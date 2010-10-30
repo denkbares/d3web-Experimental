@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.uniwue.d3web</groupId>
 	<artifactId>KnowWE-Plugin-UIMA-Connector-jpf-plugin</artifactId>
@@ -133,8 +133,8 @@
 								<echo>Copying external Plugin ${project.name} into KnowWE...</echo>
 								<echo>KnowWE is expected at: ${project.build.directory}/../${knowwe.path}/</echo>
 								 <copy todir="${project.build.directory}/../${knowwe.path}/target/KnowWE-${knowwe.version}/WEB-INF/lib/">
-									<fileset dir="target" includes="*.jar" />
-									<fileset dir="target/dependencies" includes="*.jar" />
+									<fileset dir="target" includes="*.jar"/>
+									<fileset dir="target/dependencies" includes="*.jar"/>
 								 </copy>
 								<echo>done.</echo>
 							</tasks>
