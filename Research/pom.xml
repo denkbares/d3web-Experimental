@@ -141,6 +141,7 @@
 		<module>d3web-KnOfficeParser</module>
 		<module>d3web-TiRex</module>
 		<module>d3web-KnowledgeExporter</module>
+		<module>KnowWE-Plugin-Biolog-jpf-plugin</module>
 		<module>KnowWE-Plugin-d3web-jpf-plugin</module>
 		<module>KnowWE-Plugin-Comment-jpf-plugin</module>
 		<module>KnowWE-Plugin-Calendar-jpf-plugin</module>
