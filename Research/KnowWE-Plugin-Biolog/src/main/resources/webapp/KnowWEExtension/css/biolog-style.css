@@ -1,0 +1,135 @@
+
+a {
+    color: #920500;
+}
+a.createpage {
+	color: #920500;
+    border-bottom:1px dashed #920500;
+}
+
+a:hover {
+    color: #920500;
+    text-decoration: underline;
+}
+
+.panel{
+    border: 1px solid #BBD300;
+}
+
+.panel h3{
+    background-color: #BBD300;
+}
+
+.collapsebox  {
+    background-color:#D5E8BB;
+    border:1px solid #EEE;
+}
+.collapsetitle {
+    border:2px solid #D5E8BB;
+}
+
+#o-lay-title{
+    background-color: #BBD300; 
+}
+
+/* ################################################## */
+/* -------------- Annotation styling  --------------- */
+/* ################################################## */
+
+.semLink {
+    color:#920500;
+}
+/* ################################################## */
+/* -------------- EML Renderer        --------------- */
+/* ################################################## */
+
+table.eml {
+	width: 99%;margin-bottom:20px;
+}
+table.eml td {
+    border:1px solid rgb(255,255,255);	
+}
+.eml-highlight{
+    font-weight:bold;background-color: rgb(31,129,54);border:1px solid rgb(255,255,255); color: rgb(255,255,255);	
+}
+.eml-normal {
+    background-color: rgb(187,211,1);	
+}
+.tbl-highlight {
+	background-color: rgb(31,129,54);border:1px solid rgb(255,255,255);padding:5px;font-weight:bold;
+
+}
+.tbl-normal {
+	background-color: rgb(187,211,1);border:1px solid rgb(255,255,255);padding:5px
+}
+
+/* ################################################## */
+/* -------------- Biolog search       --------------- */
+/* ################################################## */
+#biologsearch {
+    border: 1px solid #1D7D35;
+    padding:30px;
+}
+
+#biologsearch .form li {
+    /*left:0;
+    position:absolute;
+    top:0;
+    width:590px;*/
+}
+#biologsearch .form li label, #biologsearch .form li input {
+    border:0 none;
+    left:5px;
+    padding:5px;
+    position:absolute;
+    top:4px;
+    width:80%;
+}
+#biologsearch ul.form {
+    height:25px;
+    position:relative;
+    width:100%;
+    -moz-border-radius-bottomleft:5px;
+    -moz-border-radius-bottomright:5px;
+    -moz-border-radius-topleft:5px;
+    -moz-border-radius-topright:5px;
+    background: #1D7D35 none repeat scroll 0 0;
+    display:block;
+    padding:5px 5px 4px;    
+    list-style-type:none;
+}
+#biologsearch input#searchsubmit {
+    background: #1D7D35 none repeat scroll 0 0;
+    color: rgb(255,255,255);
+    left:auto;
+    position:absolute;
+    right:1%;
+    text-align:center;
+    width:20%;
+}
+.biolog-cloud-link{
+    color: rgb(29,125,53);
+    cursor: pointer;    
+}
+#knowwe-autocompletion{
+    background-color: rgb(255,255,255);
+    border: 1px solid rgb(0,0,0);
+    margin-left: 5px;
+    overflow: auto;
+    position: absolute;
+    width:30%;
+    z-index: 300;
+}
+#knowwe-autocompletion ul{
+    list-style-type: none;
+    margin: 0px;
+    padding: 5px;
+}
+#knowwe-autocompletion .highlight{
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.3); 
+}
+#knowwe-autocompletion strong{
+    color: rgb(0, 0, 255);
+}
+
