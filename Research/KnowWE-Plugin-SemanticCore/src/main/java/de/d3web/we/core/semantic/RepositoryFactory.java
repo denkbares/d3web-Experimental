@@ -22,6 +22,7 @@ package de.d3web.we.core.semantic;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 
 import org.openrdf.model.BNode;
@@ -30,10 +31,8 @@ import org.openrdf.model.Literal;
 import org.openrdf.model.Resource;
 import org.openrdf.model.ValueFactory;
 import org.openrdf.model.impl.GraphImpl;
-import org.openrdf.model.impl.ValueFactoryImpl;
 import org.openrdf.model.util.GraphUtil;
 import org.openrdf.model.vocabulary.RDF;
-import org.openrdf.query.algebra.evaluation.impl.EvaluationStrategyImpl;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.config.RepositoryConfig;
@@ -46,11 +45,8 @@ import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.Rio;
 import org.openrdf.rio.helpers.StatementCollector;
 
-import com.ontotext.trree.owlim_ext.TripleSourceImpl;
-
 public class RepositoryFactory {
 
-	private EvaluationStrategyImpl Evaluator;
 	private RepositoryManager man;
 	private static RepositoryFactory me;
 
@@ -84,9 +80,16 @@ public class RepositoryFactory {
 				|| !settings.containsKey("config_file")) {
 			return null;
 		}
-		String ontfile = settings.get("ontfile");
+		String ontfile = null;
 		String reppath = settings.get("reppath");
-		String config_file = settings.get("config_file");
+		String config_file = null;
+		try {
+			ontfile = new File(settings.get("ontfile")).getCanonicalPath();
+			config_file = new File(settings.get("config_file")).getCanonicalPath();
+		}
+		catch (IOException e) {
+			// nothing todo
+		}
 		String basens = settings.get("basens");
 		File file = new File(ontfile);
 
@@ -120,8 +123,6 @@ public class RepositoryFactory {
 			BNode context = repositoryConn.getValueFactory().createBNode(
 					"rootontology");
 			repositoryConn.add(file, basens, RDFFormat.RDFXML, context);
-			Evaluator = new EvaluationStrategyImpl(new TripleSourceImpl(
-					repositoryConn, new ValueFactoryImpl()));
 			repositoryConn.close();
 		}
 		catch (Exception ex) {

@@ -124,6 +124,7 @@ public class KBCreationTestUtil {
 		createSolutions();
 		createQuestionnaires();
 		createQuestions();
+		createAttributeTable();
 		createRules();
 		createXCLModels();
 
@@ -286,6 +287,21 @@ public class KBCreationTestUtil {
 		QContainer qc2 = createdKBM.findQContainer("Technical Examinations");
 		// - "Idle speed system o.k.?" [yn]
 		createdKBM.createQuestionYN("Idle speed system o.k.?", qc2);
+
+	}
+
+	/**
+	 * Creates MMInfo similar to the info from an AttributeTable
+	 */
+	private void createAttributeTable() {
+
+		// Get the Diagnosis which will get the MMInfo
+		Solution d = createdKBM.findSolution("Mechanical problem");
+
+		// Add MMInfo which is similar to the MMInfo created from the
+		// AttributeTable
+		// | Mechanical problem | info | prompt | some problem description
+		addMMInfo(d, "description", MMInfoSubject.PROMPT.getName(), "some problem description");
 
 	}
 
