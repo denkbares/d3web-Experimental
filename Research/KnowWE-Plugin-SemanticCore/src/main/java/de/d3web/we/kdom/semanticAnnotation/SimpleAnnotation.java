@@ -31,14 +31,15 @@ import org.openrdf.model.URI;
 
 import de.d3web.we.core.semantic.IntermediateOwlObject;
 import de.d3web.we.core.semantic.OwlHelper;
+import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
 import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.utils.KnowWEUtils;
 
 /**
@@ -54,7 +55,7 @@ public class SimpleAnnotation extends DefaultAbstractKnowWEObjectType {
 	}
 
 	private class SimpleAnnotationSubTreeHandler extends
-			SubtreeHandler {
+			OwlSubtreeHandler<KnowWEObjectType> {
 
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {

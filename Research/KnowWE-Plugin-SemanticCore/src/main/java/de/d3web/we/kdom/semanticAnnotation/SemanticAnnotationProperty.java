@@ -33,6 +33,7 @@ import org.openrdf.model.URI;
 
 import de.d3web.we.core.semantic.IntermediateOwlObject;
 import de.d3web.we.core.semantic.OwlHelper;
+import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
@@ -40,9 +41,8 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
+import de.d3web.we.kdom.sectionFinder.ISectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.utils.KnowWEUtils;
 
 /**
@@ -51,17 +51,16 @@ import de.d3web.we.utils.KnowWEUtils;
  */
 public class SemanticAnnotationProperty extends DefaultAbstractKnowWEObjectType {
 
-	@Override
-	public void init() {
+	public SemanticAnnotationProperty() {
 		this.sectionFinder = new AnnotationPropertySectionFinder();
 		this.childrenTypes.add(new SemanticAnnotationPropertyDelimiter());
 		this.childrenTypes.add(new SemanticAnnotationPropertyName());
 		this.addSubtreeHandler(new SemanticAnnotationPropertySubTreeHandler());
 	}
 
-	public static class AnnotationPropertySectionFinder extends SectionFinder {
+	public static class AnnotationPropertySectionFinder implements ISectionFinder {
 
-		private String PATTERN = "[(\\w:)?\\w]*::";
+		private final String PATTERN = "[(\\w:)?\\w]*::";
 
 		@Override
 		public List<SectionFinderResult> lookForSections(String text,
@@ -78,13 +77,12 @@ public class SemanticAnnotationProperty extends DefaultAbstractKnowWEObjectType 
 	}
 
 	private class SemanticAnnotationPropertySubTreeHandler extends
-			SubtreeHandler {
+			OwlSubtreeHandler<SemanticAnnotationProperty> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
+		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<SemanticAnnotationProperty> s) {
 
-			Section name = s.findChildOfType(SemanticAnnotationPropertyName.class);
-			KDOMReportMessage msg = null;
+			Section<SemanticAnnotationPropertyName> name = s.findChildOfType(SemanticAnnotationPropertyName.class);
 
 			IntermediateOwlObject io = new IntermediateOwlObject();
 			UpperOntology uo = UpperOntology.getInstance();
