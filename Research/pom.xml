@@ -145,7 +145,6 @@
 		<module>KnowWE-Plugin-Comment-jpf-plugin</module>
 		<module>KnowWE-Plugin-Calendar-jpf-plugin</module>
 		<module>KnowWE-Plugin-HermesModule-jpf-plugin</module>
-		<module>KnowWE-ExtensionPoints-jpf-plugin</module>
 		<module>KnowWE-core-Plugins-jpf-plugin</module>
 		<module>KnowWE-Plugin-WISEC-jpf-plugin</module>
 		<module>KnowWE-Plugin-CI4KE-jpf-plugin</module>
