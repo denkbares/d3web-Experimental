@@ -1,0 +1,3 @@
+#foot {
+	display: none;
+}

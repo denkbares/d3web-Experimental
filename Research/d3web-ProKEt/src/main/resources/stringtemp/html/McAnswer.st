@@ -1,0 +1,5 @@
+<div id="$fullId$" class="answer $fullId$ $if(realAnswerType)$answer-$realAnswerType$$endif$">
+	<input id="f_$fullId$" type="checkbox" $selection$ />
+	$AnswerTitleTooltip()$
+	$text$
+</div>
