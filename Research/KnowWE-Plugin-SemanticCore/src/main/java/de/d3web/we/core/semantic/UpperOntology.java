@@ -81,6 +81,8 @@ public class UpperOntology {
 	private final String reppath;
 
 	private UpperOntology(String path) {
+		// quickfix due to repository refactoring
+		path = path.replaceAll("Research", "d3web-KnowWE");
 		settings = new HashMap<String, String>();
 		ontfile = path + File.separatorChar + ontfile;
 		settings.put("ontfile", ontfile);
