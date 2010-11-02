@@ -26,8 +26,8 @@ import java.util.List;
 
 import de.d3web.abstraction.formula.FormulaNumber;
 import de.d3web.abstraction.formula.Operator;
-import de.d3web.abstraction.formula.QNumWrapper;
 import de.d3web.abstraction.formula.Operator.Operation;
+import de.d3web.abstraction.formula.QNumWrapper;
 import de.d3web.core.inference.condition.CondAnd;
 import de.d3web.core.inference.condition.CondDState;
 import de.d3web.core.inference.condition.CondEqual;
@@ -46,8 +46,8 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.Rating;
-import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.Rating.State;
+import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.DCElement;
 import de.d3web.core.knowledge.terminology.info.DCMarkup;
@@ -124,7 +124,6 @@ public class KBCreationTestUtil {
 		createSolutions();
 		createQuestionnaires();
 		createQuestions();
-		createAttributeTable();
 		createRules();
 		createXCLModels();
 
@@ -287,21 +286,6 @@ public class KBCreationTestUtil {
 		QContainer qc2 = createdKBM.findQContainer("Technical Examinations");
 		// - "Idle speed system o.k.?" [yn]
 		createdKBM.createQuestionYN("Idle speed system o.k.?", qc2);
-
-	}
-
-	/**
-	 * Creates MMInfo similar to the info from an AttributeTable
-	 */
-	private void createAttributeTable() {
-
-		// Get the Diagnosis which will get the MMInfo
-		Solution d = createdKBM.findSolution("Mechanical problem");
-
-		// Add MMInfo which is similar to the MMInfo created from the
-		// AttributeTable
-		// | Mechanical problem | info | description | some problem description
-		addMMInfo(d, "description", MMInfoSubject.INFO.getName(), "some problem description");
 
 	}
 
@@ -642,8 +626,6 @@ public class KBCreationTestUtil {
 		XCLModel.insertXCLRelation(createdKB, c5, d, XCLRelationType.explains);
 
 	}
-
-
 
 	/**
 	 * Adds a MMInfo to the NamedObject

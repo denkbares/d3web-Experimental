@@ -32,7 +32,6 @@ import de.d3web.core.knowledge.terminology.info.DCElement;
 import de.d3web.core.knowledge.terminology.info.DCMarkup;
 import de.d3web.core.knowledge.terminology.info.MMInfoObject;
 import de.d3web.core.knowledge.terminology.info.MMInfoStorage;
-import de.d3web.core.knowledge.terminology.info.MMInfoSubject;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.kdom.KnowWEArticle;
 
@@ -61,9 +60,9 @@ public class AttributeTableTest extends TestCase {
 		Solution createdDiag = createdKB.searchSolution("P1");
 
 		// Get MMInfoStorage of diagnoses
-		MMInfoStorage loadedStorage = (MMInfoStorage) loadedDiag.getInfoStore().getValue(
+		MMInfoStorage loadedStorage = loadedDiag.getInfoStore().getValue(
 				BasicProperties.MMINFO);
-		MMInfoStorage createdStorage = (MMInfoStorage) createdDiag.getInfoStore().getValue(
+		MMInfoStorage createdStorage = createdDiag.getInfoStore().getValue(
 				BasicProperties.MMINFO);
 		assertNotNull("Diagnosis " + loadedDiag.getName() + " has no MMInfoStorage.", loadedStorage);
 		assertNotNull("Diagnosis " + createdDiag.getName() + " has no MMInfoStorage.",
@@ -73,7 +72,6 @@ public class AttributeTableTest extends TestCase {
 		DCMarkup markup = new DCMarkup();
 		markup.setContent(DCElement.SOURCE, loadedDiag.getId());
 		markup.setContent(DCElement.TITLE, "description");
-		markup.setContent(DCElement.SUBJECT, MMInfoSubject.INFO.getName());
 
 		// Get MMInfoObject for created DCMarkup
 		MMInfoObject loadedMMInfo = (MMInfoObject) loadedStorage.getMMInfo(markup).toArray()[0];
