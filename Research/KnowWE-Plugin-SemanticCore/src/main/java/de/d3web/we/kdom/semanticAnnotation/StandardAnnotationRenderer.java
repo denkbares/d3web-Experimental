@@ -28,12 +28,13 @@ import org.openrdf.query.BindingSet;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 
-import de.d3web.we.core.semantic.DefaultURIContext;
 import de.d3web.we.core.semantic.IntermediateOwlObject;
 import de.d3web.we.core.semantic.OwlHelper;
+import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.contexts.Context;
 import de.d3web.we.kdom.contexts.ContextManager;
+import de.d3web.we.kdom.contexts.DefaultSubjectContext;
 import de.d3web.we.kdom.rendering.ConditionalRenderer;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
@@ -80,11 +81,20 @@ public class StandardAnnotationRenderer extends ConditionalRenderer {
 		else {
 
 			Context context = ContextManager.getInstance().getContext(sec,
-					DefaultURIContext.CID);
+					DefaultSubjectContext.CID);
 			if (context != null) {
-				URI solutionURI = ((DefaultURIContext) context)
-						.getSolutionURI();
-				subject = solutionURI.getLocalName();
+				String solution = ((DefaultSubjectContext) context)
+						.getSubject();
+
+				URI solutionURI = UpperOntology.getInstance().getHelper().createlocalURI(
+						solution);
+				try {
+					subject = URLDecoder.decode(solutionURI.getLocalName(), "UTF-8");
+				}
+				catch (UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				TupleQueryResult result = de.d3web.we.core.semantic.SPARQLUtil.executeTupleQuery(
 						TITLE_QUERY.replaceAll("URI", solutionURI.toString()),
 						sec.getTitle());
