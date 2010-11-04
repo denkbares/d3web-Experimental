@@ -21,7 +21,7 @@
 package de.d3web.we.kdom.rule;
 
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.renderer.StyleRenderer;
+import de.d3web.we.kdom.renderer.FontColorRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 public class If extends DefaultAbstractKnowWEObjectType {
@@ -29,9 +29,7 @@ public class If extends DefaultAbstractKnowWEObjectType {
 	@Override
 	protected void init() {
 		sectionFinder = new RegexSectionFinder("( *WENN\\s+| *IF\\s+)");
-		this.setCustomRenderer(new StyleRenderer(
-				"font-size:"
-						+ "110%;"));
+		this.setCustomRenderer(FontColorRenderer.getRenderer(FontColorRenderer.COLOR0));
 	}
 
 }
