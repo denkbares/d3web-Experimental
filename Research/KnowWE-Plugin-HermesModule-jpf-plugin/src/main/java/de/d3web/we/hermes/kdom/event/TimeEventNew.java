@@ -26,8 +26,7 @@ import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SingleChildConstraint;
 import de.d3web.we.kdom.objects.KnowWETerm;
 import de.d3web.we.kdom.objects.TermDefinition;
-import de.d3web.we.kdom.renderer.FontColorRenderer;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.rendering.EditSectionRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.message.InvalidNumberError;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -40,8 +39,6 @@ import de.d3web.we.kdom.type.AnonymousType;
 import de.d3web.we.kdom.type.AnonymousTypeInvisible;
 import de.d3web.we.kdom.util.SplitUtility;
 import de.d3web.we.kdom.util.StringFragment;
-import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class TimeEventNew extends DefaultAbstractKnowWEObjectType {
 
@@ -76,7 +73,7 @@ public class TimeEventNew extends DefaultAbstractKnowWEObjectType {
 
 		this.childrenTypes.add(DescriptionType);
 		
-		this.setCustomRenderer(new TimeEventRenderer());
+		this.setCustomRenderer(new EditSectionRenderer(new TimeEventRenderer()));
 
 		this.addSubtreeHandler(Priority.LOW, new TimeEventOWLCompiler());
 	}
