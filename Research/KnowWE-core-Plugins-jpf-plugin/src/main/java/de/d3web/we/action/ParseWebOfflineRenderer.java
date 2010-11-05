@@ -49,7 +49,8 @@ public class ParseWebOfflineRenderer extends DeprecatedAbstractKnowWEAction {
 			KnowWEDomParseReport object = KnowWEEnvironment.getInstance()
 					.getArticleManager(webname).saveUpdatedArticle(
 							KnowWEArticle.createArticle(articles.get(name),
-									name, KnowWEEnvironment.getInstance().getRootType(), webname));
+									name, KnowWEEnvironment.getInstance().getRootType(),
+									webname, true));
 
 			if (object.hasErrors()) {
 				reports.append("<p class=\"box error\">");
