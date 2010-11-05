@@ -25,8 +25,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import de.d3web.we.core.KnowWEEnvironment;
+
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class TagCloud extends AbstractHTMLTagHandler {
@@ -44,12 +45,12 @@ public class TagCloud extends AbstractHTMLTagHandler {
 		List<String> tlist = new ArrayList<String>();
 		tlist.addAll(weightedlist.keySet());
 		Collections.sort(tlist);
-
 		for (String cur : tlist) {
-			output += " <a href =\"Wiki.jsp?page=TagSearch&query=" + cur
-					+ "&ok=Find!&start=0&maxitems=20\" style=\"font-size:" + weightedlist.get(cur)
+			output += " <a href =\"Wiki.jsp?page=TagSearch&tag=" + cur
+					+ "\" style=\"font-size:" + weightedlist.get(cur)
 					+ "px\">" + cur + "</a>";
 		}
-		return KnowWEEnvironment.maskHTML(output + "</p>");
+		output += "</p>";
+		return KnowWEUtils.maskHTML(output);
 	}
 }

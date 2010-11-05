@@ -1,21 +1,21 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
- *                    Computer Science VI, University of Wuerzburg
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * Computer Science VI, University of Wuerzburg
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 
 package de.d3web.we.biolog.search;
@@ -43,11 +43,11 @@ import de.d3web.we.search.SearchTerm;
 
 /**
  * SearchProvider searching in data formalized by the BibTex-type
- *
+ * 
  * @see BibTex
- *
+ * 
  * @author Jochen
- *
+ * 
  */
 public class BibtexSearchProvider implements KnowWESearchProvider {
 
@@ -72,7 +72,7 @@ public class BibtexSearchProvider implements KnowWESearchProvider {
 	}
 
 	@Override
-	public String renderResults(Collection<GenericSearchResult> localResults) {
+	public String renderResults(Collection<GenericSearchResult> localResults, String queryString) {
 
 		StringBuffer resultBuffy = new StringBuffer();
 
@@ -86,7 +86,7 @@ public class BibtexSearchProvider implements KnowWESearchProvider {
 				String author = BiologUtils.replaceBibTeX(genericSearchResult.
 										getContexts()[1]).replaceAll("\\{", "")
 														.replaceAll("\\}", "");
-														
+
 				String topic = genericSearchResult.getPagename();
 
 				resultBuffy.append("<i>" + StringEscapeUtils.escapeHtml(author) + " </i>");
@@ -94,7 +94,8 @@ public class BibtexSearchProvider implements KnowWESearchProvider {
 				resultBuffy.append(
 						" <a target='_blank' href='Wiki.jsp?page="
 								+ topic
-								+ "#" + StringEscapeUtils.escapeHtml(genericSearchResult.getContexts()[3])
+								+ "#"
+								+ StringEscapeUtils.escapeHtml(genericSearchResult.getContexts()[3])
 								+ "' >"
 								+ topic
 								+ "</a>");
@@ -268,7 +269,6 @@ public class BibtexSearchProvider implements KnowWESearchProvider {
 						try {
 							title = URLDecoder.decode(title, "UTF-8");
 							author = URLDecoder.decode(author, "UTF-8");
-							
 
 						}
 						catch (UnsupportedEncodingException e) {
@@ -304,7 +304,7 @@ public class BibtexSearchProvider implements KnowWESearchProvider {
 
 			// SEARCH ABSTRACT
 			TupleQueryResult executeTupleQueryAbstract = null;
-				executeTupleQueryAbstract = SPARQLUtil
+			executeTupleQueryAbstract = SPARQLUtil
 							.executeTupleQuery(ABSTRACT_SPARQL.replaceAll("SEARCHWORD",
 									searchTerm.getTerm()));
 			if (executeTupleQueryAbstract != null) {

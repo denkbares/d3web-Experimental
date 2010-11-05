@@ -1,21 +1,21 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
- *                    Computer Science VI, University of Wuerzburg
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * Computer Science VI, University of Wuerzburg
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 
 package de.d3web.we.biolog.search;
@@ -71,20 +71,24 @@ public class AnnotationsProvider implements KnowWESearchProvider {
 	}
 
 	@Override
-	public String renderResults(Collection<GenericSearchResult> results) {
+	public String renderResults(Collection<GenericSearchResult> results, String queryString) {
 		StringBuffer resultBuffy = new StringBuffer();
 		for (GenericSearchResult genericSearchResult : results) {
 			if (genericSearchResult.getContexts().length > 0) {
 
 				String topic = genericSearchResult.getPagename();
 				String node = genericSearchResult.getContexts()[4];
-				String sub= genericSearchResult.getContexts()[1];
-				String prop= genericSearchResult.getContexts()[2];
-				String obj= genericSearchResult.getContexts()[3];
+				String sub = genericSearchResult.getContexts()[1];
+				String prop = genericSearchResult.getContexts()[2];
+				String obj = genericSearchResult.getContexts()[3];
 				resultBuffy.append(" <a target='_blank' href='Wiki.jsp?page="
-						+ topic + "#" + node + "' >" + topic + "</a>: "+sub.substring(sub.indexOf('#') + 1)+" "+prop.substring(prop.indexOf('#') + 1)+" "+obj.substring(obj.indexOf('#') + 1));
+						+ topic + "#" + node + "' >" + topic + "</a>: "
+						+ sub.substring(sub.indexOf('#') + 1) + " "
+						+ prop.substring(prop.indexOf('#') + 1) + " "
+						+ obj.substring(obj.indexOf('#') + 1));
 
-			} else {
+			}
+			else {
 				resultBuffy.append("<no context>");
 			}
 			resultBuffy.append("<br />");
@@ -93,7 +97,8 @@ public class AnnotationsProvider implements KnowWESearchProvider {
 		return resultBuffy.toString();
 	}
 
-	private static final String REPORTS_SPARQL = "SELECT ?sub ?prop ?searcht ?node ?title WHERE { " +
+	private static final String REPORTS_SPARQL = "SELECT ?sub ?prop ?searcht ?node ?title WHERE { "
+			+
 			"?anno rdfs:isDefinedBy ?texto ." +
 			"?anno rdf:type rdf:Statement ." +
 			"?anno rdf:object ?searcht ." +
@@ -114,8 +119,9 @@ public class AnnotationsProvider implements KnowWESearchProvider {
 		for (SearchTerm searchTerm : words) {
 			TupleQueryResult executeTupleQuery = null;
 			try {
-				// TODO: escape meta-characters (regex) possibly occurring in searchTerm
-				String coinedQuery = REPORTS_SPARQL						.replaceAll(
+				// TODO: escape meta-characters (regex) possibly occurring in
+				// searchTerm
+				String coinedQuery = REPORTS_SPARQL.replaceAll(
 								"SEARCHWORD",
 								URLEncoder
 										.encode(searchTerm.getTerm().trim(), "UTF-8"));
@@ -123,7 +129,8 @@ public class AnnotationsProvider implements KnowWESearchProvider {
 				// } catch (UnsupportedEncodingException e1) {
 				// // TODO Auto-generated catch block
 				// e1.printStackTrace();
-			} catch (Exception m) {
+			}
+			catch (Exception m) {
 				// TODO Auto-generated catch block
 				m.printStackTrace();
 			}
@@ -137,23 +144,26 @@ public class AnnotationsProvider implements KnowWESearchProvider {
 						String title = titleB.getValue().stringValue();
 						Binding nodeB = next.getBinding("node");
 						String node = nodeB.getValue().stringValue();
-						b=next.getBinding("prop");
-						String prop=b.getValue().stringValue();
-						b=next.getBinding("searcht");
-						String obj=b.getValue().stringValue();
+						b = next.getBinding("prop");
+						String prop = b.getValue().stringValue();
+						b = next.getBinding("searcht");
+						String obj = b.getValue().stringValue();
 
 						try {
 							title = URLDecoder.decode(title, "UTF-8");
 
-						} catch (UnsupportedEncodingException e) {
+						}
+						catch (UnsupportedEncodingException e) {
 							e.printStackTrace();
 						}
 						results.add(new GenericSearchResult(title
 								.substring(title.indexOf('#') + 1),
-								new String[] { title, sub, prop, obj,node }, 1));
+								new String[] {
+										title, sub, prop, obj, node }, 1));
 
 					}
-				} catch (QueryEvaluationException e) {
+				}
+				catch (QueryEvaluationException e) {
 					e.printStackTrace();
 				}
 			}

@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -71,7 +71,7 @@ public class EMLSearchProvider implements KnowWESearchProvider {
 	}
 
 	@Override
-	public String renderResults(Collection<GenericSearchResult> localResults) {
+	public String renderResults(Collection<GenericSearchResult> localResults, String queryString) {
 		StringBuffer resultBuffy = new StringBuffer();
 
 		for (GenericSearchResult genericSearchResult : localResults) {
@@ -87,7 +87,8 @@ public class EMLSearchProvider implements KnowWESearchProvider {
 
 				resultBuffy
 						.append("<strong><a target='_blank' href='Wiki.jsp?page="
-						+ topic + "' >" + StringEscapeUtils.escapeHtml(topic) + ": </a> </strong>");
+								+ topic + "' >" + StringEscapeUtils.escapeHtml(topic)
+								+ ": </a> </strong>");
 				resultBuffy.append(StringEscapeUtils.escapeHtml(genericSearchResult.getContexts()[0]));
 
 			}
@@ -110,7 +111,6 @@ public class EMLSearchProvider implements KnowWESearchProvider {
 	private static final String METHOD_SPARQL = "SELECT ?eml ?abstract WHERE { ?eml rdf:type <http://swrc.ontoware.org/ontology#ResearchProject> . ?eml <http://swrc.ontoware.org/ontology#abstract> ?abstract . ?eml <http://swrc.ontoware.org/ontology#description> ?description   .  FILTER regex(?description, \"SEARCHWORD\", \"i\" )}";
 	private static final String EML_TOPIC = "SELECT  ?topic ?to ?kdomid WHERE {  EML_URI rdfs:isDefinedBy ?to . ?to ns:hasTopic ?topic . ?to ns:hasNode ?kdomid . }";
 
-
 	@Override
 	public Collection<GenericSearchResult> search(Collection<SearchTerm> words,
 			KnowWEParameterMap map) {
@@ -121,7 +121,7 @@ public class EMLSearchProvider implements KnowWESearchProvider {
 			TupleQueryResult executeTupleQuery = null;
 			executeTupleQuery = SPARQLUtil
 					.executeTupleQuery(KEYWORD_SPARQL3.replaceAll("SEARCHWORD",
-					searchTerm.getTerm()));
+							searchTerm.getTerm()));
 
 			if (executeTupleQuery != null) {
 				try {
@@ -135,7 +135,7 @@ public class EMLSearchProvider implements KnowWESearchProvider {
 						TupleQueryResult executeTupleQuery3 = null;
 						executeTupleQuery3 = SPARQLUtil
 								.executeTupleQuery(EML_TOPIC.replaceAll(
-								"EML_URI", "<" + emlURI + ">"));
+										"EML_URI", "<" + emlURI + ">"));
 						while (executeTupleQuery3.hasNext()) {
 							BindingSet nextTopic = executeTupleQuery3.next();
 							Binding bTopic = nextTopic.getBinding("topic");
@@ -146,7 +146,7 @@ public class EMLSearchProvider implements KnowWESearchProvider {
 							results.add(new GenericSearchResult(topic
 									.substring(topic.indexOf('#') + 1),
 									new String[] {
-									abstracT, kdomid }, 1));
+											abstracT, kdomid }, 1));
 						}
 
 					}
@@ -162,7 +162,7 @@ public class EMLSearchProvider implements KnowWESearchProvider {
 		for (SearchTerm searchTerm : words) {
 			TupleQueryResult executeTupleQuery = SPARQLUtil
 					.executeTupleQuery(METHOD_SPARQL.replaceAll("SEARCHWORD",
-					searchTerm.getTerm()));
+							searchTerm.getTerm()));
 			if (executeTupleQuery != null) {
 				try {
 					while (executeTupleQuery.hasNext()) {
@@ -172,11 +172,10 @@ public class EMLSearchProvider implements KnowWESearchProvider {
 						Binding titleB = next.getBinding("abstract");
 						String title = titleB.getValue().stringValue();
 
-
 						TupleQueryResult executeTupleQuery3 = null;
 						executeTupleQuery3 = SPARQLUtil
 								.executeTupleQuery(EML_TOPIC.replaceAll(
-								"EML_URI", "<" + emlURI + ">"));
+										"EML_URI", "<" + emlURI + ">"));
 						while (executeTupleQuery3.hasNext()) {
 							BindingSet nextTopic = executeTupleQuery3.next();
 							Binding bTopic = nextTopic.getBinding("topic");
@@ -186,7 +185,7 @@ public class EMLSearchProvider implements KnowWESearchProvider {
 							results.add(new GenericSearchResult(topic
 									.substring(topic.indexOf('#') + 1),
 									new String[] {
-									title, kdomid }, 1));
+											title, kdomid }, 1));
 						}
 
 					}
@@ -224,7 +223,7 @@ public class EMLSearchProvider implements KnowWESearchProvider {
 					TupleQueryResult executeTupleQuery3 = null;
 					executeTupleQuery3 = SPARQLUtil
 							.executeTupleQuery(KEYWORD_SPARQL2.replaceAll(
-							"EML_URI", emlURI));
+									"EML_URI", emlURI));
 					while (executeTupleQuery3.hasNext()) {
 						BindingSet next3 = executeTupleQuery3.next();
 						Binding keyB = next3.getBinding("keyword");

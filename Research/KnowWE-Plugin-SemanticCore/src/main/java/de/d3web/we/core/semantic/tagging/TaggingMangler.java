@@ -86,7 +86,7 @@ public class TaggingMangler implements KnowWESearchProvider {
 		HashSet<String> tags = new HashSet<String>();
 		if (tagslist.size() > 0) {
 			boolean multiple = tagslist.size() > 1;
-			for (Section cur : tagslist) {
+			for (Section<?> cur : tagslist) {
 				for (String temptag : cur.getOriginalText().split(" |,")) {
 					tags.add(temptag.trim());
 				}
@@ -140,7 +140,7 @@ public class TaggingMangler implements KnowWESearchProvider {
 			if (!temptag.equals(tag)) output += temptag.trim() + " ";
 		}
 		output = output.trim();
-		Section keep = tagslist.get(0);
+		Section<?> keep = tagslist.get(0);
 		if (multiple) {
 			for (int i = 1; i < tagslist.size(); i++) {
 				article.getSection().removeChild(tagslist.get(i));
@@ -300,7 +300,7 @@ public class TaggingMangler implements KnowWESearchProvider {
 		}
 
 		if (tagslist.size() > 0) {
-			Section keep = tagslist.get(0);
+			Section<?> keep = tagslist.get(0);
 			if (multiple) {
 				for (int i = 1; i < tagslist.size(); i++) {
 					article.getSection().removeChild(tagslist.get(i));
@@ -325,7 +325,7 @@ public class TaggingMangler implements KnowWESearchProvider {
 		KnowWEEnvironment ke = KnowWEEnvironment.getInstance();
 		KnowWEArticle article = ke.getArticle(KnowWEEnvironment.DEFAULT_WEB,
 				topic);
-		Section asection = article.getSection();
+		Section<?> asection = article.getSection();
 		String text = asection.getOriginalText();
 		String output = "";
 		for (String temptag : content.split(" |,")) {
@@ -386,12 +386,12 @@ public class TaggingMangler implements KnowWESearchProvider {
 		return result;
 	}
 
-	public String getResultPanel(String querystring) {
+	public String getResultPanel(String queryString) {
 
-		if (querystring != null) {
+		if (queryString != null) {
 			ArrayList<GenericSearchResult> pages = TaggingMangler.getInstance()
-					.searchPages(querystring);
-			return renderResults(pages);
+					.searchPages(queryString);
+			return renderResults(pages, queryString);
 		}
 		else {
 			return ("No query.");
@@ -399,26 +399,40 @@ public class TaggingMangler implements KnowWESearchProvider {
 	}
 
 	@Override
-	public String renderResults(Collection<GenericSearchResult> pages) {
+	public String renderResults(Collection<GenericSearchResult> pages, String queryString) {
 		if (pages.size() == 0) {
-			return "No pages.";
+			return "No pages for query '" + queryString + "'.";
 		}
 
+		TaggingMangler tm = TaggingMangler.getInstance();
 		StringBuffer html = new StringBuffer();
-		html.append("<ul>\n");
+		// html.append("<ul>\n");
+		html.append("\n|| Page || Tags \n");
 		for (GenericSearchResult cur : pages) {
-			String link = "<a target='_blank' href=\"Wiki.jsp?page="
-					+ cur.getPagename() + "\">" + cur.getPagename() + "</a>";
-
-			// String score = cur.getScore() + "";
-			html.append("<div class='left'>");
-			// html.append("<b>" + link + "</b>");
-			html.append("<li>" + link + "</li>");
-			// " (Score:" + score + ")");
-			html.append("</div><br>\n");
+			String pagename = cur.getPagename();
+			html.append("| [").append(pagename);
+			html.append("]\t| ");
+			for (String tag : tm.getPageTags(pagename)) {
+				boolean matched = tag.equalsIgnoreCase(queryString);
+				if (matched) html.append("__");
+				html.append(tag);
+				if (matched) html.append("__");
+				html.append(" ");
+			}
+			html.append("\n");
+			// String link = "<a target='_blank' href=\"Wiki.jsp?page="
+			// + pagename + "\">" + pagename + "</a>";
+			//
+			// // String score = cur.getScore() + "";
+			// html.append("<div class='left'>");
+			// // html.append("<b>" + link + "</b>");
+			// html.append("<li>" + link + "</li>");
+			// // " (Score:" + score + ")");
+			// html.append("</div><br>\n");
 
 		}
-		html.append("</ul>\n");
+		// html.append("</ul>\n");
+		html.append("\n");
 		return html.toString();
 	}
 

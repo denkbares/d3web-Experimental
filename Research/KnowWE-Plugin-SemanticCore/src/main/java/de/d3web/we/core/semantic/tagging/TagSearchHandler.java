@@ -21,78 +21,36 @@
 package de.d3web.we.core.semantic.tagging;
 
 import java.util.Map;
-import java.util.ResourceBundle;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.taghandler.AbstractHTMLTagHandler;
+import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.taghandler.AbstractTagHandler;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
-public class TagSearchHandler extends AbstractHTMLTagHandler {
-
-	private ResourceBundle rb;
+public class TagSearchHandler extends AbstractTagHandler {
 
 	public TagSearchHandler() {
-		super("tagsearch");
-
-	}
-
-	private String getForm(String baseurl) {
-		// FIXME refactor TagSearch page somewhere else
-		String form = "<form action=\""
-				+ baseurl
-				+ "Wiki.jsp"
-				+ "?page=TagSearch\" "
-				+ "class=\"wikiform\" "
-				+ "id=\"searchform2\" name=\"searchform2\" accept-charset=\"UTF-8\">"
-					+ "<p>"
-				+ rb.getString("KnowWE.TagSearch.find")
-				+ ": "
-				+ "<input type=\"hidden\" name=\"page\" id=\"page\" value=\"TagSearch\" />"
-				+
-						"<input type=\"text\" name=\"query\" id=\"tagquery\" value=\"\" size=\"32\" />"
-				// +
-				// "<input type=\"submit\" name=\"ok\" id=\"ok\" value=\"Find!\" />"
-				// +
-				// "<input type=\"submit\" name=\"go\" id=\"go\" value=\"Go!\" />"
-				+ "<input type=\"hidden\" name=\"start\" id=\"start\" value=\"0\" />"
-				+ "<input type=\"hidden\" name=\"maxitems\" id=\"maxitems\" value=\"20\" />"
-				+
-
-				"<span id=\"spin\" class=\"spin\" style=\"position:absolute;display:none;\"></span>"
-				+ "</p>" + "</form>";
-		return form;
+		super("tagSearch");
 
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
-			Map<String, String> values, String web) {
-
-		rb = KnowWEEnvironment.getInstance()
-				.getKwikiBundle(user);
-		String baseurl = KnowWEEnvironment.getInstance().getWikiConnector()
-				.getBaseUrl();
+	public String render(KnowWEArticle article, Section<?> section, KnowWEUserContext userContext, Map<String, String> parameters) {
 
 		String querystring = null;
-		Map<String, String> par = user.getUrlParameterMap();
+		Map<String, String> par = userContext.getUrlParameterMap();
 		if (par != null) {
-			String parameterName = "query";
+			String parameterName = "tag";
 			if (par.containsKey(parameterName)) {
 				querystring = par.get(parameterName);
 			}
 		}
 		StringBuffer html = new StringBuffer();
-		html.append("<script type=\"text/javascript\" src=\"" + baseurl
-				+ "KnowWEExtension/scripts/tagsearch.js\"></script>");
-		html.append("<h3>"
-				+ rb.getString("KnowWE.TagSearch.headline") + ": "
-				+ (querystring == null ? "none" : querystring) + "</h3>");
-		html.append("<div id=\"searchResult2\" >");
+		html.append(KnowWEUtils.maskHTML(
+				"<script type=\"text/javascript\" src=\"KnowWEExtension/scripts/tagsearch.js\"></script>"));
 		html.append(TaggingMangler.getInstance().getResultPanel(querystring));
 
-		html.append("</div>");
-		// html.append("</div>");
-		html.append(getForm(baseurl));
 		return html.toString();
 
 	}
