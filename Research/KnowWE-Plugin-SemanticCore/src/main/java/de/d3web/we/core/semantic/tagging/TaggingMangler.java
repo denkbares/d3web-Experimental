@@ -24,6 +24,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -389,8 +391,15 @@ public class TaggingMangler implements KnowWESearchProvider {
 	public String getResultPanel(String queryString) {
 
 		if (queryString != null) {
-			ArrayList<GenericSearchResult> pages = TaggingMangler.getInstance()
-					.searchPages(queryString);
+			ArrayList<GenericSearchResult> pages = searchPages(queryString);
+			Collections.sort(pages, new Comparator<GenericSearchResult>() {
+
+				@Override
+				public int compare(GenericSearchResult o1, GenericSearchResult o2) {
+					return String.CASE_INSENSITIVE_ORDER.compare(
+							o1.getPagename(), o2.getPagename());
+				}
+			});
 			return renderResults(pages, queryString);
 		}
 		else {
