@@ -49,18 +49,18 @@ import de.d3web.we.utils.KnowWEUtils;
  * @author Sebastian Furth
  * @created 27/10/2010
  */
-public class TestSuiteTestUtil {
+public class TSUtil {
 
-	private static TestSuiteTestUtil instance = new TestSuiteTestUtil();
+	private static TSUtil instance = new TSUtil();
 	private TestSuite createdTS;
 	private KnowledgeBase kb;
 
-	private TestSuiteTestUtil() {
+	private TSUtil() {
 		createKB();
 		createTestSuite();
 	}
 
-	public static TestSuiteTestUtil getInstance() {
+	public static TSUtil getInstance() {
 		return instance;
 	}
 

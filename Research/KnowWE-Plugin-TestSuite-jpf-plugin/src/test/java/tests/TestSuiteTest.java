@@ -24,7 +24,7 @@ import java.io.IOException;
 
 import junit.framework.TestCase;
 import utils.MyTestArticleManager;
-import utils.TestSuiteTestUtil;
+import utils.TSUtil;
 import de.d3web.empiricaltesting.RatedTestCase;
 import de.d3web.empiricaltesting.TestSuite;
 import de.d3web.plugin.test.InitPluginManager;
@@ -35,7 +35,7 @@ import de.d3web.we.kdom.KnowWEArticle;
  * This class tests whether the TestSuites are equal
  *
  * @author Sebastian Furth
- * @see TestSuiteTestUtil to modify the TestSuite against which everything is
+ * @see TSUtil to modify the TestSuite against which everything is
  *      tested
  * @see TestSuiteTest.txt to modify the Article which is tested
  *
@@ -60,8 +60,8 @@ public class TestSuiteTest extends TestCase {
 		KnowWEArticle article =
 				MyTestArticleManager.getArticle(TESTSUITEARTICLE);
 		TestSuite loadedTS =
-				TestSuiteTestUtil.getInstance().findTestSuite(article);
-		TestSuite createdTS = TestSuiteTestUtil.getInstance().getCreatedTS();
+				TSUtil.getInstance().findTestSuite(article);
+		TestSuite createdTS = TSUtil.getInstance().getCreatedTS();
 
 		assertNotNull("TestSuite has no Sequential-Test-Case.",
 				loadedTS.getRepository().get(0));
