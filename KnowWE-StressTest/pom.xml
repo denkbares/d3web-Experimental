@@ -6,8 +6,8 @@
     <version>0.0.1-SNAPSHOT</version>
     <description>This Project should provide some tests based on Selenium (Interface driven test) guaranteeing the stability of the KnowWE-Server. The tests simulate changes in the knowledgebases (incremental updates) and in the wiki itself (sections overflow) in different tasks simultaneously.</description>
     <issueManagement>
-        <system>Trac</system>
-        <url>http://knowwetrac.informatik.uni-wuerzburg.de/</url>
+        <system>Bugzilla</system>
+        <url>https://tickets.denkbares.com/</url>
     </issueManagement>
     <ciManagement>
         <system>Hudson</system>

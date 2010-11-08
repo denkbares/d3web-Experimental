@@ -6,8 +6,8 @@
 	<name>KnowWE Selenium Test</name>
 	<version>0.0.1-SNAPSHOT</version>
 	<issueManagement>
-		<system>Trac</system>
-		<url>http://knowwetrac.informatik.uni-wuerzburg.de/</url>
+		<system>Bugzilla</system>
+		<url>https://tickets.denkbares.com/</url>
 	</issueManagement>
 	<ciManagement>
 		<system>Hudson</system>
