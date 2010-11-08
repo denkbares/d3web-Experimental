@@ -157,6 +157,7 @@
 		<module>KnowWE-Plugin-TestcaseTable</module>
 		<module>d3web-Persistence-ImageQuestion</module>
 		<module>KnowWE-Plugin-TestSuite-jpf-plugin</module>
+		<module>KnowWE-Plugin-Defi-jpf-plugin</module>
 	</modules>
 	<repositories>
 		<repository>
