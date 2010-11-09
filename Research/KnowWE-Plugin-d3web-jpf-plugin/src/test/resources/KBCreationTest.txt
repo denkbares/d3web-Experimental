@@ -60,7 +60,7 @@ Technical Examinations
 </Questions-section>
 
 <AttributeTable-section>
-| Mechanical problem | info | description | some problem description
+| Mechanical problem | description | blub | some problem
 </AttributeTable-section>
 
 <Rules-section>

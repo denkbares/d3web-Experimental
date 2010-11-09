@@ -21,7 +21,6 @@ package de.d3web.KnOfficeParser;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
@@ -31,12 +30,7 @@ import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.core.knowledge.terminology.info.BasicProperties;
-import de.d3web.core.knowledge.terminology.info.DCElement;
-import de.d3web.core.knowledge.terminology.info.DCMarkup;
-import de.d3web.core.knowledge.terminology.info.MMInfoObject;
-import de.d3web.core.knowledge.terminology.info.MMInfoStorage;
-import de.d3web.core.knowledge.terminology.info.MMInfoSubject;
+import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.manage.AnswerFactory;
 import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.core.session.Value;
@@ -164,18 +158,9 @@ public class RestrictedIDObjectManager extends SingleKBMIDObjectManager {
 			List<Question> questions = new LinkedList<Question>();
 			collectQuestions(currentQContainer, questions);
 			for (Question q : questions) {
-				MMInfoStorage mmis = (MMInfoStorage) q.getInfoStore().getValue(
-						BasicProperties.MMINFO);
-				if (mmis != null) {
-					DCMarkup markup = new DCMarkup();
-					markup.setContent(DCElement.SUBJECT,
-							MMInfoSubject.PROMPT.getName());
-					Set<MMInfoObject> info = mmis.getMMInfo(markup);
-					for (MMInfoObject mmio : info) {
-						if (mmio.getContent().equals(name)) {
-							return q;
-						}
-					}
+				String longname = q.getInfoStore().getValue(MMInfo.PROMPT);
+				if (longname != null && longname.equals(name)) {
+					return q;
 				}
 			}
 			// if there is no question with the text, search for one with the

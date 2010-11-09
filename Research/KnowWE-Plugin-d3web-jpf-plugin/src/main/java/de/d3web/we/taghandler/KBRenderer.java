@@ -26,13 +26,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.inference.RuleSet;
@@ -50,12 +48,7 @@ import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.core.knowledge.terminology.info.BasicProperties;
-import de.d3web.core.knowledge.terminology.info.DCElement;
-import de.d3web.core.knowledge.terminology.info.DCMarkup;
-import de.d3web.core.knowledge.terminology.info.MMInfoObject;
-import de.d3web.core.knowledge.terminology.info.MMInfoStorage;
-import de.d3web.core.knowledge.terminology.info.MMInfoSubject;
+import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.core.knowledge.terminology.info.Property.Autosave;
 import de.d3web.core.manage.KnowledgeBaseManagement;
@@ -387,8 +380,9 @@ public class KBRenderer extends AbstractHTMLTagHandler {
 			if (t1 instanceof NamedObject
 					&& ((NamedObject) t1).getInfoStore() != null) {
 				// Append the prompt for questions
-				if (t1 instanceof Question && getPrompt((Question) t1) != null) {
-					prompt.append("&#126; " + getPrompt((Question) t1));
+				String longname = t1.getInfoStore().getValue(MMInfo.PROMPT);
+				if (t1 instanceof Question && longname != null) {
+					prompt.append("&#126; " + longname);
 				}
 				// Append the properties
 				InfoStore rUnit = t1.getInfoStore();
@@ -476,31 +470,6 @@ public class KBRenderer extends AbstractHTMLTagHandler {
 	 */
 	private String getAll(TerminologyObject[] nodes, int depth) {
 		return getAll(nodes, new ArrayList<TerminologyObject>(), depth);
-	}
-
-	/**
-	 * Returns the prompt for a given question.
-	 * 
-	 * @param q Question
-	 * @return the prompt of the question.
-	 */
-	public static String getPrompt(Question q) {
-		MMInfoStorage storage = (MMInfoStorage) q.getInfoStore().getValue(BasicProperties.MMINFO);
-		if (storage != null) {
-			DCMarkup dcMarkup = new DCMarkup();
-			dcMarkup.setContent(DCElement.SOURCE, q.getId());
-			dcMarkup.setContent(DCElement.SUBJECT, MMInfoSubject.PROMPT
-					.getName());
-			Set<MMInfoObject> info = storage.getMMInfo(dcMarkup);
-
-			if (info != null) {
-				Iterator<MMInfoObject> iter = info.iterator();
-				while (iter.hasNext()) {
-					return iter.next().getContent();
-				}
-			}
-		}
-		return null;
 	}
 
 	private class RuleComparator implements

@@ -27,9 +27,6 @@ import java.util.ResourceBundle;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
-import de.d3web.core.knowledge.terminology.info.DCElement;
-import de.d3web.core.knowledge.terminology.info.DCMarkup;
-import de.d3web.core.knowledge.terminology.info.MMInfoSubject;
 import de.d3web.core.session.Session;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.utils.D3webUtils;
@@ -93,10 +90,6 @@ public class QuestionSheetHandler extends AbstractHTMLTagHandler {
 					// answerstring = answerstring.substring(0,
 					// answerstring.length()-2);
 				}
-
-				DCMarkup markup = new DCMarkup();
-				markup.setContent(DCElement.SOURCE, question.getId());
-				markup.setContent(DCElement.SUBJECT, MMInfoSubject.PROMPT.getName());
 				String rendered = KnowWEUtils.getRenderedInput(question.getId(),
 						question.getName(), kb.getId(), user.getUserName(), "Question",
 						question.getName(), "");

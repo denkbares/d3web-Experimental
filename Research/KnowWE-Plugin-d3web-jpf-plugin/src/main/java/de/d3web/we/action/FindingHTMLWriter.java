@@ -22,9 +22,7 @@ package de.d3web.we.action;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import de.d3web.core.knowledge.terminology.Choice;
@@ -34,12 +32,7 @@ import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionYN;
-import de.d3web.core.knowledge.terminology.info.BasicProperties;
-import de.d3web.core.knowledge.terminology.info.DCElement;
-import de.d3web.core.knowledge.terminology.info.DCMarkup;
-import de.d3web.core.knowledge.terminology.info.MMInfoObject;
-import de.d3web.core.knowledge.terminology.info.MMInfoStorage;
-import de.d3web.core.knowledge.terminology.info.MMInfoSubject;
+import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.values.ChoiceValue;
@@ -269,24 +262,6 @@ public class FindingHTMLWriter {
 		return buffy.toString();
 	}
 
-	public static String getPrompt(Question q) {
-		MMInfoStorage storage = (MMInfoStorage) q.getInfoStore().getValue(BasicProperties.MMINFO);
-		if (storage != null) {
-			DCMarkup dcMarkup = new DCMarkup();
-			dcMarkup.setContent(DCElement.SOURCE, q.getId());
-			dcMarkup.setContent(DCElement.SUBJECT, MMInfoSubject.PROMPT.getName());
-			Set<MMInfoObject> info = storage.getMMInfo(dcMarkup);
-
-			if (info != null) {
-				Iterator<MMInfoObject> iter = info.iterator();
-				while (iter.hasNext()) {
-					return iter.next().getContent();
-				}
-			}
-		}
-		return null;
-	}
-
 	public String getHTMLString(Question question, Session session,
 			String namespace, String webname, String topic, String targetUrlPrefix) {
 
@@ -298,8 +273,9 @@ public class FindingHTMLWriter {
 		}
 		else {
 			String questionText = question.getName();
-			if (getPrompt(question) != null) {
-				questionText = getPrompt(question);
+			String prompt = question.getInfoStore().getValue(MMInfo.PROMPT);
+			if (prompt != null) {
+				questionText = prompt;
 			}
 			retVal = "<h3>" + KnowWEUtils.convertUmlaut(questionText) + "</h3>";
 			if (question instanceof QuestionYN) {

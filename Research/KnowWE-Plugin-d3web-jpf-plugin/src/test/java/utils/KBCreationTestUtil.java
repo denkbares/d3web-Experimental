@@ -54,9 +54,6 @@ import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.core.manage.RuleFactory;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.scoring.Score;
-import de.d3web.we.basic.D3webKnowledgeHandler;
-import de.d3web.we.basic.D3webModule;
-import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelationType;
 
@@ -76,30 +73,18 @@ import de.d3web.xcl.XCLRelationType;
  * @see KnowledgeBaseCreationTest
  * 
  */
-public class KBTestUtil {
+public class KBCreationTestUtil {
 
 	public static final String KBCREATION_ARTICLE_FILE = "src/test/resources/KBCreationTest.txt";
 
-	private static KBTestUtil instance = new KBTestUtil();
+	private static KBCreationTestUtil instance = new KBCreationTestUtil();
 	private KnowledgeBase createdKB;
 	private KnowledgeBaseManagement createdKBM;
 
 	/**
-	 * Returns the KnowledgeBase of a specific article
-	 * 
-	 * @created 01.09.2010
-	 * @param article
-	 */
-	public KnowledgeBase getKnowledgeBase(KnowWEArticle article) {
-		// Load KnowledgeBase
-		D3webKnowledgeHandler d3Handler = D3webModule.getKnowledgeRepresentationHandler("default_web");
-		return d3Handler.getKBM(article.getTitle()).getKnowledgeBase();
-	}
-
-	/**
 	 * Private Constructor insures noninstantiabilty.
 	 */
-	private KBTestUtil() {
+	private KBCreationTestUtil() {
 
 		createGoldenKnowledge();
 
@@ -110,7 +95,7 @@ public class KBTestUtil {
 	 * 
 	 * @return KBCreationTestKBStorage
 	 */
-	public static KBTestUtil getInstance() {
+	public static KBCreationTestUtil getInstance() {
 		return instance;
 	}
 
@@ -236,7 +221,6 @@ public class KBTestUtil {
 						"black", "blue", "invisible" });
 
 		// Add MMInfo to Question "Exhaust fumes":
-		// "What is the color of the exhaust fumes?"
 		q0.getInfoStore().addValue(MMInfo.PROMPT, "What is the color of the exhaust fumes?");
 
 		// Add question:
@@ -309,9 +293,8 @@ public class KBTestUtil {
 
 		// Add MMInfo which is similar to the MMInfo created from the
 		// AttributeTable
-		// | Mechanical problem | info | prompt | some problem description
-		d.getInfoStore().addValue(MMInfo.PROMPT, "some problem description");
-
+		// | Mechanical problem | description | blub | some problem
+		d.getInfoStore().addValue(MMInfo.DESCRIPTION, "some problem");
 	}
 
 	/**

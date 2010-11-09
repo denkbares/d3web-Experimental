@@ -42,7 +42,7 @@ import de.d3web.KnOfficeParser.util.DefaultD3webParserErrorHandler;
 import de.d3web.KnOfficeParser.util.MessageKnOfficeGenerator;
 import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.QContainer;
-import de.d3web.core.knowledge.terminology.info.BasicProperties;
+import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.manage.IDObjectManagement;
 import de.d3web.report.Message;
 
@@ -263,7 +263,7 @@ public class QuestionnaireBuilder implements DashTBuilder, KnOfficeParser {
 								: parent);
 
 				if (child.getDescription() != null) q.getInfoStore().addValue(
-						BasicProperties.EXPLANATION, child.getDescription());
+						MMInfo.DESCRIPTION, child.getDescription());
 
 				if (child.getOrder() > 0) {
 					if (startQContainers.keySet().contains(child.getOrder())) errors.add(MessageKnOfficeGenerator.createAmbiguousOrderError(

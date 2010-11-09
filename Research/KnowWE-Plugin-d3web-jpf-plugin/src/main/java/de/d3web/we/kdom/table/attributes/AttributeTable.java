@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2010 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.d3web.we.kdom.table.attributes;
 
@@ -27,11 +27,7 @@ import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.core.knowledge.terminology.info.BasicProperties;
-import de.d3web.core.knowledge.terminology.info.DCElement;
-import de.d3web.core.knowledge.terminology.info.DCMarkup;
-import de.d3web.core.knowledge.terminology.info.MMInfoObject;
-import de.d3web.core.knowledge.terminology.info.MMInfoStorage;
+import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Priority;
@@ -47,15 +43,22 @@ import de.d3web.we.object.SolutionReference;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 
 /**
+ * 
+ * !!! Caution !!!!
+ * 
+ * This markup will be replaced soon, to not spend time on it
+ * 
+ * !!! Caution !!!!
+ * 
+ * 
  * AttributeTable which allows to specifiy additional information for
  * NamedObjects. Therefore the data is added to the MMInfoStorage.
  * 
  * It is not necessary to specify the header of the table, because it is
  * generated automatically.
  * 
- * The NamedObject is specified in the first column. The MMInfoSubject in the
- * second column. The DCElement[Lang] Title in the third. and the data/content
- * in the fourth;
+ * The NamedObject is specified in the first column. The name of the property in
+ * the second, the third is ignored and the data/content in the fourth;
  * 
  * @author Sebastian Furth
  * @created 28/10/2010
@@ -73,13 +76,13 @@ public class AttributeTable extends Table {
 
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<AttributeTable> s) {
-			
+
 			Collection<KDOMReportMessage> msg = new LinkedList<KDOMReportMessage>();
 
 			List<Section<AttributeTableTempType>> tempTypes = new LinkedList<Section<AttributeTableTempType>>();
 			s.findSuccessorsOfType(AttributeTableTempType.class, tempTypes);
 			KnowledgeBaseManagement kbm = getKBM(article);
-			
+
 			for (Section<AttributeTableTempType> tempType : tempTypes) {
 
 				NamedObject namedObject = findNamedObject(kbm, tempType.getOriginalText());
@@ -115,9 +118,10 @@ public class AttributeTable extends Table {
 			line.findSuccessorsOfType(TableCellContent.class, cells);
 			if (cells.size() == 4) {
 				String subject = cells.get(1).getOriginalText().trim();
-				String title = cells.get(2).getOriginalText().trim();
+				Property<Object> property = Property.getUntypedProperty(subject);
+				// String title = cells.get(2).getOriginalText().trim();
 				String data = cells.get(3).getOriginalText().trim();
-				addMMInfo(namedObject, title, subject, data);
+				namedObject.getInfoStore().addValue(property, data);
 			}
 			else {
 				Logger.getLogger(this.getClass().getName()).warning(
@@ -139,19 +143,5 @@ public class AttributeTable extends Table {
 			}
 			return namedObject;
 		}
-
-		private void addMMInfo(NamedObject o, String title, String subject, String content) {
-			MMInfoStorage mmis;
-			DCMarkup dcm = new DCMarkup();
-			dcm.setContent(DCElement.TITLE, title);
-			dcm.setContent(DCElement.SUBJECT, subject);
-			dcm.setContent(DCElement.SOURCE, o.getId());
-			MMInfoObject mmi = new MMInfoObject(dcm, content);
-			mmis = new MMInfoStorage();
-			o.getInfoStore().addValue(BasicProperties.MMINFO, mmis);
-			mmis.addMMInfo(mmi);
-		}
-
 	}
-
 }

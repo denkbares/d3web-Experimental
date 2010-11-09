@@ -27,11 +27,7 @@ import utils.KBTestUtil;
 import utils.MyTestArticleManager;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.core.knowledge.terminology.info.BasicProperties;
-import de.d3web.core.knowledge.terminology.info.DCElement;
-import de.d3web.core.knowledge.terminology.info.DCMarkup;
-import de.d3web.core.knowledge.terminology.info.MMInfoObject;
-import de.d3web.core.knowledge.terminology.info.MMInfoStorage;
+import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.kdom.KnowWEArticle;
 
@@ -59,29 +55,15 @@ public class AttributeTableTest extends TestCase {
 		Solution loadedDiag = loadedKB.searchSolution("P1");
 		Solution createdDiag = createdKB.searchSolution("P1");
 
-		// Get MMInfoStorage of diagnoses
-		MMInfoStorage loadedStorage = loadedDiag.getInfoStore().getValue(
-				BasicProperties.MMINFO);
-		MMInfoStorage createdStorage = createdDiag.getInfoStore().getValue(
-				BasicProperties.MMINFO);
-		assertNotNull("Diagnosis " + loadedDiag.getName() + " has no MMInfoStorage.", loadedStorage);
-		assertNotNull("Diagnosis " + createdDiag.getName() + " has no MMInfoStorage.",
-				createdStorage);
-
-		// Create DCMarkup
-		DCMarkup markup = new DCMarkup();
-		markup.setContent(DCElement.SOURCE, loadedDiag.getId());
-		markup.setContent(DCElement.TITLE, "description");
-
-		// Get MMInfoObject for created DCMarkup
-		MMInfoObject loadedMMInfo = (MMInfoObject) loadedStorage.getMMInfo(markup).toArray()[0];
-		MMInfoObject createdMMInfo = (MMInfoObject) createdStorage.getMMInfo(markup).toArray()[0];
-		assertNotNull("Diagnosis " + loadedDiag.getName() + " has no MMInfo.", loadedMMInfo);
-		assertNotNull("Diagnosis " + createdDiag.getName() + " has no MMInfo.", createdMMInfo);
+		// Get Property
+		String loadedValue = loadedDiag.getInfoStore().getValue(MMInfo.DESCRIPTION);
+		String createdValue = createdDiag.getInfoStore().getValue(MMInfo.DESCRIPTION);
+		assertNotNull("Diagnosis " + loadedDiag.getName() + " has no Description.", loadedValue);
+		assertNotNull("Diagnosis " + createdDiag.getName() + " has no Description.", createdValue);
 
 		// Compare content of MMInfoObject
-		assertEquals("Content of MMInfoObject of Diagnosis " + createdDiag.getName() + " differs.",
-				createdMMInfo.getContent(), loadedMMInfo.getContent());
+		assertEquals("Content of Description of Diagnosis " + createdDiag.getName() + " differs.",
+				createdValue, loadedValue);
 
 	}
 

@@ -23,11 +23,7 @@ import java.util.Collection;
 import java.util.logging.Level;
 
 import de.d3web.core.knowledge.terminology.NamedObject;
-import de.d3web.core.knowledge.terminology.info.BasicProperties;
-import de.d3web.core.knowledge.terminology.info.DCElement;
-import de.d3web.core.knowledge.terminology.info.DCMarkup;
-import de.d3web.core.knowledge.terminology.info.MMInfoObject;
-import de.d3web.core.knowledge.terminology.info.MMInfoStorage;
+import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
@@ -70,24 +66,10 @@ public class DCPropertySubtreeHandler extends D3webSubtreeHandler {
 	 * 
 	 */
 	private void storeMMInfo(Section s, NamedObject obj) {
-
-		MMInfoStorage mminfo = (MMInfoStorage) obj.getInfoStore().getValue(BasicProperties.MMINFO);
-
-		if (mminfo == null) {
-			mminfo = new MMInfoStorage();
-			obj.getInfoStore().addValue(BasicProperties.MMINFO, mminfo);
-		}
-		String subject = s.findChildOfType(DCPropertyNameType.class).getOriginalText().toLowerCase();
-
-		DCMarkup markup = new DCMarkup();
-		// markup.setContent(DCElement.TITLE, "Info"); //TODO set title to
-		// something?
-		markup.setContent(DCElement.SUBJECT, subject);
-		markup.setContent(DCElement.SOURCE, obj.getId());
-
-		String content = s.findChildOfType(DCPropertyContentType.class).getOriginalText();
-
-		mminfo.addMMInfo(new MMInfoObject(markup, content));
+		Property<Object> untypedProperty = Property.getUntypedProperty(s.findChildOfType(
+				DCPropertyNameType.class).getOriginalText().toLowerCase());
+		obj.getInfoStore().addValue(untypedProperty,
+				s.findChildOfType(DCPropertyContentType.class).getOriginalText());
 	}
 
 	/**

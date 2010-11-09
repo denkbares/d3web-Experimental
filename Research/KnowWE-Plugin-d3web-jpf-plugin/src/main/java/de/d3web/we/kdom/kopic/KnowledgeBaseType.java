@@ -21,9 +21,10 @@ package de.d3web.we.kdom.kopic;
 
 import java.util.Collection;
 
+import de.d3web.core.knowledge.InfoStore;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.terminology.info.DCElement;
-import de.d3web.core.knowledge.terminology.info.DCMarkup;
+import de.d3web.core.knowledge.terminology.info.BasicProperties;
+import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
@@ -99,11 +100,11 @@ public class KnowledgeBaseType extends DefaultMarkupType {
 				// and write it to the knowledge base
 				if (id != null) kb.setId(id);
 
-				DCMarkup dcm = kb.getDCMarkup();
-				dcm.setContent(DCElement.TITLE, title);
-				if (author != null) dcm.setContent(DCElement.CREATOR, author);
-				if (comment != null) dcm.setContent(DCElement.DESCRIPTION, comment);
-				if (version != null) dcm.setContent(DCElement.DATE, version);
+				InfoStore infoStore = kb.getInfoStore();
+				infoStore.addValue(MMInfo.PROMPT, title);
+				if (author != null) infoStore.addValue(BasicProperties.AUTHOR, author);
+				if (comment != null) infoStore.addValue(MMInfo.DESCRIPTION, comment);
+				if (version != null) infoStore.addValue(BasicProperties.VERSION, version);
 
 				return null;
 			}
