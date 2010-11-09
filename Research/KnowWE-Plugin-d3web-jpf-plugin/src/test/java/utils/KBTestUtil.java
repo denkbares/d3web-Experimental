@@ -310,7 +310,7 @@ public class KBTestUtil {
 		// Add MMInfo which is similar to the MMInfo created from the
 		// AttributeTable
 		// | Mechanical problem | info | prompt | some problem description
-		d.getInfoStore().addValue(MMInfo.PROMPT, "some problem description");
+		d.getInfoStore().addValue(MMInfo.DESCRIPTION, "some problem");
 
 	}
 
