@@ -50,9 +50,12 @@ import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.logging.Logging;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.utils.Patterns;
 
 public class XCLHead extends DefaultAbstractKnowWEObjectType {
+
+	public static final String KEY_SOLUTION_NAME = "solutionName";
 
 	@Override
 	protected void init() {
@@ -67,6 +70,7 @@ public class XCLHead extends DefaultAbstractKnowWEObjectType {
 	}
 
 	private class XCLHeadSubtreeHandler extends D3webSubtreeHandler<XCLHead> {
+
 
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<XCLHead> s) {
@@ -86,6 +90,8 @@ public class XCLHead extends DefaultAbstractKnowWEObjectType {
 
 			DefaultURIContext context = new DefaultURIContext(string);
 			ContextManager.getInstance().attachContext(father, context);
+			// store name of solution, so it is available for DCProperty-Sections
+			KnowWEUtils.storeObject(article, father, KEY_SOLUTION_NAME, string);
 
 			return null;
 

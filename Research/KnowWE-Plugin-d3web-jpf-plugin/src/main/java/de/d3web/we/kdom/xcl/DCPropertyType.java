@@ -23,6 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.utils.Patterns;
 
@@ -40,7 +41,7 @@ public class DCPropertyType extends DefaultAbstractKnowWEObjectType {
 		childrenTypes.add(new DCPropertyContentType());
 
 		setSectionFinder(new RegexSectionFinder(Patterns.DCPROPERTY, Pattern.MULTILINE));
-		addSubtreeHandler(new DCPropertySubtreeHandler());
+		addSubtreeHandler(Priority.LOWER, new DCPropertySubtreeHandler());
 	}
 
 	public static void main(String[] args) {

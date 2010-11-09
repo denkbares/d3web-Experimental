@@ -19,19 +19,18 @@
  */
 package de.d3web.we.kdom.xcl;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.logging.Level;
 
 import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.contexts.ContextManager;
-import de.d3web.we.kdom.contexts.DefaultSubjectContext;
 import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.logging.Logging;
+import de.d3web.we.kdom.report.message.NoSuchObjectError;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
+import de.d3web.we.utils.KnowWEUtils;
 
 /**
  * A section for storing DCProperties in a MMInfo. The storing could be generic,
@@ -43,7 +42,7 @@ import de.d3web.we.reviseHandler.D3webSubtreeHandler;
  * 
  * @author Reinhard Hatko Created on: 03.12.2009
  */
-public class DCPropertySubtreeHandler extends D3webSubtreeHandler {
+public class DCPropertySubtreeHandler extends D3webSubtreeHandler<DCPropertyType> {
 
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
@@ -54,7 +53,12 @@ public class DCPropertySubtreeHandler extends D3webSubtreeHandler {
 
 		NamedObject obj = getNamedObject(s, kbm);
 
-		if (obj == null) return null;
+		if (obj == null) {
+			ArrayList<KDOMReportMessage> list = new ArrayList<KDOMReportMessage>();
+			list.add(new NoSuchObjectError("Could not find name of solution in XCList."));
+			
+			return list;
+		}
 		storeMMInfo(s, obj);
 
 		return null;
@@ -66,10 +70,13 @@ public class DCPropertySubtreeHandler extends D3webSubtreeHandler {
 	 * 
 	 */
 	private void storeMMInfo(Section s, NamedObject obj) {
+
 		Property<Object> untypedProperty = Property.getUntypedProperty(s.findChildOfType(
 				DCPropertyNameType.class).getOriginalText().toLowerCase());
+
 		obj.getInfoStore().addValue(untypedProperty,
 				s.findChildOfType(DCPropertyContentType.class).getOriginalText());
+
 	}
 
 	/**
@@ -78,21 +85,20 @@ public class DCPropertySubtreeHandler extends D3webSubtreeHandler {
 	 * 
 	 */
 	private NamedObject getNamedObject(Section s, KnowledgeBaseManagement kbm) {
-		Section father = s.getFather();
-		DefaultSubjectContext diagnosis = (DefaultSubjectContext) ContextManager
-				.getInstance().getContext(father, DefaultSubjectContext.CID);
+		Section xclhead = s.findAncestorOfType(XCList.class);
+
+		String diagnosis = (String) KnowWEUtils.getStoredObject(xclhead, XCLHead.KEY_SOLUTION_NAME);
 
 		if (diagnosis == null) {
-			Logging.getInstance().log(Level.WARNING,
-					"No context set for: " + father.getOriginalText());
 			return null;
 		}
 
-		NamedObject d = kbm.findSolution(diagnosis.getSubject());
+		NamedObject d = kbm.findSolution(diagnosis);
 
-		if (d == null) { // atm diag is not created before, due to sequence of
-							// subtreehandlers
-			d = kbm.createSolution(diagnosis.getSubject());
+		if (d == null) { // should not happen
+			// solution should already be created by STH of XCLHEAD
+			// as this one has lower priority
+			d = kbm.createSolution(diagnosis);
 		}
 		return d;
 	}
