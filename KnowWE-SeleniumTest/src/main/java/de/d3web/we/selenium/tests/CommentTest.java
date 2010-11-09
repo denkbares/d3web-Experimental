@@ -25,7 +25,7 @@ import de.d3web.we.selenium.main.KnowWETestCase;
 public class CommentTest extends KnowWETestCase {
 
 	public void testNewCommentEntry() {
-		open(rb.getString("KnowWE.SeleniumTest.url") + "Wiki.jsp?page=Selenium-Test");
+		open(rb.getString("KnowWE.SeleniumTest.url") + "Wiki.jsp?page=Test-Selenium-Main");
 		loadAndWait("//img[@title='Comments on this Test?']");
 		assertTrue(selenium.getTitle().contains("KnowWE: Selenium-Comment"));
 		verifyTrue(selenium.isTextPresent("<< back"));
@@ -33,7 +33,7 @@ public class CommentTest extends KnowWETestCase {
 		doSelActionAndWait("//div[@onclick='saveForumBox()']", "click");
 
 		loadAndWait("link=<< back");
-		verifyEquals("KnowWE: Selenium-Test", selenium.getTitle());
+		verifyEquals("KnowWE: Test-Selenium-Main", selenium.getTitle());
 
 		loadAndWait("//img[@title='Comments on this Test?']");
 		assertEquals("KnowWE: Selenium-Comment", selenium.getTitle());

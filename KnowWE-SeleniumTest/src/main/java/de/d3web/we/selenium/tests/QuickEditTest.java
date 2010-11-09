@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -27,9 +27,9 @@ import de.d3web.we.selenium.main.KnowledgeTestCase;
 
 /**
  * Selenium Test Class for checking the functionality of QuickEdit.
- * 
+ *
  * @author Max Diez
- * 
+ *
  */
 public class QuickEditTest extends KnowledgeTestCase {
 
@@ -37,20 +37,18 @@ public class QuickEditTest extends KnowledgeTestCase {
 	final String ACCEPT = rb.getString("KnowWE.SeleniumTest.Quick-Edit-Test.button_save");
 	final String QEB = rb.getString("KnowWE.SeleniumTest.Quick-Edit-Test.button_QuickEdit");
 	final String QEA = rb.getString("KnowWE.SeleniumTest.Quick-Edit-Test.EditorArea");
-	final String kopicID = rb.getString("KnowWE.SeleniumTest.Quick-Edit-Test.KopicID");
 	final String tableID = rb.getString("KnowWE.SeleniumTest.Quick-Edit-Test.TableID");
-	final String attTableID = rb.getString("KnowWE.SeleniumTest.Quick-Edit-Test.AttributeTableID");
 	final String eventID = rb.getString("KnowWE.SeleniumTest.Quick-Edit-Test.TimeEventID");
 	final String divLocator = "//div[@id='" + tableID + "']";
 
 	/**
 	 * Testing the quick-edit functionality on a table. Checks multiple changes,
-	 * refrehsing etc..
+	 * refreshing etc..
 	 */
 	public void testQuickTableEditing() {
 
-		open(rb.getString("KnowWE.SeleniumTest.url") + "Wiki.jsp?page=Quick-Edit-Test");
-		assertTrue(selenium.getTitle().contains("KnowWE: Quick-Edit-Test"));
+		open(rb.getString("KnowWE.SeleniumTest.url") + "Wiki.jsp?page=Test-Quick-Edit");
+		assertTrue(selenium.getTitle().contains("KnowWE: Test-Quick-Edit"));
 
 		// Saves the page-content before the test starts (for comparison)
 		loadAndWait(B_EDIT);
@@ -109,8 +107,8 @@ public class QuickEditTest extends KnowledgeTestCase {
 	 */
 	public void testKnowledgeElementsEditing() {
 
-		open(rb.getString("KnowWE.SeleniumTest.url") + "Wiki.jsp?page=Quick-Edit-Test");
-		assertTrue(selenium.getTitle().contains("KnowWE: Quick-Edit-Test"));
+		open(rb.getString("KnowWE.SeleniumTest.url") + "Wiki.jsp?page=Test-Quick-Edit");
+		assertTrue(selenium.getTitle().contains("KnowWE: Test-Quick-Edit"));
 		assertTrue("Solutionpanel nicht eingebunden.", selenium.isElementPresent(ST_LOC));
 
 		// Copy actual page content
@@ -120,48 +118,43 @@ public class QuickEditTest extends KnowledgeTestCase {
 
 		// Some basic functionality test
 		refreshAndWait();
-		String sectionID = kopicID + "/SetCoveringList-section/SetCoveringList-section_content";
+		String sectionID = "Test-Quick-Edit/RootType/CoveringList/content/CoveringList";
 		openQuickEdit(sectionID);
-		openQuickEdit(kopicID + "/Solutions-section/Solutions-section_content");
+		openQuickEdit("Test-Quick-Edit/RootType/Rule/content/RuleContentType/ConditionActionRule");
+
 		assertFalse("Quick-Edit button still present.", selenium.isElementPresent(sectionID + QEB));
 		assertTrue("Save button is not existing.", selenium.isElementPresent(sectionID + ACCEPT));
 		assertTrue("Cancel button is not existing.", selenium.isElementPresent(sectionID + CANCEL));
+
 		String actText = selenium.getBodyText();
 		refreshAndWait();
 		assertEquals("Unsupposed changes in the HTML code by refreshing and an opened quick-edit.",
 				actText, selenium.getBodyText());
 
-		// Short check for questionsheet functionality
-		// Map<String, Integer[]> map = new HashMap<String, Integer[]>();
-		// map.put("Exhaust pipe color", new Integer[] {4});
-		// map.put("Fuel", new Integer[] {2});
-		// result = checkSolutions(new String[] {"Clogged air filter"}, map,
-		// false);
-		// assertEquals("Questionsheet not working (no quick-edit failure): " +
-		// comment, true, result);
-		//
 		// Adding new solution
-		sectionID = kopicID + "/Solutions-section/Solutions-section_content";
-		quickEditAdd(sectionID, "\nMissing wheel");
-		assertTrue("//div[@id='" + sectionID + "'] isn't present (yet).",
-				waitForElement("//div[@id='" + sectionID + "']"));
-		assertTrue("New solution \"Missing wheel\" wasn't saved.", selenium.getText(
-				"//div[@id='" + sectionID + "']").contains("Missing wheel"));
+		// sectionID = "/Solutions-section/Solutions-section_content";
+		// quickEditAdd(sectionID, "\nMissing wheel");
+		// assertTrue("//div[@id='" + sectionID + "'] isn't present (yet).",
+		// waitForElement("//div[@id='" + sectionID + "']"));
+		// assertTrue("New solution \"Missing wheel\" wasn't saved.",
+		// selenium.getText("//div[@id='" + sectionID +
+		// "']").contains("Missing wheel"));
 
-		// Adding new question
-		sectionID = kopicID + "/Questions-section/Questions-section_content";
+		 // Adding new question
+		sectionID = "Test-Quick-Edit/RootType/Question/content/QuestionDashTree";
 		quickEditAdd(sectionID,
 				"\n-How many wheels do you have? [oc]\n-- \"< 4\"\n-- 4\n-- \"> 4\"\n");
 		refreshAndWait();
 		assertTrue(
 				"Question 'How many wheels do you have?' isn't present (yet)",
-				waitForElement("//div[@id='questionsheet']//span[text()='How many wheels do you have?']"));
+				waitForElement("//div[text()='How many wheels do you have?']"));
 
 		// Adding new rule connecting solution and question
-		sectionID = kopicID + "/Rules-section/Rules-section_content";
-		openQuickEdit(sectionID);
-		quickEditAdd(sectionID,
-				"\nIF \"How many wheels do you have?\" = \"< 4\"\nTHEN \"Missing wheel\" = P7");
+		// sectionID =
+		// "Test-Quick-Edit/RootType/Rule/content/RuleContentType/ConditionActionRule";
+		// openQuickEdit(sectionID);
+		// quickEditAdd(sectionID,
+		// "\nIF \"How many wheels do you have?\" = \"< 4\"\nTHEN \"Missing wheel\" = P7");
 
 		// //Again questionsheet test (still working?)
 		// map.put("Exhaust pipe color", new Integer[] {4});
@@ -172,51 +165,83 @@ public class QuickEditTest extends KnowledgeTestCase {
 		//
 		// //Testing if new Solution, Question and Rule are working
 		// map.put("How many wheels do you have?", new Integer[] {1});
-		// result = checkSolutions(new String[] {"Missing wheel"}, map, false);
+		// result = checkSolutions(new String[] {"Missing wheel"}, map,
+		// false);
 		// assertEquals(comment + "(Quick-Edit changes may had no effect)",
 		// true,
 		// result);
 
-		// restore page
-		loadAndWait(B_EDIT);
-		doSelActionAndWait(EA, "type", oldPageContent);
-		loadAndWait(B_SAVE);
+		 // restore page
+		 loadAndWait(B_EDIT);
+		 doSelActionAndWait(EA, "type", oldPageContent);
+		 loadAndWait(B_SAVE);
 	}
 
 	public void testAttributeTableEditing() {
-		String[] oldVal = new String[3];
-		open(rb.getString("KnowWE.SeleniumTest.url") + "Wiki.jsp?page=Quick-Edit-Test");
-		openQuickEdit(attTableID);
-		oldVal[0] = selenium.getAttribute("//input[@id='" + attTableID
-				+ "/AttributeTableLine/AttributeTableCell2']@name");
-		doSelActionAndWait(attTableID + "/AttributeTableLine/AttributeTableCell2", "type",
-				"Newinfo");
-		oldVal[1] = selenium.getAttribute("//input[@id='" + attTableID
-				+ "/AttributeTableLine2/AttributeTableCell3']@name");
-		doSelActionAndWait(attTableID + "/AttributeTableLine2/AttributeTableCell3", "type",
-				"Beschreibung");
-		oldVal[2] = selenium.getAttribute("//input[@id='" + attTableID
-				+ "/AttributeTableLine2/AttributeTableCell']@name");
-		doSelActionAndWait(attTableID + "/AttributeTableLine2/AttributeTableCell", "type",
-				"Leere Batterie");
-		doSelActionAndWait(attTableID + ACCEPT, "click");
-		assertTrue("//img[@id='" + attTableID + QEB + "'] isn't present (yet)",
-				waitForElement("//img[@id='" + attTableID + QEB + "']"));
-		String attTableText = selenium.getText("//div[@id='" + attTableID + "']");
-		assertTrue("New attribute wasn't saved", attTableText.contains("Leere Batterie"));
-		assertTrue("New attribute wasn't saved", attTableText.contains("Newinfo"));
-		assertTrue("New attribute wasn't saved", attTableText.contains("Beschreibung"));
-		// Undo changes
-		openQuickEdit(attTableID);
-		doSelActionAndWait(attTableID + "/AttributeTableLine/AttributeTableCell2", "type",
-				oldVal[0]);
-		doSelActionAndWait(attTableID + "/AttributeTableLine2/AttributeTableCell3", "type",
-				oldVal[1]);
-		doSelActionAndWait(attTableID + "/AttributeTableLine2/AttributeTableCell", "type",
-				oldVal[2]);
-		doSelActionAndWait(attTableID + ACCEPT, "click");
-		assertTrue("//img[@id='" + attTableID + QEB + "'] isn't present (yet)",
-				waitForElement("//img[@id='" + attTableID + QEB + "']"));
+		// not need at the moment
+		return;
+
+		// String[] oldVal = new String[3];
+		// open(rb.getString("KnowWE.SeleniumTest.url") +
+		// "Wiki.jsp?page=Quick-Edit-Test");
+		// openQuickEdit(attTableID);
+		// oldVal[0] = selenium.getAttribute("//input[@id='" + attTableID
+		// +
+		// "/AttributeTableLine/AttributeTableCell2/AttributeTableCellContent']@name");
+		// doSelActionAndWait(attTableID
+		// +
+		// "/AttributeTableLine/AttributeTableCell2/AttributeTableCellContent",
+		// "type",
+		// "Newinfo");
+		// oldVal[1] = selenium.getAttribute("//input[@id='" + attTableID
+		// +
+		// "/AttributeTableLine2/AttributeTableCell3/AttributeTableCellContent']@name");
+		// doSelActionAndWait(attTableID
+		// +
+		// "/AttributeTableLine2/AttributeTableCell3/AttributeTableCellContent",
+		// "type",
+		// "Beschreibung");
+		// oldVal[2] = selenium.getAttribute("//input[@id='" + attTableID
+		// +
+		// "/AttributeTableLine2/AttributeTableCell/AttributeTableCellContent']@name");
+		// doSelActionAndWait(attTableID
+		// +
+		// "/AttributeTableLine2/AttributeTableCell/AttributeTableCellContent",
+		// "type",
+		// "Leere Batterie");
+		// doSelActionAndWait(attTableID + ACCEPT, "click");
+		// assertTrue("//img[@id='" + attTableID + QEB +
+		// "'] isn't present (yet)",
+		// waitForElement("//img[@id='" + attTableID + QEB + "']"));
+		// String attTableText = selenium.getText("//div[@id='" + attTableID +
+		// "']");
+		// assertTrue("New attribute wasn't saved",
+		// attTableText.contains("Leere Batterie"));
+		// assertTrue("New attribute wasn't saved",
+		// attTableText.contains("Newinfo"));
+		// assertTrue("New attribute wasn't saved",
+		// attTableText.contains("Beschreibung"));
+		// // Undo changes
+		// openQuickEdit(attTableID);
+		// doSelActionAndWait(attTableID
+		// +
+		// "/AttributeTableLine/AttributeTableCell2/AttributeTableCellContent",
+		// "type",
+		// oldVal[0]);
+		// doSelActionAndWait(attTableID
+		// +
+		// "/AttributeTableLine2/AttributeTableCell3/AttributeTableCellContent",
+		// "type",
+		// oldVal[1]);
+		// doSelActionAndWait(attTableID
+		// +
+		// "/AttributeTableLine2/AttributeTableCell/AttributeTableCellContent",
+		// "type",
+		// oldVal[2]);
+		// doSelActionAndWait(attTableID + ACCEPT, "click");
+		// assertTrue("//img[@id='" + attTableID + QEB +
+		// "'] isn't present (yet)",
+		// waitForElement("//img[@id='" + attTableID + QEB + "']"));
 	}
 
 	// public void testHermesTimeEventEditing() {
@@ -244,7 +269,7 @@ public class QuickEditTest extends KnowledgeTestCase {
 
 	/**
 	 * Adds some new content to the page (e.g. to Rules-section) per QuickEdit.
-	 * 
+	 *
 	 * @param sectionID The ID of the section containing the QuickEdit which
 	 *        should be used.
 	 * @param newText The new content which is being added after the existing
@@ -263,7 +288,7 @@ public class QuickEditTest extends KnowledgeTestCase {
 	 * This method simulates the using of quickedit: First the quickedit is
 	 * opened, then the select button is changed to a new value and at last it
 	 * is clicked on save or cancel.
-	 * 
+	 *
 	 * @param tableCellLocator Locator of the select button in row x and column
 	 *        y, normally in a form like //table/tbody/tr[x]/td[y]/select
 	 * @param newValue is chosen (has to be in the select's drop down list)
@@ -283,7 +308,7 @@ public class QuickEditTest extends KnowledgeTestCase {
 	 * opened, eventually the page is refreshed and then all the select buttons
 	 * are changed to their new value and at last it is clicked on save or
 	 * cancel.
-	 * 
+	 *
 	 * @param tableCellLocator Locator of the select button in row x and column
 	 *        y, normally in a form like //table/tbody/tr[x]/td[y]/select
 	 * @param newValue is chosen (has to be in the select's drop down list)
@@ -321,7 +346,7 @@ public class QuickEditTest extends KnowledgeTestCase {
 
 	/**
 	 * Opens the Quick-Edit-Mode and checks if it was already opened.
-	 * 
+	 *
 	 * @param locator The id of the section containing the Quick-Edit-Element
 	 *        (e.g.
 	 *        Quick-Edit-Test/RootType/Kopic/Kopic_content/Rules-section/Rules

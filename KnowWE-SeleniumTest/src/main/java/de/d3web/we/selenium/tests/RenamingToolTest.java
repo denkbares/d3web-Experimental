@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2010 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -29,7 +29,7 @@ import de.d3web.we.selenium.main.KnowledgeTestCase;
 
 /**
  * Selenium test for the Renaming tool of KnowWE.
- * 
+ *
  * @author Stefan Mark
  */
 public class RenamingToolTest extends KnowledgeTestCase {
@@ -88,7 +88,7 @@ public class RenamingToolTest extends KnowledgeTestCase {
 	 * Tests the renaming of not all available elements only users choice are
 	 * replaced. Only the findings in the Page "Renaming-Tool-Test" should be
 	 * replaced.
-	 * 
+	 *
 	 * @created 30.09.2010
 	 */
 	public void testSimpleCertain() {
@@ -103,7 +103,7 @@ public class RenamingToolTest extends KnowledgeTestCase {
 		int findings = countElements(selenium.getHtmlSource(), "span[id^=p]");
 		assertEquals("Unexpected number of findings found after preview action.", 7, findings);
 
-		doSelActionAndWait("//input[@rel='{section: \"Renaming-Tool-Test\"}']", "click");
+		doSelActionAndWait("//input[@rel='{section: \"Test-Renaming-Tool\"}']", "click");
 		doReplace();
 
 		String newPageContent = getWikiPageContent();
@@ -134,7 +134,7 @@ public class RenamingToolTest extends KnowledgeTestCase {
 	/**
 	 * Test the renaming of the findings in certain context. If the context is
 	 * wrong no renaming should happen.
-	 * 
+	 *
 	 * @created 30.09.2010
 	 */
 	public void testSimpleContextPrevious() {
@@ -173,7 +173,7 @@ public class RenamingToolTest extends KnowledgeTestCase {
 	/**
 	 * Test the renaming of the findings in certain context. If the context is
 	 * wrong no renaming should happen.
-	 * 
+	 *
 	 * @created 30.09.2010
 	 */
 	public void testSimpleContextAfter() {
@@ -211,7 +211,7 @@ public class RenamingToolTest extends KnowledgeTestCase {
 
 	/**
 	 * Test the renaming of the findings in case sensitive mode.
-	 * 
+	 *
 	 * @created 30.09.2010
 	 */
 	public void testSimpleCase() {
@@ -251,7 +251,7 @@ public class RenamingToolTest extends KnowledgeTestCase {
 
 	/**
 	 * Tests the renaming of knowledge elements like RuleSections etc.
-	 * 
+	 *
 	 * @created 30.09.2010
 	 */
 	public void testKnowledgeElementsRenaming() {
@@ -267,7 +267,7 @@ public class RenamingToolTest extends KnowledgeTestCase {
 		int findings = countElements(selenium.getHtmlSource(), "span[id^=p]");
 		assertEquals("Unexpected number of findings found after preview action.", 2, findings);
 
-		doSelActionAndWait("//input[@rel='{section: \"Renaming-Tool-Test\"}']", "click");
+		doSelActionAndWait("//input[@rel='{section: \"Test-Renaming-Tool\"}']", "click");
 		doReplace();
 
 		doSelActionAndWait(SEARCH_INPUT, "type", "AAAAAAAAAAAA");
@@ -288,30 +288,31 @@ public class RenamingToolTest extends KnowledgeTestCase {
 	/**
 	 * Checks if the Selection of certain section, which should be taken into
 	 * account while searching for findings, works properly.
-	 * 
+	 *
 	 * @created 30.09.2010
 	 */
 	public void testKnowledgeElementSelectionRenaming() {
 		checkCorrectPageAndRenamingPresent();
 
-		doSelActionAndWait(SEARCH_INPUT, "type", "charm");
+		doSelActionAndWait(SEARCH_INPUT, "type", "Yes");
 		doSelActionAndWait(REPLACE_INPUT, "type", "AAAAAAAAAAAA");
 
-		// open up the first hierarchy of the search tree:
-		doSelActionAndWait("//td[@id='ygtvt1']", "click");
-		// open up the second hierarchy of the search tree:
-		doSelActionAndWait("//td[@id='ygtvt2']", "click");
-		// deselect ALL elements:
-		doSelActionAndWait("//span[text()='alle Bereiche']", "click");
-		// select only 'SetCoveringList-section':
-		doSelActionAndWait("//span[text()='SetCoveringList-section']", "click");
+		String[] elements = {
+				"rename-show-extend", "//td[@id='ygtvt1']/a", "//td[@id='ygtvt2']/a"
+				, "//td[@id='ygtvt357']/a", "//td[@id='ygtvt358']/a", "//td[@id='ygtvt359']/a"
+				, "//td[@id='ygtvt360']/a", "//td[@id='ygtvt361']/a", "//td[@id='ygtvt364']/a"
+				, "//td[@id='ygtvt390']/a", "ygtvcontentel1", "ygtvcontentel391" };
+
+		for (String element : elements) {
+			doSelActionAndWait(element, "click");
+		}
 
 		doSelActionAndWait(PREVIEW, "click");
 
 		int findings = countElements(selenium.getHtmlSource(), "span[id^=p]");
 		assertEquals(
 				"Unexpected number of findings found after preview action. Selection of to search in section is working wrong.",
-				2, findings);
+				1, findings);
 	}
 	/**
 	 * Checks if the Renaming Page is correctly opened and if the renaming tool
@@ -319,17 +320,13 @@ public class RenamingToolTest extends KnowledgeTestCase {
 	 * content of the renaming tool test page is set to the page data stored in
 	 * the properties file to ensure the page contains the elements that should
 	 * be present.
-	 * 
+	 *
 	 * @created 30.09.2010
 	 */
 	private void checkCorrectPageAndRenamingPresent() {
 
-		open(rb.getString("KnowWE.SeleniumTest.url") + "Wiki.jsp");
-		assertTrue(selenium.getTitle().contains("Main"));
-		resetWikiPageContent(rb.getString("KnowWE.SeleniumTest.Main"));
-
-		open(rb.getString("KnowWE.SeleniumTest.url") + "Wiki.jsp?page=Renaming-Tool-Test");
-		assertTrue(selenium.getTitle().contains("KnowWE: Renaming-Tool-Test"));
+		open(rb.getString("KnowWE.SeleniumTest.url") + "Wiki.jsp?page=Test-Renaming-Tool");
+		assertTrue(selenium.getTitle().contains("KnowWE: Test-Renaming-Tool"));
 		resetWikiPageContent(rb.getString("KnowWE.SeleniumTest.Renaming"));
 
 		verifyTrue(selenium.isElementPresent(PREVIEW));
@@ -348,7 +345,7 @@ public class RenamingToolTest extends KnowledgeTestCase {
 	 * This methods takes the page as HTML and extracts a certain HTML element.
 	 * This element can then further used for verifying executed tasks e.g. Uses
 	 * the JSoup library.
-	 * 
+	 *
 	 * @created 30.09.2010
 	 * @param page The page HTML source
 	 * @param id The id of the to extract element
@@ -367,7 +364,7 @@ public class RenamingToolTest extends KnowledgeTestCase {
 	 * After the preview button is pressed, the request is send via AJAX to the
 	 * server. Due to different processing times and sending times, this methods
 	 * ensure, that the result has properly come back from the server.
-	 * 
+	 *
 	 * @created 30.09.2010
 	 */
 	private void doReplace() {
@@ -381,7 +378,7 @@ public class RenamingToolTest extends KnowledgeTestCase {
 	/**
 	 * Searches within the DOM for the elements specified through the
 	 * <code>locator</code> string. The number of found elements is returned.
-	 * 
+	 *
 	 * @created 30.09.2010
 	 * @param page The content of the page as HTML.
 	 * @param locator The DOM element identifier.

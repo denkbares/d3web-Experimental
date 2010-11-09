@@ -37,69 +37,92 @@ public class CarDiagnosisTest extends KnowledgeTestCase {
 		this.isDialog = false;
 	}
 
+	/**
+	 * @created 02.11.2010
+	 */
 	public void testCD1() {
 		initKnowledgeTest();
-		map.put("Battery o.k.?", new Integer[] { 2 });
-		map.put("Ignition timing o.k.?", new Integer[] { 2 });
-		map.put("Air filter o.k.?", new Integer[] { 2 });
-		map.put("Air intake system o.k.?", new Integer[] { 2 });
-		map.put("Idle speed system o.k.?", new Integer[] { 2 });
+		solutions.put("Check: Battery", new String[] { "not ok" });
+		solutions.put("Check: Ignition timing", new String[] { "not ok" });
+		solutions.put("Check: Air filter", new String[] { "not ok" });
+		solutions.put("Check: Air intake system", new String[] { "not ok" });
+		solutions.put("Check: Idle speed system", new String[] { "not ok" });
 		result = checkSolutions(new String[] {
-				"Empty battery", "Bad ignition timing",
+				"Flat battery", "Dead battery", "Bad ignition timing",
 				"Clogged air filter", "Leaking air intake system",
-				"Damaged idle speed system" }, map, isDialog);
+				"Damaged idle speed system" }, solutions, isDialog);
 		assertEquals(testResult, true, result);
 	}
 
+	/**
+	 * @created 02.11.2010
+	 */
 	public void testCD2() {
 		initKnowledgeTest();
-		map.put("Engine noises", new Integer[] { 1 });
-		result = checkSolutions(new String[] { "Bad ignition timing" }, map, isDialog);
+		solutions.put("Engine noises", new String[] { "ringing" });
+		result = checkSolutions(new String[] { "Bad ignition timing" }, solutions, isDialog);
 		assertEquals(testResult, true, result);
 	}
 
+	/**
+	 * @created 02.11.2010
+	 */
 	public void testCD3() {
 		initKnowledgeTest();
-		map.put("Engine start", new Integer[] { 1 });
-		map.put("Battery o.k.?", new Integer[] { 1 });
+		solutions.clear();
+		solutions.put("Engine start", new String[] { "engine barely starts" });
+		solutions.put("Check: Battery", new String[] { "ok" });
 		result = checkAndUncheckSolutions(new String[] { "Damaged idle speed system" },
-				new String[] { "Battery empty" }, map, isDialog);
+				new String[] { "Flat battery" }, solutions, isDialog);
 		assertEquals(testResult, true, result);
 	}
 
+	/**
+	 * @created 02.11.2010
+	 */
 	public void testCD4() {
 		initKnowledgeTest();
-		map.put("Exhaust pipe color", new Integer[] { 2 });
-		map.put("Driving", new Integer[] {
-				1, 2, 3 });
+		solutions.put("Exhaust pipe color", new String[] { "grey" });
+		solutions.put("Driving", new String[] {
+				"insufficient power on partial load", "insufficient power on full load",
+				"unsteady idle speed" });
 		result = checkAndUncheckSolutions(new String[] { "Leaking air intake system" },
-				new String[] { "Clogged air filter" }, map, isDialog);
+				new String[] { "Clogged air filter" }, solutions, isDialog);
 		assertEquals(testResult, true, result);
 	}
 
+	/**
+	 * @created 02.11.2010
+	 */
 	public void testCD5() {
 		initKnowledgeTest();
-		map.put("Exhaust pipe color", new Integer[] { 4 });
-		map.put("Fuel", new Integer[] { 2 });
-		result = checkSolutions(new String[] { "Clogged air filter" }, map, isDialog);
+		solutions.put("Exhaust pipe color", new String[] { "sooty black" });
+		solutions.put("Fuel", new String[] { "unleaded gasoline" });
+		result = checkSolutions(new String[] { "Clogged air filter" }, solutions, isDialog);
 		assertEquals("Covering-List not working:" + testResult, true, result);
 	}
 
+	/**
+	 * @created 02.11.2010
+	 */
 	public void testCD6() {
 		initKnowledgeTest();
-		map.put("Exhaust fumes", new Integer[] { 1 });
-		map.put("Fuel", new Integer[] { 2 });
-		result = checkSolutions(new String[] { "Clogged air filter" }, map, isDialog);
+		solutions.put("Exhaust fumes", new String[] { "black" });
+		solutions.put("Fuel", new String[] { "unleaded gasoline" });
+		result = checkSolutions(new String[] { "Clogged air filter" }, solutions, isDialog);
 		assertEquals(testResult, true, result);
 	}
 
+	/**
+	 * @created 02.11.2010
+	 */
 	public void testCD7() {
 		initKnowledgeTest();
-		map.put("Exhaust fumes", new Integer[] { 1 });
-		map.put("Fuel", new Integer[] { 2 });
-		map.put("Battery o.k.?", new Integer[] { 2 });
+		solutions.put("Exhaust fumes", new String[] { "black" });
+		solutions.put("Fuel", new String[] { "unleaded gasoline" });
+		solutions.put("Check: Battery", new String[] { "not ok" });
 		result = checkSolutions(new String[] {
-				"Clogged air filter", "Empty battery" }, map, isDialog);
+				"Clogged air filter", "Flat battery", "Dead battery" }, solutions, isDialog);
 		assertEquals(testResult, true, result);
 	}
 }

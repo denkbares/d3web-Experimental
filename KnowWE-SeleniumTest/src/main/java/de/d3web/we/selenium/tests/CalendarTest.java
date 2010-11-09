@@ -28,7 +28,7 @@ import de.d3web.we.selenium.main.KnowWETestCase;
 public class CalendarTest extends KnowWETestCase {
 
 	public void testNewCalendarEntry() {
-		open(rb.getString("KnowWE.SeleniumTest.url") + "Wiki.jsp?page=Selenium-Test");
+		open(rb.getString("KnowWE.SeleniumTest.url") + "Wiki.jsp?page=Test-Selenium-Main");
 		loadAndWait("//img[@title='Add some appointments']");
 		verifyTrue(selenium.getTitle().contains("Selenium-Docu"));
 		loadAndWait(B_EDIT);
@@ -41,7 +41,7 @@ public class CalendarTest extends KnowWETestCase {
 		loadAndWait(B_SAVE);
 
 		loadAndWait("link=<< back");
-		verifyEquals("KnowWE: Selenium-Test", selenium.getTitle());
+		verifyEquals("KnowWE: Test-Selenium-Main", selenium.getTitle());
 		assertTrue("Neuer Kalendereintrag wurde nicht/nicht richtig in die Termin" +
 				"uebersicht uebernommen",
 				selenium.isTextPresent("aktuelle Selenium-Test")

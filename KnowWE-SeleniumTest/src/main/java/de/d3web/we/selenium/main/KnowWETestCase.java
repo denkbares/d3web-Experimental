@@ -20,7 +20,13 @@
 
 package de.d3web.we.selenium.main;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
+
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import com.thoughtworks.selenium.KnowWESeleneseTestCase;
 
@@ -276,6 +282,50 @@ public abstract class KnowWETestCase extends KnowWESeleneseTestCase {
 		loadAndWait(B_SAVE);
 	}
 
+	/**
+	 * Returns a Selenium selector that can be used to locate the element within
+	 * a HTML page. The selector contains the whole path from the root to the
+	 * element. The child element is selected with the JSOUP HTML parser.
+	 * 
+	 * @created 02.11.2010
+	 * @param child
+	 * @return String
+	 */
+	public String getXPath(Element child) {
+		List<String> elements = new ArrayList<String>();
+		Elements path = child.parents();
+		path.add(0, child);
+
+		for (Element p : path) {
+			if (p.tag().toString().equals("body")) break;
+
+			StringBuilder node = new StringBuilder();
+			node.append(p.tag());
+
+			if (!p.id().equals("")) {
+				node.append("[@id='");
+				node.append(p.id());
+				node.append("']");
+			}
+			else {
+				if (p.elementSiblingIndex() != 0) {
+					node.append("[");
+					node.append(p.elementSiblingIndex() + 1);
+					node.append("]");
+				}
+			}
+			elements.add(node.toString());
+		}
+		Collections.reverse(elements);
+
+		StringBuilder xpath = new StringBuilder();
+		for (String s : elements) {
+			xpath.append("/");
+			xpath.append(s);
+		}
+		return "/" + xpath.toString();
+	}	
+	
 	/**
 	 * A little help if you have a locator but want to access an ancestor of a
 	 * special type of the given element.
