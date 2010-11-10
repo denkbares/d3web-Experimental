@@ -93,12 +93,6 @@
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>d3web-KnowledgeExporter</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>d3web-KnOfficeParser</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
