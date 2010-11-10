@@ -249,15 +249,6 @@
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="GenerateKBAction">
-		<parameter id="class" value="de.d3web.we.action.GenerateKBAction" />
-		<parameter id="name" value="GenerateKBAction" />
-		<parameter id="description" value="Action GenerateKBAction" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>
-
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="SemanticAnnotationAction">
 		<parameter id="class" value="de.d3web.we.action.SemanticAnnotationAction" />
 		<parameter id="name" value="SemanticAnnotationAction" />
