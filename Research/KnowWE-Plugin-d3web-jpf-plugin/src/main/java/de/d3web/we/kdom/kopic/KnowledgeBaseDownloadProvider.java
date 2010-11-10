@@ -58,6 +58,9 @@ public class KnowledgeBaseDownloadProvider implements ToolProvider {
 	protected Tool getDownloadTool(KnowWEArticle article, Section<?> section, KnowWEUserContext userContext) {
 		// tool to provide download capability
 		String kbName = DefaultMarkupType.getContent(section).trim();
+		if (kbName.isEmpty()) {
+			kbName = "knowledgebase";
+		}
 		String jsAction = "window.location='action/DownloadKnowledgeBase" +
 				"?" + KnowWEAttributes.TOPIC + "=" + article.getTitle() +
 				"&" + KnowWEAttributes.WEB + "=" + article.getWeb() +
