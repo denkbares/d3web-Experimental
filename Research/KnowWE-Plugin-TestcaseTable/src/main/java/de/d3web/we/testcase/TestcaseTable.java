@@ -20,6 +20,7 @@
 
 package de.d3web.we.testcase;
 
+import de.d3web.we.core.KnowWERessourceLoader;
 import de.d3web.we.kdom.table.Table;
 
 /**
@@ -29,6 +30,8 @@ public class TestcaseTable extends Table {
 
 	public TestcaseTable() {
 		super(new TestcaseTableAttributesProvider());
+		KnowWERessourceLoader.getInstance().add("testcasetable.js",
+				KnowWERessourceLoader.RESOURCE_SCRIPT);
 		this.childrenTypes.add(0, new TestcaseTableLine());
 	}
 

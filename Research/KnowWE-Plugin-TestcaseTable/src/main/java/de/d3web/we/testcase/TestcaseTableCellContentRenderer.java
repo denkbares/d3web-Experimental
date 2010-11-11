@@ -49,7 +49,7 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 			boolean sort = TableUtils.sortTest(sec);
 			boolean validTimeStamp = false;
 
-			if (TimeStampType.isValid(timestamp.getOriginalText())) {
+			if (timestamp != null && TimeStampType.isValid(timestamp.getOriginalText())) {
 				validTimeStamp = true;
 			}
 

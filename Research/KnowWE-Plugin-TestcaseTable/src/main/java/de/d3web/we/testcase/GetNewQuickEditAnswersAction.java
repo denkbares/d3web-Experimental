@@ -68,6 +68,8 @@ public class GetNewQuickEditAnswersAction extends AbstractAction {
 				}
 				else if (q instanceof QuestionChoice) {
 					StringBuffer buffy = new StringBuffer();
+					System.out.println(((QuestionChoice) q)
+							.getAllAlternatives());
 					for (Choice c : ((QuestionChoice) q)
 							.getAllAlternatives()) {
 						buffy.append(c.getName() + "[:;:]");

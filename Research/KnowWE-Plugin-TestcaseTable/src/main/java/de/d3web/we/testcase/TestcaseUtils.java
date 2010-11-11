@@ -32,7 +32,6 @@ import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.table.TableCellContent;
-import de.d3web.we.kdom.table.TableLine;
 import de.d3web.we.kdom.table.TableUtils;
 
 /**
@@ -48,16 +47,28 @@ public class TestcaseUtils {
 
 		KnowledgeBase knowledgeService = D3webModule.getAD3webKnowledgeServiceInTopic(
 				s.getWeb(), s.getTitle());
+
+		// if autocompile is off
+		if (knowledgeService == null) {
+			return null;
+		}
 		List<Question> questions = knowledgeService.getQuestions();
 		List<Solution> solutions = knowledgeService.getSolutions();
 
-		if (s.getObjectType() instanceof TestcaseTableCellContent) {
+		int col = TableCellContent.getCol(s);
+		int row = TableCellContent.getRow(s);
+
+		if (col == 0) {
 			return null;
 		}
+		// das hier ist immer true
+		// if (s.getObjectType() instanceof TestcaseTableCellContent) {
+		// return null;
+		// }
 
+		// line ist null weil falsche abfrage
 		if (s.getObjectType() instanceof TableCellContent) {
-			Section<TableLine> line = s.findAncestorOfExactType(TableLine.class);
-			if (TableLine.isHeaderLine(line)) {
+			if (row == 0) {
 				return getHeaderAlternatives(s, questions, solutions);
 			}
 			else {

@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2010 University Wuerzburg, Computer Science VI
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -34,8 +34,17 @@ public class TimeStampType extends DefaultAbstractKnowWEObjectType {
 	private static String MINUTE = "\\d+m\\s*";
 	private static String SECOND = "\\d+s\\s*";
 	private static String MILLIS = "\\d+ms\\s*";
-	private static String pattern = "(" + HOUR + "|" + HOUR + MINUTE + "|" + HOUR + MINUTE + SECOND
-			+ "|" + HOUR + MINUTE + SECOND + MILLIS + ")";
+	private static String HOUR_PERMUTATION = HOUR + "(" + MINUTE + ")?(" + SECOND + ")?(" + MILLIS
+			+ ")?";
+	private static String MINUTE_PERMUTATION = "(" + HOUR + ")?" + MINUTE + "(" + SECOND + ")?("
+			+ MILLIS + ")?";
+	private static String SECOND_PERMUTATION = "(" + HOUR + ")?(" + MINUTE + ")?" + SECOND + "("
+			+ MILLIS + ")?";
+	private static String MILLIS_PERMUTATION = "(" + HOUR + ")?(" + MINUTE + ")?(" + SECOND
+			+ ")?" + MILLIS;
+
+	private static String pattern = "(" + HOUR_PERMUTATION + "|" + MINUTE_PERMUTATION + "|"
+			+ SECOND_PERMUTATION + "|" + MILLIS_PERMUTATION + ")";
 	private static Pattern timeStampPattern = Pattern.compile(pattern);
 
 	public TimeStampType() {
