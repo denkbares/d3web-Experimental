@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -55,7 +55,7 @@ public class UpperOntology {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param defaultModulesTxtPath
 	 * @return an instance
 	 */
@@ -82,7 +82,7 @@ public class UpperOntology {
 
 	private UpperOntology(String path) {
 		// quickfix due to repository refactoring
-		path = path.replaceAll("Research", "d3web-KnowWE");
+		// path = path.replaceAll("Research", "d3web-KnowWE");
 		settings = new HashMap<String, String>();
 		ontfile = path + File.separatorChar + ontfile;
 		settings.put("ontfile", ontfile);
@@ -203,7 +203,7 @@ public class UpperOntology {
 
 	/**
 	 * sets the new locale namespace
-	 * 
+	 *
 	 * @param locns
 	 * @throws RepositoryException
 	 */
