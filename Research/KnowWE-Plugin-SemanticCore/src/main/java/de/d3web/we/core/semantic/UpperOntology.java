@@ -81,10 +81,6 @@ public class UpperOntology {
 	private final String reppath;
 
 	private UpperOntology(String path) {
-		// quickfix due to repository refactoring
-		Logger.getLogger(this.getClass().getName()).info(path);
-		path = path.replaceAll("Research", "d3web-KnowWE");
-		Logger.getLogger(this.getClass().getName()).info(path);
 		settings = new HashMap<String, String>();
 		ontfile = path + File.separatorChar + ontfile;
 		settings.put("ontfile", ontfile);
@@ -198,6 +194,7 @@ public class UpperOntology {
 			loadOwlFile(new File(ontfile));
 		}
 		catch (RepositoryException e) {
+			System.out.println(myRepository);
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

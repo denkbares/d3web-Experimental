@@ -3,17 +3,17 @@ package de.d3web.we.core.semantic;
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -28,9 +28,9 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.WeakHashMap;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -66,7 +66,7 @@ import de.d3web.we.wikiConnector.KnowWEWikiConnector;
  * triplestore. SemanticCore manages namespaces, queries and the addition of
  * statementes. It is a singleton which is initialised at boottime (of KnowWE)
  * See also: {@link UpperOntology} {@link TaggingMangler}
- * 
+ *
  * @author FHaupt
  * @created Mar 25, 2010
  */
@@ -126,7 +126,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.d3web.we.core.ISemanticCore#addNamespace(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -240,7 +240,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.d3web.we.core.ISemanticCore#getSettings()
 	 */
 	public HashMap<String, String> getSettings() {
@@ -248,7 +248,7 @@ public class SemanticCore implements ISemanticCore {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return an instance, you're in trouble if it hasn't been initialized
 	 */
 	public static synchronized ISemanticCore getInstance() {
@@ -264,7 +264,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.d3web.we.core.ISemanticCore#clone()
 	 */
 	@Override
@@ -274,7 +274,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.d3web.we.core.ISemanticCore#getUpper()
 	 */
 	public UpperOntology getUpper() {
@@ -283,7 +283,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * de.d3web.we.core.ISemanticCore#addStatements(de.d3web.we.core.semantic
 	 * .IntermediateOwlObject, de.d3web.we.kdom.Section)
@@ -331,7 +331,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * de.d3web.we.core.ISemanticCore#addStaticStatements(de.d3web.we.core.semantic
 	 * .IntermediateOwlObject, de.d3web.we.kdom.Section)
@@ -353,7 +353,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.d3web.we.core.ISemanticCore#getContext(de.d3web.we.kdom.Section)
 	 */
 	public Resource getContext(Section sec) {
@@ -369,7 +369,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * de.d3web.we.core.ISemanticCore#tupleQuery(org.openrdf.query.TupleQuery)
 	 */
@@ -380,7 +380,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * de.d3web.we.core.ISemanticCore#graphQuery(org.openrdf.query.GraphQuery)
 	 */
@@ -391,7 +391,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * de.d3web.we.core.ISemanticCore#booleanQuery(org.openrdf.query.BooleanQuery
 	 * )
@@ -403,7 +403,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.d3web.we.core.ISemanticCore#getTopicStatements(java.lang.String)
 	 */
 	public List<Statement> getTopicStatements(String topic) {
@@ -415,7 +415,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * de.d3web.we.core.ISemanticCore#getSectionStatementsRecursive(de.d3web
 	 * .we.kdom.Section)
@@ -451,7 +451,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.d3web.we.core.ISemanticCore#getImportList()
 	 */
 	public File[] getImportList() {
@@ -474,7 +474,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.d3web.we.core.ISemanticCore#removeFile(java.lang.String)
 	 */
 	public void removeFile(String filename) {
@@ -506,7 +506,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * de.d3web.we.core.ISemanticCore#clearContext(de.d3web.we.kdom.Section)
 	 */
@@ -560,9 +560,9 @@ public class SemanticCore implements ISemanticCore {
 
 	/**
 	 * Belongs to the hack that should fix the non-returning remove-operation
-	 * 
+	 *
 	 * @author Jochen
-	 * 
+	 *
 	 */
 	class StatementRemover implements Runnable {
 
@@ -576,9 +576,9 @@ public class SemanticCore implements ISemanticCore {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.Runnable#run()
-		 * 
+		 *
 		 * normally no own thread SHOULD be necessary to do this
 		 */
 		@Override
@@ -599,7 +599,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * de.d3web.we.core.ISemanticCore#clearContext(de.d3web.we.kdom.KnowWEArticle
 	 * )
@@ -625,7 +625,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.d3web.we.core.ISemanticCore#getSparqlNamespaceShorts()
 	 */
 	public String getSparqlNamespaceShorts() {
@@ -645,7 +645,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.d3web.we.core.ISemanticCore#simpleQueryToList(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -720,7 +720,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.d3web.we.core.ISemanticCore#booleanQuery(java.lang.String)
 	 */
 	public boolean booleanQuery(String inquery) {
@@ -752,7 +752,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.d3web.we.core.ISemanticCore#writeDump(java.io.OutputStream)
 	 */
 	public void writeDump(OutputStream stream) {
@@ -761,7 +761,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.d3web.we.core.ISemanticCore#getDefaultNameSpaces()
 	 */
 	public HashMap<String, String> getDefaultNameSpaces() {
@@ -770,7 +770,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.d3web.we.core.ISemanticCore#getNameSpaces()
 	 */
 	public HashMap<String, String> getNameSpaces() {
@@ -779,7 +779,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.d3web.we.core.ISemanticCore#expandNamespace(java.lang.String)
 	 */
 	public String expandNamespace(String ns) {
@@ -801,7 +801,7 @@ public class SemanticCore implements ISemanticCore {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.d3web.we.core.ISemanticCore#reduceNamespace(java.lang.String)
 	 */
 	public String reduceNamespace(String s) {
