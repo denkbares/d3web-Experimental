@@ -112,12 +112,12 @@ public class DefaultMarkupRenderer<T extends DefaultMarkupType> extends KnowWEDo
 		return "<script>\n" +
 				"var makeHeaderFx = function() {\n" +
 				"var a=$('header_" + id + "');\n" +
-				"var b=a.effect(\"opacity\",{wait:false}).set(0.2);\n" +
+				"var b=a.effect(\"opacity\",{wait:false,duration:200}).set(0.3);\n" +
 				"var d=a.effect(\"max-width\",{wait:false}).set(35);\n" +
 				"a.set({href:\"#\",events:{" +
-				"mouseout:function(){b.start(0.2);d.start(35);}," +
-				"click:function(){b.start(1);d.start(250);}," +
-				"mouseover:function(){b.start(1);d.start(250);}}});" +
+				"mouseout:function(){b.start(0.3);d.start(35);a.style['z-index']=1000;}," +
+				"click:function(){b.start(1);d.start(250);a.style['z-index']=1500;}," +
+				"mouseover:function(){b.start(1);d.start(250);a.style['z-index']=1500;}}});" +
 				"};" +
 				"makeHeaderFx();" +
 				"</script>\n";
@@ -137,7 +137,8 @@ public class DefaultMarkupRenderer<T extends DefaultMarkupType> extends KnowWEDo
 
 	public static void renderDefaultMarkupStyled(String header, String content, String sectionID, Tool[] tools, StringBuilder string) {
 
-		string.append(KnowWEUtils.maskHTML("<div id=\"" + sectionID + "\" class='defaultMarkupFrame'>\n"));
+		string.append(KnowWEUtils.maskHTML("<div id=\"" + sectionID
+				+ "\" class='defaultMarkupFrame'>\n"));
 
 		boolean hasTools = tools != null && tools.length > 0;
 		boolean hasMenu = hasTools;
@@ -149,7 +150,8 @@ public class DefaultMarkupRenderer<T extends DefaultMarkupType> extends KnowWEDo
 		}
 
 		string.append(KnowWEUtils.maskHTML(
-				"<div id='header_" + sectionID + "' " + "class='markupHeaderFrame'>"));
+				"<div id='header_" + sectionID + "' " +
+						"class='markupHeaderFrame'>"));
 		string.append(KnowWEUtils.maskHTML("<div class='markupHeader'>"));
 		string.append(header);
 		if (hasMenu) {
@@ -167,8 +169,10 @@ public class DefaultMarkupRenderer<T extends DefaultMarkupType> extends KnowWEDo
 		string.append(KnowWEUtils.maskHTML("</div>")); // class=markupHeaderFrame
 
 		// render pre-formatted box
-		string.append(KnowWEUtils.maskHTML("<div id=\"box_" + sectionID + "\" class='defaultMarkup'>"));
-		string.append(KnowWEUtils.maskHTML("<div id=\"content_" + sectionID + "\" class='markupText'>"));
+		string.append(KnowWEUtils.maskHTML("<div id=\"box_" + sectionID
+				+ "\" class='defaultMarkup'>"));
+		string.append(KnowWEUtils.maskHTML("<div id=\"content_" + sectionID
+				+ "\" class='markupText'>"));
 
 		// render content
 		string.append(content);
