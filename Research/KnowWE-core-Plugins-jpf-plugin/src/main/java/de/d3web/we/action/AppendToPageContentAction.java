@@ -50,7 +50,7 @@ public class AppendToPageContentAction extends DeprecatedAbstractKnowWEAction {
 		// append
 		Map<String, String> nodesMap = new HashMap<String, String>();
 		nodesMap.put(art.getSection().getID(), art.getSection().getOriginalText() + appendText);
-		return mgr.replaceKDOMNodes(parameterMap, name, nodesMap);
+		return mgr.replaceKDOMNodesSaveAndBuild(parameterMap, name, nodesMap);
 	}
 
 }

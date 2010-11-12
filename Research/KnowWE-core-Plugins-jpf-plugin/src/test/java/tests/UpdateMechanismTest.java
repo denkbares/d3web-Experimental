@@ -58,7 +58,7 @@ public class UpdateMechanismTest extends TestCase {
 		 */
 		KnowWEArticle article1 = KnowWEArticle.createArticle(content, "UpdatingTest",
 				new GenericXMLObjectType(), "default_web");
-		KnowWEEnvironment.getInstance().getArticleManager("default_web").saveUpdatedArticle(
+		KnowWEEnvironment.getInstance().getArticleManager("default_web").registerArticle(
 				article1);
 
 		/*

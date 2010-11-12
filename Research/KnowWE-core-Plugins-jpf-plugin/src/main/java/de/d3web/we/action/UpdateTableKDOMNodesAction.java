@@ -71,7 +71,7 @@ public class UpdateTableKDOMNodesAction extends DeprecatedAbstractKnowWEAction {
 				}
 			}
 			StringBuilder buddy = new StringBuilder();
-			mgr.replaceKDOMNodes(parameterMap, name, nodesMap);
+			mgr.replaceKDOMNodesSaveAndBuild(parameterMap, name, nodesMap);
 		}
 
 		return "done";

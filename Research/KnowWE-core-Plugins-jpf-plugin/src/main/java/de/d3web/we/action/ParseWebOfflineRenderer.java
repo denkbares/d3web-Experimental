@@ -47,7 +47,7 @@ public class ParseWebOfflineRenderer extends DeprecatedAbstractKnowWEAction {
 		int problems = 0;
 		for (String name : articleNames) {
 			KnowWEDomParseReport object = KnowWEEnvironment.getInstance()
-					.getArticleManager(webname).saveUpdatedArticle(
+					.getArticleManager(webname).registerArticle(
 							KnowWEArticle.createArticle(articles.get(name),
 									name, KnowWEEnvironment.getInstance().getRootType(),
 									webname, true));

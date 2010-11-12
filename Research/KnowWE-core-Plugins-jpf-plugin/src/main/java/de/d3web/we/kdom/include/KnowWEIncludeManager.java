@@ -154,7 +154,7 @@ public class KnowWEIncludeManager implements EventListener {
 									KnowWEEnvironment.getInstance().getRootType(), web);
 							KnowWEEnvironment.getInstance()
 									.getArticleManager(web)
-									.saveUpdatedArticle(art);
+									.registerArticle(art);
 						}
 					}
 				}
@@ -445,7 +445,7 @@ public class KnowWEIncludeManager implements EventListener {
 					env.getArticle(article.getWeb(), title).getSection().getOriginalText(), title,
 					env.getRootType(), web, false);
 
-			env.getArticleManager(web).saveUpdatedArticle(newArt);
+			env.getArticleManager(web).registerArticle(newArt);
 		}
 	}
 

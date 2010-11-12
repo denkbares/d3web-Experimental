@@ -72,7 +72,7 @@ public class GroovySparqlRendererRendererTest {
 		KnowWEArticle article1 = KnowWEArticle.createArticle("", "TagTest", type,
 				"default_web");
 
-		am.saveUpdatedArticle(article1);
+		am.registerArticle(article1);
 		params = new KnowWEParameterMap("", "");
 		tm = TaggingMangler.getInstance();
 		usercontext = new KnowWEUserContextImpl("test", params);
@@ -85,8 +85,8 @@ public class GroovySparqlRendererRendererTest {
 		KnowWEArticle article2 = KnowWEArticle.createArticle("", "Tag2", type,
 				"default_web");
 
-		am.saveUpdatedArticle(article1);
-		am.saveUpdatedArticle(article2);
+		am.registerArticle(article1);
+		am.registerArticle(article2);
 		tm.addTag("Tag1", "tag", params);
 		tm.addTag("Tag2", "tag", params);
 
@@ -99,7 +99,7 @@ public class GroovySparqlRendererRendererTest {
 		String renderstring = "<groovysparqlrenderer name=\"junit\">return KnowWEUtils.maskHTML(\"hallo\");</groovysparqlrenderer>";
 		KnowWEArticle setrenderer = KnowWEArticle.createArticle(renderstring,
 				"SetRenderer", type, "default_web");
-		am.saveUpdatedArticle(setrenderer);
+		am.registerArticle(setrenderer);
 		StringBuilder articleString = new StringBuilder();
 		setrenderer.getRenderer().render(setrenderer, setrenderer.getSection(),
 				usercontext, articleString);
@@ -110,7 +110,7 @@ public class GroovySparqlRendererRendererTest {
 		articleString = new StringBuilder();
 		KnowWEArticle junitquery = KnowWEArticle.createArticle(querystring, "JunitQuery",
 				type, "default_web");
-		am.saveUpdatedArticle(junitquery);
+		am.registerArticle(junitquery);
 		junitquery.getRenderer().render(junitquery, junitquery.getSection(),
 				usercontext, articleString);
 		String result_is = KnowWEUtils.unmaskHTML(articleString.toString());

@@ -80,7 +80,7 @@ public class TaggingManglerTest extends TestCase {
 		KnowWEArticle article1 = KnowWEArticle.createArticle("", "TagTest", type,
 				"default_web");
 
-		am.saveUpdatedArticle(article1);
+		am.registerArticle(article1);
 		params = new KnowWEParameterMap("", "");
 		tm = TaggingMangler.getInstance();
 		sc = SemanticCoreDelegator.getInstance();
@@ -113,7 +113,7 @@ public class TaggingManglerTest extends TestCase {
 	public void testAddRemoveTag() {
 		KnowWEArticle article1 = KnowWEArticle.createArticle("", "AddTag", type,
 				"default_web");
-		am.saveUpdatedArticle(article1);
+		am.registerArticle(article1);
 		tm.addTag("AddTag", "tagtest", params);
 		assertEquals("<tags>tagtest</tags>", am.getArticle("AddTag")
 				.getSection().getOriginalText());
@@ -134,7 +134,7 @@ public class TaggingManglerTest extends TestCase {
 	public void testAddTag() {
 		KnowWEArticle article1 = KnowWEArticle.createArticle("", "AddTag", type,
 				KnowWEEnvironment.DEFAULT_WEB);
-		am.saveUpdatedArticle(article1);
+		am.registerArticle(article1);
 		tm.addTag("AddTag", "tagtest", params);
 		// remember: article* are not the current articles anymore, changes to
 		// the articles by the TaggingMangler do not backpropagate to those
@@ -160,7 +160,7 @@ public class TaggingManglerTest extends TestCase {
 		// now test with another article in the triplestore
 		KnowWEArticle article2 = KnowWEArticle.createArticle("", "Tag1", type,
 				KnowWEEnvironment.DEFAULT_WEB);
-		am.saveUpdatedArticle(article2);
+		am.registerArticle(article2);
 		// add the same tag to the second article to check for interferences
 		tm.addTag("Tag1", "stein", params);
 		assertEquals(2, tags.size());
@@ -183,10 +183,10 @@ public class TaggingManglerTest extends TestCase {
 				KnowWEEnvironment.DEFAULT_WEB);
 		KnowWEArticle article4 = KnowWEArticle.createArticle("", "Tag4", type,
 				KnowWEEnvironment.DEFAULT_WEB);
-		am.saveUpdatedArticle(article1);
-		am.saveUpdatedArticle(article2);
-		am.saveUpdatedArticle(article3);
-		am.saveUpdatedArticle(article4);
+		am.registerArticle(article1);
+		am.registerArticle(article2);
+		am.registerArticle(article3);
+		am.registerArticle(article4);
 		tm.addTag("Tag1", "live", params);
 		tm.addTag("Tag2", "live", params);
 		tm.addTag("Tag3", "tod", params);
@@ -216,7 +216,7 @@ public class TaggingManglerTest extends TestCase {
 	public void testGetPageTags() {
 		KnowWEArticle article = KnowWEArticle.createArticle("", "Tag", type,
 				"default_web");
-		am.saveUpdatedArticle(article);
+		am.registerArticle(article);
 		tm.addTag("Tag", "tick", params);
 		tm.addTag("Tag", "trick", params);
 		tm.addTag("Tag", "track", params);
@@ -242,9 +242,9 @@ public class TaggingManglerTest extends TestCase {
 				"default_web");
 		KnowWEArticle article3 = KnowWEArticle.createArticle("", "Tag3", type,
 				"default_web");
-		am.saveUpdatedArticle(article1);
-		am.saveUpdatedArticle(article2);
-		am.saveUpdatedArticle(article3);
+		am.registerArticle(article1);
+		am.registerArticle(article2);
+		am.registerArticle(article3);
 		tm.addTag("Tag1", "tag", params);
 		tm.addTag("Tag2", "leben", params);
 		tm.addTag("Tag3", "tod", params);
@@ -273,9 +273,9 @@ public class TaggingManglerTest extends TestCase {
 				"default_web");
 		KnowWEArticle article3 = KnowWEArticle.createArticle("", "Tag3", type,
 				"default_web");
-		am.saveUpdatedArticle(article1);
-		am.saveUpdatedArticle(article2);
-		am.saveUpdatedArticle(article3);
+		am.registerArticle(article1);
+		am.registerArticle(article2);
+		am.registerArticle(article3);
 		tm.addTag("Tag1", "tag", params);
 		tm.addTag("Tag2", "leben", params);
 		tm.addTag("Tag3", "tod", params);
@@ -310,9 +310,9 @@ public class TaggingManglerTest extends TestCase {
 				"default_web");
 		KnowWEArticle article3 = KnowWEArticle.createArticle("", "Tag3", type,
 				"default_web");
-		am.saveUpdatedArticle(article1);
-		am.saveUpdatedArticle(article2);
-		am.saveUpdatedArticle(article3);
+		am.registerArticle(article1);
+		am.registerArticle(article2);
+		am.registerArticle(article3);
 		tm.addTag("Tag1", "tag", params);
 		tm.addTag("Tag2", "leben", params);
 		tm.addTag("Tag3", "tod", params);
@@ -337,7 +337,7 @@ public class TaggingManglerTest extends TestCase {
 	public void testSetTags() {
 		KnowWEArticle article1 = KnowWEArticle.createArticle("", "AddTag", type,
 				"default_web");
-		am.saveUpdatedArticle(article1);
+		am.registerArticle(article1);
 		tm.setTags("AddTag", "tag1 tag2 tag3", params);
 		assertEquals("<tags>tag1 tag2 tag3</tags>", am.getArticle("AddTag")
 				.getSection().getOriginalText());
@@ -356,9 +356,9 @@ public class TaggingManglerTest extends TestCase {
 				"default_web");
 		KnowWEArticle article3 = KnowWEArticle.createArticle("", "Tag3", type,
 				"default_web");
-		am.saveUpdatedArticle(article1);
-		am.saveUpdatedArticle(article2);
-		am.saveUpdatedArticle(article3);
+		am.registerArticle(article1);
+		am.registerArticle(article2);
+		am.registerArticle(article3);
 		tm.addTag("Tag1", "tag", params);
 		tm.addTag("Tag2", "leben", params);
 		tm.addTag("Tag3", "tod", params);

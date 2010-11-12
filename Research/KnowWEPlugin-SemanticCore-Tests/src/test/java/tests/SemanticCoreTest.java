@@ -162,10 +162,10 @@ public class SemanticCoreTest {
 	public void testAddStatements() {
 		KnowWEArticle article1 = KnowWEArticle.createArticle("", "Tag1", type,
 				"default_web");
-		am.saveUpdatedArticle(article1);
+		am.registerArticle(article1);
 		TaggingMangler tm = TaggingMangler.getInstance();
 		tm.addTag("Tag1", "tag", params);
-		am.saveUpdatedArticle(article1);
+		am.registerArticle(article1);
 		am.deleteArticle(am.getArticle("Tag1"));
 	}
 

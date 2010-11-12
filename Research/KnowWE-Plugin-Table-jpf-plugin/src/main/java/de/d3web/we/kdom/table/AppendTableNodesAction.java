@@ -72,7 +72,7 @@ public class AppendTableNodesAction extends AbstractAction {
 		else {
 			nodesMap = appendCol(table);
 		}
-		mgr.replaceKDOMNodes(map, topic, nodesMap);
+		mgr.replaceKDOMNodesSaveAndBuild(map, topic, nodesMap);
 	}
 
 	/**

@@ -39,7 +39,7 @@ public class ReplaceKDOMNodeAction extends DeprecatedAbstractKnowWEAction {
 		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
 		Map<String, String> nodesMap = new HashMap<String, String>();
 		nodesMap.put(nodeID, newText);
-		mgr.replaceKDOMNodes(parameterMap, name, nodesMap);
+		mgr.replaceKDOMNodesSaveAndBuild(parameterMap, name, nodesMap);
 
 		return "done";
 	}

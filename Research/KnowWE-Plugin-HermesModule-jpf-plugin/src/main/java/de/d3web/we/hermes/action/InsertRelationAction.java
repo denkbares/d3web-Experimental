@@ -61,7 +61,7 @@ public class InsertRelationAction extends DeprecatedAbstractKnowWEAction {
 						Map<String, String> nodesMap = new HashMap<String, String>();
 						nodesMap.put(description.getID(), description.getOriginalText() + " - "
 								+ insertion.toString());
-						articleManager.replaceKDOMNodes(parameterMap, topic, nodesMap);
+						articleManager.replaceKDOMNodesSaveAndBuild(parameterMap, topic, nodesMap);
 					}
 					return "done";
 				}
