@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -19,7 +19,7 @@
  */
 
 /**
- * 
+ *
  */
 package tests;
 
@@ -34,6 +34,7 @@ import org.junit.Test;
 
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.core.KnowWEArticleManager;
+import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.core.semantic.ISemanticCore;
@@ -46,7 +47,7 @@ import dummies.KnowWETestWikiConnector;
 
 /**
  * @author kazamatzuri
- * 
+ *
  */
 public class TaggingManglerTest extends TestCase {
 
@@ -59,7 +60,7 @@ public class TaggingManglerTest extends TestCase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	@Override
@@ -81,7 +82,7 @@ public class TaggingManglerTest extends TestCase {
 				"default_web");
 
 		am.registerArticle(article1);
-		params = new KnowWEParameterMap("", "");
+		params = new KnowWEParameterMap(KnowWEAttributes.WEB, KnowWEEnvironment.DEFAULT_WEB);
 		tm = TaggingMangler.getInstance();
 		sc = SemanticCoreDelegator.getInstance();
 	}
@@ -115,6 +116,9 @@ public class TaggingManglerTest extends TestCase {
 				"default_web");
 		am.registerArticle(article1);
 		tm.addTag("AddTag", "tagtest", params);
+
+		KnowWEArticle article2 = am.getArticle("AddTag");
+		String text = article2.getSection().getOriginalText();
 		assertEquals("<tags>tagtest</tags>", am.getArticle("AddTag")
 				.getSection().getOriginalText());
 		tm.removeTag("AddTag", "tagtest", params);
@@ -127,7 +131,7 @@ public class TaggingManglerTest extends TestCase {
 	 * Test method for
 	 * {@link de.d3web.we.core.semantic.tagging.TaggingMangler#addTag(java.lang.String, java.lang.String, de.d3web.we.core.KnowWEParameterMap)}
 	 * . Test method for
-	 * 
+	 *
 	 * .
 	 */
 	@Test
