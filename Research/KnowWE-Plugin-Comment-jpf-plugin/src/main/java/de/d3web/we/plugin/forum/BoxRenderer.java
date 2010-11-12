@@ -94,7 +94,8 @@ public class BoxRenderer extends KnowWEDomRenderer {
 				KnowWEParameterMap map = new KnowWEParameterMap(KnowWEAttributes.WEB, web);
 				map.put(KnowWEAttributes.TOPIC, topic);
 				map.put(KnowWEAttributes.USER, user.toString());
-				instance.saveArticle(web, topic, buffi.toString(), map);
+				instance.getWikiConnector().writeArticleToWikiEnginePersistence(topic,
+						buffi.toString(), map);
 
 			}
 			catch (Exception e) {

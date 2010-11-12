@@ -141,7 +141,8 @@ public class GlobalReplaceAction extends DeprecatedAbstractKnowWEAction {
 			// Gesamttext zusammenbauen
 			String text = art.collectTextsFromLeaves();
 
-			KnowWEEnvironment.getInstance().saveArticle(web, art.getTitle(), text, parameterMap);
+			KnowWEEnvironment.getInstance().getWikiConnector().writeArticleToWikiEnginePersistence(
+					art.getTitle(), text, parameterMap);
 			mgr.registerArticle(KnowWEArticle.createArticle(text, art.getTitle(),
 					KnowWEEnvironment.getInstance().getRootType(), web));
 		}

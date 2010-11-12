@@ -82,7 +82,8 @@ public class SaveDialogAsXCLAction extends DeprecatedAbstractKnowWEAction {
 
 			articleText = articleText.replace("</" + CoveringListSection.TAG + ">",
 					newXCL + "\n</" + CoveringListSection.TAG + ">");
-			KnowWEEnvironment.getInstance().saveArticle(web, topic, articleText,
+			KnowWEEnvironment.getInstance().getWikiConnector().writeArticleToWikiEnginePersistence(
+					topic, articleText,
 					parameterMap);
 
 		}

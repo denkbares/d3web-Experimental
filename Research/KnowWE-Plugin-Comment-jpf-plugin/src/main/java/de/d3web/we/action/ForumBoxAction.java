@@ -88,7 +88,8 @@ public class ForumBoxAction extends DeprecatedAbstractKnowWEAction {
 
 				StringBuilder buffi = new StringBuilder();
 				sec.collectTextsFromLeaves(buffi);
-				KnowWEEnvironment.getInstance().saveArticle(web, topic, buffi.toString(),
+				KnowWEEnvironment.getInstance().getWikiConnector().writeArticleToWikiEnginePersistence(
+						topic, buffi.toString(),
 						parameterMap);
 
 			}

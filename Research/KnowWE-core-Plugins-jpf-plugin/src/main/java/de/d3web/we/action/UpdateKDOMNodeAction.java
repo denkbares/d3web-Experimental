@@ -55,7 +55,8 @@ public class UpdateKDOMNodeAction extends DeprecatedAbstractKnowWEAction {
 				Map<String, String> nodesMap = new HashMap<String, String>();
 				nodesMap.put(id, text);
 				newSourceText = mgr.replaceKDOMNodesWithoutSave(parameterMap, name, nodesMap);
-				KnowWEEnvironment.getInstance().saveArticle(web, name, newSourceText, parameterMap);
+				KnowWEEnvironment.getInstance().getWikiConnector().writeArticleToWikiEnginePersistence(
+						name, newSourceText, parameterMap);
 			}
 		}
 		return "done";

@@ -142,13 +142,14 @@ public class CommentRenderer extends KnowWEDomRenderer {
 					forumSec.collectTextsFromLeaves(buffi);
 					KnowWEParameterMap parameterMap = new KnowWEParameterMap(KnowWEAttributes.WEB,
 							forumSec.getWeb());
-					instance.saveArticle(forumSec.getWeb(), pageName, buffi.toString(),
-							parameterMap);
+					instance.getWikiConnector().writeArticleToWikiEnginePersistence(
+							sec.getTitle(), buffy.toString(), parameterMap);
 
 				}
 
 				KnowWEParameterMap map = new KnowWEParameterMap(KnowWEAttributes.WEB, sec.getWeb());
-				instance.saveArticle(sec.getWeb(), sec.getTitle(), buffy.toString(), map);
+				instance.getWikiConnector().writeArticleToWikiEnginePersistence(
+						sec.getTitle(), buffy.toString(), map);
 
 			}
 			else {
