@@ -112,7 +112,7 @@ public class TimeEventOWLCompiler extends OwlSubtreeHandler<TimeEventNew> {
 
 	private void createDateTripels(UpperOntology uo, TimeStamp timeStamp, ArrayList<Statement> slist, URI localURI) throws RepositoryException {
 		if (timeStamp != null) {
-			Literal dateText = uo.getVf().createLiteral(timeStamp.toString());
+			Literal dateText = uo.getVf().createLiteral(timeStamp.getEncodedString());
 
 			Literal dateStart = uo.getVf().createLiteral(
 					timeStamp.getStartPoint()

@@ -23,6 +23,11 @@ package de.d3web.we.hermes;
 public class TimeStamp implements Comparable<TimeStamp> {
 
 	String encodedString;
+
+	public String getEncodedString() {
+		return encodedString;
+	}
+
 	PointInTime startPoint;
 
 	public TimeStamp(String encodedString) {
