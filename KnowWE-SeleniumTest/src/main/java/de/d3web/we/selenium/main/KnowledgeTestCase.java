@@ -116,7 +116,7 @@ public abstract class KnowledgeTestCase extends KnowWETestCase {
 		String showSolutionsExcluded = "";
 		testResult = "";
 
-		boolean elemenPresent = selenium.isElementPresent("//div[@id='content_LeftMenu/RootType/ShowSolutions']/span");
+		boolean elemenPresent = selenium.isElementPresent("//div[@id='content_LeftMenuFooter/RootType/ShowSolutions']/span");
 		assertEquals("No solutions displayed", true, elemenPresent);
 
 		// SOLUTION-SUGGESTED

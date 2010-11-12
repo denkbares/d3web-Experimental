@@ -50,7 +50,7 @@ public class SetUpWikiPages extends KnowWETestCase {
 		}
 
 		assertTrue("ShowSolutions wasn't integrated",
-				selenium.isElementPresent("LeftMenu/RootType/ShowSolutions"));
+				selenium.isElementPresent("LeftMenuFooter/RootType/ShowSolutions"));
 
 		open("Wiki.jsp?page=Test-Selenium-Main");
 		if (selenium.isElementPresent("link=Test-Renaming-Tool")) {
