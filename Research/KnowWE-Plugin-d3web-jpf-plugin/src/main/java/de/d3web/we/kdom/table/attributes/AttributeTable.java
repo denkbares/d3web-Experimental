@@ -46,7 +46,7 @@ import de.d3web.we.reviseHandler.D3webSubtreeHandler;
  * 
  * !!! Caution !!!!
  * 
- * This markup will be replaced soon, to not spend time on it
+ * This markup will be replaced soon, do not spend time on it
  * 
  * !!! Caution !!!!
  * 
