@@ -20,56 +20,45 @@
 
 package de.d3web.we.ci4ke.handling;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import de.d3web.we.ci4ke.build.CIBuilder.CIBuildTriggers;
+import de.d3web.we.ci4ke.handling.CIDashboardType.CIBuildTriggers;
 
-public class CIConfig {
+public final class CIConfig implements Cloneable {
 
-	public static String CICONFIG_STORE_KEY = "CIConfig_Section_Store";
+	public static final String CICONFIG_STORE_KEY = "CIConfig_Section_Store";
 
-	private final String dashboardID;
-	private final String monitoredArticleTitle;
+	public static final CIConfig EMPTY_CONFIG = new CIConfig("", "",
+			new HashMap<String, List<String>>(), CIBuildTriggers.onDemand);
+
+	private final String dashboardName;
 	private final String dashboardArticleTitle;
-	private final Collection<String> testNames;
+
+	private final Map<String, List<String>> tests;
 	private final CIBuildTriggers trigger;
 
-	public CIConfig(String dashboardID, String monitoredArticle, String dashboardArticle,
-			Collection<String> testNames, CIBuildTriggers trigger) {
+	public CIConfig(String dashboardName, String dashboardArticle,
+			Map<String, List<String>> tests, CIBuildTriggers trigger) {
 		super();
-		this.dashboardID = dashboardID;
-		this.monitoredArticleTitle = monitoredArticle;
+		this.dashboardName = dashboardName;
 		this.dashboardArticleTitle = dashboardArticle;
-		this.testNames = testNames;
+		this.tests = Collections.unmodifiableMap(tests);
 		this.trigger = trigger;
 	}
 
-	public CIConfig(String dashboardID, String monitoredArticle, String dashboardArticle,
-			String testNames, CIBuildTriggers trigger) {
-		super();
-		this.dashboardID = dashboardID;
-		this.monitoredArticleTitle = monitoredArticle;
-		this.dashboardArticleTitle = dashboardArticle;
-		this.testNames = Arrays.asList(testNames.split(":"));
-		this.trigger = trigger;
-	}
-
-	public String getDashboardID() {
-		return dashboardID;
-	}
-
-	public String getMonitoredArticleTitle() {
-		return monitoredArticleTitle;
+	public String getDashboardName() {
+		return dashboardName;
 	}
 
 	public String getDashboardArticleTitle() {
 		return dashboardArticleTitle;
 	}
 
-	public Collection<String> getTestNames() {
-		return testNames;
+	public Map<String, List<String>> getTests() {
+		return tests;
 	}
 
 	public CIBuildTriggers getTrigger() {
@@ -79,10 +68,9 @@ public class CIConfig {
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
 
-		CIConfig c = new CIConfig(this.dashboardID,
-				this.monitoredArticleTitle,
+		CIConfig c = new CIConfig(this.dashboardName,
 				this.dashboardArticleTitle,
-				new ArrayList<String>(testNames),
+				this.tests,
 				this.trigger);
 		return c;
 	}

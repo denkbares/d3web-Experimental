@@ -22,20 +22,12 @@ package de.d3web.we.ci4ke.groovy;
 
 import groovy.lang.Script;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
-import de.d3web.empiricaltesting.TestSuite;
 import de.d3web.we.ci4ke.handling.CIConfig;
 import de.d3web.we.ci4ke.handling.CITest;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.xcl.XCLRelation;
-import de.d3web.we.kdom.xcl.XCList;
-import de.d3web.we.testsuite.kdom.TestSuiteType;
-import de.d3web.we.utils.KnowWEUtils;
 
 public abstract class GroovyCITestScript extends Script implements CITest {
 
@@ -55,35 +47,40 @@ public abstract class GroovyCITestScript extends Script implements CITest {
 				KnowWEEnvironment.DEFAULT_WEB).getArticles();
 	}
 
-	public KnowWEArticle getArticle() {
-		return KnowWEEnvironment.getInstance().getArticle(KnowWEEnvironment.DEFAULT_WEB,
-				this.config.getMonitoredArticleTitle());
-	}
+	// public KnowWEArticle getArticle() {
+	// return
+	// KnowWEEnvironment.getInstance().getArticle(KnowWEEnvironment.DEFAULT_WEB,
+	// this.config.getMonitoredArticleTitle());
+	// }
 
-	public TestSuite getTestSuite() {
-		Section<TestSuiteType> section = getArticle().getSection().
-				findSuccessor(TestSuiteType.class);
-		if (section != null) {
-			TestSuite suite = (TestSuite) KnowWEUtils.getStoredObject(section,
-					TestSuiteType.TESTSUITEKEY);
-			return suite;
-		}
-		return null;
-	}
+	// public TestSuite getTestSuite() {
+	// Section<TestSuiteType> section = getArticle().getSection().
+	// findSuccessor(TestSuiteType.class);
+	// if (section != null) {
+	// TestSuite suite = (TestSuite) KnowWEUtils.getStoredObject(section,
+	// TestSuiteType.TESTSUITEKEY);
+	// return suite;
+	// }
+	// return null;
+	// }
 
-	public List<String> findXCListsWithLessThenXRelations(int limitRelations) {
-
-		List<String> sectionIDs = new ArrayList<String>();
-
-		List<Section<XCList>> found = new ArrayList<Section<XCList>>();
-		getArticle().getSection().findSuccessorsOfType(XCList.class, found);
-
-		for (Section<XCList> xclSection : found) {
-			List<Section<XCLRelation>> relations = new ArrayList<Section<XCLRelation>>();
-			xclSection.findSuccessorsOfType(XCLRelation.class, relations);
-			if (relations.size() < limitRelations) sectionIDs.add(xclSection.getID());
-		}
-		return sectionIDs;
-	}
+	// public List<String> findXCListsWithLessThenXRelations(int limitRelations)
+	// {
+	//
+	// List<String> sectionIDs = new ArrayList<String>();
+	//
+	// List<Section<XCList>> found = new ArrayList<Section<XCList>>();
+	// getArticle().getSection().findSuccessorsOfType(XCList.class, found);
+	//
+	// for (Section<XCList> xclSection : found) {
+	// List<Section<XCLRelation>> relations = new
+	// ArrayList<Section<XCLRelation>>();
+	// xclSection.findSuccessorsOfType(XCLRelation.class, relations);
+	// if (relations.size() < limitRelations) {
+	// sectionIDs.add(xclSection.getID());
+	// }
+	// }
+	// return sectionIDs;
+	// }
 
 }

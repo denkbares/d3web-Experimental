@@ -66,8 +66,10 @@ public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType>
 		Map<String, Section<GroovyCITestType>> map = CIUtilities.getAllGroovyCITestSections(KnowWEEnvironment.DEFAULT_WEB);
 		if (map.containsKey(testname)) {
 			Section<GroovyCITestType> testSection = map.get(testname);
-			if (!testSection.getID().equals(s.getID())) msgs.add(new Message(Message.ERROR,
-					"Test name '" + testname + "' is not unique!", null, -1, null));
+			if (!testSection.getID().equals(s.getID())) {
+				msgs.add(new Message(Message.ERROR,
+						"Test name '" + testname + "' is not unique!", null, -1, null));
+			}
 		}
 
 		try {
@@ -99,7 +101,7 @@ public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType>
 		String groovycode = PREPEND + DefaultMarkupType.getContent(s);
 
 		CITest test = (CITest) shell.parse(groovycode);
-		CIConfig ciconfig = new CIConfig("", "Main", "Main", "", null);
+		CIConfig ciconfig = new CIConfig("Main", "Main", null, null);
 		test.init(ciconfig);
 		test.call();
 	}

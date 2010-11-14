@@ -23,8 +23,9 @@ package de.d3web.we.ci4ke.util;
 import groovy.lang.GroovyShell;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +36,8 @@ import java.util.logging.Logger;
 
 import org.codehaus.groovy.control.CompilerConfiguration;
 
+import de.d3web.plugin.Extension;
+import de.d3web.plugin.PluginManager;
 import de.d3web.we.ci4ke.groovy.GroovyCITestScript;
 import de.d3web.we.ci4ke.groovy.GroovyCITestSubtreeHandler;
 import de.d3web.we.ci4ke.groovy.GroovyCITestType;
@@ -56,6 +59,21 @@ public class CIUtilities {
 	 * @return the save path for ci-build xml´s
 	 */
 	public static File getCIBuildDir() {
+		String wikiDir = getWikiContentDirectory();
+		File buildDir = new File(wikiDir + "ci-builds");
+		// check if the path exists
+		if (!buildDir.exists()) {
+			buildDir.mkdirs();
+		}
+		return buildDir;
+	}
+
+	/**
+	 * 
+	 * @created 10.11.2010
+	 * @return
+	 */
+	private static String getWikiContentDirectory() {
 		KnowWEWikiConnector con = KnowWEEnvironment.getInstance().getWikiConnector();
 		String wikiDir = con.getSavePath();
 		if (wikiDir == null || wikiDir.isEmpty()) {
@@ -66,21 +84,36 @@ public class CIUtilities {
 		if (!wikiDir.endsWith(File.separator)) {
 			wikiDir = wikiDir + File.separator;
 		}
-		File buildDir = new File(wikiDir + "ci-builds");
-		// check if the path exists
-		if (!buildDir.exists()) buildDir.mkdirs();
-		return buildDir;
+		return wikiDir;
+	}
+
+	/**
+	 * Returns the attachment-directory for a specific article.
+	 * 
+	 * @created 10.11.2010
+	 * @param articleTitle
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public static File getAttachmentsDirectory(String articleTitle) throws UnsupportedEncodingException {
+		String wikiDir = getWikiContentDirectory();
+		String folderName = URLEncoder.encode(articleTitle, "UTF-8") + "-att" + File.separator;
+		File attachmentsDir = new File(wikiDir + folderName);
+		if (!attachmentsDir.exists()) {
+			attachmentsDir.mkdirs();
+		}
+		return attachmentsDir;
 	}
 
 	/**
 	 * This method finds a CIDashboard section only by its dashboard ID, by
 	 * iterating over all wiki articles.
 	 * 
-	 * @param dashboardID the dashboard ID to look for
+	 * @param dashboardName the dashboard ID to look for
 	 * @return the section where the dashboard with the given ID is defined, or
 	 *         null if no section with this ID can be found
 	 */
-	public static Section<CIDashboardType> findCIDashboardSection(String dashboardID) {
+	public static Section<CIDashboardType> findCIDashboardSection(String dashboardName) {
 		for (KnowWEArticle article : KnowWEEnvironment.getInstance().
 				getArticleManager(KnowWEEnvironment.DEFAULT_WEB).getArticles()) {
 
@@ -89,7 +122,7 @@ public class CIUtilities {
 			article.getSection().findSuccessorsOfType(CIDashboardType.class, list);
 
 			for (Section<CIDashboardType> sec : list) {
-				if (CIDashboardType.getDashboardID(sec).equals(dashboardID)) return sec;
+				if (CIDashboardType.getAnnotation(sec, CIDashboardType.NAME_KEY).equals(dashboardName)) return sec;
 			}
 		}
 		return null;
@@ -100,11 +133,11 @@ public class CIUtilities {
 	 * the article with the given title.
 	 * 
 	 * @param dashboardArticleTitle
-	 * @param dashboardID
+	 * @param dashboardName
 	 * @return
 	 */
 	public static Section<CIDashboardType> findCIDashboardSection(
-			String dashboardArticleTitle, String dashboardID) {
+			String dashboardArticleTitle, String dashboardName) {
 		// get the article
 		KnowWEArticle article = KnowWEEnvironment.getInstance().
 				getArticleManager(KnowWEEnvironment.DEFAULT_WEB).
@@ -114,7 +147,7 @@ public class CIUtilities {
 		article.getSection().findSuccessorsOfType(CIDashboardType.class, list);
 		// iterate all sections and look for the given dashboard ID
 		for (Section<CIDashboardType> sec : list) {
-			if (CIDashboardType.getDashboardID(sec).equals(dashboardID)) return sec;
+			if (CIDashboardType.getAnnotation(sec, CIDashboardType.NAME_KEY).equals(dashboardName)) return sec;
 		}
 		return null;
 	}
@@ -125,10 +158,33 @@ public class CIUtilities {
 	 * @param testClassNames
 	 * @return
 	 */
-	public static Map<String, Class<? extends CITest>> parseTestClasses(String testClassNames) {
-		// the test class names are separeted by colons... lets split() them!
-		List<String> list = Arrays.asList(testClassNames.split(":"));
-		return parseTestClasses(list);
+	@SuppressWarnings("unchecked")
+	public static Map<String, Class<? extends CITest>> parseTestClasses(Collection<String> testClassNames) {
+
+		Map<String, Class<? extends CITest>> classesMap =
+				new TreeMap<String, Class<? extends CITest>>();
+
+		Extension[] allTests = PluginManager.getInstance().
+				getExtensions("KnowWEExtensionPoints", "CITest");
+		for (String testClassName : testClassNames) {
+			for (Extension e : allTests) {
+				if (testClassName.equals(e.getName())) {
+					try {
+						Class<?> testClass = Class.forName(e.getParameter("class"));
+						if (CITest.class.isAssignableFrom(testClass)) {
+							classesMap.put(testClassName, (Class<? extends CITest>) testClass);
+						}
+					}
+					catch (ClassNotFoundException e1) {
+					}
+				}
+			}
+		}
+		return classesMap;
+		// the test class names are separated by colons... lets split() them!
+		// List<String> list = Arrays.asList(testClassNames.split(":"));
+
+		// return parseTestClasses(list);
 	}
 
 	/**
@@ -137,59 +193,59 @@ public class CIUtilities {
 	 * @param testClassNames
 	 * @return
 	 */
-	public static Map<String, Class<? extends CITest>> parseTestClasses(
-			Collection<String> testClassNames) {
-		// our returnMap
-		Map<String, Class<? extends CITest>> classesMap =
-				new TreeMap<String, Class<? extends CITest>>();
-
-		// get all Sections containing a GroovyCITest
-		Map<String, Section<GroovyCITestType>> groovyTestSections =
-				getAllGroovyCITestSections(KnowWEEnvironment.DEFAULT_WEB);
-
-		// the package prefix to find the
-		String packagePrefix = "de.d3web.we.ci4ke.testmodules.";
-
-		for (String c : testClassNames) {
-
-			// a test can either be statically defined in a java class
-			// or dynamically defined in a grovvy test section
-			if (groovyTestSections.containsKey(c)) {
-				// the current class name matches the name of a (groovy) test
-				// section
-				Section<GroovyCITestType> sec = groovyTestSections.get(c);
-				// parse the content of the section into a groovy-script
-				Class<? extends CITest> testClass = parseGroovyCITestSection(sec);
-
-				classesMap.put(c, testClass);
-
-			}
-			else {
-
-				// c is a "ordinary" java class. Try to load the class!
-				Class<?> clazz = null;
-				try {
-					clazz = Class.forName(packagePrefix + c);
-
-					// If our new class implements the CITest-interface...
-					if (CITest.class.isAssignableFrom(clazz)) {
-						// this cast is legit due to the type-checking
-						// beforehand
-						@SuppressWarnings("unchecked")
-						Class<? extends CITest> testClass =
-								(Class<? extends CITest>) clazz;
-						classesMap.put(c, testClass);
-					}
-				}
-				catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					// e.printStackTrace();
-
-				}
-			}
-		}
-		return classesMap;
-	}
+	// public static Map<String, Class<? extends CITest>> parseTestClasses(
+	// Collection<String> testClassNames) {
+	// // our returnMap
+	// Map<String, Class<? extends CITest>> classesMap =
+	// new TreeMap<String, Class<? extends CITest>>();
+	//
+	// // get all Sections containing a GroovyCITest
+	// Map<String, Section<GroovyCITestType>> groovyTestSections =
+	// getAllGroovyCITestSections(KnowWEEnvironment.DEFAULT_WEB);
+	//
+	// // the package prefix to find the
+	// String packagePrefix = "de.d3web.we.ci4ke.testmodules.";
+	//
+	// for (String c : testClassNames) {
+	//
+	// // a test can either be statically defined in a java class
+	// // or dynamically defined in a grovvy test section
+	// if (groovyTestSections.containsKey(c)) {
+	// // the current class name matches the name of a (groovy) test
+	// // section
+	// Section<GroovyCITestType> sec = groovyTestSections.get(c);
+	// // parse the content of the section into a groovy-script
+	// Class<? extends CITest> testClass = parseGroovyCITestSection(sec);
+	//
+	// classesMap.put(c, testClass);
+	//
+	// }
+	// else {
+	//
+	// // c is a "ordinary" java class. Try to load the class!
+	// Class<?> clazz = null;
+	// try {
+	// clazz = Class.forName(packagePrefix + c);
+	//
+	// // If our new class implements the CITest-interface...
+	// if (CITest.class.isAssignableFrom(clazz)) {
+	// // this cast is legit due to the type-checking
+	// // beforehand
+	// @SuppressWarnings("unchecked")
+	// Class<? extends CITest> testClass =
+	// (Class<? extends CITest>) clazz;
+	// classesMap.put(c, testClass);
+	// }
+	// }
+	// catch (ClassNotFoundException e) {
+	// // TODO Auto-generated catch block
+	// // e.printStackTrace();
+	//
+	// }
+	// }
+	// }
+	// return classesMap;
+	// }
 
 	public static Class<? extends CITest> parseGroovyCITestSection(Section<GroovyCITestType> testSection) {
 

@@ -20,15 +20,43 @@
 
 package de.d3web.we.ci4ke.handling;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * An abstract implementation of a CITest, which implements the init(CIConfig)
+ * and setParameters(List<String>) methods.
+ * 
+ * @author Marc-Oliver Ochlast (denkbares GmbH)
+ * @created 14.11.2010
+ */
 public abstract class AbstractCITest implements CITest {
 
 	protected CIConfig config;
 
+	protected List<String> parameters;
+
 	public AbstractCITest() {
+		this.config = CIConfig.EMPTY_CONFIG;
+		this.parameters = new ArrayList<String>();
 	}
 
 	@Override
 	public void init(CIConfig config) {
-		this.config = config;
+		try {
+			this.config = (CIConfig) config.clone();
+		}
+		catch (CloneNotSupportedException e) {
+		}
+	}
+
+	@Override
+	public void setParameters(List<String> parameters) {
+		this.parameters = Collections.unmodifiableList(parameters);
+	}
+
+	public String getParameter(int index) {
+		return parameters.get(index);
 	}
 }

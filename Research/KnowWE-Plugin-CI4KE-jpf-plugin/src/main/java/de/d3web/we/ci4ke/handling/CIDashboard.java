@@ -21,7 +21,6 @@
 package de.d3web.we.ci4ke.handling;
 
 import de.d3web.we.ci4ke.build.CIBuildPersistenceHandler;
-import de.d3web.we.ci4ke.build.CIBuilder.CIBuildTriggers;
 import de.d3web.we.core.KnowWERessourceLoader;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.utils.KnowWEUtils;
@@ -33,10 +32,10 @@ public class CIDashboard {
 	private final CIBuildPersistenceHandler persistenceHandler;
 
 	public CIDashboard(Section<CIDashboardType> section) {
-		this.config = (CIConfig) KnowWEUtils.getStoredObject(section,
-				CIConfig.CICONFIG_STORE_KEY);
-		persistenceHandler = new CIBuildPersistenceHandler(
-				this.config.getDashboardID());
+		this.config = (CIConfig) KnowWEUtils.getStoredObject(section.
+				getArticle(), section, CIConfig.CICONFIG_STORE_KEY);
+		persistenceHandler = CIBuildPersistenceHandler.getHandler(
+				this.config.getDashboardName(), this.config.getDashboardArticleTitle());
 	}
 
 	public String render() {
@@ -48,7 +47,7 @@ public class CIDashboard {
 
 		StringBuffer html = new StringBuffer();
 
-		html.append("<div id='" + config.getDashboardID() + "-ci-dashboard' class='panel'>");
+		html.append("<div id='" + config.getDashboardName() + "-ci-dashboard' class='panel'>");
 		html.append(renderDashboardContents());
 		html.append("</div>");
 
@@ -62,7 +61,7 @@ public class CIDashboard {
 		html.append("<h3>");
 		html.append(persistenceHandler.renderCurrentBuildStatus() + "&nbsp;&nbsp;&nbsp;&nbsp;");
 		html.append(persistenceHandler.renderBuildHealthReport() + "&nbsp;&nbsp;&nbsp;&nbsp;");
-		html.append(config.getMonitoredArticleTitle());
+		html.append(config.getDashboardName());
 
 		html.append("</h3>\n");
 
@@ -70,12 +69,12 @@ public class CIDashboard {
 
 		// Left Column: Lists all the knowledge-base Builds of the targeted
 		// article
-		html.append("<div id='" + config.getDashboardID() + "-column-left' class='ci-column-left'>");
+		html.append("<div id='" + config.getDashboardName() + "-column-left' class='ci-column-left'>");
 
 		html.append("<h3 style=\"background-color: #CCCCCC;\">Build History");
 
-		if (config.getTrigger().equals(CIBuildTriggers.onDemand)) {
-			html.append("<a href=\"#\" onclick=\"fctExecuteNewBuild('" + config.getDashboardID()
+		if (config.getTrigger().equals(CIDashboardType.CIBuildTriggers.onDemand)) {
+			html.append("<a href=\"#\" onclick=\"fctExecuteNewBuild('" + config.getDashboardName()
 					+ "');\"");
 			html.append("<img border=\"0\" align=\"right\" src='KnowWEExtension/ci4ke/images/22x22/clock.png' "
 					+ "alt='Schedule a build' title='Schedule a build'></a>");
@@ -83,16 +82,17 @@ public class CIDashboard {
 		html.append("</h3>");
 		// render Builds
 
-		html.append("<div id=\"" + config.getDashboardID() + "-build-table\">\n");
+		html.append("<div id=\"" + config.getDashboardName() + "-build-table\">\n");
 		html.append(persistenceHandler.renderNewestBuilds(5));
 		html.append("</div>");
 
 		html.append("</div>");
 
-		html.append("<div id='" + config.getDashboardID()
+		html.append("<div id='" + config.getDashboardName()
 				+ "-build-details-wrapper' class='ci-build-details-wrapper'>");
 
-		html.append(CIDashboardType.renderBuildDetails(this.config.getDashboardID(),
+		html.append(CIDashboardType.renderBuildDetails(this.config.getDashboardName(),
+				this.config.getDashboardArticleTitle(),
 				persistenceHandler.getCurrentBuildNumber()));
 
 		html.append("</div></div>");

@@ -46,6 +46,13 @@ public class CITestSuite implements CITest {
 	}
 
 	@Override
+	public void setParameters(List<String> parameters) {
+		for (CITest test : testsSuite) {
+			test.setParameters(parameters);
+		}
+	}
+
+	@Override
 	public CITestResult call() throws Exception {
 
 		CIBuildResultset results = new CIBuildResultset();

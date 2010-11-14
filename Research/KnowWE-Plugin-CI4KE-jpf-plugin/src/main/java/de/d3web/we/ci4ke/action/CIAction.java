@@ -70,7 +70,7 @@ public class CIAction extends AbstractAction {
 		else if (task.equals("getBuildDetails")) {
 
 			int selectedBuildNumber = Integer.parseInt(context.getParameter("nr"));
-			buffy.append(CIDashboardType.renderBuildDetails(dashboardID, selectedBuildNumber));
+			buffy.append(CIDashboardType.renderBuildDetails(dashboardID, topic, selectedBuildNumber));
 
 		}
 		else if (task.equals("refreshBuildList")) {
@@ -80,8 +80,7 @@ public class CIAction extends AbstractAction {
 			int numberOfBuilds =
 					Integer.parseInt(context.getParameter("numberOfBuilds"));
 
-			CIBuildPersistenceHandler handler = new
-					CIBuildPersistenceHandler(dashboardID);
+			CIBuildPersistenceHandler handler = CIBuildPersistenceHandler.getHandler(dashboardID, topic);
 			buffy.append(handler.renderBuildList(indexFromBack,
 					numberOfBuilds));
 		}

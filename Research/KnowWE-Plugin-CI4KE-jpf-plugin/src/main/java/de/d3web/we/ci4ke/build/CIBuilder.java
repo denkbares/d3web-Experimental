@@ -20,10 +20,7 @@
 
 package de.d3web.we.ci4ke.build;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -32,14 +29,12 @@ import java.util.concurrent.Future;
 
 import de.d3web.we.ci4ke.handling.CIConfig;
 import de.d3web.we.ci4ke.handling.CIDashboardType;
+import de.d3web.we.ci4ke.handling.CIHookManager.CIHook;
 import de.d3web.we.ci4ke.handling.CITest;
 import de.d3web.we.ci4ke.handling.CITestResult;
-import de.d3web.we.ci4ke.handling.CIHookManager.CIHook;
 import de.d3web.we.ci4ke.util.CIUtilities;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.include.Include;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEWikiConnector;
 
@@ -47,12 +42,6 @@ public class CIBuilder {
 
 	public static final String ACTUAL_BUILD_STATUS = "actualBuildStatus";
 	public static final String BUILD_RESULT = "result";
-
-	public static enum CIBuildTriggers {
-		onDemand,
-		onSave,
-		onNight
-	}
 
 	private final CIConfig config;
 
@@ -66,8 +55,10 @@ public class CIBuilder {
 	public CIBuilder(String dashboardArticleTitle, String dashboardID) {
 		Section<CIDashboardType> sec = CIUtilities.
 				findCIDashboardSection(dashboardArticleTitle, dashboardID);
-		if (sec == null) throw new IllegalArgumentException("No dashboard " +
-				"with the given ID found on this article!!");
+		if (sec == null) {
+			throw new IllegalArgumentException("No dashboard " +
+					"with the given ID found on this article!!");
+		}
 		this.config = (CIConfig) KnowWEUtils.getStoredObject(sec,
 				CIConfig.CICONFIG_STORE_KEY);
 	}
@@ -80,7 +71,9 @@ public class CIBuilder {
 	public CIBuilder(String dashboardID) {
 		Section<CIDashboardType> sec = CIUtilities.
 				findCIDashboardSection(dashboardID);
-		if (sec == null) throw new IllegalArgumentException("No dashboard with the given ID found!");
+		if (sec == null) {
+			throw new IllegalArgumentException("No dashboard with the given ID found!");
+		}
 		this.config = (CIConfig) KnowWEUtils.getStoredObject(sec,
 				CIConfig.CICONFIG_STORE_KEY);
 
@@ -109,7 +102,7 @@ public class CIBuilder {
 		KnowWEWikiConnector conny = KnowWEEnvironment.getInstance().getWikiConnector();
 
 		Map<String, Class<? extends CITest>> testClasses =
-				CIUtilities.parseTestClasses(this.config.getTestNames());
+				CIUtilities.parseTestClasses(this.config.getTests().keySet());
 
 		Map<String, Future<CITestResult>> futureResults =
 				new HashMap<String, Future<CITestResult>>();
@@ -141,6 +134,9 @@ public class CIBuilder {
 				// init the test with the CIConfig
 				test.init(config);
 
+				// set the test paramterers
+				test.setParameters(config.getTests().get(testname));
+
 				// Submit this test for threaded execution!
 				// The result will arrive in the future...
 				Future<CITestResult> res = executor.submit(test);
@@ -150,15 +146,15 @@ public class CIBuilder {
 			}
 		}
 
-		int monitoredArticleVersion = KnowWEEnvironment.getInstance().
-				getWikiConnector().getVersion(this.config.getMonitoredArticleTitle());
+		// int monitoredArticleVersion = KnowWEEnvironment.getInstance().
+		// getWikiConnector().getVersion(this.config.getMonitoredArticleTitle());
 
 		// Logger.getLogger(this.getClass().getName()).log(Level.INFO,
 		// ">>> CIBuilder: testclasses parsed! >>>");
 
 		// Now collect the results
 		CIBuildResultset resultset = new CIBuildResultset();
-		resultset.setArticleVersion(monitoredArticleVersion);
+		// resultset.setArticleVersion(monitoredArticleVersion);
 
 		for (Map.Entry<String, Future<CITestResult>> entry : futureResults.entrySet()) {
 
@@ -182,37 +178,41 @@ public class CIBuilder {
 		}
 
 		// write the resultset to XML
-		CIBuildPersistenceHandler persi = new
-				CIBuildPersistenceHandler(this.config.getDashboardID());
+		CIBuildPersistenceHandler persi = CIBuildPersistenceHandler.getHandler(
+				this.config.getDashboardName(),
+				this.config.getDashboardArticleTitle());
 
 		// ------ TEST INCLUDES PARSEN --------
 
-		Date executedDate = persi.getCurrentBuildExecutionDate();
-		KnowWEArticle monitored = KnowWEEnvironment.getInstance().getArticle(
-				KnowWEEnvironment.DEFAULT_WEB, this.config.getMonitoredArticleTitle());
+		// Date executedDate = persi.getCurrentBuildExecutionDate();
+		// KnowWEArticle monitored = KnowWEEnvironment.getInstance().getArticle(
+		// KnowWEEnvironment.DEFAULT_WEB,
+		// this.config.getMonitoredArticleTitle());
+		//
+		// List<Section<Include>> list = new ArrayList<Section<Include>>();
+		// monitored.getSection().findSuccessorsOfType(Include.class, list);
+		// for (Section<Include> sec : list) {
+		// String targetArticle =
+		// Include.getIncludeAddress(sec).getTargetArticle();
+		// Map<Integer, Date> history =
+		// conny.getModificationHistory(targetArticle);
+		//
+		// int currentVersion = conny.getVersion(targetArticle);
+		// int lastVersion = 1;
+		//
+		// for (Map.Entry<Integer, Date> e : history.entrySet()) {
+		//
+		// if (e.getValue().before(executedDate)) {
+		// lastVersion = e.getKey();
+		// }
+		// }
+		// if (lastVersion < currentVersion) {
+		// resultset.addModifiedArticle(new
+		// ModifiedArticleWrapper(targetArticle,
+		// lastVersion, currentVersion));
+		// }
+		// }
 
-		List<Section<Include>> list = new ArrayList<Section<Include>>();
-		monitored.getSection().findSuccessorsOfType(Include.class, list);
-		for (Section<Include> sec : list) {
-			String targetArticle = Include.getIncludeAddress(sec).getTargetArticle();
-			Map<Integer, Date> history =
-					conny.getModificationHistory(targetArticle);
-
-			int currentVersion = conny.getVersion(targetArticle);
-			int lastVersion = 1;
-
-			for (Map.Entry<Integer, Date> e : history.entrySet()) {
-
-				if (e.getValue().before(executedDate)) {
-					lastVersion = e.getKey();
-				}
-			}
-			if (lastVersion < currentVersion) {
-				resultset.addModifiedArticle(new ModifiedArticleWrapper(targetArticle,
-						lastVersion, currentVersion));
-			}
-		}
-
-		persi.write(resultset, this.config.getMonitoredArticleTitle());
+		persi.write(resultset);// , this.config.getMonitoredArticleTitle());
 	}
 }

@@ -35,7 +35,9 @@ public class TestsuiteRunner extends AbstractCITest {
 	@Override
 	public CITestResult call() {
 
-		String monitoredArticleTitle = config.getMonitoredArticleTitle();
+		// String monitoredArticleTitle = config.getMonitoredArticleTitle();
+		String monitoredArticleTitle = config.getTests().get("TestsuiteRunner").get(0);
+
 		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticleManager(
 				KnowWEEnvironment.
 				DEFAULT_WEB).getArticle(monitoredArticleTitle);
@@ -43,21 +45,19 @@ public class TestsuiteRunner extends AbstractCITest {
 				TestSuiteType.class);
 
 		if (section != null) {
-			TestSuite suite = (TestSuite) KnowWEUtils.getStoredObject(section,
-					TestSuiteType.TESTSUITEKEY);
+			// TestSuite suite = (TestSuite)
+			// KnowWEUtils.getStoredObject(section,
+			// TestSuiteType.TESTSUITEKEY);
+			TestSuite suite = (TestSuite) KnowWEUtils.getStoredObject(
+					section.getArticle(), section, TestSuiteType.TESTSUITEKEY);
+
 			if (suite != null) {
-				if (!suite.isConsistent()) {// testsuite is not consistent!
-					return new CITestResult(TestResultType.FAILED, "Testsuite is not consistent!");
-				}
-				else if (suite.totalRecall() == 1.0 && suite.totalPrecision() == 1.0) {// testsuite
-					// passed!
-					return new CITestResult(TestResultType.SUCCESSFUL, "Testsuite passed!");
-				}
-				else {// testsuite failed
-					return new CITestResult(TestResultType.FAILED,
-							"Testsuite failed! (Total Precision: " + suite.totalPrecision() +
-									", Total Recall: " + suite.totalRecall() + ")");
-				}
+				if (!suite.isConsistent()) return new CITestResult(TestResultType.FAILED, "Testsuite is not consistent!");
+				else if (suite.totalRecall() == 1.0 && suite.totalPrecision() == 1.0) // passed!
+				return new CITestResult(TestResultType.SUCCESSFUL, "Testsuite passed!");
+				else return new CITestResult(TestResultType.FAILED,
+						"Testsuite failed! (Total Precision: " + suite.totalPrecision() +
+								", Total Recall: " + suite.totalRecall() + ")");
 			}
 			else return new CITestResult(TestResultType.ERROR,
 					"Error while retrieving Testsuite from Article '" + article.getTitle() + "' !");

@@ -21,12 +21,9 @@
 package de.d3web.we.ci4ke.build;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import de.d3web.we.ci4ke.handling.CITestResult;
 import de.d3web.we.ci4ke.handling.CITestResult.TestResultType;
@@ -51,7 +48,7 @@ public final class CIBuildResultset {
 	/**
 	 * the version number of the article which was testet
 	 */
-	private int articleVersion;
+	// private int articleVersion;
 
 	/**
 	 * A Map of the names and results of the executed Tests.
@@ -61,36 +58,36 @@ public final class CIBuildResultset {
 	/**
 	 * the articles which were modified before execution of this build
 	 */
-	private List<ModifiedArticleWrapper> modifiedArticles;
+	// private final List<ModifiedArticleWrapper> modifiedArticles;
 
 	public CIBuildResultset() {
 		super();
-		this.articleVersion = -1;
+		// this.articleVersion = -1;
 		this.buildExecutionDate = new Date();
-		this.results = new TreeMap<String, CITestResult>();
-		this.modifiedArticles = new LinkedList<ModifiedArticleWrapper>();
+		this.results = new HashMap<String, CITestResult>();
+		// this.modifiedArticles = new LinkedList<ModifiedArticleWrapper>();
 	}
 
-	@Deprecated
-	public CIBuildResultset(
-			// String dashboardID,
-			Date buildExecutionDate,
-			Map<String, CITestResult> results) {
-		super();
-		// this.dashboardID = dashboardID;
-		this.buildExecutionDate = buildExecutionDate;
-		this.results = results;
-	}
-
-	@Deprecated
-	public CIBuildResultset(
-			// String dashboardID,
-			Map<String, CITestResult> results) {
-		super();
-		// this.dashboardID = dashboardID;
-		this.buildExecutionDate = new Date();
-		this.results = results;
-	}
+	// @Deprecated
+	// public CIBuildResultset(
+	// // String dashboardID,
+	// Date buildExecutionDate,
+	// Map<String, CITestResult> results) {
+	// super();
+	// // this.dashboardID = dashboardID;
+	// this.buildExecutionDate = buildExecutionDate;
+	// this.results = results;
+	// }
+	//
+	// @Deprecated
+	// public CIBuildResultset(
+	// // String dashboardID,
+	// Map<String, CITestResult> results) {
+	// super();
+	// // this.dashboardID = dashboardID;
+	// this.buildExecutionDate = new Date();
+	// this.results = results;
+	// }
 
 	// GETTERS
 
@@ -139,7 +136,9 @@ public final class CIBuildResultset {
 			if (testresult.getTestResultMessage().length() > 0) {
 				sb.append(testresult.getTestResultMessage());
 			}
-			else sb.append("(no resultmessage)");
+			else {
+				sb.append("(no resultmessage)");
+			}
 			sb.append("\n<br/><br/>\n");
 		}
 		return sb.toString();
@@ -154,22 +153,22 @@ public final class CIBuildResultset {
 		else throw new IllegalArgumentException("addTestResult() received illegal arguments!");
 	}
 
-	public int getArticleVersion() {
-		return articleVersion;
-	}
+	// public int getArticleVersion() {
+	// return articleVersion;
+	// }
+	//
+	// public void setArticleVersion(int articleVersion) {
+	// this.articleVersion = articleVersion;
+	// }
 
-	public void setArticleVersion(int articleVersion) {
-		this.articleVersion = articleVersion;
-	}
-
-	public void addModifiedArticle(ModifiedArticleWrapper modified) {
-		if (modified != null) {
-			this.modifiedArticles.add(modified);
-		}
-	}
-
-	public List<ModifiedArticleWrapper> getModifiedArticles() {
-		return Collections.unmodifiableList(this.modifiedArticles);
-	}
+	// public void addModifiedArticle(ModifiedArticleWrapper modified) {
+	// if (modified != null) {
+	// this.modifiedArticles.add(modified);
+	// }
+	// }
+	//
+	// public List<ModifiedArticleWrapper> getModifiedArticles() {
+	// return Collections.unmodifiableList(this.modifiedArticles);
+	// }
 
 }

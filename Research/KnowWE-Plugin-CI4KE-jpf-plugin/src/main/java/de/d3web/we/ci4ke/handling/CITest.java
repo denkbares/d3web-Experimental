@@ -20,6 +20,7 @@
 
 package de.d3web.we.ci4ke.handling;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 /**
@@ -31,6 +32,17 @@ import java.util.concurrent.Callable;
  */
 public interface CITest extends Callable<CITestResult> {
 
+	/**
+	 * This is the old init() method which should get removed soon!
+	 */
 	public void init(CIConfig config);
 
+	/**
+	 * This new setParameters method sets the List of Parameters for a specific
+	 * test directly
+	 * 
+	 * @created 14.11.2010
+	 * @param parameters
+	 */
+	public void setParameters(List<String> parameters);
 }

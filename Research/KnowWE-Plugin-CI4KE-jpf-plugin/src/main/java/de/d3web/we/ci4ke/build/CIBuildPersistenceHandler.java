@@ -23,10 +23,12 @@ package de.d3web.we.ci4ke.build;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +46,11 @@ import de.d3web.we.ci4ke.handling.CITestResult.TestResultType;
 import de.d3web.we.ci4ke.util.CIUtilities;
 
 public class CIBuildPersistenceHandler {
+
+	/**
+	 * All registered CIBuildPersistenceHandlers
+	 */
+	private static Map<String, CIBuildPersistenceHandler> handlers;
 
 	/**
 	 * This File is pointing to our build File
@@ -66,17 +73,39 @@ public class CIBuildPersistenceHandler {
 	private static SimpleDateFormat DATE_FORMAT =
 			new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
-	private String dashboardID;
+	/**
+	 * The name this PersistanceHandler Instance is responsible for.
+	 */
+	private String dashboardName;
+
+	// private String dashboardArticleTitle;
+
+	/**
+	 * Get the {@link CIBuildPersistenceHandler} instance responsible for a
+	 * specific dashboardName-dashboardArticle-combination
+	 */
+	public static CIBuildPersistenceHandler getHandler(String dashboardName, String dashboardArticleTitle) {
+		if (handlers == null) {
+			handlers = new HashMap<String, CIBuildPersistenceHandler>();
+		}
+		CIBuildPersistenceHandler handler = handlers.get(dashboardName);
+		if (handler == null) {
+			handler = new CIBuildPersistenceHandler(dashboardName, dashboardArticleTitle);
+			handlers.put(dashboardName, handler);
+		}
+		return handler;
+	}
 
 	/**
 	 * Creates a new CI-Build Result-Writer for a CIDashboard
 	 * 
 	 * @param dashboardID
 	 */
-	public CIBuildPersistenceHandler(String dashboardID) {
+	private CIBuildPersistenceHandler(String dashboardName, String dashboardArticleTitle) {
 		try {
-			this.dashboardID = dashboardID;
-			this.xmlBuildFile = initXMLFile(dashboardID);
+			this.dashboardName = dashboardName;
+			// this.dashboardArticleTitle = dashboardArticleTitle;
+			this.xmlBuildFile = initXMLFile(dashboardName, dashboardArticleTitle);
 			this.xmlJDomTree = new SAXBuilder().build(xmlBuildFile);
 			this.nextBuildNumber = getCurrentBuildNumber() + 1;
 		}
@@ -90,12 +119,16 @@ public class CIBuildPersistenceHandler {
 		}
 	}
 
-	private static File initXMLFile(String dashboardID) throws IOException {
-		if (dashboardID == null || dashboardID.isEmpty()) throw new IllegalArgumentException(
-					"Parameter 'dashboardID' is null or empty!");
+	private static File initXMLFile(String dashboardName, String dashboardArticleTitle) throws IOException {
+		if (dashboardName == null || dashboardName.isEmpty()) throw new IllegalArgumentException(
+					"Parameter 'dashboardName' is null or empty!");
+		if (dashboardArticleTitle == null || dashboardArticleTitle.isEmpty()) throw new IllegalArgumentException(
+				"Parameter 'dashboardArticleTitle' is null or empty!");
 
-		File buildFile = new File(CIUtilities.getCIBuildDir(),
-				"builds-" + dashboardID + ".xml");
+		String buildFileName = URLEncoder.encode("results-" + dashboardName + ".xml", "UTF-8");
+		
+		File buildFile = new File(CIUtilities.getAttachmentsDirectory(
+				dashboardArticleTitle), buildFileName);
 
 		if (!buildFile.exists()) {
 			buildFile.createNewFile();
@@ -106,7 +139,7 @@ public class CIBuildPersistenceHandler {
 
 	private static void writeBasicXMLStructure(File xmlFile) throws IOException {
 		Element root = new Element("builds");
-		root.setAttribute("monitoredArticle", "");// stub
+		// root.setAttribute("monitoredArticle", "");// stub
 		// create the JDOM Tree for the new xml file and print it out
 		Document xmlDocument = new Document(root);
 		XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
@@ -154,19 +187,19 @@ public class CIBuildPersistenceHandler {
 	 * 
 	 * @param resultset
 	 */
-	public void write(CIBuildResultset resultset, String monitoredArticleTitle) {
+	public void write(CIBuildResultset resultset) {
 
 		try {
 			Document xmlDocument = new SAXBuilder().build(xmlBuildFile);
-			xmlDocument.getRootElement().setAttribute(
-					"monitoredArticle", monitoredArticleTitle);
+			// xmlDocument.getRootElement().setAttribute(
+			// "monitoredArticle", monitoredArticleTitle);
 			// Start building the new <build>...</build> element
 			Element build = new Element("build");
 			build.setAttribute("executed", DATE_FORMAT.format(
 					resultset.getBuildExecutionDate()));
 			build.setAttribute("nr", String.valueOf(nextBuildNumber));
-			build.setAttribute("articleVersion", String.
-					valueOf(resultset.getArticleVersion()));
+			// build.setAttribute("articleVersion", String.
+			// valueOf(resultset.getArticleVersion()));
 			nextBuildNumber++;
 
 			// find the "worst" testResult
@@ -186,21 +219,26 @@ public class CIBuildPersistenceHandler {
 				e.setAttribute("name", testname);
 				e.setAttribute("result", testresult.getResultType().toString());
 
-				if (testresult.getTestResultMessage().length() > 0) e.setAttribute("message",
-						testresult.getTestResultMessage());
+				if (testresult.getTestResultMessage().length() > 0) {
+					e.setAttribute("message",
+							testresult.getTestResultMessage());
+				}
 				tests.addContent(e);
 			}
 			build.addContent(tests);
 			// write the modified articles
-			Element modifiedArticles = new Element("modifiedArticles");
-			for (ModifiedArticleWrapper m : resultset.getModifiedArticles()) {
-				Element article = new Element("modifiedArticle");
-				article.setAttribute("title", m.getArticleTitle());
-				article.setAttribute("rangeFrom", m.getVersionRangeFrom().toString());
-				article.setAttribute("rangeTo", m.getVersionRangeTo().toString());
-				modifiedArticles.addContent(article);
-			}
-			build.addContent(modifiedArticles);
+			// Element modifiedArticles = new Element("modifiedArticles");
+			// for (ModifiedArticleWrapper m : resultset.getModifiedArticles())
+			// {
+			// Element article = new Element("modifiedArticle");
+			// article.setAttribute("title", m.getArticleTitle());
+			// article.setAttribute("rangeFrom",
+			// m.getVersionRangeFrom().toString());
+			// article.setAttribute("rangeTo",
+			// m.getVersionRangeTo().toString());
+			// modifiedArticles.addContent(article);
+			// }
+			// build.addContent(modifiedArticles);
 
 			// add the build-element to the JDOM Tree
 			xmlDocument.getRootElement().addContent(build);
@@ -310,13 +348,17 @@ public class CIBuildPersistenceHandler {
 				}
 				sb.append("</td><td>");
 				// followed by the Build Number...
-				if (buildNr != null && !buildNr.equals("")) sb.append("#" + buildNr);
+				if (buildNr != null && !buildNr.equals("")) {
+					sb.append("#" + buildNr);
+				}
 				sb.append("<td><a onclick=\"");
 				sb.append("fctGetBuildDetails('" +
-						dashboardID + "','" + buildNr + "');\">");
+						dashboardName + "','" + buildNr + "');\">");
 				// and the build date/time
 				s = e.getAttributeValue("executed");
-				if (s != null && !s.equals("")) sb.append(s);
+				if (s != null && !s.equals("")) {
+					sb.append(s);
+				}
 				// close table-cell
 				sb.append("</a></td></tr>\n");
 			}
@@ -330,7 +372,7 @@ public class CIBuildPersistenceHandler {
 			sb.append("<div style=\"float: left;\"><form name=\"ci-show-older-builds\">");
 			sb.append("<input type=\"button\" value=\"<--\" "
 					+ "name=\"submit\" class=\"button\" onclick=\"fctRefreshBuildList('"
-					+ dashboardID + "','" + (indexFromBack + numberOfBuilds) + "','"
+					+ dashboardName + "','" + (indexFromBack + numberOfBuilds) + "','"
 					+ numberOfBuilds + "');\"/>");
 			sb.append("</form></div>");
 		}
@@ -340,7 +382,7 @@ public class CIBuildPersistenceHandler {
 			sb.append("<div style=\"float: right;\"><form name=\"ci-show-newer-builds\">");
 			sb.append("<input type=\"button\" value=\"-->\" "
 					+ "name=\"submit\" class=\"button\" onclick=\"fctRefreshBuildList('"
-					+ dashboardID + "','" + (indexFromBack - numberOfBuilds) + "','"
+					+ dashboardName + "','" + (indexFromBack - numberOfBuilds) + "','"
 					+ numberOfBuilds + "');\"/>");
 			sb.append("</form></div>");
 		}
