@@ -6,7 +6,7 @@
     <version>0.2-SNAPSHOT</version>
   </parent>
   <groupId>de.uniwue.d3web</groupId>
-  <artifactId>d3web-SessionPersistence-Basic-jpf-plugin</artifactId>
+  <artifactId>d3web-Plugin-SessionPersistence-Basic</artifactId>
   <name>d3web-SessionPersistence-Basic</name>
   <version>0.2-SNAPSHOT</version>
   <build>
