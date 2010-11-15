@@ -41,9 +41,9 @@ import org.openrdf.repository.RepositoryException;
 import de.d3web.we.core.KnowWERessourceLoader;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
-import de.d3web.we.kdom.sparql.SparqlDelegateRenderer;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.knowwe.semantic.sparql.SparqlDelegateRenderer;
 
 /**
  * e.g. [{KnowWEPlugin faq=all; status=stud; major=inf;}] renders all faq
@@ -198,7 +198,7 @@ public class FAQTagHandler extends AbstractHTMLTagHandler {
 		List<String> sortedFAQs = sortAlphabetically(result);
 		StringBuilder string = new StringBuilder();
 		String[] resultVals = null;
-	
+
 		// render the topmost category-link line
 		// string.append(FAQUtils.renderCategoriesAnchorLinks());
 
@@ -214,7 +214,7 @@ public class FAQTagHandler extends AbstractHTMLTagHandler {
 
 				if (resultVals[0].startsWith(symbol.toString()) ||
 					resultVals[0].startsWith(symbol.toString().toLowerCase())) {
-			
+
 					string.append(FAQUtils.renderFAQPluginInner(
 							resultVals[0], resultVals[1], resultVals[2], resultVals[3]));
 				}

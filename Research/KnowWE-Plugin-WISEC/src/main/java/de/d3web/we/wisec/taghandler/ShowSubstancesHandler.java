@@ -29,14 +29,14 @@ import org.openrdf.query.TupleQueryResult;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.ISemanticCore;
-import de.d3web.we.core.semantic.SPARQLUtil;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.knowwe.semantic.sparql.SPARQLUtil;
 
 /**
- * 
+ *
  * @author Jochen
  * @created 19.08.2010
  */
@@ -55,24 +55,24 @@ public class ShowSubstancesHandler extends AbstractHTMLTagHandler {
 		String querystring = QUERY;
 
 		TupleQueryResult queryResult = SPARQLUtil.executeTupleQuery(querystring);
-		
+
 		StringBuffer listStringBuffer = new StringBuffer();
 		listStringBuffer.append(KnowWEUtils.maskHTML("<ul>"));
 		boolean empty = true;
-		
+
 		try {
 			while (queryResult.hasNext()) {
 				BindingSet b = queryResult.next();
 				empty = false;
 				Set<String> names = b.getBindingNames();
-			
+
 
 				for (String cur : names) {
 					String erg = b.getBinding(cur).getValue().toString();
 					if (erg.split("#").length == 2) erg = erg.split("#")[1];
 					String pagename = "WI_SUB_"+URLDecoder.decode(erg,
 					"UTF-8");
-							
+
 //							if (KnowWEEnvironment.getInstance()
 //									.getWikiConnector().doesPageExist(pagename)
 //									|| KnowWEEnvironment.getInstance()
@@ -83,10 +83,10 @@ public class ShowSubstancesHandler extends AbstractHTMLTagHandler {
 										.maskHTML("<a href=\"Wiki.jsp?page="
 												+ pagename + "\">" + erg + "</a>");
 //						}
-						
+
 
 						erg = URLDecoder.decode(erg, "UTF-8");
-					
+
 						listStringBuffer.append(KnowWEUtils.maskHTML("<li>") + erg
 								+ KnowWEUtils.maskHTML("</li>\n"));
 

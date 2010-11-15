@@ -27,19 +27,19 @@ import org.openrdf.query.BindingSet;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 
-import de.d3web.we.core.semantic.SPARQLUtil;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.d3web.we.wisec.util.Criteria;
 import de.d3web.we.wisec.util.WISECUtil;
 import de.d3web.wisec.writers.SubstanceListWriter;
+import de.knowwe.semantic.sparql.SPARQLUtil;
 
 /**
  * Displays the scoring of all criterias for a specified substance. The
  * substance is specified with the parameter substance in the taghandler. The
  * substance has to be represented by a valid / known CAS number otherwise this
  * taghandler won't show anything.
- * 
+ *
  * @author Sebastian Furth
  * @created 02/10/2010
  */

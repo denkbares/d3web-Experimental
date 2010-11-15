@@ -34,15 +34,15 @@ import common.Logger;
 
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.ActionContext;
-import de.d3web.we.core.semantic.SPARQLUtil;
 import de.d3web.we.wisec.util.Criteria;
 import de.d3web.we.wisec.util.WISECUtil;
 import de.d3web.wisec.model.RatedSubstance;
 import de.d3web.wisec.writers.SubstanceInfoWriter;
+import de.knowwe.semantic.sparql.SPARQLUtil;
 
 /**
- * 
- * 
+ *
+ *
  * @author Sebastian Furth
  * @created 23/09/2010
  */
@@ -102,7 +102,7 @@ public class WISECRankingAction extends AbstractAction {
 	/**
 	 * Checks if a legend of the underlying data should be printed by evaluating
 	 * the optional 'printinfo' parameter.
-	 * 
+	 *
 	 * @created 22.06.2010
 	 * @param values all parameters of the taghandler
 	 * @return true if printinfo = true, else false
@@ -130,7 +130,7 @@ public class WISECRankingAction extends AbstractAction {
 
 	/**
 	 * Adds the values of the current criteria to the rated substances.
-	 * 
+	 *
 	 * @created 15.06.2010
 	 * @param result Result of the SPARQL-Query (contains substances and scores)
 	 * @param weight the weight of the current criteria
@@ -165,7 +165,7 @@ public class WISECRankingAction extends AbstractAction {
 
 	/**
 	 * Returns a sorted list of all rated substances.
-	 * 
+	 *
 	 * @created 15.06.2010
 	 * @param ratedSubstances
 	 * @return sorted list of rated substances.
@@ -181,7 +181,7 @@ public class WISECRankingAction extends AbstractAction {
 
 	/**
 	 * Renders the top substances in descending order.
-	 * 
+	 *
 	 * @created 15.06.2010
 	 * @param sortedSubstances
 	 * @param numberSubstances

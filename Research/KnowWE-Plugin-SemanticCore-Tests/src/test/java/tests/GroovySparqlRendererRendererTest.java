@@ -36,10 +36,10 @@ import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.sparql.groovy.GroovySparqlRendererContent;
-import de.d3web.we.kdom.sparql.groovy.GroovySparqlRendererRenderer;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.knowwe.semantic.sparql.groovy.GroovySparqlRendererContent;
+import de.knowwe.semantic.sparql.groovy.GroovySparqlRendererRenderer;
 import de.knowwe.tagging.TaggingMangler;
 import dummies.KnowWETestWikiConnector;
 

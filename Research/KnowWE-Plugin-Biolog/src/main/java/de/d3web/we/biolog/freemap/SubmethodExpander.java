@@ -31,23 +31,23 @@ import org.openrdf.query.BindingSet;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 
-import de.d3web.we.core.semantic.SPARQLUtil;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.search.SearchTerm;
 import de.d3web.we.search.SearchTermExpander;
+import de.knowwe.semantic.sparql.SPARQLUtil;
 
 /**
  * This class implements the SearchTerm expansion on the Method-hierarchy
  * defined by the FreeNode-files
- * 
- * 
+ *
+ *
  * @author Jochen
  * @created 16.09.2010
  */
 public class SubmethodExpander implements SearchTermExpander {
 
 	public  static final String SUBMETHOD_OF = "submethodOf";
-	
+
 	private static SubmethodExpander instance;
 
 	public static SubmethodExpander getInstance() {
@@ -55,9 +55,9 @@ public class SubmethodExpander implements SearchTermExpander {
 			instance = new SubmethodExpander();
 		return instance;
 	}
-	
-	
-  
+
+
+
 	@Override
 	public Collection<SearchTerm> expandSearchTerm(SearchTerm t) {
 		return expandSearchTerm(t, 1);
@@ -70,10 +70,10 @@ public class SubmethodExpander implements SearchTermExpander {
 		if (level < 1)
 			return null;
 
-		
+
 		// throw together terms of all levels
 		Set<SearchTerm> allResults = new HashSet<SearchTerm>();
-		
+
 		// adds SearchTerms for each found subclass of the class for t recursively until level level
 		expand(t, allResults, 1, level);
 
@@ -93,11 +93,11 @@ public class SubmethodExpander implements SearchTermExpander {
 				allTerms.add(searchTerm);
 				expand(searchTerm, allTerms, ++curLevel, maxLevel);
 			}
-			
+
 		}
 
 	}
-	
+
 	public Collection<SearchTerm> expandFatherMethods(SearchTerm t, double discountFactor) {
 
 		String name = t.getTerm();
@@ -165,5 +165,5 @@ public class SubmethodExpander implements SearchTermExpander {
 		}
 		return result;
 	}
-	
+
 }

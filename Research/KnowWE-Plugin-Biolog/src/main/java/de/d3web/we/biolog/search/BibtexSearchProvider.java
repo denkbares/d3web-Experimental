@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -36,18 +36,19 @@ import org.openrdf.query.TupleQueryResult;
 
 import de.d3web.we.biolog.utils.BiologUtils;
 import de.d3web.we.core.KnowWEParameterMap;
-import de.d3web.we.core.semantic.SPARQLUtil;
+import de.d3web.we.kdom.bibtex.BibTex;
 import de.d3web.we.search.GenericSearchResult;
 import de.d3web.we.search.KnowWESearchProvider;
 import de.d3web.we.search.SearchTerm;
+import de.knowwe.semantic.sparql.SPARQLUtil;
 
 /**
  * SearchProvider searching in data formalized by the BibTex-type
- * 
+ *
  * @see BibTex
- * 
+ *
  * @author Jochen
- * 
+ *
  */
 public class BibtexSearchProvider implements KnowWESearchProvider {
 
