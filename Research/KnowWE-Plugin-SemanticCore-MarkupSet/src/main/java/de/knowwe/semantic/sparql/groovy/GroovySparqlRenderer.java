@@ -18,16 +18,20 @@
  * site: http://www.fsf.org.
  */
 
-package sparql.groovy;
+package de.knowwe.semantic.sparql.groovy;
 
-import de.d3web.we.kdom.xml.XMLContent;
+import de.d3web.we.kdom.xml.AbstractXMLObjectType;
 
-public class GroovySparqlRendererContent extends XMLContent {
+public class GroovySparqlRenderer extends AbstractXMLObjectType {
+
+	public GroovySparqlRenderer() {
+		super("groovysparqlrenderer");
+
+	}
 
 	@Override
 	protected void init() {
-		this.setCustomRenderer(GroovySparqlRendererRenderer.getInstance());
-
+		childrenTypes.add(new GroovySparqlRendererContent());
 	}
 
 }

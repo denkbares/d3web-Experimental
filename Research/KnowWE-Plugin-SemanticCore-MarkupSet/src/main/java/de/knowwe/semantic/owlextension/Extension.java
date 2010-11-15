@@ -18,39 +18,29 @@
  * site: http://www.fsf.org.
  */
 
-/**
- *
- */
-package sparql;
+package de.knowwe.semantic.owlextension;
 
-import java.util.HashMap;
+import de.d3web.we.kdom.xml.AbstractXMLObjectType;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.xml.XMLContent;
+public class Extension extends AbstractXMLObjectType {
 
-/**
- * @author kazamatzuri
- *
- */
-public class SparqlContent extends XMLContent {
+	public static final String EXTENSION_SOURCE_KEY = "EXTENSION_SOURCE";
+	public static final String EXTENSION_OBJECT_KEY = "EXTENSION_OBJECT";
+	public static final String EXTENSION_RESULT_KEY = "EXTENSION_RESULT";
 
-	private HashMap<Section<SparqlContent>, String> queries;
-
-	public void addQuery(Section<SparqlContent> s, String str) {
-		queries.put(s, str);
+	public Extension() {
+		super("extension");
 	}
 
-	public HashMap<Section<SparqlContent>, String> getQueries() {
-		return queries;
-	}
-
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see de.d3web.we.dom.AbstractKnowWEObjectType#init()
+	 */
 	@Override
-	public void init() {
-		queries = new HashMap<Section<SparqlContent>, String>();
-		this.setCustomRenderer(SparqlDelegateRenderer.getInstance());
+	protected void init() {
+		// this.setCustomRenderer(ExtensionRenderer.getInstance());
+		childrenTypes.add(new ExtensionContent());
+		// this.sectionFinder=(new ExtensionSectionFinder(this));
 	}
-
-	// public String getQuery() {
-	// return queries.get(this);
-	// }
 }

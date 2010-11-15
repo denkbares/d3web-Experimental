@@ -21,24 +21,36 @@
 /**
  *
  */
-package owlextension;
+package de.knowwe.semantic.sparql;
 
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import java.util.HashMap;
+
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.xml.XMLContent;
 
 /**
  * @author kazamatzuri
  *
  */
-public class OwlProperties extends AbstractXMLObjectType {
+public class SparqlContent extends XMLContent {
 
-	public OwlProperties() {
-		super("properties");
+	private HashMap<Section<SparqlContent>, String> queries;
 
+	public void addQuery(Section<SparqlContent> s, String str) {
+		queries.put(s, str);
+	}
+
+	public HashMap<Section<SparqlContent>, String> getQueries() {
+		return queries;
 	}
 
 	@Override
-	protected void init() {
-		childrenTypes.add(new OwlPropertiesContent());
+	public void init() {
+		queries = new HashMap<Section<SparqlContent>, String>();
+		this.setCustomRenderer(SparqlDelegateRenderer.getInstance());
 	}
 
+	// public String getQuery() {
+	// return queries.get(this);
+	// }
 }

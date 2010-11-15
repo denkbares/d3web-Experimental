@@ -21,7 +21,7 @@
 /**
  *
  */
-package owlextension;
+package de.knowwe.semantic.owlextension;
 
 import java.util.Collection;
 

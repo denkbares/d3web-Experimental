@@ -65,5 +65,26 @@
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>groovy-plugin</groupId>
+			<artifactId>groovy-plugin</artifactId>
+			<version>1.0a12</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all</artifactId>
+			<version>1.7.0</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.groovy.maven.runtime</groupId>
+			<artifactId>gmaven-runtime-default</artifactId>
+			<version>1.0-rc-3</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 </project>

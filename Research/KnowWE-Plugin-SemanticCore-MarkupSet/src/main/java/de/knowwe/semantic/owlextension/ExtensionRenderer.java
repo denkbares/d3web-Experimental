@@ -18,50 +18,51 @@
  * site: http://www.fsf.org.
  */
 
-/**
- *
- */
-package owlextension;
+package de.knowwe.semantic.owlextension;
 
+import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
-/**
- * @author kazamatzuri
- *
- */
-public class OwlPropertiesRenderer extends KnowWEDomRenderer {
+public class ExtensionRenderer extends KnowWEDomRenderer {
 
-	private static OwlPropertiesRenderer instance;
+	private static KnowWEDomRenderer me;
 
-	public static synchronized OwlPropertiesRenderer getInstance() {
-		if (instance == null) instance = new OwlPropertiesRenderer();
-		return instance;
+	private ExtensionRenderer() {
+
 	}
 
+	@Override
+	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
+		String header;
+		String footer = "</p>";
+		String content = "";
+
+		content = (String) KnowWEUtils.getStoredObject(sec, Extension.EXTENSION_RESULT_KEY);
+
+		if (!content.equals("success")) {
+			header = "<p class=\"box error\">";
+		}
+		else {
+			header = "<p class=\"box ok\">";
+		}
+		string.append(KnowWEEnvironment.maskHTML(header + content + footer));
+	}
+
+	public static synchronized KnowWEDomRenderer getInstance() {
+		if (me == null) me = new ExtensionRenderer();
+		return me;
+	}
+
+	/**
+	 * prevent cloning
+	 */
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		throw new CloneNotSupportedException();
 	}
 
-	private OwlPropertiesRenderer() {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * de.d3web.we.dom.renderer.KnowWEDomRenderer#render(de.d3web.we.dom.Section
-	 * , java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
-		String text = sec.getOriginalText();
-		for (String cur : text.split("\r\n|\r|\n")) {
-			if (cur.trim().length() > 0) string.append(cur.trim() + "\\\\");
-		}
-	}
 }

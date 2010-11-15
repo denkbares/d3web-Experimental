@@ -18,29 +18,27 @@
  * site: http://www.fsf.org.
  */
 
-package owlextension;
+/**
+ *
+ */
+package de.knowwe.semantic.owlextension;
 
 import de.d3web.we.kdom.xml.AbstractXMLObjectType;
 
-public class Extension extends AbstractXMLObjectType {
+/**
+ * @author kazamatzuri
+ *
+ */
+public class OwlProperties extends AbstractXMLObjectType {
 
-	public static final String EXTENSION_SOURCE_KEY = "EXTENSION_SOURCE";
-	public static final String EXTENSION_OBJECT_KEY = "EXTENSION_OBJECT";
-	public static final String EXTENSION_RESULT_KEY = "EXTENSION_RESULT";
+	public OwlProperties() {
+		super("properties");
 
-	public Extension() {
-		super("extension");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see de.d3web.we.dom.AbstractKnowWEObjectType#init()
-	 */
 	@Override
 	protected void init() {
-		// this.setCustomRenderer(ExtensionRenderer.getInstance());
-		childrenTypes.add(new ExtensionContent());
-		// this.sectionFinder=(new ExtensionSectionFinder(this));
+		childrenTypes.add(new OwlPropertiesContent());
 	}
+
 }

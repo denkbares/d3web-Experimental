@@ -18,7 +18,7 @@
  * site: http://www.fsf.org.
  */
 
-package sparql.groovy;
+package de.knowwe.semantic.sparql.groovy;
 
 import groovy.lang.GroovyClassLoader;
 
@@ -28,8 +28,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
 
-import sparql.SparqlDelegateRenderer;
-import sparql.SparqlRenderer;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
@@ -37,6 +35,8 @@ import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.xml.AbstractXMLObjectType;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.knowwe.semantic.sparql.SparqlDelegateRenderer;
+import de.knowwe.semantic.sparql.SparqlRenderer;
 
 public class GroovySparqlRendererRenderer extends
 		KnowWEDomRenderer<GroovySparqlRendererContent> {

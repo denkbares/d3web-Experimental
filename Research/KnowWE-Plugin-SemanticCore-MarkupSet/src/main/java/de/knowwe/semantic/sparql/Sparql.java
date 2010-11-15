@@ -18,29 +18,20 @@
  * site: http://www.fsf.org.
  */
 
-/**
- *
- */
-package semanticFactSheet;
+package de.knowwe.semantic.sparql;
 
 import de.d3web.we.kdom.xml.AbstractXMLObjectType;
 
-/**
- * @author kazamatzuri
- *
- */
-public class Info extends AbstractXMLObjectType {
+public class Sparql extends AbstractXMLObjectType {
 
-	/**
-	 * @param type
-	 */
-	public Info() {
-		super("info");
+	public Sparql() {
+		super("sparql");
+
 	}
 
 	@Override
 	protected void init() {
-		childrenTypes.add(new InfoContent());
+		childrenTypes.add(new SparqlContent());
 	}
 
 }

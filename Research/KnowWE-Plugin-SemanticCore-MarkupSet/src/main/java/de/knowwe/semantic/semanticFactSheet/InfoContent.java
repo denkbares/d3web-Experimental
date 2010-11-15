@@ -21,7 +21,7 @@
 /**
  *
  */
-package semanticFactSheet;
+package de.knowwe.semantic.semanticFactSheet;
 
 import java.util.Collection;
 

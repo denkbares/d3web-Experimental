@@ -18,7 +18,7 @@
  * site: http://www.fsf.org.
  */
 
-package sparql;
+package de.knowwe.semantic.sparql;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -21,23 +21,26 @@
 /**
  *
  */
-package sparql;
+package de.knowwe.semantic.semanticFactSheet;
 
-import java.util.Map;
-
-import org.openrdf.query.TupleQueryResult;
+import de.d3web.we.kdom.xml.AbstractXMLObjectType;
 
 /**
  * @author kazamatzuri
  *
  */
-public interface SparqlRenderer {
+public class Info extends AbstractXMLObjectType {
 
-	public String render(TupleQueryResult result, Map<String, String> params);
+	/**
+	 * @param type
+	 */
+	public Info() {
+		super("info");
+	}
 
-	public String getName();
+	@Override
+	protected void init() {
+		childrenTypes.add(new InfoContent());
+	}
 
-	public void setID(int id);
-
-	public int getID();
 }

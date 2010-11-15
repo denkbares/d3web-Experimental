@@ -18,20 +18,26 @@
  * site: http://www.fsf.org.
  */
 
-package sparql;
+/**
+ *
+ */
+package de.knowwe.semantic.sparql;
 
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import java.util.Map;
 
-public class Sparql extends AbstractXMLObjectType {
+import org.openrdf.query.TupleQueryResult;
 
-	public Sparql() {
-		super("sparql");
+/**
+ * @author kazamatzuri
+ *
+ */
+public interface SparqlRenderer {
 
-	}
+	public String render(TupleQueryResult result, Map<String, String> params);
 
-	@Override
-	protected void init() {
-		childrenTypes.add(new SparqlContent());
-	}
+	public String getName();
 
+	public void setID(int id);
+
+	public int getID();
 }
