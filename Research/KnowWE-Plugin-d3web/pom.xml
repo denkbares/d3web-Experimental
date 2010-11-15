@@ -9,7 +9,7 @@
 	</parent>
 	
 	<groupId>de.uniwue.d3web</groupId>
-	<artifactId>KnowWE-Plugin-d3web-jpf-plugin</artifactId>
+	<artifactId>KnowWE-Plugin-d3web</artifactId>
 	<name>KnowWE Plugin: d3web</name>
 	<version>0.2-SNAPSHOT</version>
 	
