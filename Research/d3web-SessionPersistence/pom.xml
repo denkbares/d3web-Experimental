@@ -28,7 +28,7 @@
   	</dependency>
   	<dependency>
   		<groupId>de.uniwue.d3web</groupId>
-  		<artifactId>d3web-SessionPersistence-ExtensionPoints-jpf-plugin</artifactId>
+  		<artifactId>d3web-Plugin-SessionPersistence-ExtensionPoints</artifactId>
   		<version>${project.version}</version>
   		<type>jar</type>
   		<scope>compile</scope>

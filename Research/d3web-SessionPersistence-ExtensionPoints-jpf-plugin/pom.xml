@@ -6,7 +6,7 @@
     <version>0.2-SNAPSHOT</version>
   </parent>
   <groupId>de.uniwue.d3web</groupId>
-  <artifactId>d3web-SessionPersistence-ExtensionPoints-jpf-plugin</artifactId>
-  <name>d3web-SessionPersistence-ExtensionPoints</name>
+  <artifactId>d3web-Plugin-SessionPersistence-ExtensionPoints</artifactId>
+  <name>d3web Plugin: SessionPersistence-ExtensionPoints</name>
   <version>0.2-SNAPSHOT</version>
 </project>

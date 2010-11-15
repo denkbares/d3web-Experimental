@@ -72,7 +72,7 @@
 
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>KnowWE-ExtensionPoints-jpf-plugin</artifactId>
+			<artifactId>KnowWE-Plugin-ExtensionPoints</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
@@ -105,7 +105,7 @@
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>KnowWE-Plugin-SemanticCore-jpf-plugin</artifactId>
+			<artifactId>KnowWE-Plugin-SemanticCore</artifactId>
 			<version>0.2-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>compile</scope>
@@ -124,7 +124,7 @@
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>KnowWE-Plugin-Table-jpf-plugin</artifactId>
+			<artifactId>KnowWE-Plugin-Table</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>

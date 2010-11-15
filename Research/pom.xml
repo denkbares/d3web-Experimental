@@ -139,24 +139,24 @@
 	<modules>
 		<module>d3web-Report</module>
 		<module>d3web-KnOfficeParser</module>
-		<module>KnowWE-Plugin-Biolog-jpf-plugin</module>
-		<module>KnowWE-Plugin-d3web-jpf-plugin</module>
-		<module>KnowWE-Plugin-Comment-jpf-plugin</module>
-		<module>KnowWE-Plugin-Calendar-jpf-plugin</module>
-		<module>KnowWE-Plugin-HermesModule-jpf-plugin</module>
-		<module>KnowWE-core-Plugins-jpf-plugin</module>
-		<module>KnowWE-Plugin-WISEC-jpf-plugin</module>
-		<module>KnowWE-Plugin-FAQ-jpf-plugin</module>
+		<module>KnowWE-Plugin-Biolog</module>
+		<module>KnowWE-Plugin-d3web</module>
+		<module>KnowWE-Plugin-Comment</module>
+		<module>KnowWE-Plugin-Calendar</module>
+		<module>KnowWE-Plugin-HermesModule</module>
+		<module>KnowWE-Plugin-Core</module>
+		<module>KnowWE-Plugin-WISEC</module>
+		<module>KnowWE-Plugin-FAQ</module>
 		<module>KnowWE-Plugin-XML</module>
-		<module>KnowWEPlugin-SemanticCore-Tests</module>
+		<module>KnowWE-Plugin-SemanticCore-Tests</module>
 		<module>KnowWE-Plugin-OneQuestionDialog</module>
-		<module>KnowWE-Plugin-Table-jpf-plugin</module>
+		<module>KnowWE-Plugin-Table</module>
 		<module>KnowWE-Plugin-TestcaseTable</module>
 		<module>d3web-Persistence-ImageQuestion</module>
-		<module>KnowWE-Plugin-Defi-jpf-plugin</module>
+		<module>KnowWE-Plugin-Defi</module>
 		<module>d3web-SessionPersistence</module>
-		<module>d3web-SessionPersistence-ExtensionPoints-jpf-plugin</module>
-		<module>d3web-SessionPersistence-Basic-jpf-plugin</module>
+		<module>d3web-Plugin-SessionPersistence-ExtensionPoints</module>
+		<module>d3web-Plugin-SessionPersistence-Basic</module>
 	</modules>
 	<repositories>
 		<repository>

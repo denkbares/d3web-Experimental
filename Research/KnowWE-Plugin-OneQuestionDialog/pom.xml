@@ -7,7 +7,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.uniwue.d3web</groupId>
-  <artifactId>KnowWE-Plugin-OneQuestionDialog-jpf-plugin</artifactId>
+  <artifactId>KnowWE-Plugin-OneQuestionDialog</artifactId>
   <name>KnowWE-Plugin-OneQuestionDialog</name>
   <version>0.2-SNAPSHOT</version>
   
@@ -34,7 +34,7 @@
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>KnowWE-Plugin-d3web-jpf-plugin</artifactId>
+			<artifactId>KnowWE-Plugin-d3web</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>

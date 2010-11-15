@@ -54,7 +54,7 @@
   	</dependency>
   	<dependency>
   		<groupId>de.uniwue.d3web</groupId>
-  		<artifactId>d3web-Persistence-Basic-jpf-plugin</artifactId>
+  		<artifactId>d3web-Plugin-Persistence-Basic</artifactId>
   		<version>0.2-SNAPSHOT</version>
   		<scope>compile</scope>
   	</dependency>

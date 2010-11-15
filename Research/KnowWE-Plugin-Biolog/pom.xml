@@ -2,11 +2,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.uniwue.d3web</groupId>
-	<artifactId>KnowWE-Plugin-Biolog-jpf-plugin</artifactId>
+	<artifactId>KnowWE-Plugin-Biolog</artifactId>
 	<packaging>jar</packaging>
 	<name>KnowWE-Plugin: Biolog</name>
 	<version>0.2-SNAPSHOT</version>
-        <parent>
+  <parent>
 		<artifactId>Research</artifactId>
 		<groupId>de.uniwue.d3web</groupId>
 		<version>0.2-SNAPSHOT</version>
@@ -15,111 +15,21 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
+				<groupId>de.uniwue.maven.plugins</groupId>
+				<artifactId>knowwe-versionator</artifactId>
+				<version>${versionatorVersion}</version>
 				<executions>
 					<execution>
-						<id>copy-dependencies</id>
-						<phase>package</phase>
+						<id>versionate-plugin</id>
+						<phase>prepare-package</phase>
 						<goals>
-							<goal>copy</goal>
+							<goal>versionate-plugin</goal>
 						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>org.bibsonomy</groupId>
-									<artifactId>bibsonomy-bibtex-parser</artifactId>
-									<version>2.0.3</version>
-									<type>jar</type>
-									<overWrite>false</overWrite>
-									<outputDirectory>${project.build.directory}/dependencies</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.bibsonomy</groupId>
-									<artifactId>bibsonomy-common</artifactId>
-									<version>2.0.3</version>
-									<type>jar</type>
-									<overWrite>false</overWrite>
-									<outputDirectory>${project.build.directory}/dependencies</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.bibsonomy</groupId>
-									<artifactId>bibsonomy-model</artifactId>
-									<version>2.0.3</version>
-									<type>jar</type>
-									<overWrite>false</overWrite>
-									<outputDirectory>${project.build.directory}/dependencies</outputDirectory>
-								</artifactItem>
-							</artifactItems>
-							<outputDirectory>${project.build.directory}/dependencies</outputDirectory>
-							<overWriteReleases>false</overWriteReleases>
-							<overWriteSnapshots>false</overWriteSnapshots>
-							<overWriteIfNewer>true</overWriteIfNewer>
-							<excludeScope>provided</excludeScope>
-							<excludeScope>system</excludeScope>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>biolog-plugin</id>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<phase>package</phase>
-
-						<configuration>
-							<tasks>
-								<echo>Copying external Plugin ${project.name} into KnowWE...</echo>
-								<echo>KnowWE is expected at:
-									${project.build.directory}/../${knowwe.path}/</echo>
-								<copy
-									todir="${project.build.directory}/../${knowwe.path}/target/KnowWE-${knowwe.version}/WEB-INF/lib/">
-									<fileset dir="target" includes="*.jar" />
-									<fileset dir="target/dependencies" includes="*.jar" />
-								</copy>
-								<echo>done.</echo>
-							</tasks>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-	<repositories>
-		<repository>
-			<id>infovi-artifactory</id>
-			<url>http://isci.informatik.uni-wuerzburg.de:8080/artifactory/repo/
-			</url>
-		</repository>
-		<repository>
-			<id>knowwe-snapshots</id>
-			<url>http://isci.informatik.uni-wuerzburg.de:8080/artifactory/knowwe-snapshots/
-			</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>ignore</checksumPolicy>
-			</snapshots>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>contrib</id>
-			<url>http://isci.informatik.uni-wuerzburg.de:8080/artifactory/infovi-contrib/
-			</url>
-		</pluginRepository>
-	</pluginRepositories>
 
 	<dependencies>
 		<dependency>
@@ -144,7 +54,7 @@
 		</dependency>
 		  	<dependency>
   		<groupId>de.uniwue.d3web</groupId>
-  		<artifactId>KnowWE-core-Plugins-jpf-plugin</artifactId>
+  		<artifactId>KnowWE-Plugin-Core</artifactId>
   		<version>0.2-SNAPSHOT</version>
   		<scope>compile</scope>
   	</dependency>
@@ -155,23 +65,10 @@
 		  	</dependency>
 		  	<dependency>
 		  		<groupId>de.uniwue.d3web</groupId>
-		  		<artifactId>KnowWE-Plugin-SemanticCore-jpf-plugin</artifactId>
+		  		<artifactId>KnowWE-Plugin-SemanticCore-</artifactId>
 		  		<version>0.2-SNAPSHOT</version>
 		  		<type>jar</type>
 		  		<scope>compile</scope>
 		  	</dependency>
 	</dependencies>
-	<distributionManagement>
-		<snapshotRepository>
-			<id>knowwe-snapshots</id>
-			<name>d3web Snapshots</name>
-			<url>http://isci.informatik.uni-wuerzburg.de:8080/artifactory/knowwe-snapshots/
-			</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-	<organization>
-		<name>Universität Würzburg</name>
-		<url>http://uni-wuerzburg.de/</url>
-	</organization>
 </project>

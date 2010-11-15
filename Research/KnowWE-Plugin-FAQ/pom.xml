@@ -9,7 +9,7 @@
 	</parent>
 	
 	<groupId>de.uniwue.d3web</groupId>
-	<artifactId>KnowWE-Plugin-FAQ-jpf-plugin</artifactId>
+	<artifactId>KnowWE-Plugin-FAQ</artifactId>
 	<name>KnowWE-Plugin: FAQ</name>
 	<version>0.2-SNAPSHOT</version>
 	
@@ -30,7 +30,7 @@
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>KnowWE-core-Plugins-jpf-plugin</artifactId>
+			<artifactId>KnowWE-Plugin-Core</artifactId>
 			<version>${project.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>

@@ -8,9 +8,9 @@
 		<version>0.2-SNAPSHOT</version>
 	</parent>
 	<groupId>de.uniwue.d3web</groupId>
-	<artifactId>d3web-Persistence-ImageQuestion-jpf-plugin</artifactId>
+	<artifactId>d3web-Plugin-Persistence-ImageQuestion</artifactId>
 	<version>0.2-SNAPSHOT</version>
-	<name>d3web-Persistence-ImageQuestion</name>
+	<name>d3web Plugin: Persistence-ImageQuestion</name>
 	<build>
 		<plugins>
 			<plugin>
@@ -54,13 +54,13 @@
 	<dependencies>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>d3web-Persistence-Basic-jpf-plugin</artifactId>
+			<artifactId>d3web-Plugin-Persistence-Basic</artifactId>
 			<version>0.2-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>d3web-Persistence-ExtensionPoints-jpf-plugin</artifactId>
+			<artifactId>d3web-Plugin-Persistence-ExtensionPoints</artifactId>
 			<version>0.2-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>

@@ -7,9 +7,9 @@
     <version>0.2-SNAPSHOT</version>
   </parent>
   <groupId>de.uniwue.d3web</groupId>
-  <artifactId>KnowWE-Plugin-TestcaseTable-jpf-plugin</artifactId>
+  <artifactId>KnowWE-Plugin-TestcaseTable</artifactId>
   <version>0.2-SNAPSHOT</version>
-  <name>KnowWE-Plugin-TestcaseTable</name>
+  <name>KnowWE Plugin: TestcaseTable</name>
   
   <dependencies>
 		<dependency>
@@ -34,7 +34,7 @@
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>KnowWE-Plugin-d3web-jpf-plugin</artifactId>
+			<artifactId>KnowWE-Plugin-d3web</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>

@@ -9,9 +9,9 @@
 	</parent>
 	
 	<groupId>de.uniwue.d3web</groupId>
-	<artifactId>KnowWE-Plugin-WISEC-jpf-plugin</artifactId>
+	<artifactId>KnowWE-Plugin-WISEC</artifactId>
 	<packaging>jar</packaging>
-	<name>KnowWE-Plugin: WISEC</name>
+	<name>KnowWE Plugin: WISEC</name>
 	<version>0.2-SNAPSHOT</version>
 	
 	<build>
@@ -80,13 +80,13 @@
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>KnowWE-core-Plugins-jpf-plugin</artifactId>
+			<artifactId>KnowWE-Plugin-core</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>KnowWE-Plugin-d3web-jpf-plugin</artifactId>
+			<artifactId>KnowWE-Plugin-d3web</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

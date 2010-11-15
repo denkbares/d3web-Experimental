@@ -9,7 +9,7 @@
 	</parent>
 	
 	<groupId>de.uniwue.d3web</groupId>
-	<artifactId>KnowWE-Plugin-HermesModule-jpf-plugin</artifactId>
+	<artifactId>KnowWE-Plugin-HermesModule</artifactId>
 	<name>KnowWE Plugin: Hermes Module</name>
 	<version>0.2-SNAPSHOT</version>
 	
@@ -56,13 +56,13 @@
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>KnowWE-core-Plugins-jpf-plugin</artifactId>
+			<artifactId>KnowWE-Plugin-Core</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>KnowWE-Plugin-SemanticCore-jpf-plugin</artifactId>
+			<artifactId>KnowWE-Plugin-SemanticCore</artifactId>
 			<version>${project.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
