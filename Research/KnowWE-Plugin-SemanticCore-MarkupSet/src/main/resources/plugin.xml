@@ -4,7 +4,8 @@
 	<requires>
 		<import plugin-id="KnowWEExtensionPoints" />
 	</requires>
-        	<runtime>
+    
+    <runtime>
 		<library id="de.knowwe" path="." type="code">
 			<export prefix="*" />
 		</library>
