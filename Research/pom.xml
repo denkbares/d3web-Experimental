@@ -146,16 +146,13 @@
 		<module>KnowWE-Plugin-HermesModule-jpf-plugin</module>
 		<module>KnowWE-core-Plugins-jpf-plugin</module>
 		<module>KnowWE-Plugin-WISEC-jpf-plugin</module>
-		<module>KnowWE-Plugin-CI4KE-jpf-plugin</module>
 		<module>KnowWE-Plugin-FAQ-jpf-plugin</module>
-		<module>KnowWE-Plugin-SemanticCore</module>
 		<module>KnowWE-Plugin-XML</module>
 		<module>KnowWEPlugin-SemanticCore-Tests</module>
 		<module>KnowWE-Plugin-OneQuestionDialog</module>
 		<module>KnowWE-Plugin-Table-jpf-plugin</module>
 		<module>KnowWE-Plugin-TestcaseTable</module>
 		<module>d3web-Persistence-ImageQuestion</module>
-		<module>KnowWE-Plugin-TestSuite-jpf-plugin</module>
 		<module>KnowWE-Plugin-Defi-jpf-plugin</module>
 		<module>d3web-SessionPersistence</module>
 		<module>d3web-SessionPersistence-ExtensionPoints-jpf-plugin</module>
