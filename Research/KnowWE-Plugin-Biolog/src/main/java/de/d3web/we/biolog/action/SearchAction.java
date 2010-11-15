@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -38,20 +38,20 @@ import de.d3web.we.biolog.search.AnnotationsProvider;
 import de.d3web.we.biolog.search.BibtexSearchProvider;
 import de.d3web.we.biolog.search.EMLSearchProvider;
 import de.d3web.we.core.KnowWEParameterMap;
-import de.d3web.we.core.semantic.tagging.TaggingMangler;
 import de.d3web.we.search.GenericSearchResult;
 import de.d3web.we.search.KnowWESearchProvider;
 import de.d3web.we.search.MultiSearchEngine;
 import de.d3web.we.search.SearchTerm;
 import de.d3web.we.search.SearchWordPreprocessor;
+import de.knowwe.tagging.TaggingMangler;
 
 /**
  * @author Jochen
- * 
+ *
  *         This action is called when someone hits the search-button in the
  *         biolog-search mask
  * @see BiologSearchTagHandler
- * 
+ *
  */
 public class SearchAction extends DeprecatedAbstractKnowWEAction {
 
@@ -155,7 +155,7 @@ public class SearchAction extends DeprecatedAbstractKnowWEAction {
 	/**
 	 * this methods filters findings from freetext-search, which are also found
 	 * by other search-providers
-	 * 
+	 *
 	 * @param results
 	 */
 	private void filterFreeTextFindings(

@@ -39,10 +39,10 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
-import de.d3web.we.core.semantic.tagging.TaggingMangler;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.search.GenericSearchResult;
+import de.knowwe.tagging.TaggingMangler;
 import dummies.KnowWETestWikiConnector;
 
 /**
