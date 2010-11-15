@@ -1,0 +1,71 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-SemanticCore-MarkupSet" version="0.0.1">
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+	</requires>
+        	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		id="Extension">
+		<parameter id="class"
+			value="de.d3web.we.kdom.owlextension.Extension" />
+		<parameter id="name" value="Extension" />
+		<parameter id="description" value="KnowWEObjectType Extension" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		id="OwlProperties">
+		<parameter id="class"
+			value="de.d3web.we.kdom.owlextension.OwlProperties" />
+		<parameter id="name" value="OwlProperties" />
+		<parameter id="description" value="KnowWEObjectType OwlProperties" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		id="Info">
+		<parameter id="class"
+			value="de.d3web.we.kdom.semanticFactSheet.Info" />
+		<parameter id="name" value="Info" />
+		<parameter id="description" value="KnowWEObjectType Info" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		id="GroovySparqlRenderer">
+		<parameter id="class"
+			value="de.d3web.we.kdom.sparql.groovy.GroovySparqlRenderer" />
+		<parameter id="name" value="GroovySparqlRenderer" />
+		<parameter id="description" value="KnowWEObjectType GroovySparqlRenderer" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		id="Sparql">
+		<parameter id="class"
+			value="de.d3web.we.kdom.sparql.Sparql" />
+		<parameter id="name" value="Sparql" />
+		<parameter id="description" value="KnowWEObjectType Sparql" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+	</extension>
+ 
+</plugin>
