@@ -157,7 +157,7 @@
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>d3web-Persistence-ImageQuestion</artifactId>
+			<artifactId>d3web-Plugin-Persistence-ImageQuestion</artifactId>
 			<version>0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
