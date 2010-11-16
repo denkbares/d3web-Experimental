@@ -99,6 +99,27 @@ public class TimeStamp implements Comparable<TimeStamp> {
 		return Double.compare(getInterpretableTime(), o.getInterpretableTime());
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((encodedString == null) ? 0 : encodedString.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		TimeStamp other = (TimeStamp) obj;
+		if (encodedString == null) {
+			if (other.encodedString != null) return false;
+		}
+		else if (!encodedString.equals(other.encodedString)) return false;
+		return true;
+	}
+
 	public static String decode(String encodedString) {
 		return new TimeStamp(encodedString).getDescription();
 	}
