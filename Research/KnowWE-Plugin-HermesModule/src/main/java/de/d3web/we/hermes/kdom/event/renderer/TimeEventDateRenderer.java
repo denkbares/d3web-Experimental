@@ -25,6 +25,7 @@ import de.d3web.we.hermes.kdom.event.TimeEventNew;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class TimeEventDateRenderer extends KnowWEDomRenderer<TimeEventNew> {
@@ -51,6 +52,6 @@ public class TimeEventDateRenderer extends KnowWEDomRenderer<TimeEventNew> {
 			date = date.substring(2);
 		
 		String dateDecoded = TimeStamp.decode(date);
-		result.append("   :   " + dateDecoded + "\\\\");
+		result.append(KnowWEUtils.maskHTML("   :   " + dateDecoded + "</h4>\\\\"));
 	}
 }

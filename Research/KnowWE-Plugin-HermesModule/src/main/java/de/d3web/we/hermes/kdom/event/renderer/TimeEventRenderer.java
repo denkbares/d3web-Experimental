@@ -58,7 +58,7 @@ public class TimeEventRenderer extends KnowWEDomRenderer<TimeEventNew> {
 			return;
 		}
 
-		result.append("%%collapsebox-closed \n! ");
+		result.append(KnowWEUtils.maskHTML("%%collapsebox-closed \n<h4> "));
 
 		// change color of title depending on importance
 		String style = "color:black";
