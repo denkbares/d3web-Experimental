@@ -137,6 +137,18 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="ListIndividualsHandler">
+		<parameter id="class"
+			value="de.d3web.we.hermes.taghandler.ListIndividualsHandler" />
+		<parameter id="name" value="ListIndividualsHandler" />
+		<parameter id="description" value="TagHandler ListIndividualsHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="script" value="Hermes.js" />
+		<parameter id="css" value="hermes.css" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="CreateMapHandler">
 		<parameter id="class"
 			value="de.d3web.we.hermes.taghandler.CreateMapHandler" />
@@ -192,6 +204,19 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		id="TreeViewType">
+		<parameter id="class"
+			value="de.d3web.we.hermes.TreeViewType" />
+		<parameter id="name" value="TreeViewType" />
+		<parameter id="description" value="KnowWEObjectType TreeViewType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="3" />
+		<parameter id="scope" value="root" />
+		<parameter id="script" value="Hermes.js" />
+		<parameter id="css" value="hermes.css" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
 		id="MapType">
 		<parameter id="class"
 			value="de.d3web.we.hermes.maps.MapType" />
@@ -216,7 +241,7 @@
 		<parameter id="script" value="Hermes.js" />
 		<parameter id="css" value="hermes.css" />
 	</extension>
-	
+
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="SearchTimeEventsAction">
 		<parameter id="class"
