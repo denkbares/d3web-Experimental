@@ -62,8 +62,12 @@ public class TreeViewType extends DefaultAbstractKnowWEObjectType {
 			String post = ""
 					+ "</div>"
 					+ "<script type='text/javascript'>"
-					+ "YAHOO.util.Event.onDOMReady((new YAHOO.widget.TreeView('tree" + id
-					+ "')).render());"
+					+ "var tree" + id + ";\n"
+					+ "function treeInit" + id + "() {\n"
+					+ "tree" + id + " = new YAHOO.widget.TreeView('tree" + id + "');\n"
+					+ "tree" + id + ".expandAll();"
+					+ "tree" + id + ".draw();\n}\n"
+					+ "YAHOO.util.Event.onDOMReady(treeInit" + id + "());"
 					+ "</script>";
 
 			string.append(KnowWEEnvironment.maskHTML(pre));
