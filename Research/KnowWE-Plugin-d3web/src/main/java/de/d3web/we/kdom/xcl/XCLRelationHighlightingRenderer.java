@@ -28,7 +28,7 @@ import de.d3web.core.session.Session;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.condition.ComplexFinding;
+import de.d3web.we.kdom.condition.antlr.ComplexFinding;
 import de.d3web.we.kdom.renderer.FontColorBackgroundRenderer;
 import de.d3web.we.kdom.renderer.FontColorRenderer;
 import de.d3web.we.kdom.rendering.DelegateRenderer;

@@ -40,7 +40,7 @@ import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.basic.QuotedType;
-import de.d3web.we.kdom.condition.NOT;
+import de.d3web.we.kdom.condition.antlr.NOT;
 import de.d3web.we.kdom.filter.TypeSectionFilter;
 import de.d3web.we.kdom.renderer.FontColorBackgroundRenderer;
 import de.d3web.we.kdom.renderer.FontColorRenderer;

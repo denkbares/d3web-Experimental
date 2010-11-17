@@ -42,7 +42,7 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Annotation.Finding;
-import de.d3web.we.kdom.condition.ComplexFinding;
+import de.d3web.we.kdom.condition.antlr.ComplexFinding;
 import de.d3web.we.kdom.contexts.ContextManager;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SimpleMessageError;

@@ -20,7 +20,7 @@
 package de.d3web.we.kdom.kopic.rules.ruleActionLine;
 
 import de.d3web.we.kdom.basic.ParameterizedKeyWordType;
-import de.d3web.we.kdom.condition.QuotedQuestion;
+import de.d3web.we.kdom.condition.antlr.QuotedQuestion;
 
 /**
  * @author Johannes Dienst

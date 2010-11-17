@@ -39,7 +39,7 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.basic.RoundBracedType;
-import de.d3web.we.kdom.condition.AndOperator;
+import de.d3web.we.kdom.condition.antlr.AndOperator;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SimpleMessageError;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
