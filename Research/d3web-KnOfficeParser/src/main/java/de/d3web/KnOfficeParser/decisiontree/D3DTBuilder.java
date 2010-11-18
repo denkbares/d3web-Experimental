@@ -595,7 +595,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 				}
 			}
 			if (unit != null) {
-				infoStore.addValue(BasicProperties.UNIT, unit);
+				infoStore.addValue(MMInfo.UNIT, unit);
 			}
 		}
 		else if (unit != null || lowerbound != null || upperbound != null) {
