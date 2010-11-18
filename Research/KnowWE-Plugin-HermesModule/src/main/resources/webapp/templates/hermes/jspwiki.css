@@ -1366,8 +1366,8 @@ a.toc:hover {
 }
 .recentchanges .date {
 	vertical-align:bottom;
-	border-top:1.5em solid white;
-	background-color:#f9f9f9 !important;
+	border-top:1.5em solid transparent;
+	background-color:transparent !important;
 	border-bottom:none;
 }
 .recentchanges tr.odd td {
