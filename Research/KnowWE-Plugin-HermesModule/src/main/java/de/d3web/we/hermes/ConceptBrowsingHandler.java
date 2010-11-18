@@ -27,6 +27,7 @@ import org.openrdf.query.BindingSet;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 
+import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.rendering.PageAppendHandler;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.semantic.sparql.SPARQLUtil;
@@ -42,7 +43,7 @@ public class ConceptBrowsingHandler implements PageAppendHandler {
 	public String getDataToAppend(String topic, String web, KnowWEUserContext user) {
 		String query = "SELECT ?x WHERE {?x rdf:type lns:Hermes-Object} ORDER BY ASC(?x)";
 		TupleQueryResult result = SPARQLUtil.executeTupleQuery(query);
-		List<String> listOfTitles = new ArrayList<String>();
+		List<String> titleList = new ArrayList<String>();
 		try {
 			while (result.hasNext()) {
 				BindingSet set = result.next();
@@ -57,7 +58,9 @@ public class ConceptBrowsingHandler implements PageAppendHandler {
 				}
 
 				title = title.substring(title.indexOf("#") + 1);
-				listOfTitles.add(title);
+				if (KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(title)) {
+					titleList.add(title);
+				}
 			}
 		}
 		catch (NumberFormatException e) {
@@ -69,11 +72,20 @@ public class ConceptBrowsingHandler implements PageAppendHandler {
 			e.printStackTrace();
 		}
 
-		if (listOfTitles.contains(topic) & listOfTitles.indexOf(topic) < listOfTitles.size() - 1) {
-			int i = listOfTitles.indexOf(topic);
-			return "  [{If group='Editoren'\n\n----[" + listOfTitles.get(i - 1)
-					+ "] <<< " + topic + " >>> ["
-					+ listOfTitles.get(i + 1) + "]\n}]";
+		if (titleList.contains(topic)) {
+			int i = titleList.indexOf(topic);
+			String str = "  [{If group='Editoren'\n\n\\\\ \\\\";
+			if (i > 0) {
+				String before = titleList.get(i - 1);
+				str += "[" + before + "] <<< ";
+			}
+			str += topic;
+			if (i < titleList.size() - 1) {
+				String next = titleList.get(i + 1);
+				str += " >>> [" + next + "]";
+			}
+			str += "\n}]";
+			return str;
 		}
 
 		return "";
