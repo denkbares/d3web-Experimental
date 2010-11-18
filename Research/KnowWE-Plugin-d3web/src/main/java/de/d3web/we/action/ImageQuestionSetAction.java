@@ -34,14 +34,13 @@ import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
-import de.d3web.core.session.blackboard.DefaultFact;
 import de.d3web.core.session.blackboard.Fact;
+import de.d3web.core.session.blackboard.FactFactory;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.core.session.values.DateValue;
 import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.NumValue;
 import de.d3web.core.session.values.Unknown;
-import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.event.EventManager;
@@ -136,9 +135,10 @@ public class ImageQuestionSetAction extends AbstractAction {
 
 			Value toAdd = MultipleChoiceValue.fromChoices(toAddList);
 			blackboard.removeValueFact(mcFact);
-			blackboard.addValueFact(new DefaultFact(question,
-								toAdd, PSMethodUserSelected.getInstance(),
-										PSMethodUserSelected.getInstance()));
+
+			Fact fact = FactFactory.createUserEnteredFact(question, toAdd);
+
+			blackboard.addValueFact(fact);
 
 			EventManager.getInstance().fireEvent(
 								new FindingSetEvent(question, value, namespace, web, user));
@@ -161,9 +161,9 @@ public class ImageQuestionSetAction extends AbstractAction {
 				value = MultipleChoiceValue.fromChoices(toAddList);
 			}
 
-			blackboard.addValueFact(new DefaultFact(question,
-									value, PSMethodUserSelected.getInstance(),
-											PSMethodUserSelected.getInstance()));
+			Fact fact = FactFactory.createUserEnteredFact(question, value);
+
+			blackboard.addValueFact(fact);
 
 			EventManager.getInstance().fireEvent(
 								new FindingSetEvent(question, value, namespace, web, user));

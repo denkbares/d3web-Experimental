@@ -104,7 +104,10 @@ public final class SessionConversionFactory {
 									"Object " + factRecord.getObjectName() +
 											" not found in knowledge base");
 						}
-						valueFacts.add(new DefaultFact(object, value, psMethod, psMethod));
+
+						// TODO save and load time?
+						long time = System.currentTimeMillis();
+						valueFacts.add(new DefaultFact(object, value, time, psMethod, psMethod));
 					}
 				}
 				else {

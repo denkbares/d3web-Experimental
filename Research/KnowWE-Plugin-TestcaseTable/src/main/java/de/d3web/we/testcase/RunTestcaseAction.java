@@ -29,8 +29,8 @@ import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
-import de.d3web.core.session.blackboard.DefaultFact;
 import de.d3web.core.session.blackboard.Fact;
+import de.d3web.core.session.blackboard.FactFactory;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.Unknown;
@@ -79,7 +79,7 @@ public class RunTestcaseAction extends AbstractAction {
 			long time = TimeStampType.getTimeInMillis(timestamp);
 			session.getPropagationManager().openPropagation(time);
 
-			setValues(testcaseMap, web, user, kbm, blackboard);
+			setValues(testcaseMap, web, user, kbm, session);
 
 		}
 		finally {
@@ -94,9 +94,13 @@ public class RunTestcaseAction extends AbstractAction {
 	 * @param user
 	 * @param kbm
 	 * @param blackboard
+	 * @param time
 	 */
 	private void setValues(Map<String, String> testcaseMap, String web,
-			String user, KnowledgeBaseManagement kbm, Blackboard blackboard) {
+			String user, KnowledgeBaseManagement kbm, Session session) {
+
+		Blackboard blackboard = session.getBlackboard();
+
 		for (String questionName : testcaseMap.keySet()) {
 
 			String valueString = testcaseMap.get(questionName);
@@ -131,9 +135,8 @@ public class RunTestcaseAction extends AbstractAction {
 				}
 			}
 
-			blackboard.addValueFact(new DefaultFact(question,
-					value, PSMethodUserSelected.getInstance(),
-							PSMethodUserSelected.getInstance()));
+			blackboard.addValueFact(FactFactory.createFact(session, question, value,
+					PSMethodUserSelected.getInstance(), PSMethodUserSelected.getInstance()));
 
 			EventManager.getInstance().fireEvent(
 					new FindingSetEvent(question, value, namespace, web, user));

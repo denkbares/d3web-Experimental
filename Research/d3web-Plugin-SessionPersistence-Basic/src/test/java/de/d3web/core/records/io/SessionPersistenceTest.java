@@ -605,15 +605,15 @@ public class SessionPersistenceTest {
 	public void globalFacts() throws IOException {
 		Session session = SessionConversionFactory.copyToSession(kb, sessionRecord2);
 		Blackboard blackboard = session.getBlackboard();
-		blackboard.addValueFact(FactFactory.createFact(questionOC, Unknown.getInstance(),
-				this, session.getPSMethodInstance(PSMethodAbstraction.class)));
+		blackboard.addValueFact(FactFactory.createFact(session, questionOC,
+				Unknown.getInstance(), this, session.getPSMethodInstance(PSMethodAbstraction.class)));
 		// Number of Facts should have increased by 2
 		SessionRecord sessionRecord2extended = SessionConversionFactory.copyToSessionRecord(session);
 		Assert.assertEquals(2,
 				sessionRecord2extended.getValueFacts().size()
 						- sessionRecord2.getValueFacts().size());
-		blackboard.addInterviewFact(FactFactory.createFact(questionMC, new Indication(
-				State.CONTRA_INDICATED), this, session.getPSMethodInstance(PSMethodStrategic.class)));
+		blackboard.addInterviewFact(FactFactory.createFact(session, questionMC, new Indication(
+						State.CONTRA_INDICATED), this, session.getPSMethodInstance(PSMethodStrategic.class)));
 		sessionRecord2extended = SessionConversionFactory.copyToSessionRecord(session);
 		Assert.assertEquals(2,
 				sessionRecord2extended.getValueFacts().size()
