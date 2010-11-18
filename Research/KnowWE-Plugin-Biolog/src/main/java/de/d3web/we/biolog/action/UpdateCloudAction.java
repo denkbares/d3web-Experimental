@@ -23,6 +23,7 @@ package de.d3web.we.biolog.action;
 import de.d3web.we.action.DeprecatedAbstractKnowWEAction;
 import de.d3web.we.biolog.BiologSearchTagHandler;
 import de.d3web.we.core.KnowWEParameterMap;
+import de.d3web.we.utils.KnowWEUtils;
 
 /**
  * UpdateCloudAction.
@@ -40,6 +41,6 @@ public class UpdateCloudAction extends DeprecatedAbstractKnowWEAction {
 		StringBuilder string = new StringBuilder();
 		string.append( BiologSearchTagHandler.renderTagCloud( query ) );
 		
-		return string.toString();
+		return KnowWEUtils.unmaskHTML(string.toString());
 	}
 }

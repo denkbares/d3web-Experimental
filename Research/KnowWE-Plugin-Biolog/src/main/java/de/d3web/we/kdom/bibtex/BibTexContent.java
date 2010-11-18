@@ -31,13 +31,13 @@ import bibtex.parser.BibtexParser;
 import bibtex.parser.ParseException;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.IntermediateOwlObject;
+import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.bibtex.verbalizer.BibTexRenderManager;
 import de.d3web.we.kdom.bibtex.verbalizer.BibTexRenderManager.RenderingFormat;
 import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.kdom.xml.XMLContent;
 import de.d3web.we.utils.KnowWEUtils;
 
@@ -60,10 +60,10 @@ public class BibTexContent extends XMLContent{
 		this.addSubtreeHandler(new BibTexContentSubTreeHandler());
 	}
 
-	private class BibTexContentSubTreeHandler extends SubtreeHandler {
+	private class BibTexContentSubTreeHandler extends OwlSubtreeHandler<BibTexContent> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
+		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<BibTexContent> s) {
 			KDOMReportMessage msg=null;
 			IntermediateOwlObject io = new IntermediateOwlObject();
 			String text = s.getOriginalText();

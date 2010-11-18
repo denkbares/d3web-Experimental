@@ -61,7 +61,13 @@ public class BibTexContentRenderer extends KnowWEDomRenderer {
 			string.append(KnowWEUtils.maskHTML(ioerror.replaceAll("\n",
 					"<br />")));
 			string.append(KnowWEUtils.maskHTML("</p>"));
-		} else {
+		}
+		else if (bibtexs == null) {
+			string.append(KnowWEUtils.maskHTML("<p class\"=box error\">"));
+			string.append("bibtex is null");
+			string.append(KnowWEUtils.maskHTML("</p>"));
+		}
+		else {
 			String header = "<div id='knoffice-panel' class='panel'>";
 			header += "<h3>" + "BibTex" + "</h3>";
 			header += ("<p id='knoffice-show-extend' class='show-extend pointer extend-panel-up'>"

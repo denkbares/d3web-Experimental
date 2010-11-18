@@ -33,13 +33,13 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.IntermediateOwlObject;
 import de.d3web.we.core.semantic.OwlHelper;
+import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SimpleMessageError;
-import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.kdom.xml.AbstractXMLObjectType;
 import de.d3web.we.kdom.xml.GenericXMLObjectType;
 import de.d3web.we.kdom.xml.XMLContent;
@@ -64,16 +64,16 @@ public class EMLXMLType extends AbstractXMLObjectType {
 		this.addSubtreeHandler(new EMLXMLTypeOWLSubTreeHandler());
 	}
 
-	private class EMLXMLTypeOWLSubTreeHandler extends SubtreeHandler {
+	private class EMLXMLTypeOWLSubTreeHandler extends OwlSubtreeHandler<EMLXMLType> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
+		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<EMLXMLType> s) {
 			KDOMReportMessage msg = null;
 			IntermediateOwlObject io = new IntermediateOwlObject();
 			ISemanticCore sc = SemanticCoreDelegator.getInstance(KnowWEEnvironment.getInstance());
 			UpperOntology uo = sc.getUpper();
 			OwlHelper helper = uo.getHelper();
-			Section<AbstractXMLObjectType> eml = s;
+			Section<EMLXMLType> eml = s;
 			String date = null;
 			Section<? extends AbstractXMLObjectType> dateSec = AbstractXMLObjectType
 					.findSubSectionOfTag("calendarDate", eml);

@@ -32,6 +32,7 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.search.SearchTerm;
 import de.d3web.we.search.SearchWordPreprocessor;
 import de.d3web.we.taghandler.AbstractTagHandler;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
@@ -65,22 +66,22 @@ public class BiologSearchTagHandler extends AbstractTagHandler {
 		
 		
 		StringBuilder result = new StringBuilder();
-		result.append(
+		result.append(KnowWEUtils.maskHTML(
 				"<h2 style='color:#1D7D35;text-align:center;"
-				+ "font-size:2.8em;font-weight:bold;'>BIOLOG Suche:</h2>");
-		result.append("<div id=\"biologsearch-wrapper\" style=\"margin:auto;width:65%\">");
+						+ "font-size:2.8em;font-weight:bold;'>BIOLOG Suche:</h2>"));
+		result.append(KnowWEUtils.maskHTML("<div id=\"biologsearch-wrapper\" style=\"margin:auto;width:65%\">"));
 		result.append(renderTagCloud( "" ));
 		
-		result.append(
+		result.append(KnowWEUtils.maskHTML(
 				"<div id=\"biologsearch-box\" style=\"margin-left:" +
-				"auto;margin-right:auto;margin-top:20px;width:100%\">");
-		result.append("<ul class=\"form\">"
+						"auto;margin-right:auto;margin-top:20px;width:100%\">"));
+		result.append(KnowWEUtils.maskHTML("<ul class=\"form\">"
 			+ "<li><input type=\"text\" id=\"s\" name=\"s\" value=\"\" autocomplete=\"off\"/></li>"
 			+ "<li><input type=\"button\" value=\"Suche\" id=\"searchsubmit\"/></li>"
-			+ "</ul>");
-		result.append("</div>");	
-		result.append("</div>");
-		result.append("<div id='biologsearch-result'> </div>");
+				+ "</ul>"));
+		result.append(KnowWEUtils.maskHTML("</div>"));
+		result.append(KnowWEUtils.maskHTML("</div>"));
+		result.append(KnowWEUtils.maskHTML("<div id='biologsearch-result'> </div>"));
 		
 		return result.toString();
 	}
@@ -95,7 +96,7 @@ public class BiologSearchTagHandler extends AbstractTagHandler {
 		//Collections.shuffle( terms );
 		
 		StringBuilder string = new StringBuilder();
-		string.append("<div id=\"biologsearch-tagcloud\">");
+		string.append(KnowWEUtils.maskHTML("<div id=\"biologsearch-tagcloud\">"));
 		
 		if( terms.size() >= 36 ){
 		    addLine(string, terms, 4, 40, 100);
@@ -106,7 +107,7 @@ public class BiologSearchTagHandler extends AbstractTagHandler {
 		} else {			
 			addLine(string, terms, terms.size(), 60, 100);
 		}
-		string.append("</div>");
+		string.append(KnowWEUtils.maskHTML("</div>"));
 		return string.toString();
 	}
 	
@@ -119,13 +120,13 @@ public class BiologSearchTagHandler extends AbstractTagHandler {
 	 */
 	private static void addLine(StringBuilder string, List<SearchTerm> tmpTerms,
 			int amount, int width, int max){
-	    string.append(
+		string.append(KnowWEUtils.maskHTML(
 	    		"<div style=\"width:"
 	    		+ width
 	    		+ "%;text-align:center;margin-left:"
-	    		+ ((max-width)/2)+"%\">");
+						+ ((max - width) / 2) + "%\">"));
 	    addItem(string, tmpTerms, amount);
-	    string.append("</div>\n");
+		string.append(KnowWEUtils.maskHTML("</div>\n"));
 	}
 	
 	/**
@@ -154,10 +155,10 @@ public class BiologSearchTagHandler extends AbstractTagHandler {
 	private static String tagLink(String term, double fontsize){
 		if(term.contains(" ")) term = "\""+term+"\"";
 		//text-decoration:underline;
-		return "<span class=\"biolog-cloud-link\""
+		return KnowWEUtils.maskHTML("<span class=\"biolog-cloud-link\""
 				+ " style=\"white-space:nowrap;font-size:"
 				+ fontsize + "px; line-height:"+fontsize+"px\">"
-				+ term + "</span> ";
+				+ term + "</span> ");
 	}
 	
 	/**
