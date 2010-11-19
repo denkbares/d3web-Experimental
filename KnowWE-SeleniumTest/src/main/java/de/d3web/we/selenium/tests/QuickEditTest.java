@@ -147,7 +147,7 @@ public class QuickEditTest extends KnowledgeTestCase {
 		refreshAndWait();
 		assertTrue(
 				"Question 'How many wheels do you have?' isn't present (yet)",
-				waitForElement("//div[text()='How many wheels do you have?']"));
+				waitForElement("//span[text()='How many wheels do you have?']"));
 
 		// Adding new rule connecting solution and question
 		// sectionID =
@@ -177,73 +177,6 @@ public class QuickEditTest extends KnowledgeTestCase {
 		 loadAndWait(B_SAVE);
 	}
 
-	public void testAttributeTableEditing() {
-		// not need at the moment
-		return;
-
-		// String[] oldVal = new String[3];
-		// open(rb.getString("KnowWE.SeleniumTest.url") +
-		// "Wiki.jsp?page=Quick-Edit-Test");
-		// openQuickEdit(attTableID);
-		// oldVal[0] = selenium.getAttribute("//input[@id='" + attTableID
-		// +
-		// "/AttributeTableLine/AttributeTableCell2/AttributeTableCellContent']@name");
-		// doSelActionAndWait(attTableID
-		// +
-		// "/AttributeTableLine/AttributeTableCell2/AttributeTableCellContent",
-		// "type",
-		// "Newinfo");
-		// oldVal[1] = selenium.getAttribute("//input[@id='" + attTableID
-		// +
-		// "/AttributeTableLine2/AttributeTableCell3/AttributeTableCellContent']@name");
-		// doSelActionAndWait(attTableID
-		// +
-		// "/AttributeTableLine2/AttributeTableCell3/AttributeTableCellContent",
-		// "type",
-		// "Beschreibung");
-		// oldVal[2] = selenium.getAttribute("//input[@id='" + attTableID
-		// +
-		// "/AttributeTableLine2/AttributeTableCell/AttributeTableCellContent']@name");
-		// doSelActionAndWait(attTableID
-		// +
-		// "/AttributeTableLine2/AttributeTableCell/AttributeTableCellContent",
-		// "type",
-		// "Leere Batterie");
-		// doSelActionAndWait(attTableID + ACCEPT, "click");
-		// assertTrue("//img[@id='" + attTableID + QEB +
-		// "'] isn't present (yet)",
-		// waitForElement("//img[@id='" + attTableID + QEB + "']"));
-		// String attTableText = selenium.getText("//div[@id='" + attTableID +
-		// "']");
-		// assertTrue("New attribute wasn't saved",
-		// attTableText.contains("Leere Batterie"));
-		// assertTrue("New attribute wasn't saved",
-		// attTableText.contains("Newinfo"));
-		// assertTrue("New attribute wasn't saved",
-		// attTableText.contains("Beschreibung"));
-		// // Undo changes
-		// openQuickEdit(attTableID);
-		// doSelActionAndWait(attTableID
-		// +
-		// "/AttributeTableLine/AttributeTableCell2/AttributeTableCellContent",
-		// "type",
-		// oldVal[0]);
-		// doSelActionAndWait(attTableID
-		// +
-		// "/AttributeTableLine2/AttributeTableCell3/AttributeTableCellContent",
-		// "type",
-		// oldVal[1]);
-		// doSelActionAndWait(attTableID
-		// +
-		// "/AttributeTableLine2/AttributeTableCell/AttributeTableCellContent",
-		// "type",
-		// oldVal[2]);
-		// doSelActionAndWait(attTableID + ACCEPT, "click");
-		// assertTrue("//img[@id='" + attTableID + QEB +
-		// "'] isn't present (yet)",
-		// waitForElement("//img[@id='" + attTableID + QEB + "']"));
-	}
-
 	// public void testHermesTimeEventEditing() {
 	// open(rb.getString("KnowWE.SeleniumTest.url") +
 	// "Wiki.jsp?page=Quick-Edit-Test");
@@ -262,10 +195,6 @@ public class QuickEditTest extends KnowledgeTestCase {
 	// assertTrue("New content wasn't saved",
 	// eventText.contains("Renovierung der UniBib"));
 	// }
-
-	public void testQuickCoveringTableEditing() {
-		// TODO write test
-	}
 
 	/**
 	 * Adds some new content to the page (e.g. to Rules-section) per QuickEdit.
