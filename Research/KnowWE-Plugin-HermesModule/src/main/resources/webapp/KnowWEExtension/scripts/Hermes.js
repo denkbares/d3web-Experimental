@@ -16,7 +16,46 @@ if (typeof KNOWWE == "undefined" || !KNOWWE) {
  * Initialized empty to ensure existence.
  */
 KNOWWE.plugin.hermes = function() {
-    return {}
+    var cookieName = "KNOWWE-Hermes";
+    return {
+        storeTree : function( collapse ) {
+          
+            var treeID = _KS(".hermes-tree-view")[0].id;
+            var clickedEl = window[treeID].currentFocus;
+            var clickedID = clickedEl.labelElId.replace("ygtvlabelel", "");
+            
+            var nodes = KNOWWE.helper.cookie.read( cookieName );
+            if(!nodes) {
+                 nodes = new Array();
+            } else {
+                nodes = nodes.split(",");
+            }
+            if( collapse ) {
+                nodes.push(clickedID);
+            } else {
+                if(KNOWWE.helper.containsArr( nodes, clickedID )) {
+                    nodes = KNOWWE.helper.removeArr( nodes, clickedID );    
+                }
+            }
+            KNOWWE.helper.cookie.create( cookieName, nodes.join(","), 1);
+        },
+        restoreTree : function() {
+            var treeID = _KS(".hermes-tree-view")[0].id;
+            var cookie = KNOWWE.helper.cookie.read( cookieName );
+            if( cookie ) {
+                var nodes = cookie.split(",");
+                var n = nodes.length;
+                for(var i = 0; i < n; i++) {
+                    var treeNode = window[treeID].getNodeByIndex(nodes[i]);
+                    if( treeNode ) {
+                      treeNode.collapse();
+                    }
+                }
+            }
+            window[treeID].subscribe('collapse', function(node){KNOWWE.plugin.hermes.storeTree(true); });
+            window[treeID].subscribe('expand', function(node){KNOWWE.plugin.hermes.storeTree(false); });
+        }       
+    }
 }();
 
 function sendTimeEventNextSearchRequest() {
@@ -366,6 +405,7 @@ KNOWWE.plugin.hermes.conceptPopup = function() {
     if (KNOWWE.helper.loadCheck( [ 'Wiki.jsp' ])) {
         window.addEvent('domready', function() {
             KNOWWE.plugin.hermes.conceptPopup.init();
+            KNOWWE.plugin.hermes.restoreTree();
         });
     }
 }());

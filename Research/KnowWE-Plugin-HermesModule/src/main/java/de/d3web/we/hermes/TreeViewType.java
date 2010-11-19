@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2010 University Wuerzburg, Computer Science VI
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -18,17 +18,17 @@
  */
 package de.d3web.we.hermes;
 
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
- * 
+ *
  * @author grotheer
  * @created 11.11.2010
  */
@@ -57,7 +57,7 @@ public class TreeViewType extends DefaultAbstractKnowWEObjectType {
 					+ "<script type='text/javascript' src='KnowWEExtension/scripts/yui2/yahoo-dom-event/yahoo-dom-event.js'></script>"
 					+ "<script type='text/javascript' src='KnowWEExtension/scripts/yui2/treeview/treeview-min.js'></script>"
 
-					+ "<div id='tree" + id + "'>";
+					+ "<div id='tree" + id + "' class=\"hermes-tree-view\">";
 
 			String post = ""
 					+ "</div>"
@@ -66,13 +66,13 @@ public class TreeViewType extends DefaultAbstractKnowWEObjectType {
 					+ "function treeInit" + id + "() {\n"
 					+ "tree" + id + " = new YAHOO.widget.TreeView('tree" + id + "');\n"
 					+ "tree" + id + ".expandAll();"
-					+ "tree" + id + ".draw();\n}\n"
+					+ "tree" + id + ".render();\n}\n"
 					+ "treeInit" + id + "();"
 					+ "</script>";
 
-			string.append(KnowWEEnvironment.maskHTML(pre));
+			string.append(KnowWEUtils.maskHTML(pre));
 			DelegateRenderer.getInstance().render(article, sec, user, string);
-			string.append(KnowWEEnvironment.maskHTML(post));
+			string.append(KnowWEUtils.maskHTML(post));
 		}
 	}
 }
