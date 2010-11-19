@@ -20,8 +20,11 @@ KNOWWE.plugin.hermes = function() {
     return {
         storeTree : function( collapse ) {
           
-            var treeID = _KS(".hermes-tree-view")[0].id;
-            var clickedEl = window[treeID].currentFocus;
+			var tree = _KS(".hermes-tree-view")[0];
+			if (!tree) return;
+			var treeID = tree.id;
+			
+			var clickedEl = window[treeID].currentFocus;
             var clickedID = clickedEl.labelElId.replace("ygtvlabelel", "");
             
             var nodes = KNOWWE.helper.cookie.read( cookieName );
@@ -40,8 +43,11 @@ KNOWWE.plugin.hermes = function() {
             KNOWWE.helper.cookie.create( cookieName, nodes.join(","), 1);
         },
         restoreTree : function() {
-            var treeID = _KS(".hermes-tree-view")[0].id;
-            var cookie = KNOWWE.helper.cookie.read( cookieName );
+			var tree = _KS(".hermes-tree-view")[0];
+			if (!tree) return;
+			var treeID = tree.id;
+			
+			var cookie = KNOWWE.helper.cookie.read( cookieName );
             if( cookie ) {
                 var nodes = cookie.split(",");
                 var n = nodes.length;
