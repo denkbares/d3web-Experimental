@@ -190,17 +190,36 @@
 		</snapshotRepository>
 	</distributionManagement>
 
-	<developers>
-		<developer>
-			<id>joba</id>
-			<name>Joachim Baumeister</name>
-			<email>joba@uni-wuerzburg.de</email>
-			<timezone>CET</timezone>
-			<roles>
-				<role>Mentor</role>
-			</roles>
-		</developer>
-	</developers>
+	<profiles>
+		<profile>
+			<id>m2e</id>
+			<activation>
+				<property>
+					<name>m2e.version</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.maven.ide.eclipse</groupId>
+						<artifactId>lifecycle-mapping</artifactId>
+						<version>0.10.0</version>
+						<configuration>
+							<mappingId>customizable</mappingId>
+							<configurators>
+								<!-- remove javaConfigurator in EAR pom.xml -->
+								<configurator id='org.maven.ide.eclipse.jdt.javaConfigurator' />
+							</configurators>
+							<mojoExecutions>
+								<mojoExecution>org.apache.maven.plugins:maven-resources-plugin::resources,testResources</mojoExecution>
+							</mojoExecutions>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
 	<scm>
 		<connection>scm:svn:https://isci.informatik.uni-wuerzburg.de/svn/Research/trunk/Research</connection>
 		<developerConnection>scm:svn:https://isci.informatik.uni-wuerzburg.de/svn/Research/trunk/Research</developerConnection>
