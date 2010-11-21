@@ -263,6 +263,8 @@ public class TaggingManglerTest extends TestCase {
 		am.deleteArticle(am.getArticle("Tag1"));
 		am.deleteArticle(am.getArticle("Tag2"));
 		am.deleteArticle(am.getArticle("Tag3"));
+		tags = tm.getAllTags();
+		assertEquals(0, tags.size());
 	}
 
 	/**
