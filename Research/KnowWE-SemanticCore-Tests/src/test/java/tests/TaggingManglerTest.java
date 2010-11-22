@@ -119,10 +119,10 @@ public class TaggingManglerTest extends TestCase {
 
 		KnowWEArticle article2 = am.getArticle("AddTag");
 		String text = article2.getSection().getOriginalText();
-		assertEquals("<tags>tagtest</tags>", am.getArticle("AddTag")
+		assertEquals("%%tags\ntagtest\n%", am.getArticle("AddTag")
 				.getSection().getOriginalText());
 		tm.removeTag("AddTag", "tagtest", params);
-		assertEquals("<tags></tags>", am.getArticle("AddTag").getSection()
+		assertEquals("%%tags\n\n%", am.getArticle("AddTag").getSection()
 				.getOriginalText());
 		am.deleteArticle(am.getArticle("AddTag"));
 	}
@@ -144,7 +144,7 @@ public class TaggingManglerTest extends TestCase {
 		// the articles by the TaggingMangler do not backpropagate to those
 		// variables
 		String keyorig = article1.getSection().getID().hashCode() + "";
-		assertEquals("<tags>tagtest</tags>", am.getArticle("AddTag")
+		assertEquals("%%tags\ntagtest\n%", am.getArticle("AddTag")
 				.getSection().getOriginalText());
 		ArrayList<String> tags = tm.getPageTags("AddTag");
 		assertEquals(1, tags.size());
@@ -345,9 +345,9 @@ public class TaggingManglerTest extends TestCase {
 				"default_web");
 		am.registerArticle(article1);
 		tm.setTags("AddTag", "tag1 tag2 tag3", params);
-		assertEquals("<tags>tag1 tag2 tag3</tags>", am.getArticle("AddTag")
+		assertEquals("%%tags\ntag1 tag2 tag3\n%", am.getArticle("AddTag")
 				.getSection().getOriginalText());
-		// am.deleteArticle(am.getArticle("AddTag"));
+		am.deleteArticle(am.getArticle("AddTag"));
 	}
 
 	/**
