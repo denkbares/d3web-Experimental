@@ -83,6 +83,16 @@
 	</extension>
 	
 	<extension plugin-id="d3web-SessionPersistence-ExtensionPoints" point-id="FragmentHandler"
+		id="UserRatingHandler">
+		<parameter id="class"
+			value="de.d3web.core.records.io.fragments.UserRatingHandler" />
+		<parameter id="name" value="RatingHandler" />
+		<parameter id="description" value="Handler for UserRatings" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+	</extension>
+	
+	<extension plugin-id="d3web-SessionPersistence-ExtensionPoints" point-id="FragmentHandler"
 		id="TextValueHandler">
 		<parameter id="class"
 			value="de.d3web.core.records.io.fragments.TextValueHandler" />
