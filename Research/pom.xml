@@ -147,7 +147,6 @@
 		<module>KnowWE-Plugin-Core</module>
 		<module>KnowWE-Plugin-WISEC</module>
 		<module>KnowWE-Plugin-FAQ</module>
-		<module>KnowWE-XML</module>
 		<module>KnowWE-SemanticCore-Tests</module>
 		<module>KnowWE-Plugin-OneQuestionDialog</module>
 		<module>KnowWE-Plugin-Table</module>
