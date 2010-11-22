@@ -22,6 +22,7 @@ package tests;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import org.junit.After;
@@ -126,6 +127,8 @@ public class GroovySparqlRendererTest {
 		// tm.removeTag("Tag2", "tag", params);
 		am.deleteArticle(am.getArticle("Tag1"));
 		am.deleteArticle(am.getArticle("Tag2"));
+		ArrayList<String> tags = tm.getAllTags();
+		assertEquals(0, tags.size());
 	}
 
 }
