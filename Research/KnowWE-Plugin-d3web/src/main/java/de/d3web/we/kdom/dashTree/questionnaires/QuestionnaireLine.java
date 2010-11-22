@@ -21,9 +21,9 @@
 package de.d3web.we.kdom.dashTree.questionnaires;
 
 import de.d3web.we.kdom.basic.LineBreak;
-import de.d3web.we.kdom.basic.TextLine;
 import de.d3web.we.kdom.dashTree.Tilde;
 import de.d3web.we.kdom.decisionTree.QClassID;
+import de.knowwe.core.TextLine;
 
 public class QuestionnaireLine extends TextLine {
 

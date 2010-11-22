@@ -20,9 +20,9 @@
 
 package de.d3web.we.kdom.decisionTree;
 
-import de.d3web.we.kdom.basic.LineContent;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.utils.Patterns;
+import de.knowwe.core.LineContent;
 import de.knowwe.core.renderer.FontColorRenderer;
 import de.knowwe.core.renderer.ObjectInfoLinkRenderer;
 

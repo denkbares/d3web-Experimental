@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.rules;
 
-import de.d3web.we.kdom.basic.TextLine;
+import de.knowwe.core.TextLine;
 
 public class RuleLine extends TextLine {
 

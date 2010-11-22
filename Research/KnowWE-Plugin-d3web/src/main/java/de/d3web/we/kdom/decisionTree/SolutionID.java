@@ -21,7 +21,7 @@
 package de.d3web.we.kdom.decisionTree;
 
 import de.d3web.we.kdom.D3IdentifierSectionFinder;
-import de.d3web.we.kdom.basic.LineContent;
+import de.knowwe.core.LineContent;
 import de.knowwe.core.renderer.FontColorRenderer;
 import de.knowwe.core.renderer.ObjectInfoLinkRenderer;
 

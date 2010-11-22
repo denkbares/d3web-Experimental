@@ -25,9 +25,9 @@ import java.util.Stack;
 
 import de.d3web.we.kdom.ExpandedSectionFinderResult;
 import de.d3web.we.kdom.basic.PlainText;
-import de.d3web.we.kdom.basic.TextLine;
 import de.d3web.we.kdom.dashTree.DashTreeKDOMBuilder;
 import de.d3web.we.kdom.dashTree.Tilde;
+import de.knowwe.core.TextLine;
 
 public class SolutionsKDOMBuilder implements DashTreeKDOMBuilder {
 
