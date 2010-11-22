@@ -122,8 +122,8 @@ public class GroovySparqlRendererTest {
 
 	@After
 	public void tearDown() {
-		tm.removeTag("Tag1", "tag", params);
-		tm.removeTag("Tag2", "tag", params);
+		// tm.removeTag("Tag1", "tag", params);
+		// tm.removeTag("Tag2", "tag", params);
 		am.deleteArticle(am.getArticle("Tag1"));
 		am.deleteArticle(am.getArticle("Tag2"));
 	}
