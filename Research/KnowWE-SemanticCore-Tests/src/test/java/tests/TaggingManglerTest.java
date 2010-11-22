@@ -347,6 +347,7 @@ public class TaggingManglerTest extends TestCase {
 		tm.setTags("AddTag", "tag1 tag2 tag3", params);
 		assertEquals("<tags>tag1 tag2 tag3</tags>", am.getArticle("AddTag")
 				.getSection().getOriginalText());
+		am.deleteArticle(am.getArticle("AddTag"));
 	}
 
 	/**
