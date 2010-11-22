@@ -1,0 +1,51 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>Research</artifactId>
+    <groupId>de.uniwue.d3web</groupId>
+    <version>0.2-SNAPSHOT</version>
+  </parent>
+  <groupId>de.uniwue.d3web</groupId>
+  <artifactId>KnowWE-Plugin-CI4KE-Groovy-Addons</artifactId>
+  <version>0.2-SNAPSHOT</version>
+  <name>KnowWE Plugin: CI4KE Groovy Addons</name>
+  <description>This Plugin enables the creation of CITests in the wiki itself (using the dynamic programming language Groovy).</description>
+  
+  <dependencies>
+		<dependency>
+			<groupId>groovy-plugin</groupId>
+			<artifactId>groovy-plugin</artifactId>
+			<version>1.0a12</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all</artifactId>
+			<version>1.7.2</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.groovy.maven.runtime</groupId>
+			<artifactId>gmaven-runtime-default</artifactId>
+			<version>1.0-rc-3</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>  
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>KnowWE-core</artifactId>
+			<version>0.2-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>KnowWE-Plugin-CI4KE</artifactId>
+			<version>0.2-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+  </dependencies>
+</project>
