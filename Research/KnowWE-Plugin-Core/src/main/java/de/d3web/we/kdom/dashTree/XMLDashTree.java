@@ -21,6 +21,7 @@ package de.d3web.we.kdom.dashTree;
 
 import de.d3web.we.kdom.xml.AbstractXMLObjectType;
 import de.d3web.we.kdom.xml.XMLContent;
+import de.knowwe.core.dashtree.DashTree;
 
 /**
  * @author Jochen

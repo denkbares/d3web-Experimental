@@ -38,11 +38,11 @@ import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.basic.RoundBracedType;
-import de.d3web.we.kdom.dashTree.DashTreeElement;
-import de.d3web.we.kdom.dashTree.DashTreeElementContent;
-import de.d3web.we.kdom.dashTree.DashTreeUtils;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SimpleMessageError;
+import de.knowwe.core.dashtree.DashTreeElement;
+import de.knowwe.core.dashtree.DashTreeElementContent;
+import de.knowwe.core.dashtree.DashTreeUtils;
 
 /**
  * @author Jochen
@@ -99,7 +99,7 @@ public class PropertyDashTreeElementContent extends DashTreeElementContent {
 								OWL.OBJECTPROPERTY));
 
 						// creates a Subproperty relation IF father exists
-						Section<? extends DashTreeElement> fatherElement = DashTreeUtils.getFatherDashTreeElement((Section<DashTreeElement>) sec.getFather());
+						Section<? extends DashTreeElement> fatherElement = DashTreeUtils.getFatherDashTreeElement(sec.getFather());
 						if (fatherElement != null) {
 							Section<PropertyIDDefinition> fatherID = fatherElement.findSuccessor(PropertyIDDefinition.class);
 							if (fatherID != null) {

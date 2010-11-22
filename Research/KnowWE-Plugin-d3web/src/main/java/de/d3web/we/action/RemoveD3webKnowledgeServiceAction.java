@@ -23,8 +23,8 @@ package de.d3web.we.action;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.basic.WikiEnvironment;
 import de.d3web.we.basic.SessionBroker;
+import de.d3web.we.basic.WikiEnvironment;
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEParameterMap;
 

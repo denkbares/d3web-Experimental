@@ -21,8 +21,8 @@
 package de.d3web.we.kdom.rule;
 
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.renderer.FontColorRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.renderer.FontColorRenderer;
 
 public class If extends DefaultAbstractKnowWEObjectType {
 

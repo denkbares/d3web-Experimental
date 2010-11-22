@@ -13,7 +13,7 @@ import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.ExclusiveType;
 import de.d3web.we.kdom.sectionFinder.ISectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.d3web.we.kdom.util.SplitUtility;
+import de.d3web.we.utils.SplitUtility;
 
 public class ConjunctSectionFinder implements ISectionFinder {
 

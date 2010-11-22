@@ -21,7 +21,7 @@
 package de.d3web.we.kdom.decisionTree;
 
 import de.d3web.we.kdom.basic.LineContent;
-import de.d3web.we.kdom.renderer.FontColorRenderer;
+import de.knowwe.core.renderer.FontColorRenderer;
 
 public class QuestionReference extends LineContent {
 

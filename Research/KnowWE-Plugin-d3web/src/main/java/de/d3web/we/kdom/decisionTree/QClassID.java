@@ -21,10 +21,10 @@
 package de.d3web.we.kdom.decisionTree;
 
 import de.d3web.we.kdom.basic.LineContent;
-import de.d3web.we.kdom.renderer.FontColorRenderer;
-import de.d3web.we.kdom.renderer.ObjectInfoLinkRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.utils.Patterns;
+import de.knowwe.core.renderer.FontColorRenderer;
+import de.knowwe.core.renderer.ObjectInfoLinkRenderer;
 
 // TODO change inheritance
 // is a Question really linecontent? i.e. the only content of a line.

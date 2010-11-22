@@ -24,11 +24,11 @@ import java.util.List;
 import de.d3web.we.kdom.AbstractKnowWEObjectType;
 import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
 import de.d3web.we.kdom.KnowWEObjectType;
-import de.d3web.we.kdom.dashTree.DashTree;
-import de.d3web.we.kdom.dashTree.DashTreeElement;
-import de.d3web.we.kdom.dashTree.DashSubtree;
 import de.d3web.we.kdom.xml.AbstractXMLObjectType;
 import de.d3web.we.kdom.xml.XMLContent;
+import de.knowwe.core.dashtree.DashSubtree;
+import de.knowwe.core.dashtree.DashTree;
+import de.knowwe.core.dashtree.DashTreeElement;
 
 /**
  * @author Jochen

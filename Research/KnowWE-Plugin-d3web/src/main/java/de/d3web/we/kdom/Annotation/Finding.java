@@ -43,7 +43,6 @@ import de.d3web.we.kdom.basic.QuotedType;
 import de.d3web.we.kdom.condition.antlr.NOT;
 import de.d3web.we.kdom.filter.TypeSectionFilter;
 import de.d3web.we.kdom.renderer.FontColorBackgroundRenderer;
-import de.d3web.we.kdom.renderer.FontColorRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SimpleMessageError;
@@ -51,6 +50,7 @@ import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.renderer.FontColorRenderer;
 
 public class Finding extends DefaultAbstractKnowWEObjectType {
 

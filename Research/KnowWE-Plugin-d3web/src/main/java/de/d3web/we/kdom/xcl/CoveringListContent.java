@@ -33,7 +33,6 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Annotation.Finding;
-import de.d3web.we.kdom.basic.CommentLineType;
 import de.d3web.we.kdom.condition.antlr.ComplexFinding;
 import de.d3web.we.kdom.condition.antlr.FindingToConditionBuilder;
 import de.d3web.we.kdom.condition.antlr.NegatedFinding;
@@ -46,6 +45,7 @@ import de.d3web.we.utils.XCLRelationWeight;
 import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelationType;
 import de.d3web.xcl.inference.PSMethodXCL;
+import de.knowwe.core.CommentLineType;
 
 public class CoveringListContent extends XMLContent {
 

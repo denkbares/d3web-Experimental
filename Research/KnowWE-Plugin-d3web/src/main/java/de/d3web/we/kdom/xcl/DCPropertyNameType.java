@@ -20,9 +20,9 @@
 package de.d3web.we.kdom.xcl;
 
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.renderer.FontColorRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.utils.Patterns;
+import de.knowwe.core.renderer.FontColorRenderer;
 
 /**
  * 

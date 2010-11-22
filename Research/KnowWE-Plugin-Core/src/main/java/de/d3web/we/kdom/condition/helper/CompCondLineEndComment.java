@@ -8,10 +8,10 @@ import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.condition.CompositeCondition;
-import de.d3web.we.kdom.renderer.CommentRenderer;
 import de.d3web.we.kdom.sectionFinder.ISectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.d3web.we.kdom.util.SplitUtility;
+import de.d3web.we.utils.SplitUtility;
+import de.knowwe.core.renderer.CommentRenderer;
 
 /**
  * 
@@ -60,7 +60,7 @@ public class CompCondLineEndComment extends DefaultAbstractKnowWEObjectType {
 							.createSingleItemList(new SectionFinderResult(start,
 									text.length()));
 				} // linebreak check whether it is before or after the
-				// endline-comment
+					// endline-comment
 				else {
 					if (CompositeCondition.hasLineBreakAfterComment(text)) {
 						// not comment for current expression

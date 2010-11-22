@@ -21,8 +21,8 @@
 package de.d3web.we.kdom.decisionTree;
 
 import de.d3web.we.kdom.basic.LineContent;
-import de.d3web.we.kdom.renderer.FontColorRenderer;
-import de.d3web.we.kdom.renderer.ObjectInfoLinkRenderer;
+import de.knowwe.core.renderer.FontColorRenderer;
+import de.knowwe.core.renderer.ObjectInfoLinkRenderer;
 
 public class QuestionDef extends LineContent {
 

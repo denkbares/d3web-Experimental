@@ -21,9 +21,8 @@ package de.d3web.we.kdom.basic;
 
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
 import de.d3web.we.kdom.KnowWEObjectType;
-import de.d3web.we.kdom.basic.SquareBracedType;
-import de.d3web.we.kdom.renderer.FontColorRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.renderer.FontColorRenderer;
 
 /**
  * A type that finds a subtype in [] after a keyword. E.g. KNOWN[Question1],

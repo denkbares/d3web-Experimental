@@ -26,9 +26,9 @@ import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.basic.EndLineComment;
 import de.d3web.we.kdom.condition.CompositeCondition;
 import de.d3web.we.kdom.objects.KnowWETermMarker;
-import de.d3web.we.kdom.renderer.CommentRenderer;
 import de.d3web.we.kdom.sectionFinder.AllBeforeTypeSectionFinder;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.core.renderer.CommentRenderer;
 
 /**
  * Markup for a simple condition-action-rule using the CompositeCondition @see

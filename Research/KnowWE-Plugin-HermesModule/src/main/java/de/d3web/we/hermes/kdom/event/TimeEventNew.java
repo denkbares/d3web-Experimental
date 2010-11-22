@@ -37,8 +37,8 @@ import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotation;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.kdom.type.AnonymousType;
 import de.d3web.we.kdom.type.AnonymousTypeInvisible;
-import de.d3web.we.kdom.util.SplitUtility;
-import de.d3web.we.kdom.util.StringFragment;
+import de.d3web.we.utils.SplitUtility;
+import de.d3web.we.utils.StringFragment;
 
 public class TimeEventNew extends DefaultAbstractKnowWEObjectType {
 

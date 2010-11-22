@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.dashTree.propertyDefinition;
 
-import de.d3web.we.kdom.dashTree.DashTree;
+import de.knowwe.core.dashtree.DashTree;
 
 /**
  * @author Jochen

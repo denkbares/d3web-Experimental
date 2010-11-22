@@ -20,10 +20,10 @@
 
 package de.d3web.we.kdom.condition.antlr;
 
-import de.d3web.we.kdom.renderer.FontColorBackgroundRenderer;
-import de.d3web.we.kdom.renderer.FontColorRenderer;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.renderer.FontColorBackgroundRenderer;
+import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.renderer.FontColorRenderer;
 
 public class NegatedFinding extends DefaultAbstractKnowWEObjectType {
 

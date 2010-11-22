@@ -32,10 +32,10 @@ import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.IncrementalConstraints;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.dashTree.DashTreeElement;
-import de.d3web.we.kdom.dashTree.DashTreeElementContent;
-import de.d3web.we.kdom.dashTree.DashTreeUtils;
 import de.d3web.we.kdom.report.KDOMReportMessage;
+import de.knowwe.core.dashtree.DashTreeElement;
+import de.knowwe.core.dashtree.DashTreeElementContent;
+import de.knowwe.core.dashtree.DashTreeUtils;
 
 public class SubClassingDashTreeElement extends DashTreeElement implements IncrementalConstraints {
 
@@ -52,7 +52,6 @@ public class SubClassingDashTreeElement extends DashTreeElement implements Incre
 
 	private class SubClassingDashTreeElementOWLSubTreeHandler extends
 			OwlSubtreeHandler<SubClassingDashTreeElement> {
-
 
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<SubClassingDashTreeElement> element) {

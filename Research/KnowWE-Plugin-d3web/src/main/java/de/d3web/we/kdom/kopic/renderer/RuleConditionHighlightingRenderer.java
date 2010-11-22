@@ -38,12 +38,12 @@ import de.d3web.we.kdom.condition.antlr.ComplexFindingBraced;
 import de.d3web.we.kdom.condition.old.Conjunct;
 import de.d3web.we.kdom.condition.old.Disjunct;
 import de.d3web.we.kdom.renderer.FontColorBackgroundRenderer;
-import de.d3web.we.kdom.renderer.FontColorRenderer;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.knowwe.core.renderer.FontColorRenderer;
 
 /**
  * Highlights the Rules in Kopic-Sections according to the Session.
