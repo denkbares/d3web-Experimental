@@ -53,8 +53,6 @@ import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.knowledge.terminology.Rating;
 import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.core.knowledge.terminology.UserRating;
-import de.d3web.core.knowledge.terminology.UserRating.Evaluation;
 import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.core.manage.RuleFactory;
 import de.d3web.core.records.DefaultSessionRecord;
@@ -69,7 +67,6 @@ import de.d3web.core.session.DefaultSession;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.SessionFactory;
 import de.d3web.core.session.blackboard.Blackboard;
-import de.d3web.core.session.blackboard.DefaultFact;
 import de.d3web.core.session.blackboard.FactFactory;
 import de.d3web.core.session.protocol.FactProtocolEntry;
 import de.d3web.core.session.protocol.Protocol;
@@ -84,7 +81,6 @@ import de.d3web.core.session.values.Unknown;
 import de.d3web.file.records.io.SingleXMLSessionRepository;
 import de.d3web.folder.records.io.MultipleXMLSessionRepository;
 import de.d3web.indication.inference.PSMethodStrategic;
-import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.scoring.HeuristicRating;
 import de.d3web.scoring.Score;
@@ -116,7 +112,6 @@ public class SessionPersistenceTest {
 	private String session2ID;
 	private Solution solution;
 	private Solution solution2;
-	private Solution solution3;
 	private File directory;
 	private Date creationDate;
 	private Date lastChangeDate;
@@ -146,7 +141,6 @@ public class SessionPersistenceTest {
 		questionNum = kbm.createQuestionNum("QuestionNum", kb.getRootQASet());
 		solution = kbm.createSolution("Solution");
 		solution2 = kbm.createSolution("Solution2");
-		solution3 = kbm.createSolution("Solution3");
 		RuleFactory.createHeuristicPSRule("R1", solution2, Score.P7, new CondNumLess(questionNum,
 				0.0));
 		RuleFactory.createHeuristicPSRule("R2", solution, Score.P7, new CondNumLess(questionNum,
@@ -165,11 +159,6 @@ public class SessionPersistenceTest {
 		blackboard.addValueFact(FactFactory.createUserEnteredFact(questionNum, NUMVALUE));
 		blackboard.addValueFact(FactFactory.createUserEnteredFact(solution, new Rating(
 				Rating.State.ESTABLISHED)));
-
-		blackboard.addValueFact(new DefaultFact(solution3, new UserRating(
-				de.d3web.core.knowledge.terminology.Rating.State.ESTABLISHED, Evaluation.REJECTED),
-				42, PSMethodUserSelected.getInstance(), PSMethodUserSelected.getInstance()));
-
 		session.getProtocol().addEntries(
 				new TextProtocolEntry(new Date(System.currentTimeMillis() + 10), "future entry"),
 				new TextProtocolEntry(new Date(startDate.getTime() - 10), "ancient entry")
@@ -464,12 +453,12 @@ public class SessionPersistenceTest {
 		Assert.assertTrue(rating.hasState(Rating.State.ESTABLISHED));
 		Protocol protocol = session.getProtocol();
 		Protocol protocol2 = session2.getProtocol();
-		Assert.assertEquals(9, protocol.getProtocolHistory().size());
-		Assert.assertEquals(2, protocol2.getProtocolHistory().size());
-		Assert.assertEquals(7, protocol.getProtocolHistory(FactProtocolEntry.class).size());
-		Assert.assertEquals(2, protocol2.getProtocolHistory(FactProtocolEntry.class).size());
-		Assert.assertEquals(2, protocol.getProtocolHistory(TextProtocolEntry.class).size());
-		Assert.assertEquals(0, protocol2.getProtocolHistory(TextProtocolEntry.class).size());
+		Assert.assertEquals(protocol.getProtocolHistory().size(), 8);
+		Assert.assertEquals(protocol2.getProtocolHistory().size(), 2);
+		Assert.assertEquals(protocol.getProtocolHistory(FactProtocolEntry.class).size(), 6);
+		Assert.assertEquals(protocol2.getProtocolHistory(FactProtocolEntry.class).size(), 2);
+		Assert.assertEquals(protocol.getProtocolHistory(TextProtocolEntry.class).size(), 2);
+		Assert.assertEquals(protocol2.getProtocolHistory(TextProtocolEntry.class).size(), 0);
 	}
 
 	/**
