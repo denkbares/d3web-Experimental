@@ -40,12 +40,12 @@ import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.multimedia.io.ImageQuestionStore;
-import de.d3web.we.action.SetSingleFindingAction;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.knowwe.d3web.action.SetSingleFindingAction;
 
 /**
  * Handling ImageQuestions with AnswerRegions.
@@ -112,7 +112,7 @@ public class ImageQuestionHandler extends AbstractHTMLTagHandler {
 				values.get(ImageQuestionHandler.TAGHANDLER_ANNOTATION);
 		KnowledgeBaseManagement kbm = KnowledgeBaseManagement.createInstance(kb);
 		Question q = kbm.findQuestion(questionID);
-		ImageQuestionStore store = (ImageQuestionStore) q.getInfoStore().getValue(
+		ImageQuestionStore store = q.getInfoStore().getValue(
 				ImageQuestionStore.IMAGE_QUESTION_INFO);
 
 		// Layout is: Picture | Checkboxes with labels
