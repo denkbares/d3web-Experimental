@@ -44,8 +44,8 @@ import de.d3web.core.session.values.Unknown;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.event.EventManager;
-import de.d3web.we.event.FindingSetEvent;
 import de.d3web.we.utils.D3webUtils;
+import de.knowwe.d3web.event.FindingSetEvent;
 
 /**
  * Instead of {@link SetSingleFindingAction} this is used. But i am sure this is

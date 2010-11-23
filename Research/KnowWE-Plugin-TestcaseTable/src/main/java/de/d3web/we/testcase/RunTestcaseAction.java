@@ -40,8 +40,8 @@ import de.d3web.we.action.ActionContext;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.event.EventManager;
-import de.d3web.we.event.FindingSetEvent;
 import de.d3web.we.utils.D3webUtils;
+import de.knowwe.d3web.event.FindingSetEvent;
 
 /**
  * @author Florian Ziegler
