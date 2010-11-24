@@ -240,16 +240,6 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="ReRenderContentPartAction">
-		<parameter id="class"
-			value="de.d3web.we.action.ReRenderContentPartAction" />
-		<parameter id="name" value="ReRenderContentPartAction" />
-		<parameter id="description" value="Action ReRenderContentPartAction" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="SessionChooserRenderer">
 		<parameter id="class"
 			value="de.d3web.we.action.SessionChooserRenderer" />
