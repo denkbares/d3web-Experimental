@@ -119,7 +119,7 @@
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>KnowWE-Plugin-Core</artifactId>
+			<artifactId>KnowWE-Plugin-Shared</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>

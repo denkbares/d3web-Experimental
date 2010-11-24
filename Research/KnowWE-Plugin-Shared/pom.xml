@@ -10,8 +10,8 @@
 	</parent>
 
 	<groupId>de.uniwue.d3web</groupId>
-	<artifactId>KnowWE-Plugin-Core</artifactId>
-	<name>KnowWE Plugin: Core</name>
+	<artifactId>KnowWE-Plugin-Shared</artifactId>
+	<name>KnowWE-Plugin-Shared</name>
 	<version>0.2-SNAPSHOT</version>
 
 	<build>
