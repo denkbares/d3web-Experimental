@@ -82,17 +82,6 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
-		id="TagHandlerType">
-		<parameter id="class"
-			value="de.d3web.we.taghandler.TagHandlerType" />
-		<parameter id="name" value="TagHandlerType" />
-		<parameter id="description" value="KnowWEObjectType TagHandlerType" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="4" />
-		<parameter id="scope" value="root" />
-	</extension>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
 		id="VerbatimType">
 		<parameter id="class"
 			value="de.d3web.we.kdom.basic.VerbatimType" />
@@ -540,18 +529,6 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
-		id="DefaultMarkupTagHandler">
-		<parameter id="class"
-			value="de.d3web.we.taghandlernew.DefaultMarkupTagHandler" />
-		<parameter id="name" value="DefaultMarkupTagHandler" />
-		<parameter id="description" value="KnowWEObjectType DefaultMarkupTagHandler" />
-		<parameter id="scope" value="root" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-		<parameter id="css" value="defaultMarkup.css" />
-	</extension>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
 		id="RenderRestrictionStart">
 		<parameter id="class"
 			value="de.d3web.we.kdom.renderRestriction.RenderRestrictionStart" />
@@ -621,19 +598,4 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
-	
-		
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
-		id="CompileFlag">
-		<parameter id="class"
-			value="de.d3web.we.kdom.packaging.CompileFlag" />
-		<parameter id="name" value="CompileFlag" />
-		<parameter id="description" value="KnowWEObjectType CompileFlag" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5.0" />
-		<parameter id="scope" value="root" />
-		<parameter id="script" value="KnowWE-plugin-d3web.js" />
-		<parameter id="script" value="silveripe.0.2.js" />
-	</extension>
-	
 </plugin>

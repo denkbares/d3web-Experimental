@@ -28,6 +28,7 @@ import de.d3web.we.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.d3web.we.tools.Tool;
 import de.d3web.we.tools.ToolUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.knowwe.core.taghandler.TagHandlerTypeContent;
 
 /**
  * A bas class for tag handlers having their rendered wiki markup content
