@@ -25,12 +25,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import junit.framework.TestCase;
 import objectTypes.SplitObjectType;
 import objectTypes.WordObjectType;
-
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.action.WordBasedRenameFinding;
-import de.d3web.we.action.WordBasedRenamingAction;
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEFacade;
@@ -39,8 +37,9 @@ import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.action.WordBasedRenameFinding;
+import de.knowwe.core.action.WordBasedRenamingAction;
 import dummies.KnowWETestWikiConnector;
-import junit.framework.TestCase;
 
 public class RenamingToolTest extends TestCase {
 

@@ -32,6 +32,7 @@ import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
+import de.knowwe.core.action.WordBasedRenameFinding;
 
 /**
  * Renders the Mask for the findings of an KnowWEObjectType in the running Wiki.
