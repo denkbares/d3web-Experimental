@@ -5,6 +5,7 @@
 	<requires>
 		<import plugin-id="KnowWEExtensionPoints" />
 		<import plugin-id="KnowWE-Plugin-Shared" />
+		<import plugin-id="KnowWE-Plugin-Table" />
 	</requires>
 	
 	<runtime>
