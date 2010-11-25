@@ -78,7 +78,7 @@ public class TimeEventRenderer extends KnowWEDomRenderer<TimeEventNew> {
 
 		result.append(imp);
 		DelegateRenderer.getInstance().render(article, sec, user, result);
-		result.append("/%\\\\");
+		result.append("/%\n");
 	}
 
 	private int getFilterLevel(KnowWEUserContext user) {
