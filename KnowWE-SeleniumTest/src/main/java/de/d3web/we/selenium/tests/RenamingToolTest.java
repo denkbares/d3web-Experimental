@@ -297,16 +297,20 @@ public class RenamingToolTest extends KnowledgeTestCase {
 		doSelActionAndWait(SEARCH_INPUT, "type", "Yes");
 		doSelActionAndWait(REPLACE_INPUT, "type", "AAAAAAAAAAAA");
 
-		String[] elements = {
-				"rename-show-extend", "//td[@id='ygtvt1']/a", "//td[@id='ygtvt2']/a"
-				, "//td[@id='ygtvt357']/a", "//td[@id='ygtvt358']/a", "//td[@id='ygtvt359']/a"
-				, "//td[@id='ygtvt360']/a", "//td[@id='ygtvt361']/a", "//td[@id='ygtvt364']/a"
-				, "//td[@id='ygtvt390']/a", "ygtvcontentel1", "ygtvcontentel391" };
+		// uncheck all boxes
+		doSelActionAndWait("ygtvcontentel1", "click");
 
-		for (String element : elements) {
-			doSelActionAndWait(element, "click");
+		String[] searchTexts = {
+				"alle Bereiche", "RootType", "Question", "content", "QuestionDashTree",
+				"DashSubtree", "DashTreeElement", "QuestionTreeElementContent", "AnswerLine" };
+
+		String locator = "";
+		for (String searchText : searchTexts) {
+			locator = this.getSectionTreeViewID(searchText, locator);
+			doSelActionAndWait(locator, "click");
 		}
-
+		locator = locator.replace("ygtvt", "ygtvcontentel");
+		doSelActionAndWait(locator, "click");
 		doSelActionAndWait(PREVIEW, "click");
 
 		int findings = countElements(selenium.getHtmlSource(), "span[id^=p]");
@@ -389,6 +393,50 @@ public class RenamingToolTest extends KnowledgeTestCase {
 
 		Elements elements = doc.select(locator);
 		return elements.size();
+	}
+
+	/**
+	 * Searches in the TreeView of the sections (used to search for findings
+	 * only in certain sections) for a given searchText and returns the domID of
+	 * the found element. This ID is used as selector for the Selenium select
+	 * method.
+	 * 
+	 * @created 15.11.2010
+	 * @param String searchText The text of the section
+	 * @param String parentID The last found domID
+	 * @return an ID of a DOM element
+	 */
+	private String getSectionTreeViewID(String searchText, String parentID) {
+		Document doc = Jsoup.parse(selenium.getHtmlSource());
+		Element root = null;
+
+		if (parentID != null && !parentID.equals("")) {
+			parentID = parentID.replace("ygtvt", "ygtvc");
+			root = doc.getElementById(parentID);
+		}
+		else {
+			root = doc;
+		}
+
+		Elements elements = root.getElementsContainingText(searchText);
+
+		for (Element element : elements) {
+			if (element.text().equals(searchText)) {
+				String id = element.attr("id");
+				StringBuilder digits = new StringBuilder();
+				digits.append("ygtvt");
+				char c;
+
+			    for (int i = 0; i < id.length(); i++) {
+					c = id.charAt(i);
+					if (Character.isDigit(c)) {
+						digits.append(c);
+					}
+				}
+				return digits.toString();
+			}
+		}
+		return null;
 	}
 }
 
