@@ -50,24 +50,8 @@ public final class GroovyDynamicCITestHandler implements DynamicCITestHandler {
 
 	@Override
 	public Class<? extends CITest> getCITestClass(String testName) {
-		Map<String, Section<GroovyCITestType>> groovyTests = getAllGroovyCITestSections();
-		if (groovyTests.containsKey(testName)) {
-			Section<GroovyCITestType> testSection = groovyTests.get(testName);
-
-			CompilerConfiguration cc = new CompilerConfiguration();
-			cc.setScriptBaseClass(GroovyCITestScript.class.getName());
-			GroovyShell shell = new GroovyShell(cc);
-
-			String groovycode = GroovyCITestSubtreeHandler.PREPEND
-					+ DefaultMarkupType.getContent(testSection);
-
-			@SuppressWarnings("unchecked")
-			Class<? extends CITest> clazz =
-					(Class<? extends CITest>) shell.parse(groovycode).getClass();
-
-			return clazz;
-		}
-		return null;
+		Section<GroovyCITestType> testSection = getAllGroovyCITestSections().get(testName);
+		return parseGroovyCITest(DefaultMarkupType.getContent(testSection));
 	}
 
 	/**
@@ -76,11 +60,23 @@ public final class GroovyDynamicCITestHandler implements DynamicCITestHandler {
 	 * @created 22.11.2010
 	 * @return
 	 */
-	public static Map<String, Section<GroovyCITestType>>
-			getAllGroovyCITestSections() {
+	@Override
+	public Map<String, Class<? extends CITest>> getAllCITestClasses() {
 		// return map
-		Map<String, Section<GroovyCITestType>> sectionsMap = new HashMap<String,
-				Section<GroovyCITestType>>();
+		Map<String, Class<? extends CITest>> classesMap =
+				new HashMap<String, Class<? extends CITest>>();
+		for (Map.Entry<String, Section<GroovyCITestType>> testSectionEntry : getAllGroovyCITestSections().entrySet()) {
+			String testName = testSectionEntry.getKey();
+			Section<GroovyCITestType> testSection = testSectionEntry.getValue();
+			classesMap.put(testName, parseGroovyCITest(DefaultMarkupType.getContent(testSection)));
+		}
+		return classesMap;
+	}
+
+	public static Map<String, Section<GroovyCITestType>> getAllGroovyCITestSections() {
+		// return map
+		Map<String, Section<GroovyCITestType>> sectionsMap =
+				new HashMap<String, Section<GroovyCITestType>>();
 		// a collection containing all wiki-articles
 		Collection<KnowWEArticle> allWikiArticles = KnowWEEnvironment.getInstance().
 				getArticleManager(KnowWEEnvironment.DEFAULT_WEB).getArticles();
@@ -99,5 +95,20 @@ public final class GroovyDynamicCITestHandler implements DynamicCITestHandler {
 			}
 		}
 		return sectionsMap;
+	}
+
+	public static Class<? extends CITest> parseGroovyCITest(String groovyCodeOfCITestSection) {
+
+		CompilerConfiguration cc = new CompilerConfiguration();
+		cc.setScriptBaseClass(GroovyCITestScript.class.getName());
+		GroovyShell shell = new GroovyShell(cc);
+
+		String groovycode = GroovyCITestSubtreeHandler.PREPEND + groovyCodeOfCITestSection;
+
+		@SuppressWarnings("unchecked")
+		Class<? extends CITest> clazz =
+				(Class<? extends CITest>) shell.parse(groovycode).getClass();
+
+		return clazz;
 	}
 }

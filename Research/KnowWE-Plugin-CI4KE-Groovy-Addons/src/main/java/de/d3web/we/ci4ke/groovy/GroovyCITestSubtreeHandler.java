@@ -63,6 +63,7 @@ public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType>
 		String testname = DefaultMarkupType.getAnnotation(s, "name");
 		Map<String, Section<GroovyCITestType>> map =
 				GroovyDynamicCITestHandler.getAllGroovyCITestSections();
+
 		if (map.containsKey(testname)) {
 			Section<GroovyCITestType> testSection = map.get(testname);
 			if (!testSection.getID().equals(s.getID())) {
