@@ -336,7 +336,7 @@ KNOWWE.shared.renaming = function(){
                         for( var i = 0; i < tblHeader.length; i++){
                             if(myColumns[i].sortable == "true"){ 
                                 var text = tblHeader[i].innerHTML; 
-                                tblHeader[i].innerHTML = '<a href="#" onclick="javascript:KNOWWE.core.util.tablesorter.sort(' 
+                                tblHeader[i].innerHTML = '<a href="#" onclick="javascript:KNOWWE.tablesorter.sort(' 
                                     + i + ",'" + tableID + "'" + ');">' + text + '</a>';
                             }
                         }                        
