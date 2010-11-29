@@ -29,10 +29,10 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.kdom.kopic.WikiAttachmentResource;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.d3web.we.wikiConnector.ConnectorAttachment;
+import de.knowwe.d3web.resource.WikiAttachmentResource;
 
 /**
  * Stores an Attachment as a resource in the knowledgebase.
