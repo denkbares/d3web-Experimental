@@ -7,7 +7,7 @@
 		<groupId>de.uniwue.d3web</groupId>
 		<version>0.2-SNAPSHOT</version>
 	</parent>
-	
+	  
 	<groupId>de.uniwue.d3web</groupId>
 	<artifactId>KnowWE-Plugin-d3web</artifactId>
 	<name>KnowWE Plugin: d3web</name>

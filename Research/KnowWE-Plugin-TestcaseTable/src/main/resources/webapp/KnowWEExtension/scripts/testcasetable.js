@@ -208,7 +208,7 @@ Testcase.changeFieldsAccordingToHeader = function(request, headerElement, table)
 			
 			// save every element, so the change will be visible
 			// after clicking the check mark
-			KNOWWE.core.table.getMap().set(current.id, current.value);
+			KNOWWE.table.getMap().set(current.id, current.value);
 			
 		// if the question just needs an input field
 		} else {
@@ -226,7 +226,7 @@ Testcase.changeFieldsAccordingToHeader = function(request, headerElement, table)
 			
 			// save every element, so the change will be visible
 			// after clicking the check mark
-			KNOWWE.core.table.getMap().set(newOption.id, newOption.value);
+			KNOWWE.table.getMap().set(newOption.id, newOption.value);
 		}
 		
 		
@@ -259,7 +259,7 @@ Testcase.checkForChange = function(newAnswers, sampleChild) {
  */
 Testcase.saveInputAfterChange = function(event) {
     var el = _KE.target(event);
-	KNOWWE.core.table.getMap().set(el.id, el.value);
+	KNOWWE.table.getMap().set(el.id, el.value);
 }
 
 /**
@@ -331,7 +331,7 @@ Testcase.findLineOfElement = function(element) {
  */
 Testcase.saveTable = function() {
     var n = '';
-    KNOWWE.core.table.getMap().forEach(function(key, value){
+    KNOWWE.table.getMap().forEach(function(key, value){
         n += key + ";-;" + value + "::";
     });
     n = n.substring(0, n.lastIndexOf('::'));

@@ -126,16 +126,6 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="UpdateTableKDOMNodesAction">
-		<parameter id="class"
-			value="de.d3web.we.action.UpdateTableKDOMNodesAction" />
-		<parameter id="name" value="UpdateTableKDOMNodesAction" />
-		<parameter id="description" value="Action UpdateTableKDOMNodesAction" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="KnowWEObjectTypeBrowserAction">
 		<parameter id="class"
 			value="de.d3web.we.action.KnowWEObjectTypeBrowserAction" />
@@ -354,6 +344,7 @@
 		<parameter id="description" value="TagHandler TemplateTagHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
+		<parameter id="script" value="KnowWE-Plugin-Shared.js" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
@@ -416,6 +407,7 @@
 		<parameter id="description" value="TagHandler KnowWEObjectTypeBrowserHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
+		<parameter id="script" value="KnowWE-Plugin-Shared.js" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
@@ -508,4 +500,14 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="ObjectInfoTagHandler">
+		<parameter id="class" value="de.d3web.we.taghandler.ObjectInfoTagHandler" />
+		<parameter id="name" value="ObjectInfoTagHandler" />
+		<parameter id="description" value="TagHandler ObjectInfoTagHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
 </plugin>
