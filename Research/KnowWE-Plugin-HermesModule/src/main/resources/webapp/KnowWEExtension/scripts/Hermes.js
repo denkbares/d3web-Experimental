@@ -18,7 +18,7 @@ if (typeof KNOWWE == "undefined" || !KNOWWE) {
 KNOWWE.plugin.hermes = function() {
     var cookieName = "KNOWWE-Hermes";
     return {
-        storeTree : function( collapse ) {
+        storeTree : function( expand ) {
           
 			var tree = _KS(".hermes-tree-view")[0];
 			if (!tree) return;
@@ -33,7 +33,7 @@ KNOWWE.plugin.hermes = function() {
             } else {
                 nodes = nodes.split(",");
             }
-            if( collapse ) {
+            if( expand ) {
                 nodes.push(clickedID);
             } else {
                 if(KNOWWE.helper.containsArr( nodes, clickedID )) {
@@ -54,12 +54,12 @@ KNOWWE.plugin.hermes = function() {
                 for(var i = 0; i < n; i++) {
                     var treeNode = window[treeID].getNodeByIndex(nodes[i]);
                     if( treeNode ) {
-                      treeNode.collapse();
+                      treeNode.expand();
                     }
                 }
             }
-            window[treeID].subscribe('collapse', function(node){KNOWWE.plugin.hermes.storeTree(true); });
-            window[treeID].subscribe('expand', function(node){KNOWWE.plugin.hermes.storeTree(false); });
+            window[treeID].subscribe('collapse', function(node){KNOWWE.plugin.hermes.storeTree(false); });
+            window[treeID].subscribe('expand', function(node){KNOWWE.plugin.hermes.storeTree(true); });
         }       
     }
 }();

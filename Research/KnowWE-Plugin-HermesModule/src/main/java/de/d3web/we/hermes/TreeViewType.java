@@ -65,7 +65,7 @@ public class TreeViewType extends DefaultAbstractKnowWEObjectType {
 					+ "var tree" + id + ";\n"
 					+ "function treeInit" + id + "() {\n"
 					+ "tree" + id + " = new YAHOO.widget.TreeView('tree" + id + "');\n"
-					+ "tree" + id + ".expandAll();"
+					// + "tree" + id + ".expandAll();" // keep 'em collpased
 					+ "tree" + id + ".render();\n}\n"
 					+ "treeInit" + id + "();"
 					+ "</script>";
