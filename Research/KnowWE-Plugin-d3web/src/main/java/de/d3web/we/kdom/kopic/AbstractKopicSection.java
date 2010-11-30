@@ -28,6 +28,7 @@ public abstract class AbstractKopicSection extends AbstractXMLObjectType {
 
 	public AbstractKopicSection(String type) {
 		super(type);
+		registerPackageDefinitionHandler();
 	}
 
 	@Override
