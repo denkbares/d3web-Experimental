@@ -245,17 +245,6 @@
 		<parameter id="priority" value="5" />
 	</extension>
 
-
-
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="ClearSessionAction">
-		<parameter id="class" value="de.d3web.we.action.ClearSessionAction" />
-		<parameter id="name" value="ClearSessionAction" />
-		<parameter id="description" value="Action ClearSessionAction" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>
-
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="RefreshHTMLDialogAction">
 		<parameter id="class" value="de.d3web.we.action.RefreshHTMLDialogAction" />
