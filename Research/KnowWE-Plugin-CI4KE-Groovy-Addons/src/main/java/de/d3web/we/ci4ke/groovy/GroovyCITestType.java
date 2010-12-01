@@ -20,21 +20,29 @@ package de.d3web.we.ci4ke.groovy;
 
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.kdom.rendering.EditSectionRenderer;
 
+/**
+ * Type for dynamically implemented CITests with Groovy
+ * 
+ * @author Marc-Oliver Ochlast (denkbares GmbH)
+ * @created 30.11.2010
+ */
 public class GroovyCITestType extends DefaultMarkupType {
 
 	private static final DefaultMarkup MARKUP;
 
+	public static final String ANNOTATION_NAME = "name";
+
 	static {
 		MARKUP = new DefaultMarkup("CITest");
-		MARKUP.addAnnotation("name", true);
+		MARKUP.addAnnotation(ANNOTATION_NAME, true);
 	}
 
 	public GroovyCITestType() {
 		super(MARKUP);
+		this.setIgnorePackageCompile(true);
 		this.addSubtreeHandler(new GroovyCITestSubtreeHandler());
-		this.setCustomRenderer(new EditSectionRenderer(new GroovySectionRenderer()));
+		this.setCustomRenderer(new GroovyCITestRenderer());
 	}
 
 }

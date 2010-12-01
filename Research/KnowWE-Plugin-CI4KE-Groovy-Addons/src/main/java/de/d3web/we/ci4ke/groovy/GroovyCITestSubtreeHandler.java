@@ -18,36 +18,25 @@
  */
 package de.d3web.we.ci4ke.groovy;
 
-import groovy.lang.GroovyShell;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import org.codehaus.groovy.control.CompilerConfiguration;
 
 import de.d3web.report.Message;
 import de.d3web.we.ci4ke.handling.CIConfig;
 import de.d3web.we.ci4ke.handling.CITest;
 import de.d3web.we.ci4ke.handling.CITestResult;
 import de.d3web.we.ci4ke.handling.CITestResult.TestResultType;
+import de.d3web.we.kdom.AbstractKnowWEObjectType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.kdom.report.KDOMError;
-import de.d3web.we.kdom.report.KDOMNotice;
 import de.d3web.we.kdom.report.KDOMReportMessage;
+import de.d3web.we.kdom.report.message.ObjectCreatedMessage;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.utils.KnowWEUtils;
 
 public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType> {
-
-	@Override
-	public boolean isIgnoringPackageCompile() {
-		return true;
-	}
 
 	/**
 	 * Prepend the groovy-code with some import statements
@@ -56,82 +45,83 @@ public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType>
 						"import " + CITestResult.class.getName() + ";\n" +
 						"import static " + TestResultType.class.getName() + ".*;\n";
 
+	// @Override
+	// public Collection<KDOMReportMessage> create(KnowWEArticle article,
+	// Section<GroovyCITestType> s) {
+	//
+	// List<Message> msgs = new ArrayList<Message>();
+	// String testname = DefaultMarkupType.getAnnotation(s, "name");
+	// Map<String, Section<GroovyCITestType>> map =
+	// GroovyDynamicCITestHandler.getAllGroovyCITestSections();
+	//
+	// if (map.containsKey(testname)) {
+	// Section<GroovyCITestType> testSection = map.get(testname);
+	// if (!testSection.getID().equals(s.getID())) {
+	// msgs.add(new Message(Message.ERROR,
+	// "Test name '" + testname + "' is not unique!", null, -1, null));
+	// }
+	// }
+	//
+	// try {
+	// parseAndRunGroovyCITestSection(s);
+	// }
+	// catch (Throwable th) {
+	// // th.printStackTrace();
+	// // System.out.println(th.getMessage());
+	// String errorMessageMasked =
+	// KnowWEUtils.maskHTML(KnowWEUtils.maskNewline(th.getLocalizedMessage()));
+	// msgs.add(new Message(Message.ERROR, errorMessageMasked, null, -1, null));
+	// DefaultMarkupType.storeMessages(article, s, this.getClass(), msgs);
+	// return null;
+	// }
+	// DefaultMarkupType.storeMessages(article, s, this.getClass(), msgs);
+	// return Arrays.asList((KDOMReportMessage) new
+	// TestCreatedSuccessfully(testname));
+	// }
+
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<GroovyCITestType> s) {
-
-		List<Message> msgs = new ArrayList<Message>();
-		String testname = DefaultMarkupType.getAnnotation(s, "name");
-		Map<String, Section<GroovyCITestType>> map =
-				GroovyDynamicCITestHandler.getAllGroovyCITestSections();
-
-		if (map.containsKey(testname)) {
-			Section<GroovyCITestType> testSection = map.get(testname);
-			if (!testSection.getID().equals(s.getID())) {
-				msgs.add(new Message(Message.ERROR,
-						"Test name '" + testname + "' is not unique!", null, -1, null));
+		// create collection for return messages
+		Collection<Message> messages = new ArrayList<Message>();
+		// parse name of test and check if its name is unique in the wiki
+		String testname = DefaultMarkupType.getAnnotation(s, GroovyCITestType.ANNOTATION_NAME);
+		for (Section<GroovyCITestType> section : GroovyDynamicCITestHandler.getAllGroovyCITestSectionsByList()) {
+			String annotationName = DefaultMarkupType.getAnnotation(section,
+					GroovyCITestType.ANNOTATION_NAME);
+			if (testname.equals(annotationName) && !s.getID().equals(section.getID())) {
+				// found other CITest with the same name!
+				messages.add(error("The name '" + testname + "' of this CITest is not unique. " +
+						"Please select another name!"));
 			}
 		}
-
-		try {
-			parseAndRunGroovyCITestSection(s);
+		String sectionContent = DefaultMarkupType.getContent(s);
+		CITestResult result = null;
+		try{
+			Class<? extends CITest> testClazz = GroovyDynamicCITestHandler.
+					parseGroovyCITest(sectionContent);
+			result = testClazz.newInstance().call();
 		}
-		catch (Throwable th) {
-			// th.printStackTrace();
-			// System.out.println(th.getMessage());
-			String errorMessageMasked = KnowWEUtils.maskHTML(KnowWEUtils.maskNewline(th.getLocalizedMessage()));
-			msgs.add(new Message(Message.ERROR, errorMessageMasked, null, -1, null));
-			DefaultMarkupType.storeMessages(article, s, this.getClass(), msgs);
+		catch (Exception e) {
+			String errorMessageMasked = KnowWEUtils.maskHTML(
+					KnowWEUtils.maskNewline(e.getLocalizedMessage()));
+			messages.add(error(errorMessageMasked));
+		}
+		if (messages.size() == 0 && result == null) {
+			// only report this error if no other error was found until now!
+			messages.add(error("The test didn't returned a CITestResult!"));
+		}
+		// now check for errors and return the appropriate result.
+		if (messages.size() > 0) {// there were errors!
+			AbstractKnowWEObjectType.storeMessages(article, s, getClass(), messages);
 			return null;
 		}
-		DefaultMarkupType.storeMessages(article, s, this.getClass(), msgs);
-		return Arrays.asList((KDOMReportMessage) new TestCreatedSuccessfully(testname));
-	}
-
-	/**
-	 * @param s
-	 * @throws Exception
-	 */
-	public static void parseAndRunGroovyCITestSection(Section<GroovyCITestType> s)
-			throws Exception {
-
-		CompilerConfiguration cc = new CompilerConfiguration();
-		cc.setScriptBaseClass(GroovyCITestScript.class.getName());
-		GroovyShell shell = new GroovyShell(cc);
-
-		String groovycode = PREPEND + DefaultMarkupType.getContent(s);
-
-		CITest test = (CITest) shell.parse(groovycode);
-		// test.init(CIConfig.DUMMY_CONFIG);
-		test.call();
-	}
-
-	public class TestCreatedSuccessfully extends KDOMNotice {
-
-		private final String s;
-
-		public TestCreatedSuccessfully(String s) {
-			this.s = s;
-		}
-
-		@Override
-		public String getVerbalization() {
-			return "Test successfully created: " + s;
+		else {
+			return Arrays.asList((KDOMReportMessage) new ObjectCreatedMessage(
+					"CITest successfully created!"));
 		}
 	}
 
-	public class TestCouldNotBeCreated extends KDOMError {
-
-		private final String s;
-
-		public TestCouldNotBeCreated(String s) {
-			this.s = s;
-		}
-
-		@Override
-		public String getVerbalization() {
-			return "Test could not be created: " + s;
-		}
+	private static Message error(String messageText) {
+		return new Message(Message.ERROR, messageText, "", -1, "");
 	}
-
-
 }

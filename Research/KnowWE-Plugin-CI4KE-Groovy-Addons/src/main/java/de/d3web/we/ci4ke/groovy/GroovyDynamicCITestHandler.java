@@ -25,6 +25,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.codehaus.groovy.control.CompilerConfiguration;
 
@@ -77,24 +79,36 @@ public final class GroovyDynamicCITestHandler implements DynamicCITestHandler {
 		// return map
 		Map<String, Section<GroovyCITestType>> sectionsMap =
 				new HashMap<String, Section<GroovyCITestType>>();
+		for (Section<GroovyCITestType> section : getAllGroovyCITestSectionsByList()) {
+			// a GroovyCITest is uniquely identified by its name-annotation
+			String testName = DefaultMarkupType.getAnnotation(section, "name");
+			if (sectionsMap.containsKey(testName)) {
+				String warning = "Duplicate CITest with name '" + testName + "found! "
+						+ "The value of the @name annotation for CITests has to be unique!";
+				Logger.getLogger(GroovyDynamicCITestHandler.class.getName()).
+						log(Level.WARNING, warning);
+			}
+			else {
+				sectionsMap.put(testName, section);
+			}
+		}
+		return sectionsMap;
+	}
+
+	public static List<Section<GroovyCITestType>> getAllGroovyCITestSectionsByList() {
+		// our return list
+		List<Section<GroovyCITestType>> sectionsList = new
+				ArrayList<Section<GroovyCITestType>>();
 		// a collection containing all wiki-articles
 		Collection<KnowWEArticle> allWikiArticles = KnowWEEnvironment.getInstance().
 				getArticleManager(KnowWEEnvironment.DEFAULT_WEB).getArticles();
 		// iterate over all articles
 		for (KnowWEArticle article : allWikiArticles) {
-			List<Section<GroovyCITestType>> sectionsList = new
-					ArrayList<Section<GroovyCITestType>>();
 			// find all GroovyCITestType sections on this article...
 			article.getSection().findSuccessorsOfType(GroovyCITestType.class,
 					sectionsList);
-			// ...and add them to our Map
-			for (Section<GroovyCITestType> section : sectionsList) {
-				// a GroovyCITest is uniquely identified by its name-annotation
-				String testName = DefaultMarkupType.getAnnotation(section, "name");
-				sectionsMap.put(testName, section);
-			}
 		}
-		return sectionsMap;
+		return sectionsList;
 	}
 
 	public static Class<? extends CITest> parseGroovyCITest(String groovyCodeOfCITestSection) {
