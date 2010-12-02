@@ -25,9 +25,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import de.d3web.we.ci4ke.handling.AbstractCITest;
 import de.d3web.we.ci4ke.handling.CIConfig;
-import de.d3web.we.ci4ke.handling.CITest;
+import de.d3web.we.ci4ke.testing.AbstractCITest;
+import de.d3web.we.ci4ke.testing.CITest;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 

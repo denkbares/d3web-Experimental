@@ -21,7 +21,7 @@ package de.d3web.we.ci4ke.groovy;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import de.d3web.we.ci4ke.handling.DynamicCITestManager;
+import de.d3web.we.ci4ke.testing.DynamicCITestManager;
 import de.d3web.we.event.Event;
 import de.d3web.we.event.EventListener;
 import de.d3web.we.event.InitEvent;

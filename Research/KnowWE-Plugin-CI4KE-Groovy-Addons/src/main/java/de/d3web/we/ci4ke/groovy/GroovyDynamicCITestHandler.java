@@ -30,8 +30,8 @@ import java.util.logging.Logger;
 
 import org.codehaus.groovy.control.CompilerConfiguration;
 
-import de.d3web.we.ci4ke.handling.CITest;
-import de.d3web.we.ci4ke.handling.DynamicCITestHandler;
+import de.d3web.we.ci4ke.testing.CITest;
+import de.d3web.we.ci4ke.testing.DynamicCITestHandler;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
