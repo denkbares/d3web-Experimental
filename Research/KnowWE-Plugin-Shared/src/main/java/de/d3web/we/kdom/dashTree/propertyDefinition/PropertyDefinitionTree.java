@@ -20,6 +20,11 @@
 
 package de.d3web.we.kdom.dashTree.propertyDefinition;
 
+import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.rendering.DelegateRenderer;
+import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.core.dashtree.DashTree;
 
 /**
@@ -33,7 +38,21 @@ import de.knowwe.core.dashtree.DashTree;
 public class PropertyDefinitionTree extends DashTree {
 
 	public PropertyDefinitionTree() {
+		setCustomRenderer(new PreRenderer());
 		replaceDashTreeElementContentType(this, new PropertyDashTreeElementContent());
 	}
 
+	class PreRenderer extends KnowWEDomRenderer<DashTree> {
+
+		@Override
+		public void render(KnowWEArticle article, Section<DashTree> sec,
+				KnowWEUserContext user, StringBuilder string) {
+
+			string.append("{{{");
+			DelegateRenderer.getInstance().render(article, sec, user, string);
+			string.append("}}}");
+
+		}
+
+	}
 }
