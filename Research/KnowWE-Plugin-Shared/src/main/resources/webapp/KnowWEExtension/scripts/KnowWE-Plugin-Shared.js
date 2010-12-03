@@ -1,4 +1,24 @@
 /**
+ * The KNOWWE global namespace object. If KNOWWE is already defined, the
+ * existing KNOWWE object will not be overwritten so that defined namespaces
+ * are preserved.
+ */
+if (typeof KNOWWE == "undefined" || !KNOWWE) {
+    var KNOWWE = {};
+}
+
+/**
+ * The KNOWWE.shared global namespace object. If KNOWWE.shared is already defined, the
+ * existing KNOWWE.shared object will not be overwritten so that defined namespaces
+ * are preserved.
+ */
+if (typeof KNOWWE.shared == "undefined" || !KNOWWE.shared) {
+        KNOWWE.shared = function(){
+             return {  }
+        }
+}
+
+/**
  * Namespace: KNOWWE.shared.actions
  * The KNOWWE actions namespace object.
  * Contains all actions that can be triggered in KnowWE per javascript.
