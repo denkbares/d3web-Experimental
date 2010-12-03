@@ -34,9 +34,9 @@
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>KnowWE-Plugin-d3web</artifactId>
-			<version>${project.version}</version>
+			<artifactId>KnowWE-Plugin-d3web-basic</artifactId>
+			<version>0.2-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
-	</dependencies>
+  </dependencies>
 </project>
