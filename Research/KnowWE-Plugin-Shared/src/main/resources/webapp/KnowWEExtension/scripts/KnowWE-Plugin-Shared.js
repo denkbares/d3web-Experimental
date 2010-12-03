@@ -540,17 +540,17 @@ KNOWWE.shared.edit = function(){
                 rel = eval("(" + elements[i].getAttribute('rel') + ")");
                 bttns = _KS('#'+rel.id + ' input[type=submit]');
                 if( bttns.length != 0 ){
-                    _KE.add('click', bttns[0], KNOWWE.core.edit.onSave );
+                    _KE.add('click', bttns[0], KNOWWE.shared.edit.onSave );
                     _KE.add('click', elements[i], function(e){
                         var el = _KE.target(e);
                         var rel = eval("(" + el.getAttribute('rel') + ")");
-                        KNOWWE.shared.actions.enableQuickEdit( KNOWWE.core.edit.init, rel.id, "render");
+                        KNOWWE.shared.actions.enableQuickEdit( KNOWWE.shared.edit.init, rel.id, "render");
                     });
                 }  else {               
                     _KE.add('click', elements[i], function(e){
                         var el = _KE.target(e);
                         var rel = eval("(" + el.getAttribute('rel') + ")");
-                        KNOWWE.shared.actions.enableQuickEdit( KNOWWE.core.edit.init, rel.id, null);
+                        KNOWWE.shared.actions.enableQuickEdit( KNOWWE.shared.edit.init, rel.id, null);
                     });
                 }
             }               
@@ -578,7 +578,7 @@ KNOWWE.shared.edit = function(){
                 response : {
                     action : 'none',
                     fn : function(){ 
-                        KNOWWE.shared.actions.enableQuickEdit( KNOWWE.core.edit.init, rel.id, "render");
+                        KNOWWE.shared.actions.enableQuickEdit( KNOWWE.shared.edit.init, rel.id, "render");
                         Collapsible.render( _KS('#page'), KNOWWE.helper.gup('page'));
                     }
                 }
