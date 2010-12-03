@@ -36,7 +36,6 @@ import de.d3web.we.kdom.Annotation.Finding;
 import de.d3web.we.kdom.condition.antlr.ComplexFinding;
 import de.d3web.we.kdom.condition.antlr.FindingToConditionBuilder;
 import de.d3web.we.kdom.condition.antlr.NegatedFinding;
-import de.d3web.we.kdom.rendering.EditSectionRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.xml.XMLContent;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
@@ -57,7 +56,6 @@ public class CoveringListContent extends XMLContent {
 		this.childrenTypes.add(new XCList());
 		this.childrenTypes.add(new CommentLineType());
 		this.addSubtreeHandler(new CoveringListContentSubTreeHandler());
-		this.setCustomRenderer(new EditSectionRenderer());
 	}
 
 	public class CoveringListContentSubTreeHandler extends D3webSubtreeHandler {

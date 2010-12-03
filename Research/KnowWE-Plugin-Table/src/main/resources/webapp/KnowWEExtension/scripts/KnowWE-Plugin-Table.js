@@ -26,7 +26,7 @@ KNOWWE.table = function(){
                     _KE.add('click', elements[i], function(e){
                         var el = _KE.target(e);
                         var id = el.parentNode.id;
-                        KNOWWE.core.actions.enableQuickEdit( KNOWWE.table.init, id, null);
+                        KNOWWE.shared.actions.enableQuickEdit( KNOWWE.table.init, id, null);
                     });
                 }                
             }
@@ -82,7 +82,7 @@ KNOWWE.table = function(){
                 response : {
                     action : 'none',
                     fn : function(){ 
-                        KNOWWE.core.actions.enableQuickEdit( KNOWWE.table.init, id, "render");
+                        KNOWWE.shared.actions.enableQuickEdit( KNOWWE.table.init, id, "render");
                     }
                 }
             }

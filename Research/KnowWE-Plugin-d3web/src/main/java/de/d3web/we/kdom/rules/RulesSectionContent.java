@@ -20,7 +20,6 @@
 
 package de.d3web.we.kdom.rules;
 
-import de.d3web.we.kdom.rendering.EditSectionRenderer;
 import de.d3web.we.kdom.xml.XMLContent;
 
 public class RulesSectionContent extends XMLContent {
@@ -28,7 +27,6 @@ public class RulesSectionContent extends XMLContent {
 	@Override
 	protected void init() {
 		childrenTypes.add(new Rule());
-		this.setCustomRenderer(new EditSectionRenderer());
 	}
 
 }

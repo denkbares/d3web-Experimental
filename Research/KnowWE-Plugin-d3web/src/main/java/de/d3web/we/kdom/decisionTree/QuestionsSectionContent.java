@@ -20,7 +20,6 @@
 
 package de.d3web.we.kdom.decisionTree;
 
-import de.d3web.we.kdom.rendering.EditSectionRenderer;
 import de.d3web.we.kdom.xml.XMLContent;
 
 public class QuestionsSectionContent extends XMLContent {
@@ -28,7 +27,6 @@ public class QuestionsSectionContent extends XMLContent {
 	@Override
 	protected void init() {
 		childrenTypes.add(new QuestionTreeANTLR());
-		this.setCustomRenderer(new EditSectionRenderer());
 	}
 
 }
