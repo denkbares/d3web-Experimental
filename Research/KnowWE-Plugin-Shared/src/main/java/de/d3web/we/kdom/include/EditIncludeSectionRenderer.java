@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.include;
 
-import de.d3web.we.kdom.rendering.EditSectionRenderer;
+import de.d3web.we.kdom.renderer.EditSectionRenderer;
 
 public class EditIncludeSectionRenderer extends EditSectionRenderer {
 

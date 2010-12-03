@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.edit;
 
-import de.d3web.we.kdom.rendering.EditSectionRenderer;
+import de.d3web.we.kdom.renderer.EditSectionRenderer;
 import de.d3web.we.kdom.xml.XMLContent;
 
 /**
