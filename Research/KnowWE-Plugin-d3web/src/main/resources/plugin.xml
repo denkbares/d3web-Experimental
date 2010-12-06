@@ -24,7 +24,6 @@
 		<parameter id="priority" value="4.1" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
-		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
@@ -37,7 +36,6 @@
 		<parameter id="priority" value="4.5" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
-		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
@@ -50,7 +48,6 @@
 		<parameter id="priority" value="4.5" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
-		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
@@ -63,7 +60,6 @@
 		<parameter id="priority" value="4.6" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
-		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
@@ -76,7 +72,6 @@
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
-		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
@@ -88,7 +83,6 @@
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
-		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
@@ -100,7 +94,6 @@
 		<parameter id="priority" value="4.9" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
-		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
@@ -112,7 +105,6 @@
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
-		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
@@ -125,7 +117,6 @@
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
-		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
@@ -136,7 +127,6 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
-		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
@@ -147,7 +137,6 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
-		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
@@ -159,7 +148,6 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
-		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
@@ -171,7 +159,6 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
-		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
