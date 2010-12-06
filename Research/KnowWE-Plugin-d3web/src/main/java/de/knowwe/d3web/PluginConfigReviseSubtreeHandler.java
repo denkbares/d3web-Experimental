@@ -36,11 +36,10 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 
-public class PluginConfigReviseSubtreeHandler extends SubtreeHandler {
+public class PluginConfigReviseSubtreeHandler extends SubtreeHandler<PluginConfigType> {
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
+	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<PluginConfigType> s) {
 		String xmlText = "<settings><plugins /><psmethods>" + s.getOriginalText()
 				+ "</psmethods></settings>";
 		KnowledgeBaseManagement kbm = D3webModule.getKnowledgeRepresentationHandler(
