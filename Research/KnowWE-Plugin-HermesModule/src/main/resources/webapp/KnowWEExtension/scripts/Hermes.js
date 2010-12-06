@@ -312,7 +312,7 @@ KNOWWE.plugin.hermes.conceptPopup = function() {
         handleForm : function(e) {
             var el = new _KN(_KE.target(e));
             var rel = eval("(" + el.getAttribute('rel') + ")");
-            KNOWWE.plugin.d3web.semantic.send(rel.url, null);
+            KNOWWE.plugin.semantic.send(rel.url, null);
         },
         /**
          * Function: handleNum Handles the input in an HTMLInput element
@@ -335,7 +335,7 @@ KNOWWE.plugin.hermes.conceptPopup = function() {
 
             if (!rel)
                 return;
-            KNOWWE.plugin.d3web.semantic.send(rel.url, {
+            KNOWWE.plugin.semantic.send(rel.url, {
                 ValueNum : el.value
             });
         },
@@ -348,31 +348,7 @@ KNOWWE.plugin.hermes.conceptPopup = function() {
         handleOC : function(e) {
             var el = _KE.target(e);
             var rel = eval("(" + el.getAttribute('rel') + ")");
-            KNOWWE.plugin.d3web.semantic.send(rel.url, null);
-        },
-        /**
-         * Function: send Sends the user selection and stores it. Used in the
-         * other handleXXX functions to send an AJAX request in order to store
-         * the users choice.
-         * 
-         * Parameters: url - The URL of the request values - The selected value
-         */
-        send : function(url, values) {
-
-            var tokens = [];
-            if (values) {
-                for (keys in values) {
-                    tokens.push(keys + "=" + encodeURIComponent(values[keys]));
-                }
-            }
-            var options = {
-                url : url + "&" + tokens.join('&'),
-                action : 'none',
-                fn : KNOWWE.plugin.d3web.actions.update
-            }
-            new _KA(options).send();
-            _KS('#o-lay')._remove();
-            clearTimeout(sTimer);
+            KNOWWE.plugin.semantic.send(rel.url, null);
         },
         /**
          * Function: showOverlayQuestion Gets the data that is shown as an

@@ -23,7 +23,7 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4.1" />
 		<parameter id="scope" value="root" />
-		<parameter id="script" value="KnowWE-plugin-d3web.js" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
@@ -36,7 +36,7 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4.5" />
 		<parameter id="scope" value="root" />
-		<parameter id="script" value="KnowWE-plugin-d3web.js" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
@@ -49,7 +49,7 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4.5" />
 		<parameter id="scope" value="root" />
-		<parameter id="script" value="KnowWE-plugin-d3web.js" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
@@ -62,7 +62,7 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4.6" />
 		<parameter id="scope" value="root" />
-		<parameter id="script" value="KnowWE-plugin-d3web.js" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
@@ -75,7 +75,7 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
-		<parameter id="script" value="KnowWE-plugin-d3web.js" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
@@ -87,7 +87,7 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
-		<parameter id="script" value="KnowWE-plugin-d3web.js" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
@@ -99,7 +99,7 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4.9" />
 		<parameter id="scope" value="root" />
-		<parameter id="script" value="KnowWE-plugin-d3web.js" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
@@ -111,7 +111,7 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
-		<parameter id="script" value="KnowWE-plugin-d3web.js" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
@@ -124,7 +124,7 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
-		<parameter id="script" value="KnowWE-plugin-d3web.js" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
@@ -135,7 +135,7 @@
 		<parameter id="description" value="TagHandler QuestionSheetHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="script" value="KnowWE-plugin-d3web.js" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
@@ -146,7 +146,7 @@
 		<parameter id="description" value="TagHandler ShowAllKBsHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="script" value="KnowWE-plugin-d3web.js" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
@@ -158,7 +158,7 @@
 		<parameter id="description" value="TagHandler QuestionnaireValuesViewHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="script" value="KnowWE-plugin-d3web.js" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
@@ -170,7 +170,7 @@
 		<parameter id="description" value="TagHandler SessionValuesViewHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="script" value="KnowWE-plugin-d3web.js" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 		<parameter id="script" value="silveripe.0.2.js" />
 	</extension>
 
@@ -290,6 +290,7 @@
 		<parameter id="description" value="KnowWEObjectType KnowledgeReaderType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
@@ -301,6 +302,7 @@
 		<parameter id="description" value="KnowWEObjectType ImageToResourceType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 		<parameter id="scope" value="root" />
 	</extension>
 
@@ -311,6 +313,7 @@
 		<parameter id="description" value="TagHandler DialogLinkTagHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
@@ -321,6 +324,7 @@
 		<parameter id="description" value="TagHandler KnowledgeBasesGeneratorHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
@@ -331,6 +335,7 @@
 		<parameter id="description" value="TagHandler ImageQuestionHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
@@ -363,7 +368,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="SectionizerModule"
 		id="ExpandedSectionizerModule">
 		<parameter id="class" value="de.d3web.we.kdom.ExpandedSectionizerModule" />
-		<parameter id="name" value="ImageQuestionAction" />
+		<parameter id="name" value="ExpandedSectionizerModule" />
 		<parameter id="description" value="SectionizerModule ExpandedSectionizerModule" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
@@ -376,6 +381,7 @@
 		<parameter id="description" value="TagHandler ObjectInfoTagHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
+		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 	</extension>
 	
 </plugin>
