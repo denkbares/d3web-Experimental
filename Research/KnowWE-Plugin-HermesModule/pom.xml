@@ -97,7 +97,7 @@
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>KnowWE-Plugin-Table-jpf-plugin</artifactId>
+			<artifactId>KnowWE-Plugin-Table</artifactId>
 			<version>${project.version}</version>
 			<type>pom</type>
 			<scope>compile</scope>
