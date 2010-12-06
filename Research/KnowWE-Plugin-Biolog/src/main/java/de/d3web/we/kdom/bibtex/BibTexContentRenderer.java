@@ -34,9 +34,9 @@ import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
- * 
+ *
  * A renderer for rendering the bibtex sections. @see BibTexContent
- * 
+ *
  * @author Jochen
  * @created 16.09.2010
  */
@@ -70,7 +70,7 @@ public class BibTexContentRenderer extends KnowWEDomRenderer {
 		else {
 			String header = "<div id='knoffice-panel' class='panel'>";
 			header += "<h3>" + "BibTex" + "</h3>";
-			header += ("<p id='knoffice-show-extend' class='show-extend pointer extend-panel-up'>"
+			header += ("<p id='knoffice-show-extend' class='show-extend pointer extend-panel-right'>"
 					+ "BibTex entries</p>");
 			header += ("<div id='knoffice-panel-extend' class='hidden' style='display:inline'>");
 			String dl="<p> (download all <a href=\"BibTexDownload.jsp?nodeID="

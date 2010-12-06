@@ -29,6 +29,7 @@ import java.util.Set;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.kdom.objects.KnowWETerm;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.objects.TermReference;
@@ -69,18 +70,31 @@ public class NewObjectInfoTagHandler extends AbstractDefaultStyledTagHandler {
 
 		// If name is not defined -> render search form!
 		if (objectName == null) {
-			return KnowWEUtils.maskHTML(renderForm(article));
+			return KnowWEUtils.maskHTML(renderLookUpForm(article));
 		}
 
-		return KnowWEUtils.maskHTML(renderObjectInfo(objectName, article.getWeb()));
+		StringBuilder html = new StringBuilder();
+		html.append(renderHeader(objectName));
+		html.append(renderRenamingForm(objectName));
+		html.append(renderObjectInfo(objectName, article.getWeb()));
+
+		return KnowWEUtils.maskHTML(html.toString());
 	}
 
-	private String renderForm(KnowWEArticle article) {
+	private String renderHeader(String objectName) {
 		StringBuilder html = new StringBuilder();
 		html.append("<strong>");
+		html.append(objectName);
+		html.append("</strong><br />\n");
+		return html.toString();
+	}
+
+	private String renderLookUpForm(KnowWEArticle article) {
+		StringBuilder html = new StringBuilder();
+
+		html.append("<div>");
 		// TODO: Strings -> Resource Bundle
-		html.append("Look up object information");
-		html.append("</strong>");
+		html.append("<p>Look up object information</p>");
 
 		html.append("<form action=\"\" method=\"get\">");
 		html.append("<input type=\"hidden\" name=\"page\" value=\""
@@ -89,15 +103,31 @@ public class NewObjectInfoTagHandler extends AbstractDefaultStyledTagHandler {
 		html.append("<input type=\"text\" name=\"" + OBJECTNAME + "\" /> ");
 		html.append("<input type=\"submit\" value=\"&rarr;\" />");
 		html.append("</form>");
+		html.append("</div>\n");
+
+		return html.toString();
+	}
+
+	private String renderRenamingForm(String objectName) {
+		StringBuilder html = new StringBuilder();
+
+		html.append("<div>");
+		html.append("<form action=\"\" method=\"post\">");
+		// TODO: Strings -> Resource Bundle
+		html.append("Rename to ");
+		html.append("<input type=\"hidden\" id=\"objectinfo-target\" value=\"" + objectName
+				+ "\" />");
+		html.append("<input type=\"text\" id=\"objectinfo-replacement\" /> ");
+		html.append("<input type=\"submit\" id=\"objectinfo-replace\" value=\"&rarr;\" />");
+		html.append("</form>");
+		html.append("</div>\n");
+		html.append("<div style=\"height:1px; width:100%; background-color:#DDDDDD;\"></div>");
 
 		return html.toString();
 	}
 
 	private String renderObjectInfo(String objectName, String web) {
 		StringBuilder html = new StringBuilder();
-		html.append("<strong>");
-		html.append(objectName);
-		html.append("</strong>");
 
 		TerminologyHandler th = KnowWEUtils.getTerminologyHandler(web);
 		Section<? extends TermDefinition> definition;
@@ -125,7 +155,6 @@ public class NewObjectInfoTagHandler extends AbstractDefaultStyledTagHandler {
 		}
 
 		html.append(renderTermDefinitions(definitions));
-		html.append("<hr />");
 		html.append(renderTermReferences(references));
 
 		return html.toString();
@@ -134,21 +163,26 @@ public class NewObjectInfoTagHandler extends AbstractDefaultStyledTagHandler {
 	private String renderTermDefinitions(Set<Section<? extends TermDefinition>> definitions) {
 		StringBuilder html = new StringBuilder();
 
+		html.append("<div>");
 		if (definitions.size() > 0) {
+			// TODO: Strings -> Resource Bundle
+			html.append("<p><strong>Definition</strong></p>");
 			html.append("<p>");
 			for (Section<? extends TermDefinition> definition : definitions) {
-				html.append("<strong>");
 				html.append(definition.getObjectType().getName());
-				html.append("</strong>: ");
+				html.append(" in ");
 				html.append("<a href=\"Wiki.jsp?page=");
-				html.append(KnowWEUtils.urlencode(definition.getTitle()));
+				html.append(definition.getArticle().getTitle());
+				html.append("#");
+				html.append(definition.getID());
 				html.append("\" >");
 				html.append(definition.getTitle());
 				html.append("</a>");
-				html.append("<br />");
 			}
 			html.append("</p>");
 		}
+		html.append("</div>\n");
+		html.append("<div style=\"height:1px; width:100%; background-color:#DDDDDD;\"></div>");
 
 		return html.toString();
 	}
@@ -159,31 +193,62 @@ public class NewObjectInfoTagHandler extends AbstractDefaultStyledTagHandler {
 
 		if (references.size() > 0) {
 
+			html.append("<div>");
+			// TODO: Strings -> Resource Bundle
+			html.append("<p><strong>References</strong></p>");
+
 			// Group References by article
 			Map<KnowWEArticle, List<Section<? extends TermReference>>> groupedReferences = groupByArticle(references);
 
+			// counter, necessary for unique ids
+			int c = 0;
+
 			// For each article
 			for (KnowWEArticle article : groupedReferences.keySet()) {
-				html.append("<p>");
-				html.append("<a href=\"Wiki.jsp?page=");
-				html.append(KnowWEUtils.urlencode(article.getTitle()));
-				html.append("\" >");
+				html.append("<p id=\"objectinfo-" + c++
+						+ "-show-extend\" class=\"show-extend pointer extend-panel-right\" >");
+				html.append("<strong>");
 				html.append(article.getTitle());
-				html.append("</a>");
+				html.append("</strong>");
+				html.append("</p>");
+				html.append("<div class=\"hidden\">");
 				html.append("<ul>");
 				// render references for current article
 				for (Section<? extends TermReference> reference : groupedReferences.get(article)) {
 					html.append("<li>");
-					html.append("<strong>");
 					html.append(reference.getObjectType().getName());
-					html.append("</strong>: ");
-					html.append(reference.getFather().getObjectType().getName());
+					html.append(" in ");
+					html.append(renderLinkToSection(reference));
 					html.append("</li>");
 				}
 				html.append("</ul>");
-				html.append("</p>");
+				html.append("</div>");
 			}
+			html.append("</div>\n");
 
+		}
+
+		return html.toString();
+	}
+
+	private String renderLinkToSection(Section<? extends TermReference> reference) {
+		StringBuilder html = new StringBuilder();
+
+		if (reference != null) {
+			// Render link to anchor
+			html.append("<a href=\"Wiki.jsp?page=");
+			html.append(reference.getArticle().getTitle());
+			html.append("#");
+			html.append(reference.getID());
+			html.append("\" >");
+
+			// Get a nice name
+			Section<DefaultMarkupType> root = reference.findAncestorOfType(DefaultMarkupType.class);
+			html.append(root != null
+					? root.getObjectType().getName()
+					: reference.getFather().getObjectType().getName());
+
+			html.append("</a>");
 		}
 
 		return html.toString();

@@ -28,7 +28,7 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  * ToolProvider for the ObjectInfoTagHandler.
- * 
+ *
  * @see NewObjectInfoTagHandler
  *
  * @author Sebastian Furth
@@ -45,9 +45,7 @@ public class ObjectInfoToolProvider implements ToolProvider {
 
 	protected Tool getCreateHomepageTool(String topic, String web, String id) {
 		// tool to provide download capability
-		String jsAction = "window.location='action/TestSuiteServlet?type=case&KWiki_Topic="
-				+ topic + "&web=" + web + "&filename=" + topic.replaceAll(" ", "_")
-				+ "_testsuite.xml'";
+		String jsAction = "KNOWWE.shared.objectinfo.createHomePage()";
 		return new DefaultTool(
 				"KnowWEExtension/images/new_file.gif",
 				"Create Homepage",

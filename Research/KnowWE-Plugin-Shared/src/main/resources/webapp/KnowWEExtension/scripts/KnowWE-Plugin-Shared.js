@@ -14,7 +14,16 @@ if (typeof KNOWWE == "undefined" || !KNOWWE) {
  */
 if (typeof KNOWWE.shared == "undefined" || !KNOWWE.shared) {
         KNOWWE.shared = function(){
-             return {  }
+        	return {
+                /**
+                 * Function: init
+                 * Shared init functions.
+                 */
+                init : function(){
+                	// This method is in KnowWE.js
+                    KNOWWE.core.util.form.addFormHints('knoffice-panel');
+                }
+            }
         }
 }
 
@@ -588,6 +597,38 @@ KNOWWE.shared.edit = function(){
     }
 }();
 
+/**
+ * Namespace: KNOWWE.shared.objectinfo
+ * The KNOWWE quick edit namespace.
+ */
+KNOWWE.shared.objectinfo = function(){
+    return {
+        /**
+         * Function: createHomePage
+         * Used in the ObjectInfoToolProvider for creating homepages for KnowWEObjects
+         * 
+         * Parameters:
+         *     e - The occurred event.
+         */     
+        createHomePage : function(){
+        	objectName = _KS('#objectinfo-target').value;
+            var params = {
+                action : 'CreateObjectHomePageAction',
+                objectname :  objectName
+            }
+
+            var options = {
+                url : KNOWWE.core.util.getURL ( params ),
+                response : {
+                    action : 'none',
+                    fn : function(){ window.location = "Wiki.jsp?page=" + objectName }
+                }
+            }
+            new _KA( options ).send();          
+        }
+    }
+}();
+
 
 /* ############################################################### */
 /* ------------- Onload Events  ---------------------------------- */
@@ -598,6 +639,7 @@ KNOWWE.shared.edit = function(){
 
     if( KNOWWE.helper.loadCheck( ['Wiki.jsp'] )){
         window.addEvent( 'domready', function(){
+        	KNOWWE.shared.init();
         	KNOWWE.shared.actions.init();
         	KNOWWE.shared.renaming.init();
             KNOWWE.shared.typebrowser.init();
