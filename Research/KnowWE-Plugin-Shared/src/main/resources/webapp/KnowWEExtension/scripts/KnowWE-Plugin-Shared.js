@@ -24,7 +24,7 @@ if (typeof KNOWWE.shared == "undefined" || !KNOWWE.shared) {
                     KNOWWE.core.util.form.addFormHints('knoffice-panel');
                 }
             }
-        }
+        }();
 }
 
 /**
