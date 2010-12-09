@@ -29,7 +29,6 @@ import de.d3web.KnOfficeParser.dashtree.QuestionnaireBuilder;
 import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.report.Message;
 import de.d3web.report.Report;
-import de.d3web.we.basic.KnowWEParseResult;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.Section;
@@ -72,8 +71,6 @@ public class QuestionnairesSection extends AbstractKopicSection {
 				for (Message messageKnOffice : messages) {
 					ruleRep.add(messageKnOffice);
 				}
-				KnowWEParseResult result = new KnowWEParseResult(ruleRep, s
-						.getTitle(), s.getOriginalText());
 			}
 			return null;
 		}
