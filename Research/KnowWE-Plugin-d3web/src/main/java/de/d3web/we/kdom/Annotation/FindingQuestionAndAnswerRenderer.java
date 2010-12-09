@@ -21,11 +21,10 @@ package de.d3web.we.kdom.Annotation;
 
 import java.util.Collection;
 
-import de.d3web.report.Message;
-import de.d3web.we.kdom.AbstractKnowWEObjectType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.core.renderer.FontColorRenderer;
 import de.knowwe.core.renderer.ObjectInfoLinkRenderer;
@@ -50,15 +49,15 @@ public class FindingQuestionAndAnswerRenderer extends KnowWEDomRenderer {
 	@Override
 	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
 
-		Collection<Message> messages = AbstractKnowWEObjectType.getMessages(article, sec);
+		Collection<KDOMReportMessage> messages = KDOMReportMessage.getMessages(sec, article);
 
-		if (messages.isEmpty() || messages.iterator().next().getMessageText().equals("")) {
+		if (messages.isEmpty() || messages.iterator().next().getVerbalization().equals("")) {
 			delegate.render(article, sec, user, string);
 		}
 		else {
 
 			// TODO: atm just the first is used, rest ignored
-			Message message = messages.iterator().next();
+			KDOMReportMessage message = messages.iterator().next();
 
 			string.append("<span class='error_highlight' title=\"" + message + "\">");
 

@@ -34,8 +34,6 @@ import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.report.Message;
 import de.d3web.report.Report;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParseResult;
-import de.d3web.we.kdom.AbstractKnowWEObjectType;
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
@@ -161,7 +159,7 @@ public class Rule extends DefaultAbstractKnowWEObjectType {
 								.getRuleIDs().get(0));
 					}
 
-					AbstractKnowWEObjectType.storeMessages(article, s, this.getClass(),
+					KnowWEUtils.storeMessages(article, s, this.getClass(), Message.class,
 							bm);
 					List<Message> errors = new ArrayList<Message>();
 					for (Message message : bm) {
@@ -181,9 +179,6 @@ public class Rule extends DefaultAbstractKnowWEObjectType {
 					for (Message messageKnOffice : bm) {
 						ruleRep.add(messageKnOffice);
 					}
-					KnowWEParseResult result = new KnowWEParseResult(ruleRep, s
-							.getTitle(), s.getOriginalText());
-					s.getArticle().getReport().addReport(result);
 				}
 			}
 			else {

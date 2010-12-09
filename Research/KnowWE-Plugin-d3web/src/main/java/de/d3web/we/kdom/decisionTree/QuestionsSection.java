@@ -29,13 +29,13 @@ import de.d3web.KnOfficeParser.decisiontree.D3DTBuilder;
 import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.report.Message;
 import de.d3web.report.Report;
-import de.d3web.we.core.KnowWEParseResult;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.kopic.AbstractKopicSection;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
+import de.d3web.we.utils.KnowWEUtils;
 
 public class QuestionsSection extends AbstractKopicSection {
 
@@ -67,14 +67,11 @@ public class QuestionsSection extends AbstractKopicSection {
 						.parse(new StringReader(content.getOriginalText()),
 								new SingleKBMIDObjectManager(kbm));
 
-				storeMessages(article, s, this.getClass(), messages);
+				KnowWEUtils.storeMessages(article, s, this.getClass(), Message.class, messages);
 				Report ruleRep = new Report();
 				for (Message messageKnOffice : messages) {
 					ruleRep.add(messageKnOffice);
 				}
-				KnowWEParseResult result = new KnowWEParseResult(ruleRep, s
-						.getTitle(), s.getOriginalText());
-				s.getArticle().getReport().addReport(result);
 			}
 			return null;
 		}

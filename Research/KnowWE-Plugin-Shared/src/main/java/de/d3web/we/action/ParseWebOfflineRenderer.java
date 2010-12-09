@@ -25,7 +25,6 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import de.d3web.we.core.KnowWEAttributes;
-import de.d3web.we.core.KnowWEDomParseReport;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -46,13 +45,15 @@ public class ParseWebOfflineRenderer extends DeprecatedAbstractKnowWEAction {
 		StringBuffer reports = new StringBuffer();
 		int problems = 0;
 		for (String name : articleNames) {
-			KnowWEDomParseReport object = KnowWEEnvironment.getInstance()
+			KnowWEArticle article = KnowWEArticle.createArticle(articles.get(name),
+					name, KnowWEEnvironment.getInstance().getRootType(),
+					webname, true);
+			KnowWEEnvironment.getInstance()
 					.getArticleManager(webname).registerArticle(
-							KnowWEArticle.createArticle(articles.get(name),
-									name, KnowWEEnvironment.getInstance().getRootType(),
-									webname, true));
-
-			if (object.hasErrors()) {
+							article);
+			boolean hasErrors = false;
+			// TODO: collect all errors of the article (KDOMMessage and Message)
+			if (hasErrors) {
 				reports.append("<p class=\"box error\">");
 			}
 			else {
@@ -60,7 +61,7 @@ public class ParseWebOfflineRenderer extends DeprecatedAbstractKnowWEAction {
 			}
 			reports.append(rb.getString("webparser.info.parsing")
 					+ createLink(name, webname) + "<br />");
-			if (object.hasErrors()) {
+			if (hasErrors) {
 				problems++;
 				reports.append("<br />\n");
 			}

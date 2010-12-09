@@ -27,7 +27,7 @@ import java.util.Map;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.report.Report;
-import de.d3web.we.core.KnowWEParseResult;
+import de.d3web.we.basic.KnowWEParseResult;
 
 public class KopicParseResult extends KnowWEParseResult {
 

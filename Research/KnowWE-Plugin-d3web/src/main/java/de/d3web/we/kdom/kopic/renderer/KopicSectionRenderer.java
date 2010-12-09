@@ -49,7 +49,7 @@ public class KopicSectionRenderer extends KnowWEDomRenderer {
 		String tooltip = null;
 		article = PackageRenderUtils.checkArticlesCompiling(article, sec, builder);
 		if (sec.getObjectType() instanceof AbstractKnowWEObjectType) {
-			Collection<Message> messages = AbstractKnowWEObjectType.getMessages(article, sec);
+			Collection<Message> messages = KnowWEUtils.getMessages(article, sec, Message.class);
 			if (messages != null && !messages.isEmpty()) {
 				boolean visible = false;
 				for (Message msg : messages) {

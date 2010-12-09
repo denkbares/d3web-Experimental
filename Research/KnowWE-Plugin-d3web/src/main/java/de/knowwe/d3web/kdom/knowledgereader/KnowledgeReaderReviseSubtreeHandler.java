@@ -35,12 +35,12 @@ import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
 import de.d3web.report.Message;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.kdom.AbstractKnowWEObjectType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
+import de.d3web.we.utils.KnowWEUtils;
 
 /**
  * ReviseSubtreehandler for KnowledgeReaderType
@@ -68,13 +68,13 @@ public class KnowledgeReaderReviseSubtreeHandler extends SubtreeHandler {
 			}
 		}
 		if (extensions.size() == 0) {
-			AbstractKnowWEObjectType.storeMessages(article, s, this.getClass(),
+			KnowWEUtils.storeMessages(article, s, this.getClass(), Message.class,
 					Arrays.asList(new Message(Message.ERROR,
 							"KnowledgeReader " + readerID + " not found.", null, -1, null)));
 			return null;
 		}
 		else if (extensions.size() > 1) {
-			AbstractKnowWEObjectType.storeMessages(article, s, this.getClass(),
+			KnowWEUtils.storeMessages(article, s, this.getClass(), Message.class,
 					Arrays.asList(new Message(Message.ERROR,
 							"KnowledgeReaderID " + readerID + " is not unique.", null, -1, null)));
 			return null;
@@ -84,12 +84,11 @@ public class KnowledgeReaderReviseSubtreeHandler extends SubtreeHandler {
 			reader.read(kb, new StringInputStream(toRead), new DummyProgressListener());
 		}
 		catch (IOException e1) {
-			AbstractKnowWEObjectType.storeMessages(article, s, this.getClass(),
+			KnowWEUtils.storeMessages(article, s, this.getClass(), Message.class,
 					Arrays.asList(new Message(Message.ERROR,
 							e1.getMessage(), null, -1, null)));
 			return null;
 		}
 		return null;
 	}
-
 }

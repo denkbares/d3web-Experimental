@@ -28,7 +28,6 @@ import de.d3web.KnOfficeParser.util.MessageKnOfficeGenerator;
 import de.d3web.report.Message;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.packaging.PackageRenderUtils;
-import de.d3web.we.kdom.AbstractKnowWEObjectType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.kopic.AbstractKopicSection;
@@ -61,7 +60,7 @@ public class RuleSectionRenderer extends KnowWEDomRenderer {
 			String rulesParsed = MessageKnOfficeGenerator.getResourceBundle().getString("rule");
 			int rnum = 1;
 			for (Section r : rules) {
-				Collection<Message> rmsgs = AbstractKnowWEObjectType.getMessages(article, r);
+				Collection<Message> rmsgs = KnowWEUtils.getMessages(article, r, Message.class);
 				boolean foundWarning = false;
 				boolean foundError = false;
 				for (Message msg : rmsgs) {
