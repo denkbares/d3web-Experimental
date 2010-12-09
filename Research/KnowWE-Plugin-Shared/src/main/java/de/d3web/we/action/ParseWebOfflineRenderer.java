@@ -20,10 +20,12 @@
 
 package de.d3web.we.action;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import de.d3web.report.Message;
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
@@ -51,8 +53,19 @@ public class ParseWebOfflineRenderer extends DeprecatedAbstractKnowWEAction {
 			KnowWEEnvironment.getInstance()
 					.getArticleManager(webname).registerArticle(
 							article);
-			boolean hasErrors = false;
-			// TODO: collect all errors of the article (KDOMMessage and Message)
+
+			boolean hasErrors = article.getSection().hasErrorInSubtree(article);
+			if (!hasErrors) {
+				Collection<Message> messages = KnowWEUtils.getMessages(article,
+						article.getSection(), Message.class);
+				for (Message message : messages) {
+					if (message.getMessageType().equals(Message.ERROR)) {
+						hasErrors = true;
+						break;
+					}
+				}
+			}
+			
 			if (hasErrors) {
 				reports.append("<p class=\"box error\">");
 			}
