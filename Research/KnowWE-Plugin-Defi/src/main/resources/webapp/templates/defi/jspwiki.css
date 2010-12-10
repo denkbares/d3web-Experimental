@@ -21,15 +21,35 @@
 	margin:1em 2em; 
 	padding:0.25em;
 }
-#header, #footer {
+#header {
 	padding:0 0 0 20%;
 }
 #header .applicationlogo {
-	
 	position:absolute;
 	left:2em; 
 	right:auto;
 	width:18%;
+	text-align:center;
+}
+#footer {
+	padding: 0 0 0 20%;
+	background-color: #eee;	
+}
+#footer .footerlinks {
+	float: left;
+	padding: 20px 0;
+}
+#footer .footerlinks a {
+	margin: 0 10px;
+}
+#footer .uniwuelogo {
+	float: right
+}
+#footer .uniwuelogo a {
+	display:block;
+	width: 169px;
+	height:72px;
+	background-image:url(images/uniwue_logo.gif);
 }
 #footer .applicationlogo,
 #footer .companylogo,
@@ -39,23 +59,30 @@
 	display:none; 
 }
 #header .userbox {
-	float:right;
+    border: 2px solid #ADE0E3;
+    float: right;
+    height: 150px;
+    width: 400px;
 }
 #header .pagename {
 	float:left;
 }
 #header .searchbox {
-	clear:right;
-	float:right;
+    clear: right;
+    float: left;
+    left: 50%;
+    margin: 10px 0 0 -95px;
+    position: relative;
+    width: 322px;
 }
 #header .breadcrumbs {
 	clear:both;
 }
 #favorites {
 	float:left;
-	margin-top:1.75em;
+	margin-top:-50px;
 	width:18%;
-	padding:0.5em;
+	background-color: #eee;
 }
 #favorites .userbox {
 	border:1px solid #ddd;
@@ -69,7 +96,13 @@
 #footer .copyright { 
 }
 #content { 
-	margin:1em 0;
+	margin:1em 0 0;
+	background-color:#eee;
+}
+#pagecontainer {
+	background-color: #fff;
+	width:82%;
+	float: right;
 }
 /*#wikibody.fav-left*/ #page, #wikibody.fav-right #favorites {
 	float:right;
@@ -92,7 +125,8 @@
 	right:2em; 
 }
 #page { 
-	width:80%;
+	width:97%;
+	background-color: #fff;
 }
 #wikibody.fav-slide #page {
 	width:100%;
@@ -165,6 +199,7 @@ hr, .hr, .clearbox {
 .titlebox {
 	color:#555;
 	padding:0.25em 1em;
+	margin: 10px 0 0;
 }
 .pagename {
 	font-size:175%;
@@ -358,16 +393,18 @@ img.outlink {
 } 
 img.attlink {
 } 
-.applicationlogo a {
+.applicationlogo #logo {
 	display:block;
-	height:80px;
-	width:120px;
+	height:130px;
+	width:200px;
 	overflow:hidden;
+	background-color:#bae0e3;
+	border:2px solid #000;
 	margin:auto;
-	border: 2px solid rgb(0,0,0);
-	font: bold 24px/28px arial;
-	text-align: center;
-	background-color: rgb(186,224,227);
+	font:42px/48px Verdana,Arial,Helvetica,sans-serif;
+	text-decoration:none;
+	color: #000;
+	padding: 20px 0 0;
 }
 .applicationlogo a:hover {
 	background-position:0 0;
@@ -867,10 +904,45 @@ label[for="edittoc"] {
 	background-image:url(images/arrright.gif);
 }
 */
-
+.infobox {
+    border: 2px solid #ADE0E3;
+    height: 150px;
+    margin: 0 415px 0 0;
+    overflow: hidden;
+}
+.infobox .userinfobox {
+	display:inline-block;
+	width: 160px;
+	height: 120px;
+	padding: 15px;
+	text-align:left;
+}
+.infobox .userinfobox .usertext {
+	float: left;
+}
+.infobox .userinfobox .userpic {
+	display:inline-block;
+	background-image:url("images/no_pic.jpg");
+	background-repeat:no-repeat;
+	background-position: center;
+	height: 130px;
+	width: 50px;
+	margin: 0 0 0 10px;
+}
+.infobox .userinfobox .grouppic {
+	background-image:url('images/gruppe.jpg');
+	width:141px;
+	height:98px;
+}
+.infobox .userinfobox h3 {
+	padding:0;	
+	margin:0 0 10px;
+}
+.infobox .userinfobox p {
+	margin:0;
+}
 .userbox {
 	overflow:hidden;
-	padding:0.5em 0;
 }
 #favorites .userbox a.action, #favorites .userbox .username {
 	float:left;
@@ -878,8 +950,10 @@ label[for="edittoc"] {
 	margin-right:4px; /*spacing between buttons */
 }
 .username {
-	font-style:italic;
-	padding:0.25em 0.5em;
+	font-style: italic;
+    font-weight: bold;
+    padding: 15px 0 0 15px;
+    display: block;
 }
 .username.anonymous {
 }
@@ -937,6 +1011,7 @@ label[for="edittoc"] {
 	font-size:90%;
 	text-align:center;
 	color:#555;
+	display:none;
 }
 
 /* +++ 460 Header +++ */
@@ -1043,7 +1118,6 @@ th.changenote, td.changenote {
 .userbox a.action:hover, a.action.quick2bottom:hover, a.action.quick2top:hover {
 	background-color:#eee !important;
 }
-
 a.action.view,
 a.action.comment,
 a.action.prefs,
@@ -1054,14 +1128,18 @@ a.action.creategroup,
 a.action.workflow,
 a.action.login,
 a.action.logout {
+	left: 172px;
+    position: relative;
+    top: 98px;
+	
 }
 #searchTools a.action, .userbox a.action, a.action.edit, a.action.more {
-	padding:0.25em 0.5em;
-	text-decoration:none;
-	line-height:normal;
-	border:1px solid #ddd;		
-	background:#f9f9f9;
-	white-space:nowrap;
+    background: none repeat scroll 0 0 #F9F9F9;
+    border: 1px solid #DDDDDD;
+    line-height: normal;
+    padding: 0.25em 0.5em;
+    text-decoration: none;
+    white-space: nowrap;
 }
 a.action.edit, a.action.more {
 	margin-left:4px;
@@ -1151,28 +1229,28 @@ html>body #previewcontent, html>body #info, html>body #pagecontent, html>body #a
 .searchbox {
 }
 #searchForm #query {
-	width:164px;
-	padding:2px 22px 2px 2px;	
-	vertical-align: middle;
-	color:#555;
+    color: #555555;
+    margin: 0 50% 0 0;
+    padding: 2px 22px 2px 2px;
+    position: relative;
+    vertical-align: middle;
+    width: 164px;
 }
 #searchSubmit {
-	position:absolute;
+    background: url("images/search.gif") no-repeat scroll center center #FFFFFF;
+    border: medium none;
+    cursor: pointer;
+    height: 16px;
+    left: 170px;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    text-indent: 16px;
     top: 5px;
-	right: 3px;
-
-	margin:0; 
-	padding:0;
-	width:16px; 
-	height:16px;
-	border:none;
-	background: #fff url(images/search.gif) no-repeat center;
-	overflow:hidden;	
-    text-indent:16px;
-    cursor:pointer;
+    width: 16px;
 }
 #searchboxMenu {
-	position:absolute;
 	background:white;
 	border:2px solid #ddd;
 	padding:0.25em;
@@ -1923,9 +2001,4 @@ div.coverflow .knob {
 	background:#fff;
 	width:100px;
 	height:15px;
-}
-
-.wue-logo{
-    background: #FFFFFF url(images/universitaet_wuerzburg_logo.png) no-repeat left left;
-    border: 1px solid red;
 }

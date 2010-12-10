@@ -8,22 +8,23 @@
   WikiContext c = WikiContext.findContext(pageContext);
   String frontpage = c.getEngine().getFrontPage(); 
 %> 
-<div id="footer" style="background-color: #EEE; padding: 10px;">
-
+<div id="footer">
+  <div class="footerlinks">
+  	<a href="Wiki.jsp?page=Datenschutz">Datenschutz</a>
+  	<a href="Wiki.jsp?page=About">&Uuml;ber uns</a>
+  	<a href="Wiki.jsp?page=Impressum">Impressum</a>
+  </div>
   <div class="applicationlogo" > 
     <a href="<wiki:LinkTo page='<%=frontpage%>' format='url' />"
        title="<fmt:message key='actions.home.title' ><fmt:param><%=frontpage%></fmt:param></fmt:message> "><fmt:message key='actions.home' /></a>
   </div>
 
-  <div class="companylogo"></div>
-  
-  <div class="footer-links">
-    <a href="Wiki.jsp?page=Datenschutz">Datenschutz</a>
-    <a href="Wiki.jsp?page=Über uns">Über uns</a>
-    <a href="Wiki.jsp?page=Impressum">Impressum</a>
+  <div class="uniwuelogo">
+  	<a href="http://www.uni-wuerzburg.de/"></a>
   </div>
+  <div style="clear: right;"></div>
+  <div class="companylogo"></div>
 
-  <span class="wue-logo">dsgdvdvbdbd</span>
   <div class="copyright"><wiki:InsertPage page="CopyrightNotice"/></div>
 
   <div class="wikiversion">

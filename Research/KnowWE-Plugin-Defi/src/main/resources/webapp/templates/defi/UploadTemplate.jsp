@@ -28,31 +28,32 @@
   <wiki:Include page="Header.jsp" />
 
   <div id="content">
-
-    <div id="page">
-      <wiki:Include page="PageActionsTop.jsp"/>
-
-      <wiki:TabbedSection defaultTab="attachments" >
-        <wiki:Tab id="pagecontent" title='<%=LocaleSupport.getLocalizedMessage(pageContext, "view.tab")%>'
-	  		     url="<%=c.getURL(WikiContext.VIEW, c.getPage().getName())%>"
-	       accesskey="v" >
-        </wiki:Tab>
-        
-        <wiki:PageExists>
-        <wiki:Tab id="attachments" title="<%= attTitle %>" >
-          <wiki:Include page="AttachmentTab.jsp"/>
-        </wiki:Tab>
-        <wiki:Tab id="info" title='<%=LocaleSupport.getLocalizedMessage(pageContext, "info.tab")%>'
-                 url="<%=c.getURL(WikiContext.INFO, c.getPage().getName())%>"
-           accesskey="i" >
-        </wiki:Tab>
-
-        </wiki:PageExists>
-      </wiki:TabbedSection>
-
-      <wiki:Include page="PageActionsBottom.jsp"/>
-
-    </div>
+	<div id="pagecontainer">
+	    <div id="page">
+	      <wiki:Include page="PageActionsTop.jsp"/>
+	
+	      <wiki:TabbedSection defaultTab="attachments" >
+	        <wiki:Tab id="pagecontent" title='<%=LocaleSupport.getLocalizedMessage(pageContext, "view.tab")%>'
+		  		     url="<%=c.getURL(WikiContext.VIEW, c.getPage().getName())%>"
+		       accesskey="v" >
+	        </wiki:Tab>
+	        
+	        <wiki:PageExists>
+	        <wiki:Tab id="attachments" title="<%= attTitle %>" >
+	          <wiki:Include page="AttachmentTab.jsp"/>
+	        </wiki:Tab>
+	        <wiki:Tab id="info" title='<%=LocaleSupport.getLocalizedMessage(pageContext, "info.tab")%>'
+	                 url="<%=c.getURL(WikiContext.INFO, c.getPage().getName())%>"
+	           accesskey="i" >
+	        </wiki:Tab>
+	
+	        </wiki:PageExists>
+	      </wiki:TabbedSection>
+	
+	      <wiki:Include page="PageActionsBottom.jsp"/>
+	
+	    </div>
+	</div>
 
     <wiki:Include page="Favorites.jsp"/>
 

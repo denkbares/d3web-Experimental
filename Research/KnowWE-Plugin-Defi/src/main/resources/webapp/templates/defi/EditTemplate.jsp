@@ -32,11 +32,12 @@
   <wiki:Include page="Header.jsp" />
 
   <div id="content">
-
-    <div id="page">
-      <wiki:Include page="PageActionsTop.jsp"/>
-      <wiki:Content/>
-      <wiki:Include page="PageActionsBottom.jsp"/>
+	<div id="pagecontainer">
+	    <div id="page">
+	      <wiki:Include page="PageActionsTop.jsp"/>
+	      <wiki:Content/>
+	      <wiki:Include page="PageActionsBottom.jsp"/>
+	    </div>
 	</div>
 
     <wiki:Include page="Favorites.jsp"/> 
