@@ -9,6 +9,10 @@
 %>
 <div class="userbox">
 
+<table>
+	<tr>
+		<th style="width: 310px;">
+	
   <wiki:UserCheck status="anonymous">
     <span class="username anonymous">
       <fmt:message key="fav.greet.anonymous" />
@@ -28,7 +32,11 @@
       </fmt:message>
     </span>
   </wiki:UserCheck>
-
+  
+		</th>
+		<td class="no_userpic"></td>
+	</tr>
+	<tr colspan="2"><td>
   <%-- action buttons --%>
   <wiki:UserCheck status="notAuthenticated">
   <wiki:CheckRequestContext context='!login'>
@@ -57,6 +65,8 @@
     </a>
   </wiki:CheckRequestContext>
   </wiki:CheckRequestContext>
+  </td></tr>
+</table>
 
   <div class="clearbox"></div>
 

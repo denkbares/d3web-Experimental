@@ -26,22 +26,17 @@
   <wiki:Include page="UserBox.jsp" />
   
   <div class="infobox">
-  	<div class="userinfobox">
-  		<div class="usertext">
-	  		<h3>Therapeut</h3>
-	  		<p>Dr. S. M. Schulz</p>
-	  		<p>Zuletzt online</p>
-	  		<p>am 23.11.10</p>
-	  		<p>um 15:30 Uhr</p>
-  		</div>
-  		<div class="userpic"></div>
-  	</div>
-  	<div class="userinfobox">
-  		<div class="usertext">
-	  		<h3 style="text-align:center;">Gruppe</h3>
-			<div class="grouppic"></div>
-  		</div>
-  	</div>
+  	<table>
+  		<tr><th>Therapeut</th>
+  			<td rowspan="2" class="no_userpic"></td>
+  			<th>Gruppe</th>
+  		</tr>
+  		<tr><td>Dr. S. M. Schulz<br />Zuletzt online<br />
+  				am 23.11.10<br />um 15:30 Uhr
+  			</td>
+  			<td class="group_pic"></td>
+  		</tr>
+  	</table>
   </div>
 
   <br />
