@@ -18,10 +18,11 @@
     <a href="<wiki:LinkTo page='<%=frontpage%>' format='url' />"
        title="<fmt:message key='actions.home.title' ><fmt:param><%=frontpage%></fmt:param></fmt:message> "><fmt:message key='actions.home' /></a>
   </div>
-
+  
   <div class="uniwuelogo">
   	<a href="http://www.uni-wuerzburg.de/"></a>
   </div>
+   <div class="chfclogo"></div>
   <div style="clear: right;"></div>
   <div class="companylogo"></div>
 

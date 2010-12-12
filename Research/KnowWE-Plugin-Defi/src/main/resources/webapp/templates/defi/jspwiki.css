@@ -54,6 +54,13 @@
 	height:72px;
 	background-image:url(images/uniwue_logo.gif);
 }
+#footer .chfclogo {
+	float: right;
+	width: 80px;
+	height: 72px;
+	background-image: url("images/Logo_CHFC.png");
+	margin: 0 15px 0 0;
+}
 #footer .applicationlogo,
 #footer .companylogo,
 #footer .wikiversion,
@@ -75,7 +82,7 @@
     clear: right;
     float: left;
     left: 50%;
-    margin: 30px 0 0 -95px;
+    margin: 40px 0 0 -95px;
     position: relative;
     width: 322px;
     z-index: 10;
@@ -85,7 +92,6 @@
 }
 #favorites {
 	float:left;
-	margin-top:-50px;
 	width:18%;
 	background-color: #eee;
 }
@@ -102,9 +108,10 @@
 }
 #content { 
 	background-color:#eee;
-	margin: 0 0 50px;
+	margin: 0 0 20px;
     position: relative;
-    top: 50px;
+    top: 20px;
+    z-index: -10;
 }
 #pagecontainer {
 	background-color: #fff;
