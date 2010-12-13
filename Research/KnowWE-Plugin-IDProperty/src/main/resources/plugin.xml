@@ -1,0 +1,52 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-IDProperty" version="0.0.1">
+
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+	</requires>
+
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		id="IDPropertyMarkup">
+		<parameter id="class" value="de.d3web.we.kdom.idProperty.IDPropertyMarkup" />
+		<parameter id="name" value="IDPropertyMarkup" />
+		<parameter id="description" value="KnowWEObjectType IDPropertyMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="6" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="IDProperty">	
+		<parameter id="name" value="IDProperty" />
+		<parameter id="description" value="Property for IDProperty" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="false" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="String" />
+	</extension>
+	
+	<extension-point id="Property">
+		<parameter-def id="name" />
+		<parameter-def id="description" />
+		<parameter-def id="multilingual" />
+		<parameter-def id="autosave" />
+		<parameter-def id="priority" type="number" />
+		<!-- defines the class of stores instances -->
+		<parameter-def id="instanceof" /> 
+		<!-- defines an optional default value -->
+		<parameter-def id="default" multiplicity="none-or-one" /> 
+	</extension-point>
+
+	
+</plugin>
