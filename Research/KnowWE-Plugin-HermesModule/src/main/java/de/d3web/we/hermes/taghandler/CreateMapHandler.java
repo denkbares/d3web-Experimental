@@ -30,9 +30,6 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class CreateMapHandler extends AbstractHTMLTagHandler {
 
-	// Google Maps API Key for http://hermeswiki.informatik.uni-wuerzburg.de
-	private static final String apiKey = "ABQIAAAAb3JzCPOo-PmQupF8WKTY_BQhTDteWOscIBEFxr5sPfw40-jPhhS0zVcy-utMHpbsLwjf1yApcwxvXg";
-
 	public CreateMapHandler() {
 		super("orterzeugen");
 	}
@@ -41,7 +38,7 @@ public class CreateMapHandler extends AbstractHTMLTagHandler {
 	public String renderHTML(String topic, KnowWEUserContext user,
 			Map<String, String> values, String web) {
 		String text = "<script type='text/javascript' src='http://maps.google.com/maps?file=api&v=2.x&key="
-				+ apiKey
+				+ ShowMapHandler.apiKey
 				+ "'></script>\n"
 				+ "<script type='text/javascript' src='KnowWEExtension/scripts/CreateMap.js'></script>\n"
 				+ "Adresse über Suchmaske suchen oder Punkt in der Karte anklicken."

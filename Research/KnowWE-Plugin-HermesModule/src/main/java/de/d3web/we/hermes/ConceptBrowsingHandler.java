@@ -29,6 +29,7 @@ import org.openrdf.query.TupleQueryResult;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.rendering.PageAppendHandler;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
@@ -74,17 +75,17 @@ public class ConceptBrowsingHandler implements PageAppendHandler {
 
 		if (titleList.contains(topic)) {
 			int i = titleList.indexOf(topic);
-			String str = "  [{If group='Editoren'\n\n\\\\ \\\\";
+			String str = "  [{If group='Editoren'\n\n\\\\ \\\\\n%%(text-align:center)\n";
 			if (i > 0) {
 				String before = titleList.get(i - 1);
-				str += "[" + before + "] <<< ";
+				str += "[" + before + "] < < < < ";
 			}
 			str += topic;
 			if (i < titleList.size() - 1) {
 				String next = titleList.get(i + 1);
-				str += " >>> [" + next + "]";
+				str += " > > > > [" + next + "]";
 			}
-			str += "\n}]";
+			str += "\n%%\n}]";
 			return str;
 		}
 

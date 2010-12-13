@@ -64,7 +64,7 @@ public class ShowMapForConceptHandler extends AbstractHTMLTagHandler {
 			return "no placemarks to render";
 		}
 		String output = "";
-		output += "<script src=\"http://maps.google.com/maps?file=api&v=2&key=abcdefg&sensor=true_or_false\" type=\"text/javascript\"> </script>";
+		output += "<script src=\"http://maps.google.com/maps?file=api&v=2&key="+ShowMapHandler.apiKey+"&sensor=true_or_false\" type=\"text/javascript\"> </script>";
 		output += "<script type=\"text/javascript\">\n";
 		output += "if (GBrowserIsCompatible()) {"
 				+ "var map = new GMap2(document.getElementById(\"" + divID

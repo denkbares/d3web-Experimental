@@ -40,6 +40,9 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class ShowMapHandler extends AbstractHTMLTagHandler {
 
+	// Google Maps API Key for http://hermeswiki.informatik.uni-wuerzburg.de
+	public static final String apiKey = "ABQIAAAAb3JzCPOo-PmQupF8WKTY_BQhTDteWOscIBEFxr5sPfw40-jPhhS0zVcy-utMHpbsLwjf1yApcwxvXg";
+
 	private static final String LOCATIONS_FOR_TOPIC = "SELECT  ?long ?lat WHERE { <URI> lns:hasLatitude ?lat . <URI> lns:hasLongitude ?long .}";
 
 	public ShowMapHandler() {
@@ -144,7 +147,7 @@ public class ShowMapHandler extends AbstractHTMLTagHandler {
 	private String getJavaScript(double latitude, double longitude,
 			double zoom, String divID) {
 		String output = "";
-		output += "<script src=\"http://maps.google.com/maps?file=api&v=2&key=abcdefg&sensor=false\" type=\"text/javascript\"> </script>";
+		output += "<script src=\"http://maps.google.com/maps?file=api&v=2&key="+apiKey+"&sensor=false\" type=\"text/javascript\"> </script>";
 		output += "<script type=\"text/javascript\">\n";
 		output += "if (GBrowserIsCompatible()) {"
 				+ "var map = new GMap2(document.getElementById(\"" + divID
