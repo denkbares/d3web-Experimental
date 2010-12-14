@@ -361,14 +361,4 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
-		id="ObjectInfoTagHandler">
-		<parameter id="class" value="de.d3web.we.taghandler.ObjectInfoTagHandler" />
-		<parameter id="name" value="ObjectInfoTagHandler" />
-		<parameter id="description" value="TagHandler ObjectInfoTagHandler" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
-	</extension>
-	
 </plugin>
