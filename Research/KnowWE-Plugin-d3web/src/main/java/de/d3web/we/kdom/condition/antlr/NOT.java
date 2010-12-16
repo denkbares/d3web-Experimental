@@ -22,8 +22,8 @@ package de.d3web.we.kdom.condition.antlr;
 
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.StringSectionFinder;
-import de.knowwe.core.renderer.FontColorRenderer;
 
 public class NOT extends DefaultAbstractKnowWEObjectType {
 
@@ -34,6 +34,6 @@ public class NOT extends DefaultAbstractKnowWEObjectType {
 
 	@Override
 	public KnowWEDomRenderer getRenderer() {
-		return FontColorRenderer.getRenderer(FontColorRenderer.COLOR2);
+		return StyleRenderer.OPERATOR;
 	}
 }

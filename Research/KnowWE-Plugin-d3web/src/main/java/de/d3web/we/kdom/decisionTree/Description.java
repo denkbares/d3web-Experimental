@@ -20,14 +20,14 @@
 
 package de.d3web.we.kdom.decisionTree;
 
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.knowwe.core.LineContent;
-import de.knowwe.core.renderer.FontColorRenderer;
 
 public class Description extends LineContent {
 
 	@Override
 	protected void init() {
-		this.setCustomRenderer(new FontColorRenderer(FontColorRenderer.COLOR6));
+		this.setCustomRenderer(StyleRenderer.PROMPT);
 	}
 
 }

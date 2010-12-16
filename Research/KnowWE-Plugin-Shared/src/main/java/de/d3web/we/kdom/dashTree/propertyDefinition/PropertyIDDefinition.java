@@ -24,10 +24,10 @@ import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
-import de.knowwe.core.renderer.FontColorRenderer;
 
 /**
  * @author Jochen
@@ -61,7 +61,7 @@ public class PropertyIDDefinition extends DefaultAbstractKnowWEObjectType {
 				KnowWEUserContext user, StringBuilder string) {
 
 			string.append(KnowWEUtils.maskHTML("<span title=\"ObjectProperty Definition\">"));
-			FontColorRenderer.getRenderer(FontColorRenderer.COLOR1).render(article, sec, user,
+			StyleRenderer.PROPERTY.render(article, sec, user,
 					string);
 			string.append(KnowWEUtils.maskHTML("</span>"));
 		}

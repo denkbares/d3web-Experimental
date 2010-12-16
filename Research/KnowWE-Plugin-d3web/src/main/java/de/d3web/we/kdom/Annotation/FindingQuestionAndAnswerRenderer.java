@@ -24,9 +24,9 @@ import java.util.Collection;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
-import de.knowwe.core.renderer.FontColorRenderer;
 import de.knowwe.core.renderer.ObjectInfoLinkRenderer;
 
 /**
@@ -42,7 +42,7 @@ public class FindingQuestionAndAnswerRenderer extends KnowWEDomRenderer {
 	public FindingQuestionAndAnswerRenderer(String foregroundColor) {
 
 		delegate = new ObjectInfoLinkRenderer(
-				FontColorRenderer.getRenderer(foregroundColor));
+				new StyleRenderer(foregroundColor));
 
 	}
 
@@ -61,12 +61,14 @@ public class FindingQuestionAndAnswerRenderer extends KnowWEDomRenderer {
 
 			string.append("<span class='error_highlight' title=\"" + message + "\">");
 
-			FontColorRenderer.getRenderer(FontColorRenderer.COLOR6).render(article, sec, user,
+			renderer.render(article, sec, user,
 					string);
 
 			string.append("</span>");
 		}
 
 	}
+
+	private static StyleRenderer renderer = new StyleRenderer("color:rgb(0, 0, 255)");
 
 }

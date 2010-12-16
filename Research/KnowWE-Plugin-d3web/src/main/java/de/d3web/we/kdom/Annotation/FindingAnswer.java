@@ -26,10 +26,10 @@ import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.knowwe.core.renderer.FontColorRenderer;
 
 public class FindingAnswer extends DefaultAbstractKnowWEObjectType {
 
@@ -55,7 +55,7 @@ public class FindingAnswer extends DefaultAbstractKnowWEObjectType {
 
 	@Override
 	public KnowWEDomRenderer getRenderer() {
-		return new FindingQuestionAndAnswerRenderer(FontColorRenderer.COLOR5);
+		return StyleRenderer.CHOICE;
 	}
 
 	@Override

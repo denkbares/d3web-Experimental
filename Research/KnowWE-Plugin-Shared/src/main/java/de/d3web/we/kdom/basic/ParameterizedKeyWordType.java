@@ -21,8 +21,8 @@ package de.d3web.we.kdom.basic;
 
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
 import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.renderer.FontColorRenderer;
 
 /**
  * A type that finds a subtype in [] after a keyword. E.g. KNOWN[Question1],
@@ -43,7 +43,7 @@ public abstract class ParameterizedKeyWordType extends DefaultAbstractKnowWEObje
 
 	@Override
 	public void init() {
-		setCustomRenderer(FontColorRenderer.getRenderer(FontColorRenderer.COLOR2));
+		setCustomRenderer(StyleRenderer.OPERATOR);
 	}
 
 	// ugly, but only workaround to configure according to constructor

@@ -28,12 +28,12 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
-import de.knowwe.core.renderer.FontColorRenderer;
 
 /**
  * @author Jochen
@@ -114,7 +114,7 @@ class RangeRenderer extends KnowWEDomRenderer {
 	public void render(KnowWEArticle article, Section sec,
 			KnowWEUserContext user, StringBuilder string) {
 		string.append(KnowWEUtils.maskHTML("<span title=\"Range restriction\">"));
-		FontColorRenderer.getRenderer(FontColorRenderer.COLOR5).render(article, sec, user, string);
+		new StyleRenderer("color:rgb(128, 128, 0)").render(article, sec, user, string);
 		string.append(KnowWEUtils.maskHTML("</span>"));
 
 	}
@@ -147,7 +147,7 @@ class DomainRenderer extends KnowWEDomRenderer {
 	public void render(KnowWEArticle article, Section sec,
 			KnowWEUserContext user, StringBuilder string) {
 		string.append(KnowWEUtils.maskHTML("<span title=\"Domain restriction\">"));
-		FontColorRenderer.getRenderer(FontColorRenderer.COLOR3).render(article, sec, user, string);
+		new StyleRenderer("color:rgb(0, 128, 0)").render(article, sec, user, string);
 		string.append(KnowWEUtils.maskHTML("</span>"));
 
 	}

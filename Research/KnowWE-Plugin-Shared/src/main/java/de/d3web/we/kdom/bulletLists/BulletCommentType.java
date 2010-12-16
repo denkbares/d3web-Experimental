@@ -28,16 +28,16 @@ import java.util.regex.Pattern;
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.knowwe.core.renderer.CommentRenderer;
 
 public class BulletCommentType extends DefaultAbstractKnowWEObjectType {
 
 	@Override
 	public void init() {
 		this.sectionFinder = new BulletCommentFinder();
-		this.setCustomRenderer(new CommentRenderer());
+		this.setCustomRenderer(StyleRenderer.COMMENT);
 	}
 
 	class BulletCommentFinder extends SectionFinder {

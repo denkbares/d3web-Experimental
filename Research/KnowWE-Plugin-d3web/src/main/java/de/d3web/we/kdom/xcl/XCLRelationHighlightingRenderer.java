@@ -29,9 +29,9 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.condition.antlr.ComplexFinding;
-import de.d3web.we.kdom.renderer.FontColorBackgroundRenderer;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.utils.XCLRelationWeight;
@@ -39,7 +39,6 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelation;
 import de.d3web.xcl.inference.PSMethodXCL;
-import de.knowwe.core.renderer.FontColorRenderer;
 
 /**
  * Highlights XCLRelations. Answer Right: Green Answer wrong: Red Answer
@@ -119,7 +118,7 @@ public class XCLRelationHighlightingRenderer extends KnowWEDomRenderer {
 
 		StringBuilder buffi = new StringBuilder();
 
-		FontColorBackgroundRenderer.getRenderer(null, null).render(article, sec, user, buffi);
+		StyleRenderer.getRenderer(null, null).render(article, sec, user, buffi);
 		return KnowWEUtils.maskHTML(buffi.toString());
 
 	}
@@ -172,7 +171,7 @@ public class XCLRelationHighlightingRenderer extends KnowWEDomRenderer {
 														// in red if fulfilled
 
 			if (fulfilled && sec.getOriginalText().trim().equals("[--]")) {
-				FontColorBackgroundRenderer.getRenderer(FontColorRenderer.COLOR2, null).render(
+				StyleRenderer.OPERATOR.render(
 						article, sec, user, buffi);
 			}
 			else {

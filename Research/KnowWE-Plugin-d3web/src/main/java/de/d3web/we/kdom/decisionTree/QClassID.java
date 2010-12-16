@@ -20,10 +20,10 @@
 
 package de.d3web.we.kdom.decisionTree;
 
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.utils.Patterns;
 import de.knowwe.core.LineContent;
-import de.knowwe.core.renderer.FontColorRenderer;
 import de.knowwe.core.renderer.ObjectInfoLinkRenderer;
 
 // TODO change inheritance
@@ -34,7 +34,6 @@ public class QClassID extends LineContent {
 	@Override
 	protected void init() {
 		setSectionFinder(new RegexSectionFinder(Patterns.D3IDENTIFIER));
-		setCustomRenderer(new ObjectInfoLinkRenderer(
-				new FontColorRenderer(FontColorRenderer.COLOR5)));
+		setCustomRenderer(new ObjectInfoLinkRenderer(StyleRenderer.Questionaire));
 	}
 }

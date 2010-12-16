@@ -20,9 +20,9 @@
 package de.d3web.we.kdom.xcl;
 
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.utils.Patterns;
-import de.knowwe.core.renderer.FontColorRenderer;
 
 /**
  * 
@@ -35,7 +35,7 @@ public class DCPropertyNameType extends DefaultAbstractKnowWEObjectType {
 		super.init();
 
 		setSectionFinder(new RegexSectionFinder("@(" + Patterns.WORD + ")", 0, 1));
-		setCustomRenderer(new FontColorRenderer(FontColorRenderer.COLOR6));
+		setCustomRenderer(StyleRenderer.PROPERTY);
 	}
 
 }

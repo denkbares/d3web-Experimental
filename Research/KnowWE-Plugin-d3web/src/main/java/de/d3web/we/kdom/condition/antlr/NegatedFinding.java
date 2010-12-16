@@ -21,22 +21,14 @@
 package de.d3web.we.kdom.condition.antlr;
 
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.renderer.FontColorBackgroundRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.knowwe.core.renderer.FontColorRenderer;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 
 public class NegatedFinding extends DefaultAbstractKnowWEObjectType {
 
 	@Override
 	public KnowWEDomRenderer getRenderer() {
-		return FontColorBackgroundRenderer.getRenderer(FontColorRenderer.COLOR5, null);
-	}
-
-	/**
-	 * Only for XclRelation Highlighting.
-	 */
-	public FontColorBackgroundRenderer getBackgroundColorRenderer(String color) {
-		return FontColorBackgroundRenderer.getRenderer(FontColorRenderer.COLOR5, color);
+		return new StyleRenderer("color:rgb(128, 128, 0)");
 	}
 
 }

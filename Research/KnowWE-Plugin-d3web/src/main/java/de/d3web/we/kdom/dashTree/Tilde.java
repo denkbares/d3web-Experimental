@@ -21,14 +21,14 @@
 package de.d3web.we.kdom.dashTree;
 
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.knowwe.core.LineContent;
-import de.knowwe.core.renderer.FontColorRenderer;
 
 public class Tilde extends LineContent {
 
 	@Override
 	public KnowWEDomRenderer getRenderer() {
-		return new FontColorRenderer(FontColorRenderer.COLOR6);
+		return StyleRenderer.OPERATOR;
 	}
 
 }

@@ -29,7 +29,6 @@ import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.knowwe.core.renderer.FontColorRenderer;
 
 public class FindingQuestion extends DefaultAbstractKnowWEObjectType {
 
@@ -52,7 +51,7 @@ public class FindingQuestion extends DefaultAbstractKnowWEObjectType {
 
 	@Override
 	public KnowWEDomRenderer getRenderer() {
-		return new FindingQuestionAndAnswerRenderer(FontColorRenderer.COLOR6);
+		return new FindingQuestionAndAnswerRenderer("color:rgb(0, 0, 255)");
 	}
 
 	@Override

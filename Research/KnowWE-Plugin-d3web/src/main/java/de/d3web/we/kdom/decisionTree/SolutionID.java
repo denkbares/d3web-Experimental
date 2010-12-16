@@ -21,16 +21,15 @@
 package de.d3web.we.kdom.decisionTree;
 
 import de.d3web.we.kdom.D3IdentifierSectionFinder;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.knowwe.core.LineContent;
-import de.knowwe.core.renderer.FontColorRenderer;
 import de.knowwe.core.renderer.ObjectInfoLinkRenderer;
 
 public class SolutionID extends LineContent {
 
 	@Override
 	public void init() {
-		setCustomRenderer(new ObjectInfoLinkRenderer(
-				new FontColorRenderer(FontColorRenderer.COLOR1)));
+		setCustomRenderer(new ObjectInfoLinkRenderer(StyleRenderer.SOLUTION));
 		setSectionFinder(new D3IdentifierSectionFinder());
 	}
 

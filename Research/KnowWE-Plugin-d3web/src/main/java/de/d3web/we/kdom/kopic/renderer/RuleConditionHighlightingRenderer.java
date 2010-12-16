@@ -37,13 +37,12 @@ import de.d3web.we.kdom.condition.antlr.ComplexFinding;
 import de.d3web.we.kdom.condition.antlr.ComplexFindingBraced;
 import de.d3web.we.kdom.condition.old.Conjunct;
 import de.d3web.we.kdom.condition.old.Disjunct;
-import de.d3web.we.kdom.renderer.FontColorBackgroundRenderer;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
-import de.knowwe.core.renderer.FontColorRenderer;
 
 /**
  * Highlights the Rules in Kopic-Sections according to the Session.
@@ -217,19 +216,19 @@ public class RuleConditionHighlightingRenderer extends KnowWEDomRenderer {
 		}
 
 		try {
-			if (rc.getCondition().eval(session)) FontColorBackgroundRenderer.getRenderer(
-					FontColorRenderer.COLOR5, "#33FF33").render(article,
+			if (rc.getCondition().eval(session)) StyleRenderer.getRenderer(
+					StyleRenderer.CONDITION.getCssStyle(), "#33FF33").render(article,
 					sec, user, buffi);
-			else FontColorBackgroundRenderer.getRenderer(
-					FontColorRenderer.COLOR5, "#FF9900").render(article,
+			else StyleRenderer.getRenderer(
+					StyleRenderer.CONDITION.getCssStyle(), "#FF9900").render(article,
 					sec, user, buffi);
 		}
 		catch (NoAnswerException e) {
-			FontColorBackgroundRenderer.getRenderer(FontColorRenderer.COLOR5,
+			StyleRenderer.getRenderer(StyleRenderer.CONDITION.getCssStyle(),
 					null).render(article, sec, user, buffi);
 		}
 		catch (UnknownAnswerException e) {
-			FontColorBackgroundRenderer.getRenderer(FontColorRenderer.COLOR5,
+			StyleRenderer.getRenderer(StyleRenderer.CONDITION.getCssStyle(),
 					null).render(article, sec, user, buffi);
 		}
 		if (braced) buffi.append(")");

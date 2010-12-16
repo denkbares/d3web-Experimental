@@ -48,15 +48,14 @@ import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.basic.RoundBracedType;
 import de.d3web.we.kdom.condition.old.Disjunct;
-import de.d3web.we.kdom.renderer.FontColorBackgroundRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SimpleMessageError;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.core.renderer.FontColorRenderer;
 
 public class ComplexFinding extends DefaultAbstractKnowWEObjectType {
 
@@ -73,8 +72,7 @@ public class ComplexFinding extends DefaultAbstractKnowWEObjectType {
 	 * Only for XclRelation Highlighting.
 	 */
 	public KnowWEDomRenderer getBackgroundColorRenderer(String color) {
-		return FontColorBackgroundRenderer.
-					getRenderer(FontColorRenderer.COLOR5, color);
+		return StyleRenderer.getRenderer(StyleRenderer.CONDITION.getCssStyle(), color);
 	}
 
 	private class ComplexFindingSubtreeHandler extends OwlSubtreeHandler<ComplexFinding> {

@@ -21,14 +21,14 @@
 package de.d3web.we.kdom.dashTree.solutions;
 
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.knowwe.core.LineContent;
-import de.knowwe.core.renderer.FontColorRenderer;
 
 public class SolutionDescription extends LineContent {
 
 	@Override
 	public KnowWEDomRenderer getRenderer() {
-		return new FontColorRenderer(FontColorRenderer.COLOR3);
+		return StyleRenderer.PROMPT;
 	}
 
 }

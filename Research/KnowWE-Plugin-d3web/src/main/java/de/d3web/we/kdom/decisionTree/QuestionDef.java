@@ -20,15 +20,14 @@
 
 package de.d3web.we.kdom.decisionTree;
 
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.knowwe.core.LineContent;
-import de.knowwe.core.renderer.FontColorRenderer;
 import de.knowwe.core.renderer.ObjectInfoLinkRenderer;
 
 public class QuestionDef extends LineContent {
 
 	@Override
 	protected void init() {
-		this.setCustomRenderer(new ObjectInfoLinkRenderer(new FontColorRenderer(
-				FontColorRenderer.COLOR3)));
+		this.setCustomRenderer(new ObjectInfoLinkRenderer(StyleRenderer.Question));
 	}
 }

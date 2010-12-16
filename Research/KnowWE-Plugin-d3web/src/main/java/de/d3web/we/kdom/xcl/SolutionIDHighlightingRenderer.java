@@ -31,12 +31,12 @@ import de.d3web.core.session.Session;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.inference.PSMethodXCL;
-import de.knowwe.core.renderer.FontColorRenderer;
 import de.knowwe.core.renderer.ObjectInfoLinkRenderer;
 
 /**
@@ -106,8 +106,7 @@ public class SolutionIDHighlightingRenderer extends KnowWEDomRenderer {
 			string.append("");
 		}
 
-		new ObjectInfoLinkRenderer(FontColorRenderer
-				.getRenderer(FontColorRenderer.COLOR1)).render(article, sec,
+		new ObjectInfoLinkRenderer(StyleRenderer.SOLUTION).render(article, sec,
 				user, string);
 		string.append(spanEnd);
 	}

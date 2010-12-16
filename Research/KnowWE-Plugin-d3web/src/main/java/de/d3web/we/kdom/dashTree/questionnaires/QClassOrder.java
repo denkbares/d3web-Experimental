@@ -21,14 +21,14 @@
 package de.d3web.we.kdom.dashTree.questionnaires;
 
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.knowwe.core.LineContent;
-import de.knowwe.core.renderer.FontColorRenderer;
 
 public class QClassOrder extends LineContent {
 
 	@Override
 	public KnowWEDomRenderer getRenderer() {
-		return new FontColorRenderer(FontColorRenderer.COLOR2);
+		return StyleRenderer.OPERATOR;
 	}
 
 }
