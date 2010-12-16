@@ -55,6 +55,9 @@ public class SubClassing extends AbstractXMLObjectType {
 			AbstractKnowWEObjectType subClassingDashTree = new DashTree();
 			replaceRootType(subClassingDashTree);
 			this.childrenTypes.add(subClassingDashTree);
+
+			// setting Pre-environoment-renderer
+			this.setCustomRenderer(new PreRendererWithoutTilde());
 		}
 
 		private void replaceRootType(

@@ -61,6 +61,7 @@ public class PropertyDashTreeElementContent extends DashTreeElementContent {
 		this.childrenTypes.add(e);
 		this.childrenTypes.add(new PropertyIDDefinition());
 		this.addSubtreeHandler(new PropertyDashTreeElementContentOWLSubTreeHandler());
+
 	}
 
 	private class PropertyDashTreeElementContentOWLSubTreeHandler extends OwlSubtreeHandler<PropertyDashTreeElementContent> {
