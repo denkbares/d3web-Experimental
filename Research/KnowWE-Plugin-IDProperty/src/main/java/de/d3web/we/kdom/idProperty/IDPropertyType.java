@@ -17,7 +17,9 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SingleChildConstraint;
 import de.d3web.we.kdom.objects.KnowWETerm;
+import de.d3web.we.kdom.objects.StringDefinition;
 import de.d3web.we.kdom.objects.TermDefinition;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.message.NoSuchObjectError;
@@ -34,7 +36,6 @@ import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.d3web.we.terminology.TerminologyHandler;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.utils.MessageUtils;
-import de.knowwe.core.renderer.FontColorRenderer;
 
 /**
  * 
@@ -115,14 +116,13 @@ public class IDPropertyType extends DefaultAbstractKnowWEObjectType {
 	 * @author Jochen
 	 * @created 14.12.2010
 	 */
-	class IDPropertyDefinition extends TermDefinition<String> {
+	class IDPropertyDefinition extends StringDefinition {
 
 		public IDPropertyDefinition() {
-			super(String.class, true);
 			ISectionFinder sectionFinder = new ConstraintSectionFinder(
 					new AllTextFinderTrimmed(), SingleChildConstraint.getInstance());
 			this.setSectionFinder(sectionFinder);
-			this.setCustomRenderer(FontColorRenderer.getRenderer(FontColorRenderer.COLOR4));
+			this.setCustomRenderer(StyleRenderer.SOLUTION);
 			this.addSubtreeHandler(new CreateIDPropertyHandler());
 			this.addSubtreeHandler(new ChangeWarningSubtreeHandler());
 		}

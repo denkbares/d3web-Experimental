@@ -20,6 +20,7 @@ package de.d3web.we.taghandler;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -142,6 +143,9 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 			result.append(article.getTitle()).append("</a></dt>");
 
 			for (KDOMReportMessage kdomReportMessage : messages) {
+				if (kdomReportMessage.getSection() == null) {
+					continue;
+				}
 				if (kdomReportMessage instanceof KDOMError) {
 					result.append("<dd><img src=\"templates/knowweTmps/images/error.gif\" title=\"KnowWEError\" />");
 				}

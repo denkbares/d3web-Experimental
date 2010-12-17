@@ -25,7 +25,7 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SingleChildConstraint;
 import de.d3web.we.kdom.objects.KnowWETerm;
-import de.d3web.we.kdom.objects.TermDefinition;
+import de.d3web.we.kdom.objects.StringDefinition;
 import de.d3web.we.kdom.renderer.EditSectionRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.message.InvalidNumberError;
@@ -34,7 +34,6 @@ import de.d3web.we.kdom.sectionFinder.ISectionFinder;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotation;
-import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.kdom.type.AnonymousType;
 import de.d3web.we.kdom.type.AnonymousTypeInvisible;
 import de.d3web.we.utils.SplitUtility;
@@ -114,12 +113,11 @@ public class TimeEventNew extends DefaultAbstractKnowWEObjectType {
 				s.getArticle().getTitle());
 	}
 
-	public static class TitleType extends TermDefinition<String> {
+	public static class TitleType extends StringDefinition {
 		Pattern newline = Pattern.compile("\\r?\\n");
 
 		public TitleType() {
 			// true says that this name is registered as globally unique term
-			super(String.class, true);
 			this.setTermScope(KnowWETerm.GLOBAL);
 
 			// renderer
@@ -147,23 +145,11 @@ public class TimeEventNew extends DefaultAbstractKnowWEObjectType {
 					});
 			cf.addConstraint(SingleChildConstraint.getInstance());
 			this.sectionFinder = cf;
-
-			// check for correct importance value
-			this.addSubtreeHandler(new SubtreeHandler<TitleType>() {
-
-				@Override
-				public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TitleType> s) {
-					TimeEvent e = new TimeEvent(s.get().getTermName(s), s.getID(),
-							article.getTitle());
-					s.get().storeTermObject(article, s, s.getOriginalText());
-					return new ArrayList<KDOMReportMessage>(0);
-				}
-			});
 		}
 
 
 		@Override
-		public String getTermName(Section s) {
+		public String getTermName(Section<? extends KnowWETerm<String>> s) {
 			return s.getOriginalText();
 		}
 	}
