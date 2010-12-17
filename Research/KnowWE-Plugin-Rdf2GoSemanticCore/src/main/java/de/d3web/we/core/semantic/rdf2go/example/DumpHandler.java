@@ -41,7 +41,7 @@ public class DumpHandler extends AbstractHTMLTagHandler {
 	public String renderHTML(String topic, KnowWEUserContext user,
 			Map<String, String> values, String web) {
 		Rdf2GoCore.getInstance().getModel().dump();
-		return KnowWEUtils.maskHTML(Rdf2GoCore.getInstance().renderResults("select ?x ?y ?z where { ?x ?y ?z }"));
+		return KnowWEUtils.maskHTML(Rdf2GoCore.getInstance().sparqlSelect("select ?x ?y ?z where { ?x ?y ?z }"));
 	}
 
 }

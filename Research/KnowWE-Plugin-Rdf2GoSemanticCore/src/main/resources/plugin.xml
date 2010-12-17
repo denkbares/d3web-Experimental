@@ -17,7 +17,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
 		id="AddStatementType">
 		<parameter id="class"
-			value="de.d3web.we.core.semantic.rdf2go.AddStatementType" />
+			value="de.d3web.we.core.semantic.rdf2go.example.AddStatementType" />
 		<parameter id="name" value="AddStatementType" />
 		<parameter id="description" value="KnowWEObjectType AddStatementType" />
 		<parameter id="version" value="1.0" />
@@ -28,7 +28,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="DumpHandler">
 		<parameter id="class"
-			value="de.d3web.we.core.semantic.rdf2go.DumpHandler" />
+			value="de.d3web.we.core.semantic.rdf2go.example.DumpHandler" />
 		<parameter id="name" value="DumpHandler" />
 		<parameter id="description" value="TagHandler DumpHandler" />
 		<parameter id="version" value="1.0" />

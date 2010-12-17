@@ -35,7 +35,6 @@ import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 
@@ -53,10 +52,12 @@ public class Rdf2GoCore {
 	public void init() {
 		if (me == null) {
 			me = this;
+
 			initModel();
 			statementcache = new HashMap<String, WeakHashMap<Section, List<Statement>>>();
 			// initNamespaces();
 			System.out.println("model initialized");
+			System.out.println(model.getUnderlyingModelImplementation().toString());
 		}
 	}
 
@@ -69,6 +70,7 @@ public class Rdf2GoCore {
 	}
 
 	public void initModel() {
+		//RDF2Go.register(new org.ontoware.rdf2go.impl.jena26.ModelFactoryImpl());
 		model = RDF2Go.getModelFactory().createModel();
 		model.open();
 		initNamespaces();
@@ -127,7 +129,7 @@ public class Rdf2GoCore {
 	 * @param query
 	 * @return html table with all triples of this rdf store
 	 */
-	public String renderResults(String query) {
+	public String sparqlSelect(String query) {
 		QueryResultTable qrt = model.sparqlSelect(query);
 		List<String> l = qrt.getVariables();
 		ClosableIterator<QueryRow> i = qrt.iterator();
@@ -146,7 +148,7 @@ public class Rdf2GoCore {
 		result += "</table>";
 		return result;
 	}
-
+	
 	/**
 	 * 
 	 * @created 06.12.2010
