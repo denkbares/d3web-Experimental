@@ -17,5 +17,23 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+    	<groupId>de.uniwue.d3web</groupId>
+    	<artifactId>KnowWE-core</artifactId>
+    	<version>0.2-SNAPSHOT</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
+    <dependency>
+    	<groupId>de.uniwue.d3web</groupId>
+    	<artifactId>KnowWE-KDOMParseUtils</artifactId>
+    	<version>0.2-SNAPSHOT</version>
+    	<scope>compile</scope>
+    </dependency>
+    		<dependency>
+			<groupId>org.semweb4j</groupId>
+			<artifactId>rdf2go.api</artifactId>
+			<version>4.7.3</version>
+		</dependency>
   </dependencies>
 </project>
