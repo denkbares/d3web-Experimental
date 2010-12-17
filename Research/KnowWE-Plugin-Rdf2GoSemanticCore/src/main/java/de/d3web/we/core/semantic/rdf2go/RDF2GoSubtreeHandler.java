@@ -39,10 +39,10 @@ import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
  *        SubtreeHandlers to facilitate the incremental build of Articles
  * 
  */
-public abstract class OwlSubtreeHandler<T extends KnowWEObjectType> extends
+public abstract class RDF2GoSubtreeHandler<T extends KnowWEObjectType> extends
 		SubtreeHandler<T> {
 
-	public OwlSubtreeHandler() {
+	public RDF2GoSubtreeHandler() {
 		super(true);
 	}
 

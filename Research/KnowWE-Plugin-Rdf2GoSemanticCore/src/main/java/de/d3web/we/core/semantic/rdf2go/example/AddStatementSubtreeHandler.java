@@ -24,7 +24,7 @@ import java.util.Collection;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
 
-import de.d3web.we.core.semantic.rdf2go.OwlSubtreeHandler;
+import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
@@ -35,7 +35,7 @@ import de.d3web.we.kdom.report.KDOMReportMessage;
  * @author grotheer
  * @created 02.12.2010
  */
-public class AddStatementSubtreeHandler extends OwlSubtreeHandler<AddStatementType> {
+public class AddStatementSubtreeHandler extends RDF2GoSubtreeHandler<AddStatementType> {
 
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<AddStatementType> s) {
