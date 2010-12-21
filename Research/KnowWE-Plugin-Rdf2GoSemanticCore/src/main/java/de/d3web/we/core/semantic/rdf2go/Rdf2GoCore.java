@@ -123,14 +123,17 @@ public class Rdf2GoCore {
 		return s;
 	}
 
+	public String renderedSparqlSelect(String query) {
+		return renderedSparqlSelect(sparqlSelect(query));
+	}
+	
 	/**
 	 * 
 	 * @created 06.12.2010
-	 * @param query
-	 * @return html table with all triples of this rdf store
+	 * @param qrt
+	 * @return html table with all results of qrt
 	 */
-	public String sparqlSelect(String query) {
-		QueryResultTable qrt = model.sparqlSelect(query);
+	public static String renderedSparqlSelect(QueryResultTable qrt) {
 		List<String> l = qrt.getVariables();
 		ClosableIterator<QueryRow> i = qrt.iterator();
 		String result = "<table>";
@@ -147,6 +150,14 @@ public class Rdf2GoCore {
 		}
 		result += "</table>";
 		return result;
+	}
+	
+	public boolean sparqlAsk(String query) {
+		return model.sparqlAsk(query);
+	}
+	
+	public QueryResultTable sparqlSelect(String query) {
+		return model.sparqlSelect(query);
 	}
 	
 	/**
