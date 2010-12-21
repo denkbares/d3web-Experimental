@@ -48,6 +48,7 @@ public class Rdf2GoCore {
 	private static Rdf2GoCore me;
 	private Model model;
 	private static HashMap<String, WeakHashMap<Section, List<Statement>>> statementcache;
+	private static HashMap<Statement,Integer> duplicateStatements;
 
 	public void init() {
 		if (me == null) {
@@ -70,7 +71,15 @@ public class Rdf2GoCore {
 	}
 
 	public void initModel() {
+		// Uncomment one of these lines to activate the specified triple store adapter.
+		// By default the sesame adapter is used
+		
+		//Jena
 		//RDF2Go.register(new org.ontoware.rdf2go.impl.jena26.ModelFactoryImpl());
+		
+		//Owlim
+		//RDF2Go.register(new com.ontotext.trree.rdf2go.OwlimModelFactory());
+		
 		model = RDF2Go.getModelFactory().createModel();
 		model.open();
 		initNamespaces();
@@ -230,7 +239,15 @@ public class Rdf2GoCore {
 		if (temp != null) {
 			List<Statement> statementsOfSection = temp.get(sec);
 			for (Statement s : statementsOfSection) {
-				model.removeStatement(s);
+				if (duplicateStatements.containsKey(s)) {
+					if (duplicateStatements.get(s) != 1) {
+						duplicateStatements.put(s, duplicateStatements.get(s)-1);
+					} else {
+						duplicateStatements.remove(s);
+					}
+				} else {
+					model.removeStatement(s);
+				}
 			}
 			temp.remove(sec);
 
@@ -254,6 +271,18 @@ public class Rdf2GoCore {
 				"semantic core updating " + sec.getID() + "  "
 						+ allStatements.size());
 
+		for (Statement s : allStatements) {
+			if (model.contains(s)) {
+				if (duplicateStatements.containsKey(s)) {
+					duplicateStatements.put(s, duplicateStatements.get(s)+1);
+				} else {
+					duplicateStatements.put(s, 1);
+				}
+				allStatements.remove(s);
+				
+			}
+		}
+		
 		addStaticStatements(allStatements, sec);
 
 	}
