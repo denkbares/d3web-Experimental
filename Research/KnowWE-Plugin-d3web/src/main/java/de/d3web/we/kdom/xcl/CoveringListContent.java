@@ -183,7 +183,7 @@ public class CoveringListContent extends XMLContent {
 				// Insert the Relation into the currentModel
 				String kbRelId = XCLModel.insertXCLRelation(kbm.getKnowledgeBase(), cond,
 						currentdiag, relationType, weight, rel.getID());
-				KnowWEUtils.storeSectionInfo(currentWeb, article.getTitle(), rel.getID(), KBID_KEY,
+				KnowWEUtils.storeObject(currentWeb, article.getTitle(), rel.getID(), KBID_KEY,
 						kbRelId);
 
 			}

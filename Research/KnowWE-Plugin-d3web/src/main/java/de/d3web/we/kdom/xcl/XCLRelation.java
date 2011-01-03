@@ -93,7 +93,7 @@ public class XCLRelation extends DefaultAbstractKnowWEObjectType {
 					if (current.getObjectType() instanceof ComplexFinding
 							|| current.getObjectType() instanceof Finding) {
 						IntermediateOwlObject tempio = (IntermediateOwlObject) KnowWEUtils.getStoredObject(
-								current, OwlHelper.IOO);
+								article, current, OwlHelper.IOO);
 						for (URI curi : tempio.getLiterals()) {
 							Statement state = uo.getHelper().createStatement(
 									explainsdings,

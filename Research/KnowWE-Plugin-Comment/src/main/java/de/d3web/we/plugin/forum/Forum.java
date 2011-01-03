@@ -47,11 +47,6 @@ public class Forum extends AbstractXMLObjectType {
 	}
 
 	@Override
-	public void cleanStoredInfos(String articleName) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public KnowWEDomRenderer getRenderer() {
 		return new ForumRenderer();
 	}

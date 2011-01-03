@@ -39,11 +39,6 @@ public class Appointment extends AbstractKnowWEObjectType {
 	}
 
 	@Override
-	public void cleanStoredInfos(String articleName) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public KnowWEDomRenderer getRenderer() {
 		return new AppointmentRenderer();
 	}

@@ -92,7 +92,7 @@ public class ComplexFinding extends DefaultAbstractKnowWEObjectType {
 				for (Section current : children) {
 					if (current.getObjectType() instanceof Disjunct) {
 						IntermediateOwlObject iohandler = (IntermediateOwlObject) KnowWEUtils.getStoredObject(
-								current, OwlHelper.IOO);
+								article, current, OwlHelper.IOO);
 						for (URI curi : iohandler.getLiterals()) {
 							Statement state = uo.getHelper().createStatement(
 									complexfinding, D3WebOWLVokab.HASDISJUNCTS
@@ -109,7 +109,7 @@ public class ComplexFinding extends DefaultAbstractKnowWEObjectType {
 			}
 			// return io;
 			// SemanticCore.getInstance().addStatements(io, s);
-			KnowWEUtils.storeSectionInfo(s, OwlHelper.IOO, io);
+			KnowWEUtils.storeObject(article, s, OwlHelper.IOO, io);
 			return msgs;
 		}
 

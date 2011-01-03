@@ -42,9 +42,4 @@ public class CommentTypeTagName extends AbstractKnowWEObjectType {
 		sectionFinder = new RegexSectionFinder(regexString + "");
 	}
 
-	@Override
-	public void cleanStoredInfos(String articleName) {
-		// TODO Auto-generated method stub
-	}
-
 }

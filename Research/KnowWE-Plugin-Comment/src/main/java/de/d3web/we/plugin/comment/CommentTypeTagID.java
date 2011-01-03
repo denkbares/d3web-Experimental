@@ -30,9 +30,4 @@ public class CommentTypeTagID extends AbstractKnowWEObjectType {
 		sectionFinder = new RegexSectionFinder("[0-9]* ");
 	}
 
-	@Override
-	public void cleanStoredInfos(String articleName) {
-		// TODO Auto-generated method stub
-	}
-
 }

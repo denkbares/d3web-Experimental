@@ -121,7 +121,7 @@ public class FreeMapNode extends AbstractXMLObjectType {
 							.getStoredObject(child, OwlHelper.IOO));
 			}
 			SemanticCoreDelegator.getInstance(KnowWEEnvironment.getInstance()).addStatements(io, s);
-			KnowWEUtils.storeSectionInfo(s, OwlHelper.IOO, io);
+			KnowWEUtils.storeObject(article, s, OwlHelper.IOO, io);
 			return new ArrayList<KDOMReportMessage>();
 		}
 

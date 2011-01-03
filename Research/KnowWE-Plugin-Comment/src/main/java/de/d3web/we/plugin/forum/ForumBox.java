@@ -44,9 +44,4 @@ public class ForumBox extends AbstractXMLObjectType {
 		this.setCustomRenderer(BoxRenderer.getInstance());
 	}
 
-	@Override
-	public void cleanStoredInfos(String articleName) {
-		// TODO Auto-generated method stub
-	}
-
 }

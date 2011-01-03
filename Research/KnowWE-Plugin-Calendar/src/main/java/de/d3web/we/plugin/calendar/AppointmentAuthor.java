@@ -42,9 +42,4 @@ public class AppointmentAuthor extends AbstractKnowWEObjectType {
 		sectionFinder = new RegexSectionFinder(regexString.toString());
 	}
 
-	@Override
-	public void cleanStoredInfos(String articleName) {
-		// TODO Auto-generated method stub
-	}
-
 }

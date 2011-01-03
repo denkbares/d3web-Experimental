@@ -76,7 +76,7 @@ public class Disjunct extends DefaultAbstractKnowWEObjectType {
 				for (Section current : children) {
 					if (current.getObjectType() instanceof Conjunct) {
 						IntermediateOwlObject iohandler = (IntermediateOwlObject) KnowWEUtils
-								.getStoredObject(current, OwlHelper.IOO);
+								.getStoredObject(article, current, OwlHelper.IOO);
 						for (URI curi : iohandler.getLiterals()) {
 							Statement state = uo.getHelper().createStatement(
 									compositeexpression,
@@ -91,7 +91,7 @@ public class Disjunct extends DefaultAbstractKnowWEObjectType {
 			catch (RepositoryException e) {
 				msgs.add(new SimpleMessageError(e.getMessage()));
 			}
-			KnowWEUtils.storeSectionInfo(s, OwlHelper.IOO, io);
+			KnowWEUtils.storeObject(article, s, OwlHelper.IOO, io);
 
 			return msgs;
 		}

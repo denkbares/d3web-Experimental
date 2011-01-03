@@ -74,13 +74,13 @@ public class BibTexContent extends XMLContent{
 				StringReader reader = new StringReader(text);
 				parser.parse(bibtexFile, reader);
 			} catch (ParseException e) {
-				KnowWEUtils.storeSectionInfo(s, PARSEEXCEPTION, e.toString());
+				KnowWEUtils.storeObject(article, s, PARSEEXCEPTION, e.toString());
 			} catch (IOException e) {
-				KnowWEUtils.storeSectionInfo(s, IOEXCEPTION, e.toString());
+				KnowWEUtils.storeObject(article, s, IOEXCEPTION, e.toString());
 			}
 
 			if (bibtexFile.getEntries().size() != 0) {
-				KnowWEUtils.storeSectionInfo(s, BIBTEXs, bibtexFile);
+				KnowWEUtils.storeObject(article, s, BIBTEXs, bibtexFile);
 			}
 			HashMap<String, Object> params=new HashMap<String, Object>();
 			params.put("SOURCE",s);

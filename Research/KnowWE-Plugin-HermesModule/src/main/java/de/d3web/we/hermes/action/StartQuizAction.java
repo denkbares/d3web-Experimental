@@ -30,6 +30,7 @@ import de.d3web.we.hermes.taghandler.QuizHandler;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.taghandler.TagHandlerAttributeSubTreeHandler;
+import de.d3web.we.utils.KnowWEUtils;
 
 public class StartQuizAction extends DeprecatedAbstractKnowWEAction {
 
@@ -51,9 +52,7 @@ public class StartQuizAction extends DeprecatedAbstractKnowWEAction {
 		Integer to = null;
 
 		if (kdomid != null) {
-			Object storedValues = KnowWEEnvironment.getInstance().getArticleManager(
-					sec.getWeb()).getTypeStore().getStoredObject(sec.getTitle(),
-					sec.getID(),
+			Object storedValues = KnowWEUtils.getStoredObject(sec.getArticle(), sec,
 					TagHandlerAttributeSubTreeHandler.ATTRIBUTE_MAP);
 			if (storedValues != null) {
 				if (storedValues instanceof Map) {

@@ -55,11 +55,6 @@ public class TimeStampType extends DefaultAbstractKnowWEObjectType {
 		sectionFinder = new RegexSectionFinder(pattern);
 	}
 
-	@Override
-	public void cleanStoredInfos(String articleName) {
-
-	}
-
 	public static boolean isValid(String sectionText) {
 		return timeStampPattern.matcher(sectionText).matches();
 	}

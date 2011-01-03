@@ -131,7 +131,7 @@ public class Finding extends DefaultAbstractKnowWEObjectType {
 			catch (NullPointerException e) {
 				msgs.add(new SimpleMessageError("Nullpointer"));
 			}
-			KnowWEUtils.storeSectionInfo(section, OwlHelper.IOO, io);
+			KnowWEUtils.storeObject(article, section, OwlHelper.IOO, io);
 			return msgs;
 		}
 

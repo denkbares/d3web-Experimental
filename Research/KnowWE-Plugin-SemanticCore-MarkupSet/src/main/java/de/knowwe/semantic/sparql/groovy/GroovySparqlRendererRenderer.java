@@ -91,7 +91,7 @@ public class GroovySparqlRendererRenderer extends
 			name = params.get("name");
 		}
 		String content = sec.getOriginalText();
-		KnowWEUtils.storeSectionInfo(sec, GroovySparqlRendererRenderer.CONTENT,
+		KnowWEUtils.storeObject(article, sec, GroovySparqlRendererRenderer.CONTENT,
 				content);
 
 		GroovyClassLoader gcl = new GroovyClassLoader(this.getClass().getClassLoader());

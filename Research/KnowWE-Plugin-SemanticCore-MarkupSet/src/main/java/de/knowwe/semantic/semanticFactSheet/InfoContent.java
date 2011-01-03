@@ -78,14 +78,14 @@ public class InfoContent extends XMLContent {
 							io.setValidPropFlag(valid);
 							io.setBadAttribute(prop.trim());
 							// break at first bad property
-							KnowWEUtils.storeSectionInfo(s, OwlHelper.IOO, io);
+							KnowWEUtils.storeObject(article, s, OwlHelper.IOO, io);
 							return null;
 						}
 					}
 
 				}
 			}
-			KnowWEUtils.storeSectionInfo(s, OwlHelper.IOO, io);
+			KnowWEUtils.storeObject(article, s, OwlHelper.IOO, io);
 			SemanticCoreDelegator.getInstance().addStatements(io, s);
 			return null;
 		}

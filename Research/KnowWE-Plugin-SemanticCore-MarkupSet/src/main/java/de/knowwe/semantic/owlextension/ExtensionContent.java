@@ -112,10 +112,10 @@ public class ExtensionContent extends XMLContent {
 			}
 			output += "";
 			if (error) {
-				KnowWEUtils.storeSectionInfo(s, Extension.EXTENSION_RESULT_KEY, output);
+				KnowWEUtils.storeObject(null, s, Extension.EXTENSION_RESULT_KEY, output);
 			}
 			else {
-				KnowWEUtils.storeSectionInfo(s, Extension.EXTENSION_RESULT_KEY, "success");
+				KnowWEUtils.storeObject(null, s, Extension.EXTENSION_RESULT_KEY, "success");
 			}
 			return io;
 		}

@@ -34,9 +34,4 @@ public class AppointmentStartSymbol extends AbstractKnowWEObjectType {
 
 	}
 
-	@Override
-	public void cleanStoredInfos(String articleName) {
-		// TODO Auto-generated method stub
-	}
-
 }

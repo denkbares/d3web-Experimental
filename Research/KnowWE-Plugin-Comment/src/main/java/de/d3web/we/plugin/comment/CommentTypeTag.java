@@ -44,9 +44,4 @@ public class CommentTypeTag extends AbstractKnowWEObjectType {
 		childrenTypes.add(new CommentTypeTagID());
 	}
 
-	@Override
-	public void cleanStoredInfos(String articleName) {
-		// TODO Auto-generated method stub
-	}
-
 }

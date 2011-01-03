@@ -154,7 +154,7 @@ public class Rule extends DefaultAbstractKnowWEObjectType {
 							new SingleKBMIDObjectManager(kbm), null);
 
 					if (builder.getRuleIDs().size() == 1) {
-						KnowWEUtils.storeSectionInfo(article.getWeb(), article
+						KnowWEUtils.storeObject(article.getWeb(), article
 								.getTitle(), s.getID(), KBID_KEY, builder
 								.getRuleIDs().get(0));
 					}
@@ -199,7 +199,7 @@ public class Rule extends DefaultAbstractKnowWEObjectType {
 	 * @param message
 	 */
 	public static void storeErrorMessages(KnowWEArticle article, Section s, List<Message> message) {
-		KnowWEUtils.storeSectionInfo(KnowWEEnvironment.DEFAULT_WEB, article
+		KnowWEUtils.storeObject(s.getWeb(), article
 				.getTitle(), s.getID(), RULE_ERROR_MESSAGE_STORE_KEY, message);
 	}
 

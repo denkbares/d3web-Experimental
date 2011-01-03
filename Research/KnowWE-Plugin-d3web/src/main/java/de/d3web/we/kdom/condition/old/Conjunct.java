@@ -73,7 +73,7 @@ public class Conjunct extends DefaultAbstractKnowWEObjectType {
 				for (Section current : children) {
 					if (current.getObjectType() instanceof Finding) {
 						IntermediateOwlObject iohandler = (IntermediateOwlObject) KnowWEUtils.getStoredObject(
-								current, OwlHelper.IOO);
+								article, current, OwlHelper.IOO);
 						for (URI curi : iohandler.getLiterals()) {
 							Statement state = uo.getHelper().createStatement(
 									compositeexpression, D3WebOWLVokab.HASCONJUNCTS
@@ -88,7 +88,7 @@ public class Conjunct extends DefaultAbstractKnowWEObjectType {
 			catch (RepositoryException e) {
 				// TODO error management?
 			}
-			KnowWEUtils.storeSectionInfo(s, OwlHelper.IOO, io);
+			KnowWEUtils.storeObject(article, s, OwlHelper.IOO, io);
 			return null;
 		}
 
