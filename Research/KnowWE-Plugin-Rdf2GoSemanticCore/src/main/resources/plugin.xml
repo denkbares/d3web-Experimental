@@ -25,6 +25,17 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		id="SparqlType">
+		<parameter id="class"
+			value="de.d3web.we.core.semantic.rdf2go.example.SparqlType" />
+		<parameter id="name" value="SparqlType" />
+		<parameter id="description" value="KnowWEObjectType SparqlType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="3" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="DumpHandler">
 		<parameter id="class"

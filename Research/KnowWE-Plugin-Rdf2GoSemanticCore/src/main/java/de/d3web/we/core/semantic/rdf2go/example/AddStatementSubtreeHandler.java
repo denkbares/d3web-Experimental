@@ -51,8 +51,8 @@ public class AddStatementSubtreeHandler extends RDF2GoSubtreeHandler<AddStatemen
 
 		try {
 			String section = s.toString();
-			section = section.replaceAll(article.getTitle() + " - %RdfStart", "");
-			section = section.replaceAll("%RdfEnd", "");
+			section = section.replaceAll(article.getTitle() + " - %add%", "");
+			section = section.replaceAll("%/add%", "");
 			section = section.replaceAll("\n", "");
 			String[] spo = section.split(";");
 			String subS = spo[0];
@@ -66,10 +66,10 @@ public class AddStatementSubtreeHandler extends RDF2GoSubtreeHandler<AddStatemen
 			e.printStackTrace();
 		}
 
-		Statement st = Rdf2GoCore.getInstance().getModel().createStatement(sub, pred, obj);
+		Statement st = Rdf2GoCore.getInstance().createStatement(sub, pred, obj);
 		l.add(st);
 		Rdf2GoCore.getInstance().addStatements(l, s);
-		System.out.println("Statement added successfully (STH)");
+		System.out.println("Statement added successfully");
 		return null;
 	}
 

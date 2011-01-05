@@ -27,16 +27,15 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
  * @author grotheer
  * @created 11.11.2010
  */
-public class AddStatementType extends DefaultAbstractKnowWEObjectType {
+public class SparqlType extends DefaultAbstractKnowWEObjectType {
 
-	public static final String START_TAG = "%add%";
-	public static final String END_TAG = "%/add%";
+	public static final String START_TAG = "%sparql%";
+	public static final String END_TAG = "%/sparql%";
 
 	@Override
 	protected void init() {
 		sectionFinder = new RegexSectionFinder(START_TAG + "[\\w|\\W]*?"
 				+ END_TAG);
-		this.setCustomRenderer(new EmptyRenderer());
-		this.addSubtreeHandler(Priority.LOW, new AddStatementSubtreeHandler());
+		this.setCustomRenderer(new SparqlRenderer());
 	}
 }

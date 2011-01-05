@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Chair of Artificial Intelligence and Applied Informatics
+ * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
  * 
  * This is free software; you can redistribute it and/or modify it under the
@@ -17,31 +17,51 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
+
 package de.d3web.we.core.semantic.rdf2go.example;
 
-import java.util.Map;
+import java.util.ArrayList;
+
+import org.ontoware.rdf2go.model.Statement;
 
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
-import de.d3web.we.taghandler.AbstractHTMLTagHandler;
+import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
-public class DumpHandler extends AbstractHTMLTagHandler {
+public class SparqlRenderer extends KnowWEDomRenderer<AddStatementType> {
 
-	// Google Maps API Key for http://hermeswiki.informatik.uni-wuerzburg.de
+	private static SparqlRenderer instance;
 
-	public DumpHandler() {
-		super("DumpModel");
+	public static SparqlRenderer getInstance() {
+		if (instance == null) {
+			instance = new SparqlRenderer();
+		}
+		return instance;
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
-			Map<String, String> values, String web) {
+	public void render(KnowWEArticle article, Section sec,
+			KnowWEUserContext user, StringBuilder result) {
 		Rdf2GoCore r2gc = new Rdf2GoCore();
 		r2gc.init();
-		Rdf2GoCore.getInstance().getModel().dump();
-		Rdf2GoCore.duplicatesOut();
-		return KnowWEUtils.maskHTML(Rdf2GoCore.getInstance().renderedSparqlSelect("select ?x ?y ?z where { ?x ?y ?z }"));
-	}
 
+		ArrayList<Statement> l = new ArrayList<Statement>();
+
+		String sparqlString = "";
+		try {
+			String section = sec.toString();
+			section = section.replaceAll(article.getTitle() + " - %sparql%", "");
+			section = section.replaceAll("%/sparql%", "");
+			sparqlString = section.replaceAll("\n", "");
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		result.append(KnowWEUtils.maskHTML(Rdf2GoCore.getInstance().renderedSparqlSelect(sparqlString)));
+	}
 }

@@ -28,13 +28,16 @@ import java.util.logging.Logger;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.RDF2Go;
+import org.ontoware.rdf2go.Reasoning;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.Statement;
+import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 
+import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 
@@ -45,20 +48,30 @@ import de.d3web.we.kdom.Section;
  */
 public class Rdf2GoCore {
 
+	private static String USE_MODEL = "";
+	private static Reasoning USE_REASONING = Reasoning.owl;
+
 	private static Rdf2GoCore me;
 	private Model model;
-	private static HashMap<String, WeakHashMap<Section, List<Statement>>> statementcache;
-	private static HashMap<Statement,Integer> duplicateStatements;
+	private HashMap<String, WeakHashMap<Section, List<Statement>>> statementcache;
+	private HashMap<Statement, Integer> duplicateStatements;
+
+	public static void duplicatesOut() {
+		System.out.println("Duplicates:");
+		for (Entry e : me.duplicateStatements.entrySet()) {
+			System.out.print(e.getKey() + " #");
+			System.out.println(e.getValue());
+		}
+	}
 
 	public void init() {
 		if (me == null) {
 			me = this;
 
-			initModel();
-			statementcache = new HashMap<String, WeakHashMap<Section, List<Statement>>>();
-			// initNamespaces();
-			System.out.println("model initialized");
-			System.out.println(model.getUnderlyingModelImplementation().toString());
+			me.initModel();
+			me.statementcache = new HashMap<String, WeakHashMap<Section, List<Statement>>>();
+			me.duplicateStatements = new HashMap<Statement, Integer>();
+			initNamespaces();
 		}
 	}
 
@@ -66,23 +79,54 @@ public class Rdf2GoCore {
 		return me;
 	}
 
+	/**
+	 * 
+	 * should not be needed, all needed functions should be implemented in
+	 * Rdf2GoCore.
+	 * 
+	 * @return
+	 */
+	@Deprecated
 	public Model getModel() {
+		KnowWEEnvironment.maskHTML("");
 		return model;
 	}
 
+	private void registerJenaModel() {
+		System.out.print("Jena 2.6");
+		RDF2Go.register(new org.ontoware.rdf2go.impl.jena26.ModelFactoryImpl());
+	}
+
+	private void registerOwlimModel() {
+		System.out.print("Owlim");
+		RDF2Go.register(new com.ontotext.trree.rdf2go.OwlimModelFactory());
+	}
+
+	private void registerSesameModel() {
+		System.out.print("Sesame 2.3");
+		RDF2Go.register(new org.openrdf.rdf2go.RepositoryModelFactory());
+	}
+
 	public void initModel() {
-		// Uncomment one of these lines to activate the specified triple store adapter.
-		// By default the sesame adapter is used
-		
-		//Jena
-		//RDF2Go.register(new org.ontoware.rdf2go.impl.jena26.ModelFactoryImpl());
-		
-		//Owlim
-		//RDF2Go.register(new com.ontotext.trree.rdf2go.OwlimModelFactory());
-		
-		model = RDF2Go.getModelFactory().createModel();
+		if (USE_MODEL == "jena") {
+			registerJenaModel();
+		}
+		else if (USE_MODEL == "owlim") {
+			registerOwlimModel();
+		}
+		else {
+			registerSesameModel();
+		}
+
+		if (USE_REASONING != null) {
+			model = RDF2Go.getModelFactory().createModel(USE_REASONING);
+		}
+		else {
+			model = RDF2Go.getModelFactory().createModel();
+		}
 		model.open();
-		initNamespaces();
+		System.out.println(" model initialized");
+
 	}
 
 	private void initNamespaces() {
@@ -99,16 +143,17 @@ public class Rdf2GoCore {
 	}
 
 	public URI createURI(String str) {
-		return model.createURI(str);
+		return model.createURI(expandNamespace(str));
 	}
-	
+
 	/**
 	 * expands prefix to namespace
+	 * 
 	 * @created 06.12.2010
 	 * @param ns
-	 * @return 
+	 * @return
 	 */
-	public String expandNamespace(String ns) {
+	public String expandNSPrefix(String ns) {
 		for (Entry<String, String> cur : model.getNamespaces().entrySet()) {
 			if (ns.equals(cur.getKey())) {
 				ns = cur.getValue();
@@ -119,11 +164,29 @@ public class Rdf2GoCore {
 	}
 
 	/**
+	 * expands namespace in uri string to prefix
+	 * 
+	 * @created 04.01.2011
+	 * @param s
+	 * @return
+	 */
+	public String expandNamespace(String s) throws IllegalArgumentException {
+		if (s.startsWith("http://")) {
+			return s;
+		}
+		String[] array = s.split(":", 2);
+		if (array.length == 2) {
+			return expandNSPrefix(array[0]) + array[1];
+		}
+		throw new IllegalArgumentException("Not a valid (absolute) URI: " + s);
+	}
+
+	/**
 	 * reduces namespace in uri string to prefix
 	 * 
 	 * @created 06.12.2010
 	 * @param s
-	 * @return 
+	 * @return
 	 */
 	public String reduceNamespace(String s) {
 		for (Entry<String, String> cur : model.getNamespaces().entrySet()) {
@@ -135,14 +198,14 @@ public class Rdf2GoCore {
 	public String renderedSparqlSelect(String query) {
 		return renderedSparqlSelect(sparqlSelect(query));
 	}
-	
+
 	/**
 	 * 
 	 * @created 06.12.2010
 	 * @param qrt
 	 * @return html table with all results of qrt
 	 */
-	public static String renderedSparqlSelect(QueryResultTable qrt) {
+	public String renderedSparqlSelect(QueryResultTable qrt) {
 		List<String> l = qrt.getVariables();
 		ClosableIterator<QueryRow> i = qrt.iterator();
 		String result = "<table>";
@@ -153,22 +216,22 @@ public class Rdf2GoCore {
 			QueryRow s = i.next();
 			result += "<tr>";
 			for (String var : l) {
-				result += "<td>" + s.getValue(var) + "</td>";
+				result += "<td>" + reduceNamespace(s.getValue(var).toString()) + "</td>";
 			}
 			result += "</tr>";
 		}
 		result += "</table>";
 		return result;
 	}
-	
+
 	public boolean sparqlAsk(String query) {
 		return model.sparqlAsk(query);
 	}
-	
+
 	public QueryResultTable sparqlSelect(String query) {
 		return model.sparqlSelect(query);
 	}
-	
+
 	/**
 	 * 
 	 * @created 06.12.2010
@@ -197,7 +260,7 @@ public class Rdf2GoCore {
 	 * removes all statements of section s
 	 * 
 	 * @created 06.12.2010
-	 * @param s 
+	 * @param s
 	 */
 	public void removeSectionStatementsRecursive(
 			Section<? extends KnowWEObjectType> s) {
@@ -230,7 +293,7 @@ public class Rdf2GoCore {
 	 * removes statements from statementcache and rdf store
 	 * 
 	 * @created 06.12.2010
-	 * @param sec 
+	 * @param sec
 	 */
 	private void removeStatementsofSingleSection(
 			Section<? extends KnowWEObjectType> sec) {
@@ -239,18 +302,25 @@ public class Rdf2GoCore {
 		if (temp != null) {
 			List<Statement> statementsOfSection = temp.get(sec);
 			for (Statement s : statementsOfSection) {
+
 				if (duplicateStatements.containsKey(s)) {
 					if (duplicateStatements.get(s) != 1) {
-						duplicateStatements.put(s, duplicateStatements.get(s)-1);
-					} else {
+						duplicateStatements.put(s, duplicateStatements.get(s) - 1);
+					}
+					else {
 						duplicateStatements.remove(s);
 					}
-				} else {
+				}
+				else {
 					model.removeStatement(s);
 				}
+
+				model.removeStatement(s);
 			}
 			temp.remove(sec);
-
+			if (temp.isEmpty()) {
+				statementcache.remove(sec.getArticle().getTitle());
+			}
 		}
 	}
 
@@ -259,10 +329,9 @@ public class Rdf2GoCore {
 	 * 
 	 * @created 06.12.2010
 	 * @param allStatements
-	 * @param sec 
+	 * @param sec
 	 */
 	public void addStatements(List<Statement> allStatements, Section sec) {
-
 		// List<Statement> allStatements = inputio.getAllStatements();
 		// clearContext(sec);
 		addToStatementcache(sec, allStatements);
@@ -271,35 +340,35 @@ public class Rdf2GoCore {
 				"semantic core updating " + sec.getID() + "  "
 						+ allStatements.size());
 
+		List<Statement> currentDuplicates = new ArrayList<Statement>();
+
 		for (Statement s : allStatements) {
+
 			if (model.contains(s)) {
 				if (duplicateStatements.containsKey(s)) {
-					duplicateStatements.put(s, duplicateStatements.get(s)+1);
-				} else {
+					duplicateStatements.put(s, duplicateStatements.get(s) + 1);
+				}
+				else {
 					duplicateStatements.put(s, 1);
 				}
-				allStatements.remove(s);
-				
+				currentDuplicates.add(s);
 			}
 		}
-		
+		allStatements.removeAll(currentDuplicates);
 		addStaticStatements(allStatements, sec);
 
 	}
 
-	
 	/**
 	 * adds statements to rdf store
 	 * 
 	 * @created 06.12.2010
 	 * @param allStatements
-	 * @param sec 
+	 * @param sec
 	 */
 	public void addStaticStatements(List<Statement> allStatements, Section sec) {
-
 		Iterator i = allStatements.iterator();
 		model.addAll(i);
-
 	}
 
 	/**
@@ -307,7 +376,7 @@ public class Rdf2GoCore {
 	 * 
 	 * @created 06.12.2010
 	 * @param sec
-	 * @param allStatements 
+	 * @param allStatements
 	 */
 	private void addToStatementcache(Section sec, List<Statement> allStatements) {
 		WeakHashMap<Section, List<Statement>> temp = statementcache.get(sec
@@ -318,5 +387,9 @@ public class Rdf2GoCore {
 		}
 		temp.put(sec, allStatements);
 		statementcache.put(sec.getArticle().getTitle(), temp);
+	}
+
+	public Statement createStatement(Resource subject, URI predicate, Node object) {
+		return model.createStatement(subject, predicate, object);
 	}
 }

@@ -32,7 +32,7 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 
 /**
- * @author kazamatzuri
+ * @author grotheer
  * @param <T> This class just implements the destroy-handler for owl-generating
  *        SubtreeHandlers. It should be used as superclass for all
  *        owl-generating (i.e. those that call SemanticCore.addstatemnts(...))
@@ -64,8 +64,6 @@ public abstract class RDF2GoSubtreeHandler<T extends KnowWEObjectType> extends
 
 	@Override
 	public void destroy(KnowWEArticle article, Section<T> s) {
-		System.out.println("subtree");
-
 		try {
 			Rdf2GoCore.getInstance().removeSectionStatementsRecursive(s);
 		}
