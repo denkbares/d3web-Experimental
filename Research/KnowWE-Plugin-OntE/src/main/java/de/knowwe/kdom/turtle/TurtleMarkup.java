@@ -30,6 +30,7 @@ import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.kdom.type.AnonymousTypeInvisible;
 import de.d3web.we.terminology.TerminologyHandler;
 import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.onte.owl.terminology.URIUtil;
 import de.knowwe.termObject.BasicVocabularyReference;
 import de.knowwe.termObject.OWLClassDefinition;
 import de.knowwe.termObject.OWLInstanceDefinition;
@@ -89,13 +90,13 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 
 		public TurtlePredicate() {
 			this.setSectionFinder(new RegexSectionFinder("\\b([^\\s]*)::", 0));
-			this.addSubtreeHandler(Priority.LOWER, new TermChecker(new String[] {
-					"type", "subClassOf", "domain", "range" }));
+			this.addSubtreeHandler(Priority.LOWER, new TermChecker(URIUtil.PREDICATE_VOCABULARY));
 		}
 
 		@Override
 		public String getTermName(Section<? extends KnowWETerm<String>> s) {
 			String text = s.getOriginalText();
+			// hack TODO remove
 			if (text.endsWith("::")) {
 				text = text.substring(0, text.length() - 2);
 			}
@@ -135,8 +136,7 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 					new AllTextFinderTrimmed());
 			c.addConstraint(new SingleChildConstraint());
 			this.setSectionFinder(c);
-			this.addSubtreeHandler(Priority.LOWER, new TermChecker(new String[] {
-					"Class", "ObjectProperty", "Thing" }));
+			this.addSubtreeHandler(Priority.LOWER, new TermChecker(URIUtil.OBJECT_VOCABULARY));
 		}
 	}
 
