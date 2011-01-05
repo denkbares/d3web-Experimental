@@ -4,11 +4,14 @@ import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.objects.KnowWETerm;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 
 public class OWLClassDefinition extends URITermDefinition {
 
+	public static final StyleRenderer CLASS_RENDERER = new StyleRenderer("color:rgb(125, 80, 102)");
+	
 	public OWLClassDefinition() {
-		this.setCustomRenderer(FontColorRenderer.getRenderer(FontColorRenderer.COLOR4));
+		this.setCustomRenderer(CLASS_RENDERER);
 	}
 
 	@Override

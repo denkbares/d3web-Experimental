@@ -6,12 +6,12 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.objects.KnowWETerm;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 
-public class OWLObjectPropertyDefinition extends URITermDefinition {
+public class OWLInstanceDefinition extends URITermDefinition {
+
+	public static final StyleRenderer CLASS_RENDERER = new StyleRenderer("color:rgb(152, 180, 12)");
 	
-	public static final StyleRenderer PROPERTY_RENDERER = new StyleRenderer("color:rgb(40, 40, 160)");
-	
-	public OWLObjectPropertyDefinition() {
-		this.setCustomRenderer(PROPERTY_RENDERER);
+	public OWLInstanceDefinition() {
+		this.setCustomRenderer(CLASS_RENDERER);
 	}
 
 	@Override
@@ -20,5 +20,3 @@ public class OWLObjectPropertyDefinition extends URITermDefinition {
 	}
 
 }
-
-

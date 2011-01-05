@@ -1,11 +1,15 @@
 package de.knowwe.termObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
+import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.objects.GlobalTermDefinition;
@@ -23,13 +27,7 @@ public abstract class URITermDefinition extends GlobalTermDefinition<URI> {
 		this.addSubtreeHandler(new URIDefinitionRegistrationHandler());
 	}
 
-	/**
-	 * 
-	 * This handler registers this Term..
-	 * 
-	 * @author Jochen, Albrecht
-	 * @created 08.10.2010
-	 */
+
 	static class URIDefinitionRegistrationHandler extends SubtreeHandler<URITermDefinition> {
 
 		@Override
@@ -48,8 +46,19 @@ public abstract class URITermDefinition extends GlobalTermDefinition<URI> {
 						s.get().getName()
 								+ ": " + s.get().getTermName(s), s));
 			}
+			
+			URI uri = null;
+			String baseUrl = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
+			try {
+				String name = URLEncoder.encode(s.get().getTermName(s), "UTF-8");
+				uri = new URIImpl(baseUrl+name);
+			}
+			catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
-			s.get().storeTermObject(article, s, s.get().getTermObject(article, s));
+			s.get().storeTermObject(article, s, uri);
 
 			return new ArrayList<KDOMReportMessage>(0);
 		}

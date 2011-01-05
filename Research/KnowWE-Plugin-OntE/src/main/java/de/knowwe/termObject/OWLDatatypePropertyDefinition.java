@@ -8,7 +8,7 @@ import de.d3web.we.kdom.objects.KnowWETerm;
 public class OWLDatatypePropertyDefinition extends URITermDefinition {
 
 	public OWLDatatypePropertyDefinition() {
-		this.setCustomRenderer(FontColorRenderer.getRenderer(FontColorRenderer.COLOR5));
+		this.setCustomRenderer(OWLObjectPropertyDefinition.PROPERTY_RENDERER);
 	}
 
 	@Override

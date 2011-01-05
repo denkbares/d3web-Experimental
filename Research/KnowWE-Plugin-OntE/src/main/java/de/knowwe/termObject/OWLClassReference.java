@@ -6,11 +6,11 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.objects.GlobalTermReference;
 import de.d3web.we.kdom.objects.KnowWETerm;
 
-public class BasicVocabularyTermReference extends GlobalTermReference<URI> {
+public class OWLClassReference extends GlobalTermReference<URI> {
 
 	private URI uri;
 
-	public BasicVocabularyTermReference(URI uri) {
+	public OWLClassReference(URI uri) {
 		super(URI.class);
 		this.uri = uri;
 	}
