@@ -48,7 +48,7 @@ import de.d3web.we.kdom.Section;
  */
 public class Rdf2GoCore {
 
-	private static String USE_MODEL = "";
+	private static String USE_MODEL = "jena";
 	private static Reasoning USE_REASONING = Reasoning.owl;
 
 	private static Rdf2GoCore me;
@@ -65,17 +65,17 @@ public class Rdf2GoCore {
 	}
 
 	public void init() {
-		if (me == null) {
-			me = this;
-
-			me.initModel();
-			me.statementcache = new HashMap<String, WeakHashMap<Section, List<Statement>>>();
-			me.duplicateStatements = new HashMap<Statement, Integer>();
-			initNamespaces();
-		}
+		me.initModel();
+		me.statementcache = new HashMap<String, WeakHashMap<Section, List<Statement>>>();
+		me.duplicateStatements = new HashMap<Statement, Integer>();
+		initNamespaces();
 	}
 
 	public static Rdf2GoCore getInstance() {
+		if (me == null) {
+			me = new Rdf2GoCore();
+			me.init();
+		}
 		return me;
 	}
 
@@ -99,7 +99,7 @@ public class Rdf2GoCore {
 
 	private void registerOwlimModel() {
 		System.out.print("Owlim");
-		RDF2Go.register(new com.ontotext.trree.rdf2go.OwlimModelFactory());
+		// RDF2Go.register(new com.ontotext.trree.rdf2go.OwlimModelFactory());
 	}
 
 	private void registerSesameModel() {
