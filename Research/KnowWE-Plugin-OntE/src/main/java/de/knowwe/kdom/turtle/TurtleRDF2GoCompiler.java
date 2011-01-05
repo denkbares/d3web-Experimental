@@ -4,21 +4,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.ListIterator;
 
+import org.ontoware.rdf2go.model.Statement;
+
+import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
+import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SyntaxError;
-import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
-import de.d3web.we.kdom.type.AnonymousType;
-import de.knowwe.kdom.turtle.TurtleMarkup.TurtleObject;
-import de.knowwe.kdom.turtle.TurtleMarkup.TurtlePredicate;
-import de.knowwe.kdom.turtle.TurtleMarkup.TurtleSubject;
+import de.knowwe.termObject.RDFResourceType;
 
-public class TurtleRDF2GoCompiler extends GeneralSubtreeHandler<TurtleMarkup>{
+public class TurtleRDF2GoCompiler extends RDF2GoSubtreeHandler<TurtleMarkup>{
 
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TurtleMarkup> s) {
@@ -26,29 +23,27 @@ public class TurtleRDF2GoCompiler extends GeneralSubtreeHandler<TurtleMarkup>{
 			return new ArrayList<KDOMReportMessage>(0);
 		}
 			
+		List<Section<RDFResourceType>> found = new ArrayList<Section<RDFResourceType>>();
 		
-		List<Section<? extends KnowWEObjectType>> children = s.getChildren();
-		List<Section<? extends KnowWEObjectType>> childrenTmp = new ArrayList<Section<? extends KnowWEObjectType>>(children);
-		ListIterator<Section<? extends KnowWEObjectType>> iterator = childrenTmp.listIterator();
-		while(iterator.hasNext()) {
-			Section<? extends KnowWEObjectType> section = iterator.next();
-			if(section.get() instanceof AnonymousType || section.get() instanceof PlainText) {
-				iterator.remove();
-			}
-		}
 		
-		if(childrenTmp.size() != 3) {
+		s.findSuccessorsOfType(RDFResourceType.class, found);
+		
+		
+		if(found.size() != 3) {
 			return Arrays.asList((KDOMReportMessage) new SyntaxError(
-			"expected 3 objects - found:"+childrenTmp.size()));
+			"expected 3 objects - found:"+found.size()));
 		}
 		
-		Section<? extends KnowWEObjectType> subject = childrenTmp.get(0);
-		Section<? extends KnowWEObjectType> predicate = childrenTmp.get(1);
-		Section<? extends KnowWEObjectType> object = childrenTmp.get(2);
+		Section<RDFResourceType> subject = found.get(0);
+		Section<RDFResourceType> predicate = found.get(1);
+		Section<RDFResourceType> object = found.get(2);
 		
+		List<Statement> statements = new ArrayList<Statement>();
+		Statement st = Rdf2GoCore.getInstance().getModel().createStatement(subject.get().getURI(subject), predicate.get().getURI(predicate), object.get().getURI(object));
+		statements.add(st);
+		Rdf2GoCore.getInstance().addStatements(statements, s);
 		
-		
-		return null;
+		return new ArrayList<KDOMReportMessage>(0);
 	}
 
 }

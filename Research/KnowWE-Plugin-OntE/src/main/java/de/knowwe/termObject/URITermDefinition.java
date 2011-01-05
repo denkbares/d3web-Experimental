@@ -13,18 +13,32 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.objects.GlobalTermDefinition;
+import de.d3web.we.kdom.objects.KnowWETerm;
 import de.d3web.we.kdom.objects.TermDefinition;
+import de.d3web.we.kdom.objects.TermReference;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.message.ObjectAlreadyDefinedError;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.terminology.TerminologyHandler;
 import de.d3web.we.utils.KnowWEUtils;
 
-public abstract class URITermDefinition extends GlobalTermDefinition<URI> {
+public abstract class URITermDefinition extends GlobalTermDefinition<URI> implements RDFResourceType {
 
 	public URITermDefinition() {
 		super(URI.class);
 		this.addSubtreeHandler(new URIDefinitionRegistrationHandler());
+	}
+	
+	@Override
+	public URI getURI(Section<? extends RDFResourceType> s) {
+		if (s.get() instanceof TermDefinition) {
+			Object termObject = ((TermDefinition)s.get()).getTermObject(s.getArticle(),
+					s);
+			if (termObject instanceof URI) {
+				return (URI) termObject;
+			}
+		}
+		return null;
 	}
 
 

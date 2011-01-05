@@ -7,37 +7,29 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.objects.GlobalTermReference;
 import de.d3web.we.kdom.objects.KnowWETerm;
 import de.d3web.we.kdom.objects.TermDefinition;
+import de.d3web.we.kdom.objects.TermReference;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.terminology.TerminologyHandler;
 import de.d3web.we.utils.KnowWEUtils;
 
-public class OWLTermReference extends GlobalTermReference<URI> {
+public class OWLTermReference extends GlobalTermReference<URI> implements RDFResourceType {
 
-	public static final StyleRenderer REF_RENDERER = new StyleRenderer("color:rgb(25, 180, 120)");
+	public static final StyleRenderer REF_RENDERER = new StyleRenderer(
+			"color:rgb(25, 180, 120)");
 
 	public OWLTermReference() {
 		super(URI.class);
 		this.setCustomRenderer(REF_RENDERER);
 	}
 
-	public URI getURI(Section<OWLTermReference> s) {
-		TerminologyHandler terminologyHandler = KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
-		Section<? extends TermDefinition> definingSection = terminologyHandler.getTermDefiningSection(s.getArticle(), s.get().getTermName(s), KnowWETerm.GLOBAL);
-		Object termObject = definingSection.get().getTermObject(s.getArticle(), definingSection);
-		if(termObject instanceof URI) {
-			return (URI) termObject;
-		}
-		return null;
-	}
-
-
 
 	@Override
 	public String getTermName(Section<? extends KnowWETerm<URI>> s) {
-		//dirty hack for colons '::'
-		//TODO: fix
-		if(s.getOriginalText().endsWith("::")) return s.getOriginalText().substring(0, s.getOriginalText().length()-2);
-		
+		// dirty hack for colons '::'
+		// TODO: fix
+		if (s.getOriginalText().endsWith("::"))
+			return s.getOriginalText().substring(0, s.getOriginalText().length() - 2);
+
 		return s.getOriginalText();
 
 	}
@@ -47,5 +39,20 @@ public class OWLTermReference extends GlobalTermReference<URI> {
 		return this.getClass().getSimpleName();
 	}
 
+	@Override
+	public URI getURI(Section<? extends RDFResourceType> s) {
+		if (s.get() instanceof TermReference) {
+			TerminologyHandler terminologyHandler = KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
+			Section<? extends TermDefinition> definingSection = terminologyHandler.getTermDefiningSection(
+					s.getArticle(), ((TermReference) s.get()).getTermName(s),
+					KnowWETerm.GLOBAL);
+			Object termObject = definingSection.get().getTermObject(s.getArticle(),
+					definingSection);
+			if (termObject instanceof URI) {
+				return (URI) termObject;
+			}
+		}
+		return null;
+	}
 
 }

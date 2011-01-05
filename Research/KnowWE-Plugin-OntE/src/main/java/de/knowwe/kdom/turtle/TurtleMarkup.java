@@ -81,6 +81,7 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 		this.addSubtreeHandler(Priority.HIGHER, new ObjectPropertyDefintionChecker());
 		this.addSubtreeHandler(Priority.HIGHER, new ClassDefintionChecker());
 		this.addSubtreeHandler(Priority.HIGH, new InstanceDefintionChecker());
+		this.addSubtreeHandler(Priority.LOWEST, new TurtleRDF2GoCompiler());
 
 	}
 
