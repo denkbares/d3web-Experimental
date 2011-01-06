@@ -159,6 +159,7 @@
 		<module>d3web-Plugin-SessionPersistence-Basic</module>
 		<module>KnowWE-Plugin-SemanticCore-MarkupSet</module>
 		<module>KnowWE-Plugin-Rdf2GoSemanticCore</module>
+		<module>KnowWE-Plugin-SemanticWikiSeedingLOD</module>
 	</modules>
 	<repositories>
 		<repository>
