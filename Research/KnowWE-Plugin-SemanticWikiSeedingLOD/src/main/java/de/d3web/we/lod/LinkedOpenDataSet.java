@@ -47,48 +47,6 @@ public class LinkedOpenDataSet {
 
 	}
 
-	// /**
-	// * List directory contents for a resource folder. Not recursive. This is
-	// * basically a brute-force implementation. Works for regular files and
-	// also
-	// * JARs.
-	// *
-	// * @param path
-	// * Should end with "/", but not start with one.
-	// * @return Just the name of each member item, not the full paths.
-	// */
-	// public String[] getResourceListing() {
-	//
-	// /* A JAR path */
-	// String jarPath = pathString;
-	// JarFile jar = null;
-	// try {
-	// jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
-	// } catch (UnsupportedEncodingException e) {
-	// e.printStackTrace();
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	// Enumeration<JarEntry> entries = jar.entries(); // gives ALL entries in
-	// // jar
-	// Set<String> result = new HashSet<String>(); // avoid duplicates in case
-	// // it is a subdirectory
-	// while (entries.hasMoreElements()) {
-	// String name = entries.nextElement().getName();
-	// if (name.startsWith(pathString)) { // filter according to the path
-	// String entry = name.substring(pathString.length());
-	// int checkSubdir = entry.indexOf("/");
-	// if (checkSubdir >= 0) {
-	// // if it is a subdirectory, we just return the directory
-	// // name
-	// entry = entry.substring(0, checkSubdir);
-	// }
-	// result.add(entry);
-	// }
-	// return result.toArray(new String[result.size()]);
-	// }
-	// return null;
-	// }
 
 	/**
 	 * Get the LinkedOpenData-Object for a specified concepttype.

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,17 +27,32 @@ import com.hp.hpl.jena.query.ResultSetFormatter;
 public class LinkedOpenData {
 
 	private ArrayList<String> propFile;
-	private HashMap<String, String> mappings;
-	private HashMap<String, String> searchTags;
-	private HashMap<String, HashSet<String>> filterTags;
 
-	// TODO: IF first not avail test other one
+	// dbpedia tag -> result
+	private HashMap<String, String> mappings;
+
+	// Lists the corresponding DBpedia source for every result, to a specifig
+	// hermes tag.
+	private HashMap<String, List<Object>> inverseMap;
+
+	// sparql variable -> dbpedia tag
+	private HashMap<String, String> searchTags;
+
+	// dbpedia tag -> filter
+	private HashMap<String, HashSet<String>> filterTags;
 
 	// LOD liefer bei conceptIsResource anderes als DBpedia -> Problem
 	// private static final String sparqlEndpoint2 =
 	// "http://lod.openlinksw.com/sparql";
 
 	private static final String sparqlEndpoint = "http://dbpedia.org/sparql";
+
+	/**
+	 * Default.
+	 */
+	public LinkedOpenData() {
+
+	}
 
 	/**
 	 * Creates all required lists and objects for a given property file.
@@ -52,6 +67,7 @@ public class LinkedOpenData {
 		mappings = new HashMap<String, String>();
 		searchTags = new HashMap<String, String>();
 		filterTags = new HashMap<String, HashSet<String>>();
+		inverseMap = new HashMap<String, List<Object>>();
 		URL name = getClass().getClassLoader().getResource(conceptTypeName);
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -77,7 +93,7 @@ public class LinkedOpenData {
 								+ prop);
 		}
 
-		Iterator<String> map = this.mappings.keySet().iterator();
+		Iterator<String> map = mappings.keySet().iterator();
 		// add varnames + their tags in hashmap for sparql search
 		while (map.hasNext()) {
 			String temp = map.next();
@@ -95,6 +111,13 @@ public class LinkedOpenData {
 			} else
 				searchTags.put(temp.replaceAll("[:-]*", ""), temp);
 		}
+	}
+
+	/**
+	 * @return the inverseMap
+	 */
+	public HashMap<String, List<Object>> getInverseMap() {
+		return inverseMap;
 	}
 
 	/**
@@ -297,11 +320,9 @@ public class LinkedOpenData {
 	 * @param results
 	 *            results from getData()
 	 * @return Formatted result.
-	 * @throws Exception
-	 *             if return datatype is not correct
 	 */
 	public HashMap<String, HashSet<Object>> getHermesData(
-			Map<String, HashSet<String>> results) {
+			HashMap<String, HashSet<String>> results) {
 		Iterator<String> map = mappings.keySet().iterator();
 		HashMap<String, HashSet<Object>> resultData = new HashMap<String, HashSet<Object>>();
 		while (map.hasNext()) {
@@ -311,6 +332,7 @@ public class LinkedOpenData {
 			String datatype = cut[1];
 			if (!resultData.containsKey(hermesOnto)) {
 				resultData.put(hermesOnto, new HashSet<Object>());
+				inverseMap.put(hermesOnto, new Vector<Object>());
 			}
 			if (results.get(temp) != null) {
 				if (datatype.matches("\\(date\\)")) {
@@ -327,11 +349,15 @@ public class LinkedOpenData {
 											Integer.parseInt("-" + yearD[0]),
 											1, 1);
 									resultData.get(hermesOnto).add(datum);
+									inverseMap.get(hermesOnto).add(temp);
+									inverseMap.get(hermesOnto).add(datum);
 								}
 								if (yearD[1].matches("AD")) {
 									datum = new GregorianCalendar(
 											Integer.parseInt(yearD[0]), 1, 1);
 									resultData.get(hermesOnto).add(datum);
+									inverseMap.get(hermesOnto).add(temp);
+									inverseMap.get(hermesOnto).add(datum);
 								}
 							}
 						} else {
@@ -347,12 +373,16 @@ public class LinkedOpenData {
 											Integer.parseInt(yearD2[2]),
 											Integer.parseInt(yearD2[3]));
 									resultData.get(hermesOnto).add(datum);
+									inverseMap.get(hermesOnto).add(temp);
+									inverseMap.get(hermesOnto).add(datum);
 								} else {
 									datum = new GregorianCalendar(
 											Integer.parseInt(yearD2[0]),
 											Integer.parseInt(yearD2[1]),
 											Integer.parseInt(yearD2[2]));
 									resultData.get(hermesOnto).add(datum);
+									inverseMap.get(hermesOnto).add(temp);
+									inverseMap.get(hermesOnto).add(datum);
 								}
 							}
 						}
@@ -361,10 +391,14 @@ public class LinkedOpenData {
 					for (String s : results.get(temp)) {
 						if (s.matches("http://[\\p{Alnum}/.:_]*")) {
 							resultData.get(hermesOnto).add(s);
+							inverseMap.get(hermesOnto).add(temp);
+							inverseMap.get(hermesOnto).add(s);
 						} else {
 							String temp1 = getDBpediaRedirect(s);
-							if (getDBpediaRedirect(temp1) != "") {
+							if (!getDBpediaRedirect(temp1).isEmpty()) {
 								resultData.get(hermesOnto).add(temp1);
+								inverseMap.get(hermesOnto).add(temp);
+								inverseMap.get(hermesOnto).add(temp1);
 							}
 						}
 					}
@@ -374,21 +408,31 @@ public class LinkedOpenData {
 							String[] cutString = s.split("http://.*/");
 							// Schneide Kategorie: oder ähnliches weg
 							if (cutString[1].matches("[\\w]+:[\\w]+")) {
-								resultData.get(hermesOnto).add(
-										cutString[1].replaceAll("[\\w]+:", "")
-												.replaceAll("_", " "));
+								String tempvar = cutString[1].replaceAll(
+										"[\\w]+:", "").replaceAll("_", " ");
+								resultData.get(hermesOnto).add(tempvar);
+								inverseMap.get(hermesOnto).add(temp);
+								inverseMap.get(hermesOnto).add(tempvar);
 							} else {
-								resultData.get(hermesOnto).add(
-										cutString[1].replaceAll("_", " "));
+								String tempvar = cutString[1].replaceAll("_",
+										" ");
+								resultData.get(hermesOnto).add(tempvar);
+								inverseMap.get(hermesOnto).add(temp);
+								inverseMap.get(hermesOnto).add(tempvar);
 							}
 						} else {
 							if (isSpecified(temp)) {
 								if (s.matches(".*@[\\w]{2}")) {
-									resultData.get(hermesOnto).add(
-											s.replaceAll("@[\\w]{2}", ""));
+									String tempvar = s.replaceAll("@[\\w]{2}",
+											"");
+									resultData.get(hermesOnto).add(tempvar);
+									inverseMap.get(hermesOnto).add(temp);
+									inverseMap.get(hermesOnto).add(tempvar);
 								}
 							} else
 								resultData.get(hermesOnto).add(s);
+							inverseMap.get(hermesOnto).add(temp);
+							inverseMap.get(hermesOnto).add(s);
 						}
 
 					}
@@ -398,15 +442,21 @@ public class LinkedOpenData {
 						if (s.matches("[\\d]+[.,][\\d]+")
 								|| s.matches("[\\d]+[.,][\\d]+ [\\d]+[.,][\\d]+")) {
 							resultData.get(hermesOnto).add(s);
+							inverseMap.get(hermesOnto).add(temp);
+							inverseMap.get(hermesOnto).add(s);
 						}
 					}
 				} else if (datatype.matches("\\(int\\)")) {
 					for (String s : results.get(temp)) {
 						if (s.matches("[\\d]+")) {
 							resultData.get(hermesOnto).add(s);
+							inverseMap.get(hermesOnto).add(temp);
+							inverseMap.get(hermesOnto).add(s);
 						} else if (s.matches("[\\d]+\\^\\^.*")) {
-							resultData.get(hermesOnto).add(
-									s.substring(0, s.indexOf("^^")));
+							String tempvar = s.substring(0, s.indexOf("^^"));
+							resultData.get(hermesOnto).add(tempvar);
+							inverseMap.get(hermesOnto).add(temp);
+							inverseMap.get(hermesOnto).add(tempvar);
 						}
 					}// else
 						// throw new Exception(

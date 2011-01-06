@@ -10,6 +10,9 @@
                 <library id="de.d3web" path="." type="code">
                         <export prefix="*" />
                 </library>
+                <library id="webapp" path="webapp/" type="resources">
+			    		<export prefix="*" />
+				</library>
         </runtime>
         
         <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
@@ -22,7 +25,7 @@
                 <parameter id="priority" value="5" />
         </extension>
 
- <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+ 		<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
                 id="GetDataHandler">
                 <parameter id="class"
                         value="de.d3web.we.lod.taghandler.GetDataHandler" />
@@ -32,28 +35,26 @@
                 <parameter id="priority" value="5" />
         </extension>
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
 		id="DBpediaContentType">
-		<parameter id="class"
+			<parameter id="class"
 			value="de.d3web.we.lod.markup.DBpediaMappingMarkup" />
-		<parameter id="name" value="DBpediaMappingMarkup" />
-		<parameter id="description" value="KnowWEObjectType DBpediaMappingMarkup" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="4.5" /><parameter id="scope"
-			value="root">
-</parameter>
-	</extension>
+			<parameter id="name" value="DBpediaMappingMarkup" />
+			<parameter id="description" value="KnowWEObjectType DBpediaMappingMarkup" />
+			<parameter id="version" value="1.0" />
+			<parameter id="priority" value="4.5" /><parameter id="scope"
+			value="root" />
+			<parameter id="script" value="KnowWE-Plugin-SWSLOD.js" />
+		</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-                id="GetDataAction">
-                <parameter id="class"
-                        value="de.d3web.we.lod.action.GetDataAction" />
-                <parameter id="name" value="GetDataAction" />
-                <parameter id="description" value="Action GetDataAction" />
-                <parameter id="version" value="1.0" />
-                <parameter id="priority" value="5" />
-                <paramter id="script" value="name" />
-        </extension>
+    	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="GetDataAction">
+        	<parameter id="class"
+            value="de.d3web.we.lod.action.GetDataAction" />
+        	<parameter id="name" value="GetDataAction" />
+        	<parameter id="description" value="Action GetDataAction" />
+        	<parameter id="version" value="1.0" />
+        	<parameter id="priority" value="5" />
+    	</extension>		
 
-        
 </plugin>
