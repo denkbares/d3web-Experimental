@@ -1,15 +1,5 @@
 package de.d3web.we.lod.action;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
-import de.d3web.we.core.semantic.UpperOntology;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.lod.ConceptType;
-import de.d3web.we.lod.LinkedOpenData;
-import de.d3web.we.lod.LinkedOpenDataSet;
-import de.d3web.we.lod.markup.DBpediaContentType;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -21,6 +11,15 @@ import java.util.Vector;
 
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.ActionContext;
+import de.d3web.we.core.KnowWEEnvironment;
+import de.d3web.we.core.KnowWEParameterMap;
+import de.d3web.we.core.semantic.UpperOntology;
+import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.lod.ConceptType;
+import de.d3web.we.lod.LinkedOpenData;
+import de.d3web.we.lod.LinkedOpenDataSet;
+import de.d3web.we.lod.markup.DBpediaContentType;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 public class GetDataAction extends AbstractAction {
