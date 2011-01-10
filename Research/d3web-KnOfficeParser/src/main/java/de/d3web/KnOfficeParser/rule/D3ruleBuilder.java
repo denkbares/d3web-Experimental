@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -64,14 +64,17 @@ import de.d3web.core.session.Value;
 import de.d3web.core.session.values.ChoiceID;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.core.session.values.MultipleChoiceValue;
+import de.d3web.indication.ActionIndication;
+import de.d3web.indication.ActionNextQASet;
+import de.d3web.indication.inference.PSMethodStrategic;
 import de.d3web.report.Message;
 import de.d3web.scoring.Score;
 
 /**
  * Adapterklasse um d3 Regeln zu erstellen
- * 
+ *
  * @author Markus Friedrich
- * 
+ *
  */
 public class D3ruleBuilder implements KnOfficeParser, RuleBuilder {
 
@@ -146,15 +149,12 @@ public class D3ruleBuilder implements KnOfficeParser, RuleBuilder {
 			Condition cond = rule.ifcond;
 			if (cond instanceof CondDState) {
 				CondDState statecond = (CondDState) cond;
-				if (statecond.getStatus().hasState(State.ESTABLISHED)) {
-					newRule = RuleFactory.createRefinementRule(newRuleID, rule.qcons,
-							statecond.getSolution(), statecond,
-							rule.exceptcond);
-				}
-				else if (statecond.getStatus().hasState(State.SUGGESTED)) {
-					newRule = RuleFactory.createClarificationRule(newRuleID, rule.qcons,
-							statecond.getSolution(), statecond,
-							rule.exceptcond);
+				if (statecond.getStatus().hasState(State.ESTABLISHED)
+						|| statecond.getStatus().hasState(State.SUGGESTED)) {
+					ActionNextQASet ruleAction = new ActionIndication();
+					ruleAction.setQASets(rule.qcons);
+					newRule = RuleFactory.createRule(newRuleID, ruleAction, statecond,
+							rule.exceptcond, null, PSMethodStrategic.class);
 				}
 				else {
 					newRule = RuleFactory.createIndicationRule(newRuleID, rule.qcons,

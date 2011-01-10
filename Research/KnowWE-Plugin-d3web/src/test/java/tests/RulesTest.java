@@ -36,7 +36,6 @@ import de.d3web.core.inference.Rule;
 import de.d3web.core.inference.RuleSet;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.indication.ActionIndication;
-import de.d3web.indication.ActionRefine;
 import de.d3web.indication.inference.PSMethodStrategic;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.scoring.ActionHeuristicPS;
@@ -193,15 +192,6 @@ public class RulesTest extends TestCase {
 							+ " has wrong QASets.",
 							((ActionIndication) createdRule.getAction()).getQASets(),
 							((ActionIndication) loadedRule.getAction()).getQASets());
-				}
-
-				// ActionRefine specific tests
-				if (createdRule.getAction() instanceof ActionRefine) {
-
-					// Compare QASets of ActionRefine
-					assertEquals("ActionRefine of " + createdRule.getId() + " has wrong QASets.",
-							((ActionRefine) createdRule.getAction()).getQASets(),
-							((ActionRefine) loadedRule.getAction()).getQASets());
 				}
 
 			}

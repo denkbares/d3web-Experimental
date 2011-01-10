@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -70,15 +70,18 @@ import de.d3web.core.manage.AnswerFactory;
 import de.d3web.core.manage.IDObjectManagement;
 import de.d3web.core.manage.RuleFactory;
 import de.d3web.core.session.values.ChoiceValue;
+import de.d3web.indication.ActionIndication;
+import de.d3web.indication.ActionNextQASet;
+import de.d3web.indication.inference.PSMethodStrategic;
 import de.d3web.report.Message;
 import de.d3web.scoring.Score;
 
 /**
  * Builder um Mithilfe des Entscheidungsbaumparsers die geparsten Elemente in
  * ein KBM einzutragen
- * 
+ *
  * @author Markus Friedrich
- * 
+ *
  */
 public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 
@@ -110,9 +113,9 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 
 	/**
 	 * Innere Klasse um ein generisches Tupel aufzunehmen
-	 * 
+	 *
 	 * @author Markus Friedrich
-	 * 
+	 *
 	 * @param <T>
 	 * @param <X>
 	 */
@@ -145,7 +148,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see DTBuilder#addAnswerOrQuestionLink(int, java.lang.String,
 	 * java.lang.String)
 	 */
@@ -328,7 +331,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see DTBuilder#addDescription(java.lang.String, java.lang.String,
 	 * java.lang.String, java.lang.String)
 	 */
@@ -378,7 +381,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see DTBuilder#addDiagnosis(int, java.lang.String)
 	 */
 	@Override
@@ -486,7 +489,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see DTBuilder#addInclude(int, java.lang.String)
 	 */
 	@Override
@@ -496,7 +499,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see DTBuilder#addNumericAnswer(int, double, double)
 	 */
 	@Override
@@ -525,7 +528,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see DTBuilder#addQuestion(int, java.lang.String, java.lang.String,
 	 * boolean, java.lang.String, java.lang.String)
 	 */
@@ -670,13 +673,12 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 			CondDState statecond = (CondDState) abscon;
 			List<QASet> action = new ArrayList<QASet>();
 			action.add(set);
-			if (statecond.getStatus().hasState(State.ESTABLISHED)) {
-				RuleFactory.createRefinementRule(newRuleID, action, statecond
-						.getSolution(), statecond);
-			}
-			else if (statecond.getStatus().hasState(State.SUGGESTED)) {
-				RuleFactory.createClarificationRule(newRuleID, action,
-						statecond.getSolution(), statecond);
+			if (statecond.getStatus().hasState(State.ESTABLISHED)
+					|| statecond.getStatus().hasState(State.SUGGESTED)) {
+				ActionNextQASet ruleAction = new ActionIndication();
+				ruleAction.setQASets(action);
+				RuleFactory.createRule(newRuleID, ruleAction, statecond,
+						null, null, PSMethodStrategic.class);
 			}
 			else {
 				errors.add(MessageKnOfficeGenerator.createWrongDiagScore(
@@ -690,7 +692,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see DTBuilder#addQuestionclass(java.lang.String)
 	 */
 	@Override

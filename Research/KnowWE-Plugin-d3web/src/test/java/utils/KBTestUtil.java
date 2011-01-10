@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -53,6 +53,9 @@ import de.d3web.core.knowledge.terminology.info.NumericalInterval;
 import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.core.manage.RuleFactory;
 import de.d3web.core.session.values.ChoiceValue;
+import de.d3web.indication.ActionIndication;
+import de.d3web.indication.ActionNextQASet;
+import de.d3web.indication.inference.PSMethodStrategic;
 import de.d3web.scoring.Score;
 import de.d3web.we.basic.D3webKnowledgeHandler;
 import de.d3web.we.basic.D3webModule;
@@ -62,19 +65,19 @@ import de.d3web.xcl.XCLRelationType;
 
 /**
  * This Class loads the KnowledgeBase which will be tested.
- * 
+ *
  * Furthermore in this class the KnowledgeBase against which the loaded
  * KnowledgeBase is compared is created.
- * 
+ *
  * This class is a Singleton class because this insures that the KnowledgeBase
  * is loaded only once.
- * 
+ *
  * Please be careful when editing anything in here because the order of the
  * elements does matter in the tests! (especially the IDs)
- * 
+ *
  * @author Sebastian Furth
  * @see KnowledgeBaseCreationTest
- * 
+ *
  */
 public class KBTestUtil {
 
@@ -86,7 +89,7 @@ public class KBTestUtil {
 
 	/**
 	 * Returns the KnowledgeBase of a specific article
-	 * 
+	 *
 	 * @created 01.09.2010
 	 * @param article
 	 */
@@ -107,7 +110,7 @@ public class KBTestUtil {
 
 	/**
 	 * Returns an instance of KBCreationTestKBStorage.
-	 * 
+	 *
 	 * @return KBCreationTestKBStorage
 	 */
 	public static KBTestUtil getInstance() {
@@ -116,7 +119,7 @@ public class KBTestUtil {
 
 	/**
 	 * Returns the KnowledgeBase which was created manually.
-	 * 
+	 *
 	 * @return KnowledgeBase
 	 */
 	public KnowledgeBase getCreatedKB() {
@@ -430,7 +433,10 @@ public class KBTestUtil {
 		Solution diag = createdKBM.findSolution("Other problem");
 		CondDState condition = new CondDState(diag,
 				new Rating(State.ESTABLISHED));
-		RuleFactory.createRefinementRule(ruleID, action, diag, condition);
+		ActionNextQASet ruleAction = new ActionIndication();
+		ruleAction.setQASets(action);
+		RuleFactory.createRule(ruleID, ruleAction, condition,
+				null, null, PSMethodStrategic.class);
 
 	}
 
