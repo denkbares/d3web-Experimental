@@ -55,6 +55,16 @@
         	<parameter id="description" value="Action GetDataAction" />
         	<parameter id="version" value="1.0" />
         	<parameter id="priority" value="5" />
-    	</extension>		
+    	</extension>	
+    		
+    	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="ParseDataAction">
+        	<parameter id="class"
+            value="de.d3web.we.lod.action.ParseDataAction" />
+        	<parameter id="name" value="ParseDataAction" />
+        	<parameter id="description" value="Action ParseDataAction" />
+        	<parameter id="version" value="1.0" />
+        	<parameter id="priority" value="5" />
+    	</extension>	
 
 </plugin>

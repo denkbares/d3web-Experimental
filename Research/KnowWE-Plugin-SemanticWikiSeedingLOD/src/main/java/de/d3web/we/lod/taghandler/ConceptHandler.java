@@ -34,21 +34,29 @@ public class ConceptHandler extends AbstractHTMLTagHandler {
 
 		HashMap<String, String> corresDBpediaConcepts = new HashMap<String, String>();
 
+		int count = 0;
+		int found = 0;
 		try {
 			while (result.hasNext()) {
+				count++;
 				BindingSet set = result.next();
 				String title = set.getBinding("x").getValue().stringValue();
 				try {
 					title = URLDecoder.decode(title, "UTF-8");
 					title = title.substring(title.indexOf("#") + 1);
 					String redirect = LinkedOpenData.getDBpediaRedirect(title);
+					if (redirect != "") {
+						found++;
+					}
 					corresDBpediaConcepts.put(title, redirect);
 
-				} catch (UnsupportedEncodingException e) {
+				}
+				catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
 			}
-		} catch (QueryEvaluationException e) {
+		}
+		catch (QueryEvaluationException e) {
 			e.printStackTrace();
 		}
 		StringBuffer buffy = new StringBuffer();
@@ -72,6 +80,6 @@ public class ConceptHandler extends AbstractHTMLTagHandler {
 		KnowWEEnvironment.getInstance().getArticleManager(web)
 				.registerArticle(article);
 
-		return "<b>Article DBpediaMapping succesfully created.</b>";
+		return "<b>Article DBpediaMapping succesfully created. (" + found + "/" + count + ")</b>";
 	}
 }

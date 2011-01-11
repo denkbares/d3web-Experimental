@@ -5,12 +5,10 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,12 +26,12 @@ public class LinkedOpenData {
 
 	private ArrayList<String> propFile;
 
-	// dbpedia tag -> result
+	// dbpedia tag -> hermes tag
 	private HashMap<String, String> mappings;
 
 	// Lists the corresponding DBpedia source for every result, to a specifig
-	// hermes tag.
-	private HashMap<String, List<Object>> inverseMap;
+	// hermes tag. hermes tag -> dbpedia source
+	private HashMap<String, List<String>> inverseMap;
 
 	// sparql variable -> dbpedia tag
 	private HashMap<String, String> searchTags;
@@ -45,7 +43,10 @@ public class LinkedOpenData {
 	// private static final String sparqlEndpoint2 =
 	// "http://lod.openlinksw.com/sparql";
 
-	private static final String sparqlEndpoint = "http://dbpedia.org/sparql";
+	private static final String sparqlEndpoint = "http://lod.openlinksw.com/sparql";
+
+	// Times the queries are split up.
+	private static final int split = 3;
 
 	/**
 	 * Default.
@@ -57,17 +58,15 @@ public class LinkedOpenData {
 	/**
 	 * Creates all required lists and objects for a given property file.
 	 * 
-	 * @param conceptTypeName
-	 *            concepttype.properties
-	 * @throws Exception
-	 *             if the propery file is not in correct syntax
+	 * @param conceptTypeName concepttype.properties
+	 * @throws Exception if the propery file is not in correct syntax
 	 */
 	public LinkedOpenData(String conceptTypeName) throws Exception {
 		propFile = new ArrayList<String>();
 		mappings = new HashMap<String, String>();
 		searchTags = new HashMap<String, String>();
 		filterTags = new HashMap<String, HashSet<String>>();
-		inverseMap = new HashMap<String, List<Object>>();
+		inverseMap = new HashMap<String, List<String>>();
 		URL name = getClass().getClassLoader().getResource(conceptTypeName);
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -79,15 +78,24 @@ public class LinkedOpenData {
 				}
 				tempLine = in.readLine();
 			}
-		} catch (Exception exception) {
+		}
+		catch (Exception exception) {
 		}
 		for (String prop : propFile) {
 			if (prop.matches("[\\w:-]* -> [\\w:öäüÖÄÜ]* [\\w()]*")
 					|| prop.matches("[\\w:-]* [\\w:_$@-]* -> [\\w:öäüÖÄÜ]* [\\w()]*")) {
 				String[] cut = prop.split(" -> ");
-				mappings.put(cut[0], cut[1]);
-			} else
-				throw new Exception(
+				if (prop.startsWith("INV")) {
+					// INV name --> name INV ; handle as a filter
+					String swap = cut[0].substring(cut[0].indexOf(" ") + 1)
+							+ " " + cut[0].substring(0, cut[0].indexOf(" "));
+					mappings.put(swap, cut[1]);
+				}
+				else {
+					mappings.put(cut[0], cut[1]);
+				}
+			}
+			else throw new Exception(
 						conceptTypeName
 								+ " file not in correct syntax: A B -> C (D) or A -> C (D)\n"
 								+ prop);
@@ -99,24 +107,25 @@ public class LinkedOpenData {
 			String temp = map.next();
 			if (isSpecified(temp)) {
 				String[] splitted = temp.split(" ");
-				searchTags.put(splitted[0].replaceAll(":", ""), splitted[0]);
+				searchTags.put(splitted[0].replaceAll("[:-]*", ""), splitted[0]);
 				// helps differentiating several filtertags & correct add of
 				// these
 				if (filterTags.containsKey(splitted[0])) {
 					filterTags.get(splitted[0]).add(splitted[1]);
-				} else {
-					filterTags.put(splitted[0],
-							new HashSet<String>(Arrays.asList(splitted[1])));
 				}
-			} else
-				searchTags.put(temp.replaceAll("[:-]*", ""), temp);
+				else {
+					filterTags.put(splitted[0],
+								new HashSet<String>(Arrays.asList(splitted[1])));
+				}
+			}
+			else searchTags.put(temp.replaceAll("[:-]*", ""), temp);
 		}
 	}
 
 	/**
 	 * @return the inverseMap
 	 */
-	public HashMap<String, List<Object>> getInverseMap() {
+	public HashMap<String, List<String>> getInverseMap() {
 		return inverseMap;
 	}
 
@@ -151,12 +160,11 @@ public class LinkedOpenData {
 	/**
 	 * Tests if a property in concepttype.properties is specified.
 	 * 
-	 * @param toTest
-	 *            string to test
+	 * @param toTest string to test
 	 * @return boolean
 	 */
-	private boolean isSpecified(String toTest) {
-		if (toTest.matches("[\\w:]* [\\w:_$@-]*")) {
+	private static boolean isSpecified(String toTest) {
+		if (toTest.matches("[\\w:-]* [\\w:_$@-]*")) {
 			return true;
 		}
 		return false;
@@ -165,60 +173,18 @@ public class LinkedOpenData {
 	/**
 	 * Get returned data from sparql for the concepttype.properties.
 	 * 
-	 * @param input
-	 *            resource to be looked up
+	 * @param input resource to be looked up
 	 * @return varname -> data (probably multiple results -> List)
 	 */
 	public HashMap<String, HashSet<String>> getLODdata(String input) {
 
 		input = "<" + input + ">";
-		StringBuffer prefixes = new StringBuffer();
-		URL name = getClass().getClassLoader().getResource("prefixes");
-		try {
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					name.openStream()));
-			String tempLine = in.readLine();
-			while (tempLine != null) {
-				prefixes.append(tempLine);
-				tempLine = in.readLine();
-			}
-		} catch (Exception exception) {
-		}
 
-		Iterator<String> map2 = searchTags.keySet().iterator();
-		StringBuffer queryStringX = new StringBuffer();
-		queryStringX.append(prefixes + "SELECT");
-		while (map2.hasNext()) {
-			String temp = map2.next();
-			queryStringX.append(" ?" + temp);
-		}
-		// Redirect
-		queryStringX.append(" WHERE { ");
-		// + "dbpedia2:redirect ?redirectTarget .");
-		// add properties to query
-		Iterator<String> map3 = searchTags.keySet().iterator();
-		while (map3.hasNext()) {
-			String temp = map3.next();
-			queryStringX.append("OPTIONAL {" + input + " "
-					+ searchTags.get(temp) + " ?" + temp + " .}");
-		}
-		queryStringX.append("}");
-
-		// create the query object
-		// System.out.println(queryStringX.toString());
-		Query query = QueryFactory.create(queryStringX.toString());
-		QueryExecution qexec = QueryExecutionFactory.sparqlService(
-				sparqlEndpoint, query);
-		List<QuerySolution> test = new ArrayList<QuerySolution>();
-		try {
-			ResultSet results = qexec.execSelect();
-			test = ResultSetFormatter.toList(results);
-		} finally {
-			qexec.close();
-		}
+		List<String> queries = this.createQueryString(input, split);
+		List<QuerySolution> solution = this.executequeryStrings(queries);
 
 		HashMap<String, HashSet<String>> result = new HashMap<String, HashSet<String>>();
-		for (QuerySolution x : test) {
+		for (QuerySolution x : solution) {
 			Iterator<String> it = x.varNames();
 			while (it.hasNext()) {
 				String temp = it.next();
@@ -226,24 +192,39 @@ public class LinkedOpenData {
 				if (filterTags.containsKey(searchTags.get(temp))) {
 					// first tag which is mapped to filter
 					for (String s : filterTags.get(searchTags.get(temp))) {
-						String filter = s.replaceAll("\\$", "\\\\w+");
-						Pattern pattern = Pattern.compile(filter);
-						Matcher matcher = pattern.matcher(x.get(temp)
-								.toString());
-						// add set with 1 element
-						if (matcher.find()) {
-							result.put(
-									searchTags.get(temp) + " " + s,
-									new HashSet<String>(Arrays.asList(x.get(
-											temp).toString())));
+						if (!s.equals("INV")) {
+							String filter = s.replaceAll("\\$", "\\\\w+");
+							Pattern pattern = Pattern.compile(filter);
+							Matcher matcher = pattern.matcher(x.get(temp)
+									.toString());
+							// add set with 1 element
+							if (matcher.find()) {
+								result.put(
+										searchTags.get(temp) + " " + s,
+										new HashSet<String>(Arrays.asList(x.get(
+												temp).toString())));
+							}
+						}
+						// Inverse lookup save with INV as filterkey
+						else {
+							if (result.containsKey(searchTags.get(temp) + " " + s)) {
+								result.get(searchTags.get(temp) + " " + s).add(
+										x.get(temp).toString());
+							}
+							else {
+								result.put(searchTags.get(temp) + " " + s, new HashSet<String>(
+										Arrays.asList(x.get(temp).toString())));
+							}
 						}
 					}
-				} else {
+				}
+				else {
 					// helps to save multiple results for every variable
 					if (result.containsKey(searchTags.get(temp))) {
 						result.get(searchTags.get(temp)).add(
 								x.get(temp).toString());
-					} else {
+					}
+					else {
 						result.put(searchTags.get(temp), new HashSet<String>(
 								Arrays.asList(x.get(temp).toString())));
 					}
@@ -254,26 +235,165 @@ public class LinkedOpenData {
 	}
 
 	/**
+	 * Lists all prefixes from prefix resource in an single string.
+	 * 
+	 * @return prefix list.
+	 */
+	public String getPrefixes() {
+
+		StringBuffer prefixes = new StringBuffer();
+		URL name = getClass().getClassLoader().getResource("prefixes");
+
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+					name.openStream()));
+			String tempLine = in.readLine();
+			while (tempLine != null) {
+				prefixes.append(tempLine);
+				tempLine = in.readLine();
+			}
+		}
+		catch (Exception exception) {
+		}
+
+		return prefixes.toString();
+	}
+
+	/**
+	 * Executes multiple query strings & returns result as a single list of
+	 * solutions.
+	 * 
+	 * @param queries queries.
+	 * @return solutionlist.
+	 */
+	public List<QuerySolution> executequeryStrings(List<String> queries) {
+
+		List<List<QuerySolution>> test = new ArrayList<List<QuerySolution>>();
+
+		for (int i = 0; i < queries.size(); i++) {
+			// create the query object
+			// System.out.println(queries.get(i).toString());
+			Query query = QueryFactory.create(queries.get(i).toString());
+			QueryExecution qexec = QueryExecutionFactory.sparqlService(
+					sparqlEndpoint, query);
+			List<QuerySolution> solution = new ArrayList<QuerySolution>();
+			try {
+				ResultSet results = qexec.execSelect();
+				solution = ResultSetFormatter.toList(results);
+				test.add(solution);
+			}
+			finally {
+				qexec.close();
+			}
+		}
+
+		List<QuerySolution> result = new ArrayList<QuerySolution>();
+		for (int i = 0; i < test.size(); i++) {
+			for (int j = 0; j < test.get(i).size(); j++) {
+				result.add(test.get(i).get(j));
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Create multiple Queries, to avoid the dbpedia sparql execution limit.
+	 * 
+	 * @param input Resource to be queried
+	 * @param count times the query is split
+	 */
+	public List<String> createQueryString(String input, int count) {
+
+		StringBuffer queryStringX = new StringBuffer();
+		queryStringX.append("SELECT");
+
+		int size = searchTags.size();
+		int split = size / count;
+
+		List<String> selectVars = new ArrayList<String>();
+
+		Iterator<String> map2 = searchTags.keySet().iterator();
+		while (map2.hasNext()) {
+			String temp = map2.next();
+			selectVars.add((" ?" + temp));
+		}
+
+		List<String> whereVars = new ArrayList<String>();
+
+		// add properties to query
+		Iterator<String> map3 = searchTags.keySet().iterator();
+		while (map3.hasNext()) {
+			String temp = map3.next();
+			String add = "";
+			if (filterTags.containsKey(searchTags.get(temp))) {
+				for (String s : filterTags.get(searchTags.get(temp)))
+					if (s.equals("INV")) {
+						add = "OPTIONAL {?" + temp + " " + searchTags.get(temp) + " " + input
+								+ " .}";
+					}
+					else {
+						add = "OPTIONAL {" + input + " " + searchTags.get(temp) + " ?" + temp
+								+ " .}";
+					}
+			}
+			else {
+				add = "OPTIONAL {" + input + " " + searchTags.get(temp) + " ?" + temp + " .}";
+			}
+			whereVars.add(add);
+		}
+
+		List<String> queries = new ArrayList<String>();
+		StringBuffer varBuf = new StringBuffer();
+		StringBuffer whereBuf = new StringBuffer();
+
+		int temp = split;
+
+		for (int i = 0; i < size; i++) {
+
+			varBuf.append(selectVars.get(i));
+			whereBuf.append(whereVars.get(i));
+
+			if (i == temp - 1 || i == size - 1) {
+				StringBuffer query = new StringBuffer();
+				query.append(this.getPrefixes() + "SELECT" + varBuf + " WHERE{" + whereBuf
+							+ "}");
+				queries.add(query.toString());
+				varBuf.delete(0, varBuf.length());
+				whereBuf.delete(0, whereBuf.length());
+				temp += split;
+			}
+		}
+		return queries;
+	}
+
+	/**
 	 * Tests if the given URI input concept is a valid resource.
 	 * 
-	 * @param input
-	 *            URI
+	 * @param input URI
 	 * @return boolean
 	 */
 	public static boolean conceptIsResource(String input) {
 		StringBuffer stringQuery = new StringBuffer();
+		StringBuffer stringQuery2 = new StringBuffer();
 		stringQuery
+				.append("PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>");
+		stringQuery.append("ASK {<" + input + "> dbpedia-owl:abstract ?temp1 .}");
+		stringQuery2
 				.append("PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>");
-		stringQuery.append("ASK {<" + input + "> rdfs:label ?temp1 .}");
+		stringQuery2.append("ASK {<" + input + "> rdfs:comment ?temp1 .}");
 		// create the query object
 		Query query = QueryFactory.create(stringQuery.toString());
+		Query query2 = QueryFactory.create(stringQuery2.toString());
 
 		QueryExecution qexec = QueryExecutionFactory.sparqlService(
 				sparqlEndpoint, query);
+		QueryExecution qexec2 = QueryExecutionFactory.sparqlService(
+				sparqlEndpoint, query2);
 
 		try {
-			return qexec.execAsk();
-		} finally {
+			return qexec.execAsk() || qexec2.execAsk();
+		}
+		finally {
 			qexec.close();
 		}
 	}
@@ -281,8 +401,7 @@ public class LinkedOpenData {
 	/**
 	 * Searches a DBpedia concept for a given object.
 	 * 
-	 * @param input
-	 *            object
+	 * @param input object
 	 * @return redirect dbpedia URI
 	 */
 	public static String getRedirect(String input) {
@@ -301,7 +420,8 @@ public class LinkedOpenData {
 		try {
 			ResultSet results = qexec.execSelect();
 			test = ResultSetFormatter.toList(results);
-		} finally {
+		}
+		finally {
 			qexec.close();
 		}
 		for (QuerySolution x : test) {
@@ -317,150 +437,347 @@ public class LinkedOpenData {
 	/**
 	 * Get a formatted output for the Hermes Ontology.
 	 * 
-	 * @param results
-	 *            results from getData()
+	 * @param results results from getData()
 	 * @return Formatted result.
 	 */
-	public HashMap<String, HashSet<Object>> getHermesData(
+	public HashMap<String, HashSet<String>> getHermesData(
 			HashMap<String, HashSet<String>> results) {
-		Iterator<String> map = mappings.keySet().iterator();
-		HashMap<String, HashSet<Object>> resultData = new HashMap<String, HashSet<Object>>();
-		while (map.hasNext()) {
-			String temp = map.next();
-			String[] cut = mappings.get(temp).split(" ");
-			String hermesOnto = cut[0];
-			String datatype = cut[1];
-			if (!resultData.containsKey(hermesOnto)) {
-				resultData.put(hermesOnto, new HashSet<Object>());
-				inverseMap.put(hermesOnto, new Vector<Object>());
+
+		Iterator<String> resultMap = results.keySet().iterator();
+		HashMap<String, HashSet<String>> resultData = new HashMap<String, HashSet<String>>();
+
+		int countCoords = 0;
+		String[] coords = new String[4];
+
+		while (resultMap.hasNext()) {
+
+			String lhsMappings = resultMap.next();
+			boolean inverse = false;
+
+			String normalTitle = lhsMappings;
+			// Save string for hermes property mouseover [title='x'].
+			String htmlTitle = "";
+
+			if (isSpecified(lhsMappings)) {
+				if (lhsMappings.split(" ")[1].equals("INV")) {
+					inverse = true;
+					htmlTitle = "is&nbsp;" + lhsMappings.substring(0, lhsMappings.indexOf(" "))
+							+ "&nbsp;of";
+				}
+				else {
+					htmlTitle = lhsMappings.substring(0, lhsMappings.indexOf(" "))
+							+ "&nbsp;["
+							+ lhsMappings.substring(lhsMappings.indexOf(" ") + 1) + "]";
+				}
 			}
-			if (results.get(temp) != null) {
+
+			// Get hermes tag for dbpedia tag & get datatype for the given
+			// result.
+			String[] cut = mappings.get(lhsMappings).split(" ");
+			String hermesTag = cut[0];
+			String datatype = cut[1];
+
+			// Intialize resultmap & lookup map for [title]
+			if (!resultData.containsKey(hermesTag)) {
+				resultData.put(hermesTag, new HashSet<String>());
+				inverseMap.put(hermesTag, new ArrayList<String>());
+			}
+
+			// Case dbtag filter($), but inverse lookup is handled as normal
+			// request.
+			if (isSpecified(lhsMappings) && !inverse) {
+
 				if (datatype.matches("\\(date\\)")) {
-					GregorianCalendar datum;
-					for (String s : results.get(temp)) {
-						if (isSpecified(temp)) {
-							String filter = "[\\w]*_[BC|AD]{2}";
+					for (String s : results.get(lhsMappings)) {
+
+						String date = "";
+
+						s = s.substring(s.lastIndexOf("/") + 1);
+
+						// category:$_$_deaths/births or category:$_AD/BC
+						if (s.matches("\\w+:\\d+_\\w+")) {
+							String filter = "[\\w]+_[BC|AD|E]{2,3}";
 							Pattern pattern = Pattern.compile(filter);
 							Matcher matcher = pattern.matcher(s);
 							if (matcher.find()) {
 								String[] yearD = matcher.group().split("_");
-								if (yearD[1].matches("BC")) {
-									datum = new GregorianCalendar(
-											Integer.parseInt("-" + yearD[0]),
-											1, 1);
-									resultData.get(hermesOnto).add(datum);
-									inverseMap.get(hermesOnto).add(temp);
-									inverseMap.get(hermesOnto).add(datum);
+								if (yearD[1].matches("BC") || yearD[1].matches("BCE")) {
+
+									date = "-" + yearD[0] + "-1-1";
 								}
-								if (yearD[1].matches("AD")) {
-									datum = new GregorianCalendar(
-											Integer.parseInt(yearD[0]), 1, 1);
-									resultData.get(hermesOnto).add(datum);
-									inverseMap.get(hermesOnto).add(temp);
-									inverseMap.get(hermesOnto).add(datum);
+								else {
+									date = yearD[0] + "-1-1)";
 								}
 							}
-						} else {
-							String filter = "-?[\\d]*-[\\d]*-[\\d]*";
-							Pattern pattern = Pattern.compile(filter);
-							Matcher matcher = pattern.matcher(s);
-							if (matcher.find()) {
-								String result = matcher.group();
-								String[] yearD2 = result.split("-");
-								if (result.indexOf("-") == 0) {
-									datum = new GregorianCalendar(
-											Integer.parseInt("-" + yearD2[1]),
-											Integer.parseInt(yearD2[2]),
-											Integer.parseInt(yearD2[3]));
-									resultData.get(hermesOnto).add(datum);
-									inverseMap.get(hermesOnto).add(temp);
-									inverseMap.get(hermesOnto).add(datum);
-								} else {
-									datum = new GregorianCalendar(
-											Integer.parseInt(yearD2[0]),
-											Integer.parseInt(yearD2[1]),
-											Integer.parseInt(yearD2[2]));
-									resultData.get(hermesOnto).add(datum);
-									inverseMap.get(hermesOnto).add(temp);
-									inverseMap.get(hermesOnto).add(datum);
-								}
-							}
+							resultData.get(hermesTag).add(date);
+							inverseMap.get(hermesTag).add(htmlTitle);
+							inverseMap.get(hermesTag).add(date);
 						}
 					}
-				} else if (datatype.matches("\\(concept\\)")) {
-					for (String s : results.get(temp)) {
-						if (s.matches("http://[\\p{Alnum}/.:_]*")) {
-							resultData.get(hermesOnto).add(s);
-							inverseMap.get(hermesOnto).add(temp);
-							inverseMap.get(hermesOnto).add(s);
-						} else {
-							String temp1 = getDBpediaRedirect(s);
-							if (!getDBpediaRedirect(temp1).isEmpty()) {
-								resultData.get(hermesOnto).add(temp1);
-								inverseMap.get(hermesOnto).add(temp);
-								inverseMap.get(hermesOnto).add(temp1);
-							}
-						}
-					}
-				} else if (datatype.matches("\\(string\\)")) {
-					for (String s : results.get(temp)) {
-						if (s.matches("http://[\\p{Alnum}/.:_]*")) {
-							String[] cutString = s.split("http://.*/");
-							// Schneide Kategorie: oder ähnliches weg
-							if (cutString[1].matches("[\\w]+:[\\w]+")) {
-								String tempvar = cutString[1].replaceAll(
-										"[\\w]+:", "").replaceAll("_", " ");
-								resultData.get(hermesOnto).add(tempvar);
-								inverseMap.get(hermesOnto).add(temp);
-								inverseMap.get(hermesOnto).add(tempvar);
-							} else {
-								String tempvar = cutString[1].replaceAll("_",
-										" ");
-								resultData.get(hermesOnto).add(tempvar);
-								inverseMap.get(hermesOnto).add(temp);
-								inverseMap.get(hermesOnto).add(tempvar);
-							}
-						} else {
-							if (isSpecified(temp)) {
-								if (s.matches(".*@[\\w]{2}")) {
-									String tempvar = s.replaceAll("@[\\w]{2}",
-											"");
-									resultData.get(hermesOnto).add(tempvar);
-									inverseMap.get(hermesOnto).add(temp);
-									inverseMap.get(hermesOnto).add(tempvar);
-								}
-							} else
-								resultData.get(hermesOnto).add(s);
-							inverseMap.get(hermesOnto).add(temp);
-							inverseMap.get(hermesOnto).add(s);
+				}
+
+				if (datatype.matches("\\(string\\)")) {
+					for (String s : results.get(lhsMappings)) {
+						// Cut languagetags @$$
+						if (s.matches(".*@[\\w]{2}")) {
+
+							String string = s.replaceAll("@[\\w]{2}",
+										"");
+							string = translate(string);
+
+							resultData.get(hermesTag).add(string);
+
+							inverseMap.get(hermesTag).add(htmlTitle);
+							inverseMap.get(hermesTag).add(string);
 						}
 
 					}
-				} else if (datatype.matches("\\(double\\)")) {
-					for (String s : results.get(temp)) {
-						// Test?
-						if (s.matches("[\\d]+[.,][\\d]+")
-								|| s.matches("[\\d]+[.,][\\d]+ [\\d]+[.,][\\d]+")) {
-							resultData.get(hermesOnto).add(s);
-							inverseMap.get(hermesOnto).add(temp);
-							inverseMap.get(hermesOnto).add(s);
+				}
+
+				// Only in conjunction with a filter -> true if filter found,
+				// else false.
+				if (datatype.matches("\\(object\\)")) {
+					for (String s : results.get(lhsMappings)) {
+
+						resultData.get(hermesTag).add("ist vom Typ " + hermesTag);
+
+						inverseMap.get(hermesTag).add(htmlTitle);
+						inverseMap.get(hermesTag).add("ist vom Typ " + hermesTag);
+					}
+				}
+
+				if (datatype.matches("\\(concept\\)")) {
+					for (String s : results.get(lhsMappings)) {
+
+						String result = "";
+						if (lhsMappings.split(" ")[1].contains("$")) {
+
+							String regex = lhsMappings.split(" ")[1];
+							int expression = regex.indexOf("$");
+							char[] search = s.substring(expression, s.length() - 1).toCharArray();
+
+							for (char c : search) {
+								if (c == '_' || c == ' ') {
+									break;
+								}
+								result += c;
+							}
+						}
+						// TODO: search hermesconcept & provide link --> Methode
+						// searchconcept auf seite zugreifen DBpediaMappings
+
+						resultData.get(hermesTag).add(result);
+						inverseMap.get(hermesTag).add(htmlTitle);
+						inverseMap.get(hermesTag).add(result);
+					}
+				}
+			}
+			else {
+
+				if (inverse) {
+					normalTitle = htmlTitle;
+				}
+
+				if (datatype.matches("\\(date\\)")) {
+					for (String s : results.get(lhsMappings)) {
+
+						String datum = "";
+						String datum2 = "";
+						boolean period = false;
+
+						if (s.matches("[\\w -]+@\\p{Alpha}{2}")) {
+							s = s.substring(0, s.indexOf("@"));
+						}
+
+						// Default xsd:date type [-]CCYY-MM-DD
+						if (s.matches("-?[\\d]*-[\\d]*-[\\d]*")) {
+
+							s = s.substring(0, s.indexOf("^"));
+
+							String[] yearD2 = s.split("-");
+							if (s.indexOf("-") == 0) {
+								datum = "-" + yearD2[1] + "-" + yearD2[2] + "-" + yearD2[3];
+							}
+							else {
+								datum = yearD2[0] + "-" + yearD2[1] + "-" + yearD2[2];
+							}
+						}
+						// October?,? ?YYYY+
+						if (s.matches("[\\p{Alpha} ,]*[\\d]+ ?[AD|BC|E]{2,3}")) {
+
+							String yearFilter = "[\\d]+ ?[AD|BC|E]{2,3}";
+							Pattern yearPattern = Pattern.compile(yearFilter);
+							Matcher matcherY = yearPattern.matcher(s);
+
+							if (matcherY.find()) {
+								String date = matcherY.group();
+								String year = date.split(" ?[\\p{Alpha}]+")[0];
+								if (date.contains("AD")
+										|| (date.contains("CE") && !date.contains("BCE"))) {
+									datum = year + "-1-1";
+								}
+								else {
+									datum = "-" + year + "-1-1";
+								}
+							}
+						}
+
+						// Period of time.
+						if (s.matches("[\\d]+ ?[AD|BC|E]{0,3} ?- ?[\\d]+ ?[AD|BC|E]{2,3}")) {
+
+							period = true;
+							String periodFilter = "[\\d]+";
+							Pattern periodPattern = Pattern.compile(periodFilter);
+							Matcher matcherP = periodPattern.matcher(s);
+							boolean two = false;
+							while (matcherP.find()) {
+								String date = matcherP.group();
+								if (s.contains("AD")
+										|| (s.contains("CE") && !s.contains("BCE"))) {
+									if (two) {
+										datum2 = date + "-1-1";
+									}
+									else {
+										datum = date + "-1-1";
+									}
+								}
+								else {
+									if (two) {
+										datum2 = "-" + date + "-1-1";
+									}
+									else {
+										datum = "-" + date + "-1-1";
+									}
+								}
+								two = true;
+							}
+						}
+						if (period) {
+							resultData.get(hermesTag).add(datum + " >> " + datum2);
+							inverseMap.get(hermesTag).add(normalTitle);
+							inverseMap.get(hermesTag).add(datum + " >> " + datum2);
+						}
+						else {
+							resultData.get(hermesTag).add(datum);
+							inverseMap.get(hermesTag).add(normalTitle);
+							inverseMap.get(hermesTag).add(datum);
 						}
 					}
-				} else if (datatype.matches("\\(int\\)")) {
-					for (String s : results.get(temp)) {
-						if (s.matches("[\\d]+")) {
-							resultData.get(hermesOnto).add(s);
-							inverseMap.get(hermesOnto).add(temp);
-							inverseMap.get(hermesOnto).add(s);
-						} else if (s.matches("[\\d]+\\^\\^.*")) {
-							String tempvar = s.substring(0, s.indexOf("^^"));
-							resultData.get(hermesOnto).add(tempvar);
-							inverseMap.get(hermesOnto).add(temp);
-							inverseMap.get(hermesOnto).add(tempvar);
+				}
+				if (datatype.matches("\\(concept\\)")) {
+					for (String s : results.get(lhsMappings)) {
+						String result = "";
+						if (s.matches("http://[\\p{Alnum}/.:_]*")) {
+							result = s;
 						}
-					}// else
-						// throw new Exception(
-				} // "Datatype does not match on of the given types ( \"(date)\", \"(concept)\", \"(string)\", \"(double)\" )");
+						else {
+							if (!getDBpediaRedirect(s).isEmpty()) {
+								result = getDBpediaRedirect(s);
+							}
+						}
+						// TODO: search hermesconcept & provide link --> Methode
+						// searchconcept auf seite zugreifen DBpediaMappings
+						resultData.get(hermesTag).add(result);
+						inverseMap.get(hermesTag).add(normalTitle);
+						inverseMap.get(hermesTag).add(result);
+					}
+				}
+
+				if (datatype.matches("\\(double\\)")) {
+					for (String s : results.get(lhsMappings)) {
+
+						double d1, d2;
+
+						if (s.matches("[\\d., ]+@\\p{Alpha}{2}")) {
+							s = s.substring(0, s.indexOf("@"));
+						}
+						if (s.matches("[\\d.,]+\\^\\^[\\w\\p{Punct}]+")) {
+							s = s.substring(0, s.indexOf("^"));
+						}
+
+						if (s.matches("[\\d]+[.,][\\d]+ ?[\\d]*[.,]?[\\d]*")) {
+
+							s = s.replaceAll(",", ".");
+
+							if (s.contains(" ")) {
+
+								d1 = Double.parseDouble(s.substring(0, s.indexOf(" ")));
+								d2 = Double.parseDouble(s.substring(s.indexOf(" "),
+										s.length()));
+								resultData.get(hermesTag).add("x: " + d1);
+								inverseMap.get(hermesTag).add(normalTitle);
+								inverseMap.get(hermesTag).add("x: " + d1);
+								resultData.get(hermesTag).add("y: " + d2);
+								inverseMap.get(hermesTag).add(normalTitle);
+								inverseMap.get(hermesTag).add("y: " + d2);
+							}
+							else {
+								resultData.get(hermesTag).add(s);
+								inverseMap.get(hermesTag).add(normalTitle);
+								inverseMap.get(hermesTag).add(s);
+							}
+
+						}
+					}
+				}
+
+				if (datatype.matches("\\(string\\)")) {
+					for (String s : results.get(lhsMappings)) {
+						String string = s;
+
+						// Cut URL.
+						if (s.matches("http://[\\p{Alnum}/.:_]*")) {
+
+							String[] cutString = s.split("http://.*/");
+							if (cutString[1].matches("[\\w]+:[\\w]+")) {
+								string = cutString[1].replaceAll(
+											"[\\w]+:", "").replaceAll("_", " ");
+							}
+							else {
+								string = cutString[1].replaceAll("_", " ");
+							}
+						}
+						else {
+							// Cut languagetags.
+							if (string.matches("[\\w.:;]+@\\p{Alpha}{2}")) {
+								string = string.substring(0, string.indexOf("@") - 1);
+							}
+						}
+						string = translate(string);
+						resultData.get(hermesTag).add(string);
+						inverseMap.get(hermesTag).add(normalTitle);
+						inverseMap.get(hermesTag).add(string);
+					}
+				}
+
+				if (datatype.matches("\\(coords\\)")) {
+					countCoords++;
+					for (String s : results.get(lhsMappings)) {
+						s = s.substring(0, s.indexOf("^"));
+						if (lhsMappings.equals("dbpprop:latDeg")) {
+							coords[0] = s + "° ";
+						}
+						if (lhsMappings.equals("dbpprop:latMin")) {
+							coords[1] = s + "'N ";
+						}
+						if (lhsMappings.equals("dbpprop:lonDeg")) {
+							coords[2] = s + "° ";
+						}
+						if (lhsMappings.equals("dbpprop:lonMin")) {
+							coords[3] = s + "'E ";
+						}
+					}
+					if (countCoords == 4) {
+						String result = "";
+						for (String s : coords) {
+							result += s;
+						}
+						resultData.get(hermesTag).add(result);
+						inverseMap.get(hermesTag).add(
+								"dbpprop:latDeg,&nbsp;dbpprop:latMin,&nbsp;dbpprop:lonDeg,&nbsp;dbpprop:lonMin");
+						inverseMap.get(hermesTag).add(result);
+					}
+				}
 			}
 		}
 		return resultData;
@@ -470,11 +787,10 @@ public class LinkedOpenData {
 	 * First gets data from LOD, then returns the Hermes output. (Concatenation
 	 * of getLODdata & getHermesData)
 	 * 
-	 * @param input
-	 *            String
+	 * @param input String
 	 * @return final result
 	 */
-	public HashMap<String, HashSet<Object>> getData(String input) {
+	public HashMap<String, HashSet<String>> getData(String input) {
 		HashMap<String, HashSet<String>> stepOne = getLODdata(input);
 		return getHermesData(stepOne);
 	}
@@ -482,8 +798,7 @@ public class LinkedOpenData {
 	/**
 	 * Get valid DBpedia concept if available.
 	 * 
-	 * @param input
-	 *            Hermes Concept.
+	 * @param input Hermes Concept.
 	 * @return corresponding Dbpedia concept.
 	 */
 	public static String getDBpediaRedirect(String input) {
@@ -491,9 +806,11 @@ public class LinkedOpenData {
 				.replaceAll(" ", "_");
 		if (conceptIsResource("http://dbpedia.org/resource/" + parsed)) {
 			return "http://dbpedia.org/resource/" + parsed;
-		} else if (conceptIsResource(getRedirect(parsed))) {
+		}
+		else if (conceptIsResource(getRedirect(parsed))) {
 			return getRedirect(parsed);
-		} else {
+		}
+		else {
 			// Same with translated one!
 			// Only for init - for google to distinguish between programs
 			Translate.setHttpReferrer("ex");
@@ -501,7 +818,8 @@ public class LinkedOpenData {
 			try {
 				translatedText = Translate.execute(input, Language.GERMAN,
 						Language.ENGLISH);
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 			}
 			if (!input.equals(translatedText)) {
@@ -511,4 +829,24 @@ public class LinkedOpenData {
 		return "";
 	}
 
+	/**
+	 * Translates a given text.
+	 * 
+	 * @param string text to translate.
+	 * @return translated Text.
+	 */
+	private static String translate(String string) {
+
+		Translate.setHttpReferrer("ex");
+		String translatedText = "";
+		try {
+			translatedText = Translate.execute(string, Language.GERMAN,
+					Language.ENGLISH);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return translatedText;
+
+	}
 }

@@ -15,8 +15,7 @@ public class LinkedOpenDataSet {
 	 * Creates a Set of LinkedData Objects, which are stored in a HashMap. Their
 	 * key is the corresponding property file name as Enumeration.
 	 * 
-	 * @throws Exception
-	 *             if one of the property files is not in correct syntax
+	 * @throws Exception if one of the property files is not in correct syntax
 	 */
 	private LinkedOpenDataSet() throws Exception {
 
@@ -39,7 +38,8 @@ public class LinkedOpenDataSet {
 		if (instance == null) {
 			try {
 				instance = new LinkedOpenDataSet();
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -47,12 +47,10 @@ public class LinkedOpenDataSet {
 
 	}
 
-
 	/**
 	 * Get the LinkedOpenData-Object for a specified concepttype.
 	 * 
-	 * @param concept
-	 *            concepttype
+	 * @param concept concepttype
 	 * @return
 	 */
 	public LinkedOpenData getLOD(ConceptType concept) {
