@@ -39,7 +39,7 @@ public class TurtleRDF2GoCompiler extends RDF2GoSubtreeHandler<TurtleMarkup>{
 		Section<RDFResourceType> object = found.get(2);
 		
 		List<Statement> statements = new ArrayList<Statement>();
-		Statement st = Rdf2GoCore.getInstance().getModel().createStatement(subject.get().getURI(subject), predicate.get().getURI(predicate), object.get().getURI(object));
+		Statement st = Rdf2GoCore.getInstance().createStatement(subject.get().getURI(subject), predicate.get().getURI(predicate), object.get().getURI(object));
 		statements.add(st);
 		Rdf2GoCore.getInstance().addStatements(statements, s);
 		

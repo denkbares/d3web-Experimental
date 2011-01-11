@@ -27,6 +27,17 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		id="TurtleMarkupSimple">
+		<parameter id="class"
+			value="de.knowwe.kdom.turtle.simple.TurtleMarkupSimple" />
+		<parameter id="name" value="TurtleMarkupSimple" />
+		<parameter id="description" value="KnowWEObjectType TurtleMarkupSimple" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="TerminologyViewHandler">
 		<parameter id="class" value="de.knowwe.util.TerminologyViewHandler" />
