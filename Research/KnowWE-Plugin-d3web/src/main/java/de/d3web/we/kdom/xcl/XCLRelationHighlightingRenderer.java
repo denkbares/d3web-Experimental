@@ -144,7 +144,8 @@ public class XCLRelationHighlightingRenderer extends KnowWEDomRenderer {
 			// When (Complex)Finding call the FontcolorBackgroundRenderer
 			List<Section> children = sec.getChildren();
 			for (Section s : children) {
-				buffi.append(this.renderRelationChild(article, s, fulfilled, user, "#33FF33"));
+				buffi.append(this.renderRelationChild(article, s, fulfilled, user,
+						StyleRenderer.CONDITION_FULLFILLED));
 			}
 
 		}
@@ -152,7 +153,8 @@ public class XCLRelationHighlightingRenderer extends KnowWEDomRenderer {
 			// b false: Color red
 			List<Section> children = sec.getChildren();
 			for (Section s : children) {
-				buffi.append(this.renderRelationChild(article, s, fulfilled, user, "#FF9900"));
+				buffi.append(this.renderRelationChild(article, s, fulfilled, user,
+						StyleRenderer.CONDITION_FALSE));
 			}
 
 		}

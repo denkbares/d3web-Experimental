@@ -217,10 +217,12 @@ public class RuleConditionHighlightingRenderer extends KnowWEDomRenderer {
 
 		try {
 			if (rc.getCondition().eval(session)) StyleRenderer.getRenderer(
-					StyleRenderer.CONDITION.getCssStyle(), "#33FF33").render(article,
+					StyleRenderer.CONDITION.getCssStyle(), StyleRenderer.CONDITION_FULLFILLED).render(
+					article,
 					sec, user, buffi);
 			else StyleRenderer.getRenderer(
-					StyleRenderer.CONDITION.getCssStyle(), "#FF9900").render(article,
+					StyleRenderer.CONDITION.getCssStyle(), StyleRenderer.CONDITION_FALSE).render(
+					article,
 					sec, user, buffi);
 		}
 		catch (NoAnswerException e) {
