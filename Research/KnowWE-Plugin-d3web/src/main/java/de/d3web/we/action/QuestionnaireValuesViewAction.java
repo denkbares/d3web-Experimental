@@ -58,7 +58,8 @@ public class QuestionnaireValuesViewAction extends AbstractAction {
 			Session session = D3webUtils.getSession(article.getTitle(), context.getWikiContext(),
 					web);
 			if (session != null) {
-				IDObject io = session.getKnowledgeBase().searchObjectForName(questionnaireName);
+				IDObject io = session.getKnowledgeBase().getManager().searchObjectForName(
+						questionnaireName);
 				if (io instanceof QContainer) {
 					QContainer questionnaire = (QContainer) io;
 					for (TerminologyObject no : questionnaire.getChildren()) {

@@ -66,7 +66,7 @@ public class QuestionStateReportAction extends DeprecatedAbstractKnowWEAction {
 		Question q = null;
 
 		if (questionID != null) {
-			QASet set = base.searchQASet(questionID);
+			QASet set = base.getManager().searchQASet(questionID);
 			if (set instanceof Question) {
 
 				q = ((Question) set);
@@ -74,7 +74,7 @@ public class QuestionStateReportAction extends DeprecatedAbstractKnowWEAction {
 		}
 
 		if (questionName != null) {
-			List<Question> questionList = base.getQuestions();
+			List<Question> questionList = base.getManager().getQuestions();
 			for (Question question : questionList) {
 				if (question.getName().equals(questionName)) {
 

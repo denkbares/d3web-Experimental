@@ -119,7 +119,7 @@ public class ShowAllKBsHandler extends AbstractHTMLTagHandler {
 			}
 			allSCcnt += xclCount;
 			allRuleCnt += rules.size();
-			int qCount = kb.getQuestions().size();
+			int qCount = kb.getManager().getQuestions().size();
 
 			if (even) {
 				html.append("<tr class=\"even\">");

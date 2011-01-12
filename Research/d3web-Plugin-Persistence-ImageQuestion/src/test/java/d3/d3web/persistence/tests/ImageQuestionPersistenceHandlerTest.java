@@ -76,7 +76,7 @@ public class ImageQuestionPersistenceHandlerTest {
 	public void testPropertiesLoading() {
 
 		// Question 1
-		Question q1 = kb.searchQuestion("QGelenkstatus");
+		Question q1 = kb.getManager().searchQuestion("QGelenkstatus");
 		ImageQuestionStore util = q1.getInfoStore().getValue(ImageQuestionStore.IMAGE_QUESTION_INFO);
 		String imageName = util.getFile();
 		String height = util.getHeight();
@@ -92,7 +92,7 @@ public class ImageQuestionPersistenceHandlerTest {
 		List<List<String>> answerRegions = util.getAnswerRegions();
 
 		// The assertions: AnswerRegion 1
-		List<String> attributes = (List<String>) answerRegions.get(0);
+		List<String> attributes = answerRegions.get(0);
 		String answerID = attributes.get(0);
 		int xStart = Integer.parseInt(attributes.get(1));
 		int xEnd = Integer.parseInt(attributes.get(2));
@@ -118,7 +118,7 @@ public class ImageQuestionPersistenceHandlerTest {
 		assertEquals(7, yStart);
 		assertEquals(8, yEnd);
 
-		Question q2 = kb.searchQuestion("QGelenkstatus2");
+		Question q2 = kb.getManager().searchQuestion("QGelenkstatus2");
 		util = q2.getInfoStore().getValue(ImageQuestionStore.IMAGE_QUESTION_INFO);
 		imageName = util.getFile();
 		height = util.getHeight();
@@ -135,7 +135,7 @@ public class ImageQuestionPersistenceHandlerTest {
 		answerRegions = util.getAnswerRegions();
 
 		// The assertions: AnswerRegion 1
-		attributes = (List<String>) answerRegions.get(0);
+		attributes = answerRegions.get(0);
 		answerID = attributes.get(0);
 		xStart = Integer.parseInt(attributes.get(1));
 		xEnd = Integer.parseInt(attributes.get(2));
@@ -149,8 +149,8 @@ public class ImageQuestionPersistenceHandlerTest {
 
 		// Question 1
 		// The assertions: AnswerRegion 2
-		attributes = (List<String>) answerRegions.get(1);
-		answerID = (String) attributes.get(0);
+		attributes = answerRegions.get(1);
+		answerID = attributes.get(0);
 		xStart = Integer.parseInt(attributes.get(1));
 		xEnd = Integer.parseInt(attributes.get(2));
 		yStart = Integer.parseInt(attributes.get(3));

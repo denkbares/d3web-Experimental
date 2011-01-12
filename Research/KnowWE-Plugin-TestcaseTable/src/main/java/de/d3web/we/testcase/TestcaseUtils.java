@@ -52,8 +52,8 @@ public class TestcaseUtils {
 		if (knowledgeService == null) {
 			return null;
 		}
-		List<Question> questions = knowledgeService.getQuestions();
-		List<Solution> solutions = knowledgeService.getSolutions();
+		List<Question> questions = knowledgeService.getManager().getQuestions();
+		List<Solution> solutions = knowledgeService.getManager().getSolutions();
 
 		int col = TableCellContent.getCol(s);
 		int row = TableCellContent.getRow(s);

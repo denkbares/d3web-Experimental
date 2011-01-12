@@ -44,7 +44,6 @@ public class SemanticAnnotationAction extends DeprecatedAbstractKnowWEAction {
 
 		String namespace = parameterMap.get(KnowWEAttributes.SEMANO_NAMESPACE);
 		String termName = parameterMap.get(KnowWEAttributes.SEMANO_TERM_NAME);
-		String type = parameterMap.get(KnowWEAttributes.SEMANO_TERM_TYPE);
 		String user = parameterMap.get(KnowWEAttributes.USER);
 		String webname = parameterMap.get(KnowWEAttributes.WEB);
 		String id = parameterMap.get(KnowWEAttributes.SEMANO_OBJECT_ID);
@@ -73,7 +72,7 @@ public class SemanticAnnotationAction extends DeprecatedAbstractKnowWEAction {
 		StringBuffer sb = new StringBuffer();
 
 		Session session = broker.getServiceSession(namespace);
-		TerminologyObject obj = session.getKnowledgeBase().search(id);
+		TerminologyObject obj = session.getKnowledgeBase().getManager().search(id);
 		if (obj instanceof Question) {
 
 			if (user != null) {

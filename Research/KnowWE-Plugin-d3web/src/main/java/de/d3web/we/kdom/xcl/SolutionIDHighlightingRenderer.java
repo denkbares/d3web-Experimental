@@ -66,7 +66,7 @@ public class SolutionIDHighlightingRenderer extends KnowWEDomRenderer {
 
 		if (session != null) {
 
-			List<Solution> diags = session.getKnowledgeBase().getSolutions();
+			List<Solution> diags = session.getKnowledgeBase().getManager().getSolutions();
 			Collection<KnowledgeSlice> slices = session.getKnowledgeBase()
 					.getAllKnowledgeSlicesFor(PSMethodXCL.class);
 

@@ -230,7 +230,7 @@ public class ImageQuestionHandler extends AbstractHTMLTagHandler {
 			KnowledgeBase kb, Question q) {
 
 		// Is the Answer in the KnowledgeBase
-		Choice answer = kb.searchAnswerChoice(answerRegion.getAnswerID());
+		Choice answer = kb.getManager().searchAnswerChoice(answerRegion.getAnswerID());
 
 		if (answer == null) {
 			Logger.getLogger(ImageQuestionHandler.class.getName())

@@ -58,8 +58,8 @@ public class QuestionTreeTest extends TestCase {
 		KnowWEArticle art = MyTestArticleManager.getArticle(KBTestUtil.KBCREATION_ARTICLE_FILE);
 		KnowledgeBase loadedKB = KBTestUtil.getInstance().getKnowledgeBase(art);
 		KnowledgeBase createdKB = KBTestUtil.getInstance().getCreatedKB();
-		assertEquals("Number of Questions differ.", createdKB.getQuestions().size(),
-				loadedKB.getQuestions().size());
+		assertEquals("Number of Questions differ.", createdKB.getManager().getQuestions().size(),
+				loadedKB.getManager().getQuestions().size());
 	}
 
 	public void testQuestions() {
@@ -68,11 +68,11 @@ public class QuestionTreeTest extends TestCase {
 		KnowledgeBase loadedKB = KBTestUtil.getInstance().getKnowledgeBase(art);
 		KnowledgeBase createdKB = KBTestUtil.getInstance().getCreatedKB();
 
-		if (loadedKB.getQuestions().size() == createdKB.getQuestions().size()) {
-			for (int i = 0; i < loadedKB.getQuestions().size(); i++) {
+		if (loadedKB.getManager().getQuestions().size() == createdKB.getManager().getQuestions().size()) {
+			for (int i = 0; i < loadedKB.getManager().getQuestions().size(); i++) {
 
-				Question expected = createdKB.getQuestions().get(i);
-				Question actual = loadedKB.getQuestions().get(i);
+				Question expected = createdKB.getManager().getQuestions().get(i);
+				Question actual = loadedKB.getManager().getQuestions().get(i);
 
 				// Test Name & ID
 				assertEquals("Question " + expected.getName() + " has wrong ID.",
@@ -126,8 +126,8 @@ public class QuestionTreeTest extends TestCase {
 		KnowledgeBase createdKB = KBTestUtil.getInstance().getCreatedKB();
 
 		// Get Question with ID "Q1": "Exhaust fumes"
-		Question loadedQuestion = loadedKB.searchQuestion("Q1");
-		Question createdQuestion = createdKB.searchQuestion("Q1");
+		Question loadedQuestion = loadedKB.getManager().searchQuestion("Q1");
+		Question createdQuestion = createdKB.getManager().searchQuestion("Q1");
 
 		String loadedPrompt = loadedQuestion.getInfoStore().getValue(MMInfo.PROMPT);
 		String createdPrompt = createdQuestion.getInfoStore().getValue(MMInfo.PROMPT);

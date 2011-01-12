@@ -23,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import de.d3web.core.knowledge.terminology.NamedObject;
+import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
@@ -85,7 +85,7 @@ public class AttributeTable extends Table {
 
 			for (Section<AttributeTableTempType> tempType : tempTypes) {
 
-				NamedObject namedObject = findNamedObject(kbm, tempType.getOriginalText());
+				TerminologyObject namedObject = findNamedObject(kbm, tempType.getOriginalText());
 
 				// Create MMInfo
 				if (namedObject != null) {
@@ -112,7 +112,7 @@ public class AttributeTable extends Table {
 			return msg;
 		}
 
-		private void createMMInfo(NamedObject namedObject, Section<AttributeTableTempType> tempType) {
+		private void createMMInfo(TerminologyObject namedObject, Section<AttributeTableTempType> tempType) {
 			Section<TableLine> line = tempType.findAncestorOfType(TableLine.class);
 			List<Section<TableCellContent>> cells = new LinkedList<Section<TableCellContent>>();
 			line.findSuccessorsOfType(TableCellContent.class, cells);
@@ -130,9 +130,9 @@ public class AttributeTable extends Table {
 
 		}
 
-		private NamedObject findNamedObject(KnowledgeBaseManagement kbm, String name) {
+		private TerminologyObject findNamedObject(KnowledgeBaseManagement kbm, String name) {
 			// Is there a Question with this name?
-			NamedObject namedObject = kbm.findQuestion(name);
+			TerminologyObject namedObject = kbm.findQuestion(name);
 			if (namedObject == null) {
 				// Or a Solution?
 				namedObject = kbm.findSolution(name);

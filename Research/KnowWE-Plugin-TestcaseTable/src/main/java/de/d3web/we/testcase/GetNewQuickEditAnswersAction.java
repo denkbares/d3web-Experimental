@@ -52,8 +52,8 @@ public class GetNewQuickEditAnswersAction extends AbstractAction {
 
 		KnowledgeBase knowledgeService = D3webModule.getAD3webKnowledgeServiceInTopic(
 				web, topic);
-		List<Question> questions = knowledgeService.getQuestions();
-		List<Solution> solutions = knowledgeService.getSolutions();
+		List<Question> questions = knowledgeService.getManager().getQuestions();
+		List<Solution> solutions = knowledgeService.getManager().getSolutions();
 
 		context.setContentType("text/plain; charset=UTF-8");
 

@@ -24,7 +24,6 @@ import java.util.List;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
-import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
@@ -165,7 +164,7 @@ public class RestrictedIDObjectManager extends SingleKBMIDObjectManager {
 			}
 			// if there is no question with the text, search for one with the
 			// name
-			for (NamedObject no : questions) {
+			for (TerminologyObject no : questions) {
 				if (no instanceof Question) {
 					Question q = (Question) no;
 					if (q.getName().equals(name)) {

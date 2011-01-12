@@ -69,7 +69,7 @@ public class ImageQuestionPersistenceHandler implements KnowledgeReader, Knowled
 
 					Element questionElement = questions.get(i);
 					String id = questionElement.getAttribute("ID");
-					Question q = knowledgeBase.searchQuestion(id);
+					Question q = knowledgeBase.getManager().searchQuestion(id);
 
 					InfoStore infoStore = q.getInfoStore();
 					ImageQuestionStore store = new ImageQuestionStore();
@@ -99,7 +99,7 @@ public class ImageQuestionPersistenceHandler implements KnowledgeReader, Knowled
 	@Override
 	public int getEstimatedSize(KnowledgeBase knowledgeBase) {
 		int count = 0;
-		for (Question q : knowledgeBase.getQuestions()) {
+		for (Question q : knowledgeBase.getManager().getQuestions()) {
 			if (q.getInfoStore().getValue(ImageQuestionStore.IMAGE_QUESTION_INFO) != null) count++;
 		}
 		return count;
@@ -114,10 +114,10 @@ public class ImageQuestionPersistenceHandler implements KnowledgeReader, Knowled
 
 		Document doc = Util.createEmptyDocument();
 		Element root = doc.createElement("Questions");
-		List<Question> questions = knowledgeBase.getQuestions();
+		List<Question> questions = knowledgeBase.getManager().getQuestions();
 
 		for (Question q : questions) {
-			ImageQuestionStore store = (ImageQuestionStore) q.getInfoStore().getValue(
+			ImageQuestionStore store = q.getInfoStore().getValue(
 					ImageQuestionStore.IMAGE_QUESTION_INFO);
 
 			if (store != null) {

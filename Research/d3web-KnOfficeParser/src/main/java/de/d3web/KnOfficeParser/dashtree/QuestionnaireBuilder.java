@@ -280,7 +280,7 @@ public class QuestionnaireBuilder implements DashTBuilder, KnOfficeParser {
 		List<Message> ret = new ArrayList<Message>(errors);
 		if (ret.size() == 0) {
 			ret.add(MessageKnOfficeGenerator.createQContainerParsedNote(file, 0, "",
-					idom.getKnowledgeBase()
+					idom.getKnowledgeBase().getManager()
 							.getQContainers().size() - 1));
 		}
 		return ret;

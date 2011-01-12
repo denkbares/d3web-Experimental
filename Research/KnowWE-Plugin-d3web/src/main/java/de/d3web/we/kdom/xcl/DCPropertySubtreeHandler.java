@@ -22,7 +22,7 @@ package de.d3web.we.kdom.xcl;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import de.d3web.core.knowledge.terminology.NamedObject;
+import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -51,7 +51,7 @@ public class DCPropertySubtreeHandler extends D3webSubtreeHandler<DCPropertyType
 
 		if (kbm == null) return null;
 
-		NamedObject obj = getNamedObject(s, kbm);
+		TerminologyObject obj = getNamedObject(s, kbm);
 
 		if (obj == null) {
 			ArrayList<KDOMReportMessage> list = new ArrayList<KDOMReportMessage>();
@@ -69,7 +69,7 @@ public class DCPropertySubtreeHandler extends D3webSubtreeHandler<DCPropertyType
 	 * Stores the content of the section into the NamedObjects MMInfoStore
 	 * 
 	 */
-	private void storeMMInfo(Section s, NamedObject obj) {
+	private void storeMMInfo(Section s, TerminologyObject obj) {
 
 		Property<Object> untypedProperty = Property.getUntypedProperty(s.findChildOfType(
 				DCPropertyNameType.class).getOriginalText().toLowerCase());
@@ -84,7 +84,7 @@ public class DCPropertySubtreeHandler extends D3webSubtreeHandler<DCPropertyType
 	 * the part which would have to be adapted to other scenarios
 	 * 
 	 */
-	private NamedObject getNamedObject(Section s, KnowledgeBaseManagement kbm) {
+	private TerminologyObject getNamedObject(Section s, KnowledgeBaseManagement kbm) {
 		Section xclhead = s.findAncestorOfType(XCList.class);
 
 		String diagnosis = (String) KnowWEUtils.getStoredObject(xclhead, XCLHead.KEY_SOLUTION_NAME);
@@ -93,7 +93,7 @@ public class DCPropertySubtreeHandler extends D3webSubtreeHandler<DCPropertyType
 			return null;
 		}
 
-		NamedObject d = kbm.findSolution(diagnosis);
+		TerminologyObject d = kbm.findSolution(diagnosis);
 
 		if (d == null) { // should not happen
 			// solution should already be created by STH of XCLHEAD

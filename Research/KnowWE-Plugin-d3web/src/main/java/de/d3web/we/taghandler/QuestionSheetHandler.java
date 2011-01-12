@@ -68,7 +68,7 @@ public class QuestionSheetHandler extends AbstractHTMLTagHandler {
 				+ rb.getString("KnowWE.QuestionSheet.header") + "</h3>");
 
 		if (kb != null) {
-			List<Question> questions = kb.getQuestions();
+			List<Question> questions = kb.getManager().getQuestions();
 
 			html.append("<ul>");
 			for (Question question : questions) {

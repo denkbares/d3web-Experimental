@@ -165,7 +165,7 @@ public class SolutionsBuilder implements DashTBuilder, KnOfficeParser {
 
 		if (ret.size() == 0) {
 			ret.add(MessageKnOfficeGenerator.createSolutionsParsedNote(file, 0, "",
-					idom.getKnowledgeBase()
+					idom.getKnowledgeBase().getManager()
 							.getSolutions().size() - 1));
 		}
 

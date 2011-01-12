@@ -59,7 +59,7 @@ public class HTMLDialogRenderer {
 		KnowledgeBaseManagement kbm = KnowledgeBaseManagement.createInstance(b);
 
 		// get all qcontainers of kb into a list
-		List<QContainer> containers = b.getQContainers();
+		List<QContainer> containers = b.getManager().getQContainers();
 		kbm.sortQContainers(containers);
 
 		StringBuffer buffi = new StringBuffer();
