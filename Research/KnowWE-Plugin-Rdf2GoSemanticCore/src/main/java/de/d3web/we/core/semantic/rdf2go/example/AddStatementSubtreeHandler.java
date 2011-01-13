@@ -40,9 +40,6 @@ public class AddStatementSubtreeHandler extends RDF2GoSubtreeHandler<AddStatemen
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<AddStatementType> s) {
 
-		Rdf2GoCore r2gc = new Rdf2GoCore();
-		r2gc.init();
-
 		ArrayList<Statement> l = new ArrayList<Statement>();
 
 		URI sub = Rdf2GoCore.getInstance().createURI("http://localhost/owl#1");

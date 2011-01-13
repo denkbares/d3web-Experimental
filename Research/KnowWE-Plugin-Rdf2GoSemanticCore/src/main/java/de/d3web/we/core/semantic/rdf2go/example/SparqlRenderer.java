@@ -45,8 +45,6 @@ public class SparqlRenderer extends KnowWEDomRenderer<AddStatementType> {
 	@Override
 	public void render(KnowWEArticle article, Section sec,
 			KnowWEUserContext user, StringBuilder result) {
-		Rdf2GoCore r2gc = new Rdf2GoCore();
-		r2gc.init();
 
 		ArrayList<Statement> l = new ArrayList<Statement>();
 
@@ -56,12 +54,13 @@ public class SparqlRenderer extends KnowWEDomRenderer<AddStatementType> {
 			section = section.replaceAll(article.getTitle() + " - %sparql%", "");
 			section = section.replaceAll("%/sparql%", "");
 			sparqlString = section.replaceAll("\n", "");
-			
+
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		result.append(KnowWEUtils.maskHTML(Rdf2GoCore.getInstance().renderedSparqlSelect(sparqlString)));
+		result.append(KnowWEUtils.maskHTML(Rdf2GoCore.getInstance().renderedSparqlSelect(
+				sparqlString)));
 	}
 }
