@@ -37,7 +37,6 @@ import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 
@@ -48,7 +47,10 @@ import de.d3web.we.kdom.Section;
  */
 public class Rdf2GoCore {
 
-	private static String USE_MODEL = "jena";
+	private static final String JENA = "jena";
+	private static final String OWLIM = "owlim";
+	
+	private static String USE_MODEL = JENA;
 	private static Reasoning USE_REASONING = Reasoning.owl;
 
 	private static Rdf2GoCore me;
@@ -66,6 +68,7 @@ public class Rdf2GoCore {
 
 	public void init() {
 		me.initModel();
+		System.out.println(model.getUnderlyingModelImplementation().getClass().toString());
 		me.statementcache = new HashMap<String, WeakHashMap<Section, List<Statement>>>();
 		me.duplicateStatements = new HashMap<Statement, Integer>();
 		initNamespaces();
@@ -82,13 +85,12 @@ public class Rdf2GoCore {
 	/**
 	 * 
 	 * should not be needed, all needed functions should be implemented in
-	 * Rdf2GoCore.
+	 * Rdf2GoCore. Just not yet deleted for debugging usage.
 	 * 
 	 * @return
 	 */
 	@Deprecated
 	public Model getModel() {
-		KnowWEEnvironment.maskHTML("");
 		return model;
 	}
 
@@ -108,10 +110,10 @@ public class Rdf2GoCore {
 	}
 
 	public void initModel() {
-		if (USE_MODEL == "jena") {
+		if (USE_MODEL == JENA) {
 			registerJenaModel();
 		}
-		else if (USE_MODEL == "owlim") {
+		else if (USE_MODEL == OWLIM) {
 			registerOwlimModel();
 		}
 		else {
@@ -325,7 +327,7 @@ public class Rdf2GoCore {
 	}
 
 	/**
-	 * adds statements to statementcache and rdf store
+	 * adds statements to statementcache and rdf store and count duplicate statements
 	 * 
 	 * @created 06.12.2010
 	 * @param allStatements
@@ -334,7 +336,6 @@ public class Rdf2GoCore {
 	public void addStatements(List<Statement> allStatements, Section sec) {
 		// List<Statement> allStatements = inputio.getAllStatements();
 		// clearContext(sec);
-		addToStatementcache(sec, allStatements);
 
 		Logger.getLogger(this.getClass().getName()).finer(
 				"semantic core updating " + sec.getID() + "  "
@@ -342,9 +343,16 @@ public class Rdf2GoCore {
 
 		List<Statement> currentDuplicates = new ArrayList<Statement>();
 
-		for (Statement s : allStatements) {
+		System.out.println(sec.getArticle().getTitle());
+		boolean scContainsCurrentSection = statementcache.containsKey(sec.getArticle().getTitle());
 
-			if (model.contains(s)) {
+		for (Statement s : allStatements) {
+			boolean scContainsCurrentStatement = false;
+			if (scContainsCurrentSection) {
+				scContainsCurrentStatement = statementcache.get(sec.getArticle().getTitle()).get(sec).contains(s);
+			}
+			
+			if (model.contains(s) & !scContainsCurrentStatement) {			
 				if (duplicateStatements.containsKey(s)) {
 					duplicateStatements.put(s, duplicateStatements.get(s) + 1);
 				}
@@ -354,7 +362,11 @@ public class Rdf2GoCore {
 				currentDuplicates.add(s);
 			}
 		}
-		allStatements.removeAll(currentDuplicates);
+		// Add all statements (including duplicates) to statementcache
+		addToStatementcache(sec, allStatements);
+
+		// Add all statements except duplicates to store
+		allStatements.removeAll(currentDuplicates);		
 		addStaticStatements(allStatements, sec);
 
 	}
@@ -391,5 +403,14 @@ public class Rdf2GoCore {
 
 	public Statement createStatement(Resource subject, URI predicate, Node object) {
 		return model.createStatement(subject, predicate, object);
+	}
+
+	/**
+	 * Dumps the whole content of the model via System.out
+	 * 
+	 * @created 05.01.2011
+	 */
+	public void dumpModel() {
+		model.dump();
 	}
 }
