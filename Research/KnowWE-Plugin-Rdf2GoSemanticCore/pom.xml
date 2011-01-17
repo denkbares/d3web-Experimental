@@ -75,5 +75,13 @@
 			<artifactId>rdf2go.impl.jena26</artifactId>
 			<version>4.7.3</version>
 		</dependency>
+ 
+ <!-- 
+		<dependency>
+			<groupId>efzwo</groupId>
+			<artifactId>bigowlim-rdf2go</artifactId>
+			<version>1.0</version>
+		</dependency>
+ -->
 	</dependencies>
 </project>

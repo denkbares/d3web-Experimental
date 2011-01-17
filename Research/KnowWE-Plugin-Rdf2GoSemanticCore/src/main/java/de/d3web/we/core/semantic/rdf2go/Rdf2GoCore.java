@@ -19,9 +19,12 @@
 package de.d3web.we.core.semantic.rdf2go;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
@@ -29,6 +32,8 @@ import java.util.logging.Logger;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.Reasoning;
+import org.ontoware.rdf2go.exception.ModelRuntimeException;
+import org.ontoware.rdf2go.exception.ReasoningNotSupportedException;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
@@ -37,6 +42,10 @@ import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 
+import de.d3web.we.event.Event;
+import de.d3web.we.event.EventListener;
+import de.d3web.we.event.FullParseEvent;
+import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 
@@ -45,11 +54,11 @@ import de.d3web.we.kdom.Section;
  * @author grotheer
  * @created 29.11.2010
  */
-public class Rdf2GoCore {
-
+public class Rdf2GoCore implements EventListener {
 	private static final String JENA = "jena";
-	private static final String OWLIM = "owlim";
-	
+	private static final String BIGOWLIM = "bigowlim";
+	private static final String SESAME = "sesame";
+
 	private static String USE_MODEL = JENA;
 	private static Reasoning USE_REASONING = Reasoning.owl;
 
@@ -58,19 +67,10 @@ public class Rdf2GoCore {
 	private HashMap<String, WeakHashMap<Section, List<Statement>>> statementcache;
 	private HashMap<Statement, Integer> duplicateStatements;
 
-	public static void duplicatesOut() {
-		System.out.println("Duplicates:");
-		for (Entry e : me.duplicateStatements.entrySet()) {
-			System.out.print(e.getKey() + " #");
-			System.out.println(e.getValue());
-		}
-	}
-
 	public void init() {
-		me.initModel();
-		System.out.println(model.getUnderlyingModelImplementation().getClass().toString());
-		me.statementcache = new HashMap<String, WeakHashMap<Section, List<Statement>>>();
-		me.duplicateStatements = new HashMap<Statement, Integer>();
+		initModel();
+		statementcache = new HashMap<String, WeakHashMap<Section, List<Statement>>>();
+		duplicateStatements = new HashMap<Statement, Integer>();
 		initNamespaces();
 	}
 
@@ -82,42 +82,35 @@ public class Rdf2GoCore {
 		return me;
 	}
 
-	/**
-	 * 
-	 * should not be needed, all needed functions should be implemented in
-	 * Rdf2GoCore. Just not yet deleted for debugging usage.
-	 * 
-	 * @return
-	 */
-	@Deprecated
-	public Model getModel() {
-		return model;
-	}
-
 	private void registerJenaModel() {
 		System.out.print("Jena 2.6");
 		RDF2Go.register(new org.ontoware.rdf2go.impl.jena26.ModelFactoryImpl());
 	}
 
-	private void registerOwlimModel() {
-		System.out.print("Owlim");
-		// RDF2Go.register(new com.ontotext.trree.rdf2go.OwlimModelFactory());
+	private void registerBigOWLIMModel() {
+		System.out.print("BigOWLIM");
+		//RDF2Go.register(new com.ontotext.trree.rdf2go.OwlimModelFactory());
 	}
 
-	private void registerSesameModel() {
+	private void registerSesameModel() throws ReasoningNotSupportedException {
 		System.out.print("Sesame 2.3");
+		if (USE_REASONING == Reasoning.owl) {
+			throw new ReasoningNotSupportedException();
+		}
 		RDF2Go.register(new org.openrdf.rdf2go.RepositoryModelFactory());
 	}
 
-	public void initModel() {
+	public void initModel() throws ModelRuntimeException {
 		if (USE_MODEL == JENA) {
 			registerJenaModel();
 		}
-		else if (USE_MODEL == OWLIM) {
-			registerOwlimModel();
+		else if (USE_MODEL == BIGOWLIM) {
+			registerBigOWLIMModel();
 		}
-		else {
+		else if (USE_MODEL == SESAME){
 			registerSesameModel();
+		} else {
+			throw new ModelRuntimeException("Model not supported");
 		}
 
 		if (USE_REASONING != null) {
@@ -126,6 +119,7 @@ public class Rdf2GoCore {
 		else {
 			model = RDF2Go.getModelFactory().createModel();
 		}
+		
 		model.open();
 		System.out.println(" model initialized");
 
@@ -137,11 +131,6 @@ public class Rdf2GoCore {
 
 	public void addNamespace(String sh, String ns) {
 		model.setNamespace(sh, ns);
-	}
-
-	@Deprecated
-	public void addStatement(Resource sub, URI pred, String obj) {
-		model.addStatement(sub, pred, obj);
 	}
 
 	public URI createURI(String str) {
@@ -181,6 +170,7 @@ public class Rdf2GoCore {
 			return expandNSPrefix(array[0]) + array[1];
 		}
 		throw new IllegalArgumentException("Not a valid (absolute) URI: " + s);
+
 	}
 
 	/**
@@ -195,10 +185,11 @@ public class Rdf2GoCore {
 			s = s.replaceAll(cur.getValue(), cur.getKey() + ":");
 		}
 		return s;
+
 	}
 
 	public String renderedSparqlSelect(String query) {
-		return renderedSparqlSelect(sparqlSelect(query));
+		return render(sparqlSelect(query));
 	}
 
 	/**
@@ -207,7 +198,7 @@ public class Rdf2GoCore {
 	 * @param qrt
 	 * @return html table with all results of qrt
 	 */
-	public String renderedSparqlSelect(QueryResultTable qrt) {
+	public String render(QueryResultTable qrt) {
 		List<String> l = qrt.getVariables();
 		ClosableIterator<QueryRow> i = qrt.iterator();
 		String result = "<table>";
@@ -300,75 +291,88 @@ public class Rdf2GoCore {
 	private void removeStatementsofSingleSection(
 			Section<? extends KnowWEObjectType> sec) {
 		WeakHashMap<Section, List<Statement>> temp = statementcache.get(sec
-				.getArticle().getTitle());
+					.getArticle().getTitle());
+		System.out.println("removing statements of section " + sec.getID());
 		if (temp != null) {
-			List<Statement> statementsOfSection = temp.get(sec);
-			for (Statement s : statementsOfSection) {
+			if (temp.containsKey(sec)) {
+				List<Statement> statementsOfSection = temp.get(sec);
+				for (Statement s : statementsOfSection) {
 
-				if (duplicateStatements.containsKey(s)) {
-					if (duplicateStatements.get(s) != 1) {
-						duplicateStatements.put(s, duplicateStatements.get(s) - 1);
+					if (duplicateStatements.containsKey(s)) {
+						if (duplicateStatements.get(s) != 1) {
+							duplicateStatements.put(s, duplicateStatements.get(s) - 1);
+						}
+						else {
+							duplicateStatements.remove(s);
+						}
 					}
 					else {
-						duplicateStatements.remove(s);
+						model.removeStatement(s);
 					}
 				}
-				else {
-					model.removeStatement(s);
+				temp.remove(sec);
+				if (temp.isEmpty()) {
+					statementcache.remove(sec.getArticle().getTitle());
 				}
-
-				model.removeStatement(s);
 			}
-			temp.remove(sec);
-			if (temp.isEmpty()) {
-				statementcache.remove(sec.getArticle().getTitle());
+			else {
+				// Not necessary because of full-pasre-listener being active
+				// for (Section cur : temp.keySet()) {
+				// if (cur.getID().equals(sec.getID())) {
+				// removeStatementsofSingleSection(cur);
+				// }
+				// break;
+				// }
 			}
 		}
 	}
 
 	/**
-	 * adds statements to statementcache and rdf store and count duplicate statements
+	 * adds statements to statementcache and rdf store and count duplicate
+	 * statements
 	 * 
 	 * @created 06.12.2010
 	 * @param allStatements
 	 * @param sec
 	 */
 	public void addStatements(List<Statement> allStatements, Section sec) {
-		// List<Statement> allStatements = inputio.getAllStatements();
-		// clearContext(sec);
-
 		Logger.getLogger(this.getClass().getName()).finer(
 				"semantic core updating " + sec.getID() + "  "
 						+ allStatements.size());
 
-		List<Statement> currentDuplicates = new ArrayList<Statement>();
-
-		System.out.println(sec.getArticle().getTitle());
-		boolean scContainsCurrentSection = statementcache.containsKey(sec.getArticle().getTitle());
-
-		for (Statement s : allStatements) {
-			boolean scContainsCurrentStatement = false;
-			if (scContainsCurrentSection) {
-				scContainsCurrentStatement = statementcache.get(sec.getArticle().getTitle()).get(sec).contains(s);
+		WeakHashMap<Section, List<Statement>> temp = statementcache.get(sec.getTitle());
+		boolean scContainsCurrentSection = false;
+		if (temp != null) {
+			if (temp.get(sec) != null) {
+				scContainsCurrentSection = true;
 			}
-			
-			if (model.contains(s) & !scContainsCurrentStatement) {			
-				if (duplicateStatements.containsKey(s)) {
-					duplicateStatements.put(s, duplicateStatements.get(s) + 1);
-				}
-				else {
-					duplicateStatements.put(s, 1);
-				}
-				currentDuplicates.add(s);
+			else {
+				// Not necessary because of full-pasre-listener being active
+				// for (Section cur : temp.keySet()) {
+				// if (cur.getID().equals(sec.getID())) {
+				// scContainsCurrentSection = true;
+				// }
+				// break;
+				// }
 			}
 		}
-		// Add all statements (including duplicates) to statementcache
+		if (!scContainsCurrentSection) {
+			for (Statement s : allStatements) {
+				if (model.contains(s)) {
+					if (duplicateStatements.containsKey(s)) {
+						duplicateStatements.put(s, duplicateStatements.get(s) + 1);
+					}
+					else {
+						duplicateStatements.put(s, 1);
+					}
+				}
+			}
+		}
 		addToStatementcache(sec, allStatements);
 
-		// Add all statements except duplicates to store
-		allStatements.removeAll(currentDuplicates);		
+		// Maybe remove duplicates before adding to store, if performance is
+		// better
 		addStaticStatements(allStatements, sec);
-
 	}
 
 	/**
@@ -379,6 +383,9 @@ public class Rdf2GoCore {
 	 * @param sec
 	 */
 	public void addStaticStatements(List<Statement> allStatements, Section sec) {
+		for (Statement s : allStatements) {
+			System.out.println(s.getSubject());
+		}
 		Iterator i = allStatements.iterator();
 		model.addAll(i);
 	}
@@ -412,5 +419,56 @@ public class Rdf2GoCore {
 	 */
 	public void dumpModel() {
 		model.dump();
+	}
+	
+	public void dumpDuplicates() {
+		System.out.println("<duplicates>");
+		for (Entry e : duplicateStatements.entrySet()) {
+			System.out.print(e.getKey() + " #");
+			System.out.println(e.getValue());
+		}
+		System.out.println("</duplicates>");
+	}
+
+	public void dumpStatementcache() {
+		System.out.println("<statementcache>");
+		for (String s : statementcache.keySet()) {
+			System.out.println(s + ":");
+			for (Section sec : statementcache.get(s).keySet()) {
+				System.out.println(sec.getID());
+				for (Statement l : statementcache.get(s).get(sec)) {
+					System.out.println("s:" + l.getSubject() + " p:" + l.getPredicate() + " o:"
+							+ l.getObject());
+				}
+			}
+		}
+		System.out.println("</statementcache>");
+	}
+
+	@Override
+	public Collection<Class<? extends Event>> getEvents() {
+		ArrayList<Class<? extends Event>> events = new ArrayList<Class<? extends Event>>(1);
+		events.add(FullParseEvent.class);
+		return events;
+	}
+
+	@Override
+	public void notify(Event event) {
+		if (event instanceof FullParseEvent) {
+			if (statementcache != null) {
+				getInstance().removeArticleStatementsRecursive(
+						((FullParseEvent) event).getArticle());
+			}
+		}
+	}
+
+	public void removeArticleStatementsRecursive(KnowWEArticle art) {
+		if (statementcache.get(art.getTitle()) != null) {
+			Set<Section> temp = new HashSet<Section>();
+			temp.addAll(statementcache.get(art.getTitle()).keySet());
+			for (Section cur : temp) {
+				removeStatementsofSingleSection(cur);
+			}
+		}
 	}
 }

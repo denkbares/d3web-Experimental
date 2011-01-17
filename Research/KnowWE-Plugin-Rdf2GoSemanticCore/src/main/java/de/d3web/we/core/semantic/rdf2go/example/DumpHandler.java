@@ -22,6 +22,7 @@ package de.d3web.we.core.semantic.rdf2go.example;
 import java.util.Map;
 
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
+
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
@@ -38,9 +39,10 @@ public class DumpHandler extends AbstractHTMLTagHandler {
 	public String renderHTML(String topic, KnowWEUserContext user,
 			Map<String, String> values, String web) {
 		Rdf2GoCore.getInstance().dumpModel();
-		Rdf2GoCore.duplicatesOut();
-		return KnowWEUtils.maskHTML(Rdf2GoCore.getInstance().renderedSparqlSelect(
-				"select ?x ?y ?z where { ?x ?y ?z }"));
+		Rdf2GoCore.getInstance().dumpStatementcache();
+		Rdf2GoCore.getInstance().dumpDuplicates();
+		
+		return KnowWEUtils.maskHTML(Rdf2GoCore.getInstance().renderedSparqlSelect("select ?Subject ?Predicate ?Object where { ?Subject ?Predicate ?Object }"));
 	}
 
 }
