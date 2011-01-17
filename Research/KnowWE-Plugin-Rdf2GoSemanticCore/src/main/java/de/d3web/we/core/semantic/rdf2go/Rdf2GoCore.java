@@ -59,14 +59,20 @@ public class Rdf2GoCore implements EventListener {
 	private static final String BIGOWLIM = "bigowlim";
 	private static final String SESAME = "sesame";
 
+	// use JENA, BIGOWLIM or SESAME:
 	private static String USE_MODEL = JENA;
-	private static Reasoning USE_REASONING = Reasoning.owl;
+	
+	// use Reasoning.owl, Reasoning.rdfs, Reasoning.rdfsAndOwl or Reasoning.none:
+	private static Reasoning USE_REASONING = Reasoning.none;
 
 	private static Rdf2GoCore me;
 	private Model model;
 	private HashMap<String, WeakHashMap<Section, List<Statement>>> statementcache;
 	private HashMap<Statement, Integer> duplicateStatements;
 
+	/**
+	 * Initializes the model and its caches and namespaces
+	 */
 	public void init() {
 		initModel();
 		statementcache = new HashMap<String, WeakHashMap<Section, List<Statement>>>();
@@ -74,6 +80,10 @@ public class Rdf2GoCore implements EventListener {
 		initNamespaces();
 	}
 
+	/**
+	 * 
+	 * @return me
+	 */
 	public static Rdf2GoCore getInstance() {
 		if (me == null) {
 			me = new Rdf2GoCore();
@@ -92,6 +102,10 @@ public class Rdf2GoCore implements EventListener {
 		//RDF2Go.register(new com.ontotext.trree.rdf2go.OwlimModelFactory());
 	}
 
+	/**
+	 * registers the sesame model, it has no owl-reasoning support
+	 * @throws ReasoningNotSupportedException 
+	 */
 	private void registerSesameModel() throws ReasoningNotSupportedException {
 		System.out.print("Sesame 2.3");
 		if (USE_REASONING == Reasoning.owl) {
@@ -100,6 +114,10 @@ public class Rdf2GoCore implements EventListener {
 		RDF2Go.register(new org.openrdf.rdf2go.RepositoryModelFactory());
 	}
 
+	/**
+	 * registers and opens the specified model
+	 * @throws ModelRuntimeException 
+	 */
 	public void initModel() throws ModelRuntimeException {
 		if (USE_MODEL == JENA) {
 			registerJenaModel();
@@ -125,10 +143,19 @@ public class Rdf2GoCore implements EventListener {
 
 	}
 
+	/**
+	 * sets the default namespaces
+	 */
 	private void initNamespaces() {
+		// TODO
 		model.setNamespace("lns", "http://localhost/rdf.xml#");
 	}
 
+	/**
+	 * add a namespace to the model
+	 * @param sh prefix
+	 * @param ns url
+	 */
 	public void addNamespace(String sh, String ns) {
 		model.setNamespace(sh, ns);
 	}
@@ -383,9 +410,6 @@ public class Rdf2GoCore implements EventListener {
 	 * @param sec
 	 */
 	public void addStaticStatements(List<Statement> allStatements, Section sec) {
-		for (Statement s : allStatements) {
-			System.out.println(s.getSubject());
-		}
 		Iterator i = allStatements.iterator();
 		model.addAll(i);
 	}
