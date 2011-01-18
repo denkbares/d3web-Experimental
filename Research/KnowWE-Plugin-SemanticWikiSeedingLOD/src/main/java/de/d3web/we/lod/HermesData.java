@@ -16,6 +16,8 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.lod.markup.DBpediaContentType;
 import de.d3web.we.lod.markup.IgnoreContentType;
+import de.d3web.we.lod.markup.IgnoreContentType.IgnoreChild;
+import de.d3web.we.lod.markup.IgnoreContentType.IgnoreConcept;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 /**
@@ -34,6 +36,18 @@ public class HermesData {
 	public static final String wikiTopicNoParse = "NoParse";
 
 	private static final String web = KnowWEEnvironment.DEFAULT_WEB;
+
+	// Type which is used to save (object)'s specified in property files.
+	private static final String objectType = "rdf:type";
+
+	/**
+	 * GetObjectType.
+	 * 
+	 * @return objectType.
+	 */
+	public static String getObjectType() {
+		return objectType;
+	}
 
 	/**
 	 * GetMappingTopic.
@@ -165,14 +179,32 @@ public class HermesData {
 		article.getSection().findSuccessorsOfType(IgnoreContentType.class,
 				found);
 
-		// TODO:
 		for (Section<IgnoreContentType> t : found) {
-			String temp = t.getChildren().get(0).getOriginalText();
-			if (temp.matches(concept)) {
-				// Get Childs and check those for hermestag == value.
+
+			Section<IgnoreConcept> temp = t.findChildOfType(IgnoreConcept.class);
+			String sectionConcept = temp.getOriginalText().substring(1,
+					temp.getOriginalText().length() - 1);
+
+			// if concept is in list - test if tag + value also.
+			if (sectionConcept.equals(concept)) {
+
+				List<Section<IgnoreChild>> listChilds = t.findChildrenOfType(
+						IgnoreChild.class);
+
+				for (Section<IgnoreChild> child : listChilds) {
+					String node = child.getOriginalText();
+					if (Character.isWhitespace(node.charAt(node.length() - 1))) {
+						node = node.substring(0, node.length() - 1);
+					}
+					// If pair is in the list.
+					if (node.equals("- " +
+							hermestag + " == " + value)) {
+						return true;
+					}
+				}
 			}
 		}
-		return true;
+		return false;
 	}
 
 	/**

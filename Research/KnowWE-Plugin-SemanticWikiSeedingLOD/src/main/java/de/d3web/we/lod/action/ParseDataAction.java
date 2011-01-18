@@ -20,6 +20,8 @@ import de.d3web.we.lod.HermesData;
 import de.d3web.we.lod.LinkedOpenData;
 import de.d3web.we.lod.markup.DBpediaContentType;
 import de.d3web.we.lod.markup.IgnoreContentType;
+import de.d3web.we.lod.markup.IgnoreContentType.IgnoreChild;
+import de.d3web.we.lod.markup.IgnoreContentType.IgnoreConcept;
 
 public class ParseDataAction extends AbstractAction {
 
@@ -69,7 +71,7 @@ public class ParseDataAction extends AbstractAction {
 			// ist vom Typ ... -> predicate = rdf:type, value = hermestype.
 			if (value.get(i).matches("ist vom Typ .*")) {
 				value.set(i, hermes.get(i));
-				hermes.set(i, "rdf:type");
+				hermes.set(i, HermesData.getObjectType());
 			}
 
 			String parse = "[" + concept + " " + hermes.get(i) + ":: " + value.get(i) + "]";
@@ -149,16 +151,17 @@ public class ParseDataAction extends AbstractAction {
 
 				// Save ignores on wiki-page:IgnoredAttributes --> Markup
 				// %%IgnoreAttributes .... %
-				
-				// TODO: tree structure.
 
 				String ignoredTopic = HermesData.getIgnoredTopic();
 
 				if (!KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
 						ignoredTopic)) {
 
+					// #concept
+					// - hermestag == value
 					String temp = "%%IgnoreAttributes " + System.getProperty("line.separator")
-							+ concept + System.getProperty("line.separator") + "- " + hermes.get(i)
+							+ "#" + concept + System.getProperty("line.separator") + "- "
+							+ hermes.get(i)
 							+ " == " + value.get(i)
 							+ System.getProperty("line.separator") + "%";
 
@@ -176,7 +179,6 @@ public class ParseDataAction extends AbstractAction {
 				// hasChild concept : add ? else new rootNode.
 				else {
 
-					// TODO:
 					KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(
 							web);
 
@@ -184,18 +186,58 @@ public class ParseDataAction extends AbstractAction {
 					mgr.getArticle(ignoredTopic).getSection().findSuccessorsOfType(
 							IgnoreContentType.class, found);
 
-					for (Section<IgnoreContentType> t : found) {
-						String temp = t.getChildren().get(0).getOriginalText();
-						System.out.println(temp);
-					}
-
 					Map<String, String> nodesMap = new HashMap<String, String>();
-					nodesMap.put("nodeID", "newText");
 
+					for (Section<IgnoreContentType> t : found) {
+
+						Section<IgnoreConcept> temp = t.findChildOfType(IgnoreConcept.class);
+						String sectionConcept = temp.getOriginalText().substring(1,
+								temp.getOriginalText().length() - 1);
+						boolean conceptFound = false;
+
+						// if concept is in list - test if tag + value also.
+						if (sectionConcept.equals(concept)) {
+
+							conceptFound = true;
+
+							List<Section<IgnoreChild>> listChilds = t.findChildrenOfType(
+									IgnoreChild.class);
+							boolean isIn = false;
+							for (Section<IgnoreChild> child : listChilds) {
+								String node = child.getOriginalText();
+								if (Character.isWhitespace(node.charAt(node.length() - 1))) {
+									node = node.substring(0, node.length() - 1);
+								}
+								if (node.equals("- " +
+										hermes.get(i) + " == " + value.get(i))) {
+									// tag + value already in ignorelist.
+									isIn = true;
+								}
+								// append at the end of the section.
+								else if (listChilds.indexOf(child) == listChilds.size() - 1
+										&& !isIn) {
+									String newIgnore = child.getOriginalText()
+											+ System.getProperty("line.separator") + "- " +
+											hermes.get(i) + " == " + value.get(i);
+									// add to ignorelist.
+									nodesMap.put(child.getID(), newIgnore);
+								}
+							}
+						}
+						else if (found.indexOf(t) == found.size() - 1 && !conceptFound) {
+							
+							// Add concept + tag & value.
+							String newIgnore = t.getOriginalText()
+									+ System.getProperty("line.separator") + "#" + concept
+									+ System.getProperty("line.separator") + "- " + hermes.get(i)
+									+ " == " + value.get(i);
+
+							nodesMap.put(t.getID(), newIgnore);
+						}
+
+					}
 					mgr.replaceKDOMNodesSaveAndBuild(map, ignoredTopic, nodesMap);
-
 				}
-
 			}
 			i++;
 		}

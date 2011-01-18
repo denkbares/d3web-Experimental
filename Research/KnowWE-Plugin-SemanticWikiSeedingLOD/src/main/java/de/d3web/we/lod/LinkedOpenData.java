@@ -80,8 +80,8 @@ public class LinkedOpenData {
 		catch (Exception exception) {
 		}
 		for (String prop : propFile) {
-			if (prop.matches("[\\w:-]+ -> [\\p{L}:]+ [\\p{L}]* ?[\\w()]+")
-					|| prop.matches("[\\w:-]+ [\\w:_$@-]* -> [\\p{L}:]+ [\\p{L}]* ?[\\w()]+")) {
+			if (prop.matches("[\\w:\\-]+ -> [\\p{L}:]+ [\\p{L}]* ?[\\w()]+")
+					|| prop.matches("[\\w:\\-]+ [\\w:_$@-]* -> [\\p{L}:]+ [\\p{L}]* ?[\\w()]+")) {
 				String[] cut = prop.split(" -> ");
 				if (prop.startsWith("INV")) {
 					// INV name --> name INV ; handle as a filter
@@ -813,13 +813,13 @@ public class LinkedOpenData {
 							coords[0] = s + "° ";
 						}
 						if (lhsMappings.equals("dbpprop:latMin")) {
-							coords[1] = s + "'N ";
+							coords[1] = s + "’N ";
 						}
 						if (lhsMappings.equals("dbpprop:lonDeg")) {
 							coords[2] = s + "° ";
 						}
 						if (lhsMappings.equals("dbpprop:lonMin")) {
-							coords[3] = s + "'E";
+							coords[3] = s + "’E";
 						}
 					}
 					if (countCoords == 4) {

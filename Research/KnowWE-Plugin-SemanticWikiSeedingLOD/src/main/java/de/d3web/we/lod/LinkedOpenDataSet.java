@@ -26,7 +26,7 @@ public class LinkedOpenDataSet {
 			conceptMappings.put(ConceptType.Person, new LinkedOpenData(
 					"Person.properties"));
 			conceptMappings.put(ConceptType.Typ, new LinkedOpenData(
-			"Typ.properties"));
+					"Typ.properties"));
 		}
 		catch (Exception e) {
 			e.printStackTrace();

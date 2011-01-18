@@ -200,7 +200,19 @@ public class GetDataAction extends AbstractAction {
 						// if ( !HermesData.storeContainsPre(hermesConcept,
 						// s, resultS)) {
 						// TODO: In Store, Ignore, NoParse
-						if (!resultS.isEmpty()) {
+
+						String checkHermesTag = s;
+						String checkValue = resultS;
+
+						// objects are saved with predicate specified in
+						// hermesdata.
+						if (resultS.matches("ist vom Typ .*")) {
+							checkHermesTag = HermesData.getObjectType();
+							checkValue = s;
+						}
+
+						if (!resultS.isEmpty()
+								&& !HermesData.isIgnored(concept, checkHermesTag, checkValue)) {
 
 							// Create title for html, if values are created from
 							// multiple dbpedia properties.
@@ -255,7 +267,7 @@ public class GetDataAction extends AbstractAction {
 										+ "<td valign='middle' align='middle'><input id='dbpediavalue"
 										+ i
 										+ "' type='text' size='40' value='"
-										+ resultS.replaceAll("'", "&rsquo;") + "'>"
+										+ resultS.replaceAll("’", "&rsquo;") + "'>"
 										+ "</td>");
 							}
 							buffy.append("<td><input type='button' name='submit"

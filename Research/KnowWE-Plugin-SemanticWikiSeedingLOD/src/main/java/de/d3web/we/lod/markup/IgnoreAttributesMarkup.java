@@ -9,7 +9,7 @@ public class IgnoreAttributesMarkup extends DefaultMarkupType {
 
 	static {
 		m = new DefaultMarkup("IgnoreAttributes");
-		m.addContentType(new NewLine(new IgnoreContentType()));
+		m.addContentType(new IgnoreContentType());
 	}
 
 	public IgnoreAttributesMarkup() {
