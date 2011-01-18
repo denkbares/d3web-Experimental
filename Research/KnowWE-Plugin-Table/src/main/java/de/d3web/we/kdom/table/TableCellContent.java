@@ -28,6 +28,10 @@ public class TableCellContent extends DefaultAbstractKnowWEObjectType {
 
 	public TableCellContent() {
 		this.sectionFinder = new AllTextSectionFinder();
+	}
+
+	@Override
+	protected void init() {
 		this.setCustomRenderer(new TableCellContentRenderer());
 	}
 

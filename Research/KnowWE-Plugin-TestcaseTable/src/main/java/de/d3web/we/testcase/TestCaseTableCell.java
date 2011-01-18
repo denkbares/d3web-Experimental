@@ -18,7 +18,9 @@
  */
 package de.d3web.we.testcase;
 
+import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
 import de.d3web.we.kdom.table.TableCell;
+import de.d3web.we.kdom.table.TableCellContent;
 
 /**
  * 
@@ -28,7 +30,13 @@ import de.d3web.we.kdom.table.TableCell;
 public class TestCaseTableCell extends TableCell {
 
 	public TestCaseTableCell() {
-		childrenTypes.add(2, new TestcaseTableCellContent());
+		try {
+			replaceChildType(new TestcaseTableCellContent(), TableCellContent.class);
+		}
+		catch (InvalidKDOMSchemaModificationOperation e) {
+			e.printStackTrace();
+		}
+		// childrenTypes.add(2, new TestcaseTableCellContent());
 	}
 
 }

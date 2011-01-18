@@ -59,11 +59,13 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 				html.append("<th class=\"sort\">");
 			}
 			else if (validTimeStamp) {
-				html.append("<td><div class=\"startTestcase\" onclick=\"return Testcase.runTestcase(this)\"></div>");
+				html.append("<td><div class=\"startTestcase\" onclick=\"return Testcase.runTestcaseNew(this)\" id=\""
+						+ sec.getID() + "\"></div>");
 
 			}
 			else {
-				html.append("<td class=\"invalidTimeStamp\"><div class=\"invalidTimeStamp\">Ungültiger Timestamp</div>");
+				html.append("<td class=\"invalidTimeStamp\"><div class=\"invalidTimeStamp\" alt=\"Invalid timestamp\">"
+						+ sectionText + "</div>");
 			}
 
 			generateContent(sectionText, sec, user, sec.getID(), html);

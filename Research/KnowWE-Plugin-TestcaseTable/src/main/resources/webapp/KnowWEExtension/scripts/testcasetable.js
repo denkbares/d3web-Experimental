@@ -262,6 +262,33 @@ Testcase.saveInputAfterChange = function(event) {
 	KNOWWE.table.getMap().set(el.id, el.value);
 }
 
+
+Testcase.runTestcaseNew = function(element) {
+	element.parentNode.className = 'testcaseExecuted';
+	
+	
+	var topic = KNOWWE.helper.gup('page')
+	
+	var params = {
+        action : 'RunTestcaseAction',
+        KWiki_Topic : topic,
+        execLine : element.id
+    }
+
+    var options = {
+        url : KNOWWE.core.util.getURL ( params ),
+        loader : true,
+        response : {
+            action : 'none',
+            fn : function(){
+				KNOWWE.helper.observer.notify('update');
+			}
+
+        }
+    }
+    new _KA( options ).send();
+	
+}
 /**
  * runs a Testcase from the TestcaseTable.
  * Takes all values from the line and the header line with the keys

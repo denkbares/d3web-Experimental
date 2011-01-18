@@ -27,6 +27,17 @@
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 	</extension>
+	 
+	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		id="TestcaseTableType">
+		<parameter id="class"
+			value="de.d3web.we.testcase.TestcaseTableType" />
+		<parameter id="name" value="TestcaseTableType" />
+		<parameter id="description" value=" TestcaseTableXMLType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="RunTestcaseAction">

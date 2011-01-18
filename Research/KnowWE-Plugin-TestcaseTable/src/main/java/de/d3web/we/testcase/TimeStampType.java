@@ -21,6 +21,7 @@ package de.d3web.we.testcase;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 /**
@@ -52,11 +53,15 @@ public class TimeStampType extends DefaultAbstractKnowWEObjectType {
 		 * Comment (Sebastian Furth): added SectionFinder because otherwise
 		 * every cell in the table is a TimeStamp. Burn me if i was wrong ;)
 		 */
-		sectionFinder = new RegexSectionFinder(pattern);
+		sectionFinder = new RegexSectionFinder(timeStampPattern);
 	}
 
 	public static boolean isValid(String sectionText) {
 		return timeStampPattern.matcher(sectionText).matches();
+	}
+
+	public static long getTimeInMillis(Section<TimeStampType> sec) {
+		return getTimeInMillis(sec.getOriginalText());
 	}
 
 	public static long getTimeInMillis(String sectionText) {

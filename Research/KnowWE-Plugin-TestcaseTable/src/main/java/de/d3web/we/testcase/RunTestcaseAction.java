@@ -21,6 +21,8 @@ package de.d3web.we.testcase;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import de.d3web.core.knowledge.terminology.Question;
@@ -38,8 +40,12 @@ import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.ActionContext;
 import de.d3web.we.basic.D3webModule;
+import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.event.EventManager;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.object.AnswerReference;
+import de.d3web.we.object.QuestionReference;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.d3web.event.FindingSetEvent;
 
@@ -54,30 +60,40 @@ public class RunTestcaseAction extends AbstractAction {
 		KnowWEParameterMap map = context.getKnowWEParameterMap();
 		String web = map.getWeb();
 		String topic = map.getTopic();
-		String headerLine = map.get("headerLine");
-		String currentLine = map.get("currentLine");
+		String execLine = map.get("execLine");
 
-		String[] headerElements = headerLine.split(",.,");
-		String[] currentElements = currentLine.split(",.,");
-
-		String timestamp = currentElements[0];
+		Section<TestcaseTableCellContent> cell = (Section<TestcaseTableCellContent>) KnowWEEnvironment.getInstance().getArticleManager(web).findNode(execLine);
+		
+		Section<TestcaseTableLine> line = cell.findAncestorOfExactType(TestcaseTableLine.class);
+		
+		Section<TimeStampType> timeStampSectino = cell.findSuccessor(TimeStampType.class);
+		long timestamp = TimeStampType.getTimeInMillis(timeStampSectino);
+		
+		List<Section<AnswerReference>> found = new LinkedList<Section<AnswerReference>>();
+		line.findSuccessorsOfType(AnswerReference.class, found);
 
 		Map<String, String> testcaseMap = new HashMap<String, String>();
-		for (int i = 0; i < headerElements.length; i++) {
-			testcaseMap.put(headerElements[i], currentElements[i + 1]);
+		for (Section<AnswerReference> section : found) {
+			Section<QuestionReference> questionSection = section.getObjectType().getQuestionSection(
+					section);
+			testcaseMap.put(questionSection.getOriginalText(), section.getOriginalText());
+
 		}
 
 		System.out.println(testcaseMap);
 		String user = context.getWikiContext().getUserName();
-		Session session = D3webUtils.getSession(topic, user, web);
+
+		Section<TestcaseTableType> tableDMType = line.findAncestorOfExactType(TestcaseTableType.class);
+
+		String master = TestcaseTableType.getMaster(tableDMType);
+
+		Session session = D3webUtils.getSession(master, user, web);
 
 		KnowledgeBaseManagement kbm = D3webModule.getKnowledgeRepresentationHandler(web).getKBM(
-				topic);
-		Blackboard blackboard = session.getBlackboard();
+				master);
 
 		try {
-			long time = TimeStampType.getTimeInMillis(timestamp);
-			session.getPropagationManager().openPropagation(time);
+			session.getPropagationManager().openPropagation(timestamp);
 
 			setValues(testcaseMap, web, user, kbm, session);
 
@@ -107,14 +123,25 @@ public class RunTestcaseAction extends AbstractAction {
 
 			// Necessary for FindingSetEvent
 			Question question = kbm.findQuestion(questionName);
+			// TODO solutions
 			if (question == null) {
 				System.out.println("Could not find Question '" + questionName + "'.");
 				continue;
 			}
 
-			// TODO
-			String namespace = "TODO";
-			Value value = kbm.findValue(question, valueString);
+			// do not change value
+			if (valueString.equals(GetNewQuickEditAnswersAction.UNCHANGED_VALUE_STRING)) {
+				continue;
+			}
+
+			Value value;
+
+			if (valueString.equals(GetNewQuickEditAnswersAction.UNKNOWN_VALUE_STRING)) {
+				value = Unknown.getInstance();
+			}
+			else {
+				value = kbm.findValue(question, valueString);
+			}
 
 			if (value == null) {
 				System.out.println("Could not find value '" + valueString + "' on Question '"
@@ -138,8 +165,9 @@ public class RunTestcaseAction extends AbstractAction {
 			blackboard.addValueFact(FactFactory.createFact(session, question, value,
 					PSMethodUserSelected.getInstance(), PSMethodUserSelected.getInstance()));
 
+			// TODO
 			EventManager.getInstance().fireEvent(
-					new FindingSetEvent(question, value, namespace, web, user));
+					new FindingSetEvent(question, value, "TODO namespace", web, user));
 
 		}
 	}

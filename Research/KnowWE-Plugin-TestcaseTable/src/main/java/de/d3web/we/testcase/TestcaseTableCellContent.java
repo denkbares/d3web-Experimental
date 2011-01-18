@@ -18,8 +18,18 @@
  */
 package de.d3web.we.testcase;
 
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import java.util.LinkedList;
+import java.util.List;
+
+import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.sectionFinder.ISectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
+import de.d3web.we.kdom.table.Table;
 import de.d3web.we.kdom.table.TableCellContent;
+import de.d3web.we.kdom.table.TableLine;
+import de.d3web.we.object.AnswerReference;
+import de.d3web.we.object.QuestionReference;
 
 /**
  * @author Florian Ziegler
@@ -27,15 +37,91 @@ import de.d3web.we.kdom.table.TableCellContent;
  */
 public class TestcaseTableCellContent extends TableCellContent {
 
-	@Override
-	protected void init() {
-		setCustomRenderer(new TestcaseTableCellContentRenderer());
-		childrenTypes.add(0, new TimeStampType());
+	/**
+	 * 
+	 * @author Reinhard Hatko
+	 * @created 18.01.2011
+	 */
+	private final class CellAnswerRef extends AnswerReference {
+
+		@Override
+		public Section<QuestionReference> getQuestionSection(Section<? extends AnswerReference> s) {
+
+			Section<TableLine> line = s.findAncestorOfType(TableLine.class);
+			
+			boolean found = false;
+			int i = 0;
+			for (Section<?> section : line.getChildren()) {
+				
+				if (s.equalsOrIsSuccessorOf(section)) {
+					found = true;
+					break;
+				}
+				
+				i++;
+			}
+
+			Section<Table> table = line.findAncestorOfType(Table.class);
+			Section<TableLine> headerline = table.findSuccessor(TableLine.class);
+			Section<? extends KnowWEObjectType> headerCell = headerline.getChildren().get(i);
+			Section<QuestionReference> questionRef = headerCell.findSuccessor(QuestionReference.class);
+
+			System.out.println(questionRef.getOriginalText() + "->" + s.getOriginalText());
+
+			return questionRef;
+		}
 	}
 
 	@Override
-	public KnowWEDomRenderer getRenderer() {
-		return new TestcaseTableCellContentRenderer();
+	protected void init() {
+		setCustomRenderer(new TestcaseTableCellContentRenderer());
+		childrenTypes.add(new TimeStampType());
+		QuestionReference qref = new QuestionReference();
+		qref.setSectionFinder(new ISectionFinder() {
+
+			@Override
+			public List<SectionFinderResult> lookForSections(String text, Section<?> father, KnowWEObjectType type) {
+				Section<TestcaseTable> table = father.findAncestorOfExactType(TestcaseTable.class);
+				List<Section<TableLine>> lines = new LinkedList<Section<TableLine>>();
+				table.findSuccessorsOfType(TableLine.class, lines);
+
+				if (lines.size() == 1) {
+					if (text.length() > 0) {
+						return SectionFinderResult.createSingleItemList(new SectionFinderResult(0,
+								text.length()));
+					}
+					else return null;
+				}
+				else return null;
+
+			}
+		});
+
+		childrenTypes.add(qref);
+		CellAnswerRef aRef = new CellAnswerRef();
+		childrenTypes.add(aRef);
+
+		aRef.setSectionFinder(new ISectionFinder() {
+
+			@Override
+			public List<SectionFinderResult> lookForSections(String text, Section<?> father, KnowWEObjectType type) {
+				Section<TestcaseTable> table = father.findAncestorOfExactType(TestcaseTable.class);
+				List<Section<TableLine>> lines = new LinkedList<Section<TableLine>>();
+				table.findSuccessorsOfType(TableLine.class, lines);
+
+				if (lines.size() > 1) {
+					if (text.length() > 0) {
+						return SectionFinderResult.createSingleItemList(new SectionFinderResult(0,
+								text.length()));
+					}
+					else return null;
+				}
+				else return null;
+
+			}
+		});
+
 	}
+
 
 }

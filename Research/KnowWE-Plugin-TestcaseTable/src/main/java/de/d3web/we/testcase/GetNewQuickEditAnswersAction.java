@@ -19,14 +19,12 @@
 package de.d3web.we.testcase;
 
 import java.io.IOException;
-import java.util.List;
 
-import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
-import de.d3web.core.knowledge.terminology.QuestionYN;
 import de.d3web.core.knowledge.terminology.Solution;
+import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.ActionContext;
 import de.d3web.we.basic.D3webModule;
@@ -38,6 +36,11 @@ import de.d3web.we.core.KnowWEParameterMap;
  */
 public class GetNewQuickEditAnswersAction extends AbstractAction {
 
+	public static final String NO_CHOICES_STRING = "[:]EMPTY[:]";
+	public static final String SEPARATOR = "[:;:]";
+	public static final String UNKNOWN_VALUE_STRING = "Unknown";
+	public static final String UNCHANGED_VALUE_STRING = "-";
+
 	@Override
 	/**
 	 * returns the new answers (separated by [:;:]) for a given headerElement if
@@ -45,56 +48,58 @@ public class GetNewQuickEditAnswersAction extends AbstractAction {
 	 * is of a different type
 	 */
 	public void execute(ActionContext context) throws IOException {
+		context.setContentType("text/plain; charset=UTF-8");
+
 		KnowWEParameterMap map = context.getKnowWEParameterMap();
 		String web = map.getWeb();
 		String topic = map.getTopic();
 		String element = context.getParameter("element");
-
-		KnowledgeBase knowledgeService = D3webModule.getAD3webKnowledgeServiceInTopic(
-				web, topic);
-		List<Question> questions = knowledgeService.getManager().getQuestions();
-		List<Solution> solutions = knowledgeService.getManager().getSolutions();
-
-		context.setContentType("text/plain; charset=UTF-8");
-
-		boolean question = false;
-
-		for (Question q : questions) {
-			if (q.getName().equals(element)) {
-				if (q instanceof QuestionYN) {
-					context.getWriter().write("Yes[:;:]No[:;:]Unknown");
-					question = true;
-					break;
-				}
-				else if (q instanceof QuestionChoice) {
-					StringBuffer buffy = new StringBuffer();
-					System.out.println(((QuestionChoice) q)
-							.getAllAlternatives());
-					for (Choice c : ((QuestionChoice) q)
-							.getAllAlternatives()) {
-						buffy.append(c.getName() + "[:;:]");
-					}
-					buffy.append("Unknown");
-					context.getWriter().write(buffy.toString());
-					question = true;
-					break;
-				}
-				else {
-					context.getWriter().write("[:]EMPTY[:]");
-					question = true;
-					break;
-				}
-			}
+		
+		KnowledgeBaseManagement kbm = D3webModule.getKnowledgeRepresentationHandler(web).getKBM(
+				topic);
+		
+		Question question = kbm.findQuestion(element);
+		
+		if (question != null) {
+			writeAnswersForQuestion(context, question);
 		}
-
-		if (!question) {
-			for (Solution s : solutions) {
-				if (s.getName().equals(element)) {
-					context.getWriter().write("established[:;:]suggested[:;:]excluded");
-				}
+		else {
+			Solution solution = kbm.findSolution(element);
+			if (solution != null) {
+				context.getWriter().write(
+						UNCHANGED_VALUE_STRING + SEPARATOR + "established"+ SEPARATOR + "suggested"+ SEPARATOR +"excluded");
 			}
+			else {
+				// TODO Do some errorHandling here.
+				// object must have been removed
+			}
+			
 		}
+	}
 
+	/**
+	 * 
+	 * @created 18.01.2011
+	 * @param context
+	 * @param element
+	 * @param question
+	 * @param questions
+	 * @return
+	 * @throws IOException
+	 */
+	private void writeAnswersForQuestion(ActionContext context, Question q) throws IOException {
+		if (q instanceof QuestionChoice) {
+			StringBuffer buffy = new StringBuffer(UNCHANGED_VALUE_STRING + SEPARATOR);
+			for (Choice c : ((QuestionChoice) q)
+					.getAllAlternatives()) {
+				buffy.append(c.getName() + SEPARATOR);
+			}
+			buffy.append(UNKNOWN_VALUE_STRING);
+			context.getWriter().write(buffy.toString());
+		}
+		else { //
+			context.getWriter().write(NO_CHOICES_STRING);
+		}
 	}
 
 }

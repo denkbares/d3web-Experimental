@@ -18,6 +18,8 @@
  */
 package de.d3web.we.testcase;
 
+import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
+import de.d3web.we.kdom.table.TableCell;
 import de.d3web.we.kdom.table.TableLine;
 
 
@@ -29,6 +31,12 @@ import de.d3web.we.kdom.table.TableLine;
 public class TestcaseTableLine extends TableLine {
 
 	public TestcaseTableLine() {
-		childrenTypes.add(0, new TestCaseTableCell());
+		try {
+			replaceChildType(new TestCaseTableCell(), TableCell.class);
+		}
+		catch (InvalidKDOMSchemaModificationOperation e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

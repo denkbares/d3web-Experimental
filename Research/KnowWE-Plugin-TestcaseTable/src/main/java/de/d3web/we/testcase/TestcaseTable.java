@@ -21,7 +21,9 @@
 package de.d3web.we.testcase;
 
 import de.d3web.we.core.KnowWERessourceLoader;
+import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
 import de.d3web.we.kdom.table.Table;
+import de.d3web.we.kdom.table.TableLine;
 
 /**
  * @author Florian Ziegler
@@ -32,7 +34,13 @@ public class TestcaseTable extends Table {
 		super(new TestcaseTableAttributesProvider());
 		KnowWERessourceLoader.getInstance().add("testcasetable.js",
 				KnowWERessourceLoader.RESOURCE_SCRIPT);
-		this.childrenTypes.add(0, new TestcaseTableLine());
+
+		try {
+			replaceChildType(new TestcaseTableLine(), TableLine.class);
+		}
+		catch (InvalidKDOMSchemaModificationOperation e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
