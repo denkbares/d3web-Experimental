@@ -24,26 +24,24 @@ import com.hp.hpl.jena.query.ResultSetFormatter;
 
 public class LinkedOpenData {
 
+	// Reads the property files.
 	private ArrayList<String> propFile;
 
-	// dbpedia tag -> hermes tag
+	// dbpedia tag -> hermes tag.
 	private HashMap<String, String> mappings;
 
 	// Lists the corresponding DBpedia source for every result, to a specifig
-	// hermes tag. hermes tag -> dbpedia source
+	// hermes tag. hermes tag -> dbpedia source.
 	private HashMap<String, List<String>> inverseMap;
 
 	// sparql variable -> dbpedia tag
 	private HashMap<String, String> searchTags;
 
-	// dbpedia tag -> filter
+	// dbpedia tag -> filter.
 	private HashMap<String, HashSet<String>> filterTags;
 
-	// LOD liefer bei conceptIsResource anderes als DBpedia -> Problem
-	// private static final String sparqlEndpoint2 =
 	// "http://lod.openlinksw.com/sparql";
-
-	private static final String sparqlEndpoint = "http://lod.openlinksw.com/sparql";
+	private static final String sparqlEndpoint = "http://dbpedia.org/sparql";
 
 	// Times the queries are split up.
 	private static final int split = 3;
@@ -70,7 +68,7 @@ public class LinkedOpenData {
 		URL name = getClass().getClassLoader().getResource(conceptTypeName);
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(
-					name.openStream()));
+					name.openStream(), "ISO-8859-1"));
 			String tempLine = in.readLine();
 			while (tempLine != null) {
 				if (!tempLine.startsWith("#") && !tempLine.matches("\\s*")) {
@@ -82,8 +80,8 @@ public class LinkedOpenData {
 		catch (Exception exception) {
 		}
 		for (String prop : propFile) {
-			if (prop.matches("[\\w:-]* -> [\\w:öäüÖÄÜ]* [\\w()]*")
-					|| prop.matches("[\\w:-]* [\\w:_$@-]* -> [\\w:öäüÖÄÜ]* [\\w()]*")) {
+			if (prop.matches("[\\w:-]+ -> [\\p{L}:]+ [\\p{L}]* ?[\\w()]+")
+					|| prop.matches("[\\w:-]+ [\\w:_$@-]* -> [\\p{L}:]+ [\\p{L}]* ?[\\w()]+")) {
 				String[] cut = prop.split(" -> ");
 				if (prop.startsWith("INV")) {
 					// INV name --> name INV ; handle as a filter
@@ -164,7 +162,7 @@ public class LinkedOpenData {
 	 * @return boolean
 	 */
 	private static boolean isSpecified(String toTest) {
-		if (toTest.matches("[\\w:-]* [\\w:_$@-]*")) {
+		if (toTest.matches("[\\w:-]* [\\p{L}:_$@-]*")) {
 			return true;
 		}
 		return false;
@@ -198,11 +196,18 @@ public class LinkedOpenData {
 							Matcher matcher = pattern.matcher(x.get(temp)
 									.toString());
 							// add set with 1 element
+
 							if (matcher.find()) {
-								result.put(
-										searchTags.get(temp) + " " + s,
-										new HashSet<String>(Arrays.asList(x.get(
-												temp).toString())));
+								if (!result.containsKey(searchTags.get(temp) + " " + s)) {
+									result.put(
+											searchTags.get(temp) + " " + s,
+											new HashSet<String>(Arrays.asList(x.get(
+													temp).toString())));
+								}
+								else {
+									result.get(searchTags.get(temp) + " " + s).add(
+											x.get(temp).toString());
+								}
 							}
 						}
 						// Inverse lookup save with INV as filterkey
@@ -389,7 +394,6 @@ public class LinkedOpenData {
 				sparqlEndpoint, query);
 		QueryExecution qexec2 = QueryExecutionFactory.sparqlService(
 				sparqlEndpoint, query2);
-
 		try {
 			return qexec.execAsk() || qexec2.execAsk();
 		}
@@ -399,12 +403,12 @@ public class LinkedOpenData {
 	}
 
 	/**
-	 * Searches a DBpedia concept for a given object.
+	 * Returns dbpprop:redirect for an input concept.
 	 * 
-	 * @param input object
-	 * @return redirect dbpedia URI
+	 * @param input concept
+	 * @return dbpedia URI or empty string.
 	 */
-	public static String getRedirect(String input) {
+	private static String getRedirect(String input) {
 		StringBuffer stringQuery = new StringBuffer();
 		stringQuery.append("PREFIX dbpprop: <http://dbpedia.org/property/>");
 		stringQuery.append("PREFIX : <http://dbpedia.org/resource/>");
@@ -431,7 +435,7 @@ public class LinkedOpenData {
 				return x.get(temp).toString();
 			}
 		}
-		return null;
+		return "";
 	}
 
 	/**
@@ -458,6 +462,7 @@ public class LinkedOpenData {
 			// Save string for hermes property mouseover [title='x'].
 			String htmlTitle = "";
 
+			// IF specified or inverse query [title] with filter or is X of.
 			if (isSpecified(lhsMappings)) {
 				if (lhsMappings.split(" ")[1].equals("INV")) {
 					inverse = true;
@@ -473,9 +478,20 @@ public class LinkedOpenData {
 
 			// Get hermes tag for dbpedia tag & get datatype for the given
 			// result.
+
 			String[] cut = mappings.get(lhsMappings).split(" ");
-			String hermesTag = cut[0];
-			String datatype = cut[1];
+			String hermesTag = "";
+			String datatype = "";
+
+			if (mappings.get(lhsMappings).matches("[\\p{L}:]+ [\\w()]+")) {
+				hermesTag = cut[0];
+				datatype = cut[1];
+			}
+			// case [\\p{L}:]+ [\\p{L}:]+ [\\w()]+
+			else {
+				hermesTag = cut[0] + " " + cut[1];
+				datatype = cut[2];
+			}
 
 			// Intialize resultmap & lookup map for [title]
 			if (!resultData.containsKey(hermesTag)) {
@@ -488,6 +504,7 @@ public class LinkedOpenData {
 			if (isSpecified(lhsMappings) && !inverse) {
 
 				if (datatype.matches("\\(date\\)")) {
+
 					for (String s : results.get(lhsMappings)) {
 
 						String date = "";
@@ -510,24 +527,24 @@ public class LinkedOpenData {
 								}
 							}
 							resultData.get(hermesTag).add(date);
-							inverseMap.get(hermesTag).add(htmlTitle);
+							inverseMap.get(hermesTag).add(htmlTitle + "&nbsp;(" + s + ")");
 							inverseMap.get(hermesTag).add(date);
 						}
 					}
 				}
 
 				if (datatype.matches("\\(string\\)")) {
+
 					for (String s : results.get(lhsMappings)) {
 						// Cut languagetags @$$
 						if (s.matches(".*@[\\w]{2}")) {
 
 							String string = s.replaceAll("@[\\w]{2}",
 										"");
-							string = translate(string);
 
 							resultData.get(hermesTag).add(string);
 
-							inverseMap.get(hermesTag).add(htmlTitle);
+							inverseMap.get(hermesTag).add(htmlTitle + "&nbsp;(" + s + ")");
 							inverseMap.get(hermesTag).add(string);
 						}
 
@@ -537,16 +554,19 @@ public class LinkedOpenData {
 				// Only in conjunction with a filter -> true if filter found,
 				// else false.
 				if (datatype.matches("\\(object\\)")) {
+
 					for (String s : results.get(lhsMappings)) {
 
 						resultData.get(hermesTag).add("ist vom Typ " + hermesTag);
 
-						inverseMap.get(hermesTag).add(htmlTitle);
+						inverseMap.get(hermesTag).add(htmlTitle + "&nbsp;(" + s + ")");
 						inverseMap.get(hermesTag).add("ist vom Typ " + hermesTag);
 					}
 				}
 
+				// Get only $ var from result.
 				if (datatype.matches("\\(concept\\)")) {
+
 					for (String s : results.get(lhsMappings)) {
 
 						String result = "";
@@ -563,22 +583,33 @@ public class LinkedOpenData {
 								result += c;
 							}
 						}
-						// TODO: search hermesconcept & provide link --> Methode
-						// searchconcept auf seite zugreifen DBpediaMappings
+
+						result = getDBpediaRedirect(result);
+
+						// Mask it to recognize it (dont't display as input box)
+
+						result = HermesData.getHermesMapping(result);
+
+						if (!result.isEmpty()) {
+							result = "!$ConceptLink:: " + result;
+						}
 
 						resultData.get(hermesTag).add(result);
-						inverseMap.get(hermesTag).add(htmlTitle);
+						inverseMap.get(hermesTag).add(htmlTitle + "&nbsp;(" + s + ")");
 						inverseMap.get(hermesTag).add(result);
 					}
 				}
 			}
+			// No Filter or inverse query.
 			else {
 
+				// if inverse [title] = is X of..
 				if (inverse) {
 					normalTitle = htmlTitle;
 				}
 
 				if (datatype.matches("\\(date\\)")) {
+
 					for (String s : results.get(lhsMappings)) {
 
 						String datum = "";
@@ -588,11 +619,12 @@ public class LinkedOpenData {
 						if (s.matches("[\\w -]+@\\p{Alpha}{2}")) {
 							s = s.substring(0, s.indexOf("@"));
 						}
+						if (s.matches("[\\w -]+\\^.*")) {
+							s = s.substring(0, s.indexOf("^"));
+						}
 
 						// Default xsd:date type [-]CCYY-MM-DD
 						if (s.matches("-?[\\d]*-[\\d]*-[\\d]*")) {
-
-							s = s.substring(0, s.indexOf("^"));
 
 							String[] yearD2 = s.split("-");
 							if (s.indexOf("-") == 0) {
@@ -664,19 +696,39 @@ public class LinkedOpenData {
 						}
 					}
 				}
+
 				if (datatype.matches("\\(concept\\)")) {
+
 					for (String s : results.get(lhsMappings)) {
+
 						String result = "";
-						if (s.matches("http://[\\p{Alnum}/.:_]*")) {
-							result = s;
+						String redirect = "";
+
+						if (s.matches("[\\w -]+@\\p{Alpha}{2}")) {
+							redirect = s.substring(0, s.indexOf("@"));
 						}
-						else {
-							if (!getDBpediaRedirect(s).isEmpty()) {
-								result = getDBpediaRedirect(s);
+
+						// DBpedia has inconsistent links ==> get main resource
+						// site.
+						if (s.matches("http://[\\p{Alnum}/.:_]*")) {
+							if (conceptIsResource(s)) {
+								result = s;
+							}
+							else {
+								result = getRedirect(s.substring(s.lastIndexOf("/") + 1));
 							}
 						}
-						// TODO: search hermesconcept & provide link --> Methode
-						// searchconcept auf seite zugreifen DBpediaMappings
+						else {
+							result = getDBpediaRedirect(redirect);
+						}
+
+						// Mask it to recognize it (dont't display as input box)
+						result = HermesData.getHermesMapping(result);
+
+						if (!result.isEmpty()) {
+							result = "!$ConceptLink:: " + result;
+						}
+
 						resultData.get(hermesTag).add(result);
 						inverseMap.get(hermesTag).add(normalTitle);
 						inverseMap.get(hermesTag).add(result);
@@ -684,6 +736,7 @@ public class LinkedOpenData {
 				}
 
 				if (datatype.matches("\\(double\\)")) {
+
 					for (String s : results.get(lhsMappings)) {
 
 						double d1, d2;
@@ -722,6 +775,7 @@ public class LinkedOpenData {
 				}
 
 				if (datatype.matches("\\(string\\)")) {
+
 					for (String s : results.get(lhsMappings)) {
 						String string = s;
 
@@ -743,7 +797,6 @@ public class LinkedOpenData {
 								string = string.substring(0, string.indexOf("@") - 1);
 							}
 						}
-						string = translate(string);
 						resultData.get(hermesTag).add(string);
 						inverseMap.get(hermesTag).add(normalTitle);
 						inverseMap.get(hermesTag).add(string);
@@ -751,7 +804,9 @@ public class LinkedOpenData {
 				}
 
 				if (datatype.matches("\\(coords\\)")) {
+
 					countCoords++;
+
 					for (String s : results.get(lhsMappings)) {
 						s = s.substring(0, s.indexOf("^"));
 						if (lhsMappings.equals("dbpprop:latDeg")) {
@@ -764,7 +819,7 @@ public class LinkedOpenData {
 							coords[2] = s + "° ";
 						}
 						if (lhsMappings.equals("dbpprop:lonMin")) {
-							coords[3] = s + "'E ";
+							coords[3] = s + "'E";
 						}
 					}
 					if (countCoords == 4) {
@@ -796,35 +851,68 @@ public class LinkedOpenData {
 	}
 
 	/**
-	 * Get valid DBpedia concept if available.
+	 * Get valid dbpedia concept if available.
 	 * 
-	 * @param input Hermes Concept.
-	 * @return corresponding Dbpedia concept.
+	 * @param input hermes Concept.
+	 * @return dbpedia URI or empty string.
 	 */
 	public static String getDBpediaRedirect(String input) {
-		String parsed = input.replaceAll("\\p{Punct}*", "")
-				.replaceAll(" ", "_");
-		if (conceptIsResource("http://dbpedia.org/resource/" + parsed)) {
-			return "http://dbpedia.org/resource/" + parsed;
+		if (!input.isEmpty()) {
+			String parsed = input.replaceAll("\\p{Punct}*", "")
+					.replaceAll(" ", "_");
+			if (conceptIsResource("http://dbpedia.org/resource/" + parsed)) {
+				return "http://dbpedia.org/resource/" + parsed;
+			}
+			else if (conceptIsResource(getRedirect(parsed))) {
+				return getRedirect(parsed);
+			}
+			else {
+				// Same with translated one!
+				String translatedText = translate(input);
+
+				if (!input.equals(translatedText)) {
+					return LinkedOpenData.getDBpediaRedirect(translatedText);
+				}
+			}
 		}
-		else if (conceptIsResource(getRedirect(parsed))) {
-			return getRedirect(parsed);
-		}
-		else {
-			// Same with translated one!
-			// Only for init - for google to distinguish between programs
-			Translate.setHttpReferrer("ex");
-			String translatedText = "";
+		return "";
+	}
+
+	/**
+	 * Get valid dbpedia concept if available for the given wikipedia link.
+	 * 
+	 * @param wikilink wikipedia @en link.
+	 * @return dbepdia URI or empty string.
+	 */
+	public static String getResourceforWikipedia(String wikilink) {
+		if (wikilink.matches("http://en\\.wikipedia\\.org/.*")) {
+
+			StringBuffer stringQuery = new StringBuffer();
+			stringQuery.append("PREFIX foaf: <http://xmlns.com/foaf/0.1/>");
+			stringQuery.append("SELECT ?resource WHERE { ?resource foaf:page <" + wikilink + "> .}");
+			// create the query object
+			Query query = QueryFactory.create(stringQuery.toString());
+
+			QueryExecution qexec = QueryExecutionFactory.sparqlService(
+					sparqlEndpoint, query);
+
+			List<QuerySolution> result = new ArrayList<QuerySolution>();
 			try {
-				translatedText = Translate.execute(input, Language.GERMAN,
-						Language.ENGLISH);
+				ResultSet results = qexec.execSelect();
+				result = ResultSetFormatter.toList(results);
 			}
-			catch (Exception e) {
-				e.printStackTrace();
+			finally {
+				qexec.close();
 			}
-			if (!input.equals(translatedText)) {
-				return LinkedOpenData.getDBpediaRedirect(translatedText);
+			String resultString = "";
+			for (QuerySolution x : result) {
+				Iterator<String> it = x.varNames();
+				while (it.hasNext()) {
+					String temp = it.next();
+					resultString = x.get(temp).toString();
+				}
 			}
+			return resultString;
 		}
 		return "";
 	}
@@ -839,12 +927,14 @@ public class LinkedOpenData {
 
 		Translate.setHttpReferrer("ex");
 		String translatedText = "";
-		try {
-			translatedText = Translate.execute(string, Language.GERMAN,
-					Language.ENGLISH);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
+		if (!string.isEmpty()) {
+			try {
+				translatedText = Translate.execute(string, Language.GERMAN,
+						Language.ENGLISH);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return translatedText;
 
