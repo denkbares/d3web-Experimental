@@ -27,7 +27,7 @@ public class CreateAction extends AbstractAction {
 
 		String dbpediaConcept = LinkedOpenData.getDBpediaRedirect(concept);
 
-		if (wikipedia != null) {
+		if (!wikipedia.isEmpty()) {
 			dbpediaConcept = LinkedOpenData.getResourceforWikipedia(wikipedia);
 		}
 
@@ -35,7 +35,7 @@ public class CreateAction extends AbstractAction {
 		HashMap<String, HashSet<String>> result = new HashMap<String, HashSet<String>>();
 		HashMap<String, HashSet<String>> dbResult = new HashMap<String, HashSet<String>>();
 		LinkedOpenData var = new LinkedOpenData();
-
+		
 		var = set.getLOD(ConceptType.Typ);
 		dbResult = var.getLODdata(dbpediaConcept);
 		result = var.getHermesData(dbResult);

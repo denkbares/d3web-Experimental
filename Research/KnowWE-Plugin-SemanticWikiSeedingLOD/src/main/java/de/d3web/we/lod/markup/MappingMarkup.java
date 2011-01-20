@@ -3,16 +3,16 @@ package de.d3web.we.lod.markup;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 
-public class DBpediaMappingMarkup extends DefaultMarkupType {
+public class MappingMarkup extends DefaultMarkupType {
 
 	private static DefaultMarkup m = null;
 
 	static {
-		m = new DefaultMarkup("DBpediaMapping");
-		m.addContentType(new NewLine(new DBpediaContentType()));
+		m = new DefaultMarkup("Mapping");
+		m.addContentType(new NewLine(new MappingContentType()));
 	}
 
-	public DBpediaMappingMarkup() {
+	public MappingMarkup() {
 		super(m);
 	}
 

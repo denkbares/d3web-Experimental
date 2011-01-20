@@ -18,7 +18,7 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.lod.HermesData;
 import de.d3web.we.lod.LinkedOpenData;
-import de.d3web.we.lod.markup.DBpediaContentType;
+import de.d3web.we.lod.markup.MappingContentType;
 import de.d3web.we.lod.markup.IgnoreContentType;
 import de.d3web.we.lod.markup.IgnoreContentType.IgnoreChild;
 import de.d3web.we.lod.markup.IgnoreContentType.IgnoreConcept;
@@ -113,6 +113,7 @@ public class ParseDataAction extends AbstractAction {
 
 			if (s.equals("return")) {
 
+				// TODO MappingContentType. + Higher Priority
 				// Save on NoParse article.
 
 				String noParseTopic = HermesData.getNoParseTopic();
@@ -120,12 +121,14 @@ public class ParseDataAction extends AbstractAction {
 				if (!KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
 						noParseTopic)) {
 
-					parse = "[" + parse + "\\\\";
+					String temp = "%%Mapping " + System.getProperty("line.separator")
+							+ parse
+							+ System.getProperty("line.separator") + "%";
 
 					KnowWEEnvironment.getInstance().getWikiConnector().createWikiPage(
-							noParseTopic, parse, user);
+							noParseTopic, temp, user);
 
-					KnowWEArticle article = KnowWEArticle.createArticle(parse,
+					KnowWEArticle article = KnowWEArticle.createArticle(temp,
 							noParseTopic, KnowWEEnvironment.getInstance().getRootType(),
 							web, true);
 
@@ -135,14 +138,25 @@ public class ParseDataAction extends AbstractAction {
 				}
 				else {
 
-					parse = "[" + parse + "\\\\";
+					// append triple to noParseTopic.
+					KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
+							web, noParseTopic);
 
-					KnowWEEnvironment.getInstance().getWikiConnector().appendContentToPage(
-							conceptTopic,
-							parse);
+					List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
+					article.getSection().findSuccessorsOfType(MappingContentType.class,
+							found);
 
-					KnowWEEnvironment.getInstance().getArticleManager(web).addArticleToRefresh(
-							conceptTopic);
+					Section<MappingContentType> lastNode = found.get(found.size() - 1);
+
+					String add = lastNode.getChildren().get(0).getOriginalText()
+								+ System.getProperty("line.separator") + parse;
+
+					Map<String, String> nodesMap = new HashMap<String, String>();
+					nodesMap.put(lastNode.getChildren().get(0).getID(), add);
+
+					KnowWEEnvironment.getInstance().getArticleManager(
+							web).replaceKDOMNodesSaveAndBuild(map, noParseTopic, nodesMap);
+
 				}
 
 			}
@@ -225,7 +239,7 @@ public class ParseDataAction extends AbstractAction {
 							}
 						}
 						else if (found.indexOf(t) == found.size() - 1 && !conceptFound) {
-							
+
 							// Add concept + tag & value.
 							String newIgnore = t.getOriginalText()
 									+ System.getProperty("line.separator") + "#" + concept
@@ -254,11 +268,11 @@ public class ParseDataAction extends AbstractAction {
 				KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
 						web, mappingTopic);
 
-				List<Section<DBpediaContentType>> found = new Vector<Section<DBpediaContentType>>();
-				article.getSection().findSuccessorsOfType(DBpediaContentType.class,
+				List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
+				article.getSection().findSuccessorsOfType(MappingContentType.class,
 						found);
 
-				Section<DBpediaContentType> lastNode = found.get(found.size() - 1);
+				Section<MappingContentType> lastNode = found.get(found.size() - 1);
 
 				String add = "";
 

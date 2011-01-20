@@ -21,7 +21,7 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.lod.HermesData;
 import de.d3web.we.lod.LinkedOpenData;
-import de.d3web.we.lod.markup.DBpediaContentType;
+import de.d3web.we.lod.markup.MappingContentType;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.semantic.sparql.SPARQLUtil;
@@ -79,7 +79,7 @@ public class ConceptHandler extends AbstractHTMLTagHandler {
 						+ System.getProperty("line.separator"));
 			}
 
-			output = "%%DBpediaMapping "
+			output = "%%Mapping "
 					+ System.getProperty("line.separator") + buffy.toString()
 					+ System.getProperty("line.separator") + "%";
 
@@ -102,8 +102,8 @@ public class ConceptHandler extends AbstractHTMLTagHandler {
 			KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
 					web, mappingTopic);
 
-			List<Section<DBpediaContentType>> found1 = new Vector<Section<DBpediaContentType>>();
-			article.getSection().findSuccessorsOfType(DBpediaContentType.class,
+			List<Section<MappingContentType>> found1 = new Vector<Section<MappingContentType>>();
+			article.getSection().findSuccessorsOfType(MappingContentType.class,
 					found1);
 
 			Map<String, String> nodesMap = new HashMap<String, String>();
@@ -112,7 +112,7 @@ public class ConceptHandler extends AbstractHTMLTagHandler {
 				String hermes = it.next();
 				String dbpedia = corresDBpediaConcepts.get(hermes);
 				if (!dbpedia.isEmpty()) {
-					for (Section<DBpediaContentType> t : found1) {
+					for (Section<MappingContentType> t : found1) {
 						String complete = t.getChildren().get(0).getOriginalText();
 
 						String filter = ".+ => http://[\\p{Alnum}/.:_]+";

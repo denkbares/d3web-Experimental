@@ -23,7 +23,7 @@ import de.d3web.we.lod.ConceptType;
 import de.d3web.we.lod.HermesData;
 import de.d3web.we.lod.LinkedOpenData;
 import de.d3web.we.lod.LinkedOpenDataSet;
-import de.d3web.we.lod.markup.DBpediaContentType;
+import de.d3web.we.lod.markup.MappingContentType;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 public class GetDataAction extends AbstractAction {
@@ -49,7 +49,7 @@ public class GetDataAction extends AbstractAction {
 
 			String wiki = "";
 
-			if (wikipedia != null
+			if (!wikipedia.isEmpty()
 					&& wikipedia.matches("http://en.wikipedia.org/.*")) {
 
 				wiki = LinkedOpenData.getResourceforWikipedia(wikipedia);
@@ -59,8 +59,10 @@ public class GetDataAction extends AbstractAction {
 			// Ask to create article?
 			if (dbpediaConcept.isEmpty()) {
 
-				if (HermesData.isHermesConcept(concept)
-						|| (LinkedOpenData.getDBpediaRedirect(concept).isEmpty() && wiki.isEmpty())) {
+				// If (no mapping || no dbpedia concept found for) && no
+				// wikilink provided.
+				if ((HermesData.isHermesConcept(concept)
+						|| LinkedOpenData.getDBpediaRedirect(concept).isEmpty()) && wiki.isEmpty()) {
 					context.getWriter().write(
 							"<br/><div style='margin-left:10px;'><p><b>Konzept nicht gefunden.</b></p></div>");
 				}
@@ -85,13 +87,13 @@ public class GetDataAction extends AbstractAction {
 					KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
 							web, mappingTopic);
 
-					List<Section<DBpediaContentType>> found = new Vector<Section<DBpediaContentType>>();
-					article.getSection().findSuccessorsOfType(DBpediaContentType.class,
+					List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
+					article.getSection().findSuccessorsOfType(MappingContentType.class,
 							found);
 
 					Map<String, String> nodesMap = new HashMap<String, String>();
 
-					for (Section<DBpediaContentType> t : found) {
+					for (Section<MappingContentType> t : found) {
 						String complete = t.getChildren().get(0).getOriginalText();
 						if (complete.matches(concept + " =>.*")) {
 							// Update node with wikipedia dbpedia url.
@@ -191,127 +193,135 @@ public class GetDataAction extends AbstractAction {
 				Iterator<String> it = sortedset.iterator();
 
 				int i = 0;
-				while (it.hasNext()) {
-					String s = it.next();
-					List<String> mapped = inverse.get(s);
-					for (String resultS : result.get(s)) {
-						// Tests if Triple is already in the hermes RDF-Store :
-						// do nothing ? add.
-						// if ( !HermesData.storeContainsPre(hermesConcept,
-						// s, resultS)) {
-						// TODO: In Store, Ignore, NoParse
+				if (result.size() > 0) {
+					while (it.hasNext()) {
+						String s = it.next();
+						List<String> mapped = inverse.get(s);
+						for (String resultS : result.get(s)) {
+							String checkHermesTag = s;
+							String checkValue = resultS;
 
-						String checkHermesTag = s;
-						String checkValue = resultS;
-
-						// objects are saved with predicate specified in
-						// hermesdata.
-						if (resultS.matches("ist vom Typ .*")) {
-							checkHermesTag = HermesData.getObjectType();
-							checkValue = s;
-						}
-
-						if (!resultS.isEmpty()
-								&& !HermesData.isIgnored(concept, checkHermesTag, checkValue)) {
-
-							// Create title for html, if values are created from
-							// multiple dbpedia properties.
-							String title = "";
-							for (int j = 0; j < mapped.size(); j++) {
-								if (mapped.get(j).equals(resultS)) {
-									title += mapped.get(j - 1) + ",&nbsp;";
-								}
-							}
-							if (!title.isEmpty()) {
-								title = title.substring(0, title.length() - 7);
-							}
-
-							// If object -> no input box.
+							// objects are saved with predicate specified in
+							// hermesdata.
 							if (resultS.matches("ist vom Typ .*")) {
-								buffy.append("<tr><td valign='middle' align='middle'>"
-										+ "<p id='hermestag" + i + "' title="
-										+ title
-										+ " class='tags'>"
-										+ s
-										+ "</p>"
-										+ "<td valign='middle' align='middle'><p id='dbpediavalue"
-										+ i + "'>"
-										+ resultS
-										+ "</p></td>");
+								checkHermesTag = HermesData.getObjectType();
+								checkValue = s;
 							}
-							// If concept -> no input box + build link for href
-							// and <a> carries id tag for JS reading.
-							else if (resultS.matches("!\\$ConceptLink:: .*")) {
-								String conceptname = resultS.substring(16);
-								String link = HermesData.linkString(conceptname, "dbpediavalue"
+
+							// if ( !HermesData.storeContainsPre(hermesConcept,
+							// s, resultS)) {
+							// TODO: In Store
+
+							if (!resultS.isEmpty()
+									&& !HermesData.isIgnored(concept, checkHermesTag, checkValue)
+									&& !HermesData.isNoParse(concept, checkHermesTag, checkValue)) {
+
+								// Create title for html, if values are created
+								// from
+								// multiple dbpedia properties.
+								String title = "";
+								for (int j = 0; j < mapped.size(); j++) {
+									if (mapped.get(j).equals(resultS)) {
+										title += mapped.get(j - 1) + ",&nbsp;";
+									}
+								}
+								if (!title.isEmpty()) {
+									title = title.substring(0, title.length() - 7);
+								}
+
+								// If object -> no input box.
+								if (resultS.matches("ist vom Typ .*")) {
+									buffy.append("<tr><td valign='middle' align='middle'>"
+											+ "<p id='hermestag"
+											+ i
+											+ "' title="
+											+ title
+											+ " class='tags'>"
+											+ s
+											+ "</p>"
+											+ "<td valign='middle' align='middle'><p id='dbpediavalue"
+											+ i + "'>"
+											+ resultS
+											+ "</p></td>");
+								}
+								// If concept -> no input box + build link for
+								// href
+								// and <a> carries id tag for JS reading.
+								else if (resultS.matches("!\\$ConceptLink:: .*")) {
+									String conceptname = resultS.substring(16);
+									String link = HermesData.linkString(conceptname, "dbpediavalue"
 												+ i);
-								buffy.append("<tr><td valign='middle' align='middle'>"
-										+ "<p id='hermestag" + i + "' title="
-										+ title
-										+ " class='tags'>"
-										+ s
-										+ "</p>"
-										+ "<td valign='middle' align='middle'>"
-										+ link
-										+ "</td>");
-							}
-							else {
-								buffy.append("<tr><td valign='middle' align='middle'>"
-										+ "<p id='hermestag"
+									buffy.append("<tr><td valign='middle' align='middle'>"
+											+ "<p id='hermestag" + i + "' title="
+											+ title
+											+ " class='tags'>"
+											+ s
+											+ "</p>"
+											+ "<td valign='middle' align='middle'>"
+											+ link
+											+ "</td>");
+								}
+								else {
+									buffy.append("<tr><td valign='middle' align='middle'>"
+											+ "<p id='hermestag"
+											+ i
+											+ "' title="
+											+ title
+											+ " class='tags'>"
+											+ s
+											+ "</p>"
+											+ "<td valign='middle' align='middle'><input id='dbpediavalue"
+											+ i
+											+ "' type='text' size='40' value='"
+											+ resultS.replaceAll("’", "&rsquo;") + "'>"
+											+ "</td>");
+								}
+								buffy.append("<td><input type='button' name='submit"
 										+ i
-										+ "' title="
-										+ title
-										+ " class='tags'>"
-										+ s
-										+ "</p>"
-										+ "<td valign='middle' align='middle'><input id='dbpediavalue"
+										+ "' onclick='buttonToggle(this);' class='submit'>"
+										+ "<input type='button' name='ignore"
 										+ i
-										+ "' type='text' size='40' value='"
-										+ resultS.replaceAll("’", "&rsquo;") + "'>"
-										+ "</td>");
+										+ "' onclick='buttonToggle(this);' class='ignore'>"
+										+ "<input type='button' name='return"
+										+ i
+										+ "' onclick='buttonToggle(this);' class='return'>"
+										+ "<input type='button' name='qmarks"
+										+ i
+										+ "' onclick='buttonToggle(this);' class='qmarksc'></td></tr>");
+								i++;
 							}
-							buffy.append("<td><input type='button' name='submit"
-									+ i
-									+ "' onclick='buttonToggle(this);' class='submit'>"
-									+ "<input type='button' name='ignore"
-									+ i
-									+ "' onclick='buttonToggle(this);' class='ignore'>"
-									+ "<input type='button' name='return"
-									+ i
-									+ "' onclick='buttonToggle(this);' class='return'>"
-									+ "<input type='button' name='qmarks"
-									+ i
-									+ "' onclick='buttonToggle(this);' class='qmarksc'></td></tr>");
-							i++;
 						}
 					}
-				}
-				buffy.append("<tr><td colspan='3'><div class='spacingbuttons'/></td></tr><tr><td colspan='3' valign='middle' align='right'><img src='KnowWEExtension/images/submit.png'"
-						+ "onmouseover='changeOnMouseOver(this);' onmouseout='changeOnMouseOut(this);'"
-						+ "onclick='submitData("
-						+ i
-						+ ");' class='buttons'>"
-						+ "<img src='KnowWEExtension/images/cancel.png' onmouseover='changeOnMouseOver(this);' "
-						+ "onmouseout='changeOnMouseOut(this);' onclick='cancelWizard();' class='buttons'></td></tr></table></form><br />");
+					buffy.append("<tr><td colspan='3'><div class='spacingbuttons'/></td></tr><tr><td colspan='3' valign='middle' align='right'><img src='KnowWEExtension/images/submit.png'"
+							+ "onmouseover='changeOnMouseOver(this);' onmouseout='changeOnMouseOut(this);'"
+							+ "onclick='submitData("
+							+ i
+							+ ");' class='buttons'>"
+							+ "<img src='KnowWEExtension/images/cancel.png' onmouseover='changeOnMouseOver(this);' "
+							+ "onmouseout='changeOnMouseOut(this);' onclick='cancelWizard();' class='buttons'></td></tr></table></form><br />");
 
-				StringBuffer debug = new StringBuffer();
+					StringBuffer debug = new StringBuffer();
 
-				if (checkDebug.equals("true")) {
-					// Debug View.
-					debug.append("<div class='collapsebox'><h4 id='section-Sandbox2-Debug.' class='collapsetitle'>"
-							+ "<div class='collapseOpen' title='Zuklappen'>-</div>Debug.</h4><table class='wikitable' border='1'>"
-							+ "<div class='collapsebody' style='overflow: hidden; height: 0px;'>"
-							+ "<tbody><tr><th class='sort'>DBpediaTag</th><th class='sort'>Value</th></tr>"
-							+ "</div></div>");
-					for (String s : dbResult.keySet()) {
-						if (!s.isEmpty()) {
-							debug.append("<tr><td>" + s + "</td><td>" + dbResult.get(s)
-									+ "</td></tr>");
+					if (checkDebug.equals("true")) {
+						// Debug View.
+						debug.append("<div class='collapsebox'><h4 id='section-Sandbox2-Debug.' class='collapsetitle'>"
+								+ "<div class='collapseOpen' title='Zuklappen'>-</div>Debug.</h4><table class='wikitable' border='1'>"
+								+ "<div class='collapsebody' style='overflow: hidden; height: 0px;'>"
+								+ "<tbody><tr><th class='sort'>DBpediaTag</th><th class='sort'>Value</th></tr>"
+								+ "</div></div>");
+						for (String s : dbResult.keySet()) {
+							if (!s.isEmpty()) {
+								debug.append("<tr><td>" + s + "</td><td>" + dbResult.get(s)
+										+ "</td></tr>");
+							}
 						}
+						debug.append("</tbody></table></div></div>");
 					}
-					debug.append("</tbody></table></div></div>");
+					context.getWriter().write(buffy.toString() + debug.toString());
 				}
-				context.getWriter().write(buffy.toString() + debug.toString());
+				else {
+					context.getWriter().write("<br/><p><b>Keine Daten zu Konzept gefunden.</b></p>");
+				}
 			}
 		}
 	}

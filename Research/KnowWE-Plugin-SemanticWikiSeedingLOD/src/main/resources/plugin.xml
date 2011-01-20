@@ -36,13 +36,13 @@
         </extension>
 
 		<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
-		id="DBpediaContentType">
+		id="MappingContentType">
 			<parameter id="class"
-			value="de.d3web.we.lod.markup.DBpediaMappingMarkup" />
-			<parameter id="name" value="DBpediaMappingMarkup" />
-			<parameter id="description" value="KnowWEObjectType DBpediaMappingMarkup" />
+			value="de.d3web.we.lod.markup.MappingMarkup" />
+			<parameter id="name" value="MappingMarkup" />
+			<parameter id="description" value="KnowWEObjectType MappingMarkup" />
 			<parameter id="version" value="1.0" />
-			<parameter id="priority" value="4.5" /><parameter id="scope"
+			<parameter id="priority" value="1" /><parameter id="scope"
 			value="root" />
 			<parameter id="script" value="KnowWE-Plugin-SWSLOD.js" />
 		</extension>

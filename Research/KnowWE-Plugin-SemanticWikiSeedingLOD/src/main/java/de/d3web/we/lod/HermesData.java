@@ -14,7 +14,7 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.lod.markup.DBpediaContentType;
+import de.d3web.we.lod.markup.MappingContentType;
 import de.d3web.we.lod.markup.IgnoreContentType;
 import de.d3web.we.lod.markup.IgnoreContentType.IgnoreChild;
 import de.d3web.we.lod.markup.IgnoreContentType.IgnoreConcept;
@@ -90,12 +90,12 @@ public class HermesData {
 		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
 				web, topic);
 
-		List<Section<DBpediaContentType>> found = new Vector<Section<DBpediaContentType>>();
-		article.getSection().findSuccessorsOfType(DBpediaContentType.class,
+		List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
+		article.getSection().findSuccessorsOfType(MappingContentType.class,
 				found);
 
 		String dbpediaMapping = "";
-		for (Section<DBpediaContentType> t : found) {
+		for (Section<MappingContentType> t : found) {
 			String temp = t.getChildren().get(0).getOriginalText();
 			if (temp.matches(hermes + " => .*")) {
 				dbpediaMapping = temp.substring(temp.indexOf(" => ") + 4);
@@ -106,7 +106,7 @@ public class HermesData {
 	}
 
 	/**
-	 * Tests if a given string is a hermes concept.
+	 * Tests if a given string is a mapped hermes concept.
 	 * 
 	 * @param conceptname string.
 	 * @return boolean.
@@ -118,11 +118,11 @@ public class HermesData {
 		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
 				web, topic);
 
-		List<Section<DBpediaContentType>> found = new Vector<Section<DBpediaContentType>>();
-		article.getSection().findSuccessorsOfType(DBpediaContentType.class,
+		List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
+		article.getSection().findSuccessorsOfType(MappingContentType.class,
 				found);
 
-		for (Section<DBpediaContentType> t : found) {
+		for (Section<MappingContentType> t : found) {
 			String temp = t.getChildren().get(0).getOriginalText();
 			if (temp.matches(conceptname + " =>.*")) {
 				return true;
@@ -145,12 +145,12 @@ public class HermesData {
 		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
 				web, topic);
 
-		List<Section<DBpediaContentType>> found = new Vector<Section<DBpediaContentType>>();
-		article.getSection().findSuccessorsOfType(DBpediaContentType.class,
+		List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
+		article.getSection().findSuccessorsOfType(MappingContentType.class,
 				found);
 
 		String hermesMapping = "";
-		for (Section<DBpediaContentType> t : found) {
+		for (Section<MappingContentType> t : found) {
 			String temp = t.getChildren().get(0).getOriginalText();
 			if (temp.matches(".* => " + dbpedia)) {
 				hermesMapping = temp.substring(0, temp.indexOf(" => "));
@@ -161,12 +161,41 @@ public class HermesData {
 	}
 
 	/**
-	 * Tests if a triple is in IgnoredAttributes.
+	 * Tests if an RDF-triple is saved in the NoParse article.
 	 * 
-	 * @param concept.
-	 * @param hermestag.
-	 * @param value.
-	 * @return
+	 * @param concept conceptname.
+	 * @param hermestag predicate.
+	 * @param value value.
+	 * @return boolean.
+	 */
+	public static boolean isNoParse(String concept, String hermestag, String value) {
+
+		String topic = getNoParseTopic();
+
+		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
+				web, topic);
+
+		List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
+		article.getSection().findSuccessorsOfType(MappingContentType.class,
+				found);
+
+		for (Section<MappingContentType> t : found) {
+			String temp = t.getChildren().get(0).getOriginalText();
+			if (temp.matches("\\[" + concept + " " + hermestag + ":: " + value + "\\][\\r\\n]*")) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Tests if a RDF-triple is in the IgnoredAttributes article.
+	 * 
+	 * @param concept conceptname.
+	 * @param hermestag predicate.
+	 * @param value value.
+	 * @return boolean.
 	 */
 	public static boolean isIgnored(String concept, String hermestag, String value) {
 
@@ -259,12 +288,14 @@ public class HermesData {
 	/**
 	 * Tests if the hermes RDF-store contains the specified triple.
 	 * 
-	 * @param concept concept (unmodified string.).
-	 * @param predicate rdf-predicate.
+	 * @param concept conceptname (unmodified string.).
+	 * @param predicate predicate.
 	 * @param value value.
 	 * @return boolean.
 	 */
 	public static boolean storeContains(String concept, String predicate, String value) {
+
+		// TODO value || predicate encode?
 
 		try {
 			concept = URLEncoder.encode(concept, "UTF-8");
@@ -285,13 +316,14 @@ public class HermesData {
 	/**
 	 * Tests if the hermes RDF-store contains the specified triple.
 	 * 
-	 * @param concept concept (already encoded + namespace added string.).
-	 * @param predicate rdf-predicate.
+	 * @param concept conceptname (already encoded + namespace added string.).
+	 * @param predicate predicate.
 	 * @param value value.
 	 * @return boolean.
 	 */
 	public static boolean storeContainsPre(String concept, String predicate, String value) {
 
+		// TODO value || predicate encode?
 		String ask = "ASK {<" + concept
 				+ "> " + predicate + " " + value + "}";
 		System.out.println(ask);
