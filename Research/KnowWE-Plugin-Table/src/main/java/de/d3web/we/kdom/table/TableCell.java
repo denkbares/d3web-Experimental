@@ -78,16 +78,18 @@ public class TableCell extends DefaultAbstractKnowWEObjectType {
 	 */
 	public class TableCellSectionFinder implements ISectionFinder {
 
+		public static final String CELLSTART = "\\|{1,2}\\s*";
+		public static final String JSPLINK = "(\\[.+\\|?.*\\])";
+		public static final String CHARCLASSES = "\\s\\d\\w";
+		public static final String SPECIALCHARS = "-_:;!§€@%&#='´`°äöüÄÖÜß}\\$\\{\\(\\\\\\+\\)\\?\\<\\>\\^\\.";
+		public static final String REGEX = CELLSTART + "(" + JSPLINK + "|[" + CHARCLASSES
+				+ SPECIALCHARS
+				+ "]*)";
+		private final Pattern pattern = Pattern.compile(REGEX);
+
 		@Override
 		public List<SectionFinderResult> lookForSections(String text, Section<?> father, KnowWEObjectType type) {
-
-			final String CELLSTART = "\\|{1,2}\\s*";
-			final String JSPLINK = "(\\[.+\\|?.*\\])";
-			final String CHARCLASSES = "\\s\\d\\w";
-			final String SPECIALCHARS = "-_:;!§€@%&#='´`°äöüÄÖÜß}\\$\\{\\(\\\\\\+\\)\\?\\<\\>\\^";
 			
-			String regex = CELLSTART + "(" + JSPLINK + "|[" + CHARCLASSES + SPECIALCHARS + "]*)";
-			Pattern pattern = Pattern.compile(regex);
 
 			Matcher tagMatcher = pattern.matcher(text);
 			List<SectionFinderResult> resultRegex = new LinkedList<SectionFinderResult>();
