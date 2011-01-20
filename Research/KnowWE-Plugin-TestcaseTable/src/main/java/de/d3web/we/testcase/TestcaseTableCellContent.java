@@ -20,10 +20,15 @@ package de.d3web.we.testcase;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
+import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
+import de.d3web.we.kdom.constraint.SectionFinderConstraint;
 import de.d3web.we.kdom.sectionFinder.ISectionFinder;
+import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.table.Table;
 import de.d3web.we.kdom.table.TableCellContent;
@@ -37,6 +42,18 @@ import de.d3web.we.object.QuestionReference;
  */
 public class TestcaseTableCellContent extends TableCellContent {
 
+	private final class UnchangedType extends DefaultAbstractKnowWEObjectType {
+
+		private final String regex = "\\s*" + GetNewQuickEditAnswersAction.UNCHANGED_VALUE_STRING
+				+ "\\s*";
+
+		@Override
+		protected void init() {
+			setSectionFinder(new RegexSectionFinder(Pattern.compile(regex)));
+		}
+
+	}
+
 	/**
 	 * 
 	 * @author Reinhard Hatko
@@ -48,7 +65,6 @@ public class TestcaseTableCellContent extends TableCellContent {
 		public Section<QuestionReference> getQuestionSection(Section<? extends AnswerReference> s) {
 
 			Section<TableLine> line = s.findAncestorOfType(TableLine.class);
-			
 			boolean found = false;
 			int i = 0;
 			for (Section<?> section : line.getChildren()) {
@@ -61,12 +77,15 @@ public class TestcaseTableCellContent extends TableCellContent {
 				i++;
 			}
 
+			if (!found) {
+				System.out.println("no Q found for: " + s);
+				return null;
+			}
+
 			Section<Table> table = line.findAncestorOfType(Table.class);
 			Section<TableLine> headerline = table.findSuccessor(TableLine.class);
 			Section<? extends KnowWEObjectType> headerCell = headerline.getChildren().get(i);
 			Section<QuestionReference> questionRef = headerCell.findSuccessor(QuestionReference.class);
-
-			System.out.println(questionRef.getOriginalText() + "->" + s.getOriginalText());
 
 			return questionRef;
 		}
@@ -75,7 +94,27 @@ public class TestcaseTableCellContent extends TableCellContent {
 	@Override
 	protected void init() {
 		setCustomRenderer(new TestcaseTableCellContentRenderer());
-		childrenTypes.add(new TimeStampType());
+		childrenTypes.add(new UnchangedType());
+
+		TimeStampType timeStampType = new TimeStampType();
+		timeStampType.setSectionFinder(new ConstraintSectionFinder(timeStampType.getSectioner(),
+				new SectionFinderConstraint() {
+
+					@Override
+					public boolean satisfiesConstraint(List<SectionFinderResult> found, Section father, KnowWEObjectType type) {
+						Section line = father.findAncestorOfExactType(TestcaseTableLine.class);
+						return line.getChildren().size() == 1;
+					}
+
+					@Override
+					public void filterCorrectResults(List<SectionFinderResult> found, Section father, KnowWEObjectType type) {
+						if (found == null || found.size() == 0) return;
+						found.clear();
+
+					}
+				}));
+
+		childrenTypes.add(timeStampType);
 		QuestionReference qref = new QuestionReference();
 		qref.setSectionFinder(new ISectionFinder() {
 
@@ -85,12 +124,20 @@ public class TestcaseTableCellContent extends TableCellContent {
 				List<Section<TableLine>> lines = new LinkedList<Section<TableLine>>();
 				table.findSuccessorsOfType(TableLine.class, lines);
 
+				// header line
 				if (lines.size() == 1) {
+					// empty first cell (contained in a TableCell section)
+					if (lines.get(0).getChildren().size() == 1) {
+						return null;
+					}
+
 					if (text.length() > 0) {
 						return SectionFinderResult.createSingleItemList(new SectionFinderResult(0,
 								text.length()));
 					}
-					else return null;
+					else {
+						return null;
+					}
 				}
 				else return null;
 

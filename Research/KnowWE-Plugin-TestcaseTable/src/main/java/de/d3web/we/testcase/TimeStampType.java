@@ -18,6 +18,7 @@
  */
 package de.d3web.we.testcase;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
@@ -31,80 +32,60 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
  */
 public class TimeStampType extends DefaultAbstractKnowWEObjectType {
 
-	private static String HOUR = "\\d+h\\s*";
-	private static String MINUTE = "\\d+m\\s*";
-	private static String SECOND = "\\d+s\\s*";
-	private static String MILLIS = "\\d+ms\\s*";
-	private static String HOUR_PERMUTATION = HOUR + "(" + MINUTE + ")?(" + SECOND + ")?(" + MILLIS
-			+ ")?";
-	private static String MINUTE_PERMUTATION = "(" + HOUR + ")?" + MINUTE + "(" + SECOND + ")?("
-			+ MILLIS + ")?";
-	private static String SECOND_PERMUTATION = "(" + HOUR + ")?(" + MINUTE + ")?" + SECOND + "("
-			+ MILLIS + ")?";
-	private static String MILLIS_PERMUTATION = "(" + HOUR + ")?(" + MINUTE + ")?(" + SECOND
-			+ ")?" + MILLIS;
+	private static final long[] TIME_FACTORS = {
+			1, 1000, 1000, 60 * 1000, 60 * 1000, 60 * 60 * 1000, 24 * 60 * 60 * 1000 };
 
-	private static String pattern = "(" + HOUR_PERMUTATION + "|" + MINUTE_PERMUTATION + "|"
-			+ SECOND_PERMUTATION + "|" + MILLIS_PERMUTATION + ")";
-	private static Pattern timeStampPattern = Pattern.compile(pattern);
+	private static final String[] TIME_UNITS = {
+			"ms", "s", "sec", "min", "h", "d" };
+
+	private static final Pattern TIMESTAMP_PATTERN = Pattern.compile(
+			"\\s*(\\d+(\\.\\d*)?)\\s*(ms|s|sec|m|min|h|d)\\s*",
+			Pattern.CASE_INSENSITIVE);
+
+
 
 	public TimeStampType() {
-		/*
-		 * Comment (Sebastian Furth): added SectionFinder because otherwise
-		 * every cell in the table is a TimeStamp. Burn me if i was wrong ;)
-		 */
-		sectionFinder = new RegexSectionFinder(timeStampPattern);
+		sectionFinder = new RegexSectionFinder(TIMESTAMP_PATTERN);
 	}
 
 	public static boolean isValid(String sectionText) {
-		return timeStampPattern.matcher(sectionText).matches();
+		return TIMESTAMP_PATTERN.matcher(sectionText).matches();
 	}
 
 	public static long getTimeInMillis(Section<TimeStampType> sec) {
 		return getTimeInMillis(sec.getOriginalText());
 	}
 
-	public static long getTimeInMillis(String sectionText) {
-		if (!isValid(sectionText)) {
-			return -1;
+	public static long getTimeInMillis(String time) throws NumberFormatException {
+		Matcher matcher = TIMESTAMP_PATTERN.matcher(time);
+
+		long result = 0;
+		int index = 0;
+		while (matcher.find(index)) {
+			String numString = matcher.group(1);
+			String unit = matcher.group(3);
+			double num = Double.parseDouble(numString);
+			for (int i = 0; i < TIME_UNITS.length; i++) {
+				if (TIME_UNITS[i].equalsIgnoreCase(unit)) {
+					result += (long) Math.rint(TIME_FACTORS[i] * num);
+				}
+			}
+
+			int next = matcher.end();
+			if (next <= index) break;
+			if (next >= time.length()) break;
+			index = next;
+
 		}
 
-		sectionText = sectionText.trim();
-
-		long sum = 0;
-		while (true) {
-			String current = "" + sectionText.charAt(0);
-			String number = "";
-			int i = 0;
-			while (current.matches("[0-9]")) {
-				number += current;
-				i++;
-				current = "" + sectionText.charAt(i);
-			}
-
-			current = "" + sectionText.charAt(i);
-			if (current.equals("h")) {
-				sum += Long.valueOf(number) * 60 * 60 * 1000;
-			}
-			else if (current.equals("m")) {
-				sum += Long.valueOf(number) * 60 * 1000;
-			}
-			else if (current.equals("s")) {
-				sum += Long.valueOf(number) * 1000;
-			}
-			else {
-				sum += Long.valueOf(number);
-			}
-
-			if (i + 1 < sectionText.length()) {
-				sectionText = sectionText.substring(i + 1);
-			}
-			else {
-				break;
-			}
-		}
-
-		return sum;
+		// if (index > 0) {
+			return result;
+		// }
+		// else {
+		// throw new NumberFormatException(
+		// "Expression '" + time + "' is not a valid time stamp");
+		// }
 	}
+
 
 }

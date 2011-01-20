@@ -20,12 +20,14 @@ package de.d3web.we.testcase;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.terminology.QuestionDate;
 import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.core.session.Session;
@@ -34,7 +36,9 @@ import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.blackboard.FactFactory;
 import de.d3web.core.session.values.ChoiceValue;
+import de.d3web.core.session.values.DateValue;
 import de.d3web.core.session.values.MultipleChoiceValue;
+import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.we.action.AbstractAction;
@@ -59,16 +63,22 @@ public class RunTestcaseAction extends AbstractAction {
 	public void execute(ActionContext context) throws IOException {
 		KnowWEParameterMap map = context.getKnowWEParameterMap();
 		String web = map.getWeb();
-		String topic = map.getTopic();
 		String execLine = map.get("execLine");
 
 		Section<TestcaseTableCellContent> cell = (Section<TestcaseTableCellContent>) KnowWEEnvironment.getInstance().getArticleManager(web).findNode(execLine);
 		
 		Section<TestcaseTableLine> line = cell.findAncestorOfExactType(TestcaseTableLine.class);
 		
-		Section<TimeStampType> timeStampSectino = cell.findSuccessor(TimeStampType.class);
-		long timestamp = TimeStampType.getTimeInMillis(timeStampSectino);
+		Section<TimeStampType> timeStampSection = cell.findSuccessor(TimeStampType.class);
 		
+		Section<TestcaseTableType> tableDMType = line.findAncestorOfExactType(TestcaseTableType.class);
+
+		String master = TestcaseTableType.getMaster(tableDMType);
+
+		if (master == null) {
+			master = map.getTopic();
+		}
+
 		List<Section<AnswerReference>> found = new LinkedList<Section<AnswerReference>>();
 		line.findSuccessorsOfType(AnswerReference.class, found);
 
@@ -80,26 +90,62 @@ public class RunTestcaseAction extends AbstractAction {
 
 		}
 
-		System.out.println(testcaseMap);
 		String user = context.getWikiContext().getUserName();
-
-		Section<TestcaseTableType> tableDMType = line.findAncestorOfExactType(TestcaseTableType.class);
-
-		String master = TestcaseTableType.getMaster(tableDMType);
-
 		Session session = D3webUtils.getSession(master, user, web);
-
 		KnowledgeBaseManagement kbm = D3webModule.getKnowledgeRepresentationHandler(web).getKBM(
 				master);
 
+		if (session == null) return;
+
+		long propTime = getPropagationTime(session, kbm, timeStampSection);
+
+
 		try {
-			session.getPropagationManager().openPropagation(timestamp);
+			session.getPropagationManager().openPropagation(propTime);
 
 			setValues(testcaseMap, web, user, kbm, session);
 
 		}
 		finally {
 			session.getPropagationManager().commitPropagation();
+		}
+
+	}
+
+	/**
+	 * 
+	 * @created 20.01.2011
+	 * @param session
+	 * @param kbm
+	 * @param timeStampSection
+	 * @return
+	 */
+	private long getPropagationTime(Session session, KnowledgeBaseManagement kbm, Section<TimeStampType> timeStampSection) {
+
+		if (timeStampSection == null) {
+			return session.getLastChangeDate().getTime();
+		}
+
+		long timestamp = TimeStampType.getTimeInMillis(timeStampSection);
+
+		Question question = kbm.findQuestion("start");
+		if (question == null) { // no timeDB present
+			return timestamp;
+		}
+		else {
+			// start is no date question. Maybe timeDB is not present
+			if (!(question instanceof QuestionDate)) {
+				return timestamp;
+			}
+			Value value = session.getBlackboard().getValue(question);
+
+			if (value == UndefinedValue.getInstance()) return 0;
+
+			DateValue dateValue = (DateValue) value;
+
+			Date date = dateValue.getDate();
+
+			return date.getTime() + timestamp;
 		}
 
 	}
