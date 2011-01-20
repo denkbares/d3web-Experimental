@@ -710,8 +710,10 @@ public class LinkedOpenData {
 
 						// DBpedia has inconsistent links ==> get main resource
 						// site.
+						//TODO Debug
 						if (s.matches("http://[\\p{Alnum}/.:_]*")) {
 							if (conceptIsResource(s)) {
+								System.out.println(1);
 								result = s;
 							}
 							else {
@@ -724,6 +726,7 @@ public class LinkedOpenData {
 
 						// Mask it to recognize it (dont't display as input box)
 						result = HermesData.getHermesMapping(result);
+						System.out.println(HermesData.getHermesMapping(result));
 
 						if (!result.isEmpty()) {
 							result = "!$ConceptLink:: " + result;
@@ -925,7 +928,7 @@ public class LinkedOpenData {
 	 */
 	private static String translate(String string) {
 
-		Translate.setHttpReferrer("ex");
+		Translate.setHttpReferrer("this");
 		String translatedText = "";
 		if (!string.isEmpty()) {
 			try {

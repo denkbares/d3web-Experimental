@@ -136,19 +136,19 @@ public class GetDataAction extends AbstractAction {
 				LinkedOpenData var = new LinkedOpenData();
 
 				if (SPARQLUtil.executeBooleanQuery(ereignis)) {
-					// System.out.println("e");
+					System.out.println("e");
 					var = set.getLOD(ConceptType.Ereignis);
 					dbResult = var.getLODdata(dbpediaConcept);
 					result = var.getHermesData(dbResult);
 				}
 				else if (SPARQLUtil.executeBooleanQuery(person)) {
-					// System.out.println("p");
+					System.out.println("p");
 					var = set.getLOD(ConceptType.Person);
 					dbResult = var.getLODdata(dbpediaConcept);
 					result = var.getHermesData(dbResult);
 				}
 				else if (SPARQLUtil.executeBooleanQuery(geographika)) {
-					// System.out.println("g");
+					System.out.println("g");
 					var = set.getLOD(ConceptType.Geographika);
 					dbResult = var.getLODdata(dbpediaConcept);
 					result = var.getHermesData(dbResult);
@@ -202,7 +202,7 @@ public class GetDataAction extends AbstractAction {
 							String checkValue = resultS;
 
 							// objects are saved with predicate specified in
-							// hermesdata.
+							// HermesData.
 							if (resultS.matches("ist vom Typ .*")) {
 								checkHermesTag = HermesData.getObjectType();
 								checkValue = s;

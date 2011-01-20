@@ -172,20 +172,23 @@ public class HermesData {
 
 		String topic = getNoParseTopic();
 
-		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
-				web, topic);
+		if (KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
+				topic)) {
 
-		List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
-		article.getSection().findSuccessorsOfType(MappingContentType.class,
-				found);
+			KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
+					web, topic);
 
-		for (Section<MappingContentType> t : found) {
-			String temp = t.getChildren().get(0).getOriginalText();
-			if (temp.matches("\\[" + concept + " " + hermestag + ":: " + value + "\\][\\r\\n]*")) {
-				return true;
+			List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
+			article.getSection().findSuccessorsOfType(MappingContentType.class,
+					found);
+
+			for (Section<MappingContentType> t : found) {
+				String temp = t.getChildren().get(0).getOriginalText();
+				if (temp.matches("\\[" + concept + " " + hermestag + ":: " + value + "\\][\\r\\n]*")) {
+					return true;
+				}
 			}
 		}
-
 		return false;
 	}
 
@@ -201,34 +204,38 @@ public class HermesData {
 
 		String topic = getIgnoredTopic();
 
-		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
-				web, topic);
+		if (KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
+				topic)) {
 
-		List<Section<IgnoreContentType>> found = new Vector<Section<IgnoreContentType>>();
-		article.getSection().findSuccessorsOfType(IgnoreContentType.class,
-				found);
+			KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
+					web, topic);
 
-		for (Section<IgnoreContentType> t : found) {
+			List<Section<IgnoreContentType>> found = new Vector<Section<IgnoreContentType>>();
+			article.getSection().findSuccessorsOfType(IgnoreContentType.class,
+					found);
 
-			Section<IgnoreConcept> temp = t.findChildOfType(IgnoreConcept.class);
-			String sectionConcept = temp.getOriginalText().substring(1,
-					temp.getOriginalText().length() - 1);
+			for (Section<IgnoreContentType> t : found) {
 
-			// if concept is in list - test if tag + value also.
-			if (sectionConcept.equals(concept)) {
+				Section<IgnoreConcept> temp = t.findChildOfType(IgnoreConcept.class);
+				String sectionConcept = temp.getOriginalText().substring(1,
+						temp.getOriginalText().length() - 1);
 
-				List<Section<IgnoreChild>> listChilds = t.findChildrenOfType(
-						IgnoreChild.class);
+				// if concept is in list - test if tag + value also.
+				if (sectionConcept.equals(concept)) {
 
-				for (Section<IgnoreChild> child : listChilds) {
-					String node = child.getOriginalText();
-					if (Character.isWhitespace(node.charAt(node.length() - 1))) {
-						node = node.substring(0, node.length() - 1);
-					}
-					// If pair is in the list.
-					if (node.equals("- " +
-							hermestag + " == " + value)) {
-						return true;
+					List<Section<IgnoreChild>> listChilds = t.findChildrenOfType(
+							IgnoreChild.class);
+
+					for (Section<IgnoreChild> child : listChilds) {
+						String node = child.getOriginalText();
+						if (Character.isWhitespace(node.charAt(node.length() - 1))) {
+							node = node.substring(0, node.length() - 1);
+						}
+						// If pair is in the list.
+						if (node.equals("- " +
+								hermestag + " == " + value)) {
+							return true;
+						}
 					}
 				}
 			}
