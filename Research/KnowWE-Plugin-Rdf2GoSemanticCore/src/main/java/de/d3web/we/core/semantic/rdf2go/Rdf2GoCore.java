@@ -18,6 +18,7 @@
  */
 package de.d3web.we.core.semantic.rdf2go;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,7 +34,6 @@ import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.Reasoning;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
-import org.ontoware.rdf2go.exception.ReasoningNotSupportedException;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
@@ -41,7 +41,16 @@ import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
+import org.openrdf.model.Value;
+import org.openrdf.query.Binding;
+import org.openrdf.query.TupleQueryResult;
+import org.openrdf.query.TupleQueryResultHandlerException;
+import org.openrdf.query.impl.BindingImpl;
+import org.openrdf.query.impl.MapBindingSet;
+import org.openrdf.query.impl.TupleQueryResultBuilder;
+import org.openrdf.repository.Repository;
 
+import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.event.Event;
 import de.d3web.we.event.EventListener;
 import de.d3web.we.event.FullParseEvent;
@@ -55,15 +64,21 @@ import de.d3web.we.kdom.Section;
  * @created 29.11.2010
  */
 public class Rdf2GoCore implements EventListener {
+
+	// Base Namespace
+	public static final String basens = "http://ki.informatik.uni-wuerzburg.de/d3web/we/knowwe.owl#";
+
 	private static final String JENA = "jena";
 	private static final String BIGOWLIM = "bigowlim";
-	private static final String SESAME = "sesame";
+	public static final String SESAME = "sesame";
 
 	// use JENA, BIGOWLIM or SESAME:
-	private static String USE_MODEL = JENA;
-	
-	// use Reasoning.owl, Reasoning.rdfs, Reasoning.rdfsAndOwl or Reasoning.none:
-	private static Reasoning USE_REASONING = Reasoning.none;
+	public static String USE_MODEL = SESAME;
+
+	// use Reasoning.owl, Reasoning.rdfs, Reasoning.rdfsAndOwl or
+	// Reasoning.none:
+	// SESAME and Reasoning.owl/Reasoning.rdfsAndOwl uses SwiftOWLIM Sail!
+	private static Reasoning USE_REASONING = Reasoning.rdfs;
 
 	private static Rdf2GoCore me;
 	private Model model;
@@ -77,7 +92,7 @@ public class Rdf2GoCore implements EventListener {
 		initModel();
 		statementcache = new HashMap<String, WeakHashMap<Section, List<Statement>>>();
 		duplicateStatements = new HashMap<Statement, Integer>();
-		initNamespaces();
+		initDefaultNamespaces();
 	}
 
 	/**
@@ -99,24 +114,24 @@ public class Rdf2GoCore implements EventListener {
 
 	private void registerBigOWLIMModel() {
 		System.out.print("BigOWLIM");
-		//RDF2Go.register(new com.ontotext.trree.rdf2go.OwlimModelFactory());
+		// RDF2Go.register(new com.ontotext.trree.rdf2go.OwlimModelFactory());
 	}
 
 	/**
-	 * registers the sesame model, it has no owl-reasoning support
-	 * @throws ReasoningNotSupportedException 
+	 * registers the sesame model, uses SwiftOwlim if owl-Reasoning is used
 	 */
-	private void registerSesameModel() throws ReasoningNotSupportedException {
+	private void registerSesameModel() {
 		System.out.print("Sesame 2.3");
-		if (USE_REASONING == Reasoning.owl) {
-			throw new ReasoningNotSupportedException();
+		if (USE_REASONING == Reasoning.owl || USE_REASONING == Reasoning.rdfsAndOwl) {
+			System.out.print(" with SwiftOWLIM");
 		}
 		RDF2Go.register(new org.openrdf.rdf2go.RepositoryModelFactory());
 	}
 
 	/**
 	 * registers and opens the specified model
-	 * @throws ModelRuntimeException 
+	 * 
+	 * @throws ModelRuntimeException
 	 */
 	public void initModel() throws ModelRuntimeException {
 		if (USE_MODEL == JENA) {
@@ -125,9 +140,10 @@ public class Rdf2GoCore implements EventListener {
 		else if (USE_MODEL == BIGOWLIM) {
 			registerBigOWLIMModel();
 		}
-		else if (USE_MODEL == SESAME){
+		else if (USE_MODEL == SESAME) {
 			registerSesameModel();
-		} else {
+		}
+		else {
 			throw new ModelRuntimeException("Model not supported");
 		}
 
@@ -137,8 +153,9 @@ public class Rdf2GoCore implements EventListener {
 		else {
 			model = RDF2Go.getModelFactory().createModel();
 		}
-		
+
 		model.open();
+
 		System.out.println(" model initialized");
 
 	}
@@ -146,18 +163,24 @@ public class Rdf2GoCore implements EventListener {
 	/**
 	 * sets the default namespaces
 	 */
-	private void initNamespaces() {
-		// TODO
-		model.setNamespace("lns", "http://localhost/rdf.xml#");
+	private void initDefaultNamespaces() {
+		model.setNamespace("ns", basens);
+		model.setNamespace("lns", KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl()
+				+ "OwlDownload.jsp#");
 	}
 
 	/**
 	 * add a namespace to the model
+	 * 
 	 * @param sh prefix
 	 * @param ns url
 	 */
 	public void addNamespace(String sh, String ns) {
 		model.setNamespace(sh, ns);
+	}
+
+	public void removeNamespace(String sh) {
+		model.removeNamespace(sh);
 	}
 
 	public URI createURI(String str) {
@@ -249,7 +272,7 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	public QueryResultTable sparqlSelect(String query) {
-		return model.sparqlSelect(query);
+		return model.sparqlSelect(getSparqlNamespaceShorts()+query);
 	}
 
 	/**
@@ -444,7 +467,7 @@ public class Rdf2GoCore implements EventListener {
 	public void dumpModel() {
 		model.dump();
 	}
-	
+
 	public void dumpDuplicates() {
 		System.out.println("<duplicates>");
 		for (Entry e : duplicateStatements.entrySet()) {
@@ -467,6 +490,14 @@ public class Rdf2GoCore implements EventListener {
 			}
 		}
 		System.out.println("</statementcache>");
+	}
+
+	public void dumpNamespaces() {
+		System.out.println("<namespaces>");
+		for (Entry e : model.getNamespaces().entrySet()) {
+			System.out.println("Prefix=" + e.getKey() + " URL=" + e.getValue());
+		}
+		System.out.println("</namespaces>");
 	}
 
 	@Override
@@ -494,5 +525,20 @@ public class Rdf2GoCore implements EventListener {
 				removeStatementsofSingleSection(cur);
 			}
 		}
+	}
+	
+	public String getSparqlNamespaceShorts() {
+		StringBuffer buffy = new StringBuffer();
+
+		for (Entry<String, String> cur : model.getNamespaces().entrySet()) {
+			buffy.append("PREFIX " + cur.getKey() + ": <" + cur.getValue()
+					+ "> \n");
+		}
+
+		return buffy.toString();
+	}
+
+	public Object getUnderlyingModelImplementation() {
+		return model.getUnderlyingModelImplementation();
 	}
 }

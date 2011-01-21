@@ -29,8 +29,6 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class DumpHandler extends AbstractHTMLTagHandler {
 
-	// Google Maps API Key for http://hermeswiki.informatik.uni-wuerzburg.de
-
 	public DumpHandler() {
 		super("DumpModel");
 	}
@@ -38,11 +36,17 @@ public class DumpHandler extends AbstractHTMLTagHandler {
 	@Override
 	public String renderHTML(String topic, KnowWEUserContext user,
 			Map<String, String> values, String web) {
+		
 		Rdf2GoCore.getInstance().dumpModel();
+
+		if (Rdf2GoCore.USE_MODEL == Rdf2GoCore.SESAME) {
+			Rdf2GoCore.getInstance().dumpNamespaces();
+		}
 		Rdf2GoCore.getInstance().dumpStatementcache();
 		Rdf2GoCore.getInstance().dumpDuplicates();
-		
-		return KnowWEUtils.maskHTML(Rdf2GoCore.getInstance().renderedSparqlSelect("select ?Subject ?Predicate ?Object where { ?Subject ?Predicate ?Object }"));
+
+		return KnowWEUtils.maskHTML(Rdf2GoCore.getInstance().renderedSparqlSelect(
+				"select ?Subject ?Predicate ?Object where { ?Subject ?Predicate ?Object }"));
 	}
 
 }
