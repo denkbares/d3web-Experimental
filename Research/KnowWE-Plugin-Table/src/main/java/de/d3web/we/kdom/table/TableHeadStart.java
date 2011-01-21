@@ -18,18 +18,12 @@
  */
 package de.d3web.we.kdom.table;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractKnowWEObjectType;
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.sectionFinder.ISectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.kdom.rendering.NothingRenderer;
+import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 /**
  * TableHeadStart.
@@ -47,41 +41,8 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
 public class TableHeadStart extends DefaultAbstractKnowWEObjectType {
 
 	public TableHeadStart() {
-		sectionFinder = new TableCellStartSectionFinder();
-	}
-
-	public class TableCellStartSectionFinder implements ISectionFinder {
-
-		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section<?> father, KnowWEObjectType type) {
-
-			if (!text.startsWith("||")) {
-				return null;
-			}
-
-			List<SectionFinderResult> result = new ArrayList<SectionFinderResult>();
-			result.add(new SectionFinderResult(0, 2));
-			return result;
-		}
-	}
-
-	/**
-	 * Returns the renderer for the <code>TableHeadStart</code>.
-	 * 
-	 * This renderer actually renders nothing, but it hides the ugly "||".
-	 */
-	@Override
-	public KnowWEDomRenderer<TableHeadStart> getRenderer() {
-
-		class TableHeadStartRenderer extends KnowWEDomRenderer<TableHeadStart> {
-
-			@Override
-			public void render(KnowWEArticle article, Section<TableHeadStart> sec, KnowWEUserContext user, StringBuilder string) {
-				string.append("");
-			}
-		}
-
-		return new TableHeadStartRenderer();
+		setSectionFinder(new RegexSectionFinder(Pattern.compile("(\\|\\|).*"), 1));
+		setCustomRenderer(NothingRenderer.getInstance());
 	}
 
 }
