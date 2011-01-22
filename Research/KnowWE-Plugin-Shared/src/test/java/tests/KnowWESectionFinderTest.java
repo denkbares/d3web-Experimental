@@ -82,8 +82,8 @@ public class KnowWESectionFinderTest extends TestCase {
 	public void testAnnotationPropertyFinder() {
 		String test = "blablub {{the currently measured mileage"
 					+ " <=> swrc:asks:: Real mileage  /100km}}bla blub";
-		SemanticAnnotationProperty.AnnotationPropertySectionFinder f =
-					new SemanticAnnotationProperty.AnnotationPropertySectionFinder();
+		ISectionFinder f =
+					new SemanticAnnotationProperty().getSectioner();
 		List<SectionFinderResult> results = f.lookForSections(test, null, null);
 
 		assertEquals(WRONG_FIRST_START, 45, results.get(0).getStart());
@@ -204,7 +204,7 @@ public class KnowWESectionFinderTest extends TestCase {
 		String text = "|                        | Apple "
 					+ "| sweetness              |   +   ";
 
-		TableCell.TableCellSectionFinder f = new TableCell().new TableCellSectionFinder();
+		ISectionFinder f = new TableCell().getSectioner();
 		List<SectionFinderResult> results = f.lookForSections(text, null, null);
 
 		assertEquals(WRONG_FIRST_START, 0, results.get(0).getStart());
@@ -222,8 +222,8 @@ public class KnowWESectionFinderTest extends TestCase {
 
 	public void testTableCellStartFinder() {
 		String text = "| Apple ";
-		TableCellStart.TableCellStartSectionFinder f =
-				new TableCellStart().new TableCellStartSectionFinder();
+		ISectionFinder f = new TableCellStart().getSectioner();
+
 		List<SectionFinderResult> results = f.lookForSections(text, null, null);
 		assertEquals(WRONG_FIRST_START, 0, results.get(0).getStart());
 		assertEquals(WRONG_FIRST_END, 1, results.get(0).getEnd());
@@ -231,8 +231,7 @@ public class KnowWESectionFinderTest extends TestCase {
 
 	public void testTableHeadStartFinder() {
 		String text = "|| Apple ";
-		TableHeadStart.TableCellStartSectionFinder f =
-				new TableHeadStart().new TableCellStartSectionFinder();
+		ISectionFinder f = new TableHeadStart().getSectioner();
 		List<SectionFinderResult> results = f.lookForSections(text, null, null);
 		assertEquals(WRONG_FIRST_START, 0, results.get(0).getStart());
 		assertEquals(WRONG_FIRST_END, 2, results.get(0).getEnd());
@@ -241,8 +240,8 @@ public class KnowWESectionFinderTest extends TestCase {
 	public void testTableLineSectionFinder() {
 		String text = "|                        | Apple \r \n"
 					+ "| sweetness              |   +   ";
-		TableLine.TableLineSectionFinder f =
-				new TableLine().new TableLineSectionFinder();
+		ISectionFinder f = new TableLine().getSectioner();
+
 		List<SectionFinderResult> results = f.lookForSections(text, null, null);
 
 		assertEquals(WRONG_FIRST_START, 0, results.get(0).getStart());
