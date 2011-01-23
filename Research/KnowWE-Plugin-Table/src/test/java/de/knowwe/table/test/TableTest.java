@@ -71,10 +71,10 @@ public class TableTest extends TestCase {
 		// First some initial sectionizing test
 		Section headerSec = checkChildsTillLine(article, 0, false);
 		checkCellContents(headerSec, new String[] {
-				" ", "Apple", "Lemon", "Coconut\n" });
+				" ", "Apple", "Lemon", "Coconut" });
 		Section lineSec = checkChildsTillLine(article, 1, false);
 		checkCellContents(lineSec, new String[] {
-				"sweetness", "+", "-", "hm\n" });
+				"sweetness", "+", "-", "hm" });
 
 		// Testing setOriginalTextSetLeaf for a node being not a leaf
 		String newHeader = "| |Football|Soccer|Rugby\n";
@@ -93,7 +93,7 @@ public class TableTest extends TestCase {
 		// Testing setOriginalTextSetLeaf for nodes being a leaf
 		String lineText = lineSec.getOriginalText();
 		String[] newLine = new String[] {
-				"speed", "0", "+", "+\n" };
+				"speed", "0", "+", "+" };
 		for (int i = 0; i < newLine.length; i++) {
 			article.getSection().setOriginalTextSetLeaf(
 					((Section) ((Section) lineSec.getChildren().get(i)).getChildren().get(1)).getID(),
@@ -117,10 +117,10 @@ public class TableTest extends TestCase {
 		// Sectionizing test for new article
 		headerSec = checkChildsTillLine(article, 0, false);
 		checkCellContents(headerSec, new String[] {
-				" ", "Football", "Soccer", "Rugby\n" });
+				" ", "Football", "Soccer", "Rugby" });
 		lineSec = checkChildsTillLine(article, 1, false);
 		checkCellContents(lineSec, new String[] {
-				"speed", "0", "+", "+\n" });
+				"speed", "0", "+", "+" });
 	}
 
 	/**
@@ -181,9 +181,17 @@ public class TableTest extends TestCase {
 
 			assertEquals("Node with new content wasn't split up into childs",
 					4, actSec.getChildren().size());
+
+			int expectedChildCount;
+			if (i == cellValues.length - 1) {
+				expectedChildCount = 3;
+			}
+			else {
+				expectedChildCount = 2;
+			}
 			// TableCell #i
 			actSec = (Section) actSec.getChildren().get(i);
-			assertEquals(actSec + ": ", 2, actSec.getChildren().size());
+			assertEquals(actSec + ": ", expectedChildCount, actSec.getChildren().size());
 			// TableContent
 			actSec = (Section) actSec.getChildren().get(1);
 			assertEquals("Actual cell values are wrong: ",

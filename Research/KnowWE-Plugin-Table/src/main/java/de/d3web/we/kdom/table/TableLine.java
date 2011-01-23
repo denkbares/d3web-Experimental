@@ -22,14 +22,11 @@ package de.d3web.we.kdom.table;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.sectionFinder.ISectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
+import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 /**
  * TableLine.
@@ -41,9 +38,12 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
  */
 public class TableLine extends DefaultAbstractKnowWEObjectType {
 
+	public static final String LINEREGEX = "\\s*(\\|{1,2}.*)+\\r?\\n?";
+	public static final Pattern LINEPATTERN = Pattern.compile(LINEREGEX);
+
 	public TableLine() {
 		childrenTypes.add(new TableCell());
-		sectionFinder = new TableLineSectionFinder();
+		sectionFinder = new RegexSectionFinder(LINEPATTERN);
 		setCustomRenderer(new TableLineRenderer());
 	}
 
@@ -65,40 +65,11 @@ public class TableLine extends DefaultAbstractKnowWEObjectType {
 		for (Section<TableCell> cell : cells) {
 			if (!TableCell.isTableHead(cell)) {
 				isHeaderLine = false;
+				break;
 			}
 		}
 
 		return isHeaderLine;
 	}
-
-	/**
-	 * Handles the table lines. Introduced to the fact, that the
-	 * LineSectionFinder allows empty lines. In the table context only lines
-	 * with content are important (line break after Table tag had been rendered
-	 * as cell).
-	 * 
-	 * @author smark, Sebastian Furth
-	 * @see ISectionFinder
-	 */
-	public class TableLineSectionFinder implements ISectionFinder {
-
-		@Override
-		public List<SectionFinderResult> lookForSections(String text,
-				Section<?> father, KnowWEObjectType type) {
-
-			String lineRegex = "\\s*(\\|{1,2}.*)+\\r?\\n?";
-			Pattern linePattern = Pattern.compile(lineRegex);
-
-			Matcher tagMatcher = linePattern.matcher(text);
-			List<SectionFinderResult> resultRegex = new LinkedList<SectionFinderResult>();
-
-			while (tagMatcher.find()) {
-				resultRegex.add(new SectionFinderResult(tagMatcher.start(), tagMatcher.end()));
-			}
-			return resultRegex;
-		}
-	}
-
-
 
 }

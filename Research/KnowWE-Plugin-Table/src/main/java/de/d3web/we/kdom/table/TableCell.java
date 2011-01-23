@@ -29,6 +29,8 @@ import de.d3web.we.kdom.AbstractKnowWEObjectType;
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.basic.LineBreak;
+import de.d3web.we.kdom.rendering.NothingRenderer;
 import de.d3web.we.kdom.sectionFinder.ISectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
@@ -47,6 +49,9 @@ public class TableCell extends DefaultAbstractKnowWEObjectType {
 
 	public TableCell() {
 		sectionFinder = new TableCellSectionFinder();
+		LineBreak lineBreak = new LineBreak();
+		lineBreak.setCustomRenderer(NothingRenderer.getInstance());
+		childrenTypes.add(lineBreak);
 		childrenTypes.add(new TableHeadStart());
 		childrenTypes.add(new TableCellStart());
 		childrenTypes.add(new TableCellContent());
@@ -89,7 +94,6 @@ public class TableCell extends DefaultAbstractKnowWEObjectType {
 
 		@Override
 		public List<SectionFinderResult> lookForSections(String text, Section<?> father, KnowWEObjectType type) {
-			
 
 			Matcher tagMatcher = pattern.matcher(text);
 			List<SectionFinderResult> resultRegex = new LinkedList<SectionFinderResult>();
