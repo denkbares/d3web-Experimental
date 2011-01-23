@@ -22,6 +22,7 @@ package de.d3web.we.testcase;
 
 import de.d3web.we.core.KnowWERessourceLoader;
 import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
+import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.table.Table;
 import de.d3web.we.kdom.table.TableLine;
 
@@ -36,16 +37,49 @@ public class TestcaseTable extends Table {
 				KnowWERessourceLoader.RESOURCE_SCRIPT);
 
 		try {
-			replaceChildType(new TestcaseTableLine(), TableLine.class);
+			replaceChildType(new HeaderLine(), TableLine.class);
 		}
 		catch (InvalidKDOMSchemaModificationOperation e) {
 			e.printStackTrace();
 		}
+		addChildType(new TestcaseTableLine());
 	}
 
 	@Override
 	public boolean isSortable() {
 		return true;
+	}
+
+	/**
+	 * 
+	 * @created 22.01.2011
+	 * @param s
+	 * @return
+	 */
+	public static Section<? extends HeaderCell> findHeaderCell(Section<?> s) {
+		Section<TableLine> line = s.findAncestorOfType(TableLine.class);
+		boolean found = false;
+		int i = 0;
+		for (Section<?> section : line.getChildren()) {
+
+			if (s.equalsOrIsSuccessorOf(section)) {
+				found = true;
+				break;
+			}
+
+			i++;
+		}
+
+		if (!found) {
+			System.out.println("no header cell for: " + s);
+			return null;
+		}
+
+		Section<Table> table = line.findAncestorOfType(Table.class);
+		Section<TableLine> headerline = table.findSuccessor(TableLine.class);
+		Section<? extends HeaderCell> headerCell = (Section<? extends HeaderCell>) headerline.getChildren().get(
+				i);
+		return headerCell;
 	}
 
 }

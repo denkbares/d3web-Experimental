@@ -24,19 +24,19 @@ import de.d3web.we.kdom.table.TableCellContent;
 
 /**
  * 
- * @author Sebastian Furth
- * @created 28/10/2010
+ * 
+ * @author Reinhard Hatko
+ * @created 23.01.2011
  */
-public class TestCaseTableCell extends TableCell {
+public class Cell extends TableCell {
 
-	public TestCaseTableCell() {
+	public Cell() {
 		try {
-			replaceChildType(new TestcaseTableCellContent(), TableCellContent.class);
+			replaceChildType(new CellContent(), TableCellContent.class);
 		}
 		catch (InvalidKDOMSchemaModificationOperation e) {
 			e.printStackTrace();
 		}
-		// childrenTypes.add(2, new TestcaseTableCellContent());
 	}
 
 }

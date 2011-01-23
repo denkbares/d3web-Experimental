@@ -39,10 +39,8 @@ public class TimeStampType extends DefaultAbstractKnowWEObjectType {
 			"ms", "s", "sec", "min", "h", "d" };
 
 	private static final Pattern TIMESTAMP_PATTERN = Pattern.compile(
-			"\\s*(\\d+(\\.\\d*)?)\\s*(ms|s|sec|m|min|h|d)\\s*",
+			"\\s*(\\d+)\\s*(ms|s|sec|m|min|h|d)\\s*",
 			Pattern.CASE_INSENSITIVE);
-
-
 
 	public TimeStampType() {
 		sectionFinder = new RegexSectionFinder(TIMESTAMP_PATTERN);
@@ -63,7 +61,7 @@ public class TimeStampType extends DefaultAbstractKnowWEObjectType {
 		int index = 0;
 		while (matcher.find(index)) {
 			String numString = matcher.group(1);
-			String unit = matcher.group(3);
+			String unit = matcher.group(2);
 			double num = Double.parseDouble(numString);
 			for (int i = 0; i < TIME_UNITS.length; i++) {
 				if (TIME_UNITS[i].equalsIgnoreCase(unit)) {
@@ -79,13 +77,12 @@ public class TimeStampType extends DefaultAbstractKnowWEObjectType {
 		}
 
 		// if (index > 0) {
-			return result;
+		return result;
 		// }
 		// else {
 		// throw new NumberFormatException(
 		// "Expression '" + time + "' is not a valid time stamp");
 		// }
 	}
-
 
 }

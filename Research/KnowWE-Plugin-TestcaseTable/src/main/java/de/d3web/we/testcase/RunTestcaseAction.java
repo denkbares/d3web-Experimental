@@ -21,9 +21,6 @@ package de.d3web.we.testcase;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import de.d3web.core.knowledge.terminology.Question;
@@ -33,6 +30,7 @@ import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
+import de.d3web.core.session.blackboard.DefaultFact;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.blackboard.FactFactory;
 import de.d3web.core.session.values.ChoiceValue;
@@ -40,17 +38,17 @@ import de.d3web.core.session.values.DateValue;
 import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
+import de.d3web.empiricaltesting.Finding;
+import de.d3web.empiricaltesting.RatedTestCase;
 import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.ActionContext;
-import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.event.EventManager;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.object.AnswerReference;
-import de.d3web.we.object.QuestionReference;
 import de.d3web.we.utils.D3webUtils;
+import de.d3web.we.utils.KnowWEUtils;
 import de.knowwe.d3web.event.FindingSetEvent;
 
 /**
@@ -65,45 +63,76 @@ public class RunTestcaseAction extends AbstractAction {
 		String web = map.getWeb();
 		String execLine = map.get("execLine");
 
-		Section<TestcaseTableCellContent> cell = (Section<TestcaseTableCellContent>) KnowWEEnvironment.getInstance().getArticleManager(web).findNode(execLine);
-		
+		Section<CellContent> cell = (Section<CellContent>) KnowWEEnvironment.getInstance().getArticleManager(
+				web).findNode(execLine);
+
 		Section<TestcaseTableLine> line = cell.findAncestorOfExactType(TestcaseTableLine.class);
-		
-		Section<TimeStampType> timeStampSection = cell.findSuccessor(TimeStampType.class);
-		
+		RatedTestCase testcase = (RatedTestCase) KnowWEUtils.getStoredObject(line.getArticle(),
+				line,
+				TestcaseTableLine.TESTCASE_KEY);
 		Section<TestcaseTableType> tableDMType = line.findAncestorOfExactType(TestcaseTableType.class);
+		String master = TestcaseTableType.getMaster(tableDMType, map.getTopic());
 
-		String master = TestcaseTableType.getMaster(tableDMType);
-
-		if (master == null) {
-			master = map.getTopic();
-		}
-
-		List<Section<AnswerReference>> found = new LinkedList<Section<AnswerReference>>();
-		line.findSuccessorsOfType(AnswerReference.class, found);
-
-		Map<String, String> testcaseMap = new HashMap<String, String>();
-		for (Section<AnswerReference> section : found) {
-			Section<QuestionReference> questionSection = section.getObjectType().getQuestionSection(
-					section);
-			testcaseMap.put(questionSection.getOriginalText(), section.getOriginalText());
-
-		}
+		// Section<TimeStampType> timeStampSection =
+		// cell.findSuccessor(TimeStampType.class);
+		//
+		//
+		//
+		// List<Section<AnswerReference>> found = new
+		// LinkedList<Section<AnswerReference>>();
+		// line.findSuccessorsOfType(AnswerReference.class, found);
+		//
+		// Map<String, String> testcaseMap = new HashMap<String, String>();
+		// for (Section<AnswerReference> section : found) {
+		// Section<QuestionReference> questionSection =
+		// section.getObjectType().getQuestionSection(
+		// section);
+		// testcaseMap.put(questionSection.getOriginalText(),
+		// section.getOriginalText());
+		//
+		// }
 
 		String user = context.getWikiContext().getUserName();
 		Session session = D3webUtils.getSession(master, user, web);
-		KnowledgeBaseManagement kbm = D3webModule.getKnowledgeRepresentationHandler(web).getKBM(
-				master);
+		// KnowledgeBaseManagement kbm =
+		// D3webModule.getKnowledgeRepresentationHandler(web).getKBM(
+		// master);
 
 		if (session == null) return;
 
-		long propTime = getPropagationTime(session, kbm, timeStampSection);
+		// long propTime = getPropagationTime(session, kbm, timeStampSection);
 
+		executeTestCase(testcase, session);
+		// try {
+		// session.getPropagationManager().openPropagation(propTime);
+		//
+		// setValues(testcaseMap, web, user, kbm, session);
+		//
+		// }
+		// finally {
+		// session.getPropagationManager().commitPropagation();
+		// }
 
+	}
+
+	/**
+	 * 
+	 * @created 22.01.2011
+	 * @param testcase
+	 * @param session
+	 */
+	private void executeTestCase(RatedTestCase testcase, Session session) {
 		try {
-			session.getPropagationManager().openPropagation(propTime);
+			session.getPropagationManager().openPropagation(testcase.getTimeStamp().getTime());
 
-			setValues(testcaseMap, web, user, kbm, session);
+			Blackboard blackboard = session.getBlackboard();
+			long time = testcase.getTimeStamp().getTime();
+			session.getPropagationManager().openPropagation(time);
+			for (Finding f : testcase.getFindings()) {
+				blackboard.addValueFact(new DefaultFact(f.getQuestion(), f.getValue(), time,
+							PSMethodUserSelected.getInstance(),
+							PSMethodUserSelected.getInstance()));
+			}
 
 		}
 		finally {
