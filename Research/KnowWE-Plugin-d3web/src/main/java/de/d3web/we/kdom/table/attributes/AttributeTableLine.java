@@ -28,16 +28,4 @@ public class AttributeTableLine extends TableLine {
 		childrenTypes.add(0, new AttributeTableCell());
 	}
 
-// public AttributeTableLine(TxtAttributeTableBuilder builder) {
-	// this.sectionFinder = new TableLineSectionFinder(builder);
-	// this.childrenTypes.add(new AttributeTableCell(builder));
-	// this.childrenTypes.add(new TableCellSeparator(builder));
-	// init();
-	// }
-	//
-	// @Override
-	// protected void init() {
-	// this.setCustomRenderer(new TableLineRenderer());
-	// }
-
 }
