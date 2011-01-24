@@ -23,13 +23,12 @@
  */
 package de.d3web.we.core.semantic.rdf2go;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.subtreeHandler.ConstraintModule;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
+import de.d3web.we.kdom.subtreeHandler.SuccessorNotReusedConstraint;
 
 /**
  * @author grotheer
@@ -44,22 +43,8 @@ public abstract class RDF2GoSubtreeHandler<T extends KnowWEObjectType> extends
 
 	public RDF2GoSubtreeHandler() {
 		super(true);
-	}
-
-	// no need to create (and destroy) all the OWL statements again for included
-	// Sections
-	@Override
-	public boolean needsToCreate(KnowWEArticle article, Section<T> s) {
-		return s.getTitle().equals(article.getTitle())
-				&& (super.needsToCreate(article, s)
-						|| s.isOrHasSuccessorNotReusedBy(article.getTitle()));
-	}
-
-	@Override
-	public boolean needsToDestroy(KnowWEArticle article, Section<T> s) {
-		return s.getTitle().equals(article.getTitle())
-				&& (super.needsToDestroy(article, s)
-						|| s.isOrHasSuccessorNotReusedBy(article.getTitle()));
+		this.registerConstraintModule(new RDF2GoHandlerConstraint<T>());
+		this.registerConstraintModule(new SuccessorNotReusedConstraint<T>());
 	}
 
 	@Override
@@ -70,6 +55,19 @@ public abstract class RDF2GoSubtreeHandler<T extends KnowWEObjectType> extends
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private class RDF2GoHandlerConstraint<T2 extends KnowWEObjectType> extends ConstraintModule<T2> {
+
+		public RDF2GoHandlerConstraint() {
+			super(Operator.DONT_COMPILE_IF_VIOLATED, Purpose.CREATE_AND_DESTROY);
+		}
+
+		@Override
+		public boolean violatedConstraints(KnowWEArticle article, Section<T2> s) {
+			return !s.getTitle().equals(article.getTitle());
+		}
+
 	}
 
 }
