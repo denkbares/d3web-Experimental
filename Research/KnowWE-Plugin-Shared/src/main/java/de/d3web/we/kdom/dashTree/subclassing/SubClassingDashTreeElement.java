@@ -29,15 +29,16 @@ import de.d3web.we.core.semantic.IntermediateOwlObject;
 import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
-import de.d3web.we.kdom.IncrementalConstraints;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.report.KDOMReportMessage;
+import de.d3web.we.kdom.subtreeHandler.IncrementalConstraint;
 import de.knowwe.core.dashtree.DashTreeElement;
 import de.knowwe.core.dashtree.DashTreeElementContent;
 import de.knowwe.core.dashtree.DashTreeUtils;
 
-public class SubClassingDashTreeElement extends DashTreeElement implements IncrementalConstraints {
+public class SubClassingDashTreeElement extends DashTreeElement implements
+		IncrementalConstraint<SubClassingDashTreeElement> {
 
 	@Override
 	protected void init() {
@@ -46,7 +47,7 @@ public class SubClassingDashTreeElement extends DashTreeElement implements Incre
 	}
 
 	@Override
-	public boolean hasViolatedConstraints(KnowWEArticle article, Section<?> s) {
+	public boolean violatedConstraints(KnowWEArticle article, Section<SubClassingDashTreeElement> s) {
 		return DashTreeUtils.isChangeInAncestorSubtree(article, s, 1);
 	}
 

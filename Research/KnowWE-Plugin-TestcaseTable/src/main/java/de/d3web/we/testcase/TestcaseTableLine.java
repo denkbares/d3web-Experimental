@@ -34,10 +34,10 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.kdom.table.TableCell;
 import de.d3web.we.kdom.table.TableLine;
 import de.d3web.we.object.QuestionReference;
+import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.d3web.we.utils.KnowWEUtils;
 
 /**
@@ -57,7 +57,7 @@ public class TestcaseTableLine extends TableLine {
 			e.printStackTrace();
 		}
 
-		addSubtreeHandler(new SubtreeHandler<TestcaseTableLine>() {
+		addSubtreeHandler(new D3webSubtreeHandler<TestcaseTableLine>() {
 
 			@Override
 			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TestcaseTableLine> s) {
@@ -106,11 +106,6 @@ public class TestcaseTableLine extends TableLine {
 				return D3webModule.getKnowledgeRepresentationHandler(article.getWeb()).getKBM(
 						master);
 
-			}
-
-			@Override
-			public boolean needsToCreate(KnowWEArticle article, Section<TestcaseTableLine> s) {
-				return true;
 			}
 		});
 	}
