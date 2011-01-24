@@ -41,14 +41,6 @@ import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
-import org.openrdf.model.Value;
-import org.openrdf.query.Binding;
-import org.openrdf.query.TupleQueryResult;
-import org.openrdf.query.TupleQueryResultHandlerException;
-import org.openrdf.query.impl.BindingImpl;
-import org.openrdf.query.impl.MapBindingSet;
-import org.openrdf.query.impl.TupleQueryResultBuilder;
-import org.openrdf.repository.Repository;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.event.Event;
@@ -78,12 +70,13 @@ public class Rdf2GoCore implements EventListener {
 	// use Reasoning.owl, Reasoning.rdfs, Reasoning.rdfsAndOwl or
 	// Reasoning.none:
 	// SESAME and Reasoning.owl/Reasoning.rdfsAndOwl uses SwiftOWLIM Sail!
-	private static Reasoning USE_REASONING = Reasoning.rdfs;
+	private static Reasoning USE_REASONING = Reasoning.owl;
 
 	private static Rdf2GoCore me;
 	private Model model;
 	private HashMap<String, WeakHashMap<Section, List<Statement>>> statementcache;
 	private HashMap<Statement, Integer> duplicateStatements;
+	private HashMap<String, String> namespaces;
 
 	/**
 	 * Initializes the model and its caches and namespaces
@@ -92,6 +85,8 @@ public class Rdf2GoCore implements EventListener {
 		initModel();
 		statementcache = new HashMap<String, WeakHashMap<Section, List<Statement>>>();
 		duplicateStatements = new HashMap<Statement, Integer>();
+		namespaces = new HashMap<String, String>();
+		namespaces.putAll(model.getNamespaces());
 		initDefaultNamespaces();
 	}
 
@@ -164,8 +159,8 @@ public class Rdf2GoCore implements EventListener {
 	 * sets the default namespaces
 	 */
 	private void initDefaultNamespaces() {
-		model.setNamespace("ns", basens);
-		model.setNamespace("lns", KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl()
+		addNamespace("ns", basens);
+		addNamespace("lns", KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl()
 				+ "OwlDownload.jsp#");
 	}
 
@@ -176,36 +171,21 @@ public class Rdf2GoCore implements EventListener {
 	 * @param ns url
 	 */
 	public void addNamespace(String sh, String ns) {
+		namespaces.put(sh, ns);
 		model.setNamespace(sh, ns);
 	}
 
 	public void removeNamespace(String sh) {
+		namespaces.remove(sh);
 		model.removeNamespace(sh);
 	}
 
-	public URI createURI(String str) {
-		return model.createURI(expandNamespace(str));
+	public HashMap<String, String> getNameSpaces() {
+		return namespaces;
 	}
 
 	/**
-	 * expands prefix to namespace
-	 * 
-	 * @created 06.12.2010
-	 * @param ns
-	 * @return
-	 */
-	public String expandNSPrefix(String ns) {
-		for (Entry<String, String> cur : model.getNamespaces().entrySet()) {
-			if (ns.equals(cur.getKey())) {
-				ns = cur.getValue();
-				break;
-			}
-		}
-		return ns;
-	}
-
-	/**
-	 * expands namespace in uri string to prefix
+	 * expands namespace from predix to uri string
 	 * 
 	 * @created 04.01.2011
 	 * @param s
@@ -224,6 +204,23 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	/**
+	 * expands prefix to namespace
+	 * 
+	 * @created 06.12.2010
+	 * @param ns
+	 * @return
+	 */
+	public String expandNSPrefix(String ns) {
+		for (Entry<String, String> cur : namespaces.entrySet()) {
+			if (ns.equals(cur.getKey())) {
+				ns = cur.getValue();
+				break;
+			}
+		}
+		return ns;
+	}
+
+	/**
 	 * reduces namespace in uri string to prefix
 	 * 
 	 * @created 06.12.2010
@@ -231,15 +228,21 @@ public class Rdf2GoCore implements EventListener {
 	 * @return
 	 */
 	public String reduceNamespace(String s) {
-		for (Entry<String, String> cur : model.getNamespaces().entrySet()) {
+		for (Entry<String, String> cur : namespaces.entrySet()) {
 			s = s.replaceAll(cur.getValue(), cur.getKey() + ":");
 		}
 		return s;
 
 	}
-
+	
 	public String renderedSparqlSelect(String query) {
 		return render(sparqlSelect(query));
+	}
+
+
+	public URI createURI(String str) {
+		System.out.println(str +";"+expandNamespace(str));
+		return model.createURI(expandNamespace(str));
 	}
 
 	/**
@@ -494,7 +497,7 @@ public class Rdf2GoCore implements EventListener {
 
 	public void dumpNamespaces() {
 		System.out.println("<namespaces>");
-		for (Entry e : model.getNamespaces().entrySet()) {
+		for (Entry e : namespaces.entrySet()) {
 			System.out.println("Prefix=" + e.getKey() + " URL=" + e.getValue());
 		}
 		System.out.println("</namespaces>");
@@ -530,7 +533,7 @@ public class Rdf2GoCore implements EventListener {
 	public String getSparqlNamespaceShorts() {
 		StringBuffer buffy = new StringBuffer();
 
-		for (Entry<String, String> cur : model.getNamespaces().entrySet()) {
+		for (Entry<String, String> cur : namespaces.entrySet()) {
 			buffy.append("PREFIX " + cur.getKey() + ": <" + cur.getValue()
 					+ "> \n");
 		}

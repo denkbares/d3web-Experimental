@@ -60,18 +60,21 @@ public class RepositoryModelFactory extends AbstractModelFactory {
 		return new RepositoryModel(contextURI, createRepository(null));
 	}
 
-//	public ModelSet createModelSet(Properties properties)
-//			throws ModelRuntimeException {
-//		return new RepositoryModelSet(createRepository(properties));
-//	}
+	// public ModelSet createModelSet(Properties properties)
+	// throws ModelRuntimeException {
+	// return new RepositoryModelSet(createRepository(properties));
+	// }
 
 	private Repository createRepository(Properties properties)
 			throws ModelRuntimeException {
 		// find out if we need reasoning
 		String reasoningProperty = properties == null ? null : properties.getProperty(REASONING);
 		boolean owlimReasoning = Reasoning.owl.toString().equalsIgnoreCase(reasoningProperty);
+		if (!owlimReasoning) {
+			owlimReasoning = Reasoning.rdfsAndOwl.toString().equalsIgnoreCase(reasoningProperty);
+		}
 
-		// create a Sail stack		
+		// create a Sail stack
 		Repository repository = null;
 
 		if (!owlimReasoning) {
@@ -92,49 +95,19 @@ public class RepositoryModelFactory extends AbstractModelFactory {
 			}
 		}
 		else {
-			HashMap<String, String> settings = new HashMap<String, String>();
-			
 			String path = KnowWEEnvironment.getInstance().getKnowWEExtensionPath();
 			String ontfile = path + File.separatorChar + "knowwe_base.owl";
-			settings.put("ontfile", ontfile);
 			String reppath = System.getProperty("java.io.tmpdir") + File.separatorChar
 					+ "repository" + (new Date()).toString().hashCode();
-
-			settings.put("reppath", reppath);
 			String config_file = path + File.separatorChar + "owlim.ttl";
-			settings.put("config_file", config_file);
 			File rfile = new File(reppath);
 			delete(rfile);
 			rfile.mkdir();
 
-			settings.put("basens", Rdf2GoCore.basens);
-			
-			if (!settings.containsKey("ontfile")
-					|| !settings.containsKey("reppath")
-					|| !settings.containsKey("basens")
-					|| !settings.containsKey("config_file")) {
-				return null;
-			}
-			ontfile = null;
-			
-			// +"0" to not use the same path as the old semantic core plugin
-			reppath = settings.get("reppath");//+"0";
-			config_file = null;
-			try {
-				ontfile = new File(settings.get("ontfile")).getCanonicalPath();
-				config_file = new File(settings.get("config_file")).getCanonicalPath();
-			}
-			catch (IOException e) {
-				System.out.println(settings.get("ontfile"));
-				e.printStackTrace();
-			}
-			String basens = settings.get("basens");
 			File file = new File(ontfile);
 
 			try {
-
 				Repository systemRepo = null;
-
 				RepositoryManager man = new LocalRepositoryManager(new File(reppath));
 				man.initialize();
 				systemRepo = man.getSystemRepository();
@@ -160,7 +133,7 @@ public class RepositoryModelFactory extends AbstractModelFactory {
 				repositoryConn.setAutoCommit(true);
 				BNode context = repositoryConn.getValueFactory().createBNode(
 						"rootontology");
-				repositoryConn.add(file, basens, RDFFormat.RDFXML, context);
+				repositoryConn.add(file, Rdf2GoCore.basens, RDFFormat.RDFXML, context);
 				repositoryConn.close();
 			}
 			catch (Exception ex) {
@@ -170,7 +143,7 @@ public class RepositoryModelFactory extends AbstractModelFactory {
 
 		return repository;
 	}
-	
+
 	private void delete(File f) {
 		File[] list = f.listFiles();
 		if (list != null) {
