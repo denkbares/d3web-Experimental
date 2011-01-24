@@ -60,7 +60,6 @@ public class KnowWEIncludeManager implements EventListener {
 	 */
 	private final Map<Section<Include>, List<Section<? extends KnowWEObjectType>>> src2targets =
 			new HashMap<Section<Include>, List<Section<? extends KnowWEObjectType>>>();
-	
 
 	// /**
 	// * This map stores for every Include the last Section they were including,
@@ -78,7 +77,7 @@ public class KnowWEIncludeManager implements EventListener {
 	 */
 	private final Map<String, Set<Section<Include>>> targetArticle2src =
 			new HashMap<String, Set<Section<Include>>>();
-	
+
 	private static KnowWEIncludeManager instance = null;
 
 	public static KnowWEIncludeManager getInstance() {
@@ -86,7 +85,7 @@ public class KnowWEIncludeManager implements EventListener {
 			instance = (KnowWEIncludeManager) PluginManager.getInstance().getExtension(
 					Plugins.EXTENDED_PLUGIN_ID,
 					Plugins.EXTENDED_POINT_EventListener,
-					"KnowWE-Basic-Plugins",
+					"KnowWE-Plugin-Shared",
 					KnowWEIncludeManager.class.getSimpleName()).getSingleton();
 		}
 		return instance;
@@ -213,8 +212,7 @@ public class KnowWEIncludeManager implements EventListener {
 					break;
 				}
 				// if only the last part of the ID is given
-				if ((node.getID().length() > address.getTargetSection().length()
-								&& node.getID().substring(
+				if ((node.getID().length() > address.getTargetSection().length() && node.getID().substring(
 										node.getID().length() - address.getTargetSection().length()).equalsIgnoreCase(
 										address.getTargetSection()))) {
 					matchingIdEndSections.add(node);
@@ -513,7 +511,7 @@ public class KnowWEIncludeManager implements EventListener {
 		}
 		return inactiveIncludes;
 	}
-	
+
 	private List<Section<Include>> getActiveIncludesForArticle(KnowWEArticle article) {
 		List<Section<Include>> activeIncludes = new ArrayList<Section<Include>>();
 		// get all registered Includes (from all articles)
@@ -651,6 +649,5 @@ public class KnowWEIncludeManager implements EventListener {
 			updateIncludesToArticle(ev.getArticle());
 		}
 	}
-
 
 }
