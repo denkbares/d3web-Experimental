@@ -34,6 +34,26 @@
                 <parameter id="version" value="1.0" />
                 <parameter id="priority" value="5" />
         </extension>
+        
+        <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+                id="BirthplaceQuizHandler">
+                <parameter id="class"
+                        value="de.d3web.we.lod.quiz.BirthplaceQuizHandler" />
+                <parameter id="name" value="GetDataHandler" />
+                <parameter id="description" value="TagHandler BirthplaceQuizHandler" />
+                <parameter id="version" value="1.0" />
+                <parameter id="priority" value="5" />
+        </extension>
+        
+        <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+                id="YearOfBirthQuizHandler">
+                <parameter id="class"
+                        value="de.d3web.we.lod.quiz.YearOfBirthQuizHandler" />
+                <parameter id="name" value="YearOfBirthQuizHandler" />
+                <parameter id="description" value="TagHandler YearOfBirthQuizHandler" />
+                <parameter id="version" value="1.0" />
+                <parameter id="priority" value="5" />
+        </extension>
 
 		<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
 		id="MappingContentType">
@@ -42,9 +62,10 @@
 			<parameter id="name" value="MappingMarkup" />
 			<parameter id="description" value="KnowWEObjectType MappingMarkup" />
 			<parameter id="version" value="1.0" />
-			<parameter id="priority" value="4.5" />
+			<parameter id="priority" value="2.0" />
 			<parameter id="scope" value="root" />
 			<parameter id="script" value="KnowWE-Plugin-SWSLOD.js" />
+			<parameter id="css" value="lod.css" />
 		</extension>
 		
 		<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
@@ -56,6 +77,8 @@
 			<parameter id="version" value="1.0" />
 			<parameter id="priority" value="4.5" />
 			<parameter id="scope" value="root" />
+		 	<parameter id="script" value="KnowWE-Plugin-SWSLOD.js" />
+			<parameter id="css" value="lod.css" />
 		</extension>
 	
     	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
@@ -87,5 +110,56 @@
         	<parameter id="version" value="1.0" />
         	<parameter id="priority" value="5" />
     	</extension>	
+    	
+    	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="MappingsAction">
+        	<parameter id="class"
+            value="de.d3web.we.lod.action.MappingsAction" />
+        	<parameter id="name" value="MappingsAction" />
+        	<parameter id="description" value="Action MappingsAction" />
+        	<parameter id="version" value="1.0" />
+        	<parameter id="priority" value="5" />
+    	</extension>	
+    	
+    	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="CreateBirthplaceAction">
+        	<parameter id="class"
+            value="de.d3web.we.lod.quiz.action.CreateBirthplaceAction" />
+        	<parameter id="name" value="CreateBirthplaceAction" />
+        	<parameter id="description" value="Action CreateBirthplaceAction" />
+        	<parameter id="version" value="1.0" />
+        	<parameter id="priority" value="5" />
+    	</extension>	
+    	
+    	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="SolveBirthplaceAction">
+        	<parameter id="class"
+            value="de.d3web.we.lod.quiz.action.SolveBirthplaceAction" />
+        	<parameter id="name" value="SolveBirthplaceAction" />
+        	<parameter id="description" value="Action SolveBirthplaceAction" />
+        	<parameter id="version" value="1.0" />
+        	<parameter id="priority" value="5" />
+    	</extension>	
+    	
+    	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="CreateYearOfBirthAction">
+        	<parameter id="class"
+            value="de.d3web.we.lod.quiz.action.CreateYearOfBirthAction" />
+        	<parameter id="name" value="CreateYearOfBirthAction" />
+        	<parameter id="description" value="Action CreateYearOfBirthAction" />
+        	<parameter id="version" value="1.0" />
+        	<parameter id="priority" value="5" />
+    	</extension>	
+    	
+    	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="SolveYearOfBirthAction">
+        	<parameter id="class"
+            value="de.d3web.we.lod.quiz.action.SolveYearOfBirthAction" />
+        	<parameter id="name" value="SolveYearOfBirthAction" />
+        	<parameter id="description" value="Action SolveYearOfBirthAction" />
+        	<parameter id="version" value="1.0" />
+        	<parameter id="priority" value="5" />
+    	</extension>	
+    	
 
 </plugin>

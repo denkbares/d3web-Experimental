@@ -18,10 +18,10 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.lod.HermesData;
 import de.d3web.we.lod.LinkedOpenData;
-import de.d3web.we.lod.markup.MappingContentType;
 import de.d3web.we.lod.markup.IgnoreContentType;
 import de.d3web.we.lod.markup.IgnoreContentType.IgnoreChild;
 import de.d3web.we.lod.markup.IgnoreContentType.IgnoreConcept;
+import de.d3web.we.lod.markup.MappingContentType;
 
 public class ParseDataAction extends AbstractAction {
 
@@ -74,6 +74,12 @@ public class ParseDataAction extends AbstractAction {
 				hermes.set(i, HermesData.getObjectType());
 			}
 
+			// Cuts the namespace for the predicate.
+			if (HermesData.isCutPredicateNS()) {
+				String temp = hermes.get(i);
+				hermes.set(i, temp.substring(temp.indexOf(":") + 1));
+			}
+
 			String parse = "[" + concept + " " + hermes.get(i) + ":: " + value.get(i) + "]";
 
 			if (s.equals("qmarks")) {
@@ -84,6 +90,8 @@ public class ParseDataAction extends AbstractAction {
 			if (s.equals("submit")) {
 
 				// Parse text for the ontology.
+
+				parse = parse + System.getProperty("line.separator");
 
 				if (!KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
 						conceptTopic)) {
@@ -97,6 +105,8 @@ public class ParseDataAction extends AbstractAction {
 
 					KnowWEEnvironment.getInstance().getArticleManager(web)
 							.registerArticle(article);
+
+					conceptTopic = concept;
 
 				}
 				else {
@@ -113,10 +123,11 @@ public class ParseDataAction extends AbstractAction {
 
 			if (s.equals("return")) {
 
-				// TODO MappingContentType. + Higher Priority
 				// Save on NoParse article.
 
 				String noParseTopic = HermesData.getNoParseTopic();
+
+				parse = "~" + parse;
 
 				if (!KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
 						noParseTopic)) {
@@ -254,10 +265,9 @@ public class ParseDataAction extends AbstractAction {
 				}
 			}
 			i++;
+			// Refresh
+			KnowWEEnvironment.getInstance().getArticleManager(web).buildArticlesToRefresh();
 		}
-
-		// Refresh
-		KnowWEEnvironment.getInstance().getArticleManager(web).buildArticlesToRefresh();
 
 		if (countData != 0) {
 			if (create != null && create.equals("true")) {

@@ -14,15 +14,15 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.lod.markup.MappingContentType;
 import de.d3web.we.lod.markup.IgnoreContentType;
 import de.d3web.we.lod.markup.IgnoreContentType.IgnoreChild;
 import de.d3web.we.lod.markup.IgnoreContentType.IgnoreConcept;
+import de.d3web.we.lod.markup.MappingContentType;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 /**
  * Provides static methods & variables for the hermes wiki.
- * 
+ *
  */
 public class HermesData {
 
@@ -40,9 +40,22 @@ public class HermesData {
 	// Type which is used to save (object)'s specified in property files.
 	private static final String objectType = "rdf:type";
 
+	// Setting to parse namespace for predicate. true cuts it.
+	// Also applies to a test if a triple is ignored or noparse.
+	private static final boolean cutPredicateNS = true;
+
+	/**
+	 * CutPredicateNS.
+	 *
+	 * @return Setting to parse namespace for predicate. True cuts it.
+	 */
+	public static boolean isCutPredicateNS() {
+		return cutPredicateNS;
+	}
+
 	/**
 	 * GetObjectType.
-	 * 
+	 *
 	 * @return objectType.
 	 */
 	public static String getObjectType() {
@@ -51,7 +64,7 @@ public class HermesData {
 
 	/**
 	 * GetMappingTopic.
-	 * 
+	 *
 	 * @return topic on which the mappings are saved.
 	 */
 	public static String getMappingTopic() {
@@ -60,7 +73,7 @@ public class HermesData {
 
 	/**
 	 * GetIgnoredTopic.
-	 * 
+	 *
 	 * @return Topic on which the ignored attributes are saved.
 	 */
 	public static String getIgnoredTopic() {
@@ -69,7 +82,7 @@ public class HermesData {
 
 	/**
 	 * GetNoParseTopic.
-	 * 
+	 *
 	 * @return topic on which the noparse triples are saved.
 	 */
 	public static String getNoParseTopic() {
@@ -79,7 +92,7 @@ public class HermesData {
 	/**
 	 * Searches an corresponding dbepdia concept for a hermes concept, on the
 	 * mapping article. (found : dbpediaMapping ? empty string)
-	 * 
+	 *
 	 * @param hermes concept.
 	 * @return dbpedia concept (http://dbpedia.org/resource/$) or empty string.
 	 */
@@ -87,8 +100,8 @@ public class HermesData {
 
 		String topic = getMappingTopic();
 
-		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
-				web, topic);
+		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(web,
+				topic);
 
 		List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
 		article.getSection().findSuccessorsOfType(MappingContentType.class,
@@ -107,7 +120,7 @@ public class HermesData {
 
 	/**
 	 * Tests if a given string is a mapped hermes concept.
-	 * 
+	 *
 	 * @param conceptname string.
 	 * @return boolean.
 	 */
@@ -115,8 +128,8 @@ public class HermesData {
 
 		String topic = getMappingTopic();
 
-		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
-				web, topic);
+		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(web,
+				topic);
 
 		List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
 		article.getSection().findSuccessorsOfType(MappingContentType.class,
@@ -134,7 +147,7 @@ public class HermesData {
 	/**
 	 * Searches an corresponding hermes concept for a dbpedia concept, on the
 	 * mapping article. (found : hermesMapping ? empty string)
-	 * 
+	 *
 	 * @param dbpedia http://dbpedia.org/resource/$.
 	 * @return hermes concept or empty string.
 	 */
@@ -142,8 +155,8 @@ public class HermesData {
 
 		String topic = getMappingTopic();
 
-		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
-				web, topic);
+		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(web,
+				topic);
 
 		List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
 		article.getSection().findSuccessorsOfType(MappingContentType.class,
@@ -162,18 +175,19 @@ public class HermesData {
 
 	/**
 	 * Tests if an RDF-triple is saved in the NoParse article.
-	 * 
+	 *
 	 * @param concept conceptname.
 	 * @param hermestag predicate.
 	 * @param value value.
 	 * @return boolean.
 	 */
-	public static boolean isNoParse(String concept, String hermestag, String value) {
+	public static boolean isNoParse(String concept, String hermestag,
+			String value) {
 
 		String topic = getNoParseTopic();
 
-		if (KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
-				topic)) {
+		if (KnowWEEnvironment.getInstance().getWikiConnector()
+				.doesPageExist(topic)) {
 
 			KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
 					web, topic);
@@ -184,7 +198,8 @@ public class HermesData {
 
 			for (Section<MappingContentType> t : found) {
 				String temp = t.getChildren().get(0).getOriginalText();
-				if (temp.matches("\\[" + concept + " " + hermestag + ":: " + value + "\\][\\r\\n]*")) {
+				if (temp.matches("~\\[" + concept + " " + hermestag + ":: "
+						+ value + "\\][\\r\\n]*")) {
 					return true;
 				}
 			}
@@ -194,18 +209,19 @@ public class HermesData {
 
 	/**
 	 * Tests if a RDF-triple is in the IgnoredAttributes article.
-	 * 
+	 *
 	 * @param concept conceptname.
 	 * @param hermestag predicate.
 	 * @param value value.
 	 * @return boolean.
 	 */
-	public static boolean isIgnored(String concept, String hermestag, String value) {
+	public static boolean isIgnored(String concept, String hermestag,
+			String value) {
 
 		String topic = getIgnoredTopic();
 
-		if (KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
-				topic)) {
+		if (KnowWEEnvironment.getInstance().getWikiConnector()
+				.doesPageExist(topic)) {
 
 			KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
 					web, topic);
@@ -216,24 +232,25 @@ public class HermesData {
 
 			for (Section<IgnoreContentType> t : found) {
 
-				Section<IgnoreConcept> temp = t.findChildOfType(IgnoreConcept.class);
+				Section<IgnoreConcept> temp = t
+						.findChildOfType(IgnoreConcept.class);
 				String sectionConcept = temp.getOriginalText().substring(1,
 						temp.getOriginalText().length() - 1);
 
 				// if concept is in list - test if tag + value also.
 				if (sectionConcept.equals(concept)) {
 
-					List<Section<IgnoreChild>> listChilds = t.findChildrenOfType(
-							IgnoreChild.class);
+					List<Section<IgnoreChild>> listChilds = t
+							.findChildrenOfType(IgnoreChild.class);
 
 					for (Section<IgnoreChild> child : listChilds) {
 						String node = child.getOriginalText();
-						if (Character.isWhitespace(node.charAt(node.length() - 1))) {
+						if (Character
+								.isWhitespace(node.charAt(node.length() - 1))) {
 							node = node.substring(0, node.length() - 1);
 						}
 						// If pair is in the list.
-						if (node.equals("- " +
-								hermestag + " == " + value)) {
+						if (node.equals("- " + hermestag + " == " + value)) {
 							return true;
 						}
 					}
@@ -245,7 +262,7 @@ public class HermesData {
 
 	/**
 	 * Method to generate a link element for a hermes concept.
-	 * 
+	 *
 	 * @param concept raw conceptname.
 	 * @param toLink wiki topic name.
 	 * @return string as a Wiki link.
@@ -260,8 +277,8 @@ public class HermesData {
 			catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			return "<a href=\"/KnowWE/Wiki.jsp?page=" + url + "\" class=\"wikipage\">"
-					+ concept + "</a>";
+			return "<a href=\"/KnowWE/Wiki.jsp?page=" + url
+					+ "\" class=\"wikipage\">" + concept + "</a>";
 		}
 		return "";
 	}
@@ -269,7 +286,7 @@ public class HermesData {
 	/**
 	 * Method to generate a link element for a hermes concept with a specified
 	 * id.
-	 * 
+	 *
 	 * @param concept raw conceptname.
 	 * @param toLink wiki topic name.
 	 * @param id id.
@@ -286,23 +303,23 @@ public class HermesData {
 				e.printStackTrace();
 			}
 			return "<a id=\"" + id + "\" href=\"/KnowWE/Wiki.jsp?page=" + url
-					+ "\" class=\"wikipage\">"
-					+ concept + "</a>";
+					+ "\" class=\"wikipage\">" + concept + "</a>";
 		}
 		return "";
 	}
 
 	/**
-	 * Tests if the hermes RDF-store contains the specified triple.
-	 * 
+	 * Tests if the hermes RDF-store contains the specified triple - For non-URI
+	 * values, it only tests if the store contains the predicate for the
+	 * subject.
+	 *
 	 * @param concept conceptname (unmodified string.).
 	 * @param predicate predicate.
 	 * @param value value.
 	 * @return boolean.
 	 */
-	public static boolean storeContains(String concept, String predicate, String value) {
-
-		// TODO value || predicate encode?
+	public static boolean storeContains(String concept, String predicate,
+			String value) {
 
 		try {
 			concept = URLEncoder.encode(concept, "UTF-8");
@@ -311,35 +328,45 @@ public class HermesData {
 			e.printStackTrace();
 		}
 
-		String namespace = UpperOntology.getInstance().getLocaleNS();
-		concept = namespace + concept;
+		String ask = "";
 
-		String ask = "ASK {<" + concept
-				+ "> " + predicate + " " + value + "}";
+		if (value.matches("!\\$ConceptLink:: .*") || predicate.equals(objectType)) {
 
-		return SPARQLUtil.executeBooleanQuery(ask);
-	}
+			String namespace = UpperOntology.getInstance().getLocaleNS();
+			concept = namespace + concept;
+			String objectname = value;
+			if (value.matches("!\\$ConceptLink:: .*")) {
+				objectname = value.substring(16);
+			}
+			else {
+				objectname = objectname.substring(objectname.indexOf(":") + 1);
+			}
 
-	/**
-	 * Tests if the hermes RDF-store contains the specified triple.
-	 * 
-	 * @param concept conceptname (already encoded + namespace added string.).
-	 * @param predicate predicate.
-	 * @param value value.
-	 * @return boolean.
-	 */
-	public static boolean storeContainsPre(String concept, String predicate, String value) {
+			try {
+				objectname = URLEncoder.encode(objectname, "UTF-8");
+			}
+			catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
 
-		// TODO value || predicate encode?
-		String ask = "ASK {<" + concept
-				+ "> " + predicate + " " + value + "}";
-		System.out.println(ask);
+			objectname = namespace + objectname;
+
+			ask = "ASK {<" + concept + "> " + predicate + " <" + objectname + ">}";
+		}
+		else {
+
+			String namespace = UpperOntology.getInstance().getLocaleNS();
+			concept = namespace + concept;
+
+			ask = "ASK {<" + concept + "> " + predicate + " ?temp}";
+		}
+
 		return SPARQLUtil.executeBooleanQuery(ask);
 	}
 
 	/**
 	 * Gets the corresponding topic (articlename) for a given concept.
-	 * 
+	 *
 	 * @param concept conceptname.
 	 * @return topic or empty string.
 	 */
@@ -355,11 +382,9 @@ public class HermesData {
 		String namespace = UpperOntology.getInstance().getLocaleNS();
 		concept = namespace + concept;
 
-		String query = "SELECT ?x ?y ?z WHERE {" +
-				"?y rdf:subject <" + concept + "> ." +
-				"?y rdf:predicate rdf:type ." +
-				"?y rdfs:isDefinedBy ?z ." +
-						"?z ns:hasTopic ?x }";
+		String query = "SELECT ?x ?y ?z WHERE {" + "?y rdf:subject <" + concept
+				+ "> ." + "?y rdf:predicate rdf:type ."
+				+ "?y rdfs:isDefinedBy ?z ." + "?z ns:hasTopic ?x }";
 
 		TupleQueryResult result = SPARQLUtil.executeTupleQuery(query);
 
@@ -379,7 +404,6 @@ public class HermesData {
 		catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-
 		return topic;
 	}
 }

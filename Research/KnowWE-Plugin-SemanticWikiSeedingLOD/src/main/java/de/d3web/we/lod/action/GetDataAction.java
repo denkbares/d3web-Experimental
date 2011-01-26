@@ -6,10 +6,9 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.Vector;
 
 import de.d3web.we.action.AbstractAction;
@@ -121,34 +120,35 @@ public class GetDataAction extends AbstractAction {
 
 				String namespace = UpperOntology.getInstance().getLocaleNS();
 				hermesConcept = namespace + hermesConcept;
+				encodePerson = namespace + encodePerson;
 
 				// Concepttypes
 				String ereignis = "ASK {<" + hermesConcept
 						+ "> rdf:type lns:Ereignis}";
 				String person = "ASK {<" + hermesConcept + "> rdf:type <"
-						+ namespace + encodePerson + ">}";
+						+ encodePerson + ">}";
 				String geographika = "ASK {<" + hermesConcept
 						+ "> rdf:type lns:Geographika}";
 
 				LinkedOpenDataSet set = LinkedOpenDataSet.getInstance();
-				HashMap<String, HashSet<String>> result = new HashMap<String, HashSet<String>>();
-				HashMap<String, HashSet<String>> dbResult = new HashMap<String, HashSet<String>>();
+				HashMap<String, HashSet<String>> result = new LinkedHashMap<String, HashSet<String>>();
+				HashMap<String, HashSet<String>> dbResult = new LinkedHashMap<String, HashSet<String>>();
 				LinkedOpenData var = new LinkedOpenData();
 
 				if (SPARQLUtil.executeBooleanQuery(ereignis)) {
-					System.out.println("e");
+					// System.out.println("e");
 					var = set.getLOD(ConceptType.Ereignis);
 					dbResult = var.getLODdata(dbpediaConcept);
 					result = var.getHermesData(dbResult);
 				}
 				else if (SPARQLUtil.executeBooleanQuery(person)) {
-					System.out.println("p");
+					// System.out.println("p");
 					var = set.getLOD(ConceptType.Person);
 					dbResult = var.getLODdata(dbpediaConcept);
 					result = var.getHermesData(dbResult);
 				}
 				else if (SPARQLUtil.executeBooleanQuery(geographika)) {
-					System.out.println("g");
+					// System.out.println("g");
 					var = set.getLOD(ConceptType.Geographika);
 					dbResult = var.getLODdata(dbpediaConcept);
 					result = var.getHermesData(dbResult);
@@ -156,41 +156,16 @@ public class GetDataAction extends AbstractAction {
 
 				HashMap<String, List<String>> inverse = var.getInverseMap();
 				StringBuffer buffy = new StringBuffer();
-				StringBuffer css = new StringBuffer();
-				css.append("<style type=\"text/css\"> .submit {cursor:pointer;cursor:hand;padding:0;margin:0;"
-						+ "border:none;background: url(KnowWEExtension/images/b1g.png) no-repeat center;height:32px;width:45px;}"
-						+ ".submitc {cursor:pointer;cursor:hand;padding:0;margin:0;"
-						+ "border:none;background: url(KnowWEExtension/images/b2g.png) no-repeat center;height:32px;width:45px;}"
-						+ ".ignore {cursor:pointer;cursor:hand;padding:0;margin:0;"
-						+ "border:none;background: url(KnowWEExtension/images/b1x.png) no-repeat center;height:32px;width:45px;}"
-						+ ".ignorec {cursor:pointer;cursor:hand;padding:0;margin:0;"
-						+ "border:none;background: url(KnowWEExtension/images/b2x.png) no-repeat center;height:32px;width:45px;}"
-						+ ".return {cursor:pointer;cursor:hand;padding:0;margin:0;"
-						+ "border:none;background: url(KnowWEExtension/images/b1r.png) no-repeat center;height:32px;width:45px;}"
-						+ ".returnc {cursor:pointer;cursor:hand;padding:0;margin:0;"
-						+ "border:none;background: url(KnowWEExtension/images/b2r.png) no-repeat center;height:32px;width:45px;}"
-						+ ".qmarks {cursor:pointer;cursor:hand;padding:0;margin:0;"
-						+ "border:none;background: url(KnowWEExtension/images/b1a.png) no-repeat center;height:32px;width:45px;}"
-						+ ".qmarksc {cursor:pointer;cursor:hand;padding:0;margin:0;"
-						+ "border:none;background: url(KnowWEExtension/images/b2a.png) no-repeat center;height:32px;width:45px;}"
-						+ ".buttons {cursor:default;margin-left:5px;}"
-						+ ".layout {border:2px solid #aaaaaa;-moz-border-radius:10px;-khtml-border-radius:30px;"
-						+ "display:table;background-color:#efefef;padding:1em;padding-bottom:0.5em;}"
-						+ ".innerlayout {border:1px solid #aaaaaa;-moz-border-radius:10px;-khtml-border-radius:30px;"
-						+ "display:table;background-color:#787878;padding:1em;padding-bottom:0.5em;}"
-						+ ".spacingtop {margin-top: 10px;}"
-						+ ".spacingbuttons {margin-top: 8px;}"
-						+ ".concepttopic {font-size:1.4em;font-family: Georgia, serif;}"
-						+ ".tags {font-weight:bold;color:#000066;}"
-						+ "</style>");
-				buffy.append(css
-						+ "<br/><form id='lodwizard' class='layout'><table border='0' cellpadding='5' cellspacing='1'>"
-						+ "<tr><th id='conceptname' colspan='3' class='concepttopic'>"
-						+ concept
-						+ "</th></tr><tr><td><div class='spacingtop' /></td></tr></tr>");
 
-				SortedSet<String> sortedset = new TreeSet<String>(result.keySet());
-				Iterator<String> it = sortedset.iterator();
+				buffy.append("<br/><form id='lodwizard' class='layout'><table border='0' cellpadding='5' cellspacing='1'>"
+								+ "<tr><th id='conceptname' colspan='3' class='concepttopic'>"
+								+ concept
+								+ "</th></tr><tr><td><div class='spacingtop' /></td></tr></tr>");
+
+				// Sort A-Z
+				// SortedSet<String> sortedset = new
+				// TreeSet<String>(result.keySet());
+				Iterator<String> it = result.keySet().iterator();
 
 				int i = 0;
 				if (result.size() > 0) {
@@ -208,13 +183,18 @@ public class GetDataAction extends AbstractAction {
 								checkValue = s;
 							}
 
-							// if ( !HermesData.storeContainsPre(hermesConcept,
-							// s, resultS)) {
-							// TODO: In Store
+							// If namespace is cut, isIgnored and isNoParse have
+							// to be tested with cut NS for predicate.
+							String checkHermesTagPI = checkHermesTag;
+							if (HermesData.isCutPredicateNS()) {
+								checkHermesTagPI = checkHermesTag.substring(checkHermesTag.indexOf(":") + 1);
+							}
 
 							if (!resultS.isEmpty()
-									&& !HermesData.isIgnored(concept, checkHermesTag, checkValue)
-									&& !HermesData.isNoParse(concept, checkHermesTag, checkValue)) {
+									&& !HermesData.isIgnored(concept, checkHermesTagPI, checkValue)
+									&& !HermesData.isNoParse(concept, checkHermesTagPI, checkValue)
+									&& !HermesData.storeContains(concept, checkHermesTag,
+											checkValue)) {
 
 								// Create title for html, if values are created
 								// from

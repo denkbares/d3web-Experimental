@@ -172,9 +172,31 @@ function submitDataCreate(count, wiki) {
 	document.getElementById("creationWizard").innerHTML = '<div style="margin-left:110px;"><img src="KnowWEExtension/images/loading.png"></div>';
 }
 
+function Mappings(type) {
+
+	document.getElementById("maphandler").innerHTML = '<div style="margin-left:72px;"><img src="KnowWEExtension/images/loading.png"></div>';
+
+	var params = {
+		action : 'MappingsAction',
+		type : type
+	}
+
+	var resultID = 'maphandler';
+
+	var options = {
+		url : KNOWWE.core.util.getURL(params),
+		response : {
+			action : 'insert',
+			ids : [ resultID ]
+		}
+	}
+
+	new _KA(options).send();
+}
+
 function buttonToggle(objButton) {
 
-	var nr = objButton.name.charAt(6);
+	var nr = objButton.name.substr(6);
 	var submit = document.getElementById("lodwizard")['submit' + nr].className;
 	var ignore = document.getElementById("lodwizard")['ignore' + nr].className;
 	var ret = document.getElementById("lodwizard")['return' + nr].className;
@@ -237,7 +259,7 @@ function buttonToggle(objButton) {
 
 function buttonToggleCreate(objButton) {
 
-	var nr = objButton.id.charAt(6);
+	var nr = objButton.id.substr(6);
 	var submit = document.getElementById('submit' + nr).className;
 	var ask = document.getElementById('qmarks' + nr).className;
 
@@ -314,4 +336,85 @@ function shownhide() {
 		document.getElementById("wikiurl").innerHTML = wikitext;
 		elem.style.display = "";
 	}
+}
+
+function getPlaceQuiz() {
+
+	var params = {
+		action : 'CreateBirthplaceAction',
+		input : document.getElementById("quizinputplace").value
+	}
+
+	var resultID = 'quizdataplace';
+
+	var options = {
+		url : KNOWWE.core.util.getURL(params),
+		response : {
+			action : 'insert',
+			ids : [ resultID ]
+		}
+	}
+
+	new _KA(options).send();
+}
+
+function submitPlaceQuiz(obj) {
+	var params = {
+		action : 'SolveBirthplaceAction',
+		answer : obj.innerHTML,
+		subject : document.getElementById("quizplacesubject").innerHTML
+	}
+
+	var resultID = 'quizplaceanswers';
+
+	var options = {
+		url : KNOWWE.core.util.getURL(params),
+		response : {
+			action : 'insert',
+			ids : [ resultID ]
+		}
+	}
+
+	new _KA(options).send();
+
+}
+
+function getYearQuiz() {
+	var params = {
+		action : 'CreateYearOfBirthAction',
+		input : document.getElementById("quizinputyear").value
+	}
+
+	var resultID = 'quizdatayear';
+
+	var options = {
+		url : KNOWWE.core.util.getURL(params),
+		response : {
+			action : 'insert',
+			ids : [ resultID ]
+		}
+	}
+
+	new _KA(options).send();
+}
+
+function submitYearQuiz(obj) {
+	var params = {
+		action : 'SolveYearOfBirthAction',
+		answer : obj.innerHTML,
+		subject : document.getElementById("quizyearsubject").innerHTML
+	}
+
+	var resultID = 'quizyearanswers';
+
+	var options = {
+		url : KNOWWE.core.util.getURL(params),
+		response : {
+			action : 'insert',
+			ids : [ resultID ]
+		}
+	}
+
+	new _KA(options).send();
+
 }
