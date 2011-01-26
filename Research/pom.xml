@@ -160,6 +160,7 @@
 		<module>KnowWE-Plugin-SemanticCore-MarkupSet</module>
 		<module>KnowWE-Plugin-Rdf2GoSemanticCore</module>
 		<module>KnowWE-Plugin-SemanticWikiSeedingLOD</module>
+		<module>KnowWE-ObjectType-Generator</module>
 	</modules>
 	<repositories>
 		<repository>
