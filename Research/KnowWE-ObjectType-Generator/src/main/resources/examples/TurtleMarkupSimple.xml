@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ObjectTypeHierarchy SYSTEM "../dtd/ObjectTypeHierarchy.dtd">
+<ObjectTypeHierarchy Author="Sebastian Furth">
+	<ObjectType ClassName="TurtleMarkupSimple" SuperType="DefaultKnowWEObjectType">
+		<ChildrenTypes>
+			<ObjectType ClassName="Subject" SuperType="OWLTermReference" Position="2">
+				<RegExSectionFinder>
+					<RegEx>...</RegEx>
+				</RegExSectionFinder>
+			</ObjectType>
+			<ObjectType ClassName="Predicate" SuperType="OWLTermReference" Position="1">
+				<RegExSectionFinder>
+					<RegEx>...</RegEx>
+				</RegExSectionFinder>
+			</ObjectType>
+			<ObjectType ClassName="Object" SuperType="OWLTermReference" Position="3">
+				<AllTextSectionFinder/>
+			</ObjectType>
+		</ChildrenTypes>
+		<RegExSectionFinder>
+			<RegEx>{(.*?::.*?)}</RegEx>
+		</RegExSectionFinder>
+		<AnonymousSubtreeHandler Name="TurtleMarkupSimpleSubtreeHandler" SuperType="OWLSubtreeHandler"/>
+	</ObjectType>
+</ObjectTypeHierarchy>

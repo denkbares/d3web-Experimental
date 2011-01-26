@@ -1,0 +1,36 @@
+0	XML
+	- Description, Short Description, plugin.xml
+
+1 	Implementierung ohne GUI
+	- Builer Pattern
+
+2	Implementierung als Eclipse Plugin 
+
+2.1	Implementierung eines Wizards
+
+	// zum schnell mal einen ObjectType anlegen
+
+	- File -> New -> KnowWE -> KnowWEObjectType
+	- Dialog ähnlich zu "New -> Java -> Class"
+		- Einstellmöglichkeiten:
+			- Name
+			- Supertype (z.B. DefaultKnowWEObjectTypes)
+			- ChildrenTypes (nur Bestehende? Ansonsten u.U. viele gleiche Dialoge)
+			- SectionFinder
+			- SubtreeHandler
+			- Renderer
+		- Verwendung von Eclipse-RCP
+			
+2.2	Implementierung mit Editor
+
+	// Zur Entwicklung von komplexen Hierarchien
+
+	- Visueller Editor zum Erzeugen von Objekt-Hierarchien (Oberer Bildschirmbereich)
+	- Properties-Fenster für Renderer, SubtreeHandler etc. (Unterer Bildschirmbereich)
+	- XML basierte Persistenz
+	- Testen von SectionFindern mit Beispieltext
+	
+	
+Literatur:
+
+http://www.eclipse.org/articles/
