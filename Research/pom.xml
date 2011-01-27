@@ -161,7 +161,7 @@
 		<module>KnowWE-Plugin-Rdf2GoSemanticCore</module>
 		<module>KnowWE-Plugin-SemanticWikiSeedingLOD</module>
 		<module>KnowWE-Plugin-Renaming</module>
-		<module>KnowWE-ObjectType-Generator</module>
+		<module>KnowWE-MetaTool</module>
 	</modules>
 	<repositories>
 		<repository>
