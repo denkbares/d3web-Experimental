@@ -24,7 +24,7 @@ import java.util.Map;
 
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.SectionID;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
+import de.d3web.we.kdom.sectionFinder.ISectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.xml.AbstractXMLObjectType;
 import de.d3web.we.kdom.xml.XMLSectionFinder;
@@ -48,7 +48,7 @@ public class Include extends AbstractXMLObjectType {
 	}
 
 	@Override
-	public SectionFinder getSectioner() {
+	public ISectionFinder getSectioner() {
 		return new IncludeSectionFinder(this.getXMLTagName());
 	}
 
