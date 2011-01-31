@@ -30,7 +30,7 @@ import org.junit.Test;
 
 import de.knowwe.kdom.generator.ObjectType;
 import de.knowwe.kdom.generator.QualifiedClass;
-import de.knowwe.kdom.generator.persistence.JavaWriter;
+import de.knowwe.kdom.generator.io.JavaWriter;
 
 /**
  *

@@ -18,11 +18,13 @@
  */
 package de.knowwe.kdom.generator;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-import de.knowwe.kdom.generator.persistence.JavaWriter;
+import de.knowwe.kdom.generator.io.JavaWriter;
+import de.knowwe.kdom.generator.io.XMLReader;
 
 /**
  *
@@ -32,9 +34,35 @@ import de.knowwe.kdom.generator.persistence.JavaWriter;
 public class Demo {
 
 	private static final String outputDir = "/Users/sebastian/Desktop/";
+	private static final String inputFile = "src/main/resources/examples/TurtleMarkupSimpleID.xml";
 
 	public static void main(String[] args) throws IOException {
 
+		ObjectType temp = read();
+		write(temp);
+		// write(createObjectType());
+	}
+
+	private static ObjectType read() throws IOException {
+		XMLReader reader = new XMLReader();
+		return reader.read(new File(inputFile));
+	}
+
+	private static void write(ObjectType objectType) throws IOException {
+
+		// Write the object type
+		if (!objectType.alreadyExists()) {
+			Writer w = new FileWriter(outputDir + objectType.getClassName() + ".java");
+			JavaWriter.getInstance().write(objectType, w);
+		}
+
+		// Write all children
+		for (ObjectType child : objectType.getChildren()) {
+			write(child);
+		}
+	}
+
+	private static ObjectType createObjectType() {
 		QualifiedClass childClass1 = new QualifiedClass("de.knowwe.kdom", "TestChildren1");
 		ObjectType child1 = new ObjectType.Builder("02", childClass1, false).build();
 
@@ -54,21 +82,9 @@ public class Demo {
 		objectType.addChild(1, child2);
 		objectType.addChild(2, child3);
 
-		write(objectType);
+		return objectType;
 	}
 
-	private static void write(ObjectType objectType) throws IOException {
 
-		// Write the object type
-		if (!objectType.alreadyExists()) {
-			Writer w = new FileWriter(outputDir + objectType.getClassName() + ".java");
-			JavaWriter.getInstance().write(objectType, w);
-		}
-
-		// Write all children
-		for (ObjectType child : objectType.getChildren()) {
-			write(child);
-		}
-	}
 
 }

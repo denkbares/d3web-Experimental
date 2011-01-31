@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!ELEMENT ObjectTypeHierarchy (ObjectType+)>
-<!ATTLIST ObjectTypeHierarchy
+<!ELEMENT ObjectTypes (ObjectType+)>
+<!ATTLIST ObjectTypes
 	Author CDATA #IMPLIED
 	CreationDate CDATA #IMPLIED
 	LastEdited CDATA #IMPLIED>
-<!ELEMENT ObjectType (ChildrenTypes?, (CustomSectionFinder | RegExSectionFinder | AllTextSectionFinder), (SubtreeHandler|AnonymousSubtreeHandler)*, CustomRenderer?)>
+<!ELEMENT ObjectType ((CustomSectionFinder | RegExSectionFinder | AllTextSectionFinder), (SubtreeHandler|AnonymousSubtreeHandler)*, CustomRenderer?)>
 <!ATTLIST ObjectType
+	ID ID #REQUIRED
+	PackageName CDATA #REQUIRED
 	ClassName CDATA #REQUIRED
-	SuperType CDATA #REQUIRED
-	Position CDATA #IMPLIED>
-<!ELEMENT ChildrenTypes (ObjectType+)>
+	SuperTypePackage CDATA #REQUIRED
+	SuperTypeClass CDATA #REQUIRED
+	Parent IDREF #IMPLIED
+	Position CDATA #IMPLIED
+	Exists (true|false) #IMPLIED>
 <!ELEMENT CustomRenderer EMPTY>
 <!ATTLIST CustomRenderer
 	ClassName CDATA #REQUIRED

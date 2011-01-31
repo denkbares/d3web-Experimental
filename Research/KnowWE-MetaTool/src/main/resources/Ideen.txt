@@ -34,3 +34,7 @@
 Literatur:
 
 http://www.eclipse.org/articles/
+
+Besprechen:
+
+position in addChild entfernen -> stattdessen Parsing-Order

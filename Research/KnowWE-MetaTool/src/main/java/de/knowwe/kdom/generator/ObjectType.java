@@ -132,6 +132,50 @@ public class ObjectType {
 		return exists;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((children == null) ? 0 : children.hashCode());
+		result = prime * result + (exists ? 1231 : 1237);
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((objectType == null) ? 0 : objectType.hashCode());
+		result = prime * result + ((superType == null) ? 0 : superType.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof ObjectType)) return false;
+		ObjectType other = (ObjectType) obj;
+		if (children == null) {
+			if (other.children != null) return false;
+		}
+		else if (!children.equals(other.children)) return false;
+		if (exists != other.exists) return false;
+		if (id == null) {
+			if (other.id != null) return false;
+		}
+		else if (!id.equals(other.id)) return false;
+		if (objectType == null) {
+			if (other.objectType != null) return false;
+		}
+		else if (!objectType.equals(other.objectType)) return false;
+		if (superType == null) {
+			if (other.superType != null) return false;
+		}
+		else if (!superType.equals(other.superType)) return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "ObjectType [id=" + id + ", objectType=" + objectType + ", superType=" + superType
+				+ ", exists=" + exists + ", children=" + children + "]";
+	}
+
 	public static class Builder {
 
 		/*
