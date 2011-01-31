@@ -22,7 +22,9 @@ package de.d3web.we.core.semantic.rdf2go.example;
 
 import java.util.ArrayList;
 
+import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.Statement;
+import org.openrdf.query.MalformedQueryException;
 
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -60,7 +62,13 @@ public class SparqlRenderer extends KnowWEDomRenderer<AddStatementType> {
 			e.printStackTrace();
 		}
 
-		result.append(KnowWEUtils.maskHTML(Rdf2GoCore.getInstance().renderedSparqlSelect(
-				sparqlString)));
+		try {
+			result.append(KnowWEUtils.maskHTML(Rdf2GoCore.getInstance().renderedSparqlSelect(
+					sparqlString)));
+		}
+		catch (ModelRuntimeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

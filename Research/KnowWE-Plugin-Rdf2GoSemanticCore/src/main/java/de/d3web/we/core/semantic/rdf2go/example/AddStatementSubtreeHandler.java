@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.ontoware.rdf2go.model.Statement;
+import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
@@ -39,9 +40,6 @@ public class AddStatementSubtreeHandler extends RDF2GoSubtreeHandler<AddStatemen
 
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<AddStatementType> s) {
-
-		ArrayList<Statement> l = new ArrayList<Statement>();
-
 		URI sub = Rdf2GoCore.getInstance().createURI("http://localhost/owl#1");
 		URI pred = Rdf2GoCore.getInstance().createURI("http://localhost/owl#2");
 		URI obj = Rdf2GoCore.getInstance().createURI("http://localhost/owl#3");
@@ -62,10 +60,9 @@ public class AddStatementSubtreeHandler extends RDF2GoSubtreeHandler<AddStatemen
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		Statement st = Rdf2GoCore.getInstance().createStatement(sub, pred, obj);
-		l.add(st);
-		Rdf2GoCore.getInstance().addStatements(l, s);
+		BlankNode bn = Rdf2GoCore.getInstance().createBlankNode();
+		Statement st = Rdf2GoCore.getInstance().createStatement(bn, pred, bn);
+		Rdf2GoCore.getInstance().addStatement(st, s);
 		System.out.println("Statement added successfully");
 		return null;
 	}

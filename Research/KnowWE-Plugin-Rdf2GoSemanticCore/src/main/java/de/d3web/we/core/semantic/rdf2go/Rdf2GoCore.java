@@ -18,7 +18,12 @@
  */
 package de.d3web.we.core.semantic.rdf2go;
 
-
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,14 +38,19 @@ import java.util.logging.Logger;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.Reasoning;
+import org.ontoware.rdf2go.exception.MalformedQueryException;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
+import org.ontoware.rdf2go.exception.ReasoningNotSupportedException;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.Statement;
+import org.ontoware.rdf2go.model.node.BlankNode;
+import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.util.RDFTool;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.event.Event;
@@ -58,11 +68,17 @@ import de.d3web.we.kdom.Section;
 public class Rdf2GoCore implements EventListener {
 
 	// Base Namespace
+	
 	public static final String basens = "http://ki.informatik.uni-wuerzburg.de/d3web/we/knowwe.owl#";
+	public static final String localns = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl()
+			+ "OwlDownload.jsp#";
 
 	private static final String JENA = "jena";
 	private static final String BIGOWLIM = "bigowlim";
 	public static final String SESAME = "sesame";
+	
+	public static final String select = "select";
+	public static final String ask = "ask";
 
 	// use JENA, BIGOWLIM or SESAME:
 	public static String USE_MODEL = SESAME;
@@ -77,7 +93,7 @@ public class Rdf2GoCore implements EventListener {
 	private HashMap<String, WeakHashMap<Section, List<Statement>>> statementcache;
 	private HashMap<Statement, Integer> duplicateStatements;
 	private HashMap<String, String> namespaces;
-
+	
 	/**
 	 * Initializes the model and its caches and namespaces
 	 */
@@ -109,7 +125,7 @@ public class Rdf2GoCore implements EventListener {
 
 	private void registerBigOWLIMModel() {
 		System.out.print("BigOWLIM");
-		// RDF2Go.register(new com.ontotext.trree.rdf2go.OwlimModelFactory());
+		//RDF2Go.register(new com.ontotext.trree.rdf2go.OwlimModelFactory());
 	}
 
 	/**
@@ -128,7 +144,7 @@ public class Rdf2GoCore implements EventListener {
 	 * 
 	 * @throws ModelRuntimeException
 	 */
-	public void initModel() throws ModelRuntimeException {
+	public void initModel() throws ModelRuntimeException,ReasoningNotSupportedException {
 		if (USE_MODEL == JENA) {
 			registerJenaModel();
 		}
@@ -160,8 +176,11 @@ public class Rdf2GoCore implements EventListener {
 	 */
 	private void initDefaultNamespaces() {
 		addNamespace("ns", basens);
-		addNamespace("lns", KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl()
-				+ "OwlDownload.jsp#");
+		addNamespace("lns", localns);
+	}
+	
+	public void readFrom(InputStream in) throws ModelRuntimeException, IOException {
+		model.readFrom(in);
 	}
 
 	/**
@@ -185,7 +204,7 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	/**
-	 * expands namespace from predix to uri string
+	 * expands namespace from prefix to uri string
 	 * 
 	 * @created 04.01.2011
 	 * @param s
@@ -234,15 +253,21 @@ public class Rdf2GoCore implements EventListener {
 		return s;
 
 	}
-	
-	public String renderedSparqlSelect(String query) {
+
+	public String renderedSparqlSelect(String query) throws ModelRuntimeException, MalformedQueryException {
 		return render(sparqlSelect(query));
 	}
 
-
 	public URI createURI(String str) {
-		System.out.println(str +";"+expandNamespace(str));
 		return model.createURI(expandNamespace(str));
+	}
+
+	public URI createURI(String ns, String str) {
+		return model.createURI(expandNamespace(ns) + str);
+	}
+
+	public URI createLocalURI(String str) {
+		return model.createURI(localns + str);
 	}
 
 	/**
@@ -270,12 +295,12 @@ public class Rdf2GoCore implements EventListener {
 		return result;
 	}
 
-	public boolean sparqlAsk(String query) {
+	public boolean sparqlAsk(String query) throws ModelRuntimeException,MalformedQueryException{
 		return model.sparqlAsk(query);
 	}
 
-	public QueryResultTable sparqlSelect(String query) {
-		return model.sparqlSelect(getSparqlNamespaceShorts()+query);
+	public QueryResultTable sparqlSelect(String query) throws ModelRuntimeException,MalformedQueryException {
+		return model.sparqlSelect(getSparqlNamespaceShorts() + query);
 	}
 
 	/**
@@ -436,10 +461,15 @@ public class Rdf2GoCore implements EventListener {
 	 * @param sec
 	 */
 	public void addStaticStatements(List<Statement> allStatements, Section sec) {
-		Iterator i = allStatements.iterator();
+		Iterator<Statement> i = allStatements.iterator();
 		model.addAll(i);
+			
 	}
 
+	public void addStaticStatement(Statement statement) {
+		model.addStatement(statement);
+	}
+	
 	/**
 	 * adds statements to statementcache
 	 * 
@@ -460,6 +490,14 @@ public class Rdf2GoCore implements EventListener {
 
 	public Statement createStatement(Resource subject, URI predicate, Node object) {
 		return model.createStatement(subject, predicate, object);
+	}
+	
+	public BlankNode createBlankNode(String internalID) {
+		return model.createBlankNode(internalID);
+	}
+	
+	public BlankNode createBlankNode( ) {
+		return model.createBlankNode();
 	}
 
 	/**
@@ -529,7 +567,7 @@ public class Rdf2GoCore implements EventListener {
 			}
 		}
 	}
-	
+
 	public String getSparqlNamespaceShorts() {
 		StringBuffer buffy = new StringBuffer();
 
@@ -537,11 +575,113 @@ public class Rdf2GoCore implements EventListener {
 			buffy.append("PREFIX " + cur.getKey() + ": <" + cur.getValue()
 					+ "> \n");
 		}
-
 		return buffy.toString();
 	}
 
 	public Object getUnderlyingModelImplementation() {
 		return model.getUnderlyingModelImplementation();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.d3web.we.core.ISemanticCore#simpleQueryToList(java.lang.String,
+	 * java.lang.String)
+	 */
+	public ArrayList<String> simpleQueryToList(String inquery,
+			String targetbinding) {
+
+		ArrayList<String> resultlist = new ArrayList<String>();
+		String querystring = getSparqlNamespaceShorts();
+		querystring = querystring + inquery;
+
+		QueryResultTable results = null;
+		try {
+			results = sparqlSelect(inquery);
+		}
+		catch (ModelRuntimeException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		if (results != null) {
+		ClosableIterator<QueryRow> i = results.iterator();
+
+		while (i.hasNext()) {
+			QueryRow row = i.next();
+			String tag = row.getValue(targetbinding).toString();
+			if (tag.split("#").length == 2) tag = tag.split("#")[1];
+			try {
+				tag = URLDecoder.decode(tag, "UTF-8");
+			}
+			catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			if (tag.contains("=")) {
+				tag = tag.split("=")[1];
+			}
+			if (tag.startsWith("\"")) {
+				tag = tag.substring(1);
+			}
+			if (tag.endsWith("\"")) {
+				tag = tag.substring(0, tag.length() - 1);
+			}
+			resultlist.add(tag.trim());
+		}
+		}
+		return resultlist;
+	}
+
+	public Literal createLiteral(String text) {
+return model.createPlainLiteral(text);
+	}
+	
+	public static String getLocalName(Node o) {
+		return RDFTool.getLabel(o);
+	}
+
+	public static List<org.openrdf.model.Statement> getTopicStatements(String topic) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public File[] getImportList() {
+		KnowWEEnvironment knowWEEnvironment = KnowWEEnvironment.getInstance();
+		String p = knowWEEnvironment.getWikiConnector().getSavePath();
+		String inpath = (p != null) ? p : (knowWEEnvironment
+				.getKnowWEExtensionPath()
+				+ File.separatorChar + "owlincludes");
+		File includes = new File(inpath);
+		if (includes.exists()) {
+			File[] files = includes.listFiles(new FilenameFilter() {
+
+				public boolean accept(File f, String s) {
+					return s.endsWith(".owl");
+				}
+			});
+			return files;
+		}
+		return null;
+	}
+	
+	/**
+	 * @param prop
+	 * @return
+	 */
+	public URI getRDF(String prop) {
+		return createURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#", prop);
+	}
+
+	/**
+	 * @param prop
+	 * @return
+	 */
+	public URI getRDFS(String prop) {
+		return createURI("http://www.w3.org/2000/01/rdf-schema#", prop);
+	}
+
+	public void addStatement(Statement s, Section sec) {
+		List<Statement> l = new ArrayList<Statement>();
+		l.add(s);
+		addStatements(l, sec);
 	}
 }

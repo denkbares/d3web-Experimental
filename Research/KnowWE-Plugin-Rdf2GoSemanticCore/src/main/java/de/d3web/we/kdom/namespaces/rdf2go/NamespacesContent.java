@@ -17,37 +17,16 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.d3web.we.core.semantic.rdf2go.example;
 
-import java.util.Map;
+package de.d3web.we.kdom.namespaces.rdf2go;
 
-import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
+import de.d3web.we.kdom.xml.XMLContent;
 
-import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
-
-public class DumpHandler extends AbstractHTMLTagHandler {
-
-	public DumpHandler() {
-		super("DumpModel");
-	}
+public class NamespacesContent extends XMLContent {
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
-			Map<String, String> values, String web) {
-		
-		Rdf2GoCore.getInstance().dumpModel();
-
-		if (Rdf2GoCore.USE_MODEL == Rdf2GoCore.SESAME) {
-			Rdf2GoCore.getInstance().dumpNamespaces();
-		}
-		//Rdf2GoCore.getInstance().dumpStatementcache();
-		//Rdf2GoCore.getInstance().dumpDuplicates();
-
-		return "dumped";
-//		return KnowWEUtils.maskHTML(Rdf2GoCore.getInstance().renderedSparqlSelect(
-//				"select ?Subject ?Predicate ?Object where { ?Subject ?Predicate ?Object }"));
+	protected void init() {
+		this.setCustomRenderer(new NamespacesContentRenderer());
 	}
 
 }
