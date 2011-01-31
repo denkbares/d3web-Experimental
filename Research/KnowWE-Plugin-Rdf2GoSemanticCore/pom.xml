@@ -75,13 +75,35 @@
 			<artifactId>rdf2go.impl.jena26</artifactId>
 			<version>4.7.3</version>
 		</dependency>
- 
- <!-- 
+
+<!-- 
 		<dependency>
 			<groupId>efzwo</groupId>
 			<artifactId>bigowlim-rdf2go</artifactId>
 			<version>1.0</version>
 		</dependency>
- -->
+	 -->
+	 	
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>KnowWE-KDOMParseUtils</artifactId>
+			<version>0.2-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>KnowWE-Plugin-ExtensionPoints</artifactId>
+			<version>0.2-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>6.0.20</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+		
 	</dependencies>
 </project>

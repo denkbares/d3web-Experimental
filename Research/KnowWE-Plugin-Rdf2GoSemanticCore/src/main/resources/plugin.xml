@@ -26,6 +26,18 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		id="Namespaces">
+		<parameter id="class"
+			value="de.d3web.we.kdom.namespaces.rdf2go.Namespaces" />
+		<parameter id="name" value="Namespaces" />
+		<parameter id="description" value="KnowWEObjectType Namespaces" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+		<parameter id="script" value="KnowWE-Plugin-SemanticCore.js" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
 		id="SparqlType">
 		<parameter id="class"
 			value="de.d3web.we.core.semantic.rdf2go.example.SparqlType" />
@@ -55,4 +67,28 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="DefaultMarkupSubtreeHandler"
+		id="DefaultMarkupOwlHandlerForRdf2Go">
+		<parameter id="class"
+			value="de.d3web.we.kdom.defaultMarkup.DefaultMarkupOwlHandlerForRdf2Go" />
+		<parameter id="name" value="DefaultMarkupOwlHandlerForRdf2Go" />
+		<parameter id="description" value="Subtreehandler for Defaultmarkup to add owl knowledge" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		id="SemanticAnnotation">
+		<parameter id="class"
+			value="de.d3web.we.kdom.semanticAnnotation.rdf2go.SemanticAnnotation" />
+		<parameter id="name" value="SemanticAnnotation" />
+		<parameter id="description" value="KnowWEObjectType SemanticAnnotation" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+		<parameter id="script" value="KnowWE-Plugin-SemanticCore.js" />
+	</extension>
+
 </plugin>
