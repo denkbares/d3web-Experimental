@@ -141,9 +141,9 @@ public class SessionPersistenceTest {
 		questionNum = kbm.createQuestionNum("QuestionNum", kb.getRootQASet());
 		solution = kbm.createSolution("Solution");
 		solution2 = kbm.createSolution("Solution2");
-		RuleFactory.createHeuristicPSRule("R1", solution2, Score.P7, new CondNumLess(questionNum,
+		RuleFactory.createHeuristicPSRule(solution2, Score.P7, new CondNumLess(questionNum,
 				0.0));
-		RuleFactory.createHeuristicPSRule("R2", solution, Score.P7, new CondNumLess(questionNum,
+		RuleFactory.createHeuristicPSRule(solution, Score.P7, new CondNumLess(questionNum,
 				0.0));
 		DefaultSession session = (DefaultSession) SessionFactory.createSession(kb);
 		session.setName(TESTNAME);
@@ -613,7 +613,8 @@ public class SessionPersistenceTest {
 				sessionRecord2extended.getValueFacts().size()
 						- sessionRecord2.getValueFacts().size());
 		blackboard.addInterviewFact(FactFactory.createFact(session, questionMC, new Indication(
-						State.CONTRA_INDICATED), this, session.getPSMethodInstance(PSMethodStrategic.class)));
+						State.CONTRA_INDICATED), this,
+				session.getPSMethodInstance(PSMethodStrategic.class)));
 		sessionRecord2extended = SessionConversionFactory.copyToSessionRecord(session);
 		Assert.assertEquals(2,
 				sessionRecord2extended.getValueFacts().size()

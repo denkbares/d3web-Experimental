@@ -69,8 +69,7 @@ public class ScoringRuleBuilder implements CellKnowledgeBuilder {
 						text);
 			}
 		}
-		String newRuleID = idom.createRuleID();
-		RuleFactory.createHeuristicPSRule(newRuleID, diag, score, cond);
+		RuleFactory.createHeuristicPSRule(diag, score, cond);
 		return null;
 	}
 

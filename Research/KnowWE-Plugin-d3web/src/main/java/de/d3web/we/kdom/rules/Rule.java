@@ -153,10 +153,10 @@ public class Rule extends DefaultAbstractKnowWEObjectType {
 					List<Message> bm = builder.addKnowledge(r,
 							new SingleKBMIDObjectManager(kbm), null);
 
-					if (builder.getRuleIDs().size() == 1) {
+					if (builder.getRules().size() == 1) {
 						KnowWEUtils.storeObject(article.getWeb(), article
 								.getTitle(), s.getID(), KBID_KEY, builder
-								.getRuleIDs().get(0));
+								.getRules().get(0));
 					}
 
 					KnowWEUtils.storeMessages(article, s, this.getClass(), Message.class,

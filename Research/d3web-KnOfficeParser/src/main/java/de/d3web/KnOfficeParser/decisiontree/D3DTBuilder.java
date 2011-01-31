@@ -391,7 +391,6 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 		for (String name : diags) {
 			Question q = idom.findQuestion(name);
 			Condition cond = getCondPath(line, linetext);
-			String newRuleID = idom.createRuleID();
 			// Merkmalsherleitung
 			if (q != null) {
 				if (q instanceof QuestionNum) {
@@ -404,21 +403,21 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 					}
 					FormulaNumber num = new FormulaNumber(d);
 					if (set) {
-						RuleFactory.createSetValueRule(newRuleID, q, num, cond);
+						RuleFactory.createSetValueRule(q, num, cond);
 					}
 					else {
-						RuleFactory.createSetValueRule(newRuleID, q,
+						RuleFactory.createSetValueRule(q,
 								new Object[] { num }, cond);
 					}
 				}
 				else if (q instanceof QuestionChoice) {
 					Choice a = ((ChoiceValue) idom.findValue(q, value)).getChoice((QuestionChoice) q);
 					if (set) {
-						RuleFactory.createSetValueRule(newRuleID, q,
+						RuleFactory.createSetValueRule(q,
 								new Object[] { a }, cond);
 					}
 					else {
-						RuleFactory.createSetValueRule(newRuleID, q,
+						RuleFactory.createSetValueRule(q,
 								new Object[] { a }, cond);
 					}
 				}
@@ -456,7 +455,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 									value));
 					return;
 				}
-				RuleFactory.createHeuristicPSRule(newRuleID, diag, score, cond);
+				RuleFactory.createHeuristicPSRule(diag, score, cond);
 				if (link != null) {
 					diag.getInfoStore().addValue(MMInfo.LINK, link);
 				}
@@ -668,7 +667,6 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 
 	private void addQuestionOrQuestionclassIndication(QASet set,
 			Condition abscon, int line, String linetext) {
-		String newRuleID = idom.createRuleID();
 		if (abscon instanceof CondDState) {
 			CondDState statecond = (CondDState) abscon;
 			List<QASet> action = new ArrayList<QASet>();
@@ -677,16 +675,16 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 					|| statecond.getStatus().hasState(State.SUGGESTED)) {
 				ActionNextQASet ruleAction = new ActionIndication();
 				ruleAction.setQASets(action);
-				RuleFactory.createRule(newRuleID, ruleAction, statecond,
+				RuleFactory.createRule(ruleAction, statecond,
 						null, null, PSMethodStrategic.class);
 			}
 			else {
 				errors.add(MessageKnOfficeGenerator.createWrongDiagScore(
-						newRuleID, line, linetext));
+						file, line, linetext));
 			}
 		}
 		else {
-			RuleFactory.createIndicationRule(newRuleID, set, abscon);
+			RuleFactory.createIndicationRule(set, abscon);
 		}
 	}
 

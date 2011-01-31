@@ -113,7 +113,7 @@ public class RuleConditionHighlightingRenderer extends KnowWEDomRenderer {
 		// get the rule: Eval it and highlight the condition
 		Section ruleSection = sec.findAncestorOfType(
 				de.d3web.we.kdom.rules.Rule.class);
-		String kbRuleId = (String) KnowWEUtils.getStoredObject(sec.getWeb(),
+		Rule kbRule = (Rule) KnowWEUtils.getStoredObject(sec.getWeb(),
 				sec.getTitle(), ruleSection.getID(),
 				de.d3web.we.kdom.rules.Rule.KBID_KEY);
 
@@ -128,8 +128,7 @@ public class RuleConditionHighlightingRenderer extends KnowWEDomRenderer {
 					if (slice instanceof RuleSet) {
 						RuleSet rs = (RuleSet) slice;
 						for (Rule r : rs.getRules()) {
-							String id = r.getId();
-							if (id != null && id.equals(kbRuleId)) {
+							if (r.equals(kbRule)) {
 								rule = r;
 							}
 						}

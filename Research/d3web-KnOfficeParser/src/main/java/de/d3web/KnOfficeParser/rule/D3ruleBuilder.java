@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -72,9 +72,9 @@ import de.d3web.scoring.Score;
 
 /**
  * Adapterklasse um d3 Regeln zu erstellen
- *
+ * 
  * @author Markus Friedrich
- *
+ * 
  */
 public class D3ruleBuilder implements KnOfficeParser, RuleBuilder {
 
@@ -88,7 +88,7 @@ public class D3ruleBuilder implements KnOfficeParser, RuleBuilder {
 	private boolean buildonlywith0Errors = false;
 	private int rulecount;
 	private List<MyRule> rules = new ArrayList<MyRule>();
-	private final List<String> ruleIDs = new ArrayList<String>();
+	private final List<Rule> ruleIDs = new ArrayList<Rule>();
 	private IDObjectManagement idom;
 
 	private enum ruletype {
@@ -143,7 +143,6 @@ public class D3ruleBuilder implements KnOfficeParser, RuleBuilder {
 	}
 
 	private Rule generateRule(MyRule rule) {
-		String newRuleID = idom.createRuleID();
 		Rule newRule = null;
 		if (rule.type == ruletype.indication) {
 			Condition cond = rule.ifcond;
@@ -153,25 +152,25 @@ public class D3ruleBuilder implements KnOfficeParser, RuleBuilder {
 						|| statecond.getStatus().hasState(State.SUGGESTED)) {
 					ActionNextQASet ruleAction = new ActionIndication();
 					ruleAction.setQASets(rule.qcons);
-					newRule = RuleFactory.createRule(newRuleID, ruleAction, statecond,
+					newRule = RuleFactory.createRule(ruleAction, statecond,
 							rule.exceptcond, null, PSMethodStrategic.class);
 				}
 				else {
-					newRule = RuleFactory.createIndicationRule(newRuleID, rule.qcons,
+					newRule = RuleFactory.createIndicationRule(rule.qcons,
 							cond, rule.exceptcond);
 				}
 			}
 			else {
-				newRule = RuleFactory.createIndicationRule(newRuleID, rule.qcons, cond,
+				newRule = RuleFactory.createIndicationRule(rule.qcons, cond,
 						rule.exceptcond);
 			}
 		}
 		else if (rule.type == ruletype.instantindication) {
-			newRule = RuleFactory.createInstantIndicationRule(newRuleID, rule.qcons,
+			newRule = RuleFactory.createInstantIndicationRule(rule.qcons,
 					rule.ifcond, rule.exceptcond);
 		}
 		else if (rule.type == ruletype.contraindication) {
-			newRule = RuleFactory.createContraIndicationRule(newRuleID, rule.qcons,
+			newRule = RuleFactory.createContraIndicationRule(rule.qcons,
 					rule.ifcond, rule.exceptcond);
 		}
 		else if (rule.type == ruletype.supress) {
@@ -187,17 +186,17 @@ public class D3ruleBuilder implements KnOfficeParser, RuleBuilder {
 			else if (rule.value instanceof ChoiceValue) {
 				theAnswers = new Choice[] { ((ChoiceValue) rule.value).getChoice((QuestionChoice) rule.question) };
 			}
-			newRule = RuleFactory.createSuppressAnswerRule(newRuleID,
-					(QuestionChoice) rule.question, theAnswers, rule.ifcond,
+			newRule = RuleFactory.createSuppressAnswerRule((QuestionChoice) rule.question,
+					theAnswers, rule.ifcond,
 					rule.exceptcond);
 		}
 		else if (rule.type == ruletype.setvalue) {
 			if (rule.formula != null) {
-				newRule = RuleFactory.createSetValueRule(newRuleID, rule.question,
+				newRule = RuleFactory.createSetValueRule(rule.question,
 						rule.formula, rule.ifcond, rule.exceptcond);
 			}
 			else if (rule.value != null) {
-				newRule = RuleFactory.createSetValueRule(newRuleID, rule.question,
+				newRule = RuleFactory.createSetValueRule(rule.question,
 						rule.value, rule.ifcond, rule.exceptcond);
 			}
 			else {
@@ -211,7 +210,7 @@ public class D3ruleBuilder implements KnOfficeParser, RuleBuilder {
 				// rule.formula, rule.ifcond, rule.exceptcond);
 			}
 			else if (rule.value != null) {
-				newRule = RuleFactory.createSetValueRule(newRuleID, rule.question,
+				newRule = RuleFactory.createSetValueRule(rule.question,
 						rule.value, rule.ifcond, rule.exceptcond);
 			}
 			else {
@@ -219,11 +218,11 @@ public class D3ruleBuilder implements KnOfficeParser, RuleBuilder {
 			}
 		}
 		else {
-			newRule = RuleFactory.createHeuristicPSRule(newRuleID, rule.diag, rule.score,
+			newRule = RuleFactory.createHeuristicPSRule(rule.diag, rule.score,
 					rule.ifcond, rule.exceptcond);
 		}
 		if (newRule != null) {
-			ruleIDs.add(newRule.getId());
+			ruleIDs.add(newRule);
 		}
 
 		rulecount++;
@@ -245,7 +244,7 @@ public class D3ruleBuilder implements KnOfficeParser, RuleBuilder {
 		}
 	}
 
-	public List<String> getRuleIDs() {
+	public List<Rule> getRules() {
 		return this.ruleIDs;
 	}
 

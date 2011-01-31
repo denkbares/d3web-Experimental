@@ -95,10 +95,10 @@ public class CreateScoresHandler extends D3webSubtreeHandler {
 
 			if (scoreV != null && d != null && cond != null) {
 
-				Rule rule = RuleFactory.createHeuristicPSRule(s.getID(), d, scoreV, cond);
+				Rule rule = RuleFactory.createHeuristicPSRule(d, scoreV, cond);
 				KnowWEUtils.storeObject(
 						s.getArticle().getWeb(), article.getTitle(), s.getID(),
-						de.d3web.we.kdom.rules.Rule.KBID_KEY, rule.getId());
+						de.d3web.we.kdom.rules.Rule.KBID_KEY, rule);
 
 			}
 			else {

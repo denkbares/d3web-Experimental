@@ -231,10 +231,4 @@ public class SingleKBMIDObjectManager implements IDObjectManagement {
 	public Solution createSolution(String id, String name, Solution parent) {
 		return kbm.createSolution(id, name, parent);
 	}
-
-	@Override
-	public String createRuleID() {
-		return kbm.createRuleID();
-	}
-
 }
