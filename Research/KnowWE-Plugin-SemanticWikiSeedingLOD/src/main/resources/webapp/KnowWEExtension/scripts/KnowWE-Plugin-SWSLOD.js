@@ -338,47 +338,6 @@ function shownhide() {
 	}
 }
 
-function getPlaceQuiz() {
-
-	var params = {
-		action : 'CreateBirthplaceAction',
-		input : document.getElementById("quizinputplace").value
-	}
-
-	var resultID = 'quizdataplace';
-
-	var options = {
-		url : KNOWWE.core.util.getURL(params),
-		response : {
-			action : 'insert',
-			ids : [ resultID ]
-		}
-	}
-
-	new _KA(options).send();
-}
-
-function submitPlaceQuiz(obj) {
-	var params = {
-		action : 'SolveBirthplaceAction',
-		answer : obj.innerHTML,
-		subject : document.getElementById("quizplacesubject").innerHTML
-	}
-
-	var resultID = 'quizplaceanswers';
-
-	var options = {
-		url : KNOWWE.core.util.getURL(params),
-		response : {
-			action : 'insert',
-			ids : [ resultID ]
-		}
-	}
-
-	new _KA(options).send();
-
-}
-
 function getYearQuiz() {
 	var params = {
 		action : 'CreateYearOfBirthAction',

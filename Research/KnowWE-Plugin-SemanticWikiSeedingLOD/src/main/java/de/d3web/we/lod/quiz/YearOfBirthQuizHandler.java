@@ -29,7 +29,7 @@ public class YearOfBirthQuizHandler extends AbstractHTMLTagHandler {
 
 		StringBuffer input = new StringBuffer();
 
-		input.append("<form action='javascript:getYearQuiz()'>"
+		input.append("<form>"
 				+ "<div class='layout' id='quizdatayear'><p class='tags'>Geburtsjahr-Quiz</p>"
 				+ "<SELECT id='quizinputyear'>");
 
@@ -64,7 +64,7 @@ public class YearOfBirthQuizHandler extends AbstractHTMLTagHandler {
 		}
 
 		input.append("</SELECT>"
-				+ "<input type='submit' onclick='getYearQuiz();' value='Quiz it!'>"
+				+ "<input type='button' onclick='getYearQuiz();' value='Quiz it!'>"
 				+ "</div></form>");
 		return input.toString();
 	}

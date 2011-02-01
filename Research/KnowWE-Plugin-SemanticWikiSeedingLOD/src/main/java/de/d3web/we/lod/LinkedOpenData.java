@@ -792,13 +792,19 @@ public class LinkedOpenData {
 									d1 = Double.parseDouble(s.substring(0,
 											s.indexOf(" ")));
 									d2 = Double.parseDouble(s.substring(
-											s.indexOf(" "), s.length()));
-									resultData.get(hermesTag).add("x: " + d1);
-									inverseMap.get(hermesTag).add(normalTitle);
-									inverseMap.get(hermesTag).add("x: " + d1);
-									resultData.get(hermesTag).add("y: " + d2);
-									inverseMap.get(hermesTag).add(normalTitle);
-									inverseMap.get(hermesTag).add("y: " + d2);
+											s.indexOf(" ")));
+
+									if (hermesTag.contains("Latitude")) {
+										resultData.get(hermesTag).add(Double.toString(d1));
+										inverseMap.get(hermesTag).add(normalTitle);
+										inverseMap.get(hermesTag).add(Double.toString(d1));
+									}
+									if (hermesTag.contains("Longtitude")) {
+										resultData.get(hermesTag).add(Double.toString(d2));
+										inverseMap.get(hermesTag).add(normalTitle);
+										inverseMap.get(hermesTag).add(Double.toString(d2));
+									}
+
 								}
 								else {
 									resultData.get(hermesTag).add(s);
@@ -846,16 +852,16 @@ public class LinkedOpenData {
 
 						for (String s : results.get(lhsMappings)) {
 							s = s.substring(0, s.indexOf("^"));
-							if (lhsMappings.equals("dbpprop:latDeg")) {
+							if (lhsMappings.contains("latDeg")) {
 								coords[0] = s + "° ";
 							}
-							if (lhsMappings.equals("dbpprop:latMin")) {
+							if (lhsMappings.contains("latMin")) {
 								coords[1] = s + "’N ";
 							}
-							if (lhsMappings.equals("dbpprop:lonDeg")) {
+							if (lhsMappings.contains("lonDeg")) {
 								coords[2] = s + "° ";
 							}
-							if (lhsMappings.equals("dbpprop:lonMin")) {
+							if (lhsMappings.contains("lonMin")) {
 								coords[3] = s + "’E";
 							}
 						}

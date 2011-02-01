@@ -34,6 +34,7 @@ public class SolveYearOfBirthAction extends AbstractAction {
 		String namespace = UpperOntology.getInstance().getLocaleNS();
 		subject = namespace + subject;
 
+		// TODO: change attribute.
 		String realQuery =
 				"SELECT ?y WHERE {<" + subject + "> lns:GeburtsJahr ?y}";
 
