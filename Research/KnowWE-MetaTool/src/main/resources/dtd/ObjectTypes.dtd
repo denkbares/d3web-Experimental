@@ -4,7 +4,7 @@
 	Author CDATA #IMPLIED
 	CreationDate CDATA #IMPLIED
 	LastEdited CDATA #IMPLIED>
-<!ELEMENT ObjectType ((CustomSectionFinder | RegExSectionFinder | AllTextSectionFinder), (SubtreeHandler|AnonymousSubtreeHandler)*, CustomRenderer?)>
+<!ELEMENT ObjectType (SectionFinder?, (SubtreeHandler|AnonymousSubtreeHandler)*, CustomRenderer?)>
 <!ATTLIST ObjectType
 	ID ID #REQUIRED
 	PackageName CDATA #REQUIRED
@@ -26,10 +26,7 @@
 <!ATTLIST AnonymousSubtreeHandler
 	Name CDATA #REQUIRED
 	SuperType CDATA #REQUIRED>
-<!ELEMENT CustomSectionFinder EMPTY>
-<!ATTLIST CustomSectionFinder
+<!ELEMENT SectionFinder EMPTY>
+<!ATTLIST SectionFinder
 	ClassName CDATA #REQUIRED
-	Package CDATA #REQUIRED>
-<!ELEMENT RegExSectionFinder (RegEx)>
-<!ELEMENT RegEx (#PCDATA)>
-<!ELEMENT AllTextSectionFinder EMPTY>
+	Package CDATA #IMPLIED>

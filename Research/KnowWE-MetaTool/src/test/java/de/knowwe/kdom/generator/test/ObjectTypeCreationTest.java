@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import de.knowwe.kdom.generator.ObjectType;
+import de.knowwe.kdom.generator.ParametrizedClass;
 import de.knowwe.kdom.generator.QualifiedClass;
 
 /**
@@ -103,6 +104,47 @@ public class ObjectTypeCreationTest {
 		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
 		QualifiedClass superType = new QualifiedClass("de.d3web.we.kdom.objects", "TermDefinition");
 		new ObjectType.Builder("01", objectTypeClass, true).setSuperType(superType).build();
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testNullAsSectionFinder() {
+		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
+		new ObjectType.Builder("01", objectTypeClass, false).setSectionFinder(null).build();
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetSectionFinderOnExisting() {
+		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
+		ParametrizedClass sectionFinder = new ParametrizedClass("de.d3web.we.kdom.sectionFinder",
+				"RegExSectionFinder", ".*");
+		new ObjectType.Builder("01", objectTypeClass, true).setSectionFinder(sectionFinder).build();
+	}
+
+	@Test
+	public void testSectionFinder() {
+
+		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
+		ParametrizedClass sectionFinder = new ParametrizedClass("de.d3web.we.kdom.sectionFinder",
+				"RegExSectionFinder", ".*");
+		ObjectType objectType = new ObjectType.Builder("01", objectTypeClass, false)
+												.setSectionFinder(sectionFinder)
+												.build();
+
+		// Mandatory attributes
+		assertEquals("Wrong ID.", "01", objectType.getID());
+		assertEquals("Wrong Class.", "TestType", objectType.getClassName());
+		assertEquals("Wrong Package.", "de.knowwe.kdom", objectType.getPackageName());
+
+		// Custom SectionFinder
+		assertEquals("SectionFinder has wrong Class.", "RegExSectionFinder",
+				objectType.getSectionFinder().getClassName());
+		assertEquals("SectionFinder has wrong package", "de.d3web.we.kdom.sectionFinder",
+				objectType.getSectionFinder().getPackageName());
+		assertEquals("SectionFinder has wrong value", ".*",
+				objectType.getSectionFinder().getValue());
+
+		// Default Attribute
+		assertEquals("Wrong number of children.", 0, objectType.getChildren().size());
 	}
 
 	@Test

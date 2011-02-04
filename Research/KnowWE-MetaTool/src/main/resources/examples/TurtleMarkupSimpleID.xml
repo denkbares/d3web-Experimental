@@ -1,30 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ObjectTypeHierarchy Author="Sebastian Furth">
+<ObjectTypes Author="Sebastian Furth">
 	<ObjectType ID="A0" PackageName="de.knowwe.kdom" ClassName="TurtleMarkupSimple"
 		SuperTypeClass="DefaultKnowWEObjectType" SuperTypePackage="de.d3web.we.kdom">
-		<RegExSectionFinder>
-			<RegEx>{(.*?::.*?)}</RegEx>
-		</RegExSectionFinder>
+		<SectionFinder ClassName="RegExSectionFinder" PackageName="de.d3web.we.kdom.sectionFinder" Value="{(.*?::.*?)}" />
 		<AnonymousSubtreeHandler Name="TurtleMarkupSimpleSubtreeHandler"
 			SuperType="OWLSubtreeHandler" />
 	</ObjectType>
 	<ObjectType ID="B1" PackageName="de.knowwe.kdom" ClassName="Predicate"
 		SuperTypeClass="DefaultKnowWEObjectType" SuperTypePackage="de.d3web.we.kdom"
 		Parent="A0" Position="0">
-		<RegExSectionFinder>
-			<RegEx>...</RegEx>
-		</RegExSectionFinder>
 	</ObjectType>
 	<ObjectType ID="B0" PackageName="de.knowwe.kdom" ClassName="Subject"
 		SuperTypeClass="DefaultKnowWEObjectType" SuperTypePackage="de.d3web.we.kdom"
 		Parent="A0" Position="1">
-		<RegExSectionFinder>
-			<RegEx>...</RegEx>
-		</RegExSectionFinder>
 	</ObjectType>
 	<ObjectType ID="B2" PackageName="de.knowwe.kdom" ClassName="Object"
 		SuperTypeClass="DefaultKnowWEObjectType" SuperTypePackage="de.d3web.we.kdom"
 		Parent="A0" Position="2">
-		<AllTextSectionFinder />
 	</ObjectType>
-</ObjectTypeHierarchy>
+</ObjectTypes>

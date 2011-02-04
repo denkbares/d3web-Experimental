@@ -1,6 +1,5 @@
 package de.knowwe.kdom.generator;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,6 +37,7 @@ public class ObjectType {
 	private final String id;
 	private final QualifiedClass objectType;
 	private final QualifiedClass superType;
+	private final ParametrizedClass sectionFinder;
 	private final boolean exists;
 
 	private final List<ObjectType> children = new LinkedList<ObjectType>();
@@ -46,6 +46,7 @@ public class ObjectType {
 		this.id = b.id;
 		this.objectType = b.objectType;
 		this.superType = b.superType;
+		this.sectionFinder = b.sectionFinder;
 		this.exists = b.exists;
 	}
 
@@ -86,10 +87,21 @@ public class ObjectType {
 	 * which will be extended by this ObjectType.
 	 *
 	 * @created Jan 26, 2011
-	 * @return Super type of the ObjectType
+	 * @return Super type of the ObjectType.
 	 */
 	public QualifiedClass getSuperType() {
 		return this.superType;
+	}
+
+	/**
+	 * Returns the section finder of the ObjectType. Please note that the
+	 * section finder can be null if it wasn't specified in the Builder.
+	 *
+	 * @created Feb 1, 2011
+	 * @return Section Finder of the ObjectType if specified, otherwise null.
+	 */
+	public ParametrizedClass getSectionFinder() {
+		return this.sectionFinder;
 	}
 
 	/**
@@ -100,7 +112,7 @@ public class ObjectType {
 	 * @return All Children of the ObjectType.
 	 */
 	public List<ObjectType> getChildren() {
-		return Collections.unmodifiableList(this.children);
+		return this.children;
 	}
 
 	/**
@@ -188,10 +200,10 @@ public class ObjectType {
 		/*
 		 * Optional attributes
 		 *
-		 * TODO:
 		 */
 		private QualifiedClass superType = new QualifiedClass("de.d3web.we.kdom",
 				"DefaultAbstractKnowWEObjectType");
+		private ParametrizedClass sectionFinder = null;
 
 		/**
 		 * Builder for ObjectTypes. The attributes are the mandatory attributes
@@ -228,6 +240,24 @@ public class ObjectType {
 				throw new IllegalArgumentException();
 			}
 			this.superType = superType;
+			return this;
+		}
+
+		/**
+		 * Can be applied to the Builder to add a section finder to the
+		 * generated ObjectType. Please note that it is not allowed to add a
+		 * section finder to an ObjectType that is marked with
+		 * "already existing".
+		 *
+		 * @created Jan 26, 2011
+		 * @param sectionFinder The specified section finder
+		 * @return Builder object with additional section finder.
+		 */
+		public Builder setSectionFinder(ParametrizedClass sectionFinder) {
+			if (sectionFinder == null || exists) {
+				throw new IllegalArgumentException();
+			}
+			this.sectionFinder = sectionFinder;
 			return this;
 		}
 

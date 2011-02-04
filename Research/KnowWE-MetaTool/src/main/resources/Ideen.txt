@@ -2,7 +2,13 @@
 	- Description, Short Description, plugin.xml
 
 1 	Implementierung ohne GUI
-	- Builer Pattern
+	
+1.1	SectionFinder
+	- QualifiedClass ergänzen (evtl. rename)
+	- Constructor mit varargs (String)
+	- SAX über alle Attribute iterieren
+	
+1.2	DashTree Markup
 
 2	Implementierung als Eclipse Plugin 
 

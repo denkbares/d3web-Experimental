@@ -38,10 +38,13 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import de.knowwe.kdom.generator.ObjectType;
+import de.knowwe.kdom.generator.ParametrizedClass;
 import de.knowwe.kdom.generator.QualifiedClass;
 
 /**
- * SAX based Parser for the XML-Persistence of ObjectTypes.
+ * SAX based Parser for the XML-Persistence of ObjectTypes. Please note that we
+ * assume that the XML-file which will be parsed was validated with a XML-Schema
+ * or DTD.
  *
  * @see ObjectType
  * @author Sebastian Furth
@@ -91,9 +94,9 @@ public class XMLReader implements ObjectTypeReader {
 	}
 
 	/**
-	 * Handler
+	 * SAX-Handler for XML-Persistence of ObjectTypes
 	 *
-	 * @author sebastian
+	 * @author Sebastian Furth
 	 * @created Jan 31, 2011
 	 */
 	private class ObjectTypeHandler extends DefaultHandler {
@@ -112,6 +115,9 @@ public class XMLReader implements ObjectTypeReader {
 				createMinimalBuilder(attributes);
 				changeSuperType(attributes);
 				prepareChildrenAddition(attributes);
+			}
+			if (qName.equalsIgnoreCase("SECTIONFINDER")) {
+				setSectionFinder(attributes);
 			}
 		}
 
@@ -146,6 +152,20 @@ public class XMLReader implements ObjectTypeReader {
 								+ parent
 								+ "\" doesn't exist. Unable to add child. Parents have to parsed before children!");
 			}
+		}
+
+		private void setSectionFinder(Attributes attributes) {
+			if (builder == null) {
+				throw new NullPointerException(
+						"There is no builder! You have specified a sectionFinder outside of an ObjectType element");
+			}
+
+			// Set SectionFinder
+			String packageName = attributes.getValue("PackageName");
+			String className = attributes.getValue("ClassName");
+			String value = attributes.getValue("Value");
+			ParametrizedClass sectionFinder = new ParametrizedClass(packageName, className, value);
+			builder.setSectionFinder(sectionFinder);
 		}
 
 		@Override

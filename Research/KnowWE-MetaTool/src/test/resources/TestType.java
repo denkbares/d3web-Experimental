@@ -21,6 +21,7 @@
 package de.knowwe.kdom;
 
 import de.d3web.we.kdom.objects.TermDefinition;
+import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.TestChildren1;
 import de.knowwe.kdom.TestChildren2;
 import de.knowwe.kdom.TestChildren3;
@@ -32,7 +33,7 @@ public class TestType extends TermDefinition {
 		childrenTypes.add(new TestChildren1());
 		childrenTypes.add(new TestChildren2());
 		childrenTypes.add(new TestChildren3());
-
+		setSectionFinder(new RegexSectionFinder(".*"));
 	}
 
 }

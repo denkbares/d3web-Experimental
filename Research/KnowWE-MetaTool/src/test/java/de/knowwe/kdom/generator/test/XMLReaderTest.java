@@ -1,24 +1,25 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
  *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.kdom.generator.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import de.knowwe.kdom.generator.ObjectType;
+import de.knowwe.kdom.generator.ParametrizedClass;
 import de.knowwe.kdom.generator.QualifiedClass;
 import de.knowwe.kdom.generator.io.XMLReader;
 
@@ -64,6 +66,20 @@ public class XMLReaderTest {
 		assertEquals("SuperType has wrong package.", expected.getSuperType().getPackageName(),
 				actual.getSuperType().getPackageName());
 
+		// Section Finder
+		if (expected.getSectionFinder() != null) {
+			assertEquals("SectionFinder has wrong Class.", expected.getSectionFinder().getClass(),
+					actual.getSectionFinder().getClass());
+			assertEquals("SectionFinder has wrong package.",
+					expected.getSectionFinder().getPackageName(),
+					actual.getSectionFinder().getPackageName());
+			assertEquals("SectionFinder has wrong value.", expected.getSectionFinder().getValue(),
+					actual.getSectionFinder().getValue());
+		}
+		else {
+			assertNull("SectionFinder should be null", actual.getSectionFinder());
+		}
+
 		// Test Children
 		assertEquals("Wrong number of children.", expected.getChildren().size(),
 				actual.getChildren().size());
@@ -84,17 +100,20 @@ public class XMLReaderTest {
 		ObjectType child3 = new ObjectType.Builder("B2", childClass3, true).build();
 
 		QualifiedClass superType = new QualifiedClass("de.d3web.we.kdom.objects", "TermDefinition");
+		ParametrizedClass sectionFinder = new ParametrizedClass("de.d3web.we.kdom.sectionFinder",
+				"RegexSectionFinder", ".*");
 
-		QualifiedClass actualClass = new QualifiedClass("de.knowwe.kdom", "TestType");
-		ObjectType actual = new ObjectType.Builder("A0", actualClass, false)
+		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
+		ObjectType objectType = new ObjectType.Builder("A0", objectTypeClass, false)
 												.setSuperType(superType)
+												.setSectionFinder(sectionFinder)
 												.build();
 
-		actual.addChild(0, child1);
-		actual.addChild(1, child2);
-		actual.addChild(2, child3);
+		objectType.addChild(0, child1);
+		objectType.addChild(1, child2);
+		objectType.addChild(2, child3);
 
-		return actual;
+		return objectType;
 	}
 
 }

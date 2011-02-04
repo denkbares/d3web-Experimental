@@ -29,6 +29,7 @@ import java.io.StringWriter;
 import org.junit.Test;
 
 import de.knowwe.kdom.generator.ObjectType;
+import de.knowwe.kdom.generator.ParametrizedClass;
 import de.knowwe.kdom.generator.QualifiedClass;
 import de.knowwe.kdom.generator.io.JavaWriter;
 
@@ -86,9 +87,13 @@ public class JavaWriterTest {
 
 		QualifiedClass superType = new QualifiedClass("de.d3web.we.kdom.objects", "TermDefinition");
 
+		ParametrizedClass sectionFinder = new ParametrizedClass("de.d3web.we.kdom.sectionFinder",
+				"RegexSectionFinder", ".*");
+
 		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
 		ObjectType objectType = new ObjectType.Builder("01", objectTypeClass, false)
 												.setSuperType(superType)
+												.setSectionFinder(sectionFinder)
 												.build();
 
 		objectType.addChild(0, child1);
