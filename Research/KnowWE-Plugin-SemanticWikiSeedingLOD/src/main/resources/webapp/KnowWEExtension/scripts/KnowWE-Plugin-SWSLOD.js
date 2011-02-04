@@ -338,25 +338,6 @@ function shownhide() {
 	}
 }
 
-function getYearQuiz() {
-	var params = {
-		action : 'CreateYearOfBirthAction',
-		input : document.getElementById("quizinputyear").value
-	}
-
-	var resultID = 'quizdatayear';
-
-	var options = {
-		url : KNOWWE.core.util.getURL(params),
-		response : {
-			action : 'insert',
-			ids : [ resultID ]
-		}
-	}
-
-	new _KA(options).send();
-}
-
 function submitYearQuiz(obj) {
 	var params = {
 		action : 'SolveYearOfBirthAction',

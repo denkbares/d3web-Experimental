@@ -112,35 +112,46 @@ public class MapForConcepts {
 	 * @return code.
 	 */
 	private static String getJavaScript(List<Placemark> placemarks, String solution, String divID) {
+
 		String output = "";
 		output += "<script src=\"http://maps.google.com/maps?file=api&v=2&key=" + apiKey
 				+ "&sensor=false\" type=\"text/javascript\"> </script>";
 		output += "<script type=\"text/javascript\">\n";
 
-		boolean first = true;
-		int zoom = 4;
+		double latAvg = 0;
+		double longiAvg = 0;
+
+		for (Placemark p : placemarks) {
+			latAvg += p.getLatitude();
+			longiAvg += p.getLongitude();
+		}
+
+		latAvg = latAvg / placemarks.size();
+		longiAvg = longiAvg / placemarks.size();
 
 		int i = 0;
 		String pre = "";
 		String messages = "";
 		String locs = "";
 
+		double margin = 0;
+
+		messages = "var messages = [";
+
 		for (Placemark p : placemarks) {
 
 			String latitude = Double.toString(p.getLatitude());
 			String longitude = Double.toString(p.getLongitude());
 
-			if (first) {
-				pre += "if (GBrowserIsCompatible()) {"
-						+ "var map = new GMap2(document.getElementById(\"" + divID + "\"));"
-						+ "map.setCenter(new GLatLng(" + latitude + "," + longitude + ")," + zoom
-						+ ");"
-						+ "map.addControl(new GSmallMapControl(),new GControlPosition(G_ANCHOR_TOP_RIGHT));}";
-				// Mousewheel Zoom
-				pre += "map.enableScrollWheelZoom();";
+			// Zoom
+			double tempLat = Math.abs(latAvg - p.getLatitude());
+			double tempLong = Math.abs(longiAvg - p.getLongitude());
 
-				messages = "var messages = [";
-				first = false;
+			if (tempLat > margin) {
+				margin = tempLat;
+			}
+			if (tempLong > margin) {
+				margin = tempLong;
 			}
 
 			if (p.title.equals(solution)) {
@@ -171,6 +182,40 @@ public class MapForConcepts {
 			messages += ",";
 			i++;
 		}
+
+
+		int zoom = 4;
+
+		// Values from testing.
+
+		if (margin < 12.65) {
+			zoom = 5;
+		}
+		if (margin < 5.95) {
+			zoom = 6;
+		}
+		if (margin < 1.15) {
+			zoom = 8;
+		}
+		if (margin < 0.55) {
+			zoom = 9;
+		}
+
+		pre += "if (GBrowserIsCompatible()) {"
+					+ "var map = new GMap2(document.getElementById(\""
+				+ divID
+				+ "\"));"
+					+ "map.setCenter(new GLatLng("
+					+ latAvg
+					+ ","
+					+ longiAvg
+					+ "),"
+					+ zoom
+					+ ");"
+					+ "map.addControl(new GSmallMapControl(),new GControlPosition(G_ANCHOR_TOP_RIGHT));}";
+		// Mousewheel Zoom
+		pre += "map.enableScrollWheelZoom();";
+
 		output += pre + locs + "</script>";
 		return output;
 	}

@@ -34,7 +34,7 @@ public class SolveYearOfBirthAction extends AbstractAction {
 		String namespace = UpperOntology.getInstance().getLocaleNS();
 		subject = namespace + subject;
 
-		// TODO: change attribute.
+		// TODO: attribute.
 		String realQuery =
 				"SELECT ?y WHERE {<" + subject + "> lns:GeburtsJahr ?y}";
 
@@ -52,16 +52,34 @@ public class SolveYearOfBirthAction extends AbstractAction {
 		catch (QueryEvaluationException e) {
 			e.printStackTrace();
 		}
+		// TODO: remove.
+		result = "211-3-11";
 
-		if (answer.equals(result)) {
-			context.getWriter().write("<p>Ihre Antwort <b>" + answer + "</b> war richtig!</p>");
+		int year;
+		String yearForQuestion = "";
+		if (result.startsWith("-")) {
+			year = Integer.parseInt(result.substring(0, result.indexOf("-", 1)));
+			yearForQuestion = Math.abs(year) + " v. Chr.";
+		}
+		else {
+			year = Integer.parseInt(result.substring(0, result.indexOf("-")));
+			yearForQuestion = year + " n. Chr.";
+		}
+
+		if (answer.equals(yearForQuestion)) {
+			context.getWriter().write(
+					"<p>Ihre Antwort <b>"
+							+ answer
+							+ "</b> war richtig!</p>"
+							+ "<div align='middle'><input type='button' onclick='window.location.reload()' value='Nächste Frage'></div>");
 		}
 		else {
 			context.getWriter().write(
 					"<p>Ihre Antwort <b>" + answer
-							+ "</b> war leider falsch. <br/>Die richtige Antwort lautet: <b>"
-							+ result
-							+ "</b></p>");
+							+ "</b> war leider falsch. <br/>Die richtige Antwort lautete: <b>"
+							+ yearForQuestion
+							+ "</b></p>"
+							+ "<div align='middle'><input type='button' onclick='window.location.reload()' value='Nächste Frage'></div>");
 		}
 	}
 

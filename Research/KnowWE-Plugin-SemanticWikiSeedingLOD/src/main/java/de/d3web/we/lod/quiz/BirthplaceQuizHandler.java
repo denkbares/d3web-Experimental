@@ -130,7 +130,7 @@ public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 		ArrayList<String> concepts = new ArrayList<String>();
 
 		// TODO: only for testing (attribute). delete after changing it on top.
-		realBirthPlace = "Damaskus";
+		realBirthPlace = "Delphi";
 
 		while (counter < optionsCount) {
 			if ((setCorrect == 1 && !concepts.contains(realBirthPlace))
@@ -149,7 +149,8 @@ public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 
 		String card = MapForConcepts.showMapForConcepts(concepts, realBirthPlace);
 
-		options += card + "</div></div>";
+		options += card
+				+ "</div><br/><div align='right'><input type='button' onclick='window.location.reload()' value='Nächste Frage'></div></div>";
 
 		return options;
 	}
