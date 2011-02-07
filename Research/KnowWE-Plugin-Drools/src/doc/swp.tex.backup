@@ -1,0 +1,251 @@
+\documentclass[a4paper,11pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{ngerman}
+
+\usepackage{courier}
+\usepackage{helvet}
+\renewcommand{\rmdefault}{phv} 
+
+\usepackage{geometry}
+\geometry{a4paper,left=2cm,right=2cm, top=2cm, bottom=3cm}
+
+\usepackage{graphicx} 
+
+\usepackage{listings}
+\lstdefinelanguage{drools}{
+  morekeywords={rule,end,when,then},
+  morecomment=[l]{//}, morecomment=[s]{/*}{*/},
+}
+\lstdefinelanguage{droolsfacts}{
+  morekeywords={Input,OC,MC,Num,Solution},
+  morecomment=[l]{//}, morecomment=[s]{/*}{*/},
+}
+
+\usepackage[plainpages=false,pdftitle={Business Rules in Semantic Wikis},pdfauthor={Sebastian Furth, Alexander Legler, Florian Ziegler}]{hyperref}
+
+\begin{document}
+  \pagenumbering{alph}
+  
+  \begin{titlepage}    
+    \begin{center}
+      \large{Julius-Maximilians-Universität Würzburg}
+      
+      \vspace{5cm}
+      
+      \huge{Softwarepraktikum}\\[1cm]
+      \huge{\textbf{Business Rules in Semantic Wikis}}\\[2cm]
+      
+      \LARGE{
+        Sebastian Furth\\[.25cm]
+        Alexander Legler\\[.25cm]
+        Florian Ziegler\\[.25cm]
+      }
+      
+      \vspace{3cm}
+      4. März 2010
+    \end{center}
+  \end{titlepage}
+  
+  \pagenumbering{arabic}
+  
+  \tableofcontents
+  
+  \parindent 0pt
+  \parskip 9pt
+  
+  \chapter{Business Rules}
+
+Eine \textbf{Business Rule} ist ein Ausdruck, der zur Problemlösung innerhalb eines Prozesses oder
+einer abgegrenzten Aufgabenstellung beitragen kann. Business Rules können sowohl in Form von 
+Beschreibungen als auch von Einschränkungen auftreten. 
+
+Es gibt eine Vielzahl von Business Rule Management Systemen (BPMS). Zu den Bekanntesten gehören
+JBOSS Drools, JESS sowie Teile der D3Web Plattform.
+
+In diesem Bericht wird die Integration von JBOSS Drools in ein bestehendes Wissensmanagementsystem
+in Form eines Semantic Web Wikis beschrieben.
+
+  \chapter{Kollaboratives Knowledge Engineering in Wikis}
+  
+  \section{Klassisches und kollaboratives KE}
+
+Das Knowledge Engineering sollte insbesondere in seiner klassischen und der kollaborativen Form
+unterschieden werden. 
+
+Das klassiche Knowledge Engineering baut vorallem auf das Expertenwissen einer begrenzten
+Anzahl von Personen (Community of Practice) und den methodischen Fähigkeiten eines 
+Wissensingenieurs hinsichtlich Formalisierungsaspekten. 
+
+Beim kollaborativen Knowledge Engineering steht der Gedanke des verteilten Wissens im Vordergrund.
+Hierbei sollte besonders an Web-Communities gedacht werden, welche einen großen Wissensbestand, 
+allerdings keine geeignete Plattform zu deren gezielter Verwaltung besitzen.
+
+
+  \section{Möglichkeiten zum kollaborativen KE}
+
+Zur Wissensaquise in kollaborativen Umgebungen eignen sich unterschiedlichste Methoden, wie z.B.
+Web-Portale, Foren und Wikis. Wie am Beispiel der freien Enzyklopädie Wikipedia zu erkennen ist,
+einen sich Wikis hervorragend zur Sammlung von Wissen. Da dieses Wissen allerdings nur informell
+vorliegt, bedarf es einer Möglichkeit zur Formalisierung. Diese Lücke wird durch das Semantic Web Wiki
+KnowWE geschlossen.
+  
+  \section{Was ist KnowWE?}
+
+KnowWE (Knowledge Wiki Environment) ist "`[e]in Semantisches Wiki, welches auf dem open-source Wiki JSPWiki 
+aufbaut. Problemlösungswissen kann direkt im Wiki editiert und ausgeführt werden. Die im Wiki entwickelten 
+Wissensbasen können exportiert und beispielsweise in OEM oder embedded Anwendungen verwendet werden. Weiterhin 
+kann das Wissen über die Ontologiesprache OWL ausgetauscht werden."'
+%TODO: Zitat
+
+    % jspwiki-plugin
+
+  \chapter{Technische Umsetzung}
+
+  \section{KnowWE-Aufbau-Dingens}
+    % jsps, servlets
+    % knowweobjecttypes, taghandler, actions
+    %   ^ ^ ^ ^ ^ 
+    % kdom section
+
+KnowWE basiert auf drei Grundkonzepten: ObjectTypes, Taghandler und Actions.
+
+ObjectTypes übernehmen die Kernaufgabe der Wissensformalisierung. Daneben werden Taghandler insbesondere 
+zum Rendering von Benutzerinteraktionselementen verwendet. Auf das Konzept der Actions wird zurückgegriffen 
+wenn Benutzereingaben verarbeitet werden sollen.
+
+  \section{Terminologie im DroolsPlugin}
+%TODO: Hier bitte das UML Diagramm zur Terminologie einbauen.
+Die Terminologie im DroolsPlugin fußt auf zwei Kernkonzepten: \texttt{Inputs} und \texttt{Values}.
+Bei den Inputs sind \texttt{ChoiceInputs}, \texttt{NumInputs} sowie \texttt{SolutionInputs} zu unterscheiden.
+
+  \subsection{Inputs}
+%TODO OneChoiceInputs sieht scheisse aus
+  \subsubsection{ChoiceInputs}
+\texttt{ChoiceInputs} lassen sich nach der Anzahl von Antwortmöglichkeiten in \texttt{MultipleChoice}
+und \texttt{OneChoiceInputs} klassifizieren. Die Anzahl der Antwortmöglichkeiten definiert
+wieviele Values gleichzeitig in einem \texttt{ChoiceInput} gesetzt sein dürfen. Die Antwortmöglichkeiten
+sind außerdem durch die \texttt{PossibleValues} eingegrenzt, welche eine dem \texttt{ChoiceInput} fest zugeordnete 
+Menge von Values darstellt.
+
+  \subsubsection{SolutionInputs}
+SolutionInputs stellen eine besondere Form von \texttt{NumInputs} dar und sind um eine \texttt{getState()}-Methode ergänzt, 
+welche eine textuelle Repräsentation des momentanen numerischen Werts in Form eines \texttt{SolutionStates} zurückgibt. 
+Der numerische Wert der  \texttt{SolutionInputs} ist das Ergebnis des heuristischen Problemlösungsmechanismus, der 
+mithilfe der Drools-Regeln integriert wurde.
+
+  \subsection{Values}
+
+  
+  \section{Wiki-Markup}
+  
+Für das Markup werden drei Sections definiert, die \textbf{DroolsFactsSection,} welche die Terminologie beinhaltet
+sowie die \textbf{DroolsRulesSection,} welche das Regelwissen bereitstellt.
+  
+  \subsection{DroolsFactsSection}
+  
+  Die Terminologie wird in der DroolsFactsSection durch typisierte \texttt{Input}-Statements definiert. Sämtliche Objekte werden dem
+  \emph{working memory} von Drools zugeführt.
+  
+  \lstset{numbers=left, numberstyle=\tiny, basicstyle=\small\ttfamily, stepnumber=1, numbersep=5pt, language=droolsfacts}
+  \begin{lstlisting}[caption=Beispiel DroolsFactsSection]
+  %%Drools-Facts
+  Input<OC>("Anlasser", {"haengt", "dreht durch", "kratzt"});
+  Input<Num>("Drehzahl");
+  Input<OC>("Auspuffrohrfarbe", {"schwarz", "braun", "keine"});
+  Input<OC>("Auspuffrohrbewertung", {"normal", "abnormal"});
+  Input<Solution>("Anlasser kaputt");
+  Input<Solution>("Chris faehrt");
+  %    
+  \end{lstlisting}
+  
+  \subsubsection{One Choice Inputs}
+  
+  Der One Choice Input stellt eine Einfachauswahlmöglichkeit bereit:
+  
+  \begin{lstlisting}[caption=Beispiel DroolsFactsSection]
+  Input<OC>("Anlasser", {"haengt", "dreht durch", "kratzt"});
+  \end{lstlisting}
+  
+  Der Nutzer kann die Frage Anlasser mit genau einer der Antwortmöglichkeiten haengt, dreht durch oder kratzt beantworten.
+  
+  
+  Hier wird ein OC-Input\footnote{OC: One Choice, Einfachauswahl} \texttt{Anlasser} definiert, welches drei mögliche Antwortalternativen bietet:
+  \texttt{hängt}, \texttt{dreht durch} und \texttt{kratzt}. Bei \texttt{Drehzahl} handelt es sich um einen numerischen Input, der keine Vorgabewerte hat.
+  \texttt{Auspuffrohrfarbe} und \texttt{Auspuffrohrbewertung} sind ähnlich wie \texttt{Anlasser} OC-Inputs.
+  
+  \texttt{Anlasser kaputt} und \texttt{Chris fährt} stellen Lösungs-Inputs dar, sie stellen Lösungen wiederum in Input-Form da, um eine Abstraktionsmöglichkeit
+  innerhalb des Systems zu gewährleisten.
+  
+  Gültige Input-Typen sind \texttt{OC}, \texttt{MC}\footnote{MC: Multiple Choice, Mehrfachauswahl}, \texttt{Num} und \texttt{Solution}.
+  
+  \subsection{DroolsRulesSection}
+  
+  In der DroolsRulesSection wird das Regelwissen formalisiert.
+  
+  \lstset{numbers=left, numberstyle=\tiny, basicstyle=\small\ttfamily, stepnumber=1, numbersep=5pt, language=drools}  
+  \begin{lstlisting}[caption=Beispiel DroolsRulesSection]
+  %%Drools-Rules
+  rule "Anlasser kaputt"
+  	when
+  		// Variablen
+  		$solution : SolutionInput(name == "Anlasser kaputt")
+  		$value : Value(value == "haengt")
+  		// Bedingung
+  		Input(name == "Anlasser" && values contains $value)
+  	then
+  		// Aktion
+  		$solution.setValue(P1);
+  end
+
+  rule "Kiste fliegt auseinander"
+  	when
+  		$solution : SolutionInput(name == "Chris faehrt")
+  		Input(name == "Drehzahl" && numValue >= 10000)
+  	then
+  		$solution.setValue(P7);
+  end
+
+  rule "Abstraktion"
+  	when
+  		$abstraktion : Input(name = "Auspuffrohrbewertung")	
+  		$value : Value(value == "schwarz")
+  		Input(name == "Auspuffrohrfarbe && values contains $value)
+  	then
+  		$abstraktion.setValue("abnormal")
+  end
+
+  rule "Abstraktionsfolge"
+  	when
+  		$solution : SolutionInput(name = "Luftfilter kaputt")
+  		$value : Value(value == "abnormal")
+  		Input(name == "Auspuffrohrbewertung" && values contains $value)
+  	then
+  		$solution.setValue(P7) 
+  end
+  %
+  \end{lstlisting}
+
+  \subsection{DroolsSessionSection}
+
+
+  \section{Die Drools Shell}
+    % seitenfüllender screenshot!!!!!
+  \subsection{serverseitige Verarbeitung}
+
+  \subsection{clientseitige Verarbeitung}
+
+  \subsection{Benutzung}
+  \subsubsection{Verfügbare Kommandos}
+    % store und load besonders beschreiben...
+
+  \subsubsection{Autocompletion}
+  
+  
+  \section{UML}
+  \subsection{OOA-Model}
+  
+  \includegraphics[width=\textwidth]{img/ooa.png}
+  
+  
+\end{document}

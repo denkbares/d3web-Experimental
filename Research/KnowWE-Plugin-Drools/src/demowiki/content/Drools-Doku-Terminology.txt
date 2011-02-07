@@ -1,0 +1,51 @@
+!!! Dokumentation - Terminologie
+
+[{TableOfContents}]
+
+!! Allgemeines
+----
+Die Terminologie im DroolsPlugin fußt auf zwei Kernkonzepten: Inputs und Values. Inputs kapseln zumeist die im System vorhandenen Fragen und bieten je nach Ausprägung verschiedene Möglichkeiten für die Beantwortung an. Values sind Objektcontainer, die zum Setzen von Werten in Inputs verwendet werden.
+
+!! Inputs
+----
+Bei den Inputs sind ChoiceInput, NumInput sowie SolutionInput zu unterscheiden.
+
+!ChoiceInput
+----
+Ein ChoiceInput lässt sich nach der Anzahl von Antwortmöglichkeiten in MultipleChoiceInput
+und OneChoiceInput klassifizieren. Die Anzahl der Antwortmöglichkeiten definiert wieviele Values
+gleichzeitig in einem ChoiceInput gesetzt sein dürfen. Die Antwortmöglichkeiten sind außerdem
+durch die PossibleValues eingegrenzt, welche eine dem ChoiceInput fest zugeordnete Menge
+von Values darstellt.
+
+!NumInput
+----
+Ein NumInput kann nur einen einzigen numerischen Wert in Form eines NumValues aufnehmen.
+
+!SolutionInput
+----
+Ein SolutionInput stellt eine besondere Form von NumInput dar und sind um eine getState()-
+Methode ergänzt, welche eine textuelle Repräsentation des momentanen numerischen Werts in
+Form eines SolutionStates zurückgibt. Der numerischeWert der SolutionInput ist das Ergebnis
+des heuristischen Problemlösungsmechanismus, der mithilfe der Drools-Regeln integriert wurde.
+Der Problemlösungsmechanismus beruht dabei auf den Werten der folgenden Tabelle:
+
+
+|| Score | N7 | N6 | N5 | N4 | N3 | N2 | N1 | P1 | P2 | P3 | P4 | P5 | P6 | P7
+|| num. Wert | -999 | -80 | -40 | -20 | -10 | -5 | -2 | 2 | 5 | 10 | 20 | 40 | 80 | 999
+
+|| SolutionState | EXCLUDED | UNCLEAR | SUGGESTED | ESTABLISHED
+
+Abhängig von der Regel werden dem Score Punkte hinzugefügt oder abgezogen. Der State ergibt
+sich aus der momentanen Gesamtpunktzahl. Initial ist der Score eines SolutionInputs 0.
+
+!! Values
+----
+Das DroolsPlugin definiert die NumValue und TextValue-Typen. Ein TextValue nimmt einen beliebigen
+String-Inhalt auf und kann einem ChoiceInput zugeordnet werden, Der NumValue hat
+zwei Funktionen: Er kapselt einen double-Wert zum einen für die Verwendung mit einem NumInput
+und zugleich stellt er die Scoring-Grundlage für die heuristische Problemlösung im SolutionInput.
+
+!! UML-Diagramm
+----
+[{Image src='Terminologie.png' width='100%'}]

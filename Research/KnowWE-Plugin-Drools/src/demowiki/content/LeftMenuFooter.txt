@@ -1,0 +1,4 @@
+----
+__KnowWE-Plugin-Drools__
+----
+

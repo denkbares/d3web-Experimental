@@ -1,0 +1,7 @@
+[{KnowWEPlugin taghandlerlist}]
+
+
+	[{KnowWEPlugin listinstalledmodules}]
+
+
+	[{KnowWEPlugin describemodule}]

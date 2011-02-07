@@ -1,0 +1,685 @@
+!!! Drools Demo - Car Diagnosis
+ 
+[{KnowWEPlugin drools}]
+
+%%DroolsFacts
+Input<OC>("Battery o.k.?", {"yes", "no"});
+Input<OC>("Ignition timing o.k.?", {"yes", "no"});
+Input<OC>("Idle speed system o.k.?", {"yes", "no"});
+Input<Num>("Year of construction");
+Input<OC>("Air filter o.k.?", {"yes", "no"});
+Input<OC>("Air intake system o.k.?", {"yes", "no"});
+Input<OC>("Starter", {"does not turn over", "turns over"});
+Input<OC>("Engine start", {"engine barely starts", "engine starts", "does not start"});
+Input<OC>("Make of car", {"VW", "Opel", "Mercedes Benz", "BMW", "Porsche", "Fiat", "Toyota", "Mazda", "Other"});
+Input<MC>("Driving", {"insufficient power on partial load", "insufficient power on full load", "unsteady idle speed", "low idle speed", "delayed take-off", "weak acceleration", "no /else"});
+Input<Num>("Average mileage /100km");
+Input<Num>("Num. Mileage evaluation");
+Input<OC>("Mileage evaluation", {"slightly increased", "normal", "increased"});
+Input<Num>("Real mileage  /100km");
+Input<OC>("Exhaust fumes", {"black", "blue", "invisible"});
+Input<OC>("Exhaust pipe color", {"brown", "grey", "light grey", "sooty black"});
+Input<OC>("Exhaust pipe color evaluation", {"abnormal", "normal"});
+Input<OC>("Fuel", {"diesel", "unleaded gasoline"});
+Input<OC>("Engine noises", {"knocking", "ringing", "no /else"});
+Input<Solution>("Damaged idle speed system");
+Input<Solution>("Leaking air intake system");
+Input<Solution>("Clogged air filter");
+Input<Solution>("Bad ignition timing");
+Input<Solution>("Empty battery");
+
+%
+
+%%DroolsRules
+rule "R7"
+  when
+    // This rule was converted manually
+    $real : Input(name == "Real mileage  /100km" && numValue != 0)
+    $average : Input(name == "Average mileage /100km" && numValue > 0.0)
+    $input : NumInput(name == "Num. Mileage evaluation")
+  then
+    $input.setValue($real.getNumValue() / $average.getNumValue() * 100);
+    System.out.println("Fired Rule R7");
+end
+
+rule "R51"
+  when
+    $value : Value(value == "no")
+    Input(name == "Battery o.k.?" && values contains $value)
+    $solution : SolutionInput(name == "Empty battery")
+  then
+    $solution.setValue(P7);
+    System.out.println("Fired Rule R51");
+end
+
+rule "R52"
+  when
+    $value : Value(value == "yes")
+    Input(name == "Battery o.k.?" && values contains $value)
+    $solution : SolutionInput(name == "Empty battery")
+  then
+    $solution.setValue(N7);
+    System.out.println("Fired Rule R52");
+end
+
+rule "R53"
+  when
+    $value : Value(value == "does not turn over")
+    Input(name == "Starter" && values contains $value)
+    $solution : SolutionInput(name == "Empty battery")
+  then
+    $solution.setValue(P5);
+    System.out.println("Fired Rule R53");
+end
+
+rule "R54"
+  when
+    $value : Value(value == "turns over")
+    Input(name == "Starter" && values contains $value)
+    $solution : SolutionInput(name == "Empty battery")
+  then
+    $solution.setValue(N4);
+    System.out.println("Fired Rule R54");
+end
+
+rule "R55_1_2"
+  when
+    $value1 : Value(value == "engine barely starts")
+    Input(name == "Engine start" && values contains $value1)
+    $solution : SolutionInput(name == "Empty battery")
+  then
+    $solution.setValue(P5);
+    System.out.println("Fired Rule R55_1_2");
+end
+
+rule "R55_2_2"
+  when
+    $value2 : Value(value == "does not start")
+    Input(name == "Engine start" && values contains $value2)
+    $solution : SolutionInput(name == "Empty battery")
+  then
+    $solution.setValue(P5);
+    System.out.println("Fired Rule R55_2_2");
+end
+
+rule "R56"
+  when
+    $value : Value(value == "engine starts")
+    Input(name == "Engine start" && values contains $value)
+    $solution : SolutionInput(name == "Empty battery")
+  then
+    $solution.setValue(N5);
+    System.out.println("Fired Rule R56");
+end
+
+rule "R23"
+  when
+    $value : Value(value == "yes")
+    Input(name == "Air intake system o.k.?" && values contains $value)
+    $solution : SolutionInput(name == "Leaking air intake system")
+  then
+    $solution.setValue(N7);
+    System.out.println("Fired Rule R23");
+end
+
+rule "R24"
+  when
+    $value : Value(value == "no")
+    Input(name == "Air intake system o.k.?" && values contains $value)
+    $solution : SolutionInput(name == "Leaking air intake system")
+  then
+    $solution.setValue(P7);
+    System.out.println("Fired Rule R24");
+end
+
+rule "R16"
+  when
+    $value1 : Value(value == "insufficient power on full load")
+    Input(name == "Driving" && values.size > 0  && values not contains $value1)
+    $value3 : Value(value == "unsteady idle speed")
+    Input(name == "Driving" && values.size > 0 && values not contains $value3)
+    $value4 : Value(value == "insufficient power on partial load")
+    Input(name == "Driving" && values.size > 0 && values not contains $value4)
+    $solution : SolutionInput(name == "Leaking air intake system")
+  then
+    $solution.setValue(N3);
+    System.out.println("Fired Rule R16");
+end
+
+rule "R17"
+  when
+    $value : Value(value == "insufficient power on full load")
+    Input(name == "Driving" && values contains $value)
+    $solution : SolutionInput(name == "Leaking air intake system")
+  then
+    $solution.setValue(P5);
+    System.out.println("Fired Rule R17");
+end
+
+rule "R18"
+  when
+    $value : Value(value == "insufficient power on partial load")
+    Input(name == "Driving" && values contains $value)
+    $solution : SolutionInput(name == "Leaking air intake system")
+  then
+    $solution.setValue(P3);
+    System.out.println("Fired Rule R18");
+end
+
+rule "R19"
+  when
+    $value : Value(value == "unsteady idle speed")
+    Input(name == "Driving" && values contains $value)
+    $solution : SolutionInput(name == "Leaking air intake system")
+  then
+    $solution.setValue(P1);
+    System.out.println("Fired Rule R19");
+end
+
+rule "R20"
+  when
+    $value : Value(value == "slightly increased")
+    Input(name == "Mileage evaluation" && values contains $value)
+    $solution : SolutionInput(name == "Leaking air intake system")
+  then
+    $solution.setValue(P3);
+    System.out.println("Fired Rule R20");
+end
+
+rule "R21"
+  when
+    $value : Value(value == "normal")
+    Input(name == "Mileage evaluation" && values contains $value)
+    $solution : SolutionInput(name == "Leaking air intake system")
+  then
+    $solution.setValue(N4);
+    System.out.println("Fired Rule R21");
+end
+
+rule "R22"
+  when
+    $value : Value(value == "increased")
+    Input(name == "Mileage evaluation" && values contains $value)
+    $solution : SolutionInput(name == "Leaking air intake system")
+  then
+    $solution.setValue(P4);
+    System.out.println("Fired Rule R22");
+end
+
+rule "R10"
+  when
+    $value : Value(value == "engine barely starts")
+    Input(name == "Engine start" && values.size > 0 && values not contains $value)
+    $solution : SolutionInput(name == "Damaged idle speed system")
+  then
+    $solution.setValue(N5);
+    System.out.println("Fired Rule R10");
+end
+
+rule "R11"
+  when
+    $value : Value(value == "engine barely starts")
+    Input(name == "Engine start" && values contains $value)
+    $solution : SolutionInput(name == "Damaged idle speed system")
+  then
+    $solution.setValue(P5);
+    System.out.println("Fired Rule R11");
+end
+
+rule "R12"
+  when
+    $value : Value(value == "unsteady idle speed")
+    Input(name == "Driving" && values.size > 0 && values not contains $value)
+    $solution : SolutionInput(name == "Damaged idle speed system")
+  then
+    $solution.setValue(N1);
+    System.out.println("Fired Rule R12");
+end
+
+rule "R13"
+  when
+    $value : Value(value == "unsteady idle speed")
+    Input(name == "Driving" && values contains $value)
+    $solution : SolutionInput(name == "Damaged idle speed system")
+  then
+    $solution.setValue(P1);
+    System.out.println("Fired Rule R13");
+end
+
+rule "R14"
+  when
+    $value : Value(value == "low idle speed")
+    Input(name == "Driving" && values.size > 0 && values not contains $value)
+    $solution : SolutionInput(name == "Damaged idle speed system")
+  then
+    $solution.setValue(N4);
+    System.out.println("Fired Rule R14");
+end
+
+rule "R15"
+  when
+    $value : Value(value == "low idle speed")
+    Input(name == "Driving" && values contains $value)
+    $solution : SolutionInput(name == "Damaged idle speed system")
+  then
+    $solution.setValue(P4);
+    System.out.println("Fired Rule R15");
+end
+
+rule "R8"
+  when
+    $value : Value(value == "yes")
+    Input(name == "Idle speed system o.k.?" && values contains $value)
+    $solution : SolutionInput(name == "Damaged idle speed system")
+  then
+    $solution.setValue(N7);
+    System.out.println("Fired Rule R8");
+end
+
+rule "R9"
+  when
+    $value : Value(value == "no")
+    Input(name == "Idle speed system o.k.?" && values contains $value)
+    $solution : SolutionInput(name == "Damaged idle speed system")
+  then
+    $solution.setValue(P7);
+    System.out.println("Fired Rule R9");
+end
+
+rule "R31"
+  when
+    $value : Value(value == "abnormal")
+    Input(name == "Exhaust pipe color evaluation" && values contains $value)
+    $solution : SolutionInput(name == "Clogged air filter")
+  then
+    $solution.setValue(P5);
+    System.out.println("Fired Rule R31");
+end
+
+rule "R32"
+  when
+    $value : Value(value == "normal")
+    Input(name == "Exhaust pipe color evaluation" && values contains $value)
+    $solution : SolutionInput(name == "Clogged air filter")
+  then
+    $solution.setValue(N5);
+    System.out.println("Fired Rule R32");
+end
+
+rule "R38"
+  when
+    $value1 : Value(value == "engine barely starts")
+    Input(name == "Engine start" && values.size > 0 && values not contains $value1)
+    $value2 : Value(value == "does not start")
+    Input(name == "Engine start" && values.size > 0 && values not contains $value2)
+    $solution : SolutionInput(name == "Clogged air filter")
+  then
+    $solution.setValue(N4);
+    System.out.println("Fired Rule R38");
+end
+
+rule "R39_3_2"
+  when
+    $value3 : Value(value == "engine barely starts")
+    Input(name == "Engine start" && values contains $value3)
+    $solution : SolutionInput(name == "Clogged air filter")
+  then
+    $solution.setValue(P4);
+    System.out.println("Fired Rule R39_3_2");
+end
+
+rule "R39_4_2"
+  when
+    $value4 : Value(value == "does not start")
+    Input(name == "Engine start" && values contains $value4)
+    $solution : SolutionInput(name == "Clogged air filter")
+  then
+    $solution.setValue(P4);
+    System.out.println("Fired Rule R539_4_2");
+end
+
+rule "R40"
+  when
+    $value1 : Value(value == "engine barely starts")
+    Input(name == "Engine start" && values.size > 0 && values not contains $value1)
+    $value2 : Value(value == "does not start")
+    Input(name == "Engine start" && values.size > 0 && values not contains $value2)
+    $solution : SolutionInput(name == "Bad ignition timing")
+  then
+    $solution.setValue(N5);
+    System.out.println("Fired Rule R40");
+end
+
+rule "R41_3_2"
+  when
+    $value3 : Value(value == "engine barely starts")
+    Input(name == "Engine start" && values contains $value3)
+    $solution : SolutionInput(name == "Bad ignition timing")
+  then
+    $solution.setValue(P5);
+    System.out.println("Fired Rule R41_3_2");
+end
+
+rule "R41_4_2"
+  when
+    $value4 : Value(value == "does not start")
+    Input(name == "Engine start" && values contains $value4)
+    $solution : SolutionInput(name == "Bad ignition timing")
+  then
+    $solution.setValue(P5);
+    System.out.println("Fired Rule R541_4_2");
+end
+
+rule "R33"
+  when
+    $value1 : Value(value == "unleaded gasoline")
+    Input(name == "Fuel" && values contains $value1)
+    $value2 : Value(value == "black")
+    Input(name == "Exhaust fumes" && values contains $value2)
+    $solution : SolutionInput(name == "Clogged air filter")
+  then
+    $solution.setValue(P5);
+    System.out.println("Fired Rule R33");
+end
+
+rule "R25"
+  when
+    $value : Value(value == "yes")
+    Input(name == "Air filter o.k.?" && values contains $value)
+    $solution : SolutionInput(name == "Clogged air filter")
+  then
+    $solution.setValue(N7);
+    System.out.println("Fired Rule R25");
+end
+
+rule "R26"
+  when
+    $value : Value(value == "no")
+    Input(name == "Air filter o.k.?" && values contains $value)
+    $solution : SolutionInput(name == "Clogged air filter")
+  then
+    $solution.setValue(P7);
+    System.out.println("Fired Rule R26");
+end
+
+rule "R27"
+  when
+    $value1 : Value(value == "weak acceleration")
+    Input(name == "Driving" && values.size > 0 && values not contains $value1)
+    $value2 : Value(value == "unsteady idle speed")
+    Input(name == "Driving" && values.size > 0 && values not contains $value2)
+    $solution : SolutionInput(name == "Clogged air filter")
+  then
+    $solution.setValue(N5);
+    System.out.println("Fired Rule R27");
+end
+
+rule "R28"
+  when
+    $value : Value(value == "unsteady idle speed")
+    Input(name == "Driving" && values contains $value)
+    $solution : SolutionInput(name == "Clogged air filter")
+  then
+    $solution.setValue(P4);
+    System.out.println("Fired Rule R28");
+end
+
+rule "R29"
+  when
+    $value : Value(value == "weak acceleration")
+    Input(name == "Driving" && values contains $value)
+    $solution : SolutionInput(name == "Clogged air filter")
+  then
+    $solution.setValue(P5);
+    System.out.println("Fired Rule R29");
+end
+
+rule "R30"
+  when
+    $value : Value(value == "turns over")
+    Input(name == "Starter" && values.size > 0 && values not contains $value)
+    $solution : SolutionInput(name == "Clogged air filter")
+  then
+    $solution.setValue(N6);
+    System.out.println("Fired Rule R30");
+end
+
+rule "R34"
+  when
+    $value : Value(value == "black")
+    Input(name == "Exhaust fumes" && values.size > 0 && values not contains $value)
+    $solution : SolutionInput(name == "Clogged air filter")
+  then
+    $solution.setValue(N5);
+    System.out.println("Fired Rule R34");
+end
+
+rule "R35"
+  when
+    $value : Value(value == "slightly increased")
+    Input(name == "Mileage evaluation" && values contains $value)
+    $solution : SolutionInput(name == "Clogged air filter")
+  then
+    $solution.setValue(P3);
+    System.out.println("Fired Rule R35");
+end
+
+rule "R36"
+  when
+    $value : Value(value == "normal")
+    Input(name == "Mileage evaluation" && values contains $value)
+    $solution : SolutionInput(name == "Clogged air filter")
+  then
+    $solution.setValue(N4);
+    System.out.println("Fired Rule R36");
+end
+
+rule "R37"
+  when
+    $value : Value(value == "increased")
+    Input(name == "Mileage evaluation" && values contains $value)
+    $solution : SolutionInput(name == "Clogged air filter")
+  then
+    $solution.setValue(P4);
+    System.out.println("Fired Rule R37");
+end
+
+rule "R47"
+  when
+    $value : Value(value == "yes")
+    Input(name == "Ignition timing o.k.?" && values contains $value)
+    $solution : SolutionInput(name == "Bad ignition timing")
+  then
+    $solution.setValue(N7);
+    System.out.println("Fired Rule R47");
+end
+
+rule "R48"
+  when
+    $value : Value(value == "no")
+    Input(name == "Ignition timing o.k.?" && values contains $value)
+    $solution : SolutionInput(name == "Bad ignition timing")
+  then
+    $solution.setValue(P7);
+    System.out.println("Fired Rule R48");
+end
+
+rule "R46"
+  when
+    $value : Value(value == "turns over")
+    Input(name == "Starter" && values.size > 0 && values not contains $value)
+    $solution : SolutionInput(name == "Bad ignition timing")
+  then
+    $solution.setValue(N6);
+    System.out.println("Fired Rule R46");
+end
+
+rule "R49_1_2"
+  when
+    $value1 : Value(value == "knocking")
+    Input(name == "Engine noises" && values contains $value1)
+    $solution : SolutionInput(name == "Bad ignition timing")
+  then
+    $solution.setValue(P5);
+    System.out.println("Fired Rule R49_1_2");
+end
+
+rule "R49_2_2"
+  when
+    $value2 : Value(value == "ringing")
+    Input(name == "Engine noises" && values contains $value2)
+    $solution : SolutionInput(name == "Bad ignition timing")
+  then
+    $solution.setValue(P5);
+    System.out.println("Fired Rule R49_2_2");
+end
+
+rule "R50"
+  when
+    $value1 : Value(value == "knocking")
+    Input(name == "Engine noises" && values.size > 0 && values not contains $value1)
+    $value2 : Value(value == "ringing")
+    Input(name == "Engine noises" && values.size > 0 && values not contains $value2)
+    $solution : SolutionInput(name == "Bad ignition timing")
+  then
+    $solution.setValue(N3);
+    System.out.println("Fired Rule R50");
+end
+
+rule "R42"
+  when
+    $value1 : Value(value == "weak acceleration")
+    Input(name == "Driving" && values.size > 0 && values not contains $value1)
+    $value3 : Value(value == "unsteady idle speed")
+    Input(name == "Driving" && values.size > 0 && values not contains $value3)
+    $value4 : Value(value == "delayed take-off")
+    Input(name == "Driving" && values.size > 0 && values not contains $value4)
+    $solution : SolutionInput(name == "Bad ignition timing")
+  then
+    $solution.setValue(N4);
+    System.out.println("Fired Rule R42");
+end
+
+rule "R43"
+  when
+    $value : Value(value == "unsteady idle speed")
+    Input(name == "Driving" && values contains $value)
+    $solution : SolutionInput(name == "Bad ignition timing")
+  then
+    $solution.setValue(P1);
+    System.out.println("Fired Rule R43");
+end
+
+rule "R44"
+  when
+    $value : Value(value == "delayed take-off")
+    Input(name == "Driving" && values contains $value)
+    $solution : SolutionInput(name == "Bad ignition timing")
+  then
+    $solution.setValue(P3);
+    System.out.println("Fired Rule R44");
+end
+
+rule "R45"
+  when
+    $value : Value(value == "weak acceleration")
+    Input(name == "Driving" && values contains $value)
+    $solution : SolutionInput(name == "Bad ignition timing")
+  then
+    $solution.setValue(P4);
+    System.out.println("Fired Rule R45");
+end
+
+rule "R1"
+  when
+    $value1 : Value(value == "sooty black")
+    Input(name == "Exhaust pipe color" && values contains $value1)
+    $value2 : Value(value == "unleaded gasoline")
+    Input(name == "Fuel" && values contains $value2)
+    $input : ChoiceInput(name == "Exhaust pipe color evaluation")
+  then
+    $input.setValue("abnormal");
+    System.out.println("Fired Rule R1");
+end
+
+rule "R2"
+  when
+    $value1 : Value(value == "sooty black")
+    Input(name == "Exhaust pipe color" && values contains $value1)
+    $value2 : Value(value == "diesel")
+    Input(name == "Fuel" && values contains $value2)
+    $input : ChoiceInput(name == "Exhaust pipe color evaluation")
+  then
+    $input.setValue("normal");
+    System.out.println("Fired Rule R2");
+end
+
+rule "R4"
+  when
+    Input(name == "Num. Mileage evaluation" && numValue <= 130.0)
+    Input(name == "Num. Mileage evaluation" && numValue >= 110.0)
+    $input : ChoiceInput(name == "Mileage evaluation")
+  then
+    $input.setValue("slightly increased");
+    System.out.println("Fired Rule R4");
+end
+
+rule "R5"
+  when
+    Input(name == "Num. Mileage evaluation" && numValue > 130.0)
+    $input : ChoiceInput(name == "Mileage evaluation")
+  then
+    $input.setValue("increased");
+    System.out.println("Fired Rule R5");
+end
+
+rule "R6"
+  when
+    Input(name == "Num. Mileage evaluation" && numValue > 0 && numValue < 110.0)
+    $input : ChoiceInput(name == "Mileage evaluation")
+  then
+    $input.setValue("normal");
+    System.out.println("Fired Rule R6");
+end
+
+rule "R3_1_2"
+  when
+    $value1 : Value(value == "light grey")
+    Input(name == "Exhaust pipe color" && values contains $value1)
+    $input : ChoiceInput(name == "Exhaust pipe color evaluation")
+  then
+    $input.setValue("normal");
+    System.out.println("Fired Rule R3_1_2");
+end
+
+rule "R3_2_2_3_2"
+  when
+    $value3 : Value(value == "grey")
+    Input(name == "Exhaust pipe color" && values contains $value3)
+    $input : ChoiceInput(name == "Exhaust pipe color evaluation")
+  then
+    $input.setValue("normal");
+    System.out.println("Fired Rule R3_2_2_3_2");
+end
+
+rule "R3_2_2_4_2"
+  when
+    $value4 : Value(value == "brown")
+    Input(name == "Exhaust pipe color" && values contains $value4)
+    $input : ChoiceInput(name == "Exhaust pipe color evaluation")
+  then
+    $input.setValue("normal");
+    System.out.println("Fired Rule R3_2_2_4_2");
+end
+
+%
+%%DroolsSession
+get Clogged air filter
+set Exhaust fumes = black
+set Fuel = unleaded gasoline
+set Engine start = engine barely starts
+fire
+get Clogged air filter
+
+@Name: CloggedAirFilter_Suggested
+%

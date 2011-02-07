@@ -162,6 +162,7 @@
 		<module>KnowWE-Plugin-SemanticWikiSeedingLOD</module>
 		<module>KnowWE-Plugin-Renaming</module>
 		<module>KnowWE-MetaTool</module>
+		<module>KnowWE-Plugin-Drools</module>
 	</modules>
 	<repositories>
 		<repository>

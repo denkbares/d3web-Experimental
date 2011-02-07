@@ -1,0 +1,49 @@
+!!! Dokumentation - Shell
+
+[{TableOfContents}]
+
+!! Allgemeines
+----
+
+[{Image src='shell.png' align='center' width='100%' }]
+
+Die Drools Shell ist das zentrale Interaktionselemnt des DroolsPlugins. Über sie werden sämtliche
+Eingaben und Ausgaben getätigt:
+
+Ausgangspunkt bildet der DroolsTagHandler welcher ein HTML-Formular mit Textfeld sowie drei Buttons „Execute“, „-/+“ und „Batch“ in die Wiki-Seite rendert. Das Formular kann über den „Execute“-Button oder alternativ per Tastendruck auf <Enter> abgeschickt werden. Der „-/+“-Button blendet die History der Shell aus bzw. wieder ein. Ein Klick auf den „Batch“-Button führt dazu, dass sich die Eingabezeile in ein Eingabefeld verwandelt, in welches mehrere Befehle zeilenweise eingegeben werden können. Zu beachten ist hierbei, dass sich das Formular nicht mehr <Enter> abschicken lässt, sondern <Shift> + <Enter> gedrückt werden müssen.
+
+Die vom Benutzer eingegebenen Daten werden zunächst von den hinterlegten JavaScript-Funktionen entgegengenommen und anschließend per AJAX1 an die DroolsAction und DroolsCodeCompletionAction gesendet und dort verarbeitet. Die DroolsAction übernimmt dabei die Interaktion mit der Terminologie und den hinterlegetne Regeln. Auf die Funktionsweise der DroolsCodeCompletionAction wird in einem separaten Punkt genauer eingegangen.
+
+Das Ergebnis der Verarbeitung wird KnowWE-typisch über die KnowWE.jsp an den Client ausgegeben. Von dort werden sie dann wieder per Javascript verarbeitet und auf der Konsole ausgegeben.
+
+!! Benutzung
+----
+Im folgenden wird die Benutzung der Drools Shell erläutert.
+
+! Verfügbare Kommandos
+----
+||Komanndo ||Erklärung
+|help |Gibt alle verfügbaren Befehle auf der Drools Shell aus.
+|get <Input> |Gibt den aktuellen Wert (Value) eines Inputs aus.
+|set <Input> = <Value> |Setzt den Wert eines Inputs auf den übergebenen Value.
+|fire |Feuert alle passenden Regeln.
+|reset |Setzt alle Inputs auf ihre Ausgangswerte zurück.
+|clear |Leert die Konsole.
+|store <Name> |Speichert alle zuvor eingegebene Befehle unter dem eingegebenen Namen als DroolsSession.
+|load <Name> |Lädt die zuvor gespeicherte DroolsSession <Name> in die aktuelle Sitzung.
+
+! Autocompletion
+----
+Zur einfachen Bedienung der Drools-Shell wird der Benutzer durch die DroolsCodeCompletionAction
+bei seinen Eingaben unterstützt. Dies geschieht im wesentlichen dadurch, dass zu seinen bisherigen
+Eingaben Vorschläge unterhalb der Konsole eingeblendet werden.
+
+[{Image src='shell-autocomplete.png' align='center' width='100%' }]
+
+Wie dem obigen Beispiel zu entnehmen ist, wird die Benutzereingabe "A" durch die
+Vorschläge "Average mileage /100km", "Air filter o.k.?", "Air intake system o.k.?" unterstützt. Die Navigation innerhalb der Vorschläge erfolgt über die
+Pfeiltasten.
+
+!! UML-Diagramm
+----
+[{Image src='actionuml.png' align='center' width='100%' }]

@@ -1,0 +1,326 @@
+!!! Drools Demo - Thermostat
+
+[{KnowWEPlugin drools}]
+
+%%DroolsFacts
+Input<OC>("Season", {"summer", "autumn", "winter", "spring"});
+Input<OC>("Operation", {"during business hours", "not during business hours"});
+Input<OC>("Month", {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"});
+Input<OC>("Day", {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"});
+Input<OC>("Time", {"between 9am and 5pm", "before 9am", "after 5pm"});
+Input<OC>("Today", {"workday", "weekend"});
+Input<Solution>("Thermostat Setting");
+Input<Solution>("set thermostat to 14 degrees");
+Input<Solution>("set thermostat to 15 degrees");
+Input<Solution>("set thermostat to 16 degrees");
+Input<Solution>("set thermostat to 18 degrees");
+Input<Solution>("set thermostat to 20 degrees");
+Input<Solution>("set thermostat to 24 degrees");
+Input<Solution>("set thermostat to 27 degrees");
+
+%
+
+%%DroolsRules
+rule "R12"
+  when
+    $value1 : Value(value == "not during business hours")
+    Input(name == "Operation" && values contains $value1)
+    $value2 : Value(value == "spring")
+    Input(name == "Season" && values contains $value2)
+    $solution : SolutionInput(name == "set thermostat to 15 degrees")
+  then
+    $solution.setValue(P7);
+end
+
+rule "R13"
+  when
+    $value1 : Value(value == "during business hours")
+    Input(name == "Operation" && values contains $value1)
+    $value2 : Value(value == "summer")
+    Input(name == "Season" && values contains $value2)
+    $solution : SolutionInput(name == "set thermostat to 24 degrees")
+  then
+    $solution.setValue(P7);
+end
+
+rule "R18"
+  when
+    $value1 : Value(value == "not during business hours")
+    Input(name == "Operation" && values contains $value1)
+    $value2 : Value(value == "winter")
+    Input(name == "Season" && values contains $value2)
+    $solution : SolutionInput(name == "set thermostat to 14 degrees")
+  then
+    $solution.setValue(P7);
+end
+
+rule "R11"
+  when
+    $value1 : Value(value == "during business hours")
+    Input(name == "Operation" && values contains $value1)
+    $value2 : Value(value == "spring")
+    Input(name == "Season" && values contains $value2)
+    $solution : SolutionInput(name == "set thermostat to 20 degrees")
+  then
+    $solution.setValue(P7);
+end
+
+rule "R14"
+  when
+    $value1 : Value(value == "not during business hours")
+    Input(name == "Operation" && values contains $value1)
+    $value2 : Value(value == "summer")
+    Input(name == "Season" && values contains $value2)
+    $solution : SolutionInput(name == "set thermostat to 27 degrees")
+  then
+    $solution.setValue(P7);
+end
+
+rule "R15"
+  when
+    $value1 : Value(value == "during business hours")
+    Input(name == "Operation" && values contains $value1)
+    $value2 : Value(value == "autumn")
+    Input(name == "Season" && values contains $value2)
+    $solution : SolutionInput(name == "set thermostat to 20 degrees")
+  then
+    $solution.setValue(P7);
+end
+
+rule "R16"
+  when
+    $value1 : Value(value == "not during business hours")
+    Input(name == "Operation" && values contains $value1)
+    $value2 : Value(value == "autumn")
+    Input(name == "Season" && values contains $value2)
+    $solution : SolutionInput(name == "set thermostat to 16 degrees")
+  then
+    $solution.setValue(P7);
+end
+
+rule "R17"
+  when
+    $value1 : Value(value == "during business hours")
+    Input(name == "Operation" && values contains $value1)
+    $value2 : Value(value == "winter")
+    Input(name == "Season" && values contains $value2)
+    $solution : SolutionInput(name == "set thermostat to 18 degrees")
+  then
+    $solution.setValue(P7);
+end
+
+rule "R3"
+  when
+    $value1 : Value(value == "between 9am and 5pm")
+    Input(name == "Time" && values contains $value1)
+    $value2 : Value(value == "workday")
+    Input(name == "Today" && values contains $value2)
+    $input : ChoiceInput(name == "Operation")
+  then
+    $input.setValue("during business hours");
+end
+
+rule "R4"
+  when
+    $value1 : Value(value == "before 9am")
+    Input(name == "Time" && values contains $value1)
+    $value2 : Value(value == "workday")
+    Input(name == "Today" && values contains $value2)
+    $input : ChoiceInput(name == "Operation")
+  then
+    $input.setValue("not during business hours");
+end
+
+rule "R5"
+  when
+    $value1 : Value(value == "after 5pm")
+    Input(name == "Time" && values contains $value1)
+    $value2 : Value(value == "workday")
+    Input(name == "Today" && values contains $value2)
+    $input : ChoiceInput(name == "Operation")
+  then
+    $input.setValue("not during business hours");
+end
+
+rule "R10_1_2"
+  when
+    $value1 : Value(value == "November")
+    Input(name == "Month" && values contains $value1)
+    $input : ChoiceInput(name == "Season")
+  then
+    $input.setValue("autumn");
+end
+
+rule "R10_2_2_3_2"
+  when
+    $value3 : Value(value == "October")
+    Input(name == "Month" && values contains $value3)
+    $input : ChoiceInput(name == "Season")
+  then
+    $input.setValue("autumn");
+end
+
+rule "R10_2_2_4_2"
+  when
+    $value4 : Value(value == "September")
+    Input(name == "Month" && values contains $value4)
+    $input : ChoiceInput(name == "Season")
+  then
+    $input.setValue("autumn");
+end
+
+rule "R7_1_2"
+  when
+    $value1 : Value(value == "February")
+    Input(name == "Month" && values contains $value1)
+    $input : ChoiceInput(name == "Season")
+  then
+    $input.setValue("winter");
+end
+
+rule "R7_2_2_3_2"
+  when
+    $value3 : Value(value == "January")
+    Input(name == "Month" && values contains $value3)
+    $input : ChoiceInput(name == "Season")
+  then
+    $input.setValue("winter");
+end
+
+rule "R7_2_2_4_2"
+  when
+    $value4 : Value(value == "December")
+    Input(name == "Month" && values contains $value4)
+    $input : ChoiceInput(name == "Season")
+  then
+    $input.setValue("winter");
+end
+
+rule "R8_1_2"
+  when
+    $value1 : Value(value == "May")
+    Input(name == "Month" && values contains $value1)
+    $input : ChoiceInput(name == "Season")
+  then
+    $input.setValue("spring");
+end
+
+rule "R8_2_2_3_2"
+  when
+    $value3 : Value(value == "April")
+    Input(name == "Month" && values contains $value3)
+    $input : ChoiceInput(name == "Season")
+  then
+    $input.setValue("spring");
+end
+
+rule "R8_2_2_4_2"
+  when
+    $value4 : Value(value == "March")
+    Input(name == "Month" && values contains $value4)
+    $input : ChoiceInput(name == "Season")
+  then
+    $input.setValue("spring");
+end
+
+rule "R9_1_2"
+  when
+    $value1 : Value(value == "August")
+    Input(name == "Month" && values contains $value1)
+    $input : ChoiceInput(name == "Season")
+  then
+    $input.setValue("summer");
+end
+
+rule "R9_2_2_3_2"
+  when
+    $value3 : Value(value == "July")
+    Input(name == "Month" && values contains $value3)
+    $input : ChoiceInput(name == "Season")
+  then
+    $input.setValue("summer");
+end
+
+rule "R9_2_2_4_2"
+  when
+    $value4 : Value(value == "June")
+    Input(name == "Month" && values contains $value4)
+    $input : ChoiceInput(name == "Season")
+  then
+    $input.setValue("summer");
+end
+
+rule "R6"
+  when
+    $value : Value(value == "weekend")
+    Input(name == "Today" && values contains $value)
+    $input : ChoiceInput(name == "Operation")
+  then
+    $input.setValue("not during business hours");
+end
+
+rule "R1_1_2"
+  when
+    $value1 : Value(value == "Friday")
+    Input(name == "Day" && values contains $value1)
+    $input : ChoiceInput(name == "Today")
+  then
+    $input.setValue("workday");
+end
+
+rule "R1_2_2_3_2"
+  when
+    $value3 : Value(value == "Thursday")
+    Input(name == "Day" && values contains $value3)
+    $input : ChoiceInput(name == "Today")
+  then
+    $input.setValue("workday");
+end
+
+rule "R1_2_2_4_2_5_2"
+  when
+    $value5 : Value(value == "Wednesday")
+    Input(name == "Day" && values contains $value5)
+    $input : ChoiceInput(name == "Today")
+  then
+    $input.setValue("workday");
+end
+
+rule "R1_2_2_4_2_6_2_7_2"
+  when
+    $value7 : Value(value == "Tuesday")
+    Input(name == "Day" && values contains $value7)
+    $input : ChoiceInput(name == "Today")
+  then
+    $input.setValue("workday");
+end
+
+rule "R1_2_2_4_2_6_2_8_2"
+  when
+    $value8 : Value(value == "Monday")
+    Input(name == "Day" && values contains $value8)
+    $input : ChoiceInput(name == "Today")
+  then
+    $input.setValue("workday");
+end
+
+rule "R2_1_2"
+  when
+    $value1 : Value(value == "Sunday")
+    Input(name == "Day" && values contains $value1)
+    $input : ChoiceInput(name == "Today")
+  then
+    $input.setValue("weekend");
+end
+
+rule "R2_2_2"
+  when
+    $value2 : Value(value == "Saturday")
+    Input(name == "Day" && values contains $value2)
+    $input : ChoiceInput(name == "Today")
+  then
+    $input.setValue("weekend");
+end
+
+%
+

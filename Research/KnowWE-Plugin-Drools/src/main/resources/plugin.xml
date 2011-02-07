@@ -1,0 +1,95 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-Drools" version="0.0.1">
+	
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+	</requires>
+	
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="DroolsTagHandler">
+		<parameter id="class"
+			value="de.d3web.we.drools.taghandler.DroolsTagHandler" />
+		<parameter id="name" value="DroolsTagHandler" />
+		<parameter id="description" value="TagHandler DroolsTagHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="script" value="drools.js" />
+		<parameter id="script" value="prototype.js" />
+		<parameter id="script" value="autocomplete.js" />
+	</extension> 
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="DroolsCodeCompletionAction">
+		<parameter id="class"
+			value="de.d3web.we.drools.action.DroolsCodeCompletionAction" />
+		<parameter id="name" value="DroolsCodeCompletionAction" />
+		<parameter id="description" value="Action DroolsCodeCompletionAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="DroolsAction">
+		<parameter id="class"
+			value="de.d3web.we.drools.action.DroolsAction" />
+		<parameter id="name" value="DroolsAction" />
+		<parameter id="description" value="Action DroolsAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		id="DroolsFactsRootType">
+		<parameter id="class"
+			value="de.d3web.we.drools.kdom.DroolsFactsRootType" />
+		<parameter id="name" value="DroolsFactsRootType" />
+		<parameter id="description" value="KnowWEObjectType DroolsFactsRootType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		id="DroolsRulesRootType">
+		<parameter id="class"
+			value="de.d3web.we.drools.kdom.DroolsRulesRootType" />
+		<parameter id="name" value="DroolsRulesRootType" />
+		<parameter id="description" value="KnowWEObjectType DroolsRulesRootType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>	
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		id="DroolsSessionRootType">
+		<parameter id="class"
+			value="de.d3web.we.drools.kdom.DroolsSessionRootType" />
+		<parameter id="name" value="DroolsSessionRootType" />
+		<parameter id="description" value="KnowWEObjectType DroolsSessionRootType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>	
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="EventListener"
+		id="DroolsKnowledgeHandler">
+		<parameter id="class"
+			value="de.d3web.we.drools.terminology.DroolsKnowledgeHandler" />
+		<parameter id="name" value="DroolsKnowledgeHandler" />
+		<parameter id="description" value="EventListener DroolsKnowledgeHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+</plugin>
