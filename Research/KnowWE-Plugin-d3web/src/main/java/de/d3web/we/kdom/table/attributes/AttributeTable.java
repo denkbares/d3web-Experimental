@@ -57,7 +57,7 @@ import de.d3web.we.reviseHandler.D3webSubtreeHandler;
  * It is not necessary to specify the header of the table, because it is
  * generated automatically.
  * 
- * The NamedObject is specified in the first column. The name of the property in
+ * The AbstractTerminologyObject is specified in the first column. The name of the property in
  * the second, the third is ignored and the data/content in the fourth;
  * 
  * @author Sebastian Furth

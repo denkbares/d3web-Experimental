@@ -50,7 +50,7 @@ import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.inference.condition.TerminalCondition;
 import de.d3web.core.knowledge.InfoStore;
 import de.d3web.core.knowledge.terminology.Choice;
-import de.d3web.core.knowledge.terminology.IDObject;
+import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
@@ -96,7 +96,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 	private QASet currentQuestionclass;
 	private final Stack<TerminalCondition> conditionStack = new Stack<TerminalCondition>();
 	private final List<Tripel<String, Condition, Message>> qcontainertolink = new ArrayList<Tripel<String, Condition, Message>>();
-	private final List<Tripel<String, IDObject, Message>> descriptionlinks = new ArrayList<Tripel<String, IDObject, Message>>();
+	private final List<Tripel<String, NamedObject, Message>> descriptionlinks = new ArrayList<Tripel<String, NamedObject, Message>>();
 	private List<String> allowedNames;
 	private final List<Message> errors = new ArrayList<Message>();
 	private final String file;
@@ -207,7 +207,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 			conditionStack.push(c);
 			conddashstack.push(dashes);
 			if (idlink != null) {
-				descriptionlinks.add(new Tripel<String, IDObject, Message>(
+				descriptionlinks.add(new Tripel<String, NamedObject, Message>(
 						idlink, answer, MessageKnOfficeGenerator
 								.createDescriptionTextNotFoundError(file, line,
 										linetext, idlink)));
@@ -365,7 +365,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 			return;
 		}
 
-		for (Tupel<String, IDObject> t : descriptionlinks) {
+		for (Tupel<String, NamedObject> t : descriptionlinks) {
 			if (t.first.equals(id)) {
 				t.used = true;
 				InfoStore infoStore = t.second.getInfoStore();
@@ -422,7 +422,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 					}
 				}
 				if (idlink != null) {
-					descriptionlinks.add(new Tripel<String, IDObject, Message>(
+					descriptionlinks.add(new Tripel<String, NamedObject, Message>(
 							idlink, q, MessageKnOfficeGenerator
 									.createDescriptionTextNotFoundError(file,
 											line, linetext, idlink)));
@@ -461,7 +461,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 				}
 				// TODO Linkbeschreibung?
 				if (idlink != null) {
-					descriptionlinks.add(new Tripel<String, IDObject, Message>(
+					descriptionlinks.add(new Tripel<String, NamedObject, Message>(
 							idlink, diag, MessageKnOfficeGenerator
 									.createDescriptionTextNotFoundError(file,
 											line, linetext, idlink)));
@@ -633,7 +633,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 		questionStack
 				.push(new Tupel<Integer, Question>(dashes, currentQuestion));
 		if (idlink != null) {
-			descriptionlinks.add(new Tripel<String, IDObject, Message>(idlink,
+			descriptionlinks.add(new Tripel<String, NamedObject, Message>(idlink,
 					currentQuestion, MessageKnOfficeGenerator
 							.createDescriptionTextNotFoundError(file, line,
 									linetext, idlink)));
@@ -810,7 +810,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 			ret.add(t.third);
 		}
 		// prüfen ob noch nichtgesetzte Links zu Erklärungen vorhanden sind
-		for (Tripel<String, IDObject, Message> t : descriptionlinks) {
+		for (Tripel<String, NamedObject, Message> t : descriptionlinks) {
 			if (!t.used) ret.add(t.third);
 		}
 		if (ret.size() == 0) {

@@ -24,7 +24,7 @@ import java.util.List;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
-import de.d3web.core.knowledge.terminology.IDObject;
+import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
@@ -58,7 +58,7 @@ public class QuestionnaireValuesViewAction extends AbstractAction {
 			Session session = D3webUtils.getSession(article.getTitle(), context.getWikiContext(),
 					web);
 			if (session != null) {
-				IDObject io = session.getKnowledgeBase().getManager().searchObjectForName(
+				NamedObject io = session.getKnowledgeBase().getManager().searchObjectForName(
 						questionnaireName);
 				if (io instanceof QContainer) {
 					QContainer questionnaire = (QContainer) io;

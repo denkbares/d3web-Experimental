@@ -30,7 +30,7 @@ public class AttributeTableRenderer extends TableRenderer {
 
 	@Override
 	protected String getHeader() {
-		return "<tr><th>IDObject</th><th>MMInfoSubject</th><th>DCElement [Lang] Title</th><th>Data</th></tr>";
+		return "<tr><th>NamedObject</th><th>MMInfoSubject</th><th>DCElement [Lang] Title</th><th>Data</th></tr>";
 	}
 
 }

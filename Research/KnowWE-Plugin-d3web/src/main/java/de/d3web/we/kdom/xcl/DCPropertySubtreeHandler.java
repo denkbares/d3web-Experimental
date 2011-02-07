@@ -34,7 +34,7 @@ import de.d3web.we.utils.KnowWEUtils;
 
 /**
  * A section for storing DCProperties in a MMInfo. The storing could be generic,
- * but then where to get the NamedObject from, to store the info in?!?!
+ * but then where to get the AbstractTerminologyObject from, to store the info in?!?!
  * 
  * ATM this class is creating the diagnosis, due to the execution order of
  * subtreehandlers. So take care the right SolutionContext is set in the
@@ -80,7 +80,7 @@ public class DCPropertySubtreeHandler extends D3webSubtreeHandler<DCPropertyType
 	}
 
 	/**
-	 * Looks for the NamedObject. ATM this is tailored to work in XCLs. this is
+	 * Looks for the AbstractTerminologyObject. ATM this is tailored to work in XCLs. this is
 	 * the part which would have to be adapted to other scenarios
 	 * 
 	 */
