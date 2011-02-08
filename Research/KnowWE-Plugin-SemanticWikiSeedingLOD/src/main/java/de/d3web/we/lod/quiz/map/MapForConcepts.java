@@ -147,11 +147,11 @@ public class MapForConcepts {
 			double tempLat = Math.abs(latAvg - p.getLatitude());
 			double tempLong = Math.abs(longiAvg - p.getLongitude());
 
-			if (tempLat > margin) {
-				margin = tempLat;
-			}
-			if (tempLong > margin) {
-				margin = tempLong;
+			// Pythagoras
+			double c = Math.sqrt((tempLat * tempLat) + (tempLong * tempLong));
+
+			if (c > margin) {
+				margin = c;
 			}
 
 			if (p.title.equals(solution)) {
@@ -191,16 +191,19 @@ public class MapForConcepts {
 		if (margin < 12.65) {
 			zoom = 5;
 		}
-		if (margin < 5.95) {
+		if (margin < 6.15) {
 			zoom = 6;
 		}
-		if (margin < 1.15) {
+		if (margin < 1.16) {
 			zoom = 8;
 		}
-		if (margin < 0.55) {
+		if (margin < 0.7) {
 			zoom = 9;
 		}
-
+		if (margin < 0.3) {
+			zoom = 10;
+		}
+		System.out.println(margin + ": " + zoom);
 		pre += "if (GBrowserIsCompatible()) {"
 					+ "var map = new GMap2(document.getElementById(\""
 				+ divID
