@@ -29,7 +29,7 @@ import java.io.StringWriter;
 import org.junit.Test;
 
 import de.knowwe.kdom.generator.ObjectType;
-import de.knowwe.kdom.generator.ParametrizedClass;
+import de.knowwe.kdom.generator.ParameterizedClass;
 import de.knowwe.kdom.generator.QualifiedClass;
 import de.knowwe.kdom.generator.io.JavaWriter;
 
@@ -40,7 +40,8 @@ import de.knowwe.kdom.generator.io.JavaWriter;
  */
 public class JavaWriterTest {
 
-	private static final String EXPECTEDFILE = "src/test/resources/TestType.java";
+	private static final String EXPECTEDSIMPLEFILE = "src/test/resources/TestType.java";
+	private static final String EXPECTEDCONSTRAINTFILE = "src/test/resources/TestTypeWithConstraint.java";
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullAsObjectType() throws IOException {
@@ -49,22 +50,31 @@ public class JavaWriterTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullAsWriter() throws IOException {
-		JavaWriter.getInstance().write(getObjectType(), null);
+		JavaWriter.getInstance().write(getSimpleObjectType(), null);
 	}
 
 	@Test
-	public void testGeneratedFile() throws IOException {
-		String expected = loadExpectedFile();
+	public void testGeneratedSimpleFile() throws IOException {
+		String expected = loadExpectedFile(EXPECTEDSIMPLEFILE);
 		StringWriter w = new StringWriter();
-		ObjectType type = getObjectType();
+		ObjectType type = getSimpleObjectType();
 		JavaWriter.getInstance().write(type, w);
 		assertEquals("Generated Java File differs.", expected, w.toString());
 	}
 
-	private String loadExpectedFile() throws IOException {
+	@Test
+	public void testGeneratedConstraintFile() throws IOException {
+		String expected = loadExpectedFile(EXPECTEDCONSTRAINTFILE);
+		StringWriter w = new StringWriter();
+		ObjectType type = getObjectTypeWithConstraint();
+		JavaWriter.getInstance().write(type, w);
+		assertEquals("Generated Java File differs.", expected, w.toString());
+	}
+
+	private String loadExpectedFile(String file) throws IOException {
 		StringBuilder content = new StringBuilder();
 		BufferedReader bufferedReader = new BufferedReader(
-				new InputStreamReader(new FileInputStream(EXPECTEDFILE), "UTF-8"));
+				new InputStreamReader(new FileInputStream(file), "UTF-8"));
 		int currentChar = bufferedReader.read();
 		while (currentChar != -1) {
 			content.append((char) currentChar);
@@ -74,7 +84,7 @@ public class JavaWriterTest {
 		return content.toString();
 	}
 
-	private ObjectType getObjectType() {
+	private ObjectType getSimpleObjectType() {
 
 		QualifiedClass childClass1 = new QualifiedClass("de.knowwe.kdom", "TestChildren1");
 		ObjectType child1 = new ObjectType.Builder("02", childClass1, true).build();
@@ -87,13 +97,47 @@ public class JavaWriterTest {
 
 		QualifiedClass superType = new QualifiedClass("de.d3web.we.kdom.objects", "TermDefinition");
 
-		ParametrizedClass sectionFinder = new ParametrizedClass("de.d3web.we.kdom.sectionFinder",
-				"RegexSectionFinder", ".*");
+		ParameterizedClass sectionFinder = new ParameterizedClass("de.d3web.we.kdom.sectionFinder",
+				"RegexSectionFinder", "\".*\"");
 
 		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
 		ObjectType objectType = new ObjectType.Builder("01", objectTypeClass, false)
 												.setSuperType(superType)
 												.setSectionFinder(sectionFinder)
+												.build();
+
+		objectType.addChild(0, child1);
+		objectType.addChild(1, child2);
+		objectType.addChild(2, child3);
+
+		return objectType;
+	}
+
+	private ObjectType getObjectTypeWithConstraint() {
+
+		QualifiedClass childClass1 = new QualifiedClass("de.knowwe.kdom", "TestChildren1");
+		ObjectType child1 = new ObjectType.Builder("02", childClass1, true).build();
+
+		QualifiedClass childClass2 = new QualifiedClass("de.knowwe.kdom", "TestChildren2");
+		ObjectType child2 = new ObjectType.Builder("03", childClass2, true).build();
+
+		QualifiedClass childClass3 = new QualifiedClass("de.knowwe.kdom", "TestChildren3");
+		ObjectType child3 = new ObjectType.Builder("04", childClass3, true).build();
+
+		QualifiedClass superType = new QualifiedClass("de.d3web.we.kdom.objects", "TermDefinition");
+
+		ParameterizedClass sectionFinder = new ParameterizedClass("de.d3web.we.kdom.sectionFinder",
+				"RegexSectionFinder", "\".*\"");
+
+		QualifiedClass constraint = new QualifiedClass("de.d3web.we.kdom.constraint",
+				"AtMostOneFindingConstraint");
+
+		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom",
+				"TestTypeWithConstraint");
+		ObjectType objectType = new ObjectType.Builder("01", objectTypeClass, false)
+												.setSuperType(superType)
+												.setSectionFinder(sectionFinder)
+												.addConstraint(constraint)
 												.build();
 
 		objectType.addChild(0, child1);

@@ -84,6 +84,18 @@ public class QualifiedClass {
 		return packageName + "." + className;
 	}
 
+	/**
+	 * Returns a String which represents a simple instatiation of this class,
+	 * e.g. new String(). Please note, that the semicolon is not part contained
+	 * in the returned String.
+	 * 
+	 * @created Feb 8, 2011
+	 * @return Instantiation String for this class.
+	 */
+	public String getInstantiationString() {
+		return "new " + className + "()";
+	}
+
 	@Override
 	public String toString() {
 		return getQualifiedClassName();

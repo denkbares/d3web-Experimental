@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import de.knowwe.kdom.generator.ParametrizedClass;
+import de.knowwe.kdom.generator.ParameterizedClass;
 
 /**
  *
@@ -33,37 +33,49 @@ public class ParametrizedClassTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullAsClass() {
-		new ParametrizedClass("de.knowwe", null, "value");
+		new ParameterizedClass("de.knowwe", null, "value");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullAsPackage() {
-		new ParametrizedClass(null, "TestClass", "value");
+		new ParameterizedClass(null, "TestClass", "value");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testEmptyClass() {
-		new ParametrizedClass("de.knowwe", "", "value");
+		new ParameterizedClass("de.knowwe", "", "value");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testEmptyPackage() {
-		new ParametrizedClass("", "TestClass", "value");
+		new ParameterizedClass("", "TestClass", "value");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullAsValue() {
-		new ParametrizedClass("de.knowwe", "TestClass", null);
+		new ParameterizedClass("de.knowwe", "TestClass", null);
+	}
+
+	@Test
+	public void testInstantiationString() {
+		ParameterizedClass test = new ParameterizedClass("de.knowwe.test", "TestClass", "\"value\"");
+		assertEquals("Wrong instantiation.", "new TestClass(\"value\")",
+				test.getInstantiationString());
+	}
+
+	@Test
+	public void testQualifiedClassString() {
+		ParameterizedClass test = new ParameterizedClass("de.knowwe.test", "TestClass", "\"value\"");
+		assertEquals("Wrong qualified class name",
+				"de.knowwe.test.TestClass", test.getQualifiedClassName());
 	}
 
 	@Test
 	public void testConstructor() {
-		ParametrizedClass test = new ParametrizedClass("de.knowwe.test", "TestClass", "value");
+		ParameterizedClass test = new ParameterizedClass("de.knowwe.test", "TestClass", "\"value\"");
 		assertEquals("Wrong package.", "de.knowwe.test", test.getPackageName());
 		assertEquals("Wrong class.", "TestClass", test.getClassName());
-		assertEquals("Wrong value.", "value", test.getValue());
-		assertEquals("Wrong qualified class name",
-				"de.knowwe.test.TestClass", test.getQualifiedClassName());
+		assertEquals("Wrong value.", "\"value\"", test.getValue());
 	}
 
 }

@@ -53,12 +53,23 @@ public class QualifiedClassTest {
 	}
 
 	@Test
+	public void testInstantiationString() {
+		QualifiedClass test = new QualifiedClass("de.knowwe.test", "TestClass");
+		assertEquals("Wrong instantiation.", "new TestClass()", test.getInstantiationString());
+	}
+
+	@Test
+	public void testQualifiedClassString() {
+		QualifiedClass test = new QualifiedClass("de.knowwe.test", "TestClass");
+		assertEquals("Wrong qualified class name",
+				"de.knowwe.test.TestClass", test.getQualifiedClassName());
+	}
+
+	@Test
 	public void testConstructor() {
 		QualifiedClass test = new QualifiedClass("de.knowwe.test", "TestClass");
 		assertEquals("Wrong package.", test.getPackageName(), "de.knowwe.test");
 		assertEquals("Wrong class.", test.getClassName(), "TestClass");
-		assertEquals("Wrong qualified class name", test.getQualifiedClassName(),
-				"de.knowwe.test.TestClass");
 	}
 
 }

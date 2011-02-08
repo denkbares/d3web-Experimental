@@ -19,26 +19,28 @@
 package de.knowwe.kdom.generator;
 
 /**
- * A ParametrizedClass is a QualifiedClass with a value for an additional
+ * A ParameterizedClass is a QualifiedClass with a value for an additional
  * constructor attribute.
  *
  * @see QualifiedClass
  * @author Sebastian Furth
  * @created Feb 1, 2011
  */
-public class ParametrizedClass extends QualifiedClass {
+public class ParameterizedClass extends QualifiedClass {
 
 	private final String value;
 
 	/**
-	 * Creates a new parametrized Class which is a qualified Class with a value
-	 * for an additional constructor attribute.
-	 * 
+	 * Creates a new parameterized Class which is a qualified Class with a value
+	 * for an additional constructor attribute. Please note, that String values
+	 * need the quotes. You have to quote them explicitly and make them part of
+	 * your argument, e.g. "\"value\"".
+	 *
 	 * @param packageName package name of the class
 	 * @param className class-name of the class
 	 * @param value value for the constructor attribute.
 	 */
-	public ParametrizedClass(String packageName, String className, String value) {
+	public ParameterizedClass(String packageName, String className, String value) {
 		super(packageName, className);
 		if (value == null) {
 			throw new IllegalArgumentException();
@@ -54,6 +56,19 @@ public class ParametrizedClass extends QualifiedClass {
 	 */
 	public String getValue() {
 		return value;
+	}
+
+	/**
+	 * Returns a String which represents a simple instantiation of this class,
+	 * e.g. new YourClass(value). Please note, that the semicolon is not part
+	 * contained in the returned String.
+	 * 
+	 * @created Feb 8, 2011
+	 * @return Instantiation String for this class.
+	 */
+	@Override
+	public String getInstantiationString() {
+		return "new " + getClassName() + "(" + value + ")";
 	}
 
 	@Override
@@ -73,8 +88,8 @@ public class ParametrizedClass extends QualifiedClass {
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 		if (!super.equals(obj)) return false;
-		if (!(obj instanceof ParametrizedClass)) return false;
-		ParametrizedClass other = (ParametrizedClass) obj;
+		if (!(obj instanceof ParameterizedClass)) return false;
+		ParameterizedClass other = (ParameterizedClass) obj;
 		if (value == null) {
 			if (other.value != null) return false;
 		}

@@ -24,10 +24,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Writer;
-import java.util.List;
+import java.util.Collection;
 
 import de.knowwe.kdom.generator.ObjectType;
-import de.knowwe.kdom.generator.ParametrizedClass;
+import de.knowwe.kdom.generator.ParameterizedClass;
+import de.knowwe.kdom.generator.QualifiedClass;
 
 /**
  * Writer which generates real Java classes by replacing the placeholder in the
@@ -48,9 +49,10 @@ public class JavaWriter implements ObjectTypeWriter {
 	private final String SUPERTYPEPACKAGE = "%SUPERTYPEPACKAGE%";
 	private final String SUPERTYPECLASSNAME = "%SUPERTYPECLASS%";
 	private final String SECTIONFINDERIMPORT = "%SECTIONFINDERIMPORT%";
-	private final String SECTIONFINDERPACKAGE = "%SECTIONFINDERPACKAGE%";
 	private final String SECTIONFINDERCLASSNAME = "%SECTIONFINDERCLASS%";
 	private final String SECTIONFINDER = "%SECTIONFINDER%";
+	private final String CONSTRAINTIMPORTS = "%CONSTRAINTIMPORTS%";
+	private final String CONSTRAINTS = "%CONSTRAINTS%";
 	private final String CHILDINSTANTIONS = "%CHILDREN%";
 	private final String CHILDIMPORTS = "%CHILDIMPORTS%";
 	private final String INDENT = "		";
@@ -80,8 +82,11 @@ public class JavaWriter implements ObjectTypeWriter {
 		template = template.replaceAll(CLASSNAME, type.getClassName());
 		template = template.replaceAll(SUPERTYPECLASSNAME, type.getSuperType().getClassName());
 		template = template.replaceAll(SUPERTYPEPACKAGE, type.getSuperType().getPackageName());
-		template = replaceSectionFinder(type.getSectionFinder(), template);
 		template = replaceChildren(type.getChildren(), template);
+
+		boolean constraints = type.getConstraints().size() > 0;
+		template = replaceSectionFinder(type.getSectionFinder(), template, constraints);
+		template = replaceConstraints(type.getConstraints(), template);
 
 		// save JAVA file
 		BufferedWriter bw = new BufferedWriter(w);
@@ -89,32 +94,40 @@ public class JavaWriter implements ObjectTypeWriter {
 		bw.close();
 	}
 
-	private String replaceSectionFinder(ParametrizedClass sectionFinder, String template) {
+	private String replaceSectionFinder(ParameterizedClass sectionFinder, String template, boolean constraints) {
 		if (sectionFinder == null) {
 			template = template.replaceAll(SECTIONFINDERIMPORT, "");
-			template = template.replaceAll(SECTIONFINDERPACKAGE, "");
 			template = template.replaceAll(SECTIONFINDERCLASSNAME, "");
 			return template.replaceAll(SECTIONFINDER, "");
 		}
 
 		// SectionFinder != null
-		template = template.replaceAll(SECTIONFINDERIMPORT, "import");
-		template = template.replaceAll(SECTIONFINDERPACKAGE, sectionFinder.getPackageName());
-		template = template.replaceAll(SECTIONFINDERCLASSNAME, sectionFinder.getClassName() + ";");
+		template = template.replaceAll(SECTIONFINDERIMPORT,
+				"import " + sectionFinder.getQualifiedClassName() + ";");
 
-		// setSectionFinder(new Class(parameter));
 		StringBuilder instantiation = new StringBuilder();
-		instantiation.append(INDENT);
-		instantiation.append("setSectionFinder(new ");
-		instantiation.append(sectionFinder.getClassName());
-		instantiation.append("(\"");
-		instantiation.append(sectionFinder.getValue());
-		instantiation.append("\"));");
+		// ConstraintSectionFinder c = new ConstraintSectionFinder(new
+		// Class(parameter));
+		if (constraints) {
+			instantiation.append(INDENT);
+			instantiation.append("ConstraintSectionFinder c = ");
+			instantiation.append(sectionFinder.getInstantiationString());
+			instantiation.append(";\n");
+			instantiation.append(INDENT);
+			instantiation.append("setSectionFinder(c);");
+		}
+		// setSectionFinder(new Class(parameter));
+		else {
+			instantiation.append(INDENT);
+			instantiation.append("setSectionFinder(");
+			instantiation.append(sectionFinder.getInstantiationString());
+			instantiation.append(");");
+		}
 
 		return template.replaceAll(SECTIONFINDER, instantiation.toString());
 	}
 
-	private String replaceChildren(List<ObjectType> children, String template) {
+	private String replaceChildren(Collection<ObjectType> children, String template) {
 		StringBuilder imports = new StringBuilder();
 		StringBuilder instantiations = new StringBuilder();
 		for (ObjectType c : children) {
@@ -124,15 +137,36 @@ public class JavaWriter implements ObjectTypeWriter {
 			imports.append(c.getClassName());
 			imports.append(";\n");
 			instantiations.append(INDENT);
-			instantiations.append("childrenTypes.add(new ");
-			instantiations.append(c.getClassName());
-			instantiations.append("());\n");
+			instantiations.append("childrenTypes.add(");
+			instantiations.append(c.getInstantiationString());
+			instantiations.append(");\n");
 		}
 		if (instantiations.length() > 0) {
 			instantiations.delete(instantiations.length() - 1, instantiations.length());
 		}
 		template = template.replaceAll(CHILDIMPORTS, imports.toString());
 		return template.replaceAll(CHILDINSTANTIONS, instantiations.toString());
+	}
+
+	private String replaceConstraints(Collection<QualifiedClass> constraint, String template) {
+		StringBuilder imports = new StringBuilder();
+		StringBuilder instantiations = new StringBuilder();
+		for (QualifiedClass c : constraint) {
+			imports.append("import ");
+			imports.append(c.getPackageName());
+			imports.append(".");
+			imports.append(c.getClassName());
+			imports.append(";\n");
+			instantiations.append(INDENT);
+			instantiations.append("c.addConstraint(");
+			instantiations.append(c.getInstantiationString());
+			instantiations.append(");\n");
+		}
+		if (instantiations.length() > 0) {
+			instantiations.delete(instantiations.length() - 1, instantiations.length());
+		}
+		template = template.replaceAll(CONSTRAINTIMPORTS, imports.toString());
+		return template.replaceAll(CONSTRAINTS, instantiations.toString());
 	}
 
 	private String loadTemplate() throws IOException {

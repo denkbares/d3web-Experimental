@@ -2,7 +2,9 @@
 <ObjectTypes>
 	<ObjectType ID="A0" PackageName="de.knowwe.kdom" ClassName="TestType"
 		SuperTypeClass="TermDefinition" SuperTypePackage="de.d3web.we.kdom.objects">
-		<SectionFinder ClassName="RegExSectionFinder" PackageName="de.d3web.we.kdom.sectionFinder" Value=".*" />
+		<SectionFinder ClassName="RegexSectionFinder" PackageName="de.d3web.we.kdom.sectionFinder" Value='".*"' >
+			<Constraint ClassName="AtMostOneFindingConstraint" PackageName="de.d3web.we.kdom.constraint" />
+		</SectionFinder>
 	</ObjectType>
 	<ObjectType ID="B0" PackageName="de.knowwe.kdom" ClassName="TestChildren1"
 		SuperTypeClass="DefaultAbstractKnowWEObjectType" SuperTypePackage="de.d3web.we.kdom"

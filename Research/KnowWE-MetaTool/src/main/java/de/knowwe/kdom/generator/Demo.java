@@ -34,7 +34,7 @@ import de.knowwe.kdom.generator.io.XMLReader;
 public class Demo {
 
 	private static final String outputDir = "/Users/sebastian/Desktop/";
-	private static final String inputFile = "src/main/resources/examples/TurtleMarkupSimpleID.xml";
+	private static final String inputFile = "src/main/resources/examples/TurtleMarkupSimple.xml";
 
 	public static void main(String[] args) throws IOException {
 
@@ -74,12 +74,14 @@ public class Demo {
 
 		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
 		QualifiedClass superType = new QualifiedClass("de.d3web.we.kdom.objects", "TermDefinition");
-		ParametrizedClass sectionFinder = new ParametrizedClass("de.d3web.we.kdom.sectionFinder",
-				"RegexSectionFinder", ".*");
-
+		ParameterizedClass sectionFinder = new ParameterizedClass("de.d3web.we.kdom.sectionFinder",
+				"RegexSectionFinder", "\".*\"");
+		QualifiedClass constraint = new QualifiedClass("de.d3web.we.kdom.constraint",
+				"AtMostOneFindingConstraint");
 		ObjectType objectType = new ObjectType.Builder("01", objectTypeClass, false)
 												.setSuperType(superType)
 												.setSectionFinder(sectionFinder)
+												.addConstraint(constraint)
 												.build();
 
 		objectType.addChild(0, child1);

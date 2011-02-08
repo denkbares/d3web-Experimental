@@ -27,7 +27,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import de.knowwe.kdom.generator.ObjectType;
-import de.knowwe.kdom.generator.ParametrizedClass;
+import de.knowwe.kdom.generator.ParameterizedClass;
 import de.knowwe.kdom.generator.QualifiedClass;
 import de.knowwe.kdom.generator.io.XMLReader;
 
@@ -80,6 +80,13 @@ public class XMLReaderTest {
 			assertNull("SectionFinder should be null", actual.getSectionFinder());
 		}
 
+		// Constraints
+		assertEquals("Wrong number of constraints", expected.getConstraints().size(),
+				actual.getConstraints().size());
+		for (int j = 0; j < actual.getConstraints().size(); j++) {
+			assertEquals(expected.getConstraints().get(j), actual.getConstraints().get(j));
+		}
+
 		// Test Children
 		assertEquals("Wrong number of children.", expected.getChildren().size(),
 				actual.getChildren().size());
@@ -100,13 +107,17 @@ public class XMLReaderTest {
 		ObjectType child3 = new ObjectType.Builder("B2", childClass3, true).build();
 
 		QualifiedClass superType = new QualifiedClass("de.d3web.we.kdom.objects", "TermDefinition");
-		ParametrizedClass sectionFinder = new ParametrizedClass("de.d3web.we.kdom.sectionFinder",
-				"RegexSectionFinder", ".*");
+		ParameterizedClass sectionFinder = new ParameterizedClass("de.d3web.we.kdom.sectionFinder",
+				"RegexSectionFinder", "\".*\"");
+
+		QualifiedClass constraint = new QualifiedClass("de.d3web.we.kdom.constraint",
+				"AtMostOneFindingConstraint");
 
 		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
 		ObjectType objectType = new ObjectType.Builder("A0", objectTypeClass, false)
 												.setSuperType(superType)
 												.setSectionFinder(sectionFinder)
+												.addConstraint(constraint)
 												.build();
 
 		objectType.addChild(0, child1);

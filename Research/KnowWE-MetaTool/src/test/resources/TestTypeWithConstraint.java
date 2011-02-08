@@ -21,21 +21,23 @@
 package de.knowwe.kdom;
 
 import de.d3web.we.kdom.objects.TermDefinition;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
+import de.d3web.we.kdom.constraint.AtMostOneFindingConstraint;
 
 import de.knowwe.kdom.TestChildren1;
 import de.knowwe.kdom.TestChildren2;
 import de.knowwe.kdom.TestChildren3;
 
 
-public class TestType extends TermDefinition {
+public class TestTypeWithConstraint extends TermDefinition {
 
-	public TestType() {
+	public TestTypeWithConstraint() {
 		childrenTypes.add(new TestChildren1());
 		childrenTypes.add(new TestChildren2());
 		childrenTypes.add(new TestChildren3());
-		setSectionFinder(new RegexSectionFinder(".*"));
-
+		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder(".*"));
+		setSectionFinder(c);
+		c.addConstraint(new AtMostOneFindingConstraint());
 	}
 
 }

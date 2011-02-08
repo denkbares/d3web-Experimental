@@ -3,10 +3,8 @@
 
 1 	Implementierung ohne GUI
 	
-1.1	SectionFinder
-	- QualifiedClass ergänzen (evtl. rename)
-	- Constructor mit varargs (String)
-	- SAX über alle Attribute iterieren
+1.1	SectionFinder/Constraints
+	Import von "altem" SectionFinder!
 	
 1.2	DashTree Markup
 

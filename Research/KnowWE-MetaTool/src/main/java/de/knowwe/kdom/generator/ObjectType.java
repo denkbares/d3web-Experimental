@@ -1,5 +1,6 @@
 package de.knowwe.kdom.generator;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,7 +38,8 @@ public class ObjectType {
 	private final String id;
 	private final QualifiedClass objectType;
 	private final QualifiedClass superType;
-	private final ParametrizedClass sectionFinder;
+	private final ParameterizedClass sectionFinder;
+	private final List<QualifiedClass> constraints;
 	private final boolean exists;
 
 	private final List<ObjectType> children = new LinkedList<ObjectType>();
@@ -47,6 +49,7 @@ public class ObjectType {
 		this.objectType = b.objectType;
 		this.superType = b.superType;
 		this.sectionFinder = b.sectionFinder;
+		this.constraints = b.constraints;
 		this.exists = b.exists;
 	}
 
@@ -100,8 +103,20 @@ public class ObjectType {
 	 * @created Feb 1, 2011
 	 * @return Section Finder of the ObjectType if specified, otherwise null.
 	 */
-	public ParametrizedClass getSectionFinder() {
+	public ParameterizedClass getSectionFinder() {
 		return this.sectionFinder;
+	}
+
+	/**
+	 * Returns a list of constraints for this ObjectType. If there is at least
+	 * one constraint the sectionFinder will automatically set to the
+	 * ConstraintSectionFinder.
+	 *
+	 * @created Feb 8, 2011
+	 * @return List of constraints for this ObjectType.
+	 */
+	public List<QualifiedClass> getConstraints() {
+		return Collections.unmodifiableList(constraints);
 	}
 
 	/**
@@ -112,7 +127,7 @@ public class ObjectType {
 	 * @return All Children of the ObjectType.
 	 */
 	public List<ObjectType> getChildren() {
-		return this.children;
+		return Collections.unmodifiableList(this.children);
 	}
 
 	/**
@@ -142,6 +157,18 @@ public class ObjectType {
 	 */
 	public boolean alreadyExists() {
 		return exists;
+	}
+
+	/**
+	 * Returns a String which represents a simple instatiation of this class,
+	 * e.g. new String(). Please note, that the semicolon is not part contained
+	 * in the returned String.
+	 *
+	 * @created Feb 8, 2011
+	 * @return Instantiation String for this class.
+	 */
+	public String getInstantiationString() {
+		return objectType.getInstantiationString();
 	}
 
 	@Override
@@ -203,7 +230,8 @@ public class ObjectType {
 		 */
 		private QualifiedClass superType = new QualifiedClass("de.d3web.we.kdom",
 				"DefaultAbstractKnowWEObjectType");
-		private ParametrizedClass sectionFinder = null;
+		private ParameterizedClass sectionFinder = null;
+		private final List<QualifiedClass> constraints = new LinkedList<QualifiedClass>();
 
 		/**
 		 * Builder for ObjectTypes. The attributes are the mandatory attributes
@@ -253,11 +281,41 @@ public class ObjectType {
 		 * @param sectionFinder The specified section finder
 		 * @return Builder object with additional section finder.
 		 */
-		public Builder setSectionFinder(ParametrizedClass sectionFinder) {
+		public Builder setSectionFinder(ParameterizedClass sectionFinder) {
 			if (sectionFinder == null || exists) {
 				throw new IllegalArgumentException();
 			}
 			this.sectionFinder = sectionFinder;
+			return this;
+		}
+
+		/**
+		 * Adds a constraint to the ObjectType. Please note that this method has
+		 * to be called <strong>AFTER</strong> the sectionFinder was set.
+		 * Otherwise you will get an IllegalStateException. Please note that the
+		 * sectionFinder will be automatically changed to
+		 * ConstraintSectionFinder(new OldSectionFinder()) when this method is
+		 * Invoked for the first time!
+		 *
+		 * @created Feb 8, 2011
+		 * @param constraint QualifiedClass representing the constraint
+		 * @return Builder with the added constraint.
+		 */
+		public Builder addConstraint(QualifiedClass constraint) {
+			if (constraint == null || exists) {
+				throw new IllegalArgumentException();
+			}
+			if (sectionFinder == null) {
+				throw new IllegalStateException(
+						"You have to specify a sectionfinder before you can apply a constraint.");
+			}
+			if (!sectionFinder.getQualifiedClassName().equals(
+					"de.d3web.we.kdom.constraint.ConstraintSectionFinder")) {
+				sectionFinder = new ParameterizedClass("de.d3web.we.kdom.constraint",
+														"ConstraintSectionFinder",
+														sectionFinder.getInstantiationString());
+			}
+			this.constraints.add(constraint);
 			return this;
 		}
 

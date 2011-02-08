@@ -38,7 +38,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import de.knowwe.kdom.generator.ObjectType;
-import de.knowwe.kdom.generator.ParametrizedClass;
+import de.knowwe.kdom.generator.ParameterizedClass;
 import de.knowwe.kdom.generator.QualifiedClass;
 
 /**
@@ -119,6 +119,9 @@ public class XMLReader implements ObjectTypeReader {
 			if (qName.equalsIgnoreCase("SECTIONFINDER")) {
 				setSectionFinder(attributes);
 			}
+			if (qName.equalsIgnoreCase("CONSTRAINT")) {
+				addConstraint(attributes);
+			}
 		}
 
 		private void createMinimalBuilder(Attributes attributes) {
@@ -164,8 +167,22 @@ public class XMLReader implements ObjectTypeReader {
 			String packageName = attributes.getValue("PackageName");
 			String className = attributes.getValue("ClassName");
 			String value = attributes.getValue("Value");
-			ParametrizedClass sectionFinder = new ParametrizedClass(packageName, className, value);
+			ParameterizedClass sectionFinder = new ParameterizedClass(packageName, className, value);
 			builder.setSectionFinder(sectionFinder);
+		}
+
+		private void addConstraint(Attributes attributes) {
+			if (builder == null) {
+				throw new NullPointerException(
+						"There is no builder! Probably you have defined the constraint on a wrong position.");
+			}
+
+			// Add Constraint
+			String packageName = attributes.getValue("PackageName");
+			String className = attributes.getValue("ClassName");
+			QualifiedClass constraint = new QualifiedClass(packageName, className);
+			builder.addConstraint(constraint);
+
 		}
 
 		@Override

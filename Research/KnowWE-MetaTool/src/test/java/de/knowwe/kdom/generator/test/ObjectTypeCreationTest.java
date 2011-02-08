@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import de.knowwe.kdom.generator.ObjectType;
-import de.knowwe.kdom.generator.ParametrizedClass;
+import de.knowwe.kdom.generator.ParameterizedClass;
 import de.knowwe.kdom.generator.QualifiedClass;
 
 /**
@@ -115,7 +115,7 @@ public class ObjectTypeCreationTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testSetSectionFinderOnExisting() {
 		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
-		ParametrizedClass sectionFinder = new ParametrizedClass("de.d3web.we.kdom.sectionFinder",
+		ParameterizedClass sectionFinder = new ParameterizedClass("de.d3web.we.kdom.sectionFinder",
 				"RegExSectionFinder", ".*");
 		new ObjectType.Builder("01", objectTypeClass, true).setSectionFinder(sectionFinder).build();
 	}
@@ -124,7 +124,7 @@ public class ObjectTypeCreationTest {
 	public void testSectionFinder() {
 
 		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
-		ParametrizedClass sectionFinder = new ParametrizedClass("de.d3web.we.kdom.sectionFinder",
+		ParameterizedClass sectionFinder = new ParameterizedClass("de.d3web.we.kdom.sectionFinder",
 				"RegExSectionFinder", ".*");
 		ObjectType objectType = new ObjectType.Builder("01", objectTypeClass, false)
 												.setSectionFinder(sectionFinder)
@@ -210,6 +210,59 @@ public class ObjectTypeCreationTest {
 		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
 		ObjectType objectType = new ObjectType.Builder("01", objectTypeClass, false).build();
 		objectType.addChild(1, child);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetConstraintOnExisting() {
+		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
+		QualifiedClass constraint = new QualifiedClass("de.d3web.we.kdom.constraint",
+				"AtMostOneFindingConstraint");
+		new ObjectType.Builder("01", objectTypeClass, true).addConstraint(constraint).build();
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void testSetConstraintBeforeSectionFinder() {
+		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
+		QualifiedClass constraint = new QualifiedClass("de.d3web.we.kdom.constraint",
+				"AtMostOneFindingConstraint");
+		new ObjectType.Builder("01", objectTypeClass, false).addConstraint(constraint).build();
+	}
+
+	@Test
+	public void testConstraint() {
+
+		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
+		ParameterizedClass sectionFinder = new ParameterizedClass("de.d3web.we.kdom.sectionFinder",
+				"RegExSectionFinder", "\".*\"");
+		QualifiedClass constraint = new QualifiedClass("de.d3web.we.kdom.constraint",
+				"AtMostOneFindingConstraint");
+		ObjectType objectType = new ObjectType.Builder("01", objectTypeClass, false)
+												.setSectionFinder(sectionFinder)
+												.addConstraint(constraint)
+												.build();
+
+		// Mandatory attributes
+		assertEquals("Wrong ID.", "01", objectType.getID());
+		assertEquals("Wrong Class.", "TestType", objectType.getClassName());
+		assertEquals("Wrong Package.", "de.knowwe.kdom", objectType.getPackageName());
+
+		// Custom SectionFinder
+		assertEquals("SectionFinder has wrong Class.", "ConstraintSectionFinder",
+				objectType.getSectionFinder().getClassName());
+		assertEquals("SectionFinder has wrong package", "de.d3web.we.kdom.constraint",
+				objectType.getSectionFinder().getPackageName());
+		assertEquals("SectionFinder has wrong value", "new RegExSectionFinder(\".*\")",
+				objectType.getSectionFinder().getValue());
+
+		// Constraints
+		assertEquals("Wrong number of constraints.", 1, objectType.getConstraints().size());
+		assertEquals("Constraint has wrong Class.", "AtMostOneFindingConstraint",
+				objectType.getConstraints().get(0).getClassName());
+		assertEquals("Constraint has wrong package", "de.d3web.we.kdom.constraint",
+				objectType.getConstraints().get(0).getPackageName());
+
+		// Default Attribute
+		assertEquals("Wrong number of children.", 0, objectType.getChildren().size());
 	}
 
 

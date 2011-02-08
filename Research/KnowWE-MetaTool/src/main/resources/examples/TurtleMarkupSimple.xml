@@ -2,20 +2,26 @@
 <ObjectTypes Author="Sebastian Furth">
 	<ObjectType ID="A0" PackageName="de.knowwe.kdom" ClassName="TurtleMarkupSimple"
 		SuperTypeClass="DefaultKnowWEObjectType" SuperTypePackage="de.d3web.we.kdom">
-		<SectionFinder ClassName="RegExSectionFinder" PackageName="de.d3web.we.kdom.sectionFinder" Value="{(.*?::.*?)}" />
-		<AnonymousSubtreeHandler Name="TurtleMarkupSimpleSubtreeHandler"
-			SuperType="OWLSubtreeHandler" />
+		<SectionFinder ClassName="RegExSectionFinder"
+			PackageName="de.d3web.we.kdom.sectionFinder" Value='"&lt;.*?::.*&gt;"'/>
 	</ObjectType>
 	<ObjectType ID="B1" PackageName="de.knowwe.kdom" ClassName="Predicate"
 		SuperTypeClass="DefaultKnowWEObjectType" SuperTypePackage="de.d3web.we.kdom"
 		Parent="A0" Position="0">
+		<SectionFinder ClassName="RegExSectionFinder"
+			PackageName="de.d3web.we.kdom.sectionFinder" Value='"\\b([^\\s]*)::"' />
 	</ObjectType>
 	<ObjectType ID="B0" PackageName="de.knowwe.kdom" ClassName="Subject"
 		SuperTypeClass="DefaultKnowWEObjectType" SuperTypePackage="de.d3web.we.kdom"
 		Parent="A0" Position="1">
+		<!-- Unable to add SectionFinder due to limitations of AllBeforeTypeSectionFinder -->
 	</ObjectType>
 	<ObjectType ID="B2" PackageName="de.knowwe.kdom" ClassName="Object"
 		SuperTypeClass="DefaultKnowWEObjectType" SuperTypePackage="de.d3web.we.kdom"
 		Parent="A0" Position="2">
+		<SectionFinder ClassName="AllTextFinderTrimmed"
+			PackageName="de.d3web.we.kdom.sectionFinder" Value="">
+			<Constraint ClassName="SingleChildConstraint" PackageName="de.d3web.we.kdom.constraint" />
+		</SectionFinder>
 	</ObjectType>
 </ObjectTypes>

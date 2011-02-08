@@ -26,7 +26,11 @@
 <!ATTLIST AnonymousSubtreeHandler
 	Name CDATA #REQUIRED
 	SuperType CDATA #REQUIRED>
-<!ELEMENT SectionFinder EMPTY>
+<!ELEMENT SectionFinder (Constraint*)>
 <!ATTLIST SectionFinder
 	ClassName CDATA #REQUIRED
 	Package CDATA #IMPLIED>
+<!ELEMENT Constraint EMPTY>
+<!ATTLIST Constraint
+	ClassName CDATA #REQUIRED
+	Package CDATA #IMPLIED> 
