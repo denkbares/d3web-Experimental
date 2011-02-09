@@ -22,7 +22,6 @@ package de.d3web.KnOfficeParser;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Choice;
-import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
@@ -160,75 +159,5 @@ public class SingleKBMIDObjectManager implements IDObjectManagement {
 	@Override
 	public KnowledgeBase getKnowledgeBase() {
 		return kbm.getKnowledgeBase();
-	}
-
-	@Override
-	public String findNewIDFor(Class<? extends NamedObject> object) {
-		return kbm.findNewIDFor(object);
-	}
-
-	@Override
-	public String findNewIDForAnswerChoice(QuestionChoice currentQuestion) {
-		return kbm.findNewIDForAnswerChoice(currentQuestion);
-	}
-
-	@Override
-	public QContainer createQContainer(String id, String name, QASet parent) {
-		return kbm.createQContainer(id, name, parent);
-	}
-
-	@Override
-	public QuestionDate createQuestionDate(String id, String name, QASet parent) {
-		return kbm.createQuestionDate(id, name, parent);
-	}
-
-	@Override
-	public QuestionMC createQuestionMC(String id, String name, QASet parent, Choice[] answers) {
-		return kbm.createQuestionMC(id, name, parent, answers);
-	}
-
-	@Override
-	public QuestionMC createQuestionMC(String id, String name, QASet parent, String[] answers) {
-		return kbm.createQuestionMC(id, name, parent, answers);
-	}
-
-	@Override
-	public QuestionNum createQuestionNum(String id, String name, QASet parent) {
-		return kbm.createQuestionNum(id, name, parent);
-	}
-
-	@Override
-	public QuestionOC createQuestionOC(String id, String name, QASet parent, Choice[] answers) {
-		return kbm.createQuestionOC(id, name, parent, answers);
-	}
-
-	@Override
-	public QuestionOC createQuestionOC(String id, String name, QASet parent, String[] answers) {
-		return kbm.createQuestionOC(id, name, parent, answers);
-	}
-
-	@Override
-	public QuestionText createQuestionText(String id, String name, QASet parent) {
-		return kbm.createQuestionText(id, name, parent);
-	}
-
-	@Override
-	public QuestionYN createQuestionYN(String id, String name, QASet parent) {
-		return kbm.createQuestionYN(id, name, parent);
-	}
-
-	@Override
-	public QuestionYN createQuestionYN(String id, String name, String yesAlternativeText, String noAlternativeText, QASet parent) {
-		return kbm.createQuestionYN(id, name, yesAlternativeText, noAlternativeText, parent);
-	}
-
-	@Override
-	public QuestionZC createQuestionZC(String id, String name, QASet parent) {
-		return kbm.createQuestionZC(id, name, parent);
-	}
-
-	@Override
-	public Solution createSolution(String id, String name, Solution parent) {
-		return kbm.createSolution(id, name, parent);
 	}
 }

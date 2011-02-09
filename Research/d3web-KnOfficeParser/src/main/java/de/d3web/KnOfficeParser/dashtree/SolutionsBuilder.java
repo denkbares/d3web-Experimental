@@ -112,7 +112,7 @@ public class SolutionsBuilder implements DashTBuilder, KnOfficeParser {
 
 		// create new diagnosis in KB if there isn't already the same diagnosis
 		if (newDiag == null) {
-			newDiag = idom.createSolution(ref, diag, parent);
+			newDiag = idom.createSolution(diag, parent);
 		}
 
 		// saves the description of the solution if available

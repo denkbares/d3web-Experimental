@@ -51,9 +51,8 @@ public final class SessionConversionFactory {
 	}
 
 	public static Session copyToSession(KnowledgeBase knowledgeBase, SessionRecord source) throws IOException {
-		DefaultSession target = SessionFactory.createSession(source.getId(),
+		DefaultSession target = SessionFactory.createSession(source.getName(),
 				knowledgeBase, source.getCreationDate());
-		target.setName(source.getName());
 		InfoStoreUtil.copyEntries(source.getInfoStore(), target.getInfoStore());
 
 		// Search psmethods of session (improves performance)
@@ -121,9 +120,8 @@ public final class SessionConversionFactory {
 
 	public static SessionRecord copyToSessionRecord(Session source) {
 		DefaultSessionRecord target = new DefaultSessionRecord(
-				source.getId(),
+				source.getName(),
 				source.getCreationDate(), source.getLastChangeDate());
-		target.setName(source.getName());
 		InfoStoreUtil.copyEntries(source.getInfoStore(), target.getInfoStore());
 		target.getProtocol().addEntries(source.getProtocol().getProtocolHistory());
 		Blackboard blackboard = source.getBlackboard();

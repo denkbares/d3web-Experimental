@@ -125,7 +125,7 @@ public class MultipleXMLSessionRepository extends DefaultSessionRepository {
 			float percent = records.size() / (float) counter++;
 			listener.updateProgress(percent, sr.getName());
 			String date = FILE_DATE_FORMAT.format(sr.getCreationDate());
-			File file = new File(folder.getAbsolutePath() + "/" + date + "_" + sr.getId()
+			File file = new File(folder.getAbsolutePath() + "/" + date + "_" + sr.getName()
 					+ ".xml");
 			if (sr instanceof FileRecord && !((FileRecord) sr).modified) {
 				FileRecord fr = (FileRecord) sr;

@@ -82,8 +82,7 @@ public class ListCriteriaD3SubtreeHandler extends D3webSubtreeHandler<ListCriter
 			String listID) {
 
 		// Create Question
-		QuestionOC q = kbm.createQuestionOC(kbm.findNewIDFor(QuestionOC.class),
-				listID, kbm.getKnowledgeBase().getRootQASet(),
+		QuestionOC q = kbm.createQuestionOC(listID, kbm.getKnowledgeBase().getRootQASet(),
 				new String[] {
 						"active", "inactive" });
 

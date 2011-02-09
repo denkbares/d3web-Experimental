@@ -115,8 +115,7 @@ public class RestrictedIDObjectManager extends SingleKBMIDObjectManager {
 		}
 		if (answer == null && lazyAnswers) {
 			QuestionChoice qc = (QuestionChoice) q;
-			Choice ac = AnswerFactory.createAnswerChoice(
-					kbm.findNewIDForAnswerChoice(qc), name);
+			Choice ac = AnswerFactory.createAnswerChoice(name);
 			qc.addAlternative(ac);
 			answer = new ChoiceValue(ac);
 		}
@@ -127,8 +126,7 @@ public class RestrictedIDObjectManager extends SingleKBMIDObjectManager {
 	public Choice findAnswerChoice(QuestionChoice qc, String name) {
 		Choice answer = kbm.findChoice(qc, name);
 		if (answer == null && lazyAnswers) {
-			answer = AnswerFactory.createAnswerChoice(kbm.findNewIDForAnswerChoice(qc),
-					name);
+			answer = AnswerFactory.createAnswerChoice(name);
 			qc.addAlternative(answer);
 		}
 		return answer;
@@ -181,14 +179,6 @@ public class RestrictedIDObjectManager extends SingleKBMIDObjectManager {
 			}
 			return null;
 		}
-	}
-
-	@Override
-	public Solution createSolution(String id, String name, Solution parent) {
-		if (parent == null) {
-			parent = kbm.getKnowledgeBase().getRootSolution();
-		}
-		return kbm.createSolution(id, name, parent);
 	}
 
 	@Override

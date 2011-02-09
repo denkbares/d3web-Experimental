@@ -126,13 +126,9 @@ public class SessionPersistenceTest {
 		choices = new Choice[2];
 		choices[0] = new Choice("Answer1");
 		choices[1] = new Choice("Answer2");
-		choices[0].setText(choices[0].getName());
-		choices[1].setText(choices[1].getName());
 		choices2 = new Choice[2];
 		choices2[0] = new Choice("Answer1");
 		choices2[1] = new Choice("Answer2");
-		choices2[0].setText(choices[0].getName());
-		choices2[1].setText(choices[1].getName());
 		questionOC = kbm.createQuestionOC("Question",
 				kb.getRootQASet(), choices);
 		questionMC = kbm.createQuestionMC("Question2", kb.getRootQASet(), choices);
@@ -145,9 +141,8 @@ public class SessionPersistenceTest {
 				0.0));
 		RuleFactory.createHeuristicPSRule(solution, Score.P7, new CondNumLess(questionNum,
 				0.0));
-		DefaultSession session = (DefaultSession) SessionFactory.createSession(kb);
-		session.setName(TESTNAME);
-		sessionID = session.getId();
+		DefaultSession session = (DefaultSession) SessionFactory.createSession(TESTNAME, kb);
+		sessionID = session.getName();
 		Blackboard blackboard = session.getBlackboard();
 		blackboard.addValueFact(FactFactory.createUserEnteredFact(questionOC, new ChoiceValue(
 				choices[0])));
@@ -167,7 +162,7 @@ public class SessionPersistenceTest {
 		lastChangeDate = session.getLastChangeDate();
 		sessionRecord = SessionConversionFactory.copyToSessionRecord(session);
 		Session session2 = SessionFactory.createSession(kb);
-		session2ID = session2.getId();
+		session2ID = session2.getName();
 		session2.getPropagationManager().openPropagation();
 		Blackboard blackboard2 = session2.getBlackboard();
 		blackboard2.addValueFact(
@@ -427,9 +422,9 @@ public class SessionPersistenceTest {
 	}
 
 	private void checkValuesAfterReload(Session session, Session session2) throws IOException {
-		Assert.assertEquals(sessionID, session.getId());
+		Assert.assertEquals(sessionID, session.getName());
 		Assert.assertEquals(TESTNAME, session.getName());
-		Assert.assertEquals(session2ID, session2.getId());
+		Assert.assertEquals(session2ID, session2.getName());
 		Assert.assertEquals(creationDate, session.getCreationDate());
 		Assert.assertEquals(lastChangeDate, session.getLastChangeDate());
 		Blackboard blackboard = session.getBlackboard();
@@ -524,7 +519,7 @@ public class SessionPersistenceTest {
 		countRecords(1, repository);
 		Assert.assertNotNull(repository.getSessionRecordById(sessionID));
 		DefaultSessionRecord newSessionRecordWithSameID = new DefaultSessionRecord(
-				sessionRecord.getId(),
+				sessionRecord.getName(),
 				sessionRecord.getCreationDate(), sessionRecord.getLastChangeDate());
 		repository.add(newSessionRecordWithSameID);
 		countRecords(1, repository);

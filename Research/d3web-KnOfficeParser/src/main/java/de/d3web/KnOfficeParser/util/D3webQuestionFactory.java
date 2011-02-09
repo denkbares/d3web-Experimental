@@ -33,32 +33,32 @@ import de.d3web.core.manage.IDObjectManagement;
 
 public class D3webQuestionFactory {
 
-	public static Question createQuestion(String name, String id, String type, IDObjectManagement idom) {
-		return createQuestion(idom, idom.getKnowledgeBase().getRootQASet(), name, id, type);
+	public static Question createQuestion(String name, String type, IDObjectManagement idom) {
+		return createQuestion(idom, idom.getKnowledgeBase().getRootQASet(), name, type);
 	}
 
-	public static Question createQuestion(IDObjectManagement idom, QASet parent, String name, String id, String type) {
+	public static Question createQuestion(IDObjectManagement idom, QASet parent, String name, String type) {
 		Question q;
 		if (type.equalsIgnoreCase("oc")) {
-			q = idom.createQuestionOC(id, name, parent, new String[0]);
+			q = idom.createQuestionOC(name, parent, new String[0]);
 		}
 		else if (type.equalsIgnoreCase("mc")) {
-			q = idom.createQuestionMC(id, name, parent, new String[0]);
+			q = idom.createQuestionMC(name, parent, new String[0]);
 		}
 		else if (type.equalsIgnoreCase("num")) {
-			q = idom.createQuestionNum(id, name, parent);
+			q = idom.createQuestionNum(name, parent);
 		}
 		else if (type.equalsIgnoreCase("date")) {
-			q = idom.createQuestionDate(id, name, parent);
+			q = idom.createQuestionDate(name, parent);
 		}
 		else if (type.equalsIgnoreCase("info")) {
-			q = idom.createQuestionZC(id, name, parent);
+			q = idom.createQuestionZC(name, parent);
 		}
 		else if (type.equalsIgnoreCase("yn") || type.equalsIgnoreCase("jn")) {
-			q = idom.createQuestionYN(id, name, parent);
+			q = idom.createQuestionYN(name, parent);
 		}
 		else if (type.equalsIgnoreCase("text")) {
-			q = idom.createQuestionText(id, name, parent);
+			q = idom.createQuestionText(name, parent);
 		}
 		else {
 			q = null;

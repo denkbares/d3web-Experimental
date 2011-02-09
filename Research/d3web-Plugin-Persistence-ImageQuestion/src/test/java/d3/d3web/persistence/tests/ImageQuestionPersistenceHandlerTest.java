@@ -51,7 +51,6 @@ import de.d3web.plugin.test.InitPluginManager;
 public class ImageQuestionPersistenceHandlerTest {
 
 	private KnowledgeBase kb;
-	private Question q1, q2;
 	private XMLTag shouldTag;
 
 	@Before
@@ -61,12 +60,8 @@ public class ImageQuestionPersistenceHandlerTest {
 		ImageQuestionPersistenceHandler ph = new ImageQuestionPersistenceHandler();
 		kb = new KnowledgeBase();
 
-		q1 = new QuestionNum("QGelenkstatus");
-		q1.setName("QGelenkstatus");
-		q1.setKnowledgeBase(kb);
-		q2 = new QuestionNum("QGelenkstatus2");
-		q2.setName("QGelenkstatus2");
-		q2.setKnowledgeBase(kb);
+		new QuestionNum(kb, "QGelenkstatus");
+		new QuestionNum(kb, "QGelenkstatus2");
 		File file = new File("src/test/resources/picturequestions.xml");
 		BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
 		ph.read(kb, in, new DummyProgressListener());

@@ -132,7 +132,7 @@ public class D3webBuilder implements Builder, KnOfficeParser {
 					}
 					if (typedef) {
 						currentquestion = D3webQuestionFactory.createQuestion(idom, currentqclass,
-								question, null, type);
+								question, type);
 					}
 					else if (answer == null) {
 						currentquestion = idom.createQuestionYN(question, currentqclass);

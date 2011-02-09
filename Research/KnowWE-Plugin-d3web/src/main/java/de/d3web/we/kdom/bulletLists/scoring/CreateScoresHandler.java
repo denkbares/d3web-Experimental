@@ -150,10 +150,8 @@ public class CreateScoresHandler extends D3webSubtreeHandler {
 			KnowledgeBaseManagement kbm, Section s) {
 
 		Choice a1 = new Choice(s.getID() + defaultValue);
-		a1.setText(defaultValue);
 
 		Choice a2 = new Choice(s.getID() + "not " + defaultValue);
-		a2.setText("not " + defaultValue);
 
 		QuestionOC q = kbm.createQuestionOC(question, kbm.getKnowledgeBase()
 				.getRootQASet(), new Choice[] {

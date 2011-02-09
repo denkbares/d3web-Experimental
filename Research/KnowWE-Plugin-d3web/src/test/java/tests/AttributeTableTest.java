@@ -29,6 +29,7 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.plugin.test.InitPluginManager;
+import de.d3web.we.core.packaging.KnowWEPackageManager;
 import de.d3web.we.kdom.KnowWEArticle;
 
 /**
@@ -43,6 +44,7 @@ public class AttributeTableTest extends TestCase {
 	@Override
 	protected void setUp() throws IOException {
 		InitPluginManager.init();
+		KnowWEPackageManager.overrideAutocompileArticle(true);
 	}
 
 	public void testMMInfo() {
@@ -52,8 +54,8 @@ public class AttributeTableTest extends TestCase {
 		KnowledgeBase createdKB = KBTestUtil.getInstance().getCreatedKB();
 
 		// Get Diagnosis with ID "P1": "Mechanical Problem"
-		Solution loadedDiag = loadedKB.getManager().searchSolution("P1");
-		Solution createdDiag = createdKB.getManager().searchSolution("P1");
+		Solution loadedDiag = loadedKB.getManager().searchSolution("Mechanical problem");
+		Solution createdDiag = createdKB.getManager().searchSolution("Mechanical problem");
 
 		// Get Property
 		String loadedValue = loadedDiag.getInfoStore().getValue(MMInfo.DESCRIPTION);

@@ -28,7 +28,6 @@ import de.d3web.core.session.protocol.Protocol;
  */
 public class DefaultSessionRecord implements SessionRecord {
 
-	private final String id;
 	private final Date creationDate;
 	private Date lastEditDate;
 
@@ -53,8 +52,8 @@ public class DefaultSessionRecord implements SessionRecord {
 		this(id, date, date);
 	}
 
-	public DefaultSessionRecord(String id, Date creationDate, Date lastEditDate) {
-		this.id = id;
+	public DefaultSessionRecord(String name, Date creationDate, Date lastEditDate) {
+		this.name = name;
 		this.creationDate = creationDate;
 		this.lastEditDate = lastEditDate;
 	}
@@ -65,8 +64,9 @@ public class DefaultSessionRecord implements SessionRecord {
 	}
 
 	@Override
+	@Deprecated
 	public String getId() {
-		return id;
+		return getName();
 	}
 
 	@Override

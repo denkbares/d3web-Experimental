@@ -181,21 +181,10 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 				}
 			}
 			else if (currentQuestion instanceof QuestionOC) {
-				if (ref != null) {
-					answer = getAnswer(name, currentQuestion.getId() + ref);
-				}
-				else {
-					answer = getAnswer(name, null);
-				}
-
+				answer = getAnswer(name);
 			}
 			else if (currentQuestion instanceof QuestionMC) {
-				if (ref != null) {
-					answer = getAnswer(name, currentQuestion.getId() + ref);
-				}
-				else {
-					answer = getAnswer(name, null);
-				}
+				answer = getAnswer(name);
 			}
 			else {
 				errors.add(MessageKnOfficeGenerator
@@ -247,20 +236,20 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 	}
 
 	private void setAnswerPropertytoCurrentQuestion(Choice answer,
-			Property property) {
+			Property<?> property) {
 		InfoStore infoStore = currentQuestion.getInfoStore();
 		Object defproperty = infoStore.getValue(property);
 		if (defproperty != null) {
 			if (defproperty instanceof String) {
 				String s = (String) defproperty;
-				if (!s.contains(answer.getId())) {
-					s += ";" + answer.getId();
+				if (!s.contains(answer.getName())) {
+					s += ";" + answer.getName();
 					defproperty = s;
 				}
 			}
 		}
 		else {
-			defproperty = answer.getId();
+			defproperty = answer.getName();
 		}
 		infoStore.addValue(property, defproperty);
 	}
@@ -308,7 +297,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 		return c;
 	}
 
-	private Choice getAnswer(String name, String ref) {
+	private Choice getAnswer(String name) {
 
 		QuestionChoice questionChoice = (QuestionChoice) currentQuestion;
 
@@ -318,12 +307,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 		}
 
 		// No answer found, create new one
-		if (ref == null) {
-			ref = idom
-					.findNewIDForAnswerChoice(questionChoice);
-		}
-
-		Choice answer = AnswerFactory.createAnswerChoice(ref, name);
+		Choice answer = AnswerFactory.createAnswerChoice(name);
 
 		questionChoice.addAlternative(answer);
 		return answer;
@@ -568,14 +552,10 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 						.createNoParentQuestionError(file, line, linetext));
 				return;
 			}
-			if (ref != null && !ref.equals(currentQuestion.getId())) {
-				errors.add(MessageKnOfficeGenerator.createCannotChangeIDError(file, line,
-						linetext, name));
-			}
 		}
 		else {
 			currentQuestion = D3webQuestionFactory.createQuestion(idom, parent,
-					name, ref, type);
+					name, type);
 		}
 
 		if (currentQuestion == null) {
@@ -710,24 +690,12 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 		}
 		QASet qs1 = idom.findQContainer(name);
 		if (qs1 == null) {
-			if (ref == null) {
-				qs1 = idom.createQContainer(name, idom.getKnowledgeBase()
+			qs1 = idom.createQContainer(name, idom.getKnowledgeBase()
 						.getRootQASet());
-			}
-			else {
-				qs1 = idom.createQContainer(ref, name,
-						idom.getKnowledgeBase().getRootQASet());
-			}
 			if (idom.getKnowledgeBase().getInitQuestions().isEmpty()) {
 				ArrayList<QASet> tmp = new ArrayList<QASet>();
 				tmp.add(qs1);
 				idom.getKnowledgeBase().setInitQuestions(tmp);
-			}
-		}
-		else {
-			if (ref != null && !qs1.getId().equals(ref)) {
-				errors.add(MessageKnOfficeGenerator.createCannotChangeIDError(file, line,
-						linetext, name));
 			}
 		}
 		currentQuestionclass = qs1;

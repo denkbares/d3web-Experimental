@@ -74,9 +74,7 @@ public class QuestionTreeTest extends TestCase {
 				Question expected = createdKB.getManager().getQuestions().get(i);
 				Question actual = loadedKB.getManager().getQuestions().get(i);
 
-				// Test Name & ID
-				assertEquals("Question " + expected.getName() + " has wrong ID.",
-						expected.getId(), actual.getId());
+				// Test Name
 				assertEquals("Question " + expected.getName() + " has wrong name.",
 						expected.getName(), actual.getName());
 
@@ -126,8 +124,8 @@ public class QuestionTreeTest extends TestCase {
 		KnowledgeBase createdKB = KBTestUtil.getInstance().getCreatedKB();
 
 		// Get Question with ID "Q1": "Exhaust fumes"
-		Question loadedQuestion = loadedKB.getManager().searchQuestion("Q1");
-		Question createdQuestion = createdKB.getManager().searchQuestion("Q1");
+		Question loadedQuestion = loadedKB.getManager().searchQuestion("Exhaust fumes");
+		Question createdQuestion = createdKB.getManager().searchQuestion("Exhaust fumes");
 
 		String loadedPrompt = loadedQuestion.getInfoStore().getValue(MMInfo.PROMPT);
 		String createdPrompt = createdQuestion.getInfoStore().getValue(MMInfo.PROMPT);

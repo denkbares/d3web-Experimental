@@ -62,7 +62,7 @@ public class QuestionnaireBuilder implements DashTBuilder, KnOfficeParser {
 	 * Little internal tree to cache the QContainers, allowing for a sorted
 	 * inclusion.
 	 */
-	private final Node cacheTree = new Node("root", null, Integer.MAX_VALUE, null);
+	private final Node cacheTree = new Node("root", Integer.MAX_VALUE, null);
 
 	/**
 	 * The start-up questions
@@ -79,7 +79,6 @@ public class QuestionnaireBuilder implements DashTBuilder, KnOfficeParser {
 	class Node {
 
 		private final String content;
-		private final String id;
 		private final String description;
 		private final int order;
 		private final List<Node> children = new LinkedList<Node>();
@@ -92,9 +91,8 @@ public class QuestionnaireBuilder implements DashTBuilder, KnOfficeParser {
 		 * @param order The initial questionnaire order ([X] in the markup)
 		 * @param description An optional description
 		 */
-		public Node(String content, String id, int order, String description) {
+		public Node(String content, int order, String description) {
 			this.content = content;
-			this.id = id;
 			this.order = order;
 			this.description = description;
 		}
@@ -152,7 +150,7 @@ public class QuestionnaireBuilder implements DashTBuilder, KnOfficeParser {
 	 */
 	@Override
 	public void addNode(int dashes, String name, String ref, int line, String description, int order) {
-		Node node = new Node(name, ref, order, description);
+		Node node = new Node(name, order, description);
 
 		// If we go one level deeper
 		if (dashes > prevNode.getLevel()) {
@@ -257,7 +255,7 @@ public class QuestionnaireBuilder implements DashTBuilder, KnOfficeParser {
 
 		if (children.size() > 0) {
 			for (Node child : children) {
-				QContainer q = idom.createQContainer(child.id, child.getContent(),
+				QContainer q = idom.createQContainer(child.getContent(),
 						(parent == null)
 								? idom.getKnowledgeBase().getRootQASet()
 								: parent);
