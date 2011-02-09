@@ -19,37 +19,29 @@
 package de.d3web.we.testcase;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Map;
 
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionDate;
-import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.blackboard.DefaultFact;
-import de.d3web.core.session.blackboard.Fact;
-import de.d3web.core.session.blackboard.FactFactory;
-import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.core.session.values.DateValue;
-import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.UndefinedValue;
-import de.d3web.core.session.values.Unknown;
 import de.d3web.empiricaltesting.Finding;
 import de.d3web.empiricaltesting.RatedTestCase;
 import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.ActionContext;
+import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
-import de.d3web.we.event.EventManager;
+import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.d3web.event.FindingSetEvent;
 
 /**
  * @author Florian Ziegler
@@ -67,51 +59,24 @@ public class RunTestcaseAction extends AbstractAction {
 				web).findNode(execLine);
 
 		Section<TestcaseTableLine> line = cell.findAncestorOfExactType(TestcaseTableLine.class);
-		RatedTestCase testcase = (RatedTestCase) KnowWEUtils.getStoredObject(line.getArticle(),
-				line,
-				TestcaseTableLine.TESTCASE_KEY);
 		Section<TestcaseTableType> tableDMType = line.findAncestorOfExactType(TestcaseTableType.class);
 		String master = TestcaseTableType.getMaster(tableDMType, map.getTopic());
+		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(web, master);
 
-		// Section<TimeStampType> timeStampSection =
-		// cell.findSuccessor(TimeStampType.class);
-		//
-		//
-		//
-		// List<Section<AnswerReference>> found = new
-		// LinkedList<Section<AnswerReference>>();
-		// line.findSuccessorsOfType(AnswerReference.class, found);
-		//
-		// Map<String, String> testcaseMap = new HashMap<String, String>();
-		// for (Section<AnswerReference> section : found) {
-		// Section<QuestionReference> questionSection =
-		// section.getObjectType().getQuestionSection(
-		// section);
-		// testcaseMap.put(questionSection.getOriginalText(),
-		// section.getOriginalText());
-		//
-		// }
+		RatedTestCase testcase = (RatedTestCase) KnowWEUtils.getStoredObject(article,
+				line,
+				TestcaseTableLine.TESTCASE_KEY);
 
 		String user = context.getWikiContext().getUserName();
 		Session session = D3webUtils.getSession(master, user, web);
-		// KnowledgeBaseManagement kbm =
-		// D3webModule.getKnowledgeRepresentationHandler(web).getKBM(
-		// master);
 
 		if (session == null) return;
 
-		// long propTime = getPropagationTime(session, kbm, timeStampSection);
+		KnowledgeBaseManagement kbm =
+				D3webModule.getKnowledgeRepresentationHandler(web).getKBM(master);
 
-		executeTestCase(testcase, session);
-		// try {
-		// session.getPropagationManager().openPropagation(propTime);
-		//
-		// setValues(testcaseMap, web, user, kbm, session);
-		//
-		// }
-		// finally {
-		// session.getPropagationManager().commitPropagation();
-		// }
+		executeTestCase(testcase, session, kbm);
+
 
 	}
 
@@ -120,13 +85,14 @@ public class RunTestcaseAction extends AbstractAction {
 	 * @created 22.01.2011
 	 * @param testcase
 	 * @param session
+	 * @param kbm
 	 */
-	private void executeTestCase(RatedTestCase testcase, Session session) {
-		try {
-			session.getPropagationManager().openPropagation(testcase.getTimeStamp().getTime());
+	private void executeTestCase(RatedTestCase testcase, Session session, KnowledgeBaseManagement kbm) {
+		Blackboard blackboard = session.getBlackboard();
+		long time = getPropagationTime(session, kbm, testcase.getTimeStamp().getTime());
 
-			Blackboard blackboard = session.getBlackboard();
-			long time = testcase.getTimeStamp().getTime();
+		try {
+
 			session.getPropagationManager().openPropagation(time);
 			for (Finding f : testcase.getFindings()) {
 				blackboard.addValueFact(new DefaultFact(f.getQuestion(), f.getValue(), time,
@@ -146,25 +112,20 @@ public class RunTestcaseAction extends AbstractAction {
 	 * @created 20.01.2011
 	 * @param session
 	 * @param kbm
-	 * @param timeStampSection
+	 * @param offSet
 	 * @return
 	 */
-	private long getPropagationTime(Session session, KnowledgeBaseManagement kbm, Section<TimeStampType> timeStampSection) {
+	private long getPropagationTime(Session session, KnowledgeBaseManagement kbm, long offSet) {
 
-		if (timeStampSection == null) {
-			return session.getLastChangeDate().getTime();
-		}
-
-		long timestamp = TimeStampType.getTimeInMillis(timeStampSection);
 
 		Question question = kbm.findQuestion("start");
 		if (question == null) { // no timeDB present
-			return timestamp;
+			return offSet;
 		}
 		else {
 			// start is no date question. Maybe timeDB is not present
 			if (!(question instanceof QuestionDate)) {
-				return timestamp;
+				return offSet;
 			}
 			Value value = session.getBlackboard().getValue(question);
 
@@ -174,77 +135,83 @@ public class RunTestcaseAction extends AbstractAction {
 
 			Date date = dateValue.getDate();
 
-			return date.getTime() + timestamp;
+			return date.getTime() + offSet;
 		}
 
 	}
 
-	/**
-	 * @param testcaseMap
-	 * @param web
-	 * @param user
-	 * @param kbm
-	 * @param blackboard
-	 * @param time
-	 */
-	private void setValues(Map<String, String> testcaseMap, String web,
-			String user, KnowledgeBaseManagement kbm, Session session) {
-
-		Blackboard blackboard = session.getBlackboard();
-
-		for (String questionName : testcaseMap.keySet()) {
-
-			String valueString = testcaseMap.get(questionName);
-
-			// Necessary for FindingSetEvent
-			Question question = kbm.findQuestion(questionName);
-			// TODO solutions
-			if (question == null) {
-				System.out.println("Could not find Question '" + questionName + "'.");
-				continue;
-			}
-
-			// do not change value
-			if (valueString.equals(GetNewQuickEditAnswersAction.UNCHANGED_VALUE_STRING)) {
-				continue;
-			}
-
-			Value value;
-
-			if (valueString.equals(GetNewQuickEditAnswersAction.UNKNOWN_VALUE_STRING)) {
-				value = Unknown.getInstance();
-			}
-			else {
-				value = kbm.findValue(question, valueString);
-			}
-
-			if (value == null) {
-				System.out.println("Could not find value '" + valueString + "' on Question '"
-						+ questionName + "'.");
-				continue;
-			}
-
-			if (question instanceof QuestionMC && !value.equals(Unknown.getInstance())) {
-				Fact mcFact = blackboard.getValueFact(question);
-				if (mcFact != null && !mcFact.getValue().equals(Unknown.getInstance())) {
-					MultipleChoiceValue mcv = ((MultipleChoiceValue) mcFact.getValue());
-					Collection<ChoiceValue> thisMcv = (Collection<ChoiceValue>) ((MultipleChoiceValue) value).getValue();
-					for (ChoiceValue cv : (Collection<ChoiceValue>) mcv.getValue()) {
-						if (!thisMcv.contains(cv)) {
-							thisMcv.add(cv);
-						}
-					}
-				}
-			}
-
-			blackboard.addValueFact(FactFactory.createFact(session, question, value,
-					PSMethodUserSelected.getInstance(), PSMethodUserSelected.getInstance()));
-
-			// TODO
-			EventManager.getInstance().fireEvent(
-					new FindingSetEvent(question, value, "TODO namespace", web, user));
-
-		}
-	}
+	// /**
+	// * @param testcaseMap
+	// * @param web
+	// * @param user
+	// * @param kbm
+	// * @param blackboard
+	// * @param time
+	// */
+	// private void setValues(Map<String, String> testcaseMap, String web,
+	// String user, KnowledgeBaseManagement kbm, Session session) {
+	//
+	// Blackboard blackboard = session.getBlackboard();
+	//
+	// for (String questionName : testcaseMap.keySet()) {
+	//
+	// String valueString = testcaseMap.get(questionName);
+	//
+	// // Necessary for FindingSetEvent
+	// Question question = kbm.findQuestion(questionName);
+	// // TODO solutions
+	// if (question == null) {
+	// System.out.println("Could not find Question '" + questionName + "'.");
+	// continue;
+	// }
+	//
+	// // do not change value
+	// if
+	// (valueString.equals(GetNewQuickEditAnswersAction.UNCHANGED_VALUE_STRING))
+	// {
+	// continue;
+	// }
+	//
+	// Value value;
+	//
+	// if
+	// (valueString.equals(GetNewQuickEditAnswersAction.UNKNOWN_VALUE_STRING)) {
+	// value = Unknown.getInstance();
+	// }
+	// else {
+	// value = kbm.findValue(question, valueString);
+	// }
+	//
+	// if (value == null) {
+	// System.out.println("Could not find value '" + valueString +
+	// "' on Question '"
+	// + questionName + "'.");
+	// continue;
+	// }
+	//
+	// if (question instanceof QuestionMC &&
+	// !value.equals(Unknown.getInstance())) {
+	// Fact mcFact = blackboard.getValueFact(question);
+	// if (mcFact != null && !mcFact.getValue().equals(Unknown.getInstance())) {
+	// MultipleChoiceValue mcv = ((MultipleChoiceValue) mcFact.getValue());
+	// Collection<ChoiceValue> thisMcv = (Collection<ChoiceValue>)
+	// ((MultipleChoiceValue) value).getValue();
+	// for (ChoiceValue cv : (Collection<ChoiceValue>) mcv.getValue()) {
+	// if (!thisMcv.contains(cv)) {
+	// thisMcv.add(cv);
+	// }
+	// }
+	// }
+	// }
+	//
+	// blackboard.addValueFact(FactFactory.createFact(session, question, value,
+	// PSMethodUserSelected.getInstance(), PSMethodUserSelected.getInstance()));
+	//
+	// // TODO
+	// EventManager.getInstance().fireEvent(
+	// new FindingSetEvent(question, value, "TODO namespace", web, user));
+	//
+	// }
+	// }
 
 }

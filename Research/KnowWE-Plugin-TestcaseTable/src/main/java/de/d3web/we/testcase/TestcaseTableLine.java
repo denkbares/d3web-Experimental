@@ -31,9 +31,9 @@ import de.d3web.empiricaltesting.RatedTestCase;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.report.KDOMReportMessage;
+import de.d3web.we.kdom.report.SyntaxError;
 import de.d3web.we.kdom.table.TableCell;
 import de.d3web.we.kdom.table.TableLine;
 import de.d3web.we.object.QuestionReference;
@@ -61,18 +61,19 @@ public class TestcaseTableLine extends TableLine {
 
 			@Override
 			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TestcaseTableLine> s) {
-				Section<? extends KnowWEObjectType> firstChild = s.findAncestorOfType(
-						TestcaseTable.class).getChildren().get(0);
-
-				if (firstChild == s) return null;
 
 				KnowledgeBaseManagement kbm = findKB(s, article);
 
 				Section<TimeStampType> timeStamp = s.findSuccessor(TimeStampType.class);
 				if (timeStamp == null) {
-					// TODO error handling
-					System.out.println("invalid timestamp:");
-					return null;
+					int lineNumber = s.findAncestorOfType(TestcaseTable.class).getChildren().indexOf(
+							s);
+					Section<CellContent> cell = s.findSuccessor(CellContent.class);
+
+					LinkedList<KDOMReportMessage> list = new LinkedList<KDOMReportMessage>();
+					list.add(new SyntaxError("Invalid timestamp '" + cell.getOriginalText()
+							+ "' in line: " + lineNumber));
+					return list;
 				}
 				long time = TimeStampType.getTimeInMillis(timeStamp);
 				RatedTestCase testCase = new RatedTestCase();
@@ -87,7 +88,7 @@ public class TestcaseTableLine extends TableLine {
 
 					Section<QuestionReference> qRef = headerCell.findSuccessor(QuestionReference.class);
 					String qName = qRef.getOriginalText();
-
+					// TODO unchanged value, unknown value
 					Question question = kbm.findQuestion(qName);
 					Value value = kbm.findValue(question, valueSec.getOriginalText());
 					Finding finding = new Finding(question, value);
