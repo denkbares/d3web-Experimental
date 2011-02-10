@@ -23,8 +23,8 @@ package de.d3web.we.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -232,8 +232,8 @@ public class XCLExplanationAction extends DeprecatedAbstractKnowWEAction {
 		for (XCLRelation rel : content) {
 			cont.append("<tr><td>");
 			Condition cond = rel.getConditionedFinding();
-			List<? extends TerminologyObject> questions = cond.getTerminalObjects();
-			ListIterator<? extends TerminologyObject> condIt = questions.listIterator();
+			Collection<? extends TerminologyObject> questions = cond.getTerminalObjects();
+			Iterator<? extends TerminologyObject> condIt = questions.iterator();
 			List<Question> askedQuestions = new ArrayList<Question>();
 			int count = 0;
 			Question cq = null;
