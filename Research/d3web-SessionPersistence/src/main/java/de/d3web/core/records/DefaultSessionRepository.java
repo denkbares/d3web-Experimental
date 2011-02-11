@@ -29,23 +29,23 @@ public class DefaultSessionRepository implements SessionRepository {
 	public boolean add(SessionRecord sessionRecord) {
 		if (sessionRecord == null) throw new NullPointerException(
 				"null can't be added to the SessionRepository.");
-		SessionRecord oldRecord = sessionRecords.get(sessionRecord.getId());
+		SessionRecord oldRecord = sessionRecords.get(sessionRecord.getName());
 		if (oldRecord == null) {
-			sessionRecords.put(sessionRecord.getId(), sessionRecord);
+			sessionRecords.put(sessionRecord.getName(), sessionRecord);
 			return true;
 		}
 		else {
 			// joba: I would recommend to keep the "==" comparison here
 			if (oldRecord == sessionRecord) {
 				Logger.getLogger(this.getClass().getSimpleName()).warning(
-						"SessionRecord " + sessionRecord.getId()
+						"SessionRecord " + sessionRecord.getName()
 								+ " is already in the SessionRepository.");
 				return false;
 
 			}
 			else {
 				// replace record with new one
-				sessionRecords.put(sessionRecord.getId(), sessionRecord);
+				sessionRecords.put(sessionRecord.getName(), sessionRecord);
 				return true;
 			}
 		}
@@ -60,11 +60,11 @@ public class DefaultSessionRepository implements SessionRepository {
 	public boolean remove(SessionRecord sessionRecord) {
 		if (sessionRecord == null) throw new NullPointerException(
 				"null can't be removed from the SessionRepository.");
-		SessionRecord storedRecord = sessionRecords.get(sessionRecord.getId());
+		SessionRecord storedRecord = sessionRecords.get(sessionRecord.getName());
 		if (storedRecord == null || !storedRecord.equals(sessionRecord)) {
 			return false;
 		}
-		return (sessionRecords.remove(sessionRecord.getId()) != null);
+		return (sessionRecords.remove(sessionRecord.getName()) != null);
 	}
 
 	@Override

@@ -156,7 +156,6 @@ public class KBTestUtil {
 
 		Solution p2 = new Solution(createdKB, "Damaged idle speed system");
 		p1.addChild(p2);
-		createdKB.getManager().putTerminologyObject(p2);
 
 		Solution p3 = new Solution(createdKB, "Leaking air intake system");
 		p3.getInfoStore().addValue(MMInfo.DESCRIPTION, "The air intake system is leaking.");
@@ -172,7 +171,6 @@ public class KBTestUtil {
 	private void createQuestionnaires() {
 
 		QContainer qc0 = new QContainer(createdKB, "Q000");
-		createdKB.getManager().putTerminologyObject(qc0);
 		createdKB.setRootQASet(qc0);
 
 		QContainer qc1 = new QContainer(createdKB, "Observations");
@@ -234,7 +232,6 @@ public class KBTestUtil {
 		InfoStore infoStore = q1.getInfoStore();
 		infoStore.addValue(MMInfo.UNIT, "liter");
 		q1.getInfoStore().addValue(BasicProperties.QUESTION_NUM_RANGE, new NumericalInterval(0, 30));
-		createdKB.getManager().putTerminologyObject(q1);
 		qc1.addChild(q1);
 
 		// Add question:

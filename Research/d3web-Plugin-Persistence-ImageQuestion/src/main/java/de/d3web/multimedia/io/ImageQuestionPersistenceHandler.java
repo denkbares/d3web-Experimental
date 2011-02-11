@@ -122,7 +122,7 @@ public class ImageQuestionPersistenceHandler implements KnowledgeReader, Knowled
 
 			if (store != null) {
 				Element question = doc.createElement("Question");
-				question.setAttribute("ID", q.getId());
+				question.setAttribute("ID", q.getName());
 				Element questionImage = doc.createElement("QuestionImage");
 				questionImage.setAttribute("file", store.getFile());
 				questionImage.setAttribute("width", store.getWidth());
