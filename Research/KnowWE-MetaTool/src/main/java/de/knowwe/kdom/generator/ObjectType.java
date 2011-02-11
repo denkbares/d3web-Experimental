@@ -27,9 +27,9 @@ import java.util.List;
  * This class represents an KnowWE-Object-Type. Objects of this class can be
  * used to build a model of KnowWE-Object-Type-hierarchy. Such hierarchies can
  * be
- *
- * TODO: Refactor Strings, SectionFinder, SubtreeHandler...
- *
+ * 
+ * TODO: Refactor Strings, add SubtreeHandler...
+ * 
  * @author Sebastian Furth
  * @created Jan 18, 2011
  */

@@ -35,6 +35,8 @@ import de.knowwe.kdom.generator.QualifiedClass;
  * template file (/src/main/resources/templates/ObjectType.java.tmpl) with the
  * values from a specified ObjectType object.
  *
+ * TODO: Handle import of sectionfinder wrapped in ConstraintSectionFinder
+ *
  * @author Sebastian Furth
  * @created Jan 21, 2011
  */
@@ -49,7 +51,6 @@ public class JavaWriter implements ObjectTypeWriter {
 	private final String SUPERTYPEPACKAGE = "%SUPERTYPEPACKAGE%";
 	private final String SUPERTYPECLASSNAME = "%SUPERTYPECLASS%";
 	private final String SECTIONFINDERIMPORT = "%SECTIONFINDERIMPORT%";
-	private final String SECTIONFINDERCLASSNAME = "%SECTIONFINDERCLASS%";
 	private final String SECTIONFINDER = "%SECTIONFINDER%";
 	private final String CONSTRAINTIMPORTS = "%CONSTRAINTIMPORTS%";
 	private final String CONSTRAINTS = "%CONSTRAINTS%";
@@ -97,7 +98,6 @@ public class JavaWriter implements ObjectTypeWriter {
 	private String replaceSectionFinder(ParameterizedClass sectionFinder, String template, boolean constraints) {
 		if (sectionFinder == null) {
 			template = template.replaceAll(SECTIONFINDERIMPORT, "");
-			template = template.replaceAll(SECTIONFINDERCLASSNAME, "");
 			return template.replaceAll(SECTIONFINDER, "");
 		}
 
@@ -159,7 +159,7 @@ public class JavaWriter implements ObjectTypeWriter {
 			imports.append(";\n");
 			instantiations.append(INDENT);
 			instantiations.append("c.addConstraint(");
-			instantiations.append(c.getInstantiationString());
+			instantiations.append(c.getSingletonInstantiationString());
 			instantiations.append(");\n");
 		}
 		if (instantiations.length() > 0) {

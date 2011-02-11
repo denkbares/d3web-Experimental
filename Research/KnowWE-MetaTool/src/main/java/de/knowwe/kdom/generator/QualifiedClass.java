@@ -85,15 +85,27 @@ public class QualifiedClass {
 	}
 
 	/**
-	 * Returns a String which represents a simple instatiation of this class,
+	 * Returns a String which represents a simple instantiation of this class,
 	 * e.g. new String(). Please note, that the semicolon is not part contained
 	 * in the returned String.
-	 * 
+	 *
 	 * @created Feb 8, 2011
 	 * @return Instantiation String for this class.
 	 */
 	public String getInstantiationString() {
 		return "new " + className + "()";
+	}
+
+	/**
+	 * Returns a String which represents a singleton instantiation of this
+	 * class, e.g. YourClass.getInstance(). Please note, that the semicolon is
+	 * not part contained in the returned String.
+	 *
+	 * @created Feb 11, 2011
+	 * @return Instantiation String for this class.
+	 */
+	public String getSingletonInstantiationString() {
+		return className + ".getInstance()";
 	}
 
 	@Override

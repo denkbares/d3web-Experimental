@@ -40,7 +40,7 @@ public class Demo {
 
 		ObjectType temp = read();
 		write(temp);
-		// write(createObjectType());
+		write(createObjectType());
 	}
 
 	private static ObjectType read() throws IOException {
@@ -63,21 +63,34 @@ public class Demo {
 	}
 
 	private static ObjectType createObjectType() {
+
+		// Child
 		QualifiedClass childClass1 = new QualifiedClass("de.knowwe.kdom", "TestChildren1");
 		ObjectType child1 = new ObjectType.Builder("02", childClass1, false).build();
 
+		// Child
 		QualifiedClass childClass2 = new QualifiedClass("de.knowwe.kdom", "TestChildren2");
 		ObjectType child2 = new ObjectType.Builder("03", childClass2, true).build();
 
+		// Child
 		QualifiedClass childClass3 = new QualifiedClass("de.knowwe.kdom", "TestChildren3");
 		ObjectType child3 = new ObjectType.Builder("04", childClass3, false).build();
 
+		// Parent
 		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
+
+		// Parent's custom super class
 		QualifiedClass superType = new QualifiedClass("de.d3web.we.kdom.objects", "TermDefinition");
+
+		// Parent's section finder
 		ParameterizedClass sectionFinder = new ParameterizedClass("de.d3web.we.kdom.sectionFinder",
 				"RegexSectionFinder", "\".*\"");
+
+		// Parent's contraint
 		QualifiedClass constraint = new QualifiedClass("de.d3web.we.kdom.constraint",
 				"AtMostOneFindingConstraint");
+
+		// Creation of ObjectType
 		ObjectType objectType = new ObjectType.Builder("01", objectTypeClass, false)
 												.setSuperType(superType)
 												.setSectionFinder(sectionFinder)
