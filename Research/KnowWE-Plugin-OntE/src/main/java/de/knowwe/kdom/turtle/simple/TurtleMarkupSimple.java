@@ -18,7 +18,7 @@ public class TurtleMarkupSimple extends DefaultAbstractKnowWEObjectType{
 		this.setSectionFinder(new RegexSectionFinder("\\{(.*?::.*?)\\}", Pattern.DOTALL,1));
 
 		this.addChildType(new SimpleTurtlePredicate());
-		
+
 		this.addChildType(new SimpleTurtleSubject());
 
 		this.addChildType(new SimpleTurtleObject());
@@ -26,28 +26,28 @@ public class TurtleMarkupSimple extends DefaultAbstractKnowWEObjectType{
 		this.addSubtreeHandler(Priority.LOWEST, new TurtleRDF2GoCompiler());
 
 	}
-	
+
 	class SimpleTurtlePredicate extends OWLTermReference {
 		public SimpleTurtlePredicate (){
 			this.setSectionFinder(new RegexSectionFinder("\\b([^\\s]*)::",Pattern.DOTALL, 1));
 		}
 	}
-	
+
 	class SimpleTurtleSubject extends OWLTermReference {
 		public SimpleTurtleSubject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new AllTextFinderTrimmed());
-			c.addConstraint(new SingleChildConstraint());
+			c.addConstraint(SingleChildConstraint.getInstance());
 			this.setSectionFinder(c);
 		}
-		
+
 	}
-	
+
 	class SimpleTurtleObject extends OWLTermReference {
 		public SimpleTurtleObject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new RegexSectionFinder("::\\s(.*)",Pattern.DOTALL,1));
-			c.addConstraint(new SingleChildConstraint());
+			c.addConstraint(SingleChildConstraint.getInstance());
 			//c.addConstraint(new NonEmptyConstraint());
 			this.setSectionFinder(c);
 		}

@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.ontoware.rdf2go.model.node.URI;
-
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -16,7 +14,6 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SingleChildConstraint;
 import de.d3web.we.kdom.objects.KnowWETerm;
-import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SyntaxError;
@@ -134,7 +131,7 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 		public TurtleObject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new AllTextFinderTrimmed());
-			c.addConstraint(new SingleChildConstraint());
+			c.addConstraint(SingleChildConstraint.getInstance());
 			this.setSectionFinder(c);
 			this.addSubtreeHandler(Priority.LOWER, new TermChecker(URIUtil.OBJECT_VOCABULARY));
 		}
@@ -167,11 +164,11 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 			}else {
 				s.setType(new OWLTermReference());
 			}
-			
+
 			TerminologyHandler terminologyHandler = KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
 			boolean defined = terminologyHandler.isDefinedTerm(article,
 						termName, KnowWETerm.GLOBAL);
-			
+
 			if (!found && !defined) {
 				return Arrays.asList((KDOMReportMessage) new NoSuchObjectError(
 							s.getOriginalText()));
