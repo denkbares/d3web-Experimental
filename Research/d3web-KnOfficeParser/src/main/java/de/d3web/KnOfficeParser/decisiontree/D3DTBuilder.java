@@ -544,8 +544,8 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 		currentQuestion = idom.findQuestion(name);
 		if (currentQuestion != null) {
 			if (parent != null) {
-				parent.addLinkedChild(currentQuestion);
-				currentQuestion.addLinkedParent(parent);
+				parent.addChild(currentQuestion);
+				currentQuestion.addParent(parent);
 			}
 			else {
 				errors.add(MessageKnOfficeGenerator
