@@ -16,15 +16,15 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.kdom.generator.test;
+package de.knowwe.metatool.test;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import de.knowwe.kdom.generator.ObjectType;
-import de.knowwe.kdom.generator.ParameterizedClass;
-import de.knowwe.kdom.generator.QualifiedClass;
+import de.knowwe.metatool.ObjectType;
+import de.knowwe.metatool.ParameterizedClass;
+import de.knowwe.metatool.QualifiedClass;
 
 /**
  *

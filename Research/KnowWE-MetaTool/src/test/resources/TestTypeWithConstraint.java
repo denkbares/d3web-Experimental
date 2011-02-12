@@ -37,7 +37,7 @@ public class TestTypeWithConstraint extends TermDefinition {
 		childrenTypes.add(new TestChildren3());
 		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder(".*"));
 		setSectionFinder(c);
-		c.addConstraint(new AtMostOneFindingConstraint());
+		c.addConstraint(AtMostOneFindingConstraint.getInstance());
 	}
 
 }

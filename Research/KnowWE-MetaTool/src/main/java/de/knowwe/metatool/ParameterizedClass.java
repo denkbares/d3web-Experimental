@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.kdom.generator;
+package de.knowwe.metatool;
 
 /**
  * A ParameterizedClass is a QualifiedClass with a value for an additional

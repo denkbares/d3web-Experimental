@@ -1,4 +1,4 @@
-package de.knowwe.kdom.generator;
+package de.knowwe.metatool;
 
 import java.util.Collections;
 import java.util.LinkedList;
