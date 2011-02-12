@@ -145,16 +145,20 @@ public class TableUtils {
 	}
 
 	/**
-	 * returns whether the current Section is in a table and is sortable
+	 * returns whether the current Section is or is in a table and is sortable
 	 * 
 	 * @created 31.07.2010
 	 * @param sec
 	 * @return
 	 */
 	public static boolean sortOption(Section<?> sec) {
-		Section<Table> tableType = sec.findAncestorOfType(Table.class);
 		boolean sortable = false;
-		if (tableType != null && tableType.getObjectType() instanceof Table) {
+		Section<Table> tableType = sec.findAncestorOfType(Table.class);
+		if (sec.getObjectType() instanceof Table) {
+			Table table = (Table) sec.getObjectType();
+			sortable = table.isSortable();
+		}
+		else if (tableType != null) {
 			Table table = tableType.getObjectType();
 			sortable = table.isSortable();
 		}

@@ -35,6 +35,8 @@ public class TestcaseTable extends Table {
 		super(new TestcaseTableAttributesProvider());
 		KnowWERessourceLoader.getInstance().add("testcasetable.js",
 				KnowWERessourceLoader.RESOURCE_SCRIPT);
+		KnowWERessourceLoader.getInstance().add("testcasetable.css",
+				KnowWERessourceLoader.RESOURCE_STYLESHEET);
 
 		try {
 			replaceChildType(new HeaderLine(), TableLine.class);
