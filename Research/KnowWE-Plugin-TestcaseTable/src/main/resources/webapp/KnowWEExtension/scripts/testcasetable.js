@@ -263,16 +263,16 @@ Testcase.saveInputAfterChange = function(event) {
 }
 
 
-Testcase.runTestcaseNew = function(element) {
-	element.parentNode.className = 'testcaseExecuted';
-	
+Testcase.runTestcase = function(element, including) {
+	Testcase.colorExecutedLines(element, including);
 	
 	var topic = KNOWWE.helper.gup('page')
 	
 	var params = {
         action : 'RunTestcaseAction',
         KWiki_Topic : topic,
-        execLine : element.id
+        execLine : element.id,
+        multiLines : including
     }
 
     var options = {
@@ -289,57 +289,7 @@ Testcase.runTestcaseNew = function(element) {
     new _KA( options ).send();
 	
 }
-/**
- * runs a Testcase from the TestcaseTable.
- * Takes all values from the line and the header line with the keys
- * and sends them to RunTestcaseAction.
- */
-Testcase.runTestcase = function(element) {
-	element.parentNode.className = 'testcaseExecuted';
-	var table = Testcase.findParentWikiTable(element);
-	var lines = Testcase.getTableLines(table);
-	var headerLine = lines[0].getElements('td');
-	if (!headerLine || headerLine.length == 0) {
-		headerLine = lines[0].getElements('th');
-	}
-	var currentLine = Testcase.findLineOfElement(element).getElements('td');
-	
-	var headerLineToLine = '';
-	var currentLineToLine = '';
-	for (var i = 0; i < headerLine.length; i++) {
-		if (headerLine[i].childNodes.length > 0) {
-			headerLineToLine += headerLine[i].lastChild.nodeValue + ',.,';
-		}
-		currentLineToLine += currentLine[i].lastChild.nodeValue + ',.,'; 
-	}
-	
-	headerLineToLine = headerLineToLine.substring(0, headerLineToLine.length - 3);
-	currentLineToLine = currentLineToLine.substring(0, currentLineToLine.length -3 );
 
-		
-	
-	var topic = KNOWWE.helper.gup('page')
-		
-	var params = {
-        action : 'RunTestcaseAction',
-        KWiki_Topic : topic,
-        headerLine : headerLineToLine,
-        currentLine : currentLineToLine
-    }
-
-    var options = {
-        url : KNOWWE.core.util.getURL ( params ),
-        loader : true,
-        response : {
-            action : 'none',
-            fn : function(){
-				KNOWWE.helper.observer.notify('update');
-			}
-
-        }
-    }
-    new _KA( options ).send();
-}
 
 Testcase.findLineOfElement = function(element) {
 	var e = $(element);
@@ -380,4 +330,43 @@ Testcase.saveTable = function() {
         }
     }
     new _KA( options ).send();
+}
+
+Testcase.colorExecutedLines = function(element, including) {
+	var trs = element.parentNode.parentNode.parentNode.childNodes;
+	var currentLine = element.parentNode.parentNode;
+	var cells = "";
+
+	if (including) {
+		for (var i = 1; i < trs.length; i++) {
+			cells = trs[i].childNodes;
+			if (cells[0].className == 'testcaseUnavailable') {
+				continue;
+			}
+			for (var j = 0; j < cells.length; j++) {
+				cells[j].className = 'testcaseExecuted';
+			}
+			if (trs[i] == element.parentNode.parentNode) {
+				return;
+			}
+		}
+	} else {
+		for (var i = 1; i < trs.length; i++) {
+			if (trs[i] == currentLine) {
+				break;
+			}
+			cells = trs[i].childNodes;
+			for (var j = 0; j < cells.length; j++) {
+				if (cells[j].className == 'testcaseExecuted') {
+					break;
+				} else {
+					cells[j].className = 'testcaseUnavailable';
+				}
+			}
+		}
+		for (var i = 0; i < currentLine.childNodes.length; i++) {
+			currentLine.childNodes[i].className = 'testcaseExecuted';
+		}
+	}
+	
 }

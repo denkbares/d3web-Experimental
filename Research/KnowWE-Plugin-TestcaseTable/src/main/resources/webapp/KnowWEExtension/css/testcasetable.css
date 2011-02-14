@@ -2,6 +2,84 @@ div.sortable span {
 	display: none;
 }
 
-table-edit span {
+div.table-edit span {
 	display: none;
+}
+
+div.table-edit {
+	overflow: auto;
+}
+
+div.addRow{
+	height: 12px;
+	width: 12px;
+	margin-left: 10px;
+	margin-top: 5px; 
+	margin-right: 5px; 
+	float:left;
+	background-image: url(../images/plus.png);
+}
+
+div.addCol{
+	height: 12px;
+	width: 12px;
+	margin-top: 15px; 
+	margin-left: 5px;
+	float:left;
+	background-image: url(../images/plus.png);
+}
+
+div.startTestcase{
+	height: 15px;
+	width: 9px;
+	float: left;
+	margin-right: 5px;
+	background-image: url(../images/arrow_right.png);
+	cursor: pointer;
+}
+
+div.startTestcaseIncluding{
+	height: 15px;
+	width: 9px;
+	float: left;
+	margin-right: 5px;
+	margin-top: 2px;
+	background-image: url(../images/arrow_right_old.png);
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+
+td.testcaseExecuted{
+	background-color: #CDFECD ;
+}
+
+td.testcaseUnavailable{
+	background-color: #FF6633 ;
+}
+
+td.invalidTimeStamp{
+	background-color: red ;
+	text-align: center;
+}
+
+td.invalidTimeStamp div.invalidTimeStamp{
+	display: none;
+}
+
+td.invalidTimeStamp:hover div.invalidTimeStamp {
+	margin-left: 75px;
+	margin-top: -3px;
+	padding-left: 5px;
+	padding-right: 5px;
+	height: 20px;
+	min-width: 160px;
+	background-color: red;
+	display: block;
+	position: absolute;
+	border: solid;
+	text-align: center;
+}
+
+td.testcaseLineHeader {
+	min-width: 50px;
 }

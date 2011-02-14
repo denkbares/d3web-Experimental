@@ -20,6 +20,8 @@ package de.d3web.we.testcase;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionDate;
@@ -39,6 +41,7 @@ import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
@@ -54,6 +57,7 @@ public class RunTestcaseAction extends AbstractAction {
 		KnowWEParameterMap map = context.getKnowWEParameterMap();
 		String web = map.getWeb();
 		String execLine = map.get("execLine");
+		boolean multiLines = Boolean.valueOf(map.get("multiLines"));
 
 		Section<CellContent> cell = (Section<CellContent>) KnowWEEnvironment.getInstance().getArticleManager(
 				web).findNode(execLine);
@@ -63,9 +67,12 @@ public class RunTestcaseAction extends AbstractAction {
 		String master = TestcaseTableType.getMaster(tableDMType, map.getTopic());
 		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(web, master);
 
-		RatedTestCase testcase = (RatedTestCase) KnowWEUtils.getStoredObject(article,
-				line,
-				TestcaseTableLine.TESTCASE_KEY);
+		List<Section<TestcaseTableLine>> toBeExecutedLines = new LinkedList<Section<TestcaseTableLine>>();
+		toBeExecutedLines.add(line);
+
+		if (multiLines) {
+			findTestcaseIncluding(line, toBeExecutedLines);
+		}
 
 		String user = context.getWikiContext().getUserName();
 		Session session = D3webUtils.getSession(master, user, web);
@@ -75,7 +82,13 @@ public class RunTestcaseAction extends AbstractAction {
 		KnowledgeBaseManagement kbm =
 				D3webModule.getKnowledgeRepresentationHandler(web).getKBM(master);
 
-		executeTestCase(testcase, session, kbm);
+		for (Section<TestcaseTableLine> tctLine : toBeExecutedLines) {
+			RatedTestCase testcase = (RatedTestCase) KnowWEUtils.getStoredObject(article,
+					tctLine,
+					TestcaseTableLine.TESTCASE_KEY);
+
+			executeTestCase(testcase, session, kbm);
+		}
 
 
 	}
@@ -98,7 +111,7 @@ public class RunTestcaseAction extends AbstractAction {
 				blackboard.addValueFact(new DefaultFact(f.getQuestion(), f.getValue(), time,
 							PSMethodUserSelected.getInstance(),
 							PSMethodUserSelected.getInstance()));
-			}
+				}
 
 		}
 		finally {
@@ -140,78 +153,27 @@ public class RunTestcaseAction extends AbstractAction {
 
 	}
 
-	// /**
-	// * @param testcaseMap
-	// * @param web
-	// * @param user
-	// * @param kbm
-	// * @param blackboard
-	// * @param time
-	// */
-	// private void setValues(Map<String, String> testcaseMap, String web,
-	// String user, KnowledgeBaseManagement kbm, Session session) {
-	//
-	// Blackboard blackboard = session.getBlackboard();
-	//
-	// for (String questionName : testcaseMap.keySet()) {
-	//
-	// String valueString = testcaseMap.get(questionName);
-	//
-	// // Necessary for FindingSetEvent
-	// Question question = kbm.findQuestion(questionName);
-	// // TODO solutions
-	// if (question == null) {
-	// System.out.println("Could not find Question '" + questionName + "'.");
-	// continue;
-	// }
-	//
-	// // do not change value
-	// if
-	// (valueString.equals(GetNewQuickEditAnswersAction.UNCHANGED_VALUE_STRING))
-	// {
-	// continue;
-	// }
-	//
-	// Value value;
-	//
-	// if
-	// (valueString.equals(GetNewQuickEditAnswersAction.UNKNOWN_VALUE_STRING)) {
-	// value = Unknown.getInstance();
-	// }
-	// else {
-	// value = kbm.findValue(question, valueString);
-	// }
-	//
-	// if (value == null) {
-	// System.out.println("Could not find value '" + valueString +
-	// "' on Question '"
-	// + questionName + "'.");
-	// continue;
-	// }
-	//
-	// if (question instanceof QuestionMC &&
-	// !value.equals(Unknown.getInstance())) {
-	// Fact mcFact = blackboard.getValueFact(question);
-	// if (mcFact != null && !mcFact.getValue().equals(Unknown.getInstance())) {
-	// MultipleChoiceValue mcv = ((MultipleChoiceValue) mcFact.getValue());
-	// Collection<ChoiceValue> thisMcv = (Collection<ChoiceValue>)
-	// ((MultipleChoiceValue) value).getValue();
-	// for (ChoiceValue cv : (Collection<ChoiceValue>) mcv.getValue()) {
-	// if (!thisMcv.contains(cv)) {
-	// thisMcv.add(cv);
-	// }
-	// }
-	// }
-	// }
-	//
-	// blackboard.addValueFact(FactFactory.createFact(session, question, value,
-	// PSMethodUserSelected.getInstance(), PSMethodUserSelected.getInstance()));
-	//
-	// // TODO
-	// EventManager.getInstance().fireEvent(
-	// new FindingSetEvent(question, value, "TODO namespace", web, user));
-	//
-	// }
-	// }
+	private void findTestcaseIncluding(Section<TestcaseTableLine> line, List<Section<TestcaseTableLine>> list) {
+		long originalTimeStampValue = TimeStampType.getTimeInMillis(line.getChildren().get(0).findSuccessor(
+				TimeStampType.class));
+
+		Section<TestcaseTable> table = (Section<TestcaseTable>) line.getFather();
+		List<Section<? extends KnowWEObjectType>> lines = table.getChildren();
+
+		for (Section<? extends KnowWEObjectType> l : lines) {
+			if (!(l.getObjectType() instanceof HeaderLine)) {
+				Section<TestcaseTableLine> currentLine = (Section<TestcaseTableLine>) l;
+				long currentTimeStampValue = TimeStampType.getTimeInMillis(currentLine.getChildren().get(
+						0).findSuccessor(
+						TimeStampType.class));
+				if (currentTimeStampValue < originalTimeStampValue) {
+					list.add(currentLine);
+				}
+
+			}
+		}
+	}
+
+
 
 }
