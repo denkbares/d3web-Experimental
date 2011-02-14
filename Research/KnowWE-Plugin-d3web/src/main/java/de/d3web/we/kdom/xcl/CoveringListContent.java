@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.manage.KnowledgeBaseManagement;
@@ -135,12 +136,13 @@ public class CoveringListContent extends XMLContent {
 		private void setThresholds(KnowledgeBaseManagement kbm,
 				Solution currentdiag, Section tail) {
 
-			List knowledge = (List) kbm.getKnowledgeBase().getKnowledge(PSMethodXCL.class,
+			Collection<KnowledgeSlice> knowledge = kbm.getKnowledgeBase().getAllKnowledgeSlicesFor(
+					PSMethodXCL.class,
 					XCLModel.XCLMODEL);
 
 			if (knowledge == null) return;
 
-			Iterator iterator = knowledge.iterator();
+			Iterator<KnowledgeSlice> iterator = knowledge.iterator();
 
 			while (iterator.hasNext()) {
 				XCLModel model = (XCLModel) iterator.next();
@@ -289,4 +291,3 @@ public class CoveringListContent extends XMLContent {
 	}
 
 }
-

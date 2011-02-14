@@ -110,7 +110,7 @@ public class ExplanationRenderer2 extends DeprecatedAbstractKnowWEAction {
 		KnowledgeBase base = dpse.getService(namespace);
 		Solution diag = base.getManager().searchSolution(id);
 		if (diag != null) {
-			KnowledgeSlice heu = diag.getKnowledge(PSMethodHeuristic.class,
+			KnowledgeSlice heu = diag.getKnowledgeStore().getKnowledge(PSMethodHeuristic.class,
 						MethodKind.BACKWARD);
 			if (heu != null) {
 				result.add(ProblemSolverType.heuristic);
