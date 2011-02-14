@@ -20,6 +20,7 @@
 package de.d3web.we.wisec.event;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -120,7 +121,7 @@ public class WISECFindingSetEventListener implements EventListener {
 				KnowledgeBaseManagement.createInstance(question.getKnowledgeBase());
 		QContainer qc = kbm.findQContainer("Substances");
 		if (qc == null) return false;
-		return qc.hasChild(question);
+		return Arrays.asList(qc.getChildren()).contains(question);
 	}
 
 	/**

@@ -545,7 +545,6 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 		if (currentQuestion != null) {
 			if (parent != null) {
 				parent.addChild(currentQuestion);
-				currentQuestion.addParent(parent);
 			}
 			else {
 				errors.add(MessageKnOfficeGenerator
@@ -735,10 +734,10 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 			return;
 		}
 		if (dashes == 1) {
-			currentQuestion.addParent(currentQuestionclass);
+			currentQuestionclass.addChild(currentQuestion);
 		}
 		else {
-			currentQuestion.addParent(questionStack.peek().second);
+			questionStack.peek().second.addChild(currentQuestion);
 			// Wenn die Frage eine Folgefrage auf eine Antwort ist, diese der
 			// Antwort zuordnen
 			if (dashes == questionStack.peek().first + 2) {
