@@ -34,7 +34,7 @@ import de.d3web.we.utils.KnowWEUtils;
 
 /**
  * A section for storing DCProperties in a MMInfo. The storing could be generic,
- * but then where to get the AbstractTerminologyObject from, to store the info in?!?!
+ * but then where to get the TerminologyObject from, to store the info in?!?!
  * 
  * ATM this class is creating the diagnosis, due to the execution order of
  * subtreehandlers. So take care the right SolutionContext is set in the
@@ -56,7 +56,7 @@ public class DCPropertySubtreeHandler extends D3webSubtreeHandler<DCPropertyType
 		if (obj == null) {
 			ArrayList<KDOMReportMessage> list = new ArrayList<KDOMReportMessage>();
 			list.add(new NoSuchObjectError("Could not find name of solution in XCList."));
-			
+
 			return list;
 		}
 		storeMMInfo(s, obj);
@@ -80,8 +80,8 @@ public class DCPropertySubtreeHandler extends D3webSubtreeHandler<DCPropertyType
 	}
 
 	/**
-	 * Looks for the AbstractTerminologyObject. ATM this is tailored to work in XCLs. this is
-	 * the part which would have to be adapted to other scenarios
+	 * Looks for the TerminologyObject. ATM this is tailored to work in XCLs.
+	 * this is the part which would have to be adapted to other scenarios
 	 * 
 	 */
 	private TerminologyObject getNamedObject(Section s, KnowledgeBaseManagement kbm) {
