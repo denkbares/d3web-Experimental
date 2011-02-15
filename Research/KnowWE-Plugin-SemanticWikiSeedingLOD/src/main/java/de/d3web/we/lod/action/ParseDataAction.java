@@ -55,6 +55,7 @@ public class ParseDataAction extends AbstractAction {
 
 		while (matchTypes.find()) {
 			type.add(matchTypes.group().substring(1, matchTypes.group().lastIndexOf("\"")));
+			System.out.println(matchTypes.group().substring(1, matchTypes.group().lastIndexOf("\"")));
 			countData++;
 		}
 		while (matchValues.find()) {

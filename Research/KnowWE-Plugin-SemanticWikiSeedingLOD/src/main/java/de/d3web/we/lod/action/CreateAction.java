@@ -112,12 +112,11 @@ public class CreateAction extends AbstractAction {
 				+ "</SELECT>"
 				+ "</td>");
 
-		buffy.append("<td><input type='button' id='submit"
+		buffy.append("<td><input type='button' id='submitoptional' onclick='buttonToggleCreateOptional(this,"
 				+ i
-				+ "' onclick='buttonToggleCreate(this);' class='submit'>"
-				+ "<input type='button' id='qmarks"
-				+ i
-				+ "' onclick='buttonToggleCreate(this);' class='qmarksc'></td></tr>");
+				+ ");' class='submit'>"
+				+ "<input type='button' id='qmarksoptional' onclick='buttonToggleCreateOptional(this,"
+				+ i + ");' class='qmarksc'></td></tr>");
 		i++;
 		buffy.append("<tr><td colspan='3'><div class='spacingbuttons'/></td></tr><tr><td colspan='3' valign='middle' align='right'><img src='KnowWEExtension/images/submit.png'"
 				+ "onmouseover='changeOnMouseOver(this);' onmouseout='changeOnMouseOut(this);'"

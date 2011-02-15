@@ -122,11 +122,13 @@ function submitDataCreate(count, wiki) {
 
 	var hermes, dbpedia, i, type;
 
+	var last = count - 1;
+
 	hermes = new Array(count);
 	dbpedia = new Array(count);
 	type = new Array(count);
 
-	for (i = 0; i < count; i++) {
+	for (i = 0; i < count - 1; i++) {
 
 		if (document.getElementById('submit' + i).className == 'submitc') {
 
@@ -145,6 +147,23 @@ function submitDataCreate(count, wiki) {
 			type[i] = "qmarks";
 
 		}
+	}
+	if (document.getElementById('submitoptional').className == 'submitc') {
+
+		// Hole Tag + Wert
+		hermes[last] = document.getElementById("hermestag" + last).innerHTML;
+		dbpedia[last] = (document.getElementById("dbpediavalue" + last).type == "select-one") ? document
+				.getElementById("dbpediavalue" + last).value : document
+				.getElementById("dbpediavalue" + last).innerHTML;
+		type[last] = "submit";
+
+	} else if (document.getElementById('qmarksoptional').className == 'qmarksc') {
+
+		// Tue nichts ;)
+		dbpedia[last] = "";
+		hermes[last] = "";
+		type[last] = "qmarks";
+
 	}
 
 	var params = {
@@ -291,6 +310,54 @@ function buttonToggleCreate(objButton) {
 
 	if (submit == 'submit' && ask == 'qmarks') {
 		document.getElementById('qmarks' + nr).className = "qmarksc";
+	}
+	// Reset optional
+	if (submit == 'submitc') {
+		document.getElementById('submitoptional').className = "submit";
+		document.getElementById('qmarksoptional').className = "qmarksc";
+	}
+}
+
+function buttonToggleCreateOptional(objButton, nr) {
+
+	var submit = document.getElementById('submitoptional').className;
+	var ask = document.getElementById('qmarksoptional').className;
+
+	if (objButton.id != 'submitoptional' && submit == 'submitc') {
+
+		document.getElementById('submitoptional').className = "submit";
+
+	} else if (objButton.id != 'qmarksoptional' && ask == 'qmarksc') {
+
+		document.getElementById('qmarksoptional').className = "qmarks";
+
+	}
+
+	if (objButton.className == 'submit' || objButton.className == 'submitc') {
+
+		objButton.className = (objButton.className == 'submit') ? 'submitc'
+				: 'submit';
+
+	} else if (objButton.className == 'qmarks'
+			|| objButton.className == 'qmarksc') {
+
+		objButton.className = (objButton.className == 'qmarks') ? 'qmarksc'
+				: 'qmarks';
+
+	}
+
+	submit = document.getElementById('submitoptional').className;
+	ask = document.getElementById('qmarksoptional').className;
+
+	if (submit == 'submit' && ask == 'qmarks') {
+		document.getElementById('qmarksoptional').className = "qmarksc";
+	}
+	// Reset all other options if optional is clicked.
+	if (submit == 'submitc') {
+		for ( var i = 0; i < nr; i++) {
+			document.getElementById('submit' + i).className = "submit";
+			document.getElementById('qmarks' + i).className = "qmarksc";
+		}
 	}
 }
 

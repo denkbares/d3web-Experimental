@@ -203,7 +203,7 @@ public class MapForConcepts {
 		if (margin < 0.3) {
 			zoom = 10;
 		}
-		System.out.println(margin + ": " + zoom);
+
 		pre += "if (GBrowserIsCompatible()) {"
 					+ "var map = new GMap2(document.getElementById(\""
 				+ divID
