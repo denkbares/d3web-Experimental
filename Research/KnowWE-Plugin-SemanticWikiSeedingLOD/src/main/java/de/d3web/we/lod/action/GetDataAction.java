@@ -183,6 +183,10 @@ public class GetDataAction extends AbstractAction {
 								checkValue = s;
 							}
 
+							if (resultS.matches("!\\$ConceptLink:: .*")) {
+								checkValue = resultS.substring(16);
+							}
+
 							// If namespace is cut, isIgnored and isNoParse have
 							// to be tested with cut NS for predicate.
 							String checkHermesTagPI = checkHermesTag;

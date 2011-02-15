@@ -13,6 +13,7 @@ import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.ActionContext;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.core.semantic.UpperOntology;
+import de.d3web.we.lod.quiz.YearOfBirthQuizHandler;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 public class SolveYearOfBirthAction extends AbstractAction {
@@ -34,9 +35,9 @@ public class SolveYearOfBirthAction extends AbstractAction {
 		String namespace = UpperOntology.getInstance().getLocaleNS();
 		subject = namespace + subject;
 
-		// TODO: attribute.
 		String realQuery =
-				"SELECT ?y WHERE {<" + subject + "> lns:GeburtsJahr ?y}";
+				"SELECT ?y WHERE {<" + subject + "> " + YearOfBirthQuizHandler.birthyearAttribute
+						+ " ?y}";
 
 		TupleQueryResult real = SPARQLUtil.executeTupleQuery(realQuery);
 		String result = "";
@@ -44,7 +45,7 @@ public class SolveYearOfBirthAction extends AbstractAction {
 		try {
 			while (real.hasNext()) {
 				BindingSet set = real.next();
-				result = set.getBinding("x").getValue().stringValue();
+				result = set.getBinding("y").getValue().stringValue();
 				result = URLDecoder.decode(result, "UTF-8");
 				result = result.substring(result.indexOf("#") + 1);
 			}
@@ -52,8 +53,6 @@ public class SolveYearOfBirthAction extends AbstractAction {
 		catch (QueryEvaluationException e) {
 			e.printStackTrace();
 		}
-		// TODO: remove.
-		result = "211-3-11";
 
 		int year;
 		String yearForQuestion = "";

@@ -21,6 +21,8 @@ import de.knowwe.semantic.sparql.SPARQLUtil;
 
 public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 
+	private static final String birthplaceAttribute = "lns:GeburtsOrt";
+
 	private static final int optionsCount = 3;
 
 	public BirthplaceQuizHandler() {
@@ -30,31 +32,31 @@ public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 	@Override
 	public String renderHTML(String topic, KnowWEUserContext user, Map<String, String> parameters, String web) {
 
-		// Select concept.
-		String concept = parameters.get("concept");
+		String encodePerson = "";
 
-		// Choose random.
-		if (concept == null || concept.isEmpty()) {
-
-			String encodePerson = "";
-
-			try {
-				encodePerson = URLEncoder.encode(
+		try {
+			encodePerson = URLEncoder.encode(
 						"Historische Persönlichkeit", "UTF-8");
-			}
-			catch (UnsupportedEncodingException e1) {
-				e1.printStackTrace();
-			}
+		}
+		catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		}
 
-			String namespace = UpperOntology.getInstance().getLocaleNS();
-			encodePerson = namespace + encodePerson;
+		String namespace = UpperOntology.getInstance().getLocaleNS();
+		encodePerson = namespace + encodePerson;
 
-			String query =
+		String query =
 					"SELECT ?x WHERE {?x rdf:type <" + encodePerson + ">} ORDER BY ASC(?x)";
 
-			TupleQueryResult result = SPARQLUtil.executeTupleQuery(query);
-			ArrayList<String> persons = new ArrayList<String>();
+		TupleQueryResult result = SPARQLUtil.executeTupleQuery(query);
+		ArrayList<String> persons = new ArrayList<String>();
 
+		boolean found = false;
+
+		String realBirthPlace = "";
+		String concept = "";
+
+		while (!found) {
 			try {
 				while (result.hasNext()) {
 					BindingSet set = result.next();
@@ -73,32 +75,53 @@ public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 			int size = persons.size();
 			int choose = (int) ((Math.random() * size) + 1);
 			concept = persons.get(choose - 1);
+			OwlHelper helper = SemanticCoreDelegator.getInstance().getUpper().getHelper();
+			String hasBirthplace =
+						"ASK {<" + helper.createlocalURI(concept) + "> " + birthplaceAttribute
+								+ " ?y}";
+			String birthplace =
+						"SELECT ?y WHERE {<" + helper.createlocalURI(concept) + "> "
+								+ birthplaceAttribute
+								+ " ?y}";
+			if (SPARQLUtil.executeBooleanQuery(hasBirthplace)) {
+				TupleQueryResult real = SPARQLUtil.executeTupleQuery(birthplace);
+				try {
+					while (real.hasNext()) {
+						BindingSet set = real.next();
+						realBirthPlace = set.getBinding("y").getValue().stringValue();
+						realBirthPlace = URLDecoder.decode(realBirthPlace, "UTF-8");
+						realBirthPlace = realBirthPlace.substring(realBirthPlace.indexOf("#") + 1);
+					}
+				}
+				catch (QueryEvaluationException e) {
+					e.printStackTrace();
+				}
+				catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+				String hasCoords = "ASK {<" + helper.createlocalURI(realBirthPlace)
+						+ "> rdf:type lns:Geographika." +
+						"<" + helper.createlocalURI(realBirthPlace) + "> lns:hasLongitude ?y." +
+								"<" + helper.createlocalURI(realBirthPlace)
+						+ "> lns:hasLatitude ?z.}";
+				if (SPARQLUtil.executeBooleanQuery(hasCoords)) {
+					found = true;
+				}
+			}
 		}
 
 		// Get Birthplace and some fake ones.
 
-		// SPARQL real birthplace.
-		// TODO: attribute.
 		OwlHelper helper = SemanticCoreDelegator.getInstance().getUpper().getHelper();
-		String realQuery =
-				"SELECT ?y WHERE {<" + helper.createlocalURI(concept) + "> lns:GeburtsOrt ?y}";
 
 		// All geo with coordinates.
 		String allGeo = "SELECT ?x WHERE {?x rdf:type lns:Geographika. ?x lns:hasLongitude ?y. ?x lns:hasLatitude ?z.}";
-		TupleQueryResult real = SPARQLUtil.executeTupleQuery(realQuery);
 
 		TupleQueryResult fakes = SPARQLUtil.executeTupleQuery(allGeo);
 
 		List<String> fakeBirthPlaces = new ArrayList<String>();
-		String realBirthPlace = "";
 
 		try {
-			while (real.hasNext()) {
-				BindingSet set = real.next();
-				realBirthPlace = set.getBinding("x").getValue().stringValue();
-				realBirthPlace = URLDecoder.decode(realBirthPlace, "UTF-8");
-				realBirthPlace = realBirthPlace.substring(realBirthPlace.indexOf("#") + 1);
-			}
 			while (fakes.hasNext()) {
 				BindingSet set = fakes.next();
 				String fakeBirthPlace = set.getBinding("x").getValue().stringValue();
@@ -128,9 +151,6 @@ public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 		int counter = 0;
 
 		ArrayList<String> concepts = new ArrayList<String>();
-
-		// TODO: only for testing (attribute). delete after changing it on top.
-		realBirthPlace = "Delphi";
 
 		while (counter < optionsCount) {
 			if ((setCorrect == 1 && !concepts.contains(realBirthPlace))

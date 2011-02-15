@@ -198,6 +198,7 @@ public class HermesData {
 
 			for (Section<MappingContentType> t : found) {
 				String temp = t.getChildren().get(0).getOriginalText();
+				// System.out.println(concept + "," + hermestag + "," + value);
 				if (temp.matches("~\\[" + concept + " " + hermestag + ":: "
 						+ value + "\\][\\r\\n]*")) {
 					return true;

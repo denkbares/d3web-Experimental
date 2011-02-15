@@ -19,6 +19,8 @@ import de.knowwe.semantic.sparql.SPARQLUtil;
 
 public class YearOfBirthQuizHandler extends AbstractHTMLTagHandler {
 
+	public static final String birthyearAttribute = "lns:Geburtsjahr";
+
 	// Number of options.
 	private static final int optionsCount = 3;
 
@@ -59,6 +61,8 @@ public class YearOfBirthQuizHandler extends AbstractHTMLTagHandler {
 		TupleQueryResult result = SPARQLUtil.executeTupleQuery(query);
 		ArrayList<String> persons = new ArrayList<String>();
 
+		boolean found = false;
+		while (!found) {
 		try {
 			while (result.hasNext()) {
 				BindingSet set = result.next();
@@ -77,21 +81,31 @@ public class YearOfBirthQuizHandler extends AbstractHTMLTagHandler {
 		int size = persons.size();
 		int choose = (int) ((Math.random() * size) + 1);
 		concept = persons.get(choose - 1);
+			OwlHelper helper = SemanticCoreDelegator.getInstance().getUpper().getHelper();
+			String hasBirthyear =
+					"ASK {<" + helper.createlocalURI(concept) + "> "
+							+ birthyearAttribute
+							+ " ?y}";
+			if (SPARQLUtil.executeBooleanQuery(hasBirthyear)) {
+				found = true;
+			}
+		}
 
 		// SPARQL real birthplace.
-		// TODO: attribute.
 
 		OwlHelper helper = SemanticCoreDelegator.getInstance().getUpper().getHelper();
 		String realQuery =
-				"SELECT ?y WHERE {<" + helper.createlocalURI(concept) + "> lns:GeburtsJahr ?y}";
+				"SELECT ?y WHERE {<" + helper.createlocalURI(concept) + "> " + birthyearAttribute
+						+ " ?y}";
 
 		TupleQueryResult real = SPARQLUtil.executeTupleQuery(realQuery);
 		String realBirthYear = "";
 
+
 		try {
 			while (real.hasNext()) {
 				BindingSet set = real.next();
-				realBirthYear = set.getBinding("x").getValue().stringValue();
+				realBirthYear = set.getBinding("y").getValue().stringValue();
 				realBirthYear = URLDecoder.decode(realBirthYear, "UTF-8");
 				realBirthYear = realBirthYear.substring(realBirthYear.indexOf("#") + 1);
 			}
@@ -102,8 +116,6 @@ public class YearOfBirthQuizHandler extends AbstractHTMLTagHandler {
 		catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		// TODO: remove.
-		realBirthYear = "211-3-11";
 
 		int year;
 		String yearForQuestion = "";
