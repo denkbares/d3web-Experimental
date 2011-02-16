@@ -40,14 +40,12 @@ import de.d3web.KnOfficeParser.KnOfficeParser;
 import de.d3web.KnOfficeParser.util.DefaultD3webLexerErrorHandler;
 import de.d3web.KnOfficeParser.util.DefaultD3webParserErrorHandler;
 import de.d3web.KnOfficeParser.util.MessageKnOfficeGenerator;
-import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.manage.IDObjectManagement;
 import de.d3web.report.Message;
 import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelationType;
-import de.d3web.xcl.inference.PSMethodXCL;
 
 /**
  * Klasse um mithilfe des XCL Parsers d3web Wissen zu generieren
@@ -238,24 +236,22 @@ public class XCLd3webBuilder implements KnOfficeParser, XCLBuilder {
 	@Override
 	public void threshold(int line, String linetext, String type, Double value) {
 		if (currentdiag != null) {
-			Collection<KnowledgeSlice> models = idom.getKnowledgeBase().getAllKnowledgeSlicesFor(
-					PSMethodXCL.class);
-			for (KnowledgeSlice knowledgeSlice : models) {
-				if (knowledgeSlice instanceof XCLModel) {
-					if (((XCLModel) knowledgeSlice).getSolution().equals(currentdiag)) {
-						if (type.equals("establishedThreshold")) {
-							((XCLModel) knowledgeSlice).setEstablishedThreshold(value);
-						}
-						else if (type.equals("suggestedThreshold")) {
-							((XCLModel) knowledgeSlice).setSuggestedThreshold(value);
-						}
-						else if (type.equals("minSupport")) {
-							((XCLModel) knowledgeSlice).setMinSupport(value);
-						}
-						else {
-							errors.add(MessageKnOfficeGenerator.createNoValidThresholdException(
+			Collection<XCLModel> models = idom.getKnowledgeBase().getAllKnowledgeSlicesFor(
+					XCLModel.KNOWLEDGE_KIND);
+			for (XCLModel model : models) {
+				if (model.getSolution().equals(currentdiag)) {
+					if (type.equals("establishedThreshold")) {
+						model.setEstablishedThreshold(value);
+					}
+					else if (type.equals("suggestedThreshold")) {
+						model.setSuggestedThreshold(value);
+					}
+					else if (type.equals("minSupport")) {
+						model.setMinSupport(value);
+					}
+					else {
+						errors.add(MessageKnOfficeGenerator.createNoValidThresholdException(
 									file, line, linetext, type));
-						}
 					}
 				}
 			}

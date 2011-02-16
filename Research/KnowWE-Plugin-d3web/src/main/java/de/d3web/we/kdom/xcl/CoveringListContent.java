@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.manage.KnowledgeBaseManagement;
@@ -44,7 +43,6 @@ import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.utils.XCLRelationWeight;
 import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelationType;
-import de.d3web.xcl.inference.PSMethodXCL;
 import de.knowwe.core.CommentLineType;
 
 public class CoveringListContent extends XMLContent {
@@ -136,16 +134,15 @@ public class CoveringListContent extends XMLContent {
 		private void setThresholds(KnowledgeBaseManagement kbm,
 				Solution currentdiag, Section tail) {
 
-			Collection<KnowledgeSlice> knowledge = kbm.getKnowledgeBase().getAllKnowledgeSlicesFor(
-					PSMethodXCL.class,
-					XCLModel.XCLMODEL);
+			Collection<XCLModel> knowledge = kbm.getKnowledgeBase().getAllKnowledgeSlicesFor(
+					XCLModel.KNOWLEDGE_KIND);
 
 			if (knowledge == null) return;
 
-			Iterator<KnowledgeSlice> iterator = knowledge.iterator();
+			Iterator<XCLModel> iterator = knowledge.iterator();
 
 			while (iterator.hasNext()) {
-				XCLModel model = (XCLModel) iterator.next();
+				XCLModel model = iterator.next();
 				if (model.getSolution().equals(currentdiag)) {
 
 					double suggestedThreshold = XCLTail.getSuggestedThreshold(tail);

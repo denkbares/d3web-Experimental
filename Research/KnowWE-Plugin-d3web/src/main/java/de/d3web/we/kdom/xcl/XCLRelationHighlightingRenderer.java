@@ -23,7 +23,6 @@ package de.d3web.we.kdom.xcl;
 import java.util.Collection;
 import java.util.List;
 
-import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.session.Session;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.KnowWEObjectType;
@@ -38,7 +37,6 @@ import de.d3web.we.utils.XCLRelationWeight;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelation;
-import de.d3web.xcl.inference.PSMethodXCL;
 
 /**
  * Highlights XCLRelations. Answer Right: Green Answer wrong: Red Answer
@@ -83,29 +81,27 @@ public class XCLRelationHighlightingRenderer extends KnowWEDomRenderer {
 
 			// Get the KnowledgeSlices from KB and find the XCLRelation to be
 			// rendered
-			Collection<KnowledgeSlice> models = session.getKnowledgeBase().getAllKnowledgeSlicesFor(
-					PSMethodXCL.class);
-			for (KnowledgeSlice knowledgeSlice : models) {
-				if (knowledgeSlice instanceof XCLModel) {
-					// Check if model contains the relation
-					XCLRelation relation = ((XCLModel) knowledgeSlice).findRelation(kbrelId);
+			Collection<XCLModel> models = session.getKnowledgeBase().getAllKnowledgeSlicesFor(
+					XCLModel.KNOWLEDGE_KIND);
+			for (XCLModel knowledgeSlice : models) {
+				// Check if model contains the relation
+				XCLRelation relation = knowledgeSlice.findRelation(kbrelId);
 
-					if (relation != null) { // nothing gets rendered if relation
-											// is null??
+				if (relation != null) { // nothing gets rendered if relation
+										// is null??
 
-						// eval the Relation to find the right Rendering
-						try {
-							boolean fulfilled = relation.eval(session);
-							// Highlight Relation
-							string.append(this.renderRelation(article, sec, user, fulfilled));
-							return;
-						}
-						catch (Exception e) {
-							// Call the XCLRelationMarkerHighlightingRenderer
-							// without any additional info
-							// string.append(this.renderRelationChildren(sec,
-							// user, false, false);
-						}
+					// eval the Relation to find the right Rendering
+					try {
+						boolean fulfilled = relation.eval(session);
+						// Highlight Relation
+						string.append(this.renderRelation(article, sec, user, fulfilled));
+						return;
+					}
+					catch (Exception e) {
+						// Call the XCLRelationMarkerHighlightingRenderer
+						// without any additional info
+						// string.append(this.renderRelationChildren(sec,
+						// user, false, false);
 					}
 				}
 			}

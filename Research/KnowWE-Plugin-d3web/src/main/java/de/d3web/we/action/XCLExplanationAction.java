@@ -29,7 +29,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Question;
@@ -47,7 +46,6 @@ import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.xcl.InferenceTrace;
 import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelation;
-import de.d3web.xcl.inference.PSMethodXCL;
 
 public class XCLExplanationAction extends DeprecatedAbstractKnowWEAction {
 
@@ -105,19 +103,17 @@ public class XCLExplanationAction extends DeprecatedAbstractKnowWEAction {
 			return rb.getString("xclrenderer.nosolution") + solutionid;
 		}
 
-		Collection<KnowledgeSlice> models = this.currentCase.getKnowledgeBase()
-					.getAllKnowledgeSlicesFor(PSMethodXCL.class);
-		for (KnowledgeSlice knowledgeSlice : models) {
-			if (knowledgeSlice instanceof XCLModel) {
-				if (((XCLModel) knowledgeSlice).getSolution().equals(
+		Collection<XCLModel> models = this.currentCase.getKnowledgeBase()
+					.getAllKnowledgeSlicesFor(XCLModel.KNOWLEDGE_KIND);
+		for (XCLModel knowledgeSlice : models) {
+			if ((knowledgeSlice).getSolution().equals(
 							solution)) {
-					InferenceTrace trace = ((XCLModel) knowledgeSlice)
+				InferenceTrace trace = (knowledgeSlice)
 								.getInferenceTrace(this.currentCase);
-					if (trace == null) {
-						return rb.getString("xclrenderer.notrace");
-					}
-					return verbalizeTrace(trace, solution.getName());
+				if (trace == null) {
+					return rb.getString("xclrenderer.notrace");
 				}
+				return verbalizeTrace(trace, solution.getName());
 			}
 		}
 

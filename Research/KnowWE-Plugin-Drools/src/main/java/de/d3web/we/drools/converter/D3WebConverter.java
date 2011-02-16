@@ -1,21 +1,21 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
- *                    Computer Science VI, University of Wuerzburg
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * Computer Science VI, University of Wuerzburg
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.d3web.we.drools.converter;
 
@@ -60,29 +60,28 @@ import de.d3web.scoring.ActionHeuristicPS;
 import de.d3web.scoring.inference.PSMethodHeuristic;
 
 public class D3WebConverter {
-	
+
 	/**
 	 * Specifies the standard indent
 	 */
 	private final String INDENT = "  ";
-	
+
 	/**
-	 * A prefix for an input e.g. "not", "or" etc.
-	 * Don't change it here, it is changed on the fly
-	 * while running this converter!
+	 * A prefix for an input e.g. "not", "or" etc. Don't change it here, it is
+	 * changed on the fly while running this converter!
 	 */
 	private String prefix = "";
-	
+
 	/**
 	 * Counts the amount of rules in NonTerminalConditions
 	 */
 	private int ruleCounter = 0;
-	
+
 	/**
 	 * The d3web-KnowledgeBase.
 	 */
 	private final KnowledgeBase d3Kb;
-	
+
 	/**
 	 * The converted Drools Rules
 	 */
@@ -92,29 +91,31 @@ public class D3WebConverter {
 	 * If true, the rule won't be added to droolsRules
 	 */
 	private boolean dontAdd;
-	
+
 	/**
 	 * If true, we are processing a not condition!
 	 */
 	private boolean notCondition;
-	
+
 	/**
 	 * The current PSAction, necessary for CondOrs
 	 */
 	private PSAction action;
-	
+
 	/**
 	 * Default Constructor which requires just a d3-web KnowledgeBase.
+	 * 
 	 * @param d3Kb the d3-web KnowledgeBase
 	 * @throws IOException
 	 */
 	public D3WebConverter(KnowledgeBase d3Kb) throws IOException {
 		this.d3Kb = d3Kb;
 	}
-	
+
 	public void convert(String filename) throws IOException {
 		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-				new FileOutputStream(System.getProperty("user.dir") + "/src/main/resources/misc/" + filename), "UTF-8"));
+				new FileOutputStream(System.getProperty("user.dir") + "/src/main/resources/misc/"
+						+ filename), "UTF-8"));
 		out.write("[{KnowWEPlugin drools}]\n\n");
 		out.write("%%DroolsFacts\n");
 		out.write(getDroolsFacts());
@@ -122,55 +123,57 @@ public class D3WebConverter {
 		convertRules();
 		out.write("%%DroolsRules\n");
 		for (DroolsRule rule : droolsRules) {
-			if (rule.getConditions().size() > 0)
-				out.write(rule.toString());
+			if (rule.getConditions().size() > 0) out.write(rule.toString());
 		}
 		out.write("%\n");
 		out.close();
-		System.out.println("Wrote file to: " + System.getProperty("user.dir") + "/src/main/resources/misc/" + filename);
-		
+		System.out.println("Wrote file to: " + System.getProperty("user.dir")
+				+ "/src/main/resources/misc/" + filename);
+
 	}
-	
+
 	/**
 	 * Returns a String representing the Drools Facts.
+	 * 
 	 * @return drools facts
-	 * @throws InvalidClassException 
+	 * @throws InvalidClassException
 	 */
 	private String getDroolsFacts() throws InvalidClassException {
-		
+
 		int factsCounter = 0;
-		
+
 		// StringBuilder for Drools Output
 		StringBuilder droolsFacts = new StringBuilder();
-				
+
 		// Convert each d3web Question in a drools Fact
 		for (Question question : d3Kb.getManager().getQuestions()) {
 			convertD3Question(droolsFacts, question);
 			factsCounter++;
 		}
-		
+
 		// Convert each d3web Solution in a drools Fact
 		for (Solution diagnosis : d3Kb.getManager().getSolutions()) {
 			convertDiagnosis(droolsFacts, diagnosis);
 			factsCounter++;
 		}
-		
+
 		System.out.println("Converted " + factsCounter + " facts.\n");
 		return droolsFacts.toString();
 	}
-	
+
 	/**
 	 * Returns a String representing the Drools Rules.
+	 * 
 	 * @return drools rules.
-	 * @throws InvalidClassException 
+	 * @throws InvalidClassException
 	 */
 	public void convertRules() throws InvalidClassException {
-		
+
 		// Stores the ids of the already processed rules
 		List<Rule> processedRules = new LinkedList<Rule>();
-				
+
 		// Convert each d3web-Rule in a drools Rule
-		for(KnowledgeSlice slice : d3Kb.getAllKnowledgeSlicesFor(PSMethodHeuristic.class)) {
+		for (KnowledgeSlice slice : d3Kb.getAllKnowledgeSlicesFor(PSMethodHeuristic.FORWARD)) {
 			if (slice instanceof RuleSet) {
 				for (Rule rule : ((RuleSet) slice).getRules()) {
 					if (rule != null && !processedRules.contains(rule)) {
@@ -180,9 +183,9 @@ public class D3WebConverter {
 				}
 			}
 		}
-		
+
 		// Convert each d3web-AbstractionRule in a droolsRule
-		for(KnowledgeSlice slice : d3Kb.getAllKnowledgeSlicesFor(PSMethodAbstraction.class)) {
+		for (KnowledgeSlice slice : d3Kb.getAllKnowledgeSlicesFor(PSMethodAbstraction.FORWARD)) {
 			if (slice instanceof RuleSet) {
 				for (Rule rule : ((RuleSet) slice).getRules()) {
 					if (rule != null && !processedRules.contains(rule)) {
@@ -192,37 +195,41 @@ public class D3WebConverter {
 				}
 			}
 		}
-		
+
 		System.out.println("Converted " + processedRules.size() + " rules.\n");
-		
+
 	}
-	
-/* ************************************************************************************************************ 
- * 
- * 								Helper Methods for getDroolsFacts
- * 
- * ************************************************************************************************************/
+
+	/* ************************************************************************************************************
+	 * 
+	 * Helper Methods for getDroolsFacts
+	 * 
+	 * **************************************************************************
+	 * *********************************
+	 */
 
 	/**
 	 * Converts a d3-web question to a textual representation of a drools fact.
+	 * 
 	 * @param droolsFacts the StringBuilder representing the drools facts
 	 * @param question the d3-web question
-	 * @throws InvalidClassException 
+	 * @throws InvalidClassException
 	 */
 	private void convertD3Question(StringBuilder droolsFacts, Question question) throws InvalidClassException {
-		if (question instanceof QuestionNum)
-			convertQuestionNum(droolsFacts, (QuestionNum) question);
-		else if (question instanceof QuestionOC)
-			convertQuestionOC(droolsFacts, (QuestionOC) question);
-		else if (question instanceof QuestionMC)
-			convertQuestionMC(droolsFacts, (QuestionMC) question);
-		else 
-			throw new InvalidClassException("This type of Question is not supported: " + question.getClass());
-		
+		if (question instanceof QuestionNum) convertQuestionNum(droolsFacts, (QuestionNum) question);
+		else if (question instanceof QuestionOC) convertQuestionOC(droolsFacts,
+				(QuestionOC) question);
+		else if (question instanceof QuestionMC) convertQuestionMC(droolsFacts,
+				(QuestionMC) question);
+		else throw new InvalidClassException("This type of Question is not supported: "
+				+ question.getClass());
+
 	}
-	
+
 	/**
-	 * Converts a d3-web QuestionNum to a textual representation of a drools fact.
+	 * Converts a d3-web QuestionNum to a textual representation of a drools
+	 * fact.
+	 * 
 	 * @param droolsFacts the StringBuilder representing the drools facts
 	 * @param question the d3-web QuestionNum
 	 */
@@ -231,9 +238,11 @@ public class D3WebConverter {
 		droolsFacts.append(question.getName());
 		droolsFacts.append("\");\n");
 	}
-	
+
 	/**
-	 * Converts a d3-web QuestionOC to a textual representation of a drools fact.
+	 * Converts a d3-web QuestionOC to a textual representation of a drools
+	 * fact.
+	 * 
 	 * @param droolsFacts the StringBuilder representing the drools facts
 	 * @param question the d3-web QuestionOC
 	 */
@@ -244,9 +253,11 @@ public class D3WebConverter {
 		convertChoiceAlternatives(droolsFacts, question.getAllAlternatives());
 		droolsFacts.append("});\n");
 	}
-	
+
 	/**
-	 * Converts a d3-web QuestionMC to a textual representation of a drools fact.
+	 * Converts a d3-web QuestionMC to a textual representation of a drools
+	 * fact.
+	 * 
 	 * @param droolsFacts the StringBuilder representing the drools facts
 	 * @param question the d3-web QuestionMC
 	 */
@@ -260,6 +271,7 @@ public class D3WebConverter {
 
 	/**
 	 * Appends all AnswerAlternatives to the current fact
+	 * 
 	 * @param droolsFacts the StringBuilder representing the drools facts
 	 * @param aternatives all answer alternatives of the d3-web question
 	 */
@@ -275,6 +287,7 @@ public class D3WebConverter {
 
 	/**
 	 * Converts a d3-web diagnosis to a textual representation of a drools fact.
+	 * 
 	 * @param droolsFacts the StringBuilder representing the drools facts
 	 * @param diagnosis the d3-web diagnosis
 	 */
@@ -286,17 +299,20 @@ public class D3WebConverter {
 		}
 	}
 
-/* ************************************************************************************************************ 
- * 
- * 								Helper Methods for getDroolsRules
- * 
- * ************************************************************************************************************/
+	/* ************************************************************************************************************
+	 * 
+	 * Helper Methods for getDroolsRules
+	 * 
+	 * **************************************************************************
+	 * *********************************
+	 */
 
 	/**
 	 * Converts a single d3-web Rule in a Drools Rule.
+	 * 
 	 * @param droolsRulesBuilde StringBuilder representing the drools rules
 	 * @param d3Rule the d3-web rule
-	 * @throws InvalidClassException 
+	 * @throws InvalidClassException
 	 */
 	private void convertD3Rule(Rule d3Rule) throws InvalidClassException {
 		dontAdd = false;
@@ -305,49 +321,44 @@ public class D3WebConverter {
 		DroolsRule droolsRule = new DroolsRule(d3Rule.toString());
 		convertCondition(d3Rule.getCondition(), droolsRule);
 		convertAction(d3Rule.getAction(), droolsRule);
-		if (!dontAdd)
-			droolsRules.add(droolsRule);
+		if (!dontAdd) droolsRules.add(droolsRule);
 	}
-	
+
 	/**
 	 * Appends the conditions to the current Drools Rule.
-	 * @param droolsRule 
+	 * 
+	 * @param droolsRule
 	 * @param droolsRules the StringBuilder of the drools rules
 	 * @param d3Rule the current d3-web rule
-	 * @throws InvalidClassException 
+	 * @throws InvalidClassException
 	 */
 	private void convertCondition(Condition condition, DroolsRule droolsRule) throws InvalidClassException {
-		if (condition instanceof CondEqual) 
-			covertCondEqual(droolsRule, (CondEqual) condition);
-		else if (condition instanceof CondKnown)
-			convertCondKnown(droolsRule, (CondKnown) condition);
-		else if (condition instanceof CondNumEqual)
-			convertCondNum(droolsRule, (CondNum) condition, "==");
-		else if (condition instanceof CondNumGreater)
-			convertCondNum(droolsRule, (CondNum) condition, ">");
-		else if (condition instanceof CondNumGreaterEqual)
-			convertCondNum(droolsRule, (CondNum) condition, ">=");
-		else if (condition instanceof CondNumIn)
-			convertCondNumIn(droolsRule, (CondNumIn) condition);
-		else if (condition instanceof CondNumLess)
-			convertCondNum(droolsRule, (CondNum) condition, "<");
-		else if (condition instanceof CondNumLessEqual)
-			convertCondNum(droolsRule, (CondNum) condition, "<=");
-		else if (condition instanceof CondAnd)
-			convertConditionAnd(droolsRule, (CondAnd) condition);
-		else if (condition instanceof CondNot)
-			convertConditionNot(droolsRule, (CondNot) condition);
-		else if (condition instanceof CondOr)
-			convertConditionOr(droolsRule, (CondOr) condition);
-		else
-			throw new InvalidClassException("Type of Condition is not yet supported: " + condition.getClass());
+		if (condition instanceof CondEqual) covertCondEqual(droolsRule, (CondEqual) condition);
+		else if (condition instanceof CondKnown) convertCondKnown(droolsRule, (CondKnown) condition);
+		else if (condition instanceof CondNumEqual) convertCondNum(droolsRule, (CondNum) condition,
+				"==");
+		else if (condition instanceof CondNumGreater) convertCondNum(droolsRule,
+				(CondNum) condition, ">");
+		else if (condition instanceof CondNumGreaterEqual) convertCondNum(droolsRule,
+				(CondNum) condition, ">=");
+		else if (condition instanceof CondNumIn) convertCondNumIn(droolsRule, (CondNumIn) condition);
+		else if (condition instanceof CondNumLess) convertCondNum(droolsRule, (CondNum) condition,
+				"<");
+		else if (condition instanceof CondNumLessEqual) convertCondNum(droolsRule,
+				(CondNum) condition, "<=");
+		else if (condition instanceof CondAnd) convertConditionAnd(droolsRule, (CondAnd) condition);
+		else if (condition instanceof CondNot) convertConditionNot(droolsRule, (CondNot) condition);
+		else if (condition instanceof CondOr) convertConditionOr(droolsRule, (CondOr) condition);
+		else throw new InvalidClassException("Type of Condition is not yet supported: "
+				+ condition.getClass());
 	}
 
 	/**
 	 * Helper method which converts CondAnds of d3-web rules.
+	 * 
 	 * @param droolsRules the StringBuilder of the drools rules
 	 * @param condition the currently processed d3-web rule
-	 * @throws InvalidClassException 
+	 * @throws InvalidClassException
 	 */
 	private void convertConditionAnd(DroolsRule droolsRule, CondAnd condition) throws InvalidClassException {
 		for (Condition term : condition.getTerms()) {
@@ -356,12 +367,13 @@ public class D3WebConverter {
 		}
 		ruleCounter = 0;
 	}
-	
+
 	/**
 	 * Helper method which converts CondNots of d3-web rules.
+	 * 
 	 * @param droolsRules the StringBuilder of the drools rules
 	 * @param condition the currently processed d3-web rule
-	 * @throws InvalidClassException 
+	 * @throws InvalidClassException
 	 */
 	private void convertConditionNot(DroolsRule droolsRule, CondNot condition) throws InvalidClassException {
 		notCondition = true;
@@ -374,21 +386,24 @@ public class D3WebConverter {
 
 	/**
 	 * Helper method which converts CondOrs of d3-web rules.
+	 * 
 	 * @param droolsRules the StringBuilder of the drools rules
 	 * @param condition the currently processed d3-web rule
-	 * @throws InvalidClassException 
+	 * @throws InvalidClassException
 	 */
 	private void convertConditionOr(DroolsRule droolsRule, CondOr condition) throws InvalidClassException {
 		for (Condition term : condition.getTerms()) {
 			ruleCounter++;
 			if (!notCondition) {
-				String name = droolsRule.getName() + "_" + ruleCounter + "_" + condition.getTerms().size();
+				String name = droolsRule.getName() + "_" + ruleCounter + "_"
+						+ condition.getTerms().size();
 				DroolsRule newRule = new DroolsRule(name);
 				convertCondition(term, newRule);
 				convertAction(action, newRule);
 				droolsRules.add(newRule);
 				dontAdd = true;
-			} else {
+			}
+			else {
 				convertCondition(term, droolsRule);
 			}
 		}
@@ -397,6 +412,7 @@ public class D3WebConverter {
 
 	/**
 	 * Helper method which converts CondEquals of d3-web rules.
+	 * 
 	 * @param droolsRules the StringBuilder of the drools rules
 	 * @param condition the currently processed condition
 	 */
@@ -407,9 +423,10 @@ public class D3WebConverter {
 		convertCondEqualCondition(conditionBuilder, condition);
 		droolsRule.getConditions().add(conditionBuilder.toString());
 	}
-	
+
 	/**
 	 * Helper method which converts CondKnowns of d3-web rules.
+	 * 
 	 * @param droolsRules the StringBuilder of the drools rules
 	 * @param condition the currently processed condition
 	 */
@@ -420,9 +437,10 @@ public class D3WebConverter {
 		conditionBuilder.append(")\n");
 		droolsRule.getConditions().add(conditionBuilder.toString());
 	}
-	
+
 	/**
 	 * Helper method which converts CondNum of d3-web rules
+	 * 
 	 * @param droolsRules the StringBuilder of the drools rules
 	 * @param condition the currently processed condition
 	 */
@@ -437,9 +455,10 @@ public class D3WebConverter {
 		conditionBuilder.append(")\n");
 		droolsRule.getConditions().add(conditionBuilder.toString());
 	}
-	
+
 	/**
 	 * Helper method which converts ConNumIN of d3-web rules
+	 * 
 	 * @param droolsRules the StringBuilder of the drools rules
 	 * @param condition the currently processed condition
 	 */
@@ -454,18 +473,20 @@ public class D3WebConverter {
 		conditionBuilder.append(condition.getMaxValue());
 		conditionBuilder.append(")\n");
 		droolsRule.getConditions().add(conditionBuilder.toString());
-		
+
 	}
-	
+
 	/**
 	 * Helper method which converts values (answers) of d3-web conditions
+	 * 
 	 * @param droolsRules the StringBuilder of the drools rules
 	 * @param value the value (answer) of the currently processed condition
 	 * @param counter an int which counts the number of converted values
 	 */
 	private void convertAnswer(StringBuilder conditionBuilder, Value value) {
 		conditionBuilder.append(INDENT);
-		conditionBuilder.append(INDENT);;
+		conditionBuilder.append(INDENT);
+		;
 		conditionBuilder.append("$value");
 		conditionBuilder.append(ruleCounter == 0 ? "" : ruleCounter);
 		conditionBuilder.append(" : Value(value == \"");
@@ -473,9 +494,10 @@ public class D3WebConverter {
 		conditionBuilder.append("\")");
 		conditionBuilder.append("\n");
 	}
-	
+
 	/**
 	 * Helper method which converts questions of d3-web conditions.
+	 * 
 	 * @param droolsRules the StringBuilder of the drools rules
 	 * @param condition the currently processed d3-web condition
 	 */
@@ -485,11 +507,12 @@ public class D3WebConverter {
 		conditionBuilder.append(ruleCounter == 0 ? "" : ruleCounter);
 		conditionBuilder.append(")\n");
 	}
-	
+
 	/**
-	 * Helper method which converts a d3-web question in an input
-	 * declaration. 
-	 * <b>ATTENTION:</b> You have to close the delaration with a brace ')' manually.
+	 * Helper method which converts a d3-web question in an input declaration.
+	 * <b>ATTENTION:</b> You have to close the delaration with a brace ')'
+	 * manually.
+	 * 
 	 * @param droolsRules the StringBuilder of the drools rules
 	 * @param question the question of the d3-web condition
 	 */
@@ -500,23 +523,25 @@ public class D3WebConverter {
 		conditionBuilder.append(question.getName());
 		conditionBuilder.append("\"");
 	}
-	
+
 	/**
 	 * Converts Actions from d3-web rules to drools actions.
+	 * 
 	 * @param d3Rule the StringBuilder of the drools rules
 	 * @param droolsRule the currently processed d3-web rule
 	 */
 	private void convertAction(PSAction action, DroolsRule droolsRule) {
-		if (action instanceof ActionHeuristicPS) 
-			convertHeuristicAction(droolsRule, (ActionHeuristicPS) action);
-		else if (action instanceof ActionSetValue)
-			convertSetValueAction(droolsRule, (ActionSetValue) action);
-		else 
-			Logger.getLogger(this.getClass()).warn("Unable to handle ActionType " + droolsRule.getAction().getClass());
+		if (action instanceof ActionHeuristicPS) convertHeuristicAction(droolsRule,
+				(ActionHeuristicPS) action);
+		else if (action instanceof ActionSetValue) convertSetValueAction(droolsRule,
+				(ActionSetValue) action);
+		else Logger.getLogger(this.getClass()).warn(
+				"Unable to handle ActionType " + droolsRule.getAction().getClass());
 	}
 
 	/**
 	 * Helper method which converts HeuristicActions of d3-web rules.
+	 * 
 	 * @param droolsRules the StringBuilder of the drools rules
 	 * @param action the currently processed d3-web action
 	 */
@@ -534,12 +559,13 @@ public class D3WebConverter {
 		actionBuilder.append(INDENT);
 		actionBuilder.append("$solution.setValue(");
 		actionBuilder.append(action.getScore());
-		actionBuilder.append(");\n");		
+		actionBuilder.append(");\n");
 		droolsRule.setAction(actionBuilder.toString());
 	}
-	
+
 	/**
 	 * Helper method which converts SetValueActions of d3-web rules.
+	 * 
 	 * @param droolsRule the StringBuilder of the drools rule
 	 * @param action the currently processed d3-web action
 	 */
@@ -557,12 +583,13 @@ public class D3WebConverter {
 		actionBuilder.append(INDENT);
 		actionBuilder.append("$input.setValue(");
 		convertActionValue(actionBuilder, action.getValue());
-		actionBuilder.append(");\n");	
+		actionBuilder.append(");\n");
 		droolsRule.setAction(actionBuilder.toString());
 	}
-	
+
 	/**
 	 * Helper method which converts the values of d3-web rules' actions.
+	 * 
 	 * @param droolsRule the StringBuilder of the drools rule
 	 * @param value the currently processed action value
 	 */
@@ -571,8 +598,9 @@ public class D3WebConverter {
 			actionBuilder.append("\"");
 			actionBuilder.append(((Value) value).getValue());
 			actionBuilder.append("\"");
-		} else 
-			Logger.getLogger(this.getClass()).warn("Unable to handle type of action value: " + value.getClass());
+		}
+		else Logger.getLogger(this.getClass()).warn(
+				"Unable to handle type of action value: " + value.getClass());
 	}
 
 }

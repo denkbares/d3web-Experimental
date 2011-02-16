@@ -20,10 +20,8 @@
 
 package de.d3web.we.kdom.xcl;
 
-import java.util.Collection;
 import java.util.List;
 
-import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.knowledge.terminology.Rating;
 import de.d3web.core.knowledge.terminology.Rating.State;
 import de.d3web.core.knowledge.terminology.Solution;
@@ -36,7 +34,6 @@ import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.d3web.xcl.XCLModel;
-import de.d3web.xcl.inference.PSMethodXCL;
 import de.knowwe.core.renderer.ObjectInfoLinkRenderer;
 
 /**
@@ -67,14 +64,12 @@ public class SolutionIDHighlightingRenderer extends KnowWEDomRenderer {
 		if (session != null) {
 
 			List<Solution> diags = session.getKnowledgeBase().getManager().getSolutions();
-			Collection<KnowledgeSlice> slices = session.getKnowledgeBase()
-					.getAllKnowledgeSlicesFor(PSMethodXCL.class);
 
 			for (Solution d : diags) {
 
 				if (d.getName().equals(solution)) {
 					Rating state;
-					XCLModel diagModel = this.findModel(solution, slices);
+					XCLModel diagModel = d.getKnowledgeStore().getKnowledge(XCLModel.KNOWLEDGE_KIND);
 
 					if (diagModel == null) state = new Rating(State.UNCLEAR);
 					else state = diagModel.getState(session);
@@ -109,21 +104,6 @@ public class SolutionIDHighlightingRenderer extends KnowWEDomRenderer {
 		new ObjectInfoLinkRenderer(StyleRenderer.SOLUTION).render(article, sec,
 				user, string);
 		string.append(spanEnd);
-	}
-
-	/**
-	 * Finds a Model from a KnowledgeSlice list.
-	 * 
-	 * @param solution
-	 * @return
-	 */
-	private XCLModel findModel(String solution, Collection<KnowledgeSlice> slices) {
-		for (KnowledgeSlice s : slices) {
-			if (s instanceof XCLModel) {
-				if (((XCLModel) s).getSolution().getName().equals(solution)) return (XCLModel) s;
-			}
-		}
-		return null;
 	}
 
 	/**

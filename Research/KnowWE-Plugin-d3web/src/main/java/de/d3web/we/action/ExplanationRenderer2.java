@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import de.d3web.core.inference.KnowledgeSlice;
-import de.d3web.core.inference.MethodKind;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.scoring.inference.PSMethodHeuristic;
@@ -110,8 +109,7 @@ public class ExplanationRenderer2 extends DeprecatedAbstractKnowWEAction {
 		KnowledgeBase base = dpse.getService(namespace);
 		Solution diag = base.getManager().searchSolution(id);
 		if (diag != null) {
-			KnowledgeSlice heu = diag.getKnowledgeStore().getKnowledge(PSMethodHeuristic.class,
-						MethodKind.BACKWARD);
+			KnowledgeSlice heu = diag.getKnowledgeStore().getKnowledge(PSMethodHeuristic.BACKWARD);
 			if (heu != null) {
 				result.add(ProblemSolverType.heuristic);
 			}
