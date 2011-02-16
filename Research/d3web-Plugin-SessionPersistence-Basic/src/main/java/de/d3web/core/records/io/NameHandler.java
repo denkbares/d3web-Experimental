@@ -25,7 +25,6 @@ import de.d3web.core.records.SessionRecord;
  */
 public class NameHandler implements SessionPersistenceHandler {
 
-	// TODO: remove this class, names are no longer optional
 	@Override
 	public void read(Element sessionElement, SessionRecord sessionRecord, ProgressListener listener) throws IOException {
 		List<Element> elementList = XMLUtil.getElementList(sessionElement.getChildNodes());

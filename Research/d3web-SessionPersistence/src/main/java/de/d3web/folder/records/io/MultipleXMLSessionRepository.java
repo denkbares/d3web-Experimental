@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2010 denkbares GmbH
  * 
- * This is free software for non commercial use
+ * This is free software for non commercial use.
  * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -125,7 +125,7 @@ public class MultipleXMLSessionRepository extends DefaultSessionRepository {
 			float percent = records.size() / (float) counter++;
 			listener.updateProgress(percent, sr.getName());
 			String date = FILE_DATE_FORMAT.format(sr.getCreationDate());
-			File file = new File(folder.getAbsolutePath() + "/" + date + "_" + sr.getName()
+			File file = new File(folder.getAbsolutePath() + "/" + date + "_" + sr.getId()
 					+ ".xml");
 			if (sr instanceof FileRecord && !((FileRecord) sr).modified) {
 				FileRecord fr = (FileRecord) sr;

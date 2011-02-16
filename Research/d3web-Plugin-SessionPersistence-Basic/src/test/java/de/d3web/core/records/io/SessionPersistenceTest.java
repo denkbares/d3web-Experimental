@@ -141,8 +141,9 @@ public class SessionPersistenceTest {
 				0.0));
 		RuleFactory.createHeuristicPSRule(solution, Score.P7, new CondNumLess(questionNum,
 				0.0));
-		DefaultSession session = (DefaultSession) SessionFactory.createSession(TESTNAME, kb);
-		sessionID = session.getName();
+		DefaultSession session = (DefaultSession) SessionFactory.createSession(kb);
+		session.setName(TESTNAME);
+		sessionID = session.getId();
 		Blackboard blackboard = session.getBlackboard();
 		blackboard.addValueFact(FactFactory.createUserEnteredFact(questionOC, new ChoiceValue(
 				choices[0])));
@@ -162,7 +163,7 @@ public class SessionPersistenceTest {
 		lastChangeDate = session.getLastChangeDate();
 		sessionRecord = SessionConversionFactory.copyToSessionRecord(session);
 		Session session2 = SessionFactory.createSession(kb);
-		session2ID = session2.getName();
+		session2ID = session2.getId();
 		session2.getPropagationManager().openPropagation();
 		Blackboard blackboard2 = session2.getBlackboard();
 		blackboard2.addValueFact(
@@ -422,9 +423,9 @@ public class SessionPersistenceTest {
 	}
 
 	private void checkValuesAfterReload(Session session, Session session2) throws IOException {
-		Assert.assertEquals(sessionID, session.getName());
+		Assert.assertEquals(sessionID, session.getId());
 		Assert.assertEquals(TESTNAME, session.getName());
-		Assert.assertEquals(session2ID, session2.getName());
+		Assert.assertEquals(session2ID, session2.getId());
 		Assert.assertEquals(creationDate, session.getCreationDate());
 		Assert.assertEquals(lastChangeDate, session.getLastChangeDate());
 		Blackboard blackboard = session.getBlackboard();
@@ -519,7 +520,7 @@ public class SessionPersistenceTest {
 		countRecords(1, repository);
 		Assert.assertNotNull(repository.getSessionRecordById(sessionID));
 		DefaultSessionRecord newSessionRecordWithSameID = new DefaultSessionRecord(
-				sessionRecord.getName(),
+				sessionRecord.getId(),
 				sessionRecord.getCreationDate(), sessionRecord.getLastChangeDate());
 		repository.add(newSessionRecordWithSameID);
 		countRecords(1, repository);

@@ -21,13 +21,14 @@ import de.d3web.core.session.protocol.DefaultProtocol;
 import de.d3web.core.session.protocol.Protocol;
 
 /**
- * Persistent version of a session
+ * Persistent version of a session.
  * 
  * @author Markus Friedrich (denkbares GmbH)
  * @created 15.09.2010
  */
 public class DefaultSessionRecord implements SessionRecord {
 
+	private final String id;
 	private final Date creationDate;
 	private Date lastEditDate;
 
@@ -52,8 +53,8 @@ public class DefaultSessionRecord implements SessionRecord {
 		this(id, date, date);
 	}
 
-	public DefaultSessionRecord(String name, Date creationDate, Date lastEditDate) {
-		this.name = name;
+	public DefaultSessionRecord(String id, Date creationDate, Date lastEditDate) {
+		this.id = id;
 		this.creationDate = creationDate;
 		this.lastEditDate = lastEditDate;
 	}
@@ -64,9 +65,8 @@ public class DefaultSessionRecord implements SessionRecord {
 	}
 
 	@Override
-	@Deprecated
 	public String getId() {
-		return getName();
+		return id;
 	}
 
 	@Override
