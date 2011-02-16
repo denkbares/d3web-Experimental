@@ -109,7 +109,7 @@ public class RestrictedIDObjectManager extends SingleKBMIDObjectManager {
 
 	@Override
 	public Value findValue(Question q, String name) {
-		Value answer = kbm.findValue(q, name);
+		Value answer = KnowledgeBaseManagement.findValue(q, name);
 		if (name.equalsIgnoreCase("unknown") || name.equalsIgnoreCase("unbekannt")) {
 			return Unknown.getInstance();
 		}
@@ -123,8 +123,8 @@ public class RestrictedIDObjectManager extends SingleKBMIDObjectManager {
 	}
 
 	@Override
-	public Choice findAnswerChoice(QuestionChoice qc, String name) {
-		Choice answer = kbm.findChoice(qc, name);
+	public Choice findChoice(QuestionChoice qc, String name) {
+		Choice answer = KnowledgeBaseManagement.findChoice(qc, name);
 		if (answer == null && lazyAnswers) {
 			answer = AnswerFactory.createAnswerChoice(name);
 			qc.addAlternative(answer);
@@ -134,7 +134,7 @@ public class RestrictedIDObjectManager extends SingleKBMIDObjectManager {
 
 	@Override
 	public Solution findSolution(String name) {
-		Solution diag = kbm.findSolution(name);
+		Solution diag = kbm.getKnowledgeBase().getManager().searchSolution(name);
 		if (diag == null && lazyDiags) {
 			diag = createSolution(name, null);
 		}
@@ -144,7 +144,7 @@ public class RestrictedIDObjectManager extends SingleKBMIDObjectManager {
 	@Override
 	public Question findQuestion(String name) {
 		if (currentQContainer == null) {
-			Question q = kbm.findQuestion(name);
+			Question q = kbm.getKnowledgeBase().getManager().searchQuestion(name);
 			if (q == null && lazyQuestions) {
 				q = createQuestionOC(name, kbm.getKnowledgeBase().getRootQASet(),
 						new String[0]);
@@ -175,7 +175,7 @@ public class RestrictedIDObjectManager extends SingleKBMIDObjectManager {
 				return createQuestionOC(name, currentQContainer, new String[0]);
 			}
 			if (semirestricted) {
-				return kbm.findQuestion(name);
+				return kbm.getKnowledgeBase().getManager().searchQuestion(name);
 			}
 			return null;
 		}

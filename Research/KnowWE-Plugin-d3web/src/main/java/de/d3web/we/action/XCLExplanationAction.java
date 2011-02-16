@@ -98,7 +98,8 @@ public class XCLExplanationAction extends DeprecatedAbstractKnowWEAction {
 		// Question q;
 		// AbstractCondition c;
 		// c.eval(c);
-		Solution solution = baseManagement.findSolution(solutionid);
+		Solution solution = baseManagement.getKnowledgeBase().getManager().searchSolution(
+				solutionid);
 		if (solution == null) {
 			return rb.getString("xclrenderer.nosolution") + solutionid;
 		}

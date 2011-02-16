@@ -45,8 +45,7 @@ import de.knowwe.d3web.event.FindingSetEvent;
 
 public class SetFindingAction extends DeprecatedAbstractKnowWEAction {
 
-	@SuppressWarnings({
-			"unchecked", "deprecation" })
+	@SuppressWarnings({ "deprecation" })
 	@Override
 	public String perform(KnowWEParameterMap parameterMap) {
 		String namespace = java.net.URLDecoder.decode(parameterMap.get(KnowWEAttributes.SEMANO_NAMESPACE));
@@ -67,7 +66,7 @@ public class SetFindingAction extends DeprecatedAbstractKnowWEAction {
 		Blackboard blackboard = session.getBlackboard();
 
 		// Necessary for FindingSetEvent
-		Question question = kbm.findQuestion(objectid);
+		Question question = kbm.getKnowledgeBase().getManager().searchQuestion(objectid);
 		if (question != null) {
 
 			List<Value> values = new ArrayList<Value>();

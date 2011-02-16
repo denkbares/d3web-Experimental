@@ -77,28 +77,18 @@ public class SingleKBMIDObjectManager implements IDObjectManagement {
 	}
 
 	@Override
-	public Value findValue(Question q, String name) {
-		return kbm.findValue(q, name);
-	}
-
-	@Override
-	public Choice findAnswerChoice(QuestionChoice qc, String name) {
-		return kbm.findChoice(qc, name);
-	}
-
-	@Override
 	public Solution findSolution(String name) {
-		return kbm.findSolution(name);
+		return kbm.getKnowledgeBase().getManager().searchSolution(name);
 	}
 
 	@Override
 	public QContainer findQContainer(String name) {
-		return kbm.findQContainer(name);
+		return kbm.getKnowledgeBase().getManager().searchQContainer(name);
 	}
 
 	@Override
 	public Question findQuestion(String name) {
-		return kbm.findQuestion(name);
+		return kbm.getKnowledgeBase().getManager().searchQuestion(name);
 	}
 
 	@Override
@@ -159,5 +149,15 @@ public class SingleKBMIDObjectManager implements IDObjectManagement {
 	@Override
 	public KnowledgeBase getKnowledgeBase() {
 		return kbm.getKnowledgeBase();
+	}
+
+	@Override
+	public Value findValue(Question q, String name) {
+		return KnowledgeBaseManagement.findValue(q, name);
+	}
+
+	@Override
+	public Choice findChoice(QuestionChoice qc, String name) {
+		return KnowledgeBaseManagement.findChoice(qc, name);
 	}
 }

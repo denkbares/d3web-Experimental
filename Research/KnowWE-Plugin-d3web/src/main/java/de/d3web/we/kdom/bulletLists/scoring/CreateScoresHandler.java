@@ -75,12 +75,12 @@ public class CreateScoresHandler extends D3webSubtreeHandler {
 
 			boolean lazy = isLazy(s);
 
-			Solution d = kbm.findSolution(solution);
+			Solution d = kbm.getKnowledgeBase().getManager().searchSolution(solution);
 			if (d == null && lazy) {
 				d = createSolution(solution, kbm);
 			}
 
-			Question q = kbm.findQuestion(question);
+			Question q = kbm.getKnowledgeBase().getManager().searchQuestion(question);
 
 			QuestionOC qc = (QuestionOC) q;
 			if (q == null && lazy) {
@@ -88,8 +88,9 @@ public class CreateScoresHandler extends D3webSubtreeHandler {
 
 			}
 
-			Condition cond = createCondition(qc, new ChoiceValue(kbm.findChoice(
-					qc, defaultValue)));
+			Condition cond = createCondition(qc,
+					new ChoiceValue(KnowledgeBaseManagement.findChoice(
+							qc, defaultValue)));
 
 			Score scoreV = getScore(score);
 
@@ -126,7 +127,7 @@ public class CreateScoresHandler extends D3webSubtreeHandler {
 
 	private Solution createSolution(String solution,
 			KnowledgeBaseManagement mgn) {
-		Solution d = mgn.findSolution(solution);
+		Solution d = mgn.getKnowledgeBase().getManager().searchSolution(solution);
 		if (d == null) {
 			d = mgn.createSolution(solution, mgn.getKnowledgeBase()
 					.getRootSolution());

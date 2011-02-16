@@ -26,7 +26,6 @@ import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -51,7 +50,6 @@ public class TestLoader {
 		// "C:/KnowWE/workspace/KnowWE-Webapp/bin/WEB-INF/resources/webs";
 		// String path =
 		// "C:/Programme/xampp/tomcat/webapps/KWiki/WEB-INF/resources/webs";
-		String path = rb.getString("path_to_web_kbs");
 		String web = "allWebs";
 		if (args.length > 0) {
 			web = args[0];
@@ -71,7 +69,7 @@ public class TestLoader {
 	private void loadKBs(String web, StringBuffer log) throws IOException {
 		String path = rb.getString("path_to_web_kbs");
 		try {
-			URL url = new File(path).toURI().toURL();
+			new File(path).toURI().toURL();
 		}
 		catch (MalformedURLException e) {
 			log.append("cannot open directory: " + path + "\n");
@@ -110,7 +108,6 @@ public class TestLoader {
 		for (int i = 0; i < jars.length; i++) {
 			try {
 				KnowledgeBase kb = m.load(jars[i]);
-				String id = jars[i].toString();
 				kb.setId("" + i);
 				list.add(kb);
 				// loaded++;
@@ -141,6 +138,7 @@ public class TestLoader {
 
 	static class JarFileFilter implements FileFilter {
 
+		@Override
 		public boolean accept(File f) {
 			return f.getName().endsWith(".jar");
 		}

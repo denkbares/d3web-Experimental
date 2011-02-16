@@ -119,7 +119,7 @@ public class WISECFindingSetEventListener implements EventListener {
 	private boolean checkQuestion(Question question) {
 		KnowledgeBaseManagement kbm =
 				KnowledgeBaseManagement.createInstance(question.getKnowledgeBase());
-		QContainer qc = kbm.findQContainer("Substances");
+		QContainer qc = kbm.getKnowledgeBase().getManager().searchQContainer("Substances");
 		if (qc == null) return false;
 		return Arrays.asList(qc.getChildren()).contains(question);
 	}
@@ -202,7 +202,7 @@ public class WISECFindingSetEventListener implements EventListener {
 		}
 
 		// Search the Counter-Question (P, B, Aqua_Tox etc.)
-		Question counterQuestion = KnowledgeBaseManagement.createInstance(kss.getKnowledgeBase()).findQuestion(
+		Question counterQuestion = KnowledgeBaseManagement.createInstance(kss.getKnowledgeBase()).getKnowledgeBase().getManager().searchQuestion(
 				criteria);
 		if (counterQuestion == null) {
 			Logger.getLogger(this.getClass()).error(

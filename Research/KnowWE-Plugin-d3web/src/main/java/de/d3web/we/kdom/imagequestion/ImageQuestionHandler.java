@@ -111,7 +111,7 @@ public class ImageQuestionHandler extends AbstractHTMLTagHandler {
 		String questionID =
 				values.get(ImageQuestionHandler.TAGHANDLER_ANNOTATION);
 		KnowledgeBaseManagement kbm = KnowledgeBaseManagement.createInstance(kb);
-		Question q = kbm.findQuestion(questionID);
+		Question q = kbm.getKnowledgeBase().getManager().searchQuestion(questionID);
 		ImageQuestionStore store = q.getInfoStore().getValue(
 				ImageQuestionStore.IMAGE_QUESTION_INFO);
 
@@ -135,12 +135,12 @@ public class ImageQuestionHandler extends AbstractHTMLTagHandler {
 		StringBuffer buffi = new StringBuffer();
 		if (renderDIV) {
 			buffi.append("<div id='imagequestion_"
-					+ q.getId()
+					+ q.getName()
 					+ "' class='panel'>"
 					+ "<h3> ImageQuestion </h3>");
 		}
 		buffi.append(
-				"<table id=\"imagetable_" + q.getId() + "\"><tr><td>"
+				"<table id=\"imagetable_" + q.getName() + "\"><tr><td>"
 						+ renderedImage.toString()
 						+ "</td>"
 						+ "<td>"
@@ -189,7 +189,7 @@ public class ImageQuestionHandler extends AbstractHTMLTagHandler {
 			KnowledgeBase kb)
 			throws IOException {
 
-		buffi.append("<div id=\"" + q.getId() + "\" class=\"questionImage\"");
+		buffi.append("<div id=\"" + q.getName() + "\" class=\"questionImage\"");
 
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("position: relative;");
@@ -247,11 +247,11 @@ public class ImageQuestionHandler extends AbstractHTMLTagHandler {
 
 		buffi.append("<a id=\"region_" + answerID + "\"");
 
-		buffi.append(" " + this.buildRelAttributeString(answerID, q.getId()));
+		buffi.append(" " + this.buildRelAttributeString(answerID, q.getName()));
 
 		buffi.append(" class=\"answerRegion");
 		// if region is aleady answered --> insert another styleclass
-		if (currentAnswerIsSet(answer.getId(), q)) {
+		if (currentAnswerIsSet(answer.getName(), q)) {
 			buffi.append(" answerSet");
 		}
 		buffi.append("\"");
@@ -266,7 +266,7 @@ public class ImageQuestionHandler extends AbstractHTMLTagHandler {
 		buffi.append(">");
 
 		// insert a transparent gif (so that Internet Explorer can be supported)
-		String imageName = answer.getId();
+		String imageName = answer.getName();
 		buffi.append("<img");
 		buffi.append(" class=\"qImageHover\" alt=\"\"");
 		// buffi.append(" src=\"" +
@@ -282,7 +282,7 @@ public class ImageQuestionHandler extends AbstractHTMLTagHandler {
 
 		// Add a Semantic Annotation,
 		// so the SetSingleFindingAction can be used
-		buffi.append(this.buildRelAttributeString(answerID, q.getId()));
+		buffi.append(this.buildRelAttributeString(answerID, q.getName()));
 
 		buffi.append(">");
 		buffi.append("</a> \n"); // avoid pagebreak by jspwiki
@@ -321,7 +321,7 @@ public class ImageQuestionHandler extends AbstractHTMLTagHandler {
 		ChoiceID value = null;
 		if (q instanceof QuestionChoice) {
 			for (Choice choice : ((QuestionChoice) q).getAllAlternatives()) {
-				if (choice.getId().equals(answerID)) {
+				if (choice.getName().equals(answerID)) {
 					value = new ChoiceID(choice);
 					break;
 				}
@@ -409,16 +409,16 @@ public class ImageQuestionHandler extends AbstractHTMLTagHandler {
 		String answerID = "";
 		String answerName = "";
 		for (int i = 0; i < ans.size(); i++) {
-			answerID = ans.get(i).getId();
+			answerID = ans.get(i).getName();
 			buffi.append("<tr>");
 			buffi.append("<td>");
 			buffi.append("<input id=\"box_" + answerID + "\"" +
-					this.buildRelAttributeString(answerID, q.getId()));
+					this.buildRelAttributeString(answerID, q.getName()));
 			if (isCheckBox) buffi.append("type=\"checkbox\"");
 			else buffi.append("type=\"radio\"");
 			buffi.append(" class=\"answerRegion2\" ");
 			buffi.append(this.buildRelAttributeString(
-					answerID, q.getId()));
+					answerID, q.getName()));
 
 			Value value = session.getBlackboard().getValue(q);
 			if (isAnsweredinCase(value, new ChoiceValue(ans.get(i)))) buffi.append(" checked");

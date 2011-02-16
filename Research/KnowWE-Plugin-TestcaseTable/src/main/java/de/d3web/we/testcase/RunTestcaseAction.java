@@ -90,7 +90,6 @@ public class RunTestcaseAction extends AbstractAction {
 			executeTestCase(testcase, session, kbm);
 		}
 
-
 	}
 
 	/**
@@ -111,7 +110,7 @@ public class RunTestcaseAction extends AbstractAction {
 				blackboard.addValueFact(new DefaultFact(f.getQuestion(), f.getValue(), time,
 							PSMethodUserSelected.getInstance(),
 							PSMethodUserSelected.getInstance()));
-				}
+			}
 
 		}
 		finally {
@@ -130,8 +129,7 @@ public class RunTestcaseAction extends AbstractAction {
 	 */
 	private long getPropagationTime(Session session, KnowledgeBaseManagement kbm, long offSet) {
 
-
-		Question question = kbm.findQuestion("start");
+		Question question = kbm.getKnowledgeBase().getManager().searchQuestion("start");
 		if (question == null) { // no timeDB present
 			return offSet;
 		}
@@ -173,7 +171,5 @@ public class RunTestcaseAction extends AbstractAction {
 			}
 		}
 	}
-
-
 
 }

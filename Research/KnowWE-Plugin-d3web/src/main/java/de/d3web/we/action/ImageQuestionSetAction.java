@@ -45,6 +45,7 @@ import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.event.EventManager;
 import de.d3web.we.utils.D3webUtils;
+import de.knowwe.d3web.action.SetSingleFindingAction;
 import de.knowwe.d3web.event.FindingSetEvent;
 
 /**
@@ -58,7 +59,6 @@ import de.knowwe.d3web.event.FindingSetEvent;
  */
 public class ImageQuestionSetAction extends AbstractAction {
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(ActionContext context) throws IOException {
 
@@ -81,7 +81,7 @@ public class ImageQuestionSetAction extends AbstractAction {
 		// Necessary for FindingSetEvent
 		KnowledgeBaseManagement kbm =
 				D3webModule.getKnowledgeRepresentationHandler(web).getKBM(topic);
-		Question question = kbm.findQuestion(objectid);
+		Question question = kbm.getKnowledgeBase().getManager().searchQuestion(objectid);
 
 		if (question == null) return;
 

@@ -22,7 +22,6 @@ package de.d3web.we.kdom.kopic.renderer;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -85,8 +84,7 @@ public class D3webAnnotationRenderer extends KnowWEDomRenderer {
 			String text, KnowledgeBase kb) {
 		if (kb != null && question != null) {
 			question = question.trim();
-			Question q = KnowledgeBaseManagement.createInstance(kb)
-					.findQuestion(question);
+			Question q = kb.getManager().searchQuestion(question);
 			if (q != null) {
 				AnnotationContext context = (AnnotationContext) ContextManager
 						.getInstance().getContext(sec, AnnotationContext.CID);
@@ -98,7 +96,7 @@ public class D3webAnnotationRenderer extends KnowWEDomRenderer {
 				// .getErrorUnknownConcept(op, text));
 				// }
 				String s = "<a href=\"#" + sec.getID() + "\"></a>"
-						+ KnowWEUtils.getRenderedInput(q.getId(), q.getName(),
+						+ KnowWEUtils.getRenderedInput(q.getName(), q.getName(),
 								kb.getId(), user, "Annotation", text, op);
 				String masked = KnowWEEnvironment.maskHTML(s);
 				return masked;

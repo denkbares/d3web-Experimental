@@ -133,8 +133,6 @@ public class SaveDialogAsXCLAction extends DeprecatedAbstractKnowWEAction {
 	private Session getSession(String web, String topic, String user) {
 		KnowledgeBase knowledgeServiceInTopic = D3webModule.getAD3webKnowledgeServiceInTopic(
 				web, topic);
-		KnowledgeBase service = D3webModule.getAD3webKnowledgeServiceInTopic(web,
-				topic);
 
 		if (knowledgeServiceInTopic == null) return null;
 		String kbid = knowledgeServiceInTopic.getId();
@@ -163,7 +161,7 @@ public class SaveDialogAsXCLAction extends DeprecatedAbstractKnowWEAction {
 		KnowledgeBase base = D3webModule.getAD3webKnowledgeServiceInTopic(web,
 				topic);
 
-		Solution d = getKBM(base).findSolution(solution);
+		Solution d = base.getManager().searchSolution(solution);
 		return d;
 	}
 

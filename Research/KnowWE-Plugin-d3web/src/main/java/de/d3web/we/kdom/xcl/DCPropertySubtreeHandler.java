@@ -93,7 +93,7 @@ public class DCPropertySubtreeHandler extends D3webSubtreeHandler<DCPropertyType
 			return null;
 		}
 
-		TerminologyObject d = kbm.findSolution(diagnosis);
+		TerminologyObject d = kbm.getKnowledgeBase().getManager().searchSolution(diagnosis);
 
 		if (d == null) { // should not happen
 			// solution should already be created by STH of XCLHEAD

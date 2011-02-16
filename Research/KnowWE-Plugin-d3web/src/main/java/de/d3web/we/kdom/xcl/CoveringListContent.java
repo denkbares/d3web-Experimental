@@ -106,8 +106,9 @@ public class CoveringListContent extends XMLContent {
 
 				// Insert Solution into KnowledgeBase when Solution doesnt exist
 				Section head = elements.get(0);
-				Solution currentdiag = kbm.findSolution(head.getOriginalText().replaceAll(
-						p.toString(), "").trim());
+				Solution currentdiag = kbm.getKnowledgeBase().getManager().searchSolution(
+						head.getOriginalText().replaceAll(
+								p.toString(), "").trim());
 				if (currentdiag == null) {
 					currentdiag = kbm.createSolution(head.getOriginalText().replaceAll(
 							p.toString(), "").trim(), kbm.getKnowledgeBase().getRootSolution());

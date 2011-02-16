@@ -133,13 +133,13 @@ public class AttributeTable extends Table {
 
 		private TerminologyObject findNamedObject(KnowledgeBaseManagement kbm, String name) {
 			// Is there a Question with this name?
-			TerminologyObject namedObject = kbm.findQuestion(name);
+			TerminologyObject namedObject = kbm.getKnowledgeBase().getManager().searchQuestion(name);
 			if (namedObject == null) {
 				// Or a Solution?
-				namedObject = kbm.findSolution(name);
+				namedObject = kbm.getKnowledgeBase().getManager().searchSolution(name);
 				if (namedObject == null) {
 					// Or a QContainer?
-					namedObject = kbm.findQContainer(name);
+					namedObject = kbm.getKnowledgeBase().getManager().searchQContainer(name);
 				}
 			}
 			return namedObject;

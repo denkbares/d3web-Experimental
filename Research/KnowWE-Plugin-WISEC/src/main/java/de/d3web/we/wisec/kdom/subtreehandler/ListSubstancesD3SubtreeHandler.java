@@ -135,10 +135,12 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 				QuestionsSection.class);
 
 		if (globalsArticle != null && questionsSection != null) {
-			if (kbm.findQContainer("Substances") == null) kbm.createQContainer("Substances");
-			if (kbm.findQuestion(sgn) == null) {
-				kbm.createQuestionOC(sgn, kbm.findQContainer("Substances"), new String[] {
-						"included", "excluded" });
+			if (kbm.getKnowledgeBase().getManager().searchQContainer("Substances") == null) kbm.createQContainer("Substances");
+			if (kbm.getKnowledgeBase().getManager().searchQuestion(sgn) == null) {
+				kbm.createQuestionOC(sgn,
+						kbm.getKnowledgeBase().getManager().searchQContainer("Substances"),
+						new String[] {
+								"included", "excluded" });
 				WikiEnvironmentManager.registerKnowledgeBase(kbm,
 						globalsArticle.getTitle(), globalsArticle.getWeb());
 			}

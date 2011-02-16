@@ -101,6 +101,7 @@ public class KBLoaderTT implements TerminologyTester {
 		}
 	}
 
+	@Override
 	public boolean checkQuestion(String term) {
 		// System.out.println("Frage: "+term);
 		KnowledgeBase kb = null;
@@ -113,15 +114,14 @@ public class KBLoaderTT implements TerminologyTester {
 				kb = kbs.get(keys.iterator().next());
 			}
 		}
-		KnowledgeBaseManagement kbm = KnowledgeBaseManagement
-				.createInstance(kb);
 		// List<Question> fl = kb.getQuestions();
 		// for (Question q: fl) {
 		// System.out.println(q.getText());
 		// }
-		return kbm.findQuestion(term) != null;
+		return kb.getManager().searchQuestion(term) != null;
 	}
 
+	@Override
 	public boolean checkAnswer(String question, String answer) {
 		// System.out.println("Frage: "+question+", Antwort: "+answer);
 		KnowledgeBase kb = null;
@@ -134,12 +134,9 @@ public class KBLoaderTT implements TerminologyTester {
 				kb = kbs.get(keys.iterator().next());
 			}
 		}
-		KnowledgeBaseManagement kbm = KnowledgeBaseManagement
-				.createInstance(kb);
-
-		Question q = kbm.findQuestion(question);
+		Question q = kb.getManager().searchQuestion(question);
 		if (q != null && q instanceof QuestionChoice) {
-			Choice a = kbm.findChoice((QuestionChoice) q, answer);
+			Choice a = KnowledgeBaseManagement.findChoice((QuestionChoice) q, answer);
 			if (a != null) return true;
 		}
 

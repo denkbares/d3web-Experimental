@@ -147,7 +147,7 @@ public class FindingToConditionBuilder {
 	// answer);
 	// return new Double(-1);
 	// }
-	//		
+	//
 	// }
 
 	/**
@@ -203,7 +203,7 @@ public class FindingToConditionBuilder {
 		String answertext = answer.getOriginalText().replaceAll(p.toString(), "").trim();
 
 		// Look up the Question in the KnowledgeBase
-		Question kbQuest = kbm.findQuestion(questiontext);
+		Question kbQuest = kbm.getKnowledgeBase().getManager().searchQuestion(questiontext);
 		if (kbQuest != null) {
 			// Look up the Answer for the Question
 			// Can be null if it is a Numerical Question
@@ -212,7 +212,8 @@ public class FindingToConditionBuilder {
 				kbValue = Unknown.getInstance();
 			}
 			if (kbQuest instanceof QuestionChoice) {
-				Choice choice = kbm.findChoice((QuestionChoice) kbQuest, answertext);
+				Choice choice = KnowledgeBaseManagement.findChoice((QuestionChoice) kbQuest,
+						answertext);
 				if (choice != null) {
 					kbValue = new ChoiceValue(choice);
 				}
@@ -259,16 +260,16 @@ public class FindingToConditionBuilder {
 
 	// private static void storeMessage(KnowWEArticle article, String
 	// messageText, Section section) {
-	//		
+	//
 	// Message message = new Message(messageText);
-	//		
+	//
 	// List<Message> messages = new ArrayList<Message>(1);
 	// messages.add(message);
-	//		
-	// AbstractKnowWEObjectType.storeMessages(article, section, messages);
-	//		
 	//
-	//		
+	// AbstractKnowWEObjectType.storeMessages(article, section, messages);
+	//
+	//
+	//
 	// }
 
 	/**

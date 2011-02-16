@@ -54,26 +54,27 @@ public class GetNewQuickEditAnswersAction extends AbstractAction {
 		String web = map.getWeb();
 		String topic = map.getTopic();
 		String element = context.getParameter("element");
-		
+
 		KnowledgeBaseManagement kbm = D3webModule.getKnowledgeRepresentationHandler(web).getKBM(
 				topic);
-		
-		Question question = kbm.findQuestion(element);
-		
+
+		Question question = kbm.getKnowledgeBase().getManager().searchQuestion(element);
+
 		if (question != null) {
 			writeAnswersForQuestion(context, question);
 		}
 		else {
-			Solution solution = kbm.findSolution(element);
+			Solution solution = kbm.getKnowledgeBase().getManager().searchSolution(element);
 			if (solution != null) {
 				context.getWriter().write(
-						UNCHANGED_VALUE_STRING + SEPARATOR + "established"+ SEPARATOR + "suggested"+ SEPARATOR +"excluded");
+						UNCHANGED_VALUE_STRING + SEPARATOR + "established" + SEPARATOR
+								+ "suggested" + SEPARATOR + "excluded");
 			}
 			else {
 				// TODO Do some errorHandling here.
 				// object must have been removed
 			}
-			
+
 		}
 	}
 

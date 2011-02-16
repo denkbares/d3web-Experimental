@@ -34,6 +34,7 @@ import de.d3web.core.inference.condition.CondNumIn;
 import de.d3web.core.inference.condition.CondNumLess;
 import de.d3web.core.inference.condition.CondNumLessEqual;
 import de.d3web.core.inference.condition.TerminalCondition;
+import de.d3web.core.knowledge.TerminologyManager;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
@@ -41,6 +42,7 @@ import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionYN;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.manage.IDObjectManagement;
+import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.report.Message;
 
@@ -71,7 +73,6 @@ public class KnowledgeUtils {
 			int line, int column, boolean lazy, String kdomid, CellKnowledgeBuilder ckb) {
 		List<Message> errors = new ArrayList<Message>();
 		if (answer != null) answer = answer.trim();
-		boolean typedef = false;
 		String type = "";
 		if (question.endsWith("]")) {
 			type = question.substring(question.lastIndexOf('[') + 1, question
@@ -80,9 +81,9 @@ public class KnowledgeUtils {
 				type = "yn";
 			}
 			question = question.substring(0, question.lastIndexOf('[')).trim();
-			typedef = true;
 		}
-		Question currentquestion = idom.findQuestion(question);
+		TerminologyManager manager = idom.getKnowledgeBase().getManager();
+		Question currentquestion = manager.searchQuestion(question);
 		if (currentquestion == null) {
 			errors.add(MessageKnOfficeGenerator
 					.createQuestionNotFoundException(kdomid, line, column, "",
@@ -97,7 +98,7 @@ public class KnowledgeUtils {
 						type));
 			}
 		}
-		Solution diag = idom.findSolution(solution);
+		Solution diag = manager.searchSolution(solution);
 		if (diag == null) {
 			errors.add(MessageKnOfficeGenerator
 					.createSolutionNotFoundException(kdomid, line, column, "",
@@ -130,7 +131,7 @@ public class KnowledgeUtils {
 		}
 		else if (currentquestion instanceof QuestionChoice) {
 			QuestionChoice qc = (QuestionChoice) currentquestion;
-			Choice currentanswer = idom.findAnswerChoice(qc, answer);
+			Choice currentanswer = KnowledgeBaseManagement.findChoice(qc, answer);
 			if (currentanswer == null) {
 				errors.add(MessageKnOfficeGenerator
 						.createAnswerNotFoundException(kdomid, line, column,

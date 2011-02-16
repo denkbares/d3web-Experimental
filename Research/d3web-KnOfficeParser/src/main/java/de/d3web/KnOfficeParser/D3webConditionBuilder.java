@@ -243,7 +243,7 @@ public class D3webConditionBuilder implements ConditionBuilder {
 				}
 			}
 			else {
-				answer = idom.findAnswerChoice(qc, value);
+				answer = idom.findChoice(qc, value);
 			}
 			if (answer == null) {
 				if (lazy || lazyAnswers) {

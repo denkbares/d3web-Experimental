@@ -89,7 +89,7 @@ public class TestcaseTableLine extends TableLine {
 					Section<QuestionReference> qRef = headerCell.findSuccessor(QuestionReference.class);
 					String qName = qRef.getOriginalText();
 					// TODO unchanged value, unknown value
-					Question question = kbm.findQuestion(qName);
+					Question question = kbm.getKnowledgeBase().getManager().searchQuestion(qName);
 					Value value = kbm.findValue(question, valueSec.getOriginalText());
 					Finding finding = new Finding(question, value);
 					testCase.add(finding);
