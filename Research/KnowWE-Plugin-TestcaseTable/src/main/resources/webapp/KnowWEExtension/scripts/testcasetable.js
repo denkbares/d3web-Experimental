@@ -368,5 +368,49 @@ Testcase.colorExecutedLines = function(element, including) {
 			currentLine.childNodes[i].className = 'testcaseExecuted';
 		}
 	}
+}
+
+Testcase.resetTestcase = function(sectionID) {
+	var topic = KNOWWE.helper.gup('page')
+		
+	var params = {
+        action : 'TestcaseTableResetAction',
+        KWiki_Topic : topic
+    }
+
+    var options = {
+        url : KNOWWE.core.util.getURL ( params ),
+        loader : true,
+        response : {
+            action : 'none',
+            fn : function(){
+				KNOWWE.core.rerendercontent.update(); //Clear new SolutionPanel
+            },
+            onError : function () {
+	        	KNOWWE.core.util.updateProcessingState(-1);                    	
+            }
+        }
+    }
+	KNOWWE.core.util.updateProcessingState(1);
+    new _KA( options ).send();
+    
+    Testcase.resetTableCSS(sectionID);
+}
+
+Testcase.resetTableCSS = function(sectionID) {
+	var sec = $(sectionID);
+	var table = sec.getElement('table');
+	var trs = sec.getElements('tr');
+	var tds;
+	
+	for (var i = 1; i < trs.length; i++) {
+		tds = trs[i].getElements('td');
+		for (var j = 0; j < tds.length; j++) {
+			tds[j].removeClass('testcaseExecuted');
+			tds[j].removeClass('testcaseUnavailable');
+		}
+	}
+	
+	var a = 1;
 	
 }

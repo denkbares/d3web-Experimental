@@ -83,3 +83,11 @@ td.invalidTimeStamp:hover div.invalidTimeStamp {
 td.testcaseLineHeader {
 	min-width: 50px;
 }
+
+td.testcaseExecuted div {
+	display: none;
+}
+
+td.testcaseUnavailable div {
+	display: none;
+}
