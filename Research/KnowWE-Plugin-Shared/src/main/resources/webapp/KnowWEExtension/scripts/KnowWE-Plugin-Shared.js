@@ -60,7 +60,7 @@ KNOWWE.shared.actions = function(){
                     _KE.add('click', els[i], function(e){
                         var el = _KE.target(e);
                         var rel = eval("(" + el.getAttribute('rel') + ")");
-                        KNOWWE.shared.actions.enableQuickEdit( KNOWWE.core.edit.init, rel.id, "render" );
+                        KNOWWE.shared.actions.enableQuickEdit( KNOWWE.shared.edit.init, rel.id, "render" );
                     });
                 }
                 //check for save button in case the user reloads the page during quick edit
@@ -68,7 +68,7 @@ KNOWWE.shared.actions = function(){
                 if(rel) {
                     bttns = _KS('#'+rel.id + ' input[type=submit]');
                     if( bttns.length != 0 ){
-                        _KE.add('click', bttns[0], KNOWWE.core.edit.onSave );
+                        _KE.add('click', bttns[0], KNOWWE.shared.edit.onSave );
                     }
                 }        
             }                
