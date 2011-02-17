@@ -70,7 +70,7 @@ public class DefiUtils {
 			return html.toString();
 		}
 		catch (Exception e) {
-			return "Error: last online time not found!";
+			return "Zuletzt online: <br /> nicht bekannt";
 		}
 	}
 
