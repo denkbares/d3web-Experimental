@@ -47,6 +47,12 @@ public class GetDataAction extends AbstractAction {
 							+
 							"Erstellen Sie diese bitte mit dem Taghandler [{KnowWEPlugin concepts}].</b></p></div>");
 		}
+		else if (!LinkedOpenData.sparqlAvailable()) {
+			context.getWriter().write(
+					"<br/><div style='margin-left:10px;'><p><b>HttpException: "
+							+ LinkedOpenData.sparqlEndpoint
+							+ " ist im Moment leider nicht verfügbar.</b></p></div>");
+		}
 		else {
 			// First letter = uppercase
 			concept = concept.substring(0, 1).toUpperCase() + concept.substring(1);

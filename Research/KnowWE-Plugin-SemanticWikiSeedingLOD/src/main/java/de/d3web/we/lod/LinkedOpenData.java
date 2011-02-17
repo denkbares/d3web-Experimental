@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.ws.http.HTTPException;
+
 import com.google.api.translate.Language;
 import com.google.api.translate.Translate;
 import com.hp.hpl.jena.query.Query;
@@ -43,7 +45,7 @@ public class LinkedOpenData {
 	private HashMap<String, HashSet<String>> filterTags;
 
 	// "http://lod.openlinksw.com/sparql";
-	private static final String sparqlEndpoint = "http://dbpedia.org/sparql";
+	public static final String sparqlEndpoint = "http://dbpedia.org/sparql";
 
 	// Times the queries are split up.
 	private static final int split = 3;
@@ -1014,6 +1016,30 @@ public class LinkedOpenData {
 			}
 		}
 		return translatedText;
+
+	}
+
+	/**
+	 * Tests whether the sparql endpoint is avaible or not.
+	 * 
+	 * @return boolean.
+	 */
+	public static boolean sparqlAvailable() {
+		String query = "ASK WHERE { ?s ?p ?o }";
+		QueryExecution qe = null;
+		try {
+			qe = QueryExecutionFactory.sparqlService(sparqlEndpoint, query);
+			if (qe.execAsk()) {
+				return true;
+			}
+		}
+		catch (HTTPException e) {
+			return false;
+		}
+		finally {
+			qe.close();
+		}
+		return true;
 
 	}
 }
