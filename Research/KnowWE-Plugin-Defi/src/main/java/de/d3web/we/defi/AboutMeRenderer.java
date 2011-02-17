@@ -26,8 +26,11 @@ import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
-
 /**
+ * The AboutMeRenderer renders the content of the about me page. It renders a
+ * list of different avatars and a HTML textarea. In this box the user can write
+ * something about himself. From the list of avatars the user can choose one
+ * that fits him/her.
  * 
  * @author smark
  * @created 25.01.2011
@@ -40,35 +43,60 @@ public class AboutMeRenderer<T extends KnowWEObjectType> extends KnowWEDomRender
 		String avatar = DefaultMarkupType.getAnnotation(sec, "avatar");
 		String about = DefaultMarkupType.getAnnotation(sec, "about");
 
-		// check if information are given
-
 		String username = user.getUserName();
 		String pageName = article.getTitle();
-		if (pageName.toLowerCase().equals(username.toLowerCase())) {
-			// user is allowed to enter information show edit box
+
+		if (pageName.toLowerCase().equals(username.toLowerCase()) && user.userIsAuthenticated()) {
 			string.append(KnowWEUtils.maskHTML("<form action=\"KnowWE.jsp\" method=\"post\">"));
+			string.append(KnowWEUtils.maskHTML("<p>Bitte wählen Sie einen Bild aus:</p><div>"));
 
-			string.append(KnowWEUtils.maskHTML("<p>Choose an avatar:</p>"));
-			for (int i = 1; i < 6; i++) {
-				String icon = "A0" + i;
-				string.append(KnowWEUtils.maskHTML("<img src=\"KnowWEExtension/images/" + icon
-						+ ".png\" height=\"80\" width=\"80\" />"));
-				string.append(KnowWEUtils.maskHTML("<input type=\"radio\" name=\"defi-avatar\" id=\"defi-avatar\""));
+			this.createAvatarHTML(string, avatar, "");
+			this.createAvatarHTML(string, avatar, "F");
+
+			string.append(KnowWEUtils.maskHTML("</div>"));
+
+			if (about == null) {
+				string.append(KnowWEUtils.maskHTML("<p>Schreiben Sie ein paar Worte über sich:</p>"));
+				string.append(KnowWEUtils.maskHTML("<p><textarea cols=\"80\" rows=\"15\" name=\""
+						+ AboutMe.HTMLID_ABOUT + "\"></textarea></p>"));
 			}
-
-			string.append(KnowWEUtils.maskHTML("<p>Enter some information about yourself:</p>"));
-			string.append(KnowWEUtils.maskHTML("<textarea cols=\"80\" rows=\"15\" name=\"defi-about\"></textarea>"));
-			string.append(KnowWEUtils.maskHTML("<input type=\"submit\" value=\"Save\"/>"));
+			string.append(KnowWEUtils.maskHTML("<p><input type=\"submit\" value=\"Speichern\"/></p>"));
 			string.append(KnowWEUtils.maskHTML("<input type=\"hidden\" name=\"action\" value=\"AboutMeSaveAction\" />"));
+			string.append(KnowWEUtils.maskHTML("<input type=\"hidden\" name=\"KWiki_Topic\" value=\""
+					+ article.getTitle() + "\" />"));
 			string.append(KnowWEUtils.maskHTML("</form>"));
-			string.append(KnowWEUtils.maskHTML(""));
-			string.append(KnowWEUtils.maskHTML(""));
-			string.append(KnowWEUtils.maskHTML(""));
 		}
 		else {
-			string.append("access denied");
+			if (avatar != null) {
+				string.append(KnowWEUtils.maskHTML("<img src=\"KnowWEExtension/images/"
+						+ avatar + ".png\" height=\"80\" width=\"80\" />"));
+			}
 		}
+	}
 
-		// show information or nothing
+	/**
+	 *
+	 */
+	private void createAvatarHTML(StringBuilder string, String avatar, String prefix) {
+		String letters = "ACE";
+		for (int j = 0; j < letters.length(); j++) {
+			for (int i = 1; i < 6; i++) {
+				String icon = (prefix != "")
+						? (prefix + letters.charAt(j) + "0" + i)
+						: letters.charAt(j) + "0" + i;
+				String checked = "";
+
+				if (avatar != null && avatar.equals(icon)) {
+					checked = " checked='checked'";
+				}
+
+				string.append(KnowWEUtils.maskHTML("<img src=\"KnowWEExtension/images/" + icon
+						+ ".png\" height=\"80\" width=\"80\" />\n"));
+				string.append(KnowWEUtils.maskHTML("<input type=\"radio\" name=\"defi-avatar\" id=\""
+						+ AboutMe.HTMLID_AVATAR + "\" value=\""
+						+ icon + "\" " + checked + " />\n"));
+			}
+			string.append(KnowWEUtils.maskHTML("<br />"));
+		}
 	}
 }

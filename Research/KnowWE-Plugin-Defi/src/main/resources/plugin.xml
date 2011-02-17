@@ -23,6 +23,27 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5"  />
 		<parameter id="scope" value="root" />
+		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
 	</extension>
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="AboutMeSaveAction">
+        <parameter id="class"
+            value="de.d3web.we.defi.AboutMeSaveAction" />
+        <parameter id="name" value="AboutMeSaveAction" />
+        <parameter id="description" value="Action AboutMeSaveAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="LogTabClicksAction">
+        <parameter id="class"
+            value="de.d3web.we.defi.LogTabClicksAction" />
+        <parameter id="name" value="LogTabClicksAction" />
+        <parameter id="description" value="Action LogTabClicksAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />      
+    </extension>
     
 </plugin>

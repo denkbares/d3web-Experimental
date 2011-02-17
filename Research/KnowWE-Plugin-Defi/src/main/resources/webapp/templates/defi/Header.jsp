@@ -1,11 +1,16 @@
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page import="com.ecyrd.jspwiki.*" %>
-<fmt:setLocale value="${prefs.Language}" />
+<%@ page import="de.d3web.we.defi.*" %>
+
+<%@page import="de.d3web.we.defi.utils.DefiUtils"%><fmt:setLocale value="${prefs.Language}" />
 <fmt:setBundle basename="templates.default"/>
 <%
   WikiContext c = WikiContext.findContext(pageContext);
   String frontpage = c.getEngine().getFrontPage(); 
+  
+  //load the last login of Schulz
+  String last_login = DefiUtils.lastLogin();
 %>
 
 <div id="header">
@@ -31,8 +36,7 @@
   			<td rowspan="2" class="no_userpic"></td>
   			<th>Gruppe</th>
   		</tr>
-  		<tr><td>Dr. S. M. Schulz<br />Zuletzt online<br />
-  				am 23.11.10<br />um 15:30 Uhr
+  		<tr><td>Dr. S. M. Schulz<br /> <%=last_login%>
   			</td>
   			<td class="group_pic"></td>
   		</tr>
