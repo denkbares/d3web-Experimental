@@ -18,7 +18,7 @@
  * site: http://www.fsf.org.
  */
 
-package de.d3web.we.defi.utils;
+package de.knowwe.defi.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,7 +29,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import de.d3web.we.defi.AboutMe;
+import de.knowwe.defi.AboutMe;
 
 /**
  *

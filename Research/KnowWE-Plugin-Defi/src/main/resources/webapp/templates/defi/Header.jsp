@@ -1,9 +1,9 @@
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page import="com.ecyrd.jspwiki.*" %>
-<%@ page import="de.d3web.we.defi.*" %>
+<%@ page import="de.knowwe.defi.*" %>
 
-<%@page import="de.d3web.we.defi.utils.DefiUtils"%><fmt:setLocale value="${prefs.Language}" />
+<%@page import="de.knowwe.defi.utils.DefiUtils"%><fmt:setLocale value="${prefs.Language}" />
 <fmt:setBundle basename="templates.default"/>
 <%
   WikiContext c = WikiContext.findContext(pageContext);
