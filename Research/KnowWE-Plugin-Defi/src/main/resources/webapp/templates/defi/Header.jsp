@@ -47,6 +47,11 @@
   
   <div class="pagename"><wiki:PageName /></div>
 
-  <div class="breadcrumbs"><fmt:message key="header.yourtrail"/><wiki:Breadcrumbs /></div>
+  <div class="breadcrumbs">
+    <wiki:Permission permission="edit">
+  	<fmt:message key="header.yourtrail"/>
+  	<wiki:Breadcrumbs />
+  	  </wiki:Permission>
+  	</div>
 
 </div>
