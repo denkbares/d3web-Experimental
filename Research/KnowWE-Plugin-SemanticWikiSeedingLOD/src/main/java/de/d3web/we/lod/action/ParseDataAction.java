@@ -1,5 +1,8 @@
 package de.d3web.we.lod.action;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +58,6 @@ public class ParseDataAction extends AbstractAction {
 
 		while (matchTypes.find()) {
 			type.add(matchTypes.group().substring(1, matchTypes.group().lastIndexOf("\"")));
-			System.out.println(matchTypes.group().substring(1, matchTypes.group().lastIndexOf("\"")));
 			countData++;
 		}
 		while (matchValues.find()) {
@@ -82,6 +84,25 @@ public class ParseDataAction extends AbstractAction {
 			}
 
 			String parse = "[" + concept + " " + hermes.get(i) + ":: " + value.get(i) + "]";
+			String lightParse = "[" + hermes.get(i) + ":: " + value.get(i) + "]";
+
+			// ################## Only for logging purposes
+			String path = KnowWEEnvironment.getInstance().getWikiConnector().getSavePath();
+			File log = new File(path + "/temp");
+			log.mkdir();
+			try {
+				// Create file
+				FileWriter fstream = new FileWriter(path + "/temp/data.log", true);
+				BufferedWriter out = new BufferedWriter(fstream);
+				out.write(s + ": " + parse
+						+ System.getProperty("line.separator"));
+				// Close the output stream
+				out.close();
+			}
+			catch (Exception e) {// Catch exception if any
+				System.err.println("Error: " + e.getMessage());
+			}
+			// ####################
 
 			if (s.equals("qmarks")) {
 				// Do nothing.
@@ -92,15 +113,17 @@ public class ParseDataAction extends AbstractAction {
 
 				// Parse text for the ontology.
 
-				parse = parse + System.getProperty("line.separator");
+				lightParse = lightParse + System.getProperty("line.separator");
 
 				if (!KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
-						conceptTopic)) {
+						conceptTopic)
+						&& !KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
+								concept)) {
 
 					KnowWEEnvironment.getInstance().getWikiConnector().createWikiPage(
-							concept, parse, user);
+							concept, lightParse, user);
 
-					KnowWEArticle article = KnowWEArticle.createArticle(parse,
+					KnowWEArticle article = KnowWEArticle.createArticle(lightParse,
 							concept, KnowWEEnvironment.getInstance().getRootType(),
 							web, true);
 
@@ -111,10 +134,13 @@ public class ParseDataAction extends AbstractAction {
 
 				}
 				else {
-
+					if (KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
+								concept)) {
+						conceptTopic = concept;
+					}
 					KnowWEEnvironment.getInstance().getWikiConnector().appendContentToPage(
 							conceptTopic,
-							parse);
+							lightParse);
 
 					KnowWEEnvironment.getInstance().getArticleManager(web).addArticleToRefresh(
 							conceptTopic);
@@ -306,7 +332,7 @@ public class ParseDataAction extends AbstractAction {
 
 				context.getWriter().write(
 						"<br/><div style='margin-left:10px;'><img src='KnowWEExtension/images/success.png' align='top'>"
-								+ "<b> Artikel erfolgreich erstellt - Sie können zu diesem Konzept nun weitere Attribute abfragen! [Ok]</b></div>");
+								+ "<b> Konzept erfolgreich erstellt - Sie können zu diesem Konzept nun weitere Attribute abfragen!</b></div>");
 			}
 			else {
 				context.getWriter().write(

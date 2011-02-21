@@ -43,7 +43,7 @@ public class CreateAction extends AbstractAction {
 		StringBuffer buffy = new StringBuffer();
 
 		buffy.append("<form id='lodwizard' class='layout'><table border='0' cellpadding='5' cellspacing='1'>"
-				+ "<tr><th id='conceptname' colspan='3' class='concepttopic'>"
+				+ "<tr><th id='conceptname' colspan='3' class='createtopic'>"
 				+ concept
 				+ "</th></tr>"
 				+ "<tr><td colspan='3' align='center' valign='middle' class='conceptcreate'>Erstelle Konzept</td></tr>"

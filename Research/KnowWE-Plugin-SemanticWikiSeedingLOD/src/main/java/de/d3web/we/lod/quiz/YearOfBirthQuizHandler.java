@@ -167,14 +167,14 @@ public class YearOfBirthQuizHandler extends AbstractHTMLTagHandler {
 							+ "</p>"))) {
 				options += "<div><b>"
 						+ number
-						+ " </b><p class='quizanswers' style='display:inline' onclick=\"submitYearQuiz(this);\">"
+						+ " </b><p class='mouselink' style='display:inline' onclick=\"submitYearQuiz(this);\">"
 						+ yearForQuestion + "</p></div>";
 				counter++;
 			}
 			else if (!options.matches(".*>" + tempForQuestion + "</p>.*")) {
 				options += "<div><b>"
 						+ number
-						+ " </b><p class='quizanswers' style='display:inline' onclick=\"submitYearQuiz(this);\">"
+						+ " </b><p class='mouselink' style='display:inline' onclick=\"submitYearQuiz(this);\">"
 						+ tempForQuestion
 						+ "</p></div>";
 				counter++;

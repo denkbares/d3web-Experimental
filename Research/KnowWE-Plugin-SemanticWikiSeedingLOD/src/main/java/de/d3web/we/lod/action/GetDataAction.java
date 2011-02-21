@@ -1,5 +1,8 @@
 package de.d3web.we.lod.action;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -36,6 +39,24 @@ public class GetDataAction extends AbstractAction {
 		String wikipedia = map.get("wikipedia");
 		String web = map.getWeb();
 
+		// #################### Only for logging purposes
+		String path = KnowWEEnvironment.getInstance().getWikiConnector().getSavePath();
+		File log = new File(path + "/temp");
+		log.mkdir();
+		try {
+			// Create file
+			FileWriter fstream = new FileWriter(path + "/temp/search.log", true);
+			BufferedWriter out = new BufferedWriter(fstream);
+			out.write("search: " + concept + " -- " + wikipedia
+					+ System.getProperty("line.separator"));
+			// Close the output stream
+			out.close();
+		}
+		catch (Exception e) {// Catch exception if any
+			System.err.println("Error: " + e.getMessage());
+		}
+		// ####################
+
 		if (concept.isEmpty()) {
 			context.getWriter().write(
 					"<br/><div style='margin-left:10px;'><p><b>Bitte Konzept eingeben.</b></p></div>");
@@ -56,6 +77,8 @@ public class GetDataAction extends AbstractAction {
 		else {
 			// First letter = uppercase
 			concept = concept.substring(0, 1).toUpperCase() + concept.substring(1);
+			// Trim input
+			concept = concept.trim();
 
 			String dbpediaConcept = HermesData.getDBpediaMapping(concept);
 
@@ -69,19 +92,28 @@ public class GetDataAction extends AbstractAction {
 			}
 
 			// Ask to create article?
-			if (dbpediaConcept.isEmpty()) {
+			if (dbpediaConcept.isEmpty() || !HermesData.storeContains(concept)) {
 
 				// If (no mapping || no dbpedia concept found for) && no
 				// wikilink provided.
-				if ((HermesData.isHermesConcept(concept)
+				if (((HermesData.isHermesConcept(concept) && dbpediaConcept.isEmpty())
 						|| LinkedOpenData.getDBpediaRedirect(concept).isEmpty()) && wiki.isEmpty()) {
 					context.getWriter().write(
-							"<br/><div style='margin-left:10px;'><p><b>Konzept nicht gefunden.</b></p></div>");
+							"<br/><div style='margin-left:10px;'><p><b>Kein Konzept als Referenz gefunden.</b></p></div>");
+				}
+				else if (KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
+						concept)) {
+					String ask = "<br/><div id='creationWizard'><p><img src='KnowWEExtension/images/newdoc.png' align='top'> Konzept <b>"
+							+ concept
+							+ "</b> auf vorhandener Artikelseite erstellen? ";
+					ask += "<input type='button' value='Ja' onclick='createConcept()'><input type='button' value='Nein' onclick='cancelWizard()'></p></div>";
+
+					context.getWriter().write(ask);
 				}
 				else {
-					String ask = "<br/><div id='creationWizard'><p><img src='KnowWEExtension/images/newdoc.png' align='top'> Artikel <b>"
+					String ask = "<br/><div id='creationWizard'><p><img src='KnowWEExtension/images/newdoc.png' align='top'> Konzept <b>"
 							+ concept
-							+ "</b> nicht vorhanden - neue Artikelseite erstellen? ";
+							+ "</b> nicht vorhanden - neues Konzept und dazugehörige Artikelseite erstellen? ";
 					ask += "<input type='button' value='Ja' onclick='createConcept()'><input type='button' value='Nein' onclick='cancelWizard()'></p></div>";
 
 					context.getWriter().write(ask);
@@ -170,17 +202,58 @@ public class GetDataAction extends AbstractAction {
 				HashMap<String, List<String>> inverse = var.getInverseMap();
 				StringBuffer buffy = new StringBuffer();
 
+				String encodeTopic = "";
+
+				try {
+					encodeTopic = URLEncoder.encode(HermesData.getTopicForConcept(concept), "UTF-8");
+				}
+				catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+
 				buffy.append("<br/><form id='lodwizard' class='layout'><table border='0' cellpadding='5' cellspacing='1'>"
-								+ "<tr><th id='conceptname' colspan='3' class='concepttopic'>"
-								+ concept
-								+ "</th></tr><tr><td><div class='spacingtop' /></td></tr></tr>");
+						+ "<tr><th id='conceptname' colspan='3' class='concepttopic'><a href='/KnowWE/Wiki.jsp?page="
+						+ encodeTopic + "'>"
+						+ concept
+						+ "</a></th></tr><tr><td><div class='spacingtop' /></td></tr>");
 
 				// Sort A-Z
 				// SortedSet<String> sortedset = new
 				// TreeSet<String>(result.keySet());
 				Iterator<String> it = result.keySet().iterator();
 
+				StringBuffer attribs = new StringBuffer();
+				StringBuffer newdata = new StringBuffer();
+
+				// SPARQL intern already saved data from properties file.
+				int num = 0;
+				for (String attribute : var.getHermesAttributes()) {
+					List<String> values = HermesData.queryStore(concept, attribute);
+					for (String value : values) {
+						if (!value.isEmpty()) {
+							attribs.append("<tr valign='middle' align='middle' id='instore" + num
+									+ "' style='display:none'><td class='savetags'>"
+									+ attribute
+									+ "</td><td class='savepadding'>" + value
+									+ "</td></tr>");
+							num++;
+						}
+					}
+				}
+				attribs.append("<tr><td><div class='spacingtop' /></td></tr>");
+
+				StringBuffer saved = new StringBuffer();
+				saved.append("<tr><td colspan='3'><p id='savetoggle' class='mouselink' onclick='switchMenu(\""
+						+ num + "\");'><b>+ Bereits gespeichert</b></p></tr>");
+				saved.append(attribs.toString());
+
+				int latCount = 1;
+				int longCount = 1;
+
 				int i = 0;
+
+				boolean noValues = true;
+
 				if (result.size() > 0) {
 					while (it.hasNext()) {
 						String s = it.next();
@@ -188,6 +261,10 @@ public class GetDataAction extends AbstractAction {
 						for (String resultS : result.get(s)) {
 							String checkHermesTag = s;
 							String checkValue = resultS;
+
+							if (!resultS.isEmpty() && !resultS.matches("\\s+")) {
+								noValues = false;
+							}
 
 							// objects are saved with predicate specified in
 							// HermesData.
@@ -206,6 +283,9 @@ public class GetDataAction extends AbstractAction {
 							if (HermesData.isCutPredicateNS()) {
 								checkHermesTagPI = checkHermesTag.substring(checkHermesTag.indexOf(":") + 1);
 							}
+							// System.out.println(resultS);
+							// System.out.println(concept + "," +
+							// checkHermesTagPI + "," + checkValue);
 
 							if (!resultS.isEmpty()
 									&& !HermesData.isIgnored(concept, checkHermesTagPI, checkValue)
@@ -228,7 +308,7 @@ public class GetDataAction extends AbstractAction {
 
 								// If object -> no input box.
 								if (resultS.matches("ist vom Typ .*")) {
-									buffy.append("<tr><td valign='middle' align='middle'>"
+									newdata.append("<tr><td valign='middle' align='middle'>"
 											+ "<p id='hermestag"
 											+ i
 											+ "' title="
@@ -248,7 +328,7 @@ public class GetDataAction extends AbstractAction {
 									String conceptname = resultS.substring(16);
 									String link = HermesData.linkString(conceptname, "dbpediavalue"
 												+ i);
-									buffy.append("<tr><td valign='middle' align='middle'>"
+									newdata.append("<tr><td valign='middle' align='middle'>"
 											+ "<p id='hermestag" + i + "' title="
 											+ title
 											+ " class='tags'>"
@@ -258,8 +338,46 @@ public class GetDataAction extends AbstractAction {
 											+ link
 											+ "</td>");
 								}
+								else if (s.contains("Longitude")) {
+									newdata.append("<tr><td valign='middle' align='middle'>"
+											+ longCount
+											+ " <a id='hermestag"
+											+ i
+											+ "' title="
+											+ title
+											+ " class='tags' href='/KnowWE/Map.jsp' onclick='openWindow(createCoordURL(\""
+											+ longCount + "\"));return false'>"
+											+ s
+											+ "</a>"
+											+ "<td valign='middle' align='middle'><span id='lon"
+											+ longCount + "'><input id='dbpediavalue"
+											+ i
+											+ "' type='text' size='40' value='"
+											+ resultS.replaceAll("’", "&rsquo;") + "'></span>"
+											+ "</td>");
+									longCount++;
+								}
+								else if (s.contains("Latitude")) {
+									newdata.append("<tr><td valign='middle' align='middle'>"
+											+ latCount
+											+ " <a id='hermestag"
+											+ i
+											+ "' title="
+											+ title
+											+ " class='tags' href='/KnowWE/Map.jsp' onclick='openWindow(createCoordURL(\""
+											+ latCount + "\"));return false'>"
+											+ s
+											+ "</a>"
+											+ "<td valign='middle' align='middle'><span id='lat"
+											+ latCount + "'><input id='dbpediavalue"
+											+ i
+											+ "' type='text' size='40' value='"
+											+ resultS.replaceAll("’", "&rsquo;") + "'></span>"
+											+ "</td>");
+									latCount++;
+								}
 								else {
-									buffy.append("<tr><td valign='middle' align='middle'>"
+									newdata.append("<tr><td valign='middle' align='middle'>"
 											+ "<p id='hermestag"
 											+ i
 											+ "' title="
@@ -273,7 +391,7 @@ public class GetDataAction extends AbstractAction {
 											+ resultS.replaceAll("’", "&rsquo;") + "'>"
 											+ "</td>");
 								}
-								buffy.append("<td><input type='button' name='submit"
+								newdata.append("<td><input type='button' name='submit"
 										+ i
 										+ "' onclick='buttonToggle(this);' class='submit'>"
 										+ "<input type='button' name='ignore"
@@ -289,13 +407,15 @@ public class GetDataAction extends AbstractAction {
 							}
 						}
 					}
-					buffy.append("<tr><td colspan='3'><div class='spacingbuttons'/></td></tr><tr><td colspan='3' valign='middle' align='right'><img src='KnowWEExtension/images/submit.png'"
+					newdata.append("<tr><td colspan='3'><div class='spacingbuttons'/></td></tr><tr><td colspan='3' valign='middle' align='right'><img src='KnowWEExtension/images/submit.png'"
 							+ "onmouseover='changeOnMouseOver(this);' onmouseout='changeOnMouseOut(this);'"
 							+ "onclick='submitData("
 							+ i
 							+ ");' class='buttons'>"
 							+ "<img src='KnowWEExtension/images/cancel.png' onmouseover='changeOnMouseOver(this);' "
 							+ "onmouseout='changeOnMouseOut(this);' onclick='cancelWizard();' class='buttons'></td></tr></table></form><br />");
+
+					saved.append("</div>");
 
 					StringBuffer debug = new StringBuffer();
 
@@ -314,10 +434,19 @@ public class GetDataAction extends AbstractAction {
 						}
 						debug.append("</tbody></table></div></div>");
 					}
-					context.getWriter().write(buffy.toString() + debug.toString());
+					if (noValues) {
+						context.getWriter().write(
+								"<br/><div style='margin-left:10px;'><p><b>Keine Daten zu Konzept gefunden.</b></p></div>");
+					}
+					else {
+						context.getWriter().write(
+								buffy.toString() + saved.toString() + newdata.toString()
+										+ debug.toString());
+					}
 				}
 				else {
-					context.getWriter().write("<br/><p><b>Keine Daten zu Konzept gefunden.</b></p>");
+					context.getWriter().write(
+								"<br/><div style='margin-left:10px;'><p><b>Keine Daten zu Konzept gefunden.</b></p></div>");
 				}
 			}
 		}

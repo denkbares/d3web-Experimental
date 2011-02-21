@@ -153,8 +153,8 @@ function submitDataCreate(count, wiki) {
 		// Hole Tag + Wert
 		hermes[last] = document.getElementById("hermestag" + last).innerHTML;
 		dbpedia[last] = (document.getElementById("dbpediavalue" + last).type == "select-one") ? document
-				.getElementById("dbpediavalue" + last).value : document
-				.getElementById("dbpediavalue" + last).innerHTML;
+				.getElementById("dbpediavalue" + last).value
+				: document.getElementById("dbpediavalue" + last).innerHTML;
 		type[last] = "submit";
 
 	} else if (document.getElementById('qmarksoptional').className == 'qmarksc') {
@@ -424,4 +424,42 @@ function submitYearQuiz(obj) {
 
 	new _KA(options).send();
 
+}
+
+function switchMenu(num) {
+	var toggle = document.getElementById("savetoggle").innerHTML;
+	for ( var i = 0; i < num; i++) {
+
+		var el = document.getElementById('instore' + i);
+
+		if (el.style.display != 'none') {
+			el.style.display = 'none';
+			toggle = toggle.replace(/-/, "+");
+			document.getElementById("savetoggle").innerHTML = toggle;
+		} else {
+			el.style.display = '';
+			toggle = toggle.replace(/\+/, "-");
+			document.getElementById("savetoggle").innerHTML = toggle;
+		}
+	}
+}
+
+function createCoordURL(num) {
+
+	var lat, long, url;
+
+	lat = document.getElementById('lat' + num).childNodes[0].value.replace(/,/,
+			".");
+	long = document.getElementById('lon' + num).childNodes[0].value.replace(
+			/,/, ".");
+	// build url for map
+	url = '/KnowWE/Map.jsp?lat=' + lat + '&long=' + long + '&num=' + num;
+
+	return url;
+}
+
+function openWindow(url, num) {
+	fenster = window.open(url, "KnowWE Map"+num,
+			"width=600,height=400,status=yes,scrollbars=yes,resizable=yes");
+	fenster.focus();
 }

@@ -656,12 +656,14 @@ public class LinkedOpenData {
 								String datum2 = "";
 								boolean period = false;
 
-								if (s.matches("[\\w -]+@\\p{Alpha}{2}")) {
+								if (s.matches("[\\w -\\.]+@\\p{Alpha}{2}")) {
 									s = s.substring(0, s.indexOf("@"));
 								}
-								if (s.matches("[\\w -]+\\^.*")) {
+								if (s.matches("[\\w -\\.]+\\^.*")) {
 									s = s.substring(0, s.indexOf("^"));
 								}
+
+								s = s.replaceAll("\\.", "");
 
 								// Default xsd:date type [-]CCYY-MM-DD
 								if (s.matches("-?[\\d]*-[\\d]*-[\\d]*")) {
@@ -696,7 +698,6 @@ public class LinkedOpenData {
 										}
 									}
 								}
-
 								// Period of time.
 								if (s.matches("[\\d]+ ?[AD|BC|E]{0,3} ?- ?[\\d]+ ?[AD|BC|E]{2,3}")) {
 
@@ -791,7 +792,7 @@ public class LinkedOpenData {
 
 							for (String s : results.get(lhsMappings)) {
 
-								double d1, d2;
+								String d1, d2;
 
 								if (s.matches("[\\d., ]+@\\p{Alpha}{2}")) {
 									s = s.substring(0, s.indexOf("@"));
@@ -800,30 +801,37 @@ public class LinkedOpenData {
 									s = s.substring(0, s.indexOf("^"));
 								}
 
-								if (s.matches("[\\d]+[.,][\\d]+ ?[\\d]*[.,]?[\\d]*")) {
+								s = s.replaceAll("\\.", ",");
 
-									s = s.replaceAll(",", ".");
+								if (s.matches("[\\d]+[.,][\\d]+ ?[\\d]*[.,]?[\\d]*")) {
 
 									if (s.contains(" ")) {
 
-										d1 = Double.parseDouble(s.substring(0,
-												s.indexOf(" ")));
-										d2 = Double.parseDouble(s.substring(
-												s.indexOf(" ")));
+										d1 = s.substring(0,
+												s.indexOf(" "));
+										d2 = s.substring(
+												s.indexOf(" "));
 
 										if (hermesTag.contains("Latitude")) {
-											resultData.get(hermesTag).add(Double.toString(d1));
+											while (!resultData.get(hermesTag).add(d1)) {
+												d1 = d1 + "0";
+											}
 											inverseMap.get(hermesTag).add(normalTitle);
-											inverseMap.get(hermesTag).add(Double.toString(d1));
+											inverseMap.get(hermesTag).add(d1);
 										}
 										if (hermesTag.contains("Longitude")) {
-											resultData.get(hermesTag).add(Double.toString(d2));
+											while (!resultData.get(hermesTag).add(d2)) {
+												d2 = d2 + "0";
+											}
 											inverseMap.get(hermesTag).add(normalTitle);
-											inverseMap.get(hermesTag).add(Double.toString(d2));
+											inverseMap.get(hermesTag).add(d2);
 										}
 
 									}
 									else {
+										while (!resultData.get(hermesTag).add(s)) {
+											s = s + "0";
+										}
 										resultData.get(hermesTag).add(s);
 										inverseMap.get(hermesTag).add(normalTitle);
 										inverseMap.get(hermesTag).add(s);
@@ -1042,4 +1050,43 @@ public class LinkedOpenData {
 		return true;
 
 	}
+
+	/**
+	 * Returns a list with all hermes attributes specified in the corresponding
+	 * properties file.
+	 * 
+	 * @return list.
+	 */
+	public HashSet<String> getHermesAttributes() {
+		Iterator<String> mappingIt = mappings.keySet().iterator();
+		HashSet<String> attributes = new LinkedHashSet<String>();
+		while (mappingIt.hasNext()) {
+			String lhsMappings = mappingIt.next();
+			for (String dif : mappings.get(lhsMappings)) {
+				String[] cut = dif.split(" ");
+				String hermesTag = "";
+				String datatype = "";
+
+				if (dif.matches("[\\p{L}:]+ [\\w()]+")) {
+					hermesTag = cut[0];
+					datatype = cut[1];
+				}
+				// case [\\p{L}:]+ [\\p{L}:]+ [\\w()]+
+				else {
+					hermesTag = cut[0] + " " + cut[1];
+					datatype = cut[2];
+				}
+
+				if (datatype.equals("(object)")) {
+					attributes.add(HermesData.getObjectType());
+				}
+				else {
+					attributes.add(hermesTag);
+				}
+			}
+		}
+		return attributes;
+
+	}
+
 }

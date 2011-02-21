@@ -131,5 +131,16 @@
         	<parameter id="priority" value="5" />
     	</extension>	
     	
+    	<extension plugin-id="KnowWEExtensionPoints" point-id="PageAppendHandler"
+		id="GetDataAppendHandler">
+		<parameter id="class"
+			value="de.d3web.we.lod.taghandler.GetDataAppendHandler" />
+		<parameter id="name" value="GetDataAppendHandler" />
+		<parameter id="description" value="PageAppendHandler GetDataAppendHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="6" />
+		<parameter id="script" value="KnowWE-Plugin-SWSLOD.js" />
+		<parameter id="css" value="lod.css" />
+	</extension>
 
 </plugin>

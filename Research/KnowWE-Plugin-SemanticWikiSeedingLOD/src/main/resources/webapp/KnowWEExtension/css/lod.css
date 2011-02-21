@@ -119,9 +119,16 @@
 	margin-top: 8px;
 }
 
+.createtopic {
+	font-size: 1.4em;
+	font-family: Georgia, serif;
+}
+
 .concepttopic {
 	font-size: 1.4em;
 	font-family: Georgia, serif;
+	color: #000000;
+	text-decoration: none;
 }
 
 .conceptcreate {
@@ -133,6 +140,17 @@
 	color: #000066;
 }
 
-.quizanswers {
+.mouselink {
 	cursor: pointer;
 	cursor: hand;
+}
+
+.savedpadding {
+	padding: 0 8px;
+}
+
+.savetags {
+	padding: 0 16px;
+	font-weight: bold;
+	color: #000066;
+}
