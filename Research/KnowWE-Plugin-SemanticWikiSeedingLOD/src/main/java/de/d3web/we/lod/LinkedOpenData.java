@@ -656,10 +656,10 @@ public class LinkedOpenData {
 								String datum2 = "";
 								boolean period = false;
 
-								if (s.matches("[\\w -\\.]+@\\p{Alpha}{2}")) {
+								if (s.matches("[\\w -\\./-]+@\\p{Alpha}{2}")) {
 									s = s.substring(0, s.indexOf("@"));
 								}
-								if (s.matches("[\\w -\\.]+\\^.*")) {
+								if (s.matches("[\\w -\\./-]+\\^.*")) {
 									s = s.substring(0, s.indexOf("^"));
 								}
 
@@ -679,22 +679,24 @@ public class LinkedOpenData {
 									}
 								}
 								// October?,? ?YYYY+
-								if (s.matches("[\\p{Alpha} ,]*[\\d]+ ?[AD|BC|E]{2,3}")) {
-
+								if (s.matches("[\\p{Alpha} ,]*[\\d]+ ?[AD|BC|E]{0,3}/?-? ?[\\d]* ?[AD|BC|E]{2,3}")) {
 									String yearFilter = "[\\d]+ ?[AD|BC|E]{2,3}";
 									Pattern yearPattern = Pattern.compile(yearFilter);
 									Matcher matcherY = yearPattern.matcher(s);
 
-									if (matcherY.find()) {
+									while (matcherY.find()) {
 										String date = matcherY.group();
 										String year = date.split(" ?[\\p{Alpha}]+")[0];
+										if (!datum.isEmpty()) {
+											datum += " ";
+										}
 										if (date.contains("AD")
 												|| (date.contains("CE") && !date
 														.contains("BCE"))) {
-											datum = year + "-1-1";
+											datum += year + "-1-1";
 										}
 										else {
-											datum = "-" + year + "-1-1";
+											datum += "-" + year + "-1-1";
 										}
 									}
 								}
