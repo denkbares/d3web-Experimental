@@ -1,4 +1,4 @@
-package com.ontotext.trree.rdf2go;
+/*package com.ontotext.trree.rdf2go;
 
 import java.io.File;
 import java.util.Properties;
@@ -152,3 +152,4 @@ public class OwlimModelFactory extends AbstractModelFactory {
 		m.close();
 	}
 }
+*/
