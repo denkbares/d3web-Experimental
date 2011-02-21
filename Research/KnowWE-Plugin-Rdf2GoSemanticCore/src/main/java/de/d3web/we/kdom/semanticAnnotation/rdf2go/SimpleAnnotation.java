@@ -25,13 +25,11 @@ package de.d3web.we.kdom.semanticAnnotation.rdf2go;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
-import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
 
+import de.d3web.we.core.semantic.rdf2go.IntermediateOwlObject;
 import de.d3web.we.core.semantic.rdf2go.OwlHelper;
 import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
@@ -60,7 +58,7 @@ public class SimpleAnnotation extends DefaultAbstractKnowWEObjectType {
 
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
-			List<URI> literals = new ArrayList<URI>();
+			IntermediateOwlObject io = new IntermediateOwlObject();
 
 			String annos = "";
 			try {
@@ -74,28 +72,26 @@ public class SimpleAnnotation extends DefaultAbstractKnowWEObjectType {
 			if (annos.contains(":")) {
 				String[] list = annos.split(":");
 				String ns = list[0];
-				String ens = Rdf2GoCore.getInstance().expandNamespace(ns);
+				String ens = Rdf2GoCore.getInstance().expandNSPrefix(ns);
 				if (ns.equals(ens)) {
-//					io.setValidPropFlag(false);
-//					io.setBadAttribute(ns + " is no valid namespace");
-					System.out.println();
+					io.setValidPropFlag(false);
+					io.setBadAttribute(ns + " is no valid namespace");
 				}
 				try {
 					anno = OwlHelper.createURI(ens, list[1]);
 				}
 				catch (IllegalArgumentException e) {
-//					io.setValidPropFlag(false);
-//					io.setBadAttribute(ns);
-					System.out.println();
+					io.setValidPropFlag(false);
+					io.setBadAttribute(ns);
 				}
 			}
 			else {
 				anno = OwlHelper.createlocalURI(annos);
 			}
 			if (anno != null) {
-				literals.add(anno);
+				io.addLiteral(anno);
 			}
-			KnowWEUtils.storeObject(article, s, OwlHelper.IOO, literals);
+			KnowWEUtils.storeObject(article, s, OwlHelper.IOO, io);
 			return null;
 		}
 

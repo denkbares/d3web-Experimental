@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -68,7 +69,7 @@ import de.d3web.we.kdom.Section;
 public class Rdf2GoCore implements EventListener {
 
 	// Base Namespace
-	
+
 	public static final String basens = "http://ki.informatik.uni-wuerzburg.de/d3web/we/knowwe.owl#";
 	public static final String localns = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl()
 			+ "OwlDownload.jsp#";
@@ -76,30 +77,36 @@ public class Rdf2GoCore implements EventListener {
 	private static final String JENA = "jena";
 	private static final String BIGOWLIM = "bigowlim";
 	public static final String SESAME = "sesame";
-	
+
 	public static final String select = "select";
 	public static final String ask = "ask";
 
 	// use JENA, BIGOWLIM or SESAME:
-	public static String USE_MODEL = SESAME;
+	public static String USE_MODEL = JENA;
 
 	// use Reasoning.owl, Reasoning.rdfs, Reasoning.rdfsAndOwl or
 	// Reasoning.none:
 	// SESAME and Reasoning.owl/Reasoning.rdfsAndOwl uses SwiftOWLIM Sail!
-	private static Reasoning USE_REASONING = Reasoning.owl;
+	private static Reasoning USE_REASONING = Reasoning.rdfs;
 
 	private static Rdf2GoCore me;
 	private Model model;
-	private HashMap<String, WeakHashMap<Section, List<Statement>>> statementcache;
+	private HashMap<String, WeakHashMap<Section<? extends KnowWEObjectType>, List<Statement>>> statementcache;
 	private HashMap<Statement, Integer> duplicateStatements;
 	private HashMap<String, String> namespaces;
-	
+
+	public static void printStuff() {
+		System.out.println(Rdf2GoCore.getInstance().duplicateStatements.size());
+		System.out.println(Rdf2GoCore.getInstance().statementcache.size());
+		System.out.println(me.model.size());
+	}
+
 	/**
 	 * Initializes the model and its caches and namespaces
 	 */
 	public void init() {
 		initModel();
-		statementcache = new HashMap<String, WeakHashMap<Section, List<Statement>>>();
+		statementcache = new HashMap<String, WeakHashMap<Section<? extends KnowWEObjectType>, List<Statement>>>();
 		duplicateStatements = new HashMap<Statement, Integer>();
 		namespaces = new HashMap<String, String>();
 		namespaces.putAll(model.getNamespaces());
@@ -144,7 +151,7 @@ public class Rdf2GoCore implements EventListener {
 	 * 
 	 * @throws ModelRuntimeException
 	 */
-	public void initModel() throws ModelRuntimeException,ReasoningNotSupportedException {
+	public void initModel() throws ModelRuntimeException, ReasoningNotSupportedException {
 		if (USE_MODEL == JENA) {
 			registerJenaModel();
 		}
@@ -177,9 +184,18 @@ public class Rdf2GoCore implements EventListener {
 	private void initDefaultNamespaces() {
 		addNamespace("ns", basens);
 		addNamespace("lns", localns);
+		addNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+		addNamespace("w", "http://www.umweltbundesamt.de/wisec#");
+		addNamespace("owl", "http://www.w3.org/2002/07/owl#");
+		addNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+		addNamespace("xsd", "http://www.w3.org/2001/XMLSchema#");
 	}
-	
+
 	public void readFrom(InputStream in) throws ModelRuntimeException, IOException {
+		model.readFrom(in);
+	}
+
+	public void readFrom(Reader in) throws ModelRuntimeException, IOException {
 		model.readFrom(in);
 	}
 
@@ -263,7 +279,7 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	public URI createURI(String ns, String str) {
-		return model.createURI(expandNamespace(ns) + str);
+		return model.createURI(expandNSPrefix(ns) + str);
 	}
 
 	public URI createLocalURI(String str) {
@@ -295,11 +311,14 @@ public class Rdf2GoCore implements EventListener {
 		return result;
 	}
 
-	public boolean sparqlAsk(String query) throws ModelRuntimeException,MalformedQueryException{
+	public boolean sparqlAsk(String query) throws ModelRuntimeException, MalformedQueryException {
 		return model.sparqlAsk(query);
 	}
 
-	public QueryResultTable sparqlSelect(String query) throws ModelRuntimeException,MalformedQueryException {
+	public QueryResultTable sparqlSelect(String query) throws ModelRuntimeException, MalformedQueryException {
+		if (query.startsWith(getSparqlNamespaceShorts())) {
+			return model.sparqlSelect(query);
+		}
 		return model.sparqlSelect(getSparqlNamespaceShorts() + query);
 	}
 
@@ -352,7 +371,7 @@ public class Rdf2GoCore implements EventListener {
 	 */
 	private List<Statement> getStatementsofSingleSection(
 			Section<? extends KnowWEObjectType> sec) {
-		WeakHashMap<Section, List<Statement>> temp = statementcache.get(sec
+		WeakHashMap<Section<? extends KnowWEObjectType>, List<Statement>> temp = statementcache.get(sec
 				.getArticle().getTitle());
 		if (temp != null) {
 			return temp.get(sec);
@@ -368,12 +387,14 @@ public class Rdf2GoCore implements EventListener {
 	 */
 	private void removeStatementsofSingleSection(
 			Section<? extends KnowWEObjectType> sec) {
-		WeakHashMap<Section, List<Statement>> temp = statementcache.get(sec
+		WeakHashMap<Section<? extends KnowWEObjectType>, List<Statement>> temp = statementcache.get(sec
 					.getArticle().getTitle());
-		System.out.println("removing statements of section " + sec.getID());
+		
 		if (temp != null) {
 			if (temp.containsKey(sec)) {
 				List<Statement> statementsOfSection = temp.get(sec);
+				List<Statement> removedStatements = new ArrayList<Statement>();
+				
 				for (Statement s : statementsOfSection) {
 
 					if (duplicateStatements.containsKey(s)) {
@@ -385,13 +406,15 @@ public class Rdf2GoCore implements EventListener {
 						}
 					}
 					else {
-						model.removeStatement(s);
+						removedStatements.add(s);
+//						model.removeStatement(s);
 					}
 				}
 				temp.remove(sec);
 				if (temp.isEmpty()) {
 					statementcache.remove(sec.getArticle().getTitle());
 				}
+				model.removeAll(removedStatements.iterator());
 			}
 			else {
 				// Not necessary because of full-pasre-listener being active
@@ -413,12 +436,12 @@ public class Rdf2GoCore implements EventListener {
 	 * @param allStatements
 	 * @param sec
 	 */
-	public void addStatements(List<Statement> allStatements, Section sec) {
+	public void addStatements(List<Statement> allStatements, Section<? extends KnowWEObjectType> sec) {
 		Logger.getLogger(this.getClass().getName()).finer(
 				"semantic core updating " + sec.getID() + "  "
 						+ allStatements.size());
 
-		WeakHashMap<Section, List<Statement>> temp = statementcache.get(sec.getTitle());
+		WeakHashMap<Section<? extends KnowWEObjectType>, List<Statement>> temp = statementcache.get(sec.getTitle());
 		boolean scContainsCurrentSection = false;
 		if (temp != null) {
 			if (temp.get(sec) != null) {
@@ -453,6 +476,10 @@ public class Rdf2GoCore implements EventListener {
 		addStaticStatements(allStatements, sec);
 	}
 
+	public void addStatements(IntermediateOwlObject io, Section<? extends KnowWEObjectType> sec) {
+		addStatements(io.getAllStatements(), sec);
+	}
+
 	/**
 	 * adds statements to rdf store
 	 * 
@@ -460,16 +487,16 @@ public class Rdf2GoCore implements EventListener {
 	 * @param allStatements
 	 * @param sec
 	 */
-	public void addStaticStatements(List<Statement> allStatements, Section sec) {
+	public void addStaticStatements(List<Statement> allStatements, Section<? extends KnowWEObjectType> sec) {
 		Iterator<Statement> i = allStatements.iterator();
 		model.addAll(i);
-			
+
 	}
 
 	public void addStaticStatement(Statement statement) {
 		model.addStatement(statement);
 	}
-	
+
 	/**
 	 * adds statements to statementcache
 	 * 
@@ -477,11 +504,11 @@ public class Rdf2GoCore implements EventListener {
 	 * @param sec
 	 * @param allStatements
 	 */
-	private void addToStatementcache(Section sec, List<Statement> allStatements) {
-		WeakHashMap<Section, List<Statement>> temp = statementcache.get(sec
+	private void addToStatementcache(Section<? extends KnowWEObjectType> sec, List<Statement> allStatements) {
+		WeakHashMap<Section<? extends KnowWEObjectType>, List<Statement>> temp = statementcache.get(sec
 				.getArticle().getTitle());
 		if (temp == null) {
-			temp = new WeakHashMap<Section, List<Statement>>();
+			temp = new WeakHashMap<Section<? extends KnowWEObjectType>, List<Statement>>();
 
 		}
 		temp.put(sec, allStatements);
@@ -491,12 +518,12 @@ public class Rdf2GoCore implements EventListener {
 	public Statement createStatement(Resource subject, URI predicate, Node object) {
 		return model.createStatement(subject, predicate, object);
 	}
-	
+
 	public BlankNode createBlankNode(String internalID) {
 		return model.createBlankNode(internalID);
 	}
-	
-	public BlankNode createBlankNode( ) {
+
+	public BlankNode createBlankNode() {
 		return model.createBlankNode();
 	}
 
@@ -511,7 +538,7 @@ public class Rdf2GoCore implements EventListener {
 
 	public void dumpDuplicates() {
 		System.out.println("<duplicates>");
-		for (Entry e : duplicateStatements.entrySet()) {
+		for (Entry<Statement, Integer> e : duplicateStatements.entrySet()) {
 			System.out.print(e.getKey() + " #");
 			System.out.println(e.getValue());
 		}
@@ -522,7 +549,7 @@ public class Rdf2GoCore implements EventListener {
 		System.out.println("<statementcache>");
 		for (String s : statementcache.keySet()) {
 			System.out.println(s + ":");
-			for (Section sec : statementcache.get(s).keySet()) {
+			for (Section<? extends KnowWEObjectType> sec : statementcache.get(s).keySet()) {
 				System.out.println(sec.getID());
 				for (Statement l : statementcache.get(s).get(sec)) {
 					System.out.println("s:" + l.getSubject() + " p:" + l.getPredicate() + " o:"
@@ -535,7 +562,7 @@ public class Rdf2GoCore implements EventListener {
 
 	public void dumpNamespaces() {
 		System.out.println("<namespaces>");
-		for (Entry e : namespaces.entrySet()) {
+		for (Entry<String, String> e : namespaces.entrySet()) {
 			System.out.println("Prefix=" + e.getKey() + " URL=" + e.getValue());
 		}
 		System.out.println("</namespaces>");
@@ -551,23 +578,35 @@ public class Rdf2GoCore implements EventListener {
 	@Override
 	public void notify(Event event) {
 		if (event instanceof FullParseEvent) {
-			if (statementcache != null) {
-				getInstance().removeArticleStatementsRecursive(
-						((FullParseEvent) event).getArticle());
-			}
+			getInstance().removeArticleStatementsRecursive(((FullParseEvent) event).getArticle());
 		}
 	}
 
 	public void removeArticleStatementsRecursive(KnowWEArticle art) {
 		if (statementcache.get(art.getTitle()) != null) {
-			Set<Section> temp = new HashSet<Section>();
+			Set<Section<? extends KnowWEObjectType>> temp = new HashSet<Section<? extends KnowWEObjectType>>();
 			temp.addAll(statementcache.get(art.getTitle()).keySet());
-			for (Section cur : temp) {
+			for (Section<? extends KnowWEObjectType> cur : temp) {
 				removeStatementsofSingleSection(cur);
 			}
 		}
 	}
 
+	public void removeAllCachedStatements() {
+		//get all statements of this wiki and remove them from the model
+		ArrayList<Statement> allStatements = new ArrayList<Statement>();
+		for (WeakHashMap<Section<? extends KnowWEObjectType>,List<Statement>> w : statementcache.values()) {
+			for (List<Statement> l : w.values()) {
+				allStatements.addAll(l);
+			}
+		}
+		model.removeAll(allStatements.iterator());
+		
+		//clear statementcache and duplicateStatements
+		statementcache.clear();
+		duplicateStatements.clear();
+	}
+	
 	public String getSparqlNamespaceShorts() {
 		StringBuffer buffy = new StringBuffer();
 
@@ -604,46 +643,52 @@ public class Rdf2GoCore implements EventListener {
 			e1.printStackTrace();
 		}
 		if (results != null) {
-		ClosableIterator<QueryRow> i = results.iterator();
+			ClosableIterator<QueryRow> i = results.iterator();
 
-		while (i.hasNext()) {
-			QueryRow row = i.next();
-			String tag = row.getValue(targetbinding).toString();
-			if (tag.split("#").length == 2) tag = tag.split("#")[1];
-			try {
-				tag = URLDecoder.decode(tag, "UTF-8");
+			while (i.hasNext()) {
+				QueryRow row = i.next();
+				String tag = row.getValue(targetbinding).toString();
+				if (tag.split("#").length == 2) tag = tag.split("#")[1];
+				try {
+					tag = URLDecoder.decode(tag, "UTF-8");
+				}
+				catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+				if (tag.contains("=")) {
+					tag = tag.split("=")[1];
+				}
+				if (tag.startsWith("\"")) {
+					tag = tag.substring(1);
+				}
+				if (tag.endsWith("\"")) {
+					tag = tag.substring(0, tag.length() - 1);
+				}
+				resultlist.add(tag.trim());
 			}
-			catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-			if (tag.contains("=")) {
-				tag = tag.split("=")[1];
-			}
-			if (tag.startsWith("\"")) {
-				tag = tag.substring(1);
-			}
-			if (tag.endsWith("\"")) {
-				tag = tag.substring(0, tag.length() - 1);
-			}
-			resultlist.add(tag.trim());
-		}
 		}
 		return resultlist;
 	}
 
 	public Literal createLiteral(String text) {
-return model.createPlainLiteral(text);
+		return model.createPlainLiteral(text);
 	}
-	
+
+	public Literal createLiteral(String literal, URI datatypeURI) {
+		return model.createDatatypeLiteral(literal, datatypeURI);
+	}
+
 	public static String getLocalName(Node o) {
 		return RDFTool.getLabel(o);
 	}
 
-	public static List<org.openrdf.model.Statement> getTopicStatements(String topic) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Statement> getTopicStatements(String topic) {
+		Section<? extends KnowWEObjectType> rootsection = KnowWEEnvironment
+				.getInstance().getArticle(KnowWEEnvironment.DEFAULT_WEB, topic)
+				.getSection();
+		return getSectionStatementsRecursive(rootsection);
 	}
-	
+
 	public File[] getImportList() {
 		KnowWEEnvironment knowWEEnvironment = KnowWEEnvironment.getInstance();
 		String p = knowWEEnvironment.getWikiConnector().getSavePath();
@@ -662,7 +707,7 @@ return model.createPlainLiteral(text);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @param prop
 	 * @return
@@ -679,7 +724,7 @@ return model.createPlainLiteral(text);
 		return createURI("http://www.w3.org/2000/01/rdf-schema#", prop);
 	}
 
-	public void addStatement(Statement s, Section sec) {
+	public void addStatement(Statement s, Section<? extends KnowWEObjectType> sec) {
 		List<Statement> l = new ArrayList<Statement>();
 		l.add(s);
 		addStatements(l, sec);

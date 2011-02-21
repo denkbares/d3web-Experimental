@@ -33,6 +33,7 @@ import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.util.RDFTool;
 
+import de.d3web.we.core.semantic.rdf2go.IntermediateOwlObject;
 import de.d3web.we.core.semantic.rdf2go.OwlHelper;
 import de.d3web.we.core.semantic.rdf2go.PropertyManager;
 import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
@@ -43,7 +44,7 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.contexts.ContextManager;
 import de.d3web.we.kdom.contexts.DefaultSubjectContext;
 import de.d3web.we.kdom.report.KDOMReportMessage;
-//import de.d3web.we.kdom.report.SimpleMessageError;
+// import de.d3web.we.kdom.report.SimpleMessageError;
 import de.d3web.we.kdom.sectionFinder.AllBeforeTypeSectionFinder;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.d3web.we.kdom.semanticAnnotation.rdf2go.SemanticAnnotationObject;
@@ -76,11 +77,11 @@ public class SemanticAnnotationObject extends DefaultAbstractKnowWEObjectType {
 	}
 
 	private class SemanticAnnotationObjectSubTreeHandler extends
-	RDF2GoSubtreeHandler<SemanticAnnotationObject> {
+			RDF2GoSubtreeHandler<SemanticAnnotationObject> {
 
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
-			List<Statement> io = new ArrayList<Statement>();
+			IntermediateOwlObject io = new IntermediateOwlObject();
 			List<KDOMReportMessage> msgs = new ArrayList<KDOMReportMessage>();
 			List<Section> childs = s.getChildren();
 			URI prop = null;
@@ -91,13 +92,13 @@ public class SemanticAnnotationObject extends DefaultAbstractKnowWEObjectType {
 			for (Section cur : childs) {
 				if (cur.getObjectType().getClass().equals(
 						SemanticAnnotationProperty.class)) {
-					List<URI> literals = (List<URI>) KnowWEUtils
+					IntermediateOwlObject tempio = (IntermediateOwlObject) KnowWEUtils
 							.getStoredObject(article, cur, OwlHelper.IOO);
-					prop = literals.get(0);
-//					erronousproperty = !tempio.getValidPropFlag();
-//					if (erronousproperty) {
-//						badprop = tempio.getBadAttribute();
-//					}
+					prop = tempio.getLiterals().get(0);
+					erronousproperty = !tempio.getValidPropFlag();
+					if (erronousproperty) {
+						badprop = tempio.getBadAttribute();
+					}
 				}
 				else if (cur.getObjectType().getClass().equals(
 						SemanticAnnotationSubject.class)) {
@@ -106,32 +107,29 @@ public class SemanticAnnotationObject extends DefaultAbstractKnowWEObjectType {
 				}
 				else if (cur.getObjectType().getClass().equals(
 						SimpleAnnotation.class)) {
-					List<URI> literals = (List<URI>) KnowWEUtils
-					.getStoredObject(article, cur, OwlHelper.IOO);
-					stringa = literals.get(0);
-//					if (tempio.getValidPropFlag()) {
-//						stringa = tempio.getLiterals().get(0);
-//					}
-//					else {
-//						badprop = tempio.getBadAttribute();
-//					}
+					IntermediateOwlObject tempio = (IntermediateOwlObject) KnowWEUtils
+							.getStoredObject(article, cur, OwlHelper.IOO);
+					if (tempio.getValidPropFlag()) {
+						stringa = tempio.getLiterals().get(0);
+					}
+					else {
+						badprop = tempio.getBadAttribute();
+					}
 				}
 
 			}
 
 			boolean validprop = false;
 			if (erronousproperty) {
-//				io.setBadAttribute(badprop);
-//				io.setValidPropFlag(false);
-				System.out.println("bad attribute: "+badprop);
+				io.setBadAttribute(badprop);
+				io.setValidPropFlag(false);
 			}
 			else if (prop != null) {
 				validprop = PropertyManager.getInstance().isValid(prop);
-//				io.setBadAttribute(RDFTool.getLabel(prop));
-				System.out.println("bad attribute: "+RDFTool.getLabel(prop));
+				io.setBadAttribute(RDFTool.getLabel(prop));
 			}
 
-//			io.setValidPropFlag(validprop);
+			io.setValidPropFlag(validprop);
 			if (!validprop) {
 				Logger.getLogger(this.getClass().getName()).log(Level.WARNING,
 						"invalid property: " + s.getOriginalText());
@@ -145,44 +143,45 @@ public class SemanticAnnotationObject extends DefaultAbstractKnowWEObjectType {
 					soluri = OwlHelper.createlocalURI(soluriString);
 				}
 				Statement stmnt = null;
-//				try {
-					if (PropertyManager.getInstance().isRDFS(prop)) {
-						stmnt = OwlHelper.createStatement(soluri, prop,
+				// try {
+				if (PropertyManager.getInstance().isRDFS(prop)) {
+					stmnt = OwlHelper.createStatement(soluri, prop,
 								stringa);
-						io.add(stmnt);
-						io.addAll(OwlHelper.createStatementSrc(soluri,
+					io.addStatement(stmnt);
+					io.addAllStatements(OwlHelper.createStatementSrc(soluri,
 								prop, stringa, s.getFather().getFather(),
 								OwlHelper.ANNOTATION));
-					}
-					else if (PropertyManager.getInstance().isRDF(prop)) {
-						stmnt = OwlHelper.createStatement(soluri, prop,
+				}
+				else if (PropertyManager.getInstance().isRDF(prop)) {
+					stmnt = OwlHelper.createStatement(soluri, prop,
 								stringa);
-						io.add(stmnt);
-						io.addAll(OwlHelper.createStatementSrc(soluri,
+					io.addStatement(stmnt);
+					io.addAllStatements(OwlHelper.createStatementSrc(soluri,
 								prop, stringa, s.getFather().getFather(),
 								OwlHelper.ANNOTATION));
-					}
-					else if (PropertyManager.getInstance().isNary(prop)) {
-						io.addAll(OwlHelper
+				}
+				else if (PropertyManager.getInstance().isNary(prop)) {
+					IntermediateOwlObject tempio = OwlHelper
 								.createAnnotationProperty(soluri, prop,
-										stringa, s.getFather().getFather()));
-					}
-					else {
-						stmnt = OwlHelper.createStatement(soluri, prop,
+										stringa, s.getFather().getFather());
+					io.merge(tempio);
+
+				}
+				else {
+					stmnt = OwlHelper.createStatement(soluri, prop,
 								stringa);
-						io.add(stmnt);
-						io.addAll(OwlHelper.createStatementSrc(soluri,
+					io.addStatement(stmnt);
+					io.addAllStatements(OwlHelper.createStatementSrc(soluri,
 								prop, stringa, s.getFather().getFather(),
 								OwlHelper.ANNOTATION));
-					}
+				}
 
-//				}
-//				catch (RepositoryException e) {
-//					msgs.add(new SimpleMessageError(e.getMessage()));
-//				}
+				// }
+				// catch (RepositoryException e) {
+				// msgs.add(new SimpleMessageError(e.getMessage()));
+				// }
 			}
 			Rdf2GoCore.getInstance().addStatements(io, s);
-
 			return msgs;
 		}
 

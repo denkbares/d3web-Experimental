@@ -32,6 +32,7 @@ import java.util.regex.Pattern;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
 
+import de.d3web.we.core.semantic.rdf2go.IntermediateOwlObject;
 import de.d3web.we.core.semantic.rdf2go.OwlHelper;
 import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
@@ -86,7 +87,7 @@ public class SemanticAnnotationProperty extends DefaultAbstractKnowWEObjectType 
 
 			Section<SemanticAnnotationPropertyName> name = s.findChildOfType(SemanticAnnotationPropertyName.class);
 
-			List<Statement> io = new ArrayList<Statement>();
+			IntermediateOwlObject io = new IntermediateOwlObject();
 			String prop = name.getOriginalText();
 			URI property = null;
 			if (prop.equals("subClassOf") || prop.equals("subPropertyOf")) {
@@ -99,14 +100,12 @@ public class SemanticAnnotationProperty extends DefaultAbstractKnowWEObjectType 
 				String ns = Rdf2GoCore.getInstance().getNameSpaces().get(
 						prop.split(":")[0]);
 				if (ns == null || ns.length() == 0) {
-//					io.setBadAttribute("no namespace given");
-//					io.setValidPropFlag(false);
-					System.out.println();
+					io.setBadAttribute("no namespace given");
+					io.setValidPropFlag(false);
 				}
 				else if (ns.equals(prop.split(":")[0])) {
-//					io.setBadAttribute(ns);
-//					io.setValidPropFlag(false);
-					System.out.println();
+					io.setBadAttribute(ns);
+					io.setValidPropFlag(false);
 				}
 				else {
 					property = OwlHelper.createURI(ns, prop.split(":")[1]);
@@ -115,10 +114,8 @@ public class SemanticAnnotationProperty extends DefaultAbstractKnowWEObjectType 
 			else {
 				property = OwlHelper.createlocalURI(prop);
 			}
-//			io.addLiteral(property);
-			List<URI> literals = new ArrayList<URI>();
-			literals.add(property);
-			KnowWEUtils.storeObject(article, s, OwlHelper.IOO, literals);
+			io.addLiteral(property);
+			KnowWEUtils.storeObject(article, s, OwlHelper.IOO, io);
 			return null;
 		}
 

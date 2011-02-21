@@ -77,7 +77,7 @@ public class DefaultMarkupOwlHandlerForRdf2Go extends RDF2GoSubtreeHandler<Defau
 
 //		try {
 			// Access (or lazy build) parent concept
-			URI superConceptURI = OwlHelper.createURI("DefaultMarkup");
+			URI superConceptURI = OwlHelper.createBasensURI("DefaultMarkup");
 
 			// create a new class for this markup
 			this.conceptURI = OwlHelper.createlocalURI(markupName);

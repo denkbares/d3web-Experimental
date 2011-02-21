@@ -87,7 +87,18 @@ public class OwlHelper {
 		HASNODE = Rdf2GoCore.getInstance().createURI(Rdf2GoCore.basens, "hasNode");
 		HASORIGIN = Rdf2GoCore.getInstance().createURI(Rdf2GoCore.basens, "hasOrigin");
 	}
+	private static final HashMap<String, URI> comparatorcache = new HashMap<String, URI>();
 
+	/**
+	 * returns a matching comparator URI to the string
+	 * 
+	 * @param comp
+	 * @return
+	 */
+	public static URI getComparator(String comp) {
+		return comparatorcache.get(comp);
+	}
+	
 	/**
 	 * @param value
 	 * @return
@@ -124,16 +135,24 @@ public class OwlHelper {
 	 * @param io the IntermediateOwlObject that should collect the statements
 	 */
 	public static void attachTextOrigin(Resource attachto, Section source,
+			IntermediateOwlObject io) {
+		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
+		io.addAllStatements(createTextOrigin(source, to));
+		io.addStatement(createStatement(attachto,
+					RDFS.isDefinedBy, to));
+	}
+	
+	public static void attachTextOrigin(Resource attachto, Section source,
 			List<Statement> io) {
 		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
 		io.addAll(createTextOrigin(source, to));
 		io.add(createStatement(attachto,
-					RDFS.isDefinedBy, to));
+				RDFS.isDefinedBy, to));
 	}
 
 	private static List<Statement> createTextOrigin(
 			Section<KnowWEObjectType> source, Resource to) {
-		List<Statement> io = new ArrayList<Statement>();
+		ArrayList<Statement> io = new ArrayList<Statement>();
 		io.add(createStatement(to, RDF.type, TEXTORIGIN));
 		io.add(createStatement(to, HASNODE,
 				createLiteral(source.getID())));
@@ -159,6 +178,10 @@ public class OwlHelper {
 		return Rdf2GoCore.getInstance().createLiteral(text);
 	}
 
+	public static Literal createLiteral(String text, URI type) {
+		return Rdf2GoCore.getInstance().createLiteral(text, type);
+	}
+	
 	/**
 	 * creates an URI within the local namespace of this wiki
 	 * 
@@ -190,7 +213,7 @@ public class OwlHelper {
 	 * @return the created URI
 	 * @throws RepositoryException
 	 */
-	public static URI createURI(String value) {
+	public static URI createBasensURI(String value) {
 		if (value == null) return null;
 		value = beautify(value);
 		return Rdf2GoCore.getInstance().createURI(Rdf2GoCore.basens, value);
@@ -243,7 +266,7 @@ public class OwlHelper {
 	 * @param cur
 	 */
 	public static List<Statement> createProperty(String cur) {
-		URI prop = createURI(cur);
+		URI prop = createBasensURI(cur);
 		URI naryprop = NARYPROPERTY;
 		List<Statement> io = new ArrayList<Statement>();
 		if (!PropertyManager.getInstance().isValid(prop)) {
@@ -254,7 +277,7 @@ public class OwlHelper {
 
 	}
 
-	public static List<Statement> createProperty(String subject,
+	public static IntermediateOwlObject createProperty(String subject,
 			String property, String object, Section<KnowWEObjectType> source) {
 
 		URI suri = Rdf2GoCore.getInstance().createLocalURI(subject);
@@ -271,22 +294,22 @@ public class OwlHelper {
 	 * @param id
 	 * @return
 	 */
-	public static List<Statement> createProperty(URI suri, URI puri, URI ouri,
+	public static IntermediateOwlObject createProperty(URI suri, URI puri, URI ouri,
 			Section source) {
-		List<Statement> io = new ArrayList<Statement>();
+		IntermediateOwlObject io = new IntermediateOwlObject();
 		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
 		URI nary = Rdf2GoCore.getInstance().createLocalURI(
 					source.getTitle() + ".." + source.getID() + ".."
 							+ Rdf2GoCore.getLocalName(suri) + Rdf2GoCore.getLocalName(puri)
 							+ Rdf2GoCore.getLocalName(ouri));
-		io.addAll(createTextOrigin(source, to));
-		io.add(createStatement(nary, RDFS.isDefinedBy, to));
-		io.add(createStatement(nary, RDF.type,
+		io.addAllStatements(createTextOrigin(source, to));
+		io.addStatement(createStatement(nary, RDFS.isDefinedBy, to));
+		io.addStatement(createStatement(nary, RDF.type,
 					RDF.Statement));
-		io.add(createStatement(nary, RDF.predicate, puri));
-		io.add(createStatement(nary, RDF.object, ouri));
-		io.add(createStatement(nary, RDF.subject, suri));
-		// io.addLiteral(nary);
+		io.addStatement(createStatement(nary, RDF.predicate, puri));
+		io.addStatement(createStatement(nary, RDF.object, ouri));
+		io.addStatement(createStatement(nary, RDF.subject, suri));
+		io.addLiteral(nary);
 
 		return io;
 	}
@@ -298,27 +321,35 @@ public class OwlHelper {
 	 * @param id
 	 * @return
 	 */
-	public static List<Statement> createAnnotationProperty(URI suri, URI puri,
+	public static IntermediateOwlObject createAnnotationProperty(URI suri, URI puri,
 			URI ouri, Section source) {
-		List<Statement> io = new ArrayList<Statement>();
+		IntermediateOwlObject io = new IntermediateOwlObject();
 		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
 		URI nary = Rdf2GoCore.getInstance().createLocalURI(
 					source.getTitle() + ".." + source.getID() + ".."
 							+ Rdf2GoCore.getLocalName(suri) + Rdf2GoCore.getLocalName(puri)
 							+ Rdf2GoCore.getLocalName(ouri));
-		io.addAll(createTextOrigin(source, to));
-		io.add(createStatement(to, HASTYPE, ANNOTATION));
-		io.add(createStatement(nary, RDFS.isDefinedBy, to));
-		io.add(createStatement(nary, RDF.type,
+		io.addAllStatements(createTextOrigin(source, to));
+		io.addStatement(createStatement(to, HASTYPE, ANNOTATION));
+		io.addStatement(createStatement(nary, RDFS.isDefinedBy, to));
+		io.addStatement(createStatement(nary, RDF.type,
 					RDF.Statement));
-		io.add(createStatement(nary, RDF.predicate, puri));
-		io.add(createStatement(nary, RDF.object, ouri));
-		io.add(createStatement(nary, RDF.subject, suri));
+		io.addStatement(createStatement(nary, RDF.predicate, puri));
+		io.addStatement(createStatement(nary, RDF.object, ouri));
+		io.addStatement(createStatement(nary, RDF.subject, suri));
 
-		// io.addLiteral(nary);
+		io.addLiteral(nary);
 		return io;
 	}
 
+	public static void attachTextOrigin(Resource attachto,
+			Section<KnowWEObjectType> source, IntermediateOwlObject io, URI type) {
+		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
+		io.addAllStatements(createTextOrigin(source, to, type));
+		io.addStatement(Rdf2GoCore.getInstance().createStatement(attachto,
+					RDFS.isDefinedBy, to));
+	}
+	
 	public static void attachTextOrigin(Resource attachto,
 			Section<KnowWEObjectType> source, List<Statement> io, URI type) {
 		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
@@ -329,7 +360,7 @@ public class OwlHelper {
 
 	private static List<Statement> createTextOrigin(
 			Section<KnowWEObjectType> source, Resource to, URI type) {
-		List<Statement> io = new ArrayList<Statement>();
+		ArrayList<Statement> io = new ArrayList<Statement>();
 		io.add(createStatement(to, RDF.type, TEXTORIGIN));
 		io.add(createStatement(to, HASNODE,
 				createLiteral(source.getID())));
@@ -341,7 +372,7 @@ public class OwlHelper {
 
 	public static List<Statement> createStatementSrc(URI soluri, URI prop,
 			URI object, Section s, URI type) {
-		List<Statement> io = new ArrayList<Statement>();
+		ArrayList<Statement> io = new ArrayList<Statement>();
 		BlankNode bnode = Rdf2GoCore.getInstance().createBlankNode();
 		io.add(createStatement(bnode, RDF.subject, soluri));
 		io.add(createStatement(bnode, RDF.predicate, prop));
@@ -351,6 +382,14 @@ public class OwlHelper {
 		io.addAll(createTextOrigin(s, to, type));
 		io.add(createStatement(bnode, RDFS.isDefinedBy, to));
 		return io;
+	}
+	
+	private static void initSTDURIs() {
+		comparatorcache.put("=", EQUAL);
+		comparatorcache.put("<", SMALLER);
+		comparatorcache.put(">", GREATER);
+		comparatorcache.put("<=", SMALLEREQUAL);
+		comparatorcache.put(">=", GREATEREQUAL);
 	}
 
 }

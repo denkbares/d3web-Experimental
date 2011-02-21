@@ -30,6 +30,7 @@ import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.util.RDFTool;
 
+import de.d3web.we.core.semantic.rdf2go.IntermediateOwlObject;
 import de.d3web.we.core.semantic.rdf2go.OwlHelper;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.Section;
@@ -141,33 +142,33 @@ public class StandardAnnotationRenderer extends ConditionalRenderer {
 					+ "<span title='" + title + "'>" + text + "</span>");
 		}
 
-//		IntermediateOwlObject tempio = (IntermediateOwlObject) KnowWEUtils
-//				.getStoredObject(objectSection, OwlHelper.IOO);
+		IntermediateOwlObject tempio = (IntermediateOwlObject) KnowWEUtils
+				.getStoredObject(objectSection, OwlHelper.IOO);
 
-//		if (tempio == null) {
-//			text = KnowWEUtils
-//					.maskHTML("<p class=\"box error\">IntermediateOwlObject tempio not found"
-//							+ "</p>");
-//			string.append(text);
-//			return;
-//		}
+		if (tempio == null) {
+			text = KnowWEUtils
+					.maskHTML("<p class=\"box error\">IntermediateOwlObject tempio not found"
+							+ "</p>");
+			string.append(text);
+			return;
+		}
 
-//		if (!tempio.getValidPropFlag()) {
-//			text = KnowWEUtils
-//					.maskHTML("<p class=\"box error\">invalid annotation attribute:"
-//							+ tempio.getBadAttribute() + "</p>");
-//
-//		}
-//		tempio = (IntermediateOwlObject) KnowWEUtils
-//				.getStoredObject(sec
-//						.findSuccessor(SemanticAnnotationProperty.class),
-//						OwlHelper.IOO);
-//		if (tempio != null && !tempio.getValidPropFlag()) {
-//			text = KnowWEUtils
-//					.maskHTML("<p class=\"box error\">invalid annotation attribute:"
-//							+ tempio.getBadAttribute() + "</p>");
-//
-//		}
+		if (!tempio.getValidPropFlag()) {
+			text = KnowWEUtils
+					.maskHTML("<p class=\"box error\">invalid annotation attribute:"
+							+ tempio.getBadAttribute() + "</p>");
+
+		}
+		tempio = (IntermediateOwlObject) KnowWEUtils
+				.getStoredObject(sec
+						.findSuccessor(SemanticAnnotationProperty.class),
+						OwlHelper.IOO);
+		if (tempio != null && !tempio.getValidPropFlag()) {
+			text = KnowWEUtils
+					.maskHTML("<p class=\"box error\">invalid annotation attribute:"
+							+ tempio.getBadAttribute() + "</p>");
+
+		}
 		string.append(text);
 	}
 
