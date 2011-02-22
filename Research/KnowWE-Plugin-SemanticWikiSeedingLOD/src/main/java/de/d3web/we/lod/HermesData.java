@@ -6,6 +6,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.QueryEvaluationException;
@@ -113,6 +115,18 @@ public class HermesData {
 			String temp = t.getChildren().get(0).getOriginalText();
 			if (temp.matches(hermes + " => .*")) {
 				dbpediaMapping = temp.substring(temp.indexOf(" => ") + 4);
+				if (temp.matches(".* (?i)http://en\\.wikipedia.*")) {
+					String dbFilter = "http://[\\p{Punct}\\p{L}]*";
+					dbFilter = "(?i)" + dbFilter;
+					Pattern pattern = Pattern.compile(dbFilter);
+					Matcher matcher = pattern.matcher(temp);
+					while (matcher.find()) {
+						String url = matcher.group();
+						if (!url.matches("(?i)http://en\\.wikipedia.*")) {
+							dbpediaMapping = matcher.group();
+						}
+					}
+				}
 			}
 		}
 
@@ -280,8 +294,8 @@ public class HermesData {
 				e.printStackTrace();
 			}
 			String baseURL = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
-			
-			return "<a href=\""+baseURL+"Wiki.jsp?page=" + url
+
+			return "<a href=\"" + baseURL + "Wiki.jsp?page=" + url
 					+ "\" class=\"wikipage\">" + concept + "</a>";
 		}
 		return "";
@@ -307,7 +321,7 @@ public class HermesData {
 				e.printStackTrace();
 			}
 			String baseURL = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
-			return "<a id=\"" + id + "\" href=\""+baseURL+"Wiki.jsp?page=" + url
+			return "<a id=\"" + id + "\" href=\"" + baseURL + "Wiki.jsp?page=" + url
 					+ "\" class=\"wikipage\">" + concept + "</a>";
 		}
 		return "";
