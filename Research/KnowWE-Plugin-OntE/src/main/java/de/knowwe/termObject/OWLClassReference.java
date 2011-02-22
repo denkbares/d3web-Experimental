@@ -26,7 +26,7 @@ public class OWLClassReference extends GlobalTermReference<URI> {
 
 	@Override
 	public String getTermName(Section<? extends KnowWETerm<URI>> s) {
-		return s.getOriginalText();
+		return s.getOriginalText().trim();
 
 	}
 

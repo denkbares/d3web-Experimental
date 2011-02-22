@@ -3,6 +3,7 @@ package de.knowwe.termObject;
 import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.we.core.KnowWEEnvironment;
+import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.objects.GlobalTermReference;
 import de.d3web.we.kdom.objects.KnowWETerm;
@@ -46,7 +47,9 @@ public class OWLTermReference extends GlobalTermReference<URI> implements RDFRes
 			Section<? extends TermDefinition> definingSection = terminologyHandler.getTermDefiningSection(
 					s.getArticle(), ((TermReference) s.get()).getTermName(s),
 					KnowWETerm.GLOBAL);
-			Object termObject = definingSection.get().getTermObject(s.getArticle(),
+			//KnowWEArticle main = KnowWEEnvironment.getInstance().getArticleManager(KnowWEEnvironment.DEFAULT_WEB).getArticle("Main");
+			
+			Object termObject = definingSection.get().getTermObject(null,
 					definingSection);
 			if (termObject instanceof URI) {
 				return (URI) termObject;

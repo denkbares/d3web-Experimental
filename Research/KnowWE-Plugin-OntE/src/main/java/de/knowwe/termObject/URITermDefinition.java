@@ -31,8 +31,10 @@ public abstract class URITermDefinition extends GlobalTermDefinition<URI> implem
 	
 	@Override
 	public URI getURI(Section<? extends RDFResourceType> s) {
+		//KnowWEArticle main = KnowWEEnvironment.getInstance().getArticleManager(KnowWEEnvironment.DEFAULT_WEB).getArticle("Main");
+		
 		if (s.get() instanceof TermDefinition) {
-			Object termObject = ((TermDefinition)s.get()).getTermObject(s.getArticle(),
+			Object termObject = ((TermDefinition)s.get()).getTermObject(null,
 					s);
 			if (termObject instanceof URI) {
 				return (URI) termObject;
@@ -72,7 +74,10 @@ public abstract class URITermDefinition extends GlobalTermDefinition<URI> implem
 				e.printStackTrace();
 			}
 
-			s.get().storeTermObject(article, s, uri);
+			//KnowWEArticle main = KnowWEEnvironment.getInstance().getArticleManager(KnowWEEnvironment.DEFAULT_WEB).getArticle("Main");
+			
+			s.get().storeTermObject(null, s, uri);
+			
 
 			return new ArrayList<KDOMReportMessage>(0);
 		}

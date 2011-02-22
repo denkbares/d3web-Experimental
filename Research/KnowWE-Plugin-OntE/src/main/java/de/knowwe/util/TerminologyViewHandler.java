@@ -28,7 +28,9 @@ public class TerminologyViewHandler extends AbstractTagHandler{
 		String result = "<ul>Registered Terms:<br>";
 		for (String string : globalTerms) {
 			Section<? extends TermDefinition> termDefiningSection = terminologyHandler.getTermDefiningSection(article, string, KnowWETerm.GLOBAL);
-			Object object = termDefiningSection.get().getTermObject(article, termDefiningSection);
+			KnowWEArticle main = KnowWEEnvironment.getInstance().getArticleManager(KnowWEEnvironment.DEFAULT_WEB).getArticle("Main");
+			
+			Object object = termDefiningSection.get().getTermObject(main, termDefiningSection);
 			String uriString = "no URI";
 			if(object instanceof URI) {
 				uriString = ((URI)object).toString();

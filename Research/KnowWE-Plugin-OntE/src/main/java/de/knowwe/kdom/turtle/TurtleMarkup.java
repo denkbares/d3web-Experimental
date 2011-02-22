@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.ontoware.rdf2go.model.node.URI;
+
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -14,6 +16,7 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SingleChildConstraint;
 import de.d3web.we.kdom.objects.KnowWETerm;
+import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SyntaxError;
@@ -24,11 +27,13 @@ import de.d3web.we.kdom.sectionFinder.ISectionFinder;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
+import de.d3web.we.kdom.type.AnonymousType;
 import de.d3web.we.kdom.type.AnonymousTypeInvisible;
 import de.d3web.we.terminology.TerminologyHandler;
 import de.d3web.we.utils.KnowWEUtils;
 import de.knowwe.onte.owl.terminology.URIUtil;
 import de.knowwe.termObject.BasicVocabularyReference;
+import de.knowwe.termObject.LocalPageOWLInstanceDef;
 import de.knowwe.termObject.OWLClassDefinition;
 import de.knowwe.termObject.OWLInstanceDefinition;
 import de.knowwe.termObject.OWLObjectPropertyDefinition;
@@ -78,6 +83,7 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 		this.addSubtreeHandler(Priority.HIGHER, new TripleChecker());
 		this.addSubtreeHandler(Priority.HIGHER, new ObjectPropertyDefintionChecker());
 		this.addSubtreeHandler(Priority.HIGHER, new ClassDefintionChecker());
+		this.addSubtreeHandler(Priority.HIGH, new LocalPageInstanceDefintionChecker());
 		this.addSubtreeHandler(Priority.HIGH, new InstanceDefintionChecker());
 		this.addSubtreeHandler(Priority.LOWEST, new TurtleRDF2GoCompiler());
 
@@ -87,7 +93,8 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 
 		public TurtlePredicate() {
 			this.setSectionFinder(new RegexSectionFinder("\\b([^\\s]*)::", 0));
-			this.addSubtreeHandler(Priority.LOWER, new TermChecker(URIUtil.PREDICATE_VOCABULARY));
+			this.addSubtreeHandler(Priority.LOWER, new TermChecker(
+					URIUtil.PREDICATE_VOCABULARY));
 		}
 
 		@Override
@@ -133,7 +140,8 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 					new AllTextFinderTrimmed());
 			c.addConstraint(SingleChildConstraint.getInstance());
 			this.setSectionFinder(c);
-			this.addSubtreeHandler(Priority.LOWER, new TermChecker(URIUtil.OBJECT_VOCABULARY));
+			this.addSubtreeHandler(Priority.LOWER, new TermChecker(
+					URIUtil.OBJECT_VOCABULARY));
 		}
 	}
 
@@ -159,9 +167,10 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 				}
 
 			}
-			if(found) {
+			if (found) {
 				s.setType(new BasicVocabularyReference());
-			}else {
+			}
+			else {
 				s.setType(new OWLTermReference());
 			}
 
@@ -216,6 +225,25 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 		}
 	}
 
+	class LocalPageInstanceDefintionChecker extends GeneralSubtreeHandler<TurtleMarkup> {
+
+		@Override
+		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TurtleMarkup> s) {
+			Section<TurtleSubject> subject = s.findSuccessor(TurtleSubject.class);
+			Section<TurtleObject> o = s.findSuccessor(TurtleObject.class);
+			Section<TurtlePredicate> p = s.findSuccessor(TurtlePredicate.class);
+			if (subject == null && o != null && p != null) {
+				if (p.getOriginalText().startsWith("type")) {
+					if (o.getOriginalText().equalsIgnoreCase("Thing")) {
+						Section<AnonymousType> anoSec = s.findSuccessor(AnonymousType.class);
+						anoSec.setType(new LocalPageOWLInstanceDef());
+
+					}
+				}
+			}
+			return new ArrayList<KDOMReportMessage>();
+		}
+	}
 	class InstanceDefintionChecker extends GeneralSubtreeHandler<TurtleMarkup> {
 
 		@Override
@@ -226,7 +254,9 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 			if (subject != null && o != null && p != null) {
 				if (p.getOriginalText().startsWith("type")) {
 					if (o.getOriginalText().equalsIgnoreCase("Thing")) {
+
 						subject.setType(new OWLInstanceDefinition());
+
 					}
 				}
 			}
