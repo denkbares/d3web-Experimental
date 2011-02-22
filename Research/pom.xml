@@ -163,6 +163,7 @@
 		<module>KnowWE-Plugin-Renaming</module>
 		<module>KnowWE-MetaTool</module>
 		<module>KnowWE-Plugin-Drools</module>
+		<module>KnowWE-Plugin-OntE</module>
 	</modules>
 	<repositories>
 		<repository>
