@@ -253,6 +253,7 @@ public class GetDataAction extends AbstractAction {
 				int i = 0;
 
 				boolean noValues = true;
+				String baseURL = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
 
 				if (result.size() > 0) {
 					while (it.hasNext()) {
@@ -339,13 +340,14 @@ public class GetDataAction extends AbstractAction {
 											+ "</td>");
 								}
 								else if (s.contains("Longitude")) {
+									
 									newdata.append("<tr><td valign='middle' align='middle'>"
 											+ longCount
 											+ " <a id='hermestag"
 											+ i
 											+ "' title="
 											+ title
-											+ " class='tags' href='/KnowWE/Map.jsp' onclick='openWindow(createCoordURL(\""
+											+ " class='tags' href='"+baseURL+"Map.jsp' onclick='openWindow(createCoordURL(\""
 											+ longCount + "\"));return false'>"
 											+ s
 											+ "</a>"
@@ -364,7 +366,7 @@ public class GetDataAction extends AbstractAction {
 											+ i
 											+ "' title="
 											+ title
-											+ " class='tags' href='/KnowWE/Map.jsp' onclick='openWindow(createCoordURL(\""
+											+ " class='tags' href='"+baseURL+"Map.jsp' onclick='openWindow(createCoordURL(\""
 											+ latCount + "\"));return false'>"
 											+ s
 											+ "</a>"

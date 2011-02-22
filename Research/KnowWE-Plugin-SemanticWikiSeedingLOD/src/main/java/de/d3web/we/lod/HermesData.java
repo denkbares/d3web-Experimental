@@ -279,7 +279,9 @@ public class HermesData {
 			catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			return "<a href=\"/KnowWE/Wiki.jsp?page=" + url
+			String baseURL = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
+			
+			return "<a href=\""+baseURL+"Wiki.jsp?page=" + url
 					+ "\" class=\"wikipage\">" + concept + "</a>";
 		}
 		return "";
@@ -304,7 +306,8 @@ public class HermesData {
 			catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			return "<a id=\"" + id + "\" href=\"/KnowWE/Wiki.jsp?page=" + url
+			String baseURL = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
+			return "<a id=\"" + id + "\" href=\""+baseURL+"Wiki.jsp?page=" + url
 					+ "\" class=\"wikipage\">" + concept + "</a>";
 		}
 		return "";
