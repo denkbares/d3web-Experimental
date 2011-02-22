@@ -67,7 +67,19 @@ public class TurtleRDF2GoCompiler extends RDF2GoSubtreeHandler<TurtleMarkup> {
 			return Arrays.asList((KDOMReportMessage) new SyntaxError(
 					"invalid term combination:" + found.size()));
 		}
-
+		if(subURI == null) {
+			return Arrays.asList((KDOMReportMessage) new SyntaxError(
+					"subject URI not found"));
+		}
+		if(predURI == null) {
+			return Arrays.asList((KDOMReportMessage) new SyntaxError(
+					"predicate URI not found"));
+		}
+		if(objURI == null) {
+			return Arrays.asList((KDOMReportMessage) new SyntaxError(
+					"object URI not found"));
+		}
+		
 		List<Statement> statements = new ArrayList<Statement>();
 		Statement st = Rdf2GoCore.getInstance().createStatement(subURI, predURI, objURI);
 		statements.add(st);

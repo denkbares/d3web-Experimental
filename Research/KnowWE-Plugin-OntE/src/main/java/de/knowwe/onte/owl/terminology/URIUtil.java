@@ -18,6 +18,7 @@ public class URIUtil {
 	public static final String THING = "Thing";
 	
 	public static final String TYPE = "type";
+	public static final String ISA = "isA";
 	
 	public static final String SUBCLASSOF = "subClassOf";
 	
@@ -31,7 +32,7 @@ public class URIUtil {
 		CLASS, OBJECTPROPERTY, THING };
 	
 	public static final String[] PREDICATE_VOCABULARY = new String[] {
-			TYPE, SUBCLASSOF, DOMAIN, RANGE, SUBPROPERTYOF };
+			TYPE,ISA, SUBCLASSOF, DOMAIN, RANGE, SUBPROPERTYOF };
 
 	public static URI getURI(Section<? extends BasicVocabularyReference> s) {
 		
@@ -49,19 +50,21 @@ public class URIUtil {
 		
 		if(text.equals(OBJECTPROPERTY)) {
 			return OWL.ObjectProperty;
-		} else if(text.equals(CLASS)) {
+		} else if(text.equalsIgnoreCase(CLASS)) {
 			return OWL.Class;
-		} else if(text.equals(THING)) {
+		} else if(text.equalsIgnoreCase(THING)) {
 			return OWL.Thing;
-		} else if(text.equals(TYPE)) {
+		} else if(text.equalsIgnoreCase(TYPE)) {
 			return RDF.type;
-		} else if(text.equals(SUBCLASSOF)) {
+		} else if(text.equalsIgnoreCase(ISA)) {
+			return RDF.type;
+		} else if(text.equalsIgnoreCase(SUBCLASSOF)) {
 			return RDFS.subClassOf;
-		} else if(text.equals(DOMAIN)) {
+		} else if(text.equalsIgnoreCase(DOMAIN)) {
 			return RDFS.domain;
-		} else if(text.equals(RANGE)) {
+		} else if(text.equalsIgnoreCase(RANGE)) {
 			return RDFS.range;
-		} else if(text.equals(SUBPROPERTYOF)) {
+		} else if(text.equalsIgnoreCase(SUBPROPERTYOF)) {
 			return RDFS.subPropertyOf;
 		} 
 		

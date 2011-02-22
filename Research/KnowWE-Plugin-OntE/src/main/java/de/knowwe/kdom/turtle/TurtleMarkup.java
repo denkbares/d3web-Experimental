@@ -85,6 +85,9 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 		this.addSubtreeHandler(Priority.HIGHER, new ClassDefintionChecker());
 		this.addSubtreeHandler(Priority.HIGH, new LocalPageInstanceDefintionChecker());
 		this.addSubtreeHandler(Priority.HIGH, new InstanceDefintionChecker());
+		this.addSubtreeHandler(Priority.HIGH, new IndirectInstanceDefintionChecker());
+		//this.addSubtreeHandler(Priority.HIGH, new IndirectClassDefintionChecker());
+		
 		this.addSubtreeHandler(Priority.LOWEST, new TurtleRDF2GoCompiler());
 
 	}
@@ -258,6 +261,26 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 						subject.setType(new OWLInstanceDefinition());
 
 					}
+				}
+			}
+			return new ArrayList<KDOMReportMessage>();
+		}
+	}
+	
+	class IndirectInstanceDefintionChecker extends GeneralSubtreeHandler<TurtleMarkup> {
+
+		@Override
+		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TurtleMarkup> s) {
+			Section<TurtleSubject> subject = s.findSuccessor(TurtleSubject.class);
+			Section<TurtleObject> o = s.findSuccessor(TurtleObject.class);
+			Section<TurtlePredicate> p = s.findSuccessor(TurtlePredicate.class);
+			if (subject != null && o != null && p != null) {
+				if (p.getOriginalText().startsWith("isA")) {
+					//if (o.getOriginalText().equalsIgnoreCase("Thing")) {
+
+						o.setType(new OWLTermReference());
+						subject.setType(new OWLInstanceDefinition());
+					//}
 				}
 			}
 			return new ArrayList<KDOMReportMessage>();
