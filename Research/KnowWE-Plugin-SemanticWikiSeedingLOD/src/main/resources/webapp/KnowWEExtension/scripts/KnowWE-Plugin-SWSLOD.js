@@ -444,7 +444,7 @@ function switchMenu(num) {
 	}
 }
 
-function createCoordURL(num) {
+function createCoordURL(num, baseURL) {
 
 	var lat, long, url;
 
@@ -453,13 +453,13 @@ function createCoordURL(num) {
 	long = document.getElementById('lon' + num).childNodes[0].value.replace(
 			/,/, ".");
 	// build url for map
-	url = '/KnowWE/Map.jsp?lat=' + lat + '&long=' + long + '&num=' + num;
+	url = baseURL + 'Map.jsp?lat=' + lat + '&long=' + long + '&num=' + num;
 
 	return url;
 }
 
 function openWindow(url, num) {
-	fenster = window.open(url, "KnowWE Map"+num,
-			"width=600,height=400,status=yes,scrollbars=yes,resizable=yes");
+	fenster = window.open(url, "KnowWE Map" + num,
+			"width=620,height=420,status=yes,scrollbars=yes,resizable=yes");
 	fenster.focus();
 }

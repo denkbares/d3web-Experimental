@@ -340,15 +340,17 @@ public class GetDataAction extends AbstractAction {
 											+ "</td>");
 								}
 								else if (s.contains("Longitude")) {
-									
+
 									newdata.append("<tr><td valign='middle' align='middle'>"
 											+ longCount
 											+ " <a id='hermestag"
 											+ i
 											+ "' title="
 											+ title
-											+ " class='tags' href='"+baseURL+"Map.jsp' onclick='openWindow(createCoordURL(\""
-											+ longCount + "\"));return false'>"
+											+ " class='tags' href='" + baseURL
+											+ "Map.jsp' onclick='openWindow(createCoordURL(\""
+											+ longCount + "\",\"" + baseURL + "\"),\"" + longCount
+											+ "\");return false'>"
 											+ s
 											+ "</a>"
 											+ "<td valign='middle' align='middle'><span id='lon"
@@ -366,8 +368,10 @@ public class GetDataAction extends AbstractAction {
 											+ i
 											+ "' title="
 											+ title
-											+ " class='tags' href='"+baseURL+"Map.jsp' onclick='openWindow(createCoordURL(\""
-											+ latCount + "\"));return false'>"
+											+ " class='tags' href='" + baseURL
+											+ "Map.jsp' onclick='openWindow(createCoordURL(\""
+											+ latCount + "\",\"" + baseURL + "\"),\"" + latCount
+											+ "\");return false'>"
 											+ s
 											+ "</a>"
 											+ "<td valign='middle' align='middle'><span id='lat"

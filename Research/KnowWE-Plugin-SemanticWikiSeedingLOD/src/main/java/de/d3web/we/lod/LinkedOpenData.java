@@ -812,7 +812,7 @@ public class LinkedOpenData {
 										d1 = s.substring(0,
 												s.indexOf(" "));
 										d2 = s.substring(
-												s.indexOf(" "));
+												s.indexOf(" ") + 1);
 
 										if (hermesTag.contains("Latitude")) {
 											while (!resultData.get(hermesTag).add(d1)) {
