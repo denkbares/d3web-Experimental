@@ -190,7 +190,6 @@ public class LinkedOpenData {
 	 * @return varname -> data (probably multiple results -> List)
 	 */
 	public HashMap<String, HashSet<String>> getLODdata(String input) {
-		System.out.println(input);
 		input = "<" + input + ">";
 
 		List<String> queries = this.createQueryString(input, split);

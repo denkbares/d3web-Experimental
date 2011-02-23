@@ -129,7 +129,6 @@ public class HermesData {
 				}
 			}
 		}
-
 		return dbpediaMapping;
 	}
 

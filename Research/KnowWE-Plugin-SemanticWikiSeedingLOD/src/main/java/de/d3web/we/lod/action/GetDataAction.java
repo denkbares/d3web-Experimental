@@ -93,9 +93,8 @@ public class GetDataAction extends AbstractAction {
 							"<br/><div style='margin-left:10px;'><p><b>Keine gültige Wikipedia@en URL.</b></p></div>");
 				}
 			}
-
 			// Ask to create article?
-			if (dbpediaConcept.isEmpty() || !HermesData.storeContains(concept)) {
+			if ((dbpediaConcept.isEmpty() && wiki.isEmpty()) || !HermesData.storeContains(concept)) {
 
 				// If (no mapping || no dbpedia concept found for) && no
 				// wikilink provided.
@@ -274,7 +273,6 @@ public class GetDataAction extends AbstractAction {
 							for (String resultS : result.get(s)) {
 								String checkHermesTag = s;
 								String checkValue = resultS;
-
 								if (!resultS.isEmpty() && !resultS.matches("\\s+")) {
 									noValues = false;
 								}
