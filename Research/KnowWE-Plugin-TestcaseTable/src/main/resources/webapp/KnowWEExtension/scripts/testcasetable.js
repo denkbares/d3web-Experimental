@@ -56,6 +56,7 @@ Testcase.sendRequest = function(type, element) {
     }
     new _KA( options ).send();
 	(function() {Testcase.addNewAnswers(table);}).delay(700);
+	(function() {KNOWWE.table.init();}).delay(700);
 }
 
 
@@ -143,25 +144,26 @@ Testcase.changeFieldsAccordingToHeader = function(request, headerElement, table)
 	var text = request.responseText;
 	var newAnswers = text.split('[:;:]');
 	
-	var cellID = '';
-	// strange bug, sometimes the top line is called TableHeaderLine
-	// sometimes just TableLine
-	if (headerElement.id.indexOf('/TableHeaderLine') > 0) {
-		cellID = headerElement.id.substring(headerElement.id.indexOf('/TestcaseTableHeaderLine/TestcaseTableCell') + 42);
-	} else {
-		cellID = headerElement.id.substring(headerElement.id.indexOf('/TestcaseTableLine/TestCaseTableCell') + 36);
-	}
-	
-	cellID = cellID.substring(0, cellID.indexOf('/'));
 	var lines = Testcase.getTableLines(table);
+	var headerLineElements = lines[0].childNodes;
 	var empty = false;
+	var cellID = '';
+
 	
+	for (var i = 0; i < headerLineElements.length; i++) {
+		var select = headerLineElements[i].getElement('select');
+		if (select == headerElement) {
+			cellID = i;
+			break;
+		}
+	}
+
 	if (text == '[:]EMPTY[:]') {
 		empty = true;
 	}
 	
 	// if no change is needed, return
-	if  (!Testcase.checkForChange(newAnswers, lines[1].childNodes[cellID -1])){
+	if  (!Testcase.checkForChange(newAnswers, lines[1].childNodes[cellID])){
 		return;
 	}
 	
@@ -169,7 +171,7 @@ Testcase.changeFieldsAccordingToHeader = function(request, headerElement, table)
 	var newOption = '';
 	
 	for (var i = 1; i < lines.length; i++) {
-		current = lines[i].childNodes[cellID -1].firstChild;
+		current = lines[i].childNodes[cellID].firstChild;
 		
 		
 		// remove all old select options
@@ -262,7 +264,9 @@ Testcase.saveInputAfterChange = function(event) {
 	KNOWWE.table.getMap().set(el.id, el.value);
 }
 
-
+/**
+ * runs a Testcase via RunTestcaseAction
+ */
 Testcase.runTestcase = function(element, including) {
 	Testcase.colorExecutedLines(element, including);
 	
@@ -332,6 +336,10 @@ Testcase.saveTable = function() {
     new _KA( options ).send();
 }
 
+
+/**
+ * colors lines after their execution
+ */
 Testcase.colorExecutedLines = function(element, including) {
 	var trs = element.parentNode.parentNode.parentNode.childNodes;
 	var currentLine = element.parentNode.parentNode;
@@ -370,6 +378,9 @@ Testcase.colorExecutedLines = function(element, including) {
 	}
 }
 
+/**
+ * resets all run lines
+ */
 Testcase.resetTestcase = function(sectionID) {
 	var topic = KNOWWE.helper.gup('page')
 		
@@ -397,6 +408,10 @@ Testcase.resetTestcase = function(sectionID) {
     Testcase.resetTableCSS(sectionID);
 }
 
+
+/**
+ * resets the css back to standard
+ */
 Testcase.resetTableCSS = function(sectionID) {
 	var sec = $(sectionID);
 	var table = sec.getElement('table');
