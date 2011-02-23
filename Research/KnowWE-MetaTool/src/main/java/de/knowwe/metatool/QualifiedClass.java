@@ -97,6 +97,18 @@ public class QualifiedClass {
 	}
 
 	/**
+	 * Returns a String which represents a fully qualified instantiation of this
+	 * class, e.g. new java.lang.String(). Please note, that the semicolon is
+	 * not part contained in the returned String.
+	 *
+	 * @created Feb 23, 2011
+	 * @return Instantiation String for this class.
+	 */
+	public String getFullyQualifiedInstantiationString() {
+		return "new " + getQualifiedClassName() + "()";
+	}
+
+	/**
 	 * Returns a String which represents a singleton instantiation of this
 	 * class, e.g. YourClass.getInstance(). Please note, that the semicolon is
 	 * not part contained in the returned String.

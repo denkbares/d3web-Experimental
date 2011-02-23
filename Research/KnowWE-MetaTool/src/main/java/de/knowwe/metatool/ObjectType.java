@@ -27,9 +27,9 @@ import java.util.List;
  * This class represents an KnowWE-Object-Type. Objects of this class can be
  * used to build a model of KnowWE-Object-Type-hierarchy. Such hierarchies can
  * be
- * 
- * TODO: Refactor Strings, add SubtreeHandler...
- * 
+ *
+ * TODO: Refactor Strings, Refactor ImportHandling
+ *
  * @author Sebastian Furth
  * @created Jan 18, 2011
  */
@@ -40,6 +40,7 @@ public class ObjectType {
 	private final QualifiedClass superType;
 	private final ParameterizedClass sectionFinder;
 	private final List<QualifiedClass> constraints;
+	private final String color;
 	private final boolean exists;
 
 	private final List<ObjectType> children = new LinkedList<ObjectType>();
@@ -51,6 +52,7 @@ public class ObjectType {
 		this.sectionFinder = b.sectionFinder;
 		this.constraints = b.constraints;
 		this.exists = b.exists;
+		this.color = b.color;
 	}
 
 	/**
@@ -148,6 +150,16 @@ public class ObjectType {
 	}
 
 	/**
+	 * Returns the Color which will be applied to this ObjectType.
+	 *
+	 * @created Feb 23, 2011
+	 * @return Color, represented as a String.
+	 */
+	public String getColor() {
+		return this.color;
+	}
+
+	/**
 	 * Returns true if this ObjectType represents an ObjectType that already
 	 * exists. Existing ObjectTypes won't be generated. Please note that there
 	 * is no built in check for this! You have to check it yourself!
@@ -232,6 +244,7 @@ public class ObjectType {
 				"DefaultAbstractKnowWEObjectType");
 		private ParameterizedClass sectionFinder = null;
 		private final List<QualifiedClass> constraints = new LinkedList<QualifiedClass>();
+		private String color = null;
 
 		/**
 		 * Builder for ObjectTypes. The attributes are the mandatory attributes
@@ -313,9 +326,25 @@ public class ObjectType {
 					"de.d3web.we.kdom.constraint.ConstraintSectionFinder")) {
 				sectionFinder = new ParameterizedClass("de.d3web.we.kdom.constraint",
 														"ConstraintSectionFinder",
-														sectionFinder.getInstantiationString());
+														sectionFinder.getFullyQualifiedInstantiationString());
 			}
 			this.constraints.add(constraint);
+			return this;
+		}
+
+		/**
+		 * Adds a color to the object type. The color will be applied using
+		 * KnowWEs StyleRenderer.
+		 *
+		 * @created Feb 23, 2011
+		 * @param color
+		 * @return
+		 */
+		public Builder setColor(String color) {
+			if (color == null || exists) {
+				throw new IllegalArgumentException();
+			}
+			this.color = color;
 			return this;
 		}
 

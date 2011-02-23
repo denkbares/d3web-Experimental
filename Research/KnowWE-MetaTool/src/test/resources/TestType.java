@@ -20,6 +20,7 @@
 
 package de.knowwe.kdom;
 
+import java.util.regex.Pattern;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
@@ -27,6 +28,7 @@ import de.knowwe.kdom.TestChildren1;
 import de.knowwe.kdom.TestChildren2;
 import de.knowwe.kdom.TestChildren3;
 
+import de.d3web.we.kdom.rendering.StyleRenderer;
 
 public class TestType extends TermDefinition {
 
@@ -36,6 +38,7 @@ public class TestType extends TermDefinition {
 		childrenTypes.add(new TestChildren3());
 		setSectionFinder(new RegexSectionFinder(".*"));
 
+		setCustomRenderer(new StyleRenderer("color:red"));
 	}
 
 }

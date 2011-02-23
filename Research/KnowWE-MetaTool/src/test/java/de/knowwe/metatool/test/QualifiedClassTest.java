@@ -59,6 +59,13 @@ public class QualifiedClassTest {
 	}
 
 	@Test
+	public void testFullyQualifiedInstantiationString() {
+		QualifiedClass test = new QualifiedClass("de.knowwe.test", "TestClass");
+		assertEquals("Wrong instantiation.", "new de.knowwe.test.TestClass()",
+				test.getFullyQualifiedInstantiationString());
+	}
+
+	@Test
 	public void testQualifiedClassString() {
 		QualifiedClass test = new QualifiedClass("de.knowwe.test", "TestClass");
 		assertEquals("Wrong qualified class name",

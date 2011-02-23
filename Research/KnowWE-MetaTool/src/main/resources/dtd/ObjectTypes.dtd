@@ -4,7 +4,7 @@
 	Author CDATA #IMPLIED
 	CreationDate CDATA #IMPLIED
 	LastEdited CDATA #IMPLIED>
-<!ELEMENT ObjectType (SectionFinder?, (SubtreeHandler|AnonymousSubtreeHandler)*, CustomRenderer?)>
+<!ELEMENT ObjectType (SectionFinder?, Color?)>
 <!ATTLIST ObjectType
 	ID ID #REQUIRED
 	PackageName CDATA #REQUIRED
@@ -14,18 +14,7 @@
 	Parent IDREF #IMPLIED
 	Position CDATA #IMPLIED
 	Exists (true|false) #IMPLIED>
-<!ELEMENT CustomRenderer EMPTY>
-<!ATTLIST CustomRenderer
-	ClassName CDATA #REQUIRED
-	Package CDATA #REQUIRED>
-<!ELEMENT SubtreeHandler EMPTY>
-<!ATTLIST SubtreeHandler
-	ClassName CDATA #REQUIRED
-	Package CDATA #REQUIRED>
-<!ELEMENT AnonymousSubtreeHandler EMPTY>
-<!ATTLIST AnonymousSubtreeHandler
-	Name CDATA #REQUIRED
-	SuperType CDATA #REQUIRED>
+<!ELEMENT Color (#PCDATA)>
 <!ELEMENT SectionFinder (Constraint*)>
 <!ATTLIST SectionFinder
 	ClassName CDATA #REQUIRED

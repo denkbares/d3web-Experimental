@@ -108,6 +108,7 @@ public class XMLReader implements ObjectTypeReader {
 
 		private ObjectType nextParent;
 		private int nextPosition;
+		private boolean color;
 
 		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -121,6 +122,16 @@ public class XMLReader implements ObjectTypeReader {
 			}
 			if (qName.equalsIgnoreCase("CONSTRAINT")) {
 				addConstraint(attributes);
+			}
+			if (qName.equalsIgnoreCase("COLOR")) {
+				color = true;
+			}
+		}
+
+		@Override
+		public void characters(char[] ch, int start, int length) throws SAXException {
+			if (color) {
+				builder.setColor(new String(ch, start, length));
 			}
 		}
 
@@ -166,7 +177,7 @@ public class XMLReader implements ObjectTypeReader {
 			// Set SectionFinder
 			String packageName = attributes.getValue("PackageName");
 			String className = attributes.getValue("ClassName");
-			String value = attributes.getValue("Value");
+			String value = attributes.getValue("Value") != null ? attributes.getValue("Value") : "";
 			ParameterizedClass sectionFinder = new ParameterizedClass(packageName, className, value);
 			builder.setSectionFinder(sectionFinder);
 		}
@@ -206,6 +217,9 @@ public class XMLReader implements ObjectTypeReader {
 				if (root == null) {
 					root = temp;
 				}
+			}
+			else if (qName.equalsIgnoreCase("COLOR")) {
+				color = false;
 			}
 		}
 

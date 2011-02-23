@@ -62,13 +62,26 @@ public class ParameterizedClass extends QualifiedClass {
 	 * Returns a String which represents a simple instantiation of this class,
 	 * e.g. new YourClass(value). Please note, that the semicolon is not part
 	 * contained in the returned String.
-	 * 
+	 *
 	 * @created Feb 8, 2011
 	 * @return Instantiation String for this class.
 	 */
 	@Override
 	public String getInstantiationString() {
 		return "new " + getClassName() + "(" + value + ")";
+	}
+
+	/**
+	 * Returns a String which represents a fully qualified instantiation of this
+	 * class, e.g. new yourpackage.YourClass(value). Please note, that the
+	 * semicolon is not part contained in the returned String.
+	 *
+	 * @created Feb 23, 2011
+	 * @return Instantiation String for this class.
+	 */
+	@Override
+	public String getFullyQualifiedInstantiationString() {
+		return "new " + getQualifiedClassName() + "(" + value + ")";
 	}
 
 	@Override

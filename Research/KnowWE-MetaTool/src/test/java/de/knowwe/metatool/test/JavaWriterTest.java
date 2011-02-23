@@ -104,6 +104,7 @@ public class JavaWriterTest {
 		ObjectType objectType = new ObjectType.Builder("01", objectTypeClass, false)
 												.setSuperType(superType)
 												.setSectionFinder(sectionFinder)
+												.setColor("red")
 												.build();
 
 		objectType.addChild(0, child1);
@@ -138,6 +139,7 @@ public class JavaWriterTest {
 												.setSuperType(superType)
 												.setSectionFinder(sectionFinder)
 												.addConstraint(constraint)
+												.setColor("red")
 												.build();
 
 		objectType.addChild(0, child1);

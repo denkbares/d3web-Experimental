@@ -87,6 +87,14 @@ public class XMLReaderTest {
 			assertEquals(expected.getConstraints().get(j), actual.getConstraints().get(j));
 		}
 
+		// Color
+		if (expected.getColor() != null) {
+			assertEquals("Wrong color", expected.getColor(), actual.getColor());
+		}
+		else {
+			assertNull("Color should be null", actual.getColor());
+		}
+
 		// Test Children
 		assertEquals("Wrong number of children.", expected.getChildren().size(),
 				actual.getChildren().size());
@@ -118,6 +126,7 @@ public class XMLReaderTest {
 												.setSuperType(superType)
 												.setSectionFinder(sectionFinder)
 												.addConstraint(constraint)
+												.setColor("red")
 												.build();
 
 		objectType.addChild(0, child1);

@@ -40,7 +40,7 @@ public class Demo {
 
 		ObjectType temp = read();
 		write(temp);
-		write(createObjectType());
+		// write(createObjectType());
 	}
 
 	private static ObjectType read() throws IOException {

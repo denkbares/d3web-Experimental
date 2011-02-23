@@ -251,7 +251,8 @@ public class ObjectTypeCreationTest {
 				objectType.getSectionFinder().getClassName());
 		assertEquals("SectionFinder has wrong package", "de.d3web.we.kdom.constraint",
 				objectType.getSectionFinder().getPackageName());
-		assertEquals("SectionFinder has wrong value", "new RegExSectionFinder(\".*\")",
+		assertEquals("SectionFinder has wrong value",
+				"new de.d3web.we.kdom.sectionFinder.RegExSectionFinder(\".*\")",
 				objectType.getSectionFinder().getValue());
 
 		// Constraints
@@ -265,5 +266,40 @@ public class ObjectTypeCreationTest {
 		assertEquals("Wrong number of children.", 0, objectType.getChildren().size());
 	}
 
+	@Test
+	public void testCustomColor() {
+
+		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
+		ObjectType objectType = new ObjectType.Builder("01", objectTypeClass, false)
+														.setColor("red")
+														.build();
+
+		// Mandatory attributes
+		assertEquals("Wrong ID.", "01", objectType.getID());
+		assertEquals("Wrong Class.", "TestType", objectType.getClassName());
+		assertEquals("Wrong Package.", "de.knowwe.kdom", objectType.getPackageName());
+
+		// Default Attributes
+		assertEquals("SuperType has wrong Class.", "DefaultAbstractKnowWEObjectType",
+				objectType.getSuperType().getClassName());
+		assertEquals("SuperType has wrong package", "de.d3web.we.kdom",
+				objectType.getSuperType().getPackageName());
+		assertEquals("Wrong number of children.", 0, objectType.getChildren().size());
+
+		// Color
+		assertEquals("Wrong color.", "red", objectType.getColor());
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testColorOnExisting() {
+		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
+		new ObjectType.Builder("01", objectTypeClass, true).setColor("red").build();
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testNullAsColor() {
+		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
+		new ObjectType.Builder("01", objectTypeClass, false).setColor(null).build();
+	}
 
 }

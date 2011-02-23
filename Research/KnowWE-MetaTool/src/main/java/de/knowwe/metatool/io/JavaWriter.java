@@ -56,6 +56,8 @@ public class JavaWriter implements ObjectTypeWriter {
 	private final String CONSTRAINTS = "%CONSTRAINTS%";
 	private final String CHILDINSTANTIONS = "%CHILDREN%";
 	private final String CHILDIMPORTS = "%CHILDIMPORTS%";
+	private final String STYLERENDERERIMPORT = "%STYLERENDERERIMPORT%";
+	private final String STYLERENDER = "%STYLERENDERER%";
 	private final String INDENT = "		";
 
 	// Singleton-Pattern
@@ -88,6 +90,7 @@ public class JavaWriter implements ObjectTypeWriter {
 		boolean constraints = type.getConstraints().size() > 0;
 		template = replaceSectionFinder(type.getSectionFinder(), template, constraints);
 		template = replaceConstraints(type.getConstraints(), template);
+		template = replaceColor(type.getColor(), template);
 
 		// save JAVA file
 		BufferedWriter bw = new BufferedWriter(w);
@@ -167,6 +170,23 @@ public class JavaWriter implements ObjectTypeWriter {
 		}
 		template = template.replaceAll(CONSTRAINTIMPORTS, imports.toString());
 		return template.replaceAll(CONSTRAINTS, instantiations.toString());
+	}
+
+	private String replaceColor(String color, String template) {
+		String imports = "";
+		StringBuilder instantiation = new StringBuilder();
+		if (color != null) {
+			imports = "import de.d3web.we.kdom.rendering.StyleRenderer;";
+			instantiation.append(INDENT);
+			instantiation.append("setCustomRenderer(new StyleRenderer(\"color:");
+			instantiation.append(color);
+			instantiation.append("\"));\n");
+		}
+		if (instantiation.length() > 0) {
+			instantiation.delete(instantiation.length() - 1, instantiation.length());
+		}
+		template = template.replaceAll(STYLERENDERERIMPORT, imports);
+		return template.replaceAll(STYLERENDER, instantiation.toString());
 	}
 
 	private String loadTemplate() throws IOException {
