@@ -25,6 +25,30 @@
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
 	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		id="DefineTableMarkup">
+		<parameter id="class" value="de.knowwe.defi.table.DefineTableMarkup" />
+		<parameter id="name" value="DefineTableMarkup" />
+		<parameter id="description" value="KnowWEObjectType DefineTableMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5"  />
+		<parameter id="scope" value="root" />
+		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
+	</extension>
+	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="ShowTableTagHandler">
+		<parameter id="class"
+			value="de.knowwe.defi.table.ShowTableTagHandler" />
+		<parameter id="name" value="ShowTableTagHandler" />
+		<parameter id="description" value="TagHandler ShowTableTagHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="script" value="Hermes.js" />
+		<parameter id="css" value="hermes.css" />
+	</extension>
+	
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="AboutMeSaveAction">
@@ -35,6 +59,8 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>
+    
+    
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="LogTabClicksAction">
