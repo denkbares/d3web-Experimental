@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<dialog header="Herz-Medizinische Dokumentation"  dtype="singleform" dstrategy="nextuaquestion" 
-	css="rheuma, nofoot, nonavigation, noquestionnairenav">
-	<data kb="HeartMedSMALL.jar" />
-</dialog>
