@@ -1,0 +1,1 @@
+$if(tooltip)$<img src="img/help.png" class="$fullId$-tt-trigger tooltip-trigger"/>$TooltipPure()$$endif$

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog type="clarification" columns="3" css="clarification" header="Clarification Dialog"
+	select-randomly="false" answer-style="flat" default="false" 
+	sidetext = "&lt;b&gt;Here&lt;/b&gt; goes the informal description of the pub. This may
+	 	be a listing of its attributes, as well as pictures, the address and so on...
+	 	At the moment, this can be marked up by HTML directly within the 'sidetext' attribute in
+	 	the dialog tag, yet it would be nicer to load an extra file.">
+	<questionnaire columns="2" title="First Pub">
+		<group title="Typ" columns="1">
+			<question title="Art der Kneipe:" answer-type="oc"
+				base-color="ccccff" select-randomly="true">
+				<answer text="Klassische Kneipe" visible="false" tooltip="Hier mehr Info dazu."></answer>
+				<answer text="Cocktailbar" tooltip="Hier mehr Info dazu."></answer>
+				<answer text="Biergarten" visible="false"></answer>
+				<answer text="Weinscheune"></answer>
+				<answer text="Disco"></answer>
+			</question>
+		</group>
+		<group title="Auswahl" columns="1">
+			<question title="Getränkeauswahl:" answer-type="oc"
+				base-color="ccccff" answer-height="1">
+				<answer text="üppig" default="true"></answer>
+				<answer text="nicht so üppig" init-visible="false"></answer>
+				<answer text="egal" init-visible="false"></answer>
+			</question>
+			<question title="Getränkearten:" answer-type="mc"
+				answer-style="flat" base-color="ffff66">
+				<answer text="Bier" default="true"></answer>
+				<answer text="Wein"></answer>
+				<answer text="Kaffee"></answer>
+				<answer text="Tee" color-value="0.9"></answer>
+				<answer text="Wasser" color-value="0.5" init-visible="false"></answer>
+			</question>
+			<question title="Essensauswahl:" answer-type="oc">
+				<answer default="true" text="gering"></answer>
+				<answer text="hoch"></answer>
+			</question>
+			<question title="Essensangebote:" answer-type="mc">
+				<answer default="true" text="Kleine Menüs"></answer>
+				<answer text="Vorspeisen"></answer>
+				<answer default="true" text="Große Menüs"></answer>
+				<answer text="Mehrgängemenüs"></answer>
+			</question>
+		</group>
+		<group title="Preis" columns="1">
+			<question title="Preisniveau Getränke:" answer-type="oc">
+				<answer default="true" text="durchschnittlich"></answer>
+				<answer text="niedrig" init-visible="false"></answer>
+				<answer text="hoch" init-visible="false"></answer>
+			</question>
+			<question title="Preis für Pils (0,4 Liter):" answer-type="text">
+				<answer text2="Euro" default="--,--" width="6"></answer>
+			</question>
+			<question title="Preis für Weizenbier (0,5 Liter):"
+				answer-type="text">
+				<answer text2="Euro" default="--,--" width="6"></answer>
+			</question>
+			<question title="Preis für Apfelschorle (0,4 Liter):"
+				answer-type="text">
+				<answer text2="Euro" default="--,--" width="6"></answer>
+			</question>
+			<question title="Preis für Cola (0,4 Liter):" answer-type="text">
+				<answer text2="Euro" default="--,--" width="6"></answer>
+			</question>
+			<question title="Preis für eine Tasse Kaffee (kleine Tasse 0,2 Liter):"
+				answer-type="text">
+				<answer text2="Euro" default="--,--" width="6"></answer>
+			</question>
+			<question title="Eintrittspreis:" answer-type="oc">
+				<answer text="nein" default="true"></answer>
+				<answer text="ja" init-visible="false"></answer>
+			</question>
+			<question title="Happy-Hour oder Special" answer-type="oc">
+				<answer text="nie" default="true"></answer>
+				<answer text="selten" init-visible="false"></answer>
+				<answer text="häufig" init-visible="false"></answer>
+				<answer text="täglich" init-visible="false"></answer>
+			</question>
+		</group>
+		<group title="Lage" columns="1">
+			<question title="Lage der Kneipe:" answer-type="oc">
+				<answer text="Innenstadt Würzburg" default="true">
+					<event type="selected">
+						<action parent-id="q_stadt" type="show" options="500"></action>
+						<action parent-id="q_lk" type="hide" options="500"></action>
+					</event>
+				</answer>
+				<answer text="Landkreis Würzburg" init-visible="false">
+					<event type="selected">
+						<action parent-id="q_stadt" type="hide" options="500"></action>
+						<action parent-id="q_lk" type="show" options="500"></action>
+					</event>
+				</answer>
+			</question>
+			<question title="Lage der Kneipe in der Innenstadt Würzburg:"
+				answer-type="oc" id="q_stadt">
+				<answer text="Sanderstraße und Umgebung" default="true"></answer>
+				<answer text="Nähe Dom" init-visible="false"></answer>
+				<answer text="Nähe Bahnhof" init-visible="false"></answer>
+			</question>
+			<question title="Lage der Kneipe im Landkreis Würzburg:"
+				answer-type="oc" id="q_lk" init-visible="false">
+				<answer text="Veitshöchheim" default="true"></answer>
+				<answer text="Sommerhausen" init-visible="false"></answer>
+			</question>
+			<question title="Ausreichend Parkplätze in der Nähe:"
+				answer-type="oc">
+				<answer text="Bis 300 Meter" default="true"></answer>
+				<answer text="Bis 2 Kilometer" init-visible="false"></answer>
+				<answer text="Bis 10 Kilkometer" init-visible="false"></answer>
+			</question>
+			<question title="Kneipe verfügt über schönen Ausblick:"
+				answer-type="oc">
+				<answer text="nein" default="true"></answer>
+				<answer text="ja" init-visible="false"></answer>
+			</question>
+		</group>
+		<group title="Atmosphäre und Musik" columns="1">
+			<question title="Gespielte Musikrichtung:" answer-type="mc">
+				<answer text="Pop/Rock" default="true"></answer>
+				<answer text="Folk"></answer>
+				<answer text="Jazz"></answer>
+				<answer text="Andere Musik"></answer>
+			</question>
+			<question title="Lautstärke der Musik:" answer-type="oc">
+				<answer text="normal" default="true"></answer>
+				<answer text="laut" init-visible="false"></answer>
+				<answer text="leise" init-visible="false"></answer>
+			</question>
+			<question title="Verrauchtheit:" answer-type="oc">
+				<answer text="normal" default="true"></answer>
+				<answer text="stark" init-visible="false"></answer>
+				<answer text="schwach" init-visible="false"></answer>
+			</question>
+		</group>
+		<group title="Publikum" columns="1">
+			<question title="Alter des Publikums:" answer-type="oc">
+				<answer text="alle Altersstufen"
+					default="true"></answer>
+				<answer text="jüngeres Publikum" init-visible="false"></answer>
+				<answer text="älteres Publikum" init-visible="false"></answer>
+			</question>
+		</group>
+		<group title="Unterhaltung" columns="1">
+			<question title="Möglichkeit zum Tanzen:" answer-type="oc">
+				<answer text="nein" default="true"></answer>
+				<answer text="ja" init-visible="false"></answer>
+			</question>
+			<question title="Spiele vorhanden:" answer-type="oc">
+				<answer text="nein" default="true"></answer>
+				<answer text="ja" init-visible="false"></answer>
+			</question>
+			<question title="Gibt es regelmäßige Veranstaltungen?"
+				answer-type="oc">
+				<answer text="nein" default="true"></answer>
+				<answer text="ja" init-visible="false"></answer>
+			</question>
+			<question title="Zeitschriften bzw. Zeitungen liegen aus:"
+				answer-type="oc">
+				<answer text="Zeitungen" default="true"></answer>
+				<answer text="Zeitschriften" init-visible="false"></answer>
+				<answer text="beides" init-visible="false"></answer>
+				<answer text="nein" init-visible="false"></answer>
+			</question>
+			<question title="Spielecke für Kleinkinder:" answer-type="oc">
+				<answer text="nein" default="true"></answer>
+				<answer text="ja" init-visible="false"></answer>
+			</question>
+		</group>
+	</questionnaire>
+</dialog>

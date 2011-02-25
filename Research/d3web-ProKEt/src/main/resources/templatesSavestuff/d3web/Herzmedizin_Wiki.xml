@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<dialog header="Herz-Medizinische Dokumentation"  dtype="freechoice" dstrategy="nextuaquestion" 
+	css="freechoice, nofoot, nonavigation, noquestionnairenav" columns="1">
+	<data kb="HeartMed2010COMPL.jar" />
+</dialog>

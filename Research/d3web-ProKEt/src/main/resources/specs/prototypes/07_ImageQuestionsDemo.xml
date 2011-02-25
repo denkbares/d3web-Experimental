@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog css="classic" title="Demo Dialog with Image Question">
+	<questionnaire text="Image Questions Demo">
+		<question title="Please mark the parts of your body" text="" 
+			type="image" answer-type="mc" image="human.png">
+			<answer title="Head" shape="rect" coords="70,2,129,70" />
+			<answer title="Left Shoulder" shape="rect" coords="42,76,85,105" />
+			<answer title="Right Shoulder" shape="rect" coords="117,76,160,105" />
+			<answer title="Left Elbow" shape="rect" coords="30,165,60,190" />
+			<answer title="Right Elbow" shape="rect" coords="142,165,172,190" />
+			<answer title="Left Hand" shape="rect" coords="3,231,36,284" />
+			<answer title="Right Hand" shape="rect" coords="165,231,198,284" />
+			<answer title="Left Foot" shape="rect" coords="50,400,85,452" />
+			<answer title="Right Foot" shape="rect" coords="125,400,160,452" />
+		</question>
+	</questionnaire>
+</dialog>

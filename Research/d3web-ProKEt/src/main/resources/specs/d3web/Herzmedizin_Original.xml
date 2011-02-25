@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<dialog 
+	header="Herz-Medizinische Dokumentation"  
+	dtype="singleform" 
+	dstrategy="nextuaquestion" 
+	css="medi2cols, nonavigation" 
+	dialogcolumns="1"
+	questionnairecolumns="3"
+	userprefix = "" >
+	<data kb="HerzmedizinJan2011.d3web" />
+</dialog>

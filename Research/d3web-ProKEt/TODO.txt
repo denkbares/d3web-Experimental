@@ -1,0 +1,52 @@
+PROTOTYPING
+-----------
+* Folgefragen?!
+* Abstraktionsfragen?!
+* Multicolumn Style: ohne Tabellen? besser?
+* Bonustext auch bei Hierarchy Statistik? 
+DONE Titel aus dem Questionnaire rausziehen/eigen taggen
+--------------------
+
+
+BUG: Resource/File not found (StringTemplate oder auch d3web/...): 
+- d3web neu kompilieren clean install, Eclipse refresh
+- dialog-prototyping neu kompilieren, Eclipse refresh, target ordner refresh.
+- control center starten. Müsste gehen.
+--> bisher im neuen Projekt nicht mehr aufgetreten, liegt vielliecht an der Einbindung des antlr
+	als jar zur compile Zeit (ins pom.xml)
+-- WICHTIG: die Eclipse WTP Integration für Maven ist ESSENTIELL
+
+--------
+GENERAL:
+--------
+- DONE refactor resources saving
+- Complete style/image refactoring: pull EVERYTHING out to CSS!!!
+- replace Renderer-chosing algorithm?!
+- DefaultSettings: define all required default project paths, dialog settings and so on
+- Neues Typ-Konzept: 
+  -- Dialog Kategorien sind in DialogType (Enum) definiert, jeder Dialog gehört einem solchen 
+     Basis-Typen an (momentan SingleForm, Multiform, Hierarchical, und default)
+  -- DialogType definiert, welche Art Strategie für das anzeigen von Fragen verwendet werden soll
+  	 momentan All, NextForm, NextUAQuestion
+  	 
+  -- Abhängig vom Typ d3web reinladen oder nicht: für SingleForm/All braucht man den gesamten Tree von 
+     Anfang an, für MultipleForm nicht
+     
+- DONE d3web servlet so umschreiben, dass hier erst auch ein XML geparst wird, in dem Angaben zu Stil etc
+  	   stehen, sowie der Name der Wissensbasis
+  	 
+- QuickI/Clarification dialog komplett anpassen wie QuickI
+-- toggle/untoggle
+-- unknown option
+-- versch. Question Typen
+- D3web Renderer erben lassen
+- Hierarchy Dialogs d3web
+- Table/Column Layout d3web!
+
+- Building Blocks, Modularisierung, Drag and Drop, Visual Edit
+- KnowWE Binding for entering knowledge bases
+- FOLGEFRAGEN
+
+- QuickI Style Dialog: Datumsfragen
+
+- Abstraktionsfragen (zB BMI) ausgegraut o.ä. dass nicht editierbar und nur berechnet

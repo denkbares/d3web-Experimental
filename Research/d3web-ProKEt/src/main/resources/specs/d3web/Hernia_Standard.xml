@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<dialog 
+	header="EuraHS"  
+	dtype="singleform" 
+	dstrategy="nextuaquestion" 
+	css="med2cols, nonavigation" 
+	dialogcolumns="1"
+	questionnairecolumns="3"
+	userprefix = "" >
+	<data kb="HerniaFeb2011_v1.d3web" />
+</dialog>

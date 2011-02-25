@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<dialog type="gen" header="SonoConsult Demo Prototype" 
+   css="classic, mimic_standarddialog_sono, nofoot" 
+   questionnaire-nav="true">
+   <questionnaire title="Verwaltungsdaten">
+   	  <question type="num" title="Alter des Patienten" send-button="true">
+       		<answer text="Jahre" />
+      </question>
+      <question type="oc" title="Geschlecht des Patienten" >
+       		<answer title="Weiblich" />
+       		<answer title="Männlich" />
+      </question>
+   </questionnaire>
+   <questionnaire title="Sonographie *Leber*">
+      <question type="num" title="Leberhöhe in MCL (Kuppel bis Unterrand), sonographisch"
+        tooltip="MCL-Erklärung">
+        <answer text="cm" selection="18.0" />
+        <answer type="oc" title="unbekannt" />
+      </question>
+      <question type="num" title="Lebertiefe in MCL, sonographisch" tooltip="MCL-Erklärung">
+        <answer text="cm" />
+        <answer type="oc" text="unbekannt" />
+      </question>
+      <question type="mc" title="Leberform, sonographisch" tooltip="Sonographie-Erklärung" send-button="true">
+        <answer title="verplumpt" tooltip="Informationen" />
+        <answer title="unproportionierte Vergrößerung des Lobus caudatus" tooltip="Informationen" />
+        <answer title="unproportionierte Vergrößerung des linken Leberlappens" />
+        <answer title="lokale Verwölbung" />
+        <answer title="lokaler Parenchymdefekt (wie nach Resektion)" />
+        <answer type="oc" title="unbekannt" />
+        <answer type="oc" title="unauffällig" />
+      </question>
+      <question type="oc" tooltip="Informationen" answer-columns="2"
+        title="Leberoberfläche, sonographisch" answer-style="radiobuttons">
+        <answer title="glatt" tooltip="Informationen" />
+        <answer title="unregelmäßig, knotig, gebuckelt" tooltip="Informationen" />
+        
+          <answer type="oc" title="unbekannt" />
+        
+      </question>
+      <question type="oc" tooltip="Informationen" answer-columns="2"
+        title="Leberunterrand, sonographisch">
+        <answer title="spitz" tooltip="Informationen" />
+        <answer title="stumpf" tooltip="Informationen" />
+        <answer title="abgerundet" tooltip="Informationen" />
+       
+          <answer type="oc" title="unbekannt" />
+        
+      </question>
+      <question type="oc" tooltip="Informationen" answer-columns="2"
+        title="Leberverformbarkeit, sonographisch">
+        <answer title="nicht oder kaum vermindert" tooltip="Informationen" />
+        <answer title="deutlich vermindert" tooltip="Informationen" />
+          <answer type="oc" title="unbekannt" />
+       
+      </question>
+    </questionnaire>
+    <questionnaire title="Duplexsonographie der Leber mit KM" />
+    <questionnaire title="Duplexsonographie der Ateria hepatica" />
+    <questionnaire title="Duplexsonographie des Truncus coeliacus" />
+    <questionnaire title="Sonographie, Leberpunktion" />
+    <questionnaire title="Sonographie, Kontrolle nach Leberpunktion" />
+</dialog>
