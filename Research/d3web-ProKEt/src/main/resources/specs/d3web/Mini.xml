@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <dialog 
-	header="Mediastinitisregister"  
+	header="Mini Test KB"  
 	dtype="singleform" 
 	dstrategy="nextuaquestion" 
 	css="medi2cols, nonavigation" 
 	dialogcolumns="1"
-	questionnairecolumns="3"
+	questionnairecolumns="1"
 	userprefix = "" >
-	<data kb="HerzmedizinFeb2011.d3web" />
+	<data kb="Mini.d3web" />
 </dialog>

@@ -60,6 +60,9 @@ import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser;
+import de.d3web.proket.d3web.output.render.D3webRenderer;
+import de.d3web.proket.d3web.output.render.ID3webRenderer;
+import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.IDUtils;
 
 /**
@@ -91,6 +94,8 @@ public class D3webDialog extends HttpServlet {
 
 	/* d3web connector for storing certain relevant properties */
 	private D3webConnector d3wcon;
+	
+	private String sourceSave = "";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -139,7 +144,8 @@ public class D3webDialog extends HttpServlet {
 
 		// only invoke parser, if XML hasn't been parsed before
 		// if it has, a knowledge base already exists
-		if (d3wcon.getKb() == null) {
+		if (d3wcon.getKb() == null ||
+				!source.equals(sourceSave)) {
 			d3wcon.setKb(d3webParser.getKnowledgeBase());
 			d3wcon.setKbName(d3webParser.getKnowledgeBaseName());
 			d3wcon.setKbm(
@@ -152,6 +158,7 @@ public class D3webDialog extends HttpServlet {
 			d3wcon.setHeader(d3webParser.getHeader());
 			d3wcon.setUserprefix(d3webParser.getUserPrefix());
 			d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
+			sourceSave = source;
 		}
 
 		// get existing d3websession if existing
@@ -205,12 +212,12 @@ public class D3webDialog extends HttpServlet {
 		PrintWriter writer = response.getWriter();
 
 		// get the root renderer --> call getRenderer with null
-		//ID3webRenderer d3webr =
-				//D3webRenderer.getRenderer(null);
+		ID3webRenderer d3webr =
+				D3webRenderer.getRenderer(null);
 
 		// new ContainerCollection needed each time to get an updated dialog
-		//ContainerCollection cc = new ContainerCollection();
-		//cc = d3webr.renderRoot(cc);
+		ContainerCollection cc = new ContainerCollection();
+		cc = d3webr.renderRoot(cc);
 
 		String html = "" +
 				"<html><head></head>" +
@@ -218,8 +225,8 @@ public class D3webDialog extends HttpServlet {
 				"<img>D3webPicShow?src=Test</img>" +
 				"</body>" +
 				"</html>";
-		// writer.print(cc.html.toString()); // deliver the rendered output
-		writer.print(html);
+		writer.print(cc.html.toString()); // deliver the rendered output
+		// writer.print(html);
 		writer.close(); // and close
 	}
 
@@ -330,7 +337,8 @@ public class D3webDialog extends HttpServlet {
 				D3webConnector.getInstance().getSession().getBlackboard();
 
 		Question to =
-				KnowledgeBaseManagement.createInstance(d3wcon.getKb()).findQuestion(termObID);
+				(Question) KnowledgeBaseManagement.createInstance(d3wcon.getKb()).findTerminologyObjectByName(
+						termObID);
 
 		// if TerminologyObject not found in the current KB return & do nothing
 		if (to == null) {
@@ -466,8 +474,8 @@ public class D3webDialog extends HttpServlet {
 			for (TerminologyObject c : parent.getChildren()) {
 
 				Question qto =
-						KnowledgeBaseManagement.createInstance(d3wcon.getKb()).
-								findQuestion(c.getId());
+						(Question) KnowledgeBaseManagement.createInstance(d3wcon.getKb()).findTerminologyObjectByName(
+								c.getId());
 
 				if (!isIndicated(qto, blackboard)
 						|| !isParentIndicated(qto, blackboard)) {
@@ -495,8 +503,8 @@ public class D3webDialog extends HttpServlet {
 			for (TerminologyObject to : parent.getChildren()) {
 
 				Question qto =
-						KnowledgeBaseManagement.createInstance(d3wcon.getKb()).
-								findQuestion(to.getId());
+						(Question) KnowledgeBaseManagement.createInstance(d3wcon.getKb()).findTerminologyObjectByName(
+								to.getId());
 
 				// remove a previously set value
 				lastFact = blackboard.getValueFact(qto);

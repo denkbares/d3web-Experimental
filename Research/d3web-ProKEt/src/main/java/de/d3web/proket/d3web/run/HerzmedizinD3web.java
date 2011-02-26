@@ -324,7 +324,8 @@ public class HerzmedizinD3web extends HttpServlet {
 				D3webConnector.getInstance().getSession().getBlackboard();
 
 		Question to =
-				KnowledgeBaseManagement.createInstance(d3wcon.getKb()).findQuestion(termObID);
+				(Question) KnowledgeBaseManagement.createInstance(d3wcon.getKb()).findTerminologyObjectByName(
+						termObID);
 
 		// if TerminologyObject not found in the current KB return & do nothing
 		if (to == null) {
@@ -460,8 +461,8 @@ public class HerzmedizinD3web extends HttpServlet {
 			for (TerminologyObject c : parent.getChildren()) {
 
 				Question qto =
-						KnowledgeBaseManagement.createInstance(d3wcon.getKb()).
-								findQuestion(c.getId());
+						(Question) KnowledgeBaseManagement.createInstance(d3wcon.getKb()).findTerminologyObjectByName(
+								(c.getId()));
 
 				if (!isIndicated(qto, blackboard)
 						|| !isParentIndicated(qto, blackboard)) {
@@ -489,8 +490,8 @@ public class HerzmedizinD3web extends HttpServlet {
 			for (TerminologyObject to : parent.getChildren()) {
 
 				Question qto =
-						KnowledgeBaseManagement.createInstance(d3wcon.getKb()).
-								findQuestion(to.getId());
+						(Question) KnowledgeBaseManagement.createInstance(d3wcon.getKb()).findTerminologyObjectByName(
+								to.getId());
 
 				// remove a previously set value
 				lastFact = blackboard.getValueFact(qto);
