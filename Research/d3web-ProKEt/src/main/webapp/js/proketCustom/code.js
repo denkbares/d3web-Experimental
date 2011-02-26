@@ -852,6 +852,7 @@ function toggle_sub(id) {
  * toggle element's visibility by ID
  */
 function toggle_hide(id) {
+	
 	// toggle (0 means no animation as time=0 for animation and on
 	// callback (animation complete) the function is processed
 	$("#" + id).toggle(0, function() {
@@ -974,12 +975,33 @@ function toggle_sub_4boxes(id) {
  * Toggle folder image (open/close) for the legal dialog style
  */
 function toggle_folder_image_4boxes(id) {
-	var temp = $("#" + id + "-folderimg");
-	if (temp.attr('src') !== 'images/plus.gif') {
-		temp.attr('src', 'images/plus.gif');
+	
+	var count = id.replace("q_", "");
+	var typeimgID = count+'-typeimg';
+	
+	//var temp = $("#" + id + "-folderimg");
+	var temp2 = $("[id*="+ typeimgID + "]");
+	
+	/*if (temp.attr('src') !== 'img/closedArrow.png') {
+		temp.attr('src', 'img/closedArrow.png');
 	} else {
-		temp.attr('src', 'images/minus.gif');
-	}
+		temp.attr('src', 'img/openedArrow.gif');
+	}*/
+	
+	//alert(temp2.attr('id'));
+	/*if(temp2.attr('src') == 'img/transpSquare.png'){
+		temp2.attr('src', 'img/transpSquare.png');
+	} else {
+
+		alert(temp2.attr('src'));
+		if (temp2.attr('src') == 'img/closedArrow.png') {
+			temp2.attr('src', 'img/openedArrow.gif');
+		} else if (temp2.attr('src') == 'img/openedArrow.gif'){		
+			temp2.attr('src', 'img/closedArrow.png');
+		} else {
+			temp2.attr('src', 'img/transpSquare.png');
+		}
+	}*/
 }
 
 /**

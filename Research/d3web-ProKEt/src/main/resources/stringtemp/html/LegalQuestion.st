@@ -1,7 +1,10 @@
 <div id="$fullId$" class="question $fullId$ $answerType$">
 	<div id="$id$-imagebox" class="question-imagebox">
 		<img id="$id$-typeimg" alt="type" src="$typeimg$" height="16" width="16" onclick="toggle_sub_4boxes('$fullId$')">
-    	<img height="16" $if(noChildren)$usemap="#panel-$fullId$"$endif$ src="img/panel.gif" style="border: medium none;" id="panel-$fullId$" $if(hasChildren)$onclick="toggle_sub_4boxes('$fullId$')"$endif$>
+    	<img height="16" 
+		$if(noChildren)$usemap="#panel-$fullId$"$endif$ 
+		src="img/panel.gif" style="border: medium none;" id="panel-$fullId$" 
+		$if(hasChildren)$onclick="toggle_sub_4boxes('$fullId$')"$endif$>
     </div> 
     <div class="title t-$fullId$" id="t-$fullId$" onClick="javascript:copy_div('bonus-$fullId$', 'bonus');">
         $title$

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<dialog sub-type="color" type="legal" css="legal, nofoot" header="Labour Legislation Consultation"
+<dialog sub-type="col" type="legal" css="legal, nofoot" header="Labour Legislation Consultation"
 	answer-type="oc">
 		<question title="Employment contract was terminated effectually and in time"
 			id="1" type="mc" />

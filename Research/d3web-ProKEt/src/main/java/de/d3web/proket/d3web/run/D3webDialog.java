@@ -94,7 +94,7 @@ public class D3webDialog extends HttpServlet {
 
 	/* d3web connector for storing certain relevant properties */
 	private D3webConnector d3wcon;
-	
+
 	private String sourceSave = "";
 
 	/**

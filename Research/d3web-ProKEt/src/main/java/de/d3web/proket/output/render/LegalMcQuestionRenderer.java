@@ -37,7 +37,11 @@ public class LegalMcQuestionRenderer extends Renderer {
 	@Override
 	protected void renderChildren(StringTemplate st, ContainerCollection cc,
 			IDialogObject dialogObject, boolean force) {
+
 		IDialogObject parent = dialogObject.getParent();
+		System.out.println(parent);
+		System.out.println(dialogObject);
+
 		if (parent != null) {
 			Vector<IDialogObject> children = parent.getChildren();
 			StringBuffer childrenHTML = new StringBuffer();
@@ -45,6 +49,7 @@ public class LegalMcQuestionRenderer extends Renderer {
 
 				if (child.getXMLTag().getAttribute("parent-id")
 						.equals(dialogObject.getId())) {
+
 					IRenderer renderer = Renderer.getRenderer(child);
 					String childHTML = renderer.renderDialogObject(cc, child);
 					if (childHTML != null) {
@@ -60,6 +65,7 @@ public class LegalMcQuestionRenderer extends Renderer {
 			st.setAttribute("answerType", dialogObject
 					.getInheritableAttributes().getAnswerType());
 
+
 			if (childrenHTML.length() > 0) {
 				// we have children
 				st.setAttribute("children", childrenHTML.toString());
@@ -72,20 +78,23 @@ public class LegalMcQuestionRenderer extends Renderer {
 				}
 				if (dialogObject.getInheritableAttributes().getAnswerType()
 						.equalsIgnoreCase("mc")) {
-					st.setAttribute("typeimg", "img/open_folder.png");
+					st.setAttribute("typeimg", "img/transpSquare.png");
 				} else {
-					st.setAttribute("typeimg", "img/choice.png");
+					st.setAttribute("typeimg", "img/transpSquare.png");
 				}
 
+				st.setAttribute("typeimg", "img/transpSquare.png");
 			} else {
 				// no child questions
 				st.setAttribute("noChildren", ""); /*
 													 * a little trick for the
 													 * template
 													 */
-				st.setAttribute("typeimg", "img/hint.png");
+				// no children, so no folding arrow/sign
+				st.setAttribute("typeimg", "img/transpSquare.png");
 			}
 		}
+
 		super.renderChildren(st, cc, dialogObject, force);
 	}
 }
