@@ -31,7 +31,9 @@ import java.util.Locale;
 import org.antlr.runtime.RecognitionException;
 
 import de.d3web.KnOfficeParser.SingleKBMIDObjectManager;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.Solution;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.report.Message;
 
 /**
@@ -52,14 +54,12 @@ public class DTTester {
 		Locale.setDefault(Locale.GERMAN);
 		File file = new File("examples\\testbogen.txt");
 		D3DTBuilder builder = new D3DTBuilder(file.toString(), new SingleKBMIDObjectManager(null));
-		KnowledgeBaseManagement kbm = KnowledgeBaseManagement.createInstance();
-		kbm.createSolution("Rheumaerkrankung eher wahrscheinlich",
-				kbm.getKnowledgeBase().getRootSolution());
-		kbm.createSolution("Rheumaerkrankung möglich", kbm.getKnowledgeBase().getRootSolution());
-		kbm.createSolution("Rheumaerkrankung eher unwahrscheinlich",
-				kbm.getKnowledgeBase().getRootSolution());
+		KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase();
+		new Solution(kb.getRootSolution(), "Rheumaerkrankung eher wahrscheinlich");
+		new Solution(kb.getRootSolution(), "Rheumaerkrankung möglich");
+		new Solution(kb.getRootSolution(), "Rheumaerkrankung eher unwahrscheinlich");
 		Reader r = new FileReader(file);
-		Collection<Message> col = builder.addKnowledge(r, new SingleKBMIDObjectManager(kbm), null);
+		Collection<Message> col = builder.addKnowledge(r, new SingleKBMIDObjectManager(kb), null);
 		List<Message> errors = (List<Message>) col;
 		for (Message m : errors) {
 			System.out.println(m);

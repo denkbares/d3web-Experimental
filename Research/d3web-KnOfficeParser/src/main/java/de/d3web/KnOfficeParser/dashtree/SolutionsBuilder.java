@@ -40,13 +40,13 @@ import de.d3web.KnOfficeParser.util.MessageKnOfficeGenerator;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.manage.IDObjectManagement;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.report.Message;
 
 public class SolutionsBuilder implements DashTBuilder, KnOfficeParser {
 
 	public static List<Message> parse(Reader reader,
-			KnowledgeBaseManagement kbm, IDObjectManagement idom) {
+			KnowledgeBaseUtils kbm, IDObjectManagement idom) {
 		SolutionsBuilder builder = new SolutionsBuilder("", idom);
 		return builder.addKnowledge(reader, idom, null);
 	}

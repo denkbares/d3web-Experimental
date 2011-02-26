@@ -32,7 +32,9 @@ import org.antlr.runtime.RecognitionException;
 
 import de.d3web.KnOfficeParser.decisiontree.D3DTBuilder;
 import de.d3web.KnOfficeParser.rule.D3ruleBuilder;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.Solution;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.report.Message;
 
 /**
@@ -52,27 +54,26 @@ public class Tester {
 			RecognitionException {
 		Locale.setDefault(Locale.GERMAN);
 		File file = new File("examples\\car.txt");
-		KnowledgeBaseManagement kbm = KnowledgeBaseManagement.createInstance();
-		D3DTBuilder builder = new D3DTBuilder(file.toString(), new SingleKBMIDObjectManager(kbm));
-		kbm.createSolution("Leerlaufsystem defekt", kbm.getKnowledgeBase().getRootSolution());
-		kbm.createSolution("Ansaugsystem undicht", kbm.getKnowledgeBase().getRootSolution());
-		kbm.createSolution("Luftfiltereinsatz verschmutzt",
-				kbm.getKnowledgeBase().getRootSolution());
-		kbm.createSolution("Zündeinstellung falsch", kbm.getKnowledgeBase().getRootSolution());
-		kbm.createSolution("Batterie leer", kbm.getKnowledgeBase().getRootSolution());
+		KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase();
+		D3DTBuilder builder = new D3DTBuilder(file.toString(), new SingleKBMIDObjectManager(kb));
+		new Solution(kb.getRootSolution(), "Leerlaufsystem defekt");
+		new Solution(kb.getRootSolution(), "Ansaugsystem undicht");
+		new Solution(kb.getRootSolution(), "Luftfiltereinsatz verschmutzt");
+		new Solution(kb.getRootSolution(), "Zündeinstellung falsch");
+		new Solution(kb.getRootSolution(), "Batterie leer");
 		Reader r = new FileReader(file);
-		Collection<Message> col = builder.addKnowledge(r, new SingleKBMIDObjectManager(kbm), null);
+		Collection<Message> col = builder.addKnowledge(r, new SingleKBMIDObjectManager(kb), null);
 		List<Message> errors = (List<Message>) col;
 		for (Message m : errors) {
 			System.out.println(m);
 		}
 		file = new File("examples\\carrule.txt");
 		D3ruleBuilder builder2 = new D3ruleBuilder(file.toString(), false,
-				new SingleKBMIDObjectManager(kbm));
+				new SingleKBMIDObjectManager(kb));
 		builder2.setLazy(true);
 		// builder2.setBuildonlywith0Errors(true);
 		r = new FileReader(file);
-		col = builder2.addKnowledge(r, new SingleKBMIDObjectManager(kbm), null);
+		col = builder2.addKnowledge(r, new SingleKBMIDObjectManager(kb), null);
 		errors = (List<Message>) col;
 		for (Message m : errors) {
 			System.out.println(m);

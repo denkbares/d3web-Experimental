@@ -33,7 +33,6 @@ import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.kernel.verbalizer.VerbalizationManager;
@@ -91,14 +90,12 @@ public class XCLExplanationAction extends DeprecatedAbstractKnowWEAction {
 		// namespace = parameterMap.get(KnowWEAttributes.NAMESPACE);
 		// }
 
-		KnowledgeBaseManagement baseManagement = KnowledgeBaseManagement.createInstance(this.currentCase.getKnowledgeBase());
-
 		this.kbId = this.currentCase.getKnowledgeBase().getId();
 
 		// Question q;
 		// AbstractCondition c;
 		// c.eval(c);
-		Solution solution = baseManagement.getKnowledgeBase().getManager().searchSolution(
+		Solution solution = currentCase.getKnowledgeBase().getManager().searchSolution(
 				solutionid);
 		if (solution == null) {
 			return rb.getString("xclrenderer.nosolution") + solutionid;

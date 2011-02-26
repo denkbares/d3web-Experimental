@@ -41,7 +41,7 @@ import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.QuestionDate;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionText;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.core.session.values.DateValue;
@@ -157,7 +157,7 @@ public class FindingToConditionBuilder {
 	 * @param kbm
 	 * @return
 	 */
-	public static Condition analyseAnyRelation(KnowWEArticle article, Section f, KnowledgeBaseManagement kbm) {
+	public static Condition analyseAnyRelation(KnowWEArticle article, Section f, KnowledgeBaseUtils kbm) {
 
 		Section child = f.findChildOfType(ComplexFinding.class);
 		if (child != null) {
@@ -173,7 +173,7 @@ public class FindingToConditionBuilder {
 	 * @return s null if the question was not found by KBM, a condition
 	 *         otherwise.
 	 */
-	private static Condition analyseFinding(KnowWEArticle article, Section f, KnowledgeBaseManagement kbm) {
+	private static Condition analyseFinding(KnowWEArticle article, Section f, KnowledgeBaseUtils kbm) {
 
 		if (!f.getObjectType().getClass().equals(Finding.class)) return null;
 
@@ -212,7 +212,7 @@ public class FindingToConditionBuilder {
 				kbValue = Unknown.getInstance();
 			}
 			if (kbQuest instanceof QuestionChoice) {
-				Choice choice = KnowledgeBaseManagement.findChoice((QuestionChoice) kbQuest,
+				Choice choice = KnowledgeBaseUtils.findChoice((QuestionChoice) kbQuest,
 						answertext);
 				if (choice != null) {
 					kbValue = new ChoiceValue(choice);
@@ -280,14 +280,14 @@ public class FindingToConditionBuilder {
 	 * @param kbm
 	 * @return s the according Condition or null if neither side could be parsed
 	 */
-	private static Condition analyseComplexFinding(KnowWEArticle article, Section cf, KnowledgeBaseManagement kbm) {
+	private static Condition analyseComplexFinding(KnowWEArticle article, Section cf, KnowledgeBaseUtils kbm) {
 
 		TypeSectionFilter filter = new TypeSectionFilter("Disjunct");
 		return analyseDisjunction(article, cf.getChildren(filter), kbm);
 
 	}
 
-	private static Condition analyseDisjunction(KnowWEArticle article, List<Section> disjunction, KnowledgeBaseManagement kbm) {
+	private static Condition analyseDisjunction(KnowWEArticle article, List<Section> disjunction, KnowledgeBaseUtils kbm) {
 
 		List<Condition> disjuncts = new ArrayList<Condition>();
 		TypeSectionFilter filter = new TypeSectionFilter("Conjunct");
@@ -306,7 +306,7 @@ public class FindingToConditionBuilder {
 	}
 
 	private static Condition analyzeConjunction(KnowWEArticle article, List<Section> conjunction,
-			KnowledgeBaseManagement kbm) {
+			KnowledgeBaseUtils kbm) {
 
 		List<Condition> conjuncts = new ArrayList<Condition>();
 

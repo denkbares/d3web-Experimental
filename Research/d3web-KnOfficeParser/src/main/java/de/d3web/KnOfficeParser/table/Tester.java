@@ -25,10 +25,10 @@ import java.io.IOException;
 import java.util.List;
 
 import jxl.JXLException;
-
 import de.d3web.KnOfficeParser.SingleKBMIDObjectManager;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.report.Message;
-import de.d3web.core.manage.KnowledgeBaseManagement;
 
 /**
  * Einfache Testklasse um den Inhalt dieses Packages zu testen
@@ -46,13 +46,13 @@ public class Tester {
 	public static void main(String[] args) throws JXLException, IOException {
 		File file = new File("examples\\Muster2.xls");
 		ExceltoTextParser parser = new ExceltoTextParser(file, 22);
-		KnowledgeBaseManagement kbm = KnowledgeBaseManagement.createInstance();
+		KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase();
 		// CellKnowledgeBuilder ckb = new ScoringRuleBuilder("score");
 		CellKnowledgeBuilder ckb = new XCLRelationBuilder("xcl");
 		// ((XCLRelationBuilder)ckb).setCreateUncompleteFindings(false);
 		TableParser tb = new TableParser2();
 		D3webBuilder builder = new D3webBuilder(file.toString(), ckb, 0, 0, tb,
-				new SingleKBMIDObjectManager(kbm));
+				new SingleKBMIDObjectManager(kb));
 		tb.builder = builder;
 		builder.setLazy(true);
 		builder.setLazyDiag(true);

@@ -31,8 +31,9 @@ import java.util.List;
 import org.antlr.runtime.RecognitionException;
 
 import de.d3web.KnOfficeParser.SingleKBMIDObjectManager;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.report.Message;
-import de.d3web.core.manage.KnowledgeBaseManagement;
 
 public class Complexrulestester {
 
@@ -44,11 +45,11 @@ public class Complexrulestester {
 	 */
 	public static void main(String[] args) throws FileNotFoundException, IOException, RecognitionException {
 		File file = new File("examples\\Regeln4.txt");
-		KnowledgeBaseManagement kbm = KnowledgeBaseManagement.createInstance();
+		KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase();
 		D3ruleBuilder builder = new D3ruleBuilder(file.toString(), true,
-				new SingleKBMIDObjectManager(kbm));
+				new SingleKBMIDObjectManager(kb));
 		Reader r = new FileReader(file);
-		Collection<Message> col = builder.addKnowledge(r, new SingleKBMIDObjectManager(kbm), null);
+		Collection<Message> col = builder.addKnowledge(r, new SingleKBMIDObjectManager(kb), null);
 		List<Message> errors = (List<Message>) col;
 		for (Message m : errors) {
 			System.out.println(m);

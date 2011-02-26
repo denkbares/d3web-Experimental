@@ -27,8 +27,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import de.d3web.core.inference.condition.Condition;
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
@@ -59,7 +60,7 @@ public class CoveringListContent extends XMLContent {
 
 	public class CoveringListContentSubTreeHandler extends D3webSubtreeHandler {
 
-		// KnowledgeBaseManagement kbm = null;
+		// KnowledgeBaseUtils kbm = null;
 		// String currentWeb = "";
 		// private Diagnosis currentdiag;
 
@@ -69,7 +70,7 @@ public class CoveringListContent extends XMLContent {
 			// Set currentWeb
 			String currentWeb = s.getWeb();
 
-			KnowledgeBaseManagement kbm = getKBM(article);
+			KnowledgeBaseUtils kbm = getKBM(article);
 
 			if (kbm != null) {
 				// Analyse s (Has XCList-Children)
@@ -89,7 +90,7 @@ public class CoveringListContent extends XMLContent {
 		 * @param currentweb
 		 * @param XCLList
 		 */
-		private void analyseXCList(KnowWEArticle article, Section xclList, KnowledgeBaseManagement kbm, String currentweb) {
+		private void analyseXCList(KnowWEArticle article, Section xclList, KnowledgeBaseUtils kbm, String currentweb) {
 
 			// Check if xclList is XCList
 			if ((xclList.getObjectType() instanceof XCList) && (kbm != null)) {
@@ -106,12 +107,13 @@ public class CoveringListContent extends XMLContent {
 
 				// Insert Solution into KnowledgeBase when Solution doesnt exist
 				Section head = elements.get(0);
-				Solution currentdiag = kbm.getKnowledgeBase().getManager().searchSolution(
+				KnowledgeBase kb = kbm.getKnowledgeBase();
+				Solution currentdiag = kb.getManager().searchSolution(
 						head.getOriginalText().replaceAll(
 								p.toString(), "").trim());
 				if (currentdiag == null) {
-					currentdiag = kbm.createSolution(head.getOriginalText().replaceAll(
-							p.toString(), "").trim(), kbm.getKnowledgeBase().getRootSolution());
+					currentdiag = new Solution(kb.getRootSolution(), head.getOriginalText().replaceAll(
+							p.toString(), "").trim());
 				}
 
 				// Insert XCLRelations belonging to current Diagnosis
@@ -132,7 +134,7 @@ public class CoveringListContent extends XMLContent {
 			}
 		}
 
-		private void setThresholds(KnowledgeBaseManagement kbm,
+		private void setThresholds(KnowledgeBaseUtils kbm,
 				Solution currentdiag, Section tail) {
 
 			Collection<XCLModel> knowledge = kbm.getKnowledgeBase().getAllKnowledgeSlicesFor(
@@ -170,7 +172,7 @@ public class CoveringListContent extends XMLContent {
 		 * @return
 		 */
 		private void insertRelations(KnowWEArticle article, List<Section> currentRels,
-				KnowledgeBaseManagement kbm, Solution currentdiag, String currentWeb) {
+				KnowledgeBaseUtils kbm, Solution currentdiag, String currentWeb) {
 
 			for (Section rel : currentRels) {
 				double weight = this.getWeight(rel);

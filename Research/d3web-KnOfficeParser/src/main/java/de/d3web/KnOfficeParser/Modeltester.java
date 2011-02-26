@@ -33,7 +33,9 @@ import org.antlr.runtime.RecognitionException;
 import de.d3web.KnOfficeParser.decisiontree.D3DTBuilder;
 import de.d3web.KnOfficeParser.rule.D3ruleBuilder;
 import de.d3web.KnOfficeParser.xcl.XCLd3webBuilder;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.Solution;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.report.Message;
 
 /**
@@ -53,14 +55,14 @@ public class Modeltester {
 			RecognitionException {
 		Locale.setDefault(Locale.GERMAN);
 		File file = new File("src\\main\\examples\\models\\Entscheidungsbaum.txt");
-		KnowledgeBaseManagement kbm = KnowledgeBaseManagement.createInstance();
-		SingleKBMIDObjectManager idom = new SingleKBMIDObjectManager(kbm);
+		KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase();
+		SingleKBMIDObjectManager idom = new SingleKBMIDObjectManager(kb);
 		D3DTBuilder builder = new D3DTBuilder(file.toString(), idom);
-		kbm.createSolution("Schwanger", kbm.getKnowledgeBase().getRootSolution());
-		kbm.createSolution("Übergewicht", kbm.getKnowledgeBase().getRootSolution());
-		kbm.createSolution("Normalgewicht", kbm.getKnowledgeBase().getRootSolution());
-		kbm.createSolution("Gliederschmerzen", kbm.getKnowledgeBase().getRootSolution());
-		kbm.createSolution("Verteilte Schmerzen", kbm.getKnowledgeBase().getRootSolution());
+		new Solution(kb.getRootSolution(), "Schwanger");
+		new Solution(kb.getRootSolution(), "Übergewicht");
+		new Solution(kb.getRootSolution(), "Normalgewicht");
+		new Solution(kb.getRootSolution(), "Gliederschmerzen");
+		new Solution(kb.getRootSolution(), "Verteilte Schmerzen");
 		Reader r = new FileReader(file);
 		Collection<Message> col = builder.addKnowledge(r, idom, null);
 		List<Message> errors = (List<Message>) col;

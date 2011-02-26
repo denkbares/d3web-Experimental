@@ -30,7 +30,7 @@ import de.d3web.core.io.KnowledgeReader;
 import de.d3web.core.io.PersistenceManager;
 import de.d3web.core.io.progress.DummyProgressListener;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
 import de.d3web.report.Message;
@@ -52,7 +52,7 @@ public class KnowledgeReaderReviseSubtreeHandler extends SubtreeHandler {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
-		KnowledgeBaseManagement kbm = D3webModule.getKnowledgeRepresentationHandler(
+		KnowledgeBaseUtils kbm = D3webModule.getKnowledgeRepresentationHandler(
 				article.getWeb()).getKBM(article.getTitle());
 		if (kbm == null) return null;
 

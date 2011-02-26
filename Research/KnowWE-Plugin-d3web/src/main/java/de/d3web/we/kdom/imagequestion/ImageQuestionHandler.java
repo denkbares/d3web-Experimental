@@ -32,7 +32,7 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.QuestionOC;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.values.ChoiceID;
@@ -110,8 +110,7 @@ public class ImageQuestionHandler extends AbstractHTMLTagHandler {
 		// Read out the properties
 		String questionID =
 				values.get(ImageQuestionHandler.TAGHANDLER_ANNOTATION);
-		KnowledgeBaseManagement kbm = KnowledgeBaseManagement.createInstance(kb);
-		Question q = kbm.getKnowledgeBase().getManager().searchQuestion(questionID);
+		Question q = kb.getManager().searchQuestion(questionID);
 		ImageQuestionStore store = q.getInfoStore().getValue(
 				ImageQuestionStore.IMAGE_QUESTION_INFO);
 
@@ -230,7 +229,7 @@ public class ImageQuestionHandler extends AbstractHTMLTagHandler {
 			KnowledgeBase kb, Question q) {
 
 		// Is the Answer in the KnowledgeBase
-		Choice answer = KnowledgeBaseManagement.findChoice((QuestionChoice) q,
+		Choice answer = KnowledgeBaseUtils.findChoice((QuestionChoice) q,
 				answerRegion.getAnswerID());
 
 		if (answer == null) {

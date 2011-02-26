@@ -24,7 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Value;
 import de.d3web.empiricaltesting.Finding;
 import de.d3web.empiricaltesting.RatedTestCase;
@@ -62,7 +62,7 @@ public class TestcaseTableLine extends TableLine {
 			@Override
 			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TestcaseTableLine> s) {
 
-				KnowledgeBaseManagement kbm = findKB(s, article);
+				KnowledgeBaseUtils kbm = findKB(s, article);
 
 				Section<TimeStampType> timeStamp = s.findSuccessor(TimeStampType.class);
 				if (timeStamp == null) {
@@ -99,7 +99,7 @@ public class TestcaseTableLine extends TableLine {
 				return null;
 			}
 
-			private KnowledgeBaseManagement findKB(Section<TestcaseTableLine> s, KnowWEArticle article) {
+			private KnowledgeBaseUtils findKB(Section<TestcaseTableLine> s, KnowWEArticle article) {
 
 				String master = TestcaseTableType.getMaster(
 						s.findAncestorOfExactType(TestcaseTableType.class), article.getTitle());

@@ -30,7 +30,8 @@ import java.util.regex.Pattern;
 
 import de.d3web.KnOfficeParser.SingleKBMIDObjectManager;
 import de.d3web.KnOfficeParser.rule.D3ruleBuilder;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.report.Message;
 import de.d3web.report.Report;
 import de.d3web.we.core.KnowWEEnvironment;
@@ -139,19 +140,20 @@ public class Rule extends DefaultAbstractKnowWEObjectType {
 				}
 			}
 
-			KnowledgeBaseManagement kbm = getKBM(article);
+			KnowledgeBaseUtils kbm = getKBM(article);
 
 			if (kbm != null) {
 
+				KnowledgeBase kb = kbm.getKnowledgeBase();
 				D3ruleBuilder builder = new D3ruleBuilder(s.getID(), lazy,
-						new SingleKBMIDObjectManager(kbm));
+						new SingleKBMIDObjectManager(kb));
 
 				if (s != null) {
 					String text = s.getOriginalText();
 					Reader r = new StringReader(text);
 
 					List<Message> bm = builder.addKnowledge(r,
-							new SingleKBMIDObjectManager(kbm), null);
+							new SingleKBMIDObjectManager(kb), null);
 
 					if (builder.getRules().size() == 1) {
 						KnowWEUtils.storeObject(article.getWeb(), article

@@ -25,9 +25,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
@@ -47,19 +49,20 @@ public class ListCriteriaD3SubtreeHandler extends D3webSubtreeHandler<ListCriter
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<ListCriteriaType> s) {
 
-		KnowledgeBaseManagement kbm = getKBM(article);
+		KnowledgeBaseUtils kbm = getKBM(article);
 
 		if (kbm != null) {
+			KnowledgeBase kb = kbm.getKnowledgeBase();
 
 			// Get the necessary Annotations
 			Section<ListCriteriaRootType> root = s.findAncestorOfType(ListCriteriaRootType.class);
 			String listID = DefaultMarkupType.getAnnotation(root, "ListID");
 
 			// Create AbstractListQuestion
-			createAbstractListQuestion(kbm, listID);
+			createAbstractListQuestion(kb, listID);
 
 			// create "Counter" Questionnaire
-			kbm.createQContainer("Counter");
+			new QContainer(kb.getRootQASet(), "Counter");
 
 			// Check if we want to use the KDOM
 			boolean useKDom = s.get().getAllowedChildrenTypes().size() > 0 ? true : false;
@@ -78,20 +81,18 @@ public class ListCriteriaD3SubtreeHandler extends D3webSubtreeHandler<ListCriter
 				("Unable to create d3web Objects. KBM was null!", this.getClass()));
 	}
 
-	private void createAbstractListQuestion(KnowledgeBaseManagement kbm,
+	private void createAbstractListQuestion(KnowledgeBase kb,
 			String listID) {
 
 		// Create Question
-		QuestionOC q = kbm.createQuestionOC(listID, kbm.getKnowledgeBase().getRootQASet(),
-				new String[] {
-						"active", "inactive" });
+		QuestionOC q = new QuestionOC(kb.getRootQASet(), listID, "active", "inactive");
 
 		// Make created Question abstract
 		q.getInfoStore().addValue(BasicProperties.ABSTRACTION_QUESTION, Boolean.TRUE);
 	}
 
 	private void createD3ObjectsUsingKDom(Section<ListCriteriaType> section,
-			KnowledgeBaseManagement kbm, String listID) {
+			KnowledgeBaseUtils kbm, String listID) {
 
 		// Check if the table was recognized
 		if (section.findSuccessor(WISECTable.class) != null) {
@@ -125,7 +126,7 @@ public class ListCriteriaD3SubtreeHandler extends D3webSubtreeHandler<ListCriter
 		}
 	}
 
-	private void createD3Objects(String tableContent, KnowledgeBaseManagement kbm,
+	private void createD3Objects(String tableContent, KnowledgeBaseUtils kbm,
 			String listID) {
 
 		// Remove the trailing dashes
@@ -151,7 +152,7 @@ public class ListCriteriaD3SubtreeHandler extends D3webSubtreeHandler<ListCriter
 	/*
 	 * Replaced by OWL + SPARQL => {@link WISECFindingSetEventListener}!
 	 */
-	// private void createCounterRule(KnowledgeBaseManagement kbm, String
+	// private void createCounterRule(KnowledgeBaseUtils kbm, String
 	// listID,
 	// QuestionNum counterQuestion, String value) {
 	//

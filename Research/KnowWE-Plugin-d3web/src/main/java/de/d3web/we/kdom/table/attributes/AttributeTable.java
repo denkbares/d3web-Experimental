@@ -28,7 +28,7 @@ import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.Property;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.Section;
@@ -82,7 +82,7 @@ public class AttributeTable extends Table {
 
 			List<Section<AttributeTableTempType>> tempTypes = new LinkedList<Section<AttributeTableTempType>>();
 			s.findSuccessorsOfType(AttributeTableTempType.class, tempTypes);
-			KnowledgeBaseManagement kbm = getKBM(article);
+			KnowledgeBaseUtils kbm = getKBM(article);
 
 			for (Section<AttributeTableTempType> tempType : tempTypes) {
 
@@ -131,7 +131,7 @@ public class AttributeTable extends Table {
 
 		}
 
-		private TerminologyObject findNamedObject(KnowledgeBaseManagement kbm, String name) {
+		private TerminologyObject findNamedObject(KnowledgeBaseUtils kbm, String name) {
 			// Is there a Question with this name?
 			TerminologyObject namedObject = kbm.getKnowledgeBase().getManager().searchQuestion(name);
 			if (namedObject == null) {

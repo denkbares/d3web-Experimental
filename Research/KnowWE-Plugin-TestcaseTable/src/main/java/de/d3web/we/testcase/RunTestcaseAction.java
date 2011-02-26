@@ -25,7 +25,7 @@ import java.util.List;
 
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionDate;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
@@ -79,7 +79,7 @@ public class RunTestcaseAction extends AbstractAction {
 
 		if (session == null) return;
 
-		KnowledgeBaseManagement kbm =
+		KnowledgeBaseUtils kbm =
 				D3webModule.getKnowledgeRepresentationHandler(web).getKBM(master);
 
 		for (Section<TestcaseTableLine> tctLine : toBeExecutedLines) {
@@ -99,7 +99,7 @@ public class RunTestcaseAction extends AbstractAction {
 	 * @param session
 	 * @param kbm
 	 */
-	private void executeTestCase(RatedTestCase testcase, Session session, KnowledgeBaseManagement kbm) {
+	private void executeTestCase(RatedTestCase testcase, Session session, KnowledgeBaseUtils kbm) {
 		Blackboard blackboard = session.getBlackboard();
 		long time = getPropagationTime(session, kbm, testcase.getTimeStamp().getTime());
 
@@ -127,7 +127,7 @@ public class RunTestcaseAction extends AbstractAction {
 	 * @param offSet
 	 * @return
 	 */
-	private long getPropagationTime(Session session, KnowledgeBaseManagement kbm, long offSet) {
+	private long getPropagationTime(Session session, KnowledgeBaseUtils kbm, long offSet) {
 
 		Question question = kbm.getKnowledgeBase().getManager().searchQuestion("start");
 		if (question == null) { // no timeDB present

@@ -28,8 +28,9 @@ import java.util.List;
 import org.antlr.runtime.RecognitionException;
 
 import de.d3web.KnOfficeParser.SingleKBMIDObjectManager;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.report.Message;
-import de.d3web.core.manage.KnowledgeBaseManagement;
 
 /**
  * Einfache Testklasse für den XCL Parser
@@ -45,9 +46,9 @@ public class BasicTester {
 	 * @throws RecognitionException
 	 */
 	public static void main(String[] args) throws IOException, RecognitionException {
-		KnowledgeBaseManagement kbm = KnowledgeBaseManagement.createInstance();
+		KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase();
 		File file = new File("examples\\modelle - edited.txt");
-		SingleKBMIDObjectManager idom = new SingleKBMIDObjectManager(kbm);
+		SingleKBMIDObjectManager idom = new SingleKBMIDObjectManager(kb);
 		XCLd3webBuilder builder = new XCLd3webBuilder(file.toString(), true, true, idom);
 		builder.setCreateUncompleteFindings(false);
 		List<Message> errors = builder.addKnowledge(new FileReader(file), idom, null);

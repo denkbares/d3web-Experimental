@@ -30,7 +30,7 @@ import java.util.Set;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionMC;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
@@ -79,7 +79,7 @@ public class ImageQuestionSetAction extends AbstractAction {
 		}
 
 		// Necessary for FindingSetEvent
-		KnowledgeBaseManagement kbm =
+		KnowledgeBaseUtils kbm =
 				D3webModule.getKnowledgeRepresentationHandler(web).getKBM(topic);
 		Question question = kbm.getKnowledgeBase().getManager().searchQuestion(objectid);
 

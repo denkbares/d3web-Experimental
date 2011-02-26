@@ -25,7 +25,6 @@ import java.util.List;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.values.UndefinedValue;
@@ -62,8 +61,7 @@ public class SaveDialogAsXCLAction extends DeprecatedAbstractKnowWEAction {
 
 			Solution d = findSolution(web, topic, solution);
 			if (isSolutionNew(d)) {
-				d = getKBM(c.getKnowledgeBase()).createSolution(solution,
-						c.getKnowledgeBase().getRootSolution());
+				d = new Solution(c.getKnowledgeBase().getRootSolution(), solution);
 			}
 			else {
 				return null;
@@ -163,15 +161,6 @@ public class SaveDialogAsXCLAction extends DeprecatedAbstractKnowWEAction {
 
 		Solution d = base.getManager().searchSolution(solution);
 		return d;
-	}
-
-	/**
-	 * 
-	 * @param kb
-	 * @return
-	 */
-	private KnowledgeBaseManagement getKBM(KnowledgeBase kb) {
-		return KnowledgeBaseManagement.createInstance(kb);
 	}
 
 }

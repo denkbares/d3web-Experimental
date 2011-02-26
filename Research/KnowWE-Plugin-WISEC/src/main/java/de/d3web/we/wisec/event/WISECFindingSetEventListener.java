@@ -39,7 +39,6 @@ import common.Logger;
 
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.values.NumValue;
@@ -117,9 +116,7 @@ public class WISECFindingSetEventListener implements EventListener {
 	 * "Substances"-Questionnaire.
 	 */
 	private boolean checkQuestion(Question question) {
-		KnowledgeBaseManagement kbm =
-				KnowledgeBaseManagement.createInstance(question.getKnowledgeBase());
-		QContainer qc = kbm.getKnowledgeBase().getManager().searchQContainer("Substances");
+		QContainer qc = question.getKnowledgeBase().getManager().searchQContainer("Substances");
 		if (qc == null) return false;
 		return Arrays.asList(qc.getChildren()).contains(question);
 	}
@@ -202,7 +199,7 @@ public class WISECFindingSetEventListener implements EventListener {
 		}
 
 		// Search the Counter-Question (P, B, Aqua_Tox etc.)
-		Question counterQuestion = KnowledgeBaseManagement.createInstance(kss.getKnowledgeBase()).getKnowledgeBase().getManager().searchQuestion(
+		Question counterQuestion = kss.getKnowledgeBase().getManager().searchQuestion(
 				criteria);
 		if (counterQuestion == null) {
 			Logger.getLogger(this.getClass()).error(

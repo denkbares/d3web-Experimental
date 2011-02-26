@@ -35,7 +35,7 @@ import de.d3web.core.knowledge.terminology.QuestionYN;
 import de.d3web.core.knowledge.terminology.QuestionZC;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.manage.IDObjectManagement;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Value;
 
 /**
@@ -46,118 +46,161 @@ import de.d3web.core.session.Value;
  */
 public class SingleKBMIDObjectManager implements IDObjectManagement {
 
-	protected KnowledgeBaseManagement kbm;
+	protected KnowledgeBase kb;
 
-	public SingleKBMIDObjectManager(KnowledgeBaseManagement kbm) {
+	public SingleKBMIDObjectManager(KnowledgeBase kb) {
 		super();
-		this.kbm = kbm;
-	}
-
-	public KnowledgeBaseManagement getKbm() {
-		return kbm;
-	}
-
-	public void setKbm(KnowledgeBaseManagement kbm) {
-		this.kbm = kbm;
+		this.kb = kb;
 	}
 
 	@Override
 	public Solution createSolution(String name, Solution parent) {
-		return kbm.createSolution(name, parent);
+		if (parent == null) {
+			return new Solution(kb.getRootSolution(), name);
+		}
+		else {
+			return new Solution(parent, name);
+		}
 	}
 
 	@Override
 	public QContainer createQContainer(String name, QASet parent) {
-		return kbm.createQContainer(name, parent);
+		if (parent == null) {
+			return new QContainer(kb.getRootQASet(), name);
+		}
+		else {
+			return new QContainer(parent, name);
+		}
 	}
 
 	@Override
 	public QuestionDate createQuestionDate(String name, QASet parent) {
-		return kbm.createQuestionDate(name, parent);
+		if (parent == null) {
+			return new QuestionDate(kb.getRootQASet(), name);
+		}
+		else {
+			return new QuestionDate(parent, name);
+		}
 	}
 
 	@Override
 	public Solution findSolution(String name) {
-		return kbm.getKnowledgeBase().getManager().searchSolution(name);
+		return kb.getManager().searchSolution(name);
 	}
 
 	@Override
 	public QContainer findQContainer(String name) {
-		return kbm.getKnowledgeBase().getManager().searchQContainer(name);
+		return kb.getManager().searchQContainer(name);
 	}
 
 	@Override
 	public Question findQuestion(String name) {
-		return kbm.getKnowledgeBase().getManager().searchQuestion(name);
+		return kb.getManager().searchQuestion(name);
 	}
 
 	@Override
 	public QuestionMC createQuestionMC(String name, QASet parent,
 			Choice[] answers) {
-		return kbm.createQuestionMC(name, parent, answers);
+		if (parent == null) {
+			return new QuestionMC(kb.getRootQASet(), name, answers);
+		}
+		else {
+			return new QuestionMC(parent, name, answers);
+		}
 	}
 
 	@Override
 	public QuestionMC createQuestionMC(String name, QASet parent,
 			String[] answers) {
-		return kbm.createQuestionMC(name, parent, answers);
+		if (parent == null) {
+			return new QuestionMC(kb.getRootQASet(), name, answers);
+		}
+		else {
+			return new QuestionMC(parent, name, answers);
+		}
 	}
 
 	@Override
 	public QuestionNum createQuestionNum(String name, QASet parent) {
-		return kbm.createQuestionNum(name, parent);
+		if (parent == null) {
+			return new QuestionNum(kb.getRootQASet(), name);
+		}
+		else {
+			return new QuestionNum(parent, name);
+		}
 	}
 
 	@Override
 	public QuestionOC createQuestionOC(String name, QASet parent,
 			Choice[] answers) {
-		return kbm.createQuestionOC(name, parent, answers);
+		if (parent == null) {
+			return new QuestionOC(kb.getRootQASet(), name, answers);
+		}
+		else {
+			return new QuestionOC(parent, name, answers);
+		}
 	}
 
 	@Override
 	public QuestionOC createQuestionOC(String name, QASet parent,
 			String[] answers) {
-		return kbm.createQuestionOC(name, parent, answers);
+		if (parent == null) {
+			return new QuestionOC(kb.getRootQASet(), name, answers);
+		}
+		else {
+			return new QuestionOC(parent, name, answers);
+		}
 	}
 
 	@Override
 	public QuestionText createQuestionText(String name, QASet parent) {
-		return kbm.createQuestionText(name, parent);
+		if (parent == null) {
+			return new QuestionText(kb.getRootQASet(), name);
+		}
+		else {
+			return new QuestionText(parent, name);
+		}
 	}
 
 	@Override
 	public QuestionYN createQuestionYN(String name, QASet parent) {
-		return kbm.createQuestionYN(name, parent);
-	}
-
-	@Override
-	public QuestionYN createQuestionYN(String name, String yesAlternativeText,
-			String noAlternativeText, QASet parent) {
-		return kbm.createQuestionYN(name, yesAlternativeText, noAlternativeText, parent);
+		if (parent == null) {
+			return new QuestionYN(kb.getRootQASet(), name);
+		}
+		else {
+			return new QuestionYN(parent, name);
+		}
 	}
 
 	@Override
 	public QuestionZC createQuestionZC(String name, QASet parent) {
-		return kbm.createQuestionZC(name, parent);
+		if (parent == null) {
+			return new QuestionZC(kb.getRootQASet(), name);
+		}
+		else {
+			return new QuestionZC(parent, name);
+		}
 	}
 
 	@Override
 	public Choice addChoiceAnswer(QuestionChoice qc, String value) {
-		return kbm.addChoiceAnswer(qc, value);
+		Choice answer = new Choice(value);
+		qc.addAlternative(answer);
+		return answer;
 	}
 
 	@Override
 	public KnowledgeBase getKnowledgeBase() {
-		return kbm.getKnowledgeBase();
+		return kb;
 	}
 
 	@Override
 	public Value findValue(Question q, String name) {
-		return KnowledgeBaseManagement.findValue(q, name);
+		return KnowledgeBaseUtils.findValue(q, name);
 	}
 
 	@Override
 	public Choice findChoice(QuestionChoice qc, String name) {
-		return KnowledgeBaseManagement.findChoice(qc, name);
+		return KnowledgeBaseUtils.findChoice(qc, name);
 	}
 }

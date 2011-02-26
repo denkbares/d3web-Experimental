@@ -24,7 +24,7 @@ import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.ActionContext;
 import de.d3web.we.basic.D3webModule;
@@ -55,7 +55,7 @@ public class GetNewQuickEditAnswersAction extends AbstractAction {
 		String topic = map.getTopic();
 		String element = context.getParameter("element");
 
-		KnowledgeBaseManagement kbm = D3webModule.getKnowledgeRepresentationHandler(web).getKBM(
+		KnowledgeBaseUtils kbm = D3webModule.getKnowledgeRepresentationHandler(web).getKBM(
 				topic);
 
 		Question question = kbm.getKnowledgeBase().getManager().searchQuestion(element);

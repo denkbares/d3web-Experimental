@@ -53,7 +53,7 @@ import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.knowledge.terminology.Rating;
 import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.manage.RuleFactory;
 import de.d3web.core.records.DefaultSessionRecord;
 import de.d3web.core.records.DefaultSessionRepository;
@@ -120,8 +120,7 @@ public class SessionPersistenceTest {
 	public void setUp() throws IOException {
 		InitPluginManager.init();
 		startDate = new Date();
-		KnowledgeBaseManagement kbm = KnowledgeBaseManagement.createInstance();
-		kb = kbm.getKnowledgeBase();
+		kb = KnowledgeBaseUtils.createKnowledgeBase();
 		kb.setId("TestKB");
 		choices = new Choice[2];
 		choices[0] = new Choice("Answer1");
@@ -129,14 +128,13 @@ public class SessionPersistenceTest {
 		choices2 = new Choice[2];
 		choices2[0] = new Choice("Answer1");
 		choices2[1] = new Choice("Answer2");
-		questionOC = kbm.createQuestionOC("Question",
-				kb.getRootQASet(), choices);
-		questionMC = kbm.createQuestionMC("Question2", kb.getRootQASet(), choices);
-		questionDate = kbm.createQuestionDate("QuestionDate", kb.getRootQASet());
-		questionText = kbm.createQuestionText("QuestionText", kb.getRootQASet());
-		questionNum = kbm.createQuestionNum("QuestionNum", kb.getRootQASet());
-		solution = kbm.createSolution("Solution");
-		solution2 = kbm.createSolution("Solution2");
+		questionOC = new QuestionOC(kb.getRootQASet(), "Question", choices);
+		questionMC = new QuestionMC(kb.getRootQASet(), "Question2", choices);
+		questionDate = new QuestionDate(kb.getRootQASet(), "QuestionDate");
+		questionText = new QuestionText(kb.getRootQASet(), "QuestionText");
+		questionNum = new QuestionNum(kb.getRootQASet(), "QuestionNum");
+		solution = new Solution(kb.getRootSolution(), "Solution");
+		solution2 = new Solution(kb.getRootSolution(), "Solution2");
 		RuleFactory.createHeuristicPSRule(solution2, Score.P7, new CondNumLess(questionNum,
 				0.0));
 		RuleFactory.createHeuristicPSRule(solution, Score.P7, new CondNumLess(questionNum,

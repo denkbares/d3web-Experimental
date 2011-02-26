@@ -26,7 +26,7 @@ import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.Resource;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.we.basic.D3webModule;
 
 /**
@@ -41,7 +41,7 @@ public class StreamImageToResourceAction extends AbstractAction {
 		String web = context.getParameter("web");
 		String topic = context.getParameter("topic");
 		String imagename = context.getParameter("imagename");
-		KnowledgeBaseManagement kbm =
+		KnowledgeBaseUtils kbm =
 			D3webModule.getKnowledgeRepresentationHandler(
 					web).getKBM(topic);
 		if (kbm == null) return;

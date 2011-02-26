@@ -22,6 +22,7 @@ package de.d3web.KnOfficeParser;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QASet;
@@ -30,8 +31,7 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
-import de.d3web.core.manage.AnswerFactory;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.core.session.values.Unknown;
@@ -51,8 +51,8 @@ public class RestrictedIDObjectManager extends SingleKBMIDObjectManager {
 	private boolean lazyAnswers = false;
 	private boolean semirestricted = false;
 
-	public RestrictedIDObjectManager(KnowledgeBaseManagement kbm) {
-		super(kbm);
+	public RestrictedIDObjectManager(KnowledgeBase kb) {
+		super(kb);
 	}
 
 	/**
@@ -109,13 +109,13 @@ public class RestrictedIDObjectManager extends SingleKBMIDObjectManager {
 
 	@Override
 	public Value findValue(Question q, String name) {
-		Value answer = KnowledgeBaseManagement.findValue(q, name);
+		Value answer = KnowledgeBaseUtils.findValue(q, name);
 		if (name.equalsIgnoreCase("unknown") || name.equalsIgnoreCase("unbekannt")) {
 			return Unknown.getInstance();
 		}
 		if (answer == null && lazyAnswers) {
 			QuestionChoice qc = (QuestionChoice) q;
-			Choice ac = AnswerFactory.createAnswerChoice(name);
+			Choice ac = new Choice(name);
 			qc.addAlternative(ac);
 			answer = new ChoiceValue(ac);
 		}
@@ -124,9 +124,9 @@ public class RestrictedIDObjectManager extends SingleKBMIDObjectManager {
 
 	@Override
 	public Choice findChoice(QuestionChoice qc, String name) {
-		Choice answer = KnowledgeBaseManagement.findChoice(qc, name);
+		Choice answer = KnowledgeBaseUtils.findChoice(qc, name);
 		if (answer == null && lazyAnswers) {
-			answer = AnswerFactory.createAnswerChoice(name);
+			answer = new Choice(name);
 			qc.addAlternative(answer);
 		}
 		return answer;
@@ -134,7 +134,7 @@ public class RestrictedIDObjectManager extends SingleKBMIDObjectManager {
 
 	@Override
 	public Solution findSolution(String name) {
-		Solution diag = kbm.getKnowledgeBase().getManager().searchSolution(name);
+		Solution diag = kb.getManager().searchSolution(name);
 		if (diag == null && lazyDiags) {
 			diag = createSolution(name, null);
 		}
@@ -144,9 +144,9 @@ public class RestrictedIDObjectManager extends SingleKBMIDObjectManager {
 	@Override
 	public Question findQuestion(String name) {
 		if (currentQContainer == null) {
-			Question q = kbm.getKnowledgeBase().getManager().searchQuestion(name);
+			Question q = kb.getManager().searchQuestion(name);
 			if (q == null && lazyQuestions) {
-				q = createQuestionOC(name, kbm.getKnowledgeBase().getRootQASet(),
+				q = createQuestionOC(name, kb.getRootQASet(),
 						new String[0]);
 			}
 			return q;
@@ -175,7 +175,7 @@ public class RestrictedIDObjectManager extends SingleKBMIDObjectManager {
 				return createQuestionOC(name, currentQContainer, new String[0]);
 			}
 			if (semirestricted) {
-				return kbm.getKnowledgeBase().getManager().searchQuestion(name);
+				return kb.getManager().searchQuestion(name);
 			}
 			return null;
 		}
@@ -183,10 +183,7 @@ public class RestrictedIDObjectManager extends SingleKBMIDObjectManager {
 
 	@Override
 	public QContainer createQContainer(String name, QASet parent) {
-		if (parent == null) {
-			parent = kbm.getKnowledgeBase().getRootQASet();
-		}
-		return kbm.createQContainer(name, parent);
+		return super.createQContainer(name, parent);
 	}
 
 	private void collectQuestions(TerminologyObject namedObject, List<Question> result) {

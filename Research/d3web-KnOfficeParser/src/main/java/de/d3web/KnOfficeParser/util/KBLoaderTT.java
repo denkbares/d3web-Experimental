@@ -33,7 +33,7 @@ import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.QuestionNum;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 
 public class KBLoaderTT implements TerminologyTester {
 
@@ -136,7 +136,7 @@ public class KBLoaderTT implements TerminologyTester {
 		}
 		Question q = kb.getManager().searchQuestion(question);
 		if (q != null && q instanceof QuestionChoice) {
-			Choice a = KnowledgeBaseManagement.findChoice((QuestionChoice) q, answer);
+			Choice a = KnowledgeBaseUtils.findChoice((QuestionChoice) q, answer);
 			if (a != null) return true;
 		}
 

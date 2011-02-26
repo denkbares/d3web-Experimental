@@ -23,7 +23,7 @@ import java.util.Collection;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.Resource;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -44,7 +44,7 @@ public class ImageToResourceSubtreeHandler extends D3webSubtreeHandler<ImageToRe
 
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<ImageToResourceType> s) {
-		KnowledgeBaseManagement kbm =
+		KnowledgeBaseUtils kbm =
 				D3webModule.getKnowledgeRepresentationHandler(
 						article.getWeb()).getKBM(article.getTitle());
 		if (kbm == null) return null;

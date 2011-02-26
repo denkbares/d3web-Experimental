@@ -27,11 +27,12 @@ import java.util.Map;
 import de.d3web.core.inference.Rule;
 import de.d3web.core.inference.condition.CondEqual;
 import de.d3web.core.inference.condition.Condition;
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.manage.RuleFactory;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.values.ChoiceValue;
@@ -69,27 +70,28 @@ public class CreateScoresHandler extends D3webSubtreeHandler {
 			String score = string.substring(string.indexOf("=") + 1).trim();
 			String question = s.getOriginalText();
 
-			KnowledgeBaseManagement kbm = getKBM(article);
+			KnowledgeBaseUtils kbm = getKBM(article);
 
 			if (kbm == null) return; // dirty hack for testing
 
 			boolean lazy = isLazy(s);
 
-			Solution d = kbm.getKnowledgeBase().getManager().searchSolution(solution);
+			KnowledgeBase kb = kbm.getKnowledgeBase();
+			Solution d = kb.getManager().searchSolution(solution);
 			if (d == null && lazy) {
-				d = createSolution(solution, kbm);
+				d = createSolution(solution, kb);
 			}
 
-			Question q = kbm.getKnowledgeBase().getManager().searchQuestion(question);
+			Question q = kb.getManager().searchQuestion(question);
 
 			QuestionOC qc = (QuestionOC) q;
 			if (q == null && lazy) {
-				qc = createQuestion(question, defaultValue, kbm, s);
+				qc = createQuestion(question, defaultValue, kb, s);
 
 			}
 
 			Condition cond = createCondition(qc,
-					new ChoiceValue(KnowledgeBaseManagement.findChoice(
+					new ChoiceValue(KnowledgeBaseUtils.findChoice(
 							qc, defaultValue)));
 
 			Score scoreV = getScore(score);
@@ -126,11 +128,10 @@ public class CreateScoresHandler extends D3webSubtreeHandler {
 	}
 
 	private Solution createSolution(String solution,
-			KnowledgeBaseManagement mgn) {
-		Solution d = mgn.getKnowledgeBase().getManager().searchSolution(solution);
+			KnowledgeBase kb) {
+		Solution d = kb.getManager().searchSolution(solution);
 		if (d == null) {
-			d = mgn.createSolution(solution, mgn.getKnowledgeBase()
-					.getRootSolution());
+			d = new Solution(kb.getRootSolution(), solution);
 		}
 		return d;
 	}
@@ -148,15 +149,13 @@ public class CreateScoresHandler extends D3webSubtreeHandler {
 	}
 
 	private QuestionOC createQuestion(String question, String defaultValue,
-			KnowledgeBaseManagement kbm, Section s) {
+			KnowledgeBase kb, Section s) {
 
 		Choice a1 = new Choice(s.getID() + defaultValue);
 
 		Choice a2 = new Choice(s.getID() + "not " + defaultValue);
 
-		QuestionOC q = kbm.createQuestionOC(question, kbm.getKnowledgeBase()
-				.getRootQASet(), new Choice[] {
-				a1, a2 });
+		QuestionOC q = new QuestionOC(kb.getRootQASet(), question, a1, a2);
 
 		return q;
 	}

@@ -26,7 +26,7 @@ import java.util.List;
 
 import de.d3web.KnOfficeParser.SingleKBMIDObjectManager;
 import de.d3web.KnOfficeParser.dashtree.SolutionsBuilder;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.report.Message;
 import de.d3web.report.Report;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -58,7 +58,7 @@ public class SolutionsSection extends AbstractKopicSection {
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
 
-			KnowledgeBaseManagement kbm = getKBM(article);
+			KnowledgeBaseUtils kbm = getKBM(article);
 
 			Section content = ((AbstractKopicSection) s.getObjectType()).getContentChild(s);
 
@@ -66,7 +66,7 @@ public class SolutionsSection extends AbstractKopicSection {
 
 				List<de.d3web.report.Message> messages = SolutionsBuilder
 						.parse(new StringReader(content.getOriginalText()), kbm,
-								new SingleKBMIDObjectManager(kbm));
+								new SingleKBMIDObjectManager(kbm.getKnowledgeBase()));
 
 				KnowWEUtils.storeMessages(article, s, this.getClass(), Message.class, messages);
 

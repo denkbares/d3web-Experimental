@@ -25,7 +25,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.QContainer;
+import de.d3web.core.knowledge.terminology.QuestionOC;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.we.basic.WikiEnvironmentManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -48,24 +51,24 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<ListSubstancesType> s) {
 
-		KnowledgeBaseManagement kbm = getKBM(article);
+		KnowledgeBaseUtils kbm = getKBM(article);
 
 		if (kbm != null) {
-
+			KnowledgeBase kb = kbm.getKnowledgeBase();
 			// Get the ListID
 			Section<ListSubstancesRootType> root = s.findAncestorOfType(ListSubstancesRootType.class);
 			String listID = DefaultMarkupType.getAnnotation(root, "ListID");
 
 			// Create Substance Questionnaire
-			kbm.createQContainer("Substances");
+			new QContainer(kb.getRootQASet(), "Substances");
 
 			// Check if we want to use the KDOM
 			boolean useKDom = s.get().getAllowedChildrenTypes().size() > 0 ? true : false;
 
 			// Process the Table Content
-			if (useKDom) createD3ObjectsUsingKDom(s, kbm, listID, article.getWeb());
+			if (useKDom) createD3ObjectsUsingKDom(s, kb, listID, article.getWeb());
 			else {
-				createD3Objects(s.getOriginalText().trim(), kbm, listID, article.getWeb());
+				createD3Objects(s.getOriginalText().trim(), kb, listID, article.getWeb());
 			}
 
 			return Arrays.asList((KDOMReportMessage) new NewObjectCreated(
@@ -78,7 +81,7 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 	}
 
 	private void createD3ObjectsUsingKDom(Section<ListSubstancesType> section,
-			KnowledgeBaseManagement kbm, String listID, String web) {
+			KnowledgeBase kb, String listID, String web) {
 
 		boolean failed = false;
 
@@ -112,7 +115,7 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 						// kbm.findQContainer("Substances"),
 						// new String[] {
 						// "included", "excluded" });
-						addGlobalQuestion(sgn, web, kbm);
+						addGlobalQuestion(sgn, web, kb);
 						// createListRule(kbm, listID, sgnQ);
 					}
 					else {
@@ -124,24 +127,23 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 
 		if (failed) { // Try to process the content without KDOM
 			Logging.getInstance().warning("Processing via KDOM failed, trying it without KDOM");
-			createD3Objects(section.getOriginalText().trim(), kbm, listID, web);
+			createD3Objects(section.getOriginalText().trim(), kb, listID, web);
 		}
 	}
 
-	private void addGlobalQuestion(String sgn, String web, KnowledgeBaseManagement kbm) {
+	private void addGlobalQuestion(String sgn, String web, KnowledgeBase kb) {
 		KnowWEArticle globalsArticle = KnowWEEnvironment.getInstance().getArticleManager(web).getArticle(
 				"WISEC_D3Globals");
 		Section<QuestionsSection> questionsSection = globalsArticle.getSection().findSuccessor(
 				QuestionsSection.class);
 
 		if (globalsArticle != null && questionsSection != null) {
-			if (kbm.getKnowledgeBase().getManager().searchQContainer("Substances") == null) kbm.createQContainer("Substances");
-			if (kbm.getKnowledgeBase().getManager().searchQuestion(sgn) == null) {
-				kbm.createQuestionOC(sgn,
-						kbm.getKnowledgeBase().getManager().searchQContainer("Substances"),
-						new String[] {
-								"included", "excluded" });
-				WikiEnvironmentManager.registerKnowledgeBase(kbm,
+			if (kb.getManager().searchQContainer("Substances") == null) new QContainer(
+					kb.getRootQASet(), "Substances");
+			if (kb.getManager().searchQuestion(sgn) == null) {
+				new QuestionOC(kb.getManager().searchQContainer("Substances"), sgn, "included",
+						"excluded");
+				WikiEnvironmentManager.registerKnowledgeBase(kb,
 						globalsArticle.getTitle(), globalsArticle.getWeb());
 			}
 		}
@@ -150,7 +152,7 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 	/*
 	 * Replaced by OWL + SPARQL => {@link WISECFindingSetEventListener}!
 	 */
-	// private void createListRule(KnowledgeBaseManagement kbm, String listID,
+	// private void createListRule(KnowledgeBaseUtils kbm, String listID,
 	// QuestionOC sgnQuestion) {
 	//
 	// // Create condition
@@ -170,7 +172,7 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 	// }
 
 	private void createD3Objects(String tableContent,
-			KnowledgeBaseManagement kbm, String listID, String web) {
+			KnowledgeBase kb, String listID, String web) {
 
 		// Remove the trailing dashes
 		StringBuilder bob = new StringBuilder(tableContent);
@@ -197,7 +199,7 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 				// kbm.createQuestionOC(sgn, kbm.findQContainer("Substances"),
 				// new String[] {
 				// "included", "excluded" });
-				addGlobalQuestion(sgn, web, kbm);
+				addGlobalQuestion(sgn, web, kb);
 				// createListRule(kbm, listID, sgnQ);
 			}
 		}

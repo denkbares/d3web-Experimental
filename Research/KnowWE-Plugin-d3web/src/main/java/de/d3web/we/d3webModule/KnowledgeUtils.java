@@ -42,7 +42,7 @@ import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionYN;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.manage.IDObjectManagement;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.report.Message;
 
@@ -131,7 +131,7 @@ public class KnowledgeUtils {
 		}
 		else if (currentquestion instanceof QuestionChoice) {
 			QuestionChoice qc = (QuestionChoice) currentquestion;
-			Choice currentanswer = KnowledgeBaseManagement.findChoice(qc, answer);
+			Choice currentanswer = KnowledgeBaseUtils.findChoice(qc, answer);
 			if (currentanswer == null) {
 				errors.add(MessageKnOfficeGenerator
 						.createAnswerNotFoundException(kdomid, line, column,

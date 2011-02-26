@@ -23,7 +23,7 @@
  */
 package de.d3web.we.kdom.contexts;
 
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.we.kdom.Section;
 
 /**
@@ -34,7 +34,7 @@ import de.d3web.we.kdom.Section;
 public class KBMContext extends StringContext {
 
 	public final static String CID = "KBMCONTEXT";
-	private KnowledgeBaseManagement kbm;
+	private KnowledgeBaseUtils kbm;
 
 	/*
 	 * (non-Javadoc)
@@ -46,11 +46,11 @@ public class KBMContext extends StringContext {
 		return CID;
 	}
 
-	public void setKBM(KnowledgeBaseManagement kbm) {
+	public void setKBM(KnowledgeBaseUtils kbm) {
 		this.kbm = kbm;
 	}
 
-	public KnowledgeBaseManagement getKBM() {
+	public KnowledgeBaseUtils getKBM() {
 		return kbm;
 	}
 

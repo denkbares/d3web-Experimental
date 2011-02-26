@@ -66,7 +66,6 @@ import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.knowledge.terminology.info.NumericalInterval;
 import de.d3web.core.knowledge.terminology.info.Property;
-import de.d3web.core.manage.AnswerFactory;
 import de.d3web.core.manage.IDObjectManagement;
 import de.d3web.core.manage.RuleFactory;
 import de.d3web.core.session.values.ChoiceValue;
@@ -307,7 +306,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 		}
 
 		// No answer found, create new one
-		Choice answer = AnswerFactory.createAnswerChoice(name);
+		Choice answer = new Choice(name);
 
 		questionChoice.addAlternative(answer);
 		return answer;

@@ -22,9 +22,11 @@ package de.d3web.we.kdom.xcl;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.Property;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.report.KDOMReportMessage;
@@ -47,11 +49,11 @@ public class DCPropertySubtreeHandler extends D3webSubtreeHandler<DCPropertyType
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
 
-		KnowledgeBaseManagement kbm = getKBM(article);
+		KnowledgeBaseUtils kbm = getKBM(article);
 
 		if (kbm == null) return null;
 
-		TerminologyObject obj = getNamedObject(s, kbm);
+		TerminologyObject obj = getNamedObject(s, kbm.getKnowledgeBase());
 
 		if (obj == null) {
 			ArrayList<KDOMReportMessage> list = new ArrayList<KDOMReportMessage>();
@@ -84,7 +86,7 @@ public class DCPropertySubtreeHandler extends D3webSubtreeHandler<DCPropertyType
 	 * this is the part which would have to be adapted to other scenarios
 	 * 
 	 */
-	private TerminologyObject getNamedObject(Section s, KnowledgeBaseManagement kbm) {
+	private TerminologyObject getNamedObject(Section s, KnowledgeBase kb) {
 		Section xclhead = s.findAncestorOfType(XCList.class);
 
 		String diagnosis = (String) KnowWEUtils.getStoredObject(xclhead, XCLHead.KEY_SOLUTION_NAME);
@@ -93,12 +95,12 @@ public class DCPropertySubtreeHandler extends D3webSubtreeHandler<DCPropertyType
 			return null;
 		}
 
-		TerminologyObject d = kbm.getKnowledgeBase().getManager().searchSolution(diagnosis);
+		TerminologyObject d = kb.getManager().searchSolution(diagnosis);
 
 		if (d == null) { // should not happen
 			// solution should already be created by STH of XCLHEAD
 			// as this one has lower priority
-			d = kbm.createSolution(diagnosis);
+			d = new Solution(kb.getRootSolution(), diagnosis);
 		}
 		return d;
 	}
