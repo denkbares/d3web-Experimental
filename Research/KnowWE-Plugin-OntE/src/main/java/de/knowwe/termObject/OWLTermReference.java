@@ -13,19 +13,19 @@ import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.terminology.TerminologyHandler;
 import de.d3web.we.utils.KnowWEUtils;
 
-public class OWLTermReference extends GlobalTermReference<URI> implements RDFResourceType {
+public class OWLTermReference extends GlobalTermReference<URIObject> implements RDFResourceType {
 
 	public static final StyleRenderer REF_RENDERER = new StyleRenderer(
 			"color:rgb(25, 180, 120)");
 
 	public OWLTermReference() {
-		super(URI.class);
+		super(URIObject.class);
 		this.setCustomRenderer(REF_RENDERER);
 	}
 
 
 	@Override
-	public String getTermName(Section<? extends KnowWETerm<URI>> s) {
+	public String getTermName(Section<? extends KnowWETerm<URIObject>> s) {
 		// dirty hack for colons '::'
 		// TODO: fix
 		if (s.getOriginalText().endsWith("::"))
@@ -51,8 +51,8 @@ public class OWLTermReference extends GlobalTermReference<URI> implements RDFRes
 			
 			Object termObject = definingSection.get().getTermObject(null,
 					definingSection);
-			if (termObject instanceof URI) {
-				return (URI) termObject;
+			if (termObject instanceof URIObject) {
+				return ((URIObject) termObject).getURI();
 			}
 		}
 		return null;

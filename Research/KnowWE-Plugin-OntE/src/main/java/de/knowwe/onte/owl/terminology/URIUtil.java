@@ -15,6 +15,8 @@ public class URIUtil {
 	
 	public static final String OBJECTPROPERTY = "ObjectProperty";
 	
+	public static final String DATATYPEPROPERTY = "DataTypeProperty";
+	
 	public static final String THING = "Thing";
 	
 	public static final String TYPE = "type";
@@ -29,7 +31,7 @@ public class URIUtil {
 	
 	
 	public static final String[] OBJECT_VOCABULARY = new String[] {
-		CLASS, OBJECTPROPERTY, THING };
+		CLASS, OBJECTPROPERTY, DATATYPEPROPERTY, THING };
 	
 	public static final String[] PREDICATE_VOCABULARY = new String[] {
 			TYPE,ISA, SUBCLASSOF, DOMAIN, RANGE, SUBPROPERTYOF };
@@ -52,6 +54,8 @@ public class URIUtil {
 			return OWL.ObjectProperty;
 		} else if(text.equalsIgnoreCase(CLASS)) {
 			return OWL.Class;
+		} else if(text.equalsIgnoreCase(DATATYPEPROPERTY)) {
+			return OWL.DatatypeProperty;
 		} else if(text.equalsIgnoreCase(THING)) {
 			return OWL.Thing;
 		} else if(text.equalsIgnoreCase(TYPE)) {

@@ -14,6 +14,7 @@ import de.d3web.we.taghandler.AbstractTagHandler;
 import de.d3web.we.terminology.TerminologyHandler;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.knowwe.termObject.URIObject;
 
 public class TerminologyViewHandler extends AbstractTagHandler{
 
@@ -32,8 +33,8 @@ public class TerminologyViewHandler extends AbstractTagHandler{
 			
 			Object object = termDefiningSection.get().getTermObject(main, termDefiningSection);
 			String uriString = "no URI";
-			if(object instanceof URI) {
-				uriString = ((URI)object).toString();
+			if(object instanceof URIObject) {
+				uriString = ((URIObject)object).toString();
 			}
 			result += "<li>"+string+" ("+uriString+")"+"</li>";
 			
