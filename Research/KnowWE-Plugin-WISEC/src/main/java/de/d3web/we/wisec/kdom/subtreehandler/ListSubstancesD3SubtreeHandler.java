@@ -28,7 +28,6 @@ import java.util.regex.Pattern;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.QuestionOC;
-import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.we.basic.WikiEnvironmentManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -51,10 +50,9 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<ListSubstancesType> s) {
 
-		KnowledgeBaseUtils kbm = getKBM(article);
+		KnowledgeBase kb = getKB(article);
 
-		if (kbm != null) {
-			KnowledgeBase kb = kbm.getKnowledgeBase();
+		if (kb != null) {
 			// Get the ListID
 			Section<ListSubstancesRootType> root = s.findAncestorOfType(ListSubstancesRootType.class);
 			String listID = DefaultMarkupType.getAnnotation(root, "ListID");

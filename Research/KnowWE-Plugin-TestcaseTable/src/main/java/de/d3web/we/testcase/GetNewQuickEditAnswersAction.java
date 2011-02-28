@@ -20,11 +20,11 @@ package de.d3web.we.testcase;
 
 import java.io.IOException;
 
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.ActionContext;
 import de.d3web.we.basic.D3webModule;
@@ -55,16 +55,16 @@ public class GetNewQuickEditAnswersAction extends AbstractAction {
 		String topic = map.getTopic();
 		String element = context.getParameter("element");
 
-		KnowledgeBaseUtils kbm = D3webModule.getKnowledgeRepresentationHandler(web).getKBM(
+		KnowledgeBase kb = D3webModule.getKnowledgeRepresentationHandler(web).getKB(
 				topic);
 
-		Question question = kbm.getKnowledgeBase().getManager().searchQuestion(element);
+		Question question = kb.getManager().searchQuestion(element);
 
 		if (question != null) {
 			writeAnswersForQuestion(context, question);
 		}
 		else {
-			Solution solution = kbm.getKnowledgeBase().getManager().searchSolution(element);
+			Solution solution = kb.getManager().searchSolution(element);
 			if (solution != null) {
 				context.getWriter().write(
 						UNCHANGED_VALUE_STRING + SEPARATOR + "established" + SEPARATOR

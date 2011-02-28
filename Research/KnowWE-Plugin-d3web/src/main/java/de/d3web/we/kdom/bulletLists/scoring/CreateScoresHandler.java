@@ -70,13 +70,12 @@ public class CreateScoresHandler extends D3webSubtreeHandler {
 			String score = string.substring(string.indexOf("=") + 1).trim();
 			String question = s.getOriginalText();
 
-			KnowledgeBaseUtils kbm = getKBM(article);
+			KnowledgeBase kb = getKB(article);
 
-			if (kbm == null) return; // dirty hack for testing
+			if (kb == null) return; // dirty hack for testing
 
 			boolean lazy = isLazy(s);
 
-			KnowledgeBase kb = kbm.getKnowledgeBase();
 			Solution d = kb.getManager().searchSolution(solution);
 			if (d == null && lazy) {
 				d = createSolution(solution, kb);

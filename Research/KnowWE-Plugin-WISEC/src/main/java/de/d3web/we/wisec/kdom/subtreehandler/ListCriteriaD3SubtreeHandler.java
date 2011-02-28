@@ -29,7 +29,6 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
-import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
@@ -49,10 +48,9 @@ public class ListCriteriaD3SubtreeHandler extends D3webSubtreeHandler<ListCriter
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<ListCriteriaType> s) {
 
-		KnowledgeBaseUtils kbm = getKBM(article);
+		KnowledgeBase kb = getKB(article);
 
-		if (kbm != null) {
-			KnowledgeBase kb = kbm.getKnowledgeBase();
+		if (kb != null) {
 
 			// Get the necessary Annotations
 			Section<ListCriteriaRootType> root = s.findAncestorOfType(ListCriteriaRootType.class);
@@ -68,9 +66,9 @@ public class ListCriteriaD3SubtreeHandler extends D3webSubtreeHandler<ListCriter
 			boolean useKDom = s.get().getAllowedChildrenTypes().size() > 0 ? true : false;
 
 			// Process the Table Content
-			if (useKDom) createD3ObjectsUsingKDom(s, kbm, listID);
+			if (useKDom) createD3ObjectsUsingKDom(s, kb, listID);
 			else {
-				createD3Objects(s.getOriginalText().trim(), kbm, listID);
+				createD3Objects(s.getOriginalText().trim(), kb, listID);
 			}
 
 			return Arrays.asList((KDOMReportMessage) new NewObjectCreated(
@@ -92,7 +90,7 @@ public class ListCriteriaD3SubtreeHandler extends D3webSubtreeHandler<ListCriter
 	}
 
 	private void createD3ObjectsUsingKDom(Section<ListCriteriaType> section,
-			KnowledgeBaseUtils kbm, String listID) {
+			KnowledgeBase kb, String listID) {
 
 		// Check if the table was recognized
 		if (section.findSuccessor(WISECTable.class) != null) {
@@ -122,11 +120,11 @@ public class ListCriteriaD3SubtreeHandler extends D3webSubtreeHandler<ListCriter
 		}
 		else {
 			Logging.getInstance().warning("Processing via KDOM failed, trying it without KDOM");
-			createD3Objects(section.getOriginalText().trim(), kbm, listID);
+			createD3Objects(section.getOriginalText().trim(), kb, listID);
 		}
 	}
 
-	private void createD3Objects(String tableContent, KnowledgeBaseUtils kbm,
+	private void createD3Objects(String tableContent, KnowledgeBase kb,
 			String listID) {
 
 		// Remove the trailing dashes

@@ -23,12 +23,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.Property;
-import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.Section;
@@ -82,11 +82,11 @@ public class AttributeTable extends Table {
 
 			List<Section<AttributeTableTempType>> tempTypes = new LinkedList<Section<AttributeTableTempType>>();
 			s.findSuccessorsOfType(AttributeTableTempType.class, tempTypes);
-			KnowledgeBaseUtils kbm = getKBM(article);
+			KnowledgeBase kb = getKB(article);
 
 			for (Section<AttributeTableTempType> tempType : tempTypes) {
 
-				TerminologyObject namedObject = findNamedObject(kbm, tempType.getOriginalText());
+				TerminologyObject namedObject = findNamedObject(kb, tempType.getOriginalText());
 
 				// Create MMInfo
 				if (namedObject != null) {
@@ -131,15 +131,15 @@ public class AttributeTable extends Table {
 
 		}
 
-		private TerminologyObject findNamedObject(KnowledgeBaseUtils kbm, String name) {
+		private TerminologyObject findNamedObject(KnowledgeBase kb, String name) {
 			// Is there a Question with this name?
-			TerminologyObject namedObject = kbm.getKnowledgeBase().getManager().searchQuestion(name);
+			TerminologyObject namedObject = kb.getManager().searchQuestion(name);
 			if (namedObject == null) {
 				// Or a Solution?
-				namedObject = kbm.getKnowledgeBase().getManager().searchSolution(name);
+				namedObject = kb.getManager().searchSolution(name);
 				if (namedObject == null) {
 					// Or a QContainer?
-					namedObject = kbm.getKnowledgeBase().getManager().searchQContainer(name);
+					namedObject = kb.getManager().searchQContainer(name);
 				}
 			}
 			return namedObject;

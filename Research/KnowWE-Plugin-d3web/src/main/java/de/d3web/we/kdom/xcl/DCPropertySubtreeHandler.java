@@ -26,7 +26,6 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.Property;
-import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.report.KDOMReportMessage;
@@ -49,11 +48,11 @@ public class DCPropertySubtreeHandler extends D3webSubtreeHandler<DCPropertyType
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
 
-		KnowledgeBaseUtils kbm = getKBM(article);
+		KnowledgeBase kb = getKB(article);
 
-		if (kbm == null) return null;
+		if (kb == null) return null;
 
-		TerminologyObject obj = getNamedObject(s, kbm.getKnowledgeBase());
+		TerminologyObject obj = getNamedObject(s, kb);
 
 		if (obj == null) {
 			ArrayList<KDOMReportMessage> list = new ArrayList<KDOMReportMessage>();

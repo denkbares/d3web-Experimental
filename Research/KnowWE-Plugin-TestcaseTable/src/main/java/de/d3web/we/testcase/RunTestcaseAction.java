@@ -23,9 +23,9 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionDate;
-import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
@@ -79,15 +79,15 @@ public class RunTestcaseAction extends AbstractAction {
 
 		if (session == null) return;
 
-		KnowledgeBaseUtils kbm =
-				D3webModule.getKnowledgeRepresentationHandler(web).getKBM(master);
+		KnowledgeBase kb =
+				D3webModule.getKnowledgeRepresentationHandler(web).getKB(master);
 
 		for (Section<TestcaseTableLine> tctLine : toBeExecutedLines) {
 			RatedTestCase testcase = (RatedTestCase) KnowWEUtils.getStoredObject(article,
 					tctLine,
 					TestcaseTableLine.TESTCASE_KEY);
 
-			executeTestCase(testcase, session, kbm);
+			executeTestCase(testcase, session, kb);
 		}
 
 	}
@@ -99,9 +99,9 @@ public class RunTestcaseAction extends AbstractAction {
 	 * @param session
 	 * @param kbm
 	 */
-	private void executeTestCase(RatedTestCase testcase, Session session, KnowledgeBaseUtils kbm) {
+	private void executeTestCase(RatedTestCase testcase, Session session, KnowledgeBase kb) {
 		Blackboard blackboard = session.getBlackboard();
-		long time = getPropagationTime(session, kbm, testcase.getTimeStamp().getTime());
+		long time = getPropagationTime(session, kb, testcase.getTimeStamp().getTime());
 
 		try {
 
@@ -127,9 +127,9 @@ public class RunTestcaseAction extends AbstractAction {
 	 * @param offSet
 	 * @return
 	 */
-	private long getPropagationTime(Session session, KnowledgeBaseUtils kbm, long offSet) {
+	private long getPropagationTime(Session session, KnowledgeBase kb, long offSet) {
 
-		Question question = kbm.getKnowledgeBase().getManager().searchQuestion("start");
+		Question question = kb.getManager().searchQuestion("start");
 		if (question == null) { // no timeDB present
 			return offSet;
 		}

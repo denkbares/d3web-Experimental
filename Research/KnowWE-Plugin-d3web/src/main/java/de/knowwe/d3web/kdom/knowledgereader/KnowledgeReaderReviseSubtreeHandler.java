@@ -30,7 +30,6 @@ import de.d3web.core.io.KnowledgeReader;
 import de.d3web.core.io.PersistenceManager;
 import de.d3web.core.io.progress.DummyProgressListener;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
 import de.d3web.report.Message;
@@ -47,21 +46,19 @@ import de.d3web.we.utils.KnowWEUtils;
  * 
  * @author Markus Friedrich (denkbares GmbH)
  */
-public class KnowledgeReaderReviseSubtreeHandler extends SubtreeHandler {
+public class KnowledgeReaderReviseSubtreeHandler extends SubtreeHandler<KnowledgeReaderType> {
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
-		KnowledgeBaseUtils kbm = D3webModule.getKnowledgeRepresentationHandler(
-				article.getWeb()).getKBM(article.getTitle());
-		if (kbm == null) return null;
+	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<KnowledgeReaderType> s) {
+		KnowledgeBase kb = D3webModule.getKnowledgeRepresentationHandler(
+				article.getWeb()).getKB(article.getTitle());
+		if (kb == null) return null;
 
-		KnowledgeBase kb = kbm.getKnowledgeBase();
 		String readerID = DefaultMarkupType.getAnnotation(s, "KnowledgeReader");
 		String toRead = DefaultMarkupType.getContent(s);
 		Extension[] allextensions = PluginManager.getInstance().getExtensions(
 				PersistenceManager.EXTENDED_PLUGIN_ID, PersistenceManager.EXTENDED_POINT_READER);
-		List<Extension> extensions = new ArrayList();
+		List<Extension> extensions = new ArrayList<Extension>();
 		for (Extension e : allextensions) {
 			if (e.getID().equals(readerID)) {
 				extensions.add(e);

@@ -29,7 +29,6 @@ import java.util.regex.Pattern;
 import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
@@ -70,13 +69,13 @@ public class CoveringListContent extends XMLContent {
 			// Set currentWeb
 			String currentWeb = s.getWeb();
 
-			KnowledgeBaseUtils kbm = getKBM(article);
+			KnowledgeBase kb = getKB(article);
 
-			if (kbm != null) {
+			if (kb != null) {
 				// Analyse s (Has XCList-Children)
 				ArrayList<Section> elements = new ArrayList<Section>(s.getChildren());
 				for (Section sec : elements) {
-					this.analyseXCList(article, sec, kbm, currentWeb);
+					this.analyseXCList(article, sec, kb, currentWeb);
 				}
 			}
 
@@ -90,10 +89,10 @@ public class CoveringListContent extends XMLContent {
 		 * @param currentweb
 		 * @param XCLList
 		 */
-		private void analyseXCList(KnowWEArticle article, Section xclList, KnowledgeBaseUtils kbm, String currentweb) {
+		private void analyseXCList(KnowWEArticle article, Section xclList, KnowledgeBase kb, String currentweb) {
 
 			// Check if xclList is XCList
-			if ((xclList.getObjectType() instanceof XCList) && (kbm != null)) {
+			if ((xclList.getObjectType() instanceof XCList) && (kb != null)) {
 
 				// Get all children of xclList containing
 				// XCLHead/XCLBody/XCLTail and some other text
@@ -107,13 +106,13 @@ public class CoveringListContent extends XMLContent {
 
 				// Insert Solution into KnowledgeBase when Solution doesnt exist
 				Section head = elements.get(0);
-				KnowledgeBase kb = kbm.getKnowledgeBase();
 				Solution currentdiag = kb.getManager().searchSolution(
 						head.getOriginalText().replaceAll(
 								p.toString(), "").trim());
 				if (currentdiag == null) {
-					currentdiag = new Solution(kb.getRootSolution(), head.getOriginalText().replaceAll(
-							p.toString(), "").trim());
+					currentdiag = new Solution(kb.getRootSolution(),
+							head.getOriginalText().replaceAll(
+									p.toString(), "").trim());
 				}
 
 				// Insert XCLRelations belonging to current Diagnosis
@@ -121,12 +120,12 @@ public class CoveringListContent extends XMLContent {
 						this.getXCLRelations(elements.get(1)));
 
 				// insert every Relation into currentModel
-				this.insertRelations(article, currentRels, kbm, currentdiag, currentweb);
+				this.insertRelations(article, currentRels, kb, currentdiag, currentweb);
 
 				// tail with thresholds
 				if (elements.size() == 3) {
 					Section tail = elements.get(2);
-					if (tail.getObjectType() instanceof XCLTail) setThresholds(kbm, currentdiag,
+					if (tail.getObjectType() instanceof XCLTail) setThresholds(kb, currentdiag,
 							tail);
 
 				}
@@ -134,10 +133,10 @@ public class CoveringListContent extends XMLContent {
 			}
 		}
 
-		private void setThresholds(KnowledgeBaseUtils kbm,
+		private void setThresholds(KnowledgeBase kb,
 				Solution currentdiag, Section tail) {
 
-			Collection<XCLModel> knowledge = kbm.getKnowledgeBase().getAllKnowledgeSlicesFor(
+			Collection<XCLModel> knowledge = kb.getAllKnowledgeSlicesFor(
 					XCLModel.KNOWLEDGE_KIND);
 
 			if (knowledge == null) return;
@@ -172,18 +171,18 @@ public class CoveringListContent extends XMLContent {
 		 * @return
 		 */
 		private void insertRelations(KnowWEArticle article, List<Section> currentRels,
-				KnowledgeBaseUtils kbm, Solution currentdiag, String currentWeb) {
+				KnowledgeBase kb, Solution currentdiag, String currentWeb) {
 
 			for (Section rel : currentRels) {
 				double weight = this.getWeight(rel);
 				XCLRelationType relationType = getRelationType(rel);
 				// Get the Conditions
-				Condition cond = FindingToConditionBuilder.analyseAnyRelation(article, rel, kbm);
+				Condition cond = FindingToConditionBuilder.analyseAnyRelation(article, rel, kb);
 
 				if (cond == null) continue;
 
 				// Insert the Relation into the currentModel
-				String kbRelId = XCLModel.insertXCLRelation(kbm.getKnowledgeBase(), cond,
+				String kbRelId = XCLModel.insertXCLRelation(kb, cond,
 						currentdiag, relationType, weight, rel.getID());
 				KnowWEUtils.storeObject(currentWeb, article.getTitle(), rel.getID(), KBID_KEY,
 						kbRelId);

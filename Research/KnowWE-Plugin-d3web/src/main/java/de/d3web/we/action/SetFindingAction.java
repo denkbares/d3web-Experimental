@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.manage.KnowledgeBaseUtils;
@@ -60,25 +61,25 @@ public class SetFindingAction extends DeprecatedAbstractKnowWEAction {
 		if (namespace == null || objectid == null) {
 			return "null";
 		}
-		KnowledgeBaseUtils kbm = D3webModule.getKnowledgeRepresentationHandler(web).getKBM(
+		KnowledgeBase kb = D3webModule.getKnowledgeRepresentationHandler(web).getKB(
 					topic);
 		Session session = D3webUtils.getSession(topic, user, web);
 		Blackboard blackboard = session.getBlackboard();
 
 		// Necessary for FindingSetEvent
-		Question question = kbm.getKnowledgeBase().getManager().searchQuestion(objectid);
+		Question question = kb.getManager().searchQuestion(objectid);
 		if (question != null) {
 
 			List<Value> values = new ArrayList<Value>();
 			if (valueids != null) {
 				String[] ids = valueids.split("\\,");
 				for (String string : ids) {
-					values.add(kbm.findValue(question, string.trim()));
+					values.add(KnowledgeBaseUtils.findValue(question, string.trim()));
 				}
 			}
 			Value singleValue = null;
 			if (valueid != null) {
-				singleValue = kbm.findValue(question, valueid);
+				singleValue = KnowledgeBaseUtils.findValue(question, valueid);
 			}
 			else if (valuenum != null) {
 				singleValue = new NumValue(Double.parseDouble(valuenum));

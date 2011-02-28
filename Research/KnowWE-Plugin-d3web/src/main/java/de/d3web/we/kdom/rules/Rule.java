@@ -31,7 +31,6 @@ import java.util.regex.Pattern;
 import de.d3web.KnOfficeParser.SingleKBMIDObjectManager;
 import de.d3web.KnOfficeParser.rule.D3ruleBuilder;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.report.Message;
 import de.d3web.report.Report;
 import de.d3web.we.core.KnowWEEnvironment;
@@ -140,11 +139,10 @@ public class Rule extends DefaultAbstractKnowWEObjectType {
 				}
 			}
 
-			KnowledgeBaseUtils kbm = getKBM(article);
+			KnowledgeBase kb = getKB(article);
 
-			if (kbm != null) {
+			if (kb != null) {
 
-				KnowledgeBase kb = kbm.getKnowledgeBase();
 				D3ruleBuilder builder = new D3ruleBuilder(s.getID(), lazy,
 						new SingleKBMIDObjectManager(kb));
 

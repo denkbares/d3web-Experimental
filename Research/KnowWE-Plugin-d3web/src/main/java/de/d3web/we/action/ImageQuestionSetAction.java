@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionMC;
@@ -79,15 +80,15 @@ public class ImageQuestionSetAction extends AbstractAction {
 		}
 
 		// Necessary for FindingSetEvent
-		KnowledgeBaseUtils kbm =
-				D3webModule.getKnowledgeRepresentationHandler(web).getKBM(topic);
-		Question question = kbm.getKnowledgeBase().getManager().searchQuestion(objectid);
+		KnowledgeBase kb =
+				D3webModule.getKnowledgeRepresentationHandler(web).getKB(topic);
+		Question question = kb.getManager().searchQuestion(objectid);
 
 		if (question == null) return;
 
 		Value value = null;
 		if (valueid != null) {
-			value = kbm.findValue(question, valueid);
+			value = KnowledgeBaseUtils.findValue(question, valueid);
 		}
 		else if (valuenum != null) {
 			value = new NumValue(Double.parseDouble(valuenum));

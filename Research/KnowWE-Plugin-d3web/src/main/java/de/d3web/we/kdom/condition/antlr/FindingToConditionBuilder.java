@@ -35,6 +35,7 @@ import de.d3web.core.inference.condition.CondNumLess;
 import de.d3web.core.inference.condition.CondNumLessEqual;
 import de.d3web.core.inference.condition.CondOr;
 import de.d3web.core.inference.condition.Condition;
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
@@ -157,11 +158,11 @@ public class FindingToConditionBuilder {
 	 * @param kbm
 	 * @return
 	 */
-	public static Condition analyseAnyRelation(KnowWEArticle article, Section f, KnowledgeBaseUtils kbm) {
+	public static Condition analyseAnyRelation(KnowWEArticle article, Section f, KnowledgeBase kb) {
 
 		Section child = f.findChildOfType(ComplexFinding.class);
 		if (child != null) {
-			return FindingToConditionBuilder.analyseComplexFinding(article, child, kbm);
+			return FindingToConditionBuilder.analyseComplexFinding(article, child, kb);
 		}
 		else return null;
 	}
@@ -173,7 +174,7 @@ public class FindingToConditionBuilder {
 	 * @return s null if the question was not found by KBM, a condition
 	 *         otherwise.
 	 */
-	private static Condition analyseFinding(KnowWEArticle article, Section f, KnowledgeBaseUtils kbm) {
+	private static Condition analyseFinding(KnowWEArticle article, Section f, KnowledgeBase kb) {
 
 		if (!f.getObjectType().getClass().equals(Finding.class)) return null;
 
@@ -203,7 +204,7 @@ public class FindingToConditionBuilder {
 		String answertext = answer.getOriginalText().replaceAll(p.toString(), "").trim();
 
 		// Look up the Question in the KnowledgeBase
-		Question kbQuest = kbm.getKnowledgeBase().getManager().searchQuestion(questiontext);
+		Question kbQuest = kb.getManager().searchQuestion(questiontext);
 		if (kbQuest != null) {
 			// Look up the Answer for the Question
 			// Can be null if it is a Numerical Question
@@ -280,20 +281,20 @@ public class FindingToConditionBuilder {
 	 * @param kbm
 	 * @return s the according Condition or null if neither side could be parsed
 	 */
-	private static Condition analyseComplexFinding(KnowWEArticle article, Section cf, KnowledgeBaseUtils kbm) {
+	private static Condition analyseComplexFinding(KnowWEArticle article, Section cf, KnowledgeBase kb) {
 
 		TypeSectionFilter filter = new TypeSectionFilter("Disjunct");
-		return analyseDisjunction(article, cf.getChildren(filter), kbm);
+		return analyseDisjunction(article, cf.getChildren(filter), kb);
 
 	}
 
-	private static Condition analyseDisjunction(KnowWEArticle article, List<Section> disjunction, KnowledgeBaseUtils kbm) {
+	private static Condition analyseDisjunction(KnowWEArticle article, List<Section> disjunction, KnowledgeBase kb) {
 
 		List<Condition> disjuncts = new ArrayList<Condition>();
 		TypeSectionFilter filter = new TypeSectionFilter("Conjunct");
 
 		for (Section child : disjunction) {
-			Condition conjunction = analyzeConjunction(article, child.getChildren(filter), kbm);
+			Condition conjunction = analyzeConjunction(article, child.getChildren(filter), kb);
 			if (conjunction != null) disjuncts.add(conjunction);
 		}
 
@@ -306,13 +307,13 @@ public class FindingToConditionBuilder {
 	}
 
 	private static Condition analyzeConjunction(KnowWEArticle article, List<Section> conjunction,
-			KnowledgeBaseUtils kbm) {
+			KnowledgeBase kb) {
 
 		List<Condition> conjuncts = new ArrayList<Condition>();
 
 		for (Section section : conjunction) {
 			Condition condition = analyseFinding(article, (Section) section.getChildren().get(0),
-					kbm);
+					kb);
 			if (condition != null) conjuncts.add(condition);
 		}
 

@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Value;
@@ -62,7 +63,7 @@ public class TestcaseTableLine extends TableLine {
 			@Override
 			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TestcaseTableLine> s) {
 
-				KnowledgeBaseUtils kbm = findKB(s, article);
+				KnowledgeBase kb = findKB(s, article);
 
 				Section<TimeStampType> timeStamp = s.findSuccessor(TimeStampType.class);
 				if (timeStamp == null) {
@@ -89,8 +90,8 @@ public class TestcaseTableLine extends TableLine {
 					Section<QuestionReference> qRef = headerCell.findSuccessor(QuestionReference.class);
 					String qName = qRef.getOriginalText();
 					// TODO unchanged value, unknown value
-					Question question = kbm.getKnowledgeBase().getManager().searchQuestion(qName);
-					Value value = kbm.findValue(question, valueSec.getOriginalText());
+					Question question = kb.getManager().searchQuestion(qName);
+					Value value = KnowledgeBaseUtils.findValue(question, valueSec.getOriginalText());
 					Finding finding = new Finding(question, value);
 					testCase.add(finding);
 				}
@@ -99,12 +100,12 @@ public class TestcaseTableLine extends TableLine {
 				return null;
 			}
 
-			private KnowledgeBaseUtils findKB(Section<TestcaseTableLine> s, KnowWEArticle article) {
+			private KnowledgeBase findKB(Section<TestcaseTableLine> s, KnowWEArticle article) {
 
 				String master = TestcaseTableType.getMaster(
 						s.findAncestorOfExactType(TestcaseTableType.class), article.getTitle());
 
-				return D3webModule.getKnowledgeRepresentationHandler(article.getWeb()).getKBM(
+				return D3webModule.getKnowledgeRepresentationHandler(article.getWeb()).getKB(
 						master);
 
 			}

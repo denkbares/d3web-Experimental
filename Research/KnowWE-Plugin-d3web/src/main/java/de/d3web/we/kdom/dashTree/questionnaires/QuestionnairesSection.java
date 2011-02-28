@@ -26,7 +26,7 @@ import java.util.List;
 
 import de.d3web.KnOfficeParser.SingleKBMIDObjectManager;
 import de.d3web.KnOfficeParser.dashtree.QuestionnaireBuilder;
-import de.d3web.core.manage.KnowledgeBaseUtils;
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.report.Message;
 import de.d3web.report.Report;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -58,13 +58,13 @@ public class QuestionnairesSection extends AbstractKopicSection {
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
 
-			KnowledgeBaseUtils kbm = getKBM(article);
+			KnowledgeBase kb = getKB(article);
 
 			Section content = ((AbstractKopicSection) s.getObjectType()).getContentChild(s);
 			if (content != null) {
 				List<de.d3web.report.Message> messages = QuestionnaireBuilder
 						.parse(new StringReader(content.getOriginalText()),
-								new SingleKBMIDObjectManager(kbm.getKnowledgeBase()));
+								new SingleKBMIDObjectManager(kb));
 
 				KnowWEUtils.storeMessages(article, s, this.getClass(), Message.class, messages);
 				Report ruleRep = new Report();
