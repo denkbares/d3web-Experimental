@@ -28,6 +28,10 @@
   <wiki:Include page="Header.jsp" />
 
   <div id="content">
+  <table id="col_fitter">
+  	<tr><td>
+  			<wiki:Include page="Favorites.jsp"/></td>
+  	<td>
 	<div id="pagecontainer">
 	    <div id="page">
 	      <wiki:Include page="PageActionsTop.jsp"/>
@@ -54,8 +58,8 @@
 	
 	    </div>
 	</div>
-
-    <wiki:Include page="Favorites.jsp"/>
+	  	</td></tr>
+	</table>
 
 	<div class="clearbox"></div>
   </div>

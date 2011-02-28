@@ -32,14 +32,19 @@
   <wiki:Include page="Header.jsp" />
 
   <div id="content">
-	<div id="pagecontainer">
+  	<table id="col_fitter">
+  	<tr><td>
+  			<wiki:Include page="Favorites.jsp"/></td>
+  	<td>
+  	<div id="pagecontainer">
 	    <div id="page">
 		      <wiki:Include page="PageActionsTop.jsp"/>
 		      <wiki:Content/>
 		      <wiki:Include page="PageActionsBottom.jsp"/>
 	    </div>
     </div>
-    <wiki:Include page="Favorites.jsp"/>
+  	</td></tr>
+	</table>
 
 	<div class="clearbox"></div>
   </div>

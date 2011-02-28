@@ -91,9 +91,6 @@
 	clear:both;
 }
 #favorites {
-	float:left;
-	width:18%;
-	background-color: #eee;
 }
 #favorites .userbox {
 	border:1px solid #ddd;
@@ -107,21 +104,32 @@
 #footer .copyright { 
 }
 #content { 
-	background-color:#eee;
 	margin: 0 0 20px;
     position: relative;
     top: 20px;
     z-index: 0;
 }
+#col_fitter {
+	padding:0;
+	width:100%;
+	margin:0;
+}
+#col_fitter td {
+	vertical-align:top;
+}
+#col_fitter td:first-child {
+	width:18%;
+	background-color:#EEEEEE;
+}
 #pagecontainer {
 	background-color: #fff;
-	width:82%;
+	width:100%;
 	float: right;
 }
 /*#wikibody.fav-left*/ #page, #wikibody.fav-right #favorites {
 	float:right;
 }
-#wikibody.fav-right #page, /*#wikibody.fav-left*/ #favorites {
+#wikibody.fav-right #page, /*#wikibody.fav-left*/ /*#favorites*/ {
 	float:left;
 }
 /*ie6 hack*/
@@ -1122,6 +1130,11 @@ th.changenote, td.changenote {
 	padding:0;
 
 }
+#morepopup {
+	z-index:50;
+	margin:-290px 0 0 0;
+	position:absolute;
+}
 #morebutton ul a {
 	padding:0.25em 0.5em;
 	text-decoration:none;
@@ -1268,6 +1281,8 @@ html>body #previewcontent, html>body #info, html>body #pagecontent, html>body #a
 	padding:0.25em;
 	left:0;
 	z-index:15;
+	/* take it out */
+	display:none;
 }
 /*ie6 hack*/
 * html #searchboxMenu {
