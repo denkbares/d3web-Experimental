@@ -49,6 +49,15 @@
 		<parameter id="css" value="hermes.css" />
 	</extension>
 	
+    <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="TabbedLinkTaghandler">
+        <parameter id="class" value="de.knowwe.defi.TabbedLinkTaghandler" />
+        <parameter id="name" value="TabbedLinkTaghandler" />
+        <parameter id="description" value="TagHandler TabbedLinkTaghandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="script" value="KnowWE-Plugin-Defi.js" />
+    </extension>    
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="AboutMeSaveAction">

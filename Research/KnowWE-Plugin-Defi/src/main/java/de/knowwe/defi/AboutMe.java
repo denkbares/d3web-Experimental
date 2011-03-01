@@ -22,6 +22,7 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 
@@ -120,19 +121,25 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 			WikiSecurityEvent e = (WikiSecurityEvent) event;
 			WikiPrincipal fp = (WikiPrincipal) e.getPrincipal();
 
-			String logout_file = System.getProperty("java.io.tmpdir") + File.separatorChar
-					+ LOGOUT_FILENAME;
+			String filterUsername = ResourceBundle.getBundle("KnowWE_Defi_config").getString(
+					"defi.last.login.user");
 
-			DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-			Date date = new Date();
+			if (fp.getName().equals(filterUsername)) {
 
-			StringBuilder entry = new StringBuilder();
-			entry.append(fp);
-			entry.append(" - ");
-			entry.append(dateFormat.format(date));
-			entry.append("\n");
+				String logout_file = System.getProperty("java.io.tmpdir") + File.separatorChar
+						+ LOGOUT_FILENAME;
 
-			KnowWEUtils.writeFile(logout_file, entry.toString());
+				DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+				Date date = new Date();
+
+				StringBuilder entry = new StringBuilder();
+				entry.append(fp);
+				entry.append(" - ");
+				entry.append(dateFormat.format(date));
+				entry.append("\n");
+
+				KnowWEUtils.writeFile(logout_file, entry.toString());
+			}
 		}
 	}
 }

@@ -26,14 +26,14 @@ KNOWWE.plugin.defi = function() {
             var prefix_content = 'tab-';
             
             var tab = KNOWWE.helper.gup('tab');
-            var first = KNOWWE.helper.gup('first');
             if( tab ) {
                 tab = tab.replace(/\s+/, '');
-                first = first.replace(/\s+/, '');
                 
                 var dom_element, dom_content_element;
-                dom_element = $(prefix + first);
-                dom_content_element = $(prefix_content + first);
+                
+                dom_element = $(prefix + tab).getParent().getFirst();
+                dom_content_element = $(prefix_content + dom_element.id.replace(/menu-tab-/, ''));
+                
                 if( dom_element ) {
                    dom_element.removeClass('activetab');
                    dom_content_element.addClass('hidetab');
