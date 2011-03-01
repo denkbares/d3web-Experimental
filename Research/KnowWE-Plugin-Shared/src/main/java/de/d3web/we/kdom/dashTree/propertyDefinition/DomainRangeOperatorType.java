@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.dashTree.propertyDefinition;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.StringSectionFinder;
 
 /**
@@ -30,7 +30,7 @@ import de.d3web.we.kdom.sectionFinder.StringSectionFinder;
  *         and range: SOMEDOMAIN OP SOMERANGE e.g.: SOMEDOMAIN --> SOMERANGE
  * 
  */
-public class DomainRangeOperatorType extends DefaultAbstractKnowWEObjectType {
+public class DomainRangeOperatorType extends AbstractType {
 
 	public static final String DOMAIN_RANGE_OPERATOR = "-->";
 

@@ -25,7 +25,7 @@ import java.util.List;
 
 import de.d3web.core.session.Session;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.condition.antlr.ComplexFinding;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
@@ -159,7 +159,7 @@ public class XCLRelationHighlightingRenderer extends KnowWEDomRenderer {
 
 	private String renderRelationChild(KnowWEArticle article, Section sec, boolean fulfilled, KnowWEUserContext user, String color) {
 		StringBuilder buffi = new StringBuilder();
-		KnowWEObjectType type = sec.getObjectType();
+		Type type = sec.get();
 
 		if (type instanceof ComplexFinding) {
 			((ComplexFinding) type).

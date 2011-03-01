@@ -19,7 +19,7 @@
  */
 package de.d3web.we.kdom.kopic.rules.ruleActionLine;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.decisionTree.SolutionID;
 
 /**
@@ -28,7 +28,7 @@ import de.d3web.we.kdom.decisionTree.SolutionID;
  * @author Johannes Dienst
  * 
  */
-public class FormulaExpression extends DefaultAbstractKnowWEObjectType {
+public class FormulaExpression extends AbstractType {
 
 	@Override
 	public void init() {

@@ -19,12 +19,13 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.lod.HermesData;
 import de.d3web.we.lod.LinkedOpenData;
 import de.d3web.we.lod.markup.IgnoreContentType;
+import de.d3web.we.lod.markup.MappingContentType;
 import de.d3web.we.lod.markup.IgnoreContentType.IgnoreChild;
 import de.d3web.we.lod.markup.IgnoreContentType.IgnoreConcept;
-import de.d3web.we.lod.markup.MappingContentType;
 
 public class ParseDataAction extends AbstractAction {
 
@@ -74,7 +75,7 @@ public class ParseDataAction extends AbstractAction {
 			// ist vom Typ ... -> predicate = rdf:type, value = hermestype.
 			if (value.get(i).matches("ist vom Typ .*")) {
 				value.set(i, hermes.get(i));
-				hermes.set(i, HermesData.getObjectType());
+				hermes.set(i, HermesData.get());
 			}
 
 			// Cuts the namespace for the predicate.
@@ -181,8 +182,8 @@ public class ParseDataAction extends AbstractAction {
 							web, noParseTopic);
 
 					List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
-					article.getSection().findSuccessorsOfType(MappingContentType.class,
-							found);
+					 Sections.findSuccessorsOfType(article.getSection(),
+							MappingContentType.class, found);
 
 					Section<MappingContentType> lastNode = found.get(found.size() - 1);
 
@@ -235,14 +236,15 @@ public class ParseDataAction extends AbstractAction {
 							web);
 
 					List<Section<IgnoreContentType>> found = new Vector<Section<IgnoreContentType>>();
-					mgr.getArticle(ignoredTopic).getSection().findSuccessorsOfType(
-							IgnoreContentType.class, found);
+				    Sections.findSuccessorsOfType(
+							mgr.getArticle(ignoredTopic).getSection(), IgnoreContentType.class, found);
 
 					Map<String, String> nodesMap = new HashMap<String, String>();
 
 					for (Section<IgnoreContentType> t : found) {
 
-						Section<IgnoreConcept> temp = t.findChildOfType(IgnoreConcept.class);
+						Section<IgnoreConcept> temp = Sections.findChildOfType(t,
+								IgnoreConcept.class);
 						String sectionConcept = temp.getOriginalText().substring(1,
 								temp.getOriginalText().length() - 1);
 						boolean conceptFound = false;
@@ -252,8 +254,8 @@ public class ParseDataAction extends AbstractAction {
 
 							conceptFound = true;
 
-							List<Section<IgnoreChild>> listChilds = t.findChildrenOfType(
-									IgnoreChild.class);
+							List<Section<IgnoreChild>> listChilds = Sections.findChildrenOfType(
+									t, IgnoreChild.class);
 							boolean isIn = false;
 							for (Section<IgnoreChild> child : listChilds) {
 								String node = child.getOriginalText();
@@ -306,8 +308,8 @@ public class ParseDataAction extends AbstractAction {
 						web, mappingTopic);
 
 				List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
-				article.getSection().findSuccessorsOfType(MappingContentType.class,
-						found);
+				Sections.findSuccessorsOfType(article.getSection(),
+						MappingContentType.class, found);
 
 				Section<MappingContentType> lastNode = found.get(found.size() - 1);
 

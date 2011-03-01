@@ -21,10 +21,10 @@ package de.d3web.we.kdom.dashTree.subclassing;
 
 import java.util.List;
 
-import de.d3web.we.kdom.AbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
-import de.d3web.we.kdom.KnowWEObjectType;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.Type;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.kdom.xml.XMLContent;
 import de.knowwe.core.dashtree.DashSubtree;
 import de.knowwe.core.dashtree.DashTree;
@@ -37,7 +37,7 @@ import de.knowwe.core.dashtree.DashTreeElement;
  *         relations from the dashTree-hierarchy structure
  * 
  */
-public class SubClassing extends AbstractXMLObjectType {
+public class SubClassing extends AbstractXMLType {
 
 	public SubClassing() {
 		super("subclassing");
@@ -52,7 +52,7 @@ public class SubClassing extends AbstractXMLObjectType {
 
 		@Override
 		protected void init() {
-			AbstractKnowWEObjectType subClassingDashTree = new DashTree();
+			AbstractType subClassingDashTree = new DashTree();
 			replaceRootType(subClassingDashTree);
 			this.childrenTypes.add(subClassingDashTree);
 
@@ -61,12 +61,12 @@ public class SubClassing extends AbstractXMLObjectType {
 		}
 
 		private void replaceRootType(
-				AbstractKnowWEObjectType subClassingDashTree) {
-			List<KnowWEObjectType> types = subClassingDashTree.getAllowedChildrenTypes();
-			for (KnowWEObjectType knowWEObjectType : types) {
-				if (knowWEObjectType instanceof DashSubtree) {
+				AbstractType subClassingDashTree) {
+			List<Type> types = subClassingDashTree.getAllowedChildrenTypes();
+			for (Type Type : types) {
+				if (Type instanceof DashSubtree) {
 					try {
-						((AbstractKnowWEObjectType) knowWEObjectType).replaceChildType(
+						((AbstractType) Type).replaceChildType(
 								new SubClassingDashTreeElement(), DashTreeElement.class);
 					}
 					catch (InvalidKDOMSchemaModificationOperation e) {

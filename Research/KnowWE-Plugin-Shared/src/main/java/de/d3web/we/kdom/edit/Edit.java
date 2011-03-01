@@ -20,16 +20,16 @@
 
 package de.d3web.we.kdom.edit;
 
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 
 /**
  * The Edit class. Used for inplace editing of wiki article content.
  * 
  * @author smark
  * @since 2009/11/18
- * @see AbstractXMLObjectType
+ * @see AbstractXMLType
  */
-public class Edit extends AbstractXMLObjectType {
+public class Edit extends AbstractXMLType {
 
 	public Edit(String tagName) {
 		super(tagName);

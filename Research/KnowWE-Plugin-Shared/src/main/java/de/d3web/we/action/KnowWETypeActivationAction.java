@@ -24,28 +24,28 @@ import java.util.List;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 
 /**
- * Changes the Activation-State of an KnowWEObjectType at Runtime. See
- * KnowWeObjectTypeActivationHandler.
+ * Changes the Activation-State of an Type at Runtime. See
+ * TypeActivationHandler.
  * 
  * @author Johannes Dienst
  * 
  */
-public class KnowWEObjectTypeActivationAction extends DeprecatedAbstractKnowWEAction {
+public class KnowWETypeActivationAction extends DeprecatedAbstractKnowWEAction {
 
 	@Override
 	public String perform(KnowWEParameterMap map) {
 
 		// get the one needed and change its Activation state.
-		List<KnowWEObjectType> types = KnowWEEnvironment.getInstance()
-				.getAllKnowWEObjectTypes();
-		int index = this.findIndexOfType(map.get("KnowWeObjectType"),
+		List<Type> types = KnowWEEnvironment.getInstance()
+				.getAllTypes();
+		int index = this.findIndexOfType(map.get("Type"),
 				types);
 
 		if (index != -1) {
-			KnowWEObjectType typ = types.get(index);
+			Type typ = types.get(index);
 			if (typ != null) {
 				if (!typ.getActivationStatus()) {
 					typ.activateType();
@@ -66,9 +66,9 @@ public class KnowWEObjectTypeActivationAction extends DeprecatedAbstractKnowWEAc
 	 * @param types
 	 * @return
 	 */
-	private int findIndexOfType(String typeName, List<KnowWEObjectType> types) {
+	private int findIndexOfType(String typeName, List<Type> types) {
 		String shortTypeName = typeName.substring(typeName.lastIndexOf(".") + 1);
-		for (KnowWEObjectType typ : types) {
+		for (Type typ : types) {
 			if (typ.getName().equals(shortTypeName)) {
 				return types.indexOf(typ);
 			}

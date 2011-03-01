@@ -21,6 +21,7 @@
 package de.d3web.we.kdom.Annotation;
 
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.ConditionalRenderer;
 import de.d3web.we.kdom.semanticAnnotation.AnnotatedString;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotationContent;
@@ -32,8 +33,9 @@ public class StandardAnnotationRenderer extends ConditionalRenderer {
 	@Override
 	public void renderDefault(Section sec, KnowWEUserContext user, StringBuilder string) {
 		try {
-			String text = "''" + sec.findSuccessor(AnnotatedString.class).getOriginalText() + "''";
-			Section content = sec.findSuccessor(SemanticAnnotationContent.class);
+			String text = "''"
+					+ Sections.findSuccessor(sec, AnnotatedString.class).getOriginalText() + "''";
+			Section content = Sections.findSuccessor(sec, SemanticAnnotationContent.class);
 			if (content != null) {
 				String title = content.getOriginalText();
 				text = KnowWEUtils.maskHTML("<a href=\"#" + sec.getID() + "\"></a>"

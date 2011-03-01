@@ -29,14 +29,16 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.xml.XMLTail;
 import de.d3web.we.plugin.forum.ForumRenderer;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.d3web.we.wikiConnector.KnowWEWikiConnector;
 
-public class CommentRenderer extends KnowWEDomRenderer {
+public class CommentRenderer extends KnowWEDomRenderer<CommentType> {
 
 	public static String clean(String s) {
 
@@ -60,7 +62,7 @@ public class CommentRenderer extends KnowWEDomRenderer {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section<CommentType> sec, KnowWEUserContext user, StringBuilder string) {
 
 		Map<String, String> commentTypes = CommentModule.getCommentTypes();
 
@@ -71,11 +73,11 @@ public class CommentRenderer extends KnowWEDomRenderer {
 			KnowWEEnvironment instance = KnowWEEnvironment.getInstance();
 			KnowWEWikiConnector wikiConnector = instance.getWikiConnector();
 
-			String commentTag = sec.findChildOfType(CommentTypeTag.class).findChildOfType(
-					CommentTypeTagName.class).getOriginalText();
+			String commentTag = Sections.findChildOfType(
+					Sections.findChildOfType(sec, CommentTypeTag.class), CommentTypeTagName.class).getOriginalText();
 			String pageName;
 
-			String commentContent = sec.findChildOfType(CommentTypeContent.class).getOriginalText();
+			String commentContent = Sections.findChildOfType(sec, CommentTypeContent.class).getOriginalText();
 
 			// split title and content:
 			String title = "";
@@ -87,15 +89,15 @@ public class CommentRenderer extends KnowWEDomRenderer {
 
 			Map<String, Integer> ids = CommentModule.getIDs();
 
-			Section idSec = sec.findChildOfType(CommentTypeTag.class).findChildOfType(
-					CommentTypeTagID.class);
+			Section<?> idSec = Sections.findChildOfType(
+						Sections.findChildOfType(sec, CommentTypeTag.class), CommentTypeTagID.class);
 			String id = idSec.getOriginalText().trim();
 
 			// add ID if not done before:
 			if (id.isEmpty()) {
 
 				int newID = ids.get(commentTag);
-				idSec.findChildOfType(PlainText.class).setOriginalText(newID + " ");
+				Sections.findChildOfType(idSec, PlainText.class).setOriginalText(newID + " ");
 
 				// save id:
 				StringBuilder buffy = new StringBuilder();
@@ -128,14 +130,14 @@ public class CommentRenderer extends KnowWEDomRenderer {
 									+ sec.getTitle() + "]:\\\\ \\\\" + commentContent
 							+ "</box>\n</forum>";
 
-					Section forumSec = instance.getArticle(sec.getWeb(), pageName).getSection();
+					Section<?> forumSec = instance.getArticle(sec.getWeb(), pageName).getSection();
 
-					List<Section> found = new ArrayList<Section>();
-					forumSec.findSuccessorsOfType(XMLTail.class, found);
+					List<Section<XMLTail>> found = new ArrayList<Section<XMLTail>>();
+					Sections.findSuccessorsOfType(forumSec, XMLTail.class, found);
 
 					if (found.size() != 0) {
-						Section changeSec = found.get(found.size() - 1);
-						changeSec.findChildOfType(PlainText.class).setOriginalText(save);
+						Section<?> changeSec = found.get(found.size() - 1);
+						Sections.findChildOfType(changeSec, PlainText.class).setOriginalText(save);
 					}
 
 					StringBuilder buffi = new StringBuilder();
@@ -193,6 +195,6 @@ public class CommentRenderer extends KnowWEDomRenderer {
 			// do nothing if WikiEngine is not properly started yet
 		}
 
-		string.append(KnowWEEnvironment.maskHTML(toHTML.toString()));
+		string.append(KnowWEUtils.maskHTML(toHTML.toString()));
 	}
 }

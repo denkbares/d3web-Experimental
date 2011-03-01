@@ -24,10 +24,11 @@ import java.util.Collection;
 
 import de.d3web.report.Message;
 import de.d3web.we.core.packaging.PackageRenderUtils;
-import de.d3web.we.kdom.AbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.utils.KnowWEUtils;
@@ -41,17 +42,17 @@ public class SetCoveringListSectionRenderer extends KnowWEDomRenderer {
 		// string.append("%%collapsebox-closed \n");
 
 		// String title = "";
-		// if(sec.getObjectType() instanceof AbstractXMLObjectType) {
+		// if(sec.get() instanceof AbstractXMLObjectType) {
 		// title =
-		// ((AbstractXMLObjectType)sec.getObjectType()).getXMLTagName()+" ";
+		// ((AbstractXMLObjectType)sec.get()).getXMLTagName()+" ";
 		// }
 
 		// string.append("! " +title + " \n");
 		StringBuilder compile = new StringBuilder();
 		article = PackageRenderUtils.checkArticlesCompiling(article, sec, compile);
 
-		if (sec.getObjectType() instanceof AbstractKnowWEObjectType) {
-			KnowWEObjectType type = sec.getObjectType();
+		if (sec.get() instanceof AbstractType) {
+			Type type = sec.get();
 			Collection<Message> messages = KnowWEUtils.getMessages(article, sec, Message.class);
 			if (messages != null && !messages.isEmpty()) {
 				string.append("{{{");
@@ -80,11 +81,11 @@ public class SetCoveringListSectionRenderer extends KnowWEDomRenderer {
 		// string.append("/%\n");
 	}
 
-	protected void insertErrorRenderer(Section sec, Message m, String user) {
+	protected void insertErrorRenderer(Section<?> sec, Message m, String user) {
 		String text = m.getLine();
 		if (text == null || text.length() == 0) return;
-		Section errorSec = sec.findSmallestNodeContaining(text);
-		((AbstractKnowWEObjectType) errorSec.getObjectType()).setCustomRenderer(ErrorRenderer.getInstance());
+		Section<?> errorSec = Sections.findSmallestNodeContaining(sec, text);
+		((AbstractType) errorSec.get()).setCustomRenderer(ErrorRenderer.getInstance());
 
 	}
 

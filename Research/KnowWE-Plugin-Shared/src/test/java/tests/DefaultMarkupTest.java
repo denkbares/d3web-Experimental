@@ -34,6 +34,7 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.RootType;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import dummies.KnowWETestWikiConnector;
@@ -126,8 +127,8 @@ public class DefaultMarkupTest {
 		env.buildAndRegisterArticle("testuser", text, "Test_Article", web);
 		KnowWEArticle article = env.getArticle(web, "Test_Article");
 
-		Section<DefaultMarkupTestType> sec = article.getSection().
-				findSuccessor(DefaultMarkupTestType.class);
+		Section<DefaultMarkupTestType> sec = Sections.
+				findSuccessor(article.getSection(), DefaultMarkupTestType.class);
 
 		assertNotNull("DefaultMarkup Section was null!", sec);
 
@@ -164,8 +165,8 @@ public class DefaultMarkupTest {
 		env.buildAndRegisterArticle("testuser", text, "Test_Article", web);
 		KnowWEArticle article = env.getArticle(web, "Test_Article");
 
-		Section<DefaultMarkupTestType> sec = article.getSection().
-				findSuccessor(DefaultMarkupTestType.class);
+		Section<DefaultMarkupTestType> sec = Sections.
+				findSuccessor(article.getSection(), DefaultMarkupTestType.class);
 		assertNotNull("DefaultMarkup Section was null!", sec);
 
 		String content = DefaultMarkupType.getContent(sec);
@@ -204,8 +205,8 @@ public class DefaultMarkupTest {
 
 		env.buildAndRegisterArticle("testuser", text, "Test_Article", web);
 		KnowWEArticle article = env.getArticle(web, "Test_Article");
-		Section<DefaultMarkupTestType> sec = article.getSection().
-				findSuccessor(DefaultMarkupTestType.class);
+		Section<DefaultMarkupTestType> sec = Sections.
+				findSuccessor(article.getSection(), DefaultMarkupTestType.class);
 
 		assertNotNull("DefaultMarkup Section was null!", sec);
 
@@ -248,8 +249,8 @@ public class DefaultMarkupTest {
 
 		env.buildAndRegisterArticle("testuser", text, "Test_Article", web);
 		KnowWEArticle article = env.getArticle(web, "Test_Article");
-		Section<DefaultMarkupTestType> sec = article.getSection().
-				findSuccessor(DefaultMarkupTestType.class);
+		Section<DefaultMarkupTestType> sec = Sections.
+				findSuccessor(article.getSection(), DefaultMarkupTestType.class);
 
 		assertNotNull("DefaultMarkup Section was null!", sec);
 

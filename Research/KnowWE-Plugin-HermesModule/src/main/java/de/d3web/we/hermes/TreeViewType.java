@@ -18,7 +18,7 @@
  */
 package de.d3web.we.hermes;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
@@ -32,7 +32,7 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
  * @author grotheer
  * @created 11.11.2010
  */
-public class TreeViewType extends DefaultAbstractKnowWEObjectType {
+public class TreeViewType extends AbstractType {
 
 	public static final String START_TAG = "%TreeStart";
 	public static final String END_TAG = "%TreeEnd";

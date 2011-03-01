@@ -53,6 +53,7 @@ import de.d3web.core.session.values.Unknown;
 import de.d3web.report.Message;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Annotation.Finding;
 import de.d3web.we.kdom.Annotation.FindingAnswer;
 import de.d3web.we.kdom.Annotation.FindingComparator;
@@ -66,6 +67,7 @@ import de.d3web.we.utils.KnowWEUtils;
  * @author Johannes Dienst
  * 
  */
+@SuppressWarnings("unchecked")
 public class FindingToConditionBuilder {
 
 	private static Pattern p = Pattern.compile("\"");
@@ -160,7 +162,7 @@ public class FindingToConditionBuilder {
 	 */
 	public static Condition analyseAnyRelation(KnowWEArticle article, Section f, KnowledgeBase kb) {
 
-		Section child = f.findChildOfType(ComplexFinding.class);
+		Section child = Sections.findChildOfType(f, ComplexFinding.class);
 		if (child != null) {
 			return FindingToConditionBuilder.analyseComplexFinding(article, child, kb);
 		}
@@ -176,14 +178,14 @@ public class FindingToConditionBuilder {
 	 */
 	private static Condition analyseFinding(KnowWEArticle article, Section f, KnowledgeBase kb) {
 
-		if (!f.getObjectType().getClass().equals(Finding.class)) return null;
+		if (!f.get().getClass().equals(Finding.class)) return null;
 
-		boolean negated = f.findChildOfType(NOT.class) != null;
+		boolean negated = Sections.findChildOfType(f, NOT.class) != null;
 
 		// Get Question Comparator Answer (Who? = You)
-		Section comp = f.findChildOfType(FindingComparator.class);
-		Section question = f.findSuccessor(FindingQuestion.class);
-		Section answer = f.findSuccessor(FindingAnswer.class);
+		Section comp = Sections.findChildOfType(f, FindingComparator.class);
+		Section question = Sections.findSuccessor(f, FindingQuestion.class);
+		Section answer = Sections.findSuccessor(f, FindingAnswer.class);
 
 		// clean out all old Messages from a previous run of this builder...
 		if (comp != null) KnowWEUtils.clearMessages(article, comp, FindingToConditionBuilder.class,
@@ -267,7 +269,7 @@ public class FindingToConditionBuilder {
 	// List<Message> messages = new ArrayList<Message>(1);
 	// messages.add(message);
 	//
-	// AbstractKnowWEObjectType.storeMessages(article, section, messages);
+	// AbstractType.storeMessages(article, section, messages);
 	//
 	//
 	//

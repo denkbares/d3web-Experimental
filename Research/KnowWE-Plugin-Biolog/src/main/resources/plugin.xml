@@ -17,31 +17,31 @@
 	</runtime>
 
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="BibTex">
 		<parameter id="class" value="de.d3web.we.kdom.bibtex.BibTex" />
 		<parameter id="name" value="BibTex" />
-		<parameter id="description" value="KnowWEObjectType BibTex" />
+		<parameter id="description" value="Type BibTex" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="Biolog.js" />
 	</extension>
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="EMLXMLType">
 		<parameter id="class" value="de.d3web.we.biolog.kdom.eml.EMLXMLType" />
 		<parameter id="name" value="EMLXMLType" />
-		<parameter id="description" value="KnowWEObjectType EMLXMLType" />
+		<parameter id="description" value="Type EMLXMLType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 	</extension>
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="FreeMapType">
 		<parameter id="class" value="de.d3web.we.biolog.freemap.FreeMapType" />
 		<parameter id="name" value="FreeMapType" />
-		<parameter id="description" value="KnowWEObjectType FreeMapType" />
+		<parameter id="description" value="Type FreeMapType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />

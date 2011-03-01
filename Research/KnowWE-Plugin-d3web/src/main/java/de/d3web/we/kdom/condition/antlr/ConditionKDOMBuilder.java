@@ -30,7 +30,6 @@ import de.d3web.we.kdom.ExpandedSectionFinderResult;
 import de.d3web.we.kdom.Annotation.Finding;
 import de.d3web.we.kdom.Annotation.FindingAnswer;
 import de.d3web.we.kdom.Annotation.FindingComparator;
-import de.d3web.we.kdom.Annotation.FindingQuestion;
 import de.d3web.we.kdom.condition.CondKnown;
 import de.d3web.we.kdom.condition.old.Conjunct;
 import de.d3web.we.kdom.rules.RuleCondLine;
@@ -156,7 +155,7 @@ public class ConditionKDOMBuilder implements ConditionBuilder {
 			value = m.group(3);
 		}
 
-		cond.addChild(new ExpandedSectionFinderResult(qname, new FindingQuestion(), offset1));
+		cond.addChild(new ExpandedSectionFinderResult(qname, new SimpleQuestionType(), offset1));
 		cond.addChild(new ExpandedSectionFinderResult(op, new FindingComparator(), offset2));
 		cond.addChild(new ExpandedSectionFinderResult(value, new FindingAnswer(), offset3));
 	}
@@ -214,7 +213,7 @@ public class ConditionKDOMBuilder implements ConditionBuilder {
 
 		}
 
-		cond.addChild(new ExpandedSectionFinderResult(qname, new FindingQuestion(), offset1));
+		cond.addChild(new ExpandedSectionFinderResult(qname, new SimpleQuestionType(), offset1));
 
 		// TODO: Bedeutung von type? Überflüssig?
 		// if (type!=null) Section.createExpandedSection(type, null, cond,
@@ -251,7 +250,7 @@ public class ConditionKDOMBuilder implements ConditionBuilder {
 		if (m.find()) {
 			name = m.group();
 		}
-		s.addChild(new ExpandedSectionFinderResult(name, new FindingQuestion(), 2));
+		s.addChild(new ExpandedSectionFinderResult(name, new SimpleQuestionType(), 2));
 		s.addChild(new ExpandedSectionFinderResult("]", new CondKnownSyntax(), 3));
 		sections.push(s);
 

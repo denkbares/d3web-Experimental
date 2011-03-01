@@ -32,6 +32,7 @@ import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.message.CreateRelationFailed;
 import de.d3web.we.kdom.table.Table;
@@ -81,7 +82,7 @@ public class AttributeTable extends Table {
 			Collection<KDOMReportMessage> msg = new LinkedList<KDOMReportMessage>();
 
 			List<Section<AttributeTableTempType>> tempTypes = new LinkedList<Section<AttributeTableTempType>>();
-			s.findSuccessorsOfType(AttributeTableTempType.class, tempTypes);
+			Sections.findSuccessorsOfType(s, AttributeTableTempType.class, tempTypes);
 			KnowledgeBase kb = getKB(article);
 
 			for (Section<AttributeTableTempType> tempType : tempTypes) {
@@ -114,9 +115,9 @@ public class AttributeTable extends Table {
 		}
 
 		private void createMMInfo(TerminologyObject namedObject, Section<AttributeTableTempType> tempType) {
-			Section<TableLine> line = tempType.findAncestorOfType(TableLine.class);
+			Section<TableLine> line = Sections.findAncestorOfType(tempType, TableLine.class);
 			List<Section<TableCellContent>> cells = new LinkedList<Section<TableCellContent>>();
-			line.findSuccessorsOfType(TableCellContent.class, cells);
+			Sections.findSuccessorsOfType(line, TableCellContent.class, cells);
 			if (cells.size() == 4) {
 				String subject = cells.get(1).getOriginalText().trim();
 				Property<Object> property = Property.getUntypedProperty(subject);

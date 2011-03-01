@@ -23,13 +23,13 @@ import java.util.Map;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
- * The ObjectTypeTreeHandler renders the hierarchy of KnowWEObjectTypes,
+ * The ObjectTypeTreeHandler renders the hierarchy of Types,
  * starting with the RootType. Grey items were already printed out somewhere
  * else in the tree, clicking on them jumps to the initial occurrence.
  * 
@@ -44,12 +44,12 @@ public class ObjectTypeTreeHandler extends AbstractTagHandler {
 
 	@Override
 	public String render(KnowWEArticle article, Section<?> section, KnowWEUserContext userContext, Map<String, String> parameters) {
-		KnowWEObjectType t = KnowWEEnvironment.getInstance().getRootType();
+		Type t = KnowWEEnvironment.getInstance().getRootType();
 
 		return visitNode(t, 1, new HashSet<String>(), false);
 	}
 
-	private String visitNode(KnowWEObjectType t, int level, HashSet<String> visitedNodes, boolean doNotRecurse) {
+	private String visitNode(Type t, int level, HashSet<String> visitedNodes, boolean doNotRecurse) {
 		// The anti-cycle strategy is rather simple:
 		// Maintain a list of already visited types with the associated classes
 		visitedNodes.add(t.getName() + t.getClass().getCanonicalName());
@@ -71,7 +71,7 @@ public class ObjectTypeTreeHandler extends AbstractTagHandler {
 		sb.append("\\\\\n %%(font-size: 70%) Renderer: __"
 				+ t.getRenderer().getClass().getSimpleName() + "__%% \n");
 
-		for (KnowWEObjectType child_type : t.getAllowedChildrenTypes()) {
+		for (Type child_type : t.getAllowedChildrenTypes()) {
 			if (doNotRecurse) {
 				sb.append(asterisks(level + 1));
 				sb.append(KnowWEUtils.maskHTML("<a href=\"#objecttype-"

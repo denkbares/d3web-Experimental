@@ -36,7 +36,7 @@ import utils.Utils;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
@@ -92,7 +92,7 @@ public class UIMAConnectorCompleteTest extends TestCase {
 
 	public void testUIMAConnector() {
 		String content = Utils.readTxtFile("src/test/resources/test");;
-		DefaultAbstractKnowWEObjectType rootType = new DefaultAbstractKnowWEObjectType(new AllTextSectionFinder()) {			
+		AbstractType rootType = new AbstractType(new AllTextSectionFinder()) {			
 			{
 				addChildType(new RoomNumberType());
 			}
@@ -107,17 +107,17 @@ public class UIMAConnectorCompleteTest extends TestCase {
 		children = children.get(0).getChildren();
 		
 		// RoomNumbers
-		assertEquals(WRONG_TYPE, true, (children.get(1).getObjectType() instanceof RoomNumberType));
-		assertEquals(WRONG_TYPE, true, (children.get(3).getObjectType() instanceof RoomNumberType));
-		assertEquals(WRONG_TYPE, true, (children.get(5).getObjectType() instanceof RoomNumberType));
+		assertEquals(WRONG_TYPE, true, (children.get(1).get() instanceof RoomNumberType));
+		assertEquals(WRONG_TYPE, true, (children.get(3).get() instanceof RoomNumberType));
+		assertEquals(WRONG_TYPE, true, (children.get(5).get() instanceof RoomNumberType));
 		
 		// Nested Type Building
 		Section building = children.get(1).getChildSectionAtPosition(0);
-		assertEquals(WRONG_TYPE, true, (building.getObjectType() instanceof BuildingType));
+		assertEquals(WRONG_TYPE, true, (building.get() instanceof BuildingType));
 		building = children.get(3).getChildSectionAtPosition(0);
-		assertEquals(WRONG_TYPE, true, (building.getObjectType() instanceof BuildingType));
+		assertEquals(WRONG_TYPE, true, (building.get() instanceof BuildingType));
 		building = children.get(5).getChildSectionAtPosition(0);
-		assertEquals(WRONG_TYPE, true, (building.getObjectType() instanceof BuildingType));
+		assertEquals(WRONG_TYPE, true, (building.get() instanceof BuildingType));
 		
 		// Feature 1
 		Section child = children.get(1);

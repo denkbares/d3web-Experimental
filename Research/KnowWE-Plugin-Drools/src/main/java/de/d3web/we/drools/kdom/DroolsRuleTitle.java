@@ -21,7 +21,7 @@ package de.d3web.we.drools.kdom;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
@@ -30,7 +30,7 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
  * 
  * @author Alex Legler
  */
-public class DroolsRuleTitle extends DefaultAbstractKnowWEObjectType {
+public class DroolsRuleTitle extends AbstractType {
 
 	public DroolsRuleTitle() {
 		setSectionFinder(new RegexSectionFinder(Pattern.compile("\"(.*?)\""), 1));

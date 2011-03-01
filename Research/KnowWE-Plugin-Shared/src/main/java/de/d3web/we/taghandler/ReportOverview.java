@@ -27,7 +27,7 @@ import java.util.Map;
 import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMReportMessage;
@@ -174,7 +174,7 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 	private void findMessages(Section<?> section, KnowWEArticle article,
 			Collection<KDOMReportMessage> errors, Collection<KDOMReportMessage> warnings) {
 
-		List<Section<? extends KnowWEObjectType>> children = section.getChildren();
+		List<Section<? extends Type>> children = section.getChildren();
 		for (Section<?> child : children) {
 
 			Collection<KDOMError> e = KDOMReportMessage.getErrors(article, child);

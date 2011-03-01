@@ -32,10 +32,11 @@ import de.d3web.we.drools.terminology.NumInput;
 import de.d3web.we.drools.terminology.OCInput;
 import de.d3web.we.drools.terminology.SolutionInput;
 import de.d3web.we.drools.terminology.TextValue;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.message.NewObjectCreated;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
@@ -45,7 +46,7 @@ import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
  * DroolsFact contains the type, name and possible values of an input.
  * @author Alex Legler, Sebastian Furth
  */
-public class DroolsFact extends DefaultAbstractKnowWEObjectType {
+public class DroolsFact extends AbstractType {
 		
 	public DroolsFact() {
 		setSectionFinder(new RegexSectionFinder("Input.*;"));
@@ -61,7 +62,7 @@ public class DroolsFact extends DefaultAbstractKnowWEObjectType {
 			Collection<KDOMReportMessage> messages = new LinkedList<KDOMReportMessage>();
 			
 			Section<? extends DroolsFactsType> factsSection = 
-				article.getSection().findSuccessor(DroolsFactsType.class);
+					Sections.findSuccessor(article.getSection(), DroolsFactsType.class);
 						
 			if (factsSection != null) {
 				Section<DroolsFact> section = s;
@@ -81,21 +82,22 @@ public class DroolsFact extends DefaultAbstractKnowWEObjectType {
 				
 				// Check for the "Input<XX>" part; if there's a DroolsFactInput, there'll also be
 				// a DroolsFactInputType.
-				if ((inputSection = section.findChildOfType(DroolsFactInput.class)) == null) {
+				if ((inputSection = Sections.findChildOfType(section, DroolsFactInput.class)) == null) {
 					messages.add(new DroolsFactParseError("Input type declaration missing."));
 					return messages;
 				}
 				
-				inputTypeSection = inputSection.findChildOfType(DroolsFactInputType.class);
+				inputTypeSection = Sections.findChildOfType(inputSection, DroolsFactInputType.class);
 				
 				// now the options: ("name", {"values"})
-				if ((optionsSection = section.findChildOfType(DroolsFactOptions.class)) == null) {
+				if ((optionsSection = Sections.findChildOfType(section, DroolsFactOptions.class)) == null) {
 					messages.add(new DroolsFactParseError("Input options missing."));
 					return messages;
 				}
 				
 				// The name
-				if ((nameSection = optionsSection.findChildOfType(DroolsFactName.class)) == null) {
+				if ((nameSection = Sections.findChildOfType(optionsSection,
+						DroolsFactName.class)) == null) {
 					messages.add(new DroolsFactParseError("Input name missing."));
 					return messages;
 				}
@@ -103,7 +105,8 @@ public class DroolsFact extends DefaultAbstractKnowWEObjectType {
 				String type = inputTypeSection.getOriginalText().toLowerCase();
 				
 				// The possible values
-				if ((valuesSection = optionsSection.findChildOfType(DroolsFactValues.class)) == null) {
+				if ((valuesSection = Sections.findChildOfType(optionsSection,
+						DroolsFactValues.class)) == null) {
 					if (type.equals("mc") || type.equals("oc")) {
 						messages.add(new DroolsFactParseError("This Input type requires more options."));
 						return messages;
@@ -121,7 +124,8 @@ public class DroolsFact extends DefaultAbstractKnowWEObjectType {
 				List<TextValue> possibleValues = new LinkedList<TextValue>();
 				
 				if (valuesSection != null) {
-					for (Section<DroolsFactValue> v : valuesSection.findChildrenOfType(DroolsFactValue.class)) {
+					for (Section<DroolsFactValue> v : Sections.findChildrenOfType(valuesSection,
+							DroolsFactValue.class)) {
 						valueName = v.getOriginalText().substring(1, v.getOriginalText().length() - 1);
 						if ((value = (TextValue) factsStore.get(valueName)) == null) {
 							value = new TextValue(valueName);

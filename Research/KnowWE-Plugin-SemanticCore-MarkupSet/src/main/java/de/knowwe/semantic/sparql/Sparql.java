@@ -20,9 +20,9 @@
 
 package de.knowwe.semantic.sparql;
 
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 
-public class Sparql extends AbstractXMLObjectType {
+public class Sparql extends AbstractXMLType {
 
 	public Sparql() {
 		super("sparql");

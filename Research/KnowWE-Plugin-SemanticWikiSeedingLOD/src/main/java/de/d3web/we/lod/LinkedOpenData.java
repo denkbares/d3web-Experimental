@@ -1079,7 +1079,7 @@ public class LinkedOpenData {
 				}
 
 				if (datatype.equals("(object)")) {
-					attributes.add(HermesData.getObjectType());
+					attributes.add(HermesData.get());
 				}
 				else {
 					attributes.add(hermesTag);

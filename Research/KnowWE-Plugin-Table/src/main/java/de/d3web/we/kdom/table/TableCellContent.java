@@ -20,11 +20,12 @@
 
 package de.d3web.we.kdom.table;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 
-public class TableCellContent extends DefaultAbstractKnowWEObjectType {
+public class TableCellContent extends AbstractType {
 
 	public TableCellContent() {
 		this.sectionFinder = new AllTextSectionFinder();
@@ -36,7 +37,7 @@ public class TableCellContent extends DefaultAbstractKnowWEObjectType {
 	}
 
 	public static boolean isTableHeadContent(Section<? extends TableCellContent> s) {
-		Section<? extends TableCell> cell = s.findAncestorOfType(TableCell.class);
+		Section<? extends TableCell> cell = Sections.findAncestorOfType(s, TableCell.class);
 		return TableCell.isTableHead(cell);
 	}
 

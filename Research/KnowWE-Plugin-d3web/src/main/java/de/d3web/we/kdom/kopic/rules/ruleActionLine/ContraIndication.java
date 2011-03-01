@@ -22,8 +22,8 @@ package de.d3web.we.kdom.kopic.rules.ruleActionLine;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.condition.antlr.NOT;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
@@ -34,7 +34,7 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
  * @author Johannes Dienst
  * 
  */
-public class ContraIndication extends DefaultAbstractKnowWEObjectType {
+public class ContraIndication extends AbstractType {
 
 	@Override
 	public void init() {
@@ -48,7 +48,7 @@ public class ContraIndication extends DefaultAbstractKnowWEObjectType {
 	private class ContraIndicationSectionFinder extends SectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, KnowWEObjectType type) {
+		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
 			if (text.contains("NOT") || text.contains("NICHT")) {
 
 				int start = 0;

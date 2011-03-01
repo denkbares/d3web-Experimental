@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.table;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.d3web.we.kdom.xml.XMLContent;
 
@@ -60,7 +60,7 @@ import de.d3web.we.kdom.xml.XMLContent;
  * @author smark
  * @see XMLContent
  */
-public abstract class Table extends DefaultAbstractKnowWEObjectType {
+public abstract class Table extends AbstractType {
 
 	private final TableAttributesProvider tableAttributesProvider;
 

@@ -25,12 +25,12 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="FAQRootType">
 		<parameter id="class"
 			value="de.d3web.we.faq.FAQRootType" />
 		<parameter id="name" value="FAQRootType" />
-		<parameter id="description" value="KnowWEObjectType FAQRootType" />
+		<parameter id="description" value="Type FAQRootType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />

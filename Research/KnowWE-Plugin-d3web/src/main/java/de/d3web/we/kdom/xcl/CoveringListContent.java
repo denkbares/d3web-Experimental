@@ -30,8 +30,9 @@ import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Annotation.Finding;
 import de.d3web.we.kdom.condition.antlr.ComplexFinding;
 import de.d3web.we.kdom.condition.antlr.FindingToConditionBuilder;
@@ -45,6 +46,7 @@ import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelationType;
 import de.knowwe.core.CommentLineType;
 
+@SuppressWarnings("unchecked")
 public class CoveringListContent extends XMLContent {
 
 	public static final String KBID_KEY = "XCLRELATION_STORE_KEY";
@@ -92,12 +94,12 @@ public class CoveringListContent extends XMLContent {
 		private void analyseXCList(KnowWEArticle article, Section xclList, KnowledgeBase kb, String currentweb) {
 
 			// Check if xclList is XCList
-			if ((xclList.getObjectType() instanceof XCList) && (kb != null)) {
+			if ((xclList.get() instanceof XCList) && (kb != null)) {
 
 				// Get all children of xclList containing
 				// XCLHead/XCLBody/XCLTail and some other text
 				ArrayList<Section> elements = new ArrayList<Section>(
-						this.getXCLHeadBodyTail(xclList.getChildren()));
+						this.getXCLHeadBodyTail(new ArrayList<Section>(xclList.getChildren())));
 
 				if (elements.size() <= 1) {
 					// invalid XCL-KDOM-tree
@@ -125,7 +127,7 @@ public class CoveringListContent extends XMLContent {
 				// tail with thresholds
 				if (elements.size() == 3) {
 					Section tail = elements.get(2);
-					if (tail.getObjectType() instanceof XCLTail) setThresholds(kb, currentdiag,
+					if (tail.get() instanceof XCLTail) setThresholds(kb, currentdiag,
 							tail);
 
 				}
@@ -197,10 +199,10 @@ public class CoveringListContent extends XMLContent {
 		 * @param rel
 		 * @return
 		 */
-		private double getWeight(Section rel) {
+		private double getWeight(Section<?> rel) {
 			try {
-				if (rel.findChildOfType(XCLRelationWeight.class) != null) {
-					Section relWeight = rel.findChildOfType(XCLRelationWeight.class);
+				if (Sections.findChildOfType(rel, XCLRelationWeight.class) != null) {
+					Section<?> relWeight = Sections.findChildOfType(rel, XCLRelationWeight.class);
 					String weight = relWeight.getOriginalText();
 					weight = weight.replaceAll("\\[", "");
 					weight = weight.replaceAll("\\]", "");
@@ -219,17 +221,17 @@ public class CoveringListContent extends XMLContent {
 		 * @param section
 		 * @return
 		 */
-		private List<Section> getXCLRelations(Section body) {
-			ArrayList<Section> rels = new ArrayList<Section>(body.getChildren().size());
+		private List<Section<?>> getXCLRelations(Section<?> body) {
+			ArrayList<Section<?>> rels = new ArrayList<Section<?>>(body.getChildren().size());
 
 			// get the XCLRelation Sections
 			// Sort out Relations only containing PlainText
-			List<Section> children = body.getChildren();
-			for (Section sec : children) {
-				if (sec.getObjectType() instanceof XCLRelation) {
-					if ((sec.findChildOfType(ComplexFinding.class) != null)
-							|| (sec.findChildOfType(Finding.class) != null)
-							|| (sec.findChildOfType(NegatedFinding.class) != null)) {
+			List<Section<?>> children = body.getChildren();
+			for (Section<?> sec : children) {
+				if (sec.get() instanceof XCLRelation) {
+					if ((Sections.findChildOfType(sec, ComplexFinding.class) != null)
+							|| (Sections.findChildOfType(sec, Finding.class) != null)
+							|| (Sections.findChildOfType(sec, NegatedFinding.class) != null)) {
 						rels.add(sec);
 					}
 				}
@@ -245,7 +247,7 @@ public class CoveringListContent extends XMLContent {
 		 */
 		private List<Section> getXCLHeadBodyTail(List<Section> children) {
 			for (int i = 0; i < children.size(); i++) {
-				KnowWEObjectType name = children.get(i).getObjectType();
+				Type name = children.get(i).get();
 				if ((name instanceof XCLHead) || (name instanceof XCLBody)
 						|| (name instanceof XCLTail)) {
 					continue;
@@ -265,8 +267,9 @@ public class CoveringListContent extends XMLContent {
 	 */
 	public static XCLRelationType getRelationType(Section<XCLRelationWeight> rel) {
 
-		if (rel.findChildOfType(XCLRelationWeight.class) != null) {
-			Section<? extends XCLRelationWeight> relWeight = rel.findChildOfType(XCLRelationWeight.class);
+		if (Sections.findChildOfType(rel, XCLRelationWeight.class) != null) {
+			Section<? extends XCLRelationWeight> relWeight = Sections.findChildOfType(rel,
+					XCLRelationWeight.class);
 			String weightString = relWeight.getOriginalText();
 			return getXCLRealtionTypeForString(weightString);
 		}

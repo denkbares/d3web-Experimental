@@ -60,7 +60,7 @@ public class QuestionnairesSection extends AbstractKopicSection {
 
 			KnowledgeBase kb = getKB(article);
 
-			Section content = ((AbstractKopicSection) s.getObjectType()).getContentChild(s);
+			Section content = ((AbstractKopicSection) s.get()).getContentChild(s);
 			if (content != null) {
 				List<de.d3web.report.Message> messages = QuestionnaireBuilder
 						.parse(new StringReader(content.getOriginalText()),

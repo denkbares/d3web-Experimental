@@ -17,11 +17,12 @@ import de.d3web.we.hermes.kdom.event.renderer.TimeEventImpRenderer;
 import de.d3web.we.hermes.kdom.event.renderer.TimeEventRenderer;
 import de.d3web.we.hermes.kdom.event.renderer.TimeEventSrcRenderer;
 import de.d3web.we.hermes.kdom.event.renderer.TimeEventTitleRenderer;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SingleChildConstraint;
 import de.d3web.we.kdom.objects.KnowWETerm;
@@ -39,7 +40,7 @@ import de.d3web.we.kdom.type.AnonymousTypeInvisible;
 import de.d3web.we.utils.SplitUtility;
 import de.d3web.we.utils.StringFragment;
 
-public class TimeEventNew extends DefaultAbstractKnowWEObjectType {
+public class TimeEventNew extends AbstractType {
 
 	private static final Description DescriptionType = new Description();
 	private static final Source SourceType = new Source();
@@ -88,22 +89,22 @@ public class TimeEventNew extends DefaultAbstractKnowWEObjectType {
 	 */
 	public static TimeEvent createTimeEvent(Section<TimeEventNew> s) {
 		String titleS = null;
-		Section<TitleType> title = s.findSuccessor(TitleType.class);
+		Section<TitleType> title = Sections.findSuccessor(s, TitleType.class);
 		if (title != null) titleS = title.get().getTermName(title);
 		
 		String dateS = null;
-		Section<DateType> date = s.findSuccessor(DateType.class);
+		Section<DateType> date = Sections.findSuccessor(s, DateType.class);
 		if (date != null) dateS = date.getOriginalText();
 		
 		Integer impI = null;
-		Section<ImportanceType> imp = s.findSuccessor(ImportanceType.class);
-		if (imp != null) impI = imp.get().getImportance(imp);
+		Section<ImportanceType> imp = Sections.findSuccessor(s, ImportanceType.class);
+		if (imp != null) impI = ImportanceType.getImportance(imp);
 		
 		String descS = null;
-		Section<Description> desc = s.findSuccessor(Description.class);
+		Section<Description> desc = Sections.findSuccessor(s, Description.class);
 		if (desc != null) descS = desc.getOriginalText();
 
-		List<Section<Source>> sources = s.findChildrenOfType(Source.class);
+		List<Section<Source>> sources = Sections.findChildrenOfType(s, Source.class);
 		List<String> sourceStrings = new ArrayList<String>();
 		for (Section<Source> src : sources) {
 			sourceStrings.add(Source.getSourceName(src));
@@ -128,7 +129,7 @@ public class TimeEventNew extends DefaultAbstractKnowWEObjectType {
 					new ISectionFinder() {
 
 						@Override
-						public List<SectionFinderResult> lookForSections(String text, Section<?> father, KnowWEObjectType type) {
+						public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 							Matcher matcher = newline.matcher(text);
 							if (matcher.find()) { // if there is a linebreak in
 								// the passed fragment take
@@ -155,7 +156,7 @@ public class TimeEventNew extends DefaultAbstractKnowWEObjectType {
 	}
 
 
-	public static class DateType extends DefaultAbstractKnowWEObjectType {
+	public static class DateType extends AbstractType {
 
 		public DateType() {
 			this.setCustomRenderer(new TimeEventDateRenderer());
@@ -163,7 +164,7 @@ public class TimeEventNew extends DefaultAbstractKnowWEObjectType {
 					new ISectionFinder() {
 
 						@Override
-						public List<SectionFinderResult> lookForSections(String text, Section<?> father, KnowWEObjectType type) {
+						public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 							StringFragment firstNonEmptyLineContent = SplitUtility.getFirstNonEmptyLineContent(text);
 							if (firstNonEmptyLineContent != null) {
 								return SectionFinderResult.createSingleItemResultList(
@@ -181,12 +182,14 @@ public class TimeEventNew extends DefaultAbstractKnowWEObjectType {
 
 				@Override
 				public Collection<KDOMReportMessage> createAttribute(KnowWEArticle article, Section<DateType> s) {
-					TimeStamp t = DateType.getTimeStamp(s);
-					if (false /* t is invalid */) { // TODO: set appropriate error
-						return Arrays.asList((KDOMReportMessage) new InvalidNumberError(
-								s.get().getName()
-										+ ": " + s.getOriginalText()));
-					}
+					// TimeStamp t = DateType.getTimeStamp(s);
+					// if (false /* t is invalid */) { // TODO: set appropriate
+					// error
+					// return Arrays.asList((KDOMReportMessage) new
+					// InvalidNumberError(
+					// s.get().getName()
+					// + ": " + s.getOriginalText()));
+					// }
 					return new ArrayList<KDOMReportMessage>(0);
 				}
 
@@ -205,7 +208,7 @@ public class TimeEventNew extends DefaultAbstractKnowWEObjectType {
 
 
 
-	public static class ImportanceType extends DefaultAbstractKnowWEObjectType {
+	public static class ImportanceType extends AbstractType {
 		Pattern embracedNumbers = Pattern.compile("\\(\\s*\\d*\\s*\\)");
 
 		// Pattern embracedNumbers = Pattern.compile("1");
@@ -218,7 +221,7 @@ public class TimeEventNew extends DefaultAbstractKnowWEObjectType {
 					new ISectionFinder() {
 
 						@Override
-						public List<SectionFinderResult> lookForSections(String text, Section<?> father, KnowWEObjectType type) {
+						public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 							String[] split = text.split("\\r?\\n");
 							for (int i = 0; i < split.length; i++) {
 								String line = split[i];
@@ -284,7 +287,7 @@ public class TimeEventNew extends DefaultAbstractKnowWEObjectType {
 		}
 	}
 
-	public static class Source extends DefaultAbstractKnowWEObjectType {
+	public static class Source extends AbstractType {
 		public Source() {
 			this.setCustomRenderer(new TimeEventSrcRenderer());
 			this.sectionFinder = new RegexSectionFinder("(QUELLE:.*)\\r?\\n",
@@ -296,7 +299,7 @@ public class TimeEventNew extends DefaultAbstractKnowWEObjectType {
 		}
 	}
 
-	public static class Description extends DefaultAbstractKnowWEObjectType {
+	public static class Description extends AbstractType {
 		public Description() {
 			SemanticAnnotation semanticAnnotation = new SemanticAnnotation();
 

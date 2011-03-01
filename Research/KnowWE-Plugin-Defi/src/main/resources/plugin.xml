@@ -15,11 +15,11 @@
         </library>
     </runtime>
         
-    <extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="AboutMe">
 		<parameter id="class" value="de.knowwe.defi.AboutMe" />
 		<parameter id="name" value="AboutMe" />
-		<parameter id="description" value="KnowWEObjectType AboutMe" />
+		<parameter id="description" value="Type AboutMe" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5"  />
 		<parameter id="scope" value="root" />

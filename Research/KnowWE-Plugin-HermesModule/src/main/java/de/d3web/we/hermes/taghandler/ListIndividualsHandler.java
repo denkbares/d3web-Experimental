@@ -27,10 +27,10 @@ import java.util.Map.Entry;
 import org.openrdf.model.URI;
 import org.openrdf.query.TupleQueryResult;
 
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.semantic.sparql.DefaultSparqlRenderer;
 import de.knowwe.semantic.sparql.SPARQLUtil;
@@ -80,7 +80,7 @@ public class ListIndividualsHandler extends AbstractHTMLTagHandler {
 
 		TupleQueryResult result = SPARQLUtil.executeTupleQuery(querystring);
 
-		return KnowWEEnvironment.maskHTML(DefaultSparqlRenderer.getInstance().renderResults(result,
+		return KnowWEUtils.maskHTML(DefaultSparqlRenderer.getInstance().renderResults(result,
 				true));
 	}
 }

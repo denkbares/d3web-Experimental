@@ -36,7 +36,7 @@ public class CondKnownType extends ParameterizedKeyWordType {
 	// }
 	//	
 	//	
-	// class CondKnownKey extends DefaultAbstractKnowWEObjectType {
+	// class CondKnownKey extends AbstractType {
 	// public void init() {
 	// this.sectionFinder = new RegexSectionFinder("KNOWN");
 	// }

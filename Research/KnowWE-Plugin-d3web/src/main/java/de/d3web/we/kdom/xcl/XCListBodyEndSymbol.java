@@ -20,10 +20,10 @@
 
 package de.d3web.we.kdom.xcl;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.StringSectionFinder;
 
-public class XCListBodyEndSymbol extends DefaultAbstractKnowWEObjectType {
+public class XCListBodyEndSymbol extends AbstractType {
 
 	@Override
 	protected void init() {

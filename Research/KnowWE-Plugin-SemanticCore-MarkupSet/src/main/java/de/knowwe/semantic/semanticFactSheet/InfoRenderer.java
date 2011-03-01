@@ -30,7 +30,7 @@ import de.d3web.we.core.semantic.OwlHelper;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
@@ -63,7 +63,7 @@ public class InfoRenderer extends KnowWEDomRenderer {
 	public void render(KnowWEArticle article, Section sec,
 			KnowWEUserContext user, StringBuilder string) {
 		boolean verbose = false;
-		Map<String, String> params = AbstractXMLObjectType
+		Map<String, String> params = AbstractXMLType
 				.getAttributeMapFor(sec.getFather());
 
 		if (params != null) {
@@ -75,7 +75,7 @@ public class InfoRenderer extends KnowWEDomRenderer {
 		if (!verbose) return;
 
 		String text = sec.getOriginalText();
-		if (sec.getObjectType() instanceof InfoContent) {
+		if (sec.get() instanceof InfoContent) {
 			IntermediateOwlObject io = (IntermediateOwlObject) KnowWEUtils.getStoredObject(sec,
 					OwlHelper.IOO);
 

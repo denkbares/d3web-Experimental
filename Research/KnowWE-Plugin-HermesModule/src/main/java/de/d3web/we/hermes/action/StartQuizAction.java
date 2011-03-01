@@ -27,7 +27,7 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.hermes.quiz.QuizSessionManager;
 import de.d3web.we.hermes.taghandler.QuizHandler;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.taghandler.TagHandlerAttributeSubTreeHandler;
 import de.d3web.we.utils.KnowWEUtils;
@@ -44,7 +44,7 @@ public class StartQuizAction extends DeprecatedAbstractKnowWEAction {
 		String user = parameterMap.getUser();
 
 		String kdomid = parameterMap.get("kdomid");
-		Section<? extends KnowWEObjectType> sec = KnowWEEnvironment.getInstance().getArticleManager(
+		Section<? extends Type> sec = KnowWEEnvironment.getInstance().getArticleManager(
 				KnowWEEnvironment.DEFAULT_WEB).findNode(kdomid);
 
 		// boundaries necessary here ?

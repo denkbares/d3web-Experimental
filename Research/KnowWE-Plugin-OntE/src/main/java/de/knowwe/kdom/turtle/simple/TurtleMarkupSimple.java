@@ -2,7 +2,7 @@ package de.knowwe.kdom.turtle.simple;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SingleChildConstraint;
@@ -11,7 +11,7 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.turtle.TurtleRDF2GoCompiler;
 import de.knowwe.termObject.OWLTermReference;
 
-public class TurtleMarkupSimple extends DefaultAbstractKnowWEObjectType{
+public class TurtleMarkupSimple extends AbstractType{
 
 	public TurtleMarkupSimple() {
 

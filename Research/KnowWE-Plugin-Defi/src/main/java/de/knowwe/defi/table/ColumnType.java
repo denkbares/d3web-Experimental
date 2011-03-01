@@ -2,11 +2,11 @@ package de.knowwe.defi.table;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
-public class ColumnType extends DefaultAbstractKnowWEObjectType{
+public class ColumnType extends AbstractType {
 	
 	public static final StyleRenderer Text_RENDERER = new StyleRenderer("color:rgb(152, 180, 12)");
 	

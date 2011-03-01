@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import de.d3web.we.drools.terminology.DroolsKnowledgeHandler;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.Section;
@@ -38,7 +38,7 @@ import de.knowwe.core.CommentLineType;
  * 
  * @author Alex Legler, Sebastian Furth
  */
-public class DroolsFactsType extends DefaultAbstractKnowWEObjectType {
+public class DroolsFactsType extends AbstractType {
 		
 	public DroolsFactsType() {
 		setSectionFinder(new AllTextSectionFinder());

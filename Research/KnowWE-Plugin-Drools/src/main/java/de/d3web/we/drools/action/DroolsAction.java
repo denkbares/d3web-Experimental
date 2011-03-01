@@ -48,6 +48,7 @@ import de.d3web.we.drools.terminology.NumInput;
 import de.d3web.we.drools.terminology.SolutionInput;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.logging.Logging;
 import de.d3web.we.utils.KnowWEUtils;
@@ -58,11 +59,6 @@ import de.d3web.we.utils.SplitUtility;
  * @author Sebastian Furth, Florian Ziegler, Alex Legler
  */
 public class DroolsAction extends AbstractAction {
-	
-	/**
-	 * Is abused as SectionID to store session in ObjectInfoStore
-	 */
-	private final String ACTIONID = "drools-action-id";
 	
 	@Override
 	public void execute(ActionContext context) throws IOException {
@@ -261,13 +257,15 @@ public class DroolsAction extends AbstractAction {
 			
 			// Get the RootType sections
 			List<Section<DroolsSessionRootType>> rootTypes = new ArrayList<Section<DroolsSessionRootType>>();
-			article.getSection().findSuccessorsOfType(DroolsSessionRootType.class, rootTypes);
+			Sections.findSuccessorsOfType(article.getSection(), DroolsSessionRootType.class,
+					rootTypes);
 		
 			// Search for the correct session
 			for (Section<DroolsSessionRootType> rootType : rootTypes) {
 				String sessionName = DefaultMarkupType.getAnnotation(rootType, "Name");
 				if (desiredSessionName != null && sessionName.equals(desiredSessionName)) {
-					Section<DroolsSessionType> session = rootType.findSuccessor(DroolsSessionType.class);
+					Section<DroolsSessionType> session = Sections.findSuccessor(rootType,
+							DroolsSessionType.class);
 					return session;
 				}
 			}

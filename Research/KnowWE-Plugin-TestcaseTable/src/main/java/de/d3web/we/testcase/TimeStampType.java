@@ -21,7 +21,7 @@ package de.d3web.we.testcase;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
@@ -30,7 +30,7 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
  * @author Florian Ziegler / Sebastian Furth
  * @created 12.08.2010
  */
-public class TimeStampType extends DefaultAbstractKnowWEObjectType {
+public class TimeStampType extends AbstractType {
 
 	private static final long[] TIME_FACTORS = {
 			1, 1000, 1000, 60 * 1000, 60 * 1000, 60 * 60 * 1000, 24 * 60 * 60 * 1000 };

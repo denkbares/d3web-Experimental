@@ -26,78 +26,78 @@
 		<parameter id="priority" value="4.9" />
 	</extension>
 	-->
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="SubClassing">
 		<parameter id="class"
 			value="de.d3web.we.kdom.dashTree.subclassing.SubClassing" />
 		<parameter id="name" value="SubClassing" />
-		<parameter id="description" value="KnowWEObjectType SubClassing" />
+		<parameter id="description" value="Type SubClassing" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="XMLDashTree">
 		<parameter id="class"
 			value="de.d3web.we.kdom.dashTree.XMLDashTree" />
 		<parameter id="name" value="XMLDashTree" />
-		<parameter id="description" value="KnowWEObjectType XMLDashTree" />
+		<parameter id="description" value="Type XMLDashTree" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Table">
 		<parameter id="class"
 			value="de.d3web.we.kdom.table.TableXMLType" />
 		<parameter id="name" value="Table" />
-		<parameter id="description" value="KnowWEObjectType Table" />
+		<parameter id="description" value="Type Table" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Edit">
 		<parameter id="class"
 			value="de.d3web.we.kdom.edit.Edit" />
 		<parameter id="name" value="Edit" />
-		<parameter id="description" value="KnowWEObjectType Edit" />
+		<parameter id="description" value="Type Edit" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="CSS">
 		<parameter id="class"
 			value="de.d3web.we.kdom.css.CSS" />
 		<parameter id="name" value="CSS" />
-		<parameter id="description" value="KnowWEObjectType CSS" />
+		<parameter id="description" value="Type CSS" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="VerbatimType">
 		<parameter id="class"
 			value="de.d3web.we.kdom.basic.VerbatimType" />
 		<parameter id="name" value="VerbatimType" />
-		<parameter id="description" value="KnowWEObjectType VerbatimType" />
+		<parameter id="description" value="Type VerbatimType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="3" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Template">
 		<parameter id="class"
 			value="de.d3web.we.kdom.wikiTemplate.Template" />
 		<parameter id="name" value="Template" />
-		<parameter id="description" value="KnowWEObjectType Template" />
+		<parameter id="description" value="Type Template" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="3" />
 		<parameter id="scope" value="root" />
@@ -105,7 +105,7 @@
 	
 	<extension 
 		plugin-id="KnowWEExtensionPoints" 
-		point-id="KnowWEObjectType"
+		point-id="Type"
 		id="StatusType">
 		<parameter id="class" value="de.d3web.we.kdom.workflow.StatusType" />
 		<parameter id="name" value="StatusType" />
@@ -126,26 +126,26 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="KnowWEObjectTypeBrowserAction">
+		id="KnowWETypeBrowserAction">
 		<parameter id="class"
-			value="de.d3web.we.action.KnowWEObjectTypeBrowserAction" />
-		<parameter id="name" value="KnowWEObjectTypeBrowserAction" />
-		<parameter id="description" value="Action KnowWEObjectTypeBrowserAction" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="KnowWEObjectTypeActivationAction">
-		<parameter id="class"
-			value="de.d3web.we.action.KnowWEObjectTypeActivationAction" />
-		<parameter id="name" value="KnowWEObjectTypeActivationAction" />
-		<parameter id="description" value="Action KnowWEObjectTypeActivationAction" />
+			value="de.d3web.we.action.KnowWETypeBrowserAction" />
+		<parameter id="name" value="KnowWETypeBrowserAction" />
+		<parameter id="description" value="Action KnowWETypeBrowserAction" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
 	
 	<!-- was moved out
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="KnowWETypeActivationHandler">
+		<parameter id="class"
+			value="de.d3web.we.action.KnowWETypeActivationHandler" />
+		<parameter id="name" value="KnowWETypeActivationHandler" />
+		<parameter id="description" value="Action KnowWETypeActivationHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="TagHandlingAction">
@@ -390,11 +390,11 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
-		id="KnowWEObjectTypeBrowserHandler">
+		id="KnowWETypeBrowserHandler">
 		<parameter id="class"
-			value="de.d3web.we.taghandler.KnowWEObjectTypeBrowserHandler" />
-		<parameter id="name" value="KnowWEObjectTypeBrowserHandler" />
-		<parameter id="description" value="TagHandler KnowWEObjectTypeBrowserHandler" />
+			value="de.d3web.we.taghandler.KnowWETypeBrowserHandler" />
+		<parameter id="name" value="KnowWETypeBrowserHandler" />
+		<parameter id="description" value="TagHandler KnowWETypeBrowserHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="script" value="KnowWE-Plugin-Shared.js" />
@@ -420,23 +420,23 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="RenderRestrictionStart">
 		<parameter id="class"
 			value="de.d3web.we.kdom.renderRestriction.RenderRestrictionStart" />
 		<parameter id="name" value="RenderRestrictionStart" />
-		<parameter id="description" value="KnowWEObjectType RenderRestrictionStart" />
+		<parameter id="description" value="Type RenderRestrictionStart" />
 		<parameter id="scope" value="root" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="RenderRestrictionEnd">
 		<parameter id="class"
 			value="de.d3web.we.kdom.renderRestriction.RenderRestrictionEnd" />
 		<parameter id="name" value="RenderRestrictionEnd" />
-		<parameter id="description" value="KnowWEObjectType RenderRestrictionEnd" />
+		<parameter id="description" value="Type RenderRestrictionEnd" />
 		<parameter id="scope" value="root" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
@@ -460,12 +460,12 @@
                 <parameter id="priority"  value="0" />
      </extension>
      
-    <extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Include">
 		<parameter id="class"
 			value="de.d3web.we.kdom.include.Include" />
 		<parameter id="name" value="Include" />
-		<parameter id="description" value="KnowWEObjectType Include" />
+		<parameter id="description" value="Type Include" />
 		<parameter id="scope" value="global" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />

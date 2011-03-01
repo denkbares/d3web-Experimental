@@ -20,8 +20,8 @@ package de.d3web.we.kdom.table;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractKnowWEObjectType;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.rendering.NothingRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
@@ -32,13 +32,13 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
  * handles the rendering and the sectioning of the <code>TableCell</code> start
  * markup.
  * 
- * @see AbstractKnowWEObjectType
+ * @see AbstractType
  * @see TableCell
  * 
  * @author Sebastian Furth
  * @created 17/10/2010
  */
-public class TableHeadStart extends DefaultAbstractKnowWEObjectType {
+public class TableHeadStart extends AbstractType {
 
 	public TableHeadStart() {
 		setSectionFinder(new RegexSectionFinder(Pattern.compile("(\\|\\|).*"), 1));

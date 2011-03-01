@@ -19,7 +19,7 @@
  */
 package de.d3web.we.drools.kdom;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
@@ -28,7 +28,7 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
  * 
  * @author Alex Legler
  */
-public class DroolsRuleLiteral extends DefaultAbstractKnowWEObjectType {
+public class DroolsRuleLiteral extends AbstractType {
 
 	public DroolsRuleLiteral() {
 		setSectionFinder(new RegexSectionFinder("\"(.*?)\""));

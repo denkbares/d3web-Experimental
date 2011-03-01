@@ -40,9 +40,10 @@ import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
-import org.openrdf.query.MalformedQueryException;
+import org.openrdf.repository.RepositoryException;
 
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 
 /**
@@ -151,7 +152,7 @@ public class OwlHelper {
 	}
 
 	private static List<Statement> createTextOrigin(
-			Section<KnowWEObjectType> source, Resource to) {
+			Section<Type> source, Resource to) {
 		ArrayList<Statement> io = new ArrayList<Statement>();
 		io.add(createStatement(to, RDF.type, TEXTORIGIN));
 		io.add(createStatement(to, HASNODE,
@@ -278,7 +279,7 @@ public class OwlHelper {
 	}
 
 	public static IntermediateOwlObject createProperty(String subject,
-			String property, String object, Section<KnowWEObjectType> source) {
+			String property, String object, Section<Type> source) {
 
 		URI suri = Rdf2GoCore.getInstance().createLocalURI(subject);
 		URI puri = Rdf2GoCore.getInstance().createLocalURI(property);
@@ -343,7 +344,7 @@ public class OwlHelper {
 	}
 
 	public static void attachTextOrigin(Resource attachto,
-			Section<KnowWEObjectType> source, IntermediateOwlObject io, URI type) {
+			Section<AbstractType> source, IntermediateOwlObject io, URI type) {
 		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
 		io.addAllStatements(createTextOrigin(source, to, type));
 		io.addStatement(Rdf2GoCore.getInstance().createStatement(attachto,
@@ -351,7 +352,7 @@ public class OwlHelper {
 	}
 	
 	public static void attachTextOrigin(Resource attachto,
-			Section<KnowWEObjectType> source, List<Statement> io, URI type) {
+			Section<AbstractType> source, List<Statement> io, URI type) {
 		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
 		io.addAll(createTextOrigin(source, to, type));
 		io.add(Rdf2GoCore.getInstance().createStatement(attachto,
@@ -359,7 +360,7 @@ public class OwlHelper {
 	}
 
 	private static List<Statement> createTextOrigin(
-			Section<KnowWEObjectType> source, Resource to, URI type) {
+			Section<AbstractType> source, Resource to, URI type) {
 		ArrayList<Statement> io = new ArrayList<Statement>();
 		io.add(createStatement(to, RDF.type, TEXTORIGIN));
 		io.add(createStatement(to, HASNODE,

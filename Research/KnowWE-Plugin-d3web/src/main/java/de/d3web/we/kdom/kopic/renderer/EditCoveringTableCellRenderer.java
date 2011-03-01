@@ -20,12 +20,13 @@
 
 package de.d3web.we.kdom.kopic.renderer;
 
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
+@SuppressWarnings("unchecked")
 public class EditCoveringTableCellRenderer extends KnowWEDomRenderer {
 
 	private static String[] options =
@@ -53,7 +54,7 @@ public class EditCoveringTableCellRenderer extends KnowWEDomRenderer {
 			}
 		}
 		b.append("</select>");
-		string.append(KnowWEEnvironment.maskHTML(b.toString()));
+		string.append(KnowWEUtils.maskHTML(b.toString()));
 	}
 
 }

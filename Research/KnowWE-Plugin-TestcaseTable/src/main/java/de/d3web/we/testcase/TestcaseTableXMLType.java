@@ -20,10 +20,10 @@
 
 package de.d3web.we.testcase;
 
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.kdom.xml.XMLContent;
 
-public class TestcaseTableXMLType extends AbstractXMLObjectType {
+public class TestcaseTableXMLType extends AbstractXMLType {
 
 	public TestcaseTableXMLType(String tagName) {
 		super(tagName);

@@ -25,10 +25,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractKnowWEObjectType;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.basic.LineBreak;
 import de.d3web.we.kdom.rendering.NothingRenderer;
 import de.d3web.we.kdom.sectionFinder.ISectionFinder;
@@ -41,11 +41,11 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
  * content area.
  * 
  * @author smark, Sebastian Furth
- * @see AbstractKnowWEObjectType
+ * @see AbstractType
  * @see TableCellStart
  * @see TableCell
  */
-public class TableCell extends DefaultAbstractKnowWEObjectType {
+public class TableCell extends AbstractType {
 
 	public TableCell() {
 		sectionFinder = new TableCellSectionFinder();
@@ -67,7 +67,7 @@ public class TableCell extends DefaultAbstractKnowWEObjectType {
 	 * @return true if table head, otherwise false.
 	 */
 	public static boolean isTableHead(Section<? extends TableCell> tableCell) {
-		return tableCell.findChildOfType(TableHeadStart.class) != null;
+		return Sections.findChildOfType(tableCell, TableHeadStart.class) != null;
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class TableCell extends DefaultAbstractKnowWEObjectType {
 		private final Pattern pattern = Pattern.compile(REGEX);
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section<?> father, KnowWEObjectType type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 
 			Matcher tagMatcher = pattern.matcher(text);
 			List<SectionFinderResult> resultRegex = new LinkedList<SectionFinderResult>();

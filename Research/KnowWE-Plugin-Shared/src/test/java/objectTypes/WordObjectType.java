@@ -21,9 +21,9 @@
 package objectTypes;
 
 import copies.RegexSectionFinder;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 
-public class WordObjectType extends DefaultAbstractKnowWEObjectType {
+public class WordObjectType extends AbstractType {
 
 	private static WordObjectType instance;
 

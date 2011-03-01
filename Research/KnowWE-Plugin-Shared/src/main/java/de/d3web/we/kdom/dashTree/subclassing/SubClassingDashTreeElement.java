@@ -31,6 +31,7 @@ import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreeHandler.IncrementalConstraint;
 import de.knowwe.core.dashtree.DashTreeElement;
@@ -57,14 +58,14 @@ public class SubClassingDashTreeElement extends DashTreeElement implements
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<SubClassingDashTreeElement> element) {
 			IntermediateOwlObject io = new IntermediateOwlObject();
-			if (element.getObjectType().isAssignableFromType(DashTreeElement.class)) {
+			if (element.get().isAssignableFromType(DashTreeElement.class)) {
 				Section<? extends DashTreeElement> father = DashTreeUtils
 						.getFatherDashTreeElement(element);
 				if (father != null) {
-					Section<? extends DashTreeElementContent> fatherElement = father
-							.findChildOfType(DashTreeElementContent.class);
-					Section<? extends DashTreeElementContent> childElement = element
-							.findChildOfType(DashTreeElementContent
+					Section<? extends DashTreeElementContent> fatherElement = Sections
+							.findChildOfType(father, DashTreeElementContent.class);
+					Section<? extends DashTreeElementContent> childElement = Sections
+							.findChildOfType(element, DashTreeElementContent
 									.class);
 					createSubClassRelation(childElement, fatherElement, io);
 				}

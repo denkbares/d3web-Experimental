@@ -22,11 +22,11 @@ package de.d3web.we.kdom.wikiTemplate;
 
 import de.d3web.we.action.TemplateGenerationAction;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.taghandler.TemplateTagHandler;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
@@ -39,7 +39,7 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
  * @author Johannes Dienst
  * 
  */
-public class Template extends AbstractXMLObjectType {
+public class Template extends AbstractXMLType {
 
 	private static Template instance;
 
@@ -52,7 +52,7 @@ public class Template extends AbstractXMLObjectType {
 	/**
 	 * @return
 	 */
-	public static KnowWEObjectType getInstance() {
+	public static Type getInstance() {
 		if (instance == null) instance = new Template();
 		return instance;
 	}

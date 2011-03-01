@@ -20,9 +20,9 @@
 
 package de.d3web.we.hermes.kdom.conceptMining;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 
-public class LocationOccurrence extends DefaultAbstractKnowWEObjectType {
+public class LocationOccurrence extends AbstractType {
 
 	@Override
 	public void init() {

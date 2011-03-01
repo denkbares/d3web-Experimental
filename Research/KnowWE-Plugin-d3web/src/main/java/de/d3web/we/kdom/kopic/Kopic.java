@@ -22,9 +22,9 @@ package de.d3web.we.kdom.kopic;
 
 import de.d3web.we.kdom.kopic.renderer.KopicRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 
-public class Kopic extends AbstractXMLObjectType {
+public class Kopic extends AbstractXMLType {
 
 	public Kopic() {
 		super("Kopic");

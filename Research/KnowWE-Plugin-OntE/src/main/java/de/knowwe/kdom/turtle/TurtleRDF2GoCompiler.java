@@ -13,15 +13,13 @@ import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.objects.KnowWETerm;
 import de.d3web.we.kdom.objects.TermDefinition;
-import de.d3web.we.kdom.objects.TermReference;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SyntaxError;
 import de.d3web.we.terminology.TerminologyHandler;
 import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.kdom.turtle.TurtleMarkup.TurtleObject;
-import de.knowwe.kdom.turtle.TurtleMarkup.TurtlePredicate;
 import de.knowwe.termObject.RDFResourceType;
 
 public class TurtleRDF2GoCompiler extends RDF2GoSubtreeHandler<TurtleMarkup> {
@@ -37,7 +35,7 @@ public class TurtleRDF2GoCompiler extends RDF2GoSubtreeHandler<TurtleMarkup> {
 		URI predURI = null;
 		URI objURI = null;
 
-		s.findSuccessorsOfType(RDFResourceType.class, found);
+		Sections.findSuccessorsOfType(s, RDFResourceType.class, found);
 
 		if (found.size() == 3) {
 			Section<RDFResourceType> subject = found.get(0);

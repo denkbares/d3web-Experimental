@@ -37,9 +37,9 @@ import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.d3webModule.D3WebOWLVokab;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Annotation.Finding;
 import de.d3web.we.kdom.condition.antlr.ComplexFinding;
@@ -51,7 +51,7 @@ import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.utils.Patterns;
 import de.d3web.we.utils.XCLRelationWeight;
 
-public class XCLRelation extends DefaultAbstractKnowWEObjectType {
+public class XCLRelation extends AbstractType {
 
 	@Override
 	protected void init() {
@@ -88,10 +88,10 @@ public class XCLRelation extends DefaultAbstractKnowWEObjectType {
 
 				io.addStatement(uo.getHelper().createStatement(explainsdings,
 						RDF.TYPE, D3WebOWLVokab.EXPLAINS));
-				List<Section<? extends KnowWEObjectType>> children = s.getChildren();
+				List<Section<? extends Type>> children = s.getChildren();
 				for (Section current : children) {
-					if (current.getObjectType() instanceof ComplexFinding
-							|| current.getObjectType() instanceof Finding) {
+					if (current.get() instanceof ComplexFinding
+							|| current.get() instanceof Finding) {
 						IntermediateOwlObject tempio = (IntermediateOwlObject) KnowWEUtils.getStoredObject(
 								article, current, OwlHelper.IOO);
 						for (URI curi : tempio.getLiterals()) {
@@ -103,7 +103,7 @@ public class XCLRelation extends DefaultAbstractKnowWEObjectType {
 						}
 						io.merge(tempio);
 					}
-					else if (current.getObjectType() instanceof XCLRelationWeight) {
+					else if (current.get() instanceof XCLRelationWeight) {
 						io.addStatement(uo.getHelper().createStatement(
 								explainsdings,
 								D3WebOWLVokab.HASWEIGHT,

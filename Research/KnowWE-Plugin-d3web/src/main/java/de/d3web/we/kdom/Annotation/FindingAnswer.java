@@ -22,24 +22,25 @@ package de.d3web.we.kdom.Annotation;
 
 import java.util.List;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
+import de.d3web.we.kdom.sectionFinder.ISectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
-public class FindingAnswer extends DefaultAbstractKnowWEObjectType {
+public class FindingAnswer extends AbstractType {
 
-	public class AnnotationKnowledgeSliceObjectAnswerSectionFinder extends SectionFinder {
+	public class AnnotationKnowledgeSliceObjectAnswerSectionFinder implements ISectionFinder {
 
-		private AllTextFinderTrimmed textFinder = new AllTextFinderTrimmed();
+		private final AllTextFinderTrimmed textFinder = new AllTextFinderTrimmed();
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, KnowWEObjectType type) {
-			if (father.hasLeftSonOfType(FindingComparator.class, text)) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
+			if (Sections.hasLeftSonOfType(father, FindingComparator.class, text)) {
 				List<SectionFinderResult> foundsections = textFinder.lookForSections(text, father,
 						type);
 
@@ -49,12 +50,12 @@ public class FindingAnswer extends DefaultAbstractKnowWEObjectType {
 		}
 	}
 
-	public String getAnswer(Section section) {
+	public String getAnswer(Section<?> section) {
 		return section.getOriginalText().trim();
 	}
 
 	@Override
-	public KnowWEDomRenderer getRenderer() {
+	public KnowWEDomRenderer<?> getRenderer() {
 		return StyleRenderer.CHOICE;
 	}
 

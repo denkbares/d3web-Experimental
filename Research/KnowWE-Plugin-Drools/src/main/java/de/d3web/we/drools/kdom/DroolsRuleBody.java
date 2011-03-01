@@ -19,7 +19,7 @@
  */
 package de.d3web.we.drools.kdom;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.CommentLineType;
 
@@ -28,7 +28,7 @@ import de.knowwe.core.CommentLineType;
  * 
  * @author Alex Legler
  */
-public class DroolsRuleBody extends DefaultAbstractKnowWEObjectType {
+public class DroolsRuleBody extends AbstractType {
 
 	public DroolsRuleBody() {
 		setSectionFinder(new AllTextSectionFinder());

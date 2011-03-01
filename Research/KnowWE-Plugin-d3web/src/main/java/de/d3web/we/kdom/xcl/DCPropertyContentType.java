@@ -21,14 +21,14 @@ package de.d3web.we.kdom.xcl;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 /**
  * 
  * @author Reinhard Hatko Created on: 03.12.2009
  */
-public class DCPropertyContentType extends DefaultAbstractKnowWEObjectType {
+public class DCPropertyContentType extends AbstractType {
 
 	@Override
 	protected void init() {

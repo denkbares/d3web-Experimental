@@ -16,11 +16,11 @@
 	</runtime>
 
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="IDPropertyMarkup">
 		<parameter id="class" value="de.d3web.we.kdom.idProperty.IDPropertyMarkup" />
 		<parameter id="name" value="IDPropertyMarkup" />
-		<parameter id="description" value="KnowWEObjectType IDPropertyMarkup" />
+		<parameter id="description" value="Type IDPropertyMarkup" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="6" />
 		<parameter id="scope" value="root" />

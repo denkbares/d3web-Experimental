@@ -20,9 +20,9 @@
 
 package de.knowwe.semantic.sparql.groovy;
 
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 
-public class GroovySparqlRenderer extends AbstractXMLObjectType {
+public class GroovySparqlRenderer extends AbstractXMLType {
 
 	public GroovySparqlRenderer() {
 		super("groovysparqlrenderer");

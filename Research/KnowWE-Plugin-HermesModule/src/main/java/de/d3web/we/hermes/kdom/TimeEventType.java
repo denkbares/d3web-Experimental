@@ -38,10 +38,11 @@ import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.hermes.TimeStamp;
 import de.d3web.we.hermes.kdom.renderer.TimeEventTypeRenderer;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.contexts.ContextManager;
 import de.d3web.we.kdom.contexts.DefaultSubjectContext;
 import de.d3web.we.kdom.renderer.EditSectionRenderer;
@@ -51,7 +52,7 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotationEndSymbol;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotationStartSymbol;
 
-public class TimeEventType extends DefaultAbstractKnowWEObjectType {
+public class TimeEventType extends AbstractType {
 
 	public static final String START_TAG = "<<";
 	public static final String END_TAG = ">>";
@@ -88,14 +89,18 @@ public class TimeEventType extends DefaultAbstractKnowWEObjectType {
 				Section<TimeEventType> sec = section;
 
 				/* Getting all the sections from KDOM */
-				Section<? extends TimeEventDescriptionType> descriptionSection = sec.findChildOfType(TimeEventDescriptionType.class);
-				Section<? extends TimeEventTitleType> titleSection = sec.findChildOfType(TimeEventTitleType.class);
-				Section<? extends TimeEventImportanceType> importanceSection = sec.findChildOfType(TimeEventImportanceType.class);
-				Section<? extends TimeEventDateType> dateSection = sec.findChildOfType(TimeEventDateType.class);
+				Section<? extends TimeEventDescriptionType> descriptionSection = Sections.findChildOfType(
+						sec, TimeEventDescriptionType.class);
+				Section<? extends TimeEventTitleType> titleSection = Sections.findChildOfType(sec,
+						TimeEventTitleType.class);
+				Section<? extends TimeEventImportanceType> importanceSection = Sections.findChildOfType(
+						sec, TimeEventImportanceType.class);
+				Section<? extends TimeEventDateType> dateSection = Sections.findChildOfType(sec,
+						TimeEventDateType.class);
 
 				List<Section<TimeEventSourceType>> sources = new ArrayList<Section<TimeEventSourceType>>();
-				sec.findSuccessorsOfType(TimeEventSourceType.class,
-								sources);
+				Sections.findSuccessorsOfType(sec,
+								TimeEventSourceType.class, sources);
 
 				if (descriptionSection == null) {
 					return Arrays.asList((KDOMReportMessage) new SimpleMessageError(

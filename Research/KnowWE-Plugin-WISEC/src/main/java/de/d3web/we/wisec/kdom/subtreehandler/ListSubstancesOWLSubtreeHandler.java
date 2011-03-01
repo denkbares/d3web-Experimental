@@ -33,6 +33,7 @@ import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.table.TableCellContent;
@@ -49,7 +50,8 @@ public class ListSubstancesOWLSubtreeHandler extends OwlSubtreeHandler<ListSubst
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<ListSubstancesType> s) {
 
 		// Get the ListID
-		Section<ListSubstancesRootType> root = s.findAncestorOfType(ListSubstancesRootType.class);
+		Section<ListSubstancesRootType> root = Sections.findAncestorOfType(s,
+				ListSubstancesRootType.class);
 		String listID = DefaultMarkupType.getAnnotation(root, "ListID");
 
 		if (listID == null) {
@@ -89,7 +91,7 @@ public class ListSubstancesOWLSubtreeHandler extends OwlSubtreeHandler<ListSubst
 	// // Get all lines
 	// List<Section<TableLine>> tableLines = new
 	// ArrayList<Section<TableLine>>();
-	// section.findSuccessorsOfType(TableLine.class, tableLines);
+	// section Sections.findSuccessorsOfType(TableLine.class, tableLines);
 	//
 	// // Find the SGN row
 	// int sgnIndex = -1;
@@ -104,7 +106,7 @@ public class ListSubstancesOWLSubtreeHandler extends OwlSubtreeHandler<ListSubst
 	// for (int i = 1; i < tableLines.size(); i++) {
 	// ArrayList<Section<TableCellContent>> contents = new
 	// ArrayList<Section<TableCellContent>>();
-	// tableLines.get(i).findSuccessorsOfType(TableCellContent.class,
+	// tableLines.get(i) Sections.findSuccessorsOfType(TableCellContent.class,
 	// contents);
 	//
 	// // Create OWL statements from cell content
@@ -266,7 +268,7 @@ public class ListSubstancesOWLSubtreeHandler extends OwlSubtreeHandler<ListSubst
 
 	private int findSGNIndexKDOM(Section<TableLine> section) {
 		ArrayList<Section<TableCellContent>> contents = new ArrayList<Section<TableCellContent>>();
-		section.findSuccessorsOfType(TableCellContent.class, contents);
+		Sections.findSuccessorsOfType(section, TableCellContent.class, contents);
 		for (int i = 0; i < contents.size(); i++) {
 			if (contents.get(i).getOriginalText().trim().equalsIgnoreCase(
 					CAS_IDENTIFIER_COLUMN)) return i;

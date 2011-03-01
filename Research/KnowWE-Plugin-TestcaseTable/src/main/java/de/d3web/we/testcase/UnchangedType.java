@@ -20,7 +20,7 @@ package de.d3web.we.testcase;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 /**
@@ -28,7 +28,7 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
  * @author Reinhard Hatko
  * @created 21.01.2011
  */
-final class UnchangedType extends DefaultAbstractKnowWEObjectType {
+final class UnchangedType extends AbstractType {
 
 	private final String regex = "\\s*" + GetNewQuickEditAnswersAction.UNCHANGED_VALUE_STRING
 			+ "\\s*";

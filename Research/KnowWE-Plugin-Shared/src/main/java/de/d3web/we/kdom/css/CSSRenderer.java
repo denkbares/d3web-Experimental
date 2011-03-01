@@ -25,10 +25,11 @@ import java.util.Map;
 
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.basic.PlainText;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
@@ -45,15 +46,15 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
  * @author smark
  * @see KnowWEDomRenderer
  */
-public class CSSRenderer extends KnowWEDomRenderer<AbstractXMLObjectType> {
+public class CSSRenderer extends KnowWEDomRenderer<AbstractXMLType> {
 
 	@Override
-	public void render(KnowWEArticle article, Section<AbstractXMLObjectType> sec, KnowWEUserContext user, StringBuilder string) {
-		Map<String, String> mapFor = AbstractXMLObjectType.getAttributeMapFor(sec);
+	public void render(KnowWEArticle article, Section<AbstractXMLType> sec, KnowWEUserContext user, StringBuilder string) {
+		Map<String, String> mapFor = AbstractXMLType.getAttributeMapFor(sec);
 		String style = mapFor.get("style");
 
 		StringBuilder b = new StringBuilder();
-		List<Section<PlainText>> children = sec.findChildrenOfType(PlainText.class);
+		List<Section<PlainText>> children = Sections.findChildrenOfType(sec, PlainText.class);
 		// should only be one
 		for (Section<PlainText> section : children) {
 			DelegateRenderer.getInstance().render(article, section, user, b);

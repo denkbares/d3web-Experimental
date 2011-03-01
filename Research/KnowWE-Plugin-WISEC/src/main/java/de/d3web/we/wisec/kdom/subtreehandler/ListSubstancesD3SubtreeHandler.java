@@ -32,6 +32,7 @@ import de.d3web.we.basic.WikiEnvironmentManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.decisionTree.QuestionsSection;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.kdom.report.KDOMReportMessage;
@@ -54,7 +55,8 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 
 		if (kb != null) {
 			// Get the ListID
-			Section<ListSubstancesRootType> root = s.findAncestorOfType(ListSubstancesRootType.class);
+			Section<ListSubstancesRootType> root = Sections.findAncestorOfType(s,
+					ListSubstancesRootType.class);
 			String listID = DefaultMarkupType.getAnnotation(root, "ListID");
 
 			// Create Substance Questionnaire
@@ -84,13 +86,13 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 		boolean failed = false;
 
 		// Check if the table was recognized
-		if (section.findSuccessor(WISECTable.class) == null) {
+		if (Sections.findSuccessor(section, WISECTable.class) == null) {
 			failed = true;
 		}
 		else {
 			// Get all lines
 			List<Section<TableLine>> tableLines = new ArrayList<Section<TableLine>>();
-			section.findSuccessorsOfType(TableLine.class, tableLines);
+			 Sections.findSuccessorsOfType(section, TableLine.class, tableLines);
 
 			// Find the SGN row
 			int sgnIndex = -1;
@@ -103,7 +105,8 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 			else {
 				for (int i = 1; i < tableLines.size(); i++) {
 					ArrayList<Section<TableCellContent>> contents = new ArrayList<Section<TableCellContent>>();
-					tableLines.get(i).findSuccessorsOfType(TableCellContent.class, contents);
+					Sections.findSuccessorsOfType(tableLines.get(i), TableCellContent.class,
+							contents);
 
 					// Create OWL statements from cell content
 					if (contents.size() >= sgnIndex) {
@@ -132,8 +135,8 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 	private void addGlobalQuestion(String sgn, String web, KnowledgeBase kb) {
 		KnowWEArticle globalsArticle = KnowWEEnvironment.getInstance().getArticleManager(web).getArticle(
 				"WISEC_D3Globals");
-		Section<QuestionsSection> questionsSection = globalsArticle.getSection().findSuccessor(
-				QuestionsSection.class);
+		Section<QuestionsSection> questionsSection = Sections.findSuccessor(
+					globalsArticle.getSection(), QuestionsSection.class);
 
 		if (globalsArticle != null && questionsSection != null) {
 			if (kb.getManager().searchQContainer("Substances") == null) new QContainer(
@@ -214,7 +217,7 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 
 	private int findSGNIndexKDOM(Section<TableLine> section) {
 		ArrayList<Section<TableCellContent>> contents = new ArrayList<Section<TableCellContent>>();
-		section.findSuccessorsOfType(TableCellContent.class, contents);
+		Sections.findSuccessorsOfType(section, TableCellContent.class, contents);
 		for (int i = 0; i < contents.size(); i++) {
 			if (contents.get(i).getOriginalText().trim().equalsIgnoreCase("CAS_No")) return i;
 		}

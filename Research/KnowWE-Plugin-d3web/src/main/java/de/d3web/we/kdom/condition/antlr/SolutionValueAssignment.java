@@ -26,10 +26,11 @@ import de.d3web.core.inference.PSAction;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.scoring.ActionHeuristicPS;
 import de.d3web.scoring.Score;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.kopic.rules.ruleActionLine.D3webRuleAction;
 import de.d3web.we.kdom.kopic.rules.ruleActionLine.Equals;
 import de.d3web.we.kdom.sectionFinder.AllBeforeTypeSectionFinder;
@@ -54,7 +55,7 @@ public class SolutionValueAssignment extends D3webRuleAction<SolutionValueAssign
 		ScorePoint scorePoint = new ScorePoint();
 		Equals equ = new Equals();
 		SolutionReference solutionRef = new SolutionReference();
-		solutionRef.setSectionFinder(AllBeforeTypeSectionFinder.createFinder(equ));
+		solutionRef.setSectionFinder(new AllBeforeTypeSectionFinder(equ));
 
 		this.childrenTypes.add(scorePoint);
 		this.childrenTypes.add(equ);
@@ -93,7 +94,7 @@ public class SolutionValueAssignment extends D3webRuleAction<SolutionValueAssign
 		}
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, KnowWEObjectType type) {
+		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
 			if (text.contains(" = ")) {
 
 				int start = 0;
@@ -123,14 +124,14 @@ public class SolutionValueAssignment extends D3webRuleAction<SolutionValueAssign
 
 	}
 
-	class ScorePoint extends DefaultAbstractKnowWEObjectType {
+	class ScorePoint extends AbstractType {
 
 	}
 
 	@Override
 	public PSAction getAction(KnowWEArticle article, Section<SolutionValueAssignment> s) {
-		Section<SolutionReference> solutionRef = s.findSuccessor(SolutionReference.class);
-		Section<ScorePoint> scoreRef = s.findSuccessor(ScorePoint.class);
+		Section<SolutionReference> solutionRef = Sections.findSuccessor(s, SolutionReference.class);
+		Section<ScorePoint> scoreRef = Sections.findSuccessor(s, ScorePoint.class);
 		Solution solution = solutionRef.get().getTermObject(article, solutionRef);
 		Score score = D3webUtils.getScoreForString(scoreRef.getOriginalText());
 		if (solution == null || score == null) return null;

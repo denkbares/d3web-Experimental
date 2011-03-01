@@ -27,15 +27,16 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.kdom.xml.XMLHead;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
-public class BoxRenderer extends KnowWEDomRenderer {
+public class BoxRenderer extends KnowWEDomRenderer<ForumBox> {
 
 	private static BoxRenderer instance = null;
 
@@ -45,14 +46,14 @@ public class BoxRenderer extends KnowWEDomRenderer {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section<ForumBox> sec, KnowWEUserContext user, StringBuilder string) {
 
 		String name;
 		String date;
 
 		try {
 
-			Map<String, String> boxMap = AbstractXMLObjectType.getAttributeMapFor(sec);
+			Map<String, String> boxMap = AbstractXMLType.getAttributeMapFor(sec);
 
 			name = boxMap.get("name");
 			date = boxMap.get("date");
@@ -64,7 +65,7 @@ public class BoxRenderer extends KnowWEDomRenderer {
 			date = "-";
 		}
 
-		Section contentSec = ForumBox.getInstance().getContentChild(sec);
+		Section<?> contentSec = ForumBox.getInstance().getContentChild(sec);
 
 		if (contentSec == null || contentSec.getOriginalText().length() < 1) return; // no
 																						// empty
@@ -76,11 +77,8 @@ public class BoxRenderer extends KnowWEDomRenderer {
 
 			if (date == null) date = ForumRenderer.getDate();
 
-			sec
-					.findChildOfType(XMLHead.class)
-					.findChildOfType(PlainText.class)
-					.setOriginalText(
-							"<box name=\"" + name + "\" date=\"" + date + "\">");
+			Sections.findChildOfType(Sections.findChildOfType(sec, XMLHead.class), PlainText.class)
+					.setOriginalText("<box name=\"" + name + "\" date=\"" + date + "\">");
 
 			// save article:
 			try {

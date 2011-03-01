@@ -60,7 +60,7 @@ public class SolutionsSection extends AbstractKopicSection {
 
 			KnowledgeBase kb = getKB(article);
 
-			Section content = ((AbstractKopicSection) s.getObjectType()).getContentChild(s);
+			Section content = ((AbstractKopicSection) s.get()).getContentChild(s);
 
 			if (content != null) {
 

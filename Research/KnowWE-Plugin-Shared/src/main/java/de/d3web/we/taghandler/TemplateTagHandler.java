@@ -28,10 +28,11 @@ import java.util.ResourceBundle;
 import de.d3web.we.action.TemplateGenerationAction;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.wikiTemplate.Template;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
@@ -77,7 +78,7 @@ public class TemplateTagHandler extends AbstractHTMLTagHandler {
 					.hasNext(); i++) {
 
 				Section<Template> temp = it.next();
-				secName = AbstractXMLObjectType.getAttributeMapFor(temp).get(
+				secName = AbstractXMLType.getAttributeMapFor(temp).get(
 						"name");
 
 				html.append("<div>");
@@ -128,20 +129,20 @@ public class TemplateTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	/**
-	 * Finds all TemplateKnowWEObjectTypes in an article.
+	 * Finds all TemplateTypes in an article.
 	 * 
 	 * @param article
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<Section<Template>> getTemplateTypes(KnowWEArticle article) {
-		ArrayList<Section<? extends KnowWEObjectType>> found =
-				new ArrayList<Section<? extends KnowWEObjectType>>();
-		article.getSection().getAllNodesPreOrder(found);
-		// article.getSection().findSuccessorsOfType(TemplateType.class, found);
+		ArrayList<Section<? extends Type>> found =
+				new ArrayList<Section<? extends Type>>();
+		Sections.getAllNodesPreOrder(article.getSection(), found);
+		// article.getSection() Sections.findSuccessorsOfType(TemplateType.class, found);
 		ArrayList<Section<Template>> cleaned = new ArrayList<Section<Template>>();
-		for (Section<? extends KnowWEObjectType> s : found) {
-			if (s.getObjectType() instanceof Template) cleaned.add((Section<Template>) s);
+		for (Section<? extends Type> s : found) {
+			if (s.get() instanceof Template) cleaned.add((Section<Template>) s);
 		}
 		return cleaned;
 	}

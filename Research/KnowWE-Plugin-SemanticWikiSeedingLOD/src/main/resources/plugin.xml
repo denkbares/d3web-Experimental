@@ -55,12 +55,12 @@
                 <parameter id="priority" value="5" />
         </extension>
 
-		<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="MappingContentType">
 			<parameter id="class"
 			value="de.d3web.we.lod.markup.MappingMarkup" />
 			<parameter id="name" value="MappingMarkup" />
-			<parameter id="description" value="KnowWEObjectType MappingMarkup" />
+			<parameter id="description" value="Type MappingMarkup" />
 			<parameter id="version" value="1.0" />
 			<parameter id="priority" value="2.0" />
 			<parameter id="scope" value="root" />
@@ -68,12 +68,12 @@
 			<parameter id="css" value="lod.css" />
 		</extension>
 		
-		<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="IgnoreContentType">
 			<parameter id="class"
 			value="de.d3web.we.lod.markup.IgnoreAttributesMarkup" />
 			<parameter id="name" value="IgnoreAttributesMarkup" />
-			<parameter id="description" value="KnowWEObjectType IgnoreAttributesMarkup" />
+			<parameter id="description" value="Type IgnoreAttributesMarkup" />
 			<parameter id="version" value="1.0" />
 			<parameter id="priority" value="4.5" />
 			<parameter id="scope" value="root" />

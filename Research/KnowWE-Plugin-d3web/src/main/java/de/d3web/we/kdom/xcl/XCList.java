@@ -26,11 +26,11 @@ import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.utils.Patterns;
 
-public class XCList extends DefaultAbstractKnowWEObjectType {
+public class XCList extends AbstractType {
 
 	@Override
 	public void init() {

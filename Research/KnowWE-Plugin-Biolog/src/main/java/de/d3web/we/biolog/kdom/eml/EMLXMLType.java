@@ -38,9 +38,10 @@ import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SimpleMessageError;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.kdom.xml.GenericXMLObjectType;
 import de.d3web.we.kdom.xml.XMLContent;
 
@@ -51,7 +52,7 @@ import de.d3web.we.kdom.xml.XMLContent;
  * @author Jochen
  * @created 16.09.2010
  */
-public class EMLXMLType extends AbstractXMLObjectType {
+public class EMLXMLType extends AbstractXMLType {
 
 	public EMLXMLType() {
 		super("ns4:eml");
@@ -75,20 +76,21 @@ public class EMLXMLType extends AbstractXMLObjectType {
 			OwlHelper helper = uo.getHelper();
 			Section<EMLXMLType> eml = s;
 			String date = null;
-			Section<? extends AbstractXMLObjectType> dateSec = AbstractXMLObjectType
+			Section<? extends AbstractXMLType> dateSec = AbstractXMLType
 					.findSubSectionOfTag("calendarDate", eml);
 
 			if (dateSec != null) {
-				dateSec.findChildOfType(XMLContent.class).getOriginalText();
+				Sections.findChildOfType(dateSec, XMLContent.class).getOriginalText();
 			}
 
 			String abstractText = null;
 
-			Section<? extends AbstractXMLObjectType> abstractSec = AbstractXMLObjectType
+			Section<? extends AbstractXMLType> abstractSec = AbstractXMLType
 					.findSubSectionOfTag("abstract", eml);
 
 			if (abstractSec != null) {
-				Section<XMLContent> findChildOfType = abstractSec.findChildOfType(XMLContent.class);
+				Section<XMLContent> findChildOfType = Sections.findChildOfType(abstractSec,
+						XMLContent.class);
 				if (findChildOfType != null) {
 					abstractText = findChildOfType
 							.getOriginalText();
@@ -97,33 +99,33 @@ public class EMLXMLType extends AbstractXMLObjectType {
 
 			String preName = null;
 
-			Section<? extends AbstractXMLObjectType> prenameSec = AbstractXMLObjectType
+			Section<? extends AbstractXMLType> prenameSec = AbstractXMLType
 					.findSubSectionOfTag("givenName", eml);
 			if (prenameSec != null) {
-				preName = prenameSec.findChildOfType(XMLContent.class)
+				preName = Sections.findChildOfType(prenameSec, XMLContent.class)
 						.getOriginalText();
 			}
 
 			String surName = null;
 
-			Section<? extends AbstractXMLObjectType> surNameSec = AbstractXMLObjectType
+			Section<? extends AbstractXMLType> surNameSec = AbstractXMLType
 					.findSubSectionOfTag("surName", eml);
 			if (surNameSec != null) {
-				surName = surNameSec.findChildOfType(XMLContent.class)
+				surName = Sections.findChildOfType(surNameSec, XMLContent.class)
 						.getOriginalText();
 			}
 
 			String methodDescription = null;
 
-			Section<? extends AbstractXMLObjectType> methodsSec = AbstractXMLObjectType
+			Section<? extends AbstractXMLType> methodsSec = AbstractXMLType
 					.findSubSectionOfTag("methods", eml);
 			if (methodsSec != null) {
-				methodDescription = methodsSec
-						.findChildOfType(XMLContent.class).getOriginalText();
+				methodDescription = Sections
+						.findChildOfType(methodsSec, XMLContent.class).getOriginalText();
 			}
 
-			Set<Section<? extends AbstractXMLObjectType>> keyWordSections = new HashSet<Section<? extends AbstractXMLObjectType>>();
-			AbstractXMLObjectType.findSubSectionsOfTag("keyword",
+			Set<Section<? extends AbstractXMLType>> keyWordSections = new HashSet<Section<? extends AbstractXMLType>>();
+			AbstractXMLType.findSubSectionsOfTag("keyword",
 					s, keyWordSections);
 
 			String ns = sc.getNameSpaces().get("swrc");
@@ -158,8 +160,8 @@ public class EMLXMLType extends AbstractXMLObjectType {
 							.createURI(ns, "description"), helper
 							.createLiteral(methodDescription)));
 
-				for (Section<? extends AbstractXMLObjectType> cur : keyWordSections) {
-					String[] split = cur.findChildOfType(XMLContent.class)
+				for (Section<? extends AbstractXMLType> cur : keyWordSections) {
+					String[] split = Sections.findChildOfType(cur, XMLContent.class)
 							.getOriginalText().split(";");
 					for (String string : split) {
 						io.addStatement(helper.createStatement(localURI, helper

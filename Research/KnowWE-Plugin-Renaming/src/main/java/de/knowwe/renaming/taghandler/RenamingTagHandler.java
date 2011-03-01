@@ -45,7 +45,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
@@ -190,7 +190,7 @@ public class RenamingTagHandler extends AbstractHTMLTagHandler {
 		ul.appendChild(li);
 		div.appendChild(ul);
 
-		List<KnowWEObjectType> typeList = new ArrayList<KnowWEObjectType>(1);
+		List<Type> typeList = new ArrayList<Type>(1);
 		typeList.add(ke.getRootType());
 		printULNodes(typeList, dom, li, new HashSet<String>());
 
@@ -222,12 +222,12 @@ public class RenamingTagHandler extends AbstractHTMLTagHandler {
 		return sw.getBuffer();
 	}
 
-	private void printULNodes(List<KnowWEObjectType> typeList, Document dom, Element father,
+	private void printULNodes(List<Type> typeList, Document dom, Element father,
 			HashSet<String> usedTypeOrig) {
 		if (typeList != null) {
 			Element ul = dom.createElement("ul");
 			boolean ulHasChildren = false;
-			for (KnowWEObjectType koType : typeList) {
+			for (Type koType : typeList) {
 				HashSet<String> usedType = (HashSet<String>) usedTypeOrig.clone();
 				if (koType != null) {
 					String koTypeName = koType.getName();

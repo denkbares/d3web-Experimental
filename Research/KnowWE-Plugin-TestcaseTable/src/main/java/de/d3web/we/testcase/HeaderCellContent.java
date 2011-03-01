@@ -20,8 +20,9 @@ package de.d3web.we.testcase;
 
 import java.util.List;
 
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.sectionFinder.ISectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.table.TableCellContent;
@@ -45,8 +46,8 @@ public class HeaderCellContent extends TableCellContent {
 		qref.setSectionFinder(new ISectionFinder() {
 
 			@Override
-			public List<SectionFinderResult> lookForSections(String text, Section<?> father, KnowWEObjectType type) {
-				Section<TableLine> line = father.findAncestorOfType(TableLine.class);
+			public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
+				Section<TableLine> line = Sections.findAncestorOfType(father, TableLine.class);
 
 				if (line.getChildren().size() == 1) {
 					return null;

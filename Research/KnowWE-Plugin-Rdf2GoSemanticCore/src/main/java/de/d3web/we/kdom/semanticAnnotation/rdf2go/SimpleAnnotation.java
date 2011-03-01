@@ -33,9 +33,9 @@ import de.d3web.we.core.semantic.rdf2go.IntermediateOwlObject;
 import de.d3web.we.core.semantic.rdf2go.OwlHelper;
 import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -45,7 +45,7 @@ import de.d3web.we.utils.KnowWEUtils;
  * @author kazamatzuri
  * 
  */
-public class SimpleAnnotation extends DefaultAbstractKnowWEObjectType {
+public class SimpleAnnotation extends AbstractType {
 
 	@Override
 	public void init() {
@@ -54,7 +54,7 @@ public class SimpleAnnotation extends DefaultAbstractKnowWEObjectType {
 	}
 
 	private class SimpleAnnotationSubTreeHandler extends
-	RDF2GoSubtreeHandler<KnowWEObjectType> {
+	RDF2GoSubtreeHandler<Type> {
 
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {

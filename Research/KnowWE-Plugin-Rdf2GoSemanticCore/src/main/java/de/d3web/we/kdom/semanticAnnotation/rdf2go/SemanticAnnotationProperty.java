@@ -29,30 +29,27 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.we.core.semantic.rdf2go.IntermediateOwlObject;
 import de.d3web.we.core.semantic.rdf2go.OwlHelper;
 import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.sectionFinder.ISectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.d3web.we.kdom.semanticAnnotation.rdf2go.SemanticAnnotationProperty;
-import de.d3web.we.kdom.semanticAnnotation.rdf2go.SemanticAnnotationPropertyDelimiter;
-import de.d3web.we.kdom.semanticAnnotation.rdf2go.SemanticAnnotationPropertyName;
 import de.d3web.we.utils.KnowWEUtils;
 
 /**
  * @author kazamatzuri
  * 
  */
-public class SemanticAnnotationProperty extends DefaultAbstractKnowWEObjectType {
+public class SemanticAnnotationProperty extends AbstractType {
 
 	public SemanticAnnotationProperty() {
 		this.sectionFinder = new AnnotationPropertySectionFinder();
@@ -67,7 +64,7 @@ public class SemanticAnnotationProperty extends DefaultAbstractKnowWEObjectType 
 
 		@Override
 		public List<SectionFinderResult> lookForSections(String text,
-				Section father, KnowWEObjectType type) {
+				Section<?> father, Type type) {
 			ArrayList<SectionFinderResult> result = new ArrayList<SectionFinderResult>();
 			Pattern p = Pattern.compile(PATTERN);
 			Matcher m = p.matcher(text);
@@ -85,7 +82,9 @@ public class SemanticAnnotationProperty extends DefaultAbstractKnowWEObjectType 
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<SemanticAnnotationProperty> s) {
 
-			Section<SemanticAnnotationPropertyName> name = s.findChildOfType(SemanticAnnotationPropertyName.class);
+			Section<SemanticAnnotationPropertyName> name = Sections.findChildOfType(s,
+					SemanticAnnotationPropertyName.class);
+
 
 			IntermediateOwlObject io = new IntermediateOwlObject();
 			String prop = name.getOriginalText();
@@ -100,12 +99,14 @@ public class SemanticAnnotationProperty extends DefaultAbstractKnowWEObjectType 
 				String ns = Rdf2GoCore.getInstance().getNameSpaces().get(
 						prop.split(":")[0]);
 				if (ns == null || ns.length() == 0) {
-					io.setBadAttribute("no namespace given");
-					io.setValidPropFlag(false);
+//					io.setBadAttribute("no namespace given");
+//					io.setValidPropFlag(false);
+					System.out.println();
 				}
 				else if (ns.equals(prop.split(":")[0])) {
-					io.setBadAttribute(ns);
-					io.setValidPropFlag(false);
+//					io.setBadAttribute(ns);
+//					io.setValidPropFlag(false);
+					System.out.println();
 				}
 				else {
 					property = OwlHelper.createURI(ns, prop.split(":")[1]);
@@ -114,8 +115,10 @@ public class SemanticAnnotationProperty extends DefaultAbstractKnowWEObjectType 
 			else {
 				property = OwlHelper.createlocalURI(prop);
 			}
-			io.addLiteral(property);
-			KnowWEUtils.storeObject(article, s, OwlHelper.IOO, io);
+//			io.addLiteral(property);
+			List<URI> literals = new ArrayList<URI>();
+			literals.add(property);
+			KnowWEUtils.storeObject(article, s, OwlHelper.IOO, literals);
 			return null;
 		}
 

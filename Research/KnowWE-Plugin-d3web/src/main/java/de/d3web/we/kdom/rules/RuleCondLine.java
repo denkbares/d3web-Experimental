@@ -22,13 +22,13 @@ package de.d3web.we.kdom.rules;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.basic.LineBreak;
 import de.d3web.we.kdom.kopic.renderer.RuleConditionHighlightingRenderer;
 import de.d3web.we.kdom.rule.If;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
-public class RuleCondLine extends DefaultAbstractKnowWEObjectType {
+public class RuleCondLine extends AbstractType {
 
 	@Override
 	protected void init() {

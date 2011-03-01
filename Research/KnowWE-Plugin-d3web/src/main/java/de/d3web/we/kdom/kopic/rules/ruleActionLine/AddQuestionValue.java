@@ -22,9 +22,9 @@ package de.d3web.we.kdom.kopic.rules.ruleActionLine;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Annotation.FindingQuestion;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
@@ -34,13 +34,14 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
  * @author Johannes Dienst
  * 
  */
-public class AddQuestionValue extends DefaultAbstractKnowWEObjectType {
+public class AddQuestionValue extends AbstractType {
 
 	@Override
 	public void init() {
 		this.sectionFinder = new AddQuestionValueSectionFinder();
-		this.childrenTypes.add(new PlusEqual());
-		this.childrenTypes.add(new FindingQuestion());
+		PlusEqual plusEqual = new PlusEqual();
+		this.childrenTypes.add(plusEqual);
+		this.childrenTypes.add(new FindingQuestion(plusEqual));
 		AddedValue aA = new AddedValue();
 		aA.setSectionFinder(new AllTextFinderTrimmed()); // TODO more specificly
 															// parsing
@@ -50,7 +51,7 @@ public class AddQuestionValue extends DefaultAbstractKnowWEObjectType {
 	private class AddQuestionValueSectionFinder extends SectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, KnowWEObjectType type) {
+		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
 
 			if (text.contains("+=")) {
 
@@ -77,7 +78,7 @@ public class AddQuestionValue extends DefaultAbstractKnowWEObjectType {
 	private class AddingValueSectionFinder extends SectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, KnowWEObjectType type) {
+		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
 
 			if (text.contains("(") && text.contains(")")) {
 				List<SectionFinderResult> result = new ArrayList<SectionFinderResult>();

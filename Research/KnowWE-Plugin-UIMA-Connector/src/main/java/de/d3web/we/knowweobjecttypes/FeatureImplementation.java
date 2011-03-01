@@ -17,9 +17,9 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.d3web.we.knowweobjecttypes;
+package de.d3web.we.Types;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.sectionfinder.FeatureSectionFinder;
 
 /**
@@ -29,6 +29,6 @@ import de.d3web.we.sectionfinder.FeatureSectionFinder;
  * @author Johannes Dienst
  * 
  */
-public class FeatureImplementation extends DefaultAbstractKnowWEObjectType {
+public class FeatureImplementation extends AbstractType {
 
 }

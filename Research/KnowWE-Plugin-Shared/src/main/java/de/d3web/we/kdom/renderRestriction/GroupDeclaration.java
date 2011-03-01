@@ -22,7 +22,7 @@ package de.d3web.we.kdom.renderRestriction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 
@@ -32,7 +32,7 @@ import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
  * @author Jochen
  * 
  */
-public class GroupDeclaration extends DefaultAbstractKnowWEObjectType {
+public class GroupDeclaration extends AbstractType {
 
 	Pattern p = Pattern.compile("group:?(.*)", Pattern.DOTALL);
 

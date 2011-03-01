@@ -18,8 +18,8 @@
  */
 package de.knowwe.defi;
 
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
@@ -35,7 +35,7 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
  * @author smark
  * @created 25.01.2011
  */
-public class AboutMeRenderer<T extends KnowWEObjectType> extends KnowWEDomRenderer<T> {
+public class AboutMeRenderer<T extends AbstractType> extends KnowWEDomRenderer<T> {
 
 	@Override
 	public void render(KnowWEArticle article, Section<T> sec, KnowWEUserContext user, StringBuilder string) {

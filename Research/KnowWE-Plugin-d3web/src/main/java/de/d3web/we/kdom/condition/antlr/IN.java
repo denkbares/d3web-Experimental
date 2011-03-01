@@ -20,8 +20,8 @@
 
 package de.d3web.we.kdom.condition.antlr;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 
-public class IN extends DefaultAbstractKnowWEObjectType {
+public class IN extends AbstractType {
 
 }

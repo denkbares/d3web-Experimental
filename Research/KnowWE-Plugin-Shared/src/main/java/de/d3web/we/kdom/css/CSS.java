@@ -22,9 +22,9 @@ package de.d3web.we.kdom.css;
 
 import java.util.List;
 
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 
 /**
  * <p>
@@ -38,9 +38,9 @@ import de.d3web.we.kdom.xml.AbstractXMLObjectType;
  * </p>
  * 
  * @author smark
- * @see AbstractXMLObjectType
+ * @see AbstractXMLType
  */
-public class CSS extends AbstractXMLObjectType {
+public class CSS extends AbstractXMLType {
 
 	/**
 	 * <p>
@@ -52,7 +52,7 @@ public class CSS extends AbstractXMLObjectType {
 	}
 
 	@Override
-	public List<KnowWEObjectType> getAllowedChildrenTypes() {
+	public List<Type> getAllowedChildrenTypes() {
 		childrenTypes.add(new CSS());
 		return childrenTypes;
 	}

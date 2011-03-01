@@ -40,10 +40,10 @@ import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.semantic.sparql.SparqlDelegateRenderer;
 
@@ -95,7 +95,7 @@ public class TimeLineHandler extends AbstractHTMLTagHandler {
 		try {
 			if (query instanceof TupleQuery) {
 				TupleQueryResult result = ((TupleQuery) query).evaluate();
-				return KnowWEEnvironment.maskHTML(renderQueryResult(result,
+				return KnowWEUtils.maskHTML(renderQueryResult(result,
 						values, asList));
 			}
 			else if (query instanceof GraphQuery) {

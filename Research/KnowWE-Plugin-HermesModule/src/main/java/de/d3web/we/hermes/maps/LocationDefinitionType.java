@@ -24,7 +24,7 @@ import java.util.Collection;
 import de.d3web.we.core.semantic.IntermediateOwlObject;
 import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.renderer.EditSectionRenderer;
@@ -34,7 +34,7 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
-public class LocationDefinitionType extends DefaultAbstractKnowWEObjectType {
+public class LocationDefinitionType extends AbstractType {
 
 	private static final String START_TAG = "<<ORT:";
 	private static final String END_TAG = ">>";

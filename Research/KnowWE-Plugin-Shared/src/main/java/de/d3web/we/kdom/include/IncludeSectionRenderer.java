@@ -31,7 +31,7 @@ import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMWarning;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
@@ -53,13 +53,13 @@ public class IncludeSectionRenderer extends KnowWEDomRenderer {
 	@Override
 	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
 
-		String render = sec.getObjectType() instanceof AbstractXMLObjectType ?
-				AbstractXMLObjectType.getAttributeMapFor(sec).get("render") : null;
+		String render = sec.get() instanceof AbstractXMLType ?
+				AbstractXMLType.getAttributeMapFor(sec).get("render") : null;
 
 		StringBuilder content = new StringBuilder();
 
 		String srclink;
-		if (sec.getObjectType() instanceof Include && Include.getIncludeAddress(sec) != null) {
+		if (sec.get() instanceof Include && Include.getIncludeAddress(sec) != null) {
 			Section<Include> child = (Section<Include>) sec.getChildren().get(0);
 			String baseURL = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
 			srclink = "<a href=\"" + baseURL + (baseURL.endsWith("/") ? "" : "/")
@@ -79,7 +79,7 @@ public class IncludeSectionRenderer extends KnowWEDomRenderer {
 		List<Section> includedChildren = sec.getChildren();
 		if (render != null && render.equalsIgnoreCase("false")
 				&& !(includedChildren != null && includedChildren.size() == 1
-						&& includedChildren.get(0).getObjectType() instanceof IncludeError)) {
+						&& includedChildren.get(0).get() instanceof IncludeError)) {
 
 			boolean errors = false;
 

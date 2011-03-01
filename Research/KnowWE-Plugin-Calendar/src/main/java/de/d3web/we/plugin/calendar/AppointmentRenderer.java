@@ -22,25 +22,26 @@ package de.d3web.we.plugin.calendar;
 
 import java.util.Map;
 
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
-public class AppointmentRenderer extends KnowWEDomRenderer {
+public class AppointmentRenderer extends KnowWEDomRenderer<Appointment> {
 
 	@Override
-	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section<Appointment> sec, KnowWEUserContext user, StringBuilder string) {
 
 		Map<String, String> persons = CalendarModule.getPersons();
 
-		Section dateSec = sec.findChildOfType(AppointmentStartSymbol.class).findChildOfType(
-				AppointmentDate.class);
-		Section timeSec = sec.findChildOfType(AppointmentStartSymbol.class).findChildOfType(
-				AppointmentTime.class);
-		Section textSec = sec.findChildOfType(AppointmentText.class);
-		Section nameSec = sec.findChildOfType(AppointmentAuthor.class);
+		Section<?> dateSec = Sections.findChildOfType(Sections.findChildOfType(sec,
+				AppointmentStartSymbol.class), AppointmentDate.class);
+		Section<?> timeSec = Sections.findChildOfType(Sections.findChildOfType(sec,
+				AppointmentStartSymbol.class), AppointmentTime.class);
+		Section<?> textSec = Sections.findChildOfType(sec, AppointmentText.class);
+		Section<?> nameSec = Sections.findChildOfType(sec, AppointmentAuthor.class);
 
 		String name = "";
 		String text = textSec.getOriginalText();
@@ -64,7 +65,7 @@ public class AppointmentRenderer extends KnowWEDomRenderer {
 				+ "</th><th align=right width=250><i>" + name + "</i></th></tr>\n");
 		b.append("<tr><td colspan=3>" + text + "</td></tr>\n</table>\n");
 
-		string.append(KnowWEEnvironment.maskHTML(b.toString()));
+		string.append(KnowWEUtils.maskHTML(b.toString()));
 
 	}
 }

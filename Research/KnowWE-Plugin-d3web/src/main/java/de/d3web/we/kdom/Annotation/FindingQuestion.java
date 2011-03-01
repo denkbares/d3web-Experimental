@@ -20,43 +20,26 @@
 
 package de.d3web.we.kdom.Annotation;
 
-import java.util.List;
-
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sectionizable;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
+import de.d3web.we.kdom.sectionFinder.AllBeforeTypeSectionFinder;
 
-public class FindingQuestion extends DefaultAbstractKnowWEObjectType {
+public class FindingQuestion extends AbstractType {
 
-	public class AnnotationKnowledgeSliceObjectQuestiongetSectionFinder extends SectionFinder {
-
-		private AllTextFinderTrimmed textFinder = new AllTextFinderTrimmed();
-
-		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, KnowWEObjectType type) {
-			if (father.hasRightSonOfType(FindingComparator.class, text)) {
-				return textFinder.lookForSections(text, father, type);
-			}
-			return null;
+	public FindingQuestion(Sectionizable allBeforeThisType) {
+		if (allBeforeThisType != null) {
+			this.sectionFinder = new AllBeforeTypeSectionFinder(allBeforeThisType);
 		}
 	}
 
-	public String getQuestion(Section section) {
+	public String getQuestion(Section<?> section) {
 		return section.getOriginalText().trim();
 	}
 
 	@Override
-	public KnowWEDomRenderer getRenderer() {
+	public KnowWEDomRenderer<?> getRenderer() {
 		return new FindingQuestionAndAnswerRenderer("color:rgb(0, 0, 255)");
-	}
-
-	@Override
-	protected void init() {
-		this.sectionFinder =
-				new AnnotationKnowledgeSliceObjectQuestiongetSectionFinder();
 	}
 }

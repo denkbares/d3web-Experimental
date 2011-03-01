@@ -21,12 +21,12 @@
 package de.d3web.we.kdom.kopic.rules.ruleActionLine;
 
 import de.d3web.core.inference.PSAction;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 
-public abstract class D3webRuleAction<T extends KnowWEObjectType> extends DefaultAbstractKnowWEObjectType {
+public abstract class D3webRuleAction<T extends Type> extends AbstractType {
 
 	public abstract PSAction getAction(KnowWEArticle article, Section<T> s);
 }

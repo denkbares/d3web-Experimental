@@ -36,10 +36,11 @@ import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
@@ -51,7 +52,7 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
  * @author Jochen
  * @created 16.09.2010
  */
-public class FreeMapNode extends AbstractXMLObjectType {
+public class FreeMapNode extends AbstractXMLType {
 
 	private static FreeMapNode instance;
 
@@ -65,7 +66,7 @@ public class FreeMapNode extends AbstractXMLObjectType {
 	}
 
 	public static String getText(Section<FreeMapNode> s) {
-		Map<String, String> map = AbstractXMLObjectType.getAttributeMapFor(s);
+		Map<String, String> map = AbstractXMLType.getAttributeMapFor(s);
 
 		String text = map.get("TEXT");
 		if (text == null) {
@@ -99,22 +100,23 @@ public class FreeMapNode extends AbstractXMLObjectType {
 	 */
 	private class FreeMapNodeOWLSubTreeHandler extends OwlSubtreeHandler<FreeMapNode> {
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<FreeMapNode> s) {
 			Section<FreeMapNode> element = s; // warning
 			IntermediateOwlObject io = new IntermediateOwlObject();
-			if (s.getObjectType().isAssignableFromType(FreeMapNode.class)) {
-				Section<? extends AbstractXMLObjectType> father = AbstractXMLObjectType
+			if (s.get().isAssignableFromType(FreeMapNode.class)) {
+				Section<? extends AbstractXMLType> father = AbstractXMLType
 						.getXMLFatherElement(element);
 				if (father != null
-						&& father.getObjectType() instanceof FreeMapNode) {
+						&& father.get() instanceof FreeMapNode) {
 
 					createSubClassRelation(getText(element),
 							getText((Section<FreeMapNode>) father), io);
 				}
 			}
 			List<Section<FreeMapNode>> children = new ArrayList<Section<FreeMapNode>>();
-			s.findSuccessorsOfType(FreeMapNode.class, children);
+			Sections.findSuccessorsOfType(s, FreeMapNode.class, children);
 			for (Section<FreeMapNode> child : children) {
 				if (child.get() instanceof FreeMapNode)
 					io.merge((IntermediateOwlObject) KnowWEUtils
@@ -148,12 +150,13 @@ public class FreeMapNode extends AbstractXMLObjectType {
 	 * @author Jochen
 	 * @created 16.09.2010
 	 */
+	@SuppressWarnings("unchecked")
 	class FreeMapNodeRenderer extends KnowWEDomRenderer {
 
 		@Override
 		public void render(KnowWEArticle article, Section sec,
 				KnowWEUserContext user, StringBuilder string) {
-			int depth = AbstractXMLObjectType.getXMLDepth(sec);
+			int depth = AbstractXMLType.getXMLDepth(sec);
 
 			string.append(createDashes(depth - 1) + "  " + getText(sec) + "\n");
 

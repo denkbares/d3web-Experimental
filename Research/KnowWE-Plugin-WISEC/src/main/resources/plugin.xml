@@ -15,34 +15,34 @@
 		</library>
 	</runtime>
 		
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="ListCriteriaRootType">
 		<parameter id="class"
 			value="de.d3web.we.wisec.kdom.ListCriteriaRootType" />
 		<parameter id="name" value="ListCriteriaRootType" />
-		<parameter id="description" value="KnowWEObjectType ListCriteriaRootType" />
+		<parameter id="description" value="Type ListCriteriaRootType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="ListSubstancesRootType">
 		<parameter id="class"
 			value="de.d3web.we.wisec.kdom.ListSubstancesRootType" />
 		<parameter id="name" value="ListSubstancesRootType" />
-		<parameter id="description" value="KnowWEObjectType ListSubstancesRootType" />
+		<parameter id="description" value="Type ListSubstancesRootType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="UpperListCategoriesRootType">
 		<parameter id="class"
 			value="de.d3web.we.wisec.kdom.UpperListCategoriesRootType" />
 		<parameter id="name" value="UpperListCategoriesRootType" />
-		<parameter id="description" value="KnowWEObjectType UpperListCategoriesRootType" />
+		<parameter id="description" value="Type UpperListCategoriesRootType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />

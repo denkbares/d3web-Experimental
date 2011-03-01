@@ -14,35 +14,35 @@
 		</library>
 	</runtime>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="AddStatementType">
 		<parameter id="class"
 			value="de.d3web.we.core.semantic.rdf2go.example.AddStatementType" />
 		<parameter id="name" value="AddStatementType" />
-		<parameter id="description" value="KnowWEObjectType AddStatementType" />
+		<parameter id="description" value="Type AddStatementType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="3" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Namespaces">
 		<parameter id="class"
 			value="de.d3web.we.kdom.namespaces.rdf2go.Namespaces" />
 		<parameter id="name" value="Namespaces" />
-		<parameter id="description" value="KnowWEObjectType Namespaces" />
+		<parameter id="description" value="Type Namespaces" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-Rdf2GoSemanticCore.js" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="SparqlType">
 		<parameter id="class"
 			value="de.d3web.we.core.semantic.rdf2go.example.SparqlType" />
 		<parameter id="name" value="SparqlType" />
-		<parameter id="description" value="KnowWEObjectType SparqlType" />
+		<parameter id="description" value="Type SparqlType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="3" />
 		<parameter id="scope" value="root" />
@@ -79,12 +79,12 @@
 	</extension>
 
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="SemanticAnnotation">
 		<parameter id="class"
 			value="de.d3web.we.kdom.semanticAnnotation.rdf2go.SemanticAnnotation" />
 		<parameter id="name" value="SemanticAnnotation" />
-		<parameter id="description" value="KnowWEObjectType SemanticAnnotation" />
+		<parameter id="description" value="Type SemanticAnnotation" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="root" />

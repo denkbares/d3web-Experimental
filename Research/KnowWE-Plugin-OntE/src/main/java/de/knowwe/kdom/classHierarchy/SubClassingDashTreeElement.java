@@ -32,6 +32,7 @@ import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.message.NoSuchObjectError;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -60,14 +61,14 @@ public class SubClassingDashTreeElement extends DashTreeElement implements
 
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<SubClassingDashTreeElement> element) {
-			if (element.getObjectType().isAssignableFromType(DashTreeElement.class)) {
+			if (element.get().isAssignableFromType(DashTreeElement.class)) {
 				Section<? extends DashTreeElement> father = DashTreeUtils
 						.getFatherDashTreeElement(element);
 				if (father != null) {
-					Section<? extends OWLTermReference> fatherElement = father
-							.findChildOfType(OWLTermReference.class);
-					Section<? extends OWLTermReference> childElement = element
-							.findChildOfType(OWLTermReference
+					Section<? extends OWLTermReference> fatherElement = Sections
+							.findChildOfType(father, OWLTermReference.class);
+					Section<? extends OWLTermReference> childElement = Sections
+							.findChildOfType(element, OWLTermReference
 									.class);
 					URI localURI = childElement.get().getURI(childElement);
 					URI fatherURI = fatherElement.get().getURI(fatherElement);

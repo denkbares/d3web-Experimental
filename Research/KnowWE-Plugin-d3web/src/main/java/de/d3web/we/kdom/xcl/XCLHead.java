@@ -37,9 +37,9 @@ import de.d3web.we.core.semantic.OwlHelper;
 import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.basic.LineBreak;
 import de.d3web.we.kdom.contexts.ContextManager;
@@ -53,7 +53,7 @@ import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.utils.Patterns;
 
-public class XCLHead extends DefaultAbstractKnowWEObjectType {
+public class XCLHead extends AbstractType {
 
 	public static final String KEY_SOLUTION_NAME = "solutionName";
 
@@ -77,7 +77,7 @@ public class XCLHead extends DefaultAbstractKnowWEObjectType {
 
 			Section father = s.getFather();
 
-			if (!father.getObjectType().getClass().equals(XCList.class)) {
+			if (!father.get().getClass().equals(XCList.class)) {
 				Logging.getInstance().log(Level.WARNING, "Expected different fathertype: XCList");
 				return null;
 			}
@@ -108,7 +108,7 @@ public class XCLHead extends DefaultAbstractKnowWEObjectType {
 		}
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, KnowWEObjectType type) {
+		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
 			if (text.length() == 0) return null;
 
 			Matcher matcher = pattern.matcher(text);

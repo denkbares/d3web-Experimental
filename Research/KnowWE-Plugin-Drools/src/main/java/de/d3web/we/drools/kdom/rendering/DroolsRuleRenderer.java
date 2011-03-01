@@ -20,7 +20,7 @@
 package de.d3web.we.drools.kdom.rendering;
 
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
@@ -31,7 +31,7 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
  * @author Alex Legler
  *
  */
-public class DroolsRuleRenderer<T extends KnowWEObjectType> extends KnowWEDomRenderer<T> {
+public class DroolsRuleRenderer<T extends Type> extends KnowWEDomRenderer<T> {
 
 	@Override
 	public void render(KnowWEArticle article, Section<T> sec,

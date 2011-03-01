@@ -20,10 +20,10 @@
 
 package de.d3web.we.knowwetypes;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.sectionfinder.NestedTypeSectionFinder;
 
-public class BuildingType extends DefaultAbstractKnowWEObjectType {
+public class BuildingType extends AbstractType {
 
 	@Override
 	protected void init() {

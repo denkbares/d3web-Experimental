@@ -23,6 +23,7 @@ package de.d3web.we.testcase;
 import de.d3web.we.core.KnowWERessourceLoader;
 import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.table.Table;
 import de.d3web.we.kdom.table.TableLine;
 
@@ -58,8 +59,9 @@ public class TestcaseTable extends Table {
 	 * @param s
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static Section<? extends HeaderCell> findHeaderCell(Section<?> s) {
-		Section<TableLine> line = s.findAncestorOfType(TableLine.class);
+		Section<TableLine> line = Sections.findAncestorOfType(s, TableLine.class);
 		boolean found = false;
 		int i = 0;
 		for (Section<?> section : line.getChildren()) {
@@ -77,8 +79,8 @@ public class TestcaseTable extends Table {
 			return null;
 		}
 
-		Section<Table> table = line.findAncestorOfType(Table.class);
-		Section<TableLine> headerline = table.findSuccessor(TableLine.class);
+		Section<Table> table = Sections.findAncestorOfType(line, Table.class);
+		Section<TableLine> headerline = Sections.findSuccessor(table, TableLine.class);
 		Section<? extends HeaderCell> headerCell = (Section<? extends HeaderCell>) headerline.getChildren().get(
 				i);
 		return headerCell;

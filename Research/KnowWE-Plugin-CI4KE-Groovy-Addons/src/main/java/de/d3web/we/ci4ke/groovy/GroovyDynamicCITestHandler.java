@@ -35,6 +35,7 @@ import de.d3web.we.ci4ke.testing.DynamicCITestHandler;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
@@ -105,8 +106,8 @@ public final class GroovyDynamicCITestHandler implements DynamicCITestHandler {
 		// iterate over all articles
 		for (KnowWEArticle article : allWikiArticles) {
 			// find all GroovyCITestType sections on this article...
-			article.getSection().findSuccessorsOfType(GroovyCITestType.class,
-					sectionsList);
+			Sections.findSuccessorsOfType(article.getSection(),
+					GroovyCITestType.class, sectionsList);
 		}
 		return sectionsList;
 	}

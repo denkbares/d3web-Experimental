@@ -49,7 +49,7 @@ public class ExtensionRenderer extends KnowWEDomRenderer {
 		else {
 			header = "<p class=\"box ok\">";
 		}
-		string.append(KnowWEEnvironment.maskHTML(header + content + footer));
+		string.append(KnowWEUtils.maskHTML(header + content + footer));
 	}
 
 	public static synchronized KnowWEDomRenderer getInstance() {

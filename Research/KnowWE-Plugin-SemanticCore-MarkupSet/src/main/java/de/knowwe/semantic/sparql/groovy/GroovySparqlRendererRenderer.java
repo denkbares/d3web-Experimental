@@ -32,7 +32,7 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.semantic.sparql.SparqlDelegateRenderer;
@@ -79,8 +79,8 @@ public class GroovySparqlRendererRenderer extends
 			Section<GroovySparqlRendererContent> sec, KnowWEUserContext user,
 			StringBuilder string) {
 		// rb = KnowWEEnvironment.getInstance().getKwikiBundle(user);
-		Map<String, String> params = AbstractXMLObjectType
-				.getAttributeMapFor((Section<? extends AbstractXMLObjectType>) sec
+		Map<String, String> params = AbstractXMLType
+				.getAttributeMapFor((Section<? extends AbstractXMLType>) sec
 						.getFather());
 		String name = "";
 		if (!params.containsKey("name")) {

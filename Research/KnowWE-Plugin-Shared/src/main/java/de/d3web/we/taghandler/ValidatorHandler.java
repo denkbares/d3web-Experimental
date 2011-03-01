@@ -23,8 +23,7 @@ package de.d3web.we.taghandler;
 import java.util.Map;
 
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.validation.KDOMValidator;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class ValidatorHandler extends AbstractHTMLTagHandler {
@@ -41,14 +40,17 @@ public class ValidatorHandler extends AbstractHTMLTagHandler {
 
 	@Override
 	public String renderHTML(String topic, KnowWEUserContext user, Map<String, String> values, String web) {
-		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(web, topic);
-		KDOMValidator.getTagHandlerInstance().validateArticle(article);
-		String header = "<div id=\"validator-panel\" class=\"panel\"><h3>"
-				+ KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
-						"KnowWE.ValidatorHandler.header")
-				+ "</h3><div><ul>";
-		return header + KDOMValidator.getTagHandlerInstance().getBuilder().toString()
-				+ "</ul></div></div>";
+		// KnowWEArticle article =
+		// KnowWEEnvironment.getInstance().getArticle(web, topic);
+		// KDOMValidator.getTagHandlerInstance().validateArticle(article);
+		// String header = "<div id=\"validator-panel\" class=\"panel\"><h3>"
+		// + KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
+		// "KnowWE.ValidatorHandler.header")
+		// + "</h3><div><ul>";
+		// return header +
+		// KDOMValidator.getTagHandlerInstance().getBuilder().toString()
+		// + "</ul></div></div>";
+		return KnowWEUtils.maskHTML("<span class='warning'>Currently the KDOM is not validated due to code refactoring!</span>");
 	}
 
 }

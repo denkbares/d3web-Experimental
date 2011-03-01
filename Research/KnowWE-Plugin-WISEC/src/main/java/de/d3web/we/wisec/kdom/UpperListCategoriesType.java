@@ -20,7 +20,7 @@
 
 package de.d3web.we.wisec.kdom;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.d3web.we.wisec.kdom.subtreehandler.UpperListCategoriesOWLSubtreeHandler;
@@ -30,7 +30,7 @@ import de.d3web.we.wisec.kdom.subtreehandler.UpperListCategoriesOWLSubtreeHandle
  * 
  * @author Sebastian Furth
  */
-public class UpperListCategoriesType extends DefaultAbstractKnowWEObjectType {
+public class UpperListCategoriesType extends AbstractType {
 
 	public UpperListCategoriesType() {
 		setSectionFinder(new AllTextSectionFinder());

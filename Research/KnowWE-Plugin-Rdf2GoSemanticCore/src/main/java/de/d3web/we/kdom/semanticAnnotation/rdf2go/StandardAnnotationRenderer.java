@@ -34,16 +34,11 @@ import de.d3web.we.core.semantic.rdf2go.IntermediateOwlObject;
 import de.d3web.we.core.semantic.rdf2go.OwlHelper;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.contexts.Context;
 import de.d3web.we.kdom.contexts.ContextManager;
 import de.d3web.we.kdom.contexts.DefaultSubjectContext;
 import de.d3web.we.kdom.rendering.ConditionalRenderer;
-import de.d3web.we.kdom.semanticAnnotation.rdf2go.AnnotatedString;
-import de.d3web.we.kdom.semanticAnnotation.rdf2go.SemanticAnnotationContent;
-import de.d3web.we.kdom.semanticAnnotation.rdf2go.SemanticAnnotationProperty;
-import de.d3web.we.kdom.semanticAnnotation.rdf2go.SemanticAnnotationPropertyName;
-import de.d3web.we.kdom.semanticAnnotation.rdf2go.SemanticAnnotationSubject;
-import de.d3web.we.kdom.semanticAnnotation.rdf2go.SimpleAnnotation;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
@@ -57,21 +52,21 @@ public class StandardAnnotationRenderer extends ConditionalRenderer {
 
 		Section<?> sec = s;
 		String object = "no object found";
-		Section<SimpleAnnotation> objectSection = sec
-				.findSuccessor(SimpleAnnotation.class);
+		Section<SimpleAnnotation> objectSection = 
+				 Sections.findSuccessor(sec, SimpleAnnotation.class);
 		if (objectSection != null) {
 			object = objectSection.getOriginalText();
 		}
 
-		Section<AnnotatedString> astring = sec
-				.findSuccessor(AnnotatedString.class);
+		Section<AnnotatedString> astring = 
+				 Sections.findSuccessor(sec, AnnotatedString.class);
 		String text = "";
 		if (astring != null) text = "''" + astring.getOriginalText() + "''";
 		else text = "<b>" + object + "</b>";
-		Section<SemanticAnnotationContent> content = sec
-				.findSuccessor(SemanticAnnotationContent.class);
-		Section<SemanticAnnotationPropertyName> propSection = sec
-				.findSuccessor(SemanticAnnotationPropertyName.class);
+		Section<SemanticAnnotationContent> content = 
+				 Sections.findSuccessor(sec, SemanticAnnotationContent.class);
+		Section<SemanticAnnotationPropertyName> propSection = 
+				 Sections.findSuccessor(sec, SemanticAnnotationPropertyName.class);
 
 		String property = "no property found";
 		if (propSection != null) {
@@ -80,8 +75,8 @@ public class StandardAnnotationRenderer extends ConditionalRenderer {
 
 		String subject = "no subject found";
 
-		Section<SemanticAnnotationSubject> subjectSection = sec
-				.findSuccessor(SemanticAnnotationSubject.class);
+		Section<SemanticAnnotationSubject> subjectSection =
+				 Sections.findSuccessor(sec, SemanticAnnotationSubject.class);
 		if (subjectSection != null
 				&& subjectSection.getOriginalText().trim().length() > 0) {
 			subject = subjectSection.getOriginalText();
@@ -160,8 +155,8 @@ public class StandardAnnotationRenderer extends ConditionalRenderer {
 
 		}
 		tempio = (IntermediateOwlObject) KnowWEUtils
-				.getStoredObject(sec
-						.findSuccessor(SemanticAnnotationProperty.class),
+				.getStoredObject(Sections
+						.findSuccessor(sec, SemanticAnnotationProperty.class),
 						OwlHelper.IOO);
 		if (tempio != null && !tempio.getValidPropFlag()) {
 			text = KnowWEUtils

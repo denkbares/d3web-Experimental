@@ -27,6 +27,7 @@ import java.util.List;
 
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
@@ -108,25 +109,25 @@ public class TableCellContentRenderer extends KnowWEDomRenderer<TableCellContent
 		return KnowWEUtils.maskHTML(html.toString());
 	}
 
-	protected void generateContent(String sectionText, Section<TableCellContent> sec,
+	protected void generateContent(String sectionText, Section<TableCellContent> s,
 			KnowWEUserContext user, String sectionID, StringBuilder html) {
-		if (sec.hasQuickEditModeSet(user.getUserName())) {
-			Section<Table> father = sec.findAncestorOfType(Table.class);
+		if (s.hasQuickEditModeSet(user.getUserName())) {
+			Section<Table> father = Sections.findAncestorOfType(s, Table.class);
 			String[] values = null;
 			String size = null, rows = null, cols = null;
 
-			if (father != null && father.getObjectType() instanceof Table) {
-				values = ((Table) father.getObjectType()).getTableAttributesProvider().getAttributeValues(
-						sec);
-				size = ((Table) father.getObjectType()).getTableAttributesProvider().getWidthAttribute(
-						sec.findAncestorOfType(Table.class));
-				cols = ((Table) father.getObjectType()).getTableAttributesProvider().getNoEditColumnAttribute(
-						sec.findAncestorOfType(Table.class));
-				rows = ((Table) father.getObjectType()).getTableAttributesProvider().getNoEditRowAttribute(
-						sec.findAncestorOfType(Table.class));
+			if (father != null && father.get() instanceof Table) {
+				values = (father.get()).getTableAttributesProvider().getAttributeValues(
+						s);
+				size = (father.get()).getTableAttributesProvider().getWidthAttribute(
+						Sections.findAncestorOfType(s, Table.class));
+				cols = (father.get()).getTableAttributesProvider().getNoEditColumnAttribute(
+						Sections.findAncestorOfType(s, Table.class));
+				rows = (father.get()).getTableAttributesProvider().getNoEditRowAttribute(
+						Sections.findAncestorOfType(s, Table.class));
 			}
 
-			if (TableUtils.isEditable(sec, rows, cols)) {
+			if (TableUtils.isEditable(s, rows, cols)) {
 				if (values != null) {
 					html.append(createDefaultValueDropDown(values, sectionText, sectionID, size));
 				}
@@ -137,11 +138,11 @@ public class TableCellContentRenderer extends KnowWEDomRenderer<TableCellContent
 				}
 			}
 			else {
-				html.append(TableUtils.quote(translateTextForView(sectionText, sec)));
+				html.append(TableUtils.quote(translateTextForView(sectionText, s)));
 			}
 		}
 		else {
-			html.append(TableUtils.quote(translateTextForView(sectionText, sec)));
+			html.append(TableUtils.quote(translateTextForView(sectionText, s)));
 		}
 	}
 

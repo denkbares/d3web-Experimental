@@ -32,6 +32,7 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 
 /**
  * used to either add a row or a column to a table
@@ -57,7 +58,7 @@ public class AppendTableNodesAction extends AbstractAction {
 
 		// We need to do the following because there can be more than one table!
 		List<Section<Table>> tables = new LinkedList<Section<Table>>();
-		root.findSuccessorsOfType(Table.class, tables);
+		Sections.findSuccessorsOfType(root, Table.class, tables);
 		Section<Table> table = null;
 		for (Section<Table> temp : tables) {
 			if (temp.getID().equals(id)) {
@@ -89,7 +90,7 @@ public class AppendTableNodesAction extends AbstractAction {
 		Map<String, String> nodesMap = new HashMap<String, String>();
 		List<Section<TableLine>> lines = new LinkedList<Section<TableLine>>();
 
-		table.findSuccessorsOfType(TableLine.class, lines);
+		 Sections.findSuccessorsOfType(table, TableLine.class, lines);
 		// we use the previous line to determine which cells should be TH
 		Section<TableLine> line = lines != null ? lines.get(lines.size() - 1) : null;
 		StringBuilder newLine = new StringBuilder("");
@@ -98,7 +99,7 @@ public class AppendTableNodesAction extends AbstractAction {
 		if (line != null) {
 			newLine.append("\n");
 			List<Section<TableCell>> cells = new LinkedList<Section<TableCell>>();
-			line.findSuccessorsOfType(TableCell.class, cells);
+			Sections.findSuccessorsOfType(line, TableCell.class, cells);
 			for (Section<TableCell> cell : cells) {
 				if (TableCell.isTableHead(cell)) {
 					newLine.append(" || - ");
@@ -128,7 +129,7 @@ public class AppendTableNodesAction extends AbstractAction {
 		Map<String, String> nodesMap = new HashMap<String, String>();
 
 		List<Section<TableLine>> lines = new LinkedList<Section<TableLine>>();
-		table.findSuccessorsOfType(TableLine.class, lines);
+		Sections.findSuccessorsOfType(table, TableLine.class, lines);
 
 		String originalText = "";
 

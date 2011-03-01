@@ -23,9 +23,9 @@ package de.d3web.we.kdom.kopic.renderer;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Annotation.AnnotationObject;
 import de.d3web.we.kdom.Annotation.StandardAnnotationRenderer;
 import de.d3web.we.kdom.contexts.AnnotationContext;
@@ -36,16 +36,17 @@ import de.d3web.we.kdom.semanticAnnotation.SimpleAnnotation;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
+@SuppressWarnings("unchecked")
 public class D3webAnnotationRenderer extends KnowWEDomRenderer {
 
 	@Override
 	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
 
 		String question = null;
-		Section qAChild = sec.findSuccessor(SimpleAnnotation.class);
+		Section qAChild = Sections.findSuccessor(sec, SimpleAnnotation.class);
 
 		if (qAChild == null) {
-			qAChild = sec.findSuccessor(AnnotationObject.class);
+			qAChild = Sections.findSuccessor(sec, AnnotationObject.class);
 		}
 
 		if (qAChild != null) {
@@ -53,7 +54,7 @@ public class D3webAnnotationRenderer extends KnowWEDomRenderer {
 		}
 
 		if (question == null) {
-			Section findChildOfType = sec.findSuccessor(SimpleAnnotation.class);
+			Section findChildOfType = Sections.findSuccessor(sec, SimpleAnnotation.class);
 			if (findChildOfType != null) {
 				question = findChildOfType.getOriginalText();
 			}
@@ -61,7 +62,7 @@ public class D3webAnnotationRenderer extends KnowWEDomRenderer {
 
 		String text = "ERROR!!";
 		try {
-			text = sec.findSuccessor(AnnotatedString.class).getOriginalText();
+			text = Sections.findSuccessor(sec, AnnotatedString.class).getOriginalText();
 		}
 		catch (NullPointerException e) {
 			new StandardAnnotationRenderer().render(article, sec, user, string);
@@ -92,17 +93,17 @@ public class D3webAnnotationRenderer extends KnowWEDomRenderer {
 				if (context != null) op = context.getAnnotationproperty();
 				// UpperOntology2 uo = UpperOntology2.getInstance();
 				// if (!uo.knownConcept(op)) {
-				// return KnowWEEnvironment.maskHTML(DefaultTextType
+				// return KnowWEUtils.maskHTML(DefaultTextType
 				// .getErrorUnknownConcept(op, text));
 				// }
 				String s = "<a href=\"#" + sec.getID() + "\"></a>"
 						+ KnowWEUtils.getRenderedInput(q.getName(), q.getName(),
 								kb.getId(), user, "Annotation", text, op);
-				String masked = KnowWEEnvironment.maskHTML(s);
+				String masked = KnowWEUtils.maskHTML(s);
 				return masked;
 			}
 			else {
-				return KnowWEEnvironment.maskHTML(KnowWEUtils.getErrorQ404(
+				return KnowWEUtils.maskHTML(KnowWEUtils.getErrorQ404(
 						question, text));
 			}
 		}

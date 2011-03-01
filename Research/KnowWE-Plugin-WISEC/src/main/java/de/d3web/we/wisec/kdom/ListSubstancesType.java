@@ -20,7 +20,7 @@
 
 package de.d3web.we.wisec.kdom;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.Section;
@@ -35,7 +35,7 @@ import de.d3web.we.wisec.kdom.subtreehandler.ListSubstancesOWLSubtreeHandler;
  * 
  * @author Sebastian Furth
  */
-public class ListSubstancesType extends DefaultAbstractKnowWEObjectType {
+public class ListSubstancesType extends AbstractType {
 
 	public ListSubstancesType() {
 		setSectionFinder(new AllTextSectionFinder());

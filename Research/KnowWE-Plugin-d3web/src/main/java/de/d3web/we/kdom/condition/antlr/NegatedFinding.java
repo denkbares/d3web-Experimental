@@ -20,11 +20,11 @@
 
 package de.d3web.we.kdom.condition.antlr;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 
-public class NegatedFinding extends DefaultAbstractKnowWEObjectType {
+public class NegatedFinding extends AbstractType {
 
 	@Override
 	public KnowWEDomRenderer getRenderer() {

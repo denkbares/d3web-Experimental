@@ -20,10 +20,10 @@
 
 package de.d3web.we.plugin.calendar;
 
-import de.d3web.we.kdom.AbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
-public class AppointmentDate extends AbstractKnowWEObjectType {
+public class AppointmentDate extends AbstractType {
 
 	@Override
 	protected void init() { // "[0-9]{1,4}(\\.|-|/)[0-9]{1,2}(\\.|-|/)[0-9][0-9]{1,4}"

@@ -19,8 +19,8 @@
  */
 package de.d3web.we.kdom.basic;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
@@ -30,12 +30,12 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
  * 
  * @author Reinhard Hatko Created on: 10.12.2009
  */
-public abstract class ParameterizedKeyWordType extends DefaultAbstractKnowWEObjectType {
+public abstract class ParameterizedKeyWordType extends AbstractType {
 
 	private final String keyword;
-	private final KnowWEObjectType type;
+	private final Type type;
 
-	public ParameterizedKeyWordType(String keyword, KnowWEObjectType type) {
+	public ParameterizedKeyWordType(String keyword, Type type) {
 		this.keyword = keyword;
 		this.type = type;
 		initintern();
@@ -55,7 +55,7 @@ public abstract class ParameterizedKeyWordType extends DefaultAbstractKnowWEObje
 
 	}
 
-	private static class KeywordType extends DefaultAbstractKnowWEObjectType {
+	private static class KeywordType extends AbstractType {
 
 		public KeywordType(String keyword) {
 			this.sectionFinder = new RegexSectionFinder(keyword);

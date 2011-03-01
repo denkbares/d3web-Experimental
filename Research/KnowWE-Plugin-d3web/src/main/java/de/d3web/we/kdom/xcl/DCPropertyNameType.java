@@ -19,7 +19,7 @@
  */
 package de.d3web.we.kdom.xcl;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.utils.Patterns;
@@ -28,7 +28,7 @@ import de.d3web.we.utils.Patterns;
  * 
  * @author Reinhard Hatko Created on: 03.12.2009
  */
-public class DCPropertyNameType extends DefaultAbstractKnowWEObjectType {
+public class DCPropertyNameType extends AbstractType {
 
 	@Override
 	protected void init() {

@@ -20,10 +20,7 @@
 
 package de.d3web.we.module;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.rendering.PageAppendHandler;
-import de.d3web.we.kdom.validation.KDOMValidator;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
@@ -34,15 +31,19 @@ public class ValidationPageAppendHandler implements PageAppendHandler {
 			KnowWEUserContext user) {
 
 		if (user.userIsAdmin()) {
-			KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(web, topic);
-			boolean valid = KDOMValidator.getTagHandlerInstance().validateArticle(article);
-			String header = "<div id=\"validator-panel\" class=\"panel\"><h3>"
-					+ KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
-							"KnowWE.ValidatorHandler.header")
-					+ "</h3><div><ul>";
-			return valid ? "" : KnowWEUtils.maskHTML(header
-					+ KDOMValidator.getTagHandlerInstance().getBuilder().toString()
-					+ "</ul></div></div>");
+			// KnowWEArticle article =
+			// KnowWEEnvironment.getInstance().getArticle(web, topic);
+			// boolean valid =
+			// KDOMValidator.getTagHandlerInstance().validateArticle(article);
+			// String header =
+			// "<div id=\"validator-panel\" class=\"panel\"><h3>"
+			// + KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
+			// "KnowWE.ValidatorHandler.header")
+			// + "</h3><div><ul>";
+			// return valid ? "" : KnowWEUtils.maskHTML(header
+			// + KDOMValidator.getTagHandlerInstance().getBuilder().toString()
+			// + "</ul></div></div>");
+			return KnowWEUtils.maskHTML("<span class='warning'>Currently the KDOM is not validated due to code refactoring!</span>");
 		}
 		else {
 			return "";

@@ -24,27 +24,27 @@ import java.util.List;
 import java.util.Map;
 
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
- * Renders the SearchMask for the KnowWEObjectTypeBrowser.
+ * Renders the SearchMask for the TypeBrowser.
  * 
- * @see KnowWEObjectTypeBrowserRenderer.
+ * @see TypeBrowserRenderer.
  * 
  * @author Johannes Dienst
  * 
  */
-public class KnowWEObjectTypeBrowserHandler extends AbstractHTMLTagHandler {
+public class KnowWETypeBrowserHandler extends AbstractHTMLTagHandler {
 
-	public KnowWEObjectTypeBrowserHandler() {
+	public KnowWETypeBrowserHandler() {
 		super("TypeBrowser");
 	}
 
 	@Override
 	public String getDescription(KnowWEUserContext user) {
 		return KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
-				"KnowWE.KnowWEObjectTypeBrowser.description");
+				"KnowWE.TypeBrowser.description");
 	}
 
 	@Override
@@ -59,13 +59,13 @@ public class KnowWEObjectTypeBrowserHandler extends AbstractHTMLTagHandler {
 			}
 		}
 
-		List<KnowWEObjectType> types = KnowWEEnvironment.getInstance().getAllKnowWEObjectTypes();
+		List<Type> types = KnowWEEnvironment.getInstance().getAllTypes();
 		StringBuilder html = new StringBuilder();
 
 		// Header
-		html.append("<div id=\"KnowWEObjectTypeBrowser\" class=\"panel\"><h3>"
+		html.append("<div id=\"TypeBrowser\" class=\"panel\"><h3>"
 				+ KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
-						"KnowWE.KnowWeObjectTypeBrowser.topic")
+						"KnowWE.TypeBrowser.topic")
 				+ "</h3>");
 		html.append("<form method='post' action='' name='typebrowser'>");
 		html.append("<fieldset>");
@@ -75,7 +75,7 @@ public class KnowWEObjectTypeBrowserHandler extends AbstractHTMLTagHandler {
 
 		// Entry for every Type
 		String name = "";
-		for (KnowWEObjectType type : types) {
+		for (Type type : types) {
 			if (!type.getName().contains(".")) {
 				name = type.getClass().getPackage().getName() + ".";
 			}
@@ -97,7 +97,7 @@ public class KnowWEObjectTypeBrowserHandler extends AbstractHTMLTagHandler {
 		html.append("<p><input type='button'"
 				+ " value='"
 				+ KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
-						"KnowWE.KnowWeObjectTypeBrowser.searchbutton")
+						"KnowWE.TypeBrowser.searchbutton")
 				+ "' name='' class='button' title=''/></p>");
 
 		html.append("<div id=\"TypeSearchResult\"> </div>");

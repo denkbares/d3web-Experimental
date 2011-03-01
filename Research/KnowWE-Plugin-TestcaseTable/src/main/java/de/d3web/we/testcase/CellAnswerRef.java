@@ -1,7 +1,8 @@
 package de.d3web.we.testcase;
 
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.object.AnswerReference;
 import de.d3web.we.object.QuestionReference;
 
@@ -15,9 +16,10 @@ final class CellAnswerRef extends AnswerReference {
 	@Override
 	public Section<QuestionReference> getQuestionSection(Section<? extends AnswerReference> s) {
 
-		Section<? extends KnowWEObjectType> headerCell = TestcaseTable.findHeaderCell(s);
+		Section<? extends Type> headerCell = TestcaseTable.findHeaderCell(s);
 
-		Section<QuestionReference> questionRef = headerCell.findSuccessor(QuestionReference.class);
+		Section<QuestionReference> questionRef = Sections.findSuccessor(headerCell,
+				QuestionReference.class);
 
 		return questionRef;
 	}

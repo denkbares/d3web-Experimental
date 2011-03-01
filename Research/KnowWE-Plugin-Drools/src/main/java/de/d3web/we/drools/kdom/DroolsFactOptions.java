@@ -19,7 +19,7 @@
  */
 package de.d3web.we.drools.kdom;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 /**
@@ -27,7 +27,7 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
  * It contains the input name and possible values where applicable.
  * @author Alex Legler
  */
-public class DroolsFactOptions extends DefaultAbstractKnowWEObjectType {
+public class DroolsFactOptions extends AbstractType {
 
 	public DroolsFactOptions() {
 		setSectionFinder(new RegexSectionFinder("\\(.*?\\)"));

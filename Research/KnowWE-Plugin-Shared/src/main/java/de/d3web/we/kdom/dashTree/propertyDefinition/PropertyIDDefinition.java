@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.dashTree.propertyDefinition;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
@@ -35,7 +35,7 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
  *         Type for an (OWL-) property-definition
  * 
  */
-public class PropertyIDDefinition extends DefaultAbstractKnowWEObjectType {
+public class PropertyIDDefinition extends AbstractType {
 
 	private static PropertyIDDefinition defaultInstance = null;
 

@@ -24,7 +24,7 @@
 package de.d3web.we.core.semantic.rdf2go;
 
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.subtreeHandler.ConstraintModule;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
@@ -38,7 +38,7 @@ import de.d3web.we.kdom.subtreeHandler.SuccessorNotReusedConstraint;
  *        SubtreeHandlers to facilitate the incremental build of Articles
  * 
  */
-public abstract class RDF2GoSubtreeHandler<T extends KnowWEObjectType> extends
+public abstract class RDF2GoSubtreeHandler<T extends Type> extends
 		SubtreeHandler<T> {
 
 	public RDF2GoSubtreeHandler() {
@@ -57,7 +57,7 @@ public abstract class RDF2GoSubtreeHandler<T extends KnowWEObjectType> extends
 		}
 	}
 
-	private class RDF2GoHandlerConstraint<T2 extends KnowWEObjectType> extends ConstraintModule<T2> {
+	private class RDF2GoHandlerConstraint<T2 extends Type> extends ConstraintModule<T2> {
 
 		public RDF2GoHandlerConstraint() {
 			super(Operator.DONT_COMPILE_IF_VIOLATED, Purpose.CREATE_AND_DESTROY);

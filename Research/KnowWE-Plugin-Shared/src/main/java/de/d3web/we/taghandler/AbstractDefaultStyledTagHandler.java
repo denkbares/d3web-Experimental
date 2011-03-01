@@ -24,6 +24,7 @@ import java.util.Map;
 
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.d3web.we.tools.Tool;
 import de.d3web.we.tools.ToolUtils;
@@ -51,7 +52,8 @@ public abstract class AbstractDefaultStyledTagHandler extends AbstractTagHandler
 	@Override
 	public final String render(KnowWEArticle article, Section<?> section, KnowWEUserContext userContext, Map<String, String> parameters) {
 		String content = renderContent(article, section, userContext, parameters);
-		Section<TagHandlerTypeContent> tagNameSection = section.findSuccessor(TagHandlerTypeContent.class);
+		Section<TagHandlerTypeContent> tagNameSection = Sections.findSuccessor(section,
+				TagHandlerTypeContent.class);
 		String sectionID = section.getID();
 		Tool[] tools = ToolUtils.getTools(article, tagNameSection, userContext);
 

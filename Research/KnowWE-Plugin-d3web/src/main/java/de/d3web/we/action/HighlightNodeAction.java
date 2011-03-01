@@ -25,6 +25,7 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 
 public class HighlightNodeAction extends DeprecatedAbstractKnowWEAction {
 
@@ -40,7 +41,7 @@ public class HighlightNodeAction extends DeprecatedAbstractKnowWEAction {
 			if (article != null) {
 				KnowWEArticle art = KnowWEEnvironment.getInstance().getArticleManager(web).getArticle(
 						article);
-				Section sec = art.getSection().findChild(nodeID);
+				Section<?> sec = Sections.findSuccessor(art.getSection(), nodeID);
 				if (sec != null) {
 					// sec.setRenderer(new OneTimeRenderer(sec,
 					// HighlightRenderer.getInstance()));

@@ -22,6 +22,7 @@ import de.d3web.we.drools.terminology.SolutionInput;
 import de.d3web.we.drools.terminology.TextValue;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.utils.KnowWEUtils;
 
@@ -229,7 +230,8 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 			
 			// Get the RootType sections
 			List<Section<DroolsSessionRootType>> rootTypes = new ArrayList<Section<DroolsSessionRootType>>();
-			article.getSection().findSuccessorsOfType(DroolsSessionRootType.class, rootTypes);
+			Sections.findSuccessorsOfType(article.getSection(), DroolsSessionRootType.class,
+					rootTypes);
 					
 			// Search for the correct session
 			for (Section<DroolsSessionRootType> rootType : rootTypes) {

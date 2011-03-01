@@ -165,12 +165,12 @@
 		-->
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TimeEventType">
 		<parameter id="class"
 			value="de.d3web.we.hermes.kdom.TimeEventType" />
 		<parameter id="name" value="TimeEventType" />
-		<parameter id="description" value="KnowWEObjectType TimeEventType" />
+		<parameter id="description" value="Type TimeEventType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="3.9" />
 		<parameter id="scope" value="root" />
@@ -178,12 +178,12 @@
 		<parameter id="css" value="hermes.css" />
 	</extension>
 	
-		<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TimeEventNew">
 		<parameter id="class"
 			value="de.d3web.we.hermes.kdom.event.TimeEventNew" />
 		<parameter id="name" value="TimeEventNew" />
-		<parameter id="description" value="KnowWEObjectType TimeEventNew" />
+		<parameter id="description" value="Type TimeEventNew" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="3" />
 		<parameter id="scope" value="root" />
@@ -191,12 +191,12 @@
 		<parameter id="css" value="hermes.css" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="LocationDefinitionType">
 		<parameter id="class"
 			value="de.d3web.we.hermes.maps.LocationDefinitionType" />
 		<parameter id="name" value="LocationDefinitionType" />
-		<parameter id="description" value="KnowWEObjectType LocationDefinitionType" />
+		<parameter id="description" value="Type LocationDefinitionType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="3.8" />
 		<parameter id="scope" value="root" />
@@ -204,12 +204,12 @@
 		<parameter id="css" value="hermes.css" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TreeViewType">
 		<parameter id="class"
 			value="de.d3web.we.hermes.TreeViewType" />
 		<parameter id="name" value="TreeViewType" />
-		<parameter id="description" value="KnowWEObjectType TreeViewType" />
+		<parameter id="description" value="Type TreeViewType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="3" />
 		<parameter id="scope" value="root" />
@@ -217,12 +217,12 @@
 		<parameter id="css" value="hermes.css" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="MapType">
 		<parameter id="class"
 			value="de.d3web.we.hermes.maps.MapType" />
 		<parameter id="name" value="MapType" />
-		<parameter id="description" value="KnowWEObjectType MapType" />
+		<parameter id="description" value="Type MapType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
@@ -230,12 +230,12 @@
 		<parameter id="css" value="hermes.css" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="PropertyDefinitionType">
 		<parameter id="class"
 			value="de.d3web.we.kdom.dashTree.propertyDefinition.PropertyDefinitionType" />
 		<parameter id="name" value="PropertyDefinitionType" />
-		<parameter id="description" value="KnowWEObjectType PropertyDefinitionType" />
+		<parameter id="description" value="Type PropertyDefinitionType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />

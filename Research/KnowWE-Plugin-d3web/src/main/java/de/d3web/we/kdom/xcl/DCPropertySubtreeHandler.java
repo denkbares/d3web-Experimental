@@ -28,6 +28,7 @@ import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.message.NoSuchObjectError;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
@@ -46,7 +47,7 @@ import de.d3web.we.utils.KnowWEUtils;
 public class DCPropertySubtreeHandler extends D3webSubtreeHandler<DCPropertyType> {
 
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
+	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<DCPropertyType> s) {
 
 		KnowledgeBase kb = getKB(article);
 
@@ -70,13 +71,13 @@ public class DCPropertySubtreeHandler extends D3webSubtreeHandler<DCPropertyType
 	 * Stores the content of the section into the NamedObjects MMInfoStore
 	 * 
 	 */
-	private void storeMMInfo(Section s, TerminologyObject obj) {
+	private void storeMMInfo(Section<DCPropertyType> s, TerminologyObject obj) {
 
-		Property<Object> untypedProperty = Property.getUntypedProperty(s.findChildOfType(
-				DCPropertyNameType.class).getOriginalText().toLowerCase());
+		Property<Object> untypedProperty = Property.getUntypedProperty(Sections.findChildOfType(
+				s, DCPropertyNameType.class).getOriginalText().toLowerCase());
 
 		obj.getInfoStore().addValue(untypedProperty,
-				s.findChildOfType(DCPropertyContentType.class).getOriginalText());
+				Sections.findChildOfType(s, DCPropertyContentType.class).getOriginalText());
 
 	}
 
@@ -85,8 +86,8 @@ public class DCPropertySubtreeHandler extends D3webSubtreeHandler<DCPropertyType
 	 * this is the part which would have to be adapted to other scenarios
 	 * 
 	 */
-	private TerminologyObject getNamedObject(Section s, KnowledgeBase kb) {
-		Section xclhead = s.findAncestorOfType(XCList.class);
+	private TerminologyObject getNamedObject(Section<?> s, KnowledgeBase kb) {
+		Section xclhead = Sections.findAncestorOfType(s, XCList.class);
 
 		String diagnosis = (String) KnowWEUtils.getStoredObject(xclhead, XCLHead.KEY_SOLUTION_NAME);
 

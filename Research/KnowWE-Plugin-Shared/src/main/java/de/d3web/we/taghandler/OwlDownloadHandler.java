@@ -23,6 +23,7 @@ package de.d3web.we.taghandler;
 import java.util.Map;
 
 import de.d3web.we.core.KnowWEEnvironment;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class OwlDownloadHandler extends AbstractHTMLTagHandler {
@@ -46,6 +47,6 @@ public class OwlDownloadHandler extends AbstractHTMLTagHandler {
 		String icon = "<img src=\"KnowWEExtension/images/disk.png\" title=\"Owl download\" /></img>";
 		result += "<a href=\"" + prefix + "OwlDownload.jsp\">" + icon + "</a>";
 
-		return KnowWEEnvironment.maskHTML(result);
+		return KnowWEUtils.maskHTML(result);
 	}
 }

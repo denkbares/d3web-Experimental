@@ -49,34 +49,34 @@
 	</extension>
 
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="DroolsFactsRootType">
 		<parameter id="class"
 			value="de.d3web.we.drools.kdom.DroolsFactsRootType" />
 		<parameter id="name" value="DroolsFactsRootType" />
-		<parameter id="description" value="KnowWEObjectType DroolsFactsRootType" />
+		<parameter id="description" value="Type DroolsFactsRootType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="DroolsRulesRootType">
 		<parameter id="class"
 			value="de.d3web.we.drools.kdom.DroolsRulesRootType" />
 		<parameter id="name" value="DroolsRulesRootType" />
-		<parameter id="description" value="KnowWEObjectType DroolsRulesRootType" />
+		<parameter id="description" value="Type DroolsRulesRootType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 	</extension>	
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="DroolsSessionRootType">
 		<parameter id="class"
 			value="de.d3web.we.drools.kdom.DroolsSessionRootType" />
 		<parameter id="name" value="DroolsSessionRootType" />
-		<parameter id="description" value="KnowWEObjectType DroolsSessionRootType" />
+		<parameter id="description" value="Type DroolsSessionRootType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />

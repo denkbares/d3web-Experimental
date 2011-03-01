@@ -34,11 +34,12 @@ import de.d3web.we.core.semantic.OwlHelper;
 import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.d3webModule.D3WebOWLVokab;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.basic.QuotedType;
 import de.d3web.we.kdom.condition.antlr.NOT;
 import de.d3web.we.kdom.filter.TypeSectionFilter;
@@ -47,18 +48,20 @@ import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SimpleMessageError;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
+import de.d3web.we.kdom.sectionFinder.ISectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.utils.KnowWEUtils;
 
-public class Finding extends DefaultAbstractKnowWEObjectType {
+@SuppressWarnings("unchecked")
+public class Finding extends AbstractType {
 
 	@Override
 	public void init() {
 		this.childrenTypes.add(new NOT());
-		this.childrenTypes.add(new FindingComparator());
-		this.childrenTypes.add(new QuotedType(new FindingQuestion()));
-		this.childrenTypes.add(new FindingQuestion());
+		FindingComparator findingComparator = new FindingComparator();
+		this.childrenTypes.add(findingComparator);
+		this.childrenTypes.add(new QuotedType(new FindingQuestion(findingComparator)));
+		this.childrenTypes.add(new FindingQuestion(findingComparator));
 		this.childrenTypes.add(new QuotedType(new FindingAnswer()));
 		this.childrenTypes.add(new FindingAnswer());
 		this.sectionFinder = new FindingSectionFinder();
@@ -84,14 +87,14 @@ public class Finding extends DefaultAbstractKnowWEObjectType {
 								new TypeSectionFilter(new FindingComparator()
 										.getName())).get(0);
 				String comparator = ((FindingComparator) csection
-						.getObjectType()).getComparator(csection);
+						.get()).getComparator(csection);
 
-				Section qsection = section.findSuccessor(FindingQuestion.class);
-				String question = ((FindingQuestion) qsection.getObjectType())
+				Section qsection = Sections.findSuccessor(section, FindingQuestion.class);
+				String question = ((FindingQuestion) qsection.get())
 						.getQuestion(qsection);
 
-				Section asection = section.findSuccessor(FindingAnswer.class);
-				String answer = ((FindingAnswer) asection.getObjectType())
+				Section asection = Sections.findSuccessor(section, FindingAnswer.class);
+				String answer = ((FindingAnswer) asection.get())
 						.getAnswer(asection);
 
 				URI compuri = uo.getHelper().getComparator(comparator);
@@ -137,13 +140,13 @@ public class Finding extends DefaultAbstractKnowWEObjectType {
 
 	}
 
-	public class FindingSectionFinder extends SectionFinder {
+	public class FindingSectionFinder implements ISectionFinder {
 
 		private final AllTextFinderTrimmed textFinder = new AllTextFinderTrimmed();
 
 		@Override
 		public List<SectionFinderResult> lookForSections(String text,
-				Section father, KnowWEObjectType type) {
+				Section<?> father, Type type) {
 			if (text.contains(">") || text.contains("=") || text.contains("<")) {
 				if (!text.contains("+=")) { // hack excluding "+="
 					return textFinder.lookForSections(

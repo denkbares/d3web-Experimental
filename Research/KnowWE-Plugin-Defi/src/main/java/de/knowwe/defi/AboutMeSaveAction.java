@@ -29,6 +29,7 @@ import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 
 /**
  * The AboutMeSaveAction stores the information provided in the AboutMe-Edit
@@ -61,7 +62,7 @@ public class AboutMeSaveAction extends AbstractAction {
 
 		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
 		Section<?> section = mgr.getArticle(title).getSection();
-		Section<AboutMe> child = section.findSuccessor(AboutMe.class);
+		Section<AboutMe> child = Sections.findSuccessor(section, AboutMe.class);
 
 		int aboutFound = 0;
 		if (about != null) {

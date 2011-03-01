@@ -23,12 +23,12 @@
  */
 package de.d3web.we.kdom.condition.antlr;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 
 /**
  * @author kazamatzuri
  * 
  */
-public class IntervallBracketOpen extends DefaultAbstractKnowWEObjectType {
+public class IntervallBracketOpen extends AbstractType {
 
 }

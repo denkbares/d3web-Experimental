@@ -20,12 +20,12 @@
 
 package de.d3web.we.knowwetypes;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.knowweobjecttypes.FeatureImplementation;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.Types.FeatureImplementation;
 import de.d3web.we.sectionfinder.FeatureSectionFinder;
 import de.d3web.we.sectionfinder.TypeSectionFinder;
 
-public class RoomNumberType extends DefaultAbstractKnowWEObjectType {
+public class RoomNumberType extends AbstractType {
 
 	@Override
 	protected void init() {

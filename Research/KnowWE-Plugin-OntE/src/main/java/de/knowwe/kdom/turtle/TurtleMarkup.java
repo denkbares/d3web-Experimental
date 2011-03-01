@@ -10,11 +10,12 @@ import org.ontoware.rdf2go.vocabulary.OWL;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SingleChildConstraint;
 import de.d3web.we.kdom.objects.KnowWETerm;
@@ -43,7 +44,7 @@ import de.knowwe.termObject.URIObject;
 import de.knowwe.termObject.URITermDefinition;
 import de.knowwe.termObject.URIObject.URIObjectType;
 
-public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
+public class TurtleMarkup extends AbstractType {
 
 	public static final StyleRenderer PROPERTY_RENDERER = new StyleRenderer(
 			"color:rgb(40, 40, 160)");
@@ -59,7 +60,7 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 		AnonymousTypeInvisible start = new AnonymousTypeInvisible("turtlestart");
 		start.setSectionFinder(new ISectionFinder() {
 			@Override
-			public List<SectionFinderResult> lookForSections(String text, Section<?> father, KnowWEObjectType type) {
+			public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 				return SectionFinderResult.createSingleItemResultList(0, 1);
 			}
 		});
@@ -69,7 +70,7 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 		stop.setSectionFinder(new ISectionFinder() {
 
 			@Override
-			public List<SectionFinderResult> lookForSections(String text, Section<?> father, KnowWEObjectType type) {
+			public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 				return SectionFinderResult.createSingleItemResultList(text.length() - 1,
 						text.length());
 			}
@@ -80,7 +81,7 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 		this.addChildType(predicate);
 
 		TurtleSubject subject = new TurtleSubject();
-		subject.setSectionFinder(AllBeforeTypeSectionFinder.createFinder(predicate));
+		subject.setSectionFinder(new AllBeforeTypeSectionFinder(predicate));
 
 		this.addChildType(subject);
 
@@ -105,7 +106,7 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 
 	}
 
-	class TurtlePredicate extends DefaultAbstractKnowWEObjectType implements KnowWETerm<String> {
+	class TurtlePredicate extends AbstractType implements KnowWETerm<String> {
 
 		public TurtlePredicate() {
 			this.setSectionFinder(new RegexSectionFinder("\\b([^\\s]*)::", 0));
@@ -143,7 +144,7 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 
 	}
 
-	class TurtleSubject extends DefaultAbstractKnowWEObjectType {
+	class TurtleSubject extends AbstractType {
 		public TurtleSubject() {
 			this.addChildType(new LocalConceptDefinition());
 			this.addChildType(new LocalConceptReference());
@@ -195,9 +196,9 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 
 			@Override
 			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<SubjectDefinition> s) {
-				Section<TurtleMarkup> turtle = s.findAncestorOfType(TurtleMarkup.class);
+				Section<TurtleMarkup> turtle = Sections.findAncestorOfType(s, TurtleMarkup.class);
 				List<Section<BasicVocabularyReference>> l = new ArrayList<Section<BasicVocabularyReference>>();
-				turtle.findSuccessorsOfType(BasicVocabularyReference.class, l);
+				Sections.findSuccessorsOfType(turtle, BasicVocabularyReference.class, l);
 
 				if (l.size() == 2) {
 					URI predURI = l.get(0).get().getURI(l.get(0));
@@ -257,7 +258,7 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 		}
 	}
 
-	class TurtleObject extends DefaultAbstractKnowWEObjectType {
+	class TurtleObject extends AbstractType {
 		public TurtleObject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new AllTextFinderTrimmed());
@@ -268,7 +269,7 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 		}
 	}
 
-	private class TermChecker extends GeneralSubtreeHandler<KnowWEObjectType> {
+	private class TermChecker extends GeneralSubtreeHandler<Type> {
 
 		String knownObjectTerms[] = null;
 
@@ -277,7 +278,7 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 		}
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<KnowWEObjectType> s) {
+		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Type> s) {
 			// if turtle object check for datatype prop!
 			String termName = s.getOriginalText();
 			if (s.get() instanceof KnowWETerm) {
@@ -316,11 +317,11 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
-			if (s.findSuccessor(TurtlePredicate.class) == null) {
+			if (Sections.findSuccessor(s, TurtlePredicate.class) == null) {
 				return Arrays.asList((KDOMReportMessage) new SyntaxError(
 						"TurtleMarkup: Predicate missing!"));
 			}
-			if (s.findSuccessor(TurtleObject.class) == null) {
+			if (Sections.findSuccessor(s, TurtleObject.class) == null) {
 				return Arrays.asList((KDOMReportMessage) new SyntaxError(
 						"TurtleMarkup: Object missing!"));
 			}

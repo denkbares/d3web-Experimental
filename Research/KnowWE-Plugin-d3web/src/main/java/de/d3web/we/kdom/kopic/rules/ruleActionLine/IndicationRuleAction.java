@@ -22,8 +22,8 @@ package de.d3web.we.kdom.kopic.rules.ruleActionLine;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.WordSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
@@ -33,7 +33,7 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
  * @author Johannes Dienst
  * 
  */
-public class IndicationRuleAction extends DefaultAbstractKnowWEObjectType {
+public class IndicationRuleAction extends AbstractType {
 
 	@Override
 	public void init() {
@@ -54,7 +54,7 @@ public class IndicationRuleAction extends DefaultAbstractKnowWEObjectType {
 	private class IndicationRuleActionSectionFinder extends SectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, KnowWEObjectType type) {
+		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
 
 			String[] parts = text.split(" ");
 			for (String s : parts) {

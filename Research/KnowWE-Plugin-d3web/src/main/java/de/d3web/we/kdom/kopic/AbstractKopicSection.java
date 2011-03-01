@@ -22,9 +22,9 @@ package de.d3web.we.kdom.kopic;
 
 import de.d3web.we.kdom.kopic.renderer.KopicSectionRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 
-public abstract class AbstractKopicSection extends AbstractXMLObjectType {
+public abstract class AbstractKopicSection extends AbstractXMLType {
 
 	public AbstractKopicSection(String type) {
 		super(type);

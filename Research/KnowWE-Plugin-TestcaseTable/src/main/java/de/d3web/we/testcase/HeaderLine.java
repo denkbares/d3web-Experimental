@@ -21,7 +21,7 @@ package de.d3web.we.testcase;
 import java.util.List;
 
 import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SectionFinderConstraint;
@@ -50,20 +50,22 @@ public class HeaderLine extends TableLine {
 				new SectionFinderConstraint() {
 
 					@Override
-					public boolean satisfiesConstraint(List<SectionFinderResult> found, Section father, KnowWEObjectType type) {
-
+					public <T extends Type> boolean satisfiesConstraint(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
+						
 						// header line
 						return found.size() == 1;
 					}
 
 					@Override
-					public void filterCorrectResults(List<SectionFinderResult> found, Section father, KnowWEObjectType type) {
+					public <T extends Type> void filterCorrectResults(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
 						if (found.size() < 2)
 							return;
 							SectionFinderResult result = found.get(0);
 							found.clear();
 							found.add(result);
 						}
+
+
 				}));
 	}
 }

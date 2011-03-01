@@ -25,13 +25,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
-public class XCLTail extends DefaultAbstractKnowWEObjectType {
+public class XCLTail extends AbstractType {
 
 	private static Pattern p = Pattern.compile(
 			"\\s*" + // spaces
@@ -47,7 +47,7 @@ public class XCLTail extends DefaultAbstractKnowWEObjectType {
 	public class XCLTailSectionFinder extends SectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, KnowWEObjectType type) {
+		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
 			List<SectionFinderResult> matches = new ArrayList<SectionFinderResult>(1);
 
 			int end = text.lastIndexOf('}');
@@ -77,7 +77,7 @@ public class XCLTail extends DefaultAbstractKnowWEObjectType {
 	}
 
 	private static double getValue(Section section, String param) {
-		if (!(section.getObjectType() instanceof XCLTail)) return -1;
+		if (!(section.get() instanceof XCLTail)) return -1;
 		else {
 			Matcher matcher = p.matcher(section.getOriginalText());
 

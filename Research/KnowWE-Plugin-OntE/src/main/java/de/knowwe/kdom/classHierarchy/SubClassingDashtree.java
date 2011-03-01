@@ -21,20 +21,19 @@ package de.knowwe.kdom.classHierarchy;
 
 import java.util.List;
 
-import de.d3web.we.kdom.AbstractKnowWEObjectType;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.dashtree.DashSubtree;
 import de.knowwe.core.dashtree.DashTree;
 import de.knowwe.core.dashtree.DashTreeElement;
 
-public class SubClassingDashtree extends DefaultAbstractKnowWEObjectType {
+public class SubClassingDashtree extends AbstractType {
 
 	@Override
 	protected void init() {
-		AbstractKnowWEObjectType subClassingDashTree = new DashTree();
+		AbstractType subClassingDashTree = new DashTree();
 		replaceRootType(subClassingDashTree);
 		this.childrenTypes.add(subClassingDashTree);
 		this.setSectionFinder(new AllTextSectionFinder());
@@ -43,12 +42,12 @@ public class SubClassingDashtree extends DefaultAbstractKnowWEObjectType {
 	}
 
 	private void replaceRootType(
-					AbstractKnowWEObjectType subClassingDashTree) {
-		List<KnowWEObjectType> types = subClassingDashTree.getAllowedChildrenTypes();
-		for (KnowWEObjectType knowWEObjectType : types) {
+			AbstractType subClassingDashTree) {
+		List<Type> types = subClassingDashTree.getAllowedChildrenTypes();
+		for (Type knowWEObjectType : types) {
 			if (knowWEObjectType instanceof DashSubtree) {
 				try {
-					((AbstractKnowWEObjectType) knowWEObjectType).replaceChildType(
+					((AbstractType) knowWEObjectType).replaceChildType(
 									new SubClassingDashTreeElement(),
 									DashTreeElement.class);
 				}

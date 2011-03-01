@@ -20,6 +20,7 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.lod.HermesData;
 import de.d3web.we.lod.LinkedOpenData;
 import de.d3web.we.lod.markup.MappingContentType;
@@ -113,8 +114,8 @@ public class MappingsAction extends AbstractAction {
 
 			List<Section<MappingContentType>> found1 = new
 					Vector<Section<MappingContentType>>();
-			article.getSection().findSuccessorsOfType(
-					MappingContentType.class, found1);
+			Sections.findSuccessorsOfType(
+						article.getSection(), MappingContentType.class, found1);
 
 			Map<String, String> nodesMap = new HashMap<String, String>();
 

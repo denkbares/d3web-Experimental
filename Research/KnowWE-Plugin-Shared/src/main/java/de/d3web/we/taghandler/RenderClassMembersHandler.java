@@ -34,9 +34,9 @@ import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.semantic.sparql.DefaultSparqlRenderer;
 import de.knowwe.semantic.sparql.SparqlDelegateRenderer;
@@ -86,7 +86,7 @@ public class RenderClassMembersHandler extends AbstractHTMLTagHandler {
 				TupleQueryResult result = ((TupleQuery) query).evaluate();
 
 				// values.put("render", "links");
-				return KnowWEEnvironment.maskHTML(DefaultSparqlRenderer
+				return KnowWEUtils.maskHTML(DefaultSparqlRenderer
 						.getInstance().renderResults(result, true));
 			}
 			else if (query instanceof GraphQuery) {

@@ -21,9 +21,9 @@
 package objectTypes;
 
 import copies.RegexSectionFinder;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 
-public class AObjectType extends DefaultAbstractKnowWEObjectType {
+public class AObjectType extends AbstractType {
 
 	@Override
 	public void init() {

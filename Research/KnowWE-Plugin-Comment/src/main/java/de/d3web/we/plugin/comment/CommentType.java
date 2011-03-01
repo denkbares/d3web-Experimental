@@ -22,11 +22,11 @@ package de.d3web.we.plugin.comment;
 
 import java.util.Map;
 
-import de.d3web.we.kdom.AbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
-public class CommentType extends AbstractKnowWEObjectType {
+public class CommentType extends AbstractType {
 
 	@Override
 	protected void init() {

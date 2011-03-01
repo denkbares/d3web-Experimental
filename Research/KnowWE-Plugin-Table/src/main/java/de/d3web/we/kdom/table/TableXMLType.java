@@ -20,16 +20,16 @@
 
 package de.d3web.we.kdom.table;
 
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.kdom.xml.XMLContent;
 
 /**
  * Table xml wrapper type.
  * 
  * 
- * @see AbstractXMLObjectType
+ * @see AbstractXMLType
  */
-public class TableXMLType extends AbstractXMLObjectType {
+public class TableXMLType extends AbstractXMLType {
 
 	public TableXMLType(String tagName) {
 		super(tagName);

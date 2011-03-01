@@ -20,11 +20,11 @@
 
 package de.d3web.we.kdom.condition.antlr;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.basic.QuotedType;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 
-public class QuotedQuestion extends DefaultAbstractKnowWEObjectType {
+public class QuotedQuestion extends AbstractType {
 
 	@Override
 	protected void init() {

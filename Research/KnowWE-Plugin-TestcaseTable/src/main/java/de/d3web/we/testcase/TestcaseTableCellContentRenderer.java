@@ -19,6 +19,7 @@
 package de.d3web.we.testcase;
 
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.table.TableCellContent;
 import de.d3web.we.kdom.table.TableCellContentRenderer;
 import de.d3web.we.kdom.table.TableUtils;
@@ -45,7 +46,7 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 		// Check if there is a valid TimeStamp
 		if (col == 0 && row > 0) {
 
-			Section<TimeStampType> timestamp = sec.findSuccessor(TimeStampType.class);
+			Section<TimeStampType> timestamp = Sections.findSuccessor(sec, TimeStampType.class);
 			boolean sort = TableUtils.sortTest(sec);
 			boolean validTimeStamp = false;
 

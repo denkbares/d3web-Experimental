@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.apache.uima.jcas.tcas.Annotation;
 
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.sectionFinder.ISectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
@@ -65,7 +65,7 @@ public class TypeSectionFinder implements ISectionFinder {
 
 	@Override
 	public List<SectionFinderResult> lookForSections(
-			String text, Section<?> father, KnowWEObjectType type) {
+			String text, Section<?> father, Type type) {
 		ArrayList<SectionFinderResult> results = new ArrayList<SectionFinderResult>();
 		AnnotationStore store = AnnotationStore.getInstance();
 

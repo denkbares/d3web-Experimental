@@ -29,11 +29,11 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.cas.FeatureStructure;
 import org.apache.uima.jcas.tcas.Annotation;
 
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.sectionFinder.ISectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.d3web.we.knowweobjecttypes.FeatureImplementation;
+import de.d3web.we.Types.FeatureImplementation;
 import de.d3web.we.uimaconnector.UIMAConnector;
 import de.d3web.we.utils.DefaultIntervalCalculator;
 import de.d3web.we.utils.IIntervalCalculator;
@@ -41,8 +41,8 @@ import de.d3web.we.utils.KnowWEUtils;
 
 /**
  * Used to find a Feature. It uses the father section to find the right Type who
- * has this Feature. You also need to have a KnowWEObjectType in the
- * FatherKnowWEObjectType that implements FeatureImplementation Interface.
+ * has this Feature. You also need to have a Type in the
+ * FatherType that implements FeatureImplementation Interface.
  * 
  * @see lookForSections()
  * @see FeatureImplementation
@@ -88,7 +88,7 @@ public class FeatureSectionFinder implements ISectionFinder {
 	 */
 	@Override
 	public List<SectionFinderResult> lookForSections(
-			String text, Section<?> father, KnowWEObjectType type) {
+			String text, Section<?> father, Type type) {
 
 		// calculate the absolute father position and find
 		// the Annotation of the father

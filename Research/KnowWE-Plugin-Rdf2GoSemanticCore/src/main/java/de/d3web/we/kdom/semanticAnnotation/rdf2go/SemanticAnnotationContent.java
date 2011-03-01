@@ -20,18 +20,16 @@
 
 package de.d3web.we.kdom.semanticAnnotation.rdf2go;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
-import de.d3web.we.kdom.semanticAnnotation.rdf2go.AnnotatedString;
-import de.d3web.we.kdom.semanticAnnotation.rdf2go.AnnotationMapSign;
-import de.d3web.we.kdom.semanticAnnotation.rdf2go.SemanticAnnotationObject;
 
-public class SemanticAnnotationContent extends DefaultAbstractKnowWEObjectType {
+public class SemanticAnnotationContent extends AbstractType {
 
 	@Override
 	public void init() {
-		this.childrenTypes.add(new AnnotationMapSign());
-		this.childrenTypes.add(new AnnotatedString());
+		AnnotationMapSign annotationMapSign = new AnnotationMapSign();
+		this.childrenTypes.add(annotationMapSign);
+		this.childrenTypes.add(new AnnotatedString(annotationMapSign));
 		this.childrenTypes.add(new SemanticAnnotationObject());
 		this.sectionFinder = new AllTextSectionFinder();
 

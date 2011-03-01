@@ -23,6 +23,7 @@ package de.d3web.we.kdom.renderRestriction;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
@@ -58,7 +59,7 @@ public class RenderRestrictionEnd extends DefaultMarkupType {
 
 		@Override
 		public void render(KnowWEArticle article, Section<GroupDeclaration> sec, KnowWEUserContext user, StringBuilder string) {
-			Section<GroupDeclaration> groupSec = sec.findSuccessor(GroupDeclaration.class);
+			Section<GroupDeclaration> groupSec = Sections.findSuccessor(sec, GroupDeclaration.class);
 			if (groupSec != null) {
 				String group = groupSec.get().getGroup(groupSec);
 				String restrictionStartFrame = "%%tabbedSection\n%%tab-" + group + "Only\n";

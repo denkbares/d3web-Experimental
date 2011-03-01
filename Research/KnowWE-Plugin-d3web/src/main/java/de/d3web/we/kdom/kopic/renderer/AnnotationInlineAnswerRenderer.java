@@ -22,6 +22,7 @@ package de.d3web.we.kdom.kopic.renderer;
 
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotationProperty;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
@@ -30,7 +31,7 @@ public class AnnotationInlineAnswerRenderer extends KnowWEDomRenderer {
 
 	@Override
 	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
-		Section prop = sec.findSuccessor(SemanticAnnotationProperty.class);
+		Section prop = Sections.findSuccessor(sec, SemanticAnnotationProperty.class);
 		if (prop != null && prop.getOriginalText().contains("asks")) {
 			// TODO merge classes
 			new D3webAnnotationRenderer().render(article, sec, user, string);

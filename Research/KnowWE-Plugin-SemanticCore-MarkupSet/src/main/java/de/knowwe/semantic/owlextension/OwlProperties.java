@@ -23,13 +23,13 @@
  */
 package de.knowwe.semantic.owlextension;
 
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 
 /**
  * @author kazamatzuri
  *
  */
-public class OwlProperties extends AbstractXMLObjectType {
+public class OwlProperties extends AbstractXMLType {
 
 	public OwlProperties() {
 		super("properties");

@@ -31,9 +31,10 @@ import de.d3web.we.drools.kdom.rendering.DroolsRuleRenderer;
 import de.d3web.we.drools.kdom.rendering.DroolsRuleWarningRenderer;
 import de.d3web.we.drools.rules.Rule;
 import de.d3web.we.drools.terminology.DroolsKnowledgeHandler;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.MessageRenderer;
 import de.d3web.we.kdom.report.message.NewObjectCreated;
@@ -49,7 +50,7 @@ import de.d3web.we.utils.KnowWEUtils;
  * 
  * @author Alex Legler
  */
-public class DroolsRule extends DefaultAbstractKnowWEObjectType {
+public class DroolsRule extends AbstractType {
 	
 	private static final String rule_store_key = "rule_store_key";
 
@@ -78,7 +79,8 @@ public class DroolsRule extends DefaultAbstractKnowWEObjectType {
 			Section<DroolsRule> section = s;
 
 			Section<? extends DroolsRulesRootType> rtSection = 
-				section.getArticle().getSection().findSuccessor(DroolsRulesRootType.class);
+					Sections.findSuccessor(section.getArticle().getSection(),
+							DroolsRulesRootType.class);
 			
 			if (rtSection == null) {
 				Logging.getInstance().warning("DroolsRulesRootType Section not found!");

@@ -30,6 +30,7 @@ import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.packaging.PackageRenderUtils;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.kopic.AbstractKopicSection;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
@@ -48,18 +49,18 @@ public class RuleSectionRenderer extends KnowWEDomRenderer {
 		result.append("\n{{{");
 		article = PackageRenderUtils.checkArticlesCompiling(article, sec, result);
 		int parsedCount = 0;
-		if (sec.getObjectType() instanceof AbstractKopicSection) {
+		if (sec.get() instanceof AbstractKopicSection) {
 
 			List<Message> sectionMessages = new ArrayList<Message>();
-			List<Section> rules = new ArrayList<Section>();
-			sec.findSuccessorsOfType(Rule.class, rules);
+			List<Section<Rule>> rules = new ArrayList<Section<Rule>>();
+			Sections.findSuccessorsOfType(sec, Rule.class, rules);
 
 			List<String> errors = new ArrayList<String>();
 			List<String> warnings = new ArrayList<String>();
 
 			String rulesParsed = MessageKnOfficeGenerator.getResourceBundle().getString("rule");
 			int rnum = 1;
-			for (Section r : rules) {
+			for (Section<Rule> r : rules) {
 				Collection<Message> rmsgs = KnowWEUtils.getMessages(article, r, Message.class);
 				boolean foundWarning = false;
 				boolean foundError = false;

@@ -36,7 +36,7 @@ import de.d3web.core.inference.RuleSet;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.WikiEnvironmentManager;
-import de.d3web.we.core.KnowWEEnvironment;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelation;
@@ -134,7 +134,7 @@ public class ShowAllKBsHandler extends AbstractHTMLTagHandler {
 						xclCount,
 						rules.size(),
 						qCount,
-						KnowWEEnvironment.unmaskHTML(DialogLinkTagHandler.generateDialogLink(
+						KnowWEUtils.unmaskHTML(DialogLinkTagHandler.generateDialogLink(
 								user.getUserName(), user.getHttpRequest(), topic, id)) };
 			for (Object object : tblContent) {
 				html.append("<td>" + object + "</td>");

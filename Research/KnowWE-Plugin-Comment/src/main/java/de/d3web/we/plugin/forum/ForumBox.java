@@ -20,9 +20,9 @@
 
 package de.d3web.we.plugin.forum;
 
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 
-public class ForumBox extends AbstractXMLObjectType {
+public class ForumBox extends AbstractXMLType {
 
 	private static ForumBox instance;
 

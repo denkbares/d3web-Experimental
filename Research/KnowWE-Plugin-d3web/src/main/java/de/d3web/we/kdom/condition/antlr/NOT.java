@@ -20,12 +20,12 @@
 
 package de.d3web.we.kdom.condition.antlr;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.StringSectionFinder;
 
-public class NOT extends DefaultAbstractKnowWEObjectType {
+public class NOT extends AbstractType {
 
 	@Override
 	public void init() {

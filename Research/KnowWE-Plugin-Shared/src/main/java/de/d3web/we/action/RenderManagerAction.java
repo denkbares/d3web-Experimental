@@ -21,7 +21,6 @@
 package de.d3web.we.action;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +29,7 @@ import com.google.gson.reflect.TypeToken;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.CustomRenderer;
 import de.d3web.we.kdom.rendering.RendererManager;
 
@@ -68,7 +67,7 @@ public class RenderManagerAction extends AbstractAction {
 		KnowWEParameterMap parameterMap = context.getKnowWEParameterMap();
 
 		Gson gson = new Gson();
-		Type mapType = new TypeToken<Map<String, String>>() {
+		java.lang.reflect.Type mapType = new TypeToken<Map<String, String>>() {
 		}.getType();
 		Map<String, String> gsonFormMap = gson.fromJson(parameterMap.get("types"), mapType);
 
@@ -77,15 +76,15 @@ public class RenderManagerAction extends AbstractAction {
 		if (gsonFormMap != null) {
 
 			for (String renderer : gsonFormMap.keySet()) {
-				KnowWEObjectType type = null;
+				Type type = null;
 				CustomRenderer customRenderer = null;
 
 				String t = gsonFormMap.get(renderer);
-				List<KnowWEObjectType> types = KnowWEEnvironment.getInstance()
-						.getAllKnowWEObjectTypes();
-				for (KnowWEObjectType knowWEObjectType : types) {
-					if (knowWEObjectType.getClass().getName().equals(t)) {
-						type = knowWEObjectType;
+				List<Type> types = KnowWEEnvironment.getInstance()
+						.getAllTypes();
+				for (Type Type : types) {
+					if (Type.getClass().getName().equals(t)) {
+						type = Type;
 						break;
 					}
 				}

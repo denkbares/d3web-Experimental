@@ -24,13 +24,12 @@ import java.util.Map;
 
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.SectionID;
-import de.d3web.we.kdom.sectionFinder.ISectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.kdom.xml.XMLSectionFinder;
 import de.d3web.we.utils.KnowWEUtils;
 
-public class Include extends AbstractXMLObjectType {
+public class Include extends AbstractXMLType {
 
 	// private static Include instance = null;
 	//
@@ -45,11 +44,7 @@ public class Include extends AbstractXMLObjectType {
 		super("include");
 		this.allowesGlobalTypes = false;
 		this.customRenderer = new EditIncludeSectionRenderer(IncludeSectionRenderer.getInstance());
-	}
-
-	@Override
-	public ISectionFinder getSectioner() {
-		return new IncludeSectionFinder(this.getXMLTagName());
+		this.setSectionFinder(new IncludeSectionFinder(this.getXMLTagName()));
 	}
 
 	private class IncludeSectionFinder extends XMLSectionFinder {

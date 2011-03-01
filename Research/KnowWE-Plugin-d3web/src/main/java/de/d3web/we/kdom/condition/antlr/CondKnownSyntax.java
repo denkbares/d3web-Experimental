@@ -20,9 +20,9 @@
 
 package de.d3web.we.kdom.condition.antlr;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 
 @Deprecated
-public class CondKnownSyntax extends DefaultAbstractKnowWEObjectType {
+public class CondKnownSyntax extends AbstractType {
 
 }

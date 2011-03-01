@@ -25,8 +25,8 @@ import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 
 public class SimpleQuestionType extends FindingQuestion {
 
-	@Override
-	protected void init() {
+	public SimpleQuestionType() {
+		super(null);
 		setSectionFinder(new AllTextFinderTrimmed());
 	}
 

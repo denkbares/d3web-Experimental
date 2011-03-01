@@ -26,42 +26,43 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 
 public class TableUtils {
 
 	/**
 	 * Returns the column of the table in which the current cell occurs.
 	 * 
-	 * @param section current section
+	 * @param s current section
 	 * @return
 	 */
-	public static int getColumn(Section<? extends TableCellContent> section) {
-		Section<TableLine> tableLine = section.findAncestorOfType(TableLine.class);
+	public static int getColumn(Section<? extends TableCellContent> s) {
+		Section<TableLine> tableLine = Sections.findAncestorOfType(s, TableLine.class);
 		List<Section<TableCellContent>> cells = new ArrayList<Section<TableCellContent>>();
-		tableLine.findSuccessorsOfType(TableCellContent.class, cells);
+		Sections.findSuccessorsOfType(tableLine, TableCellContent.class, cells);
 
-		return cells.indexOf(section);
+		return cells.indexOf(s);
 	}
 
 	/**
 	 * Returns the row of the table in which the current cell occurs.
 	 * 
-	 * @param section current section
+	 * @param s current section
 	 * @return
 	 */
-	public static int getRow(Section<? extends TableCellContent> section) {
-		Section<Table> table = section.findAncestorOfType(Table.class);
+	public static int getRow(Section<? extends TableCellContent> s) {
+		Section<Table> table = Sections.findAncestorOfType(s, Table.class);
 
 		List<Section<TableLine>> rows = new ArrayList<Section<TableLine>>();
-		table.findSuccessorsOfType(TableLine.class, rows);
+		Sections.findSuccessorsOfType(table, TableLine.class, rows);
 
-		int col = getColumn(section);
+		int col = getColumn(s);
 		for (Section<TableLine> row : rows) {
 			List<Section<TableCellContent>> cells = new ArrayList<Section<TableCellContent>>();
-			row.findSuccessorsOfType(TableCellContent.class, cells);
-			if (cells.size() > col && cells.get(col).equals(section)) {
+			 Sections.findSuccessorsOfType(row, TableCellContent.class, cells);
+			if (cells.size() > col && cells.get(col).equals(s)) {
 				return rows.indexOf(row);
 			}
 		}
@@ -148,18 +149,18 @@ public class TableUtils {
 	 * returns whether the current Section is or is in a table and is sortable
 	 * 
 	 * @created 31.07.2010
-	 * @param sec
+	 * @param s
 	 * @return
 	 */
 	public static boolean sortOption(Section<?> sec) {
 		boolean sortable = false;
-		Section<Table> tableType = sec.findAncestorOfType(Table.class);
-		if (sec.getObjectType() instanceof Table) {
-			Table table = (Table) sec.getObjectType();
+		Section<Table> tableType = Sections.findAncestorOfType(sec, Table.class);
+		if (sec.get() instanceof Table) {
+			Table table = (Table) sec.get();
 			sortable = table.isSortable();
 		}
 		else if (tableType != null) {
-			Table table = tableType.getObjectType();
+			Table table = tableType.get();
 			sortable = table.isSortable();
 		}
 		return sortable;
@@ -169,15 +170,15 @@ public class TableUtils {
 	 * returns whether the current Section gets a sort button
 	 * 
 	 * @created 31.07.2010
-	 * @param sec
+	 * @param s
 	 * @return
 	 */
-	public static boolean sortTest(Section<?> sec) {
+	public static boolean sortTest(Section<?> s) {
 
-		boolean sortable = sortOption(sec);
+		boolean sortable = sortOption(s);
 		boolean isHeaderLine = false;
 
-		Section<TableLine> tableLine = sec.findAncestorOfType(TableLine.class);
+		Section<TableLine> tableLine = Sections.findAncestorOfType(s, TableLine.class);
 		if (tableLine != null) {
 			isHeaderLine = TableLine.isHeaderLine(tableLine);
 		}
@@ -185,9 +186,9 @@ public class TableUtils {
 		return (sortable && isHeaderLine);
 	}
 
-	public static KnowWEObjectType getTableType(Section<?> sec) {
-		Section<? extends Table> table = sec.findAncestorOfType(Table.class);
-		return table != null ? table.getObjectType() : null;
+	public static Type getTableType(Section<?> s) {
+		Section<? extends Table> table = Sections.findAncestorOfType(s, Table.class);
+		return table != null ? table.get() : null;
 	}
 
 	/**
@@ -200,10 +201,10 @@ public class TableUtils {
 	 * @return column heading is String
 	 */
 	public static String getColumnHeadingForCellContent(Section<? extends TableCellContent> cell) {
-		Section<Table> table = cell.findAncestorOfType(Table.class);
-		Section<TableLine> line = table.findSuccessor(TableLine.class);
+		Section<Table> table = Sections.findAncestorOfType(cell, Table.class);
+		Section<TableLine> line = Sections.findSuccessor(table, TableLine.class);
 		List<Section<TableCellContent>> cells = new LinkedList<Section<TableCellContent>>();
-		line.findSuccessorsOfType(TableCellContent.class, cells);
+		Sections.findSuccessorsOfType(line, TableCellContent.class, cells);
 
 		int i = getColumn(cell);
 		Section<TableCellContent> headerCell = cells.get(i);
@@ -224,7 +225,8 @@ public class TableUtils {
 	 * @return column heading as String
 	 */
 	public static String getColumnHeading(Section<? extends TableCell> cell) {
-		return getColumnHeadingForCellContent(cell.findAncestorOfType(TableCellContent.class));
+		return getColumnHeadingForCellContent(Sections.findAncestorOfType(cell,
+				TableCellContent.class));
 	}
 
 	/**
@@ -238,8 +240,9 @@ public class TableUtils {
 	 * @return row description as String
 	 */
 	public static String getRowDescriptionForCellContent(Section<? extends TableCellContent> cell) {
-		Section<TableLine> line = cell.findAncestorOfType(TableLine.class);
-		Section<TableCellContent> descriptionCell = line.findSuccessor(TableCellContent.class);
+		Section<TableLine> line = Sections.findAncestorOfType(cell, TableLine.class);
+		Section<TableCellContent> descriptionCell = Sections.findSuccessor(line,
+				TableCellContent.class);
 		return descriptionCell != null ? descriptionCell.getOriginalText() : null;
 	}
 
@@ -257,6 +260,7 @@ public class TableUtils {
 	 * @return row description as String
 	 */
 	public static String getRowDescription(Section<? extends TableCell> cell) {
-		return getRowDescriptionForCellContent(cell.findAncestorOfType(TableCellContent.class));
+		return getRowDescriptionForCellContent(Sections.findAncestorOfType(cell,
+				TableCellContent.class));
 	}
 }

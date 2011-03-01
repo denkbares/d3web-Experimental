@@ -17,10 +17,11 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.lod.markup.IgnoreContentType;
+import de.d3web.we.lod.markup.MappingContentType;
 import de.d3web.we.lod.markup.IgnoreContentType.IgnoreChild;
 import de.d3web.we.lod.markup.IgnoreContentType.IgnoreConcept;
-import de.d3web.we.lod.markup.MappingContentType;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 /**
@@ -61,7 +62,7 @@ public class HermesData {
 	 * 
 	 * @return objectType.
 	 */
-	public static String getObjectType() {
+	public static String get() {
 		return objectType;
 	}
 
@@ -107,8 +108,8 @@ public class HermesData {
 				topic);
 
 		List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
-		article.getSection().findSuccessorsOfType(MappingContentType.class,
-				found);
+		Sections.findSuccessorsOfType(article.getSection(),
+				MappingContentType.class, found);
 
 		String dbpediaMapping = "";
 		for (Section<MappingContentType> t : found) {
@@ -146,8 +147,8 @@ public class HermesData {
 				topic);
 
 		List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
-		article.getSection().findSuccessorsOfType(MappingContentType.class,
-				found);
+		Sections.findSuccessorsOfType(article.getSection(),
+				MappingContentType.class, found);
 
 		for (Section<MappingContentType> t : found) {
 			String temp = t.getChildren().get(0).getOriginalText();
@@ -173,8 +174,8 @@ public class HermesData {
 				topic);
 
 		List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
-		article.getSection().findSuccessorsOfType(MappingContentType.class,
-				found);
+		Sections.findSuccessorsOfType(article.getSection(),
+				MappingContentType.class, found);
 
 		String hermesMapping = "";
 		for (Section<MappingContentType> t : found) {
@@ -207,8 +208,8 @@ public class HermesData {
 					web, topic);
 
 			List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
-			article.getSection().findSuccessorsOfType(MappingContentType.class,
-					found);
+			Sections.findSuccessorsOfType(article.getSection(),
+					MappingContentType.class, found);
 
 			for (Section<MappingContentType> t : found) {
 				String temp = t.getChildren().get(0).getOriginalText();
@@ -242,21 +243,21 @@ public class HermesData {
 					web, topic);
 
 			List<Section<IgnoreContentType>> found = new Vector<Section<IgnoreContentType>>();
-			article.getSection().findSuccessorsOfType(IgnoreContentType.class,
-					found);
+			Sections.findSuccessorsOfType(article.getSection(),
+					IgnoreContentType.class, found);
 
 			for (Section<IgnoreContentType> t : found) {
 
-				Section<IgnoreConcept> temp = t
-						.findChildOfType(IgnoreConcept.class);
+				Section<IgnoreConcept> temp = Sections
+						.findChildOfType(t, IgnoreConcept.class);
 				String sectionConcept = temp.getOriginalText().substring(1,
 						temp.getOriginalText().length() - 1);
 
 				// if concept is in list - test if tag + value also.
 				if (sectionConcept.equals(concept)) {
 
-					List<Section<IgnoreChild>> listChilds = t
-							.findChildrenOfType(IgnoreChild.class);
+					List<Section<IgnoreChild>> listChilds = Sections
+							.findChildrenOfType(t, IgnoreChild.class);
 
 					for (Section<IgnoreChild> child : listChilds) {
 						String node = child.getOriginalText();

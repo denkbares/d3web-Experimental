@@ -17,18 +17,18 @@
 	</runtime>
 	
 	 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TestcaseTableXMLType">
 		<parameter id="class"
 			value="de.d3web.we.testcase.TestcaseTableXMLType" />
 		<parameter id="name" value="TestcaseTableXMLType" />
-		<parameter id="description" value="KnowWEObjectType TestcaseTableXMLType" />
+		<parameter id="description" value="Type TestcaseTableXMLType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 	</extension>
 	 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TestcaseTableType">
 		<parameter id="class"
 			value="de.d3web.we.testcase.TestcaseTableType" />

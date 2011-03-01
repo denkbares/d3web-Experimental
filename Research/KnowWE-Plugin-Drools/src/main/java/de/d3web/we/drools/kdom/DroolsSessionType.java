@@ -20,7 +20,7 @@
 
 package de.d3web.we.drools.kdom;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 
 /**
@@ -28,7 +28,7 @@ import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
  * 
  * @author Sebastian Furth
  */
-public class DroolsSessionType extends DefaultAbstractKnowWEObjectType {
+public class DroolsSessionType extends AbstractType {
 
 	public DroolsSessionType() {
 		setSectionFinder(new AllTextSectionFinder());

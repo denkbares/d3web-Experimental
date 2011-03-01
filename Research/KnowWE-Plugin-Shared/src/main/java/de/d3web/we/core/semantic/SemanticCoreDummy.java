@@ -37,7 +37,7 @@ import org.openrdf.query.TupleQueryResult;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.wikiConnector.KnowWEWikiConnector;
 
@@ -128,7 +128,7 @@ public class SemanticCoreDummy implements ISemanticCore {
 
 	@Override
 	public List<Statement> getSectionStatementsRecursive(
-			Section<? extends KnowWEObjectType> s) {
+			Section<? extends Type> s) {
 		// TODO Auto-generated method stub
 		return null;
 	}

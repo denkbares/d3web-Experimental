@@ -62,12 +62,12 @@ public class TestcaseUtils {
 			return null;
 		}
 		// das hier ist immer true
-		// if (s.getObjectType() instanceof TestcaseTableCellContent) {
+		// if (s.get() instanceof TestcaseTableCellContent) {
 		// return null;
 		// }
 
 		// line ist null weil falsche abfrage
-		if (s.getObjectType() instanceof TableCellContent) {
+		if (s.get() instanceof TableCellContent) {
 			if (row == 0) {
 				return getHeaderAlternatives(s, questions, solutions);
 			}

@@ -41,8 +41,9 @@ import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
 
@@ -52,6 +53,7 @@ import de.d3web.we.utils.KnowWEUtils;
  */
 public class RunTestcaseAction extends AbstractAction {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(ActionContext context) throws IOException {
 		KnowWEParameterMap map = context.getKnowWEParameterMap();
@@ -62,8 +64,10 @@ public class RunTestcaseAction extends AbstractAction {
 		Section<CellContent> cell = (Section<CellContent>) KnowWEEnvironment.getInstance().getArticleManager(
 				web).findNode(execLine);
 
-		Section<TestcaseTableLine> line = cell.findAncestorOfExactType(TestcaseTableLine.class);
-		Section<TestcaseTableType> tableDMType = line.findAncestorOfExactType(TestcaseTableType.class);
+		Section<TestcaseTableLine> line = Sections.findAncestorOfExactType(cell,
+				TestcaseTableLine.class);
+		Section<TestcaseTableType> tableDMType = Sections.findAncestorOfExactType(line,
+				TestcaseTableType.class);
 		String master = TestcaseTableType.getMaster(tableDMType, map.getTopic());
 		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(web, master);
 
@@ -152,18 +156,19 @@ public class RunTestcaseAction extends AbstractAction {
 	}
 
 	private void findTestcaseIncluding(Section<TestcaseTableLine> line, List<Section<TestcaseTableLine>> list) {
-		long originalTimeStampValue = TimeStampType.getTimeInMillis(line.getChildren().get(0).findSuccessor(
+		long originalTimeStampValue = TimeStampType.getTimeInMillis(Sections.findSuccessor(
+				line.getChildren().get(0),
 				TimeStampType.class));
 
 		Section<TestcaseTable> table = (Section<TestcaseTable>) line.getFather();
-		List<Section<? extends KnowWEObjectType>> lines = table.getChildren();
+		List<Section<? extends Type>> lines = table.getChildren();
 
-		for (Section<? extends KnowWEObjectType> l : lines) {
-			if (!(l.getObjectType() instanceof HeaderLine)) {
+		for (Section<? extends Type> l : lines) {
+			if (!(l.get() instanceof HeaderLine)) {
 				Section<TestcaseTableLine> currentLine = (Section<TestcaseTableLine>) l;
-				long currentTimeStampValue = TimeStampType.getTimeInMillis(currentLine.getChildren().get(
-						0).findSuccessor(
-						TimeStampType.class));
+				long currentTimeStampValue = TimeStampType.getTimeInMillis(Sections.findSuccessor(
+						currentLine.getChildren().get(
+								0), TimeStampType.class));
 				if (currentTimeStampValue < originalTimeStampValue) {
 					list.add(currentLine);
 				}

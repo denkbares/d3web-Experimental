@@ -38,6 +38,7 @@ import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.hermes.kdom.TimeEventType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.contexts.Context;
 import de.d3web.we.kdom.contexts.ContextManager;
 import de.d3web.we.kdom.contexts.DefaultSubjectContext;
@@ -231,7 +232,8 @@ public class ConceptOccurrenceRenderer extends KnowWEDomRenderer {
 		String[] defaultOpts = {
 				"concept missmatch", "dont ask again" };
 
-		Section<? extends TimeEventType> eventSection = arg0.findAncestorOfType(TimeEventType.class);
+		Section<? extends TimeEventType> eventSection = Sections.findAncestorOfType(arg0,
+				TimeEventType.class);
 		if (eventSection == null) return null;
 
 		for (String relationName : newOpts) {

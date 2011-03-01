@@ -21,9 +21,9 @@
 package de.d3web.we.kdom.include;
 
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.SectionizerModule;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.utils.KnowWEUtils;
 
@@ -31,20 +31,21 @@ public class IncludeSectionizerModule implements SectionizerModule {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Section<?> createSection(KnowWEArticle article, KnowWEObjectType ob, Section<?> father, Section<?> thisSection, String secText, SectionFinderResult result) {
+	public Section<?> createSection(String text, Type type, Section<?> father, KnowWEArticle article, SectionFinderResult result) {
 		Section s = null;
 		if (result instanceof IncludeSectionFinderResult) {
-			s = Section.createSection(
-					thisSection.getOriginalText().substring(
-							result.getStart(),
-							result.getEnd()),
-					ob,
-					father,
-					thisSection.getOffSetFromFatherText()
-							+ result.getStart(),
-					article,
-					result.getId(),
-					false);
+			s = type.getParser().parse(text, type, result.getId(), father, article);
+			// s = Section.createSection(
+			// thisSection.getOriginalText().substring(
+			// result.getStart(),
+			// result.getEnd()),
+			// ob,
+			// father,
+			// thisSection.getOffSetFromFatherText()
+			// + result.getStart(),
+			// article,
+			// result.getId(),
+			// false);
 
 			KnowWEUtils.storeObject(s.getWeb(), s.getTitle(), s.getID(),
 					Include.INCLUDE_ADDRESS_KEY,

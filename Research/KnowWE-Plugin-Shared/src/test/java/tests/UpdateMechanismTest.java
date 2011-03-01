@@ -28,7 +28,7 @@ import utils.Utils;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.xml.GenericXMLObjectType;
 import dummies.KnowWETestWikiConnector;
@@ -67,9 +67,9 @@ public class UpdateMechanismTest extends TestCase {
 		KnowWEArticle article2 = KnowWEArticle.createArticle(content, "UpdatingTest",
 				new GenericXMLObjectType(), "default_web");
 
-		List<Section<? extends KnowWEObjectType>> sections1 = article1.getAllNodesPreOrder();
+		List<Section<? extends Type>> sections1 = article1.getAllNodesPreOrder();
 
-		List<Section<? extends KnowWEObjectType>> sections2 = article2.getAllNodesPreOrder();
+		List<Section<? extends Type>> sections2 = article2.getAllNodesPreOrder();
 
 		assertEquals("Articles dont have the same amount of sections:", sections1.size(),
 				sections2.size());

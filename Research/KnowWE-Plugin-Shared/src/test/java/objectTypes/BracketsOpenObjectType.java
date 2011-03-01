@@ -21,9 +21,9 @@
 package objectTypes;
 
 import copies.StringSectionFinder;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 
-public class BracketsOpenObjectType extends DefaultAbstractKnowWEObjectType {
+public class BracketsOpenObjectType extends AbstractType {
 
 	@Override
 	public void init() {

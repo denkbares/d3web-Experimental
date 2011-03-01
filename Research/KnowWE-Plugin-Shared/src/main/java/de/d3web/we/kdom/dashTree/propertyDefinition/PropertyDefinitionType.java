@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.dashTree.propertyDefinition;
 
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.kdom.xml.XMLContent;
 
 /**
@@ -30,7 +30,7 @@ import de.d3web.we.kdom.xml.XMLContent;
  *         the content of it a (PropertyDefinition-)dashtree is parsed
  * 
  */
-public class PropertyDefinitionType extends AbstractXMLObjectType {
+public class PropertyDefinitionType extends AbstractXMLType {
 
 	public PropertyDefinitionType() {
 		super("PropertyDefinition");

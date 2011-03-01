@@ -24,13 +24,13 @@ import java.util.List;
 
 import de.d3web.we.hermes.kdom.conceptMining.LocationOccurrence;
 import de.d3web.we.hermes.kdom.conceptMining.PersonOccurrence;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotation;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotationContent;
 
-public class TimeEventDescriptionType extends DefaultAbstractKnowWEObjectType {
+public class TimeEventDescriptionType extends AbstractType {
 
 	@Override
 	protected void init() {
@@ -47,11 +47,11 @@ public class TimeEventDescriptionType extends DefaultAbstractKnowWEObjectType {
 		sectionFinder = new AllTextSectionFinder();
 	}
 
-	private KnowWEObjectType findContentType(SemanticAnnotation semanticAnnotation) {
-		List<KnowWEObjectType> annoChildren = semanticAnnotation.getAllowedChildrenTypes();
-		for (KnowWEObjectType knowWEObjectType : annoChildren) {
-			if (knowWEObjectType instanceof SemanticAnnotationContent) {
-				return knowWEObjectType;
+	private Type findContentType(SemanticAnnotation semanticAnnotation) {
+		List<Type> annoChildren = semanticAnnotation.getAllowedChildrenTypes();
+		for (Type Type : annoChildren) {
+			if (Type instanceof SemanticAnnotationContent) {
+				return Type;
 			}
 		}
 		return null;

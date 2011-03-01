@@ -113,7 +113,7 @@ public class SetQuickEditFlagAction extends DeprecatedAbstractKnowWEAction {
 		Section secWithNodeID = getSectionFromCurrentID(nodeID, root);
 
 		if (secWithNodeID != null) {
-			KnowWEDomRenderer renderer = secWithNodeID.getObjectType().getRenderer();
+			KnowWEDomRenderer renderer = secWithNodeID.get().getRenderer();
 			StringBuilder b = new StringBuilder();
 			if (renderer != null) {
 				renderer.render(article, secWithNodeID, user, b);

@@ -22,8 +22,8 @@ package de.d3web.we.kdom.kopic.rules.ruleActionLine;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
@@ -32,7 +32,7 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
  * @author Johannes Dienst
  * 
  */
-public class AbstractionRuleAction extends DefaultAbstractKnowWEObjectType {
+public class AbstractionRuleAction extends AbstractType {
 
 	@Override
 	public void init() {
@@ -45,7 +45,7 @@ public class AbstractionRuleAction extends DefaultAbstractKnowWEObjectType {
 	private class AbstractionRuleActionSectionFinder extends SectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, KnowWEObjectType type) {
+		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
 
 			if ((text.contains("+=") || text.contains("=")) && !text.contains("HIDE")) {
 

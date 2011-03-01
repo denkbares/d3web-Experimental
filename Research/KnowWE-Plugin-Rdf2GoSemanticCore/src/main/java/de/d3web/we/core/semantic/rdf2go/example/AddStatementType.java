@@ -18,7 +18,7 @@
  */
 package de.d3web.we.core.semantic.rdf2go.example;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
@@ -27,7 +27,7 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
  * @author grotheer
  * @created 11.11.2010
  */
-public class AddStatementType extends DefaultAbstractKnowWEObjectType {
+public class AddStatementType extends AbstractType {
 
 	public static final String START_TAG = "%add%";
 	public static final String END_TAG = "%/add%";

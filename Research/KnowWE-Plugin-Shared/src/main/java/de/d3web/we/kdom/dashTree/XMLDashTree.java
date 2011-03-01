@@ -19,7 +19,7 @@
  */
 package de.d3web.we.kdom.dashTree;
 
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.kdom.xml.XMLContent;
 import de.knowwe.core.dashtree.DashTree;
 
@@ -29,7 +29,7 @@ import de.knowwe.core.dashtree.DashTree;
  *         An xml-wrapper-type for a dashTree
  * 
  */
-public class XMLDashTree extends AbstractXMLObjectType {
+public class XMLDashTree extends AbstractXMLType {
 
 	public XMLDashTree() {
 		super("DashTree");

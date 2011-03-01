@@ -25,6 +25,7 @@ import de.d3web.we.hermes.kdom.event.TimeEventNew;
 import de.d3web.we.hermes.kdom.event.TimeEventNew.ImportanceType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.utils.KnowWEUtils;
@@ -46,7 +47,7 @@ public class TimeEventRenderer extends KnowWEDomRenderer<TimeEventNew> {
 			KnowWEUserContext user, StringBuilder result) {
 
 		int eventImportanceLevel = -1;
-		Section<ImportanceType> childOfType = sec.findChildOfType(ImportanceType.class);
+		Section<ImportanceType> childOfType = Sections.findChildOfType(sec, ImportanceType.class);
 		if (childOfType != null) {
 			eventImportanceLevel = ImportanceType.getImportance(childOfType);
 		}

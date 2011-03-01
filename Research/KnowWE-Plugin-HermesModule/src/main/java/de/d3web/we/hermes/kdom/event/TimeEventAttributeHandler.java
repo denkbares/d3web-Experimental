@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
@@ -17,7 +17,7 @@ import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
  * @created 11.10.2010
  * @param <T>
  */
-public abstract class TimeEventAttributeHandler<T extends KnowWEObjectType> extends SubtreeHandler<T> {
+public abstract class TimeEventAttributeHandler<T extends Type> extends SubtreeHandler<T> {
 
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<T> s) {

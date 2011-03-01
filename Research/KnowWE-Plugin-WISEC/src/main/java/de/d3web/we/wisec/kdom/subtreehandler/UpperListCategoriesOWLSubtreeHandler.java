@@ -35,6 +35,7 @@ import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.table.TableCellContent;
@@ -50,7 +51,8 @@ public class UpperListCategoriesOWLSubtreeHandler extends OwlSubtreeHandler<Uppe
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<UpperListCategoriesType> s) {
 
 		// Get the necessary Annotations
-		Section<UpperListCategoriesRootType> root = s.findAncestorOfType(UpperListCategoriesRootType.class);
+		Section<UpperListCategoriesRootType> root = Sections.findAncestorOfType(s,
+				UpperListCategoriesRootType.class);
 		String listID = DefaultMarkupType.getAnnotation(root, "ListID");
 
 		// Get the WISEC Namespace and create OwlObject
@@ -88,17 +90,17 @@ public class UpperListCategoriesOWLSubtreeHandler extends OwlSubtreeHandler<Uppe
 			IntermediateOwlObject ioo, String ns, String listID) {
 
 		// Check if the table was recognized
-		if (section.findSuccessor(WISECTable.class) != null) {
+		if (Sections.findSuccessor(section, WISECTable.class) != null) {
 
 			// Get all table lines
 			List<Section<TableLine>> tableLines = new ArrayList<Section<TableLine>>();
-			section.findSuccessorsOfType(TableLine.class, tableLines);
+			 Sections.findSuccessorsOfType(section, TableLine.class, tableLines);
 
 			for (Section<TableLine> line : tableLines) {
 
 				// Get the content of all cells
 				ArrayList<Section<TableCellContent>> contents = new ArrayList<Section<TableCellContent>>();
-				line.findSuccessorsOfType(TableCellContent.class, contents);
+				Sections.findSuccessorsOfType(line, TableCellContent.class, contents);
 
 				// Create OWL statement from cell content
 				if (contents.size() == 2 && !contents.get(1).getOriginalText().matches("\\s*")) createCharacteristicStatement(

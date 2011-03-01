@@ -10,9 +10,9 @@ import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.Property;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SingleChildConstraint;
@@ -46,7 +46,7 @@ import de.d3web.we.utils.MessageUtils;
  * @author Jochen
  * @created 14.12.2010
  */
-public class IDPropertyType extends DefaultAbstractKnowWEObjectType {
+public class IDPropertyType extends AbstractType {
 
 	public IDPropertyType() {
 		this.setSectionFinder(new AllTextFinderTrimmed());
@@ -61,7 +61,7 @@ public class IDPropertyType extends DefaultAbstractKnowWEObjectType {
 
 	}
 
-	class IDObjectType extends DefaultAbstractKnowWEObjectType {
+	class IDObjectType extends AbstractType {
 
 		public IDObjectType() {
 			AllTextFinderTrimmed allTextFinderTrimmed = new AllTextFinderTrimmed();
@@ -160,7 +160,7 @@ public class IDPropertyType extends DefaultAbstractKnowWEObjectType {
 		@Override
 		public void destroy(KnowWEArticle article, Section<IDPropertyDefinition> s) {
 
-			Section<? extends KnowWEObjectType> sectionToStoreFor = article.findSection(s.getID());
+			Section<? extends Type> sectionToStoreFor = article.findSection(s.getID());
 			String text = " removed: " + s.getOriginalText();
 			if (sectionToStoreFor != null) {
 				text += " - changed to: " + sectionToStoreFor.getOriginalText();

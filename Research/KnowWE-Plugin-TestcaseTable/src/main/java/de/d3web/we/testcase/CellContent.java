@@ -20,8 +20,9 @@ package de.d3web.we.testcase;
 
 import java.util.List;
 
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SectionFinderConstraint;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
@@ -39,17 +40,18 @@ public class CellContent extends TableCellContent {
 		childrenTypes.add(new UnchangedType());
 
 		TimeStampType timeStampType = new TimeStampType();
-		timeStampType.setSectionFinder(new ConstraintSectionFinder(timeStampType.getSectioner(),
+		timeStampType.setSectionFinder(new ConstraintSectionFinder(timeStampType.getSectioFinder(),
 				new SectionFinderConstraint() {
 
 					@Override
-					public boolean satisfiesConstraint(List<SectionFinderResult> found, Section father, KnowWEObjectType type) {
-						Section line = father.findAncestorOfExactType(TestcaseTableLine.class);
+					public <T extends Type> boolean satisfiesConstraint(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
+						Section<?> line = Sections.findAncestorOfExactType(father,
+								TestcaseTableLine.class);
 						return line.getChildren().size() == 1;
 					}
 
 					@Override
-					public void filterCorrectResults(List<SectionFinderResult> found, Section father, KnowWEObjectType type) {
+					public <T extends Type> void filterCorrectResults(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
 						if (found == null || found.size() == 0) return;
 						found.clear();
 

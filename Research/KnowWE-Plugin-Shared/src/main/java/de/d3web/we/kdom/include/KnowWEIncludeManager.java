@@ -36,10 +36,11 @@ import de.d3web.we.event.EventListener;
 import de.d3web.we.event.KDOMCreatedEvent;
 import de.d3web.we.event.UpdatingDependenciesEvent;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.RootType;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.kdom.xml.XMLContent;
 import de.knowwe.plugin.Plugins;
 
@@ -58,8 +59,8 @@ public class KnowWEIncludeManager implements EventListener {
 	 * This map stores for every Include the Section they are including. Key is
 	 * the Include Section, value the included Section.
 	 */
-	private final Map<Section<Include>, List<Section<? extends KnowWEObjectType>>> src2targets =
-			new HashMap<Section<Include>, List<Section<? extends KnowWEObjectType>>>();
+	private final Map<Section<Include>, List<Section<? extends Type>>> src2targets =
+			new HashMap<Section<Include>, List<Section<? extends Type>>>();
 
 	// /**
 	// * This map stores for every Include the last Section they were including,
@@ -67,9 +68,9 @@ public class KnowWEIncludeManager implements EventListener {
 	// * the last included Section.
 	// */
 	// private final Map<Section<Include>, List<Section<? extends
-	// KnowWEObjectType>>> src2lastTargets =
+	// Type>>> src2lastTargets =
 	// new HashMap<Section<Include>, List<Section<? extends
-	// KnowWEObjectType>>>();
+	// Type>>>();
 
 	/**
 	 * This map stores for every title a set of Includes that include Sections
@@ -110,13 +111,13 @@ public class KnowWEIncludeManager implements EventListener {
 	 */
 	public void registerInclude(Section<Include> src) {
 
-		if (src.getObjectType() instanceof Include) {
+		if (src.get() instanceof Include) {
 
 			IncludeAddress address = Include.getIncludeAddress(src);
 
 			// this is the Section the Include Section wants to include
-			List<Section<? extends KnowWEObjectType>> targets =
-					new ArrayList<Section<? extends KnowWEObjectType>>();
+			List<Section<? extends Type>> targets =
+					new ArrayList<Section<? extends Type>>();
 
 			if (address == null) {
 				targets.add(getNoValidAddressErrorSection(src));
@@ -174,16 +175,17 @@ public class KnowWEIncludeManager implements EventListener {
 			}
 			src2targets.put(src, targets);
 			src.setChildren(targets);
+			src.setHasSharedChildren(true);
 		}
 	}
 
 	/**
 	 * Finds the target of the Include in the given Article
 	 */
-	private List<Section<? extends KnowWEObjectType>> findTargets(KnowWEArticle art, Section<Include> includeSec) {
+	private List<Section<? extends Type>> findTargets(KnowWEArticle art, Section<Include> includeSec) {
 
 		IncludeAddress address = Include.getIncludeAddress(includeSec);
-		List<Section<? extends KnowWEObjectType>> targets = new ArrayList<Section<? extends KnowWEObjectType>>();
+		List<Section<? extends Type>> targets = new ArrayList<Section<? extends Type>>();
 
 		if (address == null) {
 			targets.add(getNoValidAddressErrorSection(includeSec));
@@ -192,9 +194,9 @@ public class KnowWEIncludeManager implements EventListener {
 
 		// search node in Article
 
-		List<Section<? extends KnowWEObjectType>> matchingObjectTypeNameSections = new ArrayList<Section<? extends KnowWEObjectType>>();
-		List<Section<? extends KnowWEObjectType>> matchingIdEndSections = new ArrayList<Section<? extends KnowWEObjectType>>();
-		Section<? extends KnowWEObjectType> matchingIDSection = null;
+		List<Section<? extends Type>> matchingObjectTypeNameSections = new ArrayList<Section<? extends Type>>();
+		List<Section<? extends Type>> matchingIdEndSections = new ArrayList<Section<? extends Type>>();
+		Section<? extends Type> matchingIDSection = null;
 
 		String typeName = address.isContentSectionTarget() ? address.getTargetSection().substring(
 				0,
@@ -221,7 +223,7 @@ public class KnowWEIncludeManager implements EventListener {
 					}
 				}
 				// or the ObjectType
-				if (node.getObjectType().getClass().getSimpleName()
+				if (node.get().getClass().getSimpleName()
 							.compareToIgnoreCase(typeName) == 0) {
 					matchingObjectTypeNameSections.add(node);
 					if (!address.isWildcardSectionTarget()
@@ -246,13 +248,13 @@ public class KnowWEIncludeManager implements EventListener {
 		}
 		else if (!matchingObjectTypeNameSections.isEmpty()) {
 
-			for (Section<? extends KnowWEObjectType> locatedNode : matchingObjectTypeNameSections) {
+			for (Section<? extends Type> locatedNode : matchingObjectTypeNameSections) {
 				// get XMLContent if necessary
 				if (address.isContentSectionTarget()
-						&& !(locatedNode.getObjectType() instanceof XMLContent)) {
-					if (locatedNode.getObjectType() instanceof AbstractXMLObjectType
-							&& locatedNode.findChildOfType(XMLContent.class) != null) {
-						targets.add(locatedNode.findChildOfType(XMLContent.class));
+						&& !(locatedNode.get() instanceof XMLContent)) {
+					if (locatedNode.get() instanceof AbstractXMLType
+							&& Sections.findChildOfType(locatedNode, XMLContent.class) != null) {
+						targets.add(Sections.findChildOfType(locatedNode, XMLContent.class));
 					}
 					else {
 						targets.add(new IncludeErrorSection(
@@ -272,27 +274,28 @@ public class KnowWEIncludeManager implements EventListener {
 
 		}
 		else if (address.getTargetSection() == null) {
-			Section<? extends RootType> root = art.getSection().findChildOfType(RootType.class);
+			Section<? extends RootType> root = Sections.findChildOfType(art.getSection(),
+					RootType.class);
 			if (root != null) {
-				List<Section<? extends KnowWEObjectType>> children = root.getChildren();
+				List<Section<? extends Type>> children = root.getChildren();
 				if (!children.isEmpty()) {
 
 					// Checks the given List of children if it contains Sections
 					// that were already included in the article in another
 					// place.
-					Set<Section<? extends KnowWEObjectType>> candidates =
-							new HashSet<Section<? extends KnowWEObjectType>>(children);
+					Set<Section<? extends Type>> candidates =
+							new HashSet<Section<? extends Type>>(children);
 
-					List<Section<? extends KnowWEObjectType>> potentialDuplicates =
-							new ArrayList<Section<? extends KnowWEObjectType>>();
+					List<Section<? extends Type>> potentialDuplicates =
+							new ArrayList<Section<? extends Type>>();
 
 					for (Section<Include> inc : getActiveIncludesForArticle(includeSec.getArticle())) {
 						if (inc != includeSec) {
-							inc.getAllNodesPreOrderToDepth(potentialDuplicates, 2);
+							Sections.getAllNodesPreOrderToDepth(inc, potentialDuplicates, 2);
 						}
 					}
 
-					for (Section<? extends KnowWEObjectType> pd : potentialDuplicates) {
+					for (Section<? extends Type> pd : potentialDuplicates) {
 						// Found duplicates get removed.
 						candidates.remove(pd);
 					}
@@ -305,7 +308,7 @@ public class KnowWEIncludeManager implements EventListener {
 					}
 					else {
 						// restore order
-						for (Section<? extends KnowWEObjectType> sec : children) {
+						for (Section<? extends Type> sec : children) {
 							if (candidates.contains(sec)) {
 								targets.add(sec);
 							}
@@ -323,7 +326,7 @@ public class KnowWEIncludeManager implements EventListener {
 		// but isn't directly included from it -> causes update loops
 		// (auto includes are allowed, but not via other articles)
 		boolean loop = false;
-		for (Section<? extends KnowWEObjectType> tar : targets) {
+		for (Section<? extends Type> tar : targets) {
 			if (!(tar instanceof IncludeErrorSection)
 					&& !address.getTargetArticle().equals(includeSec.getTitle())
 					&& tar.getTitle().equals(includeSec.getTitle())) {
@@ -367,14 +370,14 @@ public class KnowWEIncludeManager implements EventListener {
 					// doesn't reuse some or all of the last targets
 					Set<Section<?>> diff = new HashSet<Section<?>>(lastTargets);
 					diff.removeAll(targets);
-					for (Section<? extends KnowWEObjectType> unusedLastTar : diff) {
+					for (Section<? extends Type> unusedLastTar : diff) {
 						unusedLastTar.setReusedByRecursively(inc.getTitle(), false);
 					}
 					// articles that reuse the include besides the owner of the
 					// include also do not reuse these last targets
 					Set<String> reusedBy = inc.getReusedBySet();
 					for (String title : reusedBy) {
-						for (Section<? extends KnowWEObjectType> unusedLastTar : diff) {
+						for (Section<? extends Type> unusedLastTar : diff) {
 							unusedLastTar.setReusedByRecursively(title, false);
 						}
 					}
@@ -382,6 +385,7 @@ public class KnowWEIncludeManager implements EventListener {
 				// overwrite the last target with the new
 				src2targets.put(inc, targets);
 				inc.setChildren(targets);
+				inc.setHasSharedChildren(true);
 				// // put the last target in the according map to make it
 				// available
 				// // for destruction of the stuff produced by its
@@ -450,12 +454,12 @@ public class KnowWEIncludeManager implements EventListener {
 	// /**
 	// * @returns the children respectively the target of the Include
 	// */
-	// public List<Section<? extends KnowWEObjectType>>
+	// public List<Section<? extends Type>>
 	// getChildrenForSection(Section<Include> src) {
-	// List<Section<? extends KnowWEObjectType>> children =
+	// List<Section<? extends Type>> children =
 	// src2targets.get(src);
 	// if (children == null) {
-	// children = new ArrayList<Section<? extends KnowWEObjectType>>(0);
+	// children = new ArrayList<Section<? extends Type>>(0);
 	// }
 	// if (children.isEmpty()) {
 	// children.add(new IncludeErrorSection("Section " + src.toString()
@@ -469,7 +473,7 @@ public class KnowWEIncludeManager implements EventListener {
 	// *
 	// * @returns the last children respectively the last target of the Include
 	// */
-	// public List<Section<? extends KnowWEObjectType>>
+	// public List<Section<? extends Type>>
 	// getLastChildrenForSection(Section<Include> src) {
 	// return src2lastTargets.get(src);
 	// }
@@ -541,11 +545,11 @@ public class KnowWEIncludeManager implements EventListener {
 	// // if an Include is from the article with the given title but not in
 	// // the active Includes of this article, it is out of use
 	// if (inc.getTitle().equals(title) && !activeIncludes.contains(inc)) {
-	// List<Section<? extends KnowWEObjectType>> targetSections =
+	// List<Section<? extends Type>> targetSections =
 	// src2target.get(inc);
 	// // since the target has changed, the including article doesn't
 	// // reuse the last target
-	// for (Section<? extends KnowWEObjectType> tar : targetSections) {
+	// for (Section<? extends Type> tar : targetSections) {
 	// tar.setReusedStateRecursively(inc.getTitle(), false);
 	// }
 	// // remove from map...

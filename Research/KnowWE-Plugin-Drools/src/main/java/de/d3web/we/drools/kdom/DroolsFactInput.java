@@ -19,7 +19,7 @@
  */
 package de.d3web.we.drools.kdom;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
@@ -28,7 +28,7 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
  * 
  * @author Alex Legler
  */
-public class DroolsFactInput extends DefaultAbstractKnowWEObjectType {
+public class DroolsFactInput extends AbstractType {
 	
 	public DroolsFactInput() {
 		setSectionFinder(new RegexSectionFinder("(Input)<\\S+>"));

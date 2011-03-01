@@ -20,10 +20,10 @@
 
 package de.d3web.we.plugin.calendar;
 
-import de.d3web.we.kdom.AbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
-public class AppointmentText extends AbstractKnowWEObjectType {
+public class AppointmentText extends AbstractType {
 
 	@Override
 	protected void init() {

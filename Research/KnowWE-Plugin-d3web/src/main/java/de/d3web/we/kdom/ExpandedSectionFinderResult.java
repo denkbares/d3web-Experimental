@@ -27,13 +27,13 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
 public class ExpandedSectionFinderResult extends SectionFinderResult {
 
-	private final KnowWEObjectType type;
+	private final Type type;
 
 	private final String text;
 
 	List<ExpandedSectionFinderResult> children = new ArrayList<ExpandedSectionFinderResult>();
 
-	public ExpandedSectionFinderResult(String text, KnowWEObjectType type, int start) {
+	public ExpandedSectionFinderResult(String text, Type type, int start) {
 		super(start, start + text.length());
 		this.text = text;
 		this.type = type;
@@ -55,7 +55,7 @@ public class ExpandedSectionFinderResult extends SectionFinderResult {
 		children.add(child);
 	}
 
-	public KnowWEObjectType getObjectType() {
+	public Type get() {
 		return type;
 	}
 

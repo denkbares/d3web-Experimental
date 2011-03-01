@@ -41,6 +41,7 @@ import org.openrdf.repository.RepositoryException;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.UpperOntology;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
@@ -157,14 +158,14 @@ public class FactSheet extends AbstractHTMLTagHandler {
 		if (empty) {
 			output += KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
 					"KnowWE.owl.query.no_result");
-			return KnowWEEnvironment.maskHTML(output);
+			return KnowWEUtils.maskHTML(output);
 		}
 		else {
 			output += "<table border=\"1\">" + table + "</table>";
 			output = "<hr /><p>Factsheet:</p>" + output;
 		}
 
-		return KnowWEEnvironment.maskHTML(output);
+		return KnowWEUtils.maskHTML(output);
 	}
 
 	@Override

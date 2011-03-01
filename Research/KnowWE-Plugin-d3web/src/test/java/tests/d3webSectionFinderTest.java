@@ -28,6 +28,7 @@ import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Annotation.Annotation;
 import de.d3web.we.kdom.Annotation.AnnotationContent;
 import de.d3web.we.kdom.Annotation.AnnotationObject;
@@ -71,6 +72,7 @@ import dummies.KnowWETestWikiConnector;
  * @author Johannes Dienst
  * 
  */
+@SuppressWarnings("unchecked")
 public class d3webSectionFinderTest extends TestCase {
 
 	private static final String WRONG_FIRST_START = "Wrong start at first finding";
@@ -82,8 +84,8 @@ public class d3webSectionFinderTest extends TestCase {
 	private static final String WRONG_FOURTH_START = "Wrong start at fourth finding";
 	private static final String WRONG_FOURTH_END = "Wrong end at fourth finding";
 	private static final String WRONG_COUNT = "Children count wrong";
-	private static final String WRONG_TYPE = "Wrong KnowWEObjectType";
-	private static final String WRONG_TYPE_COUNT = "Wrong KnowWEObjectType  section count:";
+	private static final String WRONG_TYPE = "Wrong Type";
+	private static final String WRONG_TYPE_COUNT = "Wrong Type  section count:";
 
 	@Override
 	protected void setUp() throws IOException {
@@ -107,43 +109,43 @@ public class d3webSectionFinderTest extends TestCase {
 		// Annotation
 		assertEquals(WRONG_COUNT, 3, childs.size());
 		assertEquals(WRONG_TYPE, new Annotation().getName(),
-				childs.get(1).getObjectType().getName());
+				childs.get(1).get().getName());
 
 		// StartSymbol, Content, EndSymbol
 		childs = childs.get(1).getChildren();
 		assertEquals(WRONG_COUNT, 3, childs.size());
 		assertEquals(WRONG_TYPE, new SemanticAnnotationStartSymbol("{{").getName(),
-				childs.get(0).getObjectType().getName());
+				childs.get(0).get().getName());
 		assertEquals(WRONG_TYPE, new AnnotationContent().getName(),
-				childs.get(1).getObjectType().getName());
+				childs.get(1).get().getName());
 		assertEquals(WRONG_TYPE, new SemanticAnnotationEndSymbol("}}").getName(),
-				childs.get(2).getObjectType().getName());
+				childs.get(2).get().getName());
 
 		// AnnotatedString, Annotation MapSign, AnnotationObject
 		childs = childs.get(1).getChildren();
 		assertEquals(WRONG_COUNT, 3, childs.size());
-		assertEquals(WRONG_TYPE, new AnnotatedString().getName(),
-				childs.get(0).getObjectType().getName());
+		assertEquals(WRONG_TYPE, new AnnotatedString(null).getName(),
+				childs.get(0).get().getName());
 		assertEquals(WRONG_TYPE, new AnnotationMapSign().getName(),
-				childs.get(1).getObjectType().getName());
+				childs.get(1).get().getName());
 		assertEquals(WRONG_TYPE, new AnnotationObject().getName(),
-				childs.get(2).getObjectType().getName());
+				childs.get(2).get().getName());
 
 		// PlainText, AnnotationProperty, SimpleAnnotation
 		childs = childs.get(2).getChildren();
 		assertEquals(WRONG_COUNT, 3, childs.size());
-		assertEquals(WRONG_TYPE, new PlainText().getName(), childs.get(0).getObjectType().getName());
+		assertEquals(WRONG_TYPE, new PlainText().getName(), childs.get(0).get().getName());
 		assertEquals(WRONG_TYPE, new SemanticAnnotationProperty().getName(),
-				childs.get(1).getObjectType().getName());
+				childs.get(1).get().getName());
 		assertEquals(WRONG_TYPE, new SimpleAnnotation().getName(),
-				childs.get(2).getObjectType().getName());
+				childs.get(2).get().getName());
 
 		// AnnotationPropertyName, AnnotationPropertyDelimiter
 		childs = childs.get(1).getChildren();
 		assertEquals(WRONG_TYPE, new SemanticAnnotationPropertyName().getName(),
-				childs.get(0).getObjectType().getName());
+				childs.get(0).get().getName());
 		assertEquals(WRONG_TYPE, new SemanticAnnotationPropertyDelimiter().getName(),
-				childs.get(1).getObjectType().getName());
+				childs.get(1).get().getName());
 	}
 
 	public void testAnnotationSectioner() {
@@ -172,7 +174,7 @@ public class d3webSectionFinderTest extends TestCase {
 		// ComplexFinding
 		assertEquals(WRONG_COUNT, 1, childs.size());
 		assertEquals(WRONG_TYPE, new ComplexFinding().getName(),
-				childs.get(0).getObjectType().getName());
+				childs.get(0).get().getName());
 
 		// disjunctive form
 		Section disjunction = childs.get(0);
@@ -181,31 +183,31 @@ public class d3webSectionFinderTest extends TestCase {
 
 		// TODO Test order more deeply: disj, or, disj
 		assertEquals(WRONG_TYPE_COUNT + " " + OrOperator.class.toString(), 1,
-				disjunction.findChildrenOfType(OrOperator.class).size());
+				Sections.findChildrenOfType(disjunction, OrOperator.class).size());
 		assertEquals(WRONG_TYPE_COUNT + " " + Disjunct.class.getName(), 2,
-				disjunction.findChildrenOfType(Disjunct.class).size());
+				Sections.findChildrenOfType(disjunction, Disjunct.class).size());
 
 		// conjunctive form (trivial in this case)
 		childs = childs.get(0).getChildren();
 		assertEquals(WRONG_COUNT, 1, childs.size());
 		assertEquals(WRONG_TYPE, new Conjunct().getName(),
-				childs.get(0).getObjectType().getName());
+				childs.get(0).get().getName());
 
 		// conjunctive form (trivial in this case)
 		childs = childs.get(0).getChildren();
 		assertEquals(WRONG_COUNT, 1, childs.size());
-		assertEquals(WRONG_TYPE, new Finding().getName(), childs.get(0).getObjectType().getName());
+		assertEquals(WRONG_TYPE, new Finding().getName(), childs.get(0).get().getName());
 
 		// FindingQuestion, findingComparator, FindingAnswer
 		Section finding = childs.get(0);
 		childs = finding.getChildren();
 		assertEquals(WRONG_COUNT, 5, childs.size());
 		assertEquals(WRONG_TYPE_COUNT + " " + FindingQuestion.class.toString(), 1,
-				finding.findChildrenOfType(FindingQuestion.class).size());
+				Sections.findChildrenOfType(finding, FindingQuestion.class).size());
 		assertEquals(WRONG_TYPE_COUNT + " " + FindingComparator.class.toString(), 1,
-				finding.findChildrenOfType(FindingComparator.class).size());
+				Sections.findChildrenOfType(finding, FindingComparator.class).size());
 		assertEquals(WRONG_TYPE_COUNT + " " + FindingAnswer.class.toString(), 1,
-				finding.findChildrenOfType(FindingAnswer.class).size());
+				Sections.findChildrenOfType(finding, FindingAnswer.class).size());
 
 	}
 
@@ -273,7 +275,7 @@ public class d3webSectionFinderTest extends TestCase {
 	public void testRuleCondLineSectionFinder() {
 		String text = " yoyo IF (Fuel = unleaded gasoline AND Exhaust pipe color = sooty black)";
 		ISectionFinder f =
-				new RuleCondLine().getSectioner();
+				new RuleCondLine().getSectioFinder();
 		List<SectionFinderResult> results = f.lookForSections(text, null, null);
 
 		assertEquals(WRONG_FIRST_START, 6, results.get(0).getStart());
@@ -283,7 +285,7 @@ public class d3webSectionFinderTest extends TestCase {
 	public void testRuleSectionFinder() {
 		String text = " yoyo IF (Fuel = diesel AND Exhaust pipe color = sooty black)\r\n"
 					+ "THEN Exhaust pipe color evaluation += normal";
-		ISectionFinder f = new Rule().getSectioner();
+		ISectionFinder f = new Rule().getSectioFinder();
 		List<SectionFinderResult> results = f.lookForSections(text, null, null);
 
 		assertEquals(WRONG_FIRST_START, 6, results.get(0).getStart());
@@ -321,7 +323,7 @@ public class d3webSectionFinderTest extends TestCase {
 					+ "What do you like? = Meeting people,\r\n"
 					+ "}\r\n";
 
-		ISectionFinder f = new XCList().getSectioner();
+		ISectionFinder f = new XCList().getSectioFinder();
 		List<SectionFinderResult> results = f.lookForSections(text, null, null);
 
 		assertEquals(WRONG_FIRST_START, 0, results.get(0).getStart());
@@ -396,7 +398,7 @@ public class d3webSectionFinderTest extends TestCase {
 				+ "What do you like? = Shopping,\r\n"
 				+ "} \r\n \r\n \r \n";
 
-		ISectionFinder f = new XCLRelation().getSectioner();
+		ISectionFinder f = new XCLRelation().getSectioFinder();
 		List<SectionFinderResult> results = f.lookForSections(text, null, null);
 
 		assertEquals(WRONG_FIRST_START, 0, results.get(0).getStart());

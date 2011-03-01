@@ -22,32 +22,30 @@ package de.d3web.we.kdom;
 
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
+
 public class ExpandedSectionizerModule implements SectionizerModule {
 
 	@Override
-	public Section<?> createSection(KnowWEArticle article, KnowWEObjectType ob, Section<?> father, Section<?> thisSection, String secText, SectionFinderResult result) {
+	public Section<?> createSection(String text, Type type, Section<?> father, KnowWEArticle article, SectionFinderResult result) {
 		if (result instanceof ExpandedSectionFinderResult) {
-			return createExpandedSection(
-					(ExpandedSectionFinderResult) result, father);
+			return createExpandedSection((ExpandedSectionFinderResult) result, type, father,
+					article);
 
 		}
 		return null;
 	}
 
-	private Section<?> createExpandedSection(ExpandedSectionFinderResult result, Section<?> father) {
-		Section<?> s = Section.createSection(result.getText(),
-				result.getObjectType(), father,
-				result.getStart(), father.getArticle(), null, true);
-		if (s.getOffSetFromFatherText() < 0
-				|| s.getOffSetFromFatherText() > father.getOriginalText().length()
-				|| !father.getOriginalText().substring(s.getOffSetFromFatherText()).startsWith(
-						s.getOriginalText())) {
-			s.setOffSetFromFatherText(father.getOriginalText().indexOf(
-					s.getOriginalText()));
-		}
+	private Section<?> createExpandedSection(ExpandedSectionFinderResult result, Type type, Section<?> father, KnowWEArticle article) {
+
+		Section<?> s = result.get().getParser().parse(result.getText(), result.get(),
+				result.getId(), father,
+				article);
+		// Section<?> s = Section.createSection(result.getText(),
+		// result.get(), father,
+		// result.getStart(), father.getArticle(), null, true);
 
 		for (ExpandedSectionFinderResult childResult : result.getChildren()) {
-			createExpandedSection(childResult, s);
+			createExpandedSection(childResult, result.get(), s, article);
 		}
 		return s;
 	}

@@ -21,7 +21,7 @@ import de.d3web.we.core.packaging.KnowWEPackageManager;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.hermes.TimeEvent;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.RootType;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotation;
 import de.knowwe.semantic.sparql.SPARQLUtil;
@@ -31,7 +31,7 @@ public class TimeEventTest extends TestCase {
 
 	private KnowWEEnvironment ke;
 	private KnowWEArticleManager am;
-	private KnowWEObjectType type;
+	private Type type;
 	private KnowWEParameterMap params;
 	private ISemanticCore sc;
 

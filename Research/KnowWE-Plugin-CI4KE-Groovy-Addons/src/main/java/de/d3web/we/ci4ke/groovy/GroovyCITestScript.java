@@ -95,12 +95,12 @@ public abstract class GroovyCITestScript extends Script implements CITest {
 	// List<String> sectionIDs = new ArrayList<String>();
 	//
 	// List<Section<XCList>> found = new ArrayList<Section<XCList>>();
-	// getArticle().getSection().findSuccessorsOfType(XCList.class, found);
+	// getArticle().getSection() Sections.findSuccessorsOfType(XCList.class, found);
 	//
 	// for (Section<XCList> xclSection : found) {
 	// List<Section<XCLRelation>> relations = new
 	// ArrayList<Section<XCLRelation>>();
-	// xclSection.findSuccessorsOfType(XCLRelation.class, relations);
+	// xclSection Sections.findSuccessorsOfType(XCLRelation.class, relations);
 	// if (relations.size() < limitRelations) {
 	// sectionIDs.add(xclSection.getID());
 	// }

@@ -19,7 +19,7 @@
  */
 package de.d3web.we.kdom.bibtex;
 
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 
 /**
  * 
@@ -30,7 +30,7 @@ import de.d3web.we.kdom.xml.AbstractXMLObjectType;
  * @author Jochen
  * @created 16.09.2010
  */
-public class BibTex extends AbstractXMLObjectType{
+public class BibTex extends AbstractXMLType{
 
 	public BibTex(){
 		super("bibtex");

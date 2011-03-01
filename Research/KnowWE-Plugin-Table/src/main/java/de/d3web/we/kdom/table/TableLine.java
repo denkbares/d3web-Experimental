@@ -24,8 +24,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 /**
@@ -36,7 +37,7 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
  * @author smark, Sebastian Furth
  * 
  */
-public class TableLine extends DefaultAbstractKnowWEObjectType {
+public class TableLine extends AbstractType {
 
 	public static final String LINEREGEX = "\\s*(\\|{1,2}.*)+\\r?\\n?";
 	public static final Pattern LINEPATTERN = Pattern.compile(LINEREGEX);
@@ -59,7 +60,7 @@ public class TableLine extends DefaultAbstractKnowWEObjectType {
 	public static boolean isHeaderLine(Section<TableLine> tableLine) {
 
 		List<Section<TableCell>> cells = new LinkedList<Section<TableCell>>();
-		tableLine.findSuccessorsOfType(TableCell.class, cells);
+		Sections.findSuccessorsOfType(tableLine, TableCell.class, cells);
 
 		boolean isHeaderLine = true;
 		for (Section<TableCell> cell : cells) {

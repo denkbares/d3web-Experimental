@@ -5,10 +5,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.taghandler.AbstractTagHandler;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
@@ -37,7 +37,7 @@ public class ShowTableTagHandler extends AbstractTagHandler{
 
 	private String renderTable(Section<DefineTableMarkup> myTable) {
 		List<Section<ColumnType>> cols = new ArrayList<Section<ColumnType>>();
-		myTable.findSuccessorsOfType(ColumnType.class, cols);
+		Sections.findSuccessorsOfType(myTable, ColumnType.class, cols);
 		if(cols.size() == 0) {
 			return "no colums defined in table-defintions!";
 		}
@@ -64,7 +64,8 @@ public class ShowTableTagHandler extends AbstractTagHandler{
 		Collection<KnowWEArticle> articles = KnowWEEnvironment.getInstance().getArticleManager(article.getWeb()).getArticles();
 		for (KnowWEArticle knowWEArticle : articles) {
 			List<Section<DefineTableMarkup>> tables = new ArrayList<Section<DefineTableMarkup>>();
-			knowWEArticle.getSection().findSuccessorsOfType(DefineTableMarkup.class, tables);
+			Sections.findSuccessorsOfType(knowWEArticle.getSection(), DefineTableMarkup.class,
+					tables);
 			for (Section<DefineTableMarkup> table : tables) {
 				String tableID = table.get().getAnnotation(table, "id");
 				if(tableID != null) {

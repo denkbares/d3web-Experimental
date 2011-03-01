@@ -23,13 +23,13 @@ package de.d3web.we.hermes.kdom;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
-public class TimeEventDateType extends DefaultAbstractKnowWEObjectType {
+public class TimeEventDateType extends AbstractType {
 
 	@Override
 	protected void init() {
@@ -40,7 +40,7 @@ public class TimeEventDateType extends DefaultAbstractKnowWEObjectType {
 
 		@Override
 		public List<SectionFinderResult> lookForSections(String text,
-				Section father, KnowWEObjectType type) {
+				Section father, Type type) {
 			int indexStart = text.indexOf("\n") + 1;
 			int indexEnd = text.indexOf("\n", indexStart);
 			List<SectionFinderResult> list = new ArrayList<SectionFinderResult>();

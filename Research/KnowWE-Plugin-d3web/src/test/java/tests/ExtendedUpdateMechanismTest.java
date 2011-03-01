@@ -35,7 +35,7 @@
 // import de.d3web.we.core.KnowWEEnvironment;
 // import de.d3web.we.d3webModule.D3webModule;
 // import de.d3web.we.kdom.KnowWEArticle;
-// import de.d3web.we.kdom.KnowWEObjectType;
+// import de.d3web.we.kdom.Type;
 // import de.d3web.we.kdom.Section;
 // import de.d3web.we.kdom.basic.PlainText;
 // import de.d3web.we.kdom.dashTree.questionnaires.QuestionnairesSection;
@@ -70,7 +70,7 @@
 // */
 // String content = Utils.readTxtFile("src/test/resources/UpdatingTest1.txt");
 //		
-// KnowWEObjectType types = new Kopic();
+// Type types = new Kopic();
 //		
 // D3webKnowledgeHandler d3Handler =
 // D3webModule.getKnowledgeRepresentationHandler(web);
@@ -82,7 +82,7 @@
 // types, web);
 // KnowWEEnvironment.getInstance().getArticleManager(web).saveUpdatedArticle(article1);
 //		
-// List<Section<? extends KnowWEObjectType>> sections1 =
+// List<Section<? extends Type>> sections1 =
 // article1.getAllNodesPreOrder();
 //		
 // KnowledgeBase kb1 = d3Handler.getKBM(article1.getTitle()).getKnowledgeBase();
@@ -93,7 +93,7 @@
 // KnowWEArticle article2 = new KnowWEArticle(content, "UpdatingTest1",
 // types, web);
 //		
-// List<Section<? extends KnowWEObjectType>> sections2 =
+// List<Section<? extends Type>> sections2 =
 // article2.getAllNodesPreOrder();
 //		
 // KnowledgeBase kb2 = d3Handler.getKBM(article2.getTitle()).getKnowledgeBase();
@@ -103,7 +103,7 @@
 //		
 // for (int i = 1; i < sections1.size(); i++) {
 // assertEquals("The Sections in the different articles should be the same (failed at "
-// + sections1.get(i).getObjectType().getClass().getSimpleName() + "):",
+// + sections1.get(i).get().getClass().getSimpleName() + "):",
 // true, sections1.get(i) == sections2.get(i));
 // }
 //		
@@ -127,7 +127,7 @@
 // String content2 = Utils.readTxtFile("src/test/resources/UpdatingTest2.txt");
 // String content3 = Utils.readTxtFile("src/test/resources/UpdatingTest3.txt");
 //		
-// KnowWEObjectType types = new Kopic();
+// Type types = new Kopic();
 //		
 // D3webKnowledgeHandler d3Handler =
 // D3webModule.getKnowledgeRepresentationHandler(web);
@@ -138,7 +138,7 @@
 // KnowWEArticle article1 = new KnowWEArticle(content1, "UpdatingTest",
 // types, web);
 // KnowWEEnvironment.getInstance().getArticleManager("default_web").saveUpdatedArticle(article1);
-// List<Section<? extends KnowWEObjectType>> sections1 =
+// List<Section<? extends Type>> sections1 =
 // article1.getAllNodesPreOrder();
 // KnowledgeBase kb1 = d3Handler.getKBM(article1.getTitle()).getKnowledgeBase();
 //		
@@ -148,7 +148,7 @@
 // KnowWEArticle article2 = new KnowWEArticle(content2, "UpdatingTest",
 // types, "default_web");
 // KnowWEEnvironment.getInstance().getArticleManager("default_web").saveUpdatedArticle(article2);
-// List<Section<? extends KnowWEObjectType>> sections2 =
+// List<Section<? extends Type>> sections2 =
 // article2.getAllNodesPreOrder();
 // KnowledgeBase kb2 = d3Handler.getKBM(article2.getTitle()).getKnowledgeBase();
 // Collection<KnowledgeSlice> slices2 = kb2.getAllKnowledgeSlices();
@@ -163,8 +163,8 @@
 // assertEquals("Articles dont have the same amount of sections:",
 // sections1.size(), sections2.size());
 //		
-// Set<Class<? extends KnowWEObjectType>> allowedExceptions = new
-// HashSet<Class<? extends KnowWEObjectType>>();
+// Set<Class<? extends Type>> allowedExceptions = new
+// HashSet<Class<? extends Type>>();
 // allowedExceptions.add(Kopic.class);
 // allowedExceptions.add(KopicContent.class);
 // allowedExceptions.add(RulesSection.class);
@@ -177,7 +177,7 @@
 // allowedExceptions.add(PlainText.class);
 //		
 // for (int i = 1; i < sections1.size(); i++) {
-// if (!allowedExceptions.contains(sections1.get(i).getObjectType().getClass()))
+// if (!allowedExceptions.contains(sections1.get(i).get().getClass()))
 // {
 // assertSame("The Sections in the different articles should be the same:",
 // sections1.get(i), sections2.get(i));
@@ -195,7 +195,7 @@
 // KnowWEArticle article3 = new KnowWEArticle(content3, "UpdatingTest",
 // types, web);
 // KnowWEEnvironment.getInstance().getArticleManager(web).saveUpdatedArticle(article3);
-// List<Section<? extends KnowWEObjectType>> sections3 =
+// List<Section<? extends Type>> sections3 =
 // article3.getAllNodesPreOrder();
 // KnowledgeBase kb3 = d3Handler.getKBM(article3.getTitle()).getKnowledgeBase();
 // Collection<KnowledgeSlice> slices3 = kb3.getAllKnowledgeSlices();
@@ -204,7 +204,7 @@
 // sections2.size(), sections3.size());
 //		
 // for (int i = 1; i < sections1.size(); i++) {
-// if (!allowedExceptions.contains(sections1.get(i).getObjectType().getClass()))
+// if (!allowedExceptions.contains(sections1.get(i).get().getClass()))
 // {
 // assertSame("The Sections in the different articles should be the same:",
 // sections1.get(i), sections2.get(i));

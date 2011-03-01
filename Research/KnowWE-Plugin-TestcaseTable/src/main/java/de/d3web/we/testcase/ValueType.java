@@ -21,9 +21,10 @@ package de.d3web.we.testcase;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.condition.Number;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.d3web.we.kdom.sectionFinder.ISectionFinder;
@@ -35,7 +36,7 @@ import de.d3web.we.kdom.table.TableLine;
  * @author Reinhard Hatko
  * @created 21.01.2011
  */
-public class ValueType extends DefaultAbstractKnowWEObjectType {
+public class ValueType extends AbstractType {
 
 	@Override
 	protected void init() {
@@ -47,10 +48,11 @@ public class ValueType extends DefaultAbstractKnowWEObjectType {
 		aRef.setSectionFinder(new ISectionFinder() {
 
 			@Override
-			public List<SectionFinderResult> lookForSections(String text, Section<?> father, KnowWEObjectType type) {
-				Section<TestcaseTable> table = father.findAncestorOfExactType(TestcaseTable.class);
+			public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
+				Section<TestcaseTable> table = Sections.findAncestorOfExactType(father,
+						TestcaseTable.class);
 				List<Section<TableLine>> lines = new LinkedList<Section<TableLine>>();
-				table.findSuccessorsOfType(TableLine.class, lines);
+				Sections.findSuccessorsOfType(table, TableLine.class, lines);
 
 				if (lines.size() > 1) {
 					if (text.length() > 0) {
@@ -66,11 +68,11 @@ public class ValueType extends DefaultAbstractKnowWEObjectType {
 	}
 
 	public static Object getValue(Section<ValueType> sec) {
-		List<Section<? extends KnowWEObjectType>> children = sec.getChildren();
+		List<Section<? extends Type>> children = sec.getChildren();
 
 		if (children.isEmpty()) return null;
 
-		Section<? extends KnowWEObjectType> child = children.get(0);
+		Section<? extends Type> child = children.get(0);
 
 		if (child.get().getClass().equals(CellAnswerRef.class)) {
 			return child.getOriginalText();

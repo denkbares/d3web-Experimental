@@ -22,8 +22,8 @@ package de.d3web.we.kdom.table;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractKnowWEObjectType;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.rendering.NothingRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
@@ -36,10 +36,10 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
  * 
  * @author smark
  * 
- * @see AbstractKnowWEObjectType
+ * @see AbstractType
  * @see TableCell
  */
-public class TableCellStart extends DefaultAbstractKnowWEObjectType {
+public class TableCellStart extends AbstractType {
 
 	public TableCellStart() {
 		setSectionFinder(new RegexSectionFinder(Pattern.compile("(\\|).*"), 1));

@@ -20,9 +20,9 @@
 
 package de.d3web.we.kdom.include;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 
-public class IncludeError extends DefaultAbstractKnowWEObjectType {
+public class IncludeError extends AbstractType {
 
 	private static IncludeError instance;
 

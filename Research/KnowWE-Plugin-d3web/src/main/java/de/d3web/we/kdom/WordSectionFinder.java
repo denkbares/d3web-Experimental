@@ -9,7 +9,7 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 public class WordSectionFinder implements ISectionFinder {
 
 	@Override
-	public List<SectionFinderResult> lookForSections(String text, Section father, KnowWEObjectType type) {
+	public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
 
 		if (!text.equals(" ") && !text.equals("\"")
 				&& !text.contains("(") && !text.contains(")")) {

@@ -29,9 +29,10 @@ import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.indication.ActionIndication;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.sectionFinder.ISectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.object.QuestionnaireReference;
 
@@ -49,10 +50,10 @@ public class QuestionIndication extends D3webRuleAction<QuestionIndication> {
 		this.childrenTypes.add(qC);
 	}
 
-	private class QuestionIndicationSectionFinder extends SectionFinder {
+	private class QuestionIndicationSectionFinder implements ISectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, KnowWEObjectType type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 
 			if (text.contains(";")) {
 
@@ -77,10 +78,10 @@ public class QuestionIndication extends D3webRuleAction<QuestionIndication> {
 
 	}
 
-	private class SeperatedQuestionClassSectionFinder extends SectionFinder {
+	private class SeperatedQuestionClassSectionFinder implements ISectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, KnowWEObjectType type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 
 			if (!text.equals("") && !text.equals(" ")) {
 				int start = 0;
@@ -108,8 +109,8 @@ public class QuestionIndication extends D3webRuleAction<QuestionIndication> {
 	@Override
 	public PSAction getAction(KnowWEArticle article, Section<QuestionIndication> s) {
 		List<Section<QuestionnaireReference>> qContainerrefs = new ArrayList<Section<QuestionnaireReference>>();
-		s.findSuccessorsOfType(QuestionnaireReference.class,
-				qContainerrefs);
+		Sections.findSuccessorsOfType(s,
+				QuestionnaireReference.class, qContainerrefs);
 
 		if (qContainerrefs.size() > 0) {
 			ActionIndication a = new ActionIndication();

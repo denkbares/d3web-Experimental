@@ -22,10 +22,10 @@ package de.d3web.we.plugin.calendar;
 
 import java.util.Map;
 
-import de.d3web.we.kdom.AbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
-public class AppointmentAuthor extends AbstractKnowWEObjectType {
+public class AppointmentAuthor extends AbstractType {
 
 	@Override
 	protected void init() {

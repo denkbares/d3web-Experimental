@@ -37,7 +37,7 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
@@ -51,7 +51,7 @@ public class GroovySparqlRendererTest {
 	private KnowWEDomRenderer<GroovySparqlRendererContent> renderer;
 	private KnowWEEnvironment ke;
 	private KnowWEArticleManager am;
-	private KnowWEObjectType type;
+	private Type type;
 	private KnowWEParameterMap params;
 	private TaggingMangler tm;
 	private KnowWEUserContext usercontext;

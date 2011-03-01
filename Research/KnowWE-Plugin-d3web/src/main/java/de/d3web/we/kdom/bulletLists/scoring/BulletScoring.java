@@ -25,9 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 
-public class BulletScoring extends AbstractXMLObjectType {
+public class BulletScoring extends AbstractXMLType {
 
 	public BulletScoring() {
 		super("BulletScoring");
@@ -43,7 +43,7 @@ public class BulletScoring extends AbstractXMLObjectType {
 
 	public static List<String> getScoringTargets(Section s) {
 
-		Map<String, String> map = AbstractXMLObjectType.getAttributeMapFor(s);
+		Map<String, String> map = AbstractXMLType.getAttributeMapFor(s);
 
 		String values = map.get("scorings");
 
@@ -60,7 +60,7 @@ public class BulletScoring extends AbstractXMLObjectType {
 	public static final String DEFAULT_VALUE_KEY = "defaultValue";
 
 	public static String getDefaultValue(Section s) {
-		Map<String, String> map = AbstractXMLObjectType.getAttributeMapFor(s);
+		Map<String, String> map = AbstractXMLType.getAttributeMapFor(s);
 
 		return map.get(DEFAULT_VALUE_KEY);
 	}

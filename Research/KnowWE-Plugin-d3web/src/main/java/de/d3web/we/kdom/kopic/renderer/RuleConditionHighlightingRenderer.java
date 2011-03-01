@@ -30,8 +30,9 @@ import de.d3web.core.inference.condition.NoAnswerException;
 import de.d3web.core.inference.condition.UnknownAnswerException;
 import de.d3web.core.session.Session;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Annotation.Finding;
 import de.d3web.we.kdom.condition.antlr.ComplexFinding;
 import de.d3web.we.kdom.condition.antlr.ComplexFindingBraced;
@@ -74,7 +75,7 @@ public class RuleConditionHighlightingRenderer extends KnowWEDomRenderer {
 	// public String render(Section sec, KnowWEUserContext user) {
 	//
 	// // get the rule: Eval it and highlight the condition
-	// Section rule = KnowWEObjectTypeUtils.getAncestorOfType(sec, Rule.class);
+	// Section rule = TypeUtils.getAncestorOfType(sec, Rule.class);
 	// String kbRuleId = (String) KnowWEUtils.getStoredObject(sec.getWeb(),
 	// sec.getTitle(), rule.getId(), Rule.KBID_KEY);
 	//
@@ -111,8 +112,7 @@ public class RuleConditionHighlightingRenderer extends KnowWEDomRenderer {
 			KnowWEUserContext user, StringBuilder result) {
 
 		// get the rule: Eval it and highlight the condition
-		Section ruleSection = sec.findAncestorOfType(
-				de.d3web.we.kdom.rules.Rule.class);
+		Section ruleSection = Sections.findAncestorOfType(sec, de.d3web.we.kdom.rules.Rule.class);
 		Rule kbRule = (Rule) KnowWEUtils.getStoredObject(sec.getWeb(),
 				sec.getTitle(), ruleSection.getID(),
 				de.d3web.we.kdom.rules.Rule.KBID_KEY);
@@ -160,9 +160,9 @@ public class RuleConditionHighlightingRenderer extends KnowWEDomRenderer {
 	//
 	// StringBuffer buffi = new StringBuffer();
 	//
-	// KnowWEObjectType type;
+	// Type type;
 	// for (Section child : sec.getChildren()) {
-	// type = child.getObjectType();
+	// type = child.get();
 	// if (type instanceof Finding || type instanceof ComplexFinding
 	// || type instanceof ComplexFindingBraced || type instanceof Conjunct
 	// || type instanceof Disjunct)
@@ -178,10 +178,10 @@ public class RuleConditionHighlightingRenderer extends KnowWEDomRenderer {
 			Rule rc, Session session, KnowWEUserContext user,
 			StringBuilder buffi) {
 
-		KnowWEObjectType type;
+		Type type;
 		List<Section> children = sec.getChildren();
 		for (Section child : children) {
-			type = child.getObjectType();
+			type = child.get();
 			if (type instanceof Finding || type instanceof ComplexFinding
 					|| type instanceof ComplexFindingBraced
 					|| type instanceof Conjunct || type instanceof Disjunct) buffi.append(this.highlightCondition(
@@ -208,7 +208,7 @@ public class RuleConditionHighlightingRenderer extends KnowWEDomRenderer {
 
 		StringBuilder buffi = new StringBuilder();
 		boolean braced = false;
-		if (sec.getObjectType() instanceof ComplexFindingBraced) {
+		if (sec.get() instanceof ComplexFindingBraced) {
 			braced = true;
 			buffi.append("(");
 			sec = (Section) sec.getChildren().get(1);

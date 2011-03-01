@@ -30,19 +30,20 @@ import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.knowwe.core.action.WordBasedRenameFinding;
 
 /**
- * Renders the Mask for the findings of an KnowWEObjectType in the running Wiki.
+ * Renders the Mask for the findings of an Type in the running Wiki.
  * 
- * @See KnowWEObjectTypeBrowserHandler.
+ * @See TypeBrowserHandler.
  * 
  * @author Johannes Dienst
  * 
  */
-public class KnowWEObjectTypeBrowserAction extends DeprecatedAbstractKnowWEAction {
+public class KnowWETypeBrowserAction extends DeprecatedAbstractKnowWEAction {
 
 	private ResourceBundle rb;
 
@@ -68,10 +69,10 @@ public class KnowWEObjectTypeBrowserAction extends DeprecatedAbstractKnowWEActio
 		// Build the Findings
 		StringBuilder buildi = new StringBuilder();
 
-		ArrayList<Section> found = new ArrayList<Section>();
+		ArrayList<Section<?>> found = new ArrayList<Section<?>>();
 		String types = map.get("TypeBrowserQuery");
 		try {
-			KnowWEObjectType typ = null;
+			Type typ = null;
 			typ = KnowWEEnvironment.getInstance().searchType(Class.forName(types));
 
 			if (typ != null) {
@@ -79,8 +80,8 @@ public class KnowWEObjectTypeBrowserAction extends DeprecatedAbstractKnowWEActio
 						map.getWeb()).getArticleIterator();
 				while (it.hasNext()) {
 					KnowWEArticle art = it.next();
-					art.getSection().findSuccessorsOfTypeUntyped(Class.forName(types),
-							found);
+					Sections.findSuccessorsOfTypeUntyped(art.getSection(),
+							Class.forName(types), found);
 				}
 			}
 
@@ -93,7 +94,7 @@ public class KnowWEObjectTypeBrowserAction extends DeprecatedAbstractKnowWEActio
 		// if found is empty display error message
 		if (found.isEmpty()) {
 			buildi.append("<p class='error box'>"
-							+ rb.getString("KnowWE.KnowWeObjectTypeBrowser.errorbox")
+							+ rb.getString("KnowWE.TypeBrowser.errorbox")
 							+ "</p>");
 			return buildi.toString();
 		}
@@ -110,7 +111,7 @@ public class KnowWEObjectTypeBrowserAction extends DeprecatedAbstractKnowWEActio
 	 * @return a HTML formatted table witch lists all the findings in it
 	 */
 	@SuppressWarnings("unchecked")
-	private String renderFindingsSelectionMask(List<Section> found, String searchedType) {
+	private String renderFindingsSelectionMask(List<Section<?>> found, String searchedType) {
 		StringBuilder mask = new StringBuilder();
 
 		// Create Table Header
@@ -273,7 +274,7 @@ public class KnowWEObjectTypeBrowserAction extends DeprecatedAbstractKnowWEActio
 			if (article.getTitle().equals(articleTitle)) {
 
 				// get the Section needed for additional Context
-				Section section = article.findSection(String.valueOf(sectionId));
+				Section<?> section = article.findSection(String.valueOf(sectionId));
 				additionalText = WordBasedRenameFinding.getAdditionalContextTypeBrowser(pos,
 									direction, curWords, queryLength,
 									section.getArticle().getSection().getOriginalText(), wordCount);
@@ -347,12 +348,12 @@ public class KnowWEObjectTypeBrowserAction extends DeprecatedAbstractKnowWEActio
 		StringBuffer fstringbuffy = new StringBuffer();
 
 		for (Section s : fathers) {
-			if (!(s.getObjectType() instanceof KnowWEArticle)) {
-				String name = s.getObjectType().getName() + ", ";
+			if (!(s.get() instanceof KnowWEArticle)) {
+				String name = s.get().getName() + ", ";
 				if (name.contains(".")) {
 					name = name.substring(name.indexOf('.') + 1);
 				}
-				fstringbuffy.append(s.getObjectType().getName() + ", ");
+				fstringbuffy.append(s.get().getName() + ", ");
 			}
 		}
 		String fString = fstringbuffy.toString();
@@ -378,8 +379,7 @@ public class KnowWEObjectTypeBrowserAction extends DeprecatedAbstractKnowWEActio
 	 * @param found
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	private int getValidNextSection(int k, List<Section> found) {
+	private int getValidNextSection(int k, List<Section<?>> found) {
 		for (; k < found.size(); k++) {
 			try {
 				if (found.get(k).getArticle() != null) return k;
@@ -401,7 +401,7 @@ public class KnowWEObjectTypeBrowserAction extends DeprecatedAbstractKnowWEActio
 	private String createFindingsMaskTableHeader(String searchedType) {
 		StringBuilder mask = new StringBuilder();
 		mask.append("<fieldset><legend>"
-				+ rb.getString("KnowWE.KnowWeObjectTypeBrowser.searchresult")
+				+ rb.getString("KnowWE.TypeBrowser.searchresult")
 				+ " '" + searchedType.substring(searchedType.lastIndexOf(".") + 1)
 				+ "'</legend>");
 		mask.append("<table id='sortable1'><colgroup><col class='match' /><col class='section' />");
@@ -409,11 +409,11 @@ public class KnowWEObjectTypeBrowserAction extends DeprecatedAbstractKnowWEActio
 		mask.append("<thead><tr><th scope='col'>"
 				+ rb.getString("KnowWE.renamingtool.clmn.match")
 				+ "</th><th scope='col'>"
-				+ rb.getString("KnowWE.KnowWeObjectTypeBrowser.clmn.context")
+				+ rb.getString("KnowWE.TypeBrowser.clmn.context")
 				+ "</th>");
 
 		mask.append("<th scope='col'>"
-				+ rb.getString("KnowWE.KnowWeObjectTypeBrowser.clmn.article")
+				+ rb.getString("KnowWE.TypeBrowser.clmn.article")
 				+ "</th></tr>"
 				+ "</thead>");
 		return mask.toString();

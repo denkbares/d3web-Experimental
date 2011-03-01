@@ -85,7 +85,7 @@ public class ListCriteriaRootType extends DefaultMarkupType {
 		public void render(KnowWEArticle article, Section<DefaultMarkupType> section, KnowWEUserContext user, StringBuilder string) {
 
 			String id = section.getID();
-			String name = "<span>" + section.getObjectType().getName() + "</span>";
+			String name = "<span>" + section.get().getName() + "</span>";
 			String icon = "";
 			if (this.iconPath != null) {
 				icon = "<img class='markupIcon' src='" + this.iconPath + "'></img> ";
@@ -115,16 +115,16 @@ public class ListCriteriaRootType extends DefaultMarkupType {
 			// bloody hack to not render annotations...
 			boolean annotationPartStarted = false;
 			for (Section<?> subsec : subsecs) {
-				if (subsec == first && subsec.getObjectType() instanceof PlainText)
+				if (subsec == first && subsec.get() instanceof PlainText)
 					continue;
-				if (subsec == last && subsec.getObjectType() instanceof PlainText)
+				if (subsec == last && subsec.get() instanceof PlainText)
 					continue;
 				if (subsec.getOriginalText().trim().startsWith("@")) {
 					annotationPartStarted = true;
 				}
-				if (!(subsec.getObjectType() instanceof AnnotationType)
+				if (!(subsec.get() instanceof AnnotationType)
 						&& !annotationPartStarted) {
-					subsec.getObjectType().getRenderer().render(article, subsec, user,
+					subsec.get().getRenderer().render(article, subsec, user,
 							string);
 				}
 			}

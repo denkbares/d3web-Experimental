@@ -21,6 +21,7 @@ import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.lod.ConceptType;
 import de.d3web.we.lod.HermesData;
 import de.d3web.we.lod.LinkedOpenData;
@@ -134,8 +135,8 @@ public class GetDataAction extends AbstractAction {
 							web, mappingTopic);
 
 					List<Section<MappingContentType>> found = new Vector<Section<MappingContentType>>();
-					article.getSection().findSuccessorsOfType(MappingContentType.class,
-							found);
+					Sections.findSuccessorsOfType(article.getSection(),
+							MappingContentType.class, found);
 
 					Map<String, String> nodesMap = new HashMap<String, String>();
 
@@ -280,7 +281,7 @@ public class GetDataAction extends AbstractAction {
 								// objects are saved with predicate specified in
 								// HermesData.
 								if (resultS.matches("ist vom Typ .*")) {
-									checkHermesTag = HermesData.getObjectType();
+									checkHermesTag = HermesData.get();
 									checkValue = s;
 								}
 
@@ -482,7 +483,7 @@ public class GetDataAction extends AbstractAction {
 					}
 				}
 				else {
-					List<String> type = HermesData.queryStore(concept, HermesData.getObjectType());
+					List<String> type = HermesData.queryStore(concept, HermesData.get());
 					context.getWriter().write(
 							"<br/><div style='margin-left:10px;'><p><b>Objekttyp nicht zur Abfrage vorhanden:</b></p>"
 									+ type + "</div>");

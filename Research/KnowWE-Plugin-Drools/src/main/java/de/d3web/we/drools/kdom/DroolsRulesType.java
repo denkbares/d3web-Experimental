@@ -19,7 +19,7 @@
  */
 package de.d3web.we.drools.kdom;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 
 /**
@@ -28,7 +28,7 @@ import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
  * 
  * @author Alex Legler
  */
-public class DroolsRulesType extends DefaultAbstractKnowWEObjectType {
+public class DroolsRulesType extends AbstractType {
 
 	public DroolsRulesType() {
 		setSectionFinder(new AllTextSectionFinder());

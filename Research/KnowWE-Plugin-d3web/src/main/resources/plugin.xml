@@ -15,104 +15,104 @@
 		</library>
 	</runtime>
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Kopic">
 		<parameter id="class" value="de.d3web.we.kdom.kopic.Kopic" />
 		<parameter id="name" value="Kopic" />
-		<parameter id="description" value="KnowWEObjectType Kopic" />
+		<parameter id="description" value="Type Kopic" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4.1" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 	</extension>
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="SolutionsSection">
 		<parameter id="class"
 			value="de.d3web.we.kdom.dashTree.solutions.SolutionsSection" />
 		<parameter id="name" value="SolutionsSection" />
-		<parameter id="description" value="KnowWEObjectType SolutionsSection" />
+		<parameter id="description" value="Type SolutionsSection" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4.5" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 	</extension>
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="QuestionnairesSection">
 		<parameter id="class"
 			value="de.d3web.we.kdom.dashTree.questionnaires.QuestionnairesSection" />
 		<parameter id="name" value="QuestionnairesSection" />
-		<parameter id="description" value="KnowWEObjectType QuestionnairesSection" />
+		<parameter id="description" value="Type QuestionnairesSection" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4.5" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 	</extension>
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="QuestionsSection">
 		<parameter id="class"
 			value="de.d3web.we.kdom.decisionTree.QuestionsSection" />
 		<parameter id="name" value="QuestionsSection" />
-		<parameter id="description" value="KnowWEObjectType QuestionsSection" />
+		<parameter id="description" value="Type QuestionsSection" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4.6" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 	</extension>
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="AttributeTableSection">
 		<parameter id="class"
 			value="de.d3web.we.kdom.table.attributes.AttributeTableSection" />
 		<parameter id="name" value="AttributeTableSection" />
-		<parameter id="description" value="KnowWEObjectType AttributeTableSection" />
+		<parameter id="description" value="Type AttributeTableSection" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 	</extension>
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Annotation">
 		<parameter id="class" value="de.d3web.we.kdom.Annotation.Annotation" />
 		<parameter id="name" value="Annotation" />
-		<parameter id="description" value="KnowWEObjectType Annotation" />
+		<parameter id="description" value="Type Annotation" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 	</extension>
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="CoveringListSection">
 		<parameter id="class" value="de.d3web.we.kdom.xcl.CoveringListSection" />
 		<parameter id="name" value="CoveringListSection" />
-		<parameter id="description" value="KnowWEObjectType CoveringListSection" />
+		<parameter id="description" value="Type CoveringListSection" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4.9" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 	</extension>
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="RulesSection">
 		<parameter id="class" value="de.d3web.we.kdom.rules.RulesSection" />
 		<parameter id="name" value="RulesSection" />
-		<parameter id="description" value="KnowWEObjectType RulesSection" />
+		<parameter id="description" value="Type RulesSection" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 	</extension>
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="BulletScoring">
 		<parameter id="class"
 			value="de.d3web.we.kdom.bulletLists.scoring.BulletScoring" />
 		<parameter id="name" value="BulletScoring" />
-		<parameter id="description" value="KnowWEObjectType BulletScoring" />
+		<parameter id="description" value="Type BulletScoring" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
@@ -269,24 +269,24 @@
 		<parameter id="priority" value="5" />
 	</extension>
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="KnowledgeReaderType">
 		<parameter id="class"
 			value="de.knowwe.d3web.kdom.knowledgereader.KnowledgeReaderType" />
 		<parameter id="name" value="KnowledgeReaderType" />
-		<parameter id="description" value="KnowWEObjectType KnowledgeReaderType" />
+		<parameter id="description" value="Type KnowledgeReaderType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="ImageToResourceType">
 		<parameter id="class"
 			value="de.d3web.we.kdom.imagequestion.ImageToResourceType" />
 		<parameter id="name" value="ImageToResourceType" />
-		<parameter id="description" value="KnowWEObjectType ImageToResourceType" />
+		<parameter id="description" value="Type ImageToResourceType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="script" value="KnowWE-Plugin-d3web.js" />

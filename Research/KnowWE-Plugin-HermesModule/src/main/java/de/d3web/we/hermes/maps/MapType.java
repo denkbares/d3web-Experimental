@@ -37,14 +37,15 @@ import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
-public class MapType extends AbstractXMLObjectType {
+public class MapType extends AbstractXMLType {
 
 	private static final DecimalFormat format = new DecimalFormat("#.###");
 
@@ -54,8 +55,8 @@ public class MapType extends AbstractXMLObjectType {
 	}
 
 	@Override
-	public List<KnowWEObjectType> getAllowedChildrenTypes() {
-		childrenTypes.add(new AbstractXMLObjectType("iframe"));
+	public List<Type> getAllowedChildrenTypes() {
+		childrenTypes.add(new AbstractXMLType("iframe"));
 		this.setCustomRenderer(new MapRenderer());
 		return childrenTypes;
 	}
@@ -77,16 +78,16 @@ public class MapType extends AbstractXMLObjectType {
 
 	}
 
-	private String getIFrameSrcURL(Section sec) {
-		Section iframeSection = sec
-				.findChildOfType(AbstractXMLObjectType.class);
-		AbstractXMLObjectType objectType = (AbstractXMLObjectType) iframeSection
-				.getObjectType();
+	private String getIFrameSrcURL(Section<?> sec) {
+		Section<AbstractXMLType> iframeSection = Sections
+				.findChildOfType(sec, AbstractXMLType.class);
+		AbstractXMLType objectType = iframeSection
+				.get();
 		if (objectType.getXMLTagName() != "iframe") {
 			// System.out.println("warning");
 			return null;
 		}
-		Map<String, String> attributeMap = AbstractXMLObjectType
+		Map<String, String> attributeMap = AbstractXMLType
 				.getAttributeMapFor(iframeSection);
 		String url = attributeMap.get("src");
 		return url;

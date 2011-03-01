@@ -40,7 +40,7 @@ public class InstantIndication extends ParameterizedKeyWordType {
 	// }
 	//	
 	//	
-	// class InstantKey extends DefaultAbstractKnowWEObjectType {
+	// class InstantKey extends AbstractType {
 	// public void init() {
 	// this.sectionFinder = new RegexSectionFinder("INSTANT");
 	// }

@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
@@ -49,7 +49,7 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
  */
 public class EditSectionRenderer extends KnowWEDomRenderer {
 
-	KnowWEDomRenderer<? extends KnowWEObjectType> renderer;
+	KnowWEDomRenderer<? extends Type> renderer;
 
 	public EditSectionRenderer() {
 		this(DelegateRenderer.getInstance());
@@ -105,7 +105,7 @@ public class EditSectionRenderer extends KnowWEDomRenderer {
 		if (sec.getArticle().equals(article) || KnowWEEnvironment.getInstance().getPackageManager(
 				article.getWeb()).getArticlesReferringTo(sec).contains(article.getTitle())) {
 			string.append(KnowWEUtils.maskHTML(this.generateQuickEdit("Quickedit "
-					+ sec.getObjectType().getName() + " Section", sec.getID(), isEditable, user,
+					+ sec.get().getName() + " Section", sec.getID(), isEditable, user,
 					isInline)));
 		}
 		if (isEditable) {
@@ -213,13 +213,13 @@ public class EditSectionRenderer extends KnowWEDomRenderer {
 	 * @return True if the section (its OrignialText) is in the same line as the
 	 *         text before; false if they are seperated by '\n' or '\f'.
 	 */
-	private boolean isInline(Section<KnowWEObjectType> section) {
-		Section<? extends KnowWEObjectType> sec = section;
+	private boolean isInline(Section<Type> section) {
+		Section<? extends Type> sec = section;
 		String text = sec.getOriginalText();
 		if (text.startsWith("\n") || text.startsWith("\f") || text.length() == 0) return false;
-		KnowWEArticle rootTypeObj = sec.getArticle().getSection().getObjectType();
+		KnowWEArticle rootTypeObj = sec.getArticle().getSection().get();
 		// Move up the Section-DOM till you find one with 'more' OriginalText
-		while (sec.getFather().getObjectType() != rootTypeObj) {
+		while (sec.getFather().get() != rootTypeObj) {
 			sec = sec.getFather();
 			Matcher m = Pattern.compile(text, Pattern.LITERAL).matcher(sec.getOriginalText());
 			m.find();
@@ -242,7 +242,7 @@ public class EditSectionRenderer extends KnowWEDomRenderer {
 	 * @param string - The so far rendered page content.
 	 * @param sec - The section used by the ESR, used for the table's name.
 	 */
-	private void insertTableBeforeMarkup(StringBuilder string, Section<KnowWEObjectType> sec) {
+	private void insertTableBeforeMarkup(StringBuilder string, Section<Type> sec) {
 		String[] lineSplit = string.toString().split("\n");
 		String lastLine = lineSplit[lineSplit.length - 1];
 		Integer charsTillLS = string.length() - lastLine.length();

@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.xml.XMLTail;
 import de.d3web.we.plugin.forum.Forum;
@@ -76,14 +77,15 @@ public class ForumBoxAction extends DeprecatedAbstractKnowWEAction {
 				String save = "<box name=\"" + parameterMap.getUser() + "\"; date=\""
 						+ ForumRenderer.getDate() + "\">" + text + "</box>\n</forum>";
 
-				Section sec = KnowWEEnvironment.getInstance().getArticle(web, topic).getSection();
+				Section<?> sec = KnowWEEnvironment.getInstance().getArticle(web, topic).getSection();
 
 				List<Section<XMLTail>> found = new ArrayList<Section<XMLTail>>();
-				sec.findSuccessor(Forum.class).findSuccessorsOfType(XMLTail.class, found);
+				Sections.findSuccessorsOfType(Sections.findSuccessor(sec, Forum.class),
+						XMLTail.class, found);
 
 				if (found.size() != 0) {
-					Section changeSec = found.get(found.size() - 1);
-					changeSec.findChildOfType(PlainText.class).setOriginalText(save);
+					Section<?> changeSec = found.get(found.size() - 1);
+					Sections.findChildOfType(changeSec, PlainText.class).setOriginalText(save);
 				}
 
 				StringBuilder buffi = new StringBuilder();

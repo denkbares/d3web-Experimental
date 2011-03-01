@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.kopic.renderer.AnnotationInlineAnswerRenderer;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
@@ -34,7 +34,7 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotationEndSymbol;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotationStartSymbol;
 
-public class Annotation extends DefaultAbstractKnowWEObjectType {
+public class Annotation extends AbstractType {
 
 	private static String ANNOTATIONBEGIN = "\\{\\{";
 	private static String ANNOTATIONEND = "\\}\\}";
@@ -54,7 +54,7 @@ public class Annotation extends DefaultAbstractKnowWEObjectType {
 
 		@Override
 		public List<SectionFinderResult> lookForSections(String text,
-				Section father, KnowWEObjectType type) {
+				Section father, Type type) {
 			ArrayList<SectionFinderResult> result = new ArrayList<SectionFinderResult>();
 			Pattern p = Pattern.compile(PATTERN);
 			Matcher m = p.matcher(text);

@@ -20,10 +20,10 @@
 
 package de.d3web.we.kdom.table.attributes;
 
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.kdom.xml.XMLContent;
 
-public class AttributeTableSection extends AbstractXMLObjectType {
+public class AttributeTableSection extends AbstractXMLType {
 
 	public static final String TAG = "AttributeTable-section";
 

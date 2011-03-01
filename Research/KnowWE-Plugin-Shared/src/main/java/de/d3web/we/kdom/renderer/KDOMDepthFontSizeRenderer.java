@@ -21,7 +21,7 @@
 package de.d3web.we.kdom.renderer;
 
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rendering.StyleRenderer;
@@ -36,7 +36,7 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
  * @author Jochen
  *
  */
-public class KDOMDepthFontSizeRenderer extends KnowWEDomRenderer<KnowWEObjectType> {
+public class KDOMDepthFontSizeRenderer extends KnowWEDomRenderer<Type> {
 
 	private double initialFontsize = 340;
 	private double depthDiscountFactor = 0.88;
@@ -51,7 +51,7 @@ public class KDOMDepthFontSizeRenderer extends KnowWEDomRenderer<KnowWEObjectTyp
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section<KnowWEObjectType> sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section<Type> sec, KnowWEUserContext user, StringBuilder string) {
 		// font-size:1.2em
 
 		double font = initialFontsize;

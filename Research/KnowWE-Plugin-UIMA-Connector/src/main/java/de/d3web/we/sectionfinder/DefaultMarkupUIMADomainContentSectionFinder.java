@@ -46,7 +46,7 @@ import java.util.logging.Level;
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.cas.CAS;
 
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.defaultMarkup.ContentType;
 import de.d3web.we.kdom.sectionFinder.ISectionFinder;
@@ -84,9 +84,9 @@ public class DefaultMarkupUIMADomainContentSectionFinder implements ISectionFind
 	 * Initialises the Analysis Engine and the CAS.
 	 * 
 	 */
-	public List<SectionFinderResult> lookForSections(String text, Section<?> father, KnowWEObjectType type) {
+	public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 
-		if (father.getObjectType() instanceof ContentType) {
+		if (father.get() instanceof ContentType) {
 
 			try {
 				IUIMADomain d = UIMAConnector.getInstance().getUIMADomain(domain);

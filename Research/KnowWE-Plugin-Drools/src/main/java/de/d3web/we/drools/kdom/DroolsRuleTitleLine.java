@@ -21,7 +21,7 @@ package de.d3web.we.drools.kdom;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 /**
@@ -29,7 +29,7 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
  * 
  * @author Alex Legler
  */
-public class DroolsRuleTitleLine extends DefaultAbstractKnowWEObjectType {
+public class DroolsRuleTitleLine extends AbstractType {
 
 	public DroolsRuleTitleLine() {
 		setSectionFinder(new RegexSectionFinder("^rule \"(.*?)\"", Pattern.MULTILINE));

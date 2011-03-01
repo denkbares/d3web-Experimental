@@ -21,20 +21,20 @@
 package de.d3web.we.kdom.include;
 
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.SectionID;
 
 public class IncludeErrorSection extends Section<IncludeError> {
 
-	public IncludeErrorSection(String text, Section<? extends KnowWEObjectType> father, KnowWEArticle article) {
+	public IncludeErrorSection(String text, Section<? extends Type> father, KnowWEArticle article) {
 		// super(text, new IncludeError(), father, 0, article, null, false,
 		// null);
 		super(article);
-		this.objectType = IncludeError.getInstance();
-		this.originalText = text;
+		this.type = IncludeError.getInstance();
+		this.text = text;
 		this.father = father;
-		this.setID(new SectionID(father, objectType).toString());
+		this.setID(new SectionID(father, type).toString());
 	}
 
 }

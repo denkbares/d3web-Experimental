@@ -34,20 +34,21 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.report.Message;
 import de.d3web.report.Report;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.DefaultTextRenderer;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
-public class Rule extends DefaultAbstractKnowWEObjectType {
+public class Rule extends AbstractType {
 
 	public static final String KBID_KEY = "RULE_STORE_KEY";
 	public static final String KDOMID_KEY = "kdomid";
@@ -123,10 +124,10 @@ public class Rule extends DefaultAbstractKnowWEObjectType {
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Rule> s) {
 
 			boolean lazy = false;
-			Section xml = s.findAncestorOfType(AbstractXMLObjectType.class);
+			Section xml = Sections.findAncestorOfType(s, AbstractXMLType.class);
 			Map<String, String> attributes = null;
 			if (xml != null) {
-				attributes = AbstractXMLObjectType
+				attributes = AbstractXMLType
 						.getAttributeMapFor(xml);
 			}
 			if (attributes != null && attributes.containsKey("lazy")) {

@@ -35,23 +35,23 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="CommentType">
 		<parameter id="class"
 			value="de.d3web.we.plugin.comment.CommentType" />
 		<parameter id="name" value="CommentType" />
-		<parameter id="description" value="KnowWEObjectType CommentType" />
+		<parameter id="description" value="Type CommentType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Forum">
 		<parameter id="class"
 			value="de.d3web.we.plugin.forum.Forum" />
 		<parameter id="name" value="Forum" />
-		<parameter id="description" value="KnowWEObjectType Forum" />
+		<parameter id="description" value="Type Forum" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />

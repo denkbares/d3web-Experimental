@@ -25,8 +25,9 @@ import java.util.Collection;
 
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.kdom.xml.XMLContent;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
@@ -41,10 +42,10 @@ public class EMLRenderer extends KnowWEDomRenderer {
 	@Override
 	public void render(KnowWEArticle article, Section sec,
 			KnowWEUserContext user, StringBuilder string) {
-		if(sec.getObjectType() instanceof EMLXMLType) {
-			Section<AbstractXMLObjectType> s = sec;
+		if(sec.get() instanceof EMLXMLType) {
+			Section<AbstractXMLType> s = sec;
 			
-			Section<? extends AbstractXMLObjectType> methodSection = AbstractXMLObjectType.findSubSectionOfTag("methods", s);
+			Section<? extends AbstractXMLType> methodSection = AbstractXMLType.findSubSectionOfTag("methods", s);
 			
 			if(methodSection != null) {
 				this.renderCommonData(s, string, article, user);
@@ -85,7 +86,7 @@ public class EMLRenderer extends KnowWEDomRenderer {
 	 * @param article
 	 * @param user
 	 */
-	private void renderCommonData( Section<? extends AbstractXMLObjectType> section,
+	private void renderCommonData( Section<? extends AbstractXMLType> section,
 			StringBuilder string,
 			KnowWEArticle article,
 			KnowWEUserContext user){
@@ -104,15 +105,16 @@ public class EMLRenderer extends KnowWEDomRenderer {
 			eml.append("<tr><td class=\"eml-highlight\">"
 					+ element[0] + "</td><td class=\"eml-normal\">");
 			
-			Collection<Section<? extends AbstractXMLObjectType>> tags = new ArrayList<Section<? extends AbstractXMLObjectType>>();
-			AbstractXMLObjectType.findSubSectionsOfTag(element[1].toString(), section, tags);
+			Collection<Section<? extends AbstractXMLType>> tags = new ArrayList<Section<? extends AbstractXMLType>>();
+			AbstractXMLType.findSubSectionsOfTag(element[1].toString(), section, tags);
 					
-			for(Section<? extends AbstractXMLObjectType> tag : tags){
-				Section<? extends AbstractXMLObjectType> father = AbstractXMLObjectType.getXMLFatherElement( tag );
-				String fatherTag = AbstractXMLObjectType.getTagName( father );
+			for(Section<? extends AbstractXMLType> tag : tags){
+				Section<? extends AbstractXMLType> father = AbstractXMLType.getXMLFatherElement( tag );
+				String fatherTag = AbstractXMLType.getTagName( father );
 				
 				if(fatherTag.equals(element[2])) {
-					Section<? extends XMLContent> xml = tag.findChildOfType(XMLContent.class);
+					Section<? extends XMLContent> xml = Sections.findChildOfType(tag,
+							XMLContent.class);
 					if( xml != null ){
 					    eml.append(xml.getOriginalText());
 					}
@@ -136,7 +138,7 @@ public class EMLRenderer extends KnowWEDomRenderer {
 	 * @param article
 	 * @param user
 	 */
-	private void renderPersonDetails(Section<? extends AbstractXMLObjectType> section,
+	private void renderPersonDetails(Section<? extends AbstractXMLType> section,
 			StringBuilder string,
 			KnowWEArticle article,
 			KnowWEUserContext user,
@@ -148,23 +150,24 @@ public class EMLRenderer extends KnowWEDomRenderer {
 		eml.append("<h2> " + num + ". " + (tblName.equals("creator") ? "Author" : "Kontakt") + "</h2>");
 		eml.append("<table class=\"eml\"><tbody>");
 		
-		Collection<Section<? extends AbstractXMLObjectType>> tags = new ArrayList<Section<? extends AbstractXMLObjectType>>();
-		AbstractXMLObjectType.findSubSectionsOfTag(tblName, section, tags);
+		Collection<Section<? extends AbstractXMLType>> tags = new ArrayList<Section<? extends AbstractXMLType>>();
+		AbstractXMLType.findSubSectionsOfTag(tblName, section, tags);
 		
 		for(Object[] element : tblColumns){
 			eml.append("<tr>");
 			eml.append("<td class=\"eml-highlight\" style=\"width:20%;\">" + element[0] + "</td>");
 			
-			for(Section<? extends AbstractXMLObjectType> tag : tags){
+			for(Section<? extends AbstractXMLType> tag : tags){
 			
 				eml.append("<td class=\"eml-normal\">");
-				Section<? extends AbstractXMLObjectType> c = AbstractXMLObjectType.findSubSectionOfTag(element[1].toString(), tag);
+				Section<? extends AbstractXMLType> c = AbstractXMLType.findSubSectionOfTag(element[1].toString(), tag);
 				if(c != null ){
-					Section<? extends AbstractXMLObjectType> father = AbstractXMLObjectType.getXMLFatherElement( c );
-					String fatherTag = AbstractXMLObjectType.getTagName( father );
+					Section<? extends AbstractXMLType> father = AbstractXMLType.getXMLFatherElement( c );
+					String fatherTag = AbstractXMLType.getTagName( father );
 						
 					if(fatherTag.equals(element[2])) {
-						Section<? extends XMLContent> xml = c.findChildOfType(XMLContent.class);
+						Section<? extends XMLContent> xml = Sections.findChildOfType(c,
+								XMLContent.class);
 						if( xml != null ){
 						    eml.append(xml.getOriginalText());
 						}
@@ -190,7 +193,7 @@ public class EMLRenderer extends KnowWEDomRenderer {
 	 * @param article
 	 * @param user
 	 */
-	private void renderMethods(Section<? extends AbstractXMLObjectType> section,
+	private void renderMethods(Section<? extends AbstractXMLType> section,
 			StringBuilder string,
 			KnowWEArticle article,
 			KnowWEUserContext user){
@@ -201,12 +204,12 @@ public class EMLRenderer extends KnowWEDomRenderer {
 		
 		eml.append("<tr><td colspan=\"5\" class=\"eml-highlight\">4.1 Angewendete Methoden</td></tr>");
 		
-		Collection<Section<? extends AbstractXMLObjectType>> tags = new ArrayList<Section<? extends AbstractXMLObjectType>>();
-		AbstractXMLObjectType.findSubSectionsOfTag("description", section, tags);
+		Collection<Section<? extends AbstractXMLType>> tags = new ArrayList<Section<? extends AbstractXMLType>>();
+		AbstractXMLType.findSubSectionsOfTag("description", section, tags);
 		
-		for(Section<? extends AbstractXMLObjectType> tag : tags){
-			Section<? extends AbstractXMLObjectType> father = AbstractXMLObjectType.getXMLFatherElement( tag );
-			String fatherTag = AbstractXMLObjectType.getTagName( father );
+		for(Section<? extends AbstractXMLType> tag : tags){
+			Section<? extends AbstractXMLType> father = AbstractXMLType.getXMLFatherElement( tag );
+			String fatherTag = AbstractXMLType.getTagName( father );
 				
 			if(fatherTag.equals("methodStep")) {
 				addTD(tag, eml, new String[]{"description"}, null);
@@ -215,12 +218,12 @@ public class EMLRenderer extends KnowWEDomRenderer {
 		
 		eml.append("<tr><td colspan=\"2\" class=\"eml-highlight\">4.2 Sampling</td></tr>");
 		
-		tags = new ArrayList<Section<? extends AbstractXMLObjectType>>();
-		AbstractXMLObjectType.findSubSectionsOfTag("samplingDescription", section, tags);
+		tags = new ArrayList<Section<? extends AbstractXMLType>>();
+		AbstractXMLType.findSubSectionsOfTag("samplingDescription", section, tags);
 		
-		for(Section<? extends AbstractXMLObjectType> tag : tags){
-			Section<? extends AbstractXMLObjectType> father = AbstractXMLObjectType.getXMLFatherElement( tag );
-			String fatherTag = AbstractXMLObjectType.getTagName( father );
+		for(Section<? extends AbstractXMLType> tag : tags){
+			Section<? extends AbstractXMLType> father = AbstractXMLType.getXMLFatherElement( tag );
+			String fatherTag = AbstractXMLType.getTagName( father );
 				
 			if(fatherTag.equals("sampling")) {
 				addTD(tag, eml, new String[]{"samplingDescription"}, null);
@@ -266,7 +269,7 @@ public class EMLRenderer extends KnowWEDomRenderer {
 	 * @param path
 	 * @param tdName
 	 */
-	private void addTD(Section<? extends AbstractXMLObjectType> section,
+	private void addTD(Section<? extends AbstractXMLType> section,
 			StringBuilder string, String[] path, String tdName){
 		
 		String s = getTagContent(section, path);
@@ -287,20 +290,20 @@ public class EMLRenderer extends KnowWEDomRenderer {
 	 * @param tag
 	 * @return
 	 */
-	private String getTagContent(Section<? extends AbstractXMLObjectType> s, String[] path){
+	private String getTagContent(Section<? extends AbstractXMLType> s, String[] path){
 		String txt = null;
-		Section<? extends AbstractXMLObjectType> tmpTag = null;
+		Section<? extends AbstractXMLType> tmpTag = null;
 		
 		for (String string : path) {
 			if( tmpTag == null ) {
 				tmpTag = s;
 			}
-			tmpTag = AbstractXMLObjectType.findSubSectionOfTag( string, tmpTag);
+			tmpTag = AbstractXMLType.findSubSectionOfTag( string, tmpTag);
 			if( tmpTag == null )return null;
 		}
 
 		if(tmpTag != null) {
-			Section<? extends XMLContent> xml = tmpTag.findChildOfType(XMLContent.class);
+			Section<? extends XMLContent> xml = Sections.findChildOfType(tmpTag, XMLContent.class);
 			if( xml != null) {
 				txt = xml.getOriginalText();
 			}

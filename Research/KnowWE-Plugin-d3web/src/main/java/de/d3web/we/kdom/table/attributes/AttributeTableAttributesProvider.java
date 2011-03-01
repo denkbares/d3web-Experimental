@@ -21,10 +21,11 @@ package de.d3web.we.kdom.table.attributes;
 import java.util.Map;
 
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.table.Table;
 import de.d3web.we.kdom.table.TableAttributesProvider;
 import de.d3web.we.kdom.table.TableCellContent;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 
 /**
  * 
@@ -37,9 +38,9 @@ public class AttributeTableAttributesProvider implements TableAttributesProvider
 
 	@Override
 	public String[] getAttributeValues(Section<? extends TableCellContent> s) {
-		Section<AbstractXMLObjectType> xml = s.findAncestorOfType(AbstractXMLObjectType.class);
+		Section<AbstractXMLType> xml = Sections.findAncestorOfType(s, AbstractXMLType.class);
 		if (xml != null) {
-			Map<String, String> map = AbstractXMLObjectType.getAttributeMapFor(xml);
+			Map<String, String> map = AbstractXMLType.getAttributeMapFor(xml);
 			String str = map.get(TableAttributesProvider.ATT_VALUES);
 			if (str != null) return str.split(",");
 		}
@@ -48,9 +49,9 @@ public class AttributeTableAttributesProvider implements TableAttributesProvider
 
 	@Override
 	public String getNoEditColumnAttribute(Section<Table> s) {
-		Section<AbstractXMLObjectType> xml = s.findAncestorOfType(AbstractXMLObjectType.class);
+		Section<AbstractXMLType> xml = Sections.findAncestorOfType(s, AbstractXMLType.class);
 		if (xml != null) {
-			return AbstractXMLObjectType.getAttributeMapFor(xml).get(
+			return AbstractXMLType.getAttributeMapFor(xml).get(
 					TableAttributesProvider.ATT_NOEDIT_COLUMN);
 		}
 		return null;
@@ -58,9 +59,9 @@ public class AttributeTableAttributesProvider implements TableAttributesProvider
 
 	@Override
 	public String getNoEditRowAttribute(Section<Table> s) {
-		Section<AbstractXMLObjectType> xml = s.findAncestorOfType(AbstractXMLObjectType.class);
+		Section<AbstractXMLType> xml = Sections.findAncestorOfType(s, AbstractXMLType.class);
 		if (xml != null) {
-			return AbstractXMLObjectType.getAttributeMapFor(xml).get(
+			return AbstractXMLType.getAttributeMapFor(xml).get(
 					TableAttributesProvider.ATT_NOEDIT_ROW);
 		}
 		return null;
@@ -68,9 +69,9 @@ public class AttributeTableAttributesProvider implements TableAttributesProvider
 
 	@Override
 	public String getWidthAttribute(Section<Table> s) {
-		Section<AbstractXMLObjectType> xml = s.findAncestorOfType(AbstractXMLObjectType.class);
+		Section<AbstractXMLType> xml = Sections.findAncestorOfType(s, AbstractXMLType.class);
 		if (xml != null) {
-			return AbstractXMLObjectType.getAttributeMapFor(xml).get(
+			return AbstractXMLType.getAttributeMapFor(xml).get(
 					TableAttributesProvider.ATT_WIDTH);
 		}
 		return null;

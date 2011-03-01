@@ -24,15 +24,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
-public class FindingComparator extends DefaultAbstractKnowWEObjectType {
+public class FindingComparator extends AbstractType {
 
 	private HashMap<String, String> operatorstore;
 
@@ -52,7 +52,7 @@ public class FindingComparator extends DefaultAbstractKnowWEObjectType {
 			SectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, KnowWEObjectType type) {
+		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
 			int index = -1;
 			String foundOperator = "";
 			for (String operator : operators) {

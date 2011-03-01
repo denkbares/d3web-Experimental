@@ -20,9 +20,9 @@
 
 package de.knowwe.semantic.owlextension;
 
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 
-public class Extension extends AbstractXMLObjectType {
+public class Extension extends AbstractXMLType {
 
 	public static final String EXTENSION_SOURCE_KEY = "EXTENSION_SOURCE";
 	public static final String EXTENSION_OBJECT_KEY = "EXTENSION_OBJECT";
@@ -35,7 +35,7 @@ public class Extension extends AbstractXMLObjectType {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see de.d3web.we.dom.AbstractKnowWEObjectType#init()
+	 * @see de.d3web.we.dom.AbstractType#init()
 	 */
 	@Override
 	protected void init() {

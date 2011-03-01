@@ -22,7 +22,7 @@ package de.d3web.we.kdom.kopic.renderer;
 
 import java.util.List;
 
-import de.d3web.we.kdom.AbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
@@ -36,7 +36,7 @@ public class DefaultLineNumberDeligateRenderer extends KnowWEDomRenderer {
 		int lineNum = 1;
 		List<Section> children = sec.getChildren();
 		for (Section child : children) {
-			if (((AbstractKnowWEObjectType) child.getObjectType()).isNumberedType()) {
+			if (((AbstractType) child.get()).isNumberedType()) {
 				String numberString = Integer.toString(lineNum);
 				if (numberString.length() == 1) {
 					numberString = "  " + numberString;
@@ -45,11 +45,11 @@ public class DefaultLineNumberDeligateRenderer extends KnowWEDomRenderer {
 					numberString = " " + numberString;
 				}
 				string.append(numberString + " | ");
-				child.getObjectType().getRenderer().render(article, child, user, string);
+				child.get().getRenderer().render(article, child, user, string);
 				lineNum++;
 			}
 			else {
-				child.getObjectType().getRenderer().render(article, child, user, string);
+				child.get().getRenderer().render(article, child, user, string);
 			}
 		}
 	}

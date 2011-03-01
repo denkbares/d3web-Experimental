@@ -33,7 +33,7 @@ import de.d3web.we.core.semantic.OwlHelper;
 import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.d3webModule.D3WebOWLVokab;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Annotation.Finding;
@@ -45,7 +45,7 @@ import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.utils.KnowWEUtils;
 
 @Deprecated
-public class Conjunct extends DefaultAbstractKnowWEObjectType {
+public class Conjunct extends AbstractType {
 
 	@Override
 	public void init() {
@@ -71,7 +71,7 @@ public class Conjunct extends DefaultAbstractKnowWEObjectType {
 				io.addLiteral(compositeexpression);
 				List<Section> children = s.getChildren();
 				for (Section current : children) {
-					if (current.getObjectType() instanceof Finding) {
+					if (current.get() instanceof Finding) {
 						IntermediateOwlObject iohandler = (IntermediateOwlObject) KnowWEUtils.getStoredObject(
 								article, current, OwlHelper.IOO);
 						for (URI curi : iohandler.getLiterals()) {

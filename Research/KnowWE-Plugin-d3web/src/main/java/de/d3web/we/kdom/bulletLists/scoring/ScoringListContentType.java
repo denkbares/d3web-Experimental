@@ -20,13 +20,13 @@
 
 package de.d3web.we.kdom.bulletLists.scoring;
 
-import de.d3web.we.kdom.AbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.bulletLists.BulletContentType;
 import de.d3web.we.kdom.bulletLists.BulletListItemLine;
 import de.d3web.we.kdom.xml.XMLContent;
-import de.d3web.we.utils.KnowWEObjectTypeSet;
-import de.d3web.we.utils.KnowWEObjectTypeUtils;
+import de.d3web.we.utils.KnowWETypeSet;
+import de.d3web.we.utils.KnowWETypeUtils;
 
 public class ScoringListContentType extends XMLContent {
 
@@ -34,18 +34,18 @@ public class ScoringListContentType extends XMLContent {
 	protected void init() {
 		this.childrenTypes.add(new BulletListItemLine());
 
-		KnowWEObjectTypeSet set = new KnowWEObjectTypeSet();
-		KnowWEObjectTypeUtils.getAllChildrenTypesRecursive(this, set);
-		KnowWEObjectType contentType = set.getInstanceOf(BulletContentType.class);
+		KnowWETypeSet set = new KnowWETypeSet();
+		KnowWETypeUtils.getAllChildrenTypesRecursive(this, set);
+		Type contentType = set.getInstanceOf(BulletContentType.class);
 
-		if (contentType instanceof AbstractKnowWEObjectType) { // damn, not
+		if (contentType instanceof AbstractType) { // damn, not
 																// nice. maybe
 																// we need some
 																// interface
 																// changes one
 																// day
-			((AbstractKnowWEObjectType) contentType).addSubtreeHandler(new CreateScoresHandler());
-			((AbstractKnowWEObjectType) contentType).setCustomRenderer(new ValueRenderer());
+			((AbstractType) contentType).addSubtreeHandler(new CreateScoresHandler());
+			((AbstractType) contentType).setCustomRenderer(new ValueRenderer());
 		}
 
 	}

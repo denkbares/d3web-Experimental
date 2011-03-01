@@ -1,9 +1,9 @@
 package de.d3web.we.lod.markup;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
-public class IgnoreContentType extends DefaultAbstractKnowWEObjectType {
+public class IgnoreContentType extends AbstractType {
 
 	public IgnoreContentType() {
 
@@ -15,7 +15,7 @@ public class IgnoreContentType extends DefaultAbstractKnowWEObjectType {
 		this.addChildType(new IgnoreConcept());
 	}
 
-	public class IgnoreChild extends DefaultAbstractKnowWEObjectType {
+	public class IgnoreChild extends AbstractType {
 
 		public IgnoreChild() {
 			this.setSectionFinder(new RegexSectionFinder(
@@ -23,7 +23,7 @@ public class IgnoreContentType extends DefaultAbstractKnowWEObjectType {
 		}
 	}
 
-	public class IgnoreConcept extends DefaultAbstractKnowWEObjectType {
+	public class IgnoreConcept extends AbstractType {
 
 		public IgnoreConcept() {
 			this.setSectionFinder(new RegexSectionFinder("#[\\p{L}\\p{Punct} ]+ ?[\\r\\n]"));

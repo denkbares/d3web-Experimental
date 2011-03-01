@@ -21,8 +21,8 @@ package de.d3web.we.kdom.table.attributes;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.sectionFinder.ISectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
@@ -36,7 +36,7 @@ import de.d3web.we.kdom.table.TableUtils;
  * @author Sebastian Furth
  * @created 28/10/2010
  */
-public class AttributeTableTempType extends DefaultAbstractKnowWEObjectType {
+public class AttributeTableTempType extends AbstractType {
 
 	public AttributeTableTempType() {
 		sectionFinder = new AttributeTableTempTypeSectionFinder();
@@ -46,7 +46,7 @@ public class AttributeTableTempType extends DefaultAbstractKnowWEObjectType {
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section<?> father, KnowWEObjectType type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 
 			List<SectionFinderResult> result = new ArrayList<SectionFinderResult>();
 

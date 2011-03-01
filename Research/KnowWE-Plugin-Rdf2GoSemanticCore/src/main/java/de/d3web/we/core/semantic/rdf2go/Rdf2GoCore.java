@@ -58,7 +58,7 @@ import de.d3web.we.event.Event;
 import de.d3web.we.event.EventListener;
 import de.d3web.we.event.FullParseEvent;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 
 /**
@@ -91,7 +91,7 @@ public class Rdf2GoCore implements EventListener {
 
 	private static Rdf2GoCore me;
 	private Model model;
-	private HashMap<String, WeakHashMap<Section<? extends KnowWEObjectType>, List<Statement>>> statementcache;
+	private HashMap<String, WeakHashMap<Section<? extends Type>, List<Statement>>> statementcache;
 	private HashMap<Statement, Integer> duplicateStatements;
 	private HashMap<String, String> namespaces;
 
@@ -106,7 +106,7 @@ public class Rdf2GoCore implements EventListener {
 	 */
 	public void init() {
 		initModel();
-		statementcache = new HashMap<String, WeakHashMap<Section<? extends KnowWEObjectType>, List<Statement>>>();
+		statementcache = new HashMap<String, WeakHashMap<Section<? extends Type>, List<Statement>>>();
 		duplicateStatements = new HashMap<Statement, Integer>();
 		namespaces = new HashMap<String, String>();
 		namespaces.putAll(model.getNamespaces());
@@ -329,7 +329,7 @@ public class Rdf2GoCore implements EventListener {
 	 * @return statements of section s (with children)
 	 */
 	public List<Statement> getSectionStatementsRecursive(
-			Section<? extends KnowWEObjectType> s) {
+			Section<? extends Type> s) {
 		List<Statement> allstatements = new ArrayList<Statement>();
 
 		if (getStatementsofSingleSection(s) != null) {
@@ -338,7 +338,7 @@ public class Rdf2GoCore implements EventListener {
 		}
 
 		// walk over all children
-		for (Section<? extends KnowWEObjectType> current : s.getChildren()) {
+		for (Section<? extends Type> current : s.getChildren()) {
 			// collect statements of the the children's descendants
 			allstatements.addAll(getSectionStatementsRecursive(current));
 		}
@@ -353,12 +353,12 @@ public class Rdf2GoCore implements EventListener {
 	 * @param s
 	 */
 	public void removeSectionStatementsRecursive(
-			Section<? extends KnowWEObjectType> s) {
+			Section<? extends Type> s) {
 
 		removeStatementsofSingleSection(s);
 
 		// walk over all children
-		for (Section<? extends KnowWEObjectType> current : s.getChildren()) {
+		for (Section<? extends Type> current : s.getChildren()) {
 			removeSectionStatementsRecursive(current);
 		}
 	}
@@ -370,8 +370,8 @@ public class Rdf2GoCore implements EventListener {
 	 * @return statements of section sec (without children)
 	 */
 	private List<Statement> getStatementsofSingleSection(
-			Section<? extends KnowWEObjectType> sec) {
-		WeakHashMap<Section<? extends KnowWEObjectType>, List<Statement>> temp = statementcache.get(sec
+			Section<? extends Type> sec) {
+		WeakHashMap<Section<? extends Type>, List<Statement>> temp = statementcache.get(sec
 				.getArticle().getTitle());
 		if (temp != null) {
 			return temp.get(sec);
@@ -386,8 +386,8 @@ public class Rdf2GoCore implements EventListener {
 	 * @param sec
 	 */
 	private void removeStatementsofSingleSection(
-			Section<? extends KnowWEObjectType> sec) {
-		WeakHashMap<Section<? extends KnowWEObjectType>, List<Statement>> temp = statementcache.get(sec
+			Section<? extends Type> sec) {
+		WeakHashMap<Section<? extends Type>, List<Statement>> temp = statementcache.get(sec
 					.getArticle().getTitle());
 		
 		if (temp != null) {
@@ -436,12 +436,12 @@ public class Rdf2GoCore implements EventListener {
 	 * @param allStatements
 	 * @param sec
 	 */
-	public void addStatements(List<Statement> allStatements, Section<? extends KnowWEObjectType> sec) {
+	public void addStatements(List<Statement> allStatements, Section<? extends Type> sec) {
 		Logger.getLogger(this.getClass().getName()).finer(
 				"semantic core updating " + sec.getID() + "  "
 						+ allStatements.size());
 
-		WeakHashMap<Section<? extends KnowWEObjectType>, List<Statement>> temp = statementcache.get(sec.getTitle());
+		WeakHashMap<Section<? extends Type>, List<Statement>> temp = statementcache.get(sec.getTitle());
 		boolean scContainsCurrentSection = false;
 		if (temp != null) {
 			if (temp.get(sec) != null) {
@@ -476,7 +476,7 @@ public class Rdf2GoCore implements EventListener {
 		addStaticStatements(allStatements, sec);
 	}
 
-	public void addStatements(IntermediateOwlObject io, Section<? extends KnowWEObjectType> sec) {
+	public void addStatements(IntermediateOwlObject io, Section<? extends Type> sec) {
 		addStatements(io.getAllStatements(), sec);
 	}
 
@@ -487,7 +487,7 @@ public class Rdf2GoCore implements EventListener {
 	 * @param allStatements
 	 * @param sec
 	 */
-	public void addStaticStatements(List<Statement> allStatements, Section<? extends KnowWEObjectType> sec) {
+	public void addStaticStatements(List<Statement> allStatements, Section<? extends Type> sec) {
 		Iterator<Statement> i = allStatements.iterator();
 		model.addAll(i);
 
@@ -504,11 +504,11 @@ public class Rdf2GoCore implements EventListener {
 	 * @param sec
 	 * @param allStatements
 	 */
-	private void addToStatementcache(Section<? extends KnowWEObjectType> sec, List<Statement> allStatements) {
-		WeakHashMap<Section<? extends KnowWEObjectType>, List<Statement>> temp = statementcache.get(sec
+	private void addToStatementcache(Section<? extends Type> sec, List<Statement> allStatements) {
+		WeakHashMap<Section<? extends Type>, List<Statement>> temp = statementcache.get(sec
 				.getArticle().getTitle());
 		if (temp == null) {
-			temp = new WeakHashMap<Section<? extends KnowWEObjectType>, List<Statement>>();
+			temp = new WeakHashMap<Section<? extends Type>, List<Statement>>();
 
 		}
 		temp.put(sec, allStatements);
@@ -549,7 +549,7 @@ public class Rdf2GoCore implements EventListener {
 		System.out.println("<statementcache>");
 		for (String s : statementcache.keySet()) {
 			System.out.println(s + ":");
-			for (Section<? extends KnowWEObjectType> sec : statementcache.get(s).keySet()) {
+			for (Section<? extends Type> sec : statementcache.get(s).keySet()) {
 				System.out.println(sec.getID());
 				for (Statement l : statementcache.get(s).get(sec)) {
 					System.out.println("s:" + l.getSubject() + " p:" + l.getPredicate() + " o:"
@@ -584,9 +584,9 @@ public class Rdf2GoCore implements EventListener {
 
 	public void removeArticleStatementsRecursive(KnowWEArticle art) {
 		if (statementcache.get(art.getTitle()) != null) {
-			Set<Section<? extends KnowWEObjectType>> temp = new HashSet<Section<? extends KnowWEObjectType>>();
+			Set<Section<? extends Type>> temp = new HashSet<Section<? extends Type>>();
 			temp.addAll(statementcache.get(art.getTitle()).keySet());
-			for (Section<? extends KnowWEObjectType> cur : temp) {
+			for (Section<? extends Type> cur : temp) {
 				removeStatementsofSingleSection(cur);
 			}
 		}
@@ -595,7 +595,7 @@ public class Rdf2GoCore implements EventListener {
 	public void removeAllCachedStatements() {
 		//get all statements of this wiki and remove them from the model
 		ArrayList<Statement> allStatements = new ArrayList<Statement>();
-		for (WeakHashMap<Section<? extends KnowWEObjectType>,List<Statement>> w : statementcache.values()) {
+		for (WeakHashMap<Section<? extends Type>, List<Statement>> w : statementcache.values()) {
 			for (List<Statement> l : w.values()) {
 				allStatements.addAll(l);
 			}
@@ -683,7 +683,7 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	public List<Statement> getTopicStatements(String topic) {
-		Section<? extends KnowWEObjectType> rootsection = KnowWEEnvironment
+		Section<? extends Type> rootsection = KnowWEEnvironment
 				.getInstance().getArticle(KnowWEEnvironment.DEFAULT_WEB, topic)
 				.getSection();
 		return getSectionStatementsRecursive(rootsection);
@@ -724,7 +724,7 @@ public class Rdf2GoCore implements EventListener {
 		return createURI("http://www.w3.org/2000/01/rdf-schema#", prop);
 	}
 
-	public void addStatement(Statement s, Section<? extends KnowWEObjectType> sec) {
+	public void addStatement(Statement s, Section<? extends Type> sec) {
 		List<Statement> l = new ArrayList<Statement>();
 		l.add(s);
 		addStatements(l, sec);

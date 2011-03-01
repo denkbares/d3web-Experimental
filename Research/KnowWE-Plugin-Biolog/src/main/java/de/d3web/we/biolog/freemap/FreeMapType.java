@@ -24,7 +24,7 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.kdom.xml.XMLContent;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
@@ -36,7 +36,7 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
  * @author Jochen
  * @created 16.09.2010
  */
-public class FreeMapType extends AbstractXMLObjectType{
+public class FreeMapType extends AbstractXMLType{
 	
 	public FreeMapType() {
 		super("map");

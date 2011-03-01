@@ -33,6 +33,7 @@ import de.d3web.we.hermes.kdom.TimeEventTitleType;
 import de.d3web.we.hermes.kdom.TimeEventType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.utils.KnowWEUtils;
@@ -61,20 +62,21 @@ public class TimeEventTypeRenderer extends KnowWEDomRenderer<TimeEventType> {
 			return;
 		}
 
-		Section<? extends TimeEventTitleType> titleSection = sec.findChildOfType(TimeEventTitleType.class);
+		Section<? extends TimeEventTitleType> titleSection = Sections.findChildOfType(sec,
+				TimeEventTitleType.class);
 		String title = "no title found";
 		if (titleSection != null) title = titleSection.getOriginalText();
 
 		String date = TimeStamp.decode(getDateString(sec));
 
-		Section<? extends TimeEventDescriptionType> descriptionSection = sec
-				.findChildOfType(TimeEventDescriptionType.class);
+		Section<? extends TimeEventDescriptionType> descriptionSection = Sections
+				.findChildOfType(sec, TimeEventDescriptionType.class);
 		// String description = "no description found";
 		// if (descriptionSection != null)
 		// description = descriptionSection.getOriginalText();
 
 		List<Section<TimeEventSourceType>> sources = new ArrayList<Section<TimeEventSourceType>>();
-		sec.findSuccessorsOfType(TimeEventSourceType.class, sources);
+		Sections.findSuccessorsOfType(sec, TimeEventSourceType.class, sources);
 
 		// StringBuilder result = new StringBuilder();
 
@@ -115,7 +117,8 @@ public class TimeEventTypeRenderer extends KnowWEDomRenderer<TimeEventType> {
 	}
 
 	private String getDateString(Section<TimeEventType> sec) {
-		Section<? extends TimeEventDateType> dateSection = sec.findChildOfType(TimeEventDateType.class);
+		Section<? extends TimeEventDateType> dateSection = Sections.findChildOfType(sec,
+				TimeEventDateType.class);
 		String date = "no date found";
 		if (dateSection != null) date = dateSection.getOriginalText();
 		if (date.startsWith("\r\n")) date = date.substring(2);
@@ -133,8 +136,8 @@ public class TimeEventTypeRenderer extends KnowWEDomRenderer<TimeEventType> {
 	}
 
 	private int getImportanceOfEvent(Section<TimeEventType> sec) {
-		Section<? extends TimeEventImportanceType> importanceSection = sec
-				.findChildOfType(TimeEventImportanceType.class);
+		Section<? extends TimeEventImportanceType> importanceSection = Sections
+				.findChildOfType(sec, TimeEventImportanceType.class);
 		String importance = "no importance found";
 		if (importanceSection != null) {
 			importance = importanceSection.getOriginalText();

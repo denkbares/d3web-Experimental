@@ -25,14 +25,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
-public class BulletCommentType extends DefaultAbstractKnowWEObjectType {
+public class BulletCommentType extends AbstractType {
 
 	@Override
 	public void init() {
@@ -44,7 +44,7 @@ public class BulletCommentType extends DefaultAbstractKnowWEObjectType {
 
 		@Override
 		public List<SectionFinderResult> lookForSections(String text,
-				Section father, KnowWEObjectType type) {
+				Section father, Type type) {
 			ArrayList<SectionFinderResult> result = new ArrayList<SectionFinderResult>();
 			;
 			if (text.contains("//")) {

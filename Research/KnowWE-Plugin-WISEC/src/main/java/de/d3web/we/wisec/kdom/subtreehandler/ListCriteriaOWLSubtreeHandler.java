@@ -34,6 +34,7 @@ import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.table.TableCellContent;
@@ -51,7 +52,8 @@ public class ListCriteriaOWLSubtreeHandler extends OwlSubtreeHandler<ListCriteri
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<ListCriteriaType> s) {
 
 		// Get the necessary Annotations
-		Section<ListCriteriaRootType> root = s.findAncestorOfType(ListCriteriaRootType.class);
+		Section<ListCriteriaRootType> root = Sections.findAncestorOfType(s,
+				ListCriteriaRootType.class);
 		String listID = DefaultMarkupType.getAnnotation(root, "ListID");
 		String upperlistID = DefaultMarkupType.getAnnotation(root, UPPERLIST_ID);
 
@@ -90,17 +92,17 @@ public class ListCriteriaOWLSubtreeHandler extends OwlSubtreeHandler<ListCriteri
 			IntermediateOwlObject ioo, String ns, String listID) {
 
 		// Check if the table was recognized
-		if (section.findSuccessor(WISECTable.class) != null) {
+		if (Sections.findSuccessor(section, WISECTable.class) != null) {
 
 			// Get all lines
 			List<Section<TableLine>> tableLines = new ArrayList<Section<TableLine>>();
-			section.findSuccessorsOfType(TableLine.class, tableLines);
+			 Sections.findSuccessorsOfType(section, TableLine.class, tableLines);
 
 			for (Section<TableLine> line : tableLines) {
 
 				// Get the content of all cells
 				ArrayList<Section<TableCellContent>> contents = new ArrayList<Section<TableCellContent>>();
-				line.findSuccessorsOfType(TableCellContent.class, contents);
+				Sections.findSuccessorsOfType(line, TableCellContent.class, contents);
 
 				// Create OWL from cell content
 				if (contents.size() == 2

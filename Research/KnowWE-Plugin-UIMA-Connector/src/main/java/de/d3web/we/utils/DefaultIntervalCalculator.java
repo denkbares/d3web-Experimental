@@ -102,7 +102,7 @@ public class DefaultIntervalCalculator implements IIntervalCalculator {
 
 		// catch loop when father has same type as text.
 		clazzName = clazzName.substring(clazzName.lastIndexOf(".") + 1);
-		if (clazzName.equals(father.getObjectType().getName())
+		if (clazzName.equals(father.get().getName())
 				&& (father.getOriginalText().length() == (end - start))) return false;
 
 		for (Integer[] i : this.tokenSpace) {
@@ -173,8 +173,8 @@ public class DefaultIntervalCalculator implements IIntervalCalculator {
 		int absEnd = s.getOriginalText().length();
 		Section<?> father2 = s;
 
-		while (!(father2.getObjectType() instanceof ContentType)
-				&& !(father2.getObjectType() instanceof RootType)) {
+		while (!(father2.get() instanceof ContentType)
+				&& !(father2.get() instanceof RootType)) {
 
 			int offsetfromFather = father2.getOffSetFromFatherText();
 			absStart += offsetfromFather;

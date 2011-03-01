@@ -27,12 +27,14 @@ import java.util.List;
 import de.d3web.report.Message;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.packaging.PackageRenderUtils;
-import de.d3web.we.kdom.AbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.core.TextLine;
@@ -48,7 +50,7 @@ public class KopicSectionRenderer extends KnowWEDomRenderer {
 		StringBuilder builder = new StringBuilder();
 		String tooltip = null;
 		article = PackageRenderUtils.checkArticlesCompiling(article, sec, builder);
-		if (sec.getObjectType() instanceof AbstractKnowWEObjectType) {
+		if (sec.get() instanceof AbstractType) {
 			Collection<Message> messages = KnowWEUtils.getMessages(article, sec, Message.class);
 			if (messages != null && !messages.isEmpty()) {
 				boolean visible = false;
@@ -80,10 +82,10 @@ public class KopicSectionRenderer extends KnowWEDomRenderer {
 		// string.append("/%\n");
 	}
 
-	protected void insertErrorRenderer(List<Section> lines, Message m, String user) {
+	protected void insertErrorRenderer(List<Section<? extends Type>> lines, Message m, String user) {
 		int line = m.getLineNo();
 		if (line - 1 >= 0 && line - 1 < lines.size()) {
-			((AbstractKnowWEObjectType) lines.get(line - 1).getObjectType()).setCustomRenderer(ErrorRenderer.getInstance());
+			((AbstractType) lines.get(line - 1).get()).setCustomRenderer(ErrorRenderer.getInstance());
 		}
 	}
 
@@ -104,10 +106,10 @@ public class KopicSectionRenderer extends KnowWEDomRenderer {
 				+ KnowWEUtils.maskHTML("</span>");
 	}
 
-	protected String generateMessages(Collection<Message> messages, String messageType, Section sec, KnowWEUserContext user) {
+	protected String generateMessages(Collection<Message> messages, String messageType, Section<?> sec, KnowWEUserContext user) {
 		StringBuilder result = new StringBuilder();
-		List<Section> lines = new ArrayList<Section>();
-		sec.findSuccessorsOfType(TextLine.class, lines);
+		List<Section<TextLine>> lines = new ArrayList<Section<TextLine>>();
+		Sections.findSuccessorsOfType(sec, TextLine.class, lines);
 		for (Message m : messages) {
 			if (m.getMessageType() != messageType) continue;
 			result.append(
@@ -116,13 +118,15 @@ public class KopicSectionRenderer extends KnowWEDomRenderer {
 									+ m.getLineNo())
 							+ KnowWEUtils.maskHTML("\n"));
 			if (m.getMessageType().equals(Message.ERROR)) {
-				insertErrorRenderer(lines, m, user.getUserName());
+				List<Section<? extends Type>> castList = new ArrayList<Section<? extends Type>>();
+				castList.addAll(lines);
+				insertErrorRenderer(castList, m, user.getUserName());
 			}
 		}
 		return result.toString();
 	}
 
-	protected String generateTitle(Section sec, KnowWEUserContext user, boolean errors) {
+	protected String generateTitle(Section<?> sec, KnowWEUserContext user, boolean errors) {
 		String title = "";
 		if (errors) {
 			title += KnowWEUtils.maskHTML("<img src=KnowWEExtension/images/statisticsError.gif title='"
@@ -130,7 +134,7 @@ public class KopicSectionRenderer extends KnowWEDomRenderer {
 							"KnowWE.KopicRenderer.errorTooltip")
 					+ "'></img> ");
 		}
-		title += ((AbstractXMLObjectType) sec.getObjectType()).getXMLTagName() + " ";
+		title += ((AbstractXMLType) sec.get()).getXMLTagName() + " ";
 		if (errors) {
 			title = KnowWEUtils.maskHTML("<a style='color:rgb(255, 0, 0)' title='"
 					+ D3webModule.getKwikiBundle_d3web().getString(

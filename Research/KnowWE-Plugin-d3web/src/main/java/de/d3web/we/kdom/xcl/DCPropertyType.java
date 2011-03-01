@@ -22,7 +22,7 @@ package de.d3web.we.kdom.xcl;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.utils.Patterns;
@@ -32,7 +32,7 @@ import de.d3web.we.utils.Patterns;
  * 
  * @author Reinhard Hatko Created on: 03.12.2009
  */
-public class DCPropertyType extends DefaultAbstractKnowWEObjectType {
+public class DCPropertyType extends AbstractType {
 
 	@Override
 	protected void init() {

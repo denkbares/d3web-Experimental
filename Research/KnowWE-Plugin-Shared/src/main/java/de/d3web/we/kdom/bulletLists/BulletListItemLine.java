@@ -25,14 +25,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.basic.LineBreak;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
-public class BulletListItemLine extends DefaultAbstractKnowWEObjectType {
+public class BulletListItemLine extends AbstractType {
 
 	@Override
 	public void init() {
@@ -49,7 +49,7 @@ public class BulletListItemLine extends DefaultAbstractKnowWEObjectType {
 		@SuppressWarnings("unchecked")
 		@Override
 		public List<SectionFinderResult> lookForSections(String text,
-				Section father, KnowWEObjectType type) {
+				Section father, Type type) {
 
 			String lineRegex = "\\r?\\n";
 			Pattern linePattern = Pattern.compile(lineRegex);

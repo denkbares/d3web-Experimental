@@ -41,10 +41,10 @@ import de.d3web.we.core.semantic.OwlHelper;
 import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.d3webModule.D3WebOWLVokab;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.ExpandedSectionFinderResult;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.basic.RoundBracedType;
 import de.d3web.we.kdom.condition.old.Disjunct;
@@ -57,7 +57,7 @@ import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.utils.KnowWEUtils;
 
-public class ComplexFinding extends DefaultAbstractKnowWEObjectType {
+public class ComplexFinding extends AbstractType {
 
 	@Override
 	protected void init() {
@@ -88,9 +88,9 @@ public class ComplexFinding extends DefaultAbstractKnowWEObjectType {
 						uo.getHelper().createlocalURI(
 								s.getTitle() + ".." + s.getID()));
 				io.addLiteral(complexfinding);
-				List<Section<? extends KnowWEObjectType>> children = s.getChildren();
+				List<Section<? extends Type>> children = s.getChildren();
 				for (Section current : children) {
-					if (current.getObjectType() instanceof Disjunct) {
+					if (current.get() instanceof Disjunct) {
 						IntermediateOwlObject iohandler = (IntermediateOwlObject) KnowWEUtils.getStoredObject(
 								article, current, OwlHelper.IOO);
 						for (URI curi : iohandler.getLiterals()) {
@@ -118,7 +118,7 @@ public class ComplexFinding extends DefaultAbstractKnowWEObjectType {
 	public class ComplexFindingANTLRSectionFinder extends SectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, KnowWEObjectType type) {
+		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
 			InputStream stream = new ByteArrayInputStream(text.getBytes());
 			ANTLRInputStream input = null;
 			try {

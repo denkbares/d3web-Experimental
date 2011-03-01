@@ -23,13 +23,13 @@ package de.d3web.we.kdom.bulletLists;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
-public class BulletType extends DefaultAbstractKnowWEObjectType {
+public class BulletType extends AbstractType {
 
 	@Override
 	public void init() {
@@ -40,7 +40,7 @@ public class BulletType extends DefaultAbstractKnowWEObjectType {
 
 		@Override
 		public List<SectionFinderResult> lookForSections(String text,
-				Section father, KnowWEObjectType type) {
+				Section father, Type type) {
 
 			int index = text.indexOf('*');
 			char c = text.charAt(index + 1);

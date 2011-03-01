@@ -30,7 +30,9 @@ import java.util.ResourceBundle;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class CalendarHandler extends AbstractHTMLTagHandler {
@@ -61,6 +63,7 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 		return getAppointments(null, author, web);
 	}
 
+	@SuppressWarnings("unchecked")
 	private static List<CalendarEntry> getAppointments(DateType[] intervall, String author, String web) {
 
 		List<CalendarEntry> result = new ArrayList<CalendarEntry>();
@@ -78,18 +81,20 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 			if (article == null) continue; // TODO perhaps some dates are not
 											// imported
 
-			article.getSection().findSuccessorsOfTypeAsMap(Appointment.class, found);
+			Sections.findSuccessorsOfTypeAsMap(article.getSection(), Appointment.class, found);
 
 			for (java.util.Map.Entry<String, Section<Appointment>> mapEntry : found.entrySet()) {
-				Section[] s = new Section[4];
+				Section<?>[] s = new Section[4];
 				String[] entry = new String[4];
 
-				s[0] = mapEntry.getValue().findChildOfType(AppointmentStartSymbol.class).findChildOfType(
+				s[0] = Sections.findChildOfType(
+						Sections.findChildOfType(mapEntry.getValue(), AppointmentStartSymbol.class),
 						AppointmentDate.class);
-				s[1] = mapEntry.getValue().findChildOfType(AppointmentStartSymbol.class).findChildOfType(
+				s[1] = Sections.findChildOfType(
+						Sections.findChildOfType(mapEntry.getValue(), AppointmentStartSymbol.class),
 						AppointmentTime.class);
-				s[2] = mapEntry.getValue().findChildOfType(AppointmentAuthor.class);
-				s[3] = mapEntry.getValue().findChildOfType(AppointmentText.class);
+				s[2] = Sections.findChildOfType(mapEntry.getValue(), AppointmentAuthor.class);
+				s[3] = Sections.findChildOfType(mapEntry.getValue(), AppointmentText.class);
 
 				for (int j = 0; j < 4; j++) {
 					if (s[j] != null) entry[j] = s[j].getOriginalText();
@@ -116,6 +121,7 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 		return search(apps, date, true);
 	}
 
+	@SuppressWarnings("unchecked")
 	private static int search(List<CalendarEntry> apps, DateType dateType, boolean after) {
 		String author = ""; // To provide that ce is set on the right place
 		if (!after) {
@@ -215,7 +221,7 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 					week = day.getAbsoluteWeek();
 				}
 
-				buttons = KnowWEEnvironment.maskHTML(js) + buttons(topic, week);
+				buttons = KnowWEUtils.maskHTML(js) + buttons(topic, week);
 			}
 
 			if (values.containsKey("time")) {
@@ -248,11 +254,11 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 
 			// wide calendar activated
 			if (values.containsKey("wide")) {
-				return KnowWEEnvironment.maskHTML(js) + buttons(topic, week)
+				return KnowWEUtils.maskHTML(js) + buttons(topic, week)
 						+ renderWeekWide(intervall, getAppointments(intervall, author, web));
 			}
 
-			return KnowWEEnvironment.maskHTML(js) + buttons(topic, week) +
+			return KnowWEUtils.maskHTML(js) + buttons(topic, week) +
 					renderWeek(intervall, getAppointments(intervall, author, web));
 		}
 	}
@@ -315,7 +321,7 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 						"</button></td>");
 		buttons.append("</tr></table>");
 
-		return KnowWEEnvironment.maskHTML(buttons.toString());
+		return KnowWEUtils.maskHTML(buttons.toString());
 	}
 
 	private String renderWeek(DateType[] intervall, List<CalendarEntry> appointments) {
@@ -384,7 +390,7 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 		}
 
 		toHTML.append("</tr></table>\n");
-		return KnowWEEnvironment.maskHTML(toHTML.toString());
+		return KnowWEUtils.maskHTML(toHTML.toString());
 	}
 
 	private String renderWeekWide(DateType[] intervall, List<CalendarEntry> appointments) {
@@ -500,7 +506,7 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 
 		toHTML.append("</table>\n");
 
-		return KnowWEEnvironment.maskHTML(toHTML.toString());
+		return KnowWEUtils.maskHTML(toHTML.toString());
 	}
 
 	private String renderList(List<CalendarEntry> appointments) {
@@ -530,7 +536,7 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 				+ cb.getString("KnowWE2-Plugin-CalendarHandler.empty") + "</i></td></tr>");
 
 		toHTML.append("</table>\n");
-		return KnowWEEnvironment.maskHTML(toHTML.toString());
+		return KnowWEUtils.maskHTML(toHTML.toString());
 	}
 
 	@Override

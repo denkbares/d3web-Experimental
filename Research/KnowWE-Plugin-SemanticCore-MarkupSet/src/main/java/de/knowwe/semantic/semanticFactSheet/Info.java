@@ -23,13 +23,13 @@
  */
 package de.knowwe.semantic.semanticFactSheet;
 
-import de.d3web.we.kdom.xml.AbstractXMLObjectType;
+import de.d3web.we.kdom.xml.AbstractXMLType;
 
 /**
  * @author kazamatzuri
  *
  */
-public class Info extends AbstractXMLObjectType {
+public class Info extends AbstractXMLType {
 
 	/**
 	 * @param type

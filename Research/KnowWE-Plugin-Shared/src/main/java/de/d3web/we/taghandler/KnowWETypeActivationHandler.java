@@ -24,12 +24,12 @@ import java.util.List;
 import java.util.Map;
 
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
- * Renders the Mask for the KnowWEObjectTypeActivatior. See also
- * KnowWEObjectTypeActivatorRenderer.
+ * Renders the Mask for the TypeActivatior. See also
+ * TypeActivatorRenderer.
  * 
  * @author Johannes Dienst
  * 
@@ -40,23 +40,23 @@ public class KnowWETypeActivationHandler extends AbstractHTMLTagHandler {
 	 * Constructor.
 	 */
 	public KnowWETypeActivationHandler() {
-		super("KnowWEObjectTypeActivator");
+		super("TypeActivator");
 	}
 
 	@Override
 	public String getDescription(KnowWEUserContext user) {
 		return KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
-				"KnowWE.KnowWEObjectTypeActivator.description");
+				"KnowWE.TypeActivator.description");
 	}
 
 	@Override
 	public String renderHTML(String topic, KnowWEUserContext user, Map<String, String> values, String web) {
-		List<KnowWEObjectType> types = KnowWEEnvironment.getInstance().getAllKnowWEObjectTypes();
+		List<Type> types = KnowWEEnvironment.getInstance().getAllTypes();
 		StringBuilder html = new StringBuilder();
 
-		html.append("<div id=\"KnowWEObjectTypeActivator\" class=\"panel\"><h3>"
+		html.append("<div id=\"TypeActivator\" class=\"panel\"><h3>"
 				+ KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
-						"KnowWE.KnowWeObjectTypeActivator.topic")
+						"KnowWE.TypeActivator.topic")
 				+ "</h3>");
 		html.append("<form method='post' action='' name='typeactivator'>");
 		html.append("<fieldset>");
@@ -67,7 +67,7 @@ public class KnowWETypeActivationHandler extends AbstractHTMLTagHandler {
 		// Iterate over Types to create Checkboxes
 		String spancolor;
 		String name = "";
-		for (KnowWEObjectType type : types) {
+		for (Type type : types) {
 
 			// get the current Activation Status and set the color
 			spancolor = "green";
@@ -94,7 +94,7 @@ public class KnowWETypeActivationHandler extends AbstractHTMLTagHandler {
 		html.append("<p><input type='button' class='button' "
 				+ "value='"
 				+ KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
-						"KnowWE.KnowWEObjectTypeActivator.changebutton") + "'/></p>");
+						"KnowWE.TypeActivator.changebutton") + "'/></p>");
 
 		html.append("</fieldset> ");
 		html.append("</form>");

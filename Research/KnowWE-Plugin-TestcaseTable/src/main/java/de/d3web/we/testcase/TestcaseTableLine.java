@@ -33,6 +33,7 @@ import de.d3web.we.basic.D3webModule;
 import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SyntaxError;
 import de.d3web.we.kdom.table.TableCell;
@@ -65,11 +66,11 @@ public class TestcaseTableLine extends TableLine {
 
 				KnowledgeBase kb = findKB(s, article);
 
-				Section<TimeStampType> timeStamp = s.findSuccessor(TimeStampType.class);
+				Section<TimeStampType> timeStamp =  Sections.findSuccessor(s, TimeStampType.class);
 				if (timeStamp == null) {
-					int lineNumber = s.findAncestorOfType(TestcaseTable.class).getChildren().indexOf(
+					int lineNumber = Sections.findAncestorOfType(s, TestcaseTable.class).getChildren().indexOf(
 							s);
-					Section<CellContent> cell = s.findSuccessor(CellContent.class);
+					Section<CellContent> cell =  Sections.findSuccessor(s, CellContent.class);
 
 					LinkedList<KDOMReportMessage> list = new LinkedList<KDOMReportMessage>();
 					list.add(new SyntaxError("Invalid timestamp '" + cell.getOriginalText()
@@ -81,13 +82,14 @@ public class TestcaseTableLine extends TableLine {
 				testCase.setTimeStamp(new Date(time));
 
 				List<Section<ValueType>> values = new LinkedList<Section<ValueType>>();
-				s.findSuccessorsOfType(ValueType.class, values);
+				Sections.findSuccessorsOfType(s, ValueType.class, values);
 
 				for (Section<ValueType> valueSec : values) {
 
 					Section<? extends HeaderCell> headerCell = TestcaseTable.findHeaderCell(valueSec);
 
-					Section<QuestionReference> qRef = headerCell.findSuccessor(QuestionReference.class);
+					Section<QuestionReference> qRef = Sections.findSuccessor(headerCell,
+							QuestionReference.class);
 					String qName = qRef.getOriginalText();
 					// TODO unchanged value, unknown value
 					Question question = kb.getManager().searchQuestion(qName);
@@ -103,7 +105,8 @@ public class TestcaseTableLine extends TableLine {
 			private KnowledgeBase findKB(Section<TestcaseTableLine> s, KnowWEArticle article) {
 
 				String master = TestcaseTableType.getMaster(
-						s.findAncestorOfExactType(TestcaseTableType.class), article.getTitle());
+						Sections.findAncestorOfExactType(s, TestcaseTableType.class),
+						article.getTitle());
 
 				return D3webModule.getKnowledgeRepresentationHandler(article.getWeb()).getKB(
 						master);

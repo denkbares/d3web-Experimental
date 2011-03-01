@@ -35,7 +35,7 @@ import com.ecyrd.jspwiki.event.WikiEventManager;
 import com.ecyrd.jspwiki.event.WikiSecurityEvent;
 
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
@@ -82,7 +82,7 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 
 	@Override
 	protected KnowWEDomRenderer<?> getDefaultRenderer() {
-		return new AboutMeRenderer<KnowWEObjectType>();
+		return new AboutMeRenderer<AbstractType>();
 	}
 
 	@Override

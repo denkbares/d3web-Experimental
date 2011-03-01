@@ -35,16 +35,16 @@ import de.d3web.KnOfficeParser.DefaultLexer;
 import de.d3web.KnOfficeParser.dashtree.DashTree;
 import de.d3web.KnOfficeParser.util.DefaultD3webParserErrorHandler;
 import de.d3web.report.Message;
-import de.d3web.we.kdom.DefaultAbstractKnowWEObjectType;
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.ExpandedSectionFinderResult;
-import de.d3web.we.kdom.KnowWEObjectType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.dashTree.DashTreeKDOMBuilder;
 import de.d3web.we.kdom.kopic.renderer.DefaultLineNumberDeligateRenderer;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
-public class SolutionsTreeANTLR extends DefaultAbstractKnowWEObjectType {
+public class SolutionsTreeANTLR extends AbstractType {
 
 	@Override
 	protected void init() {
@@ -60,7 +60,7 @@ public class SolutionsTreeANTLR extends DefaultAbstractKnowWEObjectType {
 		private DashTree parser;
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, KnowWEObjectType type) {
+		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
 			ReaderInputStream input = new ReaderInputStream(new StringReader(text));
 			ANTLRInputStream istream = null;
 			try {
