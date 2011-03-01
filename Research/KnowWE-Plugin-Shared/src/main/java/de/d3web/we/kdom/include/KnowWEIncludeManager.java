@@ -286,7 +286,7 @@ public class KnowWEIncludeManager implements EventListener {
 					Set<Section<? extends Type>> candidates =
 							new HashSet<Section<? extends Type>>(children);
 
-					List<Section<? extends Type>> potentialDuplicates =
+					List<Section<?>> potentialDuplicates =
 							new ArrayList<Section<? extends Type>>();
 
 					for (Section<Include> inc : getActiveIncludesForArticle(includeSec.getArticle())) {
@@ -295,7 +295,7 @@ public class KnowWEIncludeManager implements EventListener {
 						}
 					}
 
-					for (Section<? extends Type> pd : potentialDuplicates) {
+					for (Section<?> pd : potentialDuplicates) {
 						// Found duplicates get removed.
 						candidates.remove(pd);
 					}

@@ -28,9 +28,9 @@ import java.util.ResourceBundle;
 import de.d3web.we.action.TemplateGenerationAction;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.wikiTemplate.Template;
 import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
@@ -136,8 +136,8 @@ public class TemplateTagHandler extends AbstractHTMLTagHandler {
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<Section<Template>> getTemplateTypes(KnowWEArticle article) {
-		ArrayList<Section<? extends Type>> found =
-				new ArrayList<Section<? extends Type>>();
+		ArrayList<Section<?>> found =
+				new ArrayList<Section<?>>();
 		Sections.getAllNodesPreOrder(article.getSection(), found);
 		// article.getSection() Sections.findSuccessorsOfType(TemplateType.class, found);
 		ArrayList<Section<Template>> cleaned = new ArrayList<Section<Template>>();
