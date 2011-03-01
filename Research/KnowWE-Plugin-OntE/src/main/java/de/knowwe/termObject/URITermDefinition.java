@@ -14,15 +14,14 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.objects.GlobalTermDefinition;
-import de.d3web.we.kdom.objects.KnowWETerm;
 import de.d3web.we.kdom.objects.TermDefinition;
-import de.d3web.we.kdom.objects.TermReference;
 import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.message.NoSuchObjectError;
 import de.d3web.we.kdom.report.message.ObjectAlreadyDefinedError;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.terminology.TerminologyHandler;
 import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.onte.owl.terminology.PredefinedTermError;
+import de.knowwe.onte.owl.terminology.URIUtil;
 import de.knowwe.termObject.URIObject.URIObjectType;
 
 public abstract class URITermDefinition extends GlobalTermDefinition<URIObject> implements RDFResourceType {
@@ -60,6 +59,14 @@ public abstract class URITermDefinition extends GlobalTermDefinition<URIObject> 
 
 			
 			TerminologyHandler tHandler = KnowWEUtils.getTerminologyHandler(article.getWeb());
+
+			String termName = s.get().getTermName(s);
+
+			if (URIUtil.checkForKnownTerms(termName, URIUtil.OBJECT_VOCABULARY)
+					|| URIUtil.checkForKnownTerms(termName, URIUtil.PREDICATE_VOCABULARY)) {
+				return Arrays.asList((KDOMReportMessage) new PredefinedTermError(
+						s.get().getName() + ": " + s.get().getTermName(s)));
+			}
 
 			//if(s.get().checkDependencies(s)) {
 				tHandler.registerTermDefinition(article, s);

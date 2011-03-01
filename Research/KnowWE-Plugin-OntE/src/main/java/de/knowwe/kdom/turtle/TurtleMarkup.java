@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.OWL;
 import org.ontoware.rdf2go.vocabulary.RDF;
@@ -284,13 +283,7 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 			}
 
 			boolean thiss = false;
-			boolean found = false;
-			for (String string : knownObjectTerms) {
-				if (termName.equalsIgnoreCase(string)) {
-					found = true;
-				}
-
-			}
+			boolean found = URIUtil.checkForKnownTerms(termName, knownObjectTerms);
 			if (found) {
 				s.setType(new BasicVocabularyReference());
 			}else if(termName.equals(LocalConceptDefinition.LOCAL_KEY)) {
@@ -312,6 +305,8 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 
 			return new ArrayList<KDOMReportMessage>();
 		}
+
+
 
 	}
 

@@ -36,6 +36,17 @@ public class URIUtil {
 	public static final String[] PREDICATE_VOCABULARY = new String[] {
 			TYPE,ISA, SUBCLASSOF, DOMAIN, RANGE, SUBPROPERTYOF };
 
+	public static boolean checkForKnownTerms(String termName, String[] terms) {
+		boolean found = false;
+		for (String string : terms) {
+			if (termName.equalsIgnoreCase(string)) {
+				found = true;
+			}
+
+		}
+		return found;
+	}
+
 	public static URI getURI(Section<? extends BasicVocabularyReference> s) {
 		
 		String text = s.getOriginalText();
