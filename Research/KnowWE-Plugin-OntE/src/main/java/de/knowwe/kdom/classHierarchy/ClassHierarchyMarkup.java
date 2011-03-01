@@ -20,12 +20,14 @@
 package de.knowwe.kdom.classHierarchy;
 
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
+import de.d3web.we.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 
 public class ClassHierarchyMarkup extends DefaultMarkupType {
 
 	public ClassHierarchyMarkup(DefaultMarkup markup) {
 		super(markup);
+		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 
 	private static DefaultMarkup m = null;
@@ -37,5 +39,7 @@ public class ClassHierarchyMarkup extends DefaultMarkupType {
 
 	public ClassHierarchyMarkup() {
 		super(m);
+		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
+
 	}
 }
