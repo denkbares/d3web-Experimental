@@ -1,6 +1,7 @@
 package de.d3web.we.lod.markup;
 
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
+import de.d3web.we.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 
 public class MappingMarkup extends DefaultMarkupType {
@@ -14,6 +15,7 @@ public class MappingMarkup extends DefaultMarkupType {
 
 	public MappingMarkup() {
 		super(m);
+		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 
 }

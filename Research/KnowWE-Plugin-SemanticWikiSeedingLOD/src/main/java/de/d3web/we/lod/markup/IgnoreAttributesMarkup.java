@@ -1,6 +1,7 @@
 package de.d3web.we.lod.markup;
 
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
+import de.d3web.we.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 
 public class IgnoreAttributesMarkup extends DefaultMarkupType {
@@ -14,6 +15,7 @@ public class IgnoreAttributesMarkup extends DefaultMarkupType {
 
 	public IgnoreAttributesMarkup() {
 		super(m);
+		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 
 }
