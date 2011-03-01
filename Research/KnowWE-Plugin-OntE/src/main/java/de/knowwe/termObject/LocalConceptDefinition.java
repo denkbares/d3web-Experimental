@@ -10,7 +10,7 @@ public class LocalConceptDefinition extends URITermDefinition {
 	public static final String LOCAL_KEY = "this";
 	
 	public LocalConceptDefinition() {
-			this.setSectionFinder(new RegexSectionFinder("def\\s*?"+LOCAL_KEY));
+		this.setSectionFinder(new RegexSectionFinder("def\\s*?" + LOCAL_KEY + "\\s"));
 	}
 
 	@Override

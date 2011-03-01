@@ -203,7 +203,9 @@ public class TurtleMarkup extends DefaultAbstractKnowWEObjectType {
 					URI predURI = l.get(0).get().getURI(l.get(0));
 					URI objURI = l.get(1).get().getURI(l.get(1));
 					URIObject termObject = s.get().getTermObject(article, s);
+					if (termObject == null) return new ArrayList<KDOMReportMessage>(0);
 					URIObjectType uriType = termObject.getURIType();
+
 
 					if (predURI.equals(RDF.type)) {
 						if (objURI.equals(OWL.Class)) {
