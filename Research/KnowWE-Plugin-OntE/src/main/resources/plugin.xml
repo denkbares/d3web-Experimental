@@ -16,7 +16,7 @@
 	</runtime>
 
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="ClassHierarchyMarkup">
 		<parameter id="class"
 			value="de.knowwe.kdom.classHierarchy.ClassHierarchyMarkup" />
@@ -27,7 +27,7 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TurtleMarkup">
 		<parameter id="class"
 			value="de.knowwe.kdom.turtle.TurtleMarkup" />
