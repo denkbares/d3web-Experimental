@@ -28,6 +28,7 @@ import java.util.List;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
@@ -73,7 +74,10 @@ public class TableCellContentRenderer extends KnowWEDomRenderer<TableCellContent
 
 	@Override
 	public void render(KnowWEArticle article, Section<TableCellContent> sec, KnowWEUserContext user, StringBuilder string) {
-		string.append(wrappContent(sec.getOriginalText(), sec, user));
+		StringBuilder builder = new StringBuilder();
+		DelegateRenderer.getInstance().render(article, sec, user, builder);
+
+		string.append(wrappContent(builder.toString(), sec, user));
 	}
 
 	/**

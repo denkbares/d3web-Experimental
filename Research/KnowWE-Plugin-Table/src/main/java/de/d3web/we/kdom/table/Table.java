@@ -21,8 +21,10 @@
 package de.d3web.we.kdom.table;
 
 import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.d3web.we.kdom.xml.XMLContent;
+import de.d3web.we.utils.KnowWETypeUtils;
 
 /**
  * <p>
@@ -69,6 +71,14 @@ public abstract class Table extends AbstractType {
 		this.childrenTypes.add(new TableLine());
 		this.sectionFinder = new AllTextSectionFinder();
 		this.setCustomRenderer(new TableRenderer());
+	}
+
+	public void injectTableCellContentChildtype(Type type) {
+		Type cellContentType = KnowWETypeUtils.findSuccessorType(this,
+				TableCellContent.class);
+		if (cellContentType instanceof AbstractType) {
+			((AbstractType) cellContentType).addChildType(type);
+		}
 	}
 
 	public TableAttributesProvider getTableAttributesProvider() {
