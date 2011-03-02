@@ -9,8 +9,9 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.rendering.DelegateRenderer;
+import de.d3web.we.kdom.table.Table;
 import de.d3web.we.taghandler.AbstractTagHandler;
-import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class ShowTableTagHandler extends AbstractTagHandler{
@@ -27,7 +28,7 @@ public class ShowTableTagHandler extends AbstractTagHandler{
 		}
 		Section<DefineTableMarkup> myTable = findTableToShow(article, id);
 		if(myTable != null) {
-			return renderTable(myTable);
+			return renderTable(myTable, userContext);
 		}
 		else {
 			return "no table definition found for specified id: "+id;
@@ -35,29 +36,12 @@ public class ShowTableTagHandler extends AbstractTagHandler{
 		
 	}
 
-	private String renderTable(Section<DefineTableMarkup> myTable) {
-		List<Section<ColumnType>> cols = new ArrayList<Section<ColumnType>>();
-		Sections.findSuccessorsOfType(myTable, ColumnType.class, cols);
-		if(cols.size() == 0) {
-			return "no colums defined in table-defintions!";
-		}
-		StringBuffer buffy = new StringBuffer();
-		buffy.append(KnowWEUtils.maskHTML("<table>"));
-		buffy.append(KnowWEUtils.maskHTML("<tr>"));
-		for (Section<ColumnType> section : cols) {
-			buffy.append(KnowWEUtils.maskHTML("<td>"));
-			buffy.append(KnowWEUtils.maskHTML(section.getOriginalText()));
-			buffy.append(KnowWEUtils.maskHTML("</td>"));
-		}
-		for(int i = 0; i < cols.size(); i++) {
-			buffy.append(KnowWEUtils.maskHTML("<td>"));
-			buffy.append(KnowWEUtils.maskHTML("<input type='text'/>"));
-			buffy.append(KnowWEUtils.maskHTML("</td>"));
-		}
-		buffy.append(KnowWEUtils.maskHTML("</tr>"));
-		buffy.append(KnowWEUtils.maskHTML("</table>"));
-		buffy.append("<input type='button' name='ok' value='ok' />");
-		return buffy.toString();
+	private String renderTable(Section<DefineTableMarkup> myTable, KnowWEUserContext user) {
+		Section<Table> table = Sections.findSuccessor(myTable,Table.class);
+		StringBuilder string = new StringBuilder();
+		DelegateRenderer.getInstance().render(myTable.getArticle(), table.getFather(),
+				user, string);
+		return string.toString();
 	}
 
 	private Section<DefineTableMarkup> findTableToShow(KnowWEArticle article, String id) {
@@ -69,7 +53,7 @@ public class ShowTableTagHandler extends AbstractTagHandler{
 			for (Section<DefineTableMarkup> table : tables) {
 				String tableID = table.get().getAnnotation(table, "id");
 				if(tableID != null) {
-					if(tableID == id) {
+					if (tableID.equals(id)) {
 						return table;
 					}
 				}

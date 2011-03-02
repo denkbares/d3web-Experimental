@@ -26,11 +26,11 @@
 		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="DefineTableMarkup">
 		<parameter id="class" value="de.knowwe.defi.table.DefineTableMarkup" />
 		<parameter id="name" value="DefineTableMarkup" />
-		<parameter id="description" value="KnowWEObjectType DefineTableMarkup" />
+		<parameter id="description" value="Type DefineTableMarkup" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5"  />
 		<parameter id="scope" value="root" />

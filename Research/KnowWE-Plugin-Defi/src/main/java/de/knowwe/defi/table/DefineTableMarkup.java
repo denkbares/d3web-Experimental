@@ -21,13 +21,12 @@
 package de.knowwe.defi.table;
 
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
+import de.d3web.we.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * @author Jochen
  * 
- *         A markup to create a block for text-rules
- * @see RuleContentType
  * 
  * 
  */
@@ -35,6 +34,7 @@ public class DefineTableMarkup extends DefaultMarkupType {
 
 	public DefineTableMarkup(DefaultMarkup markup) {
 		super(markup);
+		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 
 	private static DefaultMarkup m = null;
@@ -47,5 +47,6 @@ public class DefineTableMarkup extends DefaultMarkupType {
 
 	public DefineTableMarkup() {
 		super(m);
+		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 }

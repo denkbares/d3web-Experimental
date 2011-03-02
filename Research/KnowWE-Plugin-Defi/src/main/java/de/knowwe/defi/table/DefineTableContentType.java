@@ -7,7 +7,7 @@ public class DefineTableContentType extends AbstractType {
 	
 	public DefineTableContentType(){
 		this.setSectionFinder(new AllTextSectionFinder());
-		this.addChildType(new ColumnType());
+		this.addChildType(new TableTemplateType());
 		
 	}
 }
