@@ -19,12 +19,17 @@
 package de.d3web.we.testcase;
 
 import java.io.IOException;
+import java.util.Map;
 
+import de.d3web.core.session.Session;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.ActionContext;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.SessionBroker;
+import de.d3web.we.basic.WikiEnvironment;
+import de.d3web.we.basic.WikiEnvironmentManager;
 import de.d3web.we.core.KnowWEParameterMap;
+import de.d3web.we.utils.D3webUtils;
 
 /**
  * 
@@ -39,6 +44,13 @@ public class TestcaseTableResetAction extends AbstractAction {
 		SessionBroker broker = D3webModule.getBroker(map);
 		broker.clear();
 
+		String user = context.getWikiContext().getUserName();
+		String topic = context.getWikiContext().getTopic();
+		String web = context.getWikiContext().getWeb();
+		Session session = D3webUtils.getSession(topic, user, web);
+		WikiEnvironment wiki = WikiEnvironmentManager.getInstance().getEnvironments(web);
+		Map<String, Object> sessionInfoStore = wiki.getSessionInfoStore(session);
+		sessionInfoStore.clear();
 	}
 
 }

@@ -19,9 +19,11 @@
 package de.d3web.we.testcase;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
@@ -38,6 +40,8 @@ import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.ActionContext;
 import de.d3web.we.basic.D3webModule;
+import de.d3web.we.basic.WikiEnvironment;
+import de.d3web.we.basic.WikiEnvironmentManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -78,8 +82,13 @@ public class RunTestcaseAction extends AbstractAction {
 			findTestcaseIncluding(line, toBeExecutedLines);
 		}
 
+		// saving/recalling execution status
 		String user = context.getWikiContext().getUserName();
 		Session session = D3webUtils.getSession(master, user, web);
+		WikiEnvironment wiki = WikiEnvironmentManager.getInstance().getEnvironments(web);
+		Map<String, Object> sessionInfoStore = wiki.getSessionInfoStore(session);
+		Object o = sessionInfoStore.get(master);
+
 
 		if (session == null) return;
 
@@ -87,10 +96,24 @@ public class RunTestcaseAction extends AbstractAction {
 				D3webModule.getKnowledgeRepresentationHandler(web).getKB(master);
 
 		for (Section<TestcaseTableLine> tctLine : toBeExecutedLines) {
+			
+			if (o == null) {
+				List<Section<TestcaseTableLine>> list = new ArrayList<Section<TestcaseTableLine>>();
+				list.add(tctLine);
+				sessionInfoStore.put(master, list);
+			}
+			else if (o instanceof List) {
+				if (((List) o).contains(tctLine)) {
+					continue;
+				}
+				else {
+					((List) o).add(tctLine);
+				}
+			}
+
 			RatedTestCase testcase = (RatedTestCase) KnowWEUtils.getStoredObject(article,
 					tctLine,
 					TestcaseTableLine.TESTCASE_KEY);
-
 			executeTestCase(testcase, session, kb);
 		}
 

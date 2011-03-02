@@ -268,8 +268,6 @@ Testcase.saveInputAfterChange = function(event) {
  * runs a Testcase via RunTestcaseAction
  */
 Testcase.runTestcase = function(element, including) {
-	Testcase.colorExecutedLines(element, including);
-	
 	var topic = KNOWWE.helper.gup('page')
 	
 	var params = {
@@ -291,7 +289,7 @@ Testcase.runTestcase = function(element, including) {
         }
     }
     new _KA( options ).send();
-	
+	Testcase.colorExecutedLines(element, including);	
 }
 
 
@@ -414,18 +412,17 @@ Testcase.resetTestcase = function(sectionID) {
  */
 Testcase.resetTableCSS = function(sectionID) {
 	var sec = $(sectionID);
-	var table = sec.getElement('table');
-	var trs = sec.getElements('tr');
+	var tables = $$('table.wikitable');
 	var tds;
 	
-	for (var i = 1; i < trs.length; i++) {
-		tds = trs[i].getElements('td');
-		for (var j = 0; j < tds.length; j++) {
-			tds[j].removeClass('testcaseExecuted');
-			tds[j].removeClass('testcaseUnavailable');
+	for (var i = 0; i < tables.length; i++) {
+		trs = tables[i].getElements('tr');
+		for (var j = 1; j < trs.length; j++) {
+			tds = trs[j].getElements('td');
+			for (var k = 0; k < tds.length; k++) {
+				tds[k].removeClass('testcaseExecuted');
+				tds[k].removeClass('testcaseUnavailable');
+			}
 		}
 	}
-	
-	var a = 1;
-	
 }
