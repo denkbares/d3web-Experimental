@@ -28,8 +28,8 @@ import de.d3web.we.kdom.sectionFinder.AllBeforeTypeSectionFinder;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.d3web.we.kdom.sectionFinder.ConditionalSectionFinder;
-import de.d3web.we.kdom.sectionFinder.ISectionFinder;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.kdom.type.AnonymousTypeInvisible;
@@ -58,7 +58,7 @@ public class TurtleMarkup extends AbstractType {
 		// TODO: Aufteilen in Def-Turtle und normales Turle
 
 		AnonymousTypeInvisible start = new AnonymousTypeInvisible("turtlestart");
-		start.setSectionFinder(new ISectionFinder() {
+		start.setSectionFinder(new SectionFinder() {
 			@Override
 			public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 				return SectionFinderResult.createSingleItemResultList(0, 1);
@@ -67,7 +67,7 @@ public class TurtleMarkup extends AbstractType {
 		this.addChildType(start);
 
 		AnonymousTypeInvisible stop = new AnonymousTypeInvisible("turtlestop");
-		stop.setSectionFinder(new ISectionFinder() {
+		stop.setSectionFinder(new SectionFinder() {
 
 			@Override
 			public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
