@@ -32,7 +32,7 @@ public abstract class URITermDefinition extends GlobalTermDefinition<URIObject> 
 	}
 	
 	@Override
-	public URI getURI(Section<? extends RDFResourceType> s) {
+	public URI getNode(Section<? extends RDFResourceType> s) {
 		//KnowWEArticle main = KnowWEEnvironment.getInstance().getArticleManager(KnowWEEnvironment.DEFAULT_WEB).getArticle("Main");
 		
 		if (s.get() instanceof TermDefinition) {

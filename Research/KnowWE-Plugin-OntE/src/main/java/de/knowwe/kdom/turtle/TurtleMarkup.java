@@ -55,8 +55,8 @@ public class TurtleMarkup extends AbstractType {
 
 		this.setSectionFinder(new RegexSectionFinder("<.*?::.*>"));
 
-		//TODO: Aufteilen in Def-Turtle und normales Turle
-		
+		// TODO: Aufteilen in Def-Turtle und normales Turle
+
 		AnonymousTypeInvisible start = new AnonymousTypeInvisible("turtlestart");
 		start.setSectionFinder(new ISectionFinder() {
 			@Override
@@ -88,19 +88,6 @@ public class TurtleMarkup extends AbstractType {
 		this.addChildType(new TurtleObject());
 
 		this.addSubtreeHandler(Priority.HIGHER, new TripleChecker());
-		// this.addSubtreeHandler(Priority.HIGHER, new
-		// ObjectPropertyDefintionChecker());
-		// this.addSubtreeHandler(Priority.HIGHER, new
-		// DatatypePropertyDefintionChecker());
-		// this.addSubtreeHandler(Priority.HIGHER, new ClassDefintionChecker());
-		// this.addSubtreeHandler(Priority.HIGH, new
-		// LocalPageInstanceDefintionChecker());
-		// this.addSubtreeHandler(Priority.HIGH, new
-		// InstanceDefintionChecker());
-		// this.addSubtreeHandler(Priority.HIGH, new
-		// IndirectInstanceDefintionChecker());
-		// this.addSubtreeHandler(Priority.HIGH, new
-		// IndirectClassDefintionChecker());
 
 		this.addSubtreeHandler(Priority.LOWEST, new TurtleRDF2GoCompiler());
 
@@ -110,8 +97,9 @@ public class TurtleMarkup extends AbstractType {
 
 		public TurtlePredicate() {
 			this.setSectionFinder(new RegexSectionFinder("\\b([^\\s]*)::", 0));
-			this.addSubtreeHandler(Priority.LOW, new TermChecker(
+			this.addSubtreeHandler(Priority.DEFAULT, new BasicVocTermChecker(
 					URIUtil.PREDICATE_VOCABULARY));
+			this.addSubtreeHandler(Priority.LOWER, new TermReferenceChecker());
 		}
 
 		@Override
@@ -177,7 +165,7 @@ public class TurtleMarkup extends AbstractType {
 					});
 			finder.addConstraint(SingleChildConstraint.getInstance());
 			this.setSectionFinder(finder);
-			this.addSubtreeHandler(Priority.LOWER, new URIObjectTypeChecker());
+			this.addSubtreeHandler(Priority.LOW, new URIObjectTypeChecker());
 		}
 
 		@Override
@@ -196,17 +184,17 @@ public class TurtleMarkup extends AbstractType {
 
 			@Override
 			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<SubjectDefinition> s) {
-				Section<TurtleMarkup> turtle = Sections.findAncestorOfType(s, TurtleMarkup.class);
+				Section<TurtleMarkup> turtle = Sections.findAncestorOfType(s,
+						TurtleMarkup.class);
 				List<Section<BasicVocabularyReference>> l = new ArrayList<Section<BasicVocabularyReference>>();
 				Sections.findSuccessorsOfType(turtle, BasicVocabularyReference.class, l);
 
 				if (l.size() == 2) {
-					URI predURI = l.get(0).get().getURI(l.get(0));
-					URI objURI = l.get(1).get().getURI(l.get(1));
+					URI predURI = l.get(0).get().getNode(l.get(0));
+					URI objURI = l.get(1).get().getNode(l.get(1));
 					URIObject termObject = s.get().getTermObject(article, s);
 					if (termObject == null) return new ArrayList<KDOMReportMessage>(0);
 					URIObjectType uriType = termObject.getURIType();
-
 
 					if (predURI.equals(RDF.type)) {
 						if (objURI.equals(OWL.Class)) {
@@ -264,16 +252,76 @@ public class TurtleMarkup extends AbstractType {
 					new AllTextFinderTrimmed());
 			c.addConstraint(SingleChildConstraint.getInstance());
 			this.setSectionFinder(c);
-			this.addSubtreeHandler(Priority.LOW, new TermChecker(
+			this.addSubtreeHandler(Priority.DEFAULT, new BasicVocTermChecker(
 					URIUtil.OBJECT_VOCABULARY));
+			this.addSubtreeHandler(Priority.LOWER, new TermReferenceChecker());
 		}
 	}
 
-	private class TermChecker extends GeneralSubtreeHandler<Type> {
+	private class TermReferenceChecker extends GeneralSubtreeHandler<Type> {
+
+		// String knownObjectTerms[] = null;
+		//
+		// public TermChecker(String[] values) {
+		// this.knownObjectTerms = values;
+		// }
+
+		@Override
+		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Type> s) {
+
+			String termName = s.getOriginalText();
+			if (s.get() instanceof KnowWETerm) {
+				termName = ((KnowWETerm) s.get()).getTermName(s);
+			}
+
+			boolean thiss = false;
+			boolean datavalue = false;
+			// boolean found = URIUtil.checkForKnownTerms(termName,
+			// knownObjectTerms);
+			// if (found) {
+			// s.setType(new BasicVocabularyReference());
+			// }
+			// else {
+			if (termName.equals(LocalConceptDefinition.LOCAL_KEY)) {
+				thiss = true;
+				s.setType(new LocalConceptReference());
+			}
+			else {
+				if (s.get() instanceof TurtleObject) {
+					List<Section<OWLTermReference>> refs = new ArrayList<Section<OWLTermReference>>();
+					Sections.findSuccessorsOfType(
+							s.getFather(), OWLTermReference.class, refs);
+					if (refs.size() > 0) {
+						Section<OWLTermReference> prop = refs.get(refs.size() - 1);
+						if (prop.get().getTermObject(article, prop).getURIType() == URIObjectType.datatypeProperty) {
+							s.setType(new DataTypeValue());
+							datavalue = true;
+						}
+					}
+				}
+				if (!datavalue) {
+					s.setType(new OWLTermReference());
+				}
+			}
+
+			TerminologyHandler terminologyHandler = KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
+			boolean defined = terminologyHandler.isDefinedTerm(article,
+						termName, KnowWETerm.GLOBAL);
+
+			if (!defined && !thiss && !datavalue) {
+				return Arrays.asList((KDOMReportMessage) new NoSuchObjectError(
+							s.getOriginalText()));
+			}
+
+			return new ArrayList<KDOMReportMessage>(0);
+		}
+	}
+
+	private class BasicVocTermChecker extends GeneralSubtreeHandler<Type> {
 
 		String knownObjectTerms[] = null;
 
-		public TermChecker(String[] values) {
+		public BasicVocTermChecker(String[] values) {
 			this.knownObjectTerms = values;
 		}
 
@@ -285,32 +333,31 @@ public class TurtleMarkup extends AbstractType {
 				termName = ((KnowWETerm) s.get()).getTermName(s);
 			}
 
-			boolean thiss = false;
+			// boolean thiss = false;
 			boolean found = URIUtil.checkForKnownTerms(termName, knownObjectTerms);
 			if (found) {
 				s.setType(new BasicVocabularyReference());
-			}else if(termName.equals(LocalConceptDefinition.LOCAL_KEY)) {
-				thiss = true;
+			}
+			else if (termName.equals(LocalConceptDefinition.LOCAL_KEY)) {
+				// thiss = true;
 				s.setType(new LocalConceptReference());
 			}
 			else {
-				s.setType(new OWLTermReference());
+				// do nothing
 			}
 
-			TerminologyHandler terminologyHandler = KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
-			boolean defined = terminologyHandler.isDefinedTerm(article,
-						termName, KnowWETerm.GLOBAL);
+			// TerminologyHandler terminologyHandler =
+			// KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
+			// boolean defined = terminologyHandler.isDefinedTerm(article,
+			// termName, KnowWETerm.GLOBAL);
+			//
+			// if (!found && !defined && !thiss) {
+			// return Arrays.asList((KDOMReportMessage) new NoSuchObjectError(
+			// s.getOriginalText()));
+			// }
 
-			if (!found && !defined && !thiss) {
-				return Arrays.asList((KDOMReportMessage) new NoSuchObjectError(
-							s.getOriginalText()));
-			}
-
-			return new ArrayList<KDOMReportMessage>();
+			return new ArrayList<KDOMReportMessage>(0);
 		}
-
-
-
 	}
 
 	class TripleChecker extends GeneralSubtreeHandler<TurtleMarkup> {
@@ -330,163 +377,5 @@ public class TurtleMarkup extends AbstractType {
 		}
 
 	}
-
-	// class ClassDefintionChecker extends GeneralSubtreeHandler<TurtleMarkup> {
-	//
-	// ClassDefintionChecker(){
-	// this.registerConstraintModule(new
-	// SuccessorNotReusedConstraint<TurtleMarkup>());
-	// }
-	//		
-	// @Override
-	// public Collection<KDOMReportMessage> create(KnowWEArticle article,
-	// Section<TurtleMarkup> s) {
-	// Section<TurtleSubject> subject = s.findSuccessor(TurtleSubject.class);
-	// Section<TurtleObject> o = s.findSuccessor(TurtleObject.class);
-	// Section<TurtlePredicate> p = s.findSuccessor(TurtlePredicate.class);
-	// if (o != null && p != null) {
-	// if (o.getOriginalText().equalsIgnoreCase("Class")) {
-	// if (p.getOriginalText().startsWith("type")) {
-	// subject.setType(new OWLClassDefinition());
-	// }
-	//
-	// }
-	// }
-	// return new ArrayList<KDOMReportMessage>();
-	// }
-	// }
-
-	// class LocalPageInstanceDefintionChecker extends
-	// GeneralSubtreeHandler<TurtleMarkup> {
-	//
-	// LocalPageInstanceDefintionChecker() {
-	// this.registerConstraintModule(new
-	// SuccessorNotReusedConstraint<TurtleMarkup>());
-	// }
-	//
-	// @Override
-	// public Collection<KDOMReportMessage> create(KnowWEArticle article,
-	// Section<TurtleMarkup> s) {
-	// Section<TurtleSubject> subject = s.findSuccessor(TurtleSubject.class);
-	// Section<TurtleObject> o = s.findSuccessor(TurtleObject.class);
-	// Section<TurtlePredicate> p = s.findSuccessor(TurtlePredicate.class);
-	// if (subject == null && o != null && p != null) {
-	// if (p.getOriginalText().startsWith("type")) {
-	// if (o.getOriginalText().equalsIgnoreCase("Thing")) {
-	// Section<AnonymousType> anoSec = s.findSuccessor(AnonymousType.class);
-	// anoSec.setType(new LocalPageOWLInstanceDef());
-	//
-	// }
-	// }
-	// }
-	// return new ArrayList<KDOMReportMessage>();
-	// }
-	// }
-	// class InstanceDefintionChecker extends
-	// GeneralSubtreeHandler<TurtleMarkup> {
-	//
-	// InstanceDefintionChecker(){
-	// this.registerConstraintModule(new
-	// SuccessorNotReusedConstraint<TurtleMarkup>());
-	// }
-	//		
-	// @Override
-	// public Collection<KDOMReportMessage> create(KnowWEArticle article,
-	// Section<TurtleMarkup> s) {
-	// Section<TurtleSubject> subject = s.findSuccessor(TurtleSubject.class);
-	// Section<TurtleObject> o = s.findSuccessor(TurtleObject.class);
-	// Section<TurtlePredicate> p = s.findSuccessor(TurtlePredicate.class);
-	// if (subject != null && o != null && p != null) {
-	// if (p.getOriginalText().startsWith("type")) {
-	// if (o.getOriginalText().equalsIgnoreCase("Thing")) {
-	//
-	// subject.setType(new OWLInstanceDefinition());
-	//
-	// }
-	// }
-	// }
-	// return new ArrayList<KDOMReportMessage>();
-	// }
-	// }
-	//	
-	// class IndirectInstanceDefintionChecker extends
-	// GeneralSubtreeHandler<TurtleMarkup> {
-	//
-	// IndirectInstanceDefintionChecker(){
-	// this.registerConstraintModule(new
-	// SuccessorNotReusedConstraint<TurtleMarkup>());
-	// }
-	//		
-	// @Override
-	// public Collection<KDOMReportMessage> create(KnowWEArticle article,
-	// Section<TurtleMarkup> s) {
-	// Section<TurtleSubject> subject = s.findSuccessor(TurtleSubject.class);
-	// Section<TurtleObject> o = s.findSuccessor(TurtleObject.class);
-	// Section<TurtlePredicate> p = s.findSuccessor(TurtlePredicate.class);
-	// if (subject != null && o != null && p != null) {
-	// if (p.getOriginalText().startsWith("isA")) {
-	// //if (o.getOriginalText().equalsIgnoreCase("Thing")) {
-	//
-	// o.setType(new OWLTermReference());
-	// subject.setType(new OWLIndirectInstanceDefinition());
-	// //}
-	// }
-	// }
-	// return new ArrayList<KDOMReportMessage>();
-	// }
-	// }
-
-	// class ObjectPropertyDefintionChecker extends
-	// GeneralSubtreeHandler<TurtleMarkup> {
-	//		
-	// ObjectPropertyDefintionChecker(){
-	// this.registerConstraintModule(new
-	// SuccessorNotReusedConstraint<TurtleMarkup>());
-	// }
-	//
-	// @Override
-	// public Collection<KDOMReportMessage> create(KnowWEArticle article,
-	// Section<TurtleMarkup> s) {
-	// Section<TurtleSubject> subject = s.findSuccessor(TurtleSubject.class);
-	// Section<TurtleObject> o = s.findSuccessor(TurtleObject.class);
-	// Section<TurtlePredicate> p = s.findSuccessor(TurtlePredicate.class);
-	// if (o != null && p != null) {
-	// if (o.getOriginalText().equalsIgnoreCase("ObjectProperty")) {
-	// if (p.getOriginalText().startsWith("type")) {
-	// subject.setType(new OWLObjectPropertyDefinition());
-	// }
-	//
-	// }
-	// }
-	// return new ArrayList<KDOMReportMessage>();
-	// }
-	// }
-
-	// class DatatypePropertyDefintionChecker extends
-	// GeneralSubtreeHandler<TurtleMarkup> {
-	//
-	// DatatypePropertyDefintionChecker(){
-	// this.registerConstraintModule(new
-	// SuccessorNotReusedConstraint<TurtleMarkup>());
-	// }
-	//		
-	// @Override
-	// public Collection<KDOMReportMessage> create(KnowWEArticle article,
-	// Section<TurtleMarkup> s) {
-	// Section<TurtleSubject> subject = s.findSuccessor(TurtleSubject.class);
-	// Section<TurtleObject> o = s.findSuccessor(TurtleObject.class);
-	// Section<TurtlePredicate> p = s.findSuccessor(TurtlePredicate.class);
-	// if (o != null && p != null) {
-	// if (o.getOriginalText().equalsIgnoreCase("DatatypeProperty")) {
-	// if (p.getOriginalText().startsWith("type")) {
-	// subject.setType(new OWLDatatypePropertyDefinition());
-	// }
-	//
-	// }
-	// }
-	// return new ArrayList<KDOMReportMessage>();
-	// }
-	//		
-	// }
 
 }

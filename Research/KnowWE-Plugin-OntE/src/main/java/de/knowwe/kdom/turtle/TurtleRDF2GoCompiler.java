@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.ontoware.rdf2go.model.Statement;
+import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.we.core.KnowWEEnvironment;
@@ -31,9 +32,9 @@ public class TurtleRDF2GoCompiler extends RDF2GoSubtreeHandler<TurtleMarkup> {
 		}
 
 		List<Section<RDFResourceType>> found = new ArrayList<Section<RDFResourceType>>();
-		URI subURI = null;
-		URI predURI = null;
-		URI objURI = null;
+		Node subURI = null;
+		Node predURI = null;
+		Node objURI = null;
 
 		Sections.findSuccessorsOfType(s, RDFResourceType.class, found);
 
@@ -42,9 +43,9 @@ public class TurtleRDF2GoCompiler extends RDF2GoSubtreeHandler<TurtleMarkup> {
 			Section<RDFResourceType> predicate = found.get(1);
 			Section<RDFResourceType> object = found.get(2);
 
-			subURI = subject.get().getURI(subject);
-			predURI = predicate.get().getURI(predicate);
-			objURI = object.get().getURI(object);
+			subURI = subject.get().getNode(subject);
+			predURI = predicate.get().getNode(predicate);
+			objURI = object.get().getNode(object);
 		}
 //		else if (found.size() == 2) {
 //			Section<RDFResourceType> first = found.get(0);
@@ -79,7 +80,8 @@ public class TurtleRDF2GoCompiler extends RDF2GoSubtreeHandler<TurtleMarkup> {
 		}
 		
 		List<Statement> statements = new ArrayList<Statement>();
-		Statement st = Rdf2GoCore.getInstance().createStatement(subURI, predURI, objURI);
+		Statement st = Rdf2GoCore.getInstance().createStatement(subURI.asResource(),
+				predURI.asURI(), objURI);
 		statements.add(st);
 		Rdf2GoCore.getInstance().addStatements(statements, s);
 

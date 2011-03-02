@@ -70,8 +70,8 @@ public class SubClassingDashTreeElement extends DashTreeElement implements
 					Section<? extends OWLTermReference> childElement = Sections
 							.findChildOfType(element, OWLTermReference
 									.class);
-					URI localURI = childElement.get().getURI(childElement);
-					URI fatherURI = fatherElement.get().getURI(fatherElement);
+					URI localURI = childElement.get().getNode(childElement);
+					URI fatherURI = fatherElement.get().getNode(fatherElement);
 					if (localURI == null || fatherURI == null) {
 						return Arrays.asList((KDOMReportMessage) new NoSuchObjectError(
 								element.getOriginalText()));

@@ -40,7 +40,7 @@ public class OWLTermReference extends GlobalTermReference<URIObject> implements 
 	}
 
 	@Override
-	public URI getURI(Section<? extends RDFResourceType> s) {
+	public URI getNode(Section<? extends RDFResourceType> s) {
 		if (s.get() instanceof TermReference) {
 			TerminologyHandler terminologyHandler = KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
 			Section<? extends TermDefinition> definingSection = terminologyHandler.getTermDefiningSection(

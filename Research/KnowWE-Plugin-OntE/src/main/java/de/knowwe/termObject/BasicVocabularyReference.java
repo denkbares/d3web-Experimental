@@ -18,7 +18,7 @@ public class BasicVocabularyReference extends AbstractType implements RDFResourc
 
 
 	@Override
-	public URI getURI(Section<? extends RDFResourceType> s) {
+	public URI getNode(Section<? extends RDFResourceType> s) {
 		if(s.get() instanceof BasicVocabularyReference) {
 			return URIUtil.getURI((Section<? extends BasicVocabularyReference>)s);
 		}
