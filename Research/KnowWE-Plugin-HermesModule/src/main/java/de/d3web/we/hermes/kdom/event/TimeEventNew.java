@@ -31,7 +31,7 @@ import de.d3web.we.kdom.renderer.EditSectionRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.message.InvalidNumberError;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.d3web.we.kdom.sectionFinder.ISectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotation;
@@ -126,7 +126,7 @@ public class TimeEventNew extends AbstractType {
 
 			// SectionFinder for Title
 			ConstraintSectionFinder cf = new ConstraintSectionFinder(
-					new ISectionFinder() {
+					new SectionFinder() {
 
 						@Override
 						public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
@@ -161,7 +161,7 @@ public class TimeEventNew extends AbstractType {
 		public DateType() {
 			this.setCustomRenderer(new TimeEventDateRenderer());
 			ConstraintSectionFinder cf = new ConstraintSectionFinder(
-					new ISectionFinder() {
+					new SectionFinder() {
 
 						@Override
 						public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
@@ -218,7 +218,7 @@ public class TimeEventNew extends AbstractType {
 
 			// SectionFinder taking the last number in brackets
 			ConstraintSectionFinder cf = new ConstraintSectionFinder(
-					new ISectionFinder() {
+					new SectionFinder() {
 
 						@Override
 						public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {

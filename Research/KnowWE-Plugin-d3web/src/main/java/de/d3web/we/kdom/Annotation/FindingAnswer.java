@@ -29,12 +29,12 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.d3web.we.kdom.sectionFinder.ISectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
 public class FindingAnswer extends AbstractType {
 
-	public class AnnotationKnowledgeSliceObjectAnswerSectionFinder implements ISectionFinder {
+	public class AnnotationKnowledgeSliceObjectAnswerSectionFinder implements SectionFinder {
 
 		private final AllTextFinderTrimmed textFinder = new AllTextFinderTrimmed();
 

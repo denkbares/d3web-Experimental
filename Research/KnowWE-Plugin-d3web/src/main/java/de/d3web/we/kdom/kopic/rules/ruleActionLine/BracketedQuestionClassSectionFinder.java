@@ -22,8 +22,8 @@ package de.d3web.we.kdom.kopic.rules.ruleActionLine;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
@@ -33,10 +33,10 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
  * 
  * @author Johannes Dienst
  */
-public class BracketedQuestionClassSectionFinder extends SectionFinder {
+public class BracketedQuestionClassSectionFinder implements SectionFinder {
 
 	@Override
-	public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
+	public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 
 		// TODO can there be Brackets inside Brackets
 		if (text.contains("[") && text.contains("]")) {

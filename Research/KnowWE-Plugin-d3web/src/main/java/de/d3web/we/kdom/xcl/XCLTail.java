@@ -26,8 +26,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
@@ -44,10 +44,10 @@ public class XCLTail extends AbstractType {
 					",?" + // optional comma
 					"\\s*"); // spaces
 
-	public class XCLTailSectionFinder extends SectionFinder {
+	public class XCLTailSectionFinder implements SectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 			List<SectionFinderResult> matches = new ArrayList<SectionFinderResult>(1);
 
 			int end = text.lastIndexOf('}');
@@ -61,22 +61,22 @@ public class XCLTail extends AbstractType {
 
 	}
 
-	public static double getSuggestedThreshold(Section section) {
+	public static double getSuggestedThreshold(Section<?> section) {
 		return getValue(section, "suggestedThreshold");
 
 	}
 
-	public static double getEstablisehdThreshold(Section section) {
+	public static double getEstablisehdThreshold(Section<?> section) {
 		return getValue(section, "establishedThreshold");
 
 	}
 
-	public static double getMinSupport(Section section) {
+	public static double getMinSupport(Section<?> section) {
 		return getValue(section, "minSupport");
 
 	}
 
-	private static double getValue(Section section, String param) {
+	private static double getValue(Section<?> section, String param) {
 		if (!(section.get() instanceof XCLTail)) return -1;
 		else {
 			Matcher matcher = p.matcher(section.getOriginalText());

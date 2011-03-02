@@ -26,8 +26,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
@@ -40,11 +40,11 @@ public class BulletCommentType extends AbstractType {
 		this.setCustomRenderer(StyleRenderer.COMMENT);
 	}
 
-	class BulletCommentFinder extends SectionFinder {
+	class BulletCommentFinder implements SectionFinder {
 
 		@Override
 		public List<SectionFinderResult> lookForSections(String text,
-				Section father, Type type) {
+				Section<?> father, Type type) {
 			ArrayList<SectionFinderResult> result = new ArrayList<SectionFinderResult>();
 			;
 			if (text.contains("//")) {

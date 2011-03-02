@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.core.CommentLineType;
@@ -43,10 +43,10 @@ public class XCLBody extends AbstractType {
 		this.sectionFinder = new XCLBodySectionFinder();
 	}
 
-	public class XCLBodySectionFinder extends SectionFinder {
+	public class XCLBodySectionFinder implements SectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 			List<SectionFinderResult> matches = new ArrayList<SectionFinderResult>(1);
 
 			if (text.indexOf('{') >= 0) {

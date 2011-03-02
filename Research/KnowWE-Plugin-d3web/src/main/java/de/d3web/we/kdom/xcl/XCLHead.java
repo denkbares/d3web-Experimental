@@ -39,8 +39,8 @@ import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.basic.LineBreak;
 import de.d3web.we.kdom.contexts.ContextManager;
 import de.d3web.we.kdom.contexts.DefaultSubjectContext;
@@ -75,7 +75,7 @@ public class XCLHead extends AbstractType {
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<XCLHead> s) {
 
-			Section father = s.getFather();
+			Section<?> father = s.getFather();
 
 			if (!father.get().getClass().equals(XCList.class)) {
 				Logging.getInstance().log(Level.WARNING, "Expected different fathertype: XCList");
@@ -99,7 +99,7 @@ public class XCLHead extends AbstractType {
 
 	}
 
-	public class XCLHeadSectionFinder extends SectionFinder {
+	public class XCLHeadSectionFinder implements SectionFinder {
 
 		private final Pattern pattern;
 
@@ -108,7 +108,7 @@ public class XCLHead extends AbstractType {
 		}
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 			if (text.length() == 0) return null;
 
 			Matcher matcher = pattern.matcher(text);
@@ -134,7 +134,7 @@ public class XCLHead extends AbstractType {
 			DefaultSubjectContext sol = (DefaultSubjectContext) ContextManager.getInstance()
 					.getContext(section, DefaultSubjectContext.CID);
 
-			Section father = section.getFather();
+			Section<?> father = section.getFather();
 			String string = section.getOriginalText().trim();
 
 			if (string.startsWith("\"")) {

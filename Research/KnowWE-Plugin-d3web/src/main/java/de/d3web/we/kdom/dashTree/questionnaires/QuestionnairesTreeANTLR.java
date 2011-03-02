@@ -52,13 +52,13 @@ public class QuestionnairesTreeANTLR extends de.d3web.we.kdom.AbstractType {
 		this.setCustomRenderer(new DefaultLineNumberDeligateRenderer());
 	}
 
-	public class QuestionnairesKDOMANTLRSectionFinder extends SectionFinder {
+	public class QuestionnairesKDOMANTLRSectionFinder implements SectionFinder {
 
 		private DashTreeKDOMBuilder builder;
 		private DashTree parser;
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 			ReaderInputStream input = new ReaderInputStream(new StringReader(text));
 			ANTLRInputStream istream = null;
 			try {

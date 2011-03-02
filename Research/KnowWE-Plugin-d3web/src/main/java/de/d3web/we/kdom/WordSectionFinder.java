@@ -3,10 +3,10 @@ package de.d3web.we.kdom;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.d3web.we.kdom.sectionFinder.ISectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
-public class WordSectionFinder implements ISectionFinder {
+public class WordSectionFinder implements SectionFinder {
 
 	@Override
 	public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {

@@ -26,8 +26,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.kopic.renderer.AnnotationInlineAnswerRenderer;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
@@ -48,13 +48,13 @@ public class Annotation extends AbstractType {
 		this.setCustomRenderer(new AnnotationInlineAnswerRenderer());
 	}
 
-	public class AnnotationSectionFinder extends SectionFinder {
+	public class AnnotationSectionFinder implements SectionFinder {
 
-		private String PATTERN = ANNOTATIONBEGIN + "[\\w\\W]*?" + ANNOTATIONEND;
+		private final String PATTERN = ANNOTATIONBEGIN + "[\\w\\W]*?" + ANNOTATIONEND;
 
 		@Override
 		public List<SectionFinderResult> lookForSections(String text,
-				Section father, Type type) {
+				Section<?> father, Type type) {
 			ArrayList<SectionFinderResult> result = new ArrayList<SectionFinderResult>();
 			Pattern p = Pattern.compile(PATTERN);
 			Matcher m = p.matcher(text);

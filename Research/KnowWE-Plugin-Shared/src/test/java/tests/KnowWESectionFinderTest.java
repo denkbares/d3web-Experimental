@@ -25,7 +25,7 @@ import java.util.List;
 import junit.framework.TestCase;
 import de.d3web.we.kdom.basic.LineBreak;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
-import de.d3web.we.kdom.sectionFinder.ISectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.LineSectionFinder;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
@@ -82,7 +82,7 @@ public class KnowWESectionFinderTest extends TestCase {
 	public void testAnnotationPropertyFinder() {
 		String test = "blablub {{the currently measured mileage"
 					+ " <=> swrc:asks:: Real mileage  /100km}}bla blub";
-		ISectionFinder f =
+		SectionFinder f =
 					new SemanticAnnotationProperty().getSectioFinder();
 		List<SectionFinderResult> results = f.lookForSections(test, null, null);
 
@@ -109,7 +109,7 @@ public class KnowWESectionFinderTest extends TestCase {
 		String text = " There goes the cow\r\n"
 					+ " and there it goes not"
 					+ "perhaps it dont want to go \r\n";
-		ISectionFinder f = new LineBreak().getSectioFinder();
+		SectionFinder f = new LineBreak().getSectioFinder();
 		List<SectionFinderResult> results = f.lookForSections(text, null, null);
 
 		assertEquals(WRONG_FIRST_START, 19, results.get(0).getStart());
@@ -123,7 +123,7 @@ public class KnowWESectionFinderTest extends TestCase {
 		String text = " There goes the cow\r\n"
 				+ " and there it goes not"
 				+ "perhaps it dont want to go \r\n";
-		ISectionFinder f = LineSectionFinder.getInstance();
+		SectionFinder f = LineSectionFinder.getInstance();
 		List<SectionFinderResult> results = f.lookForSections(text, null, null);
 
 		assertEquals(WRONG_FIRST_START, 0, results.get(0).getStart());
@@ -204,7 +204,7 @@ public class KnowWESectionFinderTest extends TestCase {
 		String text = "|                        | Apple "
 					+ "| sweetness              |   +   ";
 
-		ISectionFinder f = new TableCell().getSectioFinder();
+		SectionFinder f = new TableCell().getSectioFinder();
 		List<SectionFinderResult> results = f.lookForSections(text, null, null);
 
 		assertEquals(WRONG_FIRST_START, 0, results.get(0).getStart());
@@ -222,7 +222,7 @@ public class KnowWESectionFinderTest extends TestCase {
 
 	public void testTableCellStartFinder() {
 		String text = "| Apple ";
-		ISectionFinder f = new TableCellStart().getSectioFinder();
+		SectionFinder f = new TableCellStart().getSectioFinder();
 
 		List<SectionFinderResult> results = f.lookForSections(text, null, null);
 		assertEquals(WRONG_FIRST_START, 0, results.get(0).getStart());
@@ -231,7 +231,7 @@ public class KnowWESectionFinderTest extends TestCase {
 
 	public void testTableHeadStartFinder() {
 		String text = "|| Apple ";
-		ISectionFinder f = new TableHeadStart().getSectioFinder();
+		SectionFinder f = new TableHeadStart().getSectioFinder();
 		List<SectionFinderResult> results = f.lookForSections(text, null, null);
 		assertEquals(WRONG_FIRST_START, 0, results.get(0).getStart());
 		assertEquals(WRONG_FIRST_END, 2, results.get(0).getEnd());
@@ -240,7 +240,7 @@ public class KnowWESectionFinderTest extends TestCase {
 	public void testTableLineSectionFinder() {
 		String text = "|                        | Apple \r \n"
 					+ "| sweetness              |   +   ";
-		ISectionFinder f = new TableLine().getSectioFinder();
+		SectionFinder f = new TableLine().getSectioFinder();
 
 		List<SectionFinderResult> results = f.lookForSections(text, null, null);
 

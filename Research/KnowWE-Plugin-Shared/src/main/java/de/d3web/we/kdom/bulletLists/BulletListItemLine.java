@@ -26,8 +26,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.basic.LineBreak;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
@@ -44,12 +44,11 @@ public class BulletListItemLine extends AbstractType {
 
 	}
 
-	class BulletListItemLineFinder extends SectionFinder {
+	class BulletListItemLineFinder implements SectionFinder {
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public List<SectionFinderResult> lookForSections(String text,
-				Section father, Type type) {
+				Section<?> father, Type type) {
 
 			String lineRegex = "\\r?\\n";
 			Pattern linePattern = Pattern.compile(lineRegex);

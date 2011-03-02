@@ -44,8 +44,8 @@ import de.d3web.we.d3webModule.D3WebOWLVokab;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.ExpandedSectionFinderResult;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.basic.RoundBracedType;
 import de.d3web.we.kdom.condition.old.Disjunct;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
@@ -89,7 +89,7 @@ public class ComplexFinding extends AbstractType {
 								s.getTitle() + ".." + s.getID()));
 				io.addLiteral(complexfinding);
 				List<Section<? extends Type>> children = s.getChildren();
-				for (Section current : children) {
+				for (Section<?> current : children) {
 					if (current.get() instanceof Disjunct) {
 						IntermediateOwlObject iohandler = (IntermediateOwlObject) KnowWEUtils.getStoredObject(
 								article, current, OwlHelper.IOO);
@@ -115,10 +115,10 @@ public class ComplexFinding extends AbstractType {
 
 	}
 
-	public class ComplexFindingANTLRSectionFinder extends SectionFinder {
+	public class ComplexFindingANTLRSectionFinder implements SectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 			InputStream stream = new ByteArrayInputStream(text.getBytes());
 			ANTLRInputStream input = null;
 			try {

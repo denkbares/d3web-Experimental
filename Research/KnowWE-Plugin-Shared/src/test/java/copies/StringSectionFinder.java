@@ -23,8 +23,8 @@ package copies;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
@@ -34,9 +34,9 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
  * @author Johannes Dienst
  * 
  */
-public class StringSectionFinder extends SectionFinder {
+public class StringSectionFinder implements SectionFinder {
 
-	private String string;
+	private final String string;
 	private boolean last = false;
 
 	public StringSectionFinder(String s) {
@@ -49,7 +49,7 @@ public class StringSectionFinder extends SectionFinder {
 	}
 
 	@Override
-	public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
+	public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 		int index = text.indexOf(string);
 		if (last) index = text.lastIndexOf(string);
 

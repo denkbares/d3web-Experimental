@@ -23,7 +23,7 @@ import java.util.List;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.sectionFinder.ISectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.table.TableCellContent;
 import de.d3web.we.kdom.table.TableLine;
@@ -43,7 +43,7 @@ public class HeaderCellContent extends TableCellContent {
 		childrenTypes.add(new UnchangedType());
 
 		QuestionReference qref = new QuestionReference();
-		qref.setSectionFinder(new ISectionFinder() {
+		qref.setSectionFinder(new SectionFinder() {
 
 			@Override
 			public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {

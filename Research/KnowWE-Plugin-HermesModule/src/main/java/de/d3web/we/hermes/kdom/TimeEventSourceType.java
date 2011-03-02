@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
@@ -36,11 +36,10 @@ public class TimeEventSourceType extends AbstractType {
 		sectionFinder = new TimeEventSourceSectionFinder();
 	}
 
-	public class TimeEventSourceSectionFinder extends SectionFinder {
+	public class TimeEventSourceSectionFinder implements SectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text,
-				Section father, Type type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 
 			String[] lines = text.split("\\r\\n");
 			List<SectionFinderResult> list = new ArrayList<SectionFinderResult>();

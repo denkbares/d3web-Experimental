@@ -24,7 +24,7 @@ import java.util.List;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.sectionFinder.ISectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.table.TableCellContent;
 import de.d3web.we.kdom.table.TableUtils;
@@ -42,7 +42,7 @@ public class AttributeTableTempType extends AbstractType {
 		sectionFinder = new AttributeTableTempTypeSectionFinder();
 	}
 
-	public class AttributeTableTempTypeSectionFinder implements ISectionFinder {
+	public class AttributeTableTempTypeSectionFinder implements SectionFinder {
 
 		@SuppressWarnings("unchecked")
 		@Override

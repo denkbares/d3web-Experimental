@@ -51,13 +51,13 @@ public class QuestionTreeANTLR extends AbstractType {
 		this.setCustomRenderer(new DefaultLineNumberDeligateRenderer());
 	}
 
-	public class QuestionTreeKDOMANTLRSectionFinder extends SectionFinder {
+	public class QuestionTreeKDOMANTLRSectionFinder implements SectionFinder {
 
 		private QuestionLineKDOMBuilder builder;
 		private DecisionTree parser;
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 			ReaderInputStream input = new ReaderInputStream(new StringReader(text));
 			ANTLRInputStream istream = null;
 			try {

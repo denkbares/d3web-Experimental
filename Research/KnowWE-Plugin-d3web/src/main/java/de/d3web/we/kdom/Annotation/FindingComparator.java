@@ -25,8 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
@@ -34,7 +34,7 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
 public class FindingComparator extends AbstractType {
 
-	private HashMap<String, String> operatorstore;
+	private final HashMap<String, String> operatorstore;
 
 	public FindingComparator() {
 		operatorstore = new HashMap<String, String>();
@@ -48,11 +48,10 @@ public class FindingComparator extends AbstractType {
 	// return new XCLComparatorEditorRenderer();
 	// }
 
-	public class AnnotationKnowledgeSliceObjectComparatorSectionFinder extends
-			SectionFinder {
+	public class AnnotationKnowledgeSliceObjectComparatorSectionFinder implements SectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 			int index = -1;
 			String foundOperator = "";
 			for (String operator : operators) {

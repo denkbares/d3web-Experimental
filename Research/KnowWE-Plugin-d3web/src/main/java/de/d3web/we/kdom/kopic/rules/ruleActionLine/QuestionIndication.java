@@ -32,7 +32,7 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.sectionFinder.ISectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.object.QuestionnaireReference;
 
@@ -50,7 +50,7 @@ public class QuestionIndication extends D3webRuleAction<QuestionIndication> {
 		this.childrenTypes.add(qC);
 	}
 
-	private class QuestionIndicationSectionFinder implements ISectionFinder {
+	private class QuestionIndicationSectionFinder implements SectionFinder {
 
 		@Override
 		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
@@ -78,7 +78,7 @@ public class QuestionIndication extends D3webRuleAction<QuestionIndication> {
 
 	}
 
-	private class SeperatedQuestionClassSectionFinder implements ISectionFinder {
+	private class SeperatedQuestionClassSectionFinder implements SectionFinder {
 
 		@Override
 		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {

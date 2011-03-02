@@ -33,7 +33,7 @@ import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.condition.AnswerReferenceImpl;
 import de.d3web.we.kdom.sectionFinder.AllBeforeTypeSectionFinder;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.d3web.we.kdom.sectionFinder.ISectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.object.AnswerReference;
 import de.d3web.we.object.QuestionReference;
@@ -70,7 +70,7 @@ public class SetQuestionValue extends D3webRuleAction<SetQuestionValue> {
 	/**
 	 * This works because it is no DiagnosisRuleAction.
 	 */
-	private class SetQuestionValueSectionFinder implements ISectionFinder {
+	private class SetQuestionValueSectionFinder implements SectionFinder {
 
 		@Override
 		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
@@ -86,7 +86,7 @@ public class SetQuestionValue extends D3webRuleAction<SetQuestionValue> {
 		}
 	}
 
-	public class WordSectionFinder implements ISectionFinder {
+	public class WordSectionFinder implements SectionFinder {
 
 		@Override
 		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {

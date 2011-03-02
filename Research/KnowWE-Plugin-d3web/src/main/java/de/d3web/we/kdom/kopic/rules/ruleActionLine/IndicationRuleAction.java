@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.WordSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
@@ -51,10 +51,10 @@ public class IndicationRuleAction extends AbstractType {
 	/**
 	 * Searches for Keywords: INSTANT, NOT, ;, HIDE. Also possible: No = or +=
 	 */
-	private class IndicationRuleActionSectionFinder extends SectionFinder {
+	private class IndicationRuleActionSectionFinder implements SectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 
 			String[] parts = text.split(" ");
 			for (String s : parts) {

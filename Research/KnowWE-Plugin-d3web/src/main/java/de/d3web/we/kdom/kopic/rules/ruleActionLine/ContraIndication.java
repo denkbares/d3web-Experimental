@@ -23,11 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.condition.antlr.NOT;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
+import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
 /**
@@ -45,10 +45,10 @@ public class ContraIndication extends AbstractType {
 		this.childrenTypes.add(new SuppressedQuestion());
 	}
 
-	private class ContraIndicationSectionFinder extends SectionFinder {
+	private class ContraIndicationSectionFinder implements SectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 			if (text.contains("NOT") || text.contains("NICHT")) {
 
 				int start = 0;

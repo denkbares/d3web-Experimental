@@ -48,10 +48,10 @@ public class AddQuestionValue extends AbstractType {
 		this.childrenTypes.add(aA);
 	}
 
-	private class AddQuestionValueSectionFinder extends SectionFinder {
+	private class AddQuestionValueSectionFinder implements SectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 
 			if (text.contains("+=")) {
 
@@ -75,18 +75,19 @@ public class AddQuestionValue extends AbstractType {
 		}
 	}
 
-	private class AddingValueSectionFinder extends SectionFinder {
-
-		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
-
-			if (text.contains("(") && text.contains(")")) {
-				List<SectionFinderResult> result = new ArrayList<SectionFinderResult>();
-				result.add(new SectionFinderResult(text.indexOf("(") + 1,
-									text.lastIndexOf(")")));
-				return result;
-			}
-			return null;
-		}
-	}
+	// private class AddingValueSectionFinder implements ISectionFinder {
+	//
+	// @Override
+	// public List<SectionFinderResult> lookForSections(String text, Section<?>
+	// father, Type type) {
+	//
+	// if (text.contains("(") && text.contains(")")) {
+	// List<SectionFinderResult> result = new ArrayList<SectionFinderResult>();
+	// result.add(new SectionFinderResult(text.indexOf("(") + 1,
+	// text.lastIndexOf(")")));
+	// return result;
+	// }
+	// return null;
+	// }
+	// }
 }

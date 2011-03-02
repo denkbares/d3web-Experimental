@@ -48,7 +48,7 @@ import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SimpleMessageError;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.d3web.we.kdom.sectionFinder.ISectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.utils.KnowWEUtils;
 
@@ -140,7 +140,7 @@ public class Finding extends AbstractType {
 
 	}
 
-	public class FindingSectionFinder implements ISectionFinder {
+	public class FindingSectionFinder implements SectionFinder {
 
 		private final AllTextFinderTrimmed textFinder = new AllTextFinderTrimmed();
 

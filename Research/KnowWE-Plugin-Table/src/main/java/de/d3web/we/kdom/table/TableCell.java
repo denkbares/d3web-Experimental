@@ -31,7 +31,7 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.basic.LineBreak;
 import de.d3web.we.kdom.rendering.NothingRenderer;
-import de.d3web.we.kdom.sectionFinder.ISectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
 /**
@@ -79,9 +79,9 @@ public class TableCell extends AbstractType {
 	 * special markup into account and handles it.
 	 * 
 	 * @author smark, Sebastian Furth
-	 * @see ISectionFinder
+	 * @see SectionFinder
 	 */
-	public class TableCellSectionFinder implements ISectionFinder {
+	public class TableCellSectionFinder implements SectionFinder {
 
 		public static final String CELLSTART = "\\|{1,2}\\s*";
 		public static final String JSPLINK = "(\\[.+\\|?.*\\])";

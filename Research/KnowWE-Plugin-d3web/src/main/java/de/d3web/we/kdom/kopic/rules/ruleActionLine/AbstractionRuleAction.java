@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
@@ -42,7 +42,7 @@ public class AbstractionRuleAction extends AbstractType {
 		this.childrenTypes.add(new AddQuestionValue());
 	}
 
-	private class AbstractionRuleActionSectionFinder extends SectionFinder {
+	private class AbstractionRuleActionSectionFinder implements SectionFinder {
 
 		@Override
 		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {

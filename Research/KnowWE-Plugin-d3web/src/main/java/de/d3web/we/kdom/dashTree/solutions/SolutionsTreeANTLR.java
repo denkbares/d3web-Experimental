@@ -37,8 +37,8 @@ import de.d3web.KnOfficeParser.util.DefaultD3webParserErrorHandler;
 import de.d3web.report.Message;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.ExpandedSectionFinderResult;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.dashTree.DashTreeKDOMBuilder;
 import de.d3web.we.kdom.kopic.renderer.DefaultLineNumberDeligateRenderer;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
@@ -54,13 +54,13 @@ public class SolutionsTreeANTLR extends AbstractType {
 		this.setCustomRenderer(new DefaultLineNumberDeligateRenderer());
 	}
 
-	public class SolutionsKDOMANTLRSectionFinder extends SectionFinder {
+	public class SolutionsKDOMANTLRSectionFinder implements SectionFinder {
 
 		private DashTreeKDOMBuilder builder;
 		private DashTree parser;
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 			ReaderInputStream input = new ReaderInputStream(new StringReader(text));
 			ANTLRInputStream istream = null;
 			try {

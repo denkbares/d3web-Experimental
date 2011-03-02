@@ -34,8 +34,8 @@ import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.kopic.rules.ruleActionLine.D3webRuleAction;
 import de.d3web.we.kdom.kopic.rules.ruleActionLine.Equals;
 import de.d3web.we.kdom.sectionFinder.AllBeforeTypeSectionFinder;
-import de.d3web.we.kdom.sectionFinder.OneOfStringEnumUnquotedFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
+import de.d3web.we.kdom.sectionFinder.OneOfStringEnumUnquotedFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.object.SolutionReference;
 import de.d3web.we.utils.D3webUtils;
@@ -84,7 +84,7 @@ public class SolutionValueAssignment extends D3webRuleAction<SolutionValueAssign
 	/**
 	 * Searches the pattern diagnosis = Score.
 	 */
-	private class DiagnosisRuleActionSectionFinder extends SectionFinder {
+	private class DiagnosisRuleActionSectionFinder implements SectionFinder {
 
 		private List<String> possibleScorePoints = new ArrayList<String>();
 
@@ -94,7 +94,7 @@ public class SolutionValueAssignment extends D3webRuleAction<SolutionValueAssign
 		}
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 			if (text.contains(" = ")) {
 
 				int start = 0;

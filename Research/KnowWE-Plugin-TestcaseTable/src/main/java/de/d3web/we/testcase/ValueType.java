@@ -27,7 +27,7 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.condition.Number;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
-import de.d3web.we.kdom.sectionFinder.ISectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.table.TableLine;
 
@@ -45,7 +45,7 @@ public class ValueType extends AbstractType {
 		CellAnswerRef aRef = new CellAnswerRef();
 		addChildType(aRef);
 
-		aRef.setSectionFinder(new ISectionFinder() {
+		aRef.setSectionFinder(new SectionFinder() {
 
 			@Override
 			public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {

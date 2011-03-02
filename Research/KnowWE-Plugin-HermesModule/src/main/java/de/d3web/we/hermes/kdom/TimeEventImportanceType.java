@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
@@ -37,11 +37,11 @@ public class TimeEventImportanceType extends AbstractType {
 	}
 
 	// includes "(", ")"
-	public class TimeEventTitleSectionFinder extends SectionFinder {
+	public class TimeEventTitleSectionFinder implements SectionFinder {
 
 		@Override
 		public List<SectionFinderResult> lookForSections(String text,
-				Section father, Type type) {
+				Section<?> father, Type type) {
 			List<SectionFinderResult> list = new ArrayList<SectionFinderResult>();
 			int firstLineBreak = text.indexOf("\n");
 			String firstLine = text;

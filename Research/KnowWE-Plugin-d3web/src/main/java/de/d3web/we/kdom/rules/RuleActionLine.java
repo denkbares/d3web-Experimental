@@ -26,8 +26,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.basic.LineBreak;
 import de.d3web.we.kdom.rule.Then;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -47,10 +47,10 @@ public class RuleActionLine extends AbstractType {
 		childrenTypes.add(action);
 	}
 
-	public class RuleActionLineSectionFinder extends SectionFinder {
+	public class RuleActionLineSectionFinder implements SectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 
 			String lineRegex = "(THEN|DANN).+";
 			Pattern linePattern = Pattern.compile(lineRegex, Pattern.DOTALL);
