@@ -75,49 +75,16 @@ import de.d3web.we.kdom.Section;
  * @created 29.11.2010
  */
 public class Rdf2GoCore implements EventListener {
-	private static final HashMap<String, URI> comparatorcache = new HashMap<String, URI>();
-	public static URI EQUAL;
-	public static URI EXPLAINS;
-	public static URI GREATER;
-	public static URI GREATEREQUAL;
-	public static URI INPUT;
-	public static URI SMALLER;
-	public static URI SMALLEREQUAL;
-	public static URI SOLUTION;
-	public static String IOO = "List<Statement>";
-	public static URI ANNOTATION;
-	public static URI HASTAG;
-	public static URI HASTOPIC;
-	public static URI HASTYPE;
-	public static URI NARYPROPERTY;
-	public static URI TEXTORIGIN;
-	public static URI HASNODE;
-	public static URI HASORIGIN;
-
-
-	// Base Namespace
 	public static final String basens = "http://ki.informatik.uni-wuerzburg.de/d3web/we/knowwe.owl#";
 	public static final String localns = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl()
 			+ "OwlDownload.jsp#";
 	
-	static {
-		SOLUTION = Rdf2GoCore.getInstance().createURI(basens, "Solution");
-		INPUT = Rdf2GoCore.getInstance().createURI(basens, "Input");
-		SMALLER = Rdf2GoCore.getInstance().createURI(basens, "Smaller");
-		GREATER = Rdf2GoCore.getInstance().createURI(basens, "Greater");
-		GREATEREQUAL = Rdf2GoCore.getInstance().createURI(basens, "GreaterEqual");
-		SMALLEREQUAL = Rdf2GoCore.getInstance().createURI(basens, "SmallerEqual");
-		EQUAL = Rdf2GoCore.getInstance().createURI(basens, "Equal");
-		EXPLAINS = Rdf2GoCore.getInstance().createURI(basens, "Explains");
-		ANNOTATION = Rdf2GoCore.getInstance().createURI(basens, "Annotation");
-		HASTAG = Rdf2GoCore.getInstance().createURI(basens, "hasTag");
-		HASTOPIC = Rdf2GoCore.getInstance().createURI(basens, "hasTopic");
-		HASTYPE = Rdf2GoCore.getInstance().createURI(basens, "hasType");
-		NARYPROPERTY = Rdf2GoCore.getInstance().createURI(basens, "NaryProperty");
-		TEXTORIGIN = Rdf2GoCore.getInstance().createURI(basens, "TextOrigin");
-		HASNODE = Rdf2GoCore.getInstance().createURI(basens, "hasNode");
-		HASORIGIN = Rdf2GoCore.getInstance().createURI(basens, "hasOrigin");
-	}
+	public static String IOO = "IntermediateOwlObject";
+	public static final URI HASTAG = Rdf2GoCore.getInstance().createURI(basens, "hasTag");
+	private static final URI HASTOPIC = Rdf2GoCore.getInstance().createURI(basens, "hasTopic");
+	private static final URI NARYPROPERTY = Rdf2GoCore.getInstance().createURI(basens, "NaryProperty");
+	private static final URI TEXTORIGIN = Rdf2GoCore.getInstance().createURI(basens, "TextOrigin");
+	private static final URI HASNODE = Rdf2GoCore.getInstance().createURI(basens, "hasNode");
 
 	private static final String JENA = "jena";
 	private static final String BIGOWLIM = "bigowlim";
@@ -139,7 +106,6 @@ public class Rdf2GoCore implements EventListener {
 	 * Initializes the model and its caches and namespaces
 	 */
 	public void init() {
-		initSTDURIs();
 		initModel();
 		statementcache = new HashMap<String, WeakHashMap<Section<? extends Type>, List<Statement>>>();
 		duplicateStatements = new HashMap<Statement, Integer>();
@@ -177,7 +143,7 @@ public class Rdf2GoCore implements EventListener {
 		String useReasoning = properties.getProperty("reasoning").toLowerCase();
 
 		if (useModel.equals(JENA)) {
-			RDF2Go.register(new org.ontoware.rdf2go.impl.jena26.ModelFactoryImpl());
+			 RDF2Go.register(new org.ontoware.rdf2go.impl.jena26.ModelFactoryImpl());
 		}
 		else if (useModel.equals(BIGOWLIM)) {
 			// registers the customized model factory (in memory, owl-max)
@@ -763,20 +729,6 @@ public class Rdf2GoCore implements EventListener {
 		addStatements(l, sec);
 	}
 	
-	//From OwlHelper:
-	/**
-	 * 
-	 * @param father
-	 * @param child
-	 * @throws RepositoryException
-	 */
-	public URI createChildOf(URI father, URI child) {
-		Statement s = createStatement(child,
-				RDF.type, father);
-		addStaticStatement(s);
-		return child;
-	}
-	
 	/**
 	 * @param cur
 	 */
@@ -798,19 +750,6 @@ public class Rdf2GoCore implements EventListener {
 		URI puri = createlocalURI(property);
 		URI ouri = createlocalURI(object);
 
-		return createProperty(suri, puri, ouri, source);
-	}
-	
-
-	/**
-	 * @param soluri
-	 * @param prop
-	 * @param stringa
-	 * @param id
-	 * @return
-	 */
-	public IntermediateOwlObject createProperty(URI suri, URI puri, URI ouri,
-			Section source) {
 		IntermediateOwlObject io = new IntermediateOwlObject();
 		BlankNode to = createBlankNode();
 		URI nary = createlocalURI(
@@ -829,83 +768,23 @@ public class Rdf2GoCore implements EventListener {
 		return io;
 	}
 	
-
-	/**
-	 * @param soluri
-	 * @param prop
-	 * @param stringa
-	 * @param id
-	 * @return
-	 */
-	public IntermediateOwlObject createAnnotationProperty(URI suri, URI puri,
-			URI ouri, Section source) {
-		IntermediateOwlObject io = new IntermediateOwlObject();
-		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
-		URI nary = Rdf2GoCore.getInstance().createlocalURI(
+	public List<Statement> createProperty(URI suri, URI puri, URI ouri,
+			Section source) {
+		ArrayList<Statement> io = new ArrayList<Statement>();
+		BlankNode to = createBlankNode();
+		URI nary = createlocalURI(
 					source.getTitle() + ".." + source.getID() + ".."
-							+ Rdf2GoCore.getLocalName(suri) + Rdf2GoCore.getLocalName(puri)
-							+ Rdf2GoCore.getLocalName(ouri));
-		io.addAllStatements(createTextOrigin(source, to));
-		io.addStatement(createStatement(to, HASTYPE, ANNOTATION));
-		io.addStatement(createStatement(nary, RDFS.isDefinedBy, to));
-		io.addStatement(createStatement(nary, RDF.type,
+							+ getLocalName(suri) + getLocalName(puri)
+							+ getLocalName(ouri));
+		io.addAll(createTextOrigin(source, to));
+		io.add(createStatement(nary, RDFS.isDefinedBy, to));
+		io.add(createStatement(nary, RDF.type,
 					RDF.Statement));
-		io.addStatement(createStatement(nary, RDF.predicate, puri));
-		io.addStatement(createStatement(nary, RDF.object, ouri));
-		io.addStatement(createStatement(nary, RDF.subject, suri));
+		io.add(createStatement(nary, RDF.predicate, puri));
+		io.add(createStatement(nary, RDF.object, ouri));
+		io.add(createStatement(nary, RDF.subject, suri));
 
-		io.addLiteral(nary);
 		return io;
-	}
-
-	public void attachTextOrigin(Resource attachto,
-			Section<AbstractType> source, IntermediateOwlObject io, URI type) {
-		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
-		io.addAllStatements(createTextOrigin(source, to, type));
-		io.addStatement(Rdf2GoCore.getInstance().createStatement(attachto,
-					RDFS.isDefinedBy, to));
-	}
-	
-	public void attachTextOrigin(Resource attachto,
-			Section<AbstractType> source, List<Statement> io, URI type) {
-		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
-		io.addAll(createTextOrigin(source, to, type));
-		io.add(Rdf2GoCore.getInstance().createStatement(attachto,
-					RDFS.isDefinedBy, to));
-	}
-
-	private List<Statement> createTextOrigin(
-			Section<AbstractType> source, Resource to, URI type) {
-		ArrayList<Statement> io = new ArrayList<Statement>();
-		io.add(createStatement(to, RDF.type, TEXTORIGIN));
-		io.add(createStatement(to, HASNODE,
-				createLiteral(source.getID())));
-		io.add(createStatement(to, HASTOPIC,
-				createlocalURI(source.getTitle())));
-		io.add(createStatement(to, HASTYPE, type));
-		return io;
-	}
-
-	public List<Statement> createStatementSrc(URI soluri, URI prop,
-			URI object, Section s, URI type) {
-		ArrayList<Statement> io = new ArrayList<Statement>();
-		BlankNode bnode = Rdf2GoCore.getInstance().createBlankNode();
-		io.add(createStatement(bnode, RDF.subject, soluri));
-		io.add(createStatement(bnode, RDF.predicate, prop));
-		io.add(createStatement(bnode, RDF.object, object));
-		io.add(createStatement(bnode, RDF.type, RDF.Statement));
-		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
-		io.addAll(createTextOrigin(s, to, type));
-		io.add(createStatement(bnode, RDFS.isDefinedBy, to));
-		return io;
-	}
-	
-	private static void initSTDURIs() {
-		comparatorcache.put("=", EQUAL);
-		comparatorcache.put("<", SMALLER);
-		comparatorcache.put(">", GREATER);
-		comparatorcache.put("<=", SMALLEREQUAL);
-		comparatorcache.put(">=", GREATEREQUAL);
 	}
 	
 	/**
@@ -915,15 +794,8 @@ public class Rdf2GoCore implements EventListener {
 	 * 
 	 * @param attachto The Resource that will be annotated bei the TO-Node
 	 * @param source The source section that should be used
-	 * @param io the IntermediateOwlObject that should collect the statements
+	 * @param io the ex-IntermediateOwlObject (now List<Statements> that should collect the statements
 	 */
-	public void attachTextOrigin(Resource attachto, Section source,
-			IntermediateOwlObject io) {
-		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
-		io.addAllStatements(createTextOrigin(source, to));
-		io.addStatement(createStatement(attachto,
-					RDFS.isDefinedBy, to));
-	}
 	public void attachTextOrigin(Resource attachto, Section source,
 			List<Statement> io) {
 		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
@@ -941,16 +813,5 @@ public class Rdf2GoCore implements EventListener {
 		io.add(createStatement(to, HASTOPIC,
 				createlocalURI(source.getTitle())));
 		return io;
-	}
-	
-	/**
-	 * returns a matching comparator URI to the string
-	 * 
-	 * @param comp
-	 * @return
-	 */
-	public URI getComparator(String comp) {
-		return comparatorcache.get(comp);
-	}
-	
+	}	
 }
