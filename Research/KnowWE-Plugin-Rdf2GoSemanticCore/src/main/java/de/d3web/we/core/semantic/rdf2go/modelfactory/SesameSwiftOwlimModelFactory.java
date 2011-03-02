@@ -3,7 +3,7 @@
  * 
  * Licensed under the Aduna BSD-style license.
  */
-package org.openrdf.rdf2go;
+package de.d3web.we.core.semantic.rdf2go.modelfactory;
 
 import java.io.File;
 import java.io.FileReader;
@@ -28,6 +28,7 @@ import org.openrdf.model.ValueFactory;
 import org.openrdf.model.impl.GraphImpl;
 import org.openrdf.model.util.GraphUtil;
 import org.openrdf.model.vocabulary.RDF;
+import org.openrdf.rdf2go.RepositoryModel;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
@@ -48,7 +49,7 @@ import org.openrdf.sail.memory.MemoryStore;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 
-public class RepositoryModelFactory extends AbstractModelFactory {
+public class SesameSwiftOwlimModelFactory extends AbstractModelFactory {
 
 	public Model createModel(Properties properties)
 			throws ModelRuntimeException {
@@ -69,76 +70,53 @@ public class RepositoryModelFactory extends AbstractModelFactory {
 			throws ModelRuntimeException {
 		// find out if we need reasoning
 		String reasoningProperty = properties == null ? null : properties.getProperty(REASONING);
-		boolean owlimReasoning = Reasoning.owl.toString().equalsIgnoreCase(reasoningProperty);
-		if (!owlimReasoning) {
-			owlimReasoning = Reasoning.rdfsAndOwl.toString().equalsIgnoreCase(reasoningProperty);
-		}
 
 		// create a Sail stack
 		Repository repository = null;
 
-		if (!owlimReasoning) {
-			Sail sail = new MemoryStore();
-
-			boolean rdfsReasoning = Reasoning.rdfs.toString().equalsIgnoreCase(reasoningProperty);
-
-			if (rdfsReasoning) {
-				sail = new ForwardChainingRDFSInferencer((MemoryStore) sail);
-			}
-			// create a Repository
-			repository = new SailRepository(sail);
-			try {
-				repository.initialize();
-			}
-			catch (RepositoryException e) {
-				throw new ModelRuntimeException(e);
-			}
-		}
-		else {
-			String path = KnowWEEnvironment.getInstance().getKnowWEExtensionPath();
-			String ontfile = path + File.separatorChar + "knowwe_base.owl";
-			String reppath = System.getProperty("java.io.tmpdir") + File.separatorChar
+		String path = KnowWEEnvironment.getInstance().getKnowWEExtensionPath();
+		String ontfile = path + File.separatorChar + "knowwe_base.owl";
+		String reppath = System.getProperty("java.io.tmpdir") + File.separatorChar
 					+ "repository" + (new Date()).toString().hashCode();
-			String config_file = path + File.separatorChar + "owlim.ttl";
-			File rfile = new File(reppath);
-			delete(rfile);
-			rfile.mkdir();
+		String config_file = path + File.separatorChar + "owlim.ttl";
+		File rfile = new File(reppath);
+		delete(rfile);
+		rfile.mkdir();
 
-			File file = new File(ontfile);
+		File file = new File(ontfile);
 
-			try {
-				Repository systemRepo = null;
-				RepositoryManager man = new LocalRepositoryManager(new File(reppath));
-				man.initialize();
-				systemRepo = man.getSystemRepository();
-				ValueFactory vf = systemRepo.getValueFactory();
-				Graph graph = new GraphImpl(vf);
+		try {
+			Repository systemRepo = null;
+			RepositoryManager man = new LocalRepositoryManager(new File(reppath));
+			man.initialize();
+			systemRepo = man.getSystemRepository();
+			ValueFactory vf = systemRepo.getValueFactory();
+			Graph graph = new GraphImpl(vf);
 
-				RDFParser rdfParser = Rio.createParser(RDFFormat.TURTLE, vf);
-				rdfParser.setRDFHandler(new StatementCollector(graph));
-				rdfParser.parse(new FileReader(config_file),
+			RDFParser rdfParser = Rio.createParser(RDFFormat.TURTLE, vf);
+			rdfParser.setRDFHandler(new StatementCollector(graph));
+			rdfParser.parse(new FileReader(config_file),
 						RepositoryConfigSchema.NAMESPACE);
 
-				Resource repositoryNode = GraphUtil.getUniqueSubject(graph,
+			Resource repositoryNode = GraphUtil.getUniqueSubject(graph,
 						RDF.TYPE, RepositoryConfigSchema.REPOSITORY);
-				RepositoryConfig repConfig = RepositoryConfig.create(graph,
+			RepositoryConfig repConfig = RepositoryConfig.create(graph,
 						repositoryNode);
 
-				repConfig.validate();
-				RepositoryConfigUtil.updateRepositoryConfigs(systemRepo, repConfig);
-				Literal _id = GraphUtil.getUniqueObjectLiteral(graph,
+			repConfig.validate();
+			RepositoryConfigUtil.updateRepositoryConfigs(systemRepo, repConfig);
+			Literal _id = GraphUtil.getUniqueObjectLiteral(graph,
 						repositoryNode, RepositoryConfigSchema.REPOSITORYID);
-				repository = man.getRepository(_id.getLabel());
-				RepositoryConnection repositoryConn = repository.getConnection();
-				repositoryConn.setAutoCommit(true);
-				BNode context = repositoryConn.getValueFactory().createBNode(
+			repository = man.getRepository(_id.getLabel());
+			RepositoryConnection repositoryConn = repository.getConnection();
+			repositoryConn.setAutoCommit(true);
+			BNode context = repositoryConn.getValueFactory().createBNode(
 						"rootontology");
-				repositoryConn.add(file, Rdf2GoCore.basens, RDFFormat.RDFXML, context);
-				repositoryConn.close();
-			}
-			catch (Exception ex) {
-				ex.printStackTrace();
-			}
+			repositoryConn.add(file, Rdf2GoCore.basens, RDFFormat.RDFXML, context);
+			repositoryConn.close();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
 		}
 
 		return repository;

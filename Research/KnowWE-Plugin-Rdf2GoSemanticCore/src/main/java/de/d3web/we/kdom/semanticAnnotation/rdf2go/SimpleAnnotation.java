@@ -30,7 +30,6 @@ import java.util.Collection;
 import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.we.core.semantic.rdf2go.IntermediateOwlObject;
-import de.d3web.we.core.semantic.rdf2go.OwlHelper;
 import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.AbstractType;
@@ -78,7 +77,7 @@ public class SimpleAnnotation extends AbstractType {
 					io.setBadAttribute(ns + " is no valid namespace");
 				}
 				try {
-					anno = OwlHelper.createURI(ens, list[1]);
+					anno = Rdf2GoCore.getInstance().createURI(ens, list[1]);
 				}
 				catch (IllegalArgumentException e) {
 					io.setValidPropFlag(false);
@@ -86,12 +85,12 @@ public class SimpleAnnotation extends AbstractType {
 				}
 			}
 			else {
-				anno = OwlHelper.createlocalURI(annos);
+				anno = Rdf2GoCore.getInstance().createlocalURI(annos);
 			}
 			if (anno != null) {
 				io.addLiteral(anno);
 			}
-			KnowWEUtils.storeObject(article, s, OwlHelper.IOO, io);
+			KnowWEUtils.storeObject(article, s, Rdf2GoCore.getInstance().IOO, io);
 			return null;
 		}
 

@@ -32,7 +32,6 @@ import java.util.regex.Pattern;
 import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.we.core.semantic.rdf2go.IntermediateOwlObject;
-import de.d3web.we.core.semantic.rdf2go.OwlHelper;
 import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.AbstractType;
@@ -99,26 +98,26 @@ public class SemanticAnnotationProperty extends AbstractType {
 				String ns = Rdf2GoCore.getInstance().getNameSpaces().get(
 						prop.split(":")[0]);
 				if (ns == null || ns.length() == 0) {
-//					io.setBadAttribute("no namespace given");
-//					io.setValidPropFlag(false);
-					System.out.println();
+					io.setBadAttribute("no namespace given");
+					io.setValidPropFlag(false);
+//					System.out.println();
 				}
 				else if (ns.equals(prop.split(":")[0])) {
-//					io.setBadAttribute(ns);
-//					io.setValidPropFlag(false);
-					System.out.println();
+					io.setBadAttribute(ns);
+					io.setValidPropFlag(false);
+//					System.out.println();
 				}
 				else {
-					property = OwlHelper.createURI(ns, prop.split(":")[1]);
+					property = Rdf2GoCore.getInstance().createURI(ns, prop.split(":")[1]);
 				}
 			}
 			else {
-				property = OwlHelper.createlocalURI(prop);
+				property = Rdf2GoCore.getInstance().createlocalURI(prop);
 			}
-//			io.addLiteral(property);
-			List<URI> literals = new ArrayList<URI>();
-			literals.add(property);
-			KnowWEUtils.storeObject(article, s, OwlHelper.IOO, literals);
+			io.addLiteral(property);
+//			List<URI> literals = new ArrayList<URI>();
+//			literals.add(property);
+			KnowWEUtils.storeObject(article, s, Rdf2GoCore.getInstance().IOO, io);
 			return null;
 		}
 

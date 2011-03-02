@@ -34,7 +34,6 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.util.RDFTool;
 
 import de.d3web.we.core.semantic.rdf2go.IntermediateOwlObject;
-import de.d3web.we.core.semantic.rdf2go.OwlHelper;
 import de.d3web.we.core.semantic.rdf2go.PropertyManager;
 import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
@@ -88,7 +87,7 @@ public class SemanticAnnotationObject extends AbstractType {
 				if (cur.get().getClass().equals(
 						SemanticAnnotationProperty.class)) {
 					IntermediateOwlObject tempio = (IntermediateOwlObject) KnowWEUtils
-							.getStoredObject(article, cur, OwlHelper.IOO);
+							.getStoredObject(article, cur, Rdf2GoCore.getInstance().IOO);
 					prop = tempio.getLiterals().get(0);
 					erronousproperty = !tempio.getValidPropFlag();
 					if (erronousproperty) {
@@ -98,12 +97,12 @@ public class SemanticAnnotationObject extends AbstractType {
 				else if (cur.get().getClass().equals(
 						SemanticAnnotationSubject.class)) {
 					String subj = cur.getOriginalText().trim();
-					soluri = OwlHelper.createlocalURI(subj);
+					soluri = Rdf2GoCore.getInstance().createlocalURI(subj);
 				}
 				else if (cur.get().getClass().equals(
 						SimpleAnnotation.class)) {
 					IntermediateOwlObject tempio = (IntermediateOwlObject) KnowWEUtils
-							.getStoredObject(article, cur, OwlHelper.IOO);
+							.getStoredObject(article, cur, Rdf2GoCore.getInstance().IOO);
 					if (tempio.getValidPropFlag()) {
 						stringa = tempio.getLiterals().get(0);
 					}
@@ -135,40 +134,40 @@ public class SemanticAnnotationObject extends AbstractType {
 						.getInstance().getContext(s, DefaultSubjectContext.CID);
 				if (soluri == null) {
 					String soluriString = sol.getSubject();
-					soluri = OwlHelper.createlocalURI(soluriString);
+					soluri = Rdf2GoCore.getInstance().createlocalURI(soluriString);
 				}
 				Statement stmnt = null;
 				// try {
 				if (PropertyManager.getInstance().isRDFS(prop)) {
-					stmnt = OwlHelper.createStatement(soluri, prop,
+					stmnt = Rdf2GoCore.getInstance().createStatement(soluri, prop,
 								stringa);
 					io.addStatement(stmnt);
-					io.addAllStatements(OwlHelper.createStatementSrc(soluri,
+					io.addAllStatements(Rdf2GoCore.getInstance().createStatementSrc(soluri,
 								prop, stringa, s.getFather().getFather(),
-								OwlHelper.ANNOTATION));
+								Rdf2GoCore.getInstance().ANNOTATION));
 				}
 				else if (PropertyManager.getInstance().isRDF(prop)) {
-					stmnt = OwlHelper.createStatement(soluri, prop,
+					stmnt = Rdf2GoCore.getInstance().createStatement(soluri, prop,
 								stringa);
 					io.addStatement(stmnt);
-					io.addAllStatements(OwlHelper.createStatementSrc(soluri,
+					io.addAllStatements(Rdf2GoCore.getInstance().createStatementSrc(soluri,
 								prop, stringa, s.getFather().getFather(),
-								OwlHelper.ANNOTATION));
+								Rdf2GoCore.getInstance().ANNOTATION));
 				}
 				else if (PropertyManager.getInstance().isNary(prop)) {
-					IntermediateOwlObject tempio = OwlHelper
+					IntermediateOwlObject tempio = Rdf2GoCore.getInstance()
 								.createAnnotationProperty(soluri, prop,
 										stringa, s.getFather().getFather());
 					io.merge(tempio);
 
 				}
 				else {
-					stmnt = OwlHelper.createStatement(soluri, prop,
+					stmnt = Rdf2GoCore.getInstance().createStatement(soluri, prop,
 								stringa);
 					io.addStatement(stmnt);
-					io.addAllStatements(OwlHelper.createStatementSrc(soluri,
+					io.addAllStatements(Rdf2GoCore.getInstance().createStatementSrc(soluri,
 								prop, stringa, s.getFather().getFather(),
-								OwlHelper.ANNOTATION));
+								Rdf2GoCore.getInstance().ANNOTATION));
 				}
 
 				// }

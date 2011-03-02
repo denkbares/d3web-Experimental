@@ -52,7 +52,7 @@ public class DefaultURIContext extends StringContext {
 
 	public URI getSolutionURI() {
 		if (soluri == null) {
-			soluri = OwlHelper.createlocalURI(getSubject());
+			soluri = Rdf2GoCore.getInstance().createlocalURI(getSubject());
 		}
 		return soluri;
 	}

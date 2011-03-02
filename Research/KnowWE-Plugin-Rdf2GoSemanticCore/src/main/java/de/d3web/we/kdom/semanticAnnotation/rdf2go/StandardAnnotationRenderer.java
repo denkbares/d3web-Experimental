@@ -31,7 +31,6 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.util.RDFTool;
 
 import de.d3web.we.core.semantic.rdf2go.IntermediateOwlObject;
-import de.d3web.we.core.semantic.rdf2go.OwlHelper;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
@@ -89,7 +88,7 @@ public class StandardAnnotationRenderer extends ConditionalRenderer {
 				String solution = ((DefaultSubjectContext) context)
 						.getSubject();
 
-				URI solutionURI = OwlHelper.createlocalURI(
+				URI solutionURI = Rdf2GoCore.getInstance().createlocalURI(
 						solution);
 				try {
 					subject = URLDecoder.decode(RDFTool.getLabel(solutionURI), "UTF-8");
@@ -138,7 +137,7 @@ public class StandardAnnotationRenderer extends ConditionalRenderer {
 		}
 
 		IntermediateOwlObject tempio = (IntermediateOwlObject) KnowWEUtils
-				.getStoredObject(objectSection, OwlHelper.IOO);
+				.getStoredObject(objectSection, Rdf2GoCore.getInstance().IOO);
 
 		if (tempio == null) {
 			text = KnowWEUtils
@@ -157,7 +156,7 @@ public class StandardAnnotationRenderer extends ConditionalRenderer {
 		tempio = (IntermediateOwlObject) KnowWEUtils
 				.getStoredObject(Sections
 						.findSuccessor(sec, SemanticAnnotationProperty.class),
-						OwlHelper.IOO);
+						Rdf2GoCore.getInstance().IOO);
 		if (tempio != null && !tempio.getValidPropFlag()) {
 			text = KnowWEUtils
 					.maskHTML("<p class=\"box error\">invalid annotation attribute:"

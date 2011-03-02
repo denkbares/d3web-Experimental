@@ -39,15 +39,7 @@ public class DumpHandler extends AbstractHTMLTagHandler {
 		
 		Rdf2GoCore.getInstance().dumpModel();
 
-		if (Rdf2GoCore.USE_MODEL == Rdf2GoCore.SESAME) {
-			Rdf2GoCore.getInstance().dumpNamespaces();
-		}
-		//Rdf2GoCore.getInstance().dumpStatementcache();
-		//Rdf2GoCore.getInstance().dumpDuplicates();
-
-		return "dumped";
-//		return KnowWEUtils.maskHTML(Rdf2GoCore.getInstance().renderedSparqlSelect(
-//				"select ?Subject ?Predicate ?Object where { ?Subject ?Predicate ?Object }"));
+		return "";
 	}
 
 }

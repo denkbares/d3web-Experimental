@@ -67,7 +67,7 @@ public class PropertyManager {
 	}
 
 	public boolean isValid(String property) {
-		URI prop = Rdf2GoCore.getInstance().createLocalURI(
+		URI prop = Rdf2GoCore.getInstance().createlocalURI(
 				property);
 		return isValid(prop);
 	}

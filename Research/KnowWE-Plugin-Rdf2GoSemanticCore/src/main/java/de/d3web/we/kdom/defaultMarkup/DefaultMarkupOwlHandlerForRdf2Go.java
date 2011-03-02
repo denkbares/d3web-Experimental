@@ -34,7 +34,6 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
-import de.d3web.we.core.semantic.rdf2go.OwlHelper;
 import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -77,11 +76,11 @@ public class DefaultMarkupOwlHandlerForRdf2Go extends RDF2GoSubtreeHandler<Defau
 
 //		try {
 			// Access (or lazy build) parent concept
-			URI superConceptURI = OwlHelper.createBasensURI("DefaultMarkup");
+			URI superConceptURI = Rdf2GoCore.getInstance().createBasensURI("DefaultMarkup");
 
 			// create a new class for this markup
-			this.conceptURI = OwlHelper.createlocalURI(markupName);
-			io.add(OwlHelper.createStatement(
+			this.conceptURI = Rdf2GoCore.getInstance().createlocalURI(markupName);
+			io.add(Rdf2GoCore.getInstance().createStatement(
 					this.conceptURI,
 					RDFS.subClassOf,
 					superConceptURI));
@@ -89,7 +88,7 @@ public class DefaultMarkupOwlHandlerForRdf2Go extends RDF2GoSubtreeHandler<Defau
 			// create a new instance for the markup section
 			// TODO: create node with section-id instead of blank node
 			BlankNode bnode = Rdf2GoCore.getInstance().createBlankNode();
-			io.add(OwlHelper.createStatement(bnode, RDF.type, this.conceptURI));
+			io.add(Rdf2GoCore.getInstance().createStatement(bnode, RDF.type, this.conceptURI));
 
 			// add content block as literal "hasContent"
 			addStringLiteral(bnode,
@@ -129,9 +128,9 @@ public class DefaultMarkupOwlHandlerForRdf2Go extends RDF2GoSubtreeHandler<Defau
 
 	private static void addStringLiteral(BlankNode bnode, String name, String text, List<Statement> io) {
 		if (text == null) text = "";
-		Literal content = OwlHelper.createLiteral(text);
-		io.add(OwlHelper.createStatement(
-				bnode, OwlHelper.createlocalURI(name), content));
+		Literal content = Rdf2GoCore.getInstance().createLiteral(text);
+		io.add(Rdf2GoCore.getInstance().createStatement(
+				bnode, Rdf2GoCore.getInstance().createlocalURI(name), content));
 	}
 
 }
