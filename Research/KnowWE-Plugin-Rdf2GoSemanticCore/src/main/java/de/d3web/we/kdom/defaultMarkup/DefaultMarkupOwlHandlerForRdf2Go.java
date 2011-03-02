@@ -111,7 +111,7 @@ public class DefaultMarkupOwlHandlerForRdf2Go extends RDF2GoSubtreeHandler<Defau
 
 			// add hasLink
 			addStringLiteral(bnode,
-					"hasLink", KnowWEUtils.getLink(section),
+					"hasLink", KnowWEUtils.getWikiLink(section),
 					io);
 //		}
 //		catch (RepositoryException e) {
