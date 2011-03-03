@@ -29,9 +29,9 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -58,16 +58,15 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.util.RDFTool;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
-import org.openrdf.repository.RepositoryException;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.event.Event;
 import de.d3web.we.event.EventListener;
+import de.d3web.we.event.EventManager;
 import de.d3web.we.event.FullParseEvent;
-import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 
 /**
  * 
@@ -143,7 +142,7 @@ public class Rdf2GoCore implements EventListener {
 		String useReasoning = properties.getProperty("reasoning").toLowerCase();
 
 		if (useModel.equals(JENA)) {
-			 RDF2Go.register(new org.ontoware.rdf2go.impl.jena26.ModelFactoryImpl());
+			RDF2Go.register(new org.ontoware.rdf2go.impl.jena26.ModelFactoryImpl());
 		}
 		else if (useModel.equals(BIGOWLIM)) {
 			// registers the customized model factory (in memory, owl-max)
@@ -301,6 +300,16 @@ public class Rdf2GoCore implements EventListener {
 
 	}
 	
+	private void removeStatementsFromModel(List<Statement> list) {
+		EventManager.getInstance().fireEvent(new RemoveStatementsEvent(list));
+		model.removeAll(list.iterator());
+	}
+
+	private void addStatementsToModel(List<Statement> list) {
+		EventManager.getInstance().fireEvent(new InsertStatementsEvent(list));
+		model.addAll(list.iterator());
+	}
+
 	public URI createURI(String value) {
 		return model.createURI(expandNamespace(value));
 	}
@@ -445,7 +454,8 @@ public class Rdf2GoCore implements EventListener {
 				if (temp.isEmpty()) {
 					statementcache.remove(sec.getArticle().getTitle());
 				}
-				model.removeAll(removedStatements.iterator());
+				removeStatementsFromModel(removedStatements);
+				// model.removeAll(removedStatements.iterator());
 			}
 			else {
 				// Not necessary because of full-pasre-listener being active
@@ -504,7 +514,7 @@ public class Rdf2GoCore implements EventListener {
 
 		// Maybe remove duplicates before adding to store, if performance is
 		// better
-		addStaticStatements(allStatements, sec);
+		addStaticStatements(allStatements);
 	}
 
 	public void addStatements(IntermediateOwlObject io, Section<? extends Type> sec) {
@@ -518,14 +528,13 @@ public class Rdf2GoCore implements EventListener {
 	 * @param allStatements
 	 * @param sec
 	 */
-	public void addStaticStatements(List<Statement> allStatements, Section<? extends Type> sec) {
-		Iterator<Statement> i = allStatements.iterator();
-		model.addAll(i);
+	public void addStaticStatements(List<Statement> allStatements) {
+		addStatementsToModel(allStatements);
 
 	}
 
 	public void addStaticStatement(Statement statement) {
-		model.addStatement(statement);
+		addStatementsToModel(Collections.singletonList(statement));
 	}
 
 	/**
@@ -599,7 +608,7 @@ public class Rdf2GoCore implements EventListener {
 				allStatements.addAll(l);
 			}
 		}
-		model.removeAll(allStatements.iterator());
+		removeStatementsFromModel(allStatements);
 		
 		//clear statementcache and duplicateStatements
 		statementcache.clear();
