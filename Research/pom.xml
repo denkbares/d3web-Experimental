@@ -164,6 +164,7 @@
 		<module>KnowWE-MetaTool</module>
 		<module>KnowWE-Plugin-Drools</module>
 		<module>KnowWE-Plugin-OntE</module>
+		<module>d3web-Plugin-OWL</module>
 	</modules>
 	<repositories>
 		<repository>
