@@ -19,24 +19,106 @@
 /* +++ 010 LAYOUT of main ID blocks +++ */
 #wikibody {
 	margin:1em 2em; 
-	padding:0.25em;
+	padding:0;
+	width:1024px;
 }
 #header {
-	padding:0 0 0 20%;
 }
 #header .applicationlogo {
-	position:absolute;
-	left:2em; 
-	right:auto;
-	width:18%;
+	float:left;
+	width:190px;
+	margin:0 14px 0 0;
 	text-align:center;
 }
+#header .applicationlogo #logo {
+	display:block;
+	height:130px;
+	width:186px;
+	overflow:hidden;
+	background-color:#bae0e3;
+	border:2px solid #000;
+	font:42px/48px Verdana,Arial,Helvetica,sans-serif;
+	text-decoration:none;
+	color:#000;
+	padding:20px 0 0;
+	margin:0;
+}
+#header .applicationlogo a:hover {
+	background-position:0 0;
+}
+.infobox {
+	float:left;
+    border:2px solid #ADE0E3;
+    height:150px;
+    width:402px;
+    margin:0 10px 0 0;
+    padding:0 10px 0 10px;
+    overflow:hidden;
+}
+.infobox table {
+	height:150px;
+	margin:0 20px;
+	overflow:hidden;
+}
+.infobox .no_userpic {
+	background-image:url("images/no_pic.jpg");
+	width: 50px;
+	background-position: center;
+	background-repeat: no-repeat;	
+}
+.infobox .group_pic {
+	background-image: url("images/gruppe.jpg");
+	width: 141px;
+	background-position: center;
+	background-repeat: no-repeat;	
+}
+#header .companylogo { 
+	display:none; 
+}
+#header .userbox {
+	float:left;
+    border:2px solid #ADE0E3;
+    height:150px;
+    width:380px;
+    margin:0;
+}
+.userbox {
+	overflow:hidden;
+}
+.userbox * {
+	margin:0;
+	padding:0;	
+}
+.userbox table {
+	float:right;
+	height:120px;
+	margin:0 0 10px;
+}
+.userbox td {
+	padding:5px;
+}
+.userbox .no_userpic {
+	width:110px;
+	height:110px;
+}
+#header .pagename {
+	margin:10px 0 0 214px;
+}
+#header .searchbox {
+    position:absolute;
+    top:195px;
+    left:2em;
+    width:190px;
+    z-index:10;
+}
+#header .breadcrumbs {
+	margin:5px 0 5px 214px;
+}
 #footer {
-	padding: 0 0 0 20%;
+	padding:0 0 0 204px;
 	background-color: #eee;	
-	position: relative;
 	/* IE */
-	border: 1px solid #eee;
+	border:1px solid #eee;
 }
 #footer .footerlinks {
 	float: left;
@@ -64,33 +146,11 @@
 #footer .applicationlogo,
 #footer .companylogo,
 #footer .wikiversion,
-#footer .rssfeed,
-#header .companylogo { 
-	display:none; 
-}
-#header .userbox {
-    border: 2px solid #ADE0E3;
-    float: right;
-    height: 150px;
-    width: 400px;
-    margin: 0 0 0 20px;
-}
-#header .pagename {
-	float:left;
-}
-#header .searchbox {
-    clear: right;
-    float: left;
-    left: 50%;
-    margin: 40px 0 0 -95px;
-    position: relative;
-    width: 322px;
-    z-index: 10;
-}
-#header .breadcrumbs {
-	clear:both;
+#footer .rssfeed {
 }
 #favorites {
+	float:left;
+	width:190px;
 }
 #favorites .userbox {
 	border:1px solid #ddd;
@@ -104,27 +164,15 @@
 #footer .copyright { 
 }
 #content { 
-	margin: 0 0 20px;
-    position: relative;
-    top: 20px;
-    z-index: 0;
-}
-#col_fitter {
-	padding:0;
-	width:100%;
 	margin:0;
-}
-#col_fitter td {
-	vertical-align:top;
-}
-#col_fitter td:first-child {
-	width:18%;
-	background-color:#EEEEEE;
+    z-index:0;
+    background-image:url("images/content_bg.png");
+    background-repeat:repeat-y;
 }
 #pagecontainer {
-	background-color: #fff;
-	width:100%;
-	float: right;
+	float:left;
+	background-color:#FFFFFF;
+	width:834px;
 }
 /*#wikibody.fav-left*/ #page, #wikibody.fav-right #favorites {
 	float:right;
@@ -147,8 +195,8 @@
 	right:2em; 
 }
 #page { 
-	width:97%;
-	background-color: #fff;
+	width:820px;
+	background-color:#FFFFFF;
 }
 #wikibody.fav-slide #page {
 	width:100%;
@@ -220,8 +268,8 @@ hr, .hr, .clearbox {
 /* +++ 210 Page titles, headings, and paragraphs +++ */
 .titlebox {
 	color:#555;
-	padding:0.25em 1em;
-	margin: 10px 0 0;
+	padding:0;
+	margin:0;
 }
 .pagename {
 	font-size:175%;
@@ -415,24 +463,6 @@ img.outlink {
 } 
 img.attlink {
 } 
-.applicationlogo #logo {
-	display:block;
-	height:130px;
-	width:200px;
-	overflow:hidden;
-	background-color:#bae0e3;
-	border:2px solid #000;
-	margin:auto;
-	font:42px/48px Verdana,Arial,Helvetica,sans-serif;
-	text-decoration:none;
-	color: #000;
-	padding: 20px 0 0;
-}
-.applicationlogo a:hover {
-	background-position:0 0;
-}
-
-
 /* +++ 270 Footnotes and small text +++ */
 a.footnoteref {
 	vertical-align:super;
@@ -926,50 +956,6 @@ label[for="edittoc"] {
 	background-image:url(images/arrright.gif);
 }
 */
-.infobox {
-    border: 2px solid #ADE0E3;
-    height: 150px;
-    margin: 0;
-    overflow: hidden;
-}
-.infobox table {
-	height: 150px;
-	overflow: hidden;
-}
-.infobox .no_userpic {
-	background-image:url("images/no_pic.jpg");
-	width: 50px;
-	background-position: center;
-	background-repeat: no-repeat;	
-}
-.infobox .group_pic {
-	background-image: url("images/gruppe.jpg");
-	width: 141px;
-	background-position: center;
-	background-repeat: no-repeat;	
-}
-.userbox {
-	overflow:hidden;
-}
-.userbox * {
-	margin: 0;
-	padding: 0;	
-}
-.userbox table {
-	float: right;
-	width: 390px;
-	height: 150px;
-}
-.userbox tr:FIRST-CHILD {
-	height: 125px;
-}
-.userbox .no_userpic {
-	background-image: url("images/no_pic_big.gif");	
-	width: 75px;
-	height: 100px;
-	background-position: center;
-	background-repeat: no-repeat;
-}
 #favorites .userbox a.action, #favorites .userbox .username {
 	float:left;
 	display:block;
@@ -1132,8 +1118,6 @@ th.changenote, td.changenote {
 }
 #morepopup {
 	z-index:50;
-	margin:-290px 0 0 0;
-	position:absolute;
 }
 #morebutton ul a {
 	padding:0.25em 0.5em;

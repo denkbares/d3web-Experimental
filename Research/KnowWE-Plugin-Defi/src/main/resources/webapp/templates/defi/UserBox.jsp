@@ -10,9 +10,7 @@
 <div class="userbox">
 
 <table>
-	<tr>
-		<th style="width: 310px;">
-	
+	<tr><th>
   <wiki:UserCheck status="anonymous">
     <span class="username anonymous">
       <fmt:message key="fav.greet.anonymous" />
@@ -33,10 +31,10 @@
     </span>
   </wiki:UserCheck>
   
-		</th>
-		<td class="no_userpic"></td>
-	</tr>
-	<tr colspan="2"><td>
+	</th><td class="no_userpic">
+		<img src="KnowWEExtension/images/A01.png" height="110px" width="110px" alt="avatar" />
+	</td></tr>
+	</table>
   <%-- action buttons --%>
   <wiki:UserCheck status="notAuthenticated">
   <wiki:CheckRequestContext context='!login'>
@@ -65,8 +63,6 @@
     </a>
   </wiki:CheckRequestContext>
   </wiki:CheckRequestContext>
-  </td></tr>
-</table>
 
   <div class="clearbox"></div>
 

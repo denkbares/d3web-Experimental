@@ -23,12 +23,9 @@
        ICD FORUM
        <!--<fmt:message key='actions.home' />-->
     </a>
-  	<div class="searchbox"><wiki:Include page="SearchBox.jsp" /></div>
   </div>
 
   <div class="companylogo"></div>
-  
-  <wiki:Include page="UserBox.jsp" />
   
   <div class="infobox">
   	<table>
@@ -42,16 +39,17 @@
   		</tr>
   	</table>
   </div>
+  
+  <wiki:Include page="UserBox.jsp" />
 
   <br />
-  
+  <div class="searchbox"><wiki:Include page="SearchBox.jsp" /></div>
   <div class="pagename"><wiki:PageName /></div>
-
   <div class="breadcrumbs">
     <wiki:Permission permission="edit">
   	<fmt:message key="header.yourtrail"/>
   	<wiki:Breadcrumbs />
   	  </wiki:Permission>
-  	</div>
+  </div>
 
 </div>
