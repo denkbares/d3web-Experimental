@@ -700,7 +700,7 @@ public class LinkedOpenData {
 									}
 								}
 								// Period of time.
-								if (s.matches("[\\d]+ ?[AD|BC|E]{0,3} ?- ?[\\d]+ ?[AD|BC|E]{2,3}")) {
+								if (s.matches("[\\d]+ ?[AD|BC|E]{0,3} ?(-|to) ?[\\d]+ ?[AD|BC|E]{2,3}")) {
 
 									period = true;
 									String periodFilter = "[\\d]+";
