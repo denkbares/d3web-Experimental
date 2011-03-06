@@ -45,7 +45,7 @@ import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionText;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
@@ -148,8 +148,6 @@ public class D3webDialog extends HttpServlet {
 				!source.equals(sourceSave)) {
 			d3wcon.setKb(d3webParser.getKnowledgeBase());
 			d3wcon.setKbName(d3webParser.getKnowledgeBaseName());
-			d3wcon.setKbm(
-					KnowledgeBaseManagement.createInstance(d3wcon.getKb()));
 			d3wcon.setDialogStrat(d3webParser.getStrategy());
 			d3wcon.setDialogType(d3webParser.getType());
 			d3wcon.setDialogColumns(d3webParser.getDialogColumns());
@@ -337,8 +335,8 @@ public class D3webDialog extends HttpServlet {
 				D3webConnector.getInstance().getSession().getBlackboard();
 
 		Question to =
-				(Question) KnowledgeBaseManagement.createInstance(d3wcon.getKb()).findTerminologyObjectByName(
-						termObID);
+				(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
+						termObID, d3wcon.getKb());
 
 		// if TerminologyObject not found in the current KB return & do nothing
 		if (to == null) {
@@ -375,7 +373,7 @@ public class D3webDialog extends HttpServlet {
 					// valueString is the ID of the selected item
 					try {
 						valString = valString.replace("q_", "");
-						value = d3wcon.getKbm().findValue(to, valString);
+						value = KnowledgeBaseUtils.findValue(to, valString);
 					}
 					catch (NumberFormatException nfe) {
 						// value still null, will not be set
@@ -474,8 +472,8 @@ public class D3webDialog extends HttpServlet {
 			for (TerminologyObject c : parent.getChildren()) {
 
 				Question qto =
-						(Question) KnowledgeBaseManagement.createInstance(d3wcon.getKb()).findTerminologyObjectByName(
-								c.getId());
+						(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
+								c.getId(), d3wcon.getKb());
 
 				if (!isIndicated(qto, blackboard)
 						|| !isParentIndicated(qto, blackboard)) {
@@ -503,8 +501,8 @@ public class D3webDialog extends HttpServlet {
 			for (TerminologyObject to : parent.getChildren()) {
 
 				Question qto =
-						(Question) KnowledgeBaseManagement.createInstance(d3wcon.getKb()).findTerminologyObjectByName(
-								to.getId());
+						(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
+								to.getId(), d3wcon.getKb());
 
 				// remove a previously set value
 				lastFact = blackboard.getValueFact(qto);

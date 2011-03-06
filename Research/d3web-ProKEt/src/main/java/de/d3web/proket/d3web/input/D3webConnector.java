@@ -22,7 +22,6 @@ package de.d3web.proket.d3web.input;
 import java.util.HashMap;
 
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.manage.KnowledgeBaseManagement;
 import de.d3web.core.session.Session;
 import de.d3web.proket.data.DialogStrategy;
 import de.d3web.proket.data.DialogType;
@@ -61,9 +60,6 @@ public class D3webConnector {
 	private String header;
 
 	/* The knowledge base management */
-	private KnowledgeBaseManagement kbm;
-
-	/* The knowledge base management */
 	private String kbn;
 
 	/* number of columns for multicolumn styles (dialog) */
@@ -88,14 +84,6 @@ public class D3webConnector {
 	private D3webConnector() {
 		this.quesCount = 0;
 		this.qCount = 0;
-	}
-
-	public KnowledgeBaseManagement getKbm() {
-		return kbm;
-	}
-
-	public void setKbm(KnowledgeBaseManagement kbm) {
-		this.kbm = kbm;
 	}
 
 	public Session getSession() {

@@ -18,7 +18,7 @@ import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
-import de.d3web.core.manage.KnowledgeBaseManagement;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
@@ -106,8 +106,7 @@ public class D3webHierarchyRenderer {
 		StringBuilder sb = new StringBuilder();
 		List<QContainer> containers = session.getKnowledgeBase().getManager().getQContainers();
 
-		KnowledgeBaseManagement.createInstance(session.getKnowledgeBase()).sortQContainers(
-				containers);
+		KnowledgeBaseUtils.sortQContainers(containers);
 		for (TerminologyObject to : containers) {
 			if (!to.getName().equals("Q000")) {
 				sb.append(renderD3webQuestionnaire(to));
