@@ -165,6 +165,7 @@
 		<module>KnowWE-Plugin-Drools</module>
 		<module>KnowWE-Plugin-OntE</module>
 		<module>d3web-Plugin-OWL</module>
+		<module>d3web-ProKEt</module>
 	</modules>
 	<repositories>
 		<repository>
