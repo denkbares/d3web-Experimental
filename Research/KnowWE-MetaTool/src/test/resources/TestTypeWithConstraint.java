@@ -20,16 +20,14 @@
 
 package de.knowwe.kdom;
 
-import java.util.regex.Pattern;
+import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.AtMostOneFindingConstraint;
-
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.knowwe.kdom.TestChildren1;
 import de.knowwe.kdom.TestChildren2;
 import de.knowwe.kdom.TestChildren3;
-
-import de.d3web.we.kdom.rendering.StyleRenderer;
 
 public class TestTypeWithConstraint extends TermDefinition {
 
@@ -37,7 +35,7 @@ public class TestTypeWithConstraint extends TermDefinition {
 		childrenTypes.add(new TestChildren1());
 		childrenTypes.add(new TestChildren2());
 		childrenTypes.add(new TestChildren3());
-		ConstraintSectionFinder c = new ConstraintSectionFinder(new de.d3web.we.kdom.sectionFinder.RegexSectionFinder(".*"));
+		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder(".*"));
 		setSectionFinder(c);
 		c.addConstraint(AtMostOneFindingConstraint.getInstance());
 		setCustomRenderer(new StyleRenderer("color:red"));

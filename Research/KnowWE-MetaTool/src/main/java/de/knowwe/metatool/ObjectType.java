@@ -1,8 +1,11 @@
 package de.knowwe.metatool;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
@@ -40,10 +43,12 @@ public class ObjectType {
 	private final QualifiedClass superType;
 	private final ParameterizedClass sectionFinder;
 	private final List<QualifiedClass> constraints;
+	private final Set<QualifiedClass> imports;
 	private final String color;
 	private final boolean exists;
 
 	private final List<ObjectType> children = new LinkedList<ObjectType>();
+	private boolean expanded = false;
 
 	private ObjectType(Builder b) {
 		this.id = b.id;
@@ -53,6 +58,7 @@ public class ObjectType {
 		this.constraints = b.constraints;
 		this.exists = b.exists;
 		this.color = b.color;
+		this.imports = b.imports;
 	}
 
 	/**
@@ -129,7 +135,16 @@ public class ObjectType {
 	 * @return All Children of the ObjectType.
 	 */
 	public List<ObjectType> getChildren() {
+		if (!expanded) {
+			addPlainTextChildren();
+			expanded = true;
+		}
 		return Collections.unmodifiableList(this.children);
+	}
+
+	private void addPlainTextChildren() {
+		// TODO Auto-generated method stub
+
 	}
 
 	/**
@@ -147,6 +162,7 @@ public class ObjectType {
 			throw new IllegalArgumentException();
 		}
 		children.add(position, child);
+		imports.add(child.objectType);
 	}
 
 	/**
@@ -157,6 +173,16 @@ public class ObjectType {
 	 */
 	public String getColor() {
 		return this.color;
+	}
+
+	/**
+	 * Returns all import statements necessary for this object type.
+	 *
+	 * @created Mar 7, 2011
+	 * @return imports necessary for this object type
+	 */
+	public Collection<QualifiedClass> getImports() {
+		return this.imports;
 	}
 
 	/**
@@ -188,9 +214,13 @@ public class ObjectType {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((children == null) ? 0 : children.hashCode());
+		result = prime * result + ((color == null) ? 0 : color.hashCode());
+		result = prime * result + ((constraints == null) ? 0 : constraints.hashCode());
 		result = prime * result + (exists ? 1231 : 1237);
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((imports == null) ? 0 : imports.hashCode());
 		result = prime * result + ((objectType == null) ? 0 : objectType.hashCode());
+		result = prime * result + ((sectionFinder == null) ? 0 : sectionFinder.hashCode());
 		result = prime * result + ((superType == null) ? 0 : superType.hashCode());
 		return result;
 	}
@@ -205,15 +235,31 @@ public class ObjectType {
 			if (other.children != null) return false;
 		}
 		else if (!children.equals(other.children)) return false;
+		if (color == null) {
+			if (other.color != null) return false;
+		}
+		else if (!color.equals(other.color)) return false;
+		if (constraints == null) {
+			if (other.constraints != null) return false;
+		}
+		else if (!constraints.equals(other.constraints)) return false;
 		if (exists != other.exists) return false;
 		if (id == null) {
 			if (other.id != null) return false;
 		}
 		else if (!id.equals(other.id)) return false;
+		if (imports == null) {
+			if (other.imports != null) return false;
+		}
+		else if (!imports.equals(other.imports)) return false;
 		if (objectType == null) {
 			if (other.objectType != null) return false;
 		}
 		else if (!objectType.equals(other.objectType)) return false;
+		if (sectionFinder == null) {
+			if (other.sectionFinder != null) return false;
+		}
+		else if (!sectionFinder.equals(other.sectionFinder)) return false;
 		if (superType == null) {
 			if (other.superType != null) return false;
 		}
@@ -224,9 +270,17 @@ public class ObjectType {
 	@Override
 	public String toString() {
 		return "ObjectType [id=" + id + ", objectType=" + objectType + ", superType=" + superType
-				+ ", exists=" + exists + ", children=" + children + "]";
+				+ ", sectionFinder=" + sectionFinder + ", constraints=" + constraints
+				+ ", imports=" + imports + ", color=" + color + ", exists=" + exists
+				+ ", children=" + children + "]";
 	}
 
+	/**
+	 * Builder Pattern applied for the creation of ObjectTypes.
+	 *
+	 * @author Sebastian Furth
+	 * @created Mar 7, 2011
+	 */
 	public static class Builder {
 
 		/*
@@ -241,10 +295,11 @@ public class ObjectType {
 		 *
 		 */
 		private QualifiedClass superType = new QualifiedClass("de.d3web.we.kdom",
-				"DefaultAbstractKnowWEObjectType");
+				"AbstractType");
 		private ParameterizedClass sectionFinder = null;
 		private final List<QualifiedClass> constraints = new LinkedList<QualifiedClass>();
 		private String color = null;
+		private final Set<QualifiedClass> imports = new LinkedHashSet<QualifiedClass>();
 
 		/**
 		 * Builder for ObjectTypes. The attributes are the mandatory attributes
@@ -324,9 +379,11 @@ public class ObjectType {
 			}
 			if (!sectionFinder.getQualifiedClassName().equals(
 					"de.d3web.we.kdom.constraint.ConstraintSectionFinder")) {
+				// We lose the information if we don't do the import here!
+				imports.add(sectionFinder);
 				sectionFinder = new ParameterizedClass("de.d3web.we.kdom.constraint",
 														"ConstraintSectionFinder",
-														sectionFinder.getFullyQualifiedInstantiationString());
+														sectionFinder.getInstantiationString());
 			}
 			this.constraints.add(constraint);
 			return this;
@@ -356,7 +413,31 @@ public class ObjectType {
 		 * @return customized ObjectType object.
 		 */
 		public ObjectType build() {
+			organizeImports();
 			return new ObjectType(this);
+		}
+
+		private void organizeImports() {
+			imports.add(superType);
+			if (sectionFinder != null) {
+				imports.add(sectionFinder);
+				imports.addAll(constraints);
+				checkPatternImport();
+			}
+			if (color != null) {
+				imports.add(new QualifiedClass("de.d3web.we.kdom.rendering", "StyleRenderer"));
+			}
+		}
+
+		private void checkPatternImport() {
+			if (sectionFinder.getClassName().equals("RegexSectionFinder")
+					|| (sectionFinder.getClassName().equals("ConstraintSectionFinder")
+						&& sectionFinder.getValue().contains("RegexSectionFinder"))) {
+				// TODO: This heuristic should be improved (compare with RegEx)
+				if (sectionFinder.getValue().contains("Pattern")) {
+					imports.add(new QualifiedClass("java.util.regex", "Pattern"));
+				}
+			}
 		}
 
 	}

@@ -20,6 +20,9 @@ package de.knowwe.metatool.test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.junit.Test;
 
 import de.knowwe.metatool.ObjectType;
@@ -62,7 +65,7 @@ public class ObjectTypeCreationTest {
 		assertEquals("Wrong Package.", "de.knowwe.kdom", objectType.getPackageName());
 
 		// Default Attributes
-		assertEquals("SuperType has wrong Class.", "DefaultAbstractKnowWEObjectType",
+		assertEquals("SuperType has wrong Class.", "AbstractType",
 				objectType.getSuperType().getClassName());
 		assertEquals("SuperType has wrong package", "de.d3web.we.kdom",
 				objectType.getSuperType().getPackageName());
@@ -116,7 +119,7 @@ public class ObjectTypeCreationTest {
 	public void testSetSectionFinderOnExisting() {
 		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
 		ParameterizedClass sectionFinder = new ParameterizedClass("de.d3web.we.kdom.sectionFinder",
-				"RegExSectionFinder", ".*");
+				"RegexSectionFinder", ".*");
 		new ObjectType.Builder("01", objectTypeClass, true).setSectionFinder(sectionFinder).build();
 	}
 
@@ -125,7 +128,7 @@ public class ObjectTypeCreationTest {
 
 		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
 		ParameterizedClass sectionFinder = new ParameterizedClass("de.d3web.we.kdom.sectionFinder",
-				"RegExSectionFinder", ".*");
+				"RegexSectionFinder", ".*");
 		ObjectType objectType = new ObjectType.Builder("01", objectTypeClass, false)
 												.setSectionFinder(sectionFinder)
 												.build();
@@ -136,7 +139,7 @@ public class ObjectTypeCreationTest {
 		assertEquals("Wrong Package.", "de.knowwe.kdom", objectType.getPackageName());
 
 		// Custom SectionFinder
-		assertEquals("SectionFinder has wrong Class.", "RegExSectionFinder",
+		assertEquals("SectionFinder has wrong Class.", "RegexSectionFinder",
 				objectType.getSectionFinder().getClassName());
 		assertEquals("SectionFinder has wrong package", "de.d3web.we.kdom.sectionFinder",
 				objectType.getSectionFinder().getPackageName());
@@ -172,7 +175,7 @@ public class ObjectTypeCreationTest {
 		assertEquals("Wrong Package.", "de.knowwe.kdom", objectType.getPackageName());
 
 		// Default Attributes
-		assertEquals("SuperType has wrong Class.", "DefaultAbstractKnowWEObjectType",
+		assertEquals("SuperType has wrong Class.", "AbstractType",
 				objectType.getSuperType().getClassName());
 		assertEquals("SuperType has wrong package", "de.d3web.we.kdom",
 				objectType.getSuperType().getPackageName());
@@ -233,7 +236,7 @@ public class ObjectTypeCreationTest {
 
 		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
 		ParameterizedClass sectionFinder = new ParameterizedClass("de.d3web.we.kdom.sectionFinder",
-				"RegExSectionFinder", "\".*\"");
+				"RegexSectionFinder", "\".*\"");
 		QualifiedClass constraint = new QualifiedClass("de.d3web.we.kdom.constraint",
 				"AtMostOneFindingConstraint");
 		ObjectType objectType = new ObjectType.Builder("01", objectTypeClass, false)
@@ -252,7 +255,7 @@ public class ObjectTypeCreationTest {
 		assertEquals("SectionFinder has wrong package", "de.d3web.we.kdom.constraint",
 				objectType.getSectionFinder().getPackageName());
 		assertEquals("SectionFinder has wrong value",
-				"new de.d3web.we.kdom.sectionFinder.RegExSectionFinder(\".*\")",
+				"new RegexSectionFinder(\".*\")",
 				objectType.getSectionFinder().getValue());
 
 		// Constraints
@@ -280,7 +283,7 @@ public class ObjectTypeCreationTest {
 		assertEquals("Wrong Package.", "de.knowwe.kdom", objectType.getPackageName());
 
 		// Default Attributes
-		assertEquals("SuperType has wrong Class.", "DefaultAbstractKnowWEObjectType",
+		assertEquals("SuperType has wrong Class.", "AbstractType",
 				objectType.getSuperType().getClassName());
 		assertEquals("SuperType has wrong package", "de.d3web.we.kdom",
 				objectType.getSuperType().getPackageName());
@@ -300,6 +303,41 @@ public class ObjectTypeCreationTest {
 	public void testNullAsColor() {
 		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
 		new ObjectType.Builder("01", objectTypeClass, false).setColor(null).build();
+	}
+
+	@Test
+	public void testImports() {
+
+		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
+		QualifiedClass superType = new QualifiedClass("de.d3web.we.kdom.objects", "TermDefinition");
+		ParameterizedClass sectionFinder = new ParameterizedClass("de.d3web.we.kdom.sectionFinder",
+				"RegexSectionFinder", "\".*\", Pattern.DOTALL, 1");
+		QualifiedClass constraint = new QualifiedClass("de.d3web.we.kdom.constraint",
+				"AtMostOneFindingConstraint");
+		ObjectType objectType = new ObjectType.Builder("01", objectTypeClass, false)
+												.setSuperType(superType)
+												.setSectionFinder(sectionFinder)
+												.addConstraint(constraint)
+												.setColor("red")
+												.build();
+
+		QualifiedClass childClass1 = new QualifiedClass("de.knowwe.kdom", "TestChildren1");
+		ObjectType child1 = new ObjectType.Builder("02", childClass1, false).build();
+		objectType.addChild(0, child1);
+
+		// Create imports for comparison
+		Set<QualifiedClass> imports = new LinkedHashSet<QualifiedClass>();
+		imports.add(sectionFinder);
+		imports.add(superType);
+		imports.add(new ParameterizedClass("de.d3web.we.kdom.constraint",
+				"ConstraintSectionFinder", sectionFinder.getInstantiationString()));
+		imports.add(constraint);
+		imports.add(new QualifiedClass("java.util.regex", "Pattern"));
+		imports.add(new QualifiedClass("de.d3web.we.kdom.rendering", "StyleRenderer"));
+		imports.add(childClass1);
+
+		assertEquals("Wrong number of imports", imports.size(), objectType.getImports().size());
+		assertEquals("Wrong imports.", imports, objectType.getImports());
 	}
 
 }
