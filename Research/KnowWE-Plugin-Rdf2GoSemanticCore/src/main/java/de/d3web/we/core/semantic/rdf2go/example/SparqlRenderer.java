@@ -52,10 +52,11 @@ public class SparqlRenderer extends KnowWEDomRenderer<AddStatementType> {
 
 		String sparqlString = "";
 		try {
-			String section = sec.toString();
-			section = section.replaceAll(article.getTitle() + " - %sparql%", "");
+			String section = sec.getOriginalText();
+			section = section.replaceAll("%sparql%","");
 			section = section.replaceAll("%/sparql%", "");
 			sparqlString = section.replaceAll("\n", "");
+			sparqlString = section.replaceAll("\r", "");
 
 		}
 		catch (Exception e) {
