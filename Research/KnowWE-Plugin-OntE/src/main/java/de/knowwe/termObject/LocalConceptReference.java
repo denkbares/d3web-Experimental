@@ -20,15 +20,28 @@
 
 package de.knowwe.termObject;
 
+import java.util.List;
+
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.objects.KnowWETerm;
-import de.d3web.we.kdom.sectionFinder.StringSectionFinder;
+import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
 public class LocalConceptReference extends OWLTermReference {
 	
 	public LocalConceptReference(){
-		this.setSectionFinder(new StringSectionFinder("\\s"
-				+ LocalConceptDefinition.LOCAL_KEY + "\\s"));
+		this.setSectionFinder(new SectionFinder() {
+
+			@Override
+			public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
+				if (text.equalsIgnoreCase(LocalConceptDefinition.LOCAL_KEY)) {
+					return new AllTextSectionFinder().lookForSections(text, father, type);
+				}
+				return null;
+			}
+		});
 	}
 	
 	@Override

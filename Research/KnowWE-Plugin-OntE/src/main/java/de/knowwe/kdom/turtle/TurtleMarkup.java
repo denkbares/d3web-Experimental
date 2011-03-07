@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.OWL;
@@ -78,9 +79,8 @@ public class TurtleMarkup extends AbstractType {
 
 	public TurtleMarkup() {
 
-		this.setSectionFinder(new RegexSectionFinder("<.*?::.*>"));
+		this.setSectionFinder(new RegexSectionFinder("\\[.*?::.*?\\]", Pattern.MULTILINE));
 
-		// TODO: Aufteilen in Def-Turtle und normales Turle
 
 		AnonymousTypeInvisible start = new AnonymousTypeInvisible("turtlestart");
 		start.setSectionFinder(new SectionFinder() {
@@ -423,6 +423,10 @@ public class TurtleMarkup extends AbstractType {
 
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Type> s) {
+
+			if (s.hasErrorInSubtree(article)) {
+				return new ArrayList<KDOMReportMessage>(0);
+			}
 
 			String termName = s.getOriginalText();
 			if (s.get() instanceof KnowWETerm) {

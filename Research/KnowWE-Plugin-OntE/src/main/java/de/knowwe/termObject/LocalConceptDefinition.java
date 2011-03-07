@@ -22,15 +22,21 @@ package de.knowwe.termObject;
 
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.objects.KnowWETerm;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.termObject.URIObject.URIObjectType;
 
 public class LocalConceptDefinition extends URITermDefinition {
 	
+
+	public static final StyleRenderer CLASS_RENDERER = new StyleRenderer(
+			"color:rgb(152, 180, 12)");
+
 	public static final String LOCAL_KEY = "this";
 	
 	public LocalConceptDefinition() {
-		this.setSectionFinder(new RegexSectionFinder("def\\s*?" + LOCAL_KEY + "\\s"));
+		this.setSectionFinder(new RegexSectionFinder("def\\s*?" + LOCAL_KEY + "\\s*?"));
+		this.setCustomRenderer(CLASS_RENDERER);
 	}
 
 	@Override
