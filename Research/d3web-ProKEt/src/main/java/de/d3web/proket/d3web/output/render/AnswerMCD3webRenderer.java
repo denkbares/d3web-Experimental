@@ -69,7 +69,7 @@ public class AnswerMCD3webRenderer extends D3webRenderer {
 
 			st.setAttribute("fullId", mcq.getName());
 			st.setAttribute("realAnswerType", "mc");
-			st.setAttribute("parentFullId", mcq.getId());
+			st.setAttribute("parentFullId", parent.getName());
 			st.setAttribute("text", c.getName());
 
 			Blackboard bb = D3webConnector.getInstance().getSession().getBlackboard();

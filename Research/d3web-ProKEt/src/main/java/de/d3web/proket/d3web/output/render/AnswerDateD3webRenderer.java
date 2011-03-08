@@ -29,6 +29,7 @@ import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionDate;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
+import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.DateValue;
@@ -72,7 +73,7 @@ public class AnswerDateD3webRenderer extends D3webRenderer {
 
 		st.setAttribute("fullId", dq.getName());
 		st.setAttribute("realAnswerType", "date");
-		st.setAttribute("parentFullId", dq.getId());
+		st.setAttribute("parentFullId", parent.getName());
 
 		Blackboard bb = D3webConnector.getInstance().getSession().getBlackboard();
 		Value value = bb.getValue((ValueObject) to);
@@ -95,7 +96,7 @@ public class AnswerDateD3webRenderer extends D3webRenderer {
 		if (value != null && UndefinedValue.isNotUndefinedValue(value)
 				&& !value.equals(Unknown.getInstance())) {
 			Date d = ((DateValue) value).getDate();
-			SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("MM/yyyy");
 			String val = dateFormat.format(d).toString();
 			st.setAttribute("selection", val);
 		}
@@ -105,7 +106,8 @@ public class AnswerDateD3webRenderer extends D3webRenderer {
 			st.setAttribute("selection", ""); // displayed in the input field
 		}
 
-		st.setAttribute("text", "dd.mm.yyyy");
+		// Description of the input to provide is read from the knowledge base
+		st.setAttribute("text", dq.getInfoStore().getValue(MMInfo.DESCRIPTION));
 
 		sb.append(st.toString());
 

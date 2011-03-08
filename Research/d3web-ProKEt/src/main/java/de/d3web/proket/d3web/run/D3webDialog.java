@@ -174,10 +174,10 @@ public class D3webDialog extends HttpServlet {
 			d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
 			httpSession.setAttribute("d3webSessionID", d3webSession.getId());
 			d3wcon.setSession(d3webSession);
-			d3wcon.setQuestionCount(0);
-			d3wcon.setQuestionnaireCount(0);
 		}
 
+		d3wcon.setQuestionCount(0);
+		d3wcon.setQuestionnaireCount(0);
 		
 		// switch action as defined by the servlet call
 		if (action.equalsIgnoreCase("show")) {
@@ -408,11 +408,13 @@ public class D3webDialog extends HttpServlet {
 
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 				try {
-					// String is given in the format 20.03.2010
-					String[] datesplit = valString.split("\\.");
-					String parseableDate = datesplit[2] + "-" + datesplit[1] + "-" + datesplit[0]
-							+ "-00-00-00";
-					value = new DateValue(dateFormat.parse(parseableDate));
+					// String is given in the format 03/2010
+					String[] datesplit = valString.split("\\/");
+					if (datesplit.length == 2) {
+						String parseableDate = datesplit[1] + "-" + datesplit[0] + "-"
+								+ "01-00-00-00";
+						value = new DateValue(dateFormat.parse(parseableDate));
+					}
 				}
 				catch (ParseException e) {
 					// value still null, will not be set

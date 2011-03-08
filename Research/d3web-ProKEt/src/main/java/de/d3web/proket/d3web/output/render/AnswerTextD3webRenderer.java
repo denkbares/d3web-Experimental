@@ -26,6 +26,7 @@ import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
+import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.UndefinedValue;
@@ -68,7 +69,7 @@ public class AnswerTextD3webRenderer extends D3webRenderer {
 
 		st.setAttribute("fullId", tq.getName());
 		st.setAttribute("realAnswerType", "text");
-		st.setAttribute("parentFullId", tq.getId());
+		st.setAttribute("parentFullId", parent.getName());
 
 		Blackboard bb = D3webConnector.getInstance().getSession().getBlackboard();
 		Value value = bb.getValue((ValueObject) to);
@@ -98,6 +99,8 @@ public class AnswerTextD3webRenderer extends D3webRenderer {
 			st.setAttribute("selection", ""); // displayed in the input field
 		}
 
+		// Description of the input to provide is read from the knowledge base
+		st.setAttribute("text", tq.getInfoStore().getValue(MMInfo.DESCRIPTION));
 
 		sb.append(st.toString());
 

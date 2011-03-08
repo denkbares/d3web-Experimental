@@ -329,20 +329,28 @@ public class D3webRenderer implements ID3webRenderer {
 		if (!(to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION))) {
 
 			/*
-			 * If the unknown by default option is activated: append result of
-			 * the unknown-renderer
+			 * Append result of the unknown-renderer, i.e., unknown option, if -
+			 * unknown by default option of KB is activated - AND nothing set
+			 * additionally for single questions
 			 */
 			if (D3webConnector.getInstance().getKb().getInfoStore().getValue(
 					BasicProperties.UNKNOWNBYDEFAULT) == true) {
 
-				ID3webRenderer unknownRenderer =
+				// TODO: ugly hack. In case all unknowns should be rendered by
+				// default, the exclusion of single questions needs to be
+				// flagged by a unknown visible = true flag, as unknownVisible
+				// obviously is false per default :-/
+				if (!to.getInfoStore().getValue(BasicProperties.UNKNOWN_VISIBLE) == true) {
+
+					ID3webRenderer unknownRenderer =
 						D3webRenderer.getUnknownRenderer();
 
-				// receive the matching HTML from the Renderer and append
-				String childHTML =
+					// receive the matching HTML from the Renderer and append
+					String childHTML =
 						unknownRenderer.renderTerminologyObject(cc, to, to);
-				if (childHTML != null) {
-					childrenHTML.append(childHTML);
+					if (childHTML != null) {
+						childrenHTML.append(childHTML);
+					}
 				}
 			}
 		}
