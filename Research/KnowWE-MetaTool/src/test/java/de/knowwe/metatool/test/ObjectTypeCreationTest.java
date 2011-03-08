@@ -235,12 +235,13 @@ public class ObjectTypeCreationTest {
 	public void testConstraint() {
 
 		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
-		ParameterizedClass sectionFinder = new ParameterizedClass("de.d3web.we.kdom.sectionFinder",
+		ParameterizedClass regexSectionFinder = new ParameterizedClass(
+				"de.d3web.we.kdom.sectionFinder",
 				"RegexSectionFinder", "\".*\"");
 		QualifiedClass constraint = new QualifiedClass("de.d3web.we.kdom.constraint",
 				"AtMostOneFindingConstraint");
 		ObjectType objectType = new ObjectType.Builder("01", objectTypeClass, false)
-												.setSectionFinder(sectionFinder)
+												.setSectionFinder(regexSectionFinder)
 												.addConstraint(constraint)
 												.build();
 
@@ -255,7 +256,7 @@ public class ObjectTypeCreationTest {
 		assertEquals("SectionFinder has wrong package", "de.d3web.we.kdom.constraint",
 				objectType.getSectionFinder().getPackageName());
 		assertEquals("SectionFinder has wrong value",
-				"new RegexSectionFinder(\".*\")",
+				regexSectionFinder,
 				objectType.getSectionFinder().getValue());
 
 		// Constraints
@@ -330,13 +331,14 @@ public class ObjectTypeCreationTest {
 		imports.add(sectionFinder);
 		imports.add(superType);
 		imports.add(new ParameterizedClass("de.d3web.we.kdom.constraint",
-				"ConstraintSectionFinder", sectionFinder.getInstantiationString()));
+				"ConstraintSectionFinder", sectionFinder));
 		imports.add(constraint);
 		imports.add(new QualifiedClass("java.util.regex", "Pattern"));
 		imports.add(new QualifiedClass("de.d3web.we.kdom.rendering", "StyleRenderer"));
 		imports.add(childClass1);
 
-		assertEquals("Wrong number of imports", imports.size(), objectType.getImports().size());
+		// assertEquals("Wrong number of imports.", imports.size(),
+		// objectType.getImports().size());
 		assertEquals("Wrong imports.", imports, objectType.getImports());
 	}
 

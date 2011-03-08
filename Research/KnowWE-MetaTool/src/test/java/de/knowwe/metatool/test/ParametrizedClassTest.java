@@ -64,13 +64,6 @@ public class ParametrizedClassTest {
 	}
 
 	@Test
-	public void testFullyQualifiedInstantiationString() {
-		ParameterizedClass test = new ParameterizedClass("de.knowwe.test", "TestClass", "\"value\"");
-		assertEquals("Wrong instantiation.", "new de.knowwe.test.TestClass(\"value\")",
-				test.getFullyQualifiedInstantiationString());
-	}
-
-	@Test
 	public void testQualifiedClassString() {
 		ParameterizedClass test = new ParameterizedClass("de.knowwe.test", "TestClass", "\"value\"");
 		assertEquals("Wrong qualified class name",

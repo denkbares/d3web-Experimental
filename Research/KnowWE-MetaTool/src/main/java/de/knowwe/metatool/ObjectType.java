@@ -10,20 +10,20 @@ import java.util.Set;
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
  *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 
 /**
@@ -292,7 +292,6 @@ public class ObjectType {
 
 		/*
 		 * Optional attributes
-		 *
 		 */
 		private QualifiedClass superType = new QualifiedClass("de.d3web.we.kdom",
 				"AbstractType");
@@ -383,7 +382,7 @@ public class ObjectType {
 				imports.add(sectionFinder);
 				sectionFinder = new ParameterizedClass("de.d3web.we.kdom.constraint",
 														"ConstraintSectionFinder",
-														sectionFinder.getInstantiationString());
+														sectionFinder);
 			}
 			this.constraints.add(constraint);
 			return this;
@@ -430,16 +429,21 @@ public class ObjectType {
 		}
 
 		private void checkPatternImport() {
-			if (sectionFinder.getClassName().equals("RegexSectionFinder")
-					|| (sectionFinder.getClassName().equals("ConstraintSectionFinder")
-						&& sectionFinder.getValue().contains("RegexSectionFinder"))) {
-				// TODO: This heuristic should be improved (compare with RegEx)
-				if (sectionFinder.getValue().contains("Pattern")) {
-					imports.add(new QualifiedClass("java.util.regex", "Pattern"));
+			String value = "";
+			if (sectionFinder.getClassName().equals("RegexSectionFinder")) {
+				value = (String) sectionFinder.getValue();
+			}
+			else if (sectionFinder.getClassName().equals("ConstraintSectionFinder")
+						&& sectionFinder.getValue() instanceof ParameterizedClass) {
+				ParameterizedClass innerSectionFinder = (ParameterizedClass) sectionFinder.getValue();
+				if (innerSectionFinder.getClassName().equals("RegexSectionFinder")) {
+					value = (String) innerSectionFinder.getValue();
 				}
 			}
+			if (value.contains("Pattern")) {
+				imports.add(new QualifiedClass("java.util.regex", "Pattern"));
+			}
 		}
-
 	}
 
 }

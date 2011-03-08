@@ -28,7 +28,7 @@ package de.knowwe.metatool;
  */
 public class ParameterizedClass extends QualifiedClass {
 
-	private final String value;
+	private final Object value;
 
 	/**
 	 * Creates a new parameterized Class which is a qualified Class with a value
@@ -40,7 +40,7 @@ public class ParameterizedClass extends QualifiedClass {
 	 * @param className class-name of the class
 	 * @param value value for the constructor attribute.
 	 */
-	public ParameterizedClass(String packageName, String className, String value) {
+	public ParameterizedClass(String packageName, String className, Object value) {
 		super(packageName, className);
 		if (value == null) {
 			throw new IllegalArgumentException();
@@ -54,7 +54,7 @@ public class ParameterizedClass extends QualifiedClass {
 	 * @created Feb 4, 2011
 	 * @return value of the constructor parameter.
 	 */
-	public String getValue() {
+	public Object getValue() {
 		return value;
 	}
 
@@ -68,20 +68,11 @@ public class ParameterizedClass extends QualifiedClass {
 	 */
 	@Override
 	public String getInstantiationString() {
-		return "new " + getClassName() + "(" + value + ")";
-	}
-
-	/**
-	 * Returns a String which represents a fully qualified instantiation of this
-	 * class, e.g. new yourpackage.YourClass(value). Please note, that the
-	 * semicolon is not part contained in the returned String.
-	 *
-	 * @created Feb 23, 2011
-	 * @return Instantiation String for this class.
-	 */
-	@Override
-	public String getFullyQualifiedInstantiationString() {
-		return "new " + getQualifiedClassName() + "(" + value + ")";
+		String valueString = value.toString();
+		if (value instanceof QualifiedClass) {
+			valueString = ((QualifiedClass) value).getInstantiationString();
+		}
+		return "new " + getClassName() + "(" + valueString + ")";
 	}
 
 	@Override
