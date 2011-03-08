@@ -274,6 +274,24 @@ function d3web_saveCase(id, event) {
 
 	// display popup TODO
 	alert("Es sind noch " + questionsUnanswered + " Fragen unbeantwortet.");
+	
+	var link = 
+		$.query.set("action", "savecase").toString();
+	link = window.location.href.replace(window.location.search, "") + link;
+
+	$.ajax({
+		type : "GET",
+		async : false,
+		url : link,
+		success : function(html) {
+			//d3web_nextform();
+
+		//if (html != "same") {			// replace target id of content if not the same
+			window.location.reload();
+			d3web_init();
+		//}
+		}
+	});
 
 	/*var sendexit_button = $(id);
 

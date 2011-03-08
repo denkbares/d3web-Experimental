@@ -19,11 +19,13 @@
  */
 package de.d3web.proket.d3web.run;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -46,6 +48,8 @@ import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.manage.KnowledgeBaseUtils;
+import de.d3web.core.records.SessionConversionFactory;
+import de.d3web.core.records.SessionRecord;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
@@ -56,6 +60,7 @@ import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.NumValue;
 import de.d3web.core.session.values.TextValue;
 import de.d3web.core.session.values.Unknown;
+import de.d3web.file.records.io.SingleXMLSessionRepository;
 import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webUtils;
@@ -327,6 +332,38 @@ public class D3webDialog extends HttpServlet {
 	private void saveCase(HttpServletRequest request,
 			HttpServletResponse response) {
 
+		SessionRecord sessionRecord = SessionConversionFactory.copyToSessionRecord(
+				d3wcon.getSession());
+		SingleXMLSessionRepository sessionRepository = new SingleXMLSessionRepository();
+		sessionRepository.add(sessionRecord);
+
+		// ASSEMBLE FILE path AND name FROM HERE
+		// retrieves path to /cases folder on the server
+		String contextRoot = request.getSession().getServletContext().getRealPath("/cases");
+
+		// current date and timestamp added to filename for uniqueness
+		Date now = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmss");
+
+		// assemble complete file name
+		File file = new File(contextRoot + "/" + sdf.format(now) + ".xml");
+
+		try {
+			System.out.println(file.createNewFile());
+		}
+		catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		System.out.println(file.getAbsolutePath());
+		try {
+			sessionRepository.save(file);
+			System.out.println("something happened...");
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
