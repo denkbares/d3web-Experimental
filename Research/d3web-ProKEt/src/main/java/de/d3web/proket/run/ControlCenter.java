@@ -114,19 +114,16 @@ public class ControlCenter extends HttpServlet {
 
 			@Override
 			public boolean accept(File pathname) {
-				return !pathname.getName().contains(".jar");
+				return !pathname.getName().contains(".d3web") &&
+						!pathname.getName().contains(".jar");
 			}
 		});
 
 		for (File file : files2) {
-
-			if (!file.getName().endsWith(".jar")) {
-				sb.append(MessageFormat.format(
-						"<a href=\"D3webDialog?src={0}\">{0}</a><br />\n",
-						URLEncoder.encode(
-								file.getName().substring(0,
-										file.getName().length() - 4), "UTF-8")));
-			}
+			sb.append(MessageFormat.format(
+					"<a href=\"D3webDialog?src={0}\">{0}</a><br />\n",
+					URLEncoder.encode(file.getName()
+							.substring(0, file.getName().length() - 4), "UTF-8")));
 		}
 
 		st.setAttribute("d3web", sb.toString());
