@@ -188,6 +188,10 @@ public class D3webDialog extends HttpServlet {
 			addFact(request, response);
 			return;
 		}
+		else if (action.equalsIgnoreCase("savecase")) {
+			saveCase(request, response);
+			return;
+		}
 		else if (action.equalsIgnoreCase("solutions")) {
 			// TODO No actions yet
 		}
@@ -217,12 +221,11 @@ public class D3webDialog extends HttpServlet {
 		ContainerCollection cc = new ContainerCollection();
 		cc = d3webr.renderRoot(cc);
 
-		String html = "" +
-				"<html><head></head>" +
-				"<body>" +
-				"<img>D3webPicShow?src=Test</img>" +
-				"</body>" +
-				"</html>";
+		/*
+		 * String html = "" + "<html><head></head>" + "<body>" +
+		 * "<img>D3webPicShow?src=Test</img>" + "</body>" + "</html>";
+		 */
+		
 		writer.print(cc.html.toString()); // deliver the rendered output
 		// writer.print(html);
 		writer.close(); // and close
@@ -312,6 +315,18 @@ public class D3webDialog extends HttpServlet {
 			positions = positions.replace("+", " ");
 			setValue(qid, positions);
 		}
+	}
+
+	/**
+	 * Save a case.
+	 * 
+	 * @created 08.03.2011
+	 * @param request ServletRequest
+	 * @param response ServletResponse
+	 */
+	private void saveCase(HttpServletRequest request,
+			HttpServletResponse response) {
+
 	}
 
 	/**
@@ -475,7 +490,7 @@ public class D3webDialog extends HttpServlet {
 
 				Question qto =
 						(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
-								c.getId(), d3wcon.getKb());
+								c.getName(), d3wcon.getKb());
 
 				if (!isIndicated(qto, blackboard)
 						|| !isParentIndicated(qto, blackboard)) {
@@ -504,7 +519,7 @@ public class D3webDialog extends HttpServlet {
 
 				Question qto =
 						(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
-								to.getId(), d3wcon.getKb());
+								to.getName(), d3wcon.getKb());
 
 				// remove a previously set value
 				lastFact = blackboard.getValueFact(qto);

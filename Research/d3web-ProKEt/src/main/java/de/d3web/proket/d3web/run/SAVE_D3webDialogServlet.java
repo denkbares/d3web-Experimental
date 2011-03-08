@@ -297,7 +297,7 @@ public class SAVE_D3webDialogServlet<KnoweldgeBase> extends HttpServlet {
 				}
 
 				// add to the result
-				sb.append(IDUtils.getNamespacedId(source.getId(), "question"))
+				sb.append(IDUtils.getNamespacedId(source.getName(), "question"))
 						.append(",").append(ratingClass).append(";");
 			}
 		}
