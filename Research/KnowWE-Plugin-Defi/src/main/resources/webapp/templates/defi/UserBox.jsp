@@ -1,11 +1,26 @@
+<%@page import="de.d3web.we.kdom.Sections"%>
+<%@page import="de.knowwe.defi.AboutMe"%>
+<%@page import="de.d3web.we.jspwiki.JSPWikiUserContext"%>
+<%@page import="de.d3web.we.kdom.Section"%>
+<%@page import="de.d3web.we.core.KnowWEEnvironment"%>
+<%@page import="de.d3web.we.kdom.KnowWEArticle"%>
+<%@ page import="com.ecyrd.jspwiki.*" %>
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page import="javax.servlet.jsp.jstl.fmt.*" %>
-<%@ page import="com.ecyrd.jspwiki.*" %>
 <fmt:setLocale value="${prefs.Language}" />
 <fmt:setBundle basename="templates.default"/>
 <%
   WikiContext c = WikiContext.findContext(pageContext);
+  JSPWikiUserContext user = new JSPWikiUserContext(c);
+  String avatar = "A01";
+  if (user.userIsAuthenticated()) {
+	  KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(KnowWEEnvironment.DEFAULT_WEB, user.getUserName());
+	  Section<?> s = article.getSection();
+	  //Section<?> sec = Sections.findChildOfType(s, AboutMe.class);
+	  //avatar = DefaultMarkupType.getAnnotation(sec, "avatar");
+	  avatar = s.toString().split("@avatar: ")[1].substring(0,3);	  
+  }
 %>
 <div class="userbox">
 
@@ -32,7 +47,7 @@
   </wiki:UserCheck>
   
 	</th><td class="no_userpic">
-		<img src="KnowWEExtension/images/A01.png" height="110px" width="110px" alt="avatar" />
+		<img src="KnowWEExtension/images/<%= avatar %>.png" height="110px" width="110px" alt="avatar" />
 	</td></tr>
 	</table>
   <%-- action buttons --%>
