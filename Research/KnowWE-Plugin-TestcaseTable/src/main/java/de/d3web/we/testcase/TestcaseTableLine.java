@@ -36,10 +36,10 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SyntaxError;
+import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.kdom.table.TableCell;
 import de.d3web.we.kdom.table.TableLine;
 import de.d3web.we.object.QuestionReference;
-import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.d3web.we.utils.KnowWEUtils;
 
 /**
@@ -59,18 +59,18 @@ public class TestcaseTableLine extends TableLine {
 			e.printStackTrace();
 		}
 
-		addSubtreeHandler(new D3webSubtreeHandler<TestcaseTableLine>() {
+		addSubtreeHandler(new SubtreeHandler<TestcaseTableLine>() {
 
 			@Override
 			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TestcaseTableLine> s) {
 
 				KnowledgeBase kb = findKB(s, article);
 
-				Section<TimeStampType> timeStamp =  Sections.findSuccessor(s, TimeStampType.class);
+				Section<TimeStampType> timeStamp = Sections.findSuccessor(s, TimeStampType.class);
 				if (timeStamp == null) {
 					int lineNumber = Sections.findAncestorOfType(s, TestcaseTable.class).getChildren().indexOf(
 							s);
-					Section<CellContent> cell =  Sections.findSuccessor(s, CellContent.class);
+					Section<CellContent> cell = Sections.findSuccessor(s, CellContent.class);
 
 					LinkedList<KDOMReportMessage> list = new LinkedList<KDOMReportMessage>();
 					list.add(new SyntaxError("Invalid timestamp '" + cell.getOriginalText()
