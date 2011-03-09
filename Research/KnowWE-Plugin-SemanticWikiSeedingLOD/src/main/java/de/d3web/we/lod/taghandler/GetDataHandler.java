@@ -3,7 +3,7 @@ package de.d3web.we.lod.taghandler;
 import java.util.Map;
 
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 public class GetDataHandler extends AbstractHTMLTagHandler {
 
@@ -13,7 +13,7 @@ public class GetDataHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> parameters, String web) {
 
 		return "<form action='javascript:getDataForConcept()'>"

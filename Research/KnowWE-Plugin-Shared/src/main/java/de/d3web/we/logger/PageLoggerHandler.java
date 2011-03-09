@@ -28,7 +28,7 @@ import java.text.SimpleDateFormat;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.rendering.PageAppendHandler;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 public class PageLoggerHandler implements PageAppendHandler {
 
@@ -36,7 +36,7 @@ public class PageLoggerHandler implements PageAppendHandler {
 
 	@Override
 	public String getDataToAppend(String topic, String web,
-			KnowWEUserContext user) {
+			UserContext user) {
 		if (log) {
 			try {
 				BufferedWriter buffy = new BufferedWriter(new FileWriter(

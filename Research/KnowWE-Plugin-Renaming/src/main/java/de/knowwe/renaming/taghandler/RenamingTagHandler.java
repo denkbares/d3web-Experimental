@@ -47,7 +47,7 @@ import org.w3c.dom.Text;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 /**
  * <p>
@@ -62,7 +62,7 @@ public class RenamingTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String getDescription(KnowWEUserContext user) {
+	public String getDescription(UserContext user) {
 		return KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
 				"KnowWE.RenamingTagHandler.description");
 	}
@@ -73,7 +73,7 @@ public class RenamingTagHandler extends AbstractHTMLTagHandler {
 	 * </p>
 	 */
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user, Map<String, String> values, String web) {
+	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
 		StringBuffer html = new StringBuffer();
 
 		ResourceBundle rb = KnowWEEnvironment.getInstance().getKwikiBundle(user);

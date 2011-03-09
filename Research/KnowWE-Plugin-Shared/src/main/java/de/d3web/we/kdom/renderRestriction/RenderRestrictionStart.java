@@ -25,7 +25,7 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 /**
  * Start marker of the group-rendering-restriction
@@ -60,7 +60,7 @@ public class RenderRestrictionStart extends DefaultMarkupType {
 	class RestrictionRendererStart extends KnowWEDomRenderer<RenderRestrictionStart> {
 
 		@Override
-		public void render(KnowWEArticle article, Section<RenderRestrictionStart> sec, KnowWEUserContext user, StringBuilder string) {
+		public void render(KnowWEArticle article, Section<RenderRestrictionStart> sec, UserContext user, StringBuilder string) {
 			Section<GroupDeclaration> grSec = Sections.findSuccessor(sec, GroupDeclaration.class);
 			string.append(RenderRestrictionStart.createString(grSec.get().getGroup(grSec)));
 

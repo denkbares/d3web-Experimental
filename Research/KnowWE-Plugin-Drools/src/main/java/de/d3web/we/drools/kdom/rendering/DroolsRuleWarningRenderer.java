@@ -22,8 +22,8 @@ package de.d3web.we.drools.kdom.rendering;
 
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.MessageRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class DroolsRuleWarningRenderer implements MessageRenderer{
 
@@ -38,7 +38,7 @@ public class DroolsRuleWarningRenderer implements MessageRenderer{
 	}
 
 	@Override
-	public String postRenderMessage(KDOMReportMessage m, KnowWEUserContext user) {
+	public String postRenderMessage(KDOMReportMessage m, UserContext user) {
 		StringBuffer buffy = new StringBuffer();
 		
 		buffy.append("<span style=\"border-bottom: 1px solid #999; padding: 2px; margin-top: 5px; display: block; color: #a40000;\">");
@@ -49,7 +49,7 @@ public class DroolsRuleWarningRenderer implements MessageRenderer{
 	}
 
 	@Override
-	public String preRenderMessage(KDOMReportMessage m, KnowWEUserContext user) {
+	public String preRenderMessage(KDOMReportMessage m, UserContext user) {
 		return "";
 	}
 

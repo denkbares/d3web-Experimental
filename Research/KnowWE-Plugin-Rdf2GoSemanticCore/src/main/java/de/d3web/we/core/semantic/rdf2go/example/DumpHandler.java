@@ -22,10 +22,8 @@ package de.d3web.we.core.semantic.rdf2go.example;
 import java.util.Map;
 
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
-
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 public class DumpHandler extends AbstractHTMLTagHandler {
 
@@ -34,7 +32,7 @@ public class DumpHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 		
 		Rdf2GoCore.getInstance().dumpModel();

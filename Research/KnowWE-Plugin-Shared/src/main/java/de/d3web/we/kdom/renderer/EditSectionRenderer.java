@@ -27,13 +27,13 @@ import java.util.regex.Pattern;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.user.UserSettingsManager;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  * <p>
@@ -60,7 +60,7 @@ public class EditSectionRenderer extends KnowWEDomRenderer {
 	}
 
 	@Override
-	public final void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
+	public final void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
 
 		StringBuilder subTreeContent = new StringBuilder();
 		renderer.render(article, sec, user, subTreeContent);
@@ -74,7 +74,7 @@ public class EditSectionRenderer extends KnowWEDomRenderer {
 		// Specifies whether the whole content is rendered in one line or not
 		boolean isInline = isInline(sec);
 		boolean highlight = false;
-		Map<String, String> urlParameterMap = user.getUrlParameterMap();
+		Map<String, String> urlParameterMap = user.getParameters();
 
 		// don't append if multiline or javascript action (like
 		// ReRenderContentPartAction)
@@ -112,7 +112,7 @@ public class EditSectionRenderer extends KnowWEDomRenderer {
 			// Setting pre-Environment to avoid textarea content being rendered
 			// by JSPWiki if page was refreshed (while QuickEdit being opened).
 			// But only if there is no other one around it.
-			boolean preNeeded = !user.getUrlParameterMap().containsKey("action")
+			boolean preNeeded = !user.getParameters().containsKey("action")
 					&& !UserSettingsManager.getInstance().quickEditIsInPre(sec.getID(),
 							user.getUserName(), sec.getTitle());
 			if (preNeeded) {
@@ -156,7 +156,7 @@ public class EditSectionRenderer extends KnowWEDomRenderer {
 	 * @param isInline - if accept and cancel button are in one line or not.
 	 * @return The quick edit menu panel.
 	 */
-	protected String generateQuickEdit(String tooltip, String id, boolean isEditable, KnowWEUserContext user, Boolean isInline) {
+	protected String generateQuickEdit(String tooltip, String id, boolean isEditable, UserContext user, Boolean isInline) {
 		StringBuilder b = new StringBuilder();
 		final ResourceBundle rb = KnowWEEnvironment.getInstance().getKwikiBundle(user);
 		b.append("<div " + getQuickEditDivAttributes() + ">");

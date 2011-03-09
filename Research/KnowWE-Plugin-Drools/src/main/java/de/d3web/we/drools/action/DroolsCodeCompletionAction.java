@@ -12,7 +12,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.ActionContext;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.drools.action.utils.DroolsUtils;
 import de.d3web.we.drools.kdom.DroolsSessionRootType;
 import de.d3web.we.drools.terminology.AbstractFact;
@@ -32,7 +32,7 @@ import de.d3web.we.utils.KnowWEUtils;
 public class DroolsCodeCompletionAction extends AbstractAction {
 
 	@Override
-	public void execute(ActionContext context) throws IOException {
+	public void execute(UserActionContext context) throws IOException {
 
 		// Create new JSON Object
 		JsonObject json = new JsonObject();
@@ -162,7 +162,7 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 	/**
 	 * returns all inputs
 	 */
-	private List<String> getInputSuggestions(ActionContext context, String object) {
+	private List<String> getInputSuggestions(UserActionContext context, String object) {
 		List<String> suggestions = new ArrayList<String>();
 
 		Map<String, Object> factsStore = DroolsKnowledgeHandler.getInstance().getFactsStore(
@@ -180,7 +180,7 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 	/**
 	 * returns only inputs which are not SolutionInput
 	 */
-	private List<String> getNonSolutionInputSuggestions(ActionContext context,
+	private List<String> getNonSolutionInputSuggestions(UserActionContext context,
 			String object) {
 		List<String> suggestions = new ArrayList<String>();
 
@@ -199,7 +199,7 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 	/**
 	 * returns all values
 	 */
-	private List<String> getValueSuggestions(ActionContext context, String object,
+	private List<String> getValueSuggestions(UserActionContext context, String object,
 			String value) {
 		List<String> suggestions = new ArrayList<String>();
 
@@ -221,27 +221,27 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 	/**
 	 * returns all values
 	 */
-	private List<String> getSessionSuggestions(ActionContext context, String value) {
+	private List<String> getSessionSuggestions(UserActionContext context, String value) {
 		List<String> suggestions = new ArrayList<String>();
 
 		KnowWEArticle article = DroolsUtils.loadArticle(context);
-		
+
 		if (article != null) {
-			
+
 			// Get the RootType sections
 			List<Section<DroolsSessionRootType>> rootTypes = new ArrayList<Section<DroolsSessionRootType>>();
 			Sections.findSuccessorsOfType(article.getSection(), DroolsSessionRootType.class,
 					rootTypes);
-					
+
 			// Search for the correct session
 			for (Section<DroolsSessionRootType> rootType : rootTypes) {
 				String sessionName = DefaultMarkupType.getAnnotation(rootType, "Name");
 				if (sessionName.toLowerCase().startsWith(value.toLowerCase()))
 					suggestions.add(sessionName);
 			}
-		}		
+		}
 		return suggestions;
 	}
-	
-	
+
+
 }

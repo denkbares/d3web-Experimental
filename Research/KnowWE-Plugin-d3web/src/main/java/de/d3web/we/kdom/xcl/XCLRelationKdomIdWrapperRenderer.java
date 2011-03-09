@@ -23,8 +23,8 @@ package de.d3web.we.kdom.xcl;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  * This renderer adds the kdomid to the span in which a Section is rendered. Use
@@ -43,7 +43,7 @@ public class XCLRelationKdomIdWrapperRenderer extends KnowWEDomRenderer {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
 		// Span is for kdom id.
 		// id can be found by the class.
 		StringBuilder b = new StringBuilder();

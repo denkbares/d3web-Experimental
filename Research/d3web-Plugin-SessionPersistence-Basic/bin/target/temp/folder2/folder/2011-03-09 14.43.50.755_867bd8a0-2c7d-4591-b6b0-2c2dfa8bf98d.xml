@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<repository>
+<session changed="2011-03-09 14:43:50.755" created="2011-03-09 14:43:50.755" id="867bd8a0-2c7d-4591-b6b0-2c2dfa8bf98d">
+<name>testname äöß</name>
+<facts>
+<valueFacts>
+<fact objectName="Question2" psm="class de.d3web.indication.inference.PSMethodUserSelected">
+<multipleChoiceValue>
+<choice>Answer1</choice>
+<choice>Answer2</choice>
+</multipleChoiceValue>
+</fact>
+<fact objectName="QuestionNum" psm="class de.d3web.indication.inference.PSMethodUserSelected">
+<numValue>-29.2</numValue>
+</fact>
+<fact objectName="QuestionText" psm="class de.d3web.indication.inference.PSMethodUserSelected">
+<textValue>Text &lt;mit&gt; fiesen\bösen &lt;/Sachen&gt;</textValue>
+</fact>
+<fact objectName="Question" psm="class de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Answer1</choiceValue>
+</fact>
+<fact objectName="QuestionDate" psm="class de.d3web.indication.inference.PSMethodUserSelected">
+<dateValue>2011-03-09 14:43:50.755</dateValue>
+</fact>
+<fact objectName="Solution2" psm="class de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="999.0" type="heuristic">ESTABLISHED</rating>
+</fact>
+<fact objectName="Solution" psm="class de.d3web.indication.inference.PSMethodUserSelected">
+<rating>ESTABLISHED</rating>
+</fact>
+<fact objectName="Solution" psm="class de.d3web.scoring.inference.PSMethodHeuristic">
+<rating score="999.0" type="heuristic">ESTABLISHED</rating>
+</fact>
+<fact objectName="Solution">
+<rating>ESTABLISHED</rating>
+</fact>
+</valueFacts>
+<interviewFacts/>
+</facts>
+<protocol>
+<entry date="2011-03-09 14:43:50.745" type="text">ancient entry</entry>
+<entry date="2011-03-09 14:43:50.756" objectName="Question" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Answer1</choiceValue>
+</entry>
+<entry date="2011-03-09 14:43:50.756" objectName="Question2" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<multipleChoiceValue>
+<choice>Answer1</choice>
+<choice>Answer2</choice>
+</multipleChoiceValue>
+</entry>
+<entry date="2011-03-09 14:43:50.756" objectName="QuestionDate" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<dateValue>2011-03-09 14:43:50.755</dateValue>
+</entry>
+<entry date="2011-03-09 14:43:50.756" objectName="QuestionText" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<textValue>Text &lt;mit&gt; fiesen\bösen &lt;/Sachen&gt;</textValue>
+</entry>
+<entry date="2011-03-09 14:43:50.756" objectName="QuestionNum" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<numValue>-29.2</numValue>
+</entry>
+<entry date="2011-03-09 14:43:50.756" objectName="Solution" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<rating>ESTABLISHED</rating>
+</entry>
+<entry date="2011-03-09 14:43:50.766" type="text">future entry</entry>
+</protocol>
+</session>
+</repository>

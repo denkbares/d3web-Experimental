@@ -31,8 +31,8 @@ import de.d3web.we.kdom.renderer.EditSectionRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class LocationDefinitionType extends AbstractType {
 
@@ -122,7 +122,7 @@ public class LocationDefinitionType extends AbstractType {
 
 		@Override
 		public void render(KnowWEArticle article, Section<LocationDefinitionType> sec,
-				KnowWEUserContext user, StringBuilder string) {
+				UserContext user, StringBuilder string) {
 			String originalText = sec.getOriginalText();
 			Placemark extractPlacemark = extractPlacemark(sec);
 			if (extractPlacemark == null) {

@@ -32,8 +32,8 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.search.SearchTerm;
 import de.d3web.we.search.SearchWordPreprocessor;
 import de.d3web.we.taghandler.AbstractTagHandler;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  * This tag embeds the biolog-search into a wiki page.
@@ -47,7 +47,7 @@ public class BiologSearchTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(KnowWEArticle article, Section<?> section, KnowWEUserContext userContext, Map<String, String> values) {
+	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> values) {
 		String count = values.get("count");
 
 		int number = 1;

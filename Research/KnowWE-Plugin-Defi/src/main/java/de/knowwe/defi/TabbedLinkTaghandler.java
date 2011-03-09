@@ -5,8 +5,8 @@ import java.util.Map;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.taghandler.AbstractTagHandler;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  * The TabbedLinkTaghandler simplifies the creation of links to tabbed sections
@@ -29,7 +29,7 @@ public class TabbedLinkTaghandler extends AbstractTagHandler {
 
 
 	@Override
-	public String render(KnowWEArticle article, Section<?> section, KnowWEUserContext userContext, Map<String, String> parameters) {
+	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
 
 		StringBuilder tabbedLink = new StringBuilder();
 

@@ -34,7 +34,7 @@ import org.json.simple.JSONValue;
 import com.google.gson.JsonObject;
 
 import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.ActionContext;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.drools.action.utils.DroolsUtils;
@@ -59,16 +59,16 @@ import de.d3web.we.utils.SplitUtility;
  * @author Sebastian Furth, Florian Ziegler, Alex Legler
  */
 public class DroolsAction extends AbstractAction {
-	
+
 	@Override
-	public void execute(ActionContext context) throws IOException {
+	public void execute(UserActionContext context) throws IOException {
 		Logging.getInstance().info("Command: " + context.getParameter("command"));
 
 		StatefulKnowledgeSession session;
 		try {
 			// create session if necessary
 			session = DroolsKnowledgeHandler.getInstance().getSession(context);
-			
+
 			if (session == null)
 				throw new RuntimeException("INTERNAL ERROR: Session is null where it shouldn't be.");
 		} catch (Exception e) {
@@ -77,7 +77,7 @@ public class DroolsAction extends AbstractAction {
 			e.printStackTrace();
 			return;
 		}
-		
+
 		// Extract action-type and execute it
 		String actionType = extractActionType(context.getParameter("command"));
 		if (actionType.equalsIgnoreCase("set"))
@@ -97,42 +97,42 @@ public class DroolsAction extends AbstractAction {
 		} else
 			returnMessage(context, "Unknown command : \"" + actionType + "\"", ResponseType.ERROR);
 	}
-		
+
 	/**
 	 * Generates a Message containing the status of the specified object.
 	 * @param session the current KnowledgeSession
 	 * @param context the current ActionContext
 	 * @throws IOException only thrown if something went wrong while writing to KnowWE.jsp
 	 */
-	private void doGetAction(ActionContext context, StatefulKnowledgeSession session) throws IOException {
+	private void doGetAction(UserActionContext context, StatefulKnowledgeSession session) throws IOException {
 		if (!checkCommandSyntax("get\\s+(.*?)", context)) {
 			returnMessage(context, "Syntax error", ResponseType.ERROR);
 			return;
 		}
-		
+
 		AbstractFact fact = loadFact(session, context);
-		
+
 		if (fact != null)
 			returnMessage(context, fact.getStatusText(), ResponseType.OK);
-		else 
+		else
 			returnMessage(context, "Fact '"+ extractFactName(context.getParameter("command")) +"' not found!", ResponseType.ERROR);
 	}
-	
+
 	/**
-	 * Sets the value of a specified Fact and generates a Message 
+	 * Sets the value of a specified Fact and generates a Message
 	 * containing the new status of the fact.
 	 * @param session the current KnowledgeSession
 	 * @param context the current ActionContext
 	 * @throws IOException only thrown if something went wrong while writing to KnowWE.jsp
 	 */
-	private void doSetAction(ActionContext context, StatefulKnowledgeSession session) throws IOException {
+	private void doSetAction(UserActionContext context, StatefulKnowledgeSession session) throws IOException {
 		if (!checkCommandSyntax("set\\s+(.*?)\\s*=\\s*(.*?)", context)) {
 			returnMessage(context, "Syntax error", ResponseType.ERROR);
 			return;
 		}
-		
+
 		AbstractFact fact = loadFact(session, context);
-		
+
 		if (fact instanceof ChoiceInput)
 			doSetValueChoice(context, session, (ChoiceInput) fact);
 		else if (fact instanceof SolutionInput)
@@ -141,7 +141,7 @@ public class DroolsAction extends AbstractAction {
 			doSetValueNum(context, session, (NumInput) fact);
 		else if (fact == null)
 			returnMessage(context, "Fact not found!", ResponseType.ERROR);
-		else 
+		else
 			returnMessage(context, "Unknown Fact Type - no value was set!", ResponseType.ERROR);
 	}
 
@@ -152,10 +152,10 @@ public class DroolsAction extends AbstractAction {
 	 * @param fact the current fact
 	 * @throws IOException only thrown if something went wrong while writing to KnowWE.jsp
 	 */
-	private void doSetValueChoice(ActionContext context, StatefulKnowledgeSession session, ChoiceInput fact) throws IOException {
+	private void doSetValueChoice(UserActionContext context, StatefulKnowledgeSession session, ChoiceInput fact) throws IOException {
 		// Get the corresponding FactHandle
 		FactHandle factHandle = session.getFactHandle(fact);
-		if (factHandle == null) 
+		if (factHandle == null)
 			returnMessage(context, "Unable to load FactHandle for Fact \"" + fact.getName() + "\"", ResponseType.ERROR);
 		else {
 			// Modify Value
@@ -174,10 +174,10 @@ public class DroolsAction extends AbstractAction {
 	 * @param fact the current fact
 	 * @throws IOException only thrown if something went wrong while writing to KnowWE.jsp
 	 */
-	private void doSetValueNum(ActionContext context, StatefulKnowledgeSession session, NumInput fact) throws IOException {
+	private void doSetValueNum(UserActionContext context, StatefulKnowledgeSession session, NumInput fact) throws IOException {
 		// Get the corresponding FactHandle
 		FactHandle factHandle = session.getFactHandle(fact);
-		if (factHandle == null) 
+		if (factHandle == null)
 			returnMessage(context, "Unable to load FactHandle for Fact \"" + fact.getName() + "\"", ResponseType.OK);
 		else {
 			// Modify Value
@@ -188,29 +188,29 @@ public class DroolsAction extends AbstractAction {
 			returnMessage(context, fact.getStatusText(), ResponseType.OK);
 		}
 	}
-	
+
 	/**
 	 * Loads the session specified by the name in the command.
 	 * All commands are executed immediately
 	 * @param context the current ActionContext
 	 * @throws IOException only thrown if something went wrong while writing to KnowWE.jsp
 	 */
-	private void doLoadAction(ActionContext context) throws IOException {
-		
+	private void doLoadAction(UserActionContext context) throws IOException {
+
 		// Get the name of the desired session
 		String desiredSessionName = extractSessionName(context.getParameter("command"));
-	
+
 		Section<DroolsSessionType> session = findDroolsSessionSection(context, desiredSessionName);
-		
+
 		if (session != null) {
 			processSession(context, session.getOriginalText());
 			return;
 		}
-		
+
 		returnMessage(context, "Session \"" + desiredSessionName + "\" was not found.", ResponseType.ERROR);
 	}
-	
-	private void doStoreAction(ActionContext context) throws IOException {
+
+	private void doStoreAction(UserActionContext context) throws IOException {
 		KnowWEArticle article = DroolsUtils.loadArticle(context);
 		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(article.getWeb());
 		String desiredSessionName = extractSessionName(context.getParameter("command"));
@@ -219,11 +219,11 @@ public class DroolsAction extends AbstractAction {
 			returnMessage(context, "Session with same name already exists. Session wasn't saved.", ResponseType.ERROR);
 			return;
 		}
-		
+
 		String sessionContent = context.getParameter("sessionContent");
 		if (sessionContent != null) {
 			String[] commands = sessionContent.split("DROOLSLINEBREAK");
-			
+
 			// Create the content
 			StringBuilder sessionText = new StringBuilder();
 			sessionText.append("%%DroolsSession\n");
@@ -232,34 +232,34 @@ public class DroolsAction extends AbstractAction {
 			sessionText.append("\n@Name: ");
 			sessionText.append(desiredSessionName);
 			sessionText.append("\n%");
-			
+
 			// Save the article
 			Map<String, String> map = new HashMap<String, String>();
 			map.put(article.getSection().getID(), article.getSection().getOriginalText()
 					+ sessionText.toString());
-			mgr.replaceKDOMNodesSaveAndBuild(context.getKnowWEParameterMap(), article.getTitle(),
+			mgr.replaceKDOMNodesSaveAndBuild(context, article.getTitle(),
 					map);
 			returnMessage(context, "Session was successfully saved.", ResponseType.OK);
 			return;
 		}
-		
+
 		returnMessage(context, "There were no commands to save.", ResponseType.ERROR);
 		return;
 	}
-	
-	private Section<DroolsSessionType> findDroolsSessionSection(ActionContext context,
+
+	private Section<DroolsSessionType> findDroolsSessionSection(UserActionContext context,
 			String desiredSessionName) {
-		
+
 		// load the article
 		KnowWEArticle article = DroolsUtils.loadArticle(context);
-		
+
 		if (article != null) {
-			
+
 			// Get the RootType sections
 			List<Section<DroolsSessionRootType>> rootTypes = new ArrayList<Section<DroolsSessionRootType>>();
 			Sections.findSuccessorsOfType(article.getSection(), DroolsSessionRootType.class,
 					rootTypes);
-		
+
 			// Search for the correct session
 			for (Section<DroolsSessionRootType> rootType : rootTypes) {
 				String sessionName = DefaultMarkupType.getAnnotation(rootType, "Name");
@@ -281,27 +281,27 @@ public class DroolsAction extends AbstractAction {
 	private String extractSessionName(String text) {
 		Pattern p = Pattern.compile("^(load|store)\\s*(.+?)\\s*");
 		Matcher m = p.matcher(text);
-		
+
 		if (!m.matches())
 			return null;
-		
+
 		return m.group(2);
 	}
-	
+
 	/**
 	 * Executes all commands stored in a session
 	 * @param context the current ActionContext
 	 * @param originalText the text of the DroolsSessionType representing the commands
 	 * @throws IOException only thrown if something went wrong while writing to KnowWE.jsp
 	 */
-	private void processSession(ActionContext context, String originalText) throws IOException {
+	private void processSession(UserActionContext context, String originalText) throws IOException {
 		String[] commands = originalText.split("\r\n");
 		for (String command : commands) {
 			command = command.replace("\n", "");
-			context.getParameters().setProperty("command", command);
+			context.getParameters().put("command", command);
 			context.getAction().execute(context);
 		}
-	}	
+	}
 
 	/**
 	 * Loads the fact which is specified in the request.
@@ -309,18 +309,18 @@ public class DroolsAction extends AbstractAction {
 	 * @param context the current ActionContext
 	 * @return AbstractFact the loaded fact (null if no one was found)
 	 */
-	private AbstractFact loadFact(StatefulKnowledgeSession session, ActionContext context) {
+	private AbstractFact loadFact(StatefulKnowledgeSession session, UserActionContext context) {
 		String factName = extractFactName(context.getParameter("command"));
-		if (factName != null) { 
+		if (factName != null) {
 			for (Object o : session.getObjects()) {
-				if (o instanceof AbstractFact 
+				if (o instanceof AbstractFact
 						&& ((AbstractFact) o).getName().equals(factName))
 					return (AbstractFact) o;
 			}
 			Logging.getInstance().severe("Could not find " + factName + " in the current session.");
 			return null;
-		} 
-		Logging.getInstance().severe("Unable to extract factName from command.");	
+		}
+		Logging.getInstance().severe("Unable to extract factName from command.");
 		return null;
 	}
 
@@ -329,11 +329,11 @@ public class DroolsAction extends AbstractAction {
 	 * @param context the current ActionContext
 	 * @param message a custom Message which will be wrapped with XML markups
 	 */
-	private void returnMessage(ActionContext context, String message, ResponseType responseType) throws IOException {
+	private void returnMessage(UserActionContext context, String message, ResponseType responseType) throws IOException {
 		JsonObject json = new JsonObject();
-		
+
 		json.addProperty("status", responseType.ordinal());
-		
+
 		json.addProperty("command", context.getParameter("command"));
 		json.addProperty("message", JSONValue.escape(KnowWEUtils.html_escape(message)));
 
@@ -347,14 +347,14 @@ public class DroolsAction extends AbstractAction {
 		}
 		return text;
 	}
-	
+
 	private String extractFactName(String text) {
 		Pattern p = Pattern.compile("^(set|get)\\s*(.+?)\\s*(=.*|$)");
 		Matcher m = p.matcher(text);
-		
+
 		if (!m.matches())
 			return null;
-		
+
 		return m.group(2);
 	}
 
@@ -365,11 +365,11 @@ public class DroolsAction extends AbstractAction {
 		}
 		return null;
 	}
-	
-	private boolean checkCommandSyntax(String regex, ActionContext context) {
+
+	private boolean checkCommandSyntax(String regex, UserActionContext context) {
 		return Pattern.compile(regex).matcher(context.getParameter("command")).matches();
 	}
-	
+
 	private String removeleadingSpaces(String text) {
 		while (text.startsWith(" ")) {
 			text = text.replaceFirst(" ", "");
@@ -377,6 +377,6 @@ public class DroolsAction extends AbstractAction {
 		return text;
 	}
 
-	
-		
+
+
 }

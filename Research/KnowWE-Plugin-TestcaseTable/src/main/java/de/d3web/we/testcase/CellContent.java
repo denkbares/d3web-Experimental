@@ -20,9 +20,9 @@ package de.d3web.we.testcase;
 
 import java.util.List;
 
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SectionFinderConstraint;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;

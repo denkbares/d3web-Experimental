@@ -25,8 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.ActionContext;
-import de.d3web.we.core.KnowWEParameterMap;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.utils.KnowWEUtils;
 
 /**
@@ -44,16 +43,15 @@ public class LogTabClicksAction extends AbstractAction {
 	private final String LOGFILE_NAME = "defi.log.txt";
 
 	@Override
-	public void execute(ActionContext context) throws IOException {
+	public void execute(UserActionContext context) throws IOException {
 
-		KnowWEParameterMap map = context.getKnowWEParameterMap();
-		String username = context.getWikiContext().getUserName();
-		String clicked_tab = map.get("tologtab");
-		String page = map.get("page");
+		String username = context.getUserName();
+		String clicked_tab = context.getParameter("tologtab");
+		String page = context.getParameter("page");
 
-		boolean isAuthenticated = context.getKnowWEParameterMap().getWikiContext().userIsAuthenticated();
+		boolean isAuthenticated = context.userIsAuthenticated();
 		if (!isAuthenticated) {
-			username = context.getWikiContext().getHttpRequest().getRemoteAddr();
+			username = context.getRequest().getRemoteAddr();
 		}
 
 		String log_file = System.getProperty("java.io.tmpdir") + File.separatorChar

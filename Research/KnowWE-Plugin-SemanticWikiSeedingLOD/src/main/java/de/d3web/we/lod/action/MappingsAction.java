@@ -15,9 +15,8 @@ import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 
 import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.ActionContext;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
@@ -29,12 +28,11 @@ import de.knowwe.semantic.sparql.SPARQLUtil;
 public class MappingsAction extends AbstractAction {
 
 	@Override
-	public void execute(ActionContext context) throws IOException {
+	public void execute(UserActionContext context) throws IOException {
 
-		KnowWEParameterMap map = context.getKnowWEParameterMap();
-		String type = map.get("type");
-		String user = map.getUser();
-		String web = map.getWeb();
+		String type = context.getParameter("type");
+		String user = context.getUserName();
+		String web = context.getWeb();
 		String mappingTopic = HermesData.getMappingTopic();
 
 		// Execute Query to get all Hermes Concepts.
@@ -161,7 +159,7 @@ public class MappingsAction extends AbstractAction {
 			KnowWEEnvironment
 						.getInstance()
 						.getArticleManager(web)
-						.replaceKDOMNodesSaveAndBuild(map, mappingTopic,
+						.replaceKDOMNodesSaveAndBuild(context, mappingTopic,
 								nodesMap);
 
 			StringBuffer updates = new StringBuffer();

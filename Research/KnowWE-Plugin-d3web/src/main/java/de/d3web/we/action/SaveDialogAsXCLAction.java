@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -20,6 +20,7 @@
 
 package de.d3web.we.action;
 
+import java.io.IOException;
 import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
@@ -33,23 +34,32 @@ import de.d3web.we.basic.SessionBroker;
 import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.xcl.CoveringListSection;
 
 /**
- * 
+ *
  * @author smark
  */
-public class SaveDialogAsXCLAction extends DeprecatedAbstractKnowWEAction {
+public class SaveDialogAsXCLAction extends AbstractAction {
 
 	@Override
-	public String perform(KnowWEParameterMap parameterMap) {
+	public void execute(UserActionContext context) throws IOException {
 
-		String topic = parameterMap.get(KnowWEAttributes.TOPIC);
-		String user = parameterMap.getUser();
-		String web = parameterMap.getWeb();
-		String solution = parameterMap.get("XCLSolution");
+		String result = perform(context);
+		if (result != null && context.getWriter() != null) {
+			context.setContentType("text/html; charset=UTF-8");
+			context.getWriter().write(result);
+		}
+
+	}
+
+	private String perform(UserActionContext context) {
+
+		String topic = context.getParameter(KnowWEAttributes.TOPIC);
+		String user = context.getUserName();
+		String web = context.getWeb();
+		String solution = context.getParameter("XCLSolution");
 
 		Session c = getSession(web, topic, user);
 
@@ -74,7 +84,7 @@ public class SaveDialogAsXCLAction extends DeprecatedAbstractKnowWEAction {
 
 			// insert new XCLRelation into article
 			KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(
-					parameterMap.getWeb());
+					context.getWeb());
 			KnowWEArticle a = mgr.getArticle(topic);
 			String articleText = a.collectTextsFromLeaves();
 
@@ -82,14 +92,14 @@ public class SaveDialogAsXCLAction extends DeprecatedAbstractKnowWEAction {
 					newXCL + "\n</" + CoveringListSection.TAG + ">");
 			KnowWEEnvironment.getInstance().getWikiConnector().writeArticleToWikiEnginePersistence(
 					topic, articleText,
-					parameterMap);
+					context);
 
 		}
 		return null;
 	}
 
 	/**
-	 * 
+	 *
 	 * @param c
 	 * @param answeredQuestions
 	 * @param content
@@ -113,7 +123,7 @@ public class SaveDialogAsXCLAction extends DeprecatedAbstractKnowWEAction {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param d
 	 * @return
 	 */
@@ -149,7 +159,7 @@ public class SaveDialogAsXCLAction extends DeprecatedAbstractKnowWEAction {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param web
 	 * @param topic
 	 * @param solution

@@ -32,8 +32,8 @@ import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMWarning;
 import de.d3web.we.kdom.xml.AbstractXMLType;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class IncludeSectionRenderer extends KnowWEDomRenderer {
 
@@ -51,7 +51,7 @@ public class IncludeSectionRenderer extends KnowWEDomRenderer {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
 
 		String render = sec.get() instanceof AbstractXMLType ?
 				AbstractXMLType.getAttributeMapFor(sec).get("render") : null;
@@ -114,7 +114,7 @@ public class IncludeSectionRenderer extends KnowWEDomRenderer {
 		string.append(KnowWEUtils.maskHTML("<p>\n"));
 	}
 
-	private void renderNormally(KnowWEArticle article, Section sec, KnowWEUserContext user,
+	private void renderNormally(KnowWEArticle article, Section sec, UserContext user,
 			String srclink, StringBuilder content, StringBuilder string) {
 		DelegateRenderer.getInstance().render(article, sec, user, content);
 		string.append(content.toString());

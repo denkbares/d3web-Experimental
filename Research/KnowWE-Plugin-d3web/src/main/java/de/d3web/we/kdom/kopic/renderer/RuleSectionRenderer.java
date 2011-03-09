@@ -35,13 +35,13 @@ import de.d3web.we.kdom.kopic.AbstractKopicSection;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rules.Rule;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class RuleSectionRenderer extends KnowWEDomRenderer {
 
 	@Override
-	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder result) {
+	public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder result) {
 
 		result.append(KnowWEUtils.maskHTML("<a name=\"" + sec.getID() + "\" />"));
 		StringBuilder messagesBuilder = new StringBuilder();

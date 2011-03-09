@@ -41,8 +41,8 @@ import org.openrdf.repository.RepositoryException;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.UpperOntology;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  * @author kazamatzuri
@@ -64,7 +64,7 @@ public class FactSheet extends AbstractHTMLTagHandler {
 	 * java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user, Map<String, String> values, String web) {
+	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
 		UpperOntology uo = UpperOntology.getInstance();
 		String querystring = "PREFIX ns: <" + uo.getBaseNS() + "> \n";
 		querystring += "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n";
@@ -169,7 +169,7 @@ public class FactSheet extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String getDescription(KnowWEUserContext user) {
+	public String getDescription(UserContext user) {
 		return KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
 				"KnowWE.FactSheet.description");
 	}

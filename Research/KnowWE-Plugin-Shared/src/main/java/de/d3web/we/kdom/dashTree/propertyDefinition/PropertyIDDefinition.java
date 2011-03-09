@@ -26,8 +26,8 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  * @author Jochen
@@ -58,7 +58,7 @@ public class PropertyIDDefinition extends AbstractType {
 
 		@Override
 		public void render(KnowWEArticle article, Section sec,
-				KnowWEUserContext user, StringBuilder string) {
+				UserContext user, StringBuilder string) {
 
 			string.append(KnowWEUtils.maskHTML("<span title=\"ObjectProperty Definition\">"));
 			StyleRenderer.PROPERTY.render(article, sec, user,

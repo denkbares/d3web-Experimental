@@ -16,7 +16,7 @@ import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.lod.quiz.map.MapForConcepts;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
@@ -30,7 +30,7 @@ public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user, Map<String, String> parameters, String web) {
+	public String renderHTML(String topic, UserContext user, Map<String, String> parameters, String web) {
 
 		String encodePerson = "";
 

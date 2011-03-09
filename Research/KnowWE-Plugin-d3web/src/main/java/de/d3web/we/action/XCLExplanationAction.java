@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -20,6 +20,7 @@
 
 package de.d3web.we.action;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -41,12 +42,11 @@ import de.d3web.kernel.verbalizer.Verbalizer;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.SessionBroker;
 import de.d3web.we.core.KnowWEAttributes;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.xcl.InferenceTrace;
 import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelation;
 
-public class XCLExplanationAction extends DeprecatedAbstractKnowWEAction {
+public class XCLExplanationAction extends AbstractAction {
 
 	// properties only
 	private static final String SOLUTION = "SOLUTION";
@@ -74,13 +74,23 @@ public class XCLExplanationAction extends DeprecatedAbstractKnowWEAction {
 	private Session currentCase;
 
 	@Override
-	public String perform(KnowWEParameterMap parameterMap) {
+	public void execute(UserActionContext context) throws IOException {
 
-		ResourceBundle rb = D3webModule.getKwikiBundle_d3web(parameterMap.getRequest());
+		String result = perform(context);
+		if (result != null && context.getWriter() != null) {
+			context.setContentType("text/html; charset=UTF-8");
+			context.getWriter().write(result);
+		}
 
-		String id = parameterMap.get(KnowWEAttributes.SESSION_ID);
-		String solutionid = parameterMap.get(KnowWEAttributes.TERM);
-		SessionBroker broker = D3webModule.getBroker(parameterMap);
+	}
+
+	private String perform(UserActionContext context) {
+
+		ResourceBundle rb = D3webModule.getKwikiBundle_d3web(context.getRequest());
+
+		String id = context.getParameter(KnowWEAttributes.SESSION_ID);
+		String solutionid = context.getParameter(KnowWEAttributes.TERM);
+		SessionBroker broker = D3webModule.getBroker(context.getParameters());
 		this.currentCase = broker.getServiceSession(id);
 
 		// String namespace;
@@ -165,7 +175,7 @@ public class XCLExplanationAction extends DeprecatedAbstractKnowWEAction {
 	/**
 	 * method replaces wild card in template with corresponding table (HTML
 	 * syntax)
-	 * 
+	 *
 	 * @param type the table type
 	 * @param content the content of the table
 	 */
@@ -194,7 +204,7 @@ public class XCLExplanationAction extends DeprecatedAbstractKnowWEAction {
 
 	/**
 	 * Renders the table content, new row for every answer
-	 * 
+	 *
 	 * @param content the answers to be rendered
 	 * @return a table representation of the content
 	 */
@@ -214,7 +224,7 @@ public class XCLExplanationAction extends DeprecatedAbstractKnowWEAction {
 	 * Content for "Not Explained" has to be rendered differently since it
 	 * contains the question, the answer given and the expected answer
 	 * (verbalized condition)
-	 * 
+	 *
 	 * @param content the content to get rendered
 	 * @return a table representation of the content
 	 */
@@ -269,7 +279,7 @@ public class XCLExplanationAction extends DeprecatedAbstractKnowWEAction {
 	/**
 	 * Replaces a wildcard in the generated template with the actual (rendered)
 	 * content
-	 * 
+	 *
 	 * @param type the wildcard to be replaced
 	 * @param renderedTable the content to be inserted
 	 */
@@ -283,7 +293,7 @@ public class XCLExplanationAction extends DeprecatedAbstractKnowWEAction {
 
 	/**
 	 * Renders the state of the explanation
-	 * 
+	 *
 	 * @param state the state to be rendered
 	 * @param score the explanation score
 	 * @param support the explanation support

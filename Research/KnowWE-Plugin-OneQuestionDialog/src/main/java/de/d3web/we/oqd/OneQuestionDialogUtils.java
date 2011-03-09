@@ -33,7 +33,7 @@ import de.d3web.core.session.Session;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.SessionBroker;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 /**
  * 
@@ -42,7 +42,7 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
  */
 public class OneQuestionDialogUtils {
 
-	private static KnowWEUserContext kwuser;
+	private static UserContext kwuser;
 
 	/**
 	 * gets a session from a topic and a web
@@ -52,7 +52,7 @@ public class OneQuestionDialogUtils {
 	 * @param web
 	 * @return the session
 	 */
-	public static Session getSession(String topic, String web, KnowWEUserContext user) {
+	public static Session getSession(String topic, String web, UserContext user) {
 
 		kwuser = user;
 

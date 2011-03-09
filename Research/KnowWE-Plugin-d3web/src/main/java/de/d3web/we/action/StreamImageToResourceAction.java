@@ -34,7 +34,7 @@ import de.d3web.we.basic.D3webModule;
 public class StreamImageToResourceAction extends AbstractAction {
 
 	@Override
-	public void execute(ActionContext context) throws IOException {
+	public void execute(UserActionContext context) throws IOException {
 
 		String web = context.getParameter("web");
 		String topic = context.getParameter("topic");

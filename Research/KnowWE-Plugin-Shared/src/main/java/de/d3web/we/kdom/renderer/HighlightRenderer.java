@@ -23,8 +23,8 @@ package de.d3web.we.kdom.renderer;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class HighlightRenderer extends ColorRenderer {
 
@@ -36,7 +36,7 @@ public class HighlightRenderer extends ColorRenderer {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
 		String title = "Marker";
 		StringBuilder b = new StringBuilder();
 		DelegateRenderer.getInstance().render(article, sec, user, b);

@@ -22,13 +22,13 @@ package de.d3web.we.kdom.wikiTemplate;
 
 import de.d3web.we.action.TemplateGenerationAction;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.taghandler.TemplateTagHandler;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 /**
  * Template Type used to generate WikiPages out of templates.
@@ -61,7 +61,7 @@ public class Template extends AbstractXMLType {
 
 		@Override
 		public void render(KnowWEArticle article, Section sec,
-				KnowWEUserContext user, StringBuilder string) {
+				UserContext user, StringBuilder string) {
 
 			string.append("{{{");
 			DelegateRenderer.getInstance().render(article, sec, user, string);

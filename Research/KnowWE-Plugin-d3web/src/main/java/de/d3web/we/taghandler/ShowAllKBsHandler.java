@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -36,8 +36,8 @@ import de.d3web.core.inference.RuleSet;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.WikiEnvironmentManager;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelation;
 import de.d3web.xcl.XCLRelationType;
@@ -49,12 +49,12 @@ public class ShowAllKBsHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String getDescription(KnowWEUserContext user) {
+	public String getDescription(UserContext user) {
 		return D3webModule.getKwikiBundle_d3web(user).getString("KnowWE.showAllKBs.description");
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user, Map<String, String> values, String web) {
+	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
 		List<KnowledgeBase> ks = new ArrayList<KnowledgeBase>(
 				WikiEnvironmentManager.getInstance().getEnvironments(web).getServices());
 		Collections.sort(ks, new KDComparator());
@@ -135,7 +135,7 @@ public class ShowAllKBsHandler extends AbstractHTMLTagHandler {
 						rules.size(),
 						qCount,
 						KnowWEUtils.unmaskHTML(DialogLinkTagHandler.generateDialogLink(
-								user.getUserName(), user.getHttpRequest(), topic, id)) };
+								user.getUserName(), user.getRequest(), topic, id)) };
 			for (Object object : tblContent) {
 				html.append("<td>" + object + "</td>");
 			}

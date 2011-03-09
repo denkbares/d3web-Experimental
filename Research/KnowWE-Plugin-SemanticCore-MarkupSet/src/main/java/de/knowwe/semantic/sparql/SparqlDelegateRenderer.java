@@ -43,8 +43,8 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.xml.AbstractXMLType;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public final class SparqlDelegateRenderer extends
 		KnowWEDomRenderer<SparqlContent> {
@@ -96,7 +96,7 @@ public final class SparqlDelegateRenderer extends
 
 	@Override
 	public void render(KnowWEArticle article, Section<SparqlContent> sec,
-			KnowWEUserContext user, StringBuilder string) {
+			UserContext user, StringBuilder string) {
 		String renderengine = "default";
 		rb = KnowWEEnvironment.getInstance().getKwikiBundle(user);
 		SparqlRenderer currentrenderer = renderers.get(renderengine);

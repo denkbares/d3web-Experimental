@@ -25,7 +25,7 @@ import java.util.Map;
 
 import de.d3web.we.action.QuestionnaireValuesViewAction;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 /**
  * Displays the values of the questions in a specified questionnaire. The magic
@@ -48,12 +48,12 @@ public class QuestionnaireValuesViewHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String getDescription(KnowWEUserContext user) {
+	public String getDescription(UserContext user) {
 		return D3webModule.getKwikiBundle_d3web(user).getString("KnowWE.Questionnaire.description");
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 
 		String questionnaireName = values.get("questionnaireValues");

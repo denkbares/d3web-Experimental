@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -20,6 +20,7 @@
 
 package de.d3web.we.action;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -28,7 +29,6 @@ import java.util.logging.Logger;
 
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
@@ -37,47 +37,58 @@ import de.knowwe.core.action.WordBasedRenameFinding;
 
 /**
  * Renders the Mask for the findings of an Type in the running Wiki.
- * 
+ *
  * @See TypeBrowserHandler.
- * 
+ *
  * @author Johannes Dienst
- * 
+ *
  */
-public class KnowWETypeBrowserAction extends DeprecatedAbstractKnowWEAction {
+public class KnowWETypeBrowserAction extends AbstractAction {
 
 	private ResourceBundle rb;
 
 	@Override
-	public String perform(KnowWEParameterMap map) {
+	public void execute(UserActionContext context) throws IOException {
 
-		rb = KnowWEEnvironment.getInstance().getKwikiBundle(map.getRequest());
+		String result = perform(context);
+		if (result != null && context.getWriter() != null) {
+			context.setContentType("text/html; charset=UTF-8");
+			context.getWriter().write(result);
+		}
 
-		String atmUrl = map.get(KnowWEAttributes.ATM_URL);
-		String query = map.get(KnowWEAttributes.TYPE_BROWSER_QUERY);
+	}
+
+	private String perform(UserActionContext context) {
+
+		rb = KnowWEEnvironment.getInstance().getKwikiBundle(context.getRequest());
+
+		String atmUrl = context.getParameter(KnowWEAttributes.ATM_URL);
+		String query = context.getParameter(KnowWEAttributes.TYPE_BROWSER_QUERY);
 
 		// handle show additional text
 		if (atmUrl != null) {
-			String web = map.getWeb();
+			String web = context.getWeb();
 
 			if (web == null) {
 				web = KnowWEEnvironment.DEFAULT_WEB;
 			}
 			int queryLength = Integer.valueOf(query);
-			return getAdditionalMatchText(map.get(KnowWEAttributes.ATM_URL), web, queryLength);
+			return getAdditionalMatchText(context.getParameter(KnowWEAttributes.ATM_URL), web,
+					queryLength);
 		}
 
 		// Build the Findings
 		StringBuilder buildi = new StringBuilder();
 
 		ArrayList<Section<?>> found = new ArrayList<Section<?>>();
-		String types = map.get("TypeBrowserQuery");
+		String types = context.getParameter("TypeBrowserQuery");
 		try {
 			Type typ = null;
 			typ = KnowWEEnvironment.getInstance().searchType(Class.forName(types));
 
 			if (typ != null) {
 				Iterator<KnowWEArticle> it = KnowWEEnvironment.getInstance().getArticleManager(
-						map.getWeb()).getArticleIterator();
+						context.getWeb()).getArticleIterator();
 				while (it.hasNext()) {
 					KnowWEArticle art = it.next();
 					Sections.findSuccessorsOfTypeUntyped(art.getSection(),
@@ -106,7 +117,7 @@ public class KnowWETypeBrowserAction extends DeprecatedAbstractKnowWEAction {
 	/**
 	 * Renders a table with the results of the search in it. Code Based upon
 	 * RenamingRenderer
-	 * 
+	 *
 	 * @param found a List with all found Sections in it
 	 * @return a HTML formatted table witch lists all the findings in it
 	 */
@@ -178,7 +189,7 @@ public class KnowWETypeBrowserAction extends DeprecatedAbstractKnowWEAction {
 
 	/**
 	 * Creates the button used to display additional Context.
-	 * 
+	 *
 	 * @param article
 	 * @param section
 	 * @param start startIndex of the Finding
@@ -247,7 +258,7 @@ public class KnowWETypeBrowserAction extends DeprecatedAbstractKnowWEAction {
 	/**
 	 * Returns an additional text passage around the search result. So the user
 	 * can view the result in a larger context.
-	 * 
+	 *
 	 * @param amtURL additional text parameters
 	 * @param web KnowWEEnvironment
 	 * @param query user query string
@@ -303,7 +314,7 @@ public class KnowWETypeBrowserAction extends DeprecatedAbstractKnowWEAction {
 
 	/**
 	 * Runs up the DomTree and collects all Fathers from a Section.
-	 * 
+	 *
 	 * @param sec
 	 * @return
 	 */
@@ -320,7 +331,7 @@ public class KnowWETypeBrowserAction extends DeprecatedAbstractKnowWEAction {
 
 	/**
 	 * Replaces characters \n \r > <
-	 * 
+	 *
 	 * @param text
 	 * @return
 	 */
@@ -334,7 +345,7 @@ public class KnowWETypeBrowserAction extends DeprecatedAbstractKnowWEAction {
 
 	/**
 	 * Renders the columns for Father and Link.
-	 * 
+	 *
 	 * @param sec
 	 * @return
 	 */
@@ -374,7 +385,7 @@ public class KnowWETypeBrowserAction extends DeprecatedAbstractKnowWEAction {
 
 	/**
 	 * Gets a Valid(has Article) Section index in found.
-	 * 
+	 *
 	 * @param k
 	 * @param found
 	 * @return
@@ -394,7 +405,7 @@ public class KnowWETypeBrowserAction extends DeprecatedAbstractKnowWEAction {
 
 	/**
 	 * Renders the Header of the findings table.
-	 * 
+	 *
 	 * @param searchedType
 	 * @return
 	 */

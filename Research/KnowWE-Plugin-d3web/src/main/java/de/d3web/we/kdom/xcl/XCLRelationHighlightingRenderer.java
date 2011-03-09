@@ -25,16 +25,16 @@ import java.util.List;
 
 import de.d3web.core.session.Session;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.condition.antlr.ComplexFinding;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rendering.StyleRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.utils.XCLRelationWeight;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelation;
 
@@ -63,7 +63,7 @@ public class XCLRelationHighlightingRenderer extends KnowWEDomRenderer {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
 
 		String kbrelId = (String) KnowWEUtils.getStoredObject(sec.getArticle().getWeb(),
 				sec.getTitle(), sec.getID(), CoveringListContent.KBID_KEY);
@@ -110,7 +110,7 @@ public class XCLRelationHighlightingRenderer extends KnowWEDomRenderer {
 
 	}
 
-	private String renderText(KnowWEArticle article, Section sec, KnowWEUserContext user) {
+	private String renderText(KnowWEArticle article, Section sec, UserContext user) {
 
 		StringBuilder buffi = new StringBuilder();
 
@@ -130,7 +130,7 @@ public class XCLRelationHighlightingRenderer extends KnowWEDomRenderer {
 	 * @param fulfilled
 	 * @return
 	 */
-	private String renderRelation(KnowWEArticle article, Section sec, KnowWEUserContext user, boolean fulfilled) {
+	private String renderRelation(KnowWEArticle article, Section sec, UserContext user, boolean fulfilled) {
 
 		StringBuilder buffi = new StringBuilder();
 
@@ -157,7 +157,7 @@ public class XCLRelationHighlightingRenderer extends KnowWEDomRenderer {
 		return KnowWEUtils.maskHTML(buffi.toString());
 	}
 
-	private String renderRelationChild(KnowWEArticle article, Section sec, boolean fulfilled, KnowWEUserContext user, String color) {
+	private String renderRelationChild(KnowWEArticle article, Section sec, boolean fulfilled, UserContext user, String color) {
 		StringBuilder buffi = new StringBuilder();
 		Type type = sec.get();
 

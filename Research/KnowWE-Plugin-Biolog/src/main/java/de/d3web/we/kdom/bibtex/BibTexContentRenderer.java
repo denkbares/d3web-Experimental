@@ -30,8 +30,8 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.bibtex.verbalizer.BibTexRenderManager;
 import de.d3web.we.kdom.bibtex.verbalizer.BibTexRenderManager.RenderingFormat;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  *
@@ -43,7 +43,7 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
 public class BibTexContentRenderer extends KnowWEDomRenderer {
 
 	@Override
-	public void render(KnowWEArticle art, Section sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle art, Section sec, UserContext user, StringBuilder string) {
 		String parseerror = (String) KnowWEUtils.getStoredObject(sec,
 				BibTexContent.PARSEEXCEPTION);
 		String ioerror = (String) KnowWEUtils.getStoredObject(sec,

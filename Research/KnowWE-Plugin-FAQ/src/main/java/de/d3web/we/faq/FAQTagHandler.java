@@ -42,7 +42,7 @@ import de.d3web.we.core.KnowWERessourceLoader;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 import de.knowwe.semantic.sparql.SparqlDelegateRenderer;
 
 /**
@@ -89,7 +89,7 @@ public class FAQTagHandler extends AbstractHTMLTagHandler {
 	 * assembles the HTML String that is rendered into the page based on the
 	 * SPARQL query
 	 */
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 
 		String querystring = SPARQL_BASE;

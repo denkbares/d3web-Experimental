@@ -24,29 +24,27 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletResponse;
 
 import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.ActionContext;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 
 /**
  * The AboutMeSaveAction stores the information provided in the AboutMe-Edit
  * view into the article named after the user's name.
- * 
+ *
  * @author smark
  * @created 25.01.2011
  */
 public class AboutMeSaveAction extends AbstractAction {
 
 	@Override
-	public void execute(ActionContext context) throws IOException {
+	public void execute(UserActionContext context) throws IOException {
 
-		KnowWEParameterMap map = context.getKnowWEParameterMap();
-		String title = map.getTopic();
+		String title = context.getTopic();
 
-		boolean isAuthenticated = context.getKnowWEParameterMap().getWikiContext().userIsAuthenticated();
+		boolean isAuthenticated = context.userIsAuthenticated();
 
 		// Check for user access
 		if (!isAuthenticated) {
@@ -54,10 +52,10 @@ public class AboutMeSaveAction extends AbstractAction {
 			return;
 		}
 
-		String username = context.getWikiContext().getUserName();
-		String avatar = map.get(AboutMe.HTMLID_AVATAR);
-		String about = map.get(AboutMe.HTMLID_ABOUT);
-		String web = map.getWeb();
+		String username = context.getUserName();
+		String avatar = context.getParameter(AboutMe.HTMLID_AVATAR);
+		String about = context.getParameter(AboutMe.HTMLID_ABOUT);
+		String web = context.getWeb();
 
 
 		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
@@ -73,7 +71,7 @@ public class AboutMeSaveAction extends AbstractAction {
 		HashMap<String, String> nodesMap = new HashMap<String, String>();
 		nodesMap.put(child.getID(), "%%aboutme\r\n@avatar: " + avatar
 				+ "\r\n@about: " + aboutFound + "\r\n%\r\n");
-		mgr.replaceKDOMNodesSaveAndBuild(map, title, nodesMap);
+		mgr.replaceKDOMNodesSaveAndBuild(context, title, nodesMap);
 
 		HttpServletResponse response = context.getResponse();
 		response.sendRedirect("Wiki.jsp?page=" + username);

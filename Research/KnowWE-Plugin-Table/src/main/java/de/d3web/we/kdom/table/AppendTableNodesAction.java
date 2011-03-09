@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2010 University Wuerzburg, Computer Science VI
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -26,17 +26,16 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.ActionContext;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 
 /**
  * used to either add a row or a column to a table
- * 
+ *
  * @author Florian Ziegler (basic), Sebastian Furth (stable)
  * @created 20.06.2010
  */
@@ -44,10 +43,9 @@ public class AppendTableNodesAction extends AbstractAction {
 
 
 	@Override
-	public void execute(ActionContext context) throws IOException {
-		KnowWEParameterMap map = context.getKnowWEParameterMap();
-		String web = map.getWeb();
-		String topic = map.getTopic();
+	public void execute(UserActionContext context) throws IOException {
+		String web = context.getWeb();
+		String topic = context.getTopic();
 		String type = context.getParameter("type");
 		String id = context.getParameter("table");
 
@@ -73,13 +71,13 @@ public class AppendTableNodesAction extends AbstractAction {
 		else {
 			nodesMap = appendCol(table);
 		}
-		mgr.replaceKDOMNodesSaveAndBuild(map, topic, nodesMap);
+		mgr.replaceKDOMNodesSaveAndBuild(context, topic, nodesMap);
 	}
 
 	/**
 	 * adds a row by first calculating the number of cells and then adding a new
 	 * line.
-	 * 
+	 *
 	 * @author Florian Ziegler, Sebastian Furth
 	 * @created 23.06.2010, 19.10.2010
 	 * @param table, the table which shall get a new row
@@ -94,7 +92,7 @@ public class AppendTableNodesAction extends AbstractAction {
 		// we use the previous line to determine which cells should be TH
 		Section<TableLine> line = lines != null ? lines.get(lines.size() - 1) : null;
 		StringBuilder newLine = new StringBuilder("");
-		
+
 		// count cells
 		if (line != null) {
 			newLine.append("\n");
@@ -111,14 +109,14 @@ public class AppendTableNodesAction extends AbstractAction {
 			Logger.getLogger(this.getClass().getCanonicalName()).warning("Unable to append row, because there is no other row (can't calculate number of cells");
 		}
 
-		
+
 		nodesMap.put(table.getID(), table.getOriginalText() + newLine.toString());
 		return nodesMap;
 	}
 
 	/**
 	 * adds a column by adding a new cell to each TableLine
-	 * 
+	 *
 	 * @author Florian Ziegler, Sebastian Furth
 	 * @created 23.06.2010, 17.10.2010
 	 * @param table, the table which shall get a new column

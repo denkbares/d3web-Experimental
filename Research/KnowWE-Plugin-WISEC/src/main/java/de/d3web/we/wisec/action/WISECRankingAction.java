@@ -33,7 +33,7 @@ import org.openrdf.repository.RepositoryException;
 import common.Logger;
 
 import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.ActionContext;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.wisec.util.Criteria;
 import de.d3web.we.wisec.util.WISECUtil;
 import de.d3web.wisec.model.RatedSubstance;
@@ -49,7 +49,7 @@ import de.knowwe.semantic.sparql.SPARQLUtil;
 public class WISECRankingAction extends AbstractAction {
 
 	@Override
-	public void execute(ActionContext context) throws IOException {
+	public void execute(UserActionContext context) throws IOException {
 
 		String result = "";
 		HashMap<String, RatedSubstance> ratedSubstances = new HashMap<String, RatedSubstance>();
@@ -107,7 +107,7 @@ public class WISECRankingAction extends AbstractAction {
 	 * @param values all parameters of the taghandler
 	 * @return true if printinfo = true, else false
 	 */
-	private boolean checkPrintInfo(ActionContext context) {
+	private boolean checkPrintInfo(UserActionContext context) {
 		String param = context.getParameter("printinfo");
 		if (param != null && param.equals("true")) return true;
 		return false;

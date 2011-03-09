@@ -24,7 +24,7 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.renderer.ColorRenderer;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 public class ErrorRendererTable extends ColorRenderer {
 
@@ -36,7 +36,7 @@ public class ErrorRendererTable extends ColorRenderer {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
 		String title = "Error";
 		StringBuilder b = new StringBuilder();
 		DelegateRenderer.getInstance().render(article, sec, user, b);

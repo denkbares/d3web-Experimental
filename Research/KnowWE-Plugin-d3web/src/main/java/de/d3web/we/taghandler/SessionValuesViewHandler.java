@@ -23,7 +23,7 @@ import java.util.Map;
 
 import de.d3web.we.action.SessionValuesViewAction;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 /**
  * Displays the values of the article's d3web-Session. The magic is done with
@@ -44,12 +44,12 @@ public class SessionValuesViewHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String getDescription(KnowWEUserContext user) {
+	public String getDescription(UserContext user) {
 		return D3webModule.getKwikiBundle_d3web(user).getString("KnowWE.SessionValues.description");
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 
 		return "<div class='panel'>"

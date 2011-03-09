@@ -28,7 +28,6 @@ import org.bibsonomy.model.BibTex;
 import bibtex.dom.BibtexEntry;
 import bibtex.dom.BibtexString;
 import bibtex.parser.ParseException;
-
 import de.d3web.we.biolog.utils.BiologUtils;
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.kdom.bibtex.verbalizer.BibTexRenderManager.RenderingFormat;

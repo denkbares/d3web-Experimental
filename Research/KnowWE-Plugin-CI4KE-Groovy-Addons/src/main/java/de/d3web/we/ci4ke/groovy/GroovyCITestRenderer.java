@@ -24,8 +24,8 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.knowledgebase.KnowledgeBaseType;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  * Renderer for the {@link GroovyCITestType}
@@ -40,7 +40,7 @@ public class GroovyCITestRenderer extends DefaultMarkupRenderer<GroovyCITestType
 	}
 
 	@Override
-	protected void renderContents(KnowWEArticle article, Section<GroovyCITestType> section, KnowWEUserContext user, StringBuilder string) {
+	protected void renderContents(KnowWEArticle article, Section<GroovyCITestType> section, UserContext user, StringBuilder string) {
 		KnowWERessourceLoader.getInstance().add("syntaxhighlighter_3.0.83/shCore.css",
 				KnowWERessourceLoader.RESOURCE_STYLESHEET);
 		KnowWERessourceLoader.getInstance().add("syntaxhighlighter_3.0.83/shThemeEclipse.css",

@@ -16,13 +16,12 @@ import org.openrdf.query.TupleQueryResult;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.core.packaging.KnowWEPackageManager;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.hermes.TimeEvent;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.RootType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotation;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 import dummies.KnowWETestWikiConnector;
@@ -32,7 +31,6 @@ public class TimeEventTest extends TestCase {
 	private KnowWEEnvironment ke;
 	private KnowWEArticleManager am;
 	private Type type;
-	private KnowWEParameterMap params;
 	private ISemanticCore sc;
 
 	@Override
@@ -49,7 +47,6 @@ public class TimeEventTest extends TestCase {
 		type = ke.getRootType();
 		am = ke.getArticleManager(KnowWEEnvironment.DEFAULT_WEB);
 
-		params = new KnowWEParameterMap("", "");
 		sc = SemanticCoreDelegator.getInstance();
 	}
 
@@ -83,7 +80,7 @@ public class TimeEventTest extends TestCase {
 
 		String querystring = "select ?x ?t ?desc ?dd ?imp  where {?x lns:hasDescription ?desc . ?x lns:hasTitle ?t . ?x lns:hasDateDescription ?dd . ?x lns:hasImportance ?imp }";
 		TupleQueryResult result = SPARQLUtil.executeTupleQuery(querystring);
-		
+
 		try {
 			while (result.hasNext()) {
 				BindingSet set = result.next();

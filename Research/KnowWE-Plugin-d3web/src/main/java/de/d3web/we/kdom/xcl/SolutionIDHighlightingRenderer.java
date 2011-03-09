@@ -30,9 +30,9 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rendering.StyleRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.d3web.xcl.XCLModel;
 import de.knowwe.core.renderer.ObjectInfoLinkRenderer;
 
@@ -50,7 +50,7 @@ public class SolutionIDHighlightingRenderer extends KnowWEDomRenderer {
 
 	@Override
 	public void render(KnowWEArticle article, Section sec,
-			KnowWEUserContext user, StringBuilder string) {
+			UserContext user, StringBuilder string) {
 		String solution = sec.getOriginalText().replace("\"", "").trim();
 
 		Session session = D3webUtils.getSession(article.getTitle(), user,

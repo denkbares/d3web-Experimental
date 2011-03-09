@@ -24,8 +24,8 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  * This is a renderer for the TableLine. It wraps the <code>TableLine</code>
@@ -37,7 +37,7 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
 public class TableLineRenderer extends KnowWEDomRenderer<TableLine> {
 
 	@Override
-	public void render(KnowWEArticle article, Section<TableLine> sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section<TableLine> sec, UserContext user, StringBuilder string) {
 		StringBuilder b = new StringBuilder();
 		StringBuilder buffi = new StringBuilder();
 		DelegateRenderer.getInstance().render(article, sec, user, b);

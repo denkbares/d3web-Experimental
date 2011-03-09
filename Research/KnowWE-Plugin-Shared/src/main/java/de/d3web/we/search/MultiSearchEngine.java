@@ -30,7 +30,7 @@ import javax.servlet.ServletContext;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
-import de.d3web.we.core.KnowWEParameterMap;
+import de.d3web.we.user.UserContext;
 import de.knowwe.plugin.Instantiation;
 import de.knowwe.plugin.Plugins;
 import de.knowwe.tagging.TaggingMangler;
@@ -86,9 +86,9 @@ public class MultiSearchEngine implements Instantiation {
 	 * @return
 	 */
 	public Map<String, Collection<GenericSearchResult>> search(
-			String searchText, KnowWEParameterMap map) {
+			String searchText, UserContext context) {
 		return search(SearchWordPreprocessor.getInstance().processForSearch(
-				searchText), map);
+				searchText), context);
 	}
 
 	/**
@@ -102,7 +102,7 @@ public class MultiSearchEngine implements Instantiation {
 	 * @return
 	 */
 	public Map<String, Collection<GenericSearchResult>> search(
-			Collection<SearchTerm> terms, KnowWEParameterMap map) {
+			Collection<SearchTerm> terms, UserContext context) {
 
 		Map<String, Collection<GenericSearchResult>> all = new HashMap<String, Collection<GenericSearchResult>>();
 
@@ -112,7 +112,7 @@ public class MultiSearchEngine implements Instantiation {
 
 		for (KnowWESearchProvider provider : searchProvider.values()) {
 			Collection<GenericSearchResult> singleResultSet = provider.search(
-					searchSet, map);
+					searchSet, context);
 			all.put(provider.getID(), singleResultSet);
 		}
 

@@ -19,9 +19,9 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.lod.markup.IgnoreContentType;
-import de.d3web.we.lod.markup.MappingContentType;
 import de.d3web.we.lod.markup.IgnoreContentType.IgnoreChild;
 import de.d3web.we.lod.markup.IgnoreContentType.IgnoreConcept;
+import de.d3web.we.lod.markup.MappingContentType;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 /**

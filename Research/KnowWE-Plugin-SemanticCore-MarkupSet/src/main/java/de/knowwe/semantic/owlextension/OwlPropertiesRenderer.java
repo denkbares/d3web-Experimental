@@ -26,7 +26,7 @@ package de.knowwe.semantic.owlextension;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 /**
  * @author kazamatzuri
@@ -58,7 +58,7 @@ public class OwlPropertiesRenderer extends KnowWEDomRenderer {
 	 * , java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
 		String text = sec.getOriginalText();
 		for (String cur : text.split("\r\n|\r|\n")) {
 			if (cur.trim().length() > 0) string.append(cur.trim() + "\\\\");

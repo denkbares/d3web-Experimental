@@ -30,8 +30,8 @@ import org.openrdf.query.TupleQueryResult;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.semantic.sparql.DefaultSparqlRenderer;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
@@ -47,7 +47,7 @@ public class ListIndividualsHandler extends AbstractHTMLTagHandler {
 	private static final String SPARQL_END = "} ORDER BY ASC(?x)";
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 
 		String className = values.get("class");

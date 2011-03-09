@@ -27,7 +27,7 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.wisec.kdom.subtreehandler.ListSubstancesOWLSubtreeHandler;
 
 /**
@@ -50,7 +50,7 @@ public class ListSubstancesType extends AbstractType {
 	class ListSubstancesRenderer extends KnowWEDomRenderer<ListSubstancesType> {
 
 		@Override
-		public void render(KnowWEArticle article, Section<ListSubstancesType> sec, KnowWEUserContext user, StringBuilder string) {
+		public void render(KnowWEArticle article, Section<ListSubstancesType> sec, UserContext user, StringBuilder string) {
 
 			// %%zebra-table
 			// %%sortable

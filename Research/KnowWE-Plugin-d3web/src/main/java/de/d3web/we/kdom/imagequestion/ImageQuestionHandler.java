@@ -43,8 +43,8 @@ import de.d3web.multimedia.io.ImageQuestionStore;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.D3webUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.d3web.action.SetSingleFindingAction;
 
 /**
@@ -64,20 +64,20 @@ public class ImageQuestionHandler extends AbstractHTMLTagHandler {
 	 */
 	private String topic;
 	private String web;
-	private KnowWEUserContext user;
+	private UserContext user;
 
 	public ImageQuestionHandler() {
 		super("imagequestionhandler");
 	}
 
 	@Override
-	public String getDescription(KnowWEUserContext user) {
+	public String getDescription(UserContext user) {
 		return D3webModule.getKwikiBundle_d3web(user).
 				getString("KnowWE.ImageQuestionHandler.Description");
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 		return this.render(topic, user, values, web, true);
 	}
@@ -92,12 +92,12 @@ public class ImageQuestionHandler extends AbstractHTMLTagHandler {
 	 * @param web
 	 * @return
 	 */
-	public String renderForRerenderAction(String topic, KnowWEUserContext user,
+	public String renderForRerenderAction(String topic, UserContext user,
 			Map<String, String> values, String web) {
 		return this.render(topic, user, values, web, false);
 	}
 
-	public String render(String topic, KnowWEUserContext user,
+	public String render(String topic, UserContext user,
 			Map<String, String> values, String web, boolean renderDIV) {
 
 		// set the fields.

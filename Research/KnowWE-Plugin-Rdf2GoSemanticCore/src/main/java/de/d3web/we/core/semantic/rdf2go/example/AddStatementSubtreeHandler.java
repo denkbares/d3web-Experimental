@@ -18,7 +18,6 @@
  */
 package de.d3web.we.core.semantic.rdf2go.example;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.ontoware.rdf2go.model.Statement;

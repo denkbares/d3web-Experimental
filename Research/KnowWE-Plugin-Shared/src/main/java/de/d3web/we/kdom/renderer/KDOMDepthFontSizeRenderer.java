@@ -21,11 +21,11 @@
 package de.d3web.we.kdom.renderer;
 
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 /**
  * A renderer that renders font size depending of its depth in the KDOM as a
@@ -51,7 +51,7 @@ public class KDOMDepthFontSizeRenderer extends KnowWEDomRenderer<Type> {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section<Type> sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section<Type> sec, UserContext user, StringBuilder string) {
 		// font-size:1.2em
 
 		double font = initialFontsize;

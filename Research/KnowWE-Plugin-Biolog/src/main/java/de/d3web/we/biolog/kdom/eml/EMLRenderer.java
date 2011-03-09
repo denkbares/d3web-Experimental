@@ -29,8 +29,8 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.kdom.xml.XMLContent;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  * Renders the EML-data to a table-format.
@@ -41,7 +41,7 @@ public class EMLRenderer extends KnowWEDomRenderer {
 
 	@Override
 	public void render(KnowWEArticle article, Section sec,
-			KnowWEUserContext user, StringBuilder string) {
+			UserContext user, StringBuilder string) {
 		if(sec.get() instanceof EMLXMLType) {
 			Section<AbstractXMLType> s = sec;
 			
@@ -89,7 +89,7 @@ public class EMLRenderer extends KnowWEDomRenderer {
 	private void renderCommonData( Section<? extends AbstractXMLType> section,
 			StringBuilder string,
 			KnowWEArticle article,
-			KnowWEUserContext user){
+			UserContext user){
 		
 		Object[][] tblColumns = {{"Zweck", "purpose", "dataset"},
 				{"Projekt", "title", "project"},
@@ -141,7 +141,7 @@ public class EMLRenderer extends KnowWEDomRenderer {
 	private void renderPersonDetails(Section<? extends AbstractXMLType> section,
 			StringBuilder string,
 			KnowWEArticle article,
-			KnowWEUserContext user,
+			UserContext user,
 			Object[][] tblColumns,
 			String tblName,
 			int num){
@@ -196,7 +196,7 @@ public class EMLRenderer extends KnowWEDomRenderer {
 	private void renderMethods(Section<? extends AbstractXMLType> section,
 			StringBuilder string,
 			KnowWEArticle article,
-			KnowWEUserContext user){
+			UserContext user){
 		
 		StringBuilder eml = new StringBuilder();
 		eml.append("<h2> 4. Methoden </h2>");

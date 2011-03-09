@@ -28,7 +28,7 @@ import de.d3web.we.hermes.TimeEvent;
 import de.d3web.we.hermes.util.TimeEventSPARQLUtils;
 import de.d3web.we.hermes.util.TimeLineEventRenderer;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 public class ShowTimeEventsForConceptTagHandler extends AbstractHTMLTagHandler {
 
@@ -37,7 +37,7 @@ public class ShowTimeEventsForConceptTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 		String concept = topic;
 		String givenConcept = values.get("concept");

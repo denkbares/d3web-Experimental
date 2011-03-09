@@ -25,8 +25,8 @@ import java.util.Map;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class CreateMapHandler extends AbstractHTMLTagHandler {
 
@@ -35,7 +35,7 @@ public class CreateMapHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 		String text = "<script type='text/javascript' src='http://maps.google.com/maps?file=api&v=2.x&key="
 				+ ShowMapHandler.apiKey

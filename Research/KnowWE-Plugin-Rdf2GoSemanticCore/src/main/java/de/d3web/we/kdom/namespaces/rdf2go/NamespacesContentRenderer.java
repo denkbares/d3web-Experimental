@@ -21,21 +21,21 @@
 package de.d3web.we.kdom.namespaces.rdf2go;
 
 import java.util.HashMap;
-import java.util.ResourceBundle;
 import java.util.Map.Entry;
+import java.util.ResourceBundle;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class NamespacesContentRenderer extends KnowWEDomRenderer {
 
 	@Override
-	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
 		StringBuffer buffy = new StringBuffer();
 		ResourceBundle rb = KnowWEEnvironment.getInstance()
 				.getKwikiBundle(user);

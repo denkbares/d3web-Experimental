@@ -23,7 +23,6 @@ package de.d3web.we.kdom.table;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.rendering.NothingRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 

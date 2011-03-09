@@ -20,14 +20,15 @@
 
 package de.d3web.we.kdom.table;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.d3web.we.action.DeprecatedAbstractKnowWEAction;
+import de.d3web.we.action.AbstractAction;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
 
 /**
  * <p>
@@ -39,17 +40,27 @@ import de.d3web.we.core.KnowWEParameterMap;
  * @author smark
  * @see KnowWEAction
  */
-public class UpdateTableKDOMNodesAction extends DeprecatedAbstractKnowWEAction {
+public class UpdateTableKDOMNodesAction extends AbstractAction {
 
 	private final static String UPDATE_CELL_SEPERATOR = ";-;";
 
 	private final static String UPDATE_NODE_SEPERATOR = "::";
 
 	@Override
-	public String perform(KnowWEParameterMap parameterMap) {
-		String web = parameterMap.getWeb();
-		String nodes = parameterMap.get(KnowWEAttributes.TARGET);
-		String name = parameterMap.getTopic();
+	public void execute(UserActionContext context) throws IOException {
+
+		String result = perform(context);
+		if (result != null && context.getWriter() != null) {
+			context.setContentType("text/html; charset=UTF-8");
+			context.getWriter().write(result);
+		}
+
+	}
+
+	private String perform(UserActionContext context) {
+		String web = context.getWeb();
+		String nodes = context.getParameter(KnowWEAttributes.TARGET);
+		String name = context.getTopic();
 
 		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
 
@@ -72,7 +83,7 @@ public class UpdateTableKDOMNodesAction extends DeprecatedAbstractKnowWEAction {
 				}
 			}
 			StringBuilder buddy = new StringBuilder();
-			mgr.replaceKDOMNodesSaveAndBuild(parameterMap, name, nodesMap);
+			mgr.replaceKDOMNodesSaveAndBuild(context, name, nodesMap);
 		}
 
 		return "done";

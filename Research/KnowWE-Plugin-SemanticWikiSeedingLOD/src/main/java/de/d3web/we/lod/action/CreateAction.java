@@ -8,8 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.ActionContext;
-import de.d3web.we.core.KnowWEParameterMap;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.lod.ConceptType;
 import de.d3web.we.lod.LinkedOpenData;
 import de.d3web.we.lod.LinkedOpenDataSet;
@@ -17,12 +16,10 @@ import de.d3web.we.lod.LinkedOpenDataSet;
 public class CreateAction extends AbstractAction {
 
 	@Override
-	public void execute(ActionContext context) throws IOException {
+	public void execute(UserActionContext context) throws IOException {
 
-		KnowWEParameterMap map = context.getKnowWEParameterMap();
-
-		String concept = map.get("concept");
-		String wikipedia = map.get("wikipedia");
+		String concept = context.getParameter("concept");
+		String wikipedia = context.getParameter("wikipedia");
 
 		String dbpediaConcept = LinkedOpenData.getDBpediaRedirect(concept);
 

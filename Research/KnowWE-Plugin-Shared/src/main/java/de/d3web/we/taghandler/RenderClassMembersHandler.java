@@ -36,8 +36,8 @@ import org.openrdf.repository.RepositoryException;
 
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.semantic.sparql.DefaultSparqlRenderer;
 import de.knowwe.semantic.sparql.SparqlDelegateRenderer;
 
@@ -50,7 +50,7 @@ public class RenderClassMembersHandler extends AbstractHTMLTagHandler {
 	private static final String TIME_SPARQL = "SELECT ?x WHERE { ?x rdf:type CLASS .} ORDER BY ASC(?x)";
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 
 		String className = values.get("class");

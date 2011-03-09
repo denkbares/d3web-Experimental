@@ -14,7 +14,7 @@ import de.d3web.we.core.semantic.OwlHelper;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 public class YearOfBirthQuizHandler extends AbstractHTMLTagHandler {
@@ -32,7 +32,7 @@ public class YearOfBirthQuizHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user, Map<String, String> parameters, String web) {
+	public String renderHTML(String topic, UserContext user, Map<String, String> parameters, String web) {
 
 		// optional difficulty.
 		String range = parameters.get("range");

@@ -30,9 +30,9 @@ import de.d3web.core.inference.condition.NoAnswerException;
 import de.d3web.core.inference.condition.UnknownAnswerException;
 import de.d3web.core.session.Session;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Annotation.Finding;
 import de.d3web.we.kdom.condition.antlr.ComplexFinding;
 import de.d3web.we.kdom.condition.antlr.ComplexFindingBraced;
@@ -41,9 +41,9 @@ import de.d3web.we.kdom.condition.old.Disjunct;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rendering.StyleRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  * Highlights the Rules in Kopic-Sections according to the Session.
@@ -109,7 +109,7 @@ public class RuleConditionHighlightingRenderer extends KnowWEDomRenderer {
 
 	@Override
 	public void render(KnowWEArticle article, Section sec,
-			KnowWEUserContext user, StringBuilder result) {
+			UserContext user, StringBuilder result) {
 
 		// get the rule: Eval it and highlight the condition
 		Section ruleSection = Sections.findAncestorOfType(sec, de.d3web.we.kdom.rules.Rule.class);
@@ -175,7 +175,7 @@ public class RuleConditionHighlightingRenderer extends KnowWEDomRenderer {
 	// }
 
 	private void renderConditionLine(KnowWEArticle article, Section sec,
-			Rule rc, Session session, KnowWEUserContext user,
+			Rule rc, Session session, UserContext user,
 			StringBuilder buffi) {
 
 		Type type;
@@ -204,7 +204,7 @@ public class RuleConditionHighlightingRenderer extends KnowWEDomRenderer {
 	 * @return
 	 */
 	private String highlightCondition(KnowWEArticle article, Section sec,
-			Rule rc, Session session, KnowWEUserContext user) {
+			Rule rc, Session session, UserContext user) {
 
 		StringBuilder buffi = new StringBuilder();
 		boolean braced = false;

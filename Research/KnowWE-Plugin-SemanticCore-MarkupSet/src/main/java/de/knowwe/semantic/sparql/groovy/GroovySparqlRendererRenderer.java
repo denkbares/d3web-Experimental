@@ -33,8 +33,8 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.xml.AbstractXMLType;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.semantic.sparql.SparqlDelegateRenderer;
 import de.knowwe.semantic.sparql.SparqlRenderer;
 
@@ -76,7 +76,7 @@ public class GroovySparqlRendererRenderer extends
 
 	@Override
 	public void render(KnowWEArticle article,
-			Section<GroovySparqlRendererContent> sec, KnowWEUserContext user,
+			Section<GroovySparqlRendererContent> sec, UserContext user,
 			StringBuilder string) {
 		// rb = KnowWEEnvironment.getInstance().getKwikiBundle(user);
 		Map<String, String> params = AbstractXMLType

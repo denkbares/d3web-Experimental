@@ -36,7 +36,7 @@ import de.d3web.we.utils.D3webUtils;
 public class SessionValuesViewAction extends AbstractAction {
 
 	@Override
-	public void execute(ActionContext context) throws IOException {
+	public void execute(UserActionContext context) throws IOException {
 
 		String topic = context.getParameter(KnowWEAttributes.TOPIC);
 		String web = context.getParameter(KnowWEAttributes.WEB);

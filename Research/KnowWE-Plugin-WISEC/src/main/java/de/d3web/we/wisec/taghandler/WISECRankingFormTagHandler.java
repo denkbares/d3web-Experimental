@@ -22,7 +22,7 @@ import java.util.Map;
 
 import de.d3web.we.core.KnowWERessourceLoader;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 /**
  * Renders a form that offers basic options for the specification of WISEC
@@ -54,13 +54,13 @@ public class WISECRankingFormTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String getDescription(KnowWEUserContext user) {
+	public String getDescription(UserContext user) {
 		// TODO: This should probably moved to a resource bundle
 		return "Displays a form that offers basic options for the specification of WISEC rankings.";
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 
 		StringBuilder html = new StringBuilder();

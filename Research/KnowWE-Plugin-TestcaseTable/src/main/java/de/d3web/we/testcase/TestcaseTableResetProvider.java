@@ -23,7 +23,7 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.tools.DefaultTool;
 import de.d3web.we.tools.Tool;
 import de.d3web.we.tools.ToolProvider;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 
 /**
@@ -34,12 +34,12 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
 public class TestcaseTableResetProvider implements ToolProvider {
 
 	@Override
-	public Tool[] getTools(KnowWEArticle article, Section<?> section, KnowWEUserContext userContext) {
+	public Tool[] getTools(KnowWEArticle article, Section<?> section, UserContext userContext) {
 		Tool edit = getResetTool(article, section, userContext);
 		return edit != null ? new Tool[] { edit } : new Tool[] {};
 	}
 
-	private Tool getResetTool(KnowWEArticle article, Section<?> section, KnowWEUserContext userContext) {
+	private Tool getResetTool(KnowWEArticle article, Section<?> section, UserContext userContext) {
 
 		String jsAction = createResetAction(section, userContext);
 
@@ -50,13 +50,13 @@ public class TestcaseTableResetProvider implements ToolProvider {
 				jsAction);
 	}
 
-	private static String createResetAction(Section<?> section, KnowWEUserContext userContext) {
+	private static String createResetAction(Section<?> section, UserContext userContext) {
 		String id = section.getID();
 		String jsAction = "Testcase.resetTestcase('" + id + "');";
 		return jsAction;
 	}
 
-	public static String createResetLink(Section<?> section, KnowWEUserContext userContext) {
+	public static String createResetLink(Section<?> section, UserContext userContext) {
 		return "javascript:" + createResetAction(section, userContext) + "undefined;";
 	}
 }

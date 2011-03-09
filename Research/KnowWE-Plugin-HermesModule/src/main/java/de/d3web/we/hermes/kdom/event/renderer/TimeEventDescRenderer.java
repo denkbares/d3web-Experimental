@@ -25,7 +25,7 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 public class TimeEventDescRenderer extends KnowWEDomRenderer<TimeEventNew> {
 
@@ -39,7 +39,7 @@ public class TimeEventDescRenderer extends KnowWEDomRenderer<TimeEventNew> {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section<TimeEventNew> sec, KnowWEUserContext user, StringBuilder result) {
+	public void render(KnowWEArticle article, Section<TimeEventNew> sec, UserContext user, StringBuilder result) {
 		DelegateRenderer.getInstance().render(article, sec, user, result);
 	}
 

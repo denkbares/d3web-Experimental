@@ -37,13 +37,13 @@ import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.xml.AbstractXMLType;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 public class MapType extends AbstractXMLType {
 
@@ -123,7 +123,7 @@ public class MapType extends AbstractXMLType {
 
 		@Override
 		public void render(KnowWEArticle article, Section<MapType> sec,
-				KnowWEUserContext user, StringBuilder string) {
+				UserContext user, StringBuilder string) {
 			string.append("<div id=\"map\" class=\"panel\">");
 			string.append("<h3>Karte</h3>");
 			String originalText = sec.getOriginalText();

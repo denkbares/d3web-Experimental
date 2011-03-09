@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -23,6 +23,7 @@ package tests;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.TestCase;
@@ -31,8 +32,6 @@ import objectTypes.WordObjectType;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEFacade;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Type;
@@ -79,7 +78,8 @@ public class RenamingToolTest extends TestCase {
 		/*
 		 * make the requests
 		 */
-		KnowWEParameterMap map = new KnowWEParameterMap(KnowWEAttributes.TARGET, "ccc");
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(KnowWEAttributes.TARGET, "ccc");
 		map.put(KnowWEAttributes.CONTEXT_PREVIOUS, "");
 		map.put(KnowWEAttributes.CONTEXT_AFTER, "");
 		map.put(KnowWEAttributes.WEB, "default_web");
@@ -157,10 +157,10 @@ public class RenamingToolTest extends TestCase {
 	}
 
 	private Map<KnowWEArticle, Collection<WordBasedRenameFinding>> renamingToolTest(
-			KnowWEParameterMap map) {
-		return ((WordBasedRenamingAction) KnowWEFacade.getInstance().tryLoadingAction(
-				"WordBasedRenamingAction")).scanForFindings(map
-				.getWeb(), map.get(KnowWEAttributes.TARGET), map.get(
+			Map<String, String> map) {
+		WordBasedRenamingAction action = new WordBasedRenamingAction();
+		return action.scanForFindings(map.get(KnowWEAttributes.WEB),
+				map.get(KnowWEAttributes.TARGET), map.get(
 				KnowWEAttributes.CONTEXT_PREVIOUS).length(), null);
 	}
 }

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 

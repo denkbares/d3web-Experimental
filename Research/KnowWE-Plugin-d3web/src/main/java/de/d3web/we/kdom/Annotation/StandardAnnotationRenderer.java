@@ -25,13 +25,13 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.ConditionalRenderer;
 import de.d3web.we.kdom.semanticAnnotation.AnnotatedString;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotationContent;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class StandardAnnotationRenderer extends ConditionalRenderer {
 
 	@Override
-	public void renderDefault(Section sec, KnowWEUserContext user, StringBuilder string) {
+	public void renderDefault(Section sec, UserContext user, StringBuilder string) {
 		try {
 			String text = "''"
 					+ Sections.findSuccessor(sec, AnnotatedString.class).getOriginalText() + "''";

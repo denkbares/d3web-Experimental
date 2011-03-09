@@ -37,9 +37,8 @@ import org.openrdf.query.TupleQueryResult;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.wikiConnector.KnowWEWikiConnector;
+import de.d3web.we.kdom.Type;
 
 public class SemanticCoreDummy implements ISemanticCore {
 

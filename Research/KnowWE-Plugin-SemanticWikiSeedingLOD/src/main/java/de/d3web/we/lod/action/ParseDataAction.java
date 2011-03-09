@@ -13,37 +13,34 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.ActionContext;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.lod.HermesData;
 import de.d3web.we.lod.LinkedOpenData;
 import de.d3web.we.lod.markup.IgnoreContentType;
-import de.d3web.we.lod.markup.MappingContentType;
 import de.d3web.we.lod.markup.IgnoreContentType.IgnoreChild;
 import de.d3web.we.lod.markup.IgnoreContentType.IgnoreConcept;
+import de.d3web.we.lod.markup.MappingContentType;
 
 public class ParseDataAction extends AbstractAction {
 
 	@Override
-	public void execute(ActionContext context) throws IOException {
+	public void execute(UserActionContext context) throws IOException {
 
-		KnowWEParameterMap map = context.getKnowWEParameterMap();
-
-		String concept = map.get("concept");
+		String concept = context.getParameter("concept");
 		String conceptTopic = HermesData.getTopicForConcept(concept);
-		String user = map.getUser();
-		String web = map.getWeb();
-		String create = map.get("create");
-		String wiki = map.get("wiki");
+		String user = context.getUserName();
+		String web = context.getWeb();
+		String create = context.getParameter("create");
+		String wiki = context.getParameter("wiki");
 
-		String types = map.get("type");
-		String values = map.get("dbpedia");
-		String hermestags = map.get("hermes");
+		String types = context.getParameter("type");
+		String values = context.getParameter("dbpedia");
+		String hermestags = context.getParameter("hermes");
 		String filter = "\".*?\"";
 		Pattern pattern = Pattern.compile(filter);
 
@@ -194,7 +191,7 @@ public class ParseDataAction extends AbstractAction {
 					nodesMap.put(lastNode.getChildren().get(0).getID(), add);
 
 					KnowWEEnvironment.getInstance().getArticleManager(
-							web).replaceKDOMNodesSaveAndBuild(map, noParseTopic, nodesMap);
+							web).replaceKDOMNodesSaveAndBuild(context, noParseTopic, nodesMap);
 
 				}
 
@@ -290,7 +287,7 @@ public class ParseDataAction extends AbstractAction {
 						}
 
 					}
-					mgr.replaceKDOMNodesSaveAndBuild(map, ignoredTopic, nodesMap);
+					mgr.replaceKDOMNodesSaveAndBuild(context, ignoredTopic, nodesMap);
 				}
 			}
 			i++;
@@ -330,7 +327,7 @@ public class ParseDataAction extends AbstractAction {
 				nodesMap.put(lastNode.getChildren().get(0).getID(), add);
 
 				KnowWEEnvironment.getInstance().getArticleManager(
-						web).replaceKDOMNodesSaveAndBuild(map, mappingTopic, nodesMap);
+						web).replaceKDOMNodesSaveAndBuild(context, mappingTopic, nodesMap);
 
 				context.getWriter().write(
 						"<br/><div style='margin-left:10px;'><img src='KnowWEExtension/images/success.png' align='top'>"

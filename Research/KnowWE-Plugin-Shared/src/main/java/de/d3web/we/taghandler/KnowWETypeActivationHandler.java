@@ -25,7 +25,7 @@ import java.util.Map;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.Type;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 /**
  * Renders the Mask for the TypeActivatior. See also
@@ -44,13 +44,13 @@ public class KnowWETypeActivationHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String getDescription(KnowWEUserContext user) {
+	public String getDescription(UserContext user) {
 		return KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
 				"KnowWE.TypeActivator.description");
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user, Map<String, String> values, String web) {
+	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
 		List<Type> types = KnowWEEnvironment.getInstance().getAllTypes();
 		StringBuilder html = new StringBuilder();
 

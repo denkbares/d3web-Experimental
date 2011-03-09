@@ -20,12 +20,10 @@
 
 package de.d3web.we.core.semantic.rdf2go.example;
 
-import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 public class EmptyRenderer extends KnowWEDomRenderer<AddStatementType> {
 
@@ -40,6 +38,6 @@ public class EmptyRenderer extends KnowWEDomRenderer<AddStatementType> {
 
 	@Override
 	public void render(KnowWEArticle article, Section sec,
-			KnowWEUserContext user, StringBuilder result) {
+			UserContext user, StringBuilder result) {
 	}
 }

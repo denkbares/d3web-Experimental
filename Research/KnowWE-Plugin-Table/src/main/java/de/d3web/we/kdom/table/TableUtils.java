@@ -26,9 +26,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 
 public class TableUtils {
 

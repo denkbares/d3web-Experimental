@@ -34,11 +34,11 @@ import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.search.GenericSearchResult;
 import de.d3web.we.search.KnowWESearchProvider;
 import de.d3web.we.search.SearchTerm;
+import de.d3web.we.user.UserContext;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 /**
@@ -112,7 +112,7 @@ public class AnnotationsProvider implements KnowWESearchProvider {
 
 	@Override
 	public Collection<GenericSearchResult> search(Collection<SearchTerm> words,
-			KnowWEParameterMap map) {
+			UserContext context) {
 		List<GenericSearchResult> results = new ArrayList<GenericSearchResult>();
 		String lns = SemanticCoreDelegator.getInstance(KnowWEEnvironment.getInstance()).getUpper().getLocaleNS();
 		// looking for annotations

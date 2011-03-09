@@ -22,7 +22,7 @@ package de.d3web.we.taghandler;
 
 import java.util.Map;
 
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 public class ParseAllButton extends AbstractHTMLTagHandler {
 
@@ -31,7 +31,7 @@ public class ParseAllButton extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 		return "<input type=\"button\" value=\"ParseAll\" class=\"parseAllButton\"\"><div id=\"parseAllResult\"></div>";
 	}

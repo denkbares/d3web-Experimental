@@ -21,7 +21,7 @@ package de.d3web.we.drools.kdom.rendering;
 
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.MessageRenderer;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 public class DroolsRuleNoticeRenderer implements MessageRenderer{
 
@@ -36,12 +36,12 @@ public class DroolsRuleNoticeRenderer implements MessageRenderer{
 	}
 	
 	@Override
-	public String postRenderMessage(KDOMReportMessage m, KnowWEUserContext user) {
+	public String postRenderMessage(KDOMReportMessage m, UserContext user) {
 		return "";
 	}
 
 	@Override
-	public String preRenderMessage(KDOMReportMessage m, KnowWEUserContext user) {
+	public String preRenderMessage(KDOMReportMessage m, UserContext user) {
 		return "";
 	}
 

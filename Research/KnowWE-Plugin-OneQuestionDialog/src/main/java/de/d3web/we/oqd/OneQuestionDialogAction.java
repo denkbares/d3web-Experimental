@@ -19,12 +19,12 @@
 package de.d3web.we.oqd;
 
 import java.io.IOException;
+import java.util.Map;
 
 import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.session.Session;
 import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.ActionContext;
-import de.d3web.we.core.KnowWEParameterMap;
+import de.d3web.we.action.UserActionContext;
 
 /**
  *
@@ -34,16 +34,16 @@ import de.d3web.we.core.KnowWEParameterMap;
 public class OneQuestionDialogAction extends AbstractAction {
 
 	@Override
-	public void execute(ActionContext context) throws IOException {
+	public void execute(UserActionContext context) throws IOException {
 
-		KnowWEParameterMap map = context.getKnowWEParameterMap();
-		String web = map.getWeb();
-		String topic = map.getTopic();
+		Map<String, String> map = context.getParameters();
+		String web = context.getWeb();
+		String topic = context.getTopic();
 		String type = map.get("type");
 		String question = map.get("question");
 		String questionId = map.get("questionId");
 
-		Session current = OneQuestionDialogUtils.getSession(topic, web, map.getWikiContext());
+		Session current = OneQuestionDialogUtils.getSession(topic, web, context);
 
 		context.setContentType("text/html; charset=UTF-8");
 

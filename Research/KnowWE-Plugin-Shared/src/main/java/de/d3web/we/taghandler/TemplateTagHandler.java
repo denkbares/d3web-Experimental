@@ -33,7 +33,7 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.wikiTemplate.Template;
 import de.d3web.we.kdom.xml.AbstractXMLType;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 /**
  * @author Johannes Dienst
@@ -48,13 +48,13 @@ public class TemplateTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String getDescription(KnowWEUserContext user) {
+	public String getDescription(UserContext user) {
 		return KnowWEEnvironment.getInstance().getKwikiBundle(user).
 				getString("KnowWE.TemplateTagHandler.description");
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 
 		ResourceBundle rb = KnowWEEnvironment.getInstance()

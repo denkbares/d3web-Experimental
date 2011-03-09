@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2010 University Wuerzburg, Computer Science VI
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -26,9 +26,8 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.ActionContext;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.core.KnowWEParameterMap;
 
 /**
  * @author Florian Ziegler
@@ -47,12 +46,11 @@ public class GetNewQuickEditAnswersAction extends AbstractAction {
 	 * the question is mc/oc/yn or [:]EMPTY[:] if the question
 	 * is of a different type
 	 */
-	public void execute(ActionContext context) throws IOException {
+	public void execute(UserActionContext context) throws IOException {
 		context.setContentType("text/plain; charset=UTF-8");
 
-		KnowWEParameterMap map = context.getKnowWEParameterMap();
-		String web = map.getWeb();
-		String topic = map.getTopic();
+		String web = context.getWeb();
+		String topic = context.getTopic();
 		String element = context.getParameter("element");
 
 		KnowledgeBase kb = D3webModule.getKnowledgeRepresentationHandler(web).getKB(
@@ -79,7 +77,7 @@ public class GetNewQuickEditAnswersAction extends AbstractAction {
 	}
 
 	/**
-	 * 
+	 *
 	 * @created 18.01.2011
 	 * @param context
 	 * @param element
@@ -88,7 +86,7 @@ public class GetNewQuickEditAnswersAction extends AbstractAction {
 	 * @return
 	 * @throws IOException
 	 */
-	private void writeAnswersForQuestion(ActionContext context, Question q) throws IOException {
+	private void writeAnswersForQuestion(UserActionContext context, Question q) throws IOException {
 		if (q instanceof QuestionChoice) {
 			StringBuffer buffy = new StringBuffer(UNCHANGED_VALUE_STRING + SEPARATOR);
 			for (Choice c : ((QuestionChoice) q)

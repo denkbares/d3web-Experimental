@@ -29,9 +29,9 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.table.TableCellContent;
 import de.d3web.we.kdom.table.TableCellContentRenderer;
 import de.d3web.we.kdom.table.TableUtils;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  * 
@@ -45,7 +45,7 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 	 * the table
 	 */
 	@Override
-	protected String wrappContent(String sectionText, Section<TableCellContent> sec, KnowWEUserContext user) {
+	protected String wrappContent(String sectionText, Section<TableCellContent> sec, UserContext user) {
 
 		int col = TableCellContent.getCol(sec);
 		int row = TableCellContent.getRow(sec);

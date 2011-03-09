@@ -26,6 +26,7 @@ package tests;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import junit.framework.TestCase;
 
@@ -33,10 +34,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.d3web.plugin.test.InitPluginManager;
+import de.d3web.we.action.ActionContext;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -53,7 +55,7 @@ public class TaggingManglerTest extends TestCase {
 
 	private KnowWEArticleManager am;
 	private TaggingMangler tm;
-	private KnowWEParameterMap params;
+	private UserActionContext context;
 	private Type type;
 	private KnowWEEnvironment ke;
 	private ISemanticCore sc;
@@ -82,7 +84,11 @@ public class TaggingManglerTest extends TestCase {
 				"default_web");
 
 		am.registerArticle(article1);
-		params = new KnowWEParameterMap(KnowWEAttributes.WEB, KnowWEEnvironment.DEFAULT_WEB);
+
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(KnowWEAttributes.WEB, KnowWEEnvironment.DEFAULT_WEB);
+		map.put(KnowWEAttributes.USER, "testuser");
+		context = new ActionContext("", "", map, null, null, null, null);
 		tm = TaggingMangler.getInstance();
 		sc = SemanticCoreDelegator.getInstance();
 	}
@@ -115,13 +121,10 @@ public class TaggingManglerTest extends TestCase {
 		KnowWEArticle article1 = KnowWEArticle.createArticle("", "AddTag", type,
 				"default_web");
 		am.registerArticle(article1);
-		tm.addTag("AddTag", "tagtest", params);
-
-		KnowWEArticle article2 = am.getArticle("AddTag");
-		String text = article2.getSection().getOriginalText();
+		tm.addTag("AddTag", "tagtest", context);
 		assertEquals("%%tags\ntagtest\n%", am.getArticle("AddTag")
 				.getSection().getOriginalText());
-		tm.removeTag("AddTag", "tagtest", params);
+		tm.removeTag("AddTag", "tagtest", context);
 		assertEquals("%%tags\n\n%", am.getArticle("AddTag").getSection()
 				.getOriginalText());
 		am.deleteArticle(am.getArticle("AddTag"));
@@ -139,7 +142,7 @@ public class TaggingManglerTest extends TestCase {
 		KnowWEArticle article1 = KnowWEArticle.createArticle("", "AddTag", type,
 				KnowWEEnvironment.DEFAULT_WEB);
 		am.registerArticle(article1);
-		tm.addTag("AddTag", "tagtest", params);
+		tm.addTag("AddTag", "tagtest", context);
 		// remember: article* are not the current articles anymore, changes to
 		// the articles by the TaggingMangler do not backpropagate to those
 		// variables
@@ -157,7 +160,7 @@ public class TaggingManglerTest extends TestCase {
 		assertEquals(0, tags.size());
 
 		// now add another tag
-		tm.addTag("AddTag", "stein", params);
+		tm.addTag("AddTag", "stein", context);
 		tags = tm.getPageTags("AddTag");
 		assertEquals(2, tags.size());
 
@@ -166,7 +169,7 @@ public class TaggingManglerTest extends TestCase {
 				KnowWEEnvironment.DEFAULT_WEB);
 		am.registerArticle(article2);
 		// add the same tag to the second article to check for interferences
-		tm.addTag("Tag1", "stein", params);
+		tm.addTag("Tag1", "stein", context);
 		assertEquals(2, tags.size());
 		am.deleteArticle(am.getArticle("Tag1"));
 		am.deleteArticle(am.getArticle("AddTag"));
@@ -191,10 +194,10 @@ public class TaggingManglerTest extends TestCase {
 		am.registerArticle(article2);
 		am.registerArticle(article3);
 		am.registerArticle(article4);
-		tm.addTag("Tag1", "live", params);
-		tm.addTag("Tag2", "live", params);
-		tm.addTag("Tag3", "tod", params);
-		tm.addTag("Tag4", "live", params);
+		tm.addTag("Tag1", "live", context);
+		tm.addTag("Tag2", "live", context);
+		tm.addTag("Tag3", "tod", context);
+		tm.addTag("Tag4", "live", context);
 		// remember: article* are not the current articles anymore, changes to
 		// the articles by the TaggingMangler do not backpropagate to those
 		// variables
@@ -221,9 +224,9 @@ public class TaggingManglerTest extends TestCase {
 		KnowWEArticle article = KnowWEArticle.createArticle("", "Tag", type,
 				"default_web");
 		am.registerArticle(article);
-		tm.addTag("Tag", "tick", params);
-		tm.addTag("Tag", "trick", params);
-		tm.addTag("Tag", "track", params);
+		tm.addTag("Tag", "tick", context);
+		tm.addTag("Tag", "trick", context);
+		tm.addTag("Tag", "track", context);
 		// remember: article* are not the current articles anymore, changes to
 		// the articles by the TaggingMangler do not backpropagate to those
 		// variables
@@ -249,9 +252,9 @@ public class TaggingManglerTest extends TestCase {
 		am.registerArticle(article1);
 		am.registerArticle(article2);
 		am.registerArticle(article3);
-		tm.addTag("Tag1", "tag", params);
-		tm.addTag("Tag2", "leben", params);
-		tm.addTag("Tag3", "tod", params);
+		tm.addTag("Tag1", "tag", context);
+		tm.addTag("Tag2", "leben", context);
+		tm.addTag("Tag3", "tod", context);
 		// remember: article* are not the current articles anymore, changes to
 		// the articles by the TaggingMangler do not backpropagate to those
 		// variables
@@ -282,10 +285,10 @@ public class TaggingManglerTest extends TestCase {
 		am.registerArticle(article1);
 		am.registerArticle(article2);
 		am.registerArticle(article3);
-		tm.addTag("Tag1", "tag", params);
-		tm.addTag("Tag2", "leben", params);
-		tm.addTag("Tag3", "tod", params);
-		tm.addTag("Tag3", "leben", params);
+		tm.addTag("Tag1", "tag", context);
+		tm.addTag("Tag2", "leben", context);
+		tm.addTag("Tag3", "tod", context);
+		tm.addTag("Tag3", "leben", context);
 		// remember: article* are not the current articles anymore, changes to
 		// the articles by the TaggingMangler do not backpropagate to those
 		// variables
@@ -319,9 +322,9 @@ public class TaggingManglerTest extends TestCase {
 		am.registerArticle(article1);
 		am.registerArticle(article2);
 		am.registerArticle(article3);
-		tm.addTag("Tag1", "tag", params);
-		tm.addTag("Tag2", "leben", params);
-		tm.addTag("Tag3", "tod", params);
+		tm.addTag("Tag1", "tag", context);
+		tm.addTag("Tag2", "leben", context);
+		tm.addTag("Tag3", "tod", context);
 		// remember: article* are not the current articles anymore, changes to
 		// the articles by the TaggingMangler do not backpropagate to those
 		// variables
@@ -344,7 +347,7 @@ public class TaggingManglerTest extends TestCase {
 		KnowWEArticle article1 = KnowWEArticle.createArticle("", "AddTag", type,
 				"default_web");
 		am.registerArticle(article1);
-		tm.setTags("AddTag", "tag1 tag2 tag3", params);
+		tm.setTags("AddTag", "tag1 tag2 tag3", context);
 		assertEquals("%%tags\ntag1 tag2 tag3\n%", am.getArticle("AddTag")
 				.getSection().getOriginalText());
 		am.deleteArticle(am.getArticle("AddTag"));
@@ -366,10 +369,10 @@ public class TaggingManglerTest extends TestCase {
 		am.registerArticle(article1);
 		am.registerArticle(article2);
 		am.registerArticle(article3);
-		tm.addTag("Tag1", "tag", params);
-		tm.addTag("Tag2", "leben", params);
-		tm.addTag("Tag3", "tod", params);
-		tm.addTag("Tag3", "leben", params);
+		tm.addTag("Tag1", "tag", context);
+		tm.addTag("Tag2", "leben", context);
+		tm.addTag("Tag3", "tod", context);
+		tm.addTag("Tag3", "leben", context);
 		// remember: article* are not the current articles anymore, changes to
 		// the articles by the TaggingMangler do not backpropagate to those
 		// variables

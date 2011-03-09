@@ -29,9 +29,9 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Session;
 import de.d3web.we.basic.D3webModule;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class QuestionSheetHandler extends AbstractHTMLTagHandler {
 
@@ -50,12 +50,12 @@ public class QuestionSheetHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String getDescription(KnowWEUserContext user) {
+	public String getDescription(UserContext user) {
 		return D3webModule.getKwikiBundle_d3web(user).getString("KnowWE.QuestionSheet.description");
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user, Map<String, String> values, String web) {
+	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
 
 		Session session = D3webUtils.getSession(topic, user, web);
 

@@ -30,8 +30,8 @@ import de.d3web.we.kdom.objects.KnowWETerm;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.taghandler.AbstractTagHandler;
 import de.d3web.we.terminology.TerminologyHandler;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.termObject.URIObject;
 
 public class TerminologyViewHandler extends AbstractTagHandler{
@@ -41,7 +41,7 @@ public class TerminologyViewHandler extends AbstractTagHandler{
 	}
 
 	@Override
-	public String render(KnowWEArticle article, Section<?> section, KnowWEUserContext userContext, Map<String, String> parameters) {
+	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		TerminologyHandler terminologyHandler = KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
 		Collection<String> globalTerms = terminologyHandler.getAllGlobalTerms();
 		String result = "<ul>Registered Terms:<br>";

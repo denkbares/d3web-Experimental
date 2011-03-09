@@ -39,7 +39,7 @@ import common.Logger;
 
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.wisec.util.Criteria;
 import de.d3web.we.wisec.util.WISECUtil;
 import de.d3web.wisec.model.RatedSubstance;
@@ -77,13 +77,13 @@ public class WISECRankingTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String getDescription(KnowWEUserContext user) {
+	public String getDescription(UserContext user) {
 		// TODO: This should probably moved to a resource bundle
 		return "Displays a ranking of the n top substances with the highest rating with respect to the specified weights. If n is not defined (correctly) 10 substances will be displayed. Append 'printinfo=true' if you want the taghandler to render a legend.";
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 
 		HashMap<String, RatedSubstance> ratedSubstances = new HashMap<String, RatedSubstance>();

@@ -21,13 +21,13 @@
 package de.d3web.we.hermes;
 
 import de.d3web.we.kdom.rendering.PageAppendHandler;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 import de.knowwe.tagging.TagEditPanel;
 
 public class AppendTagEditHandler implements PageAppendHandler {
 
 	@Override
-	public String getDataToAppend(String topic, String web, KnowWEUserContext user) {
+	public String getDataToAppend(String topic, String web, UserContext user) {
 		return "\\\\[{If group='Editoren'\n\n"
 				+ TagEditPanel.render(user) + "}]";
 	}

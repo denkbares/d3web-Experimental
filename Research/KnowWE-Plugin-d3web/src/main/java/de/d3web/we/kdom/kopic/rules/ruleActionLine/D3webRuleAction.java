@@ -23,8 +23,8 @@ package de.d3web.we.kdom.kopic.rules.ruleActionLine;
 import de.d3web.core.inference.PSAction;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 
 public abstract class D3webRuleAction<T extends Type> extends AbstractType {
 

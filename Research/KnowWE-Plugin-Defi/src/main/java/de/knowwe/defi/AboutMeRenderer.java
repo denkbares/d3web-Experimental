@@ -23,8 +23,8 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  * The AboutMeRenderer renders the content of the about me page. It renders a
@@ -38,7 +38,7 @@ import de.d3web.we.wikiConnector.KnowWEUserContext;
 public class AboutMeRenderer<T extends AbstractType> extends KnowWEDomRenderer<T> {
 
 	@Override
-	public void render(KnowWEArticle article, Section<T> sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section<T> sec, UserContext user, StringBuilder string) {
 
 		String avatar = DefaultMarkupType.getAnnotation(sec, "avatar");
 		String about = DefaultMarkupType.getAnnotation(sec, "about");

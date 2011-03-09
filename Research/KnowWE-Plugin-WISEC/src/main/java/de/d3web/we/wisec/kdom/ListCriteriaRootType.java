@@ -29,8 +29,8 @@ import de.d3web.we.kdom.defaultMarkup.AnnotationType;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.d3web.we.wisec.kdom.subtreehandler.ListCriteriaOWLSubtreeHandler;
 
 /**
@@ -82,7 +82,7 @@ public class ListCriteriaRootType extends DefaultMarkupType {
 		}
 
 		@Override
-		public void render(KnowWEArticle article, Section<DefaultMarkupType> section, KnowWEUserContext user, StringBuilder string) {
+		public void render(KnowWEArticle article, Section<DefaultMarkupType> section, UserContext user, StringBuilder string) {
 
 			String id = section.getID();
 			String name = "<span>" + section.get().getName() + "</span>";
@@ -108,7 +108,7 @@ public class ListCriteriaRootType extends DefaultMarkupType {
 			string.append(KnowWEUtils.maskHTML("</div>\n"));
 		}
 
-		protected void renderContents(KnowWEArticle article, Section<? extends DefaultMarkupType> section, KnowWEUserContext user, StringBuilder string) {
+		protected void renderContents(KnowWEArticle article, Section<? extends DefaultMarkupType> section, UserContext user, StringBuilder string) {
 			List<Section<?>> subsecs = section.getChildren();
 			Section<?> first = subsecs.get(0);
 			Section<?> last = subsecs.get(subsecs.size() - 1);

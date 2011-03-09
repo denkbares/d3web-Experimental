@@ -28,7 +28,7 @@ import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.wisec.util.Criteria;
 import de.d3web.we.wisec.util.WISECUtil;
 import de.d3web.wisec.writers.SubstanceListWriter;
@@ -55,13 +55,13 @@ public class WISECSubstanceScoringTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String getDescription(KnowWEUserContext user) {
+	public String getDescription(UserContext user) {
 		// TODO: This should probably moved to a resource bundle
 		return "Displays the criteria scoring of the specified substance (CAS Number).";
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user, Map<String, String> values, String web) {
+	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
 
 		String substance = values.get("substance");
 		if (substance == null || substance.isEmpty()) {

@@ -36,8 +36,8 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class TimeEventTypeRenderer extends KnowWEDomRenderer<TimeEventType> {
 
@@ -51,7 +51,7 @@ public class TimeEventTypeRenderer extends KnowWEDomRenderer<TimeEventType> {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section<TimeEventType> sec, KnowWEUserContext user, StringBuilder result) {
+	public void render(KnowWEArticle article, Section<TimeEventType> sec, UserContext user, StringBuilder result) {
 
 		// check filter Level
 		int filterLevel = getFilterLevel(user);
@@ -125,7 +125,7 @@ public class TimeEventTypeRenderer extends KnowWEDomRenderer<TimeEventType> {
 		return date;
 	}
 
-	private int getFilterLevel(KnowWEUserContext user) {
+	private int getFilterLevel(UserContext user) {
 		Integer impFilterLevel = HermesUserManagement.getInstance()
 				.getEventFilterLevelForUser(user.getUserName());
 		int filterLevel = 3;

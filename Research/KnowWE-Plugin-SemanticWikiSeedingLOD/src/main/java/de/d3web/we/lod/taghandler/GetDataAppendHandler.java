@@ -11,14 +11,14 @@ import org.openrdf.query.TupleQueryResult;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.rendering.PageAppendHandler;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 public class GetDataAppendHandler implements PageAppendHandler {
 
 	@Override
-	public String getDataToAppend(String topic, String web, KnowWEUserContext user) {
+	public String getDataToAppend(String topic, String web, UserContext user) {
 
 		String query = "SELECT ?x WHERE {?x rdf:type lns:Hermes-Object} ORDER BY ASC(?x)";
 		TupleQueryResult result = SPARQLUtil.executeTupleQuery(query);

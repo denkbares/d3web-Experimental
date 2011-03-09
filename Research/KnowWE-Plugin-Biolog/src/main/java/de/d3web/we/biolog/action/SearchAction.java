@@ -19,6 +19,7 @@
  */
 package de.d3web.we.biolog.action;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -32,12 +33,12 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import de.d3web.we.action.DeprecatedAbstractKnowWEAction;
+import de.d3web.we.action.AbstractAction;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.biolog.BiologSearchTagHandler;
 import de.d3web.we.biolog.search.AnnotationsProvider;
 import de.d3web.we.biolog.search.BibtexSearchProvider;
 import de.d3web.we.biolog.search.EMLSearchProvider;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.search.GenericSearchResult;
 import de.d3web.we.search.KnowWESearchProvider;
 import de.d3web.we.search.MultiSearchEngine;
@@ -53,14 +54,24 @@ import de.knowwe.tagging.TaggingMangler;
  * @see BiologSearchTagHandler
  *
  */
-public class SearchAction extends DeprecatedAbstractKnowWEAction {
+public class SearchAction extends AbstractAction {
 
 	private static final String JSP_WIKI_SEARCH = "JSPWiki search";
 
 	@Override
-	public String perform(KnowWEParameterMap parameterMap) {
+	public void execute(UserActionContext context) throws IOException {
 
-		String searchText = parameterMap.get("searchText");
+		String result = perform(context);
+		if (result != null && context.getWriter() != null) {
+			context.setContentType("text/html; charset=UTF-8");
+			context.getWriter().write(result);
+		}
+
+	}
+
+	private String perform(UserActionContext context) {
+
+		String searchText = context.getParameter("searchText");
 
 		if (searchText == null || searchText.length() == 0) return "<p class=\"box error\">Please enter a search text!</p>";
 
@@ -69,7 +80,7 @@ public class SearchAction extends DeprecatedAbstractKnowWEAction {
 
 		// retrieving search results from the MultiSearchEngine
 		Map<String, Collection<GenericSearchResult>> results = MultiSearchEngine
-				.getInstance().search(expandedSearchTerms, parameterMap);
+				.getInstance().search(expandedSearchTerms, context);
 
 		// this methods filters findings from freetext-search, which are also
 		// found by other search-providers

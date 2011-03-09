@@ -26,7 +26,7 @@ import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.kdom.xml.XMLContent;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 /**
  * 
@@ -62,7 +62,7 @@ public class FreeMapType extends AbstractXMLType{
 
 		@Override
 		public void render(KnowWEArticle article, Section sec,
-				KnowWEUserContext user, StringBuilder string) {
+				UserContext user, StringBuilder string) {
 			string.append("{{{");
 			DelegateRenderer.getInstance().render(article, sec, user, string);
 			string.append("}}}");

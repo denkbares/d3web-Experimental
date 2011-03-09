@@ -12,7 +12,7 @@ import org.drools.builder.KnowledgeBuilderFactory;
 import org.drools.runtime.StatefulKnowledgeSession;
 
 import de.d3web.plugin.PluginManager;
-import de.d3web.we.action.ActionContext;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.drools.action.utils.DroolsUtils;
 import de.d3web.we.event.ArticleCreatedEvent;
 import de.d3web.we.event.Event;
@@ -23,7 +23,7 @@ import de.d3web.we.logging.Logging;
 import de.knowwe.plugin.Plugins;
 
 public class DroolsKnowledgeHandler implements EventListener {
-	
+
 	private static DroolsKnowledgeHandler instance = null;
 
 	public static DroolsKnowledgeHandler getInstance() {
@@ -41,7 +41,7 @@ public class DroolsKnowledgeHandler implements EventListener {
 	public Object clone() throws CloneNotSupportedException {
 		throw new CloneNotSupportedException();
 	}
-	
+
 	private final Map<String, Map<String, Object>> factsStores = new HashMap<String, Map<String, Object>>();
 
 	private final Map<String, KnowledgeBuilder> knowledgeBuilders = new HashMap<String, KnowledgeBuilder>();
@@ -86,7 +86,7 @@ public class DroolsKnowledgeHandler implements EventListener {
 	public Map<String, Object> getFactsStore(String title) {
 		// try to load factsStore
 		Map<String, Object> factsStore = factsStores.get(title);
-		
+
 		// if factsStore does not exist, create it and store it
 		if (factsStore == null) {
 			factsStore = new HashMap<String, Object>();
@@ -97,13 +97,13 @@ public class DroolsKnowledgeHandler implements EventListener {
 
 	/**
 	 * Loads the stored KnowledgeSession, if no one exists a new one is created
-	 * 
+	 *
 	 * @param article the currently processed article
 	 * @return the stored KnowledgeSession or a new one
 	 */
-	public StatefulKnowledgeSession getSession(ActionContext context) {
+	public StatefulKnowledgeSession getSession(UserActionContext context) {
 
-		String user = context.getKnowWEParameterMap().getUser();
+		String user = context.getUserName();
 		// Load the Article
 		KnowWEArticle article = DroolsUtils.loadArticle(context);
 		String title = article.getTitle();
@@ -142,9 +142,9 @@ public class DroolsKnowledgeHandler implements EventListener {
 		return null;
 	}
 
-	public void disposeSession(ActionContext context) {
+	public void disposeSession(UserActionContext context) {
 		String title = context.getParameter("title");
-		String user = context.getKnowWEParameterMap().getUser();
+		String user = context.getUserName();
 
 		Map<String, StatefulKnowledgeSession> sessionsForArticle = knowledgeSessions.get(title);
 		if (sessionsForArticle != null) {
@@ -176,7 +176,7 @@ public class DroolsKnowledgeHandler implements EventListener {
 	/**
 	 * Loads all Facts from the FactsStore and inserts it into the current
 	 * session
-	 * 
+	 *
 	 * @param article the current article
 	 */
 	private void addFacts(KnowWEArticle article, StatefulKnowledgeSession session) {

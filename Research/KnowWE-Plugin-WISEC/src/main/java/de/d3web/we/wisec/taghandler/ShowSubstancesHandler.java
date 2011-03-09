@@ -31,8 +31,8 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 /**
@@ -49,7 +49,7 @@ public class ShowSubstancesHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user, Map<String, String> values, String web) {
+	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
 		ISemanticCore sc = SemanticCoreDelegator.getInstance();
 
 		String querystring = QUERY;

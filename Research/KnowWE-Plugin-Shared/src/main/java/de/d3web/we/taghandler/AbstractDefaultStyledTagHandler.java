@@ -28,7 +28,7 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.d3web.we.tools.Tool;
 import de.d3web.we.tools.ToolUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 import de.knowwe.core.taghandler.TagHandlerTypeContent;
 
 /**
@@ -50,7 +50,7 @@ public abstract class AbstractDefaultStyledTagHandler extends AbstractTagHandler
 	}
 
 	@Override
-	public final String render(KnowWEArticle article, Section<?> section, KnowWEUserContext userContext, Map<String, String> parameters) {
+	public final String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		String content = renderContent(article, section, userContext, parameters);
 		Section<TagHandlerTypeContent> tagNameSection = Sections.findSuccessor(section,
 				TagHandlerTypeContent.class);
@@ -76,6 +76,6 @@ public abstract class AbstractDefaultStyledTagHandler extends AbstractTagHandler
 	 * @param parameters the parameters of the tag handler invocation
 	 * @return the resulting wiki markup text
 	 */
-	public abstract String renderContent(KnowWEArticle article, Section<?> section, KnowWEUserContext user, Map<String, String> parameters);
+	public abstract String renderContent(KnowWEArticle article, Section<?> section, UserContext user, Map<String, String> parameters);
 
 }

@@ -21,14 +21,14 @@
 package de.d3web.we.module;
 
 import de.d3web.we.kdom.rendering.PageAppendHandler;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class ValidationPageAppendHandler implements PageAppendHandler {
 
 	@Override
 	public String getDataToAppend(String topic, String web,
-			KnowWEUserContext user) {
+			UserContext user) {
 
 		if (user.userIsAdmin()) {
 			// KnowWEArticle article =

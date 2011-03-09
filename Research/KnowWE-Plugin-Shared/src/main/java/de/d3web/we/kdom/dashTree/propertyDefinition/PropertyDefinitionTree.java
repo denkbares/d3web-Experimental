@@ -25,7 +25,7 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.dashTree.subclassing.PreRendererWithoutTilde;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 import de.knowwe.core.dashtree.DashTree;
 
 /**
@@ -48,7 +48,7 @@ public class PropertyDefinitionTree extends DashTree {
 
 		@Override
 		public void render(KnowWEArticle article, Section<DashTree> sec,
-				KnowWEUserContext user, StringBuilder string) {
+				UserContext user, StringBuilder string) {
 
 			string.append("{{{");
 			DelegateRenderer.getInstance().render(article, sec, user, string);

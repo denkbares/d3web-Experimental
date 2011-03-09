@@ -34,10 +34,10 @@ import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 
 import de.d3web.we.biolog.freemap.SubmethodExpander;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.search.GenericSearchResult;
 import de.d3web.we.search.KnowWESearchProvider;
 import de.d3web.we.search.SearchTerm;
+import de.d3web.we.user.UserContext;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 /**
@@ -113,7 +113,7 @@ public class EMLSearchProvider implements KnowWESearchProvider {
 
 	@Override
 	public Collection<GenericSearchResult> search(Collection<SearchTerm> words,
-			KnowWEParameterMap map) {
+			UserContext context) {
 		Set<GenericSearchResult> results = new HashSet<GenericSearchResult>();
 
 		// looking for keywords and abstracts and creators

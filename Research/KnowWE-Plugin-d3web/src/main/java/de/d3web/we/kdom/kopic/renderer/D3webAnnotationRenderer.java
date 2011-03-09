@@ -33,14 +33,14 @@ import de.d3web.we.kdom.contexts.ContextManager;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.semanticAnnotation.AnnotatedString;
 import de.d3web.we.kdom.semanticAnnotation.SimpleAnnotation;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 @SuppressWarnings("unchecked")
 public class D3webAnnotationRenderer extends KnowWEDomRenderer {
 
 	@Override
-	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
 
 		String question = null;
 		Section qAChild = Sections.findSuccessor(sec, SimpleAnnotation.class);

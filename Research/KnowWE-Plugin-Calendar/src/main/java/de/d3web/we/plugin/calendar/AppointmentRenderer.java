@@ -26,13 +26,13 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class AppointmentRenderer extends KnowWEDomRenderer<Appointment> {
 
 	@Override
-	public void render(KnowWEArticle article, Section<Appointment> sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section<Appointment> sec, UserContext user, StringBuilder string) {
 
 		Map<String, String> persons = CalendarModule.getPersons();
 

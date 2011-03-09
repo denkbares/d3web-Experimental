@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -24,7 +24,6 @@ import java.util.Map;
 
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
@@ -33,8 +32,8 @@ import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.kdom.xml.XMLHead;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class BoxRenderer extends KnowWEDomRenderer<ForumBox> {
 
@@ -46,7 +45,7 @@ public class BoxRenderer extends KnowWEDomRenderer<ForumBox> {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section<ForumBox> sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section<ForumBox> sec, UserContext user, StringBuilder string) {
 
 		String name;
 		String date;
@@ -89,11 +88,11 @@ public class BoxRenderer extends KnowWEDomRenderer<ForumBox> {
 
 				KnowWEEnvironment instance = KnowWEEnvironment.getInstance();
 				instance.getArticle(web, topic).getSection().collectTextsFromLeaves(buffi);
-				KnowWEParameterMap map = new KnowWEParameterMap(KnowWEAttributes.WEB, web);
-				map.put(KnowWEAttributes.TOPIC, topic);
-				map.put(KnowWEAttributes.USER, user.toString());
+				user.getParameters().put(KnowWEAttributes.WEB, web);
+				user.getParameters().put(KnowWEAttributes.TOPIC, topic);
+				user.getParameters().put(KnowWEAttributes.USER, user.toString());
 				instance.getWikiConnector().writeArticleToWikiEnginePersistence(topic,
-						buffi.toString(), map);
+						buffi.toString(), user);
 
 			}
 			catch (Exception e) {

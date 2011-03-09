@@ -30,8 +30,8 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  * <p>
@@ -73,7 +73,7 @@ public class TableCellContentRenderer extends KnowWEDomRenderer<TableCellContent
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section<TableCellContent> sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section<TableCellContent> sec, UserContext user, StringBuilder string) {
 		StringBuilder builder = new StringBuilder();
 		DelegateRenderer.getInstance().render(article, sec, user, builder);
 
@@ -84,7 +84,7 @@ public class TableCellContentRenderer extends KnowWEDomRenderer<TableCellContent
 	 * Wraps the content of the cell (sectionText) with the HTML-Code needed for
 	 * the table
 	 */
-	protected String wrappContent(String sectionText, Section<TableCellContent> sec, KnowWEUserContext user) {
+	protected String wrappContent(String sectionText, Section<TableCellContent> sec, UserContext user) {
 
 		String sectionID = sec.getID();
 		StringBuilder html = new StringBuilder();
@@ -114,7 +114,7 @@ public class TableCellContentRenderer extends KnowWEDomRenderer<TableCellContent
 	}
 
 	protected void generateContent(String sectionText, Section<TableCellContent> s,
-			KnowWEUserContext user, String sectionID, StringBuilder html) {
+			UserContext user, String sectionID, StringBuilder html) {
 		if (s.hasQuickEditModeSet(user.getUserName())) {
 			Section<Table> father = Sections.findAncestorOfType(s, Table.class);
 			String[] values = null;

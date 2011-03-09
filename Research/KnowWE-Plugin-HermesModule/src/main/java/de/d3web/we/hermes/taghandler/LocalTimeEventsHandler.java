@@ -34,8 +34,8 @@ import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.hermes.TimeStamp;
 import de.d3web.we.hermes.util.TimeEventSPARQLUtils;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class LocalTimeEventsHandler extends AbstractHTMLTagHandler {
 
@@ -48,7 +48,7 @@ public class LocalTimeEventsHandler extends AbstractHTMLTagHandler {
 
 	// ?t lns:isDefinedBy ?to . ?to lns:hasTopic TOPIC .
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 
 		OwlHelper helper = SemanticCoreDelegator.getInstance().getUpper().getHelper();

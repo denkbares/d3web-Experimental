@@ -26,9 +26,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.basic.LineBreak;
 import de.d3web.we.kdom.rendering.NothingRenderer;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;

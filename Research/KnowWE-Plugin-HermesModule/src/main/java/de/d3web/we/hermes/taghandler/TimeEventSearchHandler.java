@@ -23,7 +23,7 @@ package de.d3web.we.hermes.taghandler;
 import java.util.Map;
 
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 public class TimeEventSearchHandler extends AbstractHTMLTagHandler {
 
@@ -32,7 +32,7 @@ public class TimeEventSearchHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 		return generateForms(topic);
 	}

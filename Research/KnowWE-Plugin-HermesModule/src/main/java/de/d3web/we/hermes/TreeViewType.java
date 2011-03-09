@@ -24,8 +24,8 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  *
@@ -47,7 +47,7 @@ public class TreeViewType extends AbstractType {
 	public static class TreeViewRenderer extends KnowWEDomRenderer<TreeViewType> {
 
 		@Override
-		public void render(KnowWEArticle article, Section<TreeViewType> sec, KnowWEUserContext user, StringBuilder string) {
+		public void render(KnowWEArticle article, Section<TreeViewType> sec, UserContext user, StringBuilder string) {
 			long id = System.currentTimeMillis();
 
 			String pre = ""

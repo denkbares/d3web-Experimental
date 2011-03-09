@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -20,6 +20,7 @@
 
 package de.d3web.we.action;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,13 +32,24 @@ import de.d3web.scoring.inference.PSMethodHeuristic;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.WikiEnvironment;
 import de.d3web.we.core.KnowWEAttributes;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.utils.ProblemSolverType;
 
-public class ExplanationRenderer2 extends DeprecatedAbstractKnowWEAction {
+public class ExplanationRenderer2 extends AbstractAction {
 
 	@Override
-	public String perform(KnowWEParameterMap parameterMap) {
+	public void execute(UserActionContext context) throws IOException {
+
+		String result = perform(context);
+		if (result != null && context.getWriter() != null) {
+			context.setContentType("text/html; charset=UTF-8");
+			context.getWriter().write(result);
+		}
+
+	}
+
+	private String perform(UserActionContext context) {
+
+		Map<String, String> parameterMap = context.getParameters();
 
 		String toExplain = parameterMap.get(KnowWEAttributes.EXPLAIN);
 		// String kbid = parameterMap.get(KnowWEAttributes.NAMESPACE);
@@ -56,11 +68,11 @@ public class ExplanationRenderer2 extends DeprecatedAbstractKnowWEAction {
 		}
 		if (type == null) type = ProblemSolverType.heuristic;
 		if (type.equals(ProblemSolverType.heuristic)) {
-			String rendered = renderHeuristic(parameterMap, toExplain);
+			String rendered = renderHeuristic(context, toExplain);
 			return rendered;
 		}
 		else if (type.equals(ProblemSolverType.setcovering)) {
-			String rendered = renderSCM(parameterMap, toExplain);
+			String rendered = renderSCM(context, toExplain);
 			return rendered;
 		}
 		else if (type.equals(ProblemSolverType.casebased)) {
@@ -69,15 +81,15 @@ public class ExplanationRenderer2 extends DeprecatedAbstractKnowWEAction {
 		return "error in ExplanationRenderer2";
 	}
 
-	public String renderHeuristic(KnowWEParameterMap map, String toExplain) {
+	public String renderHeuristic(UserActionContext context, String toExplain) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"de\">");
 		sb.append("<head>");
 		sb.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" />");
 		sb.append("<meta http-equiv=\"REFRESH\" content=\"0; url=faces/Controller;jsessionid="
-				+ map.getSession().getId()
+				+ context.getSession().getId()
 				+ "?knowweexplanation=true&toexplain="
-				+ toExplain + "&id=" + map.getSession().getId() + "\">");
+				+ toExplain + "&id=" + context.getSession().getId() + "\">");
 		sb.append("</head>");
 		sb.append("<body>");
 		sb.append("</body>");
@@ -85,15 +97,15 @@ public class ExplanationRenderer2 extends DeprecatedAbstractKnowWEAction {
 		return sb.toString();
 	}
 
-	public String renderSCM(KnowWEParameterMap parameterMap, String toExplain) {
+	public String renderSCM(UserActionContext context, String toExplain) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"de\">");
 		sb.append("<head>");
 		sb.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" />");
 		sb.append("<meta http-equiv=\"REFRESH\" content=\"0; url=faces/Controller;jsessionid="
-				+ parameterMap.getSession().getId()
+				+ context.getSession().getId()
 				+ "?knowwescm=true&toexplain="
-				+ toExplain + "&id=" + parameterMap.getSession().getId() + "\">");
+				+ toExplain + "&id=" + context.getSession().getId() + "\">");
 		sb.append("</head>");
 		sb.append("<body>");
 		sb.append("</body>");

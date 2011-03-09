@@ -23,12 +23,8 @@
  */
 package de.d3web.we.core.semantic.rdf2go;
 
-import java.util.logging.Logger;
-
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
-import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.node.URI;
-import org.openrdf.query.MalformedQueryException;
 
 
 /**

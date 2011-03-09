@@ -4,14 +4,14 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Map;
 
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 
 import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.ActionContext;
-import de.d3web.we.core.KnowWEParameterMap;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.lod.quiz.YearOfBirthQuizHandler;
 import de.knowwe.semantic.sparql.SPARQLUtil;
@@ -19,9 +19,9 @@ import de.knowwe.semantic.sparql.SPARQLUtil;
 public class SolveYearOfBirthAction extends AbstractAction {
 
 	@Override
-	public void execute(ActionContext context) throws IOException {
+	public void execute(UserActionContext context) throws IOException {
 
-		KnowWEParameterMap map = context.getKnowWEParameterMap();
+		Map<String, String> map = context.getParameters();
 		String answer = map.get("answer");
 		String subject = map.get("subject");
 

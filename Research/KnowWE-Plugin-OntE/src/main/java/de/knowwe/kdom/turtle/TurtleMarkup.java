@@ -67,8 +67,8 @@ import de.knowwe.termObject.LocalConceptReference;
 import de.knowwe.termObject.OWLTermReference;
 import de.knowwe.termObject.RDFResourceType;
 import de.knowwe.termObject.URIObject;
-import de.knowwe.termObject.URITermDefinition;
 import de.knowwe.termObject.URIObject.URIObjectType;
+import de.knowwe.termObject.URITermDefinition;
 
 public class TurtleMarkup extends AbstractType {
 

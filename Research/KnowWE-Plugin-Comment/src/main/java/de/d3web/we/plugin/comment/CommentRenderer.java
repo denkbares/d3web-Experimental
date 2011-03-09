@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -26,7 +26,6 @@ import java.util.Map;
 
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
@@ -34,8 +33,8 @@ import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.xml.XMLTail;
 import de.d3web.we.plugin.forum.ForumRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.d3web.we.wikiConnector.KnowWEWikiConnector;
 
 public class CommentRenderer extends KnowWEDomRenderer<CommentType> {
@@ -62,7 +61,7 @@ public class CommentRenderer extends KnowWEDomRenderer<CommentType> {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section<CommentType> sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section<CommentType> sec, UserContext user, StringBuilder string) {
 
 		Map<String, String> commentTypes = CommentModule.getCommentTypes();
 
@@ -142,16 +141,15 @@ public class CommentRenderer extends KnowWEDomRenderer<CommentType> {
 
 					StringBuilder buffi = new StringBuilder();
 					forumSec.collectTextsFromLeaves(buffi);
-					KnowWEParameterMap parameterMap = new KnowWEParameterMap(KnowWEAttributes.WEB,
-							forumSec.getWeb());
+					user.getParameters().put(KnowWEAttributes.WEB, forumSec.getWeb());
 					instance.getWikiConnector().writeArticleToWikiEnginePersistence(
-							sec.getTitle(), buffy.toString(), parameterMap);
+							sec.getTitle(), buffy.toString(), user);
 
 				}
 
-				KnowWEParameterMap map = new KnowWEParameterMap(KnowWEAttributes.WEB, sec.getWeb());
+				user.getParameters().put(KnowWEAttributes.WEB, sec.getWeb());
 				instance.getWikiConnector().writeArticleToWikiEnginePersistence(
-						sec.getTitle(), buffy.toString(), map);
+						sec.getTitle(), buffy.toString(), user);
 
 			}
 			else {

@@ -23,8 +23,8 @@ package de.d3web.we.taghandler;
 import java.util.Map;
 
 import de.d3web.we.core.KnowWEEnvironment;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class ParseFullLocalPageButton extends AbstractHTMLTagHandler {
 
@@ -36,7 +36,7 @@ public class ParseFullLocalPageButton extends AbstractHTMLTagHandler {
 	static final String text = "full-parse";
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user, Map<String, String> values, String web) {
+	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
 
 		// might be placed in 'secondary' pages (i.e., leftmenu, moremenu...)
 		String theMainTopic = user.getTopic();

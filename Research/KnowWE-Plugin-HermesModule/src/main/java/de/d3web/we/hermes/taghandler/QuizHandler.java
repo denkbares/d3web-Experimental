@@ -26,7 +26,7 @@ import de.d3web.we.hermes.quiz.QuizPanelRenderer;
 import de.d3web.we.hermes.quiz.QuizSession;
 import de.d3web.we.hermes.quiz.QuizSessionManager;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 public class QuizHandler extends AbstractHTMLTagHandler {
 
@@ -36,7 +36,7 @@ public class QuizHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 
 		String kdomid = values.get("kdomid");

@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -20,44 +20,54 @@
 
 package de.d3web.we.action;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.user.UserSettingsManager;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.d3web.we.wikiConnector.KnowWEWikiConnector;
 
 /**
- * 
+ *
  */
-public class SetQuickEditFlagAction extends DeprecatedAbstractKnowWEAction {
+public class SetQuickEditFlagAction extends AbstractAction {
 
 	private ResourceBundle rb;
 
 	@Override
-	public String perform(KnowWEParameterMap parameterMap) {
+	public void execute(UserActionContext context) throws IOException {
 
-		rb = KnowWEEnvironment.getInstance().getKwikiBundle(parameterMap.getRequest());
+		String result = perform(context);
+		if (result != null && context.getWriter() != null) {
+			context.setContentType("text/html; charset=UTF-8");
+			context.getWriter().write(result);
+		}
 
-		String web = parameterMap.getWeb();
-		String nodeID = parameterMap.get(KnowWEAttributes.TARGET);
+	}
 
-		String topic = parameterMap.getTopic();
-		String user = parameterMap.getUser();
-		String inPre = parameterMap.get("inPre");
+	private String perform(UserActionContext context) {
+
+		rb = KnowWEEnvironment.getInstance().getKwikiBundle(context.getRequest());
+
+		String web = context.getWeb();
+		String nodeID = context.getParameter(KnowWEAttributes.TARGET);
+
+		String topic = context.getTopic();
+		String user = context.getUserName();
+		String inPre = context.getParameter("inPre");
 
 		KnowWEWikiConnector connector = KnowWEEnvironment.getInstance().getWikiConnector();
 
-		if (connector.userCanEditPage(topic, parameterMap.getRequest())) {
+		if (connector.userCanEditPage(topic, context.getRequest())) {
 			boolean existsPageLock = connector.isPageLocked(topic);
 			boolean lockedByCurrentUser = connector.isPageLockedCurrentUser(
 					topic, user);
@@ -74,7 +84,7 @@ public class SetQuickEditFlagAction extends DeprecatedAbstractKnowWEAction {
 				connector.setPageLocked(topic, user);
 			}
 			UserSettingsManager.getInstance().setQuickEditFlag(nodeID, user, topic, inPre);
-			String result = this.rerenderKDOMElement(web, topic, parameterMap.getWikiContext(),
+			String result = this.rerenderKDOMElement(web, topic, context,
 					nodeID);
 
 			// Pushing the result through the JSPWiki rendering pipeline when QE
@@ -83,7 +93,7 @@ public class SetQuickEditFlagAction extends DeprecatedAbstractKnowWEAction {
 					&& !UserSettingsManager.getInstance().quickEditIsInPre(nodeID, user, topic)) {
 				result = KnowWEUtils.maskHTML(result);
 				result = KnowWEEnvironment.getInstance().getWikiConnector().renderWikiSyntax(
-						result, parameterMap);
+						result, context);
 			}
 			return "@replace@" + KnowWEUtils.unmaskHTML(result);
 		}
@@ -95,14 +105,14 @@ public class SetQuickEditFlagAction extends DeprecatedAbstractKnowWEAction {
 	/**
 	 * Searches the element the user set the QuickEditFlag to and renders it.
 	 * The result is returned for refreshing the view.
-	 * 
+	 *
 	 * @param web
 	 * @param topic
 	 * @param user
 	 * @param nodeID
 	 * @return
 	 */
-	private String rerenderKDOMElement(String web, String topic, KnowWEUserContext user, String nodeID) {
+	private String rerenderKDOMElement(String web, String topic, UserContext user, String nodeID) {
 		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
 		KnowWEArticle article = mgr.getArticle(topic);
 
@@ -132,7 +142,7 @@ public class SetQuickEditFlagAction extends DeprecatedAbstractKnowWEAction {
 	 * Searches for a section with the node id from the
 	 * <code>SetQuickEditFlagAction</code>. The resulting section will be
 	 * re-rendered and updated in the view.
-	 * 
+	 *
 	 * @param nodeID
 	 * @param root
 	 * @param found
@@ -152,7 +162,7 @@ public class SetQuickEditFlagAction extends DeprecatedAbstractKnowWEAction {
 	/**
 	 * Returns a short info message which informs the user, that he can not edit
 	 * the page and therefore is not allowed to use the quick-edit mode.
-	 * 
+	 *
 	 * @param articlename
 	 * @return
 	 */

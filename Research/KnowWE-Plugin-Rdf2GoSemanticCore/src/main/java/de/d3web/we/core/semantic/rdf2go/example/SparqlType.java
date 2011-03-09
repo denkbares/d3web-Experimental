@@ -19,7 +19,6 @@
 package de.d3web.we.core.semantic.rdf2go.example;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 /**

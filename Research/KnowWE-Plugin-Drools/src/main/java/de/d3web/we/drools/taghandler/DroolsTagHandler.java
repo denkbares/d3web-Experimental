@@ -25,8 +25,8 @@ import de.d3web.we.core.KnowWERessourceLoader;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.taghandler.AbstractTagHandler;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  * The TagHandler which adds the command line for the Drools Plugin 
@@ -43,7 +43,7 @@ public class DroolsTagHandler extends AbstractTagHandler {
 	/**
 	 * adds the command line
 	 */
-	public String render(KnowWEArticle article, Section<?> section, KnowWEUserContext userContext, Map<String, String> parameters) {
+	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
 
 		KnowWERessourceLoader rl = KnowWERessourceLoader.getInstance();
 		rl.add("drools.css", KnowWERessourceLoader.RESOURCE_STYLESHEET);

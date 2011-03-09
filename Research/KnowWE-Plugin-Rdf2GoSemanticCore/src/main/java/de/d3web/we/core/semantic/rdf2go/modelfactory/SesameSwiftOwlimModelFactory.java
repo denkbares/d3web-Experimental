@@ -7,19 +7,14 @@ package de.d3web.we.core.semantic.rdf2go.modelfactory;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map.Entry;
 import java.util.Properties;
 
-import org.ontoware.rdf2go.Reasoning;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.impl.AbstractModelFactory;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
 import org.ontoware.rdf2go.model.node.URI;
-
 import org.openrdf.model.BNode;
 import org.openrdf.model.Graph;
 import org.openrdf.model.Literal;
@@ -31,20 +26,15 @@ import org.openrdf.model.vocabulary.RDF;
 import org.openrdf.rdf2go.RepositoryModel;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.config.RepositoryConfig;
 import org.openrdf.repository.config.RepositoryConfigSchema;
 import org.openrdf.repository.config.RepositoryConfigUtil;
 import org.openrdf.repository.manager.LocalRepositoryManager;
 import org.openrdf.repository.manager.RepositoryManager;
-import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.Rio;
 import org.openrdf.rio.helpers.StatementCollector;
-import org.openrdf.sail.Sail;
-import org.openrdf.sail.inferencer.fc.ForwardChainingRDFSInferencer;
-import org.openrdf.sail.memory.MemoryStore;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;

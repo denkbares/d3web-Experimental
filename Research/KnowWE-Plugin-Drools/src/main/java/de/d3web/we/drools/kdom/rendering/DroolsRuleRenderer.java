@@ -20,12 +20,12 @@
 package de.d3web.we.drools.kdom.rendering;
 
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  * @author Alex Legler
@@ -35,7 +35,7 @@ public class DroolsRuleRenderer<T extends Type> extends KnowWEDomRenderer<T> {
 
 	@Override
 	public void render(KnowWEArticle article, Section<T> sec,
-			KnowWEUserContext user, StringBuilder string) {
+			UserContext user, StringBuilder string) {
 		
 		string.append(KnowWEUtils.maskHTML("<span class=\"drools-rule\">"));
 		DelegateRenderer.getInstance().render(article, sec, user, string);

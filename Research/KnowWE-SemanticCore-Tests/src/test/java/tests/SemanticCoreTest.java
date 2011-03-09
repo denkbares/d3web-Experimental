@@ -27,20 +27,23 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import de.d3web.plugin.test.InitPluginManager;
+import de.d3web.we.action.ActionContext;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.core.KnowWEArticleManager;
+import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.core.packaging.KnowWEPackageManager;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.RootType;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotation;
 import de.knowwe.tagging.TaggingMangler;
 import dummies.KnowWETestWikiConnector;
@@ -50,7 +53,7 @@ public class SemanticCoreTest {
 	private KnowWEEnvironment ke;
 	private KnowWEArticleManager am;
 	private Type type;
-	private KnowWEParameterMap params;
+	private UserActionContext context;
 	private ISemanticCore sc;
 
 	@Before
@@ -66,7 +69,9 @@ public class SemanticCoreTest {
 		type = ke.getRootType();
 		am = ke.getArticleManager(KnowWEEnvironment.DEFAULT_WEB);
 
-		params = new KnowWEParameterMap("", "");
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(KnowWEAttributes.USER, "testuser");
+		context = new ActionContext("", "", map, null, null, null, null);
 		sc = SemanticCoreDelegator.getInstance();
 	}
 
@@ -164,7 +169,7 @@ public class SemanticCoreTest {
 				"default_web");
 		am.registerArticle(article1);
 		TaggingMangler tm = TaggingMangler.getInstance();
-		tm.addTag("Tag1", "tag", params);
+		tm.addTag("Tag1", "tag", context);
 		am.registerArticle(article1);
 		am.deleteArticle(am.getArticle("Tag1"));
 	}

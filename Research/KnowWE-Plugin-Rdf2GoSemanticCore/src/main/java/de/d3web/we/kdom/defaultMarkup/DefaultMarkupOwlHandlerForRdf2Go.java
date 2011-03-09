@@ -24,8 +24,6 @@ package de.d3web.we.kdom.defaultMarkup;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.BlankNode;
@@ -40,7 +38,6 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup.Annotation;
 import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.SimpleMessageError;
 import de.d3web.we.utils.KnowWEUtils;
 
 /**

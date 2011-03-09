@@ -23,42 +23,37 @@ package tests;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.action.KnowWEUserContextImpl;
+import de.d3web.we.action.ActionContext;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
-import de.knowwe.semantic.sparql.groovy.GroovySparqlRendererContent;
-import de.knowwe.semantic.sparql.groovy.GroovySparqlRendererRenderer;
 import de.knowwe.tagging.TaggingMangler;
 import dummies.KnowWETestWikiConnector;
 
 public class GroovySparqlRendererTest {
 
-	private KnowWEDomRenderer<GroovySparqlRendererContent> renderer;
 	private KnowWEEnvironment ke;
 	private KnowWEArticleManager am;
 	private Type type;
-	private KnowWEParameterMap params;
+	private UserActionContext context;
 	private TaggingMangler tm;
-	private KnowWEUserContext usercontext;
 
 	@Before
 	public void setUp() throws Exception {
-		renderer = GroovySparqlRendererRenderer.getInstance();
 		InitPluginManager.init();
 		Locale.setDefault(Locale.US);
 		/*
@@ -76,9 +71,12 @@ public class GroovySparqlRendererTest {
 				"default_web");
 
 		am.registerArticle(article1);
-		params = new KnowWEParameterMap(KnowWEAttributes.WEB, KnowWEEnvironment.DEFAULT_WEB);
+
+		Map<String, String> parameter = new HashMap<String, String>();
+		parameter.put(KnowWEAttributes.WEB, KnowWEEnvironment.DEFAULT_WEB);
+		parameter.put(KnowWEAttributes.USER, "testuser");
+		context = new ActionContext("", "", parameter, null, null, null, null);
 		tm = TaggingMangler.getInstance();
-		usercontext = new KnowWEUserContextImpl("test", params);
 	}
 
 	@Test
@@ -90,8 +88,8 @@ public class GroovySparqlRendererTest {
 
 		am.registerArticle(article1);
 		am.registerArticle(article2);
-		tm.addTag("Tag1", "tag", params);
-		tm.addTag("Tag2", "tag", params);
+		tm.addTag("Tag1", "tag", context);
+		tm.addTag("Tag2", "tag", context);
 
 		String querystring = "<sparql render=\"junit\">SELECT ?q \n"
 				+ "WHERE {\n" + "?t rdf:object <"
@@ -105,7 +103,7 @@ public class GroovySparqlRendererTest {
 		am.registerArticle(setrenderer);
 		StringBuilder articleString = new StringBuilder();
 		setrenderer.getRenderer().render(setrenderer, setrenderer.getSection(),
-				usercontext, articleString);
+				context, articleString);
 		String setrenderer_result = KnowWEUtils.unmaskHTML(articleString
 				.toString());
 		String setrenderer_result_should_be = "renderer junit already present";
@@ -115,7 +113,7 @@ public class GroovySparqlRendererTest {
 				type, "default_web");
 		am.registerArticle(junitquery);
 		junitquery.getRenderer().render(junitquery, junitquery.getSection(),
-				usercontext, articleString);
+				context, articleString);
 		String result_is = KnowWEUtils.unmaskHTML(articleString.toString());
 		String result_should_be = "hallo";
 		assertEquals(result_should_be, result_is);
@@ -123,8 +121,6 @@ public class GroovySparqlRendererTest {
 
 	@After
 	public void tearDown() {
-		// tm.removeTag("Tag1", "tag", params);
-		// tm.removeTag("Tag2", "tag", params);
 		am.deleteArticle(am.getArticle("Tag1"));
 		am.deleteArticle(am.getArticle("Tag2"));
 		ArrayList<String> tags = tm.getAllTags();

@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2010 University Wuerzburg, Computer Science VI
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -54,14 +54,14 @@ import de.knowwe.d3web.event.FindingSetEvent;
  * not the proper Code. If you know how to implement this right. Do it. This
  * works for MC-Questions just like {@link SetSingleFindingAction}. What is with
  * QuestionOC?
- * 
+ *
  * @author Johannes Dienst
  * @created 14.10.2010
  */
 public class ImageQuestionSetAction extends AbstractAction {
 
 	@Override
-	public void execute(ActionContext context) throws IOException {
+	public void execute(UserActionContext context) throws IOException {
 
 		@SuppressWarnings("deprecation")
 		String namespace = java.net.URLDecoder.decode(context
@@ -71,9 +71,9 @@ public class ImageQuestionSetAction extends AbstractAction {
 		String valueid = context.getParameter(KnowWEAttributes.SEMANO_VALUE_ID);
 		String valuenum = context.getParameter(KnowWEAttributes.SEMANO_VALUE_NUM);
 		String valuedate = context.getParameter(KnowWEAttributes.SEMANO_VALUE_DATE);
-		String topic = context.getWikiContext().getTopic();
-		String user = context.getWikiContext().getUserName();
-		String web = context.getWikiContext().getWeb();
+		String topic = context.getTopic();
+		String user = context.getUserName();
+		String web = context.getWeb();
 
 		if (namespace == null || objectid == null) {
 			return;
@@ -175,7 +175,7 @@ public class ImageQuestionSetAction extends AbstractAction {
 	/**
 	 * Checks if <b>value</b> is contained in MultipleChoiceValue from
 	 * <b>answer</b>.
-	 * 
+	 *
 	 * @created 15.10.2010
 	 * @param answer
 	 * @param value

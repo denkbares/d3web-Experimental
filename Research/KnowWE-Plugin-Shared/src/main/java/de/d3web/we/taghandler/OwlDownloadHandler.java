@@ -23,8 +23,8 @@ package de.d3web.we.taghandler;
 import java.util.Map;
 
 import de.d3web.we.core.KnowWEEnvironment;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class OwlDownloadHandler extends AbstractHTMLTagHandler {
 
@@ -35,13 +35,13 @@ public class OwlDownloadHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String getDescription(KnowWEUserContext user) {
+	public String getDescription(UserContext user) {
 		return KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
 				"KnowWE.OwlDownloadHandler.description");
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user, Map<String, String> values, String web) {
+	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
 		String prefix = "";
 		String result = "";
 		String icon = "<img src=\"KnowWEExtension/images/disk.png\" title=\"Owl download\" /></img>";

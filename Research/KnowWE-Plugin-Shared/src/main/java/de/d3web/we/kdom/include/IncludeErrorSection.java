@@ -21,9 +21,9 @@
 package de.d3web.we.kdom.include;
 
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.SectionID;
+import de.d3web.we.kdom.Type;
 
 public class IncludeErrorSection extends Section<IncludeError> {
 

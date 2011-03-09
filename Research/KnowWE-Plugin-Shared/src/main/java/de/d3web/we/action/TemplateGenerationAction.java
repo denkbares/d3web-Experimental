@@ -22,12 +22,12 @@ package de.d3web.we.action;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.basic.PlainText;
@@ -48,9 +48,9 @@ import de.d3web.we.taghandler.TemplateTagHandler;
 public class TemplateGenerationAction extends AbstractAction {
 
 	@Override
-	public void execute(ActionContext context) throws IOException {
+	public void execute(UserActionContext context) throws IOException {
 
-		KnowWEParameterMap map = context.getKnowWEParameterMap();
+		Map<String, String> map = context.getParameters();
 		ResourceBundle rb = KnowWEEnvironment.getInstance().getKwikiBundle();
 		context.setContentType("text/html; charset=UTF-8");
 
@@ -62,7 +62,7 @@ public class TemplateGenerationAction extends AbstractAction {
 
 			List<Section<Template>> temps = TemplateTagHandler
 					.getTemplateTypes(KnowWEEnvironment.getInstance()
-							.getArticle(map.getWeb(), map.getTopic()));
+							.getArticle(context.getWeb(), context.getTopic()));
 
 			if (pageName == null || pageName == ""
 					|| templateNum >= temps.size()) {
@@ -77,7 +77,7 @@ public class TemplateGenerationAction extends AbstractAction {
 
 			Section<Template> renderMe = temps.get(templateNum);
 
-			if (KnowWEEnvironment.getInstance().getArticle(map.getWeb(),
+			if (KnowWEEnvironment.getInstance().getArticle(context.getWeb(),
 					pageName) != null) {
 				context.getWriter()
 						.write(
@@ -91,7 +91,7 @@ public class TemplateGenerationAction extends AbstractAction {
 			Section<PlainText> text = Sections
 					.findChildOfType(renderMe, PlainText.class);
 			KnowWEEnvironment.getInstance().getWikiConnector().createWikiPage(
-					pageName, text.getOriginalText(), map.getUser());
+					pageName, text.getOriginalText(), context.getUserName());
 
 			String baseUrl = KnowWEEnvironment.getInstance().getWikiConnector()
 					.getBaseUrl();

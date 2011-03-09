@@ -25,7 +25,7 @@ import java.util.Map.Entry;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.wikiConnector.KnowWEWikiConnector;
 
 public class VersionCountTagHandler extends AbstractHTMLTagHandler {
@@ -35,7 +35,7 @@ public class VersionCountTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 		KnowWEWikiConnector connector = KnowWEEnvironment.getInstance()
 				.getWikiConnector();

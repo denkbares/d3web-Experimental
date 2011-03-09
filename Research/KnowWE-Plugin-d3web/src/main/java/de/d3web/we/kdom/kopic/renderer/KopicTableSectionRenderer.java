@@ -25,9 +25,9 @@ import java.util.List;
 
 import de.d3web.report.Message;
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.renderer.SettingsModeRenderer;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.table.TableCellContent;

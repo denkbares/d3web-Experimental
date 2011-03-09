@@ -35,12 +35,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>KnowWE-Plugin-JSPWiki-Connector</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-core</artifactId>
 			<version>${project.version}</version>
 			<type>jar</type>

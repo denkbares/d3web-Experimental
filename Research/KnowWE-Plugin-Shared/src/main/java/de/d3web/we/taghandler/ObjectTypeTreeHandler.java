@@ -23,10 +23,10 @@ import java.util.Map;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  * The ObjectTypeTreeHandler renders the hierarchy of Types,
@@ -43,7 +43,7 @@ public class ObjectTypeTreeHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(KnowWEArticle article, Section<?> section, KnowWEUserContext userContext, Map<String, String> parameters) {
+	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		Type t = KnowWEEnvironment.getInstance().getRootType();
 
 		return visitNode(t, 1, new HashSet<String>(), false);

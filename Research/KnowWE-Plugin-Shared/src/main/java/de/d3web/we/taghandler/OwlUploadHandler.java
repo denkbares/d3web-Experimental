@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 public class OwlUploadHandler extends AbstractHTMLTagHandler {
 
@@ -40,13 +40,13 @@ public class OwlUploadHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String getDescription(KnowWEUserContext user) {
+	public String getDescription(UserContext user) {
 		return KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
 				"KnowWE.OwlUploadHandler.description");
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 
 		ResourceBundle rb = KnowWEEnvironment.getInstance()

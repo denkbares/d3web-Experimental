@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 /**
  * Creates a list of all TagHandlers mentioned in the Hash-map
@@ -42,7 +42,7 @@ public class TagHandlerListHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user,
+	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 		Collection<TagHandler> coll = KnowWEEnvironment.getInstance()
 				.getDefaultTagHandlers().values();
@@ -93,7 +93,7 @@ public class TagHandlerListHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String getDescription(KnowWEUserContext user) {
+	public String getDescription(UserContext user) {
 		return KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
 				"KnowWE.TagHandlerList.description");
 	}

@@ -43,8 +43,8 @@ import de.d3web.we.kdom.contexts.Context;
 import de.d3web.we.kdom.contexts.ContextManager;
 import de.d3web.we.kdom.contexts.DefaultSubjectContext;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 public class ConceptOccurrenceRenderer extends KnowWEDomRenderer {
@@ -52,7 +52,7 @@ public class ConceptOccurrenceRenderer extends KnowWEDomRenderer {
 	private static String TITLE_QUERY = "SELECT  ?title WHERE {  <URI> lns:hasTitle ?title }";
 
 	@Override
-	public void render(KnowWEArticle article, Section arg0, KnowWEUserContext arg1, StringBuilder arg2) {
+	public void render(KnowWEArticle article, Section arg0, UserContext arg1, StringBuilder arg2) {
 
 		Section<PersonOccurrence> personSection = arg0;
 

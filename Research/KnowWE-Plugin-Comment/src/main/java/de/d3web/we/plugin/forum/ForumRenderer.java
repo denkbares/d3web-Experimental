@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -33,8 +33,8 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.xml.AbstractXMLType;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 @SuppressWarnings("unchecked")
 public class ForumRenderer extends KnowWEDomRenderer {
@@ -92,7 +92,7 @@ public class ForumRenderer extends KnowWEDomRenderer {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
 
 		// load css-file:
 		string.append(maskHTML("<link rel=stylesheet type=text/css href=KnowWEExtension/css/forum.css>\n"));
@@ -107,7 +107,7 @@ public class ForumRenderer extends KnowWEDomRenderer {
 		Map<String, String> forumMap = AbstractXMLType.getAttributeMapFor(sec);
 
 		// load sort-parameter from URL:
-		setSortUpwards(user.getUrlParameterMap().get("sort"));
+		setSortUpwards(user.getParameters().get("sort"));
 
 		// back link:
 		String link = forumMap.get("ref");
@@ -133,7 +133,7 @@ public class ForumRenderer extends KnowWEDomRenderer {
 
 				// check edit-permission
 				canEditPage = KnowWEEnvironment.getInstance().getWikiConnector().userCanEditPage(
-						topic, user.getHttpRequest());
+						topic, user.getRequest());
 
 			}
 

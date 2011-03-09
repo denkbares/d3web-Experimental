@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2010 University Wuerzburg, Computer Science VI
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -38,16 +38,15 @@ import de.d3web.empiricaltesting.Finding;
 import de.d3web.empiricaltesting.RatedTestCase;
 import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.ActionContext;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.WikiEnvironment;
 import de.d3web.we.basic.WikiEnvironmentManager;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
 
@@ -59,11 +58,10 @@ public class RunTestcaseAction extends AbstractAction {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void execute(ActionContext context) throws IOException {
-		KnowWEParameterMap map = context.getKnowWEParameterMap();
-		String web = map.getWeb();
-		String execLine = map.get("execLine");
-		boolean multiLines = Boolean.valueOf(map.get("multiLines"));
+	public void execute(UserActionContext context) throws IOException {
+		String web = context.getWeb();
+		String execLine = context.getParameter("execLine");
+		boolean multiLines = Boolean.valueOf(context.getParameter("multiLines"));
 
 		Section<CellContent> cell = (Section<CellContent>) KnowWEEnvironment.getInstance().getArticleManager(
 				web).findNode(execLine);
@@ -72,7 +70,7 @@ public class RunTestcaseAction extends AbstractAction {
 				TestcaseTableLine.class);
 		Section<TestcaseTableType> tableDMType = Sections.findAncestorOfExactType(line,
 				TestcaseTableType.class);
-		String master = TestcaseTableType.getMaster(tableDMType, map.getTopic());
+		String master = TestcaseTableType.getMaster(tableDMType, context.getTopic());
 		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(web, master);
 
 		List<Section<TestcaseTableLine>> toBeExecutedLines = new LinkedList<Section<TestcaseTableLine>>();
@@ -83,7 +81,7 @@ public class RunTestcaseAction extends AbstractAction {
 		}
 
 		// saving/recalling execution status
-		String user = context.getWikiContext().getUserName();
+		String user = context.getUserName();
 		Session session = D3webUtils.getSession(master, user, web);
 		WikiEnvironment wiki = WikiEnvironmentManager.getInstance().getEnvironments(web);
 		Map<String, Object> sessionInfoStore = wiki.getSessionInfoStore(session);
@@ -96,7 +94,7 @@ public class RunTestcaseAction extends AbstractAction {
 				D3webModule.getKnowledgeRepresentationHandler(web).getKB(master);
 
 		for (Section<TestcaseTableLine> tctLine : toBeExecutedLines) {
-			
+
 			if (o == null) {
 				List<Section<TestcaseTableLine>> list = new ArrayList<Section<TestcaseTableLine>>();
 				list.add(tctLine);
@@ -120,7 +118,7 @@ public class RunTestcaseAction extends AbstractAction {
 	}
 
 	/**
-	 * 
+	 *
 	 * @created 22.01.2011
 	 * @param testcase
 	 * @param session
@@ -147,7 +145,7 @@ public class RunTestcaseAction extends AbstractAction {
 	}
 
 	/**
-	 * 
+	 *
 	 * @created 20.01.2011
 	 * @param session
 	 * @param kbm

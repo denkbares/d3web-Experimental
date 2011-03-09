@@ -20,27 +20,39 @@
 
 package de.d3web.we.biolog.action;
 
-import de.d3web.we.action.DeprecatedAbstractKnowWEAction;
+import java.io.IOException;
+
+import de.d3web.we.action.AbstractAction;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.biolog.BiologSearchTagHandler;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.utils.KnowWEUtils;
 
 /**
  * UpdateCloudAction.
- * 
+ *
  * @author smark
  */
-public class UpdateCloudAction extends DeprecatedAbstractKnowWEAction {
+public class UpdateCloudAction extends AbstractAction {
 
 	@Override
-	public String perform(KnowWEParameterMap parameterMap) {
+	public void execute(UserActionContext context) throws IOException {
 
-		String query = parameterMap.get("searchText");
+		String result = perform(context);
+		if (result != null && context.getWriter() != null) {
+			context.setContentType("text/html; charset=UTF-8");
+			context.getWriter().write(result);
+		}
+
+	}
+
+	private String perform(UserActionContext context) {
+
+		String query = context.getParameter("searchText");
 		query = query.trim();
-		
+
 		StringBuilder string = new StringBuilder();
 		string.append( BiologSearchTagHandler.renderTagCloud( query ) );
-		
+
 		return KnowWEUtils.unmaskHTML(string.toString());
 	}
 }

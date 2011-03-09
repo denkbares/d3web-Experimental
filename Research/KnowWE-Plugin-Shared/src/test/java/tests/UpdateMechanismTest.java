@@ -28,8 +28,8 @@ import utils.Utils;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.xml.GenericXMLObjectType;
 import dummies.KnowWETestWikiConnector;
 

@@ -22,9 +22,9 @@ package de.d3web.we.drools.converter;
 import java.io.File;
 import java.io.IOException;
 
-import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.io.PersistenceManager;
 import de.d3web.core.io.progress.ConsoleProgressListener;
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.plugin.test.InitPluginManager;
 
 public class D3WebConverterLauncher {

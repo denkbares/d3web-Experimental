@@ -24,8 +24,8 @@
 package de.d3web.we.core.semantic.rdf2go;
 
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.subtreeHandler.ConstraintModule;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.kdom.subtreeHandler.SuccessorNotReusedConstraint;

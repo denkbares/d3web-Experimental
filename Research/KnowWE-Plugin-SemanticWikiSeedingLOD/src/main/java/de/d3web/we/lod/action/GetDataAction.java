@@ -15,9 +15,8 @@ import java.util.Map;
 import java.util.Vector;
 
 import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.ActionContext;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
@@ -32,13 +31,12 @@ import de.knowwe.semantic.sparql.SPARQLUtil;
 public class GetDataAction extends AbstractAction {
 
 	@Override
-	public void execute(ActionContext context) throws IOException {
+	public void execute(UserActionContext context) throws IOException {
 
-		KnowWEParameterMap map = context.getKnowWEParameterMap();
-		String concept = map.get("concept");
-		String checkDebug = map.get("debug");
-		String wikipedia = map.get("wikipedia");
-		String web = map.getWeb();
+		String concept = context.getParameter("concept");
+		String checkDebug = context.getParameter("debug");
+		String wikipedia = context.getParameter("wikipedia");
+		String web = context.getWeb();
 
 		// #################### Only for logging purposes
 		String path = KnowWEEnvironment.getInstance().getWikiConnector().getSavePath();
@@ -151,7 +149,7 @@ public class GetDataAction extends AbstractAction {
 						}
 					}
 					KnowWEEnvironment.getInstance().getArticleManager(
-							web).replaceKDOMNodesSaveAndBuild(map, mappingTopic, nodesMap);
+							web).replaceKDOMNodesSaveAndBuild(context, mappingTopic, nodesMap);
 				}
 
 				String hermesConcept = concept;

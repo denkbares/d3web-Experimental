@@ -29,20 +29,20 @@ import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.packaging.PackageRenderUtils;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.xml.AbstractXMLType;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 import de.knowwe.core.TextLine;
 
 public class KopicSectionRenderer extends KnowWEDomRenderer {
 
 	@Override
-	public void render(KnowWEArticle article, Section sec, KnowWEUserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
 
 		string.append(KnowWEUtils.maskHTML("<a name=\"" + sec.getID() + "\" ></a>"));
 		// string.append("%%collapsebox-closed \n");
@@ -106,7 +106,7 @@ public class KopicSectionRenderer extends KnowWEDomRenderer {
 				+ KnowWEUtils.maskHTML("</span>");
 	}
 
-	protected String generateMessages(Collection<Message> messages, String messageType, Section<?> sec, KnowWEUserContext user) {
+	protected String generateMessages(Collection<Message> messages, String messageType, Section<?> sec, UserContext user) {
 		StringBuilder result = new StringBuilder();
 		List<Section<TextLine>> lines = new ArrayList<Section<TextLine>>();
 		Sections.findSuccessorsOfType(sec, TextLine.class, lines);
@@ -126,7 +126,7 @@ public class KopicSectionRenderer extends KnowWEDomRenderer {
 		return result.toString();
 	}
 
-	protected String generateTitle(Section<?> sec, KnowWEUserContext user, boolean errors) {
+	protected String generateTitle(Section<?> sec, UserContext user, boolean errors) {
 		String title = "";
 		if (errors) {
 			title += KnowWEUtils.maskHTML("<img src=KnowWEExtension/images/statisticsError.gif title='"

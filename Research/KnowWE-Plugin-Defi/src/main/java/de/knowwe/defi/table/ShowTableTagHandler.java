@@ -12,7 +12,7 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.table.Table;
 import de.d3web.we.taghandler.AbstractTagHandler;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 
 public class ShowTableTagHandler extends AbstractTagHandler{
 
@@ -21,7 +21,7 @@ public class ShowTableTagHandler extends AbstractTagHandler{
 	}
 
 	@Override
-	public String render(KnowWEArticle article, Section<?> section, KnowWEUserContext userContext, Map<String, String> parameters) {
+	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		String id = parameters.get("id");
 		if(id == null) {
 			return "Error: no table id specified!";
@@ -36,7 +36,7 @@ public class ShowTableTagHandler extends AbstractTagHandler{
 		
 	}
 
-	private String renderTable(Section<DefineTableMarkup> myTable, KnowWEUserContext user) {
+	private String renderTable(Section<DefineTableMarkup> myTable, UserContext user) {
 		Section<Table> table = Sections.findSuccessor(myTable,Table.class);
 		StringBuilder string = new StringBuilder();
 		DelegateRenderer.getInstance().render(myTable.getArticle(), table.getFather(),

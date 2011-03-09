@@ -24,8 +24,8 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 /**
  * Default renderer for the custom FAQ type; renders the faq entries in the same
@@ -38,7 +38,7 @@ public class FAQRootTypeDefaultRenderer extends DefaultMarkupRenderer {
 
 	@Override
 	public void render(KnowWEArticle article, Section sec,
-			KnowWEUserContext user, StringBuilder string) {
+			UserContext user, StringBuilder string) {
 
 		String question =
 				DefaultMarkupType.getAnnotation(sec, "question");

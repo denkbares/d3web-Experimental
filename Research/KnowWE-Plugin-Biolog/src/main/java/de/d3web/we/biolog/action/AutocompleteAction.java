@@ -20,29 +20,40 @@
 
 package de.d3web.we.biolog.action;
 
+import java.io.IOException;
 import java.util.List;
 
-import de.d3web.we.action.DeprecatedAbstractKnowWEAction;
-import de.d3web.we.core.KnowWEParameterMap;
+import de.d3web.we.action.AbstractAction;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.search.SearchTerminologyHandler;
 
 /**
  * AutocompleteAction.
- * 
+ *
  * @author smark
  */
-public class AutocompleteAction extends DeprecatedAbstractKnowWEAction {
+public class AutocompleteAction extends AbstractAction {
 
 	@Override
-	public String perform(KnowWEParameterMap parameterMap) {
+	public void execute(UserActionContext context) throws IOException {
 
-		String query = parameterMap.get("searchText");
+		String result = perform(context);
+		if (result != null && context.getWriter() != null) {
+			context.setContentType("text/html; charset=UTF-8");
+			context.getWriter().write(result);
+		}
+
+	}
+
+	private String perform(UserActionContext context) {
+
+		String query = context.getParameter("searchText");
 		if(query == null || query.length() == 0) return "";
-		
+
 		StringBuilder result = new StringBuilder();
-		
+
 		List<String> suggestions = SearchTerminologyHandler.getInstance().getCompletionSuggestions(query);
-		
+
 		for(int i = 0; i < suggestions.size(); i++){
 			if( i + 1 < suggestions.size()){
 				result.append( suggestions.get( i ) + "\\c" );

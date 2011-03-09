@@ -23,30 +23,28 @@ import java.util.Map;
 
 import de.d3web.core.session.Session;
 import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.ActionContext;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.SessionBroker;
 import de.d3web.we.basic.WikiEnvironment;
 import de.d3web.we.basic.WikiEnvironmentManager;
-import de.d3web.we.core.KnowWEParameterMap;
 import de.d3web.we.utils.D3webUtils;
 
 /**
- * 
+ *
  * @author Florian Ziegler
  * @created 14.02.2011
  */
 public class TestcaseTableResetAction extends AbstractAction {
 
 	@Override
-	public void execute(ActionContext context) throws IOException {
-		KnowWEParameterMap map = context.getKnowWEParameterMap();
-		SessionBroker broker = D3webModule.getBroker(map);
+	public void execute(UserActionContext context) throws IOException {
+		SessionBroker broker = D3webModule.getBroker(context.getParameters());
 		broker.clear();
 
-		String user = context.getWikiContext().getUserName();
-		String topic = context.getWikiContext().getTopic();
-		String web = context.getWikiContext().getWeb();
+		String user = context.getUserName();
+		String topic = context.getTopic();
+		String web = context.getWeb();
 		Session session = D3webUtils.getSession(topic, user, web);
 		WikiEnvironment wiki = WikiEnvironmentManager.getInstance().getEnvironments(web);
 		Map<String, Object> sessionInfoStore = wiki.getSessionInfoStore(session);

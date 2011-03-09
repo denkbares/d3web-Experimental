@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
 
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.wikiConnector.KnowWEWikiConnector;
 
 /**
@@ -45,13 +45,13 @@ public class KnowledgeBasesGeneratorHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String getDescription(KnowWEUserContext user) {
+	public String getDescription(UserContext user) {
 		return D3webModule.getKwikiBundle_d3web(user).
 				getString("KnowWE.KnowledgeBasesGenerator.description");
 	}
 
 	@Override
-	public String renderHTML(String topic, KnowWEUserContext user, Map<String, String> values, String web) {
+	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
 
 		ResourceBundle rb = D3webModule.getKwikiBundle_d3web(user);
 

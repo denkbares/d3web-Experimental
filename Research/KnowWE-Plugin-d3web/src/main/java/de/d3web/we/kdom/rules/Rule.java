@@ -45,8 +45,8 @@ import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
+import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.KnowWEUserContext;
 
 public class Rule extends AbstractType {
 
@@ -70,7 +70,7 @@ public class Rule extends AbstractType {
 
 		@Override
 		public void render(KnowWEArticle article, Section<Rule> sec,
-				KnowWEUserContext user, StringBuilder string) {
+				UserContext user, StringBuilder string) {
 
 			List<Message> errors = getErrorMessages(article, sec);
 
