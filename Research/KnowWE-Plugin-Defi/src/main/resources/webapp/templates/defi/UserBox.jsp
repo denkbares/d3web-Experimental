@@ -1,10 +1,11 @@
+<%@page import="java.util.HashMap"%>
 <%@page import="de.d3web.we.kdom.Sections"%>
 <%@page import="de.knowwe.defi.AboutMe"%>
 <%@page import="de.d3web.we.jspwiki.JSPWikiUserContext"%>
 <%@page import="de.d3web.we.kdom.Section"%>
 <%@page import="de.d3web.we.core.KnowWEEnvironment"%>
 <%@page import="de.d3web.we.kdom.KnowWEArticle"%>
-<%@ page import="com.ecyrd.jspwiki.*" %>
+<%@ page import="com.ecyrd.jspwiki.WikiContext" %>
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page import="javax.servlet.jsp.jstl.fmt.*" %>
@@ -12,8 +13,8 @@
 <fmt:setBundle basename="templates.default"/>
 <%
   WikiContext c = WikiContext.findContext(pageContext);
-  JSPWikiUserContext user = new JSPWikiUserContext(c);
   String avatar = "A01";
+  JSPWikiUserContext user = new JSPWikiUserContext(c, new HashMap<String, String>());
   if (user.userIsAuthenticated()) {
 	  KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(KnowWEEnvironment.DEFAULT_WEB, user.getUserName());
 	  Section<?> s = article.getSection();
