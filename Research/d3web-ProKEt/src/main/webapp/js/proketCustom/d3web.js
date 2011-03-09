@@ -83,7 +83,7 @@ function d3web_init(){
 	
 	// bind send/save button to sendexit function
 	$('#loadcase').unbind('click').click(function(event){
-		//d3web_loadCase(event);
+		d3web_loadCase(event);
 	});
 }
 
@@ -103,6 +103,7 @@ function d3web_init(){
  */
 function d3web_getSelectedFacts(clickedItem) {
 	
+	// some variables for storing multiple question/answer pairs
 	var numStore=""; var txtStore=""; var datStore=""; var store = "";
 	
 	/* The next 3 code blocks fetch all input for input fields such as
@@ -216,6 +217,78 @@ function d3web_getSelectedFacts(clickedItem) {
 }
 
 
+function d3web_getRemainingFacts() {
+	
+	// some variables for storing multiple question/answer pairs
+	var numStore=""; var txtStore=""; var datStore=""; var store = "";
+	
+	/* The next 3 code blocks fetch all input for input fields such as
+	 * num, text, and date fields. This input is assembled into one data
+	 * store in the form 
+	 * 		numvals&&&&textvals&&&&datevals
+	 * thereby the 3 val arrays are of the form
+	 * 		id###value;id###value; (= numvals)
+	 */
+	// all num questions 
+	numqs = $('#content [id^="q_"]').filter('[class*="question-num"]');
+	numqs.each(function() {
+		input = $(this).find(":text,textarea").filter(":first");
+		if (input.size() == 1) {
+			if($(this).attr('class').indexOf('abstract') < 0
+					&& input.attr('value') != ""){
+				numStore += $(this).attr('id') + "###" + input.val() + ";"
+			}
+		}
+	});
+	// all text questions
+	txtqs = $('#content [id^="q_"]').filter('[class*="question-text"]');
+	txtqs.each(function() {
+		input = $(this).find(":text,textarea").filter(":first");
+		if (input.size() == 1) {
+			if($(this).attr('class').indexOf('abstract') < 0
+					&& input.attr('value') != ""
+					&& input.attr('value') != " "){
+				txtStore += $(this).attr('id') + "###" + input.val() + ";"
+			}
+		}
+	});
+	// all date questions
+	datqs = $('#content [id^="q_"]').filter('[class*="question-date"]');
+	datqs.each(function() {
+		input = $(this).find(":text,textarea").filter(":first");
+		if (input.size() == 1) {
+			if($(this).attr('class').indexOf('abstract') < 0
+					&& input.attr('value') != ""
+					&& input.attr('value') != " "){
+				datStore += $(this).attr('id') + "###" + input.val() + ";"
+			}
+		}
+	});
+
+
+	/* Check, whether there have been values for num/text/date fields
+	 * if not so, add an " " to enable better array splitting when 
+	 * getting the values later 
+	 */ 
+	if(numStore==""){
+			numStore = " ";
+	} 
+	if(txtStore==""){
+		txtStore = " ";
+	}
+	if(datStore==""){
+		datStore = " ";
+	}
+	// assemble complete text/textinput value store
+	store += numStore + "&&&&" + txtStore + "&&&&" + datStore;
+	
+	/* AJAX call to send both the value store as well as a potential 
+	 * single radio/checkbox input
+	 */
+	d3web_addfactsBeforeSave(store);
+}
+
+
 /**
  * Transfer a selected or removed fact to the d3web dialog via an ajax call.
  * This is a special function for sending a whole store of "remembered"
@@ -237,6 +310,28 @@ function d3web_addfactsRemembering(store, qid, pos) {
 		//if (html != "same") {			// replace target id of content if not the same
 			window.location.reload();
 			d3web_init();
+		//}
+		}
+	});
+}
+
+
+function d3web_addfactsBeforeSave(store) {
+	
+	var link = 
+		$.query.set("action", "addFact").set("qid", "").set("pos", "").set("store", store).toString();
+	link = window.location.href.replace(window.location.search, "") + link;
+
+	$.ajax({
+		type : "GET",
+		async : false,
+		url : link,
+		success : function(html) {
+			//d3web_nextform();
+
+		//if (html != "same") {			// replace target id of content if not the same
+			
+			d3web_sendSave();
 		//}
 		}
 	});
@@ -275,23 +370,9 @@ function d3web_saveCase(id, event) {
 	// display popup TODO
 	alert("Es sind noch " + questionsUnanswered + " Fragen unbeantwortet.");
 	
-	var link = 
-		$.query.set("action", "savecase").toString();
-	link = window.location.href.replace(window.location.search, "") + link;
-
-	$.ajax({
-		type : "GET",
-		async : false,
-		url : link,
-		success : function(html) {
-			//d3web_nextform();
-
-		//if (html != "same") {			// replace target id of content if not the same
-			window.location.reload();
-			d3web_init();
-		//}
-		}
-	});
+	// bestätigen: nein nicht absenden
+	// bestätigen: ja absenden
+	d3web_getRemainingFacts();
 
 	/*var sendexit_button = $(id);
 
@@ -324,8 +405,59 @@ function d3web_saveCase(id, event) {
 	send_popup.fadeIn(250);*/
 }
 
-function d3web_loadCase(id, event) {
-	
+function d3web_sendSave() {
+
+	var link = $.query.set("action", "savecase").toString();
+	link = window.location.href.replace(window.location.search, "") + link;
+
+	$.ajax({
+		type : "GET",
+		async : false,
+		url : link,
+		success : function(html) {
+			d3web_show();
+		}
+	});
+}
+
+function d3web_show() {
+
+	var link = $.query.set("action", "show").toString();
+	link = window.location.href.replace(window.location.search, "") + link;
+
+	$.ajax({
+		type : "GET",
+		async : false,
+		url : link,
+		success : function(html) {
+			//d3web_nextform();
+
+		//if (html != "same") {			// replace target id of content if not the same
+			window.location.reload();
+			d3web_init();
+		//}
+		}
+	});
+}
+
+function d3web_loadCase(event) {
+
+	var link = $.query.set("action", "loadcase").toString();
+	link = window.location.href.replace(window.location.search, "") + link;
+
+	$.ajax({
+		type : "GET",
+		async : false,
+		url : link,
+		success : function(html) {
+			//d3web_nextform();
+
+		//if (html != "same") {			// replace target id of content if not the same
+			window.location.reload();
+			d3web_init();
+		//}
+		}
+	});
 }
 
 

@@ -19,13 +19,12 @@
  */
 package de.d3web.proket.d3web.run;
 
-import java.io.File;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -48,8 +47,6 @@ import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.manage.KnowledgeBaseUtils;
-import de.d3web.core.records.SessionConversionFactory;
-import de.d3web.core.records.SessionRecord;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
@@ -60,11 +57,11 @@ import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.NumValue;
 import de.d3web.core.session.values.TextValue;
 import de.d3web.core.session.values.Unknown;
-import de.d3web.file.records.io.SingleXMLSessionRepository;
 import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser;
+import de.d3web.proket.d3web.output.persistence.PersistenceD3webUtils;
 import de.d3web.proket.d3web.output.render.D3webRenderer;
 import de.d3web.proket.d3web.output.render.ID3webRenderer;
 import de.d3web.proket.output.container.ContainerCollection;
@@ -110,7 +107,8 @@ public class D3webDialog extends HttpServlet {
 	}
 
 	/**
-	 * Basic initialization and servlet method.
+	 * Basic initialization and servlet method. Always called first, if servlet
+	 * is refreshed, called newly etc.
 	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -197,13 +195,17 @@ public class D3webDialog extends HttpServlet {
 			saveCase(request, response);
 			return;
 		}
+		else if (action.equalsIgnoreCase("loadcase")) {
+			loadCase(request, response);
+			return;
+		}
 		else if (action.equalsIgnoreCase("solutions")) {
 			// TODO No actions yet
 		}
 	}
 
 	/**
-	 * Basic servlet method for displaying the servlet.
+	 * Basic servlet method for displaying the dialog.
 	 * 
 	 * @created 28.01.2011
 	 * @param request
@@ -323,7 +325,7 @@ public class D3webDialog extends HttpServlet {
 	}
 
 	/**
-	 * Save a case.
+	 * Saving a case.
 	 * 
 	 * @created 08.03.2011
 	 * @param request ServletRequest
@@ -332,43 +334,30 @@ public class D3webDialog extends HttpServlet {
 	private void saveCase(HttpServletRequest request,
 			HttpServletResponse response) {
 
-		SessionRecord sessionRecord = SessionConversionFactory.copyToSessionRecord(
-				d3wcon.getSession());
-		SingleXMLSessionRepository sessionRepository = new SingleXMLSessionRepository();
-		sessionRepository.add(sessionRecord);
-
-		// ASSEMBLE FILE path AND name FROM HERE
 		// retrieves path to /cases folder on the server
-		String contextRoot = request.getSession().getServletContext().getRealPath("/cases");
-
-		// current date and timestamp added to filename for uniqueness
-		Date now = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmss");
-
-		// assemble complete file name
-		File file = new File(contextRoot + "/" + sdf.format(now) + ".xml");
-
-		try {
-			System.out.println(file.createNewFile());
-		}
-		catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		System.out.println(file.getAbsolutePath());
-		try {
-			sessionRepository.save(file);
-			System.out.println("something happened...");
-		}
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		String folderPath = request.getSession().getServletContext().getRealPath("/cases");
+		PersistenceD3webUtils.saveCaseTimestampOneQuestionVal(folderPath, "Betreffende Klinik");
 	}
 
 	/**
-	 * Adds a value for a given question to the current knowledge base in the
-	 * current problem solving session.
+	 * Loading a case.
+	 * 
+	 * @created 09.03.2011
+	 * @param request ServletRequest
+	 * @param response ServletResponse
+	 */
+	private void loadCase(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		// retrieves path to /cases folder on the server
+		String folderPath = request.getSession().getServletContext().getRealPath("/cases");
+		PersistenceD3webUtils.loadCase(folderPath + "/09032011173416_ABD.xml");
+	}
+
+	/**
+	 * Utility method for adding values. Adds a single value for a given
+	 * question to the current knowledge base in the current problem solving
+	 * session.
 	 * 
 	 * @created 28.01.2011
 	 * @param termObID The ID of the TerminologyObject, the value is to be
@@ -489,9 +478,11 @@ public class D3webDialog extends HttpServlet {
 			}
 		}
 
+		// TODO: CHECK whether we need both the resetNotIndicated and
+		// checkChildren methods
+
 		// check, that questions of all non-init and non-indicated
-		// questionnaires
-		// are reset, i.e., no value
+		// questionnaires are reset, i.e., no value
 		for (QASet qaSet : d3wcon.getKb().getManager().getQContainers()) {
 			// find the appropriate qaset in the knowledge base
 
@@ -501,25 +492,25 @@ public class D3webDialog extends HttpServlet {
 							blackboard.getIndication(
 									qaSet).getState() != State.INSTANT_INDICATED)) {
 
-					resetNotIndicated(qaSet, blackboard);
+				resetNotIndicatedTOs(qaSet, blackboard);
 				}
 		}
 
 		// ensure, that follow-up questions are reset if parent-question doesn't
 		// indicate any more.
-		checkChildren(to, blackboard);
+		checkChildrenAndRemoveVals(to, blackboard);
 	}
 
 	/**
 	 * Utility method for resetting follow-up questions due to setting their
 	 * parent question to Unknown. Then, the childrens' value should also be
-	 * removed again,
+	 * removed again, recursively also for childrens' children and so on.
 	 * 
 	 * @created 31.01.2011
 	 * @param parent The parent TerminologyObject
 	 * @param blackboard The currently active blackboard
 	 */
-	private void checkChildren(TerminologyObject parent,
+	private void checkChildrenAndRemoveVals(TerminologyObject parent,
 			Blackboard blackboard) {
 
 		if (parent.getChildren() != null && parent.getChildren().length != 0) {
@@ -539,12 +530,19 @@ public class D3webDialog extends HttpServlet {
 					}
 				}
 
-				checkChildren(c, blackboard);
+				checkChildrenAndRemoveVals(c, blackboard);
 			}
 		}
 	}
 
-	public void resetNotIndicated(TerminologyObject parent, Blackboard bb) {
+	/**
+	 * Utility method for resetting
+	 * 
+	 * @created 09.03.2011
+	 * @param parent
+	 * @param bb
+	 */
+	private void resetNotIndicatedTOs(TerminologyObject parent, Blackboard bb) {
 
 		if (parent.getChildren() != null && parent.getChildren().length != 0) {
 			Fact lastFact = null;
@@ -564,12 +562,21 @@ public class D3webDialog extends HttpServlet {
 					blackboard.removeValueFact(lastFact);
 				}
 
-				resetNotIndicated(to, bb);
+				resetNotIndicatedTOs(to, bb);
 			}
 		}
 	}
 
-	public boolean isIndicated(TerminologyObject to, Blackboard bb) {
+	/**
+	 * Utility method for checking whether a given terminology object is
+	 * indicated or instant_indicated or not in the current session.
+	 * 
+	 * @created 09.03.2011
+	 * @param to The terminology object to check
+	 * @param bb
+	 * @return True, if the terminology object is (instant) indicated.
+	 */
+	private boolean isIndicated(TerminologyObject to, Blackboard bb) {
 		for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
 			// find the appropriate qaset in the knowledge base
 			if (qaSet.getName().equals(to.getName()) &&
@@ -582,7 +589,17 @@ public class D3webDialog extends HttpServlet {
 		return false;
 	}
 
-	public boolean isParentIndicated(TerminologyObject to, Blackboard bb) {
+	/**
+	 * Utility method for checking whether the parent object of a given
+	 * terminology object is (instant) indicated.
+	 * 
+	 * @created 09.03.2011
+	 * @param to The terminology object, the parent of which is to be checked.
+	 * @param bb
+	 * @return True, if there exists a parent object of the given terminology
+	 *         object that is indicated.
+	 */
+	private boolean isParentIndicated(TerminologyObject to, Blackboard bb) {
 		for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
 
 			// get questionnaires only
@@ -605,14 +622,14 @@ public class D3webDialog extends HttpServlet {
 	}
 
 	/**
-	 * Checks, whether a TerminologyObject child is the child of another
-	 * TerminologyObject parent. That is, whether child is nested hierarchically
-	 * underneath parent.
+	 * Utility method that checks, whether a TerminologyObject child is the
+	 * child of another TerminologyObject parent. That is, whether child is
+	 * nested hierarchically underneath parent.
 	 * 
 	 * @created 30.01.2011
 	 * @param parent The parent TerminologyObject
 	 * @param child The child to check
-	 * @return true, if child is the child of parent
+	 * @return True, if child is the child of parent
 	 */
 	private boolean hasChild(TerminologyObject parent, TerminologyObject child) {
 
