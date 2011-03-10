@@ -34,8 +34,7 @@ import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
+import de.d3web.we.kdom.RootType;
 import de.knowwe.core.action.WordBasedRenameFinding;
 import de.knowwe.core.action.WordBasedRenamingAction;
 import dummies.KnowWETestWikiConnector;
@@ -62,13 +61,9 @@ public class RenamingToolTest extends TestCase {
 		String content1 = "aaa bbb aaa ccc bbbaaa bbbaaa";
 		String content2 = "dd bbdd ccd bb b ccc bbb c dd b";
 
-		Type rootType = new AbstractType(new AllTextSectionFinder()) {
-
-			{
-				addChildType(new SplitObjectType());
-				addChildType(new WordObjectType());
-			}
-		};
+		RootType rootType = RootType.getInstance();
+		rootType.addChildType(new SplitObjectType());
+		rootType.addChildType(new WordObjectType());
 
 		_env.processAndUpdateArticleJunit("TestUser", content1, "Test_Article1", "default_web",
 				rootType);

@@ -34,9 +34,8 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.jspwiki.JSPActionDispatcher;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.RootType;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import dummies.KnowWETestWikiConnector;
 
 /**
@@ -66,13 +65,9 @@ public class ReplaceKdomNodeTest extends TestCase {
 		 * Build an Article.
 		 */
 		String content = "aaa bbb -ababba- aba - bbbaa-abba aab";
-		Type rootType = new AbstractType(new AllTextSectionFinder()) {
-
-			{
-				addChildType(new SplitObjectType());
-				addChildType(new WordObjectType());
-			}
-		};
+		RootType rootType = RootType.getInstance();
+		rootType.addChildType(new SplitObjectType());
+		rootType.addChildType(new WordObjectType());
 
 		_env.processAndUpdateArticleJunit("TestUser", content, "Test_Article", "default_web",
 				rootType);

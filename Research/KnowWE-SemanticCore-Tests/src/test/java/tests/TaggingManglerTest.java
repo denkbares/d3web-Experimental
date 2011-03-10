@@ -42,7 +42,7 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
+import de.d3web.we.kdom.RootType;
 import de.d3web.we.search.GenericSearchResult;
 import de.knowwe.tagging.TaggingMangler;
 import dummies.KnowWETestWikiConnector;
@@ -56,7 +56,7 @@ public class TaggingManglerTest extends TestCase {
 	private KnowWEArticleManager am;
 	private TaggingMangler tm;
 	private UserActionContext context;
-	private Type type;
+	private RootType type;
 	private KnowWEEnvironment ke;
 	private ISemanticCore sc;
 

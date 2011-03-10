@@ -43,7 +43,6 @@ import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.RootType;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotation;
 import de.knowwe.tagging.TaggingMangler;
 import dummies.KnowWETestWikiConnector;
@@ -52,7 +51,7 @@ public class SemanticCoreTest {
 
 	private KnowWEEnvironment ke;
 	private KnowWEArticleManager am;
-	private Type type;
+	private RootType type;	
 	private UserActionContext context;
 	private ISemanticCore sc;
 

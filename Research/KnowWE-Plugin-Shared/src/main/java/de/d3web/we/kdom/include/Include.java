@@ -23,7 +23,6 @@ package de.d3web.we.kdom.include;
 import java.util.Map;
 
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.SectionID;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.kdom.xml.XMLSectionFinder;
@@ -55,14 +54,14 @@ public class Include extends AbstractXMLType {
 
 		@Override
 		protected SectionFinderResult makeSectionFinderResult(int start,
-				int end, SectionID sectionID, Map<String, String> parameterMap) {
+				int end, Map<String, String> parameterMap) {
 
 			String src = parameterMap.get("src");
 			if (src != null) {
 				IncludeAddress a = new IncludeAddress(parameterMap.get("src"));
-				return new IncludeSectionFinderResult(start, end, sectionID, a);
+				return new IncludeSectionFinderResult(start, end, a);
 			}
-			return new IncludeSectionFinderResult(start, end, sectionID, null);
+			return new IncludeSectionFinderResult(start, end, null);
 		}
 
 	}

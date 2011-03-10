@@ -34,6 +34,7 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.RootType;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.xml.GenericXMLObjectType;
 import de.d3web.we.kdom.xml.XMLSectionFinder;
@@ -129,14 +130,18 @@ public class XMLSectionFinderTest extends TestCase {
 		/**
 		 * Build a complete Article using GenericXMLObjectType
 		 */
+
+		RootType rootType = RootType.getInstance();
+		rootType.addChildType(new GenericXMLObjectType());
+
 		content = this.readXMLFile("0");
-		article = KnowWEArticle.createArticle(content, "Test_Article2", new GenericXMLObjectType(),
+		article = KnowWEArticle.createArticle(content, "Test_Article2", rootType,
 				"default_web");
 		artSec = article.getSection();
 
 		// Test children counts
 		int expected = 3;
-		Section artChild = (Section) artSec.getChildren().get(0);
+		Section artChild = Sections.findChildOfType(artSec, RootType.class).getChildren().get(0);
 		assertEquals("ArticleSection: Childcount wrong", expected, artChild.getChildren().size());
 
 		artChild = (Section) artChild.getChildren().get(1);

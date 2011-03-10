@@ -27,8 +27,10 @@ import junit.framework.TestCase;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.RootType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Annotation.Annotation;
 import de.d3web.we.kdom.Annotation.AnnotationContent;
 import de.d3web.we.kdom.Annotation.AnnotationObject;
@@ -100,11 +102,12 @@ public class d3webSectionFinderTest extends TestCase {
 		String test = "blablub {{the currently measured mileage"
 				+ "<=> asks::Real mileage  /100km}}bla blub";
 
-		Annotation type = new de.d3web.we.kdom.Annotation.Annotation();
-		KnowWEArticle article = KnowWEArticle.createArticle(test, "Test_Article2", type,
+		RootType rootType = RootType.getInstance();
+		rootType.addChildType(new de.d3web.we.kdom.Annotation.Annotation());
+		KnowWEArticle article = KnowWEArticle.createArticle(test, "Test_Article2", rootType,
 				"default_web");
 		Section artSec = article.getSection();
-		List<Section> childs = artSec.getChildren();
+		List<Section<? extends Type>> childs = Sections.findChildOfType(artSec, RootType.class).getChildren();
 
 		// Annotation
 		assertEquals(WRONG_COUNT, 3, childs.size());
@@ -165,11 +168,13 @@ public class d3webSectionFinderTest extends TestCase {
 		KnowWEEnvironment.initKnowWE(new KnowWETestWikiConnector());
 		KnowWEEnvironment.getInstance().getArticle("default_web", "Test_Article");
 
+		RootType rootType = RootType.getInstance();
+		rootType.addChildType(new ComplexFinding());
 		KnowWEArticle article = KnowWEArticle.createArticle(test, "Test_Article2",
-				new ComplexFinding(),
+				rootType,
 				"default_web");
 		Section artSec = article.getSection();
-		List<Section> childs = artSec.getChildren();
+		List<Section<? extends Type>> childs = Sections.findChildOfType(artSec, RootType.class).getChildren();
 
 		// ComplexFinding
 		assertEquals(WRONG_COUNT, 1, childs.size());

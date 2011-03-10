@@ -28,6 +28,7 @@ import utils.Utils;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.RootType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.xml.GenericXMLObjectType;
@@ -56,8 +57,10 @@ public class UpdateMechanismTest extends TestCase {
 		/*
 		 * Init first Article
 		 */
+		RootType rootType = RootType.getInstance();
+		rootType.addChildType(new GenericXMLObjectType());
 		KnowWEArticle article1 = KnowWEArticle.createArticle(content, "UpdatingTest",
-				new GenericXMLObjectType(), "default_web");
+				rootType, "default_web");
 		KnowWEEnvironment.getInstance().getArticleManager("default_web").registerArticle(
 				article1);
 
@@ -65,7 +68,7 @@ public class UpdateMechanismTest extends TestCase {
 		 * Init a second, identical Article
 		 */
 		KnowWEArticle article2 = KnowWEArticle.createArticle(content, "UpdatingTest",
-				new GenericXMLObjectType(), "default_web");
+				rootType, "default_web");
 
 		List<Section<? extends Type>> sections1 = article1.getAllNodesPreOrder();
 
@@ -74,7 +77,7 @@ public class UpdateMechanismTest extends TestCase {
 		assertEquals("Articles dont have the same amount of sections:", sections1.size(),
 				sections2.size());
 
-		for (int i = 1; i < sections1.size(); i++) {
+		for (int i = 2; i < sections1.size(); i++) {
 			assertSame("The Sections in the different articles should be the same",
 					sections1.get(i), sections2.get(i));
 		}

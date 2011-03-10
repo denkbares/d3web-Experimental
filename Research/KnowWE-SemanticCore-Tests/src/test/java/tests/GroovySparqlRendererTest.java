@@ -39,7 +39,7 @@ import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
+import de.d3web.we.kdom.RootType;
 import de.d3web.we.utils.KnowWEUtils;
 import de.knowwe.tagging.TaggingMangler;
 import dummies.KnowWETestWikiConnector;
@@ -48,7 +48,7 @@ public class GroovySparqlRendererTest {
 
 	private KnowWEEnvironment ke;
 	private KnowWEArticleManager am;
-	private Type type;
+	private RootType type;
 	private UserActionContext context;
 	private TaggingMangler tm;
 

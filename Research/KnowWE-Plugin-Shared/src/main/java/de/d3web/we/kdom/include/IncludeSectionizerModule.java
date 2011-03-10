@@ -34,7 +34,7 @@ public class IncludeSectionizerModule implements SectionizerModule {
 	public Section<?> createSection(String text, Type type, Section<?> father, KnowWEArticle article, SectionFinderResult result) {
 		Section s = null;
 		if (result instanceof IncludeSectionFinderResult) {
-			s = type.getParser().parse(text, type, result.getId(), father, article);
+			s = type.getParser().parse(text, father, article);
 			// s = Section.createSection(
 			// thisSection.getOriginalText().substring(
 			// result.getStart(),
