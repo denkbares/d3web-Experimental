@@ -12,7 +12,7 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.table.Table;
 import de.d3web.we.taghandler.AbstractTagHandler;
-import de.d3web.we.user.UserContext;
+import de.d3web.we.utils.KnowWEUtils;
 
 public class ShowTableTagHandler extends AbstractTagHandler{
 
@@ -28,7 +28,7 @@ public class ShowTableTagHandler extends AbstractTagHandler{
 		}
 		Section<DefineTableMarkup> myTable = findTableToShow(article, id);
 		if(myTable != null) {
-			return renderTable(myTable, userContext);
+			return renderTable(myTable, userContext, id);
 		}
 		else {
 			return "no table definition found for specified id: "+id;
@@ -36,11 +36,19 @@ public class ShowTableTagHandler extends AbstractTagHandler{
 		
 	}
 
-	private String renderTable(Section<DefineTableMarkup> myTable, UserContext user) {
+	private String renderTable(Section<DefineTableMarkup> myTable, UserContext user, String tableid) {
 		Section<Table> table = Sections.findSuccessor(myTable,Table.class);
+		List<Section<InputFieldCellContent>> inputs = new ArrayList<Section<InputFieldCellContent>>();
+		// Sections.findSuccessorsOfType(myTable, InputFieldCellContent.class,
+		// inputs);
 		StringBuilder string = new StringBuilder();
+		string.append(KnowWEUtils.maskHTML("<div id=" + myTable.getID() + ">"));
 		DelegateRenderer.getInstance().render(myTable.getArticle(), table.getFather(),
 				user, string);
+		string.append(KnowWEUtils.maskHTML("<input type='button' onclick=\"submitTable('"
+				+ myTable.getID() + "','" + user.getUserName()
+				+ "','" + tableid + "')\" name='speichern' value='speichern'/>"));
+		string.append(KnowWEUtils.maskHTML("</div>"));
 		return string.toString();
 	}
 

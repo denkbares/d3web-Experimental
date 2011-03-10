@@ -36,6 +36,18 @@
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
 	</extension>
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="TableEntryType">
+		<parameter id="class" value="de.knowwe.defi.table.TableEntryType" />
+		<parameter id="name" value="TableEntryType" />
+		<parameter id="description" value="Type TableEntryType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5"  />
+		<parameter id="scope" value="root" />
+		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
+	</extension>
+	
+	
 	
 		<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="ShowTableTagHandler">
@@ -45,7 +57,7 @@
 		<parameter id="description" value="TagHandler ShowTableTagHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="script" value="Hermes.js" />
+		<parameter id="script" value="KnowWE-Plugin-Defi-SubmitTable.js" />
 		<parameter id="css" value="hermes.css" />
 	</extension>
 	
@@ -69,6 +81,16 @@
         <parameter id="priority" value="5" />
     </extension>
     
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="SubmitTableContentAction">
+        <parameter id="class"
+            value="de.knowwe.defi.table.SubmitTableContentAction" />
+        <parameter id="name" value="SubmitTableContentAction" />
+        <parameter id="description" value="Action SubmitTableContentAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
     
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
