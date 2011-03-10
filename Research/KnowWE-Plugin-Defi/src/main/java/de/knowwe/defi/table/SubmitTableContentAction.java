@@ -1,16 +1,32 @@
 package de.knowwe.defi.table;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import de.d3web.we.action.AbstractAction;
+import de.d3web.we.action.UserActionContext;
 import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 
 public class SubmitTableContentAction extends AbstractAction {
 
-	public void execute(UserActionContext context) {
+	private String createNewContentString(String tableid, Map<Integer, String> inputData) {
+		StringBuffer newContent = new StringBuffer();
+		newContent.append("%%Tabellendaten\n");
+		for (Integer i : inputData.keySet()) {
+			String text = inputData.get(i);
+			newContent.append("@input" + i + ":" + text + "\n");
+
+		}
+		newContent.append("@tableid:" + tableid + "\n");
+		newContent.append("%\n");
+		return newContent.toString();
+	}
+
+	@Override
+	public void execute(UserActionContext context) throws IOException {
 		String username = context.getParameter("user");
 		String data = context.getParameter("data");
 		String tableid = context.getParameter("tableid");
@@ -48,23 +64,10 @@ public class SubmitTableContentAction extends AbstractAction {
 		else {
 		Map<String, String> nodesMap = new HashMap<String, String>();
 		nodesMap.put(knowWEArticle.getSection().getID(), createNewContentString(tableid, inputData));
-		articleManager.replaceKDOMNodesSaveAndBuild(context.getKnowWEParameterMap(),
+		articleManager.replaceKDOMNodesSaveAndBuild(context,
 				articleNameForData, nodesMap);
 		}
-
-	}
-
-	private String createNewContentString(String tableid, Map<Integer, String> inputData) {
-		StringBuffer newContent = new StringBuffer();
-		newContent.append("%%Tabellendaten\n");
-		for (Integer i : inputData.keySet()) {
-			String text = inputData.get(i);
-			newContent.append("@input" + i + ":" + text + "\n");
-
-		}
-		newContent.append("@tableid:" + tableid + "\n");
-		newContent.append("%\n");
-		return newContent.toString();
+		
 	}
 
 }
