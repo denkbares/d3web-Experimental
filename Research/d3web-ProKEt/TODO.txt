@@ -48,5 +48,11 @@ GENERAL:
 - FOLGEFRAGEN
 
 - QuickI Style Dialog: Datumsfragen
+- DONE Abstraktionsfragen (zB BMI) ausgegraut o.ä. dass nicht editierbar und nur berechnet
 
-- Abstraktionsfragen (zB BMI) ausgegraut o.ä. dass nicht editierbar und nur berechnet
+--------------------------------
+
+- KLÄREN: Speichern/Laden von Fällen im Mediastinitis
+- Add Info 1. Frage dazu + Popup
+- Abfrage beim speichern-Popup vervollständigen
+
