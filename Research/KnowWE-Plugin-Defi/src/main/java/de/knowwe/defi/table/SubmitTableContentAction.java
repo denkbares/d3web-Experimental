@@ -31,6 +31,7 @@ public class SubmitTableContentAction extends AbstractAction {
 			String text = inputData.get(i);
 			newContent.append("INPUT" + i + ":" + text + "\n");
 		}
+		newContent.append("-\n");
 		return newContent.toString();
 	}
 
