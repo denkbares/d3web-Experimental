@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<dialog header="Car Fault Diagnosis"  dtype="freechoice" dstrategy="default" 
-	css="clarification, nonavigation, nofoot, noquestionnairenav">
-	<data kb="car_xcl.jar" />
-</dialog>
