@@ -58,6 +58,7 @@ public class UpdateMechanismTest extends TestCase {
 		 * Init first Article
 		 */
 		RootType rootType = RootType.getInstance();
+		rootType.clearAllowedChildren();
 		rootType.addChildType(new GenericXMLObjectType());
 		KnowWEArticle article1 = KnowWEArticle.createArticle(content, "UpdatingTest",
 				rootType, "default_web");
