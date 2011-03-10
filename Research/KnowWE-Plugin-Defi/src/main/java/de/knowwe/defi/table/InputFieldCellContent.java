@@ -18,9 +18,16 @@
  */
 package de.knowwe.defi.table;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.sectionFinder.StringSectionFinder;
 import de.d3web.we.user.UserContext;
@@ -39,9 +46,50 @@ public class InputFieldCellContent extends AbstractType {
 		public void render(KnowWEArticle article,
 				Section<InputFieldCellContent> sec, UserContext user,
 				StringBuilder string) {
+			List<Section<InputFieldCellContent>> found = new ArrayList<Section<InputFieldCellContent>>();
+			Sections.findSuccessorsOfType(sec.getFather().getFather().getFather(),
+					InputFieldCellContent.class,
+					found);
+			int number = found.indexOf(sec);
+			Section<DefaultMarkupType> ancestorOfType = Sections.findAncestorOfType(sec,
+					DefaultMarkupType.class);
+			String tableid = ancestorOfType.get().getAnnotation(ancestorOfType, "id");
+			String contentString = "-";
+			Section<TableEntryType> contentTable = findTableToShow(tableid);
+			if (contentTable != null) {
+				List<Section<ContentEntry>> entries = contentTable.get().getEntries(
+						contentTable);
+				for (Section<ContentEntry> section : entries) {
+					if (section.get().getNumber(section) == number) {
+						contentString = section.get().getContent(section);
+						break;
+					}
+				}
+			}
 			string.append(KnowWEUtils.maskHTML("<input type='text' id='" + sec.getID()
-					+ "' value='" + "'\\>"));
-			
+					+ "' value='" + contentString + "'\\>"));
+
+		}
+
+		private Section<TableEntryType> findTableToShow(String id) {
+			Collection<KnowWEArticle> articles = KnowWEEnvironment.getInstance().getArticleManager(
+					KnowWEEnvironment.DEFAULT_WEB).getArticles();
+			for (KnowWEArticle knowWEArticle : articles) {
+				List<Section<TableEntryType>> tables = new ArrayList<Section<TableEntryType>>();
+				Sections.findSuccessorsOfType(knowWEArticle.getSection(),
+						TableEntryType.class,
+						tables);
+				for (Section<TableEntryType> table : tables) {
+					String tableID = table.get().getAnnotation(table, "tableid");
+					if (tableID != null) {
+						if (tableID.equals(id)) {
+							return table;
+						}
+					}
+
+				}
+			}
+			return null;
 		}
 	}
 

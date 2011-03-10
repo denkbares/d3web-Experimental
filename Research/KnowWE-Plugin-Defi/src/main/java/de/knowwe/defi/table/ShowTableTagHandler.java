@@ -33,15 +33,14 @@ import de.d3web.we.taghandler.AbstractTagHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
 
-public class ShowTableTagHandler extends AbstractTagHandler{
+public class ShowTableTagHandler extends AbstractTagHandler {
 
 	public ShowTableTagHandler() {
 		super("Befragungstabelle");
 	}
 
-
 	private String renderTable(Section<DefineTableMarkup> myTable, UserContext user, String tableid) {
-		Section<Table> table = Sections.findSuccessor(myTable,Table.class);
+		Section<Table> table = Sections.findSuccessor(myTable, Table.class);
 		List<Section<InputFieldCellContent>> inputs = new ArrayList<Section<InputFieldCellContent>>();
 		// Sections.findSuccessorsOfType(myTable, InputFieldCellContent.class,
 		// inputs);
@@ -56,20 +55,22 @@ public class ShowTableTagHandler extends AbstractTagHandler{
 		return string.toString();
 	}
 
-	private Section<DefineTableMarkup> findTableToShow(KnowWEArticle article, String id) {
-		Collection<KnowWEArticle> articles = KnowWEEnvironment.getInstance().getArticleManager(article.getWeb()).getArticles();
+	private Section<DefineTableMarkup> findTableToShow(String id) {
+		Collection<KnowWEArticle> articles = KnowWEEnvironment.getInstance().getArticleManager(
+				KnowWEEnvironment.DEFAULT_WEB).getArticles();
 		for (KnowWEArticle knowWEArticle : articles) {
 			List<Section<DefineTableMarkup>> tables = new ArrayList<Section<DefineTableMarkup>>();
-			Sections.findSuccessorsOfType(knowWEArticle.getSection(), DefineTableMarkup.class,
+			Sections.findSuccessorsOfType(knowWEArticle.getSection(),
+					DefineTableMarkup.class,
 					tables);
 			for (Section<DefineTableMarkup> table : tables) {
 				String tableID = table.get().getAnnotation(table, "id");
-				if(tableID != null) {
+				if (tableID != null) {
 					if (tableID.equals(id)) {
 						return table;
 					}
 				}
-				
+
 			}
 		}
 		return null;
@@ -79,15 +80,15 @@ public class ShowTableTagHandler extends AbstractTagHandler{
 	public String render(KnowWEArticle article, Section<?> section,
 			UserContext userContext, Map<String, String> parameters) {
 		String id = parameters.get("id");
-		if(id == null) {
+		if (id == null) {
 			return "Error: no table id specified!";
 		}
-		Section<DefineTableMarkup> myTable = findTableToShow(article, id);
-		if(myTable != null) {
+		Section<DefineTableMarkup> myTable = findTableToShow(id);
+		if (myTable != null) {
 			return renderTable(myTable, userContext, id);
 		}
 		else {
-			return "no table definition found for specified id: "+id;
+			return "no table definition found for specified id: " + id;
 		}
 	}
 

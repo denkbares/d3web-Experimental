@@ -19,12 +19,21 @@
 
 package de.knowwe.defi.table;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.basic.LineBreak;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
+import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
+import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 public class TableEntryType extends DefaultMarkupType {
-		
+
 	public TableEntryType(DefaultMarkup markup) {
 		super(markup);
 		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
@@ -34,7 +43,7 @@ public class TableEntryType extends DefaultMarkupType {
 
 	static {
 		m = new DefaultMarkup("Tabellendaten");
-		// m.addContentType();
+		m.addContentType(new TableEntryContentType());
 		m.addAnnotation("tableid", true);
 	}
 
@@ -42,4 +51,63 @@ public class TableEntryType extends DefaultMarkupType {
 		super(m);
 		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
+
+	public static List<Section<ContentEntry>> getEntries(Section<TableEntryType> s) {
+		List<Section<ContentEntry>> found = new ArrayList<Section<ContentEntry>>();
+		Sections.findSuccessorsOfType(s, ContentEntry.class, found);
+		return found;
+	}
+
+}
+
+class TableEntryContentType extends AbstractType {
+
+	public TableEntryContentType() {
+		this.addChildType(new ContentEntry());
+		this.setSectionFinder(new AllTextSectionFinder());
+	}
+}
+
+class ContentEntry extends AbstractType {
+
+	public static int getNumber(Section<ContentEntry> s) {
+		Section<InputHead> section = Sections.findChildOfType(s, InputHead.class);
+		if (section != null) {
+			String numString = section.getText().substring(5,
+					section.getText().indexOf(':'));
+			return Integer.parseInt(numString);
+		}
+
+		return -1;
+	}
+
+	public static String getContent(Section<ContentEntry> s) {
+		Section<InputContent> section = Sections.findChildOfType(s, InputContent.class);
+		if (section != null) {
+			return section.getText();
+		}
+
+		return null;
+	}
+
+	public ContentEntry() {
+		this.setSectionFinder(new RegexSectionFinder("INPUT.*?\\r?\\n"));
+		this.addChildType(new InputHead());
+		this.addChildType(new LineBreak());
+		this.addChildType(new InputContent());
+	}
+}
+
+class InputHead extends AbstractType {
+
+	public InputHead() {
+		this.setSectionFinder(new RegexSectionFinder("INPUT\\d*:"));
+	}
+}
+
+class InputContent extends AbstractType {
+	public InputContent() {
+		this.setSectionFinder(new AllTextSectionFinder());
+	}
+
 }

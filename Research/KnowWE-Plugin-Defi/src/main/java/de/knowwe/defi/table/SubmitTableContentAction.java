@@ -1,7 +1,9 @@
 package de.knowwe.defi.table;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.d3web.we.action.AbstractAction;
@@ -9,19 +11,26 @@ import de.d3web.we.action.UserActionContext;
 import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 
 public class SubmitTableContentAction extends AbstractAction {
 
-	private String createNewContentString(String tableid, Map<Integer, String> inputData) {
+	private String createNewMarkupString(String tableid, Map<Integer, String> inputData) {
 		StringBuffer newContent = new StringBuffer();
 		newContent.append("%%Tabellendaten\n");
-		for (Integer i : inputData.keySet()) {
-			String text = inputData.get(i);
-			newContent.append("@input" + i + ":" + text + "\n");
-
-		}
+		newContent.append(createMarkupContent(inputData));
 		newContent.append("@tableid:" + tableid + "\n");
 		newContent.append("%\n");
+		return newContent.toString();
+	}
+
+	private String createMarkupContent(Map<Integer, String> inputData) {
+		StringBuffer newContent = new StringBuffer();
+		for (Integer i : inputData.keySet()) {
+			String text = inputData.get(i);
+			newContent.append("INPUT" + i + ":" + text + "\n");
+		}
 		return newContent.toString();
 	}
 
@@ -48,7 +57,7 @@ public class SubmitTableContentAction extends AbstractAction {
 		KnowWEArticle knowWEArticle = articleManager.getArticle(
 				articleNameForData);
 		if (knowWEArticle == null) {
-			String newContent = createNewContentString(tableid, inputData);
+			String newContent = createNewMarkupString(tableid, inputData);
 			KnowWEEnvironment.getInstance().getWikiConnector().createWikiPage(
 					articleNameForData, newContent.toString(), "Defi-system");
 			KnowWEArticle article = KnowWEArticle.createArticle(newContent.toString(),
@@ -62,12 +71,29 @@ public class SubmitTableContentAction extends AbstractAction {
 					articleNameForData);
 		}
 		else {
-		Map<String, String> nodesMap = new HashMap<String, String>();
-		nodesMap.put(knowWEArticle.getSection().getID(), createNewContentString(tableid, inputData));
-		articleManager.replaceKDOMNodesSaveAndBuild(context,
-				articleNameForData, nodesMap);
-		}
-		
-	}
+			Map<String, String> nodesMap = new HashMap<String, String>();
+			List<Section<TableEntryType>> tables = new ArrayList<Section<TableEntryType>>();
+			Sections.findSuccessorsOfType(knowWEArticle.getSection(),
+					TableEntryType.class, tables);
+			Section<TableEntryContentType> contentSection = null;
+			for (Section<TableEntryType> section : tables) {
+				String id = section.get().getAnnotation(section, "tableid");
+				if (id.equals(tableid)) {
+					contentSection = Sections.findSuccessor(section,
+							TableEntryContentType.class);
+				}
+			}
+			if (contentSection == null) {
+				nodesMap.put(knowWEArticle.getSection().getID(), createNewMarkupString(
+						tableid, inputData));
+			}
+			else {
+				nodesMap.put(contentSection.getID(), createMarkupContent(inputData));
+			}
 
+			articleManager.replaceKDOMNodesSaveAndBuild(context,
+					articleNameForData, nodesMap);
+		}
+
+	}
 }
