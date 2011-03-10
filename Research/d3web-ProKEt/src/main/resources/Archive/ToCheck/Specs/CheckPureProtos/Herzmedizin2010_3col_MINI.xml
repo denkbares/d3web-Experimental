@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<dialog css="medi2cols, nonavigation" 
+	    header="Herz-Medizinische Dokumentation - Prototyp" type="med" columns="1" sendall="true" >
+	
+	<questionnaire title="Demographische Daten" columns="3">
+		<question type="num" title="Alter des Patienten">
+			<answer text="Jahre"></answer>
+			<answer type="oc" title="unbekannt" />
+		</question>
+		<question answer-type="oc" title="Geschlecht des Patienten" select-box="true" columns="1">
+			<answer type="sel" title="Männlich" />
+			<answer type="sel" title="Weiblich" />
+			<answer type="sel" title="unbekannt" />
+		</question>
+	</questionnaire>
+	
+	<questionnaire title="Präoperative Daten (Initial-OP)" columns="3">
+		<question type="num" title="Größe">
+			<answer text="m"></answer>
+			<answer type="oc" title="unbekannt" />
+		</question>
+		<question type="num" title="Gewicht">
+			<answer text="kg"></answer>
+			<answer type="oc" title="unbekannt" />
+		</question>
+		
+			<!-- TODO BMI Question berechnet sich aus den beiden vorher -->
+		<question type="num" title="BMI">
+			<answer text=""></answer>
+			<answer type="oc" title="unbekannt" />
+		</question>
+	</questionnaire>
+</dialog>
