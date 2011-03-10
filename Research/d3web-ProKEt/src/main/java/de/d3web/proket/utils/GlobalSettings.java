@@ -60,7 +60,7 @@ public class GlobalSettings {
 	private String d3webRendererPath = "de.d3web.proket.d3web.output.render.";
 	private String rendererBasePath = "de.d3web.proket.output.render";
 
-	private String applicationBasePath = "/applicationResources";
+	private String applicationBasePath = "/ControlCenterResources";
 
 
 	/* File names */

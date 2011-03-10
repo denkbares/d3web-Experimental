@@ -67,14 +67,14 @@ public class ControlCenter extends HttpServlet {
 		 */
 		File template = FileUtils.getResourceFile(
 				GlobalSettings.getInstance().getApplicationBasePath()
-						+ "/stringtemp/controlcenter.st");
+						+ "/controlcenter.st");
 		StringTemplate st =
 				new StringTemplate(FileUtils.getString(template));
 
 		// set CSS
 		File css = FileUtils.getResourceFile(
 				GlobalSettings.getInstance().getApplicationBasePath()
-						+ "/styles/controlcenter.css");
+						+ "/controlcenter.css");
 		String cssString = FileUtils.getString(css);
 		st.setAttribute("css", cssString);
 

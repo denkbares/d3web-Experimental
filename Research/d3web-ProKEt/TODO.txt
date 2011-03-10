@@ -16,6 +16,11 @@ BUG: Resource/File not found (StringTemplate oder auch d3web/...):
 	als jar zur compile Zeit (ins pom.xml)
 -- WICHTIG: die Eclipse WTP Integration für Maven ist ESSENTIELL
 
+NEU AUSCHECK:
+.settings?! (aktuell aus altem Proj reinkopieren)
+anpassen
+rechtsklick auf Projekt, Properties, Deployment Maven Dependencies angeben dass in WEB-INF/lib
+
 --------
 GENERAL:
 --------
