@@ -446,8 +446,7 @@ public class SAVE_D3webDialogServlet<KnoweldgeBase> extends HttpServlet {
 		if (questionnaire != null) {
 			Fact fact = new DefaultFact(questionnaire, new Indication(
 					State.INSTANT_INDICATED),
-					0, PSMethodUserSelected.getInstance(),
-					PSMethodUserSelected.getInstance());
+					PSMethodUserSelected.getInstance(), PSMethodUserSelected.getInstance());
 			d3webSession.getBlackboard().addInterviewFact(fact);
 		}
 	}

@@ -132,8 +132,7 @@ public class RunTestcaseAction extends AbstractAction {
 
 			session.getPropagationManager().openPropagation(time);
 			for (Finding f : testcase.getFindings()) {
-				blackboard.addValueFact(new DefaultFact(f.getQuestion(), f.getValue(), time,
-							PSMethodUserSelected.getInstance(),
+				blackboard.addValueFact(new DefaultFact(f.getQuestion(), f.getValue(), PSMethodUserSelected.getInstance(),
 							PSMethodUserSelected.getInstance()));
 			}
 
