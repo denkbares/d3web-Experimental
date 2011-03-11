@@ -37,6 +37,7 @@ import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.message.NoSuchObjectError;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.subtreeHandler.IncrementalConstraint;
+import de.knowwe.core.dashtree.DashSubtree;
 import de.knowwe.core.dashtree.DashTreeElement;
 import de.knowwe.core.dashtree.DashTreeUtils;
 import de.knowwe.termObject.OWLTermReference;
@@ -53,7 +54,12 @@ public class SubClassingDashTreeElement extends DashTreeElement implements
 
 	@Override
 	public boolean violatedConstraints(KnowWEArticle article, Section<SubClassingDashTreeElement> s) {
-		return DashTreeUtils.isChangeInAncestorSubtree(article, s, 1);
+		Section<? extends DashSubtree> fatherDashSubtree = DashTreeUtils.getFatherDashSubtree(s);
+		if (fatherDashSubtree == null) return false; // root of dashTree
+		boolean changeInSubtree = DashTreeUtils.isChangeInSubtree(article,
+				fatherDashSubtree, new ArrayList(
+						0));
+		return changeInSubtree;
 	}
 
 	private class SubClassingDashTreeElementOWLSubTreeHandler extends
@@ -76,14 +82,14 @@ public class SubClassingDashTreeElement extends DashTreeElement implements
 						return Arrays.asList((KDOMReportMessage) new NoSuchObjectError(
 								element.getOriginalText()));
 					}
-						List<Statement> statements = new ArrayList<Statement>();
-						Statement st = Rdf2GoCore.getInstance().createStatement(localURI,
+					List<Statement> statements = new ArrayList<Statement>();
+					Statement st = Rdf2GoCore.getInstance().createStatement(localURI,
 								RDFS.subClassOf, fatherURI);
-						statements.add(st);
-						Rdf2GoCore.getInstance().addStatements(statements, element);
+					statements.add(st);
+					Rdf2GoCore.getInstance().addStatements(statements, element);
 				}
 			}
-			
+
 			return new ArrayList<KDOMReportMessage>(0);
 		}
 
