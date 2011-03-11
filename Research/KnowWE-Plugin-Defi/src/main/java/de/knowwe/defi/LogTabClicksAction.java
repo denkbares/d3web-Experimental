@@ -49,7 +49,7 @@ public class LogTabClicksAction extends AbstractAction {
 		String clicked_tab = context.getParameter("tologtab");
 		String page = context.getParameter("page");
 
-		boolean isAuthenticated = context.userIsAuthenticated();
+		boolean isAuthenticated = context.userIsAsserted();
 		if (!isAuthenticated) {
 			username = context.getRequest().getRemoteAddr();
 		}

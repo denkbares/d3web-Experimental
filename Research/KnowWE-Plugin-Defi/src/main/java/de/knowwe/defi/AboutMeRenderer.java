@@ -46,7 +46,7 @@ public class AboutMeRenderer<T extends AbstractType> extends KnowWEDomRenderer<T
 		String username = user.getUserName();
 		String pageName = article.getTitle();
 
-		if (pageName.toLowerCase().equals(username.toLowerCase()) && user.userIsAuthenticated()) {
+		if (pageName.toLowerCase().equals(username.toLowerCase()) && user.userIsAsserted()) {
 			string.append(KnowWEUtils.maskHTML("<form action=\"KnowWE.jsp\" method=\"post\">"));
 			string.append(KnowWEUtils.maskHTML("<p>Bitte wählen Sie einen Bild aus:</p><div>"));
 

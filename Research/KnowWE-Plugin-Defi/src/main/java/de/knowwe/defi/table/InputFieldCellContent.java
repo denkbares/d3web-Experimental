@@ -66,8 +66,9 @@ public class InputFieldCellContent extends AbstractType {
 					}
 				}
 			}
-			string.append(KnowWEUtils.maskHTML("<input type='text' id='" + sec.getID()
-					+ "' value='" + contentString + "'\\>"));
+			string.append(KnowWEUtils.maskHTML("<textarea rows='3' wrap='soft' type='text' id='"
+					+ sec.getID()
+					+ "'>" + contentString + "</textarea>"));
 
 		}
 

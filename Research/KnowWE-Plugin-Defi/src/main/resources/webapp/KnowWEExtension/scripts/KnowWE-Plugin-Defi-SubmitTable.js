@@ -2,10 +2,10 @@
 function submitTable(kdomid,user,tableid) {
 	
 	var tableElement = _KS('#'+kdomid);
-	var inputs = _KS('input',tableElement);
+	var inputs = _KS('textarea',tableElement);
 	var text = '';
 	 var len = inputs.length;
-     for(i = 0; i < len-1; i++){
+     for(i = 0; i < len; i++){
     	 text += 'Input'+i+':'+inputs[i].value+";";
      }
 	

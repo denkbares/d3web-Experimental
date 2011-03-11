@@ -44,7 +44,7 @@ public class AboutMeSaveAction extends AbstractAction {
 
 		String title = context.getTopic();
 
-		boolean isAuthenticated = context.userIsAuthenticated();
+		boolean isAuthenticated = context.userIsAsserted();
 
 		// Check for user access
 		if (!isAuthenticated) {

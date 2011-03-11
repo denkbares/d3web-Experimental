@@ -15,7 +15,7 @@
   WikiContext c = WikiContext.findContext(pageContext);
   String avatar = "A01";
   JSPWikiUserContext user = new JSPWikiUserContext(c, new HashMap<String, String>());
-  if (user.userIsAuthenticated()) {
+  if (user.userIsAsserted()) {
 	  KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(KnowWEEnvironment.DEFAULT_WEB, user.getUserName());
 	  Section<?> s = article.getSection();
 	  //Section<?> sec = Sections.findChildOfType(s, AboutMe.class);
