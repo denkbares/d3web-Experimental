@@ -67,8 +67,8 @@ import de.knowwe.termObject.LocalConceptReference;
 import de.knowwe.termObject.OWLTermReference;
 import de.knowwe.termObject.RDFResourceType;
 import de.knowwe.termObject.URIObject;
-import de.knowwe.termObject.URIObject.URIObjectType;
 import de.knowwe.termObject.URITermDefinition;
+import de.knowwe.termObject.URIObject.URIObjectType;
 
 public class TurtleMarkup extends AbstractType {
 
@@ -80,7 +80,6 @@ public class TurtleMarkup extends AbstractType {
 	public TurtleMarkup() {
 
 		this.setSectionFinder(new RegexSectionFinder("\\[.*?::.*?\\]", Pattern.MULTILINE));
-
 
 		AnonymousTypeInvisible start = new AnonymousTypeInvisible("turtlestart");
 		start.setSectionFinder(new SectionFinder() {
@@ -329,7 +328,7 @@ public class TurtleMarkup extends AbstractType {
 
 		@Override
 		public boolean violatedConstraints(KnowWEArticle article, Section<TurtleMarkup> s) {
-			return s.getFather().isReusedBy(article.getTitle());
+			return !s.getFather().isReusedBy(article.getTitle());
 		}
 	}
 
@@ -424,9 +423,6 @@ public class TurtleMarkup extends AbstractType {
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Type> s) {
 
-			if (s.hasErrorInSubtree(article)) {
-				return new ArrayList<KDOMReportMessage>(0);
-			}
 
 			String termName = s.getOriginalText();
 			if (s.get() instanceof KnowWETerm) {
