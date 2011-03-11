@@ -71,12 +71,6 @@
 			<version>4.7.3</version>
 		</dependency>
 		<dependency>
-			<groupId>org.semweb4j</groupId>
-			<artifactId>rdf2go.impl.jena26</artifactId>
-			<version>4.7.3</version>
-		</dependency>
-
-		<dependency>
 			<groupId>com.ontotext</groupId>
 			<artifactId>owlim</artifactId>
 			<version>3.3</version>
@@ -86,13 +80,6 @@
 			<artifactId>trree</artifactId>
 			<version>3.3</version>
 		</dependency>
-		<!--
-		<dependency>
-			<groupId>efzwo</groupId>
-			<artifactId>bigowlim-rdf2go</artifactId>
-			<version>1.0</version>
-		</dependency>
-	 	-->
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-KDOMParseUtils</artifactId>
@@ -105,7 +92,6 @@
 			<version>0.2-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -113,6 +99,13 @@
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
+		<!--
+		<dependency>
+			<groupId>efzwo</groupId>
+			<artifactId>bigowlim-rdf2go</artifactId>
+			<version>1.0</version>
+		</dependency>
+	 	-->
 		
 	</dependencies>
 </project>
