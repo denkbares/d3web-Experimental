@@ -423,7 +423,6 @@ public class TurtleMarkup extends AbstractType {
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Type> s) {
 
-
 			String termName = s.getOriginalText();
 			if (s.get() instanceof KnowWETerm) {
 				termName = ((KnowWETerm) s.get()).getTermName(s);
@@ -444,7 +443,7 @@ public class TurtleMarkup extends AbstractType {
 					if (refs.size() > 0) {
 						Section predSec = getPredicateSection(Sections.findAncestorOfType(
 								s, TurtleMarkup.class));
-						if (predSec.get() instanceof OWLTermReference) {
+						if (predSec != null && predSec.get() instanceof OWLTermReference) {
 							Section<OWLTermReference> prop = predSec;
 							URIObject termObject = prop.get().getTermObject(article, prop);
 							if (termObject == null)

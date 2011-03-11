@@ -37,7 +37,6 @@ import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.message.NoSuchObjectError;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.subtreeHandler.IncrementalConstraint;
-import de.knowwe.core.dashtree.DashSubtree;
 import de.knowwe.core.dashtree.DashTreeElement;
 import de.knowwe.core.dashtree.DashTreeUtils;
 import de.knowwe.termObject.OWLTermReference;
@@ -54,12 +53,10 @@ public class SubClassingDashTreeElement extends DashTreeElement implements
 
 	@Override
 	public boolean violatedConstraints(KnowWEArticle article, Section<SubClassingDashTreeElement> s) {
-		Section<? extends DashSubtree> fatherDashSubtree = DashTreeUtils.getFatherDashSubtree(s);
-		if (fatherDashSubtree == null) return false; // root of dashTree
-		boolean changeInSubtree = DashTreeUtils.isChangeInSubtree(article,
-				fatherDashSubtree, new ArrayList(
-						0));
-		return changeInSubtree;
+		Section<? extends DashTreeElement> fatherDashTreeElement = DashTreeUtils.getFatherDashTreeElement(s);
+		if (fatherDashTreeElement == null) return false; // root of dashTree
+		return fatherDashTreeElement.isOrHasChangedSuccessor(s.getArticle().getTitle(),
+				null);
 	}
 
 	private class SubClassingDashTreeElementOWLSubTreeHandler extends
