@@ -112,9 +112,10 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 
 		}
 
+		return super.wrappContent(sec.getOriginalText(), sec, user);
 
 		// No TimeStamp Cell -> Normal Rendering!
-		return super.wrappContent(sectionText, sec, user);
+		// return super.wrappContent(sectionText, sec, user);
 
 	}
 
