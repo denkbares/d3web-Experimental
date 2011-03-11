@@ -26,24 +26,23 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 public class ExpandedSectionizerModule implements SectionizerModule {
 
 	@Override
-	public Section<?> createSection(String text, Type type, Section<?> father, KnowWEArticle article, SectionFinderResult result) {
+	public Section<?> createSection(String text, Type type, Section<?> father, SectionFinderResult result) {
 		if (result instanceof ExpandedSectionFinderResult) {
-			return createExpandedSection((ExpandedSectionFinderResult) result, type, father,
-					article);
+			return createExpandedSection((ExpandedSectionFinderResult) result, type, father);
 
 		}
 		return null;
 	}
 
-	private Section<?> createExpandedSection(ExpandedSectionFinderResult result, Type type, Section<?> father, KnowWEArticle article) {
+	private Section<?> createExpandedSection(ExpandedSectionFinderResult result, Type type, Section<?> father) {
 
-		Section<?> s = result.get().getParser().parse(result.getText(), father, article);
+		Section<?> s = result.get().getParser().parse(result.getText(), father);
 		// Section<?> s = Section.createSection(result.getText(),
 		// result.get(), father,
 		// result.getStart(), father.getArticle(), null, true);
 
 		for (ExpandedSectionFinderResult childResult : result.getChildren()) {
-			createExpandedSection(childResult, result.get(), s, article);
+			createExpandedSection(childResult, result.get(), s);
 		}
 		return s;
 	}

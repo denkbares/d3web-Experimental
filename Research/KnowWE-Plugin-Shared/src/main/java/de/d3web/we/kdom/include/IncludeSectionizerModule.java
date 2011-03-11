@@ -20,7 +20,6 @@
 
 package de.d3web.we.kdom.include;
 
-import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.SectionizerModule;
 import de.d3web.we.kdom.Type;
@@ -31,10 +30,10 @@ public class IncludeSectionizerModule implements SectionizerModule {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Section<?> createSection(String text, Type type, Section<?> father, KnowWEArticle article, SectionFinderResult result) {
+	public Section<?> createSection(String text, Type type, Section<?> father, SectionFinderResult result) {
 		Section s = null;
 		if (result instanceof IncludeSectionFinderResult) {
-			s = type.getParser().parse(text, father, article);
+			s = type.getParser().parse(text, father);
 			// s = Section.createSection(
 			// thisSection.getOriginalText().substring(
 			// result.getStart(),
