@@ -14,6 +14,7 @@ import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.file.records.io.SingleXMLSessionRepository;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.utils.GlobalSettings;
 
 public class PersistenceD3webUtils {
 
@@ -112,21 +113,40 @@ public class PersistenceD3webUtils {
 							record1);
 
 			D3webConnector.getInstance().setSession(session1);
-			System.out.println(session1.getBlackboard().getValuedObjects());
-
-			// for (TerminologyObject to :
-			// D3webConnector.getInstance().getKb().getManager().getAllTerminologyObjects())
-			// {
-			// if (to instanceof Question) {
-			// Value val = session1.getBlackboard().getValue((ValueObject) to);
-			// System.out.println(to.getName() + ": " + val.toString());
-			// }
-
-			// }
 		}
 		catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Retrieves a listing of cases that can be loaded in the dialog.
+	 * 
+	 * @created 12.03.2011
+	 * @return String representation of the files that can be loaded in the form
+	 *         of an options-list. (For to be included within the corresponding
+	 *         FileSelect-StringTemplate.
+	 */
+	public static String getCaseList(){
+		StringBuffer cases = new StringBuffer();
+		File folder = new File(GlobalSettings.getInstance().getCaseFolder());
+
+		if (folder.listFiles() != null && folder.listFiles().length != 0) {
+			for (File f : folder.listFiles()) {
+
+				// add surrounding HTML fragments
+				cases.append("<option>");
+
+				// add filename
+				cases.append(f.getName());
+				cases.append("</option>");
+			}
+		}
+		else {
+			cases.append("");
+		}
+
+		return cases.toString();
 	}
 }

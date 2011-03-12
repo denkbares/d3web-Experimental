@@ -87,3 +87,5 @@ td { padding: 2px 0; vertical-align: top; height: 100%}
 	padding: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px;
 	-moz-box-shadow: 3px 3px 3px #888; -webkit-box-shadow: 3px 3px 3px #888; box-shadow: 3px 3px 3px #888;
 	border: 1px solid #BBB; font-weight: normal; color: #555; width: 500px; height: 100px;}
+	
+#fileselect{display: none; margin-top: 20px;}

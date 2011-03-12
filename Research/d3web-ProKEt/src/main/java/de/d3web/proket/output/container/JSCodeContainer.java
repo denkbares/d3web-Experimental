@@ -85,6 +85,7 @@ public class JSCodeContainer implements ICodeContainer {
 		linkedBibs.add("jquery/jquery.jstree.js");
 		linkedBibs.add("jquery/jquery.typing.min.js");
 		linkedBibs.add("jquery/jquery.numeric.js");
+		linkedBibs.add("jquery/jquery.customFileInput.js");
 		if (dateAnswer) {
 			linkedBibs.add("jquery/jquery.datepick.pack.js");
 			linkedBibs.add("jquery/jquery.datepick-de.js");

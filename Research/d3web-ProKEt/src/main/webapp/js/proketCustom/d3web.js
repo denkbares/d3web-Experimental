@@ -81,10 +81,14 @@ function d3web_init(){
 		d3web_saveCase(event);
 	});
 	
-	// bind send/save button to sendexit function
+	// bind the loadcase button to making the fileselect list visible
 	$('#loadcase').unbind('click').click(function(event){
-		d3web_loadCase(event);
+		
+		// make selectbox visible
+		var filesel = $('#fileselect');
+		filesel.attr("style", "display:block");
 	});
+	
 }
 
 
@@ -440,9 +444,32 @@ function d3web_show() {
 	});
 }
 
-function d3web_loadCase(event) {
+/**
+ * Retrieves the currently selected value (as text) from the 
+ * case-loading selectbox. This function is directly defined/linked
+ * in the FileSelect.st StringTemplate.
+ * 
+ * @param el The element (selectbox) that called this function
+ */
+function d3web_getSelectedCaseFileAndLoad(el){
+	
+	// get selected text = filename
+	var filename = el.options[el.selectedIndex].text;
+	
+	// call AJAX function for loading the case with specified filename.
+	d3web_loadCase(filename);
+}
 
-	var link = $.query.set("action", "loadcase").toString();
+/**
+ * Sends the name of the case/file that is to be loaded into the
+ * dialog via AJAX so it can be processed by the dialog servlet
+ * (by reading the corresponding "fn" request parameter).
+ * 
+ * @param filename Name of the file to be laoded.
+ */
+function d3web_loadCase(filename) {
+
+	var link = $.query.set("action", "loadcase").set("fn", filename).toString();
 	link = window.location.href.replace(window.location.search, "") + link;
 
 	$.ajax({

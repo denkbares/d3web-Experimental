@@ -39,7 +39,7 @@ public class GlobalSettings {
 
 	public static GlobalSettings getInstance() {
 		if (instance == null) {
-			return new GlobalSettings();
+			instance = new GlobalSettings();
 		}
 		return instance;
 	}
@@ -73,6 +73,8 @@ public class GlobalSettings {
 	private DialogStrategy defaultDialogStrategy = DialogStrategy.DEFAULT;
 	private String defaultCSSSpec = "default"; // TODO
 
+
+	private String caseFolder = "";
 
 	/* The getters for retrieving all those values */
 	public String getProketPath() {
@@ -133,5 +135,13 @@ public class GlobalSettings {
 
 	public String getD3webRendererPath() {
 		return d3webRendererPath;
+	}
+
+	public void setCaseFolder(String folderPath) {
+		caseFolder = folderPath;
+	}
+
+	public String getCaseFolder() {
+		return caseFolder;
 	}
 }

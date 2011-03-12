@@ -65,6 +65,7 @@ import de.d3web.proket.d3web.output.persistence.PersistenceD3webUtils;
 import de.d3web.proket.d3web.output.render.D3webRenderer;
 import de.d3web.proket.d3web.output.render.ID3webRenderer;
 import de.d3web.proket.output.container.ContainerCollection;
+import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.IDUtils;
 
 /**
@@ -116,6 +117,9 @@ public class D3webDialog extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		String folderPath = request.getSession().getServletContext().getRealPath("/cases");
+		GlobalSettings.getInstance().setCaseFolder(folderPath);
 
 		d3wcon = D3webConnector.getInstance();
 
@@ -336,6 +340,7 @@ public class D3webDialog extends HttpServlet {
 
 		// retrieves path to /cases folder on the server
 		String folderPath = request.getSession().getServletContext().getRealPath("/cases");
+		GlobalSettings.getInstance().setCaseFolder(folderPath);
 		PersistenceD3webUtils.saveCaseTimestampOneQuestionVal(folderPath, "Betreffende Klinik");
 	}
 
@@ -351,7 +356,12 @@ public class D3webDialog extends HttpServlet {
 
 		// retrieves path to /cases folder on the server
 		String folderPath = request.getSession().getServletContext().getRealPath("/cases");
-		PersistenceD3webUtils.loadCase(folderPath + "/09032011173416_ABD.xml");
+
+		// get the filename from the corresponding request parameter "fn"
+		String filename = request.getParameter("fn");
+
+		// load the file = path + filename
+		PersistenceD3webUtils.loadCase(folderPath + "/" + filename);
 	}
 
 	/**

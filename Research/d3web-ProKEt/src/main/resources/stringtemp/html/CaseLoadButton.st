@@ -1,3 +1,4 @@
 <div id="loadcase" class="caseButton">
-	Fall laden
+    Fall laden
+	$FileSelect()$
 </div>
