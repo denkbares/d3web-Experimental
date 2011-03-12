@@ -76,16 +76,17 @@ public class RunTestcaseAction extends AbstractAction {
 		List<Section<TestcaseTableLine>> toBeExecutedLines = new LinkedList<Section<TestcaseTableLine>>();
 		toBeExecutedLines.add(line);
 
-		if (multiLines) {
-			findTestcaseIncluding(line, toBeExecutedLines);
-		}
-
 		// saving/recalling execution status
 		String user = context.getUserName();
 		Session session = D3webUtils.getSession(master, user, web);
 		WikiEnvironment wiki = WikiEnvironmentManager.getInstance().getEnvironments(web);
 		Map<String, Object> sessionInfoStore = wiki.getSessionInfoStore(session);
 		Object o = sessionInfoStore.get(master);
+		
+		if (multiLines) {
+			findTestcaseIncluding(line, toBeExecutedLines, o);
+		}
+
 
 
 		if (session == null) return;
@@ -99,6 +100,7 @@ public class RunTestcaseAction extends AbstractAction {
 				List<Section<TestcaseTableLine>> list = new ArrayList<Section<TestcaseTableLine>>();
 				list.add(tctLine);
 				sessionInfoStore.put(master, list);
+				o = sessionInfoStore.get(master);
 			}
 			else if (o instanceof List) {
 				if (((List) o).contains(tctLine)) {
@@ -106,6 +108,7 @@ public class RunTestcaseAction extends AbstractAction {
 				}
 				else {
 					((List) o).add(tctLine);
+					o = sessionInfoStore.get(master);
 				}
 			}
 
@@ -175,21 +178,52 @@ public class RunTestcaseAction extends AbstractAction {
 
 	}
 
-	private void findTestcaseIncluding(Section<TestcaseTableLine> line, List<Section<TestcaseTableLine>> list) {
-		long originalTimeStampValue = TimeStampType.getTimeInMillis(Sections.findSuccessor(
-				line.getChildren().get(0),
-				TimeStampType.class));
+	@SuppressWarnings("unchecked")
+	private void findTestcaseIncluding(Section<TestcaseTableLine> line, List<Section<TestcaseTableLine>> list, Object sessionInfoStore) {
+
+		// find all executed lines
+		List<Section> executed = new ArrayList<Section>();
+		if (sessionInfoStore instanceof List) {
+			List l = (List) sessionInfoStore;
+
+			for (Object o : l) {
+				if (o instanceof Section) {
+					executed.add((Section) o);
+				}
+			}
+		}
+
+		// find the line executed line with the biggest timestamp
+		long maxTimeStampValue = -1;
+		for (Section tctLine : executed) {
+			if (maxTimeStampValue == -1) {
+				maxTimeStampValue = TimeStampType.getTimeInMillis(Sections.findSuccessor(
+						(Section) tctLine.getChildren().get(0),
+						TimeStampType.class));
+			}
+			else {
+				Math.max(maxTimeStampValue, TimeStampType.getTimeInMillis(Sections.findSuccessor(
+						(Section) tctLine.getChildren().get(0),
+								TimeStampType.class)));
+			}
+		}
 
 		Section<TestcaseTable> table = (Section<TestcaseTable>) line.getFather();
 		List<Section<? extends Type>> lines = table.getChildren();
 
+		// only execute lines which are not yet executed and whose
+		// timestamp is bigger than the biggest of the already
+		// executed ones
 		for (Section<? extends Type> l : lines) {
+			if (executed.contains(l)) {
+				continue;
+			}
 			if (!(l.get() instanceof HeaderLine)) {
 				Section<TestcaseTableLine> currentLine = (Section<TestcaseTableLine>) l;
 				long currentTimeStampValue = TimeStampType.getTimeInMillis(Sections.findSuccessor(
 						currentLine.getChildren().get(
 								0), TimeStampType.class));
-				if (currentTimeStampValue < originalTimeStampValue) {
+				if (currentTimeStampValue > maxTimeStampValue) {
 					list.add(currentLine);
 				}
 

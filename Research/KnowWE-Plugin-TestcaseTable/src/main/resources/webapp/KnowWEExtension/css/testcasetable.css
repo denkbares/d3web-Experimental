@@ -49,11 +49,11 @@ div.startTestcaseIncluding{
 	cursor: pointer;
 }
 
-td.testcaseExecuted{
+tr.testcaseExecuted td{
 	background-color: #CDFECD ;
 }
 
-td.testcaseUnavailable{
+tr.testcaseUnavailable td{
 	background-color: #FF6633 ;
 }
 

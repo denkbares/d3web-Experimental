@@ -52,6 +52,7 @@ public class TestcaseTableLine extends TableLine {
 	public static final String TESTCASE_KEY = "TESTCASE";
 
 	public TestcaseTableLine() {
+		setCustomRenderer(new TestcaseTableLineRenderer());
 		try {
 			replaceChildType(new Cell(), TableCell.class);
 		}

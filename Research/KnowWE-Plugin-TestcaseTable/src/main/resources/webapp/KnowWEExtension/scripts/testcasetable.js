@@ -345,34 +345,23 @@ Testcase.colorExecutedLines = function(element, including) {
 
 	if (including) {
 		for (var i = 1; i < trs.length; i++) {
-			cells = trs[i].childNodes;
-			if (cells[0].className == 'testcaseUnavailable') {
+			if (trs[i].className == 'testcaseUnavailable') {
 				continue;
 			}
-			for (var j = 0; j < cells.length; j++) {
-				cells[j].className = 'testcaseExecuted';
-			}
+			trs[i].className = 'testcaseExecuted';
 			if (trs[i] == element.parentNode.parentNode) {
 				return;
 			}
 		}
 	} else {
 		for (var i = 1; i < trs.length; i++) {
-			if (trs[i] == currentLine) {
+			if (trs[i] == currentLine || trs[i].className == 'testcaseExecuted') {
 				break;
-			}
-			cells = trs[i].childNodes;
-			for (var j = 0; j < cells.length; j++) {
-				if (cells[j].className == 'testcaseExecuted') {
-					break;
-				} else {
-					cells[j].className = 'testcaseUnavailable';
-				}
+			} else {
+				trs[i].className = 'testcaseUnavailable';
 			}
 		}
-		for (var i = 0; i < currentLine.childNodes.length; i++) {
-			currentLine.childNodes[i].className = 'testcaseExecuted';
-		}
+		currentLine.className = 'testcaseExecuted';
 	}
 }
 
@@ -418,11 +407,8 @@ Testcase.resetTableCSS = function(sectionID) {
 	for (var i = 0; i < tables.length; i++) {
 		trs = tables[i].getElements('tr');
 		for (var j = 1; j < trs.length; j++) {
-			tds = trs[j].getElements('td');
-			for (var k = 0; k < tds.length; k++) {
-				tds[k].removeClass('testcaseExecuted');
-				tds[k].removeClass('testcaseUnavailable');
-			}
+			trs[j].removeClass('testcaseExecuted');
+			trs[j].removeClass('testcaseUnavailable');
 		}
 	}
 }
