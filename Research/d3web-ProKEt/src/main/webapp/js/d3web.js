@@ -24,6 +24,14 @@
  */
 $(function() {
 
+	// creating and configuring the confirmation dialog
+	$(function(){ 
+		var opts = {
+			autoOpen: false
+		};
+		$("#jqConfirmDialog").dialog(opts);
+	});
+	
 	// on page load, init the JS binding to the dialog elements
 	d3web_init();
 	
@@ -76,9 +84,16 @@ function d3web_init(){
 		d3web_resetSession();
 	});
 	
+	
 	// bind send/save button to sendexit function
 	$('#savecase').unbind('click').click(function(event){
-		d3web_saveCase(event);
+		
+		alert("before")
+		
+		$('#jqConfirmDialog').dialog("open");
+		alert("after");
+		
+		//d3web_saveCase(event);
 	});
 	
 	// bind the loadcase button to making the fileselect list visible
@@ -88,7 +103,6 @@ function d3web_init(){
 		var filesel = $('#fileselect');
 		filesel.attr("style", "display:block");
 	});
-	
 }
 
 

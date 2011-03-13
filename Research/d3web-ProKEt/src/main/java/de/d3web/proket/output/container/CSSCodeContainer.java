@@ -48,7 +48,9 @@ public class CSSCodeContainer implements ICodeContainer {
 	 * @param cssElement the css element that is extended
 	 */
 	public void addStyle(String string, String cssElement) {
-		if (string == null || string.length() == 0) return;
+		if (string == null || string.length() == 0) {
+			return;
+		}
 
 		StringBuilder stringBuilder = new StringBuilder("\n" + cssElement
 				+ " {\n");
@@ -73,14 +75,15 @@ public class CSSCodeContainer implements ICodeContainer {
 		Vector<String> linkedStyles = new Vector<String>();
 
 		// in case of dateAnswers link jquery datepicker style
-		if (dateAnswer) {
-			linkedStyles.add("jquery.datepick.css");
-		}
+		// if (dateAnswer) {
+		// linkedStyles.add("jquery.datepick.css");
+		// }
+		linkedStyles.add("jqueryUI/jquery-ui-1.8.10.lightness.css");
 
 		// link invariant js files to use browser caching
 		for (String filename : linkedStyles) {
 			output.append(
-					"<link rel=\"stylesheet\" type=\"text/css\" href=\"css/")
+					"<link rel=\"stylesheet\" type=\"text/css\" href=\"libsExternal/")
 					.append(filename).append("\"/>\n");
 		}
 

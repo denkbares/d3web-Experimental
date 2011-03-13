@@ -77,15 +77,18 @@ public class JSCodeContainer implements ICodeContainer {
 	public String generateOutput() {
 		StringBuffer output = new StringBuffer();
 		Vector<String> linkedBibs = new Vector<String>();
+		Vector<String> ownBibs = new Vector<String>();
 
 		// FIRST define all necessary bibs
-		linkedBibs.add("jquery/jquery.min.js");
-		linkedBibs.add("jquery/jquery-ui-position.min.js");
+		linkedBibs.add("jquery/jquery-1.5.min.js");
+		// linkedBibs.add("jquery/jquery.min.js");
+		// linkedBibs.add("jquery/jquery-ui-position.min.js");
 		linkedBibs.add("jquery/jquery.cookie.js");
 		linkedBibs.add("jquery/jquery.jstree.js");
 		linkedBibs.add("jquery/jquery.typing.min.js");
 		linkedBibs.add("jquery/jquery.numeric.js");
 		linkedBibs.add("jquery/jquery.customFileInput.js");
+		linkedBibs.add("jqueryUI/jqueryUi-1.8.10.all.min.js");
 		if (dateAnswer) {
 			linkedBibs.add("jquery/jquery.datepick.pack.js");
 			linkedBibs.add("jquery/jquery.datepick-de.js");
@@ -97,12 +100,12 @@ public class JSCodeContainer implements ICodeContainer {
 			linkedBibs.add("jquery/jquery.maphilight.min.js");
 		}
 		if (d3web) {
-			linkedBibs.add("proketCustom/d3web.js");
-			linkedBibs.add("proketCustom/d3webBasic.js");
+			ownBibs.add("d3web.js");
+			ownBibs.add("d3webBasic.js");
 			linkedBibs.add("jquery/jquery.object.js");
 			add("var d3web = true;", 0);
 		} else {
-			linkedBibs.add("proketCustom/code.js");
+			ownBibs.add("proketCustom/code.js");
 			add("var d3web = false;", 0);
 		}
 
@@ -111,21 +114,28 @@ public class JSCodeContainer implements ICodeContainer {
 		// assemble all defined bibs to one String
 		for (String filename : linkedBibs) {
 			output.append(
+					"<script language=\"javascript\" type=\"text/javascript\" src=\"libsExternal/")
+					.append(filename).append("\"></script>\n");
+		}
+
+		for (String filename : ownBibs) {
+			output.append(
 					"<script language=\"javascript\" type=\"text/javascript\" src=\"js/")
 					.append(filename).append("\"></script>\n");
 		}
 
 		// append the JS code that is written directly into the output HTML file
-		output.append("<script language=\"javascript\" type=\"text/javascript\"><!--\n");
+		output.append("<script language=\"javascript\" type=\"text/javascript\">\n");
 		// add data ordered, supporting up to 32 order levels
 		for (int i = 0; i < 32; i++) {
 			if (data.get(i) != null) {
 				output.append(data.get(i));
 			}
 		}
-		output.append("\n//--></script>\n");
+		output.append("\n</script>\n");
 
 
+		
 		// THIRD remove debug lines for Firebug
 		if (!debug) {
 			String x = output.toString().replaceAll("console\\.", "//console.");

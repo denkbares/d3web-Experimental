@@ -135,7 +135,6 @@ public class D3webRenderer implements ID3webRenderer {
 
 		/* fill some basic attributes */
 		st.setAttribute("header", D3webConnector.getInstance().getHeader());
-		st.setAttribute("cltest", "HHHHAAAAAAAAALO");
 
 		// load case list
 		String opts = PersistenceD3webUtils.getCaseList();
@@ -423,12 +422,15 @@ public class D3webRenderer implements ID3webRenderer {
 	 */
 	protected void defineAndAddJS(ContainerCollection cc) {
 		cc.js.enableD3Web();
-		cc.js.add("$(function() {init_all();});", 1);
-		cc.js.add("function init_all() {", 1);
-		cc.js.add("building = true;", 2);
-		cc.js.add("building = false;", 2);
-		cc.js.add("generate_tooltip_functions();", 3);
-		cc.js.add("}", 31);
+		// cc.js.add("$(function() {init_all();});", 1);
+		// cc.js.add("function init_all() {", 1);
+		// cc.js.add("building = true;", 2);
+		// cc.js.add("building = false;", 2);
+		// cc.js.add("generate_tooltip_functions();", 3);
+		// cc.js.add("}", 31);
+
+		// cc.js.add("$(function() { d3web_init(); });", 1);
+
 	}
 
 	/**
