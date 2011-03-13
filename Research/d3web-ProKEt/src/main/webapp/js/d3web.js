@@ -24,16 +24,29 @@
  */
 $(function() {
 
-	// creating and configuring the confirmation dialog
+	/* creating and configuring the jquery UI confirmation dialog */
 	$(function(){ 
+		
 		var opts = {
-			autoOpen: false
+			autoOpen: false,
+			position: top,
+			modal: true,
+			width: 400,
+			height: 150,
+			minWidth: 400,
+			minHeight: 150,
+			buttons: {
+				"JA, Daten speichern.": d3web_sendSave,
+				"NEIN, weiter eingeben.": closeJQConfirmDialog
+			}
 		};
 		$("#jqConfirmDialog").dialog(opts);
 	});
 	
-	// on page load, init the JS binding to the dialog elements
-	d3web_init();
+	
+	/* Initialize the JS binding to the dialog elements */
+	initFunctionality();
+	
 	
 	// make navigation work on d3web level
 	//$(".navigation-item").each(function() {
@@ -50,7 +63,7 @@ $(function() {
  * sending of values if either a radio-button has been clicked,
  * or one or more num vals have been entered followed by pressing enter.
  */
-function d3web_init(){
+function initFunctionality(){
 	
 	/* bind "get selected facts" method to radio buttons, checkboxes
 	 * and textareas
@@ -87,13 +100,7 @@ function d3web_init(){
 	
 	// bind send/save button to sendexit function
 	$('#savecase').unbind('click').click(function(event){
-		
-		alert("before")
-		
-		$('#jqConfirmDialog').dialog("open");
-		alert("after");
-		
-		//d3web_saveCase(event);
+		d3web_prepareSave();
 	});
 	
 	// bind the loadcase button to making the fileselect list visible
@@ -327,7 +334,7 @@ function d3web_addfactsRemembering(store, qid, pos) {
 
 		//if (html != "same") {			// replace target id of content if not the same
 			window.location.reload();
-			d3web_init();
+			initFunctionality();
 		//}
 		}
 	});
@@ -369,62 +376,32 @@ function d3web_resetSession() {
 		url : link,
 		success : function(html) {
 			window.location.reload(true);
-			d3web_init();
+			initFunctionality();
 		}
 	});
 }
 
 
-/**
- * Function called when finally saving a d3web case.
- */
-function d3web_saveCase(id, event) {
-
+function d3web_prepareSave(){
+	
 	// get number of unanswered questions
 	questionsAll = $('#content [id^="q_"]');
 	questionsAnswered = questionsAll.filter('[class$="question-d"]');
 	questionsUnanswered = questionsAll.size() - questionsAnswered.size();
-
-	// display popup TODO
-	alert("Es sind noch " + questionsUnanswered + " Fragen unbeantwortet.");
 	
-	// bestätigen: nein nicht absenden
-	// bestätigen: ja absenden
-	d3web_getRemainingFacts();
-
-	/*var sendexit_button = $(id);
-
-	var divHTML = '<b>Test:</b><br />';
-	divHTML = divHTML + ('Es sind noch ' + questionsUnanswered + 'Fragen im Dialog unbeantwortet.');
-	divHTML = divHTML + ('Um diese noch zu beantworten, klicken Sie auf \'Zurück zum Dialog\'.');
-	divHTML = divHTML + ('Andernfalls klicken Sie auf \'Daten abschicken\' <br><br>');
-
-	var send_popup = $("#send_popup");
-	// try to get existing popup window, else create it
-	if (send_popup.size() == 0) {
-		$("body").append('<div id="send_popup"></div>');
-		send_popup = $("#send_popup");
+	var qua = "<b> " + questionsUnanswered + " </b>";
+	$('#numberUnanswered').html(qua);
+	
+	if(questionsUnanswered !== 0){
+		$('#jqConfirmDialog').dialog("open");
 	}
-	// Set the basic HTML
-	send_popup.attr('innerHTML', divHTML);
-
-	send_popup.position({
-		"my" : "left top",  // which position of popup to align to target
-		"at" : "left top", // which position of target popup is aligned to
-		"of" : "#sendexit",
-		"offset" : "0 0",
-		"collision" : "fit flip",
-		"bgiframe" : false
-	});
-
-	send_popup.show(0);
-
-	// show div
-	send_popup.fadeIn(250);*/
+	
 }
 
 function d3web_sendSave() {
 
+	//d3web_getRemainingFacts();
+	
 	var link = $.query.set("action", "savecase").toString();
 	link = window.location.href.replace(window.location.search, "") + link;
 
@@ -452,7 +429,7 @@ function d3web_show() {
 
 		//if (html != "same") {			// replace target id of content if not the same
 			window.location.reload();
-			d3web_init();
+			initFunctionality();
 		//}
 		}
 	});
@@ -495,7 +472,7 @@ function d3web_loadCase(filename) {
 
 		//if (html != "same") {			// replace target id of content if not the same
 			window.location.reload();
-			d3web_init();
+			initFunctionality();
 		//}
 		}
 	});
@@ -527,7 +504,7 @@ function d3web_nextform() {
 		success : function(html) {			// compare resulting html to former
 			if (html != "same") {			// replace target id of content if not the same
 				window.location.reload();
-				d3web_init();
+				initFunctionality();
 			}
 		}
 	});
@@ -615,4 +592,8 @@ function d3web_show_solutions(target_id) {
 			$('#' + target_id).html(html).fadeIn(3000);
 		}
 	});
+}
+
+function closeJQConfirmDialog(){
+	$('#jqConfirmDialog').dialog('close');
 }

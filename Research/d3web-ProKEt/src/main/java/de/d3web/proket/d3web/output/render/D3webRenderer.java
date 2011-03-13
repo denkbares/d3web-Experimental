@@ -429,8 +429,6 @@ public class D3webRenderer implements ID3webRenderer {
 		// cc.js.add("generate_tooltip_functions();", 3);
 		// cc.js.add("}", 31);
 
-		// cc.js.add("$(function() { d3web_init(); });", 1);
-
 	}
 
 	/**
