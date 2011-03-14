@@ -57,7 +57,12 @@ GENERAL:
 
 --------------------------------
 
-- KLÄREN: Speichern/Laden von Fällen im Mediastinitis
-- Add Info 1. Frage dazu + Popup
-- Abfrage beim speichern-Popup vervollständigen
 
+- Add Info 1. Frage dazu + Popup
+DONE - Abfrage beim speichern-Popup vervollständigen
+
+- KLÄREN: Speichern/Laden von Fällen im Mediastinitis
+-- Falls nachbearbeiten nicht erwünscht und NUR ansehen der Ergebnisse (so verstehe ich das): einfach per Zeitstempel und ggf Klinikkürzel speichern. 
+   Ansehen dann über Weboberfläche von Flo...
+-- Falls nachbearbeiten erwünscht?! KLÄREN
+   -- DATEINAME?! 
