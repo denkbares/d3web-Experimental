@@ -32,6 +32,7 @@ import de.knowwe.kdom.TestChildren3;
 public class TestTypeWithConstraint extends TermDefinition {
 
 	public TestTypeWithConstraint() {
+
 		childrenTypes.add(new TestChildren1());
 		childrenTypes.add(new TestChildren2());
 		childrenTypes.add(new TestChildren3());

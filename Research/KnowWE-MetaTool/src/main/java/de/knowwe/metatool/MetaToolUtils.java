@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
- * Computer Science VI, University of Wuerzburg
+ * Copyright (C) 2011 University Wuerzburg, Computer Science VI
  *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
@@ -17,26 +16,23 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
+package de.knowwe.metatool;
 
-package de.knowwe.kdom;
+/**
+ *
+ * @author Sebastian Furth
+ * @created Mar 14, 2011
+ */
+public class MetaToolUtils {
 
-import de.d3web.we.kdom.objects.TermDefinition;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.knowwe.kdom.TestChildren1;
-import de.knowwe.kdom.TestChildren2;
-import de.knowwe.kdom.TestChildren3;
+	public static String extractSectionFinderValue(ParameterizedClass sectionFinder) {
+		if (sectionFinder.getClassName().equals("ConstraintSectionFinder")
+					&& sectionFinder.getValue() instanceof ParameterizedClass) {
+			ParameterizedClass innerSectionFinder = (ParameterizedClass) sectionFinder.getValue();
+			return (String) innerSectionFinder.getValue();
 
-public class TestType extends TermDefinition {
-
-	public TestType() {
-
-		childrenTypes.add(new TestChildren1());
-		childrenTypes.add(new TestChildren2());
-		childrenTypes.add(new TestChildren3());
-		setSectionFinder(new RegexSectionFinder(".*"));
-
-		setCustomRenderer(new StyleRenderer("color:red"));
+		}
+		return (String) sectionFinder.getValue();
 	}
 
 }

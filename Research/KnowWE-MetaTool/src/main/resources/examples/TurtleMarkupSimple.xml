@@ -9,7 +9,7 @@
 		SuperTypeClass="AbstractType" SuperTypePackage="de.d3web.we.kdom"
 		Parent="A0" Position="0">
 		<SectionFinder ClassName="RegexSectionFinder"
-			PackageName="de.d3web.we.kdom.sectionFinder" Value='"\\\\b([^\\\\s]*)::", Pattern.DOTALL, 1' />
+			PackageName="de.d3web.we.kdom.sectionFinder" Value='"\\\\b([^\\\\s]+)::", Pattern.DOTALL, 1' />
 		<Color>red</Color>
 	</ObjectType>
 	<ObjectType ID="B0" PackageName="de.knowwe.kdom" ClassName="Subject"

@@ -2,10 +2,14 @@ package de.knowwe.metatool;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
@@ -48,6 +52,7 @@ public class ObjectType {
 	private final boolean exists;
 
 	private final List<ObjectType> children = new LinkedList<ObjectType>();
+	private final Map<String, String> anonymousChildren = new HashMap<String, String>();
 	private boolean expanded = false;
 
 	private ObjectType(Builder b) {
@@ -135,15 +140,38 @@ public class ObjectType {
 	 * @return All Children of the ObjectType.
 	 */
 	public List<ObjectType> getChildren() {
-		if (!expanded) {
-			addPlainTextChildren();
-			expanded = true;
-		}
 		return Collections.unmodifiableList(this.children);
 	}
 
+	public Map<String, String> getImplicitAnonymousChildren() {
+		if (!expanded && sectionFinder != null) {
+			addPlainTextChildren();
+			expanded = true;
+		}
+		return anonymousChildren;
+	}
+
 	private void addPlainTextChildren() {
-		// TODO Auto-generated method stub
+		String value = MetaToolUtils.extractSectionFinderValue(sectionFinder);
+		String patternStr = "\"(.*)(\\(.*\\))(.*)\"\\s*,\\s*Pattern.*\\s*,\\s*\\d";
+
+		Pattern pattern = Pattern.compile(patternStr);
+		Matcher matcher = pattern.matcher(value);
+		boolean matchFound = matcher.find();
+
+		if (matchFound && matcher.groupCount() == 3) {
+			// Necessary import
+			imports.add(new QualifiedClass("de.d3web.we.kdom.type", "AnonymousType"));
+			// add anonymous types
+			String before = matcher.group(1);
+			if (before != null && !before.isEmpty()) {
+				anonymousChildren.put("Before", matcher.group(1));
+			}
+			String after = matcher.group(3);
+			if (after != null && !after.isEmpty()) {
+				anonymousChildren.put("After", matcher.group(3));
+			}
+		}
 
 	}
 
@@ -429,18 +457,8 @@ public class ObjectType {
 		}
 
 		private void checkPatternImport() {
-			String value = "";
-			if (sectionFinder.getClassName().equals("RegexSectionFinder")) {
-				value = (String) sectionFinder.getValue();
-			}
-			else if (sectionFinder.getClassName().equals("ConstraintSectionFinder")
-						&& sectionFinder.getValue() instanceof ParameterizedClass) {
-				ParameterizedClass innerSectionFinder = (ParameterizedClass) sectionFinder.getValue();
-				if (innerSectionFinder.getClassName().equals("RegexSectionFinder")) {
-					value = (String) innerSectionFinder.getValue();
-				}
-			}
-			if (value.contains("Pattern")) {
+			String value = MetaToolUtils.extractSectionFinderValue(sectionFinder);
+			if (value.matches("\".*\"\\s*,\\s*Pattern.*\\s*,\\s*\\d")) {
 				imports.add(new QualifiedClass("java.util.regex", "Pattern"));
 			}
 		}

@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.util.Collection;
+import java.util.Map;
 
 import de.knowwe.metatool.ObjectType;
 import de.knowwe.metatool.ParameterizedClass;
@@ -53,6 +54,7 @@ public class JavaWriter implements ObjectTypeWriter {
 	private final String SECTIONFINDER = "%SECTIONFINDER%";
 	private final String CONSTRAINTS = "%CONSTRAINTS%";
 	private final String CHILDREN = "%CHILDREN%";
+	private final String ANONYMOUSCHILDREN = "%ANONYMOUSCHILDREN%";
 	private final String STYLERENDER = "%STYLERENDERER%";
 	private final String INDENT = "		";
 
@@ -81,13 +83,15 @@ public class JavaWriter implements ObjectTypeWriter {
 		template = template.replaceAll(PACKAGE, type.getPackageName());
 		template = template.replaceAll(CLASSNAME, type.getClassName());
 		template = template.replaceAll(SUPERTYPE, type.getSuperType().getClassName());
-		template = replaceImports(type.getImports(), template);
+		template = replaceAnonymousChildren(type.getImplicitAnonymousChildren(), template);
 		template = replaceChildren(type.getChildren(), template);
 
 		boolean constraints = type.getConstraints().size() > 0;
 		template = replaceSectionFinder(type.getSectionFinder(), template, constraints);
 		template = replaceConstraints(type.getConstraints(), template);
 		template = replaceColor(type.getColor(), template);
+		// do this at the end, because imports could have been added before
+		template = replaceImports(type.getImports(), template);
 
 		// save JAVA file
 		BufferedWriter bw = new BufferedWriter(w);
@@ -135,6 +139,34 @@ public class JavaWriter implements ObjectTypeWriter {
 		return template.replaceAll(IMPORTS, statements.toString());
 	}
 
+	private String replaceAnonymousChildren(Map<String, String> anonymousChildren, String template) {
+		StringBuilder instantiations = new StringBuilder();
+		for (String anonType : anonymousChildren.keySet()) {
+			// Instantiation of AnonymousType
+			instantiations.append(INDENT);
+			instantiations.append("AnonymousType ");
+			instantiations.append(anonType.toLowerCase());
+			instantiations.append(" = new AnonymousType(\"");
+			instantiations.append(anonType);
+			instantiations.append("\");\n");
+			// Configure SectionFinder
+			instantiations.append(INDENT);
+			instantiations.append(anonType.toLowerCase());
+			instantiations.append(".setSectionFinder(");
+			instantiations.append("new RegexSectionFinder(\"");
+			instantiations.append(anonymousChildren.get(anonType));
+			instantiations.append("\"));\n");
+			// Add AnonymousType as child
+			instantiations.append(INDENT);
+			instantiations.append("childrenTypes.add(");
+			instantiations.append(anonType.toLowerCase());
+			instantiations.append(");\n");
+		}
+		if (instantiations.length() > 0) {
+			instantiations.delete(instantiations.length() - 1, instantiations.length());
+		}
+		return template.replaceAll(ANONYMOUSCHILDREN, instantiations.toString());
+	}
 
 	private String replaceChildren(Collection<ObjectType> children, String template) {
 		StringBuilder instantiations = new StringBuilder();
