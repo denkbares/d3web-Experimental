@@ -20,7 +20,6 @@ package de.d3web.we.testcase;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -86,7 +85,6 @@ public class RunTestcaseAction extends AbstractAction {
 		
 		if (multiLines) {
 			findTestcaseIncluding(line, toBeExecutedLines, o);
-			Collections.sort(toBeExecutedLines);
 		}
 
 
@@ -184,7 +182,6 @@ public class RunTestcaseAction extends AbstractAction {
 	 */
 	private long getPropagationTime(Session session, KnowledgeBase kb, long offSet) {
 
-		System.out.println(offSet);
 		Question question = kb.getManager().searchQuestion("start");
 		if (question == null) { // no timeDB present
 			return offSet;
@@ -225,16 +222,10 @@ public class RunTestcaseAction extends AbstractAction {
 		// find the line executed line with the biggest timestamp
 		long maxTimeStampValue = -1;
 		for (Section tctLine : executed) {
-			if (maxTimeStampValue == -1) {
-				maxTimeStampValue = TimeStampType.getTimeInMillis(Sections.findSuccessor(
-						(Section) tctLine.getChildren().get(0),
-						TimeStampType.class));
-			}
-			else {
-				Math.max(maxTimeStampValue, TimeStampType.getTimeInMillis(Sections.findSuccessor(
-						(Section) tctLine.getChildren().get(0),
+			maxTimeStampValue = Math.max(maxTimeStampValue,
+						TimeStampType.getTimeInMillis(Sections.findSuccessor(
+								(Section) tctLine.getChildren().get(0),
 								TimeStampType.class)));
-			}
 		}
 
 		Section<TestcaseTable> table = (Section<TestcaseTable>) line.getFather();

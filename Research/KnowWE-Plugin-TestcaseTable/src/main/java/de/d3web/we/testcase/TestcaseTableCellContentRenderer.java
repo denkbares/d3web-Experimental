@@ -33,6 +33,8 @@ import de.d3web.we.utils.KnowWEUtils;
  */
 public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 
+	private final String invalidTimeStamp = "invalidTimeStamp";
+
 	/**
 	 * Wraps the content of the cell (sectionText) with the HTML-Code needed for
 	 * the table
@@ -68,7 +70,7 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 						+ sec.getID() + "\"></div>");
 			}
 			else {
-				html.append("<td class=\"invalidTimeStamp testcaseLineHeader\"></div>");
+				html.append("<td class=\"" + invalidTimeStamp + " testcaseLineHeader\"></div>");
 			}
 
 			generateContent(sec.getOriginalText(), sec, user, sec.getID(), html);

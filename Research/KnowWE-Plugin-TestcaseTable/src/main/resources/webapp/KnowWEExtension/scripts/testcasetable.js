@@ -1,4 +1,8 @@
 var Testcase = {};
+
+Testcase.testcaseSkipped = "testcaseSkipped";
+Testcase.testcaseExecuted = "testcaseExecuted";
+
 /**
  * adds a new row (as last row) to the table
  */
@@ -284,6 +288,9 @@ Testcase.runTestcase = function(id, including) {
             action : 'none',
             fn : function(){
 				KNOWWE.helper.observer.notify('update');
+//				var element = $(id);
+//				var table = Testcase.findParentWikiTable(element);
+//				KNOWWE.core.rerendercontent.updateNode(table.parentNode.id, topic, null);
 			}
 
         }
@@ -346,24 +353,26 @@ Testcase.colorExecutedLines = function(id, including) {
 
 	if (including) {
 		for (var i = 1; i < trs.length; i++) {
-			if (trs[i].className == 'testcaseUnavailable') {
-				continue;
-			}
-			trs[i].className = 'testcaseExecuted';
-			if (trs[i] == element.parentNode.parentNode) {
-				return;
-			}
+			if (trs[i] == currentLine) { 
+                break; 
+           } else if (trs[i].className == Testcase.testcaseExecuted || trs[i].className == Testcase.testcaseSkipped) { 
+                continue; 
+           } else { 
+                trs[i].className = Testcase.testcaseExecuted; 
+           }
 		}
 	} else {
 		for (var i = 1; i < trs.length; i++) {
-			if (trs[i] == currentLine || trs[i].className == 'testcaseExecuted') {
+			if (trs[i] == currentLine) {
 				break;
+			} else if (trs[i].className == Testcase.testcaseExecuted) {
+				continue;
 			} else {
-				trs[i].className = 'testcaseUnavailable';
+				trs[i].className = Testcase.testcaseSkipped;
 			}
 		}
-		currentLine.className = 'testcaseExecuted';
 	}
+	currentLine.className = Testcase.testcaseExecuted;
 }
 
 /**
@@ -408,8 +417,8 @@ Testcase.resetTableCSS = function(sectionID) {
 	for (var i = 0; i < tables.length; i++) {
 		trs = tables[i].getElements('tr');
 		for (var j = 1; j < trs.length; j++) {
-			trs[j].removeClass('testcaseExecuted');
-			trs[j].removeClass('testcaseUnavailable');
+			trs[j].removeClass(Testcase.testcaseExecuted);
+			trs[j].removeClass(Testcase.testcaseSkipped);
 		}
 	}
 }

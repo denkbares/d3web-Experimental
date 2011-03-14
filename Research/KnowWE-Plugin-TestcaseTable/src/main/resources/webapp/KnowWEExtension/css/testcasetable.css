@@ -53,7 +53,7 @@ tr.testcaseExecuted td{
 	background-color: #CDFECD ;
 }
 
-tr.testcaseUnavailable td{
+tr.testcaseSkipped td{
 	background-color: #FF6633 ;
 }
 
@@ -84,10 +84,10 @@ td.testcaseLineHeader {
 	min-width: 50px;
 }
 
-td.testcaseExecuted div {
+tr.testcaseExecuted td div {
 	display: none;
 }
 
-td.testcaseUnavailable div {
+tr.testcaseSkipped td div {
 	display: none;
 }

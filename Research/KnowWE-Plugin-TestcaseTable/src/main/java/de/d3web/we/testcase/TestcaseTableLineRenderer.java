@@ -41,6 +41,9 @@ import de.d3web.we.utils.KnowWEUtils;
  */
 public class TestcaseTableLineRenderer extends KnowWEDomRenderer<TestcaseTableLine> {
 
+	private final String testcaseExecuted = "testcaseExecuted";
+	private final String testcaseSkipped = "testcaseSkipped";
+
 	@Override
 	public void render(KnowWEArticle article, Section<TestcaseTableLine> sec, UserContext user, StringBuilder string) {
 		StringBuilder b = new StringBuilder();
@@ -80,7 +83,7 @@ public class TestcaseTableLineRenderer extends KnowWEDomRenderer<TestcaseTableLi
 
 		if (sessionInfoStoreForArticle instanceof List) {
 			if (((List) sessionInfoStoreForArticle).contains(line)) {
-				return "testcaseExecuted";
+				return testcaseExecuted;
 			}
 
 			List list = (List) sessionInfoStoreForArticle;
@@ -101,7 +104,7 @@ public class TestcaseTableLineRenderer extends KnowWEDomRenderer<TestcaseTableLi
 		}
 
 		if (time < currentMax) {
-			return "testcaseUnavailable";
+			return testcaseSkipped;
 		}
 		else {
 			return "";
