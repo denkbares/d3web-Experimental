@@ -32,6 +32,7 @@ import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
+import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
@@ -104,6 +105,8 @@ public class QuestionD3webRenderer extends D3webRenderer {
 		Blackboard bb = sess.getBlackboard();
 		Value val = bb.getValue((ValueObject) to);
 		Indication ind = bb.getIndication((InterviewObject) to);
+
+		to.getInfoStore().getValue(MMInfo.DESCRIPTION);
 
 		/* the following handles follow-up questions that get activated */
 		/* in the course of the interview (by indication) */
