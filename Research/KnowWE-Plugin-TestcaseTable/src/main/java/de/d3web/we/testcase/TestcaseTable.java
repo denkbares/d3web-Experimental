@@ -50,7 +50,7 @@ public class TestcaseTable extends Table {
 
 	@Override
 	public boolean isSortable() {
-		return true;
+		return false;
 	}
 
 	/**

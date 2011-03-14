@@ -267,13 +267,13 @@ Testcase.saveInputAfterChange = function(event) {
 /**
  * runs a Testcase via RunTestcaseAction
  */
-Testcase.runTestcase = function(element, including) {
+Testcase.runTestcase = function(id, including) {
 	var topic = KNOWWE.helper.gup('page')
 	
 	var params = {
         action : 'RunTestcaseAction',
         KWiki_Topic : topic,
-        execLine : element.id,
+        execLine : id,
         multiLines : including
     }
 
@@ -289,7 +289,7 @@ Testcase.runTestcase = function(element, including) {
         }
     }
     new _KA( options ).send();
-	Testcase.colorExecutedLines(element, including);	
+	Testcase.colorExecutedLines(id, including);	
 }
 
 
@@ -338,7 +338,8 @@ Testcase.saveTable = function() {
 /**
  * colors lines after their execution
  */
-Testcase.colorExecutedLines = function(element, including) {
+Testcase.colorExecutedLines = function(id, including) {
+	var element = $(id);
 	var trs = element.parentNode.parentNode.parentNode.childNodes;
 	var currentLine = element.parentNode.parentNode;
 	var cells = "";

@@ -40,16 +40,11 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 	@Override
 	protected String wrappContent(String sectionText, Section<TableCellContent> sec, UserContext user) {
 
-		int col = TableCellContent.getCol(sec);
-		int row = TableCellContent.getRow(sec);
+		Section<TimeStampType> timestamp = Sections.findSuccessor(sec, TimeStampType.class);
 
+		// Check if there is a (valid) TimeStamp
+		if (timestamp != null) {
 
-
-
-		// Check if there is a valid TimeStamp
-		if (col == 0 && row > 0) {
-
-			Section<TimeStampType> timestamp = Sections.findSuccessor(sec, TimeStampType.class);
 			boolean sort = TableUtils.sortTest(sec);
 			boolean validTimeStamp = false;
 
@@ -64,9 +59,12 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 			}
 			else if (validTimeStamp) {
 				html.append("<td class=\"testcaseLineHeader"
-						+ "\"><div class=\"startTestcaseIncluding\" title=\"run Testcases until and including this\" onclick=\"return Testcase.runTestcase(this, true)\" id=\""
+						+ "\"><div class=\"startTestcaseIncluding\" title=\"run Testcases until and including this\" onclick=\"return Testcase.runTestcase('"
 						+ sec.getID()
-						+ "\"></div><div class=\"startTestcase\" title=\"run Testcase\" onclick=\"return Testcase.runTestcase(this, false)\" id=\""
+						+ "', true)\" id=\""
+						+ sec.getID()
+						+ "\"></div><div class=\"startTestcase\" title=\"run Testcase\" onclick=\"return Testcase.runTestcase('"
+						+ sec.getID() + "', false)\" id=\""
 						+ sec.getID() + "\"></div>");
 			}
 			else {
