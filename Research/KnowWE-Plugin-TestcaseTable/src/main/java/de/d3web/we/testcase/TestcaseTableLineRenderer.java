@@ -57,10 +57,10 @@ public class TestcaseTableLineRenderer extends KnowWEDomRenderer<TestcaseTableLi
 		Object o = sessionInfoStore.get(sec.getTitle());
 
 		if (o != null) {
-			buffi.append("<tr class=\"" + getStatus(sec, o) + "\">");
+			buffi.append("<tr id=\"" + sec.getID() + "\" class=\"" + getStatus(sec, o) + "\">");
 		}
 		else {
-			buffi.append("<tr>");
+			buffi.append("<tr id=\"" + sec.getID() + "\">");
 		}
 
 		buffi.append(b.toString());

@@ -47,6 +47,7 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
+import de.d3web.we.kdom.table.TableUtils;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
 
@@ -182,6 +183,7 @@ public class RunTestcaseAction extends AbstractAction {
 	 */
 	private long getPropagationTime(Session session, KnowledgeBase kb, long offSet) {
 
+		System.out.println(offSet);
 		Question question = kb.getManager().searchQuestion("start");
 		if (question == null) { // no timeDB present
 			return offSet;
@@ -219,9 +221,17 @@ public class RunTestcaseAction extends AbstractAction {
 			}
 		}
 
+		Section<TestcaseTable> tableSection = Sections.findAncestorOfExactType(line,
+				TestcaseTable.class);
+
 		// find the line executed line with the biggest timestamp
 		long maxTimeStampValue = -1;
 		for (Section tctLine : executed) {
+			Section currentTableSection = Sections.findAncestorOfExactType(tctLine,
+					TestcaseTable.class);
+			if (!tableSection.equals(currentTableSection)) {
+				continue;
+			}
 			maxTimeStampValue = Math.max(maxTimeStampValue,
 						TimeStampType.getTimeInMillis(Sections.findSuccessor(
 								(Section) tctLine.getChildren().get(0),
@@ -234,12 +244,22 @@ public class RunTestcaseAction extends AbstractAction {
 		// only execute lines which are not yet executed and whose
 		// timestamp is bigger than the biggest of the already
 		// executed ones
+
+		Section<CellContent> cellContent = Sections.findSuccessor(line, CellContent.class);
+		int executedRow = TableUtils.getRow(cellContent);
+
 		for (Section<? extends Type> l : lines) {
 			if (executed.contains(l)) {
 				continue;
 			}
 			if (!(l.get() instanceof HeaderLine)) {
 				Section<TestcaseTableLine> currentLine = (Section<TestcaseTableLine>) l;
+				Section<CellContent> currentCellContent = Sections.findSuccessor(currentLine,
+						CellContent.class);
+				if (TableUtils.getRow(currentCellContent) > executedRow) {
+					break;
+				}
+
 				long currentTimeStampValue = TimeStampType.getTimeInMillis(Sections.findSuccessor(
 						currentLine.getChildren().get(
 								0), TimeStampType.class));
