@@ -105,7 +105,7 @@ public class JSCodeContainer implements ICodeContainer {
 			linkedBibs.add("jquery/jquery.object.js");
 			add("var d3web = true;", 0);
 		} else {
-			ownBibs.add("proketCustom/code.js");
+			ownBibs.add("code.js");
 			add("var d3web = false;", 0);
 		}
 

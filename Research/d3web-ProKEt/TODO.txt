@@ -55,6 +55,14 @@ GENERAL:
 - QuickI Style Dialog: Datumsfragen
 - DONE Abstraktionsfragen (zB BMI) ausgegraut o.ä. dass nicht editierbar und nur berechnet
 
+
+- DIALOGE TO CHECK
+-- 01_SonoDemo
+-- 03_KneipenConsultationAuton
+-- 04_KneipeWikiFree
+-- 05_QustionaryStandardAutogen (Style etc passt überhaupt nicht mehr!)
+-- 07_ImageQuestionDemo (bild markiert lassen, klick auf boxes markiert im Bild)
+
 --------------------------------
 
 
