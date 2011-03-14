@@ -20,6 +20,7 @@ package de.d3web.we.testcase;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -85,6 +86,7 @@ public class RunTestcaseAction extends AbstractAction {
 		
 		if (multiLines) {
 			findTestcaseIncluding(line, toBeExecutedLines, o);
+			Collections.sort(toBeExecutedLines);
 		}
 
 
@@ -94,30 +96,56 @@ public class RunTestcaseAction extends AbstractAction {
 		KnowledgeBase kb =
 				D3webModule.getKnowledgeRepresentationHandler(web).getKB(master);
 
-		for (Section<TestcaseTableLine> tctLine : toBeExecutedLines) {
+		while (!toBeExecutedLines.isEmpty()) {
+
+			Section<TestcaseTableLine> currentMinSection = findTestcaseTableLineWithSmallestTimeStamp(toBeExecutedLines);
+			toBeExecutedLines.remove(currentMinSection);
 
 			if (o == null) {
 				List<Section<TestcaseTableLine>> list = new ArrayList<Section<TestcaseTableLine>>();
-				list.add(tctLine);
+				list.add(currentMinSection);
 				sessionInfoStore.put(master, list);
 				o = sessionInfoStore.get(master);
 			}
 			else if (o instanceof List) {
-				if (((List) o).contains(tctLine)) {
+				if (((List) o).contains(currentMinSection)) {
 					continue;
 				}
 				else {
-					((List) o).add(tctLine);
+					((List) o).add(currentMinSection);
 					o = sessionInfoStore.get(master);
 				}
 			}
 
 			RatedTestCase testcase = (RatedTestCase) KnowWEUtils.getStoredObject(article,
-					tctLine,
+					currentMinSection,
 					TestcaseTableLine.TESTCASE_KEY);
 			executeTestCase(testcase, session, kb);
 		}
 
+	}
+
+	/**
+	 * returns the Section<TestcaseTableLine> with the smallest TimeStamp
+	 */
+	private Section<TestcaseTableLine> findTestcaseTableLineWithSmallestTimeStamp(List<Section<TestcaseTableLine>> lines) {
+		long currentMin = -1;
+		Section<TestcaseTableLine> currentMinSection = null;
+		for (Section<TestcaseTableLine> line : lines) {
+			long current = TimeStampType.getTimeInMillis(Sections.findSuccessor(
+					line.getChildren().get(0),
+					TimeStampType.class));
+			if (currentMin == -1) {
+				currentMin = current;
+				currentMinSection = line;
+			}
+			else if (current < currentMin) {
+				currentMin = current;
+				currentMinSection = line;
+			}
+
+		}
+		return currentMinSection;
 	}
 
 	/**
@@ -156,6 +184,7 @@ public class RunTestcaseAction extends AbstractAction {
 	 */
 	private long getPropagationTime(Session session, KnowledgeBase kb, long offSet) {
 
+		System.out.println(offSet);
 		Question question = kb.getManager().searchQuestion("start");
 		if (question == null) { // no timeDB present
 			return offSet;
