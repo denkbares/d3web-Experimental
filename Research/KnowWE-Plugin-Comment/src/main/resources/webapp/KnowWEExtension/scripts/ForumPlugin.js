@@ -52,7 +52,7 @@ KNOWWE.plugin.comment = function(){
                         fn : function() {
                             document.getElementById('knowwe-plugin-comment').value = "";                
                             window.location = location.pathname + '?page=' + topic;
-                            window.location.reload();
+                            setTimeout(window.location.reload, 20);
                         }
                     }
             }

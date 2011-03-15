@@ -103,4 +103,14 @@
         <parameter id="priority" value="5" />      
     </extension>
     
+    <extension plugin-id="KnowWEExtensionPoints" point-id="EventListener"
+        id="CommentListener">
+        <parameter id="class"
+            value="de.knowwe.defi.event.CommentListener" />
+        <parameter id="name" value="CommentListener" />
+        <parameter id="description" value="EventListener CommentListener" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>    
+    
 </plugin>
