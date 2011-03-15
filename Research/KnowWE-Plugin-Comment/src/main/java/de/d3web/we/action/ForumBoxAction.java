@@ -28,16 +28,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import de.d3web.we.core.KnowWEEnvironment;
+import de.d3web.we.event.EventManager;
+import de.d3web.we.event.NewCommentEvent;
+import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.xml.XMLTail;
 import de.d3web.we.plugin.forum.Forum;
 import de.d3web.we.plugin.forum.ForumRenderer;
 
+/**
+ *
+ *
+ */
 public class ForumBoxAction extends AbstractAction {
 
 	@Override
@@ -53,18 +57,16 @@ public class ForumBoxAction extends AbstractAction {
 
 	private String perform(UserActionContext context) {
 
-		Map<String, String> parameterMap = context.getParameters();
+		Map<String, String> map = context.getParameters();
 
-		String text = parameterMap.get("ForumBoxText");
-		HttpServletRequest r = context.getRequest();
-
-		String topic = parameterMap.get("ForumArticleTopic");
+		String text = map.get("ForumBoxText");
+		String topic = map.get("ForumArticleTopic");
 		String web = context.getWeb();
 
-		String html = "";
+		boolean canEditPage = KnowWEEnvironment.getInstance().getWikiConnector().userCanEditPage(
+				topic);
 
-		if (KnowWEEnvironment.getInstance().getWikiConnector().userCanEditPage(topic, r)) {
-
+		if (canEditPage) {
 			if (text != null && text.length() > 0) { // don't add an empty box
 
 				// ISO 8859-1 --> UTF-8
@@ -80,37 +82,47 @@ public class ForumBoxAction extends AbstractAction {
 					// do nothing!
 				}
 
-				html = "<table class=wikitable width=95% border=0><tr>\n<th align=\"left\">"
-						+ context.getUserName() + "</th>" +
-						"<th width=\"150\" align=\"right\">" + ForumRenderer.getDate() + "</th>\n" +
-						"</tr>\n<tr>\n<td colspan=\"2\">" + text + "</td>\n</tr>\n</table>";
-
 				text = text.replace("\n", "\\\\ ");
 
-				String save = "<box name=\"" + context.getUserName() + "\"; date=\""
-						+ ForumRenderer.getDate() + "\">" + text + "</box>\n</forum>";
-
-				Section<?> sec = KnowWEEnvironment.getInstance().getArticle(web, topic).getSection();
-
+				KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(web, topic);
+				Section<?> sec = article.getSection();
 				List<Section<XMLTail>> found = new ArrayList<Section<XMLTail>>();
-				Sections.findSuccessorsOfType(Sections.findSuccessor(sec, Forum.class),
-						XMLTail.class, found);
 
-				if (found.size() != 0) {
+				String save = "";
+
+				String reply = map.get("reply");
+				if (reply != null && reply != "") {
+
+					save = "<box name=\"" + context.getUserName() + "\"; date=\""
+							+ ForumRenderer.getDate() + "\">" + text + "</box>\n</box>\n";
+
+					sec = article.findSection(reply);
+					Sections.findSuccessorsOfType(sec, XMLTail.class, found);
+					sec = article.getSection();
+				}
+				else {
+					save = "<box name=\"" + context.getUserName() + "\"; date=\""
+							+ ForumRenderer.getDate() + "\">" + text + "</box>\n</forum>";
+
+					Sections.findSuccessorsOfType(Sections.findSuccessor(sec, Forum.class),
+							XMLTail.class, found);
+				}
+
+				if (found.size() != 0 && save != "") {
 					Section<?> changeSec = found.get(found.size() - 1);
-					Sections.findChildOfType(changeSec, PlainText.class).setOriginalText(save);
+					changeSec.setOriginalText(save);
 				}
 
 				StringBuilder buffi = new StringBuilder();
 				sec.collectTextsFromLeaves(buffi);
 				KnowWEEnvironment.getInstance().getWikiConnector().writeArticleToWikiEnginePersistence(
-						topic, buffi.toString(),
-						context);
+						topic, buffi.toString(), context);
 
+				// fire new comment event
+				EventManager.getInstance().fireEvent(new NewCommentEvent(text, topic));
+				return "{\"msg\" : \"success\"}";
 			}
 		}
-
-		return html;
+		return "{\"msg\" : \"error\"}";
 	}
-
 }

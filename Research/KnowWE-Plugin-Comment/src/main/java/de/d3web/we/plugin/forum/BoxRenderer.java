@@ -21,13 +21,13 @@
 package de.d3web.we.plugin.forum;
 
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.xml.AbstractXMLType;
@@ -47,37 +47,34 @@ public class BoxRenderer extends KnowWEDomRenderer<ForumBox> {
 	@Override
 	public void render(KnowWEArticle article, Section<ForumBox> sec, UserContext user, StringBuilder string) {
 
+		ResourceBundle rb = ResourceBundle.getBundle("Forum_messages");
+
 		String name;
 		String date;
 
 		try {
-
 			Map<String, String> boxMap = AbstractXMLType.getAttributeMapFor(sec);
-
 			name = boxMap.get("name");
 			date = boxMap.get("date");
-
 		}
 		catch (NullPointerException n) {
-
 			name = "System";
 			date = "-";
 		}
 
+
 		Section<?> contentSec = ForumBox.getInstance().getContentChild(sec);
 
-		if (contentSec == null || contentSec.getOriginalText().length() < 1) return; // no
-																						// empty
-																						// posts
+		// no empty posts --> return
+		if (contentSec == null || contentSec.getOriginalText().length() < 1) return;
 
 		if (name == null || date == null) {
 
 			if (name == null) name = user.getUserName();
-
 			if (date == null) date = ForumRenderer.getDate();
 
-			Sections.findChildOfType(Sections.findChildOfType(sec, XMLHead.class), PlainText.class)
-					.setOriginalText("<box name=\"" + name + "\" date=\"" + date + "\">");
+			Section<XMLHead> head = Sections.findChildOfType(sec, XMLHead.class);
+			head.setOriginalText("<box name=\"" + name + "\" date=\"" + date + "\">");
 
 			// save article:
 			try {
@@ -93,23 +90,40 @@ public class BoxRenderer extends KnowWEDomRenderer<ForumBox> {
 				user.getParameters().put(KnowWEAttributes.USER, user.toString());
 				instance.getWikiConnector().writeArticleToWikiEnginePersistence(topic,
 						buffi.toString(), user);
-
 			}
 			catch (Exception e) {
-
 				// Do nothing if WikiEngine is not properly started yet
-
 			}
 		}
 
-		string.append(KnowWEUtils.maskHTML("<table class=wikitable width=95% border=0>\n"));
-		string.append(KnowWEUtils.maskHTML("<tr><th align=left>" + name
-				+ "</th><th align=right width=150>" + date + "</th></tr>\n"));
-		string.append(KnowWEUtils.maskHTML("<tr><td colspan=2>"));
+		StringBuilder ret = new StringBuilder();
 
-		DelegateRenderer.getInstance().render(article, contentSec, user, string);
+		ret.append("<table class=wikitable width=99% border=0><tr>\n");
+		ret.append("<th align=\"left\">" + name + "</th>\n");
+		ret.append("<th align=\"right\" width=\"150\">" + date + "</th>\n");
+		ret.append("<th align=\"right\" width=\"100\">\n");
 
-		string.append(KnowWEUtils.maskHTML("</td></tr>\n</table>\n"));
+		String link = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
+		link += "/Wiki.jsp?page=" + user.getTopic() + "&amp;reply=" + sec.getID();
+
+		ret.append("<div class=\"forumbutton\">");
+		ret.append("<a href=\"" + link + "\">");
+		ret.append(rb.getString("Forum.button.reply"));
+		ret.append("</a>");
+		ret.append("</div>");
+
+		ret.append("</th></tr>");
+		ret.append("<tr><td colspan=\"3\">");
+
+		String reply = user.getParameter("reply");
+		if (sec.getID().equals(reply)) {
+			ForumRenderer.addCommentBox(ret, rb);
+		}
+
+		DelegateRenderer.getInstance().render(article, sec, user, ret);
+
+		ret.append("</td></tr>\n</table>\n");
+		string.append(KnowWEUtils.maskHTML(ret.toString()));
 	}
 
 }

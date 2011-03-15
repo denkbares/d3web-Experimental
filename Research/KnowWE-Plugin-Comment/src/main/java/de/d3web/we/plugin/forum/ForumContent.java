@@ -24,8 +24,5 @@ import de.d3web.we.kdom.xml.XMLContent;
 
 public class ForumContent extends XMLContent {
 
-	@Override
-	protected void init() {
-	}
 
 }
