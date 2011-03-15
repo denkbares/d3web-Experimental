@@ -30,21 +30,21 @@ div.addCol{
 }
 
 div.startTestcase{
-	height: 15px;
-	width: 9px;
-	float: left;
+	display: inline-block;
+	height: 16px;
+	width: 16px;
 	margin-right: 5px;
-	background-image: url(../images/arrow_right.png);
+	background-image: url(../testcasetable/images/run_exc.gif);
 	cursor: pointer;
 }
 
 div.startTestcaseIncluding{
-	height: 15px;
-	width: 9px;
-	float: left;
+	display: inline-block;
+	height: 16px;
+	width: 16px;
 	margin-right: 5px;
 	margin-top: 2px;
-	background-image: url(../images/arrow_right_old.png);
+	background-image: url(../testcasetable/images/runlast_co.gif);
 	background-repeat: no-repeat;
 	cursor: pointer;
 }
