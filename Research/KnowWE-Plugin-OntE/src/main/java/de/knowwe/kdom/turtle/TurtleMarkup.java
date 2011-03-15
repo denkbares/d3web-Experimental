@@ -251,16 +251,10 @@ public class TurtleMarkup extends AbstractType {
 
 			@Override
 			public void destroy(KnowWEArticle article, Section<SubjectDefinition> s) {
-				Section<TurtleMarkup> turtle = Sections.findAncestorOfType(s,
-						TurtleMarkup.class);
-				List<Section<BasicVocabularyReference>> l = new ArrayList<Section<BasicVocabularyReference>>();
-				Sections.findSuccessorsOfType(turtle, BasicVocabularyReference.class, l);
-
-				if (l.size() == 2) {
-					URIObject termObject = s.get().getTermObject(article, s);
-					if (termObject == null) return;
-					termObject.setURIType(URIObjectType.unspecified);
-				}
+				
+				URIObject termObject = s.get().getTermObject(article, s);
+				if (termObject == null) return;
+				termObject.setURIType(URIObjectType.unspecified);
 			}
 
 			@Override
@@ -328,7 +322,9 @@ public class TurtleMarkup extends AbstractType {
 
 		@Override
 		public boolean violatedConstraints(KnowWEArticle article, Section<TurtleMarkup> s) {
-			return !s.getFather().isReusedBy(article.getTitle());
+			Section<? extends Type> grandfather = s.getFather().getFather();
+			boolean reusedBy = grandfather.isReusedBy(article.getTitle());
+			return !reusedBy;
 		}
 	}
 
@@ -347,8 +343,9 @@ public class TurtleMarkup extends AbstractType {
 		public boolean violatedConstraints(KnowWEArticle article, Section<TurtleObject> s) {
 			List<Section<RDFResourceType>> list = new ArrayList<Section<RDFResourceType>>();
 			Sections.findSuccessorsOfType(s.getFather(), RDFResourceType.class, list);
-			return s.getFather().isOrHasSuccessorNotReusedBy(article.getTitle());
-			// abreturn list.get(1).isReusedBy(article.getTitle());
+			boolean orHasSuccessorNotReusedBy = s.getFather().isOrHasSuccessorNotReusedBy(
+					article.getTitle());
+			return orHasSuccessorNotReusedBy;
 		}
 	}
 
