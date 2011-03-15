@@ -39,32 +39,28 @@ GENERAL:
      
 - DONE d3web servlet so umschreiben, dass hier erst auch ein XML geparst wird, in dem Angaben zu Stil etc
   	   stehen, sowie der Name der Wissensbasis
+- D3web Renderer erben lassen
+- Hierarchy Dialogs d3web
+- DONE Table/Column Layout d3web!
+- Building Blocks, Modularisierung, Drag and Drop, Visual Edit
+- KnowWE Binding for entering knowledge bases
+- DONE Abstraktionsfragen (zB BMI) ausgegraut o.ä. dass nicht editierbar und nur berechnet
+
+
   	 
+FREECHOICE/QUICKI Dialog
+-------------------------  	 
 - QuickI/Clarification dialog komplett anpassen wie QuickI
 -- toggle/untoggle
 -- unknown option
 -- versch. Question Typen
-- D3web Renderer erben lassen
-- Hierarchy Dialogs d3web
-- Table/Column Layout d3web!
-
-- Building Blocks, Modularisierung, Drag and Drop, Visual Edit
-- KnowWE Binding for entering knowledge bases
-- FOLGEFRAGEN
-
-- QuickI Style Dialog: Datumsfragen
-- DONE Abstraktionsfragen (zB BMI) ausgegraut o.ä. dass nicht editierbar und nur berechnet
+-- Datumsfragen
 
 
-- DIALOGE TO CHECK
--- 01_SonoDemo
--- 03_KneipenConsultationAuton
--- 04_KneipeWikiFree
--- 05_QustionaryStandardAutogen (Style etc passt überhaupt nicht mehr!)
--- 07_ImageQuestionDemo (bild markiert lassen, klick auf boxes markiert im Bild)
 
 --------------------------------
 
+MEDIASTINITIS
 
 - Add Info 1. Frage dazu + Popup
 DONE - Abfrage beim speichern-Popup vervollständigen

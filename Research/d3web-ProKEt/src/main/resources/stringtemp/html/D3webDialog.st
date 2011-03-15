@@ -1,5 +1,6 @@
 $HTMLHeader()$
 <body>
+$LoginDialog()$
 
 <!-- header & footer in one //-->
 <div id="head">

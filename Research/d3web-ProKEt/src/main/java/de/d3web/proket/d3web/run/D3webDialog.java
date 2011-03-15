@@ -341,7 +341,15 @@ public class D3webDialog extends HttpServlet {
 		// retrieves path to /cases folder on the server
 		String folderPath = request.getSession().getServletContext().getRealPath("/cases");
 		GlobalSettings.getInstance().setCaseFolder(folderPath);
-		PersistenceD3webUtils.saveCaseTimestampOneQuestionVal(folderPath, "Betreffende Klinik");
+		// PersistenceD3webUtils.saveCaseTimestampOneQuestionVal(folderPath,
+		// "Betreffende Klinik");
+		
+		String userFilename = request.getParameter("userfn");
+
+		PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
+				folderPath,
+				"Betreffende Klinik",
+				userFilename);
 	}
 
 	/**
@@ -361,7 +369,7 @@ public class D3webDialog extends HttpServlet {
 		String filename = request.getParameter("fn");
 
 		// load the file = path + filename
-		PersistenceD3webUtils.loadCase(folderPath + "/" + filename);
+		PersistenceD3webUtils.loadCaseFromUserFilename(folderPath + "/" + filename);
 	}
 
 	/**

@@ -42,6 +42,10 @@
 		<servlet-name>D3webPicShow</servlet-name>
 		<servlet-class>de.d3web.proket.d3web.run.D3webPicShow</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>LoginServlet</servlet-name>
+		<servlet-class>de.d3web.proket.run.LoginServlet</servlet-class>
+	</servlet>
 	
 	<servlet-mapping>
 		<servlet-name>HelloServlet</servlet-name>
@@ -74,6 +78,10 @@
 	<servlet-mapping>
 		<servlet-name>D3webPicShow</servlet-name>
 		<url-pattern>/D3webPicShow</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>LoginServlet</servlet-name>
+		<url-pattern>/LoginServlet</url-pattern>
 	</servlet-mapping>
 	
 </web-app>

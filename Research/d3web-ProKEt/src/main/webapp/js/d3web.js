@@ -32,17 +32,16 @@ $(function() {
 			position: top,
 			modal: true,
 			width: 400,
-			height: 150,
+			height: 200,
 			minWidth: 400,
-			minHeight: 150,
+			minHeight: 200,
 			buttons: {
-				"JA, Daten speichern.": d3web_sendSave,
+				"SPEICHERN.": d3web_sendSave,
 				"NEIN, weiter eingeben.": closeJQConfirmDialog
 			}
 		};
 		$("#jqConfirmDialog").dialog(opts);
 	});
-	
 	
 	/* Initialize the JS binding to the dialog elements */
 	initFunctionality();
@@ -402,7 +401,12 @@ function d3web_sendSave() {
 
 	//d3web_getRemainingFacts();
 	
-	var link = $.query.set("action", "savecase").toString();
+	var confirmFilename = "";
+	confirmFilename = $('#confirmFilename').val();
+	
+	var link = $.query.set("action", "savecase").set("userfn", confirmFilename).toString();
+	
+	
 	link = window.location.href.replace(window.location.search, "") + link;
 
 	$.ajax({
@@ -596,4 +600,8 @@ function d3web_show_solutions(target_id) {
 
 function closeJQConfirmDialog(){
 	$('#jqConfirmDialog').dialog('close');
+}
+
+function closeJQLoginDialog(){
+	$('#jqLoginDialog').dialog('close');
 }

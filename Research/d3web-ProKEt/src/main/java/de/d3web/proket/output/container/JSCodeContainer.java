@@ -100,6 +100,8 @@ public class JSCodeContainer implements ICodeContainer {
 			linkedBibs.add("jquery/jquery.maphilight.min.js");
 		}
 		if (d3web) {
+			ownBibs.add("login.js");
+			ownBibs.add("encrypt.js");
 			ownBibs.add("d3web.js");
 			ownBibs.add("d3webBasic.js");
 			linkedBibs.add("jquery/jquery.object.js");
