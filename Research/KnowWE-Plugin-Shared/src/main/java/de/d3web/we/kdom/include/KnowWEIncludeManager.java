@@ -440,7 +440,7 @@ public class KnowWEIncludeManager implements EventListener {
 
 		for (String title : reviseArticles) {
 			if (env.getArticleManager(web).getSectionizingArticles().contains(title)
-					|| env.getArticleManager(web).getDependenciesUpdatingArticles().contains(title)) {
+					|| env.getArticleManager(web).getUpdatingArticles().contains(title)) {
 				continue;
 			}
 			KnowWEArticle newArt = KnowWEArticle.createArticle(

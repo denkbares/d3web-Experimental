@@ -140,7 +140,7 @@ public class ParseDataAction extends AbstractAction {
 							conceptTopic,
 							lightParse);
 
-					KnowWEEnvironment.getInstance().getArticleManager(web).addArticleToRefresh(
+					KnowWEEnvironment.getInstance().getArticleManager(web).addArticleToUpdate(
 							conceptTopic);
 				}
 
@@ -292,7 +292,7 @@ public class ParseDataAction extends AbstractAction {
 			}
 			i++;
 			// Refresh
-			KnowWEEnvironment.getInstance().getArticleManager(web).buildArticlesToRefresh();
+			KnowWEEnvironment.getInstance().getArticleManager(web).updateQueuedArticles();
 		}
 
 		if (countData != 0) {
