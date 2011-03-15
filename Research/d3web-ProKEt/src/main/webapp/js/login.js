@@ -3,16 +3,26 @@
  */
 
 /* creating and configuring the jquery Login dialog */
+
 $(function() {
 
 	var opts = {
-		autoOpen : true,
 		position : top,
-		modal : true,
 		width : 300,
 		height : 175,
 		minWidth : 300,
 		minHeight : 175,
+		draggable : false,
+		resizable : false,
+		autoOpen : true,
+		modal : true,
+		// do NOT close dialog when hitting escape
+		closeOnEscape : false,
+		// for NOT showing the default close button/cross of the dialog
+		open : function(event, ui) {
+			$(".ui-dialog-titlebar-close").hide();
+		},
+		// two custom buttons
 		buttons : {
 			"OK." : sendData,
 			"Abbrechen." : showDenyMessage
@@ -20,6 +30,24 @@ $(function() {
 	};
 
 	$("#jqLoginDialog").dialog(opts);
+	
+	// check wether user already logged in
+	if(document.cookie){
+		
+		c = document.cookie;
+		cookiename = c.substring(0, c.indexOf('='));
+		if(c.indexOf(';') != -1){
+			cookiewert = c.substring(c.indexOf('=')+1,c.indexOf(';'));
+		}
+		else{
+			cookiewert = c.substr(c.indexOf('=')+1,c.length);
+		}
+		//alert(cookiename + " " + cookiewert);
+		if(cookiewert == "loggedin"){
+
+			$("#jqLoginDialog").dialog("close");			
+		}
+	}
 
 });
 
@@ -27,9 +55,8 @@ $(function() {
  * Definition of an Ajax call that sends user login data to LoginServlet, and,
  * according to results of login check there: closes the Login Dialog (if
  * successful) and otherwise leaves Login Dialog open (if not successful logged
- * in).
- * Thus, the underlying system can only be used, in case login was successful,
- * as Login Dialog is modal.
+ * in). Thus, the underlying system can only be used, in case login was
+ * successful, as Login Dialog is modal.
  */
 function sendData() {
 
@@ -38,8 +65,7 @@ function sendData() {
 	// var seed = generateSeed();
 	// var p = encrypt(encrypt(pw) + seed);
 
-	var querylink = $.query.set("u", usr).set("p", pw).set("tryagain",
-			window.location.href).toString();
+	var querylink = $.query.set("u", usr).set("p", encrypt(pw)).toString();
 	var servletPart = window.location.href.substring(window.location.href
 			.indexOf("d3web-ProKEt"), window.location.href.length);
 
@@ -51,12 +77,23 @@ function sendData() {
 		type : "GET",
 		async : false,
 		url : link,
-		success : function(writernote) {
-			alert(writernote);
-			if (writernote == "success") {
-				$("#jqLoginDialog").dialog("close");
-			} else {
-				alert("Please try again");
+		success : function() {
+			// check wether user already logged in
+			if(document.cookie){
+				
+				c = document.cookie;
+				cookiename = c.substring(0, c.indexOf('='));
+				if(c.indexOf(';') != -1){
+					cookiewert = c.substring(c.indexOf('=')+1,c.indexOf(';'));
+				}
+				else{
+					cookiewert = c.substr(c.indexOf('=')+1,c.length);
+				}
+				//alert(cookiename + " " + cookiewert);
+				if(cookiewert == "loggedin"){
+
+					$("#jqLoginDialog").dialog("close");			
+				}
 			}
 		}
 	});

@@ -1,12 +1,18 @@
 package de.d3web.proket.run;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import au.com.bytecode.opencsv.CSVReader;
+import de.d3web.proket.utils.GlobalSettings;
 
 public class LoginServlet extends HttpServlet {
 
@@ -17,8 +23,11 @@ public class LoginServlet extends HttpServlet {
 		res.setContentType("text/html");
 
 		// fetch the information sent via the request string
-		String u = req.getParameter("usr");
-		String p = req.getParameter("pw");
+		String u = req.getParameter("u");
+		String p = req.getParameter("p");
+
+		String folderPath = req.getSession().getServletContext().getRealPath("/cases");
+		GlobalSettings.getInstance().setCaseFolder(folderPath);
 
 		// get the response writer for communicating back via Ajax
 		PrintWriter writer = res.getWriter();
@@ -34,12 +43,16 @@ public class LoginServlet extends HttpServlet {
 
 			// in case writer says success, append "success" so it can handled
 			// correspondingly by the calling Ajax (i.e., remove login dialog)
-			writer.append("success");
-			// Valid login. Make a note in the session object.
+
+			Cookie cookie = new Cookie(u, "loggedin");
+
+			// here we can set the expire time for the login cookie
+			// 60 sec * 30 min = 1800
+			// cookie.setMaxAge(1800);
+			cookie.setMaxAge(120); // only for testing
+			res.addCookie(cookie);
+
 			/*
-			 * HttpSession session = req.getSession();
-			 * session.setAttribute("logon.isDone", usr + "_" + pw);
-			 * 
 			 * // Try redirecting the client to the page he first tried to
 			 * access try { String target = (String)
 			 * session.getAttribute("login.target"); if (target != null) {
@@ -62,12 +75,35 @@ public class LoginServlet extends HttpServlet {
 	 */
 	private boolean permitUser(String user, String password) {
 
-		System.out.println("user: " + user);
-		System.out.println("pw: " + password);
+		// cases folder
+		String caseFolder = GlobalSettings.getInstance().getCaseFolder();
+		String csvFile = caseFolder + "/usrdat.csv";
+		CSVReader csvr = null;
+		String[] nextLine = null;
 
-		// Lookup user and pw here:
+		try {
+			csvr = new CSVReader(new FileReader(csvFile));
+			// go through file
+			while ((nextLine = csvr.readNext()) != null) {
+				// skip first line
+				if (!nextLine[0].startsWith("usr")) {
+					// if username and pw could be found, return true
+					if (nextLine[0].equals(user) && nextLine[1].equals(password)) {
+						return true;
+					}
+				}
+			}
 
+		}
+		catch (FileNotFoundException fnfe) {
+			// TODO Auto-generated catch block
+			fnfe.printStackTrace();
+		}
+		catch (IOException ioe) {
+			// TODO Auto-generated catch block
+			ioe.printStackTrace();
+		}
 
-		return false; // trust everyone
+		return false; // trust no one per default
 	}
 }

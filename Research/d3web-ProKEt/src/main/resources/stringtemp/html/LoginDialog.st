@@ -7,7 +7,7 @@
 				<td><input id="usrInput" /></td> 
 			</tr>
 				<td width="60px;">Passwort</td>
-				<td><input id="pwInput" /></td> 
+				<td><input id="pwInput" type="password"/></td> 
 			<tr>
 			</tr>
 			</tbody>

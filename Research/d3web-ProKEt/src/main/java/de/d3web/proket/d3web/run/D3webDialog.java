@@ -369,7 +369,9 @@ public class D3webDialog extends HttpServlet {
 		String filename = request.getParameter("fn");
 
 		// load the file = path + filename
-		PersistenceD3webUtils.loadCaseFromUserFilename(folderPath + "/" + filename);
+		// PersistenceD3webUtils.loadCaseFromUserFilename(folderPath + "/" +
+		// filename);
+		PersistenceD3webUtils.loadCaseFromUserFilename(filename);
 	}
 
 	/**
