@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -36,15 +36,15 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
-import de.d3web.kernel.verbalizer.VerbalizationManager;
-import de.d3web.kernel.verbalizer.VerbalizationManager.RenderingFormat;
-import de.d3web.kernel.verbalizer.Verbalizer;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.SessionBroker;
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.xcl.InferenceTrace;
 import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelation;
+import de.knowwe.kbrenderer.verbalizer.VerbalizationManager;
+import de.knowwe.kbrenderer.verbalizer.VerbalizationManager.RenderingFormat;
+import de.knowwe.kbrenderer.verbalizer.Verbalizer;
 
 public class XCLExplanationAction extends AbstractAction {
 
@@ -175,7 +175,7 @@ public class XCLExplanationAction extends AbstractAction {
 	/**
 	 * method replaces wild card in template with corresponding table (HTML
 	 * syntax)
-	 *
+	 * 
 	 * @param type the table type
 	 * @param content the content of the table
 	 */
@@ -204,7 +204,7 @@ public class XCLExplanationAction extends AbstractAction {
 
 	/**
 	 * Renders the table content, new row for every answer
-	 *
+	 * 
 	 * @param content the answers to be rendered
 	 * @return a table representation of the content
 	 */
@@ -224,7 +224,7 @@ public class XCLExplanationAction extends AbstractAction {
 	 * Content for "Not Explained" has to be rendered differently since it
 	 * contains the question, the answer given and the expected answer
 	 * (verbalized condition)
-	 *
+	 * 
 	 * @param content the content to get rendered
 	 * @return a table representation of the content
 	 */
@@ -279,7 +279,7 @@ public class XCLExplanationAction extends AbstractAction {
 	/**
 	 * Replaces a wildcard in the generated template with the actual (rendered)
 	 * content
-	 *
+	 * 
 	 * @param type the wildcard to be replaced
 	 * @param renderedTable the content to be inserted
 	 */
@@ -293,7 +293,7 @@ public class XCLExplanationAction extends AbstractAction {
 
 	/**
 	 * Renders the state of the explanation
-	 *
+	 * 
 	 * @param state the state to be rendered
 	 * @param score the explanation score
 	 * @param support the explanation support
