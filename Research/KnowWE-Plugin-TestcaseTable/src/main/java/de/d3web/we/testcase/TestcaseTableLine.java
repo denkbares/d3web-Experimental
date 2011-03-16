@@ -94,6 +94,7 @@ public class TestcaseTableLine extends TableLine {
 					String qName = qRef.getOriginalText();
 					// TODO unchanged value, unknown value
 					Question question = kb.getManager().searchQuestion(qName);
+					if (question == null) continue;
 					Value value = KnowledgeBaseUtils.findValue(question, valueSec.getOriginalText());
 					Finding finding = new Finding(question, value);
 					testCase.add(finding);
