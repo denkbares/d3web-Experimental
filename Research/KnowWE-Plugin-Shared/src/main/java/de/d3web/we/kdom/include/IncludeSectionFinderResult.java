@@ -20,15 +20,18 @@
 
 package de.d3web.we.kdom.include;
 
+import java.util.Map;
+
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
 public class IncludeSectionFinderResult extends SectionFinderResult {
 
 	private final IncludeAddress a;
 
-	public IncludeSectionFinderResult(int start, int end, IncludeAddress a) {
-		super(start, end);
-		this.a = a;
+	public IncludeSectionFinderResult(int start, int end, Map<String, String> parameterMap) {
+		super(start, end, parameterMap);
+		String src = parameterMap.get("src");
+		a = src == null ? null : new IncludeAddress(src);
 	}
 
 	public IncludeAddress getIncludeAddress() {

@@ -56,12 +56,7 @@ public class Include extends AbstractXMLType {
 		protected SectionFinderResult makeSectionFinderResult(int start,
 				int end, Map<String, String> parameterMap) {
 
-			String src = parameterMap.get("src");
-			if (src != null) {
-				IncludeAddress a = new IncludeAddress(parameterMap.get("src"));
-				return new IncludeSectionFinderResult(start, end, a);
-			}
-			return new IncludeSectionFinderResult(start, end, null);
+			return new IncludeSectionFinderResult(start, end, parameterMap);
 		}
 
 	}

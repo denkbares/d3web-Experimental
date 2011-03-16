@@ -20,7 +20,9 @@
 
 package de.d3web.we.kdom.include;
 
+import de.d3web.we.kdom.Parser;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sectionizer;
 import de.d3web.we.kdom.SectionizerModule;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
@@ -31,20 +33,13 @@ public class IncludeSectionizerModule implements SectionizerModule {
 	@Override
 	@SuppressWarnings("unchecked")
 	public Section<?> createSection(String text, Type type, Section<?> father, SectionFinderResult result) {
+		Parser parser = type.getParser();
+		if (result.getParameterMap() != null && parser instanceof Sectionizer) {
+			((Sectionizer) parser).addParameterMap(result.getParameterMap());
+		}
 		Section s = null;
 		if (result instanceof IncludeSectionFinderResult) {
-			s = type.getParser().parse(text, father);
-			// s = Section.createSection(
-			// thisSection.getOriginalText().substring(
-			// result.getStart(),
-			// result.getEnd()),
-			// ob,
-			// father,
-			// thisSection.getOffSetFromFatherText()
-			// + result.getStart(),
-			// article,
-			// result.getId(),
-			// false);
+			s = parser.parse(text, father);
 
 			KnowWEUtils.storeObject(s.getWeb(), s.getTitle(), s.getID(),
 					Include.INCLUDE_ADDRESS_KEY,
