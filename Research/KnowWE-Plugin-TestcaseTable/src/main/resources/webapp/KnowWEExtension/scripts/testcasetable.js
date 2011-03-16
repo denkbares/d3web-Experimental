@@ -346,10 +346,8 @@ Testcase.saveTable = function() {
  * colors lines after their execution
  */
 Testcase.colorExecutedLines = function(id, including) {
-	var element = $(id);
-	var trs = element.parentNode.parentNode.parentNode.childNodes;
-	var currentLine = element.parentNode.parentNode;
-	var cells = "";
+	var currentLine = $(id);
+	var trs = currentLine.parentNode.childNodes;
 
 	if (including) {
 		for (var i = 1; i < trs.length; i++) {

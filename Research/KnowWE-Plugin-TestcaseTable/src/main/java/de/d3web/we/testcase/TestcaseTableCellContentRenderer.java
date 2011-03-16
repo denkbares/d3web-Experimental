@@ -22,7 +22,7 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.table.TableCellContent;
 import de.d3web.we.kdom.table.TableCellContentRenderer;
-import de.d3web.we.kdom.table.TableUtils;
+import de.d3web.we.kdom.table.TableLine;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
 
@@ -47,7 +47,6 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 		// Check if there is a (valid) TimeStamp
 		if (timestamp != null) {
 
-			boolean sort = TableUtils.sortTest(sec);
 			boolean validTimeStamp = false;
 
 			if (timestamp != null && TimeStampType.isValid(timestamp.getOriginalText())) {
@@ -56,18 +55,16 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 
 			StringBuilder html = new StringBuilder();
 
-			if (sort) {
-				html.append("<th class=\"sort\">");
-			}
-			else if (validTimeStamp) {
-				html.append("<td class=\"testcaseLineHeader"
-						+ "\"><div class=\"startTestcaseIncluding\" title=\"run Testcases until and including this\" onclick=\"return Testcase.runTestcase('"
-						+ sec.getID()
-						+ "', true)\" id=\""
-						+ sec.getID()
+			if (validTimeStamp) {
+
+				Section<TableLine> line = Sections.findAncestorOfType(sec, TableLine.class);
+				html.append("<td class=\"testcaseLineHeader\">");
+				html.append("<div class=\"startTestcaseIncluding\" title=\"run Testcases until and including this\" onclick=\"return Testcase.runTestcase('"
+						+ line.getID()
+						+ "', true)\""
 						+ "\"></div><div class=\"startTestcase\" title=\"run Testcase\" onclick=\"return Testcase.runTestcase('"
-						+ sec.getID() + "', false)\" id=\""
-						+ sec.getID() + "\"></div>");
+						+ line.getID() + "', false)\""
+						+ "\"></div>");
 			}
 			else {
 				html.append("<td class=\"" + invalidTimeStamp + " testcaseLineHeader\"></div>");
@@ -75,23 +72,15 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 
 			generateContent(sec.getOriginalText(), sec, user, sec.getID(), html);
 
-			if (sort) {
-				html.append("</th>");
-			}
-
-			else {
-				html.append("</td>");
-				return KnowWEUtils.maskHTML(html.toString());
-			}
+			html.append("</td>");
+			return KnowWEUtils.maskHTML(html.toString());
 		}
-		
+
 		return super.wrappContent(sec.getOriginalText(), sec, user);
 
 		// No TimeStamp Cell -> Normal Rendering!
 		// return super.wrappContent(sectionText, sec, user);
 
 	}
-
-
 
 }

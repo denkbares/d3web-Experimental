@@ -64,11 +64,9 @@ public class RunTestcaseAction extends AbstractAction {
 		String execLine = context.getParameter("execLine");
 		boolean multiLines = Boolean.valueOf(context.getParameter("multiLines"));
 
-		Section<CellContent> cell = (Section<CellContent>) KnowWEEnvironment.getInstance().getArticleManager(
-				web).findNode(execLine);
 
-		Section<TestcaseTableLine> line = Sections.findAncestorOfExactType(cell,
-				TestcaseTableLine.class);
+		Section<TestcaseTableLine> line = (Section<TestcaseTableLine>) KnowWEEnvironment.getInstance().getArticleManager(
+				web).findNode(execLine);
 		Section<TestcaseTableType> tableDMType = Sections.findAncestorOfExactType(line,
 				TestcaseTableType.class);
 		String master = TestcaseTableType.getMaster(tableDMType, context.getTopic());
