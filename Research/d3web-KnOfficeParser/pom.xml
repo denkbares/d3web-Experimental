@@ -33,12 +33,6 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>d3web-Verbalizer</artifactId>
-			<version>${d3webCoreVersion}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.antlr</groupId>
 			<artifactId>antlr</artifactId>
 			<version>3.1.1</version>
@@ -71,6 +65,13 @@
 					<groupId>org.apache.ant</groupId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>d3web-Plugin-XCL</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 </project>
