@@ -31,7 +31,7 @@ import de.d3web.we.kdom.table.TableCell;
 import de.d3web.we.kdom.table.TableLine;
 
 /**
- * 
+ * The header line of the testcase table.
  * 
  * @author Reinhard Hatko
  * @created 21.01.2011
@@ -51,20 +51,20 @@ public class HeaderLine extends TableLine {
 
 					@Override
 					public <T extends Type> boolean satisfiesConstraint(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
-						
+
 						// header line
 						return found.size() == 1;
 					}
 
 					@Override
 					public <T extends Type> void filterCorrectResults(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
-						if (found.size() < 2)
+						if (found.size() < 2) {
 							return;
-							SectionFinderResult result = found.get(0);
-							found.clear();
-							found.add(result);
 						}
-
+						SectionFinderResult result = found.get(0);
+						found.clear();
+						found.add(result);
+					}
 
 				}));
 	}

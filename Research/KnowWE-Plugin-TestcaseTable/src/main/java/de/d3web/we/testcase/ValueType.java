@@ -58,32 +58,17 @@ public class ValueType extends AbstractType {
 					if (text.length() > 0) {
 						return SectionFinderResult.createSingleItemList(new SectionFinderResult(0,
 								text.length()));
+					}// no text to match
+					else {
+						return null;
 					}
-					else return null;
+				}// in the first line of the table, there are no values
+				else {
+					return null;
 				}
-				else return null;
 
 			}
 		});
-	}
-
-	public static Object getValue(Section<ValueType> sec) {
-		List<Section<? extends Type>> children = sec.getChildren();
-
-		if (children.isEmpty()) return null;
-
-		Section<? extends Type> child = children.get(0);
-
-		if (child.get().getClass().equals(CellAnswerRef.class)) {
-			return child.getOriginalText();
-		}
-		else if (child.get().getClass().equals(Number.class)) {
-			return Number.getNumber((Section<Number>) child);
-		}
-		else {
-			return null;
-		}
-
 	}
 
 }

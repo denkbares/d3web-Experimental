@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2010 University Wuerzburg, Computer Science VI
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -83,12 +83,10 @@ public class RunTestcaseAction extends AbstractAction {
 		WikiEnvironment wiki = WikiEnvironmentManager.getInstance().getEnvironments(web);
 		Map<String, Object> sessionInfoStore = wiki.getSessionInfoStore(session);
 		Object o = sessionInfoStore.get(master);
-		
+
 		if (multiLines) {
 			findTestcaseIncluding(line, toBeExecutedLines, o);
 		}
-
-
 
 		if (session == null) return;
 
@@ -132,7 +130,7 @@ public class RunTestcaseAction extends AbstractAction {
 		Section<TestcaseTableLine> currentMinSection = null;
 		for (Section<TestcaseTableLine> line : lines) {
 			long current = TimeStampType.getTimeInMillis(Sections.findSuccessor(
-					line.getChildren().get(0),
+					line,
 					TimeStampType.class));
 			if (currentMin == -1) {
 				currentMin = current;
@@ -148,7 +146,7 @@ public class RunTestcaseAction extends AbstractAction {
 	}
 
 	/**
-	 *
+	 * 
 	 * @created 22.01.2011
 	 * @param testcase
 	 * @param session
@@ -162,7 +160,8 @@ public class RunTestcaseAction extends AbstractAction {
 
 			session.getPropagationManager().openPropagation(time);
 			for (Finding f : testcase.getFindings()) {
-				blackboard.addValueFact(new DefaultFact(f.getQuestion(), f.getValue(), PSMethodUserSelected.getInstance(),
+				blackboard.addValueFact(new DefaultFact(f.getQuestion(), f.getValue(),
+						PSMethodUserSelected.getInstance(),
 							PSMethodUserSelected.getInstance()));
 			}
 
@@ -174,7 +173,7 @@ public class RunTestcaseAction extends AbstractAction {
 	}
 
 	/**
-	 *
+	 * 
 	 * @created 20.01.2011
 	 * @param session
 	 * @param kbm
@@ -234,7 +233,7 @@ public class RunTestcaseAction extends AbstractAction {
 			}
 			maxTimeStampValue = Math.max(maxTimeStampValue,
 						TimeStampType.getTimeInMillis(Sections.findSuccessor(
-								(Section) tctLine.getChildren().get(0),
+								tctLine,
 								TimeStampType.class)));
 		}
 
@@ -261,8 +260,7 @@ public class RunTestcaseAction extends AbstractAction {
 				}
 
 				long currentTimeStampValue = TimeStampType.getTimeInMillis(Sections.findSuccessor(
-						currentLine.getChildren().get(
-								0), TimeStampType.class));
+						currentLine, TimeStampType.class));
 				if (currentTimeStampValue > maxTimeStampValue) {
 					list.add(currentLine);
 				}

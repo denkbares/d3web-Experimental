@@ -59,7 +59,7 @@ public class TableRenderer extends KnowWEDomRenderer<Table> {
 		if (sec.hasQuickEditModeSet(user.getUserName())) {
 
 			// adds the buttons for addRow/addCol
-			buffi.append("<table style='border:1px solid #999999; float: left' class='wikitable knowwetable' border='1'><tbody>");
+			buffi.append("\n<table style='border:1px solid #999999; float: left' class='wikitable knowwetable' border='1'><tbody>");
 			buffi.append(getHeader());
 			buffi.append(b.toString());
 			buffi.append("</tbody></table>");
@@ -82,7 +82,7 @@ public class TableRenderer extends KnowWEDomRenderer<Table> {
 			if (sortable) {
 				buffi.append("<div class=\"sortable\">");
 			}
-			buffi.append("<table style='border:1px solid #999999;' class='wikitable knowwetable' border='1'><tbody>");
+			buffi.append("\n<table style='border:1px solid #999999;' class='wikitable knowwetable' border='1'><tbody>");
 			buffi.append(getHeader());
 			buffi.append(b.toString());
 			buffi.append("</tbody></table>");

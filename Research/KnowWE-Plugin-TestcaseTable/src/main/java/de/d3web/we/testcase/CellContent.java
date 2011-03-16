@@ -25,8 +25,11 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SectionFinderConstraint;
+import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.table.TableCellContent;
+import de.d3web.we.kdom.table.TableUtils;
+import de.d3web.we.kdom.type.AnonymousType;
 
 /**
  * @author Florian Ziegler
@@ -37,7 +40,6 @@ public class CellContent extends TableCellContent {
 	@Override
 	protected void init() {
 		setCustomRenderer(new TestcaseTableCellContentRenderer());
-		childrenTypes.add(new UnchangedType());
 
 		TimeStampType timeStampType = new TimeStampType();
 		timeStampType.setSectionFinder(new ConstraintSectionFinder(timeStampType.getSectioFinder(),
@@ -47,19 +49,36 @@ public class CellContent extends TableCellContent {
 					public <T extends Type> boolean satisfiesConstraint(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
 						Section<?> line = Sections.findAncestorOfExactType(father,
 								TestcaseTableLine.class);
-						return line.getChildren().size() == 1;
+						return line.getChildren().size() == 2;
 					}
 
 					@Override
 					public <T extends Type> void filterCorrectResults(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
-						if (found == null || found.size() == 0) return;
 						found.clear();
-
 					}
 				}));
 
-		childrenTypes.add(timeStampType);
+		AnonymousType nameType = new AnonymousType("name");
+		nameType.setSectionFinder(new ConstraintSectionFinder(new AllTextSectionFinder(),
+				new SectionFinderConstraint() {
 
+					@SuppressWarnings("unchecked")
+					@Override
+					public <T extends Type> boolean satisfiesConstraint(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
+						// name column is first one...
+						int column = TableUtils.getColumn((Section<? extends TableCellContent>) father);
+						return column == 0;
+					}
+
+					@Override
+					public <T extends Type> void filterCorrectResults(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
+						// ... int other columns clear the results
+						found.clear();
+					}
+				}));
+		childrenTypes.add(new UnchangedType());
+		childrenTypes.add(nameType);
+		childrenTypes.add(timeStampType);
 		childrenTypes.add(new ValueType());
 
 	}

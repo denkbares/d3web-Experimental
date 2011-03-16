@@ -39,6 +39,7 @@ import de.d3web.we.kdom.report.SyntaxError;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.kdom.table.TableCell;
 import de.d3web.we.kdom.table.TableLine;
+import de.d3web.we.kdom.table.TableUtils;
 import de.d3web.we.object.QuestionReference;
 import de.d3web.we.utils.KnowWEUtils;
 
@@ -60,60 +61,83 @@ public class TestcaseTableLine extends TableLine {
 			e.printStackTrace();
 		}
 
-		addSubtreeHandler(new SubtreeHandler<TestcaseTableLine>() {
-
-			@Override
-			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TestcaseTableLine> s) {
-
-				KnowledgeBase kb = findKB(s, article);
-
-				Section<TimeStampType> timeStamp = Sections.findSuccessor(s, TimeStampType.class);
-				if (timeStamp == null) {
-					int lineNumber = Sections.findAncestorOfType(s, TestcaseTable.class).getChildren().indexOf(
-							s);
-					Section<CellContent> cell = Sections.findSuccessor(s, CellContent.class);
-
-					LinkedList<KDOMReportMessage> list = new LinkedList<KDOMReportMessage>();
-					list.add(new SyntaxError("Invalid timestamp '" + cell.getOriginalText()
-							+ "' in line: " + lineNumber));
-					return list;
-				}
-				long time = TimeStampType.getTimeInMillis(timeStamp);
-				RatedTestCase testCase = new RatedTestCase();
-				testCase.setTimeStamp(new Date(time));
-
-				List<Section<ValueType>> values = new LinkedList<Section<ValueType>>();
-				Sections.findSuccessorsOfType(s, ValueType.class, values);
-
-				for (Section<ValueType> valueSec : values) {
-
-					Section<? extends HeaderCell> headerCell = TestcaseTable.findHeaderCell(valueSec);
-
-					Section<QuestionReference> qRef = Sections.findSuccessor(headerCell,
-							QuestionReference.class);
-					String qName = qRef.getOriginalText();
-					// TODO unchanged value, unknown value
-					Question question = kb.getManager().searchQuestion(qName);
-					if (question == null) continue;
-					Value value = KnowledgeBaseUtils.findValue(question, valueSec.getOriginalText());
-					Finding finding = new Finding(question, value);
-					testCase.add(finding);
-				}
-				KnowWEUtils.storeObject(article, s, TESTCASE_KEY, testCase);
-
-				return null;
-			}
-
-			private KnowledgeBase findKB(Section<TestcaseTableLine> s, KnowWEArticle article) {
-
-				String master = TestcaseTableType.getMaster(
-						Sections.findAncestorOfExactType(s, TestcaseTableType.class),
-						article.getTitle());
-
-				return D3webModule.getKnowledgeRepresentationHandler(article.getWeb()).getKB(
-						master);
-
-			}
-		});
+		addSubtreeHandler(new TestcaseTableLineSubtreeHandler());
 	}
+
+	/**
+	 * 
+	 * @author Reinhard Hatko
+	 * @created 16.03.2011
+	 */
+	private final class TestcaseTableLineSubtreeHandler extends SubtreeHandler<TestcaseTableLine> {
+
+		@Override
+		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TestcaseTableLine> s) {
+
+			KnowledgeBase kb = findKB(s, article);
+
+			Section<TimeStampType> timeStamp = Sections.findSuccessor(s, TimeStampType.class);
+			if (timeStamp == null) {
+
+				int lineNumber = TableUtils.getRowOfLine(s);
+				Section<CellContent> cell = Sections.findSuccessor(s, CellContent.class);
+
+				LinkedList<KDOMReportMessage> list = new LinkedList<KDOMReportMessage>();
+				list.add(new SyntaxError("Invalid timestamp '" + cell.getOriginalText()
+						+ "' in line: " + lineNumber));
+				return list;
+			}
+			else {
+				createTestcase(article, s, kb, timeStamp);
+				return null;
+
+			}
+
+		}
+
+		/**
+		 * 
+		 * @created 16.03.2011
+		 * @param article
+		 * @param s
+		 * @param kb
+		 * @param timeStamp
+		 */
+		public void createTestcase(KnowWEArticle article, Section<TestcaseTableLine> s, KnowledgeBase kb, Section<TimeStampType> timeStamp) {
+			long time = TimeStampType.getTimeInMillis(timeStamp);
+			RatedTestCase testCase = new RatedTestCase();
+			testCase.setTimeStamp(new Date(time));
+
+			List<Section<ValueType>> values = new LinkedList<Section<ValueType>>();
+			Sections.findSuccessorsOfType(s, ValueType.class, values);
+
+			for (Section<ValueType> valueSec : values) {
+
+				Section<? extends HeaderCell> headerCell = TestcaseTable.findHeaderCell(valueSec);
+
+				Section<QuestionReference> qRef = Sections.findSuccessor(headerCell,
+						QuestionReference.class);
+				String qName = qRef.getOriginalText();
+				// TODO unchanged value, unknown value
+				Question question = kb.getManager().searchQuestion(qName);
+				if (question == null) continue;
+				Value value = KnowledgeBaseUtils.findValue(question, valueSec.getOriginalText());
+				Finding finding = new Finding(question, value);
+				testCase.add(finding);
+			}
+			KnowWEUtils.storeObject(article, s, TESTCASE_KEY, testCase);
+		}
+
+		private KnowledgeBase findKB(Section<TestcaseTableLine> s, KnowWEArticle article) {
+
+			String master = TestcaseTableType.getMaster(
+					Sections.findAncestorOfExactType(s, TestcaseTableType.class),
+					article.getTitle());
+
+			return D3webModule.getKnowledgeRepresentationHandler(article.getWeb()).getKB(
+					master);
+
+		}
+	}
+
 }

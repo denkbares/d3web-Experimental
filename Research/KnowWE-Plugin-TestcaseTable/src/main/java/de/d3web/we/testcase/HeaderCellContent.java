@@ -49,7 +49,8 @@ public class HeaderCellContent extends TableCellContent {
 			public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 				Section<TableLine> line = Sections.findAncestorOfType(father, TableLine.class);
 
-				if (line.getChildren().size() == 1) {
+				// first two columns are no QRefs, but name and time
+				if (line.getChildren().size() < 3) {
 					return null;
 				}
 				else {

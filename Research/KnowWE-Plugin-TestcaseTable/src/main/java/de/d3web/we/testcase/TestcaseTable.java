@@ -20,6 +20,8 @@
 
 package de.d3web.we.testcase;
 
+import java.util.logging.Logger;
+
 import de.d3web.we.core.KnowWERessourceLoader;
 import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
 import de.d3web.we.kdom.Section;
@@ -75,15 +77,14 @@ public class TestcaseTable extends Table {
 		}
 
 		if (!found) {
-			System.out.println("no header cell for: " + s);
+			Logger.getLogger(TestcaseTable.class.getName()).warning("no header cell for: " + s);
 			return null;
 		}
 
 		Section<Table> table = Sections.findAncestorOfType(line, Table.class);
-		Section<TableLine> headerline = Sections.findSuccessor(table, TableLine.class);
-		Section<? extends HeaderCell> headerCell = (Section<? extends HeaderCell>) headerline.getChildren().get(
+		Section<TableLine> hLine = Sections.findSuccessor(table, TableLine.class);
+		Section<? extends HeaderCell> hCell = (Section<? extends HeaderCell>) hLine.getChildren().get(
 				i);
-		return headerCell;
+		return hCell;
 	}
-
 }

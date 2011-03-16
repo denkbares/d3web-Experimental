@@ -61,12 +61,24 @@ public class TableUtils {
 		int col = getColumn(s);
 		for (Section<TableLine> row : rows) {
 			List<Section<TableCellContent>> cells = new ArrayList<Section<TableCellContent>>();
-			 Sections.findSuccessorsOfType(row, TableCellContent.class, cells);
+			Sections.findSuccessorsOfType(row, TableCellContent.class, cells);
 			if (cells.size() > col && cells.get(col).equals(s)) {
 				return rows.indexOf(row);
 			}
 		}
 		return -1;
+	}
+
+	/**
+	 * The row number of the given table line.
+	 * 
+	 * @created 16.03.2011
+	 * @param s
+	 * @return
+	 */
+	public static int getRowOfLine(Section<? extends TableLine> s) {
+		return Sections.findAncestorOfType(s, Table.class).getChildren().indexOf(
+				s);
 	}
 
 	/**

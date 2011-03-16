@@ -41,11 +41,37 @@ public class TableLineRenderer extends KnowWEDomRenderer<TableLine> {
 		StringBuilder b = new StringBuilder();
 		StringBuilder buffi = new StringBuilder();
 		DelegateRenderer.getInstance().render(article, sec, user, b);
-		buffi.append("<tr>");
+
+		buffi.append("<tr ");
+
+		buffi.append(" id='").append(sec.getID()).append("'");
+
+		String classes = getClasses(article, sec, user);
+
+		if (!classes.isEmpty()) {
+			buffi.append(" classes='").append(classes).append("'");
+
+		}
+		buffi.append(">");
+
 		buffi.append(b.toString());
 		buffi.append("\n</tr>");
 
 		string.append(KnowWEUtils.maskHTML(buffi.toString()));
+	}
+
+	/**
+	 * Returns the CSS-class for the given table line.
+	 * 
+	 * @created 16.03.2011
+	 * @param article
+	 * @param sec
+	 * @param user
+	 * @return an empty string, if no classes should be assigned to the table
+	 *         line, a string of CSS classes otherwise
+	 */
+	protected String getClasses(KnowWEArticle article, Section<TableLine> sec, UserContext user) {
+		return "";
 	}
 
 }

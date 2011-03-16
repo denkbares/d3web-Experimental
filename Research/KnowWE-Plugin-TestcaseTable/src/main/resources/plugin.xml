@@ -4,7 +4,8 @@
 	
 	<requires>
 		<import plugin-id="KnowWEExtensionPoints" />
-		<import plugin-id="KnowWE-Plugin-d3web" />
+		<import plugin-id="KnowWE-Plugin-d3web-basic" />
+		<import plugin-id="KnowWE-Plugin-d3web-MarkupSet" />
 	</requires>
 	
 	<runtime>

@@ -26,6 +26,8 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 /**
+ * This type represents an instant in time. Different units of time (and their
+ * combination, eg 1h30m) is supported.
  * 
  * @author Florian Ziegler / Sebastian Furth
  * @created 12.08.2010
@@ -76,13 +78,7 @@ public class TimeStampType extends AbstractType {
 
 		}
 
-		// if (index > 0) {
 		return result;
-		// }
-		// else {
-		// throw new NumberFormatException(
-		// "Expression '" + time + "' is not a valid time stamp");
-		// }
 	}
 
 }
