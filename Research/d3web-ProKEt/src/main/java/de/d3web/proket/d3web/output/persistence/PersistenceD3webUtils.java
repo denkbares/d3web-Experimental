@@ -1,6 +1,7 @@
 package de.d3web.proket.d3web.output.persistence;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -235,14 +236,6 @@ public class PersistenceD3webUtils {
 				cases.append(f.getName());
 
 				cases.append("</option>");
-
-				// test
-				String[] fnparts = f.getName().split("UV");
-				if (fnparts != null && fnparts.length == 3) {
-					cases.append("<option>");
-					cases.append(fnparts[1]);
-					cases.append("</option>");
-				}
 			}
 		}
 		else {
@@ -265,9 +258,19 @@ public class PersistenceD3webUtils {
 		File folder = new File(GlobalSettings.getInstance().getCaseFolder());
 
 		if (folder.listFiles() != null && folder.listFiles().length != 0) {
-			for (File f : folder.listFiles()) {
 
-				// test
+			// ignore file(s) ending to .csv as this is the user config file
+			File[] files = folder.listFiles(new FileFilter() {
+				@Override
+				public boolean accept(File pathname) {
+					return !pathname.getName().contains(".csv");
+				}
+			});
+
+			for (File f : files) {
+
+				// Split the complete filename String <TIMESTAMP><>
+				// so we get only the user entered filename to be displayed
 				String[] fnparts = f.getName().split("UV");
 				if (fnparts != null && fnparts.length == 3) {
 					cases.append("<option>");
@@ -277,9 +280,32 @@ public class PersistenceD3webUtils {
 			}
 		}
 		else {
+			/* In case no files are found, just append empty string */
 			cases.append("");
 		}
 
 		return cases.toString();
+	}
+
+	public static boolean existsCase(String userFilename){
+		File folder = new File(GlobalSettings.getInstance().getCaseFolder());
+
+		if (folder.listFiles() != null && folder.listFiles().length != 0) {
+
+			// ignore file(s) ending to .csv as this is the user config file
+			File[] files = folder.listFiles(new FileFilter() {
+				@Override
+				public boolean accept(File pathname) {
+					return !pathname.getName().contains(".csv");
+				}
+			});
+
+			for (File f : files) {
+				if (f.getName().contains("UV" + userFilename + "UV")) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

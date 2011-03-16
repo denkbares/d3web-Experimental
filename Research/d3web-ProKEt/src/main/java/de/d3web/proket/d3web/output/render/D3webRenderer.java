@@ -137,7 +137,7 @@ public class D3webRenderer implements ID3webRenderer {
 		st.setAttribute("header", D3webConnector.getInstance().getHeader());
 
 		// load case list
-		String opts = PersistenceD3webUtils.getCaseList();
+		String opts = PersistenceD3webUtils.getCaseListFromUserFilename();
 		st.setAttribute("fileselectopts", opts);
 
 		// add some buttons for basic functionality

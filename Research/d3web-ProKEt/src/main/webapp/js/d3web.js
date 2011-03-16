@@ -31,16 +31,35 @@ $(function() {
 			autoOpen: false,
 			position: top,
 			modal: true,
-			width: 400,
-			height: 200,
-			minWidth: 400,
-			minHeight: 200,
+			width: 410,
+			height: 210,
+			minWidth: 410,
+			minHeight: 210,
 			buttons: {
-				"SPEICHERN.": d3web_sendSave,
-				"NEIN, weiter eingeben.": closeJQConfirmDialog
+				"Speichern": d3web_sendSave,
+				"Nein, weiter eingeben": closeJQConfirmDialog
 			}
 		};
 		$("#jqConfirmDialog").dialog(opts);
+	});
+	
+	/* creating and configuring the jquery UI confirmation dialog */
+	$(function(){ 
+		
+		var opts = {
+			autoOpen: false,
+			position: ["left", "top"],
+			modal: false,
+			width: 180,
+			height: 360,
+			minWidth: 180,
+			minHeight: 360,
+			buttons: {
+				"OK": d3web_getSelectedCaseFileAndLoad,
+				"Abbrechen": closeJQLoadCaseDialog
+			}
+		};
+		$("#jqLoadCaseDialog").dialog(opts);
 	});
 	
 	/* Initialize the JS binding to the dialog elements */
@@ -105,9 +124,11 @@ function initFunctionality(){
 	// bind the loadcase button to making the fileselect list visible
 	$('#loadcase').unbind('click').click(function(event){
 		
+		$("#jqLoadCaseDialog").dialog("open");
+		
 		// make selectbox visible
-		var filesel = $('#fileselect');
-		filesel.attr("style", "display:block");
+		//var filesel = $('#fileselect');
+		//filesel.attr("style", "display:block");
 	});
 }
 
@@ -329,6 +350,7 @@ function d3web_addfactsRemembering(store, qid, pos) {
 		async : false,
 		url : link,
 		success : function(html) {
+			
 			//d3web_nextform();
 
 		//if (html != "same") {			// replace target id of content if not the same
@@ -406,16 +428,18 @@ function d3web_sendSave() {
 	
 	var link = $.query.set("action", "savecase").set("userfn", confirmFilename).toString();
 	
-	
 	link = window.location.href.replace(window.location.search, "") + link;
-
-	$.ajax({
-		type : "GET",
-		async : false,
-		url : link,
-		success : function(html) {
-			d3web_show();
-		}
+		
+	// new jquery 1.5 syntax
+	$.get(link, function(data){
+			if (data == "exists"){
+				$('#confirmError').html(
+						"<font color=\"red\">Dateiname exisitiert bereits. Bitte anderen Namen wählen.</font>");
+			}
+			else {
+				window.location.reload();
+				initFunctionality();
+			}
 	});
 }
 
@@ -443,16 +467,20 @@ function d3web_show() {
  * Retrieves the currently selected value (as text) from the 
  * case-loading selectbox. This function is directly defined/linked
  * in the FileSelect.st StringTemplate.
- * 
- * @param el The element (selectbox) that called this function
- */
-function d3web_getSelectedCaseFileAndLoad(el){
+ **/
+function d3web_getSelectedCaseFileAndLoad(){
 	
-	// get selected text = filename
-	var filename = el.options[el.selectedIndex].text;
+	var filename = $('#caseSelect :selected').text();
 	
-	// call AJAX function for loading the case with specified filename.
-	d3web_loadCase(filename);
+	if(filename !== ""){
+		// get selected text = filename
+		alert(filename);
+		
+		// call AJAX function for loading the case with specified filename.
+		d3web_loadCase(filename);
+	} else {
+		closeJQLoadCaseDialog();
+	}
 }
 
 /**
@@ -604,4 +632,8 @@ function closeJQConfirmDialog(){
 
 function closeJQLoginDialog(){
 	$('#jqLoginDialog').dialog('close');
+}
+
+function closeJQLoadCaseDialog(){
+	$('#jqLoadCaseDialog').dialog('close');
 }

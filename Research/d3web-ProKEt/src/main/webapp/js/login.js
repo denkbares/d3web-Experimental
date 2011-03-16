@@ -24,8 +24,8 @@ $(function() {
 		},
 		// two custom buttons
 		buttons : {
-			"OK." : sendData,
-			"Abbrechen." : showDenyMessage
+			"OK" : sendData,
+			"Abbrechen" : showDenyMessage
 		}
 	};
 

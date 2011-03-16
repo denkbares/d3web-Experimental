@@ -338,18 +338,34 @@ public class D3webDialog extends HttpServlet {
 	private void saveCase(HttpServletRequest request,
 			HttpServletResponse response) {
 
+		response.setContentType("text/html");
+		response.setCharacterEncoding("utf8");
+		PrintWriter writer = null;
+		
 		// retrieves path to /cases folder on the server
 		String folderPath = request.getSession().getServletContext().getRealPath("/cases");
 		GlobalSettings.getInstance().setCaseFolder(folderPath);
 		// PersistenceD3webUtils.saveCaseTimestampOneQuestionVal(folderPath,
 		// "Betreffende Klinik");
 		
-		String userFilename = request.getParameter("userfn");
+		try {
+			writer = response.getWriter();
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
-				folderPath,
-				"Betreffende Klinik",
-				userFilename);
+		String userFilename = request.getParameter("userfn");
+		if (PersistenceD3webUtils.existsCase(userFilename)) {
+			writer.append("exists");
+		}
+		else {
+			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
+					folderPath,
+					"Betreffende Klinik",
+					userFilename);
+		}
 	}
 
 	/**

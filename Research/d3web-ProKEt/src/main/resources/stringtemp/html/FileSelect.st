@@ -1,6 +1,5 @@
-<div id="fileselect" class="fileselect">
-	<select name="files" size="10" 
-	    onChange='javascript:d3web_getSelectedCaseFileAndLoad(this)'>
+<div id="jqLoadCaseDialog" title="Fall laden">
+	<select id="caseSelect" name="files" size="15" style="width:150px;">
     	$fileselectopts$ 
     </select>
 </div>

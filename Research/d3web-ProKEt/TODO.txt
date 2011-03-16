@@ -61,12 +61,18 @@ FREECHOICE/QUICKI Dialog
 --------------------------------
 
 MEDIASTINITIS
-
-- Add Info 1. Frage dazu + Popup
 DONE - Abfrage beim speichern-Popup vervollständigen
+DONE - keine .csv Dateien und longname xmls anzeigen
+DONE - dateiauswahlmenü in dialog packen
+DONE - File exists Abfrage
+
+- Login erfolglos fall
+- automatischer Versand von mail mit PW falls vergessen?!
+- Kopplung von session login und session d3web
+- Add Info 1. Frage dazu + Popup
 
 - KLÄREN: Speichern/Laden von Fällen im Mediastinitis
--- Falls nachbearbeiten nicht erwünscht und NUR ansehen der Ergebnisse (so verstehe ich das): einfach per Zeitstempel und ggf Klinikkürzel speichern. 
-   Ansehen dann über Weboberfläche von Flo...
--- Falls nachbearbeiten erwünscht?! KLÄREN
+-- Ansehen Auswertungen über Weboberfläche von Flo...
+-- Falls nachbearbeiten erwünscht -- Ja: Fall wird automatisch in Ordner für Klinik gespeichert, mit Zeitstempel und Benutzername.
+-- Automatisch speichern nach 30 Minuten untätig.
    -- DATEINAME?! 
