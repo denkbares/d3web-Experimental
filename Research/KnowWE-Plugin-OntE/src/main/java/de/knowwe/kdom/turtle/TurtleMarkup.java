@@ -30,7 +30,6 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.OWL;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Priority;
@@ -44,7 +43,6 @@ import de.d3web.we.kdom.objects.KnowWETerm;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SyntaxError;
-import de.d3web.we.kdom.report.message.NoSuchObjectError;
 import de.d3web.we.kdom.report.message.UnexpectedSequence;
 import de.d3web.we.kdom.sectionFinder.AllBeforeTypeSectionFinder;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -54,12 +52,9 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.subtreeHandler.IncrementalConstraint;
-import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.kdom.type.AnonymousType;
 import de.d3web.we.kdom.type.AnonymousTypeInvisible;
-import de.d3web.we.terminology.TerminologyHandler;
-import de.d3web.we.utils.KnowWEUtils;
 import de.knowwe.onte.owl.terminology.URIUtil;
 import de.knowwe.termObject.BasicVocabularyReference;
 import de.knowwe.termObject.LocalConceptDefinition;
@@ -69,6 +64,7 @@ import de.knowwe.termObject.RDFResourceType;
 import de.knowwe.termObject.URIObject;
 import de.knowwe.termObject.URITermDefinition;
 import de.knowwe.termObject.URIObject.URIObjectType;
+import de.knowwe.util.DelegateDestroyHandler;
 
 public class TurtleMarkup extends AbstractType {
 
@@ -251,7 +247,7 @@ public class TurtleMarkup extends AbstractType {
 
 			@Override
 			public void destroy(KnowWEArticle article, Section<SubjectDefinition> s) {
-				
+
 				URIObject termObject = s.get().getTermObject(article, s);
 				if (termObject == null) return;
 				termObject.setURIType(URIObjectType.unspecified);
@@ -359,25 +355,13 @@ public class TurtleMarkup extends AbstractType {
 				termName = ((KnowWETerm) s.get()).getTermName(s);
 			}
 
-			boolean thiss = false;
-
 			if (termName.equals(LocalConceptDefinition.LOCAL_KEY)) {
-				thiss = true;
 				s.setType(new LocalConceptReference());
 			}
 			else {
 
 				OWLTermReference termReference = new OWLTermReference();
 				s.setType(termReference);
-			}
-
-			TerminologyHandler terminologyHandler = KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
-			boolean defined = terminologyHandler.isDefinedTerm(article,
-						termName, KnowWETerm.GLOBAL);
-
-			if (!defined && !thiss) {
-				return Arrays.asList((KDOMReportMessage) new NoSuchObjectError(
-							s.getOriginalText()));
 			}
 
 			return new ArrayList<KDOMReportMessage>(0);
@@ -397,26 +381,6 @@ public class TurtleMarkup extends AbstractType {
 			}
 		}
 
-		class DelegateDestroyHandler extends GeneralSubtreeHandler<Type> {
-
-			private final SubtreeHandler<Type> handler;
-
-			public DelegateDestroyHandler(SubtreeHandler h) {
-				this.handler = h;
-			}
-
-			@Override
-			public void destroy(KnowWEArticle article, Section<Type> s) {
-				handler.destroy(article, s);
-			}
-
-			@Override
-			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Type> s) {
-				return new ArrayList<KDOMReportMessage>(0);
-			}
-
-		}
-
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Type> s) {
 
@@ -425,11 +389,9 @@ public class TurtleMarkup extends AbstractType {
 				termName = ((KnowWETerm) s.get()).getTermName(s);
 			}
 
-			boolean thiss = false;
 			boolean datavalue = false;
 
 			if (termName.equals(LocalConceptDefinition.LOCAL_KEY)) {
-				thiss = true;
 				s.setType(new LocalConceptReference());
 			}
 			else {
@@ -454,7 +416,6 @@ public class TurtleMarkup extends AbstractType {
 								datavalue = true;
 							}
 						}
-
 					}
 				}
 				if (!datavalue && s.get() instanceof TurtleObject) {
@@ -464,16 +425,6 @@ public class TurtleMarkup extends AbstractType {
 					s.setType(termReference);
 				}
 			}
-
-			TerminologyHandler terminologyHandler = KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
-			boolean defined = terminologyHandler.isDefinedTerm(article,
-						termName, KnowWETerm.GLOBAL);
-
-			if (!defined && !thiss && !datavalue) {
-				return Arrays.asList((KDOMReportMessage) new NoSuchObjectError(
-							s.getOriginalText()));
-			}
-
 			return new ArrayList<KDOMReportMessage>(0);
 		}
 	}
@@ -494,28 +445,13 @@ public class TurtleMarkup extends AbstractType {
 				termName = ((KnowWETerm) s.get()).getTermName(s);
 			}
 
-			// boolean thiss = false;
 			boolean found = URIUtil.checkForKnownTerms(termName, knownObjectTerms);
 			if (found) {
 				s.setType(new BasicVocabularyReference());
 			}
 			else if (termName.equals(LocalConceptDefinition.LOCAL_KEY)) {
-				// thiss = true;
 				s.setType(new LocalConceptReference());
 			}
-			else {
-				// do nothing
-			}
-
-			// TerminologyHandler terminologyHandler =
-			// KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
-			// boolean defined = terminologyHandler.isDefinedTerm(article,
-			// termName, KnowWETerm.GLOBAL);
-			//
-			// if (!found && !defined && !thiss) {
-			// return Arrays.asList((KDOMReportMessage) new NoSuchObjectError(
-			// s.getOriginalText()));
-			// }
 
 			return new ArrayList<KDOMReportMessage>(0);
 		}
