@@ -82,17 +82,6 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="VerbatimType">
-		<parameter id="class"
-			value="de.d3web.we.kdom.basic.VerbatimType" />
-		<parameter id="name" value="VerbatimType" />
-		<parameter id="description" value="Type VerbatimType" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="3" />
-		<parameter id="scope" value="root" />
-	</extension>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Template">
 		<parameter id="class"
 			value="de.d3web.we.kdom.wikiTemplate.Template" />
