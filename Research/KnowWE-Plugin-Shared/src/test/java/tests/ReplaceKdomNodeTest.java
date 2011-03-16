@@ -31,8 +31,6 @@ import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.action.ActionContext;
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.jspwiki.JSPActionDispatcher;
-import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.RootType;
 import de.d3web.we.kdom.Section;
@@ -87,7 +85,7 @@ public class ReplaceKdomNodeTest extends TestCase {
 		map.put(KnowWEAttributes.USER, "testuser");
 		ActionContext actionContext = new ActionContext("ReplaceKDOMNodeAction", "", map, null,
 				null, null, null);
-		JSPActionDispatcher.getInstance().performAction(actionContext);
+		actionContext.getAction().execute(actionContext);
 
 		article = _env.getArticle("default_web", "Test_Article");
 		artSec = article.getSection();
@@ -116,7 +114,7 @@ public class ReplaceKdomNodeTest extends TestCase {
 		map.put(KnowWEAttributes.TEXT, "-aa-");
 		ActionContext actionContext2 = new ActionContext("ReplaceKDOMNodeAction", "", map, null,
 				null, null, null);
-		JSPActionDispatcher.getInstance().performAction(actionContext2);
+		actionContext2.getAction().execute(actionContext2);
 
 		// TODO: Replace KDOM-Check with something new
 		// actual = KDOMValidator.getFileHandlerInstance().validateArticle(
