@@ -96,5 +96,6 @@ public class SubmitTableContentAction extends AbstractAction {
 					articleNameForData, nodesMap);
 		}
 
+		context.getOutputStream().write(" (Wurde gespeichert)".getBytes());
 	}
 }

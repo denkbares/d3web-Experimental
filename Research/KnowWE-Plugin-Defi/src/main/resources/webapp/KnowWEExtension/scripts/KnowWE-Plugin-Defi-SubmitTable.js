@@ -24,8 +24,9 @@ function submitTable(kdomid,user,tableid) {
         var options = {
             url : KNOWWE.core.util.getURL(params),
             response : {
-                action : '',
-                ids : [ '' ]
+                action : 'insert',
+                ids : [ 'tableSubmit_'+tableid ],
+                fn : function(){ setTimeout ( 'document.location.reload()', 5000 ); }
             }
         }
 

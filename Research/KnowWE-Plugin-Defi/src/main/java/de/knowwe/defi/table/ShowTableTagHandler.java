@@ -41,16 +41,28 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 
 	private String renderTable(Section<DefineTableMarkup> myTable, UserContext user, String tableid) {
 		Section<Table> table = Sections.findSuccessor(myTable, Table.class);
-		List<Section<InputFieldCellContent>> inputs = new ArrayList<Section<InputFieldCellContent>>();
-		// Sections.findSuccessorsOfType(myTable, InputFieldCellContent.class,
-		// inputs);
+
+		Section<InputFieldCellContent> inputSec = Sections.findSuccessor(table,
+				InputFieldCellContent.class);
+		String erneut = "";
+		if (inputSec != null) {
+			String content = InputFieldCellContent.InputRenderer.getStoredContentForInput(inputSec);
+			if (content.length() > 1) {
+				erneut = " erneut";
+			}
+		}
+
 		StringBuilder string = new StringBuilder();
 		string.append(KnowWEUtils.maskHTML("<div id=" + myTable.getID() + ">"));
 		DelegateRenderer.getInstance().render(myTable.getArticle(), table.getFather(),
 				user, string);
+
 		string.append(KnowWEUtils.maskHTML("<input type='button' onclick=\"submitTable('"
 				+ myTable.getID() + "','" + user.getUserName()
-				+ "','" + tableid + "')\" name='speichern' value='speichern'/>"));
+				+ "','" + tableid
+				+ "')\" name='speichern' value='Änderungen" + erneut + " speichern'/>"));
+		string.append(KnowWEUtils.maskHTML("<span id='tableSubmit_" + tableid + "'>"));
+		string.append(KnowWEUtils.maskHTML("</span>"));
 		string.append(KnowWEUtils.maskHTML("</div>"));
 		return string.toString();
 	}

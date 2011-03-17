@@ -40,12 +40,20 @@ public class InputFieldCellContent extends AbstractType {
 		this.setCustomRenderer(new InputRenderer());
 	}
 
-	class InputRenderer extends KnowWEDomRenderer<InputFieldCellContent> {
+	static class InputRenderer extends KnowWEDomRenderer<InputFieldCellContent> {
 
 		@Override
 		public void render(KnowWEArticle article,
 				Section<InputFieldCellContent> sec, UserContext user,
 				StringBuilder string) {
+			String contentString = getStoredContentForInput(sec);
+			string.append(KnowWEUtils.maskHTML("<textarea rows='3' wrap='soft' type='text' id='"
+					+ sec.getID()
+					+ "'>" + contentString + "</textarea>"));
+
+		}
+
+		public static String getStoredContentForInput(Section<InputFieldCellContent> sec) {
 			List<Section<InputFieldCellContent>> found = new ArrayList<Section<InputFieldCellContent>>();
 			Sections.findSuccessorsOfType(sec.getFather().getFather().getFather(),
 					InputFieldCellContent.class,
@@ -54,6 +62,11 @@ public class InputFieldCellContent extends AbstractType {
 			Section<DefaultMarkupType> ancestorOfType = Sections.findAncestorOfType(sec,
 					DefaultMarkupType.class);
 			String tableid = ancestorOfType.get().getAnnotation(ancestorOfType, "id");
+			String contentString = getStoredContentString(number, tableid);
+			return contentString;
+		}
+
+		private static String getStoredContentString(int number, String tableid) {
 			String contentString = "-";
 			Section<TableEntryType> contentTable = findTableToShow(tableid);
 			if (contentTable != null) {
@@ -66,13 +79,10 @@ public class InputFieldCellContent extends AbstractType {
 					}
 				}
 			}
-			string.append(KnowWEUtils.maskHTML("<textarea rows='3' wrap='soft' type='text' id='"
-					+ sec.getID()
-					+ "'>" + contentString + "</textarea>"));
-
+			return contentString;
 		}
 
-		private Section<TableEntryType> findTableToShow(String id) {
+		private static Section<TableEntryType> findTableToShow(String id) {
 			Collection<KnowWEArticle> articles = KnowWEEnvironment.getInstance().getArticleManager(
 					KnowWEEnvironment.DEFAULT_WEB).getArticles();
 			for (KnowWEArticle knowWEArticle : articles) {

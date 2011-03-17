@@ -27,6 +27,17 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="Blank">
+		<parameter id="class" value="de.knowwe.defi.Blank" />
+		<parameter id="name" value="Blank" />
+		<parameter id="description" value="Type Blank" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5"  />
+		<parameter id="scope" value="root" />
+		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="DefineTableMarkup">
 		<parameter id="class" value="de.knowwe.defi.table.DefineTableMarkup" />
 		<parameter id="name" value="DefineTableMarkup" />
