@@ -280,7 +280,7 @@ public class d3webSectionFinderTest extends TestCase {
 	public void testRuleCondLineSectionFinder() {
 		String text = " yoyo IF (Fuel = unleaded gasoline AND Exhaust pipe color = sooty black)";
 		SectionFinder f =
-				new RuleCondLine().getSectioFinder();
+				new RuleCondLine().getSectionFinder();
 		List<SectionFinderResult> results = f.lookForSections(text, null, null);
 
 		assertEquals(WRONG_FIRST_START, 6, results.get(0).getStart());
@@ -290,7 +290,7 @@ public class d3webSectionFinderTest extends TestCase {
 	public void testRuleSectionFinder() {
 		String text = " yoyo IF (Fuel = diesel AND Exhaust pipe color = sooty black)\r\n"
 					+ "THEN Exhaust pipe color evaluation += normal";
-		SectionFinder f = new Rule().getSectioFinder();
+		SectionFinder f = new Rule().getSectionFinder();
 		List<SectionFinderResult> results = f.lookForSections(text, null, null);
 
 		assertEquals(WRONG_FIRST_START, 6, results.get(0).getStart());
@@ -328,7 +328,7 @@ public class d3webSectionFinderTest extends TestCase {
 					+ "What do you like? = Meeting people,\r\n"
 					+ "}\r\n";
 
-		SectionFinder f = new XCList().getSectioFinder();
+		SectionFinder f = new XCList().getSectionFinder();
 		List<SectionFinderResult> results = f.lookForSections(text, null, null);
 
 		assertEquals(WRONG_FIRST_START, 0, results.get(0).getStart());
@@ -403,7 +403,7 @@ public class d3webSectionFinderTest extends TestCase {
 				+ "What do you like? = Shopping,\r\n"
 				+ "} \r\n \r\n \r \n";
 
-		SectionFinder f = new XCLRelation().getSectioFinder();
+		SectionFinder f = new XCLRelation().getSectionFinder();
 		List<SectionFinderResult> results = f.lookForSections(text, null, null);
 
 		assertEquals(WRONG_FIRST_START, 0, results.get(0).getStart());

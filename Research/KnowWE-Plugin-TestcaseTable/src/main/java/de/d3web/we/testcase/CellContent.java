@@ -42,7 +42,8 @@ public class CellContent extends TableCellContent {
 		setCustomRenderer(new TestcaseTableCellContentRenderer());
 
 		TimeStampType timeStampType = new TimeStampType();
-		timeStampType.setSectionFinder(new ConstraintSectionFinder(timeStampType.getSectioFinder(),
+		timeStampType.setSectionFinder(new ConstraintSectionFinder(
+				timeStampType.getSectionFinder(),
 				new SectionFinderConstraint() {
 
 					@Override
