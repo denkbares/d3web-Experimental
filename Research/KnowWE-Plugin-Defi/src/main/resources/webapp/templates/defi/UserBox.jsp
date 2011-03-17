@@ -20,7 +20,7 @@
 	  Section<?> s = article.getSection();
 	  //Section<?> sec = Sections.findChildOfType(s, AboutMe.class);
 	  //avatar = DefaultMarkupType.getAnnotation(sec, "avatar");
-	  if (s.toString().contains("@avatar:")) {
+	  if (s != null && s.toString().contains("@avatar:")) {
 	  avatar = s.toString().split("@avatar: ")[1].substring(0,3);		  
 	  }
   }
