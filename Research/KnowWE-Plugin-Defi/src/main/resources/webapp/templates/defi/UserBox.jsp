@@ -1,7 +1,7 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="de.d3web.we.kdom.Sections"%>
 <%@page import="de.knowwe.defi.AboutMe"%>
-<%@page import="de.knowwe.jspwiki.JSPWikiUserContext"%>
+<%@page import="de.d3web.we.jspwiki.JSPWikiUserContext" %>
 <%@page import="de.d3web.we.kdom.Section"%>
 <%@page import="de.d3web.we.core.KnowWEEnvironment"%>
 <%@page import="de.d3web.we.kdom.KnowWEArticle"%>
