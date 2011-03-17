@@ -12,5 +12,5 @@
 			</tr>
 			</tbody>
 		</table>
-		 	
+		<div style="margin-top:5px;" id="loginError"></div>
 </div>

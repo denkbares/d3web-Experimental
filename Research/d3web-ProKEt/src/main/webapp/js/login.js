@@ -9,9 +9,9 @@ $(function() {
 	var opts = {
 		position : top,
 		width : 300,
-		height : 175,
+		height : 200,
 		minWidth : 300,
-		minHeight : 175,
+		minHeight : 200,
 		draggable : false,
 		resizable : false,
 		autoOpen : true,
@@ -77,22 +77,30 @@ function sendData() {
 		type : "GET",
 		async : false,
 		url : link,
-		success : function() {
-			// check wether user already logged in
-			if(document.cookie){
+		success : function(html) {
+			// unsuccessful login 
+			if (html == "nosuccess"){
+				$('#loginError').html("<font color=\"red\">Login erfolglos. <br />Bitte versuchen Sie es noch einmal.</font>");
+			} else {
 				
-				c = document.cookie;
-				cookiename = c.substring(0, c.indexOf('='));
-				if(c.indexOf(';') != -1){
-					cookiewert = c.substring(c.indexOf('=')+1,c.indexOf(';'));
-				}
-				else{
-					cookiewert = c.substr(c.indexOf('=')+1,c.length);
-				}
-				//alert(cookiename + " " + cookiewert);
-				if(cookiewert == "loggedin"){
+				$('#loginError').html("");
+				
+				// check wether user already logged in
+				if(document.cookie){
+					
+					c = document.cookie;
+					cookiename = c.substring(0, c.indexOf('='));
+					if(c.indexOf(';') != -1){
+						cookiewert = c.substring(c.indexOf('=')+1,c.indexOf(';'));
+					}
+					else{
+						cookiewert = c.substr(c.indexOf('=')+1,c.length);
+					}
+					//alert(cookiename + " " + cookiewert);
+					if(cookiewert == "loggedin"){
 
-					$("#jqLoginDialog").dialog("close");			
+						$("#jqLoginDialog").dialog("close");			
+					}
 				}
 			}
 		}
@@ -154,5 +162,5 @@ function rand(min, max) {
 }
 
 function showDenyMessage() {
-	alert("Sie müssen sich einloggen, um das System zu nutzen!");
+	$('#loginError').html("<font color=\"red\">Sie müssen sich einloggen um das System nutzen zu können.</font>");
 }
