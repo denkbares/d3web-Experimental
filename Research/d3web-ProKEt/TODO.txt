@@ -65,12 +65,13 @@ DONE - Abfrage beim speichern-Popup vervollständigen
 DONE - keine .csv Dateien und longname xmls anzeigen
 DONE - dateiauswahlmenü in dialog packen
 DONE - File exists Abfrage
-DONE - Login erfolglos fall
+DONE - Login erfolglos Fall
+
+DONE - Folgefragen beim neu laden nicht markiert?! (war auf einmal doch OK - beobachten)
 
 - automatischer Versand von mail mit PW falls vergessen?!
 - Kopplung von session login und session d3web
 - Add Info 1. Frage dazu + Popup
-- Folgefragen beim neu laden nicht markiert?!
 
 - KLÄREN: Speichern/Laden von Fällen im Mediastinitis
 -- Ansehen Auswertungen über Weboberfläche von Flo...

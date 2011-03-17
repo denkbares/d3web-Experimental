@@ -34,7 +34,7 @@ import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
-import de.d3web.proket.d3web.output.persistence.PersistenceD3webUtils;
+import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.data.DialogType;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;

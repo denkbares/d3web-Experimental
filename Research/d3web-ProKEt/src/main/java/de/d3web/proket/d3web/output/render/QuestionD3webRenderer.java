@@ -19,10 +19,13 @@
  */
 package de.d3web.proket.d3web.output.render;
 
+import java.io.IOException;
+
 import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.knowledge.Indication;
 import de.d3web.core.knowledge.InterviewObject;
+import de.d3web.core.knowledge.Resource;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Question;
@@ -40,6 +43,7 @@ import de.d3web.core.session.interviewmanager.Form;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.utils.AttachmentHandlingD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
@@ -81,6 +85,21 @@ public class QuestionD3webRenderer extends D3webRenderer {
 		st.setAttribute("fullId", "q_" + to.getName());
 		st.setAttribute("title", to.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getQuestionCount());
+
+		// handling popups, defined in textfiles in the KB
+		String popupResName = "popup" + to.getName();
+		System.out.println(popupResName);
+		Resource res = D3webConnector.getInstance().getKb().getResource(popupResName);
+		if (res != null) {
+			try {
+				String resString =
+					AttachmentHandlingD3webUtils.getTextfileContentsFromTextfileAttachment(res);
+				System.out.println(resString);
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 
 		if (to instanceof QuestionOC) {
 			st.setAttribute("type", "oc");
