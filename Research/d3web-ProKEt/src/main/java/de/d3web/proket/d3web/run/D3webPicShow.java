@@ -101,26 +101,29 @@ public class D3webPicShow extends HttpServlet {
 		System.out.println(r.getPathName());
 
 		InputStream in = r.getInputStream();
-		System.out.println(in.toString());
-		/*
-		 * BufferedImage bi = ImageIO.read(in); System.out.println(bi);
-		 * 
-		 * Iterator writers = ImageIO.getImageWritersByFormatName("jpg");
-		 * ImageWriter writer = (ImageWriter) writers.next(); ImageOutputStream
-		 * ios = ImageIO.createImageOutputStream(response.getOutputStream());
-		 * writer.setOutput(ios);
-		 */
-		
-		byte[] buf = new byte[1024];
-		int len;
-		ServletOutputStream os = response.getOutputStream();
-		while ((len = in.read(buf)) != -1) {
-			os.write(buf, 0, len);
-		}
+		try {
+			System.out.println(in.toString());
+			/*
+			 * BufferedImage bi = ImageIO.read(in); System.out.println(bi);
+			 * 
+			 * Iterator writers = ImageIO.getImageWritersByFormatName("jpg");
+			 * ImageWriter writer = (ImageWriter) writers.next();
+			 * ImageOutputStream ios =
+			 * ImageIO.createImageOutputStream(response.getOutputStream());
+			 * writer.setOutput(ios);
+			 */
 
-		in.close();
-		os.close();
-		// ios.close();
+			byte[] buf = new byte[1024];
+			int len;
+			ServletOutputStream os = response.getOutputStream();
+			while ((len = in.read(buf)) != -1) {
+				os.write(buf, 0, len);
+			}
+			os.close();
+		}
+		finally {
+			in.close();
+		}
 	}
 
 }

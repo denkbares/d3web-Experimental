@@ -28,60 +28,23 @@ public class ImageHandler {
 		return resource;
 	}
 
-	public static void writeImageToFolder(Resource r) {
-		// File f = null;
-		InputStream is = null;
+	public static void writeImageToFolder(Resource r) throws IOException {
+		InputStream is = r.getInputStream();
 		try {
-			is = r.getInputStream();
-		}
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		BufferedImage bi = null;
-		try {
-			bi = ImageIO.read(is);
-		}
-		catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		URL resourceUrl = null;
-		resourceUrl = FileUtils.class.getResource("/../../kbImg/");
-		System.out.println(resourceUrl);
-		File f = null;
-		try {
-			System.out.println(resourceUrl.toURI());
-
-			f = new File(resourceUrl.toURI() + "/dummy.txt");
-			System.out.println(f);
-		}
-		catch (URISyntaxException e) {
-
-		}
-		catch (NullPointerException e) {
-
-		}
-
-		try {
+			BufferedImage bi = ImageIO.read(is);
+			URL resourceUrl = FileUtils.class.getResource("/../../kbImg/");
+			File f = new File(resourceUrl.toURI() + "/dummy.txt");
 			f.createNewFile();
-		}
-		catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		System.out.println(f.exists());
-		System.out.println(f);
-
-		try {
 			ImageIO.write(bi, "jpg", f);
 		}
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		catch (URISyntaxException e) {
+			throw new IOException("internal error accessing ressource", e);
+		}
+		catch (NullPointerException e) {
+			throw new IOException("internal error accessing ressource", e);
+		}
+		finally {
+			is.close();
 		}
 	}
 }

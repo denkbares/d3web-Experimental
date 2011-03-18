@@ -45,7 +45,13 @@ public class StreamImageToResourceAction extends AbstractAction {
 		if (kb == null) return;
 
 		Resource input = kb.getResource("multimedia/" + imagename);
-		stream(input.getInputStream(), context.getOutputStream());
+		InputStream inputStream = input.getInputStream();
+		try {
+			stream(inputStream, context.getOutputStream());
+		}
+		finally {
+			inputStream.close();
+		}
 	}
 
 	/**
