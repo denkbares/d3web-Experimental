@@ -19,21 +19,85 @@
 package de.d3web.we.testcase;
 
 import java.io.IOException;
+import java.util.List;
 
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.session.Session;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.SessionBroker;
+import de.d3web.we.core.KnowWEArticleManager;
+import de.d3web.we.core.KnowWEEnvironment;
+import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.utils.D3webUtils;
 
 /**
+ * Resets the session. Optionally, reruns the last executed tests of the table
  * 
- * @author Florian Ziegler
+ * @author Florian Ziegler / Reinhard Hatko
  * @created 14.02.2011
  */
 public class TestcaseTableResetAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
+
+		boolean rerun = Boolean.valueOf(context.getParameter("rerun"));
+
+		if (rerun) {
+			String table = context.getParameter("table");
+			String web = context.getWeb();
+			KnowWEArticleManager articleManager = KnowWEEnvironment.getInstance().getArticleManager(
+					web);
+			Section<TestcaseTableType> tableDMType = (Section<TestcaseTableType>) articleManager.findNode(table);
+
+			String master = TestcaseTableType.getMaster(tableDMType, context.getTopic());
+			// get tests before clearing the session
+			List<Section<TestcaseTableLine>> executedLines = getExecutedTestsFromSession(context,
+					web, tableDMType, master);
+			// clear session...
+			clearSession(context);
+
+			// ... get new session and rerun tests
+			Session newSession = D3webUtils.getSession(master, context, web);
+
+			KnowledgeBase kb =
+					D3webModule.getKnowledgeRepresentationHandler(web).getKB(master);
+
+			KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(web, master);
+			List<Section<TestcaseTableLine>> alreadyExecuted = TestcaseTable.getExecutedLinesOfTable(
+					tableDMType, context, newSession);
+
+			for (Section<TestcaseTableLine> line : executedLines) {
+
+				RunTestcaseAction.executeTableLine(article, newSession, alreadyExecuted, kb, line);
+			}
+
+		}
+		else {
+			clearSession(context);
+		}
+
+	}
+
+	/**
+	 * Returns the test from the session
+	 * 
+	 * @param context
+	 * @param web
+	 * @param tableDMType
+	 * @param master
+	 * @return
+	 */
+	private List<Section<TestcaseTableLine>> getExecutedTestsFromSession(UserActionContext context, String web, Section<TestcaseTableType> tableDMType, String master) {
+		Session oldSession = D3webUtils.getSession(master, context, web);
+		return TestcaseTable.getExecutedLinesOfTable(
+				tableDMType, context, oldSession);
+	}
+
+	private void clearSession(UserActionContext context) {
 		SessionBroker broker = D3webModule.getBroker(context.getParameters());
 		broker.clear();
 	}

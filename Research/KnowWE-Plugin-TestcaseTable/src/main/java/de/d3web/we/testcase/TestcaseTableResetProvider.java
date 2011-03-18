@@ -34,14 +34,23 @@ public class TestcaseTableResetProvider implements ToolProvider {
 
 	@Override
 	public Tool[] getTools(KnowWEArticle article, Section<?> section, UserContext userContext) {
-		Tool edit = getResetTool(article, section, userContext);
-		return edit != null ? new Tool[] { edit } : new Tool[] {};
+		Tool reset = getResetTool(article, section, userContext);
+		Tool resetAndRerun = getResetAndRerunTool(article, section, userContext);
+		return new Tool[] {
+				reset, resetAndRerun };
+	}
+
+	private Tool getResetAndRerunTool(KnowWEArticle article, Section<?> section, UserContext userContext) {
+		String jsAction = createResetAction(section, userContext, true);
+		return new DefaultTool(
+				"KnowWEExtension/testcasetable/images/resetRerun.png",
+				"Clear session and rerun",
+				"Clears the session and reruns the last tests",
+				jsAction);
 	}
 
 	private Tool getResetTool(KnowWEArticle article, Section<?> section, UserContext userContext) {
-
-		String jsAction = createResetAction(section, userContext);
-
+		String jsAction = createResetAction(section, userContext, false);
 		return new DefaultTool(
 				"KnowWEExtension/images/progress_stop.gif",
 				"Clear session",
@@ -49,13 +58,9 @@ public class TestcaseTableResetProvider implements ToolProvider {
 				jsAction);
 	}
 
-	private static String createResetAction(Section<?> section, UserContext userContext) {
-		String id = section.getID();
-		String jsAction = "Testcase.resetTestcase('" + id + "');";
-		return jsAction;
+
+	private static String createResetAction(Section<?> section, UserContext userContext, boolean rerun) {
+		return "Testcase.resetTestcase('" + section.getID() + "', " + Boolean.toString(rerun) + ");";
 	}
 
-	public static String createResetLink(Section<?> section, UserContext userContext) {
-		return "javascript:" + createResetAction(section, userContext) + "undefined;";
-	}
 }

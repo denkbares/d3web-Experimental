@@ -105,7 +105,7 @@ public class RunTestcaseAction extends AbstractAction {
 	 * @param kb
 	 * @param line
 	 */
-	private void executeTableLine(KnowWEArticle article, Session session, List<Section<TestcaseTableLine>> alreadyExecuted, KnowledgeBase kb, Section<TestcaseTableLine> line) {
+	public static void executeTableLine(KnowWEArticle article, Session session, List<Section<TestcaseTableLine>> alreadyExecuted, KnowledgeBase kb, Section<TestcaseTableLine> line) {
 		alreadyExecuted.add(line);
 
 		RatedTestCase testcase = (RatedTestCase) KnowWEUtils.getStoredObject(article,
@@ -121,7 +121,7 @@ public class RunTestcaseAction extends AbstractAction {
 	 * @param session
 	 * @param kbm
 	 */
-	private void executeTestCase(RatedTestCase testcase, Session session, KnowledgeBase kb) {
+	private static void executeTestCase(RatedTestCase testcase, Session session, KnowledgeBase kb) {
 		Blackboard blackboard = session.getBlackboard();
 		long time = getPropagationTime(session, kb, testcase.getTimeStamp().getTime());
 
@@ -149,7 +149,7 @@ public class RunTestcaseAction extends AbstractAction {
 	 * @param offSet
 	 * @return
 	 */
-	private long getPropagationTime(Session session, KnowledgeBase kb, long offSet) {
+	private static long getPropagationTime(Session session, KnowledgeBase kb, long offSet) {
 
 		// TODO remove
 		System.out.println(offSet);

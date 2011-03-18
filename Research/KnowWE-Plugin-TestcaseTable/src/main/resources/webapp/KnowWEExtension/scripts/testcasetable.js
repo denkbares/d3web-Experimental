@@ -381,12 +381,14 @@ Testcase.colorExecutedLines = function(row, including) {
 /**
  * resets all run lines
  */
-Testcase.resetTestcase = function(sectionID) {
+Testcase.resetTestcase = function(sectionID, rerun) {
 	var topic = KNOWWE.helper.gup('page')
 		
 	var params = {
         action : 'TestcaseTableResetAction',
-        KWiki_Topic : topic
+        KWiki_Topic : topic,
+        rerun : rerun,
+        table : sectionID
     }
 
     var options = {
@@ -395,7 +397,8 @@ Testcase.resetTestcase = function(sectionID) {
         response : {
             action : 'none',
             fn : function(){
-				KNOWWE.core.rerendercontent.update(); 
+				KNOWWE.core.rerendercontent.update(); //TODO 
+				KNOWWE.core.rerendercontent.updateNode(sectionID, topic, null);
 				KNOWWE.core.util.updateProcessingState(-1); 
             },
             onError : function () {
@@ -406,7 +409,7 @@ Testcase.resetTestcase = function(sectionID) {
 	KNOWWE.core.util.updateProcessingState(1);
     new _KA( options ).send();
     
-    Testcase.resetTableCSS(sectionID);
+    //Testcase.resetTableCSS(sectionID);
 }
 
 
