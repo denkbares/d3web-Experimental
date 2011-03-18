@@ -18,11 +18,12 @@
  */
 package de.d3web.we.testcase;
 
+import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.table.TableCellContent;
 import de.d3web.we.kdom.table.TableCellContentRenderer;
-import de.d3web.we.kdom.table.TableLine;
+import de.d3web.we.kdom.table.TableUtils;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
 
@@ -33,53 +34,42 @@ import de.d3web.we.utils.KnowWEUtils;
  */
 public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 
-	private final String invalidTimeStamp = "invalidTimeStamp";
+	public static final String INVALIDTIMESTAMP = "invalidTimeStamp";
 
-	/**
-	 * Wraps the content of the cell (sectionText) with the HTML-Code needed for
-	 * the table
-	 */
+
 	@Override
-	protected String wrappContent(String sectionText, Section<TableCellContent> sec, UserContext user) {
+	public void render(KnowWEArticle article, Section<TableCellContent> sec, UserContext user, StringBuilder string) {
 
-		Section<TimeStampType> timestamp = Sections.findSuccessor(sec, TimeStampType.class);
+		Section<TestcaseTableLine> line = Sections.findAncestorOfExactType(sec,
+				TestcaseTableLine.class);
 
-		// Check if there is a (valid) TimeStamp
-		if (timestamp != null) {
+		boolean testcaseAvailable = KnowWEUtils.getStoredObject(article, line,
+				TestcaseTable.TESTCASE_KEY) != null;
 
-			boolean validTimeStamp = false;
+		int column = TableUtils.getColumn(sec);
 
-			if (timestamp != null && TimeStampType.isValid(timestamp.getOriginalText())) {
-				validTimeStamp = true;
-			}
+		StringBuilder html = new StringBuilder();
 
-			StringBuilder html = new StringBuilder();
+		if (!testcaseAvailable) {
+			html.append("<td class=\"" + INVALIDTIMESTAMP + "\">");
+		}
+		else if (column != 0) {
+			html.append("<td>");
 
-			if (validTimeStamp) {
+		}
+		else {
 
-				Section<TableLine> line = Sections.findAncestorOfType(sec, TableLine.class);
-				html.append("<td class=\"testcaseLineHeader\">");
-				html.append("<div class=\"startTestcaseIncluding\" title=\"run Testcases until and including this\" onclick=\"return Testcase.runTestcase('"
-						+ line.getID()
-						+ "', true)\""
-						+ "\"></div><div class=\"startTestcase\" title=\"run Testcase\" onclick=\"return Testcase.runTestcase('"
-						+ line.getID() + "', false)\""
-						+ "\"></div>");
-			}
-			else {
-				html.append("<td class=\"" + invalidTimeStamp + " testcaseLineHeader\"></div>");
-			}
+			html.append("<td>");
+			html.append("<div class='startTestcaseIncluding' title='run Testcases until and including this' onclick='Testcase.runTestcase(this, true)'>"
+						+ "</div>"
+						+ "<div class='startTestcase' title='run Testcase' onclick='Testcase.runTestcase(this, false)'></div>");
 
-			generateContent(sec.getOriginalText(), sec, user, sec.getID(), html);
-
-			html.append("</td>");
-			return KnowWEUtils.maskHTML(html.toString());
 		}
 
-		return super.wrappContent(sec.getOriginalText(), sec, user);
+		html.append(sec.getText());
 
-		// No TimeStamp Cell -> Normal Rendering!
-		// return super.wrappContent(sectionText, sec, user);
+		html.append("</td>");
+		string.append(KnowWEUtils.maskHTML(html.toString()));
 
 	}
 

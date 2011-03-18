@@ -26,6 +26,8 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.condition.Number;
+import de.d3web.we.kdom.rendering.DefaultTextRenderer;
+import de.d3web.we.kdom.report.MessageRenderer;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
@@ -41,8 +43,11 @@ public class ValueType extends AbstractType {
 	@Override
 	protected void init() {
 		setSectionFinder(new AllTextSectionFinder());
-		addChildType(new Number());
+		Number number = new Number();
+		number.setCustomRenderer(DefaultTextRenderer.getInstance());
+		addChildType(number);
 		CellAnswerRef aRef = new CellAnswerRef();
+		aRef.setCustomRenderer(DefaultTextRenderer.getInstance());
 		addChildType(aRef);
 
 		aRef.setSectionFinder(new SectionFinder() {

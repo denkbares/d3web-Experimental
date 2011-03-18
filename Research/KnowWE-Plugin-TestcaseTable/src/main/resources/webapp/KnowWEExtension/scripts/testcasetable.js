@@ -271,13 +271,15 @@ Testcase.saveInputAfterChange = function(event) {
 /**
  * runs a Testcase via RunTestcaseAction
  */
-Testcase.runTestcase = function(id, including) {
+Testcase.runTestcase = function(el, including) {
 	var topic = KNOWWE.helper.gup('page')
+	
+	var row = Testcase.findLineOfElement(el);
 	
 	var params = {
         action : 'RunTestcaseAction',
         KWiki_Topic : topic,
-        execLine : id,
+        execLine : row.id,
         multiLines : including
     }
 
@@ -287,16 +289,20 @@ Testcase.runTestcase = function(id, including) {
         response : {
             action : 'none',
             fn : function(){
+            	KNOWWE.core.util.updateProcessingState(-1);
 				KNOWWE.helper.observer.notify('update');
-//				var element = $(id);
-//				var table = Testcase.findParentWikiTable(element);
-//				KNOWWE.core.rerendercontent.updateNode(table.parentNode.id, topic, null);
-			}
+				var table = Testcase.findParentWikiTable(el);
+				KNOWWE.core.rerendercontent.updateNode(table.parentNode.id, topic, null);
+			},
+            onError : function () {
+	        	KNOWWE.core.util.updateProcessingState(-1);                    	
+            }
 
         }
     }
+	KNOWWE.core.util.updateProcessingState(1);
     new _KA( options ).send();
-	Testcase.colorExecutedLines(id, including);	
+	//Testcase.colorExecutedLines(row, including);	
 }
 
 
@@ -345,13 +351,12 @@ Testcase.saveTable = function() {
 /**
  * colors lines after their execution
  */
-Testcase.colorExecutedLines = function(id, including) {
-	var currentLine = $(id);
-	var trs = currentLine.parentNode.childNodes;
+Testcase.colorExecutedLines = function(row, including) {
+	var trs = row.parentNode.childNodes;
 
 	if (including) {
 		for (var i = 1; i < trs.length; i++) {
-			if (trs[i] == currentLine) { 
+			if (trs[i] == row) { 
                 break; 
            } else if (trs[i].className == Testcase.testcaseExecuted || trs[i].className == Testcase.testcaseSkipped) { 
                 continue; 
@@ -361,7 +366,7 @@ Testcase.colorExecutedLines = function(id, including) {
 		}
 	} else {
 		for (var i = 1; i < trs.length; i++) {
-			if (trs[i] == currentLine) {
+			if (trs[i] == row) {
 				break;
 			} else if (trs[i].className == Testcase.testcaseExecuted) {
 				continue;
@@ -370,7 +375,7 @@ Testcase.colorExecutedLines = function(id, including) {
 			}
 		}
 	}
-	currentLine.className = Testcase.testcaseExecuted;
+	row.className = Testcase.testcaseExecuted;
 }
 
 /**
@@ -390,7 +395,8 @@ Testcase.resetTestcase = function(sectionID) {
         response : {
             action : 'none',
             fn : function(){
-				KNOWWE.core.rerendercontent.update(); //Clear new SolutionPanel
+				KNOWWE.core.rerendercontent.update(); 
+				KNOWWE.core.util.updateProcessingState(-1); 
             },
             onError : function () {
 	        	KNOWWE.core.util.updateProcessingState(-1);                    	

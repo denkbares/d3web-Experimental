@@ -83,7 +83,7 @@ public class TestcaseTableLine extends TableLine {
 				Section<CellContent> cell = Sections.findSuccessor(s, CellContent.class);
 
 				LinkedList<KDOMReportMessage> list = new LinkedList<KDOMReportMessage>();
-				list.add(new SyntaxError("Invalid timestamp '" + cell.getOriginalText()
+				list.add(new SyntaxError("Invalid timestamp '" + cell.getText()
 						+ "' in line: " + lineNumber));
 				return list;
 			}
@@ -117,11 +117,11 @@ public class TestcaseTableLine extends TableLine {
 
 				Section<QuestionReference> qRef = Sections.findSuccessor(headerCell,
 						QuestionReference.class);
-				String qName = qRef.getOriginalText();
+				String qName = qRef.getText();
 				// TODO unchanged value, unknown value
 				Question question = kb.getManager().searchQuestion(qName);
 				if (question == null) continue;
-				Value value = KnowledgeBaseUtils.findValue(question, valueSec.getOriginalText());
+				Value value = KnowledgeBaseUtils.findValue(question, valueSec.getText());
 				Finding finding = new Finding(question, value);
 				testCase.add(finding);
 			}

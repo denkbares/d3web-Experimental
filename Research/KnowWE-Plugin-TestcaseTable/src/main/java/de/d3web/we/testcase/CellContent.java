@@ -21,7 +21,6 @@ package de.d3web.we.testcase;
 import java.util.List;
 
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SectionFinderConstraint;
@@ -37,6 +36,39 @@ import de.d3web.we.kdom.type.AnonymousType;
  */
 public class CellContent extends TableCellContent {
 
+	/**
+	 * 
+	 * @author Reinhard Hatko
+	 * @created 17.03.2011
+	 */
+	private final class TableColumnConstraint implements SectionFinderConstraint {
+
+		private final int column;
+
+		/**
+		 * Constrains the Sectionfinder to a single column.
+		 * 
+		 * @param column the column in which the sectionfinder is active
+		 *        (0-based)
+		 */
+		public TableColumnConstraint(int column) {
+			this.column = column;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public <T extends Type> boolean satisfiesConstraint(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
+			int column = TableUtils.getColumn((Section<? extends TableCellContent>) father);
+			return this.column == column;
+		}
+
+		@Override
+		public <T extends Type> void filterCorrectResults(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
+			// clear all results, if outside the column range
+			found.clear();
+		}
+	}
+
 	@Override
 	protected void init() {
 		setCustomRenderer(new TestcaseTableCellContentRenderer());
@@ -44,43 +76,19 @@ public class CellContent extends TableCellContent {
 		TimeStampType timeStampType = new TimeStampType();
 		timeStampType.setSectionFinder(new ConstraintSectionFinder(
 				timeStampType.getSectionFinder(),
-				new SectionFinderConstraint() {
-
-					@Override
-					public <T extends Type> boolean satisfiesConstraint(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
-						Section<?> line = Sections.findAncestorOfExactType(father,
-								TestcaseTableLine.class);
-						return line.getChildren().size() == 2;
-					}
-
-					@Override
-					public <T extends Type> void filterCorrectResults(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
-						found.clear();
-					}
-				}));
+				new TableColumnConstraint(1)));
 
 		AnonymousType nameType = new AnonymousType("name");
 		nameType.setSectionFinder(new ConstraintSectionFinder(new AllTextSectionFinder(),
-				new SectionFinderConstraint() {
+				new TableColumnConstraint(0)));
 
-					@SuppressWarnings("unchecked")
-					@Override
-					public <T extends Type> boolean satisfiesConstraint(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
-						// name column is first one...
-						int column = TableUtils.getColumn((Section<? extends TableCellContent>) father);
-						return column == 0;
-					}
+		ValueType valueType = new ValueType();
+		valueType.setSectionFinder(new ConstraintSectionFinder(valueType.getSectionFinder()));
 
-					@Override
-					public <T extends Type> void filterCorrectResults(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
-						// ... int other columns clear the results
-						found.clear();
-					}
-				}));
 		childrenTypes.add(new UnchangedType());
 		childrenTypes.add(nameType);
 		childrenTypes.add(timeStampType);
-		childrenTypes.add(new ValueType());
+		childrenTypes.add(valueType);
 
 	}
 

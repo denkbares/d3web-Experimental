@@ -43,18 +43,20 @@ div.startTestcaseIncluding{
 	height: 16px;
 	width: 16px;
 	margin-right: 5px;
-	margin-top: 2px;
 	background-image: url(../testcasetable/images/runlast_co.gif);
-	background-repeat: no-repeat;
 	cursor: pointer;
 }
 
-tr.testcaseExecuted td{
+tr.tcExecuted td{
 	background-color: #CDFECD ;
 }
 
-tr.testcaseSkipped td{
+tr.tcSkipped td{
 	background-color: #FF6633 ;
+}
+
+tr.tcLine{
+	height: 28px;
 }
 
 td.invalidTimeStamp{
@@ -80,14 +82,11 @@ td.invalidTimeStamp:hover div.invalidTimeStamp {
 	text-align: center;
 }
 
-td.testcaseLineHeader {
-	min-width: 50px;
-}
-
-tr.testcaseExecuted td div {
+tr.tcExecuted td div {
 	display: none;
 }
 
-tr.testcaseSkipped td div {
+tr.tcSkipped td div {
 	display: none;
 }
+

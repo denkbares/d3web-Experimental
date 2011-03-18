@@ -20,19 +20,31 @@
 
 package de.d3web.we.testcase;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
+import org.apache.commons.collections15.map.HashedMap;
+
+import de.d3web.core.session.Session;
+import de.d3web.we.basic.WikiEnvironment;
+import de.d3web.we.basic.WikiEnvironmentManager;
 import de.d3web.we.core.KnowWERessourceLoader;
 import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.table.Table;
 import de.d3web.we.kdom.table.TableLine;
+import de.d3web.we.user.UserContext;
 
 /**
  * @author Florian Ziegler
  */
 public class TestcaseTable extends Table {
+
+	public static final String TESTCASE_INFOSTORE_KEY = "testcasetable";
+	public static final String TESTCASE_KEY = "TESTCASE";
 
 	public TestcaseTable() {
 		super(new TestcaseTableAttributesProvider());
@@ -53,6 +65,31 @@ public class TestcaseTable extends Table {
 	@Override
 	public boolean isSortable() {
 		return false;
+	}
+
+	public static List<Section<TestcaseTableLine>> getExecutedLinesOfTable(Section<TestcaseTableType> table, UserContext context, Session session) {
+		String web = context.getWeb();
+
+		// TODO hotfix: web is null on startup
+		if (web == null) {
+			web = "default_web";
+		}
+
+		WikiEnvironment wiki = WikiEnvironmentManager.getInstance().getEnvironments(web);
+		Map<String, Object> sessionInfoStore = wiki.getSessionInfoStore(session);
+		Map<String, List<Section<TestcaseTableLine>>> tableExecutions = (Map<String, List<Section<TestcaseTableLine>>>) sessionInfoStore.get(TestcaseTable.TESTCASE_INFOSTORE_KEY);
+		if (tableExecutions == null) {
+			tableExecutions = new HashedMap<String, List<Section<TestcaseTableLine>>>();
+			sessionInfoStore.put(TestcaseTable.TESTCASE_INFOSTORE_KEY, tableExecutions);
+		}
+
+		List<Section<TestcaseTableLine>> list = tableExecutions.get(table.getID());
+		if (list == null) {
+			list = new LinkedList<Section<TestcaseTableLine>>();
+			tableExecutions.put(table.getID(), list);
+		}
+		return list;
+
 	}
 
 	/**

@@ -19,11 +19,8 @@
 package de.d3web.we.testcase;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
@@ -40,14 +37,11 @@ import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.basic.WikiEnvironment;
-import de.d3web.we.basic.WikiEnvironmentManager;
+import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.table.TableUtils;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
 
@@ -57,90 +51,67 @@ import de.d3web.we.utils.KnowWEUtils;
  */
 public class RunTestcaseAction extends AbstractAction {
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		String web = context.getWeb();
 		String execLine = context.getParameter("execLine");
 		boolean multiLines = Boolean.valueOf(context.getParameter("multiLines"));
 
+		KnowWEArticleManager articleManager = KnowWEEnvironment.getInstance().getArticleManager(web);
+		Section<TestcaseTableLine> line = (Section<TestcaseTableLine>) articleManager.findNode(execLine);
 
-		Section<TestcaseTableLine> line = (Section<TestcaseTableLine>) KnowWEEnvironment.getInstance().getArticleManager(
-				web).findNode(execLine);
 		Section<TestcaseTableType> tableDMType = Sections.findAncestorOfExactType(line,
 				TestcaseTableType.class);
 		String master = TestcaseTableType.getMaster(tableDMType, context.getTopic());
 		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(web, master);
 
-		List<Section<TestcaseTableLine>> toBeExecutedLines = new LinkedList<Section<TestcaseTableLine>>();
-		toBeExecutedLines.add(line);
+		Session session = D3webUtils.getSession(master, context, web);
 
-		// saving/recalling execution status
-		String user = context.getUserName();
-		Session session = D3webUtils.getSession(master, user, web);
-		WikiEnvironment wiki = WikiEnvironmentManager.getInstance().getEnvironments(web);
-		Map<String, Object> sessionInfoStore = wiki.getSessionInfoStore(session);
-		Object o = sessionInfoStore.get(master);
-
-		if (multiLines) {
-			findTestcaseIncluding(line, toBeExecutedLines, o);
-		}
-
+		// TODO lines are colored nevertheless. Give hint to user...
 		if (session == null) return;
+
+		List<Section<TestcaseTableLine>> alreadyExecuted = TestcaseTable.getExecutedLinesOfTable(
+				tableDMType, context, session);
 
 		KnowledgeBase kb =
 				D3webModule.getKnowledgeRepresentationHandler(web).getKB(master);
 
-		while (!toBeExecutedLines.isEmpty()) {
+		if (!multiLines) {
+			executeTableLine(article, session, alreadyExecuted, kb, line);
 
-			Section<TestcaseTableLine> currentMinSection = findTestcaseTableLineWithSmallestTimeStamp(toBeExecutedLines);
-			toBeExecutedLines.remove(currentMinSection);
+		}
+		else {
+			List<Section<TestcaseTableLine>> toBeExecutedLines = findTestcaseIncluding(line,
+					alreadyExecuted);
 
-			if (o == null) {
-				List<Section<TestcaseTableLine>> list = new ArrayList<Section<TestcaseTableLine>>();
-				list.add(currentMinSection);
-				sessionInfoStore.put(master, list);
-				o = sessionInfoStore.get(master);
+			// TODO remove
+			System.out.println("executing lines: " + toBeExecutedLines.size());
+
+			for (Section<TestcaseTableLine> testLine : toBeExecutedLines) {
+
+				executeTableLine(article, session, alreadyExecuted, kb, testLine);
 			}
-			else if (o instanceof List) {
-				if (((List) o).contains(currentMinSection)) {
-					continue;
-				}
-				else {
-					((List) o).add(currentMinSection);
-					o = sessionInfoStore.get(master);
-				}
-			}
-
-			RatedTestCase testcase = (RatedTestCase) KnowWEUtils.getStoredObject(article,
-					currentMinSection,
-					TestcaseTableLine.TESTCASE_KEY);
-			executeTestCase(testcase, session, kb);
 		}
 
 	}
 
 	/**
-	 * returns the Section<TestcaseTableLine> with the smallest TimeStamp
+	 * Executes a single table line;
+	 * 
+	 * @created 17.03.2011
+	 * @param article
+	 * @param session
+	 * @param alreadyExecuted
+	 * @param kb
+	 * @param line
 	 */
-	private Section<TestcaseTableLine> findTestcaseTableLineWithSmallestTimeStamp(List<Section<TestcaseTableLine>> lines) {
-		long currentMin = -1;
-		Section<TestcaseTableLine> currentMinSection = null;
-		for (Section<TestcaseTableLine> line : lines) {
-			long current = TimeStampType.getTimeInMillis(Sections.findSuccessor(
-					line,
-					TimeStampType.class));
-			if (currentMin == -1) {
-				currentMin = current;
-				currentMinSection = line;
-			}
-			else if (current < currentMin) {
-				currentMin = current;
-				currentMinSection = line;
-			}
+	private void executeTableLine(KnowWEArticle article, Session session, List<Section<TestcaseTableLine>> alreadyExecuted, KnowledgeBase kb, Section<TestcaseTableLine> line) {
+		alreadyExecuted.add(line);
 
-		}
-		return currentMinSection;
+		RatedTestCase testcase = (RatedTestCase) KnowWEUtils.getStoredObject(article,
+				line, TestcaseTableLine.TESTCASE_KEY);
+
+		executeTestCase(testcase, session, kb);
 	}
 
 	/**
@@ -180,6 +151,7 @@ public class RunTestcaseAction extends AbstractAction {
 	 */
 	private long getPropagationTime(Session session, KnowledgeBase kb, long offSet) {
 
+		// TODO remove
 		System.out.println(offSet);
 		Question question = kb.getManager().searchQuestion("start");
 		if (question == null) { // no timeDB present
@@ -203,68 +175,27 @@ public class RunTestcaseAction extends AbstractAction {
 
 	}
 
-	@SuppressWarnings("unchecked")
-	private void findTestcaseIncluding(Section<TestcaseTableLine> line, List<Section<TestcaseTableLine>> list, Object sessionInfoStore) {
-
-		// find all executed lines
-		List<Section> executed = new ArrayList<Section>();
-		if (sessionInfoStore instanceof List) {
-			List l = (List) sessionInfoStore;
-
-			for (Object o : l) {
-				if (o instanceof Section) {
-					executed.add((Section) o);
-				}
-			}
-		}
+	private List<Section<TestcaseTableLine>> findTestcaseIncluding(Section<TestcaseTableLine> line, List<Section<TestcaseTableLine>> alreadyExecuted) {
 
 		Section<TestcaseTable> tableSection = Sections.findAncestorOfExactType(line,
 				TestcaseTable.class);
 
-		// find the line executed line with the biggest timestamp
-		long maxTimeStampValue = -1;
-		for (Section tctLine : executed) {
-			Section currentTableSection = Sections.findAncestorOfExactType(tctLine,
-					TestcaseTable.class);
-			if (!tableSection.equals(currentTableSection)) {
-				continue;
-			}
-			maxTimeStampValue = Math.max(maxTimeStampValue,
-						TimeStampType.getTimeInMillis(Sections.findSuccessor(
-								tctLine,
-								TimeStampType.class)));
+		List<Section<TestcaseTableLine>> allLines = Sections.findChildrenOfType(tableSection,
+				TestcaseTableLine.class);
+
+		int firstLine;
+		if (alreadyExecuted.isEmpty()) {
+			firstLine = 0;
+		}
+		else {
+			Section<TestcaseTableLine> lastExLineSec = alreadyExecuted.get(alreadyExecuted.size() - 1);
+			firstLine = allLines.indexOf(lastExLineSec) + 1;
 		}
 
-		Section<TestcaseTable> table = (Section<TestcaseTable>) line.getFather();
-		List<Section<? extends Type>> lines = table.getChildren();
+		int lastLine = allLines.indexOf(line);
 
-		// only execute lines which are not yet executed and whose
-		// timestamp is bigger than the biggest of the already
-		// executed ones
+		return allLines.subList(firstLine, lastLine + 1);
 
-		Section<CellContent> cellContent = Sections.findSuccessor(line, CellContent.class);
-		int executedRow = TableUtils.getRow(cellContent);
-
-		for (Section<? extends Type> l : lines) {
-			if (executed.contains(l)) {
-				continue;
-			}
-			if (!(l.get() instanceof HeaderLine)) {
-				Section<TestcaseTableLine> currentLine = (Section<TestcaseTableLine>) l;
-				Section<CellContent> currentCellContent = Sections.findSuccessor(currentLine,
-						CellContent.class);
-				if (TableUtils.getRow(currentCellContent) > executedRow) {
-					break;
-				}
-
-				long currentTimeStampValue = TimeStampType.getTimeInMillis(Sections.findSuccessor(
-						currentLine, TimeStampType.class));
-				if (currentTimeStampValue > maxTimeStampValue) {
-					list.add(currentLine);
-				}
-
-			}
-		}
 	}
 
 }

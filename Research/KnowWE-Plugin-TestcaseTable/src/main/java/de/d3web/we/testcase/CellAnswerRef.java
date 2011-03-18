@@ -3,6 +3,7 @@ package de.d3web.we.testcase;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
+import de.d3web.we.kdom.report.MessageRenderer;
 import de.d3web.we.object.AnswerReference;
 import de.d3web.we.object.QuestionReference;
 
@@ -24,4 +25,14 @@ final class CellAnswerRef extends AnswerReference {
 		return questionRef;
 	}
 
+	@Override
+	public MessageRenderer getErrorRenderer() {
+		return null;
+	}
+
+	
+	@Override
+	public MessageRenderer getNoticeRenderer() {
+		return null;
+	}
 }

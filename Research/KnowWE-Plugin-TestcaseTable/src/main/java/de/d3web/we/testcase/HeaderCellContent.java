@@ -23,9 +23,12 @@ import java.util.List;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
+import de.d3web.we.kdom.rendering.DefaultTextRenderer;
+import de.d3web.we.kdom.report.MessageRenderer;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.table.TableCellContent;
+import de.d3web.we.kdom.table.TableCellContentRenderer;
 import de.d3web.we.kdom.table.TableLine;
 import de.d3web.we.object.QuestionReference;
 
@@ -39,10 +42,11 @@ public class HeaderCellContent extends TableCellContent {
 
 	@Override
 	protected void init() {
-		setCustomRenderer(new TestcaseTableCellContentRenderer());
+		setCustomRenderer(new TableCellContentRenderer(false));
 		childrenTypes.add(new UnchangedType());
 
 		QuestionReference qref = new QuestionReference();
+		qref.setCustomRenderer(DefaultTextRenderer.getInstance());
 		qref.setSectionFinder(new SectionFinder() {
 
 			@Override
