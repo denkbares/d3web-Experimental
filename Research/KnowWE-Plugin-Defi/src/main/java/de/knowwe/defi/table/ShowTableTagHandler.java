@@ -35,6 +35,8 @@ import de.d3web.we.utils.KnowWEUtils;
 
 public class ShowTableTagHandler extends AbstractTagHandler {
 
+	public static String VERSION_KEY = "table-version";
+
 	public ShowTableTagHandler() {
 		super("Befragungstabelle");
 	}
@@ -44,23 +46,48 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 
 		Section<InputFieldCellContent> inputSec = Sections.findSuccessor(table,
 				InputFieldCellContent.class);
-		String erneut = "";
+
+		boolean previousInputExists = false;
+		int versionsExisting = 1;
 		if (inputSec != null) {
-			String content = InputFieldCellContent.InputRenderer.getStoredContentForInput(inputSec);
+			String content = InputFieldCellContent.InputRenderer.getStoredContentForInput(
+					inputSec, 0);
 			if (content.length() > 1) {
-				erneut = " erneut";
+				previousInputExists = true;
+
+			}
+			Section<TableEntryType> entryContentTable = InputFieldCellContent.InputRenderer.findTableToShow(tableid);
+			List<Section<VersionEntry>> versions = new ArrayList<Section<VersionEntry>>();
+			if (entryContentTable != null) {
+				Sections.findSuccessorsOfType(entryContentTable, VersionEntry.class,
+						versions);
+				versionsExisting = versions.size();
 			}
 		}
 
 		StringBuilder string = new StringBuilder();
 		string.append(KnowWEUtils.maskHTML("<div id=" + myTable.getID() + ">"));
-		DelegateRenderer.getInstance().render(myTable.getArticle(), table.getFather(),
-				user, string);
+
+		for (int versionIndex = 0; versionIndex < versionsExisting; versionIndex++) {
+			user.getParameters().put(VERSION_KEY, Integer.toString(versionIndex));
+			DelegateRenderer.getInstance().render(myTable.getArticle(),
+					table.getFather(),
+					user, string);
+		}
+
+		String erneut = "";
+		if (previousInputExists) {
+			erneut = " erneut";
+		}
 
 		string.append(KnowWEUtils.maskHTML("<input type='button' onclick=\"submitTable('"
 				+ myTable.getID() + "','" + user.getUserName()
 				+ "','" + tableid
 				+ "')\" name='speichern' value='Änderungen" + erneut + " speichern'/>"));
+		string.append(KnowWEUtils.maskHTML("<input type='button' onclick=\"additionalTable('"
+				+ myTable.getID() + "','" + user.getUserName()
+				+ "','" + tableid
+				+ "')\" name='speichern' value='weitere Tabelle hinzufügen'/>"));
 		string.append(KnowWEUtils.maskHTML("<span id='tableSubmit_" + tableid + "'>"));
 		string.append(KnowWEUtils.maskHTML("</span>"));
 		string.append(KnowWEUtils.maskHTML("</div>"));
@@ -96,6 +123,7 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 			return "Error: no table id specified!";
 		}
 		Section<DefineTableMarkup> myTable = findTableToShow(id);
+
 		if (myTable != null) {
 			return renderTable(myTable, userContext, id);
 		}

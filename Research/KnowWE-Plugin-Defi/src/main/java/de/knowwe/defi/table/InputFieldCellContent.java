@@ -46,14 +46,18 @@ public class InputFieldCellContent extends AbstractType {
 		public void render(KnowWEArticle article,
 				Section<InputFieldCellContent> sec, UserContext user,
 				StringBuilder string) {
-			String contentString = getStoredContentForInput(sec);
+			String versionString = user.getParameter(ShowTableTagHandler.VERSION_KEY);
+			int version = 0;
+			if (versionString != null) {
+				version = Integer.parseInt(versionString);
+			}
+			String contentString = getStoredContentForInput(sec, version);
 			string.append(KnowWEUtils.maskHTML("<textarea rows='3' wrap='soft' type='text' id='"
 					+ sec.getID()
-					+ "'>" + contentString + "</textarea>"));
-
+					+ "_" + version + "'>" + contentString + "</textarea>"));
 		}
 
-		public static String getStoredContentForInput(Section<InputFieldCellContent> sec) {
+		public static String getStoredContentForInput(Section<InputFieldCellContent> sec, int version) {
 			List<Section<InputFieldCellContent>> found = new ArrayList<Section<InputFieldCellContent>>();
 			Sections.findSuccessorsOfType(sec.getFather().getFather().getFather(),
 					InputFieldCellContent.class,
@@ -62,27 +66,32 @@ public class InputFieldCellContent extends AbstractType {
 			Section<DefaultMarkupType> ancestorOfType = Sections.findAncestorOfType(sec,
 					DefaultMarkupType.class);
 			String tableid = ancestorOfType.get().getAnnotation(ancestorOfType, "id");
-			String contentString = getStoredContentString(number, tableid);
+			String contentString = getStoredContentString(number, tableid, version);
 			return contentString;
 		}
 
-		private static String getStoredContentString(int number, String tableid) {
+		private static String getStoredContentString(int number, String tableid, int version) {
 			String contentString = "-";
 			Section<TableEntryType> contentTable = findTableToShow(tableid);
+
 			if (contentTable != null) {
-				List<Section<ContentEntry>> entries = contentTable.get().getEntries(
-						contentTable);
+				List<Section<VersionEntry>> versionBlocks = TableEntryType.getVersionBlocks(contentTable);
+				if (versionBlocks.size() > 0) {
+				Section<VersionEntry> versionBlock = versionBlocks.get(version);
+				List<Section<ContentEntry>> entries = VersionEntry.getEntries(
+						versionBlock);
 				for (Section<ContentEntry> section : entries) {
 					if (section.get().getNumber(section) == number) {
 						contentString = section.get().getContent(section);
 						break;
 					}
 				}
+				}
 			}
 			return contentString;
 		}
 
-		private static Section<TableEntryType> findTableToShow(String id) {
+		public static Section<TableEntryType> findTableToShow(String id) {
 			Collection<KnowWEArticle> articles = KnowWEEnvironment.getInstance().getArticleManager(
 					KnowWEEnvironment.DEFAULT_WEB).getArticles();
 			for (KnowWEArticle knowWEArticle : articles) {

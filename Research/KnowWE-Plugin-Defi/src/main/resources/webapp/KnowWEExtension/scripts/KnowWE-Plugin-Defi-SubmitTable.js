@@ -8,12 +8,6 @@ function submitTable(kdomid,user,tableid) {
      for(i = 0; i < len; i++){
     	 text += 'Input'+i+':'+inputs[i].value+";";
      }
-	
-     //alert(text+ "  \nuser:"+ user + "  \ntable-kdomid: "+kdomid+ "  \ntable-id: "+tableid);
-
-	
-	
-	
     var params = {
             action : 'SubmitTableContentAction',
             user : user,
@@ -32,4 +26,9 @@ function submitTable(kdomid,user,tableid) {
 
         new _KA(options).send();
         
+}
+
+function additionalTable(kdomid,user,tableid) {
+	
+
 }
