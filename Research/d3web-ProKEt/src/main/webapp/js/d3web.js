@@ -355,7 +355,7 @@ function d3web_addfactsRemembering(store, qid, pos) {
 
 		//if (html != "same") {			// replace target id of content if not the same
 			window.location.reload();
-			initFunctionality();
+			//initFunctionality();
 		//}
 		}
 	});

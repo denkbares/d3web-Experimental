@@ -65,6 +65,11 @@ function sendData() {
 	// var seed = generateSeed();
 	// var p = encrypt(encrypt(pw) + seed);
 
+	// also login is called from dialogservlet, as login is only a modal overlay
+	var dialoglink = 
+		$.query.set("action", "show").toString();
+	
+	//link = window.location.href.replace(window.location.search, "") + link;
 	var querylink = $.query.set("u", usr).set("p", encrypt(pw)).toString();
 	var servletPart = window.location.href.substring(window.location.href
 			.indexOf("d3web-ProKEt"), window.location.href.length);
@@ -73,7 +78,7 @@ function sendData() {
 
 	link = window.location.href.replace(servletPart, servletPartNew);
 
-	$.ajax({
+	/*$.ajax({
 		type : "GET",
 		async : false,
 		url : link,
@@ -96,7 +101,6 @@ function sendData() {
 					else{
 						cookiewert = c.substr(c.indexOf('=')+1,c.length);
 					}
-					//alert(cookiename + " " + cookiewert);
 					if(cookiewert == "loggedin"){
 
 						$("#jqLoginDialog").dialog("close");			
@@ -104,6 +108,36 @@ function sendData() {
 				}
 			}
 		}
+	});*/
+	
+	var jqxhr = $.get(link, function(html) {
+		if (html == "nosuccess"){
+			$('#loginError').html("<font color=\"red\">Login erfolglos. <br />Bitte versuchen Sie es noch einmal.</font>");
+		} else {
+			
+			$('#loginError').html("");
+			
+			// check wether user already logged in
+			if(document.cookie){
+				
+				c = document.cookie;
+				cookiename = c.substring(0, c.indexOf('='));
+				if(c.indexOf(';') != -1){
+					cookiewert = c.substring(c.indexOf('=')+1,c.indexOf(';'));
+				}
+				else{
+					cookiewert = c.substr(c.indexOf('=')+1,c.length);
+				}
+				if(cookiewert == "loggedin"){
+
+					$("#jqLoginDialog").dialog("close");			
+				}
+			}
+		}
+	})
+	.complete(function() { 
+		alert("complete"); 
+		$.get(dialoglink);
 	});
 }
 

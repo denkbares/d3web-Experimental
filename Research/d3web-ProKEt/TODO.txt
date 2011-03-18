@@ -73,10 +73,12 @@ DONE - Folgefragen beim neu laden nicht markiert?! (war auf einmal doch OK - beo
 - automatischer Versand von mail mit PW falls vergessen?!
 - Kopplung von session login und session d3web
 - 1. Frage Popup schöner machen
-
+- logout popup?
 
 - KLÄREN: Speichern/Laden von Fällen im Mediastinitis
 -- Ansehen Auswertungen über Weboberfläche von Flo...
 -- Falls nachbearbeiten erwünscht -- Ja: Fall wird automatisch in Ordner für Klinik gespeichert, mit Zeitstempel und Benutzername.
 -- Automatisch speichern nach 30 Minuten untätig.
    -- DATEINAME?! 
+   
+   

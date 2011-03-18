@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -117,6 +118,12 @@ public class D3webDialog extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		// get the currently logged in user from the stored login cookie
+		Cookie[] cook = request.getCookies();
+		if (cook != null && cook.length != 0) {
+			System.out.println(cook[0].getName());
+		}
 
 		String folderPath = request.getSession().getServletContext().getRealPath("/cases");
 		GlobalSettings.getInstance().setCaseFolder(folderPath);
