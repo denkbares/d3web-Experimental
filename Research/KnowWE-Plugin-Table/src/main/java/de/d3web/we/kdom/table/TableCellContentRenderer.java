@@ -63,21 +63,43 @@ import de.d3web.we.utils.KnowWEUtils;
  */
 public class TableCellContentRenderer extends KnowWEDomRenderer<TableCellContent> {
 
-	private static TableCellContentRenderer instance = null;
+	/**
+	 * Determines of the DelegateRenderer is called for content
+	 */
+	private boolean callDelegate;
 
-	public static TableCellContentRenderer getInstance() {
-		if (instance == null) {
-			instance = new TableCellContentRenderer();
-		}
-		return instance;
+	/**
+	 * Creates a new renderer.
+	 * 
+	 * @param callDelegate determines if the delegateRenderer should be called
+	 *        for rendering the content
+	 */
+	public TableCellContentRenderer(boolean callDelegate) {
+		this.callDelegate = callDelegate;
+	}
+
+	/**
+	 * Creates a new Renderer which calls the delegateRenderer
+	 */
+	public TableCellContentRenderer() {
+		this(true);
 	}
 
 	@Override
 	public void render(KnowWEArticle article, Section<TableCellContent> sec, UserContext user, StringBuilder string) {
-		StringBuilder builder = new StringBuilder();
-		DelegateRenderer.getInstance().render(article, sec, user, builder);
 
-		string.append(wrappContent(builder.toString(), sec, user));
+		String content;
+
+		if (callDelegate) {
+			StringBuilder builder = new StringBuilder();
+			DelegateRenderer.getInstance().render(article, sec, user, builder);
+			content = builder.toString();
+		}
+		else {
+			content = sec.getOriginalText();
+		}
+
+		string.append(wrappContent(content, sec, user));
 	}
 
 	/**
@@ -186,6 +208,14 @@ public class TableCellContentRenderer extends KnowWEDomRenderer<TableCellContent
 
 		html.append("</select>");
 		return html.toString();
+	}
+
+	public boolean isCallDelegate() {
+		return callDelegate;
+	}
+
+	public void setCallDelegate(boolean callDelegate) {
+		this.callDelegate = callDelegate;
 	}
 
 	/**

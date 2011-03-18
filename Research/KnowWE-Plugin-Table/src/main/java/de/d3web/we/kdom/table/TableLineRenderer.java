@@ -39,23 +39,23 @@ public class TableLineRenderer extends KnowWEDomRenderer<TableLine> {
 	@Override
 	public void render(KnowWEArticle article, Section<TableLine> sec, UserContext user, StringBuilder string) {
 		StringBuilder b = new StringBuilder();
-		StringBuilder buffi = new StringBuilder();
 		DelegateRenderer.getInstance().render(article, sec, user, b);
 
-		buffi.append("<tr ");
+		StringBuilder buffi = new StringBuilder();
+		buffi.append("<tr");
 
 		buffi.append(" id='").append(sec.getID()).append("'");
 
 		String classes = getClasses(article, sec, user);
 
 		if (!classes.isEmpty()) {
-			buffi.append(" classes='").append(classes).append("'");
+			buffi.append(" class='").append(classes).append("'");
 
 		}
 		buffi.append(">");
 
 		buffi.append(b.toString());
-		buffi.append("\n</tr>");
+		buffi.append("</tr>\n");
 
 		string.append(KnowWEUtils.maskHTML(buffi.toString()));
 	}
