@@ -83,9 +83,11 @@ td { padding: 2px 0; vertical-align: top; height: 100%}
 .inactive .answer, .inactive input, .inactive radio{
 	background-color: #d3d3d3; color: grey; }
 
-#send_popup{z-index: 100; background-color: rgb(255, 255, 180); background-color: rgba(255, 255, 180, 0.850);
+#send_popup{z-index: 100; background-color: rgba(255, 255, 180, 0.90);
 	padding: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px;
 	-moz-box-shadow: 3px 3px 3px #888; -webkit-box-shadow: 3px 3px 3px #888; box-shadow: 3px 3px 3px #888;
 	border: 1px solid #BBB; font-weight: normal; color: #555; width: 500px; height: 100px;}
 	
 #fileselect{display: none; margin-top: 20px;}
+
+#popupTableDiv{width: 400px; margin-top: 5px; margin-bottom: 10px;}

@@ -67,9 +67,9 @@ public class AnswerTextD3webRenderer extends D3webRenderer {
 		StringTemplate st = TemplateUtils.getStringTemplate(
 					super.getTemplateName("TextAnswer"), "html");
 
-		st.setAttribute("fullId", tq.getName());
+		st.setAttribute("fullId", tq.getName().replace(" ", "_"));
 		st.setAttribute("realAnswerType", "text");
-		st.setAttribute("parentFullId", parent.getName());
+		st.setAttribute("parentFullId", parent.getName().replace(" ", "_"));
 
 		Blackboard bb = D3webConnector.getInstance().getSession().getBlackboard();
 		Value value = bb.getValue((ValueObject) to);

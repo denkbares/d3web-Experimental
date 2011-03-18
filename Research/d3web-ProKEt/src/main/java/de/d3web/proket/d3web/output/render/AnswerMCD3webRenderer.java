@@ -67,9 +67,9 @@ public class AnswerMCD3webRenderer extends D3webRenderer {
 			StringTemplate st = TemplateUtils.getStringTemplate(
 					super.getTemplateName("McAnswer"), "html");
 
-			st.setAttribute("fullId", mcq.getName());
+			st.setAttribute("fullId", mcq.getName().replace(" ", "_"));
 			st.setAttribute("realAnswerType", "mc");
-			st.setAttribute("parentFullId", parent.getName());
+			st.setAttribute("parentFullId", parent.getName().replace(" ", "_"));
 			st.setAttribute("text", c.getName());
 
 			Blackboard bb = D3webConnector.getInstance().getSession().getBlackboard();

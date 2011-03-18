@@ -22,7 +22,7 @@ var scrollHtml = 0;
 
 function setup() {
 
-	// load questionnaires and questions into memory
+	/*// load questionnaires and questions into memory
 	questionnaires = $('#content [id^="qu_"]');
 	questionsDirty = $('#content [id^="q_"]');
 	
@@ -38,7 +38,7 @@ function setup() {
 	markingQuestions = questions.filter(function(index) {
 		return $(this).find(".ok-button").size() == 0;
 	});
-
+*/
 	// setup popup stuff
 	// each time the document is clicked somewhere
 	$(document).click(function() {	
@@ -50,7 +50,7 @@ function setup() {
 	hide_popup(0); // initially hiding popup per default
 
 	// if alternating colors flag set, e.g., for Hierarchy dialog
-	if (alternatingColors) {
+	/*if (alternatingColors) {
 		alternating_colors();	// create alternating colors
 	}
 
@@ -67,13 +67,13 @@ function setup() {
 			}
 		});
 	}
-
-	prepare_question_marking(); // prepare marking of questions
+*/
+	//prepare_question_marking(); // prepare marking of questions
 	hide_all_tooltips(); // hide tooltips
 	generate_tooltip_functions(); // generate tooltip functions
-	hide_all_subquestions(); // hide subquestions
-	make_sidenav();	// make sidenavigation
-	highlight_sidenav();	// style sidenav 
+	//hide_all_subquestions(); // hide subquestions
+	//make_sidenav();	// make sidenavigation
+	//highlight_sidenav();	// style sidenav 
 }
 
 /**
@@ -580,18 +580,18 @@ function prepare_question_marking() {
  */
 function tooltip_over(id, element) {
 	
-	// get target element
-	target = $("#tt-" + id).filter(":not(:animated)");
-
+	targetid = "#tt-" + id;
+	
+	//target = $("#tt-" + id).filter(":not(:animated)");
+	var target = $(targetid);
+	
 	if (target.size() == 0) {
 		return;
 	}
+	
 	// if target element is not currently shown
 	if (target !== tooltipShown) {
 		
-		// get the triggering element
-		targetTrigger = $("." + id + "-tt-trigger");
-
 		// hide old tooltip if existing
 		if (tooltipShown !== undefined) {
 			tooltip_out(tooltipShown);
@@ -599,12 +599,12 @@ function tooltip_over(id, element) {
 		
 		// store currently shown tooltip and tooltipShownTrigger
 		tooltipShown = target;
-		// REM tooltipShownTrigger = targetTrigger;
 
 		target.css({
 			position : "absolute"
 		});
-		tooltip_move(element);
+		
+		//tooltip_move(element);
 
 		// show for 500 ms if not moved anymore
 		target.show(500);
@@ -659,18 +659,24 @@ function generate_tooltip_functions() {
 	
 	// if mouse is moved over an element define potential tooltips position
 	$(document).mousemove(function(e) {
-		tooltip_move(e);
+		//tooltip_move(e);
 	});
 	
 	// go through all existing tooltip triggers
 	triggers.each(function() {
 		
-		// TODO try this out for curiosity
-		var classes = /(\w*)-tt-trigger/;	// regex
-		var result = classes.exec($(this).attr('class'));
-		var id = result[1];	// id of the tooltip trigger
-		$(this).mouseover(function(e) {
-			tooltip_over(id, e);
+		// get all elements with -tt-trigger in class name or
+		// anywhere else
+		// var classes = /(\s*\w)*-tt-trigger/;	// regex
+		// var result = classes.exec($(this).attr('class'));
+		// var id = result[1];	// id of the tooltip trigger
+		
+		// complete class name
+		var classComplete = $(this).attr("class");
+		var id = classComplete.replace("-tt-trigger tooltip-trigger", "");
+		
+		$(this).mouseover(function() {
+			tooltip_over(id, $(this));
 		});
 		$(this).mouseout(function() {
 			tooltip_out(id);

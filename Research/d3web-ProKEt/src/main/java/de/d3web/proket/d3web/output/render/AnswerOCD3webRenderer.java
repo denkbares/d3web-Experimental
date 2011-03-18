@@ -67,9 +67,9 @@ public class AnswerOCD3webRenderer extends D3webRenderer {
 		st = TemplateUtils.getStringTemplate(
 				super.getTemplateName("OcAnswer"), "html");
 
-		st.setAttribute("fullId", c.getName());
+		st.setAttribute("fullId", c.getName().replace(" ", "_"));
 		st.setAttribute("realAnswerType", "oc");
-		st.setAttribute("parentFullId", to.getName());
+		st.setAttribute("parentFullId", to.getName().replace(" ", "_"));
 		st.setAttribute("text", c.getName());
 
 		Blackboard bb = D3webConnector.getInstance().getSession().getBlackboard();

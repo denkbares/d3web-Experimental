@@ -60,7 +60,7 @@ public class QuestionnaireD3webRenderer extends D3webRenderer {
 		StringTemplate st = TemplateUtils.getStringTemplate(
 				super.getTemplateName("Questionnaire"), "html");
 
-		st.setAttribute("fullId", to.getName());
+		st.setAttribute("fullId", to.getName().replace(" ", "_"));
 		st.setAttribute("title", to.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getQuestionnaireCount());
 

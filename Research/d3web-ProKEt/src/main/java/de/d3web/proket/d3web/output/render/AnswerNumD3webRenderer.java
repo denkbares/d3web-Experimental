@@ -66,9 +66,9 @@ public class AnswerNumD3webRenderer extends D3webRenderer {
 		StringTemplate st = TemplateUtils.getStringTemplate(
 					super.getTemplateName("NumAnswer"), "html");
 
-		st.setAttribute("fullId", nq.getName());
+		st.setAttribute("fullId", nq.getName().replace(" ", "_"));
 		st.setAttribute("realAnswerType", "num");
-		st.setAttribute("parentFullId", parent.getName());
+		st.setAttribute("parentFullId", parent.getName().replace(" ", "_"));
 
 		// set units if available
 		if (nq.getInfoStore().getValue(MMInfo.UNIT) != null) {

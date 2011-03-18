@@ -71,9 +71,9 @@ public class AnswerDateD3webRenderer extends D3webRenderer {
 		StringTemplate st = TemplateUtils.getStringTemplate(
 					super.getTemplateName("DateAnswerPure"), "html");
 
-		st.setAttribute("fullId", dq.getName());
+		st.setAttribute("fullId", dq.getName().replace(" ", "_"));
 		st.setAttribute("realAnswerType", "date");
-		st.setAttribute("parentFullId", parent.getName());
+		st.setAttribute("parentFullId", parent.getName().replace(" ", "_"));
 
 		Blackboard bb = D3webConnector.getInstance().getSession().getBlackboard();
 		Value value = bb.getValue((ValueObject) to);

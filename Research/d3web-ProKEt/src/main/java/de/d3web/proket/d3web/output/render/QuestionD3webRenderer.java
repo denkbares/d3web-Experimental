@@ -82,19 +82,19 @@ public class QuestionD3webRenderer extends D3webRenderer {
 				super.getTemplateName("Question"), "html");
 
 		// set some basic properties
-		st.setAttribute("fullId", "q_" + to.getName());
+		st.setAttribute("fullId", "q_" + to.getName().replace(" ", "_"));
 		st.setAttribute("title", to.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getQuestionCount());
 
 		// handling popups, defined in textfiles in the KB
-		String popupResName = "popup" + to.getName();
-		System.out.println(popupResName);
+		String popupResName = "popup" + to.getName() + ".txt";
+
 		Resource res = D3webConnector.getInstance().getKb().getResource(popupResName);
 		if (res != null) {
 			try {
 				String resString =
 					AttachmentHandlingD3webUtils.getTextfileContentsFromTextfileAttachment(res);
-				System.out.println(resString);
+				st.setAttribute("tooltip", resString);
 			}
 			catch (IOException e) {
 				e.printStackTrace();

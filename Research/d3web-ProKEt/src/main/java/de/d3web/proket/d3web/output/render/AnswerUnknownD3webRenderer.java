@@ -52,7 +52,7 @@ public class AnswerUnknownD3webRenderer extends D3webRenderer {
 					super.getTemplateName("Unknown"), "html");
 
 		st.setAttribute("fullId", to.getName());
-		st.setAttribute("parentFullId", to.getName());
+		st.setAttribute("parentFullId", to.getName().replace(" ", "_"));
 
 		Blackboard bb = D3webConnector.getInstance().getSession().getBlackboard();
 		Value value = bb.getValue((ValueObject) to);
