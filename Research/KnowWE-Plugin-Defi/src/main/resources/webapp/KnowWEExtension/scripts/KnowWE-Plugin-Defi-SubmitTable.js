@@ -1,9 +1,9 @@
 
-function submitTable(kdomid,user,tableid) {
+function submitTable(kdomid,user,tableid,versions) {
 	
 	var tableElement = _KS('#'+kdomid);
 	var inputs = _KS('textarea',tableElement);
-	var text = '';
+	var text = ''+versions+'#';
 	 var len = inputs.length;
      for(i = 0; i < len; i++){
     	 text += 'Input'+i+':'+inputs[i].value+";";

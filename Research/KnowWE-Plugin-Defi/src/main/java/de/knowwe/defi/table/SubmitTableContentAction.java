@@ -16,7 +16,7 @@ import de.d3web.we.kdom.Sections;
 
 public class SubmitTableContentAction extends AbstractAction {
 
-	private String createNewMarkupString(String tableid, Map<Integer, String> inputData) {
+	private String createNewMarkupString(String tableid, List<Map<Integer, String>> inputData) {
 		StringBuffer newContent = new StringBuffer();
 		newContent.append("%%Tabellendaten\n");
 		newContent.append(createMarkupContent(inputData));
@@ -25,11 +25,17 @@ public class SubmitTableContentAction extends AbstractAction {
 		return newContent.toString();
 	}
 
-	private String createMarkupContent(Map<Integer, String> inputData) {
+	private String createMarkupContent(List<Map<Integer, String>> inputData) {
 		StringBuffer newContent = new StringBuffer();
-		for (Integer i : inputData.keySet()) {
-			String text = inputData.get(i);
-			newContent.append("INPUT" + i + ":" + text + "\n");
+		int versionCounter = 0;
+		for (Map<Integer, String> map : inputData) {
+			newContent.append("VERSION" + versionCounter + "\n");
+			for (Integer i : map.keySet()) {
+				String text = map.get(i);
+				newContent.append("INPUT" + i + ":" + text + "\n");
+			}
+			versionCounter++;
+			newContent.append("\n");
 		}
 		newContent.append("-\n");
 		return newContent.toString();
@@ -41,14 +47,31 @@ public class SubmitTableContentAction extends AbstractAction {
 		String data = context.getParameter("data");
 		String tableid = context.getParameter("tableid");
 
+		String versionNumber = data.substring(0, data.indexOf('#'));
+		int versions = 1;
+		// read out leading version number
+		try {
+			versions = Integer.parseInt(versionNumber);
+		}
+		catch (Exception e) {
+		}
+		data = data.substring(data.indexOf('#') + 1); // cut away version number
+														// in front
+
 		// make up map for input data
 		String[] inputs = data.split(";");
-		Map<Integer, String> inputData = new HashMap<Integer, String>();
-		for (String string : inputs) {
-			String number = string.substring(5, string.indexOf(':'));
-			Integer i = Integer.parseInt(number.trim());
-			String text = string.substring(string.indexOf(':') + 1);
-			inputData.put(i, text);
+		int inputsByVersion = inputs.length / versions;
+		List<Map<Integer, String>> inputDataAll = new ArrayList<Map<Integer, String>>();
+		for (int i = 0; i < versions; i++) {
+			Map<Integer, String> inputDataOneVersion = new HashMap<Integer, String>();
+			for (int k = 0; k < inputsByVersion; k++) {
+				String string = inputs[i * inputsByVersion + k];
+				String number = string.substring(5, string.indexOf(':'));
+				Integer inputNumber = Integer.parseInt(number.trim()) % inputsByVersion;
+				String text = string.substring(string.indexOf(':') + 1);
+				inputDataOneVersion.put(inputNumber, text);
+			}
+			inputDataAll.add(inputDataOneVersion);
 		}
 
 		String defaultWeb = KnowWEEnvironment.DEFAULT_WEB;
@@ -58,7 +81,7 @@ public class SubmitTableContentAction extends AbstractAction {
 		KnowWEArticle knowWEArticle = articleManager.getArticle(
 				articleNameForData);
 		if (knowWEArticle == null) {
-			String newContent = createNewMarkupString(tableid, inputData);
+			String newContent = createNewMarkupString(tableid, inputDataAll);
 			KnowWEEnvironment.getInstance().getWikiConnector().createWikiPage(
 					articleNameForData, newContent.toString(), "Defi-system");
 			KnowWEArticle article = KnowWEArticle.createArticle(newContent.toString(),
@@ -86,10 +109,10 @@ public class SubmitTableContentAction extends AbstractAction {
 			}
 			if (contentSection == null) {
 				nodesMap.put(knowWEArticle.getSection().getID(), createNewMarkupString(
-						tableid, inputData));
+						tableid, inputDataAll));
 			}
 			else {
-				nodesMap.put(contentSection.getID(), createMarkupContent(inputData));
+				nodesMap.put(contentSection.getID(), createMarkupContent(inputDataAll));
 			}
 
 			articleManager.replaceKDOMNodesSaveAndBuild(context,

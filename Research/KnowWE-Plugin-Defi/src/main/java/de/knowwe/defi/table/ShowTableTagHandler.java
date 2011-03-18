@@ -74,6 +74,11 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 					table.getFather(),
 					user, string);
 		}
+		if (versionsExisting == 0) {
+			DelegateRenderer.getInstance().render(myTable.getArticle(),
+					table.getFather(),
+					user, string);
+		}
 
 		String erneut = "";
 		if (previousInputExists) {
@@ -83,11 +88,14 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 		string.append(KnowWEUtils.maskHTML("<input type='button' onclick=\"submitTable('"
 				+ myTable.getID() + "','" + user.getUserName()
 				+ "','" + tableid
+				+ "','" + versionsExisting
 				+ "')\" name='speichern' value='Änderungen" + erneut + " speichern'/>"));
-		string.append(KnowWEUtils.maskHTML("<input type='button' onclick=\"additionalTable('"
-				+ myTable.getID() + "','" + user.getUserName()
-				+ "','" + tableid
-				+ "')\" name='speichern' value='weitere Tabelle hinzufügen'/>"));
+		if (previousInputExists) {
+			string.append(KnowWEUtils.maskHTML("<input type='button' onclick=\"additionalTable('"
+					+ myTable.getID() + "','" + user.getUserName()
+					+ "','" + tableid
+					+ "')\" name='speichern' value='weitere Tabelle hinzufügen'/>"));
+		}
 		string.append(KnowWEUtils.maskHTML("<span id='tableSubmit_" + tableid + "'>"));
 		string.append(KnowWEUtils.maskHTML("</span>"));
 		string.append(KnowWEUtils.maskHTML("</div>"));
