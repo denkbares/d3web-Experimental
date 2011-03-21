@@ -19,7 +19,6 @@
 package de.knowwe.defi.table;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import de.d3web.we.core.KnowWEEnvironment;
@@ -51,13 +50,14 @@ public class InputFieldCellContent extends AbstractType {
 			if (versionString != null) {
 				version = Integer.parseInt(versionString);
 			}
-			String contentString = getStoredContentForInput(sec, version);
+			String contentString = getStoredContentForInput(sec, version,
+					user.getUserName());
 			string.append(KnowWEUtils.maskHTML("<textarea rows='3' wrap='soft' type='text' id='"
 					+ sec.getID()
 					+ "_" + version + "'>" + contentString + "</textarea>"));
 		}
 
-		public static String getStoredContentForInput(Section<InputFieldCellContent> sec, int version) {
+		public static String getStoredContentForInput(Section<InputFieldCellContent> sec, int version, String username) {
 			List<Section<InputFieldCellContent>> found = new ArrayList<Section<InputFieldCellContent>>();
 			Sections.findSuccessorsOfType(sec.getFather().getFather().getFather(),
 					InputFieldCellContent.class,
@@ -66,48 +66,50 @@ public class InputFieldCellContent extends AbstractType {
 			Section<DefaultMarkupType> ancestorOfType = Sections.findAncestorOfType(sec,
 					DefaultMarkupType.class);
 			String tableid = ancestorOfType.get().getAnnotation(ancestorOfType, "id");
-			String contentString = getStoredContentString(number, tableid, version);
+			String contentString = getStoredContentString(number, tableid, version,
+					username);
 			return contentString;
 		}
 
-		private static String getStoredContentString(int number, String tableid, int version) {
+		private static String getStoredContentString(int number, String tableid, int version, String username) {
 			String contentString = "-";
-			Section<TableEntryType> contentTable = findTableToShow(tableid);
+
+			Section<TableEntryType> contentTable = findTableToShow(tableid, username);
 
 			if (contentTable != null) {
 				List<Section<VersionEntry>> versionBlocks = TableEntryType.getVersionBlocks(contentTable);
 				if (versionBlocks.size() > 0) {
-				Section<VersionEntry> versionBlock = versionBlocks.get(version);
-				List<Section<ContentEntry>> entries = VersionEntry.getEntries(
-						versionBlock);
-				for (Section<ContentEntry> section : entries) {
-					if (section.get().getNumber(section) == number) {
-						contentString = section.get().getContent(section);
-						break;
+					Section<VersionEntry> versionBlock = versionBlocks.get(version);
+					List<Section<ContentEntry>> entries = VersionEntry.getEntries(
+							versionBlock);
+					for (Section<ContentEntry> section : entries) {
+						if (section.get().getNumber(section) == number) {
+							contentString = section.get().getContent(section);
+							break;
+						}
 					}
-				}
 				}
 			}
 			return contentString;
 		}
 
-		public static Section<TableEntryType> findTableToShow(String id) {
-			Collection<KnowWEArticle> articles = KnowWEEnvironment.getInstance().getArticleManager(
-					KnowWEEnvironment.DEFAULT_WEB).getArticles();
-			for (KnowWEArticle knowWEArticle : articles) {
-				List<Section<TableEntryType>> tables = new ArrayList<Section<TableEntryType>>();
-				Sections.findSuccessorsOfType(knowWEArticle.getSection(),
+		public static Section<TableEntryType> findTableToShow(String id, String username) {
+			String dataArticleNameForUser = SubmitTableContentAction.getDataArticleNameForUser(username);
+			KnowWEArticle knowWEArticle = KnowWEEnvironment.getInstance().getArticleManager(
+					KnowWEEnvironment.DEFAULT_WEB).getArticle(dataArticleNameForUser);
+			if (knowWEArticle == null) return null;
+			List<Section<TableEntryType>> tables = new ArrayList<Section<TableEntryType>>();
+			Sections.findSuccessorsOfType(knowWEArticle.getSection(),
 						TableEntryType.class,
 						tables);
-				for (Section<TableEntryType> table : tables) {
-					String tableID = table.get().getAnnotation(table, "tableid");
-					if (tableID != null) {
-						if (tableID.equals(id)) {
-							return table;
-						}
+			for (Section<TableEntryType> table : tables) {
+				String tableID = table.get().getAnnotation(table, "tableid");
+				if (tableID != null) {
+					if (tableID.equals(id)) {
+						return table;
 					}
-
 				}
+
 			}
 			return null;
 		}

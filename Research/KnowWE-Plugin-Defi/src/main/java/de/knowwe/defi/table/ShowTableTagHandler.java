@@ -52,12 +52,13 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 		int versionsExisting = 1;
 		if (inputSec != null) {
 			String content = InputFieldCellContent.InputRenderer.getStoredContentForInput(
-					inputSec, 0);
+					inputSec, 0, user.getUserName());
 			if (content.length() > 1) {
 				previousInputExists = true;
 
 			}
-			Section<TableEntryType> entryContentTable = InputFieldCellContent.InputRenderer.findTableToShow(tableid);
+			Section<TableEntryType> entryContentTable = InputFieldCellContent.InputRenderer.findTableToShow(
+					tableid, user.getUserName());
 			List<Section<VersionEntry>> versions = new ArrayList<Section<VersionEntry>>();
 			if (entryContentTable != null) {
 				Sections.findSuccessorsOfType(entryContentTable, VersionEntry.class,
