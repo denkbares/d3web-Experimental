@@ -37,7 +37,7 @@
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
 	</extension>
-		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TableEntryType">
 		<parameter id="class" value="de.knowwe.defi.table.TableEntryType" />
 		<parameter id="name" value="TableEntryType" />
@@ -70,7 +70,17 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
         <parameter id="script" value="KnowWE-Plugin-Defi.js" />
-    </extension>    
+    </extension>
+    
+  <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="ReadbuttonTaghandler">
+        <parameter id="class" value="de.knowwe.defi.ReadButtonTaghandler" />
+        <parameter id="name" value="ReadButtonTaghandler" />
+        <parameter id="description" value="TagHandler ReadButtonkTaghandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="script" value="KnowWE-Plugin-Defi-ReadButtonTag.js" />
+    </extension>     
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="AboutMeSaveAction">
