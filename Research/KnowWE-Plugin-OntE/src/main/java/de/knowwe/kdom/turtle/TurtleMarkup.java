@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -40,6 +40,8 @@ import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SingleChildConstraint;
 import de.d3web.we.kdom.objects.KnowWETerm;
+import de.d3web.we.kdom.rendering.DelegateRenderer;
+import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SyntaxError;
@@ -55,6 +57,9 @@ import de.d3web.we.kdom.subtreeHandler.IncrementalConstraint;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.kdom.type.AnonymousType;
 import de.d3web.we.kdom.type.AnonymousTypeInvisible;
+import de.d3web.we.tools.ToolMenuDecoratingRenderer;
+import de.d3web.we.user.UserContext;
+import de.d3web.we.utils.KnowWEUtils;
 import de.knowwe.onte.owl.terminology.URIUtil;
 import de.knowwe.termObject.BasicVocabularyReference;
 import de.knowwe.termObject.LocalConceptDefinition;
@@ -62,8 +67,8 @@ import de.knowwe.termObject.LocalConceptReference;
 import de.knowwe.termObject.OWLTermReference;
 import de.knowwe.termObject.RDFResourceType;
 import de.knowwe.termObject.URIObject;
-import de.knowwe.termObject.URITermDefinition;
 import de.knowwe.termObject.URIObject.URIObjectType;
+import de.knowwe.termObject.URITermDefinition;
 import de.knowwe.util.DelegateDestroyHandler;
 
 public class TurtleMarkup extends AbstractType {
@@ -79,6 +84,7 @@ public class TurtleMarkup extends AbstractType {
 
 		AnonymousTypeInvisible start = new AnonymousTypeInvisible("turtlestart");
 		start.setSectionFinder(new SectionFinder() {
+
 			@Override
 			public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 				return SectionFinderResult.createSingleItemResultList(0, 1);
@@ -110,6 +116,8 @@ public class TurtleMarkup extends AbstractType {
 		this.addSubtreeHandler(Priority.HIGHER, new TripleChecker());
 
 		this.addSubtreeHandler(Priority.LOWEST, new TurtleRDF2GoCompiler());
+
+		this.setCustomRenderer(new TurtleMarkupDivWrapper());
 
 	}
 
@@ -195,6 +203,7 @@ public class TurtleMarkup extends AbstractType {
 	}
 
 	class TurtleSubject extends AbstractType {
+
 		public TurtleSubject() {
 			this.addChildType(new LocalConceptDefinition());
 			this.addChildType(new LocalConceptReference());
@@ -205,6 +214,7 @@ public class TurtleMarkup extends AbstractType {
 	}
 
 	class SubjectReference extends OWLTermReference {
+
 		public SubjectReference() {
 			this.setSectionFinder(new AllTextFinderTrimmed());
 		}
@@ -212,8 +222,10 @@ public class TurtleMarkup extends AbstractType {
 
 	class SubjectDefinition extends URITermDefinition implements
 			IncrementalConstraint<TurtleMarkup> {
-		final StyleRenderer CLASS_RENDERER = new StyleRenderer(
-				"color:rgb(152, 180, 12)");
+
+		final KnowWEDomRenderer<SubjectDefinition> CLASS_RENDERER =
+				new ToolMenuDecoratingRenderer<SubjectDefinition>(
+						new StyleRenderer("color:rgb(152, 180, 12)"));
 
 		public final String DEF_PREFIX = "def";
 
@@ -221,6 +233,7 @@ public class TurtleMarkup extends AbstractType {
 			this.setCustomRenderer(CLASS_RENDERER);
 			ConstraintSectionFinder finder = new ConstraintSectionFinder(
 					new ConditionalSectionFinder(new AllTextSectionFinder()) {
+
 						@Override
 						protected boolean condition(String text, Section<?> father) {
 							return text.startsWith(DEF_PREFIX);
@@ -325,6 +338,7 @@ public class TurtleMarkup extends AbstractType {
 	}
 
 	class TurtleObject extends AbstractType implements IncrementalConstraint<TurtleObject> {
+
 		public TurtleObject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new AllTextFinderTrimmed());
@@ -405,8 +419,7 @@ public class TurtleMarkup extends AbstractType {
 						if (predSec != null && predSec.get() instanceof OWLTermReference) {
 							Section<OWLTermReference> prop = predSec;
 							URIObject termObject = prop.get().getTermObject(article, prop);
-							if (termObject == null)
-								return new ArrayList<KDOMReportMessage>(0);
+							if (termObject == null) return new ArrayList<KDOMReportMessage>(0);
 
 							if (termObject.getURIType() == URIObjectType.datatypeProperty) {
 								DataTypeValueTurtle dataTypeValue = new DataTypeValueTurtle();
@@ -471,6 +484,31 @@ public class TurtleMarkup extends AbstractType {
 			}
 
 			return new ArrayList<KDOMReportMessage>();
+		}
+
+	}
+
+	/**
+	 * We need this div wrapper, because HTML-Strict which is used by JSPWiki
+	 * allows inline elements (e.g. span) only in block elements (e.g. div). If
+	 * we don't wrap the inline elements certain browsers (e.g. webkit-based
+	 * browsers like Chrome or Safari) will destroy the markup.
+	 * 
+	 * @author Sebastian Furth
+	 * @created Mar 21, 2011
+	 */
+	class TurtleMarkupDivWrapper extends KnowWEDomRenderer<TurtleMarkup> {
+
+		@Override
+		public void render(KnowWEArticle article, Section<TurtleMarkup> sec, UserContext user, StringBuilder string) {
+			StringBuilder inner = new StringBuilder();
+			DelegateRenderer.getInstance().render(article, sec, user, inner);
+
+			StringBuilder wrapper = new StringBuilder();
+			wrapper.append("<div>");
+			wrapper.append(inner.toString());
+			wrapper.append("</div>\n");
+			string.append(KnowWEUtils.maskHTML(wrapper.toString()));
 		}
 
 	}
