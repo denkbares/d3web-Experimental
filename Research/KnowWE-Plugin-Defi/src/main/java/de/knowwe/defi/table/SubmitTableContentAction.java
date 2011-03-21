@@ -59,6 +59,7 @@ public class SubmitTableContentAction extends AbstractAction {
 		// read out leading version number
 		try {
 			versions = Integer.parseInt(versionNumber);
+			if (versions == 0) versions = 1;
 		}
 		catch (Exception e) {
 		}
@@ -77,6 +78,7 @@ public class SubmitTableContentAction extends AbstractAction {
 		KnowWEArticle knowWEArticle = articleManager.getArticle(
 				articleNameForData);
 		if (knowWEArticle == null) {
+			// create new article
 			String newContent = createNewMarkupString(tableid, inputDataAll);
 			KnowWEEnvironment.getInstance().getWikiConnector().createWikiPage(
 					articleNameForData, newContent.toString(), "Defi-system");
@@ -95,13 +97,18 @@ public class SubmitTableContentAction extends AbstractAction {
 					tableid, knowWEArticle);
 			Map<String, String> nodesMap = new HashMap<String, String>();
 			if (contentSection == null) {
-				nodesMap.put(knowWEArticle.getSection().getID(), createNewMarkupString(
+				// append entire block to page
+				nodesMap.put(knowWEArticle.getSection().getID(),
+						knowWEArticle.getSection().getText() + "\n"
+								+ createNewMarkupString(
 						tableid, inputDataAll));
 			}
 			else {
+				// override content block
 				nodesMap.put(contentSection.getID(), createMarkupContent(inputDataAll));
 			}
 
+			// submit change
 			articleManager.replaceKDOMNodesSaveAndBuild(context,
 					articleNameForData, nodesMap);
 		}
