@@ -6,7 +6,7 @@ function submitTable(kdomid,user,tableid,versions) {
 	var text = ''+versions+'#';
 	 var len = inputs.length;
      for(i = 0; i < len; i++){
-    	 text += 'Input'+i+':'+inputs[i].value+";";
+    	 text += 'Input'+i+':'+inputs[i].value+";;";
      }
     var params = {
             action : 'SubmitTableContentAction',
@@ -29,6 +29,21 @@ function submitTable(kdomid,user,tableid,versions) {
 }
 
 function additionalTable(kdomid,user,tableid) {
-	
+    var params = {
+            action : 'InsertAdditionalTableVersionAction',
+            user : user,
+            tableid: tableid
+        }
+
+        var options = {
+            url : KNOWWE.core.util.getURL(params),
+            response : {
+                action : '',
+                ids : [ '' ],
+                fn : function(){ setTimeout ( 'document.location.reload()', 100 ); }
+            }
+        }
+
+        new _KA(options).send();
 
 }

@@ -84,6 +84,16 @@
     
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="InsertAdditionalTableVersionAction">
+        <parameter id="class"
+            value="de.knowwe.defi.table.InsertAdditionalTableVersionAction" />
+        <parameter id="name" value="InsertAdditionalTableVersionAction" />
+        <parameter id="description" value="Action InsertAdditionalTableVersionAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="SubmitTableContentAction">
         <parameter id="class"
             value="de.knowwe.defi.table.SubmitTableContentAction" />

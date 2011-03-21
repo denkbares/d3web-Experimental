@@ -16,6 +16,8 @@ import de.d3web.we.kdom.Sections;
 
 public class SubmitTableContentAction extends AbstractAction {
 
+	public static final String TABLE_ID = "tableid";
+
 	private String createNewMarkupString(String tableid, List<Map<Integer, String>> inputData) {
 		StringBuffer newContent = new StringBuffer();
 		newContent.append("%%Tabellendaten\n");
@@ -29,23 +31,28 @@ public class SubmitTableContentAction extends AbstractAction {
 		StringBuffer newContent = new StringBuffer();
 		int versionCounter = 0;
 		for (Map<Integer, String> map : inputData) {
-			newContent.append("VERSION" + versionCounter + "\n");
-			for (Integer i : map.keySet()) {
-				String text = map.get(i);
-				newContent.append("INPUT" + i + ":" + text + "\n");
-			}
+			newContent.append(renderMarkupForOneVersion(versionCounter, map));
 			versionCounter++;
-			newContent.append("\n");
 		}
 		newContent.append("-\n");
 		return newContent.toString();
 	}
 
+	public static String renderMarkupForOneVersion(int versionCounter, Map<Integer, String> map) {
+		StringBuffer buffy = new StringBuffer();
+		buffy.append("VERSION" + versionCounter + "\n");
+		for (Integer i : map.keySet()) {
+			String text = map.get(i);
+			buffy.append("INPUT" + i + ":" + text + "\n");
+		}
+		buffy.append("\n");
+		return buffy.toString();
+	}
+
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-		String username = context.getParameter("user");
 		String data = context.getParameter("data");
-		String tableid = context.getParameter("tableid");
+		String tableid = context.getParameter(TABLE_ID);
 
 		String versionNumber = data.substring(0, data.indexOf('#'));
 		int versions = 1;
@@ -59,25 +66,14 @@ public class SubmitTableContentAction extends AbstractAction {
 														// in front
 
 		// make up map for input data
-		String[] inputs = data.split(";");
-		int inputsByVersion = inputs.length / versions;
-		List<Map<Integer, String>> inputDataAll = new ArrayList<Map<Integer, String>>();
-		for (int i = 0; i < versions; i++) {
-			Map<Integer, String> inputDataOneVersion = new HashMap<Integer, String>();
-			for (int k = 0; k < inputsByVersion; k++) {
-				String string = inputs[i * inputsByVersion + k];
-				String number = string.substring(5, string.indexOf(':'));
-				Integer inputNumber = Integer.parseInt(number.trim()) % inputsByVersion;
-				String text = string.substring(string.indexOf(':') + 1);
-				inputDataOneVersion.put(inputNumber, text);
-			}
-			inputDataAll.add(inputDataOneVersion);
-		}
+		List<Map<Integer, String>> inputDataAll = buildInputData(data, versions);
 
+
+		String username = context.getParameter("user");
 		String defaultWeb = KnowWEEnvironment.DEFAULT_WEB;
 		KnowWEArticleManager articleManager = KnowWEEnvironment.getInstance().getArticleManager(
 				defaultWeb);
-		String articleNameForData = username + "_data";
+		String articleNameForData = getDataArticleNameForUser(username);
 		KnowWEArticle knowWEArticle = articleManager.getArticle(
 				articleNameForData);
 		if (knowWEArticle == null) {
@@ -95,18 +91,9 @@ public class SubmitTableContentAction extends AbstractAction {
 					articleNameForData);
 		}
 		else {
+			Section<TableEntryContentType> contentSection = findContentSectionForTableID(
+					tableid, knowWEArticle);
 			Map<String, String> nodesMap = new HashMap<String, String>();
-			List<Section<TableEntryType>> tables = new ArrayList<Section<TableEntryType>>();
-			Sections.findSuccessorsOfType(knowWEArticle.getSection(),
-					TableEntryType.class, tables);
-			Section<TableEntryContentType> contentSection = null;
-			for (Section<TableEntryType> section : tables) {
-				String id = section.get().getAnnotation(section, "tableid");
-				if (id.equals(tableid)) {
-					contentSection = Sections.findSuccessor(section,
-							TableEntryContentType.class);
-				}
-			}
 			if (contentSection == null) {
 				nodesMap.put(knowWEArticle.getSection().getID(), createNewMarkupString(
 						tableid, inputDataAll));
@@ -120,5 +107,43 @@ public class SubmitTableContentAction extends AbstractAction {
 		}
 
 		context.getOutputStream().write(" (Wurde gespeichert)".getBytes());
+	}
+
+	private List<Map<Integer, String>> buildInputData(String data, int versions) {
+		String[] inputs = data.split(";;");
+		int inputsByVersion = inputs.length / versions;
+		List<Map<Integer, String>> inputDataAll = new ArrayList<Map<Integer, String>>();
+		for (int i = 0; i < versions; i++) {
+			Map<Integer, String> inputDataOneVersion = new HashMap<Integer, String>();
+			for (int k = 0; k < inputsByVersion; k++) {
+				String string = inputs[i * inputsByVersion + k];
+				String number = string.substring(5, string.indexOf(':'));
+				Integer inputNumber = Integer.parseInt(number.trim()) % inputsByVersion;
+				String text = string.substring(string.indexOf(':') + 1);
+				inputDataOneVersion.put(inputNumber, text);
+			}
+			inputDataAll.add(inputDataOneVersion);
+		}
+		return inputDataAll;
+	}
+
+	public static Section<TableEntryContentType> findContentSectionForTableID(String tableid, KnowWEArticle knowWEArticle) {
+		List<Section<TableEntryType>> tables = new ArrayList<Section<TableEntryType>>();
+		Sections.findSuccessorsOfType(knowWEArticle.getSection(),
+				TableEntryType.class, tables);
+		Section<TableEntryContentType> contentSection = null;
+		for (Section<TableEntryType> section : tables) {
+			String id = section.get().getAnnotation(section, "tableid");
+			if (id.equals(tableid)) {
+				contentSection = Sections.findSuccessor(section,
+						TableEntryContentType.class);
+			}
+		}
+		return contentSection;
+	}
+
+	public static String getDataArticleNameForUser(String username) {
+		String articleNameForData = username + "_data";
+		return articleNameForData;
 	}
 }

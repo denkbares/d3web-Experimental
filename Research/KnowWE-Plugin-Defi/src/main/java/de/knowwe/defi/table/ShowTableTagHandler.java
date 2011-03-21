@@ -29,6 +29,7 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.table.Table;
+import de.d3web.we.kdom.table.TableRenderer;
 import de.d3web.we.taghandler.AbstractTagHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
@@ -66,7 +67,10 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 		}
 
 		StringBuilder string = new StringBuilder();
-		string.append(KnowWEUtils.maskHTML("<div id=" + myTable.getID() + ">"));
+		string.append(KnowWEUtils.maskHTML("<div id='" + myTable.getID()
+				+ "' style=''>"));
+
+		user.getParameters().put(TableRenderer.QUICK_EDIT_FLAG, "false");
 
 		for (int versionIndex = 0; versionIndex < versionsExisting; versionIndex++) {
 			user.getParameters().put(VERSION_KEY, Integer.toString(versionIndex));
