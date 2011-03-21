@@ -39,6 +39,8 @@ import de.d3web.we.utils.KnowWEUtils;
  */
 public class TableRenderer extends KnowWEDomRenderer<Table> {
 
+	public static final String QUICK_EDIT_FLAG = "noQuickEdit";
+
 	@Override
 	public void render(KnowWEArticle article, Section<Table> sec, UserContext user, StringBuilder string) {
 
@@ -52,8 +54,10 @@ public class TableRenderer extends KnowWEDomRenderer<Table> {
 
 		buffi.append(getOpeningTag(sec));
 		if (!sec.hasQuickEditModeSet(user.getUserName())) {
-			buffi.append(generateQuickEdit(sec.getID(),
+			if (!user.getParameters().containsKey(QUICK_EDIT_FLAG)) {
+				buffi.append(generateQuickEdit(sec.getID(),
 					rb.getString("KnowWE.TableContentRenderer.setQE")));
+			}
 		}
 
 		if (sec.hasQuickEditModeSet(user.getUserName())) {
