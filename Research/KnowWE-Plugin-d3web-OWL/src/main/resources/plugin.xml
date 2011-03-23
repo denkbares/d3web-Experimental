@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-d3web-OWL" version="0.0.1">
+
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+	</requires>
+
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="OntologyProviderType">
+		<parameter id="class" value="de.knowwe.d3web.owl.OntologyProviderType" />
+		<parameter id="name" value="OntologyProviderType" />
+		<parameter id="description"
+			value="Provides and attaches an OWL ontology to a knowledge base." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="6" />
+		<parameter id="scope" value="root" />
+	</extension>
+
+</plugin>
