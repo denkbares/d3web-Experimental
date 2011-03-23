@@ -19,41 +19,14 @@
  */
 package de.knowwe.kdom.classHierarchy;
 
-import java.util.List;
-
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
-import de.knowwe.core.dashtree.DashSubtree;
 import de.knowwe.core.dashtree.DashTree;
-import de.knowwe.core.dashtree.DashTreeElement;
 
-public class SubClassingDashtree extends AbstractType {
+public class SubClassingDashtree extends DashTree {
 
 	public SubClassingDashtree() {
-		AbstractType subClassingDashTree = new DashTree();
-		replaceRootType(subClassingDashTree);
-		this.childrenTypes.add(subClassingDashTree);
+		replaceDashTreeElementContentType(new SubClassingDashTreeElement());
 		this.setSectionFinder(new AllTextSectionFinder());
-	}
-
-	private void replaceRootType(
-			AbstractType subClassingDashTree) {
-		List<Type> types = subClassingDashTree.getAllowedChildrenTypes();
-		for (Type knowWEObjectType : types) {
-			if (knowWEObjectType instanceof DashSubtree) {
-				try {
-					((AbstractType) knowWEObjectType).replaceChildType(
-									new SubClassingDashTreeElement(),
-									DashTreeElement.class);
-				}
-				catch (InvalidKDOMSchemaModificationOperation e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 
 }

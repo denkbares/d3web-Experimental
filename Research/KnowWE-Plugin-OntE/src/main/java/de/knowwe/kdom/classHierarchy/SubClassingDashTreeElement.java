@@ -38,22 +38,23 @@ import de.d3web.we.kdom.report.message.NoSuchObjectError;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.subtreeHandler.IncrementalConstraint;
 import de.knowwe.core.dashtree.DashTreeElement;
+import de.knowwe.core.dashtree.DashTreeElementContent;
 import de.knowwe.core.dashtree.DashTreeUtils;
 import de.knowwe.termObject.OWLTermReference;
 
-public class SubClassingDashTreeElement extends DashTreeElement implements
+public class SubClassingDashTreeElement extends DashTreeElementContent implements
 		IncrementalConstraint<SubClassingDashTreeElement> {
 
 	public SubClassingDashTreeElement() {
 		this.addSubtreeHandler(new SubClassingDashTreeElementOWLSubTreeHandler());
 		OWLTermReference ref = new OWLTermReference();
 		ref.setSectionFinder(new AllTextFinderTrimmed());
-		this.setDashTreeElementContent(ref);
+		this.addChildType(ref);
 	}
 
 	@Override
 	public boolean violatedConstraints(KnowWEArticle article, Section<SubClassingDashTreeElement> s) {
-		Section<? extends DashTreeElement> fatherDashTreeElement = DashTreeUtils.getFatherDashTreeElement(s);
+		Section<? extends DashTreeElement> fatherDashTreeElement = DashTreeUtils.getFatherDashTreeElement(s.getFather());
 		if (fatherDashTreeElement == null) return false; // root of dashTree
 		return fatherDashTreeElement.isOrHasChangedSuccessor(s.getArticle().getTitle(),
 				null);
@@ -63,15 +64,16 @@ public class SubClassingDashTreeElement extends DashTreeElement implements
 			RDF2GoSubtreeHandler<SubClassingDashTreeElement> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<SubClassingDashTreeElement> element) {
+		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<SubClassingDashTreeElement> elementContent) {
+			Section<?> element = elementContent.getFather();
 			if (element.get().isAssignableFromType(DashTreeElement.class)) {
 				Section<? extends DashTreeElement> father = DashTreeUtils
 						.getFatherDashTreeElement(element);
 				if (father != null) {
 					Section<? extends OWLTermReference> fatherElement = Sections
-							.findChildOfType(father, OWLTermReference.class);
+							.findSuccessor(father, OWLTermReference.class);
 					Section<? extends OWLTermReference> childElement = Sections
-							.findChildOfType(element, OWLTermReference
+							.findSuccessor(element, OWLTermReference
 									.class);
 					URI localURI = childElement.get().getNode(childElement);
 					URI fatherURI = fatherElement.get().getNode(fatherElement);
