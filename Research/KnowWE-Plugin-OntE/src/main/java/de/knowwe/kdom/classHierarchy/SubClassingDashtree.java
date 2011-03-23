@@ -31,14 +31,11 @@ import de.knowwe.core.dashtree.DashTreeElement;
 
 public class SubClassingDashtree extends AbstractType {
 
-	@Override
-	protected void init() {
+	public SubClassingDashtree() {
 		AbstractType subClassingDashTree = new DashTree();
 		replaceRootType(subClassingDashTree);
 		this.childrenTypes.add(subClassingDashTree);
 		this.setSectionFinder(new AllTextSectionFinder());
-		// setting Pre-environoment-renderer
-		// this.setCustomRenderer(new PreRendererWithoutTilde());
 	}
 
 	private void replaceRootType(
