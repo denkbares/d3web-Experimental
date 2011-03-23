@@ -770,6 +770,12 @@ public class Rdf2GoCore implements EventListener {
 		addStatements(l, sec);
 	}
 
+	public void addStatement(Resource subject, URI predicate, Node object, Section<? extends Type> sec) {
+		List<Statement> l = new ArrayList<Statement>();
+		l.add(createStatement(subject, predicate, object));
+		addStatements(l, sec);
+	}
+
 	/**
 	 * @param cur
 	 */
