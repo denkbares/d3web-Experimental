@@ -4,30 +4,50 @@
 <table id="popupTable">
 <tbody>
 	<tr>
-		<td width="20%">München</td>
+		<td width="15%">München</td>
+		<td width="10%">
+			<ul>
+				<li>MBHZ</li>
+				<li>MBOG</li>
+				<li>MGRH</li>
+			</ul>
+		</td>
 		<td>
 			<ul>
-				<li>M_BHZ (München BHZ)</li>
-				<li>M_BOG (München Bogenhausen)</li>
-				<li>M_GRH (München Großhadern)</li>
+				<li class="noListMarker">(München BHZ)</li>
+				<li class="noListMarker">(München Bogenhausen)</li>
+				<li class="noListMarker">(München Großhadern)</li>
 			</ul>
 		</td>
 	</tr>
 	<tr>
-		<td width="20%">Berlin</td>
+		<td width="15%">Berlin</td>
+		<td width="10%">
+			<ul>
+				<li>BBHZ</li>
+				<li>BCHA</li>
+			</ul>
+		</td>
 		<td>
 			<ul>
-				<li>B_BHZ (Berlin BHZ)</li>
-				<li>B_CHA (Berlin Charité)</li>
+				<li class="noListMarker">(Berlin BHZ)</li>
+				<li class="noListMarker">(Berlin Charité)</li>
+			</ul>
 			</ul>
 		</td>
 	</tr>
 	<tr>
-		<td width="20%">Hamburg</td>
+		<td width="15%">Hamburg</td>
+		<td width="10%">
+			<ul>
+				<li>HHEPD</li>
+				<li>HHSTG</li>
+			</ul>
+		</td>
 		<td>
 			<ul>
-				<li>HH_EPD (Hamburg Eppendorf)</li>
-				<li>HH_STG (Hamburg St. Georg)</li>
+				<li class="noListMarker">(Hamburg Eppendorf)</li>
+				<li class="noListMarker">(Hamburg St. Georg)</li>
 			</ul>
 		</td>
 	</tr>

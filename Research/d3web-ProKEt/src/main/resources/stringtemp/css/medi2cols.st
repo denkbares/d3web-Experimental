@@ -91,3 +91,5 @@ td { padding: 2px 0; vertical-align: top; height: 100%}
 #fileselect{display: none; margin-top: 20px;}
 
 #popupTableDiv{width: 400px; margin-top: 5px; margin-bottom: 10px;}
+
+li.noListMarker {list-style-type: none;}
