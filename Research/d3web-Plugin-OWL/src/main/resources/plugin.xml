@@ -4,6 +4,7 @@
 
 	<requires>
 		<import plugin-id="d3web-Kernel-ExtensionPoints" />
+		<import plugin-id="KnowledgePersistenceExtensionPoints" />
 	</requires>
 	
 	<runtime>
@@ -11,6 +12,28 @@
 			<export prefix="*" />
 		</library>
 	</runtime>
+	
+	<extension plugin-id="KnowledgePersistenceExtensionPoints" point-id="KnowledgeReader"
+		id="OWLPersistenceHandler.Reader">
+		<parameter id="class"
+			value="de.d3web.owl.io.OWLPersistenceHandler" />
+		<parameter id="name" value="OWLPersistenceHandler" />
+		<parameter id="description" value="KnowledgeReader for owl ontologies" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="2" />
+		<parameter id="filename" value="kb/ontology.owl" />
+	</extension>
+	
+	<extension plugin-id="KnowledgePersistenceExtensionPoints" point-id="KnowledgeWriter"
+		id="OWLPersistenceHandler.Writer">
+		<parameter id="class"
+			value="de.d3web.owl.io.OWLPersistenceHandler" />
+		<parameter id="name" value="OWLPersistenceHandler" />
+		<parameter id="description" value="KnowledgeWriter for owl ontologies" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="2" />
+		<parameter id="filename" value="kb/ontology.owl" />
+	</extension>
 	
 	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="PSMethod"
 		id="PSMethodOWL">

@@ -24,7 +24,6 @@ import de.d3web.core.inference.PSMethod;
 import de.d3web.core.inference.PropagationEntry;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Fact;
-import de.d3web.owl.OWLConnector;
 
 /**
  * PSMethod which delegates the reasoning to an external OWL-Reasoner.
@@ -36,8 +35,6 @@ public class PSMethodOWL implements PSMethod {
 
 	@Override
 	public void init(Session session) {
-		OWLConnector.getInstance().initializeOntology(session.getKnowledgeBase());
-		// TODO: Klassenkonstruktoren laden
 	}
 
 	@Override
@@ -53,7 +50,6 @@ public class PSMethodOWL implements PSMethod {
 
 	private void updateFactsInOntology(Session session, Collection<PropagationEntry> changes) {
 		for (PropagationEntry change : changes) {
-			OWLConnector.getInstance().updateFinding(session, change);
 		}
 	}
 
