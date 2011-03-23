@@ -25,7 +25,17 @@
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
 	</extension>
-	
+
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="DataMarkup">
+		<parameter id="class" value="de.knowwe.defi.DataMarkup" />
+		<parameter id="name" value="DataMarkup" />
+		<parameter id="description" value="Type DataMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5"  />
+		<parameter id="scope" value="root" />
+		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
+	</extension>	
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="DefineTableMarkup">
@@ -37,6 +47,7 @@
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
 	</extension>
+	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TableEntryType">
 		<parameter id="class" value="de.knowwe.defi.table.TableEntryType" />
@@ -48,9 +59,7 @@
 		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
 	</extension>
 	
-	
-	
-		<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="ShowTableTagHandler">
 		<parameter id="class"
 			value="de.knowwe.defi.table.ShowTableTagHandler" />
@@ -92,6 +101,15 @@
         <parameter id="priority" value="5" />
     </extension>
     
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="ReadPagesSaveAction">
+        <parameter id="class"
+            value="de.knowwe.defi.ReadPagesSaveAction" />
+        <parameter id="name" value="ReadPagesSaveAction" />
+        <parameter id="description" value="Action ReadPagesSaveAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="InsertAdditionalTableVersionAction">

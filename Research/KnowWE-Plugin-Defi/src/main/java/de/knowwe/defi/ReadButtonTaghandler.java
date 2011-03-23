@@ -20,8 +20,12 @@ package de.knowwe.defi;
 
 import java.util.Map;
 
+import de.d3web.we.core.KnowWEArticleManager;
+import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.taghandler.AbstractTagHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
@@ -43,16 +47,42 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 	@Override
 	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		StringBuilder readbutton = new StringBuilder();
-		readbutton.append("<p>Wie hat ihnen das gefallen?</p>");
-		readbutton.append("<form name='readbuttonform' class='rbtag'>");
-		readbutton.append("<input type='radio' name='panel' value='1' /> 1");
-		readbutton.append("<input type='radio' name='panel' value='2' /> 2");
-		readbutton.append("<input type='radio' name='panel' value='3' /> 3");
-		readbutton.append("<input type='radio' name='panel' value='4' /> 4");
-		readbutton.append("</form>");
-		readbutton.append("<input type='button' value='OK' onclick=\"getReadButtonValue('"
-				+ userContext.getUserName() + "','" + article.getTitle() + "')\" />");
 
+		if (userContext.userIsAsserted()) {
+			String title = userContext.getUserName() + "_data";
+			String pagename = userContext.getTopic();
+			String web = userContext.getWeb();
+
+			KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
+			Section<?> sec = mgr.getArticle(title).getSection();
+			Section<DataMarkup> child = Sections.findSuccessor(sec, DataMarkup.class);
+			String readpages = DefaultMarkupType.getAnnotation(child, "readpages");
+			boolean contains = false;
+			if (readpages != null) {
+				String[] pages = readpages.split(";");
+
+				for (String s : pages) {
+					if (s.split(",")[0].toLowerCase().equals(pagename.toLowerCase())) {
+						contains = true;
+					}
+				}
+			}
+			readbutton.append("<p>Wie hat ihnen das gefallen?</p>");
+			if (contains) {
+				readbutton.append("<form name='readbuttonform' class='rbtag'>");
+				readbutton.append("<p>- bereits bewertet -</p>");
+				readbutton.append("</form>");
+			}
+			else {
+				readbutton.append("<form name='readbuttonform' class='rbtag'>");
+				readbutton.append("<input type='radio' name='panel' value='1' /> 1");
+				readbutton.append("<input type='radio' name='panel' value='2' /> 2");
+				readbutton.append("<input type='radio' name='panel' value='3' /> 3");
+				readbutton.append("<input type='radio' name='panel' value='4' /> 4");
+				readbutton.append("</form>");
+				readbutton.append("<input type='button' value='OK' onclick=\"getReadButtonValue()\" />");
+			}
+		}
 
 		return KnowWEUtils.maskHTML(readbutton.toString());
 	}

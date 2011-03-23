@@ -1,3 +1,4 @@
+<%@page import="de.d3web.we.kdom.defaultMarkup.DefaultMarkupType"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="de.d3web.we.kdom.Sections"%>
 <%@page import="de.knowwe.defi.AboutMe"%>
@@ -18,10 +19,9 @@
   if (user.userIsAsserted()) {
 	  KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(KnowWEEnvironment.DEFAULT_WEB, user.getUserName());
 	  Section<?> s = article.getSection();
-	  //Section<?> sec = Sections.findChildOfType(s, AboutMe.class);
-	  //avatar = DefaultMarkupType.getAnnotation(sec, "avatar");
 	  if (s != null && s.toString().contains("@avatar:")) {
-	  avatar = s.toString().split("@avatar: ")[1].substring(0,3);		  
+	  	Section<AboutMe> sec = Sections.findSuccessor(s, AboutMe.class);
+	  	avatar = DefaultMarkupType.getAnnotation(sec, "avatar");
 	  }
   }
 %>
