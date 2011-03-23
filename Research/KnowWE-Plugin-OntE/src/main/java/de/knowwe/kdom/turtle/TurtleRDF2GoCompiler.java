@@ -25,7 +25,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 
@@ -67,21 +66,6 @@ public class TurtleRDF2GoCompiler extends RDF2GoSubtreeHandler<TurtleMarkup> {
 			predURI = predicate.get().getNode(predicate);
 			objURI = object.get().getNode(object);
 		}
-//		else if (found.size() == 2) {
-//			Section<RDFResourceType> first = found.get(0);
-//			Section<RDFResourceType> second = found.get(1);
-//			if (first.get() instanceof TurtlePredicate &&
-//					second.get() instanceof TurtleObject) {
-//				predURI = first.get().getURI(first);
-//				objURI = second.get().getURI(second);
-//				getSubject(s);
-//
-//			}
-//			else {
-//				return Arrays.asList((KDOMReportMessage) new SyntaxError(
-//						"invalid term combination:" + found.size()));
-//			}
-//		}
 		else {
 			return Arrays.asList((KDOMReportMessage) new SyntaxError(
 					"invalid term combination:" + found.size()));
@@ -99,11 +83,8 @@ public class TurtleRDF2GoCompiler extends RDF2GoSubtreeHandler<TurtleMarkup> {
 					"object URI not found"));
 		}
 		
-		List<Statement> statements = new ArrayList<Statement>();
-		Statement st = Rdf2GoCore.getInstance().createStatement(subURI.asResource(),
-				predURI.asURI(), objURI);
-		statements.add(st);
-		Rdf2GoCore.getInstance().addStatements(statements, s);
+		Rdf2GoCore.getInstance().addStatement(subURI.asResource(),
+				predURI.asURI(), objURI, s);
 
 		return new ArrayList<KDOMReportMessage>(0);
 	}

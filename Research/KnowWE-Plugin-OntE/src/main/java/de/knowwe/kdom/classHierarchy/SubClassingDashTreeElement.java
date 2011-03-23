@@ -22,9 +22,7 @@ package de.knowwe.kdom.classHierarchy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
-import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
@@ -81,11 +79,8 @@ public class SubClassingDashTreeElement extends DashTreeElementContent implement
 						return Arrays.asList((KDOMReportMessage) new NoSuchObjectError(
 								element.getOriginalText()));
 					}
-					List<Statement> statements = new ArrayList<Statement>();
-					Statement st = Rdf2GoCore.getInstance().createStatement(localURI,
-								RDFS.subClassOf, fatherURI);
-					statements.add(st);
-					Rdf2GoCore.getInstance().addStatements(statements, element);
+					Rdf2GoCore.getInstance().addStatement(localURI,
+								RDFS.subClassOf, fatherURI, element);
 				}
 			}
 
