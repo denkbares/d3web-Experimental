@@ -60,6 +60,7 @@ import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
 import de.d3web.we.core.KnowWEEnvironment;
+import de.d3web.we.event.ArticleUpdatesFinishedEvent;
 import de.d3web.we.event.Event;
 import de.d3web.we.event.EventListener;
 import de.d3web.we.event.EventManager;
@@ -104,6 +105,8 @@ public class Rdf2GoCore implements EventListener {
 	private HashMap<String, WeakHashMap<Section<? extends Type>, List<Statement>>> statementcache;
 	private HashMap<Statement, Integer> duplicateStatements;
 	private HashMap<String, String> namespaces;
+	private List<Statement> addCache;
+	private List<Statement> removeCache;
 
 	/**
 	 * Initializes the model and its caches and namespaces
@@ -112,6 +115,10 @@ public class Rdf2GoCore implements EventListener {
 		initModel();
 		statementcache = new HashMap<String, WeakHashMap<Section<? extends Type>, List<Statement>>>();
 		duplicateStatements = new HashMap<Statement, Integer>();
+		
+		addCache = new ArrayList<Statement>();
+		removeCache = new ArrayList<Statement>();
+		
 		namespaces = new HashMap<String, String>();
 		namespaces.putAll(model.getNamespaces());
 		initDefaultNamespaces();
@@ -320,7 +327,8 @@ public class Rdf2GoCore implements EventListener {
 		String key = "REMOVE: ";
 		// logStatements(list, key);
 
-		model.removeAll(list.iterator());
+//		model.removeAll(list.iterator());
+		removeCache.addAll(list);
 	}
 
 	private void addStatementsToModel(List<Statement> list) {
@@ -328,7 +336,8 @@ public class Rdf2GoCore implements EventListener {
 		String key = "INSERT: ";
 		// logStatements(list, key);
 
-		model.addAll(list.iterator());
+//		model.addAll(list.iterator());
+		addCache.addAll(list);
 	}
 
 	private void logStatements(List<Statement> list, String key) {
@@ -611,6 +620,7 @@ public class Rdf2GoCore implements EventListener {
 		ArrayList<Class<? extends Event>> events = new ArrayList<Class<? extends Event>>(
 				1);
 		events.add(FullParseEvent.class);
+		events.add(ArticleUpdatesFinishedEvent.class);
 		return events;
 	}
 
@@ -620,6 +630,17 @@ public class Rdf2GoCore implements EventListener {
 			getInstance().removeArticleStatementsRecursive(
 					((FullParseEvent) event).getArticle());
 		}
+		if (event instanceof ArticleUpdatesFinishedEvent) {
+			getInstance().commit();
+		}
+	}
+
+	// commits the statements from writeCache and removeCache to the triplestore
+	private void commit() {
+		model.removeAll(removeCache.iterator());
+		model.addAll(addCache.iterator());
+		removeCache.clear();
+		addCache.clear();
 	}
 
 	public void removeArticleStatementsRecursive(KnowWEArticle art) {

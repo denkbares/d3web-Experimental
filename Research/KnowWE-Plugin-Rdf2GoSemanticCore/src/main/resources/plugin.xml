@@ -15,17 +15,6 @@
 	</runtime>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="AddStatementType">
-		<parameter id="class"
-			value="de.d3web.we.core.semantic.rdf2go.example.AddStatementType" />
-		<parameter id="name" value="AddStatementType" />
-		<parameter id="description" value="Type AddStatementType" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="3" />
-		<parameter id="scope" value="root" />
-	</extension>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Namespaces">
 		<parameter id="class"
 			value="de.d3web.we.kdom.namespaces.rdf2go.Namespaces" />
@@ -64,6 +53,16 @@
 			value="de.d3web.we.core.semantic.rdf2go.example.DumpHandler" />
 		<parameter id="name" value="DumpHandler" />
 		<parameter id="description" value="TagHandler DumpHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="Rdf2GoPageViewHandler">
+		<parameter id="class"
+			value="de.d3web.we.core.semantic.rdf2go.example.Rdf2GoPageViewHandler" />
+		<parameter id="name" value="DumpHandler" />
+		<parameter id="description" value="TagHandler Rdf2GoPageViewHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>

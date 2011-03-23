@@ -28,8 +28,8 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
  */
 public class SparqlType extends AbstractType {
 
-	public static final String START_TAG = "%sparql%";
-	public static final String END_TAG = "%/sparql%";
+	public static final String START_TAG = "<sparql2go>";
+	public static final String END_TAG = "</sparql2go>";
 
 	@Override
 	protected void init() {
