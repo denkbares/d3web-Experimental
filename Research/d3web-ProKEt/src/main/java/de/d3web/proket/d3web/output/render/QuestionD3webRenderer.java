@@ -119,7 +119,7 @@ public class QuestionD3webRenderer extends D3webRenderer {
 		}
 
 		// get d3web properties
-		Session sess = D3webConnector.getInstance().getSession();
+		Session sess = super.d3webSession;
 		Form current = sess.getInterview().nextForm();
 		Blackboard bb = sess.getBlackboard();
 		Value val = bb.getValue((ValueObject) to);

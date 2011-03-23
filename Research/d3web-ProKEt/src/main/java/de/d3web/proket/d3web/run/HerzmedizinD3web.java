@@ -175,7 +175,7 @@ public class HerzmedizinD3web extends HttpServlet {
 
 		// switch action as defined by the servlet call
 		if (action.equalsIgnoreCase("show")) {
-			show(request, response);
+			show(request, response, httpSession);
 			return;
 		}
 		else if (action.equalsIgnoreCase("addfact")) {
@@ -196,7 +196,7 @@ public class HerzmedizinD3web extends HttpServlet {
 	 * @param d3webSession
 	 * @throws IOException
 	 */
-	private void show(HttpServletRequest request, HttpServletResponse response)
+	private void show(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession)
 			throws IOException {
 
 		response.setContentType("text/html");
@@ -209,7 +209,7 @@ public class HerzmedizinD3web extends HttpServlet {
 
 		// new ContainerCollection needed each time to get an updated dialog
 		ContainerCollection cc = new ContainerCollection();
-		cc = d3webr.renderRoot(cc);
+		cc = d3webr.renderRoot(cc, d3webSession, httpSession);
 
 		writer.print(cc.html.toString()); // deliver the rendered output
 		writer.close(); // and close

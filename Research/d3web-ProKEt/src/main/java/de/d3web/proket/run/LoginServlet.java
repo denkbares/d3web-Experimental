@@ -10,6 +10,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import au.com.bytecode.opencsv.CSVReader;
 import de.d3web.proket.utils.GlobalSettings;
@@ -22,51 +23,70 @@ public class LoginServlet extends HttpServlet {
 
 		res.setContentType("text/html");
 
-		// fetch the information sent via the request string
+		// fetch the information sent via the request string from login
 		String u = req.getParameter("u");
 		String p = req.getParameter("p");
 
+		// TODO check if needed here
 		String folderPath = req.getSession().getServletContext().getRealPath("/cases");
 		GlobalSettings.getInstance().setCaseFolder(folderPath);
 
 		// get the response writer for communicating back via Ajax
 		PrintWriter writer = res.getWriter();
 
-		// no valid login data - deny access
-		if (!permitUser(u, p)) {
+		// get current HTTPSession
+		HttpSession sess = req.getSession(true);
 
-			// Whatever is written on the writer here, is read from the Ajax
-			// call in login.js, that initiated the login check.
-			writer.append("nosuccess");
+		// System.out.println(u + " " + sess.getAttribute("user"));
+
+		/*
+		 * check whether login user is already running a session (e.g. diff
+		 * browser or the like)
+		 */
+		if (!sess.isNew()) {
+
+
+			Cookie c = new Cookie(u, "loggedin");
+			c.setMaxAge(30 * 60);
+			res.addCookie(c);
+
+			// set user attribute for the HttpSession
+			sess.setAttribute("user", u);
+
+			// same user append causes JS just to redirect to dialog
+			writer.append("sameUser");
 		}
+
+		// other user than before
 		else {
 
-			// in case writer says success, append "success" so it can handled
-			// correspondingly by the calling Ajax (i.e., remove login dialog)
+			// if no valid login
+			if (!permitUser(u, p)) {
 
-			Cookie cookie = new Cookie(u, "loggedin");
+				// causes JS to display error message
+				writer.append("nosuccess");
+				return;
+			}
 
-			// here we can set the expire time for the login cookie
-			// 60 sec * 30 min = 1800
-			// cookie.setMaxAge(1800);
-			cookie.setMaxAge(120); // only for testing
-			res.addCookie(cookie);
+			// set user attribute for the HttpSession
+			sess.setAttribute("user", u);
 
-			/*
-			 * // Try redirecting the client to the page he first tried to
-			 * access try { String target = (String)
-			 * session.getAttribute("login.target"); if (target != null) {
-			 * res.sendRedirect(target); return; } } catch (Exception ignored) {
-			 * }
-			 * 
-			 * // Couldn't redirect to the target. Redirect to the site's home
-			 * // page. res.sendRedirect("/");
-			 */
+			// set a cookie for JS so login is not displayed when
+			// refreshing due to sending values etc
+			// cookie expires after 60 sec of inactivity
+			Cookie c = new Cookie(u, "loggedin");
+			c.setMaxAge(30 * 60);
+			res.addCookie(c);
+
+			// causes JS to start new session and d3web case finally
+			writer.append("newUser");
+			// System.out.println("new");
 		}
 	}
 
 	/**
-	 * Check, whether the user has permissions to log in
+	 * Check, whether the user has permissions to log in. Permissions are stored
+	 * in userdat.csv in cases parent folder
 	 * 
 	 * @created 15.03.2011
 	 * @param user The user name.

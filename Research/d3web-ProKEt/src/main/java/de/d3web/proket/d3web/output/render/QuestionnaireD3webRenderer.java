@@ -64,7 +64,7 @@ public class QuestionnaireD3webRenderer extends D3webRenderer {
 		st.setAttribute("title", to.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getQuestionnaireCount());
 
-		Blackboard bb = D3webConnector.getInstance().getSession().getBlackboard();
+		Blackboard bb = super.d3webSession.getBlackboard();
 
 		if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(to)
 				|| isIndicated(to, bb)) {

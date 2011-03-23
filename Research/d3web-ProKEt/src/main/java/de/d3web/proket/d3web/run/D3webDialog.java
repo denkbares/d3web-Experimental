@@ -19,7 +19,8 @@
  */
 package de.d3web.proket.d3web.run;
 
-
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
@@ -28,12 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import au.com.bytecode.opencsv.CSVReader;
 import de.d3web.core.knowledge.Indication.State;
 import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.knowledge.TerminologyObject;
@@ -93,9 +94,6 @@ public class D3webDialog extends HttpServlet {
 	/* special parser for reading in the d3web-specification xml */
 	private D3webXMLParser d3webParser;
 
-	/* current d3web session */
-	private Session d3webSession;
-
 	/* d3web connector for storing certain relevant properties */
 	private D3webConnector d3wcon;
 
@@ -119,28 +117,16 @@ public class D3webDialog extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// get the currently logged in user from the stored login cookie
-		Cookie[] cook = request.getCookies();
-		if (cook != null && cook.length != 0) {
-			System.out.println(cook[0].getName());
-		}
-
 		String folderPath = request.getSession().getServletContext().getRealPath("/cases");
 		GlobalSettings.getInstance().setCaseFolder(folderPath);
 
 		d3wcon = D3webConnector.getInstance();
 
-		// in case nothing other is provided, "show" is the default action of
-		// the dialog
+		// in case nothing other is provided, "show" is the default action
 		String action = request.getParameter("action");
 		if (action == null) {
 			action = "show";
 		}
-
-		// Get the current httpSession
-		HttpSession httpSession = request.getSession(true);
-		// Sets any httpSession inactive after max 24h
-		httpSession.setMaxInactiveInterval(24 * 3600);
 
 		// try to get the src parameter, which defines the specification xml
 		// with special properties for this dialog/knowledge base
@@ -173,45 +159,71 @@ public class D3webDialog extends HttpServlet {
 			sourceSave = source;
 		}
 
-		// get existing d3websession if existing
-		d3webSession = d3wcon.getSession();
+		// Get the current httpSession or a new one
+		HttpSession httpSession = request.getSession(true);
 
 		/*
-		 * otherwise, i.e. if session is null, OR reset parameter is activated,
-		 * OR browser has been refreshed (TODO if possible) create a session
-		 * according to the specified dialog strategy
+		 * otherwise, i.e. if session is null create a session according to the
+		 * specified dialog strategy
 		 */
-		if (d3webSession == null
-				|| (request.getParameter("reset") != null
-						&& request.getParameter("reset").equals("true"))) {
-
-			d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
-			httpSession.setAttribute("d3webSessionID", d3webSession.getId());
-			d3wcon.setSession(d3webSession);
+		if (httpSession.getAttribute("d3webSession") == null) {
+			// create d3web session and store in http session
+			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(),
+					d3wcon.getDialogStrat());
+			httpSession.setAttribute("d3webSession", d3webSession);
 		}
 
 		d3wcon.setQuestionCount(0);
 		d3wcon.setQuestionnaireCount(0);
-		
+
 		// switch action as defined by the servlet call
 		if (action.equalsIgnoreCase("show")) {
-			show(request, response);
+			show(request, response, httpSession);
 			return;
 		}
 		else if (action.equalsIgnoreCase("addfact")) {
-			addFact(request, response);
+			addFact(request, response, httpSession);
 			return;
 		}
 		else if (action.equalsIgnoreCase("savecase")) {
-			saveCase(request, response);
+			saveCase(request, response, httpSession);
 			return;
 		}
 		else if (action.equalsIgnoreCase("loadcase")) {
-			loadCase(request, response);
+			loadCase(request, response, httpSession);
 			return;
 		}
-		else if (action.equalsIgnoreCase("solutions")) {
-			// TODO No actions yet
+		else if (action.equalsIgnoreCase("reset")) {
+
+			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
+			httpSession.setAttribute("d3webSession", d3webSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("resetNewUser")) {
+
+			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
+			httpSession.setAttribute("d3webSession", d3webSession);
+
+			return;
+		}
+		else if (action.equalsIgnoreCase("checklogin")) {
+
+			response.setContentType("text/html");
+			response.setCharacterEncoding("utf8");
+			PrintWriter writer = response.getWriter();
+
+			if (httpSession.getAttribute("user") == null) {
+				httpSession.setAttribute("log", true);
+				writer.append("NLI");
+			}
+			else {
+				writer.append("NOLI");
+			}
+
+			return;
+		}
+		else if (action.equalsIgnoreCase("login")) {
+			login(request, response, httpSession);
 		}
 	}
 
@@ -224,7 +236,8 @@ public class D3webDialog extends HttpServlet {
 	 * @param d3webSession
 	 * @throws IOException
 	 */
-	private void show(HttpServletRequest request, HttpServletResponse response)
+	private void show(HttpServletRequest request, HttpServletResponse response,
+			HttpSession httpSession)
 			throws IOException {
 
 		response.setContentType("text/html");
@@ -237,13 +250,16 @@ public class D3webDialog extends HttpServlet {
 
 		// new ContainerCollection needed each time to get an updated dialog
 		ContainerCollection cc = new ContainerCollection();
-		cc = d3webr.renderRoot(cc);
+
+		Session d3webSess = (Session) httpSession.getAttribute("d3webSession");
+		D3webRenderer.storeSession(d3webSess);
+		cc = d3webr.renderRoot(cc, d3webSess, httpSession);
 
 		/*
 		 * String html = "" + "<html><head></head>" + "<body>" +
 		 * "<img>D3webPicShow?src=Test</img>" + "</body>" + "</html>";
 		 */
-		
+
 		writer.print(cc.html.toString()); // deliver the rendered output
 		// writer.print(html);
 		writer.close(); // and close
@@ -259,10 +275,25 @@ public class D3webDialog extends HttpServlet {
 	 * @param response ServletResponse
 	 */
 	private void addFact(HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response, HttpSession httpSession)
+			throws IOException {
+
+		response.setContentType("text/html");
+		response.setCharacterEncoding("utf8");
+		PrintWriter writer = response.getWriter();
+
+		Session sess = (Session) httpSession.getAttribute("d3webSession");
 
 		// get the ID of a potentially given single question answered
 		String qid = request.getParameter("qid");
+
+		// ONLY GO ON SAVING if required att(s) is/are already set
+		boolean goOn = checkReqVal("Betreffende Klinik", sess, qid);
+
+		if (!goOn) {
+			writer.append("noReqs");
+			return;
+		}
 
 		// get the input-store
 		String store = request.getParameter("store");
@@ -272,7 +303,7 @@ public class D3webDialog extends HttpServlet {
 		if (!store.equals("") || !store.equals(" ")) {
 
 			// replace empty-space surrogate
-			store = store.replace("+", " ");
+			store = store.replace("q_", "").replace("_", " ").replace("+", " ");
 
 			// split store into the 3 categories num/text/date
 			String[] cats = store.split("&&&&");
@@ -298,7 +329,7 @@ public class D3webDialog extends HttpServlet {
 				for (String s : nums) {
 					if (!s.equals(" ") && !s.equals("")) {
 						valPair = s.split("###");
-						setValue(valPair[0], valPair[1]);
+						setValue(valPair[0], valPair[1], sess);
 					}
 				}
 			}
@@ -307,7 +338,7 @@ public class D3webDialog extends HttpServlet {
 				for (String s : txts) {
 					if (!s.equals(" ") && !s.equals("")) {
 						valPair = s.split("###");
-						setValue(valPair[0], valPair[1]);
+						setValue(valPair[0], valPair[1], sess);
 					}
 				}
 			}
@@ -316,7 +347,7 @@ public class D3webDialog extends HttpServlet {
 				for (String s : dates) {
 					if (!s.equals(" ") && !s.equals("")) {
 						valPair = s.split("###");
-						setValue(valPair[0], valPair[1]);
+						setValue(valPair[0], valPair[1], sess);
 					}
 				}
 			}
@@ -329,9 +360,23 @@ public class D3webDialog extends HttpServlet {
 		if (!positions.equals("EMPTY")) {
 
 			// replace whitespace surrogates and set value
-			qid = qid.replace("+", " ");
-			positions = positions.replace("+", " ");
-			setValue(qid, positions);
+			qid = qid.replace("q_", "").replace("_", " ");
+			qid = "q_" + qid;
+			positions = positions.replace("_", " ");
+
+			setValue(qid, positions, sess);
+
+			// AUTOSAVE
+			String folderPath = request.getSession().getServletContext().getRealPath("/cases");
+			GlobalSettings.getInstance().setCaseFolder(folderPath);
+
+			// AUTOSAVE
+			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
+						folderPath,
+						"Betreffende Klinik",
+						"autosave",
+						(Session) httpSession.getAttribute("d3webSession"));
+
 		}
 	}
 
@@ -343,18 +388,18 @@ public class D3webDialog extends HttpServlet {
 	 * @param response ServletResponse
 	 */
 	private void saveCase(HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response, HttpSession httpSession) {
 
 		response.setContentType("text/html");
 		response.setCharacterEncoding("utf8");
 		PrintWriter writer = null;
-		
+
 		// retrieves path to /cases folder on the server
 		String folderPath = request.getSession().getServletContext().getRealPath("/cases");
 		GlobalSettings.getInstance().setCaseFolder(folderPath);
 		// PersistenceD3webUtils.saveCaseTimestampOneQuestionVal(folderPath,
 		// "Betreffende Klinik");
-		
+
 		try {
 			writer = response.getWriter();
 		}
@@ -364,14 +409,21 @@ public class D3webDialog extends HttpServlet {
 		}
 
 		String userFilename = request.getParameter("userfn");
-		if (PersistenceD3webUtils.existsCase(userFilename)) {
+		System.out.println(userFilename);
+		if (PersistenceD3webUtils.existsCase(
+				folderPath,
+				userFilename,
+				"Betreffende Klinik",
+				(Session) httpSession.getAttribute("d3webSession"))) {
+			System.out.println("exists");
 			writer.append("exists");
 		}
 		else {
 			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
 					folderPath,
 					"Betreffende Klinik",
-					userFilename);
+					userFilename,
+					(Session) httpSession.getAttribute("d3webSession"));
 		}
 	}
 
@@ -383,18 +435,51 @@ public class D3webDialog extends HttpServlet {
 	 * @param response ServletResponse
 	 */
 	private void loadCase(HttpServletRequest request,
-			HttpServletResponse response) {
-
-		// retrieves path to /cases folder on the server
-		String folderPath = request.getSession().getServletContext().getRealPath("/cases");
+			HttpServletResponse response, HttpSession httpSession) {
 
 		// get the filename from the corresponding request parameter "fn"
 		String filename = request.getParameter("fn");
 
+		String user = httpSession.getAttribute("user").toString();
 		// load the file = path + filename
 		// PersistenceD3webUtils.loadCaseFromUserFilename(folderPath + "/" +
 		// filename);
-		PersistenceD3webUtils.loadCaseFromUserFilename(filename);
+		Session session = PersistenceD3webUtils.loadCaseFromUserFilename(filename, user);
+		httpSession.setAttribute("d3webSession", session);
+	}
+
+	private void login(HttpServletRequest req,
+			HttpServletResponse res, HttpSession httpSession)
+			throws IOException {
+
+		res.setContentType("text/html");
+
+		// fetch the information sent via the request string from login
+		String u = req.getParameter("u");
+		String p = req.getParameter("p");
+
+		// TODO check if needed here
+		String folderPath = req.getSession().getServletContext().getRealPath("/cases");
+		GlobalSettings.getInstance().setCaseFolder(folderPath);
+
+		// get the response writer for communicating back via Ajax
+		PrintWriter writer = res.getWriter();
+
+		httpSession.setMaxInactiveInterval(15);
+
+		// if no valid login
+		if (!permitUser(u, p)) {
+
+			// causes JS to display error message
+			writer.append("nosuccess");
+			return;
+		}
+
+		// set user attribute for the HttpSession
+		httpSession.setAttribute("user", u);
+
+		// causes JS to start new session and d3web case finally
+		writer.append("newUser");
 	}
 
 	/**
@@ -408,7 +493,7 @@ public class D3webDialog extends HttpServlet {
 	 * @param valString The value, that is to be added for the TerminologyObject
 	 *        with ID valID.
 	 */
-	private void setValue(String termObID, String valString) {
+	private void setValue(String termObID, String valString, Session sess) {
 
 		// remove prefix, e.g. "q_" in "q_BMI"
 		termObID = IDUtils.removeNamspace(termObID);
@@ -416,7 +501,7 @@ public class D3webDialog extends HttpServlet {
 		Fact lastFact = null;
 
 		Blackboard blackboard =
-				D3webConnector.getInstance().getSession().getBlackboard();
+				sess.getBlackboard();
 
 		Question to =
 				(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
@@ -441,7 +526,7 @@ public class D3webDialog extends HttpServlet {
 
 			// and add the unknown value
 			value = Unknown.getInstance();
-			Fact fact = FactFactory.createFact(d3webSession, to, value,
+			Fact fact = FactFactory.createFact(sess, to, value,
 					PSMethodUserSelected.getInstance(),
 					PSMethodUserSelected.getInstance());
 			blackboard.addValueFact(fact);
@@ -535,8 +620,8 @@ public class D3webDialog extends HttpServlet {
 							blackboard.getIndication(
 									qaSet).getState() != State.INSTANT_INDICATED)) {
 
-				resetNotIndicatedTOs(qaSet, blackboard);
-				}
+				resetNotIndicatedTOs(qaSet, blackboard, sess);
+			}
 		}
 
 		// ensure, that follow-up questions are reset if parent-question doesn't
@@ -585,13 +670,14 @@ public class D3webDialog extends HttpServlet {
 	 * @param parent
 	 * @param bb
 	 */
-	private void resetNotIndicatedTOs(TerminologyObject parent, Blackboard bb) {
+	private void resetNotIndicatedTOs(TerminologyObject parent, Blackboard bb,
+			Session sess) {
 
 		if (parent.getChildren() != null && parent.getChildren().length != 0) {
 			Fact lastFact = null;
 
 			Blackboard blackboard =
-					D3webConnector.getInstance().getSession().getBlackboard();
+					sess.getBlackboard();
 
 			for (TerminologyObject to : parent.getChildren()) {
 
@@ -605,7 +691,7 @@ public class D3webDialog extends HttpServlet {
 					blackboard.removeValueFact(lastFact);
 				}
 
-				resetNotIndicatedTOs(to, bb);
+				resetNotIndicatedTOs(to, bb, sess);
 			}
 		}
 	}
@@ -691,4 +777,62 @@ public class D3webDialog extends HttpServlet {
 		return false;
 	}
 
+	/**
+	 * Check, whether the user has permissions to log in. Permissions are stored
+	 * in userdat.csv in cases parent folder
+	 * 
+	 * @created 15.03.2011
+	 * @param user The user name.
+	 * @param password The password.
+	 * @return True, if permissions are correct.
+	 */
+	private boolean permitUser(String user, String password) {
+
+		// cases folder
+		String caseFolder = GlobalSettings.getInstance().getCaseFolder();
+		String csvFile = caseFolder + "/usrdat.csv";
+		CSVReader csvr = null;
+		String[] nextLine = null;
+
+		try {
+			csvr = new CSVReader(new FileReader(csvFile));
+			// go through file
+			while ((nextLine = csvr.readNext()) != null) {
+				// skip first line
+				if (!nextLine[0].startsWith("usr")) {
+					// if username and pw could be found, return true
+					if (nextLine[0].equals(user) && nextLine[1].equals(password)) {
+						return true;
+					}
+				}
+			}
+
+		}
+		catch (FileNotFoundException fnfe) {
+			// TODO Auto-generated catch block
+			fnfe.printStackTrace();
+		}
+		catch (IOException ioe) {
+			// TODO Auto-generated catch block
+			ioe.printStackTrace();
+		}
+
+		return false; // trust no one per default
+	}
+
+	private boolean checkReqVal(String requiredVal, Session sess, String valToSet) {
+		Blackboard blackboard = sess.getBlackboard();
+
+		valToSet = valToSet.replace("q_", "").replace("_", " ");
+		Question to =
+				(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
+						requiredVal, d3wcon.getKb());
+
+		Fact lastFact = blackboard.getValueFact(to);
+		if (requiredVal.equals(valToSet) ||
+				(lastFact != null && lastFact.getValue().toString() != "")) {
+			return true;
+		}
+		return false;
+	}
 }

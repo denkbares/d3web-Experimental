@@ -67,18 +67,32 @@ DONE - dateiauswahlmenü in dialog packen
 DONE - File exists Abfrage
 DONE - Login erfolglos Fall
 DONE - Add Info 1. Frage dazu + Popup
+DONE - ids etc ohne Leerzeichen (Anzeige der Fragetexte etc schon, aber für JS ids müssen Leerzeichen raus)
+DONE - reset session on logon other user
+DONE - Kopplung von session login und session d3web
+DONE - Folgefragen beim neu laden nicht markiert
+DONE - autosave case if new login (Klinikname = username, timestamp und "autosave"). 
+	Session wird dann zurückgesetzt. User kann den Fall aber wieder aus der Liste laden
+DONE - irgendwie die session mitführen. Problem: login von 2 Stellen (aus eclipse raus sowie von FF aus) unter 2 versch.
+		Benutzern führt dazu, dass alle denselben Fall bearbeiten!
+DONE - Num automatisch mitschicken
+DONE - Speichern Fälle in Ordner gemäß login
+DONE - Fall laden und Ordner anzeigen
+	Benutzer kann nur jeweils die Fälle in "seinem" Login ordner laden = Loginname bzw. Klinikname
+	
+DONE - Dialoge per Enter bestätigen
+DONE - Autosave und session refresh immer noch buggy :-)
+DONE - autosave case if 30(?) minutes inactive
+	besser: autosave nach jedem Werteintrag automatisch. Immer nur EIN autosave schreiben, anderes von zuvor löschen.
+DONE - Att Klinik muss immer ausgefüllt sein, ansonsten Fehlermeldung und KEIN absenden!
 
-DONE - Folgefragen beim neu laden nicht markiert?! (war auf einmal doch OK - beobachten)
-
-- automatischer Versand von mail mit PW falls vergessen?!
-- Kopplung von session login und session d3web
+- CHECK Sessions,Users,Autosave etc
+	
 - 1. Frage Popup schöner machen
-- logout popup?
-
-- KLÄREN: Speichern/Laden von Fällen im Mediastinitis
--- Ansehen Auswertungen über Weboberfläche von Flo...
--- Falls nachbearbeiten erwünscht -- Ja: Fall wird automatisch in Ordner für Klinik gespeichert, mit Zeitstempel und Benutzername.
--- Automatisch speichern nach 30 Minuten untätig.
-   -- DATEINAME?! 
-   
-   
+- logout link?
+- Login-Maske: Beschreibungstext, was der Login Name sein soll
+- automatischer Versand von mail mit PW falls vergessen?!
+- remove check/val from other questions if KLINIK (required val) is not set 
+- Erklärungs-/Hilfetext
+    
+LATER - Betreffende_Klinik: Wert vorbelegen (zu KNIFFLIG/AUFWENDIG für sofort) 

@@ -19,6 +19,8 @@
  */
 package de.d3web.proket.d3web.output.render;
 
+import javax.servlet.http.HttpSession;
+
 import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.knowledge.Indication.State;
@@ -31,6 +33,7 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
+import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
@@ -63,6 +66,12 @@ import de.d3web.proket.utils.TemplateUtils;
  * @created 13.01.2011
  */
 public class D3webRenderer implements ID3webRenderer {
+
+	protected static Session d3webSession;
+
+	public static void storeSession(Session session) {
+		d3webSession = session;
+	}
 
 	/**
 	 * Retrieves the appropriate renderer class according to what base object is
@@ -120,7 +129,10 @@ public class D3webRenderer implements ID3webRenderer {
 	 * basic structure, styles etc. Initiates the rendering of child-objects.
 	 */
 	@Override
-	public ContainerCollection renderRoot(ContainerCollection cc) {
+	public ContainerCollection renderRoot(ContainerCollection cc,
+			Session d3webSession, HttpSession http) {
+
+		this.d3webSession = d3webSession;
 
 		D3webConnector d3wcon = D3webConnector.getInstance();
 
@@ -137,7 +149,8 @@ public class D3webRenderer implements ID3webRenderer {
 		st.setAttribute("header", D3webConnector.getInstance().getHeader());
 
 		// load case list
-		String opts = PersistenceD3webUtils.getCaseListFromUserFilename();
+		String opts = PersistenceD3webUtils.getCaseListFromUserFilename((String) http.getAttribute("user"));
+
 		st.setAttribute("fileselectopts", opts);
 
 		// add some buttons for basic functionality
@@ -192,7 +205,7 @@ public class D3webRenderer implements ID3webRenderer {
 		// TableContainer and append it to the HTML
 		if (columns > 1) {
 			String tableOpening =
-					cc.tc.openTable(to.getName(), columns);
+					cc.tc.openTable(to.getName().replace(" ", "_"), columns);
 			childrenHTML.append(tableOpening);
 		}
 
@@ -222,7 +235,7 @@ public class D3webRenderer implements ID3webRenderer {
 
 		// close the table that had been opened for multicolumn cases
 		if (columns > 1) {
-			String tableClosing = cc.tc.closeTable(to.getName());
+			String tableClosing = cc.tc.closeTable(to.getName().replace(" ", "_"));
 			childrenHTML.append(tableClosing);
 		}
 
@@ -296,7 +309,7 @@ public class D3webRenderer implements ID3webRenderer {
 		// append
 		if (columns > 1) {
 			String tableOpening =
-					cc.tc.openTable(to.getName(), columns);
+					cc.tc.openTable(to.getName().replace(" ", "_"), columns);
 			childrenHTML.append(tableOpening);
 		}
 
@@ -362,7 +375,7 @@ public class D3webRenderer implements ID3webRenderer {
 
 		// close the table that had been opened for multicolumn
 		if (columns > 1) {
-			String tableClosing = cc.tc.closeTable(to.getName());
+			String tableClosing = cc.tc.closeTable(to.getName().replace(" ", "_"));
 			childrenHTML.append(tableClosing);
 		}
 
@@ -458,13 +471,14 @@ public class D3webRenderer implements ID3webRenderer {
 
 		// insert table cell opening string before the content of result which
 		// is the content/rendering of the dialog object itself
-		result.insert(0, cc.tc.getNextCellOpeningString(parent.getName(), colspan));
+		result.insert(0,
+				cc.tc.getNextCellOpeningString(parent.getName().replace(" ", "_"), colspan));
 
 		// append table cell closing
-		result.append(cc.tc.getNextCellClosingString(parent.getName(), colspan));
+		result.append(cc.tc.getNextCellClosingString(parent.getName().replace(" ", "_"), colspan));
 
 		// add to the table container
-		cc.tc.addNextCell(parent.getName(), colspan);
+		cc.tc.addNextCell(parent.getName().replace(" ", "_"), colspan);
 	}
 
 	/**
@@ -491,13 +505,14 @@ public class D3webRenderer implements ID3webRenderer {
 
 		// insert table cell opening string before the content of result which
 		// is the content/rendering of the dialog object itself
-		result.insert(0, cc.tc.getNextCellOpeningString(parent.getName(), colspan));
+		result.insert(0,
+				cc.tc.getNextCellOpeningString(parent.getName().replace(" ", "_"), colspan));
 
 		// append table cell closing
-		result.append(cc.tc.getNextCellClosingString(parent.getName(), colspan));
+		result.append(cc.tc.getNextCellClosingString(parent.getName().replace(" ", "_"), colspan));
 
 		// add to the table container
-		cc.tc.addNextCell(parent.getName(), colspan);
+		cc.tc.addNextCell(parent.getName().replace(" ", "_"), colspan);
 	}
 
 	/**

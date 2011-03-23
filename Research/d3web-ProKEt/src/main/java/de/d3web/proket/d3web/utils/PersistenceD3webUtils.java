@@ -25,11 +25,11 @@ public class PersistenceD3webUtils {
 	 * @created 09.03.2011
 	 * @param folderPath Path to the folder, where cases should be stored.
 	 */
-	public static void saveCaseTimestampDefault(String folderPath) {
+	public static void saveCaseTimestampDefault(String folderPath, Session d3webSession) {
 
 		/* d3web related persistence setup */
 		SessionRecord sessionRecord = SessionConversionFactory.copyToSessionRecord(
-				D3webConnector.getInstance().getSession());
+				d3webSession);
 		SingleXMLSessionRepository sessionRepository = new SingleXMLSessionRepository();
 		sessionRepository.add(sessionRecord);
 
@@ -59,11 +59,12 @@ public class PersistenceD3webUtils {
 	 * @param questionName Name of the Question, the value of which is also
 	 *        considered for assembling the case-filename.
 	 */
-	public static void saveCaseTimestampOneQuestionVal(String folderPath, String questionName) {
+	public static void saveCaseTimestampOneQuestionVal(String folderPath, String questionName,
+			Session d3webSession) {
 
 		/* d3web related persistence setup */
 		SessionRecord sessionRecord = SessionConversionFactory.copyToSessionRecord(
-				D3webConnector.getInstance().getSession());
+				d3webSession);
 		SingleXMLSessionRepository sessionRepository = new SingleXMLSessionRepository();
 		sessionRepository.add(sessionRecord);
 
@@ -76,7 +77,7 @@ public class PersistenceD3webUtils {
 		// Value of given question in the current session
 		Question clinic = (Question) KnowledgeBaseUtils.
 				findTerminologyObjectByName(questionName, D3webConnector.getInstance().getKb());
-		Blackboard bb = D3webConnector.getInstance().getSession().getBlackboard();
+		Blackboard bb = d3webSession.getBlackboard();
 		String clinicVal = bb.getValue(clinic).toString();
 
 		// Final assembly
@@ -106,11 +107,11 @@ public class PersistenceD3webUtils {
 	 * @param filename Name of the file the user wants the case to be stored as.
 	 */
 	public static void saveCaseTimestampOneQuestionAndInput(String folderPath, String questionName,
-			String filename) {
+			String filename, Session d3webSession) {
 
 		/* d3web related persistence setup */
 		SessionRecord sessionRecord = SessionConversionFactory.copyToSessionRecord(
-				D3webConnector.getInstance().getSession());
+				d3webSession);
 		SingleXMLSessionRepository sessionRepository = new SingleXMLSessionRepository();
 		sessionRepository.add(sessionRecord);
 
@@ -123,12 +124,28 @@ public class PersistenceD3webUtils {
 		// Value of given question in the current session
 		Question clinic = (Question) KnowledgeBaseUtils.
 				findTerminologyObjectByName(questionName, D3webConnector.getInstance().getKb());
-		Blackboard bb = D3webConnector.getInstance().getSession().getBlackboard();
+		Blackboard bb = d3webSession.getBlackboard();
 		String clinicVal = bb.getValue(clinic).toString();
 
-		// Final assembly
-		File file = new File(folderPath + "/" + clinicVal + "/" + sdf.format(now) + "_UV"
-				+ filename + "UV.xml");
+		File folder = new File(folderPath + "/" + clinicVal + "/");
+		File file = null;
+		if (filename.equals("autosave")) {
+			if (folder.listFiles() != null && folder.listFiles().length != 0) {
+				for (File f : folder.listFiles()) {
+					if (f.getName().contains("autosave")) {
+						f.delete();
+					}
+				}
+			}
+			file = new File(folderPath + "/" + clinicVal + "/" + sdf.format(now)
+					+ "_UVautosaveUV.xml");
+		}
+		else {
+			// Final assembly
+			file = new File(folderPath + "/" + clinicVal + "/" + sdf.format(now) + "_UV"
+					+ filename + "UV.xml");
+		}
+
 
 		try {
 			sessionRepository.save(file);
@@ -180,16 +197,15 @@ public class PersistenceD3webUtils {
 	 * @created 09.03.2011
 	 * @param filename Name of the file to be loaded.
 	 */
-	public static void loadCaseFromUserFilename(String filename) {
+	public static Session loadCaseFromUserFilename(String filename, String user) {
 
 		// folder with cases .xml files
-		File folder = new File(GlobalSettings.getInstance().getCaseFolder());
+		File folder = new File(GlobalSettings.getInstance().getCaseFolder() + "/" + user);
 		File fileToLoad = null;
 
 		if (folder.listFiles() != null && folder.listFiles().length != 0) {
 			for (File f : folder.listFiles()) {
-				System.out.println(f.getName());
-				System.out.println(filename);
+
 				if (f.getName().contains(filename)) {
 					fileToLoad = f;
 				}
@@ -197,7 +213,7 @@ public class PersistenceD3webUtils {
 		}
 
 		SingleXMLSessionRepository sessionRepository = new SingleXMLSessionRepository();
-
+		Session session1 = null;
 		try {
 
 			sessionRepository.load(fileToLoad);
@@ -205,16 +221,16 @@ public class PersistenceD3webUtils {
 			Iterator<SessionRecord> iterator = sessionRepository.iterator();
 			SessionRecord record1 = iterator.next();
 
-			Session session1 =
+			session1 =
 					SessionConversionFactory.copyToSession(D3webConnector.getInstance().getKb(),
 							record1);
 
-			D3webConnector.getInstance().setSession(session1);
 		}
 		catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return session1;
 	}
 
 	/**
@@ -256,9 +272,9 @@ public class PersistenceD3webUtils {
 	 *         of an options-list. (For to be included within the corresponding
 	 *         FileSelect-StringTemplate.
 	 */
-	public static String getCaseListFromUserFilename() {
+	public static String getCaseListFromUserFilename(String user) {
 		StringBuffer cases = new StringBuffer();
-		File folder = new File(GlobalSettings.getInstance().getCaseFolder());
+		File folder = new File(GlobalSettings.getInstance().getCaseFolder() + "/" + user);
 
 		if (folder.listFiles() != null && folder.listFiles().length != 0) {
 
@@ -291,9 +307,16 @@ public class PersistenceD3webUtils {
 		return cases.toString();
 	}
 
-	public static boolean existsCase(String userFilename) {
-		File folder = new File(GlobalSettings.getInstance().getCaseFolder());
+	public static boolean existsCase(String fold, String userFilename, String subfolder, Session session) {
 
+		// Value of given question in the current session
+		Question subfolderVal = (Question) KnowledgeBaseUtils.
+				findTerminologyObjectByName(subfolder, D3webConnector.getInstance().getKb());
+		Blackboard bb = session.getBlackboard();
+		String subfold = bb.getValue(subfolderVal).toString();
+
+		File folder = new File(fold + "/" + subfold);
+		System.out.println(folder.getName());
 		if (folder.listFiles() != null && folder.listFiles().length != 0) {
 
 			// ignore file(s) ending to .csv as this is the user config file

@@ -19,8 +19,11 @@
  */
 package de.d3web.proket.d3web.output.render;
 
+import javax.servlet.http.HttpSession;
+
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
+import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.proket.output.container.ContainerCollection;
 
@@ -43,7 +46,7 @@ public interface ID3webRenderer {
 	 * @param cc the ContainerCollection that is to be used.
 	 * @return the resulting ContainerCollection specifying the dialog.
 	 */
-	public ContainerCollection renderRoot(ContainerCollection cc);
+	public ContainerCollection renderRoot(ContainerCollection cc, Session d3webSession, HttpSession http);
 
 	/**
 	 * Renders the current terminology object.
