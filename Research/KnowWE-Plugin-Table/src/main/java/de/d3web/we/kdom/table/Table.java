@@ -74,10 +74,14 @@ public abstract class Table extends AbstractType {
 	}
 
 	public void injectTableCellContentChildtype(Type type) {
-		Type cellContentType = KnowWETypeUtils.findSuccessorType(this,
+		injectCellContentType(this, type);
+	}
+
+	public static void injectCellContentType(Type master, Type injection) {
+		Type cellContentType = KnowWETypeUtils.findSuccessorType(master,
 				TableCellContent.class);
 		if (cellContentType instanceof AbstractType) {
-			((AbstractType) cellContentType).addChildType(type);
+			((AbstractType) cellContentType).addChildType(injection);
 		}
 	}
 

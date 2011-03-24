@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 /**
@@ -46,6 +47,10 @@ public class TableLine extends AbstractType {
 		childrenTypes.add(new TableCell());
 		sectionFinder = new RegexSectionFinder(LINEPATTERN);
 		setCustomRenderer(new TableLineRenderer());
+	}
+
+	public void injectTableCellContentChildtype(Type type) {
+		Table.injectCellContentType(this, type);
 	}
 
 	/**
