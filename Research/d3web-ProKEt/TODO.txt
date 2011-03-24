@@ -97,6 +97,7 @@ DONE - mehrere Nutzer einer "Nutzergruppe" (hier, Klinik) können auf den Klinik
 - remove check/val from other questions if KLINIK (required val) is not set 
 - Login-Maske: Beschreibungstext, was der Login Name sein soll
 - Allgemeiner Erklärungs-/Hilfetext
+- Parallelzugriff auf Dateien verhindern (wenn user derselben usergroup sich einloggen)?!
     
 LATER - Betreffende_Klinik: Wert vorbelegen (zu KNIFFLIG/AUFWENDIG für sofort) 
 
