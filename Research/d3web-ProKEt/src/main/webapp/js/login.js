@@ -8,10 +8,10 @@ $(function() {
 
 	var opts = {
 		position : top,
-		width : 300,
-		height : 200,
-		minWidth : 300,
-		minHeight : 200,
+		width : 470,
+		height : 350,
+		minWidth : 470,
+		minHeight : 350,
 		draggable : false,
 		resizable : false,
 		// to force first login
@@ -110,7 +110,7 @@ function sendData() {
 		
 		// not successfully logged in
 		if (html == "nosuccess"){
-			$('#loginError').html("<font color=\"red\">Login erfolglos. <br />Bitte versuchen Sie es noch einmal.</font>");
+			$('#loginError').html("<font color=\"red\">Login erfolglos. Bitte versuchen Sie es noch einmal.</font>");
 			
 		} else {
 			// successful login: remove error message

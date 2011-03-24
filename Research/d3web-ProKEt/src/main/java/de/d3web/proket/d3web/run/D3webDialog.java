@@ -409,21 +409,25 @@ public class D3webDialog extends HttpServlet {
 		}
 
 		String userFilename = request.getParameter("userfn");
-		System.out.println(userFilename);
-		if (PersistenceD3webUtils.existsCase(
-				folderPath,
-				userFilename,
-				"Betreffende Klinik",
-				(Session) httpSession.getAttribute("d3webSession"))) {
-			System.out.println("exists");
-			writer.append("exists");
-		}
-		else {
-			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
-					folderPath,
-					"Betreffende Klinik",
-					userFilename,
-					(Session) httpSession.getAttribute("d3webSession"));
+		String lastLoaded = (String) httpSession.getAttribute("lastLoaded");
+
+		if (lastLoaded != null && lastLoaded != "") {
+			if (lastLoaded.equals(userFilename)) {
+				PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
+						folderPath,
+						"Betreffende Klinik",
+						userFilename,
+						(Session) httpSession.getAttribute("d3webSession"));
+			}
+			else {
+				if (PersistenceD3webUtils.existsCase(
+						folderPath,
+						userFilename,
+						"Betreffende Klinik",
+						(Session) httpSession.getAttribute("d3webSession"))) {
+					writer.append("exists");
+				}
+			}
 		}
 	}
 
@@ -446,6 +450,8 @@ public class D3webDialog extends HttpServlet {
 		// filename);
 		Session session = PersistenceD3webUtils.loadCaseFromUserFilename(filename, user);
 		httpSession.setAttribute("d3webSession", session);
+
+		httpSession.setAttribute("lastLoaded", filename);
 	}
 
 	private void login(HttpServletRequest req,
@@ -465,7 +471,7 @@ public class D3webDialog extends HttpServlet {
 		// get the response writer for communicating back via Ajax
 		PrintWriter writer = res.getWriter();
 
-		httpSession.setMaxInactiveInterval(15);
+		httpSession.setMaxInactiveInterval(30);
 
 		// if no valid login
 		if (!permitUser(u, p)) {
@@ -490,7 +496,6 @@ public class D3webDialog extends HttpServlet {
 		if (splitter != -1) {
 			String toReplace = u.substring(splitter, u.length());
 			String userSubfolder = u.replace(toReplace, "");
-			System.out.println(userSubfolder);
 			httpSession.setAttribute("user", userSubfolder);
 		}
 

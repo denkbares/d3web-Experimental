@@ -12,5 +12,14 @@
 			</tr>
 			</tbody>
 		</table>
-		<div style="margin-top:5px;" id="loginError"></div>
+		<div style="margin-top:5px; margin-bottom:5px;" id="loginError"></div>
+		<div id="loginExplanation">
+		<b>Hinweis:</b> Sie werden nach <b>60 Minuten Inaktivität</b> automatisch ausgeloggt.<br /><br />
+		
+		Wenn Sie den Fall nicht explizit mit <b>Fall speichern</b> abgespeichert hatten, können Sie
+		den letzten Bearbeitungsstand mit <b>Fall laden (autosave)</b> wiederherstellen.
+		In der Datenbank wird der Fall aber nur dauerhaft übernommen, wenn er mit <b>Fall speichern</b>
+		unter einen expliziten Fallnamen gespeichert wurde!	<br /><br />
+		Bereits eingegebene und abgespeicherte Fälle können Sie mittels <b>Fall laden (Fallname)</b> weiterbearbeiten.
+		</div>
 </div>
