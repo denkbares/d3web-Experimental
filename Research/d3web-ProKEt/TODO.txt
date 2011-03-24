@@ -5,47 +5,50 @@ PROTOTYPING
 * Multicolumn Style: ohne Tabellen? besser?
 * Bonustext auch bei Hierarchy Statistik? 
 DONE Titel aus dem Questionnaire rausziehen/eigen taggen
---------------------
 
 
 BUG: Resource/File not found (StringTemplate oder auch d3web/...): 
+------------------------------------------------------------------
 - d3web neu kompilieren clean install, Eclipse refresh
 - dialog-prototyping neu kompilieren, Eclipse refresh, target ordner refresh.
 - control center starten. Müsste gehen.
---> bisher im neuen Projekt nicht mehr aufgetreten, liegt vielliecht an der Einbindung des antlr
-	als jar zur compile Zeit (ins pom.xml)
--- WICHTIG: die Eclipse WTP Integration für Maven ist ESSENTIELL
+- WICHTIG: die Eclipse WTP Integration für Maven ist ESSENTIELL
+- Projekteinstellungen: maven libs müssen nach Web-INF/lib kopiert werden!
+
 
 NEU AUSCHECK:
-.settings?! (aktuell aus altem Proj reinkopieren)
-anpassen
-rechtsklick auf Projekt, Properties, Deployment Maven Dependencies angeben dass in WEB-INF/lib
+-------------
+- .settings?! (müssen drinbleiben, da sonst Projekt nicht als WTP erkannt wird)
+- ggf. anpassen
+- rechtsklick auf Projekt, Properties, Deployment Maven Dependencies angeben dass in WEB-INF/lib
 
---------
+
 GENERAL:
 --------
 - DONE refactor resources saving
+- DONE Abstraktionsfragen (zB BMI) ausgegraut o.ä. dass nicht editierbar und nur berechnet
+- DONE d3web servlet so umschreiben, dass hier erst auch ein XML geparst wird, in dem Angaben zu Stil etc
+  	   stehen, sowie der Name der Wissensbasis
+- DONE Table/Column Layout d3web!
+- DONE replace Renderer-chosing algorithm?! 
+	--> Erstmal so lassen
 - Complete style/image refactoring: pull EVERYTHING out to CSS!!!
-- replace Renderer-chosing algorithm?!
-- DefaultSettings: define all required default project paths, dialog settings and so on
-- Neues Typ-Konzept: 
+- DefaultSettings: define all required default project paths, dialog settings and so on, noch durchgängig
+- Unterscheidung zwischen global settings und user settings (wichtig für richtige Dialoge die von mehreren
+	Usern/Rechnern aus verwendet werden)
+- Neues Typ-Konzept: noch umsetzen, bisher gibt es nur eine Form Dialoge
   -- Dialog Kategorien sind in DialogType (Enum) definiert, jeder Dialog gehört einem solchen 
      Basis-Typen an (momentan SingleForm, Multiform, Hierarchical, und default)
   -- DialogType definiert, welche Art Strategie für das anzeigen von Fragen verwendet werden soll
   	 momentan All, NextForm, NextUAQuestion
-  	 
   -- Abhängig vom Typ d3web reinladen oder nicht: für SingleForm/All braucht man den gesamten Tree von 
      Anfang an, für MultipleForm nicht
-     
-- DONE d3web servlet so umschreiben, dass hier erst auch ein XML geparst wird, in dem Angaben zu Stil etc
-  	   stehen, sowie der Name der Wissensbasis
+- Bildfragen d3web
 - D3web Renderer erben lassen
-- Hierarchy Dialogs d3web
-- DONE Table/Column Layout d3web!
+- Hierarchy/QuickI Dialogs d3web
+
 - Building Blocks, Modularisierung, Drag and Drop, Visual Edit
 - KnowWE Binding for entering knowledge bases
-- DONE Abstraktionsfragen (zB BMI) ausgegraut o.ä. dass nicht editierbar und nur berechnet
-
 
   	 
 FREECHOICE/QUICKI Dialog
@@ -57,10 +60,8 @@ FREECHOICE/QUICKI Dialog
 -- Datumsfragen
 
 
-
---------------------------------
-
-MEDIASTINITIS
+MEDIASTINITIS (Projekt Herzmedizin)
+-----------------------------------
 DONE - Abfrage beim speichern-Popup vervollständigen
 DONE - keine .csv Dateien und longname xmls anzeigen
 DONE - dateiauswahlmenü in dialog packen
@@ -79,20 +80,29 @@ DONE - Num automatisch mitschicken
 DONE - Speichern Fälle in Ordner gemäß login
 DONE - Fall laden und Ordner anzeigen
 	Benutzer kann nur jeweils die Fälle in "seinem" Login ordner laden = Loginname bzw. Klinikname
-	
+DONE - 1. Frage Popup schöner machen	
 DONE - Dialoge per Enter bestätigen
 DONE - Autosave und session refresh immer noch buggy :-)
 DONE - autosave case if 30(?) minutes inactive
 	besser: autosave nach jedem Werteintrag automatisch. Immer nur EIN autosave schreiben, anderes von zuvor löschen.
 DONE - Att Klinik muss immer ausgefüllt sein, ansonsten Fehlermeldung und KEIN absenden!
-
+DONE - mehrere Nutzer einer "Nutzergruppe" (hier, Klinik) können auf den Klinik folder zugreifen. Dh es gibt zB
+	einen folder WUE in dem alle Würzburger Fälle drin sind, und user WUE_1, WUE_2 etc können drauf zugreifen. Das
+	hinter dem "_" ist dabei unwichtig, wichtig ist dass das Trennzeichen genau einmal als "_" vorkommt!
 - CHECK Sessions,Users,Autosave etc
 	
-DONE - 1. Frage Popup schöner machen
-- logout link?
-- Login-Maske: Beschreibungstext, was der Login Name sein soll
+- Speichern & Name vorhanden: überschreiben ermöglichen durch Bestätigung (evtl)
+- logout link? Passiert automatisch nach X Minuten (momentan zum testen 15 Sekunden)
 - automatischer Versand von mail mit PW falls vergessen?!
 - remove check/val from other questions if KLINIK (required val) is not set 
-- Erklärungs-/Hilfetext
+- Login-Maske: Beschreibungstext, was der Login Name sein soll
+- Allgemeiner Erklärungs-/Hilfetext
     
 LATER - Betreffende_Klinik: Wert vorbelegen (zu KNIFFLIG/AUFWENDIG für sofort) 
+
+HEUTE klären: 
+- Zuständigkeit Server / Updates: Berlin oder wir mit Fremdzugriff?
+- Fälle speichern: wo Ordner am besten ablegen? Innerhalb Webapp gefährlich wenn updates und Sicherung vergessen wird
+- Automatisch Logout nach wieviel Minuten: 30?
+- Feld Vorbelegung "Betreffende_Klink", da eh Benutzername sein soll?!
+- PW vergessen: mail Versand, automatisiert?

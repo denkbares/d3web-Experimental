@@ -477,6 +477,22 @@ public class D3webDialog extends HttpServlet {
 
 		// set user attribute for the HttpSession
 		httpSession.setAttribute("user", u);
+		
+
+		/*
+		 * in case we should have more than one user per clinic, we distinguish
+		 * them by adding "_1"... to the clinic name, i.e. WUE_1, WUE_2 etc.
+		 * Thus we need to extract part of the login name that also denotes the
+		 * clinic name and thus the subfolder, where cases are stored that
+		 * should be visible for THIS user.
+		 */
+		int splitter = u.indexOf("_");
+		if (splitter != -1) {
+			String toReplace = u.substring(splitter, u.length());
+			String userSubfolder = u.replace(toReplace, "");
+			System.out.println(userSubfolder);
+			httpSession.setAttribute("user", userSubfolder);
+		}
 
 		// causes JS to start new session and d3web case finally
 		writer.append("newUser");
@@ -788,8 +804,9 @@ public class D3webDialog extends HttpServlet {
 	 */
 	private boolean permitUser(String user, String password) {
 
-		// cases folder
+		// get parent folder for storing cases
 		String caseFolder = GlobalSettings.getInstance().getCaseFolder();
+
 		String csvFile = caseFolder + "/usrdat.csv";
 		CSVReader csvr = null;
 		String[] nextLine = null;

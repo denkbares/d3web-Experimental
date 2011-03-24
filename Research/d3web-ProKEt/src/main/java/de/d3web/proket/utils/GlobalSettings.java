@@ -75,6 +75,7 @@ public class GlobalSettings {
 
 
 	private String caseFolder = "";
+	private String userSubCaseFolder = "";
 
 	/* The getters for retrieving all those values */
 	public String getProketPath() {
@@ -143,5 +144,13 @@ public class GlobalSettings {
 
 	public String getCaseFolder() {
 		return caseFolder;
+	}
+
+	public void setSubCaseFolder(String userSubCaseFolder) {
+		this.userSubCaseFolder = userSubCaseFolder;
+	}
+
+	public String getSubCaseFolder() {
+		return userSubCaseFolder;
 	}
 }
