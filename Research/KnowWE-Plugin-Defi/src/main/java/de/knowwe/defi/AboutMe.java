@@ -109,11 +109,23 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 			if (fullName != ""
 					&& !KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(fullName)) {
 
-				String pagePermissions = "[{ALLOW view All}]\r\n[{ALLOW delete "
-						+ fullName + "}]\r\n\r\n";
-				String content = pagePermissions + "%%aboutme\r\n%\r\n";
+				// create user page
+				String pagePermissions = "[{ALLOW view All}]\n[{ALLOW delete "
+						+ fullName + "}]\n\n";
+				String content = pagePermissions + "%%aboutme\n%\n";
 				KnowWEEnvironment.getInstance().getWikiConnector()
 						.createWikiPage(fullName, content, loginName);
+
+				// create comment page / talks with the therapist
+				content = "[{ALLOW view "
+						+ fullName
+						+ "}]\n[{ALLOW delete "
+						+ fullName
+						+ "}]\n<forum name=\"Mit dem Therapeuten sprechen\">\n<box></box></forum>\n";
+
+				String commentPage = fullName + "_comment_therapist";
+				KnowWEEnvironment.getInstance().getWikiConnector()
+						.createWikiPage(commentPage, content, loginName);
 			}
 		}
 		else if ((event instanceof WikiSecurityEvent)

@@ -81,6 +81,16 @@
         <parameter id="script" value="KnowWE-Plugin-Defi.js" />
     </extension>
     
+    <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="TalkAboutTaghandler">
+        <parameter id="class" value="de.knowwe.defi.TalkAboutTaghandler" />
+        <parameter id="name" value="TalkAboutTaghandler" />
+        <parameter id="description" value="TagHandler TalkAboutTaghandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="script" value="KnowWE-Plugin-Defi.js" />
+    </extension>    
+    
   <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
         id="ReadbuttonTaghandler">
         <parameter id="class" value="de.knowwe.defi.ReadButtonTaghandler" />
