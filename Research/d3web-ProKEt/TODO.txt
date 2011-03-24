@@ -99,13 +99,19 @@ DONE - Speichern & Name vorhanden: überschreiben möglich, wenn genau dieser Fa
 - Login-Maske: Beschreibungstext, was der Login Name sein soll,
 	Text, Erklärung zum laden/speichern, Link zum PW vergessen mail Versand
 	
+- Speichern/Überschreiben nochmal durchgehen
+
 - Parallelzugriff auf Dateien verhindern (wenn user derselben usergroup sich einloggen)?!
     
 LATER - Betreffende_Klinik: Wert vorbelegen (zu KNIFFLIG/AUFWENDIG für sofort) 
 
 HEUTE klären: 
 - Zuständigkeit Server / Updates: Berlin oder wir mit Fremdzugriff? WIR
-- Fälle speichern: wo Ordner am besten ablegen? Innerhalb Webapp gefährlich wenn updates und Sicherung vergessen wird
+- Fälle speichern: wo Ordner am besten ablegen? 
+	Innerhalb Webapp gefährlich wenn updates und Sicherung vergessen wird, muss aber erstmal so sein, außerhalb
+	schreibt die Webapp nicht?!
 - Automatisch Logout nach wieviel Minuten: 60?
 - Feld Vorbelegung "Betreffende_Klink", da eh Benutzername sein soll?!
 - PW vergessen: mail Versand, automatisiert?
+
+- Anzeigen welcher Benutzer gerade eingeloggt ist?!

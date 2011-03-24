@@ -127,7 +127,10 @@ public class PersistenceD3webUtils {
 		Blackboard bb = d3webSession.getBlackboard();
 		String clinicVal = bb.getValue(clinic).toString();
 
+		System.out.println(clinicVal);
+
 		File folder = new File(folderPath + "/" + clinicVal + "/");
+		System.out.println(folder);
 		File file = null;
 		if (filename.equals("autosave")) {
 			if (folder.listFiles() != null && folder.listFiles().length != 0) {

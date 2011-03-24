@@ -23,8 +23,8 @@
 		<servlet-class>de.d3web.proket.d3web.run.D3webDialog</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>HerzmedizinD3web</servlet-name>
-		<servlet-class>de.d3web.proket.d3web.run.HerzmedizinD3web</servlet-class>
+		<servlet-name>Mediastinitis</servlet-name>
+		<servlet-class>de.d3web.proket.d3web.run.Mediastinitis</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>Debug</servlet-name>
@@ -60,8 +60,8 @@
 		<url-pattern>/D3webDialog</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>HerzmedizinD3web</servlet-name>
-		<url-pattern>/HerzmedizinD3web</url-pattern>
+		<servlet-name>Mediastinitis</servlet-name>
+		<url-pattern>/Mediastinitis</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Debug</servlet-name>

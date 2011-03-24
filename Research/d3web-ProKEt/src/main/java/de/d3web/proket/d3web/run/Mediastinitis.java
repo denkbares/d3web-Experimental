@@ -89,7 +89,7 @@ import de.d3web.proket.utils.IDUtils;
  * @date 14.01.2011; Update: 28/01/2011
  * 
  */
-public class D3webDialog extends HttpServlet {
+public class Mediastinitis extends HttpServlet {
 
 	/* special parser for reading in the d3web-specification xml */
 	private D3webXMLParser d3webParser;
@@ -102,7 +102,7 @@ public class D3webDialog extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public D3webDialog() {
+	public Mediastinitis() {
 		super();
 	}
 
@@ -135,13 +135,11 @@ public class D3webDialog extends HttpServlet {
 		// try to get the src parameter, which defines the specification xml
 		// with special properties for this dialog/knowledge base
 		// if none available, default.xml is set
-		String source = "default.xml";
-		if (request.getParameter("src") != null) {
-			source = request.getParameter("src");
-		}
+		String source = "Mediastinitis";
 		if (!source.endsWith(".xml")) {
 			source = source + ".xml";
 		}
+
 
 		// d3web parser for interpreting the source/specification xml
 		d3webParser = new D3webXMLParser(source);
@@ -478,7 +476,7 @@ public class D3webDialog extends HttpServlet {
 		// get the response writer for communicating back via Ajax
 		PrintWriter writer = res.getWriter();
 
-		httpSession.setMaxInactiveInterval(30);
+		httpSession.setMaxInactiveInterval(60 * 60);
 
 		// if no valid login
 		if (!permitUser(u, p)) {
