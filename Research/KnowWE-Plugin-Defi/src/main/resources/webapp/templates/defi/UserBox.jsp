@@ -18,10 +18,12 @@
   JSPWikiUserContext user = new JSPWikiUserContext(c, new HashMap<String, String>());
   if (user.userIsAsserted()) {
 	  KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(KnowWEEnvironment.DEFAULT_WEB, user.getUserName());
-	  Section<?> s = article.getSection();
-	  if (s != null && s.toString().contains("@avatar:")) {
-	  	Section<AboutMe> sec = Sections.findSuccessor(s, AboutMe.class);
-	  	avatar = DefaultMarkupType.getAnnotation(sec, "avatar");
+	  if(article != null) {
+		  Section<?> s = article.getSection();
+		  if (s != null && s.toString().contains("@avatar:")) {
+		  	Section<AboutMe> sec = Sections.findSuccessor(s, AboutMe.class);
+		  	avatar = DefaultMarkupType.getAnnotation(sec, "avatar");
+		  }
 	  }
   }
 %>

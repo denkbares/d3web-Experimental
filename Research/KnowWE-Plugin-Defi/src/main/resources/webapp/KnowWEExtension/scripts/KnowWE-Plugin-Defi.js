@@ -16,6 +16,22 @@ if (typeof KNOWWE == "undefined" || !KNOWWE) {
  */
 KNOWWE.plugin.defi = function() {
     return {
+    	/**
+    	 * Adds blanks to the tab names. necessary due the fact that they are not
+    	 * allowed in the JSPWiki tab markup.
+    	 */
+    	beatifyTabNames : function(){
+    	    var tabs = $('pagecontent').getElements('.tabmenu');
+    	    
+            for(var i = 0; i < tabs.length; i++) {
+            	var a = tabs[i].getElements('a');
+            	for(var j = 0; j < a.length; j++) {
+            		text = a[j].getText();
+                	text = text.replace("--", " ");
+            	    a[j].setText(text);
+            	}
+            }
+    	},    	
         /**
          * Checks the URL for a given tab combination. If one is found,
          * the active tab is set to the found tab. Used to select other tabs
@@ -86,6 +102,9 @@ KNOWWE.plugin.defi = function() {
         window.addEvent('domready', function() {
             KNOWWE.helper.observer.subscribe( 'onload', KNOWWE.plugin.defi.checkURLForTab);
             KNOWWE.helper.observer.subscribe( 'onload', KNOWWE.plugin.defi.enableLogTabClicks);
+        });
+        window.addEvent('load', function(){
+        	KNOWWE.plugin.defi.beatifyTabNames();
         });
     }
 }());
