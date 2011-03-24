@@ -41,7 +41,7 @@ public class PropertyDefinitionTree extends DashTree {
 	public PropertyDefinitionTree() {
 		// setting Pre-environoment-renderer
 		this.setCustomRenderer(new PreRendererWithoutTilde());
-		replaceDashTreeElementContentType(this, new PropertyDashTreeElementContent());
+		replaceDashTreeElementContentType(new PropertyDashTreeElementContent());
 	}
 
 	class PreRenderer extends KnowWEDomRenderer<DashTree> {
