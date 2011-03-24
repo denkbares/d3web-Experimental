@@ -25,7 +25,7 @@ import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.condition.Number;
+import de.d3web.we.kdom.basic.Number;
 import de.d3web.we.kdom.rendering.DefaultTextRenderer;
 import de.d3web.we.kdom.report.MessageRenderer;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
