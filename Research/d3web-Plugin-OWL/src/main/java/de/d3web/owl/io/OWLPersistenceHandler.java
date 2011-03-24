@@ -18,15 +18,14 @@
  */
 package de.d3web.owl.io;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.logging.Logger;
 
-import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.DefaultOntologyFormat;
 import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
@@ -34,56 +33,60 @@ import de.d3web.core.io.KnowledgeReader;
 import de.d3web.core.io.KnowledgeWriter;
 import de.d3web.core.io.progress.ProgressListener;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.owl.Ontology;
+import de.d3web.owl.OntologyProvider;
 
 /**
- * Persistence handler for owl ontologies attached to the KnowledgeBase.
+ * Persistence handler for owl ontologies attached to the KnowledgeBase. The
+ * attached ontology will be read into a byte[]. This byte[] will be used to
+ * provide various InputStreams. These InputStreams can be used to create new
+ * ontology instances for each session.
  *
  * @author Sebastian Furth
  * @created Mar 23, 2011
  */
 public class OWLPersistenceHandler implements KnowledgeReader, KnowledgeWriter {
 
-	// Handles almost everything related to ontologies
-	private final OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-
 	// Just for convenience and code beautification
 	private final Logger logger = Logger.getLogger(this.getClass().getSimpleName());
 
 	@Override
 	public void write(KnowledgeBase knowledgeBase, OutputStream stream, ProgressListener listener) throws IOException {
-		Ontology ontology = knowledgeBase.getKnowledgeStore().getKnowledge(Ontology.KNOWLEDGE_KIND);
-		if (ontology != null) {
+		OntologyProvider provider = knowledgeBase.getKnowledgeStore().getKnowledge(
+				OntologyProvider.KNOWLEDGE_KIND);
+		if (provider != null) {
 			try {
-				OWLOntology owlOntology = ontology.getOntology();
-				manager.setOntologyFormat(owlOntology, new DefaultOntologyFormat());
-				manager.saveOntology(owlOntology, stream);
+				OWLOntology ontology = provider.createOntologyInstance();
+				OWLOntologyManager manager = ontology.getOWLOntologyManager();
+				manager.setOntologyFormat(ontology, new DefaultOntologyFormat());
+				manager.saveOntology(ontology, stream);
 			}
 			catch (OWLOntologyStorageException e) {
 				logger.severe("Unexpected error while saving ontology!" + e.getLocalizedMessage());
 			}
 		}
 		else {
-			logger.severe("Ontology is null, nothing was saved!");
+			logger.severe("OntologyProvider is null, nothing was saved!");
 		}
-
 	}
 
 	@Override
 	public int getEstimatedSize(KnowledgeBase kb) {
-		return kb.getKnowledgeStore().getKnowledge(Ontology.KNOWLEDGE_KIND).getOntology().getAxiomCount();
+		// TODO: Fragen, aber wir haben immer nur 1 Ontologie :D
+		return 1;
 	}
 
 	@Override
 	public void read(KnowledgeBase knowledgeBase, InputStream stream, ProgressListener listerner) throws IOException {
-		try {
-			OWLOntology ontology = manager.loadOntologyFromOntologyDocument(stream);
-			knowledgeBase.getKnowledgeStore().addKnowledge(Ontology.KNOWLEDGE_KIND,
-					new Ontology(ontology));
+		// We save the ontology as byte[], as we have to create new instances of
+		// the ontology in each session! These instances can only be created
+		// from InputStreams.
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		int i;
+		while ((i = stream.read()) != -1) {
+			bos.write(i);
 		}
-		catch (OWLOntologyCreationException e) {
-			logger.severe("Unexpected error while loading ontology" + e.getLocalizedMessage());
-		}
+		knowledgeBase.getKnowledgeStore().addKnowledge(OntologyProvider.KNOWLEDGE_KIND,
+					new OntologyProvider(bos.toByteArray()));
 	}
 
 }

@@ -41,7 +41,7 @@ import de.d3web.plugin.test.InitPluginManager;
 public class AutoDetectTest {
 
 	@Test
-	public void testKBWithoudOntology() {
+	public void testKBWithoutOntology() {
 		KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase();
 		OWLAutoDetect autoDetect = new OWLAutoDetect();
 		assertEquals("AutoDetect should return false.", false, autoDetect.check(kb));

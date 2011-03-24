@@ -18,7 +18,13 @@
  */
 package de.d3web.owl;
 
+import java.io.ByteArrayInputStream;
+import java.util.logging.Logger;
+
+import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import de.d3web.core.inference.KnowledgeKind;
 import de.d3web.core.inference.KnowledgeSlice;
@@ -30,14 +36,17 @@ import de.d3web.core.inference.KnowledgeSlice;
  * @author Sebastian Furth
  * @created Mar 23, 2011
  */
-public class Ontology implements KnowledgeSlice {
+public class OntologyProvider implements KnowledgeSlice {
 
-	public final static KnowledgeKind<Ontology> KNOWLEDGE_KIND =
-			new KnowledgeKind<Ontology>("Ontology", Ontology.class);
+	// Just for convenience and code beautification
+	private final Logger logger = Logger.getLogger(this.getClass().getSimpleName());
 
-	private final OWLOntology ontology;
+	public final static KnowledgeKind<OntologyProvider> KNOWLEDGE_KIND =
+			new KnowledgeKind<OntologyProvider>("OntologyProvider", OntologyProvider.class);
 
-	public Ontology(OWLOntology ontology) {
+	private final byte[] ontology;
+
+	public OntologyProvider(byte[] ontology) {
 		if (ontology == null) {
 			throw new NullPointerException("The ontology can't be null!");
 		}
@@ -45,13 +54,23 @@ public class Ontology implements KnowledgeSlice {
 	}
 
 	/**
-	 * Returns the encapsulated OWLOntology.
+	 * Returns a new instance of the encapsulated ontology. This ontolgy
+	 * instance can be used in d3web sessions.
 	 *
 	 * @created Mar 23, 2011
 	 * @return OWLOntology
 	 */
-	public OWLOntology getOntology() {
-		return ontology;
+	public OWLOntology createOntologyInstance() {
+		ByteArrayInputStream bai = new ByteArrayInputStream(ontology);
+		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+		try {
+			return manager.loadOntologyFromOntologyDocument(bai);
+		}
+		catch (OWLOntologyCreationException e) {
+			logger.severe("Ontology could not be created from the provided byte[]: "
+					+ e.getLocalizedMessage());
+		}
+		return null;
 	}
 
 }

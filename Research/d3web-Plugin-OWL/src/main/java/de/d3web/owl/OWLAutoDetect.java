@@ -31,7 +31,7 @@ public class OWLAutoDetect implements Autodetect {
 
 	@Override
 	public boolean check(KnowledgeBase kb) {
-		return (kb.getKnowledgeStore().getKnowledge(Ontology.KNOWLEDGE_KIND) != null);
+		return (kb.getKnowledgeStore().getKnowledge(OntologyProvider.KNOWLEDGE_KIND) != null);
 	}
 
 }

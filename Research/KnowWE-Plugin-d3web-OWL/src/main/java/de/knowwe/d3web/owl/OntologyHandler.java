@@ -19,18 +19,21 @@
 package de.knowwe.d3web.owl;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.io.DefaultOntologyFormat;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.owl.Ontology;
+import de.d3web.owl.OntologyProvider;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
@@ -51,8 +54,6 @@ import de.d3web.we.wikiConnector.ConnectorAttachment;
  */
 public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 
-	private final OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<OntologyProviderType> section) {
 		KnowledgeBase kb = getKB(article);
@@ -68,17 +69,18 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 		boolean hasContent = content != null && !content.trim().isEmpty();
 		boolean hasSourcePath = sourcePath != null && !sourcePath.trim().isEmpty();
 
+		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology ontology = null;
 
 		// no data available
 		if (!hasSourcePath && !hasContent) {
 			return MessageUtils.syntaxErrorAsList(
-					"There is neither an path to an ontology file nor content which can be attached.");
+					"There is neither a path to an ontology file nor content which can be attached.");
 		}
 		// take the content as ontology
 		else if (!hasSourcePath && hasContent) {
 			try {
-				ontology = createOntologyFromContent(content);
+				ontology = createOntologyFromContent(content, manager);
 			}
 			catch (OWLOntologyCreationException e) {
 				return MessageUtils.syntaxErrorAsList(
@@ -88,7 +90,7 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 		// take the specified attachment as ontology
 		else if (hasSourcePath) {
 			try {
-				ontology = getOntologyAttachment(sourcePath, section);
+				ontology = getOntologyAttachment(sourcePath, section, manager);
 			}
 			catch (OWLOntologyCreationException e) {
 				return MessageUtils.syntaxErrorAsList(
@@ -106,11 +108,19 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 			}
 		}
 
-		// add the ontology to the knowledge base
-		kb.getKnowledgeStore().addKnowledge(Ontology.KNOWLEDGE_KIND, new Ontology(ontology));
-
-		// delete ontology in the OWLManager. We don't need it there!
-		manager.removeOntology(ontology);
+		try {
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			// Save the ontology in RDFXML-Format
+			manager.setOntologyFormat(ontology, new DefaultOntologyFormat());
+			manager.saveOntology(ontology, bos);
+			kb.getKnowledgeStore().addKnowledge(OntologyProvider.KNOWLEDGE_KIND,
+					new OntologyProvider(bos.toByteArray()));
+		}
+		catch (OWLOntologyStorageException e) {
+			return MessageUtils.asList(new SimpleMessageError(
+					"An error occured while saving the ontology to the knowledge base: "
+							+ e.getLocalizedMessage()));
+		}
 
 		// content and attachment was defined.
 		// Warn the user that the content has been ignored!
@@ -128,13 +138,14 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 		return Collections.emptyList();
 	}
 
-	private OWLOntology createOntologyFromContent(String content) throws OWLOntologyCreationException {
-		// TODO: Check whether getBytes as expected, otherwise add encoding
+	private OWLOntology createOntologyFromContent(String content, OWLOntologyManager manager) throws OWLOntologyCreationException {
+		// TODO: Check whether getBytes works as expected, otherwise add
+		// encoding
 		InputStream is = new ByteArrayInputStream(content.getBytes());
 		return manager.loadOntologyFromOntologyDocument(is);
 	}
 
-	private OWLOntology getOntologyAttachment(String sourcePath, Section<OntologyProviderType> section) throws OWLOntologyCreationException, IOException {
+	private OWLOntology getOntologyAttachment(String sourcePath, Section<OntologyProviderType> section, OWLOntologyManager manager) throws OWLOntologyCreationException, IOException {
 		String sourceFile;
 		String sourceArticle;
 		if (sourcePath.contains("/")) {
