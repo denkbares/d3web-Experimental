@@ -42,7 +42,7 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 		super("Befragungstabelle");
 	}
 
-	private String renderTable(Section<DefineTableMarkup> myTable, UserContext user, String tableid) {
+	private String renderTable(Section<DefineTableMarkup> myTable, UserContext user, String tableid, boolean singleTableVersion) {
 		Section<Table> table = Sections.findSuccessor(myTable, Table.class);
 
 		Section<InputFieldCellContent> inputSec = Sections.findSuccessor(table,
@@ -95,7 +95,10 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 				+ "','" + tableid
 				+ "','" + versionsExisting
 				+ "')\" name='speichern' value='Änderungen" + erneut + " speichern'/>"));
-		if (previousInputExists) {
+
+		// tables can be configured to only support single versions using the
+		// single-attribute, then no additionalTable-button is rendered
+		if (previousInputExists && !singleTableVersion) {
 			string.append(KnowWEUtils.maskHTML("<input type='button' onclick=\"additionalTable('"
 					+ myTable.getID() + "','" + user.getUserName()
 					+ "','" + tableid
@@ -132,13 +135,14 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 	public String render(KnowWEArticle article, Section<?> section,
 			UserContext userContext, Map<String, String> parameters) {
 		String id = parameters.get("id");
+		boolean singleVersionTable = parameters.containsKey("single");
 		if (id == null) {
 			return "Error: no table id specified!";
 		}
 		Section<DefineTableMarkup> myTable = findTableToShow(id);
 
 		if (myTable != null) {
-			return renderTable(myTable, userContext, id);
+			return renderTable(myTable, userContext, id, singleVersionTable);
 		}
 		else {
 			return "no table definition found for specified id: " + id;

@@ -41,7 +41,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 	 * @param name
 	 */
 	public ReadButtonTaghandler() {
-		super("readbuttontag");
+		super("readbutton");
 	}
 
 	@Override
@@ -56,8 +56,9 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
 			Section<?> sec = mgr.getArticle(title).getSection();
 			Section<DataMarkup> child = Sections.findSuccessor(sec, DataMarkup.class);
-			String readpages = DefaultMarkupType.getAnnotation(child, "readpages");
 			boolean contains = false;
+			if (child != null) {
+			String readpages = DefaultMarkupType.getAnnotation(child, "readpages");
 			if (readpages != null) {
 				String[] pages = readpages.split(";");
 
@@ -66,6 +67,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 						contains = true;
 					}
 				}
+			}
 			}
 			readbutton.append("<p>Wie hat ihnen das gefallen?</p>");
 			if (contains) {
