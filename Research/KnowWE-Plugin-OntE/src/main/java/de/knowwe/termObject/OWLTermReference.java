@@ -36,6 +36,7 @@ import de.d3web.we.utils.KnowWEUtils;
 
 public class OWLTermReference extends GlobalTermReference<URIObject> implements RDFResourceType {
 
+	@SuppressWarnings("unchecked")
 	final KnowWEDomRenderer<OWLTermReference> REF_RENDERER =
 			new ToolMenuDecoratingRenderer<OWLTermReference>(new StyleRenderer(
 					"color:rgb(25, 180, 120)"));
@@ -44,7 +45,6 @@ public class OWLTermReference extends GlobalTermReference<URIObject> implements 
 		super(URIObject.class);
 		this.setCustomRenderer(REF_RENDERER);
 	}
-
 
 	@Override
 	public String getTermName(Section<? extends KnowWETerm<URIObject>> s) {

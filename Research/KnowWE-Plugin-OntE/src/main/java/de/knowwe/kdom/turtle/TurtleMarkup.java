@@ -505,7 +505,7 @@ public class TurtleMarkup extends AbstractType {
 			DelegateRenderer.getInstance().render(article, sec, user, inner);
 
 			StringBuilder wrapper = new StringBuilder();
-			wrapper.append("<div>");
+			wrapper.append("<div style='display: inline-block;'>");
 			wrapper.append(inner.toString());
 			wrapper.append("</div>\n");
 			string.append(KnowWEUtils.maskHTML(wrapper.toString()));
