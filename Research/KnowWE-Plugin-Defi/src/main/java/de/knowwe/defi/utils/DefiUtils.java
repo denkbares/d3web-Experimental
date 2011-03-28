@@ -29,7 +29,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import de.knowwe.defi.AboutMe;
+import de.knowwe.defi.aboutMe.AboutMe;
 
 /**
  *

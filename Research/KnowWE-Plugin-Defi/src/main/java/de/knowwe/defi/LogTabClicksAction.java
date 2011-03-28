@@ -27,6 +27,7 @@ import java.util.Date;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
 import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.defi.aboutMe.AboutMe;
 
 /**
  * Stores the clicks in TabbedSection in a log file. Used to log which user
