@@ -24,6 +24,7 @@
 		<parameter id="priority" value="5"  />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
+		<parameter id="css" value="defi.css" />
 	</extension>
 
     <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -35,6 +36,7 @@
 		<parameter id="priority" value="5"  />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
+		<parameter id="css" value="defi.css" />
 	</extension>	
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -46,6 +48,7 @@
 		<parameter id="priority" value="5"  />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
+		<parameter id="css" value="defi.css" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -57,6 +60,7 @@
 		<parameter id="priority" value="5"  />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
+		<parameter id="css" value="defi.css" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
@@ -68,7 +72,7 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="script" value="KnowWE-Plugin-Defi-SubmitTable.js" />
-		<parameter id="css" value="hermes.css" />
+		<parameter id="css" value="defi.css" />
 	</extension>
 	
     <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
@@ -79,6 +83,7 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
         <parameter id="script" value="KnowWE-Plugin-Defi.js" />
+        <parameter id="css" value="defi.css" />
     </extension>
     
         <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
@@ -88,6 +93,7 @@
         <parameter id="description" value="TagHandler ExternalLinkTaghandler" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
+        <parameter id="css" value="defi.css" />
     </extension>
     
     
@@ -99,6 +105,7 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
         <parameter id="script" value="KnowWE-Plugin-Defi.js" />
+        <parameter id="css" value="defi.css" />
     </extension>    
     
   <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
@@ -109,6 +116,7 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
         <parameter id="script" value="KnowWE-Plugin-Defi-ReadButtonTag.js" />
+        <parameter id="css" value="defi.css" />
     </extension>     
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
@@ -119,6 +127,7 @@
         <parameter id="description" value="Action AboutMeSaveAction" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
+        <parameter id="css" value="defi.css" />
     </extension>
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
@@ -129,6 +138,7 @@
         <parameter id="description" value="Action ReadPagesSaveAction" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
+        <parameter id="css" value="defi.css" />
     </extension>
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
@@ -139,6 +149,7 @@
         <parameter id="description" value="Action InsertAdditionalTableVersionAction" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
+        <parameter id="css" value="defi.css" />
     </extension>
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
@@ -149,6 +160,7 @@
         <parameter id="description" value="Action SubmitTableContentAction" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
+        <parameter id="css" value="defi.css" />
     </extension>
     
     
@@ -160,6 +172,7 @@
         <parameter id="description" value="Action LogTabClicksAction" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />      
+        <parameter id="css" value="defi.css" />
     </extension>
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="EventListener"
@@ -170,6 +183,7 @@
         <parameter id="description" value="EventListener CommentListener" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
+        <parameter id="css" value="defi.css" />
     </extension>    
     
 </plugin>

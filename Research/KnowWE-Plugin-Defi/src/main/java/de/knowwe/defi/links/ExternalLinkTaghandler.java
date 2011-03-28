@@ -26,6 +26,13 @@ import de.d3web.we.taghandler.AbstractTagHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
 
+/**
+ * Renders a html-link with "target='_blank'"
+ * 
+ * 
+ * @author Jochen
+ * @created 28.03.2011
+ */
 public class ExternalLinkTaghandler extends AbstractTagHandler {
 
 	public ExternalLinkTaghandler() {

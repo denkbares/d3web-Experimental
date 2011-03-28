@@ -1,0 +1,9 @@
+body.view { 
+	color:red;
+	font-size:120%;
+	text-align:left;
+	line-height:1.3;
+	/*font: 12px/1.5 "Lucida Grande", Arial, Helvetica, Sans-Serif;*/
+	/*font:76%/140% Verdana,Arial,Helvetica,sans-serif;*/
+}
+
