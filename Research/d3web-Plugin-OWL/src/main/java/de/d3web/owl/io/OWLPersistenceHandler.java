@@ -71,7 +71,7 @@ public class OWLPersistenceHandler implements KnowledgeReader, KnowledgeWriter {
 
 	@Override
 	public int getEstimatedSize(KnowledgeBase kb) {
-		// TODO: Fragen, aber wir haben immer nur 1 Ontologie :D
+		// We have exactly one ontology in the knowledge base
 		return 1;
 	}
 

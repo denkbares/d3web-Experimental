@@ -51,15 +51,19 @@ public interface IRIConstants {
 
 	public final IRI NUMERICVALUE = IRI.create(PREFIX + "#NumericValue");
 
+	public final IRI HASINPUT = IRI.create(PREFIX + "#hasInput");
+
+	public final IRI HASVALUE = IRI.create(PREFIX + "#hasValue");
+
 	public interface SolutionValues {
 
-		public final IRI ESTABLISHED = IRI.create(PREFIX + "#Established");
+		public final IRI ESTABLISHED = IRI.create(PREFIX + "#established");
 
-		public final IRI SUGGESTED = IRI.create(PREFIX + "#Suggested");
+		public final IRI SUGGESTED = IRI.create(PREFIX + "#suggested");
 
-		public final IRI UNDEFINED = IRI.create(PREFIX + "#Undefined");
+		public final IRI UNCLEAR = IRI.create(PREFIX + "#unclear");
 
-		public final IRI EXCLUDED = IRI.create(PREFIX + "#Excluded");
+		public final IRI EXCLUDED = IRI.create(PREFIX + "#excluded");
 
 	}
 }
