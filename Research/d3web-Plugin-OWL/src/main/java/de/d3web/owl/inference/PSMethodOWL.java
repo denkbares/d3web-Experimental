@@ -20,9 +20,7 @@ package de.d3web.owl.inference;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -36,6 +34,8 @@ import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.reasoner.NodeSet;
+import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
 
 import de.d3web.core.inference.PSMethod;
@@ -48,6 +48,7 @@ import de.d3web.core.session.blackboard.SessionObject;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.owl.IRIConstants;
 import de.d3web.owl.IRIUtils;
+import de.d3web.owl.OWLOntologyUtil;
 import de.d3web.owl.OntologyProvider;
 
 /**
@@ -61,21 +62,57 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 	// Just for convenience and code beautification
 	private final Logger logger = Logger.getLogger(this.getClass().getSimpleName());
 
-	// Caches for OWL objects, avoids multiple searches
-	private final Map<IRI, OWLClass> cachedClasses = new HashMap<IRI, OWLClass>();
-	private final Map<IRI, OWLIndividual> cachedIndividuals = new HashMap<IRI, OWLIndividual>();
-	private final Map<IRI, OWLObjectProperty> cachedProperties = new HashMap<IRI, OWLObjectProperty>();
 
 	@Override
 	public void init(Session session) {
+		OWLSessionObject so = (OWLSessionObject) session.getSessionObject(this);
+		if (so != null) {
+			OWLOntology ontology = so.getOntology();
+			OWLOntologyManager manager = ontology.getOWLOntologyManager();
+			OWLDataFactory factory = manager.getOWLDataFactory();
+			OWLOntologyUtil util = so.getOntologyUtil();
+			// Create PSSession individual for this session
+			IRI sessionIRI = IRIUtils.toIRI(session.getId(), ontology);
+			OWLNamedIndividual sessionIndividual = factory.getOWLNamedIndividual(sessionIRI);
+			OWLClass sessionClass = util.getOWLClassFor(PSSESSION);
+			if (sessionIndividual != null && sessionClass != null) {
+				Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
+				axioms.add(factory.getOWLClassAssertionAxiom(sessionClass, sessionIndividual));
+				manager.addAxioms(ontology, axioms);
+			}
+			else {
+				logger.warning("Unable to create session individual: " + sessionIRI);
+			}
+		}
+		else {
+			logger.severe("There is no ontology! Unable to initialize ontology with individuals!");
+		}
 	}
 
 	@Override
 	public void propagate(Session session, Collection<PropagationEntry> changes) {
-		OntologySessionObject so = (OntologySessionObject) session.getSessionObject(this);
+		OWLSessionObject so = (OWLSessionObject) session.getSessionObject(this);
 		if (so != null) {
-			updateFactsInOntology(so.getOntology(), session, changes);
-			// TODO: neue Fakten abfragen
+			OWLOntology ontology = so.getOntology();
+			OWLOntologyUtil util = so.getOntologyUtil();
+			updateFactsInOntology(ontology, util, session, changes);
+
+			// Just a test
+			OWLReasoner reasoner = so.getReasoner();
+			reasoner.flush();
+			IRI affectedPartIRI = IRI.create("http://is.informatik.uni-wuerzburg.de/d3web/minicar.owl#Affected_Part");
+			OWLClass affectedPart = util.getOWLClassFor(affectedPartIRI);
+			if (affectedPart != null) {
+				NodeSet<OWLNamedIndividual> individualsNodeSet =
+						reasoner.getInstances(affectedPart, false);
+				Set<OWLNamedIndividual> individuals = individualsNodeSet.getFlattened();
+				System.out.println("Instances: ");
+				for (OWLNamedIndividual ind : individuals) {
+					System.out.println("    " + ind);
+				}
+			}
+
+			// TODO: implizites Wissen abfragen
 			// TODO: neue Fakten in Blackboard setzen
 		}
 		else {
@@ -83,35 +120,40 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 		}
 	}
 
-	private void updateFactsInOntology(OWLOntology ontology, Session session, Collection<PropagationEntry> changes) {
+	private void updateFactsInOntology(OWLOntology ontology, OWLOntologyUtil util, Session session, Collection<PropagationEntry> changes) {
 		OWLOntologyManager manager = ontology.getOWLOntologyManager();
 		OWLDataFactory factory = manager.getOWLDataFactory();
 		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
 		for (PropagationEntry change : changes) {
 			if (change.hasChanged()) {
 				// Remove old finding entity
-				removeOldFinding(change, ontology, manager);
+				removeOldFinding(change, ontology, util, manager);
 			}
 			// Create new finding entity
-			createNewFinding(change, ontology, factory, axioms);
+			createNewFinding(change, ontology, util, factory, axioms, session);
 		}
 		// add created finding entities to ontology
 		manager.addAxioms(ontology, axioms);
 	}
 
-	private void createNewFinding(PropagationEntry change, OWLOntology ont, OWLDataFactory factory, Set<OWLAxiom> axioms) {
+	private void createNewFinding(PropagationEntry change, OWLOntology ont, OWLOntologyUtil util, OWLDataFactory factory, Set<OWLAxiom> axioms, Session s) {
 		if (change.getNewValue() != null) {
 			// Create finding individual in ontology
 			IRI findingIRI = IRIUtils.toIRI(change.getObject(), change.getNewValue(), ont);
 			OWLNamedIndividual finding = factory.getOWLNamedIndividual(findingIRI);
-			OWLClass findingClass = getOWLClassFor(FINDING, ont);
+			OWLClass findingClass = util.getOWLClassFor(FINDING);
 			if (finding != null && findingClass != null) {
+				// finding axiom
 				axioms.add(factory.getOWLClassAssertionAxiom(findingClass, finding));
+				// hasInput assertion
 				IRI input = IRIUtils.toIRI(change.getObject(), ont);
-				doFindingPropertyAssertion(finding, HASINPUT, input, ont, factory, axioms);
+				doFindingPropertyAssertion(finding, HASINPUT, input, ont, util, factory, axioms);
+				// hasValue assertion
 				IRI value = IRIUtils.toIRI(change.getNewValue(), ont);
-				doFindingPropertyAssertion(finding, HASVALUE, value, ont, factory, axioms);
-				// TODO: isStoredBy assertion
+				doFindingPropertyAssertion(finding, HASVALUE, value, ont, util, factory, axioms);
+				// isStoredBy assertion
+				IRI session = IRIUtils.toIRI(s.getId(), ont);
+				doFindingPropertyAssertion(finding, ISSTOREDBY, session, ont, util, factory, axioms);
 			}
 		}
 		else {
@@ -119,9 +161,9 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 		}
 	}
 
-	private void doFindingPropertyAssertion(OWLNamedIndividual finding, IRI propertyIRI, IRI objectIRI, OWLOntology ont, OWLDataFactory factory, Set<OWLAxiom> axioms) {
-		OWLIndividual object = getOWLIndividualFor(objectIRI, ont);
-		OWLObjectProperty property = getOWLPropertyFor(propertyIRI, ont);
+	private void doFindingPropertyAssertion(OWLNamedIndividual finding, IRI propertyIRI, IRI objectIRI, OWLOntology ont, OWLOntologyUtil util, OWLDataFactory factory, Set<OWLAxiom> axioms) {
+		OWLIndividual object = util.getOWLIndividualFor(objectIRI);
+		OWLObjectProperty property = util.getOWLPropertyFor(propertyIRI);
 		if (object != null && property != null) {
 			axioms.add(factory.getOWLObjectPropertyAssertionAxiom(property, finding, object));
 		}
@@ -133,7 +175,7 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 		}
 	}
 
-	private void removeOldFinding(PropagationEntry change, OWLOntology ont, OWLOntologyManager manager) {
+	private void removeOldFinding(PropagationEntry change, OWLOntology ont, OWLOntologyUtil util, OWLOntologyManager manager) {
 		Value oldValue = change.getOldValue();
 		if (oldValue != null && !oldValue.equals(UndefinedValue.getInstance())) {
 			// Get the IRI of the old finding
@@ -144,7 +186,7 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 			if (findings != null && findings.size() > 0) {
 				OWLEntityRemover remover = new OWLEntityRemover(manager, Collections.singleton(ont));
 				// Get all Finding individuals
-				OWLClass findingClass = getOWLClassFor(FINDING, ont);
+				OWLClass findingClass = util.getOWLClassFor(FINDING);
 				Set<OWLIndividual> allFindings = findingClass.getIndividuals(ont);
 				// remove the entity only if it really is a finding individual!
 				for (OWLEntity finding : findings) {
@@ -155,11 +197,6 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 				}
 				// Do the removal!
 				manager.applyChanges(remover.getChanges());
-				// Warn if not exactly ONE finding was removed
-				int removals = remover.getChanges().size();
-				if (removals != 1) {
-					logger.severe("Removed " + removals + " entities, this shouldn't happen.");
-				}
 			}
 			else {
 				logger.warning("There is no finding individual for IRI: " + iri);
@@ -167,50 +204,7 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 		}
 	}
 
-	private OWLClass getOWLClassFor(IRI iri, OWLOntology ontology) {
-		if (cachedClasses.containsKey(iri)) {
-			return cachedClasses.get(iri);
-		}
-		Set<OWLEntity> entities = ontology.getEntitiesInSignature(iri);
-		for (OWLEntity entity : entities) {
-			if (entity.getIRI().equals(iri) && entity.isOWLClass()) {
-				cachedClasses.put(iri, entity.asOWLClass());
-				return entity.asOWLClass();
-			}
-		}
-		logger.warning("No OWLClass found for IRI: " + iri);
-		return null;
-	}
 
-	private OWLIndividual getOWLIndividualFor(IRI iri, OWLOntology ont) {
-		if (cachedIndividuals.containsKey(iri)) {
-			return cachedIndividuals.get(iri);
-		}
-		Set<OWLEntity> entities = ont.getEntitiesInSignature(iri);
-		for (OWLEntity entity : entities) {
-			if (entity.isOWLNamedIndividual() && entity.getIRI().equals(iri)) {
-				cachedIndividuals.put(iri, entity.asOWLNamedIndividual());
-				return entity.asOWLNamedIndividual();
-			}
-		}
-		logger.warning("No OWLIndividual found for IRI: " + iri);
-		return null;
-	}
-
-	private OWLObjectProperty getOWLPropertyFor(IRI iri, OWLOntology ont) {
-		if (cachedProperties.containsKey(iri)) {
-			return cachedProperties.get(iri);
-		}
-		Set<OWLEntity> entities = ont.getEntitiesInSignature(iri);
-		for (OWLEntity entity : entities) {
-			if (entity.isOWLObjectProperty() && entity.getIRI().equals(iri)) {
-				cachedProperties.put(iri, entity.asOWLObjectProperty());
-				return entity.asOWLObjectProperty();
-			}
-		}
-		logger.warning("No OWLProperty found for IRI: " + iri);
-		return null;
-	}
 
 	@Override
 	public Fact mergeFacts(Fact[] facts) {
@@ -233,44 +227,9 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 	public SessionObject createSessionObject(Session session) {
 		OntologyProvider provider = session.getKnowledgeBase().getKnowledgeStore().getKnowledge(
 				OntologyProvider.KNOWLEDGE_KIND);
-		return new OntologySessionObject(this, provider.createOntologyInstance());
-
+		return new OWLSessionObject(this, provider.createOntologyInstance());
 	}
 
-	/**
-	 * Stores the OWLOntology instance created for this session.
-	 *
-	 * @author Sebastian Furth
-	 * @created Mar 24, 2011
-	 */
-	private class OntologySessionObject extends SessionObject {
 
-		private final OWLOntology ontology;
-
-		/**
-		 * Creates a new OntologySessionObject which encapsulates the
-		 * OWLOntology of this session.
-		 *
-		 * @param theSourceObject
-		 * @param ontology the ontology of this session.
-		 */
-		public OntologySessionObject(SessionObjectSource theSourceObject, OWLOntology ontology) {
-			super(theSourceObject);
-			if (ontology == null) {
-				throw new NullPointerException("The ontology can't be null!");
-			}
-			this.ontology = ontology;
-		}
-
-		/**
-		 * Returns the OWLOntology of this session.
-		 *
-		 * @created Mar 24, 2011
-		 * @return the ontology of this session.
-		 */
-		public OWLOntology getOntology() {
-			return ontology;
-		}
-	}
 
 }

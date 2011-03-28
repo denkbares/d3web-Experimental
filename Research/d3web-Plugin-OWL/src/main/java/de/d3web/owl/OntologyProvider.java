@@ -54,9 +54,9 @@ public class OntologyProvider implements KnowledgeSlice {
 	}
 
 	/**
-	 * Returns a new instance of the encapsulated ontology. This ontolgy
+	 * Returns a new instance of the encapsulated ontology. This ontology
 	 * instance can be used in d3web sessions.
-	 *
+	 * 
 	 * @created Mar 23, 2011
 	 * @return OWLOntology
 	 */

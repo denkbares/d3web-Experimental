@@ -33,6 +33,10 @@ import de.d3web.core.session.Value;
  */
 public class IRIUtils {
 
+	public static IRI toIRI(String s, OWLOntology ontology) {
+		return IRI.create(getOntologyIRI(ontology) + "#" + adapt(s));
+	}
+
 	public static IRI toIRI(TerminologyObject object, OWLOntology ontology) {
 		return IRI.create(getOntologyIRI(ontology) + "#" + adapt(object.getName()));
 	}
@@ -48,7 +52,7 @@ public class IRIUtils {
 		return IRI.create(toIRI(object, ontology) + "=" + adapt(value.toString()));
 	}
 
-	private static IRI getOntologyIRI(OWLOntology ontology) {
+	public static IRI getOntologyIRI(OWLOntology ontology) {
 		return ontology.getOntologyID().getOntologyIRI();
 	}
 

@@ -55,6 +55,8 @@ public interface IRIConstants {
 
 	public final IRI HASVALUE = IRI.create(PREFIX + "#hasValue");
 
+	public final IRI ISSTOREDBY = IRI.create(PREFIX + "#isStoredBy");
+
 	public interface SolutionValues {
 
 		public final IRI ESTABLISHED = IRI.create(PREFIX + "#established");
