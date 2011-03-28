@@ -112,6 +112,13 @@ HEUTE klären:
 	schreibt die Webapp nicht?!
 - Automatisch Logout nach wieviel Minuten: 60?
 - Feld Vorbelegung "Betreffende_Klink", da eh Benutzername sein soll?!
+
 - PW vergessen: mail Versand, automatisiert?
+--> KLÄREN: Passwörter auf dem Server sollten nicht im Plaintext liegen. Wie vorgehen?
+	- Versand einer notification an mich (ODER den IT Menschen vom Projekt) der dem entsprechenden
+		Nutzer die mail dann schickt
+	- Plaintext PWer auf dem Server (ohne Zuordnung) ablegen, drüber iterieren, mit Checksumme
+		prüfen aus dem Zuordnungsfile, dort wo es matcht, das Plaintext PW schicken
+
 
 - Anzeigen welcher Benutzer gerade eingeloggt ist?!

@@ -27,7 +27,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -129,7 +136,7 @@ public class D3webDialog extends HttpServlet {
 		// in case nothing other is provided, "show" is the default action
 		String action = request.getParameter("action");
 		if (action == null) {
-			action = "show";
+			action = "mail";
 		}
 
 		// try to get the src parameter, which defines the specification xml
@@ -229,6 +236,17 @@ public class D3webDialog extends HttpServlet {
 		}
 		else if (action.equalsIgnoreCase("login")) {
 			login(request, response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("mail")) {
+			try {
+				sendMail(request, response, httpSession);
+			}
+			catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return;
 		}
 	}
 
@@ -432,6 +450,57 @@ public class D3webDialog extends HttpServlet {
 		}
 	}
 
+	private void sendMail(HttpServletRequest request, HttpServletResponse response,
+			HttpSession httpSession) throws MessagingException {
+
+		final String user = "Meg200x@freenet.de";
+		final String pw = "bonnie";
+
+		/* setup properties for mail server */
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "mx.freenet.de");
+		props.put("mail.smtp.port", "25");
+		props.put("mail.transport.protocol", "smtp");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.user", user);
+		props.put("mail.password", pw);
+		props.put("mail.debug", "true");
+
+		javax.mail.Session session = javax.mail.Session.getDefaultInstance(props,
+				new javax.mail.Authenticator() {
+
+					@Override
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication(user, pw);
+					}
+				});
+
+		MimeMessage message = new MimeMessage(session);
+
+		// from-identificator
+		InternetAddress from = new InternetAddress("freiberg@informatik.uni-wuerzburg.de");
+		message.setFrom(from);
+
+		/*
+		 * to-identificator: insert clients mail address here, has to be read
+		 * from csv file
+		 */
+		InternetAddress to = new InternetAddress("martina.freiberg@uni-wuerzburg.de");
+		message.addRecipient(Message.RecipientType.TO, to);
+
+		/* A subject */
+		message.setSubject("Mediastinitis Loginanfrage");
+
+		/*
+		 * Insert username and password here; password needs to be the plaintext
+		 * version! Security consideration: have a pw file that contains only
+		 * the plaintext passwords,
+		 */
+		String u = "My User";
+		message.setText("Bitte Logindaten für folgenden Benutzer versenden: \n\n" + u);
+		Transport.send(message);
+	}
+
 	/**
 	 * Loading a case.
 	 * 
@@ -478,7 +547,7 @@ public class D3webDialog extends HttpServlet {
 		// get the response writer for communicating back via Ajax
 		PrintWriter writer = res.getWriter();
 
-		httpSession.setMaxInactiveInterval(30);
+		httpSession.setMaxInactiveInterval(60 * 60);
 
 		// if no valid login
 		if (!permitUser(u, p)) {

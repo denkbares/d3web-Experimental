@@ -24,7 +24,7 @@
 
 $(function() {
 
-	window.setTimeout("timeout()", 13000);
+	window.setTimeout("timeout()", 57000 * 60);
 
 	var link = $.query.set("action", "checkLogin").toString();
 	link = window.location.href.replace(window.location.search, "") + link;
