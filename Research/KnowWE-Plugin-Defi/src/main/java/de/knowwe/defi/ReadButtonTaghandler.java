@@ -57,20 +57,31 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			Section<?> sec = mgr.getArticle(title).getSection();
 			Section<DataMarkup> child = Sections.findSuccessor(sec, DataMarkup.class);
 			boolean contains = false;
+			boolean talkAbout = false;
 			if (child != null) {
 			String readpages = DefaultMarkupType.getAnnotation(child, "readpages");
 			if (readpages != null) {
 				String[] pages = readpages.split(";");
 
 				for (String s : pages) {
-					if (s.split(",")[0].toLowerCase().equals(pagename.toLowerCase())) {
-						contains = true;
-					}
+
+						if (s.split(",")[0].toLowerCase().equals(pagename.toLowerCase())) {
+							contains = true;
+							if (s.split(",")[1].equals("1") || s.split(",")[1].equals("2")) {
+								talkAbout = true;
+							}
+						}
+
 				}
 			}
 			}
 			readbutton.append("<p>Wie hat ihnen das gefallen?</p>");
-			if (contains) {
+			if (contains && talkAbout) {
+				readbutton.append("<form name='readbuttonform' class='rbtag'>");
+				readbutton.append("<p>'Besprechen-Button' - 'Nicht-Besprechen-Button'</p>");
+				readbutton.append("</form>");
+			}
+			else if (contains) {
 				readbutton.append("<form name='readbuttonform' class='rbtag'>");
 				readbutton.append("<p>- bereits bewertet -</p>");
 				readbutton.append("</form>");

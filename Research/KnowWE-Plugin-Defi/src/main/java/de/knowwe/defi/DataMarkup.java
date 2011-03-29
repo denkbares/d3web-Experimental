@@ -97,6 +97,8 @@ public class DataMarkup extends DefaultMarkupType implements WikiEventListener {
 				String pagePermissions = "[{ALLOW view All}]\r\n[{ALLOW delete "
 						+ fullName + "}]\r\n\r\n";
 				String content = pagePermissions + "%%data\r\n%\r\n";
+				KnowWEEnvironment.getInstance().buildAndRegisterArticle(loginName, content,
+						fullName + "_data", KnowWEEnvironment.DEFAULT_WEB);
 				KnowWEEnvironment.getInstance().getWikiConnector()
 						.createWikiPage(fullName + "_data", content, loginName);
 			}
