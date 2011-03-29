@@ -33,6 +33,10 @@ import de.d3web.core.session.Value;
  */
 public class IRIUtils {
 
+	/* Ensure non-instantiability */
+	private IRIUtils() {
+	}
+
 	public static IRI toIRI(String s, OWLOntology ontology) {
 		return IRI.create(getOntologyIRI(ontology) + "#" + adapt(s));
 	}
@@ -57,7 +61,7 @@ public class IRIUtils {
 	}
 
 	private static String adapt(String text) {
-		return text.replaceAll("\\s+", "_").toLowerCase();
+		return text.replaceAll(" ", "_").toLowerCase();
 	}
 
 }

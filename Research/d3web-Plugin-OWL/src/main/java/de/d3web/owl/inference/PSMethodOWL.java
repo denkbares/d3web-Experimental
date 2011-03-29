@@ -34,7 +34,6 @@ import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
-import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
 
@@ -44,12 +43,15 @@ import de.d3web.core.session.Session;
 import de.d3web.core.session.SessionObjectSource;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Fact;
+import de.d3web.core.session.blackboard.Facts;
 import de.d3web.core.session.blackboard.SessionObject;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.owl.IRIConstants;
 import de.d3web.owl.IRIUtils;
 import de.d3web.owl.OWLOntologyUtil;
 import de.d3web.owl.OntologyProvider;
+import de.d3web.owl.assignment.Assignment;
+import de.d3web.owl.assignment.AssignmentSet;
 
 /**
  * PSMethod which delegates reasoning to an external OWL-Reasoner.
@@ -61,7 +63,6 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 
 	// Just for convenience and code beautification
 	private final Logger logger = Logger.getLogger(this.getClass().getSimpleName());
-
 
 	@Override
 	public void init(Session session) {
@@ -95,28 +96,21 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 		if (so != null) {
 			OWLOntology ontology = so.getOntology();
 			OWLOntologyUtil util = so.getOntologyUtil();
+			// Apply changes to ontology
 			updateFactsInOntology(ontology, util, session, changes);
-
-			// Just a test
+			// Synchronize the reasoner
 			OWLReasoner reasoner = so.getReasoner();
 			reasoner.flush();
-			IRI affectedPartIRI = IRI.create("http://is.informatik.uni-wuerzburg.de/d3web/minicar.owl#Affected_Part");
-			OWLClass affectedPart = util.getOWLClassFor(affectedPartIRI);
-			if (affectedPart != null) {
-				NodeSet<OWLNamedIndividual> individualsNodeSet =
-						reasoner.getInstances(affectedPart, false);
-				Set<OWLNamedIndividual> individuals = individualsNodeSet.getFlattened();
-				System.out.println("Instances: ");
-				for (OWLNamedIndividual ind : individuals) {
-					System.out.println("    " + ind);
-				}
+			// Get all assignments
+			AssignmentSet assignments = session.getKnowledgeBase().getKnowledgeStore().getKnowledge(
+					AssignmentSet.KNOWLEDGE_KIND);
+			// Do the assignments
+			for (Assignment assignment : assignments.getAssignments()) {
+				assignment.assign(session, so);
 			}
-
-			// TODO: implizites Wissen abfragen
-			// TODO: neue Fakten in Blackboard setzen
 		}
 		else {
-			logger.severe("There is no ontology! Unable to propagate changes to ontology!");
+			logger.severe("OWLSessionObject is null! Unable to propagate changes to ontology!");
 		}
 	}
 
@@ -154,6 +148,7 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 				// isStoredBy assertion
 				IRI session = IRIUtils.toIRI(s.getId(), ont);
 				doFindingPropertyAssertion(finding, ISSTOREDBY, session, ont, util, factory, axioms);
+				// TODO? hasAssignedValue assertion
 			}
 		}
 		else {
@@ -192,7 +187,6 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 				for (OWLEntity finding : findings) {
 					if (allFindings.contains(finding)) {
 						finding.accept(remover);
-						// TODO: Check removal of hasInput/hasValue
 					}
 				}
 				// Do the removal!
@@ -204,12 +198,10 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 		}
 	}
 
-
-
 	@Override
 	public Fact mergeFacts(Fact[] facts) {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO: For now we assume that we don't have to merge facts!
+		return Facts.mergeError(facts);
 	}
 
 	@Override
@@ -219,7 +211,7 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 
 	@Override
 	public double getPriority() {
-		// TODO: Priorität abklären
+		// TODO: ask chiefs for desired priority
 		return 6;
 	}
 
