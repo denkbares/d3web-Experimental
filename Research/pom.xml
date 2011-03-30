@@ -164,6 +164,7 @@
 		<module>d3web-Plugin-OWL</module>
 		<module>d3web-ProKEt</module>
 		<module>KnowWE-Plugin-d3web-OWL</module>
+		<module>KnowWE-Plugin-WimVentRuleTable</module>
 	</modules>
 	<repositories>
 		<repository>
