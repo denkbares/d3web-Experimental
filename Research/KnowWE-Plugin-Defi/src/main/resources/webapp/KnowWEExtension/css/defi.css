@@ -6,3 +6,6 @@ body.view {
 	/*font:76%/140% Verdana,Arial,Helvetica,sans-serif;*/
 }
 
+textarea {
+    font-size: 150%;
+}

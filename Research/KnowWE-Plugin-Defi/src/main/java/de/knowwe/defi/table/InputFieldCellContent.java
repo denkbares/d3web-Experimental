@@ -20,6 +20,7 @@ package de.knowwe.defi.table;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.AbstractType;
@@ -28,15 +29,48 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.sectionFinder.StringSectionFinder;
+import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
 
 public class InputFieldCellContent extends AbstractType {
 
 	public InputFieldCellContent() {
-		this.setSectionFinder(new StringSectionFinder("INPUT"));
+		this.setSectionFinder(new RegexSectionFinder("INPUT(\\(.*?\\))?", Pattern.DOTALL));
 		this.setCustomRenderer(new InputRenderer());
+	}
+
+	public static int getWidth(Section<InputFieldCellContent> sec) {
+		String originalText = sec.getOriginalText();
+		int width;
+		width = readParamterNo(originalText, 0);
+		if (width == -1) width = 20; // set default
+		return width;
+	}
+
+	public static int getHeight(Section<InputFieldCellContent> sec) {
+		String originalText = sec.getOriginalText();
+		int height;
+		height = readParamterNo(originalText, 1);
+		if (height == -1) height = 3; // set default
+		return height;
+	}
+
+	private static int readParamterNo(String originalText, int no) {
+		if (originalText.contains("(") && originalText.endsWith(")")) {
+			String content = originalText.substring(originalText.indexOf("(") + 1,
+					originalText.length() - 1);
+			String[] split = content.trim().split(";");
+			if (split.length > no) {
+			try {
+					return Integer.parseInt(split[no].trim());
+			}
+			catch (Exception e) {
+
+			}
+			}
+		}
+		return -1;
 	}
 
 	static class InputRenderer extends KnowWEDomRenderer<InputFieldCellContent> {
@@ -52,7 +86,10 @@ public class InputFieldCellContent extends AbstractType {
 			}
 			String contentString = getStoredContentForInput(sec, version,
 					user.getUserName());
-			string.append(KnowWEUtils.maskHTML("<textarea rows='3' wrap='soft' type='text' id='"
+			int rows = InputFieldCellContent.getHeight(sec);
+			int cols = InputFieldCellContent.getWidth(sec);
+			string.append(KnowWEUtils.maskHTML("<textarea rows='" + rows + "' cols='"
+					+ cols + "' wrap='soft' type='text' id='"
 					+ sec.getID()
 					+ "_" + version + "'>" + contentString + "</textarea>"));
 		}
