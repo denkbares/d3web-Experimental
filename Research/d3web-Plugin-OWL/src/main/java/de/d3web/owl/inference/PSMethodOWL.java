@@ -62,7 +62,7 @@ import de.d3web.owl.assignment.AssignmentSet;
 public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants {
 
 	// Just for convenience and code beautification
-	private final Logger logger = Logger.getLogger(this.getClass().getSimpleName());
+	private final Logger logger = Logger.getLogger(this.getClass().getName());
 
 	@Override
 	public void init(Session session) {

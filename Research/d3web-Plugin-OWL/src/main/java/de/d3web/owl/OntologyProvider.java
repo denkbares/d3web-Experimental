@@ -39,7 +39,7 @@ import de.d3web.core.inference.KnowledgeSlice;
 public class OntologyProvider implements KnowledgeSlice {
 
 	// Just for convenience and code beautification
-	private final Logger logger = Logger.getLogger(this.getClass().getSimpleName());
+	private final Logger logger = Logger.getLogger(this.getClass().getName());
 
 	public final static KnowledgeKind<OntologyProvider> KNOWLEDGE_KIND =
 			new KnowledgeKind<OntologyProvider>("OntologyProvider", OntologyProvider.class);
@@ -56,7 +56,7 @@ public class OntologyProvider implements KnowledgeSlice {
 	/**
 	 * Returns a new instance of the encapsulated ontology. This ontology
 	 * instance can be used in d3web sessions.
-	 * 
+	 *
 	 * @created Mar 23, 2011
 	 * @return OWLOntology
 	 */

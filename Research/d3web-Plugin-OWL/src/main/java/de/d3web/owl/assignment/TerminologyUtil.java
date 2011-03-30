@@ -18,7 +18,6 @@
  */
 package de.d3web.owl.assignment;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -30,8 +29,10 @@ import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.Solution;
 
 /**
@@ -42,14 +43,14 @@ import de.d3web.core.knowledge.terminology.Solution;
 public class TerminologyUtil {
 
 	// Just for convenience and code beautification
-	private final Logger logger = Logger.getLogger(this.getClass().getSimpleName());
+	private final Logger logger = Logger.getLogger(this.getClass().getName());
 
 	// All instances of TerminologyUtil
 	private static Map<KnowledgeBase, TerminologyUtil> instances = new WeakHashMap<KnowledgeBase, TerminologyUtil>();
 
 	/**
-	 * Returns an instance of TerminologyUtil for a specific @Link{KnowledgeBase}
-	 * <b>If no instances exists, a new one will be created.</b>
+	 * Returns an instance of TerminologyUtil for a specific @Link{KnowledgeBase}.
+	 * <b>If no instance exists, a new one will be created.</b>
 	 *
 	 * @created Mar 29, 2011
 	 * @param kb the underlying KnowledgeBase
@@ -68,11 +69,11 @@ public class TerminologyUtil {
 	private final KnowledgeBase kb;
 
 	/* Caches to avoid multiple searches */
-	private final Map<OWLNamedIndividual, Solution> solutionCache = new HashMap<OWLNamedIndividual, Solution>();
-	private final Map<OWLNamedIndividual, Question> questionCache = new HashMap<OWLNamedIndividual, Question>();
-	private final Map<OWLNamedIndividual, QContainer> qcontainerCache = new HashMap<OWLNamedIndividual, QContainer>();
+	private final Map<OWLNamedIndividual, Solution> solutionCache = new WeakHashMap<OWLNamedIndividual, Solution>();
+	private final Map<OWLNamedIndividual, Question> questionCache = new WeakHashMap<OWLNamedIndividual, Question>();
+	private final Map<OWLNamedIndividual, QContainer> qcontainerCache = new WeakHashMap<OWLNamedIndividual, QContainer>();
 
-	/* Ensure non-instantiability */
+	/* External instantiation is forbidden */
 	private TerminologyUtil(KnowledgeBase kb) {
 		if (kb == null) {
 			throw new NullPointerException();
@@ -91,6 +92,22 @@ public class TerminologyUtil {
 	public Set<QContainer> getQContainersFor(Set<OWLNamedIndividual> individuals) {
 		return findTerminologyObjects(individuals, kb.getManager().getQContainers(),
 				qcontainerCache);
+	}
+
+	public Set<Choice> getChoicesFor(Set<OWLNamedIndividual> individuals, QuestionChoice question) {
+		Set<Choice> results = new HashSet<Choice>();
+		for (OWLNamedIndividual individual : individuals) {
+			String name = extract(individual);
+			for (Choice c : question.getAllAlternatives()) {
+				if (c.getName().equalsIgnoreCase(name)) {
+					results.add(c);
+				}
+			}
+		}
+		if (results.size() != individuals.size()) {
+			logger.warning("The result contains less TerminologyObjects than specified OWLIndividuals!");
+		}
+		return results;
 	}
 
 	private <T extends TerminologyObject> Set<T> findTerminologyObjects(Set<OWLNamedIndividual> individuals, List<T> terminologyObjects, Map<OWLNamedIndividual, T> cache) {
@@ -116,9 +133,12 @@ public class TerminologyUtil {
 				results.add(result);
 			}
 			else {
-				logger.severe("Unable to find a corresponding TerminologyObject for IRI: "
+				logger.warning("Unable to find a corresponding TerminologyObject for IRI: "
 						+ individual);
 			}
+		}
+		if (results.size() != individuals.size()) {
+			logger.warning("The result contains less TerminologyObjects than specified OWLIndividuals!");
 		}
 		return results;
 	}

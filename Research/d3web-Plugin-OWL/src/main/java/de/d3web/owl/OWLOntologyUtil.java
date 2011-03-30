@@ -35,7 +35,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
  * ontologies. These convenience methods offer easy access to OWL objects such
  * as classes, individuals or properties.
  *
- * 
+ *
  * @author Sebastian Furth
  * @created Mar 28, 2011
  */
@@ -49,7 +49,7 @@ public class OWLOntologyUtil {
 	private final Map<IRI, OWLObjectProperty> cachedProperties = new HashMap<IRI, OWLObjectProperty>();
 
 	// Just for convenience and code beautification
-	private final Logger logger = Logger.getLogger(this.getClass().getSimpleName());
+	private final Logger logger = Logger.getLogger(this.getClass().getName());
 
 	public OWLOntologyUtil(OWLOntology ontology) {
 		if (ontology == null) {

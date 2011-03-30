@@ -34,14 +34,14 @@ import de.d3web.owl.inference.OWLSessionObject;
 /**
  * Abstract implementation of the @link{Assignment} interface. Offers some
  * methods needed by almost all assignments.
- * 
+ *
  * @author Sebastian Furth
  * @created Mar 29, 2011
  */
 public abstract class AbstractAssignment implements Assignment {
 
 	// Just for convenience and code beautification
-	private final Logger logger = Logger.getLogger(this.getClass().getSimpleName());
+	private final Logger logger = Logger.getLogger(this.getClass().getName());
 
 	/** Specifies the IRI of the complex OWL class */
 	protected final IRI complexClassIRI;
