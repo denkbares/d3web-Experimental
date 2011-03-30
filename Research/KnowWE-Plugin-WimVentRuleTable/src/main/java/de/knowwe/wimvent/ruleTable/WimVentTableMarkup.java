@@ -19,9 +19,14 @@
  */
 package de.knowwe.wimvent.ruleTable;
 
+import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
+import de.d3web.we.kdom.rendering.DelegateRenderer;
+import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.table.TableRenderer;
+import de.d3web.we.user.UserContext;
 
 public class WimVentTableMarkup extends DefaultMarkupType {
 
@@ -29,7 +34,17 @@ public class WimVentTableMarkup extends DefaultMarkupType {
 
 	public WimVentTableMarkup(DefaultMarkup markup) {
 		super(markup);
-		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
+	}
+
+	@Override
+	public KnowWEDomRenderer getRenderer() {
+		return new KnowWEDomRenderer() {
+			@Override
+			public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
+				user.getParameters().put(TableRenderer.QUICK_EDIT_FLAG, "false");
+				DelegateRenderer.getInstance().render(article, sec, user, string);
+			}
+		};
 	}
 
 	private static DefaultMarkup m = null;
@@ -42,8 +57,6 @@ public class WimVentTableMarkup extends DefaultMarkupType {
 
 	public WimVentTableMarkup() {
 		super(m);
-		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 
 	}
 }
-
