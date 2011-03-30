@@ -105,8 +105,10 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 			AssignmentSet assignments = session.getKnowledgeBase().getKnowledgeStore().getKnowledge(
 					AssignmentSet.KNOWLEDGE_KIND);
 			// Do the assignments
-			for (Assignment assignment : assignments.getAssignments()) {
-				assignment.assign(session, so);
+			if (assignments != null) {
+				for (Assignment assignment : assignments.getAssignments()) {
+					assignment.assign(session, so);
+				}
 			}
 		}
 		else {
