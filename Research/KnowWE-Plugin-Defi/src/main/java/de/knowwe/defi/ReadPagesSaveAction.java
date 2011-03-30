@@ -32,6 +32,8 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
+ * Saves the rated page, the rating and a "show-or-hide"-value in the
+ * DataMarkup.
  * 
  * @author dupke
  * @created 23.03.2011
@@ -47,34 +49,49 @@ public class ReadPagesSaveAction extends AbstractAction {
 		String web = context.getWeb();
 		String value = context.getParameter("value");
 
+		// Get the readpages-annotation
 		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
 		Section<?> section = mgr.getArticle(title).getSection();
 		Section<DataMarkup> child = Sections.findSuccessor(section, DataMarkup.class);
-		if (child == null) {
-			// TODO: handle this case - generate markup
-			context.getOutputStream().write("markup not found".getBytes());
-			return;
-		}
 		String readpages = DefaultMarkupType.getAnnotation(child, "readpages");
-		boolean add = true;
 
 		if (readpages == null) {
 			readpages = "";
 		}
 
-		String[] pages = readpages.split(";");
+		// value = 0 => Set HideButtonValue in DataMarkup on 1...
+		if (value.equals("0")) {
+			String[] pages = readpages.split(";");
 
-		for (String s : pages) {
-			if (s.toLowerCase().equals(pagename.toLowerCase())) {
-				add = false;
+			// Get the entry and change the third value to 1
+			for (String s : pages) {
+				if (s.toLowerCase().split(",")[0].equals(pagename.toLowerCase())) {
+					readpages = readpages.replace(s, s.split(",")[0] + "," + s.split(",")[1]
+							+ "," + 1);
+				}
 			}
-		}
-
-		if (add) {
 			HashMap<String, String> nodesMap = new HashMap<String, String>();
-			readpages += pagename + "," + value + ";";
 			nodesMap.put(child.getID(), "%%data\r\n@readpages: " + readpages + "\r\n%\r\n");
 			mgr.replaceKDOMNodesSaveAndBuild(context, title, nodesMap);
+		}
+		// ...else try to add a new entry
+		else {
+			boolean add = true;
+			String[] pages = readpages.split(";");
+
+			// Is the entry already written?
+			for (String s : pages) {
+				if (s.toLowerCase().split(",")[0].equals(pagename.toLowerCase())) {
+					add = false;
+				}
+			}
+
+			if (add) {
+				HashMap<String, String> nodesMap = new HashMap<String, String>();
+				readpages += pagename + "," + value + "," + 0 + ";";
+				nodesMap.put(child.getID(), "%%data\r\n@readpages: " + readpages + "\r\n%\r\n");
+				mgr.replaceKDOMNodesSaveAndBuild(context, title, nodesMap);
+			}
 		}
 
 		HttpServletResponse response = context.getResponse();

@@ -31,6 +31,8 @@ import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
 
 /**
+ * With the readbutton, the user can rate a lesson. If he rates the lesson with
+ * 1 or 2, there is the possibility to talk about it with a therapist.
  * 
  * @author dupke
  * @created 17.03.2011
@@ -52,49 +54,74 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			String title = userContext.getUserName() + "_data";
 			String pagename = userContext.getTopic();
 			String web = userContext.getWeb();
+			boolean contains = false;
+			boolean talkAbout = false;
+			String rateValue = "";
 
+			// Get the readpages-annotation
 			KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
 			Section<?> sec = mgr.getArticle(title).getSection();
 			Section<DataMarkup> child = Sections.findSuccessor(sec, DataMarkup.class);
-			boolean contains = false;
-			boolean talkAbout = false;
 			if (child != null) {
-			String readpages = DefaultMarkupType.getAnnotation(child, "readpages");
-			if (readpages != null) {
-				String[] pages = readpages.split(";");
 
-				for (String s : pages) {
+				String readpages = DefaultMarkupType.getAnnotation(child, "readpages");
+				if (readpages != null) {
+
+					// Checks whether the lesson is already rated and if the
+					// talkAbout-link has to appear
+					String[] pages = readpages.split(";");
+					for (String s : pages) {
 
 						if (s.split(",")[0].toLowerCase().equals(pagename.toLowerCase())) {
+
 							contains = true;
-							if (s.split(",")[1].equals("1") || s.split(",")[1].equals("2")) {
+							rateValue = s.split(",")[1];
+							if ((rateValue.equals("1") || rateValue.equals("2"))
+										&& s.split(",")[2].equals("0")) {
+
 								talkAbout = true;
 							}
-						}
+							}
 
+					}
 				}
 			}
-			}
-			readbutton.append("<p>Wie hat ihnen das gefallen?</p>");
-			if (contains && talkAbout) {
-				readbutton.append("<form name='readbuttonform' class='rbtag'>");
-				readbutton.append("<p>'Besprechen-Button' - 'Nicht-Besprechen-Button'</p>");
-				readbutton.append("</form>");
-			}
-			else if (contains) {
-				readbutton.append("<form name='readbuttonform' class='rbtag'>");
-				readbutton.append("<p>- bereits bewertet -</p>");
-				readbutton.append("</form>");
-			}
-			else {
+			// There is no rating for this page or ...
+			if (!contains) {
+
+				readbutton.append("<p>Wie hat ihnen das gefallen?</p>");
 				readbutton.append("<form name='readbuttonform' class='rbtag'>");
 				readbutton.append("<input type='radio' name='panel' value='1' /> 1");
 				readbutton.append("<input type='radio' name='panel' value='2' /> 2");
 				readbutton.append("<input type='radio' name='panel' value='3' /> 3");
 				readbutton.append("<input type='radio' name='panel' value='4' /> 4");
 				readbutton.append("</form>");
-				readbutton.append("<input type='button' value='OK' onclick=\"getReadButtonValue()\" />");
+				readbutton.append("<input type='button' value='OK' onclick='getReadButtonValue(0)' />");
 			}
+			// ... there is a rating and a talkAbout-link or ...
+			else if (talkAbout) {
+
+				String talkPage = userContext.getUserName() + "_comment_therapist";
+				title = parameters.get("title");
+				if (title == null) {
+					title = " &raquo; " + talkPage;
+				}
+				readbutton.append("<p>Möchten Sie mit Therapeuten dar&uuml;ber sprechen?</p>");
+				readbutton.append("<p><a href=\"Wiki.jsp?page=");
+				readbutton.append(KnowWEUtils.urlencode(talkPage.trim()));
+				readbutton.append("\" title=\"Title:");
+				readbutton.append(title);
+				readbutton.append("\" rel=\"nofollow\">");
+				readbutton.append("Jetzt Besprechen");
+				readbutton.append("</a>");
+				readbutton.append(" - <a href=\"\" onclick='getReadButtonValue(1)'>Nicht Besprechen</a></p>");
+			}
+			// ... there is a rating and no need to talk about
+			else {
+				readbutton.append("<p>Sie haben diese Lektion mit einer " + rateValue
+						+ " bewertet.</p>");
+			}
+
 		}
 
 		return KnowWEUtils.maskHTML(readbutton.toString());
