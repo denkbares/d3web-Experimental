@@ -31,6 +31,7 @@ import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.session.Session;
+import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.FactFactory;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.core.session.values.MultipleChoiceValue;
@@ -79,9 +80,16 @@ public final class ChoiceValueAssignment extends AbstractAssignment {
 
 	private void assignChoicesToQuestionOC(Session session, Set<Choice> choices) {
 		if (choices != null && choices.size() == 1) {
-			session.getBlackboard().addValueFact(FactFactory.createFact(session, target,
-					new ChoiceValue(choices.toArray(new Choice[1])[0]),
-					this, session.getPSMethodInstance(PSMethodOWL.class)));
+			// Create new ChoiceValue
+			ChoiceValue value = new ChoiceValue(choices.toArray(new Choice[1])[0]);
+			// Get old value
+			Value oldValue = session.getBlackboard().getValue(target,
+					session.getPSMethodInstance(PSMethodOWL.class), this);
+			// Set new value if it differs from old value
+			if (!value.equals(oldValue)) {
+				session.getBlackboard().addValueFact(FactFactory.createFact(session, target,
+						value, this, session.getPSMethodInstance(PSMethodOWL.class)));
+			}
 		}
 		else {
 			logger.warning("Ambigous amount of values: "
@@ -92,13 +100,19 @@ public final class ChoiceValueAssignment extends AbstractAssignment {
 	}
 
 	private void assignChoicesToQuestionMC(Session session, Set<Choice> choices) {
-		// We have to do this, because the d3web API uses List<Choice> instead
-		// of Collection<Choice>
+		// d3web-API only understands Lists...
 		List<Choice> choiceList = new ArrayList<Choice>(choices);
-		session.getBlackboard().addValueFact(
-				FactFactory.createFact(session, target,
-						MultipleChoiceValue.fromChoices(choiceList), this,
-						session.getPSMethodInstance(PSMethodOWL.class)));
+		// Create new value
+		MultipleChoiceValue value = MultipleChoiceValue.fromChoices(choiceList);
+		// Get old value
+		Value oldValue = session.getBlackboard().getValue(target,
+					session.getPSMethodInstance(PSMethodOWL.class), this);
+		// Set new value if it differs from old value
+		if (!value.equals(oldValue)) {
+			session.getBlackboard().addValueFact(
+					FactFactory.createFact(session, target, value, this,
+							session.getPSMethodInstance(PSMethodOWL.class)));
+		}
 	}
 
 	public QuestionChoice getTarget() {

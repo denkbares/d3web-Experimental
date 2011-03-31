@@ -57,7 +57,7 @@ public final class ActionAssignment extends AbstractAssignment {
 	@Override
 	public void assign(Session session, OWLSessionObject so) {
 		Set<OWLNamedIndividual> individuals = getOWLIndividuals(so);
-		if (individuals.size() > 0) {
+		if (!individuals.isEmpty()) {
 			action.doIt(session, this, session.getPSMethodInstance(PSMethodOWL.class));
 		}
 	}

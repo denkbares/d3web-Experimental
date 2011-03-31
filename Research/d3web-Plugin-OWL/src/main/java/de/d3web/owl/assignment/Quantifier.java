@@ -19,12 +19,21 @@
 package de.d3web.owl.assignment;
 
 /**
- * 
+ *
  * @author Sebastian Furth
  * @created Mar 29, 2011
  */
 public enum Quantifier {
 
-	EXISTENTIAL, UNIVERSAL
+	EXISTENTIAL("EXISTS"), UNIVERSAL("ALL");
 
+	private String symbol;
+
+	private Quantifier(String symbol) {
+		this.symbol = symbol;
+	}
+
+	public String getSymbol() {
+		return symbol;
+	}
 }

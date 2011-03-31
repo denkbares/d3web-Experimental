@@ -19,6 +19,7 @@
 package de.d3web.owl.assignment;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 
 import de.d3web.core.inference.KnowledgeKind;
@@ -51,7 +52,7 @@ public class AssignmentSet implements KnowledgeSlice {
 	}
 
 	public Collection<Assignment> getAssignments() {
-		return assignments;
+		return Collections.unmodifiableCollection(assignments);
 	}
 
 	@Override
