@@ -31,7 +31,8 @@ import de.d3web.we.utils.KnowWEUtils;
  * containing a forum. For more information on the forum see the
  * KnowWE-Plugin-Comment. Please use the following syntax:
  * 
- * <blockquote> [{KnowWEPlugin talkabout , title=LinkName}] </blockquote>
+ * <blockquote> [{KnowWEPlugin talkabout , title=LinkName, subject=SubjectName}]
+ * </blockquote>
  * 
  * The title attribute is optional. Only used for the HTML title attribute.
  * 
@@ -53,13 +54,19 @@ public class TalkAboutTaghandler extends AbstractTagHandler {
 		String talkPage = userContext.getUserName() + "_comment_therapist";
 
 		String title = parameters.get("title");
+		String subject = parameters.get("subject");
 
 		if (title == null ) {
 			title = " &raquo; " + talkPage;
 		}
+		if (subject == null || subject.equals("")) {
+			subject = userContext.getTopic();
+		}
 
 		talkAbout.append("<a href=\"Wiki.jsp?page=");
 		talkAbout.append(KnowWEUtils.urlencode(talkPage.trim()));
+		talkAbout.append("&amp;talkabout=");
+		talkAbout.append(KnowWEUtils.urlencode(subject.trim()));
 		talkAbout.append("\" title=\"Title:");
 		talkAbout.append(title);
 		talkAbout.append("\" rel=\"nofollow\">");

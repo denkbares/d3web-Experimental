@@ -63,6 +63,22 @@ KNOWWE.plugin.defi = function() {
             }
         },
         /**
+         * Checks the URL for a talk about subject and adds it to the 
+         * comment area when on the talk about page.
+         */
+        checkURLForSubject : function() {
+            var prefix = 'menu-tab-';
+            var prefix_content = 'tab-';
+            
+            var subject = KNOWWE.helper.gup('talkabout');
+            if( subject ) {
+                var textarea = _KS('#knowwe-plugin-comment')
+                if(textarea) {
+                    textarea.value = '[Betreff: ' + subject + ' ]';
+                }             
+            }
+        },        
+        /**
          * Enables the logging on the page tabs. Only the tabs within the
          * Wiki page are affected.
          */
@@ -101,6 +117,7 @@ KNOWWE.plugin.defi = function() {
     if (KNOWWE.helper.loadCheck( [ 'Wiki.jsp' ])) {
         window.addEvent('domready', function() {
             KNOWWE.helper.observer.subscribe( 'onload', KNOWWE.plugin.defi.checkURLForTab);
+            KNOWWE.helper.observer.subscribe( 'onload', KNOWWE.plugin.defi.checkURLForSubject);
             KNOWWE.helper.observer.subscribe( 'onload', KNOWWE.plugin.defi.enableLogTabClicks);
         });
         window.addEvent('load', function(){

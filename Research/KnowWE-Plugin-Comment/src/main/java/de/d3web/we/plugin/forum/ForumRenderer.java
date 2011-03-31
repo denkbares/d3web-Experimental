@@ -158,7 +158,7 @@ public class ForumRenderer extends KnowWEDomRenderer {
 	 */
 	public static void addCommentBox(StringBuilder builder, ResourceBundle rb) {
 		builder.append("<div style=\"clear:both;float:right;padding-right: 30px;\">\n");
-		builder.append("<textarea id=\"knowwe-plugin-comment\" name=\"knowwe-plugin-comment\" cols=\"68\" rows=\"8\"></textarea>\n");
+		builder.append("<textarea id=\"knowwe-plugin-comment\" name=\"knowwe-plugin-comment\" cols=\"60\" rows=\"8\"></textarea>\n");
 		builder.append("<div class=\"forumbutton\" id=\"forum-button-save\" onclick=\"javascript:KNOWWE.plugin.comment.saveComment()\">");
 		builder.append(rb.getString("Forum.button.postMessage"));
 		builder.append("</div>");

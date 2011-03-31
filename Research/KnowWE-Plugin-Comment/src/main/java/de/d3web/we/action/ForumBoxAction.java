@@ -120,9 +120,14 @@ public class ForumBoxAction extends AbstractAction {
 
 				// fire new comment event
 				EventManager.getInstance().fireEvent(new NewCommentEvent(text, topic));
-				return "{\"msg\" : \"success\"}";
+
+				String refreshUrl = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
+				refreshUrl += "Wiki.jsp?page=" + topic;
+
+				return "{\"msg\" : \"success\", \"url\" : \"" + refreshUrl + "\"}";
 			}
 		}
+
 		return "{\"msg\" : \"error\"}";
 	}
 }

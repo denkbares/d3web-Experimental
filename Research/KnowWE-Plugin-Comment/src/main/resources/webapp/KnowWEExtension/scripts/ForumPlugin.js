@@ -51,8 +51,10 @@ KNOWWE.plugin.comment = function(){
                         ids : [],
                         fn : function() {
                             document.getElementById('knowwe-plugin-comment').value = "";                
-                            window.location = location.pathname + '?page=' + topic;
-                            setTimeout(window.location.reload, 20);
+                            result = JSON.parse(this.responseText);
+                            if(result.url) {
+                            	window.location.assign( result.url );
+                            }
                         }
                     }
             }
