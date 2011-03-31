@@ -53,6 +53,7 @@ public class ReadPagesSaveAction extends AbstractAction {
 		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
 		Section<?> section = mgr.getArticle(title).getSection();
 		Section<DataMarkup> child = Sections.findSuccessor(section, DataMarkup.class);
+
 		String readpages = DefaultMarkupType.getAnnotation(child, "readpages");
 
 		if (readpages == null) {

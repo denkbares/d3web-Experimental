@@ -51,7 +51,8 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 		StringBuilder readbutton = new StringBuilder();
 
 		if (userContext.userIsAsserted()) {
-			String title = userContext.getUserName() + "_data";
+			String username = userContext.getUserName();
+			String title = username + "_data";
 			String pagename = userContext.getTopic();
 			String web = userContext.getWeb();
 			boolean contains = false;
@@ -60,30 +61,49 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 
 			// Get the readpages-annotation
 			KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
-			Section<?> sec = mgr.getArticle(title).getSection();
-			Section<DataMarkup> child = Sections.findSuccessor(sec, DataMarkup.class);
-			if (child != null) {
+			Section<DataMarkup> child = null;
+			String readpages = "";
 
-				String readpages = DefaultMarkupType.getAnnotation(child, "readpages");
-				if (readpages != null) {
+			try {
+				Section<?> sec = mgr.getArticle(title).getSection();
+				child = Sections.findSuccessor(sec, DataMarkup.class);
+				readpages = DefaultMarkupType.getAnnotation(child, "readpages");
 
-					// Checks whether the lesson is already rated and if the
-					// talkAbout-link has to appear
-					String[] pages = readpages.split(";");
-					for (String s : pages) {
+			}
+			// Generate MarkUp and article if missing
+			catch (NullPointerException npe) {
 
-						if (s.split(",")[0].toLowerCase().equals(pagename.toLowerCase())) {
+				String pagePermissions = "[{ALLOW view All}]\r\n[{ALLOW delete "
+						+ username + "}]\r\n\r\n";
+				String content = pagePermissions + "%%data\r\n%\r\n";
+				KnowWEEnvironment.getInstance().buildAndRegisterArticle(username, content,
+						title, KnowWEEnvironment.DEFAULT_WEB);
+				KnowWEEnvironment.getInstance().getWikiConnector()
+						.createWikiPage(title, content, username);
 
-							contains = true;
-							rateValue = s.split(",")[1];
-							if ((rateValue.equals("1") || rateValue.equals("2"))
-										&& s.split(",")[2].equals("0")) {
+				Section<?> sec = mgr.getArticle(title).getSection();
+				child = Sections.findSuccessor(sec, DataMarkup.class);
+			}
 
-								talkAbout = true;
-							}
-							}
 
+			if (readpages != null) {
+
+				// Checks whether the lesson is already rated and if the
+				// talkAbout-link has to appear
+				String[] pages = readpages.split(";");
+				for (String s : pages) {
+
+					if (s.split(",")[0].toLowerCase().equals(pagename.toLowerCase())) {
+
+						contains = true;
+						rateValue = s.split(",")[1];
+						if ((rateValue.equals("1") || rateValue.equals("2"))
+									&& s.split(",")[2].equals("0")) {
+
+							talkAbout = true;
+						}
 					}
+
 				}
 			}
 			// There is no rating for this page or ...
