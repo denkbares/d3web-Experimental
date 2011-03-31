@@ -29,7 +29,6 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -79,7 +78,6 @@ public class Rdf2GoCore implements EventListener {
 	public static final String localns = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl()
 			+ "OwlDownload.jsp#";
 
-	public static String IOO = "IntermediateOwlObject";
 	public static final URI HASTAG = Rdf2GoCore.getInstance().createURI(basens, "hasTag");
 	private static final URI HASTOPIC = Rdf2GoCore.getInstance().createURI(basens,
 			"hasTopic");
@@ -322,8 +320,8 @@ public class Rdf2GoCore implements EventListener {
 
 	}
 
-	private void removeStatementsFromModel(List<Statement> list) {
-		EventManager.getInstance().fireEvent(new RemoveStatementsEvent(list));
+	private void removeStatementsFromCache(List<Statement> list) {
+
 		String key = "REMOVE: ";
 		// logStatements(list, key);
 
@@ -331,8 +329,7 @@ public class Rdf2GoCore implements EventListener {
 		removeCache.addAll(list);
 	}
 
-	private void addStatementsToModel(List<Statement> list) {
-		EventManager.getInstance().fireEvent(new InsertStatementsEvent(list));
+	private void addStatementsToCache(List<Statement> list) {
 		String key = "INSERT: ";
 		// logStatements(list, key);
 
@@ -493,7 +490,7 @@ public class Rdf2GoCore implements EventListener {
 				if (temp.isEmpty()) {
 					statementcache.remove(sec.getArticle().getTitle());
 				}
-				removeStatementsFromModel(removedStatements);
+				removeStatementsFromCache(removedStatements);
 				// model.removeAll(removedStatements.iterator());
 			}
 			else {
@@ -553,28 +550,10 @@ public class Rdf2GoCore implements EventListener {
 
 		// Maybe remove duplicates before adding to store, if performance is
 		// better
-		addStaticStatements(allStatements);
+		addStatementsToCache(allStatements);
 	}
 
-	public void addStatements(IntermediateOwlObject io, Section<? extends Type> sec) {
-		addStatements(io.getAllStatements(), sec);
-	}
 
-	/**
-	 * adds statements to rdf store
-	 * 
-	 * @created 06.12.2010
-	 * @param allStatements
-	 * @param sec
-	 */
-	public void addStaticStatements(List<Statement> allStatements) {
-		addStatementsToModel(allStatements);
-
-	}
-
-	public void addStaticStatement(Statement statement) {
-		addStatementsToModel(Collections.singletonList(statement));
-	}
 
 	/**
 	 * adds statements to statementcache
@@ -637,8 +616,15 @@ public class Rdf2GoCore implements EventListener {
 
 	// commits the statements from writeCache and removeCache to the triplestore
 	private void commit() {
+
+		// hazard filter
+
 		model.removeAll(removeCache.iterator());
+		EventManager.getInstance().fireEvent(new RemoveStatementsEvent(removeCache));
+
 		model.addAll(addCache.iterator());
+		EventManager.getInstance().fireEvent(new InsertStatementsEvent(addCache));
+
 		removeCache.clear();
 		addCache.clear();
 	}
@@ -661,7 +647,7 @@ public class Rdf2GoCore implements EventListener {
 				allStatements.addAll(l);
 			}
 		}
-		removeStatementsFromModel(allStatements);
+		removeStatementsFromCache(allStatements);
 
 		// clear statementcache and duplicateStatements
 		statementcache.clear();
@@ -811,49 +797,9 @@ public class Rdf2GoCore implements EventListener {
 		return io;
 	}
 
-	public IntermediateOwlObject createProperty(String subject,
-			String property, String object, Section<Type> source) {
 
-		URI suri = createlocalURI(subject);
-		URI puri = createlocalURI(property);
-		URI ouri = createlocalURI(object);
 
-		IntermediateOwlObject io = new IntermediateOwlObject();
-		BlankNode to = createBlankNode();
-		URI nary = createlocalURI(
-					source.getTitle() + ".." + source.getID() + ".."
-							+ getLocalName(suri) + getLocalName(puri)
-							+ getLocalName(ouri));
-		io.addAllStatements(createTextOrigin(source, to));
-		io.addStatement(createStatement(nary, RDFS.isDefinedBy, to));
-		io.addStatement(createStatement(nary, RDF.type,
-					RDF.Statement));
-		io.addStatement(createStatement(nary, RDF.predicate, puri));
-		io.addStatement(createStatement(nary, RDF.object, ouri));
-		io.addStatement(createStatement(nary, RDF.subject, suri));
-		io.addLiteral(nary);
 
-		return io;
-	}
-
-	public List<Statement> createProperty(URI suri, URI puri, URI ouri,
-			Section source) {
-		ArrayList<Statement> io = new ArrayList<Statement>();
-		BlankNode to = createBlankNode();
-		URI nary = createlocalURI(
-					source.getTitle() + ".." + source.getID() + ".."
-							+ getLocalName(suri) + getLocalName(puri)
-							+ getLocalName(ouri));
-		io.addAll(createTextOrigin(source, to));
-		io.add(createStatement(nary, RDFS.isDefinedBy, to));
-		io.add(createStatement(nary, RDF.type,
-					RDF.Statement));
-		io.add(createStatement(nary, RDF.predicate, puri));
-		io.add(createStatement(nary, RDF.object, ouri));
-		io.add(createStatement(nary, RDF.subject, suri));
-
-		return io;
-	}
 
 	/**
 	 * attaches a TextOrigin Node to a Resource. It's your duty to make sure the
