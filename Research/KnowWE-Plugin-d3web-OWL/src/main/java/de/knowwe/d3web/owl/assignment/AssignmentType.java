@@ -19,12 +19,13 @@
 package de.knowwe.d3web.owl.assignment;
 
 import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.objects.IncrementalMarker;
 
 /**
- * 
+ *
  * @author Sebastian Furth
  * @created Mar 31, 2011
  */
-public abstract class AssignmentType extends AbstractType implements AssignmentRegEx {
+public abstract class AssignmentType extends AbstractType implements AssignmentRegEx, IncrementalMarker {
 
 }
