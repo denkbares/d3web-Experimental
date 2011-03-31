@@ -29,7 +29,7 @@ import java.util.Collection;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
-import de.d3web.we.core.KnowWEEnvironment;
+import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.Section;
@@ -118,7 +118,7 @@ public abstract class URITermDefinition extends GlobalTermDefinition<URIObject> 
 
 		protected URIObject createTermObject(Section<URITermDefinition> s) {
 			URI uri = null;
-			String baseUrl = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
+			String baseUrl = Rdf2GoCore.localns;
 			try {
 				String name = URLEncoder.encode(s.get().getTermName(s), "UTF-8");
 				uri = new URIImpl(baseUrl+name);
