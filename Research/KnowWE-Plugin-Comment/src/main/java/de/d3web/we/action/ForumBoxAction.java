@@ -64,7 +64,7 @@ public class ForumBoxAction extends AbstractAction {
 		String web = context.getWeb();
 
 		boolean canEditPage = KnowWEEnvironment.getInstance().getWikiConnector().userCanEditPage(
-				topic);
+				topic, context.getRequest());
 
 		if (canEditPage) {
 			if (text != null && text.length() > 0) { // don't add an empty box
@@ -126,6 +126,7 @@ public class ForumBoxAction extends AbstractAction {
 
 				return "{\"msg\" : \"success\", \"url\" : \"" + refreshUrl + "\"}";
 			}
+			return "{\"msg\" : \"error: no text found\"}";
 		}
 
 		return "{\"msg\" : \"error\"}";
