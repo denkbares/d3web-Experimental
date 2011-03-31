@@ -24,7 +24,7 @@ import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 /**
- * 
+ *
  * @author Sebastian Furth
  * @created Mar 30, 2011
  */

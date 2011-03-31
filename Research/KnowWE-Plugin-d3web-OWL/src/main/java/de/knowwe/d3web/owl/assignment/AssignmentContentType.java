@@ -30,8 +30,9 @@ import de.knowwe.core.CommentLineType;
 public class AssignmentContentType extends AbstractType {
 
 	public AssignmentContentType() {
-		// take nearly all the text that is passed (kind of trimmed)
+		/* We take almost the whole content */
 		this.sectionFinder = new AllTextFinderDivCorrectTrimmed();
+		/* ChildrenTypes */
 		this.childrenTypes.add(new CommentLineType());
 		this.childrenTypes.add(new ChoiceValueAssignmentType());
 		this.childrenTypes.add(new YesNoAssignmentType());

@@ -32,11 +32,13 @@ import de.d3web.we.kdom.rules.RulesMarkup;
 public class AssignmentMarkup extends DefaultMarkupType {
 
 	private static DefaultMarkup MARKUP = null;
+	public static String BASEURI = "baseuri";
 
 	static {
 		MARKUP = new DefaultMarkup("Assignment");
 		MARKUP.addContentType(new AssignmentContentType());
 		MARKUP.addAnnotation(KnowWEPackageManager.ATTRIBUTE_NAME, false);
+		MARKUP.addAnnotation(BASEURI, false);
 	}
 
 	public AssignmentMarkup() {

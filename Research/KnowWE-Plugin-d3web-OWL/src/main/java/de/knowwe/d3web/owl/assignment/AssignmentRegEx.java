@@ -18,6 +18,8 @@
  */
 package de.knowwe.d3web.owl.assignment;
 
+import de.d3web.owl.assignment.Quantifier;
+
 /**
  *
  * @author Sebastian Furth
@@ -25,14 +27,17 @@ package de.knowwe.d3web.owl.assignment;
  */
 public interface AssignmentRegEx {
 
-	public final String EXISTS = "EXISTS\\((.+)\\)";
+	public final String EXISTSCLASS = Quantifier.EXISTENTIAL.getSymbol() + "\\((.+)\\)";
 
-	public final String ALL = "ALL\\((.+)\\)";
+	public final String ALLCLASS = Quantifier.UNIVERSAL.getSymbol() + "\\((.+)\\)";
 
-	public final String QUANTIFIER = "(ALL|EXISTS)";
+	public final String QUANTIFIER =
+			"(" + Quantifier.UNIVERSAL.getSymbol() + "|" + Quantifier.EXISTENTIAL.getSymbol() + ")";
 
 	public final String COMPLEXCLASS = QUANTIFIER + "\\((.+)\\)";
 
 	public final String RATING = "(ESTABLISHED|SUGGESTED|EXCLUDED|UNCLEAR)";
+
+	public final String RIGHTARROW = "=>";
 
 }

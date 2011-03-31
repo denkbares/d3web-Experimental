@@ -18,10 +18,25 @@
  */
 package de.knowwe.d3web.owl.assignment;
 
+import java.util.Collection;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
+import org.semanticweb.owlapi.model.IRI;
+
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.terminology.QuestionYN;
+import de.d3web.owl.OWLOntologyUtil;
+import de.d3web.owl.assignment.Assignment;
+import de.d3web.owl.assignment.Quantifier;
+import de.d3web.owl.assignment.YesNoAssignment;
+import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.Priority;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.auxiliary.Equals;
+import de.d3web.we.kdom.report.KDOMReportMessage;
+import de.d3web.we.kdom.report.SyntaxError;
 import de.d3web.we.kdom.sectionFinder.AllBeforeTypeSectionFinder;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.object.QuestionReference;
@@ -31,12 +46,14 @@ import de.d3web.we.object.QuestionReference;
  * @author Sebastian Furth
  * @created Mar 30, 2011
  */
-public class YesNoAssignmentType extends AbstractType implements AssignmentRegEx {
+public class YesNoAssignmentType extends AssignmentType {
 
-	private final String REGEX = "\\s*.+\\s*=\\s*" + EXISTS;
+	private final String REGEX = "\\s*.+\\s*=\\s*" + EXISTSCLASS;
 
 	public YesNoAssignmentType() {
+		// SectionFinder
 		this.sectionFinder = new RegexSectionFinder(REGEX, Pattern.CASE_INSENSITIVE, 0);
+		/* ChildrenTypes */
 		this.addChildType(new ComplexOWLClassType());
 		this.addChildType(new QuantifierType());
 		Equals equals = new Equals();
@@ -44,6 +61,45 @@ public class YesNoAssignmentType extends AbstractType implements AssignmentRegEx
 		QuestionReference question = new QuestionReference();
 		question.setSectionFinder(new AllBeforeTypeSectionFinder(equals));
 		this.addChildType(question);
+		// SubtreeHandler. Priority.LOWER is important!
+		this.addSubtreeHandler(Priority.LOWER, new YesNoAssignmentCompiler());
+	}
+
+	private class YesNoAssignmentCompiler extends AssignmentCompiler<YesNoAssignmentType> {
+
+		@Override
+		protected Assignment createAssignment(KnowWEArticle article, Section<YesNoAssignmentType> s, KnowledgeBase kb, OWLOntologyUtil util, String baseURI, Collection<KDOMReportMessage> messages) {
+			/* Get the question */
+			QuestionYN question = getQuestion(article, s, messages);
+			if (question == null) {
+				return null;
+			}
+			/* Check the Quantifier */
+			if (!checkQuantifier(s, Quantifier.EXISTENTIAL, messages)) {
+				return null;
+			}
+			/* Get and Check IRI of the OWLClass */
+			IRI owlClassIRI = getOWLClassIRI(s, baseURI, util, messages);
+			if (owlClassIRI == null) {
+				return null;
+			}
+			// Create the assignment
+			return new YesNoAssignment(owlClassIRI, question);
+		}
+
+		private QuestionYN getQuestion(KnowWEArticle article, Section<YesNoAssignmentType> s, Collection<KDOMReportMessage> messages) {
+			// Get Question section
+			Section<QuestionReference> questionSection = Sections.findSuccessor(s,
+					QuestionReference.class);
+			// Get Question object
+			Question question = questionSection.get().getTermObject(article, questionSection);
+			// Check QuestionYN
+			if (!(question instanceof QuestionYN)) {
+				messages.add(new SyntaxError("There is no QuestionYN: " + questionSection.getText()));
+				return null;
+			}
+			return (QuestionYN) question;
+		}
 	}
 
 }

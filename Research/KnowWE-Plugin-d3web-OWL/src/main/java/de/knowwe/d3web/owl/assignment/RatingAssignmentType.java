@@ -18,10 +18,24 @@
  */
 package de.knowwe.d3web.owl.assignment;
 
+import java.util.Collection;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
+import org.semanticweb.owlapi.model.IRI;
+
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.Rating;
+import de.d3web.owl.OWLOntologyUtil;
+import de.d3web.owl.assignment.Assignment;
+import de.d3web.owl.assignment.Quantifier;
+import de.d3web.owl.assignment.RatingAssignment;
+import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.Priority;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.auxiliary.Equals;
+import de.d3web.we.kdom.report.KDOMReportMessage;
+import de.d3web.we.kdom.report.message.NoSuchObjectError;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 /**
@@ -29,16 +43,58 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
  * @author Sebastian Furth
  * @created Mar 30, 2011
  */
-public class RatingAssignmentType extends AbstractType implements AssignmentRegEx {
+public class RatingAssignmentType extends AssignmentType {
 
-	private final String REGEX = "\\s*" + ALL + "\\s*=\\s*" + RATING;
+	private final String REGEX = "\\s*" + ALLCLASS + "\\s*=\\s*" + RATING;
 
 	public RatingAssignmentType() {
+		// SectionFinder
 		this.sectionFinder = new RegexSectionFinder(REGEX, Pattern.CASE_INSENSITIVE, 0);
+		/* ChildrenTypes */
 		this.addChildType(new ComplexOWLClassType());
 		this.addChildType(new QuantifierType());
 		this.addChildType(new Equals());
 		this.addChildType(new RatingType());
+		// SubtreeHandler. Priority.LOWER is important!
+		this.addSubtreeHandler(Priority.LOWER, new RatingAssignmentCompiler());
+	}
+
+	private class RatingAssignmentCompiler extends AssignmentCompiler<RatingAssignmentType> {
+
+		@Override
+		protected Assignment createAssignment(KnowWEArticle article, Section<RatingAssignmentType> s, KnowledgeBase kb, OWLOntologyUtil util, String baseURI, Collection<KDOMReportMessage> messages) {
+			/* Get the rating */
+			Rating rating = getRating(article, s, messages);
+			if (rating == null) {
+				return null;
+			}
+			/* Check the Quantifier */
+			if (!checkQuantifier(s, Quantifier.UNIVERSAL, messages)) {
+				return null;
+			}
+			/* Get and Check IRI of the OWLClass */
+			IRI owlClassIRI = getOWLClassIRI(s, baseURI, util, messages);
+			if (owlClassIRI == null) {
+				return null;
+			}
+			// Create the assignment
+			return new RatingAssignment(owlClassIRI, rating);
+		}
+
+		private Rating getRating(KnowWEArticle article, Section<RatingAssignmentType> s, Collection<KDOMReportMessage> messages) {
+			// Get Rating section
+			Section<RatingType> ratingSection = Sections.findSuccessor(s, RatingType.class);
+			// Get textual representation of the desired state
+			String ratingText = ratingSection != null ? ratingSection.getText() : "";
+			/* Try to find a corresponding d3web Rating.State */
+			for (Rating.State state : Rating.State.values()) {
+				if (ratingText.equalsIgnoreCase(state.name())) {
+					return new Rating(state);
+				}
+			}
+			messages.add(new NoSuchObjectError("Can't get a Rating for state: " + ratingText));
+			return null;
+		}
 	}
 
 }

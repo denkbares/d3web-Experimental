@@ -19,18 +19,12 @@
 package de.knowwe.d3web.owl.assignment;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-
 
 /**
- *
+ * 
  * @author Sebastian Furth
- * @created Mar 30, 2011
+ * @created Mar 31, 2011
  */
-public class RightArrowType extends AbstractType {
-
-	public RightArrowType() {
-		this.sectionFinder = new RegexSectionFinder("=>");
-	}
+public abstract class AssignmentType extends AbstractType implements AssignmentRegEx {
 
 }

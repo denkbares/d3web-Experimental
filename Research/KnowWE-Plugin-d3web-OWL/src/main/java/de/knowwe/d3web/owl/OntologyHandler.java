@@ -42,6 +42,7 @@ import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.KDOMWarning;
 import de.d3web.we.kdom.report.SimpleMessageError;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
+import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.utils.MessageUtils;
 import de.d3web.we.wikiConnector.ConnectorAttachment;
 
@@ -53,6 +54,8 @@ import de.d3web.we.wikiConnector.ConnectorAttachment;
  * @created Mar 23, 2011
  */
 public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
+
+	private final String STOREKEY = "Ontology-Provider-Store-Key";
 
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<OntologyProviderType> section) {
@@ -113,8 +116,10 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 			// Save the ontology in RDFXML-Format
 			manager.setOntologyFormat(ontology, new DefaultOntologyFormat());
 			manager.saveOntology(ontology, bos);
-			kb.getKnowledgeStore().addKnowledge(OntologyProvider.KNOWLEDGE_KIND,
-					new OntologyProvider(bos.toByteArray()));
+			OntologyProvider provider = new OntologyProvider(bos.toByteArray());
+			kb.getKnowledgeStore().addKnowledge(OntologyProvider.KNOWLEDGE_KIND, provider);
+			// Save provider for incremental compilation
+			KnowWEUtils.storeObject(article, section, STOREKEY, provider);
 		}
 		catch (OWLOntologyStorageException e) {
 			return MessageUtils.asList(new SimpleMessageError(
@@ -136,6 +141,19 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 
 		// all right, no errors and warnings
 		return Collections.emptyList();
+	}
+
+	@Override
+	public void destroy(KnowWEArticle article, Section<OntologyProviderType> s) {
+		OntologyProvider provider =
+				(OntologyProvider) KnowWEUtils.getObjectFromLastVersion(article, s, STOREKEY);
+		if (provider != null) {
+			KnowledgeBase kb = getKB(article);
+			if (kb != null) {
+				kb.getKnowledgeStore().removeKnowledge(OntologyProvider.KNOWLEDGE_KIND,
+						provider);
+			}
+		}
 	}
 
 	private OWLOntology createOntologyFromContent(String content, OWLOntologyManager manager) throws OWLOntologyCreationException {
