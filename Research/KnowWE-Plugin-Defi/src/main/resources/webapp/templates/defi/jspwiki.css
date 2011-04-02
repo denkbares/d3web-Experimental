@@ -50,14 +50,14 @@
 	float:left;
     border:2px solid #ADE0E3;
     height:150px;
-    width:402px;
+    width:382px;
     margin:0 10px 0 0;
     padding:0 10px 0 10px;
     overflow:hidden;
 }
 .infobox table {
 	height:150px;
-	margin:0 20px;
+	margin:0;
 	overflow:hidden;
 }
 .infobox .no_userpic {
@@ -79,7 +79,7 @@
 	float:left;
     border:2px solid #ADE0E3;
     height:150px;
-    width:380px;
+    width:400px;
     margin:0;
 }
 .userbox {
@@ -92,7 +92,7 @@
 .userbox table {
 	float:right;
 	height:120px;
-	margin:0 0 10px;
+	margin:0 0 10px 10px;
 }
 .userbox td {
 	padding:5px;

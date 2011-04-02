@@ -29,7 +29,7 @@
 
     <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="DataMarkup">
-		<parameter id="class" value="de.knowwe.defi.DataMarkup" />
+		<parameter id="class" value="de.knowwe.defi.readbutton.DataMarkup" />
 		<parameter id="name" value="DataMarkup" />
 		<parameter id="description" value="Type DataMarkup" />
 		<parameter id="version" value="1.0" />
@@ -110,7 +110,7 @@
     
   <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
         id="ReadbuttonTaghandler">
-        <parameter id="class" value="de.knowwe.defi.ReadButtonTaghandler" />
+        <parameter id="class" value="de.knowwe.defi.readbutton.ReadButtonTaghandler" />
         <parameter id="name" value="ReadButtonTaghandler" />
         <parameter id="description" value="TagHandler ReadButtonkTaghandler" />
         <parameter id="version" value="1.0" />
@@ -132,7 +132,7 @@
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="ReadPagesSaveAction">
         <parameter id="class"
-            value="de.knowwe.defi.ReadPagesSaveAction" />
+            value="de.knowwe.defi.readbutton.ReadPagesSaveAction" />
         <parameter id="name" value="ReadPagesSaveAction" />
         <parameter id="description" value="Action ReadPagesSaveAction" />
         <parameter id="version" value="1.0" />
