@@ -109,14 +109,17 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			// There is no rating for this page or ...
 			if (!contains) {
 
-				readbutton.append("<p>Wie hat ihnen das gefallen?</p>");
 				readbutton.append("<form name='readbuttonform' class='rbtag'>");
-				readbutton.append("<input type='radio' name='panel' value='1' /> 1");
-				readbutton.append("<input type='radio' name='panel' value='2' /> 2");
-				readbutton.append("<input type='radio' name='panel' value='3' /> 3");
-				readbutton.append("<input type='radio' name='panel' value='4' /> 4");
+				readbutton.append("<table class='rbtag'><tr>");
+				readbutton.append("<td><input type='radio' name='panel' value='1' /> 1</td>");
+				readbutton.append("<td><input type='radio' name='panel' value='2' /> 2</td>");
+				readbutton.append("<td><input type='radio' name='panel' value='3' /> 3</td>");
+				readbutton.append("<td><input type='radio' name='panel' value='4' /> 4</td>");
+				readbutton.append("<tr><td>Schlecht</td><td>Geht so</td><td>Gut</td><td>Sehr gut</td></tr>");
+				readbutton.append("</tr><tr><td colspan='4'>");
+				readbutton.append("<input class='submit' type='button' value='OK' onclick='getReadButtonValue(0)' />");
+				readbutton.append("</td></tr></table>");
 				readbutton.append("</form>");
-				readbutton.append("<input type='button' value='OK' onclick='getReadButtonValue(0)' />");
 			}
 			// ... there is a rating and a talkAbout-link or ...
 			else if (talkAbout) {
@@ -126,20 +129,23 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				if (title == null) {
 					title = " &raquo; " + talkPage;
 				}
-				readbutton.append("<p>Möchten Sie mit Therapeuten dar&uuml;ber sprechen?</p>");
+				// subject = pagename
 				readbutton.append("<p><a href=\"Wiki.jsp?page=");
 				readbutton.append(KnowWEUtils.urlencode(talkPage.trim()));
+				readbutton.append("&amp;talkabout=");
+				readbutton.append(KnowWEUtils.urlencode(pagename.trim()));
 				readbutton.append("\" title=\"Title:");
 				readbutton.append(title);
 				readbutton.append("\" rel=\"nofollow\">");
-				readbutton.append("Jetzt Besprechen");
+				readbutton.append("Mit Therapeuten dar&uuml;ber sprechen");
 				readbutton.append("</a>");
 				readbutton.append(" - <a href=\"\" onclick='getReadButtonValue(1)'>Nicht Besprechen</a></p>");
 			}
-			// ... there is a rating and no need to talk about
+			// ... there is a rating and no need to talk about or already talked
+			// about => hide readbutton
 			else {
-				readbutton.append("<p>Sie haben diese Lektion mit einer " + rateValue
-						+ " bewertet.</p>");
+				// Here you could add something to show after user rated an
+				// article
 			}
 
 		}
