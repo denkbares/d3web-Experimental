@@ -29,7 +29,7 @@ import org.semanticweb.owlapi.model.IRI;
  */
 public interface IRIConstants {
 
-	public final IRI PREFIX = IRI.create("http://ki.informatik.uni-wuerzburg.de/d3web/d3web.owl");
+	public final IRI PREFIX = IRI.create("http://is.informatik.uni-wuerzburg.de/d3web/d3web.owl");
 
 	public final IRI PSSESSION = IRI.create(PREFIX + "#PSSession");
 
