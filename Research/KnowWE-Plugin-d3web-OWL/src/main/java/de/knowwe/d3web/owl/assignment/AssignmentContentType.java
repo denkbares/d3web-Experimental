@@ -37,7 +37,6 @@ public class AssignmentContentType extends AbstractType {
 		this.childrenTypes.add(new ChoiceValueAssignmentType());
 		this.childrenTypes.add(new YesNoAssignmentType());
 		this.childrenTypes.add(new RatingAssignmentType());
-		this.childrenTypes.add(new ActionAssignmentType());
 	}
 
 }
