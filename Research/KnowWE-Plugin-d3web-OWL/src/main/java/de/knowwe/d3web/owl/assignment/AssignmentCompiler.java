@@ -138,7 +138,7 @@ public abstract class AssignmentCompiler<T extends AssignmentType> extends D3web
 	private OWLOntology loadOntology(KnowledgeBase kb) {
 		OntologyProvider provider = kb.getKnowledgeStore().getKnowledge(
 				OntologyProvider.KNOWLEDGE_KIND);
-		return provider.createOntologyInstance();
+		return provider != null ? provider.createOntologyInstance() : null;
 	}
 
 	private String getBaseURI(Section<T> section, KnowledgeBase kb, OWLOntology ontology) {
