@@ -16,24 +16,35 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.d3web.owl.assignment;
+package de.d3web.owl.test;
 
-import org.semanticweb.owlapi.model.IRI;
+import static org.junit.Assert.assertEquals;
 
-import de.d3web.core.session.Session;
-import de.d3web.owl.inference.OWLSessionObject;
+import java.io.File;
+import java.io.IOException;
+
+import org.junit.Test;
+
+import de.d3web.core.io.PersistenceManager;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.owl.assignment.AssignmentSet;
+import de.d3web.plugin.test.InitPluginManager;
 
 /**
- * An Assignment sets link{Value}s in the d3web blackboard based on information
- * from the ontology.
+ * Tests the Reader of the @link{AssignmentPersistenceHandler}.
  *
  * @author Sebastian Furth
- * @created Mar 28, 2011
+ * @created Apr 5, 2011
  */
-public interface Assignment {
+public class PersistenceHandlerTest {
 
-	public void assign(Session session, OWLSessionObject so);
-
-	public IRI getComplexOWLClass();
+	@Test
+	public void testAssignmentSetSize() throws IOException {
+		InitPluginManager.init();
+		File kbFile = new File("src/test/resources/knowledgebases/car.d3web");
+		KnowledgeBase kb = PersistenceManager.getInstance().load(kbFile);
+		AssignmentSet set = kb.getKnowledgeStore().getKnowledge(AssignmentSet.KNOWLEDGE_KIND);
+		assertEquals("Wrong amount of assignments", 3, set.getAssignments().size());
+	}
 
 }

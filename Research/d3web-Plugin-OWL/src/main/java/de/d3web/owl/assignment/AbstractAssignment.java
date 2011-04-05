@@ -79,6 +79,7 @@ public abstract class AbstractAssignment implements Assignment {
 		}
 	}
 
+	@Override
 	public IRI getComplexOWLClass() {
 		return complexClassIRI;
 	}

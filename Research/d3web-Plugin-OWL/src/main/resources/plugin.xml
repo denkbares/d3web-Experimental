@@ -35,6 +35,28 @@
 		<parameter id="filename" value="kb/ontology.owl" />
 	</extension>
 	
+	<extension plugin-id="KnowledgePersistenceExtensionPoints" point-id="KnowledgeReader"
+		id="AssignmentPersistenceHandler.Reader">
+		<parameter id="class"
+			value="de.d3web.owl.io.AssignmentPersistenceHandler" />
+		<parameter id="name" value="AssignmentPersistenceHandler" />
+		<parameter id="description" value="KnowledgeReader for assignments" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="2" />
+		<parameter id="filename" value="kb/assignments.xml" />
+	</extension>
+	
+	<extension plugin-id="KnowledgePersistenceExtensionPoints" point-id="KnowledgeWriter"
+		id="AssignmentPersistenceHandler.Writer">
+		<parameter id="class"
+			value="de.d3web.owl.io.AssignmentPersistenceHandler" />
+		<parameter id="name" value="AssignmentPersistenceHandler" />
+		<parameter id="description" value="KnowledgeWriter for assignments" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="2" />
+		<parameter id="filename" value="kb/assignments.xml" />
+	</extension>
+	
 	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="PSMethod"
 		id="PSMethodOWL">
 		<parameter id="class"
