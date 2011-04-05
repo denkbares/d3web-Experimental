@@ -21,13 +21,10 @@
 package de.d3web.we.core.semantic.rdf2go.example;
 
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.Statement;
-import org.openrdf.query.MalformedQueryException;
 
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
@@ -47,32 +44,38 @@ public class SparqlRenderer extends KnowWEDomRenderer<SparqlType> {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section sec,
-			UserContext user, StringBuilder result) {
+	public void render(KnowWEArticle article, Section sec, UserContext user,
+			StringBuilder result) {
 
 		ArrayList<Statement> l = new ArrayList<Statement>();
 
 		String sparqlString = "";
-		try {
-			String section = sec.getOriginalText();
-			section = section.replaceAll("<sparql2go>","");
-			section = section.replaceAll("</sparql2go>", "");
-			sparqlString = section.replaceAll("\n", "");
-			sparqlString = section.replaceAll("\r", "");
+		String section = sec.getOriginalText();
+		section = section.replaceAll("<sparql2go>", "");
+		section = section.replaceAll("</sparql2go>", "");
+		sparqlString = section.replaceAll("\n", "");
+		sparqlString = section.replaceAll("\r", "");
 
-		}
-		catch (Exception e) {
-			e.printStackTrace();
+		boolean collapse = false;
+		if (section.startsWith("collapse;")) {
+			collapse = true;
+			sparqlString = sparqlString.replaceFirst("collapse;", "");
+			sparqlString = sparqlString.trim();			
 		}
 
 		try {
-			result.append(KnowWEUtils.maskHTML(Rdf2GoCore.getInstance().renderedSparqlSelect(
-					sparqlString)));
-		}
-		catch (ModelRuntimeException e) {
-			ResourceBundle rb = KnowWEEnvironment.getInstance().getKwikiBundle(user);
+			if (collapse) {
+				result.append("%%collapsebox \n<h4>Sparql-Query '"
+						+ sparqlString + "'</h4>\n");
+			}
+			result.append(KnowWEUtils.maskHTML(Rdf2GoCore.getInstance()
+					.renderedSparqlSelect(sparqlString)));
+			if (collapse) {
+				result.append("/%");
+			}
+		} catch (ModelRuntimeException e) {
 			result.append(KnowWEUtils.maskHTML("<span class='warning'>"
-					+ e.getMessage()+"</span>"));
+					+ e.getMessage() + "</span>"));
 		}
 	}
 }

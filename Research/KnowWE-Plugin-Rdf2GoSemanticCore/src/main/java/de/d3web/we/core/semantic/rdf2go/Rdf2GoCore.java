@@ -29,6 +29,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -93,10 +94,10 @@ public class Rdf2GoCore implements EventListener {
 	public static final String SESAME = "sesame";
 	private static final String SWIFTOWLIM = "swiftowlim";
 
-	public static final String select = "select";
-	public static final String ask = "ask";
-	private static final String OwlReasoning = "owl";
-	private static final String RdfsReasoning = "rdfs";
+	public static final String SELECT = "select";
+	public static final String ASK = "ask";
+	private static final String OWL_REASONING = "owl";
+	private static final String RDFS_REASONING = "rdfs";
 
 	private static Rdf2GoCore me;
 	private Model model;
@@ -178,10 +179,10 @@ public class Rdf2GoCore implements EventListener {
 			throw new ModelRuntimeException("Model not supported");
 		}
 
-		if (useReasoning.equals(OwlReasoning)) {
+		if (useReasoning.equals(OWL_REASONING)) {
 			model = RDF2Go.getModelFactory().createModel(Reasoning.owl);
 		}
-		else if (useReasoning.equals(RdfsReasoning)) {
+		else if (useReasoning.equals(RDFS_REASONING)) {
 			model = RDF2Go.getModelFactory().createModel(Reasoning.rdfs);
 		}
 		else {
@@ -396,6 +397,10 @@ public class Rdf2GoCore implements EventListener {
 			return model.sparqlSelect(query);
 		}
 		return model.sparqlSelect(getSparqlNamespaceShorts() + query);
+	}
+	
+	public ClosableIterator<QueryRow> sparqlSelectIt(String query) throws ModelRuntimeException, MalformedQueryException {
+		return sparqlSelect(query).iterator();
 	}
 
 	/**
@@ -796,10 +801,7 @@ public class Rdf2GoCore implements EventListener {
 		}
 		return io;
 	}
-
-
-
-
+	
 
 	/**
 	 * attaches a TextOrigin Node to a Resource. It's your duty to make sure the
