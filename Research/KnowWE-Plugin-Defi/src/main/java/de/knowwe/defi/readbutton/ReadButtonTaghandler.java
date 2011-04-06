@@ -55,6 +55,10 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			String title = username + "_data";
 			String pagename = userContext.getTopic();
 			String web = userContext.getWeb();
+			String value1 = parameters.get("value1");
+			String value2 = parameters.get("value2");
+			String value3 = parameters.get("value3");
+			String value4 = parameters.get("value4");
 			boolean contains = false;
 			boolean talkAbout = false;
 			String rateValue = "";
@@ -108,6 +112,10 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			}
 			// There is no rating for this page or ...
 			if (!contains) {
+				if (value1 == null) value1 = "";
+				if (value2 == null) value2 = "";
+				if (value3 == null) value3 = "";
+				if (value4 == null) value4 = "";
 
 				readbutton.append("<form name='readbuttonform' class='rbtag'>");
 				readbutton.append("<table class='rbtag'><tr>");
@@ -115,7 +123,8 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				readbutton.append("<td><input type='radio' name='panel' value='2' /> 2</td>");
 				readbutton.append("<td><input type='radio' name='panel' value='3' /> 3</td>");
 				readbutton.append("<td><input type='radio' name='panel' value='4' /> 4</td>");
-				readbutton.append("<tr><td>Schlecht</td><td>Geht so</td><td>Gut</td><td>Sehr gut</td></tr>");
+				readbutton.append("<tr><td>" + value1 + "</td><td>" + value2 + "</td><td>" + value3
+						+ "</td><td>" + value4 + "</td></tr>");
 				readbutton.append("</tr><tr><td colspan='4'>");
 				readbutton.append("<input class='submit' type='button' value='OK' onclick='getReadButtonValue(0)' />");
 				readbutton.append("</td></tr></table>");
