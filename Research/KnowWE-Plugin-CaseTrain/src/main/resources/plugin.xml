@@ -1,0 +1,222 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-CaseTrain" version="0.0.1">
+    
+    <requires>
+        <import plugin-id="KnowWEExtensionPoints" />
+    </requires>
+    
+    <runtime>
+        <library id="de.d3web" path="." type="code">
+            <export prefix="*" />
+        </library>
+        <library id="webapp" path="webapp/" type="resources">
+            <export prefix="*" />
+        </library>
+    </runtime>
+    
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="Einleitung">
+		<parameter id="class" value="de.knowwe.caseTrain.Einleitung" />
+		<parameter id="name" value="Einleitung" />
+		<parameter id="description" value="Type Einleitung" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5"  />
+		<parameter id="scope" value="root" />
+		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
+		<parameter id="css" value="caseTrain.css" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="Info">
+		<parameter id="class" value="de.knowwe.caseTrain.Info" />
+		<parameter id="name" value="Info" />
+		<parameter id="description" value="Type Info" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5"  />
+		<parameter id="scope" value="root" />
+		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
+		<parameter id="css" value="caseTrain.css" />
+	</extension>
+	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="MetaDaten">
+		<parameter id="class" value="de.knowwe.caseTrain.MetaDaten" />
+		<parameter id="name" value="MetaDaten" />
+		<parameter id="description" value="Type MetaDaten" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5"  />
+		<parameter id="scope" value="root" />
+		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
+		<parameter id="css" value="caseTrain.css" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="Abschluss">
+		<parameter id="class" value="de.knowwe.caseTrain.Abschluss" />
+		<parameter id="name" value="Abschluss" />
+		<parameter id="description" value="Type Abschluss" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5"  />
+		<parameter id="scope" value="root" />
+		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
+		<parameter id="css" value="caseTrain.css" />
+	</extension>
+
+ <!--   
+
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="DataMarkup">
+		<parameter id="class" value="de.knowwe.defi.DataMarkup" />
+		<parameter id="name" value="DataMarkup" />
+		<parameter id="description" value="Type DataMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5"  />
+		<parameter id="scope" value="root" />
+		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
+		<parameter id="css" value="defi.css" />
+	</extension>	
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="DefineTableMarkup">
+		<parameter id="class" value="de.knowwe.defi.table.DefineTableMarkup" />
+		<parameter id="name" value="DefineTableMarkup" />
+		<parameter id="description" value="Type DefineTableMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5"  />
+		<parameter id="scope" value="root" />
+		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
+		<parameter id="css" value="defi.css" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="TableEntryType">
+		<parameter id="class" value="de.knowwe.defi.table.TableEntryType" />
+		<parameter id="name" value="TableEntryType" />
+		<parameter id="description" value="Type TableEntryType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5"  />
+		<parameter id="scope" value="root" />
+		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
+		<parameter id="css" value="defi.css" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="ShowTableTagHandler">
+		<parameter id="class"
+			value="de.knowwe.defi.table.ShowTableTagHandler" />
+		<parameter id="name" value="ShowTableTagHandler" />
+		<parameter id="description" value="TagHandler ShowTableTagHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="script" value="KnowWE-Plugin-Defi-SubmitTable.js" />
+		<parameter id="css" value="defi.css" />
+	</extension>
+	
+    <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="TabbedLinkTaghandler">
+        <parameter id="class" value="de.knowwe.defi.links.TabbedLinkTaghandler" />
+        <parameter id="name" value="TabbedLinkTaghandler" />
+        <parameter id="description" value="TagHandler TabbedLinkTaghandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="script" value="KnowWE-Plugin-Defi.js" />
+        <parameter id="css" value="defi.css" />
+    </extension>
+    
+        <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="ExternalLinkTaghandler">
+        <parameter id="class" value="de.knowwe.defi.links.ExternalLinkTaghandler" />
+        <parameter id="name" value="ExternalLinkTaghandler" />
+        <parameter id="description" value="TagHandler ExternalLinkTaghandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="css" value="defi.css" />
+    </extension>
+    
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="TalkAboutTaghandler">
+        <parameter id="class" value="de.knowwe.defi.links.TalkAboutTaghandler" />
+        <parameter id="name" value="TalkAboutTaghandler" />
+        <parameter id="description" value="TagHandler TalkAboutTaghandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="script" value="KnowWE-Plugin-Defi.js" />
+        <parameter id="css" value="defi.css" />
+    </extension>    
+    
+  <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="ReadbuttonTaghandler">
+        <parameter id="class" value="de.knowwe.defi.ReadButtonTaghandler" />
+        <parameter id="name" value="ReadButtonTaghandler" />
+        <parameter id="description" value="TagHandler ReadButtonkTaghandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="script" value="KnowWE-Plugin-Defi-ReadButtonTag.js" />
+        <parameter id="css" value="defi.css" />
+    </extension>     
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="AboutMeSaveAction">
+        <parameter id="class"
+            value="de.knowwe.defi.AboutMeSaveAction" />
+        <parameter id="name" value="AboutMeSaveAction" />
+        <parameter id="description" value="Action AboutMeSaveAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="ReadPagesSaveAction">
+        <parameter id="class"
+            value="de.knowwe.defi.ReadPagesSaveAction" />
+        <parameter id="name" value="ReadPagesSaveAction" />
+        <parameter id="description" value="Action ReadPagesSaveAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="InsertAdditionalTableVersionAction">
+        <parameter id="class"
+            value="de.knowwe.defi.table.InsertAdditionalTableVersionAction" />
+        <parameter id="name" value="InsertAdditionalTableVersionAction" />
+        <parameter id="description" value="Action InsertAdditionalTableVersionAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="SubmitTableContentAction">
+        <parameter id="class"
+            value="de.knowwe.defi.table.SubmitTableContentAction" />
+        <parameter id="name" value="SubmitTableContentAction" />
+        <parameter id="description" value="Action SubmitTableContentAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="LogTabClicksAction">
+        <parameter id="class"
+            value="de.knowwe.defi.LogTabClicksAction" />
+        <parameter id="name" value="LogTabClicksAction" />
+        <parameter id="description" value="Action LogTabClicksAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />      
+    </extension>
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="EventListener"
+        id="CommentListener">
+        <parameter id="class"
+            value="de.knowwe.defi.event.CommentListener" />
+        <parameter id="name" value="CommentListener" />
+        <parameter id="description" value="EventListener CommentListener" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>    
+    -->
+</plugin>

@@ -1,0 +1,98 @@
+div.Infowahl, div.Info, div.Frage, div.Antworten,div.Antwort, div.Hinweis, div.Erkl,div.Infostart,div.Infoend,div.Titel,div.InfoContent,div.Fragen:first-child,div.Fragen,div.Metadaten,div.Content,div.Ie,div.Afrage {
+	font-family: Verdana, sans-serif;
+	padding: 10px;
+}
+
+/*div {
+	font-family: Verdana, sans-serif;
+	padding: 10px;
+}*/
+
+div.Infowahl, div.Info, div.Frage, div.Antworten, div.Hinweis, div.Erkl {
+	border-left-style: solid;
+	border-left-width: 10px;
+}
+div.Infowahl {
+	border-color: #0000CC;
+}
+div.Info {
+	border-left-width: 5px;
+	padding: 0px;
+}
+div.Info div.Infostart {
+	border-top: solid 5px black;
+	width: 20px;
+	padding: 0px;
+	height: 10px;
+}
+div.Info div.Infoend {
+	border-bottom: solid 5px black;
+	width: 20px;
+	padding: 0px;
+	height: 10px;
+}
+div.InfoContent {
+	padding-left: 10px;
+}
+div.Info div.Titel {
+	background-color: #b1e75b;
+	font-weight: bold;
+	font-size:large;
+}
+div.Fragen {
+	margin: 0px;
+	padding: 0px;
+}
+div.Afrage {
+	margin: 0px;
+	padding: 0px;
+	margin-top: 10px;
+}
+div.Fragen:first-child {
+	margin-top: 0px;
+}
+div.Frage {
+	border-color: #dee75a;
+}
+span.Options {
+	background-color:#AAAAAA;
+	font-style:italic;
+	padding: 0px 5px 0px 5px;
+}
+div.Hinweis {
+	border-color: #e67439;
+}
+div.Antworten {
+	padding-left: 5px;
+	border-color: #daf4b3;
+}
+div.Antwort {
+	padding: 5px;
+}
+div.Erkl {
+	background:url(../../KnowWEExtension/images/edgar2.png);
+	background-repeat:no-repeat;
+	background-position:top left;
+	border-style:none;
+	padding-left: 20px;
+}
+div.Ie {
+	margin: 0px;
+	padding: 0px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+div.Ie div {
+	margin: 0px;
+	padding: 0px;
+}
+
+
+div.Ie div.Titel {
+	font-weight: bold;
+	background-color:#b1e75b;
+	padding: 10px;
+}
+div.Ie div.Content {
+	padding-left: 10px;
+}
