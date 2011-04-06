@@ -19,11 +19,13 @@
  */
 package de.d3web.we.hermes.maps;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
-import de.d3web.we.core.semantic.IntermediateOwlObject;
-import de.d3web.we.core.semantic.OwlSubtreeHandler;
-import de.d3web.we.core.semantic.SemanticCoreDelegator;
+import org.ontoware.rdf2go.model.Statement;
+
+import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
+import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
@@ -49,24 +51,25 @@ public class LocationDefinitionType extends AbstractType {
 	}
 
 	private class LocationDefinitionTypeOWLSubTreeHandler extends
-			OwlSubtreeHandler<LocationDefinitionType> {
+			RDF2GoSubtreeHandler<LocationDefinitionType> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<LocationDefinitionType> s) {
-			IntermediateOwlObject ioo = new IntermediateOwlObject();
+		public Collection<KDOMReportMessage> create(KnowWEArticle article,
+				Section<LocationDefinitionType> s) {
+			ArrayList<Statement> ioo = new ArrayList<Statement>();
 			Placemark placem = extractPlacemark(s);
 			MapType.addPlacemarkToOwlObject(placem, ioo);
-			SemanticCoreDelegator.getInstance().addStatements(ioo, s);
+			Rdf2GoCore.getInstance().addStatements(ioo, s);
 			return null;
 		}
 
 	}
 
-	private static Placemark extractPlacemark(Section<LocationDefinitionType> section) {
+	private static Placemark extractPlacemark(
+			Section<LocationDefinitionType> section) {
 		String sectionText = section.getOriginalText();
-		sectionText = sectionText.substring(START_TAG.length(), sectionText
-				.length()
-				- END_TAG.length());
+		sectionText = sectionText.substring(START_TAG.length(),
+				sectionText.length() - END_TAG.length());
 
 		String locationName = null;
 		Double latitude = null;
@@ -83,8 +86,7 @@ public class LocationDefinitionType extends AbstractType {
 			try {
 				latitude = Double.parseDouble(splittedSecText[0]);
 				longitude = Double.parseDouble(splittedSecText[1]);
-			}
-			catch (NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				return null;
 			}
 		}
@@ -93,8 +95,7 @@ public class LocationDefinitionType extends AbstractType {
 			try {
 				latitude = Double.parseDouble(splittedSecText[1]);
 				longitude = Double.parseDouble(splittedSecText[2]);
-			}
-			catch (NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				return null;
 			}
 			if (splittedSecText.length == 4) {
@@ -109,7 +110,8 @@ public class LocationDefinitionType extends AbstractType {
 		return new Placemark(locationName, latitude, longitude, description);
 	}
 
-	public static class LocationRenderer extends KnowWEDomRenderer<LocationDefinitionType> {
+	public static class LocationRenderer extends
+			KnowWEDomRenderer<LocationDefinitionType> {
 
 		private static LocationRenderer instance;
 
@@ -121,17 +123,17 @@ public class LocationDefinitionType extends AbstractType {
 		}
 
 		@Override
-		public void render(KnowWEArticle article, Section<LocationDefinitionType> sec,
-				UserContext user, StringBuilder string) {
+		public void render(KnowWEArticle article,
+				Section<LocationDefinitionType> sec, UserContext user,
+				StringBuilder string) {
 			String originalText = sec.getOriginalText();
 			Placemark extractPlacemark = extractPlacemark(sec);
 			if (extractPlacemark == null) {
-				string.append(KnowWEUtils.maskHTML("<span class='error' title='invalid syntax'>")
+				string.append(KnowWEUtils
+						.maskHTML("<span class='error' title='invalid syntax'>")
 						+ originalText + KnowWEUtils.maskHTML("</span>"));
-			}
-			else {
-				String htmlString = extractPlacemark
-							.toHTMLString();
+			} else {
+				String htmlString = extractPlacemark.toHTMLString();
 				string.append(KnowWEUtils.maskHTML(htmlString));
 			}
 		}

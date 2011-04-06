@@ -28,25 +28,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.openrdf.query.Binding;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.BooleanQuery;
-import org.openrdf.query.GraphQuery;
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.Query;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.QueryLanguage;
-import org.openrdf.query.TupleQuery;
-import org.openrdf.query.TupleQueryResult;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.exception.ModelRuntimeException;
+import org.ontoware.rdf2go.model.QueryResultTable;
+import org.ontoware.rdf2go.model.QueryRow;
 
-import de.d3web.we.core.semantic.ISemanticCore;
-import de.d3web.we.core.semantic.OwlHelper;
-import de.d3web.we.core.semantic.SemanticCoreDelegator;
+import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.hermes.TimeEvent;
 import de.d3web.we.hermes.maps.Placemark;
-import de.knowwe.semantic.sparql.SparqlDelegateRenderer;
 
 public class TimeEventSPARQLUtils {
 
@@ -68,12 +57,13 @@ public class TimeEventSPARQLUtils {
 
 		String querystring = null;
 
-		querystring = TIME_SPARQL.replaceAll("YEARFROM", Integer
-				.toString(yearFrom));
+		querystring = TIME_SPARQL.replaceAll("YEARFROM",
+				Integer.toString(yearFrom));
 		querystring = querystring
 				.replaceAll("YEARTO", Integer.toString(yearTo));
 
-		TupleQueryResult result = executeQuery(querystring);
+		QueryResultTable result = Rdf2GoCore.getInstance().sparqlSelect(
+				querystring);
 		return buildTimeEvents(result);
 	}
 
@@ -85,100 +75,52 @@ public class TimeEventSPARQLUtils {
 		querystring = CONCEPT_SPARQL
 				.replaceAll("CONCEPT", "lns:" + conceptName);
 
-		TupleQueryResult result = executeQuery(querystring);
+		QueryResultTable result = Rdf2GoCore.getInstance().sparqlSelect(
+				querystring);
 		return buildTimeEvents(result);
-	}
-
-	public static TupleQueryResult executeQuery(String querystring) {
-		ISemanticCore sc = SemanticCoreDelegator.getInstance();
-		RepositoryConnection con = sc.getUpper().getConnection();
-		// try {
-		// con.setAutoCommit(false);
-		// } catch (RepositoryException e1) {
-		// e1.printStackTrace();
-		// }
-		Query query = null;
-		try {
-			query = con.prepareQuery(QueryLanguage.SPARQL,
-					SparqlDelegateRenderer.addNamespaces(querystring));
-		}
-		catch (RepositoryException e) {
-			// return e.getMessage();
-		}
-		catch (MalformedQueryException e) {
-			// return e.getMessage();
-		}
-		try {
-			if (query instanceof TupleQuery) {
-				TupleQueryResult result = ((TupleQuery) query).evaluate();
-				return result;
-			}
-			else if (query instanceof GraphQuery) {
-				// GraphQueryResult result = ((GraphQuery) query).evaluate();
-				// return "graphquery ouput implementation: TODO";
-			}
-			else if (query instanceof BooleanQuery) {
-				// boolean result = ((BooleanQuery) query).evaluate();
-				// return result + "";
-			}
-		}
-		catch (QueryEvaluationException e) {
-			// return
-			// kwikiBundle.getString("KnowWE.owl.query.evalualtion.error")
-			// + ":" + e.getMessage();
-		}
-		finally {
-
-		}
-		return null;
 	}
 
 	// private static final String TEXTORIGIN_SPARQL =
 	// "SELECT ?textOrigin WHERE { ?t lns:hasNode ?textOrigin .  ?t lns:hasTitle TITLE .}";
 
-	private static List<TimeEvent> buildTimeEvents(TupleQueryResult result) {
+	private static List<TimeEvent> buildTimeEvents(QueryResultTable resultTable) {
 		// List<String> bindings = result.getBindingNames();
+		ClosableIterator<QueryRow> result = resultTable.iterator();
 
 		List<TimeEvent> events = new ArrayList<TimeEvent>();
 		try {
 			while (result.hasNext()) {
 
-				BindingSet set = result.next();
+				QueryRow row = result.next();
+				String tURI = row.getValue("t").toString();
+				String title = row.getValue("title").toString();
 
-				Binding tB = set.getBinding("t");
-				String tURI = tB.getValue().stringValue();
+				String kdomid = row.getValue("kdomid").toString();
+				String topic = row.getValue("topic").toString();
 
-				Binding titleB = set.getBinding("title");
-				String kdomid = set.getBinding("kdomid").getValue()
-						.stringValue();
-				String topic = set.getBinding("topic").getValue().stringValue();
+				String imp = row.getValue("imp").asDatatypeLiteral().getValue();
 
-				Binding impB = set.getBinding("imp");
 				// Binding textOriginB = set.getBinding("textOrigin");
 
-				String time = set.getBinding("encodedTime").getValue()
-						.stringValue();
-				String desc = set.getBinding("desc").getValue().stringValue();
-				String title = titleB.getValue().stringValue();
-				String imp = impB.getValue().stringValue();
+				String time = row.getValue("encodedTime").toString();
+				String desc = row.getValue("desc").toString();
 
 				Set<String> sources = new HashSet<String>();
 
 				String query = SOURCE_SPARQL.replace("*URI*", tURI);
-				TupleQueryResult sourcesResult = executeQuery(query.replaceAll(
-						"TITLE", title));
+				ClosableIterator<QueryRow> sourcesResult = Rdf2GoCore
+						.getInstance().sparqlSelectIt(
+								query.replaceAll("TITLE", title));
 
 				while (sourcesResult.hasNext()) {
 					// for some reason every source appears twice in this loop
 					// ;p
 					// thus using a set
-					BindingSet set2 = sourcesResult.next();
-					Binding sourceBinding = set2.getBinding("source");
-					String aSource = sourceBinding.getValue().stringValue();
+					QueryRow row2 = sourcesResult.next();
+					String aSource = row2.getValue("source").toString();
 					try {
 						aSource = URLDecoder.decode(aSource, "UTF-8");
-					}
-					catch (UnsupportedEncodingException e) {
+					} catch (UnsupportedEncodingException e) {
 						e.printStackTrace();
 					}
 					if (aSource != null) {
@@ -193,8 +135,7 @@ public class TimeEventSPARQLUtils {
 					desc = URLDecoder.decode(desc, "UTF-8");
 					topic = URLDecoder.decode(topic, "UTF-8");
 					kdomid = URLDecoder.decode(kdomid, "UTF-8");
-				}
-				catch (UnsupportedEncodingException e) {
+				} catch (UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -208,8 +149,7 @@ public class TimeEventSPARQLUtils {
 
 				try {
 					parseInt = Integer.parseInt(imp);
-				}
-				catch (NumberFormatException e) {
+				} catch (NumberFormatException e) {
 					// TODO
 				}
 				List<String> resultSources = new ArrayList<String>();
@@ -219,8 +159,7 @@ public class TimeEventSPARQLUtils {
 						time, kdomid, topic));
 
 			}
-		}
-		catch (QueryEvaluationException e) {
+		} catch (ModelRuntimeException e) {
 			// return
 			// kwikiBundle.getString("KnowWE.owl.query.evalualtion.error")
 			// + ":" + e.getMessage();
@@ -237,44 +176,47 @@ public class TimeEventSPARQLUtils {
 
 		querystring = PLACEMARK_SPARQL.replaceAll("CONCEPT", "lns:" + concept);
 
-		TupleQueryResult result = executeQuery(querystring);
+		QueryResultTable result = Rdf2GoCore.getInstance().sparqlSelect(
+				querystring);
 		return buildPlacemarks(result);
 	}
 
 	public static List<Placemark> findLocationsOfTimeEventsForTopic(String topic) {
-		OwlHelper helper = SemanticCoreDelegator.getInstance().getUpper().getHelper();
 		String querystring = LOCATIONS_FOR_EVENTS_FOR_TOPIC_SPARQL.replaceAll(
-				"TOPIC", "<" + helper.createlocalURI(topic).toString() + ">");
-		TupleQueryResult queryResult = executeQuery(querystring);
+				"TOPIC", "<"
+						+ Rdf2GoCore.getInstance().createlocalURI(topic)
+								.toString() + ">");
+		QueryResultTable queryResult = Rdf2GoCore.getInstance().sparqlSelect(
+				querystring);
 		List<Placemark> result = buildPlacemarks(queryResult);
 
 		querystring = LOCATIONS_FOR_TOPIC_SPARQL.replaceAll("TOPIC", "<"
-				+ helper.createlocalURI(topic).toString() + ">");
-		queryResult = executeQuery(querystring);
+				+ Rdf2GoCore.getInstance().createlocalURI(topic).toString()
+				+ ">");
+		queryResult = Rdf2GoCore.getInstance().sparqlSelect(querystring);
 		result.addAll(buildPlacemarksForTopic(queryResult));
 		return result;
 	}
 
 	private static Collection<? extends Placemark> buildPlacemarksForTopic(
-			TupleQueryResult result) {
+			QueryResultTable resultTable) {
+		ClosableIterator<QueryRow> result = resultTable.iterator();
 		List<Placemark> placemarks = new ArrayList<Placemark>();
-		if (result == null) return placemarks;
+		if (result == null)
+			return placemarks;
 		try {
 			while (result.hasNext()) {
 
-				BindingSet set = result.next();
+				QueryRow row = result.next();
 
-				String loc = set.getBinding("loc").getValue().stringValue();
-				String latString = set.getBinding("lat").getValue()
-						.stringValue();
-				String longString = set.getBinding("long").getValue()
-						.stringValue();
+				String loc = row.getValue("loc").toString();
+				String latString = row.getValue("lat").toString();
+				String longString = row.getValue("long").toString();
 				try {
 					loc = URLDecoder.decode(loc, "UTF-8");
 					latString = URLDecoder.decode(latString, "UTF-8");
 					longString = URLDecoder.decode(longString, "UTF-8");
-				}
-				catch (UnsupportedEncodingException e) {
+				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
 				loc = removeNamespace(loc);
@@ -286,8 +228,7 @@ public class TimeEventSPARQLUtils {
 				placemarks.add(new Placemark(loc, latitude, longitude, ""));
 
 			}
-		}
-		catch (QueryEvaluationException e) {
+		} catch (ModelRuntimeException e) {
 			return null;
 		}
 		return placemarks;
@@ -298,32 +239,30 @@ public class TimeEventSPARQLUtils {
 		return loc.substring(index + 1);
 	}
 
-	private static List<Placemark> buildPlacemarks(TupleQueryResult result) {
+	private static List<Placemark> buildPlacemarks(QueryResultTable resultTable) {
 		// List<String> bindings = result.getBindingNames();
 
-		if (result == null) return new ArrayList<Placemark>(0);
+		if (resultTable == null)
+			return new ArrayList<Placemark>(0);
 
+		ClosableIterator<QueryRow> result = resultTable.iterator();
 		List<Placemark> placemarks = new ArrayList<Placemark>();
 		try {
 			while (result.hasNext()) {
 
-				BindingSet set = result.next();
+				QueryRow row = result.next();
 
-				Binding titleB = set.getBinding("title");
-				String desc = set.getBinding("desc").getValue().stringValue();
-				String title = titleB.getValue().stringValue();
+				String desc = row.getValue("desc").toString();
+				String title = row.getValue("title").toString();
 
-				String latString = set.getBinding("lat").getValue()
-						.stringValue();
-				String longString = set.getBinding("long").getValue()
-						.stringValue();
+				String latString = row.getValue("lat").toString();
+				String longString = row.getValue("long").toString();
 				try {
 					title = URLDecoder.decode(title, "UTF-8");
 					desc = URLDecoder.decode(desc, "UTF-8");
 					latString = URLDecoder.decode(latString, "UTF-8");
 					longString = URLDecoder.decode(longString, "UTF-8");
-				}
-				catch (UnsupportedEncodingException e) {
+				} catch (UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -335,8 +274,7 @@ public class TimeEventSPARQLUtils {
 				placemarks.add(new Placemark(title, latitude, longitude, desc));
 
 			}
-		}
-		catch (QueryEvaluationException e) {
+		} catch (ModelRuntimeException e) {
 			// return
 			// kwikiBundle.getString("KnowWE.owl.query.evalualtion.error")
 			// + ":" + e.getMessage();

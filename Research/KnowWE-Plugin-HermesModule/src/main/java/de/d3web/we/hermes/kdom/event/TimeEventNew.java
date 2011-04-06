@@ -34,7 +34,6 @@ import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotation;
 import de.d3web.we.kdom.type.AnonymousType;
 import de.d3web.we.kdom.type.AnonymousTypeInvisible;
 import de.d3web.we.utils.SplitUtility;
@@ -72,7 +71,7 @@ public class TimeEventNew extends AbstractType {
 		this.childrenTypes.add(SourceType);
 
 		this.childrenTypes.add(DescriptionType);
-		
+
 		this.setCustomRenderer(new EditSectionRenderer(new TimeEventRenderer()));
 
 		this.addSubtreeHandler(Priority.LOW, new TimeEventOWLCompiler());
@@ -90,28 +89,35 @@ public class TimeEventNew extends AbstractType {
 	public static TimeEvent createTimeEvent(Section<TimeEventNew> s) {
 		String titleS = null;
 		Section<TitleType> title = Sections.findSuccessor(s, TitleType.class);
-		if (title != null) titleS = title.get().getTermName(title);
-		
+		if (title != null)
+			titleS = title.get().getTermName(title);
+
 		String dateS = null;
 		Section<DateType> date = Sections.findSuccessor(s, DateType.class);
-		if (date != null) dateS = date.getOriginalText();
-		
-		Integer impI = null;
-		Section<ImportanceType> imp = Sections.findSuccessor(s, ImportanceType.class);
-		if (imp != null) impI = ImportanceType.getImportance(imp);
-		
-		String descS = null;
-		Section<Description> desc = Sections.findSuccessor(s, Description.class);
-		if (desc != null) descS = desc.getOriginalText();
+		if (date != null)
+			dateS = date.getOriginalText();
 
-		List<Section<Source>> sources = Sections.findChildrenOfType(s, Source.class);
+		Integer impI = null;
+		Section<ImportanceType> imp = Sections.findSuccessor(s,
+				ImportanceType.class);
+		if (imp != null)
+			impI = ImportanceType.getImportance(imp);
+
+		String descS = null;
+		Section<Description> desc = Sections
+				.findSuccessor(s, Description.class);
+		if (desc != null)
+			descS = desc.getOriginalText();
+
+		List<Section<Source>> sources = Sections.findChildrenOfType(s,
+				Source.class);
 		List<String> sourceStrings = new ArrayList<String>();
 		for (Section<Source> src : sources) {
 			sourceStrings.add(Source.getSourceName(src));
 		}
-		
-		return new TimeEvent(titleS, descS, impI, sourceStrings, dateS, s.getID(),
-				s.getArticle().getTitle());
+
+		return new TimeEvent(titleS, descS, impI, sourceStrings, dateS,
+				s.getID(), s.getArticle().getTitle());
 	}
 
 	public static class TitleType extends StringDefinition {
@@ -129,17 +135,18 @@ public class TimeEventNew extends AbstractType {
 					new SectionFinder() {
 
 						@Override
-						public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
+						public List<SectionFinderResult> lookForSections(
+								String text, Section<?> father, Type type) {
 							Matcher matcher = newline.matcher(text);
 							if (matcher.find()) { // if there is a linebreak in
 								// the passed fragment take
 								// everything before
-								return SectionFinderResult.createSingleItemResultList(0,
-										matcher.start());
-							}
-							else { // take everything
-								return new AllTextFinderTrimmed().lookForSections(text,
-										father, type);
+								return SectionFinderResult
+										.createSingleItemResultList(0,
+												matcher.start());
+							} else { // take everything
+								return new AllTextFinderTrimmed()
+										.lookForSections(text, father, type);
 							}
 
 						}
@@ -148,13 +155,11 @@ public class TimeEventNew extends AbstractType {
 			this.sectionFinder = cf;
 		}
 
-
 		@Override
 		public String getTermName(Section<? extends KnowWETerm<String>> s) {
 			return s.getOriginalText();
 		}
 	}
-
 
 	public static class DateType extends AbstractType {
 
@@ -164,12 +169,17 @@ public class TimeEventNew extends AbstractType {
 					new SectionFinder() {
 
 						@Override
-						public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
-							StringFragment firstNonEmptyLineContent = SplitUtility.getFirstNonEmptyLineContent(text);
+						public List<SectionFinderResult> lookForSections(
+								String text, Section<?> father, Type type) {
+							StringFragment firstNonEmptyLineContent = SplitUtility
+									.getFirstNonEmptyLineContent(text);
 							if (firstNonEmptyLineContent != null) {
-								return SectionFinderResult.createSingleItemResultList(
-										firstNonEmptyLineContent.getStart(),
-										firstNonEmptyLineContent.getEnd());
+								return SectionFinderResult
+										.createSingleItemResultList(
+												firstNonEmptyLineContent
+														.getStart(),
+												firstNonEmptyLineContent
+														.getEnd());
 							}
 							return null;
 						}
@@ -181,7 +191,8 @@ public class TimeEventNew extends AbstractType {
 			this.addSubtreeHandler(new TimeEventAttributeHandler<DateType>() {
 
 				@Override
-				public Collection<KDOMReportMessage> createAttribute(KnowWEArticle article, Section<DateType> s) {
+				public Collection<KDOMReportMessage> createAttribute(
+						KnowWEArticle article, Section<DateType> s) {
 					// TimeStamp t = DateType.getTimeStamp(s);
 					// if (false /* t is invalid */) { // TODO: set appropriate
 					// error
@@ -206,8 +217,6 @@ public class TimeEventNew extends AbstractType {
 		}
 	}
 
-
-
 	public static class ImportanceType extends AbstractType {
 		Pattern embracedNumbers = Pattern.compile("\\(\\s*\\d*\\s*\\)");
 
@@ -221,13 +230,15 @@ public class TimeEventNew extends AbstractType {
 					new SectionFinder() {
 
 						@Override
-						public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
+						public List<SectionFinderResult> lookForSections(
+								String text, Section<?> father, Type type) {
 							String[] split = text.split("\\r?\\n");
 							for (int i = 0; i < split.length; i++) {
 								String line = split[i];
 								if (line.trim().length() > 0) {
 									// take the last match of that line
-									Matcher matcher = embracedNumbers.matcher(line);
+									Matcher matcher = embracedNumbers
+											.matcher(line);
 
 									// of course a horrible way to access the
 									// last match, but seems like there is no
@@ -239,7 +250,8 @@ public class TimeEventNew extends AbstractType {
 										lastMatchEnd = matcher.end();
 									}
 									if (lastMatchStart != -1) {
-										return SectionFinderResult.createSingleItemResultList(
+										return SectionFinderResult
+												.createSingleItemResultList(
 														lastMatchStart,
 														lastMatchEnd);
 									}
@@ -257,12 +269,14 @@ public class TimeEventNew extends AbstractType {
 			this.addSubtreeHandler(new TimeEventAttributeHandler<ImportanceType>() {
 
 				@Override
-				protected Collection<KDOMReportMessage> createAttribute(KnowWEArticle article, Section<ImportanceType> s) {
+				protected Collection<KDOMReportMessage> createAttribute(
+						KnowWEArticle article, Section<ImportanceType> s) {
 					Integer i = ImportanceType.getImportance(s);
 					if (i == null || i < 1 || i > 3) {
-						return Arrays.asList((KDOMReportMessage) new InvalidNumberError(
-								s.get().getName()
-										+ ": " + s.getOriginalText()));
+						return Arrays
+								.asList((KDOMReportMessage) new InvalidNumberError(
+										s.get().getName() + ": "
+												+ s.getOriginalText()));
 					}
 
 					return new ArrayList<KDOMReportMessage>(0);
@@ -273,13 +287,12 @@ public class TimeEventNew extends AbstractType {
 		}
 
 		public static Integer getImportance(Section<ImportanceType> s) {
-			String number = s.getOriginalText().replaceAll("\\(", "").replaceAll("\\)",
-					"").trim();
+			String number = s.getOriginalText().replaceAll("\\(", "")
+					.replaceAll("\\)", "").trim();
 			Integer i = null;
 			try {
 				i = Integer.parseInt(number);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				// is not a valid number
 			}
 
@@ -295,16 +308,18 @@ public class TimeEventNew extends AbstractType {
 		}
 
 		static String getSourceName(Section<Source> s) {
-			return s.getOriginalText().substring(s.getOriginalText().indexOf(":") + 1);
+			return s.getOriginalText().substring(
+					s.getOriginalText().indexOf(":") + 1);
 		}
 	}
 
 	public static class Description extends AbstractType {
 		public Description() {
-			SemanticAnnotation semanticAnnotation = new SemanticAnnotation();
-
-			// first grab annotated concepts
-			this.childrenTypes.add(semanticAnnotation);
+			// TODO this has to be implemented without SemanticAnnotation
+			// SemanticAnnotation semanticAnnotation = new SemanticAnnotation();
+			//
+			// // first grab annotated concepts
+			// this.childrenTypes.add(semanticAnnotation);
 
 			// then search for un-annotated concepts
 			this.childrenTypes.add(new PersonOccurrence());
@@ -312,7 +327,7 @@ public class TimeEventNew extends AbstractType {
 
 			// renderer
 			this.setCustomRenderer(new TimeEventDescRenderer());
-			
+
 			ConstraintSectionFinder f = new ConstraintSectionFinder(
 					new AllTextFinderTrimmed());
 			f.addConstraint(SingleChildConstraint.getInstance());

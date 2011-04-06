@@ -27,12 +27,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.openrdf.query.Binding;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.TupleQueryResult;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.exception.ModelRuntimeException;
+import org.ontoware.rdf2go.model.QueryResultTable;
+import org.ontoware.rdf2go.model.QueryRow;
 
-import de.d3web.we.hermes.util.TimeEventSPARQLUtils;
+import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
@@ -47,7 +47,8 @@ public abstract class ConceptFinder implements SectionFinder {
 	private Set<String> objectNames = null;
 
 	@Override
-	public List<SectionFinderResult> lookForSections(String arg0, Section<?> arg1, Type type) {
+	public List<SectionFinderResult> lookForSections(String arg0,
+			Section<?> arg1, Type type) {
 
 		String text = arg0;
 
@@ -60,9 +61,11 @@ public abstract class ConceptFinder implements SectionFinder {
 		for (String objectName : objectNames) {
 			int index = text.indexOf(objectName);
 
-			if (index == -1) continue;
+			if (index == -1)
+				continue;
 
-			result.add(new SectionFinderResult(index, index + objectName.length()));
+			result.add(new SectionFinderResult(index, index
+					+ objectName.length()));
 		}
 
 		return result;
@@ -76,19 +79,19 @@ public abstract class ConceptFinder implements SectionFinder {
 		for (String clazz : classes) {
 			String query = INSTANCE_SPARQL.replace("CLASS", clazz);
 
-			TupleQueryResult result = TimeEventSPARQLUtils.executeQuery(query);
+			QueryResultTable resultTable = Rdf2GoCore.getInstance()
+					.sparqlSelect(query);
+			ClosableIterator<QueryRow> result = resultTable.iterator();
 
 			try {
 				while (result.hasNext()) {
-					BindingSet set = result.next();
+					QueryRow row = result.next();
 
-					Binding tB = set.getBinding("x");
-					String name = tB.getValue().stringValue();
+					String name = row.getValue("x").toString();
 
 					try {
 						name = URLDecoder.decode(name, "UTF-8");
-					}
-					catch (UnsupportedEncodingException e) {
+					} catch (UnsupportedEncodingException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
@@ -96,21 +99,10 @@ public abstract class ConceptFinder implements SectionFinder {
 					objectNames.add(name.substring(name.lastIndexOf("#") + 1));
 
 				}
-			}
-			catch (QueryEvaluationException e) {
+			} catch (ModelRuntimeException e) {
 				// moo
 				e.printStackTrace();
 			}
-			finally {
-				try {
-					result.close();
-				}
-				catch (QueryEvaluationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
 		}
 
 	}

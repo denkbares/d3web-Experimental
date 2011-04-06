@@ -24,16 +24,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.openrdf.model.URI;
-import org.openrdf.query.TupleQueryResult;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.model.QueryRow;
+import org.ontoware.rdf2go.model.node.URI;
 
-import de.d3web.we.core.semantic.ISemanticCore;
-import de.d3web.we.core.semantic.SemanticCoreDelegator;
+import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
 import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.semantic.sparql.DefaultSparqlRenderer;
-import de.knowwe.semantic.sparql.SPARQLUtil;
 
 public class ListIndividualsHandler extends AbstractHTMLTagHandler {
 
@@ -51,7 +48,6 @@ public class ListIndividualsHandler extends AbstractHTMLTagHandler {
 			Map<String, String> values, String web) {
 
 		String className = values.get("class");
-		ISemanticCore sc = SemanticCoreDelegator.getInstance();
 
 		// Removes all entries which are no properties
 		Map<String, String> properties = new HashMap<String, String>(values);
@@ -65,7 +61,8 @@ public class ListIndividualsHandler extends AbstractHTMLTagHandler {
 		for (Entry<String, String> entry : properties.entrySet()) {
 			sparql_mid += " ?x lns:";
 			sparql_mid += entry.getKey() + " <";
-			URI propURI = sc.getUpper().getHelper().createlocalURI(entry.getValue());
+			URI propURI = Rdf2GoCore.getInstance().createlocalURI(
+					entry.getValue());
 			sparql_mid += propURI.toString() + ">.";
 		}
 
@@ -73,14 +70,18 @@ public class ListIndividualsHandler extends AbstractHTMLTagHandler {
 			return "No class given for list class members tag!";
 		}
 
-		URI classURI = sc.getUpper().getHelper().createlocalURI(className);
+		URI classURI = Rdf2GoCore.getInstance().createlocalURI(className);
 
-		String querystring = SPARQL_START.replaceAll("CLASS", "<" + classURI.toString() + ">");
+		String querystring = SPARQL_START.replaceAll("CLASS",
+				"<" + classURI.toString() + ">");
 		querystring += sparql_mid + SPARQL_END;
 
-		TupleQueryResult result = SPARQLUtil.executeTupleQuery(querystring);
+		ClosableIterator<QueryRow> result = Rdf2GoCore.getInstance()
+				.sparqlSelectIt(querystring);
 
-		return KnowWEUtils.maskHTML(DefaultSparqlRenderer.getInstance().renderResults(result,
-				true));
+		return "";
+		// return
+		// KnowWEUtils.maskHTML(DefaultSparqlRenderer.getInstance().renderResults(result,
+		// true));
 	}
 }

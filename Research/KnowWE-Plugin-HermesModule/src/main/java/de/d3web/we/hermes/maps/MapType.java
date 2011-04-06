@@ -26,16 +26,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.openrdf.model.Literal;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.repository.RepositoryException;
+import org.ontoware.rdf2go.model.Statement;
+import org.ontoware.rdf2go.model.node.Literal;
+import org.ontoware.rdf2go.model.node.URI;
 
-import de.d3web.we.core.semantic.IntermediateOwlObject;
-import de.d3web.we.core.semantic.OwlHelper;
-import de.d3web.we.core.semantic.OwlSubtreeHandler;
-import de.d3web.we.core.semantic.SemanticCoreDelegator;
-import de.d3web.we.core.semantic.UpperOntology;
+import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
+import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
@@ -61,28 +57,29 @@ public class MapType extends AbstractXMLType {
 		return childrenTypes;
 	}
 
-	private class MapTypeOWLSubTreeHandler extends OwlSubtreeHandler<MapType> {
+	private class MapTypeOWLSubTreeHandler extends
+			RDF2GoSubtreeHandler<MapType> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<MapType> s) {
-			IntermediateOwlObject ioo = new IntermediateOwlObject();
+		public Collection<KDOMReportMessage> create(KnowWEArticle article,
+				Section<MapType> s) {
+			List<Statement> ioo = new ArrayList<Statement>();
 			String url = getIFrameSrcURL(s);
 			KMLLoader kmlLoader = new KMLLoader(url);
 			List<Placemark> placemarks = kmlLoader.getPlacemarks();
 			for (Placemark placem : placemarks) {
 				addPlacemarkToOwlObject(placem, ioo);
 			}
-			SemanticCoreDelegator.getInstance().addStatements(ioo, s);
+			Rdf2GoCore.getInstance().addStatements(ioo, s);
 			return null;
 		}
 
 	}
 
 	private String getIFrameSrcURL(Section<?> sec) {
-		Section<AbstractXMLType> iframeSection = Sections
-				.findChildOfType(sec, AbstractXMLType.class);
-		AbstractXMLType objectType = iframeSection
-				.get();
+		Section<AbstractXMLType> iframeSection = Sections.findChildOfType(sec,
+				AbstractXMLType.class);
+		AbstractXMLType objectType = iframeSection.get();
 		if (objectType.getXMLTagName() != "iframe") {
 			// System.out.println("warning");
 			return null;
@@ -94,28 +91,30 @@ public class MapType extends AbstractXMLType {
 	}
 
 	public static void addPlacemarkToOwlObject(Placemark placem,
-			IntermediateOwlObject ioo) {
-		OwlHelper helper = UpperOntology.getInstance().getHelper();
+			List<Statement> ioo) {
 
-		URI conceptURI = helper.createlocalURI(placem.getTitle());
+		URI conceptURI = Rdf2GoCore.getInstance().createlocalURI(
+				placem.getTitle());
 
-		Literal latitude = helper.createLiteral(format.format(placem
-				.getLatitude()));
-		Literal longitude = helper.createLiteral(format.format(placem
-				.getLongitude()));
+		Literal latitude = Rdf2GoCore.getInstance().createLiteral(
+				format.format(placem.getLatitude()));
+		Literal longitude = Rdf2GoCore.getInstance().createLiteral(
+				format.format(placem.getLongitude()));
 
 		/* adding all OWL statements to ioo object */
-		try {
-			ArrayList<Statement> slist = new ArrayList<Statement>();
-			slist.add(helper.createStatement(conceptURI, helper
-					.createlocalURI("hasLatitude"), latitude));
-			slist.add(helper.createStatement(conceptURI, helper
-					.createlocalURI("hasLongitude"), longitude));
-			ioo.addAllStatements(slist);
-		}
-		catch (RepositoryException e) {
-			e.printStackTrace();
-		}
+		// try {
+		ArrayList<Statement> slist = new ArrayList<Statement>();
+		slist.add(Rdf2GoCore.getInstance().createStatement(conceptURI,
+				Rdf2GoCore.getInstance().createlocalURI("hasLatitude"),
+				latitude));
+		slist.add(Rdf2GoCore.getInstance().createStatement(conceptURI,
+				Rdf2GoCore.getInstance().createlocalURI("hasLongitude"),
+				longitude));
+		ioo.addAll(slist);
+		// }
+		// catch (Repository e) {
+		// e.printStackTrace();
+		// }
 
 	}
 

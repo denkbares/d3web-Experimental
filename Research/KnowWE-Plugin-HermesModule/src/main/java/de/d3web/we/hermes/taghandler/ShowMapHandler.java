@@ -27,14 +27,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.TupleQueryResult;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.exception.ModelRuntimeException;
+import org.ontoware.rdf2go.model.QueryResultTable;
+import org.ontoware.rdf2go.model.QueryRow;
 
-import de.d3web.we.core.semantic.OwlHelper;
-import de.d3web.we.core.semantic.SemanticCoreDelegator;
+import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.hermes.maps.Placemark;
-import de.d3web.we.hermes.util.TimeEventSPARQLUtils;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
 import de.d3web.we.user.UserContext;
 
@@ -59,24 +58,21 @@ public class ShowMapHandler extends AbstractHTMLTagHandler {
 		if (values.containsKey("longitude")) {
 			try {
 				longitude = Double.parseDouble(values.get("longitude"));
-			}
-			catch (NumberFormatException nfe) {
+			} catch (NumberFormatException nfe) {
 				// do nothing
 			}
 		}
 		if (values.containsKey("latitude")) {
 			try {
 				latitude = Double.parseDouble(values.get("latitude"));
-			}
-			catch (NumberFormatException nfe) {
+			} catch (NumberFormatException nfe) {
 				// do nothing
 			}
 		}
 		if (values.containsKey("zoom")) {
 			try {
 				zoom = Double.parseDouble(values.get("zoom"));
-			}
-			catch (NumberFormatException nfe) {
+			} catch (NumberFormatException nfe) {
 				// do nothing
 			}
 		}
@@ -86,10 +82,14 @@ public class ShowMapHandler extends AbstractHTMLTagHandler {
 			if (values.containsKey("concept")) {
 				concept = values.get("concept");
 			}
-			OwlHelper helper = SemanticCoreDelegator.getInstance().getUpper().getHelper();
-			String querystring = LOCATIONS_FOR_TOPIC.replaceAll("URI",
-					helper.createlocalURI(concept).toString());
-			TupleQueryResult queryResult = TimeEventSPARQLUtils.executeQuery(querystring);
+			String querystring = LOCATIONS_FOR_TOPIC
+					.replaceAll("URI",
+							Rdf2GoCore.getInstance().createlocalURI(concept)
+									.toString());
+			QueryResultTable queryResultTable = Rdf2GoCore.getInstance()
+					.sparqlSelect(querystring);
+			ClosableIterator<QueryRow> queryResult = queryResultTable
+					.iterator();
 			Collection<? extends Placemark> placemark = buildPlacemarksForLocation(queryResult);
 			if (placemark != null && placemark.size() > 0) {
 				Placemark p = placemark.iterator().next();
@@ -111,22 +111,20 @@ public class ShowMapHandler extends AbstractHTMLTagHandler {
 	}
 
 	private static Collection<? extends Placemark> buildPlacemarksForLocation(
-			TupleQueryResult result) {
+			ClosableIterator<QueryRow> result) {
 		List<Placemark> placemarks = new ArrayList<Placemark>();
-		if (result == null) return placemarks;
+		if (result == null)
+			return placemarks;
 		try {
 			while (result.hasNext()) {
 
-				BindingSet set = result.next();
-				String latString = set.getBinding("lat").getValue()
-						.stringValue();
-				String longString = set.getBinding("long").getValue()
-						.stringValue();
+				QueryRow row = result.next();
+				String latString = row.getValue("lat").toString();
+				String longString = row.getValue("long").toString();
 				try {
 					latString = URLDecoder.decode(latString, "UTF-8");
 					longString = URLDecoder.decode(longString, "UTF-8");
-				}
-				catch (UnsupportedEncodingException e) {
+				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
 				double latitude = Double.parseDouble(latString.replaceAll(",",
@@ -137,8 +135,7 @@ public class ShowMapHandler extends AbstractHTMLTagHandler {
 				placemarks.add(new Placemark(null, latitude, longitude, ""));
 
 			}
-		}
-		catch (QueryEvaluationException e) {
+		} catch (ModelRuntimeException e) {
 			return null;
 		}
 		return placemarks;
@@ -147,7 +144,9 @@ public class ShowMapHandler extends AbstractHTMLTagHandler {
 	private String getJavaScript(double latitude, double longitude,
 			double zoom, String divID) {
 		String output = "";
-		output += "<script src=\"http://maps.google.com/maps?file=api&v=2&key="+apiKey+"&sensor=false\" type=\"text/javascript\"> </script>";
+		output += "<script src=\"http://maps.google.com/maps?file=api&v=2&key="
+				+ apiKey
+				+ "&sensor=false\" type=\"text/javascript\"> </script>";
 		output += "<script type=\"text/javascript\">\n";
 		output += "if (GBrowserIsCompatible()) {"
 				+ "var map = new GMap2(document.getElementById(\"" + divID

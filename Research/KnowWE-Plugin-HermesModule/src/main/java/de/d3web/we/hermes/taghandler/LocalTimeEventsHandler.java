@@ -25,14 +25,13 @@ import java.net.URLDecoder;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.TupleQueryResult;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.exception.ModelRuntimeException;
+import org.ontoware.rdf2go.model.QueryResultTable;
+import org.ontoware.rdf2go.model.QueryRow;
 
-import de.d3web.we.core.semantic.OwlHelper;
-import de.d3web.we.core.semantic.SemanticCoreDelegator;
+import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.hermes.TimeStamp;
-import de.d3web.we.hermes.util.TimeEventSPARQLUtils;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
@@ -51,21 +50,20 @@ public class LocalTimeEventsHandler extends AbstractHTMLTagHandler {
 	public String renderHTML(String topic, UserContext user,
 			Map<String, String> values, String web) {
 
-		OwlHelper helper = SemanticCoreDelegator.getInstance().getUpper().getHelper();
-
 		String yearAfter = getIntAsString(-10000, values, TIME_AFTER);
 		String querystring = null;
 		try {
-			querystring = TIME_SPARQL.replaceAll("TOPIC",
-					"<" + helper.createlocalURI(topic).toString() + ">");
-		}
-		catch (Exception e) {
+			querystring = TIME_SPARQL.replaceAll("TOPIC", "<"
+					+ Rdf2GoCore.getInstance().createlocalURI(topic).toString()
+					+ ">");
+		} catch (Exception e) {
 			return "Illegal query String: " + querystring + "<br />"
 					+ " no valid parameter for: " + TIME_AFTER;
 		}
 
-		TupleQueryResult qResult = TimeEventSPARQLUtils
-				.executeQuery(querystring);
+		QueryResultTable qResultTable = Rdf2GoCore.getInstance().sparqlSelect(
+				querystring);
+		ClosableIterator<QueryRow> qResult = qResultTable.iterator();
 
 		return KnowWEUtils.maskHTML(renderQueryResult(qResult, values));
 
@@ -75,13 +73,12 @@ public class LocalTimeEventsHandler extends AbstractHTMLTagHandler {
 			Map<String, String> valueMap, String valueFromMap) {
 		try {
 			return String.valueOf(Integer.parseInt(valueMap.get(valueFromMap)));
-		}
-		catch (NumberFormatException nfe) {
+		} catch (NumberFormatException nfe) {
 			return String.valueOf(defaultValue);
 		}
 	}
 
-	private String renderQueryResult(TupleQueryResult result,
+	private String renderQueryResult(ClosableIterator<QueryRow> result,
 			Map<String, String> params) {
 		// List<String> bindings = result.getBindingNames();
 		StringBuffer buffy = new StringBuffer();
@@ -91,24 +88,22 @@ public class LocalTimeEventsHandler extends AbstractHTMLTagHandler {
 			TreeMap<TimeStamp, String> queryResults = new TreeMap<TimeStamp, String>();
 			while (result.hasNext()) {
 				found = true;
-				BindingSet set = result.next();
+				QueryRow row = result.next();
 				try {
-					String importance = URLDecoder.decode(set.getBinding("imp")
-							.getValue().stringValue(), "UTF-8");
+					String importance = URLDecoder.decode(row.getValue("imp")
+							.toString(), "UTF-8");
 					if (importance.equals("(1)")) {
 
-						String title = URLDecoder.decode(set
-								.getBinding("title").getValue().stringValue(),
-								"UTF-8");
-						String timeString = URLDecoder.decode(set.getBinding(
-								"y").getValue().stringValue(), "UTF-8");
+						String title = URLDecoder.decode(row.getValue("title")
+								.toString(), "UTF-8");
+						String timeString = URLDecoder.decode(row.getValue("y")
+								.toString(), "UTF-8");
 						TimeStamp timeStamp = new TimeStamp(timeString);
 						String timeDescr = timeStamp.getDescription();
-						queryResults.put(timeStamp, "<li>" + timeDescr + ": " + title
-								+ "</li>");
+						queryResults.put(timeStamp, "<li>" + timeDescr + ": "
+								+ title + "</li>");
 					}
-				}
-				catch (UnsupportedEncodingException e) {
+				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
 				// Set<String> names = set.getBindingNames();
@@ -122,10 +117,10 @@ public class LocalTimeEventsHandler extends AbstractHTMLTagHandler {
 			for (String s : queryResults.values()) {
 				buffy.append(s);
 			}
-			if (!found) buffy.append("no results found");
+			if (!found)
+				buffy.append("no results found");
 			buffy.append("</ul>");
-		}
-		catch (QueryEvaluationException e) {
+		} catch (ModelRuntimeException e) {
 			return "error";
 		}
 		return buffy.toString();

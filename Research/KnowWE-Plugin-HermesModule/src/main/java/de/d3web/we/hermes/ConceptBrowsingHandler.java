@@ -23,14 +23,14 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.TupleQueryResult;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.exception.ModelRuntimeException;
+import org.ontoware.rdf2go.model.QueryRow;
 
 import de.d3web.we.core.KnowWEEnvironment;
+import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.rendering.PageAppendHandler;
 import de.d3web.we.user.UserContext;
-import de.knowwe.semantic.sparql.SPARQLUtil;
 
 /**
  * 
@@ -42,13 +42,14 @@ public class ConceptBrowsingHandler implements PageAppendHandler {
 	@Override
 	public String getDataToAppend(String topic, String web, UserContext user) {
 		String query = "SELECT ?x WHERE {?x rdf:type lns:Hermes-Object} ORDER BY ASC(?x)";
-		TupleQueryResult result = SPARQLUtil.executeTupleQuery(query);
+		
+		ClosableIterator<QueryRow> result =  Rdf2GoCore.getInstance().sparqlSelectIt(query);
 		List<String> titleList = new ArrayList<String>();
 		try {
 			while (result.hasNext()) {
-				BindingSet set = result.next();
+				QueryRow row = result.next();
 
-				String title = set.getBinding("x").getValue().stringValue();
+				String title = row.getValue("x").toString();
 
 				try {
 					title = URLDecoder.decode(title, "UTF-8");
@@ -67,8 +68,7 @@ public class ConceptBrowsingHandler implements PageAppendHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		catch (QueryEvaluationException e) {
-			// TODO Auto-generated catch block
+		catch (ModelRuntimeException e) {
 			e.printStackTrace();
 		}
 

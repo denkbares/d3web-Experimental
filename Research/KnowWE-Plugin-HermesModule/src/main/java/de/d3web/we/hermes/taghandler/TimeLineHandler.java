@@ -22,30 +22,20 @@ package de.d3web.we.hermes.taghandler;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.Set;
 
-import org.openrdf.model.Value;
-import org.openrdf.query.Binding;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.BooleanQuery;
-import org.openrdf.query.GraphQuery;
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.Query;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.QueryLanguage;
-import org.openrdf.query.TupleQuery;
-import org.openrdf.query.TupleQueryResult;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.exception.ModelRuntimeException;
+import org.ontoware.rdf2go.model.QueryResultTable;
+import org.ontoware.rdf2go.model.QueryRow;
+import org.ontoware.rdf2go.model.node.Node;
 
-import de.d3web.we.core.semantic.ISemanticCore;
-import de.d3web.we.core.semantic.SemanticCoreDelegator;
+import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.semantic.sparql.SparqlDelegateRenderer;
 
 public class TimeLineHandler extends AbstractHTMLTagHandler {
 
@@ -73,46 +63,17 @@ public class TimeLineHandler extends AbstractHTMLTagHandler {
 		String querystring = null;
 		try {
 			querystring = TIME_SPARQL.replaceAll("YEAR", yearAfter);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			return "Illegal query String: " + querystring + "<br />"
 					+ " no valid parameter for: " + TIME_AFTER;
 		}
-
-		ISemanticCore sc = SemanticCoreDelegator.getInstance();
-		RepositoryConnection con = sc.getUpper().getConnection();
-		Query query = null;
 		try {
-			query = con.prepareQuery(QueryLanguage.SPARQL,
-					SparqlDelegateRenderer.addNamespaces(querystring));
-		}
-		catch (RepositoryException e) {
-			return e.getMessage();
-		}
-		catch (MalformedQueryException e) {
-			return e.getMessage();
-		}
-		try {
-			if (query instanceof TupleQuery) {
-				TupleQueryResult result = ((TupleQuery) query).evaluate();
-				return KnowWEUtils.maskHTML(renderQueryResult(result,
-						values, asList));
-			}
-			else if (query instanceof GraphQuery) {
-				// GraphQueryResult result = ((GraphQuery) query).evaluate();
-				return "graphquery output implementation: TODO";
-			}
-			else if (query instanceof BooleanQuery) {
-				boolean result = ((BooleanQuery) query).evaluate();
-				return result + "";
-			}
-		}
-		catch (QueryEvaluationException e) {
-			return kwikiBundle.getString("KnowWE.owl.query.evaluation.error")
-					+ ":" + e.getMessage();
-		}
-		finally {
-
+			QueryResultTable result = Rdf2GoCore.getInstance().sparqlSelect(
+					querystring);
+			return KnowWEUtils.maskHTML(renderQueryResult(result, values,
+					asList));
+		} catch (ModelRuntimeException e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -121,34 +82,31 @@ public class TimeLineHandler extends AbstractHTMLTagHandler {
 			Map<String, String> valueMap, String valueFromMap) {
 		try {
 			return String.valueOf(Integer.parseInt(valueMap.get(valueFromMap)));
-		}
-		catch (NumberFormatException nfe) {
+		} catch (NumberFormatException nfe) {
 			return String.valueOf(defaultValue);
 		}
 	}
 
-	private String renderQueryResult(TupleQueryResult result,
+	private String renderQueryResult(QueryResultTable resultTable,
 			Map<String, String> params, boolean asList) {
 		// List<String> bindings = result.getBindingNames();
 		StringBuffer buffy = new StringBuffer();
+		ClosableIterator<QueryRow> result = resultTable.iterator();
 		try {
 			while (result.hasNext()) {
-				BindingSet set = result.next();
-				Set<String> names = set.getBindingNames();
+				QueryRow row = result.next();
+				List<String> names = resultTable.getVariables();
 				for (String string : names) {
-					Binding b = set.getBinding(string);
-					Value event = b.getValue();
-					buffy.append(URLDecoder.decode(event.toString(), "UTF-8")
+					Node n = row.getValue(string);
+					buffy.append(URLDecoder.decode(n.toString(), "UTF-8")
 							+ "<br>");
 				}
 
 			}
-		}
-		catch (QueryEvaluationException e) {
+		} catch (ModelRuntimeException e) {
 			return kwikiBundle.getString("KnowWE.owl.query.evalualtion.error")
 					+ ":" + e.getMessage();
-		}
-		catch (UnsupportedEncodingException e) {
+		} catch (UnsupportedEncodingException e) {
 			return e.toString();
 		}
 

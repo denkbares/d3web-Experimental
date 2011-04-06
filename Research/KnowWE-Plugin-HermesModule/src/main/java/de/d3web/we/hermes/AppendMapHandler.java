@@ -27,39 +27,42 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.TupleQueryResult;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.exception.ModelRuntimeException;
+import org.ontoware.rdf2go.model.QueryResultTable;
+import org.ontoware.rdf2go.model.QueryRow;
 
 import de.d3web.we.core.KnowWEEnvironment;
+import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.hermes.maps.Placemark;
 import de.d3web.we.hermes.taghandler.ShowMapHandler;
-import de.d3web.we.hermes.util.TimeEventSPARQLUtils;
 import de.d3web.we.kdom.rendering.PageAppendHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
 
 public class AppendMapHandler implements PageAppendHandler {
-	
+
 	private static final String group = "Editoren";
 	private static final String SPARQL_PLACE = "select ?x ?lat ?long where {?x lns:hasLatitude ?lat . ?x lns:hasLongitude ?long }";
 
 	@Override
-	public String getDataToAppend(String topic, String web,
-			UserContext user) {
-		
-		if (KnowWEEnvironment.getInstance().getWikiConnector().userIsMemberOfGroup(
-						user.getUserName(), group, user.getRequest())) {
-			
-		String content = KnowWEEnvironment.getInstance().getArticle(web, topic)
-				.getSection().getOriginalText();
+	public String getDataToAppend(String topic, String web, UserContext user) {
 
-		List<Placemark> l = getPlacemarks(content);
-		
-		if (l.size() >= 2) {
-			String map = createMap(l);
-			return KnowWEUtils.maskHTML(map);
-		}
+		if (KnowWEEnvironment
+				.getInstance()
+				.getWikiConnector()
+				.userIsMemberOfGroup(user.getUserName(), group,
+						user.getRequest())) {
+
+			String content = KnowWEEnvironment.getInstance()
+					.getArticle(web, topic).getSection().getOriginalText();
+
+			List<Placemark> l = getPlacemarks(content);
+
+			if (l.size() >= 2) {
+				String map = createMap(l);
+				return KnowWEUtils.maskHTML(map);
+			}
 		}
 		return "";
 	}
@@ -73,8 +76,9 @@ public class AppendMapHandler implements PageAppendHandler {
 		List<Placemark> l = new ArrayList<Placemark>();
 
 		// SemanticCore implementation
-		TupleQueryResult result = TimeEventSPARQLUtils
-				.executeQuery(SPARQL_PLACE);
+		QueryResultTable resultTable = Rdf2GoCore.getInstance().sparqlSelect(
+				SPARQL_PLACE);
+		ClosableIterator<QueryRow> result = resultTable.iterator();
 
 		// new implementation with rdf2go
 		// QueryResultTable resultTable =
@@ -95,7 +99,7 @@ public class AppendMapHandler implements PageAppendHandler {
 		if (!matches.isEmpty()) {
 			try {
 				while (result.hasNext()) {
-					
+
 					// new implementation with rdf2go
 					// QueryRow row = result.next();
 					// String currentPlace = row.getValue("x").toString();
@@ -113,19 +117,17 @@ public class AppendMapHandler implements PageAppendHandler {
 					// }
 
 					// use SemanticCore:
-					BindingSet set = result.next();
+					QueryRow row = result.next();
+
 					try {
 						String currentPlace = URLDecoder.decode(
-								set.getBinding("x").getValue().stringValue(),
-								"UTF-8");
+								row.getValue("x").toString(), "UTF-8");
 						System.out.println(currentPlace);
 						if (matches.contains(currentPlace
 								.substring(currentPlace.indexOf("#") + 1))) {
 							System.out.println("TREFFER");
-							String latitude = set.getBinding("lat").getValue()
-									.stringValue();
-							String longitude = set.getBinding("long")
-									.getValue().stringValue();
+							String latitude = row.getValue("lat").toString();
+							String longitude = row.getValue("long").toString();
 							latitude = latitude.replace(",", ".");
 							longitude = longitude.replace(",", ".");
 							l.add(new Placemark(currentPlace, Double
@@ -137,7 +139,7 @@ public class AppendMapHandler implements PageAppendHandler {
 					}
 
 				}
-			} catch (QueryEvaluationException e1) {
+			} catch (ModelRuntimeException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -145,7 +147,7 @@ public class AppendMapHandler implements PageAppendHandler {
 		}
 		return l;
 	}
-	
+
 	// Gibt String der Google-Maps-Karte mit allen Punkten und Flächen der
 	// aktuellen Seite
 	private static String createMap(List<Placemark> list) {
