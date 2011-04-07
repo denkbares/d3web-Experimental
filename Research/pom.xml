@@ -165,6 +165,7 @@
 		<module>d3web-ProKEt</module>
 		<module>KnowWE-Plugin-d3web-OWL</module>
 		<module>KnowWE-Plugin-WimVentRuleTable</module>
+		<module>KnowWE-Plugin-CaseTrain</module>
 	</modules>
 	<repositories>
 		<repository>
