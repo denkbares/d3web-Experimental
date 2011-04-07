@@ -63,6 +63,17 @@
 		<parameter id="css" value="defi.css" />
 	</extension>
 	
+	
+	 <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="TabMenuFakeHandler">
+        <parameter id="class" value="de.knowwe.defi.links.TabMenuFakeHandler" />
+        <parameter id="name" value="TabMenuFakeHandler" />
+        <parameter id="description" value="TagHandler TabMenuFakeHandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="css" value="defi.css" />
+    </extension>
+	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="ShowTableTagHandler">
 		<parameter id="class"
