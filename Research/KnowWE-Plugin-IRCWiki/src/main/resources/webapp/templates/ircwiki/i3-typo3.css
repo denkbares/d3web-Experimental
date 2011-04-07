@@ -1,0 +1,130 @@
+body
+{
+	background-repeat:no-repeat;
+/* 	margin:0px; */
+/* 	padding:0px; */
+	/*font-family:Verdana,Arial,Sans-Serif;*/
+	/*font-size:13px;*/
+/* 	color:black; */
+	/*min-width:0px;*/ /* important as UniWue CSS sets this to 990px!! */
+}
+
+table
+{
+	max-width: 100%;
+}
+
+#head
+{
+	background-color:#063d79;
+	background-image:url(images/UniWueBG.png);
+}
+
+#menu_links a.current,
+#menu_links a.current:link,
+#menu_links a.current:visited
+{
+	background-color:#063d79;
+	color:#ffffff;
+}
+
+#mainnav
+{
+	background-color:#696969;
+}
+
+#mainnav a:active,
+#mainnav a:hover,
+#mainnav a.active,
+#mainnav a.active:link,
+#mainnav a.current,
+#mainnav a.current:link,
+#mainnav a.current:visited
+{
+	background-color:#063d79;
+	color:#ffffff;
+}
+
+img.header-title,
+img.header-main,
+div.address
+{
+	position: absolute;
+	visibility:hidden; /* collapse does not work with IE here */
+	height:0px;
+	width:0px;
+}
+
+div.header-vorl
+{
+/* 	position:absolute; */
+/* 	top:16px; */
+/* 	left:150px; */
+/* 	width:700px; */
+}
+
+div.reminder
+{
+	border:1px dashed red;
+	margin-bottom:30px;
+	padding:5px;
+}
+
+div.mainpart,
+div.mainpart-staff,
+div.mainpart-titleonly,
+div.mainpart-noheader
+{
+/*	position:relative;*/
+/* 	float:left; */
+/* 	margin-left: 0px; */
+/* 	margin-top:0px; */
+/* 	top:0px; */
+/* 	left:260px; */
+/* 	text-align:justify; */
+}
+
+tr.bright
+{
+	background-color:#ebf5ff;
+}
+
+tr.dark
+{
+	background-color:#89a7d6;
+/*	background-color: #063d79;
+	color: white;*/
+}
+
+div.loginstatus
+{
+	position: absolute;
+	top: 50px;
+	right: 10px;
+	color: white;
+	font-size: 0.91em;
+}
+
+div.header-research
+{
+/* 	position: relative; */
+}
+
+div.research-group
+{
+	position: relative;
+}
+
+div.research-title
+{
+	position: relative;
+	font-weight: bold;
+}
+
+div.research-member
+{
+	position: relative;
+	top: -1em;
+	left: 130px;
+}
+
