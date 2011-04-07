@@ -41,13 +41,9 @@ public class TimeStamp implements Comparable<TimeStamp> {
 			// ok, that is not that nice, but that was the initial agreement
 			// with
 			// historians...
-			if ((startPoint.getInterpretableTime() > endPoint
-					.getInterpretableTime())
-					&& (startPoint.getInterpretableTime() * (-1) < endPoint
-							.getInterpretableTime())) {
-				startPoint.setInterpretableTime(startPoint
-						.getInterpretableTime()
-						* (-1));
+			if ((startPoint.getInterpretableTime() > endPoint.getInterpretableTime())
+					&& (startPoint.getInterpretableTime() * (-1) < endPoint.getInterpretableTime())) {
+				startPoint.setInterpretableTime(startPoint.getInterpretableTime() * (-1));
 			}
 		}
 		else {

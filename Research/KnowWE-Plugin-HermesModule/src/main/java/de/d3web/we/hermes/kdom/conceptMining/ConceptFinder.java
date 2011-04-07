@@ -61,8 +61,7 @@ public abstract class ConceptFinder implements SectionFinder {
 		for (String objectName : objectNames) {
 			int index = text.indexOf(objectName);
 
-			if (index == -1)
-				continue;
+			if (index == -1) continue;
 
 			result.add(new SectionFinderResult(index, index
 					+ objectName.length()));
@@ -79,8 +78,7 @@ public abstract class ConceptFinder implements SectionFinder {
 		for (String clazz : classes) {
 			String query = INSTANCE_SPARQL.replace("CLASS", clazz);
 
-			QueryResultTable resultTable = Rdf2GoCore.getInstance()
-					.sparqlSelect(query);
+			QueryResultTable resultTable = Rdf2GoCore.getInstance().sparqlSelect(query);
 			ClosableIterator<QueryRow> result = resultTable.iterator();
 
 			try {
@@ -91,7 +89,8 @@ public abstract class ConceptFinder implements SectionFinder {
 
 					try {
 						name = URLDecoder.decode(name, "UTF-8");
-					} catch (UnsupportedEncodingException e) {
+					}
+					catch (UnsupportedEncodingException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
@@ -99,7 +98,8 @@ public abstract class ConceptFinder implements SectionFinder {
 					objectNames.add(name.substring(name.lastIndexOf("#") + 1));
 
 				}
-			} catch (ModelRuntimeException e) {
+			}
+			catch (ModelRuntimeException e) {
 				// moo
 				e.printStackTrace();
 			}

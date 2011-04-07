@@ -43,19 +43,15 @@ public class LocationDefinitionType extends AbstractType {
 
 	@Override
 	protected void init() {
-		sectionFinder = new RegexSectionFinder(START_TAG + "[\\w|\\W]*?"
-				+ END_TAG);
-		this.setCustomRenderer(new EditSectionRenderer(LocationRenderer
-				.getInstance()));
+		sectionFinder = new RegexSectionFinder(START_TAG + "[\\w|\\W]*?" + END_TAG);
+		this.setCustomRenderer(new EditSectionRenderer(LocationRenderer.getInstance()));
 		this.addSubtreeHandler(new LocationDefinitionTypeOWLSubTreeHandler());
 	}
 
-	private class LocationDefinitionTypeOWLSubTreeHandler extends
-			RDF2GoSubtreeHandler<LocationDefinitionType> {
+	private class LocationDefinitionTypeOWLSubTreeHandler extends RDF2GoSubtreeHandler<LocationDefinitionType> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article,
-				Section<LocationDefinitionType> s) {
+		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<LocationDefinitionType> s) {
 			ArrayList<Statement> ioo = new ArrayList<Statement>();
 			Placemark placem = extractPlacemark(s);
 			MapType.addPlacemarkToOwlObject(placem, ioo);
@@ -65,8 +61,7 @@ public class LocationDefinitionType extends AbstractType {
 
 	}
 
-	private static Placemark extractPlacemark(
-			Section<LocationDefinitionType> section) {
+	private static Placemark extractPlacemark(Section<LocationDefinitionType> section) {
 		String sectionText = section.getOriginalText();
 		sectionText = sectionText.substring(START_TAG.length(),
 				sectionText.length() - END_TAG.length());
@@ -86,7 +81,8 @@ public class LocationDefinitionType extends AbstractType {
 			try {
 				latitude = Double.parseDouble(splittedSecText[0]);
 				longitude = Double.parseDouble(splittedSecText[1]);
-			} catch (NumberFormatException e) {
+			}
+			catch (NumberFormatException e) {
 				return null;
 			}
 		}
@@ -95,7 +91,8 @@ public class LocationDefinitionType extends AbstractType {
 			try {
 				latitude = Double.parseDouble(splittedSecText[1]);
 				longitude = Double.parseDouble(splittedSecText[2]);
-			} catch (NumberFormatException e) {
+			}
+			catch (NumberFormatException e) {
 				return null;
 			}
 			if (splittedSecText.length == 4) {
@@ -110,8 +107,7 @@ public class LocationDefinitionType extends AbstractType {
 		return new Placemark(locationName, latitude, longitude, description);
 	}
 
-	public static class LocationRenderer extends
-			KnowWEDomRenderer<LocationDefinitionType> {
+	public static class LocationRenderer extends KnowWEDomRenderer<LocationDefinitionType> {
 
 		private static LocationRenderer instance;
 
@@ -123,16 +119,14 @@ public class LocationDefinitionType extends AbstractType {
 		}
 
 		@Override
-		public void render(KnowWEArticle article,
-				Section<LocationDefinitionType> sec, UserContext user,
-				StringBuilder string) {
+		public void render(KnowWEArticle article, Section<LocationDefinitionType> sec, UserContext user, StringBuilder string) {
 			String originalText = sec.getOriginalText();
 			Placemark extractPlacemark = extractPlacemark(sec);
 			if (extractPlacemark == null) {
-				string.append(KnowWEUtils
-						.maskHTML("<span class='error' title='invalid syntax'>")
+				string.append(KnowWEUtils.maskHTML("<span class='error' title='invalid syntax'>")
 						+ originalText + KnowWEUtils.maskHTML("</span>"));
-			} else {
+			}
+			else {
 				String htmlString = extractPlacemark.toHTMLString();
 				string.append(KnowWEUtils.maskHTML(htmlString));
 			}

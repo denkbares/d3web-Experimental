@@ -57,12 +57,10 @@ public class MapType extends AbstractXMLType {
 		return childrenTypes;
 	}
 
-	private class MapTypeOWLSubTreeHandler extends
-			RDF2GoSubtreeHandler<MapType> {
+	private class MapTypeOWLSubTreeHandler extends RDF2GoSubtreeHandler<MapType> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article,
-				Section<MapType> s) {
+		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<MapType> s) {
 			List<Statement> ioo = new ArrayList<Statement>();
 			String url = getIFrameSrcURL(s);
 			KMLLoader kmlLoader = new KMLLoader(url);
@@ -84,17 +82,14 @@ public class MapType extends AbstractXMLType {
 			// System.out.println("warning");
 			return null;
 		}
-		Map<String, String> attributeMap = AbstractXMLType
-				.getAttributeMapFor(iframeSection);
+		Map<String, String> attributeMap = AbstractXMLType.getAttributeMapFor(iframeSection);
 		String url = attributeMap.get("src");
 		return url;
 	}
 
-	public static void addPlacemarkToOwlObject(Placemark placem,
-			List<Statement> ioo) {
+	public static void addPlacemarkToOwlObject(Placemark placem, List<Statement> ioo) {
 
-		URI conceptURI = Rdf2GoCore.getInstance().createlocalURI(
-				placem.getTitle());
+		URI conceptURI = Rdf2GoCore.getInstance().createlocalURI(placem.getTitle());
 
 		Literal latitude = Rdf2GoCore.getInstance().createLiteral(
 				format.format(placem.getLatitude()));
@@ -105,11 +100,9 @@ public class MapType extends AbstractXMLType {
 		// try {
 		ArrayList<Statement> slist = new ArrayList<Statement>();
 		slist.add(Rdf2GoCore.getInstance().createStatement(conceptURI,
-				Rdf2GoCore.getInstance().createlocalURI("hasLatitude"),
-				latitude));
+				Rdf2GoCore.getInstance().createlocalURI("hasLatitude"), latitude));
 		slist.add(Rdf2GoCore.getInstance().createStatement(conceptURI,
-				Rdf2GoCore.getInstance().createlocalURI("hasLongitude"),
-				longitude));
+				Rdf2GoCore.getInstance().createlocalURI("hasLongitude"), longitude));
 		ioo.addAll(slist);
 		// }
 		// catch (Repository e) {
@@ -121,8 +114,7 @@ public class MapType extends AbstractXMLType {
 	private class MapRenderer extends KnowWEDomRenderer<MapType> {
 
 		@Override
-		public void render(KnowWEArticle article, Section<MapType> sec,
-				UserContext user, StringBuilder string) {
+		public void render(KnowWEArticle article, Section<MapType> sec, UserContext user, StringBuilder string) {
 			string.append("<div id=\"map\" class=\"panel\">");
 			string.append("<h3>Karte</h3>");
 			String originalText = sec.getOriginalText();

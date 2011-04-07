@@ -67,28 +67,27 @@ public class TimeLineEventRenderer {
 		// +"&highlight="+encodedKDOMID
 		// +"#"+encodedKDOMID
 
-		sb
-				.append("<h3 "
-						+ styleTag
-						+ "><i>"
-						+ te.getTime().getDescription()
-						+ "</i> - "
-						+ te.getTitle()
-						+ " <a class=\"wikipage\" href=\"Wiki.jsp?page="
-						+ te.getTopic()
-						+ "&highlight="
-						+ encodedKDOMID
-						+ "#"
-						+ encodedKDOMID
-						+ "\"><img src=\"./KnowWEExtension/images/hermes/page_go.png\" alt=\"Zum Wiki\" title=\"Zum Wiki\"/></a>"
-						+ " <a class=\"wikipage\" href=\"Wiki.jsp?page="
-						+ te.getTopic()
-						+ "&edit="
-						+ encodedKDOMID
-						+ "#"
-						+ encodedKDOMID
-						+ "\"><img src=\"./KnowWEExtension/images/hermes/page_edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\"/></a>"
-						+ "</h3>");
+		sb.append("<h3 "
+				+ styleTag
+				+ "><i>"
+				+ te.getTime().getDescription()
+				+ "</i> - "
+				+ te.getTitle()
+				+ " <a class=\"wikipage\" href=\"Wiki.jsp?page="
+				+ te.getTopic()
+				+ "&highlight="
+				+ encodedKDOMID
+				+ "#"
+				+ encodedKDOMID
+				+ "\"><img src=\"./KnowWEExtension/images/hermes/page_go.png\" alt=\"Zum Wiki\" title=\"Zum Wiki\"/></a>"
+				+ " <a class=\"wikipage\" href=\"Wiki.jsp?page="
+				+ te.getTopic()
+				+ "&edit="
+				+ encodedKDOMID
+				+ "#"
+				+ encodedKDOMID
+				+ "\"><img src=\"./KnowWEExtension/images/hermes/page_edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\"/></a>"
+				+ "</h3>");
 
 		sb.append("\n<div>" + te.getDescription() + "<br>");
 		List<String> sources = te.getSources();

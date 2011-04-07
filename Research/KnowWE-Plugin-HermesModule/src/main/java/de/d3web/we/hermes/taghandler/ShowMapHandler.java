@@ -49,8 +49,7 @@ public class ShowMapHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user,
-			Map<String, String> values, String web) {
+	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
 		double latitude = 0;
 		double longitude = 0;
 		double zoom = 5;
@@ -58,21 +57,24 @@ public class ShowMapHandler extends AbstractHTMLTagHandler {
 		if (values.containsKey("longitude")) {
 			try {
 				longitude = Double.parseDouble(values.get("longitude"));
-			} catch (NumberFormatException nfe) {
+			}
+			catch (NumberFormatException nfe) {
 				// do nothing
 			}
 		}
 		if (values.containsKey("latitude")) {
 			try {
 				latitude = Double.parseDouble(values.get("latitude"));
-			} catch (NumberFormatException nfe) {
+			}
+			catch (NumberFormatException nfe) {
 				// do nothing
 			}
 		}
 		if (values.containsKey("zoom")) {
 			try {
 				zoom = Double.parseDouble(values.get("zoom"));
-			} catch (NumberFormatException nfe) {
+			}
+			catch (NumberFormatException nfe) {
 				// do nothing
 			}
 		}
@@ -82,14 +84,10 @@ public class ShowMapHandler extends AbstractHTMLTagHandler {
 			if (values.containsKey("concept")) {
 				concept = values.get("concept");
 			}
-			String querystring = LOCATIONS_FOR_TOPIC
-					.replaceAll("URI",
-							Rdf2GoCore.getInstance().createlocalURI(concept)
-									.toString());
-			QueryResultTable queryResultTable = Rdf2GoCore.getInstance()
-					.sparqlSelect(querystring);
-			ClosableIterator<QueryRow> queryResult = queryResultTable
-					.iterator();
+			String querystring = LOCATIONS_FOR_TOPIC.replaceAll("URI",
+					Rdf2GoCore.getInstance().createlocalURI(concept).toString());
+			QueryResultTable queryResultTable = Rdf2GoCore.getInstance().sparqlSelect(querystring);
+			ClosableIterator<QueryRow> queryResult = queryResultTable.iterator();
 			Collection<? extends Placemark> placemark = buildPlacemarksForLocation(queryResult);
 			if (placemark != null && placemark.size() > 0) {
 				Placemark p = placemark.iterator().next();
@@ -110,11 +108,9 @@ public class ShowMapHandler extends AbstractHTMLTagHandler {
 		return output;
 	}
 
-	private static Collection<? extends Placemark> buildPlacemarksForLocation(
-			ClosableIterator<QueryRow> result) {
+	private static Collection<? extends Placemark> buildPlacemarksForLocation(ClosableIterator<QueryRow> result) {
 		List<Placemark> placemarks = new ArrayList<Placemark>();
-		if (result == null)
-			return placemarks;
+		if (result == null) return placemarks;
 		try {
 			while (result.hasNext()) {
 
@@ -124,36 +120,33 @@ public class ShowMapHandler extends AbstractHTMLTagHandler {
 				try {
 					latString = URLDecoder.decode(latString, "UTF-8");
 					longString = URLDecoder.decode(longString, "UTF-8");
-				} catch (UnsupportedEncodingException e) {
+				}
+				catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
-				double latitude = Double.parseDouble(latString.replaceAll(",",
-						"."));
-				double longitude = Double.parseDouble(longString.replaceAll(
-						",", "."));
+				double latitude = Double.parseDouble(latString.replaceAll(",", "."));
+				double longitude = Double.parseDouble(longString.replaceAll(",", "."));
 
 				placemarks.add(new Placemark(null, latitude, longitude, ""));
 
 			}
-		} catch (ModelRuntimeException e) {
+		}
+		catch (ModelRuntimeException e) {
 			return null;
 		}
 		return placemarks;
 	}
 
-	private String getJavaScript(double latitude, double longitude,
-			double zoom, String divID) {
+	private String getJavaScript(double latitude, double longitude, double zoom, String divID) {
 		String output = "";
-		output += "<script src=\"http://maps.google.com/maps?file=api&v=2&key="
-				+ apiKey
+		output += "<script src=\"http://maps.google.com/maps?file=api&v=2&key=" + apiKey
 				+ "&sensor=false\" type=\"text/javascript\"> </script>";
 		output += "<script type=\"text/javascript\">\n";
 		output += "if (GBrowserIsCompatible()) {"
 				+ "var map = new GMap2(document.getElementById(\"" + divID
 				+ "\"));" + "map.setCenter(new GLatLng(" + latitude + ","
 				+ longitude + ")," + zoom + ");" + "}";
-		output += "var point = new GLatLng(" + latitude + ", " + longitude
-				+ ");";
+		output += "var point = new GLatLng(" + latitude + ", " + longitude + ");";
 		output += "map.addOverlay(new GMarker(point));";
 		output += "</script>";
 		return output;
@@ -171,8 +164,7 @@ public class ShowMapHandler extends AbstractHTMLTagHandler {
 			String latitude = Double.toString(p.getLatitude());
 			String longitude = Double.toString(p.getLongitude());
 
-			output += "var point = new GLatLng(" + latitude + ", " + longitude
-					+ ");";
+			output += "var point = new GLatLng(" + latitude + ", " + longitude + ");";
 			output += "map.addOverlay(new GMarker(point));";
 		}
 		output += "</script>";

@@ -24,8 +24,7 @@ import de.d3web.we.kdom.report.KDOMReportMessage;
 public class TimeEventOWLCompiler extends RDF2GoSubtreeHandler<TimeEventNew> {
 
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article,
-			Section<TimeEventNew> s) {
+	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TimeEventNew> s) {
 
 		TimeEvent event = TimeEventNew.createTimeEvent(s);
 		if (s.hasErrorInSubtree(article) || event == null) {
@@ -40,8 +39,7 @@ public class TimeEventOWLCompiler extends RDF2GoSubtreeHandler<TimeEventNew> {
 			String localID = s.getTitle() + "_" + s.getID();
 			URI localURI = Rdf2GoCore.getInstance().createlocalURI(localID);
 
-			URI timeEventURI = Rdf2GoCore.getInstance().createlocalURI(
-					"Ereignis");
+			URI timeEventURI = Rdf2GoCore.getInstance().createlocalURI("Ereignis");
 
 			// Putting the TimeEventURI in a context, so it can be found by
 			// subtypes
@@ -61,32 +59,24 @@ public class TimeEventOWLCompiler extends RDF2GoSubtreeHandler<TimeEventNew> {
 			// handle description
 			String description = event.getDescription();
 			if (description != null) {
-				Literal descriptionURI = Rdf2GoCore.getInstance()
-						.createLiteral(description);
-				slist.add(Rdf2GoCore.getInstance().createStatement(
-						localURI,
-						Rdf2GoCore.getInstance().createlocalURI(
-								"hasDescription"), descriptionURI));
+				Literal descriptionURI = Rdf2GoCore.getInstance().createLiteral(description);
+				slist.add(Rdf2GoCore.getInstance().createStatement(localURI,
+						Rdf2GoCore.getInstance().createlocalURI("hasDescription"), descriptionURI));
 			}
 
 			// handle title
 			String title = event.getTitle();
 			Literal titleURI = Rdf2GoCore.getInstance().createLiteral(title);
 			slist.add(Rdf2GoCore.getInstance().createStatement(localURI,
-					Rdf2GoCore.getInstance().createlocalURI("hasTitle"),
-					titleURI));
+					Rdf2GoCore.getInstance().createlocalURI("hasTitle"), titleURI));
 
 			// handle importance
 			Integer importance = event.getImportance();
 			if (importance != null) {
-				Literal importanceURI = Rdf2GoCore
-						.getInstance()
-						.createDatatypeLiteral(importance.toString(), "xsd:int");
-				slist.add(Rdf2GoCore.getInstance()
-						.createStatement(
-								localURI,
-								Rdf2GoCore.getInstance().createlocalURI(
-										"hasImportance"), importanceURI));
+				Literal importanceURI = Rdf2GoCore.getInstance().createDatatypeLiteral(
+						importance.toString(), "xsd:int");
+				slist.add(Rdf2GoCore.getInstance().createStatement(localURI,
+						Rdf2GoCore.getInstance().createlocalURI("hasImportance"), importanceURI));
 			}
 
 			// handle sources
@@ -97,15 +87,14 @@ public class TimeEventOWLCompiler extends RDF2GoSubtreeHandler<TimeEventNew> {
 			}
 			for (Literal sURI : sourceURIs) {
 				slist.add(Rdf2GoCore.getInstance().createStatement(localURI,
-						Rdf2GoCore.getInstance().createlocalURI("hasSource"),
-						sURI));
+						Rdf2GoCore.getInstance().createlocalURI("hasSource"), sURI));
 			}
 
-			io.add(Rdf2GoCore.getInstance().createStatement(localURI, RDF.type,
-					timeEventURI));
+			io.add(Rdf2GoCore.getInstance().createStatement(localURI, RDF.type, timeEventURI));
 			io.addAll(slist);
 
-		} catch (ModelRuntimeException e) {
+		}
+		catch (ModelRuntimeException e) {
 			e.printStackTrace();
 		}
 
@@ -113,37 +102,28 @@ public class TimeEventOWLCompiler extends RDF2GoSubtreeHandler<TimeEventNew> {
 		return new ArrayList<KDOMReportMessage>(0);
 	}
 
-	private void createDateTripels(TimeStamp timeStamp,
-			ArrayList<Statement> slist, URI localURI)
-			throws ModelRuntimeException {
+	private void createDateTripels(TimeStamp timeStamp, ArrayList<Statement> slist, URI localURI) throws ModelRuntimeException {
 		if (timeStamp != null) {
-			Literal dateText = Rdf2GoCore.getInstance().createLiteral(
-					timeStamp.getEncodedString());
+			Literal dateText = Rdf2GoCore.getInstance().createLiteral(timeStamp.getEncodedString());
 
 			Literal dateStart = Rdf2GoCore.getInstance().createDatatypeLiteral(
-					timeStamp.getStartPoint().getInterpretableTime() + "",
-					"xsd:double");
+					timeStamp.getStartPoint().getInterpretableTime() + "", "xsd:double");
 
 			Literal dateEnd = null;
 			if (timeStamp.getEndPoint() != null) {
 
 				dateEnd = Rdf2GoCore.getInstance().createDatatypeLiteral(
-						timeStamp.getEndPoint().getInterpretableTime() + "",
-						"xsd:double");
+						timeStamp.getEndPoint().getInterpretableTime() + "", "xsd:double");
 			}
 
 			slist.add(Rdf2GoCore.getInstance().createStatement(localURI,
-					Rdf2GoCore.getInstance().createlocalURI("hasStartDate"),
-					dateStart));
+					Rdf2GoCore.getInstance().createlocalURI("hasStartDate"), dateStart));
 			if (dateEnd != null) {
 				slist.add(Rdf2GoCore.getInstance().createStatement(localURI,
-						Rdf2GoCore.getInstance().createlocalURI("hasEndDate"),
-						dateEnd));
+						Rdf2GoCore.getInstance().createlocalURI("hasEndDate"), dateEnd));
 			}
-			slist.add(Rdf2GoCore.getInstance().createStatement(
-					localURI,
-					Rdf2GoCore.getInstance().createlocalURI(
-							"hasDateDescription"), dateText));
+			slist.add(Rdf2GoCore.getInstance().createStatement(localURI,
+					Rdf2GoCore.getInstance().createlocalURI("hasDateDescription"), dateText));
 		}
 	}
 

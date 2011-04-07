@@ -47,39 +47,36 @@ public class LocalTimeEventsHandler extends AbstractHTMLTagHandler {
 
 	// ?t lns:isDefinedBy ?to . ?to lns:hasTopic TOPIC .
 	@Override
-	public String renderHTML(String topic, UserContext user,
-			Map<String, String> values, String web) {
+	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
 
 		String yearAfter = getIntAsString(-10000, values, TIME_AFTER);
 		String querystring = null;
 		try {
 			querystring = TIME_SPARQL.replaceAll("TOPIC", "<"
-					+ Rdf2GoCore.getInstance().createlocalURI(topic).toString()
-					+ ">");
-		} catch (Exception e) {
-			return "Illegal query String: " + querystring + "<br />"
-					+ " no valid parameter for: " + TIME_AFTER;
+					+ Rdf2GoCore.getInstance().createlocalURI(topic).toString() + ">");
+		}
+		catch (Exception e) {
+			return "Illegal query String: " + querystring + "<br />" + " no valid parameter for: "
+					+ TIME_AFTER;
 		}
 
-		QueryResultTable qResultTable = Rdf2GoCore.getInstance().sparqlSelect(
-				querystring);
+		QueryResultTable qResultTable = Rdf2GoCore.getInstance().sparqlSelect(querystring);
 		ClosableIterator<QueryRow> qResult = qResultTable.iterator();
 
 		return KnowWEUtils.maskHTML(renderQueryResult(qResult, values));
 
 	}
 
-	private String getIntAsString(int defaultValue,
-			Map<String, String> valueMap, String valueFromMap) {
+	private String getIntAsString(int defaultValue, Map<String, String> valueMap, String valueFromMap) {
 		try {
 			return String.valueOf(Integer.parseInt(valueMap.get(valueFromMap)));
-		} catch (NumberFormatException nfe) {
+		}
+		catch (NumberFormatException nfe) {
 			return String.valueOf(defaultValue);
 		}
 	}
 
-	private String renderQueryResult(ClosableIterator<QueryRow> result,
-			Map<String, String> params) {
+	private String renderQueryResult(ClosableIterator<QueryRow> result, Map<String, String> params) {
 		// List<String> bindings = result.getBindingNames();
 		StringBuffer buffy = new StringBuffer();
 		try {
@@ -90,20 +87,17 @@ public class LocalTimeEventsHandler extends AbstractHTMLTagHandler {
 				found = true;
 				QueryRow row = result.next();
 				try {
-					String importance = URLDecoder.decode(row.getValue("imp")
-							.toString(), "UTF-8");
+					String importance = URLDecoder.decode(row.getValue("imp").toString(), "UTF-8");
 					if (importance.equals("(1)")) {
 
-						String title = URLDecoder.decode(row.getValue("title")
-								.toString(), "UTF-8");
-						String timeString = URLDecoder.decode(row.getValue("y")
-								.toString(), "UTF-8");
+						String title = URLDecoder.decode(row.getValue("title").toString(), "UTF-8");
+						String timeString = URLDecoder.decode(row.getValue("y").toString(), "UTF-8");
 						TimeStamp timeStamp = new TimeStamp(timeString);
 						String timeDescr = timeStamp.getDescription();
-						queryResults.put(timeStamp, "<li>" + timeDescr + ": "
-								+ title + "</li>");
+						queryResults.put(timeStamp, "<li>" + timeDescr + ": " + title + "</li>");
 					}
-				} catch (UnsupportedEncodingException e) {
+				}
+				catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
 				// Set<String> names = set.getBindingNames();
@@ -117,10 +111,10 @@ public class LocalTimeEventsHandler extends AbstractHTMLTagHandler {
 			for (String s : queryResults.values()) {
 				buffy.append(s);
 			}
-			if (!found)
-				buffy.append("no results found");
+			if (!found) buffy.append("no results found");
 			buffy.append("</ul>");
-		} catch (ModelRuntimeException e) {
+		}
+		catch (ModelRuntimeException e) {
 			return "error";
 		}
 		return buffy.toString();

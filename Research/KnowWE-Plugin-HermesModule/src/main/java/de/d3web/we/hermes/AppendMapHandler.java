@@ -48,14 +48,10 @@ public class AppendMapHandler implements PageAppendHandler {
 	@Override
 	public String getDataToAppend(String topic, String web, UserContext user) {
 
-		if (KnowWEEnvironment
-				.getInstance()
-				.getWikiConnector()
-				.userIsMemberOfGroup(user.getUserName(), group,
-						user.getRequest())) {
+		if (KnowWEEnvironment.getInstance().getWikiConnector().userIsMemberOfGroup(
+				user.getUserName(), group, user.getRequest())) {
 
-			String content = KnowWEEnvironment.getInstance()
-					.getArticle(web, topic).getSection().getOriginalText();
+			String content = KnowWEEnvironment.getInstance().getArticle(web, topic).getSection().getOriginalText();
 
 			List<Placemark> l = getPlacemarks(content);
 
@@ -75,15 +71,8 @@ public class AppendMapHandler implements PageAppendHandler {
 	private static List<Placemark> getPlacemarks(String content) {
 		List<Placemark> l = new ArrayList<Placemark>();
 
-		// SemanticCore implementation
-		QueryResultTable resultTable = Rdf2GoCore.getInstance().sparqlSelect(
-				SPARQL_PLACE);
+		QueryResultTable resultTable = Rdf2GoCore.getInstance().sparqlSelect(SPARQL_PLACE);
 		ClosableIterator<QueryRow> result = resultTable.iterator();
-
-		// new implementation with rdf2go
-		// QueryResultTable resultTable =
-		// SPARQLUtil.executeTupleQuery(SPARQL_PLACE);
-		// ClosableIterator<QueryRow> result = resultTable.iterator();
 
 		Pattern pattern = Pattern.compile("\\[[^\\{\\[\\]]+\\]");
 		Matcher matcher = pattern.matcher(content);
@@ -120,26 +109,26 @@ public class AppendMapHandler implements PageAppendHandler {
 					QueryRow row = result.next();
 
 					try {
-						String currentPlace = URLDecoder.decode(
-								row.getValue("x").toString(), "UTF-8");
+						String currentPlace = URLDecoder.decode(row.getValue("x").toString(),
+								"UTF-8");
 						System.out.println(currentPlace);
-						if (matches.contains(currentPlace
-								.substring(currentPlace.indexOf("#") + 1))) {
+						if (matches.contains(currentPlace.substring(currentPlace.indexOf("#") + 1))) {
 							System.out.println("TREFFER");
 							String latitude = row.getValue("lat").toString();
 							String longitude = row.getValue("long").toString();
 							latitude = latitude.replace(",", ".");
 							longitude = longitude.replace(",", ".");
-							l.add(new Placemark(currentPlace, Double
-									.parseDouble(latitude), Double
-									.parseDouble(longitude)));
+							l.add(new Placemark(currentPlace, Double.parseDouble(latitude),
+									Double.parseDouble(longitude)));
 						}
-					} catch (UnsupportedEncodingException e) {
+					}
+					catch (UnsupportedEncodingException e) {
 						e.printStackTrace();
 					}
 
 				}
-			} catch (ModelRuntimeException e1) {
+			}
+			catch (ModelRuntimeException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -161,8 +150,8 @@ public class AppendMapHandler implements PageAppendHandler {
 
 			for (Placemark p : list) {
 				result += "var marker_"
-						+ p.getTitle().replaceAll("[äÄöÖüÜ]", "_")
-								.substring(p.getTitle().indexOf("#") + 1)
+						+ p.getTitle().replaceAll("[äÄöÖüÜ]", "_").substring(
+								p.getTitle().indexOf("#") + 1)
 						+ " = new GMarker(new GLatLng(" + p.getLatitude() + ","
 						+ p.getLongitude() + "));\r\n";
 			}
@@ -174,18 +163,17 @@ public class AppendMapHandler implements PageAppendHandler {
 					+ "var bounds = new GLatLngBounds();";
 
 			for (Placemark p : list) {
-				String title = p.getTitle().replaceAll("[äÄöÖüÜ]", "_")
-						.substring(p.getTitle().indexOf("#") + 1);
+				String title = p.getTitle().replaceAll("[äÄöÖüÜ]", "_").substring(
+						p.getTitle().indexOf("#") + 1);
 
-				String bubble = "<b>" + "<a href='Wiki.jsp?page=" + title
-						+ "'>" + title + "</a></b>";
+				String bubble = "<b>" + "<a href='Wiki.jsp?page=" + title + "'>" + title
+						+ "</a></b>";
 				if (p.getDescription() != null) {
-					bubble += "<br/>"
-							+ p.getDescription().replaceAll("\r\n", "<br/>");
+					bubble += "<br/>" + p.getDescription().replaceAll("\r\n", "<br/>");
 				}
 				result += "\r\n" + "map.addOverlay(marker_" + title + ");\r\n"
-						+ "GEvent.addListener(marker_" + title
-						+ ", 'click', function() {marker_" + title
+						+ "GEvent.addListener(marker_" + title + ", 'click', function() {marker_"
+						+ title
 						+ ".openInfoWindowHtml(\"" + bubble + "\");});\r\n"
 						+ "bounds.extend(new GLatLng(" + p.getLatitude() + ","
 						+ p.getLongitude() + "));";

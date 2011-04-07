@@ -43,8 +43,7 @@ public class TimeEvent implements Comparable<TimeEvent> {
 
 	private TimeStamp time;
 
-	public TimeEvent(String title, String description, Integer imp,
-			List<String> sources, String time, String textOriginNode, String topic) {
+	public TimeEvent(String title, String description, Integer imp, List<String> sources, String time, String textOriginNode, String topic) {
 		this.title = title;
 		this.description = description;
 		this.sources = sources;
@@ -161,5 +160,5 @@ public class TimeEvent implements Comparable<TimeEvent> {
 		else if (!topic.equals(other.topic)) return false;
 		return true;
 	}
-	
+
 }

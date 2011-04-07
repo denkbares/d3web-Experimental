@@ -57,13 +57,10 @@ public class TimeEventSPARQLUtils {
 
 		String querystring = null;
 
-		querystring = TIME_SPARQL.replaceAll("YEARFROM",
-				Integer.toString(yearFrom));
-		querystring = querystring
-				.replaceAll("YEARTO", Integer.toString(yearTo));
+		querystring = TIME_SPARQL.replaceAll("YEARFROM", Integer.toString(yearFrom));
+		querystring = querystring.replaceAll("YEARTO", Integer.toString(yearTo));
 
-		QueryResultTable result = Rdf2GoCore.getInstance().sparqlSelect(
-				querystring);
+		QueryResultTable result = Rdf2GoCore.getInstance().sparqlSelect(querystring);
 		return buildTimeEvents(result);
 	}
 
@@ -72,11 +69,9 @@ public class TimeEventSPARQLUtils {
 
 		String querystring = null;
 
-		querystring = CONCEPT_SPARQL
-				.replaceAll("CONCEPT", "lns:" + conceptName);
+		querystring = CONCEPT_SPARQL.replaceAll("CONCEPT", "lns:" + conceptName);
 
-		QueryResultTable result = Rdf2GoCore.getInstance().sparqlSelect(
-				querystring);
+		QueryResultTable result = Rdf2GoCore.getInstance().sparqlSelect(querystring);
 		return buildTimeEvents(result);
 	}
 
@@ -108,9 +103,8 @@ public class TimeEventSPARQLUtils {
 				Set<String> sources = new HashSet<String>();
 
 				String query = SOURCE_SPARQL.replace("*URI*", tURI);
-				ClosableIterator<QueryRow> sourcesResult = Rdf2GoCore
-						.getInstance().sparqlSelectIt(
-								query.replaceAll("TITLE", title));
+				ClosableIterator<QueryRow> sourcesResult = Rdf2GoCore.getInstance().sparqlSelectIt(
+						query.replaceAll("TITLE", title));
 
 				while (sourcesResult.hasNext()) {
 					// for some reason every source appears twice in this loop
@@ -120,7 +114,8 @@ public class TimeEventSPARQLUtils {
 					String aSource = row2.getValue("source").toString();
 					try {
 						aSource = URLDecoder.decode(aSource, "UTF-8");
-					} catch (UnsupportedEncodingException e) {
+					}
+					catch (UnsupportedEncodingException e) {
 						e.printStackTrace();
 					}
 					if (aSource != null) {
@@ -135,7 +130,8 @@ public class TimeEventSPARQLUtils {
 					desc = URLDecoder.decode(desc, "UTF-8");
 					topic = URLDecoder.decode(topic, "UTF-8");
 					kdomid = URLDecoder.decode(kdomid, "UTF-8");
-				} catch (UnsupportedEncodingException e) {
+				}
+				catch (UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -149,7 +145,8 @@ public class TimeEventSPARQLUtils {
 
 				try {
 					parseInt = Integer.parseInt(imp);
-				} catch (NumberFormatException e) {
+				}
+				catch (NumberFormatException e) {
 					// TODO
 				}
 				List<String> resultSources = new ArrayList<String>();
@@ -159,7 +156,8 @@ public class TimeEventSPARQLUtils {
 						time, kdomid, topic));
 
 			}
-		} catch (ModelRuntimeException e) {
+		}
+		catch (ModelRuntimeException e) {
 			// return
 			// kwikiBundle.getString("KnowWE.owl.query.evalualtion.error")
 			// + ":" + e.getMessage();
@@ -170,40 +168,33 @@ public class TimeEventSPARQLUtils {
 		return events;
 	}
 
-	public static List<Placemark> findLocationsOfTimeEventsInvolvingConcept(
-			String concept) {
+	public static List<Placemark> findLocationsOfTimeEventsInvolvingConcept(String concept) {
 		String querystring = null;
 
 		querystring = PLACEMARK_SPARQL.replaceAll("CONCEPT", "lns:" + concept);
 
-		QueryResultTable result = Rdf2GoCore.getInstance().sparqlSelect(
-				querystring);
+		QueryResultTable result = Rdf2GoCore.getInstance().sparqlSelect(querystring);
 		return buildPlacemarks(result);
 	}
 
 	public static List<Placemark> findLocationsOfTimeEventsForTopic(String topic) {
-		String querystring = LOCATIONS_FOR_EVENTS_FOR_TOPIC_SPARQL.replaceAll(
-				"TOPIC", "<"
-						+ Rdf2GoCore.getInstance().createlocalURI(topic)
-								.toString() + ">");
+		String querystring = LOCATIONS_FOR_EVENTS_FOR_TOPIC_SPARQL.replaceAll("TOPIC", "<"
+				+ Rdf2GoCore.getInstance().createlocalURI(topic).toString() + ">");
 		QueryResultTable queryResult = Rdf2GoCore.getInstance().sparqlSelect(
 				querystring);
 		List<Placemark> result = buildPlacemarks(queryResult);
 
 		querystring = LOCATIONS_FOR_TOPIC_SPARQL.replaceAll("TOPIC", "<"
-				+ Rdf2GoCore.getInstance().createlocalURI(topic).toString()
-				+ ">");
+				+ Rdf2GoCore.getInstance().createlocalURI(topic).toString() + ">");
 		queryResult = Rdf2GoCore.getInstance().sparqlSelect(querystring);
 		result.addAll(buildPlacemarksForTopic(queryResult));
 		return result;
 	}
 
-	private static Collection<? extends Placemark> buildPlacemarksForTopic(
-			QueryResultTable resultTable) {
+	private static Collection<? extends Placemark> buildPlacemarksForTopic(QueryResultTable resultTable) {
 		ClosableIterator<QueryRow> result = resultTable.iterator();
 		List<Placemark> placemarks = new ArrayList<Placemark>();
-		if (result == null)
-			return placemarks;
+		if (result == null) return placemarks;
 		try {
 			while (result.hasNext()) {
 
@@ -216,19 +207,19 @@ public class TimeEventSPARQLUtils {
 					loc = URLDecoder.decode(loc, "UTF-8");
 					latString = URLDecoder.decode(latString, "UTF-8");
 					longString = URLDecoder.decode(longString, "UTF-8");
-				} catch (UnsupportedEncodingException e) {
+				}
+				catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
 				loc = removeNamespace(loc);
-				double latitude = Double.parseDouble(latString.replaceAll(",",
-						"."));
-				double longitude = Double.parseDouble(longString.replaceAll(
-						",", "."));
+				double latitude = Double.parseDouble(latString.replaceAll(",", "."));
+				double longitude = Double.parseDouble(longString.replaceAll(",", "."));
 
 				placemarks.add(new Placemark(loc, latitude, longitude, ""));
 
 			}
-		} catch (ModelRuntimeException e) {
+		}
+		catch (ModelRuntimeException e) {
 			return null;
 		}
 		return placemarks;
@@ -242,8 +233,7 @@ public class TimeEventSPARQLUtils {
 	private static List<Placemark> buildPlacemarks(QueryResultTable resultTable) {
 		// List<String> bindings = result.getBindingNames();
 
-		if (resultTable == null)
-			return new ArrayList<Placemark>(0);
+		if (resultTable == null) return new ArrayList<Placemark>(0);
 
 		ClosableIterator<QueryRow> result = resultTable.iterator();
 		List<Placemark> placemarks = new ArrayList<Placemark>();
@@ -262,19 +252,19 @@ public class TimeEventSPARQLUtils {
 					desc = URLDecoder.decode(desc, "UTF-8");
 					latString = URLDecoder.decode(latString, "UTF-8");
 					longString = URLDecoder.decode(longString, "UTF-8");
-				} catch (UnsupportedEncodingException e) {
+				}
+				catch (UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				double latitude = Double.parseDouble(latString.replaceAll(",",
-						"."));
-				double longitude = Double.parseDouble(longString.replaceAll(
-						",", "."));
+				double latitude = Double.parseDouble(latString.replaceAll(",", "."));
+				double longitude = Double.parseDouble(longString.replaceAll(",", "."));
 
 				placemarks.add(new Placemark(title, latitude, longitude, desc));
 
 			}
-		} catch (ModelRuntimeException e) {
+		}
+		catch (ModelRuntimeException e) {
 			// return
 			// kwikiBundle.getString("KnowWE.owl.query.evalualtion.error")
 			// + ":" + e.getMessage();

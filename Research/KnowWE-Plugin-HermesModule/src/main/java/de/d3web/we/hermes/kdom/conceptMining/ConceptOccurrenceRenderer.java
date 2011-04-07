@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2010 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -31,7 +31,6 @@ import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.util.RDFTool;
-import org.openrdf.query.QueryEvaluationException;
 
 import de.d3web.we.core.semantic.rdf2go.DefaultURIContext;
 import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
@@ -51,8 +50,7 @@ public class ConceptOccurrenceRenderer extends KnowWEDomRenderer {
 	private static String TITLE_QUERY = "SELECT  ?title WHERE {  <URI> lns:hasTitle ?title }";
 
 	@Override
-	public void render(KnowWEArticle article, Section arg0, UserContext arg1,
-			StringBuilder arg2) {
+	public void render(KnowWEArticle article, Section arg0, UserContext arg1, StringBuilder arg2) {
 
 		Section<PersonOccurrence> personSection = arg0;
 
@@ -60,8 +58,7 @@ public class ConceptOccurrenceRenderer extends KnowWEDomRenderer {
 
 		String conceptName = arg0.getOriginalText();
 
-		Context context = ContextManager.getInstance().getContext(arg0,
-				DefaultSubjectContext.CID);
+		Context context = ContextManager.getInstance().getContext(arg0, DefaultSubjectContext.CID);
 
 		String subjectString = "error: subject not found!";
 		URI subjectURI = null;
@@ -76,8 +73,7 @@ public class ConceptOccurrenceRenderer extends KnowWEDomRenderer {
 			}
 			subjectString = RDFTool.getLabel(subjectURI);
 			String q = TITLE_QUERY.replaceAll("URI", subjectURI.toString());
-			ClosableIterator<QueryRow> result = Rdf2GoCore.getInstance()
-					.sparqlSelectIt(q);
+			ClosableIterator<QueryRow> result = Rdf2GoCore.getInstance().sparqlSelectIt(q);
 			if (result != null) {
 				try {
 					if (result.hasNext()) {
@@ -86,12 +82,14 @@ public class ConceptOccurrenceRenderer extends KnowWEDomRenderer {
 						try {
 							title = URLDecoder.decode(title, "UTF-8");
 							subjectString = title;
-						} catch (UnsupportedEncodingException e) {
+						}
+						catch (UnsupportedEncodingException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
-				} catch (ModelRuntimeException e) {
+				}
+				catch (ModelRuntimeException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -141,25 +139,27 @@ public class ConceptOccurrenceRenderer extends KnowWEDomRenderer {
 
 	protected String[] getPossibleProperties(URI subject, String object) {
 		List<String> propList = new ArrayList<String>();
-		
+
 		String classSparql = "SELECT ?x WHERE { <URI> rdf:type ?x.} ";
 
 		// all classes the subject belongs to
-		ClosableIterator<QueryRow> subjectClasses = Rdf2GoCore.getInstance().sparqlSelectIt(classSparql.replaceAll("URI",subject.toString()));
-//		TupleQueryResult subjectClasses = SPARQLUtil
-//				.findClassesOfEntity(subject);
+		ClosableIterator<QueryRow> subjectClasses = Rdf2GoCore.getInstance().sparqlSelectIt(
+				classSparql.replaceAll("URI", subject.toString()));
+		// TupleQueryResult subjectClasses = SPARQLUtil
+		// .findClassesOfEntity(subject);
 
 		// all classes the object belongs to
-		ClosableIterator<QueryRow> objectClasses = Rdf2GoCore.getInstance().sparqlSelectIt(classSparql.replaceAll("URI",Rdf2GoCore.getInstance().createlocalURI(object).toString()));
-//		TupleQueryResult objectClasses = SPARQLUtil
-//				.findClassesOfEntity(UpperOntology.getInstance().getHelper()
-//						.createlocalURI(object));
+		ClosableIterator<QueryRow> objectClasses = Rdf2GoCore.getInstance().sparqlSelectIt(
+				classSparql.replaceAll("URI",
+						Rdf2GoCore.getInstance().createlocalURI(object).toString()));
+		// TupleQueryResult objectClasses = SPARQLUtil
+		// .findClassesOfEntity(UpperOntology.getInstance().getHelper()
+		// .createlocalURI(object));
 
 		try {
 			while (subjectClasses.hasNext()) {
 				QueryRow subjectClass = subjectClasses.next();
-				String subjectClazzString = subjectClass.getValue("x")
-						.toString();
+				String subjectClazzString = subjectClass.getValue("x").toString();
 
 				while (objectClasses.hasNext()) {
 					QueryRow objectClass = objectClasses.next();
@@ -179,42 +179,41 @@ public class ConceptOccurrenceRenderer extends KnowWEDomRenderer {
 					// bindingX.getValue().toString();
 					// }
 
-					String q = PROP_SPARQL.replaceAll("SUBJECT",
-							subjectClazzString);
+					String q = PROP_SPARQL.replaceAll("SUBJECT", subjectClazzString);
 					q = q.replaceAll("OBJECT", objectClassString);
 					ClosableIterator<QueryRow> result = Rdf2GoCore.getInstance().sparqlSelectIt(q);
 
 					if (result != null) {
-							while (result.hasNext()) {
-								QueryRow row = result.next();
-								Node propB = row.getValue("x");
-								String propName = propB.toString();
+						while (result.hasNext()) {
+							QueryRow row = result.next();
+							Node propB = row.getValue("x");
+							String propName = propB.toString();
 
-								try {
-									propName = URLDecoder.decode(propName,
+							try {
+								propName = URLDecoder.decode(propName,
 											"UTF-8");
-								} catch (UnsupportedEncodingException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								propList.add(propName.substring(propName
-										.lastIndexOf('#') + 1));
 							}
+							catch (UnsupportedEncodingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							propList.add(propName.substring(propName.lastIndexOf('#') + 1));
+						}
 
 					}
 				}
 
 			}
 			return propList.toArray(new String[propList.size()]);
-		} catch (ModelRuntimeException e1) {
+		}
+		catch (ModelRuntimeException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		return new String[] {};
 	}
 
-	private String generatePopupContent(Section arg0, URI subject,
-			String subjectTitle) {
+	private String generatePopupContent(Section arg0, URI subject, String subjectTitle) {
 		StringBuffer buffy = new StringBuffer();
 
 		buffy.append("<div style='padding:10px' class=\"confirmPanel\" >");
@@ -228,15 +227,14 @@ public class ConceptOccurrenceRenderer extends KnowWEDomRenderer {
 
 		String[] newOpts = filterOpts(subject, originalText, opts);
 
-		if (newOpts.length == 0)
-			return null;
+		if (newOpts.length == 0) return null;
 
-		String[] defaultOpts = { "concept missmatch", "dont ask again" };
+		String[] defaultOpts = {
+				"concept missmatch", "dont ask again" };
 
 		Section<? extends TimeEventType> eventSection = Sections
 				.findAncestorOfType(arg0, TimeEventType.class);
-		if (eventSection == null)
-			return null;
+		if (eventSection == null) return null;
 
 		for (String relationName : newOpts) {
 
@@ -276,8 +274,7 @@ public class ConceptOccurrenceRenderer extends KnowWEDomRenderer {
 
 		for (String relation : opts) {
 
-			String q = RELATION_QUERY.replaceAll("SUBJECT",
-					"<" + subject.toString() + ">");
+			String q = RELATION_QUERY.replaceAll("SUBJECT", "<" + subject.toString() + ">");
 			q = q.replaceAll("RELATION", relation);
 			q = q.replaceAll("OBJECT", "<"
 					+ Rdf2GoCore.getInstance().createlocalURI(originalText).toString() + ">");

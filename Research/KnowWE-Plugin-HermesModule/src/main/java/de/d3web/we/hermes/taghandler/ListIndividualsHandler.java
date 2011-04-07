@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2010 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -44,8 +44,7 @@ public class ListIndividualsHandler extends AbstractHTMLTagHandler {
 	private static final String SPARQL_END = "} ORDER BY ASC(?x)";
 
 	@Override
-	public String renderHTML(String topic, UserContext user,
-			Map<String, String> values, String web) {
+	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
 
 		String className = values.get("class");
 
@@ -61,8 +60,7 @@ public class ListIndividualsHandler extends AbstractHTMLTagHandler {
 		for (Entry<String, String> entry : properties.entrySet()) {
 			sparql_mid += " ?x lns:";
 			sparql_mid += entry.getKey() + " <";
-			URI propURI = Rdf2GoCore.getInstance().createlocalURI(
-					entry.getValue());
+			URI propURI = Rdf2GoCore.getInstance().createlocalURI(entry.getValue());
 			sparql_mid += propURI.toString() + ">.";
 		}
 
@@ -72,12 +70,10 @@ public class ListIndividualsHandler extends AbstractHTMLTagHandler {
 
 		URI classURI = Rdf2GoCore.getInstance().createlocalURI(className);
 
-		String querystring = SPARQL_START.replaceAll("CLASS",
-				"<" + classURI.toString() + ">");
+		String querystring = SPARQL_START.replaceAll("CLASS", "<" + classURI.toString() + ">");
 		querystring += sparql_mid + SPARQL_END;
 
-		ClosableIterator<QueryRow> result = Rdf2GoCore.getInstance()
-				.sparqlSelectIt(querystring);
+		ClosableIterator<QueryRow> result = Rdf2GoCore.getInstance().sparqlSelectIt(querystring);
 
 		return "";
 		// return
