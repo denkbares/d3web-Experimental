@@ -27,7 +27,7 @@ KNOWWE.plugin.defi = function() {
             	var a = tabs[i].getElements('a');
             	for(var j = 0; j < a.length; j++) {
             		text = a[j].getText();
-                	text = text.replace("--", " ");
+            		text = text.replace(/--/g, " ");
             	    a[j].setText(text);
             	}
             }
