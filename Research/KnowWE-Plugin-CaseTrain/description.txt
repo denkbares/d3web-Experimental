@@ -1,0 +1,4 @@
+This plugin aims to allow knowledge/case acquisition for CaseTrain (www.casetrain.de) using the wiki KnowWE.
+The idea is to give the case authors instant feedback about errors and testing capabilities.
+The project startet in an afternoon brainstorming session documented here:   
+https://ki.informatik.uni-wuerzburg.de/wiki/Wiki.jsp?page=CaseTrain%20in%20KnowWE
