@@ -16,24 +16,41 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.d3web.owl.assignment;
+package de.d3web.owl;
 
 import org.semanticweb.owlapi.model.IRI;
 
-import de.d3web.core.session.Session;
-import de.d3web.owl.inference.OWLSessionObject;
-
 /**
- * An Assignment sets link{Value}s in the d3web blackboard based on information
- * from the ontology.
  *
- * @author Sebastian Furth
- * @created Mar 28, 2011
+ * @author sebastian
+ * @created Apr 8, 2011
  */
-public interface Assignment {
+public enum Vocabulary {
 
-	public void eval(Session session, OWLSessionObject so);
+	PSSESSION("PSSession"),
+	FINDING("Finding"),
+	QUESTIONNAIRE("Questionnaire"),
+	INPUT("Input"),
+	NUMERICINPUT("NumericInput"),
+	CHOICEINPUT("ChoiceInput"),
+	SOLUTION("Solution"),
+	VALUE("Value"),
+	CHOICEVALUE("ChoiceValue"),
+	NUMERICVALUE("NumericValue"),
+	HASINPUT("hasInput"),
+	HASVALUE("hasValue"),
+	ISSTOREDBY("isStoredBy");
 
-	public IRI getComplexOWLClass();
+	public static final String BASEURI = "http://is.informatik.uni-wuerzburg.de/d3web/d3web.owl#";
+
+	private final IRI iri;
+
+	Vocabulary(String iriString) {
+		this.iri = IRI.create(BASEURI + iriString);
+	}
+
+	public IRI getIRI() {
+		return this.iri;
+	}
 
 }

@@ -46,10 +46,10 @@ import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.blackboard.Facts;
 import de.d3web.core.session.blackboard.SessionObject;
 import de.d3web.core.session.values.UndefinedValue;
-import de.d3web.owl.IRIConstants;
 import de.d3web.owl.IRIUtils;
 import de.d3web.owl.OWLOntologyUtil;
 import de.d3web.owl.OntologyProvider;
+import de.d3web.owl.Vocabulary;
 import de.d3web.owl.assignment.Assignment;
 import de.d3web.owl.assignment.AssignmentSet;
 
@@ -59,7 +59,7 @@ import de.d3web.owl.assignment.AssignmentSet;
  * @author Sebastian Furth
  * @created Mar 3, 2011
  */
-public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants {
+public class PSMethodOWL implements PSMethod, SessionObjectSource {
 
 	// Just for convenience and code beautification
 	private final Logger logger = Logger.getLogger(this.getClass().getName());
@@ -75,7 +75,7 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 			// Create PSSession individual for this session
 			IRI sessionIRI = IRIUtils.toIRI(session.getId(), ontology);
 			OWLNamedIndividual sessionIndividual = factory.getOWLNamedIndividual(sessionIRI);
-			OWLClass sessionClass = util.getOWLClassFor(PSSESSION);
+			OWLClass sessionClass = util.getOWLClassFor(Vocabulary.PSSESSION.getIRI());
 			if (sessionIndividual != null && sessionClass != null) {
 				Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
 				axioms.add(factory.getOWLClassAssertionAxiom(sessionClass, sessionIndividual));
@@ -107,7 +107,7 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 			// Do the assignments
 			if (assignments != null) {
 				for (Assignment assignment : assignments.getAssignments()) {
-					assignment.assign(session, so);
+					assignment.eval(session, so);
 				}
 			}
 		}
@@ -137,19 +137,22 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 			// Create finding individual in ontology
 			IRI findingIRI = IRIUtils.toIRI(change.getObject(), change.getNewValue(), ont);
 			OWLNamedIndividual finding = factory.getOWLNamedIndividual(findingIRI);
-			OWLClass findingClass = util.getOWLClassFor(FINDING);
+			OWLClass findingClass = util.getOWLClassFor(Vocabulary.FINDING.getIRI());
 			if (finding != null && findingClass != null) {
 				// finding axiom
 				axioms.add(factory.getOWLClassAssertionAxiom(findingClass, finding));
 				// hasInput assertion
 				IRI input = IRIUtils.toIRI(change.getObject(), ont);
-				doFindingPropertyAssertion(finding, HASINPUT, input, ont, util, factory, axioms);
+				doFindingPropertyAssertion(finding, Vocabulary.HASINPUT.getIRI(), input, ont, util,
+						factory, axioms);
 				// hasValue assertion
 				IRI value = IRIUtils.toIRI(change.getNewValue(), ont);
-				doFindingPropertyAssertion(finding, HASVALUE, value, ont, util, factory, axioms);
+				doFindingPropertyAssertion(finding, Vocabulary.HASVALUE.getIRI(), value, ont, util,
+						factory, axioms);
 				// isStoredBy assertion
 				IRI session = IRIUtils.toIRI(s.getId(), ont);
-				doFindingPropertyAssertion(finding, ISSTOREDBY, session, ont, util, factory, axioms);
+				doFindingPropertyAssertion(finding, Vocabulary.ISSTOREDBY.getIRI(), session, ont,
+						util, factory, axioms);
 				// TODO? hasAssignedValue assertion
 			}
 		}
@@ -183,7 +186,7 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource, IRIConstants 
 			if (findings != null && findings.size() > 0) {
 				OWLEntityRemover remover = new OWLEntityRemover(manager, Collections.singleton(ont));
 				// Get all Finding individuals
-				OWLClass findingClass = util.getOWLClassFor(FINDING);
+				OWLClass findingClass = util.getOWLClassFor(Vocabulary.FINDING.getIRI());
 				Set<OWLIndividual> allFindings = findingClass.getIndividuals(ont);
 				// remove the entity only if it really is a finding individual!
 				for (OWLEntity finding : findings) {

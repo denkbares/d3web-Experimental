@@ -65,7 +65,7 @@ public final class ChoiceValueAssignment extends AbstractAssignment {
 	}
 
 	@Override
-	public void assign(Session session, OWLSessionObject so) {
+	public void eval(Session session, OWLSessionObject so) {
 		Set<OWLNamedIndividual> individuals = getOWLIndividuals(so);
 		// Get corresponding d3web Solutions
 		TerminologyUtil util = TerminologyUtil.getInstance(session.getKnowledgeBase());

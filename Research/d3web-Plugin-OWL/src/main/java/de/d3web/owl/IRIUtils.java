@@ -47,7 +47,7 @@ public class IRIUtils {
 
 	public static IRI toIRI(Value value, OWLOntology ontology) {
 		if (value instanceof Rating) {
-			return IRI.create(IRIConstants.PREFIX + "#" + adapt(value.toString()));
+			return IRI.create(Vocabulary.BASEURI + adapt(value.toString()));
 		}
 		return IRI.create(getOntologyIRI(ontology) + "#" + adapt(value.toString()));
 	}

@@ -58,7 +58,7 @@ public final class YesNoAssignment extends AbstractAssignment {
 	}
 
 	@Override
-	public void assign(Session session, OWLSessionObject so) {
+	public void eval(Session session, OWLSessionObject so) {
 		Set<OWLNamedIndividual> individuals = getOWLIndividuals(so);
 		// Create new ChoiceValue
 		ChoiceValue value = !individuals.isEmpty()
