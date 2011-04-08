@@ -118,7 +118,7 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 		// Check if the vocabulary of the d3web task ontology is present
 		if (!checkOntology(ontology)) {
 			return MessageUtils.asList(new SyntaxError(
-					"The provided ontology doesn't meet the requirements of a valid d3web task-ontology."));
+					"The provided ontology doesn't meet the requirements of a valid d3web task-ontology. Check the vocabulary."));
 		}
 
 		try {

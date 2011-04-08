@@ -49,6 +49,7 @@ public class OntologyProviderType extends DefaultMarkupType implements Increment
 		this.setCustomRenderer(new DefaultMarkupRenderer<OntologyProviderType>(
 				"KnowWEExtension/images/owl24.png"));
 		this.addSubtreeHandler(new OntologyHandler());
+		this.setCustomRenderer(new OntologyEscapeRenderer());
 	}
 
 }
