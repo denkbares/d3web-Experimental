@@ -1,0 +1,4 @@
+This project contains the KnowWE/JSPWiki template for the wiki for the IRC (Internet Research Center) 
+of Uni Würzburg which is an interdisciplinary organization within the university.
+We are hosting the wiki as a collaborative platform for information exchange etc.
+The wiki template mocks the sytle of the typo3 pages of the university.
