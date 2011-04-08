@@ -145,6 +145,9 @@ public class Rdf2GoCore implements EventListener {
 					+ "model.properties"));
 		}
 		catch (IOException e) {
+			// this case happens on junit-tests
+			properties.put("model", SESAME);
+			properties.put("reasoning", RDFS_REASONING);
 		}
 
 		String useModel = properties.getProperty("model").toLowerCase();
