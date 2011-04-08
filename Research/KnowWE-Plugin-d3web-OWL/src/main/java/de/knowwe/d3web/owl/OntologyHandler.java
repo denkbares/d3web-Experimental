@@ -33,7 +33,9 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.owl.OWLOntologyUtil;
 import de.d3web.owl.OntologyProvider;
+import de.d3web.owl.Vocabulary;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
@@ -41,6 +43,7 @@ import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.KDOMWarning;
 import de.d3web.we.kdom.report.SimpleMessageError;
+import de.d3web.we.kdom.report.SyntaxError;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.utils.MessageUtils;
@@ -109,6 +112,13 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 				return MessageUtils.asList(new SimpleMessageError("Attachment \"" + sourcePath
 						+ "\" doesn't exist."));
 			}
+
+		}
+
+		// Check if the vocabulary of the d3web task ontology is present
+		if (!checkOntology(ontology)) {
+			return MessageUtils.asList(new SyntaxError(
+					"The provided ontology doesn't meet the requirements of a valid d3web task-ontology."));
 		}
 
 		try {
@@ -141,6 +151,17 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 
 		// all right, no errors and warnings
 		return Collections.emptyList();
+	}
+
+	private boolean checkOntology(OWLOntology ontology) {
+		OWLOntologyUtil util = new OWLOntologyUtil(ontology);
+		for (Vocabulary v : Vocabulary.values()) {
+			if (util.getOWLClassFor(v.getIRI()) == null
+					&& util.getOWLPropertyFor(v.getIRI()) == null) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
