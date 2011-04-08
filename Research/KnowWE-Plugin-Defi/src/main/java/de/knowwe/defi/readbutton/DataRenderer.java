@@ -50,7 +50,7 @@ public class DataRenderer<T extends AbstractType> extends KnowWEDomRenderer<T> {
 			} else {
 				string.append(KnowWEUtils.maskHTML("<ul>"));
 				for (String s : readpages.split(";")) {
-					string.append(KnowWEUtils.maskHTML("<li>" + s.split(",")[0] + ": "
+					string.append(KnowWEUtils.maskHTML("<li>" + s.split(",")[0] + ": Wert "
 							+ s.split(",")[1] + "</li>"));
 				}
 				string.append(KnowWEUtils.maskHTML("</ul>"));

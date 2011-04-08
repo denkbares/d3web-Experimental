@@ -1,10 +1,10 @@
-function getReadButtonValue(hide) {
+function getReadButtonValue(hide,number) {
 	
 	// hide tells the function whether to hide the Readbutton(value = 0) or deliver the checked radiobutton
 	if (hide == 0) {
 		var form = document.readbuttonform;
 		var checked = null;
-		for (i = 0; i < 4; i++) {
+		for (i = 0; i < number; i++) {
 			
 			if (form.elements[i].checked) {
 				checked = form.elements[i].value;

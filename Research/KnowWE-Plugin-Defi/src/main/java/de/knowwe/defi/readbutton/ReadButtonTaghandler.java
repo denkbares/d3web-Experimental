@@ -39,6 +39,14 @@ import de.d3web.we.utils.KnowWEUtils;
  */
 public class ReadButtonTaghandler extends AbstractTagHandler {
 
+	private static int DEFAULT_NUMBER = 4;
+	private static String DEFAULT_HIDE = "false";
+
+	int number, borderValue, ratedValue;
+	boolean contains, talkAbout, custom;
+	String hide_values, link, linkText;
+	String[] labels, values;
+
 	/**
 	 * @param name
 	 */
@@ -46,22 +54,58 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 		super("readbutton");
 	}
 
+	/**
+	 * @param parameters has the following entries: number (The number of
+	 *        radiobuttons), value_1, value_2, ...(The String near to the
+	 *        radiobutton), label_1, label_2, ...(The String under the
+	 *        radiobutton), hide_values(true, false(default)), borderValue(rated
+	 *        value <= borderValue? speak with therapist), link and
+	 *        linkText(adds a link after user rated)
+	 * 
+	 */
 	@Override
 	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		StringBuilder readbutton = new StringBuilder();
-
 		if (userContext.userIsAsserted()) {
 			String username = userContext.getUserName();
 			String title = username + "_data";
 			String pagename = userContext.getTopic();
 			String web = userContext.getWeb();
-			String value1 = parameters.get("value1");
-			String value2 = parameters.get("value2");
-			String value3 = parameters.get("value3");
-			String value4 = parameters.get("value4");
-			boolean contains = false;
-			boolean talkAbout = false;
-			String rateValue = "";
+			custom = false;
+			contains = false;
+			talkAbout = false;
+			ratedValue = -1;
+
+			// Get Tagattributes
+			if (parameters.containsKey("number")) number = Integer.parseInt(parameters.get("number"));
+			else number = DEFAULT_NUMBER;
+
+			if (parameters.containsKey("hide_values")) hide_values = parameters.get("hide_values");
+			else hide_values = DEFAULT_HIDE;
+
+			labels = new String[number];
+			values = new String[number];
+			
+			for (int i = 0; i < number; i++) {
+				if (parameters.containsKey("label_" + (i + 1))) labels[i] = parameters.get("label_"
+						+ (i + 1));
+				else labels[i] = "";
+
+				if (parameters.containsKey("value_" + (i + 1))) {
+					values[i] = parameters.get("value_" + (i + 1));
+					custom = true;
+				}
+				else values[i] = "";
+			}
+			
+			if (parameters.containsKey("borderValue")) borderValue = Integer.getInteger(parameters.get("borderValue"));
+			else borderValue = (int) Math.floor(number / 2);
+			
+			if (parameters.containsKey("addLink")) link = parameters.get("addLink");
+			else link = "";
+
+			if (parameters.containsKey("linkText")) linkText = parameters.get("linkText");
+			else linkText = "";
 
 			// Get the readpages-annotation
 			KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
@@ -89,9 +133,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				child = Sections.findSuccessor(sec, DataMarkup.class);
 			}
 
-
 			if (readpages != null) {
-
 				// Checks whether the lesson is already rated and if the
 				// talkAbout-link has to appear
 				String[] pages = readpages.split(";");
@@ -100,9 +142,9 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 					if (s.split(",")[0].toLowerCase().equals(pagename.toLowerCase())) {
 
 						contains = true;
-						rateValue = s.split(",")[1];
-						if ((rateValue.equals("1") || rateValue.equals("2"))
-									&& s.split(",")[2].equals("0")) {
+						ratedValue = Integer.parseInt(s.split(",")[1]);
+						if (ratedValue <= borderValue
+								&& s.split(",")[2].equals("0")) {
 
 							talkAbout = true;
 						}
@@ -110,34 +152,29 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 
 				}
 			}
-			// There is no rating for this page or ...
-			if (!contains) {
-				if (value1 == null) value1 = "";
-				if (value2 == null) value2 = "";
-				if (value3 == null) value3 = "";
-				if (value4 == null) value4 = "";
 
-				readbutton.append("<form name='readbuttonform' class='rbtag'>");
-				readbutton.append("<table class='rbtag'><tr>");
-				readbutton.append("<td><input type='radio' name='panel' value='1' /> 1</td>");
-				readbutton.append("<td><input type='radio' name='panel' value='2' /> 2</td>");
-				readbutton.append("<td><input type='radio' name='panel' value='3' /> 3</td>");
-				readbutton.append("<td><input type='radio' name='panel' value='4' /> 4</td>");
-				readbutton.append("<tr><td>" + value1 + "</td><td>" + value2 + "</td><td>" + value3
-						+ "</td><td>" + value4 + "</td></tr>");
-				readbutton.append("</tr><tr><td colspan='4'>");
-				readbutton.append("<input class='submit' type='button' value='OK' onclick='getReadButtonValue(0)' />");
+			readbutton.append("<form name='readbuttonform' class='rbtag'>");
+			// Generate table
+			readbutton.append("<table class='rbtag'>");
+			readbutton = appendRadiobuttons(readbutton);
+
+			// - user has to rate
+			if (!contains) {
+				readbutton.append("<tr><td colspan='" + number + "'>");
+				readbutton.append("<input class='submit' type='button' value='OK' onclick='getReadButtonValue(0,"
+						+ number + ")' />");
 				readbutton.append("</td></tr></table>");
 				readbutton.append("</form>");
 			}
-			// ... there is a rating and a talkAbout-link or ...
+			// - user can talk about it
 			else if (talkAbout) {
-
+				readbutton.append("</table></form>");
 				String talkPage = userContext.getUserName() + "_comment_therapist";
 				title = parameters.get("title");
 				if (title == null) {
 					title = " &raquo; " + talkPage;
 				}
+
 				// subject = pagename
 				readbutton.append("<p><a href=\"Wiki.jsp?page=");
 				readbutton.append(KnowWEUtils.urlencode(talkPage.trim()));
@@ -148,18 +185,63 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				readbutton.append("\" rel=\"nofollow\">");
 				readbutton.append("Mit Therapeuten dar&uuml;ber sprechen");
 				readbutton.append("</a>");
-				readbutton.append(" - <a href=\"\" onclick='getReadButtonValue(1)'>Nicht Besprechen</a></p>");
+				readbutton.append(" - <a href=\"\" onclick='getReadButtonValue(1," + number
+						+ ")'>Nicht Besprechen</a></p>");
+				readbutton.append("<a href='" + link + "' target='_blank'>" + linkText + "</a>");
 			}
-			// ... there is a rating and no need to talk about or already talked
-			// about => hide readbutton
+			// - user has already rated
 			else {
-				// Here you could add something to show after user rated an
-				// article
+				readbutton.append("<tr><td colspan='" + number + "'>");
+				readbutton.append("<p>Vielen Dank!</p>");
+				readbutton.append("</td></tr>");
+				readbutton.append("</table></form>");
 			}
 
 		}
 
 		return KnowWEUtils.maskHTML(readbutton.toString());
 	}
-	
+
+	/**
+	 * Appends the radiobutton, if user has rated, the buttons are disabled
+	 * 
+	 * @created 07.04.2011
+	 * @param readbutton
+	 * @return
+	 */
+	private StringBuilder appendRadiobuttons(StringBuilder readbutton) {
+
+		readbutton.append("<tr>");
+		for (int i = 0; i < number; i++) {
+			readbutton.append("<td style='width:" + (100 / number) + "%'>");
+
+			readbutton.append("<input type='radio' ");
+			if (ratedValue != -1) readbutton.append("disabled ");
+			if (ratedValue != -1 && ratedValue == (i + 1)) readbutton.append("disabled checked ");
+			readbutton.append("name='panel' value='" + (i + 1) + "' />");
+
+			// hidden: hide value
+			if (hide_values.equals("true")) {
+				readbutton.append("</td>");
+			}
+			// custom: show value
+			else if (custom) {
+				readbutton.append(values[i] + "</td>");
+			}
+			// default: show numbers from 1 to last radiobutton
+			else {
+				readbutton.append((i + 1) + "</td>");
+			}
+		}
+		readbutton.append("</tr><tr>");
+
+		// append labels
+		for (int i = 0; i < number; i++) {
+			readbutton.append("<td>" + labels[i] + "</td>");
+		}
+		readbutton.append("</tr>");
+
+		return readbutton;
+	}
+
 }
