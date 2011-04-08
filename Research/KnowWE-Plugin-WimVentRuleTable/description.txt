@@ -1,0 +1,3 @@
+A plugin to generate d3web-rules from tables. Usefull if rules have similar structure, 
+that is use equal questions in condition (conjunctions) and actions.
+For each line one rule (or multiple with same condition) is generated.  
