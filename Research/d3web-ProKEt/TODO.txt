@@ -60,65 +60,37 @@ FREECHOICE/QUICKI Dialog
 -- Datumsfragen
 
 
-MEDIASTINITIS (Projekt Herzmedizin)
------------------------------------
-DONE - Abfrage beim speichern-Popup vervollständigen
-DONE - keine .csv Dateien und longname xmls anzeigen
-DONE - dateiauswahlmenü in dialog packen
-DONE - File exists Abfrage
-DONE - Login erfolglos Fall
-DONE - Add Info 1. Frage dazu + Popup
-DONE - ids etc ohne Leerzeichen (Anzeige der Fragetexte etc schon, aber für JS ids müssen Leerzeichen raus)
-DONE - reset session on logon other user
-DONE - Kopplung von session login und session d3web
-DONE - Folgefragen beim neu laden nicht markiert
-DONE - autosave case if new login (Klinikname = username, timestamp und "autosave"). 
-	Session wird dann zurückgesetzt. User kann den Fall aber wieder aus der Liste laden
-DONE - irgendwie die session mitführen. Problem: login von 2 Stellen (aus eclipse raus sowie von FF aus) unter 2 versch.
-		Benutzern führt dazu, dass alle denselben Fall bearbeiten!
-DONE - Num automatisch mitschicken
-DONE - Speichern Fälle in Ordner gemäß login
-DONE - Fall laden und Ordner anzeigen
-	Benutzer kann nur jeweils die Fälle in "seinem" Login ordner laden = Loginname bzw. Klinikname
-DONE - 1. Frage Popup schöner machen	
-DONE - Dialoge per Enter bestätigen
-DONE - Autosave und session refresh immer noch buggy :-)
-DONE - autosave case if 30(?) minutes inactive
-	besser: autosave nach jedem Werteintrag automatisch. Immer nur EIN autosave schreiben, anderes von zuvor löschen.
-DONE - Att Klinik muss immer ausgefüllt sein, ansonsten Fehlermeldung und KEIN absenden!
-DONE - mehrere Nutzer einer "Nutzergruppe" (hier, Klinik) können auf den Klinik folder zugreifen. Dh es gibt zB
-	einen folder WUE in dem alle Würzburger Fälle drin sind, und user WUE_1, WUE_2 etc können drauf zugreifen. Das
-	hinter dem "_" ist dabei unwichtig, wichtig ist dass das Trennzeichen genau einmal als "_" vorkommt!
-DONE - CHECK Sessions,Users,Autosave etc
-DONE - Speichern & Name vorhanden: überschreiben möglich, wenn genau dieser Fall vorher geladen wurde, ansonsten Fehlermeldung
 
-- Trennung von User Settings und Global Settings CHECK	
-- logout link? Passiert automatisch nach 60 Minuten
-- automatischer Versand von mail mit PW falls vergessen?!
-- remove check/val from other questions if KLINIK (required val) is not set 
-- Login-Maske: Beschreibungstext, was der Login Name sein soll,
-	Text, Erklärung zum laden/speichern, Link zum PW vergessen mail Versand
-	
-- Speichern/Überschreiben nochmal durchgehen
+-------------------------------------------
+--- MEDIASTINITIS (Projekt Herzmedizin) ---
+-------------------------------------------
 
-- Parallelzugriff auf Dateien verhindern (wenn user derselben usergroup sich einloggen)?!
-    
+----------------------------
+---- TODOS  TODOS  TODOS ---
+----------------------------
+
+LATER - logout link? Passiert automatisch nach 60 Minuten    
 LATER - Betreffende_Klinik: Wert vorbelegen (zu KNIFFLIG/AUFWENDIG für sofort) 
+LATER - Anzeigen welcher Benutzer gerade eingeloggt ist?!
+LATER - Parallelzugriff auf Dateien verhindern (wenn user derselben usergroup sich einloggen)?!
+  --> erstmal kein Handlungsbedarf, sollte nicht/sehr selten vorkommen da eh nur ein-zwei Bearbeiter pro Klinik
+LATER - Fälle speichern: wo Ordner am besten ablegen? 
+	Aktuell innerhalb der webapp im subfolder "cases"
+	Innerhalb Webapp "gefährlich" (?!) wenn updates und Sicherung vergessen wird, außerhalb hat aber 
+	webapp keine Schreibrechte?!
+ 
+REFINE - Wertüberprüfung Num-/Text-Felder
+REFINE - Fallsortierung im Laden-Menü: Groß-/Kleinschreibung anders berücksichtigen
 
-HEUTE klären: 
-- Zuständigkeit Server / Updates: Berlin oder wir mit Fremdzugriff? WIR
-- Fälle speichern: wo Ordner am besten ablegen? 
-	Innerhalb Webapp gefährlich wenn updates und Sicherung vergessen wird, muss aber erstmal so sein, außerhalb
-	schreibt die Webapp nicht?!
-- Automatisch Logout nach wieviel Minuten: 60?
-- Feld Vorbelegung "Betreffende_Klink", da eh Benutzername sein soll?!
+----------------------------
+--- KLÄREN KLÄREN KLÄREN ---
+----------------------------
 
-- PW vergessen: mail Versand, automatisiert?
---> KLÄREN: Passwörter auf dem Server sollten nicht im Plaintext liegen. Wie vorgehen?
-	- Versand einer notification an mich (ODER den IT Menschen vom Projekt) der dem entsprechenden
-		Nutzer die mail dann schickt
-	- Plaintext PWer auf dem Server (ohne Zuordnung) ablegen, drüber iterieren, mit Checksumme
-		prüfen aus dem Zuordnungsfile, dort wo es matcht, das Plaintext PW schicken
-
-
-- Anzeigen welcher Benutzer gerade eingeloggt ist?!
+- PW vergessen: mail Versand automatisiert  KLÄREN!
+  --> Eigener mail-Alias für den Dialog
+  --> Versand einer notification an den IT Menschen vom Projekt der dem entsprechenden
+	  Nutzer dann die Zugangsdaten nochmal schickt
+	  ODER
+  --> Plaintext PWer auf dem Server (ohne Zuordnung) ablegen, drüber iterieren, mit Checksumme
+	  prüfen aus dem Zuordnungsfile, dort wo es matcht, das Plaintext PW schicken
+		

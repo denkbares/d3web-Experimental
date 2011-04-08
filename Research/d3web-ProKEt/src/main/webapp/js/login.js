@@ -8,10 +8,10 @@ $(function() {
 
 	var opts = {
 		position : top,
-		width : 470,
-		height : 400,
-		minWidth : 470,
-		minHeight : 400,
+		width : 480,
+		height : 420,
+		minWidth : 480,
+		minHeight : 420,
 		draggable : false,
 		resizable : false,
 		// to force first login
@@ -56,6 +56,8 @@ $(function() {
 				return false;
             }
         });
+		
+		
 	});
 
 });
@@ -110,9 +112,9 @@ function sendData() {
 		
 		// not successfully logged in
 		if (html == "nosuccess"){
-			$('#loginError').html("<font color=\"red\">Login erfolglos. Bitte versuchen Sie es noch einmal.</font><br /><br />" +
-					"<b>Logindaten vergessen?</b> <br />");
-			
+			$('#loginError').html("<font color=\"red\">Login erfolglos. Bitte versuchen Sie es noch einmal.</font><br />");
+			$('#loginErrorMailRequest').html("" +
+					"<b>Logindaten vergessen?</b> <font color=\"blue\"><u>Daten erneut zuschicken</u></font>" );
 		} else {
 			// successful login: remove error message
 			$('#loginError').html("");
@@ -133,6 +135,24 @@ function sendData() {
 				// otherwise just show previous dialog mask/link
 				d3web_show();
 			}	
+		}
+	});
+}
+
+function sendLoginMailRequest(){
+	
+	var user = $('#usrInput').val();
+		
+	var link = $.query.set("action", "sendmail").set("user", user).toString();
+	var jxhr = $.get(link, function(html) {
+		
+		// no mail success
+		if (html != "success"){
+
+		} else {
+			$('#loginError').html("");
+			$('#loginErrorMailRequest').html("<b>Vielen Dank. Sie erhalten Ihre Daten in Kürze an die" +
+					"für Ihren Benutzernamen gespeicherte email-Adresse zugeschickt.</b>");
 		}
 	});
 }
@@ -212,6 +232,7 @@ function rand(min, max) {
 }
 
 function showDenyMessage() {
+	$('#loginErrorMailRequest').html("");
 	$('#loginError').html("<font color=\"red\">Sie müssen sich einloggen um das System nutzen zu können.</font>");
 }
 
@@ -227,3 +248,4 @@ function getUrlVars()
     }
     return vars;
 }
+

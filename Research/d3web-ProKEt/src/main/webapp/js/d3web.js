@@ -387,7 +387,8 @@ function d3web_addfactsRemembering(store, qid, pos) {
 
 			if(html=="noReqs"){
 				// Error message
-				alert("Not all required fields are set!");
+				alert("Das Feld 'Betreffende Klinik' muss immer zuerst ausgefüllt werden!");
+				d3web_resetSession();
 			} else {
 				d3web_show();
 			}

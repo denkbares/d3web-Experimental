@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -127,10 +129,10 @@ public class PersistenceD3webUtils {
 		Blackboard bb = d3webSession.getBlackboard();
 		String clinicVal = bb.getValue(clinic).toString();
 
-		System.out.println(clinicVal);
+		// System.out.println(clinicVal);
 
 		File folder = new File(folderPath + "/" + clinicVal + "/");
-		System.out.println(folder);
+		// System.out.println(folder);
 		File file = null;
 		if (filename.equals("autosave")) {
 			if (folder.listFiles() != null && folder.listFiles().length != 0) {
@@ -144,6 +146,15 @@ public class PersistenceD3webUtils {
 					+ "_UVautosaveUV.xml");
 		}
 		else {
+
+			/* check whether file with that name already exists --> delet it */
+			if (folder.listFiles() != null && folder.listFiles().length != 0) {
+				for (File f : folder.listFiles()) {
+					if (f.getName().contains(filename)) {
+						f.delete();
+					}
+				}
+			}
 			// Final assembly
 			file = new File(folderPath + "/" + clinicVal + "/" + sdf.format(now) + "_UV"
 					+ filename + "UV.xml");
@@ -290,14 +301,35 @@ public class PersistenceD3webUtils {
 				}
 			});
 
+			ArrayList<String> sfn = new ArrayList<String>();
+
 			for (File f : files) {
 
 				// Split the complete filename String <TIMESTAMP><>
 				// so we get only the user entered filename to be displayed
-				String[] fnparts = f.getName().split("UV");
-				if (fnparts != null && fnparts.length == 3) {
+
+				if (!f.getName().contains("autosave")) {
+					String[] fnparts = f.getName().split("UV");
+					if (fnparts != null && fnparts.length == 3) {
+						sfn.add(fnparts[1]);
+					}
+				}
+			}
+
+			/* add autosaved as first item always */
+			cases.append("<option>");
+			cases.append("autosave");
+			cases.append("</option>");
+
+			String[] sortedFilenames = new String[sfn.size()];
+			sfn.toArray(sortedFilenames);
+
+			Arrays.sort(sortedFilenames);
+
+			for (String fn : sortedFilenames) {
+				if (fn != null && fn != "") {
 					cases.append("<option>");
-					cases.append(fnparts[1]);
+					cases.append(fn);
 					cases.append("</option>");
 				}
 			}
@@ -319,7 +351,7 @@ public class PersistenceD3webUtils {
 		String subfold = bb.getValue(subfolderVal).toString();
 
 		File folder = new File(fold + "/" + subfold);
-		System.out.println(folder.getName());
+		// System.out.println(folder.getName());
 		if (folder.listFiles() != null && folder.listFiles().length != 0) {
 
 			// ignore file(s) ending to .csv as this is the user config file

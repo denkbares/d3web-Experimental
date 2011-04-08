@@ -1,0 +1,46 @@
+MEDIASTINITIS - TODOs History
+-----------------------------
+
+DONE - Abfrage beim speichern-Popup vervollständigen
+DONE - keine .csv Dateien und longname xmls anzeigen
+DONE - dateiauswahlmenü in dialog packen
+DONE - File exists Abfrage
+DONE - Login erfolglos Fall
+DONE - Add Info 1. Frage dazu + Popup
+DONE - ids etc ohne Leerzeichen (Anzeige der Fragetexte etc schon, aber für JS ids müssen Leerzeichen raus)
+DONE - reset session on logon other user
+DONE - Kopplung von session login und session d3web
+DONE - Folgefragen beim neu laden nicht markiert
+DONE - autosave case if new login (Klinikname = username, timestamp und "autosave"). 
+	Session wird dann zurückgesetzt. User kann den Fall aber wieder aus der Liste laden
+DONE - irgendwie die session mitführen. Problem: login von 2 Stellen (aus eclipse raus sowie von FF aus) unter 2 versch.
+		Benutzern führt dazu, dass alle denselben Fall bearbeiten!
+DONE - Num automatisch mitschicken
+DONE - Speichern Fälle in Ordner gemäß login
+DONE - Fall laden und Ordner anzeigen
+	Benutzer kann nur jeweils die Fälle in "seinem" Login ordner laden = Loginname bzw. Klinikname
+DONE - 1. Frage Popup schöner machen	
+DONE - Dialoge per Enter bestätigen
+DONE - Autosave und session refresh immer noch buggy :-)
+DONE - autosave case if 30(?) minutes inactive
+	besser: autosave nach jedem Werteintrag automatisch. Immer nur EIN autosave schreiben, anderes von zuvor löschen.
+DONE - Att Klinik muss immer ausgefüllt sein, ansonsten Fehlermeldung und KEIN absenden!
+DONE - mehrere Nutzer einer "Nutzergruppe" (hier, Klinik) können auf den Klinik folder zugreifen. Dh es gibt zB
+	einen folder WUE in dem alle Würzburger Fälle drin sind, und user WUE_1, WUE_2 etc können drauf zugreifen. Das
+	hinter dem "_" ist dabei unwichtig, wichtig ist dass das Trennzeichen genau einmal als "_" vorkommt!
+DONE - CHECK Sessions,Users,Autosave etc
+DONE - Speichern & Name vorhanden: überschreiben möglich, wenn genau dieser Fall vorher geladen wurde, ansonsten Fehlermeldung
+DONE - Automatisch Logout nach wieviel Minuten: 60?
+DONE - Zuständigkeit Server / Updates: Berlin oder wir mit Fremdzugriff? WIR
+DONE - remove check/val from other questions if KLINIK (required val) is not set 
+DONE - Trennung von User Settings und Global Settings CHECK	 --> müsste so passen, globale Settings in GlobalSettings (KB
+ 		Name, case base folder, system paths...), user settings direkt über die HttpSession in den Servlets
+DONE - Fälle speichern
+DONE - Speichern/Überschreiben nochmal durchgehen --> sollte jetzt wie gewünscht funktionieren:
+	--> Fall kann nur gespeichert werden, falls Datei-/Fallname noch nicht existiert. Ausnahme: User
+	    hatte den Fall vorher geladen, dann kann er auch unter dem selben Namen wieder speichern
+	--> beim speichern eines exist. Falls, alten Fall mit dem Namen löschen!   
+DONE - Fälle (im laden Menü) sortieren   
+DONE - Login-Maske: 
+  DONE -- Erklärung zum laden/speichern, 
+  DONE-- Link zum PW vergessen mail Versand

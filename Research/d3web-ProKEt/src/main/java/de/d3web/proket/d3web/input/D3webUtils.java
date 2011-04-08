@@ -311,7 +311,6 @@ public class D3webUtils {
 				!kbFilename.endsWith(".d3web")) {
 			kbFilename += ".d3web";
 		}
-		System.out.println(kbFilename);
 
 		File kbFile;
 		File libPath;

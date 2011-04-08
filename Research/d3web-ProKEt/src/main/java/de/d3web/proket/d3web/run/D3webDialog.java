@@ -124,7 +124,10 @@ public class D3webDialog extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		/* only needed here in case the dialog is used without login mechanisms */
+		/* 
+		 * FOLDER PATH: get the folder on the server for persistence storing
+		 * only needed here in case the dialog is used without login mechanisms 
+		 */
 		// String folderPath =
 		// request.getSession().getServletContext().getRealPath("/");
 		// String persistencePath = folderPath.replace("d3web-ProKEt",
@@ -136,7 +139,8 @@ public class D3webDialog extends HttpServlet {
 		// in case nothing other is provided, "show" is the default action
 		String action = request.getParameter("action");
 		if (action == null) {
-			action = "mail";
+			//action = "mail";
+			action = "show";
 		}
 
 		// try to get the src parameter, which defines the specification xml
@@ -238,9 +242,13 @@ public class D3webDialog extends HttpServlet {
 			login(request, response, httpSession);
 			return;
 		}
-		else if (action.equalsIgnoreCase("mail")) {
+		else if (action.equalsIgnoreCase("sendmail")) {
 			try {
 				sendMail(request, response, httpSession);
+				response.setContentType("text/html");
+				response.setCharacterEncoding("utf8");
+				PrintWriter writer = response.getWriter();
+				writer.append("success");
 			}
 			catch (MessagingException e) {
 				// TODO Auto-generated catch block
@@ -423,8 +431,31 @@ public class D3webDialog extends HttpServlet {
 		String userFilename = request.getParameter("userfn");
 		String lastLoaded = (String) httpSession.getAttribute("lastLoaded");
 
+		// if any file had been loaded before as a case
 		if (!lastLoaded.equals("")) {
-			if (lastLoaded.equals(userFilename)) {
+
+			if (PersistenceD3webUtils.existsCase(
+					folderPath,
+					userFilename,
+					"Betreffende Klinik",
+					(Session) httpSession.getAttribute("d3webSession"))) {
+
+				// if user loaded case before, he can save with that already
+				// existing filename
+				if (lastLoaded.equals(userFilename)) {
+					PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
+							folderPath,
+							"Betreffende Klinik",
+							userFilename,
+							(Session) httpSession.getAttribute("d3webSession"));
+				}
+				else {
+					writer.append("exists");
+				}
+			}
+
+			// otherwise
+			else {
 				PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
 						folderPath,
 						"Betreffende Klinik",
@@ -432,7 +463,11 @@ public class D3webDialog extends HttpServlet {
 						(Session) httpSession.getAttribute("d3webSession"));
 			}
 		}
+
+		// if no file loaded, there should be no chance of saving with same name
 		else {
+
+			// if case already exists, do not enable saving
 			if (PersistenceD3webUtils.existsCase(
 					folderPath,
 					userFilename,
@@ -440,6 +475,8 @@ public class D3webDialog extends HttpServlet {
 					(Session) httpSession.getAttribute("d3webSession"))) {
 				writer.append("exists");
 			}
+
+			// otherwise if filename/case is not existent, it can be saved
 			else {
 			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
 					folderPath,
@@ -464,7 +501,7 @@ public class D3webDialog extends HttpServlet {
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.user", user);
 		props.put("mail.password", pw);
-		props.put("mail.debug", "true");
+		// props.put("mail.debug", "true");
 
 		javax.mail.Session session = javax.mail.Session.getDefaultInstance(props,
 				new javax.mail.Authenticator() {
@@ -496,9 +533,12 @@ public class D3webDialog extends HttpServlet {
 		 * version! Security consideration: have a pw file that contains only
 		 * the plaintext passwords,
 		 */
-		String u = "My User";
-		message.setText("Bitte Logindaten für folgenden Benutzer versenden: \n\n" + u);
+
+		String loginUser = request.getParameter("user");
+		message.setText("Bitte Logindaten erneut zusenden: \n\n" +
+				"Benutzername:" + loginUser);
 		Transport.send(message);
+
 	}
 
 	/**

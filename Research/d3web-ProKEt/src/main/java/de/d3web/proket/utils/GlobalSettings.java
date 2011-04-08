@@ -73,9 +73,9 @@ public class GlobalSettings {
 	private DialogStrategy defaultDialogStrategy = DialogStrategy.DEFAULT;
 	private String defaultCSSSpec = "default"; // TODO
 
-
+	/* The folder, where persistence is stored, e.g., case-files */
 	private String caseFolder = "";
-	private String userSubCaseFolder = "";
+
 
 	/* The getters for retrieving all those values */
 	public String getProketPath() {
@@ -138,6 +138,7 @@ public class GlobalSettings {
 		return d3webRendererPath;
 	}
 
+	/* Some values need to be set at runtime from outside */
 	public void setCaseFolder(String folderPath) {
 		caseFolder = folderPath;
 	}
@@ -146,11 +147,4 @@ public class GlobalSettings {
 		return caseFolder;
 	}
 
-	public void setSubCaseFolder(String userSubCaseFolder) {
-		this.userSubCaseFolder = userSubCaseFolder;
-	}
-
-	public String getSubCaseFolder() {
-		return userSubCaseFolder;
-	}
 }

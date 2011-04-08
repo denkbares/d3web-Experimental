@@ -1,1 +1,1 @@
-<jsp:forward page="/Mediastinitis"/>
+<jsp:forward page="/ControlCenter"/>

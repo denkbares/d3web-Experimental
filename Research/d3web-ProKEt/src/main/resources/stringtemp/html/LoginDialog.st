@@ -1,5 +1,6 @@
 <div id="jqLoginDialog" title="Bitte geben Sie Ihre LOGIN Daten ein:">
-		
+
+
 		<table>
 			<tbody>
 			<tr>
@@ -13,7 +14,11 @@
 			</tbody>
 		</table>
 		<div style="margin-top:5px; margin-bottom:5px;" id="loginError"></div>
-		<div id="loginExplanation">
+		<div style="margin-top:5px; margin-bottom:15px; cursor:pointer;" id="loginErrorMailRequest" 
+			onclick='javascript:sendLoginMailRequest();'></div>
+		
+		
+		<div style="margin-top:10px;" id="loginExplanation">
 		<b>Hinweis:</b> Sie werden nach <b>60 Minuten Inaktivität</b> automatisch ausgeloggt.<br /><br />
 		
 		Wenn Sie den Fall nicht explizit mit <b>Fall speichern</b> abgespeichert hatten, können Sie
