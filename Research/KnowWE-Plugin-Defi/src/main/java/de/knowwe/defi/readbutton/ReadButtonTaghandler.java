@@ -211,13 +211,14 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 	 */
 	private StringBuilder appendRadiobuttons(StringBuilder readbutton) {
 
-		readbutton.append("<tr>");
+		if (ratedValue != -1) readbutton.append("<tr  class='rated'>");
+		else readbutton.append("<tr>");
 		for (int i = 0; i < number; i++) {
 			readbutton.append("<td style='width:" + (100 / number) + "%'>");
 
 			readbutton.append("<input type='radio' ");
 			if (ratedValue != -1) readbutton.append("disabled ");
-			if (ratedValue != -1 && ratedValue == (i + 1)) readbutton.append("disabled checked ");
+			if (ratedValue != -1 && ratedValue == (i + 1)) readbutton.append("checked ");
 			readbutton.append("name='panel' value='" + (i + 1) + "' />");
 
 			// hidden: hide value

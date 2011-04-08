@@ -2021,4 +2021,7 @@ table.rbtag tr:FIRST-CHILD {
 table.rbtag td {
 	text-align:center;
 }
-
+tr.rated {
+	border:1px solid #BBB !important;
+	color:#BBB;	
+}
