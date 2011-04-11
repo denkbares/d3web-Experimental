@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2010 University Wuerzburg, Computer Science VI
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -69,7 +69,7 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Type;
 
 /**
- * 
+ *
  * @author grotheer
  * @created 29.11.2010
  */
@@ -121,7 +121,7 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return me
 	 */
 	public static Rdf2GoCore getInstance() {
@@ -134,7 +134,7 @@ public class Rdf2GoCore implements EventListener {
 
 	/**
 	 * registers and opens the specified model
-	 * 
+	 *
 	 * @throws ModelRuntimeException
 	 */
 	public void initModel() throws ModelRuntimeException, ReasoningNotSupportedException {
@@ -219,7 +219,7 @@ public class Rdf2GoCore implements EventListener {
 
 	/**
 	 * add a namespace to the model
-	 * 
+	 *
 	 * @param sh prefix
 	 * @param ns url
 	 */
@@ -239,7 +239,7 @@ public class Rdf2GoCore implements EventListener {
 
 	/**
 	 * expands namespace from prefix to uri string
-	 * 
+	 *
 	 * @created 04.01.2011
 	 * @param s
 	 * @return
@@ -258,7 +258,7 @@ public class Rdf2GoCore implements EventListener {
 
 	/**
 	 * expands prefix to namespace
-	 * 
+	 *
 	 * @created 06.12.2010
 	 * @param ns
 	 * @return
@@ -275,7 +275,7 @@ public class Rdf2GoCore implements EventListener {
 
 	/**
 	 * reduces namespace in uri string to prefix
-	 * 
+	 *
 	 * @created 06.12.2010
 	 * @param s
 	 * @return
@@ -361,7 +361,7 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @created 06.12.2010
 	 * @param qrt
 	 * @return html table with all results of qrt
@@ -387,7 +387,10 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	public boolean sparqlAsk(String query) throws ModelRuntimeException, MalformedQueryException {
-		return model.sparqlAsk(query);
+		if (query.startsWith(getSparqlNamespaceShorts())) {
+			return model.sparqlAsk(query);
+		}
+		return model.sparqlAsk(getSparqlNamespaceShorts() + query);
 	}
 
 	public QueryResultTable sparqlSelect(String query) throws ModelRuntimeException, MalformedQueryException {
@@ -402,7 +405,7 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @created 06.12.2010
 	 * @param s
 	 * @return statements of section s (with children)
@@ -426,7 +429,7 @@ public class Rdf2GoCore implements EventListener {
 
 	/**
 	 * removes all statements of section s
-	 * 
+	 *
 	 * @created 06.12.2010
 	 * @param s
 	 */
@@ -441,7 +444,7 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param sec
 	 * @created 06.12.2010
 	 * @return statements of section sec (without children)
@@ -457,7 +460,7 @@ public class Rdf2GoCore implements EventListener {
 
 	/**
 	 * removes statements from statementcache and rdf store
-	 * 
+	 *
 	 * @created 06.12.2010
 	 * @param sec
 	 */
@@ -507,7 +510,7 @@ public class Rdf2GoCore implements EventListener {
 	/**
 	 * adds statements to statementcache and rdf store and count duplicate
 	 * statements
-	 * 
+	 *
 	 * @created 06.12.2010
 	 * @param allStatements
 	 * @param sec
@@ -554,7 +557,7 @@ public class Rdf2GoCore implements EventListener {
 
 	/**
 	 * adds statements to statementcache
-	 * 
+	 *
 	 * @created 06.12.2010
 	 * @param sec
 	 * @param allStatements
@@ -584,7 +587,7 @@ public class Rdf2GoCore implements EventListener {
 
 	/**
 	 * Dumps the whole content of the model via System.out
-	 * 
+	 *
 	 * @created 05.01.2011
 	 */
 	public void dumpModel() {
@@ -664,7 +667,7 @@ public class Rdf2GoCore implements EventListener {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.d3web.we.core.ISemanticCore#simpleQueryToList(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -799,7 +802,7 @@ public class Rdf2GoCore implements EventListener {
 	 * attaches a TextOrigin Node to a Resource. It's your duty to make sure the
 	 * Resource is of the right type if applicable (eg attachto RDF.TYPE
 	 * RDF.STATEMENT)
-	 * 
+	 *
 	 * @param attachto The Resource that will be annotated bei the TO-Node
 	 * @param source The source section that should be used
 	 * @param io the ex-IntermediateOwlObject (now List<Statements> that should
