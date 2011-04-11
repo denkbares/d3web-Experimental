@@ -74,6 +74,8 @@ public class D3webConnector {
 	/* single element specification, e.g. selectbox... */
 	private HashMap<String, HashMap<String, String>> singleSpecs;
 
+	private D3webXMLParser d3webParser = null;
+
 	public static D3webConnector getInstance() {
 		if (instance == null) {
 			instance = new D3webConnector();
@@ -188,5 +190,13 @@ public class D3webConnector {
 
 	public HashMap<String, HashMap<String, String>> getSingleSpecs() {
 		return this.singleSpecs;
+	}
+
+	public void setD3webParser(D3webXMLParser parser) {
+		this.d3webParser = parser;
+	}
+
+	public D3webXMLParser getD3webParser() {
+		return d3webParser;
 	}
 }

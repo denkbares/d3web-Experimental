@@ -6,6 +6,7 @@
 	css="med2cols, nonavigation" 
 	dialogcolumns="1"
 	questionnairecolumns="3"
-	userprefix = "" >
-	<data kb="HerniaFeb2011_v2.d3web" />
+	userprefix = "" 
+	login = "no">
+	<data kb="HerniaApr2011.d3web" />
 </dialog>

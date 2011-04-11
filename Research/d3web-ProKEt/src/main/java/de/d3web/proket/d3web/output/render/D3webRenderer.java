@@ -159,6 +159,15 @@ public class D3webRenderer implements ID3webRenderer {
 		st.setAttribute("reset", "true");
 		st.setAttribute("sendexit", "true");
 		
+		/*
+		 * handle custom ContainerCollection modification, e.g., enabling
+		 * certain JS stuff
+		 */
+		if (D3webConnector.getInstance().getD3webParser().getLogin()) {
+			st.setAttribute("login", "true");
+			cc.js.enableLogin();
+		}
+
 		// handle Css
 		handleCss(cc);
 

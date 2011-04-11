@@ -36,6 +36,7 @@ public class JSCodeContainer implements ICodeContainer {
 	private boolean dateAnswer = false;
 	private boolean debug = false;
 	private boolean imageQuestions = false;
+	private boolean login = false;
 
 	@Override
 	public void add(String data) {
@@ -69,6 +70,10 @@ public class JSCodeContainer implements ICodeContainer {
 		imageQuestions = true;
 	}
 
+	public void enableLogin() {
+		login = true;
+	}
+
 
 	/**
 	 * Putting together the complete JS-defining and -linking String
@@ -100,8 +105,10 @@ public class JSCodeContainer implements ICodeContainer {
 			linkedBibs.add("jquery/jquery.maphilight.min.js");
 		}
 		if (d3web) {
-			ownBibs.add("login.js");
-			ownBibs.add("encrypt.js");
+			if (login) {
+				ownBibs.add("login.js");
+				ownBibs.add("encrypt.js");
+			}
 			ownBibs.add("d3web.js");
 			ownBibs.add("d3webBasic.js");
 			linkedBibs.add("jquery/jquery.object.js");

@@ -77,6 +77,7 @@ public class GlobalSettings {
 	private String caseFolder = "";
 
 
+
 	/* The getters for retrieving all those values */
 	public String getProketPath() {
 		return proketPath;

@@ -6,6 +6,8 @@
 	css="medi2cols, nonavigation" 
 	dialogcolumns="1"
 	questionnairecolumns="3"
-	userprefix = "" >
+	userprefix = "" 
+	login = "yes"
+	>
 	<data kb="HerzmedizinMar2011.d3web" />
 </dialog>

@@ -1,0 +1,13 @@
+-------------------------------------------
+--- HERNIA (Projekt EU-Hernienregister) ---
+-------------------------------------------
+
+----------------------------
+---- TODOS  TODOS  TODOS ---
+----------------------------
+
+- Bildfragen Eingabe / Rendering über KB
+- Markup für Popup, PDF, Summary Grids
+- Summary Grid Base Mechanism
+- adapt date questions for format YYYY-MM-DD
+		

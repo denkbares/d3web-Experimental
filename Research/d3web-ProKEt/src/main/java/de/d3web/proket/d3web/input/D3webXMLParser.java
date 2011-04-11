@@ -148,6 +148,7 @@ public class D3webXMLParser {
 	}
 
 
+
 	/**
 	 * Reads the DialogType from the parsed XML file. This attribute needs to be
 	 * one of the values of DialogType enum.
@@ -189,6 +190,19 @@ public class D3webXMLParser {
 		}
 		return col;
 	}
+
+
+	// returns false in case "no" is given OR nothing
+	public boolean getLogin() {
+
+		String log = XMLUtils.getStr((Element) dialogSpec, "login", null);
+		if (log != null && log.toLowerCase().equals("yes")) {
+			System.out.println("login xes");
+			return true;
+		}
+		return false;
+	}
+
 
 	public String getUserPrefix() {
 		return XMLUtils.getStr((Element) dialogSpec, "userprefix", "");

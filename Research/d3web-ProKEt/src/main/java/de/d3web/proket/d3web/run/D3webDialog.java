@@ -156,6 +156,7 @@ public class D3webDialog extends HttpServlet {
 
 		// d3web parser for interpreting the source/specification xml
 		d3webParser = new D3webXMLParser(source);
+		d3wcon.setD3webParser(d3webParser);
 
 		// only invoke parser, if XML hasn't been parsed before
 		// if it has, a knowledge base already exists
@@ -290,6 +291,7 @@ public class D3webDialog extends HttpServlet {
 		 * String html = "" + "<html><head></head>" + "<body>" +
 		 * "<img>D3webPicShow?src=Test</img>" + "</body>" + "</html>";
 		 */
+
 
 		writer.print(cc.html.toString()); // deliver the rendered output
 		// writer.print(html);
