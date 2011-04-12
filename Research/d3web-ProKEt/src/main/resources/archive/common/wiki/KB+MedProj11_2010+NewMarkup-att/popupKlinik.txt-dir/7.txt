@@ -1,0 +1,55 @@
+<div id="popupTableDiv">
+	<b>Zur eindeutigen Unterscheidung der Kliniken in München, Berlin und Hamburg verwenden Sie bitte nachfolgende Kürzel:</b>
+</div>
+<table id="popupTable">
+<tbody>
+	<tr>
+		<td width="17%">München</td>
+		<td>
+			<ul>
+				<li>M_BHZ</li>
+				<li>M_BOG</li>
+				<li>M_GRH</li>
+			</ul>
+		</td>
+		<td width="15%">
+			<ul>
+				<li class="noListMarker">(München BHZ)</li>
+				<li class="noListMarker">(München Bogenhausen)</li>
+				<li class="noListMarker">(München Großhadern)</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td width="17%">Berlin</td>
+		<td width="15%">
+			<ul>
+				<li>B_BHZ</li>
+				<li>B_CHA</li>
+			</ul>
+		</td>
+		<td>
+			<ul>
+				<li class="noListMarker">(Berlin BHZ)</li>
+				<li class="noListMarker">(Berlin Charité)</li>
+			</ul>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td width="17%">Hamburg</td>
+		<td width="15%">
+			<ul>
+				<li>HH_EPD</li>
+				<li>HH_STG</li>
+			</ul>
+		</td>
+		<td>
+			<ul>
+				<li class="noListMarker">(Hamburg Eppendorf)</li>
+				<li class="noListMarker">(Hamburg St. Georg)</li>
+			</ul>
+		</td>
+	</tr>
+</tbody>
+</table>
