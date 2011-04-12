@@ -1,0 +1,12 @@
+%%Property
+"Year
+ of birth:".description = YYYY-MM-
+DD
+
+Scheduled date of operation:.description = "YYYY-MM-DD"
+Date of the last repair:.description = "yyyy/mm/dd OR yyyy/mm OR yyyy"
+
+@package: Hernia
+%
+
+[{KnowWEPlugin renderKDOM}]

@@ -19,7 +19,7 @@ __MFreiberg-KBDevel__
 
 * [Overview | KBDevel]
 * [Herzmedizin | KB MedProj11_2010 NewMarkup]
-* [Hernienregister | Hernienregister Hauptseite]
+* [Hernienregister | KB Hernienregister|Hernienregister Hauptseite]
 * [Arbeitsrecht | KB Kündigungsrecht]
 
 ----
