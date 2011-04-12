@@ -1,8 +1,10 @@
 $HTMLHeader()$
 <body>
+
 $if(login)$
 	$LoginDialog()$
 $endif$
+
 <!-- header & footer in one //-->
 <div id="head">
 	<table>

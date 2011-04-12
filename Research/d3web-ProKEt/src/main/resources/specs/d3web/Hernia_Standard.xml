@@ -3,7 +3,7 @@
 	header="EuraHS"  
 	dtype="singleform" 
 	dstrategy="nextuaquestion" 
-	css="med2cols, nonavigation" 
+	css="medi2cols, nonavigation" 
 	dialogcolumns="1"
 	questionnairecolumns="3"
 	userprefix = "" 
