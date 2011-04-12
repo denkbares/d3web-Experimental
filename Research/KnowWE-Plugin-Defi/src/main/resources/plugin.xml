@@ -73,6 +73,16 @@
         <parameter id="priority" value="5" />
         <parameter id="css" value="defi.css" />
     </extension>
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="LeftRightNavigationBarTagHandler">
+        <parameter id="class" value="de.knowwe.defi.links.LeftRightNavigationBarTagHandler" />
+        <parameter id="name" value="LeftRightNavigationBarTagHandler" />
+        <parameter id="description" value="TagHandler LeftRightNavigationBarTagHandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="css" value="defi.css" />
+    </extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="ShowTableTagHandler">
