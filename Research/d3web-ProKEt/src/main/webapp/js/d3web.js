@@ -24,23 +24,27 @@
 
 $(function() {
 
-	window.setTimeout("timeout()", 57000 * 60);
+	// if login should be enabled: set in minimal XML and JSCodeContainer
+	if(login){
+		window.setTimeout("logintimeout()", 57000 * 60);
 
-	var link = $.query.set("action", "checkLogin").toString();
-	link = window.location.href.replace(window.location.search, "") + link;
+		var link = $.query.set("action", "checkLogin").toString();
+		link = window.location.href.replace(window.location.search, "") + link;
 
-	$.ajax({
-		type : "GET",
-		async : false,
-		url : link,
-		success : function(html) {
-			if (html == "NLI") {
-				$("#jqLoginDialog").dialog("open");
-			} else {
-				$("#jqLoginDialog").dialog("close");
+		$.ajax({
+			type : "GET",
+			async : false,
+			url : link,
+			success : function(html) {
+				if (html == "NLI") {
+					$("#jqLoginDialog").dialog("open");
+				} else {
+					$("#jqLoginDialog").dialog("close");
+				}
 			}
-		}
-	});
+		});
+	} 
+	
 
 	/* creating and configuring the jquery UI save-case dialog */
 	$(function() {
@@ -83,21 +87,22 @@ $(function() {
 	/* Initialize the JS binding to the dialog elements */
 	initFunctionality();
 
-	// make navigation work on d3web level
-	// $(".navigation-item").each(function() {
-	// var id = $(this).attr('id');
-	// $(this).children("a").bind("click", function() {
-	// d3web_selectQuestionnaire(id.replace(/^nav-/, ""));
-	// });
-	// });
-});
+	$().ready(function() {
 
-function timeout() {
-	
-	$("#jqLoginDialog").delay(3000).dialog("open");
-	
-	
-}
+		// enable buttons in save case and load case dialogs to react on pressing enter
+		$(document).keypress(function(e) {
+			if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+				if ($('#jqConfirmDialog').dialog('isOpen'))
+					$('[aria-labelledby$=jqConfirmDialog]').find(":button:contains('Speichern')").click();
+				if ($('#jqLoadCaseDialog').dialog('isOpen'))
+					$('[aria-labelledby$=jqLoadCaseDialog]').find(":button:contains('OK')").click();
+				return false;
+            }
+        });
+		
+		
+	});
+});
 
 /**
  * Set a click function to all form elements for enabling the sending of values
@@ -693,9 +698,9 @@ function closeJQConfirmDialog() {
 	$('#jqConfirmDialog').dialog('close');
 }
 
-function closeJQLoginDialog() {
-	$('#jqLoginDialog').dialog('close');
-}
+//function closeJQLoginDialog() {
+	//$('#jqLoginDialog').dialog('close');
+//}
 
 function closeJQLoadCaseDialog() {
 	$('#jqLoadCaseDialog').dialog('close');

@@ -123,41 +123,74 @@ public class PersistenceD3webUtils {
 		Date now = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmss");
 
-		// Value of given question in the current session
-		Question clinic = (Question) KnowledgeBaseUtils.
-				findTerminologyObjectByName(questionName, D3webConnector.getInstance().getKb());
-		Blackboard bb = d3webSession.getBlackboard();
-		String clinicVal = bb.getValue(clinic).toString();
-
-		// System.out.println(clinicVal);
-
-		File folder = new File(folderPath + "/" + clinicVal + "/");
-		// System.out.println(folder);
+		String clinicVal = "";
+		File folder = null;
 		File file = null;
-		if (filename.equals("autosave")) {
-			if (folder.listFiles() != null && folder.listFiles().length != 0) {
-				for (File f : folder.listFiles()) {
-					if (f.getName().contains("autosave")) {
-						f.delete();
-					}
-				}
-			}
-			file = new File(folderPath + "/" + clinicVal + "/" + sdf.format(now)
-					+ "_UVautosaveUV.xml");
-		}
-		else {
+		
+		if (questionName != "") {
+			// Value of given question in the current session
+			Question clinic = (Question) KnowledgeBaseUtils.
+					findTerminologyObjectByName(questionName, D3webConnector.getInstance().getKb());
+			Blackboard bb = d3webSession.getBlackboard();
+			clinicVal = bb.getValue(clinic).toString();
+			folder = new File(folderPath + "/" + clinicVal + "/");
 
-			/* check whether file with that name already exists --> delet it */
-			if (folder.listFiles() != null && folder.listFiles().length != 0) {
-				for (File f : folder.listFiles()) {
-					if (f.getName().contains(filename)) {
-						f.delete();
+			if (filename.equals("autosave")) {
+				if (folder.listFiles() != null && folder.listFiles().length != 0) {
+					for (File f : folder.listFiles()) {
+						if (f.getName().contains("autosave")) {
+							f.delete();
+						}
 					}
 				}
+				file = new File(folderPath + "/" + clinicVal + "/" + sdf.format(now)
+						+ "_UVautosaveUV.xml");
 			}
-			// Final assembly
-			file = new File(folderPath + "/" + clinicVal + "/" + sdf.format(now) + "_UV"
-					+ filename + "UV.xml");
+			else {
+
+				/* check whether file with that name already exists --> delet it */
+				if (folder.listFiles() != null && folder.listFiles().length != 0) {
+					for (File f : folder.listFiles()) {
+						if (f.getName().contains(filename)) {
+							f.delete();
+						}
+					}
+				}
+				// Final assembly
+				file = new File(folderPath + "/" + clinicVal + "/" + sdf.format(now) + "_UV"
+						+ filename + "UV.xml");
+			}
+
+		} else {
+
+			folder = new File(folderPath + "/");
+
+			if (filename.equals("autosave")) {
+				if (folder.listFiles() != null && folder.listFiles().length != 0) {
+					for (File f : folder.listFiles()) {
+						if (f.getName().contains("autosave")) {
+							f.delete();
+						}
+					}
+				}
+				file = new File(folderPath + "/" + sdf.format(now)
+						+ "_UVautosaveUV.xml");
+			}
+			else {
+
+				/* check whether file with that name already exists --> delet it */
+				if (folder.listFiles() != null && folder.listFiles().length != 0) {
+					for (File f : folder.listFiles()) {
+						if (f.getName().contains(filename)) {
+							f.delete();
+						}
+					}
+				}
+				// Final assembly
+				file = new File(folderPath + "/" + sdf.format(now) + "_UV"
+						+ filename + "UV.xml");
+			}
+
 		}
 
 
@@ -176,28 +209,43 @@ public class PersistenceD3webUtils {
 	 * @created 09.03.2011
 	 * @param filename Name of the file to be loaded.
 	 */
-	public static void loadCase(String filename) {
+	public static Session loadCase(String filename) {
 
-		File file = new File(filename);
+		// folder with cases .xml files
+		File folder = new File(GlobalSettings.getInstance().getCaseFolder());
+		File fileToLoad = null;
+
+		if (folder.listFiles() != null && folder.listFiles().length != 0) {
+			for (File f : folder.listFiles()) {
+
+				if (f.getName().contains(filename)) {
+					fileToLoad = f;
+				}
+			}
+		}
+
 		SingleXMLSessionRepository sessionRepository = new SingleXMLSessionRepository();
 
+		Session session1 = null;
 		try {
 
-			sessionRepository.load(file);
+			sessionRepository.load(fileToLoad);
 
 			Iterator<SessionRecord> iterator = sessionRepository.iterator();
 			SessionRecord record1 = iterator.next();
 
-			Session session1 =
+			session1 =
 					SessionConversionFactory.copyToSession(D3webConnector.getInstance().getKb(),
 							record1);
 
-			D3webConnector.getInstance().setSession(session1);
+
 		}
 		catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		return session1;
 	}
 
 	/**
@@ -256,22 +304,56 @@ public class PersistenceD3webUtils {
 	 *         FileSelect-StringTemplate.
 	 */
 	public static String getCaseList() {
+
 		StringBuffer cases = new StringBuffer();
 		File folder = new File(GlobalSettings.getInstance().getCaseFolder());
 
 		if (folder.listFiles() != null && folder.listFiles().length != 0) {
-			for (File f : folder.listFiles()) {
 
-				// add surrounding HTML fragments
-				cases.append("<option>");
+			// ignore file(s) ending to .csv as this is the user config file
+			File[] files = folder.listFiles(new FileFilter() {
 
-				// add filename
-				cases.append(f.getName());
+				@Override
+				public boolean accept(File pathname) {
+					return !pathname.getName().contains(".csv");
+				}
+			});
 
-				cases.append("</option>");
+			ArrayList<String> sfn = new ArrayList<String>();
+
+			for (File f : files) {
+
+				// Split the complete filename String <TIMESTAMP><>
+				// so we get only the user entered filename to be displayed
+
+				if (!f.getName().contains("autosave")) {
+					String[] fnparts = f.getName().split("UV");
+					if (fnparts != null && fnparts.length == 3) {
+						sfn.add(fnparts[1]);
+					}
+				}
+			}
+
+			/* add autosaved as first item always */
+			cases.append("<option>");
+			cases.append("autosave");
+			cases.append("</option>");
+
+			String[] sortedFilenames = new String[sfn.size()];
+			sfn.toArray(sortedFilenames);
+
+			Arrays.sort(sortedFilenames);
+
+			for (String fn : sortedFilenames) {
+				if (fn != null && fn != "") {
+					cases.append("<option>");
+					cases.append(fn);
+					cases.append("</option>");
+				}
 			}
 		}
 		else {
+			/* In case no files are found, just append empty string */
 			cases.append("");
 		}
 
@@ -344,13 +426,20 @@ public class PersistenceD3webUtils {
 
 	public static boolean existsCase(String fold, String userFilename, String subfolder, Session session) {
 
+		String subfold = "";
+		File folder = null;
+		
 		// Value of given question in the current session
-		Question subfolderVal = (Question) KnowledgeBaseUtils.
-				findTerminologyObjectByName(subfolder, D3webConnector.getInstance().getKb());
-		Blackboard bb = session.getBlackboard();
-		String subfold = bb.getValue(subfolderVal).toString();
+		if(subfolder != ""){
+			Question subfolderVal = (Question) KnowledgeBaseUtils.
+			findTerminologyObjectByName(subfolder, D3webConnector.getInstance().getKb());
+			Blackboard bb = session.getBlackboard();
+			subfold = bb.getValue(subfolderVal).toString();
+			folder = new File(fold + "/" + subfold);
+		} else {
+			folder = new File(fold);
+		}
 
-		File folder = new File(fold + "/" + subfold);
 		// System.out.println(folder.getName());
 		if (folder.listFiles() != null && folder.listFiles().length != 0) {
 

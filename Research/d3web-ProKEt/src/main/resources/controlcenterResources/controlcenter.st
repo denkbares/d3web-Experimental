@@ -34,9 +34,9 @@ $css$
 <div id="accordion"
 	style="width: 600px; margin-left: auto; margin-right: auto;">
 
-<h3><a href="#">Reine Prototypen Dialoge</a></h3>
+<h3><a href="#">Pure Prototype Dialogs</a></h3>
 <div>$dialogs$</div>
-<h3><a href="#">Reine d3web Dialoge</a></h3>
+<h3><a href="#">d3web Dialogs</a></h3>
 <div>$d3web$</div>
 </div>
 </body>

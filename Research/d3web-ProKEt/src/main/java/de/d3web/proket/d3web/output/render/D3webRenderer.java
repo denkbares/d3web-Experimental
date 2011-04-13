@@ -149,7 +149,13 @@ public class D3webRenderer implements ID3webRenderer {
 		st.setAttribute("header", D3webConnector.getInstance().getHeader());
 
 		// load case list
-		String opts = PersistenceD3webUtils.getCaseListFromUserFilename((String) http.getAttribute("user"));
+		String opts = "";
+		if ((String) http.getAttribute("user") != null && (String) http.getAttribute("user") != "") {
+			opts = PersistenceD3webUtils.getCaseListFromUserFilename((String) http.getAttribute("user"));
+		}
+		else {
+			opts = PersistenceD3webUtils.getCaseList();
+		}
 
 		st.setAttribute("fileselectopts", opts);
 
@@ -158,7 +164,7 @@ public class D3webRenderer implements ID3webRenderer {
 		st.setAttribute("savecase", "true");
 		st.setAttribute("reset", "true");
 		st.setAttribute("sendexit", "true");
-		
+
 		/*
 		 * handle custom ContainerCollection modification, e.g., enabling
 		 * certain JS stuff
@@ -370,11 +376,11 @@ public class D3webRenderer implements ID3webRenderer {
 				if (!to.getInfoStore().getValue(BasicProperties.UNKNOWN_VISIBLE) == true) {
 
 					ID3webRenderer unknownRenderer =
-						D3webRenderer.getUnknownRenderer();
+							D3webRenderer.getUnknownRenderer();
 
 					// receive the matching HTML from the Renderer and append
 					String childHTML =
-						unknownRenderer.renderTerminologyObject(cc, to, to);
+							unknownRenderer.renderTerminologyObject(cc, to, to);
 					if (childHTML != null) {
 						childrenHTML.append(childHTML);
 					}
@@ -579,6 +585,20 @@ public class D3webRenderer implements ID3webRenderer {
 						return true;
 					}
 				}
+			}
+		}
+		return false;
+	}
+
+	public boolean isParentOfFollowUpQuIndicated(TerminologyObject to, Blackboard bb) {
+		for (Question q : bb.getSession().getKnowledgeBase().getManager().getQuestions()) {
+
+			// and check its indication state
+			if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(q)
+						|| bb.getIndication(q).getState() == State.INDICATED
+						|| bb.getIndication(q).getState() == State.INSTANT_INDICATED) {
+
+				return true;
 			}
 		}
 		return false;

@@ -104,11 +104,19 @@ public class JSCodeContainer implements ICodeContainer {
 		if (imageQuestions) {
 			linkedBibs.add("jquery/jquery.maphilight.min.js");
 		}
+
+		if (login) {
+			ownBibs.add("login.js");
+			ownBibs.add("encrypt.js");
+			// flag that enables login mechanism in d3web.js
+			add("var login = true;", 0);
+		}
+		else {
+			// flag that disables login mechanism in d3web.js
+			add("var login = false;", 0);
+		}
+
 		if (d3web) {
-			if (login) {
-				ownBibs.add("login.js");
-				ownBibs.add("encrypt.js");
-			}
 			ownBibs.add("d3web.js");
 			ownBibs.add("d3webBasic.js");
 			linkedBibs.add("jquery/jquery.object.js");
@@ -117,6 +125,7 @@ public class JSCodeContainer implements ICodeContainer {
 			ownBibs.add("code.js");
 			add("var d3web = false;", 0);
 		}
+
 
 
 		// SECOND assemble bibs and singular js data to a string

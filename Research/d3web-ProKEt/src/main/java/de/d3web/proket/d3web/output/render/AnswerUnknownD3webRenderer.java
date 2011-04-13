@@ -23,6 +23,7 @@ import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
+import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Value;
@@ -41,31 +42,46 @@ public class AnswerUnknownD3webRenderer extends D3webRenderer {
 			TerminologyObject parent) {
 
 		StringBuilder sb = new StringBuilder();
-
 		StringTemplate st = null;
 
-		// get the fitting template. In case user prefix was specified, the
-		// specific TemplateName is returned, otherwise, the base object
-		// name.
+		// Get the fitting template.
 		st = TemplateUtils.getStringTemplate(
 					super.getTemplateName("Unknown"), "html");
 
+		// set basic properties
 		st.setAttribute("fullId", to.getName().replace(" ", "_"));
-		st.setAttribute("parentFullId", to.getName().replace(" ", "_"));
+		st.setAttribute("parentFullId", parent.getName().replace(" ", "_"));
 
 		Blackboard bb = super.d3webSession.getBlackboard();
 		Value value = bb.getValue((ValueObject) to);
 
+		// abstraction question --> readonly
 		if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
 			st.setAttribute("readonly", "true");
 		}
-		else if (!isParentIndicated(to, bb)) {
-			st.setAttribute("readonly", "true");
-		}
-		else if (to.getParents() != null && to.getParents().length != 0
-				&& to.getParents()[0] instanceof Question
-				&& !isIndicated(to, bb)) {
-			st.setAttribute("readonly", "true");
+
+		// question has parents, e.g. direct qcontainer or question parent
+		// then readonly state depends on parent state
+		else if (to.getParents() != null &&
+				to.getParents().length != 0) {
+
+			if (to.getParents()[0] instanceof QContainer) {
+				if (!isParentIndicated(to, bb)) {
+					st.setAttribute("readonly", "true");
+				}
+			}
+			else if (to.getParents()[0] instanceof Question) {
+				if (isParentOfFollowUpQuIndicated(to, bb)) {
+					st.removeAttribute("readonly");
+				}
+				else {
+					st.setAttribute("readonly", "true");
+
+						// also remove possible set values
+					st.removeAttribute("selection");
+					st.setAttribute("selection", "");
+				}
+			}
 		}
 		else {
 			st.removeAttribute("readonly");

@@ -61,6 +61,12 @@ FREECHOICE/QUICKI Dialog
 
 
 
+-- IF ONE DIALOG IS OPENED/USED and we switch to another (ControlCenter) ALL FIELDS ARE DISPLAYED DISABLED?!?!!!!
+-- REFACTOR ANSWER D3WEB RENDERERS
+-- REFACTOR D3webDialog?! Problem is with httpSession stuff and providing variables or not, depending on whether, 
+for example, login is enabled or not.
+
+
 -------------------------------------------
 --- MEDIASTINITIS (Projekt Herzmedizin) ---
 -------------------------------------------

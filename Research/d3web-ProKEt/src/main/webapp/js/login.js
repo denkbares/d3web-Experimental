@@ -49,10 +49,10 @@ $(function() {
 			if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
 				if ($('#jqLoginDialog').dialog('isOpen'))
 					$('[aria-labelledby$=jqLoginDialog]').find(":button:contains('OK')").click();
-				if ($('#jqConfirmDialog').dialog('isOpen'))
+				/*if ($('#jqConfirmDialog').dialog('isOpen'))
 					$('[aria-labelledby$=jqConfirmDialog]').find(":button:contains('Speichern')").click();
 				if ($('#jqLoadCaseDialog').dialog('isOpen'))
-					$('[aria-labelledby$=jqLoadCaseDialog]').find(":button:contains('OK')").click();
+					$('[aria-labelledby$=jqLoadCaseDialog]').find(":button:contains('OK')").click();*/
 				return false;
             }
         });
@@ -76,7 +76,10 @@ $(function() {
     }
 }]*/
 
-
+function logintimeout() {
+	
+	$("#jqLoginDialog").delay(3000).dialog("open");
+}
 
 /**
  * Definition of an Ajax call that sends user login data to LoginServlet, and,

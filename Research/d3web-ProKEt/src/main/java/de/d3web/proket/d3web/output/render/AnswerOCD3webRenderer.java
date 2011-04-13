@@ -24,6 +24,7 @@ import org.antlr.stringtemplate.StringTemplate;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
+import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Value;
@@ -60,9 +61,8 @@ public class AnswerOCD3webRenderer extends D3webRenderer {
 
 		StringTemplate st = null;
 
-		// get the fitting template. In case user prefix was specified, the
-		// specific TemplateName is returned, otherwise, the base object
-		// name.
+		// get the template. In case user prefix was specified, the specific
+		// TemplateName is returned, otherwise the base object name.
 		st = TemplateUtils.getStringTemplate(
 				super.getTemplateName("OcAnswer"), "html");
 
@@ -74,31 +74,79 @@ public class AnswerOCD3webRenderer extends D3webRenderer {
 		Blackboard bb = super.d3webSession.getBlackboard();
 		Value value = bb.getValue((ValueObject) to);
 
+		// if question is an abstraction question --> readonly
 		if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
 			st.setAttribute("readonly", "true");
 		}
-		else if (!isParentIndicated(to, bb)) {
-			st.setAttribute("readonly", "true");
-		}
-		else if (to.getParents() != null && to.getParents().length != 0
-				&& to.getParents()[0] instanceof Question
-				&& !isIndicated(to, bb)) {
-			st.setAttribute("readonly", "true");
+		// if to=question has parents readonly state depends on parent
+		else if (to.getParents()[0] != null &&
+				to.getParents().length != 0) {
 
-			st.removeAttribute("selection");
-			st.setAttribute("selection", "");
+			// if direct parent is qcontainer
+			// if the qcontainer is not indicated --> question readonly
+			if (to.getParents()[0] instanceof QContainer) {
+				if (!isParentIndicated(to, bb)) {
+					st.setAttribute("readonly", "true");
+				}
+			}
+			// if direct parent is question and if the to=question is
+			// follow up question of one of parents answers
+			else if (to.getParents()[0] instanceof Question) {
+
+				// if parent is indicated, to indicated too --> no readonly
+				if (isParentOfFollowUpQuIndicated(to, bb)) {
+					st.removeAttribute("readonly");
+				}
+				// otherwise to=question not indicated and readonly
+				else {
+					st.setAttribute("readonly", "true");
+
+					// also remove possible set values
+					st.removeAttribute("selection");
+					st.setAttribute("selection", "");
+				}
+			}
 		}
+		// in all other cases display question/answers --> no readonly
 		else {
 			st.removeAttribute("readonly");
 		}
 
+		// else if (!isParentIndicated(to, bb)) {
+		// st.setAttribute("readonly", "true");
+
+			// if parent is a question and current to was a follow up
+			// question of parent and parent is indicated --> no readonly
+		// if (isParentOfFollowUpQuIndicated(to, bb)) {
+		// st.removeAttribute("readonly");
+		// }
+		// }
+		// else if (to.getParents() != null && to.getParents().length != 0
+		// && to.getParents()[0] instanceof Question
+		// && !isIndicated(to, bb)) {
+		// st.setAttribute("readonly", "true");
+
+			// st.removeAttribute("selection");
+		// st.setAttribute("selection", "");
+		// }
+
+		// if value of the to=question equals this choice
 		if (value.toString().equals(c.toString())) {
+
+			// if to=question is abstraction question, was readonly before, but
+			// value
+			// has been set (e.g. by other answer & Kb indication), remove
+			// readonly
 			if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
 				st.removeAttribute("readonly");
 			}
+
+			// set selected
 			st.removeAttribute("selection");
 			st.setAttribute("selection", "checked=\'checked\'");
 		}
+
+		// if value of question is undefined or unknown remove previous choice
 		else if (UndefinedValue.isUndefinedValue(value)
 				|| value.equals(Unknown.getInstance())) {
 			st.removeAttribute("selection");

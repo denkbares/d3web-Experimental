@@ -197,12 +197,21 @@ public class D3webXMLParser {
 
 		String log = XMLUtils.getStr((Element) dialogSpec, "login", null);
 		if (log != null && log.toLowerCase().equals("yes")) {
-			System.out.println("login xes");
 			return true;
 		}
 		return false;
 	}
 
+	// returns the specification of required fields
+	public String getRequired() {
+
+		String req = XMLUtils.getStr((Element) dialogSpec, "required", null);
+		if ((req != null && req.toLowerCase().equals("none")) ||
+				req.equals(null)) {
+			return "";
+		}
+		return req;
+	}
 
 	public String getUserPrefix() {
 		return XMLUtils.getStr((Element) dialogSpec, "userprefix", "");

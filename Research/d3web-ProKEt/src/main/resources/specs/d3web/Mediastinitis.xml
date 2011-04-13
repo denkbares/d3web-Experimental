@@ -8,6 +8,7 @@
 	questionnairecolumns="3"
 	userprefix = "" 
 	login = "yes"
+	required = "Betreffende Klinik"
 	>
 	<data kb="HerzmedizinMar2011.d3web" />
 </dialog>

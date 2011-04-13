@@ -124,6 +124,13 @@ public class D3webDialog extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		String fP = GlobalSettings.getInstance().getCaseFolder();
+		if (fP.equals(null) || fP.equals("")) {
+			String folderPath =
+					request.getSession().getServletContext().getRealPath("/");
+			String persistencePath = folderPath + "cases";
+			GlobalSettings.getInstance().setCaseFolder(persistencePath);
+		}
 		/* 
 		 * FOLDER PATH: get the folder on the server for persistence storing
 		 * only needed here in case the dialog is used without login mechanisms 
@@ -320,8 +327,15 @@ public class D3webDialog extends HttpServlet {
 		// get the ID of a potentially given single question answered
 		String qid = request.getParameter("qid");
 
-		// ONLY GO ON SAVING if required att(s) is/are already set
-		boolean goOn = checkReqVal("Betreffende Klinik", sess, qid);
+		// check if required fields are given and need to be checked
+		boolean goOn = false;
+		if (D3webConnector.getInstance().getD3webParser().getRequired().equals("")) {
+			goOn = true;
+		}
+		else {
+			goOn = checkReqVal(
+					D3webConnector.getInstance().getD3webParser().getRequired(), sess, qid);
+		}
 
 		if (!goOn) {
 			writer.append("noReqs");
@@ -405,7 +419,7 @@ public class D3webDialog extends HttpServlet {
 			// AUTOSAVE
 			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
 						folderPath,
-						"Betreffende Klinik",
+						D3webConnector.getInstance().getD3webParser().getRequired(),
 						"autosave",
 						(Session) httpSession.getAttribute("d3webSession"));
 
@@ -434,12 +448,12 @@ public class D3webDialog extends HttpServlet {
 		String lastLoaded = (String) httpSession.getAttribute("lastLoaded");
 
 		// if any file had been loaded before as a case
-		if (!lastLoaded.equals("")) {
+		if (lastLoaded != null && !lastLoaded.equals("")) {
 
 			if (PersistenceD3webUtils.existsCase(
 					folderPath,
 					userFilename,
-					"Betreffende Klinik",
+					D3webConnector.getInstance().getD3webParser().getRequired(),
 					(Session) httpSession.getAttribute("d3webSession"))) {
 
 				// if user loaded case before, he can save with that already
@@ -447,7 +461,7 @@ public class D3webDialog extends HttpServlet {
 				if (lastLoaded.equals(userFilename)) {
 					PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
 							folderPath,
-							"Betreffende Klinik",
+							D3webConnector.getInstance().getD3webParser().getRequired(),
 							userFilename,
 							(Session) httpSession.getAttribute("d3webSession"));
 				}
@@ -458,9 +472,10 @@ public class D3webDialog extends HttpServlet {
 
 			// otherwise
 			else {
+				System.out.println("save");
 				PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
 						folderPath,
-						"Betreffende Klinik",
+						D3webConnector.getInstance().getD3webParser().getRequired(),
 						userFilename,
 						(Session) httpSession.getAttribute("d3webSession"));
 			}
@@ -473,7 +488,7 @@ public class D3webDialog extends HttpServlet {
 			if (PersistenceD3webUtils.existsCase(
 					folderPath,
 					userFilename,
-					"Betreffende Klinik",
+					D3webConnector.getInstance().getD3webParser().getRequired(),
 					(Session) httpSession.getAttribute("d3webSession"))) {
 				writer.append("exists");
 			}
@@ -482,7 +497,7 @@ public class D3webDialog extends HttpServlet {
 			else {
 			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
 					folderPath,
-					"Betreffende Klinik",
+						D3webConnector.getInstance().getD3webParser().getRequired(),
 					userFilename,
 					(Session) httpSession.getAttribute("d3webSession"));
 			}
@@ -556,11 +571,24 @@ public class D3webDialog extends HttpServlet {
 		// get the filename from the corresponding request parameter "fn"
 		String filename = request.getParameter("fn");
 
-		String user = httpSession.getAttribute("user").toString();
+		String user = "";
+		if (httpSession.getAttribute("user") != null) {
+			user = httpSession.getAttribute("user").toString();
+		}
+
 		// load the file = path + filename
 		// PersistenceD3webUtils.loadCaseFromUserFilename(folderPath + "/" +
 		// filename);
-		Session session = PersistenceD3webUtils.loadCaseFromUserFilename(filename, user);
+		
+		Session session = null;
+		if (!user.equals("")) {
+			session = PersistenceD3webUtils.loadCaseFromUserFilename(filename, user);
+		}
+		else {
+			session = PersistenceD3webUtils.loadCase(filename);
+		}
+		
+		
 		httpSession.setAttribute("d3webSession", session);
 
 		httpSession.setAttribute("lastLoaded", filename);
