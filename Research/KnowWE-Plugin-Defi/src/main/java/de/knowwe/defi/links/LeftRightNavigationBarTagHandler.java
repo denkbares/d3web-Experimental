@@ -55,7 +55,7 @@ public class LeftRightNavigationBarTagHandler extends AbstractTagHandler {
 		buffy.append(KnowWEUtils.maskHTML("<td >"));
 		if (left != null) {
 		buffy.append(KnowWEUtils.maskHTML("<a href='Wiki.jsp?page="
-				+ left
+					+ extractPageName(left)
 				+ "' ><img src='KnowWEExtension/images/Pfeil_nach_links.gif' height='60'/></a>"));
 		buffy.append(KnowWEUtils.maskHTML("</td>"));
 		buffy.append(KnowWEUtils.maskHTML("<td>"));
@@ -79,7 +79,7 @@ public class LeftRightNavigationBarTagHandler extends AbstractTagHandler {
 		buffy.append(KnowWEUtils.maskHTML("<td>"));
 
 		buffy.append(KnowWEUtils.maskHTML("<a href='Wiki.jsp?page="
-				+ right
+					+ extractPageName(right)
 				+ "Wie sich Angst zeigt' > <img src='KnowWEExtension/images/Pfeil_nach_rechts.gif' height='60'/>  </a>"));
 		}
 		buffy.append(KnowWEUtils.maskHTML("</td>"));
@@ -88,6 +88,18 @@ public class LeftRightNavigationBarTagHandler extends AbstractTagHandler {
 		buffy.append(KnowWEUtils.maskHTML("</center>"));
 
 		return buffy.toString();
+	}
+
+	private String extractPageName(String left) {
+		String text = left.trim();
+		if (text.startsWith("[") && text.endsWith("]")) {
+			text = text.substring(1, text.length() - 1);
+			if (text.contains("|")) {
+				String[] split = text.split("|");
+				text = split[1];
+			}
+		}
+		return text.trim();
 	}
 
 }
