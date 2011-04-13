@@ -80,7 +80,7 @@ public class LeftRightNavigationBarTagHandler extends AbstractTagHandler {
 
 		buffy.append(KnowWEUtils.maskHTML("<a href='Wiki.jsp?page="
 					+ extractPageName(right)
-				+ "Wie sich Angst zeigt' > <img src='KnowWEExtension/images/Pfeil_nach_rechts.gif' height='60'/>  </a>"));
+					+ "' > <img src='KnowWEExtension/images/Pfeil_nach_rechts.gif' height='60'/>  </a>"));
 		}
 		buffy.append(KnowWEUtils.maskHTML("</td>"));
 		buffy.append(KnowWEUtils.maskHTML("</tr>"));
@@ -95,7 +95,7 @@ public class LeftRightNavigationBarTagHandler extends AbstractTagHandler {
 		if (text.startsWith("[") && text.endsWith("]")) {
 			text = text.substring(1, text.length() - 1);
 			if (text.contains("|")) {
-				String[] split = text.split("|");
+				String[] split = text.split("\\|");
 				text = split[1];
 			}
 		}
