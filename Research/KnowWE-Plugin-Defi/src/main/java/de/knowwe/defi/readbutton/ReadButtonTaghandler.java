@@ -42,6 +42,8 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 	private static int DEFAULT_NUMBER = 4;
 	private static String DEFAULT_HIDE = "false";
 
+	private static final String BORDER_VALUE = "threshold";
+
 	int number, borderValue, ratedValue;
 	boolean contains, talkAbout, custom;
 	String hide_values, link, linkText;
@@ -98,7 +100,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				else values[i] = "";
 			}
 			
-			if (parameters.containsKey("borderValue")) borderValue = Integer.getInteger(parameters.get("borderValue"));
+			if (parameters.containsKey(BORDER_VALUE)) borderValue = Integer.parseInt(parameters.get(BORDER_VALUE));
 			else borderValue = (int) Math.floor(number / 2);
 			
 			if (parameters.containsKey("addLink")) link = parameters.get("addLink");
