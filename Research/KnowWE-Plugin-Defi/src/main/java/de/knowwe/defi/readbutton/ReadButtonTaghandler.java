@@ -116,7 +116,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			else linkText = "";
 
 			if (parameters.containsKey(ID)) id = Integer.parseInt(parameters.get(ID));
-			else id = 1;
+			else return KnowWEUtils.maskHTML("<p>Fehler: Dem Button fehlt das Attribut 'id'.</p>");
 
 			// Get the readpages-annotation
 			KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
