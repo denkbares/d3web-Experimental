@@ -189,7 +189,21 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				readbutton.append("</a>");
 				readbutton.append(" - <a href=\"\" onclick='getReadButtonValue(1," + number
 						+ ")'>Nicht Besprechen</a></p>");
-				readbutton.append("<a href='" + link + "' target='_blank'>" + linkText + "</a>");
+				if (link.startsWith("[") && link.endsWith("]")) {
+					// is wiki link (because of ajax not rendering by jspwiki
+					// pipeline
+					// => render here
+					String linkPagename = link.substring(1, link.length() - 1).trim();
+					String baseUrl = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
+					readbutton.append("<a href='" + baseUrl + "Wiki.jsp?page="
+							+ linkPagename
+							+ "' target='_blank'>"
+							+ linkPagename + "</a>");
+				}
+				else {
+					readbutton.append("<a href='" + link + "' target='_blank'>"
+							+ linkText + "</a>");
+				}
 			}
 			// - user has already rated
 			else {
