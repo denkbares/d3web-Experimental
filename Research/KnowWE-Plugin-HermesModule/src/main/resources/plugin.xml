@@ -20,7 +20,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="TimeLineHandler">
 		<parameter id="class"
-			value="de.d3web.we.hermes.taghandler.TimeLineHandler" />
+			value="de.knowwe.hermes.taghandler.TimeLineHandler" />
 		<parameter id="name" value="TimeLineHandler" />
 		<parameter id="description" value="TagHandler TimeLineHandler" />
 		<parameter id="version" value="1.0" />
@@ -32,7 +32,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="LocalTimeEventsHandler">
 		<parameter id="class"
-			value="de.d3web.we.hermes.taghandler.LocalTimeEventsHandler" />
+			value="de.knowwe.hermes.taghandler.LocalTimeEventsHandler" />
 		<parameter id="name" value="LocalTimeEventsHandler" />
 		<parameter id="description" value="TagHandler LocalTimeEventsHandler" />
 		<parameter id="version" value="1.0" />
@@ -44,7 +44,7 @@
 		<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="TimeEventSearchHandler">
 		<parameter id="class"
-			value="de.d3web.we.hermes.taghandler.TimeEventSearchHandler" />
+			value="de.knowwe.hermes.taghandler.TimeEventSearchHandler" />
 		<parameter id="name" value="TimeEventSearchHandler" />
 		<parameter id="description" value="TagHandler TimeEventSearchHandler" />
 		<parameter id="version" value="1.0" />
@@ -56,7 +56,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="ShowTimeEventsForConceptTagHandler">
 		<parameter id="class"
-			value="de.d3web.we.hermes.taghandler.ShowTimeEventsForConceptTagHandler" />
+			value="de.knowwe.hermes.taghandler.ShowTimeEventsForConceptTagHandler" />
 		<parameter id="name" value="ShowTimeEventsForConceptTagHandler" />
 		<parameter id="description" value="TagHandler ShowTimeEventsForConceptTagHandler" />
 		<parameter id="version" value="1.0" />
@@ -68,7 +68,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="ShowMapHandler">
 		<parameter id="class"
-			value="de.d3web.we.hermes.taghandler.ShowMapHandler" />
+			value="de.knowwe.hermes.taghandler.ShowMapHandler" />
 		<parameter id="name" value="ShowMapHandler" />
 		<parameter id="description" value="TagHandler ShowMapHandler" />
 		<parameter id="version" value="1.0" />
@@ -80,7 +80,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="ShowMapForConceptHandler">
 		<parameter id="class"
-			value="de.d3web.we.hermes.taghandler.ShowMapForConceptHandler" />
+			value="de.knowwe.hermes.taghandler.ShowMapForConceptHandler" />
 		<parameter id="name" value="ShowMapForConceptHandler" />
 		<parameter id="description" value="TagHandler ShowMapForConceptHandler" />
 		<parameter id="version" value="1.0" />
@@ -92,7 +92,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="ShowMapForTopicHandler">
 		<parameter id="class"
-			value="de.d3web.we.hermes.taghandler.ShowMapForTopicHandler" />
+			value="de.knowwe.hermes.taghandler.ShowMapForTopicHandler" />
 		<parameter id="name" value="ShowMapForTopicHandler" />
 		<parameter id="description" value="TagHandler ShowMapForTopicHandler" />
 		<parameter id="version" value="1.0" />
@@ -104,7 +104,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="SetTimeEventFilterLevelHandler">
 		<parameter id="class"
-			value="de.d3web.we.hermes.taghandler.SetTimeEventFilterLevelHandler" />
+			value="de.knowwe.hermes.taghandler.SetTimeEventFilterLevelHandler" />
 		<parameter id="name" value="SetTimeEventFilterLevelHandler" />
 		<parameter id="description" value="TagHandler SetTimeEventFilterLevelHandler" />
 		<parameter id="version" value="1.0" />
@@ -116,7 +116,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="VersionCountTagHandler">
 		<parameter id="class"
-			value="de.d3web.we.hermes.taghandler.VersionCountTagHandler" />
+			value="de.knowwe.hermes.taghandler.VersionCountTagHandler" />
 		<parameter id="name" value="VersionCountTagHandler" />
 		<parameter id="description" value="TagHandler VersionCountTagHandler" />
 		<parameter id="version" value="1.0" />
@@ -128,7 +128,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="QuizHandler">
 		<parameter id="class"
-			value="de.d3web.we.hermes.taghandler.QuizHandler" />
+			value="de.knowwe.hermes.taghandler.QuizHandler" />
 		<parameter id="name" value="QuizHandler" />
 		<parameter id="description" value="TagHandler QuizHandler" />
 		<parameter id="version" value="1.0" />
@@ -140,7 +140,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="ListIndividualsHandler">
 		<parameter id="class"
-			value="de.d3web.we.hermes.taghandler.ListIndividualsHandler" />
+			value="de.knowwe.hermes.taghandler.ListIndividualsHandler" />
 		<parameter id="name" value="ListIndividualsHandler" />
 		<parameter id="description" value="TagHandler ListIndividualsHandler" />
 		<parameter id="version" value="1.0" />
@@ -152,7 +152,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="CreateMapHandler">
 		<parameter id="class"
-			value="de.d3web.we.hermes.taghandler.CreateMapHandler" />
+			value="de.knowwe.hermes.taghandler.CreateMapHandler" />
 		<parameter id="name" value="CreateMapHandler" />
 		<parameter id="description" value="TagHandler CreateMapHandler" />
 		<parameter id="version" value="1.0" />
@@ -168,7 +168,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TimeEventType">
 		<parameter id="class"
-			value="de.d3web.we.hermes.kdom.TimeEventType" />
+			value="de.knowwe.hermes.kdom.TimeEventType" />
 		<parameter id="name" value="TimeEventType" />
 		<parameter id="description" value="Type TimeEventType" />
 		<parameter id="version" value="1.0" />
@@ -181,7 +181,7 @@
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TimeEventNew">
 		<parameter id="class"
-			value="de.d3web.we.hermes.kdom.event.TimeEventNew" />
+			value="de.knowwe.hermes.kdom.event.TimeEventNew" />
 		<parameter id="name" value="TimeEventNew" />
 		<parameter id="description" value="Type TimeEventNew" />
 		<parameter id="version" value="1.0" />
@@ -194,7 +194,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="LocationDefinitionType">
 		<parameter id="class"
-			value="de.d3web.we.hermes.maps.LocationDefinitionType" />
+			value="de.knowwe.hermes.maps.LocationDefinitionType" />
 		<parameter id="name" value="LocationDefinitionType" />
 		<parameter id="description" value="Type LocationDefinitionType" />
 		<parameter id="version" value="1.0" />
@@ -207,7 +207,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TreeViewType">
 		<parameter id="class"
-			value="de.d3web.we.hermes.TreeViewType" />
+			value="de.knowwe.hermes.TreeViewType" />
 		<parameter id="name" value="TreeViewType" />
 		<parameter id="description" value="Type TreeViewType" />
 		<parameter id="version" value="1.0" />
@@ -220,7 +220,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="MapType">
 		<parameter id="class"
-			value="de.d3web.we.hermes.maps.MapType" />
+			value="de.knowwe.hermes.maps.MapType" />
 		<parameter id="name" value="MapType" />
 		<parameter id="description" value="Type MapType" />
 		<parameter id="version" value="1.0" />
@@ -246,7 +246,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="SearchTimeEventsAction">
 		<parameter id="class"
-			value="de.d3web.we.hermes.action.SearchTimeEventsAction" />
+			value="de.knowwe.hermes.action.SearchTimeEventsAction" />
 		<parameter id="name" value="SearchTimeEventsAction" />
 		<parameter id="description" value="Action SearchTimeEventsAction" />
 		<parameter id="version" value="1.0" />
@@ -256,7 +256,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="SetFilterLevelAction">
 		<parameter id="class"
-			value="de.d3web.we.hermes.action.SetFilterLevelAction" />
+			value="de.knowwe.hermes.action.SetFilterLevelAction" />
 		<parameter id="name" value="SetFilterLevelAction" />
 		<parameter id="description" value="Action SetFilterLevelAction" />
 		<parameter id="version" value="1.0" />
@@ -266,7 +266,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="InsertRelationAction">
 		<parameter id="class"
-			value="de.d3web.we.hermes.action.InsertRelationAction" />
+			value="de.knowwe.hermes.action.InsertRelationAction" />
 		<parameter id="name" value="InsertRelationAction" />
 		<parameter id="description" value="Action InsertRelationAction" />
 		<parameter id="version" value="1.0" />
@@ -276,7 +276,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="StartQuizAction">
 		<parameter id="class"
-			value="de.d3web.we.hermes.action.StartQuizAction" />
+			value="de.knowwe.hermes.action.StartQuizAction" />
 		<parameter id="name" value="StartQuizAction" />
 		<parameter id="description" value="Action StartQuizAction" />
 		<parameter id="version" value="1.0" />
@@ -286,7 +286,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="StopQuizAction">
 		<parameter id="class"
-			value="de.d3web.we.hermes.action.StopQuizAction" />
+			value="de.knowwe.hermes.action.StopQuizAction" />
 		<parameter id="name" value="StopQuizAction" />
 		<parameter id="description" value="Action StopQuizAction" />
 		<parameter id="version" value="1.0" />
@@ -296,7 +296,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="SetAnswerAction">
 		<parameter id="class"
-			value="de.d3web.we.hermes.action.SetAnswerAction" />
+			value="de.knowwe.hermes.action.SetAnswerAction" />
 		<parameter id="name" value="SetAnswerAction" />
 		<parameter id="description" value="Action SetAnswerAction" />
 		<parameter id="version" value="1.0" />
@@ -306,7 +306,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="PageAppendHandler"
 		id="AppendTagEditHandler">
 		<parameter id="class"
-			value="de.d3web.we.hermes.AppendTagEditHandler" />
+			value="de.knowwe.hermes.AppendTagEditHandler" />
 		<parameter id="name" value="AppendTagEditHandler" />
 		<parameter id="description" value="PageAppendHandler AppendTagEditHandler" />
 		<parameter id="version" value="1.0" />
@@ -318,7 +318,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="PageAppendHandler"
 		id="ConceptBrowsingHandler">
 		<parameter id="class"
-			value="de.d3web.we.hermes.ConceptBrowsingHandler" />
+			value="de.knowwe.hermes.ConceptBrowsingHandler" />
 		<parameter id="name" value="ConceptBrowsingHandler" />
 		<parameter id="description" value="PageAppendHandler ConceptBrowsingHandler" />
 		<parameter id="version" value="1.0" />
@@ -330,7 +330,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="PageAppendHandler"
 		id="AppendMapHandler">
 		<parameter id="class"
-			value="de.d3web.we.hermes.AppendMapHandler" />
+			value="de.knowwe.hermes.AppendMapHandler" />
 		<parameter id="name" value="AppendMapHandler" />
 		<parameter id="description" value="PageAppendHandler AppendMapHandler" />
 		<parameter id="version" value="1.0" />

@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.ontoware.rdf2go.model.node.Node;
 
-import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Priority;
@@ -34,6 +33,7 @@ import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreeHandler.IncrementalConstraint;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
+import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.termObject.RDFResourceType;
 
 public class DataTypeValueTurtle extends AbstractType implements RDFResourceType, IncrementalConstraint<TurtleMarkup> {

@@ -29,7 +29,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="SparqlType">
 		<parameter id="class"
-			value="de.d3web.we.core.semantic.rdf2go.example.SparqlType" />
+			value="de.knowwe.rdf2go.example.SparqlType" />
 		<parameter id="name" value="SparqlType" />
 		<parameter id="description" value="Type SparqlType" />
 		<parameter id="version" value="1.0" />
@@ -40,7 +40,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="EventListener"
 		id="Rdf2GoCoreEventListener">
 		<parameter id="class"
-			value="de.d3web.we.core.semantic.rdf2go.Rdf2GoCore" />
+			value="de.knowwe.rdf2go.Rdf2GoCore" />
 		<parameter id="name" value="Rdf2GoCore" />
 		<parameter id="description" value="EventListener Rdf2GoCore" />
 		<parameter id="version" value="1.0" />
@@ -50,7 +50,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="DumpHandler">
 		<parameter id="class"
-			value="de.d3web.we.core.semantic.rdf2go.example.DumpHandler" />
+			value="de.knowwe.rdf2go.example.DumpHandler" />
 		<parameter id="name" value="DumpHandler" />
 		<parameter id="description" value="TagHandler DumpHandler" />
 		<parameter id="version" value="1.0" />
@@ -60,7 +60,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="Rdf2GoPageViewHandler">
 		<parameter id="class"
-			value="de.d3web.we.core.semantic.rdf2go.example.Rdf2GoPageViewHandler" />
+			value="de.knowwe.rdf2go.example.Rdf2GoPageViewHandler" />
 		<parameter id="name" value="DumpHandler" />
 		<parameter id="description" value="TagHandler Rdf2GoPageViewHandler" />
 		<parameter id="version" value="1.0" />

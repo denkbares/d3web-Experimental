@@ -26,8 +26,6 @@ import java.util.Collection;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
-import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
-import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
@@ -38,6 +36,8 @@ import de.d3web.we.kdom.subtreeHandler.IncrementalConstraint;
 import de.knowwe.core.dashtree.DashTreeElement;
 import de.knowwe.core.dashtree.DashTreeElementContent;
 import de.knowwe.core.dashtree.DashTreeUtils;
+import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
+import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.termObject.OWLTermReference;
 
 public class SubClassingDashTreeElement extends DashTreeElementContent implements

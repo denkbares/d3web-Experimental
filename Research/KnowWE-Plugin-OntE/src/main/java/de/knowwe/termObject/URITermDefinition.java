@@ -29,7 +29,6 @@ import java.util.Collection;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
-import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.Section;
@@ -42,6 +41,7 @@ import de.d3web.we.terminology.TerminologyHandler;
 import de.d3web.we.utils.KnowWEUtils;
 import de.knowwe.onte.owl.terminology.PredefinedTermError;
 import de.knowwe.onte.owl.terminology.URIUtil;
+import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.termObject.URIObject.URIObjectType;
 
 public abstract class URITermDefinition extends GlobalTermDefinition<URIObject> implements RDFResourceType {

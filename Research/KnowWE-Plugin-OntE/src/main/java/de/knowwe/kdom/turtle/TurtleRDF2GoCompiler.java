@@ -29,8 +29,6 @@ import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
-import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
@@ -40,6 +38,8 @@ import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SyntaxError;
 import de.d3web.we.terminology.TerminologyHandler;
 import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
+import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.termObject.RDFResourceType;
 
 public class TurtleRDF2GoCompiler extends RDF2GoSubtreeHandler<TurtleMarkup> {

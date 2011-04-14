@@ -17,10 +17,10 @@ import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.packaging.KnowWEPackageManager;
-import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
-import de.d3web.we.hermes.TimeEvent;
 import de.d3web.we.kdom.RootType;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotation;
+import de.knowwe.hermes.TimeEvent;
+import de.knowwe.rdf2go.Rdf2GoCore;
 import dummies.KnowWETestWikiConnector;
 
 public class TimeEventTest extends TestCase {

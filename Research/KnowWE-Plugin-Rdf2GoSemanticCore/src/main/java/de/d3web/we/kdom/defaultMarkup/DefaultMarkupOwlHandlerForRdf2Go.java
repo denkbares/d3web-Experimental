@@ -32,13 +32,13 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
-import de.d3web.we.core.semantic.rdf2go.RDF2GoSubtreeHandler;
-import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup.Annotation;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
+import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**
  * This class implements a default behavior for generating owl concept and

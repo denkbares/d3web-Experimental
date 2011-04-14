@@ -25,12 +25,12 @@ import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.semantic.rdf2go.Rdf2GoCore;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class NamespacesContentRenderer extends KnowWEDomRenderer {
 
