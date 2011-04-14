@@ -1,18 +1,18 @@
 Dieser Artikel enhält die Terminolgie des Hernienregisters.
 
-%%question
+%%Question
 EuraHS Initialization #1
-- Please select one of the following options:[oc]
+- Please select one of the following options [oc]
 -- Enter a new operation
 -- Enter operative or postoperative data of an operation
---- EuraHS registration number[num]
+--- EuraHS registration number [num]
 -- Enter follow up data of an operation
---- &REF EuraHS registration number
+--- EuraHS registration number [num]
 -- Get information on your patients
 -- Lost the registration number? Request information.
-- Please select your hernia route[oc]
+- Please select your hernia route [oc]
 -- Primary ventral hernia route
---- "Please select (primary ventral hernia)"[oc]
+--- "Please select (primary ventral hernia)" [oc]
 ---- Epigastric hernia
 ---- Umbilical hernia
 ---- Lumbar hernia
@@ -25,23 +25,23 @@ EuraHS Initialization #1
 ---- Recurrent lumbar hernia
 ---- Recurrent Spighelian hernia
 -- Parastomal hernia route
---- "Please select (parastomal hernia)"[oc]
+--- "Please select (parastomal hernia)" [oc]
 ---- Parastomal hernia
 
 Common Route #2
-- Please choose the database level:[oc]
+- Please choose the database level [oc]
 -- Level 1
 -- Level 2
-- Year of birth: [date]
-- Gender: [oc]
+- Year of birth [date]
+- Gender [oc]
 -- Male
 -- Female
-- Scheduled date of operation: [date]
-- EuraHs registration number: [num]
-- Informed consent obtained: [yn]
+- Scheduled date of operation [date]
+- EuraHS registration number [num]
+- Informed consent obtained [yn]
 
 Co-morbidities #3
-- Co-morbidities: [mc]
+- Select Co-morbidities [mc]
 -- No co-morbidities
 -- "Diabetes mellitus type I (juvenil)"
 -- "Diabetes mellitus type II (adult)"
@@ -57,7 +57,7 @@ Co-morbidities #3
 --- Curatively treated [yn]
 
 Risk factors #4
-- Medical risk factors: [mc]
+- Medical risk factors [mc]
 -- No medical risk factors
 -- Aneurysmatic disease
 -- Collagen related disease
@@ -71,52 +71,52 @@ Risk factors #4
 -- Chronic use of coricosteroids
 -- Use of immunosuppersive medication
 -- "Use of anticoagulant therapy (cumarine)"
-- Weight of the patient: [num]{kg}
-- Lenght/size of the patient: [num]{cm}
+- Weight of the patient [num]{kg}
+- Length/size of the patient [num]{cm}
 - BMI: [num]{kg/m2}<abstract>
 
 Other risk factors #5
-- Occupation: [oc]
+- Occupation [oc]
 -- Heavy physical labour
 -- Mild physical labour
 -- Administrative labour
 -- No employment
-- Sporting activities: [oc]
+- Sporting activities [oc]
 -- None
 -- Sporadic
 -- "Moderate (1/week)"
 -- "Intense (>1/week)"
-- Smoking habits: [oc]
+- Smoking habits [oc]
 -- Never smoked
 -- "Ex-smoker (>12 months stopped)"
 -- Occasional smoker
 -- Daily smoker
---- Pack years: [text]
+--- Pack years [text]
 
 Primary ventral hernia route 
-- Width of the hernia: [num]{cm}
-- Length of the hernia: [num]{cm}
-- Diameter of the hernia: [num]
-- Reducibility of the hernia: [oc]
+- Width of the hernia [num] {cm}
+- Length of the hernia [num] {cm}
+- Diameter of the hernia [num]
+- Reducibility of the hernia [oc]
 -- Completely reducible
 -- Partially reducible
 -- Non reducible
-- Indication for surgery: [oc]
+- Indication for surgery [oc]
 -- Elective
 -- Emergency
 - Show grid[info]
 
 Incisional ventral hernia route 
-- Width of the hernia: [num]{cm}
-- Length of the hernia: [num]{cm}
-- Reducibility of the hernia: [oc]
+- Width of the hernia [num] {cm}
+- Length of the hernia [num] {cm}
+- Reducibility of the hernia [oc]
 -- Completely reducible
 -- Partially reducible
 -- Non reducible
 - Indication for surgery: [oc]
 -- Elective
 -- Emergency
-- Mark the incisional hernia areas involved: [mc]
+- Mark the incisional hernia areas involved [mc]
 -- M1
 -- M2
 -- M3
@@ -130,8 +130,8 @@ Incisional ventral hernia route
 -- "L3_R"
 -- "L4_L"
 -- "L4_R"
-- Hernia operation date: [date]
-- "Type of operation (speciality) that caused the incisional hernia:" [oc]
+- Hernia operation date [date]
+- "Type of operation (speciality) that caused the incisional hernia" [oc]
 -- Gastrointestinal
 -- Abdominal wall surgery
 -- Gynecological
@@ -140,15 +140,120 @@ Incisional ventral hernia route
 -- Plastic surgery
 -- Thoracic surgery
 -- Urological
-- Recurrent hernia: [yn]
-- Number of previous repairs: [num]
-- Has there been a previous mesh repair? [yn]
-- Date of the last repair: [date]
+- Recurrent hernia [yn]
+-- Yes
+--- Number of previous repairs [num]
+--- Has there been a previous mesh repair? [yn]
+---- Yes
+----- Date of the last repair [date]
 
 Parastomal hernia route
-- Q1[oc]
--- A1
--- A2
+- Years since stoma creation [num]
+- Years with parastomal hernia [num]
+- Tyoe of stoma [oc]
+-- Colostomy
+-- Ilestomy
+-- Ileal conduit
+- Indication for stoma creation [oc]
+-- Malignancy
+-- Benign disease
+- Symptoms of the parastomal hernia [mc]
+-- None
+-- Pain
+-- Incarceration
+-- Obstruction
+-- Esthetical
+-- Difficulty for bag appliance
+- Previous repair of the parastomal hernia [yn]
+-- Yes
+--- Number of previous repairs [num]
+--- Has there been a previous mesh repair? [yn]
+---- Yes
+----- Method [oc]
+------ Laparoscopic
+------ Open
+----- Reducibility of the hernia [oc]
+------ Completely reducible
+------ Partially reducible
+------ Not reducible
+----- Indication for surgery [oc]
+------ Elective
+------ Emergency
+- Width of the hernia [num] {cm}
+- Length of the hernia [num] {cm}
+- Is there a concomitant incisional hernia present [yn]
+-- Yes
+--- Localization of the concomitant incisional hernia [mc]
+---- M1
+---- M2
+---- M3
+---- M4
+---- M5
+---- "L1_L"
+---- "L1_R"
+---- "L2_L"
+---- "L2_R"
+---- "L3_L"
+---- "L3_R"
+---- "L4_L"
+---- "L4_R"
+
+Common Route
+- Operative data
+- Operative approach
+- Concomitant procedures
+
+Operative data
+- Operation date [date]
+- Anesthesia [oc]
+-- General
+-- Regional
+-- Local
+- Antibiotic prophylaxis [mc]
+-- None
+-- Single dose
+-- "Prolonged (therapeutic)"
+-- Patient is on AB or another infection
+- Intraoperative wound contamination [oc]
+-- Class I
+-- Class II
+-- Class III
+-- Class IV
+- Operator [oc]
+-- Senior surgeon
+-- "Resident with direct supervisor (surgeon scrubbed in)"
+-- "Resident without direct supervision (surgeon not scrubbed in)"
+-- Resident without supervision
+- "Start of operation (first incision)" [date]
+- "End of operation (last skin suture)" [date]
+- Content of the hernia sac [mc]
+-- None
+-- Small bowel
+-- Colon
+-- Stomach
+-- Omentum majus
+-- Ovaries
+-- Appendix
+-- Bladder
+-- Other
+- Incarceration [yn]
+- Bowel resection needed [oc]
+-- No
+-- "Yes (small bowel)"
+-- "Yes (colon)"
+
+Operative approach
+- Type of acces [mc]
+-- Open surgery
+-- Laparoscopic surgery
+--- Number of ports used [num]
+--- Conversion to open [yn]
+- Type of repair
+-- Mesh repair
+-- Non mesh repair
+
+Concomitant procedures
+- Concomitant abdominal surgery [yn]
 
 @package: Hernia
 %
@@ -170,14 +275,17 @@ THEN Incisional ventral hernia route
 IF Please select your hernia route = Parastomal hernia route
 THEN Parastomal hernia route
 
-IF Recurrent hernia: = Yes
-THEN Number of previous repairs:
+// IF Recurrent hernia = Yes
+// THEN Number of previous repairs
 
-IF Recurrent hernia: = Yes
-THEN Has there been a previous mesh repair?
+// IF Recurrent hernia = Yes
+// THEN Has there been a previous mesh repair?
 
-IF Has there been a previous mesh repair? = Yes
-THEN Date of the last repair:
+// IF Has there been a previous mesh repair? = Yes
+// THEN Date of the last repair
+
+IF KNOWN[Weight of the patient] AND KNOWN[Length/size of the patient]
+THEN BMI: = (("Weight of the patient" / ("Length/size of the patient" * "Length/size of the patient")) * 10000)
 
 @package: Hernia
 %
