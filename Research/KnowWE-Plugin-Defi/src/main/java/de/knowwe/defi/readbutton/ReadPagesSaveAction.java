@@ -42,12 +42,13 @@ public class ReadPagesSaveAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-
 		String username = context.getUserName();
 		String title = username + "_data";
 		String pagename = context.getTopic();
 		String web = context.getWeb();
 		String value = context.getParameter("value");
+		String id = context.getParameter("id");
+		System.out.println(id);
 
 		// Get the readpages-annotation
 		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
@@ -66,9 +67,10 @@ public class ReadPagesSaveAction extends AbstractAction {
 
 			// Get the entry and change the third value to 1
 			for (String s : pages) {
-				if (s.toLowerCase().split(",")[0].equals(pagename.toLowerCase())) {
-					readpages = readpages.replace(s, s.split(",")[0] + "," + s.split(",")[1]
-							+ "," + 1);
+				if (s.toLowerCase().split("::")[0].equals(pagename.toLowerCase())
+						&& s.split("::")[1].equals(id)) {
+					readpages = readpages.replace(s, s.split("::")[0] + "::" + s.split("::")[1]
+							+ "::" + s.split("::")[2] + "::" + 1);
 				}
 			}
 			HashMap<String, String> nodesMap = new HashMap<String, String>();
@@ -82,14 +84,15 @@ public class ReadPagesSaveAction extends AbstractAction {
 
 			// Is the entry already written?
 			for (String s : pages) {
-				if (s.toLowerCase().split(",")[0].equals(pagename.toLowerCase())) {
+				if (s.toLowerCase().split("::")[0].equals(pagename.toLowerCase())
+						&& s.split("::")[1].equals(id)) {
 					add = false;
 				}
 			}
 
 			if (add) {
 				HashMap<String, String> nodesMap = new HashMap<String, String>();
-				readpages += pagename + "," + value + "," + 0 + ";";
+				readpages += pagename + "::" + id + "::" + value + "::" + 0 + ";";
 				nodesMap.put(child.getID(), "%%data\r\n@readpages: " + readpages + "\r\n%\r\n");
 				mgr.replaceKDOMNodesSaveAndBuild(context, title, nodesMap);
 			}

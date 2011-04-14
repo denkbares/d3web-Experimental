@@ -1,8 +1,8 @@
-function getReadButtonValue(hide,number) {
+function getReadButtonValue(hide,number,id) {
 	
 	// hide tells the function whether to hide the Readbutton(value = 0) or deliver the checked radiobutton
 	if (hide == 0) {
-		var form = document.readbuttonform;
+		var form = document.getElementsByName('readbuttonform')[id-1];
 		var checked = null;
 		for (i = 0; i < number; i++) {
 			
@@ -17,14 +17,16 @@ function getReadButtonValue(hide,number) {
 			
 			var params = {
 					action : 'ReadPagesSaveAction',
-					value : checked 
+					value : checked,
+					id : id
 			}
 		}
 		
 	} else {
 		var params = {
 				action : 'ReadPagesSaveAction',
-				value : 0 
+				value : 0,
+				id : id
 		}
 	}
 	
