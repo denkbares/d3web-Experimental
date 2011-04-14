@@ -48,7 +48,6 @@ public class ReadPagesSaveAction extends AbstractAction {
 		String web = context.getWeb();
 		String value = context.getParameter("value");
 		String id = context.getParameter("id");
-		System.out.println(id);
 
 		// Get the readpages-annotation
 		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
@@ -74,7 +73,7 @@ public class ReadPagesSaveAction extends AbstractAction {
 				}
 			}
 			HashMap<String, String> nodesMap = new HashMap<String, String>();
-			nodesMap.put(child.getID(), "%%data\r\n@readpages: " + readpages + "\r\n%\r\n");
+			nodesMap.put(child.getID(), "%%data\r\n@readpages: " + readpages + "\r\n%");
 			mgr.replaceKDOMNodesSaveAndBuild(context, title, nodesMap);
 		}
 		// ...else try to add a new entry
@@ -93,7 +92,7 @@ public class ReadPagesSaveAction extends AbstractAction {
 			if (add) {
 				HashMap<String, String> nodesMap = new HashMap<String, String>();
 				readpages += pagename + "::" + id + "::" + value + "::" + 0 + ";";
-				nodesMap.put(child.getID(), "%%data\r\n@readpages: " + readpages + "\r\n%\r\n");
+				nodesMap.put(child.getID(), "%%data\r\n@readpages: " + readpages + "\r\n%");
 				mgr.replaceKDOMNodesSaveAndBuild(context, title, nodesMap);
 			}
 		}
