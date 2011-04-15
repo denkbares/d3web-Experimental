@@ -5,7 +5,7 @@
 	dstrategy="nextuaquestion" 
 	css="freechoice, nonavigation" 
 	dialogcolumns="1"
-	questionnairecolumns="3"
+	questionnairecolumns="2"
 	questioncolumns="1"
 	userprefix = "Freechoice" 
 	login = "no">

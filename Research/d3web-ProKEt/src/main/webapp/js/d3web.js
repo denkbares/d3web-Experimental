@@ -23,7 +23,7 @@
  */
 
 $(function() {
-
+	
 	// if login should be enabled: set in minimal XML and JSCodeContainer
 	if(login){
 		window.setTimeout("logintimeout()", 57000 * 60);
@@ -160,141 +160,50 @@ function initFunctionality() {
 	});
 }
 
-/**
- * Calculating the set facts for the parent question of a clicked element.
- * Thereby, all input fields (num/text/date) are checked and their values
- * denoted in a store. This ensures, that changed values, even for already
- * answered questions, are correctly propagated. Also, it is ensured, that
- * values of ALL input fields are propagated, regardless whether enter was
- * clicked each time. After storing the input field values, the dialog is
- * checked also for radio boxes and checkboxes input. Thereby, unknown option is
- * checked first as to ensure that its value is correctly toggled.
- * 
- * @param clickedItem
- *            the latest item clicked in the dialog
- */
-function d3web_getSelectedFacts(clickedItem) {
 
-	// some variables for storing multiple question/answer pairs
-	var numStore = "";
-	var txtStore = "";
-	var datStore = "";
-	var store = "";
-
-	/*
-	 * The next 3 code blocks fetch all input for input fields such as num,
-	 * text, and date fields. This input is assembled into one data store in the
-	 * form numvals&&&&textvals&&&&datevals thereby the 3 val arrays are of the
-	 * form id###value;id###value; (= numvals)
-	 */
-	// all num questions
-	numqs = $('#content [id^="q_"]').filter('[class*="question-num"]');
-	numqs.each(function() {
-		input = $(this).find(":text,textarea").filter(":first");
-		if (input.size() == 1) {
-			if ($(this).attr('class').indexOf('abstract') < 0
-					&& input.attr('value') != "") {
-				numStore += $(this).attr('id') + "###" + input.val() + ";"
+function d3web_checkNumRanges(qid, value, store){
+	
+	var link = $.query.set("action", "checkRange").set("qid", qid).toString();
+	link = window.location.href.replace(window.location.search, "") + link;
+	
+	// checked on rangeRequest success
+	var checkRangeOK = true;
+	
+	// new jquery 1.5 syntax
+	$.get( link,
+		   function(data) {
+				// a range exists
+				if (data !== "") {
+					// get and parse range values
+					var rangeVals = data.split(";");
+					var min = parseFloat(rangeVals[0]);
+                	var max = parseFloat(rangeVals[1]);
+					
+                	// if provided value not within specified range, notify user and 
+                	// delete value from field
+					if(value < min || value > max){
+						qid = 	qid.replace("q_", "");
+						alert("Wert des Feldes '" + qid + "' außerhalb des zulässigen Wertebereichs [" + data + "]");
+						var id = "#" +  qid;
+						$(id).val("");
+						checkRangeOK = false;
+					} 
+				}
 			}
+	)
+	.success(function(){
+		// if val was in provided range add value
+		if(checkRangeOK){
+			d3web_addfactsRemembering(store, qid, value);
+		} 
+		// otherwise just show dialog again
+		else {
+			d3web_show();
 		}
 	});
-	// all text questions
-	txtqs = $('#content [id^="q_"]').filter('[class*="question-text"]');
-	txtqs
-			.each(function() {
-				input = $(this).find(":text,textarea").filter(":first");
-				if (input.size() == 1) {
-					if ($(this).attr('class').indexOf('abstract') < 0
-							&& input.attr('value') != ""
-							&& input.attr('value') != " ") {
-						txtStore += $(this).attr('id') + "###" + input.val()
-								+ ";"
-					}
-				}
-			});
-	// all date questions
-	datqs = $('#content [id^="q_"]').filter('[class*="question-date"]');
-	datqs
-			.each(function() {
-				input = $(this).find(":text,textarea").filter(":first");
-				if (input.size() == 1) {
-					if ($(this).attr('class').indexOf('abstract') < 0
-							&& input.attr('value') != ""
-							&& input.attr('value') != " ") {
-						datStore += $(this).attr('id') + "###" + input.val()
-								+ ";"
-					}
-				}
-			});
-
-	/*
-	 * Now the dialog is checkedradio button / checkbox input
-	 */
-	// "^=" means begins with, jquery expression
-	question = clickedItem.closest('[id^="q_"]');
-	unknown = clickedItem.closest('[id^="i_unknown"]');
-
-	// if unknown has been clicked, it is primarily saved
-	if (clickedItem.attr('id').indexOf('i_unknown') >= 0) {
-		pos = clickedItem.attr("id");
-	}
-
-	// otherwise check for "not-unknown" radio buttons and checkboxes
-	else {
-		var counter = 0, pos = "";
-		/* text */
-		if (pos == "") {
-			items = question.find(":text,textarea").filter(":first");
-			if (items.size() == 1) {
-				pos = items.attr('value');
-			}
-		}
-		/* radio buttons */
-		if (pos == "") {
-			items = question.find('[type=radio]');
-			items.each(function() {
-				if ($(this).attr('checked')) {
-					pos = $(this).attr("id").substring(2);
-				}
-			});
-		}
-		/* checkboxes */
-		if (pos == "") {
-			items = question.find(":checkbox");
-			items.each(function() {
-				if ($(this).attr('checked')) {
-					pos = $(this).attr("id").substring(2);
-				}
-			});
-		}
-		// no radio- or checkbox value set, e.g if only some nums are given
-		if (pos == "") {
-			pos = "EMPTY";
-		}
-	}
-
-	/*
-	 * Check, whether there have been values for num/text/date fields if not so,
-	 * add an " " to enable better array splitting when getting the values later
-	 */
-	if (numStore == "") {
-		numStore = " ";
-	}
-	if (txtStore == "") {
-		txtStore = " ";
-	}
-	if (datStore == "") {
-		datStore = " ";
-	}
-	// assemble complete text/textinput value store
-	store += numStore + "&&&&" + txtStore + "&&&&" + datStore;
-
-	/*
-	 * AJAX call to send both the value store as well as a potential single
-	 * radio/checkbox input
-	 */
-	d3web_addfactsRemembering(store, question.attr('id'), pos);
+	
 }
+
 
 function d3web_getRemainingFacts() {
 
@@ -386,25 +295,16 @@ function d3web_addfactsRemembering(store, qid, pos) {
 
 	$.ajax({
 		type : "GET",
-		async : false,
 		url : link,
 		success : function(html) {
-
-			if(html=="noReqs"){
-				// Error message
-				alert("Das Feld 'Betreffende Klinik' muss immer zuerst ausgefüllt werden!");
+			if(html!==""){
+				// Error message and reset session so user can provide input first
+				var errMsg = "Das Feld '" + html + "' muss immer zuerst ausgefüllt werden!";
+				alert(errMsg);
 				d3web_resetSession();
 			} else {
 				d3web_show();
 			}
-			
-			// d3web_nextform();
-
-			// if (html != "same") { // replace target id of content if not the
-			// same
-			// window.location.reload();
-			// initFunctionality();
-			// }
 		}
 	});
 }
@@ -692,6 +592,143 @@ function d3web_show_solutions(target_id) {
 			$('#' + target_id).html(html).fadeIn(3000);
 		}
 	});
+}
+
+/**
+ * Calculating the set facts for the parent question of a clicked element.
+ * Thereby, all input fields (num/text/date) are checked and their values
+ * denoted in a store. This ensures, that changed values, even for already
+ * answered questions, are correctly propagated. Also, it is ensured, that
+ * values of ALL input fields are propagated, regardless whether enter was
+ * clicked each time. After storing the input field values, the dialog is
+ * checked also for radio boxes and checkboxes input. Thereby, unknown option is
+ * checked first as to ensure that its value is correctly toggled.
+ * 
+ * @param clickedItem
+ *            the latest item clicked in the dialog
+ */
+function d3web_getSelectedFacts(clickedItem) {
+
+	// some variables for storing multiple question/answer pairs
+	var numStore = "";
+	var txtStore = "";
+	var datStore = "";
+	var store = "";
+
+	/*
+	 * The next 3 code blocks fetch all input for input fields such as num,
+	 * text, and date fields. This input is assembled into one data store in the
+	 * form numvals&&&&textvals&&&&datevals thereby the 3 val arrays are of the
+	 * form id###value;id###value; (= numvals)
+	 */
+	// all num questions
+	numqs = $('#content [id^="q_"]').filter('[class*="question-num"]');
+	numqs.each(function() {
+		input = $(this).find(":text,textarea").filter(":first");
+		if (input.size() == 1) {
+			if ($(this).attr('class').indexOf('abstract') < 0
+					&& input.attr('value') != "") {
+				numStore += $(this).attr('id') + "###" + input.val() + ";"
+			}
+		}
+	});
+	// all text questions
+	txtqs = $('#content [id^="q_"]').filter('[class*="question-text"]');
+	txtqs
+			.each(function() {
+				input = $(this).find(":text,textarea").filter(":first");
+				if (input.size() == 1) {
+					if ($(this).attr('class').indexOf('abstract') < 0
+							&& input.attr('value') != ""
+							&& input.attr('value') != " ") {
+						txtStore += $(this).attr('id') + "###" + input.val()
+								+ ";"
+					}
+				}
+			});
+	// all date questions
+	datqs = $('#content [id^="q_"]').filter('[class*="question-date"]');
+	datqs
+			.each(function() {
+				input = $(this).find(":text,textarea").filter(":first");
+				if (input.size() == 1) {
+					if ($(this).attr('class').indexOf('abstract') < 0
+							&& input.attr('value') != ""
+							&& input.attr('value') != " ") {
+						datStore += $(this).attr('id') + "###" + input.val()
+								+ ";"
+					}
+				}
+			});
+
+	/*
+	 * Now the dialog is checkedradio button / checkbox input
+	 */
+	// "^=" means begins with, jquery expression
+	question = clickedItem.closest('[id^="q_"]');
+	unknown = clickedItem.closest('[id^="i_unknown"]');
+
+	// if unknown has been clicked, it is primarily saved
+	if (clickedItem.attr('id').indexOf('i_unknown') >= 0) {
+		pos = clickedItem.attr("id");
+	}
+
+	// otherwise check for "not-unknown" radio buttons and checkboxes
+	else {
+		var counter = 0, pos = "";
+		/* text */
+		if (pos == "") {
+			items = question.find(":text,textarea").filter(":first");
+			if (items.size() == 1) {
+				pos = items.attr('value');
+			}
+		}
+		/* radio buttons */
+		if (pos == "") {
+			items = question.find('[type=radio]');
+			items.each(function() {
+				if ($(this).attr('checked')) {
+					pos = $(this).attr("id").substring(2);
+				}
+			});
+		}
+		/* checkboxes */
+		if (pos == "") {
+			items = question.find(":checkbox");
+			items.each(function() {
+				if ($(this).attr('checked')) {
+					pos = $(this).attr("id").substring(2);
+				}
+			});
+		}
+		// no radio- or checkbox value set, e.g if only some nums are given
+		if (pos == "") {
+			pos = "EMPTY";
+		}
+	}
+
+	/*
+	 * Check, whether there have been values for num/text/date fields if not so,
+	 * add an " " to enable better array splitting when getting the values later
+	 */
+	if (numStore == "") {
+		numStore = " ";
+	}
+	if (txtStore == "") {
+		txtStore = " ";
+	}
+	if (datStore == "") {
+		datStore = " ";
+	}
+
+	// make sure, also "," is accepted as float separator
+	pos = pos.replace(",", ".");
+	numStore = numStore.replace(",", ".");
+	// assemble complete text/textinput value store
+	store += numStore + "&&&&" + txtStore + "&&&&" + datStore;
+	
+	d3web_checkNumRanges(question.attr('id'), pos, store);
+	
 }
 
 function closeJQConfirmDialog() {

@@ -55,6 +55,8 @@ import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionText;
+import de.d3web.core.knowledge.terminology.info.BasicProperties;
+import de.d3web.core.knowledge.terminology.info.NumericalInterval;
 import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
@@ -264,6 +266,30 @@ public class D3webDialog extends HttpServlet {
 			}
 			return;
 		}
+		else if (action.equalsIgnoreCase("checkrange")) {
+			response.setContentType("text/html");
+			response.setCharacterEncoding("utf8");
+			PrintWriter writer = response.getWriter();
+			String qid = request.getParameter("qid");
+			qid = qid.replace("q_", "");
+
+			Question to =
+					(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
+							qid, d3wcon.getKb());
+
+			if (to instanceof QuestionNum) {
+				if (to.getInfoStore().getValue(BasicProperties.QUESTION_NUM_RANGE) != null) {
+					NumericalInterval range = to.getInfoStore().getValue(
+							BasicProperties.QUESTION_NUM_RANGE);
+					writer.append(range.getLeft() + ";" + range.getRight());
+				}
+			}
+			else {
+				writer.append("");
+			}
+
+			return;
+		}
 	}
 
 	/**
@@ -326,24 +352,24 @@ public class D3webDialog extends HttpServlet {
 
 		// get the ID of a potentially given single question answered
 		String qid = request.getParameter("qid");
-
-		// check if required fields are given and need to be checked
-		boolean goOn = false;
-		if (D3webConnector.getInstance().getD3webParser().getRequired().equals("")) {
-			goOn = true;
-		}
-		else {
-			goOn = checkReqVal(
-					D3webConnector.getInstance().getD3webParser().getRequired(), sess, qid);
-		}
-
-		if (!goOn) {
-			writer.append("noReqs");
-			return;
-		}
-
 		// get the input-store
 		String store = request.getParameter("store");
+
+		/*
+		 * Check, whether a required value (for saving) is specified. If yes,
+		 * check whether this value has already been set in the KB or is about
+		 * to be set in the current call --> go on normally. Otherwise, return a
+		 * marker "<required value>" so the user is informed by AJAX to provide
+		 * this marked value.
+		 */
+
+		String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
+		if ((!reqVal.equals("")) &&
+				(!checkReqVal(reqVal, sess, qid, store))) {
+
+			writer.append(reqVal);
+			return;
+		}
 
 		// if there are values in the input-store (i.e., multiple questions
 		// answered or changed
@@ -402,7 +428,6 @@ public class D3webDialog extends HttpServlet {
 
 		// get single value storage
 		String positions = request.getParameter("pos");
-
 		// if not EMPTY, i.e., if one single value was set
 		if (!positions.equals("EMPTY")) {
 
@@ -989,16 +1014,33 @@ public class D3webDialog extends HttpServlet {
 		return false; // trust no one per default
 	}
 
-	private boolean checkReqVal(String requiredVal, Session sess, String valToSet) {
+	/**
+	 * Checks, whether a potentially required value is already set in the KB or
+	 * is contained in the current set of values to write to the KB. If yes, the
+	 * method returns true, if no, false.
+	 * 
+	 * @created 15.04.2011
+	 * @param requiredVal The required value that is to check
+	 * @param sess The d3webSession
+	 * @param valToSet The single value to set
+	 * @param store The value store
+	 * @return TRUE of the required value is already set or contained in the
+	 *         current set of values to set
+	 */
+	private boolean checkReqVal(String requiredVal, Session sess, String valToSet, String store) {
 		Blackboard blackboard = sess.getBlackboard();
 
 		valToSet = valToSet.replace("q_", "").replace("_", " ");
+		store = store.replace("_", " ");
+
 		Question to =
 				(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
 						requiredVal, d3wcon.getKb());
 
 		Fact lastFact = blackboard.getValueFact(to);
+
 		if (requiredVal.equals(valToSet) ||
+				(store.contains(requiredVal)) ||
 				(lastFact != null && lastFact.getValue().toString() != "")) {
 			return true;
 		}

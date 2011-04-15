@@ -10,5 +10,5 @@
 	login = "yes"
 	required = "Betreffende Klinik"
 	>
-	<data kb="HerzmedizinMar2011.d3web" />
+	<data kb="HerzmedizinApr2011.d3web" />
 </dialog>

@@ -216,6 +216,7 @@ public class D3webRenderer implements ID3webRenderer {
 			columns = d3wcon.getQuestionnaireColumns();
 		}
 
+
 		// if more than one column is required, get open-table tag from
 		// TableContainer and append it to the HTML
 		if (columns > 1) {

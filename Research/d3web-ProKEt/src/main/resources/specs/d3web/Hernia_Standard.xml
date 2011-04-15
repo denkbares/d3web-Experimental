@@ -9,5 +9,5 @@
 	userprefix = "" 
 	login = "no"
 	required = "none">
-	<data kb="HerniaApr2011.d3web" />
+	<data kb="HerniaNew.d3web" />
 </dialog>

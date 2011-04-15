@@ -65,7 +65,9 @@ FREECHOICE/QUICKI Dialog
 -- REFACTOR ANSWER D3WEB RENDERERS
 -- REFACTOR D3webDialog?! Problem is with httpSession stuff and providing variables or not, depending on whether, 
 for example, login is enabled or not.
-
+-- SETTING values: only use the store, not the single val any more!
+-- REQUIRED VALUES: currently, only a single value can be specified as "always required", e.g., if its needed for
+	autosaving mechanism (filename assembly in the MEDIASTINITIS case). Make this more flexible to specify several vals?! 
 
 -------------------------------------------
 --- MEDIASTINITIS (Projekt Herzmedizin) ---
@@ -87,6 +89,10 @@ LATER - Fälle speichern: wo Ordner am besten ablegen?
  
 REFINE - Wertüberprüfung Num-/Text-Felder
 REFINE - Fallsortierung im Laden-Menü: Groß-/Kleinschreibung anders berücksichtigen
+REFINE - Num Fields: Wertebereich 
+DONE - Num fields , statt . akzeptieren
+DONE - Req Fields beim ersten abschicken direkt mitgeben
+
 
 ----------------------------
 --- KLÄREN KLÄREN KLÄREN ---
