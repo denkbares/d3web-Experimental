@@ -19,14 +19,20 @@
  */
 package de.knowwe.defi.menu;
 
+import de.d3web.we.kdom.rendering.NothingRenderer;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
+import de.d3web.we.utils.KnowWETypeUtils;
 import de.knowwe.core.dashtree.DashTree;
+import de.knowwe.core.dashtree.DashesPrefix;
 
 public class DynamicMenuDashtree extends DashTree {
 
 	public DynamicMenuDashtree() {
 		replaceDashTreeElementContentType(new DynamicMenuItem());
 		this.setSectionFinder(new AllTextSectionFinder());
+
+		KnowWETypeUtils.injectRendererToSuccessorType(this, DashesPrefix.class,
+				NothingRenderer.getInstance());
 	}
 
 }

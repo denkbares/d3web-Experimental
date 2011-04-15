@@ -52,6 +52,18 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="DynamicMenuMarkup">
+		<parameter id="class" value="de.knowwe.defi.menu.DynamicMenuMarkup" />
+		<parameter id="name" value="DynamicMenuMarkup" />
+		<parameter id="description" value="Type DynamicMenuMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5"  />
+		<parameter id="scope" value="root" />
+		<parameter id="script" value="KnowWE-Plugin-Defi.js" />
+		<parameter id="css" value="defi.css" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TableEntryType">
 		<parameter id="class" value="de.knowwe.defi.table.TableEntryType" />
 		<parameter id="name" value="TableEntryType" />
@@ -143,7 +155,7 @@
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="AboutMeSaveAction">
         <parameter id="class"
-            value="de.knowwe.defi.AboutMeSaveAction" />
+            value="de.knowwe.defi.aboutMe.AboutMeSaveAction" />
         <parameter id="name" value="AboutMeSaveAction" />
         <parameter id="description" value="Action AboutMeSaveAction" />
         <parameter id="version" value="1.0" />

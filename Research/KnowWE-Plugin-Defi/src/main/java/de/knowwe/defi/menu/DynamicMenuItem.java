@@ -19,6 +19,7 @@
  */
 package de.knowwe.defi.menu;
 
+import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.dashtree.DashTreeElementContent;
 
@@ -27,6 +28,11 @@ public class DynamicMenuItem extends DashTreeElementContent {
 	public DynamicMenuItem() {
 		this.setSectionFinder(new AllTextFinderTrimmed());
 		this.setCustomRenderer(new MenuItemRenderer());
+	}
+
+	@Override
+	public KnowWEDomRenderer getRenderer() {
+		return new MenuItemRenderer();
 	}
 
 }
