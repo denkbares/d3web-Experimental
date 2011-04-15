@@ -103,17 +103,18 @@ public class BoxRenderer extends KnowWEDomRenderer<ForumBox> {
 		ret.append("<th align=\"right\" width=\"150\">" + date + "</th>\n");
 		ret.append("<th align=\"right\" width=\"100\">\n");
 
-		String link = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
-		link += "/Wiki.jsp?page=" + user.getTopic() + "&amp;reply=" + sec.getID();
+		//String link = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
+		//link += "/Wiki.jsp?page=" + user.getTopic() + "&amp;reply=" + sec.getID();
+		//Nested link not used at the moment
 
 		ret.append("<div class=\"forumbutton\">");
-		ret.append("<a href=\"" + link + "\">");
+		ret.append("<a class=\"forum-reply\" rel='{\"id\" : \"" + sec.getID() + "\"}' href=\"#\">");
 		ret.append(rb.getString("Forum.button.reply"));
 		ret.append("</a>");
 		ret.append("</div>");
 
 		ret.append("</th></tr>");
-		ret.append("<tr><td colspan=\"3\">");
+		ret.append("<tr><td colspan=\"3\" id=\"forum-comment-" + sec.getID() + "\">");
 
 		String reply = user.getParameter("reply");
 		if (sec.getID().equals(reply)) {
