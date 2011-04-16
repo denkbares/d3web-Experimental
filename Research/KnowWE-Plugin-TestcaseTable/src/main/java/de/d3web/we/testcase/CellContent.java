@@ -57,13 +57,13 @@ public class CellContent extends TableCellContent {
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public <T extends Type> boolean satisfiesConstraint(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
+		public <T extends Type> boolean satisfiesConstraint(List<SectionFinderResult> found, Section<?> father, Class<T> type, String text) {
 			int column = TableUtils.getColumn((Section<? extends TableCellContent>) father);
 			return this.column == column;
 		}
 
 		@Override
-		public <T extends Type> void filterCorrectResults(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
+		public <T extends Type> void filterCorrectResults(List<SectionFinderResult> found, Section<?> father, Class<T> type, String text) {
 			// clear all results, if outside the column range
 			found.clear();
 		}

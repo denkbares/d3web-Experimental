@@ -50,14 +50,14 @@ public class HeaderLine extends TableLine {
 				new SectionFinderConstraint() {
 
 					@Override
-					public <T extends Type> boolean satisfiesConstraint(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
+					public <T extends Type> boolean satisfiesConstraint(List<SectionFinderResult> found, Section<?> father, Class<T> type, String text) {
 
 						// header line
 						return found.size() == 1;
 					}
 
 					@Override
-					public <T extends Type> void filterCorrectResults(List<SectionFinderResult> found, Section<?> father, Class<T> type) {
+					public <T extends Type> void filterCorrectResults(List<SectionFinderResult> found, Section<?> father, Class<T> type, String text) {
 						if (found.size() < 2) {
 							return;
 						}
