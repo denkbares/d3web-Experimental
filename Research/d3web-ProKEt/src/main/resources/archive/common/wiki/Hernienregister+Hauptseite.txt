@@ -53,6 +53,7 @@ Die Wissensbasis wird verteilt auf den folgenden Artikel definiert:\\
 [Hernienregister Terminologie]\\
 [Hernienregister Properties]
 
+[{KnowWEPlugin renderKnowledge}]
 !!! Quick Interview Hernia
 \\
 [{KnowWEPlugin quickInterview}]

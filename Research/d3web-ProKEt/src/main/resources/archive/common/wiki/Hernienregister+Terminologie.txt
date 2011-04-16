@@ -198,7 +198,7 @@ Parastomal hernia route
 ---- "L4_L"
 ---- "L4_R"
 
-Common Route - Operative data
+Common Route - Operative data #6
 - Operation date [date]
 - Anesthesia [oc]
 -- General
@@ -237,7 +237,7 @@ Common Route - Operative data
 -- "Yes (small bowel)"
 -- "Yes (colon)"
 
-Common Route - Operative data - Approach
+Common Route - Operative data - Approach #7
 - Type of acces [mc]
 -- Open surgery
 -- Laparoscopic surgery
@@ -247,7 +247,7 @@ Common Route - Operative data - Approach
 -- Mesh repair
 -- Non mesh repair
 
-Common Route - Operative Data - Concomitant procedures
+Common Route - Operative Data - Concomitant procedures #8
 - Concomitant abdominal surgery [yn]
 -- Yes
 --- Type of Concomitant abdominal surgery [mc]
@@ -265,7 +265,7 @@ Common Route - Operative Data - Concomitant procedures
 ---- Other
 - Is the hernia repair the main indication for surgery? [yn]
 
-Common Route - Operative Data - Surgical technique
+Common Route - Operative Data - Surgical technique #9
 - Surgical technique [oc]
 -- Non mesh repair
 --- Type of non mesh repair [oc]
@@ -302,7 +302,7 @@ Common Route - Operative Data - Surgical technique
 ---- Glue
 ---- Combination
 
-Common Route - Operation data - Intraoperative complications
+Common Route - Operation data - Intraoperative complications #10
 - Conversion from laparoscopic to open surgery [yn]
 -- Yes
 --- "Reason(s) for conversion" [mc]
@@ -336,7 +336,7 @@ Common Route - Operation data - Intraoperative complications
 ---- "General complication (e.g. cardiac)"
 ---- Other
 
-Common Route - Discharge data
+Common Route - Discharge data #11
 - Date of discharge [date]
 - Hour of discharge [date]
 - State at discharge [mc]
@@ -374,7 +374,7 @@ Common Route - Discharge data
 - Did the patient die postoperatively? [yn]
 - Classification of surgical complications [text]
 
-Common Route - Follow-up
+Common Route - Follow-up #12
 - Lost to follow up [oc]
 -- Unable to contact the patient
 -- Patient refuses futher follow up
@@ -389,7 +389,7 @@ Common Route - Follow-up
 -- Telephone questioning the patient
 -- Telephone questioning the family doctor
 
-Common Route - Quality of life measurement
+Common Route - Quality of life measurement #13
 - Chronic abdominal wall pain at the operation site [yn]
 -- Yes
 --- Intensity of pain [oc]
@@ -404,7 +404,7 @@ Common Route - Quality of life measurement
 ---- Constant
 --- Foreign body feeling at operation site [yn]
 
-Common Route - Late complications
+Common Route - Late complications #14
 - Late complications [yn]
 -- Yes
 --- Types of late complications [mc]
