@@ -93,3 +93,5 @@ td { padding: 2px 0; vertical-align: top; height: 100%}
 #popupTableDiv{width: 400px; margin-top: 5px; margin-bottom: 10px;}
 
 li.noListMarker {list-style-type: none;}
+
+.qerror{margin: 5px; color: #CC0000; font-weight: bold;};

@@ -89,7 +89,8 @@ LATER - Fälle speichern: wo Ordner am besten ablegen?
  
 REFINE - Wertüberprüfung Num-/Text-Felder
 REFINE - Fallsortierung im Laden-Menü: Groß-/Kleinschreibung anders berücksichtigen
-REFINE - Num Fields: Wertebereich 
+
+DONE - Num Fields: Wertebereich 
 DONE - Num fields , statt . akzeptieren
 DONE - Req Fields beim ersten abschicken direkt mitgeben
 

@@ -270,23 +270,34 @@ public class D3webDialog extends HttpServlet {
 			response.setContentType("text/html");
 			response.setCharacterEncoding("utf8");
 			PrintWriter writer = response.getWriter();
-			String qid = request.getParameter("qid");
-			qid = qid.replace("q_", "");
+			//String qid = request.getParameter("qid");
+			//qid = qid.replace("q_", "");
 
-			Question to =
+			String qidsString = request.getParameter("qids");
+			qidsString = qidsString.replace("q_", "");
+
+			String[] qids = qidsString.split(";");
+			String qidBackstring = "";
+			
+			for(String qid : qids){
+				String[] idVal = qid.split("%");
+
+				Question to =
 					(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
-							qid, d3wcon.getKb());
+								idVal[0], d3wcon.getKb());
 
-			if (to instanceof QuestionNum) {
-				if (to.getInfoStore().getValue(BasicProperties.QUESTION_NUM_RANGE) != null) {
-					NumericalInterval range = to.getInfoStore().getValue(
-							BasicProperties.QUESTION_NUM_RANGE);
-					writer.append(range.getLeft() + ";" + range.getRight());
+				if (to instanceof QuestionNum) {
+					if (to.getInfoStore().getValue(BasicProperties.QUESTION_NUM_RANGE) != null) {
+						NumericalInterval range = to.getInfoStore().getValue(
+								BasicProperties.QUESTION_NUM_RANGE);
+						qidBackstring += to.getName() + "%" + idVal[1] + "%";
+						qidBackstring += range.getLeft() + "-" + range.getRight() + ";";
+					}
 				}
+				
 			}
-			else {
-				writer.append("");
-			}
+			
+			writer.append(qidBackstring);
 
 			return;
 		}

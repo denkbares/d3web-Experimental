@@ -16,5 +16,6 @@
 				$children$
 			$endif$
 		$endif$
+		<div id=error-$fullId$ class="qerror"></div>
 	</div>
 </div>

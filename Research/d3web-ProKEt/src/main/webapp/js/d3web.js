@@ -160,46 +160,99 @@ function initFunctionality() {
 	});
 }
 
-
-function d3web_checkNumRanges(qid, value, store){
+/**
+ * Send an AJAX request to check, whether possibly answered num questions
+ * have a certain value-range specified, and if yes, return the respective
+ * question-ids and ranges for checking the user provided value against the
+ * range.
+ */
+function d3web_checkNumRanges(qid, value, store, numStore){
 	
-	var link = $.query.set("action", "checkRange").set("qid", qid).toString();
+	/* FIRST assemble all questions that might be a num-q with range
+	 * to a String representation: <qid>%<value>;<qid>%<value>; 
+	 * This can be the single clicked question, or those in the
+	 * numStore  TODO: maybe adapt later for handling also text etc questions
+	 * */
+	var qids = "";
+	if(qid !== undefined && value !== undefined){
+		qids = qid + "%" + value + ";";
+	} 
+	if(numStore !== undefined && numStore !== " "){
+		var storeVals = numStore.split(";");
+		for (i = 0; i < storeVals.length; i++) {
+			 var idVal = storeVals[i].split("###");
+			 
+			 if(idVal[0] !== "" || idVal[1] !== undefined){
+				 if(!(idVal[0]==qid)){
+					 var add = idVal[0] + "%" + idVal[1] + ";";
+					 qids += add;
+				 }
+			 }
+		 }	
+	}
+
+	/* create query string for calling the checkrange method of the servlet */
+	var link = $.query.set("action", "checkRange").set("qids", qids).toString();
 	link = window.location.href.replace(window.location.search, "") + link;
 	
-	// checked on rangeRequest success
+	// checked on rangeRequest complete; TRUE means, every provided value is
+	// also within the value range (if one existed)
 	var checkRangeOK = true;
 	
-	// new jquery 1.5 syntax
+	// send the request; on success, check whether qid/range pairs are given back
 	$.get( link,
 		   function(data) {
-				// a range exists
-				if (data !== "") {
-					// get and parse range values
-					var rangeVals = data.split(";");
-					var min = parseFloat(rangeVals[0]);
-                	var max = parseFloat(rangeVals[1]);
+				
+				if (data !== "") {		// range(s) exist(s)
 					
-                	// if provided value not within specified range, notify user and 
-                	// delete value from field
-					if(value < min || value > max){
-						qid = 	qid.replace("q_", "");
-						alert("Wert des Feldes '" + qid + "' außerhalb des zulässigen Wertebereichs [" + data + "]");
-						var id = "#" +  qid;
-						$(id).val("");
-						checkRangeOK = false;
-					} 
+					// split the ID/val/range complete String into ID/val/range value triples
+					var idValRange = data.split(";");
+					
+					for(i = 0; i<idValRange.length-1; i++){	// for each triple
+						
+						// split the triple String into three distinct vals
+						var triple = idValRange[i].split("%");
+					
+						var id = triple[0];
+						var value = triple[1];
+						var range = triple[2];
+						
+						// get and parse range values
+						var rangeVals = range.split("-");
+						var min = parseFloat(rangeVals[0]);
+	                	var max = parseFloat(rangeVals[1]);
+						
+	                	// if provided value not within specified range
+						if(value < min || value > max){
+							
+							// input fields have id prefix "f_"
+							var idplus = "#f_" +  id;
+							var qerrid = "#error-q_" + id;
+							
+							// set error message for question
+							$(qerrid).html("Zulässiger Wertebereich: [" + range + "]");
+							
+							// remove wront value
+							$(idplus).val("");
+							checkRangeOK = false;		// set flag for not all vals OK 
+						}
+					}
+					if(!checkRangeOK){
+						alert("Bitte überprüfen Sie die mit roter Fehlermeldung gekennzeichneten Fragen!");
+					}
 				}
 			}
 	)
-	.success(function(){
+	.complete(function(){
+		
 		// if val was in provided range add value
 		if(checkRangeOK){
+		
+			// reset error messages
+			$("[id*=error]").html("");
 			d3web_addfactsRemembering(store, qid, value);
 		} 
-		// otherwise just show dialog again
-		else {
-			d3web_show();
-		}
+		// otherwise do nothing
 	});
 	
 }
@@ -614,6 +667,7 @@ function d3web_getSelectedFacts(clickedItem) {
 	var txtStore = "";
 	var datStore = "";
 	var store = "";
+	var hasNumFirst = false;
 
 	/*
 	 * The next 3 code blocks fetch all input for input fields such as num,
@@ -681,6 +735,7 @@ function d3web_getSelectedFacts(clickedItem) {
 			items = question.find(":text,textarea").filter(":first");
 			if (items.size() == 1) {
 				pos = items.attr('value');
+				hasNumFirst = true;
 			}
 		}
 		/* radio buttons */
@@ -727,7 +782,7 @@ function d3web_getSelectedFacts(clickedItem) {
 	// assemble complete text/textinput value store
 	store += numStore + "&&&&" + txtStore + "&&&&" + datStore;
 	
-	d3web_checkNumRanges(question.attr('id'), pos, store);
+	d3web_checkNumRanges(question.attr('id'), pos, store, numStore);
 	
 }
 
