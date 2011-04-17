@@ -16,15 +16,19 @@ import java.util.regex.Pattern;
 
 import javax.xml.ws.http.HTTPException;
 
+import org.openrdf.query.BindingSet;
+import org.openrdf.query.BooleanQuery;
+import org.openrdf.query.MalformedQueryException;
+import org.openrdf.query.QueryEvaluationException;
+import org.openrdf.query.QueryLanguage;
+import org.openrdf.query.TupleQuery;
+import org.openrdf.query.TupleQueryResult;
+import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.http.HTTPRepository;
+
 import com.google.api.translate.Language;
 import com.google.api.translate.Translate;
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.ResultSetFormatter;
 
 public class LinkedOpenData {
 
@@ -46,6 +50,8 @@ public class LinkedOpenData {
 
 	// "http://lod.openlinksw.com/sparql";
 	public static final String sparqlEndpoint = "http://dbpedia.org/sparql";
+	public static final HTTPRepository endpointRepo = new HTTPRepository(
+			sparqlEndpoint, "");
 
 	// Times the queries are split up.
 	private static final int split = 3;
@@ -64,6 +70,14 @@ public class LinkedOpenData {
 	 * @throws Exception if the propery file is not in correct syntax
 	 */
 	public LinkedOpenData(String conceptTypeName) throws Exception {
+		try {
+			endpointRepo.initialize();
+		}
+		catch (RepositoryException e) {
+			System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+			e.printStackTrace();
+		}
+
 		propFile = new ArrayList<String>();
 		mappings = new LinkedHashMap<String, List<String>>();
 		searchTags = new LinkedHashMap<String, String>();
@@ -95,7 +109,8 @@ public class LinkedOpenData {
 						mappings.get(swap).add(cut[1]);
 					}
 					else {
-						mappings.put(swap, new ArrayList<String>(Arrays.asList(cut[1])));
+						mappings.put(swap,
+								new ArrayList<String>(Arrays.asList(cut[1])));
 					}
 				}
 				else {
@@ -103,7 +118,8 @@ public class LinkedOpenData {
 						mappings.get(cut[0]).add(cut[1]);
 					}
 					else {
-						mappings.put(cut[0], new ArrayList<String>(Arrays.asList(cut[1])));
+						mappings.put(cut[0],
+								new ArrayList<String>(Arrays.asList(cut[1])));
 					}
 				}
 			}
@@ -193,11 +209,11 @@ public class LinkedOpenData {
 		input = "<" + input + ">";
 
 		List<String> queries = this.createQueryString(input, split);
-		List<QuerySolution> solution = this.executequeryStrings(queries);
+		List<BindingSet> solution = this.executequeryStrings(queries);
 
 		HashMap<String, HashSet<String>> result = new LinkedHashMap<String, HashSet<String>>();
-		for (QuerySolution x : solution) {
-			Iterator<String> it = x.varNames();
+		for (BindingSet x : solution) {
+			Iterator<String> it = x.getBindingNames().iterator();
 			while (it.hasNext()) {
 				String temp = it.next();
 				// if searchtag is a specified one
@@ -208,8 +224,8 @@ public class LinkedOpenData {
 							String filter = s.replaceAll("\\$", "\\\\w+");
 							filter = "(?i)" + filter;
 							Pattern pattern = Pattern.compile(filter);
-							Matcher matcher = pattern.matcher(x.get(temp)
-									.toString());
+							Matcher matcher = pattern.matcher(x
+									.getBinding(temp).getValue().toString());
 							// add set with 1 element
 
 							if (matcher.find()) {
@@ -218,11 +234,13 @@ public class LinkedOpenData {
 									result.put(
 											searchTags.get(temp) + " " + s,
 											new HashSet<String>(Arrays.asList(x
-													.get(temp).toString())));
+													.getBinding(temp)
+													.getValue().toString())));
 								}
 								else {
 									result.get(searchTags.get(temp) + " " + s)
-											.add(x.get(temp).toString());
+											.add(x.getBinding(temp).getValue()
+													.toString());
 								}
 							}
 						}
@@ -231,13 +249,15 @@ public class LinkedOpenData {
 							if (result.containsKey(searchTags.get(temp) + " "
 									+ s)) {
 								result.get(searchTags.get(temp) + " " + s).add(
-										x.get(temp).toString());
+										x.getBinding(temp).getValue()
+												.toString());
 							}
 							else {
 								result.put(
 										searchTags.get(temp) + " " + s,
 										new HashSet<String>(Arrays.asList(x
-												.get(temp).toString())));
+												.getBinding(temp).getValue()
+												.toString())));
 							}
 						}
 					}
@@ -246,11 +266,14 @@ public class LinkedOpenData {
 					// helps to save multiple results for every variable
 					if (result.containsKey(searchTags.get(temp))) {
 						result.get(searchTags.get(temp)).add(
-								x.get(temp).toString());
+								x.getBinding(temp).getValue().toString());
 					}
 					else {
-						result.put(searchTags.get(temp), new HashSet<String>(
-								Arrays.asList(x.get(temp).toString())));
+						result.put(
+								searchTags.get(temp),
+								new HashSet<String>(Arrays
+										.asList(x.getBinding(temp).getValue()
+												.toString())));
 					}
 				}
 			}
@@ -290,34 +313,46 @@ public class LinkedOpenData {
 	 * @param queries queries.
 	 * @return solutionlist.
 	 */
-	private List<QuerySolution> executequeryStrings(List<String> queries) {
-
-		List<List<QuerySolution>> test = new ArrayList<List<QuerySolution>>();
-
+	private List<BindingSet> executequeryStrings(List<String> queries) {
+		List<BindingSet> results = new ArrayList<BindingSet>();
 		for (int i = 0; i < queries.size(); i++) {
 			// create the query object
 			// System.out.println(queries.get(i).toString());
-			Query query = QueryFactory.create(queries.get(i).toString());
-			QueryExecution qexec = QueryExecutionFactory.sparqlService(
-					sparqlEndpoint, query);
-			List<QuerySolution> solution = new ArrayList<QuerySolution>();
+
 			try {
-				ResultSet results = qexec.execSelect();
-				solution = ResultSetFormatter.toList(results);
-				test.add(solution);
+				RepositoryConnection con = endpointRepo.getConnection();
+				try {
+					TupleQuery query = con.prepareTupleQuery(
+							QueryLanguage.SPARQL, queries.get(i));
+					TupleQueryResult result = query.evaluate();
+
+					while (result.hasNext()) {
+						results.add(result.next());
+					}
+				}
+				catch (RepositoryException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				catch (MalformedQueryException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				catch (QueryEvaluationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				finally {
+					con.close();
+				}
 			}
-			finally {
-				qexec.close();
+			catch (RepositoryException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 		}
 
-		List<QuerySolution> result = new ArrayList<QuerySolution>();
-		for (int i = 0; i < test.size(); i++) {
-			for (int j = 0; j < test.get(i).size(); j++) {
-				result.add(test.get(i).get(j));
-			}
-		}
-		return result;
+		return results;
 	}
 
 	/**
@@ -408,19 +443,49 @@ public class LinkedOpenData {
 				.append("PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>");
 		stringQuery2.append("ASK {<" + input + "> rdfs:comment ?temp1 .}");
 		// create the query object
-		Query query = QueryFactory.create(stringQuery.toString());
-		Query query2 = QueryFactory.create(stringQuery2.toString());
 
-		QueryExecution qexec = QueryExecutionFactory.sparqlService(
-				sparqlEndpoint, query);
-		QueryExecution qexec2 = QueryExecutionFactory.sparqlService(
-				sparqlEndpoint, query2);
+		boolean queryResult = false;
+		boolean queryResult2 = false;
+
 		try {
-			return qexec.execAsk() || qexec2.execAsk();
+			RepositoryConnection con = endpointRepo.getConnection();
+
+			try {
+				BooleanQuery query = con.prepareBooleanQuery(
+						QueryLanguage.SPARQL, stringQuery.toString());
+				BooleanQuery query2 = con.prepareBooleanQuery(
+						QueryLanguage.SPARQL, stringQuery2.toString());
+
+				queryResult = query.evaluate();
+				queryResult2 = query2.evaluate();
+
+			}
+			catch (RepositoryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (MalformedQueryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (QueryEvaluationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			finally {
+				con.close();
+			}
 		}
-		finally {
-			qexec.close();
+		catch (HTTPException e) {
+			e.printStackTrace();
+			return false;
 		}
+		catch (RepositoryException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return queryResult || queryResult2;
+
 	}
 
 	/**
@@ -431,31 +496,50 @@ public class LinkedOpenData {
 	 */
 	private static String getRedirect(String input) {
 		StringBuffer stringQuery = new StringBuffer();
-		stringQuery.append("PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>");
+		stringQuery
+				.append("PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>");
 		stringQuery.append("PREFIX : <http://dbpedia.org/resource/>");
 		stringQuery.append("SELECT ?redirectTarget WHERE {:" + input
 				+ " dbpedia-owl:wikiPageRedirects ?redirectTarget .}");
 		// create the query object
-		Query query = QueryFactory.create(stringQuery.toString());
 
-		QueryExecution qexec = QueryExecutionFactory.sparqlService(
-				sparqlEndpoint, query);
-
-		List<QuerySolution> test = new ArrayList<QuerySolution>();
 		try {
-			ResultSet results = qexec.execSelect();
-			test = ResultSetFormatter.toList(results);
-		}
-		finally {
-			qexec.close();
-		}
-		for (QuerySolution x : test) {
-			Iterator<String> it = x.varNames();
-			while (it.hasNext()) {
-				String temp = it.next();
-				return x.get(temp).toString();
+			RepositoryConnection con = endpointRepo.getConnection();
+			try {
+				TupleQuery query = con.prepareTupleQuery(QueryLanguage.SPARQL,
+						stringQuery.toString());
+				TupleQueryResult result = query.evaluate();
+
+				while (result.hasNext()) {
+					BindingSet b = result.next();
+					Iterator<String> it = b.getBindingNames().iterator();
+					while (it.hasNext()) {
+						String temp = it.next();
+						return b.getBinding(temp).getValue().toString();
+					}
+				}
+			}
+			catch (RepositoryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (MalformedQueryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (QueryEvaluationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			finally {
+				con.close();
 			}
 		}
+		catch (RepositoryException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		return "";
 	}
 
@@ -489,17 +573,15 @@ public class LinkedOpenData {
 					if (lhsMappings.split(" ")[1].equals("INV")) {
 						inverse = true;
 						htmlTitle = "is&nbsp;"
-								+ lhsMappings
-										.substring(0, lhsMappings.indexOf(" "))
-								+ "&nbsp;of";
+								+ lhsMappings.substring(0,
+										lhsMappings.indexOf(" ")) + "&nbsp;of";
 					}
 					else {
 						htmlTitle = lhsMappings.substring(0,
 								lhsMappings.indexOf(" "))
 								+ "&nbsp;["
-								+ lhsMappings
-										.substring(lhsMappings.indexOf(" ") + 1)
-								+ "]";
+								+ lhsMappings.substring(lhsMappings
+										.indexOf(" ") + 1) + "]";
 					}
 				}
 
@@ -546,7 +628,8 @@ public class LinkedOpenData {
 									Pattern pattern = Pattern.compile(filter);
 									Matcher matcher = pattern.matcher(s);
 									if (matcher.find()) {
-										String[] yearD = matcher.group().split("_");
+										String[] yearD = matcher.group().split(
+												"_");
 										if (yearD[1].matches("BC")
 												|| yearD[1].matches("BCE")) {
 
@@ -575,7 +658,8 @@ public class LinkedOpenData {
 								resultData.get(hermesTag).add(s);
 
 								inverseMap.get(hermesTag).add(
-										htmlTitle + "&nbsp;(" + s.replaceAll(" ", "&nbsp;")
+										htmlTitle + "&nbsp;("
+												+ s.replaceAll(" ", "&nbsp;")
 												+ ")");
 								inverseMap.get(hermesTag).add(s);
 
@@ -593,7 +677,9 @@ public class LinkedOpenData {
 										"ist vom Typ " + hermesTag);
 
 								inverseMap.get(hermesTag).add(
-										htmlTitle + "&nbsp;(" + s.replaceAll(" ", "&nbsp;") + ")");
+										htmlTitle + "&nbsp;("
+												+ s.replaceAll(" ", "&nbsp;")
+												+ ")");
 								inverseMap.get(hermesTag).add(
 										"ist vom Typ " + hermesTag);
 							}
@@ -634,7 +720,9 @@ public class LinkedOpenData {
 
 								resultData.get(hermesTag).add(result);
 								inverseMap.get(hermesTag).add(
-										htmlTitle + "&nbsp;(" + s.replaceAll(" ", "&nbsp;") + ")");
+										htmlTitle + "&nbsp;("
+												+ s.replaceAll(" ", "&nbsp;")
+												+ ")");
 								inverseMap.get(hermesTag).add(result);
 							}
 						}
@@ -669,23 +757,25 @@ public class LinkedOpenData {
 
 									String[] yearD2 = s.split("-");
 									if (s.indexOf("-") == 0) {
-										datum = "-" + yearD2[1] + "-" + yearD2[2] + "-"
-												+ yearD2[3];
+										datum = "-" + yearD2[1] + "-"
+												+ yearD2[2] + "-" + yearD2[3];
 									}
 									else {
-										datum = yearD2[0] + "-" + yearD2[1] + "-"
-												+ yearD2[2];
+										datum = yearD2[0] + "-" + yearD2[1]
+												+ "-" + yearD2[2];
 									}
 								}
 								// October?,? ?YYYY+
 								if (s.matches("[\\p{Alpha} ,]*[\\d]+ ?[AD|BC|E]{0,3}/?-? ?[\\d]* ?[AD|BC|E]{2,3}")) {
 									String yearFilter = "[\\d]+ ?[AD|BC|E]{2,3}";
-									Pattern yearPattern = Pattern.compile(yearFilter);
+									Pattern yearPattern = Pattern
+											.compile(yearFilter);
 									Matcher matcherY = yearPattern.matcher(s);
 
 									while (matcherY.find()) {
 										String date = matcherY.group();
-										String year = date.split(" ?[\\p{Alpha}]+")[0];
+										String year = date
+												.split(" ?[\\p{Alpha}]+")[0];
 										if (!datum.isEmpty()) {
 											datum += " ";
 										}
@@ -808,33 +898,37 @@ public class LinkedOpenData {
 
 									if (s.contains(" ")) {
 
-										d1 = s.substring(0,
-												s.indexOf(" "));
-										d2 = s.substring(
-												s.indexOf(" ") + 1);
+										d1 = s.substring(0, s.indexOf(" "));
+										d2 = s.substring(s.indexOf(" ") + 1);
 
 										if (hermesTag.contains("Latitude")) {
-											while (!resultData.get(hermesTag).add(d1)) {
+											while (!resultData.get(hermesTag)
+													.add(d1)) {
 												d1 = d1 + "0";
 											}
-											inverseMap.get(hermesTag).add(normalTitle);
+											inverseMap.get(hermesTag).add(
+													normalTitle);
 											inverseMap.get(hermesTag).add(d1);
 										}
 										if (hermesTag.contains("Longitude")) {
-											while (!resultData.get(hermesTag).add(d2)) {
+											while (!resultData.get(hermesTag)
+													.add(d2)) {
 												d2 = d2 + "0";
 											}
-											inverseMap.get(hermesTag).add(normalTitle);
+											inverseMap.get(hermesTag).add(
+													normalTitle);
 											inverseMap.get(hermesTag).add(d2);
 										}
 
 									}
 									else {
-										while (!resultData.get(hermesTag).add(s)) {
+										while (!resultData.get(hermesTag)
+												.add(s)) {
 											s = s + "0";
 										}
 										resultData.get(hermesTag).add(s);
-										inverseMap.get(hermesTag).add(normalTitle);
+										inverseMap.get(hermesTag).add(
+												normalTitle);
 										inverseMap.get(hermesTag).add(s);
 									}
 
@@ -852,16 +946,19 @@ public class LinkedOpenData {
 
 									String[] cutString = s.split("http://.*/");
 									if (cutString[1].matches("[\\w]+:[\\w]+")) {
-										string = cutString[1].replaceAll("[\\w]+:", "")
-												.replaceAll("_", " ");
+										string = cutString[1].replaceAll(
+												"[\\w]+:", "").replaceAll("_",
+												" ");
 									}
 									else {
-										string = cutString[1].replaceAll("_", " ");
+										string = cutString[1].replaceAll("_",
+												" ");
 									}
 								}
 								else {
 									// Cut languagetags.
-									if (string.matches("[\\p{L}\\.:; ]+@\\p{Alpha}{2}")) {
+									if (string
+											.matches("[\\p{L}\\.:; ]+@\\p{Alpha}{2}")) {
 										string = string.substring(0,
 												string.indexOf("@") - 1);
 									}
@@ -964,28 +1061,46 @@ public class LinkedOpenData {
 			stringQuery.append("SELECT ?resource WHERE { ?resource foaf:page <"
 					+ wikilink + "> .}");
 			// create the query object
-			Query query = QueryFactory.create(stringQuery.toString());
-
-			QueryExecution qexec = QueryExecutionFactory.sparqlService(
-					sparqlEndpoint, query);
-
-			List<QuerySolution> result = new ArrayList<QuerySolution>();
 			try {
-				ResultSet results = qexec.execSelect();
-				result = ResultSetFormatter.toList(results);
-			}
-			finally {
-				qexec.close();
-			}
-			String resultString = "";
-			for (QuerySolution x : result) {
-				Iterator<String> it = x.varNames();
-				while (it.hasNext()) {
-					String temp = it.next();
-					resultString = x.get(temp).toString();
+				RepositoryConnection con = endpointRepo.getConnection();
+				try {
+					TupleQuery query = con.prepareTupleQuery(
+							QueryLanguage.SPARQL, stringQuery.toString());
+					TupleQueryResult result = query.evaluate();
+
+					String resultString = "";
+					while (result.hasNext()) {
+						BindingSet b = result.next();
+						Iterator<String> it = b.getBindingNames().iterator();
+						while (it.hasNext()) {
+							String temp = it.next();
+							resultString = b.getBinding(temp).getValue()
+									.toString();
+						}
+					}
+					return resultString;
+				}
+				catch (RepositoryException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				catch (MalformedQueryException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				catch (QueryEvaluationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				finally {
+					con.close();
 				}
 			}
-			return resultString;
+			catch (RepositoryException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
 		}
 		return "";
 	}
@@ -1034,20 +1149,44 @@ public class LinkedOpenData {
 	 * @return boolean.
 	 */
 	public static boolean sparqlAvailable() {
-		String query = "ASK WHERE { ?s ?p ?o }";
-		QueryExecution qe = null;
+		String stringQuery = "ASK WHERE { ?s ?p ?o }";
+
 		try {
-			qe = QueryExecutionFactory.sparqlService(sparqlEndpoint, query);
-			if (qe.execAsk()) {
-				return true;
+			RepositoryConnection con = endpointRepo.getConnection();
+
+			try {
+				BooleanQuery query = con.prepareBooleanQuery(
+						QueryLanguage.SPARQL, stringQuery.toString());
+
+				if (query.evaluate()) {
+					return true;
+				}
+			}
+			catch (RepositoryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (MalformedQueryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (QueryEvaluationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			finally {
+				con.close();
 			}
 		}
 		catch (HTTPException e) {
+			e.printStackTrace();
 			return false;
 		}
-		finally {
-			qe.close();
+		catch (RepositoryException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+
 		return true;
 
 	}

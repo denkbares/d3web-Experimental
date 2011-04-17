@@ -24,20 +24,6 @@
   		<scope>compile</scope>
   	</dependency>
   	<dependency>
-  		<groupId>com.hp.hpl.jena</groupId>
-  		<artifactId>jena</artifactId>
-  		<version>2.6.3</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>com.hp.hpl.jena</groupId>
-  		<artifactId>arq</artifactId>
-  		<version>2.8.6</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
   		<groupId>com.googlecode</groupId>
   		<artifactId>google-api-translate-java</artifactId>
   		<version>0.92</version>
@@ -51,5 +37,11 @@
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
+  	<dependency>
+		<groupId>org.openrdf</groupId>
+		<artifactId>sesame</artifactId>
+		<version>2.3.2</version>
+		<classifier>onejar</classifier>
+	</dependency>
   </dependencies>
 </project>
