@@ -1,4 +1,4 @@
-package de.d3web.we.lod.quiz.action;
+package de.knowwe.lod.quiz.action;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -13,7 +13,7 @@ import org.openrdf.query.TupleQueryResult;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
 import de.d3web.we.core.semantic.UpperOntology;
-import de.d3web.we.lod.quiz.YearOfBirthQuizHandler;
+import de.knowwe.lod.quiz.YearOfBirthQuizHandler;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 public class SolveYearOfBirthAction extends AbstractAction {

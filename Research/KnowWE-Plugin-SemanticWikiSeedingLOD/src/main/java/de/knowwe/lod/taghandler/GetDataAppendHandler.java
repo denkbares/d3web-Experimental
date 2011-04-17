@@ -1,4 +1,4 @@
-package de.d3web.we.lod.taghandler;
+package de.knowwe.lod.taghandler;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

@@ -18,7 +18,7 @@
         <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
                 id="ConceptHandler">
                 <parameter id="class"
-                        value="de.d3web.we.lod.taghandler.ConceptHandler" />
+                        value="de.knowwe.lod.taghandler.ConceptHandler" />
                 <parameter id="name" value="ConceptHandler" />
                 <parameter id="description" value="TagHandler ConceptHandler" />
                 <parameter id="version" value="1.0" />
@@ -28,7 +28,7 @@
  		<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
                 id="GetDataHandler">
                 <parameter id="class"
-                        value="de.d3web.we.lod.taghandler.GetDataHandler" />
+                        value="de.knowwe.lod.taghandler.GetDataHandler" />
                 <parameter id="name" value="GetDataHandler" />
                 <parameter id="description" value="TagHandler GetDataHandler" />
                 <parameter id="version" value="1.0" />
@@ -38,7 +38,7 @@
         <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
                 id="BirthplaceQuizHandler">
                 <parameter id="class"
-                        value="de.d3web.we.lod.quiz.BirthplaceQuizHandler" />
+                        value="de.knowwe.lod.quiz.BirthplaceQuizHandler" />
                 <parameter id="name" value="GetDataHandler" />
                 <parameter id="description" value="TagHandler BirthplaceQuizHandler" />
                 <parameter id="version" value="1.0" />
@@ -48,7 +48,7 @@
         <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
                 id="YearOfBirthQuizHandler">
                 <parameter id="class"
-                        value="de.d3web.we.lod.quiz.YearOfBirthQuizHandler" />
+                        value="de.knowwe.lod.quiz.YearOfBirthQuizHandler" />
                 <parameter id="name" value="YearOfBirthQuizHandler" />
                 <parameter id="description" value="TagHandler YearOfBirthQuizHandler" />
                 <parameter id="version" value="1.0" />
@@ -58,7 +58,7 @@
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="MappingContentType">
 			<parameter id="class"
-			value="de.d3web.we.lod.markup.MappingMarkup" />
+			value="de.knowwe.lod.markup.MappingMarkup" />
 			<parameter id="name" value="MappingMarkup" />
 			<parameter id="description" value="Type MappingMarkup" />
 			<parameter id="version" value="1.0" />
@@ -71,7 +71,7 @@
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="IgnoreContentType">
 			<parameter id="class"
-			value="de.d3web.we.lod.markup.IgnoreAttributesMarkup" />
+			value="de.knowwe.lod.markup.IgnoreAttributesMarkup" />
 			<parameter id="name" value="IgnoreAttributesMarkup" />
 			<parameter id="description" value="Type IgnoreAttributesMarkup" />
 			<parameter id="version" value="1.0" />
@@ -84,7 +84,7 @@
     	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="GetDataAction">
         	<parameter id="class"
-            value="de.d3web.we.lod.action.GetDataAction" />
+            value="de.knowwe.lod.action.GetDataAction" />
         	<parameter id="name" value="GetDataAction" />
         	<parameter id="description" value="Action GetDataAction" />
         	<parameter id="version" value="1.0" />
@@ -94,7 +94,7 @@
     	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="ParseDataAction">
         	<parameter id="class"
-            value="de.d3web.we.lod.action.ParseDataAction" />
+            value="de.knowwe.lod.action.ParseDataAction" />
         	<parameter id="name" value="ParseDataAction" />
         	<parameter id="description" value="Action ParseDataAction" />
         	<parameter id="version" value="1.0" />
@@ -104,7 +104,7 @@
     	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="CreateAction">
         	<parameter id="class"
-            value="de.d3web.we.lod.action.CreateAction" />
+            value="de.knowwe.lod.action.CreateAction" />
         	<parameter id="name" value="CreateAction" />
         	<parameter id="description" value="Action CreateAction" />
         	<parameter id="version" value="1.0" />
@@ -114,7 +114,7 @@
     	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="MappingsAction">
         	<parameter id="class"
-            value="de.d3web.we.lod.action.MappingsAction" />
+            value="de.knowwe.lod.action.MappingsAction" />
         	<parameter id="name" value="MappingsAction" />
         	<parameter id="description" value="Action MappingsAction" />
         	<parameter id="version" value="1.0" />
@@ -124,7 +124,7 @@
     	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="SolveYearOfBirthAction">
         	<parameter id="class"
-            value="de.d3web.we.lod.quiz.action.SolveYearOfBirthAction" />
+            value="de.knowwe.lod.quiz.action.SolveYearOfBirthAction" />
         	<parameter id="name" value="SolveYearOfBirthAction" />
         	<parameter id="description" value="Action SolveYearOfBirthAction" />
         	<parameter id="version" value="1.0" />
@@ -134,7 +134,7 @@
     	<extension plugin-id="KnowWEExtensionPoints" point-id="PageAppendHandler"
 		id="GetDataAppendHandler">
 		<parameter id="class"
-			value="de.d3web.we.lod.taghandler.GetDataAppendHandler" />
+			value="de.knowwe.lod.taghandler.GetDataAppendHandler" />
 		<parameter id="name" value="GetDataAppendHandler" />
 		<parameter id="description" value="PageAppendHandler GetDataAppendHandler" />
 		<parameter id="version" value="1.0" />

@@ -1,4 +1,4 @@
-package de.d3web.we.lod.taghandler;
+package de.knowwe.lod.taghandler;
 
 import java.util.Map;
 

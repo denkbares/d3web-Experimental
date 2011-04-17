@@ -1,4 +1,4 @@
-package de.d3web.we.lod.action;
+package de.knowwe.lod.action;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,12 +19,12 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
-import de.d3web.we.lod.HermesData;
-import de.d3web.we.lod.LinkedOpenData;
-import de.d3web.we.lod.markup.IgnoreContentType;
-import de.d3web.we.lod.markup.IgnoreContentType.IgnoreChild;
-import de.d3web.we.lod.markup.IgnoreContentType.IgnoreConcept;
-import de.d3web.we.lod.markup.MappingContentType;
+import de.knowwe.lod.HermesData;
+import de.knowwe.lod.LinkedOpenData;
+import de.knowwe.lod.markup.IgnoreContentType;
+import de.knowwe.lod.markup.MappingContentType;
+import de.knowwe.lod.markup.IgnoreContentType.IgnoreChild;
+import de.knowwe.lod.markup.IgnoreContentType.IgnoreConcept;
 
 public class ParseDataAction extends AbstractAction {
 

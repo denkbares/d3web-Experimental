@@ -1,4 +1,4 @@
-package de.d3web.we.lod.quiz;
+package de.knowwe.lod.quiz;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -14,9 +14,9 @@ import org.openrdf.query.TupleQueryResult;
 import de.d3web.we.core.semantic.OwlHelper;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
-import de.d3web.we.lod.quiz.map.MapForConcepts;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
 import de.d3web.we.user.UserContext;
+import de.knowwe.lod.quiz.map.MapForConcepts;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {

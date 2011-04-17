@@ -1,4 +1,4 @@
-package de.d3web.we.lod.action;
+package de.knowwe.lod.action;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -20,9 +20,9 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
-import de.d3web.we.lod.HermesData;
-import de.d3web.we.lod.LinkedOpenData;
-import de.d3web.we.lod.markup.MappingContentType;
+import de.knowwe.lod.HermesData;
+import de.knowwe.lod.LinkedOpenData;
+import de.knowwe.lod.markup.MappingContentType;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 public class MappingsAction extends AbstractAction {

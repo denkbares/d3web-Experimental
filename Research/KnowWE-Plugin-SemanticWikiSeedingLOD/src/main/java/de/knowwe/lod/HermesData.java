@@ -1,4 +1,4 @@
-package de.d3web.we.lod;
+package de.knowwe.lod;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -18,10 +18,10 @@ import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
-import de.d3web.we.lod.markup.IgnoreContentType;
-import de.d3web.we.lod.markup.IgnoreContentType.IgnoreChild;
-import de.d3web.we.lod.markup.IgnoreContentType.IgnoreConcept;
-import de.d3web.we.lod.markup.MappingContentType;
+import de.knowwe.lod.markup.IgnoreContentType;
+import de.knowwe.lod.markup.MappingContentType;
+import de.knowwe.lod.markup.IgnoreContentType.IgnoreChild;
+import de.knowwe.lod.markup.IgnoreContentType.IgnoreConcept;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 /**

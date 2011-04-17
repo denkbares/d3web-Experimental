@@ -1,4 +1,4 @@
-package de.d3web.we.lod;
+package de.knowwe.lod;
 
 import java.util.HashMap;
 

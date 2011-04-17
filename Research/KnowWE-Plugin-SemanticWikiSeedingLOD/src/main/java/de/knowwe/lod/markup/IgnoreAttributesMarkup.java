@@ -1,4 +1,4 @@
-package de.d3web.we.lod.markup;
+package de.knowwe.lod.markup;
 
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupRenderer;

@@ -1,4 +1,4 @@
-package de.d3web.we.lod.markup;
+package de.knowwe.lod.markup;
 
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;

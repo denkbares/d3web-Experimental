@@ -18,7 +18,7 @@
  * site: http://www.fsf.org.
  */
 
-package de.d3web.we.lod.quiz.map;
+package de.knowwe.lod.quiz.map;
 
 public class Placemark {
 

@@ -1,4 +1,4 @@
-package de.d3web.we.lod.action;
+package de.knowwe.lod.action;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -9,9 +9,9 @@ import java.util.List;
 
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
-import de.d3web.we.lod.ConceptType;
-import de.d3web.we.lod.LinkedOpenData;
-import de.d3web.we.lod.LinkedOpenDataSet;
+import de.knowwe.lod.ConceptType;
+import de.knowwe.lod.LinkedOpenData;
+import de.knowwe.lod.LinkedOpenDataSet;
 
 public class CreateAction extends AbstractAction {
 

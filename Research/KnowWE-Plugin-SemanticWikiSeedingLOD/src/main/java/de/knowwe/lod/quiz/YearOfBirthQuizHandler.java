@@ -1,4 +1,4 @@
-package de.d3web.we.lod.quiz;
+package de.knowwe.lod.quiz;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

@@ -1,4 +1,4 @@
-package de.d3web.we.lod.action;
+package de.knowwe.lod.action;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21,11 +21,11 @@ import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
-import de.d3web.we.lod.ConceptType;
-import de.d3web.we.lod.HermesData;
-import de.d3web.we.lod.LinkedOpenData;
-import de.d3web.we.lod.LinkedOpenDataSet;
-import de.d3web.we.lod.markup.MappingContentType;
+import de.knowwe.lod.ConceptType;
+import de.knowwe.lod.HermesData;
+import de.knowwe.lod.LinkedOpenData;
+import de.knowwe.lod.LinkedOpenDataSet;
+import de.knowwe.lod.markup.MappingContentType;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 public class GetDataAction extends AbstractAction {
