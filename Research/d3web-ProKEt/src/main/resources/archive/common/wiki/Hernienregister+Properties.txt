@@ -1,8 +1,17 @@
 %%Property
-Year of birth:.description = YYYY-MM-DD
-
-Scheduled date of operation:.description = "YYYY-MM"DD"
-Date of the last repair:.description = "yyyy/mm/dd OR yyyy/mm OR yyyy"
+Year of birth.description = YYYY
+Scheduled date of operation.description = YYYY-MM-DD
+Date of operation that caused the incisional hernia.description = YYYY-MM-DD OR YYYY-MM OR YYYY
+Date of the last repair.description = YYYY-MM-DD OR YYYY-MM OR YYYY
+Operation date.description = YYYY-MM-DD
+"Start of operation (first incision)".description = HH-MM-SS
+"End of operation (last skin suture)".description = HH-MM-SS
+Date of discharge.description = YYYY-MM-DD
+Hour of discharge.description = HH
+Date of death.description = YYYY-MM-DD
+Date of follow up.description = YYYY-MM-DD
+Date of diagnosis.description = YYYY-MM-DD
+Date of repair done.description = YYYY-MM-DD
 
 @package: Hernia
 %

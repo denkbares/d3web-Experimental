@@ -40,40 +40,44 @@ Common Route #2
 - EuraHS registration number [num]
 - Informed consent obtained [yn]
 
-Co-morbidities #3
-- Select Co-morbidities [mc]
--- No co-morbidities
--- "Diabetes mellitus type I (juvenil)"
--- "Diabetes mellitus type II (adult)"
--- Cardiac disease
--- Arterial hypertension
--- Pulmonary disease
--- Hepatic disease
---- Ascites present [yn]
--- Renal disease
---- Haemodyalysis [yn]
---- Peritoneal dialysis [yn]
--- Malignant disease 
---- Curatively treated [yn]
+Comorbidities #3
+- Are there Comorbidities? [yn]
+-- Yes
+-- Select Comorbidities [mc]
+--- No co-morbidities
+--- "Diabetes mellitus type I (juvenil)"
+--- "Diabetes mellitus type II (adult)"
+--- Cardiac disease
+--- Arterial hypertension
+--- Pulmonary disease
+--- Hepatic disease
+---- Ascites present [yn]
+--- Renal disease
+---- Haemodyalysis [yn]
+---- Peritoneal dialysis [yn]
+--- Malignant disease 
+---- Curatively treated [yn]
 
 Risk factors #4
-- Medical risk factors [mc]
--- No medical risk factors
--- Aneurysmatic disease
--- Collagen related disease
---- Type of collagen related disease: [oc]
----- Lung emphysema
----- Marfan syndrome
----- Ehlers Danlos
----- Polycystic kidney disease
--- Personal history of previous hernia repair at another side
--- "Family history of hernia surgery (more than 2 first grade relatives)"
--- Chronic use of coricosteroids
--- Use of immunosuppersive medication
--- "Use of anticoagulant therapy (cumarine)"
-- Weight of the patient [num]{kg}
-- Length/size of the patient [num]{cm}
-- BMI: [num]{kg/m2}<abstract>
+- Are there other risk factors? [yn]
+-- Yes
+-- Select risk factors [mc]
+--- No medical risk factors
+--- Aneurysmatic disease
+--- Collagen related disease
+---- Type of collagen related disease: [oc]
+----- Lung emphysema
+----- Marfan syndrome
+----- Ehlers Danlos
+----- Polycystic kidney disease
+--- Personal history of previous hernia repair at another side
+--- "Family history of hernia surgery (more than 2 first grade relatives)"
+--- Chronic use of coricosteroids
+--- Use of immunosuppersive medication
+--- "Use of anticoagulant therapy (cumarine)"
+-- Weight of the patient [num]{kg}
+-- Length/size of the patient [num]{cm}
+-- BMI: [num]{kg/m2}<abstract>
 
 Other risk factors #5
 - Occupation [oc]
@@ -130,7 +134,7 @@ Incisional ventral hernia route
 -- "L3_R"
 -- "L4_L"
 -- "L4_R"
-- Hernia operation date [date]
+- Date of operation that caused the incisional hernia [date]
 - "Type of operation (speciality) that caused the incisional hernia" [oc]
 -- Gastrointestinal
 -- Abdominal wall surgery
