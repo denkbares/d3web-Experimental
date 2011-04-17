@@ -106,6 +106,7 @@ public class QuestionD3webRenderer extends D3webRenderer {
 		}
 		else if (to instanceof QuestionMC) {
 			st.setAttribute("type", "mc");
+			st.setAttribute("sendButton", "true");
 		}
 		else if (to instanceof QuestionNum) {
 			st.setAttribute("type", "num");

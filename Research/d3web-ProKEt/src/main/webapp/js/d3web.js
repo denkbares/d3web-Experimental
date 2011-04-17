@@ -23,9 +23,9 @@
  */
 
 $(function() {
-	
+
 	// if login should be enabled: set in minimal XML and JSCodeContainer
-	if(login){
+	if (login) {
 		window.setTimeout("logintimeout()", 57000 * 60);
 
 		var link = $.query.set("action", "checkLogin").toString();
@@ -43,8 +43,7 @@ $(function() {
 				}
 			}
 		});
-	} 
-	
+	}
 
 	/* creating and configuring the jquery UI save-case dialog */
 	$(function() {
@@ -87,21 +86,36 @@ $(function() {
 	/* Initialize the JS binding to the dialog elements */
 	initFunctionality();
 
-	$().ready(function() {
+	$()
+			.ready(
+					function() {
 
-		// enable buttons in save case and load case dialogs to react on pressing enter
-		$(document).keypress(function(e) {
-			if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
-				if ($('#jqConfirmDialog').dialog('isOpen'))
-					$('[aria-labelledby$=jqConfirmDialog]').find(":button:contains('Speichern')").click();
-				if ($('#jqLoadCaseDialog').dialog('isOpen'))
-					$('[aria-labelledby$=jqLoadCaseDialog]').find(":button:contains('OK')").click();
-				return false;
-            }
-        });
-		
-		
-	});
+						// enable buttons in save case and load case dialogs to
+						// react on pressing enter
+						$(document)
+								.keypress(
+										function(e) {
+											if ((e.which && e.which == 13)
+													|| (e.keyCode && e.keyCode == 13)) {
+												if ($('#jqConfirmDialog')
+														.dialog('isOpen'))
+													$(
+															'[aria-labelledby$=jqConfirmDialog]')
+															.find(
+																	":button:contains('Speichern')")
+															.click();
+												if ($('#jqLoadCaseDialog')
+														.dialog('isOpen'))
+													$(
+															'[aria-labelledby$=jqLoadCaseDialog]')
+															.find(
+																	":button:contains('OK')")
+															.click();
+												return false;
+											}
+										});
+
+					});
 });
 
 /**
@@ -111,20 +125,30 @@ $(function() {
  */
 function initFunctionality() {
 
+	var mcVals = "";
+
 	/*
 	 * bind "get selected facts" method to radio buttons, checkboxes and
 	 * textareas
 	 */
 	$('[type=radio]').unbind('click').click(function() {
-		d3web_getSelectedFacts($(this));
+		d3web_getSelectedFacts($(this).attr("id"));
 	});
-	
-	
+
 	/* TODO MC QUESTIONS */
-	/* the following ensures, that MC questions behave like OC questions,
-	 * i.e., a v*/
+	/*
+	 * the following ensures, that MC questions behave like OC questions, i.e.,
+	 * a v
+	 */
 	$('[type=checkbox]').unbind('click').click(function() {
-		d3web_getSelectedFacts($(this));
+		// d3web_getSelectedFacts($(this));
+		mcVals = d3web_collectMCs($(this), mcVals);
+	});
+
+	$('[id*=ok-]').unbind('click').click(function() {
+		if (mcVals != undefined && mcVals != "") {
+			d3web_addMCfacts(mcVals, $(this).attr("id"));
+		}
 	});
 
 	$('[type=text]').unbind('click').click(function() {
@@ -168,103 +192,160 @@ function initFunctionality() {
 	});
 }
 
+function d3web_collectMCs(clickedEl, mcVals) {
+
+	// id of clicked checkbox
+	clickID = clickedEl.attr("id").replace("f_", "");
+
+	// init save-checked-vals-variable
+	var checkedVals = "";
+
+	// get the question-content-parent element and go through all its
+	// div-children
+	clickedQContent = clickedEl.parents("[id*=q_]");
+	mcs = clickedQContent.children('div');
+	mcs.each(function() {
+
+		// for each div, get the input child
+		child = $(this).children('input').eq(0);
+
+		// if it is checked, add it to the save-checked-vals-variable
+		if (child.attr("checked") == "true" || child.attr("checked") == true) {
+			checkedVals += child.attr("id").replace("f_", "") + ",";
+		}
+	});
+
+	return checkedVals;
+}
+
+function d3web_addMCfacts(mcfacts, qid) {
+
+	var link = $.query.set("action", "addmcfact").set("mcs", mcfacts).set(
+			"qid", qid).toString();
+	link = window.location.href.replace(window.location.search, "") + link;
+
+	$.ajax({
+		type : "GET",
+		url : link,
+		success : function(html) {
+			if (html !== "") {
+				// Error message and reset session so user can provide input
+				// first
+				var errMsg = "Das Feld '" + html
+						+ "' muss immer zuerst ausgefüllt werden!";
+				alert(errMsg);
+				d3web_resetSession();
+			} else {
+				d3web_show();
+			}
+		}
+	});
+}
+
 /**
- * Send an AJAX request to check, whether possibly answered num questions
- * have a certain value-range specified, and if yes, return the respective
- * question-ids and ranges for checking the user provided value against the
- * range.
+ * Send an AJAX request to check, whether possibly answered num questions have a
+ * certain value-range specified, and if yes, return the respective question-ids
+ * and ranges for checking the user provided value against the range.
  */
-function d3web_checkNumRanges(qid, value, store, numStore){
-	
-	/* FIRST assemble all questions that might be a num-q with range
-	 * to a String representation: <qid>%<value>;<qid>%<value>; 
-	 * This can be the single clicked question, or those in the
-	 * numStore  TODO: maybe adapt later for handling also text etc questions
-	 * */
+function d3web_checkNumRanges(qid, value, store, numStore) {
+
+	/*
+	 * FIRST assemble all questions that might be a num-q with range to a String
+	 * representation: <qid>%<value>;<qid>%<value>; This can be the single
+	 * clicked question, or those in the numStore TODO: maybe adapt later for
+	 * handling also text etc questions
+	 */
 	var qids = "";
-	if(qid !== undefined && value !== undefined){
+	if (qid !== undefined && value !== undefined) {
 		qids = qid + "%" + value + ";";
-	} 
-	if(numStore !== undefined && numStore !== " "){
+	}
+	if (numStore !== undefined && numStore !== " ") {
 		var storeVals = numStore.split(";");
 		for (i = 0; i < storeVals.length; i++) {
-			 var idVal = storeVals[i].split("###");
-			 
-			 if(idVal[0] !== "" || idVal[1] !== undefined){
-				 if(!(idVal[0]==qid)){
-					 var add = idVal[0] + "%" + idVal[1] + ";";
-					 qids += add;
-				 }
-			 }
-		 }	
+			var idVal = storeVals[i].split("###");
+
+			if (idVal[0] !== "" || idVal[1] !== undefined) {
+				if (!(idVal[0] == qid)) {
+					var add = idVal[0] + "%" + idVal[1] + ";";
+					qids += add;
+				}
+			}
+		}
 	}
 
 	/* create query string for calling the checkrange method of the servlet */
 	var link = $.query.set("action", "checkRange").set("qids", qids).toString();
 	link = window.location.href.replace(window.location.search, "") + link;
-	
+
 	// checked on rangeRequest complete; TRUE means, every provided value is
 	// also within the value range (if one existed)
 	var checkRangeOK = true;
-	
-	// send the request; on success, check whether qid/range pairs are given back
-	$.get( link,
-		   function(data) {
-				
-				if (data !== "") {		// range(s) exist(s)
-					
-					// split the ID/val/range complete String into ID/val/range value triples
-					var idValRange = data.split(";");
-					
-					for(i = 0; i<idValRange.length-1; i++){	// for each triple
-						
-						// split the triple String into three distinct vals
-						var triple = idValRange[i].split("%");
-					
-						var id = triple[0];
-						var value = triple[1];
-						var range = triple[2];
-						
-						// get and parse range values
-						var rangeVals = range.split("-");
-						var min = parseFloat(rangeVals[0]);
-	                	var max = parseFloat(rangeVals[1]);
-						
-	                	// if provided value not within specified range
-						if(value < min || value > max){
-							
-							// input fields have id prefix "f_"
-							var idplus = "#f_" +  id;
-							var qerrid = "#error-q_" + id;
-							
-							// set error message for question
-							$(qerrid).html("Zulässiger Wertebereich: [" + range + "]");
-							
-							// remove wront value
-							$(idplus).val("");
-							checkRangeOK = false;		// set flag for not all vals OK 
-						}
-					}
-					if(!checkRangeOK){
-						alert("Bitte überprüfen Sie die mit roter Fehlermeldung gekennzeichneten Fragen!");
-					}
-				}
-			}
-	)
-	.complete(function(){
-		
-		// if val was in provided range add value
-		if(checkRangeOK){
-		
-			// reset error messages
-			$("[id*=error]").html("");
-			d3web_addfactsRemembering(store, qid, value);
-		} 
-		// otherwise do nothing
-	});
-	
-}
 
+	// send the request; on success, check whether qid/range pairs are given
+	// back
+	$
+			.get(
+					link,
+					function(data) {
+
+						if (data !== "") { // range(s) exist(s)
+
+							// split the ID/val/range complete String into
+							// ID/val/range value triples
+							var idValRange = data.split(";");
+
+							for (i = 0; i < idValRange.length - 1; i++) { // for
+								// each
+								// triple
+
+								// split the triple String into three distinct
+								// vals
+								var triple = idValRange[i].split("%");
+
+								var id = triple[0];
+								var value = triple[1];
+								var range = triple[2];
+
+								// get and parse range values
+								var rangeVals = range.split("-");
+								var min = parseFloat(rangeVals[0]);
+								var max = parseFloat(rangeVals[1]);
+
+								// if provided value not within specified range
+								if (value < min || value > max) {
+
+									// input fields have id prefix "f_"
+									var idplus = "#f_" + id;
+									var qerrid = "#error-q_" + id;
+
+									// set error message for question
+									$(qerrid).html(
+											"Zulässiger Wertebereich: ["
+													+ range + "]");
+
+									// remove wront value
+									$(idplus).val("");
+									checkRangeOK = false; // set flag for not
+									// all vals OK
+								}
+							}
+							if (!checkRangeOK) {
+								alert("Bitte überprüfen Sie die mit roter Fehlermeldung gekennzeichneten Fragen!");
+							}
+						}
+					}).complete(function() {
+
+				// if val was in provided range add value
+				if (checkRangeOK) {
+
+					// reset error messages
+					$("[id*=error]").html("");
+					d3web_addfactsRemembering(store, qid, value);
+				}
+				// otherwise do nothing
+			});
+
+}
 
 function d3web_getRemainingFacts() {
 
@@ -358,9 +439,11 @@ function d3web_addfactsRemembering(store, qid, pos) {
 		type : "GET",
 		url : link,
 		success : function(html) {
-			if(html!==""){
-				// Error message and reset session so user can provide input first
-				var errMsg = "Das Feld '" + html + "' muss immer zuerst ausgefüllt werden!";
+			if (html !== "") {
+				// Error message and reset session so user can provide input
+				// first
+				var errMsg = "Das Feld '" + html
+						+ "' muss immer zuerst ausgefüllt werden!";
 				alert(errMsg);
 				d3web_resetSession();
 			} else {
@@ -564,7 +647,7 @@ function d3web_nextform() {
 		// url : link,
 		success : function(html) { // compare resulting html to former
 			if (html != "same") { // replace target id of content if not the
-									// same
+				// same
 				window.location.reload();
 				initFunctionality();
 			}
@@ -789,18 +872,18 @@ function d3web_getSelectedFacts(clickedItem) {
 	numStore = numStore.replace(",", ".");
 	// assemble complete text/textinput value store
 	store += numStore + "&&&&" + txtStore + "&&&&" + datStore;
-	
+
 	d3web_checkNumRanges(question.attr('id'), pos, store, numStore);
-	
+
 }
 
 function closeJQConfirmDialog() {
 	$('#jqConfirmDialog').dialog('close');
 }
 
-//function closeJQLoginDialog() {
-	//$('#jqLoginDialog').dialog('close');
-//}
+// function closeJQLoginDialog() {
+// $('#jqLoginDialog').dialog('close');
+// }
 
 function closeJQLoadCaseDialog() {
 	$('#jqLoadCaseDialog').dialog('close');

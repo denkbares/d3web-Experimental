@@ -3,7 +3,7 @@
 	$if(title)$$TitleTooltipButton()$$endif$
 	<div id="content-$fullId$" class="content-$fullId$ question-content">
 		$Image()$
-		$text$	
+		
 		$if(selectBox)$
 		 	<select>
 			<option>-Antworten-</option>

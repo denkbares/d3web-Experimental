@@ -210,6 +210,10 @@ public class D3webDialog extends HttpServlet {
 			addFact(request, response, httpSession);
 			return;
 		}
+		else if (action.equalsIgnoreCase("addmcfact")) {
+			addMCFact(request, response, httpSession);
+			return;
+		}
 		else if (action.equalsIgnoreCase("savecase")) {
 			saveCase(request, response, httpSession);
 			return;
@@ -339,6 +343,58 @@ public class D3webDialog extends HttpServlet {
 		writer.print(cc.html.toString()); // deliver the rendered output
 		// writer.print(html);
 		writer.close(); // and close
+	}
+
+	private void addMCFact(HttpServletRequest request,
+			HttpServletResponse response, HttpSession httpSession)
+			throws IOException {
+
+		response.setContentType("text/html");
+		response.setCharacterEncoding("utf8");
+		PrintWriter writer = response.getWriter();
+
+		Session sess = (Session) httpSession.getAttribute("d3webSession");
+
+		// get the ID of a potentially given single question answered
+		String qid = request.getParameter("qid");
+		qid = qid.replace("ok-q_", "").replace("_", " ");
+
+		String mcVals = request.getParameter("mcs");
+		mcVals = mcVals.replace("_", " ");
+		System.out.println(mcVals + " " + qid);
+
+		/*
+		 * Check, whether a required value (for saving) is specified. If yes,
+		 * check whether this value has already been set in the KB or is about
+		 * to be set in the current call --> go on normally. Otherwise, return a
+		 * marker "<required value>" so the user is informed by AJAX to provide
+		 * this marked value.
+		 */
+
+		String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
+		System.out.println(reqVal);
+		if ((!reqVal.equals("") || !reqVal.equals("none")) &&
+				(!checkReqVal(reqVal, sess, qid, ""))) {
+
+			writer.append(reqVal);
+			return;
+		}
+
+		if (!mcVals.equals("")) {
+
+			setValue(qid, mcVals, sess);
+
+			// AUTOSAVE
+			String folderPath = GlobalSettings.getInstance().getCaseFolder();
+
+			// AUTOSAVE
+			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
+						folderPath,
+						D3webConnector.getInstance().getD3webParser().getRequired(),
+						"autosave",
+						(Session) httpSession.getAttribute("d3webSession"));
+
+		}
 	}
 
 	/**
@@ -753,41 +809,16 @@ public class D3webDialog extends HttpServlet {
 				}
 				else if (to instanceof QuestionMC) {
 
-					valString = valString.replace("q_", "");
-					System.out.println(valString);
-
-					lastFact = blackboard.getValueFact(to);
-					if (lastFact != null &&
-							lastFact.getValue() instanceof MultipleChoiceValue) {
-
-						MultipleChoiceValue mcval = (MultipleChoiceValue) lastFact.getValue();
-
-						if (mcval.contains(new Choice(valString))) {
-
-							List<Choice> choicesNew = new ArrayList<Choice>();
-							List<Choice> choicesOld = mcval.asChoiceList((QuestionMC) to);
-
-							for (Choice c : choicesOld) {
-
-								if (c.getName().equals(valString)) {
-									System.out.println("do not add: " + c);
-								}
-								else {
-									choicesNew.add(c);
-								}
-							}
-							value = MultipleChoiceValue.fromChoices(choicesNew);
-						}
-						else {
-							List<Choice> choicesOld = mcval.asChoiceList((QuestionMC) to);
-							choicesOld.add(new Choice(valString));
-							value = MultipleChoiceValue.fromChoices(choicesOld);
-						}
-
+					String[] choices = valString.split(",");
+					List<Choice> cs = new ArrayList<Choice>();
+					
+					for (String c : choices) {
+						cs.add(new Choice(c));
 					}
-					else {
-						value = KnowledgeBaseUtils.findValue(to, valString);
-					}
+					value = MultipleChoiceValue.fromChoices(cs);
+				}
+						
+
 					// valueString is a comma separated list of the IDs of the
 					// selected items
 					// List<Choice> values = new ArrayList<Choice>();
@@ -796,7 +827,6 @@ public class D3webDialog extends HttpServlet {
 					// values.add(new Choice(part));
 					// }
 					// value = MultipleChoiceValue.fromChoices(values);
-				}
 			}
 			// TEXT questions
 			else if (to instanceof QuestionText) {
