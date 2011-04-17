@@ -133,9 +133,9 @@ public class D3webDialog extends HttpServlet {
 			String persistencePath = folderPath + "cases";
 			GlobalSettings.getInstance().setCaseFolder(persistencePath);
 		}
-		/* 
+		/*
 		 * FOLDER PATH: get the folder on the server for persistence storing
-		 * only needed here in case the dialog is used without login mechanisms 
+		 * only needed here in case the dialog is used without login mechanisms
 		 */
 		// String folderPath =
 		// request.getSession().getServletContext().getRealPath("/");
@@ -148,7 +148,7 @@ public class D3webDialog extends HttpServlet {
 		// in case nothing other is provided, "show" is the default action
 		String action = request.getParameter("action");
 		if (action == null) {
-			//action = "mail";
+			// action = "mail";
 			action = "show";
 		}
 
@@ -270,20 +270,20 @@ public class D3webDialog extends HttpServlet {
 			response.setContentType("text/html");
 			response.setCharacterEncoding("utf8");
 			PrintWriter writer = response.getWriter();
-			//String qid = request.getParameter("qid");
-			//qid = qid.replace("q_", "");
+			// String qid = request.getParameter("qid");
+			// qid = qid.replace("q_", "");
 
 			String qidsString = request.getParameter("qids");
 			qidsString = qidsString.replace("q_", "");
 
 			String[] qids = qidsString.split(";");
 			String qidBackstring = "";
-			
-			for(String qid : qids){
+
+			for (String qid : qids) {
 				String[] idVal = qid.split("%");
 
 				Question to =
-					(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
+						(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
 								idVal[0], d3wcon.getKb());
 
 				if (to instanceof QuestionNum) {
@@ -294,9 +294,9 @@ public class D3webDialog extends HttpServlet {
 						qidBackstring += range.getLeft() + "-" + range.getRight() + ";";
 					}
 				}
-				
+
 			}
-			
+
 			writer.append(qidBackstring);
 
 			return;
@@ -335,7 +335,6 @@ public class D3webDialog extends HttpServlet {
 		 * String html = "" + "<html><head></head>" + "<body>" +
 		 * "<img>D3webPicShow?src=Test</img>" + "</body>" + "</html>";
 		 */
-
 
 		writer.print(cc.html.toString()); // deliver the rendered output
 		// writer.print(html);
@@ -531,11 +530,11 @@ public class D3webDialog extends HttpServlet {
 
 			// otherwise if filename/case is not existent, it can be saved
 			else {
-			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
-					folderPath,
+				PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
+						folderPath,
 						D3webConnector.getInstance().getD3webParser().getRequired(),
-					userFilename,
-					(Session) httpSession.getAttribute("d3webSession"));
+						userFilename,
+						(Session) httpSession.getAttribute("d3webSession"));
 			}
 		}
 	}
@@ -615,7 +614,7 @@ public class D3webDialog extends HttpServlet {
 		// load the file = path + filename
 		// PersistenceD3webUtils.loadCaseFromUserFilename(folderPath + "/" +
 		// filename);
-		
+
 		Session session = null;
 		if (!user.equals("")) {
 			session = PersistenceD3webUtils.loadCaseFromUserFilename(filename, user);
@@ -623,8 +622,7 @@ public class D3webDialog extends HttpServlet {
 		else {
 			session = PersistenceD3webUtils.loadCase(filename);
 		}
-		
-		
+
 		httpSession.setAttribute("d3webSession", session);
 
 		httpSession.setAttribute("lastLoaded", filename);
@@ -699,6 +697,7 @@ public class D3webDialog extends HttpServlet {
 	 */
 	private void setValue(String termObID, String valString, Session sess) {
 
+		// TODO REFACTOR: can be removed, just provide ID without "q_"
 		// remove prefix, e.g. "q_" in "q_BMI"
 		termObID = IDUtils.removeNamspace(termObID);
 
@@ -753,14 +752,50 @@ public class D3webDialog extends HttpServlet {
 					}
 				}
 				else if (to instanceof QuestionMC) {
+
+					valString = valString.replace("q_", "");
+					System.out.println(valString);
+
+					lastFact = blackboard.getValueFact(to);
+					if (lastFact != null &&
+							lastFact.getValue() instanceof MultipleChoiceValue) {
+
+						MultipleChoiceValue mcval = (MultipleChoiceValue) lastFact.getValue();
+
+						if (mcval.contains(new Choice(valString))) {
+
+							List<Choice> choicesNew = new ArrayList<Choice>();
+							List<Choice> choicesOld = mcval.asChoiceList((QuestionMC) to);
+
+							for (Choice c : choicesOld) {
+
+								if (c.getName().equals(valString)) {
+									System.out.println("do not add: " + c);
+								}
+								else {
+									choicesNew.add(c);
+								}
+							}
+							value = MultipleChoiceValue.fromChoices(choicesNew);
+						}
+						else {
+							List<Choice> choicesOld = mcval.asChoiceList((QuestionMC) to);
+							choicesOld.add(new Choice(valString));
+							value = MultipleChoiceValue.fromChoices(choicesOld);
+						}
+
+					}
+					else {
+						value = KnowledgeBaseUtils.findValue(to, valString);
+					}
 					// valueString is a comma separated list of the IDs of the
 					// selected items
-					List<Choice> values = new ArrayList<Choice>();
-					String[] parts = valString.split(",");
-					for (String part : parts) {
-						values.add(new Choice(part));
-					}
-					value = MultipleChoiceValue.fromChoices(values);
+					// List<Choice> values = new ArrayList<Choice>();
+					// String[] parts = valString.split(",");
+					// for (String part : parts) {
+					// values.add(new Choice(part));
+					// }
+					// value = MultipleChoiceValue.fromChoices(values);
 				}
 			}
 			// TEXT questions
@@ -885,17 +920,19 @@ public class D3webDialog extends HttpServlet {
 
 			for (TerminologyObject to : parent.getChildren()) {
 
-				Question qto =
-						(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
-								to.getName(), d3wcon.getKb());
+				if (to instanceof Question) {
+					Question qto =
+							(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
+									to.getName(), d3wcon.getKb());
 
-				// remove a previously set value
-				lastFact = blackboard.getValueFact(qto);
-				if (lastFact != null) {
-					blackboard.removeValueFact(lastFact);
+					// remove a previously set value
+					lastFact = blackboard.getValueFact(qto);
+					if (lastFact != null) {
+						blackboard.removeValueFact(lastFact);
+					}
+
+					resetNotIndicatedTOs(to, bb, sess);
 				}
-
-				resetNotIndicatedTOs(to, bb, sess);
 			}
 		}
 	}

@@ -118,6 +118,14 @@ function initFunctionality() {
 	$('[type=radio]').unbind('click').click(function() {
 		d3web_getSelectedFacts($(this));
 	});
+	
+	
+	/* TODO MC QUESTIONS */
+	/* the following ensures, that MC questions behave like OC questions,
+	 * i.e., a v*/
+	$('[type=checkbox]').unbind('click').click(function() {
+		d3web_getSelectedFacts($(this));
+	});
 
 	$('[type=text]').unbind('click').click(function() {
 		var thisEl = $(this);

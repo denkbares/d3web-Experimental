@@ -24,12 +24,15 @@ import org.antlr.stringtemplate.StringTemplate;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
+import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
+import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.UndefinedValue;
+import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
@@ -48,58 +51,102 @@ public class AnswerMCD3webRenderer extends D3webRenderer {
 	/**
 	 * Specifically adapted for rendering MCAnswers
 	 */
-	public String renderTerminologyObject(ContainerCollection cc, TerminologyObject to,
+	public String renderTerminologyObject(ContainerCollection cc, Choice c,
 			TerminologyObject parent) {
 
-		QuestionMC mcq = (QuestionMC) to;
+		QuestionMC mcq = (QuestionMC) parent;
 
 		StringBuilder sb = new StringBuilder();
 
 		// return if the InterviewObject is null
-		if (to == null) {
+		if (parent == null) {
 			return "";
 		}
 
-		for (Choice c : mcq.getAllAlternatives()) {
-			// get the fitting template. In case user prefix was specified, the
-			// specific TemplateName is returned, else the base object name.
-			StringTemplate st = TemplateUtils.getStringTemplate(
+		// get the fitting template. In case user prefix was specified, the
+		// specific TemplateName is returned, else the base object name.
+		StringTemplate st = TemplateUtils.getStringTemplate(
 					super.getTemplateName("McAnswer"), "html");
 
-			st.setAttribute("fullId", mcq.getName().replace(" ", "_"));
-			st.setAttribute("realAnswerType", "mc");
-			st.setAttribute("parentFullId", parent.getName().replace(" ", "_"));
-			st.setAttribute("text", c.getName());
+		st.setAttribute("fullId", c.getName().replace(" ", "_"));
+		st.setAttribute("realAnswerType", "mc");
+		st.setAttribute("parentFullId", mcq.getName().replace(" ", "_"));
+		st.setAttribute("text", c.getName());
 
-			Blackboard bb = super.d3webSession.getBlackboard();
-			Value value = bb.getValue((ValueObject) to);
+		Blackboard bb = super.d3webSession.getBlackboard();
+		Value value = bb.getValue((ValueObject) parent);
 
-			if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
-				st.setAttribute("readonly", "true");
+		// if question is an abstraction question --> readonly
+		if (parent.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
+			st.setAttribute("readonly", "true");
+		}
+		// if to=question has parents readonly state depends on parent
+		else if (parent.getParents()[0] != null &&
+				parent.getParents().length != 0) {
+
+			// if direct parent is qcontainer
+			// if the qcontainer is not indicated --> question readonly
+			if (parent.getParents()[0] instanceof QContainer) {
+				if (!isParentIndicated(parent, bb)) {
+					st.setAttribute("readonly", "true");
+				}
 			}
-			else if (!isParentIndicated(to, bb)) {
-				st.setAttribute("readonly", "true");
+			// if direct parent is question and if the to=question is
+			// follow up question of one of parents answers
+			else if (parent.getParents()[0] instanceof Question) {
+
+				// if parent is indicated, to indicated too --> no readonly
+				if (isParentOfFollowUpQuIndicated(parent, bb)) {
+					st.removeAttribute("readonly");
+				}
+				// otherwise to=question not indicated and readonly
+				else {
+					st.setAttribute("readonly", "true");
+
+					// also remove possible set values
+					st.removeAttribute("selection");
+					st.setAttribute("selection", "");
+				}
 			}
-			else if (to.getParents() != null && to.getParents().length != 0
-					&& to.getParents()[0] instanceof Question
-					&& !isIndicated(to, bb)) {
-				st.setAttribute("readonly", "true");
-			}
-			else {
+		}
+		// in all other cases display question/answers --> no readonly
+		else {
+			st.removeAttribute("readonly");
+		}
+
+		MultipleChoiceValue mcval = null;
+
+		if (UndefinedValue.isNotUndefinedValue(value) &&
+				!value.equals(Unknown.getInstance())) {
+			mcval = (MultipleChoiceValue) value;
+		}
+
+		// if value of the to=question equals this choice
+		if (mcval != null && mcval.contains(c)) {
+
+			// if to=question is abstraction question, was readonly before, but
+			// value
+			// has been set (e.g. by other answer & Kb indication), remove
+			// readonly
+			if (parent.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
 				st.removeAttribute("readonly");
 			}
 
-			if (value.toString().equals(c.toString())) {
-				st.setAttribute("selection", "true");
-			}
-			else if (UndefinedValue.isUndefinedValue(value)) {
-				st.removeAttribute("selection");
-				st.setAttribute("selection", "");
-			}
-			sb.append(st.toString());
+			// set selected
+			st.removeAttribute("selection");
+			st.setAttribute("selection", "checked=\'checked\'");
 		}
 
-		super.makeTables(to, parent, cc, sb);
+		// if value of question is undefined or unknown remove previous choice
+		else if (UndefinedValue.isUndefinedValue(value)
+				|| value.equals(Unknown.getInstance())) {
+			st.removeAttribute("selection");
+			st.setAttribute("selection", "");
+		}
+
+		sb.append(st.toString());
+
+		super.makeTables(c, parent, cc, sb);
 
 		return sb.toString();
 	}
