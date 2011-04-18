@@ -32,11 +32,11 @@ Common Route #2
 - Please choose the database level [oc]
 -- Level 1
 -- Level 2
-- Year of birth [date]
+- Year of birth [text]
 - Gender [oc]
 -- Male
 -- Female
-- Scheduled date of operation [date]
+- Scheduled date of operation [text]
 - EuraHS registration number [num]
 - Informed consent obtained [yn]
 
@@ -134,7 +134,7 @@ Incisional ventral hernia route
 -- "L3_R"
 -- "L4_L"
 -- "L4_R"
-- Date of operation that caused the incisional hernia [date]
+- Date of operation that caused the incisional hernia [text]
 - "Type of operation (speciality) that caused the incisional hernia" [oc]
 -- Gastrointestinal
 -- Abdominal wall surgery
@@ -149,7 +149,7 @@ Incisional ventral hernia route
 --- Number of previous repairs [num]
 --- Has there been a previous mesh repair? [yn]
 ---- Yes
------ Date of the last repair [date]
+----- Date of the last repair [text]
 
 Parastomal hernia route
 - Years since stoma creation [num]
@@ -203,7 +203,7 @@ Parastomal hernia route
 ---- "L4_R"
 
 Common Route - Operative data #6
-- Operation date [date]
+- Operation date [text]
 - Anesthesia [oc]
 -- General
 -- Regional
@@ -223,8 +223,8 @@ Common Route - Operative data #6
 -- "Resident with direct supervisor (surgeon scrubbed in)"
 -- "Resident without direct supervision (surgeon not scrubbed in)"
 -- Resident without supervision
-- "Start of operation (first incision)" [date]
-- "End of operation (last skin suture)" [date]
+- "Start of operation (first incision)" [text]
+- "End of operation (last skin suture)" [text]
 - Content of the hernia sac [mc]
 -- None
 -- Small bowel
@@ -341,8 +341,8 @@ Common Route - Operation data - Intraoperative complications #10
 ---- Other
 
 Common Route - Discharge data #11
-- Date of discharge [date]
-- Hour of discharge [date]
+- Date of discharge [text]
+- Hour of discharge [text]
 - State at discharge [mc]
 -- No Complications
 -- Bleeding complications
@@ -383,10 +383,10 @@ Common Route - Follow-up #12
 -- Unable to contact the patient
 -- Patient refuses futher follow up
 -- The patien deceased
---- Date of death [date]
+--- Date of death [text]
 --- Cause of death [text]
 --- Recurrence at death [yn]
-- Date of follow up [date]
+- Date of follow up [text]
 - Type of follow up [oc]
 -- Clinical
 -- Clinical and with medical imaging
@@ -462,7 +462,7 @@ Common Route - Late complications #14
 ------ Symptomatic but accepted as it is
 ------ Symptomatic and reason for reoperation
 ---- Recurrent abdominal wall hernia
------ Date of diagnosis [date]
+----- Date of diagnosis [text]
 ----- Site of recurrence [oc]
 ------ At the original hernia site
 ------ At hte margin of the repair or the mesh
@@ -477,7 +477,7 @@ Common Route - Late complications #14
 ------ Yes
 ------- New Repair done [oc]
 -------- Yes
---------- Date of repair done [date]
+--------- Date of repair done [text]
 --------- Method of repair [mc]
 ---------- Open
 ---------- Laparoscopic
