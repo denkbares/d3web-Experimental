@@ -30,6 +30,7 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionDate;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
+import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.DateValue;
@@ -74,7 +75,7 @@ public class AnswerDateD3webRenderer extends D3webRenderer {
 		st.setAttribute("realAnswerType", "date");
 		st.setAttribute("parentFullId", parent.getName().replace(" ", "_"));
 
-		Blackboard bb = super.d3webSession.getBlackboard();
+		Blackboard bb = D3webRenderer.d3webSession.getBlackboard();
 		Value value = bb.getValue((ValueObject) to);
 
 		if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
@@ -94,8 +95,25 @@ public class AnswerDateD3webRenderer extends D3webRenderer {
 
 		if (value != null && UndefinedValue.isNotUndefinedValue(value)
 				&& !value.equals(Unknown.getInstance())) {
+
 			Date d = ((DateValue) value).getDate();
-			SimpleDateFormat dateFormat = new SimpleDateFormat("MM/yyyy");
+			SimpleDateFormat dateFormat = null;
+			
+			String dateDescription = to.getInfoStore().getValue(
+					Property.getProperty("description", String.class));
+
+			if (dateDescription != null && !dateDescription.isEmpty()) {
+				String[] dateDescSplit = dateDescription.split("OR");
+				try {
+					dateFormat = new SimpleDateFormat(dateDescSplit[0].trim());
+				}
+				catch (IllegalArgumentException e) {
+				}
+			}
+			if (dateFormat == null) {
+				dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+			}
+			
 			String val = dateFormat.format(d).toString();
 			st.setAttribute("selection", val);
 		}

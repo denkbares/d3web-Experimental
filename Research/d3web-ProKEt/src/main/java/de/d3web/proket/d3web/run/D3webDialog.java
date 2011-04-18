@@ -57,6 +57,7 @@ import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.NumericalInterval;
+import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
@@ -843,19 +844,33 @@ public class D3webDialog extends HttpServlet {
 			}
 			// DATE questions
 			else if (to instanceof QuestionDate) {
-
-				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-				try {
-					// String is given in the format 03/2010
-					String[] datesplit = valString.split("\\/");
-					if (datesplit.length == 2) {
-						String parseableDate = datesplit[1] + "-" + datesplit[0] + "-"
-								+ "01-00-00-00";
-						value = new DateValue(dateFormat.parse(parseableDate));
+				String dateDescription = to.getInfoStore().getValue(
+						Property.getProperty("description", String.class));
+				if (dateDescription != null && !dateDescription.isEmpty()) {
+					String[] dateDescSplit = dateDescription.split("OR");
+					for (String dateDesc : dateDescSplit) {
+						dateDesc = dateDesc.trim();
+						try {
+							SimpleDateFormat dateFormat = new SimpleDateFormat(dateDesc);
+							value = new DateValue(dateFormat.parse(valString));
+						}
+						catch (ParseException e) {
+							// value still null, will not be set
+						}
+						catch (IllegalArgumentException e) {
+							// value still null, will not be set
+						}
+						if (value != null) break;
 					}
 				}
-				catch (ParseException e) {
-					// value still null, will not be set
+				else {
+					try {
+						SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+						value = new DateValue(dateFormat.parse(valString));
+					}
+					catch (ParseException e) {
+						// value still null, will not be set
+					}
 				}
 			}
 
