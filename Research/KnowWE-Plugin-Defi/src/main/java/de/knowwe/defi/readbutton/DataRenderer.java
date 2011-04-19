@@ -50,9 +50,9 @@ public class DataRenderer<T extends AbstractType> extends KnowWEDomRenderer<T> {
 			} else {
 				string.append(KnowWEUtils.maskHTML("<ul>"));
 				for (String s : readpages.split(";")) {
-					string.append(KnowWEUtils.maskHTML("<li>" + s.split("::")[0] + ": "
+					string.append(KnowWEUtils.maskHTML("<li>" + s.split("::")[0] + ": Button("
 							+ s.split("::")[1] +
-							". Button hat den " + s.split("::")[2] + ". Wert gespeichert</li>"));
+							") hat den " + s.split("::")[2] + ". Wert gespeichert</li>"));
 				}
 				string.append(KnowWEUtils.maskHTML("</ul>"));
 			}

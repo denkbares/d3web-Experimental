@@ -2,7 +2,7 @@ function getReadButtonValue(hide,number,id) {
 	
 	// hide tells the function whether to hide the Readbutton(value = 0) or deliver the checked radiobutton
 	if (hide == 0) {
-		var form = document.getElementsByName('readbuttonform')[id-1];
+		var form = document.getElementById(id);
 		var checked = null;
 		for (i = 0; i < number; i++) {
 			
@@ -13,6 +13,7 @@ function getReadButtonValue(hide,number,id) {
 		
 		if (checked == null) {
 			alert('Bitte wählen Sie eine Bewertung aus')
+			return;
 		} else {
 			
 			var params = {

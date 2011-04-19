@@ -1,6 +1,8 @@
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@page import="java.util.HashMap"%>
 <%@ page import="com.ecyrd.jspwiki.*" %>
+<%@page import="de.d3web.we.jspwiki.JSPWikiUserContext" %>
 <%@ page import="de.knowwe.defi.*" %>
 
 <%@page import="de.knowwe.defi.utils.DefiUtils"%><fmt:setLocale value="${prefs.Language}" />
@@ -8,6 +10,7 @@
 <%
   WikiContext c = WikiContext.findContext(pageContext);
   String frontpage = c.getEngine().getFrontPage(); 
+  JSPWikiUserContext user = new JSPWikiUserContext(c, new HashMap<String, String>());
   
   //load the last login of Schulz
   String last_login = DefiUtils.lastLogin();
@@ -44,6 +47,7 @@
 
   <br />
   <div class="searchbox"><wiki:Include page="SearchBox.jsp" /></div>
+<% if (user.userIsAdmin()) { %>
   <div class="pagename"><wiki:PageName /></div>
   <div class="breadcrumbs">
     <wiki:Permission permission="edit">
@@ -51,5 +55,8 @@
   	<wiki:Breadcrumbs />
   	  </wiki:Permission>
   </div>
+<% } else { %>
+	<div style="height:70px;"></div>
+<% } %>
 
 </div>

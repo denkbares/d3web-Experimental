@@ -1,11 +1,15 @@
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %>
+<%@ page import="java.util.HashMap"%>
 <%@ page import="com.ecyrd.jspwiki.*" %>
+<%@ page import="de.d3web.we.jspwiki.JSPWikiUserContext" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page import="javax.servlet.jsp.jstl.fmt.*" %>
 <fmt:setLocale value="${prefs.Language}" />
 <fmt:setBundle basename="templates.default"/>
 <%
   WikiContext c = WikiContext.findContext( pageContext );
+  WikiPage wikipage = c.getPage();
+  JSPWikiUserContext user = new JSPWikiUserContext(c, new HashMap<String, String>());
   int attCount = c.getEngine().getAttachmentManager().listAttachments(c.getPage()).size();
   String attTitle = LocaleSupport.getLocalizedMessage(pageContext, "attach.tab");
   if( attCount != 0 ) attTitle += " (" + attCount + ")";
@@ -19,6 +23,11 @@
   <title><fmt:message key="upload.title"><fmt:param><wiki:Variable var="applicationname"/></fmt:param></fmt:message></title>
   <wiki:Include page="commonheader.jsp"/>
   <meta name="robots" content="noindex,nofollow" />
+    <% if(!user.userIsAdmin()) { %>
+  <style type="text/css">
+  	#menu-attach, #menu-info { display:none; }
+  </style>
+  <% } %>
 </head>
 
 <body>
@@ -51,7 +60,9 @@
 	        </wiki:PageExists>
 	      </wiki:TabbedSection>
 	
-	      <wiki:Include page="PageActionsBottom.jsp"/>
+			  <% if(user.userIsAdmin()) { %>
+		      <wiki:Include page="PageActionsBottom.jsp"/>
+		      <% } %>
 	
 	    </div>
 	</div>

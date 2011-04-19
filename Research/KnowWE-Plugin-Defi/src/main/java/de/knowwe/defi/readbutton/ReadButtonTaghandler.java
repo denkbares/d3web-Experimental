@@ -74,8 +74,8 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			boolean contains = false;
 			boolean talkAbout = false;
 			int ratedValue = -1;
-			int threshold, number, id;
-			String hide_values, link, linkText;
+			int threshold, number;
+			String hide_values, link, linkText, id;
 			String[] labels, values;
 
 			// Get parameters
@@ -115,7 +115,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			if (parameters.containsKey(LINKTEXT)) linkText = parameters.get(LINKTEXT);
 			else linkText = "";
 
-			if (parameters.containsKey(ID)) id = Integer.parseInt(parameters.get(ID));
+			if (parameters.containsKey(ID)) id = parameters.get(ID);
 			else return KnowWEUtils.maskHTML("<p>Fehler: Dem Button fehlt das Attribut 'id'.</p>");
 
 			// Get the readpages-annotation
@@ -151,7 +151,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				for (String s : pages) {
 
 					if (s.split("::")[0].toLowerCase().equals(pagename.toLowerCase())
-							&& Integer.parseInt(s.split("::")[1]) == id) {
+							&& s.split("::")[1].equals(id)) {
 
 						contains = true;
 						ratedValue = Integer.parseInt(s.split("::")[2]);
@@ -165,7 +165,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				}
 			}
 
-			readbutton.append("<form name='readbuttonform' class='rbtag'>");
+			readbutton.append("<form name='readbuttonform' class='rbtag' id='" + id + "'>");
 			// Generate table
 			readbutton.append("<table class='rbtag'>");
 			readbutton = appendRadiobuttons(readbutton, ratedValue, number, hide_values, custom,
@@ -175,7 +175,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			if (!contains) {
 				readbutton.append("<tr><td colspan='" + number + "'>");
 				readbutton.append("<input class='submit' type='button' value='OK' onclick='getReadButtonValue(0,"
-						+ number + "," + id + ")' />");
+						+ number + ",\"" + id + "\")' />");
 				readbutton.append("</td></tr></table>");
 				readbutton.append("</form>");
 			}
@@ -198,8 +198,8 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				readbutton.append("\" rel=\"nofollow\">");
 				readbutton.append("Mit Therapeuten dar&uuml;ber sprechen");
 				readbutton.append("</a>");
-				readbutton.append(" - <a href=\"\" onclick='getReadButtonValue(1," + number + ","
-						+ id + ")'>Nicht Besprechen</a></p>");
+				readbutton.append(" - <a href=\"\" onclick='getReadButtonValue(1," + number + ",\""
+						+ id + "\")'>Nicht Besprechen</a></p>");
 				if (link.startsWith("[") && link.endsWith("]")) {
 					// is wiki link (because of ajax not rendering by jspwiki
 					// pipeline

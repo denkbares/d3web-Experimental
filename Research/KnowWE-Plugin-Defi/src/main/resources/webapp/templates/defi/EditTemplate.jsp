@@ -1,7 +1,15 @@
+<%@ page import="java.util.HashMap"%>
+<%@ page import="com.ecyrd.jspwiki.*" %>
+<%@ page import="de.d3web.we.jspwiki.JSPWikiUserContext" %>
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <fmt:setLocale value="${prefs.Language}" />
 <fmt:setBundle basename="templates.default"/>
+<%
+  WikiContext c = WikiContext.findContext(pageContext);
+  WikiPage wikipage = c.getPage();
+  JSPWikiUserContext user = new JSPWikiUserContext(c, new HashMap<String, String>());
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html id="top" xmlns="http://www.w3.org/1999/xhtml">
@@ -24,6 +32,11 @@
   <meta name="robots" content="noindex,follow" />
   <wiki:Include page="commonheader.jsp"/>
   <link rel="stylesheet" type="text/css" media="screen" href="KnowWEExtension/css/general.css" />
+    <% if(!user.userIsAdmin()) { %>
+  <style type="text/css">
+  	#menu-attach, #menu-info { display:none; }
+  </style>
+  <% } %>
 </head>
 
 <body <wiki:CheckRequestContext context='edit'>class="edit"</wiki:CheckRequestContext><wiki:CheckRequestContext context='comment'>class="comment"</wiki:CheckRequestContext> >
@@ -36,9 +49,13 @@
   	<wiki:Include page="Favorites.jsp"/>
 	<div id="pagecontainer">
 	    <div id="page">
-	      <wiki:Include page="PageActionsTop.jsp"/>
-	      <wiki:Content/>
-	      <wiki:Include page="PageActionsBottom.jsp"/>
+		      <wiki:Include page="PageActionsTop.jsp"/>
+		      <wiki:Content/>
+		      <% if(user.userIsAdmin()) { %>
+		      <wiki:Include page="PageActionsBottom.jsp"/>
+		      <% } else { %>
+		      <div style="height:20px;"></div>
+		      <% } %>
 	    </div>
 	</div>
 

@@ -1,3 +1,6 @@
+<%@page import="java.io.IOException"%>
+<%@page import="java.io.FileReader"%>
+<%@page import="java.io.BufferedReader"%>
 <%@page import="de.d3web.we.kdom.defaultMarkup.DefaultMarkupType"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="de.d3web.we.kdom.Sections"%>
@@ -26,6 +29,8 @@
 		  }
 	  }
   }
+
+  String notfallplan = "http://google.de";
 %>
 <div class="userbox">
 
@@ -79,10 +84,11 @@
     <a href="<wiki:Link jsp='UserPreferences.jsp' format='url' ><wiki:Param name='redirect'
       value='<%=c.getEngine().encodeName(c.getName())%>'/></wiki:Link>"
       class="action prefs" accesskey="p"
-      title="<fmt:message key='actions.prefs.title'/>"><fmt:message key="actions.prefs" />
-    </a>
+      title="<fmt:message key='actions.prefs.title'/>"><fmt:message key="actions.prefs" /></a>
   </wiki:CheckRequestContext>
   </wiki:CheckRequestContext>
+
+	<a href="<%= notfallplan %>" target="_blank" class="action" title="test">Notfallplan</a>
 
   <div class="clearbox"></div>
 

@@ -12,7 +12,7 @@
   <div style="position:relative">
   <input onblur="if( this.value == '' ) { this.value = this.defaultValue }; return true; "
         onfocus="if( this.value == this.defaultValue ) { this.value = ''}; return true; "
-           type="text" value="<fmt:message key='sbox.search.submit'/>"
+           type="text" value="Suche"
            name="query" id="query"
            size="20" 
       accesskey="f" />
