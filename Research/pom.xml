@@ -166,6 +166,7 @@
 		<module>KnowWE-Plugin-d3web-OWL</module>
 		<module>KnowWE-Plugin-WimVentRuleTable</module>
 		<module>KnowWE-Plugin-CaseTrain</module>
+		<module>KnowWE-Plugin-CI4KE-Anomalies</module>
 	</modules>
 	<repositories>
 		<repository>
