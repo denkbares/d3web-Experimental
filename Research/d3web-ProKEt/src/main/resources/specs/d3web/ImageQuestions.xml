@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<dialog 
+	header="ImageQuestions"  
+	dtype="singleform" 
+	dstrategy="nextuaquestion" 
+	css="medi2cols, nonavigation" 
+	dialogcolumns="1"
+	questionnairecolumns="2"
+	userprefix = "" 
+	login = "no"
+	required = "none"
+	>
+	<data kb="ImageQuestions.d3web" />
+</dialog>

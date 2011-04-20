@@ -35,12 +35,8 @@
 		<servlet-class>de.d3web.proket.run.ControlCenter</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>Herzmedizin</servlet-name>
-		<servlet-class>de.d3web.proket.run.Herzmedizin</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>D3webPicShow</servlet-name>
-		<servlet-class>de.d3web.proket.d3web.run.D3webPicShow</servlet-class>
+		<servlet-name>ImageQuestions</servlet-name>
+		<servlet-class>de.d3web.proket.d3web.run.ImageQuestions</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>LoginServlet</servlet-name>
@@ -77,12 +73,8 @@
 		<url-pattern>/ControlCenter</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>Herzmedizin</servlet-name>
-		<url-pattern>/Herzmedizin</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>D3webPicShow</servlet-name>
-		<url-pattern>/D3webPicShow</url-pattern>
+		<servlet-name>ImageQuestions</servlet-name>
+		<url-pattern>/ImageQuestions</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>LoginServlet</servlet-name>

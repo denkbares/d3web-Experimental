@@ -1,5 +1,7 @@
 package de.d3web.proket.d3web.output.render;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,22 +12,28 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 import de.d3web.core.knowledge.Resource;
-import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.utils.FileUtils;
 
 public class ImageHandler {
 
-	public static Resource getResource(String resourceName) {
-		Resource resource = null;
-		D3webConnector d3wc = D3webConnector.getInstance();
-		if (d3wc.getKb() != null) {
-			resource = d3wc.getKb().getResource(resourceName);
-			if (resource != null) {
-				System.out.println(resource.getPathName());
+	public static BufferedImage getResourceAsBUI(Resource r) {
+		BufferedImage bui = null;
 
+		if (r != null) {
+
+			Image image = null;
+			try {
+				InputStream in = r.getInputStream();
+				image = ImageIO.read(in);
+				bui = toBufferedImage(image);
+			}
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
-		return resource;
+
+		return bui;
 	}
 
 	public static void writeImageToFolder(Resource r) throws IOException {
@@ -46,5 +54,20 @@ public class ImageHandler {
 		finally {
 			is.close();
 		}
+	}
+
+	public static BufferedImage toBufferedImage(final Image image) {
+		if (image instanceof BufferedImage) {
+			return (BufferedImage) image;
+		}
+		// if (image instanceof VolatileImage)
+		// return ((VolatileImage) image).getSnapshot();
+		// loadImage(image);
+		final BufferedImage buffImg = new BufferedImage(image.getWidth(null),
+				image.getHeight(null), BufferedImage.TYPE_CUSTOM);
+		final Graphics2D g2 = buffImg.createGraphics();
+		g2.drawImage(image, null, null);
+		g2.dispose();
+		return buffImg;
 	}
 }

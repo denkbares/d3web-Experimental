@@ -64,7 +64,7 @@ public class AnswerTextD3webRenderer extends D3webRenderer {
 		// get the fitting template. In case user prefix was specified, the
 		// specific TemplateName is returned, else the base object name.
 		StringTemplate st = TemplateUtils.getStringTemplate(
-					super.getTemplateName("TextAnswer"), "html");
+					super.getTemplateName("TextImgAnswer"), "html");
 
 		st.setAttribute("fullId", tq.getName().replace(" ", "_"));
 		st.setAttribute("realAnswerType", "text");
@@ -101,6 +101,13 @@ public class AnswerTextD3webRenderer extends D3webRenderer {
 		// Description of the input to provide is read from the knowledge base
 		st.setAttribute("text", tq.getInfoStore().getValue(MMInfo.DESCRIPTION));
 
+		// TODO IMG QUESTIONS TEST
+		String imgName = "";
+		String desc = tq.getInfoStore().getValue(MMInfo.DESCRIPTION);
+		if (desc.contains("IMG#####")) {
+			imgName = desc.replace("IMG#####", "");
+		}
+		st.setAttribute("img", imgName);
 		sb.append(st.toString());
 
 		super.makeTables(to, parent, cc, sb);

@@ -19,6 +19,8 @@
  */
 package de.d3web.proket.d3web.run;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.imageio.ImageIO;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -44,6 +47,7 @@ import javax.servlet.http.HttpSession;
 import au.com.bytecode.opencsv.CSVReader;
 import de.d3web.core.knowledge.Indication.State;
 import de.d3web.core.knowledge.InterviewObject;
+import de.d3web.core.knowledge.Resource;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QASet;
@@ -75,6 +79,7 @@ import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.d3web.output.render.D3webRenderer;
 import de.d3web.proket.d3web.output.render.ID3webRenderer;
+import de.d3web.proket.d3web.output.render.ImageHandler;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
@@ -109,6 +114,7 @@ public class D3webDialog extends HttpServlet {
 
 	private String sourceSave = "";
 
+
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -127,12 +133,17 @@ public class D3webDialog extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		// set both persistence (case saving) and image (images streamed from
+		// kb) folder
 		String fP = GlobalSettings.getInstance().getCaseFolder();
 		if (fP.equals(null) || fP.equals("")) {
 			String folderPath =
 					request.getSession().getServletContext().getRealPath("/");
 			String persistencePath = folderPath + "cases";
+			String kbImgPath = folderPath + "kbimg";
 			GlobalSettings.getInstance().setCaseFolder(persistencePath);
+			GlobalSettings.getInstance().setKbImgFolder(kbImgPath);
+			System.out.println(GlobalSettings.getInstance().getKbImgFolder());
 		}
 		/*
 		 * FOLDER PATH: get the folder on the server for persistence storing
@@ -186,8 +197,15 @@ public class D3webDialog extends HttpServlet {
 			sourceSave = source;
 		}
 
+
 		// Get the current httpSession or a new one
 		HttpSession httpSession = request.getSession(true);
+
+		System.out.println(httpSession.getAttribute("imgStreamed"));
+		// if (httpSession.getAttribute("imgStreamed") == null) {
+		streamImages();
+		// httpSession.setAttribute("imgStreamed", true);
+		// }
 
 		/*
 		 * otherwise, i.e. if session is null create a session according to the
@@ -1137,5 +1155,26 @@ public class D3webDialog extends HttpServlet {
 			return true;
 		}
 		return false;
+	}
+
+	private void streamImages() {
+
+		List<Resource> kbimages = D3webConnector.getInstance().getKb().getResources();
+		if (kbimages != null && kbimages.size() != 0) {
+			for (Resource r : kbimages) {
+				String rname = r.getPathName();
+				BufferedImage bui = ImageHandler.getResourceAsBUI(r);
+				try {
+					File file =
+							new File(GlobalSettings.getInstance().getKbImgFolder()
+									+ "/" + rname);
+					ImageIO.write(bui, "jpg", file);
+				}
+				catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }

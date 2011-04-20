@@ -76,6 +76,8 @@ public class GlobalSettings {
 	/* The folder, where persistence is stored, e.g., case-files */
 	private String caseFolder = "";
 
+	private String kbImgFolder = "";
+
 
 
 	/* The getters for retrieving all those values */
@@ -146,6 +148,14 @@ public class GlobalSettings {
 
 	public String getCaseFolder() {
 		return caseFolder;
+	}
+
+	public void setKbImgFolder(String path) {
+		kbImgFolder = path;
+	}
+
+	public String getKbImgFolder() {
+		return kbImgFolder;
 	}
 
 }
