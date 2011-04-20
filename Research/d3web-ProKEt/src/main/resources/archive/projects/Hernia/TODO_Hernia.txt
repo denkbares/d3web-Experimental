@@ -6,11 +6,37 @@
 ---- TODOS  TODOS  TODOS ---
 ----------------------------
 
-- Fall speichern/laden
-- Required Fields Abfrage: pluggable
-- Bildfragen Eingabe / Rendering über KB
-- Markup für Popup, PDF, Summary Grids (Markup erledigt Albrecht)
-- Summary Grid Base Mechanism
-- adapt date questions for format YYYY-MM-DD
-		
+DONE - adapt date questions for format YYYY-MM-DD
+	--> work with every format allowed by SimpleDateFormat, needs to be specified in KB
+		in Question property description 
+DONE - Required Fields Abfrage: pluggable
+	--> needs specification of the (currently only ONE) req field in minimal xml, otherwise "none"
+DONE - 	Bildfragen Eingabe / Rendering über KB
+	--> grundsätzlich aktuell: Bilder werden bei erstem Dialog laden alle eingelesen und auf
+		dem Server zwischengespeichert. Von dort dann mittels der Renderer gelesen. 
+		Zwischenlösung, da Servlets immer nur entweder Text oder Bilder anzeigen können!
+DONE A - Markup für Popup, PDF, Summary Grids - Markup Möglichkeit mehrere Zeilen description
+
+- recursive display of follow up questions
+- repqair MC mechanism completely
+- MC Questions: send by clicking OK OR by leaving to another question
+- Rendering of
+	- Grid Base Inclusion
+	- PDF (link)?
+	- Popups
+	
+- Refactor Image Questions Base Mechanism
+	-- input image questions via question[info] (text-only questions)
+	-- make Renderer (s) --> we need not image-only, but OC Image or MC image.
+		sub-renderes of OC/MC? maybe adapt in renderer chosing method to ask there
+		if img or not and get respective Renderer
+	-- reasonable to have OWN property instead of .description?!
+- Styling of Image Questions
+- Connection of Image Questions and answer alternatives
+	--> create tailored st files and js functions
+	
+	
+KLÄREN am 28.4.
+---------------
+- Fall speichern/laden		
 		
