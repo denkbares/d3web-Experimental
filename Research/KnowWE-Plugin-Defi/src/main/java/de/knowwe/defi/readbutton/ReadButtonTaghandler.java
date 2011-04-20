@@ -118,6 +118,8 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			if (parameters.containsKey(ID)) id = parameters.get(ID);
 			else return KnowWEUtils.maskHTML("<p>Fehler: Dem Button fehlt das Attribut 'id'.</p>");
 
+			if (!checkID(id)) return KnowWEUtils.maskHTML("<p>Fehler: Das Attribut 'id' darf nicht die Zeichen '::' und ';' enthalten.</p>");
+
 			// Get the readpages-annotation
 			KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
 			Section<DataMarkup> child = null;
@@ -270,6 +272,14 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 		readbutton.append("</tr>");
 
 		return readbutton;
+	}
+
+	private boolean checkID(String id) {
+
+		System.out.println(id);
+		if (id.contains("::") || id.contains(";")) return false;
+
+		return true;
 	}
 
 }
