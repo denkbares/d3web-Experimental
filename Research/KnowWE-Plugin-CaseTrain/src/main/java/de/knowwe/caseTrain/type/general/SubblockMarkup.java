@@ -26,12 +26,12 @@ import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.type.AnonymousTypeInvisible;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.caseTrain.renderer.MouseOverTitleRenderer;
 
 /**
  * 
@@ -70,7 +70,7 @@ public class SubblockMarkup extends AbstractType {
 				string.append(KnowWEUtils.maskHTML("<div class='"
 						+ sec.get().getCSSClass()
 						+ "'>"));
-				DelegateRenderer.getInstance().render(article, sec, user, string);
+				MouseOverTitleRenderer.getInstance().render(article, sec, user, string);
 				string.append(KnowWEUtils.maskHTML("</div>"));
 
 			}
@@ -80,7 +80,7 @@ public class SubblockMarkup extends AbstractType {
 
 		// TODO: reuse regex above
 		String regex2 = START_TAG
-				+ key + ":" + "(.*?)" + END_TAG;
+		+ key + ":" + "(.*?)" + END_TAG;
 		content.setSectionFinder(new RegexSectionFinder(regex2, Pattern.DOTALL, 1));
 		this.addChildType(content);
 
