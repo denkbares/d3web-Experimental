@@ -6,9 +6,11 @@
 ---- TODOS  TODOS  TODOS ---
 ----------------------------
 
+- Fall speichern/laden
 - Required Fields Abfrage: pluggable
 - Bildfragen Eingabe / Rendering über KB
-- PDF, Summary Grids
+- Markup für Popup, PDF, Summary Grids (Markup erledigt Albrecht)
 - Summary Grid Base Mechanism
+- adapt date questions for format YYYY-MM-DD
 		
 		

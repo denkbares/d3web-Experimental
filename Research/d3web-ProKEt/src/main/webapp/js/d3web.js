@@ -200,6 +200,7 @@ function d3web_checkNumRanges(qid, value, store, numStore) {
 	if(qid !== undefined && value !== undefined){
 		qids = qid + "%" + value + ";";
 	} 
+	
 	if(numStore !== undefined && numStore !== " "){
 		var storeVals = numStore.split(";");
 		for (i = 0; i < storeVals.length; i++) {
@@ -213,7 +214,7 @@ function d3web_checkNumRanges(qid, value, store, numStore) {
 			 }
 		 }	
 	}
-
+	
 	/* create query string for calling the checkrange method of the servlet */
 	var link = $.query.set("action", "checkRange").set("qids", qids).toString();
 	link = window.location.href.replace(window.location.search, "") + link;

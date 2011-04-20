@@ -31,7 +31,6 @@ import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
-import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Blackboard;
@@ -215,6 +214,9 @@ public class D3webRenderer implements ID3webRenderer {
 		else if (to instanceof QContainer) {
 			columns = d3wcon.getQuestionnaireColumns();
 		}
+		else if (to instanceof Question) {
+			columns = d3wcon.getQuestionColumns();
+		}
 
 
 		// if more than one column is required, get open-table tag from
@@ -317,7 +319,13 @@ public class D3webRenderer implements ID3webRenderer {
 		// number of columns that is to be set for this element, default 1-col
 		int columns = 1;
 
-		if (to instanceof QuestionOC) {
+		if (D3webConnector.getInstance().getQuestionColumns() != -1) {
+			columns = D3webConnector.getInstance().getQuestionColumns();
+		}
+		else {
+
+			// default: set 2 columns for questions, i.e., answers displayed in
+			// 2 cols
 			columns = 2;
 		}
 

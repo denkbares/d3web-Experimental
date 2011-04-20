@@ -66,7 +66,7 @@ public class AnswerMCD3webRenderer extends D3webRenderer {
 		// get the fitting template. In case user prefix was specified, the
 		// specific TemplateName is returned, else the base object name.
 		StringTemplate st = TemplateUtils.getStringTemplate(
-					super.getTemplateName("McAnswer"), "html");
+					super.getTemplateName("McAnswerTabular"), "html");
 
 		st.setAttribute("fullId", c.getName().replace(" ", "_"));
 		st.setAttribute("realAnswerType", "mc");
@@ -79,6 +79,7 @@ public class AnswerMCD3webRenderer extends D3webRenderer {
 		// if question is an abstraction question --> readonly
 		if (parent.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
 			st.setAttribute("readonly", "true");
+			st.setAttribute("inactive", "true");
 		}
 		// if to=question has parents readonly state depends on parent
 		else if (parent.getParents()[0] != null &&
@@ -89,6 +90,7 @@ public class AnswerMCD3webRenderer extends D3webRenderer {
 			if (parent.getParents()[0] instanceof QContainer) {
 				if (!isParentIndicated(parent, bb)) {
 					st.setAttribute("readonly", "true");
+					st.setAttribute("inactive", "true");
 				}
 			}
 			// if direct parent is question and if the to=question is
@@ -96,12 +98,16 @@ public class AnswerMCD3webRenderer extends D3webRenderer {
 			else if (parent.getParents()[0] instanceof Question) {
 
 				// if parent is indicated, to indicated too --> no readonly
-				if (isParentOfFollowUpQuIndicated(parent, bb)) {
+				if (isIndicated(parent, bb) ||
+						(isParentOfFollowUpQuIndicated(parent, bb) &&
+							isIndicated(parent, bb))) {
 					st.removeAttribute("readonly");
+					st.removeAttribute("inactive");
 				}
 				// otherwise to=question not indicated and readonly
 				else {
 					st.setAttribute("readonly", "true");
+					st.setAttribute("inactive", "true");
 
 					// also remove possible set values
 					st.removeAttribute("selection");
@@ -112,6 +118,7 @@ public class AnswerMCD3webRenderer extends D3webRenderer {
 		// in all other cases display question/answers --> no readonly
 		else {
 			st.removeAttribute("readonly");
+			st.removeAttribute("inactive");
 		}
 
 		MultipleChoiceValue mcval = null;

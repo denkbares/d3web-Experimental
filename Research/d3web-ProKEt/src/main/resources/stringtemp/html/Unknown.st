@@ -1,6 +1,6 @@
-<div id="$fullId$" class="answer $fullId$">
+<div id="$fullId$">
 	<input id="i_unknown_$fullId$" type="radio" $selection$ title="Unbekannt"
 		name="group-$parentFullId$"
-		$selection$ $if(readonly)$ DISABLED $endif$ />	
+		$selection$ $if(readonly)$ DISABLED $endif$/>	
 	Unbekannt
 </div>

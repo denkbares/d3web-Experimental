@@ -191,6 +191,13 @@ public class D3webXMLParser {
 		return col;
 	}
 
+	public int getQuestionColumns() {
+		Integer col = XMLUtils.getInt((Element) dialogSpec, "questioncolumns");
+		if (col == null) {
+			col = 1;
+		}
+		return col;
+	}
 
 	// returns false in case "no" is given OR nothing
 	public boolean getLogin() {

@@ -27,7 +27,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -48,6 +55,8 @@ import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionText;
+import de.d3web.core.knowledge.terminology.info.BasicProperties;
+import de.d3web.core.knowledge.terminology.info.NumericalInterval;
 import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
@@ -89,7 +98,7 @@ import de.d3web.proket.utils.IDUtils;
  * @date 14.01.2011; Update: 28/01/2011
  * 
  */
-public class Mediastinitis extends HttpServlet {
+public class Hernia extends HttpServlet {
 
 	/* special parser for reading in the d3web-specification xml */
 	private D3webXMLParser d3webParser;
@@ -102,7 +111,7 @@ public class Mediastinitis extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public Mediastinitis() {
+	public Hernia() {
 		super();
 	}
 
@@ -117,7 +126,18 @@ public class Mediastinitis extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		/* only needed here in case the dialog is used without login mechanisms */
+		/*
+		 * String fP = GlobalSettings.getInstance().getCaseFolder(); if
+		 * (fP.equals(null) || fP.equals("")) { String folderPath =
+		 * request.getSession().getServletContext().getRealPath("/"); String
+		 * persistencePath = folderPath + "cases";
+		 * GlobalSettings.getInstance().setCaseFolder(persistencePath); }
+		 */
+		
+		/*
+		 * FOLDER PATH: get the folder on the server for persistence storing
+		 * only needed here in case the dialog is used without login mechanisms
+		 */
 		// String folderPath =
 		// request.getSession().getServletContext().getRealPath("/");
 		// String persistencePath = folderPath.replace("d3web-ProKEt",
@@ -129,20 +149,18 @@ public class Mediastinitis extends HttpServlet {
 		// in case nothing other is provided, "show" is the default action
 		String action = request.getParameter("action");
 		if (action == null) {
+			// action = "mail";
 			action = "show";
 		}
 
-		// try to get the src parameter, which defines the specification xml
-		// with special properties for this dialog/knowledge base
-		// if none available, default.xml is set
-		String source = "Mediastinitis";
+		String source = "Hernia_Standard";
 		if (!source.endsWith(".xml")) {
 			source = source + ".xml";
 		}
 
-
 		// d3web parser for interpreting the source/specification xml
 		d3webParser = new D3webXMLParser(source);
+		d3wcon.setD3webParser(d3webParser);
 
 		// only invoke parser, if XML hasn't been parsed before
 		// if it has, a knowledge base already exists
@@ -227,6 +245,57 @@ public class Mediastinitis extends HttpServlet {
 		}
 		else if (action.equalsIgnoreCase("login")) {
 			login(request, response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("sendmail")) {
+			try {
+				sendMail(request, response, httpSession);
+				response.setContentType("text/html");
+				response.setCharacterEncoding("utf8");
+				PrintWriter writer = response.getWriter();
+				writer.append("success");
+			}
+			catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return;
+		}
+		else if (action.equalsIgnoreCase("checkrange")) {
+			response.setContentType("text/html");
+			response.setCharacterEncoding("utf8");
+			PrintWriter writer = response.getWriter();
+			// String qid = request.getParameter("qid");
+			// qid = qid.replace("q_", "");
+
+			String qidsString = request.getParameter("qids");
+			qidsString = qidsString.replace("q_", "");
+
+			String[] qids = qidsString.split(";");
+			String qidBackstring = "";
+
+			for (String qid : qids) {
+				String[] idVal = qid.split("%");
+
+				// TerminologyManager man = new
+				// TerminologyManager(d3wcon.getKb());
+				Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(
+						idVal[0]);
+
+				if (to instanceof QuestionNum) {
+					if (to.getInfoStore().getValue(BasicProperties.QUESTION_NUM_RANGE) != null) {
+						NumericalInterval range = to.getInfoStore().getValue(
+								BasicProperties.QUESTION_NUM_RANGE);
+						qidBackstring += to.getName() + "%" + idVal[1] + "%";
+						qidBackstring += range.getLeft() + "-" + range.getRight() + ";";
+					}
+				}
+
+			}
+
+			writer.append(qidBackstring);
+
+			return;
 		}
 	}
 
@@ -289,17 +358,24 @@ public class Mediastinitis extends HttpServlet {
 
 		// get the ID of a potentially given single question answered
 		String qid = request.getParameter("qid");
-
-		// ONLY GO ON SAVING if required att(s) is/are already set
-		boolean goOn = checkReqVal("Betreffende Klinik", sess, qid);
-
-		if (!goOn) {
-			writer.append("noReqs");
-			return;
-		}
-
 		// get the input-store
 		String store = request.getParameter("store");
+
+		/*
+		 * Check, whether a required value (for saving) is specified. If yes,
+		 * check whether this value has already been set in the KB or is about
+		 * to be set in the current call --> go on normally. Otherwise, return a
+		 * marker "<required value>" so the user is informed by AJAX to provide
+		 * this marked value.
+		 */
+
+		String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
+		if ((!reqVal.equals("")) &&
+				(!checkReqVal(reqVal, sess, qid, store))) {
+
+			writer.append(reqVal);
+			return;
+		}
 
 		// if there are values in the input-store (i.e., multiple questions
 		// answered or changed
@@ -358,7 +434,6 @@ public class Mediastinitis extends HttpServlet {
 
 		// get single value storage
 		String positions = request.getParameter("pos");
-
 		// if not EMPTY, i.e., if one single value was set
 		if (!positions.equals("EMPTY")) {
 
@@ -375,7 +450,7 @@ public class Mediastinitis extends HttpServlet {
 			// AUTOSAVE
 			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
 						folderPath,
-						"Betreffende Klinik",
+						D3webConnector.getInstance().getD3webParser().getRequired(),
 						"autosave",
 						(Session) httpSession.getAttribute("d3webSession"));
 
@@ -403,31 +478,115 @@ public class Mediastinitis extends HttpServlet {
 		String userFilename = request.getParameter("userfn");
 		String lastLoaded = (String) httpSession.getAttribute("lastLoaded");
 
-		if (!lastLoaded.equals("")) {
-			if (lastLoaded.equals(userFilename)) {
+		// if any file had been loaded before as a case
+		if (lastLoaded != null && !lastLoaded.equals("")) {
+
+			if (PersistenceD3webUtils.existsCase(
+					folderPath,
+					userFilename,
+					D3webConnector.getInstance().getD3webParser().getRequired(),
+					(Session) httpSession.getAttribute("d3webSession"))) {
+
+				// if user loaded case before, he can save with that already
+				// existing filename
+				if (lastLoaded.equals(userFilename)) {
+					PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
+							folderPath,
+							D3webConnector.getInstance().getD3webParser().getRequired(),
+							userFilename,
+							(Session) httpSession.getAttribute("d3webSession"));
+				}
+				else {
+					writer.append("exists");
+				}
+			}
+
+			// otherwise
+			else {
+				System.out.println("save");
 				PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
 						folderPath,
-						"Betreffende Klinik",
+						D3webConnector.getInstance().getD3webParser().getRequired(),
 						userFilename,
 						(Session) httpSession.getAttribute("d3webSession"));
 			}
 		}
+
+		// if no file loaded, there should be no chance of saving with same name
 		else {
+
+			// if case already exists, do not enable saving
 			if (PersistenceD3webUtils.existsCase(
 					folderPath,
 					userFilename,
-					"Betreffende Klinik",
+					D3webConnector.getInstance().getD3webParser().getRequired(),
 					(Session) httpSession.getAttribute("d3webSession"))) {
 				writer.append("exists");
 			}
+
+			// otherwise if filename/case is not existent, it can be saved
 			else {
-			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
-					folderPath,
-					"Betreffende Klinik",
-					userFilename,
-					(Session) httpSession.getAttribute("d3webSession"));
+				PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
+						folderPath,
+						D3webConnector.getInstance().getD3webParser().getRequired(),
+						userFilename,
+						(Session) httpSession.getAttribute("d3webSession"));
 			}
 		}
+	}
+
+	private void sendMail(HttpServletRequest request, HttpServletResponse response,
+			HttpSession httpSession) throws MessagingException {
+
+		final String user = "Meg200x@freenet.de";
+		final String pw = "bonnie";
+
+		/* setup properties for mail server */
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "mx.freenet.de");
+		props.put("mail.smtp.port", "25");
+		props.put("mail.transport.protocol", "smtp");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.user", user);
+		props.put("mail.password", pw);
+		// props.put("mail.debug", "true");
+
+		javax.mail.Session session = javax.mail.Session.getDefaultInstance(props,
+				new javax.mail.Authenticator() {
+
+					@Override
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication(user, pw);
+					}
+				});
+
+		MimeMessage message = new MimeMessage(session);
+
+		// from-identificator
+		InternetAddress from = new InternetAddress("freiberg@informatik.uni-wuerzburg.de");
+		message.setFrom(from);
+
+		/*
+		 * to-identificator: insert clients mail address here, has to be read
+		 * from csv file
+		 */
+		InternetAddress to = new InternetAddress("martina.freiberg@uni-wuerzburg.de");
+		message.addRecipient(Message.RecipientType.TO, to);
+
+		/* A subject */
+		message.setSubject("Mediastinitis Loginanfrage");
+
+		/*
+		 * Insert username and password here; password needs to be the plaintext
+		 * version! Security consideration: have a pw file that contains only
+		 * the plaintext passwords,
+		 */
+
+		String loginUser = request.getParameter("user");
+		message.setText("Bitte Logindaten erneut zusenden: \n\n" +
+				"Benutzername:" + loginUser);
+		Transport.send(message);
+
 	}
 
 	/**
@@ -443,11 +602,23 @@ public class Mediastinitis extends HttpServlet {
 		// get the filename from the corresponding request parameter "fn"
 		String filename = request.getParameter("fn");
 
-		String user = httpSession.getAttribute("user").toString();
+		String user = "";
+		if (httpSession.getAttribute("user") != null) {
+			user = httpSession.getAttribute("user").toString();
+		}
+
 		// load the file = path + filename
 		// PersistenceD3webUtils.loadCaseFromUserFilename(folderPath + "/" +
 		// filename);
-		Session session = PersistenceD3webUtils.loadCaseFromUserFilename(filename, user);
+
+		Session session = null;
+		if (!user.equals("")) {
+			session = PersistenceD3webUtils.loadCaseFromUserFilename(filename, user);
+		}
+		else {
+			session = PersistenceD3webUtils.loadCase(filename);
+		}
+
 		httpSession.setAttribute("d3webSession", session);
 
 		httpSession.setAttribute("lastLoaded", filename);
@@ -522,6 +693,7 @@ public class Mediastinitis extends HttpServlet {
 	 */
 	private void setValue(String termObID, String valString, Session sess) {
 
+		// TODO REFACTOR: can be removed, just provide ID without "q_"
 		// remove prefix, e.g. "q_" in "q_BMI"
 		termObID = IDUtils.removeNamspace(termObID);
 
@@ -576,14 +748,50 @@ public class Mediastinitis extends HttpServlet {
 					}
 				}
 				else if (to instanceof QuestionMC) {
+
+					valString = valString.replace("q_", "");
+					System.out.println(valString);
+
+					lastFact = blackboard.getValueFact(to);
+					if (lastFact != null &&
+							lastFact.getValue() instanceof MultipleChoiceValue) {
+
+						MultipleChoiceValue mcval = (MultipleChoiceValue) lastFact.getValue();
+
+						if (mcval.contains(new Choice(valString))) {
+
+							List<Choice> choicesNew = new ArrayList<Choice>();
+							List<Choice> choicesOld = mcval.asChoiceList((QuestionMC) to);
+
+							for (Choice c : choicesOld) {
+
+								if (c.getName().equals(valString)) {
+									System.out.println("do not add: " + c);
+								}
+								else {
+									choicesNew.add(c);
+								}
+							}
+							value = MultipleChoiceValue.fromChoices(choicesNew);
+						}
+						else {
+							List<Choice> choicesOld = mcval.asChoiceList((QuestionMC) to);
+							choicesOld.add(new Choice(valString));
+							value = MultipleChoiceValue.fromChoices(choicesOld);
+						}
+
+					}
+					else {
+						value = KnowledgeBaseUtils.findValue(to, valString);
+					}
 					// valueString is a comma separated list of the IDs of the
 					// selected items
-					List<Choice> values = new ArrayList<Choice>();
-					String[] parts = valString.split(",");
-					for (String part : parts) {
-						values.add(new Choice(part));
-					}
-					value = MultipleChoiceValue.fromChoices(values);
+					// List<Choice> values = new ArrayList<Choice>();
+					// String[] parts = valString.split(",");
+					// for (String part : parts) {
+					// values.add(new Choice(part));
+					// }
+					// value = MultipleChoiceValue.fromChoices(values);
 				}
 			}
 			// TEXT questions
@@ -675,7 +883,6 @@ public class Mediastinitis extends HttpServlet {
 				// D3webConnector.getInstance().getKb());
 				Question qto = D3webConnector.getInstance().getKb().getManager().searchQuestion(
 						c.getName());
-
 				if (!isIndicated(qto, blackboard)
 						|| !isParentIndicated(qto, blackboard)) {
 
@@ -709,18 +916,20 @@ public class Mediastinitis extends HttpServlet {
 
 			for (TerminologyObject to : parent.getChildren()) {
 
-				// TerminologyManager man = new TerminologyManager(
-				// D3webConnector.getInstance().getKb());
-				Question qto = D3webConnector.getInstance().getKb().getManager().searchQuestion(
-						to.getName());
+				if (to instanceof Question) {
+					// TerminologyManager man = new TerminologyManager(
+					// D3webConnector.getInstance().getKb());
+					Question qto = D3webConnector.getInstance().getKb().getManager().searchQuestion(
+							to.getName());
 
-				// remove a previously set value
-				lastFact = blackboard.getValueFact(qto);
-				if (lastFact != null) {
-					blackboard.removeValueFact(lastFact);
+					// remove a previously set value
+					lastFact = blackboard.getValueFact(qto);
+					if (lastFact != null) {
+						blackboard.removeValueFact(lastFact);
+					}
+
+					resetNotIndicatedTOs(to, bb, sess);
 				}
-
-				resetNotIndicatedTOs(to, bb, sess);
 			}
 		}
 	}
@@ -850,16 +1059,33 @@ public class Mediastinitis extends HttpServlet {
 		return false; // trust no one per default
 	}
 
-	private boolean checkReqVal(String requiredVal, Session sess, String valToSet) {
+	/**
+	 * Checks, whether a potentially required value is already set in the KB or
+	 * is contained in the current set of values to write to the KB. If yes, the
+	 * method returns true, if no, false.
+	 * 
+	 * @created 15.04.2011
+	 * @param requiredVal The required value that is to check
+	 * @param sess The d3webSession
+	 * @param valToSet The single value to set
+	 * @param store The value store
+	 * @return TRUE of the required value is already set or contained in the
+	 *         current set of values to set
+	 */
+	private boolean checkReqVal(String requiredVal, Session sess, String valToSet, String store) {
 		Blackboard blackboard = sess.getBlackboard();
 
 		valToSet = valToSet.replace("q_", "").replace("_", " ");
+		store = store.replace("_", " ");
+
 		// TerminologyManager man = new
 		// TerminologyManager(D3webConnector.getInstance().getKb());
 		Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(requiredVal);
 
 		Fact lastFact = blackboard.getValueFact(to);
+
 		if (requiredVal.equals(valToSet) ||
+				(store.contains(requiredVal)) ||
 				(lastFact != null && lastFact.getValue().toString() != "")) {
 			return true;
 		}

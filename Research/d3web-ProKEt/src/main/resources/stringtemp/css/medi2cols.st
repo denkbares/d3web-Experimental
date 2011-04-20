@@ -94,4 +94,7 @@ td { padding: 2px 0; vertical-align: top; height: 100%}
 
 li.noListMarker {list-style-type: none;}
 
-.qerror{margin: 5px; color: #CC0000; font-weight: bold;};
+
+.unknown{margin-top: 5px;}
+
+.qerror{margin: 5px; color: #CC0000; font-weight: bold;}

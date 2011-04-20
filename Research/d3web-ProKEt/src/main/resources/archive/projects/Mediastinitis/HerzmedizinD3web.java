@@ -34,6 +34,7 @@ import javax.servlet.http.HttpSession;
 
 import de.d3web.core.knowledge.Indication.State;
 import de.d3web.core.knowledge.InterviewObject;
+import de.d3web.core.knowledge.TerminologyManager;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QASet;
@@ -321,9 +322,8 @@ public class HerzmedizinD3web extends HttpServlet {
 		Blackboard blackboard =
 				D3webConnector.getInstance().getSession().getBlackboard();
 
-		Question to =
-				(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
-						termObID, d3wcon.getKb());
+		TerminologyManager man = new TerminologyManager(D3webConnector.getInstance().getKb());
+		Question to = man.searchQuestion(termObID);
 
 		// if TerminologyObject not found in the current KB return & do nothing
 		if (to == null) {

@@ -46,7 +46,7 @@ public class AnswerUnknownD3webRenderer extends D3webRenderer {
 
 		// Get the fitting template.
 		st = TemplateUtils.getStringTemplate(
-					super.getTemplateName("Unknown"), "html");
+					super.getTemplateName("UnknownTabular"), "html");
 
 		// set basic properties
 		st.setAttribute("fullId", to.getName().replace(" ", "_"));
@@ -58,6 +58,7 @@ public class AnswerUnknownD3webRenderer extends D3webRenderer {
 		// abstraction question --> readonly
 		if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
 			st.setAttribute("readonly", "true");
+			st.setAttribute("inactive", "true");
 		}
 
 		// question has parents, e.g. direct qcontainer or question parent
@@ -68,14 +69,19 @@ public class AnswerUnknownD3webRenderer extends D3webRenderer {
 			if (to.getParents()[0] instanceof QContainer) {
 				if (!isParentIndicated(to, bb)) {
 					st.setAttribute("readonly", "true");
+					st.setAttribute("inactive", "true");
 				}
 			}
 			else if (to.getParents()[0] instanceof Question) {
-				if (isParentOfFollowUpQuIndicated(to, bb)) {
+				if (isIndicated(to, bb) ||
+						(isParentOfFollowUpQuIndicated(to, bb) &&
+							isIndicated(to, bb))) {
 					st.removeAttribute("readonly");
+					st.removeAttribute("inactive");
 				}
 				else {
 					st.setAttribute("readonly", "true");
+					st.setAttribute("inactive", "true");
 
 						// also remove possible set values
 					st.removeAttribute("selection");
@@ -85,6 +91,7 @@ public class AnswerUnknownD3webRenderer extends D3webRenderer {
 		}
 		else {
 			st.removeAttribute("readonly");
+			st.removeAttribute("inactive");
 		}
 
 		if (value.equals(Unknown.getInstance())) {

@@ -66,7 +66,10 @@ public class D3webConnector {
 	private int dcols;
 
 	/* number of columns for multicolumn styles (questionnaire) */
-	private int questcols;
+	private int questcols = -1;
+
+	/* number of columns for multicolumn styles (questionnaire) */
+	private int qcols = -1;
 
 	/* prefix that can be set by the user to define more specific dialog types */
 	private String userprefix = "";
@@ -142,6 +145,14 @@ public class D3webConnector {
 
 	public void setDialogColumns(int c) {
 		this.dcols = c;
+	}
+
+	public int getQuestionColumns() {
+		return this.qcols;
+	}
+
+	public void setQuestionColumns(int c) {
+		this.qcols = c;
 	}
 
 	public int getQuestionnaireColumns() {

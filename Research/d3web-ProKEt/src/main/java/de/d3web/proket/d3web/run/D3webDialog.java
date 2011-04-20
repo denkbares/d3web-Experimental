@@ -177,6 +177,7 @@ public class D3webDialog extends HttpServlet {
 			d3wcon.setDialogStrat(d3webParser.getStrategy());
 			d3wcon.setDialogType(d3webParser.getType());
 			d3wcon.setDialogColumns(d3webParser.getDialogColumns());
+			d3wcon.setQuestionColumns(d3webParser.getQuestionColumns());
 			d3wcon.setQuestionnaireColumns(d3webParser.getQuestionnaireColumns());
 			d3wcon.setCss(d3webParser.getCss());
 			d3wcon.setHeader(d3webParser.getHeader());
@@ -275,8 +276,6 @@ public class D3webDialog extends HttpServlet {
 			response.setContentType("text/html");
 			response.setCharacterEncoding("utf8");
 			PrintWriter writer = response.getWriter();
-			// String qid = request.getParameter("qid");
-			// qid = qid.replace("q_", "");
 
 			String qidsString = request.getParameter("qids");
 			qidsString = qidsString.replace("q_", "");
@@ -287,9 +286,7 @@ public class D3webDialog extends HttpServlet {
 			for (String qid : qids) {
 				String[] idVal = qid.split("%");
 
-				Question to =
-						(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
-								idVal[0], d3wcon.getKb());
+				Question to = d3wcon.getKb().getManager().searchQuestion(idVal[0]);
 
 				if (to instanceof QuestionNum) {
 					if (to.getInfoStore().getValue(BasicProperties.QUESTION_NUM_RANGE) != null) {
@@ -362,7 +359,7 @@ public class D3webDialog extends HttpServlet {
 
 		String mcVals = request.getParameter("mcs");
 		mcVals = mcVals.replace("_", " ");
-		System.out.println(mcVals + " " + qid);
+		// System.out.println(mcVals + " " + qid);
 
 		/*
 		 * Check, whether a required value (for saving) is specified. If yes,
@@ -373,7 +370,7 @@ public class D3webDialog extends HttpServlet {
 		 */
 
 		String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
-		System.out.println(reqVal);
+		// System.out.println(reqVal);
 		if ((!reqVal.equals("") || !reqVal.equals("none")) &&
 				(!checkReqVal(reqVal, sess, qid, ""))) {
 
@@ -503,6 +500,7 @@ public class D3webDialog extends HttpServlet {
 			qid = "q_" + qid;
 			positions = positions.replace("_", " ");
 
+			// System.out.println(qid + " " + positions);
 			setValue(qid, positions, sess);
 
 			// AUTOSAVE
@@ -763,9 +761,11 @@ public class D3webDialog extends HttpServlet {
 		Blackboard blackboard =
 				sess.getBlackboard();
 
-		Question to =
-				(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
-						termObID, d3wcon.getKb());
+		// TerminologyManager man = new
+		// TerminologyManager(D3webConnector.getInstance().getKb());
+		// Question to = man.searchQuestion(termObID);
+
+		Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(termObID);
 
 		// if TerminologyObject not found in the current KB return & do nothing
 		if (to == null) {
@@ -860,7 +860,9 @@ public class D3webDialog extends HttpServlet {
 						catch (IllegalArgumentException e) {
 							// value still null, will not be set
 						}
-						if (value != null) break;
+						if (value != null) {
+							break;
+						}
 					}
 				}
 				else {
@@ -928,9 +930,8 @@ public class D3webDialog extends HttpServlet {
 		if (parent.getChildren() != null && parent.getChildren().length != 0) {
 			for (TerminologyObject c : parent.getChildren()) {
 
-				Question qto =
-						(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
-								c.getName(), d3wcon.getKb());
+				Question qto = D3webConnector.getInstance().getKb().getManager().searchQuestion(
+						c.getName());
 
 				if (!isIndicated(qto, blackboard)
 						|| !isParentIndicated(qto, blackboard)) {
@@ -966,9 +967,9 @@ public class D3webDialog extends HttpServlet {
 			for (TerminologyObject to : parent.getChildren()) {
 
 				if (to instanceof Question) {
-					Question qto =
-							(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
-									to.getName(), d3wcon.getKb());
+
+					Question qto = D3webConnector.getInstance().getKb().getManager().searchQuestion(
+							to.getName());
 
 					// remove a previously set value
 					lastFact = blackboard.getValueFact(qto);
@@ -1126,9 +1127,7 @@ public class D3webDialog extends HttpServlet {
 		valToSet = valToSet.replace("q_", "").replace("_", " ");
 		store = store.replace("_", " ");
 
-		Question to =
-				(Question) KnowledgeBaseUtils.findTerminologyObjectByName(
-						requiredVal, d3wcon.getKb());
+		Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(requiredVal);
 
 		Fact lastFact = blackboard.getValueFact(to);
 

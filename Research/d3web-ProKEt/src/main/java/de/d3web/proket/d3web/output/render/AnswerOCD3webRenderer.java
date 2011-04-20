@@ -64,7 +64,7 @@ public class AnswerOCD3webRenderer extends D3webRenderer {
 		// get the template. In case user prefix was specified, the specific
 		// TemplateName is returned, otherwise the base object name.
 		st = TemplateUtils.getStringTemplate(
-				super.getTemplateName("OcAnswer"), "html");
+				super.getTemplateName("OcAnswerTabular"), "html");
 
 		st.setAttribute("fullId", c.getName().replace(" ", "_"));
 		st.setAttribute("realAnswerType", "oc");
@@ -77,6 +77,7 @@ public class AnswerOCD3webRenderer extends D3webRenderer {
 		// if question is an abstraction question --> readonly
 		if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
 			st.setAttribute("readonly", "true");
+			st.setAttribute("inactive", "true");
 		}
 		// if to=question has parents readonly state depends on parent
 		else if (to.getParents()[0] != null &&
@@ -87,6 +88,7 @@ public class AnswerOCD3webRenderer extends D3webRenderer {
 			if (to.getParents()[0] instanceof QContainer) {
 				if (!isParentIndicated(to, bb)) {
 					st.setAttribute("readonly", "true");
+					st.setAttribute("inactive", "true");
 				}
 			}
 			// if direct parent is question and if the to=question is
@@ -94,12 +96,16 @@ public class AnswerOCD3webRenderer extends D3webRenderer {
 			else if (to.getParents()[0] instanceof Question) {
 
 				// if parent is indicated, to indicated too --> no readonly
-				if (isParentOfFollowUpQuIndicated(to, bb)) {
+				if (isIndicated(to, bb) ||
+						(isParentOfFollowUpQuIndicated(to, bb) &&
+							isIndicated(to, bb))) {
 					st.removeAttribute("readonly");
-				}
+					st.removeAttribute("inactive");
+				} 
 				// otherwise to=question not indicated and readonly
 				else {
 					st.setAttribute("readonly", "true");
+					st.setAttribute("inactive", "true");
 
 					// also remove possible set values
 					st.removeAttribute("selection");
@@ -110,6 +116,7 @@ public class AnswerOCD3webRenderer extends D3webRenderer {
 		// in all other cases display question/answers --> no readonly
 		else {
 			st.removeAttribute("readonly");
+			st.removeAttribute("inactive");
 		}
 
 		// else if (!isParentIndicated(to, bb)) {
@@ -139,6 +146,7 @@ public class AnswerOCD3webRenderer extends D3webRenderer {
 			// readonly
 			if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
 				st.removeAttribute("readonly");
+				st.removeAttribute("inactive");
 			}
 
 			// set selected

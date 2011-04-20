@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.Iterator;
 
 import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.records.SessionConversionFactory;
 import de.d3web.core.records.SessionRecord;
 import de.d3web.core.session.Session;
@@ -77,8 +76,10 @@ public class PersistenceD3webUtils {
 		SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmss");
 
 		// Value of given question in the current session
-		Question clinic = (Question) KnowledgeBaseUtils.
-				findTerminologyObjectByName(questionName, D3webConnector.getInstance().getKb());
+		// TerminologyManager man = new
+		// TerminologyManager(D3webConnector.getInstance().getKb());
+		Question clinic = D3webConnector.getInstance().getKb().getManager().searchQuestion(
+				questionName);
 		Blackboard bb = d3webSession.getBlackboard();
 		String clinicVal = bb.getValue(clinic).toString();
 
@@ -129,8 +130,10 @@ public class PersistenceD3webUtils {
 		
 		if (questionName != "") {
 			// Value of given question in the current session
-			Question clinic = (Question) KnowledgeBaseUtils.
-					findTerminologyObjectByName(questionName, D3webConnector.getInstance().getKb());
+			// TerminologyManager man = new
+			// TerminologyManager(D3webConnector.getInstance().getKb());
+			Question clinic = D3webConnector.getInstance().getKb().getManager().searchQuestion(
+					questionName);
 			Blackboard bb = d3webSession.getBlackboard();
 			clinicVal = bb.getValue(clinic).toString();
 			folder = new File(folderPath + "/" + clinicVal + "/");
@@ -431,8 +434,10 @@ public class PersistenceD3webUtils {
 		
 		// Value of given question in the current session
 		if(subfolder != ""){
-			Question subfolderVal = (Question) KnowledgeBaseUtils.
-			findTerminologyObjectByName(subfolder, D3webConnector.getInstance().getKb());
+			// TerminologyManager man = new
+			// TerminologyManager(D3webConnector.getInstance().getKb());
+			Question subfolderVal = D3webConnector.getInstance().getKb().getManager().searchQuestion(
+					subfolder);
 			Blackboard bb = session.getBlackboard();
 			subfold = bb.getValue(subfolderVal).toString();
 			folder = new File(fold + "/" + subfold);
