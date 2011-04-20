@@ -1,3 +1,4 @@
+<%@page import="java.util.ResourceBundle"%>
 <%@page import="java.io.IOException"%>
 <%@page import="java.io.FileReader"%>
 <%@page import="java.io.BufferedReader"%>
@@ -29,8 +30,9 @@
 		  }
 	  }
   }
-
-  String notfallplan = "http://google.de";
+  
+  ResourceBundle rb = ResourceBundle.getBundle("KnowWE_Defi_config");
+  String notfallplan = rb.getString("defi.link.notfall");
 %>
 <div class="userbox">
 
