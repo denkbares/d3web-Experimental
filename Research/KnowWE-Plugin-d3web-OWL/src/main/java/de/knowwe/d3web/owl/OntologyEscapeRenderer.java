@@ -34,6 +34,10 @@ import de.d3web.we.user.UserContext;
  */
 public class OntologyEscapeRenderer extends DefaultMarkupRenderer<OntologyProviderType> {
 
+	public OntologyEscapeRenderer() {
+		super("KnowWEExtension/images/owl24.png");
+	}
+
 	@Override
 	protected void renderContents(KnowWEArticle article, Section<OntologyProviderType> section, UserContext user, StringBuilder string) {
 		List<Section<?>> subsecs = section.getChildren();

@@ -20,7 +20,6 @@ package de.knowwe.d3web.owl;
 
 import de.d3web.we.core.packaging.KnowWEPackageManager;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.kdom.objects.IncrementalMarker;
 
@@ -46,8 +45,6 @@ public class OntologyProviderType extends DefaultMarkupType implements Increment
 
 	public OntologyProviderType() {
 		super(MARKUP);
-		this.setCustomRenderer(new DefaultMarkupRenderer<OntologyProviderType>(
-				"KnowWEExtension/images/owl24.png"));
 		this.addSubtreeHandler(new OntologyHandler());
 		this.setCustomRenderer(new OntologyEscapeRenderer());
 	}
