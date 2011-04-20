@@ -23,9 +23,9 @@
  */
 
 $(function() {
-
+	
 	// if login should be enabled: set in minimal XML and JSCodeContainer
-	if (login) {
+	if(login){
 		window.setTimeout("logintimeout()", 57000 * 60);
 
 		var link = $.query.set("action", "checkLogin").toString();
@@ -125,30 +125,20 @@ $(function() {
  */
 function initFunctionality() {
 
-	var mcVals = "";
-
 	/*
 	 * bind "get selected facts" method to radio buttons, checkboxes and
 	 * textareas
 	 */
 	$('[type=radio]').unbind('click').click(function() {
-		d3web_getSelectedFacts($(this).attr("id"));
+		d3web_getSelectedFacts($(this));
 	});
-
+	
+	
 	/* TODO MC QUESTIONS */
-	/*
-	 * the following ensures, that MC questions behave like OC questions, i.e.,
-	 * a v
-	 */
+	/* the following ensures, that MC questions behave like OC questions,
+	 * i.e., a v*/
 	$('[type=checkbox]').unbind('click').click(function() {
-		// d3web_getSelectedFacts($(this));
-		mcVals = d3web_collectMCs($(this), mcVals);
-	});
-
-	$('[id*=ok-]').unbind('click').click(function() {
-		if (mcVals != undefined && mcVals != "") {
-			d3web_addMCfacts(mcVals, $(this).attr("id"));
-		}
+		d3web_getSelectedFacts($(this));
 	});
 
 	$('[type=text]').unbind('click').click(function() {
@@ -192,60 +182,11 @@ function initFunctionality() {
 	});
 }
 
-function d3web_collectMCs(clickedEl, mcVals) {
-
-	// id of clicked checkbox
-	clickID = clickedEl.attr("id").replace("f_", "");
-
-	// init save-checked-vals-variable
-	var checkedVals = "";
-
-	// get the question-content-parent element and go through all its
-	// div-children
-	clickedQContent = clickedEl.parents("[id*=q_]");
-	mcs = clickedQContent.children('div');
-	mcs.each(function() {
-
-		// for each div, get the input child
-		child = $(this).children('input').eq(0);
-
-		// if it is checked, add it to the save-checked-vals-variable
-		if (child.attr("checked") == "true" || child.attr("checked") == true) {
-			checkedVals += child.attr("id").replace("f_", "") + ",";
-		}
-	});
-
-	return checkedVals;
-}
-
-function d3web_addMCfacts(mcfacts, qid) {
-
-	var link = $.query.set("action", "addmcfact").set("mcs", mcfacts).set(
-			"qid", qid).toString();
-	link = window.location.href.replace(window.location.search, "") + link;
-
-	$.ajax({
-		type : "GET",
-		url : link,
-		success : function(html) {
-			if (html !== "") {
-				// Error message and reset session so user can provide input
-				// first
-				var errMsg = "Das Feld '" + html
-						+ "' muss immer zuerst ausgefüllt werden!";
-				alert(errMsg);
-				d3web_resetSession();
-			} else {
-				d3web_show();
-			}
-		}
-	});
-}
-
 /**
- * Send an AJAX request to check, whether possibly answered num questions have a
- * certain value-range specified, and if yes, return the respective question-ids
- * and ranges for checking the user provided value against the range.
+ * Send an AJAX request to check, whether possibly answered num questions
+ * have a certain value-range specified, and if yes, return the respective
+ * question-ids and ranges for checking the user provided value against the
+ * range.
  */
 function d3web_checkNumRanges(qid, value, store, numStore) {
 
@@ -256,27 +197,27 @@ function d3web_checkNumRanges(qid, value, store, numStore) {
 	 * handling also text etc questions
 	 */
 	var qids = "";
-	if (qid !== undefined && value !== undefined) {
+	if(qid !== undefined && value !== undefined){
 		qids = qid + "%" + value + ";";
-	}
-	if (numStore !== undefined && numStore !== " ") {
+	} 
+	if(numStore !== undefined && numStore !== " "){
 		var storeVals = numStore.split(";");
 		for (i = 0; i < storeVals.length; i++) {
-			var idVal = storeVals[i].split("###");
-
-			if (idVal[0] !== "" || idVal[1] !== undefined) {
-				if (!(idVal[0] == qid)) {
-					var add = idVal[0] + "%" + idVal[1] + ";";
-					qids += add;
-				}
-			}
-		}
+			 var idVal = storeVals[i].split("###");
+			 
+			 if(idVal[0] !== "" || idVal[1] !== undefined){
+				 if(!(idVal[0]==qid)){
+					 var add = idVal[0] + "%" + idVal[1] + ";";
+					 qids += add;
+				 }
+			 }
+		 }	
 	}
 
 	/* create query string for calling the checkrange method of the servlet */
 	var link = $.query.set("action", "checkRange").set("qids", qids).toString();
 	link = window.location.href.replace(window.location.search, "") + link;
-
+	
 	// checked on rangeRequest complete; TRUE means, every provided value is
 	// also within the value range (if one existed)
 	var checkRangeOK = true;
