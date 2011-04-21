@@ -497,16 +497,6 @@ Common Route - Late complications #14
 ------ "Central mesh failure (recurrence through the mesh)"
 ------ Increased patient risk
 ----- Other cause of recurrence [text]
-
-
-
-@package: Hernia
-%
-
-%%Resource
-Fig7_TorsoClickareas.jpg
-
-@path: Fig7.jpg
 @package: Hernia
 %
 
@@ -540,3 +530,5 @@ Dummy
 
 @package: Hernia
 %
+
+

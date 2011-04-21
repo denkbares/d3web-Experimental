@@ -1,3 +1,22 @@
+%%Resource
+@src=Fig6_MeshPos.JPG
+@path: Fig6_MeshPos.JPG
+@package: Hernia
+%
+%%Resource
+@src=Fig7_Areas.JPG
+@path: Fig7_Areas.JPG
+@package: Hernia
+%
+
+%%Property
+Mark the incisional hernia areas involved.description = IMG#####Fig7_Areas.JPG
+Localization of the concomitant incisional hernia.description = IMG#####Fig7_Areas.JPG
+Mesh position.description = IMG#####Fig6_MeshPos.JPG
+
+@package: Hernia
+%
+
 %%Property
 Year of birth.description = yyyy
 Scheduled date of operation.description = dd.MM.yyyy
