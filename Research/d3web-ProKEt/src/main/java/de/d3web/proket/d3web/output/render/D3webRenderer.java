@@ -131,7 +131,7 @@ public class D3webRenderer implements ID3webRenderer {
 	public ContainerCollection renderRoot(ContainerCollection cc,
 			Session d3webSession, HttpSession http) {
 
-		this.d3webSession = d3webSession;
+		D3webRenderer.d3webSession = d3webSession;
 
 		D3webConnector d3wcon = D3webConnector.getInstance();
 
@@ -242,9 +242,9 @@ public class D3webRenderer implements ID3webRenderer {
 				childrenHTML.append(childHTML);
 			}
 
-			// if the child is a question, check recusively for follow-up-qs
+			// if the child is a question, check recursively for follow-up-qs
 			// as this is done after having inserted the normal child, the
-			// follow up is appended inbetween the child and its follow-up
+			// follow up is appended in between the child and its follow-up
 			if (child instanceof Question) {
 				String fus = renderFollowUps(cc, child, to);
 				childrenHTML.append(fus);
@@ -291,8 +291,11 @@ public class D3webRenderer implements ID3webRenderer {
 				ID3webRenderer childRenderer = D3webRenderer.getRenderer(childsChild);
 
 				// receive the rendering code from the Renderer and append
-				String childHTML =
-						childRenderer.renderTerminologyObject(cc, childsChild, parent);
+				StringBuilder childHTML = new StringBuilder(
+						childRenderer.renderTerminologyObject(cc, childsChild, parent));
+				if (child instanceof Question) {
+					childHTML.append(renderFollowUps(cc, childsChild, parent));
+				}
 				if (childHTML != null) {
 					fus.append(childHTML);
 				}

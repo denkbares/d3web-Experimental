@@ -57,7 +57,7 @@ public class TableContainer {
 		colspan = limitColspan(id, colspan);
 
 		// set tables-element value at table.elements plus colspan
-		tables.get(id).elements = tables.get(id).elements + colspan;
+		tables.get(id).elements += colspan;
 	}
 
 	/**
@@ -139,7 +139,6 @@ public class TableContainer {
 		// generate the string
 		Table t = tables.get(id);
 		
-		StringBuilder bui = new StringBuilder();
 		int crit = 0;
 
 		// if elements + colspan divided by number of columns is zero, all
@@ -221,7 +220,7 @@ public class TableContainer {
 
 	/**
 	 * Limits the column span of a table to ensure, that nothing is spanned over
-	 * the limits of a table with fiven number of cols.
+	 * the limits of a table with given number of cols.
 	 * 
 	 * @created 09.10.2010
 	 * @param id id of the table element
