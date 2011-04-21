@@ -29,6 +29,7 @@ import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionText;
+import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.proket.utils.GlobalSettings;
 
 /**
@@ -69,8 +70,11 @@ public class D3webRendererMapping extends HashMap<String, String> {
 		this.put("Root", "D3webRenderer");
 		this.put("Default", "D3webRenderer");
 		this.put("Question", "QuestionD3webRenderer");
+		this.put("IMGQuestion", "ImageQuestionD3webRenderer");
 		this.put("QCont", "QuestionnaireD3webRenderer");
 
+		this.put("IMGOC", "AnswerImgOCD3webRenderer");
+		this.put("IMGMC", "AnswerImgMCD3webRenderer");
 		this.put("OC", "AnswerOCD3webRenderer");
 		// this.put("YN", prefix + "AnswerYND3webRenderer");
 		this.put("MC", "AnswerMCD3webRenderer");
@@ -97,6 +101,10 @@ public class D3webRendererMapping extends HashMap<String, String> {
 			}
 			else if (to instanceof Question) {
 				result = Class.forName(prefix + this.get("Question"));
+				if (to.getInfoStore().getValue(MMInfo.DESCRIPTION) != null &&
+						to.getInfoStore().getValue(MMInfo.DESCRIPTION).contains("IMG#####")) {
+					result = Class.forName(prefix + this.get("IMGQuestion"));
+				}
 			}
 			else if (to instanceof QContainer) {
 				result = Class.forName(prefix + this.get("QCont"));
@@ -139,12 +147,20 @@ public class D3webRendererMapping extends HashMap<String, String> {
 
 			if (to instanceof QuestionOC) {
 				result = Class.forName(prefix + this.get("OC"));
+				if (to.getInfoStore().getValue(MMInfo.DESCRIPTION) != null &&
+						to.getInfoStore().getValue(MMInfo.DESCRIPTION).contains("IMG#####")) {
+					result = Class.forName(prefix + this.get("IMGOC"));
+				}
 			}
 			// else if (parentto instanceof QuestionYN) {
 			// result = Class.forName(this.get("YN"));
 			// }
 			else if (to instanceof QuestionMC) {
 				result = Class.forName(prefix + this.get("MC"));
+				if (to.getInfoStore().getValue(MMInfo.DESCRIPTION) != null &&
+						to.getInfoStore().getValue(MMInfo.DESCRIPTION).contains("IMG#####")) {
+					result = Class.forName(prefix + this.get("IMGMC"));
+				}
 			}
 			else if (to instanceof QuestionText) {
 				result = Class.forName(prefix + this.get("TXT"));

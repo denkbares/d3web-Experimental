@@ -57,7 +57,7 @@ import de.d3web.proket.utils.TemplateUtils;
  * @author Martina Freiberg
  * @created 15.01.2011
  */
-public class QuestionD3webRenderer extends D3webRenderer {
+public class ImageQuestionD3webRenderer extends D3webRenderer {
 
 	@Override
 	/**

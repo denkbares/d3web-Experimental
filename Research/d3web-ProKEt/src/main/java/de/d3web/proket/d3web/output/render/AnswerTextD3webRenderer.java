@@ -103,11 +103,11 @@ public class AnswerTextD3webRenderer extends D3webRenderer {
 
 		// TODO IMG QUESTIONS TEST
 		String imgName = "";
-		String desc = tq.getInfoStore().getValue(MMInfo.DESCRIPTION);
-		if (desc.contains("IMG#####")) {
-			imgName = desc.replace("IMG#####", "");
-		}
-		st.setAttribute("img", imgName);
+		// String desc = tq.getInfoStore().getValue(MMInfo.DESCRIPTION);
+		// if (desc.contains("IMG#####")) {
+		// imgName = desc.replace("IMG#####", "");
+		// }
+		// st.setAttribute("img", imgName);
 		sb.append(st.toString());
 
 		super.makeTables(to, parent, cc, sb);
