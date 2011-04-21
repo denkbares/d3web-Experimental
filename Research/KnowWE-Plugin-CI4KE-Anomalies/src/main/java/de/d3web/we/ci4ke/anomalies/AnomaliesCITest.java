@@ -19,7 +19,7 @@
  */
 
 
-package de.d3web.we.ci4ke.testmodules;
+package de.d3web.we.ci4ke.anomalies;
 
 import de.d3web.we.ci4ke.testing.AbstractCITest;
 import de.d3web.we.ci4ke.testing.CITestResult;
