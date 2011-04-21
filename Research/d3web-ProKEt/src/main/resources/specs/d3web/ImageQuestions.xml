@@ -5,7 +5,7 @@
 	dstrategy="nextuaquestion" 
 	css="medi2cols, nonavigation" 
 	dialogcolumns="1"
-	questionnairecolumns="2"
+	questionnairecolumns="3"
 	userprefix = "" 
 	login = "no"
 	required = "none"

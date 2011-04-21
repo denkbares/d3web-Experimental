@@ -28,20 +28,15 @@ import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.knowledge.Resource;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
+import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.knowledge.terminology.QuestionDate;
-import de.d3web.core.knowledge.terminology.QuestionMC;
-import de.d3web.core.knowledge.terminology.QuestionNum;
-import de.d3web.core.knowledge.terminology.QuestionOC;
-import de.d3web.core.knowledge.terminology.QuestionText;
-import de.d3web.core.knowledge.terminology.info.BasicProperties;
+import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.interviewmanager.Form;
 import de.d3web.core.session.values.UndefinedValue;
-import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.utils.AttachmentHandlingD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
@@ -79,7 +74,7 @@ public class ImageQuestionD3webRenderer extends D3webRenderer {
 		// get the fitting template. In case user prefix was specified, the
 		// specific TemplateName is returned, otherwise, the base object name.
 		StringTemplate st = TemplateUtils.getStringTemplate(
-				super.getTemplateName("Question"), "html");
+				super.getTemplateName("ImageQuestionD3web"), "html");
 
 		// set some basic properties
 		st.setAttribute("fullId", "q_" + to.getName().replace(" ", "_"));
@@ -87,6 +82,7 @@ public class ImageQuestionD3webRenderer extends D3webRenderer {
 		st.setAttribute("count", D3webConnector.getInstance().getQuestionCount());
 
 		// TODO extend for HERNIA
+		// adapt to take Popup just from description name POP#####
 		// handling popups, defined in textfiles in the KB
 		String popupResName = "popup" + to.getName() + ".txt";
 
@@ -102,23 +98,6 @@ public class ImageQuestionD3webRenderer extends D3webRenderer {
 			}
 		}
 
-		if (to instanceof QuestionOC) {
-			st.setAttribute("type", "oc");
-		}
-		else if (to instanceof QuestionMC) {
-			st.setAttribute("type", "mc");
-			st.setAttribute("sendButton", "true");
-		}
-		else if (to instanceof QuestionNum) {
-			st.setAttribute("type", "num");
-			// st.setAttribute("sendButton", "true");
-		}
-		else if (to instanceof QuestionDate) {
-			st.setAttribute("type", "date");
-		}
-		else if (to instanceof QuestionText) {
-			st.setAttribute("type", "text");
-		}
 
 		// get d3web properties
 		Session sess = super.d3webSession;
@@ -126,8 +105,6 @@ public class ImageQuestionD3webRenderer extends D3webRenderer {
 		Blackboard bb = sess.getBlackboard();
 		Value val = bb.getValue((ValueObject) to);
 		Indication ind = bb.getIndication((InterviewObject) to);
-
-		to.getInfoStore().getValue(MMInfo.DESCRIPTION);
 
 		/* the following handles follow-up questions that get activated */
 		/* in the course of the interview (by indication) */
@@ -148,25 +125,6 @@ public class ImageQuestionD3webRenderer extends D3webRenderer {
 			}
 		}
 
-		/*
-		 * the following handles abstraction questions that get activated during
-		 * the interview when previous corresponding questions are answered
-		 */
-		if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
-
-			st.setAttribute("inactive", "true");
-			st.setAttribute("abstract", "true");
-
-			// check whether abstraction question has been implicitly answered
-			// by other, corresponding questions
-			if (val != null && UndefinedValue.isNotUndefinedValue(val) &&
-					!val.equals(Unknown.getInstance())) {
-				st.removeAttribute("inactive");
-				st.removeAttribute("qstate");
-				st.setAttribute("qstate", "question-d");
-			}
-		}
-
 		// check answer - if answered, mark question as done
 		if (val != null && UndefinedValue.isNotUndefinedValue(val)) {
 			st.removeAttribute("qstate");
@@ -180,6 +138,17 @@ public class ImageQuestionD3webRenderer extends D3webRenderer {
 			st.setAttribute("qstate", "question-c");
 		}
 
+		String imgName = "";
+		String desc = to.getInfoStore().getValue(MMInfo.DESCRIPTION);
+		if (desc.contains("IMG#####")) {
+			imgName = desc.replace("IMG#####", "");
+		}
+		st.setAttribute("image", imgName);
+
+		// read clicable-area coordinates from KB
+		String areas = getChoiceAreas(to);
+		st.setAttribute("areas", areas);
+
 		// underneath="within" a rendered question, always answers are rendered
 		super.renderChoices(st, cc, to);
 
@@ -189,5 +158,55 @@ public class ImageQuestionD3webRenderer extends D3webRenderer {
 		super.makeTables(to, parent, cc, sb);
 
 		return sb.toString();
+	}
+
+	/**
+	 * Get all the defined clickable areas of an image question and assemble
+	 * them to represent a html area map String: <area shape="circle"
+	 * coords="110,110,25" alt="Bremen.gif" href="Bremen.html" /> Therefore, a
+	 * basic StringTemplate representing one area tag is filled with coords and
+	 * shape.
+	 * 
+	 * @created 21.04.2011
+	 * @param to The terminologyObject (usually a question) the areas are
+	 *        defined for
+	 * @return HTML area map representing String
+	 */
+	protected String getChoiceAreas(TerminologyObject to) {
+
+		StringBuilder bui = new StringBuilder();
+
+		// imagequestions make sense for choice questions only so far
+		if (to instanceof QuestionChoice) {
+
+			for (Choice c : ((QuestionChoice) to).getAllAlternatives()) {
+
+				// basic StringTemplate file the shape and coords are inserted
+				// into
+				StringTemplate st = TemplateUtils.getStringTemplate(
+						getTemplateName("ImageAnswerD3web"), "html");
+
+				st.setAttribute("fullId", c.getName().replace(" ", "_"));
+
+				// if description = shape and coords for current Choice exist
+				if (c.getInfoStore().getValue(MMInfo.DESCRIPTION) != null) {
+
+					// split shape and coords
+					String[] asplit =
+							c.getInfoStore().getValue(MMInfo.DESCRIPTION).split("SHAPE");
+
+					st.setAttribute("coords", asplit[0]);
+					// default clicable area form should be rectangular
+					if (asplit[1] == "") {
+						st.setAttribute("shape", "rect");
+					}
+					else {
+						st.setAttribute("shape", asplit[1]);
+					}
+				}
+				bui.append(st.toString());
+			}
+		}
+		return bui.toString();
 	}
 }

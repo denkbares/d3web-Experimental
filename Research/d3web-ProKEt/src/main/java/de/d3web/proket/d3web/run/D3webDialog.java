@@ -1160,11 +1160,11 @@ public class D3webDialog extends HttpServlet {
 	private void streamImages() {
 
 		List<Resource> kbimages = D3webConnector.getInstance().getKb().getResources();
-		System.out.println(kbimages.toString());
+
 		if (kbimages != null && kbimages.size() != 0) {
 			for (Resource r : kbimages) {
 				String rname = r.getPathName();
-				System.out.println(r.getPathName());
+
 				if (rname.endsWith(".jpg") || rname.endsWith(".JPG")) {
 					BufferedImage bui = ImageHandler.getResourceAsBUI(r);
 					try {
