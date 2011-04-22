@@ -64,7 +64,7 @@ public class AnswerTextD3webRenderer extends D3webRenderer {
 		// get the fitting template. In case user prefix was specified, the
 		// specific TemplateName is returned, else the base object name.
 		StringTemplate st = TemplateUtils.getStringTemplate(
-					super.getTemplateName("TextImgAnswer"), "html");
+					super.getTemplateName("TextAnswer"), "html");
 
 		st.setAttribute("fullId", tq.getName().replace(" ", "_"));
 		st.setAttribute("realAnswerType", "text");

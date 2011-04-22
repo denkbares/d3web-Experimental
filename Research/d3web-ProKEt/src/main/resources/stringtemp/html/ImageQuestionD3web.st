@@ -1,16 +1,20 @@
-<div id="$fullId$" class="question imageQuestion $fullId$
-					$if(inactive)$ inactive $endif$ $qstate$">
+<div id="$fullId$" class="question imageQuestion
+					$if(inactive)$ inactive $endif$ $qstate$" >
 	$if(title)$$TitleTooltipButton()$$endif$
 	<div id="content-$fullId$" class="content-$fullId$ question-content">
 		$text$
 		<table>
 			<tr>
 				<td valign="center">
-					<img width="100%" src="kbimg/$image$" alt="$image$" usemap="#$fullId$-map">
-					<map name="$fullId$-map">
-						$if(areas)$$areas$$endif$
-					</map>
-					
+					<img width="$width$" src="kbimg/$image$" alt="$image$" 
+					$if(inactive)$
+						usemap="">
+					$else$
+						usemap="#$fullId$-map">
+							<map name="$fullId$-map">
+							$if(areas)$$areas$$endif$
+							</map>
+					$endif$
 				</td>
 			</tr>
 			<tr>

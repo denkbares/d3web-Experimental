@@ -7,21 +7,6 @@ PROTOTYPING
 DONE Titel aus dem Questionnaire rausziehen/eigen taggen
 
 
-BUG: Resource/File not found (StringTemplate oder auch d3web/...): 
-------------------------------------------------------------------
-- d3web neu kompilieren clean install, Eclipse refresh
-- dialog-prototyping neu kompilieren, Eclipse refresh, target ordner refresh.
-- control center starten. Müsste gehen.
-- WICHTIG: die Eclipse WTP Integration für Maven ist ESSENTIELL
-- Projekteinstellungen: maven libs müssen nach Web-INF/lib kopiert werden!
-
-
-NEU AUSCHECK:
--------------
-- .settings?! (müssen drinbleiben, da sonst Projekt nicht als WTP erkannt wird)
-- ggf. anpassen
-- rechtsklick auf Projekt, Properties, Deployment Maven Dependencies angeben dass in WEB-INF/lib
-
 
 GENERAL:
 --------
@@ -32,6 +17,7 @@ GENERAL:
 - DONE Table/Column Layout d3web!
 - DONE replace Renderer-chosing algorithm?! 
 	--> Erstmal so lassen
+	
 - Complete style/image refactoring: pull EVERYTHING out to CSS!!!
 - DefaultSettings: define all required default project paths, dialog settings and so on, noch durchgängig
 - Unterscheidung zwischen global settings und user settings (wichtig für richtige Dialoge die von mehreren
@@ -43,7 +29,6 @@ GENERAL:
   	 momentan All, NextForm, NextUAQuestion
   -- Abhängig vom Typ d3web reinladen oder nicht: für SingleForm/All braucht man den gesamten Tree von 
      Anfang an, für MultipleForm nicht
-- Bildfragen d3web
 - D3web Renderer erben lassen
 - Hierarchy/QuickI Dialogs d3web
 
@@ -60,14 +45,26 @@ FREECHOICE/QUICKI Dialog
 -- Datumsfragen
 
 
+TODO ALLGEMEIN
+-----------------
 
 -- IF ONE DIALOG IS OPENED/USED and we switch to another (ControlCenter) ALL FIELDS ARE DISPLAYED DISABLED?!?!!!!
--- REFACTOR ANSWER D3WEB RENDERERS
 -- REFACTOR D3webDialog?! Problem is with httpSession stuff and providing variables or not, depending on whether, 
 for example, login is enabled or not.
 -- SETTING values: only use the store, not the single val any more!
 -- REQUIRED VALUES: currently, only a single value can be specified as "always required", e.g., if its needed for
 	autosaving mechanism (filename assembly in the MEDIASTINITIS case). Make this more flexible to specify several vals?! 
+- REFACTOR Renderers URGENTLY
+- REFACTOR completely, check why dialogs quite slow
+
+
+TODO Doku
+---------
+HOW TO add new renderers for new widgets
+-- create StringTemplate file
+-- derive Renderer from D3webRenderer or sub-renderers
+-- adapt renderer chosing class RendererMapping
+
 
 -------------------------------------------
 --- MEDIASTINITIS (Projekt Herzmedizin) ---
@@ -103,7 +100,5 @@ DONE - Req Fields beim ersten abschicken direkt mitgeben
   --> Eigener mail-Alias für den Dialog
   --> Versand einer notification an den IT Menschen vom Projekt der dem entsprechenden
 	  Nutzer dann die Zugangsdaten nochmal schickt
-	  ODER
-  --> Plaintext PWer auf dem Server (ohne Zuordnung) ablegen, drüber iterieren, mit Checksumme
-	  prüfen aus dem Zuordnungsfile, dort wo es matcht, das Plaintext PW schicken
+	  
 		

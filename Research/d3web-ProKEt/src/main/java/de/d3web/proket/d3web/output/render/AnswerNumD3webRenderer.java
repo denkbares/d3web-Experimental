@@ -80,17 +80,37 @@ public class AnswerNumD3webRenderer extends D3webRenderer {
 
 		if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
 			st.setAttribute("readonly", "true");
+			st.setAttribute("inactive", "true");
 		}
-		else if (!isParentIndicated(to, bb)) {
-			st.setAttribute("readonly", "true");
+
+		else if (to.getParents()[0] instanceof Question) {
+			if (isIndicated(to, bb) ||
+					(isParentOfFollowUpQuIndicated(to, bb) &&
+						isIndicated(to, bb))) {
+				st.removeAttribute("readonly");
+				st.removeAttribute("inactive");
+			}
+			else {
+				st.setAttribute("readonly", "true");
+				st.setAttribute("inactive", "true");
+
+				// also remove possible set values
+				st.removeAttribute("selection");
+				st.setAttribute("selection", "");
+			}
 		}
-		else if (to.getParents() != null && to.getParents().length != 0
-				&& to.getParents()[0] instanceof Question
-				&& !isIndicated(to, bb)) {
-			st.setAttribute("readonly", "true");
-		}
+
+		// else if (!isParentIndicated(to, bb)) {
+		// st.setAttribute("readonly", "true");
+		// }
+		// else if (to.getParents() != null && to.getParents().length != 0
+		// && to.getParents()[0] instanceof Question
+		// && !isIndicated(to, bb)) {
+		// st.setAttribute("readonly", "true");
+		// }
 		else {
 			st.removeAttribute("readonly");
+			st.removeAttribute("inactive");
 		}
 
 		// / if not undefined and not unknown, value needs to be written into
@@ -100,7 +120,9 @@ public class AnswerNumD3webRenderer extends D3webRenderer {
 
 			if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
 				st.removeAttribute("readonly");
+				st.removeAttribute("inactive");
 			}
+			st.removeAttribute("selection");
 			st.setAttribute("selection", value);
 		}
 

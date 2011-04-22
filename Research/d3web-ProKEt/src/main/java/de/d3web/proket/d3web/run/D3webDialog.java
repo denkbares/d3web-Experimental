@@ -143,7 +143,7 @@ public class D3webDialog extends HttpServlet {
 			String kbImgPath = folderPath + "kbimg";
 			GlobalSettings.getInstance().setCaseFolder(persistencePath);
 			GlobalSettings.getInstance().setKbImgFolder(kbImgPath);
-			System.out.println(GlobalSettings.getInstance().getKbImgFolder());
+			// System.out.println(GlobalSettings.getInstance().getKbImgFolder());
 		}
 		/*
 		 * FOLDER PATH: get the folder on the server for persistence storing
@@ -201,7 +201,7 @@ public class D3webDialog extends HttpServlet {
 		// Get the current httpSession or a new one
 		HttpSession httpSession = request.getSession(true);
 
-		System.out.println(httpSession.getAttribute("imgStreamed"));
+		// System.out.println(httpSession.getAttribute("imgStreamed"));
 		// if (httpSession.getAttribute("imgStreamed") == null) {
 		streamImages();
 		// httpSession.setAttribute("imgStreamed", true);

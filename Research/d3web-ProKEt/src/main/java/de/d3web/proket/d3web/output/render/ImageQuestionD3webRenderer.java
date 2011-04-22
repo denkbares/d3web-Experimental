@@ -29,6 +29,7 @@ import de.d3web.core.knowledge.Resource;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
+import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
@@ -105,25 +106,37 @@ public class ImageQuestionD3webRenderer extends D3webRenderer {
 		Blackboard bb = sess.getBlackboard();
 		Value val = bb.getValue((ValueObject) to);
 		Indication ind = bb.getIndication((InterviewObject) to);
+		Indication parInd = bb.getIndication((InterviewObject) parent);
 
 		/* the following handles follow-up questions that get activated */
 		/* in the course of the interview (by indication) */
 		// check if parent had been a question --> so this is follow up q
-		if (to.getParents() != null && to.getParents().length != 0
-				&& to.getParents()[0] instanceof Question) {
+		
+		if (to.getParents() != null && to.getParents().length != 0) {
+			
+			if(to.getParents()[0] instanceof Question){
+				// check whether question has been indicated so far
+				if (ind.getState() == Indication.State.INDICATED
+						|| ind.getState() == Indication.State.INSTANT_INDICATED) {
 
-			// check whether question has been indicated so far
-			if (ind.getState() == Indication.State.INDICATED
-					|| ind.getState() == Indication.State.INSTANT_INDICATED) {
-				st.removeAttribute("inactive");
-				st.removeAttribute("qstate");
-				st.setAttribute("qstate", "");
+					st.removeAttribute("inactive");
+					st.removeAttribute("qstate");
+					st.setAttribute("qstate", "");
+				}
+				// otherwise follow-ups should be displayed inactive
+				else {
+					st.setAttribute("inactive", "true");
+				}
 			}
-			// otherwise follow-ups should be displayed inactive
-			else {
-				st.setAttribute("inactive", "true");
+			else if (to.getParents()[0] instanceof QContainer) {
+				if (!isParentIndicated(to, bb)) {
+					st.setAttribute("inactive", "true");
+				}
 			}
-		}
+			
+		} 
+		
+		
 
 		// check answer - if answered, mark question as done
 		if (val != null && UndefinedValue.isNotUndefinedValue(val)) {
@@ -138,12 +151,21 @@ public class ImageQuestionD3webRenderer extends D3webRenderer {
 			st.setAttribute("qstate", "question-c");
 		}
 
+		String[] split;
 		String imgName = "";
+		String width = "";
 		String desc = to.getInfoStore().getValue(MMInfo.DESCRIPTION);
 		if (desc.contains("IMG#####")) {
-			imgName = desc.replace("IMG#####", "");
+			split = desc.split("WIDTH#####");
+			imgName = split[0].replace("IMG#####", "");
+
+			if (split.length == 2) {
+				width = split[1];
+			}
+
 		}
 		st.setAttribute("image", imgName);
+		st.setAttribute("width", width);
 
 		// read clicable-area coordinates from KB
 		String areas = getChoiceAreas(to);
@@ -195,14 +217,19 @@ public class ImageQuestionD3webRenderer extends D3webRenderer {
 					String[] asplit =
 							c.getInfoStore().getValue(MMInfo.DESCRIPTION).split("SHAPE");
 
-					st.setAttribute("coords", asplit[0]);
-					// default clicable area form should be rectangular
-					if (asplit[1] == "") {
-						st.setAttribute("shape", "rect");
+					if (!asplit[0].equals("")) {
+						st.setAttribute("coords", asplit[0]);
 					}
-					else {
+					if (!asplit[1].equals("")) {
 						st.setAttribute("shape", asplit[1]);
 					}
+
+					// if no description given at all or part of the description
+					// is empty String then set defaults to avoid HTML errors
+				}
+				else {
+					st.setAttribute("coords", "0,0,0,0");
+					st.setAttribute("shape", "rect");
 				}
 				bui.append(st.toString());
 			}

@@ -17,8 +17,8 @@ DONE - 	Bildfragen Eingabe / Rendering über KB
 		Zwischenlösung, da Servlets immer nur entweder Text oder Bilder anzeigen können!
 DONE A - Markup für Popup, PDF, Summary Grids - Markup Möglichkeit mehrere Zeilen description
 
-- recursive display of follow up questions
-- repqair MC mechanism completely
+DONE A - recursive display of follow up questions
+- repair MC mechanism completely
 - MC Questions: send by clicking OK OR by leaving to another question
 - Rendering of
 	- Grid Base Inclusion
@@ -26,17 +26,24 @@ DONE A - Markup für Popup, PDF, Summary Grids - Markup Möglichkeit mehrere Zei
 	- Popups
 	
 - Refactor Image Questions Base Mechanism
-	-- input image questions via question[info] (text-only questions)
-	-- make Renderer (s) --> we need not image-only, but OC Image or MC image.
+	DONE -- make Renderer (s) --> we need not image-only, but OC Image or MC image.
 		sub-renderes of OC/MC? maybe adapt in renderer chosing method to ask there
 		if img or not and get respective Renderer
-	-- reasonable to have OWN property instead of .description?!
-- Styling of Image Questions
+	DONE -- Enable correct activation/deactivation of image maps (clickability) due to indication	
+	-- Styling of Image Questions
 - Connection of Image Questions and answer alternatives
 	--> create tailored st files and js functions
-	
+
+A - Properties d3web plugin to be able to input different properties as PDF, SummaryGrids etc in a 
+		cleaner manner
+A - Stop recursion for renderers mechanism
+A - Num Inputs: output in a way, the user provided input?!
+		
 	
 KLÄREN am 28.4.
 ---------------
 - Fall speichern/laden		
+
+
+
 		

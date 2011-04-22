@@ -10,8 +10,39 @@
 %
 
 %%Property
-Mark the incisional hernia areas involved.description = IMG#####Fig7_Areas.JPG
-Localization of the concomitant incisional hernia.description = IMG#####Fig7_Areas.JPG
+Mark the incisional hernia areas involved#M1.description = 194,144,257,199SHAPErect
+Mark the incisional hernia areas involved#M2.description = 194,199,257,300SHAPErect
+Mark the incisional hernia areas involved#M3.description = 194,300,257,382SHAPErect
+Mark the incisional hernia areas involved#M4.description = 194,382,257,457SHAPErect
+Mark the incisional hernia areas involved#M5.description = 194,457,257,516SHAPErect
+Mark the incisional hernia areas involved#L2_L.description = 121,300,194,382SHAPErect
+Mark the incisional hernia areas involved#L2_R.description = 257,300,333,382SHAPErect
+Mark the incisional hernia areas involved#L1_L.description = 121,300,194,162,194,300,121,300SHAPEpoly
+Mark the incisional hernia areas involved#L1_R.description = 257,300,257,164,333,300,257,300SHAPEpoly
+Mark the incisional hernia areas involved#L3_L.description = 121,382,194,511,194,382,121,382SHAPEpoly
+Mark the incisional hernia areas involved#L3_R.description = 333,382,257,511,257,382,333,382SHAPEpoly
+Mark the incisional hernia areas involved#L4_L.description = 121,300,79,315,77,366,121,382,121,300SHAPEpoly
+Mark the incisional hernia areas involved#L4_R.description = 333,382,377,368,377,315,333,300,333,382SHAPEpoly
+
+Localization of the concomitant incisional hernia#M1.description = 194,144,257,199SHAPErect
+Localization of the concomitant incisional hernia#M2.description = 194,199,257,300SHAPErect
+Localization of the concomitant incisional hernia#M3.description = 194,300,257,382SHAPErect
+Localization of the concomitant incisional hernia#M4.description = 194,382,257,457SHAPErect
+Localization of the concomitant incisional hernia#M5.description = 194,457,257,516SHAPErect
+Localization of the concomitant incisional hernia#L2_L.description = 121,300,194,382SHAPErect
+Localization of the concomitant incisional hernia#L2_R.description = 257,300,333,382SHAPErect
+Localization of the concomitant incisional hernia#L1_L.description = 121,300,194,162,194,300,121,300SHAPEpoly
+Localization of the concomitant incisional hernia#L1_R.description = 257,300,257,164,333,300,257,300SHAPEpoly
+Localization of the concomitant incisional hernia#L3_L.description = 121,382,194,511,194,382,121,382SHAPEpoly
+Localization of the concomitant incisional hernia#L3_R.description = 333,382,257,511,257,382,333,382SHAPEpoly
+Localization of the concomitant incisional hernia#L4_L.description = 121,300,79,315,77,366,121,382,121,300SHAPEpoly
+Localization of the concomitant incisional hernia#L4_R.description = 333,382,377,368,377,315,333,300,333,382SHAPEpoly
+@package: Hernia
+%
+
+%%Property
+Mark the incisional hernia areas involved.description = IMG#####Fig7_Areas.JPGWIDTH#####451
+Localization of the concomitant incisional hernia.description = IMG#####Fig7_Areas.JPGWIDTH#####451
 Mesh position.description = IMG#####Fig6_MeshPos.JPG
 
 @package: Hernia
