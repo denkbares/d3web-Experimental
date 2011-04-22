@@ -85,10 +85,10 @@ public class QuestionD3webRenderer extends D3webRenderer {
 		st.setAttribute("title", to.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getQuestionCount());
 
-		// TODO extend for HERNIA
-		// handling popups, defined in textfiles in the KB
+		// TODO extend for HERNIA --> Popup in separate Window?!
+		// so far: handling overlay (tooltip) popups, defined in textfiles in
+		// the KB
 		String popupResName = "popup" + to.getName() + ".txt";
-
 		Resource res = D3webConnector.getInstance().getKb().getResource(popupResName);
 		if (res != null) {
 			try {

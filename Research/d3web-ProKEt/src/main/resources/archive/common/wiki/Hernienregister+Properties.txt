@@ -8,6 +8,11 @@
 @path: Fig7_Areas.JPG
 @package: Hernia
 %
+%%Resource
+@src=popupTest.txt
+@path: popupIndication for surgery.txt
+@package: Hernia
+%
 
 %%Property
 Mark the incisional hernia areas involved#M1.description = 194,144,257,199SHAPErect

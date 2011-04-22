@@ -115,7 +115,7 @@ Incisional ventral hernia route
 -- Completely reducible
 -- Partially reducible
 -- Non reducible
-- Indication for surgery: [oc]
+- Indication for surgery [oc]
 -- Elective
 -- Emergency
 - Mark the incisional hernia areas involved [mc]
