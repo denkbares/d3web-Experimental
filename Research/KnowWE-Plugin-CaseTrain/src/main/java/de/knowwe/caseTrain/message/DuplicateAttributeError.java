@@ -23,7 +23,7 @@ import de.d3web.we.kdom.report.KDOMError;
 
 /**
  * 
- * @author ManiaC
+ * @author Johannes Dienst
  * @created 20.04.2011
  */
 public class DuplicateAttributeError extends KDOMError {
