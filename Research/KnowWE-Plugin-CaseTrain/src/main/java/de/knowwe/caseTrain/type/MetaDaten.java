@@ -20,7 +20,6 @@
 package de.knowwe.caseTrain.type;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,18 +27,21 @@ import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.rendering.NothingRenderer;
 import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.KDOMWarning;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.LineSectionFinder;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.caseTrain.message.MissingAttributeError;
 import de.knowwe.caseTrain.type.MetaLine.AttributeName;
 import de.knowwe.caseTrain.type.general.BlockMarkupType;
 import de.knowwe.caseTrain.util.Utils;
@@ -55,12 +57,10 @@ import de.knowwe.caseTrain.util.Utils;
  */
 public class MetaDaten extends BlockMarkupType {
 
-	public static final String CASE_ID_KEY = "FALL_ID";
-
 	public MetaDaten() {
 		super("Metadaten");
 		this.addContentType(new MetaLine());
-		
+
 		this.setCustomRenderer(new KnowWEDomRenderer<MetaLine>() {
 
 			@Override
@@ -78,7 +78,7 @@ public class MetaDaten extends BlockMarkupType {
 				string.append(KnowWEUtils.maskHTML("<th>Metadaten:</th><th></th>"));
 				DelegateRenderer.getInstance().render(article, sec, user, string);
 				string.append(KnowWEUtils.maskHTML("</table>"));
-				
+
 			}
 		});
 		this.addSubtreeHandler(new GeneralSubtreeHandler<MetaLine>() {
@@ -87,18 +87,7 @@ public class MetaDaten extends BlockMarkupType {
 			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<MetaLine> s) {
 				List<Section<AttributeName>> atts = new ArrayList<Section<AttributeName>>();
 				Sections.findSuccessorsOfType(s, AttributeName.class, atts);
-				boolean found = false;
-				for (Section<AttributeName> section : atts) {
-					if (section.getOriginalText().trim().startsWith(CASE_ID_KEY)) {
-						found = true;
-					}
-				}
-
-				if (found == false) {
-					return Arrays.asList((KDOMReportMessage) new MissingAttributeError(
-							CASE_ID_KEY));
-				}
-				return new ArrayList<KDOMReportMessage>(0);
+				return MetaAttributes.getInstance().compareAttributeList(atts);
 			}
 		});
 	}
@@ -112,11 +101,10 @@ public class MetaDaten extends BlockMarkupType {
 
 class MetaLine extends AbstractType {
 
-
-
 	public MetaLine() {
 		this.setSectionFinder(new LineSectionFinder());
 		this.addChildType(new AttributeName());
+		this.addChildType(new Delimiter());
 		this.addChildType(new AttributeContent());
 
 		this.setCustomRenderer(new KnowWEDomRenderer<MetaLine>() {
@@ -130,19 +118,39 @@ class MetaLine extends AbstractType {
 
 			}
 		});
-		
+
+
+	}
+
+	class Delimiter extends AbstractType {
+
+		public Delimiter() {
+			this.setSectionFinder(new RegexSectionFinder(":"));
+			this.setCustomRenderer(NothingRenderer.getInstance());
+		}
 
 	}
 
 	class AttributeName extends AbstractType {
 
 		public AttributeName() {
-			this.setSectionFinder(new RegexSectionFinder(".*?:"));
+			this.setSectionFinder(new SectionFinder(){
+
+				@Override
+				public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
+					int ende = text.indexOf(":");
+					List<SectionFinderResult> res = new ArrayList<SectionFinderResult>();
+					if (ende != -1) {
+						res.add(new SectionFinderResult(0, ende));
+					}
+					return res;
+				}
+
+			});
 			this.setCustomRenderer(new KnowWEDomRenderer<MetaLine>() {
 
 				@Override
 				public void render(KnowWEArticle article, Section<MetaLine> sec, UserContext user, StringBuilder string) {
-
 					string.append(KnowWEUtils.maskHTML("<td>"));
 					DelegateRenderer.getInstance().render(article, sec, user, string);
 					string.append(KnowWEUtils.maskHTML("</td>"));
