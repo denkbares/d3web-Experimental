@@ -20,7 +20,22 @@
 
 package de.knowwe.caseTrain.type;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.basic.PlainText;
+import de.d3web.we.kdom.report.KDOMReportMessage;
+import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
+import de.knowwe.caseTrain.message.MissingContentWarning;
+import de.knowwe.caseTrain.message.MissingPictureWarning;
+import de.knowwe.caseTrain.message.MissingTitleError;
+import de.knowwe.caseTrain.type.general.Bild;
 import de.knowwe.caseTrain.type.general.BlockMarkupType;
+import de.knowwe.caseTrain.type.general.Title;
 
 /**
  * 
@@ -33,6 +48,31 @@ public class Abschluss extends BlockMarkupType {
 
 	public Abschluss() {
 		super("Abschluss");
+		this.addSubtreeHandler(new GeneralSubtreeHandler<Abschluss>() {
+
+			@Override
+			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Abschluss> s) {
+
+				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
+
+				Section<Title> title = Sections.findSuccessor(s, Title.class);
+				if (title == null) {
+					messages.add(new MissingTitleError(Title.TITLE));
+				}
+
+				Section<PlainText> plain = Sections.findSuccessor(s, PlainText.class);
+				if (plain == null) {
+					messages.add(new MissingContentWarning());
+				}
+
+				Section<Bild> pic = Sections.findSuccessor(s, Bild.class);
+				if (pic == null) {
+					messages.add(new MissingPictureWarning());
+				}
+
+				return messages;
+			}
+		});
 	}
 
 	@Override

@@ -35,7 +35,7 @@ import de.knowwe.caseTrain.renderer.MouseOverTitleRenderer;
 
 /**
  * 
- * * A simple Type to capture a section of a page using a start/end-tag and a
+ * A simple Type to capture a section of a page using a start/end-tag and a
  * keyword. Vontent-types can be added. Error messages are rendered as summary
  * at the top of the block.
  * 
@@ -57,6 +57,10 @@ public class SubblockMarkup extends AbstractType {
 		return this.getClass().getSimpleName();
 	}
 
+	// TODO: The SubblockMarkupContent captures the whole text in a Subblock
+	// so childTypes in extending types are not considered. Perhaps define
+	// a Constructor with a list of childtypes as parameters. this could
+	// solve this issue
 	public SubblockMarkup(String key) {
 		this.key = key;
 

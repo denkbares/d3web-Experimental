@@ -23,6 +23,7 @@ package de.knowwe.caseTrain.type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
@@ -77,6 +78,10 @@ public class Info extends BlockMarkupType {
 		};
 	}
 
+	private final String FRAGE = "Frage";
+	private final String EINLEITUNG = "Einleitung";
+	private final String ABSCHLUSS = "Abschluss";
+
 	public Info() {
 		super("Info");
 		this.addContentType(new Hinweis());
@@ -105,7 +110,6 @@ public class Info extends BlockMarkupType {
 				DelegateRenderer.getInstance().render(article, sec, user, string);
 				string.append(KnowWEUtils.maskHTML("<div class='Infoend'></div>"));
 				string.append(KnowWEUtils.maskHTML("</div>"));
-
 			}
 		});
 
@@ -113,12 +117,26 @@ public class Info extends BlockMarkupType {
 
 			@Override
 			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Info> s) {
+
+				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
+
 				Section<Frage> frageSection = Sections.findSuccessor(s, Frage.class);
 				if (frageSection == null) {
-					return Arrays.asList((KDOMReportMessage) new MissingComponentWarning(
-							"Frage"));
+					messages.add(new MissingComponentWarning(FRAGE));
 				}
-				return new ArrayList<KDOMReportMessage>(0);
+
+				// TODO: This is right, as long as a Page contains ONLY ONE Case
+				Section<Einleitung> einleitung = Sections.findSuccessor(s.getFather(), Einleitung.class);
+				if (einleitung == null) {
+					messages.add(new MissingComponentWarning(EINLEITUNG));
+				}
+				Section<Abschluss> abschluss = Sections.findSuccessor(s.getFather(), Abschluss.class);
+				if (abschluss == null) {
+					messages.add(new MissingComponentWarning(ABSCHLUSS));
+				}
+				////////////////////////////////////////////////////////////////
+
+				return messages;
 			}
 		});
 	}
@@ -173,7 +191,7 @@ class Antworten extends SubblockMarkup {
 						}
 						catch (Exception e) {
 							return Arrays.asList((KDOMReportMessage) new InvalidArgumentError(
-										" Nur '+' oder '-' oder Zahlen zwischen 0 und 1 erlaubt!"));
+							" Nur '+' oder '-' oder Zahlen zwischen 0 und 1 erlaubt!"));
 						}
 
 						return new ArrayList<KDOMReportMessage>(0);
@@ -201,6 +219,19 @@ class Frage extends SubblockMarkup {
 		super("Frage");
 		this.addChildType(new Title());
 		this.addContentType(new Bild());
+
+		//		this.addSubtreeHandler(new GeneralSubtreeHandler<Frage>() {
+		//
+		//			@Override
+		//			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Frage> s) {
+		//
+		//				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
+		//
+		//				// TODO
+		//
+		//				return messages;
+		//			}
+		//		});
 	}
 
 }

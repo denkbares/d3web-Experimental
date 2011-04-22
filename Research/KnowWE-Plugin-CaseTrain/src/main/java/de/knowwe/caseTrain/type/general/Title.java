@@ -41,6 +41,8 @@ import de.d3web.we.utils.KnowWEUtils;
  */
 public class Title extends AbstractType {
 
+	public static final String TITLE = "Titel";
+
 	public Title() {
 		ConstraintSectionFinder cf = new ConstraintSectionFinder(new LineSectionFinder());
 		cf.addConstraint(ExactlyOneFindingConstraint.getInstance());
@@ -52,13 +54,13 @@ public class Title extends AbstractType {
 			@Override
 			public void render(KnowWEArticle article, Section<Title> sec, UserContext user, StringBuilder string) {
 				if (sec.getOriginalText().trim().equals("")) return; // if empty
-																		// do
-																		// nothing
+				// do
+				// nothing
 				Section<? extends Type> father = sec.getFather().getFather();
 				String classPrefix = father.get().getClass().getSimpleName();
 
 				string.append(KnowWEUtils.maskHTML("<div class='" +
-							"Titel"
+						"Titel"
 						+ "'>"));
 				DelegateRenderer.getInstance().render(article, sec, user, string);
 				string.append(KnowWEUtils.maskHTML("</div>"));

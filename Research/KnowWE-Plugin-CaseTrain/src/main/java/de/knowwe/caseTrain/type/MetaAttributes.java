@@ -99,7 +99,6 @@ public class MetaAttributes {
 		List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>();
 		Set<String> foundOnes = new TreeSet<String>();
 
-		// TODO: Ugly. AttributeName should be without ":"
 		String ori = "";
 		for (Section<AttributeName> section : atts) {
 			ori = section.getOriginalText().trim();
@@ -116,7 +115,7 @@ public class MetaAttributes {
 
 		for (String s : this.attributes.keySet()) {
 			if (!foundOnes.contains(this.attributes.get(s))) {
-				messages.add(new MissingAttributeError(s));
+				messages.add(new MissingAttributeError(this.attributes.get(s)));
 			}
 		}
 
