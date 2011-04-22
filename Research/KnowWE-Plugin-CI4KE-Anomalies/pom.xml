@@ -6,8 +6,9 @@
     <version>0.2-SNAPSHOT</version>
   </parent>
   <groupId>de.uniwue.d3web</groupId>
-  <artifactId>KnowWE-Plugin-CI4KE-Anomalies-jpf-plugin</artifactId>
+  <artifactId>KnowWE-Plugin-CI4KE-Anomalies</artifactId>
   <version>0.2-SNAPSHOT</version>
+  <name>KnowWE Plugin: CI4KE Anomalies</name>
   <dependencies>
   	<dependency>
   		<groupId>de.uniwue.d3web</groupId>
