@@ -10,20 +10,16 @@
 		<library id="de.d3web" path="." type="code">
 			<export prefix="*" />
 		</library>
-		<library id="webapp" path="webapp/" type="resources">
-			<export prefix="*" />
-		</library>
+		
 	</runtime>
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="AbstractCITest"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
 		id="AnomaliesCITest">
-		<parameter id="class"
-			value="de.d3web.we.ci4ke.anomalies.AnomaliesCITest" />
+		<parameter id="class" value="de.d3web.we.ci4ke.anomalies.AnomaliesCITest" />
 		<parameter id="name" value="AnomaliesCITest" />
 		<parameter id="description" value="AbstractCITest AnomaliesCITest" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="scope" value="root" />
 	</extension>
 	
 </plugin>
