@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -70,10 +70,12 @@ public class Info extends BlockMarkupType {
 	@Override
 	public MessageRenderer getWarningRenderer() {
 		return new MessageRenderer() {
+
 			@Override
 			public String preRenderMessage(KDOMReportMessage m, UserContext user) {
 				return "";
 			}
+
 			@Override
 			public String postRenderMessage(KDOMReportMessage m, UserContext user) {
 				return "";
@@ -129,15 +131,17 @@ public class Info extends BlockMarkupType {
 				}
 
 				// TODO: This is right, as long as a Page contains ONLY ONE Case
-				Section<Einleitung> einleitung = Sections.findSuccessor(s.getFather(), Einleitung.class);
+				Section<Einleitung> einleitung = Sections.findSuccessor(s.getFather(),
+						Einleitung.class);
 				if (einleitung == null) {
 					messages.add(new MissingComponentWarning(EINLEITUNG));
 				}
-				Section<Abschluss> abschluss = Sections.findSuccessor(s.getFather(), Abschluss.class);
+				Section<Abschluss> abschluss = Sections.findSuccessor(s.getFather(),
+						Abschluss.class);
 				if (abschluss == null) {
 					messages.add(new MissingComponentWarning(ABSCHLUSS));
 				}
-				////////////////////////////////////////////////////////////////
+				/////////////////////////////////////////////////////////////////
 
 				return messages;
 			}
@@ -154,6 +158,7 @@ class Antworten extends SubblockMarkup {
 	}
 
 	class Antwort extends AbstractType {
+
 		public Antwort() {
 			this.setSectionFinder(new LineSectionFinder());
 			this.setCustomRenderer(new DivStyleClassRenderer("Antwort"));
@@ -161,7 +166,9 @@ class Antworten extends SubblockMarkup {
 		}
 
 		class AntwortKorrektheit extends AbstractType {
+
 			String regex = "\\{(.*?)\\}";
+
 			public AntwortKorrektheit() {
 				ConstraintSectionFinder csf = new ConstraintSectionFinder(
 						new RegexSectionFinder(regex));
@@ -177,7 +184,9 @@ class Antworten extends SubblockMarkup {
 					this.setSectionFinder(new RegexSectionFinder(regex, Pattern.DOTALL, 1));
 					this.addSubtreeHandler(new AntwortKorrektheitChecker());
 				}
+
 				private final class AntwortKorrektheitChecker extends GeneralSubtreeHandler<AntwortKorrektheitContent> {
+
 					@Override
 					public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<AntwortKorrektheitContent> s) {
 						String content = s.getOriginalText().trim();
@@ -216,9 +225,8 @@ class Hinweis extends SubblockMarkup {
 }
 
 /*
- *  TODO: The Regex for ChildTypes are not save.
- *        Specifications of the markup are not clear yet
- *        Johannes: 25.04.2011
+ * TODO: The Regex for ChildTypes are not save. Specifications of the markup are
+ * not clear yet Johannes: 25.04.2011
  */
 class Frage extends SubblockMarkup {
 
@@ -262,18 +270,18 @@ class Frage extends SubblockMarkup {
 		});
 	}
 
-	class FrageTyp extends AbstractType  {
+	class FrageTyp extends AbstractType {
 
 		public FrageTyp() {
-			// TODO: Should Match, OC, 1-MC, NUM
-			this.setSectionFinder(new RegexSectionFinder("[1-9]+\\-MC"));
+			this.setSectionFinder(new RegexSectionFinder("([1-9]+\\-MC|OC|NUM)"));
 		}
 
 	}
 
 	class FrageText extends AbstractType {
+
 		public FrageText() {
-			this.setSectionFinder(new SectionFinder(){
+			this.setSectionFinder(new SectionFinder() {
 
 				@Override
 				public List<SectionFinderResult> lookForSections(String text, Section<?> father,
@@ -281,7 +289,7 @@ class Frage extends SubblockMarkup {
 					int index = text.indexOf("?");
 					List<SectionFinderResult> res = new ArrayList<SectionFinderResult>();
 					if (index != -1) {
-						res.add(new SectionFinderResult(0, index+1));
+						res.add(new SectionFinderResult(0, index + 1));
 					}
 					return res;
 				}
@@ -290,6 +298,7 @@ class Frage extends SubblockMarkup {
 	}
 
 	class FrageGewicht extends AbstractType {
+
 		public FrageGewicht() {
 			this.setSectionFinder(new RegexSectionFinder("[0]?[1-9]+"));
 		}
