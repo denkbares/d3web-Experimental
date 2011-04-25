@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -44,7 +44,6 @@ import de.d3web.core.session.SessionObjectSource;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.blackboard.Facts;
-import de.d3web.core.session.blackboard.SessionObject;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.owl.IRIUtils;
 import de.d3web.owl.OWLOntologyUtil;
@@ -55,11 +54,11 @@ import de.d3web.owl.assignment.AssignmentSet;
 
 /**
  * PSMethod which delegates reasoning to an external OWL-Reasoner.
- *
+ * 
  * @author Sebastian Furth
  * @created Mar 3, 2011
  */
-public class PSMethodOWL implements PSMethod, SessionObjectSource {
+public class PSMethodOWL implements PSMethod, SessionObjectSource<OWLSessionObject> {
 
 	// Just for convenience and code beautification
 	private final Logger logger = Logger.getLogger(this.getClass().getName());
@@ -221,12 +220,10 @@ public class PSMethodOWL implements PSMethod, SessionObjectSource {
 	}
 
 	@Override
-	public SessionObject createSessionObject(Session session) {
+	public OWLSessionObject createSessionObject(Session session) {
 		OntologyProvider provider = session.getKnowledgeBase().getKnowledgeStore().getKnowledge(
 				OntologyProvider.KNOWLEDGE_KIND);
-		return new OWLSessionObject(this, provider.createOntologyInstance());
+		return new OWLSessionObject(provider.createOntologyInstance());
 	}
-
-
 
 }
