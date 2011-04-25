@@ -30,6 +30,7 @@ import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
@@ -41,6 +42,8 @@ import de.d3web.we.kdom.report.KDOMWarning;
 import de.d3web.we.kdom.report.MessageRenderer;
 import de.d3web.we.kdom.sectionFinder.LineSectionFinder;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
@@ -184,7 +187,6 @@ class Antworten extends SubblockMarkup {
 							if (content.equals(string)) {
 								return new ArrayList<KDOMReportMessage>(0);
 							}
-
 						}
 						try {
 							Double.parseDouble(content);
@@ -213,27 +215,85 @@ class Hinweis extends SubblockMarkup {
 
 }
 
+/*
+ *  TODO: The Regex for ChildTypes are not save.
+ *        Specifications of the markup are not clear yet
+ *        Johannes: 25.04.2011
+ */
 class Frage extends SubblockMarkup {
+
+	private final String FRAGE_TYPE = "Fragetyp";
+	private final String FRAGE_TEXT = "Fragetext";
+	private final String FRAGE_GEWICHT = "Fragegewicht";
 
 	public Frage() {
 		super("Frage");
 		this.addChildType(new Title());
 		this.addContentType(new Bild());
+		this.addContentType(new FrageTyp());
+		this.addContentType(new FrageText());
+		this.addContentType(new FrageGewicht());
 
-		//		this.addSubtreeHandler(new GeneralSubtreeHandler<Frage>() {
-		//
-		//			@Override
-		//			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Frage> s) {
-		//
-		//				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
-		//
-		//				// TODO
-		//
-		//				return messages;
-		//			}
-		//		});
+		this.addSubtreeHandler(new GeneralSubtreeHandler<Frage>() {
+
+			@Override
+			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Frage> s) {
+
+				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
+
+				Section<FrageTyp> typSection = Sections.findSuccessor(s, FrageTyp.class);
+				if (typSection == null) {
+					messages.add(new MissingComponentWarning(FRAGE_TYPE));
+				}
+
+				Section<FrageText> fragetextSection = Sections.findSuccessor(s,
+						FrageText.class);
+				if (fragetextSection == null) {
+					messages.add(new MissingComponentWarning(FRAGE_TEXT));
+				}
+				Section<FrageGewicht> fragegewichtSection = Sections.findSuccessor(s,
+						FrageGewicht.class);
+				if (fragegewichtSection == null) {
+					messages.add(new MissingComponentWarning(FRAGE_GEWICHT));
+				}
+
+				return messages;
+			}
+		});
 	}
 
+	class FrageTyp extends AbstractType  {
+
+		public FrageTyp() {
+			// TODO: Should Match, OC, 1-MC, NUM
+			this.setSectionFinder(new RegexSectionFinder("[1-9]+\\-MC"));
+		}
+
+	}
+
+	class FrageText extends AbstractType {
+		public FrageText() {
+			this.setSectionFinder(new SectionFinder(){
+
+				@Override
+				public List<SectionFinderResult> lookForSections(String text, Section<?> father,
+						Type type) {
+					int index = text.indexOf("?");
+					List<SectionFinderResult> res = new ArrayList<SectionFinderResult>();
+					if (index != -1) {
+						res.add(new SectionFinderResult(0, index+1));
+					}
+					return res;
+				}
+			});
+		}
+	}
+
+	class FrageGewicht extends AbstractType {
+		public FrageGewicht() {
+			this.setSectionFinder(new RegexSectionFinder("[0]?[1-9]+"));
+		}
+	}
 }
 
 class Erkl extends SubblockMarkup {

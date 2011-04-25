@@ -57,10 +57,6 @@ public class SubblockMarkup extends AbstractType {
 		return this.getClass().getSimpleName();
 	}
 
-	// TODO: The SubblockMarkupContent captures the whole text in a Subblock
-	// so childTypes in extending types are not considered. Perhaps define
-	// a Constructor with a list of childtypes as parameters. this could
-	// solve this issue
 	public SubblockMarkup(String key) {
 		this.key = key;
 
@@ -96,6 +92,13 @@ public class SubblockMarkup extends AbstractType {
 		return this.key;
 	}
 
+	/**
+	 * Types can be added to contentType of the SubblockMarkup
+	 * for refining the KDOM.
+	 * 
+	 * @created 25.04.2011
+	 * @param t
+	 */
 	public void addContentType(Type t) {
 		content.addChildType(t);
 	}

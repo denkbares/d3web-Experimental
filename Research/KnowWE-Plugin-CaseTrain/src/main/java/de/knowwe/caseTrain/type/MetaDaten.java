@@ -111,11 +111,9 @@ class MetaLine extends AbstractType {
 
 			@Override
 			public void render(KnowWEArticle article, Section<MetaLine> sec, UserContext user, StringBuilder string) {
-
 				string.append(KnowWEUtils.maskHTML("<tr>"));
 				DelegateRenderer.getInstance().render(article, sec, user, string);
 				string.append(KnowWEUtils.maskHTML("</tr>"));
-
 			}
 		});
 
