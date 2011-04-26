@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -90,19 +90,19 @@ import de.d3web.proket.utils.IDUtils;
  * a loose binding: if no d3web etc session exists, a new d3web session is
  * created and knowledge base and specs are read from the corresponding XML
  * specfication.
- * 
+ *
  * Basically, when the user selects answers in the dialog, those are transferred
  * back via AJAX calls and processed by this servlet. Here, values are
  * propagated to the d3web session (and later re-read by the renderers).
- * 
+ *
  * Both browser refresh and pressing the "new case"/"neuer Fall" Button in the
  * dialog leads to the creation of a new d3web session, i.e. all values set so
  * far are discarded, and an "empty" problem solving session begins.
- * 
+ *
  * @author Martina Freiberg
- * 
+ *
  * @date 14.01.2011; Update: 28/01/2011
- * 
+ *
  */
 public class D3webDialog extends HttpServlet {
 
@@ -125,7 +125,7 @@ public class D3webDialog extends HttpServlet {
 	/**
 	 * Basic initialization and servlet method. Always called first, if servlet
 	 * is refreshed, called newly etc.
-	 * 
+	 *
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
@@ -325,7 +325,7 @@ public class D3webDialog extends HttpServlet {
 
 	/**
 	 * Basic servlet method for displaying the dialog.
-	 * 
+	 *
 	 * @created 28.01.2011
 	 * @param request
 	 * @param response
@@ -417,7 +417,7 @@ public class D3webDialog extends HttpServlet {
 	 * Add one or several given facts. Thereby, first check whether input-store
 	 * has elements, if yes, parse them and set them (for num/text/date
 	 * questions), if no, just parse and set a given single value.
-	 * 
+	 *
 	 * @created 28.01.2011
 	 * @param request ServletRequest
 	 * @param response ServletResponse
@@ -536,7 +536,7 @@ public class D3webDialog extends HttpServlet {
 
 	/**
 	 * Saving a case.
-	 * 
+	 *
 	 * @created 08.03.2011
 	 * @param request ServletRequest
 	 * @param response ServletResponse
@@ -668,7 +668,7 @@ public class D3webDialog extends HttpServlet {
 
 	/**
 	 * Loading a case.
-	 * 
+	 *
 	 * @created 09.03.2011
 	 * @param request ServletRequest
 	 * @param response ServletResponse
@@ -761,7 +761,7 @@ public class D3webDialog extends HttpServlet {
 	 * Utility method for adding values. Adds a single value for a given
 	 * question to the current knowledge base in the current problem solving
 	 * session.
-	 * 
+	 *
 	 * @created 28.01.2011
 	 * @param termObID The ID of the TerminologyObject, the value is to be
 	 *        added.
@@ -830,13 +830,13 @@ public class D3webDialog extends HttpServlet {
 
 					String[] choices = valString.split(",");
 					List<Choice> cs = new ArrayList<Choice>();
-					
+
 					for (String c : choices) {
 						cs.add(new Choice(c));
 					}
 					value = MultipleChoiceValue.fromChoices(cs);
 				}
-						
+
 
 					// valueString is a comma separated list of the IDs of the
 					// selected items
@@ -937,7 +937,7 @@ public class D3webDialog extends HttpServlet {
 	 * Utility method for resetting follow-up questions due to setting their
 	 * parent question to Unknown. Then, the childrens' value should also be
 	 * removed again, recursively also for childrens' children and so on.
-	 * 
+	 *
 	 * @created 31.01.2011
 	 * @param parent The parent TerminologyObject
 	 * @param blackboard The currently active blackboard
@@ -968,7 +968,7 @@ public class D3webDialog extends HttpServlet {
 
 	/**
 	 * Utility method for resetting
-	 * 
+	 *
 	 * @created 09.03.2011
 	 * @param parent
 	 * @param bb
@@ -1004,7 +1004,7 @@ public class D3webDialog extends HttpServlet {
 	/**
 	 * Utility method for checking whether a given terminology object is
 	 * indicated or instant_indicated or not in the current session.
-	 * 
+	 *
 	 * @created 09.03.2011
 	 * @param to The terminology object to check
 	 * @param bb
@@ -1026,7 +1026,7 @@ public class D3webDialog extends HttpServlet {
 	/**
 	 * Utility method for checking whether the parent object of a given
 	 * terminology object is (instant) indicated.
-	 * 
+	 *
 	 * @created 09.03.2011
 	 * @param to The terminology object, the parent of which is to be checked.
 	 * @param bb
@@ -1059,7 +1059,7 @@ public class D3webDialog extends HttpServlet {
 	 * Utility method that checks, whether a TerminologyObject child is the
 	 * child of another TerminologyObject parent. That is, whether child is
 	 * nested hierarchically underneath parent.
-	 * 
+	 *
 	 * @created 30.01.2011
 	 * @param parent The parent TerminologyObject
 	 * @param child The child to check
@@ -1085,7 +1085,7 @@ public class D3webDialog extends HttpServlet {
 	/**
 	 * Check, whether the user has permissions to log in. Permissions are stored
 	 * in userdat.csv in cases parent folder
-	 * 
+	 *
 	 * @created 15.03.2011
 	 * @param user The user name.
 	 * @param password The password.
@@ -1130,7 +1130,7 @@ public class D3webDialog extends HttpServlet {
 	 * Checks, whether a potentially required value is already set in the KB or
 	 * is contained in the current set of values to write to the KB. If yes, the
 	 * method returns true, if no, false.
-	 * 
+	 *
 	 * @created 15.04.2011
 	 * @param requiredVal The required value that is to check
 	 * @param sess The d3webSession

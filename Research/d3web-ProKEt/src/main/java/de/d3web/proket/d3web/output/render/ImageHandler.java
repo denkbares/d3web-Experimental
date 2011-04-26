@@ -18,7 +18,6 @@ public class ImageHandler {
 
 	public static BufferedImage getResourceAsBUI(Resource r) {
 		BufferedImage bui = null;
-
 		if (r != null) {
 
 			Image image = null;
