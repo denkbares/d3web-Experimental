@@ -30,7 +30,6 @@ import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
@@ -42,14 +41,14 @@ import de.d3web.we.kdom.report.KDOMWarning;
 import de.d3web.we.kdom.report.MessageRenderer;
 import de.d3web.we.kdom.sectionFinder.LineSectionFinder;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
 import de.knowwe.caseTrain.message.InvalidArgumentError;
+import de.knowwe.caseTrain.message.MissingAttributeWarning;
 import de.knowwe.caseTrain.message.MissingComponentWarning;
 import de.knowwe.caseTrain.renderer.DivStyleClassRenderer;
+import de.knowwe.caseTrain.renderer.MouseOverTitleRenderer;
 import de.knowwe.caseTrain.type.general.Bild;
 import de.knowwe.caseTrain.type.general.BlockMarkupType;
 import de.knowwe.caseTrain.type.general.SubblockMarkup;
@@ -238,9 +237,9 @@ class Frage extends SubblockMarkup {
 		super("Frage");
 		this.addChildType(new Title());
 		this.addContentType(new Bild());
+		this.addContentType(new FrageGewicht());
 		this.addContentType(new FrageTyp());
 		this.addContentType(new FrageText());
-		this.addContentType(new FrageGewicht());
 
 		this.addSubtreeHandler(new GeneralSubtreeHandler<Frage>() {
 
@@ -248,6 +247,12 @@ class Frage extends SubblockMarkup {
 			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Frage> s) {
 
 				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
+
+				Section<FrageGewicht> fragegewichtSection = Sections.findSuccessor(s,
+						FrageGewicht.class);
+				if (fragegewichtSection == null) {
+					messages.add(new MissingAttributeWarning(FRAGE_GEWICHT));
+				}
 
 				Section<FrageTyp> typSection = Sections.findSuccessor(s, FrageTyp.class);
 				if (typSection == null) {
@@ -259,21 +264,31 @@ class Frage extends SubblockMarkup {
 				if (fragetextSection == null) {
 					messages.add(new MissingComponentWarning(FRAGE_TEXT));
 				}
-				Section<FrageGewicht> fragegewichtSection = Sections.findSuccessor(s,
-						FrageGewicht.class);
-				if (fragegewichtSection == null) {
-					messages.add(new MissingComponentWarning(FRAGE_GEWICHT));
-				}
 
 				return messages;
 			}
 		});
 	}
 
+	class FrageGewicht extends AbstractType {
+
+		public FrageGewicht() {
+			this.setSectionFinder(new RegexSectionFinder("[0]*[1-9]+"));
+		}
+	}
+
 	class FrageTyp extends AbstractType {
 
+		private final String[] types = {"MC", "OC", "NUM"};
+
 		public FrageTyp() {
-			this.setSectionFinder(new RegexSectionFinder("([1-9]+\\-MC|OC|NUM)"));
+			StringBuilder typesRegex = new StringBuilder("(");
+			for(int i=0; i<types.length; i++)
+				typesRegex.append(types[i] + "|");
+			typesRegex.deleteCharAt(typesRegex.length()-1);
+			typesRegex.append(")");
+			this.setSectionFinder(new RegexSectionFinder(typesRegex.toString()));
+			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
 		}
 
 	}
@@ -281,28 +296,10 @@ class Frage extends SubblockMarkup {
 	class FrageText extends AbstractType {
 
 		public FrageText() {
-			this.setSectionFinder(new SectionFinder() {
-
-				@Override
-				public List<SectionFinderResult> lookForSections(String text, Section<?> father,
-						Type type) {
-					int index = text.indexOf("?");
-					List<SectionFinderResult> res = new ArrayList<SectionFinderResult>();
-					if (index != -1) {
-						res.add(new SectionFinderResult(0, index + 1));
-					}
-					return res;
-				}
-			});
+			this.setSectionFinder(new RegexSectionFinder("([\\w]{1}[\\W]?[ ]?)+\\?"));
 		}
 	}
 
-	class FrageGewicht extends AbstractType {
-
-		public FrageGewicht() {
-			this.setSectionFinder(new RegexSectionFinder("[0]?[1-9]+"));
-		}
-	}
 }
 
 class Erkl extends SubblockMarkup {

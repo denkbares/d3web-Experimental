@@ -31,7 +31,7 @@ import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.knowwe.caseTrain.message.MissingContentWarning;
-import de.knowwe.caseTrain.message.MissingPictureWarning;
+import de.knowwe.caseTrain.message.MissingPictureNotice;
 import de.knowwe.caseTrain.message.MissingTitleError;
 import de.knowwe.caseTrain.type.general.Bild;
 import de.knowwe.caseTrain.type.general.BlockMarkupType;
@@ -67,7 +67,7 @@ public class Abschluss extends BlockMarkupType {
 
 				Section<Bild> pic = Sections.findSuccessor(s, Bild.class);
 				if (pic == null) {
-					messages.add(new MissingPictureWarning());
+					messages.add(new MissingPictureNotice());
 				}
 
 				return messages;

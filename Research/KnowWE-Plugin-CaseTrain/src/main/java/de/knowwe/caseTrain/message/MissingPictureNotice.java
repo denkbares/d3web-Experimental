@@ -18,7 +18,7 @@
  */
 package de.knowwe.caseTrain.message;
 
-import de.d3web.we.kdom.report.KDOMWarning;
+import de.d3web.we.kdom.report.KDOMNotice;
 
 
 /**
@@ -26,7 +26,7 @@ import de.d3web.we.kdom.report.KDOMWarning;
  * @author Johannes Dienst
  * @created 22.04.2011
  */
-public class MissingPictureWarning extends KDOMWarning {
+public class MissingPictureNotice extends KDOMNotice {
 
 	@Override
 	public String getVerbalization() {
