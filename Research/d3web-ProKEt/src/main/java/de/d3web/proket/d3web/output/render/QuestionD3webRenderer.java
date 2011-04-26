@@ -42,6 +42,7 @@ import de.d3web.core.session.interviewmanager.Form;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.utils.AttachmentHandlingD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
@@ -88,17 +89,9 @@ public class QuestionD3webRenderer extends D3webRenderer {
 		// TODO extend for HERNIA --> Popup in separate Window?!
 		// so far: handling overlay (tooltip) popups, defined in textfiles in
 		// the KB
-		String popupResName = "popup" + to.getName() + ".txt";
-		Resource res = D3webConnector.getInstance().getKb().getResource(popupResName);
-		if (res != null) {
-			try {
-				String resString =
-					AttachmentHandlingD3webUtils.getTextfileContentsFromTextfileAttachment(res);
-				st.setAttribute("tooltip", resString);
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
+		String resString = to.getInfoStore().getValue(ProKEtProperties.POPUP);
+		if (resString != null) {
+			st.setAttribute("tooltip", resString);
 		}
 
 		if (to instanceof QuestionOC) {

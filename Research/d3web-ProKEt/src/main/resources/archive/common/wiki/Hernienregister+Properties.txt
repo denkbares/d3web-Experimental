@@ -3,11 +3,13 @@
 @path: Fig6_MeshPos.JPG
 @package: Hernia
 %
+
 %%Resource
 @src=Fig7_Areas.JPG
 @path: Fig7_Areas.JPG
 @package: Hernia
 %
+
 %%Resource
 @src=popupTest.txt
 @path: popupIndication for surgery.txt
