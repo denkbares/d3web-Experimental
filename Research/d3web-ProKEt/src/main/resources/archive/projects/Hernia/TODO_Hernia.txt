@@ -25,6 +25,13 @@ DONE A - recursive display of follow up questions
 	- PDF (link)?
 	- Popups
 	
+PRIO:
+DONE - Bildfragen: Antwort-Alternativen daneben
+- MC Questions (ich)
+- Popups (Albrecht)
+- Zusammenfassung ich (Button, Popup, 2spaltig, Fragen (beantwortet!) und FB=)
+- Bildfragen (Albrecht)
+
 - Refactor Image Questions Base Mechanism
 	DONE -- make Renderer (s) --> we need not image-only, but OC Image or MC image.
 		sub-renderes of OC/MC? maybe adapt in renderer chosing method to ask there

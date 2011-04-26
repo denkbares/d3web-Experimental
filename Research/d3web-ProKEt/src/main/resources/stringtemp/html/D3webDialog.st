@@ -25,6 +25,11 @@ $endif$
 				$CaseNewButton()$
 			</div>
 		$endif$
+		$if(summary)$
+			<div class="leftButton">
+				$SummaryButton()$
+			</div>
+		$endif$
 	</td>
 	<td width=*>
 		$header$

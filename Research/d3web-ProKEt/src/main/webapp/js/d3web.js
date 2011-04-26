@@ -82,6 +82,24 @@ $(function() {
 		};
 		$("#jqLoadCaseDialog").dialog(opts);
 	});
+	
+	/* creating and configuring the jquery UI summary dialog */
+	$(function() {
+
+		var opts = {
+			autoOpen : false,
+			position : [ "left", "top" ],
+			modal : false,
+			width : 400,
+			height : 400,
+			minWidth : 400,
+			minHeight : 400,
+			buttons : {
+				"Schließen" : closeJQSummaryDialog
+			}
+		};
+		$("#jqSummaryDialog").dialog(opts);
+	});
 
 	/* Initialize the JS binding to the dialog elements */
 	initFunctionality();
@@ -180,6 +198,11 @@ function initFunctionality() {
 		// var filesel = $('#fileselect');
 		// filesel.attr("style", "display:block");
 	});
+	
+	$('#summary').unbind('click').click(function(event){
+		alert("click");
+		$("#jqSummaryDialog").dialog("open");
+	});
 }
 
 /**
@@ -230,6 +253,7 @@ function d3web_checkNumRanges(qid, value, store, numStore) {
 					link,
 					function(data) {
 
+						alert(data);
 						if (data !== "") { // range(s) exist(s)
 
 							// split the ID/val/range complete String into
@@ -288,6 +312,20 @@ function d3web_checkNumRanges(qid, value, store, numStore) {
 			});
 
 }
+
+
+function d3web_IQClicked(id) {
+	alert("image answer " + id + " was clicked");
+	d3web_getSelectedFacts($('#' + id));
+	/*var target = $("#" + id);	// get the clicked element
+	var selected = target.find(":input:checked");	// find clicked input 
+	var deselected = target.find(":input:not(:checked)"); // find not clicked inputs
+	selected.attr('checked', false);
+	deselected.attr('checked', true);
+	remark_selectively(target);	// mark question accordingly*/
+}
+
+
 
 function d3web_getRemainingFacts() {
 
@@ -695,6 +733,7 @@ function d3web_show_solutions(target_id) {
  */
 function d3web_getSelectedFacts(clickedItem) {
 
+	
 	// some variables for storing multiple question/answer pairs
 	var numStore = "";
 	var txtStore = "";
@@ -758,6 +797,12 @@ function d3web_getSelectedFacts(clickedItem) {
 	// if unknown has been clicked, it is primarily saved
 	if (clickedItem.attr('id').indexOf('i_unknown') >= 0) {
 		pos = clickedItem.attr("id");
+		
+	} 
+	
+	// image questions
+	else if  (clickedItem.attr('id').indexOf('img_') >= 0) {
+		pos = clickedItem.attr("id");
 	}
 
 	// otherwise check for "not-unknown" radio buttons and checkboxes
@@ -815,6 +860,7 @@ function d3web_getSelectedFacts(clickedItem) {
 	// assemble complete text/textinput value store
 	store += numStore + "&&&&" + txtStore + "&&&&" + datStore;
 
+	
 	d3web_checkNumRanges(question.attr('id'), pos, store, numStore);
 
 }
@@ -823,6 +869,10 @@ function closeJQConfirmDialog() {
 	$('#jqConfirmDialog').dialog('close');
 }
 
+
+function closeJQSummaryDialog() {
+	$('#jqSummaryDialog').dialog('close');
+}
 // function closeJQLoginDialog() {
 // $('#jqLoginDialog').dialog('close');
 // }

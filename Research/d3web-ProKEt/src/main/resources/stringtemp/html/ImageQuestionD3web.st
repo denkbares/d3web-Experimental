@@ -5,7 +5,7 @@
 		$text$
 		<table>
 			<tr>
-				<td valign="center">
+				<td width="90%" valign="center">
 					<img width="$width$" src="kbimg/$image$" alt="$image$" 
 					$if(inactive)$
 						usemap="">
@@ -16,13 +16,9 @@
 							</map>
 					$endif$
 				</td>
-			</tr>
-			<tr>
 				<td valign="center">
 					$if(children)$$children$$endif$
 				</td>
-			</tr>
-			
 		</table>
 	</div>
 </div>
