@@ -80,6 +80,7 @@ import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.d3web.output.render.D3webRenderer;
 import de.d3web.proket.d3web.output.render.ID3webRenderer;
 import de.d3web.proket.d3web.output.render.ImageHandler;
+import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
@@ -862,8 +863,7 @@ public class D3webDialog extends HttpServlet {
 			}
 			// DATE questions
 			else if (to instanceof QuestionDate) {
-				String dateDescription = to.getInfoStore().getValue(
-						Property.getProperty("description", String.class));
+				String dateDescription = to.getInfoStore().getValue(ProKEtProperties.DATE_FORMAT);
 				if (dateDescription != null && !dateDescription.isEmpty()) {
 					String[] dateDescSplit = dateDescription.split("OR");
 					for (String dateDesc : dateDescSplit) {

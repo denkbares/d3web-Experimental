@@ -36,6 +36,7 @@ import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.DateValue;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
+import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
@@ -99,8 +100,7 @@ public class AnswerDateD3webRenderer extends D3webRenderer {
 			Date d = ((DateValue) value).getDate();
 			SimpleDateFormat dateFormat = null;
 			
-			String dateDescription = to.getInfoStore().getValue(
-					Property.getProperty("date_format", String.class));
+			String dateDescription = to.getInfoStore().getValue(ProKEtProperties.DATE_FORMAT);
 
 			if (dateDescription != null && !dateDescription.isEmpty()) {
 				String[] dateDescSplit = dateDescription.split("OR");
@@ -124,7 +124,7 @@ public class AnswerDateD3webRenderer extends D3webRenderer {
 		}
 
 		// Description of the input to provide is read from the knowledge base
-		st.setAttribute("text", dq.getInfoStore().getValue(MMInfo.DESCRIPTION));
+		st.setAttribute("text", dq.getInfoStore().getValue(ProKEtProperties.DATE_FORMAT));
 
 		sb.append(st.toString());
 
