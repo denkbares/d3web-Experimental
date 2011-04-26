@@ -42,6 +42,7 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.caseTrain.message.MissingComponentWarning;
 import de.knowwe.caseTrain.type.MetaLine.AttributeName;
 import de.knowwe.caseTrain.type.general.BlockMarkupType;
 import de.knowwe.caseTrain.util.Utils;
@@ -57,14 +58,16 @@ import de.knowwe.caseTrain.util.Utils;
  */
 public class MetaDaten extends BlockMarkupType {
 
+	private final String INFO_ABSCHNITT = "Infoabschnitt";
+
 	public MetaDaten() {
 		super("Metadaten");
 		this.addContentType(new MetaLine());
 
-		this.setCustomRenderer(new KnowWEDomRenderer<MetaLine>() {
+		this.setCustomRenderer(new KnowWEDomRenderer<MetaDaten>() {
 
 			@Override
-			public void render(KnowWEArticle article, Section<MetaLine> sec, UserContext user, StringBuilder string) {
+			public void render(KnowWEArticle article, Section<MetaDaten> sec, UserContext user, StringBuilder string) {
 				Utils.renderKDOMReportMessageBlock(KnowWEUtils.getMessagesFromSubtree(
 						article,
 						sec,
@@ -81,13 +84,22 @@ public class MetaDaten extends BlockMarkupType {
 
 			}
 		});
-		this.addSubtreeHandler(new GeneralSubtreeHandler<MetaLine>() {
+		this.addSubtreeHandler(new GeneralSubtreeHandler<MetaDaten>() {
 
 			@Override
-			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<MetaLine> s) {
+			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<MetaDaten> s) {
+
+				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
+				Section<Info> infoSection = Sections.findSuccessor(s.getArticle().getSection(),
+						Info.class);
+				if (infoSection == null) {
+					messages.add(new MissingComponentWarning(INFO_ABSCHNITT));
+				}
+
 				List<Section<AttributeName>> atts = new ArrayList<Section<AttributeName>>();
 				Sections.findSuccessorsOfType(s, AttributeName.class, atts);
-				return MetaAttributes.getInstance().compareAttributeList(atts);
+				messages.addAll(MetaAttributes.getInstance().compareAttributeList(atts));
+				return messages;
 			}
 		});
 	}

@@ -30,6 +30,7 @@ import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
@@ -82,9 +83,43 @@ public class Info extends BlockMarkupType {
 		};
 	}
 
+	@Override
+	public MessageRenderer getNoticeRenderer() {
+		return new MessageRenderer() {
+
+			@Override
+			public String preRenderMessage(KDOMReportMessage m, UserContext user) {
+				return "";
+			}
+
+			@Override
+			public String postRenderMessage(KDOMReportMessage m, UserContext user) {
+				return "";
+			}
+		};
+	}
+
+	@Override
+	public MessageRenderer getErrorRenderer() {
+		return new MessageRenderer() {
+
+			@Override
+			public String preRenderMessage(KDOMReportMessage m, UserContext user) {
+				return "";
+			}
+
+			@Override
+			public String postRenderMessage(KDOMReportMessage m, UserContext user) {
+				return "";
+			}
+		};
+	}
+
 	private final String FRAGE = "Frage";
 	private final String EINLEITUNG = "Einleitung";
 	private final String ABSCHLUSS = "Abschluss";
+	private final String ERKLAERUNG = "Erklaerung";
+	private final String ANTWORTEN = "ANTWORTEN";
 
 	public Info() {
 		super("Info");
@@ -124,24 +159,78 @@ public class Info extends BlockMarkupType {
 
 				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
 
-				Section<Frage> frageSection = Sections.findSuccessor(s, Frage.class);
-				if (frageSection == null) {
-					messages.add(new MissingComponentWarning(FRAGE));
-				}
+				messages.addAll(this.testQuestionAnswerComposition(s));
 
-				// TODO: This is right, as long as a Page contains ONLY ONE Case
-				Section<Einleitung> einleitung = Sections.findSuccessor(s.getFather(),
+				// TODO: This is right, as long as a Page contains ONLY ONE Info
+				Section<Einleitung> einleitung = Sections.findSuccessor(s.getArticle().getSection(),
 						Einleitung.class);
 				if (einleitung == null) {
 					messages.add(new MissingComponentWarning(EINLEITUNG));
 				}
-				Section<Abschluss> abschluss = Sections.findSuccessor(s.getFather(),
+				Section<Abschluss> abschluss = Sections.findSuccessor(s.getArticle().getSection(),
 						Abschluss.class);
 				if (abschluss == null) {
 					messages.add(new MissingComponentWarning(ABSCHLUSS));
 				}
 				/////////////////////////////////////////////////////////////////
 
+
+
+				return messages;
+			}
+
+			private List<KDOMReportMessage> testQuestionAnswerComposition(Section<Info> s) {
+
+				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
+
+				List<Section<Frage>> found = new ArrayList<Section<Frage>>();
+				Sections.findSuccessorsOfType(s, Frage.class, found);
+				if (found.isEmpty()) {
+					messages.add(new MissingComponentWarning(FRAGE));
+					return messages;
+				}
+
+				/*
+				 *  check children if the right order is given or some
+				 *  thing is missing. Right is:
+				 *  Hinweis* Frage Hinweis* Antworten Hinweis* Erklaerung
+				 * 
+				 *  TODO getting the children is not save. How do I get the
+				 *  the BlockMarkupContent?
+				 */
+				List<Section<? extends Type>> children = s.getChildren().get(0).getChildren();
+				Section<? extends Type> actual = null;
+				boolean erklMissing = true;
+				boolean antwortenMissing = true;
+				for (Section<? extends Type> sec : children) {
+					if (sec.get() instanceof Frage) {
+						if(actual == null) {
+							actual = sec;
+							continue;
+						}
+						actual = sec;
+						if (erklMissing) {
+							messages.add(new MissingComponentWarning(ERKLAERUNG));
+						}
+						if (antwortenMissing) {
+							messages.add(new MissingComponentWarning(ANTWORTEN));
+						}
+						erklMissing = true;
+						antwortenMissing = true;
+						continue;
+					}
+					if (sec.get() instanceof Hinweis) {
+						continue;
+					}
+					if (sec.get() instanceof Erkl) {
+						erklMissing = false;
+						continue;
+					}
+					if (sec.get() instanceof Antworten) {
+						antwortenMissing = false;
+						continue;
+					}
+				}
 				return messages;
 			}
 		});
@@ -196,14 +285,20 @@ class Antworten extends SubblockMarkup {
 								return new ArrayList<KDOMReportMessage>(0);
 							}
 						}
+
+						double d = 0.0;
 						try {
-							Double.parseDouble(content);
+							d = Double.parseDouble(content);
 						}
 						catch (Exception e) {
 							return Arrays.asList((KDOMReportMessage) new InvalidArgumentError(
 							" Nur '+' oder '-' oder Zahlen zwischen 0 und 1 erlaubt!"));
 						}
 
+						if ( (d < 0) || (d > 1) ) {
+							return Arrays.asList((KDOMReportMessage) new InvalidArgumentError(
+							" Nur Zahlen zwischen 0 und 1 erlaubt!"));
+						}
 						return new ArrayList<KDOMReportMessage>(0);
 					}
 				}
@@ -223,10 +318,6 @@ class Hinweis extends SubblockMarkup {
 
 }
 
-/*
- * TODO: The Regex for ChildTypes are not save. Specifications of the markup are
- * not clear yet Johannes: 25.04.2011
- */
 class Frage extends SubblockMarkup {
 
 	private final String FRAGE_TYPE = "Fragetyp";
