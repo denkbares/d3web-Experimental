@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="d3web-Plugin-TimeDB" version="0.0.1">
+	
+	<requires>
+		<import plugin-id="d3web-Kernel-ExtensionPoints" />
+	</requires>
+	
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+	</runtime>
+	
+	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="date_format">
+		<parameter id="name" value="date_format" />
+		<parameter id="description" value="allows to specify a format for date entries" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.String" />
+	</extension>
+	
+		<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="popup">
+		<parameter id="name" value="popup" />
+		<parameter id="description" value="can be used for popups providing addtional informations for questions" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.String" />
+	</extension>
+	
+	
+</plugin>

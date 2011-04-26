@@ -100,7 +100,7 @@ public class AnswerDateD3webRenderer extends D3webRenderer {
 			SimpleDateFormat dateFormat = null;
 			
 			String dateDescription = to.getInfoStore().getValue(
-					Property.getProperty("description", String.class));
+					Property.getProperty("date_format", String.class));
 
 			if (dateDescription != null && !dateDescription.isEmpty()) {
 				String[] dateDescSplit = dateDescription.split("OR");

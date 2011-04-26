@@ -167,6 +167,7 @@
 		<module>KnowWE-Plugin-WimVentRuleTable</module>
 		<module>KnowWE-Plugin-CaseTrain</module>
 		<module>KnowWE-Plugin-CI4KE-Anomalies</module>
+		<module>d3web-Plugin-ProKEtProperties</module>
 	</modules>
 	<repositories>
 		<repository>
