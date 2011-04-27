@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -19,16 +19,10 @@
  */
 package de.d3web.proket.d3web.output.render;
 
-import java.io.IOException;
-
 import org.antlr.stringtemplate.StringTemplate;
 
-import de.d3web.core.knowledge.Indication;
-import de.d3web.core.knowledge.InterviewObject;
-import de.d3web.core.knowledge.Resource;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
-import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionDate;
 import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.QuestionNum;
@@ -42,18 +36,18 @@ import de.d3web.core.session.interviewmanager.Form;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
-import de.d3web.proket.d3web.utils.AttachmentHandlingD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
 /**
  * Renderer for rendering basic Questions.
- * 
+ *
  * TODO CHECK: 1) basic properties for questions
- * 
+ *
  * TODO LATER: 1) further question types needed?
- * 
+ *
  * @author Martina Freiberg
  * @created 15.01.2011
  */
@@ -117,26 +111,31 @@ public class QuestionD3webRenderer extends D3webRenderer {
 		Form current = sess.getInterview().nextForm();
 		Blackboard bb = sess.getBlackboard();
 		Value val = bb.getValue((ValueObject) to);
-		Indication ind = bb.getIndication((InterviewObject) to);
 
 		/* the following handles follow-up questions that get activated */
 		/* in the course of the interview (by indication) */
-		// check if parent had been a question --> so this is follow up q
-		if (to.getParents() != null && to.getParents().length != 0
-				&& to.getParents()[0] instanceof Question) {
 
-			// check whether question has been indicated so far
-			if (ind.getState() == Indication.State.INDICATED
-					|| ind.getState() == Indication.State.INSTANT_INDICATED) {
-				st.removeAttribute("inactive");
+
+		// QContainer indicated
+		if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent) ||
+				isIndicated(parent, bb)) {
+
+			// show, if indicated follow up
+			if ((D3webUtils.isFollowUpTOinQCon(to, parent) && isIndicated(to, bb))
+					|| (!D3webUtils.isFollowUpTOinQCon(to, parent))) {
+				st.removeAttribute("inactiveQuestion");
 				st.removeAttribute("qstate");
 				st.setAttribute("qstate", "");
 			}
-			// otherwise follow-ups should be displayed inactive
 			else {
-				st.setAttribute("inactive", "true");
+				st.setAttribute("inactiveQuestion", "true");
 			}
 		}
+
+		else {
+			st.setAttribute("inactiveQuestion", "true");
+		}
+
 
 		/*
 		 * the following handles abstraction questions that get activated during
@@ -144,14 +143,14 @@ public class QuestionD3webRenderer extends D3webRenderer {
 		 */
 		if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
 
-			st.setAttribute("inactive", "true");
-			st.setAttribute("abstract", "true");
+			st.setAttribute("inactiveQuestion", "true");
+			st.setAttribute("abstractQuestion", "true");
 
 			// check whether abstraction question has been implicitly answered
 			// by other, corresponding questions
 			if (val != null && UndefinedValue.isNotUndefinedValue(val) &&
 					!val.equals(Unknown.getInstance())) {
-				st.removeAttribute("inactive");
+				st.removeAttribute("inactiveQuestion");
 				st.removeAttribute("qstate");
 				st.setAttribute("qstate", "question-d");
 			}
@@ -171,7 +170,7 @@ public class QuestionD3webRenderer extends D3webRenderer {
 		}
 
 		// underneath="within" a rendered question, always answers are rendered
-		super.renderChoices(st, cc, to);
+		super.renderChoices(st, cc, to, parent);
 
 		sb.append(st.toString());
 

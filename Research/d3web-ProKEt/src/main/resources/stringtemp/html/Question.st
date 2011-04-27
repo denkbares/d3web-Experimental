@@ -1,5 +1,5 @@
 <div id="$fullId$" class="question $fullId$$if(type)$ question-$type$$elseif(answerType)$ question-$answerType$$endif$ 
-	$if(inactive)$ inactive $endif$ $if(abstract)$ abstract $endif$ $qstate$">
+	$if(inactiveQuestion)$ inactive $endif$ $if(abstractQuestion)$ abstract $endif$ $qstate$">
 	$if(title)$$TitleTooltipButton()$$endif$
 	<div id="content-$fullId$" class="content-$fullId$ question-content">
 		$Image()$

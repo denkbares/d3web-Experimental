@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -23,7 +23,6 @@ import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
-import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
@@ -31,14 +30,15 @@ import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
+import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
 /**
  * Renderer for rendering basic NumAnswers.
- * 
+ *
  * TODO CHECK: 1) basic properties for answers
- * 
+ *
  * @author Martina Freiberg
  * @created 16.01.2011
  */
@@ -76,44 +76,41 @@ public class AnswerNumD3webRenderer extends D3webRenderer {
 		}
 
 		Blackboard bb = super.d3webSession.getBlackboard();
-		Value value = bb.getValue((ValueObject) to);
+		Value value = bb.getValue((ValueObject) nq);
+
 
 		if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
 			st.setAttribute("readonly", "true");
 			st.setAttribute("inactive", "true");
 		}
 
-		else if (to.getParents()[0] instanceof Question) {
-			if (isIndicated(to, bb) ||
-					(isParentOfFollowUpQuIndicated(to, bb) &&
-						isIndicated(to, bb))) {
+		// QContainer indicated
+		if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent) ||
+				isIndicated(parent, bb)) {
+
+			// show, if indicated follow up
+			if ((D3webUtils.isFollowUpTOinQCon(to, parent) && isIndicated(to, bb))
+					|| (!D3webUtils.isFollowUpTOinQCon(to, parent))) {
 				st.removeAttribute("readonly");
-				st.removeAttribute("inactive");
 			}
 			else {
 				st.setAttribute("readonly", "true");
-				st.setAttribute("inactive", "true");
-
 				// also remove possible set values
 				st.removeAttribute("selection");
 				st.setAttribute("selection", "");
 			}
 		}
 
-		// else if (!isParentIndicated(to, bb)) {
-		// st.setAttribute("readonly", "true");
-		// }
-		// else if (to.getParents() != null && to.getParents().length != 0
-		// && to.getParents()[0] instanceof Question
-		// && !isIndicated(to, bb)) {
-		// st.setAttribute("readonly", "true");
-		// }
+		// otherwise, readonly and no vals
 		else {
-			st.removeAttribute("readonly");
-			st.removeAttribute("inactive");
+			st.setAttribute("readonly", "true");
+			// also remove possible set values
+			st.removeAttribute("selection");
+			st.setAttribute("selection", "");
 		}
 
-		// / if not undefined and not unknown, value needs to be written into
+
+		// if not undefined and not unknown, value needs to be written into
 		// num field
 		if (value != null && UndefinedValue.isNotUndefinedValue(value)
 				&& !value.equals(Unknown.getInstance())) {
@@ -135,7 +132,7 @@ public class AnswerNumD3webRenderer extends D3webRenderer {
 
 		sb.append(st.toString());
 
-		super.makeTables(to, parent, cc, sb);
+		super.makeTables(to, to, cc, sb);
 
 		return sb.toString();
 	}

@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -24,22 +24,22 @@ import org.antlr.stringtemplate.StringTemplate;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
-import de.d3web.core.knowledge.terminology.QContainer;
-import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
+import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
 /**
  * Renderer for rendering basic OCAnswers.
- * 
+ *
  * TODO CHECK: 1) basic properties for answers 2) d3web resulting properties,
  * e.g. is indicated, is shown etc.
- * 
+ *
  * @author Martina Freiberg
  * @created 15.01.2011
  */
@@ -50,7 +50,7 @@ public class AnswerOCD3webRenderer extends D3webRenderer {
 	 * Specifically adapted for OCAnswer rendering
 	 */
 	public String renderTerminologyObject(ContainerCollection cc, Choice c,
-			TerminologyObject to) {
+			TerminologyObject to, TerminologyObject parent) {
 
 		StringBuilder sb = new StringBuilder();
 
@@ -70,6 +70,7 @@ public class AnswerOCD3webRenderer extends D3webRenderer {
 		st.setAttribute("realAnswerType", "oc");
 		st.setAttribute("parentFullId", to.getName().replace(" ", "_"));
 		st.setAttribute("text", c.getName());
+		st.setAttribute("count", D3webConnector.getInstance().getQuestionCount());
 
 		Blackboard bb = super.d3webSession.getBlackboard();
 		Value value = bb.getValue((ValueObject) to);
@@ -79,63 +80,29 @@ public class AnswerOCD3webRenderer extends D3webRenderer {
 			st.setAttribute("readonly", "true");
 			st.setAttribute("inactive", "true");
 		}
-		// if to=question has parents readonly state depends on parent
-		else if (to.getParents()[0] != null &&
-				to.getParents().length != 0) {
 
-			// if direct parent is qcontainer
-			// if the qcontainer is not indicated --> question readonly
-			if (to.getParents()[0] instanceof QContainer) {
-				if (!isParentIndicated(to, bb)) {
-					st.setAttribute("readonly", "true");
-					st.setAttribute("inactive", "true");
-				}
+		// QContainer indicated
+		if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent) ||
+				isIndicated(parent, bb)) {
+
+			// show, if indicated follow up
+			if ((D3webUtils.isFollowUpTOinQCon(to, parent) && isIndicated(to, bb))
+					|| (!D3webUtils.isFollowUpTOinQCon(to, parent))) {
+				st.removeAttribute("readonly");
+				st.removeAttribute("inactive");
+				st.removeAttribute("qstate");
+				st.setAttribute("qstate", "");
 			}
-			// if direct parent is question and if the to=question is
-			// follow up question of one of parents answers
-			else if (to.getParents()[0] instanceof Question) {
-
-				// if parent is indicated, to indicated too --> no readonly
-				if (isIndicated(to, bb) ||
-						(isParentOfFollowUpQuIndicated(to, bb) &&
-							isIndicated(to, bb))) {
-					st.removeAttribute("readonly");
-					st.removeAttribute("inactive");
-				} 
-				// otherwise to=question not indicated and readonly
-				else {
-					st.setAttribute("readonly", "true");
-					st.setAttribute("inactive", "true");
-
-					// also remove possible set values
-					st.removeAttribute("selection");
-					st.setAttribute("selection", "");
-				}
+			else {
+				st.setAttribute("inactive", "true");
+				st.setAttribute("readonly", "true");
 			}
 		}
-		// in all other cases display question/answers --> no readonly
+
 		else {
-			st.removeAttribute("readonly");
-			st.removeAttribute("inactive");
+			st.setAttribute("inactive", "true");
+			st.setAttribute("readonly", "true");
 		}
-
-		// else if (!isParentIndicated(to, bb)) {
-		// st.setAttribute("readonly", "true");
-
-			// if parent is a question and current to was a follow up
-			// question of parent and parent is indicated --> no readonly
-		// if (isParentOfFollowUpQuIndicated(to, bb)) {
-		// st.removeAttribute("readonly");
-		// }
-		// }
-		// else if (to.getParents() != null && to.getParents().length != 0
-		// && to.getParents()[0] instanceof Question
-		// && !isIndicated(to, bb)) {
-		// st.setAttribute("readonly", "true");
-
-			// st.removeAttribute("selection");
-		// st.setAttribute("selection", "");
-		// }
 
 		// if value of the to=question equals this choice
 		if (value.toString().equals(c.toString())) {

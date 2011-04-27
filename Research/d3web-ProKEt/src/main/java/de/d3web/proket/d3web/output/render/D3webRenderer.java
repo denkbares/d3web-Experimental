@@ -327,7 +327,7 @@ public class D3webRenderer implements ID3webRenderer {
 	 * @param to The TerminologyObject
 	 */
 	protected void renderChoices(StringTemplate st, ContainerCollection cc,
-			TerminologyObject to) {
+			TerminologyObject to, TerminologyObject parent) {
 
 		StringBuilder childrenHTML = new StringBuilder();
 
@@ -361,7 +361,7 @@ public class D3webRenderer implements ID3webRenderer {
 
 				// receive the matching HTML from the Renderer and append
 				String childHTML =
-						childRenderer.renderTerminologyObject(cc, c, to);
+						childRenderer.renderTerminologyObject(cc, c, to, parent);
 				if (childHTML != null) {
 					childrenHTML.append(childHTML);
 				}
@@ -376,7 +376,7 @@ public class D3webRenderer implements ID3webRenderer {
 
 			// receive the matching HTML from the Renderer and append
 			String childHTML =
-					childRenderer.renderTerminologyObject(cc, to, to);
+					childRenderer.renderTerminologyObject(cc, to, parent);
 			if (childHTML != null) {
 				childrenHTML.append(childHTML);
 			}
@@ -404,7 +404,7 @@ public class D3webRenderer implements ID3webRenderer {
 
 					// receive the matching HTML from the Renderer and append
 					String childHTML =
-							unknownRenderer.renderTerminologyObject(cc, to, to);
+							unknownRenderer.renderTerminologyObject(cc, to, parent);
 					if (childHTML != null) {
 						childrenHTML.append(childHTML);
 					}
@@ -669,7 +669,7 @@ public class D3webRenderer implements ID3webRenderer {
 	/*
 	 * Overridden by sub-classing renderers, so no basic functionality here.
 	 */
-	public String renderTerminologyObject(ContainerCollection cc, Choice C, TerminologyObject parent) {
+	public String renderTerminologyObject(ContainerCollection cc, Choice C, TerminologyObject to, TerminologyObject parent) {
 		return "";
 	}
 

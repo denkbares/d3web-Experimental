@@ -124,14 +124,14 @@ Incisional ventral hernia route
 -- M3
 -- M4
 -- M5
--- "L1_L"
--- "L1_R"
--- "L2_L"
--- "L2_R"
--- "L3_L"
--- "L3_R"
--- "L4_L"
--- "L4_R"
+-- "L1:L"
+-- "L1:R"
+-- "L2:L"
+-- "L2:R"
+-- "L3:L"
+-- "L3:R"
+-- "L4:L"
+-- "L4:R"
 - Date of operation that caused the incisional hernia [date]
 - "Type of operation (speciality) that caused the incisional hernia" [oc]
 -- Gastrointestinal
@@ -191,14 +191,14 @@ Parastomal hernia route
 ---- M3
 ---- M4
 ---- M5
----- "L1_L"
----- "L1_R"
----- "L2_L"
----- "L2_R"
----- "L3_L"
----- "L3_R"
----- "L4_L"
----- "L4_R"
+---- "L1:L"
+---- "L1:R"
+---- "L2:L"
+---- "L2:R"
+---- "L3:L"
+---- "L3:R"
+---- "L4:L"
+---- "L4:R"
 
 Common Route - Operative data #6
 - Operation date [date]

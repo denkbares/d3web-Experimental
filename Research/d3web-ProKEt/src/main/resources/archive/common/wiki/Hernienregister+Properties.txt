@@ -3,13 +3,11 @@
 @path: Fig6_MeshPos.JPG
 @package: Hernia
 %
-
 %%Resource
 @src=Fig7_Areas.JPG
 @path: Fig7_Areas.JPG
 @package: Hernia
 %
-
 %%Resource
 @src=popupTest.txt
 @path: popupIndication for surgery.txt
@@ -22,53 +20,53 @@ Mark the incisional hernia areas involved#M2.description = 194,199,257,300SHAPEr
 Mark the incisional hernia areas involved#M3.description = 194,300,257,382SHAPErect
 Mark the incisional hernia areas involved#M4.description = 194,382,257,457SHAPErect
 Mark the incisional hernia areas involved#M5.description = 194,457,257,516SHAPErect
-Mark the incisional hernia areas involved#L2_L.description = 121,300,194,382SHAPErect
-Mark the incisional hernia areas involved#L2_R.description = 257,300,333,382SHAPErect
-Mark the incisional hernia areas involved#L1_L.description = 121,300,194,162,194,300,121,300SHAPEpoly
-Mark the incisional hernia areas involved#L1_R.description = 257,300,257,164,333,300,257,300SHAPEpoly
-Mark the incisional hernia areas involved#L3_L.description = 121,382,194,511,194,382,121,382SHAPEpoly
-Mark the incisional hernia areas involved#L3_R.description = 333,382,257,511,257,382,333,382SHAPEpoly
-Mark the incisional hernia areas involved#L4_L.description = 121,300,79,315,77,366,121,382,121,300SHAPEpoly
-Mark the incisional hernia areas involved#L4_R.description = 333,382,377,368,377,315,333,300,333,382SHAPEpoly
+Mark the incisional hernia areas involved#L2:L.description = 121,300,194,382SHAPErect
+Mark the incisional hernia areas involved#L2:R.description = 257,300,333,382SHAPErect
+Mark the incisional hernia areas involved#L1:L.description = 121,300,194,162,194,300,121,300SHAPEpoly
+Mark the incisional hernia areas involved#L1:R.description = 257,300,257,164,333,300,257,300SHAPEpoly
+Mark the incisional hernia areas involved#L3:L.description = 121,382,194,511,194,382,121,382SHAPEpoly
+Mark the incisional hernia areas involved#L3:R.description = 333,382,257,511,257,382,333,382SHAPEpoly
+Mark the incisional hernia areas involved#L4:L.description = 121,300,79,315,77,366,121,382,121,300SHAPEpoly
+Mark the incisional hernia areas involved#L4:R.description = 333,382,377,368,377,315,333,300,333,382SHAPEpoly
 
 Localization of the concomitant incisional hernia#M1.description = 194,144,257,199SHAPErect
 Localization of the concomitant incisional hernia#M2.description = 194,199,257,300SHAPErect
 Localization of the concomitant incisional hernia#M3.description = 194,300,257,382SHAPErect
 Localization of the concomitant incisional hernia#M4.description = 194,382,257,457SHAPErect
 Localization of the concomitant incisional hernia#M5.description = 194,457,257,516SHAPErect
-Localization of the concomitant incisional hernia#L2_L.description = 121,300,194,382SHAPErect
-Localization of the concomitant incisional hernia#L2_R.description = 257,300,333,382SHAPErect
-Localization of the concomitant incisional hernia#L1_L.description = 121,300,194,162,194,300,121,300SHAPEpoly
-Localization of the concomitant incisional hernia#L1_R.description = 257,300,257,164,333,300,257,300SHAPEpoly
-Localization of the concomitant incisional hernia#L3_L.description = 121,382,194,511,194,382,121,382SHAPEpoly
-Localization of the concomitant incisional hernia#L3_R.description = 333,382,257,511,257,382,333,382SHAPEpoly
-Localization of the concomitant incisional hernia#L4_L.description = 121,300,79,315,77,366,121,382,121,300SHAPEpoly
-Localization of the concomitant incisional hernia#L4_R.description = 333,382,377,368,377,315,333,300,333,382SHAPEpoly
+Localization of the concomitant incisional hernia#L2:L.description = 121,300,194,382SHAPErect
+Localization of the concomitant incisional hernia#L2:R.description = 257,300,333,382SHAPErect
+Localization of the concomitant incisional hernia#L1:L.description = 121,300,194,162,194,300,121,300SHAPEpoly
+Localization of the concomitant incisional hernia#L1:R.description = 257,300,257,164,333,300,257,300SHAPEpoly
+Localization of the concomitant incisional hernia#L3:L.description = 121,382,194,511,194,382,121,382SHAPEpoly
+Localization of the concomitant incisional hernia#L3:R.description = 333,382,257,511,257,382,333,382SHAPEpoly
+Localization of the concomitant incisional hernia#L4:L.description = 121,300,79,315,77,366,121,382,121,300SHAPEpoly
+Localization of the concomitant incisional hernia#L4:R.description = 333,382,377,368,377,315,333,300,333,382SHAPEpoly
 @package: Hernia
 %
 
 %%Property
 Mark the incisional hernia areas involved.description = IMG#####Fig7_Areas.JPGWIDTH#####451
 Localization of the concomitant incisional hernia.description = IMG#####Fig7_Areas.JPGWIDTH#####451
-Mesh position.description = IMG#####Fig6_MeshPos.JPG
+Mesh position.description = IMG#####Fig6_MeshPos.JPGWIDTH#####400
 
 @package: Hernia
 %
 
 %%Property
-Year of birth.date_format = yyyy
-Scheduled date of operation.date_format = dd.MM.yyyy
-Date of operation that caused the incisional hernia.date_format = dd.MM.yyyy OR MM.yyyy OR yyyy
-Date of the last repair.date_format = dd.MM.yyyy OR MM.yyyy OR yyyy
-Operation date.date_format = dd.MM.yyyy
-"Start of operation (first incision)".date_format = HH:mm:ss OR HH:mm
-"End of operation (last skin suture)".date_format = HH:mm:ss OR HH:mm
-Date of discharge.date_format = dd.MM.yyyy
-Hour of discharge.date_format = HH
-Date of death.date_format = dd.MM.yyyy
-Date of follow up.date_format = dd.MM.yyyy
-Date of diagnosis.date_format = dd.MM.yyyy
-Date of repair done.date_format = dd.MM.yyyy
+Year of birth.description = yyyy
+Scheduled date of operation.description = dd.MM.yyyy
+Date of operation that caused the incisional hernia.description = dd.MM.yyyy OR MM.yyyy OR yyyy
+Date of the last repair.description = dd.MM.yyyy OR MM.yyyy OR yyyy
+Operation date.description = dd.MM.yyyy
+"Start of operation (first incision)".description = HH:mm:ss OR HH:mm
+"End of operation (last skin suture)".description = HH:mm:ss OR HH:mm
+Date of discharge.description = dd.MM.yyyy
+Hour of discharge.description = HH
+Date of death.description = dd.MM.yyyy
+Date of follow up.description = dd.MM.yyyy
+Date of diagnosis.description = dd.MM.yyyy
+Date of repair done.description = dd.MM.yyyy
 
 @package: Hernia
 %

@@ -3,7 +3,7 @@
 	<tbody>
 	<tr>
 	<td width=*>
-		<input id="f_$fullId$" name="group-$parentFullId$" type="radio" $selection$ title="$title$" 
+		<input id="f_$count$_$fullId$" name="group-$count$-$parentFullId$" type="radio" $selection$ title="$fullId$" 
 		$if(readonly)$ DISABLED $endif$ />	
 	</td>
 	<td width="95%" $if(inactive)$ class="inactive" $endif$>

@@ -61,7 +61,6 @@ import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.NumericalInterval;
-import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
@@ -72,6 +71,7 @@ import de.d3web.core.session.values.DateValue;
 import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.NumValue;
 import de.d3web.core.session.values.TextValue;
+import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.proket.d3web.input.D3webConnector;
@@ -114,7 +114,6 @@ public class D3webDialog extends HttpServlet {
 	private D3webConnector d3wcon;
 
 	private String sourceSave = "";
-
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -197,7 +196,6 @@ public class D3webDialog extends HttpServlet {
 			d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
 			sourceSave = source;
 		}
-
 
 		// Get the current httpSession or a new one
 		HttpSession httpSession = request.getSession(true);
@@ -362,58 +360,6 @@ public class D3webDialog extends HttpServlet {
 		writer.close(); // and close
 	}
 
-	private void addMCFact(HttpServletRequest request,
-			HttpServletResponse response, HttpSession httpSession)
-			throws IOException {
-
-		response.setContentType("text/html");
-		response.setCharacterEncoding("utf8");
-		PrintWriter writer = response.getWriter();
-
-		Session sess = (Session) httpSession.getAttribute("d3webSession");
-
-		// get the ID of a potentially given single question answered
-		String qid = request.getParameter("qid");
-		qid = qid.replace("ok-q_", "").replace("_", " ");
-
-		String mcVals = request.getParameter("mcs");
-		mcVals = mcVals.replace("_", " ");
-		// System.out.println(mcVals + " " + qid);
-
-		/*
-		 * Check, whether a required value (for saving) is specified. If yes,
-		 * check whether this value has already been set in the KB or is about
-		 * to be set in the current call --> go on normally. Otherwise, return a
-		 * marker "<required value>" so the user is informed by AJAX to provide
-		 * this marked value.
-		 */
-
-		String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
-		// System.out.println(reqVal);
-		if ((!reqVal.equals("") || !reqVal.equals("none")) &&
-				(!checkReqVal(reqVal, sess, qid, ""))) {
-
-			writer.append(reqVal);
-			return;
-		}
-
-		if (!mcVals.equals("")) {
-
-			setValue(qid, mcVals, sess);
-
-			// AUTOSAVE
-			String folderPath = GlobalSettings.getInstance().getCaseFolder();
-
-			// AUTOSAVE
-			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
-						folderPath,
-						D3webConnector.getInstance().getD3webParser().getRequired(),
-						"autosave",
-						(Session) httpSession.getAttribute("d3webSession"));
-
-		}
-	}
-
 	/**
 	 * Add one or several given facts. Thereby, first check whether input-store
 	 * has elements, if yes, parse them and set them (for num/text/date
@@ -519,7 +465,6 @@ public class D3webDialog extends HttpServlet {
 			qid = "q_" + qid;
 			positions = positions.replace("_", " ");
 
-			// System.out.println(qid + " " + positions);
 			setValue(qid, positions, sess);
 
 			// AUTOSAVE
@@ -533,6 +478,53 @@ public class D3webDialog extends HttpServlet {
 						(Session) httpSession.getAttribute("d3webSession"));
 
 		}
+	}
+
+	private void addMCFact(HttpServletRequest request,
+			HttpServletResponse response, HttpSession httpSession)
+			throws IOException {
+
+		response.setContentType("text/html");
+		response.setCharacterEncoding("utf8");
+		PrintWriter writer = response.getWriter();
+
+		Session sess = (Session) httpSession.getAttribute("d3webSession");
+
+		// get the ID of a potentially given single question answered
+		String qid = request.getParameter("qid");
+		qid = qid.replace("q_", "").replace("_", " ");
+
+		String mcVals = request.getParameter("mcs");
+		mcVals = mcVals.replace("_", " ");
+
+		/*
+		 * Check, whether a required value (for saving) is specified. If yes,
+		 * check whether this value has already been set in the KB or is about
+		 * to be set in the current call --> go on normally. Otherwise, return a
+		 * marker "<required value>" so the user is informed by AJAX to provide
+		 * this marked value.
+		 */
+
+		String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
+		if ((!reqVal.equals("") || !reqVal.equals("none")) &&
+				(!checkReqVal(reqVal, sess, qid, ""))) {
+
+			writer.append(reqVal);
+			return;
+		}
+
+		setValue(qid, mcVals, sess);
+
+		// AUTOSAVE
+		String folderPath = GlobalSettings.getInstance().getCaseFolder();
+
+		// AUTOSAVE
+		PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
+						folderPath,
+						D3webConnector.getInstance().getD3webParser().getRequired(),
+						"autosave",
+						(Session) httpSession.getAttribute("d3webSession"));
+
 	}
 
 	/**
@@ -829,24 +821,20 @@ public class D3webDialog extends HttpServlet {
 				}
 				else if (to instanceof QuestionMC) {
 
-					String[] choices = valString.split(",");
-					List<Choice> cs = new ArrayList<Choice>();
-
-					for (String c : choices) {
-						cs.add(new Choice(c));
+					if (valString.equals("")) {
+						value = UndefinedValue.getInstance();
 					}
-					value = MultipleChoiceValue.fromChoices(cs);
+					else {
+						String[] choices = valString.split(",");
+						List<Choice> cs = new ArrayList<Choice>();
+
+						for (String c : choices) {
+							cs.add(new Choice(c));
+						}
+						value = MultipleChoiceValue.fromChoices(cs);
+
+					}
 				}
-
-
-					// valueString is a comma separated list of the IDs of the
-					// selected items
-					// List<Choice> values = new ArrayList<Choice>();
-					// String[] parts = valString.split(",");
-					// for (String part : parts) {
-					// values.add(new Choice(part));
-					// }
-					// value = MultipleChoiceValue.fromChoices(values);
 			}
 			// TEXT questions
 			else if (to instanceof QuestionText) {
@@ -904,9 +892,11 @@ public class D3webDialog extends HttpServlet {
 					blackboard.removeValueFact(lastFact);
 				}
 
-				// add new value as UserEnteredFact
-				Fact fact = FactFactory.createUserEnteredFact(to, value);
-				blackboard.addValueFact(fact);
+				if (UndefinedValue.isNotUndefinedValue(value)) {
+					// add new value as UserEnteredFact
+					Fact fact = FactFactory.createUserEnteredFact(to, value);
+					blackboard.addValueFact(fact);
+				}
 			}
 		}
 
@@ -982,6 +972,7 @@ public class D3webDialog extends HttpServlet {
 			Blackboard blackboard =
 					sess.getBlackboard();
 
+			// go through all questions of the qcontainer
 			for (TerminologyObject to : parent.getChildren()) {
 
 				if (to instanceof Question) {
@@ -989,13 +980,17 @@ public class D3webDialog extends HttpServlet {
 					Question qto = D3webConnector.getInstance().getKb().getManager().searchQuestion(
 							to.getName());
 
-					// remove a previously set value
-					lastFact = blackboard.getValueFact(qto);
-					if (lastFact != null) {
-						blackboard.removeValueFact(lastFact);
+					// workaround to assure that same question from other
+					// questionnaire is not reset, too
+					if (qto.getParents().length == 1) {
+						// remove a previously set value
+						lastFact = blackboard.getValueFact(qto);
+						if (lastFact != null) {
+							blackboard.removeValueFact(lastFact);
+						}
+						resetNotIndicatedTOs(to, bb, sess);
 					}
 
-					resetNotIndicatedTOs(to, bb, sess);
 				}
 			}
 		}
@@ -1169,12 +1164,12 @@ public class D3webDialog extends HttpServlet {
 					BufferedImage bui = ImageHandler.getResourceAsBUI(r);
 					try {
 						File file =
-							new File(GlobalSettings.getInstance().getKbImgFolder()
-									+ "/" + rname);
+								new File(GlobalSettings.getInstance().getKbImgFolder()
+										+ "/" + rname);
 						ImageIO.write(bui, "jpg", file);
 					}
 					catch (IOException e) {
-					// TODO Auto-generated catch block
+						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}

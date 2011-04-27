@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2010/2011 Chair of Artificial Intelligence and Applied
  * Informatics Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -50,7 +50,7 @@ import de.d3web.proket.utils.FileUtils;
 
 /**
  * Util methods for the binding of d3web to the ProKEt system.
- * 
+ *
  * @author Martina Freiberg Johannes Mitlmeier
  */
 public class D3webUtils {
@@ -58,7 +58,7 @@ public class D3webUtils {
 	/**
 	 * Create a d3web session with a given knowledge base. Per default creates a
 	 * session for a multiple-question dialog.
-	 * 
+	 *
 	 * @created 11.10.2010
 	 * @param kb the d3web knowledge base
 	 * @return the Session
@@ -70,7 +70,7 @@ public class D3webUtils {
 	/**
 	 * Creates a new D3webSession for a a given KnowledgeBase and a certain
 	 * DialogType.
-	 * 
+	 *
 	 * @param kb d3web KnowledgeBase to be used.
 	 * @param dt the Dialog Type
 	 * @return A new D3webSession with the KnowledgeBase associated.
@@ -96,7 +96,7 @@ public class D3webUtils {
 
 	/**
 	 * Creates a new D3webSession for a given KnowledgeBase (by filename).
-	 * 
+	 *
 	 * @param kbFilename File name of the KnowledgeBase to be used. The file is
 	 *        searched in /resources/kb or at runtime in WEB-INF/classes/kb. The
 	 *        suffix ".jar" can be omitted.
@@ -109,7 +109,7 @@ public class D3webUtils {
 	/**
 	 * Util method: Get a String representation of the questions and solutions
 	 * of a given KnowledgeBase for debugging.
-	 * 
+	 *
 	 * @param kb KnowledgeBase to be debugged.
 	 * @return A String containing a textual representation of the
 	 *         KnowledgeBase's questions and solutions.
@@ -123,7 +123,7 @@ public class D3webUtils {
 	/**
 	 * The recursive util method needed to assemble a String representation of
 	 * the questions and solutions of a knowledge base.
-	 * 
+	 *
 	 * @created 11.10.2010
 	 * @param root The recursion start
 	 * @param sb a StringBuilder
@@ -160,7 +160,7 @@ public class D3webUtils {
 	/**
 	 * Discretize a rating with no limits/discretization values given, i.e.
 	 * using the defaults defined in this method.
-	 * 
+	 *
 	 * @created 11.10.2010
 	 * @param value The value to be discretized
 	 * @return String an abstract/discretized value
@@ -184,7 +184,7 @@ public class D3webUtils {
 
 	/**
 	 * Discretize a rating value with given limits and discretization values.
-	 * 
+	 *
 	 * @param limits Ordered list of limits starting from the lowest, where a
 	 *        single value of x means the rating has to be <= x.
 	 * @param returnValues Return values based on the limits.
@@ -210,7 +210,7 @@ public class D3webUtils {
 	/**
 	 * Util method to get all jpf-plugin-files of a given folder. Needed for the
 	 * PluginManager to work.
-	 * 
+	 *
 	 * @param folder Folder to operate in.
 	 * @return List of the JPF plugins in the given folder.
 	 */
@@ -229,10 +229,10 @@ public class D3webUtils {
 	 * Retrieves the best solutions a {@link Session} contains at this moment.
 	 * Thereby, "best" is defined by a minimum rating a solution must have and a
 	 * maximum number of solutions to be returned in total.
-	 * 
+	 *
 	 * TODO maybe this method needs refactoring as to return other sets of
 	 * solutions?!
-	 * 
+	 *
 	 * @param session {@link Session} to operate on.
 	 * @param minRating Minimum {@link Rating} a {@link Solution} must have to
 	 *        be included in the returned list.
@@ -299,7 +299,7 @@ public class D3webUtils {
 	/**
 	 * Retrieve a {@link KnowledgeBase} by its file name. Search is performed in
 	 * /WEB-INF/classes/kb. The trailing ".jar" can be omitted.
-	 * 
+	 *
 	 * @param kbFilename File name of the {@link KnowledgeBase}.
 	 * @return The {@link KnowledgeBase} denoted by the given name, null if no
 	 *         such {@link KnowledgeBase} exists.
@@ -342,7 +342,7 @@ public class D3webUtils {
 	/**
 	 * Retrieve all {@link Question}s of a {@link KnowledgeBase} as a string.
 	 * TODO: needed?
-	 * 
+	 *
 	 * @param kb {@link KnowledgeBase} to operate on.
 	 * @return A string with one {@link Question} per line. The questions are
 	 *         represented by their name.
@@ -361,7 +361,7 @@ public class D3webUtils {
 	 * filtered. First we try to get only established ones, if there are none
 	 * established we want to get the suggested ones TODO maybe we just should
 	 * get all the solutions and order them accordingly!
-	 * 
+	 *
 	 * @param session {@link Session} to operate on.
 	 * @return If there is established {@link Solution}s, a list of those is
 	 *         returned. Otherwise this function returns a (possibly empty) list
@@ -380,7 +380,7 @@ public class D3webUtils {
 	/**
 	 * Retrieves a {@link TerminologyObject} from a {@link KnowledgeBase} by its
 	 * given ID.
-	 * 
+	 *
 	 * @param session The {@link Session} to operate on.
 	 * @param id The target ID.
 	 * @return The {@link TerminologyObject} with the given ID in the
@@ -400,5 +400,21 @@ public class D3webUtils {
 			}
 		}
 		return null;
+	}
+
+	public static boolean isFollowUpTOinQCon(TerminologyObject to, TerminologyObject currentQCon) {
+
+		TerminologyObject[] parents = to.getParents();
+
+		if (parents != null && parents.length != 0) {
+			for (TerminologyObject term : parents) {
+
+				if(term.equals(currentQCon)){
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 }

@@ -1,4 +1,4 @@
-<div id="$fullId$" class="questionnaire $fullId$ $if(inactive)$ inactive $endif$">
+<div id="$fullId$" class="questionnaire $fullId$ $if(questInactive)$ inactive $endif$">
 	$if(title)$$TitleTooltip()$$endif$
 	$Image()$
 	$text$

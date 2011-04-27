@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -23,15 +23,12 @@ import java.io.IOException;
 
 import org.antlr.stringtemplate.StringTemplate;
 
-import de.d3web.core.knowledge.Indication;
-import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.knowledge.Resource;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
-import de.d3web.core.knowledge.terminology.QContainer;
-import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
+import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
@@ -39,17 +36,18 @@ import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.interviewmanager.Form;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.utils.AttachmentHandlingD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
 /**
  * Renderer for rendering basic Questions.
- * 
+ *
  * TODO CHECK: 1) basic properties for questions
- * 
+ *
  * TODO LATER: 1) further question types needed?
- * 
+ *
  * @author Martina Freiberg
  * @created 15.01.2011
  */
@@ -105,38 +103,28 @@ public class ImageQuestionD3webRenderer extends D3webRenderer {
 		Form current = sess.getInterview().nextForm();
 		Blackboard bb = sess.getBlackboard();
 		Value val = bb.getValue((ValueObject) to);
-		Indication ind = bb.getIndication((InterviewObject) to);
-		Indication parInd = bb.getIndication((InterviewObject) parent);
 
-		/* the following handles follow-up questions that get activated */
-		/* in the course of the interview (by indication) */
-		// check if parent had been a question --> so this is follow up q
-		
-		if (to.getParents() != null && to.getParents().length != 0) {
-			
-			if(to.getParents()[0] instanceof Question){
-				// check whether question has been indicated so far
-				if (ind.getState() == Indication.State.INDICATED
-						|| ind.getState() == Indication.State.INSTANT_INDICATED) {
+		// QContainer indicated
+		if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent) ||
+				isIndicated(parent, bb)) {
 
-					st.removeAttribute("inactive");
-					st.removeAttribute("qstate");
-					st.setAttribute("qstate", "");
-				}
-				// otherwise follow-ups should be displayed inactive
-				else {
-					st.setAttribute("inactive", "true");
-				}
+			// show, if indicated follow up
+			if ((D3webUtils.isFollowUpTOinQCon(to, parent) && isIndicated(to, bb))
+					|| (!D3webUtils.isFollowUpTOinQCon(to, parent))) {
+				st.removeAttribute("inactive");
+				st.removeAttribute("qstate");
+				st.setAttribute("qstate", "");
 			}
-			else if (to.getParents()[0] instanceof QContainer) {
-				if (!isParentIndicated(to, bb)) {
-					st.setAttribute("inactive", "true");
-				}
+			else {
+				st.setAttribute("inactive", "true");
 			}
-			
-		} 
-		
-		
+		}
+
+		else {
+			st.setAttribute("inactive", "true");
+		}
+
+
 
 		// check answer - if answered, mark question as done
 		if (val != null && UndefinedValue.isNotUndefinedValue(val)) {
@@ -171,8 +159,12 @@ public class ImageQuestionD3webRenderer extends D3webRenderer {
 		String areas = getChoiceAreas(to);
 		st.setAttribute("areas", areas);
 
+		if (to instanceof QuestionMC) {
+			st.setAttribute("sendButton", "true");
+		}
+
 		// underneath="within" a rendered question, always answers are rendered
-		super.renderChoices(st, cc, to);
+		super.renderChoices(st, cc, to, parent);
 
 		sb.append(st.toString());
 
@@ -188,7 +180,7 @@ public class ImageQuestionD3webRenderer extends D3webRenderer {
 	 * coords="110,110,25" alt="Bremen.gif" href="Bremen.html" /> Therefore, a
 	 * basic StringTemplate representing one area tag is filled with coords and
 	 * shape.
-	 * 
+	 *
 	 * @created 21.04.2011
 	 * @param to The terminologyObject (usually a question) the areas are
 	 *        defined for

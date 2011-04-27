@@ -143,6 +143,8 @@ $(function() {
  */
 function initFunctionality() {
 
+	var mcVals = "";
+	
 	/*
 	 * bind "get selected facts" method to radio buttons, checkboxes and
 	 * textareas
@@ -156,9 +158,15 @@ function initFunctionality() {
 	/* the following ensures, that MC questions behave like OC questions,
 	 * i.e., a v*/
 	$('[type=checkbox]').unbind('click').click(function() {
-		d3web_getSelectedFacts($(this));
+		//d3web_getSelectedFacts($(this));
+		mcVals = d3web_collectMCs($(this), mcVals);
 	});
 
+	$('[id^=ok-]').unbind('click').click(function(event) {
+		d3web_addMCfacts(mcVals, $(this).attr("id"));
+	});
+	
+	
 	$('[type=text]').unbind('click').click(function() {
 		var thisEl = $(this);
 		thisEl.bind('keydown', function(e) {
@@ -203,6 +211,59 @@ function initFunctionality() {
 		$("#jqSummaryDialog").dialog("open");
 	});
 }
+
+
+function d3web_collectMCs(clickedEl, mcVals) {
+
+	// init save-checked-vals-variable
+	var checkedVals = "";
+
+	// get the question-content-parent element and go through all its
+	// div-children
+	clickedQContent = clickedEl.parents("[id*=q_]");
+	mcs = clickedQContent.children('div').find("input");
+	mcs.each(function() {
+
+		inputid = $(this).attr("id");
+		if(inputid.indexOf("i_unknown")==-1){
+			// if it is checked, add it to the save-checked-vals-variable
+			if ($(this).attr("checked") == true) {
+				checkedVals += $(this).attr("id").replace("f_", "") + ",";
+			}
+		}
+		
+	});
+
+	return checkedVals;
+}
+
+
+function d3web_addMCfacts(mcfacts, qid) {
+
+	qid = qid.replace("ok-", "");
+	
+	var link = $.query.set("action", "addmcfact").set("mcs", mcfacts).set(
+			"qid", qid).toString();
+	link = window.location.href.replace(window.location.search, "") + link;
+
+	$.ajax({
+		type : "GET",
+		url : link,
+		success : function(html) {
+			if (html !== "") {
+				// Error message and reset session so user can provide input
+				// first
+				var errMsg = "Das Feld '" + html
+						+ "' muss immer zuerst ausgefüllt werden!";
+				alert(errMsg);
+				d3web_resetSession();
+			} else {
+				d3web_show();
+			}
+		}
+	});
+}
+
 
 /**
  * Send an AJAX request to check, whether possibly answered num questions
@@ -252,7 +313,6 @@ function d3web_checkNumRanges(qid, value, store, numStore) {
 					link,
 					function(data) {
 
-						alert(data);
 						if (data !== "") { // range(s) exist(s)
 
 							// split the ID/val/range complete String into
@@ -303,6 +363,7 @@ function d3web_checkNumRanges(qid, value, store, numStore) {
 				// if val was in provided range add value
 				if (checkRangeOK) {
 
+					
 					// reset error messages
 					$("[id*=error]").html("");
 					d3web_addfactsRemembering(store, qid, value);
@@ -314,7 +375,7 @@ function d3web_checkNumRanges(qid, value, store, numStore) {
 
 
 function d3web_IQClicked(id) {
-	alert("image answer " + id + " was clicked");
+	//alert("image answer " + id + " was clicked");
 	d3web_getSelectedFacts($('#' + id));
 	/*var target = $("#" + id);	// get the clicked element
 	var selected = target.find(":input:checked");	// find clicked input 
@@ -796,12 +857,12 @@ function d3web_getSelectedFacts(clickedItem) {
 	// if unknown has been clicked, it is primarily saved
 	if (clickedItem.attr('id').indexOf('i_unknown') >= 0) {
 		pos = clickedItem.attr("id");
-		
-	} 
+		} 
 	
 	// image questions
 	else if  (clickedItem.attr('id').indexOf('img_') >= 0) {
-		pos = clickedItem.attr("id");
+		pos = clickedItem.attr("id").replace("img_", "");
+		//alert(pos);
 	}
 
 	// otherwise check for "not-unknown" radio buttons and checkboxes
@@ -820,7 +881,7 @@ function d3web_getSelectedFacts(clickedItem) {
 			items = question.find('[type=radio]');
 			items.each(function() {
 				if ($(this).attr('checked')) {
-					pos = $(this).attr("id").substring(2);
+					pos = $(this).attr("title");
 				}
 			});
 		}
