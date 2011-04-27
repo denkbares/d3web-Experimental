@@ -83,6 +83,7 @@ KNOWWE.plugin.comment = function(){
         	//var value = comString.innerText || comString.textContent || '';
         	var value = comString.innerHTML;
         	value = value.replace(/<br>/g, "\n> ");
+        	value = value.replace(/&gt;/g, "> ");
         	
         	if(_KS('#knowwe-plugin-comment')) {
         		_KS('#knowwe-plugin-comment').value = "> " + value + "\n\n";
