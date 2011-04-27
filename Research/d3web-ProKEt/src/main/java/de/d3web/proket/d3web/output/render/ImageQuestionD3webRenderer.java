@@ -19,11 +19,8 @@
  */
 package de.d3web.proket.d3web.output.render;
 
-import java.io.IOException;
-
 import org.antlr.stringtemplate.StringTemplate;
 
-import de.d3web.core.knowledge.Resource;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
@@ -37,7 +34,7 @@ import de.d3web.core.session.interviewmanager.Form;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webUtils;
-import de.d3web.proket.d3web.utils.AttachmentHandlingD3webUtils;
+import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
@@ -81,20 +78,10 @@ public class ImageQuestionD3webRenderer extends D3webRenderer {
 		st.setAttribute("count", D3webConnector.getInstance().getQuestionCount());
 
 		// TODO extend for HERNIA
-		// adapt to take Popup just from description name POP#####
-		// handling popups, defined in textfiles in the KB
-		String popupResName = "popup" + to.getName() + ".txt";
-
-		Resource res = D3webConnector.getInstance().getKb().getResource(popupResName);
-		if (res != null) {
-			try {
-				String resString =
-					AttachmentHandlingD3webUtils.getTextfileContentsFromTextfileAttachment(res);
-				st.setAttribute("tooltip", resString);
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
+		// read html popups from properties
+		String resString = to.getInfoStore().getValue(ProKEtProperties.POPUP);
+		if (resString != null) {
+			st.setAttribute("tooltip", resString);
 		}
 
 

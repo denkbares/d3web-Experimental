@@ -23,6 +23,16 @@
 	</extension>
 	
 	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="text_format">
+		<parameter id="name" value="text_format" />
+		<parameter id="description" value="allows to specify a format for text entries" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.String" />
+	</extension>
+	
+	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
 		id="popup">
 		<parameter id="name" value="popup" />
 		<parameter id="description" value="can be used for popups providing addtional informations for questions" />

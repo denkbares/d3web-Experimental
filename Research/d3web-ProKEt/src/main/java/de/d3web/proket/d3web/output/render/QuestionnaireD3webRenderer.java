@@ -24,6 +24,7 @@ import org.antlr.stringtemplate.StringTemplate;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
@@ -63,6 +64,11 @@ public class QuestionnaireD3webRenderer extends D3webRenderer {
 		st.setAttribute("fullId", to.getName().replace(" ", "_"));
 		st.setAttribute("title", to.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getQuestionnaireCount());
+
+		String resString = to.getInfoStore().getValue(ProKEtProperties.POPUP);
+		if (resString != null) {
+			st.setAttribute("tooltip", resString);
+		}
 
 		Blackboard bb = super.d3webSession.getBlackboard();
 

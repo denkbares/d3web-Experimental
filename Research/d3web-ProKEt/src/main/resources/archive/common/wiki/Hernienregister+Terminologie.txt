@@ -5,9 +5,9 @@ EuraHS Initialization #1
 - Please select one of the following options [oc]
 -- Enter a new operation
 -- Enter operative or postoperative data of an operation
---- EuraHS registration number [num]
+--- EuraHS registration number [text]
 -- Enter follow up data of an operation
---- EuraHS registration number [num]
+--- EuraHS registration number [text]
 -- Get information on your patients
 -- Lost the registration number? Request information.
 - Please select your hernia route [oc]
@@ -37,7 +37,7 @@ Common Route #2
 -- Male
 -- Female
 - Scheduled date of operation [date]
-- EuraHS registration number [num]
+- EuraHS registration number [text]
 - Informed consent obtained [yn]
 
 Comorbidities #3

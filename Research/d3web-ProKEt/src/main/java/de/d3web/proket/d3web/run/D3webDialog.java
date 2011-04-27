@@ -30,6 +30,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.mail.Message;
@@ -838,7 +840,24 @@ public class D3webDialog extends HttpServlet {
 			}
 			// TEXT questions
 			else if (to instanceof QuestionText) {
-				value = new TextValue(valString);
+				String textPattern = to.getInfoStore().getValue(ProKEtProperties.TEXT_FORMAT);
+				Pattern p = null;
+				if (textPattern != null && !textPattern.isEmpty()) {
+					try {
+						p = Pattern.compile(textPattern);
+					}
+					catch (Exception e) {
+
+					}
+				}
+				if (p != null) {
+					Matcher m = p.matcher(valString);
+					if (m.find()) {
+						value = new TextValue(m.group());
+					}
+				} else {
+					value = new TextValue(valString);
+				}
 			}
 			// NUM questions
 			else if (to instanceof QuestionNum) {
