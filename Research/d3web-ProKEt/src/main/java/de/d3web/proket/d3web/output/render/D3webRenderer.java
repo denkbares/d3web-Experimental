@@ -26,6 +26,7 @@ import org.antlr.stringtemplate.StringTemplate;
 import de.d3web.core.knowledge.Indication.State;
 import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.QContainer;
@@ -33,7 +34,9 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Session;
+import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
+import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
@@ -67,6 +70,8 @@ import de.d3web.proket.utils.TemplateUtils;
 public class D3webRenderer implements ID3webRenderer {
 
 	protected static Session d3webSession;
+	private int countQcon = 1;
+	private int countQ = 1;
 
 	public static void storeSession(Session session) {
 		d3webSession = session;
@@ -166,12 +171,9 @@ public class D3webRenderer implements ID3webRenderer {
 		st.setAttribute("savecase", "true");
 		st.setAttribute("reset", "true");
 
-
-
 		// ONLY FOR HERNIA! Disable for Mediastinitis?!
 		st.setAttribute("summary", true);
 		// create a summary of already answered questions
-
 
 		// st.setAttribute("sendexit", "true");
 
@@ -228,7 +230,6 @@ public class D3webRenderer implements ID3webRenderer {
 		else if (to instanceof Question) {
 			columns = d3wcon.getQuestionColumns();
 		}
-
 
 		// if more than one column is required, get open-table tag from
 		// TableContainer and append it to the HTML
@@ -422,7 +423,6 @@ public class D3webRenderer implements ID3webRenderer {
 			st.setAttribute("children", childrenHTML.toString());
 		}
 	}
-
 
 	/**
 	 * Handles CSS specifications from the specification XML, i.e. checks the
@@ -675,13 +675,40 @@ public class D3webRenderer implements ID3webRenderer {
 
 	private String fillSummaryDialog() {
 
-		int counter = 1;
 		StringBuilder bui = new StringBuilder();
-		for(QContainer qcon : D3webConnector.getInstance().getKb().getManager().getQContainers()){
-			bui.append("<div>" + counter + " " + qcon.getName() + "</div>");
-			counter++;
-		}
+		D3webConnector d3wcon = D3webConnector.getInstance();
+
+		TerminologyObject root = d3wcon.getKb().getRootQASet();
+
+		fillSummaryChildren(bui, root);
 
 		return bui.toString();
 	}
+
+	private void fillSummaryChildren(StringBuilder bui, TerminologyObject to) {
+
+		if (to instanceof QContainer && !to.getName().contains("Q000")) {
+			bui.append("<div style='margin-top:10px;'><b>" + countQcon + " " + to.getName()
+					+ "</b></div>");
+			countQcon++;
+		}
+		else if (to instanceof Question) {
+			Value val =
+					d3webSession.getBlackboard().getValue((ValueObject) to);
+
+			if (val != null && UndefinedValue.isNotUndefinedValue(val)) {
+				bui.append("<div style='margin-left:10px;'>" + countQ + " " + to.getName()
+						+ " -- " + val + "</div>");
+			}
+			countQ++;
+		}
+
+		if (to.getChildren() != null && to.getChildren().length != 0) {
+			for (TerminologyObject toc : to.getChildren()) {
+				fillSummaryChildren(bui, toc);
+			}
+		}
+
+	}
+
 }

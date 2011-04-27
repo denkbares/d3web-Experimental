@@ -90,9 +90,9 @@ $(function() {
 			autoOpen : false,
 			position : [ "left", "top" ],
 			modal : false,
-			width : 400,
+			width : 600,
 			height : 400,
-			minWidth : 400,
+			minWidth : 600,
 			minHeight : 400,
 			buttons : {
 				"Schließen" : closeJQSummaryDialog
@@ -200,7 +200,6 @@ function initFunctionality() {
 	});
 	
 	$('#summary').unbind('click').click(function(event){
-		alert("click");
 		$("#jqSummaryDialog").dialog("open");
 	});
 }
