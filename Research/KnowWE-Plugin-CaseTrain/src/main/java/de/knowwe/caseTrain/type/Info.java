@@ -21,7 +21,6 @@
 package de.knowwe.caseTrain.type;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -45,7 +44,6 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.caseTrain.message.InvalidArgumentError;
 import de.knowwe.caseTrain.message.MissingAttributeWarning;
 import de.knowwe.caseTrain.message.MissingComponentError;
 import de.knowwe.caseTrain.message.MissingComponentWarning;
@@ -196,7 +194,6 @@ public class Info extends BlockMarkupType {
 				/////////////////////////////////////////////////////////////////
 
 
-
 				return messages;
 			}
 
@@ -210,6 +207,7 @@ public class Info extends BlockMarkupType {
 			 * @param s
 			 * @return
 			 */
+			@SuppressWarnings("unchecked")
 			private List<KDOMReportMessage> testQuestionAnswerComposition(Section<Info> s) {
 
 				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
@@ -225,6 +223,11 @@ public class Info extends BlockMarkupType {
 				 *  check children if the right order is given or some
 				 *  thing is missing. Right is:
 				 *  Hinweis* Frage Hinweis* Antworten Hinweis* Erklaerung
+				 * 
+				 *  Also validates the given Antworten-block for:
+				 *   - frage hat nur eine antwortmöglichkeit
+				 *   - frage hat keine richtige antwortmöglichkeit
+				 *   - frage hat keine falsche antwortmöglichkeit
 				 * 
 				 *  TODO getting the children is not save. How do I get the
 				 *  the BlockMarkupContent?
@@ -259,6 +262,8 @@ public class Info extends BlockMarkupType {
 					}
 					if (sec.get() instanceof Antworten) {
 						antwortenMissing = false;
+						AntwortKorrektheitChecker.getInstance().
+						validateAntwortenBlock((Section<Frage>) actual, (Section<Antworten>) sec, messages);
 						continue;
 					}
 				}
@@ -296,10 +301,6 @@ class Antworten extends SubblockMarkup {
 					messages.add(new MissingComponentWarning(ANTWORT));
 				}
 
-				if (found.size() < 2) {
-					messages.add(new InvalidArgumentError("Weniger als 2 Antworten angegeben."));
-				}
-
 				return messages;
 			}
 		});
@@ -330,38 +331,9 @@ class Antworten extends SubblockMarkup {
 				public AntwortKorrektheitContent() {
 					this.setCustomRenderer(new StyleRenderer("font-weight:bold;"));
 					this.setSectionFinder(new RegexSectionFinder(regex, Pattern.DOTALL, 1));
-					this.addSubtreeHandler(new AntwortKorrektheitChecker());
+					this.addSubtreeHandler(AntwortKorrektheitChecker.getInstance());
 				}
 
-				private final class AntwortKorrektheitChecker extends GeneralSubtreeHandler<AntwortKorrektheitContent> {
-
-					@Override
-					public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<AntwortKorrektheitContent> s) {
-						String content = s.getOriginalText().trim();
-						String[] symbols = {
-								"+", "-" };
-						for (String string : symbols) {
-							if (content.equals(string)) {
-								return new ArrayList<KDOMReportMessage>(0);
-							}
-						}
-
-						double d = 0.0;
-						try {
-							d = Double.parseDouble(content);
-						}
-						catch (Exception e) {
-							return Arrays.asList((KDOMReportMessage) new InvalidArgumentError(
-							" Nur '+' oder '-' oder Zahlen zwischen 0 und 1 erlaubt!"));
-						}
-
-						if ( (d < 0) || (d > 1) ) {
-							return Arrays.asList((KDOMReportMessage) new InvalidArgumentError(
-							" Nur Zahlen zwischen 0 und 1 erlaubt!"));
-						}
-						return new ArrayList<KDOMReportMessage>(0);
-					}
-				}
 			}
 		}
 	}
@@ -431,15 +403,9 @@ class Frage extends SubblockMarkup {
 
 	class FrageTyp extends AbstractType {
 
-		private final String[] types = {"MC", "OC", "NUM"};
-
 		public FrageTyp() {
-			StringBuilder typesRegex = new StringBuilder("(");
-			for(int i=0; i<types.length; i++)
-				typesRegex.append(types[i] + "|");
-			typesRegex.deleteCharAt(typesRegex.length()-1);
-			typesRegex.append(")");
-			this.setSectionFinder(new RegexSectionFinder(typesRegex.toString()));
+			this.setSectionFinder(new RegexSectionFinder(
+					AntwortKorrektheitChecker.getInstance().getRegexAsString()));
 			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
 		}
 
