@@ -60,8 +60,9 @@ public class SubblockMarkup extends AbstractType {
 	public SubblockMarkup(String key) {
 		this.key = key;
 
-		this.sectionFinder = new RegexSectionFinder("\\r?\\n(" + START_TAG
-				+ key + ":" + "(.*?)" + END_TAG + ")\\r?\\n", Pattern.DOTALL, 1);
+		String regex1 = START_TAG + key + ":" + "(.*?)" + END_TAG;
+
+		this.sectionFinder = new RegexSectionFinder("\\r?\\n(" + regex1 + ")\\r?\\n", Pattern.DOTALL, 1);
 
 		this.setCustomRenderer(new KnowWEDomRenderer<SubblockMarkup>() {
 
@@ -77,11 +78,7 @@ public class SubblockMarkup extends AbstractType {
 		});
 
 		content = new SubBlockMarkupContent();
-
-		// TODO: reuse regex above
-		String regex2 = START_TAG
-		+ key + ":" + "(.*?)" + END_TAG;
-		content.setSectionFinder(new RegexSectionFinder(regex2, Pattern.DOTALL, 1));
+		content.setSectionFinder(new RegexSectionFinder(regex1, Pattern.DOTALL, 1));
 		this.addChildType(content);
 
 		AnonymousTypeInvisible keytext = new AnonymousTypeInvisible("syntax");
@@ -94,7 +91,7 @@ public class SubblockMarkup extends AbstractType {
 
 	/**
 	 * Types can be added to contentType of the SubblockMarkup
-	 * for refining the KDOM.
+	 * for refining the KDOM-Structure.
 	 * 
 	 * @created 25.04.2011
 	 * @param t
@@ -105,6 +102,13 @@ public class SubblockMarkup extends AbstractType {
 
 }
 
+/**
+ * 
+ * Contains content of SubblockMarkup.
+ * 
+ * @author Jochen
+ * @created 28.04.2011
+ */
 class SubBlockMarkupContent extends AbstractType {
 
 }

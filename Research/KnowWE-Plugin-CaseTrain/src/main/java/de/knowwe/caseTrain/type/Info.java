@@ -168,7 +168,7 @@ public class Info extends BlockMarkupType {
 				/*
 				 *  Info has no content if:
 				 *  - Only title as children and no other children
-				 *  - If it has no children at all
+				 *  - It has no children at all
 				 */
 				List<Section<? extends Type>> blockMarkupChildren = s.getChildren().get(0).getChildren();
 				if ( ((title != null) && (blockMarkupChildren.size() == 1))
@@ -201,7 +201,7 @@ public class Info extends BlockMarkupType {
 			 * Tests the following:
 			 * Frage has Antworten/Erklaerung
 			 * 
-			 * Does not test if Antworten has Frage!
+			 * TODO Does not test if Antworten has Frage! Is this necessary?
 			 * 
 			 * @created 28.04.2011
 			 * @param s
@@ -274,8 +274,11 @@ public class Info extends BlockMarkupType {
 
 }
 
-/*
- *  TODO Only works for MC and OC Questions.
+/**
+ * Part of Info: Contains Antwort-Lines.
+ * 
+ * @author Jochen Reutelshoefer
+ * @created 28.04.2011
  */
 class Antworten extends SubblockMarkup {
 
@@ -326,6 +329,12 @@ class Antworten extends SubblockMarkup {
 				this.addChildType(new AntwortKorrektheitContent());
 			}
 
+			/**
+			 * See also {@link AntwortKorrektheitChecker}
+			 * 
+			 * @author Jochen
+			 * @created 28.04.2011
+			 */
 			class AntwortKorrektheitContent extends AbstractType {
 
 				public AntwortKorrektheitContent() {

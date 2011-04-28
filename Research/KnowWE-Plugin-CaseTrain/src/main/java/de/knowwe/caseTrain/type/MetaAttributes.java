@@ -79,9 +79,17 @@ public class MetaAttributes {
 		attributes.put("CASE_HISTORY", CASE_HISTORY);
 	}
 
+	/**
+	 * Returns true if attribute is specified.
+	 * False otherwise.
+	 * 
+	 * @created 28.04.2011
+	 * @param attribute
+	 * @return
+	 */
 	public boolean contains(String attribute) {
 		for(String key : attributes.keySet()) {
-			if(this.attributes.get(key).equals(attribute)) return true;
+			if(this.attributes.get(key).equals(attribute)) {return true;}
 		}
 		return false;
 	}

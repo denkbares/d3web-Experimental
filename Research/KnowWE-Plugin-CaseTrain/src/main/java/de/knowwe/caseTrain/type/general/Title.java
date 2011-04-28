@@ -26,6 +26,7 @@ import de.d3web.we.kdom.sectionFinder.LineSectionFinder;
 import de.knowwe.caseTrain.renderer.DivStyleClassRenderer;
 
 /**
+ * 
  * Belongs to BlockMarkupType. Represents the rest of the first line after the
  * keyword.
  * 

@@ -40,6 +40,7 @@ import de.knowwe.caseTrain.type.Frage.FrageTyp;
  * 
  * Checks, if a specified Antwort is conform with its
  * correlated Frage.
+ * Used in SubtreeHandler of {@link Info} and in {@link AntwortKorrektheitContent}
  * 
  * @author Johannes Dienst
  * @created 28.04.2011

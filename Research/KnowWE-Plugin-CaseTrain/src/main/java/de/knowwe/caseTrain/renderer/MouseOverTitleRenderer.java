@@ -29,6 +29,7 @@ import de.d3web.we.utils.KnowWEUtils;
 /**
  * 
  * To show the KnowWEObjectType on mouseover.
+ * Uses the Title-Tag of HTML to achieve this behaviour.
  * 
  * @author Johannes Dienst
  * @created 18.04.2011

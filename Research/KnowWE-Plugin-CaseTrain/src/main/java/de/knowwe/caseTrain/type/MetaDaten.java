@@ -112,6 +112,14 @@ public class MetaDaten extends BlockMarkupType {
 
 }
 
+/**
+ * 
+ * A Line of the MetaDaten table.
+ * The Delimiter ":" is not rendered into the table.
+ * 
+ * @author Jochen
+ * @created 6.04.2011
+ */
 class MetaLine extends AbstractType {
 
 	public MetaLine() {

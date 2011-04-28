@@ -43,7 +43,7 @@ import de.knowwe.caseTrain.util.Utils;
 /**
  * 
  * A simple Type to capture a section of a page using a start/end-tag and a
- * keyword. Vontent-types can be added. Error messages are rendered as summary
+ * keyword. Content-types can be added. Error messages are rendered as summary
  * at the top of the block.
  * 
  * @author Jochen
@@ -63,10 +63,10 @@ public abstract class BlockMarkupType extends AbstractType {
 
 	public BlockMarkupType(String key) {
 		this.key = key;
-		
+
 		String regex = "^(" + START_TAG + ""
 		+ key +":"+ "(.*?)" + END_TAG + ")\\r?\\n";
-		
+
 		this.sectionFinder = new RegexSectionFinder(regex, Pattern.DOTALL
 				| Pattern.MULTILINE, 1);
 
@@ -97,7 +97,7 @@ public abstract class BlockMarkupType extends AbstractType {
 
 		// TODO: reuse regex above
 		String regex2 = START_TAG + ""
-				+ key + ":" + "(.*?)" + END_TAG;
+		+ key + ":" + "(.*?)" + END_TAG;
 		content.setSectionFinder(new RegexSectionFinder(regex2, Pattern.DOTALL, 1));
 		this.addChildType(content);
 
