@@ -19,6 +19,10 @@
  */
 package de.d3web.proket.d3web.output.render;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.Locale;
+
 import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.knowledge.TerminologyObject;
@@ -78,7 +82,6 @@ public class AnswerNumD3webRenderer extends D3webRenderer {
 		Blackboard bb = super.d3webSession.getBlackboard();
 		Value value = bb.getValue((ValueObject) nq);
 
-
 		if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
 			st.setAttribute("readonly", "true");
 			st.setAttribute("inactive", "true");
@@ -109,7 +112,6 @@ public class AnswerNumD3webRenderer extends D3webRenderer {
 			st.setAttribute("selection", "");
 		}
 
-
 		// if not undefined and not unknown, value needs to be written into
 		// num field
 		if (value != null && UndefinedValue.isNotUndefinedValue(value)
@@ -119,8 +121,20 @@ public class AnswerNumD3webRenderer extends D3webRenderer {
 				st.removeAttribute("readonly");
 				st.removeAttribute("inactive");
 			}
+
+			// quick tweak for double-num values formatting
+			BigDecimal myDec = new BigDecimal((Double) value.getValue());
+			Double numround = myDec.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+			DecimalFormat df =
+					(DecimalFormat) DecimalFormat.getInstance(Locale.GERMAN);
+			df.applyPattern("#,###,##0.00");
+			String doubleString = df.format(numround);
+			if (doubleString.endsWith("00")) {
+				doubleString = doubleString.substring(0, doubleString.length() - 3);
+			}
+
 			st.removeAttribute("selection");
-			st.setAttribute("selection", value);
+			st.setAttribute("selection", doubleString);
 		}
 
 		// if undefined or unknown value, erase entries from num field

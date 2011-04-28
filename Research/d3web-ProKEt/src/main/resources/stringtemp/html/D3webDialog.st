@@ -9,7 +9,7 @@ $endif$
 <div id="head">
 	<table>
 	<tr>
-	<td width="35%">
+	<td width="40%">
 		$if(loadcase)$
 			<div class="leftButton">
 				$CaseLoadButton()$
@@ -34,7 +34,7 @@ $endif$
 	<td width=*>
 		$header$
 	</td>
-	<td width="35%">
+	<td width="40%">
 	
 	</td>
 	</tr>

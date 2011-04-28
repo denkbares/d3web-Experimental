@@ -22,6 +22,8 @@
  * Startup code, executed on page load
  */
 
+var mcVals = "";
+
 $(function() {
 	
 	// if login should be enabled: set in minimal XML and JSCodeContainer
@@ -143,7 +145,7 @@ $(function() {
  */
 function initFunctionality() {
 
-	var mcVals = "";
+	mcVals = "";
 	
 	/*
 	 * bind "get selected facts" method to radio buttons, checkboxes and
@@ -471,6 +473,13 @@ function d3web_getRemainingFacts() {
  */
 function d3web_addfactsRemembering(store, qid, pos) {
 
+	//alert(mcVals);
+	
+	// TODO MC values senden
+	//if(mcVals != ""){
+		//alert("hier mc senden");	
+	//}
+	
 	var link = $.query.set("action", "addFact").set("qid", qid).set("pos", pos)
 			.set("store", store).toString();
 	link = window.location.href.replace(window.location.search, "") + link;
