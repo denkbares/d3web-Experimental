@@ -28,9 +28,15 @@ import de.d3web.we.kdom.report.KDOMWarning;
  */
 public class MissingContentWarning extends KDOMWarning {
 
+	private final String text;
+
+	public MissingContentWarning(String text) {
+		this.text = text;
+	}
+
 	@Override
 	public String getVerbalization() {
-		return "Kein Inhalt vorhanden";
+		return "Kein Inhalt vorhanden: " + text;
 	}
 
 }

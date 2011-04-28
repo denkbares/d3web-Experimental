@@ -42,7 +42,7 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.caseTrain.message.MissingComponentWarning;
+import de.knowwe.caseTrain.message.MissingComponentError;
 import de.knowwe.caseTrain.type.MetaLine.AttributeName;
 import de.knowwe.caseTrain.type.general.BlockMarkupType;
 import de.knowwe.caseTrain.util.Utils;
@@ -93,7 +93,7 @@ public class MetaDaten extends BlockMarkupType {
 				Section<Info> infoSection = Sections.findSuccessor(s.getArticle().getSection(),
 						Info.class);
 				if (infoSection == null) {
-					messages.add(new MissingComponentWarning(INFO_ABSCHNITT));
+					messages.add(new MissingComponentError(INFO_ABSCHNITT));
 				}
 
 				List<Section<AttributeName>> atts = new ArrayList<Section<AttributeName>>();

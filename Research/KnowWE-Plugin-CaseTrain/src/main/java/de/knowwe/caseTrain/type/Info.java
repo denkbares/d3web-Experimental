@@ -31,6 +31,7 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
+import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
@@ -47,7 +48,9 @@ import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
 import de.knowwe.caseTrain.message.InvalidArgumentError;
 import de.knowwe.caseTrain.message.MissingAttributeWarning;
+import de.knowwe.caseTrain.message.MissingComponentError;
 import de.knowwe.caseTrain.message.MissingComponentWarning;
+import de.knowwe.caseTrain.message.MissingContentWarning;
 import de.knowwe.caseTrain.renderer.DivStyleClassRenderer;
 import de.knowwe.caseTrain.renderer.MouseOverTitleRenderer;
 import de.knowwe.caseTrain.type.general.Bild;
@@ -115,11 +118,12 @@ public class Info extends BlockMarkupType {
 		};
 	}
 
-	private final String FRAGE = "Frage";
-	private final String EINLEITUNG = "Einleitung";
-	private final String ABSCHLUSS = "Abschluss";
-	private final String ERKLAERUNG = "Erklaerung";
-	private final String ANTWORTEN = "ANTWORTEN";
+	public static final String FRAGE = "Frage";
+	public static final String EINLEITUNG = "Einleitung";
+	public static final String ABSCHLUSS = "Abschluss";
+	public static final String ERKLAERUNG = "Erklaerung";
+	public static final String ANTWORTEN = "Antworten";
+	public static final String ABSCHNITT = "Abschnitt";
 
 	public Info() {
 		super("Info");
@@ -159,18 +163,36 @@ public class Info extends BlockMarkupType {
 
 				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
 
-				messages.addAll(this.testQuestionAnswerComposition(s));
+				Section<Title> title = Sections.findSuccessor(s, Title.class);
+				if (title == null) {
+					messages.add(new MissingComponentError(Title.TITLE));
+				}
+
+				/*
+				 *  Info has no content if:
+				 *  - Only title as children and no other children
+				 *  - If it has no children at all
+				 */
+				List<Section<? extends Type>> blockMarkupChildren = s.getChildren().get(0).getChildren();
+				if ( ((title != null) && (blockMarkupChildren.size() == 1))
+						|| blockMarkupChildren.size() == 0) {
+					messages.add(new MissingContentWarning(Info.ABSCHNITT));
+				} else {
+					messages.addAll(this.testQuestionAnswerComposition(s));
+				}
+
+
 
 				// TODO: This is right, as long as a Page contains ONLY ONE Info
 				Section<Einleitung> einleitung = Sections.findSuccessor(s.getArticle().getSection(),
 						Einleitung.class);
 				if (einleitung == null) {
-					messages.add(new MissingComponentWarning(EINLEITUNG));
+					messages.add(new MissingComponentError(EINLEITUNG));
 				}
 				Section<Abschluss> abschluss = Sections.findSuccessor(s.getArticle().getSection(),
 						Abschluss.class);
 				if (abschluss == null) {
-					messages.add(new MissingComponentWarning(ABSCHLUSS));
+					messages.add(new MissingComponentError(ABSCHLUSS));
 				}
 				/////////////////////////////////////////////////////////////////
 
@@ -179,6 +201,16 @@ public class Info extends BlockMarkupType {
 				return messages;
 			}
 
+			/**
+			 * Tests the following:
+			 * Frage has Antworten/Erklaerung
+			 * 
+			 * Does not test if Antworten has Frage!
+			 * 
+			 * @created 28.04.2011
+			 * @param s
+			 * @return
+			 */
 			private List<KDOMReportMessage> testQuestionAnswerComposition(Section<Info> s) {
 
 				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
@@ -238,11 +270,40 @@ public class Info extends BlockMarkupType {
 
 }
 
+/*
+ *  TODO Only works for MC and OC Questions.
+ */
 class Antworten extends SubblockMarkup {
+
+	private final String ANTWORT = "Antwort";
 
 	public Antworten() {
 		super("Antworten");
+		PlainText plain = new PlainText();
+		plain.setSectionFinder(new RegexSectionFinder("\\r?\\n"));
+		this.addContentType(plain);
 		this.addContentType(new Antwort());
+
+		this.addSubtreeHandler(new GeneralSubtreeHandler<Frage>() {
+
+			@Override
+			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Frage> s) {
+
+				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
+				List<Section<Antwort>> found = new ArrayList<Section<Antwort>>();
+				Sections.findSuccessorsOfType(s, Antwort.class, found);
+
+				if (found.isEmpty()) {
+					messages.add(new MissingComponentWarning(ANTWORT));
+				}
+
+				if (found.size() < 2) {
+					messages.add(new InvalidArgumentError("Weniger als 2 Antworten angegeben."));
+				}
+
+				return messages;
+			}
+		});
 	}
 
 	class Antwort extends AbstractType {
@@ -347,7 +408,7 @@ class Frage extends SubblockMarkup {
 
 				Section<FrageTyp> typSection = Sections.findSuccessor(s, FrageTyp.class);
 				if (typSection == null) {
-					messages.add(new MissingComponentWarning(FRAGE_TYPE));
+					messages.add(new MissingComponentError(FRAGE_TYPE));
 				}
 
 				Section<FrageText> fragetextSection = Sections.findSuccessor(s,
