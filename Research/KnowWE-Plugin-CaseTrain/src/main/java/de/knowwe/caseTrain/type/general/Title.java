@@ -20,16 +20,10 @@
 package de.knowwe.caseTrain.type.general;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
-import de.d3web.we.kdom.rendering.DelegateRenderer;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.sectionFinder.LineSectionFinder;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.caseTrain.renderer.DivStyleClassRenderer;
 
 /**
  * Belongs to BlockMarkupType. Represents the rest of the first line after the
@@ -48,25 +42,7 @@ public class Title extends AbstractType {
 		cf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 		this.setSectionFinder(cf);
 
-		this.setCustomRenderer(new KnowWEDomRenderer<Title>() {
-
-			// TODO: use existing renderer class
-			@Override
-			public void render(KnowWEArticle article, Section<Title> sec, UserContext user, StringBuilder string) {
-				if (sec.getOriginalText().trim().equals("")) return; // if empty
-				// do
-				// nothing
-				Section<? extends Type> father = sec.getFather().getFather();
-				String classPrefix = father.get().getClass().getSimpleName();
-
-				string.append(KnowWEUtils.maskHTML("<div class='" +
-						"Titel"
-						+ "'>"));
-				DelegateRenderer.getInstance().render(article, sec, user, string);
-				string.append(KnowWEUtils.maskHTML("</div>"));
-
-			}
-		});
+		this.setCustomRenderer(new DivStyleClassRenderer(TITLE));
 
 	}
 

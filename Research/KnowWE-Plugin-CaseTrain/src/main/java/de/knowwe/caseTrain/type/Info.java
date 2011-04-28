@@ -34,7 +34,6 @@ import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
-import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.report.KDOMError;
@@ -150,7 +149,7 @@ public class Info extends BlockMarkupType {
 						article,
 						sec,
 						KDOMWarning.class), string);
-				DelegateRenderer.getInstance().render(article, sec, user, string);
+				MouseOverTitleRenderer.getInstance().render(article, sec, user, string);
 				string.append(KnowWEUtils.maskHTML("<div class='Infoend'></div>"));
 				string.append(KnowWEUtils.maskHTML("</div>"));
 			}
@@ -426,6 +425,7 @@ class Frage extends SubblockMarkup {
 
 		public FrageGewicht() {
 			this.setSectionFinder(new RegexSectionFinder("[0]*[1-9]+"));
+			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
 		}
 	}
 
@@ -449,6 +449,7 @@ class Frage extends SubblockMarkup {
 
 		public FrageText() {
 			this.setSectionFinder(new RegexSectionFinder("([\\w]{1}[\\W]?[ ]?)+\\?"));
+			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
 		}
 	}
 

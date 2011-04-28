@@ -34,7 +34,7 @@ import de.knowwe.caseTrain.type.MetaLine.AttributeName;
 
 
 /**
- * Managing the MetaAttributes.
+ * Managing the MetaAttributes used in {@link MetaDaten}
  * 
  * @author Johannes Dienst
  * @created 20.04.2011

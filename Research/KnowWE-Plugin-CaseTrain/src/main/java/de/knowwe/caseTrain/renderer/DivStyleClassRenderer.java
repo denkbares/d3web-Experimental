@@ -36,20 +36,20 @@ import de.d3web.we.utils.KnowWEUtils;
  * @created 06.04.2011
  */
 public class DivStyleClassRenderer extends KnowWEDomRenderer<Type> {
-	
+
 	String cssClass;
-	
+
 	public DivStyleClassRenderer(String s) {
 		this.cssClass = s;
 	}
-	
+
 	@Override
 	public void render(KnowWEArticle article, Section<Type> sec, UserContext user, StringBuilder string) {
-	string.append(KnowWEUtils.maskHTML("<div class='"
+		string.append(KnowWEUtils.maskHTML("<div class='"
 				+ cssClass
-			+ "'>"));
-	DelegateRenderer.getInstance().render(article, sec, user, string);
-	string.append(KnowWEUtils.maskHTML("</div>"));
+				+ "'>"));
+		DelegateRenderer.getInstance().render(article, sec, user, string);
+		string.append(KnowWEUtils.maskHTML("</div>"));
 
 	}
 

@@ -40,6 +40,7 @@ import de.knowwe.caseTrain.type.general.Title;
 /**
  * 
  * One part of the case-markup-structure of the caseTrain-wiki-format
+ * Represents the end of a Case.
  * 
  * @author Jochen
  * @created 06.04.2011

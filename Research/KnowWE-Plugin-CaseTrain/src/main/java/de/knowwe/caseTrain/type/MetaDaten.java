@@ -52,6 +52,7 @@ import de.knowwe.caseTrain.util.Utils;
  * One part of the case-markup-structure of the caseTrain-wiki-format
  * 
  * MetaDaten are rendered as a table with tow columns - attribute - value
+ * Allowed attributes are specified in {@link MetaAttributes}
  * 
  * @author Jochen
  * @created 06.04.2011

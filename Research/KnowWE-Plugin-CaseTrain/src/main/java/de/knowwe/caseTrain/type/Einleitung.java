@@ -39,7 +39,8 @@ import de.knowwe.caseTrain.type.general.Title;
 
 /**
  * 
- * One part of the case-markup-structure of the caseTrain-wiki-format
+ * One part of the case-markup-structure of the caseTrain-wiki-format.
+ * Represents the Introduction before the Info-Parts.
  * 
  * @author Jochen
  * @created 06.04.2011
