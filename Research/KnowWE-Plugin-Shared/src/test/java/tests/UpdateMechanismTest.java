@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.List;
 
 import junit.framework.TestCase;
-import utils.Utils;
+import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -50,7 +50,7 @@ public class UpdateMechanismTest extends TestCase {
 		/*
 		 * Setup
 		 */
-		String content = Utils.readTxtFile("src/test/resources/UpdatingTest1.txt");
+		String content = TestUtils.readTxtFile("src/test/resources/UpdatingTest1.txt");
 
 		// types.add(DefaultTextType.getInstance());
 

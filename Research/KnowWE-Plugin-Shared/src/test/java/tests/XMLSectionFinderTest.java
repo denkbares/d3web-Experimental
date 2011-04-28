@@ -28,7 +28,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import junit.framework.TestCase;
-import utils.Utils;
+import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -191,7 +191,7 @@ public class XMLSectionFinderTest extends TestCase {
 			s = new FileInputStream(f);
 
 			BufferedReader r = new BufferedReader(new InputStreamReader(s));
-			String st = Utils.readBytes(r);
+			String st = TestUtils.readBytes(r);
 			s.close();
 			r.close();
 			return st;

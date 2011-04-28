@@ -27,7 +27,7 @@
 // import java.util.Set;
 //
 // import junit.framework.TestCase;
-// import utils.Utils;
+// import utils.TestUtils;
 // import de.d3web.core.inference.KnowledgeSlice;
 // import de.d3web.core.inference.RuleSet;
 // import de.d3web.core.knowledge.KnowledgeBase;
@@ -68,7 +68,7 @@
 // /*
 // * Setup
 // */
-// String content = Utils.readTxtFile("src/test/resources/UpdatingTest1.txt");
+// String content = TestUtils.readTxtFile("src/test/resources/UpdatingTest1.txt");
 //		
 // Type types = new Kopic();
 //		
@@ -123,9 +123,9 @@
 // /*
 // * Setup
 // */
-// String content1 = Utils.readTxtFile("src/test/resources/UpdatingTest1.txt");
-// String content2 = Utils.readTxtFile("src/test/resources/UpdatingTest2.txt");
-// String content3 = Utils.readTxtFile("src/test/resources/UpdatingTest3.txt");
+// String content1 = TestUtils.readTxtFile("src/test/resources/UpdatingTest1.txt");
+// String content2 = TestUtils.readTxtFile("src/test/resources/UpdatingTest2.txt");
+// String content3 = TestUtils.readTxtFile("src/test/resources/UpdatingTest3.txt");
 //		
 // Type types = new Kopic();
 //		
