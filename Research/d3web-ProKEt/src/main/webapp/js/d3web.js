@@ -51,7 +51,7 @@ $(function() {
 		var opts = {
 			autoOpen : false,
 			position : top,
-			modal : true,
+			modal : false,
 			width : 410,
 			height : 210,
 			minWidth : 410,
@@ -88,12 +88,12 @@ $(function() {
 
 		var opts = {
 			autoOpen : false,
-			position : [ "left", "top" ],
+			position : [ "center", "top" ],
 			modal : false,
-			width : 600,
-			height : 400,
-			minWidth : 600,
-			minHeight : 400,
+			width : 1000,
+			height : 800,
+			minWidth : 1000,
+			minHeight : 800,
 			buttons : {
 				"Schließen" : closeJQSummaryDialog
 			}

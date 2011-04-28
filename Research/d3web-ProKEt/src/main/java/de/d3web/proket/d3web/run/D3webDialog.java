@@ -547,6 +547,8 @@ public class D3webDialog extends HttpServlet {
 
 		// retrieves path to /cases folder on the server
 		String folderPath = GlobalSettings.getInstance().getCaseFolder();
+		// folderPath += "/" + httpSession.getAttribute("user");
+		// System.out.println(folderPath);
 		String userFilename = request.getParameter("userfn");
 		String lastLoaded = (String) httpSession.getAttribute("lastLoaded");
 
@@ -610,8 +612,8 @@ public class D3webDialog extends HttpServlet {
 	private void sendMail(HttpServletRequest request, HttpServletResponse response,
 			HttpSession httpSession) throws MessagingException {
 
-		final String user = "Meg200x@freenet.de";
-		final String pw = "bonnie";
+		final String user = "SendmailAnonymus@freenet.de";
+		final String pw = "sendmail";
 
 		/* setup properties for mail server */
 		Properties props = new Properties();
@@ -635,13 +637,15 @@ public class D3webDialog extends HttpServlet {
 		MimeMessage message = new MimeMessage(session);
 
 		// from-identificator
-		InternetAddress from = new InternetAddress("freiberg@informatik.uni-wuerzburg.de");
+		InternetAddress from = new InternetAddress("SendmailAnonymus@freenet.de");
 		message.setFrom(from);
 
 		/*
 		 * to-identificator: insert clients mail address here, has to be read
 		 * from csv file
 		 */
+		// InternetAddress to = new
+		// InternetAddress("reinhard.dietzel@maindreieck.com");
 		InternetAddress to = new InternetAddress("martina.freiberg@uni-wuerzburg.de");
 		message.addRecipient(Message.RecipientType.TO, to);
 

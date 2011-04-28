@@ -11,8 +11,8 @@ td { padding: 2px 0; vertical-align: top; height: 100%}
 
 
 /* STANDARD OWN STYLED BUTTONS */ 
-.caseButton{ width: 115px; height: 18px; padding-top: 3px; border: 1px solid #696969; text-align: center; cursor: pointer; 
-	background-color: #DDDDDD; font-weight: bold; color: brown; -moz-box-shadow: 0 0 5px black;	
+.caseButton{ width: 120px; height: 20px; padding-top: 3px; border: 1px solid #696969; text-align: center; cursor: pointer; 
+	background-color: #dddddd; font-weight: bold; color: #224172; -moz-box-shadow: 0 0 5px black;	
 	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; }
 
 .rightButton { float: right; margin-right: 10px; }
@@ -24,7 +24,7 @@ td { padding: 2px 0; vertical-align: top; height: 100%}
 
 
 /* GENERAL STRUCTURING */
-#head{ font-size: 1.5em; font-variant: small-caps; font-weight: bold; text-align: center; background: #f5f5f5;
+#head{ font-size: 1.5em; font-variant: small-caps; font-weight: bold; text-align: center; background: #efefef;
 	background-image: none; padding: 12px 5px 12px 5px; margin-left: auto; margin-right: auto; position: fixed; width: 100%;
 	-moz-box-shadow: 0 0 5px black; -webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; float: none; } 
 
@@ -41,7 +41,7 @@ td { padding: 2px 0; vertical-align: top; height: 100%}
  				
 #questionnaireTitle { font-weight: bolder; padding-right: 5px; }
 
-.title { padding-left: 4px; padding-right: 4px; vertical-align: middle; background-color: #e0e0e0;
+.title { padding-left: 4px; padding-right: 4px; vertical-align: middle; background-color: #efefef;
 	-moz-box-shadow: 0 0 5px black; -webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; }
 
 .title,.title td { font-weight: bolder;}

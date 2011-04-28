@@ -24,9 +24,9 @@ import java.util.Vector;
 
 /**
  * Container for css code.
- * 
+ *
  * @author Martina Freiberg, Johannes Mitlmeier
- * 
+ *
  */
 public class CSSCodeContainer implements ICodeContainer {
 
@@ -42,7 +42,7 @@ public class CSSCodeContainer implements ICodeContainer {
 
 	/**
 	 * Adds a new style to a defined css element
-	 * 
+	 *
 	 * @created 09.10.2010
 	 * @param string the style to be added
 	 * @param cssElement the css element that is extended
@@ -61,7 +61,7 @@ public class CSSCodeContainer implements ICodeContainer {
 
 	/**
 	 * Enable date answers with the color picker
-	 * 
+	 *
 	 * @created 09.10.2010
 	 */
 	public void enableDateAnswer() {
@@ -78,7 +78,7 @@ public class CSSCodeContainer implements ICodeContainer {
 		// if (dateAnswer) {
 		// linkedStyles.add("jquery.datepick.css");
 		// }
-		linkedStyles.add("jqueryUI/jquery-ui-1.8.10.lightness.css");
+		linkedStyles.add("jqueryUI/jquery-ui-1.8.12.customMediastinitis.css");
 
 		// link invariant js files to use browser caching
 		for (String filename : linkedStyles) {
