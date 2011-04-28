@@ -137,31 +137,39 @@ public class D3webDialog extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// HERNIA specific
+		/*
+		 * / HERNIA specific
+		 */
+
+		// needed for assembling filename
 		String login = request.getParameter("l");
+		String nname = request.getParameter("n");
+		String inst = request.getParameter("i");
 
-		//
-		String decoded = Base64CoDec.getPlainString(login);
-
-		String nname = request.getParameter("");
-		String inst = request.getParameter("");
+		// needed for date check
 		String token = request.getParameter("t");
 
-		// Datum aus token decodieren
-		Date d = Base64CoDec.getDate(token);
+		if (login != null && nname != null && inst != null && token != null) {
 
-		// Abfragen login < 30 Sekunden her dann Zugriff
-		Date now = new Date();
-		System.out.println(getDifference(d, now) + " d: " + d + " now: " + now);
+			// decode Strings
+			String decodedLogin = Base64CoDec.getPlainString(login);
+			String decodedNname = Base64CoDec.getPlainString(nname);
+			String decodedInstitute = Base64CoDec.getPlainString(inst);
+			String decodedToken = Base64CoDec.getPlainString(token);
 
-		// Andernfalls Weiterleitung/Zurückleitung
-		if (getDifference(d, now) < -30) {
-			System.out.println("resend to origin Url");
-			response.sendRedirect(
-					response.encodeRedirectURL(
-							"http://casetrain-test.informatik.uni-wuerzburg.de/HernienRegistrierung/login.jsp"));
+			// decode date from token
+			Date d = Base64CoDec.getDate(token);
+			Date now = new Date(); // current date
+
+			// if login was less than 20 sec before, allow login (i.e., just go
+			// on
+			// in code) otherwise redirect to login page
+			if (getDifference(d, now) < -20) {
+				response.sendRedirect(
+						response.encodeRedirectURL(
+								"http://casetrain-test.informatik.uni-wuerzburg.de/HernienRegistrierung/login.jsp"));
+			}
 		}
-
 		// set both persistence (case saving) and image (images streamed from
 		// kb) folder
 		String fP = GlobalSettings.getInstance().getCaseFolder();
@@ -886,7 +894,8 @@ public class D3webDialog extends HttpServlet {
 					if (m.find()) {
 						value = new TextValue(m.group());
 					}
-				} else {
+				}
+				else {
 					value = new TextValue(valString);
 				}
 			}
