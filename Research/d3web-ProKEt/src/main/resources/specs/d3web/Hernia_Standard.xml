@@ -8,7 +8,7 @@
 	questionnairecolumns="3"
 	questioncolumns="1"
 	userprefix = "" 
-	login = "yes"
+	login = "no"
 	required = "none">
 	<data kb="HerniaApr2011-8.d3web" />
 </dialog>

@@ -28,6 +28,7 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -83,6 +84,7 @@ import de.d3web.proket.d3web.output.render.D3webRenderer;
 import de.d3web.proket.d3web.output.render.ID3webRenderer;
 import de.d3web.proket.d3web.output.render.ImageHandler;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
+import de.d3web.proket.d3web.utils.Base64CoDec;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
@@ -134,6 +136,31 @@ public class D3webDialog extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		// HERNIA specific
+		String login = request.getParameter("l");
+
+		//
+		String decoded = Base64CoDec.getPlainString(login);
+
+		String nname = request.getParameter("");
+		String inst = request.getParameter("");
+		String token = request.getParameter("t");
+
+		// Datum aus token decodieren
+		Date d = Base64CoDec.getDate(token);
+
+		// Abfragen login < 30 Sekunden her dann Zugriff
+		Date now = new Date();
+		System.out.println(getDifference(d, now) + " d: " + d + " now: " + now);
+
+		// Andernfalls Weiterleitung/Zurückleitung
+		if (getDifference(d, now) < -30) {
+			System.out.println("resend to origin Url");
+			response.sendRedirect(
+					response.encodeRedirectURL(
+							"http://casetrain-test.informatik.uni-wuerzburg.de/HernienRegistrierung/login.jsp"));
+		}
 
 		// set both persistence (case saving) and image (images streamed from
 		// kb) folder
@@ -1198,5 +1225,9 @@ public class D3webDialog extends HttpServlet {
 				}
 			}
 		}
+	}
+
+	public float getDifference(Date d1, Date d2) {
+		return (d1.getTime() - d2.getTime()) / 1000;
 	}
 }

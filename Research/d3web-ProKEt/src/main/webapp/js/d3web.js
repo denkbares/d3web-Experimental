@@ -476,9 +476,12 @@ function d3web_addfactsRemembering(store, qid, pos) {
 	//alert(mcVals);
 	
 	// TODO MC values senden
-	//if(mcVals != ""){
+	if(mcVals != ""){
+		
+		//TODO ID
+		d3web_addMCfacts(mcVals, $(this).attr("id"));
 		//alert("hier mc senden");	
-	//}
+	}
 	
 	var link = $.query.set("action", "addFact").set("qid", qid).set("pos", pos)
 			.set("store", store).toString();
