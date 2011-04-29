@@ -84,7 +84,6 @@ import de.d3web.proket.d3web.output.render.D3webRenderer;
 import de.d3web.proket.d3web.output.render.ID3webRenderer;
 import de.d3web.proket.d3web.output.render.ImageHandler;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
-import de.d3web.proket.d3web.utils.Base64CoDec;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
@@ -137,50 +136,17 @@ public class D3webDialog extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		/*
-		 * / HERNIA specific
-		 */
-
-		// needed for assembling filename
-		String login = request.getParameter("l");
-		String nname = request.getParameter("n");
-		String inst = request.getParameter("i");
-
-		// needed for date check
-		String token = request.getParameter("t");
-
-		if (login != null && nname != null && inst != null && token != null) {
-
-			// decode Strings
-			String decodedLogin = Base64CoDec.getPlainString(login);
-			String decodedNname = Base64CoDec.getPlainString(nname);
-			String decodedInstitute = Base64CoDec.getPlainString(inst);
-			String decodedToken = Base64CoDec.getPlainString(token);
-
-			// decode date from token
-			Date d = Base64CoDec.getDate(token);
-			Date now = new Date(); // current date
-
-			// if login was less than 20 sec before, allow login (i.e., just go
-			// on
-			// in code) otherwise redirect to login page
-			if (getDifference(d, now) < -20) {
-				response.sendRedirect(
-						response.encodeRedirectURL(
-								"http://casetrain-test.informatik.uni-wuerzburg.de/HernienRegistrierung/login.jsp"));
-			}
-		}
 		// set both persistence (case saving) and image (images streamed from
 		// kb) folder
-		String fP = GlobalSettings.getInstance().getCaseFolder();
-		if (fP.equals(null) || fP.equals("")) {
-			String folderPath =
+		String fca = GlobalSettings.getInstance().getCaseFolder();
+		String fim = GlobalSettings.getInstance().getKbImgFolder();
+		if ((fca.equals(null) || fca.equals("")) &&
+				(fim.equals(null) || fim.equals(""))) {
+
+			String servletBasePath =
 					request.getSession().getServletContext().getRealPath("/");
-			String persistencePath = folderPath + "cases";
-			String kbImgPath = folderPath + "kbimg";
-			GlobalSettings.getInstance().setCaseFolder(persistencePath);
-			GlobalSettings.getInstance().setKbImgFolder(kbImgPath);
-			// System.out.println(GlobalSettings.getInstance().getKbImgFolder());
+			GlobalSettings.getInstance().setCaseFolder(servletBasePath + "cases");
+			GlobalSettings.getInstance().setKbImgFolder(servletBasePath + "kbimg");
 		}
 		/*
 		 * FOLDER PATH: get the folder on the server for persistence storing
@@ -237,11 +203,10 @@ public class D3webDialog extends HttpServlet {
 		// Get the current httpSession or a new one
 		HttpSession httpSession = request.getSession(true);
 
-		// System.out.println(httpSession.getAttribute("imgStreamed"));
-		// if (httpSession.getAttribute("imgStreamed") == null) {
-		streamImages();
-		// httpSession.setAttribute("imgStreamed", true);
-		// }
+		if (httpSession.getAttribute("imgStreamed") == null) {
+			streamImages();
+			httpSession.setAttribute("imgStreamed", true);
+		}
 
 		/*
 		 * otherwise, i.e. if session is null create a session according to the
@@ -387,13 +352,8 @@ public class D3webDialog extends HttpServlet {
 		D3webRenderer.storeSession(d3webSess);
 		cc = d3webr.renderRoot(cc, d3webSess, httpSession);
 
-		/*
-		 * String html = "" + "<html><head></head>" + "<body>" +
-		 * "<img>D3webPicShow?src=Test</img>" + "</body>" + "</html>";
-		 */
-
 		writer.print(cc.html.toString()); // deliver the rendered output
-		// writer.print(html);
+
 		writer.close(); // and close
 	}
 
@@ -517,6 +477,15 @@ public class D3webDialog extends HttpServlet {
 		}
 	}
 
+	/**
+	 * Adding MC facts
+	 *
+	 * @created 29.04.2011
+	 * @param request
+	 * @param response
+	 * @param httpSession
+	 * @throws IOException
+	 */
 	private void addMCFact(HttpServletRequest request,
 			HttpServletResponse response, HttpSession httpSession)
 			throws IOException {
@@ -644,6 +613,16 @@ public class D3webDialog extends HttpServlet {
 		}
 	}
 
+	/**
+	 * Send a mail with login request via account "user" and to the contact
+	 * person specified in InternetAdress "to"
+	 *
+	 * @created 29.04.2011
+	 * @param request
+	 * @param response
+	 * @param httpSession
+	 * @throws MessagingException
+	 */
 	private void sendMail(HttpServletRequest request, HttpServletResponse response,
 			HttpSession httpSession) throws MessagingException {
 
@@ -675,10 +654,6 @@ public class D3webDialog extends HttpServlet {
 		InternetAddress from = new InternetAddress("SendmailAnonymus@freenet.de");
 		message.setFrom(from);
 
-		/*
-		 * to-identificator: insert clients mail address here, has to be read
-		 * from csv file
-		 */
 		// InternetAddress to = new
 		// InternetAddress("reinhard.dietzel@maindreieck.com");
 		InternetAddress to = new InternetAddress("martina.freiberg@uni-wuerzburg.de");
@@ -686,12 +661,6 @@ public class D3webDialog extends HttpServlet {
 
 		/* A subject */
 		message.setSubject("Mediastinitis Loginanfrage");
-
-		/*
-		 * Insert username and password here; password needs to be the plaintext
-		 * version! Security consideration: have a pw file that contains only
-		 * the plaintext passwords,
-		 */
 
 		String loginUser = request.getParameter("user");
 		message.setText("Bitte Logindaten erneut zusenden: \n\n" +
@@ -735,6 +704,15 @@ public class D3webDialog extends HttpServlet {
 		httpSession.setAttribute("lastLoaded", filename);
 	}
 
+	/**
+	 * Handle login of new user
+	 *
+	 * @created 29.04.2011
+	 * @param req
+	 * @param res
+	 * @param httpSession
+	 * @throws IOException
+	 */
 	private void login(HttpServletRequest req,
 			HttpServletResponse res, HttpSession httpSession)
 			throws IOException {
@@ -745,13 +723,10 @@ public class D3webDialog extends HttpServlet {
 		String u = req.getParameter("u");
 		String p = req.getParameter("p");
 
-		// TODO check if needed here
-		// guess with login needed here for initially loading cases, otherwise
+		// with login mechanism needed here for initially loading cases,
+		// otherwise
 		// put it into doGet
 		String folderPath = req.getSession().getServletContext().getRealPath("/cases");
-		// String persistencePath = folderPath.replace("d3web-ProKEt",
-		// "persistence"); DOESNT WORK - writing rights outside webapp issues
-		// probably
 
 		GlobalSettings.getInstance().setCaseFolder(folderPath);
 
@@ -809,15 +784,9 @@ public class D3webDialog extends HttpServlet {
 		termObID = IDUtils.removeNamspace(termObID);
 
 		Fact lastFact = null;
-
-		Blackboard blackboard =
-				sess.getBlackboard();
-
-		// TerminologyManager man = new
-		// TerminologyManager(D3webConnector.getInstance().getKb());
-		// Question to = man.searchQuestion(termObID);
-
-		Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(termObID);
+		Blackboard blackboard = sess.getBlackboard();
+		Question to =
+				D3webConnector.getInstance().getKb().getManager().searchQuestion(termObID);
 
 		// if TerminologyObject not found in the current KB return & do nothing
 		if (to == null) {
@@ -1211,6 +1180,11 @@ public class D3webDialog extends HttpServlet {
 		return false;
 	}
 
+	/**
+	 * Stream images from the KB into intermediate storage in webapp
+	 *
+	 * @created 29.04.2011
+	 */
 	private void streamImages() {
 
 		List<Resource> kbimages = D3webConnector.getInstance().getKb().getResources();
@@ -1236,6 +1210,14 @@ public class D3webDialog extends HttpServlet {
 		}
 	}
 
+	/**
+	 * Retrieve the difference between two date objects in seconds
+	 *
+	 * @created 29.04.2011
+	 * @param d1 First date
+	 * @param d2 Second date
+	 * @return the difference in seconds
+	 */
 	public float getDifference(Date d1, Date d2) {
 		return (d1.getTime() - d2.getTime()) / 1000;
 	}

@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -19,31 +19,28 @@
  */
 package de.d3web.proket.d3web.run;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import au.com.bytecode.opencsv.CSVReader;
 import de.d3web.core.knowledge.Indication.State;
 import de.d3web.core.knowledge.InterviewObject;
+import de.d3web.core.knowledge.Resource;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QASet;
@@ -67,6 +64,7 @@ import de.d3web.core.session.values.DateValue;
 import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.NumValue;
 import de.d3web.core.session.values.TextValue;
+import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.proket.d3web.input.D3webConnector;
@@ -74,6 +72,9 @@ import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.d3web.output.render.D3webRenderer;
 import de.d3web.proket.d3web.output.render.ID3webRenderer;
+import de.d3web.proket.d3web.output.render.ImageHandler;
+import de.d3web.proket.d3web.properties.ProKEtProperties;
+import de.d3web.proket.d3web.utils.Base64CoDec;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
@@ -84,19 +85,19 @@ import de.d3web.proket.utils.IDUtils;
  * a loose binding: if no d3web etc session exists, a new d3web session is
  * created and knowledge base and specs are read from the corresponding XML
  * specfication.
- * 
+ *
  * Basically, when the user selects answers in the dialog, those are transferred
  * back via AJAX calls and processed by this servlet. Here, values are
  * propagated to the d3web session (and later re-read by the renderers).
- * 
+ *
  * Both browser refresh and pressing the "new case"/"neuer Fall" Button in the
  * dialog leads to the creation of a new d3web session, i.e. all values set so
  * far are discarded, and an "empty" problem solving session begins.
- * 
+ *
  * @author Martina Freiberg
- * 
+ *
  * @date 14.01.2011; Update: 28/01/2011
- * 
+ *
  */
 public class Hernia extends HttpServlet {
 
@@ -118,7 +119,7 @@ public class Hernia extends HttpServlet {
 	/**
 	 * Basic initialization and servlet method. Always called first, if servlet
 	 * is refreshed, called newly etc.
-	 * 
+	 *
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
@@ -127,29 +128,66 @@ public class Hernia extends HttpServlet {
 			throws ServletException, IOException {
 
 		/*
-		 * String fP = GlobalSettings.getInstance().getCaseFolder(); if
-		 * (fP.equals(null) || fP.equals("")) { String folderPath =
-		 * request.getSession().getServletContext().getRealPath("/"); String
-		 * persistencePath = folderPath + "cases";
-		 * GlobalSettings.getInstance().setCaseFolder(persistencePath); }
+		 * HERNIA specific
+		 * Login is done via external part-system which sends respective URL
+		 * parameters for further processing
 		 */
-		
-		/*
-		 * FOLDER PATH: get the folder on the server for persistence storing
-		 * only needed here in case the dialog is used without login mechanisms
-		 */
-		// String folderPath =
-		// request.getSession().getServletContext().getRealPath("/");
-		// String persistencePath = folderPath.replace("d3web-ProKEt",
-		// "persistence");
-		// GlobalSettings.getInstance().setCaseFolder(persistencePath);
+
+		// needed for assembling filename
+		String login = request.getParameter("l");
+		String nname = request.getParameter("n");
+		String inst = request.getParameter("i");
+
+		// needed for date check at login
+		String token = request.getParameter("t");
+
+		if (login != null && nname != null && inst != null && token != null) {
+
+			// decode Strings
+			String decodedLogin = Base64CoDec.getPlainString(login);
+			String decodedNname = Base64CoDec.getPlainString(nname);
+			String decodedInstitute = Base64CoDec.getPlainString(inst);
+			String decodedToken = Base64CoDec.getPlainString(token);
+
+			// decode date from token
+			Date d = Base64CoDec.getDate(token);
+			Date now = new Date(); // current date
+
+			// if login was less than 20 sec before, allow login (i.e., just go
+			// on in code) otherwise redirect to login page
+			if (getDifference(d, now) < -20) {
+				response.sendRedirect(
+						response.encodeRedirectURL(
+								"http://casetrain-test.informatik.uni-wuerzburg.de/HernienRegistrierung/login.jsp"));
+			}
+
+			// TODO: check whether login etc are already set, if not, start new
+			// session, add user to parameters for file loading etc
+			//if(){
+			// String action = request.getParameter("action");
+			// action = "resetNewUser";
+			//}
+		}
+
+		// set both persistence (case saving) and image (images streamed from
+		// kb) folder paths
+
+		String fca = GlobalSettings.getInstance().getCaseFolder();
+		String fim = GlobalSettings.getInstance().getKbImgFolder();
+		if ((fca.equals(null) || fca.equals("")) &&
+				(fim.equals(null) || fim.equals(""))) {
+
+			String servletBasePath =
+					request.getSession().getServletContext().getRealPath("/");
+			GlobalSettings.getInstance().setCaseFolder(servletBasePath + "cases");
+			GlobalSettings.getInstance().setKbImgFolder(servletBasePath + "kbimg");
+		}
 
 		d3wcon = D3webConnector.getInstance();
 
 		// in case nothing other is provided, "show" is the default action
 		String action = request.getParameter("action");
 		if (action == null) {
-			// action = "mail";
 			action = "show";
 		}
 
@@ -182,6 +220,11 @@ public class Hernia extends HttpServlet {
 		// Get the current httpSession or a new one
 		HttpSession httpSession = request.getSession(true);
 
+		if (httpSession.getAttribute("imgStreamed") == null) {
+			streamImages();
+			httpSession.setAttribute("imgStreamed", true);
+		}
+
 		/*
 		 * otherwise, i.e. if session is null create a session according to the
 		 * specified dialog strategy
@@ -203,6 +246,10 @@ public class Hernia extends HttpServlet {
 		}
 		else if (action.equalsIgnoreCase("addfact")) {
 			addFact(request, response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("addmcfact")) {
+			addMCFact(request, response, httpSession);
 			return;
 		}
 		else if (action.equalsIgnoreCase("savecase")) {
@@ -227,46 +274,14 @@ public class Hernia extends HttpServlet {
 
 			return;
 		}
-		else if (action.equalsIgnoreCase("checklogin")) {
-
-			response.setContentType("text/html");
-			response.setCharacterEncoding("utf8");
-			PrintWriter writer = response.getWriter();
-
-			if (httpSession.getAttribute("user") == null) {
-				httpSession.setAttribute("log", true);
-				writer.append("NLI");
-			}
-			else {
-				writer.append("NOLI");
-			}
-
-			return;
-		}
 		else if (action.equalsIgnoreCase("login")) {
 			login(request, response, httpSession);
-			return;
-		}
-		else if (action.equalsIgnoreCase("sendmail")) {
-			try {
-				sendMail(request, response, httpSession);
-				response.setContentType("text/html");
-				response.setCharacterEncoding("utf8");
-				PrintWriter writer = response.getWriter();
-				writer.append("success");
-			}
-			catch (MessagingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			return;
 		}
 		else if (action.equalsIgnoreCase("checkrange")) {
 			response.setContentType("text/html");
 			response.setCharacterEncoding("utf8");
 			PrintWriter writer = response.getWriter();
-			// String qid = request.getParameter("qid");
-			// qid = qid.replace("q_", "");
 
 			String qidsString = request.getParameter("qids");
 			qidsString = qidsString.replace("q_", "");
@@ -290,18 +305,15 @@ public class Hernia extends HttpServlet {
 						qidBackstring += range.getLeft() + "-" + range.getRight() + ";";
 					}
 				}
-
 			}
-
 			writer.append(qidBackstring);
-
 			return;
 		}
 	}
 
 	/**
 	 * Basic servlet method for displaying the dialog.
-	 * 
+	 *
 	 * @created 28.01.2011
 	 * @param request
 	 * @param response
@@ -327,13 +339,8 @@ public class Hernia extends HttpServlet {
 		D3webRenderer.storeSession(d3webSess);
 		cc = d3webr.renderRoot(cc, d3webSess, httpSession);
 
-		/*
-		 * String html = "" + "<html><head></head>" + "<body>" +
-		 * "<img>D3webPicShow?src=Test</img>" + "</body>" + "</html>";
-		 */
-
 		writer.print(cc.html.toString()); // deliver the rendered output
-		// writer.print(html);
+
 		writer.close(); // and close
 	}
 
@@ -341,7 +348,7 @@ public class Hernia extends HttpServlet {
 	 * Add one or several given facts. Thereby, first check whether input-store
 	 * has elements, if yes, parse them and set them (for num/text/date
 	 * questions), if no, just parse and set a given single value.
-	 * 
+	 *
 	 * @created 28.01.2011
 	 * @param request ServletRequest
 	 * @param response ServletResponse
@@ -458,8 +465,65 @@ public class Hernia extends HttpServlet {
 	}
 
 	/**
+	 * Adding MC facts
+	 *
+	 * @created 29.04.2011
+	 * @param request
+	 * @param response
+	 * @param httpSession
+	 * @throws IOException
+	 */
+	private void addMCFact(HttpServletRequest request,
+			HttpServletResponse response, HttpSession httpSession)
+			throws IOException {
+
+		response.setContentType("text/html");
+		response.setCharacterEncoding("utf8");
+		PrintWriter writer = response.getWriter();
+
+		Session sess = (Session) httpSession.getAttribute("d3webSession");
+
+		// get the ID of a potentially given single question answered
+		String qid = request.getParameter("qid");
+		qid = qid.replace("q_", "").replace("_", " ");
+
+		String mcVals = request.getParameter("mcs");
+		mcVals = mcVals.replace("_", " ");
+
+		/*
+		 * Check, whether a required value (for saving) is specified. If yes,
+		 * check whether this value has already been set in the KB or is about
+		 * to be set in the current call --> go on normally. Otherwise, return a
+		 * marker "<required value>" so the user is informed by AJAX to provide
+		 * this marked value.
+		 */
+
+		String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
+		if ((!reqVal.equals("") || !reqVal.equals("none")) &&
+				(!checkReqVal(reqVal, sess, qid, ""))) {
+
+			writer.append(reqVal);
+			return;
+		}
+
+		setValue(qid, mcVals, sess);
+
+		// AUTOSAVE
+		String folderPath = GlobalSettings.getInstance().getCaseFolder();
+
+		// AUTOSAVE
+		PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
+						folderPath,
+						D3webConnector.getInstance().getD3webParser().getRequired(),
+						"autosave",
+						(Session) httpSession.getAttribute("d3webSession"));
+
+	}
+
+	// TODO
+	/**
 	 * Saving a case.
-	 * 
+	 *
 	 * @created 08.03.2011
 	 * @param request ServletRequest
 	 * @param response ServletResponse
@@ -535,63 +599,10 @@ public class Hernia extends HttpServlet {
 		}
 	}
 
-	private void sendMail(HttpServletRequest request, HttpServletResponse response,
-			HttpSession httpSession) throws MessagingException {
-
-		final String user = "Meg200x@freenet.de";
-		final String pw = "bonnie";
-
-		/* setup properties for mail server */
-		Properties props = new Properties();
-		props.put("mail.smtp.host", "mx.freenet.de");
-		props.put("mail.smtp.port", "25");
-		props.put("mail.transport.protocol", "smtp");
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.user", user);
-		props.put("mail.password", pw);
-		// props.put("mail.debug", "true");
-
-		javax.mail.Session session = javax.mail.Session.getDefaultInstance(props,
-				new javax.mail.Authenticator() {
-
-					@Override
-					protected PasswordAuthentication getPasswordAuthentication() {
-						return new PasswordAuthentication(user, pw);
-					}
-				});
-
-		MimeMessage message = new MimeMessage(session);
-
-		// from-identificator
-		InternetAddress from = new InternetAddress("freiberg@informatik.uni-wuerzburg.de");
-		message.setFrom(from);
-
-		/*
-		 * to-identificator: insert clients mail address here, has to be read
-		 * from csv file
-		 */
-		InternetAddress to = new InternetAddress("martina.freiberg@uni-wuerzburg.de");
-		message.addRecipient(Message.RecipientType.TO, to);
-
-		/* A subject */
-		message.setSubject("Mediastinitis Loginanfrage");
-
-		/*
-		 * Insert username and password here; password needs to be the plaintext
-		 * version! Security consideration: have a pw file that contains only
-		 * the plaintext passwords,
-		 */
-
-		String loginUser = request.getParameter("user");
-		message.setText("Bitte Logindaten erneut zusenden: \n\n" +
-				"Benutzername:" + loginUser);
-		Transport.send(message);
-
-	}
-
+	// TODO
 	/**
 	 * Loading a case.
-	 * 
+	 *
 	 * @created 09.03.2011
 	 * @param request ServletRequest
 	 * @param response ServletResponse
@@ -624,6 +635,16 @@ public class Hernia extends HttpServlet {
 		httpSession.setAttribute("lastLoaded", filename);
 	}
 
+	// TODO
+	/**
+	 * Handle login of new user
+	 *
+	 * @created 29.04.2011
+	 * @param req
+	 * @param res
+	 * @param httpSession
+	 * @throws IOException
+	 */
 	private void login(HttpServletRequest req,
 			HttpServletResponse res, HttpSession httpSession)
 			throws IOException {
@@ -634,13 +655,10 @@ public class Hernia extends HttpServlet {
 		String u = req.getParameter("u");
 		String p = req.getParameter("p");
 
-		// TODO check if needed here
-		// guess with login needed here for initially loading cases, otherwise
+		// with login mechanism needed here for initially loading cases,
+		// otherwise
 		// put it into doGet
 		String folderPath = req.getSession().getServletContext().getRealPath("/cases");
-		// String persistencePath = folderPath.replace("d3web-ProKEt",
-		// "persistence"); DOESNT WORK - writing rights outside webapp issues
-		// probably
 
 		GlobalSettings.getInstance().setCaseFolder(folderPath);
 
@@ -650,12 +668,12 @@ public class Hernia extends HttpServlet {
 		httpSession.setMaxInactiveInterval(60 * 60);
 
 		// if no valid login
-		if (!permitUser(u, p)) {
+		// if (!permitUser(u, p)) {
 
 			// causes JS to display error message
-			writer.append("nosuccess");
-			return;
-		}
+		// writer.append("nosuccess");
+		// return;
+		// }
 
 		// set user attribute for the HttpSession
 		httpSession.setAttribute("user", u);
@@ -684,7 +702,7 @@ public class Hernia extends HttpServlet {
 	 * Utility method for adding values. Adds a single value for a given
 	 * question to the current knowledge base in the current problem solving
 	 * session.
-	 * 
+	 *
 	 * @created 28.01.2011
 	 * @param termObID The ID of the TerminologyObject, the value is to be
 	 *        added.
@@ -698,13 +716,9 @@ public class Hernia extends HttpServlet {
 		termObID = IDUtils.removeNamspace(termObID);
 
 		Fact lastFact = null;
-
-		Blackboard blackboard =
-				sess.getBlackboard();
-
-		// TerminologyManager man = new
-		// TerminologyManager(D3webConnector.getInstance().getKb());
-		Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(termObID);
+		Blackboard blackboard = sess.getBlackboard();
+		Question to =
+				D3webConnector.getInstance().getKb().getManager().searchQuestion(termObID);
 
 		// if TerminologyObject not found in the current KB return & do nothing
 		if (to == null) {
@@ -749,54 +763,42 @@ public class Hernia extends HttpServlet {
 				}
 				else if (to instanceof QuestionMC) {
 
-					valString = valString.replace("q_", "");
-					System.out.println(valString);
-
-					lastFact = blackboard.getValueFact(to);
-					if (lastFact != null &&
-							lastFact.getValue() instanceof MultipleChoiceValue) {
-
-						MultipleChoiceValue mcval = (MultipleChoiceValue) lastFact.getValue();
-
-						if (mcval.contains(new Choice(valString))) {
-
-							List<Choice> choicesNew = new ArrayList<Choice>();
-							List<Choice> choicesOld = mcval.asChoiceList((QuestionMC) to);
-
-							for (Choice c : choicesOld) {
-
-								if (c.getName().equals(valString)) {
-									System.out.println("do not add: " + c);
-								}
-								else {
-									choicesNew.add(c);
-								}
-							}
-							value = MultipleChoiceValue.fromChoices(choicesNew);
-						}
-						else {
-							List<Choice> choicesOld = mcval.asChoiceList((QuestionMC) to);
-							choicesOld.add(new Choice(valString));
-							value = MultipleChoiceValue.fromChoices(choicesOld);
-						}
-
+					if (valString.equals("")) {
+						value = UndefinedValue.getInstance();
 					}
 					else {
-						value = KnowledgeBaseUtils.findValue(to, valString);
+						String[] choices = valString.split(",");
+						List<Choice> cs = new ArrayList<Choice>();
+
+						for (String c : choices) {
+							cs.add(new Choice(c));
+						}
+						value = MultipleChoiceValue.fromChoices(cs);
+
 					}
-					// valueString is a comma separated list of the IDs of the
-					// selected items
-					// List<Choice> values = new ArrayList<Choice>();
-					// String[] parts = valString.split(",");
-					// for (String part : parts) {
-					// values.add(new Choice(part));
-					// }
-					// value = MultipleChoiceValue.fromChoices(values);
 				}
 			}
 			// TEXT questions
 			else if (to instanceof QuestionText) {
-				value = new TextValue(valString);
+				String textPattern = to.getInfoStore().getValue(ProKEtProperties.TEXT_FORMAT);
+				Pattern p = null;
+				if (textPattern != null && !textPattern.isEmpty()) {
+					try {
+						p = Pattern.compile(textPattern);
+					}
+					catch (Exception e) {
+
+					}
+				}
+				if (p != null) {
+					Matcher m = p.matcher(valString);
+					if (m.find()) {
+						value = new TextValue(m.group());
+					}
+				}
+				else {
+					value = new TextValue(valString);
+				}
 			}
 			// NUM questions
 			else if (to instanceof QuestionNum) {
@@ -809,19 +811,34 @@ public class Hernia extends HttpServlet {
 			}
 			// DATE questions
 			else if (to instanceof QuestionDate) {
-
-				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-				try {
-					// String is given in the format 03/2010
-					String[] datesplit = valString.split("\\/");
-					if (datesplit.length == 2) {
-						String parseableDate = datesplit[1] + "-" + datesplit[0] + "-"
-								+ "01-00-00-00";
-						value = new DateValue(dateFormat.parse(parseableDate));
+				String dateDescription = to.getInfoStore().getValue(ProKEtProperties.DATE_FORMAT);
+				if (dateDescription != null && !dateDescription.isEmpty()) {
+					String[] dateDescSplit = dateDescription.split("OR");
+					for (String dateDesc : dateDescSplit) {
+						dateDesc = dateDesc.trim();
+						try {
+							SimpleDateFormat dateFormat = new SimpleDateFormat(dateDesc);
+							value = new DateValue(dateFormat.parse(valString));
+						}
+						catch (ParseException e) {
+							// value still null, will not be set
+						}
+						catch (IllegalArgumentException e) {
+							// value still null, will not be set
+						}
+						if (value != null) {
+							break;
+						}
 					}
 				}
-				catch (ParseException e) {
-					// value still null, will not be set
+				else {
+					try {
+						SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+						value = new DateValue(dateFormat.parse(valString));
+					}
+					catch (ParseException e) {
+						// value still null, will not be set
+					}
 				}
 			}
 
@@ -835,9 +852,11 @@ public class Hernia extends HttpServlet {
 					blackboard.removeValueFact(lastFact);
 				}
 
-				// add new value as UserEnteredFact
-				Fact fact = FactFactory.createUserEnteredFact(to, value);
-				blackboard.addValueFact(fact);
+				if (UndefinedValue.isNotUndefinedValue(value)) {
+					// add new value as UserEnteredFact
+					Fact fact = FactFactory.createUserEnteredFact(to, value);
+					blackboard.addValueFact(fact);
+				}
 			}
 		}
 
@@ -868,7 +887,7 @@ public class Hernia extends HttpServlet {
 	 * Utility method for resetting follow-up questions due to setting their
 	 * parent question to Unknown. Then, the childrens' value should also be
 	 * removed again, recursively also for childrens' children and so on.
-	 * 
+	 *
 	 * @created 31.01.2011
 	 * @param parent The parent TerminologyObject
 	 * @param blackboard The currently active blackboard
@@ -879,10 +898,9 @@ public class Hernia extends HttpServlet {
 		if (parent.getChildren() != null && parent.getChildren().length != 0) {
 			for (TerminologyObject c : parent.getChildren()) {
 
-				// TerminologyManager man = new TerminologyManager(
-				// D3webConnector.getInstance().getKb());
 				Question qto = D3webConnector.getInstance().getKb().getManager().searchQuestion(
 						c.getName());
+
 				if (!isIndicated(qto, blackboard)
 						|| !isParentIndicated(qto, blackboard)) {
 
@@ -900,7 +918,7 @@ public class Hernia extends HttpServlet {
 
 	/**
 	 * Utility method for resetting
-	 * 
+	 *
 	 * @created 09.03.2011
 	 * @param parent
 	 * @param bb
@@ -914,21 +932,25 @@ public class Hernia extends HttpServlet {
 			Blackboard blackboard =
 					sess.getBlackboard();
 
+			// go through all questions of the qcontainer
 			for (TerminologyObject to : parent.getChildren()) {
 
 				if (to instanceof Question) {
-					// TerminologyManager man = new TerminologyManager(
-					// D3webConnector.getInstance().getKb());
+
 					Question qto = D3webConnector.getInstance().getKb().getManager().searchQuestion(
 							to.getName());
 
-					// remove a previously set value
-					lastFact = blackboard.getValueFact(qto);
-					if (lastFact != null) {
-						blackboard.removeValueFact(lastFact);
+					// workaround to assure that same question from other
+					// questionnaire is not reset, too
+					if (qto.getParents().length == 1) {
+						// remove a previously set value
+						lastFact = blackboard.getValueFact(qto);
+						if (lastFact != null) {
+							blackboard.removeValueFact(lastFact);
+						}
+						resetNotIndicatedTOs(to, bb, sess);
 					}
 
-					resetNotIndicatedTOs(to, bb, sess);
 				}
 			}
 		}
@@ -937,7 +959,7 @@ public class Hernia extends HttpServlet {
 	/**
 	 * Utility method for checking whether a given terminology object is
 	 * indicated or instant_indicated or not in the current session.
-	 * 
+	 *
 	 * @created 09.03.2011
 	 * @param to The terminology object to check
 	 * @param bb
@@ -959,7 +981,7 @@ public class Hernia extends HttpServlet {
 	/**
 	 * Utility method for checking whether the parent object of a given
 	 * terminology object is (instant) indicated.
-	 * 
+	 *
 	 * @created 09.03.2011
 	 * @param to The terminology object, the parent of which is to be checked.
 	 * @param bb
@@ -992,7 +1014,7 @@ public class Hernia extends HttpServlet {
 	 * Utility method that checks, whether a TerminologyObject child is the
 	 * child of another TerminologyObject parent. That is, whether child is
 	 * nested hierarchically underneath parent.
-	 * 
+	 *
 	 * @created 30.01.2011
 	 * @param parent The parent TerminologyObject
 	 * @param child The child to check
@@ -1015,55 +1037,12 @@ public class Hernia extends HttpServlet {
 		return false;
 	}
 
-	/**
-	 * Check, whether the user has permissions to log in. Permissions are stored
-	 * in userdat.csv in cases parent folder
-	 * 
-	 * @created 15.03.2011
-	 * @param user The user name.
-	 * @param password The password.
-	 * @return True, if permissions are correct.
-	 */
-	private boolean permitUser(String user, String password) {
-
-		// get parent folder for storing cases
-		String caseFolder = GlobalSettings.getInstance().getCaseFolder();
-
-		String csvFile = caseFolder + "/usrdat.csv";
-		CSVReader csvr = null;
-		String[] nextLine = null;
-
-		try {
-			csvr = new CSVReader(new FileReader(csvFile));
-			// go through file
-			while ((nextLine = csvr.readNext()) != null) {
-				// skip first line
-				if (!nextLine[0].startsWith("usr")) {
-					// if username and pw could be found, return true
-					if (nextLine[0].equals(user) && nextLine[1].equals(password)) {
-						return true;
-					}
-				}
-			}
-
-		}
-		catch (FileNotFoundException fnfe) {
-			// TODO Auto-generated catch block
-			fnfe.printStackTrace();
-		}
-		catch (IOException ioe) {
-			// TODO Auto-generated catch block
-			ioe.printStackTrace();
-		}
-
-		return false; // trust no one per default
-	}
 
 	/**
 	 * Checks, whether a potentially required value is already set in the KB or
 	 * is contained in the current set of values to write to the KB. If yes, the
 	 * method returns true, if no, false.
-	 * 
+	 *
 	 * @created 15.04.2011
 	 * @param requiredVal The required value that is to check
 	 * @param sess The d3webSession
@@ -1078,8 +1057,6 @@ public class Hernia extends HttpServlet {
 		valToSet = valToSet.replace("q_", "").replace("_", " ");
 		store = store.replace("_", " ");
 
-		// TerminologyManager man = new
-		// TerminologyManager(D3webConnector.getInstance().getKb());
 		Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(requiredVal);
 
 		Fact lastFact = blackboard.getValueFact(to);
@@ -1090,5 +1067,47 @@ public class Hernia extends HttpServlet {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Stream images from the KB into intermediate storage in webapp
+	 *
+	 * @created 29.04.2011
+	 */
+	private void streamImages() {
+
+		List<Resource> kbimages = D3webConnector.getInstance().getKb().getResources();
+
+		if (kbimages != null && kbimages.size() != 0) {
+			for (Resource r : kbimages) {
+				String rname = r.getPathName();
+
+				if (rname.endsWith(".jpg") || rname.endsWith(".JPG")) {
+					BufferedImage bui = ImageHandler.getResourceAsBUI(r);
+					try {
+						File file =
+								new File(GlobalSettings.getInstance().getKbImgFolder()
+										+ "/" + rname);
+						ImageIO.write(bui, "jpg", file);
+					}
+					catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Retrieve the difference between two date objects in seconds
+	 *
+	 * @created 29.04.2011
+	 * @param d1 First date
+	 * @param d2 Second date
+	 * @return the difference in seconds
+	 */
+	public float getDifference(Date d1, Date d2) {
+		return (d1.getTime() - d2.getTime()) / 1000;
 	}
 }

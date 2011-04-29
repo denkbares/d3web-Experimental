@@ -37,7 +37,7 @@ td { padding: 2px 0; vertical-align: top; height: 100%}
 
 /* DIALOG ITEMS */
 .questionnaire{ -moz-box-shadow: 0 0 5px black;	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; padding: 5px; 
- 		background: #f0fff0; }
+ 		background: #ffffff; }
  				
 #questionnaireTitle { font-weight: bolder; padding-right: 5px; }
 
