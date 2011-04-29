@@ -55,6 +55,41 @@
 @package: Hernia
 %
 
+%%Resource
+@src=EuraHSLogo.png
+@path: logo.png
+@package: Hernia
+%
+%%Resource
+@src=deFlag.png
+@path: deFlag.png
+@package: Hernia
+%
+%%Resource
+@src=enFlag.png
+@path: enFlag.png
+@package: Hernia
+%
+%%Resource
+@src=esFlag.png
+@path: esFlag.png 
+@package: Hernia
+%
+%%Resource
+@src=frFlag.png
+@path: frFlag.png
+@package: Hernia
+%
+%%Resource
+@src=itFlag.png
+@path: itFlag.png
+@package: Hernia
+%
+%%Resource
+@src=plFlag.png
+@path: plFlag.png
+@package: Hernia
+%
 
 %%Property
 Mark the incisional hernia areas involved#M1.description = 194,144,257,199SHAPErect

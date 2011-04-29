@@ -209,6 +209,7 @@ public class Hernia extends HttpServlet {
 			d3wcon.setDialogStrat(d3webParser.getStrategy());
 			d3wcon.setDialogType(d3webParser.getType());
 			d3wcon.setDialogColumns(d3webParser.getDialogColumns());
+			d3wcon.setQuestionColumns(d3webParser.getQuestionColumns());
 			d3wcon.setQuestionnaireColumns(d3webParser.getQuestionnaireColumns());
 			d3wcon.setCss(d3webParser.getCss());
 			d3wcon.setHeader(d3webParser.getHeader());
@@ -1089,6 +1090,19 @@ public class Hernia extends HttpServlet {
 								new File(GlobalSettings.getInstance().getKbImgFolder()
 										+ "/" + rname);
 						ImageIO.write(bui, "jpg", file);
+					}
+					catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				if (rname.endsWith(".png") || rname.endsWith(".PNG")) {
+					BufferedImage bui = ImageHandler.getResourceAsBUI(r);
+					try {
+						File file =
+								new File(GlobalSettings.getInstance().getKbImgFolder()
+										+ "/" + rname);
+						ImageIO.write(bui, "png", file);
 					}
 					catch (IOException e) {
 						// TODO Auto-generated catch block

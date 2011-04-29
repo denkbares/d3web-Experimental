@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <dialog 
-	header="EuraHS"  
+	header="European Registry of Abdominal wall HerniaS"  
 	dtype="singleform" 
 	dstrategy="nextuaquestion" 
-	css="medi2cols, nonavigation" 
+	css="medi2colsHernia, nonavigation" 
 	dialogcolumns="1"
 	questionnairecolumns="3"
 	questioncolumns="1"
-	userprefix = "" 
+	userprefix = "Hernia" 
 	login = "no"
 	required = "none">
-	<data kb="HerniaApr2011-8.d3web" />
+	<data kb="HerniaApr2011-9.d3web" />
 </dialog>

@@ -147,8 +147,11 @@ public class D3webRenderer implements ID3webRenderer {
 		StringTemplate st = null;
 		if (d3wcon.getDialogType().equals(DialogType.SINGLEFORM)) {
 			st = TemplateUtils.getStringTemplate("D3webDialog", "html");
-		} // other Dialog Types also !!!
+		}
 
+		if (d3wcon.getUserprefix() != "") {
+			st = TemplateUtils.getStringTemplate(d3wcon.getUserprefix() + "D3webDialog", "html");
+		}
 		/* fill some basic attributes */
 		st.setAttribute("header", D3webConnector.getInstance().getHeader());
 
