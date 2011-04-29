@@ -38,6 +38,7 @@ public class Vocabulary {
 
 	/* Individuals */
 	public static URI ALEXANDER = core.createlocalURI("Alexander the Great");
+	public static URI ALEXANDERLITTLE = core.createlocalURI("Alexander the Little");
 	public static URI BABYLON = core.createlocalURI("Babylon");
 
 	/* Classes */
@@ -48,6 +49,7 @@ public class Vocabulary {
 	public static URI CONCEPTOFHISTORY = core.createlocalURI("Concept of History");
 	public static URI ISLAND = core.createlocalURI("Island");
 	public static URI KING = core.createlocalURI("King");
+	public static URI QUEEN = core.createlocalURI("Queen");
 
 	/* Properties */
 	public static URI DEATHPLACE = core.createlocalURI("deathPlace");
