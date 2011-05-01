@@ -1,3 +1,8 @@
 <div id="reset" class="caseButton">
-	Neuer Fall
+	$if(langEN)$
+ 	New Case
+	$endif$ 
+	$if (langDE)$
+		Neuer Fall
+	$endif$
 </div>

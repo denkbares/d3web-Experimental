@@ -1,5 +1,10 @@
 <div id="savecase" class="caseButton">
-	Fall speichern
+	$if(langEN)$
+		Save Case
+	$endif$ 
+	$if (langDE)$
+    	Fall speichern
+    $endif$
 	$ConfirmSaveDialog()$
 </div>
 	

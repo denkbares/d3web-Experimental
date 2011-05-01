@@ -215,6 +215,9 @@ public class Hernia extends HttpServlet {
 			d3wcon.setHeader(d3webParser.getHeader());
 			d3wcon.setUserprefix(d3webParser.getUserPrefix());
 			d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
+			if (!d3webParser.getLanguage().equals("")) {
+				d3wcon.setLanguage(d3webParser.getLanguage());
+			}
 			sourceSave = source;
 		}
 

@@ -6,6 +6,15 @@
 
 $(function() {
 
+	var textOK, textCancel;
+	if(language=="en"){
+		textOK = "OK";
+		textCancel = "Cancel";
+	} else if(language=="de"){
+		textOK = "OK";
+		textCancel = "Abbrechen";
+	}
+	
 	var opts = {
 		position : top,
 		width : 480,
@@ -26,14 +35,14 @@ $(function() {
 		// two custom buttons
 		buttons : [{
 			id: "loginOk",
-			text: "OK",
+			text: textOK,
 			click: function(){
 					sendData();
 				}
 			},
 			{
 			id: "loginCancel",
-			text: "Abbrechen",
+			text: textCancel,
 			click: function(){
 					showDenyMessage();
 				}

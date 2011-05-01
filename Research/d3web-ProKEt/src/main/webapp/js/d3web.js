@@ -47,6 +47,15 @@ $(function() {
 		});
 	}
 
+	var save, goon;
+	if(language=="en"){
+		save = "Save";
+		goon = "Continue";
+	} else if(language=="de"){
+		save = "Speichern";
+		goon = "Nein, weiter eingeben";
+	}
+	
 	/* creating and configuring the jquery UI save-case dialog */
 	$(function() {
 
@@ -58,14 +67,33 @@ $(function() {
 			height : 210,
 			minWidth : 410,
 			minHeight : 210,
-			buttons : {
-				"Speichern" : d3web_sendSave,
-				"Nein, weiter eingeben" : closeJQConfirmDialog
-			}
+			buttons : [{
+				id: "saveOK",
+				text: save,
+				click: function(){
+					d3web_sendSave();
+				}
+				},
+				{
+				id: "saveCancel",
+				text: goon,
+				click: function(){
+					 closeJQConfirmDialog();
+					}
+				}]
 		};
 		$("#jqConfirmDialog").dialog(opts);
 	});
 
+	var load, cancelload;
+	if(language=="en"){
+		load = "OK";
+		cancelload = "Cancel";
+	} else if(language=="de"){
+		load = "OK";
+		cancelload = "Abbrechen";
+	}
+	
 	/* creating and configuring the jquery UI load-case dialog */
 	$(function() {
 
@@ -77,13 +105,30 @@ $(function() {
 			height : 360,
 			minWidth : 180,
 			minHeight : 360,
-			buttons : {
-				"OK" : d3web_getSelectedCaseFileAndLoad,
-				"Abbrechen" : closeJQLoadCaseDialog
-			}
+			buttons : [{
+				id: "loadOK",
+				text: load,
+				click: function(){
+					d3web_getSelectedCaseFileAndLoad();
+				}
+				},
+				{
+				id: "loadCancel",
+				text: cancelload,
+				click: function(){
+					closeJQLoadCaseDialog();
+					}
+				}]
 		};
 		$("#jqLoadCaseDialog").dialog(opts);
 	});
+	
+	var close;
+	if(language=="en"){
+		close = "Close";
+	} else if(language=="de"){
+		close = "Schließen";
+	}
 	
 	/* creating and configuring the jquery UI summary dialog */
 	$(function() {
@@ -96,9 +141,13 @@ $(function() {
 			height : 800,
 			minWidth : 1000,
 			minHeight : 800,
-			buttons : {
-				"Schließen" : closeJQSummaryDialog
-			}
+			buttons : [{
+				id: "sumClose",
+				text: close,
+				click: function(){
+					closeJQSummaryDialog();
+				}
+				}]
 		};
 		$("#jqSummaryDialog").dialog(opts);
 	});

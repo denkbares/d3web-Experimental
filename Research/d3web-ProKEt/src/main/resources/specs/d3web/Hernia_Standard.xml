@@ -9,6 +9,7 @@
 	questioncolumns="1"
 	userprefix = "Hernia" 
 	login = "no"
-	required = "none">
+	required = "none"
+	language = "en">
 	<data kb="HerniaApr2011-9.d3web" />
 </dialog>

@@ -163,11 +163,20 @@ public class D3webRenderer implements ID3webRenderer {
 		else {
 			opts = PersistenceD3webUtils.getCaseList();
 		}
-
-		String sum = fillSummaryDialog();
-
 		st.setAttribute("fileselectopts", opts);
+
+		// Summary dialog
+		String sum = fillSummaryDialog();
 		st.setAttribute("sumQuestionnaire", sum);
+
+		// set language variable for StringTemplate Widgets
+		String lang = D3webConnector.getInstance().getLanguage();
+		if (lang.equals("de")) {
+			st.setAttribute("langDE", "de");
+		}
+		else if (lang.equals("en")) {
+			st.setAttribute("langEN", "en");
+		}
 
 		// add some buttons for basic functionality
 		st.setAttribute("loadcase", "true");

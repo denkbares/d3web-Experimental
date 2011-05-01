@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -35,7 +35,7 @@ import de.d3web.proket.utils.XMLUtils;
 
 /**
  * Class for parsing a given XML file.
- * 
+ *
  * @author Martina Freiberg
  * @created 13.10.2010
  */
@@ -50,7 +50,7 @@ public class D3webXMLParser {
 
 	/**
 	 * Constructor specifying the XML file
-	 * 
+	 *
 	 * @param xMLFilename
 	 */
 	public D3webXMLParser(Object xMLFilename) {
@@ -67,7 +67,7 @@ public class D3webXMLParser {
 	/**
 	 * Parses the d3web-XML specification file to retrieve both the root node
 	 * and the data node.
-	 * 
+	 *
 	 * @created 13.10.2010
 	 */
 	private void parse() {
@@ -110,7 +110,7 @@ public class D3webXMLParser {
 
 	/**
 	 * Return the knowledgebase as specified per its filename in the parsed XML
-	 * 
+	 *
 	 * @created 13.10.2010
 	 * @return the KnowledgeBase
 	 */
@@ -123,7 +123,7 @@ public class D3webXMLParser {
 
 	/**
 	 * Retrieve the name of the knowledge base specified in the parsed XML.
-	 * 
+	 *
 	 * @created 13.10.2010
 	 * @return the String representation of the name of the kb
 	 */
@@ -137,7 +137,7 @@ public class D3webXMLParser {
 	/**
 	 * Reads the DialogStrategy from the parsed XML file. This attribute needs
 	 * to be one of the values of DialogStrategy enum.
-	 * 
+	 *
 	 * @created 13.10.2010
 	 * @return the parsed DialogStrategy
 	 */
@@ -152,7 +152,7 @@ public class D3webXMLParser {
 	/**
 	 * Reads the DialogType from the parsed XML file. This attribute needs to be
 	 * one of the values of DialogType enum.
-	 * 
+	 *
 	 * @created 13.10.2010
 	 * @return the parsed DialogType
 	 */
@@ -163,7 +163,7 @@ public class D3webXMLParser {
 
 	/**
 	 * Reads the CSS attribute from the parsed XML file.
-	 * 
+	 *
 	 * @created 13.10.2010
 	 * @return the CSS String
 	 */
@@ -222,6 +222,10 @@ public class D3webXMLParser {
 
 	public String getUserPrefix() {
 		return XMLUtils.getStr((Element) dialogSpec, "userprefix", "");
+	}
+
+	public String getLanguage() {
+		return XMLUtils.getStr((Element) dialogSpec, "language", "");
 	}
 
 	public HashMap<String, HashMap<String, String>> getSingleSpecs() {

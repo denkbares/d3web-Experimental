@@ -12,22 +12,22 @@ $endif$
 	<td width="41%">
 		$if(loadcase)$
 			<div class="leftButton">
-				$CaseLoadButtonEn()$
+				$CaseLoadButton()$
 			</div>
 		$endif$
 		$if(savecase)$
 			<div class="leftButton">
-				$CaseSaveButtonEn()$
+				$CaseSaveButton()$
 			</div>
 		$endif$
 		$if(reset)$
 			<div class="leftButton">
-				$CaseNewButtonEn()$
+				$CaseNewButton()$
 			</div>
 		$endif$
 		$if(summary)$
 			<div class="leftButton">
-				$SummaryButtonEn()$
+				$SummaryButton()$
 			</div>
 		$endif$
 	</td>

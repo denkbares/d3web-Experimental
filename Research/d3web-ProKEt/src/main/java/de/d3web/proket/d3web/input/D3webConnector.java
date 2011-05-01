@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -29,7 +29,7 @@ import de.d3web.proket.data.DialogType;
 /**
  * Data storage class for everything that is parsed from the d3web XML and
  * created while working with d3web.
- * 
+ *
  * @author Martina Freiberg
  * @created 16.10.2010
  */
@@ -78,6 +78,9 @@ public class D3webConnector {
 	private HashMap<String, HashMap<String, String>> singleSpecs;
 
 	private D3webXMLParser d3webParser = null;
+
+	// set english as default language setting
+	private String language = "en";
 
 	public static D3webConnector getInstance() {
 		if (instance == null) {
@@ -209,5 +212,13 @@ public class D3webConnector {
 
 	public D3webXMLParser getD3webParser() {
 		return d3webParser;
+	}
+
+	public void setLanguage(String lang) {
+		this.language = lang;
+	}
+
+	public String getLanguage() {
+		return this.language;
 	}
 }

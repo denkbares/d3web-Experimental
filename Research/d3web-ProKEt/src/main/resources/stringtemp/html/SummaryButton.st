@@ -1,4 +1,9 @@
 <div id="summary" class="caseButton">
-	Zusammenfassung
+	$if(langEN)$
+		Summary
+	$endif$ 
+	$if (langDE)$
+    	Zusammenfassung
+    $endif$
 	$SummaryDialog()$
 </div>

@@ -24,17 +24,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import de.d3web.proket.d3web.input.D3webConnector;
+
 /**
  * Container for JavaScript code.
- * 
+ *
  * @author Martina Freiberg, Johannes Mitlmeier
- * 
+ *
  */
 public class JSCodeContainer implements ICodeContainer {
 	private boolean d3web = false;
-	private Map<Integer, StringBuilder> data = new HashMap<Integer, StringBuilder>();
+	private final Map<Integer, StringBuilder> data = new HashMap<Integer, StringBuilder>();
 	private boolean dateAnswer = false;
-	private boolean debug = false;
+	private final boolean debug = false;
 	private boolean imageQuestions = false;
 	private boolean login = false;
 
@@ -94,6 +96,12 @@ public class JSCodeContainer implements ICodeContainer {
 		linkedBibs.add("jquery/jquery.numeric.js");
 		linkedBibs.add("jquery/jquery.customFileInput.js");
 		linkedBibs.add("jqueryUI/jqueryUi-1.8.10.all.min.js");
+
+		// manage language mechanism
+		String lang = D3webConnector.getInstance().getLanguage();
+		String langString = "var language = \"" + lang + "\";";
+		add(langString, 0);
+
 		if (dateAnswer) {
 			linkedBibs.add("jquery/jquery.datepick.pack.js");
 			linkedBibs.add("jquery/jquery.datepick-de.js");
@@ -153,7 +161,7 @@ public class JSCodeContainer implements ICodeContainer {
 		output.append("\n</script>\n");
 
 
-		
+
 		// THIRD remove debug lines for Firebug
 		if (!debug) {
 			String x = output.toString().replaceAll("console\\.", "//console.");
