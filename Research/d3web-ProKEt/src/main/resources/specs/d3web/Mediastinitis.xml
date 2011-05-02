@@ -3,12 +3,14 @@
 	header="Mediastinitisregister"  
 	dtype="singleform" 
 	dstrategy="nextuaquestion" 
-	css="medi2cols, nonavigation" 
+	css="medi2colsMediastinitis, nonavigation" 
 	dialogcolumns="1"
 	questionnairecolumns="3"
-	userprefix = "" 
+	questioncolumns = "2"
+	userprefix = "Mediastinitis" 
 	login = "yes"
 	required = "Betreffende Klinik"
+	language = "de"
 	>
-	<data kb="HerzmedizinApr2011.d3web" />
+	<data kb="MediastinitisMai2011.d3web" />
 </dialog>

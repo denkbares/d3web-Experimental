@@ -1,2 +1,2 @@
 
-<jsp:forward page="/ControlCenter"/>
+<jsp:forward page="/Mediastinitis"/>

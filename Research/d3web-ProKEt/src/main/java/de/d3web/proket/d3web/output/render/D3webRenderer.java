@@ -32,6 +32,7 @@ import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
+import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
@@ -348,6 +349,9 @@ public class D3webRenderer implements ID3webRenderer {
 
 		if (D3webConnector.getInstance().getQuestionColumns() != -1) {
 			columns = D3webConnector.getInstance().getQuestionColumns();
+		}
+		else if (parent instanceof QuestionNum) {
+			columns = 1;
 		}
 		else {
 

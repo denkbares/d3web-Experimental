@@ -198,15 +198,19 @@ public class D3webDialog extends HttpServlet {
 			d3wcon.setUserprefix(d3webParser.getUserPrefix());
 			d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
 			sourceSave = source;
+			if (!d3webParser.getLanguage().equals("")) {
+				d3wcon.setLanguage(d3webParser.getLanguage());
+			}
 		}
 
 		// Get the current httpSession or a new one
 		HttpSession httpSession = request.getSession(true);
 
-		if (httpSession.getAttribute("imgStreamed") == null) {
-			streamImages();
-			httpSession.setAttribute("imgStreamed", true);
-		}
+		streamImages();
+		// if (httpSession.getAttribute("imgStreamed") == null) {
+		// streamImages();
+		// httpSession.setAttribute("imgStreamed", true);
+		// }
 
 		/*
 		 * otherwise, i.e. if session is null create a session according to the
@@ -664,7 +668,7 @@ public class D3webDialog extends HttpServlet {
 
 		String loginUser = request.getParameter("user");
 		message.setText("Bitte Logindaten erneut zusenden: \n\n" +
-				"Benutzername:" + loginUser);
+				"Benutzername: " + loginUser);
 		Transport.send(message);
 
 	}
@@ -1200,6 +1204,19 @@ public class D3webDialog extends HttpServlet {
 								new File(GlobalSettings.getInstance().getKbImgFolder()
 										+ "/" + rname);
 						ImageIO.write(bui, "jpg", file);
+					}
+					catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				if (rname.endsWith(".png") || rname.endsWith(".PNG")) {
+					BufferedImage bui = ImageHandler.getResourceAsBUI(r);
+					try {
+						File file =
+								new File(GlobalSettings.getInstance().getKbImgFolder()
+										+ "/" + rname);
+						ImageIO.write(bui, "png", file);
 					}
 					catch (IOException e) {
 						// TODO Auto-generated catch block

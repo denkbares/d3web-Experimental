@@ -18,9 +18,9 @@ $(function() {
 	var opts = {
 		position : top,
 		width : 480,
-		height : 420,
+		height : 450,
 		minWidth : 480,
-		minHeight : 420,
+		minHeight : 450,
 		draggable : false,
 		resizable : false,
 		// to force first login
@@ -126,7 +126,8 @@ function sendData() {
 		if (html == "nosuccess"){
 			$('#loginError').html("<font color=\"red\">Login erfolglos. Bitte versuchen Sie es noch einmal.</font><br />");
 			$('#loginErrorMailRequest').html("" +
-					"<b>Logindaten vergessen?</b> <font color=\"blue\"><u>Daten erneut zuschicken</u></font>" );
+					"<b>Logindaten vergessen?</b> <font color=\"blue\"><u>Daten erneut zuschicken</u></font><br/>" +
+					"(Feld <b>Benutzer</b> muss ausgefüllt sein!)" );
 		} else {
 			// successful login: remove error message
 			$('#loginError').html("");
