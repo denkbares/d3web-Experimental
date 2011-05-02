@@ -41,6 +41,16 @@
 		<parameter id="priority" value="5" />
 		<parameter id="instanceof" value="java.lang.String" />
 	</extension>
+
+	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="grid">
+		<parameter id="name" value="grid" />
+		<parameter id="description" value="can be used for grids providing a summary of the entered values" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.String" />
+	</extension>
 	
 	
 </plugin>
