@@ -75,10 +75,12 @@ public class QuestionnaireD3webRenderer extends D3webRenderer {
 		if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(to)
 				|| isIndicated(to, bb)) {
 
-			st.removeAttribute("questInactive");
+			// st.removeAttribute("questInactive");
+			st.removeAttribute("hidden");
 		}
 		else {
-			st.setAttribute("questInactive", "true");
+			// st.setAttribute("questInactive", "true");
+			st.setAttribute("hidden", "true");
 		}
 
 		// render the children

@@ -75,6 +75,13 @@ td { padding: 2px 0; vertical-align: top; height: 100%}
 
 .disabled { background: #E0E0E0; }
 	
+.questionnairehidden{display: none;}
+
+.hidden .title, .hidden .question, .hidden .title td, 
+.hidden .answer, .hidden input, .hidden radio, .hidden .questionnaire-content{
+	display: none;}
+	
+	
 .inactive {	background-color: #d3d3d3; color: grey; }
 
 .inactive .title, .inactive .question, .inactive .title td, 
