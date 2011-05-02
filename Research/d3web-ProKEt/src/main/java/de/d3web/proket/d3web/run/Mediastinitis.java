@@ -476,7 +476,7 @@ public class Mediastinitis extends HttpServlet {
 
 	/**
 	 * Adding MC facts
-	 * 
+	 *
 	 * @created 29.04.2011
 	 * @param request
 	 * @param response
@@ -532,7 +532,7 @@ public class Mediastinitis extends HttpServlet {
 
 	/**
 	 * Saving a case.
-	 * 
+	 *
 	 * @created 08.03.2011
 	 * @param request ServletRequest
 	 * @param response ServletResponse
@@ -613,7 +613,7 @@ public class Mediastinitis extends HttpServlet {
 	/**
 	 * Send a mail with login request via account "user" and to the contact
 	 * person specified in InternetAdress "to"
-	 * 
+	 *
 	 * @created 29.04.2011
 	 * @param request
 	 * @param response
@@ -629,7 +629,7 @@ public class Mediastinitis extends HttpServlet {
 		/* setup properties for mail server */
 		Properties props = new Properties();
 		props.put("mail.smtp.host", "mx.freenet.de");
-		props.put("mail.smtp.port", "25");
+		props.put("mail.smtp.port", "587");
 		props.put("mail.transport.protocol", "smtp");
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.user", user);
@@ -668,7 +668,7 @@ public class Mediastinitis extends HttpServlet {
 
 	/**
 	 * Loading a case.
-	 * 
+	 *
 	 * @created 09.03.2011
 	 * @param request ServletRequest
 	 * @param response ServletResponse
@@ -703,7 +703,7 @@ public class Mediastinitis extends HttpServlet {
 
 	/**
 	 * Handle login of new user
-	 * 
+	 *
 	 * @created 29.04.2011
 	 * @param req
 	 * @param res
@@ -1150,7 +1150,7 @@ public class Mediastinitis extends HttpServlet {
 	 * Checks, whether a potentially required value is already set in the KB or
 	 * is contained in the current set of values to write to the KB. If yes, the
 	 * method returns true, if no, false.
-	 * 
+	 *
 	 * @created 15.04.2011
 	 * @param requiredVal The required value that is to check
 	 * @param sess The d3webSession
@@ -1179,7 +1179,7 @@ public class Mediastinitis extends HttpServlet {
 
 	/**
 	 * Stream images from the KB into intermediate storage in webapp
-	 * 
+	 *
 	 * @created 29.04.2011
 	 */
 	private void streamImages() {
@@ -1222,7 +1222,7 @@ public class Mediastinitis extends HttpServlet {
 
 	/**
 	 * Retrieve the difference between two date objects in seconds
-	 * 
+	 *
 	 * @created 29.04.2011
 	 * @param d1 First date
 	 * @param d2 Second date

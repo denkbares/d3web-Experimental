@@ -161,7 +161,6 @@ function sendLoginMailRequest(){
 		
 		// no mail success
 		if (html != "success"){
-
 		} else {
 			$('#loginError').html("");
 			$('#loginErrorMailRequest').html("<b>Vielen Dank. Sie erhalten Ihre Daten in Kürze an die" +

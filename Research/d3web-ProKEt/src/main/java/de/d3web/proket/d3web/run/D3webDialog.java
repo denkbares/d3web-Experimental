@@ -636,12 +636,12 @@ public class D3webDialog extends HttpServlet {
 		/* setup properties for mail server */
 		Properties props = new Properties();
 		props.put("mail.smtp.host", "mx.freenet.de");
-		props.put("mail.smtp.port", "25");
+		props.put("mail.smtp.port", "587");
 		props.put("mail.transport.protocol", "smtp");
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.user", user);
 		props.put("mail.password", pw);
-		// props.put("mail.debug", "true");
+		props.put("mail.debug", "true");
 
 		javax.mail.Session session = javax.mail.Session.getDefaultInstance(props,
 				new javax.mail.Authenticator() {

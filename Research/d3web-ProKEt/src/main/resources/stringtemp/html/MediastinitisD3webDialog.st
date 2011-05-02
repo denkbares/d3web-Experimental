@@ -30,11 +30,11 @@ $endif$
 		$header$
 	</td>
 	<td width="40%">
-		$if(summary)$
+		<!--$if(summary)$
 			<div class="rightButton">
 				$SummaryButton()$
 			</div>
-		$endif$
+		$endif$ -->
 	</td>
 	</tr>
 	</table>
