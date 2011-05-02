@@ -123,9 +123,9 @@ Localization of the concomitant incisional hernia#L4:R.description = 333,382,377
 %
 
 %%Property
-Mark the incisional hernia areas involved.description = IMG#####Fig7_Areas.JPGWIDTH#####451
-Localization of the concomitant incisional hernia.description = IMG#####Fig7_Areas.JPGWIDTH#####451
-Mesh position.description = IMG#####Fig6_MeshPos.JPGWIDTH#####400
+Mark the incisional hernia areas involved.description = IMG#####Fig7_Areas.JPGWIDTH#####220
+Localization of the concomitant incisional hernia.description = IMG#####Fig7_Areas.JPGWIDTH#####220
+Mesh position.description = IMG#####Fig6_MeshPos.JPGWIDTH#####200
 
 @package: Hernia
 %
@@ -276,6 +276,58 @@ Intraoperative wound contamination.popup = """
 - Bowel resection for incarceration.</td>
   </tr>
 </table>
+"""
+
+@package: Hernia
+%
+
+%%Property
+
+Grid1.grid = """
+<table border='1'>
+  <tr>
+    <th colspan="2">E H S<p/>Primary Abdominal Wall<br/>Hernia Classification</b></th>
+    <th>Diameter (cm)</th>
+    <td><b>Small (cm)</b><p/>&lt; 2 cm</td>
+    <td><b>Medium (cm)</b><p/>2-4 cm</td>
+    <td><b>Large (cm)</b><p/>&ge; 4 cm</td>
+  </tr>
+  <tr>
+    <th rowspan="2">Midline</th>
+    <td>Epigastric</td>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td>Umbilical</td>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+  </tr>
+  <tr>
+    <th rowspan="2">Lateral</th>
+    <td>Spigelian</td>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td>Lumbar</td>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+  </tr>
+</table>
+"""
+
+@package: Hernia
+%
+
+%%Property
+Please choose the database level.popup = """
+<b>Level 1:</b> Short questionnaire (5 min)<br/>
+<b>Level 2:</b> Comprehensive questionnaire (20 min)
 """
 
 @package: Hernia

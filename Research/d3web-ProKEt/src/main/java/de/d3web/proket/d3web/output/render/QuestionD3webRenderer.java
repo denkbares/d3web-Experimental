@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -28,6 +28,7 @@ import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionText;
+import de.d3web.core.knowledge.terminology.QuestionZC;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
@@ -43,11 +44,11 @@ import de.d3web.proket.utils.TemplateUtils;
 
 /**
  * Renderer for rendering basic Questions.
- *
+ * 
  * TODO CHECK: 1) basic properties for questions
- *
+ * 
  * TODO LATER: 1) further question types needed?
- *
+ * 
  * @author Martina Freiberg
  * @created 15.01.2011
  */
@@ -104,6 +105,9 @@ public class QuestionD3webRenderer extends D3webRenderer {
 		else if (to instanceof QuestionText) {
 			st.setAttribute("type", "text");
 		}
+		else if (to instanceof QuestionZC) {
+			st.setAttribute("type", "info");
+		}
 
 		// get d3web properties
 		Session sess = D3webRenderer.d3webSession;
@@ -113,7 +117,6 @@ public class QuestionD3webRenderer extends D3webRenderer {
 
 		/* the following handles follow-up questions that get activated */
 		/* in the course of the interview (by indication) */
-
 
 		// QContainer indicated
 		if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent) ||
@@ -134,7 +137,6 @@ public class QuestionD3webRenderer extends D3webRenderer {
 		else {
 			st.setAttribute("inactiveQuestion", "true");
 		}
-
 
 		/*
 		 * the following handles abstraction questions that get activated during

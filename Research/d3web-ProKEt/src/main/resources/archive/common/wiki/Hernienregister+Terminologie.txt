@@ -106,7 +106,7 @@ Primary ventral hernia route
 - Indication for surgery [oc]
 -- Elective
 -- Emergency
-- Show grid[info]
+- Grid1 [info]
 
 Incisional ventral hernia route 
 - Width of the hernia [num] {cm}
