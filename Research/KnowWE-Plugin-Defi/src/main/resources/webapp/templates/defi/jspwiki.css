@@ -55,6 +55,9 @@
     padding:0;
     overflow:hidden;
 }
+.infobox th {
+	text-align:center;
+}
 .infobox table {
 	height:150px;
 	margin:0;
@@ -62,15 +65,9 @@
 }
 .infobox .no_userpic {
 	background-image:url("images/no_pic.jpg");
-	width: 50px;
-	background-position: center;
-	background-repeat: no-repeat;	
-}
-.infobox .group_pic {
-	background-image: url("images/gruppe.jpg");
-	width: 141px;
-	background-position: center;
-	background-repeat: no-repeat;	
+	width:50px;
+	background-position:center;
+	background-repeat:no-repeat;	
 }
 #header .companylogo { 
 	display:none; 
@@ -92,7 +89,11 @@
 .userbox table {
 	float:right;
 	height:120px;
+	width:410px;
 	margin:0 0 3px 10px;
+}
+.userbox th {
+	text-align:center;
 }
 .userbox td {
 	padding:5px;
@@ -2024,4 +2025,9 @@ table.rbtag td {
 tr.rated {
 	border:1px solid #BBB !important;
 	color:#BBB;	
+}
+
+/* Userlist */
+table.userlist, table.userlist td {
+	border:1px solid black;	
 }

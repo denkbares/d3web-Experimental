@@ -38,7 +38,7 @@
   		</tr>
   		<tr><td>Dr. S. M. Schulz<br /> <%=last_login%>
   			</td>
-  			<td class="group_pic"></td>
+  			<td class="group_pic"><a href="Wiki.jsp?page=Gruppe"><img src="KnowWEExtension/images/Gruppe.jpg" height="98px" width="141px" alt="Gruppe" /></a></td>
   		</tr>
   	</table>
   </div>

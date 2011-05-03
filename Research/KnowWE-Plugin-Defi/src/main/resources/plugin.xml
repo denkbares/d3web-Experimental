@@ -145,12 +145,22 @@
         id="ReadbuttonTaghandler">
         <parameter id="class" value="de.knowwe.defi.readbutton.ReadButtonTaghandler" />
         <parameter id="name" value="ReadButtonTaghandler" />
-        <parameter id="description" value="TagHandler ReadButtonkTaghandler" />
+        <parameter id="description" value="TagHandler ReadButtonTaghandler" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
         <parameter id="script" value="KnowWE-Plugin-Defi-ReadButtonTag.js" />
         <parameter id="css" value="defi.css" />
     </extension>     
+    
+   <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="UserlistTaghandler">
+        <parameter id="class" value="de.knowwe.defi.userlist.UserlistTaghandler" />
+        <parameter id="name" value="UserlistTaghandler" />
+        <parameter id="description" value="TagHandler UserlistTaghandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="css" value="defi.css" />
+    </extension>  
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="AboutMeSaveAction">

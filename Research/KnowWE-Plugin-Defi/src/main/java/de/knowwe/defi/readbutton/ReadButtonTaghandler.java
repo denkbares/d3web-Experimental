@@ -276,9 +276,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 
 	private boolean checkID(String id) {
 
-		System.out.println(id);
 		if (id.contains("::") || id.contains(";")) return false;
-
 		return true;
 	}
 
