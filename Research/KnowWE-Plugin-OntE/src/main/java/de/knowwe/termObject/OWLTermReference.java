@@ -48,13 +48,7 @@ public class OWLTermReference extends GlobalTermReference<URIObject> implements 
 
 	@Override
 	public String getTermName(Section<? extends KnowWETerm<URIObject>> s) {
-		// dirty hack for colons '::'
-		// TODO: fix
-		if (s.getOriginalText().endsWith("::"))
-			return s.getOriginalText().substring(0, s.getOriginalText().length() - 2);
-
 		return s.getOriginalText();
-
 	}
 
 	@Override

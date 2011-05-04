@@ -36,7 +36,6 @@ import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SingleChildConstraint;
 import de.d3web.we.kdom.objects.KnowWETerm;
@@ -55,7 +54,6 @@ import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.subtreeHandler.IncrementalConstraint;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
-import de.d3web.we.kdom.type.AnonymousType;
 import de.d3web.we.kdom.type.AnonymousTypeInvisible;
 import de.d3web.we.tools.ToolMenuDecoratingRenderer;
 import de.d3web.we.user.UserContext;
@@ -67,8 +65,8 @@ import de.knowwe.termObject.LocalConceptReference;
 import de.knowwe.termObject.OWLTermReference;
 import de.knowwe.termObject.RDFResourceType;
 import de.knowwe.termObject.URIObject;
-import de.knowwe.termObject.URIObject.URIObjectType;
 import de.knowwe.termObject.URITermDefinition;
+import de.knowwe.termObject.URIObject.URIObjectType;
 import de.knowwe.util.DelegateDestroyHandler;
 
 public class TurtleMarkup extends AbstractType {
@@ -103,15 +101,15 @@ public class TurtleMarkup extends AbstractType {
 		});
 		this.addChildType(stop);
 
-		TurtlePredicate predicate = new TurtlePredicate();
+		TurtlePredicatePart predicate = new TurtlePredicatePart();
 		this.addChildType(predicate);
 
-		TurtleSubject subject = new TurtleSubject();
+		TurtleSubjectPart subject = new TurtleSubjectPart();
 		subject.setSectionFinder(new AllBeforeTypeSectionFinder(predicate));
 
 		this.addChildType(subject);
 
-		this.addChildType(new TurtleObject());
+		this.addChildType(new TurtleObjectPart());
 
 		this.addSubtreeHandler(Priority.HIGHER, new TripleChecker());
 
@@ -122,94 +120,94 @@ public class TurtleMarkup extends AbstractType {
 	}
 
 	public static Section<? extends Type> getSubjectSection(Section<TurtleMarkup> s) {
-		List<Section<? extends Type>> components = getTurtleComponents(s);
-		if (components.size() == 3) {
-			return components.get(0);
-		}
+		Section<TurtleSubjectPart> subjectPart = Sections.findChildOfType(s,
+				TurtleSubjectPart.class);
+		if (subjectPart != null) return subjectPart.getChildren().get(0);
 
 		return null;
 	}
 
 	public static Section<? extends Type> getPredicateSection(Section<TurtleMarkup> s) {
 
-		List<Section<? extends Type>> components = getTurtleComponents(s);
-		if (components.size() == 3) {
-			return components.get(1);
-		}
+		Section<TurtlePredicatePart> predPart = Sections.findChildOfType(s,
+				TurtlePredicatePart.class);
+		if (predPart != null) return predPart.getChildren().get(0);
 
 		return null;
 	}
 
-	private static List<Section<? extends Type>> getTurtleComponents(Section<TurtleMarkup> s) {
-		List<Section<? extends Type>> components = new ArrayList<Section<? extends Type>>();
-		List<Section<? extends Type>> children = s.getChildren();
-		for (Section<? extends Type> section : children) {
-			if (section.get() instanceof AnonymousType
-					|| section.get() instanceof PlainText) {
-			}
-			else {
-				components.add(section);
-			}
-		}
-		return components;
-	}
 
 	public static Section<? extends Type> getObjectSection(Section<TurtleMarkup> s) {
-		List<Section<? extends Type>> components = getTurtleComponents(s);
-		if (components.size() == 3) {
-			return components.get(2);
-		}
-
+		Section<TurtleObjectPart> objectPart = Sections.findChildOfType(s,
+				TurtleObjectPart.class);
+		if (objectPart != null) return objectPart.getChildren().get(0);
 		return null;
 	}
 
-	class TurtlePredicate extends AbstractType implements KnowWETerm<String> {
-
-		public TurtlePredicate() {
-			this.setSectionFinder(new RegexSectionFinder("\\b([^\\s]*)::", 0));
-			this.addSubtreeHandler(Priority.DEFAULT, new BasicVocTermChecker(
-					URIUtil.PREDICATE_VOCABULARY));
-			this.addSubtreeHandler(Priority.LOWER, new TermReferenceCheckerPredicate());
+	class TurtlePredicatePart extends AbstractType {
+		final static String PREDICATE_REGEX = "\\b([^\\s]+)::";
+		public TurtlePredicatePart() {
+			this.setSectionFinder(new RegexSectionFinder(PREDICATE_REGEX, 0));
+			this.addChildType(new TurtlePredicate());
 		}
 
-		@Override
-		public String getTermName(Section<? extends KnowWETerm<String>> s) {
-			String text = s.getOriginalText();
-			// hack TODO remove
-			if (text.endsWith("::")) {
-				text = text.substring(0, text.length() - 2);
+		class TurtlePredicate extends AbstractType implements KnowWETerm<String> {
+
+			public TurtlePredicate() {
+				// this.setSectionFinder(new AllTextSectionFinder());
+				ConstraintSectionFinder csf = new ConstraintSectionFinder(
+						new RegexSectionFinder(PREDICATE_REGEX,
+								0, 1));
+				csf.addConstraint(SingleChildConstraint.getInstance());
+				this.setSectionFinder(csf);
+				this.addSubtreeHandler(Priority.DEFAULT, new BasicVocTermChecker(
+						URIUtil.PREDICATE_VOCABULARY));
+				this.addSubtreeHandler(Priority.LOWER,
+						new TermReferenceCheckerPredicate());
 			}
-			return text;
+
+			@Override
+			public String getTermName(Section<? extends KnowWETerm<String>> s) {
+				return s.getOriginalText();
+			}
+
+			@Override
+			public Class<String> getTermObjectClass() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public int getTermScope() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public void setTermScope(int termScope) {
+				// TODO Auto-generated method stub
+
+			}
+
 		}
-
-		@Override
-		public Class<String> getTermObjectClass() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public int getTermScope() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public void setTermScope(int termScope) {
-			// TODO Auto-generated method stub
-
-		}
-
 	}
 
-	class TurtleSubject extends AbstractType {
+	class TurtleSubjectPart extends AbstractType {
 
-		public TurtleSubject() {
-			this.addChildType(new LocalConceptDefinition());
-			this.addChildType(new LocalConceptReference());
-			this.addChildType(new SubjectDefinition());
-			this.addChildType(new SubjectReference());
+		public TurtleSubjectPart() {
+			this.addChildType(new TurtleSubject());
+		}
 
+		class TurtleSubject extends AbstractType {
+
+			public TurtleSubject() {
+				this.setSectionFinder(new AllTextFinderTrimmed());
+				this.addChildType(new LocalConceptDefinition());
+				this.addChildType(new LocalConceptReference());
+				this.addChildType(new SubjectDefinition());
+				this.addChildType(new SubjectReference());
+
+			}
 		}
 	}
 
@@ -337,25 +335,97 @@ public class TurtleMarkup extends AbstractType {
 		}
 	}
 
-	class TurtleObject extends AbstractType implements IncrementalConstraint<TurtleObject> {
-
-		public TurtleObject() {
+	class TurtleObjectPart extends AbstractType {
+		public TurtleObjectPart() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new AllTextFinderTrimmed());
 			c.addConstraint(SingleChildConstraint.getInstance());
 			this.setSectionFinder(c);
-			this.addSubtreeHandler(Priority.DEFAULT, new BasicVocTermChecker(
-					URIUtil.OBJECT_VOCABULARY));
-			this.addSubtreeHandler(Priority.LOWER, new TermReferenceCheckerObject());
+			this.addChildType(new TurtleObject());
 		}
 
-		@Override
-		public boolean violatedConstraints(KnowWEArticle article, Section<TurtleObject> s) {
-			List<Section<RDFResourceType>> list = new ArrayList<Section<RDFResourceType>>();
-			Sections.findSuccessorsOfType(s.getFather(), RDFResourceType.class, list);
-			boolean orHasSuccessorNotReusedBy = s.getFather().isOrHasSuccessorNotReusedBy(
-					article.getTitle());
-			return orHasSuccessorNotReusedBy;
+		class TurtleObject extends AbstractType implements IncrementalConstraint<TurtleObject> {
+
+			public TurtleObject() {
+				this.setSectionFinder(new AllTextFinderTrimmed());
+				this.addSubtreeHandler(Priority.DEFAULT, new BasicVocTermChecker(
+						URIUtil.OBJECT_VOCABULARY));
+				this.addSubtreeHandler(Priority.LOWER, new TermReferenceCheckerObject());
+			}
+
+			@Override
+			public boolean violatedConstraints(KnowWEArticle article, Section<TurtleObject> s) {
+				List<Section<RDFResourceType>> list = new ArrayList<Section<RDFResourceType>>();
+				Sections.findSuccessorsOfType(s.getFather().getFather(),
+						RDFResourceType.class, list);
+				boolean orHasSuccessorNotReusedBy = s.getFather().getFather().isOrHasSuccessorNotReusedBy(
+						article.getTitle());
+				return orHasSuccessorNotReusedBy;
+			}
+		}
+
+		private class TermReferenceCheckerObject extends GeneralSubtreeHandler<Type> {
+
+			@Override
+			public void destroy(KnowWEArticle article, Section<Type> s) {
+				List<Section<RDFResourceType>> list = new ArrayList<Section<RDFResourceType>>();
+				Sections.findSuccessorsOfType(s.getFather().getFather(),
+						RDFResourceType.class, list);
+				if (list.size() < 3) return;
+				if (list.get(2).getID().equals(s.getID())) {
+					s.setType(new TurtleObject(), false);
+					s.setReusedBy(article.getTitle(), false);
+				}
+			}
+
+			@Override
+			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Type> s) {
+
+				String termName = s.getOriginalText();
+				if (s.get() instanceof KnowWETerm) {
+					termName = ((KnowWETerm) s.get()).getTermName(s);
+				}
+
+				boolean datavalue = false;
+
+				if (termName.equals(LocalConceptDefinition.LOCAL_KEY)) {
+					s.setType(new LocalConceptReference());
+				}
+				else {
+					if (s.get() instanceof TurtleObject) {
+						List<Section<OWLTermReference>> refs = new ArrayList<Section<OWLTermReference>>();
+						Sections.findSuccessorsOfType(
+								s.getFather().getFather(), OWLTermReference.class, refs);
+						if (refs.size() > 0) {
+							Section predSec = getPredicateSection(Sections.findAncestorOfType(
+									s, TurtleMarkup.class));
+							if (predSec != null
+									&& predSec.get() instanceof OWLTermReference) {
+								Section<OWLTermReference> prop = predSec;
+								URIObject termObject = prop.get().getTermObject(article,
+										prop);
+								if (termObject == null)
+									return new ArrayList<KDOMReportMessage>(0);
+
+								if (termObject.getURIType() == URIObjectType.datatypeProperty) {
+									DataTypeValueTurtle dataTypeValue = new DataTypeValueTurtle();
+									dataTypeValue.addSubtreeHandler(new DelegateDestroyHandler(
+											this));
+									s.setType(dataTypeValue);
+									datavalue = true;
+								}
+							}
+						}
+					}
+					if (!datavalue && s.get() instanceof TurtleObject) {
+						OWLTermReference termReference = new OWLTermReferenceTurtle();
+						termReference.addSubtreeHandler(new DelegateDestroyHandler(
+								this));
+						s.setType(termReference);
+					}
+				}
+				return new ArrayList<KDOMReportMessage>(0);
+			}
 		}
 	}
 
@@ -382,65 +452,6 @@ public class TurtleMarkup extends AbstractType {
 		}
 	}
 
-	private class TermReferenceCheckerObject extends GeneralSubtreeHandler<Type> {
-
-		@Override
-		public void destroy(KnowWEArticle article, Section<Type> s) {
-			List<Section<RDFResourceType>> list = new ArrayList<Section<RDFResourceType>>();
-			Sections.findSuccessorsOfType(s.getFather(), RDFResourceType.class, list);
-			if (list.size() < 3) return;
-			if (list.get(2).getID().equals(s.getID())) {
-				s.setType(new TurtleObject(), false);
-				s.setReusedBy(article.getTitle(), false);
-			}
-		}
-
-		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Type> s) {
-
-			String termName = s.getOriginalText();
-			if (s.get() instanceof KnowWETerm) {
-				termName = ((KnowWETerm) s.get()).getTermName(s);
-			}
-
-			boolean datavalue = false;
-
-			if (termName.equals(LocalConceptDefinition.LOCAL_KEY)) {
-				s.setType(new LocalConceptReference());
-			}
-			else {
-				if (s.get() instanceof TurtleObject) {
-					List<Section<OWLTermReference>> refs = new ArrayList<Section<OWLTermReference>>();
-					Sections.findSuccessorsOfType(
-							s.getFather(), OWLTermReference.class, refs);
-					if (refs.size() > 0) {
-						Section predSec = getPredicateSection(Sections.findAncestorOfType(
-								s, TurtleMarkup.class));
-						if (predSec != null && predSec.get() instanceof OWLTermReference) {
-							Section<OWLTermReference> prop = predSec;
-							URIObject termObject = prop.get().getTermObject(article, prop);
-							if (termObject == null) return new ArrayList<KDOMReportMessage>(0);
-
-							if (termObject.getURIType() == URIObjectType.datatypeProperty) {
-								DataTypeValueTurtle dataTypeValue = new DataTypeValueTurtle();
-								dataTypeValue.addSubtreeHandler(new DelegateDestroyHandler(
-										this));
-								s.setType(dataTypeValue);
-								datavalue = true;
-							}
-						}
-					}
-				}
-				if (!datavalue && s.get() instanceof TurtleObject) {
-					OWLTermReference termReference = new OWLTermReferenceTurtle();
-					termReference.addSubtreeHandler(new DelegateDestroyHandler(
-							this));
-					s.setType(termReference);
-				}
-			}
-			return new ArrayList<KDOMReportMessage>(0);
-		}
-	}
 
 	private class BasicVocTermChecker extends GeneralSubtreeHandler<Type> {
 
@@ -474,11 +485,11 @@ public class TurtleMarkup extends AbstractType {
 
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
-			if (Sections.findSuccessor(s, TurtlePredicate.class) == null) {
+			if (Sections.findSuccessor(s, TurtlePredicatePart.class) == null) {
 				return Arrays.asList((KDOMReportMessage) new SyntaxError(
 						"TurtleMarkup: Predicate missing!"));
 			}
-			if (Sections.findSuccessor(s, TurtleObject.class) == null) {
+			if (Sections.findSuccessor(s, TurtleObjectPart.class) == null) {
 				return Arrays.asList((KDOMReportMessage) new SyntaxError(
 						"TurtleMarkup: Object missing!"));
 			}
