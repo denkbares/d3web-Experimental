@@ -252,28 +252,41 @@ Mark the incisional hernia areas involved.popup = """
 %%Property
 
 Intraoperative wound contamination.popup = """
-<table border='1'>
+<table border="1">
   <colgroup>
-    <col width='150'>
-    <col width='250'>
-    <col width='250'>
+    <col width="150">
+    <col width="250">
+    <col width="250">
   </colgroup>
   <tr>
-    <th align='center'>Class of operation and<br/>wound contamination</th>
-    <th align='center'>Definition</th>
-    <th align='center'>Example for ventral hernia repair</th>
+    <th align="center">Class of operation and<br/>wound contamination</th>
+    <th align="center">Definition</th>
+    <th align="center">Example for ventral hernia repair</th>
   </tr>
   <tr>
-    <th align='center'>Class I:<br>Clean</th>
-    <td style='padding:5px'>These are uninfected operative wounds in which no inflammation is encountered and the respiratory, alimentary, genital, or uninfected urinary tracts are not entered.</td>
-    <td style='padding:5px'>Elective repair of a hernia.</td>
+    <th align="center">Class I:<br>Clean</th>
+    <td style="padding:5px">These are uninfected operative wounds in which no inflammation is encountered and the respiratory, alimentary, genital, or uninfected urinary tracts are not entered.</td>
+    <td style="padding:5px">Elective repair of a hernia.</td>
   </tr>
   <tr>
-    <th align='center'>Class II:<br/>Clean-Contaminated</th>
-    <td style='padding:5px'>These are operative wounds in which the respiratory, alimentary, genital, or urinary tract is entered under controlled conditions and without unusual contamination.</td>
-    <td style='padding:5px'>- Bowel lesion during adhesiolysis, without spillage of bowel content.<p/>
+    <th align="center">Class II:<br/>Clean-Contaminated</th>
+    <td style="padding:5px">These are operative wounds in which the respiratory, alimentary, genital, or urinary tract is entered under controlled conditions and without unusual contamination.</td>
+    <td style="padding:5px">- Bowel lesion during adhesiolysis, without spillage of bowel content.<p/>
 - Combined cholecystectomy and hernia repair.<p/>
 - Bowel resection for incarceration.</td>
+  </tr>
+  <tr>
+    <th align="center">Class III:<br/>Contaminated</th>
+    <td style="padding:5px">These include open, fresh, accidental wounds, operations with major breaks in sterile technique or gross spillage from the gastrointestinal tract, and incisions in which acute, nonpurulent inflammation is encountered.</td>
+    <td style="padding:5px">- Bowel lesion with gross spillage.<p/>
+- Enterocutaneous fistula.</td>
+  </tr>
+  <tr>
+    <th align="center">Class IV:<br/>Dirty</th>
+    <td style="padding:5px">These include old traumatic wounds with retained devitalized tissue and those that involve existing clinical infection or perforated viscera. This definition suggests that the organisms causing postoperative infection were present in the operative field before the operation.</td>
+    <td style="padding:5px">- Perforation of strangulated bowel<p/>
+- diverticular abcess<p/>
+- diverticular perforation</td>
   </tr>
 </table>
 """
