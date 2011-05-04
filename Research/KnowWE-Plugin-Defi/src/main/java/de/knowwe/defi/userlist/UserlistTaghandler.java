@@ -53,6 +53,7 @@ public class UserlistTaghandler extends AbstractTagHandler {
 		JSPWikiKnowWEConnector wc = new JSPWikiKnowWEConnector(WikiEngine.getInstance(
 				KnowWEEnvironment.getInstance().getContext(), null));
 		String[] users = wc.getAllUsers();
+		String[] activeUsers = wc.getAllActiveUsers();
 
 		userlist.append("<table class='userlist'>");
 		for (int i = 0; i < users.length; i++) {
@@ -60,7 +61,10 @@ public class UserlistTaghandler extends AbstractTagHandler {
 			userlist.append("<td><img src=\"KnowWEExtension/images/"
 					+ getAvatar(users[i])
 					+ ".png\" height=\"80px\" width=\"80px\" alt=\"avatar\" /></td>");
-			userlist.append("<td>" + users[i] + "<br />- [status] -</td>");
+			userlist.append("<td><a href='" + JSPWikiKnowWEConnector.LINK_PREFIX + users[i] + "'>"
+					+ users[i]
+					+ "</a><br />- " + getStatus(activeUsers, users[i])
+					+ " -</td>");
 			userlist.append("</tr>");
 		}
 
@@ -69,7 +73,7 @@ public class UserlistTaghandler extends AbstractTagHandler {
 	}
 
 	/**
-	 * Get the user's avatar
+	 * Get the user's avatar.
 	 * 
 	 * @param userName
 	 * @return
@@ -90,6 +94,22 @@ public class UserlistTaghandler extends AbstractTagHandler {
 		if (avatar == null || avatar == "") avatar = "A01";
 
 		return avatar;
+	}
+
+	/**
+	 * Get the user's status.
+	 * 
+	 * @param activeUsers
+	 * @param userName
+	 * @return
+	 */
+	private String getStatus(String[] activeUsers, String userName) {
+
+		for (String s : activeUsers) {
+			if (s.equals(userName)) return "<span class='online'>online</span>";
+		}
+
+		return "<span class='offline'>offline</span>";
 	}
 
 }

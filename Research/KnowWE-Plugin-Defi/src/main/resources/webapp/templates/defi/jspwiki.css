@@ -2028,6 +2028,12 @@ tr.rated {
 }
 
 /* Userlist */
-table.userlist, table.userlist td {
+table.userlist tr {
 	border:1px solid black;	
+}
+table.userlist span.online {
+	color:green;
+}
+table.userlist span.offline {
+	color:red;
 }
