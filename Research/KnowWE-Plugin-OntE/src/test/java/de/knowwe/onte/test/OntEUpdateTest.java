@@ -102,6 +102,15 @@ public class OntEUpdateTest {
 	@Test
 	public void testPredicateChange() {
 		/* Change text */
+		String oldText2 = "[deathPlace range:: Location]";
+		String newText2 = "[deathPlace domain:: Location]";
+		changeText(oldText2, newText2, TurtleMarkup.class);
+		// Check that old triple is invalid now */
+		assertFalse(core.sparqlAsk(Query.DEATHPLACERANGE));
+		// Check new triple
+		assertTrue(core.sparqlAsk(Query.Update.DEATHPLACEDOMAIN));
+
+		/* Change text */
 		String oldText = "[deathPlace domain:: Person]";
 		String newText = "[deathPlace range:: Person]";
 		changeText(oldText, newText, TurtleMarkup.class);
@@ -110,13 +119,7 @@ public class OntEUpdateTest {
 		// Check new triple
 		assertTrue(core.sparqlAsk(Query.Update.DEATHPLACERANGE));
 
-		String oldText2 = "[deathPlace range:: Location]";
-		String newText2 = "[deathPlace domain:: Location]";
-		changeText(oldText2, newText2, TurtleMarkup.class);
-		// Check that old triple is invalid now */
-		assertFalse(core.sparqlAsk(Query.DEATHPLACERANGE));
-		// Check new triple
-		assertTrue(core.sparqlAsk(Query.Update.DEATHPLACEDOMAIN));
+
 		// TODO? Check validity of other triples...
 	}
 
