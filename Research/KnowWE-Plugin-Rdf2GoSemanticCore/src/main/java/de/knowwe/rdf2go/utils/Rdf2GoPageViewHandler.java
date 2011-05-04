@@ -18,7 +18,7 @@
  * site: http://www.fsf.org.
  */
 
-package de.knowwe.rdf2go.example;
+package de.knowwe.rdf2go.utils;
 
 import java.util.List;
 import java.util.Map;

@@ -24,12 +24,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.ontoware.aifbcommons.collection.ClosableIterator;
-import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
 import de.d3web.we.user.UserContext;
+import de.d3web.we.utils.KnowWEUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class ListIndividualsHandler extends AbstractHTMLTagHandler {
@@ -73,11 +72,6 @@ public class ListIndividualsHandler extends AbstractHTMLTagHandler {
 		String querystring = SPARQL_START.replaceAll("CLASS", "<" + classURI.toString() + ">");
 		querystring += sparql_mid + SPARQL_END;
 
-		ClosableIterator<QueryRow> result = Rdf2GoCore.getInstance().sparqlSelectIt(querystring);
-
-		return "";
-		// return
-		// KnowWEUtils.maskHTML(DefaultSparqlRenderer.getInstance().renderResults(result,
-		// true));
+		return KnowWEUtils.maskHTML(Rdf2GoCore.getInstance().renderedSparqlSelect(querystring, true));
 	}
 }

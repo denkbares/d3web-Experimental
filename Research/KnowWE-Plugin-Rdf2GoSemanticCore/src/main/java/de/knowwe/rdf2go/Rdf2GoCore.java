@@ -67,6 +67,7 @@ import de.d3web.we.event.FullParseEvent;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Type;
+import de.d3web.we.utils.KnowWEUtils;
 
 /**
  * 
@@ -288,8 +289,8 @@ public class Rdf2GoCore implements EventListener {
 
 	}
 
-	public String renderedSparqlSelect(String query) throws ModelRuntimeException, MalformedQueryException {
-		return render(sparqlSelect(query));
+	public String renderedSparqlSelect(String query, boolean links) throws ModelRuntimeException, MalformedQueryException {
+		return renderQueryResult(sparqlSelect(query), links);
 	}
 
 	/**
@@ -366,26 +367,72 @@ public class Rdf2GoCore implements EventListener {
 	 * @param qrt
 	 * @return html table with all results of qrt
 	 */
-	public String render(QueryResultTable qrt) {
+	public String renderQueryResult(QueryResultTable qrt, boolean links) {
+		boolean tablemode = false;
 		List<String> l = qrt.getVariables();
 		ClosableIterator<QueryRow> i = qrt.iterator();
-		String result = "<table>";
-		for (String var : l) {
-			result += "<th>" + var + "</th>";
-		}
-		while (i.hasNext()) {
-			QueryRow s = i.next();
-			result += "<tr>";
+		String result = "";
+		if (tablemode) {
+			result += KnowWEUtils.maskHTML("<table>");
 			for (String var : l) {
-				result += "<td>" + reduceNamespace(s.getValue(var).toString())
-						+ "</td>";
+				result += KnowWEUtils.maskHTML("<th>") + var + KnowWEUtils.maskHTML("</th>");
 			}
-			result += "</tr>";
 		}
-		result += "</table>";
+		else {
+			result += KnowWEUtils.maskHTML("<ul>");
+		}
+
+		while (i.hasNext()) {
+			if (!tablemode) {
+				tablemode = qrt.getVariables().size() > 1;
+			}
+			QueryRow s = i.next();
+			if (tablemode) {
+				result += KnowWEUtils.maskHTML("<tr>");
+			}
+			for (String var : l) {
+				String erg = reduceNamespace(s.getValue(var).toString());
+				if (links) {
+					if (erg.startsWith("lns:")) {
+						erg = erg.substring(4);
+					}
+					try {
+						if (KnowWEEnvironment.getInstance()
+								.getWikiConnector().doesPageExist(erg)
+								|| KnowWEEnvironment.getInstance()
+										.getWikiConnector().doesPageExist(
+												URLDecoder.decode(erg,
+														"UTF-8"))) {
+							erg = KnowWEUtils.maskHTML("<a href=\"Wiki.jsp?page="
+											+ erg + "\">" + erg + "</a>");
+						}
+					}
+					catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
+				}
+				if (tablemode) {
+					result += KnowWEUtils.maskHTML("<td>") + erg
+							+ KnowWEUtils.maskHTML("</td>\n");
+				}
+				else {
+					result += KnowWEUtils.maskHTML("<li>") + erg
+							+ KnowWEUtils.maskHTML("</li>\n");
+				}
+			}
+			if (tablemode) {
+				result += KnowWEUtils.maskHTML("</tr>");
+			}
+		}
+		if (tablemode) {
+			result += KnowWEUtils.maskHTML("</table>");
+		}
+		else {
+			result += KnowWEUtils.maskHTML("</ul>");
+		}
 		return result;
 	}
-	
+
 	public boolean sparqlAsk(String query) throws ModelRuntimeException, MalformedQueryException {
 		if (query.startsWith(getSparqlNamespaceShorts())) {
 			return model.sparqlAsk(query);
