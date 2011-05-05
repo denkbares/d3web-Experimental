@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2010 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.d3web.we.taghandler;
 
@@ -80,19 +80,19 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 	 */
 	@Override
 	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
-		
+
 		String reportType = values.get("report");
-		if( reportType == null || reportType == "") {
+		if (reportType == null || reportType == "") {
 			reportType = "both";
 		}
-		
+
 		StringBuilder html = new StringBuilder();
 		StringBuilder errorHTML = new StringBuilder();
 		StringBuilder warningHTML = new StringBuilder();
 
 		KnowWEArticleManager manager = KnowWEEnvironment.getInstance().getArticleManager(web);
 		Collection<KnowWEArticle> articles = manager.getArticles();
-		
+
 		for (KnowWEArticle article : articles) {
 			Section<KnowWEArticle> root = article.getSection();
 
@@ -140,7 +140,7 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 
 			result.append("<dt><a href=\"Wiki.jsp?page=");
 			result.append(article.getTitle()).append("\" class=\"wikipage\">");
-			result.append(article.getTitle()).append("</a></dt>");
+			result.append(article.getTitle()).append("</a></dt>\n");
 
 			for (KDOMReportMessage kdomReportMessage : messages) {
 				if (kdomReportMessage.getSection() == null) {
@@ -153,7 +153,8 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 					result.append("<dd><img src=\"templates/knowweTmps/images/exclamation.gif\" title=\"KnowWEError\" />");
 				}
 				result.append("<a href=\"Wiki.jsp?page=").append(article.getTitle()).append("#");
-				result.append(kdomReportMessage.getSection().getID()).append("\" class=\"wikipage\">");
+				result.append(kdomReportMessage.getSection().getID()).append(
+						"\" class=\"wikipage\">");
 				result.append(kdomReportMessage.getVerbalization()).append("</a></dd>");
 			}
 		}
@@ -161,8 +162,8 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 
 	/**
 	 * Searches for all {@link KDOMReportMessage} messages in the current
-	 * article. All found {@link KDOMError} and {@link KDOMWarning} messages 
-	 * are added to the according StringBuilder.
+	 * article. All found {@link KDOMError} and {@link KDOMWarning} messages are
+	 * added to the according StringBuilder.
 	 * 
 	 * @created 12.10.2010
 	 * @param section The root section of an {@link KnowWEArticle}.
