@@ -18,7 +18,7 @@
  */
 package de.knowwe.caseTrain.message;
 
-import de.d3web.we.kdom.report.KDOMNotice;
+import de.d3web.we.kdom.report.KDOMWarning;
 
 
 /**
@@ -26,7 +26,7 @@ import de.d3web.we.kdom.report.KDOMNotice;
  * @author Johannes Dienst
  * @created 26.04.2011
  */
-public class MissingAttributeWarning extends KDOMNotice {
+public class MissingAttributeWarning extends KDOMWarning {
 
 	private final String text;
 

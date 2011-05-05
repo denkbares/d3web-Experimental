@@ -36,14 +36,15 @@ import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.report.KDOMError;
+import de.d3web.we.kdom.report.KDOMNotice;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.KDOMWarning;
-import de.d3web.we.kdom.report.MessageRenderer;
 import de.d3web.we.kdom.sectionFinder.LineSectionFinder;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.caseTrain.message.InvalidArgumentError;
 import de.knowwe.caseTrain.message.MissingAttributeWarning;
 import de.knowwe.caseTrain.message.MissingComponentError;
 import de.knowwe.caseTrain.message.MissingComponentWarning;
@@ -65,22 +66,6 @@ import de.knowwe.caseTrain.util.Utils;
  * @created 06.04.2011
  */
 public class Info extends BlockMarkupType {
-
-	@Override
-	public MessageRenderer getErrorRenderer() {
-		return new MessageRenderer() {
-
-			@Override
-			public String preRenderMessage(KDOMReportMessage m, UserContext user) {
-				return "";
-			}
-
-			@Override
-			public String postRenderMessage(KDOMReportMessage m, UserContext user) {
-				return "";
-			}
-		};
-	}
 
 	public static final String FRAGE = "Frage";
 	public static final String EINLEITUNG = "Einleitung";
@@ -105,6 +90,7 @@ public class Info extends BlockMarkupType {
 						+ sec.get().getCSSClass()
 						+ "'>"));
 				string.append(KnowWEUtils.maskHTML("<div class='Infostart'></div>"));
+
 				Utils.renderKDOMReportMessageBlock(KnowWEUtils.getMessagesFromSubtree(
 						article,
 						sec,
@@ -114,6 +100,11 @@ public class Info extends BlockMarkupType {
 						article,
 						sec,
 						KDOMWarning.class), string);
+
+				Utils.renderKDOMReportMessageBlock(KnowWEUtils.getMessagesFromSubtree(
+						article,
+						sec,
+						KDOMNotice.class), string);
 				MouseOverTitleRenderer.getInstance().render(article, sec, user, string);
 				string.append(KnowWEUtils.maskHTML("<div class='Infoend'></div>"));
 				string.append(KnowWEUtils.maskHTML("</div>"));
@@ -331,6 +322,7 @@ class Frage extends SubblockMarkup {
 	private final String FRAGE_TYPE = "Fragetyp";
 	private final String FRAGE_TEXT = "Fragetext";
 	private final String FRAGE_GEWICHT = "Fragegewicht";
+	private final String FRAGE_GEWICHT_WRONG = "Fragegewicht kleiner 0";
 
 	public Frage() {
 		super("Frage");
@@ -351,6 +343,8 @@ class Frage extends SubblockMarkup {
 						FrageGewicht.class);
 				if (fragegewichtSection == null) {
 					messages.add(new MissingAttributeWarning(FRAGE_GEWICHT));
+				} else if(Double.valueOf(fragegewichtSection.getOriginalText()) < 0) {
+					messages.add(new InvalidArgumentError(FRAGE_GEWICHT_WRONG));
 				}
 
 				Section<FrageTyp> typSection = Sections.findSuccessor(s, FrageTyp.class);
@@ -372,7 +366,7 @@ class Frage extends SubblockMarkup {
 	class FrageGewicht extends AbstractType {
 
 		public FrageGewicht() {
-			this.setSectionFinder(new RegexSectionFinder("[0]*[1-9]+"));
+			this.setSectionFinder(new RegexSectionFinder("[-]?[0-9]+"));
 			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
 		}
 	}
