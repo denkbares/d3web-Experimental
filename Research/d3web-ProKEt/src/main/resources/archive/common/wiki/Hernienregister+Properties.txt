@@ -123,9 +123,9 @@ Localization of the concomitant incisional hernia#L4:R.description = 333,382,377
 %
 
 %%Property
-Mark the incisional hernia areas involved.description = IMG#####Fig7_Areas.JPGWIDTH#####220
-Localization of the concomitant incisional hernia.description = IMG#####Fig7_Areas.JPGWIDTH#####220
-Mesh position.description = IMG#####Fig6_MeshPos.JPGWIDTH#####200
+Mark the incisional hernia areas involved.description = IMG#####Fig7_Areas.JPGWIDTH#####250
+Localization of the concomitant incisional hernia.description = IMG#####Fig7_Areas.JPGWIDTH#####250
+Mesh position.description = IMG#####Fig6_MeshPos.JPGWIDTH#####300
 
 @package: Hernia
 %
