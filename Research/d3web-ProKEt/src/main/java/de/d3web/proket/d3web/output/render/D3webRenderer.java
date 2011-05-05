@@ -205,6 +205,9 @@ public class D3webRenderer implements ID3webRenderer {
 
 		// ONLY FOR HERNIA! Disable for Mediastinitis?!
 		st.setAttribute("summary", true);
+		st.setAttribute("statistics", true);
+		st.setAttribute("followup", true);
+
 		// create a summary of already answered questions
 
 		// st.setAttribute("sendexit", "true");
@@ -453,6 +456,7 @@ public class D3webRenderer implements ID3webRenderer {
 					// receive the matching HTML from the Renderer and append
 					String childHTML =
 							unknownRenderer.renderTerminologyObject(cc, to, parent);
+					System.out.println(childHTML);
 					if (childHTML != null) {
 						childrenHTML.append(childHTML);
 					}

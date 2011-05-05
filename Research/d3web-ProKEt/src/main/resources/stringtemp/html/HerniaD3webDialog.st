@@ -9,20 +9,15 @@ $endif$
 <div id="head">
 	<table>
 	<tr>
-	<td width="41%">
-		$if(loadcase)$
-			<div class="leftButton">
-				$CaseLoadButton()$
-			</div>
-		$endif$
-		$if(savecase)$
-			<div class="leftButton">
-				$CaseSaveButton()$
-			</div>
-		$endif$
+	<td width="35%">
 		$if(reset)$
 			<div class="leftButton">
 				$CaseNewButton()$
+			</div>
+		$endif$
+		$if(loadcase)$
+			<div class="leftButton">
+				$CaseLoadButton()$
 			</div>
 		$endif$
 		$if(summary)$
@@ -30,6 +25,24 @@ $endif$
 				$SummaryButton()$
 			</div>
 		$endif$
+		$if(followup)$
+			<div class="leftButton">
+				$FollowUpButton()$
+			</div>
+		$endif$
+		
+		$if(statistics)$
+			<div class="leftButton">
+				$StatisticsButton()$
+			</div>
+		$endif$
+		
+		$if(savecase)$
+			<div class="leftButton">
+				$CaseSaveButton()$
+			</div>
+		$endif$
+
 	</td>
 	<td width=*>
 		
@@ -38,7 +51,7 @@ $endif$
 		</div>
 		
 	</td>
-	<td width="41%">
+	<td width="35%">
 		<div class="langSelect">
 			$LanguageSelectFlags()$
 		</div>

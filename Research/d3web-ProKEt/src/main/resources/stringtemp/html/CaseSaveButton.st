@@ -1,4 +1,4 @@
-<div id="savecase" class="caseButton">
+<div id="savecase" class="SaveCaseButton">
 	$if(langEN)$
 		Save Case
 	$endif$ 

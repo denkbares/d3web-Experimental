@@ -15,6 +15,10 @@ td { padding: 2px 0; vertical-align: top; height: 100%}
 	background-color: #dddddd; font-weight: bold; color: #982F02; -moz-box-shadow: 0 0 5px black;	
 	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; }
 
+.SaveCaseButton{ width: 90px; height: 20px; padding-top: 3px; border: 1px solid #696969; text-align: center; cursor: pointer; 
+	background-color: #fffacd; font-weight: bold; color: #982F02; -moz-box-shadow: 0 0 5px black;	
+	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; }
+	
 .leftButton { float: left; margin-right: 5px; padding-top: 7px;}
 
 .ok-button { border: 1px solid #696969; text-align: center; cursor: pointer;  background-color: #DDDDDD; font-weight: normal; 
