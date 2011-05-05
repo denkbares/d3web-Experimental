@@ -20,7 +20,6 @@ package de.knowwe.caseTrain.type;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -35,22 +34,71 @@ import de.knowwe.caseTrain.type.MetaLine.AttributeName;
 
 /**
  * Managing the MetaAttributes used in {@link MetaDaten}
+ * The attributes are taken from {@link http://casetrain.uni-wuerzburg.de/doku/format_case.shtml}
  * 
  * @author Johannes Dienst
  * @created 20.04.2011
  */
 public class MetaAttributes {
 
+	// Demanded attributes
 	private static final String CASE_ID_KEY = "FALL_ID";
 	private static final String CASE_TITLE = "FALL_TITEL";
 	private static final String CASE_AUTHOR = "FALL_AUTOR";
 	private static final String CASE_VERSION = "FALL_VERSION";
 	private static final String CASE_DATE = "FALL_DATUM";
-	private static final String CASE_PASS = "BESTEHEN_AB";
 	private static final String CASE_POINTS = "FALL_PUNKTZAHL";
-	private static final String CASE_HISTORY = "HISTORIE";
+	private static final String CASE_PASS = "BESTEHEN_AB";
 
-	private final HashMap<String, String> attributes;
+	// Optional attributes
+	private static final String DURATION_MIN = "DAUER_MIN";
+	private static final String DIFFICULTY = "SCHWIERIGKEIT";
+	private static final String REQUIREMENTS = "VORAUSSETZUNGEN";
+	private static final String HINT = "HINWEIS";
+	private static final String COMMENT = "FALL_KOMMENTAR";
+	private static final String KEYWORDS = "SCHLAGWORTE";
+	private static final String CASE_TODO = "FALL_TODO";
+	private static final String CASE_HISTORY = "HISTORIE";
+	private static final String SHOW_TIME = "ZEIT_ANZEIGEN";
+	private static final String TIME_WEIGHT = "ZEIT_GEWICHT";
+	private static final String TIME_LIMIT100 = "ZEIT_GRENZE100";
+	private static final String TIME_LIMIT0 = "ZEIT_GRENZE0";
+	private static final String FEEDBACK = "FEEDBACK";
+	private static final String BACKGROUND = "HINTERGRUNDWISSEN";
+	private static final String HW_LINKTEXT = "HW_LINKTEXT";
+	private static final String LANGUAGE = "SPRACHE";
+
+	private MetaAttributes() {
+		this.demandedAttributes = new TreeSet<String>();
+		demandedAttributes.add(CASE_ID_KEY);
+		demandedAttributes.add(CASE_TITLE);
+		demandedAttributes.add(CASE_AUTHOR);
+		demandedAttributes.add(CASE_DATE);
+		demandedAttributes.add(CASE_VERSION);
+		demandedAttributes.add(CASE_PASS);
+		demandedAttributes.add(CASE_POINTS);
+
+		this.optionalAttributes = new TreeSet<String>();
+		optionalAttributes.add(DURATION_MIN);
+		optionalAttributes.add(DIFFICULTY);
+		optionalAttributes.add(REQUIREMENTS);
+		optionalAttributes.add(HINT);
+		optionalAttributes.add(COMMENT);
+		optionalAttributes.add(KEYWORDS);
+		optionalAttributes.add(CASE_HISTORY);
+		optionalAttributes.add(CASE_TODO);
+		optionalAttributes.add(SHOW_TIME);
+		optionalAttributes.add(TIME_WEIGHT);
+		optionalAttributes.add(TIME_LIMIT100);
+		optionalAttributes.add(TIME_LIMIT0);
+		optionalAttributes.add(FEEDBACK);
+		optionalAttributes.add(BACKGROUND);
+		optionalAttributes.add(HW_LINKTEXT);
+		optionalAttributes.add(LANGUAGE);
+	}
+
+	private final TreeSet<String> demandedAttributes;
+	private final TreeSet<String> optionalAttributes;
 
 	private static MetaAttributes uniqueInstance;
 
@@ -62,24 +110,6 @@ public class MetaAttributes {
 	}
 
 	/**
-	 * TODO: fallpunktzahl Ã€ndern
-	 * TODO: bessere bilder
-	 * TODO: vervollstÃ€ndigen
-	 */
-
-	private MetaAttributes() {
-		this.attributes = new HashMap<String, String>();
-		attributes.put("CASE_ID_KEY", CASE_ID_KEY);
-		attributes.put("CASE_TITLE", CASE_TITLE);
-		attributes.put("CASE_AUTHOR", CASE_AUTHOR);
-		attributes.put("CASE_VERSION", CASE_VERSION);
-		attributes.put("CASE_DATE", CASE_DATE);
-		attributes.put("CASE_PASS", CASE_PASS);
-		attributes.put("CASE_POINTS", CASE_POINTS);
-		attributes.put("CASE_HISTORY", CASE_HISTORY);
-	}
-
-	/**
 	 * Returns true if attribute is specified.
 	 * False otherwise.
 	 * 
@@ -88,10 +118,9 @@ public class MetaAttributes {
 	 * @return
 	 */
 	public boolean contains(String attribute) {
-		for(String key : attributes.keySet()) {
-			if(this.attributes.get(key).equals(attribute)) {return true;}
-		}
-		return false;
+		boolean retBool = demandedAttributes.contains(attribute);
+		if(retBool) {return true;}
+		return optionalAttributes.contains(attribute);
 	}
 
 	/**
@@ -110,7 +139,7 @@ public class MetaAttributes {
 		String ori = "";
 		for (Section<AttributeName> section : atts) {
 			ori = section.getOriginalText().trim();
-			if (foundOnes.contains(ori)) {
+			if (foundOnes.contains(ori) && !ori.equals(CASE_TODO)) {
 				messages.add(new DuplicateAttributeError(ori));
 				continue;
 			}
@@ -121,9 +150,10 @@ public class MetaAttributes {
 			foundOnes.add(ori);
 		}
 
-		for (String s : this.attributes.keySet()) {
-			if (!foundOnes.contains(this.attributes.get(s))) {
-				messages.add(new MissingAttributeError(this.attributes.get(s)));
+		// TODO some like TODO are optional
+		for (String s : this.demandedAttributes) {
+			if (!foundOnes.contains(s)) {
+				messages.add(new MissingAttributeError(s));
 			}
 		}
 
