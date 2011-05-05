@@ -33,6 +33,7 @@ import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.report.KDOMError;
+import de.d3web.we.kdom.report.KDOMNotice;
 import de.d3web.we.kdom.report.KDOMWarning;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.type.AnonymousTypeInvisible;
@@ -86,6 +87,11 @@ public abstract class BlockMarkupType extends AbstractType {
 						article,
 						sec,
 						KDOMWarning.class), string);
+
+				Utils.renderKDOMReportMessageBlock(KnowWEUtils.getMessagesFromSubtree(
+						article,
+						sec,
+						KDOMNotice.class), string);
 				DelegateRenderer.getInstance().render(article, sec, user, string);
 				string.append(KnowWEUtils.maskHTML("</div>"));
 

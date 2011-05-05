@@ -28,9 +28,15 @@ import de.d3web.we.kdom.report.KDOMNotice;
  */
 public class MissingPictureNotice extends KDOMNotice {
 
+	private final String text;
+
+	public MissingPictureNotice(String text) {
+		this.text = text;
+	}
+
 	@Override
 	public String getVerbalization() {
-		return "Kein Bild vorhanden";
+		return "Kein Bild vorhanden: " + text;
 	}
 
 }

@@ -68,7 +68,7 @@ public class Abschluss extends BlockMarkupType {
 
 				Section<Bild> pic = Sections.findSuccessor(s, Bild.class);
 				if (pic == null) {
-					messages.add(new MissingPictureNotice());
+					messages.add(new MissingPictureNotice(Info.ABSCHLUSS));
 				}
 
 				return messages;

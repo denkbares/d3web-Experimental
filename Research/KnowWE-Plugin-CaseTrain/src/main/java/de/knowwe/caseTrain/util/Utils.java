@@ -48,7 +48,7 @@ public class Utils {
 		string.append(KnowWEUtils.maskHTML("<span class='" + className + "'>"));
 		for (KDOMReportMessage error : messages) {
 			string.append(error.getVerbalization());
-			string.append("\n");
+			string.append(KnowWEUtils.maskHTML("<br/>"));
 		}
 		string.append(KnowWEUtils.maskHTML("</span>"));
 	}
