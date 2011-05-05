@@ -21,8 +21,13 @@
 	margin:1em 2em; 
 	padding:0.25em;
 }
-#header, #footer {
+#header {
 	padding:0 0 0 20%;
+}
+#footer {
+	margin:20px 0 0 20%;
+	border-top:1px solid #CCC;
+	text-align:right;
 }
 #header .applicationlogo {
 	position:absolute;
@@ -890,6 +895,7 @@ label[for="edittoc"] {
 	font-size:90%;
 	padding:0.25em;
 	text-align:center;
+	display:none;
 }
 
 /* +++ 450 FindContent +++ */

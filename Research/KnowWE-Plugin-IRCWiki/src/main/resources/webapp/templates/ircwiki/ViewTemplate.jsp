@@ -4,7 +4,7 @@
 <fmt:setBundle basename="templates.default"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-<html id="top" xmlns="http://www.w3.org/1999/xhtml">
+<html id="top" xmlns="http://www.w3.org/1999/xhtml" >
 
 <head>
   <title>
@@ -28,8 +28,8 @@
 <body class="view">
 <div id="head"></div>
 <div id="unilogo">
-<a href="http://www.uni-wuerzburg.de/"><img src="templates/ircwiki/images/UniWue.gif" alt="Julius-Maximilians-Universität Würzburg" title="Julius-Maximilians-Universität Würzburg" border="0" height="72" width="169"></a>
-<a href="/"><img src="templates/ircwiki/images/UniWueLS3Logo.gif" alt="Lehrstuhl für Informatik III" title="Lehrstuhl für Informatik III" border="0" height="72" width="570"></a>
+<a href="http://www.uni-wuerzburg.de/"><img src="templates/ircwiki/images/UniWue.gif" alt="Julius-Maximilians-Universit&auml;t W&uuml;rzburg" title="Julius-Maximilians-Universit&auml;t W&uuml;rzburg" border="0" height="72" width="169"></a>
+<a href="/"><img src="templates/ircwiki/images/UniWueLS3Logo.gif" alt="Internet Research Center" title="Internet Research Center" border="0" height="72" width="570"></a>
 </div>
 
 
@@ -41,9 +41,16 @@
   <div id="content">
 
     <div id="page">
-	      <wiki:Include page="PageActionsTop.jsp"/>
-	      <wiki:Content/>
-	      <wiki:Include page="PageActionsBottom.jsp"/>
+     <wiki:UserCheck status="authenticated">
+	      	<wiki:Include page="PageActionsTop.jsp"/>
+	  </wiki:UserCheck>
+      <wiki:Content/>
+	      <wiki:UserCheck status="authenticated">
+	      	<wiki:Include page="PageActionsBottom.jsp"/>
+	      </wiki:UserCheck>
+	      <wiki:UserCheck status="notAuthenticated">
+	      	<br />
+	      </wiki:UserCheck>
     </div>
     <wiki:Include page="Favorites.jsp"/>
 

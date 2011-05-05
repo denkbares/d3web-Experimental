@@ -9,7 +9,12 @@
   String frontpage = c.getEngine().getFrontPage(); 
 %> 
 <div id="footer">
-
+  <div id="footercontent">
+  	<p>Internet Research Center (Zentrum f&uuml;r Internet-Forschung, IRC) at
+University of W&uuml;rzburg, Am Hubland 97074 W&uuml;rzburg, Tel. 0931/31-86631
+  	</p>
+  </div>
+  
   <div class="applicationlogo" > 
     <a href="<wiki:LinkTo page='<%=frontpage%>' format='url' />"
        title="<fmt:message key='actions.home.title' ><fmt:param><%=frontpage%></fmt:param></fmt:message> "><fmt:message key='actions.home' /></a>
