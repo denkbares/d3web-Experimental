@@ -106,7 +106,7 @@ Primary ventral hernia route
 - Indication for surgery [oc]
 -- Elective
 -- Emergency
-- Grid1 [info]
+- Primary ventral hernia summary [info]
 
 Incisional ventral hernia route 
 - Width of the hernia [num] {cm}
@@ -148,6 +148,7 @@ Incisional ventral hernia route
 --- Has there been a previous mesh repair? [yn]
 ---- Yes
 ----- Date of the last repair [date]
+- Incisional ventral hernia summary [info]
 
 Parastomal hernia route
 - Years since stoma creation [num]
@@ -199,6 +200,7 @@ Parastomal hernia route
 ---- "L3:R"
 ---- "L4:L"
 ---- "L4:R"
+- Parastomal hernia route summary [info]
 
 Common Route - Operative data #6
 - Operation date [date]
