@@ -6,12 +6,12 @@
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -160,11 +160,26 @@ public class D3webRenderer implements ID3webRenderer {
 		/* fill some basic attributes */
 		st.setAttribute("header", D3webConnector.getInstance().getHeader());
 
-		// load case list
+		// load case list dependent from logged in user, e.g. MEDIASTINITIS
 		String opts = "";
 		if ((String) http.getAttribute("user") != null && (String) http.getAttribute("user") != "") {
 			opts = PersistenceD3webUtils.getCaseListFromUserFilename((String) http.getAttribute("user"));
 		}
+		// load case list dependent from login, fam name and institute, e.g.
+		// HERNIA
+		else if ((String) http.getAttribute("login") != null
+				&& (String) http.getAttribute("login") != "" &&
+				(String) http.getAttribute("nname") != null
+				&& (String) http.getAttribute("nname") != "" &&
+				(String) http.getAttribute("institute") != null
+				&& (String) http.getAttribute("institute") != "") {
+
+			System.out.println("HERNIA");
+			String idString = (String) http.getAttribute("login") +
+					(String) http.getAttribute("nname") + (String) http.getAttribute("institute");
+			opts = PersistenceD3webUtils.getCaseListFilterByID(idString);
+		}
+		// otherwise
 		else {
 			opts = PersistenceD3webUtils.getCaseList();
 		}
