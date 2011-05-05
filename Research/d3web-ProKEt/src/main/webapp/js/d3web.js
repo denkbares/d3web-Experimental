@@ -130,6 +130,13 @@ $(function() {
 		close = "Schließen";
 	}
 	
+	var print;
+	if(language=="en"){
+		print = "Print";
+	} else if(language=="de"){
+		print = "Drucken";
+	}
+	
 	/* creating and configuring the jquery UI summary dialog */
 	$(function() {
 
@@ -142,12 +149,18 @@ $(function() {
 			minWidth : 1000,
 			minHeight : 800,
 			buttons : [{
+				id: "sumPrint",
+				text: print,
+				click: function(){
+				}
+			},
+			{
 				id: "sumClose",
 				text: close,
 				click: function(){
 					closeJQSummaryDialog();
 				}
-				}]
+			}]
 		};
 		$("#jqSummaryDialog").dialog(opts);
 	});
