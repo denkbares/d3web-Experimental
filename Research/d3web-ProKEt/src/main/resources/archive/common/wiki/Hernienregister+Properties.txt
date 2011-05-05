@@ -149,7 +149,6 @@ Date of repair done.date_format = dd.MM.yyyy
 %
 
 %%Property
-EuraHS registration number.text_format = \d+
 EuraHS registration number.popup = """
 Information about data policy<br/>
 Information about the informed consent<br/>
