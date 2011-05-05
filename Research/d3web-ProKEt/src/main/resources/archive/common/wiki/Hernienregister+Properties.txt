@@ -227,6 +227,20 @@ Length of the hernia.popup = """
 <img width="440" src='kbimg/Figure 4+5 single and multiple hernia.jpg' alt='hernia defect description'>
 """
 
+Width of the parastomal hernia.popup = """
+<img width="440" src='kbimg/Figure 4+5 single and multiple hernia.jpg' alt='hernia defect description'>
+"""
+Length of the parastomal hernia.popup = """
+<img width="440" src='kbimg/Figure 4+5 single and multiple hernia.jpg' alt='hernia defect description'>
+"""
+
+Width of the ventral hernia.popup = """
+<img width="440" src='kbimg/Figure 4+5 single and multiple hernia.jpg' alt='hernia defect description'>
+"""
+Length of the ventral hernia.popup = """
+<img width="440" src='kbimg/Figure 4+5 single and multiple hernia.jpg' alt='hernia defect description'>
+"""
+
 @package: Hernia
 %
 

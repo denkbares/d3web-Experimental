@@ -88,14 +88,14 @@ Other risk factors #5
 --- Pack years [num]
 
 Primary ventral hernia route 
-- Width of the hernia [num] {cm}
-- Length of the hernia [num] {cm}
-- Diameter of the hernia [num]
-- Reducibility of the hernia [oc]
+- Width of the ventral hernia [num] {cm}
+- Length of the ventral hernia [num] {cm}
+- Diameter of the ventral hernia [num]
+- Reducibility of the ventral hernia [oc]
 -- Completely reducible
 -- Partially reducible
 -- Non reducible
-- Indication for surgery [oc]
+- Indication for ventral hernia surgery [oc]
 -- Elective
 -- Emergency
 - Primary ventral hernia summary [info]
@@ -140,6 +140,16 @@ Incisional ventral hernia route
 --- Has there been a previous mesh repair? [yn]
 ---- Yes
 ----- Date of the last repair [date]
+----- Method of prevoius repair [oc]
+------ Laparoscopic
+------ Open
+----- Reducibility of the previous hernia [oc]
+------ Completely reducible
+------ Partially reducible
+------ Not reducible
+----- Indication for previous surgery [oc]
+------ Elective
+------ Emergency
 - Incisional ventral hernia summary [info]
 
 Parastomal hernia route
@@ -162,20 +172,21 @@ Parastomal hernia route
 - Previous repair of the parastomal hernia [yn]
 -- Yes
 --- Number of previous repairs [num]
---- Has there been a previous mesh repair? [yn]
+--- Has there been a previous parastomal mesh repair? [yn]
 ---- Yes
------ Method [oc]
+----- Date of the last parastomal hernia repair [date]
+----- Method of prevoius parastomal repair [oc]
 ------ Laparoscopic
 ------ Open
------ Reducibility of the hernia [oc]
+----- Reducibility of the previous parastomal hernia [oc]
 ------ Completely reducible
 ------ Partially reducible
 ------ Not reducible
------ Indication for surgery [oc]
+----- Indication for previous parastomal hernia surgery [oc]
 ------ Elective
 ------ Emergency
-- Width of the hernia [num] {cm}
-- Length of the hernia [num] {cm}
+- Width of the parastomal hernia [num] {cm}
+- Length of the parastomal hernia [num] {cm}
 - Is there a concomitant incisional hernia present [yn]
 -- Yes
 --- Localization of the concomitant incisional hernia [mc]
