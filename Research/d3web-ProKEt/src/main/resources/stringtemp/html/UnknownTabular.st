@@ -3,11 +3,11 @@
 	<tbody>
 	<tr>
 	<td width=*>
-		<input id="i_unknown_$fullId$" type="radio" $selection$ title="Unbekannt" 
+		<input id="i_unknown_$fullId$" type="radio" $selection$ title="Unknown" 
 		name="group-$parentFullId$" $selection$ $if(readonly)$ DISABLED $endif$ />	
 	</td>
 	<td width="95%" $if(inactive)$ class="inactive" $endif$>
-		Unbekannt
+		Unknown
 	</td>
 	</tr>
 	</tbody>
