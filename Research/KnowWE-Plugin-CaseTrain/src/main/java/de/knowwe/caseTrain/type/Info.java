@@ -66,39 +66,6 @@ import de.knowwe.caseTrain.util.Utils;
  */
 public class Info extends BlockMarkupType {
 
-	// Warnings are only rendered in message block
-	@Override
-	public MessageRenderer getWarningRenderer() {
-		return new MessageRenderer() {
-
-			@Override
-			public String preRenderMessage(KDOMReportMessage m, UserContext user) {
-				return "";
-			}
-
-			@Override
-			public String postRenderMessage(KDOMReportMessage m, UserContext user) {
-				return "";
-			}
-		};
-	}
-
-	@Override
-	public MessageRenderer getNoticeRenderer() {
-		return new MessageRenderer() {
-
-			@Override
-			public String preRenderMessage(KDOMReportMessage m, UserContext user) {
-				return "";
-			}
-
-			@Override
-			public String postRenderMessage(KDOMReportMessage m, UserContext user) {
-				return "";
-			}
-		};
-	}
-
 	@Override
 	public MessageRenderer getErrorRenderer() {
 		return new MessageRenderer() {

@@ -32,6 +32,7 @@ import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rendering.NothingRenderer;
 import de.d3web.we.kdom.report.KDOMError;
+import de.d3web.we.kdom.report.KDOMNotice;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.KDOMWarning;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -78,6 +79,11 @@ public class MetaDaten extends BlockMarkupType {
 						article,
 						sec,
 						KDOMWarning.class), string);
+
+				Utils.renderKDOMReportMessageBlock(KnowWEUtils.getMessagesFromSubtree(
+						article,
+						sec,
+						KDOMNotice.class), string);
 				string.append(KnowWEUtils.maskHTML("<table class='wikitable'>"));
 				string.append(KnowWEUtils.maskHTML("<th>Metadaten:</th><th></th>"));
 				DelegateRenderer.getInstance().render(article, sec, user, string);

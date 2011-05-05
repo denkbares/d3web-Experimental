@@ -30,6 +30,9 @@ import de.knowwe.caseTrain.renderer.DivStyleClassRenderer;
  * Belongs to BlockMarkupType. Represents the rest of the first line after the
  * keyword.
  * 
+ * TODO Finds an empty title when the Line looks like this
+ *      MetaDaten:\r\n
+ *      This is wrong. It should find no title at all.
  * 
  * @author Jochen
  * @created 06.04.2011

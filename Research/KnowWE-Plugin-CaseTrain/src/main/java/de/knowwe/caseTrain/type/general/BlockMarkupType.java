@@ -34,7 +34,9 @@ import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMNotice;
+import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.KDOMWarning;
+import de.d3web.we.kdom.report.MessageRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.type.AnonymousTypeInvisible;
 import de.d3web.we.user.UserContext;
@@ -51,6 +53,55 @@ import de.knowwe.caseTrain.util.Utils;
  * @created 06.04.2011
  */
 public abstract class BlockMarkupType extends AbstractType {
+
+	// Warnings are only rendered in message block
+	@Override
+	public MessageRenderer getWarningRenderer() {
+		return new MessageRenderer() {
+
+			@Override
+			public String preRenderMessage(KDOMReportMessage m, UserContext user) {
+				return "";
+			}
+
+			@Override
+			public String postRenderMessage(KDOMReportMessage m, UserContext user) {
+				return "";
+			}
+		};
+	}
+
+	@Override
+	public MessageRenderer getNoticeRenderer() {
+		return new MessageRenderer() {
+
+			@Override
+			public String preRenderMessage(KDOMReportMessage m, UserContext user) {
+				return "";
+			}
+
+			@Override
+			public String postRenderMessage(KDOMReportMessage m, UserContext user) {
+				return "";
+			}
+		};
+	}
+
+	@Override
+	public MessageRenderer getErrorRenderer() {
+		return new MessageRenderer() {
+
+			@Override
+			public String preRenderMessage(KDOMReportMessage m, UserContext user) {
+				return "";
+			}
+
+			@Override
+			public String postRenderMessage(KDOMReportMessage m, UserContext user) {
+				return "";
+			}
+		};
+	}
 
 	private final String key;
 	public static final String START_TAG = "<<";
