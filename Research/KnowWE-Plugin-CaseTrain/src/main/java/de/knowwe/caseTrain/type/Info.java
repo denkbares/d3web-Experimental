@@ -23,7 +23,6 @@ package de.knowwe.caseTrain.type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -220,7 +219,7 @@ public class Info extends BlockMarkupType {
 					}
 					if (sec.get() instanceof Antworten) {
 						antwortenMissing = false;
-						AntwortKorrektheitChecker.getInstance().
+						AntwortenKorrektheitChecker.getInstance().
 						validateAntwortenBlock((Section<Frage>) actual, (Section<Antworten>) sec, messages);
 						continue;
 					}
@@ -267,40 +266,78 @@ class Antworten extends SubblockMarkup {
 		});
 	}
 
+	/**
+	 * Antwort is a Antwort Line.
+	 * Contains a AntwortContent which has the following syntax:
+	 * {Markierung}Antwort{Antwortspezifische Erklärung}
+	 * 
+	 * @author Jochen
+	 * @created
+	 */
 	class Antwort extends AbstractType {
 
 		public Antwort() {
 			this.setSectionFinder(new LineSectionFinder());
 			this.setCustomRenderer(new DivStyleClassRenderer("Antwort"));
-			this.addChildType(new AntwortKorrektheit());
+			this.addChildType(new AntwortMarkierung());
+			this.addChildType(new AntwortText());
+			this.addChildType(new AntwortErklaerung());
 		}
 
-		class AntwortKorrektheit extends AbstractType {
+		/**
+		 * {@link AntwortenKorrektheitChecker}
+		 * 
+		 * @author Johannes Dienst
+		 * @created 08.05.2011
+		 */
+		class AntwortMarkierung extends AbstractType {
 
 			String regex = "\\{(.*?)\\}";
 
-			public AntwortKorrektheit() {
+			public AntwortMarkierung() {
+				this.setCustomRenderer(new StyleRenderer("font-weight:bold;"));
 				ConstraintSectionFinder csf = new ConstraintSectionFinder(
 						new RegexSectionFinder(regex));
 				csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 				this.setSectionFinder(csf);
-				this.addChildType(new AntwortKorrektheitContent());
+				this.addSubtreeHandler(AntwortMarkierungHandler.getInstance());
 			}
 
-			/**
-			 * See also {@link AntwortKorrektheitChecker}
-			 * 
-			 * @author Jochen
-			 * @created 28.04.2011
-			 */
-			class AntwortKorrektheitContent extends AbstractType {
+		}
 
-				public AntwortKorrektheitContent() {
-					this.setCustomRenderer(new StyleRenderer("font-weight:bold;"));
-					this.setSectionFinder(new RegexSectionFinder(regex, Pattern.DOTALL, 1));
-					this.addSubtreeHandler(AntwortKorrektheitChecker.getInstance());
-				}
+		/**
+		 * 
+		 * @author Johannes Dienst
+		 * @created 08.05.2011
+		 */
+		class AntwortText extends AbstractType {
 
+			String regex = "([\\w]{1}[äüöÄÜÖß]?[ ]?)+";
+
+			public AntwortText() {
+				this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
+				ConstraintSectionFinder csf = new ConstraintSectionFinder(
+						new RegexSectionFinder(regex));
+				csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+				this.setSectionFinder(csf);
+			}
+		}
+
+		/**
+		 * 
+		 * @author Johannes Dienst
+		 * @created 08.05.2011
+		 */
+		class AntwortErklaerung extends AbstractType {
+
+			String regex = "\\{.*?\\}";
+
+			public AntwortErklaerung() {
+				this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
+				ConstraintSectionFinder csf = new ConstraintSectionFinder(
+						new RegexSectionFinder(regex));
+				csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+				this.setSectionFinder(csf);
 			}
 		}
 	}
@@ -375,7 +412,7 @@ class Frage extends SubblockMarkup {
 
 		public FrageTyp() {
 			this.setSectionFinder(new RegexSectionFinder(
-					AntwortKorrektheitChecker.getInstance().getRegexAsString()));
+					AntwortenKorrektheitChecker.getInstance().getRegexAsString()));
 			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
 		}
 
