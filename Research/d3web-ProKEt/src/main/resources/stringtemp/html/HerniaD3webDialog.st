@@ -9,53 +9,62 @@ $endif$
 <div id="head">
 	<table>
 	<tr>
-	<td width="35%">
-		$if(reset)$
-			<div class="leftButton">
-				$CaseNewButton()$
+		<td width="35%" cellspacing="0" cellpadding="0">
+			<table>
+				<tr>
+					<td>
+						$if(reset)$
+							<div class="leftButton">
+								$CaseNewButton()$
+							</div>
+						$endif$
+						$if(loadcase)$
+							<div class="leftButton">
+								$CaseLoadButton()$
+							</div>
+						$endif$
+						$if(summary)$
+							<div class="leftButton">
+								$SummaryButton()$
+							</div>
+						$endif$
+					</td>
+				</tr>
+				<tr>
+					<td>
+						$if(followup)$
+							<div class="leftButton">
+								$FollowUpButton()$
+							</div>
+						$endif$
+						
+						$if(statistics)$
+							<div class="leftButton">
+								$StatisticsButton()$
+							</div>
+						$endif$
+						
+						$if(savecase)$
+							<div class="leftButton">
+								$CaseSaveButton()$
+							</div>
+						$endif$
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td width=*>
+			
+			<div class="header">
+				$header$
 			</div>
-		$endif$
-		$if(loadcase)$
-			<div class="leftButton">
-				$CaseLoadButton()$
+			
+		</td>
+		<td width="35%">
+			<div class="langSelect">
+				$LanguageSelectFlags()$
 			</div>
-		$endif$
-		$if(summary)$
-			<div class="leftButton">
-				$SummaryButton()$
-			</div>
-		$endif$
-		$if(followup)$
-			<div class="leftButton">
-				$FollowUpButton()$
-			</div>
-		$endif$
-		
-		$if(statistics)$
-			<div class="leftButton">
-				$StatisticsButton()$
-			</div>
-		$endif$
-		
-		$if(savecase)$
-			<div class="leftButton">
-				$CaseSaveButton()$
-			</div>
-		$endif$
-
-	</td>
-	<td width=*>
-		
-		<div class="header">
-			$header$
-		</div>
-		
-	</td>
-	<td width="35%">
-		<div class="langSelect">
-			$LanguageSelectFlags()$
-		</div>
-	</td>
+		</td>
 	</tr>
 	</table>
 </div>

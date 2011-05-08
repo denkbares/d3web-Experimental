@@ -19,7 +19,7 @@ td { padding: 2px 0; vertical-align: top; height: 100%}
 	background-color: #fffacd; font-weight: bold; color: #982F02; -moz-box-shadow: 0 0 5px black;	
 	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; }
 	
-.leftButton { float: left; margin-right: 5px; padding-top: 7px;}
+.leftButton { float: left; margin-right: 5px;}
 
 .ok-button { border: 1px solid #696969; text-align: center; cursor: pointer;  background-color: #DDDDDD; font-weight: normal; 
  	color: #696969; -moz-box-shadow: 0 0 5px black;	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; }
@@ -71,8 +71,8 @@ td { padding: 2px 0; vertical-align: top; height: 100%}
 .answer{ font-weight: normal;}
 
 
-/* TOOLTIS, ADD STUFF */
-.tooltip { z-index: 100; background-color: rgb(255, 255, 180); background-color: rgba(255, 255, 180, 0.725);
+/* TOOLTIPS, ADD STUFF */
+.tooltip { z-index: 100; background-color: rgb(255, 255, 180); background-color: rgba(255, 255, 180, 1);
 	padding: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px;
 	-moz-box-shadow: 3px 3px 3px #888; -webkit-box-shadow: 3px 3px 3px #888; box-shadow: 3px 3px 3px #888;
 	border: 1px solid #BBB; font-weight: normal; color: #555; }
