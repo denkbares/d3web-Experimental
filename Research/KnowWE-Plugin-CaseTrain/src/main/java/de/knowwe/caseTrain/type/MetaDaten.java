@@ -61,6 +61,7 @@ import de.knowwe.caseTrain.util.Utils;
 public class MetaDaten extends BlockMarkupType {
 
 	private final String INFO_ABSCHNITT = "Infoabschnitt";
+	private final String META = "MetaDaten";
 
 	public MetaDaten() {
 		super("Metadaten");
@@ -84,10 +85,17 @@ public class MetaDaten extends BlockMarkupType {
 						article,
 						sec,
 						KDOMNotice.class), string);
+
+				string.append(KnowWEUtils.maskHTML("%%collapsebox-closed \r\n"));
+				string.append(
+						KnowWEUtils.maskHTML("! "
+								+ META
+								+ "\r\n"));
 				string.append(KnowWEUtils.maskHTML("<table class='wikitable'>"));
 				string.append(KnowWEUtils.maskHTML("<th>Metadaten:</th><th></th>"));
 				DelegateRenderer.getInstance().render(article, sec, user, string);
 				string.append(KnowWEUtils.maskHTML("</table>"));
+				string.append(KnowWEUtils.maskHTML("/%\r\n"));
 
 			}
 		});
