@@ -66,15 +66,26 @@ public class AntwortMarkierungHandler extends GeneralSubtreeHandler<AntwortMarki
 		}
 
 		double d1 = 0.0;
+		double d2 = -1.0;
 		try {
-			d1 = Double.parseDouble(content);
+			String[] doubles = content.split("[ ]+");
+			if (doubles.length > 2)
+				throw new IllegalArgumentException();
+			d1 = Double.parseDouble(doubles[0]);
+			if (doubles.length == 2)
+				d2 = Double.parseDouble(doubles[1]);
 		}
 		catch (Exception e) {
 			messages.add(new InvalidArgumentError("Nur '+' oder '-' oder Zahlen größer 0"));
+			return messages;
 		}
 
 		if ( d1 < 0 ) {
 			messages.add(new InvalidArgumentError("Nur Zahlen größer 0"));
+		}
+
+		if (d2 >= 0) {
+			messages.add(new InvalidArgumentError("Nur Zahlen kleiner 0"));
 		}
 		return messages;
 	}

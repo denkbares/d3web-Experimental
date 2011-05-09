@@ -29,8 +29,11 @@ import de.knowwe.caseTrain.message.InvalidArgumentError;
 import de.knowwe.caseTrain.message.InvalidArgumentNotice;
 import de.knowwe.caseTrain.message.InvalidArgumentWarning;
 import de.knowwe.caseTrain.message.InvalidAttributeError;
+import de.knowwe.caseTrain.message.MissingContentWarning;
 import de.knowwe.caseTrain.type.Antworten.Antwort;
+import de.knowwe.caseTrain.type.Antworten.Antwort.AntwortErklaerung;
 import de.knowwe.caseTrain.type.Antworten.Antwort.AntwortMarkierung;
+import de.knowwe.caseTrain.type.Antworten.Antwort.AntwortText;
 import de.knowwe.caseTrain.type.Frage.FrageTyp;
 
 
@@ -113,22 +116,27 @@ public class AntwortenKorrektheitChecker {
 
 		if (typ.getOriginalText().equals(W)) {
 			this.checkWordQuestion(antworten, messages);
+			return;
 		}
 
 		if (typ.getOriginalText().equals(UMW)) {
 			this.checkUMWQuestion(antworten, messages);
+			return;
 		}
 
 		if (typ.getOriginalText().equals(OMW)) {
 			this.checkOMWQuestion(antworten, messages);
+			return;
 		}
 
 		if (typ.getOriginalText().equals(N)) {
 			this.checkNQuestion(antworten, messages);
+			return;
 		}
 
 		if (typ.getOriginalText().equals(MN)) {
 			this.checkMNQuestion(antworten, messages);
+			return;
 		}
 
 		if (typ.getOriginalText().equals(T)) {
@@ -137,15 +145,60 @@ public class AntwortenKorrektheitChecker {
 
 	}
 
-
-	private void checkChoiceQuestion(
-			Section<Antworten> antworten, List<KDOMReportMessage> messages) {
+	/**
+	 * Tests if {@link AntwortText} is empty
+	 * 
+	 * @created 09.05.2011
+	 * @param antworten
+	 * @param messages
+	 */
+	private void checkText(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
 
 		List<Section<Antwort>> found = new ArrayList<Section<Antwort>>();
 		Sections.findSuccessorsOfType(antworten, Antwort.class, found);
 
-		if (found.size() < 2) {
-			messages.add(new InvalidArgumentError("Weniger als 2 Antworten für Frage angegeben."));
+		Section<AntwortText> antwortText = null;
+		for(Section<Antwort> ans : found) {
+			antwortText = Sections.findSuccessor(ans, AntwortText.class);
+			if ( antwortText == null )
+				messages.add(new MissingContentWarning("Antwort hat keinen Antwort-Text"));
+			else if (antwortText.getOriginalText().trim().length() == 0)
+				messages.add(new MissingContentWarning("Antwort hat leeren Antwort-Text"));
+
+		}
+	}
+
+	/**
+	 * Tests if {@link AntwortErklaerung} is empty
+	 * 
+	 * @created 09.05.2011
+	 * @param antworten
+	 * @param messages
+	 */
+	private void checkErklaerung(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
+
+		List<Section<Antwort>> found = new ArrayList<Section<Antwort>>();
+		Sections.findSuccessorsOfType(antworten, Antwort.class, found);
+
+		Section<AntwortErklaerung> antwortErklaerung = null;
+		for(Section<Antwort> ans : found) {
+			antwortErklaerung = Sections.findSuccessor(ans, AntwortErklaerung.class);
+			if ( antwortErklaerung != null )
+				if (antwortErklaerung.getOriginalText().trim().length() == 0)
+					messages.add(new MissingContentWarning(
+					"Antwort-Erklärung enthält keinen Text"));
+		}
+	}
+
+	private void checkMarkierung(
+			Section<Antworten> antworten, List<KDOMReportMessage> messages, int minAnswers) {
+
+		// First: Right Syntax of Markierung
+		List<Section<Antwort>> found = new ArrayList<Section<Antwort>>();
+		Sections.findSuccessorsOfType(antworten, Antwort.class, found);
+
+		if (found.size() < minAnswers) {
+			messages.add(new InvalidArgumentError("Weniger als "+ minAnswers +" Antworten für Frage angegeben."));
 		}
 
 		// Counting right and wrong answers
@@ -158,11 +211,11 @@ public class AntwortenKorrektheitChecker {
 			weight = Sections.findSuccessor(ans, AntwortMarkierung.class);
 			content = weight.getOriginalText().substring(1, weight.getOriginalText().length()-1).trim();
 
-			if (content.equals("+")) {
+			if (content.equals("+") || content.equals("1")) {
 				rightAnswers++;
 				continue;
 			}
-			if (content.equals("-")) {
+			if (content.equals("-") || content.equals("0")) {
 				wrongAnswers++;
 				continue;
 			}
@@ -172,25 +225,82 @@ public class AntwortenKorrektheitChecker {
 		if (rightAnswers == 0) {
 			messages.add(new InvalidArgumentError("Keine richtige Antwort für Frage angegeben"));
 		}
-		if (wrongAnswers == 0) {
+		if ( (wrongAnswers == 0) && (minAnswers > 1) ) {
 			messages.add(new InvalidArgumentWarning("Keine falsche Antwort für Frage angegeben"));
 		}
 		if  ( (numAnswers > 0) && ((rightAnswers > 0 ) || (wrongAnswers > 0)) ) {
 			messages.add(new InvalidArgumentNotice("+/- ist gemischt mit Zahlen"));
 		}
+
+	}
+
+	private void checkChoiceQuestion(
+			Section<Antworten> antworten, List<KDOMReportMessage> messages) {
+		this.checkMarkierung(antworten, messages, 2);
+		this.checkText(antworten, messages);
+		this.checkErklaerung(antworten, messages);
 	}
 
 	/**
 	 * 
-	 * TODO Support all the various types
+	 * TODO: Edit-Distance {1}{2}Kohäsion
 	 * 
 	 * @created 08.05.2011
 	 * @param antworten
 	 * @param messages
 	 */
 	private void checkWordQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
-		// TODO Auto-generated method stub
+		this.checkMarkierung(antworten, messages, 1);
+		this.checkText(antworten, messages);
 
+		// Regex Test
+		// TODO is the pattern escaped?
+		List<Section<Antwort>> found = new ArrayList<Section<Antwort>>();
+		Sections.findSuccessorsOfType(antworten, Antwort.class, found);
+
+		Section<AntwortText> antwortText = null;
+		String antString = "";
+		String start = "";
+		String c = "";
+		for(Section<Antwort> ans : found) {
+			antwortText = Sections.findSuccessor(ans, AntwortText.class);
+			antString = antwortText.getOriginalText().trim();
+
+			if ( (antwortText == null) || (antString.length() == 0 ))
+				continue;
+
+			if (antString.startsWith("{r}")) {
+				antString = antString.substring(antString.indexOf("}")+1);
+				try {
+					Pattern.compile(antString);
+				} catch (Exception e) {
+					messages.add(new InvalidArgumentError("Regex fehlerhaft: " + antString));
+				}
+				continue;
+			}
+
+			if (antString.startsWith("{")) {
+
+				if (antString.indexOf("}") == -1) {
+					messages.add(new InvalidArgumentError("Kein schließendes '}'"));
+					continue;
+				}
+
+				c = antString.substring(1, antString.indexOf("}"));
+				try {
+					Integer.valueOf(c);
+				} catch(Exception e) {
+					messages.add(new InvalidArgumentError("Kein gueltiges Zeichen innerhalb {}"));
+					continue;
+				}
+				antString = antString.substring(antString.indexOf("}")+1);
+				if (antString.length() == 0)
+					messages.add(new InvalidArgumentError("Leeres Wort eingegeben"));
+			}
+
+		}
+
+		this.checkErklaerung(antworten, messages);
 	}
 
 	/**
@@ -200,8 +310,9 @@ public class AntwortenKorrektheitChecker {
 	 * @param messages
 	 */
 	private void checkUMWQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
-		// TODO Auto-generated method stub
+		this.checkMarkierung(antworten, messages, 2);
 
+		this.checkErklaerung(antworten, messages);
 	}
 
 	/**
@@ -211,18 +322,23 @@ public class AntwortenKorrektheitChecker {
 	 * @param messages
 	 */
 	private void checkOMWQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
-		// TODO Auto-generated method stub
+		this.checkMarkierung(antworten, messages, 2);
 
+		this.checkErklaerung(antworten, messages);
 	}
 
 	/**
+	 * 
+	 * TODO:     {...}x, wobei x eine beliebige Zahl ist
+                 {...}x y, für das Intervall [x; y]
+
 	 * 
 	 * @created 08.05.2011
 	 * @param antworten
 	 * @param messages
 	 */
 	private void checkNQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
-		// TODO Auto-generated method stub
+		this.checkMarkierung(antworten, messages, 1);
 
 	}
 
@@ -233,8 +349,9 @@ public class AntwortenKorrektheitChecker {
 	 * @param messages
 	 */
 	private void checkMNQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
-		// TODO Auto-generated method stub
+		this.checkMarkierung(antworten, messages, 2);
 
+		this.checkErklaerung(antworten, messages);
 	}
 
 	/**
@@ -244,7 +361,8 @@ public class AntwortenKorrektheitChecker {
 	 * @param messages
 	 */
 	private void checkTQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
-		// TODO Auto-generated method stub
+		this.checkMarkierung(antworten, messages, 2);
 
+		this.checkErklaerung(antworten, messages);
 	}
 }

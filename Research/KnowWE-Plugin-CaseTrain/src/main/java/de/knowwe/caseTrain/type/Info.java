@@ -312,7 +312,9 @@ class Antworten extends SubblockMarkup {
 		 */
 		class AntwortText extends AbstractType {
 
-			String regex = "([\\w]{1}[äüöÄÜÖß]?[ ]?)+";
+			// TODO Regex only recognizes {r}word
+			//      not regex in full.
+			String regex = "(\\{.*?\\})?([\\w]{1}[äüöÄÜÖß]?[ ]?[0-9]*)+";
 
 			public AntwortText() {
 				this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
