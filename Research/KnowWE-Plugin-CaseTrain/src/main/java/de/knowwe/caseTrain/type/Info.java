@@ -314,7 +314,7 @@ class Antworten extends SubblockMarkup {
 
 			// TODO Regex only recognizes {r}word
 			//      not regex in full.
-			String regex = "(\\{.*?\\})?([\\w]{1}[äüöÄÜÖß]?[ ]?[0-9]*)+";
+			String regex = "(\\{.*?\\})?([\\w]{1}[äüöÄÜÖß]?[ 0-9]*)+";
 
 			public AntwortText() {
 				this.setCustomRenderer(MouseOverTitleRenderer.getInstance());

@@ -243,8 +243,6 @@ public class AntwortenKorrektheitChecker {
 
 	/**
 	 * 
-	 * TODO: Edit-Distance {1}{2}Kohäsion
-	 * 
 	 * @created 08.05.2011
 	 * @param antworten
 	 * @param messages
@@ -260,7 +258,6 @@ public class AntwortenKorrektheitChecker {
 
 		Section<AntwortText> antwortText = null;
 		String antString = "";
-		String start = "";
 		String c = "";
 		for(Section<Antwort> ans : found) {
 			antwortText = Sections.findSuccessor(ans, AntwortText.class);
@@ -339,7 +336,40 @@ public class AntwortenKorrektheitChecker {
 	 */
 	private void checkNQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
 		this.checkMarkierung(antworten, messages, 1);
+		this.checkText(antworten, messages);
 
+		List<Section<Antwort>> found = new ArrayList<Section<Antwort>>();
+		Sections.findSuccessorsOfType(antworten, Antwort.class, found);
+
+		Section<AntwortText> antwortText = null;
+		String antString = "";
+		for(Section<Antwort> ans : found) {
+			antwortText = Sections.findSuccessor(ans, AntwortText.class);
+			antString = antwortText.getOriginalText().trim();
+			String[] interval = antString.split("[ ]+");
+
+			if ( (interval.length == 0) || (interval.length > 2) ) {
+				messages.add(new InvalidArgumentError("Formatierung des Intervals fehlerhaft"));
+				continue;
+			}
+
+			int i1 = 0;
+			int i2 = Integer.MAX_VALUE;
+			try {
+				i1 = Integer.valueOf(interval[0]);
+				if (interval.length != 1)
+					i2 = Integer.valueOf(interval[1]);
+			} catch(Exception e) {
+				messages.add(new InvalidArgumentError("Interval muss aus Zahlen bestehen"));
+				continue;
+			}
+
+			if (i1 > i2)
+				messages.add(new InvalidArgumentWarning("Erste Zahl größer als zweite Zahl"));
+
+		}
+
+		this.checkErklaerung(antworten, messages);
 	}
 
 	/**
@@ -350,7 +380,7 @@ public class AntwortenKorrektheitChecker {
 	 */
 	private void checkMNQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
 		this.checkMarkierung(antworten, messages, 2);
-
+		this.checkText(antworten, messages);
 		this.checkErklaerung(antworten, messages);
 	}
 
@@ -362,7 +392,7 @@ public class AntwortenKorrektheitChecker {
 	 */
 	private void checkTQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
 		this.checkMarkierung(antworten, messages, 2);
-
+		this.checkText(antworten, messages);
 		this.checkErklaerung(antworten, messages);
 	}
 }
