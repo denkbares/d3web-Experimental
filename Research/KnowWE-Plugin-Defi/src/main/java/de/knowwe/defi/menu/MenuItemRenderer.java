@@ -19,14 +19,21 @@
  */
 package de.knowwe.defi.menu;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.user.UserContext;
 import de.knowwe.core.dashtree.DashTreeElement;
+import de.knowwe.core.dashtree.DashTreeElementContent;
 import de.knowwe.core.dashtree.DashTreeUtils;
+import de.knowwe.defi.time.TimeTableMarkup;
 
 public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 
@@ -39,6 +46,8 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 		if(dashLevel == 0) {
 			isRoot = true;
 		}
+
+		if (!isRoot && !isFree(sec)) return;
 
 		String currentPage = user.getParameter("page");
 
@@ -75,6 +84,45 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 		string.append("</a>");
 		// string.append("\\\\");
 
+	}
+
+	private boolean isFree(Section<DynamicMenuItem> sec) {
+		Section<? extends DashTreeElement> fatherDashTreeElement = DashTreeUtils.getFatherDashTreeElement(sec);
+		Section<? extends Type> dashtree = fatherDashTreeElement.getFather().getFather();
+		List<Section<DynamicMenuItem>> found = new ArrayList<Section<DynamicMenuItem>>();
+		Sections.findSuccessorsOfType(dashtree, DynamicMenuItem.class, 3, found);
+
+		int unitNumber = -1;
+		for (int i = 0; i < found.size(); i++) {
+			if (found.get(i).getID().equals(
+					Sections.findChildOfType(fatherDashTreeElement,
+							DashTreeElementContent.class).getID())) {
+				unitNumber = i;
+				break;
+			}
+		}
+
+		KnowWEArticle zeitplanArticle = KnowWEEnvironment.getInstance().getArticleManager(
+				KnowWEEnvironment.DEFAULT_WEB).getArticle(
+				"Zeitplan");
+
+		Section<TimeTableMarkup> timetable = Sections.findSuccessor(
+				zeitplanArticle.getSection(), TimeTableMarkup.class);
+		if (timetable != null) {
+			List<Date> dates = TimeTableMarkup.getDates(timetable);
+			Date current = new Date();
+			Date unitDate = null;
+			if (dates.size() > unitNumber) {
+				unitDate = dates.get(unitNumber);
+				if (current.after(unitDate)) {
+					return true;
+				}
+			}
+
+
+		}
+
+		return false;
 	}
 
 }
