@@ -25,15 +25,20 @@ import java.util.regex.Pattern;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.report.KDOMReportMessage;
+import de.knowwe.caseTrain.message.DuplicateComponentError;
 import de.knowwe.caseTrain.message.InvalidArgumentError;
 import de.knowwe.caseTrain.message.InvalidArgumentNotice;
 import de.knowwe.caseTrain.message.InvalidArgumentWarning;
 import de.knowwe.caseTrain.message.InvalidAttributeError;
+import de.knowwe.caseTrain.message.MissingComponentWarning;
 import de.knowwe.caseTrain.message.MissingContentWarning;
 import de.knowwe.caseTrain.type.Antworten.Antwort;
 import de.knowwe.caseTrain.type.Antworten.Antwort.AntwortErklaerung;
 import de.knowwe.caseTrain.type.Antworten.Antwort.AntwortMarkierung;
 import de.knowwe.caseTrain.type.Antworten.Antwort.AntwortText;
+import de.knowwe.caseTrain.type.Antworten.Postfix;
+import de.knowwe.caseTrain.type.Antworten.Praefix;
+import de.knowwe.caseTrain.type.Antworten.Ueberschrift;
 import de.knowwe.caseTrain.type.Frage.FrageTyp;
 
 
@@ -302,33 +307,50 @@ public class AntwortenKorrektheitChecker {
 
 	/**
 	 * 
+	 * TODO: Only tests one Antworten-Block
+	 * 
 	 * @created 08.05.2011
 	 * @param antworten
 	 * @param messages
 	 */
 	private void checkUMWQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
-		this.checkMarkierung(antworten, messages, 2);
-
+		this.checkMarkierung(antworten, messages, 1);
+		this.checkText(antworten, messages);
 		this.checkErklaerung(antworten, messages);
+		this.checkUeberschrift(antworten, messages);
 	}
 
 	/**
+	 * 
+	 * @created 10.05.2011
+	 * @param antworten
+	 * @param messages
+	 */
+	private void checkUeberschrift(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
+		List<Section<Ueberschrift>> found = new ArrayList<Section<Ueberschrift>>();
+		Sections.findSuccessorsOfType(antworten, Ueberschrift.class, found);
+		if (found.size() > 1)
+			messages.add(new DuplicateComponentError("Ueberschrift"));
+		if (found.size() == 0)
+			messages.add(new MissingComponentWarning("Ueberschrift"));
+	}
+
+	/**
+	 * 
+	 * TODO: Only tests one Antworten-Block
 	 * 
 	 * @created 08.05.2011
 	 * @param antworten
 	 * @param messages
 	 */
 	private void checkOMWQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
-		this.checkMarkierung(antworten, messages, 2);
-
+		this.checkMarkierung(antworten, messages, 1);
+		this.checkText(antworten, messages);
 		this.checkErklaerung(antworten, messages);
+		this.checkUeberschrift(antworten, messages);
 	}
 
 	/**
-	 * 
-	 * TODO:     {...}x, wobei x eine beliebige Zahl ist
-                 {...}x y, für das Intervall [x; y]
-
 	 * 
 	 * @created 08.05.2011
 	 * @param antworten
@@ -337,7 +359,11 @@ public class AntwortenKorrektheitChecker {
 	private void checkNQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
 		this.checkMarkierung(antworten, messages, 1);
 		this.checkText(antworten, messages);
+		this.checkNumAntwortenBlock(antworten, messages);
+		this.checkErklaerung(antworten, messages);
+	}
 
+	private void checkNumAntwortenBlock(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
 		List<Section<Antwort>> found = new ArrayList<Section<Antwort>>();
 		Sections.findSuccessorsOfType(antworten, Antwort.class, found);
 
@@ -369,7 +395,29 @@ public class AntwortenKorrektheitChecker {
 
 		}
 
-		this.checkErklaerung(antworten, messages);
+		this.checkPraefixPostfix(antworten, messages);
+	}
+
+	/**
+	 * 
+	 * @created 10.05.2011
+	 * @param antworten
+	 * @param messages
+	 */
+	private void checkPraefixPostfix(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
+		List<Section<Praefix>> found = new ArrayList<Section<Praefix>>();
+		Sections.findSuccessorsOfType(antworten, Praefix.class, found);
+		if (found.size() > 1)
+			messages.add(new DuplicateComponentError("Praefix"));
+		if (found.size() == 0)
+			messages.add(new MissingComponentWarning("Praefix"));
+
+		List<Section<Postfix>> found2 = new ArrayList<Section<Postfix>>();
+		Sections.findSuccessorsOfType(antworten, Postfix.class, found2);
+		if (found2.size() > 1)
+			messages.add(new DuplicateComponentError("Postfix"));
+		if (found2.size() == 0)
+			messages.add(new MissingComponentWarning("Postfix"));
 	}
 
 	/**
@@ -379,9 +427,11 @@ public class AntwortenKorrektheitChecker {
 	 * @param messages
 	 */
 	private void checkMNQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
-		this.checkMarkierung(antworten, messages, 2);
+		this.checkMarkierung(antworten, messages, 1);
 		this.checkText(antworten, messages);
+		this.checkNumAntwortenBlock(antworten, messages);
 		this.checkErklaerung(antworten, messages);
+		this.checkUeberschrift(antworten, messages);
 	}
 
 	/**
@@ -391,7 +441,7 @@ public class AntwortenKorrektheitChecker {
 	 * @param messages
 	 */
 	private void checkTQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
-		this.checkMarkierung(antworten, messages, 2);
+		this.checkMarkierung(antworten, messages, 1);
 		this.checkText(antworten, messages);
 		this.checkErklaerung(antworten, messages);
 	}

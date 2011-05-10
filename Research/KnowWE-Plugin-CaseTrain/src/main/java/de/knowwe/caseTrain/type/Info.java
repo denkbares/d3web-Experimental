@@ -23,6 +23,8 @@ package de.knowwe.caseTrain.type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -38,8 +40,9 @@ import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMNotice;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.KDOMWarning;
-import de.d3web.we.kdom.sectionFinder.LineSectionFinder;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
@@ -50,6 +53,7 @@ import de.knowwe.caseTrain.message.MissingComponentWarning;
 import de.knowwe.caseTrain.message.MissingContentWarning;
 import de.knowwe.caseTrain.renderer.DivStyleClassRenderer;
 import de.knowwe.caseTrain.renderer.MouseOverTitleRenderer;
+import de.knowwe.caseTrain.type.Frage.FrageTyp;
 import de.knowwe.caseTrain.type.general.Bild;
 import de.knowwe.caseTrain.type.general.BlockMarkupType;
 import de.knowwe.caseTrain.type.general.SubblockMarkup;
@@ -218,6 +222,15 @@ public class Info extends BlockMarkupType {
 						continue;
 					}
 					if (sec.get() instanceof Antworten) {
+						// test if multiple Antworten are possible
+						// Only by UMW,OMW,MN
+						if (!antwortenMissing) {
+							String typ = Sections.findSuccessor(actual, FrageTyp.class).getOriginalText().trim();
+							if ( !(typ.equals("UMW") || typ.equals("OMW") || typ.equals("MN"))) {
+								messages.add(new InvalidArgumentError("Mehrfache Antworten bei diesem FrageTyp nicht zulässig: "+typ));
+							}
+
+						}
 						antwortenMissing = false;
 						AntwortenKorrektheitChecker.getInstance().
 						validateAntwortenBlock((Section<Frage>) actual, (Section<Antworten>) sec, messages);
@@ -247,6 +260,9 @@ class Antworten extends SubblockMarkup {
 		plain.setSectionFinder(new RegexSectionFinder("\\r?\\n"));
 		this.addContentType(plain);
 		this.addContentType(new Antwort());
+		this.addContentType(new Praefix());
+		this.addContentType(new Postfix());
+		this.addContentType(new Ueberschrift());
 
 		this.addSubtreeHandler(new GeneralSubtreeHandler<Frage>() {
 
@@ -277,11 +293,26 @@ class Antworten extends SubblockMarkup {
 	class Antwort extends AbstractType {
 
 		public Antwort() {
-			this.setSectionFinder(new LineSectionFinder());
+			this.setSectionFinder(new AntwortSectionFinder<Antwort>());
 			this.setCustomRenderer(new DivStyleClassRenderer("Antwort"));
 			this.addChildType(new AntwortMarkierung());
 			this.addChildType(new AntwortText());
 			this.addChildType(new AntwortErklaerung());
+		}
+
+		class AntwortSectionFinder<Antwort> implements SectionFinder {
+
+			@Override
+			public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
+				List<SectionFinderResult> results = new ArrayList<SectionFinderResult>();
+				if (text.startsWith("Präfix") || text.startsWith("Postfix")
+						|| text.startsWith("Überschrift")) {
+					return results;
+				}
+				results.add(new SectionFinderResult(0, text.length()));
+				return results;
+			}
+
 		}
 
 		/**
@@ -315,13 +346,41 @@ class Antworten extends SubblockMarkup {
 			// TODO Regex only recognizes {r}word
 			//      not regex in full.
 			String regex = "(\\{.*?\\})?([\\w]{1}[äüöÄÜÖß]?[ 0-9]*)+";
-
+			//			String regex = 	"(\\{.*?\\})?[.]*[^\\{]{0,1}";
+			@SuppressWarnings("rawtypes")
 			public AntwortText() {
 				this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
-				ConstraintSectionFinder csf = new ConstraintSectionFinder(
-						new RegexSectionFinder(regex));
-				csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
-				this.setSectionFinder(csf);
+				//				ConstraintSectionFinder csf = new ConstraintSectionFinder(
+				//						new RegexSectionFinder(regex));
+				//				csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+				//				this.setSectionFinder(csf);
+				this.setSectionFinder(new AntwortTextSectionFinder());
+			}
+
+			@SuppressWarnings("hiding")
+			class AntwortTextSectionFinder<AntwortText> implements SectionFinder {
+
+				@Override
+				public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
+
+					List<SectionFinderResult> results = new ArrayList<SectionFinderResult>();
+					int start = 0;
+					int end = text.length();
+
+					Pattern p = Pattern.compile("\\{.*?\\}");
+					Matcher m = p.matcher(text);
+					while (m.find()) {
+						if (m.end() == text.length()) {
+							end = m.start();
+							break;
+						}
+					}
+					if ( !(text.contains("Präfix:")||text.contains("Präfix:")||text.contains("Überschrift:"))) {
+						results.add(new SectionFinderResult(start, end));
+					}
+					return results;
+				}
+
 			}
 		}
 
@@ -344,6 +403,41 @@ class Antworten extends SubblockMarkup {
 		}
 	}
 
+	/**
+	 * 
+	 * @author Johannes Dienst
+	 * @created 09.05.2011
+	 */
+	class Praefix extends AbstractType {
+		public Praefix() {
+			this.setSectionFinder(new RegexSectionFinder("Präfix:.*"));
+			this.setCustomRenderer(new DivStyleClassRenderer("praefix"));
+		}
+	}
+
+	/**
+	 * 
+	 * @author Johannes Dienst
+	 * @created 09.05.2011
+	 */
+	class Postfix extends AbstractType {
+		public Postfix() {
+			this.setSectionFinder(new RegexSectionFinder("Postfix:.*"));
+			this.setCustomRenderer(new DivStyleClassRenderer("postfix"));
+		}
+	}
+
+	/**
+	 * 
+	 * @author Johannes Dienst
+	 * @created 09.05.2011
+	 */
+	class Ueberschrift extends AbstractType {
+		public Ueberschrift() {
+			this.setSectionFinder(new RegexSectionFinder("Überschrift:.*"));
+			this.setCustomRenderer(new DivStyleClassRenderer("ueberschrift"));
+		}
+	}
 }
 
 class Hinweis extends SubblockMarkup {
