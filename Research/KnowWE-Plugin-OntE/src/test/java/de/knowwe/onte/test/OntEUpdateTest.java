@@ -119,7 +119,6 @@ public class OntEUpdateTest {
 		// Check new triple
 		assertTrue(core.sparqlAsk(Query.Update.DEATHPLACERANGE));
 
-
 		// TODO? Check validity of other triples...
 	}
 
@@ -173,9 +172,8 @@ public class OntEUpdateTest {
 		oldText = "[def King isA:: Class]";
 		newText = "[def Queen isA:: Class]";
 		changeText(oldText, newText, TurtleMarkup.class);
-		// Check that old triple is invalid now */
-		// TODO: FIX! Triple is not updated / invalidated!
-		// assertFalse(core.sparqlAsk(Query.PERSONKING));
+		// Check that old triple is invalid now
+		assertFalse(core.sparqlAsk(Query.PERSONKING));
 		// Check new triple
 		assertTrue(core.sparqlAsk(Query.Update.PERSONQUEEN));
 	}

@@ -80,7 +80,7 @@ public class SubClassingDashTreeElement extends DashTreeElementContent implement
 								element.getOriginalText()));
 					}
 					Rdf2GoCore.getInstance().addStatement(localURI,
-								RDFS.subClassOf, fatherURI, element);
+								RDFS.subClassOf, fatherURI, childElement);
 				}
 			}
 
