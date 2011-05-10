@@ -168,6 +168,7 @@
 		<module>KnowWE-Plugin-CaseTrain</module>
 		<module>KnowWE-Plugin-CI4KE-Anomalies</module>
 		<module>d3web-Plugin-ProKEtProperties</module>
+		<module>KnowWE-Plugin-TestCaseExecutor</module>
 	</modules>
 	<repositories>
 		<repository>
