@@ -56,6 +56,10 @@ import de.knowwe.caseTrain.type.Frage.FrageTyp;
  */
 public class AntwortenKorrektheitChecker {
 
+	public static final String PRAEFIX = "Präfix";
+	public static final String POSTFIX = "Postfix";
+	public static final String UEBERSCHRIFT = "Überschrift";
+
 	private final String MC = "MC";
 	private final String OC = "OC";
 	private final String W  = "W";
@@ -97,6 +101,21 @@ public class AntwortenKorrektheitChecker {
 	 */
 	public String getRegexAsString() {
 		return this.regex.toString();
+	}
+
+	/**
+	 * Returns a list of FrageTypen, who
+	 * have multiple Antworten-Blocks
+	 * 
+	 * @created 10.05.2011
+	 * @return
+	 */
+	public List<String> getTypesMultiple() {
+		List<String> toRet = new ArrayList<String>();
+		toRet.add(UMW);
+		toRet.add(OMW);
+		toRet.add(MN);
+		return toRet;
 	}
 
 	/**
@@ -239,8 +258,7 @@ public class AntwortenKorrektheitChecker {
 
 	}
 
-	private void checkChoiceQuestion(
-			Section<Antworten> antworten, List<KDOMReportMessage> messages) {
+	private void checkChoiceQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
 		this.checkMarkierung(antworten, messages, 2);
 		this.checkText(antworten, messages);
 		this.checkErklaerung(antworten, messages);
@@ -256,8 +274,6 @@ public class AntwortenKorrektheitChecker {
 		this.checkMarkierung(antworten, messages, 1);
 		this.checkText(antworten, messages);
 
-		// Regex Test
-		// TODO is the pattern escaped?
 		List<Section<Antwort>> found = new ArrayList<Section<Antwort>>();
 		Sections.findSuccessorsOfType(antworten, Antwort.class, found);
 
@@ -307,8 +323,6 @@ public class AntwortenKorrektheitChecker {
 
 	/**
 	 * 
-	 * TODO: Only tests one Antworten-Block
-	 * 
 	 * @created 08.05.2011
 	 * @param antworten
 	 * @param messages
@@ -318,21 +332,6 @@ public class AntwortenKorrektheitChecker {
 		this.checkText(antworten, messages);
 		this.checkErklaerung(antworten, messages);
 		this.checkUeberschrift(antworten, messages);
-	}
-
-	/**
-	 * 
-	 * @created 10.05.2011
-	 * @param antworten
-	 * @param messages
-	 */
-	private void checkUeberschrift(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
-		List<Section<Ueberschrift>> found = new ArrayList<Section<Ueberschrift>>();
-		Sections.findSuccessorsOfType(antworten, Ueberschrift.class, found);
-		if (found.size() > 1)
-			messages.add(new DuplicateComponentError("Ueberschrift"));
-		if (found.size() == 0)
-			messages.add(new MissingComponentWarning("Ueberschrift"));
 	}
 
 	/**
@@ -400,28 +399,6 @@ public class AntwortenKorrektheitChecker {
 
 	/**
 	 * 
-	 * @created 10.05.2011
-	 * @param antworten
-	 * @param messages
-	 */
-	private void checkPraefixPostfix(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
-		List<Section<Praefix>> found = new ArrayList<Section<Praefix>>();
-		Sections.findSuccessorsOfType(antworten, Praefix.class, found);
-		if (found.size() > 1)
-			messages.add(new DuplicateComponentError("Praefix"));
-		if (found.size() == 0)
-			messages.add(new MissingComponentWarning("Praefix"));
-
-		List<Section<Postfix>> found2 = new ArrayList<Section<Postfix>>();
-		Sections.findSuccessorsOfType(antworten, Postfix.class, found2);
-		if (found2.size() > 1)
-			messages.add(new DuplicateComponentError("Postfix"));
-		if (found2.size() == 0)
-			messages.add(new MissingComponentWarning("Postfix"));
-	}
-
-	/**
-	 * 
 	 * @created 08.05.2011
 	 * @param antworten
 	 * @param messages
@@ -444,5 +421,42 @@ public class AntwortenKorrektheitChecker {
 		this.checkMarkierung(antworten, messages, 1);
 		this.checkText(antworten, messages);
 		this.checkErklaerung(antworten, messages);
+	}
+
+	/**
+	 * 
+	 * @created 10.05.2011
+	 * @param antworten
+	 * @param messages
+	 */
+	private void checkPraefixPostfix(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
+		List<Section<Praefix>> found = new ArrayList<Section<Praefix>>();
+		Sections.findSuccessorsOfType(antworten, Praefix.class, found);
+		if (found.size() > 1)
+			messages.add(new DuplicateComponentError(PRAEFIX));
+		if (found.size() == 0)
+			messages.add(new MissingComponentWarning(PRAEFIX));
+
+		List<Section<Postfix>> found2 = new ArrayList<Section<Postfix>>();
+		Sections.findSuccessorsOfType(antworten, Postfix.class, found2);
+		if (found2.size() > 1)
+			messages.add(new DuplicateComponentError(POSTFIX));
+		if (found2.size() == 0)
+			messages.add(new MissingComponentWarning(POSTFIX));
+	}
+
+	/**
+	 * 
+	 * @created 10.05.2011
+	 * @param antworten
+	 * @param messages
+	 */
+	private void checkUeberschrift(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
+		List<Section<Ueberschrift>> found = new ArrayList<Section<Ueberschrift>>();
+		Sections.findSuccessorsOfType(antworten, Ueberschrift.class, found);
+		if (found.size() > 1)
+			messages.add(new DuplicateComponentError(UEBERSCHRIFT));
+		if (found.size() == 0)
+			messages.add(new MissingComponentWarning(UEBERSCHRIFT));
 	}
 }

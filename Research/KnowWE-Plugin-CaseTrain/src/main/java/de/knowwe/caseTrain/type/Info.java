@@ -226,7 +226,7 @@ public class Info extends BlockMarkupType {
 						// Only by UMW,OMW,MN
 						if (!antwortenMissing) {
 							String typ = Sections.findSuccessor(actual, FrageTyp.class).getOriginalText().trim();
-							if ( !(typ.equals("UMW") || typ.equals("OMW") || typ.equals("MN"))) {
+							if ( !(AntwortenKorrektheitChecker.getInstance().getTypesMultiple().contains(typ))) {
 								messages.add(new InvalidArgumentError("Mehrfache Antworten bei diesem FrageTyp nicht zulässig: "+typ));
 							}
 
@@ -300,13 +300,15 @@ class Antworten extends SubblockMarkup {
 			this.addChildType(new AntwortErklaerung());
 		}
 
+		@SuppressWarnings("hiding")
 		class AntwortSectionFinder<Antwort> implements SectionFinder {
 
 			@Override
 			public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 				List<SectionFinderResult> results = new ArrayList<SectionFinderResult>();
-				if (text.startsWith("Präfix") || text.startsWith("Postfix")
-						|| text.startsWith("Überschrift")) {
+				if (text.startsWith(AntwortenKorrektheitChecker.PRAEFIX)
+						|| text.startsWith(AntwortenKorrektheitChecker.POSTFIX)
+						|| text.startsWith(AntwortenKorrektheitChecker.UEBERSCHRIFT)) {
 					return results;
 				}
 				results.add(new SectionFinderResult(0, text.length()));
@@ -345,8 +347,8 @@ class Antworten extends SubblockMarkup {
 
 			// TODO Regex only recognizes {r}word
 			//      not regex in full.
-			String regex = "(\\{.*?\\})?([\\w]{1}[äüöÄÜÖß]?[ 0-9]*)+";
-			//			String regex = 	"(\\{.*?\\})?[.]*[^\\{]{0,1}";
+			//			String regex = "(\\{.*?\\})?([\\w]{1}[äüöÄÜÖß]?[ 0-9]*)+";
+
 			@SuppressWarnings("rawtypes")
 			public AntwortText() {
 				this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
@@ -375,9 +377,9 @@ class Antworten extends SubblockMarkup {
 							break;
 						}
 					}
-					if ( !(text.contains("Präfix:")||text.contains("Präfix:")||text.contains("Überschrift:"))) {
-						results.add(new SectionFinderResult(start, end));
-					}
+
+					results.add(new SectionFinderResult(start, end));
+
 					return results;
 				}
 
@@ -410,7 +412,8 @@ class Antworten extends SubblockMarkup {
 	 */
 	class Praefix extends AbstractType {
 		public Praefix() {
-			this.setSectionFinder(new RegexSectionFinder("Präfix:.*"));
+			this.setSectionFinder(
+					new RegexSectionFinder(AntwortenKorrektheitChecker.PRAEFIX + ":.*"));
 			this.setCustomRenderer(new DivStyleClassRenderer("praefix"));
 		}
 	}
@@ -422,7 +425,8 @@ class Antworten extends SubblockMarkup {
 	 */
 	class Postfix extends AbstractType {
 		public Postfix() {
-			this.setSectionFinder(new RegexSectionFinder("Postfix:.*"));
+			this.setSectionFinder(
+					new RegexSectionFinder(AntwortenKorrektheitChecker.POSTFIX + ":.*"));
 			this.setCustomRenderer(new DivStyleClassRenderer("postfix"));
 		}
 	}
@@ -434,7 +438,8 @@ class Antworten extends SubblockMarkup {
 	 */
 	class Ueberschrift extends AbstractType {
 		public Ueberschrift() {
-			this.setSectionFinder(new RegexSectionFinder("Überschrift:.*"));
+			this.setSectionFinder(
+					new RegexSectionFinder(AntwortenKorrektheitChecker.UEBERSCHRIFT + ":.*"));
 			this.setCustomRenderer(new DivStyleClassRenderer("ueberschrift"));
 		}
 	}
