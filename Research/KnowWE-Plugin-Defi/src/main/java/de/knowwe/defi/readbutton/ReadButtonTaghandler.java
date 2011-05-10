@@ -200,7 +200,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				readbutton.append("\" rel=\"nofollow\">");
 				readbutton.append("Mit Therapeuten dar&uuml;ber sprechen");
 				readbutton.append("</a>");
-				readbutton.append(" - <a onclick='getReadButtonValue(1," + number + ",\""
+				readbutton.append(" - <a href='#' onclick='getReadButtonValue(1," + number + ",\""
 						+ id + "\");return false'>Nicht Besprechen</a></p>");
 				if (link.startsWith("[") && link.endsWith("]")) {
 					// is wiki link (because of ajax not rendering by jspwiki
