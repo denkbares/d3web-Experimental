@@ -1,0 +1,1 @@
+This project allows to run TestCases from xml files attached to a page
