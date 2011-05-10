@@ -64,7 +64,7 @@ public class ReadPagesSaveAction extends AbstractAction {
 		if (value.equals("0")) {
 			String[] pages = readpages.split(";");
 
-			// Get the entry and change the third value to 1
+			// Get the entry and change the fourth value to 1
 			for (String s : pages) {
 				if (s.toLowerCase().split("::")[0].equals(pagename.toLowerCase())
 						&& s.split("::")[1].equals(id)) {
