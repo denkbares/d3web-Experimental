@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-TestCaseExecutor" version="0.0.1">
+
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+	</requires>
+
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="TestCaseExecutorTagHandler">
+	    <parameter id="class"
+			value="de.d3web.we.testcaseexecutor.TestCaseExecutorTagHandler" />
+		<parameter id="name" value="TestCaseExecutorTagHandler" />
+		<parameter id="description" value="TagHandler TestCaseExecutorTagHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="TestCaseExecutorAction">
+		<parameter id="class"
+			value="de.d3web.we.testcaseexecutor.TestCaseExecutorAction" />
+		<parameter id="name" value="TestCaseExecutorAction" />
+		<parameter id="description" value="Action TestCaseExecutorAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="TestCaseExecutorRunTestcaseAction">
+		<parameter id="class"
+			value="de.d3web.we.testcaseexecutor.TestCaseExecutorRunTestcaseAction" />
+		<parameter id="name" value="TestCaseExecutorRunTestcaseAction" />
+		<parameter id="description" value="Action TestCaseExecutorRunTestcaseAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+
+</plugin>

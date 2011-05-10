@@ -1,0 +1,12 @@
+li.runTestExecutor {
+	list-style-image: url(../images/testcaseexecutor/run.gif);
+	cursor: pointer;
+}
+
+div.selectXMLFile {
+	cursor: pointer;
+}
+
+div#testcases {
+	margin-left: 15px;
+}
