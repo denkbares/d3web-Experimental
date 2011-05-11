@@ -32,7 +32,7 @@
   </wiki:CheckRequestContext>
   <% if(!user.userIsAdmin()) { %>
   <style type="text/css">
-  	#menu-attach, #menu-info { display:none; }
+  	#menu-pagecontent, #menu-attach, #menu-info { display:none; }
   </style>
   <% } %>
 </head>

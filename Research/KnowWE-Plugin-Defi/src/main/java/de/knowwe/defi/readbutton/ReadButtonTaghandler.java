@@ -18,6 +18,7 @@
  */
 package de.knowwe.defi.readbutton;
 
+import java.util.List;
 import java.util.Map;
 
 import de.d3web.we.core.KnowWEArticleManager;
@@ -25,6 +26,7 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.taghandler.AbstractTagHandler;
 import de.d3web.we.user.UserContext;
@@ -118,7 +120,8 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			if (parameters.containsKey(ID)) id = parameters.get(ID);
 			else return KnowWEUtils.maskHTML("<p>Fehler: Dem Button fehlt das Attribut 'id'.</p>");
 
-			if (!checkID(id)) return KnowWEUtils.maskHTML("<p>Fehler: Das Attribut 'id' darf nicht die Zeichen '::' und ';' enthalten.</p>");
+			if (checkID(id, article) == 1) return KnowWEUtils.maskHTML("<p>Fehler: Das Attribut 'id' darf nicht die Zeichen '::' und ';' enthalten.</p>");
+			if (checkID(id, article) == 2) return KnowWEUtils.maskHTML("<p>Fehler: Das Attribut 'id' muss einmalig sein!");
 
 			// Get the readpages-annotation
 			KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
@@ -274,10 +277,39 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 		return readbutton;
 	}
 
-	private boolean checkID(String id) {
+	/**
+	 * Checks the id for errors.
+	 * 
+	 * @return 0 = no error, 1 = illegal characters, 2 = double id
+	 */
+	private int checkID(String id, KnowWEArticle article) {
+		List<Section<? extends Type>> allNodes = article.getAllNodesPreOrder();
+		Section<? extends Type> node;
+		int count = 0;
 
-		if (id.contains("::") || id.contains(";")) return false;
-		return true;
+		// (1) Check id for illegal characters
+		if (id.contains("::") || id.contains(";")) return 1;
+
+		// (2) Check for double id
+		for (int i = 0; i < allNodes.size(); i++) {
+			node = allNodes.get(i);
+
+			// conditions:
+			// - TagHandlerType
+			// - readbutton
+			// - readbutton id = current id
+			if (node.get().toString().contains("TagHandlerType")
+					&& node.toString().contains("KnowWEPlugin readbutton")
+						&& node.toString().contains("id=" + id)) {
+				System.out.println(node);
+					count++;
+			}
+		}
+
+		System.out.println(count);
+		// (2) current id has been found more often than once => double id
+		if (count > 1) return 2;
+		return 0;
 	}
 
 }

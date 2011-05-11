@@ -88,7 +88,7 @@
 }
 .userbox table {
 	float:right;
-	height:120px;
+	height:124px;
 	width:410px;
 	margin:0 0 3px 10px;
 }
@@ -198,6 +198,9 @@
 #page { 
 	width:820px;
 	background-color:#FFFFFF;
+}
+#page .tabmenu:AFTER {
+	display:none;	
 }
 #wikibody.fav-slide #page {
 	width:100%;

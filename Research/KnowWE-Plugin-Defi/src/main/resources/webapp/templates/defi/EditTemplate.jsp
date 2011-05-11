@@ -34,7 +34,7 @@
   <link rel="stylesheet" type="text/css" media="screen" href="KnowWEExtension/css/general.css" />
     <% if(!user.userIsAdmin()) { %>
   <style type="text/css">
-  	#menu-attach, #menu-info { display:none; }
+  	#menu-pagecontent, #menu-attach, #menu-info { display:none; }
   </style>
   <% } %>
 </head>
