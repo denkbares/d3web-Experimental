@@ -105,7 +105,7 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 		KnowWEArticle zeitplanArticle = KnowWEEnvironment.getInstance().getArticleManager(
 				KnowWEEnvironment.DEFAULT_WEB).getArticle(
 				"Zeitplan");
-
+		if (zeitplanArticle != null) {
 		Section<TimeTableMarkup> timetable = Sections.findSuccessor(
 				zeitplanArticle.getSection(), TimeTableMarkup.class);
 		if (timetable != null) {
@@ -118,7 +118,7 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 					return true;
 				}
 			}
-
+			}
 
 		}
 
