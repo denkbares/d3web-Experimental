@@ -1,10 +1,11 @@
 var TestCaseExecutor = {};
 
-TestCaseExecutor.getTestcases = function(filename) {
+TestCaseExecutor.getTestcases = function(filename, master) {
 		params = {
 			action : 'TestCaseExecutorAction',
 	        KWikiWeb : 'default_web',
-	        filename : filename
+	        filename : filename, 
+	        master : master
 		};
 		
 		// options for AJAX request
@@ -42,11 +43,13 @@ TestCaseExecutor.addTestcases = function(request) {
 TestCaseExecutor.runTestcase = function(element) {
 	var testcase = element.innerHTML;
 	var filename = $('filename').innerHTML;
+	var master = $('master').innerHTML;
 	params = {
 			action : 'TestCaseExecutorRunTestcaseAction',
 	        KWikiWeb : 'default_web',
 	        testcase : testcase,
-	        filename : filename
+	        filename : filename,
+	        master : master
 		};
 		
 		// options for AJAX request

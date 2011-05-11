@@ -15,15 +15,18 @@
 		</library>
 	</runtime>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
-		id="TestCaseExecutorTagHandler">
-	    <parameter id="class"
-			value="de.d3web.we.testcaseexecutor.TestCaseExecutorTagHandler" />
-		<parameter id="name" value="TestCaseExecutorTagHandler" />
-		<parameter id="description" value="TagHandler TestCaseExecutorTagHandler" />
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="de.d3web.we.testcaseexecutor.TestCaseExecutorType">
+		<parameter id="class"
+			value="de.d3web.we.testcaseexecutor.TestCaseExecutorType" />
+		<parameter id="name" value="de.d3web.we.testcaseexecutor.TestCaseExecutorType" />
+		<parameter id="description" value="Type de.d3web.we.testcaseexecutor.TestCaseExecutorType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
 	</extension>
+	
+	
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="TestCaseExecutorAction">

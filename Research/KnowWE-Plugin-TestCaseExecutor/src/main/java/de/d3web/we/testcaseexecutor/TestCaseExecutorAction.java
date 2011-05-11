@@ -39,6 +39,7 @@ public class TestCaseExecutorAction extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		String filename = context.getParameter("filename");
+		String master = context.getParameter("master");
 		String topic = context.getTopic();
 
 		Collection<ConnectorAttachment> attachments =
@@ -63,8 +64,9 @@ public class TestCaseExecutorAction extends AbstractAction {
 		tc += "</ul>";
 
 		context.getWriter().write(
-				"<div><div id=\"filename\" style=\"display: none\">" + filename
-						+ "</div>Available Testcases:"
+				"<div>" + "<div id=\"filename\" style=\"display: none\">" + filename + "</div>" +
+						"<div id=\"master\" style=\"display: none\">" + master + "</div>"
+						+ "Available Testcases:"
 						+ tc + "</div>");
 	}
 

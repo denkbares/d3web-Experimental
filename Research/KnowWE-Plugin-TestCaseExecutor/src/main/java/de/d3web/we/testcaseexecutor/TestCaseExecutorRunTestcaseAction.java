@@ -20,22 +20,14 @@ package de.d3web.we.testcaseexecutor;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.empiricaltesting.Finding;
-import de.d3web.empiricaltesting.RatedSolution;
 import de.d3web.empiricaltesting.RatedTestCase;
-import de.d3web.empiricaltesting.Rating;
 import de.d3web.empiricaltesting.SequentialTestCase;
-import de.d3web.empiricaltesting.StateRating;
+import de.d3web.empiricaltesting.TestPersistence;
 import de.d3web.empiricaltesting.caseAnalysis.functions.Diff;
 import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysis;
 import de.d3web.we.action.AbstractAction;
@@ -52,17 +44,16 @@ import de.d3web.we.wikiConnector.KnowWEWikiConnector;
  */
 public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 
-	private static final String MC_ANSWER_SEPARATOR = "#####";
-
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 
 		String testCase = context.getParameter("testcase");
 		String fileName = context.getParameter("filename");
+		String master = context.getParameter("master");
 		String topic = context.getTopic();
 
 		KnowledgeBase kb = D3webModule.getAD3webKnowledgeServiceInTopic(
-				context.getWeb(), topic);
+				context.getWeb(), master);
 
 
 		KnowWEWikiConnector connector = KnowWEEnvironment.getInstance().getWikiConnector();
@@ -78,11 +69,9 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 		}
 
 		try {
-			XMLInputFactory factory = XMLInputFactory.newInstance();
-			XMLStreamReader parser = factory.createXMLStreamReader(selectedAttachment.getInputStream());
 
-			List<SequentialTestCase> testcases = new LinkedList<SequentialTestCase>();
-			extractTestcasesFromXML(parser, testcases, kb);
+			List<SequentialTestCase> testcases =
+					TestPersistence.getInstance().loadCases(selectedAttachment.getInputStream(), kb);
 
 			for (SequentialTestCase testcase : testcases) {
 				if (testcase.getName().equals(testCase)) {
@@ -94,167 +83,13 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 
 			}
 
-		}
+		} // TODO handle exceptions
 		catch (XMLStreamException e) {
 			e.printStackTrace();
 		}
 
 	}
 
-	/**
-	 * extracts the information from each xml element and builds TestCases
-	 * according to the information from the xml.
-	 */
-	private void extractTestcasesFromXML(XMLStreamReader parser, List<SequentialTestCase> testcases, KnowledgeBase kb) {
-		try {
-			while (parser.hasNext()) {
-
-				switch (parser.getEventType()) {
-				case XMLStreamConstants.START_DOCUMENT:
-					break;
-
-				case XMLStreamConstants.END_DOCUMENT:
-					parser.close();
-					break;
-
-				case XMLStreamConstants.NAMESPACE:
-					break;
-
-				case XMLStreamConstants.START_ELEMENT:
-					if (parser.getLocalName().equals("SeqTestCaseRepository")) {
-
-					}
-					else if (parser.getLocalName().equals("STestCase")) {
-						SequentialTestCase testcase = new SequentialTestCase();
-						for (int i = 0; i < parser.getAttributeCount(); i++) {
-							if (parser.getAttributeLocalName(i).equals("Name")) {
-								testcase.setName(parser.getAttributeValue(i));
-							}
-						}
-						testcases.add(testcase);
-					}
-					else if (parser.getLocalName().equals("RatedTestCase")) {
-						RatedTestCase ratedTestCase = new RatedTestCase();
-						for (int i = 0; i < parser.getAttributeCount(); i++) {
-							if (parser.getAttributeLocalName(i).equals("Name")) {
-								ratedTestCase.setName(parser.getAttributeValue(i));
-							}
-							else if (parser.getAttributeLocalName(i).equals("LastTested")) {
-								ratedTestCase.setTestingDate(parser.getAttributeValue(i));
-							}
-						}
-						testcases.get(testcases.size() - 1).add(ratedTestCase);
-					}
-					else if (parser.getLocalName().equals("Findings")) {
-
-					}
-					else if (parser.getLocalName().equals("Finding")) {
-						String question = "";
-						String answer = "";
-						for (int i = 0; i < parser.getAttributeCount(); i++) {
-							if (parser.getAttributeLocalName(i).equals("Question")) {
-								question = (parser.getAttributeValue(i));
-							}
-							else if (parser.getAttributeLocalName(i).equals("Answer")) {
-								answer = parser.getAttributeValue(i);
-							}
-						}
-
-						List<Finding> findings = new LinkedList<Finding>();
-						if (answer.contains(MC_ANSWER_SEPARATOR)) {
-							String[] answers = answer.split(MC_ANSWER_SEPARATOR);
-							for (int i = 1; i < answers.length; i++) {
-								try {
-									Finding f = Finding.createFinding(kb, question, answers[i]);
-									if (f != null) {
-										findings.add(f);
-									}
-								}
-								catch (Exception e) {
-									// question not found
-								}
-							}
-						}
-						else {
-							try {
-								Finding f = Finding.createFinding(kb, question, answer);
-								if (f != null) {
-									findings.add(f);
-								}
-							}
-							catch (Exception e) {
-								// question not found
-							}
-						}
-
-						SequentialTestCase lastTestCase = testcases.get(testcases.size() - 1);
-						RatedTestCase lastRatedTestCase = lastTestCase.getCases().get(
-								lastTestCase.getCases().size() - 1);
-
-						for (Finding f : findings) {
-							lastRatedTestCase.add(f);
-						}
-
-					}
-					else if (parser.getLocalName().equals("Solutions")) {
-
-					}
-					else if (parser.getLocalName().equals("Solution")) {
-						Solution solution = null;
-						Rating rating = null;
-
-						for (int i = 0; i < parser.getAttributeCount(); i++) {
-							if (parser.getAttributeLocalName(i).equals("Name")) {
-								solution = findMatchingSolution(parser.getAttributeValue(i), kb);
-							}
-							else if (parser.getAttributeLocalName(i).equals("Rating")) {
-								rating = new StateRating(parser.getAttributeValue(i));
-							}
-						}
-
-						if (solution != null && rating != null) {
-							RatedSolution ratedSolution = new RatedSolution(solution, rating);
-							SequentialTestCase lastTestCase = testcases.get(testcases.size() - 1);
-							RatedTestCase lastRatedTestCase = lastTestCase.getCases().get(
-									lastTestCase.getCases().size() - 1);
-
-							lastRatedTestCase.getExpectedSolutions().add(ratedSolution);
-						}
-					}
-
-					break;
-
-				case XMLStreamConstants.CHARACTERS:
-					break;
-
-				case XMLStreamConstants.END_ELEMENT:
-					break;
-
-				default:
-					break;
-				}
-
-				parser.next();
-			}
-		}
-		catch (XMLStreamException e) {
-			e.printStackTrace();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	private Solution findMatchingSolution(String solution, KnowledgeBase kb) {
-		List<Solution> solutions = kb.getManager().getSolutions();
-		for (Solution s : solutions) {
-			if (s.getName().equals(solution)) {
-				return s;
-			}
-		}
-		return null;
-	}
 
 	private String createOutput(Diff result) {
 		StringBuilder html = new StringBuilder();
