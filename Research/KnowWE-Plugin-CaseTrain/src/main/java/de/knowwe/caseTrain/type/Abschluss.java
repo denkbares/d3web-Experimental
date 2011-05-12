@@ -30,6 +30,7 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
+import de.knowwe.caseTrain.info.Info;
 import de.knowwe.caseTrain.message.MissingContentWarning;
 import de.knowwe.caseTrain.message.MissingPictureNotice;
 import de.knowwe.caseTrain.message.MissingTitleError;

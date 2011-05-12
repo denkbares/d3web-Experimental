@@ -18,42 +18,32 @@
  * site: http://www.fsf.org.
  */
 
-package de.knowwe.caseTrain.type;
+package de.knowwe.caseTrain.info;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.basic.PlainText;
-import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
-import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMNotice;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.KDOMWarning;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.caseTrain.info.Frage.FrageTyp;
 import de.knowwe.caseTrain.message.InvalidArgumentError;
-import de.knowwe.caseTrain.message.MissingAttributeWarning;
 import de.knowwe.caseTrain.message.MissingComponentError;
 import de.knowwe.caseTrain.message.MissingComponentWarning;
 import de.knowwe.caseTrain.message.MissingContentWarning;
-import de.knowwe.caseTrain.renderer.DivStyleClassRenderer;
 import de.knowwe.caseTrain.renderer.MouseOverTitleRenderer;
-import de.knowwe.caseTrain.type.Frage.FrageTyp;
+import de.knowwe.caseTrain.type.Abschluss;
+import de.knowwe.caseTrain.type.Einleitung;
 import de.knowwe.caseTrain.type.general.Bild;
 import de.knowwe.caseTrain.type.general.BlockMarkupType;
 import de.knowwe.caseTrain.type.general.SubblockMarkup;
@@ -244,206 +234,7 @@ public class Info extends BlockMarkupType {
 
 }
 
-/**
- * Part of Info: Contains Antwort-Lines.
- * 
- * @author Jochen Reutelshoefer
- * @created 28.04.2011
- */
-class Antworten extends SubblockMarkup {
 
-	private final String ANTWORT = "Antwort";
-
-	public Antworten() {
-		super("Antworten");
-		PlainText plain = new PlainText();
-		plain.setSectionFinder(new RegexSectionFinder("\\r?\\n"));
-		this.addContentType(plain);
-		this.addContentType(new Antwort());
-		this.addContentType(new Praefix());
-		this.addContentType(new Postfix());
-		this.addContentType(new Ueberschrift());
-
-		this.addSubtreeHandler(new GeneralSubtreeHandler<Frage>() {
-
-			@Override
-			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Frage> s) {
-
-				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
-				List<Section<Antwort>> found = new ArrayList<Section<Antwort>>();
-				Sections.findSuccessorsOfType(s, Antwort.class, found);
-
-				if (found.isEmpty()) {
-					messages.add(new MissingComponentWarning(ANTWORT));
-				}
-
-				return messages;
-			}
-		});
-	}
-
-	/**
-	 * Antwort is a Antwort Line.
-	 * Contains a AntwortContent which has the following syntax:
-	 * {Markierung}Antwort{Antwortspezifische Erklärung}
-	 * 
-	 * @author Jochen
-	 * @created
-	 */
-	class Antwort extends AbstractType {
-
-		public Antwort() {
-			this.setSectionFinder(new AntwortSectionFinder<Antwort>());
-			this.setCustomRenderer(new DivStyleClassRenderer("Antwort"));
-			this.addChildType(new AntwortMarkierung());
-			this.addChildType(new AntwortText());
-			this.addChildType(new AntwortErklaerung());
-		}
-
-		@SuppressWarnings("hiding")
-		class AntwortSectionFinder<Antwort> implements SectionFinder {
-
-			@Override
-			public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
-				List<SectionFinderResult> results = new ArrayList<SectionFinderResult>();
-				if (text.startsWith(AntwortenKorrektheitChecker.PRAEFIX)
-						|| text.startsWith(AntwortenKorrektheitChecker.POSTFIX)
-						|| text.startsWith(AntwortenKorrektheitChecker.UEBERSCHRIFT)) {
-					return results;
-				}
-				results.add(new SectionFinderResult(0, text.length()));
-				return results;
-			}
-
-		}
-
-		/**
-		 * {@link AntwortenKorrektheitChecker}
-		 * 
-		 * @author Johannes Dienst
-		 * @created 08.05.2011
-		 */
-		class AntwortMarkierung extends AbstractType {
-
-			String regex = "\\{(.*?)\\}";
-
-			public AntwortMarkierung() {
-				this.setCustomRenderer(new StyleRenderer("font-weight:bold;"));
-				ConstraintSectionFinder csf = new ConstraintSectionFinder(
-						new RegexSectionFinder(regex));
-				csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
-				this.setSectionFinder(csf);
-				this.addSubtreeHandler(AntwortMarkierungHandler.getInstance());
-			}
-
-		}
-
-		/**
-		 * 
-		 * @author Johannes Dienst
-		 * @created 08.05.2011
-		 */
-		class AntwortText extends AbstractType {
-
-			// TODO Regex only recognizes {r}word
-			//      not regex in full.
-			//			String regex = "(\\{.*?\\})?([\\w]{1}[äüöÄÜÖß]?[ 0-9]*)+";
-
-			@SuppressWarnings("rawtypes")
-			public AntwortText() {
-				this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
-				//				ConstraintSectionFinder csf = new ConstraintSectionFinder(
-				//						new RegexSectionFinder(regex));
-				//				csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
-				//				this.setSectionFinder(csf);
-				this.setSectionFinder(new AntwortTextSectionFinder());
-			}
-
-			@SuppressWarnings("hiding")
-			class AntwortTextSectionFinder<AntwortText> implements SectionFinder {
-
-				@Override
-				public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
-
-					List<SectionFinderResult> results = new ArrayList<SectionFinderResult>();
-					int start = 0;
-					int end = text.length();
-
-					Pattern p = Pattern.compile("\\{.*?\\}");
-					Matcher m = p.matcher(text);
-					while (m.find()) {
-						if (m.end() == text.length()) {
-							end = m.start();
-							break;
-						}
-					}
-
-					results.add(new SectionFinderResult(start, end));
-
-					return results;
-				}
-
-			}
-		}
-
-		/**
-		 * 
-		 * @author Johannes Dienst
-		 * @created 08.05.2011
-		 */
-		class AntwortErklaerung extends AbstractType {
-
-			String regex = "\\{.*?\\}";
-
-			public AntwortErklaerung() {
-				this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
-				ConstraintSectionFinder csf = new ConstraintSectionFinder(
-						new RegexSectionFinder(regex));
-				csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
-				this.setSectionFinder(csf);
-			}
-		}
-	}
-
-	/**
-	 * 
-	 * @author Johannes Dienst
-	 * @created 09.05.2011
-	 */
-	class Praefix extends AbstractType {
-		public Praefix() {
-			this.setSectionFinder(
-					new RegexSectionFinder(AntwortenKorrektheitChecker.PRAEFIX + ":.*"));
-			this.setCustomRenderer(new DivStyleClassRenderer("praefix"));
-		}
-	}
-
-	/**
-	 * 
-	 * @author Johannes Dienst
-	 * @created 09.05.2011
-	 */
-	class Postfix extends AbstractType {
-		public Postfix() {
-			this.setSectionFinder(
-					new RegexSectionFinder(AntwortenKorrektheitChecker.POSTFIX + ":.*"));
-			this.setCustomRenderer(new DivStyleClassRenderer("postfix"));
-		}
-	}
-
-	/**
-	 * 
-	 * @author Johannes Dienst
-	 * @created 09.05.2011
-	 */
-	class Ueberschrift extends AbstractType {
-		public Ueberschrift() {
-			this.setSectionFinder(
-					new RegexSectionFinder(AntwortenKorrektheitChecker.UEBERSCHRIFT + ":.*"));
-			this.setCustomRenderer(new DivStyleClassRenderer("ueberschrift"));
-		}
-	}
-}
 
 class Hinweis extends SubblockMarkup {
 
@@ -451,80 +242,6 @@ class Hinweis extends SubblockMarkup {
 		super("Hinweis");
 		this.addChildType(new Title());
 		this.addContentType(new Bild());
-	}
-
-}
-
-class Frage extends SubblockMarkup {
-
-	private final String FRAGE_TYPE = "Fragetyp";
-	private final String FRAGE_TEXT = "Fragetext";
-	private final String FRAGE_GEWICHT = "Fragegewicht";
-	private final String FRAGE_GEWICHT_WRONG = "Fragegewicht kleiner 0";
-
-	public Frage() {
-		super("Frage");
-		this.addChildType(new Title());
-		this.addContentType(new Bild());
-		this.addContentType(new FrageGewicht());
-		this.addContentType(new FrageTyp());
-		this.addContentType(new FrageText());
-
-		this.addSubtreeHandler(new GeneralSubtreeHandler<Frage>() {
-
-			@Override
-			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Frage> s) {
-
-				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
-
-				Section<FrageGewicht> fragegewichtSection = Sections.findSuccessor(s,
-						FrageGewicht.class);
-				if (fragegewichtSection == null) {
-					messages.add(new MissingAttributeWarning(FRAGE_GEWICHT));
-				} else if(Double.valueOf(fragegewichtSection.getOriginalText()) < 0) {
-					messages.add(new InvalidArgumentError(FRAGE_GEWICHT_WRONG));
-				}
-
-				Section<FrageTyp> typSection = Sections.findSuccessor(s, FrageTyp.class);
-				if (typSection == null) {
-					messages.add(new MissingComponentError(FRAGE_TYPE));
-				}
-
-				Section<FrageText> fragetextSection = Sections.findSuccessor(s,
-						FrageText.class);
-				if (fragetextSection == null) {
-					messages.add(new MissingComponentWarning(FRAGE_TEXT));
-				}
-
-				return messages;
-			}
-		});
-	}
-
-	class FrageGewicht extends AbstractType {
-
-		public FrageGewicht() {
-			this.setSectionFinder(new RegexSectionFinder("[-]?[0-9]+"));
-			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
-		}
-	}
-
-	class FrageTyp extends AbstractType {
-
-		public FrageTyp() {
-			this.setSectionFinder(new RegexSectionFinder(
-					AntwortenKorrektheitChecker.getInstance().getRegexAsString()));
-			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
-		}
-
-	}
-
-	class FrageText extends AbstractType {
-
-		public FrageText() {
-			this.setSectionFinder(new RegexSectionFinder("([\\w]{1}[\\W]?[ ]?)+\\?"));
-			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
-		}
 	}
 
 }

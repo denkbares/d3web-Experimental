@@ -20,6 +20,7 @@ package de.knowwe.caseTrain.type;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -47,8 +48,8 @@ public class MetaAttributes {
 	private static final String CASE_AUTHOR = "FALL_AUTOR";
 	private static final String CASE_VERSION = "FALL_VERSION";
 	private static final String CASE_DATE = "FALL_DATUM";
-	private static final String CASE_POINTS = "FALL_PUNKTZAHL";
-	private static final String CASE_PASS = "BESTEHEN_AB";
+	public static final String CASE_POINTS = "FALL_PUNKTZAHL";
+	public static final String CASE_PASS = "BESTEHEN_AB";
 
 	// Optional attributes
 	private static final String DURATION_MIN = "DAUER_MIN";
@@ -57,16 +58,16 @@ public class MetaAttributes {
 	private static final String HINT = "HINWEIS";
 	private static final String COMMENT = "FALL_KOMMENTAR";
 	private static final String KEYWORDS = "SCHLAGWORTE";
-	private static final String CASE_TODO = "FALL_TODO";
+	public static final String CASE_TODO = "FALL_TODO";
 	private static final String CASE_HISTORY = "HISTORIE";
-	private static final String SHOW_TIME = "ZEIT_ANZEIGEN";
-	private static final String TIME_WEIGHT = "ZEIT_GEWICHT";
-	private static final String TIME_LIMIT100 = "ZEIT_GRENZE100";
-	private static final String TIME_LIMIT0 = "ZEIT_GRENZE0";
-	private static final String FEEDBACK = "FEEDBACK";
+	public static final String SHOW_TIME = "ZEIT_ANZEIGEN";
+	public static final String TIME_WEIGHT = "ZEIT_GEWICHT";
+	public static final String TIME_LIMIT100 = "ZEIT_GRENZE100";
+	public static final String TIME_LIMIT0 = "ZEIT_GRENZE0";
+	public static final String FEEDBACK = "FEEDBACK";
 	private static final String BACKGROUND = "HINTERGRUNDWISSEN";
 	private static final String HW_LINKTEXT = "HW_LINKTEXT";
-	private static final String LANGUAGE = "SPRACHE";
+	public static final String LANGUAGE = "SPRACHE";
 
 	private MetaAttributes() {
 		this.demandedAttributes = new TreeSet<String>();
@@ -150,7 +151,6 @@ public class MetaAttributes {
 			foundOnes.add(ori);
 		}
 
-		// TODO some like TODO are optional
 		for (String s : this.demandedAttributes) {
 			if (!foundOnes.contains(s)) {
 				messages.add(new MissingAttributeError(s));
@@ -160,4 +160,42 @@ public class MetaAttributes {
 		return messages;
 	}
 
+	private HashMap<String, String> attributesForXML;
+
+	public HashMap<String, String> getAttributesForXMLMap() {
+		if (this.attributesForXML != null)
+			return this.attributesForXML;
+
+		this.attributesForXML = new HashMap<String, String>();
+
+		this.attributesForXML.put(CASE_ID_KEY, "ID");
+		this.attributesForXML.put(CASE_TITLE, "Title");
+		this.attributesForXML.put(CASE_AUTHOR, "Author");
+		this.attributesForXML.put(CASE_VERSION, "Version");
+		this.attributesForXML.put(COMMENT, "Comment");
+		this.attributesForXML.put(CASE_TODO, "Todo");
+		this.attributesForXML.put(CASE_HISTORY, "History");
+		this.attributesForXML.put(CASE_DATE, "Date");
+		this.attributesForXML.put(BACKGROUND, "URL");
+		this.attributesForXML.put(HW_LINKTEXT, "URLText");
+		this.attributesForXML.put(DURATION_MIN, "DurationMinutes");
+		this.attributesForXML.put(REQUIREMENTS, "Prereqs");
+		this.attributesForXML.put(DIFFICULTY, "Difficulty");
+		this.attributesForXML.put(HINT, "Notice");
+		this.attributesForXML.put(KEYWORDS, "Keywords");
+
+		// Score
+		this.attributesForXML.put(CASE_POINTS, "weight");
+		this.attributesForXML.put(CASE_PASS, "minScoreForSuccess");
+		this.attributesForXML.put(TIME_LIMIT100, "okTimeSeconds");
+		this.attributesForXML.put(TIME_LIMIT0, "maxTimeSeconds");
+		this.attributesForXML.put(TIME_WEIGHT, "weightTime");
+
+		// Misc - Not in MetaDaten: colorScheme
+		this.attributesForXML.put(FEEDBACK, "feedback");
+		this.attributesForXML.put(LANGUAGE, "language");
+		this.attributesForXML.put(SHOW_TIME, "showClock");
+
+		return this.attributesForXML;
+	}
 }
