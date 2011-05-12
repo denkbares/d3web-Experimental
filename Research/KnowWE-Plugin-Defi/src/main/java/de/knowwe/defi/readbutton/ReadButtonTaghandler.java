@@ -224,7 +224,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			// - user has already rated
 			else {
 				readbutton.append("<tr><td colspan='" + number + "'>");
-				readbutton.append("<p>Vielen Dank!</p>");
+				readbutton.append("<p>Alles klar. Vielen Dank!</p>");
 				readbutton.append("</td></tr>");
 				readbutton.append("</table></form>");
 			}
