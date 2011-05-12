@@ -37,6 +37,11 @@ import de.knowwe.defi.time.TimeTableMarkup;
 
 public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 
+	private static final String CSS_CLASS_MENULINK = "menulink";
+	private static final String CSS_CLASS_MENULINKROOT = "menulinkroot";
+	private static final String CSS_CLASS_MENULINKROOTCLOSED = "menulinkrootclosed";
+	private static final String CSS_CLASS_MENULINKCURRENT = "menulinkcurrent";
+
 	private static String getPageName(Section<? extends DashTreeElementContent> sec) {
 		String pagename = sec.getOriginalText().trim();
 		if (sec.getOriginalText().contains("|")) {
@@ -71,7 +76,7 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 
 		String currentPage = user.getParameter("page");
 
-		String className = "menulink";
+		String className = CSS_CLASS_MENULINK;
 
 		String pagename = getPageName(sec);
 		String label = getLabel(sec);
@@ -81,10 +86,10 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 
 		if (isRoot) {
 			if (isFree(sec)) {
-				className = "menulinkroot";
+				className = CSS_CLASS_MENULINKROOT;
 			}
 			else {
-				className = "menulinkrootclosed";
+				className = CSS_CLASS_MENULINKROOTCLOSED;
 			}
 			hidden = false;
 		}
@@ -109,11 +114,11 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 		if (hidden) return;
 
 		if (pagename.equals(currentPage)) {
-			className = "menulinkcurrent";
+			className = CSS_CLASS_MENULINKCURRENT;
 		}
 
 		// Link nur wenn freigeschaltet
-		if (!(isRoot && (!isFree(sec)))) {
+		if (!className.equals(CSS_CLASS_MENULINKROOTCLOSED)) {
 			string.append("<a  href='"
 					+ KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl()
 					+ "Wiki.jsp?page=" + pagename + "'>");
@@ -127,10 +132,9 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 		string.append("</div>");
 
 		// link nur wenn freigeschaltet
-		if (!(isRoot && (!isFree(sec)))) {
+		if (!className.equals(CSS_CLASS_MENULINKROOTCLOSED)) {
 			string.append("</a>");
 		}
-		// string.append("\\\\");
 
 	}
 
