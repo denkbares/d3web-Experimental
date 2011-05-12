@@ -9,3 +9,17 @@ body.view {
 textarea {
     font-size: 150%;
 }
+
+
+
+.defi-bttn {
+    padding:5px 5px 5px 25px;
+    background-color: #dcdcdc;
+    border: 1px solid #666;
+    color:#000;
+    cursor: pointer;
+    text-decoration:none;  
+}
+.defi-download {
+	background: #dcdcdc url(../images/disk.png) no-repeat scroll 5px center;
+}

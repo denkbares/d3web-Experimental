@@ -174,6 +174,16 @@
         <parameter id="css" value="defi.css" />
     </extension>  
     
+     <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="DownloadPageAsPDFTaghandler">
+        <parameter id="class" value="de.knowwe.defi.links.DownloadPageAsPDFTaghandler" />
+        <parameter id="name" value="DownloadPageAsPDFTaghandler" />
+        <parameter id="description" value="TagHandler DownloadPageAsPDFTaghandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="css" value="defi.css" />
+    </extension>    
+    
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="AboutMeSaveAction">
         <parameter id="class"
