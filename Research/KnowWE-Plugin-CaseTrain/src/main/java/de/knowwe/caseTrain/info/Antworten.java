@@ -41,7 +41,7 @@ import de.knowwe.caseTrain.type.general.SubblockMarkup;
  * @author Jochen Reutelshoefer
  * @created 28.04.2011
  */
-class Antworten extends SubblockMarkup {
+public class Antworten extends SubblockMarkup {
 
 	private final String ANTWORT = "Antwort";
 

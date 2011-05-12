@@ -80,7 +80,7 @@ public class Antwort extends AbstractType {
 	 * @author Johannes Dienst
 	 * @created 08.05.2011
 	 */
-	class AntwortMarkierung extends AbstractType {
+	public class AntwortMarkierung extends AbstractType {
 
 		String regex = "\\{(.*?)\\}";
 
@@ -100,7 +100,7 @@ public class Antwort extends AbstractType {
 	 * @author Johannes Dienst
 	 * @created 08.05.2011
 	 */
-	class AntwortText extends AbstractType {
+	public class AntwortText extends AbstractType {
 
 		// TODO Regex only recognizes {r}word
 		//      not regex in full.
@@ -146,7 +146,7 @@ public class Antwort extends AbstractType {
 	 * @author Johannes Dienst
 	 * @created 08.05.2011
 	 */
-	class AntwortErklaerung extends AbstractType {
+	public class AntwortErklaerung extends AbstractType {
 
 		String regex = "\\{.*?\\}";
 

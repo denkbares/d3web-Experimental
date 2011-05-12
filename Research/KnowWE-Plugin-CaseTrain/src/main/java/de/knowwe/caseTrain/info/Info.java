@@ -46,7 +46,6 @@ import de.knowwe.caseTrain.type.Abschluss;
 import de.knowwe.caseTrain.type.Einleitung;
 import de.knowwe.caseTrain.type.general.Bild;
 import de.knowwe.caseTrain.type.general.BlockMarkupType;
-import de.knowwe.caseTrain.type.general.SubblockMarkup;
 import de.knowwe.caseTrain.type.general.Title;
 import de.knowwe.caseTrain.util.Utils;
 
@@ -72,7 +71,7 @@ public class Info extends BlockMarkupType {
 		this.addContentType(new Hinweis());
 		this.addContentType(new Frage());
 		this.addContentType(new Antworten());
-		this.addContentType(new Erkl());
+		this.addContentType(new Erklaerung());
 		this.addContentType(new Bild());
 
 		this.setCustomRenderer(new KnowWEDomRenderer<BlockMarkupType>() {
@@ -207,7 +206,7 @@ public class Info extends BlockMarkupType {
 					if (sec.get() instanceof Hinweis) {
 						continue;
 					}
-					if (sec.get() instanceof Erkl) {
+					if (sec.get() instanceof Erklaerung) {
 						erklMissing = false;
 						continue;
 					}
@@ -230,33 +229,6 @@ public class Info extends BlockMarkupType {
 				return messages;
 			}
 		});
-	}
-
-}
-
-
-
-class Hinweis extends SubblockMarkup {
-
-	public Hinweis() {
-		super("Hinweis");
-		this.addChildType(new Title());
-		this.addContentType(new Bild());
-	}
-
-}
-
-class Erkl extends SubblockMarkup {
-
-	public Erkl() {
-		super("Erklärung");
-		this.addChildType(new Title());
-		this.addContentType(new Bild());
-	}
-
-	@Override
-	public String getCSSClass() {
-		return "Erkl";
 	}
 
 }

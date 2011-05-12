@@ -90,7 +90,7 @@ public class Frage extends SubblockMarkup {
 		});
 	}
 
-	class FrageGewicht extends AbstractType {
+	public class FrageGewicht extends AbstractType {
 
 		public FrageGewicht() {
 			this.setSectionFinder(new RegexSectionFinder("[-]?[0-9]+"));
@@ -98,7 +98,7 @@ public class Frage extends SubblockMarkup {
 		}
 	}
 
-	class FrageTyp extends AbstractType {
+	public class FrageTyp extends AbstractType {
 
 		public FrageTyp() {
 			this.setSectionFinder(new RegexSectionFinder(
@@ -108,7 +108,7 @@ public class Frage extends SubblockMarkup {
 
 	}
 
-	class FrageText extends AbstractType {
+	public class FrageText extends AbstractType {
 
 		public FrageText() {
 			this.setSectionFinder(new RegexSectionFinder("([\\w]{1}[\\W]?[ ]?)+\\?"));
