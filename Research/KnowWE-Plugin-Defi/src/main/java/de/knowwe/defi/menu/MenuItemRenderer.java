@@ -37,66 +37,112 @@ import de.knowwe.defi.time.TimeTableMarkup;
 
 public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 
+	private static String getPageName(Section<? extends DashTreeElementContent> sec) {
+		String pagename = sec.getOriginalText().trim();
+		if (sec.getOriginalText().contains("|")) {
+			String[] split = sec.getOriginalText().split("\\|");
+			pagename = split[1].trim();
+		}
+
+		return pagename;
+	}
+
+	private static String getLabel(Section<DynamicMenuItem> sec) {
+		String pagename = sec.getOriginalText().trim();
+		String label = pagename;
+		if (sec.getOriginalText().contains("|")) {
+			String[] split = sec.getOriginalText().split("\\|");
+			label = split[0].trim();
+		}
+
+		return label;
+	}
+
 	@Override
 	public void render(KnowWEArticle article, Section<DynamicMenuItem> sec, UserContext user, StringBuilder string) {
 		// TODO: add rendering logics here
 		int dashLevel = DashTreeUtils.getDashLevel(Sections.findAncestorOfType(sec,
 				DashTreeElement.class));
 		boolean isRoot = false;
-		if(dashLevel == 0) {
+		if (dashLevel == 0) {
 			isRoot = true;
 		}
 
-		if (!isRoot && !isFree(sec)) return;
 
 		String currentPage = user.getParameter("page");
 
-		String color = "#CCCCCC";
-		String weight = "normal";
+		String className = "menulink";
 
-		String pagename = sec.getOriginalText();
-		String label = sec.getOriginalText();
-		if (sec.getOriginalText().contains("|")) {
-			String[] split = sec.getOriginalText().split("\\|");
-			label = split[0].trim();
-			pagename = split[1].trim();
-		}
-		string.append("<a href='"
-				+ KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl()
-				+ "Wiki.jsp?page=" + pagename + "'>");
+		String pagename = getPageName(sec);
+		String label = getLabel(sec);
+
+
+		boolean hidden = true;
 
 		if (isRoot) {
-			color = "#FF6633";
-			weight = "bold";
+			if (isFree(sec)) {
+				className = "menulinkroot";
+			}
+			else {
+				className = "menulinkrootclosed";
+			}
+			hidden = false;
 		}
+		else {
+			// checken ob Einheit gewählt ist
+			Section<? extends DashTreeElement> root = DashTreeUtils.getFatherDashTreeElement(sec);
+			Section<DashTreeElementContent> rootContent = Sections.findChildOfType(root,
+					DashTreeElementContent.class);
+			if (getPageName(rootContent).equals(currentPage)) {
+				hidden = false;
+			}
+			List<Section<DynamicMenuItem>> found = new ArrayList<Section<DynamicMenuItem>>();
+			Sections.findSuccessorsOfType(root.getFather(), DynamicMenuItem.class, found);
+			for (Section<DynamicMenuItem> section : found) {
+				if (getPageName(section).equals(currentPage)) {
+					hidden = false;
+				}
+			}
+
+		}
+
+		if (hidden) return;
 
 		if (pagename.equals(currentPage)) {
-			color = "white";
+			className = "menulinkcurrent";
 		}
 
-		string.append("<div style='font-weight:"
-				+ weight
-				+ ";padding-top: 0.25em;padding-right: 0.5em;padding-left: 0.5em; padding-bottom: 0.25em;background-color:"
-				+ color
+		// Link nur wenn freigeschaltet
+		if (!(isRoot && (!isFree(sec)))) {
+			string.append("<a  href='"
+					+ KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl()
+					+ "Wiki.jsp?page=" + pagename + "'>");
+		}
+
+		string.append("<div class="
+				+ className
+				+ " style='padding-top: 0.25em;padding-right: 0.5em;padding-left: 0.5em; padding-bottom: 0.25em;"
 				+ "; border-style:solid; border-color: #000000;border-left-width:1px;border-right-width:1px;border-bottom-width:0px;border-top-width:1px;'>");
 		string.append(label);
 		string.append("</div>");
-		string.append("</a>");
+
+		// link nur wenn freigeschaltet
+		if (!(isRoot && (!isFree(sec)))) {
+			string.append("</a>");
+		}
 		// string.append("\\\\");
 
 	}
 
 	private boolean isFree(Section<DynamicMenuItem> sec) {
-		Section<? extends DashTreeElement> fatherDashTreeElement = DashTreeUtils.getFatherDashTreeElement(sec);
-		Section<? extends Type> dashtree = fatherDashTreeElement.getFather().getFather();
+		Section<? extends Type> dashtree = sec.getFather().getFather().getFather();
 		List<Section<DynamicMenuItem>> found = new ArrayList<Section<DynamicMenuItem>>();
 		Sections.findSuccessorsOfType(dashtree, DynamicMenuItem.class, 3, found);
 
 		int unitNumber = -1;
 		for (int i = 0; i < found.size(); i++) {
 			if (found.get(i).getID().equals(
-					Sections.findChildOfType(fatherDashTreeElement,
-							DashTreeElementContent.class).getID())) {
+					sec.getID())) {
 				unitNumber = i;
 				break;
 			}
@@ -106,18 +152,18 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 				KnowWEEnvironment.DEFAULT_WEB).getArticle(
 				"Zeitplan");
 		if (zeitplanArticle != null) {
-		Section<TimeTableMarkup> timetable = Sections.findSuccessor(
-				zeitplanArticle.getSection(), TimeTableMarkup.class);
-		if (timetable != null) {
-			List<Date> dates = TimeTableMarkup.getDates(timetable);
-			Date current = new Date();
-			Date unitDate = null;
-			if (dates.size() > unitNumber) {
-				unitDate = dates.get(unitNumber);
-				if (current.after(unitDate)) {
-					return true;
+			Section<TimeTableMarkup> timetable = Sections.findSuccessor(
+					zeitplanArticle.getSection(), TimeTableMarkup.class);
+			if (timetable != null) {
+				List<Date> dates = TimeTableMarkup.getDates(timetable);
+				Date current = new Date();
+				Date unitDate = null;
+				if (dates.size() > unitNumber) {
+					unitDate = dates.get(unitNumber);
+					if (current.after(unitDate)) {
+						return true;
+					}
 				}
-			}
 			}
 
 		}

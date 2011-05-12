@@ -10,6 +10,36 @@ textarea {
     font-size: 150%;
 }
 
+div.menulinkroot {
+    color: #CCCCCC;
+    background-color: #064080;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+div.menulinkrootclosed {
+    color: #AAAAAA;
+    background-color: #595959;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+div.menulink {
+	background-color: #CCCCCC;
+    color: #000000;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+div.menulinkcurrent {
+	background-color: #F8BB90;
+    color: #000000;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+
 
 
 .defi-bttn {
