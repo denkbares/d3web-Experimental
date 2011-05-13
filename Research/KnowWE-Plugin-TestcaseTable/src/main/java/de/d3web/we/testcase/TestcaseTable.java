@@ -20,12 +20,11 @@
 
 package de.d3web.we.testcase;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-
-import org.apache.commons.collections15.map.HashedMap;
 
 import de.d3web.core.session.Session;
 import de.d3web.we.basic.WikiEnvironment;
@@ -79,7 +78,7 @@ public class TestcaseTable extends Table {
 		Map<String, Object> sessionInfoStore = wiki.getSessionInfoStore(session);
 		Map<String, List<Section<TestcaseTableLine>>> tableExecutions = (Map<String, List<Section<TestcaseTableLine>>>) sessionInfoStore.get(TestcaseTable.TESTCASE_INFOSTORE_KEY);
 		if (tableExecutions == null) {
-			tableExecutions = new HashedMap<String, List<Section<TestcaseTableLine>>>();
+			tableExecutions = new HashMap<String, List<Section<TestcaseTableLine>>>();
 			sessionInfoStore.put(TestcaseTable.TESTCASE_INFOSTORE_KEY, tableExecutions);
 		}
 
