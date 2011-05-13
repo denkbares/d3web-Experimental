@@ -117,7 +117,7 @@ public class TableUtils {
 	public static String quote(String content) {
 		if (!(content.contains("\""))) return content.trim();
 
-		content = content.replace("\"", "\\\"");
+		content = content.replace("\"", "&quot;");
 		return content.trim();
 	}
 

@@ -159,16 +159,16 @@ public class TableCellContentRenderer extends KnowWEDomRenderer<TableCellContent
 				}
 				else {
 					html.append("<input type='text' name='" + sectionText + "' id='" + sectionID
-							+ "' value='" + sectionText
+							+ "' value='" + TableUtils.quote(sectionText)
 							+ "' class='table-edit-node' " + TableUtils.getWidth(size) + "/>");
 				}
 			}
 			else {
-				html.append(TableUtils.quote(translateTextForView(sectionText, s)));
+				html.append(translateTextForView(sectionText, s));
 			}
 		}
 		else {
-			html.append(TableUtils.quote(translateTextForView(sectionText, s)));
+			html.append(translateTextForView(sectionText, s));
 		}
 	}
 
