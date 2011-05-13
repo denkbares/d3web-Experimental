@@ -24,7 +24,6 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.DefaultTextRenderer;
-import de.d3web.we.kdom.report.MessageRenderer;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.table.TableCellContent;
@@ -43,7 +42,6 @@ public class HeaderCellContent extends TableCellContent {
 	@Override
 	protected void init() {
 		setCustomRenderer(new TableCellContentRenderer(false));
-		childrenTypes.add(new UnchangedType());
 
 		QuestionReference qref = new QuestionReference();
 		qref.setCustomRenderer(DefaultTextRenderer.getInstance());
@@ -58,9 +56,12 @@ public class HeaderCellContent extends TableCellContent {
 					return null;
 				}
 				else {
-					if (text.length() > 0) {
-						return SectionFinderResult.createSingleItemList(new SectionFinderResult(0,
-								text.length()));
+					String trim = text.trim();
+					int start = text.indexOf(trim);
+					if (trim.length() > 0) {
+						return SectionFinderResult.createSingleItemList(new SectionFinderResult(
+								start,
+								start + trim.length()));
 					}
 					else {
 						return null;
