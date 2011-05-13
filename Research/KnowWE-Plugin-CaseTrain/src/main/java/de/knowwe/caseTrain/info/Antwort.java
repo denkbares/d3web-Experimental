@@ -87,7 +87,9 @@ public class Antwort extends AbstractType {
 	public static String getPosFactor(Section<Antwort> sec) {
 		Section<AntwortMarkierung> mark = Sections.findSuccessor(sec, AntwortMarkierung.class);
 		if (mark == null) return "1";
-		String[] factors = mark.getOriginalText().trim().split("[ ]+");
+		String markText = mark.getOriginalText().trim();
+		markText = markText.substring(1, markText.length()-1);
+		String[] factors = markText.trim().split("[ ]+");
 		return factors[0];
 	}
 
@@ -104,7 +106,9 @@ public class Antwort extends AbstractType {
 	public static String getNegFactor(Section<Antwort> sec) {
 		Section<AntwortMarkierung> mark = Sections.findSuccessor(sec, AntwortMarkierung.class);
 		if (mark == null) return "0";
-		String[] factors = mark.getOriginalText().trim().split("[ ]+");
+		String markText = mark.getOriginalText().trim();
+		markText = markText.substring(1, markText.length()-1);
+		String[] factors = markText.trim().split("[ ]+");
 		if (factors.length < 2) return "0";
 		return factors[1];
 	}
