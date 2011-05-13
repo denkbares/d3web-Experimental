@@ -26,6 +26,8 @@ import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
+import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
@@ -101,8 +103,11 @@ public class Frage extends SubblockMarkup {
 	public class FrageTyp extends AbstractType {
 
 		public FrageTyp() {
-			this.setSectionFinder(new RegexSectionFinder(
-					AntwortenKorrektheitChecker.getInstance().getRegexAsString()));
+			ConstraintSectionFinder csf = new ConstraintSectionFinder(
+					new RegexSectionFinder(
+							AntwortenKorrektheitChecker.getInstance().getRegexAsString()));
+			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+			this.setSectionFinder(csf);
 			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
 		}
 

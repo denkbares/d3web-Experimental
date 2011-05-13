@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
@@ -72,6 +73,40 @@ public class Antwort extends AbstractType {
 			return results;
 		}
 
+	}
+
+
+	/**
+	 * Returns the PosFactor of a given AntwortMarkierung-Section.
+	 * If none is specified then it returns 1.
+	 * 
+	 * @created 13.05.2011
+	 * @param sec
+	 * @return
+	 */
+	public static String getPosFactor(Section<Antwort> sec) {
+		Section<AntwortMarkierung> mark = Sections.findSuccessor(sec, AntwortMarkierung.class);
+		if (mark == null) return "1";
+		String[] factors = mark.getOriginalText().trim().split("[ ]+");
+		return factors[0];
+	}
+
+	/**
+	 * Returns the NegFactor of a given AntwortMarkierung-Section.
+	 * If none is specified then it returns "0";
+	 * 
+	 * TODO is 0 right.
+	 * 
+	 * @created 13.05.2011
+	 * @param sec
+	 * @return
+	 */
+	public static String getNegFactor(Section<Antwort> sec) {
+		Section<AntwortMarkierung> mark = Sections.findSuccessor(sec, AntwortMarkierung.class);
+		if (mark == null) return "0";
+		String[] factors = mark.getOriginalText().trim().split("[ ]+");
+		if (factors.length < 2) return "0";
+		return factors[1];
 	}
 
 	/**
