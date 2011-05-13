@@ -89,6 +89,7 @@ public class Antwort extends AbstractType {
 		if (mark == null) return "1";
 		String markText = mark.getOriginalText().trim();
 		markText = markText.substring(1, markText.length()-1);
+		markText = Antwort.replaceFactorWithNumber(markText);
 		String[] factors = markText.trim().split("[ ]+");
 		return factors[0];
 	}
@@ -108,9 +109,16 @@ public class Antwort extends AbstractType {
 		if (mark == null) return "0";
 		String markText = mark.getOriginalText().trim();
 		markText = markText.substring(1, markText.length()-1);
+		markText = Antwort.replaceFactorWithNumber(markText);
 		String[] factors = markText.trim().split("[ ]+");
 		if (factors.length < 2) return "0";
 		return factors[1];
+	}
+
+	private static String replaceFactorWithNumber(String factor) {
+		factor = factor.replaceAll("\\+", "1");
+		factor = factor.replaceAll("\\-", "0");
+		return factor;
 	}
 
 	/**
