@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -52,7 +52,7 @@ import de.d3web.proket.utils.TemplateUtils;
 /**
  * Basic Renderer Class for d3web-based dialogs. Defines the basic rendering of
  * d3web dialogs and methods, required by all rendering sub-classes.
- * 
+ *
  * TODO CHECK: 1) renderRoot: other dialog types or maybe write specific
  * renderers for each one particularly? Maybe better... 2) renderRoot: basic
  * properties such as header, title, HTML header... 3) check global JS 5)
@@ -60,23 +60,23 @@ import de.d3web.proket.utils.TemplateUtils;
  * specific "dialogs", e.g by defining "hierarchic" in the XML and having
  * HierarchicQuestionnaireRenderer etc used automatically (or if not existing,
  * just return to base renderer.)
- * 
+ *
  * TODO CHECK: what happens for more deeply nested question/f-u question
  * hierarchies? Also check an exit-condition for endless recursion!
- * 
+ *
  * TODO LATER: 1) renderRoot: navigation 4) refactor D3webConnector to
  * class-variable?! 5) makeTables: add varying colspans from the XML
  * specification into this method one day 2) Handle cycles!!! 3) handle MC
  * Questions
- * 
+ *
  * @author Martina Freiberg
  * @created 13.01.2011
  */
 public class D3webRenderer implements ID3webRenderer {
 
 	protected static Session d3webSession;
-	private int countQcon = 1;
-	private int countQ = 1;
+	protected int countQcon = 1;
+	protected int countQ = 1;
 
 	public static void storeSession(Session session) {
 		d3webSession = session;
@@ -86,7 +86,7 @@ public class D3webRenderer implements ID3webRenderer {
 	 * Retrieves the appropriate renderer class according to what base object is
 	 * given from the d3web knowledge base. EXCLUDES answers, as those need a
 	 * specific handling.
-	 * 
+	 *
 	 * @created 14.01.2011
 	 * @param to the TerminologyObject that needs to retrieve the renderer.
 	 * @return the suiting renderer class
@@ -102,7 +102,7 @@ public class D3webRenderer implements ID3webRenderer {
 	/**
 	 * Retrieves the appropriate renderer class for answers,according to what
 	 * base object (question type) is given.
-	 * 
+	 *
 	 * @created 15.01.2011
 	 * @param to the TerminologyObject that needs to retrieve the answer
 	 *        renderer.
@@ -120,7 +120,7 @@ public class D3webRenderer implements ID3webRenderer {
 	/**
 	 * Retrieves the renderer for the Unknown object (unknown option for
 	 * dialogs).
-	 * 
+	 *
 	 * @created 23.01.2011
 	 * @return the suiting renderer class.
 	 */
@@ -141,11 +141,10 @@ public class D3webRenderer implements ID3webRenderer {
 	public ContainerCollection renderRoot(ContainerCollection cc,
 			Session d3webSession, HttpSession http) {
 
-		D3webRenderer.d3webSession = d3webSession;
+		// D3webRenderer.d3webSession = d3webSession;
 
 		D3webConnector d3wcon = D3webConnector.getInstance();
 
-		// System.out.println(d3wcon.getSingleSpecs().toString());
 		TerminologyObject root = d3wcon.getKb().getRootQASet();
 
 		// get the d3web base template according to dialog type
@@ -164,20 +163,6 @@ public class D3webRenderer implements ID3webRenderer {
 		String opts = "";
 		if ((String) http.getAttribute("user") != null && (String) http.getAttribute("user") != "") {
 			opts = PersistenceD3webUtils.getCaseListFromUserFilename((String) http.getAttribute("user"));
-		}
-		// load case list dependent from login, fam name and institute, e.g.
-		// HERNIA
-		else if ((String) http.getAttribute("login") != null
-				&& (String) http.getAttribute("login") != "" &&
-				(String) http.getAttribute("nname") != null
-				&& (String) http.getAttribute("nname") != "" &&
-				(String) http.getAttribute("institute") != null
-				&& (String) http.getAttribute("institute") != "") {
-
-			System.out.println("HERNIA");
-			String idString = (String) http.getAttribute("login") +
-					(String) http.getAttribute("nname") + (String) http.getAttribute("institute");
-			opts = PersistenceD3webUtils.getCaseListFilterByID(idString);
 		}
 		// otherwise
 		else {
@@ -208,9 +193,6 @@ public class D3webRenderer implements ID3webRenderer {
 		st.setAttribute("statistics", true);
 		st.setAttribute("followup", true);
 
-		// create a summary of already answered questions
-
-		// st.setAttribute("sendexit", "true");
 
 		/*
 		 * handle custom ContainerCollection modification, e.g., enabling
@@ -242,7 +224,7 @@ public class D3webRenderer implements ID3webRenderer {
 	 * Renders the children of a given TerminologyObject and assembles the
 	 * result into the given StringTemplate and writes into the given
 	 * ContainerCollection.
-	 * 
+	 *
 	 * @created 15.01.2011
 	 * @param st The StringTemplate for assembly
 	 * @param cc The ContainerCollection for writing into
@@ -315,7 +297,7 @@ public class D3webRenderer implements ID3webRenderer {
 	 * children of a question-child are questions again, those are inserted
 	 * right here (i.e., e.g. underneath the questionnaire), and next/right
 	 * after to the "parent"-question.
-	 * 
+	 *
 	 * @created 20.01.2011
 	 * @param cc ContainerCollection to be used
 	 * @param child The (question) child of the TerminologyObject parent, that
@@ -355,7 +337,7 @@ public class D3webRenderer implements ID3webRenderer {
 	 * Renders the choices of a given (question) TerminologyObject and assembles
 	 * the result into the given StringTemplate(s) and writes everything into
 	 * the given ContainerCollection.
-	 * 
+	 *
 	 * @created 15.01.2011
 	 * @param st The StringTemplate
 	 * @param cc The ContainerCollection
@@ -480,7 +462,7 @@ public class D3webRenderer implements ID3webRenderer {
 	 * Handles CSS specifications from the specification XML, i.e. checks the
 	 * format, retrieves the corresponding CSS files from file system, and adds
 	 * them to the final ContainerCollection of the dialog.
-	 * 
+	 *
 	 * @created 15.01.2011
 	 * @param cc ContainerCollection containing all infos about the resulting
 	 *        dialog.
@@ -520,7 +502,7 @@ public class D3webRenderer implements ID3webRenderer {
 	/**
 	 * Defines the necessary JavaScript required by this renderer/dialog, and
 	 * adds it to the JS into the ContainerCollection.
-	 * 
+	 *
 	 * @created 15.01.2011
 	 * @param cc The ContainerCollection
 	 */
@@ -541,7 +523,7 @@ public class D3webRenderer implements ID3webRenderer {
 	 * cell from the "parent's view", closing it properly, adding those cells to
 	 * the given StringBuilder (i.e. opening BEFORE the to, and closing AFTER
 	 * the to) and adding everything to the CodeCollection.
-	 * 
+	 *
 	 * @created 15.01.2011
 	 * @param to The TerminologyObject
 	 * @param parentID The parent or the TerminologyObject
@@ -575,7 +557,7 @@ public class D3webRenderer implements ID3webRenderer {
 	/**
 	 * Create tables structures (tr and td) for surrounding the given Choice
 	 * object.
-	 * 
+	 *
 	 * @created 23.01.2011
 	 * @param c The choice to be put into the table.
 	 * @param parent The parent TerminologyObject, needed for
@@ -609,7 +591,7 @@ public class D3webRenderer implements ID3webRenderer {
 	/**
 	 * Retrieves the suiting StringTemplate (html) for a given base object name.
 	 * MAYBE MOVE TO TEMPLATE UTILS
-	 * 
+	 *
 	 * @created 23.01.2011
 	 * @param baseObjectName Name of the base object.
 	 * @return The suitable StringTemplate name.
@@ -684,7 +666,7 @@ public class D3webRenderer implements ID3webRenderer {
 	 * Checks, whether a TerminologyObject child is the child of another
 	 * TerminologyObject parent. That is, whether child is nested hierarchically
 	 * underneath parent.
-	 * 
+	 *
 	 * @created 30.01.2011
 	 * @param parent The parent TerminologyObject
 	 * @param child The child to check

@@ -62,7 +62,7 @@ $endif$
 		</td>
 		<td width="35%">
 			<div class="langSelect">
-				$LanguageSelectFlags()$
+				$RightHeaderLanguageLogoRoute()$
 			</div>
 		</td>
 	</tr>

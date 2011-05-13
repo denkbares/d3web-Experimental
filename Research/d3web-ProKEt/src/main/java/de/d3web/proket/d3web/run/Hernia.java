@@ -301,6 +301,8 @@ public class Hernia extends HttpServlet {
 
 		Session d3webSess = (Session) httpSession.getAttribute("d3webSession");
 		D3webRenderer.storeSession(d3webSess);
+
+		// TODO remove httpSession from method
 		cc = d3webr.renderRoot(cc, d3webSess, httpSession);
 
 		writer.print(cc.html.toString()); // deliver the rendered output
