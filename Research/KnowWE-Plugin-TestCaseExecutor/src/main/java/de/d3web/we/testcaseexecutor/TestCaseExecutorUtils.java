@@ -57,4 +57,12 @@ public class TestCaseExecutorUtils {
 			return "";
 		}
 	}
+
+	public static String createHiddenFilenameDiv(String filename) {
+		return "<div id=\"filename\" style=\"display: none\">" + filename + "</div>";
+	}
+
+	public static String createHiddenMasterDiv(String master) {
+		return "<div id=\"master\" style=\"display: none\">" + master + "</div>";
+	}
 }

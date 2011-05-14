@@ -44,17 +44,20 @@ import de.d3web.we.wikiConnector.KnowWEWikiConnector;
  */
 public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 
+	private static final String TESTCASEEXECUTOR_SEPARATOR = "#####";
+	private static final String TESTCASEEXECUTOR_UNNAMED = "Unnamed TestCase";
+
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 
-		String testCase = context.getParameter("testcase");
+		String testCases = context.getParameter("testcases");
 		String fileName = context.getParameter("filename");
 		String master = context.getParameter("master");
 		String topic = context.getTopic();
+		String[] cases = testCases.split(TESTCASEEXECUTOR_SEPARATOR);
 
 		KnowledgeBase kb = D3webModule.getAD3webKnowledgeServiceInTopic(
 				context.getWeb(), master);
-
 
 		KnowWEWikiConnector connector = KnowWEEnvironment.getInstance().getWikiConnector();
 		Collection<ConnectorAttachment> attachments = connector.getAttachments();
@@ -69,19 +72,49 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 		}
 
 		try {
-
 			List<SequentialTestCase> testcases =
 					TestPersistence.getInstance().loadCases(selectedAttachment.getInputStream(), kb);
+			// TestCase t = new TestCase();
+			// t.setKb(kb);
+			// t.setRepository(testcases);
+			// TestCaseRunAction action = new TestCaseRunAction();
+			// String test = action.renderTestCaseResult(t);
+
+			StringBuilder result = new StringBuilder();
+			result.append("<div>");
+			result.append(TestCaseExecutorUtils.createHiddenFilenameDiv(fileName));
+			result.append(TestCaseExecutorUtils.createHiddenMasterDiv(master));
+			result.append("</div>");
+			result.append("<div><strong>Results:</strong></div><br />");
 
 			for (SequentialTestCase testcase : testcases) {
-				if (testcase.getName().equals(testCase)) {
-					TestCaseAnalysis analysis = TestCaseAnalysis.getInstance();
-					Diff result = analysis.runAndAnalyze(
-							testcase, kb);
-					context.getWriter().write(createOutput(result));
+				for (String s : cases) {
+					if (s.equals(TESTCASEEXECUTOR_UNNAMED)) s = "";
+
+					if (testcase.getName().equals(s)) {
+						TestCaseAnalysis analysis = TestCaseAnalysis.getInstance();
+						Diff res = analysis.runAndAnalyze(
+								testcase, kb);
+						String name = testcase.getName().equals("")
+								? "Unnamed Testcase"
+								: testcase.getName();
+						result.append("<strong>");
+						result.append(name);
+						result.append(":<br />");
+						result.append("</strong>");
+						result.append(createOutput(res));
+						result.append("<br />");
+						break;
+					}
 				}
 
 			}
+
+			// append back button
+			result.append("<br />");
+			result.append("<div id=\"backToCaseSelection\" onclick=\"return TestCaseExecutor.backToCaseSelection()\"> back </div>");
+
+			context.getWriter().write(result.toString());
 
 		} // TODO handle exceptions
 		catch (XMLStreamException e) {
@@ -90,12 +123,12 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 
 	}
 
-
 	private String createOutput(Diff result) {
 		StringBuilder html = new StringBuilder();
 		if (!result.hasDifferences()) {
 			html.append(renderTestCasePassed(result));
-		} else {
+		}
+		else {
 			html.append(renderTestCaseFailed(result));
 		}
 		return html.toString();

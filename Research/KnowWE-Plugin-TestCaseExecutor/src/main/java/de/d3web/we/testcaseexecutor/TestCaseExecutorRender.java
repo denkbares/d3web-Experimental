@@ -36,7 +36,7 @@ public class TestCaseExecutorRender extends KnowWEDomRenderer<TestCaseExecutorTy
 
 		StringBuilder html = new StringBuilder();
 		html.append("<h3 class=\"testExecutor\"> TestCase Executor </h3>");
-		html.append("<br /><div id=\"testcases\"><strong>Testcases:</strong><br />");
+		html.append("<br /><div id=\"testcases\"><strong>Available Files with Testcases:</strong><br />");
 
 		for (ConnectorAttachment attachment : attachments) {
 			if (attachment.getParentName().equals(articleName)
@@ -49,6 +49,10 @@ public class TestCaseExecutorRender extends KnowWEDomRenderer<TestCaseExecutorTy
 		}
 
 		html.append("</div>");
+		html.append("<br />");
+		// html.append("<div>@master ");
+		// html.append(master);
+		// html.append("</div>");
 
 		string.append(KnowWEUtils.maskHTML(html.toString()));
 

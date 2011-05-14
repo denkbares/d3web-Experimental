@@ -14,7 +14,7 @@ TestCaseExecutor.getTestcases = function(filename, master) {
 	        response : {
 	    		action : 'none',
             	fn : function(){
-	    	TestCaseExecutor.addTestcases(this);
+	    			TestCaseExecutor.addTestcases(this);
 	    		}
 	        }
 	    };
@@ -40,14 +40,27 @@ TestCaseExecutor.addTestcases = function(request) {
 	var a = 1;
 }
 
-TestCaseExecutor.runTestcase = function(element) {
-	var testcase = element.innerHTML;
+TestCaseExecutor.SEPARATOR = '#####';
+
+TestCaseExecutor.runTestcase = function() {
+	var cases = $('selectCases');
+	var selectedCases = '';
+	
+	for (var i = 0; i < cases.childNodes.length; i++) {
+		if (cases.childNodes[i].firstChild.checked) {
+			if (selectedCases !== '') {
+				selectedCases += TestCaseExecutor.SEPARATOR;
+			} 
+			selectedCases += cases.childNodes[i].lastChild.nodeValue;
+		}
+	}
+
 	var filename = $('filename').innerHTML;
 	var master = $('master').innerHTML;
 	params = {
 			action : 'TestCaseExecutorRunTestcaseAction',
 	        KWikiWeb : 'default_web',
-	        testcase : testcase,
+	        testcases : selectedCases,
 	        filename : filename,
 	        master : master
 		};
@@ -68,4 +81,29 @@ TestCaseExecutor.runTestcase = function(element) {
 	    // send AJAX request
 	    new _KA( options ).send();
 
+}
+
+TestCaseExecutor.backToCaseSelection = function() {
+	var filename = $('filename').innerHTML;
+	var master = $('master').innerHTML;
+	
+	TestCaseExecutor.getTestcases(filename, master);
+}
+
+TestCaseExecutor.selectAllCases = function() {
+	var cases = $('selectCases');
+	
+	for (var i = 0; i < cases.childNodes.length; i++) {
+		var input = cases.childNodes[i].getElement('input');
+		input.checked = "checked";
+	}
+}
+
+TestCaseExecutor.deSelectAllCases = function() {
+	var cases = $('selectCases');
+	
+	for (var i = 0; i < cases.childNodes.length; i++) {
+		var input = cases.childNodes[i].getElement('input');
+		input.checked = false;
+	}
 }

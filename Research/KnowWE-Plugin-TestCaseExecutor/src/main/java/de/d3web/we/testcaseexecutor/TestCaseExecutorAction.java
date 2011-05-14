@@ -40,34 +40,42 @@ public class TestCaseExecutorAction extends AbstractAction {
 	public void execute(UserActionContext context) throws IOException {
 		String filename = context.getParameter("filename");
 		String master = context.getParameter("master");
-		String topic = context.getTopic();
 
 		Collection<ConnectorAttachment> attachments =
 				KnowWEEnvironment.getInstance().getWikiConnector().getAttachments();
-		String xml = "";
 		List<String> testCases = new LinkedList<String>();
 		for (ConnectorAttachment att : attachments) {
 			if (att.getFileName().equalsIgnoreCase(filename)) {
 
 				InputStream is = att.getInputStream();
-				xml = TestCaseExecutorUtils.convertStreamToString(is);
-				testCases = getSTestcases(xml);
+				testCases = getSTestcases(TestCaseExecutorUtils.convertStreamToString(is));
 
 			}
 		}
 
-		String tc = "<ul>";
-		for (String s : testCases) {
-			tc += "<li class=\"runTestExecutor\" onclick=\"return TestCaseExecutor.runTestcase(this)\">"
-					+ s + "</li>";
-		}
-		tc += "</ul>";
+		StringBuilder html = new StringBuilder();
 
-		context.getWriter().write(
-				"<div>" + "<div id=\"filename\" style=\"display: none\">" + filename + "</div>" +
-						"<div id=\"master\" style=\"display: none\">" + master + "</div>"
-						+ "Available Testcases:"
-						+ tc + "</div>");
+		html.append("<div>");
+		html.append(TestCaseExecutorUtils.createHiddenFilenameDiv(filename));
+		html.append(TestCaseExecutorUtils.createHiddenMasterDiv(master));
+		html.append("Available Testcases:");
+
+		html.append("<div id=\"selectCases\">");
+		for (String s : testCases) {
+			String name = s.equals("") ? "Unnamed TestCase" : s;
+			html.append("<div><input type=\"checkbox\" name=\"case\" class=\"runTestExecutor\">");
+			html.append(name);
+			html.append("</div>");
+		}
+		html.append("</div>");
+		html.append("<div id=\"buttons\">");
+		html.append("<div id=\"selectAllCases\" onclick=\"return TestCaseExecutor.selectAllCases()\"></div>");
+		html.append("<div id=\"deSelectAllCases\" onclick=\"return TestCaseExecutor.deSelectAllCases()\"></div>");
+		html.append("<div class=\"runCasesButton\" onclick=\"return TestCaseExecutor.runTestcase()\"></div>");
+		html.append("</div></div>");
+
+		context.getWriter().write(html.toString());
+
 	}
 
 	public List<String> getSTestcases(String xml) {

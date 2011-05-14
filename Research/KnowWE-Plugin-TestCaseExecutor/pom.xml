@@ -33,6 +33,12 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>KnowWE-Plugin-TestCase</artifactId>
+			<version>${d3webCoreVersion}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>6.0.20</version>

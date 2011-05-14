@@ -10,3 +10,35 @@ div.selectXMLFile {
 div#testcases {
 	margin-left: 15px;
 }
+
+div.runCasesButton {
+	background-image: url(../images/testcaseexecutor/run.gif);
+	height: 16px;
+	width: 16px;
+	cursor: pointer;
+	float: left;
+}
+
+div#backToCaseSelection {
+	cursor: pointer;
+}
+
+div#selectAllCases{
+	background-image: url(../images/checkmark-all.png);
+	width: 20px;
+	height: 15px;
+	cursor: pointer;
+	float: left;
+}
+
+div#deSelectAllCases{
+	background-image: url(../images/checkmark-none.png);
+	width: 20px;
+	height: 15px;
+	cursor: pointer;
+	float: left;
+}
+div#buttons{
+	margin-top: 10px;
+	margin-left: 5px;
+}
