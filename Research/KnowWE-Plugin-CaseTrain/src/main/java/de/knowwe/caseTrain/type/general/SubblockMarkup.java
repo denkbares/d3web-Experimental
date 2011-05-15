@@ -51,7 +51,7 @@ public class SubblockMarkup extends AbstractType {
 	public static final String START_TAG = "<";
 	public static final String END_TAG = ">";
 
-	private final SubBlockMarkupContent content;
+	private final SubblockMarkupContent content;
 
 	public String getCSSClass() {
 		return this.getClass().getSimpleName();
@@ -77,7 +77,7 @@ public class SubblockMarkup extends AbstractType {
 			}
 		});
 
-		content = new SubBlockMarkupContent();
+		content = new SubblockMarkupContent();
 		content.setSectionFinder(new RegexSectionFinder(regex1, Pattern.DOTALL, 1));
 		this.addChildType(content);
 
@@ -99,16 +99,5 @@ public class SubblockMarkup extends AbstractType {
 	public void addContentType(Type t) {
 		content.addChildType(t);
 	}
-
-}
-
-/**
- * 
- * Contains content of SubblockMarkup.
- * 
- * @author Jochen
- * @created 28.04.2011
- */
-class SubBlockMarkupContent extends AbstractType {
 
 }

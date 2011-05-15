@@ -48,6 +48,9 @@ import de.knowwe.caseTrain.type.MetaLine.AttributeContent;
 import de.knowwe.caseTrain.type.MetaLine.AttributeName;
 import de.knowwe.caseTrain.type.general.Bild;
 import de.knowwe.caseTrain.type.general.BlockMarkupContent;
+import de.knowwe.caseTrain.type.general.BlockMarkupType;
+import de.knowwe.caseTrain.type.general.SubblockMarkup;
+import de.knowwe.caseTrain.type.general.SubblockMarkupContent;
 import de.knowwe.caseTrain.type.general.Title;
 import de.knowwe.caseTrain.type.general.Video;
 
@@ -122,9 +125,21 @@ public class XMLUtils {
 	 * @param intro
 	 * @param introSec
 	 */
+	@SuppressWarnings("unchecked")
 	private static void addmmmixedcontent(Element intro, Section<?> introSec) {
-		List<Section<?>> contentChildren =
-			Sections.findSuccessor(introSec, BlockMarkupContent.class).getChildren();
+		List<Section<?>> contentChildren = null;
+
+		if (introSec.get().isAssignableFromType(BlockMarkupType.class)) {
+			Section<BlockMarkupContent> s =
+				Sections.findSuccessor(introSec, BlockMarkupContent.class);
+			contentChildren = s.getChildren();
+		}
+
+		if (introSec.get().isAssignableFromType(SubblockMarkup.class)) {
+			Section<SubblockMarkupContent> s =
+				Sections.findSuccessor(introSec, SubblockMarkupContent.class);
+			contentChildren = s.getChildren();
+		}
 
 		for (Section<?> sec : contentChildren) {
 			if (sec.get().isType(Title.class)) {
@@ -134,9 +149,7 @@ public class XMLUtils {
 				continue;
 			}
 			if (sec.get().isType(PlainText.class)) {
-				Element neu = new Element("Content");
-				neu.addContent(sec.getOriginalText());
-				intro.addContent(neu);
+				XMLUtils.addContentElement(intro, sec);
 				continue;
 			}
 
@@ -175,11 +188,7 @@ public class XMLUtils {
 
 				// First PlainText+Some Multimedia
 				if (child.get().isType(PlainText.class)) {
-					Element neu = new Element("Content");
-					String te = child.getOriginalText().replaceAll("[\\r\\n]", "");
-					if (te.equals("")) continue;
-					neu.addContent(te);
-					simple.addContent(neu);
+					XMLUtils.addContentElement(simple, child);
 					continue;
 				}
 
@@ -260,6 +269,7 @@ public class XMLUtils {
 			if (sec.get().isType(Erklaerung.class)) {
 				Element i = new Element("Info");
 				XMLUtils.addmmmixedcontent(i, sec);
+				question.addContent(i);
 				continue;
 			}
 		}
@@ -442,5 +452,19 @@ public class XMLUtils {
 		url.addContent(child.getOriginalText());
 		neu.addContent(url);
 		return null;
+	}
+
+	/**
+	 * 
+	 * @created 15.05.2011
+	 * @param simple
+	 * @param child
+	 */
+	private static void addContentElement(Element simple, Section<?> child) {
+		Element neu = new Element("Content");
+		String te = child.getOriginalText().replaceAll("[\\r\\n]", "");
+		if (te.equals("")) return;
+		neu.addContent(te);
+		simple.addContent(neu);
 	}
 }
