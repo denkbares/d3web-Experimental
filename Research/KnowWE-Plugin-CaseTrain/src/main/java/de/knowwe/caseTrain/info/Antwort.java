@@ -95,10 +95,9 @@ public class Antwort extends AbstractType {
 	}
 
 	/**
-	 * Returns the NegFactor of a given AntwortMarkierung-Section.
-	 * If none is specified then it returns "0";
 	 * 
-	 * TODO is 0 right.
+	 * Returns the NegFactor of a given AntwortMarkierung-Section.
+	 * If none is specified then it returns null;
 	 * 
 	 * @created 13.05.2011
 	 * @param sec
@@ -106,12 +105,12 @@ public class Antwort extends AbstractType {
 	 */
 	public static String getNegFactor(Section<Antwort> sec) {
 		Section<AntwortMarkierung> mark = Sections.findSuccessor(sec, AntwortMarkierung.class);
-		if (mark == null) return "0";
+		if (mark == null) return null;
 		String markText = mark.getOriginalText().trim();
 		markText = markText.substring(1, markText.length()-1);
 		markText = Antwort.replaceFactorWithNumber(markText);
 		String[] factors = markText.trim().split("[ ]+");
-		if (factors.length < 2) return "0";
+		if (factors.length < 2) return null;
 		return factors[1];
 	}
 

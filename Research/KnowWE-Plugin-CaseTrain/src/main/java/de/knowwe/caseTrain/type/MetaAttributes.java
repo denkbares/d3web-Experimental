@@ -174,7 +174,7 @@ public class MetaAttributes {
 		this.attributesForXML.put(CASE_VERSION, "Version");
 		this.attributesForXML.put(COMMENT, "Comment");
 		this.attributesForXML.put(CASE_TODO, "Todo");
-		this.attributesForXML.put(CASE_HISTORY, "History");
+		this.attributesForXML.put(CASE_HISTORY, "Historie");
 		this.attributesForXML.put(CASE_DATE, "Date");
 		this.attributesForXML.put(BACKGROUND, "URL");
 		this.attributesForXML.put(HW_LINKTEXT, "URLText");

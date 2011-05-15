@@ -39,6 +39,7 @@ import de.knowwe.caseTrain.renderer.MouseOverTitleRenderer;
 import de.knowwe.caseTrain.type.general.Bild;
 import de.knowwe.caseTrain.type.general.SubblockMarkup;
 import de.knowwe.caseTrain.type.general.Title;
+import de.knowwe.caseTrain.type.general.Video;
 
 
 /**
@@ -57,6 +58,7 @@ public class Frage extends SubblockMarkup {
 		super("Frage");
 		this.addChildType(new Title());
 		this.addContentType(new Bild());
+		this.addContentType(new Video());
 		this.addContentType(new FrageGewicht());
 		this.addContentType(new FrageTyp());
 		this.addContentType(new FrageText());

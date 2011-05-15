@@ -29,7 +29,6 @@ import java.util.regex.Pattern;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
@@ -42,7 +41,6 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.type.AnonymousTypeInvisible;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.caseTrain.type.MetaDaten;
 import de.knowwe.caseTrain.util.Utils;
 
 /**
@@ -176,40 +174,5 @@ public abstract class BlockMarkupType extends AbstractType {
 
 
 
-
-}
-
-class BlockMarkupContent extends AbstractType {
-
-	private final String css;
-
-	public BlockMarkupContent(String cssClass) {
-		this.css = cssClass;
-		this.setCustomRenderer(new KnowWEDomRenderer<SubblockMarkup>() {
-
-			@Override
-			public void render(KnowWEArticle article, Section<SubblockMarkup> sec, UserContext user, StringBuilder string) {
-
-				boolean isMeta = false;
-				if (Sections.findAncestorOfType(sec, MetaDaten.class) != null) {isMeta = true;}
-				if (!isMeta) {
-					string.append(KnowWEUtils.maskHTML("%%collapsebox-closed \r\n"));
-					string.append(
-							KnowWEUtils.maskHTML("! "
-									+ Sections.findSuccessor(sec, Title.class).getOriginalText().trim()
-									+ "\r\n"));
-				}
-
-				string.append(KnowWEUtils.maskHTML("<div class='"
-						+ css
-						+ "'>"));
-				DelegateRenderer.getInstance().render(article, sec, user, string);
-				string.append(KnowWEUtils.maskHTML("</div>\r\n"));
-
-				if (!isMeta) {string.append(KnowWEUtils.maskHTML("/%\r\n"));}
-			}
-		});
-
-	}
 
 }

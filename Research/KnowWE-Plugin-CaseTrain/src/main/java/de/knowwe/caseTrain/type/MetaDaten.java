@@ -98,6 +98,8 @@ public class MetaDaten extends BlockMarkupType {
 				string.append(KnowWEUtils.maskHTML("</table>"));
 				string.append(KnowWEUtils.maskHTML("/%\r\n"));
 
+				// Only for testing
+				XMLUtils.createXMLFromCase(article);
 			}
 		});
 		this.addSubtreeHandler(new GeneralSubtreeHandler<MetaDaten>() {

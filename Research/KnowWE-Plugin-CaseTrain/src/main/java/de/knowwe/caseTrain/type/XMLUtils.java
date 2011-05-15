@@ -47,10 +47,14 @@ import de.knowwe.caseTrain.info.Info;
 import de.knowwe.caseTrain.type.MetaLine.AttributeContent;
 import de.knowwe.caseTrain.type.MetaLine.AttributeName;
 import de.knowwe.caseTrain.type.general.Bild;
+import de.knowwe.caseTrain.type.general.BlockMarkupContent;
 import de.knowwe.caseTrain.type.general.Title;
+import de.knowwe.caseTrain.type.general.Video;
 
 
 /**
+ * 
+ * XMLOutputParser for the CaseTrain-Markup.
  * 
  * @author Johannes Dienst
  * @created 11.05.2011
@@ -59,6 +63,8 @@ public class XMLUtils {
 
 	public static void createXMLFromCase(KnowWEArticle article) {
 		Section<KnowWEArticle> articleSec = article.getSection();
+
+		// TODO XML-Schema
 		Element root = new Element("Case");
 		Document doc = new Document(root);
 
@@ -80,16 +86,13 @@ public class XMLUtils {
 			fmt.output( doc, System.out );
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * Adds the Introduction/Outroduction Element to root.
 	 * 
-	 * TODO Getting the BlockMarkupContent is ugly!
-	 * TODO Some MultimediaTypes are missing
+	 * Adds the Introduction/Outroduction Element to root.
 	 * 
 	 * @created 11.05.2011
 	 * @param root
@@ -120,7 +123,8 @@ public class XMLUtils {
 	 * @param introSec
 	 */
 	private static void addmmmixedcontent(Element intro, Section<?> introSec) {
-		List<Section<?>> contentChildren = introSec.getChildren().get(0).getChildren();
+		List<Section<?>> contentChildren =
+			Sections.findSuccessor(introSec, BlockMarkupContent.class).getChildren();
 
 		for (Section<?> sec : contentChildren) {
 			if (sec.get().isType(Title.class)) {
@@ -135,13 +139,9 @@ public class XMLUtils {
 				intro.addContent(neu);
 				continue;
 			}
-			if(sec.get().isType(Bild.class)) {
-				Element neu = new Element("MultimediaItem");
-				neu.setAttribute("type", "image");
-				Element url = new Element("URL");
-				url.addContent(sec.getOriginalText());
-				neu.addContent(url);
-				intro.addContent(neu);
+
+			if(sec.get().isType(Bild.class) || sec.get().isType(Video.class)) {
+				intro.addContent(XMLUtils.createMultimediaElement(sec));
 				continue;
 			}
 		}
@@ -151,7 +151,7 @@ public class XMLUtils {
 	 * 
 	 * Adds all Info-Abschnitte to root.
 	 * 
-	 * TODO only support SimpleSections
+	 * TODO only supports SimpleSections
 	 * TODO InfoWahl-Sections
 	 * 
 	 * @created 11.05.2011
@@ -182,13 +182,9 @@ public class XMLUtils {
 					simple.addContent(neu);
 					continue;
 				}
-				if(child.get().isType(Bild.class)) {
-					Element neu = new Element("MultimediaItem");
-					neu.setAttribute("type", "image");
-					Element url = new Element("URL");
-					url.addContent(child.getOriginalText());
-					neu.addContent(url);
-					simple.addContent(neu);
+
+				if(child.get().isType(Bild.class) || child.get().isType(Video.class)) {
+					simple.addContent(XMLUtils.createMultimediaElement(child));
 					continue;
 				}
 
@@ -289,7 +285,8 @@ public class XMLUtils {
 			String posFactor = Antwort.getPosFactor((Section<Antwort>)s);
 			answer.setAttribute("posFactor", posFactor);
 			String negFactor = Antwort.getNegFactor((Section<Antwort>)s);
-			answer.setAttribute("negFactor", negFactor);
+			if (negFactor != null)
+				answer.setAttribute("negFactor", negFactor);
 
 			Section<AntwortText> text = Sections.findSuccessor(s, AntwortText.class);
 			Element t = new Element("Text");
@@ -424,5 +421,26 @@ public class XMLUtils {
 		}
 
 		root.addContent(metaData);
+	}
+
+	/**
+	 * 
+	 * Creates a Element of the given MultimediaSection.
+	 * 
+	 * @created 15.05.2011
+	 * @param child
+	 * @return
+	 */
+	private static String createMultimediaElement(Section<?> child) {
+		String type = "";
+		if(child.get().isType(Bild.class)) type = "image";
+		if(child.get().isType(Video.class)) type = "video";
+
+		Element neu = new Element("MultimediaItem");
+		neu.setAttribute("type", type);
+		Element url = new Element("URL");
+		url.addContent(child.getOriginalText());
+		neu.addContent(url);
+		return null;
 	}
 }

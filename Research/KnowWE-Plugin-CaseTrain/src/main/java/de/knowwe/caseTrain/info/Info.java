@@ -45,8 +45,10 @@ import de.knowwe.caseTrain.renderer.MouseOverTitleRenderer;
 import de.knowwe.caseTrain.type.Abschluss;
 import de.knowwe.caseTrain.type.Einleitung;
 import de.knowwe.caseTrain.type.general.Bild;
+import de.knowwe.caseTrain.type.general.BlockMarkupContent;
 import de.knowwe.caseTrain.type.general.BlockMarkupType;
 import de.knowwe.caseTrain.type.general.Title;
+import de.knowwe.caseTrain.type.general.Video;
 import de.knowwe.caseTrain.util.Utils;
 
 /**
@@ -73,6 +75,7 @@ public class Info extends BlockMarkupType {
 		this.addContentType(new Antworten());
 		this.addContentType(new Erklaerung());
 		this.addContentType(new Bild());
+		this.addContentType(new Video());
 
 		this.setCustomRenderer(new KnowWEDomRenderer<BlockMarkupType>() {
 
@@ -179,10 +182,9 @@ public class Info extends BlockMarkupType {
 				 *   - frage hat keine richtige antwortmöglichkeit
 				 *   - frage hat keine falsche antwortmöglichkeit
 				 * 
-				 *  TODO getting the children is not save. How do I get the
-				 *  the BlockMarkupContent?
 				 */
-				List<Section<? extends Type>> children = s.getChildren().get(0).getChildren();
+				List<Section<? extends Type>> children =
+					Sections.findSuccessor(s, BlockMarkupContent.class).getChildren();
 				Section<? extends Type> actual = null;
 				boolean erklMissing = true;
 				boolean antwortenMissing = true;
