@@ -301,12 +301,10 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			if (node.get().toString().contains("TagHandlerType")
 					&& node.toString().contains("KnowWEPlugin readbutton")
 						&& node.toString().contains("id=" + id)) {
-				System.out.println(node);
 					count++;
 			}
 		}
 
-		System.out.println(count);
 		// (2) current id has been found more often than once => double id
 		if (count > 1) return 2;
 		return 0;

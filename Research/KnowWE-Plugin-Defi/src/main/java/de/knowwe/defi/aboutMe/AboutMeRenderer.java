@@ -57,7 +57,7 @@ public class AboutMeRenderer<T extends AbstractType> extends KnowWEDomRenderer<T
 
 			if (about == null) {
 				string.append(KnowWEUtils.maskHTML("<p>Schreiben Sie ein paar Worte über sich:</p>"));
-				string.append(KnowWEUtils.maskHTML("<p><textarea cols=\"80\" rows=\"15\" name=\""
+				string.append(KnowWEUtils.maskHTML("<p><textarea cols=\"60\" rows=\"15\" name=\""
 						+ AboutMe.HTMLID_ABOUT + "\"></textarea></p>"));
 			}
 			string.append(KnowWEUtils.maskHTML("<p><input type=\"submit\" value=\"Speichern\"/></p>"));

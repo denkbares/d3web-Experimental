@@ -35,9 +35,39 @@
   String notfallplan = rb.getString("defi.link.notfall");
 %>
 <div class="userbox">
-
+	<div class="notfall">
+		<a href="<%= notfallplan %>" target="_blank" class="notfall" title="test">
+		<img src="KnowWEExtension/images/notfall.png" width="73px" height="69px" alt="Notfallplan" />
+		<p>Notfallplan</p></a></div>
+	<div class="message">
+	  <% if (user.userIsAsserted()) { %>
+	  <p>Willkommen,</p>
+	  <p><%= user.getUserName() %>!</p>
+	  <wiki:UserCheck status="asserted">
+	  <p>(nicht angemeldet)</p>
+	  </wiki:UserCheck>
+	  <br />
+	  <a href="Wiki.jsp?page=<%= user.getUserName() %>" class="princ">Meine Startseite</a>
+	  <% } else { %>
+	  	<br />
+	    <span class="username anonymous">
+	      <fmt:message key="fav.greet.anonymous" />
+	    </span>
+	  <% } %>
+	</div>
+<% if (user.userIsAsserted()) { %>
+	<div class="avatar">
+   		<img src="KnowWEExtension/images/<%= avatar %>.png" height="110px" width="110px" alt="avatar" />
+   	</div>
+<% } %>
+	
+<!--
 <table>
-	<tr><th>
+	<tr><td>
+		<a href="<%= notfallplan %>" target="_blank" class="notfall" title="test">
+		<img src="KnowWEExtension/images/notfall.png" width="73px" height="69px" alt="Notfallplan" />
+		<p>Notfallplan</p></a>
+	</td><th>
   <wiki:UserCheck status="anonymous">
     <span class="username anonymous">
       <fmt:message key="fav.greet.anonymous" />
@@ -58,12 +88,10 @@
   
    </th>
 <% if (user.userIsAsserted()) { %>
-   <td class="no_userpic">
-		<img src="KnowWEExtension/images/<%= avatar %>.png" height="110px" width="110px" alt="avatar" />
-	</td>
+   <td><img src="KnowWEExtension/images/<%= avatar %>.png" height="110px" width="110px" alt="avatar" /></td>
 <% } %>
 	</tr>
-</table>
+</table>-->
 
   <%-- action buttons --%>
   <wiki:UserCheck status="notAuthenticated">
@@ -92,8 +120,6 @@
       title="<fmt:message key='actions.prefs.title'/>"><fmt:message key="actions.prefs" /></a>
   </wiki:CheckRequestContext>
   </wiki:CheckRequestContext>
-
-	<a href="<%= notfallplan %>" target="_blank" class="action" title="test">Notfallplan</a>
 
   <div class="clearbox"></div>
 

@@ -23,40 +23,27 @@
   <div class="applicationlogo" > 
     <a id="logo" href="<wiki:LinkTo page='<%=frontpage%>' format='url' />"
        title="<fmt:message key='actions.home.title' ><fmt:param><%=frontpage%></fmt:param></fmt:message> ">
-       ICD FORUM
        <!--<fmt:message key='actions.home' />-->
+       <img src="KnowWEExtension/images/Logo_icd-forum.gif" height="101px" width="143px" alt="ICD-Forum Logo" />
+    	ICD-Forum
     </a>
   </div>
 
   <div class="companylogo"></div>
   
   <div class="infobox">
-  	<table>
-  		<tr><th>Therapeut</th>
-  			<td rowspan="2" class="no_userpic"></td>
-  			<th>Gruppe</th>
-  		</tr>
-  		<tr><td>Dr. S. M. Schulz<br /> <%=last_login%>
-  			</td>
-  			<td class="group_pic"><a href="Wiki.jsp?page=Gruppe"><img src="KnowWEExtension/images/Gruppe.jpg" height="98px" width="141px" alt="Gruppe" /></a></td>
-  		</tr>
-  	</table>
+   <div class="therapeut">
+  		<h3>Therapeuth</h3>
+  		<p>Dr. S. M. Schulz<br /> <%=last_login%></p>
+  	</div>
+  	<div class="gruppe">
+  		<h3>Gruppe</h3>
+  		<a href="Wiki.jsp?page=Gruppe"><img src="KnowWEExtension/images/Gruppe.jpg" height="98px" width="141px" alt="Gruppe" /></a>
+  	</div>
   </div>
   
   <wiki:Include page="UserBox.jsp" />
 
   <br />
   <div class="searchbox"><wiki:Include page="SearchBox.jsp" /></div>
-<% if (user.userIsAdmin()) { %>
-  <div class="pagename"><wiki:PageName /></div>
-  <div class="breadcrumbs">
-    <wiki:Permission permission="edit">
-  	<fmt:message key="header.yourtrail"/>
-  	<wiki:Breadcrumbs />
-  	  </wiki:Permission>
-  </div>
-<% } else { %>
-	<div style="height:70px;"></div>
-<% } %>
-
 </div>
