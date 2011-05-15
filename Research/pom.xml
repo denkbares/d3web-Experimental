@@ -169,6 +169,7 @@
 		<module>KnowWE-Plugin-CI4KE-Anomalies</module>
 		<module>d3web-Plugin-ProKEtProperties</module>
 		<module>KnowWE-Plugin-TestCaseExecutor</module>
+		<module>KnowWE-Plugin-DiaFlux-Refactoring</module>
 	</modules>
 	<repositories>
 		<repository>
