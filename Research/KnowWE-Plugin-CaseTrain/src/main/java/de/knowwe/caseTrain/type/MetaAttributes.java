@@ -30,7 +30,6 @@ import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.knowwe.caseTrain.message.DuplicateAttributeError;
 import de.knowwe.caseTrain.message.InvalidAttributeError;
 import de.knowwe.caseTrain.message.MissingAttributeError;
-import de.knowwe.caseTrain.type.MetaLine.AttributeName;
 
 
 /**

@@ -16,12 +16,14 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.caseTrain.type.general;
+package de.knowwe.caseTrain.type;
 
+import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
 
@@ -31,29 +33,19 @@ import de.d3web.we.utils.KnowWEUtils;
  * @author Johannes Dienst
  * @created 15.05.2011
  */
-public class Video extends MultimediaItem {
-
-	public static String KEY_VIDEO = "Video:";
-
-	private static String REGEX = "\\{" + KEY_VIDEO + "(.*?)\\}";
-
-	public Video() {
-		super(REGEX);
-
-		// TODO this is not for Video.
-		this.setCustomRenderer(new KnowWEDomRenderer<Video>() {
+public class AttributeContent extends AbstractType {
+	public AttributeContent() {
+		this.setSectionFinder(new AllTextFinderTrimmed());
+		this.setCustomRenderer(new KnowWEDomRenderer<MetaLine>() {
 
 			@Override
-			public void render(KnowWEArticle article, Section<Video> sec, UserContext user, StringBuilder string) {
-				Section<MultimediaItemContent> bildURL = Sections.findChildOfType(sec,
-						MultimediaItemContent.class);
-				string.append(KnowWEUtils.maskHTML("<img height='70' src='"));
-				string.append("attach/" + sec.getArticle().getTitle() + "/");
-				string.append(bildURL.getOriginalText().trim());
-				string.append(KnowWEUtils.maskHTML("'></img>"));
+			public void render(KnowWEArticle article, Section<MetaLine> sec, UserContext user, StringBuilder string) {
+
+				string.append(KnowWEUtils.maskHTML("<td>"));
+				DelegateRenderer.getInstance().render(article, sec, user, string);
+				string.append(KnowWEUtils.maskHTML("</td>"));
+
 			}
 		});
-
 	}
-
 }

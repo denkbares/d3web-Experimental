@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.caseTrain.type.general;
+package de.knowwe.caseTrain.type.multimedia;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,6 +31,7 @@ import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.knowwe.caseTrain.message.MissingPictureError;
+import de.knowwe.caseTrain.type.multimedia.Bild;
 
 
 /**

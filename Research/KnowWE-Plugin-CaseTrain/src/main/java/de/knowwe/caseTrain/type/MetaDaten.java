@@ -23,31 +23,23 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.rendering.NothingRenderer;
 import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMNotice;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.KDOMWarning;
-import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.d3web.we.kdom.sectionFinder.LineSectionFinder;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
 import de.knowwe.caseTrain.info.Info;
 import de.knowwe.caseTrain.message.MissingComponentError;
-import de.knowwe.caseTrain.type.MetaLine.AttributeName;
 import de.knowwe.caseTrain.type.general.BlockMarkupType;
 import de.knowwe.caseTrain.util.Utils;
+import de.knowwe.caseTrain.util.XMLUtils;
 
 /**
  * 
@@ -99,7 +91,7 @@ public class MetaDaten extends BlockMarkupType {
 				string.append(KnowWEUtils.maskHTML("/%\r\n"));
 
 				// Only for testing
-				//				XMLUtils.createXMLFromCase(article);
+//				XMLUtils.createXMLFromCase(article);
 			}
 		});
 		this.addSubtreeHandler(new GeneralSubtreeHandler<MetaDaten>() {
@@ -127,89 +119,4 @@ public class MetaDaten extends BlockMarkupType {
 		return "Metadaten";
 	}
 
-}
-
-/**
- * 
- * A Line of the MetaDaten table.
- * The Delimiter ":" is not rendered into the table.
- * 
- * @author Jochen
- * @created 6.04.2011
- */
-class MetaLine extends AbstractType {
-
-	public MetaLine() {
-		this.setSectionFinder(new LineSectionFinder());
-		this.addChildType(new AttributeName());
-		this.addChildType(new Delimiter());
-		this.addChildType(new AttributeContent());
-
-		this.setCustomRenderer(new KnowWEDomRenderer<MetaLine>() {
-
-			@Override
-			public void render(KnowWEArticle article, Section<MetaLine> sec, UserContext user, StringBuilder string) {
-				string.append(KnowWEUtils.maskHTML("<tr>"));
-				DelegateRenderer.getInstance().render(article, sec, user, string);
-				string.append(KnowWEUtils.maskHTML("</tr>"));
-			}
-		});
-
-
-	}
-
-	class Delimiter extends AbstractType {
-
-		public Delimiter() {
-			this.setSectionFinder(new RegexSectionFinder(":"));
-			this.setCustomRenderer(NothingRenderer.getInstance());
-		}
-
-	}
-
-	class AttributeName extends AbstractType {
-
-		public AttributeName() {
-			this.setSectionFinder(new SectionFinder(){
-
-				@Override
-				public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
-					int ende = text.indexOf(":");
-					List<SectionFinderResult> res = new ArrayList<SectionFinderResult>();
-					if (ende != -1) {
-						res.add(new SectionFinderResult(0, ende));
-					}
-					return res;
-				}
-
-			});
-			this.setCustomRenderer(new KnowWEDomRenderer<MetaLine>() {
-
-				@Override
-				public void render(KnowWEArticle article, Section<MetaLine> sec, UserContext user, StringBuilder string) {
-					string.append(KnowWEUtils.maskHTML("<td>"));
-					DelegateRenderer.getInstance().render(article, sec, user, string);
-					string.append(KnowWEUtils.maskHTML("</td>"));
-
-				}
-			});
-		}
-	}
-
-	class AttributeContent extends AbstractType {
-		public AttributeContent() {
-			this.setSectionFinder(new AllTextFinderTrimmed());
-			this.setCustomRenderer(new KnowWEDomRenderer<MetaLine>() {
-
-				@Override
-				public void render(KnowWEArticle article, Section<MetaLine> sec, UserContext user, StringBuilder string) {
-
-					string.append(KnowWEUtils.maskHTML("<td>"));
-					DelegateRenderer.getInstance().render(article, sec, user, string);
-					string.append(KnowWEUtils.maskHTML("</td>"));
-
-				}
-			});
-		}
-	}
 }

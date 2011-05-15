@@ -18,10 +18,10 @@
  */
 package de.knowwe.caseTrain.info;
 
-import de.knowwe.caseTrain.type.general.Bild;
 import de.knowwe.caseTrain.type.general.SubblockMarkup;
 import de.knowwe.caseTrain.type.general.Title;
-import de.knowwe.caseTrain.type.general.Video;
+import de.knowwe.caseTrain.type.multimedia.Bild;
+import de.knowwe.caseTrain.type.multimedia.Video;
 
 
 /**

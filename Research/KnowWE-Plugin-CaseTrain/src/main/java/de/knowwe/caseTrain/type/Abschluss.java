@@ -34,10 +34,10 @@ import de.knowwe.caseTrain.info.Info;
 import de.knowwe.caseTrain.message.MissingContentWarning;
 import de.knowwe.caseTrain.message.MissingPictureNotice;
 import de.knowwe.caseTrain.message.MissingTitleError;
-import de.knowwe.caseTrain.type.general.Bild;
 import de.knowwe.caseTrain.type.general.BlockMarkupType;
 import de.knowwe.caseTrain.type.general.Title;
-import de.knowwe.caseTrain.type.general.Video;
+import de.knowwe.caseTrain.type.multimedia.Bild;
+import de.knowwe.caseTrain.type.multimedia.Video;
 
 /**
  * 

@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.caseTrain.type;
+package de.knowwe.caseTrain.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,16 +44,21 @@ import de.knowwe.caseTrain.info.Frage.FrageText;
 import de.knowwe.caseTrain.info.Frage.FrageTyp;
 import de.knowwe.caseTrain.info.Hinweis;
 import de.knowwe.caseTrain.info.Info;
-import de.knowwe.caseTrain.type.MetaLine.AttributeContent;
-import de.knowwe.caseTrain.type.MetaLine.AttributeName;
-import de.knowwe.caseTrain.type.general.Bild;
+import de.knowwe.caseTrain.type.Abschluss;
+import de.knowwe.caseTrain.type.AttributeContent;
+import de.knowwe.caseTrain.type.AttributeName;
+import de.knowwe.caseTrain.type.Einleitung;
+import de.knowwe.caseTrain.type.MetaAttributes;
+import de.knowwe.caseTrain.type.MetaDaten;
+import de.knowwe.caseTrain.type.MetaLine;
 import de.knowwe.caseTrain.type.general.BlockMarkupContent;
 import de.knowwe.caseTrain.type.general.BlockMarkupType;
-import de.knowwe.caseTrain.type.general.MultimediaItem;
 import de.knowwe.caseTrain.type.general.SubblockMarkup;
 import de.knowwe.caseTrain.type.general.SubblockMarkupContent;
 import de.knowwe.caseTrain.type.general.Title;
-import de.knowwe.caseTrain.type.general.Video;
+import de.knowwe.caseTrain.type.multimedia.Bild;
+import de.knowwe.caseTrain.type.multimedia.MultimediaItem;
+import de.knowwe.caseTrain.type.multimedia.Video;
 
 
 /**
@@ -308,7 +313,8 @@ public class XMLUtils {
 			Section<AntwortErklaerung> erklaerung = Sections.findSuccessor(s, AntwortErklaerung.class);
 			if (erklaerung != null) {
 				Element t1 = new Element("SimpleFeedback");
-				t1.addContent(text.getOriginalText());
+				t1.addContent(erklaerung.getOriginalText().
+						substring(1, erklaerung.getOriginalText().length()-1));
 				answer.addContent(t1);
 			}
 

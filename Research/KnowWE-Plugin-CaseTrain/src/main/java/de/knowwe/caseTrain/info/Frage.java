@@ -36,10 +36,10 @@ import de.knowwe.caseTrain.message.MissingAttributeWarning;
 import de.knowwe.caseTrain.message.MissingComponentError;
 import de.knowwe.caseTrain.message.MissingComponentWarning;
 import de.knowwe.caseTrain.renderer.MouseOverTitleRenderer;
-import de.knowwe.caseTrain.type.general.Bild;
 import de.knowwe.caseTrain.type.general.SubblockMarkup;
 import de.knowwe.caseTrain.type.general.Title;
-import de.knowwe.caseTrain.type.general.Video;
+import de.knowwe.caseTrain.type.multimedia.Bild;
+import de.knowwe.caseTrain.type.multimedia.Video;
 
 
 /**
