@@ -37,6 +37,7 @@ import de.knowwe.caseTrain.message.MissingTitleError;
 import de.knowwe.caseTrain.type.general.Bild;
 import de.knowwe.caseTrain.type.general.BlockMarkupType;
 import de.knowwe.caseTrain.type.general.Title;
+import de.knowwe.caseTrain.type.general.Video;
 
 /**
  * 
@@ -50,6 +51,10 @@ public class Abschluss extends BlockMarkupType {
 
 	public Abschluss() {
 		super("Abschluss");
+		this.addChildType(new Title());
+		this.addContentType(new Bild());
+		this.addContentType(new Video());
+
 		this.addSubtreeHandler(new GeneralSubtreeHandler<Abschluss>() {
 
 			@Override

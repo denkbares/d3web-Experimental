@@ -18,23 +18,12 @@
  */
 package de.knowwe.caseTrain.type.general;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.caseTrain.message.MissingPictureError;
-import de.knowwe.caseTrain.type.general.Bild.BildContent;
 
 
 /**
@@ -42,23 +31,22 @@ import de.knowwe.caseTrain.type.general.Bild.BildContent;
  * @author Johannes Dienst
  * @created 15.05.2011
  */
-public class Video extends AbstractType {
+public class Video extends MultimediaItem {
 
 	public static String KEY_VIDEO = "Video:";
 
 	private static String REGEX = "\\{" + KEY_VIDEO + "(.*?)\\}";
 
 	public Video() {
+		super(REGEX);
 
-		this.setSectionFinder(new RegexSectionFinder(REGEX));
-		this.addChildType(new VideoContent());
-
+		// TODO this is not for Video.
 		this.setCustomRenderer(new KnowWEDomRenderer<Video>() {
 
 			@Override
 			public void render(KnowWEArticle article, Section<Video> sec, UserContext user, StringBuilder string) {
-				Section<BildContent> bildURL = Sections.findChildOfType(sec,
-						BildContent.class);
+				Section<MultimediaItemContent> bildURL = Sections.findChildOfType(sec,
+						MultimediaItemContent.class);
 				string.append(KnowWEUtils.maskHTML("<img height='70' src='"));
 				string.append("attach/" + sec.getArticle().getTitle() + "/");
 				string.append(bildURL.getOriginalText().trim());
@@ -66,32 +54,6 @@ public class Video extends AbstractType {
 			}
 		});
 
-		this.addSubtreeHandler(new GeneralSubtreeHandler<Video>() {
-
-			@Override
-			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Video> s) {
-
-				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
-
-				List<String> attachments = KnowWEEnvironment.getInstance().getWikiConnector()
-				.getAttachmentFilenamesForPage(article.getTitle());
-				Section<VideoContent> videoURL = Sections.findChildOfType(s,
-						VideoContent.class);
-				if(!attachments.contains(videoURL.getOriginalText().trim())) {
-					messages.add(new MissingPictureError(videoURL.getOriginalText().trim()));
-				}
-
-				return messages;
-			}
-		});
 	}
-
-	class VideoContent extends AbstractType{
-
-		public VideoContent() {
-			this.setSectionFinder(new RegexSectionFinder(REGEX, 0, 1));
-		}
-	}
-
 
 }

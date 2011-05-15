@@ -49,6 +49,7 @@ import de.knowwe.caseTrain.type.MetaLine.AttributeName;
 import de.knowwe.caseTrain.type.general.Bild;
 import de.knowwe.caseTrain.type.general.BlockMarkupContent;
 import de.knowwe.caseTrain.type.general.BlockMarkupType;
+import de.knowwe.caseTrain.type.general.MultimediaItem;
 import de.knowwe.caseTrain.type.general.SubblockMarkup;
 import de.knowwe.caseTrain.type.general.SubblockMarkupContent;
 import de.knowwe.caseTrain.type.general.Title;
@@ -153,7 +154,7 @@ public class XMLUtils {
 				continue;
 			}
 
-			if(sec.get().isType(Bild.class) || sec.get().isType(Video.class)) {
+			if(sec.get().isAssignableFromType(MultimediaItem.class)) {
 				intro.addContent(XMLUtils.createMultimediaElement(sec));
 				continue;
 			}
@@ -192,7 +193,7 @@ public class XMLUtils {
 					continue;
 				}
 
-				if(child.get().isType(Bild.class) || child.get().isType(Video.class)) {
+				if(child.get().isAssignableFromType(MultimediaItem.class)) {
 					simple.addContent(XMLUtils.createMultimediaElement(child));
 					continue;
 				}
@@ -267,7 +268,7 @@ public class XMLUtils {
 
 			// Feedback is Erklaerung
 			if (sec.get().isType(Erklaerung.class)) {
-				Element i = new Element("Info");
+				Element i = new Element("Feedback");
 				XMLUtils.addmmmixedcontent(i, sec);
 				question.addContent(i);
 				continue;
@@ -334,13 +335,8 @@ public class XMLUtils {
 				info.addContent(neu);
 				continue;
 			}
-			if(sec.get().isType(Bild.class)) {
-				Element neu = new Element("MultimediaItem");
-				neu.setAttribute("type", "image");
-				Element url = new Element("URL");
-				url.addContent(sec.getOriginalText());
-				neu.addContent(url);
-				info.addContent(neu);
+			if(sec.get().isAssignableFromType(MultimediaItem.class)) {
+				info.addContent(XMLUtils.createMultimediaElement(sec));
 				continue;
 			}
 		}
@@ -441,7 +437,7 @@ public class XMLUtils {
 	 * @param child
 	 * @return
 	 */
-	private static String createMultimediaElement(Section<?> child) {
+	private static Element createMultimediaElement(Section<?> child) {
 		String type = "";
 		if(child.get().isType(Bild.class)) type = "image";
 		if(child.get().isType(Video.class)) type = "video";
@@ -449,9 +445,9 @@ public class XMLUtils {
 		Element neu = new Element("MultimediaItem");
 		neu.setAttribute("type", type);
 		Element url = new Element("URL");
-		url.addContent(child.getOriginalText());
+		url.addContent(child.getChildren().get(1).getOriginalText().trim());
 		neu.addContent(url);
-		return null;
+		return neu;
 	}
 
 	/**
