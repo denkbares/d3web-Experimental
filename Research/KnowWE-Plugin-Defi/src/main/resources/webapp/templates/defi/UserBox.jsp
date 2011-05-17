@@ -47,7 +47,7 @@
 	  <p>(nicht angemeldet)</p>
 	  </wiki:UserCheck>
 	  <br />
-	  <a href="Wiki.jsp?page=<%= user.getUserName() %>" class="princ">Meine Startseite</a>
+	  <a href="Wiki.jsp?page=Startseite" class="princ">Meine Startseite</a>
 	  <% } else { %>
 	  	<br />
 	    <span class="username anonymous">
@@ -60,67 +60,31 @@
    		<img src="KnowWEExtension/images/<%= avatar %>.png" height="110px" width="110px" alt="avatar" />
    	</div>
 <% } %>
-	
-<!--
-<table>
-	<tr><td>
-		<a href="<%= notfallplan %>" target="_blank" class="notfall" title="test">
-		<img src="KnowWEExtension/images/notfall.png" width="73px" height="69px" alt="Notfallplan" />
-		<p>Notfallplan</p></a>
-	</td><th>
-  <wiki:UserCheck status="anonymous">
-    <span class="username anonymous">
-      <fmt:message key="fav.greet.anonymous" />
-    </span>
-  </wiki:UserCheck>
-  <wiki:UserCheck status="asserted">
-    <span class="username asserted">
-      <fmt:message key="fav.greet.asserted">
-      <fmt:param><wiki:Translate>[<wiki:UserName />]</wiki:Translate></fmt:param>
-    </fmt:message>
-    </span>
-  </wiki:UserCheck>
-  <wiki:UserCheck status="authenticated">
-    <span class="username authenticated">
-        Willkommen, <wiki:Translate>[<wiki:UserName />]</wiki:Translate>!
-    </span>
-  </wiki:UserCheck>
-  
-   </th>
-<% if (user.userIsAsserted()) { %>
-   <td><img src="KnowWEExtension/images/<%= avatar %>.png" height="110px" width="110px" alt="avatar" /></td>
-<% } %>
-	</tr>
-</table>-->
 
   <%-- action buttons --%>
-  <wiki:UserCheck status="notAuthenticated">
-  <wiki:CheckRequestContext context='!login'>
-    <wiki:Permission permission="login">
-      <a href="<wiki:Link jsp='Login.jsp' format='url'><wiki:Param 
-         name='redirect' value='<%=c.getEngine().encodeName(c.getName())%>'/></wiki:Link>" 
-        class="action login"
-        title="<fmt:message key='actions.login.title'/>"><fmt:message key="actions.login"/></a>
-    </wiki:Permission>
-  </wiki:CheckRequestContext>
-  </wiki:UserCheck>
+  <table><tr>
+  	<td>  
+  		<wiki:UserCheck status="notAuthenticated">
+  		<wiki:CheckRequestContext context='!login'>
+    	<wiki:Permission permission="login">
+      		<a href="<wiki:Link jsp='Login.jsp' format='url'><wiki:Param 
+      		name='redirect' value='<%=c.getEngine().encodeName(c.getName())%>'/></wiki:Link>" 
+      		class="action login"
+        	title="<fmt:message key='actions.login.title'/>"><fmt:message key="actions.login"/></a>
+    	</wiki:Permission>
+  		</wiki:CheckRequestContext>
+  		</wiki:UserCheck>
   
-  <wiki:UserCheck status="authenticated">
-   <a href="<wiki:Link jsp='Logout.jsp' format='url' />" 
-     class="action logout"
-     title="<fmt:message key='actions.logout.title'/>"><fmt:message key="actions.logout"/></a>
-   <%--onclick="return( confirm('<fmt:message key="actions.confirmlogout"/>') && (location=this.href) );"--%>
-  </wiki:UserCheck>
-
-  <wiki:CheckRequestContext context='!prefs'>
-  <wiki:CheckRequestContext context='!preview'>
-    <a href="<wiki:Link jsp='UserPreferences.jsp' format='url' ><wiki:Param name='redirect'
-      value='<%=c.getEngine().encodeName(c.getName())%>'/></wiki:Link>"
-      class="action prefs" accesskey="p"
-      title="<fmt:message key='actions.prefs.title'/>"><fmt:message key="actions.prefs" /></a>
-  </wiki:CheckRequestContext>
-  </wiki:CheckRequestContext>
-
-  <div class="clearbox"></div>
-
+	  	<wiki:UserCheck status="authenticated">
+	   		<a href="<wiki:Link jsp='Logout.jsp' format='url' />" 
+	     	class="action logout"
+	     	title="<fmt:message key='actions.logout.title'/>"><fmt:message key="actions.logout"/></a>
+	   		<%--onclick="return( confirm('<fmt:message key="actions.confirmlogout"/>') && (location=this.href) );"--%>
+	  	</wiki:UserCheck>
+  
+  	</td>
+  	<td> 
+  		<a href="Wiki.jsp?page=<%= user.getUserName() %>" class="action">Meine Einstellungen</a>
+  	</td>
+  </tr></table>
 </div>

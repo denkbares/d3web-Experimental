@@ -114,18 +114,20 @@
 	font-weight:bold;
 	font-size:20px;
 }
-.userbox .action {
-	display:inline-block;
-	width:229px;
-	text-align:center;
-	border:1px solid black !important;
-	margin:0 !important;
-	padding:4px 0 !important;
-	float:left;
-	border-collapse:collapse;
-}
 .userbox a.notfall {
 	text-decoration:none;	
+}
+.userbox a.action {
+	border:1px solid black !important;
+	width:100%;
+	display:inline-block;
+	padding:0.25em 0 !important;
+}
+.userbox table {
+	width:100%;
+}
+.userbox td {
+	width:50%;	
 }
 #header .pagename {
 	margin:10px 0 0 214px;
