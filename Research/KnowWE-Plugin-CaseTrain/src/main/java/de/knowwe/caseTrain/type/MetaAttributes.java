@@ -42,30 +42,30 @@ import de.knowwe.caseTrain.message.MissingAttributeError;
 public class MetaAttributes {
 
 	// Demanded attributes
-	private static final String CASE_ID_KEY = "FALL_ID";
-	private static final String CASE_TITLE = "FALL_TITEL";
-	private static final String CASE_AUTHOR = "FALL_AUTOR";
-	private static final String CASE_VERSION = "FALL_VERSION";
-	private static final String CASE_DATE = "FALL_DATUM";
+	public static final String CASE_ID_KEY = "FALL_ID";
+	public static final String CASE_TITLE = "FALL_TITEL";
+	public static final String CASE_AUTHOR = "FALL_AUTOR";
+	public static final String CASE_VERSION = "FALL_VERSION";
+	public static final String CASE_DATE = "FALL_DATUM";
 	public static final String CASE_POINTS = "FALL_PUNKTZAHL";
 	public static final String CASE_PASS = "BESTEHEN_AB";
 
 	// Optional attributes
-	private static final String DURATION_MIN = "DAUER_MIN";
-	private static final String DIFFICULTY = "SCHWIERIGKEIT";
-	private static final String REQUIREMENTS = "VORAUSSETZUNGEN";
-	private static final String HINT = "HINWEIS";
-	private static final String COMMENT = "FALL_KOMMENTAR";
-	private static final String KEYWORDS = "SCHLAGWORTE";
+	public static final String DURATION_MIN = "DAUER_MIN";
+	public static final String DIFFICULTY = "SCHWIERIGKEIT";
+	public static final String REQUIREMENTS = "VORAUSSETZUNGEN";
+	public static final String HINT = "HINWEIS";
+	public static final String COMMENT = "FALL_KOMMENTAR";
+	public static final String KEYWORDS = "SCHLAGWORTE";
 	public static final String CASE_TODO = "FALL_TODO";
-	private static final String CASE_HISTORY = "HISTORIE";
+	public static final String CASE_HISTORY = "HISTORIE";
 	public static final String SHOW_TIME = "ZEIT_ANZEIGEN";
 	public static final String TIME_WEIGHT = "ZEIT_GEWICHT";
 	public static final String TIME_LIMIT100 = "ZEIT_GRENZE100";
 	public static final String TIME_LIMIT0 = "ZEIT_GRENZE0";
 	public static final String FEEDBACK = "FEEDBACK";
-	private static final String BACKGROUND = "HINTERGRUNDWISSEN";
-	private static final String HW_LINKTEXT = "HW_LINKTEXT";
+	public static final String BACKGROUND = "HINTERGRUNDWISSEN";
+	public static final String HW_LINKTEXT = "HW_LINKTEXT";
 	public static final String LANGUAGE = "SPRACHE";
 
 	private MetaAttributes() {

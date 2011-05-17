@@ -123,7 +123,8 @@ public class Info extends BlockMarkupType {
 				 *  - Only title as children and no other children
 				 *  - It has no children at all
 				 */
-				List<Section<? extends Type>> blockMarkupChildren = s.getChildren().get(0).getChildren();
+				List<Section<? extends Type>> blockMarkupChildren =
+					Sections.findSuccessor(s, BlockMarkupContent.class).getChildren();
 				if ( ((title != null) && (blockMarkupChildren.size() == 1))
 						|| blockMarkupChildren.size() == 0) {
 					messages.add(new MissingContentWarning(Info.ABSCHNITT));
@@ -189,7 +190,7 @@ public class Info extends BlockMarkupType {
 				boolean erklMissing = true;
 				boolean antwortenMissing = true;
 				for (Section<? extends Type> sec : children) {
-					if (sec.get() instanceof Frage) {
+					if (sec.get().isType(Frage.class)) {
 						if(actual == null) {
 							actual = sec;
 							continue;
@@ -205,14 +206,14 @@ public class Info extends BlockMarkupType {
 						antwortenMissing = true;
 						continue;
 					}
-					if (sec.get() instanceof Hinweis) {
+					if (sec.get().isType(Hinweis.class)) {
 						continue;
 					}
-					if (sec.get() instanceof Erklaerung) {
+					if (sec.get().isType(Erklaerung.class)) {
 						erklMissing = false;
 						continue;
 					}
-					if (sec.get() instanceof Antworten) {
+					if (sec.get().isType(Antworten.class)) {
 						// test if multiple Antworten are possible
 						// Only by UMW,OMW,MN
 						if (!antwortenMissing) {

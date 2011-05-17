@@ -59,14 +59,14 @@ public class AntwortenKorrektheitChecker {
 	public static final String POSTFIX = "Postfix";
 	public static final String UEBERSCHRIFT = "Überschrift";
 
-	private final String MC = "MC";
-	private final String OC = "OC";
-	private final String W  = "W";
-	private final String UMW = "UMW";
-	private final String OMW = "OMW";
-	private final String N = "N";
-	private final String MN = "MN";
-	private final String T = "T";
+	public static final String MC = "MC";
+	public static final String OC = "OC";
+	public static final String W  = "W";
+	public static final String UMW = "UMW";
+	public static final String OMW = "OMW";
+	public static final String N = "N";
+	public static final String MN = "MN";
+	public static final String T = "T";
 
 	private final String[] types = {MC, OC, W, UMW, OMW, N, MN, T};
 

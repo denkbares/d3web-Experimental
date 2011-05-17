@@ -78,7 +78,7 @@ public class Antworten extends SubblockMarkup {
 	 * @author Johannes Dienst
 	 * @created 09.05.2011
 	 */
-	class Praefix extends AbstractType {
+	public class Praefix extends AbstractType {
 		public Praefix() {
 			this.setSectionFinder(
 					new RegexSectionFinder(AntwortenKorrektheitChecker.PRAEFIX + ":.*"));
@@ -91,7 +91,7 @@ public class Antworten extends SubblockMarkup {
 	 * @author Johannes Dienst
 	 * @created 09.05.2011
 	 */
-	class Postfix extends AbstractType {
+	public class Postfix extends AbstractType {
 		public Postfix() {
 			this.setSectionFinder(
 					new RegexSectionFinder(AntwortenKorrektheitChecker.POSTFIX + ":.*"));
@@ -104,7 +104,7 @@ public class Antworten extends SubblockMarkup {
 	 * @author Johannes Dienst
 	 * @created 09.05.2011
 	 */
-	class Ueberschrift extends AbstractType {
+	public class Ueberschrift extends AbstractType {
 		public Ueberschrift() {
 			this.setSectionFinder(
 					new RegexSectionFinder(AntwortenKorrektheitChecker.UEBERSCHRIFT + ":.*"));
