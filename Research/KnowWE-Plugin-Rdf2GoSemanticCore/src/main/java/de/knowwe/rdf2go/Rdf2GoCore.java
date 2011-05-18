@@ -34,6 +34,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
@@ -369,6 +370,8 @@ public class Rdf2GoCore implements EventListener {
 	 */
 	public String renderQueryResult(QueryResultTable qrt, boolean links) {
 		boolean tablemode = false;
+		boolean empty = true;
+
 		List<String> l = qrt.getVariables();
 		ClosableIterator<QueryRow> i = qrt.iterator();
 		String result = "";
@@ -383,6 +386,8 @@ public class Rdf2GoCore implements EventListener {
 		}
 
 		while (i.hasNext()) {
+			empty = false;
+
 			if (!tablemode) {
 				tablemode = qrt.getVariables().size() > 1;
 			}
@@ -424,11 +429,18 @@ public class Rdf2GoCore implements EventListener {
 				result += KnowWEUtils.maskHTML("</tr>");
 			}
 		}
-		if (tablemode) {
-			result += KnowWEUtils.maskHTML("</table>");
+
+		if (empty) {
+			ResourceBundle rb = KnowWEEnvironment.getInstance().getKwikiBundle();
+			result = rb.getString("KnowWE.owl.query.no_result");
 		}
 		else {
-			result += KnowWEUtils.maskHTML("</ul>");
+			if (tablemode) {
+				result += KnowWEUtils.maskHTML("</table>");
+			}
+			else {
+				result += KnowWEUtils.maskHTML("</ul>");
+			}
 		}
 		return result;
 	}
