@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-DiaFlux-Refactoring" version="0.0.1">
+	
+	<requires>
+		<import plugin-id="KnowWE-Plugin-DiaFlux" />
+	</requires>
+	
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+	
+	<extension plugin-id="KnowWE-Plugin-DiaFlux" point-id="DiaFluxEditorEnhancement"
+		id="DiaFluxRefactoring">
+		<parameter id="class"
+			value="de.d3web.we.diaFlux.refactoring.DiaFluxRefactoring" />
+		<parameter id="name" value="DiaFluxRefactoring" />
+		<parameter id="description" value="Refactoring for DiaFlux editor" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="GetPackageName">
+		<parameter id="class"
+			value="de.d3web.we.diaFlux.refactoring.GetPackageName" />
+		<parameter id="name" value="GetPackageName" />
+		<parameter id="description" value="Gets package name of a flowchart." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	
+</plugin>
