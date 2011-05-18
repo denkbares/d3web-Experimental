@@ -645,37 +645,9 @@ public class XMLUtils {
 			NumQuestion q = (NumQuestion) question;
 			NumAnswers ans = fac.createNumAnswers();
 			for (AntwortAttributeStore store : ants) {
-
-				String[] i = Antwort.getInterval(store.getText());
-				if ( i != null ) {
-					NumAnswerInterval inter = fac.createNumAnswersNumAnswerInterval();
-					inter.setLower(new BigDecimal(i[0]));
-					inter.setUpper(new BigDecimal(i[1]));
-					if (store.getNegFactor() != null)
-						inter.setNegFactor(new BigDecimal(store.getNegFactor()));
-					inter.setPosFactor(new BigDecimal(store.getPosFactor()));
-					if (store.getSimplefeedback() != null)
-						inter.setSimpleFeedback(store.getSimplefeedback());
-					ans.getNumAnswerOrNumAnswerInterval().add(inter);
-				}
-
-				NumAnswer a = fac.createNumAnswersNumAnswer();
-				if (store.getNegFactor() != null)
-					a.setNegFactor(new BigDecimal(store.getNegFactor()));
-				a.setPosFactor(new BigDecimal(store.getPosFactor()));
-				if (store.getSimplefeedback() != null)
-					a.setSimpleFeedback(store.getSimplefeedback());
-				a.setValue(new BigDecimal(store.getText()));
-				ans.getNumAnswerOrNumAnswerInterval().add(a);
+				XMLUtils.addNumAnswerInstance(ans, store, fac);
 			}
-
-			if (ueberschrift != null)
-				ans.setAnswerCaption(ueberschrift);
-			if (postfix != null)
-				ans.setAnswerPostfix(postfix);
-			if (praefix != null)
-				ans.setAnswerPrefix(praefix);
-
+			XMLUtils.addPraePostUeberschrift(ans, ueberschrift, postfix, praefix);
 			q.setNumAnswers(ans);
 		}
 
@@ -683,26 +655,73 @@ public class XMLUtils {
 			MNumQuestion q = (MNumQuestion) question;
 			NumAnswers ans = fac.createNumAnswers();
 			for (AntwortAttributeStore store : ants) {
-				NumAnswer a = fac.createNumAnswersNumAnswer();
-				if (store.getNegFactor() != null)
-					a.setNegFactor(new BigDecimal(store.getNegFactor()));
-				a.setPosFactor(new BigDecimal(store.getPosFactor()));
-				if (store.getSimplefeedback() != null)
-					a.setSimpleFeedback(store.getSimplefeedback());
-				a.setValue(new BigDecimal(store.getText()));
-				ans.getNumAnswerOrNumAnswerInterval().add(a);
+				XMLUtils.addNumAnswerInstance(ans, store, fac);
 			}
+			XMLUtils.addPraePostUeberschrift(ans, ueberschrift, postfix, praefix);
 			q.getNumAnswers().add(ans);
 		}
 
 		if (question instanceof TextQuestion) {
 			TextQuestion q = (TextQuestion) question;
-
 			for (AntwortAttributeStore store : ants) {
 				q.setSolution(store.getText());
 			}
 		}
 
+	}
+
+	/**
+	 * 
+	 * Adds Praefix/Postfix/Ueberschrift to NumAnswerObject.
+	 * They are not added if they are null.
+	 * 
+	 * @created 18.05.2011
+	 * @param ans
+	 * @param ueberschrift
+	 * @param postfix
+	 * @param praefix
+	 */
+	private static void addPraePostUeberschrift(NumAnswers ans, String ueberschrift, String postfix, String praefix) {
+		if (ueberschrift != null)
+			ans.setAnswerCaption(ueberschrift);
+		if (postfix != null)
+			ans.setAnswerPostfix(postfix);
+		if (praefix != null)
+			ans.setAnswerPrefix(praefix);
+	}
+
+	/**
+	 * 
+	 * Adds NumAnswer or NumAnswerInterval to a
+	 * NumAnswers-Object.
+	 * 
+	 * @created 18.05.2011
+	 * @param ans
+	 * @param store
+	 * @param fac
+	 */
+	private static void addNumAnswerInstance(NumAnswers ans, AntwortAttributeStore store, ObjectFactory fac) {
+		String[] i = Antwort.getInterval(store.getText());
+		if ( i != null ) {
+			NumAnswerInterval inter = fac.createNumAnswersNumAnswerInterval();
+			inter.setLower(new BigDecimal(i[0]));
+			inter.setUpper(new BigDecimal(i[1]));
+			if (store.getNegFactor() != null)
+				inter.setNegFactor(new BigDecimal(store.getNegFactor()));
+			inter.setPosFactor(new BigDecimal(store.getPosFactor()));
+			if (store.getSimplefeedback() != null)
+				inter.setSimpleFeedback(store.getSimplefeedback());
+			ans.getNumAnswerOrNumAnswerInterval().add(inter);
+		}
+
+		NumAnswer a = fac.createNumAnswersNumAnswer();
+		if (store.getNegFactor() != null)
+			a.setNegFactor(new BigDecimal(store.getNegFactor()));
+		a.setPosFactor(new BigDecimal(store.getPosFactor()));
+		if (store.getSimplefeedback() != null)
+			a.setSimpleFeedback(store.getSimplefeedback());
+		a.setValue(new BigDecimal(store.getText()));
+		ans.getNumAnswerOrNumAnswerInterval().add(a);
 	}
 
 	/**
