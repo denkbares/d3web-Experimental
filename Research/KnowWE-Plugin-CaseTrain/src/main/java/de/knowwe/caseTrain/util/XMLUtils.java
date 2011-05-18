@@ -52,6 +52,7 @@ import de.casetrain.binding.traincase.jaxb.Mmmixedcontent;
 import de.casetrain.binding.traincase.jaxb.MultiWordQuestion;
 import de.casetrain.binding.traincase.jaxb.NumAnswers;
 import de.casetrain.binding.traincase.jaxb.NumAnswers.NumAnswer;
+import de.casetrain.binding.traincase.jaxb.NumAnswers.NumAnswerInterval;
 import de.casetrain.binding.traincase.jaxb.ObjectFactory;
 import de.casetrain.binding.traincase.jaxb.SimpleSection;
 import de.casetrain.binding.traincase.jaxb.Titledmmcontent;
@@ -187,9 +188,9 @@ public class XMLUtils {
 			}
 
 			if (sec.get().isType(PlainText.class)) {
-				String te = sec.getOriginalText().trim().replaceAll("\\r\\n", "");
-				if (te.equals("")) continue;
-				titledmmContent.getContentOrMultimediaItemOrFormula().add(te);
+				String te = XMLUtils.clearPlainText(sec);
+				if (!te.equals(""))
+					titledmmContent.getContentOrMultimediaItemOrFormula().add(te);
 				continue;
 			}
 
@@ -381,7 +382,10 @@ public class XMLUtils {
 
 				// First PlainText+Some Multimedia
 				if (child.get().isType(PlainText.class)) {
-					XMLUtils.addContenWithBinding(simpleSec, child, fac);
+					String te = XMLUtils.clearPlainText(child);
+					if (!te.equals("")) {
+						simpleSec.getContentOrMultimediaItemOrFormula().add(te);
+					}
 					continue;
 				}
 				if(child.get().isAssignableFromType(MultimediaItem.class)) {
@@ -550,6 +554,9 @@ public class XMLUtils {
 	private static void addAntwortenWithBinding(BasicQuestion question, Section<?> antworten, ObjectFactory fac) {
 
 		List<AntwortAttributeStore> ants = new ArrayList<AntwortAttributeStore>();
+		String postfix = null;
+		String praefix = null;
+		String ueberschrift = null;
 		for (Section<?> s : antworten.getChildren().get(0).getChildren()) {
 			if (s.get().isType(PlainText.class)) continue;
 
@@ -569,22 +576,19 @@ public class XMLUtils {
 
 			// Postfix Praefix Ueberschrift
 			Section<Antworten.Postfix> post = Sections.findSuccessor(s, Antworten.Postfix.class);
-			String postfix = null;
 			if (post != null)
 				postfix = post.getOriginalText().trim();
 
 			Section<Antworten.Praefix> prae = Sections.findSuccessor(s, Antworten.Praefix.class);
-			String praefix = null;
 			if (prae != null)
 				praefix =prae.getOriginalText().trim();
 
 			Section<Antworten.Ueberschrift> ueber = Sections.findSuccessor(s, Antworten.Ueberschrift.class);
-			String ueberschrift = null;
 			if (ueber != null)
 				ueberschrift = ueber.getOriginalText().trim();
 
 			ants.add(new AntwortAttributeStore(posFactor, negFactor,
-					text.getOriginalText(), erkl, postfix, praefix, ueberschrift));
+					text.getOriginalText(), erkl));
 		}
 
 
@@ -596,7 +600,8 @@ public class XMLUtils {
 				if (store.getNegFactor() != null)
 					a.setNegFactor(new BigDecimal(store.getNegFactor()));
 				a.setPosFactor(new BigDecimal(store.getPosFactor()));
-				a.setSimpleFeedback(store.getSimplefeedback());
+				if (store.getSimplefeedback() != null)
+					a.setSimpleFeedback(store.getSimplefeedback());
 				a.setText(store.getText());
 				ans.getAnswer().add(a);
 			}
@@ -612,7 +617,8 @@ public class XMLUtils {
 				if (store.getNegFactor() != null)
 					a.setNegFactor(new BigDecimal(store.getNegFactor()));
 				a.setPosFactor(new BigDecimal(store.getPosFactor()));
-				a.setSimpleFeedback(store.getSimplefeedback());
+				if (store.getSimplefeedback() != null)
+					a.setSimpleFeedback(store.getSimplefeedback());
 				a.setText(store.getText());
 				ans.getWordAnswer().add(a);
 			}
@@ -627,31 +633,49 @@ public class XMLUtils {
 				if (store.getNegFactor() != null)
 					a.setNegFactor(new BigDecimal(store.getNegFactor()));
 				a.setPosFactor(new BigDecimal(store.getPosFactor()));
-				a.setSimpleFeedback(store.getSimplefeedback());
+				if (store.getSimplefeedback() != null)
+					a.setSimpleFeedback(store.getSimplefeedback());
 				a.setText(store.getText());
 				ans.getWordAnswer().add(a);
 			}
 			qu.getWordAnswers().add(ans);
 		}
 
-		// TODO Interval
 		if (question instanceof NumQuestion) {
 			NumQuestion q = (NumQuestion) question;
 			NumAnswers ans = fac.createNumAnswers();
 			for (AntwortAttributeStore store : ants) {
+
+				String[] i = Antwort.getInterval(store.getText());
+				if ( i != null ) {
+					NumAnswerInterval inter = fac.createNumAnswersNumAnswerInterval();
+					inter.setLower(new BigDecimal(i[0]));
+					inter.setUpper(new BigDecimal(i[1]));
+					if (store.getNegFactor() != null)
+						inter.setNegFactor(new BigDecimal(store.getNegFactor()));
+					inter.setPosFactor(new BigDecimal(store.getPosFactor()));
+					if (store.getSimplefeedback() != null)
+						inter.setSimpleFeedback(store.getSimplefeedback());
+					ans.getNumAnswerOrNumAnswerInterval().add(inter);
+				}
+
 				NumAnswer a = fac.createNumAnswersNumAnswer();
 				if (store.getNegFactor() != null)
 					a.setNegFactor(new BigDecimal(store.getNegFactor()));
 				a.setPosFactor(new BigDecimal(store.getPosFactor()));
-				a.setSimpleFeedback(store.getSimplefeedback());
+				if (store.getSimplefeedback() != null)
+					a.setSimpleFeedback(store.getSimplefeedback());
 				a.setValue(new BigDecimal(store.getText()));
-				if (store.getUeberschrift() != null)
-					ans.setAnswerCaption(store.getUeberschrift());
-				if (store.getPost() != null)
-					ans.setAnswerPostfix(store.getPost());
-				if (store.getPrae() != null)
-					ans.setAnswerPrefix(store.getPrae());
+				ans.getNumAnswerOrNumAnswerInterval().add(a);
 			}
+
+			if (ueberschrift != null)
+				ans.setAnswerCaption(ueberschrift);
+			if (postfix != null)
+				ans.setAnswerPostfix(postfix);
+			if (praefix != null)
+				ans.setAnswerPrefix(praefix);
+
 			q.setNumAnswers(ans);
 		}
 
@@ -663,16 +687,20 @@ public class XMLUtils {
 				if (store.getNegFactor() != null)
 					a.setNegFactor(new BigDecimal(store.getNegFactor()));
 				a.setPosFactor(new BigDecimal(store.getPosFactor()));
-				a.setSimpleFeedback(store.getSimplefeedback());
+				if (store.getSimplefeedback() != null)
+					a.setSimpleFeedback(store.getSimplefeedback());
 				a.setValue(new BigDecimal(store.getText()));
 				ans.getNumAnswerOrNumAnswerInterval().add(a);
 			}
 			q.getNumAnswers().add(ans);
 		}
 
-		// TODO how does this work?
 		if (question instanceof TextQuestion) {
 			TextQuestion q = (TextQuestion) question;
+
+			for (AntwortAttributeStore store : ants) {
+				q.setSolution(store.getText());
+			}
 		}
 
 	}
@@ -731,10 +759,9 @@ public class XMLUtils {
 	 * @param simpleSec
 	 * @param child
 	 */
-	private static void addContenWithBinding(SimpleSection simpleSec, Section<?> child, ObjectFactory fac) {
+	private static String clearPlainText(Section<?> child) {
 		String te = child.getOriginalText().replaceAll("[\\r\\n]", "");
-		if (te.equals("")) return;
-		simpleSec.getContentOrMultimediaItemOrFormula().add(te);
+		return te;
 	}
 
 	//	public static void createXMLFromCase(KnowWEArticle article) {

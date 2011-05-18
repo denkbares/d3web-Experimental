@@ -18,6 +18,7 @@
  */
 package de.knowwe.caseTrain.info;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -75,6 +76,28 @@ public class Antwort extends AbstractType {
 
 	}
 
+	/**
+	 * NumAnswerText can be an Interval. This method
+	 * returns this Interval or null if it is not an
+	 * Interval.
+	 * 
+	 * @created 18.05.2011
+	 * @param antwortText
+	 * @return
+	 */
+	public static String[] getInterval(String antwortText) {
+		String[] i = antwortText.split("[ ]+");
+		if (i.length == 2) {
+			try {
+				new BigDecimal(i[0]);
+				new BigDecimal(i[1]);
+			} catch(NumberFormatException e) {
+				return null;
+			}
+			return i;
+		}
+		return null;
+	}
 
 	/**
 	 * Returns the PosFactor of a given AntwortMarkierung-Section.

@@ -31,31 +31,13 @@ public class AntwortAttributeStore {
 	private final String negFactor;
 	private final String text;
 	private final String simplefeedback;
-	private final String post;
-	private final String prae;
-	private final String ueberschrift;
 
 	public AntwortAttributeStore(String posFactor, String negFactor,
-			String text, String simplefeedback, String post, String prae, String ueberschrift) {
+			String text, String simplefeedback) {
 		this.posFactor = posFactor;
 		this.negFactor = negFactor;
 		this.text = text;
 		this.simplefeedback = simplefeedback;
-		this.prae = prae;
-		this.post = post;
-		this.ueberschrift = ueberschrift;
-	}
-
-	public String getUeberschrift() {
-		return ueberschrift;
-	}
-
-	public String getPost() {
-		return post;
-	}
-
-	public String getPrae() {
-		return prae;
 	}
 
 	public String getPosFactor() {
