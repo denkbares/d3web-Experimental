@@ -127,7 +127,7 @@ public class XMLUtils {
 
 		String webapp = KnowWEEnvironment.getInstance().getKnowWEExtensionPath();
 		try {
-			File f = new File(webapp+"/tmp/blaCase.xml");
+			File f = new File(webapp+"/tmp/case.xml");
 			f.createNewFile();
 			FileOutputStream stream = new FileOutputStream(f);
 			stream.flush();
@@ -141,36 +141,6 @@ public class XMLUtils {
 			e.printStackTrace();
 		}
 	}
-
-	//	public static void createXMLFromCase(KnowWEArticle article) {
-	//		Section<KnowWEArticle> articleSec = article.getSection();
-	//
-	//
-	//
-	//		Element root = new Element("Case");
-	//		Document doc = new Document(root);
-	//
-	//		// MetaData
-	//		XMLUtils.addMetaDataElement(root, articleSec);
-	//
-	//		// Einleitung
-	//		XMLUtils.addMixedMultimediaElement(root, articleSec, "Intro");
-	//
-	//		// Info Abschnitte
-	//		XMLUtils.addSectionsElement(root, articleSec);
-	//
-	//		// Abschluss
-	//		XMLUtils.addMixedMultimediaElement(root, articleSec, "Extro");
-	//
-	//		XMLOutputter fmt = new XMLOutputter();
-	//		fmt.setFormat( Format.getPrettyFormat() );
-	//		try {
-	//			fmt.output( doc, System.out );
-	//		}
-	//		catch (IOException e) {
-	//			e.printStackTrace();
-	//		}
-	//	}
 
 	private static void addTitledMMWithBinding(Case c, Section<KnowWEArticle> sec,
 			ObjectFactory fac ,String elementName) {
@@ -467,55 +437,55 @@ public class XMLUtils {
 
 		if (typ.equals(AntwortenKorrektheitChecker.OC)) {
 			ChoiceQuestion q = fac.createChoiceQuestion();
-			XMLUtils.createQuestionWithBinding(frageChilds, q, fac, q.getClass());
+			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsOCQuestion(q));
 		}
 
 		if (typ.equals(AntwortenKorrektheitChecker.MC)) {
 			ChoiceQuestion q = fac.createChoiceQuestion();
-			XMLUtils.createQuestionWithBinding(frageChilds, q, fac, q.getClass());
+			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsMCQuestion(q));
 		}
 
 		if (typ.equals(AntwortenKorrektheitChecker.W)) {
 			WordQuestion q = fac.createBasicSectionQuestionsWordQuestion();
-			XMLUtils.createQuestionWithBinding(frageChilds, q, fac, q.getClass());
+			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.add(fac.createBasicSectionQuestionsWordQuestion(q));
 		}
 
 		if (typ.equals(AntwortenKorrektheitChecker.UMW)) {
 			MultiWordQuestion q = fac.createMultiWordQuestion();
-			XMLUtils.createQuestionWithBinding(frageChilds, q, fac, q.getClass());
+			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsUMWordQuestion(q));
 		}
 
 		if (typ.equals(AntwortenKorrektheitChecker.OMW)) {
 			MultiWordQuestion q = fac.createMultiWordQuestion();
-			XMLUtils.createQuestionWithBinding(frageChilds, q, fac, q.getClass());
+			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsOMWordQuestion(q));
 		}
 
 		if (typ.equals(AntwortenKorrektheitChecker.N)) {
 			NumQuestion q = fac.createBasicSectionQuestionsNumQuestion();
-			XMLUtils.createQuestionWithBinding(frageChilds, q, fac, q.getClass());
+			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsNumQuestion(q));
 		}
 
 		if (typ.equals(AntwortenKorrektheitChecker.MN)) {
 			MNumQuestion q = fac.createBasicSectionQuestionsMNumQuestion();
-			XMLUtils.createQuestionWithBinding(frageChilds, q, fac, q.getClass());
+			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsMNumQuestion(q));
 		}
 
 		if (typ.equals(AntwortenKorrektheitChecker.T)) {
 			TextQuestion q = fac.createBasicSectionQuestionsTextQuestion();
-			XMLUtils.createQuestionWithBinding(frageChilds, q, fac, q.getClass());
+			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsTextQuestion(q));
 		}
@@ -531,8 +501,7 @@ public class XMLUtils {
 	 */
 	@SuppressWarnings("rawtypes")
 	private static void createQuestionWithBinding(
-			List<Section<?>> frageChilds,
-			BasicQuestion question, ObjectFactory fac, Class clazz) {
+			List<Section<?>> frageChilds, BasicQuestion question, ObjectFactory fac) {
 
 		Section<?> frage = frageChilds.remove(0);
 		//		Section<?> fragetyp = Sections.findSuccessor(frage, FrageTyp.class);
@@ -555,7 +524,7 @@ public class XMLUtils {
 			//			}
 
 			if(sec.get().isType(Antworten.class)) {
-				XMLUtils.addAntwortenWithBinding(question, sec, clazz, fac);
+				XMLUtils.addAntwortenWithBinding(question, sec, fac);
 				continue;
 			}
 
@@ -578,8 +547,7 @@ public class XMLUtils {
 	 * @param fac
 	 */
 	@SuppressWarnings("unchecked")
-	private static void addAntwortenWithBinding(BasicQuestion question, Section<?> antworten,
-			Class clazz, ObjectFactory fac) {
+	private static void addAntwortenWithBinding(BasicQuestion question, Section<?> antworten, ObjectFactory fac) {
 
 		List<AntwortAttributeStore> ants = new ArrayList<AntwortAttributeStore>();
 		for (Section<?> s : antworten.getChildren().get(0).getChildren()) {
@@ -768,6 +736,36 @@ public class XMLUtils {
 		if (te.equals("")) return;
 		simpleSec.getContentOrMultimediaItemOrFormula().add(te);
 	}
+
+	//	public static void createXMLFromCase(KnowWEArticle article) {
+	//		Section<KnowWEArticle> articleSec = article.getSection();
+	//
+	//
+	//
+	//		Element root = new Element("Case");
+	//		Document doc = new Document(root);
+	//
+	//		// MetaData
+	//		XMLUtils.addMetaDataElement(root, articleSec);
+	//
+	//		// Einleitung
+	//		XMLUtils.addMixedMultimediaElement(root, articleSec, "Intro");
+	//
+	//		// Info Abschnitte
+	//		XMLUtils.addSectionsElement(root, articleSec);
+	//
+	//		// Abschluss
+	//		XMLUtils.addMixedMultimediaElement(root, articleSec, "Extro");
+	//
+	//		XMLOutputter fmt = new XMLOutputter();
+	//		fmt.setFormat( Format.getPrettyFormat() );
+	//		try {
+	//			fmt.output( doc, System.out );
+	//		}
+	//		catch (IOException e) {
+	//			e.printStackTrace();
+	//		}
+	//	}
 
 	/**
 	 * Creates the Question-Element from the list children
