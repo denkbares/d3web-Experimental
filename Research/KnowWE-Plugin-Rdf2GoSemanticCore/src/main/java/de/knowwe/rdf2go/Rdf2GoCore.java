@@ -397,6 +397,13 @@ public class Rdf2GoCore implements EventListener {
 			}
 			for (String var : l) {
 				String erg = reduceNamespace(s.getValue(var).toString());
+				try {
+					erg = URLDecoder.decode(erg, "UTF-8");
+				}
+				catch (UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				if (links) {
 					if (erg.startsWith("lns:")) {
 						erg = erg.substring(4);
@@ -408,8 +415,9 @@ public class Rdf2GoCore implements EventListener {
 										.getWikiConnector().doesPageExist(
 												URLDecoder.decode(erg,
 														"UTF-8"))) {
-							erg = KnowWEUtils.maskHTML("<a href=\"Wiki.jsp?page="
-											+ erg + "\">" + erg + "</a>");
+							erg = KnowWEUtils.maskHTML("<a href=\"Wiki.jsp?page=")
+											+ erg + KnowWEUtils.maskHTML("\">") + erg
+									+ KnowWEUtils.maskHTML("</a>");
 						}
 					}
 					catch (UnsupportedEncodingException e) {
