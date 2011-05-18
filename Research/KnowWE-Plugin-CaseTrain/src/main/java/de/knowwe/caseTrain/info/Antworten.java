@@ -111,4 +111,32 @@ public class Antworten extends SubblockMarkup {
 			this.setCustomRenderer(new DivStyleClassRenderer("ueberschrift"));
 		}
 	}
+
+	/**
+	 * 
+	 * @created 18.05.2011
+	 * @param t
+	 * @return
+	 */
+	public static Long getEditDistance(String t) {
+		try {
+			return new Long(t.substring(1, t.length()-1).trim());
+		} catch(NumberFormatException e) {
+			// do nothing here is right!
+		} catch(NullPointerException e1) {
+			// do nothing here is right!
+		}
+		return Long.valueOf("0");
+	}
+
+	/**
+	 * 
+	 * @created 18.05.2011
+	 * @param t
+	 * @return
+	 */
+	public static Boolean getIsRegularExpression(String t) {
+		if (t == null) return false;
+		return t.substring(1, t.length()-1).trim().equals("r");
+	}
 }

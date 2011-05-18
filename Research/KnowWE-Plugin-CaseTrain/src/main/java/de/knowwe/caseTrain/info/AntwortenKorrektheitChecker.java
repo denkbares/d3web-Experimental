@@ -28,6 +28,7 @@ import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.knowwe.caseTrain.info.Antwort.AntwortErklaerung;
 import de.knowwe.caseTrain.info.Antwort.AntwortMarkierung;
 import de.knowwe.caseTrain.info.Antwort.AntwortText;
+import de.knowwe.caseTrain.info.Antwort.AntwortTextArgument;
 import de.knowwe.caseTrain.info.Antworten.Postfix;
 import de.knowwe.caseTrain.info.Antworten.Praefix;
 import de.knowwe.caseTrain.info.Antworten.Ueberschrift;
@@ -277,6 +278,7 @@ public class AntwortenKorrektheitChecker {
 		Sections.findSuccessorsOfType(antworten, Antwort.class, found);
 
 		Section<AntwortText> antwortText = null;
+		Section<AntwortTextArgument> arg = null;
 		String antString = "";
 		String c = "";
 		for(Section<Antwort> ans : found) {
@@ -286,16 +288,6 @@ public class AntwortenKorrektheitChecker {
 			if ( (antwortText == null) || (antString.length() == 0 ))
 				continue;
 
-			if (antString.startsWith("{r}")) {
-				antString = antString.substring(antString.indexOf("}")+1);
-				try {
-					Pattern.compile(antString);
-				} catch (Exception e) {
-					messages.add(new InvalidArgumentError("Regex fehlerhaft: " + antString));
-				}
-				continue;
-			}
-
 			if (antString.startsWith("{")) {
 
 				if (antString.indexOf("}") == -1) {
@@ -303,16 +295,36 @@ public class AntwortenKorrektheitChecker {
 					continue;
 				}
 
-				c = antString.substring(1, antString.indexOf("}"));
+				antString = antString.substring(antString.indexOf("}")+1);
+				if (antString.length() == 0)
+					messages.add(new InvalidArgumentError("Leeres Wort eingegeben"));
+			}
+
+			// Test the Argument
+			arg = Sections.findSuccessor(ans, AntwortTextArgument.class);
+			if (arg != null) {
+				c = arg.getOriginalText().trim().substring(1, arg.getOriginalText().trim().length()-1);
+				// Regex is marked with r
+				if ( c.equals("r")) {
+					try {
+						Pattern.compile(antString);
+					} catch (Exception e) {
+						messages.add(new InvalidArgumentError("Regex fehlerhaft: " + antString));
+					}
+					continue;
+				}
+
+				// TODO how to check formulas?
+				if ( c.equals("f")) continue;
+
+				// Cohesion must be Long
 				try {
-					Integer.valueOf(c);
+					Long.valueOf(c);
 				} catch(Exception e) {
 					messages.add(new InvalidArgumentError("Kein gueltiges Zeichen innerhalb {}"));
 					continue;
 				}
-				antString = antString.substring(antString.indexOf("}")+1);
-				if (antString.length() == 0)
-					messages.add(new InvalidArgumentError("Leeres Wort eingegeben"));
+
 			}
 
 		}

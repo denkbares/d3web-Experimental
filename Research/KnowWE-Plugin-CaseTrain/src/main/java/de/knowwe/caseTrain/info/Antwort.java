@@ -51,6 +51,7 @@ public class Antwort extends AbstractType {
 		this.setSectionFinder(new AntwortSectionFinder());
 		this.setCustomRenderer(new DivStyleClassRenderer("Antwort"));
 		this.addChildType(new AntwortMarkierung());
+		this.addChildType(new AntwortTextArgument());
 		this.addChildType(new AntwortText());
 		this.addChildType(new AntwortErklaerung());
 	}
@@ -165,6 +166,23 @@ public class Antwort extends AbstractType {
 	}
 
 	/**
+	 * Represents {r/f/Number};
+	 * 
+	 * @author Johannes Dienst
+	 * @created 18.05.2011
+	 */
+	public class AntwortTextArgument extends AbstractType {
+
+		public AntwortTextArgument() {
+			ConstraintSectionFinder csf = new ConstraintSectionFinder(
+					new RegexSectionFinder("\\{.*?\\}"));
+			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
+			this.setSectionFinder(csf);
+		}
+
+	}
+
+	/**
 	 * 
 	 * @author Johannes Dienst
 	 * @created 08.05.2011
@@ -208,6 +226,7 @@ public class Antwort extends AbstractType {
 			}
 
 		}
+
 	}
 
 	/**

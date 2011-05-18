@@ -66,6 +66,7 @@ import de.d3web.we.kdom.basic.PlainText;
 import de.knowwe.caseTrain.info.Antwort;
 import de.knowwe.caseTrain.info.Antwort.AntwortErklaerung;
 import de.knowwe.caseTrain.info.Antwort.AntwortText;
+import de.knowwe.caseTrain.info.Antwort.AntwortTextArgument;
 import de.knowwe.caseTrain.info.Antworten;
 import de.knowwe.caseTrain.info.AntwortenKorrektheitChecker;
 import de.knowwe.caseTrain.info.Erklaerung;
@@ -503,7 +504,6 @@ public class XMLUtils {
 	 * @param fac
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
 	private static void createQuestionWithBinding(
 			List<Section<?>> frageChilds, BasicQuestion question, ObjectFactory fac) {
 
@@ -564,7 +564,14 @@ public class XMLUtils {
 			String posFactor = Antwort.getPosFactor((Section<Antwort>)s);
 			String negFactor = Antwort.getNegFactor((Section<Antwort>)s);
 
+			// AntwortTex
 			Section<AntwortText> text = Sections.findSuccessor(s, AntwortText.class);
+
+			// AntwortTextArgument
+			String textArgString = null;
+			Section<AntwortTextArgument> textArg = Sections.findSuccessor(s, AntwortTextArgument.class);
+			if (textArg != null)
+				textArgString = textArg.getOriginalText().trim();
 
 			//SimpleFeedback
 			Section<AntwortErklaerung> erklaerung = Sections.findSuccessor(s, AntwortErklaerung.class);
@@ -588,7 +595,7 @@ public class XMLUtils {
 				ueberschrift = ueber.getOriginalText().trim();
 
 			ants.add(new AntwortAttributeStore(posFactor, negFactor,
-					text.getOriginalText(), erkl));
+					text.getOriginalText(), erkl, textArgString));
 		}
 
 
@@ -614,6 +621,8 @@ public class XMLUtils {
 			WordAnswers ans = fac.createWordAnswers();
 			for (AntwortAttributeStore store : ants) {
 				WordAnswer a = fac.createWordAnswersWordAnswer();
+				a.setEditDistance(new Long(Antworten.getEditDistance(store.getTextArgument())));
+				a.setIsRegularExpression(Antworten.getIsRegularExpression(store.getTextArgument()));
 				if (store.getNegFactor() != null)
 					a.setNegFactor(new BigDecimal(store.getNegFactor()));
 				a.setPosFactor(new BigDecimal(store.getPosFactor()));
@@ -630,6 +639,8 @@ public class XMLUtils {
 			WordAnswers ans = fac.createWordAnswers();
 			for (AntwortAttributeStore store : ants) {
 				WordAnswer a = fac.createWordAnswersWordAnswer();
+				a.setEditDistance(new Long(Antworten.getEditDistance(store.getTextArgument())));
+				a.setIsRegularExpression(Antworten.getIsRegularExpression(store.getTextArgument()));
 				if (store.getNegFactor() != null)
 					a.setNegFactor(new BigDecimal(store.getNegFactor()));
 				a.setPosFactor(new BigDecimal(store.getPosFactor()));
@@ -738,7 +749,9 @@ public class XMLUtils {
 		for (Section<?> s : sec.getChildren().get(0).getChildren()) {
 
 			if (s.get().isType(PlainText.class)) {
-				itList.add(s.getOriginalText());
+				String te = XMLUtils.clearPlainText(s);
+				if (!te.equals(""))
+					itList.add(te);
 				continue;
 			}
 			if(s.get().isAssignableFromType(MultimediaItem.class)) {

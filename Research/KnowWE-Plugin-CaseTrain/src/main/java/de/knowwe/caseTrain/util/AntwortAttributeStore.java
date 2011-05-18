@@ -31,13 +31,15 @@ public class AntwortAttributeStore {
 	private final String negFactor;
 	private final String text;
 	private final String simplefeedback;
+	private final String textArgument;
 
 	public AntwortAttributeStore(String posFactor, String negFactor,
-			String text, String simplefeedback) {
+			String text, String simplefeedback, String textArgString) {
 		this.posFactor = posFactor;
 		this.negFactor = negFactor;
 		this.text = text;
 		this.simplefeedback = simplefeedback;
+		this.textArgument = textArgString;
 	}
 
 	public String getPosFactor() {
@@ -57,6 +59,10 @@ public class AntwortAttributeStore {
 
 	public String getSimplefeedback() {
 		return simplefeedback;
+	}
+
+	public String getTextArgument() {
+		return textArgument;
 	}
 
 
