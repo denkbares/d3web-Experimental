@@ -519,13 +519,12 @@ public class XMLUtils {
 		for (Section<?> sec : frageChilds) {
 			// Hints koennen immer kommen und element Info
 			// beinhalten Text und Multimedia
-			// TODO does not work see renderHinweisMethod
-			//			if (sec.get().isType(Hinweis.class)) {
-			//				Mmmixedcontent it = fac.createMmmixedcontent();
-			//				XMLUtils.renderHinweisOrErklaerungWithBinding(it, sec, fac);
-			//				question.setInfo(it);
-			//				continue;
-			//			}
+			if (sec.get().isType(Hinweis.class)) {
+				Mmmixedcontent it = fac.createMmmixedcontent();
+				XMLUtils.renderHinweisOrErklaerungWithBinding(it, sec, fac);
+				question.setInfo(it);
+				continue;
+			}
 
 			if(sec.get().isType(Antworten.class)) {
 				XMLUtils.addAntwortenWithBinding(question, sec, fac);
@@ -615,7 +614,6 @@ public class XMLUtils {
 			qu.setAnswers(ans);
 		}
 
-		// TODO Regular expression and edit Distance
 		if (question instanceof WordQuestion) {
 			WordQuestion qu = (WordQuestion) question;
 			WordAnswers ans = fac.createWordAnswers();
@@ -770,18 +768,18 @@ public class XMLUtils {
 		for (Section<?> s : sec.getChildren().get(0).getChildren()) {
 
 			if (s.get().isType(PlainText.class)) {
-				itList.add(s.getOriginalText());
+				String te = XMLUtils.clearPlainText(s);
+				if (!te.equals(""))
+					itList.add(fac.createContent(te));
 				continue;
 			}
-			// TODO does not work because:
-			// unable to marshal type "de.casetrain.binding.traincase.jaxb.Mmitem"
-			// as an element because it is missing an @XmlRootElement annotation
-			//			if(s.get().isAssignableFromType(MultimediaItem.class)) {
-			//				Mmitem item = fac.createMmitem();
-			//				XMLUtils.configureMmitem(item, s);
-			//				itList.add(item);
-			//				continue;
-			//			}
+
+			if(s.get().isAssignableFromType(MultimediaItem.class)) {
+				Mmitem item = fac.createMmitem();
+				XMLUtils.configureMmitem(item, s);
+				itList.add(fac.createMultimediaItem(item));
+				continue;
+			}
 		}
 	}
 
