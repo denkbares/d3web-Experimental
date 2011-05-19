@@ -107,8 +107,12 @@ public class XMLUtils {
 
 		ObjectFactory fac = new ObjectFactory();
 		Case c = fac.createCase();
+
+		// TODO how to get the webapp path?
 		try {
-			LoadSave.initialise(KnowWEEnvironment.getInstance().getKnowWEExtensionPath());
+			String path = KnowWEEnvironment.getInstance().
+			getKnowWEExtensionPath().replaceAll("/KnowWEExtension", "");
+			LoadSave.initialise(path);
 		}
 		catch (URISyntaxException e1) {
 			e1.printStackTrace();
@@ -184,7 +188,7 @@ public class XMLUtils {
 
 		for (Section<?> sec : contentChildren) {
 			if (sec.get().isType(Title.class)) {
-				titledmmContent.setTitle(sec.getOriginalText());
+				titledmmContent.setTitle(XMLUtils.clearPlainText(sec).trim());
 				continue;
 			}
 
@@ -411,7 +415,7 @@ public class XMLUtils {
 				}
 
 				if(child.get().isType(Title.class)) {
-					simpleSec.setTitle(child.getOriginalText());
+					simpleSec.setTitle(XMLUtils.clearPlainText(child).trim());
 					continue;
 				}
 
