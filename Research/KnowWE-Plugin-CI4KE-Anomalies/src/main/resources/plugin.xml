@@ -22,4 +22,40 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="AnomalyUnconnectedNode">
+		<parameter id="class" value="de.d3web.we.ci4ke.anomalies.AnomalyUnconnectedNode" />
+		<parameter id="name" value="AnomalyUnconnectedNode" />
+		<parameter id="description" value="AbstractCITest AnomalyUnconnectedNode" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="AnomalyAutostartFlow">
+		<parameter id="class" value="de.d3web.we.ci4ke.anomalies.AnomalyAutostartFlow" />
+		<parameter id="name" value="AnomalyAutostartFlow" />
+		<parameter id="description" value="AbstractCITest AnomalyAutostartFlow" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="AnomalyInconsistentInd">
+		<parameter id="class" value="de.d3web.we.ci4ke.anomalies.AnomalyInconsistentInd" />
+		<parameter id="name" value="AnomalyInconsistentInd" />
+		<parameter id="description" value="AbstractCITest AnomalyInconsistentInd" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="AnomalyUnusedElements">
+		<parameter id="class" value="de.d3web.we.ci4ke.anomalies.AnomalyUnusedElements" />
+		<parameter id="name" value="AnomalyUnusedElements" />
+		<parameter id="description" value="AbstractCITest AnomalyUnusedElements" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>	
+	
 </plugin>
