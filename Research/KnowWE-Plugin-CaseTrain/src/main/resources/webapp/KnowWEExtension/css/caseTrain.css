@@ -1,4 +1,4 @@
-div.Infowahl, div.Info, div.Frage, div.Antworten,div.Antwort, div.Hinweis, div.Erkl,div.Infostart,div.Infoend,div.Titel,div.InfoContent,div.Fragen:first-child,div.Fragen,div.Metadaten,div.Content,div.Ie,div.Afrage {
+div.Infowahl, div.Info, div.Frage, div.Antworten,div.Antwort, div.Hinweis, div.Erkl,div.Infostart,div.Infoend,div.Titel,div.InfoContent,div.Fragen:first-child,div.Fragen,div.Metadaten,div.Content,div.Ie,div.Afrage,div.Evaluation {
 	font-family: Verdana, sans-serif;
 	padding: 10px;
 }
@@ -8,14 +8,14 @@ div.Infowahl, div.Info, div.Frage, div.Antworten,div.Antwort, div.Hinweis, div.E
 	padding: 10px;
 }*/
 
-div.Infowahl, div.Info, div.Frage, div.Antworten, div.Hinweis, div.Erkl {
+div.Infowahl, div.Info, div.Frage, div.Antworten, div.Hinweis, div.Erkl, div.Evaluation {
 	border-left-style: solid;
 	border-left-width: 10px;
 }
 div.Infowahl {
 	border-color: #0000CC;
 }
-div.Info {
+div.Info, div.Evaluation{
 	border-left-width: 5px;
 	padding: 0px;
 }
@@ -25,20 +25,48 @@ div.Info div.Infostart {
 	padding: 0px;
 	height: 10px;
 }
-div.Info div.Infoend {
+
+div.Evaluation div.Evaluationstart {
+	border-top: solid 5px black;
+	width: 20px;
+	padding: 0px;
+	height: 10px;
+}	
+	
+div.Info div.Infoend  {
 	border-bottom: solid 5px black;
 	width: 20px;
 	padding: 0px;
 	height: 10px;
 }
+
+div.Evaluation div.Evaluationend  {
+	border-bottom: solid 5px black;
+	width: 20px;
+	padding: 0px;
+	height: 10px;
+}
+
 div.InfoContent {
 	padding-left: 10px;
 }
+
+div.EvaluationContent {
+	padding-left: 10px;
+}
+
 div.Info div.Titel {
 	background-color: #b1e75b;
 	font-weight: bold;
 	font-size:large;
 }
+
+div.Evaluation div.Titel {
+	background-color: #b1e75b;
+	font-weight: bold;
+	font-size:large;
+}
+
 div.Fragen {
 	margin: 0px;
 	padding: 0px;
@@ -86,7 +114,6 @@ div.Ie div {
 	margin: 0px;
 	padding: 0px;
 }
-
 
 div.Ie div.Titel {
 	font-weight: bold;

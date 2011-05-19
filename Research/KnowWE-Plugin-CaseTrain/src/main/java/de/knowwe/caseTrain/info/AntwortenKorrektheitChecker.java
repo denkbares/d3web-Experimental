@@ -283,9 +283,12 @@ public class AntwortenKorrektheitChecker {
 		String c = "";
 		for(Section<Antwort> ans : found) {
 			antwortText = Sections.findSuccessor(ans, AntwortText.class);
-			antString = antwortText.getOriginalText().trim();
 
-			if ( (antwortText == null) || (antString.length() == 0 ))
+			if ( (antwortText == null))
+				continue;
+
+			antString = antwortText.getOriginalText().trim();
+			if (antString.length() == 0 )
 				continue;
 
 			if (antString.startsWith("{")) {
