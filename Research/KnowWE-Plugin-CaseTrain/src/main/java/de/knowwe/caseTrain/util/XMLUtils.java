@@ -650,6 +650,9 @@ public class XMLUtils {
 
 			// AntwortTex
 			Section<AntwortText> text = Sections.findSuccessor(s, AntwortText.class);
+			String antwortText = "";
+			if (text != null)
+				antwortText = text.getOriginalText();
 
 			// AntwortTextArgument
 			String textArgString = null;
@@ -679,7 +682,7 @@ public class XMLUtils {
 				ueberschrift = ueber.getOriginalText().trim();
 
 			ants.add(new AntwortAttributeStore(posFactor, negFactor,
-					text.getOriginalText(), erkl, textArgString));
+					antwortText, erkl, textArgString));
 		}
 
 
