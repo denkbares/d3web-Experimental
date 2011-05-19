@@ -38,6 +38,9 @@ import de.casetrain.binding.traincase.jaxb.BasicSection.Questions.NumQuestion;
 import de.casetrain.binding.traincase.jaxb.BasicSection.Questions.TextQuestion;
 import de.casetrain.binding.traincase.jaxb.BasicSection.Questions.WordQuestion;
 import de.casetrain.binding.traincase.jaxb.Case;
+import de.casetrain.binding.traincase.jaxb.Case.Evaluation;
+import de.casetrain.binding.traincase.jaxb.Case.Evaluation.EvaluationEnd;
+import de.casetrain.binding.traincase.jaxb.Case.Evaluation.EvaluationSections;
 import de.casetrain.binding.traincase.jaxb.Case.Extro;
 import de.casetrain.binding.traincase.jaxb.Case.Metadata;
 import de.casetrain.binding.traincase.jaxb.Case.Metadata.Misc;
@@ -131,6 +134,9 @@ public class XMLUtils {
 		// Abschluss
 		XMLUtils.addTitledMMWithBinding(c, articleSec, fac, "Extro");
 
+		// TODO Evaluation
+		XMLUtils.addEvaluation(c, articleSec, fac);
+
 		String webapp = KnowWEEnvironment.getInstance().getKnowWEExtensionPath();
 		try {
 			File f = new File(webapp+"/tmp/case.xml");
@@ -146,6 +152,81 @@ public class XMLUtils {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * 
+	 * @created 19.05.2011
+	 * @param c
+	 * @param articleSec
+	 * @param fac
+	 */
+	private static void addEvaluation(Case c, Section<KnowWEArticle> articleSec, ObjectFactory fac) {
+		Evaluation evo = fac.createCaseEvaluation();
+		EvaluationSections evoSecs = fac.createCaseEvaluationEvaluationSections();
+
+		List<Section<de.knowwe.caseTrain.evaluation.Evaluation>> found =
+			new ArrayList<Section<de.knowwe.caseTrain.evaluation.Evaluation>>();
+		Sections.findSuccessorsOfType(articleSec, de.knowwe.caseTrain.evaluation.Evaluation.class, found);
+
+		for(Section<de.knowwe.caseTrain.evaluation.Evaluation> infoSec : found) {
+			List<Section<?>> childs = infoSec.getChildren().get(0).getChildren();
+			SimpleSection simpleSec = fac.createSimpleSection();
+			simpleSec.setQuestions(fac.createBasicSectionQuestions());
+
+			List<Section<?>> frageChilds = new ArrayList<Section<?>>();
+
+			for (Section<?> child : childs) {
+
+				// First PlainText+Some Multimedia
+				if (child.get().isType(PlainText.class)) {
+					String te = XMLUtils.clearPlainText(child);
+					if (!te.equals("")) {
+						simpleSec.getContentOrMultimediaItemOrFormula().add(te);
+					}
+					continue;
+				}
+				if(child.get().isAssignableFromType(MultimediaItem.class)) {
+					Mmitem it = fac.createMmitem();
+					XMLUtils.configureMmitem(it, child);
+					simpleSec.getContentOrMultimediaItemOrFormula().add(it);
+					continue;
+				}
+
+				if (child.get().isType(Frage.class)) {
+					if (!frageChilds.isEmpty()) {
+						XMLUtils.addQuestionsWithBinding(simpleSec, frageChilds, fac);
+					}
+					frageChilds.clear();
+					frageChilds.add(child);
+					continue;
+				}
+				if ( (child.get().isType(Hinweis.class))
+						|| (child.get().isType(Antworten.class))
+						|| (child.get().isType(Erklaerung.class)) ) {
+					frageChilds.add(child);
+				}
+
+				if(child.get().isType(Title.class)) {
+					simpleSec.setTitle(XMLUtils.clearPlainText(child).trim());
+					continue;
+				}
+
+			}
+
+			if (!frageChilds.isEmpty())
+				XMLUtils.addQuestionsWithBinding(simpleSec, frageChilds, fac);
+			evoSecs.getSimpleSection().add(simpleSec);
+		}
+
+		if (evoSecs.getSimpleSection().isEmpty()) return;
+
+		evo.setEvaluationSections(evoSecs);
+		EvaluationEnd end = fac.createCaseEvaluationEvaluationEnd();
+		end.getContentOrMultimediaItemOrFormula().add("Wir danken Ihnen für Ihre Mitarbeit!");
+		end.setTitle("Evaluationende");
+		evo.setEvaluationEnd(end);
+		c.setEvaluation(evo);
 	}
 
 	private static void addTitledMMWithBinding(Case c, Section<KnowWEArticle> sec,
