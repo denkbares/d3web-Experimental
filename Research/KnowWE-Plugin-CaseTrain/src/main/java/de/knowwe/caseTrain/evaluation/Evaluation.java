@@ -59,6 +59,7 @@ public class Evaluation extends BlockMarkupType {
 		super("Evaluation");
 		this.addContentType(new Frage());
 		this.addContentType(new Antworten());
+		this.addContentType(new EvaluationEnd());
 
 		this.setCustomRenderer(new KnowWEDomRenderer<BlockMarkupType>() {
 

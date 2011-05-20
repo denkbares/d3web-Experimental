@@ -216,16 +216,35 @@ public class XMLUtils {
 
 			if (!frageChilds.isEmpty())
 				XMLUtils.addQuestionsWithBinding(simpleSec, frageChilds, fac);
+
+			// Add the EvaluationEnd
+			EvaluationEnd end = fac.createCaseEvaluationEvaluationEnd();
+
+			Section<de.knowwe.caseTrain.evaluation.EvaluationEnd> evoEnd =
+				Sections.findSuccessor(infoSec, de.knowwe.caseTrain.evaluation.EvaluationEnd.class);
+
+			if (evoEnd == null) {
+				end.setTitle("Evaluationende");
+				end.getContentOrMultimediaItemOrFormula().
+				add("Wir danken Ihnen für Ihre Mitarbeit!");
+			}
+
+			if (evoEnd != null) {
+				Section<Title> tit = Sections.findSuccessor(evoEnd, Title.class);
+				Section<PlainText> con = Sections.findSuccessor(evoEnd, PlainText.class);
+				end.setTitle(XMLUtils.clearPlainText(tit));
+				end.getContentOrMultimediaItemOrFormula().add(XMLUtils.clearPlainText(con));
+			}
+
+			evo.setEvaluationEnd(end);
+
 			evoSecs.getSimpleSection().add(simpleSec);
 		}
 
 		if (evoSecs.getSimpleSection().isEmpty()) return;
 
 		evo.setEvaluationSections(evoSecs);
-		EvaluationEnd end = fac.createCaseEvaluationEvaluationEnd();
-		end.getContentOrMultimediaItemOrFormula().add("Wir danken Ihnen für Ihre Mitarbeit!");
-		end.setTitle("Evaluationende");
-		evo.setEvaluationEnd(end);
+
 		c.setEvaluation(evo);
 	}
 

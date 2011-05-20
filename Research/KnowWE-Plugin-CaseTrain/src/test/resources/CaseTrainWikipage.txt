@@ -1,0 +1,256 @@
+!! Demo Fall in KnowWE
+
+<<Metadaten:
+FALL_ID:INFO_INFO6_AH_DEMO23072008
+FALL_TITEL:Demofall (Spielzeugklinik)
+FALL_AUTOR:Alexander H�rnlein
+FALL_VERSION:1
+FALL_DATUM:23.07.2008
+BESTEHEN_AB:0.75
+FALL_PUNKTZAHL:1
+HISTORIE: nix
+FALL_TODO: vervollst�ndigen
+FALL_TODO: Mach was
+SCHWIERIGKEIT : Sehr sehr schwer
+VORAUSSETZUNGEN : NullkommaNichts
+HINWEIS : Bitte nicht bearbeiten
+FALL_KOMMENTAR : Dies ist ein Testfall
+SCHLAGWORTE : Case Train Fall
+FALL_TODO : Test TODO
+HISTORIE : 1.0
+ZEIT_ANZEIGEN : ja
+ZEIT_GEWICHT : 20
+ZEIT_GRENZE100 : 600
+ZEIT_GRENZE0 : 300
+FEEDBACK : Eine Erkl�rung
+HINTERGRUNDWISSEN : http://casetrain.uni-wuerzburg.de/index.shtml
+HW_LINKTEXT : Das ist der LinkText
+SPRACHE : en
+>>
+
+<<Einleitung: Titel der Einleitung
+Text der Einleitung
+{Bild: ls6logo.gif}
+{Video: video42.avi}
+>>
+
+<<Info: Differentialdiagnose
+Der Teddy ist in anscheinend schlechtem Allgemeinzustand.
+
+{Bild: knowwe_logo.gif}
+
+<Frage: 1-MC
+Welche Probleme mit diesem Spielzeug kommen nun in Frage?
+>
+<Hinweis: Geben Sie mindestens 2%%sup 3/% Probleme an.
+
+{Bild: ls6logo.gif}
+{Video: video23.avi}
+__Wichtig__: �berlegen Sie ''gut''!
+>
+<Antworten:
+{+}Fremdk�rper
+{+}Ausflockung
+{-}Offene N�hte
+{-}Lockere Extremit�ten
+{-}Lockere Kleinteile
+>
+
+<Erklärung:
+
+Die erklärung...
+>
+
+<Frage: 1-OC
+Was könnte man zum reparabieren tun?
+>
+
+<Antworten:
+{+}Wegwerfen
+{+} Neuen Teddy kaufen
+{0.2} Mit Klebeband fixen
+>
+<Hinweis: Gehen Sie vorsichtig vor!
+>
+<Erklärung:
+Die erklärung...
+>
+
+<Frage: 1-W
+Was könnte man zum reparabieren tun?
+>
+
+<Antworten:
+{+}{r}Wegwerfen
+>
+<Hinweis: Gehen Sie vorsichtig vor!
+>
+<Erklärung:
+Die erklärung...
+>
+
+<Frage: 1-W
+Was könnte man zum reparabieren tun?
+>
+
+<Antworten:
+{+}{2}Wegwerfen
+>
+<Hinweis: Gehen Sie vorsichtig vor!
+>
+<Erklärung:
+Die erklärung...
+>
+
+<Frage: 1-MN Wie hoch ist die Mortalit�t bei vegetativer Dystonie?
+>
+<Antworten:
+{1}
+{0.3}20 30
+{0.6}24 26
+{1}25
+
+Präfix:
+männlich
+
+Postfix:
+%
+>
+	
+<Antworten:
+{1}
+{0.3}20 40
+{0.6}27 33
+{1}30
+
+Präfix:
+weiblich
+
+Postfix:
+%
+>
+<Antworten:
+{2}
+{.3}20 35
+{.6}26 29
+{1}27.5
+
+Präfix:
+Gesamt
+
+Postfix:
+%
+>
+<Hinweis: Gehen Sie vorsichtig vor!
+>
+<Erklärung:
+Die erklärung...
+>
+
+<Frage: 1-UMW
+Was könnte man zum reparabieren tun?
+>
+
+<Antworten:
+{+}{2}Wegwerfen
+>
+<Hinweis: Gehen Sie vorsichtig vor!
+>
+<Erklärung:
+Die erklärung...
+>
+
+<Antworten:
+{+}{r}Wegwerfen*
+>
+<Hinweis: Gehen Sie vorsichtig vor!
+>
+<Erklärung:
+Die erklärung...
+>
+
+<Frage: 1-OMW
+Was könnte man zum reparabieren tun?
+>
+
+<Antworten:
+{1}
+{+}{2}Wegwerfen
+>
+<Hinweis: Gehen Sie vorsichtig vor!
+>
+<Erklärung:
+Die erklärung...
+>
+
+<Antworten:
+{2}
+{+}{r}Wegwerfen*
+>
+<Hinweis: Gehen Sie vorsichtig vor!
+>
+<Erklärung:
+Die erklärung...
+>
+
+<Frage: 1-N
+Was könnte man zum reparabieren tun?
+>
+
+<Antworten:
+{0.3}20 30
+{0.6}24 26
+{1}25
+
+Präfix:
+männlich
+
+Postfix:
+%
+>
+<Hinweis: Gehen Sie vorsichtig vor!
+>
+<Erklärung:
+Die erklärung...
+>
+
+<Frage: 1-T
+Was könnte man zum reparabieren tun?
+>
+
+<Antworten:
+{+} Eine Textfrage gibt im Normalfall keine Punkte!
+>
+<Hinweis: Gehen Sie vorsichtig vor!
+>
+<Erklärung:
+Die erklärung...
+>
+
+>>
+
+<<Evaluation: Evaluation
+Um diesen Fall weiter verbessern zu k�nnen, beantworten Sie uns bitte noch zwei kurze Fragen.
+<Frage: 0-OC Welche Schulnote geben Sie dem Fall?
+>
+<Antworten:
+{-}1
+{-}2
+{-}3
+{-}4
+
+<Frage:	0-MC Welchen Aussagen k�nnen Sie zustimmen?
+>
+<Antworten :
+{-}Die Bearbeitung dieses Falles hat mich auf die Klausur vorbereitet.
+{-}Der Online-Fall ist eine gute Erg�nzung zur Pr�senzveranstaltung.
+{-}Die Mediadaten zum Fall sind von ausreichender Qualit�t
+{-}Das verlinkte Hintergrundwissen hat mir dabei geholfen, den Fall zu bearbeiten.
+>
+>>
+
+<<Abschluss: Abschlusskommentar
+Ende des Falles. Auf wiederhören.
+>>
+
+
