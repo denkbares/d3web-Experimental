@@ -23,7 +23,7 @@ import de.knowwe.core.correction.CorrectionProvider;
 public class OWLTermCorrectionProvider implements CorrectionProvider {
 
 	@Override
-	public List<String> getSuggestions(KnowWEArticle article, Section<?> section, int threshold) {
+	public List<CorrectionProvider.Suggestion> getSuggestions(KnowWEArticle article, Section<?> section, int threshold) {
 		if (!(section.get() instanceof TermReference)) {
 			return null;
 		}
@@ -36,12 +36,13 @@ public class OWLTermCorrectionProvider implements CorrectionProvider {
 		);
 		
 		String originalText = section.getOriginalText();
-		List<String> suggestions = new LinkedList<String>();
+		List<CorrectionProvider.Suggestion> suggestions = new LinkedList<CorrectionProvider.Suggestion>();
 		Levenstein l = new Levenstein();
 		
 		for (String match : localTermMatches) {
-			if (l.score(originalText, match) >= -threshold) {		
-				suggestions.add(match);
+			double score = l.score(originalText, match);
+			if (score >= -threshold) {		
+				suggestions.add(new CorrectionProvider.Suggestion(match, (int)score));
 			}
 		}
 		
