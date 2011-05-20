@@ -9,6 +9,32 @@
   <artifactId>KnowWE-Plugin-CaseTrain</artifactId>
   <name>KnowWE-Plugin-CaseTrain</name>
   <version>0.2-SNAPSHOT</version>
+  
+  <build>
+	<plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-dependency-plugin</artifactId>
+			<executions>
+				<execution>
+					<id>copy-dependencies</id>
+					<phase>test-compile</phase>
+					<goals>
+						<goal>build-classpath</goal>
+					</goals>
+					<configuration>
+						<outputDirectory>target/dependencies</outputDirectory>
+						<overWriteReleases>false</overWriteReleases>							<overWriteSnapshots>false</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<pathSeparator>;</pathSeparator>
+							<outputFile>target/dependencies/output.txt</outputFile>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
+	</plugins>
+</build>
+  
   <dependencies>
   	<dependency>
   		<groupId>de.uniwue.d3web</groupId>
@@ -38,6 +64,16 @@
   		<groupId>CaseTrain-XMLBinding</groupId>
   		<artifactId>CaseTrain-XMLBinding</artifactId>
   		<version>CaseTrain-XMLBinding</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>4.8.2</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>de.uniwue.d3web</groupId>
+  		<artifactId>KnowWE-GlobalTestUtils</artifactId>
+  		<version>0.2-SNAPSHOT</version>
   	</dependency>
   </dependencies>
 </project>

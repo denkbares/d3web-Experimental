@@ -102,44 +102,35 @@ Was könnte man zum reparabieren tun?
 Die erklärung...
 >
 
-<Frage: 1-MN Wie hoch ist die Mortalit�t bei vegetativer Dystonie?
+<Frage: 1-MN Wie hoch ist die Mortalität bei vegetativer Dystonie?
 >
 <Antworten:
-{1}
 {0.3}20 30
 {0.6}24 26
 {1}25
 
-Präfix:
-männlich
+Präfix: männlich
 
-Postfix:
-%
+Postfix: %
 >
 	
 <Antworten:
-{1}
 {0.3}20 40
 {0.6}27 33
 {1}30
 
-Präfix:
-weiblich
+Präfix: weiblich
 
-Postfix:
-%
+Postfix: %
 >
 <Antworten:
-{2}
 {.3}20 35
 {.6}26 29
 {1}27.5
 
-Präfix:
-Gesamt
+Präfix: Gesamt
 
-Postfix:
-%
+Postfix: %
 >
 <Hinweis: Gehen Sie vorsichtig vor!
 >
@@ -174,7 +165,6 @@ Was könnte man zum reparabieren tun?
 >
 
 <Antworten:
-{1}
 {+}{2}Wegwerfen
 >
 <Hinweis: Gehen Sie vorsichtig vor!
@@ -184,7 +174,6 @@ Die erklärung...
 >
 
 <Antworten:
-{2}
 {+}{r}Wegwerfen*
 >
 <Hinweis: Gehen Sie vorsichtig vor!
@@ -202,11 +191,9 @@ Was könnte man zum reparabieren tun?
 {0.6}24 26
 {1}25
 
-Präfix:
-männlich
+Präfix:männlich
 
-Postfix:
-%
+Postfix:%
 >
 <Hinweis: Gehen Sie vorsichtig vor!
 >
