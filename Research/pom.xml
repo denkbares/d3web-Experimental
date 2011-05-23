@@ -170,6 +170,7 @@
 		<module>d3web-Plugin-ProKEtProperties</module>
 		<module>KnowWE-Plugin-TestCaseExecutor</module>
 		<module>KnowWE-Plugin-DiaFlux-Refactoring</module>
+		<module>KnowWE-Plugin-OWLAPI</module>
 	</modules>
 	<repositories>
 		<repository>
