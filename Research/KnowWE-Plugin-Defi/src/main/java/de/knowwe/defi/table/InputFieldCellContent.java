@@ -109,7 +109,7 @@ public class InputFieldCellContent extends AbstractType {
 		}
 
 		private static String getStoredContentString(int number, String tableid, int version, String username) {
-			String contentString = "-";
+			String contentString = "";
 
 			Section<TableEntryType> contentTable = findTableToShow(tableid, username);
 
