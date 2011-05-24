@@ -1,0 +1,2 @@
+This project acts as an connector to the OWLAPI. Thus OWL-Reasoning with OWL-Reasoners like HermiT or Pellet will be possible in KnowWE.
+The OWL ontology used for the reasoning is in perfect sync with the RDF2Go triple store.
