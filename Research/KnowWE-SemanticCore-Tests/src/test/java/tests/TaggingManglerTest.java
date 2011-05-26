@@ -26,6 +26,7 @@ package tests;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import junit.framework.TestCase;
@@ -201,7 +202,7 @@ public class TaggingManglerTest extends TestCase {
 		// remember: article* are not the current articles anymore, changes to
 		// the articles by the TaggingMangler do not backpropagate to those
 		// variables
-		ArrayList<String> pages = tm.getPages("live");
+		List<String> pages = tm.getPages("live");
 		assertNotNull(pages);
 		assertEquals(3, pages.size());
 		assertTrue("not found page Tag1", pages.contains("Tag1"));
@@ -258,7 +259,7 @@ public class TaggingManglerTest extends TestCase {
 		// remember: article* are not the current articles anymore, changes to
 		// the articles by the TaggingMangler do not backpropagate to those
 		// variables
-		ArrayList<String> tags = tm.getAllTags();
+		List<String> tags = tm.getAllTags();
 		assertNotNull(tags);
 		assertTrue(tags.contains("tag"));
 		assertTrue(tags.contains("leben"));
@@ -292,7 +293,7 @@ public class TaggingManglerTest extends TestCase {
 		// remember: article* are not the current articles anymore, changes to
 		// the articles by the TaggingMangler do not backpropagate to those
 		// variables
-		HashMap<String, Integer> tags = tm.getCloudList(10, 20);
+		Map<String, Integer> tags = tm.getCloudList(10, 20);
 		assertEquals(Integer.valueOf(20), tags.get("leben"));
 		assertEquals(Integer.valueOf(10), tags.get("tod"));
 		am.deleteArticle(am.getArticle("Tag1"));
@@ -328,7 +329,7 @@ public class TaggingManglerTest extends TestCase {
 		// remember: article* are not the current articles anymore, changes to
 		// the articles by the TaggingMangler do not backpropagate to those
 		// variables
-		HashMap<String, Integer> tags = tm.getCloudList(10, 20);
+		Map<String, Integer> tags = tm.getCloudList(10, 20);
 		assertEquals(Integer.valueOf(15), tags.get("leben"));
 		assertEquals(Integer.valueOf(15), tags.get("tod"));
 		assertEquals(Integer.valueOf(15), tags.get("tag"));
@@ -376,7 +377,7 @@ public class TaggingManglerTest extends TestCase {
 		// remember: article* are not the current articles anymore, changes to
 		// the articles by the TaggingMangler do not backpropagate to those
 		// variables
-		ArrayList<GenericSearchResult> pages = tm.searchPages("leben");
+		List<GenericSearchResult> pages = tm.searchPages("leben");
 		assertEquals(2, pages.size());
 		GenericSearchResult a = pages.get(0);
 		GenericSearchResult b = pages.get(1);

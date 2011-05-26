@@ -22,8 +22,8 @@ package tests;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -123,7 +123,7 @@ public class GroovySparqlRendererTest {
 	public void tearDown() {
 		am.deleteArticle(am.getArticle("Tag1"));
 		am.deleteArticle(am.getArticle("Tag2"));
-		ArrayList<String> tags = tm.getAllTags();
+		List<String> tags = tm.getAllTags();
 		assertEquals(0, tags.size());
 	}
 
