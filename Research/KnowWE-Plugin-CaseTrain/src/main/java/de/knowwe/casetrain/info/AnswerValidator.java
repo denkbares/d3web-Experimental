@@ -25,14 +25,14 @@ import java.util.regex.Pattern;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.knowwe.casetrain.info.Antwort.AntwortErklaerung;
-import de.knowwe.casetrain.info.Antwort.AntwortMarkierung;
-import de.knowwe.casetrain.info.Antwort.AntwortText;
-import de.knowwe.casetrain.info.Antwort.AntwortTextArgument;
-import de.knowwe.casetrain.info.Antworten.Postfix;
-import de.knowwe.casetrain.info.Antworten.Praefix;
-import de.knowwe.casetrain.info.Antworten.Ueberschrift;
-import de.knowwe.casetrain.info.Frage.FrageTyp;
+import de.knowwe.casetrain.info.AnswerLine.AnswerExplanation;
+import de.knowwe.casetrain.info.AnswerLine.AnswerMark;
+import de.knowwe.casetrain.info.AnswerLine.AnswerText;
+import de.knowwe.casetrain.info.AnswerLine.AnswerTextArgument;
+import de.knowwe.casetrain.info.AnswersBlock.Postfix;
+import de.knowwe.casetrain.info.AnswersBlock.Praefix;
+import de.knowwe.casetrain.info.AnswersBlock.Heading;
+import de.knowwe.casetrain.info.Question.QuestionType;
 import de.knowwe.casetrain.message.DuplicateComponentError;
 import de.knowwe.casetrain.message.InvalidArgumentError;
 import de.knowwe.casetrain.message.InvalidArgumentNotice;
@@ -54,7 +54,7 @@ import de.knowwe.casetrain.message.MissingContentWarning;
  * @author Johannes Dienst
  * @created 28.04.2011
  */
-public class AntwortenKorrektheitChecker {
+public class AnswerValidator {
 
 	public static final String PRAEFIX = "Präfix";
 	public static final String POSTFIX = "Postfix";
@@ -72,18 +72,18 @@ public class AntwortenKorrektheitChecker {
 	private final String[] types = {MC, OC, W, UMW, OMW, N, MN, T};
 
 	private final Pattern regex;
-	private static AntwortenKorrektheitChecker uniqueInstance;
+	private static AnswerValidator uniqueInstance;
 
 	private static final String UNKNOWN_FRAGE_TYPE = "Fragetyp unbekannt";
 
-	public static AntwortenKorrektheitChecker getInstance() {
+	public static AnswerValidator getInstance() {
 		if (uniqueInstance == null) {
-			uniqueInstance = new AntwortenKorrektheitChecker();
+			uniqueInstance = new AnswerValidator();
 		}
 		return uniqueInstance;
 	}
 
-	private AntwortenKorrektheitChecker() {
+	private AnswerValidator() {
 		StringBuilder typesRegex = new StringBuilder("(");
 		for(int i=0; i<types.length; i++)
 			typesRegex.append(types[i] + "|");
@@ -125,11 +125,11 @@ public class AntwortenKorrektheitChecker {
 	 * @created 28.04.2011
 	 * @param sec
 	 */
-	public void validateAntwortenBlock(Section<Frage> frage,
-			Section<Antworten> antworten, List<KDOMReportMessage> messages) {
-		Section<FrageTyp> typ = Sections.findSuccessor(frage, FrageTyp.class);
+	public void validateAntwortenBlock(Section<Question> frage,
+			Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
+		Section<QuestionType> typ = Sections.findSuccessor(frage, QuestionType.class);
 		if (typ == null) {
-			messages.add(new InvalidAttributeError(AntwortenKorrektheitChecker.UNKNOWN_FRAGE_TYPE));
+			messages.add(new InvalidAttributeError(AnswerValidator.UNKNOWN_FRAGE_TYPE));
 			return;
 		}
 
@@ -170,20 +170,20 @@ public class AntwortenKorrektheitChecker {
 	}
 
 	/**
-	 * Tests if {@link AntwortText} is empty
+	 * Tests if {@link AnswerText} is empty
 	 * 
 	 * @created 09.05.2011
 	 * @param antworten
 	 * @param messages
 	 */
-	private void checkText(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
+	private void checkText(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
 
-		List<Section<Antwort>> found = new ArrayList<Section<Antwort>>();
-		Sections.findSuccessorsOfType(antworten, Antwort.class, found);
+		List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
+		Sections.findSuccessorsOfType(antworten, AnswerLine.class, found);
 
-		Section<AntwortText> antwortText = null;
-		for(Section<Antwort> ans : found) {
-			antwortText = Sections.findSuccessor(ans, AntwortText.class);
+		Section<AnswerText> antwortText = null;
+		for(Section<AnswerLine> ans : found) {
+			antwortText = Sections.findSuccessor(ans, AnswerText.class);
 			if ( antwortText == null )
 				messages.add(new MissingContentWarning("Antwort hat keinen Antwort-Text"));
 			else if (antwortText.getOriginalText().trim().length() == 0)
@@ -193,20 +193,20 @@ public class AntwortenKorrektheitChecker {
 	}
 
 	/**
-	 * Tests if {@link AntwortErklaerung} is empty
+	 * Tests if {@link AnswerExplanation} is empty
 	 * 
 	 * @created 09.05.2011
 	 * @param antworten
 	 * @param messages
 	 */
-	private void checkErklaerung(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
+	private void checkErklaerung(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
 
-		List<Section<Antwort>> found = new ArrayList<Section<Antwort>>();
-		Sections.findSuccessorsOfType(antworten, Antwort.class, found);
+		List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
+		Sections.findSuccessorsOfType(antworten, AnswerLine.class, found);
 
-		Section<AntwortErklaerung> antwortErklaerung = null;
-		for(Section<Antwort> ans : found) {
-			antwortErklaerung = Sections.findSuccessor(ans, AntwortErklaerung.class);
+		Section<AnswerExplanation> antwortErklaerung = null;
+		for(Section<AnswerLine> ans : found) {
+			antwortErklaerung = Sections.findSuccessor(ans, AnswerExplanation.class);
 			if ( antwortErklaerung != null )
 				if (antwortErklaerung.getOriginalText().trim().length() == 0)
 					messages.add(new MissingContentWarning(
@@ -215,11 +215,11 @@ public class AntwortenKorrektheitChecker {
 	}
 
 	private void checkMarkierung(
-			Section<Antworten> antworten, List<KDOMReportMessage> messages, int minAnswers) {
+			Section<AnswersBlock> antworten, List<KDOMReportMessage> messages, int minAnswers) {
 
 		// First: Right Syntax of Markierung
-		List<Section<Antwort>> found = new ArrayList<Section<Antwort>>();
-		Sections.findSuccessorsOfType(antworten, Antwort.class, found);
+		List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
+		Sections.findSuccessorsOfType(antworten, AnswerLine.class, found);
 
 		if (found.size() < minAnswers) {
 			messages.add(new InvalidArgumentError("Weniger als "+ minAnswers +" Antworten für Frage angegeben."));
@@ -229,10 +229,10 @@ public class AntwortenKorrektheitChecker {
 		int rightAnswers = 0;
 		int wrongAnswers = 0;
 		int numAnswers = 0;
-		Section<AntwortMarkierung> weight = null;
+		Section<AnswerMark> weight = null;
 		String content = "";
-		for(Section<Antwort> ans : found) {
-			weight = Sections.findSuccessor(ans, AntwortMarkierung.class);
+		for(Section<AnswerLine> ans : found) {
+			weight = Sections.findSuccessor(ans, AnswerMark.class);
 			content = weight.getOriginalText().substring(1, weight.getOriginalText().length()-1).trim();
 
 			if (content.equals("+") || content.equals("1")) {
@@ -258,7 +258,7 @@ public class AntwortenKorrektheitChecker {
 
 	}
 
-	private void checkChoiceQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
+	private void checkChoiceQuestion(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
 		this.checkMarkierung(antworten, messages, 2);
 		this.checkText(antworten, messages);
 		this.checkErklaerung(antworten, messages);
@@ -270,19 +270,19 @@ public class AntwortenKorrektheitChecker {
 	 * @param antworten
 	 * @param messages
 	 */
-	private void checkWordQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
+	private void checkWordQuestion(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
 		this.checkMarkierung(antworten, messages, 1);
 		this.checkText(antworten, messages);
 
-		List<Section<Antwort>> found = new ArrayList<Section<Antwort>>();
-		Sections.findSuccessorsOfType(antworten, Antwort.class, found);
+		List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
+		Sections.findSuccessorsOfType(antworten, AnswerLine.class, found);
 
-		Section<AntwortText> antwortText = null;
-		Section<AntwortTextArgument> arg = null;
+		Section<AnswerText> antwortText = null;
+		Section<AnswerTextArgument> arg = null;
 		String antString = "";
 		String c = "";
-		for(Section<Antwort> ans : found) {
-			antwortText = Sections.findSuccessor(ans, AntwortText.class);
+		for(Section<AnswerLine> ans : found) {
+			antwortText = Sections.findSuccessor(ans, AnswerText.class);
 
 			if ( (antwortText == null))
 				continue;
@@ -304,7 +304,7 @@ public class AntwortenKorrektheitChecker {
 			}
 
 			// Test the Argument
-			arg = Sections.findSuccessor(ans, AntwortTextArgument.class);
+			arg = Sections.findSuccessor(ans, AnswerTextArgument.class);
 			if (arg != null) {
 				c = arg.getOriginalText().trim().substring(1, arg.getOriginalText().trim().length()-1);
 				// Regex is marked with r
@@ -341,7 +341,7 @@ public class AntwortenKorrektheitChecker {
 	 * @param antworten
 	 * @param messages
 	 */
-	private void checkUMWQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
+	private void checkUMWQuestion(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
 		this.checkMarkierung(antworten, messages, 1);
 		this.checkText(antworten, messages);
 		this.checkErklaerung(antworten, messages);
@@ -356,7 +356,7 @@ public class AntwortenKorrektheitChecker {
 	 * @param antworten
 	 * @param messages
 	 */
-	private void checkOMWQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
+	private void checkOMWQuestion(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
 		this.checkMarkierung(antworten, messages, 1);
 		this.checkText(antworten, messages);
 		this.checkErklaerung(antworten, messages);
@@ -369,21 +369,21 @@ public class AntwortenKorrektheitChecker {
 	 * @param antworten
 	 * @param messages
 	 */
-	private void checkNQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
+	private void checkNQuestion(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
 		this.checkMarkierung(antworten, messages, 1);
 		this.checkText(antworten, messages);
 		this.checkNumAntwortenBlock(antworten, messages);
 		this.checkErklaerung(antworten, messages);
 	}
 
-	private void checkNumAntwortenBlock(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
-		List<Section<Antwort>> found = new ArrayList<Section<Antwort>>();
-		Sections.findSuccessorsOfType(antworten, Antwort.class, found);
+	private void checkNumAntwortenBlock(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
+		List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
+		Sections.findSuccessorsOfType(antworten, AnswerLine.class, found);
 
-		Section<AntwortText> antwortText = null;
+		Section<AnswerText> antwortText = null;
 		String antString = "";
-		for(Section<Antwort> ans : found) {
-			antwortText = Sections.findSuccessor(ans, AntwortText.class);
+		for(Section<AnswerLine> ans : found) {
+			antwortText = Sections.findSuccessor(ans, AnswerText.class);
 			antString = antwortText.getOriginalText().trim();
 			String[] interval = antString.split("[ ]+");
 
@@ -417,7 +417,7 @@ public class AntwortenKorrektheitChecker {
 	 * @param antworten
 	 * @param messages
 	 */
-	private void checkMNQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
+	private void checkMNQuestion(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
 		this.checkMarkierung(antworten, messages, 1);
 		this.checkText(antworten, messages);
 		this.checkNumAntwortenBlock(antworten, messages);
@@ -431,7 +431,7 @@ public class AntwortenKorrektheitChecker {
 	 * @param antworten
 	 * @param messages
 	 */
-	private void checkTQuestion(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
+	private void checkTQuestion(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
 		this.checkMarkierung(antworten, messages, 1);
 		this.checkText(antworten, messages);
 		this.checkErklaerung(antworten, messages);
@@ -443,7 +443,7 @@ public class AntwortenKorrektheitChecker {
 	 * @param antworten
 	 * @param messages
 	 */
-	private void checkPraefixPostfix(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
+	private void checkPraefixPostfix(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
 		List<Section<Praefix>> found = new ArrayList<Section<Praefix>>();
 		Sections.findSuccessorsOfType(antworten, Praefix.class, found);
 		if (found.size() > 1)
@@ -465,9 +465,9 @@ public class AntwortenKorrektheitChecker {
 	 * @param antworten
 	 * @param messages
 	 */
-	private void checkUeberschrift(Section<Antworten> antworten, List<KDOMReportMessage> messages) {
-		List<Section<Ueberschrift>> found = new ArrayList<Section<Ueberschrift>>();
-		Sections.findSuccessorsOfType(antworten, Ueberschrift.class, found);
+	private void checkUeberschrift(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
+		List<Section<Heading>> found = new ArrayList<Section<Heading>>();
+		Sections.findSuccessorsOfType(antworten, Heading.class, found);
 		if (found.size() > 1)
 			messages.add(new DuplicateComponentError(UEBERSCHRIFT));
 		if (found.size() == 0)

@@ -35,7 +35,7 @@ import de.knowwe.casetrain.message.MissingPictureError;
 
 /**
  * 
- * Extended by MultimediaItems like {@link Bild} and {@link Video}
+ * Extended by MultimediaItems like {@link Image} and {@link Video}
  * 
  * @author Johannes Dienst
  * @created 15.05.2011

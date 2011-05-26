@@ -50,19 +50,19 @@ import de.knowwe.casetrain.util.Utils;
  * @author Jochen
  * @created 06.04.2011
  */
-public class MetaDaten extends BlockMarkupType {
+public class MetaData extends BlockMarkupType {
 
 	private final String INFO_ABSCHNITT = "Infoabschnitt";
 	private final String META = "MetaDaten";
 
-	public MetaDaten() {
+	public MetaData() {
 		super("Metadaten");
 		this.addContentType(new MetaLine());
 
-		this.setCustomRenderer(new KnowWEDomRenderer<MetaDaten>() {
+		this.setCustomRenderer(new KnowWEDomRenderer<MetaData>() {
 
 			@Override
-			public void render(KnowWEArticle article, Section<MetaDaten> sec, UserContext user, StringBuilder string) {
+			public void render(KnowWEArticle article, Section<MetaData> sec, UserContext user, StringBuilder string) {
 				Utils.renderKDOMReportMessageBlock(KnowWEUtils.getMessagesFromSubtree(
 						article,
 						sec,
@@ -93,10 +93,10 @@ public class MetaDaten extends BlockMarkupType {
 				//				XMLUtils.createXMLWithBindings(article);
 			}
 		});
-		this.addSubtreeHandler(new GeneralSubtreeHandler<MetaDaten>() {
+		this.addSubtreeHandler(new GeneralSubtreeHandler<MetaData>() {
 
 			@Override
-			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<MetaDaten> s) {
+			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<MetaData> s) {
 
 				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
 				Section<Info> infoSection = Sections.findSuccessor(s.getArticle().getSection(),

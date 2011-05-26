@@ -66,32 +66,32 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.basic.PlainText;
-import de.knowwe.casetrain.info.Antwort;
-import de.knowwe.casetrain.info.Antwort.AntwortErklaerung;
-import de.knowwe.casetrain.info.Antwort.AntwortText;
-import de.knowwe.casetrain.info.Antwort.AntwortTextArgument;
-import de.knowwe.casetrain.info.Antworten;
-import de.knowwe.casetrain.info.AntwortenKorrektheitChecker;
-import de.knowwe.casetrain.info.Erklaerung;
-import de.knowwe.casetrain.info.Frage;
-import de.knowwe.casetrain.info.Frage.FrageGewicht;
-import de.knowwe.casetrain.info.Frage.FrageText;
-import de.knowwe.casetrain.info.Frage.FrageTyp;
-import de.knowwe.casetrain.info.Hinweis;
+import de.knowwe.casetrain.info.AnswerLine;
+import de.knowwe.casetrain.info.AnswerLine.AnswerExplanation;
+import de.knowwe.casetrain.info.AnswerLine.AnswerText;
+import de.knowwe.casetrain.info.AnswerLine.AnswerTextArgument;
+import de.knowwe.casetrain.info.AnswersBlock;
+import de.knowwe.casetrain.info.AnswerValidator;
+import de.knowwe.casetrain.info.Explanation;
+import de.knowwe.casetrain.info.Question;
+import de.knowwe.casetrain.info.Question.QuestionWeight;
+import de.knowwe.casetrain.info.Question.QuestionText;
+import de.knowwe.casetrain.info.Question.QuestionType;
+import de.knowwe.casetrain.info.Hint;
 import de.knowwe.casetrain.info.Info;
-import de.knowwe.casetrain.type.Abschluss;
+import de.knowwe.casetrain.type.Closure;
 import de.knowwe.casetrain.type.AttributeContent;
 import de.knowwe.casetrain.type.AttributeName;
-import de.knowwe.casetrain.type.Einleitung;
+import de.knowwe.casetrain.type.Introduction;
 import de.knowwe.casetrain.type.MetaAttributes;
-import de.knowwe.casetrain.type.MetaDaten;
+import de.knowwe.casetrain.type.MetaData;
 import de.knowwe.casetrain.type.MetaLine;
 import de.knowwe.casetrain.type.general.BlockMarkupContent;
 import de.knowwe.casetrain.type.general.BlockMarkupType;
 import de.knowwe.casetrain.type.general.SubblockMarkup;
 import de.knowwe.casetrain.type.general.SubblockMarkupContent;
 import de.knowwe.casetrain.type.general.Title;
-import de.knowwe.casetrain.type.multimedia.Bild;
+import de.knowwe.casetrain.type.multimedia.Image;
 import de.knowwe.casetrain.type.multimedia.MultimediaItem;
 import de.knowwe.casetrain.type.multimedia.Video;
 
@@ -193,7 +193,7 @@ public class XMLUtils {
 					continue;
 				}
 
-				if (child.get().isType(Frage.class)) {
+				if (child.get().isType(Question.class)) {
 					if (!frageChilds.isEmpty()) {
 						XMLUtils.addQuestionsWithBinding(simpleSec, frageChilds, fac);
 					}
@@ -201,9 +201,9 @@ public class XMLUtils {
 					frageChilds.add(child);
 					continue;
 				}
-				if ( (child.get().isType(Hinweis.class))
-						|| (child.get().isType(Antworten.class))
-						|| (child.get().isType(Erklaerung.class)) ) {
+				if ( (child.get().isType(Hint.class))
+						|| (child.get().isType(AnswersBlock.class))
+						|| (child.get().isType(Explanation.class)) ) {
 					frageChilds.add(child);
 				}
 
@@ -254,9 +254,9 @@ public class XMLUtils {
 		Section<?> introSec = null;
 
 		if (elementName.equals("Intro"))
-			introSec = Sections.findSuccessor(sec, Einleitung.class);
+			introSec = Sections.findSuccessor(sec, Introduction.class);
 		if (elementName.equals("Extro"))
-			introSec = Sections.findSuccessor(sec, Abschluss.class);
+			introSec = Sections.findSuccessor(sec, Closure.class);
 
 		if (introSec == null) return;
 		XMLUtils.addTitledmmmixedcontentWithBinding(c, introSec, fac);
@@ -307,10 +307,10 @@ public class XMLUtils {
 			}
 		}
 
-		if (introSec.get().isType(Einleitung.class))
+		if (introSec.get().isType(Introduction.class))
 			c.setIntro(titledmmContent);
 
-		if (introSec.get().isType(Abschluss.class)) {
+		if (introSec.get().isType(Closure.class)) {
 			Extro ex = fac.createCaseExtro();
 			ex.setTitle(titledmmContent.getTitle());
 			ex.getContentOrMultimediaItemOrFormula().
@@ -322,7 +322,7 @@ public class XMLUtils {
 
 	private static void configureMmitem(Mmitem it, Section<?> sec) {
 		String type = "";
-		if(sec.get().isType(Bild.class)) type = "image";
+		if(sec.get().isType(Image.class)) type = "image";
 		if(sec.get().isType(Video.class)) type = "video";
 		//		if(child.get().isType(Link.class)) type = "link";
 		//		if(child.get().isType(Audio.class)) type = "audio";
@@ -342,7 +342,7 @@ public class XMLUtils {
 			Case c, Section<KnowWEArticle> articleSec, ObjectFactory fac) {
 		Metadata metaObj = fac.createCaseMetadata();
 
-		Section<MetaDaten> meta = Sections.findSuccessor(articleSec, MetaDaten.class);
+		Section<MetaData> meta = Sections.findSuccessor(articleSec, MetaData.class);
 		if (meta == null) return;
 
 		List<Section<MetaLine>> lines = new ArrayList<Section<MetaLine>>();
@@ -500,7 +500,7 @@ public class XMLUtils {
 					continue;
 				}
 
-				if (child.get().isType(Frage.class)) {
+				if (child.get().isType(Question.class)) {
 					if (!frageChilds.isEmpty()) {
 						XMLUtils.addQuestionsWithBinding(simpleSec, frageChilds, fac);
 					}
@@ -508,9 +508,9 @@ public class XMLUtils {
 					frageChilds.add(child);
 					continue;
 				}
-				if ( (child.get().isType(Hinweis.class))
-						|| (child.get().isType(Antworten.class))
-						|| (child.get().isType(Erklaerung.class)) ) {
+				if ( (child.get().isType(Hint.class))
+						|| (child.get().isType(AnswersBlock.class))
+						|| (child.get().isType(Explanation.class)) ) {
 					frageChilds.add(child);
 				}
 
@@ -541,58 +541,58 @@ public class XMLUtils {
 		List<JAXBElement<? extends BasicQuestion>> questionsList = questions.getOCQuestionOrMCQuestionOrHLMMCQuestion();
 
 		Section<?> frage = frageChilds.get(0);
-		Section<?> fragetyp = Sections.findSuccessor(frage, FrageTyp.class);
+		Section<?> fragetyp = Sections.findSuccessor(frage, QuestionType.class);
 		String typ = fragetyp.getOriginalText().trim();
 
-		if (typ.equals(AntwortenKorrektheitChecker.OC)) {
+		if (typ.equals(AnswerValidator.OC)) {
 			ChoiceQuestion q = fac.createChoiceQuestion();
 			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsOCQuestion(q));
 		}
 
-		if (typ.equals(AntwortenKorrektheitChecker.MC)) {
+		if (typ.equals(AnswerValidator.MC)) {
 			ChoiceQuestion q = fac.createChoiceQuestion();
 			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsMCQuestion(q));
 		}
 
-		if (typ.equals(AntwortenKorrektheitChecker.W)) {
+		if (typ.equals(AnswerValidator.W)) {
 			WordQuestion q = fac.createBasicSectionQuestionsWordQuestion();
 			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.add(fac.createBasicSectionQuestionsWordQuestion(q));
 		}
 
-		if (typ.equals(AntwortenKorrektheitChecker.UMW)) {
+		if (typ.equals(AnswerValidator.UMW)) {
 			MultiWordQuestion q = fac.createMultiWordQuestion();
 			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsUMWordQuestion(q));
 		}
 
-		if (typ.equals(AntwortenKorrektheitChecker.OMW)) {
+		if (typ.equals(AnswerValidator.OMW)) {
 			MultiWordQuestion q = fac.createMultiWordQuestion();
 			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsOMWordQuestion(q));
 		}
 
-		if (typ.equals(AntwortenKorrektheitChecker.N)) {
+		if (typ.equals(AnswerValidator.N)) {
 			NumQuestion q = fac.createBasicSectionQuestionsNumQuestion();
 			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsNumQuestion(q));
 		}
 
-		if (typ.equals(AntwortenKorrektheitChecker.MN)) {
+		if (typ.equals(AnswerValidator.MN)) {
 			MNumQuestion q = fac.createBasicSectionQuestionsMNumQuestion();
 			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsMNumQuestion(q));
 		}
 
-		if (typ.equals(AntwortenKorrektheitChecker.T)) {
+		if (typ.equals(AnswerValidator.T)) {
 			TextQuestion q = fac.createBasicSectionQuestionsTextQuestion();
 			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
@@ -613,8 +613,8 @@ public class XMLUtils {
 
 		Section<?> frage = frageChilds.remove(0);
 		//		Section<?> fragetyp = Sections.findSuccessor(frage, FrageTyp.class);
-		Section<?> frageGewicht = Sections.findSuccessor(frage, FrageGewicht.class);
-		Section<?> frageText = Sections.findSuccessor(frage, FrageText.class);
+		Section<?> frageGewicht = Sections.findSuccessor(frage, QuestionWeight.class);
+		Section<?> frageText = Sections.findSuccessor(frage, QuestionText.class);
 
 		String weight = frageGewicht.getOriginalText().trim();
 		question.setWeight(new BigDecimal(weight));
@@ -623,20 +623,20 @@ public class XMLUtils {
 		for (Section<?> sec : frageChilds) {
 			// Hints koennen immer kommen und element Info
 			// beinhalten Text und Multimedia
-			if (sec.get().isType(Hinweis.class)) {
+			if (sec.get().isType(Hint.class)) {
 				Mmmixedcontent it = fac.createMmmixedcontent();
 				XMLUtils.renderHinweisOrErklaerungWithBinding(it, sec, fac);
 				question.setInfo(it);
 				continue;
 			}
 
-			if(sec.get().isType(Antworten.class)) {
+			if(sec.get().isType(AnswersBlock.class)) {
 				XMLUtils.addAntwortenWithBinding(question, sec, fac);
 				continue;
 			}
 
 			// Feedback is Erklaerung
-			if (sec.get().isType(Erklaerung.class)) {
+			if (sec.get().isType(Explanation.class)) {
 				Mmcontent it = fac.createMmcontent();
 				XMLUtils.renderHinweisOrErklaerungWithBinding(it, sec, fac);
 				question.setFeedback(it);
@@ -656,7 +656,7 @@ public class XMLUtils {
 	@SuppressWarnings("unchecked")
 	private static void addAntwortenWithBinding(BasicQuestion question, Section<?> antworten, ObjectFactory fac) {
 
-		List<AntwortAttributeStore> ants = new ArrayList<AntwortAttributeStore>();
+		List<AnswerAttributeStore> ants = new ArrayList<AnswerAttributeStore>();
 		String postfix = null;
 		String praefix = null;
 		String ueberschrift = null;
@@ -664,23 +664,23 @@ public class XMLUtils {
 			if (s.get().isType(PlainText.class)) continue;
 
 			// PosFactor and NegFactor
-			String posFactor = Antwort.getPosFactor((Section<Antwort>)s);
-			String negFactor = Antwort.getNegFactor((Section<Antwort>)s);
+			String posFactor = AnswerLine.getPosFactor((Section<AnswerLine>)s);
+			String negFactor = AnswerLine.getNegFactor((Section<AnswerLine>)s);
 
 			// AntwortTex
-			Section<AntwortText> text = Sections.findSuccessor(s, AntwortText.class);
+			Section<AnswerText> text = Sections.findSuccessor(s, AnswerText.class);
 			String antwortText = "";
 			if (text != null)
 				antwortText = text.getOriginalText();
 
 			// AntwortTextArgument
 			String textArgString = null;
-			Section<AntwortTextArgument> textArg = Sections.findSuccessor(s, AntwortTextArgument.class);
+			Section<AnswerTextArgument> textArg = Sections.findSuccessor(s, AnswerTextArgument.class);
 			if (textArg != null)
 				textArgString = textArg.getOriginalText().trim();
 
 			//SimpleFeedback
-			Section<AntwortErklaerung> erklaerung = Sections.findSuccessor(s, AntwortErklaerung.class);
+			Section<AnswerExplanation> erklaerung = Sections.findSuccessor(s, AnswerExplanation.class);
 			String erkl = null;
 			if (erklaerung != null) {
 				erkl = erklaerung.getOriginalText().
@@ -688,19 +688,19 @@ public class XMLUtils {
 			}
 
 			// Postfix Praefix Ueberschrift
-			Section<Antworten.Postfix> post = Sections.findSuccessor(s, Antworten.Postfix.class);
+			Section<AnswersBlock.Postfix> post = Sections.findSuccessor(s, AnswersBlock.Postfix.class);
 			if (post != null)
 				postfix = post.getOriginalText().trim();
 
-			Section<Antworten.Praefix> prae = Sections.findSuccessor(s, Antworten.Praefix.class);
+			Section<AnswersBlock.Praefix> prae = Sections.findSuccessor(s, AnswersBlock.Praefix.class);
 			if (prae != null)
 				praefix =prae.getOriginalText().trim();
 
-			Section<Antworten.Ueberschrift> ueber = Sections.findSuccessor(s, Antworten.Ueberschrift.class);
+			Section<AnswersBlock.Heading> ueber = Sections.findSuccessor(s, AnswersBlock.Heading.class);
 			if (ueber != null)
 				ueberschrift = ueber.getOriginalText().trim();
 
-			ants.add(new AntwortAttributeStore(posFactor, negFactor,
+			ants.add(new AnswerAttributeStore(posFactor, negFactor,
 					antwortText, erkl, textArgString));
 		}
 
@@ -708,7 +708,7 @@ public class XMLUtils {
 		if (question instanceof ChoiceQuestion) {
 			ChoiceQuestion qu = (ChoiceQuestion) question;
 			Answers ans = fac.createChoiceQuestionAnswers();
-			for (AntwortAttributeStore store : ants) {
+			for (AnswerAttributeStore store : ants) {
 				ChoiceAnswer a = fac.createChoiceAnswer();
 				if (store.getNegFactor() != null)
 					a.setNegFactor(new BigDecimal(store.getNegFactor()));
@@ -724,10 +724,10 @@ public class XMLUtils {
 		if (question instanceof WordQuestion) {
 			WordQuestion qu = (WordQuestion) question;
 			WordAnswers ans = fac.createWordAnswers();
-			for (AntwortAttributeStore store : ants) {
+			for (AnswerAttributeStore store : ants) {
 				WordAnswer a = fac.createWordAnswersWordAnswer();
-				a.setEditDistance(new Long(Antworten.getEditDistance(store.getTextArgument())));
-				a.setIsRegularExpression(Antworten.getIsRegularExpression(store.getTextArgument()));
+				a.setEditDistance(new Long(AnswersBlock.getEditDistance(store.getTextArgument())));
+				a.setIsRegularExpression(AnswersBlock.getIsRegularExpression(store.getTextArgument()));
 				if (store.getNegFactor() != null)
 					a.setNegFactor(new BigDecimal(store.getNegFactor()));
 				a.setPosFactor(new BigDecimal(store.getPosFactor()));
@@ -742,10 +742,10 @@ public class XMLUtils {
 		if (question instanceof MultiWordQuestion) {
 			MultiWordQuestion qu = (MultiWordQuestion) question;
 			WordAnswers ans = fac.createWordAnswers();
-			for (AntwortAttributeStore store : ants) {
+			for (AnswerAttributeStore store : ants) {
 				WordAnswer a = fac.createWordAnswersWordAnswer();
-				a.setEditDistance(new Long(Antworten.getEditDistance(store.getTextArgument())));
-				a.setIsRegularExpression(Antworten.getIsRegularExpression(store.getTextArgument()));
+				a.setEditDistance(new Long(AnswersBlock.getEditDistance(store.getTextArgument())));
+				a.setIsRegularExpression(AnswersBlock.getIsRegularExpression(store.getTextArgument()));
 				if (store.getNegFactor() != null)
 					a.setNegFactor(new BigDecimal(store.getNegFactor()));
 				a.setPosFactor(new BigDecimal(store.getPosFactor()));
@@ -760,7 +760,7 @@ public class XMLUtils {
 		if (question instanceof NumQuestion) {
 			NumQuestion q = (NumQuestion) question;
 			NumAnswers ans = fac.createNumAnswers();
-			for (AntwortAttributeStore store : ants) {
+			for (AnswerAttributeStore store : ants) {
 				XMLUtils.addNumAnswerInstance(ans, store, fac);
 			}
 			XMLUtils.addPraePostUeberschrift(ans, ueberschrift, postfix, praefix);
@@ -770,7 +770,7 @@ public class XMLUtils {
 		if (question instanceof MNumQuestion) {
 			MNumQuestion q = (MNumQuestion) question;
 			NumAnswers ans = fac.createNumAnswers();
-			for (AntwortAttributeStore store : ants) {
+			for (AnswerAttributeStore store : ants) {
 				XMLUtils.addNumAnswerInstance(ans, store, fac);
 			}
 			XMLUtils.addPraePostUeberschrift(ans, ueberschrift, postfix, praefix);
@@ -779,7 +779,7 @@ public class XMLUtils {
 
 		if (question instanceof TextQuestion) {
 			TextQuestion q = (TextQuestion) question;
-			for (AntwortAttributeStore store : ants) {
+			for (AnswerAttributeStore store : ants) {
 				q.setSolution(store.getText());
 			}
 		}
@@ -816,8 +816,8 @@ public class XMLUtils {
 	 * @param store
 	 * @param fac
 	 */
-	private static void addNumAnswerInstance(NumAnswers ans, AntwortAttributeStore store, ObjectFactory fac) {
-		String[] i = Antwort.getInterval(store.getText());
+	private static void addNumAnswerInstance(NumAnswers ans, AnswerAttributeStore store, ObjectFactory fac) {
+		String[] i = AnswerLine.getInterval(store.getText());
 		if ( i != null ) {
 			NumAnswerInterval inter = fac.createNumAnswersNumAnswerInterval();
 			inter.setLower(new BigDecimal(i[0]));

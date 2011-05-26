@@ -33,7 +33,7 @@ import de.knowwe.casetrain.message.MissingAttributeError;
 
 
 /**
- * Managing the MetaAttributes used in {@link MetaDaten}
+ * Managing the MetaAttributes used in {@link MetaData}
  * The attributes are taken from {@link http://casetrain.uni-wuerzburg.de/doku/format_case.shtml}
  * 
  * @author Johannes Dienst

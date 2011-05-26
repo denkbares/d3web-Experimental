@@ -26,7 +26,7 @@ import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.casetrain.type.MetaDaten;
+import de.knowwe.casetrain.type.MetaData;
 
 
 /**
@@ -46,7 +46,7 @@ public class BlockMarkupContent extends AbstractType {
 			public void render(KnowWEArticle article, Section<SubblockMarkup> sec, UserContext user, StringBuilder string) {
 
 				boolean isMeta = false;
-				if (Sections.findAncestorOfType(sec, MetaDaten.class) != null) {isMeta = true;}
+				if (Sections.findAncestorOfType(sec, MetaData.class) != null) {isMeta = true;}
 				if (!isMeta) {
 					string.append(KnowWEUtils.maskHTML("%%collapsebox-closed \r\n"));
 					string.append(

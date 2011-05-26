@@ -38,7 +38,7 @@ import de.knowwe.casetrain.message.MissingComponentWarning;
 import de.knowwe.casetrain.renderer.MouseOverTitleRenderer;
 import de.knowwe.casetrain.type.general.SubblockMarkup;
 import de.knowwe.casetrain.type.general.Title;
-import de.knowwe.casetrain.type.multimedia.Bild;
+import de.knowwe.casetrain.type.multimedia.Image;
 import de.knowwe.casetrain.type.multimedia.Video;
 
 
@@ -47,44 +47,44 @@ import de.knowwe.casetrain.type.multimedia.Video;
  * @author Johannes Dienst
  * @created 12.05.2011
  */
-public class Frage extends SubblockMarkup {
+public class Question extends SubblockMarkup {
 
 	private final String FRAGE_TYPE = "Fragetyp";
 	private final String FRAGE_TEXT = "Fragetext";
 	private final String FRAGE_GEWICHT = "Fragegewicht";
 	private final String FRAGE_GEWICHT_WRONG = "Fragegewicht kleiner 0";
 
-	public Frage() {
+	public Question() {
 		super("Frage");
 		this.addChildType(new Title());
-		this.addContentType(new Bild());
+		this.addContentType(new Image());
 		this.addContentType(new Video());
-		this.addContentType(new FrageGewicht());
-		this.addContentType(new FrageTyp());
-		this.addContentType(new FrageText());
+		this.addContentType(new QuestionWeight());
+		this.addContentType(new QuestionType());
+		this.addContentType(new QuestionText());
 
-		this.addSubtreeHandler(new GeneralSubtreeHandler<Frage>() {
+		this.addSubtreeHandler(new GeneralSubtreeHandler<Question>() {
 
 			@Override
-			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Frage> s) {
+			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Question> s) {
 
 				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
 
-				Section<FrageGewicht> fragegewichtSection = Sections.findSuccessor(s,
-						FrageGewicht.class);
+				Section<QuestionWeight> fragegewichtSection = Sections.findSuccessor(s,
+						QuestionWeight.class);
 				if (fragegewichtSection == null) {
 					messages.add(new MissingAttributeWarning(FRAGE_GEWICHT));
 				} else if(Double.valueOf(fragegewichtSection.getOriginalText()) < 0) {
 					messages.add(new InvalidArgumentError(FRAGE_GEWICHT_WRONG));
 				}
 
-				Section<FrageTyp> typSection = Sections.findSuccessor(s, FrageTyp.class);
+				Section<QuestionType> typSection = Sections.findSuccessor(s, QuestionType.class);
 				if (typSection == null) {
 					messages.add(new MissingComponentError(FRAGE_TYPE));
 				}
 
-				Section<FrageText> fragetextSection = Sections.findSuccessor(s,
-						FrageText.class);
+				Section<QuestionText> fragetextSection = Sections.findSuccessor(s,
+						QuestionText.class);
 				if (fragetextSection == null) {
 					messages.add(new MissingComponentWarning(FRAGE_TEXT));
 				}
@@ -94,20 +94,20 @@ public class Frage extends SubblockMarkup {
 		});
 	}
 
-	public class FrageGewicht extends AbstractType {
+	public class QuestionWeight extends AbstractType {
 
-		public FrageGewicht() {
+		public QuestionWeight() {
 			this.setSectionFinder(new RegexSectionFinder("[-]?[0-9]+"));
 			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
 		}
 	}
 
-	public class FrageTyp extends AbstractType {
+	public class QuestionType extends AbstractType {
 
-		public FrageTyp() {
+		public QuestionType() {
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(
 					new RegexSectionFinder(
-							AntwortenKorrektheitChecker.getInstance().getRegexAsString()));
+							AnswerValidator.getInstance().getRegexAsString()));
 			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 			this.setSectionFinder(csf);
 			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
@@ -115,9 +115,9 @@ public class Frage extends SubblockMarkup {
 
 	}
 
-	public class FrageText extends AbstractType {
+	public class QuestionText extends AbstractType {
 
-		public FrageText() {
+		public QuestionText() {
 			this.setSectionFinder(new RegexSectionFinder("([\\w]{1}[\\W]?[ ]?)+\\?"));
 			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
 		}

@@ -17,10 +17,10 @@
     
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="Einleitung">
-		<parameter id="class" value="de.knowwe.casetrain.type.Einleitung" />
-		<parameter id="name" value="Einleitung" />
-		<parameter id="description" value="Type Einleitung" />
+		id="Introduction">
+		<parameter id="class" value="de.knowwe.casetrain.type.Introduction" />
+		<parameter id="name" value="Introduction" />
+		<parameter id="description" value="Type Introduction" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5"  />
 		<parameter id="scope" value="root" />
@@ -53,10 +53,10 @@
 	</extension>
 	
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="MetaDaten">
-		<parameter id="class" value="de.knowwe.casetrain.type.MetaDaten" />
-		<parameter id="name" value="MetaDaten" />
-		<parameter id="description" value="Type MetaDaten" />
+		id="MetaData">
+		<parameter id="class" value="de.knowwe.casetrain.type.MetaData" />
+		<parameter id="name" value="MetaData" />
+		<parameter id="description" value="Type MetaData" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5"  />
 		<parameter id="scope" value="root" />
@@ -65,10 +65,10 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="Abschluss">
-		<parameter id="class" value="de.knowwe.casetrain.type.Abschluss" />
+		id="Closure">
+		<parameter id="class" value="de.knowwe.casetrain.type.Closure" />
 		<parameter id="name" value="Abschluss" />
-		<parameter id="description" value="Type Abschluss" />
+		<parameter id="description" value="Type Closure" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5"  />
 		<parameter id="scope" value="root" />

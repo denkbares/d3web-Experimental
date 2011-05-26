@@ -20,7 +20,7 @@ package de.knowwe.casetrain.info;
 
 import de.knowwe.casetrain.type.general.SubblockMarkup;
 import de.knowwe.casetrain.type.general.Title;
-import de.knowwe.casetrain.type.multimedia.Bild;
+import de.knowwe.casetrain.type.multimedia.Image;
 import de.knowwe.casetrain.type.multimedia.Video;
 
 
@@ -29,12 +29,12 @@ import de.knowwe.casetrain.type.multimedia.Video;
  * @author Johannes Dienst
  * @created 12.05.2011
  */
-public class Erklaerung extends SubblockMarkup {
+public class Explanation extends SubblockMarkup {
 
-	public Erklaerung() {
+	public Explanation() {
 		super("Erklärung");
 		this.addChildType(new Title());
-		this.addContentType(new Bild());
+		this.addContentType(new Image());
 		this.addContentType(new Video());
 	}
 

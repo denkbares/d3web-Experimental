@@ -28,7 +28,7 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.knowwe.casetrain.message.MissingContentWarning;
-import de.knowwe.casetrain.type.Abschluss;
+import de.knowwe.casetrain.type.Closure;
 import de.knowwe.casetrain.type.general.SubblockMarkup;
 import de.knowwe.casetrain.type.general.SubblockMarkupContent;
 import de.knowwe.casetrain.type.general.Title;
@@ -46,10 +46,10 @@ public class EvaluationEnd extends SubblockMarkup {
 		this.addChildType(new Title());
 		this.addContentType(new Title());
 
-		this.addSubtreeHandler(new GeneralSubtreeHandler<Abschluss>() {
+		this.addSubtreeHandler(new GeneralSubtreeHandler<Closure>() {
 
 			@Override
-			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Abschluss> s) {
+			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Closure> s) {
 
 				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
 

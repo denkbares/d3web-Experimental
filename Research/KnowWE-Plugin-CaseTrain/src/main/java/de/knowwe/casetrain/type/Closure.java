@@ -36,29 +36,29 @@ import de.knowwe.casetrain.message.MissingPictureNotice;
 import de.knowwe.casetrain.message.MissingTitleError;
 import de.knowwe.casetrain.type.general.BlockMarkupType;
 import de.knowwe.casetrain.type.general.Title;
-import de.knowwe.casetrain.type.multimedia.Bild;
+import de.knowwe.casetrain.type.multimedia.Image;
 import de.knowwe.casetrain.type.multimedia.Video;
 
 /**
  * 
- * One part of the case-markup-structure of the casetrain-wiki-format.
- * Represents the Introduction before the Info-Parts.
+ * One part of the case-markup-structure of the casetrain-wiki-format
+ * Represents the end of a Case.
  * 
  * @author Jochen
  * @created 06.04.2011
  */
-public class Einleitung extends BlockMarkupType {
+public class Closure extends BlockMarkupType {
 
-	public Einleitung() {
-		super("Einleitung");
+	public Closure() {
+		super("Abschluss");
 		this.addChildType(new Title());
-		this.addContentType(new Bild());
+		this.addContentType(new Image());
 		this.addContentType(new Video());
 
-		this.addSubtreeHandler(new GeneralSubtreeHandler<Einleitung>() {
+		this.addSubtreeHandler(new GeneralSubtreeHandler<Closure>() {
 
 			@Override
-			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Einleitung> s) {
+			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Closure> s) {
 
 				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
 
@@ -69,12 +69,12 @@ public class Einleitung extends BlockMarkupType {
 
 				Section<PlainText> plain = Sections.findSuccessor(s, PlainText.class);
 				if (plain == null) {
-					messages.add(new MissingContentWarning(Info.EINLEITUNG));
+					messages.add(new MissingContentWarning(Info.ABSCHLUSS));
 				}
 
-				Section<Bild> pic = Sections.findSuccessor(s, Bild.class);
+				Section<Image> pic = Sections.findSuccessor(s, Image.class);
 				if (pic == null) {
-					messages.add(new MissingPictureNotice(Info.EINLEITUNG));
+					messages.add(new MissingPictureNotice(Info.ABSCHLUSS));
 				}
 
 				return messages;
@@ -88,4 +88,3 @@ public class Einleitung extends BlockMarkupType {
 	}
 
 }
-

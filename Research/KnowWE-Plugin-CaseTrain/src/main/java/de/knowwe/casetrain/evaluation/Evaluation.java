@@ -34,10 +34,10 @@ import de.d3web.we.kdom.report.KDOMWarning;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.casetrain.info.Antworten;
-import de.knowwe.casetrain.info.AntwortenKorrektheitChecker;
-import de.knowwe.casetrain.info.Frage;
-import de.knowwe.casetrain.info.Frage.FrageTyp;
+import de.knowwe.casetrain.info.AnswersBlock;
+import de.knowwe.casetrain.info.AnswerValidator;
+import de.knowwe.casetrain.info.Question;
+import de.knowwe.casetrain.info.Question.QuestionType;
 import de.knowwe.casetrain.info.Info;
 import de.knowwe.casetrain.message.InvalidArgumentError;
 import de.knowwe.casetrain.message.MissingComponentWarning;
@@ -57,8 +57,8 @@ public class Evaluation extends BlockMarkupType {
 
 	public Evaluation() {
 		super("Evaluation");
-		this.addContentType(new Frage());
-		this.addContentType(new Antworten());
+		this.addContentType(new Question());
+		this.addContentType(new AnswersBlock());
 		this.addContentType(new EvaluationEnd());
 
 		this.setCustomRenderer(new KnowWEDomRenderer<BlockMarkupType>() {
@@ -128,8 +128,8 @@ public class Evaluation extends BlockMarkupType {
 
 				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
 
-				List<Section<Frage>> found = new ArrayList<Section<Frage>>();
-				Sections.findSuccessorsOfType(s, Frage.class, found);
+				List<Section<Question>> found = new ArrayList<Section<Question>>();
+				Sections.findSuccessorsOfType(s, Question.class, found);
 				if (found.isEmpty()) {
 					messages.add(new MissingComponentWarning(Info.FRAGE));
 					return messages;
@@ -151,7 +151,7 @@ public class Evaluation extends BlockMarkupType {
 				Section<? extends Type> actual = null;
 				boolean antwortenMissing = true;
 				for (Section<? extends Type> sec : children) {
-					if (sec.get().isType(Frage.class)) {
+					if (sec.get().isType(Question.class)) {
 						if(actual == null) {
 							actual = sec;
 							continue;
@@ -163,14 +163,14 @@ public class Evaluation extends BlockMarkupType {
 						antwortenMissing = true;
 						continue;
 					}
-					if (sec.get().isType(Antworten.class)) {
+					if (sec.get().isType(AnswersBlock.class)) {
 						// test if multiple Antworten are possible
 						// Only by UMW,OMW,MN
 						if (!antwortenMissing) {
 							String typ =
-								Sections.findSuccessor(actual, FrageTyp.class).
+								Sections.findSuccessor(actual, QuestionType.class).
 								getOriginalText().trim();
-							if (!(AntwortenKorrektheitChecker.getInstance()
+							if (!(AnswerValidator.getInstance()
 									.getTypesMultiple().contains(typ))) {
 								messages.add(new InvalidArgumentError(
 										"Mehrfache Antworten bei diesem FrageTyp nicht zulässig: "
@@ -179,9 +179,9 @@ public class Evaluation extends BlockMarkupType {
 
 						}
 						antwortenMissing = false;
-						AntwortenKorrektheitChecker.getInstance().
-						validateAntwortenBlock((Section<Frage>) actual,
-								(Section<Antworten>) sec, messages);
+						AnswerValidator.getInstance().
+						validateAntwortenBlock((Section<Question>) actual,
+								(Section<AnswersBlock>) sec, messages);
 						continue;
 					}
 				}

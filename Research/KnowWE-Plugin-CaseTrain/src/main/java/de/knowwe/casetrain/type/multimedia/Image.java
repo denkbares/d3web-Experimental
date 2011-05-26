@@ -27,19 +27,19 @@ import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
 
-public class Bild extends MultimediaItem {
+public class Image extends MultimediaItem {
 
 	public static String KEY_BILD = "Bild:";
 
 	private static String REGEX = "\\{" + KEY_BILD + "(.*?)\\}";
 
-	public Bild() {
+	public Image() {
 		super(REGEX);
 
-		this.setCustomRenderer(new KnowWEDomRenderer<Bild>() {
+		this.setCustomRenderer(new KnowWEDomRenderer<Image>() {
 
 			@Override
-			public void render(KnowWEArticle article, Section<Bild> sec, UserContext user, StringBuilder string) {
+			public void render(KnowWEArticle article, Section<Image> sec, UserContext user, StringBuilder string) {
 				Section<MultimediaItemContent> bildURL = Sections.findChildOfType(sec,
 						MultimediaItemContent.class);
 				string.append(KnowWEUtils.maskHTML("<img height='70' src='"));

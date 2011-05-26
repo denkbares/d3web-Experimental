@@ -16,26 +16,54 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.casetrain.info;
+package de.knowwe.casetrain.util;
 
-import de.knowwe.casetrain.type.general.SubblockMarkup;
-import de.knowwe.casetrain.type.general.Title;
-import de.knowwe.casetrain.type.multimedia.Bild;
-import de.knowwe.casetrain.type.multimedia.Video;
 
 
 /**
  * 
  * @author Johannes Dienst
- * @created 12.05.2011
+ * @created 16.05.2011
  */
-public class Hinweis extends SubblockMarkup {
+public class AnswerAttributeStore {
 
-	public Hinweis() {
-		super("Hinweis");
-		this.addChildType(new Title());
-		this.addContentType(new Bild());
-		this.addContentType(new Video());
+	private final String posFactor;
+	private final String negFactor;
+	private final String text;
+	private final String simplefeedback;
+	private final String textArgument;
+
+	public AnswerAttributeStore(String posFactor, String negFactor,
+			String text, String simplefeedback, String textArgString) {
+		this.posFactor = posFactor;
+		this.negFactor = negFactor;
+		this.text = text;
+		this.simplefeedback = simplefeedback;
+		this.textArgument = textArgString;
 	}
+
+	public String getPosFactor() {
+		return posFactor;
+	}
+
+
+	public String getNegFactor() {
+		return negFactor;
+	}
+
+
+	public String getText() {
+		return text;
+	}
+
+
+	public String getSimplefeedback() {
+		return simplefeedback;
+	}
+
+	public String getTextArgument() {
+		return textArgument;
+	}
+
 
 }

@@ -42,18 +42,19 @@ import de.knowwe.casetrain.renderer.MouseOverTitleRenderer;
  * Contains a AntwortContent which has the following syntax:
  * {Markierung}Antwort{Antwortspezifische Erklärung}
  * 
+ * 
  * @author Jochen
  * @created
  */
-public class Antwort extends AbstractType {
+public class AnswerLine extends AbstractType {
 
-	public Antwort() {
-		this.setSectionFinder(new AntwortSectionFinder());
+	public AnswerLine() {
+		this.setSectionFinder(new AnswerSectionFinder());
 		this.setCustomRenderer(new DivStyleClassRenderer("Antwort"));
-		this.addChildType(new AntwortMarkierung());
-		this.addChildType(new AntwortTextArgument());
-		this.addChildType(new AntwortText());
-		this.addChildType(new AntwortErklaerung());
+		this.addChildType(new AnswerMark());
+		this.addChildType(new AnswerTextArgument());
+		this.addChildType(new AnswerText());
+		this.addChildType(new AnswerExplanation());
 	}
 
 	/**
@@ -61,7 +62,7 @@ public class Antwort extends AbstractType {
 	 * @author Johannes Dienst
 	 * @created 12.05.2011
 	 */
-	class AntwortSectionFinder implements SectionFinder {
+	class AnswerSectionFinder implements SectionFinder {
 
 		@Override
 		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
@@ -70,9 +71,9 @@ public class Antwort extends AbstractType {
 			Pattern p = Pattern.compile("\\{[0-9]+\\}");
 			Matcher m = p.matcher(text);
 			if (m.matches()) return results;
-			if (text.startsWith(AntwortenKorrektheitChecker.PRAEFIX)
-					|| text.startsWith(AntwortenKorrektheitChecker.POSTFIX)
-					|| text.startsWith(AntwortenKorrektheitChecker.UEBERSCHRIFT)) {
+			if (text.startsWith(AnswerValidator.PRAEFIX)
+					|| text.startsWith(AnswerValidator.POSTFIX)
+					|| text.startsWith(AnswerValidator.UEBERSCHRIFT)) {
 				return results;
 			}
 			results.add(new SectionFinderResult(0, text.length()));
@@ -90,8 +91,8 @@ public class Antwort extends AbstractType {
 	 * @param antwortText
 	 * @return
 	 */
-	public static String[] getInterval(String antwortText) {
-		String[] i = antwortText.split("[ ]+");
+	public static String[] getInterval(String answerText) {
+		String[] i = answerText.split("[ ]+");
 		if (i.length == 2) {
 			try {
 				new BigDecimal(i[0]);
@@ -112,12 +113,12 @@ public class Antwort extends AbstractType {
 	 * @param sec
 	 * @return
 	 */
-	public static String getPosFactor(Section<Antwort> sec) {
-		Section<AntwortMarkierung> mark = Sections.findSuccessor(sec, AntwortMarkierung.class);
+	public static String getPosFactor(Section<AnswerLine> sec) {
+		Section<AnswerMark> mark = Sections.findSuccessor(sec, AnswerMark.class);
 		if (mark == null) return "1";
 		String markText = mark.getOriginalText().trim();
 		markText = markText.substring(1, markText.length()-1);
-		markText = Antwort.replaceFactorWithNumber(markText);
+		markText = AnswerLine.replaceFactorWithNumber(markText);
 		String[] factors = markText.trim().split("[ ]+");
 		return factors[0];
 	}
@@ -131,12 +132,12 @@ public class Antwort extends AbstractType {
 	 * @param sec
 	 * @return
 	 */
-	public static String getNegFactor(Section<Antwort> sec) {
-		Section<AntwortMarkierung> mark = Sections.findSuccessor(sec, AntwortMarkierung.class);
+	public static String getNegFactor(Section<AnswerLine> sec) {
+		Section<AnswerMark> mark = Sections.findSuccessor(sec, AnswerMark.class);
 		if (mark == null) return null;
 		String markText = mark.getOriginalText().trim();
 		markText = markText.substring(1, markText.length()-1);
-		markText = Antwort.replaceFactorWithNumber(markText);
+		markText = AnswerLine.replaceFactorWithNumber(markText);
 		String[] factors = markText.trim().split("[ ]+");
 		if (factors.length < 2) return null;
 		return factors[1];
@@ -149,22 +150,22 @@ public class Antwort extends AbstractType {
 	}
 
 	/**
-	 * {@link AntwortenKorrektheitChecker}
+	 * {@link AnswerValidator}
 	 * 
 	 * @author Johannes Dienst
 	 * @created 08.05.2011
 	 */
-	public class AntwortMarkierung extends AbstractType {
+	public class AnswerMark extends AbstractType {
 
 		String regex = "\\{(.*?)\\}";
 
-		public AntwortMarkierung() {
+		public AnswerMark() {
 			this.setCustomRenderer(new StyleRenderer("font-weight:bold;"));
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(
 					new RegexSectionFinder(regex));
 			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 			this.setSectionFinder(csf);
-			this.addSubtreeHandler(AntwortMarkierungHandler.getInstance());
+			this.addSubtreeHandler(AnswerMarkHandler.getInstance());
 		}
 
 	}
@@ -175,9 +176,9 @@ public class Antwort extends AbstractType {
 	 * @author Johannes Dienst
 	 * @created 18.05.2011
 	 */
-	public class AntwortTextArgument extends AbstractType {
+	public class AnswerTextArgument extends AbstractType {
 
-		public AntwortTextArgument() {
+		public AnswerTextArgument() {
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(
 					new RegexSectionFinder("\\{.*?\\}"));
 			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
@@ -191,13 +192,13 @@ public class Antwort extends AbstractType {
 	 * @author Johannes Dienst
 	 * @created 08.05.2011
 	 */
-	public class AntwortText extends AbstractType {
+	public class AnswerText extends AbstractType {
 
 		// TODO Regex only recognizes {r}word
 		//      not regex in full.
 		//			String regex = "(\\{.*?\\})?([\\w]{1}[äüöÄÜÖß]?[ 0-9]*)+";
 
-		public AntwortText() {
+		public AnswerText() {
 			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
 			//				ConstraintSectionFinder csf = new ConstraintSectionFinder(
 			//						new RegexSectionFinder(regex));
@@ -238,11 +239,11 @@ public class Antwort extends AbstractType {
 	 * @author Johannes Dienst
 	 * @created 08.05.2011
 	 */
-	public class AntwortErklaerung extends AbstractType {
+	public class AnswerExplanation extends AbstractType {
 
 		String regex = "\\{.*?\\}";
 
-		public AntwortErklaerung() {
+		public AnswerExplanation() {
 			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(
 					new RegexSectionFinder(regex));

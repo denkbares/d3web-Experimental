@@ -1,4 +1,4 @@
-div.Infowahl, div.Info, div.Frage, div.Antworten,div.Antwort, div.Hinweis, div.Erkl,div.Infostart,div.Infoend,div.Titel,div.InfoContent,div.Fragen:first-child,div.Fragen,div.Metadaten,div.Content,div.Ie,div.Afrage,div.Evaluation {
+div.Infowahl, div.Info, div.Question, div.AnswersBlock,div.AnswerLine, div.Hint, div.Erkl,div.Infostart,div.Infoend,div.Titel,div.InfoContent,div.Fragen:first-child,div.Fragen,div.Metadata,div.Content,div.Ie,div.Afrage,div.Evaluation {
 	font-family: Verdana, sans-serif;
 	padding: 10px;
 }
@@ -8,7 +8,7 @@ div.Infowahl, div.Info, div.Frage, div.Antworten,div.Antwort, div.Hinweis, div.E
 	padding: 10px;
 }*/
 
-div.Infowahl, div.Info, div.Frage, div.Antworten, div.Hinweis, div.Erkl, div.Evaluation {
+div.Infowahl, div.Info, div.Question, div.AnswersBlock, div.Hint, div.Erkl, div.Evaluation {
 	border-left-style: solid;
 	border-left-width: 10px;
 }
@@ -79,7 +79,7 @@ div.Afrage {
 div.Fragen:first-child {
 	margin-top: 0px;
 }
-div.Frage {
+div.Question {
 	border-color: #dee75a;
 }
 span.Options {
@@ -87,17 +87,17 @@ span.Options {
 	font-style:italic;
 	padding: 0px 5px 0px 5px;
 }
-div.Hinweis {
+div.Hint {
 	border-color: #e67439;
 }
-div.Antworten {
+div.AnswersBlock {
 	padding-left: 5px;
 	border-color: #daf4b3;
 }
-div.Antwort {
+div.AnswerLine {
 	padding: 5px;
 }
-div.Erkl {
+div.Introduction {
 	background:url(../../KnowWEExtension/images/edgar2.png);
 	background-repeat:no-repeat;
 	background-position:top left;

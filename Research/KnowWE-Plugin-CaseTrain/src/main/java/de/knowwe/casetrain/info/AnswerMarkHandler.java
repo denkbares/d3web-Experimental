@@ -26,7 +26,7 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
-import de.knowwe.casetrain.info.Antwort.AntwortMarkierung;
+import de.knowwe.casetrain.info.AnswerLine.AnswerMark;
 import de.knowwe.casetrain.message.InvalidArgumentError;
 
 
@@ -37,24 +37,24 @@ import de.knowwe.casetrain.message.InvalidArgumentError;
  * @author Johannes Dienst
  * @created 08.05.2011
  */
-public class AntwortMarkierungHandler extends GeneralSubtreeHandler<AntwortMarkierung> {
+public class AnswerMarkHandler extends GeneralSubtreeHandler<AnswerMark> {
 
 	String[] symbols = {"+", "-"};
 
-	private static AntwortMarkierungHandler uniqueInstance;
+	private static AnswerMarkHandler uniqueInstance;
 
-	private AntwortMarkierungHandler(){
+	private AnswerMarkHandler(){
 		// Nothing
 	}
 
-	public static AntwortMarkierungHandler getInstance() {
+	public static AnswerMarkHandler getInstance() {
 		if (uniqueInstance == null)
-			uniqueInstance = new AntwortMarkierungHandler();
+			uniqueInstance = new AnswerMarkHandler();
 		return uniqueInstance;
 	}
 
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<AntwortMarkierung> s) {
+	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<AnswerMark> s) {
 
 		List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>();
 		String content = s.getOriginalText().substring(1, s.getOriginalText().length()-1).trim();

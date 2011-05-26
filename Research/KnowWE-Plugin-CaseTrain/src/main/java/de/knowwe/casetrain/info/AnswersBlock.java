@@ -42,29 +42,29 @@ import de.knowwe.casetrain.type.general.SubblockMarkup;
  * @author Jochen Reutelshoefer
  * @created 28.04.2011
  */
-public class Antworten extends SubblockMarkup {
+public class AnswersBlock extends SubblockMarkup {
 
 	private final String ANTWORT = "Antwort";
 
-	public Antworten() {
+	public AnswersBlock() {
 		super("Antworten");
 		PlainText plain = new PlainText();
 		plain.setSectionFinder(new RegexSectionFinder("\\r?\\n"));
 		this.addContentType(plain);
-		this.addContentType(new Antwort());
+		this.addContentType(new AnswerLine());
 		this.addContentType(new Praefix());
 		this.addContentType(new Postfix());
-		this.addContentType(new Ueberschrift());
-		this.addContentType(new AntwortOrderMarkierung());
+		this.addContentType(new Heading());
+		this.addContentType(new AnswerOrderMark());
 
-		this.addSubtreeHandler(new GeneralSubtreeHandler<Frage>() {
+		this.addSubtreeHandler(new GeneralSubtreeHandler<Question>() {
 
 			@Override
-			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Frage> s) {
+			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Question> s) {
 
 				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
-				List<Section<Antwort>> found = new ArrayList<Section<Antwort>>();
-				Sections.findSuccessorsOfType(s, Antwort.class, found);
+				List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
+				Sections.findSuccessorsOfType(s, AnswerLine.class, found);
 
 				if (found.isEmpty()) {
 					messages.add(new MissingComponentWarning(ANTWORT));
@@ -83,7 +83,7 @@ public class Antworten extends SubblockMarkup {
 	public class Praefix extends AbstractType {
 		public Praefix() {
 			this.setSectionFinder(
-					new RegexSectionFinder(AntwortenKorrektheitChecker.PRAEFIX + ":.*"));
+					new RegexSectionFinder(AnswerValidator.PRAEFIX + ":.*"));
 			this.setCustomRenderer(new DivStyleClassRenderer("praefix"));
 		}
 	}
@@ -96,7 +96,7 @@ public class Antworten extends SubblockMarkup {
 	public class Postfix extends AbstractType {
 		public Postfix() {
 			this.setSectionFinder(
-					new RegexSectionFinder(AntwortenKorrektheitChecker.POSTFIX + ":.*"));
+					new RegexSectionFinder(AnswerValidator.POSTFIX + ":.*"));
 			this.setCustomRenderer(new DivStyleClassRenderer("postfix"));
 		}
 	}
@@ -106,10 +106,10 @@ public class Antworten extends SubblockMarkup {
 	 * @author Johannes Dienst
 	 * @created 09.05.2011
 	 */
-	public class Ueberschrift extends AbstractType {
-		public Ueberschrift() {
+	public class Heading extends AbstractType {
+		public Heading() {
 			this.setSectionFinder(
-					new RegexSectionFinder(AntwortenKorrektheitChecker.UEBERSCHRIFT + ":.*"));
+					new RegexSectionFinder(AnswerValidator.UEBERSCHRIFT + ":.*"));
 			this.setCustomRenderer(new DivStyleClassRenderer("ueberschrift"));
 		}
 	}
@@ -120,8 +120,8 @@ public class Antworten extends SubblockMarkup {
 	 * @author Johannes Dienst
 	 * @created 20.05.2011
 	 */
-	public class AntwortOrderMarkierung extends AbstractType {
-		public AntwortOrderMarkierung() {
+	public class AnswerOrderMark extends AbstractType {
+		public AnswerOrderMark() {
 			this.setSectionFinder(
 					new RegexSectionFinder("\\{[0-9]+\\}"));
 			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
