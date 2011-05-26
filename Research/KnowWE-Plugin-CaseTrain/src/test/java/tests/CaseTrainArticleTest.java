@@ -103,7 +103,6 @@ public class CaseTrainArticleTest extends TestCase {
 		assertNotNull(missingComponent+Einleitung.class.getName(), intro);
 
 		// Info
-		// OMW and MN are not marked with {1} in Antworten-Block
 		assertNotNull(missingComponent+Info.class.getName(), info);
 
 		// Evaluation
@@ -180,6 +179,23 @@ public class CaseTrainArticleTest extends TestCase {
 		List<Section<Hinweis>> hints = new ArrayList<Section<Hinweis>>();
 		Sections.findSuccessorsOfType(info, Hinweis.class, hints);
 		assertEquals(WRONG_HINT_COUNT + Info.class.getName(), 11, hints.size());
+
+		// Test the first Hint
+		Section<Hinweis> hint = hints.get(0);
+		List<Section<PlainText>> hintPlains = new ArrayList<Section<PlainText>>();
+		Sections.findSuccessorsOfType(hint, PlainText.class, 2, hintPlains);
+		//		Sections.findSuccessorsOfType(hint, PlainText.class, hintPlains);
+		assertEquals("Wrong number of PlainText in " + Hinweis.class.getName(), 3, hintPlains.size());
+		String text = hintPlains.get(0).getOriginalText().trim();
+		assertEquals(WRONG_STRING + Hinweis.class.getName(),"Geben Sie mindestens 2 Probleme an.", text);
+		text = hintPlains.get(2).getOriginalText().trim();
+		assertEquals(WRONG_STRING + Hinweis.class.getName(),"Testtext.", text);
+
+		// Multimedia-items
+		Section<Bild> hintPic = Sections.findSuccessor(hint, Bild.class);
+		assertNotNull(PICTURE_MISSING + Hinweis.class.getName(), hintPic);
+		Section<Video> hintVideo = Sections.findSuccessor(hint, Video.class);
+		assertNotNull(VIDEO_MISSING + Hinweis.class.getName(), hintVideo);
 
 		List<Section<Frage>> questions = new ArrayList<Section<Frage>>();
 		Sections.findSuccessorsOfType(info, Frage.class, questions);

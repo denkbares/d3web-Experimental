@@ -43,11 +43,10 @@ Der Teddy ist in anscheinend schlechtem Allgemeinzustand.
 <Frage: 1-MC
 Welche Probleme mit diesem Spielzeug kommen nun in Frage?
 >
-<Hinweis: Geben Sie mindestens 2%%sup 3/% Probleme an1.
-
+<Hinweis: Geben Sie mindestens 2 Probleme an.
 {Bild: ls6logo.gif}
 {Video: video23.avi}
-__Wichtig__: Überlegen Sie ''gut''!
+Testtext.
 >
 <Antworten:
 {+}Fremdkörper
@@ -223,7 +222,7 @@ Die erklärung...
 >>
 
 <<Evaluation: Evaluation
-Um diesen Fall weiter verbessern zu k�nnen, beantworten Sie uns bitte noch zwei kurze Fragen.
+Um diesen Fall weiter verbessern zu können, beantworten Sie uns bitte noch zwei kurze Fragen.
 <Frage: 0-OC Welche Schulnote geben Sie dem Fall?
 >
 <Antworten:
@@ -232,12 +231,12 @@ Um diesen Fall weiter verbessern zu k�nnen, beantworten Sie uns bitte noch zwe
 {-}3
 {-}4
 
-<Frage:	0-MC Welchen Aussagen k�nnen Sie zustimmen?
+<Frage:	0-MC Welchen Aussagen können Sie zustimmen?
 >
 <Antworten :
 {-}Die Bearbeitung dieses Falles hat mich auf die Klausur vorbereitet.
-{-}Der Online-Fall ist eine gute Erg�nzung zur Pr�senzveranstaltung.
-{-}Die Mediadaten zum Fall sind von ausreichender Qualit�t
+{-}Der Online-Fall ist eine gute Ergänzung zur Präsenzveranstaltung.
+{-}Die Mediadaten zum Fall sind von ausreichender Qualität
 {-}Das verlinkte Hintergrundwissen hat mir dabei geholfen, den Fall zu bearbeiten.
 >
 >>
