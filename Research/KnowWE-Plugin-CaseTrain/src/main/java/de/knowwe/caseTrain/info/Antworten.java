@@ -32,6 +32,7 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.knowwe.caseTrain.message.MissingComponentWarning;
 import de.knowwe.caseTrain.renderer.DivStyleClassRenderer;
+import de.knowwe.caseTrain.renderer.MouseOverTitleRenderer;
 import de.knowwe.caseTrain.type.general.SubblockMarkup;
 
 
@@ -54,6 +55,7 @@ public class Antworten extends SubblockMarkup {
 		this.addContentType(new Praefix());
 		this.addContentType(new Postfix());
 		this.addContentType(new Ueberschrift());
+		this.addContentType(new AntwortOrderMarkierung());
 
 		this.addSubtreeHandler(new GeneralSubtreeHandler<Frage>() {
 
@@ -109,6 +111,20 @@ public class Antworten extends SubblockMarkup {
 			this.setSectionFinder(
 					new RegexSectionFinder(AntwortenKorrektheitChecker.UEBERSCHRIFT + ":.*"));
 			this.setCustomRenderer(new DivStyleClassRenderer("ueberschrift"));
+		}
+	}
+
+	/**
+	 * In MN/OMW the {@link Antwortenblock} can have a ordering mark.
+	 * 
+	 * @author Johannes Dienst
+	 * @created 20.05.2011
+	 */
+	public class AntwortOrderMarkierung extends AbstractType {
+		public AntwortOrderMarkierung() {
+			this.setSectionFinder(
+					new RegexSectionFinder("\\{[0-9]+\\}"));
+			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
 		}
 	}
 

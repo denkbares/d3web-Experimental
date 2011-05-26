@@ -66,6 +66,10 @@ public class Antwort extends AbstractType {
 		@Override
 		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 			List<SectionFinderResult> results = new ArrayList<SectionFinderResult>();
+
+			Pattern p = Pattern.compile("\\{[0-9]+\\}");
+			Matcher m = p.matcher(text);
+			if (m.matches()) return results;
 			if (text.startsWith(AntwortenKorrektheitChecker.PRAEFIX)
 					|| text.startsWith(AntwortenKorrektheitChecker.POSTFIX)
 					|| text.startsWith(AntwortenKorrektheitChecker.UEBERSCHRIFT)) {
