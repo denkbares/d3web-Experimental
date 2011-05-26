@@ -20,30 +20,29 @@
 
 package de.knowwe.termObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.objects.KnowWETerm;
-import de.d3web.we.kdom.objects.TermReference;
-import de.d3web.we.terminology.TerminologyHandler;
-import de.d3web.we.utils.KnowWEUtils;
+import de.d3web.we.kdom.rendering.StyleRenderer;
+import de.knowwe.termObject.IRIEntityType.IRIDeclarationType;
 
-public abstract class URITermDefintionComplex extends URITermDefinition{
+public class ClassIRIDefinition extends AbstractIRITermDefinition {
 
+	public static final StyleRenderer CLASS_RENDERER = new StyleRenderer("color:rgb(125, 80, 102)");
+	
+	public ClassIRIDefinition() {
+		this.setCustomRenderer(CLASS_RENDERER);
+	}
+
+	@Override
+	public String getTermName(Section<? extends KnowWETerm<IRIEntityType>> s) {
+		return s.getOriginalText();
+	}
 	
 	@Override
-	protected boolean checkDependencies(Section<URITermDefinition> s) {
-		Section<?> father = s.getFather();
-		List<Section<TermReference>> refs = new ArrayList<Section<TermReference>>();
-		Sections.findSuccessorsOfType(father, TermReference.class, refs);
-		TerminologyHandler tHandler = KnowWEUtils.getTerminologyHandler(s.getArticle().getWeb());
-		for (Section<TermReference> section : refs) {
-			boolean valid = tHandler.isDefinedTerm(s.getArticle(), section.get().getTermName(section),KnowWETerm.GLOBAL);
-			if(!valid) return false;
-		}
-		
-		return true;
+	protected IRIDeclarationType getIRIDeclarationType() {
+		return IRIDeclarationType.CLASS;
 	}
+
+
 }
+

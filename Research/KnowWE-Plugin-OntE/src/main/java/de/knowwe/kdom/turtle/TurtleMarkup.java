@@ -64,11 +64,11 @@ import de.knowwe.onte.owl.terminology.URIUtil;
 import de.knowwe.termObject.BasicVocabularyReference;
 import de.knowwe.termObject.LocalConceptDefinition;
 import de.knowwe.termObject.LocalConceptReference;
-import de.knowwe.termObject.OWLTermReference;
-import de.knowwe.termObject.RDFResourceType;
-import de.knowwe.termObject.URIObject;
-import de.knowwe.termObject.URIObject.URIObjectType;
-import de.knowwe.termObject.URITermDefinition;
+import de.knowwe.termObject.IRITermReference;
+import de.knowwe.termObject.RDFNodeType;
+import de.knowwe.termObject.IRIEntityType;
+import de.knowwe.termObject.IRIEntityType.IRIDeclarationType;
+import de.knowwe.termObject.AbstractIRITermDefinition;
 import de.knowwe.util.DelegateDestroyHandler;
 
 public class TurtleMarkup extends AbstractType {
@@ -213,14 +213,14 @@ public class TurtleMarkup extends AbstractType {
 		}
 	}
 
-	class SubjectReference extends OWLTermReference {
+	class SubjectReference extends IRITermReference {
 
 		public SubjectReference() {
 			this.setSectionFinder(new AllTextFinderTrimmed());
 		}
 	}
 
-	class SubjectDefinition extends URITermDefinition implements
+	class SubjectDefinition extends AbstractIRITermDefinition implements
 			IncrementalConstraint<TurtleMarkup> {
 
 		final KnowWEDomRenderer<SubjectDefinition> CLASS_RENDERER =
@@ -245,15 +245,15 @@ public class TurtleMarkup extends AbstractType {
 		}
 
 		@Override
-		public String getTermName(Section<? extends KnowWETerm<URIObject>> s) {
+		public String getTermName(Section<? extends KnowWETerm<IRIEntityType>> s) {
 			String text = s.getOriginalText();
 			if (text.trim().equals(DEF_PREFIX)) return s.getArticle().getTitle();
 			return text.substring(3).trim();
 		}
 
 		@Override
-		protected URIObjectType getURIObjectType() {
-			return URIObjectType.unspecified;
+		protected IRIDeclarationType getIRIDeclarationType() {
+			return IRIDeclarationType.UNSPECIFIED;
 		}
 
 		class URIObjectTypeChecker extends GeneralSubtreeHandler<SubjectDefinition> {
@@ -261,9 +261,9 @@ public class TurtleMarkup extends AbstractType {
 			@Override
 			public void destroy(KnowWEArticle article, Section<SubjectDefinition> s) {
 
-				URIObject termObject = s.get().getTermObject(article, s);
+				IRIEntityType termObject = s.get().getTermObject(article, s);
 				if (termObject == null) return;
-				termObject.setURIType(URIObjectType.unspecified);
+				termObject.setIRIDeclarationType(IRIDeclarationType.UNSPECIFIED);
 			}
 
 			@Override
@@ -276,14 +276,14 @@ public class TurtleMarkup extends AbstractType {
 				if (l.size() == 2) {
 					URI predURI = l.get(0).get().getNode(l.get(0));
 					URI objURI = l.get(1).get().getNode(l.get(1));
-					URIObject termObject = s.get().getTermObject(article, s);
+					IRIEntityType termObject = s.get().getTermObject(article, s);
 					if (termObject == null) return new ArrayList<KDOMReportMessage>(0);
-					URIObjectType uriType = termObject.getURIType();
+					IRIDeclarationType uriType = termObject.getIRIDeclarationType();
 
 					if (predURI.equals(RDF.type)) {
 						if (objURI.equals(OWL.Class)) {
-							if (uriType == URIObjectType.unspecified) {
-								termObject.setURIType(URIObjectType.Class);
+							if (uriType == IRIDeclarationType.UNSPECIFIED) {
+								termObject.setIRIDeclarationType(IRIDeclarationType.CLASS);
 							}
 							else {
 								return Arrays.asList((KDOMReportMessage) new UnexpectedSequence(
@@ -291,8 +291,8 @@ public class TurtleMarkup extends AbstractType {
 							}
 						}
 						else if (objURI.equals(OWL.ObjectProperty)) {
-							if (uriType == URIObjectType.unspecified) {
-								termObject.setURIType(URIObjectType.objectProperty);
+							if (uriType == IRIDeclarationType.UNSPECIFIED) {
+								termObject.setIRIDeclarationType(IRIDeclarationType.OBJECT_PROPERTY);
 							}
 							else {
 								return Arrays.asList((KDOMReportMessage) new UnexpectedSequence(
@@ -301,8 +301,8 @@ public class TurtleMarkup extends AbstractType {
 
 						}
 						else if (objURI.equals(OWL.DatatypeProperty)) {
-							if (uriType == URIObjectType.unspecified) {
-								termObject.setURIType(URIObjectType.datatypeProperty);
+							if (uriType == IRIDeclarationType.UNSPECIFIED) {
+								termObject.setIRIDeclarationType(IRIDeclarationType.DATATYPE_PROPERTY);
 							}
 							else {
 								return Arrays.asList((KDOMReportMessage) new UnexpectedSequence(
@@ -311,8 +311,8 @@ public class TurtleMarkup extends AbstractType {
 
 						}
 						else if (objURI.equals(OWL.Thing)) {
-							if (uriType == URIObjectType.unspecified) {
-								termObject.setURIType(URIObjectType.instance);
+							if (uriType == IRIDeclarationType.UNSPECIFIED) {
+								termObject.setIRIDeclarationType(IRIDeclarationType.NAMED_INDIVIDUAL);
 							}
 							else {
 								return Arrays.asList((KDOMReportMessage) new UnexpectedSequence(
@@ -351,8 +351,8 @@ public class TurtleMarkup extends AbstractType {
 
 		@Override
 		public boolean violatedConstraints(KnowWEArticle article, Section<TurtleObject> s) {
-			List<Section<RDFResourceType>> list = new ArrayList<Section<RDFResourceType>>();
-			Sections.findSuccessorsOfType(s.getFather(), RDFResourceType.class, list);
+			List<Section<RDFNodeType>> list = new ArrayList<Section<RDFNodeType>>();
+			Sections.findSuccessorsOfType(s.getFather(), RDFNodeType.class, list);
 			boolean orHasSuccessorNotReusedBy = s.getFather().isOrHasSuccessorNotReusedBy(
 					article.getTitle());
 			return orHasSuccessorNotReusedBy;
@@ -374,7 +374,7 @@ public class TurtleMarkup extends AbstractType {
 			}
 			else {
 
-				OWLTermReference termReference = new OWLTermReference();
+				IRITermReference termReference = new IRITermReference();
 				s.setType(termReference);
 			}
 
@@ -386,8 +386,8 @@ public class TurtleMarkup extends AbstractType {
 
 		@Override
 		public void destroy(KnowWEArticle article, Section<Type> s) {
-			List<Section<RDFResourceType>> list = new ArrayList<Section<RDFResourceType>>();
-			Sections.findSuccessorsOfType(s.getFather(), RDFResourceType.class, list);
+			List<Section<RDFNodeType>> list = new ArrayList<Section<RDFNodeType>>();
+			Sections.findSuccessorsOfType(s.getFather(), RDFNodeType.class, list);
 			if (list.size() < 3) return;
 			if (list.get(2).getID().equals(s.getID())) {
 				s.setType(new TurtleObject(), false);
@@ -410,18 +410,18 @@ public class TurtleMarkup extends AbstractType {
 			}
 			else {
 				if (s.get() instanceof TurtleObject) {
-					List<Section<OWLTermReference>> refs = new ArrayList<Section<OWLTermReference>>();
+					List<Section<IRITermReference>> refs = new ArrayList<Section<IRITermReference>>();
 					Sections.findSuccessorsOfType(
-							s.getFather(), OWLTermReference.class, refs);
+							s.getFather(), IRITermReference.class, refs);
 					if (refs.size() > 0) {
 						Section predSec = getPredicateSection(Sections.findAncestorOfType(
 								s, TurtleMarkup.class));
-						if (predSec != null && predSec.get() instanceof OWLTermReference) {
-							Section<OWLTermReference> prop = predSec;
-							URIObject termObject = prop.get().getTermObject(article, prop);
+						if (predSec != null && predSec.get() instanceof IRITermReference) {
+							Section<IRITermReference> prop = predSec;
+							IRIEntityType termObject = prop.get().getTermObject(article, prop);
 							if (termObject == null) return new ArrayList<KDOMReportMessage>(0);
 
-							if (termObject.getURIType() == URIObjectType.datatypeProperty) {
+							if (termObject.getIRIDeclarationType() == IRIDeclarationType.DATATYPE_PROPERTY) {
 								DataTypeValueTurtle dataTypeValue = new DataTypeValueTurtle();
 								dataTypeValue.addSubtreeHandler(new DelegateDestroyHandler(
 										this));
@@ -432,7 +432,7 @@ public class TurtleMarkup extends AbstractType {
 					}
 				}
 				if (!datavalue && s.get() instanceof TurtleObject) {
-					OWLTermReference termReference = new OWLTermReferenceTurtle();
+					IRITermReference termReference = new OWLTermReferenceTurtle();
 					termReference.addSubtreeHandler(new DelegateDestroyHandler(
 							this));
 					s.setType(termReference);

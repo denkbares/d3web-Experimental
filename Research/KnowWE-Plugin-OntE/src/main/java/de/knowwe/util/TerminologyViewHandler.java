@@ -32,7 +32,7 @@ import de.d3web.we.taghandler.AbstractTagHandler;
 import de.d3web.we.terminology.TerminologyHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.termObject.URIObject;
+import de.knowwe.termObject.IRIEntityType;
 
 public class TerminologyViewHandler extends AbstractTagHandler{
 
@@ -51,8 +51,8 @@ public class TerminologyViewHandler extends AbstractTagHandler{
 			
 			Object object = termDefiningSection.get().getTermObject(main, termDefiningSection);
 			String uriString = "no URI";
-			if(object instanceof URIObject) {
-				uriString = ((URIObject)object).toString();
+			if(object instanceof IRIEntityType) {
+				uriString = ((IRIEntityType)object).toString();
 			}
 			result += "<li>"+string+" ("+uriString+")"+"</li>";
 			

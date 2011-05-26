@@ -34,20 +34,20 @@ import de.d3web.we.terminology.TerminologyHandler;
 import de.d3web.we.tools.ToolMenuDecoratingRenderer;
 import de.d3web.we.utils.KnowWEUtils;
 
-public class OWLTermReference extends GlobalTermReference<URIObject> implements RDFResourceType {
+public class IRITermReference extends GlobalTermReference<IRIEntityType> implements RDFNodeType {
 
 	@SuppressWarnings("unchecked")
-	final KnowWEDomRenderer<OWLTermReference> REF_RENDERER =
-			new ToolMenuDecoratingRenderer<OWLTermReference>(new StyleRenderer(
+	final KnowWEDomRenderer<IRITermReference> REF_RENDERER =
+			new ToolMenuDecoratingRenderer<IRITermReference>(new StyleRenderer(
 					"color:rgb(25, 180, 120)"));
 
-	public OWLTermReference() {
-		super(URIObject.class);
+	public IRITermReference() {
+		super(IRIEntityType.class);
 		this.setCustomRenderer(REF_RENDERER);
 	}
 
 	@Override
-	public String getTermName(Section<? extends KnowWETerm<URIObject>> s) {
+	public String getTermName(Section<? extends KnowWETerm<IRIEntityType>> s) {
 		// dirty hack for colons '::'
 		// TODO: fix
 		if (s.getOriginalText().endsWith("::")) return s.getOriginalText().substring(0,
@@ -63,7 +63,7 @@ public class OWLTermReference extends GlobalTermReference<URIObject> implements 
 	}
 
 	@Override
-	public URI getNode(Section<? extends RDFResourceType> s) {
+	public URI getNode(Section<? extends RDFNodeType> s) {
 		if (s.get() instanceof TermReference) {
 			TerminologyHandler terminologyHandler = KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
 			Section<? extends TermDefinition> definingSection = terminologyHandler.getTermDefiningSection(
@@ -75,8 +75,8 @@ public class OWLTermReference extends GlobalTermReference<URIObject> implements 
 
 			Object termObject = definingSection.get().getTermObject(null,
 					definingSection);
-			if (termObject instanceof URIObject) {
-				return ((URIObject) termObject).getURI();
+			if (termObject instanceof IRIEntityType) {
+				return ((IRIEntityType) termObject).getIRI();
 			}
 		}
 		return null;

@@ -30,10 +30,10 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreeHandler.IncrementalConstraint;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.termObject.OWLTermReference;
-import de.knowwe.termObject.RDFResourceType;
+import de.knowwe.termObject.IRITermReference;
+import de.knowwe.termObject.RDFNodeType;
 
-public class OWLTermReferenceTurtle extends OWLTermReference implements IncrementalConstraint<TurtleMarkup> {
+public class OWLTermReferenceTurtle extends IRITermReference implements IncrementalConstraint<TurtleMarkup> {
 
 	public OWLTermReferenceTurtle() {
 		super();
@@ -50,8 +50,8 @@ public class OWLTermReferenceTurtle extends OWLTermReference implements Incremen
 
 	@Override
 	public boolean violatedConstraints(KnowWEArticle article, Section<TurtleMarkup> s) {
-		List<Section<RDFResourceType>> list = new ArrayList<Section<RDFResourceType>>();
-		Sections.findSuccessorsOfType(s.getFather(), RDFResourceType.class, list);
+		List<Section<RDFNodeType>> list = new ArrayList<Section<RDFNodeType>>();
+		Sections.findSuccessorsOfType(s.getFather(), RDFNodeType.class, list);
 		return s.getFather().isOrHasSuccessorNotReusedBy(article.getTitle());
 		// abreturn list.get(1).isReusedBy(article.getTitle());
 	}

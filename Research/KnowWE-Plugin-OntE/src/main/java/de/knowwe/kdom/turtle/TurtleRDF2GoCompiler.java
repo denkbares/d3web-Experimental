@@ -40,7 +40,7 @@ import de.d3web.we.terminology.TerminologyHandler;
 import de.d3web.we.utils.KnowWEUtils;
 import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.termObject.RDFResourceType;
+import de.knowwe.termObject.RDFNodeType;
 
 public class TurtleRDF2GoCompiler extends RDF2GoSubtreeHandler<TurtleMarkup> {
 
@@ -50,17 +50,17 @@ public class TurtleRDF2GoCompiler extends RDF2GoSubtreeHandler<TurtleMarkup> {
 			return new ArrayList<KDOMReportMessage>(0);
 		}
 
-		List<Section<RDFResourceType>> found = new ArrayList<Section<RDFResourceType>>();
+		List<Section<RDFNodeType>> found = new ArrayList<Section<RDFNodeType>>();
 		Node subURI = null;
 		Node predURI = null;
 		Node objURI = null;
 
-		Sections.findSuccessorsOfType(s, RDFResourceType.class, found);
+		Sections.findSuccessorsOfType(s, RDFNodeType.class, found);
 
 		if (found.size() == 3) {
-			Section<RDFResourceType> subject = found.get(0);
-			Section<RDFResourceType> predicate = found.get(1);
-			Section<RDFResourceType> object = found.get(2);
+			Section<RDFNodeType> subject = found.get(0);
+			Section<RDFNodeType> predicate = found.get(1);
+			Section<RDFNodeType> object = found.get(2);
 
 			subURI = subject.get().getNode(subject);
 			predURI = predicate.get().getNode(predicate);

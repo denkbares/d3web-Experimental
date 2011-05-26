@@ -17,30 +17,30 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
+
 package de.knowwe.termObject;
 
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.objects.KnowWETerm;
 import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.knowwe.termObject.URIObject.URIObjectType;
+import de.knowwe.termObject.IRIEntityType.IRIDeclarationType;
 
-public class OWLObjectPropertyDefinition extends URITermDefinition {
+public class NamedIndividualIRIDefinition extends AbstractIRITermDefinition {
+
+	public static final StyleRenderer CLASS_RENDERER = new StyleRenderer("color:rgb(152, 180, 12)");
 	
-	public static final StyleRenderer PROPERTY_RENDERER = new StyleRenderer("color:rgb(40, 40, 160)");
-	
-	public OWLObjectPropertyDefinition() {
-		this.setCustomRenderer(PROPERTY_RENDERER);
+	public NamedIndividualIRIDefinition() {
+		this.setCustomRenderer(CLASS_RENDERER);
 	}
 
 	@Override
-	public String getTermName(Section<? extends KnowWETerm<URIObject>> s) {
+	public String getTermName(Section<? extends KnowWETerm<IRIEntityType>> s) {
 		return s.getOriginalText();
 	}
 
 	@Override
-	protected URIObjectType getURIObjectType() {
-		return URIObjectType.objectProperty;
+	protected IRIDeclarationType getIRIDeclarationType() {
+		return IRIDeclarationType.NAMED_INDIVIDUAL;
 	}
+
 }
-
-

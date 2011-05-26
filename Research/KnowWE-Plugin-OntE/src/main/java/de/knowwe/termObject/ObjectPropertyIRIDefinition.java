@@ -17,44 +17,30 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-
 package de.knowwe.termObject;
 
-import org.ontoware.rdf2go.model.node.URI;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.objects.KnowWETerm;
+import de.d3web.we.kdom.rendering.StyleRenderer;
+import de.knowwe.termObject.IRIEntityType.IRIDeclarationType;
 
-public class URIObject {
+public class ObjectPropertyIRIDefinition extends AbstractIRITermDefinition {
 	
-	public enum URIObjectType { Class, objectProperty, datatypeProperty, instance, unspecified};
+	public static final StyleRenderer PROPERTY_RENDERER = new StyleRenderer("color:rgb(40, 40, 160)");
 	
-	private final URI uri;
-	URIObjectType type;
-	
-	public URIObject(URI rui) {
-		this.uri = rui;
-		type = URIObjectType.unspecified;
-	}
-	
-	public URIObjectType getURIType() {
-		return type;
+	public ObjectPropertyIRIDefinition() {
+		this.setCustomRenderer(PROPERTY_RENDERER);
 	}
 
-	public void setURIType(URIObjectType type) {
-		this.type = type;
-	}
-
-	public URIObject(URI rui, URIObjectType type) {
-		this.uri = rui;
-		this.type = type;
-	}
-
-	public URI getURI() {
-		return uri;
-	}
-	
 	@Override
-	public String toString() {
-		return uri.toString()+ "("+type.toString()+")";
-		
+	public String getTermName(Section<? extends KnowWETerm<IRIEntityType>> s) {
+		return s.getOriginalText();
 	}
 
+	@Override
+	protected IRIDeclarationType getIRIDeclarationType() {
+		return IRIDeclarationType.OBJECT_PROPERTY;
+	}
 }
+
+

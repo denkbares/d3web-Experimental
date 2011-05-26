@@ -22,22 +22,22 @@ package de.knowwe.termObject;
 
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.objects.KnowWETerm;
-import de.knowwe.termObject.URIObject.URIObjectType;
+import de.knowwe.termObject.IRIEntityType.IRIDeclarationType;
 
-public class OWLDatatypePropertyDefinition extends URITermDefinition {
+public class DatatypePropertyIRIDefinition extends AbstractIRITermDefinition {
 
-	public OWLDatatypePropertyDefinition() {
-		this.setCustomRenderer(OWLObjectPropertyDefinition.PROPERTY_RENDERER);
+	public DatatypePropertyIRIDefinition() {
+		this.setCustomRenderer(ObjectPropertyIRIDefinition.PROPERTY_RENDERER);
 	}
 
 	@Override
-	public String getTermName(Section<? extends KnowWETerm<URIObject>> s) {
+	public String getTermName(Section<? extends KnowWETerm<IRIEntityType>> s) {
 		return s.getOriginalText();
 	}
 	
 	@Override
-	protected URIObjectType getURIObjectType() {
-		return URIObjectType.datatypeProperty;
+	protected IRIDeclarationType getIRIDeclarationType() {
+		return IRIDeclarationType.DATATYPE_PROPERTY;
 	}
 
 }

@@ -28,7 +28,7 @@ import de.d3web.we.kdom.constraint.SingleChildConstraint;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.turtle.TurtleRDF2GoCompiler;
-import de.knowwe.termObject.OWLTermReference;
+import de.knowwe.termObject.IRITermReference;
 
 public class TurtleMarkupSimple extends AbstractType{
 
@@ -46,13 +46,13 @@ public class TurtleMarkupSimple extends AbstractType{
 
 	}
 	
-	class SimpleTurtlePredicate extends OWLTermReference {
+	class SimpleTurtlePredicate extends IRITermReference {
 		public SimpleTurtlePredicate (){
 			this.setSectionFinder(new RegexSectionFinder("\\b([^\\s]*)::",Pattern.DOTALL, 1));
 		}
 	}
 	
-	class SimpleTurtleSubject extends OWLTermReference {
+	class SimpleTurtleSubject extends IRITermReference {
 		public SimpleTurtleSubject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new AllTextFinderTrimmed());
@@ -62,7 +62,7 @@ public class TurtleMarkupSimple extends AbstractType{
 		
 	}
 	
-	class SimpleTurtleObject extends OWLTermReference {
+	class SimpleTurtleObject extends IRITermReference {
 		public SimpleTurtleObject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new RegexSectionFinder("::\\s(.*)",Pattern.DOTALL,1));

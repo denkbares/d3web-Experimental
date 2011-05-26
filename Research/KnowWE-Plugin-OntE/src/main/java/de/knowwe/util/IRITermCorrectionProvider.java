@@ -1,4 +1,4 @@
-package de.knowwe.termObject;
+package de.knowwe.util;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -20,7 +20,7 @@ import de.knowwe.core.correction.CorrectionProvider;
  * @author Alex Legler
  * @created 22.03.2011
  */
-public class OWLTermCorrectionProvider implements CorrectionProvider {
+public class IRITermCorrectionProvider implements CorrectionProvider {
 
 	@Override
 	public List<CorrectionProvider.Suggestion> getSuggestions(KnowWEArticle article, Section<?> section, int threshold) {

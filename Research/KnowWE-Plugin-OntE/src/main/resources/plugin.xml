@@ -61,10 +61,10 @@
 	
 		
 		<extension plugin-id="KnowWEExtensionPoints" point-id="CorrectionProvider"
-		id="OWLTermCorrectionProvider">
+		id="IRITermCorrectionProvider">
 		<parameter id="class"
-			value="de.knowwe.termObject.OWLTermCorrectionProvider" />
-		<parameter id="name" value="OWLTermCorrectionProvider" />
+			value="de.knowwe.util.IRITermCorrectionProvider" />
+		<parameter id="name" value="IRITermCorrectionProvider" />
 		<parameter id="description"
 			value="Generates correction suggestions for OWL" />
 		<parameter id="version" value="1.0" />

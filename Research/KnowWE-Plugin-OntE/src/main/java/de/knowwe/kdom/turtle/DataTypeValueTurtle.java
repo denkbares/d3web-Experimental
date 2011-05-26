@@ -34,9 +34,9 @@ import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreeHandler.IncrementalConstraint;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.termObject.RDFResourceType;
+import de.knowwe.termObject.RDFNodeType;
 
-public class DataTypeValueTurtle extends AbstractType implements RDFResourceType, IncrementalConstraint<TurtleMarkup> {
+public class DataTypeValueTurtle extends AbstractType implements RDFNodeType, IncrementalConstraint<TurtleMarkup> {
 
 	public DataTypeValueTurtle() {
 		this.setCustomRenderer(new StyleRenderer("font-weight:bold"));
@@ -53,14 +53,14 @@ public class DataTypeValueTurtle extends AbstractType implements RDFResourceType
 
 
 	@Override
-	public Node getNode(Section<? extends RDFResourceType> s) {
+	public Node getNode(Section<? extends RDFNodeType> s) {
 		return Rdf2GoCore.getInstance().createLiteral(s.getOriginalText());
 	}
 
 	@Override
 	public boolean violatedConstraints(KnowWEArticle article, Section<TurtleMarkup> s) {
-		List<Section<RDFResourceType>> list = new ArrayList<Section<RDFResourceType>>();
-		Sections.findSuccessorsOfType(s.getFather(), RDFResourceType.class, list);
+		List<Section<RDFNodeType>> list = new ArrayList<Section<RDFNodeType>>();
+		Sections.findSuccessorsOfType(s.getFather(), RDFNodeType.class, list);
 		return s.getFather().isOrHasSuccessorNotReusedBy(article.getTitle());
 		// abreturn list.get(1).isReusedBy(article.getTitle());
 	}

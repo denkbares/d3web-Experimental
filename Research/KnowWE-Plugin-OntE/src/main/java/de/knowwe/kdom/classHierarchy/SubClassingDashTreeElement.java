@@ -38,14 +38,14 @@ import de.knowwe.core.dashtree.DashTreeElementContent;
 import de.knowwe.core.dashtree.DashTreeUtils;
 import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.termObject.OWLTermReference;
+import de.knowwe.termObject.IRITermReference;
 
 public class SubClassingDashTreeElement extends DashTreeElementContent implements
 		IncrementalConstraint<SubClassingDashTreeElement> {
 
 	public SubClassingDashTreeElement() {
 		this.addSubtreeHandler(new SubClassingDashTreeElementOWLSubTreeHandler());
-		OWLTermReference ref = new OWLTermReference();
+		IRITermReference ref = new IRITermReference();
 		ref.setSectionFinder(new AllTextFinderTrimmed());
 		this.addChildType(ref);
 	}
@@ -68,10 +68,10 @@ public class SubClassingDashTreeElement extends DashTreeElementContent implement
 				Section<? extends DashTreeElement> father = DashTreeUtils
 						.getFatherDashTreeElement(element);
 				if (father != null) {
-					Section<? extends OWLTermReference> fatherElement = Sections
-							.findSuccessor(father, OWLTermReference.class);
-					Section<? extends OWLTermReference> childElement = Sections
-							.findSuccessor(element, OWLTermReference
+					Section<? extends IRITermReference> fatherElement = Sections
+							.findSuccessor(father, IRITermReference.class);
+					Section<? extends IRITermReference> childElement = Sections
+							.findSuccessor(element, IRITermReference
 									.class);
 					URI localURI = childElement.get().getNode(childElement);
 					URI fatherURI = fatherElement.get().getNode(fatherElement);
