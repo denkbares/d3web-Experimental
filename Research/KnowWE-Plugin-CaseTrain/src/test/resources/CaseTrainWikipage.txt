@@ -56,9 +56,10 @@ Testtext.
 {-}Lockere Kleinteile
 >
 
-<Erklärung:
-
-Die erklärung...
+<Erklärung: Geben Sie mindestens 2 Probleme an.
+{Bild: ls6logo.gif}
+{Video: video23.avi}
+Testtext.
 >
 
 <Frage: 1-OC

@@ -24,6 +24,7 @@ import de.knowwe.casetrain.type.Einleitung;
 import de.knowwe.casetrain.type.MetaDaten;
 import de.knowwe.casetrain.type.MetaLine;
 import de.knowwe.casetrain.type.general.BlockMarkupContent;
+import de.knowwe.casetrain.type.general.SubblockMarkupContent;
 import de.knowwe.casetrain.type.general.Title;
 import de.knowwe.casetrain.type.multimedia.Bild;
 import de.knowwe.casetrain.type.multimedia.MultimediaItem.MultimediaItemContent;
@@ -184,30 +185,47 @@ public class CaseTrainArticleTest extends TestCase {
 		Section<Hinweis> hint = hints.get(0);
 		List<Section<PlainText>> hintPlains = new ArrayList<Section<PlainText>>();
 		Sections.findSuccessorsOfType(hint, PlainText.class, 2, hintPlains);
-		//		Sections.findSuccessorsOfType(hint, PlainText.class, hintPlains);
 		assertEquals("Wrong number of PlainText in " + Hinweis.class.getName(), 3, hintPlains.size());
 		String text = hintPlains.get(0).getOriginalText().trim();
 		assertEquals(WRONG_STRING + Hinweis.class.getName(),"Geben Sie mindestens 2 Probleme an.", text);
 		text = hintPlains.get(2).getOriginalText().trim();
 		assertEquals(WRONG_STRING + Hinweis.class.getName(),"Testtext.", text);
-
-		// Multimedia-items
 		Section<Bild> hintPic = Sections.findSuccessor(hint, Bild.class);
 		assertNotNull(PICTURE_MISSING + Hinweis.class.getName(), hintPic);
 		Section<Video> hintVideo = Sections.findSuccessor(hint, Video.class);
 		assertNotNull(VIDEO_MISSING + Hinweis.class.getName(), hintVideo);
 
+		// Questions
 		List<Section<Frage>> questions = new ArrayList<Section<Frage>>();
 		Sections.findSuccessorsOfType(info, Frage.class, questions);
 		assertEquals(WRONG_QUESTION_COUNT + Info.class.getName(), 9, questions.size());
 
+		// Answers-Block
 		List<Section<Antworten>> antworten = new ArrayList<Section<Antworten>>();
 		Sections.findSuccessorsOfType(info, Antworten.class, antworten);
 		assertEquals(WRONG_ANSWERSBLOCKS_COUNT + Info.class.getName(), 13, antworten.size());
 
+		// Explications
 		List<Section<Erklaerung>> explications = new ArrayList<Section<Erklaerung>>();
 		Sections.findSuccessorsOfType(info, Erklaerung.class, explications);
 		assertEquals(WRONG_EXPLICATION_COUNT + Info.class.getName(), 11, explications.size());
+
+		Section<SubblockMarkupContent> sContent =
+			Sections.findSuccessor(explications.get(0), SubblockMarkupContent.class);
+
+		List<Section<PlainText>> expPlains = new ArrayList<Section<PlainText>>();
+		Sections.findSuccessorsOfType(sContent, PlainText.class, 1, expPlains);
+		//		Sections.findSuccessorsOfType(hint, PlainText.class, hintPlains);
+		assertEquals("Wrong number of PlainText in " + Hinweis.class.getName(), 3, expPlains.size());
+		text = hintPlains.get(0).getOriginalText().trim();
+		assertEquals(WRONG_STRING + Hinweis.class.getName(),"Geben Sie mindestens 2 Probleme an.", text);
+		text = hintPlains.get(2).getOriginalText().trim();
+		assertEquals(WRONG_STRING + Hinweis.class.getName(),"Testtext.", text);
+
+		bild = Sections.findChildOfType(sContent, Bild.class);
+		assertNotNull(PICTURE_MISSING + Erklaerung.class.getName(), bild);
+		video = Sections.findChildOfType(sContent, Video.class);
+		assertNotNull(VIDEO_MISSING + Erklaerung.class.getName(), video);
 
 	}
 
