@@ -32,7 +32,7 @@ Common Route #2
 - Scheduled date of operation [date]
 - Informed consent obtained [yn]
 
-Comorbidities #3
+Comorbidities &only if: Please choose the database level = Level 2 &  #3 
 - Are there Comorbidities? [yn]
 -- Yes
 --- Select Comorbidities [mc]
@@ -49,7 +49,7 @@ Comorbidities #3
 ---- Malignant disease 
 ----- Curatively treated [yn]
 
-Risk factors #4
+Risk factors &only if: Please choose the database level = Level 2 & #4
 - Are there other risk factors? [yn]
 -- Yes
 --- Select risk factors [mc]
@@ -69,7 +69,7 @@ Risk factors #4
 --- Length/size of the patient [num]{cm}
 --- BMI: [num]{kg/m2}<abstract>
 
-Other risk factors #5
+Other risk factors &only if: Please choose the database level = Level 2 & #5
 - Occupation [oc]
 -- Heavy physical labour
 -- Mild physical labour
@@ -91,11 +91,11 @@ Primary ventral hernia route
 - Width of the ventral hernia [num] {cm}
 - Length of the ventral hernia [num] {cm}
 - Diameter of the ventral hernia [num]
-- Reducibility of the ventral hernia [oc]
+- Reducibility of the ventral hernia [oc] &only if: Please choose the database level = Level 2 &
 -- Completely reducible
 -- Partially reducible
 -- Non reducible
-- Indication for ventral hernia surgery [oc]
+- Indication for ventral hernia surgery [oc] &only if: Please choose the database level = Level 2 &
 -- Elective
 -- Emergency
 - Primary ventral hernia summary [info]

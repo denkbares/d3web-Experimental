@@ -55,7 +55,7 @@ Die Wissensbasis wird verteilt auf den folgenden Artikel definiert:\\
 
 !!! Quick Interview Hernia
 \\
-[{KnowWEPlugin quickInterview}]
+[{KnowWEPlugin renderKnowledge}]
 
 %%knowledgebase 
 Hernia

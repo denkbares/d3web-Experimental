@@ -25,7 +25,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td colspan="6" >Route: $if(route)$ $route$ $endif$ / Level: $if(level)$ $level$ $endif$ </td>
+		<td colspan="6" >$if(info)$ $info$ $endif$ </td>
 	</tr>
 	<tr>
 		
