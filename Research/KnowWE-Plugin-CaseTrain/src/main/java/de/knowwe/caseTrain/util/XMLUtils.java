@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.caseTrain.util;
+package de.knowwe.casetrain.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -66,39 +66,39 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.basic.PlainText;
-import de.knowwe.caseTrain.info.Antwort;
-import de.knowwe.caseTrain.info.Antwort.AntwortErklaerung;
-import de.knowwe.caseTrain.info.Antwort.AntwortText;
-import de.knowwe.caseTrain.info.Antwort.AntwortTextArgument;
-import de.knowwe.caseTrain.info.Antworten;
-import de.knowwe.caseTrain.info.AntwortenKorrektheitChecker;
-import de.knowwe.caseTrain.info.Erklaerung;
-import de.knowwe.caseTrain.info.Frage;
-import de.knowwe.caseTrain.info.Frage.FrageGewicht;
-import de.knowwe.caseTrain.info.Frage.FrageText;
-import de.knowwe.caseTrain.info.Frage.FrageTyp;
-import de.knowwe.caseTrain.info.Hinweis;
-import de.knowwe.caseTrain.info.Info;
-import de.knowwe.caseTrain.type.Abschluss;
-import de.knowwe.caseTrain.type.AttributeContent;
-import de.knowwe.caseTrain.type.AttributeName;
-import de.knowwe.caseTrain.type.Einleitung;
-import de.knowwe.caseTrain.type.MetaAttributes;
-import de.knowwe.caseTrain.type.MetaDaten;
-import de.knowwe.caseTrain.type.MetaLine;
-import de.knowwe.caseTrain.type.general.BlockMarkupContent;
-import de.knowwe.caseTrain.type.general.BlockMarkupType;
-import de.knowwe.caseTrain.type.general.SubblockMarkup;
-import de.knowwe.caseTrain.type.general.SubblockMarkupContent;
-import de.knowwe.caseTrain.type.general.Title;
-import de.knowwe.caseTrain.type.multimedia.Bild;
-import de.knowwe.caseTrain.type.multimedia.MultimediaItem;
-import de.knowwe.caseTrain.type.multimedia.Video;
+import de.knowwe.casetrain.info.Antwort;
+import de.knowwe.casetrain.info.Antwort.AntwortErklaerung;
+import de.knowwe.casetrain.info.Antwort.AntwortText;
+import de.knowwe.casetrain.info.Antwort.AntwortTextArgument;
+import de.knowwe.casetrain.info.Antworten;
+import de.knowwe.casetrain.info.AntwortenKorrektheitChecker;
+import de.knowwe.casetrain.info.Erklaerung;
+import de.knowwe.casetrain.info.Frage;
+import de.knowwe.casetrain.info.Frage.FrageGewicht;
+import de.knowwe.casetrain.info.Frage.FrageText;
+import de.knowwe.casetrain.info.Frage.FrageTyp;
+import de.knowwe.casetrain.info.Hinweis;
+import de.knowwe.casetrain.info.Info;
+import de.knowwe.casetrain.type.Abschluss;
+import de.knowwe.casetrain.type.AttributeContent;
+import de.knowwe.casetrain.type.AttributeName;
+import de.knowwe.casetrain.type.Einleitung;
+import de.knowwe.casetrain.type.MetaAttributes;
+import de.knowwe.casetrain.type.MetaDaten;
+import de.knowwe.casetrain.type.MetaLine;
+import de.knowwe.casetrain.type.general.BlockMarkupContent;
+import de.knowwe.casetrain.type.general.BlockMarkupType;
+import de.knowwe.casetrain.type.general.SubblockMarkup;
+import de.knowwe.casetrain.type.general.SubblockMarkupContent;
+import de.knowwe.casetrain.type.general.Title;
+import de.knowwe.casetrain.type.multimedia.Bild;
+import de.knowwe.casetrain.type.multimedia.MultimediaItem;
+import de.knowwe.casetrain.type.multimedia.Video;
 
 
 /**
  * 
- * XMLOutputParser for the CaseTrain-Markup.
+ * XMLOutputParser for the casetrain-Markup.
  * 
  * @author Johannes Dienst
  * @created 11.05.2011
@@ -165,11 +165,11 @@ public class XMLUtils {
 		Evaluation evo = fac.createCaseEvaluation();
 		EvaluationSections evoSecs = fac.createCaseEvaluationEvaluationSections();
 
-		List<Section<de.knowwe.caseTrain.evaluation.Evaluation>> found =
-			new ArrayList<Section<de.knowwe.caseTrain.evaluation.Evaluation>>();
-		Sections.findSuccessorsOfType(articleSec, de.knowwe.caseTrain.evaluation.Evaluation.class, found);
+		List<Section<de.knowwe.casetrain.evaluation.Evaluation>> found =
+			new ArrayList<Section<de.knowwe.casetrain.evaluation.Evaluation>>();
+		Sections.findSuccessorsOfType(articleSec, de.knowwe.casetrain.evaluation.Evaluation.class, found);
 
-		for(Section<de.knowwe.caseTrain.evaluation.Evaluation> infoSec : found) {
+		for(Section<de.knowwe.casetrain.evaluation.Evaluation> infoSec : found) {
 			List<Section<?>> childs = infoSec.getChildren().get(0).getChildren();
 			SimpleSection simpleSec = fac.createSimpleSection();
 			simpleSec.setQuestions(fac.createBasicSectionQuestions());
@@ -220,8 +220,8 @@ public class XMLUtils {
 			// Add the EvaluationEnd
 			EvaluationEnd end = fac.createCaseEvaluationEvaluationEnd();
 
-			Section<de.knowwe.caseTrain.evaluation.EvaluationEnd> evoEnd =
-				Sections.findSuccessor(infoSec, de.knowwe.caseTrain.evaluation.EvaluationEnd.class);
+			Section<de.knowwe.casetrain.evaluation.EvaluationEnd> evoEnd =
+				Sections.findSuccessor(infoSec, de.knowwe.casetrain.evaluation.EvaluationEnd.class);
 
 			if (evoEnd == null) {
 				end.setTitle("Evaluationende");

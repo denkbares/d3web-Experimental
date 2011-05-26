@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.caseTrain.info;
+package de.knowwe.casetrain.info;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -34,8 +34,8 @@ import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.knowwe.caseTrain.renderer.DivStyleClassRenderer;
-import de.knowwe.caseTrain.renderer.MouseOverTitleRenderer;
+import de.knowwe.casetrain.renderer.DivStyleClassRenderer;
+import de.knowwe.casetrain.renderer.MouseOverTitleRenderer;
 
 /**
  * Antwort is a Antwort Line.

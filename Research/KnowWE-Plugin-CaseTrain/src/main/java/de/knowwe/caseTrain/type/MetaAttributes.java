@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.caseTrain.type;
+package de.knowwe.casetrain.type;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,9 +27,9 @@ import java.util.TreeSet;
 
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.knowwe.caseTrain.message.DuplicateAttributeError;
-import de.knowwe.caseTrain.message.InvalidAttributeError;
-import de.knowwe.caseTrain.message.MissingAttributeError;
+import de.knowwe.casetrain.message.DuplicateAttributeError;
+import de.knowwe.casetrain.message.InvalidAttributeError;
+import de.knowwe.casetrain.message.MissingAttributeError;
 
 
 /**

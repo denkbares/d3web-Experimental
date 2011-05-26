@@ -22,7 +22,7 @@ Lesser General Public License for more
  * site: http://www.fsf.org.
  */
 
-package de.knowwe.caseTrain.type.general;
+package de.knowwe.casetrain.type.general;
 
 import java.util.regex.Pattern;
 
@@ -41,7 +41,7 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.type.AnonymousTypeInvisible;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.caseTrain.util.Utils;
+import de.knowwe.casetrain.util.Utils;
 
 /**
  * 
@@ -55,21 +55,21 @@ import de.knowwe.caseTrain.util.Utils;
 public abstract class BlockMarkupType extends AbstractType {
 
 	// Warnings are only rendered in message block
-	@Override
-	public MessageRenderer getWarningRenderer() {
-		return new MessageRenderer() {
-
-			@Override
-			public String preRenderMessage(KDOMReportMessage m, UserContext user) {
-				return "";
-			}
-
-			@Override
-			public String postRenderMessage(KDOMReportMessage m, UserContext user) {
-				return "";
-			}
-		};
-	}
+	//	@Override
+	//	public MessageRenderer getWarningRenderer() {
+	//		return new MessageRenderer() {
+	//
+	//			@Override
+	//			public String preRenderMessage(KDOMReportMessage m, UserContext user) {
+	//				return "";
+	//			}
+	//
+	//			@Override
+	//			public String postRenderMessage(KDOMReportMessage m, UserContext user) {
+	//				return "";
+	//			}
+	//		};
+	//	}
 
 	@Override
 	public MessageRenderer getNoticeRenderer() {
@@ -87,21 +87,21 @@ public abstract class BlockMarkupType extends AbstractType {
 		};
 	}
 
-	@Override
-	public MessageRenderer getErrorRenderer() {
-		return new MessageRenderer() {
-
-			@Override
-			public String preRenderMessage(KDOMReportMessage m, UserContext user) {
-				return "";
-			}
-
-			@Override
-			public String postRenderMessage(KDOMReportMessage m, UserContext user) {
-				return "";
-			}
-		};
-	}
+	//	@Override
+	//	public MessageRenderer getErrorRenderer() {
+	//		return new MessageRenderer() {
+	//
+	//			@Override
+	//			public String preRenderMessage(KDOMReportMessage m, UserContext user) {
+	//				return "";
+	//			}
+	//
+	//			@Override
+	//			public String postRenderMessage(KDOMReportMessage m, UserContext user) {
+	//				return "";
+	//			}
+	//		};
+	//	}
 
 	private final String key;
 	public static final String START_TAG = "<<";

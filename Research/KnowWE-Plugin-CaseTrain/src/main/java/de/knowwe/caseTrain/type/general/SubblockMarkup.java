@@ -18,7 +18,7 @@
  * site: http://www.fsf.org.
  */
 
-package de.knowwe.caseTrain.type.general;
+package de.knowwe.casetrain.type.general;
 
 import java.util.regex.Pattern;
 
@@ -31,7 +31,7 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.type.AnonymousTypeInvisible;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.caseTrain.renderer.MouseOverTitleRenderer;
+import de.knowwe.casetrain.renderer.MouseOverTitleRenderer;
 
 /**
  * 

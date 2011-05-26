@@ -17,7 +17,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.caseTrain.type;
+package de.knowwe.casetrain.type;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,15 +35,14 @@ import de.d3web.we.kdom.report.KDOMWarning;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.caseTrain.info.Info;
-import de.knowwe.caseTrain.message.MissingComponentError;
-import de.knowwe.caseTrain.type.general.BlockMarkupType;
-import de.knowwe.caseTrain.util.Utils;
-import de.knowwe.caseTrain.util.XMLUtils;
+import de.knowwe.casetrain.info.Info;
+import de.knowwe.casetrain.message.MissingComponentError;
+import de.knowwe.casetrain.type.general.BlockMarkupType;
+import de.knowwe.casetrain.util.Utils;
 
 /**
  * 
- * One part of the case-markup-structure of the caseTrain-wiki-format
+ * One part of the case-markup-structure of the casetrain-wiki-format
  * 
  * MetaDaten are rendered as a table with tow columns - attribute - value
  * Allowed attributes are specified in {@link MetaAttributes}
@@ -91,7 +90,7 @@ public class MetaDaten extends BlockMarkupType {
 				string.append(KnowWEUtils.maskHTML("/%\r\n"));
 
 				// Only for testing
-//				XMLUtils.createXMLFromCase(article);
+				//				XMLUtils.createXMLWithBindings(article);
 			}
 		});
 		this.addSubtreeHandler(new GeneralSubtreeHandler<MetaDaten>() {

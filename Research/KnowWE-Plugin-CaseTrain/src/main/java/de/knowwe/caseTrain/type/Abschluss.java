@@ -18,7 +18,7 @@
  * site: http://www.fsf.org.
  */
 
-package de.knowwe.caseTrain.type;
+package de.knowwe.casetrain.type;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,18 +30,18 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
-import de.knowwe.caseTrain.info.Info;
-import de.knowwe.caseTrain.message.MissingContentWarning;
-import de.knowwe.caseTrain.message.MissingPictureNotice;
-import de.knowwe.caseTrain.message.MissingTitleError;
-import de.knowwe.caseTrain.type.general.BlockMarkupType;
-import de.knowwe.caseTrain.type.general.Title;
-import de.knowwe.caseTrain.type.multimedia.Bild;
-import de.knowwe.caseTrain.type.multimedia.Video;
+import de.knowwe.casetrain.info.Info;
+import de.knowwe.casetrain.message.MissingContentWarning;
+import de.knowwe.casetrain.message.MissingPictureNotice;
+import de.knowwe.casetrain.message.MissingTitleError;
+import de.knowwe.casetrain.type.general.BlockMarkupType;
+import de.knowwe.casetrain.type.general.Title;
+import de.knowwe.casetrain.type.multimedia.Bild;
+import de.knowwe.casetrain.type.multimedia.Video;
 
 /**
  * 
- * One part of the case-markup-structure of the caseTrain-wiki-format
+ * One part of the case-markup-structure of the casetrain-wiki-format
  * Represents the end of a Case.
  * 
  * @author Jochen

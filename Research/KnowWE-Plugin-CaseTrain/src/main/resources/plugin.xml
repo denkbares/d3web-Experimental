@@ -18,7 +18,7 @@
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Einleitung">
-		<parameter id="class" value="de.knowwe.caseTrain.type.Einleitung" />
+		<parameter id="class" value="de.knowwe.casetrain.type.Einleitung" />
 		<parameter id="name" value="Einleitung" />
 		<parameter id="description" value="Type Einleitung" />
 		<parameter id="version" value="1.0" />
@@ -30,7 +30,7 @@
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Info">
-		<parameter id="class" value="de.knowwe.caseTrain.info.Info" />
+		<parameter id="class" value="de.knowwe.casetrain.info.Info" />
 		<parameter id="name" value="Info" />
 		<parameter id="description" value="Type Info" />
 		<parameter id="version" value="1.0" />
@@ -42,7 +42,7 @@
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Evaluation">
-		<parameter id="class" value="de.knowwe.caseTrain.evaluation.Evaluation" />
+		<parameter id="class" value="de.knowwe.casetrain.evaluation.Evaluation" />
 		<parameter id="name" value="Evaluation" />
 		<parameter id="description" value="Type Evaluation" />
 		<parameter id="version" value="1.0" />
@@ -54,7 +54,7 @@
 	
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="MetaDaten">
-		<parameter id="class" value="de.knowwe.caseTrain.type.MetaDaten" />
+		<parameter id="class" value="de.knowwe.casetrain.type.MetaDaten" />
 		<parameter id="name" value="MetaDaten" />
 		<parameter id="description" value="Type MetaDaten" />
 		<parameter id="version" value="1.0" />
@@ -66,7 +66,7 @@
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Abschluss">
-		<parameter id="class" value="de.knowwe.caseTrain.type.Abschluss" />
+		<parameter id="class" value="de.knowwe.casetrain.type.Abschluss" />
 		<parameter id="name" value="Abschluss" />
 		<parameter id="description" value="Type Abschluss" />
 		<parameter id="version" value="1.0" />

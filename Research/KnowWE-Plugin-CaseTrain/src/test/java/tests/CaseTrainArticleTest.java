@@ -10,11 +10,11 @@ import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
-import de.knowwe.caseTrain.evaluation.Evaluation;
-import de.knowwe.caseTrain.info.Info;
-import de.knowwe.caseTrain.type.Abschluss;
-import de.knowwe.caseTrain.type.Einleitung;
-import de.knowwe.caseTrain.type.MetaDaten;
+import de.knowwe.casetrain.evaluation.Evaluation;
+import de.knowwe.casetrain.info.Info;
+import de.knowwe.casetrain.type.Abschluss;
+import de.knowwe.casetrain.type.Einleitung;
+import de.knowwe.casetrain.type.MetaDaten;
 
 
 /*

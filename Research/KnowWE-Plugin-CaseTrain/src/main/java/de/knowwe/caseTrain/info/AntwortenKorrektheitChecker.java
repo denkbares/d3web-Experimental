@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.caseTrain.info;
+package de.knowwe.casetrain.info;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,21 +25,21 @@ import java.util.regex.Pattern;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.knowwe.caseTrain.info.Antwort.AntwortErklaerung;
-import de.knowwe.caseTrain.info.Antwort.AntwortMarkierung;
-import de.knowwe.caseTrain.info.Antwort.AntwortText;
-import de.knowwe.caseTrain.info.Antwort.AntwortTextArgument;
-import de.knowwe.caseTrain.info.Antworten.Postfix;
-import de.knowwe.caseTrain.info.Antworten.Praefix;
-import de.knowwe.caseTrain.info.Antworten.Ueberschrift;
-import de.knowwe.caseTrain.info.Frage.FrageTyp;
-import de.knowwe.caseTrain.message.DuplicateComponentError;
-import de.knowwe.caseTrain.message.InvalidArgumentError;
-import de.knowwe.caseTrain.message.InvalidArgumentNotice;
-import de.knowwe.caseTrain.message.InvalidArgumentWarning;
-import de.knowwe.caseTrain.message.InvalidAttributeError;
-import de.knowwe.caseTrain.message.MissingComponentWarning;
-import de.knowwe.caseTrain.message.MissingContentWarning;
+import de.knowwe.casetrain.info.Antwort.AntwortErklaerung;
+import de.knowwe.casetrain.info.Antwort.AntwortMarkierung;
+import de.knowwe.casetrain.info.Antwort.AntwortText;
+import de.knowwe.casetrain.info.Antwort.AntwortTextArgument;
+import de.knowwe.casetrain.info.Antworten.Postfix;
+import de.knowwe.casetrain.info.Antworten.Praefix;
+import de.knowwe.casetrain.info.Antworten.Ueberschrift;
+import de.knowwe.casetrain.info.Frage.FrageTyp;
+import de.knowwe.casetrain.message.DuplicateComponentError;
+import de.knowwe.casetrain.message.InvalidArgumentError;
+import de.knowwe.casetrain.message.InvalidArgumentNotice;
+import de.knowwe.casetrain.message.InvalidArgumentWarning;
+import de.knowwe.casetrain.message.InvalidAttributeError;
+import de.knowwe.casetrain.message.MissingComponentWarning;
+import de.knowwe.casetrain.message.MissingContentWarning;
 
 
 /**

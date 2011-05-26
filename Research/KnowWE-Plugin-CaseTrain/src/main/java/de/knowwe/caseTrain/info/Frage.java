@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.caseTrain.info;
+package de.knowwe.casetrain.info;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,15 +31,15 @@ import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
-import de.knowwe.caseTrain.message.InvalidArgumentError;
-import de.knowwe.caseTrain.message.MissingAttributeWarning;
-import de.knowwe.caseTrain.message.MissingComponentError;
-import de.knowwe.caseTrain.message.MissingComponentWarning;
-import de.knowwe.caseTrain.renderer.MouseOverTitleRenderer;
-import de.knowwe.caseTrain.type.general.SubblockMarkup;
-import de.knowwe.caseTrain.type.general.Title;
-import de.knowwe.caseTrain.type.multimedia.Bild;
-import de.knowwe.caseTrain.type.multimedia.Video;
+import de.knowwe.casetrain.message.InvalidArgumentError;
+import de.knowwe.casetrain.message.MissingAttributeWarning;
+import de.knowwe.casetrain.message.MissingComponentError;
+import de.knowwe.casetrain.message.MissingComponentWarning;
+import de.knowwe.casetrain.renderer.MouseOverTitleRenderer;
+import de.knowwe.casetrain.type.general.SubblockMarkup;
+import de.knowwe.casetrain.type.general.Title;
+import de.knowwe.casetrain.type.multimedia.Bild;
+import de.knowwe.casetrain.type.multimedia.Video;
 
 
 /**

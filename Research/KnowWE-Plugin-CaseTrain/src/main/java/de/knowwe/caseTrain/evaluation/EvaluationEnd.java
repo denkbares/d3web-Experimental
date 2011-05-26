@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.caseTrain.evaluation;
+package de.knowwe.casetrain.evaluation;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,11 +27,11 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
-import de.knowwe.caseTrain.message.MissingContentWarning;
-import de.knowwe.caseTrain.type.Abschluss;
-import de.knowwe.caseTrain.type.general.SubblockMarkup;
-import de.knowwe.caseTrain.type.general.SubblockMarkupContent;
-import de.knowwe.caseTrain.type.general.Title;
+import de.knowwe.casetrain.message.MissingContentWarning;
+import de.knowwe.casetrain.type.Abschluss;
+import de.knowwe.casetrain.type.general.SubblockMarkup;
+import de.knowwe.casetrain.type.general.SubblockMarkupContent;
+import de.knowwe.casetrain.type.general.Title;
 
 
 /**

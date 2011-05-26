@@ -17,13 +17,13 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.caseTrain.type.general;
+package de.knowwe.casetrain.type.general;
 
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
 import de.d3web.we.kdom.sectionFinder.LineSectionFinder;
-import de.knowwe.caseTrain.renderer.DivStyleClassRenderer;
+import de.knowwe.casetrain.renderer.DivStyleClassRenderer;
 
 /**
  * 

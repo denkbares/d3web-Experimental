@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.caseTrain.evaluation;
+package de.knowwe.casetrain.evaluation;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,18 +34,18 @@ import de.d3web.we.kdom.report.KDOMWarning;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.caseTrain.info.Antworten;
-import de.knowwe.caseTrain.info.AntwortenKorrektheitChecker;
-import de.knowwe.caseTrain.info.Frage;
-import de.knowwe.caseTrain.info.Frage.FrageTyp;
-import de.knowwe.caseTrain.info.Info;
-import de.knowwe.caseTrain.message.InvalidArgumentError;
-import de.knowwe.caseTrain.message.MissingComponentWarning;
-import de.knowwe.caseTrain.message.MissingContentWarning;
-import de.knowwe.caseTrain.renderer.MouseOverTitleRenderer;
-import de.knowwe.caseTrain.type.general.BlockMarkupContent;
-import de.knowwe.caseTrain.type.general.BlockMarkupType;
-import de.knowwe.caseTrain.util.Utils;
+import de.knowwe.casetrain.info.Antworten;
+import de.knowwe.casetrain.info.AntwortenKorrektheitChecker;
+import de.knowwe.casetrain.info.Frage;
+import de.knowwe.casetrain.info.Frage.FrageTyp;
+import de.knowwe.casetrain.info.Info;
+import de.knowwe.casetrain.message.InvalidArgumentError;
+import de.knowwe.casetrain.message.MissingComponentWarning;
+import de.knowwe.casetrain.message.MissingContentWarning;
+import de.knowwe.casetrain.renderer.MouseOverTitleRenderer;
+import de.knowwe.casetrain.type.general.BlockMarkupContent;
+import de.knowwe.casetrain.type.general.BlockMarkupType;
+import de.knowwe.casetrain.util.Utils;
 
 
 /**

@@ -18,7 +18,7 @@
  * site: http://www.fsf.org.
  */
 
-package de.knowwe.caseTrain.message;
+package de.knowwe.casetrain.message;
 
 import de.d3web.we.kdom.report.KDOMWarning;
 
