@@ -19,10 +19,15 @@
  */
 package de.knowwe.defi.menu;
 
+import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.defaultMarkup.ContentType;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.user.UserContext;
 
 public class DynamicMenuMarkup extends DefaultMarkupType {
 
@@ -32,7 +37,19 @@ public class DynamicMenuMarkup extends DefaultMarkupType {
 
 	@Override
 	public KnowWEDomRenderer getRenderer() {
-		return DelegateRenderer.getInstance();
+		return new KnowWEDomRenderer<DynamicMenuMarkup>() {
+
+			@Override
+			public void render(KnowWEArticle article, Section<DynamicMenuMarkup> sec, UserContext user, StringBuilder string) {
+				string.append("<table>");
+				Section<ContentType> content = Sections.findChildOfType(sec,
+						ContentType.class);
+				DelegateRenderer.getInstance().render(article, content, user, string);
+				string.append("</table>");
+
+			}
+		};
+
 	}
 
 	private static DefaultMarkup m = null;
