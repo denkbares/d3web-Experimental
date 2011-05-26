@@ -72,8 +72,7 @@ public class MultimediaItem extends AbstractType {
 	}
 
 
-
-	class MultimediaItemContent extends AbstractType {
+	public class MultimediaItemContent extends AbstractType {
 		public MultimediaItemContent(String regex) {
 			this.setSectionFinder(new RegexSectionFinder(REGEX, 0, 1));
 		}
