@@ -3,13 +3,13 @@
 <<Metadaten:
 FALL_ID:INFO_INFO6_AH_DEMO23072008
 FALL_TITEL:Demofall (Spielzeugklinik)
-FALL_AUTOR:Alexander H�rnlein
+FALL_AUTOR:Alexander Hörnlein
 FALL_VERSION:1
 FALL_DATUM:23.07.2008
 BESTEHEN_AB:0.75
 FALL_PUNKTZAHL:1
 HISTORIE: nix
-FALL_TODO: vervollst�ndigen
+FALL_TODO: vervollständigen
 FALL_TODO: Mach was
 SCHWIERIGKEIT : Sehr sehr schwer
 VORAUSSETZUNGEN : NullkommaNichts
@@ -22,7 +22,7 @@ ZEIT_ANZEIGEN : ja
 ZEIT_GEWICHT : 20
 ZEIT_GRENZE100 : 600
 ZEIT_GRENZE0 : 300
-FEEDBACK : Eine Erkl�rung
+FEEDBACK : Eine Erkärung
 HINTERGRUNDWISSEN : http://casetrain.uni-wuerzburg.de/index.shtml
 HW_LINKTEXT : Das ist der LinkText
 SPRACHE : en
@@ -38,20 +38,21 @@ Text der Einleitung
 Der Teddy ist in anscheinend schlechtem Allgemeinzustand.
 
 {Bild: knowwe_logo.gif}
+{Video: video23.avi}
 
 <Frage: 1-MC
 Welche Probleme mit diesem Spielzeug kommen nun in Frage?
 >
-<Hinweis: Geben Sie mindestens 2%%sup 3/% Probleme an.
+<Hinweis: Geben Sie mindestens 2%%sup 3/% Probleme an1.
 
 {Bild: ls6logo.gif}
 {Video: video23.avi}
-__Wichtig__: �berlegen Sie ''gut''!
+__Wichtig__: Überlegen Sie ''gut''!
 >
 <Antworten:
-{+}Fremdk�rper
+{+}Fremdkörper
 {+}Ausflockung
-{-}Offene N�hte
+{-}Offene Nähte
 {-}Lockere Extremit�ten
 {-}Lockere Kleinteile
 >
@@ -70,7 +71,7 @@ Was könnte man zum reparabieren tun?
 {+} Neuen Teddy kaufen
 {0.2} Mit Klebeband fixen
 >
-<Hinweis: Gehen Sie vorsichtig vor!
+<Hinweis: Gehen Sie vorsichtig vor2!
 >
 <Erklärung:
 Die erklärung...
@@ -83,7 +84,7 @@ Was könnte man zum reparabieren tun?
 <Antworten:
 {+}{r}Wegwerfen
 >
-<Hinweis: Gehen Sie vorsichtig vor!
+<Hinweis: Gehen Sie vorsichtig vor3!
 >
 <Erklärung:
 Die erklärung...
@@ -96,7 +97,7 @@ Was könnte man zum reparabieren tun?
 <Antworten:
 {+}{2}Wegwerfen
 >
-<Hinweis: Gehen Sie vorsichtig vor!
+<Hinweis: Gehen Sie vorsichtig vor4!
 >
 <Erklärung:
 Die erklärung...
@@ -135,7 +136,7 @@ Präfix: Gesamt
 
 Postfix: %
 >
-<Hinweis: Gehen Sie vorsichtig vor!
+<Hinweis: Gehen Sie vorsichtig vor5!
 >
 <Erklärung:
 Die erklärung...
@@ -148,7 +149,7 @@ Was könnte man zum reparabieren tun?
 <Antworten:
 {+}{2}Wegwerfen
 >
-<Hinweis: Gehen Sie vorsichtig vor!
+<Hinweis: Gehen Sie vorsichtig vor6!
 >
 <Erklärung:
 Die erklärung...
@@ -157,7 +158,7 @@ Die erklärung...
 <Antworten:
 {+}{r}Wegwerfen*
 >
-<Hinweis: Gehen Sie vorsichtig vor!
+<Hinweis: Gehen Sie vorsichtig vor7!
 >
 <Erklärung:
 Die erklärung...
@@ -171,7 +172,7 @@ Was könnte man zum reparabieren tun?
 {1}
 {+}{2}Wegwerfen
 >
-<Hinweis: Gehen Sie vorsichtig vor!
+<Hinweis: Gehen Sie vorsichtig vor8!
 >
 <Erklärung:
 Die erklärung...
@@ -181,7 +182,7 @@ Die erklärung...
 {2}
 {+}{r}Wegwerfen*
 >
-<Hinweis: Gehen Sie vorsichtig vor!
+<Hinweis: Gehen Sie vorsichtig vor9!
 >
 <Erklärung:
 Die erklärung...
@@ -200,7 +201,7 @@ Präfix:männlich
 
 Postfix:%
 >
-<Hinweis: Gehen Sie vorsichtig vor!
+<Hinweis: Gehen Sie vorsichtig vor10!
 >
 <Erklärung:
 Die erklärung...
@@ -213,7 +214,7 @@ Was könnte man zum reparabieren tun?
 <Antworten:
 {+} Eine Textfrage gibt im Normalfall keine Punkte!
 >
-<Hinweis: Gehen Sie vorsichtig vor!
+<Hinweis: Gehen Sie vorsichtig vor11!
 >
 <Erklärung:
 Die erklärung...
@@ -242,7 +243,9 @@ Um diesen Fall weiter verbessern zu k�nnen, beantworten Sie uns bitte noch zwe
 >>
 
 <<Abschluss: Abschlusskommentar
-Ende des Falles. Auf wiederhören.
+Ende des Falles!
+{Bild: ls6logo.gif}
+{Video: video42.avi}
 >>
 
 
