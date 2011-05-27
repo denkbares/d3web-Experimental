@@ -65,12 +65,19 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 
 	@Override
 	public void render(KnowWEArticle article, Section<DynamicMenuItem> sec, UserContext user, StringBuilder string) {
-		// TODO: add rendering logics here
+
 		int dashLevel = DashTreeUtils.getDashLevel(Sections.findAncestorOfType(sec,
 				DashTreeElement.class));
 		boolean isRoot = false;
 		if (dashLevel == 0) {
 			isRoot = true;
+		}
+
+		// check for sub-pages
+		if (dashLevel == 2) {
+			return; // sub-pages are not displayed in Menu at all
+			// (if a sub-page is opened in the main view, then super-page is
+			// highlighted)
 		}
 
 
@@ -104,16 +111,20 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 			List<Section<DynamicMenuItem>> found = new ArrayList<Section<DynamicMenuItem>>();
 			Sections.findSuccessorsOfType(root.getFather(), DynamicMenuItem.class, found);
 			for (Section<DynamicMenuItem> section : found) {
-				if (getPageName(section).equals(currentPage)) {
+				if (pagename.equals(currentPage) || isSubpageOf(currentPage, section)) {
 					hidden = false;
 				}
 			}
 
 		}
 
+		// do not show hidden elements at all
 		if (hidden) return;
 
-		if (pagename.equals(currentPage)) {
+		// if this page or one of its subpages is opened, this menu item is
+		// highlighted
+		if (pagename.equals(currentPage) || (!isRoot && isSubpageOf(currentPage, sec))) {
+
 			className = CSS_CLASS_MENULINKCURRENT;
 		}
 
@@ -136,6 +147,22 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 			string.append("</a>");
 		}
 
+	}
+
+	private boolean isSubpageOf(String currentPage, Section<DynamicMenuItem> section) {
+		Section<DashTreeElement> dtElement = Sections.findAncestorOfType(section,
+				DashTreeElement.class);
+		List<Section<DashTreeElementContent>> found = new ArrayList<Section<DashTreeElementContent>>();
+		Sections.findSuccessorsOfType(dtElement.getFather(),
+				DashTreeElementContent.class, found);
+
+		for (Section<DashTreeElementContent> section2 : found) {
+			if (getPageName(section2).equals(currentPage)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private boolean isFree(Section<DynamicMenuItem> sec) {
