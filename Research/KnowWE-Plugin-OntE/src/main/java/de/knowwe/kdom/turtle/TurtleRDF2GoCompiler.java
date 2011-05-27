@@ -47,6 +47,7 @@ public class TurtleRDF2GoCompiler extends RDF2GoSubtreeHandler<TurtleMarkup> {
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TurtleMarkup> s) {
 		if (s.hasErrorInSubtree(article)) {
+			this.destroy(article, s);
 			return new ArrayList<KDOMReportMessage>(0);
 		}
 
