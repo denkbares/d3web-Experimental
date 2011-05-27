@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -35,10 +35,11 @@ import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.NumericalInterval;
 import de.d3web.core.session.Session;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser;
-import de.d3web.proket.d3web.output.render.D3webRenderer;
-import de.d3web.proket.d3web.output.render.ID3webRenderer;
+import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
+import de.d3web.proket.d3web.output.render.HerniaDefaultRootD3webRenderer;
 import de.d3web.proket.d3web.utils.Base64CoDec;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
@@ -49,19 +50,19 @@ import de.d3web.proket.utils.GlobalSettings;
  * a loose binding: if no d3web etc session exists, a new d3web session is
  * created and knowledge base and specs are read from the corresponding XML
  * specfication.
- *
+ * 
  * Basically, when the user selects answers in the dialog, those are transferred
  * back via AJAX calls and processed by this servlet. Here, values are
  * propagated to the d3web session (and later re-read by the renderers).
- *
+ * 
  * Both browser refresh and pressing the "new case"/"neuer Fall" Button in the
  * dialog leads to the creation of a new d3web session, i.e. all values set so
  * far are discarded, and an "empty" problem solving session begins.
- *
+ * 
  * @author Martina Freiberg
- *
+ * 
  * @date 14.01.2011; Last Update: Mai 2011
- *
+ * 
  */
 public class Hernia extends HttpServlet {
 
@@ -83,7 +84,7 @@ public class Hernia extends HttpServlet {
 	/**
 	 * Basic initialization and servlet method. Always called first, if servlet
 	 * is refreshed, called newly etc.
-	 *
+	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
@@ -277,7 +278,7 @@ public class Hernia extends HttpServlet {
 
 	/**
 	 * Basic servlet method for displaying the dialog.
-	 *
+	 * 
 	 * @created 28.01.2011
 	 * @param request
 	 * @param response
@@ -293,14 +294,14 @@ public class Hernia extends HttpServlet {
 		PrintWriter writer = response.getWriter();
 
 		// get the root renderer --> call getRenderer with null
-		ID3webRenderer d3webr =
-				D3webRenderer.getRenderer(null);
+		HerniaDefaultRootD3webRenderer d3webr = (HerniaDefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRendererObject(
+				null);
 
 		// new ContainerCollection needed each time to get an updated dialog
 		ContainerCollection cc = new ContainerCollection();
 
 		Session d3webSess = (Session) httpSession.getAttribute("d3webSession");
-		D3webRenderer.storeSession(d3webSess);
+		AbstractD3webRenderer.storeSession(d3webSess);
 
 		// TODO remove httpSession from method
 		cc = d3webr.renderRoot(cc, d3webSess, httpSession);
@@ -314,7 +315,7 @@ public class Hernia extends HttpServlet {
 	 * Add one or several given facts. Thereby, first check whether input-store
 	 * has elements, if yes, parse them and set them (for num/text/date
 	 * questions), if no, just parse and set a given single value.
-	 *
+	 * 
 	 * @created 28.01.2011
 	 * @param request ServletRequest
 	 * @param response ServletResponse
@@ -419,20 +420,17 @@ public class Hernia extends HttpServlet {
 
 			// AUTOSAVE
 			String folderPath = GlobalSettings.getInstance().getCaseFolder();
-
-			// AUTOSAVE
-			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
-						folderPath,
-						D3webConnector.getInstance().getD3webParser().getRequired(),
-						"autosave",
-						(Session) httpSession.getAttribute("d3webSession"));
+			Session d3webSession = (Session) httpSession.getAttribute("d3webSession");
+			long before = System.currentTimeMillis();
+			new SaveThread(folderPath, d3webSession).start();
+			System.out.println(System.currentTimeMillis() - before);
 
 		}
 	}
 
 	/**
 	 * Adding MC facts
-	 *
+	 * 
 	 * @created 29.04.2011
 	 * @param request
 	 * @param response
@@ -476,20 +474,36 @@ public class Hernia extends HttpServlet {
 
 		// AUTOSAVE
 		String folderPath = GlobalSettings.getInstance().getCaseFolder();
+		Session d3webSession = (Session) httpSession.getAttribute("d3webSession");
+		long before = System.currentTimeMillis();
+		new SaveThread(folderPath, d3webSession).start();
+		System.out.println(System.currentTimeMillis() - before);
+	}
 
-		// AUTOSAVE
-		PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
+	private class SaveThread extends Thread {
+
+		private final String folderPath;
+		private final Session d3webSession;
+
+		public SaveThread(String folderPath, Session d3webSession) {
+			this.folderPath = folderPath;
+			this.d3webSession = d3webSession;
+		}
+
+		@Override
+		public void run() {
+
+			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
 						folderPath,
 						D3webConnector.getInstance().getD3webParser().getRequired(),
-						"autosave",
-						(Session) httpSession.getAttribute("d3webSession"));
-
+						"autosave", d3webSession);
+		}
 	}
 
 	// TODO
 	/**
 	 * Saving a case.
-	 *
+	 * 
 	 * @created 08.03.2011
 	 * @param request ServletRequest
 	 * @param response ServletResponse
@@ -573,7 +587,7 @@ public class Hernia extends HttpServlet {
 	// TODO
 	/**
 	 * Loading a case.
-	 *
+	 * 
 	 * @created 09.03.2011
 	 * @param request ServletRequest
 	 * @param response ServletResponse
@@ -609,7 +623,7 @@ public class Hernia extends HttpServlet {
 	// TODO
 	/**
 	 * Handle login of new user
-	 *
+	 * 
 	 * @created 29.04.2011
 	 * @param req
 	 * @param res
@@ -673,7 +687,7 @@ public class Hernia extends HttpServlet {
 	 * Checks, whether for a numerical question a range is given and gives back
 	 * this range (if specified) as the writer backstring so it can be further
 	 * processed (checked) by JS.
-	 *
+	 * 
 	 * @created 05.05.2011
 	 * @param request
 	 * @param response
@@ -715,7 +729,7 @@ public class Hernia extends HttpServlet {
 	 * Creates a new d3websession for a newly logged in user. Stores the
 	 * respective values (session, loginname, famname and lastloaded session
 	 * (nothing when new) into the httpsession for storage during user session.
-	 *
+	 * 
 	 * @created 05.05.2011
 	 * @param httpSession the current httpSession
 	 * @param login the login name of the user

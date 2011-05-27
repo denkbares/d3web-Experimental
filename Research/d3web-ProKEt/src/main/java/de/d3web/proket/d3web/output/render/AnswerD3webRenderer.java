@@ -1,6 +1,5 @@
-/**
- * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
- * Computer Science VI, University of Wuerzburg
+/*
+ * Copyright (C) 2011 denkbares GmbH
  * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
@@ -20,30 +19,29 @@
 package de.d3web.proket.d3web.output.render;
 
 import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.session.blackboard.Blackboard;
+import de.d3web.core.knowledge.terminology.Choice;
+import de.d3web.proket.output.container.ContainerCollection;
 
 /**
- * Interface common to all d3web renderers.
  * 
- * TODO CHECK: do we need further methods in here that might be common to all
- * renderers and sub-renderers?
- * 
- * @author Martina Freiberg
- * @created 14.01.2011
+ * @author Albrecht Striffler
+ * @created 27.05.2011
  */
-public interface D3webRenderer {
+public interface AnswerD3webRenderer {
 
 	/**
-	 * Checks, whether the given TerminologyObject is indicated in the current
-	 * session.
+	 * Renders the current terminology object, only using a Choice object,
+	 * instead of further TerminologyObjects.
 	 * 
-	 * @created 03.11.2010
-	 * @param to The TerminologyObject to be checked
-	 * @param bb Blackboard of the current session
-	 * @return true, if the TerminologyObject is indicated.
+	 * @see renderTerminologyObject(cc, to, parent)
+	 * @created 14.01.2011
+	 * @param cc ContainerCollection to be used.
+	 * @param c Choice to be rendered.
+	 * @param parent The parent object of to
+	 * @return the resulting String that is inserted in the parent
+	 *         StringTemplate as a result.
 	 */
-	public boolean isIndicated(TerminologyObject to, Blackboard bb);
-
-	// public boolean isParentIndicated(TerminologyObject to, Blackboard bb);
+	public String renderTerminologyObject(ContainerCollection cc, Choice c,
+			TerminologyObject to, TerminologyObject parent);
 
 }

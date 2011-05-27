@@ -22,7 +22,7 @@ public class PersistenceD3webUtils {
 
 	/**
 	 * Saving of a case. Only the current timestamp is used as filename.
-	 *
+	 * 
 	 * @created 09.03.2011
 	 * @param folderPath Path to the folder, where cases should be stored.
 	 */
@@ -54,7 +54,7 @@ public class PersistenceD3webUtils {
 	/**
 	 * Saving of a case. Not only the current timestamp is used as filename, but
 	 * moreover also the value of a given question.
-	 *
+	 * 
 	 * @created 09.03.2011
 	 * @param folderPath Path to the folder, where cases should be stored.
 	 * @param questionName Name of the Question, the value of which is also
@@ -102,7 +102,7 @@ public class PersistenceD3webUtils {
 	 * used as a storage-sub-folder. Parent folder is the folder "cases". If
 	 * this sub-folder doesn't exist, it is newly created, otherwise the file is
 	 * saved within the specified sub-folder.
-	 *
+	 * 
 	 * @created 09.03.2011
 	 * @param folderPath Path to the folder, where cases should be stored.
 	 * @param questionName Name of the Question, the value of which is used to
@@ -199,6 +199,7 @@ public class PersistenceD3webUtils {
 
 		try {
 			sessionRepository.save(file);
+			System.out.println("Saved case to file: " + file.getAbsolutePath());
 		}
 		catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -208,7 +209,7 @@ public class PersistenceD3webUtils {
 
 	/**
 	 * Loads a case-file (.xml) of given filename back into the application.
-	 *
+	 * 
 	 * @created 09.03.2011
 	 * @param filename Name of the file to be loaded.
 	 */
@@ -257,7 +258,7 @@ public class PersistenceD3webUtils {
 	 * filename. In the load-case menu, only the filenames are to be displayed,
 	 * thus when actually loading the file back, the "real" file with timestamp
 	 * etc needs to be retrieved first.
-	 *
+	 * 
 	 * @created 09.03.2011
 	 * @param filename Name of the file to be loaded.
 	 */
@@ -299,7 +300,7 @@ public class PersistenceD3webUtils {
 
 	/**
 	 * Retrieves a listing of cases that can be loaded in the dialog.
-	 *
+	 * 
 	 * @created 12.03.2011
 	 * @return String representation of the files that can be loaded in the form
 	 *         of an options-list. (For to be included within the corresponding
@@ -364,7 +365,7 @@ public class PersistenceD3webUtils {
 
 	/**
 	 * Retrieves a listing of cases that can be loaded in the dialog.
-	 *
+	 * 
 	 * @created 12.03.2011
 	 * @return String representation of the files that can be loaded in the form
 	 *         of an options-list. (For to be included within the corresponding

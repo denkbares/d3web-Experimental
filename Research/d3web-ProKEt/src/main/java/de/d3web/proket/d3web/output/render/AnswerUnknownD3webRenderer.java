@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -23,6 +23,7 @@ import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
+import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
@@ -32,13 +33,13 @@ import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
-public class AnswerUnknownD3webRenderer extends D3webRenderer {
+public class AnswerUnknownD3webRenderer extends AbstractD3webRenderer implements AnswerD3webRenderer {
 
 	@Override
 	/**
 	 * Specifically adapted for Unknown Option rendering
 	 */
-	public String renderTerminologyObject(ContainerCollection cc, TerminologyObject to,
+	public String renderTerminologyObject(ContainerCollection cc, Choice c, TerminologyObject to,
 			TerminologyObject parent) {
 
 		StringBuilder sb = new StringBuilder();
@@ -102,4 +103,5 @@ public class AnswerUnknownD3webRenderer extends D3webRenderer {
 
 		return sb.toString();
 	}
+
 }

@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -40,15 +40,15 @@ import de.d3web.proket.utils.TemplateUtils;
 
 /**
  * Renderer for rendering basic Questions.
- *
+ * 
  * TODO CHECK: 1) basic properties for questions
- *
+ * 
  * TODO LATER: 1) further question types needed?
- *
+ * 
  * @author Martina Freiberg
  * @created 15.01.2011
  */
-public class ImageQuestionD3webRenderer extends D3webRenderer {
+public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements IQuestionD3webRenderer {
 
 	@Override
 	/**
@@ -84,7 +84,6 @@ public class ImageQuestionD3webRenderer extends D3webRenderer {
 			st.setAttribute("tooltip", resString);
 		}
 
-
 		// get d3web properties
 		Session sess = super.d3webSession;
 		Form current = sess.getInterview().nextForm();
@@ -110,8 +109,6 @@ public class ImageQuestionD3webRenderer extends D3webRenderer {
 		else {
 			st.setAttribute("inactive", "true");
 		}
-
-
 
 		// check answer - if answered, mark question as done
 		if (val != null && UndefinedValue.isNotUndefinedValue(val)) {
@@ -167,7 +164,7 @@ public class ImageQuestionD3webRenderer extends D3webRenderer {
 	 * coords="110,110,25" alt="Bremen.gif" href="Bremen.html" /> Therefore, a
 	 * basic StringTemplate representing one area tag is filled with coords and
 	 * shape.
-	 *
+	 * 
 	 * @created 21.04.2011
 	 * @param to The terminologyObject (usually a question) the areas are
 	 *        defined for
@@ -215,4 +212,5 @@ public class ImageQuestionD3webRenderer extends D3webRenderer {
 		}
 		return bui.toString();
 	}
+
 }

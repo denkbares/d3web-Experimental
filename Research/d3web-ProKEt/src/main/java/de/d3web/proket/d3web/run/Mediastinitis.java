@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -78,10 +78,11 @@ import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser;
-import de.d3web.proket.d3web.output.render.D3webRenderer;
-import de.d3web.proket.d3web.output.render.ID3webRenderer;
+import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
+import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
 import de.d3web.proket.d3web.output.render.ImageHandler;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
@@ -94,19 +95,19 @@ import de.d3web.proket.utils.IDUtils;
  * a loose binding: if no d3web etc session exists, a new d3web session is
  * created and knowledge base and specs are read from the corresponding XML
  * specfication.
- *
+ * 
  * Basically, when the user selects answers in the dialog, those are transferred
  * back via AJAX calls and processed by this servlet. Here, values are
  * propagated to the d3web session (and later re-read by the renderers).
- *
+ * 
  * Both browser refresh and pressing the "new case"/"neuer Fall" Button in the
  * dialog leads to the creation of a new d3web session, i.e. all values set so
  * far are discarded, and an "empty" problem solving session begins.
- *
+ * 
  * @author Martina Freiberg
- *
+ * 
  * @date 14.01.2011; Update: 28/01/2011
- *
+ * 
  */
 public class Mediastinitis extends HttpServlet {
 
@@ -128,7 +129,7 @@ public class Mediastinitis extends HttpServlet {
 	/**
 	 * Basic initialization and servlet method. Always called first, if servlet
 	 * is refreshed, called newly etc.
-	 *
+	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
@@ -158,7 +159,6 @@ public class Mediastinitis extends HttpServlet {
 		// "persistence");
 		// GlobalSettings.getInstance().setCaseFolder(persistencePath);
 
-
 		d3wcon = D3webConnector.getInstance();
 
 		// in case nothing other is provided, "show" is the default action
@@ -174,7 +174,6 @@ public class Mediastinitis extends HttpServlet {
 		if (!source.endsWith(".xml")) {
 			source = source + ".xml";
 		}
-
 
 		// d3web parser for interpreting the source/specification xml
 		d3webParser = new D3webXMLParser(source);
@@ -321,9 +320,10 @@ public class Mediastinitis extends HttpServlet {
 			return;
 		}
 	}
+
 	/**
 	 * Basic servlet method for displaying the dialog.
-	 *
+	 * 
 	 * @created 28.01.2011
 	 * @param request
 	 * @param response
@@ -339,14 +339,14 @@ public class Mediastinitis extends HttpServlet {
 		PrintWriter writer = response.getWriter();
 
 		// get the root renderer --> call getRenderer with null
-		ID3webRenderer d3webr =
-				D3webRenderer.getRenderer(null);
+		DefaultRootD3webRenderer d3webr = (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRendererObject(
+				null);
 
 		// new ContainerCollection needed each time to get an updated dialog
 		ContainerCollection cc = new ContainerCollection();
 
 		Session d3webSess = (Session) httpSession.getAttribute("d3webSession");
-		D3webRenderer.storeSession(d3webSess);
+		AbstractD3webRenderer.storeSession(d3webSess);
 		cc = d3webr.renderRoot(cc, d3webSess, httpSession);
 
 		writer.print(cc.html.toString()); // deliver the rendered output
@@ -358,7 +358,7 @@ public class Mediastinitis extends HttpServlet {
 	 * Add one or several given facts. Thereby, first check whether input-store
 	 * has elements, if yes, parse them and set them (for num/text/date
 	 * questions), if no, just parse and set a given single value.
-	 *
+	 * 
 	 * @created 28.01.2011
 	 * @param request ServletRequest
 	 * @param response ServletResponse
@@ -476,7 +476,7 @@ public class Mediastinitis extends HttpServlet {
 
 	/**
 	 * Adding MC facts
-	 *
+	 * 
 	 * @created 29.04.2011
 	 * @param request
 	 * @param response
@@ -532,7 +532,7 @@ public class Mediastinitis extends HttpServlet {
 
 	/**
 	 * Saving a case.
-	 *
+	 * 
 	 * @created 08.03.2011
 	 * @param request ServletRequest
 	 * @param response ServletResponse
@@ -613,7 +613,7 @@ public class Mediastinitis extends HttpServlet {
 	/**
 	 * Send a mail with login request via account "user" and to the contact
 	 * person specified in InternetAdress "to"
-	 *
+	 * 
 	 * @created 29.04.2011
 	 * @param request
 	 * @param response
@@ -668,7 +668,7 @@ public class Mediastinitis extends HttpServlet {
 
 	/**
 	 * Loading a case.
-	 *
+	 * 
 	 * @created 09.03.2011
 	 * @param request ServletRequest
 	 * @param response ServletResponse
@@ -703,7 +703,7 @@ public class Mediastinitis extends HttpServlet {
 
 	/**
 	 * Handle login of new user
-	 *
+	 * 
 	 * @created 29.04.2011
 	 * @param req
 	 * @param res
@@ -767,7 +767,7 @@ public class Mediastinitis extends HttpServlet {
 	 * Utility method for adding values. Adds a single value for a given
 	 * question to the current knowledge base in the current problem solving
 	 * session.
-	 *
+	 * 
 	 * @created 28.01.2011
 	 * @param termObID The ID of the TerminologyObject, the value is to be
 	 *        added.
@@ -952,7 +952,7 @@ public class Mediastinitis extends HttpServlet {
 	 * Utility method for resetting follow-up questions due to setting their
 	 * parent question to Unknown. Then, the childrens' value should also be
 	 * removed again, recursively also for childrens' children and so on.
-	 *
+	 * 
 	 * @created 31.01.2011
 	 * @param parent The parent TerminologyObject
 	 * @param blackboard The currently active blackboard
@@ -983,7 +983,7 @@ public class Mediastinitis extends HttpServlet {
 
 	/**
 	 * Utility method for resetting
-	 *
+	 * 
 	 * @created 09.03.2011
 	 * @param parent
 	 * @param bb
@@ -1024,7 +1024,7 @@ public class Mediastinitis extends HttpServlet {
 	/**
 	 * Utility method for checking whether a given terminology object is
 	 * indicated or instant_indicated or not in the current session.
-	 *
+	 * 
 	 * @created 09.03.2011
 	 * @param to The terminology object to check
 	 * @param bb
@@ -1046,7 +1046,7 @@ public class Mediastinitis extends HttpServlet {
 	/**
 	 * Utility method for checking whether the parent object of a given
 	 * terminology object is (instant) indicated.
-	 *
+	 * 
 	 * @created 09.03.2011
 	 * @param to The terminology object, the parent of which is to be checked.
 	 * @param bb
@@ -1079,7 +1079,7 @@ public class Mediastinitis extends HttpServlet {
 	 * Utility method that checks, whether a TerminologyObject child is the
 	 * child of another TerminologyObject parent. That is, whether child is
 	 * nested hierarchically underneath parent.
-	 *
+	 * 
 	 * @created 30.01.2011
 	 * @param parent The parent TerminologyObject
 	 * @param child The child to check
@@ -1105,7 +1105,7 @@ public class Mediastinitis extends HttpServlet {
 	/**
 	 * Check, whether the user has permissions to log in. Permissions are stored
 	 * in userdat.csv in cases parent folder
-	 *
+	 * 
 	 * @created 15.03.2011
 	 * @param user The user name.
 	 * @param password The password.
@@ -1150,7 +1150,7 @@ public class Mediastinitis extends HttpServlet {
 	 * Checks, whether a potentially required value is already set in the KB or
 	 * is contained in the current set of values to write to the KB. If yes, the
 	 * method returns true, if no, false.
-	 *
+	 * 
 	 * @created 15.04.2011
 	 * @param requiredVal The required value that is to check
 	 * @param sess The d3webSession
@@ -1179,7 +1179,7 @@ public class Mediastinitis extends HttpServlet {
 
 	/**
 	 * Stream images from the KB into intermediate storage in webapp
-	 *
+	 * 
 	 * @created 29.04.2011
 	 */
 	private void streamImages() {
@@ -1222,7 +1222,7 @@ public class Mediastinitis extends HttpServlet {
 
 	/**
 	 * Retrieve the difference between two date objects in seconds
-	 *
+	 * 
 	 * @created 29.04.2011
 	 * @param d1 First date
 	 * @param d2 Second date

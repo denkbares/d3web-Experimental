@@ -32,7 +32,7 @@ Common Route #2
 - Scheduled date of operation [date]
 - Informed consent obtained [yn]
 
-Comorbidities &only if: Please choose the database level = Level 2 &  #3 
+Comorbidities &only if: Please choose the database level = Level 2 &
 - Are there Comorbidities? [yn]
 -- Yes
 --- Select Comorbidities [mc]
@@ -49,7 +49,7 @@ Comorbidities &only if: Please choose the database level = Level 2 &  #3
 ---- Malignant disease 
 ----- Curatively treated [yn]
 
-Risk factors &only if: Please choose the database level = Level 2 & #4
+Risk factors &only if: Please choose the database level = Level 2 &
 - Are there other risk factors? [yn]
 -- Yes
 --- Select risk factors [mc]
@@ -69,7 +69,7 @@ Risk factors &only if: Please choose the database level = Level 2 & #4
 --- Length/size of the patient [num]{cm}
 --- BMI: [num]{kg/m2}<abstract>
 
-Other risk factors &only if: Please choose the database level = Level 2 & #5
+Other risk factors &only if: Please choose the database level = Level 2 &
 - Occupation [oc]
 -- Heavy physical labour
 -- Mild physical labour
@@ -103,11 +103,11 @@ Primary ventral hernia route
 Incisional ventral hernia route 
 - Width of the hernia [num] {cm}
 - Length of the hernia [num] {cm}
-- Reducibility of the hernia [oc]
+- Reducibility of the hernia [oc] &only if: Please choose the database level = Level 2 &
 -- Completely reducible
 -- Partially reducible
 -- Non reducible
-- Indication for surgery [oc]
+- Indication for surgery [oc] &only if: Please choose the database level = Level 2 &
 -- Elective
 -- Emergency
 - Mark the incisional hernia areas involved [mc]
@@ -124,8 +124,8 @@ Incisional ventral hernia route
 -- "L3:R"
 -- "L4:L"
 -- "L4:R"
-- Date of operation that caused the incisional hernia [date]
-- "Type of operation (speciality) that caused the incisional hernia" [oc]
+- Date of operation that caused the incisional hernia [date] &only if: Please choose the database level = Level 2 &
+- "Type of operation (speciality) that caused the incisional hernia" [oc] &only if: Please choose the database level = Level 2 &
 -- Gastrointestinal
 -- Abdominal wall surgery
 -- Gynecological
@@ -136,7 +136,7 @@ Incisional ventral hernia route
 -- Urological
 - Recurrent hernia [yn]
 -- Yes
---- Number of previous repairs [num]
+--- Number of previous repairs [num] &only if: Please choose the database level = Level 2 &
 --- Has there been a previous mesh repair? [yn]
 ---- Yes
 ----- Date of the last repair [date]
@@ -153,16 +153,16 @@ Incisional ventral hernia route
 - Incisional ventral hernia summary [info]
 
 Parastomal hernia route
-- Years since stoma creation [num]
-- Years with parastomal hernia [num]
+- Years since stoma creation [num] &only if: Please choose the database level = Level 2 &
+- Years with parastomal hernia [num] &only if: Please choose the database level = Level 2 &
 - Tyoe of stoma [oc]
 -- Colostomy
 -- Ilestomy
 -- Ileal conduit
-- Indication for stoma creation [oc]
+- Indication for stoma creation [oc] &only if: Please choose the database level = Level 2 &
 -- Malignancy
 -- Benign disease
-- Symptoms of the parastomal hernia [mc]
+- Symptoms of the parastomal hernia [mc] &only if: Please choose the database level = Level 2 &
 -- None
 -- Pain
 -- Incarceration
@@ -171,7 +171,7 @@ Parastomal hernia route
 -- Difficulty for bag appliance
 - Previous repair of the parastomal hernia [yn]
 -- Yes
---- Number of previous repairs [num]
+--- Number of previous repairs [num] &only if: Please choose the database level = Level 2 &
 --- Has there been a previous parastomal mesh repair? [yn]
 ---- Yes
 ----- Date of the last parastomal hernia repair [date]
@@ -211,24 +211,24 @@ Common Route - Operative data #6
 -- General
 -- Regional
 -- Local
-- Antibiotic prophylaxis [mc]
+- Antibiotic prophylaxis [mc] &only if: Please choose the database level = Level 2 &
 -- None
 -- Single dose
 -- "Prolonged (therapeutic)"
 -- Patient is on AB or another infection
-- Intraoperative wound contamination [oc]
+- Intraoperative wound contamination [oc] &only if: Please choose the database level = Level 2 &
 -- Class I
 -- Class II
 -- Class III
 -- Class IV
-- Operator [oc]
+- Operator [oc] &only if: Please choose the database level = Level 2 &
 -- Senior surgeon
 -- "Resident with direct supervisor (surgeon scrubbed in)"
 -- "Resident without direct supervision (surgeon not scrubbed in)"
 -- Resident without supervision
-- "Start of operation (first incision)" [date]
-- "End of operation (last skin suture)" [date]
-- Content of the hernia sac [mc]
+- "Start of operation (first incision)" [date] &only if: Please choose the database level = Level 2 &
+- "End of operation (last skin suture)" [date] &only if: Please choose the database level = Level 2 &
+- Content of the hernia sac [mc] &only if: Please choose the database level = Level 2 &
 -- None
 -- Small bowel
 -- Colon
@@ -238,8 +238,8 @@ Common Route - Operative data #6
 -- Appendix
 -- Bladder
 -- Other
-- Incarceration [yn]
-- Bowel resection needed [oc]
+- Incarceration [yn] &only if: Please choose the database level = Level 2 &
+- Bowel resection needed [oc] &only if: Please choose the database level = Level 2 &
 -- No
 -- "Yes (small bowel)"
 -- "Yes (colon)"
@@ -254,7 +254,7 @@ Common Route - Operative data - Approach #7
 -- Mesh repair
 -- Non mesh repair
 
-Common Route - Operative Data - Concomitant procedures #8
+Common Route - Operative Data - Concomitant procedures &only if: Please choose the database level = Level 2 &
 - Concomitant abdominal surgery [yn]
 -- Yes
 --- Type of Concomitant abdominal surgery [mc]
@@ -294,10 +294,10 @@ Common Route - Operative Data - Surgical technique #9
 --- Name of mesh [text]
 --- Production company [text]
 --- Other mesh [text]
---- Was the hernia defect closed? [yn]
---- Length of the implanted mesh [num] {cm}
---- Width of the implanted mesh [num] {cm}
---- Estimated minimal overlap of the mesh beyond the hernia defect [num] {cm}
+--- Was the hernia defect closed? [yn] &only if: Please choose the database level = Level 2 &
+--- Length of the implanted mesh [num] {cm} &only if: Please choose the database level = Level 2 &
+--- Width of the implanted mesh [num] {cm} &only if: Please choose the database level = Level 2 &
+--- Estimated minimal overlap of the mesh beyond the hernia defect [num] {cm} &only if: Please choose the database level = Level 2 &
 --- Fixation of the mesh [oc]
 ---- No fixation
 ---- Suture
@@ -309,7 +309,7 @@ Common Route - Operative Data - Surgical technique #9
 ---- Glue
 ---- Combination
 
-Common Route - Operation data - Intraoperative complications #10
+Common Route - Operation data - Intraoperative complications &only if: Please choose the database level = Level 2 &
 - Conversion from laparoscopic to open surgery [yn]
 -- Yes
 --- "Reason(s) for conversion" [mc]
@@ -349,7 +349,7 @@ Common Route - Discharge data #11
 - State at discharge [mc]
 -- No Complications
 -- Bleeding complications
---- Type of bleeding complications [mc]
+--- Type of bleeding complications [mc] &only if: Please choose the database level = Level 2 &
 ---- Abdominal wall bleeding or hematoma
 ---- Intraperitoneal bleeding
 ----- Treatment [oc]
@@ -358,11 +358,11 @@ Common Route - Discharge data #11
 ---- Revision not under general anaesthesia
 ---- Revision under general anaesthesia
 -- "Surgical site infection (SSI)"
---- Type of SSI [oc]
+--- Type of SSI [oc] &only if: Please choose the database level = Level 2 &
 ---- Superficial
 ---- Deep
 ---- Intra-abdominal
---- Mesh infection [yn]
+--- Mesh infection [yn] &only if: Please choose the database level = Level 2 &
 ---- Yes
 ----- Was mesh removed [oc]
 ------ Yes
@@ -381,7 +381,7 @@ Common Route - Discharge data #11
 - Did the patient die postoperatively? [yn]
 - Classification of surgical complications [text]
 
-Common Route - Follow-up #12
+Common Route - Follow-up &only if: Please choose the database level = Level 2 &
 - Lost to follow up [oc]
 -- Unable to contact the patient
 -- Patient refuses futher follow up
@@ -396,7 +396,7 @@ Common Route - Follow-up #12
 -- Telephone questioning the patient
 -- Telephone questioning the family doctor
 
-Common Route - Quality of life measurement #13
+Common Route - Quality of life measurement &only if: Please choose the database level = Level 2 &
 - Chronic abdominal wall pain at the operation site [yn]
 -- Yes
 --- Intensity of pain [oc]
@@ -411,7 +411,7 @@ Common Route - Quality of life measurement #13
 ---- Constant
 --- Foreign body feeling at operation site [yn]
 
-Common Route - Late complications #14
+Common Route - Late complications &only if: Please choose the database level = Level 2 &
 - Late complications [yn]
 -- Yes
 --- Types of late complications [mc]
@@ -514,15 +514,6 @@ THEN Incisional ventral hernia route
 
 IF Please select your hernia route = Parastomal hernia route
 THEN Parastomal hernia route
-
-// IF Recurrent hernia = Yes
-// THEN Number of previous repairs
-
-// IF Recurrent hernia = Yes
-// THEN Has there been a previous mesh repair?
-
-// IF Has there been a previous mesh repair? = Yes
-// THEN Date of the last repair
 
 IF KNOWN[Weight of the patient] AND KNOWN[Length/size of the patient]
 THEN BMI: = (("Weight of the patient" / ("Length/size of the patient" * "Length/size of the patient")) * 10000)

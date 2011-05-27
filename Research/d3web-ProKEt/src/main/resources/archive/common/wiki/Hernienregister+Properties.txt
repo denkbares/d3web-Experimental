@@ -92,6 +92,12 @@
 %
 
 %%Property
+Please choose the database level.init = Level 1
+
+@package: Hernia
+%
+
+%%Property
 Mark the incisional hernia areas involved#M1.description = 194,144,257,199SHAPErect
 Mark the incisional hernia areas involved#M2.description = 194,199,257,300SHAPErect
 Mark the incisional hernia areas involved#M3.description = 194,300,257,382SHAPErect

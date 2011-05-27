@@ -24,14 +24,11 @@ import javax.servlet.http.HttpSession;
 import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.knowledge.ValueObject;
-import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.proket.d3web.input.D3webConnector;
-import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
@@ -59,58 +56,7 @@ import de.d3web.proket.utils.TemplateUtils;
  * @author Martina Freiberg
  * @created 13.01.2011
  */
-public class HerniaD3webRenderer extends D3webRenderer {
-
-	/**
-	 * Retrieves the appropriate renderer class according to what base object is
-	 * given from the d3web knowledge base. EXCLUDES answers, as those need a
-	 * specific handling.
-	 * 
-	 * @created 14.01.2011
-	 * @param to the TerminologyObject that needs to retrieve the renderer.
-	 * @return the suiting renderer class
-	 */
-	public static ID3webRenderer getRenderer(TerminologyObject to) {
-
-		ID3webRenderer renderer =
-				(ID3webRenderer) D3webRendererMapping.getInstance().getRendererObject(to);
-
-		return renderer;
-	}
-
-	/**
-	 * Retrieves the appropriate renderer class for answers,according to what
-	 * base object (question type) is given.
-	 * 
-	 * @created 15.01.2011
-	 * @param to the TerminologyObject that needs to retrieve the answer
-	 *        renderer.
-	 * @return the suiting renderer class.
-	 */
-	public static ID3webRenderer getAnswerRenderer(TerminologyObject to) {
-
-		ID3webRenderer renderer =
-				(ID3webRenderer)
-					D3webRendererMapping.getInstance().getAnswerRendererObject(to);
-
-		return renderer;
-	}
-
-	/**
-	 * Retrieves the renderer for the Unknown object (unknown option for
-	 * dialogs).
-	 * 
-	 * @created 23.01.2011
-	 * @return the suiting renderer class.
-	 */
-	public static ID3webRenderer getUnknownRenderer() {
-
-		ID3webRenderer renderer =
-				(ID3webRenderer)
-					D3webRendererMapping.getInstance().getUnknownRenderer();
-
-		return renderer;
-	}
+public class HerniaDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 
 	/**
 	 * Basic rendering of the root, i.e., the framing stuff of a dialog, like
@@ -174,12 +120,12 @@ public class HerniaD3webRenderer extends D3webRenderer {
 		// route
 		Question route = D3webConnector.getInstance().getKb().getManager().searchQuestion(
 				"Please select your hernia route");
-		Value rVal = D3webRenderer.d3webSession.getBlackboard().getValue(route);
+		Value rVal = AbstractD3webRenderer.d3webSession.getBlackboard().getValue(route);
 
 		// level
 		Question level = D3webConnector.getInstance().getKb().getManager().searchQuestion(
 				"Please choose the database level");
-		Value lVal = D3webRenderer.d3webSession.getBlackboard().getValue(level);
+		Value lVal = AbstractD3webRenderer.d3webSession.getBlackboard().getValue(level);
 
 		if ((rVal != null && UndefinedValue.isNotUndefinedValue(rVal)) || (lVal != null
 				&& UndefinedValue.isNotUndefinedValue(lVal))) {
@@ -233,44 +179,6 @@ public class HerniaD3webRenderer extends D3webRenderer {
 
 		cc.html.add(st.toString());
 		return cc;
-	}
-
-	private String fillSummaryDialog() {
-
-		StringBuilder bui = new StringBuilder();
-		D3webConnector d3wcon = D3webConnector.getInstance();
-
-		TerminologyObject root = d3wcon.getKb().getRootQASet();
-
-		fillSummaryChildren(bui, root);
-
-		return bui.toString();
-	}
-
-	private void fillSummaryChildren(StringBuilder bui, TerminologyObject to) {
-
-		if (to instanceof QContainer && !to.getName().contains("Q000")) {
-			bui.append("<div style='margin-top:10px;'><b>" + super.countQcon + " " + to.getName()
-					+ "</b></div>");
-			super.countQcon++;
-		}
-		else if (to instanceof Question) {
-			Value val =
-					d3webSession.getBlackboard().getValue((ValueObject) to);
-
-			if (val != null && UndefinedValue.isNotUndefinedValue(val)) {
-				bui.append("<div style='margin-left:10px;'>" + super.countQ + " " + to.getName()
-						+ " -- " + val + "</div>");
-			}
-			super.countQ++;
-		}
-
-		if (to.getChildren() != null && to.getChildren().length != 0) {
-			for (TerminologyObject toc : to.getChildren()) {
-				fillSummaryChildren(bui, toc);
-			}
-		}
-
 	}
 
 }

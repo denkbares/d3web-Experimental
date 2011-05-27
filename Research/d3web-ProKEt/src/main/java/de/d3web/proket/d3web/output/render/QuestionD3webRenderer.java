@@ -52,7 +52,7 @@ import de.d3web.proket.utils.TemplateUtils;
  * @author Martina Freiberg
  * @created 15.01.2011
  */
-public class QuestionD3webRenderer extends D3webRenderer {
+public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQuestionD3webRenderer {
 
 	@Override
 	/**
@@ -110,7 +110,7 @@ public class QuestionD3webRenderer extends D3webRenderer {
 		}
 
 		// get d3web properties
-		Session sess = D3webRenderer.d3webSession;
+		Session sess = AbstractD3webRenderer.d3webSession;
 		Form current = sess.getInterview().nextForm();
 		Blackboard bb = sess.getBlackboard();
 		Value val = bb.getValue((ValueObject) to);
@@ -180,4 +180,5 @@ public class QuestionD3webRenderer extends D3webRenderer {
 
 		return sb.toString();
 	}
+
 }
