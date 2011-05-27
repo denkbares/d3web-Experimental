@@ -20,9 +20,9 @@
 
 package de.d3web.we.kdom.namespaces.rdf2go;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Map.Entry;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -40,7 +40,7 @@ public class NamespacesContentRenderer extends KnowWEDomRenderer {
 		ResourceBundle rb = KnowWEEnvironment.getInstance()
 				.getKwikiBundle(user);
 		String content = sec.getOriginalText();
-		HashMap<String, String> namespaces = Rdf2GoCore.getInstance().getNameSpaces();
+		Map<String, String> namespaces = Rdf2GoCore.getInstance().getNameSpaces();
 		if (content.trim().length() > 0) {
 			for (String line : content.split("\r\n|\r|\n")) {
 				if (line.contains(":")) {

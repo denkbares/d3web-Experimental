@@ -32,11 +32,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -100,11 +101,15 @@ public class Rdf2GoCore implements EventListener {
 
 	private static Rdf2GoCore me;
 	private Model model;
-	private HashMap<String, WeakHashMap<Section<? extends Type>, List<Statement>>> statementcache;
-	private HashMap<Statement, Integer> duplicateStatements;
-	private HashMap<String, String> namespaces;
+	private Map<String, WeakHashMap<Section<? extends Type>, List<Statement>>> statementcache;
+	private Map<Statement, Integer> duplicateStatements;
+	private Map<String, String> namespaces;
 	private List<Statement> addCache;
 	private List<Statement> removeCache;
+
+	Map<String, WeakHashMap<Section<? extends Type>, List<Statement>>> getStatementCache() {
+		return statementcache;
+	}
 
 	/**
 	 * Initializes the model and its caches and namespaces
@@ -235,7 +240,7 @@ public class Rdf2GoCore implements EventListener {
 		model.removeNamespace(sh);
 	}
 
-	public HashMap<String, String> getNameSpaces() {
+	public Map<String, String> getNameSpaces() {
 		return namespaces;
 	}
 
@@ -558,6 +563,10 @@ public class Rdf2GoCore implements EventListener {
 				temp.remove(sec);
 				if (temp.isEmpty()) {
 					statementcache.remove(sec.getArticle().getTitle());
+				}
+				if (removedStatements.size() == 0) {
+					Logger.getLogger(this.getClass().getName()).log(Level.INFO,
+							"found no statement to remove for: " + sec.toString());
 				}
 				removeStatementsFromCache(removedStatements);
 				// model.removeAll(removedStatements.iterator());
