@@ -34,7 +34,7 @@ public class LeftRightNavigationBarTagHandler extends AbstractTagHandler {
 
 	@Override
 	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
-		String center = "no center data found";
+		String center = null;
 		if (parameters.containsKey("center")) {
 			center = parameters.get("center");
 		}
@@ -52,33 +52,31 @@ public class LeftRightNavigationBarTagHandler extends AbstractTagHandler {
 		buffy.append(KnowWEUtils.maskHTML("<center>"));
 		buffy.append(KnowWEUtils.maskHTML("<table>"));
 		buffy.append(KnowWEUtils.maskHTML("<tr>"));
-		buffy.append(KnowWEUtils.maskHTML("<td >"));
 		if (left != null) {
-		buffy.append(KnowWEUtils.maskHTML("<a href='Wiki.jsp?page="
-					+ extractPageName(left)
-				+ "' ><img src='KnowWEExtension/images/Pfeil_nach_links.gif' height='60'/></a>"));
-		buffy.append(KnowWEUtils.maskHTML("</td>"));
-		buffy.append(KnowWEUtils.maskHTML("<td>"));
-			// buffy.append(KnowWEUtils.maskHTML("<a href='Wiki.jsp?page=" +
-			// left + "' >"));
-			buffy.append(left);
-			// buffy.append(KnowWEUtils.maskHTML("</a>"));
-		}
-		buffy.append(KnowWEUtils.maskHTML("</td>"));
-		buffy.append(KnowWEUtils.maskHTML("<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"));
-		buffy.append(center);
-		buffy.append(KnowWEUtils.maskHTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"));
-		buffy.append(KnowWEUtils.maskHTML("</td>"));
-		buffy.append(KnowWEUtils.maskHTML("<td>"));
-		if (right != null) {
-			// buffy.append(KnowWEUtils.maskHTML("<a href='Wiki.jsp?page=" +
-			// right + "' >"));
-			buffy.append(right);
-			// buffy.append(KnowWEUtils.maskHTML("</a>"));
-		buffy.append(KnowWEUtils.maskHTML("</td>"));
-		buffy.append(KnowWEUtils.maskHTML("<td>"));
+			buffy.append(KnowWEUtils.maskHTML("<td >"));
 
-		buffy.append(KnowWEUtils.maskHTML("<a href='Wiki.jsp?page="
+			buffy.append(KnowWEUtils.maskHTML("<a href='Wiki.jsp?page="
+					+ extractPageName(left)
+					+ "' ><img src='KnowWEExtension/images/Pfeil_nach_links.gif' height='60'/></a>"));
+			buffy.append(KnowWEUtils.maskHTML("</td>"));
+			buffy.append(KnowWEUtils.maskHTML("<td>"));
+			buffy.append(left);
+
+			buffy.append(KnowWEUtils.maskHTML("</td>"));
+		}
+		if (center != null) {
+			buffy.append(KnowWEUtils.maskHTML("<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"));
+			buffy.append(center);
+			buffy.append(KnowWEUtils.maskHTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"));
+			buffy.append(KnowWEUtils.maskHTML("</td>"));
+		}
+
+		if (right != null) {
+			buffy.append(KnowWEUtils.maskHTML("<td>"));
+			buffy.append(right);
+			buffy.append(KnowWEUtils.maskHTML("</td>"));
+			buffy.append(KnowWEUtils.maskHTML("<td>"));
+			buffy.append(KnowWEUtils.maskHTML("<a href='Wiki.jsp?page="
 					+ extractPageName(right)
 					+ "' > <img src='KnowWEExtension/images/Pfeil_nach_rechts.gif' height='60'/>  </a>"));
 		}
