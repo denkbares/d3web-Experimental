@@ -38,7 +38,19 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
-	<!-- This simple markup was for testing only
+		
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="SimpleIRIDefinition">
+		<parameter id="class"
+			value="de.knowwe.kdom.turtle.simple.SimpleIRIDefintionMarkup" />
+		<parameter id="name" value="SimpleIRIDefinition" />
+		<parameter id="description" value="Type SimpleIRIDefinition" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<!-- This simple markup was for testing only -->
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TurtleMarkupSimple">
 		<parameter id="class"
@@ -49,7 +61,7 @@
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="root" />
 	</extension>
-	-->
+	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="TerminologyViewHandler">
 		<parameter id="class" value="de.knowwe.util.TerminologyViewHandler" />
