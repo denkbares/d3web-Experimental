@@ -14,5 +14,15 @@
 			<export prefix="*" />
 		</library>
 	</runtime>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="EventListener"
+		id="RDF2GoEventListener">
+		<parameter id="class"
+			value="de.knowwe.owlapi.RDF2GoEventListener" />
+		<parameter id="name" value="RDF2GoEventListener" />
+		<parameter id="description" value="EventListener RDF2GoEventListener" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
 
 </plugin>
