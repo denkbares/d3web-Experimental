@@ -33,11 +33,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.WeakHashMap;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -636,13 +636,17 @@ public class Rdf2GoCore implements EventListener {
 	 * 
 	 * @created 06.12.2010
 	 * @param sec
-	 * @param allStatements
+	 * @param newStatements
 	 */
-	private void addToStatementcache(Section<? extends Type> sec, List<Statement> allStatements) {
+	private void addToStatementcache(Section<? extends Type> sec, List<Statement> newStatements) {
 		WeakHashMap<Section<? extends Type>, List<Statement>> temp = statementcache.get(sec.getArticle().getTitle());
 		if (temp == null) {
 			temp = new WeakHashMap<Section<? extends Type>, List<Statement>>();
-
+		}
+		List<Statement> allStatements = new ArrayList<Statement>();
+		allStatements.addAll(newStatements);
+		if (temp.containsKey(sec)) {
+			allStatements.addAll(temp.get(sec));
 		}
 		temp.put(sec, allStatements);
 		statementcache.put(sec.getArticle().getTitle(), temp);
