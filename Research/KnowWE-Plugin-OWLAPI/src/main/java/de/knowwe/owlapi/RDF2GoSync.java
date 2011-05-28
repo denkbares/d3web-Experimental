@@ -171,6 +171,7 @@ public class RDF2GoSync {
 
 	private static String statementsToRDF(List<Statement> statements) {
 		Model rdfModel = RDF2Go.getModelFactory().createModel();
+		rdfModel.open();
 		rdfModel.addAll(statements.iterator());
 		return RDFTool.modelToString(rdfModel);
 	}
