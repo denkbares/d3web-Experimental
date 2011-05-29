@@ -180,7 +180,7 @@ public class AnswerLine extends AbstractType {
 
 		public AnswerTextArgument() {
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(
-					new RegexSectionFinder("\\{.*?\\}"));
+					new RegexSectionFinder("\\{[rf1-9]}"));
 			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 			this.setSectionFinder(csf);
 		}
