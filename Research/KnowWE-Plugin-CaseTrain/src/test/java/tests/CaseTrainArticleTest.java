@@ -14,11 +14,22 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.basic.PlainText;
 import de.knowwe.casetrain.evaluation.Evaluation;
+import de.knowwe.casetrain.info.AnswerLine;
+import de.knowwe.casetrain.info.AnswerLine.AnswerExplanation;
+import de.knowwe.casetrain.info.AnswerLine.AnswerMark;
+import de.knowwe.casetrain.info.AnswerLine.AnswerText;
 import de.knowwe.casetrain.info.AnswersBlock;
+import de.knowwe.casetrain.info.AnswersBlock.AnswerOrderMark;
+import de.knowwe.casetrain.info.AnswersBlock.Heading;
+import de.knowwe.casetrain.info.AnswersBlock.Postfix;
+import de.knowwe.casetrain.info.AnswersBlock.Praefix;
 import de.knowwe.casetrain.info.Explanation;
-import de.knowwe.casetrain.info.Question;
 import de.knowwe.casetrain.info.Hint;
 import de.knowwe.casetrain.info.Info;
+import de.knowwe.casetrain.info.Question;
+import de.knowwe.casetrain.info.Question.QuestionText;
+import de.knowwe.casetrain.info.Question.QuestionType;
+import de.knowwe.casetrain.info.Question.QuestionWeight;
 import de.knowwe.casetrain.type.Closure;
 import de.knowwe.casetrain.type.Introduction;
 import de.knowwe.casetrain.type.MetaData;
@@ -52,6 +63,9 @@ import de.knowwe.casetrain.type.multimedia.Video;
 
 /**
  * 
+ * Note: Dont change the ordering in the CaseTrainWikipage.txt.
+ * The tests rely on the right order of Questions/Hints/Answer/Blocks!
+ * 
  * @author Johannes Dienst
  * @created 20.05.2011
  */
@@ -66,6 +80,9 @@ public class CaseTrainArticleTest extends TestCase {
 	private Section<Info> info;
 	private Section<Evaluation> eval;
 	private Section<Closure> closure;
+
+	private List<Section<Question>> questions;
+	List<Section<AnswersBlock>> antworten;
 
 	private static final String TITLE_MISSING = "Title is Missing in ";
 	private static final String TEXT_MISSING = "Text is Missing in ";
@@ -82,6 +99,8 @@ public class CaseTrainArticleTest extends TestCase {
 	private static final String WRONG_ANSWERSBLOCKS_COUNT = "Wrong number of answer-blocks in ";
 	private static final String WRONG_EXPLICATION_COUNT = "Wrong number of explications in ";
 
+	private static final String MISSING = "Missing ";
+
 	@Override
 	protected void setUp() throws IOException {
 		InitPluginManager.init();
@@ -92,6 +111,14 @@ public class CaseTrainArticleTest extends TestCase {
 		info = Sections.findSuccessor(articleSec, Info.class);
 		eval = Sections.findSuccessor(articleSec, Evaluation.class);
 		closure = Sections.findSuccessor(articleSec, Closure.class);
+
+		if (info != null) {
+			questions = new ArrayList<Section<Question>>();
+			Sections.findSuccessorsOfType(info, Question.class, questions);
+			antworten = new ArrayList<Section<AnswersBlock>>();
+			Sections.findSuccessorsOfType(info, AnswersBlock.class, antworten);
+		}
+
 	}
 
 	@Test
@@ -122,7 +149,7 @@ public class CaseTrainArticleTest extends TestCase {
 		assertEquals("Wrong Meta-Attribute-Count", 25, children.size());
 	}
 
-	// TODO MultimediaTypes missing.
+	// TODO MultimediaTypes: audio/link missing.
 	@Test
 	public void testIntroduction() {
 		Section<BlockMarkupContent> content =
@@ -196,22 +223,18 @@ public class CaseTrainArticleTest extends TestCase {
 		assertNotNull(VIDEO_MISSING + Hint.class.getName(), hintVideo);
 
 		// Questions
-		List<Section<Question>> questions = new ArrayList<Section<Question>>();
-		Sections.findSuccessorsOfType(info, Question.class, questions);
 		assertEquals(WRONG_QUESTION_COUNT + Info.class.getName(), 9, questions.size());
 
 		// Answers-Block
-		List<Section<AnswersBlock>> antworten = new ArrayList<Section<AnswersBlock>>();
-		Sections.findSuccessorsOfType(info, AnswersBlock.class, antworten);
 		assertEquals(WRONG_ANSWERSBLOCKS_COUNT + Info.class.getName(), 13, antworten.size());
 
-		// Explications
-		List<Section<Explanation>> explications = new ArrayList<Section<Explanation>>();
-		Sections.findSuccessorsOfType(info, Explanation.class, explications);
-		assertEquals(WRONG_EXPLICATION_COUNT + Info.class.getName(), 11, explications.size());
+		// Explanation
+		List<Section<Explanation>> explanations = new ArrayList<Section<Explanation>>();
+		Sections.findSuccessorsOfType(info, Explanation.class, explanations);
+		assertEquals(WRONG_EXPLICATION_COUNT + Info.class.getName(), 11, explanations.size());
 
 		Section<SubblockMarkupContent> sContent =
-			Sections.findSuccessor(explications.get(0), SubblockMarkupContent.class);
+			Sections.findSuccessor(explanations.get(0), SubblockMarkupContent.class);
 
 		List<Section<PlainText>> expPlains = new ArrayList<Section<PlainText>>();
 		Sections.findSuccessorsOfType(sContent, PlainText.class, 1, expPlains);
@@ -226,6 +249,84 @@ public class CaseTrainArticleTest extends TestCase {
 		assertNotNull(PICTURE_MISSING + Explanation.class.getName(), bild);
 		video = Sections.findChildOfType(sContent, Video.class);
 		assertNotNull(VIDEO_MISSING + Explanation.class.getName(), video);
+
+	}
+
+	@Test
+	public void testQuestions() {
+		Section<SubblockMarkupContent> c = null;
+		Section<QuestionWeight> weight = null;
+		Section<QuestionType> type = null;
+		Section<QuestionText> text = null;
+		for (Section<Question> q : questions) {
+			c = Sections.findSuccessor(q, SubblockMarkupContent.class);
+
+			weight = Sections.findSuccessor(c, QuestionWeight.class);
+			assertNotNull(QuestionWeight.class.getName() +" null", weight);
+			assertEquals(QuestionWeight.class.getName() +" not equals 1", "1", weight.getOriginalText().trim());
+
+			type = Sections.findSuccessor(c, QuestionType.class);
+			assertNotNull(QuestionType.class.getName() +" null", type);
+
+			text = Sections.findSuccessor(c, QuestionText.class);
+			assertNotNull(QuestionText.class.getName() +" null", text);
+			assertFalse(QuestionText.class.getName() +" is empty string", text.getOriginalText().trim().equals(""));
+		}
+	}
+
+	@Test
+	public void testAnswerBlocks() {
+		Section<AnswerLine> line = null;
+		List<Section<AnswerLine>> lines = new ArrayList<Section<AnswerLine>>();
+		boolean actual;
+		Section<AnswerMark> mark = null;
+		Section<AnswerText> text = null;
+		Section<AnswerExplanation> expl = null;
+
+		for (Section<AnswersBlock> a : antworten) {
+			lines.clear();
+			Sections.findSuccessorsOfType(a, AnswerLine.class, lines);
+
+			actual = (lines.size() <= 0);
+			assertFalse("No "+ AnswerLine.class.getName() +" found", actual);
+
+			for (Section<AnswerLine> l : lines) {
+				mark = Sections.findSuccessor(l, AnswerMark.class);
+				assertNotNull(MISSING + AnswerMark.class.getName(), mark);
+
+				text = Sections.findSuccessor(l, AnswerText.class);
+				assertNotNull(MISSING + AnswerText.class.getName(), text);
+				assertFalse("Empty " + AnswerText.class.getName(), text.getOriginalText().trim().equals(""));
+
+				expl = Sections.findSuccessor(l, AnswerExplanation.class);
+				assertNotNull(MISSING + AnswerExplanation.class.getName(), expl);
+				assertFalse("Empty " + AnswerExplanation.class.getName(),
+						expl.getOriginalText().trim().equals(""));
+			}
+
+		}
+
+		// Test one AnswersBlock which has
+		// OrderMark/Praefix/Postfix/Heading
+		Section<AnswersBlock> block = antworten.get(5);
+		Section<AnswerOrderMark> mar = Sections.findSuccessor(block, AnswerOrderMark.class);
+		Section<Praefix> praefix = Sections.findSuccessor(block, Praefix.class);
+		Section<Postfix> postfix = Sections.findSuccessor(block, Postfix.class);
+		Section<Heading> heading = Sections.findSuccessor(block, Heading.class);
+
+		assertNotNull(MISSING + AnswerOrderMark.class.getName(), mar);
+		assertNotNull(MISSING + Praefix.class.getName(), praefix);
+		assertNotNull(MISSING + Postfix.class.getName(), postfix);
+		assertNotNull(MISSING + Heading.class.getName(), heading);
+
+		assertEquals(WRONG_STRING + AnswerOrderMark.class.getName(),
+				"{2}", mar.getOriginalText().trim());
+		assertEquals(WRONG_STRING + Praefix.class.getName(),
+				"Präfix: weiblich", praefix.getOriginalText().trim());
+		assertEquals(WRONG_STRING + Postfix.class.getName(),
+				"Postfix: %", postfix.getOriginalText().trim());
+		assertEquals(WRONG_STRING + Heading.class.getName(),
+				"Überschrift: Überschrift", heading.getOriginalText().trim());
 
 	}
 
