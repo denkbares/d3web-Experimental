@@ -72,7 +72,7 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
 		st.setAttribute("text", c.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getQuestionCount());
 
-		Blackboard bb = super.d3webSession.getBlackboard();
+		Blackboard bb = d3webSession.getBlackboard();
 		Value value = bb.getValue((ValueObject) to);
 
 		// if question is an abstraction question --> readonly

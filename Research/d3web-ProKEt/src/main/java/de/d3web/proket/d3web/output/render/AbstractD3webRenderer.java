@@ -291,14 +291,12 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 			 * unknown by default option of KB is activated - AND nothing set
 			 * additionally for single questions
 			 */
-			if (D3webConnector.getInstance().getKb().getInfoStore().getValue(
-					BasicProperties.UNKNOWN_VISIBLE) == true) {
+			Boolean value = D3webConnector.getInstance().getKb().getInfoStore().getValue(
+					BasicProperties.UNKNOWN_VISIBLE);
+			if (value != null && value) {
 
-				// TODO: ugly hack. In case all unknowns should be rendered by
-				// default, the exclusion of single questions needs to be
-				// flagged by a unknown visible = true flag, as unknownVisible
-				// obviously is false per default :-/
-				if (!to.getInfoStore().getValue(BasicProperties.UNKNOWN_VISIBLE) == true) {
+				Boolean toValue = to.getInfoStore().getValue(BasicProperties.UNKNOWN_VISIBLE);
+				if (toValue == null || !toValue) {
 
 					AnswerD3webRenderer unknownRenderer = getUnknownRenderer();
 

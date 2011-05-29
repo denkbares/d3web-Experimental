@@ -472,10 +472,7 @@ public class D3webDialog extends HttpServlet {
 			// AUTOSAVE
 			String folderPath = GlobalSettings.getInstance().getCaseFolder();
 			Session d3webSession = (Session) httpSession.getAttribute("d3webSession");
-			long before = System.currentTimeMillis();
 			new SaveThread(folderPath, d3webSession).start();
-			System.out.println(System.currentTimeMillis() - before);
-
 		}
 	}
 
