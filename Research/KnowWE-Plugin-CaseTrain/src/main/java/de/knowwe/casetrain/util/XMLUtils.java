@@ -71,7 +71,7 @@ import de.knowwe.casetrain.info.AnswerLine.AnswerExplanation;
 import de.knowwe.casetrain.info.AnswerLine.AnswerText;
 import de.knowwe.casetrain.info.AnswerLine.AnswerTextArgument;
 import de.knowwe.casetrain.info.AnswersBlock;
-import de.knowwe.casetrain.info.AnswerValidator;
+import de.knowwe.casetrain.info.AnswersBlockValidator;
 import de.knowwe.casetrain.info.Explanation;
 import de.knowwe.casetrain.info.Question;
 import de.knowwe.casetrain.info.Question.QuestionWeight;
@@ -544,55 +544,55 @@ public class XMLUtils {
 		Section<?> fragetyp = Sections.findSuccessor(frage, QuestionType.class);
 		String typ = fragetyp.getOriginalText().trim();
 
-		if (typ.equals(AnswerValidator.OC)) {
+		if (typ.equals(AnswersBlockValidator.OC)) {
 			ChoiceQuestion q = fac.createChoiceQuestion();
 			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsOCQuestion(q));
 		}
 
-		if (typ.equals(AnswerValidator.MC)) {
+		if (typ.equals(AnswersBlockValidator.MC)) {
 			ChoiceQuestion q = fac.createChoiceQuestion();
 			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsMCQuestion(q));
 		}
 
-		if (typ.equals(AnswerValidator.W)) {
+		if (typ.equals(AnswersBlockValidator.W)) {
 			WordQuestion q = fac.createBasicSectionQuestionsWordQuestion();
 			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.add(fac.createBasicSectionQuestionsWordQuestion(q));
 		}
 
-		if (typ.equals(AnswerValidator.UMW)) {
+		if (typ.equals(AnswersBlockValidator.UMW)) {
 			MultiWordQuestion q = fac.createMultiWordQuestion();
 			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsUMWordQuestion(q));
 		}
 
-		if (typ.equals(AnswerValidator.OMW)) {
+		if (typ.equals(AnswersBlockValidator.OMW)) {
 			MultiWordQuestion q = fac.createMultiWordQuestion();
 			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsOMWordQuestion(q));
 		}
 
-		if (typ.equals(AnswerValidator.N)) {
+		if (typ.equals(AnswersBlockValidator.N)) {
 			NumQuestion q = fac.createBasicSectionQuestionsNumQuestion();
 			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsNumQuestion(q));
 		}
 
-		if (typ.equals(AnswerValidator.MN)) {
+		if (typ.equals(AnswersBlockValidator.MN)) {
 			MNumQuestion q = fac.createBasicSectionQuestionsMNumQuestion();
 			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.
 			add(fac.createBasicSectionQuestionsMNumQuestion(q));
 		}
 
-		if (typ.equals(AnswerValidator.T)) {
+		if (typ.equals(AnswersBlockValidator.T)) {
 			TextQuestion q = fac.createBasicSectionQuestionsTextQuestion();
 			XMLUtils.createQuestionWithBinding(frageChilds, q, fac);
 			questionsList.

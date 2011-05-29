@@ -107,7 +107,7 @@ public class Question extends SubblockMarkup {
 		public QuestionType() {
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(
 					new RegexSectionFinder(
-							AnswerValidator.getInstance().getRegexAsString()));
+							AnswersBlockValidator.getInstance().getRegexAsString()));
 			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 			this.setSectionFinder(csf);
 			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());

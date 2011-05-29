@@ -71,9 +71,9 @@ public class AnswerLine extends AbstractType {
 			Pattern p = Pattern.compile("\\{[0-9]+\\}");
 			Matcher m = p.matcher(text);
 			if (m.matches()) return results;
-			if (text.startsWith(AnswerValidator.PRAEFIX)
-					|| text.startsWith(AnswerValidator.POSTFIX)
-					|| text.startsWith(AnswerValidator.UEBERSCHRIFT)) {
+			if (text.startsWith(AnswersBlockValidator.PRAEFIX)
+					|| text.startsWith(AnswersBlockValidator.POSTFIX)
+					|| text.startsWith(AnswersBlockValidator.UEBERSCHRIFT)) {
 				return results;
 			}
 			results.add(new SectionFinderResult(0, text.length()));
@@ -150,7 +150,7 @@ public class AnswerLine extends AbstractType {
 	}
 
 	/**
-	 * {@link AnswerValidator}
+	 * {@link AnswersBlockValidator}
 	 * 
 	 * @author Johannes Dienst
 	 * @created 08.05.2011

@@ -29,9 +29,9 @@ import de.knowwe.casetrain.info.AnswerLine.AnswerExplanation;
 import de.knowwe.casetrain.info.AnswerLine.AnswerMark;
 import de.knowwe.casetrain.info.AnswerLine.AnswerText;
 import de.knowwe.casetrain.info.AnswerLine.AnswerTextArgument;
+import de.knowwe.casetrain.info.AnswersBlock.Heading;
 import de.knowwe.casetrain.info.AnswersBlock.Postfix;
 import de.knowwe.casetrain.info.AnswersBlock.Praefix;
-import de.knowwe.casetrain.info.AnswersBlock.Heading;
 import de.knowwe.casetrain.info.Question.QuestionType;
 import de.knowwe.casetrain.message.DuplicateComponentError;
 import de.knowwe.casetrain.message.InvalidArgumentError;
@@ -54,7 +54,7 @@ import de.knowwe.casetrain.message.MissingContentWarning;
  * @author Johannes Dienst
  * @created 28.04.2011
  */
-public class AnswerValidator {
+public class AnswersBlockValidator {
 
 	public static final String PRAEFIX = "Präfix";
 	public static final String POSTFIX = "Postfix";
@@ -72,18 +72,18 @@ public class AnswerValidator {
 	private final String[] types = {MC, OC, W, UMW, OMW, N, MN, T};
 
 	private final Pattern regex;
-	private static AnswerValidator uniqueInstance;
+	private static AnswersBlockValidator uniqueInstance;
 
 	private static final String UNKNOWN_FRAGE_TYPE = "Fragetyp unbekannt";
 
-	public static AnswerValidator getInstance() {
+	public static AnswersBlockValidator getInstance() {
 		if (uniqueInstance == null) {
-			uniqueInstance = new AnswerValidator();
+			uniqueInstance = new AnswersBlockValidator();
 		}
 		return uniqueInstance;
 	}
 
-	private AnswerValidator() {
+	private AnswersBlockValidator() {
 		StringBuilder typesRegex = new StringBuilder("(");
 		for(int i=0; i<types.length; i++)
 			typesRegex.append(types[i] + "|");
@@ -105,7 +105,7 @@ public class AnswerValidator {
 
 	/**
 	 * Returns a list of FrageTypen, who
-	 * have multiple Antworten-Blocks
+	 * have multiple AnswersBlocks
 	 * 
 	 * @created 10.05.2011
 	 * @return
@@ -119,52 +119,56 @@ public class AnswerValidator {
 	}
 
 	/**
-	 * Validates the Antworten-block according to its
+	 * Validates the AnswersBlock according to its
 	 * related Frage.
 	 * 
 	 * @created 28.04.2011
-	 * @param sec
+	 * @param frage
+	 * @param answersBlock
+	 * @param messages
+	 * @param evaluation
 	 */
-	public void validateAntwortenBlock(Section<Question> frage,
-			Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
+	public void validateAnswersBlock(Section<Question> frage,
+			Section<AnswersBlock> answersBlock, List<KDOMReportMessage> messages,
+			boolean evaluation) {
 		Section<QuestionType> typ = Sections.findSuccessor(frage, QuestionType.class);
 		if (typ == null) {
-			messages.add(new InvalidAttributeError(AnswerValidator.UNKNOWN_FRAGE_TYPE));
+			messages.add(new InvalidAttributeError(AnswersBlockValidator.UNKNOWN_FRAGE_TYPE));
 			return;
 		}
 
 		if (typ.getOriginalText().equals(MC) || typ.getOriginalText().equals(OC)) {
-			this.checkChoiceQuestion(antworten, messages);
+			this.checkChoiceQuestion(answersBlock, messages, evaluation);
 			return;
 		}
 
 		if (typ.getOriginalText().equals(W)) {
-			this.checkWordQuestion(antworten, messages);
+			this.checkWordQuestion(answersBlock, messages, evaluation);
 			return;
 		}
 
 		if (typ.getOriginalText().equals(UMW)) {
-			this.checkUMWQuestion(antworten, messages);
+			this.checkUMWQuestion(answersBlock, messages, evaluation);
 			return;
 		}
 
 		if (typ.getOriginalText().equals(OMW)) {
-			this.checkOMWQuestion(antworten, messages);
+			this.checkOMWQuestion(answersBlock, messages, evaluation);
 			return;
 		}
 
 		if (typ.getOriginalText().equals(N)) {
-			this.checkNQuestion(antworten, messages);
+			this.checkNQuestion(answersBlock, messages, evaluation);
 			return;
 		}
 
 		if (typ.getOriginalText().equals(MN)) {
-			this.checkMNQuestion(antworten, messages);
+			this.checkMNQuestion(answersBlock, messages, evaluation);
 			return;
 		}
 
 		if (typ.getOriginalText().equals(T)) {
-			this.checkTQuestion(antworten, messages);
+			this.checkTQuestion(answersBlock, messages, evaluation);
 		}
 
 	}
@@ -173,13 +177,13 @@ public class AnswerValidator {
 	 * Tests if {@link AnswerText} is empty
 	 * 
 	 * @created 09.05.2011
-	 * @param antworten
+	 * @param answersBlock
 	 * @param messages
 	 */
-	private void checkText(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
+	private void checkText(Section<AnswersBlock> answersBlock, List<KDOMReportMessage> messages) {
 
 		List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
-		Sections.findSuccessorsOfType(antworten, AnswerLine.class, found);
+		Sections.findSuccessorsOfType(answersBlock, AnswerLine.class, found);
 
 		Section<AnswerText> antwortText = null;
 		for(Section<AnswerLine> ans : found) {
@@ -196,13 +200,13 @@ public class AnswerValidator {
 	 * Tests if {@link AnswerExplanation} is empty
 	 * 
 	 * @created 09.05.2011
-	 * @param antworten
+	 * @param answersBlock
 	 * @param messages
 	 */
-	private void checkErklaerung(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
+	private void checkErklaerung(Section<AnswersBlock> answersBlock, List<KDOMReportMessage> messages) {
 
 		List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
-		Sections.findSuccessorsOfType(antworten, AnswerLine.class, found);
+		Sections.findSuccessorsOfType(answersBlock, AnswerLine.class, found);
 
 		Section<AnswerExplanation> antwortErklaerung = null;
 		for(Section<AnswerLine> ans : found) {
@@ -214,15 +218,24 @@ public class AnswerValidator {
 		}
 	}
 
+	/**
+	 * 
+	 * 
+	 * @created 29.05.2011
+	 * @param answersBlock
+	 * @param messages
+	 * @param minAnswers
+	 * @param evaluation if the AnswersBlock is part of Evaluation block
+	 */
 	private void checkMarkierung(
-			Section<AnswersBlock> antworten, List<KDOMReportMessage> messages, int minAnswers) {
+			Section<AnswersBlock> answersBlock, List<KDOMReportMessage> messages, int minAnswers,
+			boolean evaluation) {
 
-		// First: Right Syntax of Markierung
 		List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
-		Sections.findSuccessorsOfType(antworten, AnswerLine.class, found);
+		Sections.findSuccessorsOfType(answersBlock, AnswerLine.class, found);
 
 		if (found.size() < minAnswers) {
-			messages.add(new InvalidArgumentError("Weniger als "+ minAnswers +" Antworten für Frage angegeben."));
+			messages.add(new InvalidArgumentError("Weniger als "+ minAnswers +" answersBlockBlock für Frage angegeben."));
 		}
 
 		// Counting right and wrong answers
@@ -246,6 +259,15 @@ public class AnswerValidator {
 			numAnswers++;
 		}
 
+		if (evaluation) {
+			if (rightAnswers > 0)
+				messages.add(new InvalidArgumentError("Richtige Antwort für Frage nicht erlaubt"));
+			if (numAnswers > 0)
+				messages.add(new InvalidArgumentError("Mit Numerisch bewertete " +
+				"Antwort für Frage nicht erlaubt"));
+			return;
+		}
+
 		if (rightAnswers == 0) {
 			messages.add(new InvalidArgumentError("Keine richtige Antwort für Frage angegeben"));
 		}
@@ -258,24 +280,20 @@ public class AnswerValidator {
 
 	}
 
-	private void checkChoiceQuestion(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
-		this.checkMarkierung(antworten, messages, 2);
-		this.checkText(antworten, messages);
-		this.checkErklaerung(antworten, messages);
+	private void checkChoiceQuestion(Section<AnswersBlock> answersBlock,
+			List<KDOMReportMessage> messages, boolean evaluation) {
+		this.checkMarkierung(answersBlock, messages, 2, evaluation);
+		this.checkText(answersBlock, messages);
+		this.checkErklaerung(answersBlock, messages);
 	}
 
-	/**
-	 * 
-	 * @created 08.05.2011
-	 * @param antworten
-	 * @param messages
-	 */
-	private void checkWordQuestion(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
-		this.checkMarkierung(antworten, messages, 1);
-		this.checkText(antworten, messages);
+	private void checkWordQuestion(Section<AnswersBlock> answersBlock,
+			List<KDOMReportMessage> messages, boolean evaluation) {
+		this.checkMarkierung(answersBlock, messages, 1, evaluation);
+		this.checkText(answersBlock, messages);
 
 		List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
-		Sections.findSuccessorsOfType(antworten, AnswerLine.class, found);
+		Sections.findSuccessorsOfType(answersBlock, AnswerLine.class, found);
 
 		Section<AnswerText> antwortText = null;
 		Section<AnswerTextArgument> arg = null;
@@ -332,53 +350,50 @@ public class AnswerValidator {
 
 		}
 
-		this.checkErklaerung(antworten, messages);
+		this.checkErklaerung(answersBlock, messages);
+	}
+
+	private void checkUMWQuestion(Section<AnswersBlock> answersBlock,
+			List<KDOMReportMessage> messages, boolean evaluation) {
+		this.checkMarkierung(answersBlock, messages, 1, evaluation);
+		this.checkText(answersBlock, messages);
+		this.checkErklaerung(answersBlock, messages);
+		this.checkUeberschrift(answersBlock, messages);
+	}
+
+	/**
+	 * 
+	 * TODO: Only tests one answersBlock-Block
+	 * 
+	 * @created 08.05.2011
+	 * @param answersBlock
+	 * @param messages
+	 */
+	private void checkOMWQuestion(Section<AnswersBlock> answersBlock,
+			List<KDOMReportMessage> messages, boolean evaluation) {
+		this.checkMarkierung(answersBlock, messages, 1, evaluation);
+		this.checkText(answersBlock, messages);
+		this.checkErklaerung(answersBlock, messages);
+		this.checkUeberschrift(answersBlock, messages);
 	}
 
 	/**
 	 * 
 	 * @created 08.05.2011
-	 * @param antworten
+	 * @param answersBlock
 	 * @param messages
 	 */
-	private void checkUMWQuestion(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
-		this.checkMarkierung(antworten, messages, 1);
-		this.checkText(antworten, messages);
-		this.checkErklaerung(antworten, messages);
-		this.checkUeberschrift(antworten, messages);
+	private void checkNQuestion(Section<AnswersBlock> answersBlock,
+			List<KDOMReportMessage> messages, boolean evaluation) {
+		this.checkMarkierung(answersBlock, messages, 1, evaluation);
+		this.checkText(answersBlock, messages);
+		this.checkNumanswersBlockBlock(answersBlock, messages);
+		this.checkErklaerung(answersBlock, messages);
 	}
 
-	/**
-	 * 
-	 * TODO: Only tests one Antworten-Block
-	 * 
-	 * @created 08.05.2011
-	 * @param antworten
-	 * @param messages
-	 */
-	private void checkOMWQuestion(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
-		this.checkMarkierung(antworten, messages, 1);
-		this.checkText(antworten, messages);
-		this.checkErklaerung(antworten, messages);
-		this.checkUeberschrift(antworten, messages);
-	}
-
-	/**
-	 * 
-	 * @created 08.05.2011
-	 * @param antworten
-	 * @param messages
-	 */
-	private void checkNQuestion(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
-		this.checkMarkierung(antworten, messages, 1);
-		this.checkText(antworten, messages);
-		this.checkNumAntwortenBlock(antworten, messages);
-		this.checkErklaerung(antworten, messages);
-	}
-
-	private void checkNumAntwortenBlock(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
+	private void checkNumanswersBlockBlock(Section<AnswersBlock> answersBlock, List<KDOMReportMessage> messages) {
 		List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
-		Sections.findSuccessorsOfType(antworten, AnswerLine.class, found);
+		Sections.findSuccessorsOfType(answersBlock, AnswerLine.class, found);
 
 		Section<AnswerText> antwortText = null;
 		String antString = "";
@@ -408,51 +423,47 @@ public class AnswerValidator {
 
 		}
 
-		this.checkPraefixPostfix(antworten, messages);
+		this.checkPraefixPostfix(answersBlock, messages);
+	}
+
+	private void checkMNQuestion(Section<AnswersBlock> answersBlock,
+			List<KDOMReportMessage> messages, boolean evaluation) {
+		this.checkMarkierung(answersBlock, messages, 1, evaluation);
+		this.checkText(answersBlock, messages);
+		this.checkNumanswersBlockBlock(answersBlock, messages);
+		this.checkErklaerung(answersBlock, messages);
+		this.checkUeberschrift(answersBlock, messages);
 	}
 
 	/**
 	 * 
 	 * @created 08.05.2011
-	 * @param antworten
+	 * @param answersBlock
 	 * @param messages
 	 */
-	private void checkMNQuestion(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
-		this.checkMarkierung(antworten, messages, 1);
-		this.checkText(antworten, messages);
-		this.checkNumAntwortenBlock(antworten, messages);
-		this.checkErklaerung(antworten, messages);
-		this.checkUeberschrift(antworten, messages);
-	}
-
-	/**
-	 * 
-	 * @created 08.05.2011
-	 * @param antworten
-	 * @param messages
-	 */
-	private void checkTQuestion(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
-		this.checkMarkierung(antworten, messages, 1);
-		this.checkText(antworten, messages);
-		this.checkErklaerung(antworten, messages);
+	private void checkTQuestion(Section<AnswersBlock> answersBlock,
+			List<KDOMReportMessage> messages, boolean evaluation) {
+		this.checkMarkierung(answersBlock, messages, 1, evaluation);
+		this.checkText(answersBlock, messages);
+		this.checkErklaerung(answersBlock, messages);
 	}
 
 	/**
 	 * 
 	 * @created 10.05.2011
-	 * @param antworten
+	 * @param answersBlock
 	 * @param messages
 	 */
-	private void checkPraefixPostfix(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
+	private void checkPraefixPostfix(Section<AnswersBlock> answersBlock, List<KDOMReportMessage> messages) {
 		List<Section<Praefix>> found = new ArrayList<Section<Praefix>>();
-		Sections.findSuccessorsOfType(antworten, Praefix.class, found);
+		Sections.findSuccessorsOfType(answersBlock, Praefix.class, found);
 		if (found.size() > 1)
 			messages.add(new DuplicateComponentError(PRAEFIX));
 		if (found.size() == 0)
 			messages.add(new MissingComponentWarning(PRAEFIX));
 
 		List<Section<Postfix>> found2 = new ArrayList<Section<Postfix>>();
-		Sections.findSuccessorsOfType(antworten, Postfix.class, found2);
+		Sections.findSuccessorsOfType(answersBlock, Postfix.class, found2);
 		if (found2.size() > 1)
 			messages.add(new DuplicateComponentError(POSTFIX));
 		if (found2.size() == 0)
@@ -462,12 +473,12 @@ public class AnswerValidator {
 	/**
 	 * 
 	 * @created 10.05.2011
-	 * @param antworten
+	 * @param answersBlock
 	 * @param messages
 	 */
-	private void checkUeberschrift(Section<AnswersBlock> antworten, List<KDOMReportMessage> messages) {
+	private void checkUeberschrift(Section<AnswersBlock> answersBlock, List<KDOMReportMessage> messages) {
 		List<Section<Heading>> found = new ArrayList<Section<Heading>>();
-		Sections.findSuccessorsOfType(antworten, Heading.class, found);
+		Sections.findSuccessorsOfType(answersBlock, Heading.class, found);
 		if (found.size() > 1)
 			messages.add(new DuplicateComponentError(UEBERSCHRIFT));
 		if (found.size() == 0)

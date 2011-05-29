@@ -218,14 +218,15 @@ public class Info extends BlockMarkupType {
 						// Only by UMW,OMW,MN
 						if (!antwortenMissing) {
 							String typ = Sections.findSuccessor(actual, QuestionType.class).getOriginalText().trim();
-							if ( !(AnswerValidator.getInstance().getTypesMultiple().contains(typ))) {
+							if ( !(AnswersBlockValidator.getInstance().getTypesMultiple().contains(typ))) {
 								messages.add(new InvalidArgumentError("Mehrfache Antworten bei diesem FrageTyp nicht zulässig: "+typ));
 							}
 
 						}
 						antwortenMissing = false;
-						AnswerValidator.getInstance().
-						validateAntwortenBlock((Section<Question>) actual, (Section<AnswersBlock>) sec, messages);
+						AnswersBlockValidator.getInstance().
+						validateAnswersBlock((Section<Question>) actual,
+								(Section<AnswersBlock>) sec, messages, false);
 						continue;
 					}
 				}

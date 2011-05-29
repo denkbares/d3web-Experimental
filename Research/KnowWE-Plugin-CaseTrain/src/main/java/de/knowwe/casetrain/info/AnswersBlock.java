@@ -83,7 +83,7 @@ public class AnswersBlock extends SubblockMarkup {
 	public class Praefix extends AbstractType {
 		public Praefix() {
 			this.setSectionFinder(
-					new RegexSectionFinder(AnswerValidator.PRAEFIX + ":.*"));
+					new RegexSectionFinder(AnswersBlockValidator.PRAEFIX + ":.*"));
 			this.setCustomRenderer(new DivStyleClassRenderer("praefix"));
 		}
 	}
@@ -96,7 +96,7 @@ public class AnswersBlock extends SubblockMarkup {
 	public class Postfix extends AbstractType {
 		public Postfix() {
 			this.setSectionFinder(
-					new RegexSectionFinder(AnswerValidator.POSTFIX + ":.*"));
+					new RegexSectionFinder(AnswersBlockValidator.POSTFIX + ":.*"));
 			this.setCustomRenderer(new DivStyleClassRenderer("postfix"));
 		}
 	}
@@ -109,7 +109,7 @@ public class AnswersBlock extends SubblockMarkup {
 	public class Heading extends AbstractType {
 		public Heading() {
 			this.setSectionFinder(
-					new RegexSectionFinder(AnswerValidator.UEBERSCHRIFT + ":.*"));
+					new RegexSectionFinder(AnswersBlockValidator.UEBERSCHRIFT + ":.*"));
 			this.setCustomRenderer(new DivStyleClassRenderer("ueberschrift"));
 		}
 	}

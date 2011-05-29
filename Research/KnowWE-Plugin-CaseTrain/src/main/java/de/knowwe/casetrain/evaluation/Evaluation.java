@@ -35,10 +35,11 @@ import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
 import de.knowwe.casetrain.info.AnswersBlock;
-import de.knowwe.casetrain.info.AnswerValidator;
+import de.knowwe.casetrain.info.AnswersBlockValidator;
+import de.knowwe.casetrain.info.Explanation;
+import de.knowwe.casetrain.info.Info;
 import de.knowwe.casetrain.info.Question;
 import de.knowwe.casetrain.info.Question.QuestionType;
-import de.knowwe.casetrain.info.Info;
 import de.knowwe.casetrain.message.InvalidArgumentError;
 import de.knowwe.casetrain.message.MissingComponentWarning;
 import de.knowwe.casetrain.message.MissingContentWarning;
@@ -64,7 +65,8 @@ public class Evaluation extends BlockMarkupType {
 		this.setCustomRenderer(new KnowWEDomRenderer<BlockMarkupType>() {
 
 			@Override
-			public void render(KnowWEArticle article, Section<BlockMarkupType> sec, UserContext user, StringBuilder string) {
+			public void render(KnowWEArticle article, Section<BlockMarkupType> sec,
+					UserContext user, StringBuilder string) {
 				string.append(KnowWEUtils.maskHTML("<div class='"
 						+ sec.get().getCSSClass()
 						+ "'>"));
@@ -115,9 +117,10 @@ public class Evaluation extends BlockMarkupType {
 
 			/**
 			 * Tests the following:
-			 * Frage has Antworten/Erklaerung
+			 * {@link Question} has {@link AnswersBlock)/{@link Explanation}
 			 * 
-			 * TODO Does not test if Antworten has Frage! Is this necessary?
+			 * TODO Does not test if {@link AnswersBlock} has {@link Question}!
+			 * Is this necessary?
 			 * 
 			 * @created 28.04.2011
 			 * @param s
@@ -138,12 +141,9 @@ public class Evaluation extends BlockMarkupType {
 				/*
 				 *  check children if the right order is given or some
 				 *  thing is missing. Right is:
-				 *  Hinweis* Frage Hinweis* Antworten Hinweis* Erklaerung
+				 *  Hint* Question Hint* AnswersBlock Hint* Explanation
 				 * 
-				 *  Also validates the given Antworten-block for:
-				 *   - frage hat nur eine antwortmöglichkeit
-				 *   - frage hat keine richtige antwortmöglichkeit
-				 *   - frage hat keine falsche antwortmöglichkeit
+				 *  Also validates the given AnswerBlock.
 				 * 
 				 */
 				List<Section<? extends Type>> children =
@@ -170,7 +170,7 @@ public class Evaluation extends BlockMarkupType {
 							String typ =
 								Sections.findSuccessor(actual, QuestionType.class).
 								getOriginalText().trim();
-							if (!(AnswerValidator.getInstance()
+							if (!(AnswersBlockValidator.getInstance()
 									.getTypesMultiple().contains(typ))) {
 								messages.add(new InvalidArgumentError(
 										"Mehrfache Antworten bei diesem FrageTyp nicht zulässig: "
@@ -179,9 +179,9 @@ public class Evaluation extends BlockMarkupType {
 
 						}
 						antwortenMissing = false;
-						AnswerValidator.getInstance().
-						validateAntwortenBlock((Section<Question>) actual,
-								(Section<AnswersBlock>) sec, messages);
+						AnswersBlockValidator.getInstance().
+						validateAnswersBlock((Section<Question>) actual,
+								(Section<AnswersBlock>) sec, messages, true);
 						continue;
 					}
 				}
