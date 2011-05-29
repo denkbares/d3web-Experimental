@@ -14,6 +14,7 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.basic.PlainText;
 import de.knowwe.casetrain.evaluation.Evaluation;
+import de.knowwe.casetrain.evaluation.EvaluationEnd;
 import de.knowwe.casetrain.info.AnswerLine;
 import de.knowwe.casetrain.info.AnswerLine.AnswerExplanation;
 import de.knowwe.casetrain.info.AnswerLine.AnswerMark;
@@ -330,12 +331,26 @@ public class CaseTrainArticleTest extends TestCase {
 
 	}
 
-	//
-	//	@Test
-	//	public void testEvaluation() {
-	//
-	//	}
-	//
+
+	// We dont have to deeply test here.
+	// All deep tests are done for Info.
+	@Test
+	public void testEvaluation() {
+		Section<EvaluationEnd> evalEnd =
+			Sections.findSuccessor(eval, EvaluationEnd.class);
+		assertNotNull(MISSING + EvaluationEnd.class.getName(), evalEnd);
+
+		List<Section<Question>> questions = new ArrayList<Section<Question>>();
+		Sections.findSuccessorsOfType(eval, Question.class, questions);
+		assertEquals(WRONG_QUESTION_COUNT + Evaluation.class.getName(), 2, questions.size());
+
+		List<Section<AnswersBlock>> blocks = new ArrayList<Section<AnswersBlock>>();
+		Sections.findSuccessorsOfType(eval, AnswersBlock.class, blocks);
+		assertEquals(WRONG_ANSWERSBLOCKS_COUNT + Evaluation.class.getName(), 2, blocks.size());
+
+
+	}
+
 
 	// TODO MultimediaTypes missing.
 	@Test

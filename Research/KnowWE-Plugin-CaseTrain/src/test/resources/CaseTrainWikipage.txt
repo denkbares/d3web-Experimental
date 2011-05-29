@@ -233,14 +233,19 @@ Um diesen Fall weiter verbessern zu können, beantworten Sie uns bitte noch zwei
 {-}2
 {-}3
 {-}4
+>
 
 <Frage:	0-MC Welchen Aussagen können Sie zustimmen?
 >
-<Antworten :
+<Antworten:
 {-}Die Bearbeitung dieses Falles hat mich auf die Klausur vorbereitet.
 {-}Der Online-Fall ist eine gute Ergänzung zur Präsenzveranstaltung.
 {-}Die Mediadaten zum Fall sind von ausreichender Qualität
 {-}Das verlinkte Hintergrundwissen hat mir dabei geholfen, den Fall zu bearbeiten.
+>
+
+<EvaluationEnd: Ende der Evaluation
+Das wars!
 >
 >>
 
