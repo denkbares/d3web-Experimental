@@ -41,7 +41,7 @@ public class DynamicMenuMarkup extends DefaultMarkupType {
 
 			@Override
 			public void render(KnowWEArticle article, Section<DynamicMenuMarkup> sec, UserContext user, StringBuilder string) {
-				string.append("<table>");
+				string.append("<table class='menulink'>");
 				Section<ContentType> content = Sections.findChildOfType(sec,
 						ContentType.class);
 				DelegateRenderer.getInstance().render(article, content, user, string);

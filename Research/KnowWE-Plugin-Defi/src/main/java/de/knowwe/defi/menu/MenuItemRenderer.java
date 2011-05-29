@@ -40,6 +40,7 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 	private static final String CSS_CLASS_MENULINK = "menulink";
 	private static final String CSS_CLASS_MENULINKROOT = "menulinkroot";
 	private static final String CSS_CLASS_MENULINKROOTCLOSED = "menulinkrootclosed";
+	private static final String CSS_CLASS_MENULINKROOTCURRENT = "menulinkrootcurrent";
 	private static final String CSS_CLASS_MENULINKCURRENT = "menulinkcurrent";
 
 	private static String getPageName(Section<? extends DashTreeElementContent> sec) {
@@ -126,8 +127,10 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 		if (pagename.equals(currentPage) || (!isRoot && isSubpageOf(currentPage, sec))) {
 
 			className = CSS_CLASS_MENULINKCURRENT;
+			if (isRoot) className = CSS_CLASS_MENULINKROOTCURRENT;
 		}
 
+		string.append("<tr><td class=" + className + ">");
 		// Link nur wenn freigeschaltet
 		if (!className.equals(CSS_CLASS_MENULINKROOTCLOSED)) {
 			string.append("<a  href='"
@@ -135,10 +138,7 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 					+ "Wiki.jsp?page=" + pagename + "'>");
 		}
 
-		string.append("<div class="
-				+ className
-				+ " style='padding-top: 0.25em;padding-right: 0.5em;padding-left: 0.5em; padding-bottom: 0.25em;"
-				+ "; border-style:solid; border-color: #000000;border-left-width:1px;border-right-width:1px;border-bottom-width:0px;border-top-width:1px;'>");
+		string.append("<div>");
 		string.append(label);
 		string.append("</div>");
 
@@ -146,7 +146,7 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 		if (!className.equals(CSS_CLASS_MENULINKROOTCLOSED)) {
 			string.append("</a>");
 		}
-
+		string.append("</td></tr>");
 	}
 
 	private boolean isSubpageOf(String currentPage, Section<DynamicMenuItem> section) {

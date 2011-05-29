@@ -10,33 +10,73 @@ textarea {
     font-size: 150%;
 }
 
-div.menulinkroot {
-    color: #CCCCCC;
+/* ReadButtonTag */
+table.rbtag tr:FIRST-CHILD {
+	border:1px solid black;	
+}
+table.rbtag td {
+	text-align:center;
+}
+tr.rated {
+	border:1px solid #BBB !important;
+	color:#BBB;	
+}
+
+/* Userlist */
+table.userlist tr {
+	border:1px solid black;	
+}
+table.userlist span.online {
+	color:green;
+}
+table.userlist span.offline {
+	color:red;
+}
+
+/* Menu */
+td.menulinkroot {
+    color:#CCCCCC;
     background-color: #064080;
     cursor: pointer;
     text-decoration: none;
     font-weight: bold;
 }
-
-div.menulinkrootclosed {
+td.menulinkrootclosed {
     color: #AAAAAA;
     background-color: #595959;
     text-decoration: none;
     font-weight: bold;
 }
-
-div.menulink {
+td.menulink {
 	background-color: #CCCCCC;
     color: #000000;
     cursor: pointer;
     text-decoration: none;
 }
-
-div.menulinkcurrent {
+td.menulinkcurrent, td.menulinkrootcurrent {
 	background-color: #F8BB90;
     color: #000000;
     cursor: pointer;
     text-decoration: none;
+}
+td.menulinkroot a {
+	color:#CCCCCC !important;
+}
+td.menulink a, td.menulinkcurrent a, td.menulinkrootcurrent a {
+	color:#000000 !important;	
+}
+td.menulinkrootcurrent {
+	font-weight:bold;
+}
+table.menulink td {
+	padding:0.25em 0.5em;
+	border:2px solid white;
+}
+table.menulink {
+	border-collapse:collapse;
+}
+table.menulink * {
+	width:170px;
 }
 
 div.logosDefi img {
@@ -45,7 +85,6 @@ div.logosDefi img {
     margin-right: 15px;
     margin-top: 0;
 }
-
 
 .defi-bttn {
     padding:5px 5px 5px 25px;
