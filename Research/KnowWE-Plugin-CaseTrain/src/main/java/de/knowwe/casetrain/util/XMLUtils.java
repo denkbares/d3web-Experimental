@@ -73,15 +73,15 @@ import de.knowwe.casetrain.info.AnswerLine.AnswerTextArgument;
 import de.knowwe.casetrain.info.AnswersBlock;
 import de.knowwe.casetrain.info.AnswersBlockValidator;
 import de.knowwe.casetrain.info.Explanation;
-import de.knowwe.casetrain.info.Question;
-import de.knowwe.casetrain.info.Question.QuestionWeight;
-import de.knowwe.casetrain.info.Question.QuestionText;
-import de.knowwe.casetrain.info.Question.QuestionType;
 import de.knowwe.casetrain.info.Hint;
 import de.knowwe.casetrain.info.Info;
-import de.knowwe.casetrain.type.Closure;
+import de.knowwe.casetrain.info.Question;
+import de.knowwe.casetrain.info.Question.QuestionText;
+import de.knowwe.casetrain.info.Question.QuestionType;
+import de.knowwe.casetrain.info.Question.QuestionWeight;
 import de.knowwe.casetrain.type.AttributeContent;
 import de.knowwe.casetrain.type.AttributeName;
+import de.knowwe.casetrain.type.Closure;
 import de.knowwe.casetrain.type.Introduction;
 import de.knowwe.casetrain.type.MetaAttributes;
 import de.knowwe.casetrain.type.MetaData;
@@ -91,7 +91,9 @@ import de.knowwe.casetrain.type.general.BlockMarkupType;
 import de.knowwe.casetrain.type.general.SubblockMarkup;
 import de.knowwe.casetrain.type.general.SubblockMarkupContent;
 import de.knowwe.casetrain.type.general.Title;
+import de.knowwe.casetrain.type.multimedia.Audio;
 import de.knowwe.casetrain.type.multimedia.Image;
+import de.knowwe.casetrain.type.multimedia.Link;
 import de.knowwe.casetrain.type.multimedia.MultimediaItem;
 import de.knowwe.casetrain.type.multimedia.Video;
 
@@ -186,6 +188,13 @@ public class XMLUtils {
 					}
 					continue;
 				}
+
+				if(child.get().isAssignableFromType(Link.class)) {
+					String original = child.getOriginalText();
+					simpleSec.getContentOrMultimediaItemOrFormula().add(original);
+					continue;
+				}
+
 				if(child.get().isAssignableFromType(MultimediaItem.class)) {
 					Mmitem it = fac.createMmitem();
 					XMLUtils.configureMmitem(it, child);
@@ -268,7 +277,8 @@ public class XMLUtils {
 	 * @param c
 	 * @param introSec
 	 */
-	private static void addTitledmmmixedcontentWithBinding(Case c, Section<?> introSec, ObjectFactory fac) {
+	private static void addTitledmmmixedcontentWithBinding(Case c,
+			Section<?> introSec, ObjectFactory fac) {
 
 		List<Section<?>> contentChildren = null;
 
@@ -299,6 +309,12 @@ public class XMLUtils {
 				continue;
 			}
 
+			if(sec.get().isAssignableFromType(Link.class)) {
+				String original = sec.getOriginalText();
+				titledmmContent.getContentOrMultimediaItemOrFormula().add(original);
+				continue;
+			}
+
 			if(sec.get().isAssignableFromType(MultimediaItem.class)) {
 				Mmitem it = fac.createMmitem();
 				XMLUtils.configureMmitem(it, sec);
@@ -324,10 +340,10 @@ public class XMLUtils {
 		String type = "";
 		if(sec.get().isType(Image.class)) type = "image";
 		if(sec.get().isType(Video.class)) type = "video";
-		//		if(child.get().isType(Link.class)) type = "link";
-		//		if(child.get().isType(Audio.class)) type = "audio";
+		if(sec.get().isType(Audio.class)) type = "audio";
 
 		it.setType(type);
+
 		it.setURL(sec.getChildren().get(1).getOriginalText().trim());
 	}
 
@@ -493,6 +509,13 @@ public class XMLUtils {
 					}
 					continue;
 				}
+
+				if(child.get().isAssignableFromType(Link.class)) {
+					String original = child.getOriginalText();
+					simpleSec.getContentOrMultimediaItemOrFormula().add(original);
+					continue;
+				}
+
 				if(child.get().isAssignableFromType(MultimediaItem.class)) {
 					Mmitem it = fac.createMmitem();
 					XMLUtils.configureMmitem(it, child);
@@ -859,6 +882,13 @@ public class XMLUtils {
 					itList.add(te);
 				continue;
 			}
+
+			if(s.get().isAssignableFromType(Link.class)) {
+				String original = s.getOriginalText();
+				itList.add(original);
+				continue;
+			}
+
 			if(s.get().isAssignableFromType(MultimediaItem.class)) {
 				Mmitem item = fac.createMmitem();
 				XMLUtils.configureMmitem(item, s);
@@ -878,6 +908,12 @@ public class XMLUtils {
 				String te = XMLUtils.clearPlainText(s);
 				if (!te.equals(""))
 					itList.add(fac.createContent(te));
+				continue;
+			}
+
+			if(s.get().isAssignableFromType(Link.class)) {
+				String original = s.getOriginalText();
+				itList.add(original);
 				continue;
 			}
 

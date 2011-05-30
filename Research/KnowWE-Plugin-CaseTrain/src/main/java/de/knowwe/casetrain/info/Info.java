@@ -47,7 +47,9 @@ import de.knowwe.casetrain.type.Introduction;
 import de.knowwe.casetrain.type.general.BlockMarkupContent;
 import de.knowwe.casetrain.type.general.BlockMarkupType;
 import de.knowwe.casetrain.type.general.Title;
+import de.knowwe.casetrain.type.multimedia.Audio;
 import de.knowwe.casetrain.type.multimedia.Image;
+import de.knowwe.casetrain.type.multimedia.Link;
 import de.knowwe.casetrain.type.multimedia.Video;
 import de.knowwe.casetrain.util.Utils;
 
@@ -76,6 +78,8 @@ public class Info extends BlockMarkupType {
 		this.addContentType(new Explanation());
 		this.addContentType(new Image());
 		this.addContentType(new Video());
+		this.addContentType(new Link());
+		this.addContentType(new Audio());
 
 		this.setCustomRenderer(new KnowWEDomRenderer<BlockMarkupType>() {
 

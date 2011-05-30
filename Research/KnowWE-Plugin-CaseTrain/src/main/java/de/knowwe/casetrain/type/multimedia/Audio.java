@@ -18,6 +18,13 @@
  */
 package de.knowwe.casetrain.type.multimedia;
 
+import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.user.UserContext;
+import de.d3web.we.utils.KnowWEUtils;
+
 
 /**
  * 
@@ -35,18 +42,17 @@ public class Audio extends MultimediaItem {
 	public Audio() {
 		super(REGEX);
 
-		//		this.setCustomRenderer(new KnowWEDomRenderer<Audio>() {
-		//
-		//			@Override
-		//			public void render(KnowWEArticle article, Section<Link> sec, UserContext user, StringBuilder string) {
-		//				Section<MultimediaItemContent> linkURL = Sections.findChildOfType(sec,
-		//						MultimediaItemContent.class);
-		//				string.append(KnowWEUtils.maskHTML("<img height='70' src='"));
-		//				string.append("attach/" + sec.getArticle().getTitle() + "/");
-		//				string.append(linkURL.getOriginalText().trim());
-		//				string.append(KnowWEUtils.maskHTML("'></img>"));
-		//			}
-		//		});
+		this.setCustomRenderer(new KnowWEDomRenderer<Audio>() {
+
+			@Override
+			public void render(KnowWEArticle article, Section<Audio> sec, UserContext user, StringBuilder string) {
+				Section<MultimediaItemContent> linkURL = Sections.findChildOfType(sec,
+						MultimediaItemContent.class);
+				string.append(KnowWEUtils.maskHTML("<span title='Audio'>"));
+				string.append(linkURL.getOriginalText().trim());
+				string.append(KnowWEUtils.maskHTML("'</span>"));
+			}
+		});
 
 	}
 

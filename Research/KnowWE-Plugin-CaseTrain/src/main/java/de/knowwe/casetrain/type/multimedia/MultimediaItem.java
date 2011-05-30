@@ -18,24 +18,17 @@
  */
 package de.knowwe.casetrain.type.multimedia;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.report.KDOMReportMessage;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
-import de.knowwe.casetrain.message.MissingPictureError;
 
 
 /**
  * 
  * Extended by MultimediaItems like {@link Image} and {@link Video}
+ * and {@link Audio} and {@link Link}.
+ * 
+ * TODO check extensions of files.
  * 
  * @author Johannes Dienst
  * @created 15.05.2011
@@ -43,34 +36,41 @@ import de.knowwe.casetrain.message.MissingPictureError;
 public class MultimediaItem extends AbstractType {
 
 	private final String REGEX;
+	private final MultimediaItemContent content;
 
 	public MultimediaItem(String regex) {
 		this.REGEX = regex;
 
 		this.setSectionFinder(new RegexSectionFinder(REGEX));
-		this.addChildType(new MultimediaItemContent(REGEX));
+		content = new MultimediaItemContent(REGEX);
+		this.addChildType(content);
 
-		this.addSubtreeHandler(new GeneralSubtreeHandler<MultimediaItem>() {
+		this.addSubtreeHandler(new MultimediaItemHandler());
 
-			@Override
-			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<MultimediaItem> s) {
-
-				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
-
-				List<String> attachments = KnowWEEnvironment.getInstance().getWikiConnector()
-				.getAttachmentFilenamesForPage(article.getTitle());
-				Section<MultimediaItemContent> multimediaItemURL = Sections.findChildOfType(s,
-						MultimediaItemContent.class);
-				if(!attachments.contains(multimediaItemURL.getOriginalText().trim())) {
-					messages.add(
-							new MissingPictureError(multimediaItemURL.getOriginalText().trim()));
-				}
-
-				return messages;
-			}
-		});
+		//		this.addSubtreeHandler(new GeneralSubtreeHandler<MultimediaItem>() {
+		//
+		//			@Override
+		//			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<MultimediaItem> s) {
+		//
+		//				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
+		//
+		//				List<String> attachments = KnowWEEnvironment.getInstance().getWikiConnector()
+		//				.getAttachmentFilenamesForPage(article.getTitle());
+		//				Section<MultimediaItemContent> multimediaItemURL = Sections.findChildOfType(s,
+		//						MultimediaItemContent.class);
+		//				if(!attachments.contains(multimediaItemURL.getOriginalText().trim())) {
+		//					messages.add(
+		//							new MissingPictureError(multimediaItemURL.getOriginalText().trim()));
+		//				}
+		//
+		//				return messages;
+		//			}
+		//		});
 	}
 
+	public void addContentType(Type t) {
+		content.addChildType(t);
+	}
 
 	public class MultimediaItemContent extends AbstractType {
 		public MultimediaItemContent(String regex) {

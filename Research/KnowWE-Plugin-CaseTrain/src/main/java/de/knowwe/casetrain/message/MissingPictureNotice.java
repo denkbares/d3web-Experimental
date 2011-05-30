@@ -36,7 +36,7 @@ public class MissingPictureNotice extends KDOMNotice {
 
 	@Override
 	public String getVerbalization() {
-		return "Kein Bild vorhanden: " + text;
+		return "Kein Bild angehängt: " + text;
 	}
 
 }

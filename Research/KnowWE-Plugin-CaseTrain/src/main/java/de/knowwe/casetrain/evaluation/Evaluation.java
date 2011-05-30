@@ -46,6 +46,10 @@ import de.knowwe.casetrain.message.MissingContentWarning;
 import de.knowwe.casetrain.renderer.MouseOverTitleRenderer;
 import de.knowwe.casetrain.type.general.BlockMarkupContent;
 import de.knowwe.casetrain.type.general.BlockMarkupType;
+import de.knowwe.casetrain.type.multimedia.Audio;
+import de.knowwe.casetrain.type.multimedia.Image;
+import de.knowwe.casetrain.type.multimedia.Link;
+import de.knowwe.casetrain.type.multimedia.Video;
 import de.knowwe.casetrain.util.Utils;
 
 
@@ -61,6 +65,10 @@ public class Evaluation extends BlockMarkupType {
 		this.addContentType(new Question());
 		this.addContentType(new AnswersBlock());
 		this.addContentType(new EvaluationEnd());
+		this.addContentType(new Image());
+		this.addContentType(new Video());
+		this.addContentType(new Link());
+		this.addContentType(new Audio());
 
 		this.setCustomRenderer(new KnowWEDomRenderer<BlockMarkupType>() {
 

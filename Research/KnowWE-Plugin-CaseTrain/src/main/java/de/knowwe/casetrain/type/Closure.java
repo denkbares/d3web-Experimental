@@ -36,7 +36,9 @@ import de.knowwe.casetrain.message.MissingPictureNotice;
 import de.knowwe.casetrain.message.MissingTitleError;
 import de.knowwe.casetrain.type.general.BlockMarkupType;
 import de.knowwe.casetrain.type.general.Title;
+import de.knowwe.casetrain.type.multimedia.Audio;
 import de.knowwe.casetrain.type.multimedia.Image;
+import de.knowwe.casetrain.type.multimedia.Link;
 import de.knowwe.casetrain.type.multimedia.Video;
 
 /**
@@ -54,6 +56,8 @@ public class Closure extends BlockMarkupType {
 		this.addChildType(new Title());
 		this.addContentType(new Image());
 		this.addContentType(new Video());
+		this.addContentType(new Link());
+		this.addContentType(new Audio());
 
 		this.addSubtreeHandler(new GeneralSubtreeHandler<Closure>() {
 

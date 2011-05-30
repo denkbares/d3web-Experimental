@@ -16,35 +16,27 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.casetrain.info;
+package de.knowwe.casetrain.message;
 
-import de.knowwe.casetrain.type.general.SubblockMarkup;
-import de.knowwe.casetrain.type.general.Title;
-import de.knowwe.casetrain.type.multimedia.Audio;
-import de.knowwe.casetrain.type.multimedia.Image;
-import de.knowwe.casetrain.type.multimedia.Link;
-import de.knowwe.casetrain.type.multimedia.Video;
+import de.d3web.we.kdom.report.KDOMError;
 
 
 /**
  * 
  * @author Johannes Dienst
- * @created 12.05.2011
+ * @created 30.05.2011
  */
-public class Explanation extends SubblockMarkup {
+public class MissingVideoError extends KDOMError {
 
-	public Explanation() {
-		super("Erklärung");
-		this.addChildType(new Title());
-		this.addContentType(new Image());
-		this.addContentType(new Video());
-		this.addContentType(new Link());
-		this.addContentType(new Audio());
+	private final String text;
+
+	public MissingVideoError(String text) {
+		this.text = text;
 	}
 
 	@Override
-	public String getCSSClass() {
-		return "Erkl";
+	public String getVerbalization() {
+		return "Videodatei ist nicht angehängt: " + text;
 	}
 
 }

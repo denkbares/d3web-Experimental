@@ -18,13 +18,20 @@
  */
 package de.knowwe.casetrain.type.multimedia;
 
+import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.d3web.we.user.UserContext;
+import de.d3web.we.utils.KnowWEUtils;
+
 
 
 /**
  * 
- * TODO {link: url}{text}
- * 		text is not supported.
- * TODO renderer needed?
+ * Represents a link.
  * 
  * @author Johannes Dienst
  * @created 15.05.2011
@@ -33,24 +40,39 @@ public class Link extends MultimediaItem {
 
 	public static String KEY_LINK = "Link:";
 
-	private static String REGEX = "\\{" + KEY_LINK + "(.*?)\\}";
+	private static String REGEX = "\\{" + KEY_LINK + "(.*?)\\}(\\{.*?})?";
 
 	public Link() {
 		super(REGEX);
 
-		//		this.setCustomRenderer(new KnowWEDomRenderer<Link>() {
-		//
-		//			@Override
-		//			public void render(KnowWEArticle article, Section<Link> sec, UserContext user, StringBuilder string) {
-		//				Section<MultimediaItemContent> linkURL = Sections.findChildOfType(sec,
-		//						MultimediaItemContent.class);
-		//				string.append(KnowWEUtils.maskHTML("<img height='70' src='"));
-		//				string.append("attach/" + sec.getArticle().getTitle() + "/");
-		//				string.append(linkURL.getOriginalText().trim());
-		//				string.append(KnowWEUtils.maskHTML("'></img>"));
-		//			}
-		//		});
+		this.subtreeHandler.clear();
+		this.addChildType(new Url());
 
+		this.setCustomRenderer(new KnowWEDomRenderer<Link>() {
+
+			@Override
+			public void render(KnowWEArticle article, Section<Link> sec, UserContext user, StringBuilder string) {
+				Section<MultimediaItemContent> linkURL = Sections.findChildOfType(sec,
+						MultimediaItemContent.class);
+				string.append(KnowWEUtils.maskHTML("<span title=\"Link\">"));
+				Section<Url> url = Sections.findChildOfType(sec, Url.class);
+				if (url == null)
+					string.append(linkURL.getOriginalText().trim());
+				else
+					string.append(url.getOriginalText().
+							substring(1, url.getOriginalText().length()-1).trim());
+				string.append(KnowWEUtils.maskHTML("</span>"));
+			}
+		});
+
+	}
+
+	public class Url extends AbstractType {
+		private final String regex = "\\{.*?\\}";
+
+		public Url() {
+			this.setSectionFinder(new RegexSectionFinder(regex));
+		}
 	}
 
 }

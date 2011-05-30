@@ -21,7 +21,6 @@ package de.knowwe.casetrain.info;
 import de.knowwe.casetrain.type.general.SubblockMarkup;
 import de.knowwe.casetrain.type.general.Title;
 import de.knowwe.casetrain.type.multimedia.Image;
-import de.knowwe.casetrain.type.multimedia.Video;
 
 
 /**
@@ -35,7 +34,6 @@ public class Hint extends SubblockMarkup {
 		super("Hinweis");
 		this.addChildType(new Title());
 		this.addContentType(new Image());
-		this.addContentType(new Video());
 	}
 
 }

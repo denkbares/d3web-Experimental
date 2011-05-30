@@ -32,6 +32,8 @@ SPRACHE : en
 Text der Einleitung
 {Bild: ls6logo.gif}
 {Video: video42.avi}
+{Audio: helloworld.mp3}
+{Link: www.org.com}{DieUrl}
 >>
 
 <<Info: Differentialdiagnose
@@ -39,13 +41,14 @@ Der Teddy ist in anscheinend schlechtem Allgemeinzustand.
 
 {Bild: knowwe_logo.gif}
 {Video: video23.avi}
+{Audio: helloworld.mp3}
+{Link: www.org.com}{DieUrl}
 
 <Frage: 1-MC
 Welche Probleme mit diesem Spielzeug kommen nun in Frage?
 >
 <Hinweis: Geben Sie mindestens 2 Probleme an.
 {Bild: ls6logo.gif}
-{Video: video23.avi}
 Testtext.
 >
 <Antworten:
@@ -59,6 +62,8 @@ Testtext.
 <Erklärung: Geben Sie mindestens 2 Probleme an.
 {Bild: ls6logo.gif}
 {Video: video23.avi}
+{Audio: helloworld.mp3}
+{Link: www.org.com}{DieUrl}
 Testtext.
 >
 
@@ -226,6 +231,12 @@ Die erklärung...
 
 <<Evaluation: Evaluation
 Um diesen Fall weiter verbessern zu können, beantworten Sie uns bitte noch zwei kurze Fragen.
+
+{Audio: helloworld.mp3}
+{Link: www.org.com}{DieUrl}
+{Bild: ls6logo.gif}
+{Video: video42.avi}
+
 <Frage: 0-OC Welche Schulnote geben Sie dem Fall?
 >
 <Antworten:
@@ -253,6 +264,8 @@ Das wars!
 Ende des Falles!
 {Bild: ls6logo.gif}
 {Video: video42.avi}
+{Audio: helloworld.mp3}
+{Link: www.org.com}{DieUrl}
 >>
 
 
