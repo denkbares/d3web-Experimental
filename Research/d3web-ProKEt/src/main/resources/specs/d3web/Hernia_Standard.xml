@@ -2,7 +2,8 @@
 <dialog 
 	header="European Registry of Abdominal wall HerniaS"  
 	dtype="singleform" 
-	dstrategy="nextuaquestion" 
+	indicationmode="hide_unindicated"
+	dstrategy="nextuaquestion"
 	css="medi2colsHernia, nonavigation" 
 	dialogcolumns="1"
 	questionnairecolumns="3"

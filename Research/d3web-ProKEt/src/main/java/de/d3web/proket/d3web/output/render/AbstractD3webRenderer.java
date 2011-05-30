@@ -41,6 +41,7 @@ import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
+import de.d3web.proket.data.IndicationMode;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
@@ -168,7 +169,10 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 		TerminologyObject[] children = to.getChildren();
 		Blackboard bb = d3webSession.getBlackboard();
 		for (TerminologyObject child : children) {
-			if (child instanceof QContainer && !isIndicated(child, bb)) continue;
+			if (D3webConnector.getInstance().getIndicationMode() == IndicationMode.HIDE_UNINDICATED
+					&& child instanceof QContainer && !isIndicated(child, bb)) {
+				continue;
+			}
 			// get the matching renderer
 			IQuestionD3webRenderer childRenderer = AbstractD3webRenderer.getRenderer(child);
 			// System.out.println(childRenderer);
@@ -346,7 +350,10 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
 			// get the (probably question) children of the child
 			for (TerminologyObject childsChild : child.getChildren()) {
-				if (!isIndicated(childsChild, d3webSession.getBlackboard())) continue;
+				if (D3webConnector.getInstance().getIndicationMode() == IndicationMode.HIDE_UNINDICATED
+						&& !isIndicated(childsChild, d3webSession.getBlackboard())) {
+					continue;
+				}
 
 				// get appropriate renderer
 				IQuestionD3webRenderer childRenderer = AbstractD3webRenderer.getRenderer(childsChild);

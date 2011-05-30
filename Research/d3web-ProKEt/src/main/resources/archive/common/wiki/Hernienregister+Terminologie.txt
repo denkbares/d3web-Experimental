@@ -90,7 +90,7 @@ Other risk factors &only if: Please choose the database level = Level 2 &
 Primary ventral hernia route 
 - Width of the ventral hernia [num] {cm}
 - Length of the ventral hernia [num] {cm}
-- Diameter of the ventral hernia [num]
+- Diameter of the ventral hernia [num] {cm} <abstract>
 - Reducibility of the ventral hernia [oc] &only if: Please choose the database level = Level 2 &
 -- Completely reducible
 -- Partially reducible
@@ -517,6 +517,9 @@ THEN Parastomal hernia route
 
 IF KNOWN[Weight of the patient] AND KNOWN[Length/size of the patient]
 THEN BMI: = (("Weight of the patient" / ("Length/size of the patient" * "Length/size of the patient")) * 10000)
+
+IF KNOWN[Width of the ventral hernia] AND KNOWN[Length of the ventral hernia]
+THEN Diameter of the ventral hernia = (Width of the ventral hernia + Length of the ventral hernia) / 2
 
 @package: Hernia
 %

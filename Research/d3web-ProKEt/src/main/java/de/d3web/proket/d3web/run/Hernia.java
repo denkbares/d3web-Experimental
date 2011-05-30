@@ -115,6 +115,7 @@ public class Hernia extends HttpServlet {
 			d3wcon.setKbName(d3webParser.getKnowledgeBaseName());
 			d3wcon.setDialogStrat(d3webParser.getStrategy());
 			d3wcon.setDialogType(d3webParser.getType());
+			d3wcon.setIndicationMode(d3webParser.getIndicationMode());
 			d3wcon.setDialogColumns(d3webParser.getDialogColumns());
 			d3wcon.setQuestionColumns(d3webParser.getQuestionColumns());
 			d3wcon.setQuestionnaireColumns(d3webParser.getQuestionnaireColumns());

@@ -191,6 +191,7 @@ public class D3webDialog extends HttpServlet {
 			d3wcon.setKbName(d3webParser.getKnowledgeBaseName());
 			d3wcon.setDialogStrat(d3webParser.getStrategy());
 			d3wcon.setDialogType(d3webParser.getType());
+			d3wcon.setIndicationMode(d3webParser.getIndicationMode());
 			d3wcon.setDialogColumns(d3webParser.getDialogColumns());
 			d3wcon.setQuestionColumns(d3webParser.getQuestionColumns());
 			d3wcon.setQuestionnaireColumns(d3webParser.getQuestionnaireColumns());
@@ -476,26 +477,6 @@ public class D3webDialog extends HttpServlet {
 		}
 	}
 
-	private class SaveThread extends Thread {
-
-		private final String folderPath;
-		private final Session d3webSession;
-
-		public SaveThread(String folderPath, Session d3webSession) {
-			this.folderPath = folderPath;
-			this.d3webSession = d3webSession;
-		}
-
-		@Override
-		public void run() {
-
-			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
-						folderPath,
-						D3webConnector.getInstance().getD3webParser().getRequired(),
-						"autosave", d3webSession);
-		}
-	}
-
 	/**
 	 * Adding MC facts
 	 * 
@@ -543,10 +524,28 @@ public class D3webDialog extends HttpServlet {
 		// AUTOSAVE
 		String folderPath = GlobalSettings.getInstance().getCaseFolder();
 		Session d3webSession = (Session) httpSession.getAttribute("d3webSession");
-		long before = System.currentTimeMillis();
 		new SaveThread(folderPath, d3webSession).start();
-		System.out.println(System.currentTimeMillis() - before);
 
+	}
+
+	private class SaveThread extends Thread {
+
+		private final String folderPath;
+		private final Session d3webSession;
+
+		public SaveThread(String folderPath, Session d3webSession) {
+			this.folderPath = folderPath;
+			this.d3webSession = d3webSession;
+		}
+
+		@Override
+		public void run() {
+
+			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
+					folderPath,
+					D3webConnector.getInstance().getD3webParser().getRequired(),
+					"autosave", d3webSession);
+		}
 	}
 
 	/**
