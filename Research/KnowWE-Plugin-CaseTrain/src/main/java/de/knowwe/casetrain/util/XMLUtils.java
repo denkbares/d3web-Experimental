@@ -182,10 +182,8 @@ public class XMLUtils {
 
 				// First PlainText+Some Multimedia
 				if (child.get().isType(PlainText.class)) {
-					String te = XMLUtils.clearPlainText(child);
-					if (!te.equals("")) {
-						simpleSec.getContentOrMultimediaItemOrFormula().add(te);
-					}
+					XMLUtils.clearPlainText(
+							child, simpleSec.getContentOrMultimediaItemOrFormula());
 					continue;
 				}
 
@@ -217,7 +215,7 @@ public class XMLUtils {
 				}
 
 				if(child.get().isType(Title.class)) {
-					simpleSec.setTitle(XMLUtils.clearPlainText(child).trim());
+					simpleSec.setTitle(XMLUtils.clearPlainText(child));
 					continue;
 				}
 
@@ -242,7 +240,9 @@ public class XMLUtils {
 				Section<Title> tit = Sections.findSuccessor(evoEnd, Title.class);
 				Section<PlainText> con = Sections.findSuccessor(evoEnd, PlainText.class);
 				end.setTitle(XMLUtils.clearPlainText(tit));
-				end.getContentOrMultimediaItemOrFormula().add(XMLUtils.clearPlainText(con));
+				// Does this work?
+				//				end.getContentOrMultimediaItemOrFormula().add(XMLUtils.clearPlainText(con));
+				XMLUtils.clearPlainText(con, end.getContentOrMultimediaItemOrFormula());
 			}
 
 			evo.setEvaluationEnd(end);
@@ -298,14 +298,13 @@ public class XMLUtils {
 
 		for (Section<?> sec : contentChildren) {
 			if (sec.get().isType(Title.class)) {
-				titledmmContent.setTitle(XMLUtils.clearPlainText(sec).trim());
+				titledmmContent.setTitle(XMLUtils.clearPlainText(sec));
 				continue;
 			}
 
 			if (sec.get().isType(PlainText.class)) {
-				String te = XMLUtils.clearPlainText(sec);
-				if (!te.equals(""))
-					titledmmContent.getContentOrMultimediaItemOrFormula().add(te);
+				XMLUtils.clearPlainText(
+						sec, titledmmContent.getContentOrMultimediaItemOrFormula());
 				continue;
 			}
 
@@ -341,9 +340,7 @@ public class XMLUtils {
 		if(sec.get().isType(Image.class)) type = "image";
 		if(sec.get().isType(Video.class)) type = "video";
 		if(sec.get().isType(Audio.class)) type = "audio";
-
 		it.setType(type);
-
 		it.setURL(sec.getChildren().get(1).getOriginalText().trim());
 	}
 
@@ -503,10 +500,8 @@ public class XMLUtils {
 
 				// First PlainText+Some Multimedia
 				if (child.get().isType(PlainText.class)) {
-					String te = XMLUtils.clearPlainText(child);
-					if (!te.equals("")) {
-						simpleSec.getContentOrMultimediaItemOrFormula().add(te);
-					}
+					XMLUtils.clearPlainText(child,
+							simpleSec.getContentOrMultimediaItemOrFormula());
 					continue;
 				}
 
@@ -538,7 +533,7 @@ public class XMLUtils {
 				}
 
 				if(child.get().isType(Title.class)) {
-					simpleSec.setTitle(XMLUtils.clearPlainText(child).trim());
+					simpleSec.setTitle(XMLUtils.clearPlainText(child));
 					continue;
 				}
 
@@ -877,9 +872,7 @@ public class XMLUtils {
 		for (Section<?> s : sec.getChildren().get(0).getChildren()) {
 
 			if (s.get().isType(PlainText.class)) {
-				String te = XMLUtils.clearPlainText(s);
-				if (!te.equals(""))
-					itList.add(te);
+				XMLUtils.clearPlainText(s, itList);
 				continue;
 			}
 
@@ -898,16 +891,15 @@ public class XMLUtils {
 		}
 	}
 
-	private static void renderHinweisOrErklaerungWithBinding(Mmmixedcontent it, Section<?> sec, ObjectFactory fac) {
+	private static void renderHinweisOrErklaerungWithBinding(Mmmixedcontent it,
+			Section<?> sec, ObjectFactory fac) {
 
 		List<Object> itList = it.getContent();
 
 		for (Section<?> s : sec.getChildren().get(0).getChildren()) {
 
 			if (s.get().isType(PlainText.class)) {
-				String te = XMLUtils.clearPlainText(s);
-				if (!te.equals(""))
-					itList.add(fac.createContent(te));
+				XMLUtils.clearPlainText(s, itList);
 				continue;
 			}
 
@@ -929,7 +921,20 @@ public class XMLUtils {
 	/**
 	 * 
 	 * @created 16.05.2011
-	 * @param simpleSec
+	 * @param child
+	 * @param itemList
+	 */
+	private static void clearPlainText(Section<?> child, List<Object> itemList) {
+		String te = child.getOriginalText().replaceAll("[\\r\\n]", "");
+		if (!te.equals("")) {
+			itemList.add(te);
+		}
+	}
+
+	/**
+	 * 
+	 * 
+	 * @created 30.05.2011
 	 * @param child
 	 */
 	private static String clearPlainText(Section<?> child) {
