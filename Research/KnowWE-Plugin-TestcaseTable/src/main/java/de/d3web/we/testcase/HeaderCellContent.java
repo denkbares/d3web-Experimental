@@ -18,18 +18,27 @@
  */
 package de.d3web.we.testcase;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.DefaultTextRenderer;
+import de.d3web.we.kdom.report.KDOMReportMessage;
+import de.d3web.we.kdom.report.message.NoSuchObjectError;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
+import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.kdom.table.TableCellContent;
 import de.d3web.we.kdom.table.TableCellContentRenderer;
 import de.d3web.we.kdom.table.TableLine;
 import de.d3web.we.object.QuestionReference;
+import de.d3web.we.utils.D3webUtils;
 
 /**
  * 
@@ -69,6 +78,28 @@ public class HeaderCellContent extends TableCellContent {
 				}
 
 			}
+		});
+
+		qref.addSubtreeHandler(new SubtreeHandler<QuestionReference>() {
+
+			@Override
+			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<QuestionReference> s) {
+
+				KnowledgeBase kb = D3webUtils.getKB(article.getWeb(), article.getTitle());
+
+				Question question = kb.getManager().searchQuestion(s.getText());
+
+				if (question == null) {
+					List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>();
+					//TODO message is not shown
+					messages.add(new NoSuchObjectError(s.getText()));
+					return messages;
+				}
+				else
+
+				return null;
+			}
+
 		});
 
 		childrenTypes.add(qref);

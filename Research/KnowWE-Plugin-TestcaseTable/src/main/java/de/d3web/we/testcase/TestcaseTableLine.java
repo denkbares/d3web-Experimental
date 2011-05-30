@@ -120,10 +120,15 @@ public class TestcaseTableLine extends TableLine {
 				String qName = qRef.getText();
 				// TODO unchanged value, unknown value
 				Question question = kb.getManager().searchQuestion(qName);
-				if (question == null) continue;
+				if (question == null) {
+					continue;
+				}
 				Value value = KnowledgeBaseUtils.findValue(question, valueSec.getText());
-				Finding finding = new Finding(question, value);
-				testCase.add(finding);
+				if (value != null) {
+					Finding finding = new Finding(question, value);
+					testCase.add(finding);
+				}
+
 			}
 			KnowWEUtils.storeObject(article, s, TESTCASE_KEY, testCase);
 		}
