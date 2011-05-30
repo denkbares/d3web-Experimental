@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Priority;
+import de.d3web.we.kdom.constraint.AtMostOneFindingConstraint;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SingleChildConstraint;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -48,7 +49,11 @@ public class TurtleMarkupSimple extends AbstractType{
 	
 	class SimpleTurtlePredicate extends IRITermReference {
 		public SimpleTurtlePredicate (){
-			this.setSectionFinder(new RegexSectionFinder("\\b([^\\s]*)::",Pattern.DOTALL, 1));
+			ConstraintSectionFinder c = new ConstraintSectionFinder(
+					new RegexSectionFinder("\\b([^\\s]*)::", Pattern.DOTALL, 1));
+			c.addConstraint(SingleChildConstraint.getInstance());
+			c.addConstraint(AtMostOneFindingConstraint.getInstance());
+			this.setSectionFinder(c);
 		}
 	}
 	
