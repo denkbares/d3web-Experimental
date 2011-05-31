@@ -5,15 +5,16 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import de.d3web.core.knowledge.InfoStore;
-import de.d3web.core.knowledge.terminology.IDObject;
+import de.d3web.core.knowledge.terminology.AbstractTerminologyObject;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SingleChildConstraint;
 import de.d3web.we.kdom.objects.KnowWETerm;
@@ -24,7 +25,7 @@ import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.message.NoSuchObjectError;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.d3web.we.kdom.sectionFinder.ISectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.StringSectionFinderUnquoted;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.kdom.type.AnonymousType;
@@ -119,7 +120,7 @@ public class IDPropertyType extends AbstractType {
 	class IDPropertyDefinition extends StringDefinition {
 
 		public IDPropertyDefinition() {
-			ISectionFinder sectionFinder = new ConstraintSectionFinder(
+			SectionFinder sectionFinder = new ConstraintSectionFinder(
 					new AllTextFinderTrimmed(), SingleChildConstraint.getInstance());
 			this.setSectionFinder(sectionFinder);
 			this.setCustomRenderer(StyleRenderer.SOLUTION);
@@ -205,9 +206,11 @@ public class IDPropertyType extends AbstractType {
 		@Override
 		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<IDPropertyDefinition> s) {
 
-			Section<D3webTermReference> idobjectSection = s.getFather().findSuccessor(
+			Section<D3webTermReference> idobjectSection = Sections.findSuccessor(
+					s.getFather(),
 					D3webTermReference.class);
-			Section<IDPropertyDefinition> propertySection = s.findSuccessor(IDPropertyDefinition.class);
+			Section<IDPropertyDefinition> propertySection = Sections.findSuccessor(s,
+					IDPropertyDefinition.class);
 			if (idobjectSection == null) return null;
 			Object object = idobjectSection.get().getTermObject(article,
 					idobjectSection);
@@ -233,8 +236,8 @@ public class IDPropertyType extends AbstractType {
 				return MessageUtils.syntaxErrorAsList("The property value \"" + content
 							+ "\" is not compatible with the property " + property);
 			}
-			if (object instanceof IDObject) {
-				((IDObject) object).getInfoStore().addValue(property,
+			if (object instanceof AbstractTerminologyObject) {
+				((AbstractTerminologyObject) object).getInfoStore().addValue(property,
 						InfoStore.NO_LANGUAGE, value);
 			}
 			return new ArrayList<KDOMReportMessage>(0);
@@ -242,9 +245,10 @@ public class IDPropertyType extends AbstractType {
 
 		@Override
 		public void destroy(KnowWEArticle article, Section<IDPropertyDefinition> s) {
-			Section<D3webTermReference> idobjectSection = s.getFather().findSuccessor(
-					D3webTermReference.class);
-			Section<IDPropertyDefinition> propertySection = s.findSuccessor(IDPropertyDefinition.class);
+			Section<D3webTermReference> idobjectSection = Sections.findSuccessor(
+					s.getFather(), D3webTermReference.class);
+			Section<IDPropertyDefinition> propertySection = Sections.findSuccessor(
+					s.getFather(), IDPropertyDefinition.class);
 			if (idobjectSection == null) return;
 			Object object = idobjectSection.get().getTermObject(article,
 					idobjectSection);
@@ -253,8 +257,8 @@ public class IDPropertyType extends AbstractType {
 			if (propertySection == null) return;
 			Property<?> property = Property.getProperty("IDProperty", String.class);
 			if (property == null) return;
-			if (object instanceof IDObject) {
-				((IDObject) object).getInfoStore().remove(property);
+			if (object instanceof AbstractTerminologyObject) {
+				((AbstractTerminologyObject) object).getInfoStore().remove(property);
 			}
 		}
 
