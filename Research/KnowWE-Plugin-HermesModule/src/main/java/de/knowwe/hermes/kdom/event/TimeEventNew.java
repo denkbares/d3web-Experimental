@@ -120,7 +120,7 @@ public class TimeEventNew extends AbstractType {
 
 		public TitleType() {
 			// true says that this name is registered as globally unique term
-			this.setTermScope(KnowWETerm.GLOBAL);
+			this.setTermScope(Scope.GLOBAL);
 
 			// renderer
 			this.setCustomRenderer(new TimeEventTitleRenderer());

@@ -61,14 +61,14 @@ import de.d3web.we.tools.ToolMenuDecoratingRenderer;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
 import de.knowwe.onte.owl.terminology.URIUtil;
+import de.knowwe.termObject.AbstractIRITermDefinition;
 import de.knowwe.termObject.BasicVocabularyReference;
-import de.knowwe.termObject.LocalConceptDefinition;
-import de.knowwe.termObject.LocalConceptReference;
-import de.knowwe.termObject.IRITermReference;
-import de.knowwe.termObject.RDFNodeType;
 import de.knowwe.termObject.IRIEntityType;
 import de.knowwe.termObject.IRIEntityType.IRIDeclarationType;
-import de.knowwe.termObject.AbstractIRITermDefinition;
+import de.knowwe.termObject.IRITermReference;
+import de.knowwe.termObject.LocalConceptDefinition;
+import de.knowwe.termObject.LocalConceptReference;
+import de.knowwe.termObject.RDFNodeType;
 import de.knowwe.util.DelegateDestroyHandler;
 
 public class TurtleMarkup extends AbstractType {
@@ -189,13 +189,13 @@ public class TurtleMarkup extends AbstractType {
 		}
 
 		@Override
-		public int getTermScope() {
+		public Scope getTermScope() {
 			// TODO Auto-generated method stub
-			return 0;
+			return Scope.LOCAL;
 		}
 
 		@Override
-		public void setTermScope(int termScope) {
+		public void setTermScope(Scope scope) {
 			// TODO Auto-generated method stub
 
 		}

@@ -68,7 +68,7 @@ public class IRITermReference extends GlobalTermReference<IRIEntityType> impleme
 			TerminologyHandler terminologyHandler = KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
 			Section<? extends TermDefinition> definingSection = terminologyHandler.getTermDefiningSection(
 					s.getArticle(), ((TermReference) s.get()).getTermName(s),
-					KnowWETerm.GLOBAL);
+					Scope.GLOBAL);
 			if (definingSection == null) return null;
 			// KnowWEArticle main =
 			// KnowWEEnvironment.getInstance().getArticleManager(KnowWEEnvironment.DEFAULT_WEB).getArticle("Main");

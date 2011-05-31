@@ -34,9 +34,7 @@ import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.objects.GlobalTermDefinition;
 import de.d3web.we.kdom.objects.TermDefinition;
-import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.message.ObjectAlreadyDefinedError;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.terminology.TerminologyHandler;
 import de.d3web.we.utils.KnowWEUtils;
@@ -90,33 +88,7 @@ public abstract class AbstractIRITermDefinition extends GlobalTermDefinition<IRI
 
 			tHandler.registerTermDefinition(article, s);
 
-			Section<? extends TermDefinition<IRIEntityType>> defSec = tHandler.getTermDefiningSection(
-					article, s);
 
-
-			if (defSec != s) { // concurrent definition found !
-				// check whether concurrent definition already error flagged
-				Collection<KDOMError> existingErrors = KnowWEUtils.getMessages(article,
-						defSec, KDOMError.class);
-				boolean errorAlreadyFlagged = false;
-				for (KDOMError kdomError : existingErrors) {
-					if (kdomError instanceof ObjectAlreadyDefinedError) {
-						errorAlreadyFlagged = true;
-					}
-				}
-
-				// set error if not yet flagged
-				if (!errorAlreadyFlagged) {
-				KnowWEUtils.storeMessages(article, defSec, this.getClass(),
-						KDOMError.class,
-						Arrays.asList((KDOMError) new ObjectAlreadyDefinedError(
-								s.get().getName()
-										+ ": " + s.get().getTermName(s), defSec)));
-				}
-				return Arrays.asList((KDOMReportMessage) new ObjectAlreadyDefinedError(
-						s.get().getName()
-								+ ": " + s.get().getTermName(s), defSec));
-			}
 
 			IRIEntityType uri = createTermObject(s);
 

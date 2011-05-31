@@ -32,8 +32,9 @@ import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.objects.KnowWETerm;
+import de.d3web.we.kdom.objects.KnowWETerm.Scope;
 import de.d3web.we.kdom.objects.TermDefinition;
+import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.SyntaxError;
 import de.d3web.we.terminology.TerminologyHandler;
@@ -47,6 +48,9 @@ public class TurtleRDF2GoCompiler extends RDF2GoSubtreeHandler<TurtleMarkup> {
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TurtleMarkup> s) {
 		if (s.hasErrorInSubtree(article)) {
+			Collection<KDOMError> messagesFromSubtree = KnowWEUtils.getMessagesFromSubtree(article,
+					s, KDOMError.class);
+
 			this.destroy(article, s);
 			return new ArrayList<KDOMReportMessage>(0);
 		}
@@ -93,10 +97,10 @@ public class TurtleRDF2GoCompiler extends RDF2GoSubtreeHandler<TurtleMarkup> {
 	private URI getSubject(Section<TurtleMarkup> s) {
 		TerminologyHandler terminologyHandler = KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
 		boolean b = terminologyHandler.isDefinedTerm(s.getArticle(),
-				s.getArticle().getTitle(), KnowWETerm.GLOBAL);
+				s.getArticle().getTitle(), Scope.GLOBAL);
 		if (b) {
 			Section<? extends TermDefinition> termDefiningSection = terminologyHandler.getTermDefiningSection(
-					s.getArticle(), s.getArticle().getTitle(), KnowWETerm.GLOBAL);
+					s.getArticle(), s.getArticle().getTitle(), Scope.GLOBAL);
 
 			Object termObject = termDefiningSection.get().getTermObject(s.getArticle(),
 					termDefiningSection);

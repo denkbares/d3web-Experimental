@@ -26,7 +26,7 @@ import java.util.Map;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.objects.KnowWETerm;
+import de.d3web.we.kdom.objects.KnowWETerm.Scope;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.taghandler.AbstractTagHandler;
 import de.d3web.we.terminology.TerminologyHandler;
@@ -46,7 +46,8 @@ public class TerminologyViewHandler extends AbstractTagHandler{
 		Collection<String> globalTerms = terminologyHandler.getAllGlobalTerms();
 		String result = "<ul>Registered Terms:<br>";
 		for (String string : globalTerms) {
-			Section<? extends TermDefinition> termDefiningSection = terminologyHandler.getTermDefiningSection(article, string, KnowWETerm.GLOBAL);
+			Section<? extends TermDefinition> termDefiningSection = terminologyHandler.getTermDefiningSection(
+					article, string, Scope.GLOBAL);
 			KnowWEArticle main = KnowWEEnvironment.getInstance().getArticleManager(KnowWEEnvironment.DEFAULT_WEB).getArticle("Main");
 			
 			Object object = termDefiningSection.get().getTermObject(main, termDefiningSection);
