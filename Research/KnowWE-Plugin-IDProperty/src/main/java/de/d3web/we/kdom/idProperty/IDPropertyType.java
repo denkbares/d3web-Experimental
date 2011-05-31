@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import de.d3web.core.knowledge.InfoStore;
-import de.d3web.core.knowledge.terminology.AbstractTerminologyObject;
+import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
@@ -154,6 +154,7 @@ public class IDPropertyType extends AbstractType {
 			return null;
 			/*
 			 * because a message might have been stored via the destroy method
+			 * 
 			 * @see destroy()
 			 */
 		}
@@ -223,7 +224,6 @@ public class IDPropertyType extends AbstractType {
 			String content = propertySection.get().getTermName(
 					propertySection);
 
-
 			Object value;
 			try {
 				value = property.parseValue(content);
@@ -236,8 +236,8 @@ public class IDPropertyType extends AbstractType {
 				return MessageUtils.syntaxErrorAsList("The property value \"" + content
 							+ "\" is not compatible with the property " + property);
 			}
-			if (object instanceof AbstractTerminologyObject) {
-				((AbstractTerminologyObject) object).getInfoStore().addValue(property,
+			if (object instanceof NamedObject) {
+				((NamedObject) object).getInfoStore().addValue(property,
 						InfoStore.NO_LANGUAGE, value);
 			}
 			return new ArrayList<KDOMReportMessage>(0);
@@ -257,8 +257,8 @@ public class IDPropertyType extends AbstractType {
 			if (propertySection == null) return;
 			Property<?> property = Property.getProperty("IDProperty", String.class);
 			if (property == null) return;
-			if (object instanceof AbstractTerminologyObject) {
-				((AbstractTerminologyObject) object).getInfoStore().remove(property);
+			if (object instanceof NamedObject) {
+				((NamedObject) object).getInfoStore().remove(property);
 			}
 		}
 
