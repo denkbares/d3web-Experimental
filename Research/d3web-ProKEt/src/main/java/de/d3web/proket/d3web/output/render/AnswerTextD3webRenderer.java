@@ -71,7 +71,7 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
 		st.setAttribute("realAnswerType", "text");
 		st.setAttribute("parentFullId", parent.getName().replace(" ", "_"));
 
-		Blackboard bb = super.d3webSession.getBlackboard();
+		Blackboard bb = d3webSession.getBlackboard();
 		Value value = bb.getValue((ValueObject) to);
 
 		if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {

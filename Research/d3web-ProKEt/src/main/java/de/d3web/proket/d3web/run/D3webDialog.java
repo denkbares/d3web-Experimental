@@ -88,7 +88,6 @@ import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
-import de.d3web.proket.utils.IDUtils;
 
 /**
  * Servlet for creating and using dialogs with d3web binding. Binding is more of
@@ -227,20 +226,19 @@ public class D3webDialog extends HttpServlet {
 
 		d3wcon.setQuestionCount(0);
 		d3wcon.setQuestionnaireCount(0);
-
 		// switch action as defined by the servlet call
 		if (action.equalsIgnoreCase("show")) {
 			show(request, response, httpSession);
 			return;
 		}
-		else if (action.equalsIgnoreCase("addfact")) {
-			addFact(request, response, httpSession);
+		else if (action.equalsIgnoreCase("addfacts")) {
+			addFacts(request, response, httpSession);
 			return;
 		}
-		else if (action.equalsIgnoreCase("addmcfact")) {
-			addMCFact(request, response, httpSession);
-			return;
-		}
+		// else if (action.equalsIgnoreCase("addmcfact")) {
+		// addMCFact(request, response, httpSession);
+		// return;
+		// }
 		else if (action.equalsIgnoreCase("savecase")) {
 			saveCase(request, response, httpSession);
 			return;
@@ -325,7 +323,6 @@ public class D3webDialog extends HttpServlet {
 			}
 
 			writer.append(qidBackstring);
-
 			return;
 		}
 	}
@@ -372,6 +369,72 @@ public class D3webDialog extends HttpServlet {
 	 * @param request ServletRequest
 	 * @param response ServletResponse
 	 */
+	private void addFacts(HttpServletRequest request,
+			HttpServletResponse response, HttpSession httpSession)
+			throws IOException {
+
+		response.setContentType("text/html");
+		response.setCharacterEncoding("utf8");
+		PrintWriter writer = response.getWriter();
+
+		Session sess = (Session) httpSession.getAttribute("d3webSession");
+
+		// get the ID of a potentially given single question answered
+		String ocq = request.getParameter("ocq");
+		// get the choice
+		String occhoice = request.getParameter("occhoice");
+
+		String mcq = request.getParameter("mcq");
+		String mcchoices = request.getParameter("mcchoices");
+
+		String dateq = request.getParameter("dateq");
+		String date = request.getParameter("date");
+
+		String textq = request.getParameter("textq");
+		String text = request.getParameter("text");
+
+		String numq = request.getParameter("numq");
+		String num = request.getParameter("num");
+
+		/*
+		 * Check, whether a required value (for saving) is specified. If yes,
+		 * check whether this value has already been set in the KB or is about
+		 * to be set in the current call --> go on normally. Otherwise, return a
+		 * marker "<required value>" so the user is informed by AJAX to provide
+		 * this marked value.
+		 */
+
+		String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
+		if (!reqVal.equals("")
+				&& !checkReqVal(reqVal, sess, ocq, occhoice, mcq, mcchoices, date, dateq, text,
+						textq, num, numq)) {
+
+			writer.append(reqVal);
+			return;
+		}
+
+		setValue(ocq, occhoice, sess);
+		setValue(mcq, mcchoices, sess);
+		setValue(textq, text, sess);
+		setValue(dateq, date, sess);
+		setValue(numq, num, sess);
+
+		// AUTOSAVE
+		String folderPath = GlobalSettings.getInstance().getCaseFolder();
+		Session d3webSession = (Session) httpSession.getAttribute("d3webSession");
+		new SaveThread(folderPath, d3webSession).start();
+
+	}
+
+	/**
+	 * Add one or several given facts. Thereby, first check whether input-store
+	 * has elements, if yes, parse them and set them (for num/text/date
+	 * questions), if no, just parse and set a given single value.
+	 * 
+	 * @created 28.01.2011
+	 * @param request ServletRequest
+	 * @param response ServletResponse
+	 */
 	private void addFact(HttpServletRequest request,
 			HttpServletResponse response, HttpSession httpSession)
 			throws IOException {
@@ -405,8 +468,8 @@ public class D3webDialog extends HttpServlet {
 
 		// if there are values in the input-store (i.e., multiple questions
 		// answered or changed
-		if (!store.equals("") || !store.equals(" ")) {
-
+		if (!store.trim().isEmpty()) {
+			System.out.println(store);
 			// replace empty-space surrogate
 			store = store.replace("q_", "").replace("_", " ").replace("+", " ");
 
@@ -415,6 +478,7 @@ public class D3webDialog extends HttpServlet {
 			String[] nums = null;
 			String[] txts = null;
 			String[] dates = null;
+			String[] mcs = null;
 
 			// split category Strings into id-value pairs
 			if (cats[0] != null) {
@@ -426,6 +490,9 @@ public class D3webDialog extends HttpServlet {
 			if (cats[2] != null) {
 				dates = cats[2].split(";");
 			}
+			// if (cats[3] != null) {
+			// mcs = cats[3].split(";");
+			// }
 
 			// split id-value pairs and set values correspondingly
 			// for NUM
@@ -794,14 +861,14 @@ public class D3webDialog extends HttpServlet {
 	 */
 	private void setValue(String termObID, String valString, Session sess) {
 
-		// TODO REFACTOR: can be removed, just provide ID without "q_"
-		// remove prefix, e.g. "q_" in "q_BMI"
-		termObID = IDUtils.removeNamspace(termObID);
+		if (termObID == null || valString == null) return;
+
+		termObID = termObID.replaceAll("_", " ");
+		valString = valString.replaceAll("_", " ");
 
 		Fact lastFact = null;
 		Blackboard blackboard = sess.getBlackboard();
-		Question to =
-				D3webConnector.getInstance().getKb().getManager().searchQuestion(termObID);
+		Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(termObID);
 
 		// if TerminologyObject not found in the current KB return & do nothing
 		if (to == null) {
@@ -1177,19 +1244,21 @@ public class D3webDialog extends HttpServlet {
 	 * @return TRUE of the required value is already set or contained in the
 	 *         current set of values to set
 	 */
-	private boolean checkReqVal(String requiredVal, Session sess, String valToSet, String store) {
+	private boolean checkReqVal(String requiredVal, Session sess, String... check) {
 		Blackboard blackboard = sess.getBlackboard();
-
-		valToSet = valToSet.replace("q_", "").replace("_", " ");
-		store = store.replace("_", " ");
 
 		Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(requiredVal);
 
 		Fact lastFact = blackboard.getValueFact(to);
 
-		if (requiredVal.equals(valToSet) ||
-				(store.contains(requiredVal)) ||
-				(lastFact != null && lastFact.getValue().toString() != "")) {
+		boolean contains = false;
+		for (String s : check) {
+			if (s.equals(requiredVal)) {
+				contains = true;
+				break;
+			}
+		}
+		if (contains || (lastFact != null && lastFact.getValue().toString() != "")) {
 			return true;
 		}
 		return false;

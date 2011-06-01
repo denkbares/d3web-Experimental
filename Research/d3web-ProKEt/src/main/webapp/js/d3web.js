@@ -21,8 +21,11 @@
 /**
  * Startup code, executed on page load
  */
-
-var mcVals = "";
+var mcStore = new Object();
+var ocStore = new Object();
+var dateStore = new Object();
+var textStore = new Object();
+var numStore = new Object();
 
 $(function() {
 	
@@ -32,7 +35,7 @@ $(function() {
 
 		var link = $.query.set("action", "checkLogin").toString();
 		link = window.location.href.replace(window.location.search, "") + link;
-
+		
 		$.ajax({
 			type : "GET",
 			async : false,
@@ -214,7 +217,8 @@ function initFunctionality() {
 	 * textareas
 	 */
 	$('[type=radio]').unbind('click').click(function() {
-		d3web_getSelectedFacts($(this));
+		d3web_storeQuestionOC($(this));
+		d3web_addFacts($(this));
 	});
 	
 	
@@ -222,12 +226,11 @@ function initFunctionality() {
 	/* the following ensures, that MC questions behave like OC questions,
 	 * i.e., a v*/
 	$('[type=checkbox]').unbind('click').click(function() {
-		//d3web_getSelectedFacts($(this));
-		mcVals = d3web_collectMCs($(this), mcVals);
+		d3web_storeQuestionMC($(this));
 	});
 
 	$('[id^=ok-]').unbind('click').click(function(event) {
-		d3web_addMCfacts(mcVals, $(this).attr("id"));
+		d3web_addFacts($(this));
 	});
 	
 	
@@ -236,9 +239,12 @@ function initFunctionality() {
 		thisEl.bind('keydown', function(e) {
 			var code = (e.keyCode ? e.keyCode : e.which);
 			if (code == 13) {
-				d3web_getSelectedFacts(thisEl);
+				d3web_addFacts($(this));
 			}
 		});
+	});
+	$('[type=text]').blur(function() {
+		d3web_storeQuestionText($(this));
 	});
 
 	$('[type=textarea]').unbind('click').click(function() {
@@ -276,6 +282,97 @@ function initFunctionality() {
 	});
 }
 
+function d3web_storeQuestionText(textInput) {
+	var textQID = $(textInput.parents("[id^=q_]")).attr("id").replace("q_", "");
+	textStore[textQID] = $(textInput).val();
+}
+
+function d3web_storeQuestionNum(numInput) {
+	var numQID = $(numInput.parents("[id^=q_]")).attr("id").replace("q_", "");
+	numStore[numQID] = $(numInput).val();
+}
+
+function d3web_storeQuestionDate(dateInput) {
+	var dateQID = $(dateInput.parents("[id^=q_]")).attr("id").replace("q_", "");
+	dateStore[dateQID] = $(dateInput).val();
+}
+
+function d3web_storeQuestionOC(ocInput) {
+	var ocQID = $(ocInput.parents("[id^=q_]")).attr("id").replace("q_", "");
+	ocStore[ocQID] = $(ocInput).attr('title');
+}
+
+function d3web_storeQuestionMC(mcCheckBox) {
+	
+	var mcQParent = $(mcCheckBox.parents("[id^=q_]")).replace("q_", "");
+	var mcQID = mcQParent.attr("id");
+	var checkBoxes = mcQParent.find(":checkbox");
+
+	// get the question-content-parent element and go through all its
+	// checkbox-children
+	var checkedBoxes = new Array();
+	checkBoxes.each(function() {
+		inputid = $(this).attr("id");
+		if ($(this).attr("checked") == true) {
+			checkedBoxes.push($(this).attr("id")).replace("f_", "");
+		}
+	});
+	
+	mcStore[mcQID] = checkedBoxes;
+}
+
+function d3web_addFacts() {
+
+	var link = $.query.set("action", "addFacts");
+
+	for (var qid in mcStore) {
+		link = link.set("mcq", qid).set("mcchoices", mcStore[qid].toString());
+	}
+	
+	for (var qid in ocStore) {
+		var store = ocStore[qid];
+		link = link.set("ocq", qid).set("occhoice", ocStore[qid]);
+	}
+	
+	for (var qid in dateStore) {
+		link = link.set("dateq", qid).set("date", dateStore[qid]);
+	}
+	
+	for (var qid in textStore) {
+		link = link.set("textq", qid).set("text", textStore[qid]);
+	}
+	
+	for (var qid in numStore) {
+		link = link.set("numq", qid).set("num", numStore[qid]);
+	}
+	
+	
+	link = window.location.href.replace(window.location.search, "") + link.toString();
+
+	$.ajax({
+		type : "GET",
+		url : link,
+		success : function(html) {
+			if (html !== "") {
+				// Error message and reset session so user can provide input
+				// first
+				var errMsg = "Das Feld '" + html
+						+ "' muss immer zuerst ausgefüllt werden!";
+				alert(errMsg);
+				d3web_resetSession();
+			} else {
+				d3web_show();
+			}
+		}
+	});
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// OLD STUFF, NOT SURE IF NEEDED ///////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
 
 function d3web_collectMCs(clickedEl, mcVals) {
 
@@ -297,7 +394,12 @@ function d3web_collectMCs(clickedEl, mcVals) {
 		}
 		
 	});
-
+	
+	var mcid = $(clickedEl.parents("[id^=q_]")).attr("id");
+	mcStore[mcid] = new Object();
+	mcStore[mcid]["key"] = mcid;
+	mcStore[mcid]["content"] = checkedVals;
+	var test = mcStore[mcid];
 	return checkedVals;
 }
 
@@ -306,7 +408,7 @@ function d3web_addMCfacts(mcfacts, qid) {
 
 	qid = qid.replace("ok-", "");
 	
-	var link = $.query.set("action", "addmcfact").set("mcs", mcfacts).set(
+	var link = $.query.set("action", "addfact").set("mcs", mcfacts).set(
 			"qid", qid).toString();
 	link = window.location.href.replace(window.location.search, "") + link;
 
@@ -872,6 +974,7 @@ function d3web_getSelectedFacts(clickedItem) {
 	var numStore = "";
 	var txtStore = "";
 	var datStore = "";
+	var mcStore = "";
 	var store = "";
 	var hasNumFirst = false;
 
@@ -882,9 +985,9 @@ function d3web_getSelectedFacts(clickedItem) {
 	 * form id###value;id###value; (= numvals)
 	 */
 	// all num questions
-	numqs = $('#content [id^="q_"]').filter('[class*="question-num"]');
+	var numqs = $('#content [id^="q_"]').filter('[class*="question-num"]');
 	numqs.each(function() {
-		input = $(this).find(":text,textarea").filter(":first");
+		var input = $(this).find(":text,textarea").filter(":first");
 		if (input.size() == 1) {
 			if ($(this).attr('class').indexOf('abstract') < 0
 					&& input.attr('value') != "") {
@@ -893,10 +996,10 @@ function d3web_getSelectedFacts(clickedItem) {
 		}
 	});
 	// all text questions
-	txtqs = $('#content [id^="q_"]').filter('[class*="question-text"]');
+	var txtqs = $('#content [id^="q_"]').filter('[class*="question-text"]');
 	txtqs
 			.each(function() {
-				input = $(this).find(":text,textarea").filter(":first");
+				var input = $(this).find(":text,textarea").filter(":first");
 				if (input.size() == 1) {
 					if ($(this).attr('class').indexOf('abstract') < 0
 							&& input.attr('value') != ""
@@ -907,10 +1010,10 @@ function d3web_getSelectedFacts(clickedItem) {
 				}
 			});
 	// all date questions
-	datqs = $('#content [id^="q_"]').filter('[class*="question-date"]');
+	var datqs = $('#content [id^="q_"]').filter('[class*="question-date"]');
 	datqs
 			.each(function() {
-				input = $(this).find(":text,textarea").filter(":first");
+				var input = $(this).find(":text,textarea").filter(":first");
 				if (input.size() == 1) {
 					if ($(this).attr('class').indexOf('abstract') < 0
 							&& input.attr('value') != ""
