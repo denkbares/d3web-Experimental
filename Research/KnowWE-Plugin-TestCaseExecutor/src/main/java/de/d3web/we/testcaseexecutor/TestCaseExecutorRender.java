@@ -35,16 +35,16 @@ public class TestCaseExecutorRender extends KnowWEDomRenderer<TestCaseExecutorTy
 		Collection<ConnectorAttachment> attachments = connector.getAttachments();
 
 		StringBuilder html = new StringBuilder();
-		html.append("<h3 class=\"testExecutor\"> TestCase Executor </h3>");
-		html.append("<br /><div id=\"testcases\"><strong>Available Files with Testcases:</strong><br />");
+		html.append("<h2 class=\"testExecutor\"> TestCase Executor </h2>");
+		html.append("<p></p><div id=\"testcases\"><strong>Available Files with Testcases:</strong><br /><br />");
 
 		for (ConnectorAttachment attachment : attachments) {
 			if (attachment.getParentName().equals(articleName)
 					&& attachment.getFileName().endsWith(".xml")) {
 				String name = attachment.getFileName();
 				html.append("<div class=\"selectXMLFile\" onclick=\"return TestCaseExecutor.getTestcases('"
-						+ name + "','" + master + "')\">"
-						+ name + "</div>");
+						+ name + "','" + master + "')\"><span class=\"highlightOnHover\">"
+						+ name + "</span></div>");
 			}
 		}
 

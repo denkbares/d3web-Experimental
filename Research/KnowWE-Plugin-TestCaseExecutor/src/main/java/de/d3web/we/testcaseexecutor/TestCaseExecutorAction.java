@@ -58,21 +58,25 @@ public class TestCaseExecutorAction extends AbstractAction {
 		html.append("<div>");
 		html.append(TestCaseExecutorUtils.createHiddenFilenameDiv(filename));
 		html.append(TestCaseExecutorUtils.createHiddenMasterDiv(master));
-		html.append("Available Testcases:");
+		html.append("<strong>Available Testcases:</strong><br /><br />");
 
-		html.append("<div id=\"selectCases\">");
+		html.append("<table id=\"selectCases\">");
+		html.append("<tr class=\"borderBottom\">");
+		html.append("<td class=\"noPadding borderRight\"><input type=\"checkbox\" name=\"selectAllCases\" onclick=\"return TestCaseExecutor.selectAllCases()\"></td>");
+		html.append("<td></td>");
+		html.append("</tr>");
 		for (String s : testCases) {
 			String name = s.equals("") ? "Unnamed TestCase" : s;
-			html.append("<div><input type=\"checkbox\" name=\"case\" class=\"runTestExecutor\">");
-			html.append(name);
-			html.append("</div>");
+			html.append("<tr>");
+			html.append("<td class=\"noPadding borderRight\"><input type=\"checkbox\" name=\"case\" class=\"runTestExecutor\"></td>");
+			html.append("<td>" + name + "</td>");
+			html.append("</tr>");
 		}
+		html.append("<tr class=\"borderTop\">");
+		html.append("<td class=\"noPadding borderRight\"><div class=\"runCasesButton\" onclick=\"return TestCaseExecutor.runTestcase()\"></div></td>");
+		html.append("</tr>");
+		html.append("</table>");
 		html.append("</div>");
-		html.append("<div id=\"buttons\">");
-		html.append("<div id=\"selectAllCases\" onclick=\"return TestCaseExecutor.selectAllCases()\"></div>");
-		html.append("<div id=\"deSelectAllCases\" onclick=\"return TestCaseExecutor.deSelectAllCases()\"></div>");
-		html.append("<div class=\"runCasesButton\" onclick=\"return TestCaseExecutor.runTestcase()\"></div>");
-		html.append("</div></div>");
 
 		context.getWriter().write(html.toString());
 

@@ -37,7 +37,6 @@ TestCaseExecutor.addTestcases = function(request) {
 	}
 	
 	parent.innerHTML = text;
-	var a = 1;
 }
 
 TestCaseExecutor.SEPARATOR = '#####';
@@ -45,15 +44,18 @@ TestCaseExecutor.SEPARATOR = '#####';
 TestCaseExecutor.runTestcase = function() {
 	var cases = $('selectCases');
 	var selectedCases = '';
+	var trs = cases.getElements('tr');
 	
-	for (var i = 0; i < cases.childNodes.length; i++) {
-		if (cases.childNodes[i].firstChild.checked) {
+	for (var i = 1; i < trs.length - 1; i++) {
+		var checkbox = trs[i].getElement('input');
+		if (checkbox.checked) {
 			if (selectedCases !== '') {
 				selectedCases += TestCaseExecutor.SEPARATOR;
 			} 
-			selectedCases += cases.childNodes[i].lastChild.nodeValue;
+			selectedCases += trs[i].lastChild.textContent;
 		}
 	}
+	
 
 	var filename = $('filename').innerHTML;
 	var master = $('master').innerHTML;
@@ -92,18 +94,19 @@ TestCaseExecutor.backToCaseSelection = function() {
 
 TestCaseExecutor.selectAllCases = function() {
 	var cases = $('selectCases');
+	var select = false;
 	
-	for (var i = 0; i < cases.childNodes.length; i++) {
-		var input = cases.childNodes[i].getElement('input');
-		input.checked = "checked";
+	var trs = cases.getElements('tr');
+	if (trs[0].getElement('input').checked) {
+		select = true;
 	}
-}
-
-TestCaseExecutor.deSelectAllCases = function() {
-	var cases = $('selectCases');
 	
-	for (var i = 0; i < cases.childNodes.length; i++) {
-		var input = cases.childNodes[i].getElement('input');
-		input.checked = false;
+	for (var i = 1; i < trs.length - 1; i++) {
+		var checkbox = trs[i].getElement('input');
+		if (select) {
+			checkbox.checked = 'checked';
+		} else {
+			checkbox.checked = false;
+		}
 	}
 }

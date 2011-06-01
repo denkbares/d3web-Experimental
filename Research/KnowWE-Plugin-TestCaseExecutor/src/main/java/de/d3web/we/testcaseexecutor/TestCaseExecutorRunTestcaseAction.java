@@ -107,7 +107,7 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 
 			// append back button
 			result.append("<br />");
-			result.append("<div id=\"backToCaseSelection\" onclick=\"return TestCaseExecutor.backToCaseSelection()\"> back </div>");
+			result.append("<div id=\"backToCaseSelection\" onclick=\"return TestCaseExecutor.backToCaseSelection()\"> <strong>back</strong> </div>");
 
 			context.getWriter().write(result.toString());
 
