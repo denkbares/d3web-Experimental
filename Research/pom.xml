@@ -171,6 +171,7 @@
 		<module>KnowWE-Plugin-TestCaseExecutor</module>
 		<module>KnowWE-Plugin-DiaFlux-Refactoring</module>
 		<module>KnowWE-Plugin-OWLAPI</module>
+		<module>KnowWE-Plugin-Example</module>
 	</modules>
 	<repositories>
 		<repository>
