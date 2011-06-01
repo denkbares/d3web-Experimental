@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-Example" version="0.0.1">
+
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+	</requires>
+
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="HelloWorldTagHandler">
+		<parameter id="class"
+			value="de.knowwe.example.HelloWorldTagHandler" />
+		<parameter id="name" value="HelloWorldTagHandler" />
+		<parameter id="description" value="TagHandler HelloWorldTagHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+		id="HelloKnowWEType">
+		<parameter id="class"
+			value="de.knowwe.example.HelloKnowWEType" />
+		<parameter id="name" value="HelloKnowWEType" />
+		<parameter id="description" value="KnowWEObjectType HelloKnowWEType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+
+</plugin>
