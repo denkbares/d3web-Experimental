@@ -29,6 +29,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -235,10 +236,6 @@ public class D3webDialog extends HttpServlet {
 			addFacts(request, response, httpSession);
 			return;
 		}
-		// else if (action.equalsIgnoreCase("addmcfact")) {
-		// addMCFact(request, response, httpSession);
-		// return;
-		// }
 		else if (action.equalsIgnoreCase("savecase")) {
 			saveCase(request, response, httpSession);
 			return;
@@ -379,22 +376,57 @@ public class D3webDialog extends HttpServlet {
 
 		Session sess = (Session) httpSession.getAttribute("d3webSession");
 
-		// get the ID of a potentially given single question answered
-		String ocq = request.getParameter("ocq");
-		// get the choice
-		String occhoice = request.getParameter("occhoice");
+		int i = 0;
+		List<String> questions = new ArrayList<String>();
+		List<String> values = new ArrayList<String>();
+		while (true) {
+			String ocq = request.getParameter("ocq" + i);
+			String occhoice = request.getParameter("occhoice" + i);
+			if (ocq == null || occhoice == null) break;
+			questions.add(ocq);
+			values.add(occhoice);
+			i++;
+		}
 
-		String mcq = request.getParameter("mcq");
-		String mcchoices = request.getParameter("mcchoices");
+		i = 0;
+		while (true) {
+			String mcq = request.getParameter("mcq" + i);
+			String mcchoices = request.getParameter("mcchoices" + i);
+			if (mcq == null || mcchoices == null) break;
+			questions.add(mcq);
+			values.add(mcchoices);
+			i++;
+		}
 
-		String dateq = request.getParameter("dateq");
-		String date = request.getParameter("date");
+		i = 0;
+		while (true) {
+			String dateq = request.getParameter("dateq" + i);
+			String date = request.getParameter("date" + i);
+			if (dateq == null || date == null) break;
+			questions.add(dateq);
+			values.add(date);
+			i++;
+		}
 
-		String textq = request.getParameter("textq");
-		String text = request.getParameter("text");
+		i = 0;
+		while (true) {
+			String textq = request.getParameter("textq" + i);
+			String text = request.getParameter("text" + i);
+			if (textq == null || text == null) break;
+			questions.add(textq);
+			values.add(text);
+			i++;
+		}
 
-		String numq = request.getParameter("numq");
-		String num = request.getParameter("num");
+		i = 0;
+		while (true) {
+			String numq = request.getParameter("numq" + i);
+			String num = request.getParameter("num" + i);
+			if (numq == null || num == null) break;
+			questions.add(numq);
+			values.add(num);
+			i++;
+		}
 
 		/*
 		 * Check, whether a required value (for saving) is specified. If yes,
@@ -403,190 +435,20 @@ public class D3webDialog extends HttpServlet {
 		 * marker "<required value>" so the user is informed by AJAX to provide
 		 * this marked value.
 		 */
-
+		List<String> all = new LinkedList<String>();
+		all.addAll(questions);
+		all.addAll(values);
 		String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
 		if (!reqVal.equals("")
-				&& !checkReqVal(reqVal, sess, ocq, occhoice, mcq, mcchoices, date, dateq, text,
-						textq, num, numq)) {
+				&& !checkReqVal(reqVal, sess, all)) {
 
 			writer.append(reqVal);
 			return;
 		}
 
-		setValue(ocq, occhoice, sess);
-		setValue(mcq, mcchoices, sess);
-		setValue(textq, text, sess);
-		setValue(dateq, date, sess);
-		setValue(numq, num, sess);
-
-		// AUTOSAVE
-		String folderPath = GlobalSettings.getInstance().getCaseFolder();
-		Session d3webSession = (Session) httpSession.getAttribute("d3webSession");
-		new SaveThread(folderPath, d3webSession).start();
-
-	}
-
-	/**
-	 * Add one or several given facts. Thereby, first check whether input-store
-	 * has elements, if yes, parse them and set them (for num/text/date
-	 * questions), if no, just parse and set a given single value.
-	 * 
-	 * @created 28.01.2011
-	 * @param request ServletRequest
-	 * @param response ServletResponse
-	 */
-	private void addFact(HttpServletRequest request,
-			HttpServletResponse response, HttpSession httpSession)
-			throws IOException {
-
-		response.setContentType("text/html");
-		response.setCharacterEncoding("utf8");
-		PrintWriter writer = response.getWriter();
-
-		Session sess = (Session) httpSession.getAttribute("d3webSession");
-
-		// get the ID of a potentially given single question answered
-		String qid = request.getParameter("qid");
-		// get the input-store
-		String store = request.getParameter("store");
-
-		/*
-		 * Check, whether a required value (for saving) is specified. If yes,
-		 * check whether this value has already been set in the KB or is about
-		 * to be set in the current call --> go on normally. Otherwise, return a
-		 * marker "<required value>" so the user is informed by AJAX to provide
-		 * this marked value.
-		 */
-
-		String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
-		if ((!reqVal.equals("")) &&
-				(!checkReqVal(reqVal, sess, qid, store))) {
-
-			writer.append(reqVal);
-			return;
+		for (i = 0; i < questions.size(); i++) {
+			setValue(questions.get(i), values.get(i), sess);
 		}
-
-		// if there are values in the input-store (i.e., multiple questions
-		// answered or changed
-		if (!store.trim().isEmpty()) {
-			System.out.println(store);
-			// replace empty-space surrogate
-			store = store.replace("q_", "").replace("_", " ").replace("+", " ");
-
-			// split store into the 3 categories num/text/date
-			String[] cats = store.split("&&&&");
-			String[] nums = null;
-			String[] txts = null;
-			String[] dates = null;
-			String[] mcs = null;
-
-			// split category Strings into id-value pairs
-			if (cats[0] != null) {
-				nums = cats[0].split(";");
-			}
-			if (cats[1] != null) {
-				txts = cats[1].split(";");
-			}
-			if (cats[2] != null) {
-				dates = cats[2].split(";");
-			}
-			// if (cats[3] != null) {
-			// mcs = cats[3].split(";");
-			// }
-
-			// split id-value pairs and set values correspondingly
-			// for NUM
-			String[] valPair = null;
-			if (nums != null) {
-				for (String s : nums) {
-					if (!s.equals(" ") && !s.equals("")) {
-						valPair = s.split("###");
-						setValue(valPair[0], valPair[1], sess);
-					}
-				}
-			}
-			// for TEXT
-			if (txts != null && !txts.equals(" ") && !txts.equals("")) {
-				for (String s : txts) {
-					if (!s.equals(" ") && !s.equals("")) {
-						valPair = s.split("###");
-						setValue(valPair[0], valPair[1], sess);
-					}
-				}
-			}
-			// for DATE
-			if (dates != null) {
-				for (String s : dates) {
-					if (!s.equals(" ") && !s.equals("")) {
-						valPair = s.split("###");
-						setValue(valPair[0], valPair[1], sess);
-					}
-				}
-			}
-		}
-
-		// get single value storage
-		String positions = request.getParameter("pos");
-		// if not EMPTY, i.e., if one single value was set
-		if (!positions.equals("EMPTY")) {
-
-			// replace whitespace surrogates and set value
-			qid = qid.replace("q_", "").replace("_", " ");
-			qid = "q_" + qid;
-			positions = positions.replace("_", " ");
-
-			setValue(qid, positions, sess);
-
-			// AUTOSAVE
-			String folderPath = GlobalSettings.getInstance().getCaseFolder();
-			Session d3webSession = (Session) httpSession.getAttribute("d3webSession");
-			new SaveThread(folderPath, d3webSession).start();
-		}
-	}
-
-	/**
-	 * Adding MC facts
-	 * 
-	 * @created 29.04.2011
-	 * @param request
-	 * @param response
-	 * @param httpSession
-	 * @throws IOException
-	 */
-	private void addMCFact(HttpServletRequest request,
-			HttpServletResponse response, HttpSession httpSession)
-			throws IOException {
-
-		response.setContentType("text/html");
-		response.setCharacterEncoding("utf8");
-		PrintWriter writer = response.getWriter();
-
-		Session sess = (Session) httpSession.getAttribute("d3webSession");
-
-		// get the ID of a potentially given single question answered
-		String qid = request.getParameter("qid");
-		qid = qid.replace("q_", "").replace("_", " ");
-
-		String mcVals = request.getParameter("mcs");
-		mcVals = mcVals.replace("_", " ");
-
-		/*
-		 * Check, whether a required value (for saving) is specified. If yes,
-		 * check whether this value has already been set in the KB or is about
-		 * to be set in the current call --> go on normally. Otherwise, return a
-		 * marker "<required value>" so the user is informed by AJAX to provide
-		 * this marked value.
-		 */
-
-		String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
-		if ((!reqVal.equals("") || !reqVal.equals("none")) &&
-				(!checkReqVal(reqVal, sess, qid, ""))) {
-
-			writer.append(reqVal);
-			return;
-		}
-
-		setValue(qid, mcVals, sess);
 
 		// AUTOSAVE
 		String folderPath = GlobalSettings.getInstance().getCaseFolder();
@@ -904,7 +766,6 @@ public class D3webDialog extends HttpServlet {
 				if (to instanceof QuestionOC) {
 					// valueString is the ID of the selected item
 					try {
-						valString = valString.replace("q_", "");
 						value = KnowledgeBaseUtils.findValue(to, valString);
 					}
 					catch (NumberFormatException nfe) {
@@ -1244,7 +1105,7 @@ public class D3webDialog extends HttpServlet {
 	 * @return TRUE of the required value is already set or contained in the
 	 *         current set of values to set
 	 */
-	private boolean checkReqVal(String requiredVal, Session sess, String... check) {
+	private boolean checkReqVal(String requiredVal, Session sess, List<String> check) {
 		Blackboard blackboard = sess.getBlackboard();
 
 		Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(requiredVal);

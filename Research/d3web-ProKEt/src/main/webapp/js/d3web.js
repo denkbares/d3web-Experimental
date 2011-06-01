@@ -239,6 +239,7 @@ function initFunctionality() {
 		thisEl.bind('keydown', function(e) {
 			var code = (e.keyCode ? e.keyCode : e.which);
 			if (code == 13) {
+				d3web_storeQuestionText($(this));
 				d3web_addFacts($(this));
 			}
 		});
@@ -252,9 +253,13 @@ function initFunctionality() {
 		thisEl.bind('keydown', function(e) {
 			var code = (e.keyCode ? e.keyCode : e.which);
 			if (code == 13) {
-				d3web_getSelectedFacts(thisEl);
+				d3web_storeQuestionText($(this));
+				d3web_addFacts($(this));
 			}
 		});
+	});
+	$('[type=text]').blur(function() {
+		d3web_storeQuestionText($(this));
 	});
 
 	// bind reset button to resetSession() function
@@ -304,8 +309,8 @@ function d3web_storeQuestionOC(ocInput) {
 
 function d3web_storeQuestionMC(mcCheckBox) {
 	
-	var mcQParent = $(mcCheckBox.parents("[id^=q_]")).replace("q_", "");
-	var mcQID = mcQParent.attr("id");
+	var mcQParent = $(mcCheckBox.parents("[id^=q_]"));
+	var mcQID = mcQParent.attr("id").replace("q_", "");
 	var checkBoxes = mcQParent.find(":checkbox");
 
 	// get the question-content-parent element and go through all its
@@ -314,7 +319,7 @@ function d3web_storeQuestionMC(mcCheckBox) {
 	checkBoxes.each(function() {
 		inputid = $(this).attr("id");
 		if ($(this).attr("checked") == true) {
-			checkedBoxes.push($(this).attr("id")).replace("f_", "");
+			checkedBoxes.push($(this).attr("id").replace("f_", ""));
 		}
 	});
 	
@@ -325,25 +330,34 @@ function d3web_addFacts() {
 
 	var link = $.query.set("action", "addFacts");
 
+	var i = 0;
 	for (var qid in mcStore) {
-		link = link.set("mcq", qid).set("mcchoices", mcStore[qid].toString());
+		link = link.set("mcq" + i, qid).set("mcchoices" + i, mcStore[qid].toString());
+		i++;
 	}
 	
+	i = 0;
 	for (var qid in ocStore) {
 		var store = ocStore[qid];
-		link = link.set("ocq", qid).set("occhoice", ocStore[qid]);
+		link = link.set("ocq" + i, qid).set("occhoice" + i, ocStore[qid]);
+		i++;
 	}
 	
+	i = 0;
 	for (var qid in dateStore) {
-		link = link.set("dateq", qid).set("date", dateStore[qid]);
+		link = link.set("dateq" + i, qid).set("date" + i, dateStore[qid]);
+		i++;
 	}
 	
 	for (var qid in textStore) {
-		link = link.set("textq", qid).set("text", textStore[qid]);
+		link = link.set("textq" + i, qid).set("text" + i, textStore[qid]);
+		i++;
 	}
 	
+	i = 0;
 	for (var qid in numStore) {
-		link = link.set("numq", qid).set("num", numStore[qid]);
+		link = link.set("numq" + i, qid).set("num" + i, numStore[qid]);
+		i++;
 	}
 	
 	
@@ -403,143 +417,6 @@ function d3web_collectMCs(clickedEl, mcVals) {
 	return checkedVals;
 }
 
-
-function d3web_addMCfacts(mcfacts, qid) {
-
-	qid = qid.replace("ok-", "");
-	
-	var link = $.query.set("action", "addfact").set("mcs", mcfacts).set(
-			"qid", qid).toString();
-	link = window.location.href.replace(window.location.search, "") + link;
-
-	$.ajax({
-		type : "GET",
-		url : link,
-		success : function(html) {
-			if (html !== "") {
-				// Error message and reset session so user can provide input
-				// first
-				var errMsg = "Das Feld '" + html
-						+ "' muss immer zuerst ausgefüllt werden!";
-				alert(errMsg);
-				d3web_resetSession();
-			} else {
-				d3web_show();
-			}
-		}
-	});
-}
-
-
-/**
- * Send an AJAX request to check, whether possibly answered num questions
- * have a certain value-range specified, and if yes, return the respective
- * question-ids and ranges for checking the user provided value against the
- * range.
- */
-function d3web_checkNumRanges(qid, value, store, numStore) {
-
-	/*
-	 * FIRST assemble all questions that might be a num-q with range to a String
-	 * representation: <qid>%<value>;<qid>%<value>; This can be the single
-	 * clicked question, or those in the numStore TODO: maybe adapt later for
-	 * handling also text etc questions
-	 */
-	var qids = "";
-	if(qid !== undefined && value !== undefined){
-		qids = qid + "%" + value + ";";
-	} 
-	
-	if(numStore !== undefined && numStore !== " "){
-		var storeVals = numStore.split(";");
-		for (i = 0; i < storeVals.length; i++) {
-			 var idVal = storeVals[i].split("###");
-			 
-			 if(idVal[0] !== "" || idVal[1] !== undefined){
-				 if(!(idVal[0]==qid)){
-					 var add = idVal[0] + "%" + idVal[1] + ";";
-					 qids += add;
-				 }
-			 }
-		 }	
-	}
-	
-	/* create query string for calling the checkrange method of the servlet */
-	var link = $.query.set("action", "checkRange").set("qids", qids).toString();
-	link = window.location.href.replace(window.location.search, "") + link;
-	
-	// checked on rangeRequest complete; TRUE means, every provided value is
-	// also within the value range (if one existed)
-	var checkRangeOK = true;
-
-	// send the request; on success, check whether qid/range pairs are given
-	// back
-	$
-			.get(
-					link,
-					function(data) {
-
-						if (data !== "") { // range(s) exist(s)
-
-							// split the ID/val/range complete String into
-							// ID/val/range value triples
-							var idValRange = data.split(";");
-
-							for (i = 0; i < idValRange.length - 1; i++) { // for
-								// each
-								// triple
-
-								// split the triple String into three distinct
-								// vals
-								var triple = idValRange[i].split("%");
-
-								var id = triple[0];
-								var value = triple[1];
-								var range = triple[2];
-
-								// get and parse range values
-								var rangeVals = range.split("-");
-								var min = parseFloat(rangeVals[0]);
-								var max = parseFloat(rangeVals[1]);
-
-								// if provided value not within specified range
-								if (value < min || value > max) {
-
-									// input fields have id prefix "f_"
-									var idplus = "#f_" + id;
-									var qerrid = "#error-q_" + id;
-
-									// set error message for question
-									$(qerrid).html(
-											"Zulässiger Wertebereich: ["
-													+ range + "]");
-
-									// remove wront value
-									$(idplus).val("");
-									checkRangeOK = false; // set flag for not
-									// all vals OK
-								}
-							}
-							if (!checkRangeOK) {
-								alert("Bitte überprüfen Sie die mit roter Fehlermeldung gekennzeichneten Fragen!");
-							}
-						}
-					}).complete(function() {
-
-				// if val was in provided range add value
-				if (checkRangeOK) {
-
-					
-					// reset error messages
-					$("[id*=error]").html("");
-					d3web_addfactsRemembering(store, qid, value);
-				}
-				// otherwise do nothing
-			});
-
-}
-
-
 function d3web_IQClicked(id) {
 	//alert("image answer " + id + " was clicked");
 	d3web_getSelectedFacts($('#' + id));
@@ -549,146 +426,6 @@ function d3web_IQClicked(id) {
 	selected.attr('checked', false);
 	deselected.attr('checked', true);
 	remark_selectively(target);	// mark question accordingly*/
-}
-
-
-
-function d3web_getRemainingFacts() {
-
-	// some variables for storing multiple question/answer pairs
-	var numStore = "";
-	var txtStore = "";
-	var datStore = "";
-	var store = "";
-
-	/*
-	 * The next 3 code blocks fetch all input for input fields such as num,
-	 * text, and date fields. This input is assembled into one data store in the
-	 * form numvals&&&&textvals&&&&datevals thereby the 3 val arrays are of the
-	 * form id###value;id###value; (= numvals)
-	 */
-	// all num questions
-	numqs = $('#content [id^="q_"]').filter('[class*="question-num"]');
-	numqs.each(function() {
-		input = $(this).find(":text,textarea").filter(":first");
-		if (input.size() == 1) {
-			if ($(this).attr('class').indexOf('abstract') < 0
-					&& input.attr('value') != "") {
-				numStore += $(this).attr('id') + "###" + input.val() + ";"
-			}
-		}
-	});
-	// all text questions
-	txtqs = $('#content [id^="q_"]').filter('[class*="question-text"]');
-	txtqs
-			.each(function() {
-				input = $(this).find(":text,textarea").filter(":first");
-				if (input.size() == 1) {
-					if ($(this).attr('class').indexOf('abstract') < 0
-							&& input.attr('value') != ""
-							&& input.attr('value') != " ") {
-						txtStore += $(this).attr('id') + "###" + input.val()
-								+ ";"
-					}
-				}
-			});
-	// all date questions
-	datqs = $('#content [id^="q_"]').filter('[class*="question-date"]');
-	datqs
-			.each(function() {
-				input = $(this).find(":text,textarea").filter(":first");
-				if (input.size() == 1) {
-					if ($(this).attr('class').indexOf('abstract') < 0
-							&& input.attr('value') != ""
-							&& input.attr('value') != " ") {
-						datStore += $(this).attr('id') + "###" + input.val()
-								+ ";"
-					}
-				}
-			});
-
-	/*
-	 * Check, whether there have been values for num/text/date fields if not so,
-	 * add an " " to enable better array splitting when getting the values later
-	 */
-	if (numStore == "") {
-		numStore = " ";
-	}
-	if (txtStore == "") {
-		txtStore = " ";
-	}
-	if (datStore == "") {
-		datStore = " ";
-	}
-	// assemble complete text/textinput value store
-	store += numStore + "&&&&" + txtStore + "&&&&" + datStore;
-
-	/*
-	 * AJAX call to send both the value store as well as a potential single
-	 * radio/checkbox input
-	 */
-	d3web_addfactsBeforeSave(store);
-}
-
-/**
- * Transfer a selected or removed fact to the d3web dialog via an ajax call.
- * This is a special function for sending a whole store of "remembered" answers,
- * e.g., num answers that have not yet been confirmed
- */
-function d3web_addfactsRemembering(store, qid, pos) {
-
-	//alert(mcVals);
-	
-	// TODO MC values senden
-	if(mcVals != ""){
-		
-		//TODO ID
-		d3web_addMCfacts(mcVals, $(this).attr("id"));
-		//alert("hier mc senden");	
-	}
-	
-	var link = $.query.set("action", "addFact").set("qid", qid).set("pos", pos)
-			.set("store", store).toString();
-	link = window.location.href.replace(window.location.search, "") + link;
-
-	$.ajax({
-		type : "GET",
-		url : link,
-		success : function(html) {
-			if (html !== "") {
-				// Error message and reset session so user can provide input
-				// first
-				var errMsg = "Das Feld '" + html
-						+ "' muss immer zuerst ausgefüllt werden!";
-				alert(errMsg);
-				d3web_resetSession();
-			} else {
-				d3web_show();
-			}
-		}
-	});
-}
-
-function d3web_addfactsBeforeSave(store) {
-
-	var link = $.query.set("action", "addFact").set("qid", "").set("pos", "")
-			.set("store", store).toString();
-	link = window.location.href.replace(window.location.search, "") + link;
-
-	$.ajax({
-		type : "GET",
-		async : false,
-		url : link,
-		success : function(html) {
-			// d3web_nextform();
-
-			// if (html != "same") { // replace target id of content if not the
-			// same
-
-			d3web_sendSave();
-			// }
-		}
-	});
 }
 
 /**
@@ -954,153 +691,7 @@ function d3web_show_solutions(target_id) {
 	});
 }
 
-/**
- * Calculating the set facts for the parent question of a clicked element.
- * Thereby, all input fields (num/text/date) are checked and their values
- * denoted in a store. This ensures, that changed values, even for already
- * answered questions, are correctly propagated. Also, it is ensured, that
- * values of ALL input fields are propagated, regardless whether enter was
- * clicked each time. After storing the input field values, the dialog is
- * checked also for radio boxes and checkboxes input. Thereby, unknown option is
- * checked first as to ensure that its value is correctly toggled.
- * 
- * @param clickedItem
- *            the latest item clicked in the dialog
- */
-function d3web_getSelectedFacts(clickedItem) {
 
-	
-	// some variables for storing multiple question/answer pairs
-	var numStore = "";
-	var txtStore = "";
-	var datStore = "";
-	var mcStore = "";
-	var store = "";
-	var hasNumFirst = false;
-
-	/*
-	 * The next 3 code blocks fetch all input for input fields such as num,
-	 * text, and date fields. This input is assembled into one data store in the
-	 * form numvals&&&&textvals&&&&datevals thereby the 3 val arrays are of the
-	 * form id###value;id###value; (= numvals)
-	 */
-	// all num questions
-	var numqs = $('#content [id^="q_"]').filter('[class*="question-num"]');
-	numqs.each(function() {
-		var input = $(this).find(":text,textarea").filter(":first");
-		if (input.size() == 1) {
-			if ($(this).attr('class').indexOf('abstract') < 0
-					&& input.attr('value') != "") {
-				numStore += $(this).attr('id') + "###" + input.val() + ";"
-			}
-		}
-	});
-	// all text questions
-	var txtqs = $('#content [id^="q_"]').filter('[class*="question-text"]');
-	txtqs
-			.each(function() {
-				var input = $(this).find(":text,textarea").filter(":first");
-				if (input.size() == 1) {
-					if ($(this).attr('class').indexOf('abstract') < 0
-							&& input.attr('value') != ""
-							&& input.attr('value') != " ") {
-						txtStore += $(this).attr('id') + "###" + input.val()
-								+ ";"
-					}
-				}
-			});
-	// all date questions
-	var datqs = $('#content [id^="q_"]').filter('[class*="question-date"]');
-	datqs
-			.each(function() {
-				var input = $(this).find(":text,textarea").filter(":first");
-				if (input.size() == 1) {
-					if ($(this).attr('class').indexOf('abstract') < 0
-							&& input.attr('value') != ""
-							&& input.attr('value') != " ") {
-						datStore += $(this).attr('id') + "###" + input.val()
-								+ ";"
-					}
-				}
-			});
-
-	/*
-	 * Now the dialog is checkedradio button / checkbox input
-	 */
-	// "^=" means begins with, jquery expression
-	question = clickedItem.closest('[id^="q_"]');
-	unknown = clickedItem.closest('[id^="i_unknown"]');
-
-	// if unknown has been clicked, it is primarily saved
-	if (clickedItem.attr('id').indexOf('i_unknown') >= 0) {
-		pos = clickedItem.attr("id");
-		} 
-	
-	// image questions
-	else if  (clickedItem.attr('id').indexOf('img_') >= 0) {
-		pos = clickedItem.attr("id").replace("img_", "");
-		//alert(pos);
-	}
-
-	// otherwise check for "not-unknown" radio buttons and checkboxes
-	else {
-		var counter = 0, pos = "";
-		/* text */
-		if (pos == "") {
-			items = question.find(":text,textarea").filter(":first");
-			if (items.size() == 1) {
-				pos = items.attr('value');
-				hasNumFirst = true;
-			}
-		}
-		/* radio buttons */
-		if (pos == "") {
-			items = question.find('[type=radio]');
-			items.each(function() {
-				if ($(this).attr('checked')) {
-					pos = $(this).attr("title");
-				}
-			});
-		}
-		/* checkboxes */
-		if (pos == "") {
-			items = question.find(":checkbox");
-			items.each(function() {
-				if ($(this).attr('checked')) {
-					pos = $(this).attr("id").substring(2);
-				}
-			});
-		}
-		// no radio- or checkbox value set, e.g if only some nums are given
-		if (pos == "") {
-			pos = "EMPTY";
-		}
-	}
-
-	/*
-	 * Check, whether there have been values for num/text/date fields if not so,
-	 * add an " " to enable better array splitting when getting the values later
-	 */
-	if (numStore == "") {
-		numStore = " ";
-	}
-	if (txtStore == "") {
-		txtStore = " ";
-	}
-	if (datStore == "") {
-		datStore = " ";
-	}
-
-	// make sure, also "," is accepted as float separator
-	pos = pos.replace(",", ".");
-	numStore = numStore.replace(",", ".");
-	// assemble complete text/textinput value store
-	store += numStore + "&&&&" + txtStore + "&&&&" + datStore;
-
-	
-	d3web_checkNumRanges(question.attr('id'), pos, store, numStore);
-
-}
 
 function closeJQConfirmDialog() {
 	$('#jqConfirmDialog').dialog('close');

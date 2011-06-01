@@ -30,6 +30,7 @@ import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
+import de.d3web.core.knowledge.terminology.info.NumericalInterval;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.UndefinedValue;
@@ -74,12 +75,18 @@ public class AnswerNumD3webRenderer extends AbstractD3webRenderer implements Ans
 		st.setAttribute("parentFullId", parent.getName().replace(" ", "_"));
 
 		// set units if available
+		String unit = nq.getInfoStore().getValue(MMInfo.UNIT);
 		if (nq.getInfoStore().getValue(MMInfo.UNIT) != null) {
-			st.setAttribute("text",
-					nq.getInfoStore().getValue(MMInfo.UNIT));
+			NumericalInterval interVal = nq.getInfoStore().getValue(
+					BasicProperties.QUESTION_NUM_RANGE);
+			String inter = "";
+			if (interVal != null) {
+				inter = interVal.getLeft() + " - " + interVal.getRight() + " ";
+			}
+			st.setAttribute("text", inter + unit);
 		}
 
-		Blackboard bb = super.d3webSession.getBlackboard();
+		Blackboard bb = d3webSession.getBlackboard();
 		Value value = bb.getValue(nq);
 
 		if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {

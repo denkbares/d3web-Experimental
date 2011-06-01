@@ -97,7 +97,6 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 		}
 		else if (to instanceof QuestionNum) {
 			st.setAttribute("type", "num");
-			// st.setAttribute("sendButton", "true");
 		}
 		else if (to instanceof QuestionDate) {
 			st.setAttribute("type", "date");
