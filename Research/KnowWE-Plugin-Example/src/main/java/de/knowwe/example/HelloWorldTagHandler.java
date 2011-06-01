@@ -26,6 +26,7 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.taghandler.AbstractTagHandler;
 import de.d3web.we.user.UserContext;
+import de.d3web.we.utils.KnowWEUtils;
 
 /**
  * @author Alex Legler
@@ -61,7 +62,7 @@ public class HelloWorldTagHandler extends AbstractTagHandler {
 			result += ("<img src=\"KnowWEExtension/images/helloworld.png\" alt=\":)\"/>");
 		}
 
-		return result;
+		return KnowWEUtils.maskHTML(result);
 	}
 
 }

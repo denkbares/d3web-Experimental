@@ -1,0 +1,1 @@
+This is a very simple example plugin that showing first steps of knowwe plugin development.
