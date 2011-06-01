@@ -184,6 +184,16 @@
         <parameter id="css" value="defi.css" />
     </extension>    
     
+    <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="ReadStatusTagHandler">
+        <parameter id="class" value="de.knowwe.defi.readstatus.ReadStatusTagHandler" />
+        <parameter id="name" value="ReadStatusTagHandler" />
+        <parameter id="description" value="TagHandler ReadStatusTagHandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="css" value="defi.css" />
+    </extension>  
+    
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="AboutMeSaveAction">
         <parameter id="class"
