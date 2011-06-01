@@ -25,7 +25,7 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="KnowWEObjectType"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="HelloKnowWEType">
 		<parameter id="class"
 			value="de.knowwe.example.HelloKnowWEType" />

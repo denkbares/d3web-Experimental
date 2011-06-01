@@ -1,0 +1,34 @@
+!!! Hello World Example Page
+
+!! Test the HelloWorld-TagHandler:
+
+{{{
+[{KnowWEPlugin helloworld}]
+}}}
+
+renders as:
+
+[{KnowWEPlugin helloworld}]
+
+----
+
+Further, a ''count'' variable can be specified:
+
+{{{
+[{KnowWEPlugin helloworld , count = 5 }]
+}}}
+
+rendering as:
+[{KnowWEPlugin helloworld , count = 5 }]
+
+----
+
+!! Test the HelloKnowWE-Type:
+
+{{{
+Hello KnowWE!
+}}}
+
+renders as:
+Hello KnowWE!
+
