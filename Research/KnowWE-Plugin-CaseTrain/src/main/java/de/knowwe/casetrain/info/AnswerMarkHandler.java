@@ -21,6 +21,7 @@ package de.knowwe.casetrain.info;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
@@ -38,6 +39,8 @@ import de.knowwe.casetrain.message.InvalidArgumentError;
  * @created 08.05.2011
  */
 public class AnswerMarkHandler extends GeneralSubtreeHandler<AnswerMark> {
+
+	ResourceBundle bundle = ResourceBundle.getBundle("casetrain_messages");
 
 	String[] symbols = {"+", "-"};
 
@@ -76,16 +79,22 @@ public class AnswerMarkHandler extends GeneralSubtreeHandler<AnswerMark> {
 				d2 = Double.parseDouble(doubles[1]);
 		}
 		catch (Exception e) {
-			messages.add(new InvalidArgumentError("Nur '+' oder '-' oder Zahlen größer 0"));
+			messages.add(
+					new InvalidArgumentError(
+							bundle.getString("WRONG_ANSWER_MARK")));
 			return messages;
 		}
 
 		if ( d1 < 0 ) {
-			messages.add(new InvalidArgumentError("Nur Zahlen größer 0"));
+			messages.add(
+					new InvalidArgumentError(
+							bundle.getString("GREATER_ZERO")));
 		}
 
 		if (d2 >= 0) {
-			messages.add(new InvalidArgumentError("Nur Zahlen kleiner 0"));
+			messages.add(
+					new InvalidArgumentError(
+							bundle.getString("LOWER_ZERO")));
 		}
 		return messages;
 	}

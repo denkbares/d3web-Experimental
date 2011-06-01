@@ -21,6 +21,7 @@ package de.knowwe.casetrain.info;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -49,10 +50,7 @@ import de.knowwe.casetrain.type.multimedia.Video;
  */
 public class Question extends SubblockMarkup {
 
-	private final String FRAGE_TYPE = "Fragetyp";
-	private final String FRAGE_TEXT = "Fragetext";
-	private final String FRAGE_GEWICHT = "Fragegewicht";
-	private final String FRAGE_GEWICHT_WRONG = "Fragegewicht kleiner 0";
+	ResourceBundle bundle = ResourceBundle.getBundle("casetrain_messages");
 
 	public Question() {
 		super("Frage");
@@ -73,20 +71,28 @@ public class Question extends SubblockMarkup {
 				Section<QuestionWeight> fragegewichtSection = Sections.findSuccessor(s,
 						QuestionWeight.class);
 				if (fragegewichtSection == null) {
-					messages.add(new MissingAttributeWarning(FRAGE_GEWICHT));
+					messages.add(
+							new MissingAttributeWarning(
+									bundle.getString("QUESTION_WEIGHT")));
 				} else if(Double.valueOf(fragegewichtSection.getOriginalText()) < 0) {
-					messages.add(new InvalidArgumentError(FRAGE_GEWICHT_WRONG));
+					messages.add(
+							new InvalidArgumentError(
+									bundle.getString("QUESTION_WEIGHT_WRONG")));
 				}
 
 				Section<QuestionType> typSection = Sections.findSuccessor(s, QuestionType.class);
 				if (typSection == null) {
-					messages.add(new MissingComponentError(FRAGE_TYPE));
+					messages.add(
+							new MissingComponentError(
+									bundle.getString("QUESTION_TYPE")));
 				}
 
 				Section<QuestionText> fragetextSection = Sections.findSuccessor(s,
 						QuestionText.class);
 				if (fragetextSection == null) {
-					messages.add(new MissingComponentWarning(FRAGE_TEXT));
+					messages.add(
+							new MissingComponentWarning(
+									bundle.getString("QUESTION_TEXT")));
 				}
 
 				return messages;

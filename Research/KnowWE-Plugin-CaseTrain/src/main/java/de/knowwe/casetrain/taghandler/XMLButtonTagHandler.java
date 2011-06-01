@@ -16,37 +16,38 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.casetrain.type;
+package de.knowwe.casetrain.taghandler;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.rendering.DelegateRenderer;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
+import java.util.Map;
+import java.util.ResourceBundle;
+
+import de.d3web.we.taghandler.AbstractHTMLTagHandler;
 import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
 
 
 /**
  * 
  * @author Johannes Dienst
- * @created 15.05.2011
+ * @created 30.05.2011
  */
-public class AttributeContent extends AbstractType {
+public class XMLButtonTagHandler extends AbstractHTMLTagHandler {
 
-	public AttributeContent() {
-		this.setSectionFinder(new AllTextFinderTrimmed());
-		this.setCustomRenderer(new KnowWEDomRenderer<MetaLine>() {
+	private final ResourceBundle bundle = ResourceBundle.getBundle("casetrain_messages");
 
-			@Override
-			public void render(KnowWEArticle article, Section<MetaLine> sec, UserContext user, StringBuilder string) {
-
-				string.append(KnowWEUtils.maskHTML("<td>"));
-				DelegateRenderer.getInstance().render(article, sec, user, string);
-				string.append(KnowWEUtils.maskHTML("</td>"));
-
-			}
-		});
+	public XMLButtonTagHandler() {
+		super("xmlbuttonhandler");
 	}
+
+	@Override
+	public String renderHTML(String topic, UserContext user, Map<String,
+			String> parameters, String web) {
+		StringBuilder buildi = new StringBuilder();
+		buildi.append("<div id=\"xmlcasetraindiv\">" +
+				"<input type=\"button\" name=\"xmlctbutton\"" +
+				" id=\"xmlctbutton\" value=\"" +bundle.getString("PARSE_BUTTON")+"\">" +
+		"</div>");
+		buildi.append("<div id=\"casetrainparseresult\"></div>");
+		return buildi.toString();
+	}
+
 }

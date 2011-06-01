@@ -147,6 +147,11 @@ public class XMLUtils {
 			stream.flush();
 			LoadSave.saveCase(c, stream);
 			stream.close();
+
+			// Store File in Attachments
+			KnowWEEnvironment.getInstance().getWikiConnector().
+			storeAttachment(article.getTitle(), f);
+
 		}
 		catch (FileNotFoundException e) {
 			e.printStackTrace();

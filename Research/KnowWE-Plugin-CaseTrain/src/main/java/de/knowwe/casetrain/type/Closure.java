@@ -30,7 +30,6 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
-import de.knowwe.casetrain.info.Info;
 import de.knowwe.casetrain.message.MissingContentWarning;
 import de.knowwe.casetrain.message.MissingPictureNotice;
 import de.knowwe.casetrain.message.MissingTitleError;
@@ -68,17 +67,17 @@ public class Closure extends BlockMarkupType {
 
 				Section<Title> title = Sections.findSuccessor(s, Title.class);
 				if (title == null) {
-					messages.add(new MissingTitleError(Title.TITLE));
+					messages.add(new MissingTitleError(Closure.class.getSimpleName()));
 				}
 
 				Section<PlainText> plain = Sections.findSuccessor(s, PlainText.class);
 				if (plain == null) {
-					messages.add(new MissingContentWarning(Info.ABSCHLUSS));
+					messages.add(new MissingContentWarning(Closure.class.getSimpleName()));
 				}
 
 				Section<Image> pic = Sections.findSuccessor(s, Image.class);
 				if (pic == null) {
-					messages.add(new MissingPictureNotice(Info.ABSCHLUSS));
+					messages.add(new MissingPictureNotice(Closure.class.getSimpleName()));
 				}
 
 				return messages;

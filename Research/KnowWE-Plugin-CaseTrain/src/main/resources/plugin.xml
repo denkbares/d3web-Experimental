@@ -76,6 +76,25 @@
 		<parameter id="css" value="caseTrain.css" />
 	</extension>
 
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="XMLButtonTagHandler">
+		<parameter id="class" value="de.knowwe.casetrain.taghandler.XMLButtonTagHandler" />
+		<parameter id="name" value="XMLButtonTagHandler" />
+		<parameter id="description" value="TagHandler XMLButtonTagHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="script" value="CaseTrain.js" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="ParseXMLAction">
+		<parameter id="class" value="de.knowwe.casetrain.taghandler.ParseXMLAction" />
+		<parameter id="name" value="ParseXMLAction" />
+		<parameter id="description" value="KnowWEAction ParseXMLAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+
  <!--   
 
    

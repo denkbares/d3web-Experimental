@@ -44,8 +44,6 @@ import de.knowwe.casetrain.type.general.SubblockMarkup;
  */
 public class AnswersBlock extends SubblockMarkup {
 
-	private final String ANTWORT = "Antwort";
-
 	public AnswersBlock() {
 		super("Antworten");
 		PlainText plain = new PlainText();
@@ -67,7 +65,7 @@ public class AnswersBlock extends SubblockMarkup {
 				Sections.findSuccessorsOfType(s, AnswerLine.class, found);
 
 				if (found.isEmpty()) {
-					messages.add(new MissingComponentWarning(ANTWORT));
+					messages.add(new MissingComponentWarning(AnswerLine.class.getSimpleName()));
 				}
 
 				return messages;
@@ -81,9 +79,12 @@ public class AnswersBlock extends SubblockMarkup {
 	 * @created 09.05.2011
 	 */
 	public class Praefix extends AbstractType {
+
+		public static final String NAME = "Praefix";
+
 		public Praefix() {
 			this.setSectionFinder(
-					new RegexSectionFinder(AnswersBlockValidator.PRAEFIX + ":.*"));
+					new RegexSectionFinder(NAME + ":.*"));
 			this.setCustomRenderer(new DivStyleClassRenderer("praefix"));
 		}
 	}
@@ -94,9 +95,12 @@ public class AnswersBlock extends SubblockMarkup {
 	 * @created 09.05.2011
 	 */
 	public class Postfix extends AbstractType {
+
+		public static final String NAME = "Postfix";
+
 		public Postfix() {
 			this.setSectionFinder(
-					new RegexSectionFinder(AnswersBlockValidator.POSTFIX + ":.*"));
+					new RegexSectionFinder(NAME + ":.*"));
 			this.setCustomRenderer(new DivStyleClassRenderer("postfix"));
 		}
 	}
@@ -107,9 +111,12 @@ public class AnswersBlock extends SubblockMarkup {
 	 * @created 09.05.2011
 	 */
 	public class Heading extends AbstractType {
+
+		public static final String NAME = "Überschrift";
+
 		public Heading() {
 			this.setSectionFinder(
-					new RegexSectionFinder(AnswersBlockValidator.UEBERSCHRIFT + ":.*"));
+					new RegexSectionFinder(NAME + ":.*"));
 			this.setCustomRenderer(new DivStyleClassRenderer("ueberschrift"));
 		}
 	}

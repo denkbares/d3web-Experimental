@@ -63,13 +63,6 @@ import de.knowwe.casetrain.util.Utils;
  */
 public class Info extends BlockMarkupType {
 
-	public static final String FRAGE = "Frage";
-	public static final String EINLEITUNG = "Einleitung";
-	public static final String ABSCHLUSS = "Abschluss";
-	public static final String ERKLAERUNG = "Erklaerung";
-	public static final String ANTWORTEN = "Antworten";
-	public static final String ABSCHNITT = "Abschnitt";
-
 	public Info() {
 		super("Info");
 		this.addContentType(new Hint());
@@ -131,7 +124,7 @@ public class Info extends BlockMarkupType {
 					Sections.findSuccessor(s, BlockMarkupContent.class).getChildren();
 				if ( ((title != null) && (blockMarkupChildren.size() == 1))
 						|| blockMarkupChildren.size() == 0) {
-					messages.add(new MissingContentWarning(Info.ABSCHNITT));
+					messages.add(new MissingContentWarning(Info.class.getSimpleName()));
 				} else {
 					messages.addAll(this.testQuestionAnswerComposition(s));
 				}
@@ -142,12 +135,12 @@ public class Info extends BlockMarkupType {
 				Section<Introduction> einleitung = Sections.findSuccessor(s.getArticle().getSection(),
 						Introduction.class);
 				if (einleitung == null) {
-					messages.add(new MissingComponentError(EINLEITUNG));
+					messages.add(new MissingComponentError(Introduction.class.getSimpleName()));
 				}
 				Section<Closure> abschluss = Sections.findSuccessor(s.getArticle().getSection(),
 						Closure.class);
 				if (abschluss == null) {
-					messages.add(new MissingComponentError(ABSCHLUSS));
+					messages.add(new MissingComponentError(Introduction.class.getSimpleName()));
 				}
 				/////////////////////////////////////////////////////////////////
 
@@ -173,7 +166,7 @@ public class Info extends BlockMarkupType {
 				List<Section<Question>> found = new ArrayList<Section<Question>>();
 				Sections.findSuccessorsOfType(s, Question.class, found);
 				if (found.isEmpty()) {
-					messages.add(new MissingComponentWarning(FRAGE));
+					messages.add(new MissingComponentWarning(Question.class.getSimpleName()));
 					return messages;
 				}
 
@@ -201,10 +194,14 @@ public class Info extends BlockMarkupType {
 						}
 						actual = sec;
 						if (erklMissing) {
-							messages.add(new MissingComponentWarning(ERKLAERUNG));
+							messages.add(
+									new MissingComponentWarning(
+											Explanation.class.getSimpleName()));
 						}
 						if (antwortenMissing) {
-							messages.add(new MissingComponentWarning(ANTWORTEN));
+							messages.add(
+									new MissingComponentWarning(
+											AnswersBlock.class.getSimpleName()));
 						}
 						erklMissing = true;
 						antwortenMissing = true;

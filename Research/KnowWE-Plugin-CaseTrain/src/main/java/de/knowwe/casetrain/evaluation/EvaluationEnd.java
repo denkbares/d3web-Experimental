@@ -58,9 +58,10 @@ public class EvaluationEnd extends SubblockMarkup {
 				//					messages.add(new MissingTitleError(Title.TITLE));
 				//				}
 
-				Section<SubblockMarkupContent> plain = Sections.findSuccessor(s, SubblockMarkupContent.class);
+				Section<SubblockMarkupContent> plain =
+					Sections.findSuccessor(s, SubblockMarkupContent.class);
 				if (plain.getOriginalText() == null || plain.getOriginalText().trim().equals("")) {
-					messages.add(new MissingContentWarning("EvaluationEnd"));
+					messages.add(new MissingContentWarning(EvaluationEnd.class.getSimpleName()));
 				}
 
 				return messages;

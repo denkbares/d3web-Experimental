@@ -20,6 +20,7 @@ package de.knowwe.casetrain.info;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.Section;
@@ -56,10 +57,6 @@ import de.knowwe.casetrain.message.MissingContentWarning;
  */
 public class AnswersBlockValidator {
 
-	public static final String PRAEFIX = "Präfix";
-	public static final String POSTFIX = "Postfix";
-	public static final String UEBERSCHRIFT = "Überschrift";
-
 	public static final String MC = "MC";
 	public static final String OC = "OC";
 	public static final String W  = "W";
@@ -74,7 +71,7 @@ public class AnswersBlockValidator {
 	private final Pattern regex;
 	private static AnswersBlockValidator uniqueInstance;
 
-	private static final String UNKNOWN_FRAGE_TYPE = "Fragetyp unbekannt";
+	ResourceBundle bundle = ResourceBundle.getBundle("casetrain_messages");
 
 	public static AnswersBlockValidator getInstance() {
 		if (uniqueInstance == null) {
@@ -133,7 +130,9 @@ public class AnswersBlockValidator {
 			boolean evaluation) {
 		Section<QuestionType> typ = Sections.findSuccessor(frage, QuestionType.class);
 		if (typ == null) {
-			messages.add(new InvalidAttributeError(AnswersBlockValidator.UNKNOWN_FRAGE_TYPE));
+			messages.add(
+					new InvalidAttributeError(
+							bundle.getString("UNKNOWN_FRAGE_TYPE")));
 			return;
 		}
 
@@ -458,16 +457,16 @@ public class AnswersBlockValidator {
 		List<Section<Praefix>> found = new ArrayList<Section<Praefix>>();
 		Sections.findSuccessorsOfType(answersBlock, Praefix.class, found);
 		if (found.size() > 1)
-			messages.add(new DuplicateComponentError(PRAEFIX));
+			messages.add(new DuplicateComponentError(Praefix.class.getSimpleName()));
 		if (found.size() == 0)
-			messages.add(new MissingComponentWarning(PRAEFIX));
+			messages.add(new MissingComponentWarning(Praefix.class.getSimpleName()));
 
 		List<Section<Postfix>> found2 = new ArrayList<Section<Postfix>>();
 		Sections.findSuccessorsOfType(answersBlock, Postfix.class, found2);
 		if (found2.size() > 1)
-			messages.add(new DuplicateComponentError(POSTFIX));
+			messages.add(new DuplicateComponentError(Postfix.class.getSimpleName()));
 		if (found2.size() == 0)
-			messages.add(new MissingComponentWarning(POSTFIX));
+			messages.add(new MissingComponentWarning(Postfix.class.getSimpleName()));
 	}
 
 	/**
@@ -480,8 +479,8 @@ public class AnswersBlockValidator {
 		List<Section<Heading>> found = new ArrayList<Section<Heading>>();
 		Sections.findSuccessorsOfType(answersBlock, Heading.class, found);
 		if (found.size() > 1)
-			messages.add(new DuplicateComponentError(UEBERSCHRIFT));
+			messages.add(new DuplicateComponentError(Heading.class.getSimpleName()));
 		if (found.size() == 0)
-			messages.add(new MissingComponentWarning(UEBERSCHRIFT));
+			messages.add(new MissingComponentWarning(Heading.class.getSimpleName()));
 	}
 }

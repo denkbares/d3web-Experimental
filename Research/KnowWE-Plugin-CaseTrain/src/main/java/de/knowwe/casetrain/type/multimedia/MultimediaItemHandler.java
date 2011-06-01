@@ -21,6 +21,7 @@ package de.knowwe.casetrain.type.multimedia;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -43,6 +44,8 @@ import de.knowwe.casetrain.type.multimedia.MultimediaItem.MultimediaItemContent;
  */
 public class MultimediaItemHandler extends GeneralSubtreeHandler<MultimediaItem>  {
 
+	private final ResourceBundle bundle = ResourceBundle.getBundle("casetrain_messages");
+
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<MultimediaItem> s) {
 
@@ -56,7 +59,7 @@ public class MultimediaItemHandler extends GeneralSubtreeHandler<MultimediaItem>
 		String t = mmI.getOriginalText().trim();
 
 		if (t.equals("")) {
-			messages.add(new MissingContentWarning("MultimediaItem"));
+			messages.add(new MissingContentWarning(MultimediaItem.class.getSimpleName()));
 			return messages;
 		}
 
@@ -65,7 +68,9 @@ public class MultimediaItemHandler extends GeneralSubtreeHandler<MultimediaItem>
 				messages.add(new MissingPictureError(t));
 			}
 			if (!(t.endsWith(".gif") || t.endsWith(".jpg") || t.endsWith("png"))) {
-				messages.add(new InvalidArgumentError("Bilddatei nicht als gif/jpg/png hochgeladen"));
+				messages.add(
+						new InvalidArgumentError(
+								bundle.getString("WRONG_IMAGE_FORMAT")));
 			}
 
 		} else if (s.get().isAssignableFromType(Video.class)) {
@@ -73,14 +78,18 @@ public class MultimediaItemHandler extends GeneralSubtreeHandler<MultimediaItem>
 				messages.add(new MissingVideoError(t));
 			}
 			if (!t.endsWith(".flv")) {
-				messages.add(new InvalidArgumentError("Videodatei nicht als flv hochgeladen"));
+				messages.add(
+						new InvalidArgumentError(
+								bundle.getString("WRONG_VIDEO_FORMAT")));
 			}
 
 		} else if (s.get().isAssignableFromType(Audio.class)) {
 			if(!attachments.contains(t))
 				messages.add(new MissingAudioError(t));
 			if (!t.endsWith(".mp3")) {
-				messages.add(new InvalidArgumentError("Audiodatei nicht als mp3 hochgeladen"));
+				messages.add(
+						new InvalidArgumentError(
+								bundle.getString("WRONG_AUDIO_FORMAT")));
 			}
 
 		}

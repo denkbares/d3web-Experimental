@@ -52,7 +52,6 @@ import de.knowwe.casetrain.util.Utils;
  */
 public class MetaData extends BlockMarkupType {
 
-	private final String INFO_ABSCHNITT = "Infoabschnitt";
 	private final String META = "MetaDaten";
 
 	public MetaData() {
@@ -88,11 +87,9 @@ public class MetaData extends BlockMarkupType {
 				DelegateRenderer.getInstance().render(article, sec, user, string);
 				string.append(KnowWEUtils.maskHTML("</table>"));
 				string.append(KnowWEUtils.maskHTML("/%\r\n"));
-
-				// Only for testing
-				//				XMLUtils.createXMLWithBindings(article);
 			}
 		});
+
 		this.addSubtreeHandler(new GeneralSubtreeHandler<MetaData>() {
 
 			@Override
@@ -102,7 +99,9 @@ public class MetaData extends BlockMarkupType {
 				Section<Info> infoSection = Sections.findSuccessor(s.getArticle().getSection(),
 						Info.class);
 				if (infoSection == null) {
-					messages.add(new MissingComponentError(INFO_ABSCHNITT));
+					messages.add(
+							new MissingComponentError(
+									Info.class.getSimpleName()));
 				}
 
 				List<Section<AttributeName>> atts = new ArrayList<Section<AttributeName>>();

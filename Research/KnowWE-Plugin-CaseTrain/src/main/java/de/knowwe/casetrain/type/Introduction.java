@@ -30,7 +30,6 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
-import de.knowwe.casetrain.info.Info;
 import de.knowwe.casetrain.message.MissingContentWarning;
 import de.knowwe.casetrain.message.MissingPictureNotice;
 import de.knowwe.casetrain.message.MissingTitleError;
@@ -73,12 +72,16 @@ public class Introduction extends BlockMarkupType {
 
 				Section<PlainText> plain = Sections.findSuccessor(s, PlainText.class);
 				if (plain == null) {
-					messages.add(new MissingContentWarning(Info.EINLEITUNG));
+					messages.add(
+							new MissingContentWarning(
+									Introduction.class.getSimpleName()));
 				}
 
 				Section<Image> pic = Sections.findSuccessor(s, Image.class);
 				if (pic == null) {
-					messages.add(new MissingPictureNotice(Info.EINLEITUNG));
+					messages.add(
+							new MissingPictureNotice(
+									Introduction.class.getSimpleName()));
 				}
 
 				return messages;

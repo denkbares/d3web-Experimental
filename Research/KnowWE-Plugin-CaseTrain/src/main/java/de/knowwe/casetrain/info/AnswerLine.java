@@ -34,6 +34,9 @@ import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.casetrain.info.AnswersBlock.Heading;
+import de.knowwe.casetrain.info.AnswersBlock.Postfix;
+import de.knowwe.casetrain.info.AnswersBlock.Praefix;
 import de.knowwe.casetrain.renderer.DivStyleClassRenderer;
 import de.knowwe.casetrain.renderer.MouseOverTitleRenderer;
 
@@ -71,9 +74,9 @@ public class AnswerLine extends AbstractType {
 			Pattern p = Pattern.compile("\\{[0-9]+\\}");
 			Matcher m = p.matcher(text);
 			if (m.matches()) return results;
-			if (text.startsWith(AnswersBlockValidator.PRAEFIX)
-					|| text.startsWith(AnswersBlockValidator.POSTFIX)
-					|| text.startsWith(AnswersBlockValidator.UEBERSCHRIFT)) {
+			if (text.startsWith(Praefix.NAME)
+					|| text.startsWith(Postfix.NAME)
+					|| text.startsWith(Heading.NAME)) {
 				return results;
 			}
 			results.add(new SectionFinderResult(0, text.length()));

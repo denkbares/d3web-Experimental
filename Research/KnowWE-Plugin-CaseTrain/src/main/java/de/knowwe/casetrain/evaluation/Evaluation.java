@@ -21,6 +21,7 @@ package de.knowwe.casetrain.evaluation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
@@ -59,6 +60,8 @@ import de.knowwe.casetrain.util.Utils;
  * @created 15.05.2011
  */
 public class Evaluation extends BlockMarkupType {
+
+	ResourceBundle bundle = ResourceBundle.getBundle("casetrain_messages");
 
 	public Evaluation() {
 		super("Evaluation");
@@ -115,7 +118,7 @@ public class Evaluation extends BlockMarkupType {
 				List<Section<? extends Type>> blockMarkupChildren =
 					Sections.findSuccessor(s, BlockMarkupContent.class).getChildren();
 				if ( blockMarkupChildren.size() == 0 ) {
-					messages.add(new MissingContentWarning(Info.ABSCHNITT));
+					messages.add(new MissingContentWarning(Info.class.getSimpleName()));
 				} else {
 					messages.addAll(this.testQuestionAnswerComposition(s));
 				}
@@ -142,7 +145,7 @@ public class Evaluation extends BlockMarkupType {
 				List<Section<Question>> found = new ArrayList<Section<Question>>();
 				Sections.findSuccessorsOfType(s, Question.class, found);
 				if (found.isEmpty()) {
-					messages.add(new MissingComponentWarning(Info.FRAGE));
+					messages.add(new MissingComponentWarning(Question.class.getSimpleName()));
 					return messages;
 				}
 
@@ -166,7 +169,9 @@ public class Evaluation extends BlockMarkupType {
 						}
 						actual = sec;
 						if (antwortenMissing) {
-							messages.add(new MissingComponentWarning(Info.ANTWORTEN));
+							messages.add(
+									new MissingComponentWarning(
+											AnswersBlock.class.getSimpleName()));
 						}
 						antwortenMissing = true;
 						continue;
@@ -181,7 +186,7 @@ public class Evaluation extends BlockMarkupType {
 							if (!(AnswersBlockValidator.getInstance()
 									.getTypesMultiple().contains(typ))) {
 								messages.add(new InvalidArgumentError(
-										"Mehrfache Antworten bei diesem FrageTyp nicht zulässig: "
+										bundle.getString("NO_MULTIPLE_ANSWERS")
 										+ typ));
 							}
 
