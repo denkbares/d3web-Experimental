@@ -128,10 +128,6 @@ public class Hernia extends HttpServlet {
 			}
 			sourceSave = source;
 		}
-
-		d3wcon.setQuestionCount(0);
-		d3wcon.setQuestionnaireCount(0);
-
 		/*
 		 * HERNIA specific Login is done via external part-system which sends
 		 * respective URL parameters for further processing

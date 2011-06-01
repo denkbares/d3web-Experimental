@@ -61,9 +61,6 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 	public String renderTerminologyObject(ContainerCollection cc, TerminologyObject to,
 			TerminologyObject parent) {
 
-		D3webConnector.getInstance().setQuestionCount(
-				D3webConnector.getInstance().getQuestionCount() + 1);
-
 		StringBuilder sb = new StringBuilder();
 
 		// return if the InterviewObject is null
@@ -79,7 +76,7 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 		// set some basic properties
 		st.setAttribute("fullId", "q_" + to.getName().replace(" ", "_"));
 		st.setAttribute("title", to.getName());
-		st.setAttribute("count", D3webConnector.getInstance().getQuestionCount());
+		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
 		// TODO extend for HERNIA --> Popup in separate Window?!
 		// read html popups from properties

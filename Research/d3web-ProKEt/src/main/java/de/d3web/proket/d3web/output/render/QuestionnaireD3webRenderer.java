@@ -46,9 +46,6 @@ public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements
 	public String renderTerminologyObject(ContainerCollection cc, TerminologyObject to,
 			TerminologyObject parent) {
 
-		D3webConnector.getInstance().setQuestionnaireCount(
-				D3webConnector.getInstance().getQuestionnaireCount() + 1);
-
 		StringBuilder sb = new StringBuilder();
 
 		// return if the InterviewObject is null
@@ -63,7 +60,7 @@ public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements
 
 		st.setAttribute("fullId", to.getName().replace(" ", "_"));
 		st.setAttribute("title", to.getName());
-		st.setAttribute("count", D3webConnector.getInstance().getQuestionnaireCount());
+		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
 		String resString = to.getInfoStore().getValue(ProKEtProperties.POPUP);
 		if (resString != null) {

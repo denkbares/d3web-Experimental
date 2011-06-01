@@ -20,8 +20,13 @@
 package de.d3web.proket.d3web.input;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.knowledge.terminology.QContainer;
+import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Session;
 import de.d3web.proket.data.DialogStrategy;
 import de.d3web.proket.data.DialogType;
@@ -35,10 +40,6 @@ import de.d3web.proket.data.IndicationMode;
  * @created 16.10.2010
  */
 public class D3webConnector {
-
-	private int quesCount = 0;
-
-	private int qCount = 0;
 
 	private static D3webConnector instance;
 
@@ -56,6 +57,18 @@ public class D3webConnector {
 
 	/* The knowledge base */
 	private KnowledgeBase kb;
+
+	/* Map that contains an ID for each TO connected to the root */
+	private Map<TerminologyObject, String> idMap;
+
+	/* Counter for question IDs */
+	private int qCount = 1;
+
+	/* Counter for questionnaire IDs */
+	private int qcCount = 0;
+
+	/* Counter for solution IDs */
+	private int sCount = 0;
 
 	/* The Css parsed from the d3web XML */
 	private String css;
@@ -94,8 +107,6 @@ public class D3webConnector {
 	}
 
 	private D3webConnector() {
-		this.quesCount = 0;
-		this.qCount = 0;
 	}
 
 	public Session getSession() {
@@ -136,6 +147,36 @@ public class D3webConnector {
 
 	public void setKb(KnowledgeBase kb) {
 		this.kb = kb;
+		this.idMap = new HashMap<TerminologyObject, String>();
+		generateIDs(kb.getRootQASet());
+		generateIDs(kb.getRootSolution());
+
+	}
+
+	private void generateIDs(TerminologyObject... tos) {
+		for (TerminologyObject to : tos) {
+			int count = -1;
+			if (to instanceof QContainer) {
+				count = qcCount;
+				qcCount++;
+			}
+			else if (to instanceof Question) {
+				count = qCount;
+				qCount++;
+			}
+			else if (to instanceof Solution) {
+				count = sCount;
+				sCount++;
+			}
+			idMap.put(to, count == -1 ? "" : String.valueOf(count));
+			generateIDs(to.getChildren());
+		}
+	}
+
+	public String getID(TerminologyObject to) {
+		String id = idMap.get(to);
+		if (id == null) id = "";
+		return id;
 	}
 
 	public String getCss() {
@@ -184,22 +225,6 @@ public class D3webConnector {
 
 	public void setKbName(String kbn) {
 		this.kbn = kbn;
-	}
-
-	public int getQuestionnaireCount() {
-		return this.quesCount;
-	}
-
-	public void setQuestionnaireCount(int qc) {
-		this.quesCount = qc;
-	}
-
-	public int getQuestionCount() {
-		return this.qCount;
-	}
-
-	public void setQuestionCount(int qc) {
-		this.qCount = qc;
 	}
 
 	public String getUserprefix() {

@@ -27,7 +27,6 @@ import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
-import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.interviewmanager.Form;
@@ -57,9 +56,6 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 	public String renderTerminologyObject(ContainerCollection cc, TerminologyObject to,
 			TerminologyObject parent) {
 
-		D3webConnector.getInstance().setQuestionCount(
-				D3webConnector.getInstance().getQuestionCount() + 1);
-
 		StringBuilder sb = new StringBuilder();
 
 		// return if the InterviewObject is null
@@ -75,7 +71,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 		// set some basic properties
 		st.setAttribute("fullId", "q_" + to.getName().replace(" ", "_"));
 		st.setAttribute("title", to.getName());
-		st.setAttribute("count", D3webConnector.getInstance().getQuestionCount());
+		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
 		// TODO extend for HERNIA
 		// read html popups from properties
@@ -85,9 +81,8 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 		}
 
 		// get d3web properties
-		Session sess = super.d3webSession;
-		Form current = sess.getInterview().nextForm();
-		Blackboard bb = sess.getBlackboard();
+		Form current = d3webSession.getInterview().nextForm();
+		Blackboard bb = d3webSession.getBlackboard();
 		Value val = bb.getValue((ValueObject) to);
 
 		// QContainer indicated

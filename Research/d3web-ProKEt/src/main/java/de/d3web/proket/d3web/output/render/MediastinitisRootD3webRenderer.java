@@ -31,7 +31,7 @@ import de.d3web.proket.data.DialogType;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
-public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements RootD3webRenderer {
+public class MediastinitisRootD3webRenderer extends AbstractD3webRenderer implements RootD3webRenderer {
 
 	/**
 	 * Basic rendering of the root, i.e., the framing stuff of a dialog, like

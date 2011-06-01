@@ -225,8 +225,6 @@ public class D3webDialog extends HttpServlet {
 			httpSession.setAttribute("d3webSession", d3webSession);
 		}
 
-		d3wcon.setQuestionCount(0);
-		d3wcon.setQuestionnaireCount(0);
 		// switch action as defined by the servlet call
 		if (action.equalsIgnoreCase("show")) {
 			show(request, response, httpSession);

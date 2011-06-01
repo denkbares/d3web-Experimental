@@ -188,8 +188,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 			// as this is done after having inserted the normal child, the
 			// follow up is appended in between the child and its follow-up
 			if (child instanceof Question) {
-				String fus = renderFollowUps(cc, child, to);
-				childrenHTML.append(fus);
+				childrenHTML.append(renderFollowUps(cc, child, to));
 			}
 		}
 
@@ -569,33 +568,6 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 						|| bb.getIndication(q).getState() == State.INSTANT_INDICATED) {
 
 				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Checks, whether a TerminologyObject child is the child of another
-	 * TerminologyObject parent. That is, whether child is nested hierarchically
-	 * underneath parent.
-	 * 
-	 * @created 30.01.2011
-	 * @param parent The parent TerminologyObject
-	 * @param child The child to check
-	 * @return true, if child is the child of parent
-	 */
-	private boolean hasChild(TerminologyObject parent, TerminologyObject child) {
-
-		if (parent.getChildren() != null && parent.getChildren().length != 0) {
-			for (TerminologyObject c : parent.getChildren()) {
-				if (c.equals(child)) {
-					return true;
-				}
-			}
-			for (TerminologyObject c : parent.getChildren()) {
-				if (c.getChildren().length != 0) {
-					return hasChild(c, child);
-				}
 			}
 		}
 		return false;

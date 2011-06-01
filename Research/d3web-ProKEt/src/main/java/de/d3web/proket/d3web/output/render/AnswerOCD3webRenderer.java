@@ -70,7 +70,7 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
 		st.setAttribute("realAnswerType", "oc");
 		st.setAttribute("parentFullId", to.getName().replace(" ", "_"));
 		st.setAttribute("text", c.getName());
-		st.setAttribute("count", D3webConnector.getInstance().getQuestionCount());
+		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
 		Blackboard bb = d3webSession.getBlackboard();
 		Value value = bb.getValue((ValueObject) to);
