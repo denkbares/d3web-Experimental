@@ -203,12 +203,13 @@ public class D3webDialog extends HttpServlet {
 			if (!d3webParser.getLanguage().equals("")) {
 				d3wcon.setLanguage(d3webParser.getLanguage());
 			}
+			streamImages();
 		}
 
 		// Get the current httpSession or a new one
 		HttpSession httpSession = request.getSession(true);
 
-		streamImages();
+
 		// if (httpSession.getAttribute("imgStreamed") == null) {
 		// streamImages();
 		// httpSession.setAttribute("imgStreamed", true);
