@@ -22,6 +22,7 @@ package de.knowwe.kdom.classHierarchy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDFS;
@@ -30,7 +31,7 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.message.NoSuchObjectError;
+import de.d3web.we.kdom.report.message.ObjectNotFoundWarning;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.subtreeHandler.IncrementalConstraint;
 import de.knowwe.core.dashtree.DashTreeElement;
@@ -40,10 +41,10 @@ import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.termObject.IRITermReference;
 
-public class SubClassingDashTreeElement extends DashTreeElementContent implements
-		IncrementalConstraint<SubClassingDashTreeElement> {
+public class SubClassingDashTreeElementContent extends DashTreeElementContent implements
+		IncrementalConstraint<SubClassingDashTreeElementContent> {
 
-	public SubClassingDashTreeElement() {
+	public SubClassingDashTreeElementContent() {
 		this.addSubtreeHandler(new SubClassingDashTreeElementOWLSubTreeHandler());
 		IRITermReference ref = new IRITermReference();
 		ref.setSectionFinder(new AllTextFinderTrimmed());
@@ -51,7 +52,7 @@ public class SubClassingDashTreeElement extends DashTreeElementContent implement
 	}
 
 	@Override
-	public boolean violatedConstraints(KnowWEArticle article, Section<SubClassingDashTreeElement> s) {
+	public boolean violatedConstraints(KnowWEArticle article, Section<SubClassingDashTreeElementContent> s) {
 		Section<? extends DashTreeElement> fatherDashTreeElement = DashTreeUtils.getFatherDashTreeElement(s.getFather());
 		if (fatherDashTreeElement == null) return false; // root of dashTree
 		return fatherDashTreeElement.isOrHasChangedSuccessor(s.getArticle().getTitle(),
@@ -59,10 +60,33 @@ public class SubClassingDashTreeElement extends DashTreeElementContent implement
 	}
 
 	private class SubClassingDashTreeElementOWLSubTreeHandler extends
-			RDF2GoSubtreeHandler<SubClassingDashTreeElement> {
+			RDF2GoSubtreeHandler<SubClassingDashTreeElementContent> {
+		
+		@Override
+		public void destroy(KnowWEArticle article, Section<SubClassingDashTreeElementContent> s) {
+			if (s.getOriginalText().startsWith("Hermes-Object") | s.getOriginalText().startsWith("Kulturkreis")) {
+				int k = 0;
+				k++;
+			}
+			super.destroy(article, s);
+		}
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<SubClassingDashTreeElement> elementContent) {
+		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<SubClassingDashTreeElementContent> elementContent) {
+			if (elementContent.hasErrorInSubtree(article)) {
+				this.destroy(article, elementContent);
+				Section<DashTreeElement> element = Sections.findAncestorOfType(elementContent, DashTreeElement.class);
+				List<Section<DashTreeElement>> found = DashTreeUtils.findChildrenDashtreeElements(element);
+				for (Section<DashTreeElement> section : found) {
+					Section<SubClassingDashTreeElementContent> content = Sections.findSuccessor(section, SubClassingDashTreeElementContent.class);
+					this.destroy(article, content);
+				}
+				return new ArrayList<KDOMReportMessage>(0);
+			}
+			if (elementContent.getOriginalText().startsWith("Hermes-Object") | elementContent.getOriginalText().startsWith("Kulturkreis")) {
+				int k = 0;
+				k++;
+			}
 			Section<?> element = elementContent.getFather();
 			if (element.get().isAssignableFromType(DashTreeElement.class)) {
 				Section<? extends DashTreeElement> father = DashTreeUtils
@@ -76,7 +100,7 @@ public class SubClassingDashTreeElement extends DashTreeElementContent implement
 					URI localURI = childElement.get().getNode(childElement);
 					URI fatherURI = fatherElement.get().getNode(fatherElement);
 					if (localURI == null || fatherURI == null) {
-						return Arrays.asList((KDOMReportMessage) new NoSuchObjectError(
+						return Arrays.asList((KDOMReportMessage) new ObjectNotFoundWarning(
 								element.getOriginalText()));
 					}
 					Rdf2GoCore.getInstance().addStatement(localURI,
@@ -86,6 +110,8 @@ public class SubClassingDashTreeElement extends DashTreeElementContent implement
 
 			return new ArrayList<KDOMReportMessage>(0);
 		}
+
+		
 
 	}
 

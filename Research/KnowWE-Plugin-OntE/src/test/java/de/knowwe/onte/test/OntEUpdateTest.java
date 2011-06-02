@@ -41,7 +41,7 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
-import de.knowwe.kdom.classHierarchy.SubClassingDashTreeElement;
+import de.knowwe.kdom.classHierarchy.SubClassingDashTreeElementContent;
 import de.knowwe.kdom.turtle.TurtleMarkup;
 import de.knowwe.onte.test.util.Query;
 import de.knowwe.onte.test.util.Vocabulary;
@@ -168,7 +168,7 @@ public class OntEUpdateTest {
 		/* Change text */
 		String oldText = "King";
 		String newText = "Queen";
-		changeText(oldText, newText, SubClassingDashTreeElement.class);
+		changeText(oldText, newText, SubClassingDashTreeElementContent.class);
 		oldText = "[def King isA:: Class]";
 		newText = "[def Queen isA:: Class]";
 		changeText(oldText, newText, TurtleMarkup.class);

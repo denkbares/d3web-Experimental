@@ -25,7 +25,7 @@ import de.knowwe.core.dashtree.DashTree;
 public class SubClassingDashtree extends DashTree {
 
 	public SubClassingDashtree() {
-		replaceDashTreeElementContentType(new SubClassingDashTreeElement());
+		replaceDashTreeElementContentType(new SubClassingDashTreeElementContent());
 		this.setSectionFinder(new AllTextSectionFinder());
 	}
 
