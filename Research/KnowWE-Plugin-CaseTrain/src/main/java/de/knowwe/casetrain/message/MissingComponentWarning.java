@@ -21,6 +21,7 @@
 package de.knowwe.casetrain.message;
 
 import de.d3web.we.kdom.report.KDOMWarning;
+import de.knowwe.casetrain.util.Utils;
 
 public class MissingComponentWarning extends KDOMWarning {
 
@@ -32,6 +33,6 @@ public class MissingComponentWarning extends KDOMWarning {
 
 	@Override
 	public String getVerbalization() {
-		return "Fehlende Komponente: " + text;
+		return Utils.getBundle().getString("MISSING_COMPONENT_WARNING") + text;
 	}
 }

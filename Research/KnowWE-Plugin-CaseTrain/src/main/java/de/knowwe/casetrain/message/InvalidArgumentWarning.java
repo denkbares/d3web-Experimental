@@ -19,6 +19,7 @@
 package de.knowwe.casetrain.message;
 
 import de.d3web.we.kdom.report.KDOMWarning;
+import de.knowwe.casetrain.util.Utils;
 
 
 /**
@@ -36,7 +37,7 @@ public class InvalidArgumentWarning extends KDOMWarning {
 
 	@Override
 	public String getVerbalization() {
-		return "Invalid Argument: " + text;
+		return Utils.getBundle().getString("INVALID_ARGUMENT_WARNING") + text;
 	}
 
 }

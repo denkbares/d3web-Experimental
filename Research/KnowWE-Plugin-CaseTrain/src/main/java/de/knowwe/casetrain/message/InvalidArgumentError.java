@@ -20,6 +20,7 @@
 package de.knowwe.casetrain.message;
 
 import de.d3web.we.kdom.report.KDOMError;
+import de.knowwe.casetrain.util.Utils;
 
 public class InvalidArgumentError extends KDOMError {
 
@@ -31,6 +32,6 @@ public class InvalidArgumentError extends KDOMError {
 
 	@Override
 	public String getVerbalization() {
-		return "Invalid Argument: " + text;
+		return Utils.getBundle().getString("INVALID_ARGUMENT_ERROR") + text;
 	}
 }

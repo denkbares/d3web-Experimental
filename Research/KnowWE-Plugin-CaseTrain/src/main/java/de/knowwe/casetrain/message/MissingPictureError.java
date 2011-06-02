@@ -19,6 +19,7 @@
 package de.knowwe.casetrain.message;
 
 import de.d3web.we.kdom.report.KDOMError;
+import de.knowwe.casetrain.util.Utils;
 
 
 /**
@@ -36,7 +37,7 @@ public class MissingPictureError extends KDOMError {
 
 	@Override
 	public String getVerbalization() {
-		return "Referenziertes Bild ist nicht im Anhang hochgeladen: " + text;
+		return Utils.getBundle().getString("MISSING_PICTURE_ERROR") + text;
 	}
 
 }

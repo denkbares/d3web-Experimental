@@ -20,6 +20,7 @@
 package de.knowwe.casetrain.util;
 
 import java.util.Collection;
+import java.util.ResourceBundle;
 
 import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMNotice;
@@ -29,7 +30,14 @@ import de.d3web.we.utils.KnowWEUtils;
 
 public class Utils {
 
-	public static void renderKDOMReportMessageBlock(Collection<? extends KDOMReportMessage> messages, StringBuilder string) {
+	private static final ResourceBundle bundle = ResourceBundle.getBundle("casetrain_messages");
+
+	public static ResourceBundle getBundle() {
+		return bundle;
+	}
+
+	public static void renderKDOMReportMessageBlock(
+			Collection<? extends KDOMReportMessage> messages, StringBuilder string) {
 		if (messages == null) return;
 		if (messages.size() == 0) return;
 

@@ -19,6 +19,7 @@
 package de.knowwe.casetrain.message;
 
 import de.d3web.we.kdom.report.KDOMError;
+import de.knowwe.casetrain.util.Utils;
 
 
 /**
@@ -36,7 +37,7 @@ public class DuplicateComponentError extends KDOMError {
 
 	@Override
 	public String getVerbalization() {
-		return "Komponente mehr als einfach vorhanden: " + text;
+		return Utils.getBundle().getString("DOUBLE_COMPONENT") + text;
 	}
 
 }

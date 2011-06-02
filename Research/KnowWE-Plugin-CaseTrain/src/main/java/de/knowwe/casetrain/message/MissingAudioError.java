@@ -19,6 +19,7 @@
 package de.knowwe.casetrain.message;
 
 import de.d3web.we.kdom.report.KDOMError;
+import de.knowwe.casetrain.util.Utils;
 
 
 /**
@@ -36,7 +37,7 @@ public class MissingAudioError extends KDOMError {
 
 	@Override
 	public String getVerbalization() {
-		return "Audiodatei ist nicht angehängt: " + text;
+		return Utils.getBundle().getString("MISSING_AUDIO_ERROR") + text;
 	}
 
 }

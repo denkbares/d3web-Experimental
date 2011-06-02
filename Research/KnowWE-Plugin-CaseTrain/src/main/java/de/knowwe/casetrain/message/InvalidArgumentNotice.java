@@ -19,6 +19,7 @@
 package de.knowwe.casetrain.message;
 
 import de.d3web.we.kdom.report.KDOMNotice;
+import de.knowwe.casetrain.util.Utils;
 
 
 /**
@@ -33,9 +34,10 @@ public class InvalidArgumentNotice extends KDOMNotice {
 	public InvalidArgumentNotice(String text) {
 		this.text = text;
 	}
+
 	@Override
 	public String getVerbalization() {
-		return "Argument ungültig: " + text;
+		return Utils.getBundle().getString("INVALID_ARGUMENT_NOTICE") + text;
 	}
 
 }

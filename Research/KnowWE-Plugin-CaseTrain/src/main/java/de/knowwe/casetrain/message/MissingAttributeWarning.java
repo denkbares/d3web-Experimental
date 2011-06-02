@@ -19,6 +19,7 @@
 package de.knowwe.casetrain.message;
 
 import de.d3web.we.kdom.report.KDOMWarning;
+import de.knowwe.casetrain.util.Utils;
 
 
 /**
@@ -36,7 +37,7 @@ public class MissingAttributeWarning extends KDOMWarning {
 
 	@Override
 	public String getVerbalization() {
-		return "Fehlendes Attribut: " + text;
+		return Utils.getBundle().getString("MISSING_ATTRIBUTE_WARNING") + text;
 	}
 
 }

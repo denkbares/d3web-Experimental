@@ -19,6 +19,7 @@
 package de.knowwe.casetrain.message;
 
 import de.d3web.we.kdom.report.KDOMNotice;
+import de.knowwe.casetrain.util.Utils;
 
 
 /**
@@ -36,7 +37,7 @@ public class MissingPictureNotice extends KDOMNotice {
 
 	@Override
 	public String getVerbalization() {
-		return "Kein Bild angehängt: " + text;
+		return Utils.getBundle().getString("MISSING_PICTURE_NOTICE") + text;
 	}
 
 }

@@ -106,7 +106,7 @@ public class ParseXMLAction extends AbstractAction {
 			"</span>");
 		}
 
-		XMLUtils.createXMLWithBindings(article);
+		XMLUtils.createXML(article);
 
 		return buildi.toString();
 	}

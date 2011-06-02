@@ -20,6 +20,7 @@
 package de.knowwe.casetrain.message;
 
 import de.d3web.we.kdom.report.KDOMError;
+import de.knowwe.casetrain.util.Utils;
 
 public class MissingAttributeError extends KDOMError {
 
@@ -31,6 +32,6 @@ public class MissingAttributeError extends KDOMError {
 
 	@Override
 	public String getVerbalization() {
-		return "Fehlendes Attribut: " + text;
+		return Utils.getBundle().getString("MISSING_ATTRIBUTE_ERROR") + text;
 	}
 }

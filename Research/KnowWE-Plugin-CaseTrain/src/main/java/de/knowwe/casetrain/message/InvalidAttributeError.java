@@ -19,6 +19,7 @@
 package de.knowwe.casetrain.message;
 
 import de.d3web.we.kdom.report.KDOMError;
+import de.knowwe.casetrain.util.Utils;
 
 
 /**
@@ -36,7 +37,7 @@ public class InvalidAttributeError extends KDOMError {
 
 	@Override
 	public String getVerbalization() {
-		return "Attribut ist nicht vorgesehen:" + text;
+		return Utils.getBundle().getString("INVALID_ATTRIBUTE_ERROR") + text;
 	}
 
 }

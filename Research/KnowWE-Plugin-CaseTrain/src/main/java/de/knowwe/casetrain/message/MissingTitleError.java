@@ -19,6 +19,7 @@
 package de.knowwe.casetrain.message;
 
 import de.d3web.we.kdom.report.KDOMError;
+import de.knowwe.casetrain.util.Utils;
 
 
 /**
@@ -36,7 +37,7 @@ public class MissingTitleError extends KDOMError {
 
 	@Override
 	public String getVerbalization() {
-		return "Kein Titel vorhanden:" + text;
+		return Utils.getBundle().getString("MISSING_TITLE_ERROR") + text;
 	}
 
 }
