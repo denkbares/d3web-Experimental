@@ -80,7 +80,7 @@ public class AnswersBlock extends SubblockMarkup {
 	 */
 	public class Praefix extends AbstractType {
 
-		public static final String NAME = "Praefix";
+		public static final String NAME = "Präfix";
 
 		public Praefix() {
 			this.setSectionFinder(
