@@ -18,6 +18,7 @@ import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SingleChildConstraint;
 import de.d3web.we.kdom.objects.KnowWETerm;
+import de.d3web.we.kdom.objects.KnowWETerm.Scope;
 import de.d3web.we.kdom.objects.StringDefinition;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.rendering.StyleRenderer;
@@ -77,9 +78,9 @@ public class IDPropertyType extends AbstractType {
 					TerminologyHandler terminologyHandler = KnowWEUtils.getTerminologyHandler(article.getWeb());
 					String termName = KnowWEUtils.trimQuotes(s.getOriginalText());
 					if (terminologyHandler.isDefinedTerm(article, termName,
-							KnowWETerm.LOCAL)) {
+							Scope.LOCAL)) {
 						Section<? extends TermDefinition> termDefinitionSection = terminologyHandler.getTermDefiningSection(
-								article, termName, KnowWETerm.LOCAL);
+								article, termName, Scope.LOCAL);
 						Class<?> objectClazz = termDefinitionSection.get().getTermObjectClass();
 						if (Question.class.isAssignableFrom(objectClazz)) {
 							s.setType(new QuestionReference());
