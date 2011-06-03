@@ -13,5 +13,13 @@ public class ProKEtProperties {
 	public static final Property<String> POPUP = Property.getProperty("popup", String.class);
 
 	public static final Property<String> GRID = Property.getProperty("grid", String.class);
+	
+	public static final Property<String> IMAGE = Property.getProperty("image", String.class);
+	
+	public static final Property<String> IMAGEWIDTH = Property.getProperty("imagewidth", String.class);
+	
+	public static final Property<String> IMAGEHEIGHT = Property.getProperty("imageheight", String.class);
+	
+	public static final Property<String> IMAGEMAP = Property.getProperty("imagemap", String.class);
 
 }

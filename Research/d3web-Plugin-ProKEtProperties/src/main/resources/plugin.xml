@@ -52,5 +52,45 @@
 		<parameter id="instanceof" value="java.lang.String" />
 	</extension>
 	
+	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="image">
+		<parameter id="name" value="image" />
+		<parameter id="description" value="can be used for images in image questions" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.String" />
+	</extension>
+	
+	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="imagewidth">
+		<parameter id="name" value="imagewidth" />
+		<parameter id="description" value="can be used to set a specific width for the image of a question" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.String" />
+	</extension>
+	
+		<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="imageheight">
+		<parameter id="name" value="imageheight" />
+		<parameter id="description" value="can be used to set a specific height for the image of a question" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.String" />
+	</extension>
+	
+		<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="imagemap">
+		<parameter id="name" value="imagemap" />
+		<parameter id="description" value="can be used to specify an imagemap for a image of question" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.String" />
+	</extension>
+	
 	
 </plugin>
