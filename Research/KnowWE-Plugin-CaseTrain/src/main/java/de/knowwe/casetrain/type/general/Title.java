@@ -30,7 +30,7 @@ import de.knowwe.casetrain.renderer.DivStyleClassRenderer;
  * Belongs to BlockMarkupType. Represents the rest of the first line after the
  * keyword.
  * 
- * TODO Finds an empty title when the Line looks like this
+ * TODO Finds an empty title when the line looks like this
  *      MetaDaten:\r\n
  *      This is wrong. It should find no title at all.
  * 
@@ -46,7 +46,7 @@ public class Title extends AbstractType {
 		cf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 		this.setSectionFinder(cf);
 
-		this.setCustomRenderer(new DivStyleClassRenderer(TITLE));
+		this.setCustomRenderer(new DivStyleClassRenderer(TITLE, null));
 
 	}
 

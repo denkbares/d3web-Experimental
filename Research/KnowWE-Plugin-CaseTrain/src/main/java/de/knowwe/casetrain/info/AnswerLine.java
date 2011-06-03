@@ -30,7 +30,6 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
-import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
@@ -39,6 +38,7 @@ import de.knowwe.casetrain.info.AnswersBlock.Postfix;
 import de.knowwe.casetrain.info.AnswersBlock.Praefix;
 import de.knowwe.casetrain.renderer.DivStyleClassRenderer;
 import de.knowwe.casetrain.renderer.MouseOverTitleRenderer;
+import de.knowwe.casetrain.renderer.SpanClassRenderer;
 
 /**
  * Antwort is a Antwort Line.
@@ -53,7 +53,7 @@ public class AnswerLine extends AbstractType {
 
 	public AnswerLine() {
 		this.setSectionFinder(new AnswerSectionFinder());
-		this.setCustomRenderer(new DivStyleClassRenderer("Antwort"));
+		this.setCustomRenderer(new DivStyleClassRenderer("Antwort", null));
 		this.addChildType(new AnswerMark());
 		this.addChildType(new AnswerTextArgument());
 		this.addChildType(new AnswerText());
@@ -163,7 +163,7 @@ public class AnswerLine extends AbstractType {
 		String regex = "\\{(.*?)\\}";
 
 		public AnswerMark() {
-			this.setCustomRenderer(new StyleRenderer("font-weight:bold;"));
+			this.setCustomRenderer(new SpanClassRenderer(SpanClassRenderer.META_KEY));
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(
 					new RegexSectionFinder(regex));
 			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
@@ -182,6 +182,7 @@ public class AnswerLine extends AbstractType {
 	public class AnswerTextArgument extends AbstractType {
 
 		public AnswerTextArgument() {
+			this.setCustomRenderer(new SpanClassRenderer(SpanClassRenderer.META_KEY));
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(
 					new RegexSectionFinder("\\{[rf1-9]}"));
 			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());

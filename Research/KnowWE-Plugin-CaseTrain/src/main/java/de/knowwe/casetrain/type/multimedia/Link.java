@@ -51,16 +51,25 @@ public class Link extends MultimediaItem {
 		this.setCustomRenderer(new KnowWEDomRenderer<Link>() {
 
 			@Override
-			public void render(KnowWEArticle article, Section<Link> sec, UserContext user, StringBuilder string) {
+			public void render(KnowWEArticle article, Section<Link> sec,
+					UserContext user, StringBuilder string) {
 				Section<MultimediaItemContent> linkURL = Sections.findChildOfType(sec,
 						MultimediaItemContent.class);
-				string.append(KnowWEUtils.maskHTML("<span title=\"Link\">"));
+				string.append(KnowWEUtils.maskHTML(
+				"<span title=\"Link\" class=\"casetrainlink\">"));
 				Section<Url> url = Sections.findChildOfType(sec, Url.class);
+				string.append(KnowWEUtils.maskHTML("<a href=\""));
+				String linkString = linkURL.getOriginalText().trim();
+				if (!linkString.startsWith("http://"));
+				string.append("http://");
+				string.append(linkString);
+				string.append(KnowWEUtils.maskHTML("\">"));
 				if (url == null)
 					string.append(linkURL.getOriginalText().trim());
 				else
 					string.append(url.getOriginalText().
 							substring(1, url.getOriginalText().length()-1).trim());
+				string.append(KnowWEUtils.maskHTML("</a>"));
 				string.append(KnowWEUtils.maskHTML("</span>"));
 			}
 		});

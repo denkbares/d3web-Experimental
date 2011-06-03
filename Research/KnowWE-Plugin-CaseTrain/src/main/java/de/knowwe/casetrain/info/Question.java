@@ -37,6 +37,7 @@ import de.knowwe.casetrain.message.MissingAttributeWarning;
 import de.knowwe.casetrain.message.MissingComponentError;
 import de.knowwe.casetrain.message.MissingComponentWarning;
 import de.knowwe.casetrain.renderer.MouseOverTitleRenderer;
+import de.knowwe.casetrain.renderer.SpanClassRenderer;
 import de.knowwe.casetrain.type.general.SubblockMarkup;
 import de.knowwe.casetrain.type.general.Title;
 import de.knowwe.casetrain.type.multimedia.Image;
@@ -104,7 +105,7 @@ public class Question extends SubblockMarkup {
 
 		public QuestionWeight() {
 			this.setSectionFinder(new RegexSectionFinder("[-]?[0-9]+"));
-			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
+			this.setCustomRenderer(new SpanClassRenderer(SpanClassRenderer.META_KEY));
 		}
 	}
 
@@ -116,7 +117,7 @@ public class Question extends SubblockMarkup {
 							AnswersBlockValidator.getInstance().getRegexAsString()));
 			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 			this.setSectionFinder(csf);
-			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
+			this.setCustomRenderer(new SpanClassRenderer(SpanClassRenderer.META_KEY));
 		}
 
 	}

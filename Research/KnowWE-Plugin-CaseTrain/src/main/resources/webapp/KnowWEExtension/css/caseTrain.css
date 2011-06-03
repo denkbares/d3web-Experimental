@@ -123,3 +123,13 @@ div.Ie div.Titel {
 div.Ie div.Content {
 	padding-left: 10px;
 }
+
+span.metakeyword {
+	color: #0000CD;
+	font-weight:bold;
+}
+
+span.casetrainlink a:link,
+span.casetrainlink a:visited {
+	color: #5C8513;
+}

@@ -36,10 +36,12 @@ import de.d3web.we.utils.KnowWEUtils;
  */
 public class DivStyleClassRenderer extends KnowWEDomRenderer<Type> {
 
-	String cssClass;
+	private final String cssClass;
+	private final KnowWEDomRenderer<Type> customRenderer;
 
-	public DivStyleClassRenderer(String s) {
+	public DivStyleClassRenderer(String s, KnowWEDomRenderer<Type> c) {
 		this.cssClass = s;
+		customRenderer = c;
 	}
 
 	@Override
@@ -47,7 +49,10 @@ public class DivStyleClassRenderer extends KnowWEDomRenderer<Type> {
 		string.append(KnowWEUtils.maskHTML("<div class='"
 				+ cssClass
 				+ "'>"));
-		MouseOverTitleRenderer.getInstance().render(article, sec, user, string);
+		if (customRenderer != null)
+			customRenderer.render(article, sec, user, string);
+		else
+			MouseOverTitleRenderer.getInstance().render(article, sec, user, string);
 		string.append(KnowWEUtils.maskHTML("</div>"));
 
 	}

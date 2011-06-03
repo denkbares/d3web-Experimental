@@ -32,7 +32,7 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.knowwe.casetrain.message.MissingComponentWarning;
 import de.knowwe.casetrain.renderer.DivStyleClassRenderer;
-import de.knowwe.casetrain.renderer.MouseOverTitleRenderer;
+import de.knowwe.casetrain.renderer.SpanClassRenderer;
 import de.knowwe.casetrain.type.general.SubblockMarkup;
 
 
@@ -85,7 +85,9 @@ public class AnswersBlock extends SubblockMarkup {
 		public Praefix() {
 			this.setSectionFinder(
 					new RegexSectionFinder(NAME + ":.*"));
-			this.setCustomRenderer(new DivStyleClassRenderer("praefix"));
+			this.setCustomRenderer(
+					new DivStyleClassRenderer("praefix",
+							new SpanClassRenderer(SpanClassRenderer.META_KEY)));
 		}
 	}
 
@@ -101,7 +103,9 @@ public class AnswersBlock extends SubblockMarkup {
 		public Postfix() {
 			this.setSectionFinder(
 					new RegexSectionFinder(NAME + ":.*"));
-			this.setCustomRenderer(new DivStyleClassRenderer("postfix"));
+			this.setCustomRenderer(
+					new DivStyleClassRenderer("postfix",
+							new SpanClassRenderer(SpanClassRenderer.META_KEY)));
 		}
 	}
 
@@ -117,7 +121,9 @@ public class AnswersBlock extends SubblockMarkup {
 		public Heading() {
 			this.setSectionFinder(
 					new RegexSectionFinder(NAME + ":.*"));
-			this.setCustomRenderer(new DivStyleClassRenderer("ueberschrift"));
+			this.setCustomRenderer(
+					new DivStyleClassRenderer(
+							"ueberschrift", new SpanClassRenderer(SpanClassRenderer.META_KEY)));
 		}
 	}
 
@@ -131,7 +137,7 @@ public class AnswersBlock extends SubblockMarkup {
 		public AnswersBlockWeightMark() {
 			this.setSectionFinder(
 					new RegexSectionFinder("\\{[0-9]+\\}"));
-			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
+			this.setCustomRenderer(new SpanClassRenderer(SpanClassRenderer.META_KEY));
 		}
 
 	}
