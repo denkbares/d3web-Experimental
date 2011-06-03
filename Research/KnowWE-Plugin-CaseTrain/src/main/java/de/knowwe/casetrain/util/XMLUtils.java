@@ -71,6 +71,7 @@ import de.knowwe.casetrain.info.AnswerLine.AnswerExplanation;
 import de.knowwe.casetrain.info.AnswerLine.AnswerText;
 import de.knowwe.casetrain.info.AnswerLine.AnswerTextArgument;
 import de.knowwe.casetrain.info.AnswersBlock;
+import de.knowwe.casetrain.info.AnswersBlock.AnswersBlockWeightMark;
 import de.knowwe.casetrain.info.AnswersBlockValidator;
 import de.knowwe.casetrain.info.Explanation;
 import de.knowwe.casetrain.info.Hint;
@@ -682,7 +683,7 @@ public class XMLUtils {
 		List<AnswerAttributeStore> ants = new ArrayList<AnswerAttributeStore>();
 		String postfix = null;
 		String praefix = null;
-		String ueberschrift = null;
+		String heading = null;
 		for (Section<?> s : antworten.getChildren().get(0).getChildren()) {
 			if (s.get().isType(PlainText.class)) continue;
 
@@ -719,9 +720,9 @@ public class XMLUtils {
 			if (prae != null)
 				praefix =prae.getOriginalText().trim();
 
-			Section<AnswersBlock.Heading> ueber = Sections.findSuccessor(s, AnswersBlock.Heading.class);
-			if (ueber != null)
-				ueberschrift = ueber.getOriginalText().trim();
+			Section<AnswersBlock.Heading> head = Sections.findSuccessor(s, AnswersBlock.Heading.class);
+			if (head != null)
+				heading = head.getOriginalText().trim();
 
 			ants.add(new AnswerAttributeStore(posFactor, negFactor,
 					antwortText, erkl, textArgString));
@@ -765,6 +766,12 @@ public class XMLUtils {
 		if (question instanceof MultiWordQuestion) {
 			MultiWordQuestion qu = (MultiWordQuestion) question;
 			WordAnswers ans = fac.createWordAnswers();
+			Section<AnswersBlockWeightMark> aBWMark =
+				Sections.findSuccessor(antworten, AnswersBlockWeightMark.class);
+			if (aBWMark != null)
+				ans.setWeight(new BigDecimal(
+						AnswersBlock.getWeight(aBWMark.getOriginalText())));
+
 			for (AnswerAttributeStore store : ants) {
 				WordAnswer a = fac.createWordAnswersWordAnswer();
 				a.setEditDistance(new Long(AnswersBlock.getEditDistance(store.getTextArgument())));
@@ -777,6 +784,7 @@ public class XMLUtils {
 				a.setText(store.getText());
 				ans.getWordAnswer().add(a);
 			}
+
 			qu.getWordAnswers().add(ans);
 		}
 
@@ -786,17 +794,24 @@ public class XMLUtils {
 			for (AnswerAttributeStore store : ants) {
 				XMLUtils.addNumAnswerInstance(ans, store, fac);
 			}
-			XMLUtils.addPraePostUeberschrift(ans, ueberschrift, postfix, praefix);
+			XMLUtils.addPraePostUeberschrift(ans, heading, postfix, praefix);
 			q.setNumAnswers(ans);
 		}
 
 		if (question instanceof MNumQuestion) {
 			MNumQuestion q = (MNumQuestion) question;
 			NumAnswers ans = fac.createNumAnswers();
+
+			Section<AnswersBlockWeightMark> aBWMark =
+				Sections.findSuccessor(antworten, AnswersBlockWeightMark.class);
+			if (aBWMark != null)
+				ans.setWeight(new BigDecimal(
+						AnswersBlock.getWeight(aBWMark.getOriginalText())));
+
 			for (AnswerAttributeStore store : ants) {
 				XMLUtils.addNumAnswerInstance(ans, store, fac);
 			}
-			XMLUtils.addPraePostUeberschrift(ans, ueberschrift, postfix, praefix);
+			XMLUtils.addPraePostUeberschrift(ans, heading, postfix, praefix);
 			q.getNumAnswers().add(ans);
 		}
 

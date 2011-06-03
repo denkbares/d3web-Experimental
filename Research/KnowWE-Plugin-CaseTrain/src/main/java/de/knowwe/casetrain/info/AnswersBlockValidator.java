@@ -279,6 +279,7 @@ public class AnswersBlockValidator {
 
 	}
 
+	// TODO Präfix/Postfix/Überschrift-check
 	private void checkChoiceQuestion(Section<AnswersBlock> answersBlock,
 			List<KDOMReportMessage> messages, boolean evaluation) {
 		this.checkMarkierung(answersBlock, messages, 2, evaluation);
@@ -286,6 +287,7 @@ public class AnswersBlockValidator {
 		this.checkErklaerung(answersBlock, messages);
 	}
 
+	// TODO Preafix/Postfix-Check
 	private void checkWordQuestion(Section<AnswersBlock> answersBlock,
 			List<KDOMReportMessage> messages, boolean evaluation) {
 		this.checkMarkierung(answersBlock, messages, 1, evaluation);
@@ -357,7 +359,7 @@ public class AnswersBlockValidator {
 		this.checkMarkierung(answersBlock, messages, 1, evaluation);
 		this.checkText(answersBlock, messages);
 		this.checkErklaerung(answersBlock, messages);
-		this.checkUeberschrift(answersBlock, messages);
+		//		this.checkUeberschrift(answersBlock, messages);
 	}
 
 	/**
@@ -373,10 +375,12 @@ public class AnswersBlockValidator {
 		this.checkMarkierung(answersBlock, messages, 1, evaluation);
 		this.checkText(answersBlock, messages);
 		this.checkErklaerung(answersBlock, messages);
+		this.checkPraefixPostfix(answersBlock, messages);
 		this.checkUeberschrift(answersBlock, messages);
 	}
 
 	/**
+	 * TODO Präfix/Postfix-Check
 	 * 
 	 * @created 08.05.2011
 	 * @param answersBlock
@@ -386,11 +390,11 @@ public class AnswersBlockValidator {
 			List<KDOMReportMessage> messages, boolean evaluation) {
 		this.checkMarkierung(answersBlock, messages, 1, evaluation);
 		this.checkText(answersBlock, messages);
-		this.checkNumanswersBlockBlock(answersBlock, messages);
+		this.checkNumanswersBlock(answersBlock, messages);
 		this.checkErklaerung(answersBlock, messages);
 	}
 
-	private void checkNumanswersBlockBlock(Section<AnswersBlock> answersBlock, List<KDOMReportMessage> messages) {
+	private void checkNumanswersBlock(Section<AnswersBlock> answersBlock, List<KDOMReportMessage> messages) {
 		List<Section<AnswerLine>> found = new ArrayList<Section<AnswerLine>>();
 		Sections.findSuccessorsOfType(answersBlock, AnswerLine.class, found);
 
@@ -429,12 +433,13 @@ public class AnswersBlockValidator {
 			List<KDOMReportMessage> messages, boolean evaluation) {
 		this.checkMarkierung(answersBlock, messages, 1, evaluation);
 		this.checkText(answersBlock, messages);
-		this.checkNumanswersBlockBlock(answersBlock, messages);
+		this.checkNumanswersBlock(answersBlock, messages);
 		this.checkErklaerung(answersBlock, messages);
 		this.checkUeberschrift(answersBlock, messages);
 	}
 
 	/**
+	 * TODO Präfix/Postfix/Überschrift-check
 	 * 
 	 * @created 08.05.2011
 	 * @param answersBlock

@@ -53,7 +53,7 @@ public class AnswersBlock extends SubblockMarkup {
 		this.addContentType(new Praefix());
 		this.addContentType(new Postfix());
 		this.addContentType(new Heading());
-		this.addContentType(new AnswerOrderMark());
+		this.addContentType(new AnswersBlockWeightMark());
 
 		this.addSubtreeHandler(new GeneralSubtreeHandler<Question>() {
 
@@ -122,17 +122,29 @@ public class AnswersBlock extends SubblockMarkup {
 	}
 
 	/**
-	 * In MN/OMW the {@link Antwortenblock} can have a ordering mark.
+	 * In MN/OMW the {@link Antwortenblock} can have a block-weight mark.
 	 * 
 	 * @author Johannes Dienst
 	 * @created 20.05.2011
 	 */
-	public class AnswerOrderMark extends AbstractType {
-		public AnswerOrderMark() {
+	public class AnswersBlockWeightMark extends AbstractType {
+		public AnswersBlockWeightMark() {
 			this.setSectionFinder(
 					new RegexSectionFinder("\\{[0-9]+\\}"));
 			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
 		}
+
+	}
+
+	/**
+	 * Extracts the Weight.
+	 * 
+	 * @created 03.06.2011
+	 * @param weight
+	 * @return
+	 */
+	public static String getWeight(String weight) {
+		return weight.replaceAll("[\\{\\}]", "");
 	}
 
 	/**
