@@ -279,7 +279,7 @@ public class AnswersBlockValidator {
 
 	}
 
-	// TODO Präfix/Postfix/Überschrift-check
+	// No Präfix/Postfix/Heading-check
 	private void checkChoiceQuestion(Section<AnswersBlock> answersBlock,
 			List<KDOMReportMessage> messages, boolean evaluation) {
 		this.checkMarkierung(answersBlock, messages, 2, evaluation);
@@ -376,16 +376,10 @@ public class AnswersBlockValidator {
 		this.checkText(answersBlock, messages);
 		this.checkErklaerung(answersBlock, messages);
 		this.checkPraefixPostfix(answersBlock, messages);
-		this.checkUeberschrift(answersBlock, messages);
+		this.checkHeading(answersBlock, messages);
 	}
 
-	/**
-	 * TODO Präfix/Postfix-Check
-	 * 
-	 * @created 08.05.2011
-	 * @param answersBlock
-	 * @param messages
-	 */
+	// No heading check. Praefix-Postfix tested by checkNumanswersBlock
 	private void checkNQuestion(Section<AnswersBlock> answersBlock,
 			List<KDOMReportMessage> messages, boolean evaluation) {
 		this.checkMarkierung(answersBlock, messages, 1, evaluation);
@@ -435,16 +429,10 @@ public class AnswersBlockValidator {
 		this.checkText(answersBlock, messages);
 		this.checkNumanswersBlock(answersBlock, messages);
 		this.checkErklaerung(answersBlock, messages);
-		this.checkUeberschrift(answersBlock, messages);
+		this.checkHeading(answersBlock, messages);
+		this.checkHeading(answersBlock, messages);
 	}
 
-	/**
-	 * TODO Präfix/Postfix/Überschrift-check
-	 * 
-	 * @created 08.05.2011
-	 * @param answersBlock
-	 * @param messages
-	 */
 	private void checkTQuestion(Section<AnswersBlock> answersBlock,
 			List<KDOMReportMessage> messages, boolean evaluation) {
 		this.checkMarkierung(answersBlock, messages, 1, evaluation);
@@ -480,7 +468,7 @@ public class AnswersBlockValidator {
 	 * @param answersBlock
 	 * @param messages
 	 */
-	private void checkUeberschrift(Section<AnswersBlock> answersBlock, List<KDOMReportMessage> messages) {
+	private void checkHeading(Section<AnswersBlock> answersBlock, List<KDOMReportMessage> messages) {
 		List<Section<Heading>> found = new ArrayList<Section<Heading>>();
 		Sections.findSuccessorsOfType(answersBlock, Heading.class, found);
 		if (found.size() > 1)

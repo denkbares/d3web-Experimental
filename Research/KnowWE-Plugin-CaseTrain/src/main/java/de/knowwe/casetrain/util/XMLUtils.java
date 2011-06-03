@@ -175,7 +175,8 @@ public class XMLUtils {
 
 		List<Section<de.knowwe.casetrain.evaluation.Evaluation>> found =
 			new ArrayList<Section<de.knowwe.casetrain.evaluation.Evaluation>>();
-		Sections.findSuccessorsOfType(articleSec, de.knowwe.casetrain.evaluation.Evaluation.class, found);
+		Sections.findSuccessorsOfType(
+				articleSec, de.knowwe.casetrain.evaluation.Evaluation.class, found);
 
 		for(Section<de.knowwe.casetrain.evaluation.Evaluation> infoSec : found) {
 			List<Section<?>> childs = infoSec.getChildren().get(0).getChildren();
@@ -632,6 +633,7 @@ public class XMLUtils {
 	 * @param fac
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private static void createQuestion(
 			List<Section<?>> frageChilds, BasicQuestion question, ObjectFactory fac) {
 
@@ -655,7 +657,8 @@ public class XMLUtils {
 			}
 
 			if(sec.get().isType(AnswersBlock.class)) {
-				XMLUtils.addAntwortenWithBinding(question, sec, fac);
+				XMLUtils.addAntwortenWithBinding(
+						question, (Section<AnswersBlock>)sec, fac);
 				continue;
 			}
 
@@ -678,13 +681,14 @@ public class XMLUtils {
 	 * @param fac
 	 */
 	@SuppressWarnings("unchecked")
-	private static void addAntwortenWithBinding(BasicQuestion question, Section<?> antworten, ObjectFactory fac) {
+	private static void addAntwortenWithBinding(BasicQuestion question, Section<AnswersBlock> antworten, ObjectFactory fac) {
 
 		List<AnswerAttributeStore> ants = new ArrayList<AnswerAttributeStore>();
 		String postfix = null;
 		String praefix = null;
 		String heading = null;
-		for (Section<?> s : antworten.getChildren().get(0).getChildren()) {
+		for (Section<?> s : Sections.findSuccessor(
+				antworten, SubblockMarkupContent.class).getChildren()) {
 			if (s.get().isType(PlainText.class)) continue;
 
 			// PosFactor and NegFactor
@@ -712,15 +716,18 @@ public class XMLUtils {
 			}
 
 			// Postfix Praefix Ueberschrift
-			Section<AnswersBlock.Postfix> post = Sections.findSuccessor(s, AnswersBlock.Postfix.class);
+			Section<AnswersBlock.Postfix> post =
+				Sections.findSuccessor(s, AnswersBlock.Postfix.class);
 			if (post != null)
 				postfix = post.getOriginalText().trim();
 
-			Section<AnswersBlock.Praefix> prae = Sections.findSuccessor(s, AnswersBlock.Praefix.class);
+			Section<AnswersBlock.Praefix> prae =
+				Sections.findSuccessor(s, AnswersBlock.Praefix.class);
 			if (prae != null)
 				praefix =prae.getOriginalText().trim();
 
-			Section<AnswersBlock.Heading> head = Sections.findSuccessor(s, AnswersBlock.Heading.class);
+			Section<AnswersBlock.Heading> head =
+				Sections.findSuccessor(s, AnswersBlock.Heading.class);
 			if (head != null)
 				heading = head.getOriginalText().trim();
 
@@ -748,6 +755,14 @@ public class XMLUtils {
 		if (question instanceof WordQuestion) {
 			WordQuestion qu = (WordQuestion) question;
 			WordAnswers ans = fac.createWordAnswers();
+
+			if (postfix != null)
+				ans.setAnswerPostfix(postfix);
+			if (praefix != null)
+				ans.setAnswerPrefix(praefix);
+			if (heading != null)
+				ans.setAnswerCaption(heading);
+
 			for (AnswerAttributeStore store : ants) {
 				WordAnswer a = fac.createWordAnswersWordAnswer();
 				a.setEditDistance(new Long(AnswersBlock.getEditDistance(store.getTextArgument())));
@@ -766,6 +781,14 @@ public class XMLUtils {
 		if (question instanceof MultiWordQuestion) {
 			MultiWordQuestion qu = (MultiWordQuestion) question;
 			WordAnswers ans = fac.createWordAnswers();
+
+			if (postfix != null)
+				ans.setAnswerPostfix(postfix);
+			if (praefix != null)
+				ans.setAnswerPrefix(praefix);
+			if (heading != null)
+				ans.setAnswerCaption(heading);
+
 			Section<AnswersBlockWeightMark> aBWMark =
 				Sections.findSuccessor(antworten, AnswersBlockWeightMark.class);
 			if (aBWMark != null)
@@ -791,6 +814,14 @@ public class XMLUtils {
 		if (question instanceof NumQuestion) {
 			NumQuestion q = (NumQuestion) question;
 			NumAnswers ans = fac.createNumAnswers();
+
+			if (postfix != null)
+				ans.setAnswerPostfix(postfix);
+			if (praefix != null)
+				ans.setAnswerPrefix(praefix);
+			if (heading != null)
+				ans.setAnswerCaption(heading);
+
 			for (AnswerAttributeStore store : ants) {
 				XMLUtils.addNumAnswerInstance(ans, store, fac);
 			}
@@ -801,6 +832,13 @@ public class XMLUtils {
 		if (question instanceof MNumQuestion) {
 			MNumQuestion q = (MNumQuestion) question;
 			NumAnswers ans = fac.createNumAnswers();
+
+			if (postfix != null)
+				ans.setAnswerPostfix(postfix);
+			if (praefix != null)
+				ans.setAnswerPrefix(praefix);
+			if (heading != null)
+				ans.setAnswerCaption(heading);
 
 			Section<AnswersBlockWeightMark> aBWMark =
 				Sections.findSuccessor(antworten, AnswersBlockWeightMark.class);
