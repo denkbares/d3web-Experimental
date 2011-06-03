@@ -209,7 +209,6 @@ public class D3webDialog extends HttpServlet {
 		// Get the current httpSession or a new one
 		HttpSession httpSession = request.getSession(true);
 
-
 		// if (httpSession.getAttribute("imgStreamed") == null) {
 		// streamImages();
 		// httpSession.setAttribute("imgStreamed", true);
@@ -375,57 +374,13 @@ public class D3webDialog extends HttpServlet {
 
 		Session sess = (Session) httpSession.getAttribute("d3webSession");
 
-		int i = 0;
 		List<String> questions = new ArrayList<String>();
 		List<String> values = new ArrayList<String>();
-		while (true) {
-			String ocq = request.getParameter("ocq" + i);
-			String occhoice = request.getParameter("occhoice" + i);
-			if (ocq == null || occhoice == null) break;
-			questions.add(ocq);
-			values.add(occhoice);
-			i++;
-		}
-
-		i = 0;
-		while (true) {
-			String mcq = request.getParameter("mcq" + i);
-			String mcchoices = request.getParameter("mcchoices" + i);
-			if (mcq == null || mcchoices == null) break;
-			questions.add(mcq);
-			values.add(mcchoices);
-			i++;
-		}
-
-		i = 0;
-		while (true) {
-			String dateq = request.getParameter("dateq" + i);
-			String date = request.getParameter("date" + i);
-			if (dateq == null || date == null) break;
-			questions.add(dateq);
-			values.add(date);
-			i++;
-		}
-
-		i = 0;
-		while (true) {
-			String textq = request.getParameter("textq" + i);
-			String text = request.getParameter("text" + i);
-			if (textq == null || text == null) break;
-			questions.add(textq);
-			values.add(text);
-			i++;
-		}
-
-		i = 0;
-		while (true) {
-			String numq = request.getParameter("numq" + i);
-			String num = request.getParameter("num" + i);
-			if (numq == null || num == null) break;
-			questions.add(numq);
-			values.add(num);
-			i++;
-		}
+		getParameter(request, "ocq", "occhoice", questions, values);
+		getParameter(request, "mcq", "mcchoices", questions, values);
+		getParameter(request, "dateq", "date", questions, values);
+		getParameter(request, "textq", "text", questions, values);
+		getParameter(request, "numq", "num", questions, values);
 
 		/*
 		 * Check, whether a required value (for saving) is specified. If yes,
@@ -445,7 +400,7 @@ public class D3webDialog extends HttpServlet {
 			return;
 		}
 
-		for (i = 0; i < questions.size(); i++) {
+		for (int i = 0; i < questions.size(); i++) {
 			setValue(questions.get(i), values.get(i), sess);
 		}
 
@@ -473,6 +428,18 @@ public class D3webDialog extends HttpServlet {
 					folderPath,
 					D3webConnector.getInstance().getD3webParser().getRequired(),
 					"autosave", d3webSession);
+		}
+	}
+
+	private void getParameter(HttpServletRequest request, String paraName1, String paraName2, List<String> parameters1, List<String> parameters2) {
+		int i = 0;
+		while (true) {
+			String para1 = request.getParameter(paraName1 + i);
+			String para2 = request.getParameter(paraName2 + i);
+			if (para1 == null || para2 == null) break;
+			parameters1.add(para1.replaceAll("_", " "));
+			parameters2.add(para2.replaceAll("_", " "));
+			i++;
 		}
 	}
 

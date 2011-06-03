@@ -19,28 +19,71 @@
  */
 package de.d3web.proket.d3web.run;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import javax.imageio.ImageIO;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import au.com.bytecode.opencsv.CSVReader;
+import de.d3web.core.knowledge.InterviewObject;
+import de.d3web.core.knowledge.Resource;
+import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.knowledge.Indication.State;
+import de.d3web.core.knowledge.terminology.Choice;
+import de.d3web.core.knowledge.terminology.QASet;
+import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.terminology.QuestionChoice;
+import de.d3web.core.knowledge.terminology.QuestionDate;
+import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.QuestionNum;
-import de.d3web.core.knowledge.terminology.info.BasicProperties;
-import de.d3web.core.knowledge.terminology.info.NumericalInterval;
+import de.d3web.core.knowledge.terminology.QuestionOC;
+import de.d3web.core.knowledge.terminology.QuestionText;
+import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Session;
+import de.d3web.core.session.Value;
+import de.d3web.core.session.blackboard.Blackboard;
+import de.d3web.core.session.blackboard.Fact;
+import de.d3web.core.session.blackboard.FactFactory;
+import de.d3web.core.session.values.DateValue;
+import de.d3web.core.session.values.MultipleChoiceValue;
+import de.d3web.core.session.values.NumValue;
+import de.d3web.core.session.values.TextValue;
+import de.d3web.core.session.values.UndefinedValue;
+import de.d3web.core.session.values.Unknown;
+import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.HerniaDefaultRootD3webRenderer;
-import de.d3web.proket.d3web.utils.Base64CoDec;
+import de.d3web.proket.d3web.output.render.ImageHandler;
+import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
@@ -61,7 +104,7 @@ import de.d3web.proket.utils.GlobalSettings;
  * 
  * @author Martina Freiberg
  * 
- * @date 14.01.2011; Last Update: Mai 2011
+ * @date 14.01.2011; Update: 28/01/2011
  * 
  */
 public class Hernia extends HttpServlet {
@@ -92,16 +135,47 @@ public class Hernia extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		/*
-		 * D3web RELATED STUFF FIRST needs to be setup first to have kb etc
-		 * available
-		 */
+		// set both persistence (case saving) and image (images streamed from
+		// kb) folder
+		String fca = GlobalSettings.getInstance().getCaseFolder();
+		String fim = GlobalSettings.getInstance().getKbImgFolder();
+		if ((fca.equals(null) || fca.equals("")) &&
+				(fim.equals(null) || fim.equals(""))) {
 
+			String servletBasePath =
+					request.getSession().getServletContext().getRealPath("/");
+			GlobalSettings.getInstance().setCaseFolder(servletBasePath + "cases");
+			GlobalSettings.getInstance().setKbImgFolder(servletBasePath + "kbimg");
+		}
+		/*
+		 * FOLDER PATH: get the folder on the server for persistence storing
+		 * only needed here in case the dialog is used without login mechanisms
+		 */
+		// String folderPath =
+		// request.getSession().getServletContext().getRealPath("/");
+		// String persistencePath = folderPath.replace("d3web-ProKEt",
+		// "persistence");
+		// GlobalSettings.getInstance().setCaseFolder(persistencePath);
+
+		d3wcon = D3webConnector.getInstance();
+
+		// in case nothing other is provided, "show" is the default action
+		String action = request.getParameter("action");
+		if (action == null) {
+			// action = "mail";
+			action = "show";
+		}
+
+		// try to get the src parameter, which defines the specification xml
+		// with special properties for this dialog/knowledge base
+		// if none available, default.xml is set
 		String source = "Hernia_Standard";
+		if (request.getParameter("src") != null) {
+			source = request.getParameter("src");
+		}
 		if (!source.endsWith(".xml")) {
 			source = source + ".xml";
 		}
-		d3wcon = D3webConnector.getInstance();
 
 		// d3web parser for interpreting the source/specification xml
 		d3webParser = new D3webXMLParser(source);
@@ -123,108 +197,27 @@ public class Hernia extends HttpServlet {
 			d3wcon.setHeader(d3webParser.getHeader());
 			d3wcon.setUserprefix(d3webParser.getUserPrefix());
 			d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
+			sourceSave = source;
 			if (!d3webParser.getLanguage().equals("")) {
 				d3wcon.setLanguage(d3webParser.getLanguage());
 			}
-			sourceSave = source;
-		}
-		/*
-		 * HERNIA specific Login is done via external part-system which sends
-		 * respective URL parameters for further processing
-		 */
-
-		// needed for assembling filename
-		String login = request.getParameter("l");
-		String nname = request.getParameter("n");
-		String inst = request.getParameter("i");
-
-		// needed for date check at login
-		String token = request.getParameter("t");
-		String action = null;
-
-		// System.out.println(login + " " + nname + " " + inst + " " + token);
-
-		if (login != null && nname != null && inst != null && token != null) {
-
-			// decode Strings
-			String decodedLogin = Base64CoDec.getPlainString(login);
-			String decodedNname = Base64CoDec.getPlainString(nname);
-			String decodedInstitute = Base64CoDec.getPlainString(inst);
-			String decodedToken = Base64CoDec.getPlainString(token);
-
-			// decode date from token
-			Date d = Base64CoDec.getDate(token);
-			Date now = new Date(); // current date
-
-			// if login was less than 20 sec before, allow login (i.e., just go
-			// on in code) otherwise redirect to login page
-
-			// if (D3webUtils.getDifference(d, now) < -20) {
-			// response.sendRedirect(
-			// response.encodeRedirectURL(
-			// "http://casetrain-test.informatik.uni-wuerzburg.de/Eura-HS/"));
-			// }
-
-			// save decoded info in httpSession
-			HttpSession httpSession = request.getSession();
-			httpSession.setAttribute("login", decodedLogin);
-			httpSession.setAttribute("nname", decodedNname);
-			httpSession.setAttribute("institute", decodedInstitute);
-
-			// TODO: check whether login etc are already set, if not, start new
-			// session, add user to parameters for file loading etc
-			String sesslogin = (String) request.getSession().getAttribute("login");
-			String sessnname = (String) request.getSession().getAttribute("nname");
-			System.out.println(sesslogin + " --- " + sessnname);
-			if (sesslogin != null && sessnname != null) {
-				if (!sesslogin.equals(decodedLogin) && !sessnname.equals(decodedNname)) {
-
-					resetNewUser(request.getSession(), decodedLogin, decodedNname);
-					System.out.println("reset new user");
-				}
-			}
-			else {
-				resetNewUser(request.getSession(), decodedLogin, decodedNname);
-				System.out.println("reset new user II");
-			}
-		}
-
-		// set both persistence (case saving) and image (images streamed from
-		// kb) folder paths
-		String fca = GlobalSettings.getInstance().getCaseFolder();
-		String fim = GlobalSettings.getInstance().getKbImgFolder();
-		if ((fca.equals(null) || fca.equals("")) &&
-				(fim.equals(null) || fim.equals(""))) {
-
-			String servletBasePath =
-					request.getSession().getServletContext().getRealPath("/");
-			GlobalSettings.getInstance().setCaseFolder(servletBasePath + "cases");
-			GlobalSettings.getInstance().setKbImgFolder(servletBasePath + "kbimg");
-		}
-
-		// in case nothing other is provided, "show" is the default action
-		action = request.getParameter("action");
-		if (action == null) {
-			action = "show";
+			streamImages();
 		}
 
 		// Get the current httpSession or a new one
 		HttpSession httpSession = request.getSession(true);
 
-		if (httpSession.getAttribute("imgStreamed") == null) {
-			System.out.println("stream");
-			D3webUtils.streamImages();
-			httpSession.setAttribute("imgStreamed", true);
-		}
+		// if (httpSession.getAttribute("imgStreamed") == null) {
+		// streamImages();
+		// httpSession.setAttribute("imgStreamed", true);
+		// }
 
 		/*
 		 * otherwise, i.e. if session is null create a session according to the
-		 * specified dialog strategy SHOULD NEVER BE THE CASE HERE AS IS CREATED
-		 * user dependent
+		 * specified dialog strategy
 		 */
 		if (httpSession.getAttribute("d3webSession") == null) {
 			// create d3web session and store in http session
-			System.out.println("new session");
 			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(),
 					d3wcon.getDialogStrat());
 			httpSession.setAttribute("d3webSession", d3webSession);
@@ -235,12 +228,8 @@ public class Hernia extends HttpServlet {
 			show(request, response, httpSession);
 			return;
 		}
-		else if (action.equalsIgnoreCase("addfact")) {
-			addFact(request, response, httpSession);
-			return;
-		}
-		else if (action.equalsIgnoreCase("addmcfact")) {
-			addMCFact(request, response, httpSession);
+		else if (action.equalsIgnoreCase("addfacts")) {
+			addFacts(request, response, httpSession);
 			return;
 		}
 		else if (action.equalsIgnoreCase("savecase")) {
@@ -252,23 +241,51 @@ public class Hernia extends HttpServlet {
 			return;
 		}
 		else if (action.equalsIgnoreCase("reset")) {
+
 			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
 			httpSession.setAttribute("d3webSession", d3webSession);
 			httpSession.setAttribute("lastLoaded", "");
 			return;
 		}
 		else if (action.equalsIgnoreCase("resetNewUser")) {
+
 			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
 			httpSession.setAttribute("d3webSession", d3webSession);
-			httpSession.setAttribute("lastLoaded", "");
+
+			return;
+		}
+		else if (action.equalsIgnoreCase("checklogin")) {
+
+			response.setContentType("text/html");
+			response.setCharacterEncoding("utf8");
+			PrintWriter writer = response.getWriter();
+
+			if (httpSession.getAttribute("user") == null) {
+				httpSession.setAttribute("log", true);
+				writer.append("NLI");
+			}
+			else {
+				writer.append("NOLI");
+			}
+
 			return;
 		}
 		else if (action.equalsIgnoreCase("login")) {
 			login(request, response, httpSession);
 			return;
 		}
-		else if (action.equalsIgnoreCase("checkrange")) {
-			checkRange(request, response);
+		else if (action.equalsIgnoreCase("sendmail")) {
+			try {
+				sendMail(request, response, httpSession);
+				response.setContentType("text/html");
+				response.setCharacterEncoding("utf8");
+				PrintWriter writer = response.getWriter();
+				writer.append("success");
+			}
+			catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return;
 		}
 	}
@@ -299,8 +316,6 @@ public class Hernia extends HttpServlet {
 
 		Session d3webSess = (Session) httpSession.getAttribute("d3webSession");
 		AbstractD3webRenderer.storeSession(d3webSess);
-
-		// TODO remove httpSession from method
 		cc = d3webr.renderRoot(cc, d3webSess, httpSession);
 
 		writer.print(cc.html.toString()); // deliver the rendered output
@@ -317,7 +332,7 @@ public class Hernia extends HttpServlet {
 	 * @param request ServletRequest
 	 * @param response ServletResponse
 	 */
-	private void addFact(HttpServletRequest request,
+	private void addFacts(HttpServletRequest request,
 			HttpServletResponse response, HttpSession httpSession)
 			throws IOException {
 
@@ -327,10 +342,13 @@ public class Hernia extends HttpServlet {
 
 		Session sess = (Session) httpSession.getAttribute("d3webSession");
 
-		// get the ID of a potentially given single question answered
-		String qid = request.getParameter("qid");
-		// get the input-store
-		String store = request.getParameter("store");
+		List<String> questions = new ArrayList<String>();
+		List<String> values = new ArrayList<String>();
+		getParameter(request, "ocq", "occhoice", questions, values);
+		getParameter(request, "mcq", "mcchoices", questions, values);
+		getParameter(request, "dateq", "date", questions, values);
+		getParameter(request, "textq", "text", questions, values);
+		getParameter(request, "numq", "num", questions, values);
 
 		/*
 		 * Check, whether a required value (for saving) is specified. If yes,
@@ -339,142 +357,26 @@ public class Hernia extends HttpServlet {
 		 * marker "<required value>" so the user is informed by AJAX to provide
 		 * this marked value.
 		 */
-
+		List<String> all = new LinkedList<String>();
+		all.addAll(questions);
+		all.addAll(values);
 		String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
-		if ((!reqVal.equals("")) &&
-				(!D3webUtils.checkReqVal(reqVal, sess, qid, store))) {
+		if (!reqVal.equals("")
+				&& !checkReqVal(reqVal, sess, all)) {
 
 			writer.append(reqVal);
 			return;
 		}
 
-		// if there are values in the input-store (i.e., multiple questions
-		// answered or changed
-		if (!store.equals("") || !store.equals(" ")) {
-
-			// replace empty-space surrogate
-			store = store.replace("q_", "").replace("_", " ").replace("+", " ");
-
-			// split store into the 3 categories num/text/date
-			String[] cats = store.split("&&&&");
-			String[] nums = null;
-			String[] txts = null;
-			String[] dates = null;
-
-			// split category Strings into id-value pairs
-			if (cats[0] != null) {
-				nums = cats[0].split(";");
-			}
-			if (cats[1] != null) {
-				txts = cats[1].split(";");
-			}
-			if (cats[2] != null) {
-				dates = cats[2].split(";");
-			}
-
-			// split id-value pairs and set values correspondingly
-			// for NUM
-			String[] valPair = null;
-			if (nums != null) {
-				for (String s : nums) {
-					if (!s.equals(" ") && !s.equals("")) {
-						valPair = s.split("###");
-						D3webUtils.setValue(valPair[0], valPair[1], sess);
-					}
-				}
-			}
-			// for TEXT
-			if (txts != null && !txts.equals(" ") && !txts.equals("")) {
-				for (String s : txts) {
-					if (!s.equals(" ") && !s.equals("")) {
-						valPair = s.split("###");
-						D3webUtils.setValue(valPair[0], valPair[1], sess);
-					}
-				}
-			}
-			// for DATE
-			if (dates != null) {
-				for (String s : dates) {
-					if (!s.equals(" ") && !s.equals("")) {
-						valPair = s.split("###");
-						D3webUtils.setValue(valPair[0], valPair[1], sess);
-					}
-				}
-			}
+		for (int i = 0; i < questions.size(); i++) {
+			setValue(questions.get(i), values.get(i), sess);
 		}
-
-		// get single value storage
-		String positions = request.getParameter("pos");
-		// if not EMPTY, i.e., if one single value was set
-		if (!positions.equals("EMPTY")) {
-
-			// replace whitespace surrogates and set value
-			qid = qid.replace("q_", "").replace("_", " ");
-			qid = "q_" + qid;
-			positions = positions.replace("_", " ");
-
-			D3webUtils.setValue(qid, positions, sess);
-
-			// AUTOSAVE
-			String folderPath = GlobalSettings.getInstance().getCaseFolder();
-			Session d3webSession = (Session) httpSession.getAttribute("d3webSession");
-			long before = System.currentTimeMillis();
-			new SaveThread(folderPath, d3webSession).start();
-			System.out.println(System.currentTimeMillis() - before);
-
-		}
-	}
-
-	/**
-	 * Adding MC facts
-	 * 
-	 * @created 29.04.2011
-	 * @param request
-	 * @param response
-	 * @param httpSession
-	 * @throws IOException
-	 */
-	private void addMCFact(HttpServletRequest request,
-			HttpServletResponse response, HttpSession httpSession)
-			throws IOException {
-
-		response.setContentType("text/html");
-		response.setCharacterEncoding("utf8");
-		PrintWriter writer = response.getWriter();
-
-		Session sess = (Session) httpSession.getAttribute("d3webSession");
-
-		// get the ID of a potentially given single question answered
-		String qid = request.getParameter("qid");
-		qid = qid.replace("q_", "").replace("_", " ");
-
-		String mcVals = request.getParameter("mcs");
-		mcVals = mcVals.replace("_", " ");
-
-		/*
-		 * Check, whether a required value (for saving) is specified. If yes,
-		 * check whether this value has already been set in the KB or is about
-		 * to be set in the current call --> go on normally. Otherwise, return a
-		 * marker "<required value>" so the user is informed by AJAX to provide
-		 * this marked value.
-		 */
-
-		String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
-		if ((!reqVal.equals("") || !reqVal.equals("none")) &&
-				(!D3webUtils.checkReqVal(reqVal, sess, qid, ""))) {
-
-			writer.append(reqVal);
-			return;
-		}
-
-		D3webUtils.setValue(qid, mcVals, sess);
 
 		// AUTOSAVE
 		String folderPath = GlobalSettings.getInstance().getCaseFolder();
 		Session d3webSession = (Session) httpSession.getAttribute("d3webSession");
-		long before = System.currentTimeMillis();
 		new SaveThread(folderPath, d3webSession).start();
-		System.out.println(System.currentTimeMillis() - before);
+
 	}
 
 	private class SaveThread extends Thread {
@@ -491,13 +393,24 @@ public class Hernia extends HttpServlet {
 		public void run() {
 
 			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
-						folderPath,
-						D3webConnector.getInstance().getD3webParser().getRequired(),
-						"autosave", d3webSession);
+					folderPath,
+					D3webConnector.getInstance().getD3webParser().getRequired(),
+					"autosave", d3webSession);
 		}
 	}
 
-	// TODO
+	private void getParameter(HttpServletRequest request, String paraName1, String paraName2, List<String> parameters1, List<String> parameters2) {
+		int i = 0;
+		while (true) {
+			String para1 = request.getParameter(paraName1 + i);
+			String para2 = request.getParameter(paraName2 + i);
+			if (para1 == null || para2 == null) break;
+			parameters1.add(para1.replaceAll("_", " "));
+			parameters2.add(para2.replaceAll("_", " "));
+			i++;
+		}
+	}
+
 	/**
 	 * Saving a case.
 	 * 
@@ -514,17 +427,11 @@ public class Hernia extends HttpServlet {
 		PrintWriter writer = null;
 		writer = response.getWriter();
 
-		HttpSession hsess = request.getSession();
-		String login = (String) hsess.getAttribute("login");
-		String nname = (String) hsess.getAttribute("nname");
-		String inst = (String) hsess.getAttribute("institute");
-		String idString = login + nname + inst;
-		// System.out.println(login + nname + inst);
-
 		// retrieves path to /cases folder on the server
 		String folderPath = GlobalSettings.getInstance().getCaseFolder();
-		String userFilename = idString + "&&&" + request.getParameter("userfn");
-		System.out.println(userFilename);
+		// folderPath += "/" + httpSession.getAttribute("user");
+		// System.out.println(folderPath);
+		String userFilename = request.getParameter("userfn");
 		String lastLoaded = (String) httpSession.getAttribute("lastLoaded");
 
 		// if any file had been loaded before as a case
@@ -539,8 +446,9 @@ public class Hernia extends HttpServlet {
 				// if user loaded case before, he can save with that already
 				// existing filename
 				if (lastLoaded.equals(userFilename)) {
-					PersistenceD3webUtils.saveCaseWithLoginNnameInstituteTimestamp(
+					PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
 							folderPath,
+							D3webConnector.getInstance().getD3webParser().getRequired(),
 							userFilename,
 							(Session) httpSession.getAttribute("d3webSession"));
 				}
@@ -552,8 +460,9 @@ public class Hernia extends HttpServlet {
 			// otherwise
 			else {
 				System.out.println("save");
-				PersistenceD3webUtils.saveCaseWithLoginNnameInstituteTimestamp(
+				PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
 						folderPath,
+						D3webConnector.getInstance().getD3webParser().getRequired(),
 						userFilename,
 						(Session) httpSession.getAttribute("d3webSession"));
 			}
@@ -573,15 +482,71 @@ public class Hernia extends HttpServlet {
 
 			// otherwise if filename/case is not existent, it can be saved
 			else {
-				PersistenceD3webUtils.saveCaseWithLoginNnameInstituteTimestamp(
+				PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
 						folderPath,
+						D3webConnector.getInstance().getD3webParser().getRequired(),
 						userFilename,
 						(Session) httpSession.getAttribute("d3webSession"));
 			}
 		}
 	}
 
-	// TODO
+	/**
+	 * Send a mail with login request via account "user" and to the contact
+	 * person specified in InternetAdress "to"
+	 * 
+	 * @created 29.04.2011
+	 * @param request
+	 * @param response
+	 * @param httpSession
+	 * @throws MessagingException
+	 */
+	private void sendMail(HttpServletRequest request, HttpServletResponse response,
+			HttpSession httpSession) throws MessagingException {
+
+		final String user = "SendmailAnonymus@freenet.de";
+		final String pw = "sendmail";
+
+		/* setup properties for mail server */
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "mx.freenet.de");
+		props.put("mail.smtp.port", "587");
+		props.put("mail.transport.protocol", "smtp");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.user", user);
+		props.put("mail.password", pw);
+		props.put("mail.debug", "true");
+
+		javax.mail.Session session = javax.mail.Session.getDefaultInstance(props,
+				new javax.mail.Authenticator() {
+
+					@Override
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication(user, pw);
+					}
+				});
+
+		MimeMessage message = new MimeMessage(session);
+
+		// from-identificator
+		InternetAddress from = new InternetAddress("SendmailAnonymus@freenet.de");
+		message.setFrom(from);
+
+		// InternetAddress to = new
+		// InternetAddress("reinhard.dietzel@maindreieck.com");
+		InternetAddress to = new InternetAddress("martina.freiberg@uni-wuerzburg.de");
+		message.addRecipient(Message.RecipientType.TO, to);
+
+		/* A subject */
+		message.setSubject("Mediastinitis Loginanfrage");
+
+		String loginUser = request.getParameter("user");
+		message.setText("Bitte Logindaten erneut zusenden: \n\n" +
+				"Benutzername: " + loginUser);
+		Transport.send(message);
+
+	}
+
 	/**
 	 * Loading a case.
 	 * 
@@ -617,7 +582,6 @@ public class Hernia extends HttpServlet {
 		httpSession.setAttribute("lastLoaded", filename);
 	}
 
-	// TODO
 	/**
 	 * Handle login of new user
 	 * 
@@ -651,8 +615,8 @@ public class Hernia extends HttpServlet {
 
 		// if no valid login
 		// if (!permitUser(u, p)) {
-
-		// causes JS to display error message
+		//
+		// // causes JS to display error message
 		// writer.append("nosuccess");
 		// return;
 		// }
@@ -681,62 +645,472 @@ public class Hernia extends HttpServlet {
 	}
 
 	/**
-	 * Checks, whether for a numerical question a range is given and gives back
-	 * this range (if specified) as the writer backstring so it can be further
-	 * processed (checked) by JS.
+	 * Utility method for adding values. Adds a single value for a given
+	 * question to the current knowledge base in the current problem solving
+	 * session.
 	 * 
-	 * @created 05.05.2011
-	 * @param request
-	 * @param response
-	 * @throws IOException
+	 * @created 28.01.2011
+	 * @param termObID The ID of the TerminologyObject, the value is to be
+	 *        added.
+	 * @param valString The value, that is to be added for the TerminologyObject
+	 *        with ID valID.
 	 */
-	private void checkRange(HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		response.setContentType("text/html");
-		response.setCharacterEncoding("utf8");
-		PrintWriter writer = response.getWriter();
+	private void setValue(String termObID, String valString, Session sess) {
 
-		String qidsString = request.getParameter("qids");
-		qidsString = qidsString.replace("q_", "");
+		if (termObID == null || valString == null) return;
 
-		String[] qids = qidsString.split(";");
-		String qidBackstring = "";
+		termObID = termObID.replaceAll("_", " ");
+		valString = valString.replaceAll("_", " ");
 
-		for (String qid : qids) {
-			String[] idVal = qid.split("%");
+		Fact lastFact = null;
+		Blackboard blackboard = sess.getBlackboard();
+		Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(termObID);
 
-			// TerminologyManager man = new
-			// TerminologyManager(d3wcon.getKb());
-			Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(
-					idVal[0]);
+		// if TerminologyObject not found in the current KB return & do nothing
+		if (to == null) {
+			return;
+		}
 
-			if (to instanceof QuestionNum) {
-				if (to.getInfoStore().getValue(BasicProperties.QUESTION_NUM_RANGE) != null) {
-					NumericalInterval range = to.getInfoStore().getValue(
-							BasicProperties.QUESTION_NUM_RANGE);
-					qidBackstring += to.getName() + "%" + idVal[1] + "%";
-					qidBackstring += range.getLeft() + "-" + range.getRight() + ";";
+		// init Value object...
+		Value value = null;
+
+		// check if unknown option was chosen
+		if (valString.contains("unknown")) {
+
+			// remove a previously set value
+			lastFact = blackboard.getValueFact(to);
+			if (lastFact != null) {
+				blackboard.removeValueFact(lastFact);
+			}
+
+			// and add the unknown value
+			value = Unknown.getInstance();
+			Fact fact = FactFactory.createFact(sess, to, value,
+					PSMethodUserSelected.getInstance(),
+					PSMethodUserSelected.getInstance());
+			blackboard.addValueFact(fact);
+
+		}
+
+		// otherwise, i.e., for all other "not-unknown" values
+		else {
+
+			// CHOICE questions
+			if (to instanceof QuestionChoice) {
+				if (to instanceof QuestionOC) {
+					// valueString is the ID of the selected item
+					try {
+						value = KnowledgeBaseUtils.findValue(to, valString);
+					}
+					catch (NumberFormatException nfe) {
+						// value still null, will not be set
+					}
+				}
+				else if (to instanceof QuestionMC) {
+
+					if (valString.equals("")) {
+						value = UndefinedValue.getInstance();
+					}
+					else {
+						String[] choices = valString.split(",");
+						List<Choice> cs = new ArrayList<Choice>();
+
+						for (String c : choices) {
+							cs.add(new Choice(c));
+						}
+						value = MultipleChoiceValue.fromChoices(cs);
+
+					}
+				}
+			}
+			// TEXT questions
+			else if (to instanceof QuestionText) {
+				String textPattern = to.getInfoStore().getValue(ProKEtProperties.TEXT_FORMAT);
+				Pattern p = null;
+				if (textPattern != null && !textPattern.isEmpty()) {
+					try {
+						p = Pattern.compile(textPattern);
+					}
+					catch (Exception e) {
+
+					}
+				}
+				if (p != null) {
+					Matcher m = p.matcher(valString);
+					if (m.find()) {
+						value = new TextValue(m.group());
+					}
+				}
+				else {
+					value = new TextValue(valString);
+				}
+			}
+			// NUM questions
+			else if (to instanceof QuestionNum) {
+				try {
+					value = new NumValue(Double.parseDouble(valString));
+				}
+				catch (NumberFormatException ex) {
+					// value still null, will not be set
+				}
+			}
+			// DATE questions
+			else if (to instanceof QuestionDate) {
+				String dateDescription = to.getInfoStore().getValue(ProKEtProperties.DATE_FORMAT);
+				if (dateDescription != null && !dateDescription.isEmpty()) {
+					String[] dateDescSplit = dateDescription.split("OR");
+					for (String dateDesc : dateDescSplit) {
+						dateDesc = dateDesc.trim();
+						try {
+							SimpleDateFormat dateFormat = new SimpleDateFormat(dateDesc);
+							value = new DateValue(dateFormat.parse(valString));
+						}
+						catch (ParseException e) {
+							// value still null, will not be set
+						}
+						catch (IllegalArgumentException e) {
+							// value still null, will not be set
+						}
+						if (value != null) {
+							break;
+						}
+					}
+				}
+				else {
+					try {
+						SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+						value = new DateValue(dateFormat.parse(valString));
+					}
+					catch (ParseException e) {
+						// value still null, will not be set
+					}
+				}
+			}
+
+			// if reasonable value retrieved, set it for the given
+			// TerminologyObject
+			if (value != null) {
+
+				// remove previously set value
+				lastFact = blackboard.getValueFact(to);
+				if (lastFact != null) {
+					blackboard.removeValueFact(lastFact);
+				}
+
+				if (UndefinedValue.isNotUndefinedValue(value)) {
+					// add new value as UserEnteredFact
+					Fact fact = FactFactory.createUserEnteredFact(to, value);
+					blackboard.addValueFact(fact);
 				}
 			}
 		}
-		writer.append(qidBackstring);
+
+		// TODO: CHECK whether we need both the resetNotIndicated and
+		// checkChildren methods
+
+		// check, that questions of all non-init and non-indicated
+		// questionnaires are reset, i.e., no value
+		for (QASet qaSet : d3wcon.getKb().getManager().getQContainers()) {
+			// find the appropriate qaset in the knowledge base
+
+			if (!d3wcon.getKb().getInitQuestions().contains(qaSet) &&
+					!qaSet.getName().equals("Q000") &&
+					(blackboard.getIndication(qaSet).getState() != State.INDICATED &&
+							blackboard.getIndication(
+									qaSet).getState() != State.INSTANT_INDICATED)) {
+
+				resetNotIndicatedTOs(qaSet, blackboard, sess);
+			}
+		}
+
+		// ensure, that follow-up questions are reset if parent-question doesn't
+		// indicate any more.
+		checkChildrenAndRemoveVals(to, blackboard);
 	}
 
 	/**
-	 * Creates a new d3websession for a newly logged in user. Stores the
-	 * respective values (session, loginname, famname and lastloaded session
-	 * (nothing when new) into the httpsession for storage during user session.
+	 * Utility method for resetting follow-up questions due to setting their
+	 * parent question to Unknown. Then, the childrens' value should also be
+	 * removed again, recursively also for childrens' children and so on.
 	 * 
-	 * @created 05.05.2011
-	 * @param httpSession the current httpSession
-	 * @param login the login name of the user
-	 * @param nname the familiy name of the user
+	 * @created 31.01.2011
+	 * @param parent The parent TerminologyObject
+	 * @param blackboard The currently active blackboard
 	 */
-	private void resetNewUser(HttpSession httpSession, String login, String nname) {
-		Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
-		httpSession.setAttribute("d3webSession", d3webSession);
-		httpSession.setAttribute("lastLoaded", "");
-		httpSession.setAttribute("login", login);
-		httpSession.setAttribute("nname", nname);
+	private void checkChildrenAndRemoveVals(TerminologyObject parent,
+			Blackboard blackboard) {
+
+		if (parent.getChildren() != null && parent.getChildren().length != 0) {
+			for (TerminologyObject c : parent.getChildren()) {
+
+				Question qto = D3webConnector.getInstance().getKb().getManager().searchQuestion(
+						c.getName());
+
+				if (!isIndicated(qto, blackboard)
+						|| !isParentIndicated(qto, blackboard)) {
+
+					// remove a previously set value
+					Fact lastFact = blackboard.getValueFact(qto);
+					if (lastFact != null) {
+						blackboard.removeValueFact(lastFact);
+					}
+				}
+
+				checkChildrenAndRemoveVals(c, blackboard);
+			}
+		}
+	}
+
+	/**
+	 * Utility method for resetting
+	 * 
+	 * @created 09.03.2011
+	 * @param parent
+	 * @param bb
+	 */
+	private void resetNotIndicatedTOs(TerminologyObject parent, Blackboard bb,
+			Session sess) {
+
+		if (parent.getChildren() != null && parent.getChildren().length != 0) {
+			Fact lastFact = null;
+
+			Blackboard blackboard =
+					sess.getBlackboard();
+
+			// go through all questions of the qcontainer
+			for (TerminologyObject to : parent.getChildren()) {
+
+				if (to instanceof Question) {
+
+					Question qto = D3webConnector.getInstance().getKb().getManager().searchQuestion(
+							to.getName());
+
+					// workaround to assure that same question from other
+					// questionnaire is not reset, too
+					if (qto.getParents().length == 1) {
+						// remove a previously set value
+						lastFact = blackboard.getValueFact(qto);
+						if (lastFact != null) {
+							blackboard.removeValueFact(lastFact);
+						}
+						resetNotIndicatedTOs(to, bb, sess);
+					}
+
+				}
+			}
+		}
+	}
+
+	/**
+	 * Utility method for checking whether a given terminology object is
+	 * indicated or instant_indicated or not in the current session.
+	 * 
+	 * @created 09.03.2011
+	 * @param to The terminology object to check
+	 * @param bb
+	 * @return True, if the terminology object is (instant) indicated.
+	 */
+	private boolean isIndicated(TerminologyObject to, Blackboard bb) {
+		for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
+			// find the appropriate qaset in the knowledge base
+			if (qaSet.getName().equals(to.getName()) &&
+					// and check its indication state
+					(bb.getIndication((InterviewObject) to).getState() == State.INDICATED
+					|| bb.getIndication((InterviewObject) to).getState() == State.INSTANT_INDICATED)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Utility method for checking whether the parent object of a given
+	 * terminology object is (instant) indicated.
+	 * 
+	 * @created 09.03.2011
+	 * @param to The terminology object, the parent of which is to be checked.
+	 * @param bb
+	 * @return True, if there exists a parent object of the given terminology
+	 *         object that is indicated.
+	 */
+	private boolean isParentIndicated(TerminologyObject to, Blackboard bb) {
+		for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
+
+			// get questionnaires only
+			if (qaSet instanceof QContainer) {
+				QContainer qcon = (QContainer) qaSet;
+
+				// and check its indication state
+				if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(qcon)
+						|| bb.getIndication(qcon).getState() == State.INDICATED
+						|| bb.getIndication(qcon).getState() == State.INSTANT_INDICATED) {
+
+					// if questionnaire indicated, check whether to is its child
+					if (hasChild(qcon, to)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Utility method that checks, whether a TerminologyObject child is the
+	 * child of another TerminologyObject parent. That is, whether child is
+	 * nested hierarchically underneath parent.
+	 * 
+	 * @created 30.01.2011
+	 * @param parent The parent TerminologyObject
+	 * @param child The child to check
+	 * @return True, if child is the child of parent
+	 */
+	private boolean hasChild(TerminologyObject parent, TerminologyObject child) {
+
+		if (parent.getChildren() != null && parent.getChildren().length != 0) {
+			for (TerminologyObject c : parent.getChildren()) {
+				if (c.equals(child)) {
+					return true;
+				}
+			}
+			for (TerminologyObject c : parent.getChildren()) {
+				if (c.getChildren().length != 0) {
+					return hasChild(c, child);
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Check, whether the user has permissions to log in. Permissions are stored
+	 * in userdat.csv in cases parent folder
+	 * 
+	 * @created 15.03.2011
+	 * @param user The user name.
+	 * @param password The password.
+	 * @return True, if permissions are correct.
+	 */
+	private boolean permitUser(String user, String password) {
+
+		// get parent folder for storing cases
+		String caseFolder = GlobalSettings.getInstance().getCaseFolder();
+
+		String csvFile = caseFolder + "/usrdat.csv";
+		CSVReader csvr = null;
+		String[] nextLine = null;
+
+		try {
+			csvr = new CSVReader(new FileReader(csvFile));
+			// go through file
+			while ((nextLine = csvr.readNext()) != null) {
+				// skip first line
+				if (!nextLine[0].startsWith("usr")) {
+					// if username and pw could be found, return true
+					if (nextLine[0].equals(user) && nextLine[1].equals(password)) {
+						return true;
+					}
+				}
+			}
+
+		}
+		catch (FileNotFoundException fnfe) {
+			// TODO Auto-generated catch block
+			fnfe.printStackTrace();
+		}
+		catch (IOException ioe) {
+			// TODO Auto-generated catch block
+			ioe.printStackTrace();
+		}
+
+		return false; // trust no one per default
+	}
+
+	/**
+	 * Checks, whether a potentially required value is already set in the KB or
+	 * is contained in the current set of values to write to the KB. If yes, the
+	 * method returns true, if no, false.
+	 * 
+	 * @created 15.04.2011
+	 * @param requiredVal The required value that is to check
+	 * @param sess The d3webSession
+	 * @param valToSet The single value to set
+	 * @param store The value store
+	 * @return TRUE of the required value is already set or contained in the
+	 *         current set of values to set
+	 */
+	private boolean checkReqVal(String requiredVal, Session sess, List<String> check) {
+		Blackboard blackboard = sess.getBlackboard();
+
+		Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(requiredVal);
+
+		Fact lastFact = blackboard.getValueFact(to);
+
+		boolean contains = false;
+		for (String s : check) {
+			if (s.equals(requiredVal)) {
+				contains = true;
+				break;
+			}
+		}
+		if (contains || (lastFact != null && lastFact.getValue().toString() != "")) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Stream images from the KB into intermediate storage in webapp
+	 * 
+	 * @created 29.04.2011
+	 */
+	private void streamImages() {
+
+		List<Resource> kbimages = D3webConnector.getInstance().getKb().getResources();
+
+		if (kbimages != null && kbimages.size() != 0) {
+			for (Resource r : kbimages) {
+				String rname = r.getPathName();
+
+				if (rname.endsWith(".jpg") || rname.endsWith(".JPG")) {
+					BufferedImage bui = ImageHandler.getResourceAsBUI(r);
+					try {
+						File file =
+								new File(GlobalSettings.getInstance().getKbImgFolder()
+										+ "/" + rname);
+						ImageIO.write(bui, "jpg", file);
+					}
+					catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				if (rname.endsWith(".png") || rname.endsWith(".PNG")) {
+					BufferedImage bui = ImageHandler.getResourceAsBUI(r);
+					try {
+						File file =
+								new File(GlobalSettings.getInstance().getKbImgFolder()
+										+ "/" + rname);
+						ImageIO.write(bui, "png", file);
+					}
+					catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Retrieve the difference between two date objects in seconds
+	 * 
+	 * @created 29.04.2011
+	 * @param d1 First date
+	 * @param d2 Second date
+	 * @return the difference in seconds
+	 */
+	public float getDifference(Date d1, Date d2) {
+		return (d1.getTime() - d2.getTime()) / 1000;
 	}
 }

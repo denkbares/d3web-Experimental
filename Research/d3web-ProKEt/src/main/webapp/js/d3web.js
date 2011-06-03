@@ -418,7 +418,7 @@ function d3web_collectMCs(clickedEl, mcVals) {
 }
 
 function d3web_IQClicked(id) {
-	//alert("image answer " + id + " was clicked");
+	alert("image answer " + id + " was clicked");
 	d3web_getSelectedFacts($('#' + id));
 	/*var target = $("#" + id);	// get the clicked element
 	var selected = target.find(":input:checked");	// find clicked input 

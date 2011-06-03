@@ -81,7 +81,7 @@ public class AnswerNumD3webRenderer extends AbstractD3webRenderer implements Ans
 					BasicProperties.QUESTION_NUM_RANGE);
 			String inter = "";
 			if (interVal != null) {
-				inter = interVal.getLeft() + " - " + interVal.getRight() + " ";
+				inter = trimPZ(interVal.getLeft()) + " - " + trimPZ(interVal.getRight()) + " ";
 			}
 			st.setAttribute("text", inter + unit);
 		}
@@ -156,6 +156,21 @@ public class AnswerNumD3webRenderer extends AbstractD3webRenderer implements Ans
 		super.makeTables(to, to, cc, sb);
 
 		return sb.toString();
+	}
+
+	/**
+	 * Trims .0 from doubles.
+	 * 
+	 * @created 16.05.2011
+	 * @param d is the double to trim
+	 * @return trimmed String representation of the double
+	 */
+	private String trimPZ(double d) {
+		String trimmed = String.valueOf(d);
+		if (trimmed.endsWith(".0")) {
+			trimmed = trimmed.substring(0, trimmed.length() - 2);
+		}
+		return trimmed;
 	}
 
 }
