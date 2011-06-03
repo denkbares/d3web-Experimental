@@ -29,6 +29,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -88,7 +89,6 @@ import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
-import de.d3web.proket.utils.IDUtils;
 
 /**
  * Servlet for creating and using dialogs with d3web binding. Binding is more of
@@ -164,6 +164,7 @@ public class Mediastinitis extends HttpServlet {
 		// in case nothing other is provided, "show" is the default action
 		String action = request.getParameter("action");
 		if (action == null) {
+			// action = "mail";
 			action = "show";
 		}
 
@@ -187,6 +188,7 @@ public class Mediastinitis extends HttpServlet {
 			d3wcon.setKbName(d3webParser.getKnowledgeBaseName());
 			d3wcon.setDialogStrat(d3webParser.getStrategy());
 			d3wcon.setDialogType(d3webParser.getType());
+			d3wcon.setIndicationMode(d3webParser.getIndicationMode());
 			d3wcon.setDialogColumns(d3webParser.getDialogColumns());
 			d3wcon.setQuestionColumns(d3webParser.getQuestionColumns());
 			d3wcon.setQuestionnaireColumns(d3webParser.getQuestionnaireColumns());
@@ -198,12 +200,16 @@ public class Mediastinitis extends HttpServlet {
 			if (!d3webParser.getLanguage().equals("")) {
 				d3wcon.setLanguage(d3webParser.getLanguage());
 			}
+			streamImages();
 		}
 
 		// Get the current httpSession or a new one
 		HttpSession httpSession = request.getSession(true);
 
-		streamImages();
+		// if (httpSession.getAttribute("imgStreamed") == null) {
+		// streamImages();
+		// httpSession.setAttribute("imgStreamed", true);
+		// }
 
 		/*
 		 * otherwise, i.e. if session is null create a session according to the
@@ -221,12 +227,8 @@ public class Mediastinitis extends HttpServlet {
 			show(request, response, httpSession);
 			return;
 		}
-		else if (action.equalsIgnoreCase("addfact")) {
-			addFact(request, response, httpSession);
-			return;
-		}
-		else if (action.equalsIgnoreCase("addmcfact")) {
-			addMCFact(request, response, httpSession);
+		else if (action.equalsIgnoreCase("addfacts")) {
+			addFacts(request, response, httpSession);
 			return;
 		}
 		else if (action.equalsIgnoreCase("savecase")) {
@@ -313,7 +315,6 @@ public class Mediastinitis extends HttpServlet {
 			}
 
 			writer.append(qidBackstring);
-
 			return;
 		}
 	}
@@ -360,7 +361,7 @@ public class Mediastinitis extends HttpServlet {
 	 * @param request ServletRequest
 	 * @param response ServletResponse
 	 */
-	private void addFact(HttpServletRequest request,
+	private void addFacts(HttpServletRequest request,
 			HttpServletResponse response, HttpSession httpSession)
 			throws IOException {
 
@@ -370,10 +371,13 @@ public class Mediastinitis extends HttpServlet {
 
 		Session sess = (Session) httpSession.getAttribute("d3webSession");
 
-		// get the ID of a potentially given single question answered
-		String qid = request.getParameter("qid");
-		// get the input-store
-		String store = request.getParameter("store");
+		List<String> questions = new ArrayList<String>();
+		List<String> values = new ArrayList<String>();
+		getParameter(request, "ocq", "occhoice", questions, values);
+		getParameter(request, "mcq", "mcchoices", questions, values);
+		getParameter(request, "dateq", "date", questions, values);
+		getParameter(request, "textq", "text", questions, values);
+		getParameter(request, "numq", "num", questions, values);
 
 		/*
 		 * Check, whether a required value (for saving) is specified. If yes,
@@ -382,149 +386,58 @@ public class Mediastinitis extends HttpServlet {
 		 * marker "<required value>" so the user is informed by AJAX to provide
 		 * this marked value.
 		 */
-
+		List<String> all = new LinkedList<String>();
+		all.addAll(questions);
+		all.addAll(values);
 		String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
-		if ((!reqVal.equals("")) &&
-				(!checkReqVal(reqVal, sess, qid, store))) {
+		if (!reqVal.equals("")
+				&& !checkReqVal(reqVal, sess, all)) {
 
 			writer.append(reqVal);
 			return;
 		}
 
-		// if there are values in the input-store (i.e., multiple questions
-		// answered or changed
-		if (!store.equals("") || !store.equals(" ")) {
-
-			// replace empty-space surrogate
-			store = store.replace("q_", "").replace("_", " ").replace("+", " ");
-
-			// split store into the 3 categories num/text/date
-			String[] cats = store.split("&&&&");
-			String[] nums = null;
-			String[] txts = null;
-			String[] dates = null;
-
-			// split category Strings into id-value pairs
-			if (cats[0] != null) {
-				nums = cats[0].split(";");
-			}
-			if (cats[1] != null) {
-				txts = cats[1].split(";");
-			}
-			if (cats[2] != null) {
-				dates = cats[2].split(";");
-			}
-
-			// split id-value pairs and set values correspondingly
-			// for NUM
-			String[] valPair = null;
-			if (nums != null) {
-				for (String s : nums) {
-					if (!s.equals(" ") && !s.equals("")) {
-						valPair = s.split("###");
-						setValue(valPair[0], valPair[1], sess);
-					}
-				}
-			}
-			// for TEXT
-			if (txts != null && !txts.equals(" ") && !txts.equals("")) {
-				for (String s : txts) {
-					if (!s.equals(" ") && !s.equals("")) {
-						valPair = s.split("###");
-						setValue(valPair[0], valPair[1], sess);
-					}
-				}
-			}
-			// for DATE
-			if (dates != null) {
-				for (String s : dates) {
-					if (!s.equals(" ") && !s.equals("")) {
-						valPair = s.split("###");
-						setValue(valPair[0], valPair[1], sess);
-					}
-				}
-			}
+		for (int i = 0; i < questions.size(); i++) {
+			setValue(questions.get(i), values.get(i), sess);
 		}
-
-		// get single value storage
-		String positions = request.getParameter("pos");
-		// if not EMPTY, i.e., if one single value was set
-		if (!positions.equals("EMPTY")) {
-
-			// replace whitespace surrogates and set value
-			qid = qid.replace("q_", "").replace("_", " ");
-			qid = "q_" + qid;
-			positions = positions.replace("_", " ");
-
-			setValue(qid, positions, sess);
-
-			// AUTOSAVE
-			String folderPath = GlobalSettings.getInstance().getCaseFolder();
-
-			// AUTOSAVE
-			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
-						folderPath,
-						D3webConnector.getInstance().getD3webParser().getRequired(),
-						"autosave",
-						(Session) httpSession.getAttribute("d3webSession"));
-
-		}
-	}
-
-	/**
-	 * Adding MC facts
-	 * 
-	 * @created 29.04.2011
-	 * @param request
-	 * @param response
-	 * @param httpSession
-	 * @throws IOException
-	 */
-	private void addMCFact(HttpServletRequest request,
-			HttpServletResponse response, HttpSession httpSession)
-			throws IOException {
-
-		response.setContentType("text/html");
-		response.setCharacterEncoding("utf8");
-		PrintWriter writer = response.getWriter();
-
-		Session sess = (Session) httpSession.getAttribute("d3webSession");
-
-		// get the ID of a potentially given single question answered
-		String qid = request.getParameter("qid");
-		qid = qid.replace("q_", "").replace("_", " ");
-
-		String mcVals = request.getParameter("mcs");
-		mcVals = mcVals.replace("_", " ");
-
-		/*
-		 * Check, whether a required value (for saving) is specified. If yes,
-		 * check whether this value has already been set in the KB or is about
-		 * to be set in the current call --> go on normally. Otherwise, return a
-		 * marker "<required value>" so the user is informed by AJAX to provide
-		 * this marked value.
-		 */
-
-		String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
-		if ((!reqVal.equals("") || !reqVal.equals("none")) &&
-				(!checkReqVal(reqVal, sess, qid, ""))) {
-
-			writer.append(reqVal);
-			return;
-		}
-
-		setValue(qid, mcVals, sess);
 
 		// AUTOSAVE
 		String folderPath = GlobalSettings.getInstance().getCaseFolder();
+		Session d3webSession = (Session) httpSession.getAttribute("d3webSession");
+		new SaveThread(folderPath, d3webSession).start();
 
-		// AUTOSAVE
-		PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
-						folderPath,
-						D3webConnector.getInstance().getD3webParser().getRequired(),
-						"autosave",
-						(Session) httpSession.getAttribute("d3webSession"));
+	}
 
+	private class SaveThread extends Thread {
+
+		private final String folderPath;
+		private final Session d3webSession;
+
+		public SaveThread(String folderPath, Session d3webSession) {
+			this.folderPath = folderPath;
+			this.d3webSession = d3webSession;
+		}
+
+		@Override
+		public void run() {
+
+			PersistenceD3webUtils.saveCaseTimestampOneQuestionAndInput(
+					folderPath,
+					D3webConnector.getInstance().getD3webParser().getRequired(),
+					"autosave", d3webSession);
+		}
+	}
+
+	private void getParameter(HttpServletRequest request, String paraName1, String paraName2, List<String> parameters1, List<String> parameters2) {
+		int i = 0;
+		while (true) {
+			String para1 = request.getParameter(paraName1 + i);
+			String para2 = request.getParameter(paraName2 + i);
+			if (para1 == null || para2 == null) break;
+			parameters1.add(para1.replaceAll("_", " "));
+			parameters2.add(para2.replaceAll("_", " "));
+			i++;
+		}
 	}
 
 	/**
@@ -631,7 +544,7 @@ public class Mediastinitis extends HttpServlet {
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.user", user);
 		props.put("mail.password", pw);
-		// props.put("mail.debug", "true");
+//		props.put("mail.debug", "true");
 
 		javax.mail.Session session = javax.mail.Session.getDefaultInstance(props,
 				new javax.mail.Authenticator() {
@@ -773,14 +686,12 @@ public class Mediastinitis extends HttpServlet {
 	 */
 	private void setValue(String termObID, String valString, Session sess) {
 
-		// TODO REFACTOR: can be removed, just provide ID without "q_"
-		// remove prefix, e.g. "q_" in "q_BMI"
-		termObID = IDUtils.removeNamspace(termObID);
+		if (termObID == null || valString == null) return;
+
 
 		Fact lastFact = null;
 		Blackboard blackboard = sess.getBlackboard();
-		Question to =
-				D3webConnector.getInstance().getKb().getManager().searchQuestion(termObID);
+		Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(termObID);
 
 		// if TerminologyObject not found in the current KB return & do nothing
 		if (to == null) {
@@ -816,7 +727,6 @@ public class Mediastinitis extends HttpServlet {
 				if (to instanceof QuestionOC) {
 					// valueString is the ID of the selected item
 					try {
-						valString = valString.replace("q_", "");
 						value = KnowledgeBaseUtils.findValue(to, valString);
 					}
 					catch (NumberFormatException nfe) {
@@ -1156,19 +1066,21 @@ public class Mediastinitis extends HttpServlet {
 	 * @return TRUE of the required value is already set or contained in the
 	 *         current set of values to set
 	 */
-	private boolean checkReqVal(String requiredVal, Session sess, String valToSet, String store) {
+	private boolean checkReqVal(String requiredVal, Session sess, List<String> check) {
 		Blackboard blackboard = sess.getBlackboard();
-
-		valToSet = valToSet.replace("q_", "").replace("_", " ");
-		store = store.replace("_", " ");
 
 		Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(requiredVal);
 
 		Fact lastFact = blackboard.getValueFact(to);
 
-		if (requiredVal.equals(valToSet) ||
-				(store.contains(requiredVal)) ||
-				(lastFact != null && lastFact.getValue().toString() != "")) {
+		boolean contains = false;
+		for (String s : check) {
+			if (s.equals(requiredVal)) {
+				contains = true;
+				break;
+			}
+		}
+		if (contains || (lastFact != null && lastFact.getValue().toString() != "")) {
 			return true;
 		}
 		return false;

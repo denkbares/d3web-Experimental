@@ -19,6 +19,9 @@
  */
 package de.d3web.proket.d3web.output.render;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.knowledge.TerminologyObject;
@@ -26,7 +29,6 @@ import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.QuestionMC;
-import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.interviewmanager.Form;
@@ -48,6 +50,8 @@ import de.d3web.proket.utils.TemplateUtils;
  * @created 15.01.2011
  */
 public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements IQuestionD3webRenderer {
+	
+
 
 	@Override
 	/**
@@ -118,24 +122,15 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 			st.setAttribute("qstate", "question-c");
 		}
 
-		String[] split;
-		String imgName = "";
-		String width = "";
-		String desc = to.getInfoStore().getValue(MMInfo.DESCRIPTION);
-		if (desc.contains("IMG#####")) {
-			split = desc.split("WIDTH#####");
-			imgName = split[0].replace("IMG#####", "");
 
-			if (split.length == 2) {
-				width = split[1];
-			}
+		String imgName = to.getInfoStore().getValue(ProKEtProperties.IMAGE);
+		String width = to.getInfoStore().getValue(ProKEtProperties.IMAGEWIDTH);
 
-		}
 		st.setAttribute("image", imgName);
-		st.setAttribute("width", width);
+		if (width != null) st.setAttribute("width", width);
 
 		// read clicable-area coordinates from KB
-		String areas = getChoiceAreas(to);
+		String areas = getChoiceAreas(width, to);
 		st.setAttribute("areas", areas);
 
 		if (to instanceof QuestionMC) {
@@ -153,6 +148,8 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 		return sb.toString();
 	}
 
+	Pattern imageMapPattern = Pattern.compile("^ *SIZE *(\\d+) *x *(\\d+) *SHAPE *(\\w+) *COORDS *((?:\\d+,)+\\d+) *$");
+	
 	/**
 	 * Get all the defined clickable areas of an image question and assemble
 	 * them to represent a html area map String: <area shape="circle"
@@ -165,43 +162,61 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 	 *        defined for
 	 * @return HTML area map representing String
 	 */
-	protected String getChoiceAreas(TerminologyObject to) {
+	protected String getChoiceAreas(String width, TerminologyObject to) {
 
 		StringBuilder bui = new StringBuilder();
-
+		String fixedWidthString = to.getInfoStore().getValue(ProKEtProperties.IMAGEWIDTH);
+		double fixedWidth = -1;
+		try {
+			fixedWidth = Double.valueOf(fixedWidthString);
+		} catch (NumberFormatException e) {}
+		
 		// imagequestions make sense for choice questions only so far
 		if (to instanceof QuestionChoice) {
 
-			for (Choice c : ((QuestionChoice) to).getAllAlternatives()) {
+			for (Choice choice : ((QuestionChoice) to).getAllAlternatives()) {
 
 				// basic StringTemplate file the shape and coords are inserted
 				// into
 				StringTemplate st = TemplateUtils.getStringTemplate(
 						getTemplateName("ImageAnswerD3web"), "html");
 
-				st.setAttribute("fullId", c.getName().replace(" ", "_"));
+				st.setAttribute("fullId", choice.getName().replace(" ", "_"));
 
 				// if description = shape and coords for current Choice exist
-				if (c.getInfoStore().getValue(MMInfo.DESCRIPTION) != null) {
-
-					// split shape and coords
-					String[] asplit =
-							c.getInfoStore().getValue(MMInfo.DESCRIPTION).split("SHAPE");
-
-					if (!asplit[0].equals("")) {
-						st.setAttribute("coords", asplit[0]);
-					}
-					if (!asplit[1].equals("")) {
-						st.setAttribute("shape", asplit[1]);
-					}
-
-					// if no description given at all or part of the description
-					// is empty String then set defaults to avoid HTML errors
+				String imgmap = choice.getInfoStore().getValue(ProKEtProperties.IMAGEMAP);
+				Matcher m;
+			
+				// if no description given at all or part of the description
+				// is empty String then set defaults to avoid HTML errors
+				String fixedCoords = "0,0,0,0";
+				String shape = "rect";
+				if (imgmap != null && (m = imageMapPattern.matcher(imgmap)).find()) {
+						// split shape and coords
+						double actualWidth = Double.valueOf(m.group(1));
+						double actualHeight = Double.valueOf(m.group(2));
+						
+						if (actualWidth > 0 && actualHeight > 0) {
+							if (fixedWidth == -1) fixedWidth = actualWidth;
+							double xFactor = fixedWidth / actualWidth;
+							double fixedHeight = actualHeight * xFactor;
+							double yFactor = fixedHeight / actualHeight;
+							
+							String[] coords = m.group(4).split(",");
+							StringBuilder coordsBuilder = new StringBuilder();
+							int count = 0;
+							for (String coord : coords) {
+								int c = (int) (Double.valueOf(coord) * (count % 2 == 0 ? xFactor : yFactor));
+								coordsBuilder.append(c + ",");
+							}
+							fixedCoords = coordsBuilder.substring(0, coordsBuilder.length() - 1);
+							shape =  m.group(3);
+							st.setAttribute("coords", m.group(4));
+						}
 				}
-				else {
-					st.setAttribute("coords", "0,0,0,0");
-					st.setAttribute("shape", "rect");
-				}
+				st.setAttribute("coords", fixedCoords);
+				st.setAttribute("shape", shape);
+				
 				bui.append(st.toString());
 			}
 		}

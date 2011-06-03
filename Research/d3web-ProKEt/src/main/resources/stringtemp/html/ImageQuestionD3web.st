@@ -6,7 +6,7 @@
 		<table>
 			<tr>
 				<td width="90%" valign="center">
-					<img width="$width$" src="kbimg/$image$" alt="$image$" 
+					<img $if(width)$width="$width$"$endif$ src="kbimg/$image$" alt="$image$" 
 					$if(inactive)$
 						usemap="">
 					$else$

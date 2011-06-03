@@ -163,7 +163,7 @@ function sendLoginMailRequest(){
 		if (html != "success"){
 		} else {
 			$('#loginError').html("");
-			$('#loginErrorMailRequest').html("<b>Vielen Dank. Sie erhalten Ihre Daten in Kürze an die" +
+			$('#loginErrorMailRequest').html("<b>Vielen Dank. Sie erhalten Ihre Daten in Kürze an die " +
 					"für Ihren Benutzernamen gespeicherte email-Adresse zugeschickt.</b>");
 		}
 	});

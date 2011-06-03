@@ -98,40 +98,43 @@ Please choose the database level.init = Level 1
 %
 
 %%Property
-Mark the incisional hernia areas involved#M1.description = 194,144,257,199SHAPErect
-Mark the incisional hernia areas involved#M2.description = 194,199,257,300SHAPErect
-Mark the incisional hernia areas involved#M3.description = 194,300,257,382SHAPErect
-Mark the incisional hernia areas involved#M4.description = 194,382,257,457SHAPErect
-Mark the incisional hernia areas involved#M5.description = 194,457,257,516SHAPErect
-Mark the incisional hernia areas involved#L2:L.description = 121,300,194,382SHAPErect
-Mark the incisional hernia areas involved#L2:R.description = 257,300,333,382SHAPErect
-Mark the incisional hernia areas involved#L1:L.description = 121,300,194,162,194,300,121,300SHAPEpoly
-Mark the incisional hernia areas involved#L1:R.description = 257,300,257,164,333,300,257,300SHAPEpoly
-Mark the incisional hernia areas involved#L3:L.description = 121,382,194,511,194,382,121,382SHAPEpoly
-Mark the incisional hernia areas involved#L3:R.description = 333,382,257,511,257,382,333,382SHAPEpoly
-Mark the incisional hernia areas involved#L4:L.description = 121,300,79,315,77,366,121,382,121,300SHAPEpoly
-Mark the incisional hernia areas involved#L4:R.description = 333,382,377,368,377,315,333,300,333,382SHAPEpoly
+Mark the incisional hernia areas involved#M1.imagemap = SIZE 452x649 SHAPE rect COORDS 194,144,257,199 
+Mark the incisional hernia areas involved#M2.imagemap = SIZE 452x649 SHAPE rect COORDS 194,199,257,300
+Mark the incisional hernia areas involved#M3.imagemap = SIZE 452x649 SHAPE rect COORDS 194,300,257,382
+Mark the incisional hernia areas involved#M4.imagemap = SIZE 452x649 SHAPE rect COORDS 194,382,257,457
+Mark the incisional hernia areas involved#M5.imagemap = SIZE 452x649 SHAPE rect COORDS 194,457,257,516
+Mark the incisional hernia areas involved#L2:L.imagemap = SIZE 452x649 SHAPE rect COORDS 121,300,194,382
+Mark the incisional hernia areas involved#L2:R.imagemap = SIZE 452x649 SHAPE rect COORDS 257,300,333,382
+Mark the incisional hernia areas involved#L1:L.imagemap = SIZE 452x649 SHAPE poly COORDS 121,300,194,162,194,300,121,300
+Mark the incisional hernia areas involved#L1:R.imagemap = SIZE 452x649 SHAPE poly COORDS 257,300,257,164,333,300,257,300 
+Mark the incisional hernia areas involved#L3:L.imagemap = SIZE 452x649 SHAPE poly COORDS 121,382,194,511,194,382,121,382
+Mark the incisional hernia areas involved#L3:R.imagemap = SIZE 452x649 SHAPE poly COORDS 333,382,257,511,257,382,333,382
+Mark the incisional hernia areas involved#L4:L.imagemap = SIZE 452x649 SHAPE poly COORDS 121,300,79,315,77,366,121,382,121,300
+Mark the incisional hernia areas involved#L4:R.imagemap = SIZE 452x649 SHAPE poly COORDS 333,382,377,368,377,315,333,300,333,382
 
-Localization of the concomitant incisional hernia#M1.description = 194,144,257,199SHAPErect
-Localization of the concomitant incisional hernia#M2.description = 194,199,257,300SHAPErect
-Localization of the concomitant incisional hernia#M3.description = 194,300,257,382SHAPErect
-Localization of the concomitant incisional hernia#M4.description = 194,382,257,457SHAPErect
-Localization of the concomitant incisional hernia#M5.description = 194,457,257,516SHAPErect
-Localization of the concomitant incisional hernia#L2:L.description = 121,300,194,382SHAPErect
-Localization of the concomitant incisional hernia#L2:R.description = 257,300,333,382SHAPErect
-Localization of the concomitant incisional hernia#L1:L.description = 121,300,194,162,194,300,121,300SHAPEpoly
-Localization of the concomitant incisional hernia#L1:R.description = 257,300,257,164,333,300,257,300SHAPEpoly
-Localization of the concomitant incisional hernia#L3:L.description = 121,382,194,511,194,382,121,382SHAPEpoly
-Localization of the concomitant incisional hernia#L3:R.description = 333,382,257,511,257,382,333,382SHAPEpoly
-Localization of the concomitant incisional hernia#L4:L.description = 121,300,79,315,77,366,121,382,121,300SHAPEpoly
-Localization of the concomitant incisional hernia#L4:R.description = 333,382,377,368,377,315,333,300,333,382SHAPEpoly
+Localization of the concomitant incisional hernia#M1.imagemap = SIZE 452x649 SHAPE rect COORDS 194,144,257,199 
+Localization of the concomitant incisional hernia#M2.imagemap = SIZE 452x649 SHAPE rect COORDS 194,199,257,300
+Localization of the concomitant incisional hernia#M3.imagemap = SIZE 452x649 SHAPE rect COORDS 194,300,257,382
+Localization of the concomitant incisional hernia#M4.imagemap = SIZE 452x649 SHAPE rect COORDS 194,382,257,457
+Localization of the concomitant incisional hernia#M5.imagemap = SIZE 452x649 SHAPE rect COORDS 194,457,257,516
+Localization of the concomitant incisional hernia#L2:L.imagemap = SIZE 452x649 SHAPE rect COORDS 121,300,194,382
+Localization of the concomitant incisional hernia#L2:R.imagemap = SIZE 452x649 SHAPE rect COORDS 257,300,333,382
+Localization of the concomitant incisional hernia#L1:L.imagemap = SIZE 452x649 SHAPE poly COORDS 121,300,194,162,194,300,121,300
+Localization of the concomitant incisional hernia#L1:R.imagemap = SIZE 452x649 SHAPE poly COORDS 257,300,257,164,333,300,257,300 
+Localization of the concomitant incisional hernia#L3:L.imagemap = SIZE 452x649 SHAPE poly COORDS 121,382,194,511,194,382,121,382
+Localization of the concomitant incisional hernia#L3:R.imagemap = SIZE 452x649 SHAPE poly COORDS 333,382,257,511,257,382,333,382
+Localization of the concomitant incisional hernia#L4:L.imagemap = SIZE 452x649 SHAPE poly COORDS 121,300,79,315,77,366,121,382,121,300
+Localization of the concomitant incisional hernia#L4:R.imagemap = SIZE 452x649 SHAPE poly COORDS 333,382,377,368,377,315,333,300,333,382
 @package: Hernia
 %
 
 %%Property
-Mark the incisional hernia areas involved.description = IMG#####Fig7_Areas.JPGWIDTH#####250
-Localization of the concomitant incisional hernia.description = IMG#####Fig7_Areas.JPGWIDTH#####250
-Mesh position.description = IMG#####Fig6_MeshPos.JPGWIDTH#####300
+Mark the incisional hernia areas involved.image = Fig7_Areas.JPG
+Mark the incisional hernia areas involved.imagewidth = 250
+Localization of the concomitant incisional hernia.image = Fig7_Areas.JPG
+Localization of the concomitant incisional hernia.imagewidth = 250
+Mesh position.image = Fig6_MeshPos.JPG
+Mesh position.imagewidth = 300
 
 @package: Hernia
 %

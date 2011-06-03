@@ -691,9 +691,6 @@ public class D3webDialog extends HttpServlet {
 
 		if (termObID == null || valString == null) return;
 
-		termObID = termObID.replaceAll("_", " ");
-		valString = valString.replaceAll("_", " ");
-
 		Fact lastFact = null;
 		Blackboard blackboard = sess.getBlackboard();
 		Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(termObID);

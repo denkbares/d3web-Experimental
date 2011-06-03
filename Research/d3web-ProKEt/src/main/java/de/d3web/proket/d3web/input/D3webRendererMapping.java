@@ -31,6 +31,7 @@ import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
+import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.utils.GlobalSettings;
 
 /**
@@ -107,8 +108,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
 			}
 			else if (to instanceof Question) {
 				result = Class.forName(prefix + this.get("Question"));
-				if (to.getInfoStore().getValue(MMInfo.DESCRIPTION) != null &&
-						to.getInfoStore().getValue(MMInfo.DESCRIPTION).contains("IMG#####")) {
+				if (to.getInfoStore().getValue(ProKEtProperties.IMAGE) != null) {
 					result = Class.forName(prefix + this.get("IMGQuestion"));
 				}
 			}
