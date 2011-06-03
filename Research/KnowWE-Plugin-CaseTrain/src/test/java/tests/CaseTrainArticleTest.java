@@ -20,7 +20,7 @@ import de.knowwe.casetrain.info.AnswerLine.AnswerExplanation;
 import de.knowwe.casetrain.info.AnswerLine.AnswerMark;
 import de.knowwe.casetrain.info.AnswerLine.AnswerText;
 import de.knowwe.casetrain.info.AnswersBlock;
-import de.knowwe.casetrain.info.AnswersBlock.AnswerOrderMark;
+import de.knowwe.casetrain.info.AnswersBlock.AnswersBlockWeightMark;
 import de.knowwe.casetrain.info.AnswersBlock.Heading;
 import de.knowwe.casetrain.info.AnswersBlock.Postfix;
 import de.knowwe.casetrain.info.AnswersBlock.Praefix;
@@ -337,17 +337,17 @@ public class CaseTrainArticleTest extends TestCase {
 		// Test one AnswersBlock which has
 		// OrderMark/Praefix/Postfix/Heading
 		Section<AnswersBlock> block = antworten.get(5);
-		Section<AnswerOrderMark> mar = Sections.findSuccessor(block, AnswerOrderMark.class);
+		Section<AnswersBlockWeightMark> mar = Sections.findSuccessor(block, AnswersBlockWeightMark.class);
 		Section<Praefix> praefix = Sections.findSuccessor(block, Praefix.class);
 		Section<Postfix> postfix = Sections.findSuccessor(block, Postfix.class);
 		Section<Heading> heading = Sections.findSuccessor(block, Heading.class);
 
-		assertNotNull(MISSING + AnswerOrderMark.class.getName(), mar);
+		assertNotNull(MISSING + AnswersBlockWeightMark.class.getName(), mar);
 		assertNotNull(MISSING + Praefix.class.getName(), praefix);
 		assertNotNull(MISSING + Postfix.class.getName(), postfix);
 		assertNotNull(MISSING + Heading.class.getName(), heading);
 
-		assertEquals(WRONG_STRING + AnswerOrderMark.class.getName(),
+		assertEquals(WRONG_STRING + AnswersBlockWeightMark.class.getName(),
 				"{2}", mar.getOriginalText().trim());
 		assertEquals(WRONG_STRING + Praefix.class.getName(),
 				"Präfix: weiblich", praefix.getOriginalText().trim());
