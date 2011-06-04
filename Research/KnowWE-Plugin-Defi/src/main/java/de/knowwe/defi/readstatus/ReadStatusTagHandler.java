@@ -20,7 +20,9 @@ package de.knowwe.defi.readstatus;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +48,8 @@ import de.knowwe.defi.time.TimeTableMarkup;
  */
 public class ReadStatusTagHandler extends AbstractTagHandler {
 
+	private static final int DAYS_UNTIL_WARNING = 3;
+
 	/**
 	 * @param name
 	 */
@@ -70,6 +74,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 		Date current = new Date();
 		Date unitDate = new Date();
+		Calendar calendar = new GregorianCalendar();
 
 		for (Section<DashTreeElement> rootUnit : units) {
 
@@ -88,14 +93,23 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 						read = false;
 				}
 				
+				calendar.setTime(dates.get(rootCounter));
+				calendar.add(Calendar.DAY_OF_MONTH, DAYS_UNTIL_WARNING);
+				Date warning = calendar.getTime();
+
 				// Einheit anstehend
 				if (unitDate.after(current)) {
 					timeStatus = 1;
 				}
 				// Einheit aktiv
-				else if (rootCounter < dates.size()
+				else if (rootCounter + 1 < dates.size()
 						&& dates.get(rootCounter + 1).after(current)) {
 					timeStatus = 0;
+				}
+				// Letzte Einheit
+				else if (rootCounter + 1 == dates.size()) {
+					if (current.before(warning)) timeStatus = 0;
+					else timeStatus = -1;
 				}
 				// Einheit vergangen
 				else {
@@ -113,13 +127,18 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 						+ "): ");
 
 				if (timeStatus == -1) {
-					if (read) readstatus.append("Einheit erfolgreich absolviert.");
-					else readstatus.append("Warnung! Einheit sollte bereits absolviert sein");
+					if (read) readstatus.append("Einheit abgeschlossen.");
+					else readstatus.append("Diese Einheit sollte so bald wie möglich beendet werden.");
 				}
 
 				else if (timeStatus == 0) {
-					if (read) readstatus.append("Aktive Einheit bereits erfolgreich absolviert.");
-					else readstatus.append("Aktive Einheit noch nicht absolviert!");
+					if (read) readstatus.append("Aktuelle Einheit bereits abgeschlossen.");
+					else {
+						if (current.before(warning)) readstatus.append("Aktuelle Einheit noch nicht abgeschlossen");
+						else readstatus.append("Die aktuelle Einheit sollte demnächst beendet");
+					}
+					// 1.5 2.5 3.5 || 4.5 Warnung!
+
 				}
 
 				else {
