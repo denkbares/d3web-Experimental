@@ -45,5 +45,7 @@
   <wiki:Include page="UserBox.jsp" />
 
   <br />
+  <% if(user.userIsAdmin()) { %>
   <div class="searchbox"><wiki:Include page="SearchBox.jsp" /></div>
+  <% } %>
 </div>

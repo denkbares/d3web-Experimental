@@ -137,7 +137,6 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 						if (current.before(warning)) readstatus.append("Aktuelle Einheit noch nicht abgeschlossen");
 						else readstatus.append("Die aktuelle Einheit sollte demnächst beendet");
 					}
-					// 1.5 2.5 3.5 || 4.5 Warnung!
 
 				}
 

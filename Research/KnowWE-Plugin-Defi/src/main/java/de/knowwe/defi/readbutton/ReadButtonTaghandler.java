@@ -300,14 +300,27 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			// - readbutton id = current id
 			if (node.get().toString().contains("TagHandlerType")
 					&& node.toString().contains("KnowWEPlugin readbutton")
-						&& node.toString().contains("id=" + id)) {
-					count++;
-			}
+					&& getReadButtonID(node.toString()).equals(id)) count++;
 		}
 
 		// (2) current id has been found more often than once => double id
 		if (count > 1) return 2;
 		return 0;
+	}
+
+	/**
+	 * 
+	 * @created 05.06.2011
+	 * @param rb
+	 * @return
+	 */
+	private String getReadButtonID(String rb) {
+		String id = "";
+
+		id = rb.split("id=")[1];
+		if (id.split(" ,").length > 1) return id.split(" ,")[0];
+		else if (id.split(" }]").length > 1) return id.split(" }]")[0];
+		else return id.split("}]")[0];
 	}
 
 }
