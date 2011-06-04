@@ -72,7 +72,7 @@ public class AnswerMCD3webRenderer extends AbstractD3webRenderer implements Answ
 		st.setAttribute("parentFullId", mcq.getName().replace(" ", "_"));
 		st.setAttribute("text", c.getName());
 
-		Blackboard bb = super.d3webSession.getBlackboard();
+		Blackboard bb = d3webSession.getBlackboard();
 		Value value = bb.getValue((ValueObject) to);
 
 		// if question is an abstraction question --> readonly

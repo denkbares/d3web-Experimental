@@ -50,8 +50,6 @@ import de.d3web.proket.utils.TemplateUtils;
  * @created 15.01.2011
  */
 public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements IQuestionD3webRenderer {
-	
-
 
 	@Override
 	/**
@@ -122,16 +120,17 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 			st.setAttribute("qstate", "question-c");
 		}
 
-
 		String imgName = to.getInfoStore().getValue(ProKEtProperties.IMAGE);
 		String width = to.getInfoStore().getValue(ProKEtProperties.IMAGEWIDTH);
+		String height = to.getInfoStore().getValue(ProKEtProperties.IMAGEHEIGHT);
 
 		st.setAttribute("image", imgName);
 		if (width != null) st.setAttribute("width", width);
+		if (height != null) st.setAttribute("height", height);
 
 		// read clicable-area coordinates from KB
-		String areas = getChoiceAreas(width, to);
-		st.setAttribute("areas", areas);
+		String areas = getChoiceAreas(width, height, to);
+		if (areas != null) st.setAttribute("areas", areas);
 
 		if (to instanceof QuestionMC) {
 			st.setAttribute("sendButton", "true");
@@ -149,7 +148,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 	}
 
 	Pattern imageMapPattern = Pattern.compile("^ *SIZE *(\\d+) *x *(\\d+) *SHAPE *(\\w+) *COORDS *((?:\\d+,)+\\d+) *$");
-	
+
 	/**
 	 * Get all the defined clickable areas of an image question and assemble
 	 * them to represent a html area map String: <area shape="circle"
@@ -162,15 +161,19 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 	 *        defined for
 	 * @return HTML area map representing String
 	 */
-	protected String getChoiceAreas(String width, TerminologyObject to) {
+	protected String getChoiceAreas(String imgWidthString, String imgHeightString, TerminologyObject to) {
 
 		StringBuilder bui = new StringBuilder();
-		String fixedWidthString = to.getInfoStore().getValue(ProKEtProperties.IMAGEWIDTH);
-		double fixedWidth = -1;
+
+		double imgWidth = -1;
+		double imgHeight = -1;
 		try {
-			fixedWidth = Double.valueOf(fixedWidthString);
-		} catch (NumberFormatException e) {}
-		
+			if (imgWidthString != null) imgWidth = Double.valueOf(imgWidthString);
+			if (imgHeightString != null) imgHeight = Double.valueOf(imgHeightString);
+		}
+		catch (NumberFormatException e) {
+		}
+
 		// imagequestions make sense for choice questions only so far
 		if (to instanceof QuestionChoice) {
 
@@ -181,42 +184,56 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 				StringTemplate st = TemplateUtils.getStringTemplate(
 						getTemplateName("ImageAnswerD3web"), "html");
 
-				st.setAttribute("fullId", choice.getName().replace(" ", "_"));
-
+				st.setAttribute("fullId",
+						choice.getName().replace(" ", "_"));
+				st.setAttribute("title", choice.getName());
 				// if description = shape and coords for current Choice exist
 				String imgmap = choice.getInfoStore().getValue(ProKEtProperties.IMAGEMAP);
 				Matcher m;
-			
+
 				// if no description given at all or part of the description
 				// is empty String then set defaults to avoid HTML errors
 				String fixedCoords = "0,0,0,0";
 				String shape = "rect";
 				if (imgmap != null && (m = imageMapPattern.matcher(imgmap)).find()) {
-						// split shape and coords
-						double actualWidth = Double.valueOf(m.group(1));
-						double actualHeight = Double.valueOf(m.group(2));
-						
-						if (actualWidth > 0 && actualHeight > 0) {
-							if (fixedWidth == -1) fixedWidth = actualWidth;
-							double xFactor = fixedWidth / actualWidth;
-							double fixedHeight = actualHeight * xFactor;
-							double yFactor = fixedHeight / actualHeight;
-							
-							String[] coords = m.group(4).split(",");
-							StringBuilder coordsBuilder = new StringBuilder();
-							int count = 0;
-							for (String coord : coords) {
-								int c = (int) (Double.valueOf(coord) * (count % 2 == 0 ? xFactor : yFactor));
-								coordsBuilder.append(c + ",");
-							}
-							fixedCoords = coordsBuilder.substring(0, coordsBuilder.length() - 1);
-							shape =  m.group(3);
-							st.setAttribute("coords", m.group(4));
+					// split shape and coords
+					double mapWidth = Double.valueOf(m.group(1));
+					double mapHeight = Double.valueOf(m.group(2));
+
+					if (mapWidth > 0 && mapHeight > 0) {
+						// if the size of the image was not given, we set the
+						// factors to 1
+						double xFactor = 1;
+						double yFactor = 1;
+						if (imgWidth > 0 && imgHeight > 0) {
+							xFactor = imgWidth / mapWidth;
+							yFactor = imgHeight / mapHeight;
 						}
+						else if (imgWidth < 0 && imgHeight > 0) {
+							yFactor = imgHeight / mapHeight;
+							xFactor = yFactor;
+						}
+						else if (imgWidth > 0 && imgHeight < 0) {
+							xFactor = imgWidth / mapWidth;
+							yFactor = xFactor;
+						}
+
+						String[] coords = m.group(4).split(",");
+						StringBuilder coordsBuilder = new StringBuilder();
+						int count = 0;
+						for (String coord : coords) {
+							int c = (int) (Double.valueOf(coord) * (count % 2 == 0
+									? xFactor
+									: yFactor));
+							coordsBuilder.append(c + ",");
+						}
+						fixedCoords = coordsBuilder.substring(0, coordsBuilder.length() - 1);
+						shape = m.group(3);
+					}
 				}
 				st.setAttribute("coords", fixedCoords);
 				st.setAttribute("shape", shape);
-				
+
 				bui.append(st.toString());
 			}
 		}

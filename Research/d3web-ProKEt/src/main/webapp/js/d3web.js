@@ -388,44 +388,19 @@ function d3web_addFacts() {
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 
-function d3web_collectMCs(clickedEl, mcVals) {
-
-	// init save-checked-vals-variable
-	var checkedVals = "";
-
-	// get the question-content-parent element and go through all its
-	// div-children
-	clickedQContent = clickedEl.parents("[id*=q_]");
-	mcs = clickedQContent.children('div').find("input");
-	mcs.each(function() {
-
-		inputid = $(this).attr("id");
-		if(inputid.indexOf("i_unknown")==-1){
-			// if it is checked, add it to the save-checked-vals-variable
-			if ($(this).attr("checked") == true) {
-				checkedVals += $(this).attr("id").replace("f_", "") + ",";
-			}
-		}
-		
-	});
-	
-	var mcid = $(clickedEl.parents("[id^=q_]")).attr("id");
-	mcStore[mcid] = new Object();
-	mcStore[mcid]["key"] = mcid;
-	mcStore[mcid]["content"] = checkedVals;
-	var test = mcStore[mcid];
-	return checkedVals;
+function escapeExpression(str) {
+    return str.replace(/([#;&,\.\+\*\~':"\!\^$\[\]\(\)=>\|])/g, "\\$1");
 }
 
 function d3web_IQClicked(id) {
-	alert("image answer " + id + " was clicked");
-	d3web_getSelectedFacts($('#' + id));
-	/*var target = $("#" + id);	// get the clicked element
+	//alert("image answer " + id + " was clicked");
+	// d3web_getSelectedFacts($('#' + id));
+	var target = $("#" + escapeExpression(id));	// get the clicked element
 	var selected = target.find(":input:checked");	// find clicked input 
 	var deselected = target.find(":input:not(:checked)"); // find not clicked inputs
 	selected.attr('checked', false);
 	deselected.attr('checked', true);
-	remark_selectively(target);	// mark question accordingly*/
+	d3web_storeQuestionMC(target);
 }
 
 /**
