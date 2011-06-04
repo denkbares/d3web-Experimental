@@ -704,7 +704,7 @@ public class D3webDialog extends HttpServlet {
 		Value value = null;
 
 		// check if unknown option was chosen
-		if (valString.contains("unknown")) {
+		if (valString.equalsIgnoreCase("unknown")) {
 
 			// remove a previously set value
 			lastFact = blackboard.getValueFact(to);

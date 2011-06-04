@@ -49,10 +49,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import au.com.bytecode.opencsv.CSVReader;
+import de.d3web.core.knowledge.Indication.State;
 import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.knowledge.Resource;
 import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.knowledge.Indication.State;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.QContainer;
@@ -675,7 +675,7 @@ public class Hernia extends HttpServlet {
 		Value value = null;
 
 		// check if unknown option was chosen
-		if (valString.contains("unknown")) {
+		if (valString.equalsIgnoreCase("unknown")) {
 
 			// remove a previously set value
 			lastFact = blackboard.getValueFact(to);
