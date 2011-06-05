@@ -65,6 +65,7 @@ public class Info extends BlockMarkupType {
 
 	public Info() {
 		super("Info");
+		this.addContentType(new Title());
 		this.addContentType(new Hint());
 		this.addContentType(new Question());
 		this.addContentType(new AnswersBlock());

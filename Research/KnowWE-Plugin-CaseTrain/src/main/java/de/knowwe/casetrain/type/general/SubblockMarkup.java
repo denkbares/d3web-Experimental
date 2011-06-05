@@ -23,15 +23,9 @@ package de.knowwe.casetrain.type.general;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.type.AnonymousTypeInvisible;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.casetrain.renderer.MouseOverTitleRenderer;
 
 /**
  * 
@@ -64,18 +58,7 @@ public class SubblockMarkup extends AbstractType {
 
 		this.sectionFinder = new RegexSectionFinder("\\r?\\n(" + regex1 + ")\\r?\\n", Pattern.DOTALL, 1);
 
-		this.setCustomRenderer(new KnowWEDomRenderer<SubblockMarkup>() {
-
-			@Override
-			public void render(KnowWEArticle article, Section<SubblockMarkup> sec, UserContext user, StringBuilder string) {
-				string.append(KnowWEUtils.maskHTML("<div class='"
-						+ sec.get().getCSSClass()
-						+ "'>"));
-				MouseOverTitleRenderer.getInstance().render(article, sec, user, string);
-				string.append(KnowWEUtils.maskHTML("</div>"));
-
-			}
-		});
+		this.setCustomRenderer(new SubblockMarkupRenderer());
 
 		content = new SubblockMarkupContent();
 		content.setSectionFinder(new RegexSectionFinder(regex1, Pattern.DOTALL, 1));

@@ -16,33 +16,29 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.knowwe.casetrain.info;
+package de.knowwe.casetrain.type.general;
 
-import de.knowwe.casetrain.type.general.SubblockMarkup;
-import de.knowwe.casetrain.type.multimedia.Audio;
-import de.knowwe.casetrain.type.multimedia.Image;
-import de.knowwe.casetrain.type.multimedia.Link;
-import de.knowwe.casetrain.type.multimedia.Video;
+import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.user.UserContext;
+import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.casetrain.renderer.MouseOverTitleRenderer;
 
 
 /**
  * 
  * @author Johannes Dienst
- * @created 12.05.2011
+ * @created 05.06.2011
  */
-public class Explanation extends SubblockMarkup {
-
-	public Explanation() {
-		super("Erklärung");
-		this.addContentType(new Image());
-		this.addContentType(new Video());
-		this.addContentType(new Link());
-		this.addContentType(new Audio());
-	}
+public class SubblockMarkupRenderer extends KnowWEDomRenderer<SubblockMarkup> {
 
 	@Override
-	public String getCSSClass() {
-		return "Erkl";
+	public void render(KnowWEArticle article, Section<SubblockMarkup> sec, UserContext user, StringBuilder string) {
+		string.append(KnowWEUtils.maskHTML("<div class='"
+				+ sec.get().getCSSClass()
+				+ "'>"));
+		MouseOverTitleRenderer.getInstance().render(article, sec, user, string);
+		string.append(KnowWEUtils.maskHTML("</div>"));
 	}
-
 }

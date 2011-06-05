@@ -23,7 +23,6 @@ import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
 import de.d3web.we.kdom.sectionFinder.LineSectionFinder;
-import de.knowwe.casetrain.renderer.DivStyleClassRenderer;
 
 /**
  * 
@@ -46,7 +45,7 @@ public class Title extends AbstractType {
 		cf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 		this.setSectionFinder(cf);
 
-		this.setCustomRenderer(new DivStyleClassRenderer(TITLE, null));
+		//		this.setCustomRenderer(new DivStyleClassRenderer(TITLE, null));
 
 	}
 

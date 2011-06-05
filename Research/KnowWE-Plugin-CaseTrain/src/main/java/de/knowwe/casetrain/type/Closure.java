@@ -32,9 +32,7 @@ import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.knowwe.casetrain.message.MissingContentWarning;
 import de.knowwe.casetrain.message.MissingPictureNotice;
-import de.knowwe.casetrain.message.MissingTitleError;
 import de.knowwe.casetrain.type.general.BlockMarkupType;
-import de.knowwe.casetrain.type.general.Title;
 import de.knowwe.casetrain.type.multimedia.Audio;
 import de.knowwe.casetrain.type.multimedia.Image;
 import de.knowwe.casetrain.type.multimedia.Link;
@@ -52,7 +50,6 @@ public class Closure extends BlockMarkupType {
 
 	public Closure() {
 		super("Abschluss");
-		this.addChildType(new Title());
 		this.addContentType(new Image());
 		this.addContentType(new Video());
 		this.addContentType(new Link());
@@ -65,10 +62,11 @@ public class Closure extends BlockMarkupType {
 
 				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
 
-				Section<Title> title = Sections.findSuccessor(s, Title.class);
-				if (title == null) {
-					messages.add(new MissingTitleError(Closure.class.getSimpleName()));
-				}
+				// TODO Title needed?
+				//				Section<Title> title = Sections.findSuccessor(s, Title.class);
+				//				if (title == null) {
+				//					messages.add(new MissingTitleError(Closure.class.getSimpleName()));
+				//				}
 
 				Section<PlainText> plain = Sections.findSuccessor(s, PlainText.class);
 				if (plain == null) {

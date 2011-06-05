@@ -158,7 +158,8 @@ public abstract class BlockMarkupType extends AbstractType {
 		content.setSectionFinder(new RegexSectionFinder(regex2, Pattern.DOTALL, 1));
 		this.addChildType(content);
 
-		content.addChildType(new Title());
+		// TODO Title needed?
+		//		content.addChildType(new Title());
 
 		AnonymousTypeInvisible keytext = new AnonymousTypeInvisible("syntax");
 		this.addChildType(keytext);

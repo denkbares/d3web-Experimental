@@ -22,16 +22,19 @@ package de.knowwe.casetrain.type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMNotice;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.KDOMWarning;
+import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
@@ -56,6 +59,9 @@ public class MetaData extends BlockMarkupType {
 
 	public MetaData() {
 		super("Metadaten");
+		PlainText plain = new PlainText();
+		plain.setSectionFinder(new RegexSectionFinder("\\r?\\n"));
+		this.addContentType(plain);
 		this.addContentType(new MetaLine());
 
 		this.setCustomRenderer(new KnowWEDomRenderer<MetaData>() {
@@ -80,7 +86,8 @@ public class MetaData extends BlockMarkupType {
 				string.append(KnowWEUtils.maskHTML("%%collapsebox-closed \r\n"));
 				string.append(
 						KnowWEUtils.maskHTML("! "
-								+ META
+								+ ResourceBundle.getBundle("casetrain_messages")
+								.getString(META)
 								+ "\r\n"));
 				string.append(KnowWEUtils.maskHTML("<table class='wikitable'>"));
 				string.append(KnowWEUtils.maskHTML("<th>Metadaten:</th><th></th>"));

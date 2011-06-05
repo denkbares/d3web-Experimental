@@ -28,7 +28,7 @@ HW_LINKTEXT : Das ist der LinkText
 SPRACHE : en
 >>
 
-<<Einleitung: Titel der Einleitung
+<<Einleitung:
 Text der Einleitung
 {Bild: ls6logo.gif}
 {Video: video42.avi}
@@ -260,7 +260,7 @@ Das wars!
 >
 >>
 
-<<Abschluss: Abschlusskommentar
+<<Abschluss:
 Ende des Falles!
 {Bild: ls6logo.gif}
 {Video: video42.avi}
