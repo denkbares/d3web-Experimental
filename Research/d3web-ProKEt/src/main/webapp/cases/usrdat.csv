@@ -1,9 +1,5 @@
 usr,pw,mail
-USER,b0e95c5f98326f2d5b2f0589da21b6c2,user@test.com
-test,ab86a1e1ef70dff97959067b723c5c24,me@me.com
-WUE,1a1dc91c907325c69271ddf0c944bc72,pass
-u1,a722c63db8ec8625af6cf71cb8c2d939,pass1
-u2,c1572d05424d0ecb2a65ec6a82aeacbf,pass2
-u3,3afc79b597f88a72528e864cf81856d2,pass3
-WUE_1,fbc4b2a58466b9c1875cf1f57f215a44,wuepass1
-WUE_2,bfab5221edef64836215ee9f8038c56b,wuepass2
+USER,b0e95c5f98326f2d5b2f0589da21b6c2,striffler@informatik.uni-wuerzburg.de
+WUE,1a1dc91c907325c69271ddf0c944bc72,reinhard.dietzel@googlemail.com
+WUE_1,fbc4b2a58466b9c1875cf1f57f215a44,reinhard.dietzel@googlemail.com
+WUE_2,bfab5221edef64836215ee9f8038c56b,reinhard.dietzel@googlemail.com

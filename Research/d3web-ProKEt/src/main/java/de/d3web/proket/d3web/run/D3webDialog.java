@@ -29,8 +29,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -111,13 +113,17 @@ import de.d3web.proket.utils.GlobalSettings;
  */
 public class D3webDialog extends HttpServlet {
 
+	private static final long serialVersionUID = -2466200526894064976L;
+
 	/* special parser for reading in the d3web-specification xml */
-	private D3webXMLParser d3webParser;
+	protected D3webXMLParser d3webParser;
 
 	/* d3web connector for storing certain relevant properties */
-	private D3webConnector d3wcon;
+	protected D3webConnector d3wcon;
 
-	private String sourceSave = "";
+	protected String sourceSave = "";
+
+	protected static Map<String, List<String>> usrDat = null;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -364,7 +370,7 @@ public class D3webDialog extends HttpServlet {
 	 * @param request ServletRequest
 	 * @param response ServletResponse
 	 */
-	private void addFacts(HttpServletRequest request,
+	protected void addFacts(HttpServletRequest request,
 			HttpServletResponse response, HttpSession httpSession)
 			throws IOException {
 
@@ -411,7 +417,7 @@ public class D3webDialog extends HttpServlet {
 
 	}
 
-	private class SaveThread extends Thread {
+	protected class SaveThread extends Thread {
 
 		private final String folderPath;
 		private final Session d3webSession;
@@ -450,7 +456,7 @@ public class D3webDialog extends HttpServlet {
 	 * @param request ServletRequest
 	 * @param response ServletResponse
 	 */
-	private void saveCase(HttpServletRequest request,
+	protected void saveCase(HttpServletRequest request,
 			HttpServletResponse response, HttpSession httpSession)
 			throws IOException {
 
@@ -533,7 +539,7 @@ public class D3webDialog extends HttpServlet {
 	 * @param httpSession
 	 * @throws MessagingException
 	 */
-	private void sendMail(HttpServletRequest request, HttpServletResponse response,
+	protected void sendMail(HttpServletRequest request, HttpServletResponse response,
 			HttpSession httpSession) throws MessagingException {
 
 		final String user = "SendmailAnonymus@freenet.de";
@@ -547,7 +553,7 @@ public class D3webDialog extends HttpServlet {
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.user", user);
 		props.put("mail.password", pw);
-		props.put("mail.debug", "true");
+		//props.put("mail.debug", "true");
 
 		javax.mail.Session session = javax.mail.Session.getDefaultInstance(props,
 				new javax.mail.Authenticator() {
@@ -561,18 +567,25 @@ public class D3webDialog extends HttpServlet {
 		MimeMessage message = new MimeMessage(session);
 
 		// from-identificator
-		InternetAddress from = new InternetAddress("SendmailAnonymus@freenet.de");
+		InternetAddress from = new InternetAddress(user);
 		message.setFrom(from);
 
-		// InternetAddress to = new
-		// InternetAddress("reinhard.dietzel@maindreieck.com");
-		InternetAddress to = new InternetAddress("martina.freiberg@uni-wuerzburg.de");
+		String loginUser = request.getParameter("user");
+
+		String toAddress = "striffler@informatik.uni-wuerzburg.de";
+		List<String> usrDat = getUserDat().get(loginUser);
+		if (usrDat != null) {
+			String email = usrDat.get(2);
+			if (email != null) {
+				toAddress = email;
+			}
+		}
+		InternetAddress to = new InternetAddress(toAddress);
 		message.addRecipient(Message.RecipientType.TO, to);
 
 		/* A subject */
-		message.setSubject("Mediastinitis Loginanfrage");
+		message.setSubject(this.getClass().getSimpleName() + " Loginanfrage");
 
-		String loginUser = request.getParameter("user");
 		message.setText("Bitte Logindaten erneut zusenden: \n\n" +
 				"Benutzername: " + loginUser);
 		Transport.send(message);
@@ -586,7 +599,7 @@ public class D3webDialog extends HttpServlet {
 	 * @param request ServletRequest
 	 * @param response ServletResponse
 	 */
-	private void loadCase(HttpServletRequest request,
+	protected void loadCase(HttpServletRequest request,
 			HttpServletResponse response, HttpSession httpSession) {
 
 		// get the filename from the corresponding request parameter "fn"
@@ -623,7 +636,7 @@ public class D3webDialog extends HttpServlet {
 	 * @param httpSession
 	 * @throws IOException
 	 */
-	private void login(HttpServletRequest req,
+	protected void login(HttpServletRequest req,
 			HttpServletResponse res, HttpSession httpSession)
 			throws IOException {
 
@@ -687,7 +700,7 @@ public class D3webDialog extends HttpServlet {
 	 * @param valString The value, that is to be added for the TerminologyObject
 	 *        with ID valID.
 	 */
-	private void setValue(String termObID, String valString, Session sess) {
+	protected void setValue(String termObID, String valString, Session sess) {
 
 		if (termObID == null || valString == null) return;
 
@@ -1011,6 +1024,43 @@ public class D3webDialog extends HttpServlet {
 		return false;
 	}
 
+	protected static Map<String, List<String>> getUserDat() {
+		if (usrDat == null) {
+			// get parent folder for storing cases
+			usrDat = new HashMap<String, List<String>>();
+
+			String caseFolder = GlobalSettings.getInstance().getCaseFolder();
+
+			String csvFile = caseFolder + "/usrdat.csv";
+			CSVReader csvr = null;
+			String[] nextLine = null;
+
+			try {
+				csvr = new CSVReader(new FileReader(csvFile));
+				// go through file
+				while ((nextLine = csvr.readNext()) != null) {
+					// skip first line
+					if (!nextLine[0].startsWith("usr")) {
+						// if username and pw could be found, return true
+						List<String> values = new ArrayList<String>();
+						for (String word : nextLine) {
+							values.add(word);
+						}
+						usrDat.put(nextLine[0], values);
+					}
+				}
+
+			}
+			catch (FileNotFoundException fnfe) {
+				fnfe.printStackTrace();
+			}
+			catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+		}
+		return usrDat; // trust no one per default
+	}
+
 	/**
 	 * Check, whether the user has permissions to log in. Permissions are stored
 	 * in userdat.csv in cases parent folder
@@ -1022,36 +1072,11 @@ public class D3webDialog extends HttpServlet {
 	 */
 	private boolean permitUser(String user, String password) {
 
-		// get parent folder for storing cases
-		String caseFolder = GlobalSettings.getInstance().getCaseFolder();
-
-		String csvFile = caseFolder + "/usrdat.csv";
-		CSVReader csvr = null;
-		String[] nextLine = null;
-
-		try {
-			csvr = new CSVReader(new FileReader(csvFile));
-			// go through file
-			while ((nextLine = csvr.readNext()) != null) {
-				// skip first line
-				if (!nextLine[0].startsWith("usr")) {
-					// if username and pw could be found, return true
-					if (nextLine[0].equals(user) && nextLine[1].equals(password)) {
-						return true;
-					}
-				}
-			}
-
+		List<String> values = getUserDat().get(user);
+		if (values != null) {
+			String pass = values.get(1);
+			if (pass != null && password.equals(pass)) return true;
 		}
-		catch (FileNotFoundException fnfe) {
-			// TODO Auto-generated catch block
-			fnfe.printStackTrace();
-		}
-		catch (IOException ioe) {
-			// TODO Auto-generated catch block
-			ioe.printStackTrace();
-		}
-
 		return false; // trust no one per default
 	}
 
@@ -1093,7 +1118,7 @@ public class D3webDialog extends HttpServlet {
 	 * 
 	 * @created 29.04.2011
 	 */
-	private void streamImages() {
+	protected void streamImages() {
 
 		List<Resource> kbimages = D3webConnector.getInstance().getKb().getResources();
 
@@ -1139,7 +1164,7 @@ public class D3webDialog extends HttpServlet {
 	 * @param d2 Second date
 	 * @return the difference in seconds
 	 */
-	public float getDifference(Date d1, Date d2) {
+	protected float getDifference(Date d1, Date d2) {
 		return (d1.getTime() - d2.getTime()) / 1000;
 	}
 }
