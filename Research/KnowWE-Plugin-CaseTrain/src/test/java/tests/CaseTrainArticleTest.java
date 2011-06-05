@@ -153,7 +153,6 @@ public class CaseTrainArticleTest extends TestCase {
 		assertEquals("Wrong Meta-Attribute-Count", 25, children.size());
 	}
 
-	// TODO MultimediaTypes: audio/link missing.
 	@Test
 	public void testIntroduction() {
 		Section<BlockMarkupContent> content =
@@ -304,7 +303,6 @@ public class CaseTrainArticleTest extends TestCase {
 
 	@Test
 	public void testAnswerBlocks() {
-		Section<AnswerLine> line = null;
 		List<Section<AnswerLine>> lines = new ArrayList<Section<AnswerLine>>();
 		boolean actual;
 		Section<AnswerMark> mark = null;

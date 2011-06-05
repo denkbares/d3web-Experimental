@@ -51,13 +51,13 @@ Welche Probleme mit diesem Spielzeug kommen nun in Frage?
 {Bild: ls6logo.gif}
 Testtext.
 >
-<Antworten:
-{+}Fremdkörper{AntwortExplanation}
-{+}Ausflockung{AntwortExplanation}
-{-}Offene Nähte{AntwortExplanation}
-{-}Lockere Extremitäten{AntwortExplanation}
-{-}Lockere Kleinteile{AntwortExplanation}
->
+	<Antworten:
+		{+}Fremdkörper{AntwortExplanation}
+		{+}Ausflockung{AntwortExplanation}
+		{-}Offene Nähte{AntwortExplanation}
+		{-}Lockere Extremitäten{AntwortExplanation}
+		{-}Lockere Kleinteile{AntwortExplanation}
+	>
 
 <Erklärung: Geben Sie mindestens 2 Probleme an.
 {Bild: ls6logo.gif}
@@ -121,18 +121,18 @@ Präfix: männlich
 Postfix: %
 >
 	
-<Antworten:
-{2}
-{0.3}20 40{AntwortExplanation}
-{0.6}27 33{AntwortExplanation}
-{1}30{AntwortExplanation}
+	<Antworten:
+		{2}
+		{0.3}20 40{AntwortExplanation}
+		{0.6}27 33{AntwortExplanation}
+		{1}30{AntwortExplanation}
 
-Präfix: weiblich
+		Präfix: weiblich
 
-Postfix: %
+		Postfix: %
 
-Überschrift: Überschrift
->
+		Überschrift: Überschrift
+	>
 <Antworten:
 {3}
 {.3}20 35{AntwortExplanation}

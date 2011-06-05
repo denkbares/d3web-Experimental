@@ -116,7 +116,7 @@ public abstract class BlockMarkupType extends AbstractType {
 	public BlockMarkupType(String key) {
 		this.key = key;
 
-		String regex = "^(" + START_TAG + ""
+		String regex = "^\\s*(" + START_TAG + ""
 		+ key +":"+ "(.*?)" + END_TAG + ")\\r?\\n";
 
 		this.sectionFinder = new RegexSectionFinder(regex, Pattern.DOTALL

@@ -71,15 +71,33 @@ public class AnswerLine extends AbstractType {
 		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 			List<SectionFinderResult> results = new ArrayList<SectionFinderResult>();
 
-			Pattern p = Pattern.compile("\\{[0-9]+\\}");
+			Pattern p = Pattern.compile("\\s*\\{[0-9]+\\}");
 			Matcher m = p.matcher(text);
 			if (m.matches()) return results;
-			if (text.startsWith(Praefix.NAME)
-					|| text.startsWith(Postfix.NAME)
-					|| text.startsWith(Heading.NAME)) {
-				return results;
+
+			p = Pattern.compile("\\s*"+Praefix.NAME+":.*");
+			m = p.matcher(text);
+			if (m.matches()) return results;
+
+			p = Pattern.compile("\\s*"+Postfix.NAME+":.*");
+			m = p.matcher(text);
+			if (m.matches()) return results;
+
+			p = Pattern.compile("\\s*"+Heading.NAME+":.*");
+			m = p.matcher(text);
+			if (m.matches()) return results;
+
+			p = Pattern.compile("\\s*");
+			m = p.matcher(text);
+			if (m.matches()) return results;
+
+			m.reset();
+			int i = 0;
+			if (m.find()) {
+				i = m.end();
 			}
-			results.add(new SectionFinderResult(0, text.length()));
+
+			results.add(new SectionFinderResult(i, text.length()));
 			return results;
 		}
 

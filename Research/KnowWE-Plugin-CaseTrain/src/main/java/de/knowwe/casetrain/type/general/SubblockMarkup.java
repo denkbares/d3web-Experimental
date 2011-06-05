@@ -60,7 +60,7 @@ public class SubblockMarkup extends AbstractType {
 	public SubblockMarkup(String key) {
 		this.key = key;
 
-		String regex1 = START_TAG + key + ":" + "(.*?)" + END_TAG;
+		String regex1 = "\\s*" + START_TAG + key + ":" + "(.*?)" + END_TAG;
 
 		this.sectionFinder = new RegexSectionFinder("\\r?\\n(" + regex1 + ")\\r?\\n", Pattern.DOTALL, 1);
 
