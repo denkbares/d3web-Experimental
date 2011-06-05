@@ -345,6 +345,13 @@ public class Mediastinitis extends HttpServlet {
 
 		Session d3webSess = (Session) httpSession.getAttribute("d3webSession");
 		AbstractD3webRenderer.storeSession(d3webSess);
+
+		// set clinic to user name, since its the only clinic it can see cases of
+		String user = (String) httpSession.getAttribute("user");
+		if (user != null && user != "") {
+			setValue("Betreffende Klinik", user, d3webSess);
+		}
+
 		cc = d3webr.renderRoot(cc, d3webSess, httpSession);
 
 		writer.print(cc.html.toString()); // deliver the rendered output
