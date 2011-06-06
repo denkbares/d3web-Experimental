@@ -34,7 +34,7 @@ public class ClassIRIDefinition extends AbstractIRITermDefinition {
 	}
 
 	@Override
-	public String getTermName(Section<? extends KnowWETerm<IRIEntityType>> s) {
+	public String getTermIdentifier(Section<? extends KnowWETerm<IRIEntityType>> s) {
 		return s.getOriginalText();
 	}
 	

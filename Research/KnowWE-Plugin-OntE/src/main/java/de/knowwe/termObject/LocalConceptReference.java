@@ -51,7 +51,7 @@ public class LocalConceptReference extends IRITermReference {
 	}
 
 	@Override
-	public String getTermName(Section<? extends KnowWETerm<IRIEntityType>> s) {
+	public String getTermIdentifier(Section<? extends KnowWETerm<IRIEntityType>> s) {
 		return s.getArticle().getTitle();
 
 	}

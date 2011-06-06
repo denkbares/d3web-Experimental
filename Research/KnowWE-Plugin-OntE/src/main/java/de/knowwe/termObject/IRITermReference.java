@@ -47,7 +47,7 @@ public class IRITermReference extends GlobalTermReference<IRIEntityType> impleme
 	}
 
 	@Override
-	public String getTermName(Section<? extends KnowWETerm<IRIEntityType>> s) {
+	public String getTermIdentifier(Section<? extends KnowWETerm<IRIEntityType>> s) {
 		// dirty hack for colons '::'
 		// TODO: fix
 		if (s.getOriginalText().endsWith("::")) return s.getOriginalText().substring(0,
@@ -67,7 +67,7 @@ public class IRITermReference extends GlobalTermReference<IRIEntityType> impleme
 		if (s.get() instanceof TermReference) {
 			TerminologyHandler terminologyHandler = KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
 			Section<? extends TermDefinition> definingSection = terminologyHandler.getTermDefiningSection(
-					s.getArticle(), ((TermReference) s.get()).getTermName(s),
+					s.getArticle(), ((TermReference) s.get()).getTermIdentifier(s),
 					Scope.GLOBAL);
 			if (definingSection == null) return null;
 			// KnowWEArticle main =

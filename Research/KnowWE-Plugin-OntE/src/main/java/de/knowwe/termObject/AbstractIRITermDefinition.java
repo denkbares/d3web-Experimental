@@ -78,12 +78,12 @@ public abstract class AbstractIRITermDefinition extends GlobalTermDefinition<IRI
 
 			TerminologyHandler tHandler = KnowWEUtils.getTerminologyHandler(article.getWeb());
 
-			String termName = s.get().getTermName(s);
+			String termName = s.get().getTermIdentifier(s);
 
 			if (URIUtil.checkForKnownTerms(termName, URIUtil.OBJECT_VOCABULARY)
 					|| URIUtil.checkForKnownTerms(termName, URIUtil.PREDICATE_VOCABULARY)) {
 				return Arrays.asList((KDOMReportMessage) new PredefinedTermError(
-						s.get().getName() + ": " + s.get().getTermName(s)));
+						s.get().getName() + ": " + s.get().getTermIdentifier(s)));
 			}
 
 			tHandler.registerTermDefinition(article, s);
@@ -101,7 +101,7 @@ public abstract class AbstractIRITermDefinition extends GlobalTermDefinition<IRI
 			URI uri = null;
 			String baseUrl = Rdf2GoCore.localns;
 			try {
-				String name = URLEncoder.encode(s.get().getTermName(s), "UTF-8");
+				String name = URLEncoder.encode(s.get().getTermIdentifier(s), "UTF-8");
 				uri = new URIImpl(baseUrl + name);
 			}
 			catch (UnsupportedEncodingException e) {

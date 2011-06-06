@@ -59,7 +59,7 @@ public class SimpleIRIDefintionMarkup extends AbstractType {
 		}
 
 		@Override
-		public String getTermName(Section<? extends KnowWETerm<IRIEntityType>> s) {
+		public String getTermIdentifier(Section<? extends KnowWETerm<IRIEntityType>> s) {
 			return s.getOriginalText().trim();
 		}
 

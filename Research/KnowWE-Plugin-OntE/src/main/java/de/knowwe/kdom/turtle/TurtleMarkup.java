@@ -173,7 +173,7 @@ public class TurtleMarkup extends AbstractType {
 		}
 
 		@Override
-		public String getTermName(Section<? extends KnowWETerm<String>> s) {
+		public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
 			String text = s.getOriginalText();
 			// hack TODO remove
 			if (text.endsWith("::")) {
@@ -245,7 +245,7 @@ public class TurtleMarkup extends AbstractType {
 		}
 
 		@Override
-		public String getTermName(Section<? extends KnowWETerm<IRIEntityType>> s) {
+		public String getTermIdentifier(Section<? extends KnowWETerm<IRIEntityType>> s) {
 			String text = s.getOriginalText();
 			if (text.trim().equals(DEF_PREFIX)) return s.getArticle().getTitle();
 			return text.substring(3).trim();
@@ -366,7 +366,7 @@ public class TurtleMarkup extends AbstractType {
 
 			String termName = s.getOriginalText();
 			if (s.get() instanceof KnowWETerm) {
-				termName = ((KnowWETerm) s.get()).getTermName(s);
+				termName = ((KnowWETerm) s.get()).getTermIdentifier(s);
 			}
 
 			if (termName.equals(LocalConceptDefinition.LOCAL_KEY)) {
@@ -400,7 +400,7 @@ public class TurtleMarkup extends AbstractType {
 
 			String termName = s.getOriginalText();
 			if (s.get() instanceof KnowWETerm) {
-				termName = ((KnowWETerm) s.get()).getTermName(s);
+				termName = ((KnowWETerm) s.get()).getTermIdentifier(s);
 			}
 
 			boolean datavalue = false;
@@ -455,7 +455,7 @@ public class TurtleMarkup extends AbstractType {
 			// if turtle object check for datatype prop!
 			String termName = s.getOriginalText();
 			if (s.get() instanceof KnowWETerm) {
-				termName = ((KnowWETerm) s.get()).getTermName(s);
+				termName = ((KnowWETerm) s.get()).getTermIdentifier(s);
 			}
 
 			boolean found = URIUtil.checkForKnownTerms(termName, knownObjectTerms);
