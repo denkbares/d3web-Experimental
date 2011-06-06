@@ -89,7 +89,7 @@ public class TimeEventNew extends AbstractType {
 	public static TimeEvent createTimeEvent(Section<TimeEventNew> s) {
 		String titleS = null;
 		Section<TitleType> title = Sections.findSuccessor(s, TitleType.class);
-		if (title != null) titleS = title.get().getTermName(title);
+		if (title != null) titleS = title.get().getTermIdentifier(title);
 
 		String dateS = null;
 		Section<DateType> date = Sections.findSuccessor(s, DateType.class);
@@ -147,7 +147,7 @@ public class TimeEventNew extends AbstractType {
 		}
 
 		@Override
-		public String getTermName(Section<? extends KnowWETerm<String>> s) {
+		public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
 			return s.getOriginalText();
 		}
 	}
