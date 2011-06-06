@@ -329,7 +329,7 @@ public class Rdf2GoCore implements EventListener {
 	private void removeStatementsFromCache(List<Statement> list) {
 
 		String key = "REMOVE: ";
-		logStatements(list, key);
+		//logStatements(list, key);
 
 		// model.removeAll(list.iterator());
 		removeCache.addAll(list);
@@ -337,7 +337,7 @@ public class Rdf2GoCore implements EventListener {
 
 	private void addStatementsToCache(List<Statement> list) {
 		String key = "INSERT: ";
-		 logStatements(list, key);
+		 //logStatements(list, key);
 
 		// model.addAll(list.iterator());
 		addCache.addAll(list);
