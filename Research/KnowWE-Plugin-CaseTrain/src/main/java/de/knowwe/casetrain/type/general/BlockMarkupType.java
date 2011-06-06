@@ -29,8 +29,8 @@ import java.util.regex.Pattern;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMNotice;
@@ -124,6 +124,7 @@ public abstract class BlockMarkupType extends AbstractType {
 
 		this.setCustomRenderer(new KnowWEDomRenderer<BlockMarkupType>() {
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public void render(KnowWEArticle article, Section<BlockMarkupType> sec, UserContext user, StringBuilder string) {
 				string.append(KnowWEUtils.maskHTML("<div class='"
@@ -143,7 +144,14 @@ public abstract class BlockMarkupType extends AbstractType {
 						article,
 						sec,
 						KDOMNotice.class), string);
-				DelegateRenderer.getInstance().render(article, sec, user, string);
+
+				// TODO Delegation renders PlainText around collapsebox!
+				Section<BlockMarkupContent> con =
+					Sections.findSuccessor(sec, BlockMarkupContent.class);
+				con.get().getRenderer().render(article, con, user, string);
+				//				DelegateRenderer.getInstance().render(
+				//						article, sec,
+				//						user, string);
 				string.append(KnowWEUtils.maskHTML("</div>"));
 
 			}

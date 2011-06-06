@@ -28,7 +28,6 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.basic.PlainText;
-import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMNotice;
@@ -40,6 +39,7 @@ import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
 import de.knowwe.casetrain.info.Info;
 import de.knowwe.casetrain.message.MissingComponentError;
+import de.knowwe.casetrain.type.general.BlockMarkupContent;
 import de.knowwe.casetrain.type.general.BlockMarkupType;
 import de.knowwe.casetrain.util.Utils;
 
@@ -66,6 +66,7 @@ public class MetaData extends BlockMarkupType {
 
 		this.setCustomRenderer(new KnowWEDomRenderer<MetaData>() {
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public void render(KnowWEArticle article, Section<MetaData> sec, UserContext user, StringBuilder string) {
 				Utils.renderKDOMReportMessageBlock(KnowWEUtils.getMessagesFromSubtree(
@@ -91,7 +92,11 @@ public class MetaData extends BlockMarkupType {
 								+ "\r\n"));
 				string.append(KnowWEUtils.maskHTML("<table class='wikitable'>"));
 				string.append(KnowWEUtils.maskHTML("<th>Metadaten:</th><th></th>"));
-				DelegateRenderer.getInstance().render(article, sec, user, string);
+				// TODO Delegation renders PlainText around collapsebox!
+				Section<BlockMarkupContent> con =
+					Sections.findSuccessor(sec, BlockMarkupContent.class);
+				con.get().getRenderer().render(article, con, user, string);
+				//				DelegateRenderer.getInstance().render(article, sec, user, string);
 				string.append(KnowWEUtils.maskHTML("</table>"));
 				string.append(KnowWEUtils.maskHTML("/%\r\n"));
 			}

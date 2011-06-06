@@ -98,6 +98,7 @@ public class Info extends BlockMarkupType {
 						article,
 						sec,
 						KDOMNotice.class), string);
+				// TODO Delegation renders PlainText around collapsebox!
 				MouseOverTitleRenderer.getInstance().render(article, sec, user, string);
 				string.append(KnowWEUtils.maskHTML("<div class='Infoend'></div>"));
 				string.append(KnowWEUtils.maskHTML("</div>"));

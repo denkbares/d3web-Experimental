@@ -75,5 +75,10 @@
   		<artifactId>KnowWE-GlobalTestUtils</artifactId>
   		<version>0.2-SNAPSHOT</version>
   	</dependency>
+  	<dependency>
+  		<groupId>CaseTrain-CleanUp</groupId>
+  		<artifactId>CaseTrain-CleanUp</artifactId>
+  		<version>CaseTrain-CleanUp</version>
+  	</dependency>
   </dependencies>
 </project>

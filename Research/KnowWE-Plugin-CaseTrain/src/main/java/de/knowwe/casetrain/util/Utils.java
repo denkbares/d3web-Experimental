@@ -22,6 +22,8 @@ package de.knowwe.casetrain.util;
 import java.util.Collection;
 import java.util.ResourceBundle;
 
+import de.casetrain.cleanup.Cleaner;
+import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMNotice;
 import de.d3web.we.kdom.report.KDOMReportMessage;
@@ -59,6 +61,12 @@ public class Utils {
 			string.append(KnowWEUtils.maskHTML("<br/>"));
 		}
 		string.append(KnowWEUtils.maskHTML("</span>"));
+	}
+
+	public static String wikiSyntaxToHtml(String syntax) {
+		syntax = KnowWEEnvironment.getInstance().getWikiConnector().wikiSyntaxToHtml(syntax);
+		syntax = Cleaner.removeTagsExceptIUB(syntax);
+		return syntax;
 	}
 
 }

@@ -20,6 +20,7 @@ package de.knowwe.casetrain.type.general;
 
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
@@ -38,7 +39,9 @@ public class SubblockMarkupRenderer extends KnowWEDomRenderer<SubblockMarkup> {
 		string.append(KnowWEUtils.maskHTML("<div class='"
 				+ sec.get().getCSSClass()
 				+ "'>"));
-		MouseOverTitleRenderer.getInstance().render(article, sec, user, string);
+		MouseOverTitleRenderer.getInstance().render(
+				article, Sections.findSuccessor(sec, SubblockMarkupContent.class),
+				user, string);
 		string.append(KnowWEUtils.maskHTML("</div>"));
 	}
 }

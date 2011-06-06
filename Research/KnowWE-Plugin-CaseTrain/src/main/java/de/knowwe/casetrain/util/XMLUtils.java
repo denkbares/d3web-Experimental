@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.xml.bind.JAXBElement;
 
@@ -185,6 +186,11 @@ public class XMLUtils {
 
 			List<Section<?>> frageChilds = new ArrayList<Section<?>>();
 
+			// TODO This is a fix, cause there is no title at all
+			// So we add a title manually here.
+			simpleSec.setTitle(ResourceBundle.getBundle("casetrain_messages").
+					getString("Evaluation"));
+
 			for (Section<?> child : childs) {
 
 				// First PlainText+Some Multimedia
@@ -302,6 +308,11 @@ public class XMLUtils {
 		}
 
 		Titledmmcontent titledmmContent = fac.createTitledmmcontent();
+
+		// TODO This is a fix, cause there is no title at all
+		// So we add a title manually here.
+		titledmmContent.setTitle(ResourceBundle.getBundle("casetrain_messages").
+				getString("Introduction"));
 
 		for (Section<?> sec : contentChildren) {
 			if (sec.get().isType(Title.class)) {
@@ -988,6 +999,7 @@ public class XMLUtils {
 	private static void clearPlainText(Section<?> child, List<Object> itemList) {
 		String te = child.getOriginalText().replaceAll("[\\r\\n]", "");
 		if (!te.equals("")) {
+			te = Utils.wikiSyntaxToHtml(te);
 			itemList.add(te);
 		}
 	}
@@ -1000,6 +1012,7 @@ public class XMLUtils {
 	 */
 	private static String clearPlainText(Section<?> child) {
 		String te = child.getOriginalText().replaceAll("[\\r\\n]", "");
+		te = Utils.wikiSyntaxToHtml(te);
 		return te;
 	}
 

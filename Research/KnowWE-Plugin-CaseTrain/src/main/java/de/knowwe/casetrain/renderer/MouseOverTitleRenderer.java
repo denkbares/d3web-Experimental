@@ -20,10 +20,13 @@ package de.knowwe.casetrain.renderer;
 
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.casetrain.type.general.BlockMarkupContent;
+import de.knowwe.casetrain.type.general.BlockMarkupType;
 
 
 /**
@@ -45,10 +48,18 @@ public class MouseOverTitleRenderer extends KnowWEDomRenderer {
 		return uniqueInstance;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void render(KnowWEArticle article, Section sec, UserContext user,
 			StringBuilder string) {
 		string.append(KnowWEUtils.maskHTML("<span title=\"" + sec.get().getName() +  "\">"));
+		// TODO Should be delegated but does NOT work!
+		if (sec.get().isAssignableFromType(BlockMarkupType.class)) {
+			Section<BlockMarkupContent> section = Sections.findSuccessor(sec, BlockMarkupContent.class);
+			section.get().getRenderer().render(article, section, user, string);
+			return;
+		}
+
 		DelegateRenderer.getInstance().render(article, sec, user, string);
 		string.append(KnowWEUtils.maskHTML("</span>"));
 	}
