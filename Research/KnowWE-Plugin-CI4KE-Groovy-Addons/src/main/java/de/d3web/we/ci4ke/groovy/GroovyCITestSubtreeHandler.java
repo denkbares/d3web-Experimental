@@ -25,7 +25,7 @@ import java.util.Collection;
 import de.d3web.we.ci4ke.handling.CIConfig;
 import de.d3web.we.ci4ke.testing.CITest;
 import de.d3web.we.ci4ke.testing.CITestResult;
-import de.d3web.we.ci4ke.testing.CITestResult.TestResultType;
+import de.d3web.we.ci4ke.testing.CITestResult.Type;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
@@ -42,7 +42,7 @@ public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType>
 	 */
 	public static final String PREPEND = "import " + CIConfig.class.getName() + ";\n" +
 						"import " + CITestResult.class.getName() + ";\n" +
-						"import static " + TestResultType.class.getName() + ".*;\n";
+						"import static " + Type.class.getName() + ".*;\n";
 
 	@Override
 	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<GroovyCITestType> s) {

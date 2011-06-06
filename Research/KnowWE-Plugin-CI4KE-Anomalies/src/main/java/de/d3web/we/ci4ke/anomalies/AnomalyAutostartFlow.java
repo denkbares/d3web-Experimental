@@ -28,7 +28,7 @@ import de.d3web.diaFlux.flow.StartNode;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.ci4ke.testing.AbstractCITest;
 import de.d3web.we.ci4ke.testing.CITestResult;
-import de.d3web.we.ci4ke.testing.CITestResult.TestResultType;
+import de.d3web.we.ci4ke.testing.CITestResult.Type;
 import de.d3web.we.core.KnowWEEnvironment;
 
 /**
@@ -43,20 +43,19 @@ public class AnomalyAutostartFlow extends AbstractCITest {
 	@Override
 	public CITestResult call() throws Exception {
 
-		CITestResult res = new CITestResult(TestResultType.SUCCESSFUL,
-				": No automatically starting flowcharts with more than one startnode detected.");
-
-		StringBuffer buf = new
-				StringBuffer();
-
 		// get the first parameter = article whose KB should be searched for
 		// anomaly
 		String articleName = getParameter(0);
-		// get the KB of this article
+		String config = "knowledge base article: " + articleName;
+
 		KnowledgeBase kb =
 				D3webModule.getAD3webKnowledgeServiceInTopic(
 						KnowWEEnvironment.DEFAULT_WEB, articleName);
 
+		CITestResult res = new CITestResult(Type.SUCCESSFUL, null, config);
+		StringBuffer buf = new StringBuffer();
+
+		// get the KB of this article
 		if (kb != null) {
 
 			// get all flowcharts
@@ -80,9 +79,10 @@ public class AnomalyAutostartFlow extends AbstractCITest {
 
 		if (buf.length() > 0) {
 			res = new
-					CITestResult(TestResultType.FAILED,
-							": Anomaly detected - automatically starting flowcharts with more than one startnode found: \n"
-									+ buf.toString());
+					CITestResult(
+							Type.FAILED,
+							"automatically starting flowcharts with more than one startnode found: \n"
+									+ buf.toString(), config);
 		}
 
 		return res;

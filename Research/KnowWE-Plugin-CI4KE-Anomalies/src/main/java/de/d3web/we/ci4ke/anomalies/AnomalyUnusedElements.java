@@ -30,7 +30,7 @@ import de.d3web.diaFlux.flow.Node;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.ci4ke.testing.AbstractCITest;
 import de.d3web.we.ci4ke.testing.CITestResult;
-import de.d3web.we.ci4ke.testing.CITestResult.TestResultType;
+import de.d3web.we.ci4ke.testing.CITestResult.Type;
 import de.d3web.we.core.KnowWEEnvironment;
 
 /**
@@ -44,20 +44,20 @@ public class AnomalyUnusedElements extends AbstractCITest {
 	@Override
 	public CITestResult call() throws Exception {
 
-		CITestResult res = new CITestResult(TestResultType.SUCCESSFUL,
-				": No unused elements detected.");
-
-		Integer numberOfUnusedElements = 0;
-		StringBuffer buf = new
-				StringBuffer();
-
 		// get the first parameter = article whose KB should be searched for
 		// anomaly
 		String articleName = getParameter(0);
+		String config = "knowledge base article: " + articleName;
+
 		// get the KB of this article
 		KnowledgeBase kb =
 				D3webModule.getAD3webKnowledgeServiceInTopic(
 						KnowWEEnvironment.DEFAULT_WEB, articleName);
+
+		CITestResult res = new CITestResult(Type.SUCCESSFUL, null, config);
+		Integer numberOfUnusedElements = 0;
+		StringBuffer buf = new
+				StringBuffer();
 
 		if (kb != null) {
 
@@ -94,7 +94,6 @@ public class AnomalyUnusedElements extends AbstractCITest {
 
 			} // end for each question
 
-			
 			// get all solutions from KB
 			List<Solution> solutions =
 					kb.getManager().getObjects(Solution.class);
@@ -128,9 +127,10 @@ public class AnomalyUnusedElements extends AbstractCITest {
 
 		if (numberOfUnusedElements > 0) {
 			res = new
-					CITestResult(TestResultType.FAILED, ": Anomaly detected - " +
+					CITestResult(Type.FAILED,
 							numberOfUnusedElements.toString() +
-							" unused element(s) found: \n" + buf.toString());
+									" unused element(s) found: \n" + buf.toString(),
+									config);
 		}
 
 		return res;
