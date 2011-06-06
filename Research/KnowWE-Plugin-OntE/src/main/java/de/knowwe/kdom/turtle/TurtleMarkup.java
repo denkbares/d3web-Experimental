@@ -171,6 +171,11 @@ public class TurtleMarkup extends AbstractType {
 					URIUtil.PREDICATE_VOCABULARY));
 			this.addSubtreeHandler(Priority.LOWER, new TermReferenceCheckerPredicate());
 		}
+		
+		@Override
+		public String getTermName(Section<? extends KnowWETerm<String>> s) {
+			return getTermIdentifier(s);
+		}
 
 		@Override
 		public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
