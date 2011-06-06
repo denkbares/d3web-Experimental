@@ -27,21 +27,12 @@ package de.knowwe.casetrain.type.general;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.report.KDOMError;
-import de.d3web.we.kdom.report.KDOMNotice;
 import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.KDOMWarning;
 import de.d3web.we.kdom.report.MessageRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.type.AnonymousTypeInvisible;
 import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.casetrain.util.Utils;
 
 /**
  * 
@@ -122,41 +113,7 @@ public abstract class BlockMarkupType extends AbstractType {
 		this.sectionFinder = new RegexSectionFinder(regex, Pattern.DOTALL
 				| Pattern.MULTILINE, 1);
 
-		this.setCustomRenderer(new KnowWEDomRenderer<BlockMarkupType>() {
-
-			@SuppressWarnings("unchecked")
-			@Override
-			public void render(KnowWEArticle article, Section<BlockMarkupType> sec, UserContext user, StringBuilder string) {
-				string.append(KnowWEUtils.maskHTML("<div class='"
-						+ sec.get().getCSSClass()
-						+ "'>"));
-				Utils.renderKDOMReportMessageBlock(KnowWEUtils.getMessagesFromSubtree(
-						article,
-						sec,
-						KDOMError.class), string);
-
-				Utils.renderKDOMReportMessageBlock(KnowWEUtils.getMessagesFromSubtree(
-						article,
-						sec,
-						KDOMWarning.class), string);
-
-				Utils.renderKDOMReportMessageBlock(KnowWEUtils.getMessagesFromSubtree(
-						article,
-						sec,
-						KDOMNotice.class), string);
-
-				// TODO Delegation renders PlainText around collapsebox!
-				Section<BlockMarkupContent> con =
-					Sections.findSuccessor(sec, BlockMarkupContent.class);
-				con.get().getRenderer().render(article, con, user, string);
-				//				DelegateRenderer.getInstance().render(
-				//						article, sec,
-				//						user, string);
-				string.append(KnowWEUtils.maskHTML("</div>"));
-
-			}
-		});
-
+		this.setCustomRenderer(new BlockMarkupTypeRenderer());
 
 		content = new BlockMarkupContent(key + "Content");
 

@@ -92,11 +92,16 @@ public class MetaData extends BlockMarkupType {
 								+ "\r\n"));
 				string.append(KnowWEUtils.maskHTML("<table class='wikitable'>"));
 				string.append(KnowWEUtils.maskHTML("<th>Metadaten:</th><th></th>"));
-				// TODO Delegation renders PlainText around collapsebox!
+
 				Section<BlockMarkupContent> con =
 					Sections.findSuccessor(sec, BlockMarkupContent.class);
-				con.get().getRenderer().render(article, con, user, string);
-				//				DelegateRenderer.getInstance().render(article, sec, user, string);
+				List<Section<MetaLine>> lines = new ArrayList<Section<MetaLine>>();
+				Sections.findSuccessorsOfType(con, MetaLine.class, lines);
+
+				for (Section<MetaLine> l : lines) {
+					l.get().getRenderer().render(article, l, user, string);
+				}
+
 				string.append(KnowWEUtils.maskHTML("</table>"));
 				string.append(KnowWEUtils.maskHTML("/%\r\n"));
 			}

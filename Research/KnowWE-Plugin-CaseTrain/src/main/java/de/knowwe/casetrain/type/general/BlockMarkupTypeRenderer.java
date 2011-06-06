@@ -22,29 +22,48 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.report.KDOMError;
+import de.d3web.we.kdom.report.KDOMNotice;
+import de.d3web.we.kdom.report.KDOMWarning;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.casetrain.renderer.MouseOverTitleRenderer;
+import de.knowwe.casetrain.util.Utils;
 
 
 /**
  * 
  * @author Johannes Dienst
- * @created 05.06.2011
+ * @created 06.06.2011
  */
-public class SubblockMarkupRenderer extends KnowWEDomRenderer<SubblockMarkup> {
+public class BlockMarkupTypeRenderer extends KnowWEDomRenderer<BlockMarkupType> {
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void render(KnowWEArticle article, Section<SubblockMarkup> sec, UserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section<BlockMarkupType> sec, UserContext user, StringBuilder string) {
 		string.append(KnowWEUtils.maskHTML("<div class='"
 				+ sec.get().getCSSClass()
 				+ "'>"));
+		Utils.renderKDOMReportMessageBlock(KnowWEUtils.getMessagesFromSubtree(
+				article,
+				sec,
+				KDOMError.class), string);
 
-		// Only render the Subblock and not the
-		// PlainText surrounding it.
-		MouseOverTitleRenderer.getInstance().render(
-				article, Sections.findSuccessor(sec, SubblockMarkupContent.class),
-				user, string);
+		Utils.renderKDOMReportMessageBlock(KnowWEUtils.getMessagesFromSubtree(
+				article,
+				sec,
+				KDOMWarning.class), string);
+
+		Utils.renderKDOMReportMessageBlock(KnowWEUtils.getMessagesFromSubtree(
+				article,
+				sec,
+				KDOMNotice.class), string);
+
+		// TODO Delegation renders PlainText around collapsebox!
+		Section<BlockMarkupContent> con =
+			Sections.findSuccessor(sec, BlockMarkupContent.class);
+		BlockMarkupContentRenderer.getInstance().render(article, con, user, string);
 		string.append(KnowWEUtils.maskHTML("</div>"));
+
 	}
+
 }

@@ -41,10 +41,10 @@ import de.knowwe.casetrain.message.InvalidArgumentError;
 import de.knowwe.casetrain.message.MissingComponentError;
 import de.knowwe.casetrain.message.MissingComponentWarning;
 import de.knowwe.casetrain.message.MissingContentWarning;
-import de.knowwe.casetrain.renderer.MouseOverTitleRenderer;
 import de.knowwe.casetrain.type.Closure;
 import de.knowwe.casetrain.type.Introduction;
 import de.knowwe.casetrain.type.general.BlockMarkupContent;
+import de.knowwe.casetrain.type.general.BlockMarkupContentRenderer;
 import de.knowwe.casetrain.type.general.BlockMarkupType;
 import de.knowwe.casetrain.type.general.Title;
 import de.knowwe.casetrain.type.multimedia.Audio;
@@ -98,8 +98,9 @@ public class Info extends BlockMarkupType {
 						article,
 						sec,
 						KDOMNotice.class), string);
-				// TODO Delegation renders PlainText around collapsebox!
-				MouseOverTitleRenderer.getInstance().render(article, sec, user, string);
+				Section<BlockMarkupContent> con =
+					Sections.findSuccessor(sec, BlockMarkupContent.class);
+				BlockMarkupContentRenderer.getInstance().render(article, con, user, string);
 				string.append(KnowWEUtils.maskHTML("<div class='Infoend'></div>"));
 				string.append(KnowWEUtils.maskHTML("</div>"));
 			}
