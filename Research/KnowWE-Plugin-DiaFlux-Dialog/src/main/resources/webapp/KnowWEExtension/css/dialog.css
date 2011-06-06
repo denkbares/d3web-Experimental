@@ -1,0 +1,32 @@
+.nodeVisited {
+ 	border: 3px solid green;
+}
+
+.ruleVisited .v_line, .ruleVisited .h_line{
+	border: 1px solid green;
+}
+
+input#numQuestion{
+	padding: 0px;
+	max-width: 70px;
+}
+
+div.dialogBox{
+	border: 1px solid black;
+	margin-top: 5px;
+	margin-left: 5px;
+	padding: 3px;
+	z-index: 101;
+}
+
+div#hiddenNodeId, div#hiddenQuestion{
+	display: none;
+}
+
+div#closeButton{
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	cursor: pointer;
+	background-image: url("../images/cross.png");
+}

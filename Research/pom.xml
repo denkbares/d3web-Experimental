@@ -172,6 +172,7 @@
 		<module>KnowWE-Plugin-DiaFlux-Refactoring</module>
 		<module>KnowWE-Plugin-OWLAPI</module>
 		<module>KnowWE-Plugin-Example</module>
+		<module>KnowWE-Plugin-DiaFlux-Dialog</module>
 	</modules>
 	<repositories>
 		<repository>
