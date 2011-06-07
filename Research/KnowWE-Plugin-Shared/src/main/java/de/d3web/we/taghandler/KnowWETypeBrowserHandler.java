@@ -64,8 +64,7 @@ public class KnowWETypeBrowserHandler extends AbstractHTMLTagHandler {
 
 		// Header
 		html.append("<div id=\"TypeBrowser\" class=\"panel\"><h3>"
-				+ KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
-						"KnowWE.TypeBrowser.topic")
+				+ "Topic"
 				+ "</h3>");
 		html.append("<form method='post' action='' name='typebrowser'>");
 		html.append("<fieldset>");
