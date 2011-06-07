@@ -14,12 +14,14 @@ DiaFluxDialog.addEventsToFollowUp = function(previousNode) {
 	
 	for (var i = 0; i < outgoingRules.length; i++) {
 		var currentNode = outgoingRules[i].targetAnchor.node;
+		currentNode.dom.removeEvents('click');
 		currentNode.dom.addEvent('click', function(event){
 			DiaFluxDialog.createContextMenu(event);
 		});
 		
 		var newOutgoingRules = DiaFluxDialog.Utils.findOutgoingRules(currentNode);
 		for (var j = 0; j < newOutgoingRules.length; j++) {
+			newOutgoingRules[j].dom.removeEvents('click');
 			newOutgoingRules[j].dom.addEvent('click', function(event) {
 				DiaFluxDialog.clickRule(event);
 			});
@@ -57,24 +59,121 @@ DiaFluxDialog.clickRule = function(event) {
 // activates a rule, e.g. colors the rule and adds the event to
 // its target node and the outgoing rules
 DiaFluxDialog.activateRule = function(flowRule) {
-	DiaFluxDialog.deactivateAllRules(flowRule);
+	if (!flowRule.isActive) {
+		flowRule.isActive = true;
+	} else {
+		DiaFluxDialog.deactivateRule(flowRule);
+		return;
+	}
+	DiaFluxDialog.deactivateAllRulesExcept(flowRule);
 	DiaFluxDialog.colorRule(flowRule);
 	DiaFluxDialog.colorNode(flowRule.sourceNode);
 	
 	var targetNode = flowRule.targetNode;
+	DiaFluxDialog.increaseSupportForNode(targetNode);
+	
+	
+	var action = targetNode.actionPane.action;
+	var infoObject = KBInfo.lookupInfoObject(action.getInfoObjectName());
+	
+	// -> solution -> color target node
+	if (!infoObject.type) {
+		DiaFluxDialog.colorNode(targetNode);
+		return;
+	}
+	
+	targetNode.dom.removeEvents('click');
 	targetNode.dom.addEvent('click', function(event){
 		DiaFluxDialog.createContextMenu(event);
 	});
 	
 	var outgoingRules = DiaFluxDialog.Utils.findOutgoingRules(targetNode);
 	for (var i = 0; i < outgoingRules.length; i++) {
+		outgoingRules[i].dom.removeEvents('click');
 		outgoingRules[i].dom.addEvent('click', function(event) {
 			DiaFluxDialog.clickRule(event);
 		});
 	}
 }
 
+DiaFluxDialog.deactivateRule = function(flowRule) {
+	flowRule.isActive = false;
+	DiaFluxDialog.resetRuleColor(flowRule);
+	DiaFluxDialog.decreaseSupportForNode(flowRule.targetNode);
+}
+
+DiaFluxDialog.activateNode = function(flowNode) {
+	DiaFluxDialog.colorNode(flowNode);
+	DiaFluxDialog.addEventsToFollowUp(flowNode);
+}
+
+DiaFluxDialog.deactivateNode = function(flowNode) {
+	// deactivate outgoing rules first
+	var outgoingRules = DiaFluxDialog.Utils.findOutgoingRules(flowNode);
+	for (var i = 0; i < outgoingRules.length; i++) {
+		DiaFluxDialog.deactivateRule(outgoingRules[i]);
+	}
+	
+	DiaFluxDialog.resetNodeColor(flowNode);
+	
+}
+
+//fires a node, i.e. sets the css class 
+DiaFluxDialog.fireNode = function(event) {
+	var target = event.target;	
+	var hiddenNode = $('hiddenNodeId')	
+	var flowNode = DiaFluxDialog.Utils.findFlowNodeById(hiddenNode.firstChild.textContent);
+
+	var outgoingRules = DiaFluxDialog.Utils.findOutgoingRules(flowNode);
+	for (var i = 0; i < outgoingRules.length; i++) {
+		DiaFluxDialog.resetRuleColor(outgoingRules[i]);
+	}	
+
+	
+	var question = $('hiddenQuestion').innerHTML;
+	var contextMenu = theFlowchart.dom.getElement('div.dialogBox');
+		
+	var trs = $(contextMenu).getElements('tr');
+	var selected = '';
+	for (var i = 0; i < trs.length; i++) {
+		var checkbox = trs[i].getElement('input')
+		if (checkbox.checked) {
+			// putting together the string with selected values
+			if (selected != '') {
+				selected += '#####';
+			}
+			selected += checkbox.value;
+				
+			// coloring the rules
+			for (var j = 0; j < outgoingRules.length; j++) {
+				if (outgoingRules[j].guard.displayHTML === checkbox.value) {
+					DiaFluxDialog.activateRule(outgoingRules[j]);
+				}
+			}
+				
+		}
+			
+			
+	}
+	var incomingRules = DiaFluxDialog.Utils.findIncomingRules(flowNode);
+	for (var i = 0; i < incomingRules.length; i++) {
+		if (!incomingRules[i].isActive) {
+			DiaFluxDialog.activateRule(incomingRules[i]);
+		}
+	}
+	
+	
+	DiaFluxDialog.activateNode(flowNode);
+	contextMenu.parentNode.removeChild(contextMenu);
+}
+
+
 DiaFluxDialog.createContextMenu = function(event) {
+	var contextMenu = theFlowchart.dom.getElement('div.dialogBox');
+	if (contextMenu) {
+		contextMenu.parentNode.removeChild(contextMenu);
+	}
+	
 	var target = event.target;
 	var htmlNode = DiaFluxDialog.Utils.findParentWithClass(target, 'Node');
 	var flowNode = DiaFluxDialog.Utils.findFittingNode(htmlNode);
@@ -117,8 +216,8 @@ DiaFluxDialog.createContextMenu = function(event) {
 	$('sendAnswer').addEvent('click', function(event) {
 		DiaFluxDialog.fireNode(event);
 	});
-
 }
+
 
 DiaFluxDialog.createAnswerPossibilites = function(infoObject) {
 	var html = '';
@@ -158,57 +257,12 @@ DiaFluxDialog.createAnswerPossibilites = function(infoObject) {
 	return html;	
 }
 
-//fires a node, i.e. sets the css class 
-DiaFluxDialog.fireNode = function(event) {
-	var target = event.target;	
-	var hiddenNode = $('hiddenNodeId')	
-	var flowNode = DiaFluxDialog.Utils.findFlowNodeById(hiddenNode.firstChild.textContent);
-
-	var outgoingRules = DiaFluxDialog.Utils.findOutgoingRules(flowNode);
-	for (var i = 0; i < outgoingRules.length; i++) {
-		DiaFluxDialog.resetRuleColor(outgoingRules[i]);
-	}	
-
-	DiaFluxDialog.colorNode(flowNode);
-	
-	var question = $('hiddenQuestion').innerHTML;
-	var contextMenu = theFlowchart.dom.getElement('div.dialogBox');
-	
-	
-	
-	// only if the context menu was called
-	if (contextMenu) {
-		
-		var trs = $(contextMenu).getElements('tr');
-		var selected = '';
-		for (var i = 0; i < trs.length; i++) {
-			var checkbox = trs[i].getElement('input')
-			if (checkbox.checked) {
-				// putting together the string with selected values
-				if (selected != '') {
-					selected += '#####';
-				}
-				selected += checkbox.value;
-				
-				// coloring the rules
-				for (var j = 0; j < outgoingRules.length; j++) {
-					if (outgoingRules[j].guard.displayHTML === checkbox.value) {
-						DiaFluxDialog.colorRule(outgoingRules[j]);
-					}
-				}
-				
-			}
-			
-			
-		}
-		contextMenu.parentNode.removeChild(contextMenu);
-	}
-	
-	DiaFluxDialog.addEventsToFollowUp(flowNode);
-}
-
 DiaFluxDialog.colorNode = function(flowNode) {
 	flowNode.dom.addClass('nodeVisited');
+}
+
+DiaFluxDialog.resetNodeColor = function(flowNode) {
+	flowNode.dom.removeClass('nodeVisited');
 }
 
 DiaFluxDialog.colorRule = function(flowRule) {
@@ -227,7 +281,7 @@ DiaFluxDialog.removeContextMenu = function() {
 }
 
 // deactivates all rules sharing the same source node
-DiaFluxDialog.deactivateAllRules = function(flowRule) {
+DiaFluxDialog.deactivateAllRulesExcept = function(flowRule) {
 	var sourceNode = flowRule.sourceNode;
 	
 	// dont deactivate if the source node is the start node
@@ -244,10 +298,32 @@ DiaFluxDialog.deactivateAllRules = function(flowRule) {
 	
 	var outgoingRules = DiaFluxDialog.Utils.findOutgoingRules(sourceNode);
 	for (var i = 0; i < outgoingRules.length; i++) {
-		DiaFluxDialog.resetRuleColor(outgoingRules[i]);
+		if (outgoingRules[i] !== flowRule) {
+			DiaFluxDialog.deactivateRule(outgoingRules[i]);
+		}
 	}
 }
 
+DiaFluxDialog.increaseSupportForNode = function(flowNode) {
+	if (flowNode.support) {
+		flowNode.support++;
+	} else {
+		flowNode.support = 1;
+	}
+}
+
+
+// decreases the support of a node, only if it already has support
+// nodes with support = 0 are either not yet started or just lost
+// their support
+DiaFluxDialog.decreaseSupportForNode = function(flowNode) {
+	if (flowNode.support && flowNode.support > 0) {
+		flowNode.support--;
+		if (flowNode.support === 0) {
+			DiaFluxDialog.deactivateNode(flowNode);
+		}
+	}
+}
 
 DiaFluxDialog.Utils = {};
 
@@ -263,7 +339,18 @@ DiaFluxDialog.Utils.findOutgoingRules = function(flowNode) {
 	var rules = theFlowchart.rules;
 	var outgoingRules = [];
 	for (var i = 0; i < rules.length; i++) {
-		if (rules[i].sourceAnchor.node === flowNode) {
+		if (rules[i].sourceNode === flowNode) {
+			outgoingRules.push(rules[i]);
+		}
+	}
+	return outgoingRules;
+}
+
+DiaFluxDialog.Utils.findIncomingRules = function(flowNode) {
+	var rules = theFlowchart.rules;
+	var outgoingRules = [];
+	for (var i = 0; i < rules.length; i++) {
+		if (rules[i].targetNode === flowNode) {
 			outgoingRules.push(rules[i]);
 		}
 	}
