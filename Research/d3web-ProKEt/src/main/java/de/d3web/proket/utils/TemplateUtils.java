@@ -118,6 +118,7 @@ public class TemplateUtils {
 			e.printStackTrace();
 			return null;
 		}
+		stg.setFileCharEncoding("UTF-8");
 
 		// kill the package
 		String templateName = templateClass.replaceFirst(".*\\.", "");
