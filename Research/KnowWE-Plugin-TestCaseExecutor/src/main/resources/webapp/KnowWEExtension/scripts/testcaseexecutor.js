@@ -1,26 +1,33 @@
 var TestCaseExecutor = {};
 
 TestCaseExecutor.getTestcases = function(filename, master) {
-		params = {
-			action : 'TestCaseExecutorAction',
-	        KWikiWeb : 'default_web',
-	        filename : filename, 
-	        master : master
-		};
-		
-		// options for AJAX request
-	    options = {
-	        url : KNOWWE.core.util.getURL( params ),
-	        response : {
-	    		action : 'none',
-            	fn : function(){
-	    			TestCaseExecutor.addTestcases(this);
-	    		}
-	        }
-	    };
-	    
-	    // send AJAX request
-	    new _KA( options ).send();
+	if (filename === null) {
+		var select = $('testcases').getElement('select');
+		var filename = select.options[select.selectedIndex].value;
+		if (!filename) return;
+	}
+	
+	
+	params = {
+		action : 'TestCaseExecutorAction',
+        KWikiWeb : 'default_web',
+        filename : filename, 
+        master : master
+	};
+	
+	// options for AJAX request
+    options = {
+        url : KNOWWE.core.util.getURL( params ),
+        response : {
+    		action : 'none',
+        	fn : function(){
+    			TestCaseExecutor.addTestcases(this);
+    		}
+        }
+    };
+    
+    // send AJAX request
+    new _KA( options ).send();
 }
 
 TestCaseExecutor.addTestcases = function(request) {

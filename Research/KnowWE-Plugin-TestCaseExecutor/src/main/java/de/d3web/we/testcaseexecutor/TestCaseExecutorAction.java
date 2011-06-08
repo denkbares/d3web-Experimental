@@ -63,7 +63,7 @@ public class TestCaseExecutorAction extends AbstractAction {
 		html.append("<table id=\"selectCases\">");
 		html.append("<tr class=\"borderBottom\">");
 		html.append("<td class=\"noPadding borderRight\"><input type=\"checkbox\" name=\"selectAllCases\" onclick=\"return TestCaseExecutor.selectAllCases()\"></td>");
-		html.append("<td></td>");
+		html.append("<td>Testcases</td>");
 		html.append("</tr>");
 		for (String s : testCases) {
 			String name = s.equals("") ? "Unnamed TestCase" : s;
