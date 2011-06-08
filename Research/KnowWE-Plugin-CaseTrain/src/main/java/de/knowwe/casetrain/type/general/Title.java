@@ -44,9 +44,6 @@ public class Title extends AbstractType {
 		ConstraintSectionFinder cf = new ConstraintSectionFinder(new LineSectionFinder());
 		cf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 		this.setSectionFinder(cf);
-
-		//		this.setCustomRenderer(new DivStyleClassRenderer(TITLE, null));
-
 	}
 
 }

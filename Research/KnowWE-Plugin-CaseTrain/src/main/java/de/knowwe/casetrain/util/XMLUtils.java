@@ -180,7 +180,8 @@ public class XMLUtils {
 				articleSec, de.knowwe.casetrain.evaluation.Evaluation.class, found);
 
 		for(Section<de.knowwe.casetrain.evaluation.Evaluation> infoSec : found) {
-			List<Section<?>> childs = infoSec.getChildren().get(0).getChildren();
+			List<Section<?>> childs =
+				Sections.findSuccessor(infoSec, BlockMarkupContent.class).getChildren();
 			SimpleSection simpleSec = fac.createSimpleSection();
 			simpleSec.setQuestions(fac.createBasicSectionQuestions());
 
@@ -227,10 +228,11 @@ public class XMLUtils {
 					frageChilds.add(child);
 				}
 
-				if(child.get().isType(Title.class)) {
-					simpleSec.setTitle(XMLUtils.clearPlainText(child));
-					continue;
-				}
+				// TODO Evaluation has title?
+				//				if(child.get().isType(Title.class)) {
+				//					simpleSec.setTitle(XMLUtils.clearPlainText(child));
+				//					continue;
+				//				}
 
 			}
 
@@ -308,11 +310,6 @@ public class XMLUtils {
 		}
 
 		Titledmmcontent titledmmContent = fac.createTitledmmcontent();
-
-		// TODO This is a fix, cause there is no title at all
-		// So we add a title manually here.
-		titledmmContent.setTitle(ResourceBundle.getBundle("casetrain_messages").
-				getString("Introduction"));
 
 		for (Section<?> sec : contentChildren) {
 			if (sec.get().isType(Title.class)) {
@@ -508,7 +505,7 @@ public class XMLUtils {
 		Sections.findSuccessorsOfType(articleSec, Info.class, infoSecs);
 
 		for(Section<Info> infoSec : infoSecs) {
-			List<Section<?>> childs = infoSec.getChildren().get(0).getChildren();
+			List<Section<?>> childs = Sections.findSuccessor(infoSec, BlockMarkupContent.class).getChildren();
 			SimpleSection simpleSec = fac.createSimpleSection();
 			simpleSec.setQuestions(fac.createBasicSectionQuestions());
 
@@ -658,8 +655,7 @@ public class XMLUtils {
 		question.setText(frageText.getOriginalText());
 
 		for (Section<?> sec : frageChilds) {
-			// Hints koennen immer kommen und element Info
-			// beinhalten Text und Multimedia
+
 			if (sec.get().isType(Hint.class)) {
 				Mmmixedcontent it = fac.createMmmixedcontent();
 				XMLUtils.renderHinweisOrErklaerung(it, sec, fac);
@@ -700,13 +696,15 @@ public class XMLUtils {
 		String heading = null;
 		for (Section<?> s : Sections.findSuccessor(
 				antworten, SubblockMarkupContent.class).getChildren()) {
-			if (s.get().isType(PlainText.class)) continue;
+
+			if (s.get().isType(PlainText.class) || s.get().isType(AnswersBlockWeightMark.class))
+				continue;
 
 			// PosFactor and NegFactor
 			String posFactor = AnswerLine.getPosFactor((Section<AnswerLine>)s);
 			String negFactor = AnswerLine.getNegFactor((Section<AnswerLine>)s);
 
-			// AntwortTex
+			// AntwortText
 			Section<AnswerText> text = Sections.findSuccessor(s, AnswerText.class);
 			String antwortText = "";
 			if (text != null)
@@ -941,7 +939,7 @@ public class XMLUtils {
 
 		List<Object> itList = it.getContentOrMultimediaItemOrFormula();
 
-		for (Section<?> s : sec.getChildren().get(0).getChildren()) {
+		for (Section<?> s : Sections.findSuccessor(sec, SubblockMarkupContent.class).getChildren()) {
 
 			if (s.get().isType(PlainText.class)) {
 				XMLUtils.clearPlainText(s, itList);
@@ -968,7 +966,7 @@ public class XMLUtils {
 
 		List<Object> itList = it.getContent();
 
-		for (Section<?> s : sec.getChildren().get(0).getChildren()) {
+		for (Section<?> s : Sections.findSuccessor(sec, SubblockMarkupContent.class).getChildren()) {
 
 			if (s.get().isType(PlainText.class)) {
 				XMLUtils.clearPlainText(s, itList);

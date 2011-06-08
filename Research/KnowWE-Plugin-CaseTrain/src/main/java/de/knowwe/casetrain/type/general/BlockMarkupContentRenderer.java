@@ -57,9 +57,10 @@ public class BlockMarkupContentRenderer extends KnowWEDomRenderer<BlockMarkupCon
 		string.append(KnowWEUtils.maskHTML("%%collapsebox-closed \r\n"));
 		String tString = "";
 
-		Section<Title> titl = Sections.findSuccessor(sec, Title.class);
-		if (titl != null) {
-			tString = titl.getOriginalText().trim();
+		// Only 1 title here
+		List<Section<Title>> titl = Sections.findChildrenOfType(sec, Title.class);
+		if (!titl.isEmpty()) {
+			tString = titl.get(0).getOriginalText().trim();
 		} else if(bundle.getString(sec.getFather().get().getName()) != null) {
 			tString = bundle.getString(sec.getFather().get().getName());
 		}

@@ -43,7 +43,6 @@ public class EvaluationEnd extends SubblockMarkup {
 
 	public EvaluationEnd() {
 		super("EvaluationEnd");
-		this.addChildType(new Title());
 		this.addContentType(new Title());
 
 		this.addSubtreeHandler(new GeneralSubtreeHandler<Closure>() {

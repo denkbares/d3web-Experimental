@@ -23,11 +23,13 @@ package de.knowwe.casetrain.info;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
+import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMNotice;
@@ -41,6 +43,7 @@ import de.knowwe.casetrain.message.InvalidArgumentError;
 import de.knowwe.casetrain.message.MissingComponentError;
 import de.knowwe.casetrain.message.MissingComponentWarning;
 import de.knowwe.casetrain.message.MissingContentWarning;
+import de.knowwe.casetrain.message.MissingTitleError;
 import de.knowwe.casetrain.type.Closure;
 import de.knowwe.casetrain.type.Introduction;
 import de.knowwe.casetrain.type.general.BlockMarkupContent;
@@ -62,6 +65,8 @@ import de.knowwe.casetrain.util.Utils;
  * @created 06.04.2011
  */
 public class Info extends BlockMarkupType {
+
+	ResourceBundle bundle = ResourceBundle.getBundle("casetrain_messages");
 
 	public Info() {
 		super("Info");
@@ -115,7 +120,9 @@ public class Info extends BlockMarkupType {
 
 				Section<Title> title = Sections.findSuccessor(s, Title.class);
 				if (title == null) {
-					messages.add(new MissingComponentError(Title.TITLE));
+					messages.add(new MissingTitleError(Info.class.getSimpleName()));
+				} else if(title.getOriginalText().trim().equals("")) {
+					messages.add(new MissingTitleError(Info.class.getSimpleName()));
 				}
 
 				/*
@@ -184,46 +191,59 @@ public class Info extends BlockMarkupType {
 				 *   - frage hat keine falsche antwortmöglichkeit
 				 * 
 				 */
+				Section<BlockMarkupContent> content =
+					Sections.findSuccessor(s, BlockMarkupContent.class);
+
 				List<Section<? extends Type>> children =
-					Sections.findSuccessor(s, BlockMarkupContent.class).getChildren();
+					new ArrayList<Section<? extends Type>>(content.getChildren());
+
 				Section<? extends Type> actual = null;
+
 				boolean erklMissing = true;
 				boolean antwortenMissing = true;
-				for (Section<? extends Type> sec : children) {
-					if (sec.get().isType(Question.class)) {
-						if(actual == null) {
+				boolean moreAnswersBlocks = false;
+				for (Section<?> sec : children) {
+
+					if (sec.get().isType(Hint.class) || sec.get().isType(Title.class)
+							|| sec.get().isType(PlainText.class)
+							|| sec.get().isType(Link.class)) {
+						continue;
+					}
+
+					if ( sec.get().isType(Question.class) ) {
+
+						if (actual == null) {
 							actual = sec;
 							continue;
 						}
-						actual = sec;
-						if (erklMissing) {
-							messages.add(
-									new MissingComponentWarning(
-											Explanation.class.getSimpleName()));
-						}
-						if (antwortenMissing) {
-							messages.add(
-									new MissingComponentWarning(
-											AnswersBlock.class.getSimpleName()));
-						}
+						this.validateQuestion(actual, erklMissing,
+								antwortenMissing, moreAnswersBlocks, messages);
 						erklMissing = true;
 						antwortenMissing = true;
+						moreAnswersBlocks = false;
 						continue;
 					}
-					if (sec.get().isType(Hint.class)) {
-						continue;
-					}
+
 					if (sec.get().isType(Explanation.class)) {
 						erklMissing = false;
 						continue;
 					}
+
 					if (sec.get().isType(AnswersBlock.class)) {
 						// test if multiple Antworten are possible
 						// Only by UMW,OMW,MN
 						if (!antwortenMissing) {
-							String typ = Sections.findSuccessor(actual, QuestionType.class).getOriginalText().trim();
-							if ( !(AnswersBlockValidator.getInstance().getTypesMultiple().contains(typ))) {
-								messages.add(new InvalidArgumentError("Mehrfache Antworten bei diesem FrageTyp nicht zulässig: "+typ));
+							moreAnswersBlocks = true;
+							String typ =
+								Sections.findSuccessor(actual, QuestionType.class)
+								.getOriginalText().trim();
+							if ( !(AnswersBlockValidator.getInstance()
+									.getTypesMultiple().contains(typ))) {
+								messages.add(
+										new InvalidArgumentError(
+												bundle.getString("NO_MULTIPLE_ANSWERS")
+												+typ)
+								);
 							}
 
 						}
@@ -231,10 +251,47 @@ public class Info extends BlockMarkupType {
 						AnswersBlockValidator.getInstance().
 						validateAnswersBlock((Section<Question>) actual,
 								(Section<AnswersBlock>) sec, messages, false);
-						continue;
 					}
+
 				}
+
+				this.validateQuestion(actual, erklMissing,
+						antwortenMissing, moreAnswersBlocks, messages);
+
 				return messages;
+			}
+
+			private void validateQuestion(Section<? extends Type> actual,
+					boolean erklMissing, boolean antwortenMissing, boolean moreAnswersBlocks,
+					List<KDOMReportMessage> messages) {
+
+				if (actual == null) {
+					messages.add(
+							new MissingComponentError(
+									Question.class.getSimpleName()));
+					return;
+				}
+
+				if (erklMissing) {
+					messages.add(
+							new MissingComponentWarning(
+									Explanation.class.getSimpleName()));
+				}
+				if (antwortenMissing) {
+					messages.add(
+							new MissingComponentWarning(
+									AnswersBlock.class.getSimpleName()));
+				}
+				String typ =
+					Sections.findSuccessor(actual, QuestionType.class)
+					.getOriginalText().trim();
+				if (!moreAnswersBlocks && AnswersBlockValidator.getInstance()
+						.getTypesMultiple().contains(typ)) {
+					messages.add(
+							new MissingComponentError(
+									bundle.getString("MIN_TWO_BLOCKS")+typ));
+				}
+
 			}
 		});
 	}
