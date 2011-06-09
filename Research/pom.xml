@@ -173,6 +173,7 @@
 		<module>KnowWE-Plugin-OWLAPI</module>
 		<module>KnowWE-Plugin-Example</module>
 		<module>KnowWE-Plugin-DiaFlux-Dialog</module>
+		<module>KnowWE-Plugin-IncrementalCompiler</module>
 	</modules>
 	<repositories>
 		<repository>
