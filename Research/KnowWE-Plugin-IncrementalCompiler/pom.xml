@@ -6,6 +6,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.uniwue.d3web</groupId>
+  <name>KnowWE-Plugin-IncrementalCompiler</name>
   <artifactId>KnowWE-Plugin-IncrementalCompiler</artifactId>
   <version>0.2-SNAPSHOT</version>
   <dependencies>
