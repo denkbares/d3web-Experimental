@@ -58,7 +58,6 @@ public class CompileUtils {
 		return result;
 	}
 
-
 	private static void addNonReusedSection(Section<? extends Type> section, Collection<Section<? extends Type>> result) {
 		List<Section<? extends Type>> children = section.getChildren();
 		for (Section<? extends Type> child : children) {
@@ -127,8 +126,8 @@ public class CompileUtils {
 		Sections.findSuccessorsOfType(section, TermReference.class, result);
 		return result;
 	}
-	
-	public static<T extends Type> Collection<Section<TermReference>> getAllReferencesOfComplexDefinition(Section<? extends ComplexDefinition<T>> section, Class T) {
+
+	public static <T extends Type> Collection<Section<TermReference>> getAllReferencesOfComplexDefinition(Section<? extends ComplexDefinition> section) {
 		List<Section<TermReference>> result = new ArrayList<Section<TermReference>>();
 		Sections.findSuccessorsOfType(section, TermReference.class, result);
 		return result;

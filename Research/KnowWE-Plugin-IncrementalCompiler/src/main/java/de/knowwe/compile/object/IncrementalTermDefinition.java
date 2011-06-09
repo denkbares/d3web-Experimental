@@ -24,15 +24,20 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.report.DefaultErrorRenderer;
 import de.d3web.we.kdom.report.message.NoSuchObjectError;
 import de.d3web.we.user.UserContext;
 import de.knowwe.compile.IncrementalCompiler;
 
-public abstract class IncrementalTermDefinition<TermObject>  extends TermDefinition<TermObject>{
-	
+public abstract class IncrementalTermDefinition<TermObject> extends TermDefinition<TermObject> {
+
+	final StyleRenderer CLASS_RENDERER = new StyleRenderer(
+			"color:rgb(125, 80, 102)");
+
 	public IncrementalTermDefinition(Class termObjectClass) {
 		super(termObjectClass);
+		this.setCustomRenderer(CLASS_RENDERER);
 	}
 
 	@Override
@@ -51,7 +56,7 @@ public abstract class IncrementalTermDefinition<TermObject>  extends TermDefinit
 		@Override
 		public void render(KnowWEArticle article, Section<IncrementalTermDefinition> sec, UserContext user, StringBuilder string) {
 
-			boolean hasError = ! IncrementalCompiler.getInstance().hasValidDefinition(
+			boolean hasError = !IncrementalCompiler.getInstance().hasValidDefinition(
 					sec.get().getTermIdentifier(sec));
 			if (hasError) {
 				string.append(DefaultErrorRenderer.INSTANCE_ERROR.preRenderMessage(

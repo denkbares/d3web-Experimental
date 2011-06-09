@@ -23,13 +23,21 @@ package de.knowwe.compile.object;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.objects.TermReference;
+import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.report.DefaultErrorRenderer;
 import de.d3web.we.kdom.report.message.NoSuchObjectError;
+import de.d3web.we.tools.ToolMenuDecoratingRenderer;
 import de.d3web.we.user.UserContext;
 import de.knowwe.compile.IncrementalCompiler;
 
 public abstract class IncrementalTermReference<TermObject> extends TermReference<TermObject> {
+
+	@SuppressWarnings("unchecked")
+	final KnowWEDomRenderer<IncrementalTermReference> REF_RENDERER =
+			new ToolMenuDecoratingRenderer<IncrementalTermReference>(new StyleRenderer(
+					"color:rgb(25, 180, 120)"));
 
 	public IncrementalTermReference(Class termObjectClass) {
 		super(termObjectClass);
@@ -37,7 +45,7 @@ public abstract class IncrementalTermReference<TermObject> extends TermReference
 
 	@Override
 	public KnowWEDomRenderer getRenderer() {
-		return new ReferenceRenderer(this.customRenderer);
+		return new ReferenceRenderer(REF_RENDERER);
 	}
 
 	/**
@@ -54,7 +62,12 @@ public abstract class IncrementalTermReference<TermObject> extends TermReference
 		private KnowWEDomRenderer r = null;
 
 		public ReferenceRenderer(KnowWEDomRenderer renderer) {
-			r = renderer;
+			if (renderer != null) {
+				r = renderer;
+			}
+			else {
+				r = new DelegateRenderer();
+			}
 		}
 
 		@Override

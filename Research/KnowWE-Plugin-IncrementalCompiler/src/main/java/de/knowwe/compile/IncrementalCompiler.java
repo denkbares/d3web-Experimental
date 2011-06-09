@@ -31,24 +31,25 @@ import de.d3web.we.event.EventListener;
 import de.d3web.we.event.KDOMCreatedEvent;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.objects.KnowWETerm;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.objects.TermReference;
+import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.utils.CompileUtils;
 
 /**
  * This class implements the incremental compilation algorithm as proposed by
- * the paper at KCAP2011 entitled 'Incremental Compilation of Knowledge Documents for
- * Markup-based Closed-World Authoring'
+ * the paper at KCAP2011 entitled 'Incremental Compilation of Knowledge
+ * Documents for Markup-based Closed-World Authoring'
  * 
  * @author Jochen
  * @created 09.06.2011
  */
 public class IncrementalCompiler implements EventListener {
 
-	private ReferenceManager terminology = new ReferenceManager();
+	private final ReferenceManager terminology = new ReferenceManager();
 
 	private Collection<Section<? extends KnowledgeUnit>> potentiallyNewKnowledgeSlices = new HashSet<Section<? extends KnowledgeUnit>>();
 	private Collection<Section<? extends KnowledgeUnit>> knowledgeSlicesToRemove = new HashSet<Section<? extends KnowledgeUnit>>();
@@ -118,7 +119,8 @@ public class IncrementalCompiler implements EventListener {
 		Iterator<Section<? extends KnowledgeUnit>> compilationUnitIterator = potentiallyNewKnowledgeSlices.iterator();
 		while (compilationUnitIterator.hasNext()) {
 			Section<? extends KnowledgeUnit> section = compilationUnitIterator.next();
-			Collection<Section<TermReference>> refs = section.get().getAllReferences(section);
+			Collection<Section<TermReference>> refs = section.get().getAllReferences(
+					section);
 			for (Section<TermReference> ref : refs) {
 				if (!terminology.isValid(ref.get().getTermIdentifier(ref))) {
 					// compilation unit not valid => remove
@@ -184,7 +186,7 @@ public class IncrementalCompiler implements EventListener {
 
 	private boolean hasValidDefinition(Section<? extends TermDefinition> section) {
 		String termIdentifier = section.get().getTermIdentifier(
-				(Section<? extends KnowWETerm>) section);
+				section);
 		return hasValidDefinition(termIdentifier);
 
 	}
@@ -194,6 +196,20 @@ public class IncrementalCompiler implements EventListener {
 		if (termDefiningSections.size() != 1) return false;
 
 		// TODO: check complex definitions here
+
+		// there is exactly one
+		Section<? extends TermDefinition> def = termDefiningSections.iterator().next();
+		Section<ComplexDefinition> complexDef = Sections.findAncestorOfType(def,
+				ComplexDefinition.class);
+		if (complexDef != null) {
+			Collection<Section<TermReference>> allReferencesOfComplexDefinition = CompileUtils.getAllReferencesOfComplexDefinition(complexDef);
+			for (Section<TermReference> ref : allReferencesOfComplexDefinition) {
+				if (!terminology.isValid(ref.get().getTermIdentifier(ref))) {
+					return false;
+				}
+			}
+		}
+
 		return true;
 	}
 

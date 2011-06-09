@@ -44,12 +44,12 @@ import de.knowwe.compile.object.KnowledgeUnit;
  */
 public class ReferenceManager {
 
-	private Map<String, Section<? extends TermDefinition>> validObjects = new HashMap<String, Section<? extends TermDefinition>>();
+	private final Map<String, Section<? extends TermDefinition>> validObjects = new HashMap<String, Section<? extends TermDefinition>>();
 
 	private Map<String, Section<? extends TermDefinition>> validObjectsOld = new HashMap<String, Section<? extends TermDefinition>>();
 
-	private Map<String, Set<Section<? extends TermReference>>> allReferences = new HashMap<String, Set<Section<? extends TermReference>>>();
-	private Map<String, Set<Section<? extends TermDefinition>>> allDefinitions = new HashMap<String, Set<Section<? extends TermDefinition>>>();
+	private final Map<String, Set<Section<? extends TermReference>>> allReferences = new HashMap<String, Set<Section<? extends TermReference>>>();
+	private final Map<String, Set<Section<? extends TermDefinition>>> allDefinitions = new HashMap<String, Set<Section<? extends TermDefinition>>>();
 
 	public void newCompilationStep() {
 		validObjectsOld = new HashMap<String, Section<? extends TermDefinition>>();
@@ -88,7 +88,9 @@ public class ReferenceManager {
 		for (Section<? extends TermReference> ref : refSet) {
 			Section<KnowledgeUnit> compilationUnit = Sections.findAncestorOfType(ref,
 					KnowledgeUnit.class);
-			result.add(compilationUnit);
+			if (compilationUnit != null) {
+				result.add(compilationUnit);
+			}
 		}
 		return result;
 
