@@ -27,7 +27,8 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
-		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="SimpleIRIDefinition">
 		<parameter id="class"
 			value="de.knowwe.compile.test.SimpleIRIDefintionMarkup" />
@@ -35,6 +36,17 @@
 		<parameter id="description" value="Type SimpleIRIDefinition" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="ComplexIRIDefinitionMarkup">
+		<parameter id="class"
+			value="de.knowwe.compile.test.ComplexIRIDefinitionMarkup" />
+		<parameter id="name" value="ComplexIRIDefinitionMarkup" />
+		<parameter id="description" value="Type ComplexIRIDefinitionMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="3" />
 		<parameter id="scope" value="root" />
 	</extension>
 	

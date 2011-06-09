@@ -24,7 +24,6 @@ import java.util.regex.Pattern;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.objects.KnowWETerm;
-import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 public class SimpleIRIDefintionMarkup extends AbstractType {
@@ -40,14 +39,11 @@ public class SimpleIRIDefintionMarkup extends AbstractType {
 
 	class SimpleIRIDefType extends AbstractIRITermDefinition {
 
-		final StyleRenderer CLASS_RENDERER = new StyleRenderer(
-				"color:rgb(125, 80, 102)");
-
 		public SimpleIRIDefType() {
 			this.setSectionFinder(new
 					RegexSectionFinder(Pattern.compile("def\\s(.+)"),
 							1));
-			this.setCustomRenderer(CLASS_RENDERER);
+
 		}
 
 		@Override

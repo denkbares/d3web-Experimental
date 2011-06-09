@@ -22,6 +22,7 @@ package de.knowwe.compile.test;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -30,7 +31,6 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.CompilationUnit;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.constraint.AtMostOneFindingConstraint;
@@ -39,9 +39,11 @@ import de.d3web.we.kdom.constraint.SingleChildConstraint;
 import de.d3web.we.kdom.objects.TermReference;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
-public class TripleMarkupSimple extends AbstractType implements CompilationUnit<TripleMarkupSimple>{
+public class TripleMarkupSimple extends AbstractType implements KnowledgeUnit<TripleMarkupSimple>{
 
 	public TripleMarkupSimple() {
 
@@ -142,5 +144,11 @@ public class TripleMarkupSimple extends AbstractType implements CompilationUnit<
 
 		//return new ArrayList<KDOMReportMessage>(0);
 		
+	}
+
+	@Override
+	public Collection<Section<TermReference>> getAllReferences(
+			Section<? extends KnowledgeUnit<TripleMarkupSimple>> section) {
+		return CompileUtils.getAllReferencesOfCompilationUnit(section);
 	}
 }
