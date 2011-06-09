@@ -31,6 +31,7 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.objects.TermReference;
+import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
 
 /**
@@ -144,6 +145,21 @@ public class ReferenceManager {
 			return allDefinitions.get(identifier);
 		}
 		return new ArrayList<Section<? extends TermDefinition>>();
+	}
+
+	public Collection<Section<? extends ComplexDefinition>> getReferencingDefinitions(Section<? extends TermDefinition> section) {
+		Collection<Section<? extends ComplexDefinition>> result = new HashSet<Section<? extends ComplexDefinition>>();
+		String termIdentifier = section.get().getTermIdentifier(section);
+		Set<Section<? extends TermReference>> refSet = allReferences.get(termIdentifier);
+		if (refSet == null) return result;
+		for (Section<? extends TermReference> ref : refSet) {
+			Section<ComplexDefinition> compilationUnit = Sections.findAncestorOfType(ref,
+					ComplexDefinition.class);
+			if (compilationUnit != null) {
+				result.add(compilationUnit);
+			}
+		}
+		return result;
 	}
 
 }

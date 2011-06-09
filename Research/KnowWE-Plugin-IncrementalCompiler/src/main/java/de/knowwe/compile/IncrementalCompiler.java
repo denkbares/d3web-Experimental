@@ -161,23 +161,35 @@ public class IncrementalCompiler implements EventListener {
 
 	}
 
-	private void removeRecursively(Section<? extends TermDefinition<?>> section) {
+	private void removeRecursively(Section<? extends TermDefinition> section) {
 		if (terminology.wasValidInOldVersion(section)) {
 			terminology.removeFromValidObjects(section);
 			Collection<Section<? extends KnowledgeUnit>> referencingSlices = terminology.getReferencingSlices(section);
 			knowledgeSlicesToRemove.addAll(referencingSlices);
-			// TODO recursive call
+
+			// recursion for complex definitions
+			Collection<Section<? extends ComplexDefinition>> referencingDefs = terminology.getReferencingDefinitions(section);
+			for (Section<? extends ComplexDefinition> ref : referencingDefs) {
+				removeRecursively(Sections.findSuccessor(ref,
+						TermDefinition.class));
+			}
 		}
 
 	}
 
-	private void resolveRecursively(Section<? extends TermDefinition<?>> section) {
+	private void resolveRecursively(Section<? extends TermDefinition> section) {
 		if (hasValidDefinition(section)) {
 			if (!terminology.wasValidInOldVersion(section)) {
 				terminology.addToValidObjects(section);
 				Collection<Section<? extends KnowledgeUnit>> referencingSlices = terminology.getReferencingSlices(section);
 				potentiallyNewKnowledgeSlices.addAll(referencingSlices);
-				// TODO: recursion for complex definitions
+
+				// recursion for complex definitions
+				Collection<Section<? extends ComplexDefinition>> referencingDefs = terminology.getReferencingDefinitions(section);
+				for (Section<? extends ComplexDefinition> ref : referencingDefs) {
+					resolveRecursively(Sections.findChildOfType(ref,
+							TermDefinition.class));
+				}
 
 			}
 		}
