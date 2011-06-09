@@ -1,0 +1,23 @@
+!! Mini-Test für den inkrementellen Compiler
+
+def Jochen
+
+def Pete
+
+def istEin
+
+def istEi
+
+def Assi
+
+
+{ Jochen istEin:: Assi}
+
+{ Peter istEin:: Assi}
+
+
+
+! Alle Assis:
+<sparql2go>
+Select ?x where { ?x ?y lns:Assi}
+</sparql2go>
