@@ -26,21 +26,16 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.taglibs.standard.tag.common.core.RemoveTag;
-
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.event.Event;
 import de.d3web.we.event.EventListener;
 import de.d3web.we.event.KDOMCreatedEvent;
-import de.d3web.we.kdom.CompilationUnit;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.objects.KnowWETerm;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.objects.TermReference;
-import de.d3web.we.kdom.objects.KnowWETerm.Scope;
-import de.d3web.we.terminology.TerminologyHandler;
+import de.knowwe.compile.object.CompilationUnit;
 import de.knowwe.compile.utils.CompileUtils;
 
 /**
@@ -123,7 +118,7 @@ public class IncrementalCompiler implements EventListener {
 		Iterator<Section<? extends CompilationUnit>> compilationUnitIterator = potentiallyNewKnowledgeSlices.iterator();
 		while (compilationUnitIterator.hasNext()) {
 			Section<? extends CompilationUnit> section = compilationUnitIterator.next();
-			Collection<Section<TermReference>> refs = CompileUtils.getAllReferencesOfCompilationUnit(section);
+			Collection<Section<TermReference>> refs = section.get().getAllReferences(section);
 			for (Section<TermReference> ref : refs) {
 				if (!terminology.isValid(ref.get().getTermIdentifier(ref))) {
 					// compilation unit not valid => remove

@@ -27,11 +27,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import de.d3web.we.kdom.CompilationUnit;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.objects.TermReference;
+import de.knowwe.compile.object.CompilationUnit;
 
 /**
  * 

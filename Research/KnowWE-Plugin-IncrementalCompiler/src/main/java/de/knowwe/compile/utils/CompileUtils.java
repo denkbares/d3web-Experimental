@@ -25,13 +25,13 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import de.d3web.we.kdom.CompilationUnit;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.objects.TermReference;
+import de.knowwe.compile.object.CompilationUnit;
 
 /**
  * Some util methods needed for the compilation algorithm
