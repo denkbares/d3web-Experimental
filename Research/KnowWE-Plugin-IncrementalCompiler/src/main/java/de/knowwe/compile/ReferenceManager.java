@@ -31,7 +31,7 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.objects.TermReference;
-import de.knowwe.compile.object.CompilationUnit;
+import de.knowwe.compile.object.KnowledgeUnit;
 
 /**
  * 
@@ -80,14 +80,14 @@ public class ReferenceManager {
 		return wasValidInOldVersion(s.get().getTermIdentifier(s));
 	}
 
-	public Collection<Section<? extends CompilationUnit>> getReferencingSlices(Section<? extends TermDefinition> section) {
-		Collection<Section<? extends CompilationUnit>> result = new HashSet<Section<? extends CompilationUnit>>();
+	public Collection<Section<? extends KnowledgeUnit>> getReferencingSlices(Section<? extends TermDefinition> section) {
+		Collection<Section<? extends KnowledgeUnit>> result = new HashSet<Section<? extends KnowledgeUnit>>();
 		String termIdentifier = section.get().getTermIdentifier(section);
 		Set<Section<? extends TermReference>> refSet = allReferences.get(termIdentifier);
 		if (refSet == null) return result;
 		for (Section<? extends TermReference> ref : refSet) {
-			Section<CompilationUnit> compilationUnit = Sections.findAncestorOfType(ref,
-					CompilationUnit.class);
+			Section<KnowledgeUnit> compilationUnit = Sections.findAncestorOfType(ref,
+					KnowledgeUnit.class);
 			result.add(compilationUnit);
 		}
 		return result;

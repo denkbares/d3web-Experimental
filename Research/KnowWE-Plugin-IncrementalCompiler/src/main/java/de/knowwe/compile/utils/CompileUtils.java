@@ -31,7 +31,8 @@ import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.objects.TermReference;
-import de.knowwe.compile.object.CompilationUnit;
+import de.knowwe.compile.object.ComplexDefinition;
+import de.knowwe.compile.object.KnowledgeUnit;
 
 /**
  * Some util methods needed for the compilation algorithm
@@ -121,7 +122,13 @@ public class CompileUtils {
 		return result;
 	}
 
-	public static Collection<Section<TermReference>> getAllReferencesOfCompilationUnit(Section<? extends CompilationUnit> section) {
+	public static Collection<Section<TermReference>> getAllReferencesOfCompilationUnit(Section<? extends KnowledgeUnit> section) {
+		List<Section<TermReference>> result = new ArrayList<Section<TermReference>>();
+		Sections.findSuccessorsOfType(section, TermReference.class, result);
+		return result;
+	}
+	
+	public static<T extends Type> Collection<Section<TermReference>> getAllReferencesOfComplexDefinition(Section<? extends ComplexDefinition<T>> section, Class T) {
 		List<Section<TermReference>> result = new ArrayList<Section<TermReference>>();
 		Sections.findSuccessorsOfType(section, TermReference.class, result);
 		return result;

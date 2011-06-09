@@ -35,7 +35,7 @@ import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.objects.KnowWETerm;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.objects.TermReference;
-import de.knowwe.compile.object.CompilationUnit;
+import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.utils.CompileUtils;
 
 /**
@@ -50,8 +50,8 @@ public class IncrementalCompiler implements EventListener {
 
 	private ReferenceManager terminology = new ReferenceManager();
 
-	private Collection<Section<? extends CompilationUnit>> potentiallyNewKnowledgeSlices = new HashSet<Section<? extends CompilationUnit>>();
-	private Collection<Section<? extends CompilationUnit>> knowledgeSlicesToRemove = new HashSet<Section<? extends CompilationUnit>>();
+	private Collection<Section<? extends KnowledgeUnit>> potentiallyNewKnowledgeSlices = new HashSet<Section<? extends KnowledgeUnit>>();
+	private Collection<Section<? extends KnowledgeUnit>> knowledgeSlicesToRemove = new HashSet<Section<? extends KnowledgeUnit>>();
 
 	// TODO: how to implement singleton plugin?
 	private static IncrementalCompiler instance;
@@ -87,8 +87,8 @@ public class IncrementalCompiler implements EventListener {
 		Collection<Section<? extends Type>> oldSectionsNotReused = CompileUtils.findOldNonReusedSections(lastVersionOfArticle);
 
 		// reset knowledge slice sets
-		potentiallyNewKnowledgeSlices = new HashSet<Section<? extends CompilationUnit>>();
-		knowledgeSlicesToRemove = new HashSet<Section<? extends CompilationUnit>>();
+		potentiallyNewKnowledgeSlices = new HashSet<Section<? extends KnowledgeUnit>>();
+		knowledgeSlicesToRemove = new HashSet<Section<? extends KnowledgeUnit>>();
 
 		// update references --- necessary??
 		registerNewSectionsInReferenceManager(newSectionsNotReused);
@@ -115,9 +115,9 @@ public class IncrementalCompiler implements EventListener {
 		/* now knowledge slice sets are filled */
 
 		// now check all potentially new knowledge slices for validity
-		Iterator<Section<? extends CompilationUnit>> compilationUnitIterator = potentiallyNewKnowledgeSlices.iterator();
+		Iterator<Section<? extends KnowledgeUnit>> compilationUnitIterator = potentiallyNewKnowledgeSlices.iterator();
 		while (compilationUnitIterator.hasNext()) {
-			Section<? extends CompilationUnit> section = compilationUnitIterator.next();
+			Section<? extends KnowledgeUnit> section = compilationUnitIterator.next();
 			Collection<Section<TermReference>> refs = section.get().getAllReferences(section);
 			for (Section<TermReference> ref : refs) {
 				if (!terminology.isValid(ref.get().getTermIdentifier(ref))) {
@@ -133,18 +133,18 @@ public class IncrementalCompiler implements EventListener {
 		hazardFilter(potentiallyNewKnowledgeSlices, knowledgeSlicesToRemove);
 
 		// finally create knowledge
-		for (Section<? extends CompilationUnit> section : potentiallyNewKnowledgeSlices) {
+		for (Section<? extends KnowledgeUnit> section : potentiallyNewKnowledgeSlices) {
 			section.get().insertIntoRepository(section);
 		}
 
 		// and remove knowledge
-		for (Section<? extends CompilationUnit> section : knowledgeSlicesToRemove) {
+		for (Section<? extends KnowledgeUnit> section : knowledgeSlicesToRemove) {
 			section.get().deleteFromRepository(section);
 		}
 
 	}
 
-	private void hazardFilter(Collection<Section<? extends CompilationUnit>> potentiallyNewKnowledgeSlices2, Collection<Section<? extends CompilationUnit>> knowledgeSlicesToRemove2) {
+	private void hazardFilter(Collection<Section<? extends KnowledgeUnit>> potentiallyNewKnowledgeSlices2, Collection<Section<? extends KnowledgeUnit>> knowledgeSlicesToRemove2) {
 		// TODO implement hazard-filter (optional!!)
 		// this is efficiency improvement is only relevant in very special cases
 	}
@@ -162,7 +162,7 @@ public class IncrementalCompiler implements EventListener {
 	private void removeRecursively(Section<? extends TermDefinition<?>> section) {
 		if (terminology.wasValidInOldVersion(section)) {
 			terminology.removeFromValidObjects(section);
-			Collection<Section<? extends CompilationUnit>> referencingSlices = terminology.getReferencingSlices(section);
+			Collection<Section<? extends KnowledgeUnit>> referencingSlices = terminology.getReferencingSlices(section);
 			knowledgeSlicesToRemove.addAll(referencingSlices);
 			// TODO recursive call
 		}
@@ -173,7 +173,7 @@ public class IncrementalCompiler implements EventListener {
 		if (hasValidDefinition(section)) {
 			if (!terminology.wasValidInOldVersion(section)) {
 				terminology.addToValidObjects(section);
-				Collection<Section<? extends CompilationUnit>> referencingSlices = terminology.getReferencingSlices(section);
+				Collection<Section<? extends KnowledgeUnit>> referencingSlices = terminology.getReferencingSlices(section);
 				potentiallyNewKnowledgeSlices.addAll(referencingSlices);
 				// TODO: recursion for complex definitions
 
