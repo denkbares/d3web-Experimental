@@ -33,6 +33,7 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
+import de.d3web.we.kdom.objects.KnowWETerm;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.objects.TermReference;
 import de.knowwe.compile.object.ComplexDefinition;
@@ -47,6 +48,7 @@ import de.knowwe.compile.utils.CompileUtils;
  * @author Jochen
  * @created 09.06.2011
  */
+@SuppressWarnings("unchecked")
 public class IncrementalCompiler implements EventListener {
 
 	private final ReferenceManager terminology = new ReferenceManager();
@@ -64,6 +66,25 @@ public class IncrementalCompiler implements EventListener {
 	public IncrementalCompiler() {
 		// TODO: implement singleton properly
 		instance = this;
+
+		// TODO: add extension point for plugins defining predefined terminology
+//		Section<PreDefinedTerm> subclassDef = Section.createSection("subclassof",
+//				new PreDefinedTerm(), null);
+//		terminology.addPredefinedObject(subclassDef);
+//		terminology.registerTermDefinition(subclassDef);
+	}
+
+	class PreDefinedTerm extends TermDefinition<String> {
+
+		public PreDefinedTerm() {
+			super(String.class);
+		}
+
+		@Override
+		public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
+			return s.getOriginalText();
+		}
+
 	}
 
 	@Override
@@ -137,6 +158,35 @@ public class IncrementalCompiler implements EventListener {
 				}
 			}
 		}
+
+		/*
+		 * BEGIN The following is not part of the original algorithm. However,
+		 * it helps to get along with predefined terms, that are constantly
+		 * valid in the system (even if user adds additional definitions for
+		 * this term)
+		 */
+		// now check all (potentially) destroyed knowledge slice, whether they
+		// might still be valid due to predefined terms
+		Iterator<Section<? extends KnowledgeUnit>> removeKnowledgeUnitIterator = this.knowledgeSlicesToRemove.iterator();
+		while (removeKnowledgeUnitIterator.hasNext()) {
+			Section<? extends KnowledgeUnit> section = removeKnowledgeUnitIterator.next();
+			Collection<Section<TermReference>> refs = section.get().getAllReferencesOfKnowledgeUnit(
+					section);
+			boolean valid = true;
+			for (Section<TermReference> ref : refs) {
+				if (!terminology.isValid(ref.get().getTermIdentifier(ref))) {
+					// compilation unit definitely invalid (stays in list)
+					valid = false;
+				}
+
+			}
+			if (valid) {
+				removeKnowledgeUnitIterator.remove();
+			}
+		}
+		/*
+		 * END
+		 */
 
 		// run hazard-filter filtering knowledge being inserted and removed
 		// right afterwards
@@ -215,12 +265,15 @@ public class IncrementalCompiler implements EventListener {
 		Collection<Section<? extends TermDefinition>> termDefiningSections = terminology.getTermDefinitions(termIdentifier);
 		if (termDefiningSections.size() != 1) return false;
 
-		// TODO: check complex definitions here
+		// check complex definitions here
 
 		// there is exactly one
 		Section<? extends TermDefinition> def = termDefiningSections.iterator().next();
+
 		Section<ComplexDefinition> complexDef = Sections.findAncestorOfType(def,
 				ComplexDefinition.class);
+		// all references of this complexDef (if existing) need to be in the set
+		// of valid objects
 		if (complexDef != null) {
 			Collection<Section<TermReference>> allReferencesOfComplexDefinition = CompileUtils.getAllReferencesOfComplexDefinition(complexDef);
 			for (Section<TermReference> ref : allReferencesOfComplexDefinition) {
@@ -231,6 +284,10 @@ public class IncrementalCompiler implements EventListener {
 		}
 
 		return true;
+	}
+
+	public ReferenceManager getTerminology() {
+		return terminology;
 	}
 
 	private void registerNewSectionsInReferenceManager(Collection<Section<? extends Type>> sectionsNotReused) {

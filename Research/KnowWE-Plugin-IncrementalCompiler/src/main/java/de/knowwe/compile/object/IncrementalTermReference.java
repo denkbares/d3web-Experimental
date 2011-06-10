@@ -73,7 +73,7 @@ public abstract class IncrementalTermReference<TermObject> extends TermReference
 		@Override
 		public void render(KnowWEArticle article, Section<IncrementalTermReference> sec, UserContext user, StringBuilder string) {
 
-			boolean hasError = !IncrementalCompiler.getInstance().hasValidDefinition(
+			boolean hasError = !IncrementalCompiler.getInstance().getTerminology().isValid(
 					sec.get().getTermIdentifier(sec));
 			if (hasError) {
 				string.append(DefaultErrorRenderer.INSTANCE_ERROR.preRenderMessage(

@@ -46,6 +46,7 @@ import de.knowwe.compile.object.KnowledgeUnit;
 public class ReferenceManager {
 
 	private final Map<String, Section<? extends TermDefinition>> validObjects = new HashMap<String, Section<? extends TermDefinition>>();
+	private final Map<String, Section<? extends TermDefinition>> validPredefinedObjects = new HashMap<String, Section<? extends TermDefinition>>();
 
 	private Map<String, Section<? extends TermDefinition>> validObjectsOld = new HashMap<String, Section<? extends TermDefinition>>();
 
@@ -61,17 +62,29 @@ public class ReferenceManager {
 		validObjects.put(s.get().getTermIdentifier(s), s);
 	}
 
+	/**
+	 * This is for predefined terms only! They cannot be removed and will last
+	 * in the system forever. Use this in initialization only!
+	 * 
+	 * @created 10.06.2011
+	 * @param s
+	 */
+	public void addPredefinedObject(Section<? extends TermDefinition> s) {
+		validPredefinedObjects.put(s.get().getTermIdentifier(s), s);
+	}
+
 	public void removeFromValidObjects(Section<? extends TermDefinition> s) {
 		validObjects.remove(s.get().getTermIdentifier(s));
 	}
 
 	public boolean isValid(String termIdentifier) {
-		return validObjects.containsKey(termIdentifier);
+		return validObjects.containsKey(termIdentifier)
+				|| validPredefinedObjects.containsKey(termIdentifier);
 	}
 
-	public boolean isValid(Section<? extends TermDefinition> s) {
-		return validObjects.containsValue(s);
-	}
+	// public boolean isValid(Section<? extends TermDefinition> s) {
+	// return validObjects.containsValue(s);
+	// }
 
 	public boolean wasValidInOldVersion(String termIdentifier) {
 		return validObjectsOld.containsKey(termIdentifier);
