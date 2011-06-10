@@ -24,7 +24,12 @@ import java.util.regex.Pattern;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.objects.KnowWETerm;
+import de.d3web.we.kdom.rendering.StyleRenderer;
+import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.d3web.we.kdom.sectionFinder.RegexSectionFinderSingle;
+import de.d3web.we.utils.SplitUtility;
+import de.knowwe.compile.object.IncrementalTermDefinition;
 
 public class SimpleIRIDefintionMarkup extends AbstractType {
 
@@ -34,21 +39,27 @@ public class SimpleIRIDefintionMarkup extends AbstractType {
 		this.setSectionFinder(new RegexSectionFinder(REGEX,
 				Pattern.MULTILINE));
 
-		this.addChildType(new SimpleIRIDefType());
+		this.addChildType(new DefType());
+		this.addChildType(new DefinitionTerm());
 	}
 
-	class SimpleIRIDefType extends AbstractIRITermDefinition {
+	class DefType extends AbstractType {
+		public DefType() {
+			this.setSectionFinder(new RegexSectionFinderSingle("^def\\s+"));
+			this.setCustomRenderer(new StyleRenderer("font-style:italic;"));
+		}
+	}
 
-		public SimpleIRIDefType() {
-			this.setSectionFinder(new
-					RegexSectionFinder(Pattern.compile("def\\s(.+)"),
-							1));
+	class DefinitionTerm extends IncrementalTermDefinition<String> {
 
+		public DefinitionTerm() {
+			super(String.class);
+			this.setSectionFinder(new AllTextFinderTrimmed());
 		}
 
 		@Override
 		public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
-			return s.getOriginalText().trim();
+			return SplitUtility.unquote(s.getOriginalText().trim());
 		}
 
 	}

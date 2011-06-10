@@ -19,16 +19,12 @@
  */
 package de.knowwe.compile.test;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.node.Node;
-import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
@@ -43,18 +39,19 @@ import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
-public class TripleMarkupSimple extends AbstractType implements KnowledgeUnit<TripleMarkupSimple>{
+public class TripleMarkupSimple extends AbstractType implements KnowledgeUnit<TripleMarkupSimple> {
 
 	public TripleMarkupSimple() {
 
-		this.setSectionFinder(new RegexSectionFinder("\\{(.*?::.*?)\\}", Pattern.DOTALL,1));
+		this.setSectionFinder(new RegexSectionFinder("\\{(.*?::.*?)\\}", Pattern.DOTALL,
+				1));
 		this.addChildType(new SimpleTurtlePredicate());
 		this.addChildType(new SimpleTurtleSubject());
 		this.addChildType(new SimpleTurtleObject());
 	}
-	
+
 	class SimpleTurtlePredicate extends IRITermReference {
-		public SimpleTurtlePredicate (){
+		public SimpleTurtlePredicate() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new RegexSectionFinder("\\b([^\\s]*)::", Pattern.DOTALL, 1));
 			c.addConstraint(SingleChildConstraint.getInstance());
@@ -62,7 +59,7 @@ public class TripleMarkupSimple extends AbstractType implements KnowledgeUnit<Tr
 			this.setSectionFinder(c);
 		}
 	}
-	
+
 	class SimpleTurtleSubject extends IRITermReference {
 		public SimpleTurtleSubject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
@@ -70,32 +67,16 @@ public class TripleMarkupSimple extends AbstractType implements KnowledgeUnit<Tr
 			c.addConstraint(SingleChildConstraint.getInstance());
 			this.setSectionFinder(c);
 		}
-		
+
 	}
-	
+
 	class SimpleTurtleObject extends IRITermReference {
 		public SimpleTurtleObject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
-					new RegexSectionFinder("::\\s(.*)",Pattern.DOTALL,1));
+					new RegexSectionFinder("::\\s(.*)", Pattern.DOTALL, 1));
 			c.addConstraint(SingleChildConstraint.getInstance());
 			this.setSectionFinder(c);
 		}
-	}
-
-	
-	private URI getURI(Section<TermReference> s) {
-			URI uri = null;
-			String baseUrl = Rdf2GoCore.localns;
-			try {
-				String name = URLEncoder.encode(s.get().getTermIdentifier(s), "UTF-8");
-				uri = new URIImpl(baseUrl + name);
-			}
-			catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return uri;
-
 	}
 
 	@Override
@@ -118,36 +99,36 @@ public class TripleMarkupSimple extends AbstractType implements KnowledgeUnit<Tr
 			Section<TermReference> predicate = found.get(1);
 			Section<TermReference> object = found.get(2);
 
-			subURI = getURI(subject);
-			predURI = getURI(predicate);
-			objURI = getURI(object);
+			subURI = Utils.getURI(subject);
+			predURI = Utils.getURI(predicate);
+			objURI = Utils.getURI(object);
 		}
 		else {
-			//return Arrays.asList((KDOMReportMessage) new SyntaxError(
-			//		"invalid term combination:" + found.size()));
+			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+			// "invalid term combination:" + found.size()));
 		}
-		if(subURI == null) {
-			//return Arrays.asList((KDOMReportMessage) new SyntaxError(
-			//		"subject URI not found"));
+		if (subURI == null) {
+			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+			// "subject URI not found"));
 		}
-		if(predURI == null) {
-			//return Arrays.asList((KDOMReportMessage) new SyntaxError(
-			//		"predicate URI not found"));
+		if (predURI == null) {
+			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+			// "predicate URI not found"));
 		}
-		if(objURI == null) {
-			//return Arrays.asList((KDOMReportMessage) new SyntaxError(
-			//		"object URI not found"));
+		if (objURI == null) {
+			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+			// "object URI not found"));
 		}
-		
+
 		Rdf2GoCore.getInstance().addStatement(subURI.asResource(),
 				predURI.asURI(), objURI, section);
 
-		//return new ArrayList<KDOMReportMessage>(0);
-		
+		// return new ArrayList<KDOMReportMessage>(0);
+
 	}
 
 	@Override
-	public Collection<Section<TermReference>> getAllReferences(
+	public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(
 			Section<? extends KnowledgeUnit<TripleMarkupSimple>> section) {
 		return CompileUtils.getAllReferencesOfCompilationUnit(section);
 	}

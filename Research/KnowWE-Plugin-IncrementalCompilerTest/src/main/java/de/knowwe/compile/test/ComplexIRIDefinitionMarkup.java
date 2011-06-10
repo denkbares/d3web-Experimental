@@ -20,12 +20,18 @@
 
 package de.knowwe.compile.test;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.regex.Pattern;
+
+import org.ontoware.rdf2go.model.node.Node;
 
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.objects.KnowWETerm;
+import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.objects.TermReference;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
@@ -34,9 +40,11 @@ import de.d3web.we.utils.SplitUtility;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.IncrementalTermReference;
+import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.utils.CompileUtils;
+import de.knowwe.rdf2go.Rdf2GoCore;
 
-public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexDefinition<ComplexIRIDefinitionMarkup> {
+public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexDefinition<ComplexIRIDefinitionMarkup>, KnowledgeUnit<ComplexIRIDefinitionMarkup> {
 
 	private static final String REGEX = "(.+)\\s(\\w+)::\\s(.+)$";
 
@@ -51,11 +59,13 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 		this.addChildType(new Object());
 	}
 
-	@Override
-	public Collection<Section<TermReference>> getAllReferences(
-			Section<? extends ComplexDefinition<ComplexIRIDefinitionMarkup>> section) {
-		return CompileUtils.getAllReferencesOfComplexDefinition(section);
-	}
+	// @Override
+	// public Collection<Section<TermReference>>
+	// getAllReferencesOfComplexDefinition(
+	// Section<? extends ComplexDefinition<ComplexIRIDefinitionMarkup>> section)
+	// {
+	// return CompileUtils.getAllReferencesOfComplexDefinition(section);
+	// }
 
 	class DefType extends AbstractType {
 		public DefType() {
@@ -112,6 +122,65 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 		public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
 			return s.getOriginalText().trim();
 		}
+	}
+
+	@Override
+	public void deleteFromRepository(Section<ComplexIRIDefinitionMarkup> section) {
+		Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
+	}
+
+	@Override
+	public void insertIntoRepository(Section<ComplexIRIDefinitionMarkup> section) {
+		List<Section<TermReference>> found = new ArrayList<Section<TermReference>>();
+		Node subURI = null;
+		Node predURI = null;
+		Node objURI = null;
+
+		Sections.findSuccessorsOfType(section, TermReference.class, found);
+		Section<TermDefinition> subject = Sections.findSuccessor(section,
+				TermDefinition.class);
+
+		if (found.size() == 2) {
+
+			Section<TermReference> predicate = found.get(0);
+			Section<TermReference> object = found.get(1);
+
+			subURI = Utils.getURI(subject);
+			predURI = Utils.getURI(predicate);
+			objURI = Utils.getURI(object);
+		}
+		else {
+			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+			// "invalid term combination:" + found.size()));
+		}
+		if (subURI == null) {
+			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+			// "subject URI not found"));
+		}
+		if (predURI == null) {
+			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+			// "predicate URI not found"));
+		}
+		if (objURI == null) {
+			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+			// "object URI not found"));
+		}
+
+		Rdf2GoCore.getInstance().addStatement(subURI.asResource(),
+				predURI.asURI(), objURI, section);
+
+		// return new ArrayList<KDOMReportMessage>(0);
+
+	}
+
+	@Override
+	public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit<ComplexIRIDefinitionMarkup>> section) {
+		return CompileUtils.getAllReferencesOfCompilationUnit(section);
+	}
+
+	@Override
+	public Collection<Section<TermReference>> getAllReferencesOfComplexDefinition(Section<? extends ComplexDefinition<ComplexIRIDefinitionMarkup>> section) {
+		return CompileUtils.getAllReferencesOfComplexDefinition(section);
 	}
 
 }
