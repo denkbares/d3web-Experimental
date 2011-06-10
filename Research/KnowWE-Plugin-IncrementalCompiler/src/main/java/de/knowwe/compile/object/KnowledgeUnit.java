@@ -25,6 +25,7 @@ import java.util.Collection;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.objects.TermReference;
+
 /**
  * 
  * Interface for types that have to be compiled to a knowledge repository
@@ -34,12 +35,10 @@ import de.d3web.we.kdom.objects.TermReference;
  * @author Jochen
  * @created 08.06.2011
  */
-public interface KnowledgeUnit<T extends Type> extends Type{
-	
-	public Collection<Section<TermReference>> getAllReferences(Section<? extends KnowledgeUnit<T>> section);
-	
-	
-	
+public interface KnowledgeUnit<T extends Type> extends Type {
+
+	public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit<T>> section);
+
 	public void insertIntoRepository(Section<T> section);
 
 	public void deleteFromRepository(Section<T> section);

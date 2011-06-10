@@ -101,6 +101,14 @@ public class IncrementalCompiler implements EventListener {
 
 		/* now dependency graph is updated */
 
+		// check deleted knowledge units
+		Collection<Section<? extends KnowledgeUnit<?>>> deletedknowledge = CompileUtils.filterKnowledgeUnits(oldSectionsNotReused);
+		this.knowledgeSlicesToRemove.addAll(deletedknowledge);
+
+		// check deleted knowledge units
+		Collection<Section<? extends KnowledgeUnit<?>>> createdknowledge = CompileUtils.filterKnowledgeUnits(newSectionsNotReused);
+		this.potentiallyNewKnowledgeSlices.addAll(createdknowledge);
+
 		// check deleted objects
 		Collection<Section<? extends TermDefinition<?>>> deletedObjectDefintions = CompileUtils.filterDefinitions(oldSectionsNotReused);
 		for (Section<? extends TermDefinition<?>> section : deletedObjectDefintions) {
@@ -119,7 +127,7 @@ public class IncrementalCompiler implements EventListener {
 		Iterator<Section<? extends KnowledgeUnit>> compilationUnitIterator = potentiallyNewKnowledgeSlices.iterator();
 		while (compilationUnitIterator.hasNext()) {
 			Section<? extends KnowledgeUnit> section = compilationUnitIterator.next();
-			Collection<Section<TermReference>> refs = section.get().getAllReferences(
+			Collection<Section<TermReference>> refs = section.get().getAllReferencesOfKnowledgeUnit(
 					section);
 			for (Section<TermReference> ref : refs) {
 				if (!terminology.isValid(ref.get().getTermIdentifier(ref))) {

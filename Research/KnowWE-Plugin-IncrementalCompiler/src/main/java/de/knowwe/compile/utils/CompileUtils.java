@@ -105,6 +105,25 @@ public class CompileUtils {
 	/**
 	 * 
 	 * filters a set of sections and returns only those which are of type
+	 * KnowledgeUnit
+	 * 
+	 * @created 08.06.2011
+	 * @param oldSectionsNotReused
+	 * @return
+	 */
+	public static Collection<Section<? extends KnowledgeUnit<?>>> filterKnowledgeUnits(Collection<Section<? extends Type>> oldSectionsNotReused) {
+		Collection<Section<? extends KnowledgeUnit<?>>> result = new HashSet<Section<? extends KnowledgeUnit<?>>>();
+		for (Section<? extends Type> section : oldSectionsNotReused) {
+			if (section.get() instanceof KnowledgeUnit<?>) {
+				result.add((Section<? extends KnowledgeUnit<?>>) section);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 
+	 * filters a set of sections and returns only those which are of type
 	 * TermDefinition
 	 * 
 	 * @created 08.06.2011
