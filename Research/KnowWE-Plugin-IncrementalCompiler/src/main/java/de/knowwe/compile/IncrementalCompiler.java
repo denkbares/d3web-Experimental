@@ -36,8 +36,14 @@ import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.objects.KnowWETerm;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.objects.TermReference;
+import de.d3web.we.kdom.report.KDOMError;
+import de.d3web.we.kdom.report.KDOMReportMessage;
+import de.d3web.we.kdom.report.message.NoSuchObjectError;
 import de.knowwe.compile.object.ComplexDefinition;
+import de.knowwe.compile.object.ComplexDefinitionError;
+import de.knowwe.compile.object.ConcurrentDefinitionsError;
 import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.PredefinedTermWarning;
 import de.knowwe.compile.utils.CompileUtils;
 
 /**
@@ -68,10 +74,11 @@ public class IncrementalCompiler implements EventListener {
 		instance = this;
 
 		// TODO: add extension point for plugins defining predefined terminology
-//		Section<PreDefinedTerm> subclassDef = Section.createSection("subclassof",
-//				new PreDefinedTerm(), null);
-//		terminology.addPredefinedObject(subclassDef);
-//		terminology.registerTermDefinition(subclassDef);
+		Section<PreDefinedTerm> subclassDef =
+				Section.createSection("subclassof",
+						new PreDefinedTerm(), null);
+		terminology.addPredefinedObject(subclassDef);
+		terminology.registerTermDefinition(subclassDef);
 	}
 
 	class PreDefinedTerm extends TermDefinition<String> {
@@ -160,10 +167,9 @@ public class IncrementalCompiler implements EventListener {
 		}
 
 		/*
-		 * BEGIN The following is not part of the original algorithm. However,
-		 * it helps to get along with predefined terms, that are constantly
-		 * valid in the system (even if user adds additional definitions for
-		 * this term)
+		 * BEGIN The following is not part of the original algorithm. It helps
+		 * to get along with predefined terms, that are constantly valid in the
+		 * system (even if user adds concurrent definitions for this term)
 		 */
 		// now check all (potentially) destroyed knowledge slice, whether they
 		// might still be valid due to predefined terms
@@ -262,8 +268,33 @@ public class IncrementalCompiler implements EventListener {
 	}
 
 	public boolean hasValidDefinition(String termIdentifier) {
+
+		Collection<KDOMReportMessage> messages = checkDefinition(termIdentifier);
+		for (KDOMReportMessage kdomReportMessage : messages) {
+			if (kdomReportMessage instanceof KDOMError) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public Collection<KDOMReportMessage> checkDefinition(String termIdentifier) {
+		Collection<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>();
+
 		Collection<Section<? extends TermDefinition>> termDefiningSections = terminology.getTermDefinitions(termIdentifier);
-		if (termDefiningSections.size() != 1) return false;
+		if (termDefiningSections.size() == 0) {
+			messages.add(new NoSuchObjectError(termIdentifier));
+			return messages;
+		}
+
+		if (termDefiningSections.size() > 1) {
+			if (terminology.isPredefinedObject(termIdentifier)) {
+				messages.add(new PredefinedTermWarning());
+				return messages;
+			}
+			messages.add(new ConcurrentDefinitionsError(termIdentifier));
+			return messages;
+		}
 
 		// check complex definitions here
 
@@ -278,12 +309,14 @@ public class IncrementalCompiler implements EventListener {
 			Collection<Section<TermReference>> allReferencesOfComplexDefinition = CompileUtils.getAllReferencesOfComplexDefinition(complexDef);
 			for (Section<TermReference> ref : allReferencesOfComplexDefinition) {
 				if (!terminology.isValid(ref.get().getTermIdentifier(ref))) {
-					return false;
+					messages.add(new ComplexDefinitionError(
+							ref.get().getTermIdentifier(ref)));
+					return messages;
 				}
 			}
 		}
 
-		return true;
+		return messages;
 	}
 
 	public ReferenceManager getTerminology() {

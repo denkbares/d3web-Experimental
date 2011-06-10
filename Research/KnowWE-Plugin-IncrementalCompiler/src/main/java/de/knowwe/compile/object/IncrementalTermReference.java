@@ -20,6 +20,8 @@
 
 package de.knowwe.compile.object;
 
+import java.util.Collection;
+
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.objects.TermReference;
@@ -27,7 +29,9 @@ import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.report.DefaultErrorRenderer;
-import de.d3web.we.kdom.report.message.NoSuchObjectError;
+import de.d3web.we.kdom.report.KDOMError;
+import de.d3web.we.kdom.report.KDOMReportMessage;
+import de.d3web.we.kdom.report.KDOMWarning;
 import de.d3web.we.tools.ToolMenuDecoratingRenderer;
 import de.d3web.we.user.UserContext;
 import de.knowwe.compile.IncrementalCompiler;
@@ -73,16 +77,32 @@ public abstract class IncrementalTermReference<TermObject> extends TermReference
 		@Override
 		public void render(KnowWEArticle article, Section<IncrementalTermReference> sec, UserContext user, StringBuilder string) {
 
-			boolean hasError = !IncrementalCompiler.getInstance().getTerminology().isValid(
+			Collection<KDOMReportMessage> messages = IncrementalCompiler.getInstance().checkDefinition(
 					sec.get().getTermIdentifier(sec));
-			if (hasError) {
-				string.append(DefaultErrorRenderer.INSTANCE_ERROR.preRenderMessage(
-						new NoSuchObjectError(sec.getOriginalText()), user));
+			for (KDOMReportMessage kdomReportMessage : messages) {
+				if (kdomReportMessage instanceof KDOMError) {
+					string.append(
+							DefaultErrorRenderer.INSTANCE_ERROR.preRenderMessage(
+									kdomReportMessage, user));
+				}
+				if (kdomReportMessage instanceof KDOMWarning) {
+					string.append(
+							DefaultErrorRenderer.INSTANCE_WARNING.preRenderMessage(
+									kdomReportMessage, user));
+				}
 			}
 			r.render(article, sec, user, string);
-			if (hasError) {
-				string.append(DefaultErrorRenderer.INSTANCE_ERROR.postRenderMessage(
-						new NoSuchObjectError(sec.getOriginalText()), user));
+			for (KDOMReportMessage kdomReportMessage : messages) {
+				if (kdomReportMessage instanceof KDOMError) {
+					string.append(
+							DefaultErrorRenderer.INSTANCE_ERROR.postRenderMessage(
+									kdomReportMessage, user));
+				}
+				if (kdomReportMessage instanceof KDOMWarning) {
+					string.append(
+							DefaultErrorRenderer.INSTANCE_WARNING.postRenderMessage(
+									kdomReportMessage, user));
+				}
 			}
 		}
 

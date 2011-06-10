@@ -73,6 +73,10 @@ public class ReferenceManager {
 		validPredefinedObjects.put(s.get().getTermIdentifier(s), s);
 	}
 
+	public boolean isPredefinedObject(String termIdentifer) {
+		return validPredefinedObjects.containsKey(termIdentifer);
+	}
+
 	public void removeFromValidObjects(Section<? extends TermDefinition> s) {
 		validObjects.remove(s.get().getTermIdentifier(s));
 	}
