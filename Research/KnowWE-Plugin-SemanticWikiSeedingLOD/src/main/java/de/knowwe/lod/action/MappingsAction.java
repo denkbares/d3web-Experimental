@@ -10,9 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.TupleQueryResult;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.model.QueryRow;
 
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
@@ -23,7 +22,7 @@ import de.d3web.we.kdom.Sections;
 import de.knowwe.lod.HermesData;
 import de.knowwe.lod.LinkedOpenData;
 import de.knowwe.lod.markup.MappingContentType;
-import de.knowwe.semantic.sparql.SPARQLUtil;
+import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class MappingsAction extends AbstractAction {
 
@@ -38,7 +37,7 @@ public class MappingsAction extends AbstractAction {
 		// Execute Query to get all Hermes Concepts.
 		String query =
 				"SELECT ?x WHERE {?x rdf:type lns:Hermes-Object} ORDER BY ASC(?x)";
-		TupleQueryResult result = SPARQLUtil.executeTupleQuery(query);
+		ClosableIterator<QueryRow> result = Rdf2GoCore.getInstance().sparqlSelectIt(query);
 
 		LinkedHashMap<String, String> corresDBpediaConcepts = new
 				LinkedHashMap<String, String>();
@@ -48,8 +47,8 @@ public class MappingsAction extends AbstractAction {
 		try {
 			while (result.hasNext()) {
 				count++;
-				BindingSet set = result.next();
-				String title = set.getBinding("x").getValue().stringValue();
+				QueryRow row = result.next();
+				String title = row.getValue("x").toString();
 				title = URLDecoder.decode(title, "UTF-8");
 				title = title.substring(title.indexOf("#") + 1);
 				String redirect = LinkedOpenData.getDBpediaRedirect(title);
@@ -58,9 +57,6 @@ public class MappingsAction extends AbstractAction {
 				}
 				corresDBpediaConcepts.put(title, redirect);
 			}
-		}
-		catch (QueryEvaluationException e) {
-			e.printStackTrace();
 		}
 		catch (UnsupportedEncodingException e) {
 			e.printStackTrace();

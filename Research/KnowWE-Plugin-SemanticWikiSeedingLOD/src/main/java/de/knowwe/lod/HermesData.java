@@ -9,20 +9,18 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.TupleQueryResult;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.model.QueryRow;
 
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.knowwe.lod.markup.IgnoreContentType;
-import de.knowwe.lod.markup.MappingContentType;
 import de.knowwe.lod.markup.IgnoreContentType.IgnoreChild;
 import de.knowwe.lod.markup.IgnoreContentType.IgnoreConcept;
-import de.knowwe.semantic.sparql.SPARQLUtil;
+import de.knowwe.lod.markup.MappingContentType;
+import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**
  * Provides static methods & variables for the hermes wiki.
@@ -351,7 +349,7 @@ public class HermesData {
 
 		if (value.matches("!\\$ConceptLink:: .*") || predicate.equals(objectType)) {
 
-			String namespace = UpperOntology.getInstance().getLocaleNS();
+			String namespace = Rdf2GoCore.localns;
 			concept = namespace + concept;
 			String objectname = value;
 			if (value.matches("!\\$ConceptLink:: .*")) {
@@ -374,13 +372,13 @@ public class HermesData {
 		}
 		else {
 
-			String namespace = UpperOntology.getInstance().getLocaleNS();
+			String namespace = Rdf2GoCore.localns;
 			concept = namespace + concept;
 
 			ask = "ASK {<" + concept + "> " + predicate + " ?temp}";
 		}
 
-		return SPARQLUtil.executeBooleanQuery(ask);
+		return Rdf2GoCore.getInstance().sparqlAsk(ask);
 	}
 
 	/**
@@ -398,13 +396,13 @@ public class HermesData {
 			e.printStackTrace();
 		}
 
-		String namespace = UpperOntology.getInstance().getLocaleNS();
+		String namespace = Rdf2GoCore.localns;
 		concept = namespace + concept;
 		String ask = "";
 
 		ask = "ASK {<" + concept + "> rdf:type ?has}";
 
-		return SPARQLUtil.executeBooleanQuery(ask);
+		return Rdf2GoCore.getInstance().sparqlAsk(ask);
 	}
 
 	/**
@@ -422,27 +420,24 @@ public class HermesData {
 			e.printStackTrace();
 		}
 
-		String namespace = UpperOntology.getInstance().getLocaleNS();
+		String namespace = Rdf2GoCore.localns;
 		concept = namespace + concept;
 
 		String query = "SELECT ?x ?y ?z WHERE {?y rdf:subject <" + concept
 				+ "> ." + "?y rdf:predicate rdf:type ."
 				+ "?y rdfs:isDefinedBy ?z ." + "?z ns:hasTopic ?x }";
 
-		TupleQueryResult result = SPARQLUtil.executeTupleQuery(query);
+		ClosableIterator<QueryRow> result = Rdf2GoCore.getInstance().sparqlSelectIt(query);
 
 		String topic = "";
 
 		try {
 			while (result.hasNext()) {
-				BindingSet set = result.next();
-				topic = set.getBinding("x").getValue().stringValue();
+				QueryRow row = result.next();
+				topic = row.getValue("x").toString();
 				topic = URLDecoder.decode(topic, "UTF-8");
 				topic = topic.substring(topic.indexOf("#") + 1);
 			}
-		}
-		catch (QueryEvaluationException e) {
-			e.printStackTrace();
 		}
 		catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -464,28 +459,25 @@ public class HermesData {
 			e.printStackTrace();
 		}
 
-		String namespace = UpperOntology.getInstance().getLocaleNS();
+		String namespace = Rdf2GoCore.localns;
 		concept = namespace + concept;
 
 		String query = "SELECT ?x WHERE {<" + concept
 				+ "> " + predicate + " ?x.}";
 
-		TupleQueryResult result = SPARQLUtil.executeTupleQuery(query);
+		ClosableIterator<QueryRow> result = Rdf2GoCore.getInstance().sparqlSelectIt(query);
 
 		List<String> values = new ArrayList<String>();
 		String value = "";
 
 		try {
 			while (result.hasNext()) {
-				BindingSet set = result.next();
-				value = set.getBinding("x").getValue().stringValue();
+				QueryRow row = result.next();
+				value = row.getValue("x").toString();
 				value = URLDecoder.decode(value, "UTF-8");
 				value = value.substring(value.indexOf("#") + 1);
 				values.add(value);
 			}
-		}
-		catch (QueryEvaluationException e) {
-			e.printStackTrace();
 		}
 		catch (UnsupportedEncodingException e) {
 			e.printStackTrace();

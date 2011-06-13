@@ -6,13 +6,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.TupleQueryResult;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.model.QueryRow;
 
-import de.d3web.we.core.semantic.OwlHelper;
-import de.d3web.we.core.semantic.SemanticCoreDelegator;
-import de.knowwe.semantic.sparql.SPARQLUtil;
+import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class MapForConcepts {
 
@@ -24,7 +21,7 @@ public class MapForConcepts {
 	/**
 	 * Creates a google map with different concepts on it, which are used to
 	 * evaluate the birthplace of a person.
-	 *
+	 * 
 	 * @param concepts concepts to be displayed
 	 * @param solution the right concept which is asked in the quiz.
 	 * @return html quiz code.
@@ -38,10 +35,10 @@ public class MapForConcepts {
 
 		for (String concept : concepts) {
 
-			OwlHelper helper = SemanticCoreDelegator.getInstance().getUpper().getHelper();
 			String querystring = LOCATIONS_FOR_TOPIC.replaceAll("URI",
-					helper.createlocalURI(concept).toString());
-			TupleQueryResult queryResult = SPARQLUtil.executeTupleQuery(querystring);
+					Rdf2GoCore.getInstance().createlocalURI(concept).toString());
+			ClosableIterator<QueryRow> queryResult = Rdf2GoCore.getInstance().sparqlSelectIt(
+					querystring);
 			Collection<? extends Placemark> placemark = buildPlacemarksForLocation(queryResult);
 
 			if (placemark != null && placemark.size() > 0) {
@@ -64,48 +61,43 @@ public class MapForConcepts {
 
 	/**
 	 * Builds placemarks for locations.
-	 *
+	 * 
 	 * @param result a sparql query result.
 	 * @return placemarks.
 	 */
 	private static Collection<? extends Placemark> buildPlacemarksForLocation(
-			TupleQueryResult result) {
+			ClosableIterator<QueryRow> result) {
 		List<Placemark> placemarks = new ArrayList<Placemark>();
 		if (result == null) return placemarks;
-		try {
-			while (result.hasNext()) {
+		while (result.hasNext()) {
 
-				BindingSet set = result.next();
-				String latString = set.getBinding("lat").getValue()
-						.stringValue();
-				String longString = set.getBinding("long").getValue()
-						.stringValue();
-				try {
-					latString = URLDecoder.decode(latString, "UTF-8");
-					longString = URLDecoder.decode(longString, "UTF-8");
-				}
-				catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
-				double latitude = Double.parseDouble(latString.replaceAll(",",
+			QueryRow row = result.next();
+			String latString = row.getValue("lat").toString();
+			String longString = row.getValue("long").toString();
+
+			try {
+				latString = URLDecoder.decode(latString, "UTF-8");
+				longString = URLDecoder.decode(longString, "UTF-8");
+			}
+			catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			double latitude = Double.parseDouble(latString.replaceAll(",",
 						"."));
-				double longitude = Double.parseDouble(longString.replaceAll(
+			double longitude = Double.parseDouble(longString.replaceAll(
 						",", "."));
 
-				placemarks.add(new Placemark(null, latitude, longitude, ""));
+			placemarks.add(new Placemark(null, latitude, longitude, ""));
 
-			}
 		}
-		catch (QueryEvaluationException e) {
-			return null;
-		}
+
 		return placemarks;
 	}
 
 	/**
 	 * Generates the javascript code for the placemarks. Also puts in some
 	 * onclicks for the different locations, to be used in the quiz.
-	 *
+	 * 
 	 * @param placemarks different placemarks.
 	 * @param solution solution location.
 	 * @param divID mapdiv.
@@ -182,7 +174,6 @@ public class MapForConcepts {
 			messages += ",";
 			i++;
 		}
-
 
 		int zoom = 4;
 

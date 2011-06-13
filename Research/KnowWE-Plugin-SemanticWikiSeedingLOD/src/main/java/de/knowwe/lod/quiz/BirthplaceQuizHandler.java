@@ -7,17 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.TupleQueryResult;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.model.QueryRow;
 
-import de.d3web.we.core.semantic.OwlHelper;
-import de.d3web.we.core.semantic.SemanticCoreDelegator;
-import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
 import de.d3web.we.user.UserContext;
 import de.knowwe.lod.quiz.map.MapForConcepts;
-import de.knowwe.semantic.sparql.SPARQLUtil;
+import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 
@@ -31,6 +27,7 @@ public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 
 	@Override
 	public String renderHTML(String topic, UserContext user, Map<String, String> parameters, String web) {
+		Rdf2GoCore core = Rdf2GoCore.getInstance();
 
 		String encodePerson = "";
 
@@ -42,13 +39,13 @@ public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 			e1.printStackTrace();
 		}
 
-		String namespace = UpperOntology.getInstance().getLocaleNS();
+		String namespace = Rdf2GoCore.localns;
 		encodePerson = namespace + encodePerson;
 
 		String query =
 					"SELECT ?x WHERE {?x rdf:type <" + encodePerson + ">} ORDER BY ASC(?x)";
 
-		TupleQueryResult result = SPARQLUtil.executeTupleQuery(query);
+		ClosableIterator<QueryRow> result = core.sparqlSelectIt(query);
 		ArrayList<String> persons = new ArrayList<String>();
 
 		boolean found = false;
@@ -59,15 +56,12 @@ public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 		while (!found) {
 			try {
 				while (result.hasNext()) {
-					BindingSet set = result.next();
-					String title = set.getBinding("x").getValue().stringValue();
+					QueryRow row = result.next();
+					String title = row.getValue("x").toString();
 					String realTitle = URLDecoder.decode(title, "UTF-8");
 					realTitle = realTitle.substring(title.indexOf("#") + 1);
 					persons.add(realTitle);
 				}
-			}
-			catch (QueryEvaluationException e) {
-				e.printStackTrace();
 			}
 			catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
@@ -75,36 +69,32 @@ public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 			int size = persons.size();
 			int choose = (int) ((Math.random() * size) + 1);
 			concept = persons.get(choose - 1);
-			OwlHelper helper = SemanticCoreDelegator.getInstance().getUpper().getHelper();
 			String hasBirthplace =
-						"ASK {<" + helper.createlocalURI(concept) + "> " + birthplaceAttribute
+						"ASK {<" + core.createlocalURI(concept) + "> " + birthplaceAttribute
 								+ " ?y}";
 			String birthplace =
-						"SELECT ?y WHERE {<" + helper.createlocalURI(concept) + "> "
+						"SELECT ?y WHERE {<" + core.createlocalURI(concept) + "> "
 								+ birthplaceAttribute
 								+ " ?y}";
-			if (SPARQLUtil.executeBooleanQuery(hasBirthplace)) {
-				TupleQueryResult real = SPARQLUtil.executeTupleQuery(birthplace);
+			if (Rdf2GoCore.getInstance().sparqlAsk(hasBirthplace)) {
+				ClosableIterator<QueryRow> real = core.sparqlSelectIt(birthplace);
 				try {
 					while (real.hasNext()) {
-						BindingSet set = real.next();
-						realBirthPlace = set.getBinding("y").getValue().stringValue();
+						QueryRow row = real.next();
+						realBirthPlace = row.getValue("x").toString();
 						realBirthPlace = URLDecoder.decode(realBirthPlace, "UTF-8");
 						realBirthPlace = realBirthPlace.substring(realBirthPlace.indexOf("#") + 1);
 					}
 				}
-				catch (QueryEvaluationException e) {
-					e.printStackTrace();
-				}
 				catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
-				String hasCoords = "ASK {<" + helper.createlocalURI(realBirthPlace)
+				String hasCoords = "ASK {<" + core.createlocalURI(realBirthPlace)
 						+ "> rdf:type lns:Geographika." +
-						"<" + helper.createlocalURI(realBirthPlace) + "> lns:hasLongitude ?y." +
-								"<" + helper.createlocalURI(realBirthPlace)
+						"<" + core.createlocalURI(realBirthPlace) + "> lns:hasLongitude ?y." +
+								"<" + core.createlocalURI(realBirthPlace)
 						+ "> lns:hasLatitude ?z.}";
-				if (SPARQLUtil.executeBooleanQuery(hasCoords)) {
+				if (core.sparqlAsk(hasCoords)) {
 					found = true;
 				}
 			}
@@ -112,28 +102,23 @@ public class BirthplaceQuizHandler extends AbstractHTMLTagHandler {
 
 		// Get Birthplace and some fake ones.
 
-		OwlHelper helper = SemanticCoreDelegator.getInstance().getUpper().getHelper();
-
 		// All geo with coordinates.
 		String allGeo = "SELECT ?x WHERE {?x rdf:type lns:Geographika. ?x lns:hasLongitude ?y. ?x lns:hasLatitude ?z.}";
 
-		TupleQueryResult fakes = SPARQLUtil.executeTupleQuery(allGeo);
+		ClosableIterator<QueryRow> fakes = core.sparqlSelectIt(allGeo);
 
 		List<String> fakeBirthPlaces = new ArrayList<String>();
 
 		try {
 			while (fakes.hasNext()) {
-				BindingSet set = fakes.next();
-				String fakeBirthPlace = set.getBinding("x").getValue().stringValue();
+				QueryRow row = fakes.next();
+				String fakeBirthPlace = row.getValue("x").toString();
 				fakeBirthPlace = URLDecoder.decode(fakeBirthPlace, "UTF-8");
 				fakeBirthPlace = fakeBirthPlace.substring(fakeBirthPlace.indexOf("#") + 1);
 				if (!fakeBirthPlace.equals(realBirthPlace)) {
 					fakeBirthPlaces.add(fakeBirthPlace);
 				}
 			}
-		}
-		catch (QueryEvaluationException e) {
-			e.printStackTrace();
 		}
 		catch (UnsupportedEncodingException e) {
 			e.printStackTrace();

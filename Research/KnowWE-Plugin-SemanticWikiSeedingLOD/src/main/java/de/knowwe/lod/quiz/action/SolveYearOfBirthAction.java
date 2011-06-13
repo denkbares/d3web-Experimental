@@ -6,15 +6,13 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Map;
 
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.TupleQueryResult;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.model.QueryRow;
 
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
-import de.d3web.we.core.semantic.UpperOntology;
 import de.knowwe.lod.quiz.YearOfBirthQuizHandler;
-import de.knowwe.semantic.sparql.SPARQLUtil;
+import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class SolveYearOfBirthAction extends AbstractAction {
 
@@ -32,26 +30,21 @@ public class SolveYearOfBirthAction extends AbstractAction {
 			e.printStackTrace();
 		}
 
-		String namespace = UpperOntology.getInstance().getLocaleNS();
+		String namespace = Rdf2GoCore.localns;
 		subject = namespace + subject;
 
 		String realQuery =
 				"SELECT ?y WHERE {<" + subject + "> " + YearOfBirthQuizHandler.birthyearAttribute
 						+ " ?y}";
 
-		TupleQueryResult real = SPARQLUtil.executeTupleQuery(realQuery);
+		ClosableIterator<QueryRow> real = Rdf2GoCore.getInstance().sparqlSelectIt(realQuery);
 		String result = "";
 
-		try {
-			while (real.hasNext()) {
-				BindingSet set = real.next();
-				result = set.getBinding("y").getValue().stringValue();
-				result = URLDecoder.decode(result, "UTF-8");
-				result = result.substring(result.indexOf("#") + 1);
-			}
-		}
-		catch (QueryEvaluationException e) {
-			e.printStackTrace();
+		while (real.hasNext()) {
+			QueryRow row = real.next();
+			result = row.getValue("y").toString();
+			result = URLDecoder.decode(result, "UTF-8");
+			result = result.substring(result.indexOf("#") + 1);
 		}
 
 		int year;
@@ -74,12 +67,12 @@ public class SolveYearOfBirthAction extends AbstractAction {
 		}
 		else {
 			context.getWriter().write(
-					"<p>Ihre Antwort <b>" + answer
+					"<p>Ihre Antwort <b>"
+							+ answer
 							+ "</b> war leider falsch. <br/>Die richtige Antwort lautete: <b>"
 							+ yearForQuestion
 							+ "</b></p>"
 							+ "<div align='middle'><input type='button' onclick='window.location.reload()' value='Nächste Frage'></div>");
 		}
 	}
-
 }

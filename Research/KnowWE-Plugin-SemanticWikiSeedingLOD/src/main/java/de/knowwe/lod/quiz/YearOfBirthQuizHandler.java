@@ -6,16 +6,12 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Map;
 
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.TupleQueryResult;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.model.QueryRow;
 
-import de.d3web.we.core.semantic.OwlHelper;
-import de.d3web.we.core.semantic.SemanticCoreDelegator;
-import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.taghandler.AbstractHTMLTagHandler;
 import de.d3web.we.user.UserContext;
-import de.knowwe.semantic.sparql.SPARQLUtil;
+import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class YearOfBirthQuizHandler extends AbstractHTMLTagHandler {
 
@@ -33,6 +29,7 @@ public class YearOfBirthQuizHandler extends AbstractHTMLTagHandler {
 
 	@Override
 	public String renderHTML(String topic, UserContext user, Map<String, String> parameters, String web) {
+		Rdf2GoCore core = Rdf2GoCore.getInstance();
 
 		// optional difficulty.
 		String range = parameters.get("range");
@@ -52,66 +49,57 @@ public class YearOfBirthQuizHandler extends AbstractHTMLTagHandler {
 			e1.printStackTrace();
 		}
 
-		String namespace = UpperOntology.getInstance().getLocaleNS();
+		String namespace = Rdf2GoCore.localns;
 		encodePerson = namespace + encodePerson;
 
 		String query =
 				"SELECT ?x WHERE {?x rdf:type <" + encodePerson + ">} ORDER BY ASC(?x)";
 
-		TupleQueryResult result = SPARQLUtil.executeTupleQuery(query);
+		ClosableIterator<QueryRow> result = core.sparqlSelectIt(query);
 		ArrayList<String> persons = new ArrayList<String>();
 
 		boolean found = false;
 		while (!found) {
-		try {
-			while (result.hasNext()) {
-				BindingSet set = result.next();
-				String title = set.getBinding("x").getValue().stringValue();
-				String realTitle = URLDecoder.decode(title, "UTF-8");
-				realTitle = realTitle.substring(title.indexOf("#") + 1);
-				persons.add(realTitle);
+			try {
+				while (result.hasNext()) {
+					QueryRow row = result.next();
+					String title = row.getValue("x").toString();
+					String realTitle = URLDecoder.decode(title, "UTF-8");
+					realTitle = realTitle.substring(title.indexOf("#") + 1);
+					persons.add(realTitle);
+				}
 			}
-		}
-		catch (QueryEvaluationException e) {
-			e.printStackTrace();
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		int size = persons.size();
-		int choose = (int) ((Math.random() * size) + 1);
-		concept = persons.get(choose - 1);
-			OwlHelper helper = SemanticCoreDelegator.getInstance().getUpper().getHelper();
+			catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			int size = persons.size();
+			int choose = (int) ((Math.random() * size) + 1);
+			concept = persons.get(choose - 1);
 			String hasBirthyear =
-					"ASK {<" + helper.createlocalURI(concept) + "> "
+					"ASK {<" + core.createlocalURI(concept) + "> "
 							+ birthyearAttribute
 							+ " ?y}";
-			if (SPARQLUtil.executeBooleanQuery(hasBirthyear)) {
+			if (core.sparqlAsk(hasBirthyear)) {
 				found = true;
 			}
 		}
 
 		// SPARQL real birthplace.
 
-		OwlHelper helper = SemanticCoreDelegator.getInstance().getUpper().getHelper();
 		String realQuery =
-				"SELECT ?y WHERE {<" + helper.createlocalURI(concept) + "> " + birthyearAttribute
+				"SELECT ?y WHERE {<" + core.createlocalURI(concept) + "> " + birthyearAttribute
 						+ " ?y}";
 
-		TupleQueryResult real = SPARQLUtil.executeTupleQuery(realQuery);
+		ClosableIterator<QueryRow> real = core.sparqlSelectIt(realQuery);
 		String realBirthYear = "";
-
 
 		try {
 			while (real.hasNext()) {
-				BindingSet set = real.next();
-				realBirthYear = set.getBinding("y").getValue().stringValue();
+				QueryRow row = real.next();
+				realBirthYear = row.getValue("x").toString();
 				realBirthYear = URLDecoder.decode(realBirthYear, "UTF-8");
 				realBirthYear = realBirthYear.substring(realBirthYear.indexOf("#") + 1);
 			}
-		}
-		catch (QueryEvaluationException e) {
-			e.printStackTrace();
 		}
 		catch (UnsupportedEncodingException e) {
 			e.printStackTrace();

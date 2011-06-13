@@ -11,19 +11,6 @@
   <name>SeedLOD</name>
   <dependencies>
   	<dependency>
-  		<groupId>de.uniwue.d3web</groupId>
-  		<artifactId>KnowWE-Plugin-SemanticCore</artifactId>
-  		<version>0.2-SNAPSHOT</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>de.uniwue.d3web</groupId>
-  		<artifactId>KnowWE-Plugin-SemanticCore-MarkupSet</artifactId>
-  		<version>0.2-SNAPSHOT</version>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
   		<groupId>com.googlecode</groupId>
   		<artifactId>google-api-translate-java</artifactId>
   		<version>0.92</version>
@@ -43,5 +30,12 @@
 		<version>2.3.2</version>
 		<classifier>onejar</classifier>
 	</dependency>
+  	<dependency>
+  		<groupId>de.uniwue.d3web</groupId>
+  		<artifactId>KnowWE-Plugin-Rdf2GoSemanticCore</artifactId>
+  		<version>0.2-SNAPSHOT</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
   </dependencies>
 </project>

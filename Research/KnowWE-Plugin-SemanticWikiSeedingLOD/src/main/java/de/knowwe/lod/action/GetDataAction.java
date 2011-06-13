@@ -17,7 +17,6 @@ import java.util.Vector;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
 import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
@@ -26,7 +25,7 @@ import de.knowwe.lod.HermesData;
 import de.knowwe.lod.LinkedOpenData;
 import de.knowwe.lod.LinkedOpenDataSet;
 import de.knowwe.lod.markup.MappingContentType;
-import de.knowwe.semantic.sparql.SPARQLUtil;
+import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class GetDataAction extends AbstractAction {
 
@@ -164,7 +163,7 @@ public class GetDataAction extends AbstractAction {
 					e.printStackTrace();
 				}
 
-				String namespace = UpperOntology.getInstance().getLocaleNS();
+				String namespace = Rdf2GoCore.localns;
 				hermesConcept = namespace + hermesConcept;
 				encodePerson = namespace + encodePerson;
 
@@ -183,21 +182,21 @@ public class GetDataAction extends AbstractAction {
 
 				boolean validType = false;
 
-				if (SPARQLUtil.executeBooleanQuery(ereignis)) {
+				if (Rdf2GoCore.getInstance().sparqlAsk(ereignis)) {
 					// System.out.println("e");
 					var = set.getLOD(ConceptType.Ereignis);
 					dbResult = var.getLODdata(dbpediaConcept);
 					result = var.getHermesData(dbResult);
 					validType = true;
 				}
-				else if (SPARQLUtil.executeBooleanQuery(person)) {
+				else if (Rdf2GoCore.getInstance().sparqlAsk(person)) {
 					// System.out.println("p");
 					var = set.getLOD(ConceptType.Person);
 					dbResult = var.getLODdata(dbpediaConcept);
 					result = var.getHermesData(dbResult);
 					validType = true;
 				}
-				else if (SPARQLUtil.executeBooleanQuery(geographika)) {
+				else if (Rdf2GoCore.getInstance().sparqlAsk(geographika)) {
 					// System.out.println("g");
 					var = set.getLOD(ConceptType.Geographika);
 					dbResult = var.getLODdata(dbpediaConcept);
