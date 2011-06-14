@@ -1,36 +1,55 @@
 
 DiaFluxDialog = {};
 
-// the entry function to the dialog
-// "fires" startNodes and adds events to the next nodes
+/**
+ * the entry function to the dialog "fires" startNodes and adds events to the
+ * next nodes
+ */
 DiaFluxDialog.addEvents = function() {
 	DiaFluxDialog.fireStartNodes();
 }
 
-// adds the onclick event to all follow up nodes 
-// (and their rules) of a node
-DiaFluxDialog.addEventsToFollowUp = function(previousNode) {
-	var outgoingRules = DiaFluxDialog.Utils.findOutgoingRules(previousNode);
+/**
+ * adds the onclick event to all follow up nodes (and their rules) of a node
+ */ 
+DiaFluxDialog.addEventsToFollowUp = function(flowNode) {
+	var outgoingRules = DiaFluxDialog.Utils.findOutgoingRules(flowNode);
 	
 	for (var i = 0; i < outgoingRules.length; i++) {
 		var currentNode = outgoingRules[i].targetAnchor.node;
-		currentNode.dom.removeEvents('click');
-		currentNode.dom.addEvent('click', function(event){
-			DiaFluxDialog.createContextMenu(event);
-		});
-		
-		var newOutgoingRules = DiaFluxDialog.Utils.findOutgoingRules(currentNode);
-		for (var j = 0; j < newOutgoingRules.length; j++) {
-			newOutgoingRules[j].dom.removeEvents('click');
-			newOutgoingRules[j].dom.addEvent('click', function(event) {
-				DiaFluxDialog.clickRule(event);
-			});
-		}
+		DiaFluxDialog.addClickHandlerToNode(currentNode);		
+		DiaFluxDialog.addClickHandlerToRules(currentNode);
 	}
 }
 
 
-// fires all start nodes and returns them in an array
+/**
+ * adds the onclick handler to all outgoing rules of a node
+ */
+DiaFluxDialog.addClickHandlerToRules = function(flowNode) {
+	var outgoingRules = DiaFluxDialog.Utils.findOutgoingRules(flowNode);
+	for (var j = 0; j < outgoingRules.length; j++) {
+		outgoingRules[j].dom.removeEvents('click');
+		outgoingRules[j].dom.addEvent('click', function(event) {
+			DiaFluxDialog.clickRule(event);
+		});
+	}
+}
+
+/**
+ * adds the onclick handler to a node (to create the context menu)
+ */
+DiaFluxDialog.addClickHandlerToNode = function(flowNode) {
+	flowNode.dom.removeEvents('click');
+	flowNode.dom.addEvent('click', function(event){
+		DiaFluxDialog.createContextMenu(event);
+	});
+}
+
+
+/**
+ * fires all start nodes and returns them in an array
+ */
 DiaFluxDialog.fireStartNodes = function() {
 	var nodes = theFlowchart.nodes;
 	
@@ -42,34 +61,42 @@ DiaFluxDialog.fireStartNodes = function() {
 			// color outgoing rules
 			var rules = DiaFluxDialog.Utils.findOutgoingRules(nodes[i]);
 			for (var j = 0; j < rules.length; j++) {
-				DiaFluxDialog.activateRule(rules[j]);
+				DiaFluxDialog.activateRule(rules[j], false);
 			}
 		}
 	}
 }
 
+
+/**
+ * the function which is called when a rule is clicked
+ */
 DiaFluxDialog.clickRule = function(event) {
 	var target = event.target;
 	var htmlRule = DiaFluxDialog.Utils.findParentWithClass(target, 'Rule');
 	var flowRule = DiaFluxDialog.Utils.findFittingRule(htmlRule);
-	DiaFluxDialog.activateRule(flowRule);
+	DiaFluxDialog.activateRule(flowRule, true);
 
 }
 
-// activates a rule, e.g. colors the rule and adds the event to
-// its target node and the outgoing rules
-DiaFluxDialog.activateRule = function(flowRule) {
+/**
+ * activates a rule, e.g. colors the rule and adds the event to its target node
+ * and the outgoing rules
+ */
+DiaFluxDialog.activateRule = function(flowRule, sendRequest) {
 	if (!flowRule.isActive) {
 		flowRule.isActive = true;
 	} else {
 		DiaFluxDialog.deactivateRule(flowRule);
 		return;
 	}
+	var sourceNode = flowRule.sourceNode;
+	var targetNode = flowRule.targetNode;
+	
 	DiaFluxDialog.deactivateAllRulesExcept(flowRule);
 	DiaFluxDialog.colorRule(flowRule);
-	DiaFluxDialog.colorNode(flowRule.sourceNode);
+	DiaFluxDialog.colorNode(sourceNode);
 	
-	var targetNode = flowRule.targetNode;
 	DiaFluxDialog.increaseSupportForNode(targetNode);
 	
 	
@@ -81,18 +108,27 @@ DiaFluxDialog.activateRule = function(flowRule) {
 		DiaFluxDialog.colorNode(targetNode);
 		return;
 	}
+
+
+	DiaFluxDialog.addClickHandlerToNode(targetNode);	
+	DiaFluxDialog.addClickHandlerToRules(targetNode);
 	
-	targetNode.dom.removeEvents('click');
-	targetNode.dom.addEvent('click', function(event){
-		DiaFluxDialog.createContextMenu(event);
-	});
+	var start = DiaFluxDialog.Utils.isStartNode(sourceNode);
+	if (start || !sendRequest) {
+		return;
+	}
 	
-	var outgoingRules = DiaFluxDialog.Utils.findOutgoingRules(targetNode);
-	for (var i = 0; i < outgoingRules.length; i++) {
-		outgoingRules[i].dom.removeEvents('click');
-		outgoingRules[i].dom.addEvent('click', function(event) {
-			DiaFluxDialog.clickRule(event);
-		});
+	var sourceAction = sourceNode.actionPane.action;
+	var sourceInfoObject = KBInfo.lookupInfoObject(sourceAction.getInfoObjectName());
+	var type = sourceInfoObject.type;
+	var question = sourceInfoObject.name;
+	if (type !== KBInfo.Question.TYPE_NUM) {	
+		var selected = flowRule.guard.displayHTML;
+		DiaFluxDialog.sendRequest(question, {ValueID : selected});
+	
+	//TODO num werte generieren
+	} else {
+		DiaFluxDialog.sendRequest();
 	}
 }
 
@@ -113,12 +149,12 @@ DiaFluxDialog.deactivateNode = function(flowNode) {
 	for (var i = 0; i < outgoingRules.length; i++) {
 		DiaFluxDialog.deactivateRule(outgoingRules[i]);
 	}
-	
 	DiaFluxDialog.resetNodeColor(flowNode);
-	
 }
 
-//fires a node, i.e. sets the css class 
+/**
+ * fires a node, i.e. sets the css class
+ */
 DiaFluxDialog.fireNode = function(event) {
 	var target = event.target;	
 	var hiddenNode = $('hiddenNodeId')	
@@ -135,36 +171,79 @@ DiaFluxDialog.fireNode = function(event) {
 		
 	var trs = $(contextMenu).getElements('tr');
 	var selected = '';
-	for (var i = 0; i < trs.length; i++) {
-		var checkbox = trs[i].getElement('input')
-		if (checkbox.checked) {
-			// putting together the string with selected values
-			if (selected != '') {
-				selected += '#####';
-			}
-			selected += checkbox.value;
-				
-			// coloring the rules
-			for (var j = 0; j < outgoingRules.length; j++) {
-				if (outgoingRules[j].guard.displayHTML === checkbox.value) {
-					DiaFluxDialog.activateRule(outgoingRules[j]);
+	var answer;
+	
+	// mc or oc question
+	if (trs.length !== 0) {
+		for (var i = 0; i < trs.length; i++) {
+			var checkbox = trs[i].getElement('input')
+			if (checkbox.checked) {
+				// putting together the string with selected values
+				if (selected != '') {
+					selected += '#####';
 				}
-			}
-				
+				selected += checkbox.value;
+					
+				// coloring the rules
+				for (var j = 0; j < outgoingRules.length; j++) {
+					if (outgoingRules[j].guard.displayHTML === checkbox.value) {
+						DiaFluxDialog.activateRule(outgoingRules[j], false);
+					}
+				}
+			}	
 		}
-			
-			
+		answer = {ValueID : selected};
+	// numquestion
+	} else {
+		selected = $('numQuestion').value;
+		answer = {ValueNum : selected};
 	}
 	var incomingRules = DiaFluxDialog.Utils.findIncomingRules(flowNode);
 	for (var i = 0; i < incomingRules.length; i++) {
 		if (!incomingRules[i].isActive) {
-			DiaFluxDialog.activateRule(incomingRules[i]);
+			DiaFluxDialog.activateRule(incomingRules[i], false);
 		}
 	}
 	
-	
 	DiaFluxDialog.activateNode(flowNode);
+	DiaFluxDialog.sendRequest(question, answer);
 	contextMenu.parentNode.removeChild(contextMenu);
+}
+
+DiaFluxDialog.sendRequest = function(question, selected) {
+	var master = $('hiddenMaster');
+	if (master) {
+		master = master.value;
+	} else {
+		return;
+	}
+	params = {
+			action : 'SetSingleFindingAction',
+	        KWikiWeb : 'default_web',
+	        namespace : master,
+	        ObjectID : question,
+	        TermName : 'undefined'
+		};
+	
+	params = KNOWWE.helper.enrich( selected, params );
+		
+		// options for AJAX request
+	    options = {
+	        url : KNOWWE.core.util.getURL( params ),
+	        response : {
+	    		action : 'none',
+	        	fn : function(){
+	    			KNOWWE.helper.observer.notify('update');
+	    		},
+	    		onError : function () {
+		        	KNOWWE.core.util.updateProcessingState(-1);                    	
+                }
+	        }
+	    };
+	    
+	    // send AJAX request
+	    KNOWWE.core.util.updateProcessingState(1);
+	    new _KA( options ).send();
 }
 
 
@@ -212,6 +291,15 @@ DiaFluxDialog.createContextMenu = function(event) {
 	});
 	dom.appendChild(closeButton);
 	
+	
+	// increase size of the box and move the close button
+	// for num questions
+	if (infoObject.type === KBInfo.Question.TYPE_NUM) {
+		var width = $(dom).getStyle('width').toInt() + 10;
+		var left = $(closeButton).getStyle('left').toInt() + 10;
+		$(dom).setStyle('width', width);
+		$(closeButton).setStyle('left', left);
+	}
 	
 	$('sendAnswer').addEvent('click', function(event) {
 		DiaFluxDialog.fireNode(event);
@@ -280,7 +368,9 @@ DiaFluxDialog.removeContextMenu = function() {
 	}
 }
 
-// deactivates all rules sharing the same source node
+/**
+ * deactivates all rules sharing the same source node
+ */
 DiaFluxDialog.deactivateAllRulesExcept = function(flowRule) {
 	var sourceNode = flowRule.sourceNode;
 	
@@ -313,9 +403,10 @@ DiaFluxDialog.increaseSupportForNode = function(flowNode) {
 }
 
 
-// decreases the support of a node, only if it already has support
-// nodes with support = 0 are either not yet started or just lost
-// their support
+/**
+ * decreases the support of a node, only if it already has support nodes with
+ * support = 0 are either not yet started or just lost their support
+ */
 DiaFluxDialog.decreaseSupportForNode = function(flowNode) {
 	if (flowNode.support && flowNode.support > 0) {
 		flowNode.support--;
@@ -385,5 +476,12 @@ DiaFluxDialog.Utils.findParentWithClass = function(node, clazz) {
 		node = node.parentNode;
 	}
 	return node;
-	
 }
+
+DiaFluxDialog.Utils.isStartNode = function(flowNode) {
+	if (flowNode.nodeModel && flowNode.nodeModel.start && flowNode.nodeModel.start === 'Start') {
+		return true;
+	}
+	return false;
+}
+

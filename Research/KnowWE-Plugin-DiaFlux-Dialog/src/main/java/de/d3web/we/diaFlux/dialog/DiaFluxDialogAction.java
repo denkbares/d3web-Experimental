@@ -20,8 +20,13 @@ package de.d3web.we.diaFlux.dialog;
 
 import java.io.IOException;
 
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.session.Session;
+import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
+import de.d3web.we.basic.D3webModule;
+import de.d3web.we.utils.D3webUtils;
 
 /**
  * 
@@ -30,10 +35,20 @@ import de.d3web.we.action.UserActionContext;
  */
 public class DiaFluxDialogAction extends AbstractAction {
 
-	// TODO plugin dingens geht nicht :(
+
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		String web = context.getWeb();
+		String master = context.getParameter("master");
+		String question = context.getParameter("question");
+		String selectedValues = context.getParameter("selectedValues");
+		KnowledgeBase kb = D3webModule.getAD3webKnowledgeServiceInTopic(
+				context.getWeb(), master);
+
+		Session session = D3webUtils.getSession(master, context.getUserName(), context.getWeb());
+		Blackboard blackboard = session.getBlackboard();
+
+
 
 		context.getWriter().write("lolrofllol");
 	}
