@@ -38,7 +38,7 @@ public class TimeStampType extends AbstractType {
 			1, 1000, 1000, 60 * 1000, 60 * 1000, 60 * 60 * 1000, 24 * 60 * 60 * 1000 };
 
 	private static final String[] TIME_UNITS = {
-			"ms", "s", "sec", "min", "h", "d" };
+			"ms", "s", "sec", "m", "min", "h", "d" };
 
 	private static final Pattern TIMESTAMP_PATTERN = Pattern.compile(
 			"\\s*(\\d+)\\s*(ms|s|sec|m|min|h|d)\\s*",
