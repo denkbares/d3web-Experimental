@@ -45,7 +45,7 @@
 
 <div id="login_defi"> 
 <br />
-<h2>Willkommen bei ICD-Forum</h2><h2>Benutzeranmeldung f&uuml;r registrierte Teilnehmer</h2>
+<h2>Willkommen im ICD-Forum</h2><h2>Benutzeranmeldung f&uuml;r registrierte Teilnehmer</h2>
   
 </div>
 
