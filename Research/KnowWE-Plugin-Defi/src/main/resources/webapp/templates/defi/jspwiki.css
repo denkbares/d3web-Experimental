@@ -2058,26 +2058,3 @@ div.coverflow .knob {
 	width:100px;
 	height:15px;
 }
-
-/* ReadButtonTag */
-table.rbtag tr:FIRST-CHILD {
-	border:1px solid black;	
-}
-table.rbtag td {
-	text-align:center;
-}
-tr.rated {
-	border:1px solid #BBB !important;
-	color:#BBB;	
-}
-
-/* Userlist */
-table.userlist tr {
-	border:1px solid black;	
-}
-table.userlist span.online {
-	color:green;
-}
-table.userlist span.offline {
-	color:red;
-}

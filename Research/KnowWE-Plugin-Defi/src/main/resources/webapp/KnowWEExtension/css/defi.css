@@ -100,4 +100,18 @@ div.logosDefi img {
 /* Readstatus */
 #readstatus li {
 	list-style-type: none;
+	color:red;
+}
+/* Login */
+#login_defi {
+	position:absolute;
+	top:22px;
+	left:14.02em;
+	width:828px;
+	height:168px;
+	background-color:white;	
+	text-align:center;
+}
+#login_defi h2 {
+	color:#063d79;	
 }

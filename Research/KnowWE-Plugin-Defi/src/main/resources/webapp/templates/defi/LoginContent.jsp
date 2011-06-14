@@ -26,12 +26,36 @@
 
     boolean supportsCookieAuthentication = mgr.allowsCookieAuthentication();
 %>
+<%-- Additional stylesheets --%>
+<link href="KnowWEExtension/css/general.css" type="text/css" rel="stylesheet">
+<link href="KnowWEExtension/css/defi.css" type="text/css" rel="stylesheet">
+<link href="KnowWEExtension/css/toolsMenuDecorator.css" type="text/css" rel="stylesheet">
+<link href="KnowWEExtension/css/defaultMarkup.css" type="text/css" rel="stylesheet">
+<style type="text/css">
+#header {
+	border-bottom:0;
+}
+#header div.infobox, #header div.userbox, #favorites {
+	display:none;
+}
+#content {
+	margin:5px 0 0 196px;
+}
+</style>
+
+<div id="login_defi"> 
+<br />
+<h2>Willkommen bei ICD-Forum</h2><h2>Benutzeranmeldung f&uuml;r registrierte Teilnehmer</h2>
+  
+</div>
+
 <wiki:TabbedSection defaultTab="${param.tab}">
 
 <%-- Login functionality --%>
 <wiki:UserCheck status="notauthenticated">
 <wiki:Tab id="logincontent" title='<%=LocaleSupport.getLocalizedMessage(pageContext, "login.tab")%>'>
 <%--<wiki:Include page='LoginTab.jsp'/>--%>
+
 
 <form action="<%=postURL%>"
           id="login"
@@ -196,3 +220,4 @@
 </wiki:Tab>
 
 </wiki:TabbedSection>
+<h3 style="color:#063d79;margin:1em 0 -1em 1em;">Eine gemeinsame Initiative von</h3>
