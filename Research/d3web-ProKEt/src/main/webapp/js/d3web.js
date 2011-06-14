@@ -26,6 +26,8 @@ var ocStore = new Object();
 var dateStore = new Object();
 var textStore = new Object();
 var numStore = new Object();
+var headerHeight = -1;
+
 
 $(function() {
 	
@@ -224,10 +226,15 @@ function initFunctionality() {
 	// move the content below the header
 	var content = $('[id=content]');
 	var head = $('[id=head]');
-	content.css("margin-top", (head.height() + 5) + "px");
+	
+	if (headerHeight == -1) {
+		headerHeight = head.height() + 5;
+	}
+	content.css("margin-top", headerHeight + "px");
 	
 	$(window).resize(function() {
-		content.css("margin-top", (head.height() + 32) + "px");
+		headerHeight = head.height() + 32;
+		content.css("margin-top", headerHeight + "px");
 	});
 	
 	/*
