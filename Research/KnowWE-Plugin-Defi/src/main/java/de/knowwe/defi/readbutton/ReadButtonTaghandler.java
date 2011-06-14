@@ -170,6 +170,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				}
 			}
 
+			readbutton.append("<div align='center'>");
 			readbutton.append("<form name='readbuttonform' class='rbtag' id='" + id + "'>");
 			// Generate table
 			readbutton.append("<table class='rbtag'>");
@@ -181,8 +182,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				readbutton.append("<tr><td colspan='" + number + "'>");
 				readbutton.append("<input class='submit' type='button' value='OK' onclick='getReadButtonValue(0,"
 						+ number + ",\"" + id + "\")' />");
-				readbutton.append("</td></tr></table>");
-				readbutton.append("</form>");
+				readbutton.append("</td></tr></table></form>");
 			}
 			// - user can talk about it
 			else if (talkAbout) {
@@ -228,7 +228,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				readbutton.append("</td></tr>");
 				readbutton.append("</table></form>");
 			}
-
+			readbutton.append("</div>");
 		}
 
 		return KnowWEUtils.maskHTML(readbutton.toString());

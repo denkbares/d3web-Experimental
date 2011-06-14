@@ -97,3 +97,7 @@ div.logosDefi img {
 .defi-download {
 	background: #dcdcdc url(../images/disk.png) no-repeat scroll 5px center;
 }
+/* Readstatus */
+#readstatus li {
+	list-style-type: none;
+}

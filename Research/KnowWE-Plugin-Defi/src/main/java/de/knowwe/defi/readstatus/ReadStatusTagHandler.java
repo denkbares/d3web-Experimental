@@ -18,7 +18,6 @@
  */
 package de.knowwe.defi.readstatus;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -71,7 +70,6 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 		boolean read = true;
 		// -1: vergangen, 0: aktiv; 1: anstehend
 		int timeStatus = 0;
-		SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 		Date current = new Date();
 		Date unitDate = new Date();
 		Calendar calendar = new GregorianCalendar();
@@ -119,32 +117,22 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 				/* ------------------------------------------------------------ */
 				/* AUSGABE                                                      */
 				/* ------------------------------------------------------------ */
-				readstatus.append("<li style='color:");
-				if (timeStatus == -1 && !read) readstatus.append("red");
-				if (timeStatus == -1 && read) readstatus.append("green");
-				if (timeStatus == 0) readstatus.append("orange");
-				readstatus.append("'>" + getLabel(rootUnit) + " (" + formatter.format(unitDate)
-						+ "): ");
+				if (!read) {
+					readstatus.append("<li style='color:red'>Achtung: ");
+					readstatus.append("<a href='Wiki.jsp?page="
+							+ getPageName(rootUnit) + "'>" + getLabel(rootUnit)
+								+ "</a> ");
 
-				if (timeStatus == -1) {
-					if (read) readstatus.append("Einheit abgeschlossen.");
-					else readstatus.append("Diese Einheit sollte so bald wie möglich beendet werden.");
-				}
-
-				else if (timeStatus == 0) {
-					if (read) readstatus.append("Aktuelle Einheit bereits abgeschlossen.");
-					else {
-						if (current.before(warning)) readstatus.append("Aktuelle Einheit noch nicht abgeschlossen");
-						else readstatus.append("Die aktuelle Einheit sollte demnächst beendet");
+					if (timeStatus == -1) {
+						readstatus.append("sollte so bald wie möglich beendet werden.");
 					}
 
-				}
+					if (timeStatus == 0 && !current.before(warning)) {
+						readstatus.append("sollte demnächst beendet werden.");
+					}
 
-				else {
-					readstatus.append("Anstehende Einheit");
+					readstatus.append("</li>");
 				}
-
-				readstatus.append("</li>");
 				/* ------------------------------------------------------------ */
 
 				read = true;
