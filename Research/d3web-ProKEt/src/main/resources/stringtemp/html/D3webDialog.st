@@ -8,36 +8,36 @@ $endif$
 <!-- header & footer in one //-->
 <div id="head">
 	<table>
-	<tr>
-	<td width="40%">
-		$if(loadcase)$
-			<div class="leftButton">
-				$CaseLoadButton()$
-			</div>
-		$endif$
-		$if(savecase)$
-			<div class="leftButton">
-				$CaseSaveButton()$
-			</div>
-		$endif$
-		$if(reset)$
-			<div class="leftButton">
-				$CaseNewButton()$
-			</div>
-		$endif$
-		$if(summary)$
-			<div class="leftButton">
-				$SummaryButton()$
-			</div>
-		$endif$
-	</td>
-	<td width=*>
-		$header$
-	</td>
-	<td width="40%">
-	
-	</td>
-	</tr>
+		<tr>
+			<td width="40%">
+				$if(loadcase)$
+					<div class="leftButton">
+						$CaseLoadButton()$
+					</div>
+				$endif$
+				$if(savecase)$
+					<div class="leftButton">
+						$CaseSaveButton()$
+					</div>
+				$endif$
+				$if(reset)$
+					<div class="leftButton">
+						$CaseNewButton()$
+					</div>
+				$endif$
+				$if(summary)$
+					<div class="leftButton">
+						$SummaryButton()$
+					</div>
+				$endif$
+			</td>
+			<td width=*>
+				$header$
+			</td>
+			<td width="40%">
+			
+			</td>
+		</tr>
 	</table>
 </div>
 

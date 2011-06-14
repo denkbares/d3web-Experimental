@@ -40,7 +40,7 @@ import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
-import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
+import de.d3web.proket.d3web.output.render.MediastinitisDefaultRootD3webRenderer;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
 
@@ -285,7 +285,8 @@ public class Mediastinitis extends D3webDialog {
 		PrintWriter writer = response.getWriter();
 
 		// get the root renderer --> call getRenderer with null
-		DefaultRootD3webRenderer d3webr = (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRendererObject(
+		MediastinitisDefaultRootD3webRenderer d3webr =
+				(MediastinitisDefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRendererObject(
 				null);
 
 		// new ContainerCollection needed each time to get an updated dialog
