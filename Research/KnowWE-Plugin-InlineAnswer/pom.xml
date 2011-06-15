@@ -1,12 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<artifactId>KnowWE</artifactId>
+		<groupId>de.uniwue.d3web</groupId>
+		<version>0.2-SNAPSHOT</version>
+	</parent>
+	
 	<groupId>de.uniwue.d3web</groupId>
 	<artifactId>KnowWE-Plugin-InlineAnswer</artifactId>
 	<packaging>jar</packaging>
 	<name>KnowWE-Plugin: InlineAnswer</name>
 	<version>0.2-SNAPSHOT</version>
 	<url>http://www.d3web.de/</url>
+	
 	<ciManagement>
 		<system>Hudson</system>
 		<url>https://isci.informatik.uni-wuerzburg.de/hudson/</url>
