@@ -106,7 +106,7 @@ KNOWWE.plugin.semanticannotation.rendering = function() {
             var rel = eval( "(" + el.getAttribute('rel') + ")");
             
             var params = {
-                action : 'SemanticAnnotationAction',
+                action : 'AnnotationAction',
                 namespace : KNOWWE.helper.gup( 'page' )+'..'+KNOWWE.helper.gup( 'page' )+'_KB',
                 ObjectID : rel.objectID,
                 TermName : rel.termName,

@@ -34,14 +34,17 @@ import de.d3web.we.core.KnowWEAttributes;
 
 /**
  * 
+ * Delegates the rendering of an InlineAnnotation to the
+ * {@link FindingHTMLWriter}
+ * 
  * @author Johannes Dienst
  * @created 09.06.2011
  */
-public class SemanticAnnotationAction extends AbstractAction {
+public class AnnotationAction extends AbstractAction {
 
 	private final FindingHTMLWriter questionWriter;
 
-	public SemanticAnnotationAction() {
+	public AnnotationAction() {
 		questionWriter = new FindingHTMLWriter();
 	}
 

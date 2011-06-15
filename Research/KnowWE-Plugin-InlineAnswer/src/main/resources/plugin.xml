@@ -16,10 +16,10 @@
 	</runtime>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="SemanticAnnotationAction">
-		<parameter id="class" value="de.d3web.knowwe.action.SemanticAnnotationAction" />
-		<parameter id="name" value="SemanticAnnotationAction" />
-		<parameter id="description" value="Action SemanticAnnotationAction" />
+		id="AnnotationAction">
+		<parameter id="class" value="de.d3web.knowwe.action.AnnotationAction" />
+		<parameter id="name" value="AnnotationAction" />
+		<parameter id="description" value="Action AnnotationAction" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
