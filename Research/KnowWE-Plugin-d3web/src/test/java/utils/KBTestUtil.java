@@ -403,7 +403,7 @@ public class KBTestUtil {
 		ActionNextQASet ruleAction = new ActionIndication();
 		ruleAction.setQASets(action);
 		RuleFactory.createRule(ruleAction, condition,
-				null, null, PSMethodStrategic.class);
+				null, PSMethodStrategic.class);
 
 	}
 

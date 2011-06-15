@@ -122,7 +122,8 @@ public class TableLineRuleCompiler extends D3webSubtreeHandler<WimVentRuleTableR
 					asv.setQuestion(qNum);
 					asv.setValue(Number.getNumber(numberSec));
 					a = asv;
-				}else {
+				}
+				else {
 					messages.add(new CreateRelationFailed(
 							"wrong question-answer combination")
 							);
@@ -149,7 +150,7 @@ public class TableLineRuleCompiler extends D3webSubtreeHandler<WimVentRuleTableR
 			// create actual rule
 			if (and != null && a != null) {
 				Rule r = RuleFactory.createRule(a, and,
-						null, null, PSMethodAbstraction.class);
+						null, PSMethodAbstraction.class);
 				if (r != null) {
 					KnowWEUtils.storeObject(article, s, ruleStoreKey, r);
 					messages.add(new ObjectCreatedMessage(

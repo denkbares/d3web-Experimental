@@ -153,7 +153,7 @@ public class D3ruleBuilder implements KnOfficeParser, RuleBuilder {
 					ActionNextQASet ruleAction = new ActionIndication();
 					ruleAction.setQASets(rule.qcons);
 					newRule = RuleFactory.createRule(ruleAction, statecond,
-							rule.exceptcond, null, PSMethodStrategic.class);
+							rule.exceptcond, PSMethodStrategic.class);
 				}
 				else {
 					newRule = RuleFactory.createIndicationRule(rule.qcons,

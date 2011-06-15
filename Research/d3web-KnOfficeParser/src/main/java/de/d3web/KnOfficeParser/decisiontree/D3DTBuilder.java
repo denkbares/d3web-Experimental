@@ -654,7 +654,7 @@ public class D3DTBuilder implements DTBuilder, KnOfficeParser {
 				ActionNextQASet ruleAction = new ActionIndication();
 				ruleAction.setQASets(action);
 				RuleFactory.createRule(ruleAction, statecond,
-						null, null, PSMethodStrategic.class);
+						null, PSMethodStrategic.class);
 			}
 			else {
 				errors.add(MessageKnOfficeGenerator.createWrongDiagScore(
