@@ -8,8 +8,10 @@ import de.d3web.knowwe.renderer.AnnotationInlineAnswerRenderer;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Type;
+import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
+import de.d3web.we.kdom.type.AnonymousType;
 
 
 /*
@@ -43,8 +45,12 @@ public class Annotation extends AbstractType {
 
 	@Override
 	public void init() {
-		this.childrenTypes.add(new SemanticAnnotationStartSymbol("{{"));
-		this.childrenTypes.add(new SemanticAnnotationEndSymbol("}}"));
+		AnonymousType at1 = new AnonymousType("InlineAnnotationBegin");
+		at1.setSectionFinder(new RegexSectionFinder(ANNOTATIONBEGIN));
+		AnonymousType at2 = new AnonymousType("InlineAnnotationEnd");
+		at2.setSectionFinder(new RegexSectionFinder(ANNOTATIONEND));
+		this.childrenTypes.add(at1);
+		this.childrenTypes.add(at2);
 		this.childrenTypes.add(new AnnotationContent());
 		this.sectionFinder = new AnnotationSectionFinder();
 		this.setCustomRenderer(new AnnotationInlineAnswerRenderer());
