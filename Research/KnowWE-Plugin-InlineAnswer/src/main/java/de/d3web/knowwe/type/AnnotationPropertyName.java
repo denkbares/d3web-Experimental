@@ -16,9 +16,10 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.d3web.knowwe.semantic;
+package de.d3web.knowwe.type;
 
 import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 
 
 /**
@@ -26,6 +27,12 @@ import de.d3web.we.kdom.AbstractType;
  * @author Johannes Dienst
  * @created 09.06.2011
  */
-public class SemanticAnnotationSubject extends AbstractType {
+public class AnnotationPropertyName extends
+AbstractType {
+
+	@Override
+	public void init() {
+		this.sectionFinder = new AllTextSectionFinder();
+	}
 
 }

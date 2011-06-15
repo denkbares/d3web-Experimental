@@ -31,7 +31,7 @@ public class AnnotationObject extends AbstractType {
 
 	@Override
 	public void init() {
-		this.childrenTypes.add(new SemanticAnnotationProperty());
+		this.childrenTypes.add(new AnnotationProperty());
 		this.childrenTypes.add(new SimpleAnnotation());
 		this.sectionFinder = new AllTextSectionFinder();
 	}

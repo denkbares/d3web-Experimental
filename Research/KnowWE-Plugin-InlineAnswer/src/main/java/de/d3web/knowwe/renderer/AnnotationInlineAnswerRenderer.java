@@ -22,7 +22,7 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.knowwe.type.AnnotatedString;
 import de.d3web.knowwe.type.AnnotationObject;
-import de.d3web.knowwe.type.SemanticAnnotationProperty;
+import de.d3web.knowwe.type.AnnotationProperty;
 import de.d3web.knowwe.type.SimpleAnnotation;
 import de.d3web.we.basic.D3webKnowledgeHandler;
 import de.d3web.we.basic.D3webModule;
@@ -46,7 +46,7 @@ public class AnnotationInlineAnswerRenderer extends KnowWEDomRenderer {
 	@Override
 	public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
 
-		Section prop = Sections.findSuccessor(sec, SemanticAnnotationProperty.class);
+		Section prop = Sections.findSuccessor(sec, AnnotationProperty.class);
 		if (prop == null || !prop.getOriginalText().contains("asks"))
 			return;
 

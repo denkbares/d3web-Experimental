@@ -26,22 +26,27 @@ import java.util.regex.Pattern;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Type;
+import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
+import de.d3web.we.kdom.type.AnonymousType;
 
 
 /**
  * 
+ * This property can only be <b>asks</b>
+ * 
  * @author Johannes Dienst
  * @created 09.06.2011
  */
-public class SemanticAnnotationProperty extends AbstractType {
+public class AnnotationProperty extends AbstractType {
 
-	public SemanticAnnotationProperty() {
+	public AnnotationProperty() {
 		this.sectionFinder = new AnnotationPropertySectionFinder();
-		this.childrenTypes.add(new SemanticAnnotationPropertyDelimiter());
-		this.childrenTypes.add(new SemanticAnnotationPropertyName());
-		//		this.addSubtreeHandler(new SemanticAnnotationPropertySubTreeHandler());
+		AnonymousType at = new AnonymousType("PropertyDelimiter");
+		at.setSectionFinder(new RegexSectionFinder("::"));
+		this.childrenTypes.add(at);
+		this.childrenTypes.add(new AnnotationPropertyName());
 	}
 
 	public static class AnnotationPropertySectionFinder implements SectionFinder {
@@ -61,49 +66,5 @@ public class SemanticAnnotationProperty extends AbstractType {
 		}
 
 	}
-
-	//	private class SemanticAnnotationPropertySubTreeHandler extends
-	//	OwlSubtreeHandler<SemanticAnnotationProperty> {
-	//
-	//		@Override
-	//		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<SemanticAnnotationProperty> s) {
-	//
-	//			Section<SemanticAnnotationPropertyName> name = Sections.findChildOfType(s,
-	//					SemanticAnnotationPropertyName.class);
-	//
-	//			IntermediateOwlObject io = new IntermediateOwlObject();
-	//			UpperOntology uo = UpperOntology.getInstance();
-	//			String prop = name.getOriginalText();
-	//			URI property = null;
-	//			if (prop.equals("subClassOf") || prop.equals("subPropertyOf")) {
-	//				property = uo.getRDFS(prop);
-	//			}
-	//			else if (prop.equals("type")) {
-	//				property = uo.getRDF(prop);
-	//			}
-	//			else if (prop.contains(":")) {
-	//				String ns = SemanticCoreDelegator.getInstance().getNameSpaces().get(
-	//						prop.split(":")[0]);
-	//				if (ns == null || ns.length() == 0) {
-	//					io.setBadAttribute("no namespace given");
-	//					io.setValidPropFlag(false);
-	//				}
-	//				else if (ns.equals(prop.split(":")[0])) {
-	//					io.setBadAttribute(ns);
-	//					io.setValidPropFlag(false);
-	//				}
-	//				else {
-	//					property = uo.getHelper().createURI(ns, prop.split(":")[1]);
-	//				}
-	//			}
-	//			else {
-	//				property = uo.getHelper().createlocalURI(prop);
-	//			}
-	//			io.addLiteral(property);
-	//			KnowWEUtils.storeObject(article, s, OwlHelper.IOO, io);
-	//			return null;
-	//		}
-	//
-	//	}
 
 }

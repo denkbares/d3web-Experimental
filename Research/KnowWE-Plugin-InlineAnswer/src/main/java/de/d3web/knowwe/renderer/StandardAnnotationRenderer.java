@@ -18,8 +18,8 @@
  */
 package de.d3web.knowwe.renderer;
 
-import de.d3web.knowwe.semantic.SemanticAnnotationContent;
 import de.d3web.knowwe.type.AnnotatedString;
+import de.d3web.knowwe.type.AnnotationContent;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.ConditionalRenderer;
@@ -41,7 +41,7 @@ public class StandardAnnotationRenderer extends ConditionalRenderer {
 		try {
 			String text = "''"
 				+ Sections.findSuccessor(sec, AnnotatedString.class).getOriginalText() + "''";
-			Section content = Sections.findSuccessor(sec, SemanticAnnotationContent.class);
+			Section content = Sections.findSuccessor(sec, AnnotationContent.class);
 			if (content != null) {
 				String title = content.getOriginalText();
 				text = KnowWEUtils.maskHTML("<a href=\"#" + sec.getID() + "\"></a>"

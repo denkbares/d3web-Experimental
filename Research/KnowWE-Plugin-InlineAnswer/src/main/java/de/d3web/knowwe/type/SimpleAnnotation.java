@@ -32,52 +32,6 @@ public class SimpleAnnotation extends AbstractType {
 	@Override
 	public void init() {
 		this.sectionFinder = new AllTextFinderTrimmed();
-		//		this.addSubtreeHandler(new SimpleAnnotationSubTreeHandler());
 	}
-
-	//	private class SimpleAnnotationSubTreeHandler extends
-	//	OwlSubtreeHandler<Type> {
-	//
-	//		@Override
-	//		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
-	//			IntermediateOwlObject io = new IntermediateOwlObject();
-	//			UpperOntology uo = UpperOntology.getInstance();
-	//
-	//			String annos = "";
-	//			try {
-	//				annos = URLEncoder.encode(s.getOriginalText().trim(), "UTF-8");
-	//			}
-	//			catch (UnsupportedEncodingException e1) {
-	//				// TODO Auto-generated catch block
-	//				e1.printStackTrace();
-	//			}
-	//			URI anno = null;
-	//			if (annos.contains(":")) {
-	//				String[] list = annos.split(":");
-	//				String ns = list[0];
-	//				String ens = SemanticCoreDelegator.getInstance().expandNamespace(ns);
-	//				if (ns.equals(ens)) {
-	//					io.setValidPropFlag(false);
-	//					io.setBadAttribute(ns + " is no valid namespace");
-	//				}
-	//				try {
-	//					anno = uo.getHelper().createURI(ens, list[1]);
-	//				}
-	//				catch (IllegalArgumentException e) {
-	//					io.setValidPropFlag(false);
-	//					io.setBadAttribute(ns);
-	//				}
-	//			}
-	//			else {
-	//				anno = uo.getHelper().createlocalURI(annos);
-	//			}
-	//			if (anno != null) {
-	//				io.addLiteral(anno);
-	//			}
-	//			KnowWEUtils.storeObject(article, s, OwlHelper.IOO, io);
-	//			return null;
-	//		}
-	//
-	//	}
 
 }
