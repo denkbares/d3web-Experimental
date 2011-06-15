@@ -37,6 +37,7 @@ import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.NumValue;
 import de.d3web.core.session.values.UndefinedValue;
+import de.d3web.core.session.values.Unknown;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.utils.KnowWEUtils;
@@ -213,14 +214,21 @@ public class FindingHTMLWriter {
 						+ "ValueIDS : '" + choice.getName() + "'"
 						+ "}\" ");
 
-				if (session != null && sessionValue != UndefinedValue.getInstance()
+				if ( (sessionValue instanceof Unknown) &&
+						(choiceValue.getChoiceID().equals(Unknown.UNKNOWN_ID))) {
+					buffy.append(" checked=\"checked\" ");
+				}
+				else if (sessionValue instanceof Unknown) {
+					// Nothing here
+				}
+				else if (session != null && sessionValue != UndefinedValue.getInstance()
 						&& containsValue((MultipleChoiceValue) sessionValue, choiceValue)) {
 					buffy.append(" checked=\"checked\" ");
 				}
 				buffy.append(">");
 				buffy.append(renderAnswerText(KnowWEUtils.convertUmlaut(choice.getName())));
 				buffy.append("<br />");
-				// }
+
 			}
 			buffy.append("</form>");
 		}

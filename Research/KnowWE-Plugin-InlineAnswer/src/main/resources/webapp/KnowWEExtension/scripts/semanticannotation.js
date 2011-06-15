@@ -66,7 +66,7 @@ KNOWWE.plugin.semanticannotation.rendering = function() {
                 mcStorage.push( rel.ValueIDS );
             }
         });
-        mcUrl.ValueIDS = mcStorage.join(',');
+        mcUrl.ValueIDS = mcStorage.join('#####');
         KNOWWE.plugin.semanticannotation.rendering.send( mcUrl, null );
         mcUrl = false;
         isMC = false;
@@ -271,8 +271,19 @@ KNOWWE.plugin.semanticannotation.rendering = function() {
         },
         
         send : function( url, values ) {
+        	
+         	var act = 'SetSingleFindingAction';
+        	if ( url.ValueIDS != null ) {
+        		url.ValueID = url.ValueIDS;
+        		url.TermName = undefined; 
+        		if ( url.ValueIDS == '') {
+        			act = 'RetractSingleFindingAction';
+        		}
+        		
+        	}
+        	
         	var params = {
-                action : 'SetFindingAction',
+                action : act
             }
             
             for( keys in url ){

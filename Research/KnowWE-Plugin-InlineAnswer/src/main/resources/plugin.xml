@@ -24,26 +24,6 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="SetFindingAction">
-		<parameter id="class" value="de.d3web.knowwe.action.SetFindingAction" />
-		<parameter id="name" value="SetFindingAction" />
-		<parameter id="description" value="Action SetFindingAction" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="ReRenderQuestionSheetAction">
-		<parameter id="class"
-			value="de.d3web.knowewe.action.ReRenderQuestionSheetAction" />
-		<parameter id="name" value="ReRenderQuestionSheetAction" />
-		<parameter id="description" value="Action ReRenderQuestionSheetAction" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-		<parameter id="script" value="semanticannotation.js" />
-	</extension>
-	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Annotation">
 		<parameter id="class" value="de.d3web.knowwe.type.Annotation" />
