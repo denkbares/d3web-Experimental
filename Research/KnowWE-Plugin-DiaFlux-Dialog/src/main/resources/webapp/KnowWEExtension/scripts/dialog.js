@@ -103,9 +103,21 @@ DiaFluxDialog.activateRule = function(flowRule, sendRequest) {
 	var action = targetNode.actionPane.action;
 	var infoObject = KBInfo.lookupInfoObject(action.getInfoObjectName());
 	
-	// -> solution -> color target node
+	// -> solution or subflowchart
 	if (!infoObject.type) {
+		
+		// subflowchart
+		if (infoObject.startNames && infoObject.exitNames) {
+			DiaFluxDialog.sendGetFlowchartRequest(infoObject.name);
+			return;
+		} 
+		
+		// solution
 		DiaFluxDialog.colorNode(targetNode);
+		var outGoingRules = DiaFluxDialog.Utils.findOutgoingRules(targetNode);
+		for (var i = 0; i < outGoingRules.length; i++) {
+			DiaFluxDialog.activateRule(outGoingRules[i], false);
+		}
 		return;
 	}
 
@@ -124,11 +136,11 @@ DiaFluxDialog.activateRule = function(flowRule, sendRequest) {
 	var question = sourceInfoObject.name;
 	if (type !== KBInfo.Question.TYPE_NUM) {	
 		var selected = flowRule.guard.displayHTML;
-		DiaFluxDialog.sendRequest(question, {ValueID : selected});
+		DiaFluxDialog.sendSetSingleFindingRequest(question, {ValueID : selected});
 	
-	//TODO num werte generieren
+	// TODO num werte generieren
 	} else {
-		DiaFluxDialog.sendRequest();
+		DiaFluxDialog.sendSetSingleFindingRequest();
 	}
 }
 
@@ -206,11 +218,11 @@ DiaFluxDialog.fireNode = function(event) {
 	}
 	
 	DiaFluxDialog.activateNode(flowNode);
-	DiaFluxDialog.sendRequest(question, answer);
+	DiaFluxDialog.sendSetSingleFindingRequest(question, answer);
 	contextMenu.parentNode.removeChild(contextMenu);
 }
 
-DiaFluxDialog.sendRequest = function(question, selected) {
+DiaFluxDialog.sendSetSingleFindingRequest = function(question, selected) {
 	var master = $('hiddenMaster');
 	if (master) {
 		master = master.value;
@@ -246,6 +258,41 @@ DiaFluxDialog.sendRequest = function(question, selected) {
 	    new _KA( options ).send();
 }
 
+DiaFluxDialog.sendGetFlowchartRequest = function(name) {
+	var master = $('hiddenMaster');
+	if (master) {
+		master = master.value;
+	} else {
+		return;
+	}
+	params = {
+			action : 'DiaFluxDialogAction',
+	        KWikiWeb : 'default_web',
+	        master : master,
+	        name : name
+		};
+	
+
+		// options for AJAX request
+ 	options = {
+        url : KNOWWE.core.util.getURL( params ),
+        response : {
+    		action : 'none',
+        	fn : function(){
+ 				DiaFluxDialog.replaceFlowchart(this);
+    		}
+        }
+    };
+    
+    // send AJAX request
+
+    new _KA( options ).send();
+}
+
+DiaFluxDialog.replaceFlowchart = function(request) {
+	var text = request.responseText;
+	var a = 1;
+}
 
 DiaFluxDialog.createContextMenu = function(event) {
 	var contextMenu = theFlowchart.dom.getElement('div.dialogBox');

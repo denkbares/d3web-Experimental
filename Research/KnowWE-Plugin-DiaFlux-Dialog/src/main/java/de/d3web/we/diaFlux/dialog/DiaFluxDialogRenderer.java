@@ -18,12 +18,12 @@
  */
 package de.d3web.we.diaFlux.dialog;
 
-import de.d3web.core.session.Session;
+import de.d3web.diaFlux.flow.Flow;
+import de.d3web.diaFlux.flow.FlowSet;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
 
 /**
@@ -36,39 +36,27 @@ public class DiaFluxDialogRenderer extends KnowWEDomRenderer<DiaFluxDialogType> 
 	@Override
 	public void render(KnowWEArticle article, Section<DiaFluxDialogType> sec, UserContext user, StringBuilder string) {
 		String master = DiaFluxDialogType.getMaster(sec);
-		String topic = sec.getTitle();
-		Session session = D3webUtils.getSession(master, user, article.getWeb());
+		if (master == null) {
+			master = article.getTitle();
+		}
 		StringBuilder html = new StringBuilder();
+		html.append("<div class=\"defaultMarkup\">");
 		html.append("<h2>DiaFluxDialog</h2>");
 		html.append("<input type=\"hidden\" id=\"hiddenMaster\" value=\"" + master + "\">");
 
-		// if (!DiaFluxUtils.isFlowCase(session)) {
-		// string.append("No Flowchart found.");
-		// return;
-		// }
-		//
-		// List<Section<FlowchartType>> flows = new
-		// ArrayList<Section<FlowchartType>>();
-		//
-		// FlowSet flowSet = DiaFluxUtils.getFlowSet(session);
-		//
-		// for (Flow flow : flowSet) {
-		//
-		// String origin = flow.getInfoStore().getValue(
-		// Property.getProperty(FlowchartSubTreeHandler.ORIGIN_KEY,
-		// String.class));
-		//
-		// if (origin == null) continue;
-		//
-		// Section<FlowchartType> node = (Section<FlowchartType>)
-		// KnowWEEnvironment.getInstance().getArticleManager(
-		// article.getWeb()).findNode(origin);
-		// flows.add(node);
-		// String s = FlowchartUtils.createFlowchartRenderer(node, user);
-		// html.append(s);
-		// }
 
+		FlowSet flowSet = DiaFluxDialogUtils.getFlowSet(master, user);
 
+		for (Flow flow : flowSet) {
+			if (!flow.isAutostart()) {
+				continue;
+			}
+
+			html.append("<div id=\"DiaFluxDialogFlowchart\"></div>");
+			html.append(DiaFluxDialogUtils.extractFlowchartRendererFromFlow(flow, user));
+
+		}
+		html.append("</div>");
 		string.append(KnowWEUtils.maskHTML(html.toString()));
 
 	}

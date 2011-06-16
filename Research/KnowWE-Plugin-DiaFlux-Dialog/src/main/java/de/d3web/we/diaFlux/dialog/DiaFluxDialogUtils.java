@@ -18,6 +18,17 @@
  */
 package de.d3web.we.diaFlux.dialog;
 
+import de.d3web.core.session.Session;
+import de.d3web.diaFlux.flow.Flow;
+import de.d3web.diaFlux.flow.FlowSet;
+import de.d3web.diaFlux.inference.DiaFluxUtils;
+import de.d3web.we.core.KnowWEEnvironment;
+import de.d3web.we.flow.FlowchartSubTreeHandler;
+import de.d3web.we.flow.FlowchartUtils;
+import de.d3web.we.flow.type.FlowchartType;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.user.UserContext;
+import de.d3web.we.utils.D3webUtils;
 
 
 /**
@@ -27,6 +38,33 @@ package de.d3web.we.diaFlux.dialog;
  */
 public class DiaFluxDialogUtils {
 
+	public static final String DIAFLUXDIALOG_FLOWCHART = "DiaFluxDialogFlowchart";
 
+	public static FlowSet getFlowSet(String master, UserContext user) {
+		Session session = D3webUtils.getSession(master, user,
+				user.getWeb());
+
+		if (!DiaFluxUtils.isFlowCase(session)) {
+			// No Flowchart found
+			return null;
+		}
+		return DiaFluxUtils.getFlowSet(session);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static String extractFlowchartRendererFromFlow(Flow flow, UserContext user) {
+		String origin = (String) FlowchartUtils.getFlowProperty(flow,
+				FlowchartSubTreeHandler.ORIGIN_KEY);
+
+		if (origin == null) {
+			return null;
+		}
+
+		Section<FlowchartType> node = (Section<FlowchartType>)
+				KnowWEEnvironment.getInstance().getArticleManager(
+						user.getWeb()).findNode(origin);
+
+		return FlowchartUtils.createFlowchartRenderer(node, user, DIAFLUXDIALOG_FLOWCHART);
+	}
 
 }
