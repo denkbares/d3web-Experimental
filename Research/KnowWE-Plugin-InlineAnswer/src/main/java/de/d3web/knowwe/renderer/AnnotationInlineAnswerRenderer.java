@@ -33,6 +33,7 @@ import de.d3web.we.kdom.contexts.AnnotationContext;
 import de.d3web.we.kdom.contexts.ContextManager;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.user.UserContext;
+import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
 
 
@@ -74,13 +75,19 @@ public class AnnotationInlineAnswerRenderer extends KnowWEDomRenderer {
 			new StandardAnnotationRenderer().render(article, sec, user, string);
 		}
 
-		//		KnowledgeBase service = D3webModule.getAD3webKnowledgeServiceInTopic(sec.getWeb(),
-		//				sec.getTitle());
 		String web = sec.getWeb();
 		String title = sec.getTitle();
 		D3webKnowledgeHandler repHandler = D3webModule.getKnowledgeRepresentationHandler(web);
-		KnowledgeBase service = repHandler.getKB(
-				title);
+		KnowledgeBase service = repHandler.getKB(title);
+		// TODO Use a KB with a question of the given id in it!
+		// Currently gets the first KB 06.2011 Johannes
+		String name = service.getName();
+		if (name == null) {
+			KnowledgeBase base = D3webUtils.getFirstKnowledgeBase(web);
+			if (base != null)
+				service = base;
+		}
+
 		String middle = renderline(sec, user.getUserName(), question, text, service);
 
 		if (middle != null) {

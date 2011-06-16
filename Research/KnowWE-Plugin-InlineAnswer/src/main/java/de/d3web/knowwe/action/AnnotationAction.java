@@ -30,6 +30,7 @@ import de.d3web.we.basic.SessionBroker;
 import de.d3web.we.basic.WikiEnvironment;
 import de.d3web.we.basic.WikiEnvironmentManager;
 import de.d3web.we.core.KnowWEAttributes;
+import de.d3web.we.utils.D3webUtils;
 
 
 /**
@@ -93,6 +94,12 @@ public class AnnotationAction extends AbstractAction {
 		StringBuffer sb = new StringBuffer();
 
 		Session session = broker.getServiceSession(namespace);
+
+		if (session == null) {
+			session = D3webUtils.getFirstSession(context.getWeb(),
+					context.getUserName(), context.getTopic());
+		}
+
 		TerminologyObject obj = session.getKnowledgeBase().getManager().search(id);
 		if (obj instanceof Question) {
 
