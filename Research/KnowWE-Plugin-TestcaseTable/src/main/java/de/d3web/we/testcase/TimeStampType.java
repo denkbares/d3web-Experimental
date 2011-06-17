@@ -18,12 +18,19 @@
  */
 package de.d3web.we.testcase;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.d3web.we.kdom.report.KDOMReportMessage;
+import de.d3web.we.kdom.report.SyntaxError;
+import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
+import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 
 /**
  * This type represents an instant in time. Different units of time (and their
@@ -34,18 +41,27 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
  */
 public class TimeStampType extends AbstractType {
 
+	private static final String DURATION = "\\s*(\\d+)\\s*(ms|s|sec|m|min|h|d)\\s*";
+	private static final String TIMESTAMP = "(" + DURATION + ")+";
+
 	private static final long[] TIME_FACTORS = {
 			1, 1000, 1000, 60 * 1000, 60 * 1000, 60 * 60 * 1000, 24 * 60 * 60 * 1000 };
 
 	private static final String[] TIME_UNITS = {
 			"ms", "s", "sec", "m", "min", "h", "d" };
 
+	// TODO does not work with isvalid
+	private static final Pattern DURATION_PATTERN = Pattern.compile(
+			DURATION,
+			Pattern.CASE_INSENSITIVE);
+
 	private static final Pattern TIMESTAMP_PATTERN = Pattern.compile(
-			"\\s*(\\d+)\\s*(ms|s|sec|m|min|h|d)\\s*",
+			TIMESTAMP,
 			Pattern.CASE_INSENSITIVE);
 
 	public TimeStampType() {
-		sectionFinder = new RegexSectionFinder(TIMESTAMP_PATTERN);
+		sectionFinder = new AllTextSectionFinder();
+		addSubtreeHandler(new TimeStampSubtreeHandler());
 	}
 
 	public static boolean isValid(String sectionText) {
@@ -57,7 +73,7 @@ public class TimeStampType extends AbstractType {
 	}
 
 	public static long getTimeInMillis(String time) throws NumberFormatException {
-		Matcher matcher = TIMESTAMP_PATTERN.matcher(time);
+		Matcher matcher = DURATION_PATTERN.matcher(time);
 
 		long result = 0;
 		int index = 0;
@@ -79,6 +95,25 @@ public class TimeStampType extends AbstractType {
 		}
 
 		return result;
+	}
+
+	class TimeStampSubtreeHandler extends SubtreeHandler<TimeStampType> {
+
+		@Override
+		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TimeStampType> s) {
+			if (TimeStampType.isValid(s.getText())) {
+				return Collections.emptyList();
+			}
+			else {
+				LinkedList<KDOMReportMessage> list = new LinkedList<KDOMReportMessage>();
+				list.add(new SyntaxError("Invalid time stamp: '" + s.getText() + "'"));
+
+				return list;
+
+			}
+
+		}
+
 	}
 
 }

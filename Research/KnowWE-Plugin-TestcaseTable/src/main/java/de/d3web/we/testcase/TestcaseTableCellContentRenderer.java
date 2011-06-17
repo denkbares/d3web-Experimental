@@ -22,8 +22,7 @@ import java.util.Collection;
 
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.report.message.NoSuchObjectError;
+import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.table.TableCellContent;
 import de.d3web.we.kdom.table.TableCellContentRenderer;
 import de.d3web.we.kdom.table.TableUtils;
@@ -37,29 +36,17 @@ import de.d3web.we.utils.KnowWEUtils;
  */
 public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 
-	public static final String INVALIDTIMESTAMP = "invalidTimeStamp";
-
 	@Override
 	public void render(KnowWEArticle article, Section<TableCellContent> sec, UserContext user, StringBuilder string) {
 
-		Section<TestcaseTableLine> line = Sections.findAncestorOfExactType(sec,
-				TestcaseTableLine.class);
-
-		boolean testcaseAvailable = KnowWEUtils.getStoredObject(article, line,
-				TestcaseTable.TESTCASE_KEY) != null;
-
-		//TODO no errors are returned
-		Collection<NoSuchObjectError> messages = KnowWEUtils.getMessages(article, sec,
-				NoSuchObjectError.class);
+		Collection<KDOMError> messages = KnowWEUtils.getMessagesFromSubtree(article, sec,
+				KDOMError.class);
 
 		int column = TableUtils.getColumn(sec);
 
 		StringBuilder html = new StringBuilder();
 
-		if (!testcaseAvailable) {
-			html.append("<td class=\"" + INVALIDTIMESTAMP + "\">");
-		}
-		else if (!messages.isEmpty()) {
+		if (!messages.isEmpty()) {
 			html.append("<td class='error'>");
 		}
 		else if (column != 0) {

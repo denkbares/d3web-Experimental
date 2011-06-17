@@ -88,7 +88,6 @@ public class RunTestcaseAction extends AbstractAction {
 			System.out.println("executing lines: " + toBeExecutedLines.size());
 
 			for (Section<TestcaseTableLine> testLine : toBeExecutedLines) {
-
 				executeTableLine(article, session, alreadyExecuted, kb, testLine);
 			}
 		}
@@ -110,7 +109,6 @@ public class RunTestcaseAction extends AbstractAction {
 
 		RatedTestCase testcase = (RatedTestCase) KnowWEUtils.getStoredObject(article,
 				line, TestcaseTableLine.TESTCASE_KEY);
-
 		executeTestCase(testcase, session, kb);
 	}
 

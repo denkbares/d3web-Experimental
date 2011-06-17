@@ -26,8 +26,9 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.basic.Number;
+import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
+import de.d3web.we.kdom.constraint.SingleChildConstraint;
 import de.d3web.we.kdom.rendering.DefaultTextRenderer;
-import de.d3web.we.kdom.report.MessageRenderer;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
@@ -45,10 +46,14 @@ public class ValueType extends AbstractType {
 		setSectionFinder(new AllTextSectionFinder());
 		Number number = new Number();
 		number.setCustomRenderer(DefaultTextRenderer.getInstance());
+		number.setSectionFinder(new ConstraintSectionFinder(number.getSectionFinder(),
+				SingleChildConstraint.getInstance()));
 		addChildType(number);
 		CellAnswerRef aRef = new CellAnswerRef();
 		aRef.setCustomRenderer(DefaultTextRenderer.getInstance());
 		addChildType(aRef);
+
+		childrenTypes.add(new UnchangedType());
 
 		aRef.setSectionFinder(new SectionFinder() {
 

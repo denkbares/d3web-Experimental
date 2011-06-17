@@ -18,17 +18,20 @@
  */
 package de.d3web.we.testcase;
 
+import java.util.Collection;
 import java.util.List;
 
 import de.d3web.core.session.Session;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.table.TableLine;
 import de.d3web.we.kdom.table.TableLineRenderer;
 import de.d3web.we.kdom.table.TableUtils;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.D3webUtils;
+import de.d3web.we.utils.KnowWEUtils;
 
 /**
  * 
@@ -40,9 +43,18 @@ public class TestcaseTableLineRenderer extends TableLineRenderer {
 	public static final String TESTCASEEXECUTED = "tcExecuted";
 	public static final String TESTCASESKIPPED = "tcSkipped";
 	public static final String TESTCASELINE = "tcLine";
+	public static final String TESTCASEERROR = "tcError";
 
 	@Override
 	protected String getClasses(KnowWEArticle article, Section<TableLine> sec, UserContext user) {
+
+		Collection<KDOMError> errorMessages = KnowWEUtils.getMessagesFromSubtree(article, sec,
+				KDOMError.class);
+
+		if (errorMessages != null && !errorMessages.isEmpty()) {
+			return TESTCASELINE + " " + TESTCASEERROR;
+		}
+
 		// get execution status
 		Section<TestcaseTableType> table = Sections.findAncestorOfExactType(sec,
 				TestcaseTableType.class);

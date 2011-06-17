@@ -19,6 +19,7 @@
 package de.d3web.we.testcase;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,12 +35,13 @@ import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.SyntaxError;
+import de.d3web.we.kdom.report.message.InvalidNumberError;
+import de.d3web.we.kdom.report.message.NoSuchObjectError;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.kdom.table.TableCell;
 import de.d3web.we.kdom.table.TableLine;
-import de.d3web.we.kdom.table.TableUtils;
 import de.d3web.we.object.QuestionReference;
 import de.d3web.we.utils.KnowWEUtils;
 
@@ -77,34 +79,11 @@ public class TestcaseTableLine extends TableLine {
 			KnowledgeBase kb = findKB(s, article);
 
 			Section<TimeStampType> timeStamp = Sections.findSuccessor(s, TimeStampType.class);
-			if (timeStamp == null) {
 
-				int lineNumber = TableUtils.getRowOfLine(s);
-				Section<CellContent> cell = Sections.findSuccessor(s, CellContent.class);
-
-				LinkedList<KDOMReportMessage> list = new LinkedList<KDOMReportMessage>();
-				list.add(new SyntaxError("Invalid timestamp '" + cell.getText()
-						+ "' in line: " + lineNumber));
-				return list;
-			}
-			else {
-				createTestcase(article, s, kb, timeStamp);
-				return null;
-
-			}
-
-		}
-
-		/**
-		 * 
-		 * @created 16.03.2011
-		 * @param article
-		 * @param s
-		 * @param kb
-		 * @param timeStamp
-		 */
-		public void createTestcase(KnowWEArticle article, Section<TestcaseTableLine> s, KnowledgeBase kb, Section<TimeStampType> timeStamp) {
+			// returns 0 for illegal time stamp
+			// we could also return here, but then the Values are not checked
 			long time = TimeStampType.getTimeInMillis(timeStamp);
+
 			RatedTestCase testCase = new RatedTestCase();
 			testCase.setTimeStamp(new Date(time));
 
@@ -118,19 +97,43 @@ public class TestcaseTableLine extends TableLine {
 				Section<QuestionReference> qRef = Sections.findSuccessor(headerCell,
 						QuestionReference.class);
 				String qName = qRef.getText();
-				// TODO unchanged value, unknown value
 				Question question = kb.getManager().searchQuestion(qName);
+
 				if (question == null) {
 					continue;
 				}
-				Value value = KnowledgeBaseUtils.findValue(question, valueSec.getText());
+
+				String valueString = valueSec.getText();
+				// TODO handle unchanged value, unknown value
+				Value value;
+				try {
+					value = KnowledgeBaseUtils.findValue(question, valueString);
+
+				}// sectionizing finds a choiceValue, if illegal number is
+					// entered
+				catch (NumberFormatException e) {
+					// TODO clear old message
+					KnowWEUtils.clearMessages(article.getWeb(), article.getTitle(),
+							valueSec.getID(), KDOMError.class);
+					KnowWEUtils.storeSingleMessage(article, valueSec, getClass(), KDOMError.class,
+							new InvalidNumberError(valueString));
+					continue;
+				}
+
 				if (value != null) {
 					Finding finding = new Finding(question, value);
 					testCase.add(finding);
 				}
+				else {
+					KnowWEUtils.storeSingleMessage(article, valueSec, getClass(), KDOMError.class,
+							new NoSuchObjectError(valueString));
+				}
 
 			}
+
 			KnowWEUtils.storeObject(article, s, TESTCASE_KEY, testCase);
+
+			return Collections.emptyList();
 		}
 
 		private KnowledgeBase findKB(Section<TestcaseTableLine> s, KnowWEArticle article) {

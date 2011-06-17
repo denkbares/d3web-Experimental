@@ -59,27 +59,9 @@ tr.tcLine{
 	height: 28px;
 }
 
-td.invalidTimeStamp{
-	background-color: red ;
-	text-align: center;
-}
 
-td.invalidTimeStamp div.invalidTimeStamp{
+tr.tcError td div {
 	display: none;
-}
-
-td.invalidTimeStamp:hover div.invalidTimeStamp {
-	margin-left: 75px;
-	margin-top: -3px;
-	padding-left: 5px;
-	padding-right: 5px;
-	height: 20px;
-	min-width: 160px;
-	background-color: red;
-	display: block;
-	position: absolute;
-	border: solid;
-	text-align: center;
 }
 
 tr.tcExecuted td div {
