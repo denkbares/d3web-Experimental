@@ -64,12 +64,12 @@ public class AnnotationAction extends AbstractAction {
 
 		Map<String, String> parameterMap = context.getParameters();
 
-		String namespace = parameterMap.get(KnowWEAttributes.SEMANO_NAMESPACE);
-		String termName = parameterMap.get(KnowWEAttributes.SEMANO_TERM_NAME);
-		String user = parameterMap.get(KnowWEAttributes.USER);
-		String webname = parameterMap.get(KnowWEAttributes.WEB);
-		String id = parameterMap.get(KnowWEAttributes.SEMANO_OBJECT_ID);
-		String targetUrlPrefix = parameterMap.get("sendToUrl");
+		String namespace = context.getParameter(KnowWEAttributes.SEMANO_NAMESPACE);
+		String termName = context.getParameter(KnowWEAttributes.SEMANO_TERM_NAME);
+		String user = context.getParameter(KnowWEAttributes.USER);
+		String webname = context.getParameter(KnowWEAttributes.WEB);
+		String id = context.getParameter(KnowWEAttributes.SEMANO_OBJECT_ID);
+		String targetUrlPrefix = context.getParameter("sendToUrl");
 		String topic = context.getTopic();
 		if (topic == null) {
 			topic = namespace.substring(0, namespace.indexOf(".."));

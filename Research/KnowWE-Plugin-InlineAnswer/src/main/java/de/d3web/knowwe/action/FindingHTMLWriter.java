@@ -193,16 +193,13 @@ public class FindingHTMLWriter {
 		+ KnowWEAttributes.TOPIC + ": '" + topic + "',";
 
 		if (theMC.getAllAlternatives() != null) {
+
+			boolean oneAnswerChecked = false;
+
 			buffy.append("<form action='#' name='semanomc' id='semano_mc'>");
 			for (Choice choice : theMC.getAllAlternatives()) {
 				ChoiceValue choiceValue = new ChoiceValue(choice);
 				Value sessionValue = session.getBlackboard().getValue(theQuestion);
-				// TODO: 04.2010 joba: insert Unknown alternative
-				// if (theAnswer instanceof AnswerUnknown) {
-				// answerText =
-				// KnowWEUtils.convertUmlaut(rb.getString("KnowWE.answer.unknown"));
-				// }
-				// else {
 
 				buffy.append("<INPUT TYPE=CHECKBOX NAME='f" + timestampid + "id"
 						+ theQuestion.getName() + "' "
@@ -224,12 +221,30 @@ public class FindingHTMLWriter {
 				else if (session != null && sessionValue != UndefinedValue.getInstance()
 						&& containsValue((MultipleChoiceValue) sessionValue, choiceValue)) {
 					buffy.append(" checked=\"checked\" ");
+					oneAnswerChecked = true;
 				}
 				buffy.append(">");
 				buffy.append(renderAnswerText(KnowWEUtils.convertUmlaut(choice.getName())));
 				buffy.append("<br />");
-
 			}
+			// TODO: 04.2010 joba: insert Unknown alternative
+			String answerText = KnowWEUtils.convertUmlaut(rb.getString("KnowWE.answer.unknown"));
+			buffy.append("<INPUT TYPE=CHECKBOX NAME='f" + timestampid + "id"
+					+ theQuestion.getName() + "' "
+					+ "value='" + answerText + "' "
+					+ "id='semanomc" + theQuestion.getName() + "' "
+					+ "class=\"semano_mc\" "
+					+ " rel=\"{" + rel
+					+ "ObjectID : '" + theQuestion.getName() + "',"
+					+ "ValueIDS : '" + answerText + "'"
+					+ "}\" ");
+
+			if (!oneAnswerChecked)
+				buffy.append(" checked=\"checked\" ");
+			buffy.append(">");
+			buffy.append(renderAnswerText(answerText));
+			buffy.append("<br />");
+
 			buffy.append("</form>");
 		}
 	}

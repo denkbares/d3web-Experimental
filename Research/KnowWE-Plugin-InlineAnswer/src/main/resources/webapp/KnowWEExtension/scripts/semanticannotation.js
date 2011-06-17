@@ -66,7 +66,11 @@ KNOWWE.plugin.semanticannotation.rendering = function() {
                 mcStorage.push( rel.ValueIDS );
             }
         });
+
         mcUrl.ValueIDS = mcStorage.join('#####');
+        if (mcUrl.ValueIDS.indexOf('#####unbekannt') != -1) {
+        	mcUrl.ValueIDS = mcUrl.ValueIDS.replace('#####unbekannt', '');
+        }
         KNOWWE.plugin.semanticannotation.rendering.send( mcUrl, null );
         mcUrl = false;
         isMC = false;
@@ -288,11 +292,11 @@ KNOWWE.plugin.semanticannotation.rendering = function() {
             
             for( keys in url ){
                 if(keys == 'url') continue;
-                params[keys] = encodeURIComponent( url[keys] );
+                params[keys] = url[keys];
             }
             if(values) {
                 for( keys in values ){
-                    params[keys] = encodeURIComponent( values[keys] );
+                    params[keys] = values[keys];
                 }
             }         
             
