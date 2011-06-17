@@ -1,23 +1,50 @@
 !! Mini-Test für den inkrementellen Compiler
 
-def Jochen
+def subclasso
 
 def Pete
 
+def Peter
+
+def Wuerzburg
+
 def istEin
 
-def istEi
+def wohntIn
 
 def Assi
 
+def Jochen wohntIn:: Wuerzburg
 
 { Jochen istEin:: Assi}
 
 { Peter istEin:: Assi}
 
+def Perso
+
+
+{Assi subclassof:: Person}
+
+
+{Peter wohntIn:: Wuerzburg}
+
+def Reinhard 
+
+{Reinhard wohntIn:: Wuerzburg}
 
 
 ! Alle Assis:
 <sparql2go>
 Select ?x where { ?x ?y lns:Assi}
 </sparql2go>
+
+
+! Wohnt in Würzburg:
+<sparql2go>
+Select ?x  where { ?x lns:wohntIn lns:Wuerzburg}
+</sparql2go>
+
+
+! subclass von Person:
+<sparql2go>
+Select ?x  where 
