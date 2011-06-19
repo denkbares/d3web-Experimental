@@ -23,9 +23,9 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.rendering.NothingRenderer;
 import de.d3web.we.kdom.sectionFinder.LineSectionFinder;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.d3web.we.kdom.type.AnonymousTypeInvisible;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
 
@@ -43,7 +43,11 @@ public class MetaLine extends AbstractType {
 	public MetaLine() {
 		this.setSectionFinder(new LineSectionFinder());
 		this.addChildType(new AttributeName());
-		this.addChildType(new Delimiter());
+
+		AnonymousTypeInvisible at = new AnonymousTypeInvisible("Delimiter");
+		at.setSectionFinder(new RegexSectionFinder(":"));
+		this.addChildType(at);
+
 		this.addChildType(new AttributeContent());
 
 		this.setCustomRenderer(new KnowWEDomRenderer<MetaLine>() {
@@ -56,15 +60,6 @@ public class MetaLine extends AbstractType {
 			}
 		});
 
-
-	}
-
-	class Delimiter extends AbstractType {
-
-		public Delimiter() {
-			this.setSectionFinder(new RegexSectionFinder(":"));
-			this.setCustomRenderer(NothingRenderer.getInstance());
-		}
 
 	}
 

@@ -67,6 +67,7 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.basic.PlainText;
+import de.d3web.we.kdom.type.AnonymousType;
 import de.knowwe.casetrain.info.AnswerLine;
 import de.knowwe.casetrain.info.AnswerLine.AnswerExplanation;
 import de.knowwe.casetrain.info.AnswerLine.AnswerText;
@@ -697,7 +698,8 @@ public class XMLUtils {
 		for (Section<?> s : Sections.findSuccessor(
 				antworten, SubblockMarkupContent.class).getChildren()) {
 
-			if (s.get().isType(PlainText.class) || s.get().isType(AnswersBlockWeightMark.class))
+			if (s.get().isType(PlainText.class) || s.get().isType(AnswersBlockWeightMark.class)
+					|| s.get().isType(AnonymousType.class))
 				continue;
 
 			// PosFactor and NegFactor

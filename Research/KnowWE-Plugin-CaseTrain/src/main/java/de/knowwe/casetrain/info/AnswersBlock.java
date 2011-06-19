@@ -26,10 +26,10 @@ import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
+import de.d3web.we.kdom.type.AnonymousType;
 import de.knowwe.casetrain.message.MissingComponentWarning;
 import de.knowwe.casetrain.renderer.DivStyleClassRenderer;
 import de.knowwe.casetrain.renderer.SpanClassRenderer;
@@ -46,9 +46,9 @@ public class AnswersBlock extends SubblockMarkup {
 
 	public AnswersBlock() {
 		super("Antworten");
-		PlainText plain = new PlainText();
-		plain.setSectionFinder(new RegexSectionFinder("\\r?\\n"));
-		this.addContentType(plain);
+		AnonymousType at = new AnonymousType("LineBreak");
+		at.setSectionFinder(new RegexSectionFinder("\\r?\\n"));
+		this.addContentType(at);
 		this.addContentType(new AnswerLine());
 		this.addContentType(new Praefix());
 		this.addContentType(new Postfix());

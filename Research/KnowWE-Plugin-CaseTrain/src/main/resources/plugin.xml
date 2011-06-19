@@ -52,7 +52,7 @@
 		<parameter id="css" value="caseTrain.css" />
 	</extension>
 	
-		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="MetaData">
 		<parameter id="class" value="de.knowwe.casetrain.type.MetaData" />
 		<parameter id="name" value="MetaData" />

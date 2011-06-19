@@ -27,7 +27,6 @@ import java.util.ResourceBundle;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.report.KDOMError;
 import de.d3web.we.kdom.report.KDOMNotice;
@@ -35,6 +34,7 @@ import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.KDOMWarning;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
+import de.d3web.we.kdom.type.AnonymousType;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
 import de.knowwe.casetrain.info.Info;
@@ -59,9 +59,11 @@ public class MetaData extends BlockMarkupType {
 
 	public MetaData() {
 		super("Metadaten");
-		PlainText plain = new PlainText();
-		plain.setSectionFinder(new RegexSectionFinder("\\r?\\n"));
-		this.addContentType(plain);
+
+		AnonymousType at = new AnonymousType("LineBreak");
+		at.setSectionFinder(new RegexSectionFinder("\\r?\\n"));
+		this.addContentType(at);
+
 		this.addContentType(new MetaLine());
 
 		this.setCustomRenderer(new KnowWEDomRenderer<MetaData>() {
