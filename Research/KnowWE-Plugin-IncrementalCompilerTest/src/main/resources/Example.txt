@@ -47,4 +47,5 @@ Select ?x  where { ?x lns:wohntIn lns:Wuerzburg}
 
 ! subclass von Person:
 <sparql2go>
-Select ?x  where 
+Select ?x  where { ?x lns:subclassof lns:Person}
+</sparql2go>
