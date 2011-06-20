@@ -23,6 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -86,6 +87,11 @@ public class IncrementalCompilerParserTest {
 		assertFalse(core.sparqlAsk(Query.ASSIPERSON));
 		assertTrue(core.sparqlAsk(Query.PETERWUERZBURG));
 		assertTrue(core.sparqlAsk(Query.REINHARDWUERZBURG));
+	}
+
+	@AfterClass
+	public static void tearDown() {
+		MyTestArticleManager.clear();
 	}
 
 }
