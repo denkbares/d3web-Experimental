@@ -1,11 +1,19 @@
 
 DiaFluxDialog = {};
 
+DiaFluxDialog.FLOWCHARTID = 'DiaFluxDialogFlowchart';
+DiaFluxDialog.FLOWCHARTPATHID = 'DiaFluxDialogPath';
+DiaFluxDialog.flowcharts = [];
+
 /**
  * the entry function to the dialog "fires" startNodes and adds events to the
  * next nodes
  */
 DiaFluxDialog.addEvents = function() {
+	
+	if (!DiaFluxDialog.flowcharts.contains(theFlowchart)) {
+		DiaFluxDialog.flowcharts.push(theFlowchart);
+	}
 	DiaFluxDialog.fireStartNodes();
 }
 
@@ -52,8 +60,12 @@ DiaFluxDialog.addClickHandlerToNode = function(flowNode) {
  */
 DiaFluxDialog.fireStartNodes = function() {
 	var nodes = theFlowchart.nodes;
-	
+
 	for (var i = 0; i < nodes.length; i++) {
+		if (i === 0) {
+			DiaFluxDialog.sendAddActiveFlowchartRequest(nodes[0].flowchart.name);
+		}
+		
 		if (nodes[i].nodeModel.start && nodes[i].nodeModel.start === 'Start') {
 			DiaFluxDialog.colorNode(nodes[i]);
 
@@ -99,6 +111,13 @@ DiaFluxDialog.activateRule = function(flowRule, sendRequest) {
 	
 	DiaFluxDialog.increaseSupportForNode(targetNode);
 	
+	
+	// -> exit node
+	if (!DiaFluxDialog.Utils.hasOutgoingRules(targetNode)){
+		DiaFluxDialog.colorNode(targetNode);
+		DiaFluxDialog.sendGetNextActiveFlowchartRequest();
+		return;
+	}
 	
 	var action = targetNode.actionPane.action;
 	var infoObject = KBInfo.lookupInfoObject(action.getInfoObjectName());
@@ -269,7 +288,8 @@ DiaFluxDialog.sendGetFlowchartRequest = function(name) {
 			action : 'DiaFluxDialogAction',
 	        KWikiWeb : 'default_web',
 	        master : master,
-	        name : name
+	        name : name,
+	        type : 'getFlowchart'
 		};
 	
 
@@ -279,21 +299,141 @@ DiaFluxDialog.sendGetFlowchartRequest = function(name) {
         response : {
     		action : 'none',
         	fn : function(){
- 				DiaFluxDialog.replaceFlowchart(this);
+ 				DiaFluxDialog.replaceFlowchart(this, name);
     		}
         }
     };
     
     // send AJAX request
-
     new _KA( options ).send();
 }
 
-DiaFluxDialog.replaceFlowchart = function(request) {
-	var text = request.responseText;
+
+/**
+ * replaces the current flowchart with the new
+ * one from the request
+ */
+DiaFluxDialog.replaceFlowchart = function(request, name) {
+	// hide all other flowcharts
+	DiaFluxDialog.hideFlowcharts();
+	
+	// paste the new flowchart
+	$(DiaFluxDialog.FLOWCHARTID).innerHTML += request.responseText;
+	
+	// change path
+	$(DiaFluxDialog.FLOWCHARTPATHID).innerHTML += ' - ' + name;
+	
+	
+	name += 'Source';
+	
+	// activate the new flowchart
+	KBInfo._updateCache($('referredKBInfo'));
+	Flowchart.createFromXML(DiaFluxDialog.FLOWCHARTID, $(name)).setVisible(true);
+	DiaFluxDialog.addEvents();
+
+}
+
+
+/**
+ * hides all flowcharts, e.g. makes display:none
+ */
+DiaFluxDialog.hideFlowcharts = function() {
+	var parent = $(DiaFluxDialog.FLOWCHARTID);
+	var flowcharts = parent.getElements('.Flowchart');
+	for (var i = 0; i < flowcharts.length; i++) {
+		flowcharts[i].parentNode.setStyle('display', 'none');
+	}
+}
+
+
+/**
+ * if the flowchart is not yet active, it will be added
+ * to the active flowcharts else it will be removed because
+ * it is finished
+ */
+DiaFluxDialog.sendAddActiveFlowchartRequest = function(name) {
+	params = {
+			action : 'DiaFluxDialogManageAction',
+	        KWikiWeb : 'default_web',
+	        name : name,
+	        type : 'addActiveFlowchart'
+		};
+	
+
+	// options for AJAX request
+ 	options = {
+        url : KNOWWE.core.util.getURL( params ),
+        response : {
+    		action : 'none',
+        	fn : function(){
+
+    		}
+        }
+    };
+    
+    // send AJAX request
+    new _KA( options ).send();
+}
+
+/**
+ * removes the current active flowchart and returns the next
+ */
+DiaFluxDialog.sendGetNextActiveFlowchartRequest = function() {
+	params = {
+			action : 'DiaFluxDialogManageAction',
+	        KWikiWeb : 'default_web',
+	        type : 'getNextActiveFlowchart'
+		};
+	
+
+	// options for AJAX request
+ 	options = {
+        url : KNOWWE.core.util.getURL( params ),
+        response : {
+    		action : 'none',
+        	fn : function(){
+ 				DiaFluxDialog.activatePreviousFlowchart(this);
+    		}
+        }
+    };
+    
+    // send AJAX request
+    new _KA( options ).send();
+}
+
+
+/**
+ * activates the parent flowchart, after dead end
+ * is reached
+ */
+DiaFluxDialog.activatePreviousFlowchart = function(request) {
+	var text = request.responseText.split('#####');
+	var nextFlowchart = text[0];
+	
+	DiaFluxDialog.Utils.createPath(text);
+	
+	DiaFluxDialog.hideFlowcharts();
+	
+	for (var i = 0; i < DiaFluxDialog.flowcharts.length; i++) {
+		if (DiaFluxDialog.flowcharts[i].name === nextFlowchart) {
+			theFlowchart = DiaFluxDialog.flowcharts[i];
+			break;
+		}
+	}
+	
+	var next = $(DiaFluxDialog.FLOWCHARTID).getElement('#' + theFlowchart.dom.id);
+	next.setStyle('display', 'block');
+
+//	var test3 = $(theFlowchart.dom.id);
+
+	
 	var a = 1;
 }
 
+
+/**
+ * creates the context menu, when nodes are clicked
+ */
 DiaFluxDialog.createContextMenu = function(event) {
 	var contextMenu = theFlowchart.dom.getElement('div.dialogBox');
 	if (contextMenu) {
@@ -353,7 +493,9 @@ DiaFluxDialog.createContextMenu = function(event) {
 	});
 }
 
-
+/**
+ * creates the possible answers for the context menu
+ */
 DiaFluxDialog.createAnswerPossibilites = function(infoObject) {
 	var html = '';
 	var type = '';
@@ -531,4 +673,23 @@ DiaFluxDialog.Utils.isStartNode = function(flowNode) {
 	}
 	return false;
 }
+
+DiaFluxDialog.Utils.hasOutgoingRules = function(flowNode) {
+	return (DiaFluxDialog.Utils.findOutgoingRules(flowNode).length !== 0);
+}
+
+DiaFluxDialog.Utils.createPath =  function(array) {
+	var path = 'Path: ';
+	if (array.length > 1) {
+		for (var i = 1; i < array.length; i++) {
+			if (array[i] !== '') {
+				path += array[i] + ' - ';
+			}
+		}
+		path = path.substring(0, path.length  - 3);
+		
+		$(DiaFluxDialog.FLOWCHARTPATHID).innerHTML = path;
+	}
+}
+
 

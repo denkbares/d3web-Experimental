@@ -34,18 +34,24 @@ public class DiaFluxDialogAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-		String master = context.getParameter("master");
-		String name = context.getParameter("name");
+		String type = context.getParameter("type");
 
-		FlowSet flowSet = DiaFluxDialogUtils.getFlowSet(master, context);
+		// get new flowchart
+		if (type.equalsIgnoreCase("getFlowchart")) {
+			String master = context.getParameter("master");
+			String name = context.getParameter("name");
+			FlowSet flowSet = DiaFluxDialogUtils.getFlowSet(master, context);
 
-		for (Flow flow : flowSet) {
-			if (flow.getName().equalsIgnoreCase(name)) {
+			for (Flow flow : flowSet) {
+				if (flow.getName().equalsIgnoreCase(name)) {
 
-				String fc = DiaFluxDialogUtils.extractFlowchartRendererFromFlow(flow, context);
-				context.getWriter().write(fc);
+					String fc = DiaFluxDialogUtils.extraxtMinimalFlowchart(DiaFluxDialogUtils.extractFlowchartRendererFromFlow(
+							flow, context));
+					context.getWriter().write(fc);
+				}
+
 			}
-
 		}
+
 	}
 }

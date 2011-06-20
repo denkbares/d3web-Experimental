@@ -42,21 +42,24 @@ public class DiaFluxDialogRenderer extends KnowWEDomRenderer<DiaFluxDialogType> 
 		StringBuilder html = new StringBuilder();
 		html.append("<div class=\"defaultMarkup\">");
 		html.append("<h2>DiaFluxDialog</h2>");
-		html.append("<input type=\"hidden\" id=\"hiddenMaster\" value=\"" + master + "\">");
-
 
 		FlowSet flowSet = DiaFluxDialogUtils.getFlowSet(master, user);
 
+		StringBuilder flowchart = new StringBuilder();
+		String name = "";
 		for (Flow flow : flowSet) {
 			if (!flow.isAutostart()) {
 				continue;
 			}
-
-			html.append("<div id=\"DiaFluxDialogFlowchart\"></div>");
-			html.append(DiaFluxDialogUtils.extractFlowchartRendererFromFlow(flow, user));
+			name = flow.getName();
+			flowchart.append("<div id=\"DiaFluxDialogFlowchart\"></div>");
+			flowchart.append(DiaFluxDialogUtils.extraxtMinimalFlowchart(DiaFluxDialogUtils.extractFlowchartRendererFromFlow(
+					flow, user)));
 
 		}
-		html.append("</div>");
+		html.append("<div id=\"DiaFluxDialogPath\">Path: " + name + "</div>");
+		html.append("<input type=\"hidden\" id=\"hiddenMaster\" value=\"" + master + "\">");
+		html.append(flowchart);
 		string.append(KnowWEUtils.maskHTML(html.toString()));
 
 	}
