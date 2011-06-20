@@ -85,7 +85,6 @@ public class CellContent extends TableCellContent {
 		ValueType valueType = new ValueType();
 		valueType.setSectionFinder(new ConstraintSectionFinder(valueType.getSectionFinder()));
 
-		childrenTypes.add(new UnchangedType());
 		childrenTypes.add(nameType);
 		childrenTypes.add(timeStampType);
 		childrenTypes.add(valueType);

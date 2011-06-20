@@ -112,9 +112,11 @@ public class TestcaseTableLine extends TableLine {
 				}// sectionizing finds a choiceValue, if illegal number is
 					// entered
 				catch (NumberFormatException e) {
-					// TODO clear old message
-					KnowWEUtils.clearMessages(article.getWeb(), article.getTitle(),
-							valueSec.getID(), KDOMError.class);
+					// on sectionizing an invalid AnswerRef was found.
+					// replace message...
+					KnowWEUtils.clearMessages(article,
+							Sections.findSuccessor(valueSec, CellAnswerRef.class));
+
 					KnowWEUtils.storeSingleMessage(article, valueSec, getClass(), KDOMError.class,
 							new InvalidNumberError(valueString));
 					continue;

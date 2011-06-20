@@ -53,7 +53,7 @@ public class ValueType extends AbstractType {
 		aRef.setCustomRenderer(DefaultTextRenderer.getInstance());
 		addChildType(aRef);
 
-		childrenTypes.add(new UnchangedType());
+		addChildType(new UnchangedType());
 
 		aRef.setSectionFinder(new SectionFinder() {
 
