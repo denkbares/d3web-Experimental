@@ -1,0 +1,28 @@
+!!! Main article of the Hernia dialog
+
+! Notes
+* Markup for Popup references and PDFs and automated-filled-in-grids?
+* JOBA: Bug in QuickI rendering questionnaires?! Startfragebögen def.
+* JOBA: [info] questions = zero choice?
+
+
+\\
+!!! Knowledge base / dialog
+The dialog is defined distributed over the following articles:\\
+\\
+[Hernia Terminology]\\
+[Hernia Properties]\\
+[Hernia Resources]\\
+[Hernia ImageMap]\\
+[Hernia Popups]\\
+\\
+
+%%knowledgebase 
+HerniaDialog
+@Comment: EuraHS Hernienregister Stand Juni 2011
+@uses: Hernia
+/%
+
+\\
+[{KnowWEPlugin renderKnowledge}]
+
