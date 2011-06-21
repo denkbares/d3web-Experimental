@@ -26,7 +26,7 @@ public class PredefinedTermWarning extends KDOMWarning {
 
 	@Override
 	public String getVerbalization() {
-		return "This is a predefined term and concurrent definitions have been created!";
+		return "This is a predefined term. Concurrent definitions are existing but will be ignored!";
 	}
 
 }

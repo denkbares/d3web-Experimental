@@ -166,45 +166,21 @@ public class IncrementalCompiler implements EventListener {
 			}
 		}
 
-		/*
-		 * BEGIN The following is not part of the original algorithm. It helps
-		 * to get along with predefined terms, that are constantly valid in the
-		 * system (even if user adds concurrent definitions for this term)
-		 */
-		// now check all (potentially) destroyed knowledge slice, whether they
-		// might still be valid due to predefined terms
-		Iterator<Section<? extends KnowledgeUnit>> removeKnowledgeUnitIterator = this.knowledgeSlicesToRemove.iterator();
-		while (removeKnowledgeUnitIterator.hasNext()) {
-			Section<? extends KnowledgeUnit> section = removeKnowledgeUnitIterator.next();
-			Collection<Section<TermReference>> refs = section.get().getAllReferencesOfKnowledgeUnit(
-					section);
-			boolean valid = true;
-			for (Section<TermReference> ref : refs) {
-				if (!terminology.isValid(ref.get().getTermIdentifier(ref))) {
-					// compilation unit definitely invalid (stays in list)
-					valid = false;
-				}
-
-			}
-			if (valid) {
-				removeKnowledgeUnitIterator.remove();
-			}
-		}
-		/*
-		 * END
-		 */
-
 		// run hazard-filter filtering knowledge being inserted and removed
 		// right afterwards
 		hazardFilter(potentiallyNewKnowledgeSlices, knowledgeSlicesToRemove);
 
 		// finally create knowledge
 		for (Section<? extends KnowledgeUnit> section : potentiallyNewKnowledgeSlices) {
+			// System.out.println("Inserting Knowledge Slice: " +
+			// section.toString());
 			section.get().insertIntoRepository(section);
 		}
 
 		// and remove knowledge
 		for (Section<? extends KnowledgeUnit> section : knowledgeSlicesToRemove) {
+			// System.out.println("Deleting Knowledge Slice: " +
+			// section.toString());
 			section.get().deleteFromRepository(section);
 		}
 
