@@ -24,6 +24,24 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="SetFindingAction">
+		<parameter id="class" value="de.d3web.knowwe.action.SetFindingAction" />
+		<parameter id="name" value="SetFindingAction" />
+		<parameter id="description" value="Action SetFindingAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="RetractFindingAction">
+		<parameter id="class" value="de.d3web.knowwe.action.RetractFindingAction" />
+		<parameter id="name" value="RetractFindingAction" />
+		<parameter id="description" value="Action RetractFindingAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Annotation">
 		<parameter id="class" value="de.d3web.knowwe.type.Annotation" />

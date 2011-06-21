@@ -19,7 +19,6 @@
 package de.d3web.knowwe.action;
 
 import java.io.IOException;
-import java.util.Map;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Question;
@@ -62,8 +61,6 @@ public class AnnotationAction extends AbstractAction {
 
 	private String perform(UserActionContext context) {
 
-		Map<String, String> parameterMap = context.getParameters();
-
 		String namespace = context.getParameter(KnowWEAttributes.SEMANO_NAMESPACE);
 		String termName = context.getParameter(KnowWEAttributes.SEMANO_TERM_NAME);
 		String user = context.getParameter(KnowWEAttributes.USER);
@@ -97,7 +94,7 @@ public class AnnotationAction extends AbstractAction {
 
 		if (session == null) {
 			session = D3webUtils.getFirstSession(context.getWeb(),
-					context.getUserName(), context.getTopic());
+					context.getUserName(), context.getTopic(), id);
 		}
 
 		TerminologyObject obj = session.getKnowledgeBase().getManager().search(id);

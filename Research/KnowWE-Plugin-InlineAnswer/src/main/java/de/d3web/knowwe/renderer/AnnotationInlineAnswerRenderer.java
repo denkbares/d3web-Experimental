@@ -79,11 +79,9 @@ public class AnnotationInlineAnswerRenderer extends KnowWEDomRenderer {
 		String title = sec.getTitle();
 		D3webKnowledgeHandler repHandler = D3webModule.getKnowledgeRepresentationHandler(web);
 		KnowledgeBase service = repHandler.getKB(title);
-		// TODO Use a KB with a question of the given id in it!
-		// Currently gets the first KB 06.2011 Johannes
 		String name = service.getName();
 		if (name == null) {
-			KnowledgeBase base = D3webUtils.getFirstKnowledgeBase(web);
+			KnowledgeBase base = D3webUtils.getFirstKnowledgeBase(web, question);
 			if (base != null)
 				service = base;
 		}
@@ -126,5 +124,7 @@ public class AnnotationInlineAnswerRenderer extends KnowWEDomRenderer {
 		}
 		return null;
 	}
+
+
 
 }

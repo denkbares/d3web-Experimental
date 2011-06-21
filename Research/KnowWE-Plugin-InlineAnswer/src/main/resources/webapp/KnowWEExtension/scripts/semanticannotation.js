@@ -276,12 +276,12 @@ KNOWWE.plugin.semanticannotation.rendering = function() {
         
         send : function( url, values ) {
         	
-         	var act = 'SetSingleFindingAction';
+         	var act = 'SetFindingAction';
         	if ( url.ValueIDS != null ) {
         		url.ValueID = url.ValueIDS;
         		url.TermName = undefined; 
         		if ( url.ValueIDS == '') {
-        			act = 'RetractSingleFindingAction';
+        			act = 'RetractFindingAction';
         		}
         		
         	}
