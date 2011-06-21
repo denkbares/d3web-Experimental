@@ -18,14 +18,8 @@
  */
 package de.d3web.knowwe.type;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
+import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 
 /**
@@ -35,22 +29,9 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
  */
 public class AnnotationMapSign extends AbstractType {
 
-	public static class AnnotationMapSignSectionFinder implements SectionFinder {
-
-		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
-			List<SectionFinderResult> result = new ArrayList<SectionFinderResult>();
-			int index = text.lastIndexOf("<=>");
-			if (index >= 0) {
-				result.add(new SectionFinderResult(index, index + 3));
-			}
-			return result;
-		}
-	}
-
 	@Override
 	protected void init() {
-		this.sectionFinder = new AnnotationMapSignSectionFinder();
+		this.sectionFinder = new RegexSectionFinder("<=>");
 	}
 
 }

@@ -18,17 +18,8 @@
  */
 package de.d3web.knowwe.type;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.type.AnonymousType;
 
 
@@ -42,29 +33,11 @@ import de.d3web.we.kdom.type.AnonymousType;
 public class AnnotationProperty extends AbstractType {
 
 	public AnnotationProperty() {
-		this.sectionFinder = new AnnotationPropertySectionFinder();
+		this.sectionFinder = new RegexSectionFinder("[(\\w:)?\\w]*::");
 		AnonymousType at = new AnonymousType("PropertyDelimiter");
 		at.setSectionFinder(new RegexSectionFinder("::"));
 		this.childrenTypes.add(at);
 		this.childrenTypes.add(new AnnotationPropertyName());
-	}
-
-	public static class AnnotationPropertySectionFinder implements SectionFinder {
-
-		private final String PATTERN = "[(\\w:)?\\w]*::";
-
-		@Override
-		public List<SectionFinderResult> lookForSections(String text,
-				Section<?> father, Type type) {
-			ArrayList<SectionFinderResult> result = new ArrayList<SectionFinderResult>();
-			Pattern p = Pattern.compile(PATTERN);
-			Matcher m = p.matcher(text);
-			while (m.find()) {
-				result.add(new SectionFinderResult(m.start(), m.end()));
-			}
-			return result;
-		}
-
 	}
 
 }

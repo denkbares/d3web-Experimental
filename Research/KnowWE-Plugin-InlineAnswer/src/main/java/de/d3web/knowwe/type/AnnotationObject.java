@@ -19,7 +19,7 @@
 package de.d3web.knowwe.type;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
+import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 
 
 /**
@@ -33,12 +33,7 @@ public class AnnotationObject extends AbstractType {
 	public void init() {
 		this.childrenTypes.add(new AnnotationProperty());
 		this.childrenTypes.add(new SimpleAnnotation());
-		this.sectionFinder = new AllTextSectionFinder();
-	}
-
-	@Override
-	public String getName() {
-		return this.getClass().getName();
+		this.sectionFinder = new AllTextFinderTrimmed();
 	}
 
 }
