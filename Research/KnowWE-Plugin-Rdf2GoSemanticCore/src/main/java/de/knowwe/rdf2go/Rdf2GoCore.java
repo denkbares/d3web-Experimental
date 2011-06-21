@@ -33,11 +33,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -83,11 +83,14 @@ public class Rdf2GoCore implements EventListener {
 			+ "OwlDownload.jsp#";
 
 	public static final URI HASTAG = Rdf2GoCore.getInstance().createURI(basens, "hasTag");
-	private static final URI HASTOPIC = Rdf2GoCore.getInstance().createURI(basens, "hasTopic");
+	private static final URI HASTOPIC = Rdf2GoCore.getInstance().createURI(basens,
+			"hasTopic");
 	private static final URI NARYPROPERTY = Rdf2GoCore.getInstance().createURI(basens,
 			"NaryProperty");
-	private static final URI TEXTORIGIN = Rdf2GoCore.getInstance().createURI(basens, "TextOrigin");
-	private static final URI HASNODE = Rdf2GoCore.getInstance().createURI(basens, "hasNode");
+	private static final URI TEXTORIGIN = Rdf2GoCore.getInstance().createURI(basens,
+			"TextOrigin");
+	private static final URI HASNODE = Rdf2GoCore.getInstance().createURI(basens,
+			"hasNode");
 
 	private static final String JENA = "jena";
 	private static final String BIGOWLIM = "bigowlim";
@@ -106,6 +109,7 @@ public class Rdf2GoCore implements EventListener {
 	private Map<String, String> namespaces;
 	private List<Statement> addCache;
 	private List<Statement> removeCache;
+	Properties properties = new Properties();
 
 	Map<String, WeakHashMap<Section<? extends Type>, List<Statement>>> getStatementCache() {
 		return statementcache;
@@ -145,17 +149,8 @@ public class Rdf2GoCore implements EventListener {
 	 * @throws ModelRuntimeException
 	 */
 	public void initModel() throws ModelRuntimeException, ReasoningNotSupportedException {
-		Properties properties = new Properties();
-		String path = KnowWEEnvironment.getInstance().getKnowWEExtensionPath();
-		try {
-			properties.load(new FileInputStream(path + File.separatorChar
-					+ "model.properties"));
-		}
-		catch (IOException e) {
-			// this case happens on junit-tests
-			properties.put("model", SESAME);
-			properties.put("reasoning", RDFS_REASONING);
-		}
+
+		readProperties();
 
 		String useModel = properties.getProperty("model").toLowerCase();
 		String useReasoning = properties.getProperty("reasoning").toLowerCase();
@@ -203,6 +198,19 @@ public class Rdf2GoCore implements EventListener {
 
 	}
 
+	private void readProperties() {
+		String path = KnowWEEnvironment.getInstance().getKnowWEExtensionPath();
+		try {
+			properties.load(new FileInputStream(path + File.separatorChar
+					+ "model.properties"));
+		}
+		catch (IOException e) {
+			// this case happens on junit-tests
+			properties.put("model", SESAME);
+			properties.put("reasoning", RDFS_REASONING);
+		}
+	}
+
 	/**
 	 * sets the default namespaces
 	 */
@@ -227,8 +235,10 @@ public class Rdf2GoCore implements EventListener {
 	/**
 	 * add a namespace to the model
 	 * 
-	 * @param sh prefix
-	 * @param ns url
+	 * @param sh
+	 *            prefix
+	 * @param ns
+	 *            url
 	 */
 	public void addNamespace(String sh, String ns) {
 		namespaces.put(sh, ns);
@@ -329,7 +339,7 @@ public class Rdf2GoCore implements EventListener {
 	private void removeStatementsFromCache(List<Statement> list) {
 
 		String key = "REMOVE: ";
-		//logStatements(list, key);
+		logStatements(list, key);
 
 		// model.removeAll(list.iterator());
 		removeCache.addAll(list);
@@ -337,7 +347,7 @@ public class Rdf2GoCore implements EventListener {
 
 	private void addStatementsToCache(List<Statement> list) {
 		String key = "INSERT: ";
-		 //logStatements(list, key);
+		logStatements(list, key);
 
 		// model.addAll(list.iterator());
 		addCache.addAll(list);
@@ -348,7 +358,8 @@ public class Rdf2GoCore implements EventListener {
 		for (Statement statement : list) {
 			buffy.append(statement.toString());
 		}
-		Logger.getLogger(this.getClass().getName()).log(Level.INFO, key + buffy.toString());
+		Logger.getLogger(this.getClass().getName()).log(Level.INFO,
+				key + buffy.toString());
 	}
 
 	public URI createURI(String value) {
@@ -383,7 +394,8 @@ public class Rdf2GoCore implements EventListener {
 		if (tablemode) {
 			result += KnowWEUtils.maskHTML("<table>");
 			for (String var : l) {
-				result += KnowWEUtils.maskHTML("<th>") + var + KnowWEUtils.maskHTML("</th>");
+				result += KnowWEUtils.maskHTML("<th>") + var
+						+ KnowWEUtils.maskHTML("</th>");
 			}
 		}
 		else {
@@ -676,7 +688,8 @@ public class Rdf2GoCore implements EventListener {
 
 	@Override
 	public Collection<Class<? extends Event>> getEvents() {
-		ArrayList<Class<? extends Event>> events = new ArrayList<Class<? extends Event>>(1);
+		ArrayList<Class<? extends Event>> events = new ArrayList<Class<? extends Event>>(
+				1);
 		events.add(FullParseEvent.class);
 		events.add(ArticleUpdatesFinishedEvent.class);
 		return events;
@@ -684,8 +697,17 @@ public class Rdf2GoCore implements EventListener {
 
 	@Override
 	public void notify(Event event) {
+		// quick fix for initialization problem
+		readProperties();
 		if (event instanceof FullParseEvent) {
-			getInstance().removeArticleStatementsRecursive(((FullParseEvent) event).getArticle());
+			if (properties.containsKey("compile")
+					&& properties.get("compile").equals("ignoreFullParse")) {
+				// do nothing on full-parse
+			}
+			else {
+				getInstance().removeArticleStatementsRecursive(
+						((FullParseEvent) event).getArticle());
+			}
 		}
 		if (event instanceof ArticleUpdatesFinishedEvent) {
 			getInstance().commit();
@@ -883,10 +905,13 @@ public class Rdf2GoCore implements EventListener {
 	 * Resource is of the right type if applicable (eg attachto RDF.TYPE
 	 * RDF.STATEMENT)
 	 * 
-	 * @param attachto The Resource that will be annotated bei the TO-Node
-	 * @param source The source section that should be used
-	 * @param io the ex-IntermediateOwlObject (now List<Statements> that should
-	 *        collect the statements
+	 * @param attachto
+	 *            The Resource that will be annotated bei the TO-Node
+	 * @param source
+	 *            The source section that should be used
+	 * @param io
+	 *            the ex-IntermediateOwlObject (now List<Statements> that should
+	 *            collect the statements
 	 */
 	public void attachTextOrigin(Resource attachto, Section source, List<Statement> io) {
 		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
