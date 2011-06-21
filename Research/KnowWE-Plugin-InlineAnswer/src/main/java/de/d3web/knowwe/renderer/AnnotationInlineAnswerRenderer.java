@@ -18,6 +18,9 @@
  */
 package de.d3web.knowwe.renderer;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.knowwe.type.AnnotatedString;
@@ -72,7 +75,10 @@ public class AnnotationInlineAnswerRenderer extends KnowWEDomRenderer {
 			text = Sections.findSuccessor(sec, AnnotatedString.class).getOriginalText();
 		}
 		catch (NullPointerException e) {
-			new StandardAnnotationRenderer().render(article, sec, user, string);
+			Logger.getLogger(
+					AnnotationInlineAnswerRenderer.class.getName()).
+					log(Level.INFO, "AnnotatedString not found");
+			//			new StandardAnnotationRenderer().render(article, sec, user, string);
 		}
 
 		String web = sec.getWeb();
@@ -88,12 +94,11 @@ public class AnnotationInlineAnswerRenderer extends KnowWEDomRenderer {
 
 		String middle = renderline(sec, user.getUserName(), question, text, service);
 
-		if (middle != null) {
+		if (middle != null)
 			string.append(middle);
-		}
-		else {
-			new StandardAnnotationRenderer().render(article, sec, user, string);
-		}
+		//		else {
+		//			new StandardAnnotationRenderer().render(article, sec, user, string);
+		//		}
 	}
 
 	private String renderline(Section sec, String user, String question,
