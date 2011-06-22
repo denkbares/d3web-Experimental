@@ -157,6 +157,7 @@ $(function() {
 				id: "sumPrint",
 				text: print,
 				click: function(){
+					$("#jqSummaryDialog").jqprint();
 				}
 			},
 			{

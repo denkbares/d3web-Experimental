@@ -95,6 +95,7 @@ public class JSCodeContainer implements ICodeContainer {
 		linkedBibs.add("jquery/jquery.typing.min.js");
 		linkedBibs.add("jquery/jquery.numeric.js");
 		linkedBibs.add("jquery/jquery.customFileInput.js");
+		linkedBibs.add("jquery/jquery.print.js");
 		linkedBibs.add("jqueryUI/jqueryUi-1.8.10.all.min.js");
 
 		// manage language mechanism

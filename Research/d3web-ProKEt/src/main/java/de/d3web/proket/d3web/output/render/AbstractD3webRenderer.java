@@ -169,10 +169,11 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 		TerminologyObject[] children = to.getChildren();
 		Blackboard bb = d3webSession.getBlackboard();
 		for (TerminologyObject child : children) {
-			if (D3webConnector.getInstance().getIndicationMode() == IndicationMode.HIDE_UNINDICATED
-					&& child instanceof QContainer && !isIndicated(child, bb)) {
-				continue;
-			}
+			// if (D3webConnector.getInstance().getIndicationMode() ==
+			// IndicationMode.HIDE_UNINDICATED
+			// && child instanceof QContainer && !isIndicated(child, bb)) {
+			// continue;
+			// }
 			// get the matching renderer
 			IQuestionD3webRenderer childRenderer = AbstractD3webRenderer.getRenderer(child);
 			// System.out.println(childRenderer);
