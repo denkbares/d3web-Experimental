@@ -1,0 +1,18 @@
+This is a small plugin containing the type InlineIndicationCondition,
+which is plugged to QuestionLine and QClass line in case the plugin is loaded.
+
+InlineIndicationCondition allows to prevent a Question or Questionnaire from
+being indicated, except another question is answered in the right way.
+
+Example:
+Questionnaire1 &only if: Please choose the database level = Level 2 &
+- Question1
+-- Answer1
+-- Answer2
+
+
+Questionnaire2
+- Question2 &only if: Question1 = Answer2&
+
+Questionnaire3 &only if: Question1 = Answer1&
+- Question3

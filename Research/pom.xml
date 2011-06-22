@@ -176,6 +176,7 @@
 		<module>KnowWE-Plugin-IncrementalCompiler</module>
 		<module>KnowWE-Plugin-IncrementalCompilerTest</module>
 		<module>KnowWE-Plugin-QuickEdit</module>
+		<module>KnowWE-Plugin-InlineIndication</module>
 	</modules>
 	<repositories>
 		<repository>
