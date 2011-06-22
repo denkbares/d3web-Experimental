@@ -27,14 +27,14 @@ import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.tools.ToolMenuDecoratingRenderer;
 import de.knowwe.compile.object.IncrementalTermReference;
 
-public class IRITermReference extends IncrementalTermReference<String> {
+public class IRITermRef extends IncrementalTermReference<String> {
 
 	@SuppressWarnings("unchecked")
-	final KnowWEDomRenderer<IRITermReference> REF_RENDERER =
-			new ToolMenuDecoratingRenderer<IRITermReference>(new StyleRenderer(
+	final KnowWEDomRenderer<IRITermRef> REF_RENDERER =
+			new ToolMenuDecoratingRenderer<IRITermRef>(new StyleRenderer(
 					"color:rgb(25, 180, 120)"));
 
-	public IRITermReference() {
+	public IRITermRef() {
 		super(String.class);
 		this.setCustomRenderer(REF_RENDERER);
 	}

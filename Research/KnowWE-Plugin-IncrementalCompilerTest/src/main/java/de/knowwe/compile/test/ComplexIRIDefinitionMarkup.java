@@ -39,7 +39,6 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinderSingle;
 import de.d3web.we.utils.SplitUtility;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.IncrementalTermDefinition;
-import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -88,9 +87,8 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 
 	}
 
-	class Predicate extends IncrementalTermReference<String> {
+	class Predicate extends IRITermRef {
 		public Predicate() {
-			super(String.class);
 			this.sectionFinder = new RegexSectionFinderSingle("\\b([^\\s]*)::",
 					Pattern.DOTALL, 1);
 		}
@@ -106,9 +104,8 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 		}
 	}
 
-	class Object extends IncrementalTermReference<String> {
+	class Object extends IRITermRef {
 		public Object() {
-			super(String.class);
 			this.sectionFinder = new RegexSectionFinderSingle("::\\s(.*)",
 					Pattern.DOTALL, 1);
 		}

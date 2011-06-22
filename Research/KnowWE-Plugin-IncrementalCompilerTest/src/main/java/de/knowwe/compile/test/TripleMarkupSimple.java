@@ -50,7 +50,7 @@ public class TripleMarkupSimple extends AbstractType implements KnowledgeUnit<Tr
 		this.addChildType(new SimpleTurtleObject());
 	}
 
-	class SimpleTurtlePredicate extends IRITermReference {
+	class SimpleTurtlePredicate extends IRITermRef {
 		public SimpleTurtlePredicate() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new RegexSectionFinder("\\b([^\\s]*)::", Pattern.DOTALL, 1));
@@ -60,7 +60,7 @@ public class TripleMarkupSimple extends AbstractType implements KnowledgeUnit<Tr
 		}
 	}
 
-	class SimpleTurtleSubject extends IRITermReference {
+	class SimpleTurtleSubject extends IRITermRef {
 		public SimpleTurtleSubject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new AllTextFinderTrimmed());
@@ -70,7 +70,7 @@ public class TripleMarkupSimple extends AbstractType implements KnowledgeUnit<Tr
 
 	}
 
-	class SimpleTurtleObject extends IRITermReference {
+	class SimpleTurtleObject extends IRITermRef {
 		public SimpleTurtleObject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new RegexSectionFinder("::\\s(.*)", Pattern.DOTALL, 1));
