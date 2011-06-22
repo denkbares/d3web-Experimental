@@ -39,9 +39,9 @@ $(function() {
 		link = window.location.href.replace(window.location.search, "") + link;
 		
 		$.ajax({
-			type : "GET",
-			async : false,
-			url : link,
+			type: "GET",
+			async: false,
+			url: link,
 			success : function(html) {
 				if (html == "NLI") {
 					$("#jqLoginDialog").dialog("open");
@@ -65,14 +65,14 @@ $(function() {
 	$(function() {
 
 		var opts = {
-			autoOpen : false,
-			position : top,
-			modal : false,
-			width : 410,
-			height : 210,
-			minWidth : 410,
-			minHeight : 210,
-			buttons : [{
+			autoOpen: false,
+			position: top,
+			modal: false,
+			width: 410,
+			height: 210,
+			minWidth: 410,
+			minHeight: 210,
+			buttons: [{
 				id: "saveOK",
 				text: save,
 				click: function(){
@@ -103,14 +103,14 @@ $(function() {
 	$(function() {
 
 		var opts = {
-			autoOpen : false,
-			position : [ "left", "top" ],
-			modal : false,
-			width : 180,
-			height : 360,
-			minWidth : 180,
-			minHeight : 360,
-			buttons : [{
+			autoOpen: false,
+			position: [ "left", "top" ],
+			modal: false,
+			width: 180,
+			height: 360,
+			minWidth: 180,
+			minHeight: 360,
+			buttons: [{
 				id: "loadOK",
 				text: load,
 				click: function(){
@@ -146,14 +146,14 @@ $(function() {
 	$(function() {
 
 		var opts = {
-			autoOpen : false,
-			position : [ "center", "top" ],
-			modal : false,
-			width : 900,
-			height : 700,
-			minWidth : 900,
-			minHeight : 700,
-			buttons : [{
+			autoOpen: false,
+			position: [ "center", "top" ],
+			modal: false,
+			width: 900,
+			height: 700,
+			minWidth: 900,
+			minHeight: 700,
+			buttons: [{
 				id: "sumPrint",
 				text: print,
 				click: function(){
@@ -228,12 +228,12 @@ function initFunctionality() {
 	var head = $('[id=head]');
 	
 	if (headerHeight == -1) {
-		headerHeight = head.height() + 5;
+		headerHeight = getHeaderHeight(head) - 15;
 	}
 	content.css("margin-top", headerHeight + "px");
 	
 	$(window).resize(function() {
-		headerHeight = head.height() + 32;
+		headerHeight = getHeaderHeight(head) + 9;
 		content.css("margin-top", headerHeight + "px");
 	});
 	
@@ -310,6 +310,10 @@ function initFunctionality() {
 	$('#summary').unbind('click').click(function(event){
 		$("#jqSummaryDialog").dialog("open");
 	});
+}
+
+function getHeaderHeight(head) {
+	return head.height() + parseInt(head.css("padding-top")) + parseInt(head.css("padding-bottom"));
 }
 
 function d3web_storeQuestionText(textInput) {

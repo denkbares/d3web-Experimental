@@ -18,7 +18,6 @@ body,table,div {
 #head, #foot {
 	clear: both;
 	width: 99%;
-	padding: 5px;
 	min-height: 25px;
 	/* gradient background color */
 	background-color: #ccc; /* fallback (Opera, IE) */
@@ -34,6 +33,7 @@ body,table,div {
 }
 
 #foot {
+	padding: 5px;
 	margin-top: 10px;
 	padding-top: 10px;
 }

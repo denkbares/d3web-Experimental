@@ -1,3 +1,4 @@
+<div style="display:none">
 <div id="jqSummaryDialog" title="Zusammenfassung">
 
 	$if(sumQuestionnaire)$
@@ -5,4 +6,5 @@
 		$sumQuestionnaire$
 	</div> 
 	$endif$	
+</div>
 </div>
