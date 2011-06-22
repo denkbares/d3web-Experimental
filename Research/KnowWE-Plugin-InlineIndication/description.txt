@@ -5,7 +5,7 @@ InlineIndicationCondition allows to prevent a Question or Questionnaire from
 being indicated, except another question is answered in the right way.
 
 Example:
-Questionnaire1 &only if: Please choose the database level = Level 2 &
+Questionnaire1
 - Question1
 -- Answer1
 -- Answer2
