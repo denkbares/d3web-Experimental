@@ -175,6 +175,7 @@
 		<module>KnowWE-Plugin-DiaFlux-Dialog</module>
 		<module>KnowWE-Plugin-IncrementalCompiler</module>
 		<module>KnowWE-Plugin-IncrementalCompilerTest</module>
+		<module>KnowWE-Plugin-QuickEdit</module>
 	</modules>
 	<repositories>
 		<repository>
