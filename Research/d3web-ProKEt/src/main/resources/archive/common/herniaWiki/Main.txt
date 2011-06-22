@@ -27,5 +27,7 @@ HerniaDialog
 /%
 
 \\
+!Defined Knowledge 
+
 [{KnowWEPlugin renderKnowledge}]
 
