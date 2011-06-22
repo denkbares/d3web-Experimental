@@ -33,11 +33,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.WeakHashMap;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -101,6 +101,8 @@ public class Rdf2GoCore implements EventListener {
 	public static final String ASK = "ask";
 	private static final String OWL_REASONING = "owl";
 	private static final String RDFS_REASONING = "rdfs";
+
+	private static final String IGNOREFULLPARSE = "ignoreFullParse";
 
 	private static Rdf2GoCore me;
 	private Model model;
@@ -208,6 +210,7 @@ public class Rdf2GoCore implements EventListener {
 			// this case happens on junit-tests
 			properties.put("model", SESAME);
 			properties.put("reasoning", RDFS_REASONING);
+			properties.put("compile", IGNOREFULLPARSE);
 		}
 	}
 
@@ -235,10 +238,8 @@ public class Rdf2GoCore implements EventListener {
 	/**
 	 * add a namespace to the model
 	 * 
-	 * @param sh
-	 *            prefix
-	 * @param ns
-	 *            url
+	 * @param sh prefix
+	 * @param ns url
 	 */
 	public void addNamespace(String sh, String ns) {
 		namespaces.put(sh, ns);
@@ -850,6 +851,7 @@ public class Rdf2GoCore implements EventListener {
 		if (includes.exists()) {
 			File[] files = includes.listFiles(new FilenameFilter() {
 
+				@Override
 				public boolean accept(File f, String s) {
 					return s.endsWith(".owl");
 				}
@@ -905,13 +907,10 @@ public class Rdf2GoCore implements EventListener {
 	 * Resource is of the right type if applicable (eg attachto RDF.TYPE
 	 * RDF.STATEMENT)
 	 * 
-	 * @param attachto
-	 *            The Resource that will be annotated bei the TO-Node
-	 * @param source
-	 *            The source section that should be used
-	 * @param io
-	 *            the ex-IntermediateOwlObject (now List<Statements> that should
-	 *            collect the statements
+	 * @param attachto The Resource that will be annotated bei the TO-Node
+	 * @param source The source section that should be used
+	 * @param io the ex-IntermediateOwlObject (now List<Statements> that should
+	 *        collect the statements
 	 */
 	public void attachTextOrigin(Resource attachto, Section source, List<Statement> io) {
 		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
