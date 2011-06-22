@@ -13,6 +13,7 @@ Questionnaire1
 
 Questionnaire2
 - Question2 &only if: Question1 = Answer2&
+- Question3
 
 Questionnaire3 &only if: Question1 = Answer1&
-- Question3
+- Question4
