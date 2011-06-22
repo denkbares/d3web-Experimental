@@ -1,14 +1,14 @@
 
+__[EuraHS Home|Main]__
 
-__[Home|Hernia Main]__
 
-
-* [Hernia Terminology]
-* [Hernia Properties]
-* [Hernia Resources]
-* [Hernia ImageMap]
-* [Hernia Popups]
+* [Terminology]
+* [Properties]
+* [Resources]
+* [ImageMap]
+* [Popups]
 \\
+[Leftmenu]
 
 [{KnowWEPlugin tagcloud}]
 

@@ -1,0 +1,30 @@
+%%Property
+HerniaDialog.unknownVisible = true
+
+@package: Hernia
+%
+
+%%Property
+Please choose the database level.init = Level 1
+
+@package: Hernia
+%
+
+%%Property
+Year of birth.date_format = yyyy
+Scheduled date of operation.date_format = dd.MM.yyyy
+Date of operation that caused the incisional hernia.date_format = dd.MM.yyyy OR MM.yyyy OR yyyy
+Date of the last repair.date_format = dd.MM.yyyy OR MM.yyyy OR yyyy
+Operation date.date_format = dd.MM.yyyy
+"Start of operation (first incision)".date_format = HH:mm:ss OR HH:mm
+"End of operation (last skin suture)".date_format = HH:mm:ss OR HH:mm
+Date of discharge.date_format = dd.MM.yyyy
+Hour of discharge.date_format = HH
+Date of death.date_format = dd.MM.yyyy
+Date of follow up.date_format = dd.MM.yyyy
+Date of diagnosis.date_format = dd.MM.yyyy
+Date of repair done.date_format = dd.MM.yyyy
+
+@package: Hernia
+%
+
