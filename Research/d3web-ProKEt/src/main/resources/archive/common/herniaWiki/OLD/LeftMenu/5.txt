@@ -1,5 +1,3 @@
-
-
 __[Home|Hernia Main]__
 
 
@@ -19,3 +17,6 @@ __[Home|Hernia Main]__
 
 [{KnowWEPlugin version}]
 
+%%tags
+Hernia
+%

@@ -1,6 +1,3 @@
-[{Image src='1.png' width='150px' height='..' align='left|center|right' style='..' class='..' }]
-
-
 !!! Main article of the Hernia dialog
 
 ! Notes

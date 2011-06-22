@@ -1,0 +1,10 @@
+__[Home|Hernia Main]__
+
+----
+[{KnowWEPlugin tagcloud}]
+----
+[{KnowWEPlugin tageditpanel}]
+----
+
+[{KnowWEPlugin version}]
+

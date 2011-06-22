@@ -1,5 +1,3 @@
-
-
 __[Home|Hernia Main]__
 
 
@@ -9,13 +7,11 @@ __[Home|Hernia Main]__
 * [Hernia ImageMap]
 * [Hernia Popups]
 \\
-
+----
 [{KnowWEPlugin tagcloud}]
-
+----
 [{KnowWEPlugin tageditpanel}]
-
-
-
+----
 
 [{KnowWEPlugin version}]
 
