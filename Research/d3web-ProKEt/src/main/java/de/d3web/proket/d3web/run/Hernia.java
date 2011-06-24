@@ -235,6 +235,7 @@ public class Hernia extends D3webDialog {
 		}
 	}
 
+
 	/**
 	 * Basic servlet method for displaying the dialog.
 	 * 

@@ -30,10 +30,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -86,6 +88,7 @@ import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
+import de.d3web.proket.d3web.output.render.IQuestionD3webRenderer;
 import de.d3web.proket.d3web.output.render.ImageHandler;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
@@ -380,6 +383,10 @@ public class D3webDialog extends HttpServlet {
 
 		Session sess = (Session) httpSession.getAttribute("d3webSession");
 
+		Set<InterviewObject> indicatedTOsBefore = new HashSet<InterviewObject>(
+				sess.getInterview().getInterviewAgenda().getCurrentlyActiveObjects());
+		List<Question> answeredQuestionsBefore = sess.getBlackboard().getAnsweredQuestions();
+
 		List<String> questions = new ArrayList<String>();
 		List<String> values = new ArrayList<String>();
 		getParameter(request, "ocq", "occhoice", questions, values);
@@ -402,6 +409,7 @@ public class D3webDialog extends HttpServlet {
 		if (!reqVal.equals("")
 				&& !checkReqVal(reqVal, sess, all)) {
 
+			writer.append("##missingfield##");
 			writer.append(reqVal);
 			return;
 		}
@@ -415,6 +423,56 @@ public class D3webDialog extends HttpServlet {
 		Session d3webSession = (Session) httpSession.getAttribute("d3webSession");
 		new SaveThread(folderPath, d3webSession).start();
 
+		// Rerender changed Questions and Quesitonnaires
+		Set<InterviewObject> indicatedTOsAfter = new HashSet<InterviewObject>(
+				sess.getInterview().getInterviewAgenda().getCurrentlyActiveObjects());
+
+		Set<TerminologyObject> diff = new HashSet<TerminologyObject>();
+		getDiff(indicatedTOsBefore, indicatedTOsAfter, diff);
+		getDiff(indicatedTOsAfter, indicatedTOsBefore, diff);
+
+		List<Question> answeredQuestionsAfter = sess.getBlackboard().getAnsweredQuestions();
+		answeredQuestionsAfter.removeAll(answeredQuestionsBefore);
+		System.out.println(answeredQuestionsAfter);
+		diff.addAll(answeredQuestionsAfter);
+
+		ContainerCollection cc = new ContainerCollection();
+		for (TerminologyObject to : diff) {
+			IQuestionD3webRenderer toRenderer = AbstractD3webRenderer.getRenderer(to);
+			writer.append("##replaceid##" + toRenderer.createID(to));
+			writer.append("##replacecontent##");
+			writer.append(toRenderer.renderTerminologyObject(cc, to, to instanceof QContainer
+					? d3wcon.getKb().getRootQASet()
+					: getQuestionnaireAncestor(to)));
+		}
+
+	}
+
+	private void getDiff(Set<InterviewObject> set1, Set<InterviewObject> set2, Set<TerminologyObject> diff) {
+		for (InterviewObject io : set1) {
+			if (!set2.contains(io)) {
+				if (io instanceof Question) {
+					diff.add(getQuestionnaireAncestor(io));
+				}
+				else {
+					diff.add(io);
+				}
+			}
+		}
+	}
+
+	private TerminologyObject getQuestionnaireAncestor(TerminologyObject to) {
+		if (to.getParents() != null) {
+			for (TerminologyObject parent : to.getParents()) {
+				if (parent instanceof QContainer) {
+					return parent;
+				}
+				else {
+					return getQuestionnaireAncestor(parent);
+				}
+			}
+		}
+		return null;
 	}
 
 	protected class SaveThread extends Thread {

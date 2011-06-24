@@ -29,6 +29,7 @@ var numStore = new Object();
 var headerHeight = -1;
 
 
+
 $(function() {
 	
 	// if login should be enabled: set in minimal XML and JSCodeContainer
@@ -368,7 +369,6 @@ function d3web_addFacts() {
 	
 	i = 0;
 	for (var qid in ocStore) {
-		var store = ocStore[qid];
 		link = link.set("ocq" + i, qid).set("occhoice" + i, ocStore[qid]);
 		i++;
 	}
@@ -397,16 +397,23 @@ function d3web_addFacts() {
 		type : "GET",
 		url : link,
 		success : function(html) {
-			if (html !== "") {
+			if (html.startsWith("##missingfield##")) {
 				// Error message and reset session so user can provide input
 				// first
-				var errMsg = "Das Feld '" + html
+				var errMsg = "Das Feld '" + html.replace("##missingfield##", "")
 						+ "' muss immer zuerst ausgefüllt werden!";
 				alert(errMsg);
 				d3web_resetSession();
-			} else {
-				d3web_show();
+			} else if (html.startsWith("##replaceid##")) {
+				var updateArray = html.split(/##replaceid##|##replacecontent##/);
+				for (var i = 1; i < updateArray.length - 1; i+=2) {
+					$("#" + updateArray[i]).replaceWith(updateArray[i + 1]);
+				}
+				setup();
+				initFunctionality();
+//				d3web_show();
 			}
+			
 		}
 	});
 }

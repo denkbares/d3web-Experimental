@@ -167,7 +167,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
 		// for each of the child elements
 		TerminologyObject[] children = to.getChildren();
-		Blackboard bb = d3webSession.getBlackboard();
+		// Blackboard bb = d3webSession.getBlackboard();
 		for (TerminologyObject child : children) {
 			// if (D3webConnector.getInstance().getIndicationMode() ==
 			// IndicationMode.HIDE_UNINDICATED

@@ -71,7 +71,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 				super.getTemplateName("ImageQuestionD3web"), "html");
 
 		// set some basic properties
-		st.setAttribute("fullId", "q_" + to.getName().replace(" ", "_"));
+		st.setAttribute("fullId", createID(to));
 		st.setAttribute("title", to.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
@@ -238,6 +238,11 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 			}
 		}
 		return bui.toString();
+	}
+
+	@Override
+	public String createID(TerminologyObject to) {
+		return "q_" + to.getName().replace(" ", "_");
 	}
 
 }

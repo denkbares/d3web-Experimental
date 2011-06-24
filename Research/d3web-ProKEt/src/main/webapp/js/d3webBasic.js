@@ -87,6 +87,24 @@ function scroll_up() {
 }
 
 /**
+ * Add startsWith() function to String.
+ */
+String.prototype.startsWith = function(str) 
+	{return (this.match("^"+str)==str);};
+
+/**
+ * Add endsWith() function to String.
+ */
+String.prototype.endsWith = function(str) 
+	{return (this.match(str+"$")==str);};
+
+/**
+ * Add trim() function to String.
+ */
+String.prototype.trim = function(){return 
+	(this.replace(/^[\s\xA0]+/, "").replace(/[\s\xA0]+$/, ""));};
+
+/**
  * Show everything
  */
 function show_everything() {
@@ -387,7 +405,7 @@ function mark_current() {
 		// get the next first question 
 		temp.filter(":first").each(function() {
 			
-			var id = $(this).attr('id');
+			// var id = $(this).attr('id');
 			
 			// if it's not the currently active question
 			if ($(this).attr('class').indexOf("-c") == -1) {
@@ -809,7 +827,7 @@ function alternating_colors() {
  */
 function checkAnswers() {
 	$(function() {
-		var pos = 0;
+		// var pos = 0;
 		
 		// for each visible answer element remove 
 		// coloring scheme
@@ -1134,7 +1152,7 @@ function flat_button_toggle(id) {
 	}
 	
 	// now the corresponding fact needs to be set in the kb
-	var answer = "";
+	//var answer = "";
 	
 	// if we have a oc or mc question, we need the text
 	// such questions don't have "type" attributes
@@ -1177,7 +1195,7 @@ function class_deselect(target) {
  * @param e the clicked-evebt
  */
 function show_clarification_popup(question_id, e) {
-	var counter = 0;
+	//var counter = 0;
 
 	if (lastPopup != question_id) {
 		var divHTML = '<b>Weitere Optionen:</b><br />';
@@ -1223,7 +1241,7 @@ function show_clarification_popup(question_id, e) {
 				var height = popup.height();
 				var width = popup.width();
 
-				var scrOfY = 0;
+			//	var scrOfY = 0;
 				if (typeof (window.pageYOffset) == 'number') {
 					// Netscape compliant
 					yOffset = window.pageYOffset;

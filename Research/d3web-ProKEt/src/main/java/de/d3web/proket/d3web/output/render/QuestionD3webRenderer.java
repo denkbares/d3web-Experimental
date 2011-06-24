@@ -74,7 +74,7 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 				super.getTemplateName("Question"), "html");
 
 		// set some basic properties
-		st.setAttribute("fullId", "q_" + to.getName().replace(" ", "_"));
+		st.setAttribute("fullId", createID(to));
 		st.setAttribute("title", to.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
@@ -175,6 +175,11 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 		super.makeTables(to, parent, cc, sb);
 
 		return sb.toString();
+	}
+
+	@Override
+	public String createID(TerminologyObject to) {
+		return "q_" + to.getName().replace(" ", "_");
 	}
 
 }

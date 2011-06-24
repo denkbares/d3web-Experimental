@@ -58,7 +58,8 @@ public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements
 		StringTemplate st = TemplateUtils.getStringTemplate(
 				super.getTemplateName("Questionnaire"), "html");
 
-		st.setAttribute("fullId", to.getName().replace(" ", "_"));
+		st.setAttribute("fullId", createID(to));// to.getName().replace(" ",
+												// "_"));
 		st.setAttribute("title", to.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
@@ -89,6 +90,11 @@ public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements
 		super.makeTables(to, parent, cc, sb);
 
 		return sb.toString();
+	}
+
+	@Override
+	public String createID(TerminologyObject to) {
+		return "qc_" + to.getName().replace(" ", "_");
 	}
 
 }

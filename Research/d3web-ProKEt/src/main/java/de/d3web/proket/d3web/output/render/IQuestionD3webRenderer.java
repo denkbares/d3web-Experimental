@@ -41,4 +41,5 @@ public interface IQuestionD3webRenderer {
 	public String renderTerminologyObject(ContainerCollection cc, TerminologyObject to,
 			TerminologyObject parent);
 
+	public String createID(TerminologyObject to);
 }
