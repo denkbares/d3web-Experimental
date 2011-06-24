@@ -254,6 +254,7 @@ function initFunctionality() {
 	 * i.e., a v*/
 	$('[type=checkbox]').unbind('click').click(function() {
 		d3web_storeQuestionMC($(this));
+		d3web_addFacts($(this));
 	});
 
 	$('[id^=ok-]').unbind('click').click(function(event) {
@@ -416,6 +417,12 @@ function d3web_addFacts() {
 			
 		}
 	});
+	
+	 mcStore = new Object();
+	 ocStore = new Object();
+	 dateStore = new Object();
+	 textStore = new Object();
+	 numStore = new Object();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -438,6 +445,7 @@ function d3web_IQClicked(id) {
 	selected.attr('checked', false);
 	deselected.attr('checked', true);
 	d3web_storeQuestionMC(target);
+	d3web_addFacts($(this));
 }
 
 /**

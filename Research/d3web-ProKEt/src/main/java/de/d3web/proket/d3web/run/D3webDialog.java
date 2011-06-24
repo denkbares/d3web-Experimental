@@ -57,6 +57,7 @@ import de.d3web.core.knowledge.Indication.State;
 import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.knowledge.Resource;
 import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.QContainer;
@@ -432,8 +433,14 @@ public class D3webDialog extends HttpServlet {
 		getDiff(indicatedTOsAfter, indicatedTOsBefore, diff);
 
 		List<Question> answeredQuestionsAfter = sess.getBlackboard().getAnsweredQuestions();
+		for (TerminologyObject to : sess.getBlackboard().getValuedObjects()) {
+			Fact mergedFact = sess.getBlackboard().getValueFact((ValueObject) to);
+			if (mergedFact != null && UndefinedValue.isUndefinedValue(mergedFact.getValue())) {
+				diff.add(to);
+			}
+		}
 		answeredQuestionsAfter.removeAll(answeredQuestionsBefore);
-		System.out.println(answeredQuestionsAfter);
+		// System.out.println(answeredQuestionsAfter);
 		diff.addAll(answeredQuestionsAfter);
 
 		ContainerCollection cc = new ContainerCollection();
