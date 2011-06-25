@@ -16,7 +16,6 @@ import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SingleChildConstraint;
 import de.d3web.we.kdom.objects.KnowWETerm;
-import de.d3web.we.kdom.objects.StringDefinition;
 import de.d3web.we.kdom.renderer.EditSectionRenderer;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.message.InvalidNumberError;
@@ -30,14 +29,16 @@ import de.d3web.we.utils.SplitUtility;
 import de.d3web.we.utils.StringFragment;
 import de.knowwe.hermes.TimeEvent;
 import de.knowwe.hermes.TimeStamp;
-import de.knowwe.hermes.kdom.conceptMining.LocationOccurrence;
-import de.knowwe.hermes.kdom.conceptMining.PersonOccurrence;
 import de.knowwe.hermes.kdom.event.renderer.TimeEventDateRenderer;
 import de.knowwe.hermes.kdom.event.renderer.TimeEventDescRenderer;
 import de.knowwe.hermes.kdom.event.renderer.TimeEventImpRenderer;
 import de.knowwe.hermes.kdom.event.renderer.TimeEventRenderer;
 import de.knowwe.hermes.kdom.event.renderer.TimeEventSrcRenderer;
 import de.knowwe.hermes.kdom.event.renderer.TimeEventTitleRenderer;
+import de.knowwe.kdom.turtle.TurtleMarkup;
+import de.knowwe.termObject.AbstractIRITermDefinition;
+import de.knowwe.termObject.IRIEntityType;
+import de.knowwe.termObject.IRIEntityType.IRIDeclarationType;
 
 public class TimeEventNew extends AbstractType {
 
@@ -114,7 +115,7 @@ public class TimeEventNew extends AbstractType {
 				s.getID(), s.getArticle().getTitle());
 	}
 
-	public static class TitleType extends StringDefinition {
+	public static class TitleType extends AbstractIRITermDefinition {
 
 		Pattern newline = Pattern.compile("\\r?\\n");
 
@@ -134,10 +135,12 @@ public class TimeEventNew extends AbstractType {
 					if (matcher.find()) { // if there is a linebreak in
 						// the passed fragment take
 						// everything before
-						return SectionFinderResult.createSingleItemResultList(0, matcher.start());
+						return SectionFinderResult.createSingleItemResultList(0,
+								matcher.start());
 					}
 					else { // take everything
-						return new AllTextFinderTrimmed().lookForSections(text, father, type);
+						return new AllTextFinderTrimmed().lookForSections(text, father,
+								type);
 					}
 
 				}
@@ -147,9 +150,16 @@ public class TimeEventNew extends AbstractType {
 		}
 
 		@Override
-		public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
-			return s.getOriginalText();
+		public String getTermIdentifier(Section<? extends KnowWETerm<IRIEntityType>> s) {
+			return s.getOriginalText().trim();
 		}
+
+		@Override
+		protected IRIDeclarationType getIRIDeclarationType() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public static class DateType extends AbstractType {
@@ -269,7 +279,8 @@ public class TimeEventNew extends AbstractType {
 		}
 
 		public static Integer getImportance(Section<ImportanceType> s) {
-			String number = s.getOriginalText().replaceAll("\\(", "").replaceAll("\\)", "").trim();
+			String number = s.getOriginalText().replaceAll("\\(", "").replaceAll("\\)",
+					"").trim();
 			Integer i = null;
 			try {
 				i = Integer.parseInt(number);
@@ -304,13 +315,16 @@ public class TimeEventNew extends AbstractType {
 			// this.childrenTypes.add(semanticAnnotation);
 
 			// then search for un-annotated concepts
-			this.childrenTypes.add(new PersonOccurrence());
-			this.childrenTypes.add(new LocationOccurrence());
+			// this.childrenTypes.add(new PersonOccurrence());
+			// this.childrenTypes.add(new LocationOccurrence());
 
 			// renderer
 			this.setCustomRenderer(new TimeEventDescRenderer());
 
-			ConstraintSectionFinder f = new ConstraintSectionFinder(new AllTextFinderTrimmed());
+			this.addChildType(new TurtleMarkup());
+
+			ConstraintSectionFinder f = new ConstraintSectionFinder(
+					new AllTextFinderTrimmed());
 			f.addConstraint(SingleChildConstraint.getInstance());
 			this.sectionFinder = f;
 		}

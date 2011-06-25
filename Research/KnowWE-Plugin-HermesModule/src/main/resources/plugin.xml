@@ -165,6 +165,8 @@
 		-->
 	</extension>
 	
+	
+	<!-- Using TimeEventNew
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TimeEventType">
 		<parameter id="class"
@@ -177,15 +179,15 @@
 		<parameter id="script" value="Hermes.js" />
 		<parameter id="css" value="hermes.css" />
 	</extension>
-	
-		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+	-->
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TimeEventNew">
 		<parameter id="class"
 			value="de.knowwe.hermes.kdom.event.TimeEventNew" />
 		<parameter id="name" value="TimeEventNew" />
 		<parameter id="description" value="Type TimeEventNew" />
 		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="3" />
+		<parameter id="priority" value="2.5" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="Hermes.js" />
 		<parameter id="css" value="hermes.css" />
