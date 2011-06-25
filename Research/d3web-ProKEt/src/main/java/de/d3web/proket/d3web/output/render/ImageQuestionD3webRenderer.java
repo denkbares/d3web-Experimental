@@ -28,7 +28,6 @@ import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
-import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.interviewmanager.Form;
@@ -132,9 +131,9 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 		String areas = getChoiceAreas(width, height, to);
 		if (areas != null) st.setAttribute("areas", areas);
 
-		if (to instanceof QuestionMC) {
-			st.setAttribute("sendButton", "true");
-		}
+		// if (to instanceof QuestionMC) {
+		// st.setAttribute("sendButton", "true");
+		// }
 
 		// underneath="within" a rendered question, always answers are rendered
 		super.renderChoices(st, cc, to, parent);

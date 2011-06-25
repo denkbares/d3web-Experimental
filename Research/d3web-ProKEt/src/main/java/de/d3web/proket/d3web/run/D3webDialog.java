@@ -387,6 +387,8 @@ public class D3webDialog extends HttpServlet {
 		Set<InterviewObject> indicatedTOsBefore = new HashSet<InterviewObject>(
 				sess.getInterview().getInterviewAgenda().getCurrentlyActiveObjects());
 		List<Question> answeredQuestionsBefore = sess.getBlackboard().getAnsweredQuestions();
+		Set<TerminologyObject> unknownQuestionsBefore = new HashSet<TerminologyObject>();
+		getUnknownQuestions(sess, unknownQuestionsBefore);
 
 		List<String> questions = new ArrayList<String>();
 		List<String> values = new ArrayList<String>();
@@ -428,17 +430,19 @@ public class D3webDialog extends HttpServlet {
 		Set<InterviewObject> indicatedTOsAfter = new HashSet<InterviewObject>(
 				sess.getInterview().getInterviewAgenda().getCurrentlyActiveObjects());
 
+		Set<TerminologyObject> unknownQuestionsAfter = new HashSet<TerminologyObject>();
+		getUnknownQuestions(sess, unknownQuestionsAfter);
+
 		Set<TerminologyObject> diff = new HashSet<TerminologyObject>();
+		for (TerminologyObject to : unknownQuestionsBefore) {
+			if (!unknownQuestionsAfter.contains(to)) diff.add(to);
+		}
+
 		getDiff(indicatedTOsBefore, indicatedTOsAfter, diff);
 		getDiff(indicatedTOsAfter, indicatedTOsBefore, diff);
 
 		List<Question> answeredQuestionsAfter = sess.getBlackboard().getAnsweredQuestions();
-		for (TerminologyObject to : sess.getBlackboard().getValuedObjects()) {
-			Fact mergedFact = sess.getBlackboard().getValueFact((ValueObject) to);
-			if (mergedFact != null && UndefinedValue.isUndefinedValue(mergedFact.getValue())) {
-				diff.add(to);
-			}
-		}
+		getUnknownQuestions(sess, diff);
 		answeredQuestionsAfter.removeAll(answeredQuestionsBefore);
 		// System.out.println(answeredQuestionsAfter);
 		diff.addAll(answeredQuestionsAfter);
@@ -453,6 +457,15 @@ public class D3webDialog extends HttpServlet {
 					: getQuestionnaireAncestor(to)));
 		}
 
+	}
+
+	private void getUnknownQuestions(Session sess, Set<TerminologyObject> unknownQuestions) {
+		for (TerminologyObject to : sess.getBlackboard().getValuedObjects()) {
+			Fact mergedFact = sess.getBlackboard().getValueFact((ValueObject) to);
+			if (mergedFact != null && Unknown.assignedTo(mergedFact.getValue())) {
+				unknownQuestions.add(to);
+			}
+		}
 	}
 
 	private void getDiff(Set<InterviewObject> set1, Set<InterviewObject> set2, Set<TerminologyObject> diff) {
@@ -618,7 +631,7 @@ public class D3webDialog extends HttpServlet {
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.user", user);
 		props.put("mail.password", pw);
-		//props.put("mail.debug", "true");
+		// props.put("mail.debug", "true");
 
 		javax.mail.Session session = javax.mail.Session.getDefaultInstance(props,
 				new javax.mail.Authenticator() {
