@@ -215,8 +215,11 @@ $(function() {
 function initFunctionality() {
 
 	// check browser and warn if the wrong one is used
-	if (!(BrowserDetect.browser == "Chrome" || BrowserDetect.browser == "Firefox")) {
-		$('[id=head]').children("table").children("tbody").append(
+	if (!(BrowserDetect.browser == "Chrome" 
+		|| BrowserDetect.browser == "Firefox" 
+		|| BrowserDetect.browser == "Safari"  
+		|| BrowserDetect.browser == "Opera")) {
+		$('#head').children("table").children("tbody").append(
 				"<tr><td colspan='3' style='color:red; font-variant:normal' >Sie benutzen " +
 				"den Browser '" + BrowserDetect.browser + "'. Dieser Browser wird von dieser Seite " +
 				"noch nicht unterstützt. Bitte nutzen sie stattdessen " +

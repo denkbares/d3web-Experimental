@@ -28,6 +28,7 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -384,12 +385,6 @@ public class D3webDialog extends HttpServlet {
 
 		Session sess = (Session) httpSession.getAttribute("d3webSession");
 
-		Set<InterviewObject> indicatedTOsBefore = new HashSet<InterviewObject>(
-				sess.getInterview().getInterviewAgenda().getCurrentlyActiveObjects());
-		List<Question> answeredQuestionsBefore = sess.getBlackboard().getAnsweredQuestions();
-		Set<TerminologyObject> unknownQuestionsBefore = new HashSet<TerminologyObject>();
-		getUnknownQuestions(sess, unknownQuestionsBefore);
-
 		List<String> questions = new ArrayList<String>();
 		List<String> values = new ArrayList<String>();
 		getParameter(request, "ocq", "occhoice", questions, values);
@@ -417,9 +412,16 @@ public class D3webDialog extends HttpServlet {
 			return;
 		}
 
+		// get dialog state before setting values
+		Set<QASet> indicatedTOsBefore = getActiveSet(sess);
+		List<Question> answeredQuestionsBefore = sess.getBlackboard().getAnsweredQuestions();
+		Set<TerminologyObject> unknownQuestionsBefore = getUnknownQuestions(sess);
+
 		for (int i = 0; i < questions.size(); i++) {
 			setValue(questions.get(i), values.get(i), sess);
 		}
+
+		resetAbandonedPaths(sess);
 
 		// AUTOSAVE
 		String folderPath = GlobalSettings.getInstance().getCaseFolder();
@@ -427,11 +429,9 @@ public class D3webDialog extends HttpServlet {
 		new SaveThread(folderPath, d3webSession).start();
 
 		// Rerender changed Questions and Quesitonnaires
-		Set<InterviewObject> indicatedTOsAfter = new HashSet<InterviewObject>(
-				sess.getInterview().getInterviewAgenda().getCurrentlyActiveObjects());
+		Set<QASet> indicatedTOsAfter = getActiveSet(sess);
 
-		Set<TerminologyObject> unknownQuestionsAfter = new HashSet<TerminologyObject>();
-		getUnknownQuestions(sess, unknownQuestionsAfter);
+		Set<TerminologyObject> unknownQuestionsAfter = getUnknownQuestions(sess);
 
 		Set<TerminologyObject> diff = new HashSet<TerminologyObject>();
 		for (TerminologyObject to : unknownQuestionsBefore) {
@@ -442,7 +442,7 @@ public class D3webDialog extends HttpServlet {
 		getDiff(indicatedTOsAfter, indicatedTOsBefore, diff);
 
 		List<Question> answeredQuestionsAfter = sess.getBlackboard().getAnsweredQuestions();
-		getUnknownQuestions(sess, diff);
+		diff.addAll(getUnknownQuestions(sess));
 		answeredQuestionsAfter.removeAll(answeredQuestionsBefore);
 		// System.out.println(answeredQuestionsAfter);
 		diff.addAll(answeredQuestionsAfter);
@@ -459,16 +459,18 @@ public class D3webDialog extends HttpServlet {
 
 	}
 
-	private void getUnknownQuestions(Session sess, Set<TerminologyObject> unknownQuestions) {
+	private Set<TerminologyObject> getUnknownQuestions(Session sess) {
+		Set<TerminologyObject> unknownQuestions = new HashSet<TerminologyObject>();
 		for (TerminologyObject to : sess.getBlackboard().getValuedObjects()) {
 			Fact mergedFact = sess.getBlackboard().getValueFact((ValueObject) to);
 			if (mergedFact != null && Unknown.assignedTo(mergedFact.getValue())) {
 				unknownQuestions.add(to);
 			}
 		}
+		return unknownQuestions;
 	}
 
-	private void getDiff(Set<InterviewObject> set1, Set<InterviewObject> set2, Set<TerminologyObject> diff) {
+	private void getDiff(Set<QASet> set1, Set<QASet> set2, Set<TerminologyObject> diff) {
 		for (InterviewObject io : set1) {
 			if (!set2.contains(io)) {
 				if (io instanceof Question) {
@@ -925,100 +927,31 @@ public class D3webDialog extends HttpServlet {
 			}
 		}
 
-		// TODO: CHECK whether we need both the resetNotIndicated and
-		// checkChildren methods
-
-		// check, that questions of all non-init and non-indicated
-		// questionnaires are reset, i.e., no value
-		for (QASet qaSet : d3wcon.getKb().getManager().getQContainers()) {
-			// find the appropriate qaset in the knowledge base
-
-			if (!d3wcon.getKb().getInitQuestions().contains(qaSet) &&
-					!qaSet.getName().equals("Q000") &&
-					(blackboard.getIndication(qaSet).getState() != State.INDICATED &&
-							blackboard.getIndication(
-									qaSet).getState() != State.INSTANT_INDICATED)) {
-
-				resetNotIndicatedTOs(qaSet, blackboard, sess);
-			}
-		}
-
-		// ensure, that follow-up questions are reset if parent-question doesn't
-		// indicate any more.
-		checkChildrenAndRemoveVals(to, blackboard);
 	}
 
-	/**
-	 * Utility method for resetting follow-up questions due to setting their
-	 * parent question to Unknown. Then, the childrens' value should also be
-	 * removed again, recursively also for childrens' children and so on.
-	 * 
-	 * @created 31.01.2011
-	 * @param parent The parent TerminologyObject
-	 * @param blackboard The currently active blackboard
-	 */
-	private void checkChildrenAndRemoveVals(TerminologyObject parent,
-			Blackboard blackboard) {
-
-		if (parent.getChildren() != null && parent.getChildren().length != 0) {
-			for (TerminologyObject c : parent.getChildren()) {
-
-				Question qto = D3webConnector.getInstance().getKb().getManager().searchQuestion(
-						c.getName());
-
-				if (!isIndicated(qto, blackboard)
-						|| !isParentIndicated(qto, blackboard)) {
-
-					// remove a previously set value
-					Fact lastFact = blackboard.getValueFact(qto);
-					if (lastFact != null) {
-						blackboard.removeValueFact(lastFact);
-					}
-				}
-
-				checkChildrenAndRemoveVals(c, blackboard);
-			}
-		}
-	}
-
-	/**
-	 * Utility method for resetting
-	 * 
-	 * @created 09.03.2011
-	 * @param parent
-	 * @param bb
-	 */
-	private void resetNotIndicatedTOs(TerminologyObject parent, Blackboard bb,
-			Session sess) {
-
-		if (parent.getChildren() != null && parent.getChildren().length != 0) {
-			Fact lastFact = null;
-
-			Blackboard blackboard =
-					sess.getBlackboard();
-
-			// go through all questions of the qcontainer
-			for (TerminologyObject to : parent.getChildren()) {
-
-				if (to instanceof Question) {
-
-					Question qto = D3webConnector.getInstance().getKb().getManager().searchQuestion(
-							to.getName());
-
-					// workaround to assure that same question from other
-					// questionnaire is not reset, too
-					if (qto.getParents().length == 1) {
-						// remove a previously set value
-						lastFact = blackboard.getValueFact(qto);
-						if (lastFact != null) {
-							blackboard.removeValueFact(lastFact);
-						}
-						resetNotIndicatedTOs(to, bb, sess);
-					}
-
+	private Collection<Question> resetAbandonedPaths(Session sess) {
+		Blackboard bb = sess.getBlackboard();
+		Collection<Question> resetQuestions = new LinkedList<Question>();
+		Set<QASet> initQuestions = new HashSet<QASet>(d3wcon.getKb().getInitQuestions());
+		for (Question question : bb.getAnsweredQuestions()) {
+			if (!isActive(question, bb, initQuestions)) {
+				Fact lastFact = bb.getValueFact(question);
+				if (lastFact != null) {
+					bb.removeValueFact(lastFact);
+					resetQuestions.add(question);
 				}
 			}
 		}
+		return resetQuestions;
+	}
+
+	private Set<QASet> getActiveSet(Session sess) {
+		Set<QASet> activeSet = new HashSet<QASet>();
+		Set<QASet> initQuestions = new HashSet<QASet>(sess.getKnowledgeBase().getInitQuestions());
+		for (QASet qaset : sess.getKnowledgeBase().getManager().getQASets()) {
+			if (isActive(qaset, sess.getBlackboard(), initQuestions)) activeSet.add(qaset);
+		}
+		return activeSet;
 	}
 
 	/**
@@ -1030,76 +963,22 @@ public class D3webDialog extends HttpServlet {
 	 * @param bb
 	 * @return True, if the terminology object is (instant) indicated.
 	 */
-	private boolean isIndicated(TerminologyObject to, Blackboard bb) {
-		for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
-			// find the appropriate qaset in the knowledge base
-			if (qaSet.getName().equals(to.getName()) &&
-					// and check its indication state
-					(bb.getIndication((InterviewObject) to).getState() == State.INDICATED
-					|| bb.getIndication((InterviewObject) to).getState() == State.INSTANT_INDICATED)) {
-				return true;
+	private boolean isActive(QASet qaset, Blackboard bb, Set<QASet> initQuestions) {
+		boolean indicatedParent = false;
+		for (TerminologyObject parentQASet : qaset.getParents()) {
+			if (parentQASet instanceof QContainer
+					&& isIndicated((QASet) parentQASet, bb, initQuestions)) {
+				indicatedParent = true;
+				break;
 			}
 		}
-		return false;
+		return indicatedParent || isIndicated(qaset, bb, initQuestions);
 	}
 
-	/**
-	 * Utility method for checking whether the parent object of a given
-	 * terminology object is (instant) indicated.
-	 * 
-	 * @created 09.03.2011
-	 * @param to The terminology object, the parent of which is to be checked.
-	 * @param bb
-	 * @return True, if there exists a parent object of the given terminology
-	 *         object that is indicated.
-	 */
-	private boolean isParentIndicated(TerminologyObject to, Blackboard bb) {
-		for (QASet qaSet : bb.getSession().getKnowledgeBase().getManager().getQASets()) {
-
-			// get questionnaires only
-			if (qaSet instanceof QContainer) {
-				QContainer qcon = (QContainer) qaSet;
-
-				// and check its indication state
-				if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(qcon)
-						|| bb.getIndication(qcon).getState() == State.INDICATED
-						|| bb.getIndication(qcon).getState() == State.INSTANT_INDICATED) {
-
-					// if questionnaire indicated, check whether to is its child
-					if (hasChild(qcon, to)) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Utility method that checks, whether a TerminologyObject child is the
-	 * child of another TerminologyObject parent. That is, whether child is
-	 * nested hierarchically underneath parent.
-	 * 
-	 * @created 30.01.2011
-	 * @param parent The parent TerminologyObject
-	 * @param child The child to check
-	 * @return True, if child is the child of parent
-	 */
-	private boolean hasChild(TerminologyObject parent, TerminologyObject child) {
-
-		if (parent.getChildren() != null && parent.getChildren().length != 0) {
-			for (TerminologyObject c : parent.getChildren()) {
-				if (c.equals(child)) {
-					return true;
-				}
-			}
-			for (TerminologyObject c : parent.getChildren()) {
-				if (c.getChildren().length != 0) {
-					return hasChild(c, child);
-				}
-			}
-		}
-		return false;
+	private boolean isIndicated(QASet qaset, Blackboard bb, Set<QASet> initQuestions) {
+		return initQuestions.contains(qaset)
+				|| bb.getIndication(qaset).getState() == State.INDICATED
+				|| bb.getIndication(qaset).getState() == State.INSTANT_INDICATED;
 	}
 
 	protected static Map<String, List<String>> getUserDat() {

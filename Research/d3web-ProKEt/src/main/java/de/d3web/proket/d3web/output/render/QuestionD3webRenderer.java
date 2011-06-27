@@ -179,7 +179,7 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 
 	@Override
 	public String createID(TerminologyObject to) {
-		return "q_" + to.getName().replace(" ", "_");
+		return "q_" + to.getName().replace(" ", "_").replace("(", "").replace(")", "");
 	}
 
 }
