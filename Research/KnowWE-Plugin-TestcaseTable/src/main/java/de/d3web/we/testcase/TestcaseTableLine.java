@@ -92,6 +92,9 @@ public class TestcaseTableLine extends TableLine {
 
 			for (Section<ValueType> valueSec : values) {
 
+				//if value is unchanged, ignore it
+				if (Sections.findSuccessor(valueSec, UnchangedType.class) != null) continue;
+
 				Section<? extends HeaderCell> headerCell = TestcaseTable.findHeaderCell(valueSec);
 
 				Section<QuestionReference> qRef = Sections.findSuccessor(headerCell,
@@ -104,7 +107,7 @@ public class TestcaseTableLine extends TableLine {
 				}
 
 				String valueString = valueSec.getText();
-				// TODO handle unchanged value, unknown value
+				// TODO unknown value
 				Value value;
 				try {
 					value = KnowledgeBaseUtils.findValue(question, valueString);

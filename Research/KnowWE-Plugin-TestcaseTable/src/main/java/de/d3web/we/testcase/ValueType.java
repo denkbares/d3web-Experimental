@@ -44,6 +44,8 @@ public class ValueType extends AbstractType {
 	@Override
 	protected void init() {
 		setSectionFinder(new AllTextSectionFinder());
+
+		addChildType(new UnchangedType());
 		Number number = new Number();
 		number.setCustomRenderer(DefaultTextRenderer.getInstance());
 		number.setSectionFinder(new ConstraintSectionFinder(number.getSectionFinder(),
@@ -52,8 +54,6 @@ public class ValueType extends AbstractType {
 		CellAnswerRef aRef = new CellAnswerRef();
 		aRef.setCustomRenderer(DefaultTextRenderer.getInstance());
 		addChildType(aRef);
-
-		addChildType(new UnchangedType());
 
 		aRef.setSectionFinder(new SectionFinder() {
 
