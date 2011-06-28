@@ -18,15 +18,15 @@
  */
 package de.d3web.we.testcase;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
-import de.d3web.we.kdom.constraint.SectionFinderConstraint;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
 /**
@@ -36,25 +36,24 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
  */
 final class UnchangedType extends AbstractType {
 
-	private final String regex = "\\s*" + GetNewQuickEditAnswersAction.UNCHANGED_VALUE_STRING
-			+ "\\s*";
+	public static final String REGEX = "\\s*("
+			+ GetNewQuickEditAnswersAction.UNCHANGED_VALUE_STRING
+			+ ")\\s*";
+	public static final Pattern PATTERN = Pattern.compile(REGEX);
 
 	@Override
 	protected void init() {
-		// setSectionFinder(new RegexSectionFinder(Pattern.compile(regex)));
-		setSectionFinder(new ConstraintSectionFinder(
-				new RegexSectionFinder(Pattern.compile(regex)), new SectionFinderConstraint() {
+		setSectionFinder(new SectionFinder() {
 
-					@Override
-					public <T extends Type> boolean satisfiesConstraint(List<SectionFinderResult> found, Section<?> father, Class<T> type, String text) {
-						return found != null ? found.size() == 1 : true;
-					}
-
-					@Override
-					public <T extends Type> void filterCorrectResults(List<SectionFinderResult> found, Section<?> father, Class<T> type, String text) {
-						if (found != null)
-							found.clear();
-						}
-				}));
+			@Override
+			public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
+				Matcher matcher = PATTERN.matcher(text);
+				if (matcher.matches()) {
+					return SectionFinderResult.createSingleItemResultList(matcher.start(1),
+							matcher.end(1));
+				}
+				else return Collections.emptyList();
+			}
+		});
 	}
 }
