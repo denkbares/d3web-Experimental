@@ -223,7 +223,10 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 							int c = (int) (Double.valueOf(coord) * (count % 2 == 0
 									? xFactor
 									: yFactor));
-							coordsBuilder.append(c + ",");
+							// somehow this is not completely accurate,
+							// therefore we add 4 to every coord
+							// TODO: Find out why we need this fix
+							coordsBuilder.append((c + 4) + ",");
 						}
 						fixedCoords = coordsBuilder.substring(0, coordsBuilder.length() - 1);
 						shape = m.group(3);

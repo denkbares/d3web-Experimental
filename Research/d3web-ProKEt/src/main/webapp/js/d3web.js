@@ -313,9 +313,22 @@ function initFunctionality() {
 		// filesel.attr("style", "display:block");
 	});
 	
-	$('#summary').unbind('click').click(function(event){
+	$('#summary').click(function(event){
 		$("#jqSummaryDialog").dialog("open");
 	});
+	
+    $('[type=imageAnswer]').mouseenter(function() {
+        $("#img-" + $(this).attr("id")).focus();
+    }).mouseleave(function() {
+    	$("#img-" + $(this).attr("id")).blur();
+    });
+    
+    $('area').mouseenter(function() {
+        $("#f_" + $(this).attr("id").replace("img-", "")).focus();
+    }).mouseleave(function() {
+        $("#f_" + $(this).attr("id").replace("img-", "")).focus();
+    });
+
 }
 
 function getHeaderHeight(head) {

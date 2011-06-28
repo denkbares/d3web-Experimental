@@ -1,4 +1,4 @@
-<div id="$fullId$"  class="answer $fullId$ $if(realAnswerType)$answer-$realAnswerType$$endif$" >
+<div id="$fullId$" $if(imageAnswer)$type="imageAnswer"$endif$ class="answer $fullId$ $if(realAnswerType)$answer-$realAnswerType$$endif$" >
 	<label>
 		<table>
 			<tr>

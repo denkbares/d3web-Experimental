@@ -31,6 +31,7 @@ import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webUtils;
+import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
@@ -72,6 +73,9 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
 													// "_"));
 		st.setAttribute("text", c.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
+		if (to.getInfoStore().getValue(ProKEtProperties.IMAGE) != null) {
+			st.setAttribute("imageAnswer", "true");
+		}
 
 		Blackboard bb = d3webSession.getBlackboard();
 		Value value = bb.getValue((ValueObject) to);

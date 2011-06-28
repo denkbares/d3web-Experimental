@@ -30,6 +30,7 @@ import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webUtils;
+import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
@@ -69,6 +70,9 @@ public class AnswerImgOCD3webRenderer extends AbstractD3webRenderer implements A
 		st.setAttribute("realAnswerType", "oc");
 		st.setAttribute("parentFullId", getID(to));// .getName().replace(" ",
 													// "_"));
+		if (to.getInfoStore().getValue(ProKEtProperties.IMAGE) != null) {
+			st.setAttribute("imageAnswer", "true");
+		}
 		st.setAttribute("text", c.getName());
 
 		Blackboard bb = d3webSession.getBlackboard();

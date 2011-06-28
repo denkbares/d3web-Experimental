@@ -32,6 +32,7 @@ import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webUtils;
+import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
@@ -71,6 +72,10 @@ public class AnswerImgMCD3webRenderer extends AbstractD3webRenderer implements A
 		st.setAttribute("realAnswerType", "mc");
 		st.setAttribute("parentFullId", getID(mcq));// .getName().replace(" ",
 													// "_"));
+
+		if (to.getInfoStore().getValue(ProKEtProperties.IMAGE) != null) {
+			st.setAttribute("imageAnswer", "true");
+		}
 		st.setAttribute("text", c.getName());
 
 		Blackboard bb = d3webSession.getBlackboard();
