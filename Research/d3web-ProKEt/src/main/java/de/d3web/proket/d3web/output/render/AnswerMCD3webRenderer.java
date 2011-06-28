@@ -67,9 +67,10 @@ public class AnswerMCD3webRenderer extends AbstractD3webRenderer implements Answ
 		StringTemplate st = TemplateUtils.getStringTemplate(
 					super.getTemplateName("McAnswerTabular"), "html");
 
-		st.setAttribute("fullId", c.getName().replace(" ", "_"));
+		st.setAttribute("fullId", getID(c));// .getName().replace(" ", "_"));
 		st.setAttribute("realAnswerType", "mc");
-		st.setAttribute("parentFullId", mcq.getName().replace(" ", "_"));
+		st.setAttribute("parentFullId", getID(mcq));// .getName().replace(" ",
+													// "_"));
 		st.setAttribute("text", c.getName());
 
 		Blackboard bb = d3webSession.getBlackboard();
@@ -140,5 +141,4 @@ public class AnswerMCD3webRenderer extends AbstractD3webRenderer implements Answ
 
 		return sb.toString();
 	}
-
 }

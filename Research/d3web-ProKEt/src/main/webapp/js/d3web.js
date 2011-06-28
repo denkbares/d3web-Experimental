@@ -323,42 +323,57 @@ function getHeaderHeight(head) {
 }
 
 function d3web_storeQuestionText(textInput) {
-	var textQID = $(textInput.parents("[id^=q_]")).attr("id").replace("q_", "");
-	textStore[textQID] = $(textInput).val();
+	var textQuestion = getQuestionName(textInput);
+	textStore[textQuestion] = $(textInput).val();
 }
 
 function d3web_storeQuestionNum(numInput) {
-	var numQID = $(numInput.parents("[id^=q_]")).attr("id").replace("q_", "");
-	numStore[numQID] = $(numInput).val();
+	var numQuestion = getQuestionName(numInput);
+	numStore[numQuestion] = $(numInput).val();
 }
 
 function d3web_storeQuestionDate(dateInput) {
-	var dateQID = $(dateInput.parents("[id^=q_]")).attr("id").replace("q_", "");
-	dateStore[dateQID] = $(dateInput).val();
+	var dateQuestion = getQuestionName(dateInput);
+	dateStore[dateQuestion] = $(dateInput).val();
 }
 
 function d3web_storeQuestionOC(ocInput) {
-	var ocQID = $(ocInput.parents("[id^=q_]")).attr("id").replace("q_", "");
-	ocStore[ocQID] = $(ocInput).attr('title');
+	var ocQuestion = getQuestionName(ocInput);
+	ocStore[ocQuestion] = getAnswerName(ocInput);
 }
 
 function d3web_storeQuestionMC(mcCheckBox) {
 	
 	var mcQParent = $(mcCheckBox.parents("[id^=q_]"));
-	var mcQID = mcQParent.attr("id").replace("q_", "");
+	var mcQuestion = getQuestionName(mcCheckBox);
 	var checkBoxes = mcQParent.find(":checkbox");
 
 	// get the question-content-parent element and go through all its
 	// checkbox-children
 	var checkedBoxes = new Array();
 	checkBoxes.each(function() {
-		inputid = $(this).attr("id");
 		if ($(this).attr("checked") == true) {
-			checkedBoxes.push($(this).attr("id").replace("f_", ""));
+			checkedBoxes.push(getAnswerName($(this)));
 		}
 	});
 	
-	mcStore[mcQID] = checkedBoxes;
+	mcStore[mcQuestion] = checkedBoxes;
+}
+
+function getQuestionName(input) {
+	  return getTerminologyObjectName(input, "q");
+}
+
+function getAnswerName(input) {
+	  return getTerminologyObjectName(input, "a");
+}
+
+function getTerminologyObjectName(input, prefix) {
+	 var parent = $(input.parents("[id^=" + prefix + "_]"));
+	 var valTd = $("#text-" + parent.attr("id"));
+	 // get text of this element only
+	 var text = valTd.clone().children().remove().end().text(); 
+	 return $.trim(text);
 }
 
 function d3web_addFacts() {
@@ -442,7 +457,7 @@ function escapeExpression(str) {
 function d3web_IQClicked(id) {
 	//alert("image answer " + id + " was clicked");
 	// d3web_getSelectedFacts($('#' + id));
-	var target = $("#" + escapeExpression(id));	// get the clicked element
+	var target = $("#" + id);	// get the clicked element
 	var selected = target.find(":input:checked");	// find clicked input 
 	var deselected = target.find(":input:not(:checked)"); // find not clicked inputs
 	selected.attr('checked', false);

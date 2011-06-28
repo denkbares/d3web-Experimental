@@ -26,6 +26,7 @@ import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
+import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
@@ -610,6 +611,20 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 			}
 		}
 
+	}
+
+	public static String getID(NamedObject no) {
+		String prefix = "";
+		if (no instanceof Question) {
+			prefix = "q";
+		}
+		else if (no instanceof QContainer) {
+			prefix = "qc";
+		}
+		else if (no instanceof Choice) {
+			prefix = "a";
+		}
+		return prefix + "_" + no.getName().replaceAll("\\W", "");
 	}
 
 }

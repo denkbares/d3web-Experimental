@@ -70,7 +70,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 				super.getTemplateName("ImageQuestionD3web"), "html");
 
 		// set some basic properties
-		st.setAttribute("fullId", createID(to));
+		st.setAttribute("fullId", getID(to));
 		st.setAttribute("title", to.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
@@ -183,8 +183,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 				StringTemplate st = TemplateUtils.getStringTemplate(
 						getTemplateName("ImageAnswerD3web"), "html");
 
-				st.setAttribute("fullId",
-						choice.getName().replace(" ", "_"));
+				st.setAttribute("fullId", getID(choice));
 				st.setAttribute("title", choice.getName());
 				// if description = shape and coords for current Choice exist
 				String imgmap = choice.getInfoStore().getValue(ProKEtProperties.IMAGEMAP);
@@ -237,11 +236,6 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 			}
 		}
 		return bui.toString();
-	}
-
-	@Override
-	public String createID(TerminologyObject to) {
-		return "q_" + to.getName().replace(" ", "_");
 	}
 
 }

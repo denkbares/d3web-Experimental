@@ -5,20 +5,20 @@ EuraHS Initialization #1
 - Please enter a EuraHS registration number instead of a patient name [text]
 - Please select your hernia route [oc]
 -- Primary ventral hernia route
---- "Please select (primary ventral hernia)" [oc]
+--- "Please select primary ventral hernia" [oc]
 ---- Epigastric hernia
 ---- Umbilical hernia
 ---- Lumbar hernia
 ---- Spighelian hernia
 -- Incisional ventral hernia route
---- "Please select (incisional ventral hernia)" [oc]
+--- "Please select incisional ventral hernia" [oc]
 ---- Incisional ventral hernia
 ---- Recurrent epigastric hernia
 ---- Recurrent umbilical hernia
 ---- Recurrent lumbar hernia
 ---- Recurrent Spighelian hernia
 -- Parastomal hernia route
---- "Please select (parastomal hernia)" [oc]
+--- "Please select parastomal hernia" [oc]
 ---- Parastomal hernia
 
 Common Route #2

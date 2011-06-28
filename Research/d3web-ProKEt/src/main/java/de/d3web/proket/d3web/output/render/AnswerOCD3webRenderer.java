@@ -66,9 +66,10 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
 		st = TemplateUtils.getStringTemplate(
 				super.getTemplateName("OcAnswerTabular"), "html");
 
-		st.setAttribute("fullId", c.getName().replace(" ", "_"));
+		st.setAttribute("fullId", getID(c));// .getName().replace(" ", "_"));
 		st.setAttribute("realAnswerType", "oc");
-		st.setAttribute("parentFullId", to.getName().replace(" ", "_"));
+		st.setAttribute("parentFullId", getID(to));// getName().replace(" ",
+													// "_"));
 		st.setAttribute("text", c.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
@@ -134,5 +135,4 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
 
 		return sb.toString();
 	}
-
 }

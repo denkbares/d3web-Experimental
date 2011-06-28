@@ -70,7 +70,7 @@ public class AnswerDateD3webRenderer extends AbstractD3webRenderer implements An
 		StringTemplate st = TemplateUtils.getStringTemplate(
 					super.getTemplateName("DateAnswerPure"), "html");
 
-		st.setAttribute("fullId", dq.getName().replace(" ", "_"));
+		st.setAttribute("fullId", getID(dq));// .getName().replace(" ", "_"));
 		st.setAttribute("realAnswerType", "date");
 		st.setAttribute("parentFullId", parent.getName().replace(" ", "_"));
 

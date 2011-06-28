@@ -70,9 +70,10 @@ public class AnswerNumD3webRenderer extends AbstractD3webRenderer implements Ans
 		StringTemplate st = TemplateUtils.getStringTemplate(
 					super.getTemplateName("NumAnswer"), "html");
 
-		st.setAttribute("fullId", nq.getName().replace(" ", "_"));
+		st.setAttribute("fullId", getID(nq));// .getName().replace(" ", "_"));
 		st.setAttribute("realAnswerType", "num");
-		st.setAttribute("parentFullId", parent.getName().replace(" ", "_"));
+		st.setAttribute("parentFullId", getID(parent));// .getName().replace(" ",
+														// "_"));
 
 		// set units if available
 		String unit = nq.getInfoStore().getValue(MMInfo.UNIT);

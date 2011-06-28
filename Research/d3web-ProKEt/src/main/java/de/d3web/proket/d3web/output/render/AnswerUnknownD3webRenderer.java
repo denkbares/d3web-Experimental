@@ -50,12 +50,14 @@ public class AnswerUnknownD3webRenderer extends AbstractD3webRenderer implements
 					super.getTemplateName("UnknownTabular"), "html");
 
 		// set basic properties
-		st.setAttribute("fullId", to.getName().replace(" ", "_"));
-		st.setAttribute("parentFullId", parent.getName().replace(" ", "_"));
+		st.setAttribute("fullId", getID(new Choice("Unknown")));// .getName().replace(" ",
+																// "_"));
+		st.setAttribute("parentFullId", getID(parent));// .getName().replace(" ",
+														// "_"));
 
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
-		Blackboard bb = super.d3webSession.getBlackboard();
+		Blackboard bb = d3webSession.getBlackboard();
 		Value value = bb.getValue((ValueObject) to);
 
 		// abstraction question --> readonly

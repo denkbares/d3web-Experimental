@@ -450,7 +450,7 @@ public class D3webDialog extends HttpServlet {
 		ContainerCollection cc = new ContainerCollection();
 		for (TerminologyObject to : diff) {
 			IQuestionD3webRenderer toRenderer = AbstractD3webRenderer.getRenderer(to);
-			writer.append("##replaceid##" + toRenderer.createID(to));
+			writer.append("##replaceid##" + AbstractD3webRenderer.getID(to));
 			writer.append("##replacecontent##");
 			writer.append(toRenderer.renderTerminologyObject(cc, to, to instanceof QContainer
 					? d3wcon.getKb().getRootQASet()
@@ -523,8 +523,8 @@ public class D3webDialog extends HttpServlet {
 			String para1 = request.getParameter(paraName1 + i);
 			String para2 = request.getParameter(paraName2 + i);
 			if (para1 == null || para2 == null) break;
-			parameters1.add(para1.replaceAll("_", " "));
-			parameters2.add(para2.replaceAll("_", " "));
+			parameters1.add(para1.replace("+", " "));
+			parameters2.add(para2.replace("+", " "));
 			i++;
 		}
 	}

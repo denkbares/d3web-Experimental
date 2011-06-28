@@ -65,12 +65,13 @@ public class AnswerImgOCD3webRenderer extends AbstractD3webRenderer implements A
 		st = TemplateUtils.getStringTemplate(
 				super.getTemplateName("OcAnswerTabular"), "html");
 
-		st.setAttribute("fullId", c.getName().replace(" ", "_"));
+		st.setAttribute("fullId", getID(c));
 		st.setAttribute("realAnswerType", "oc");
-		st.setAttribute("parentFullId", to.getName().replace(" ", "_"));
+		st.setAttribute("parentFullId", getID(to));// .getName().replace(" ",
+													// "_"));
 		st.setAttribute("text", c.getName());
 
-		Blackboard bb = super.d3webSession.getBlackboard();
+		Blackboard bb = d3webSession.getBlackboard();
 		Value value = bb.getValue((ValueObject) to);
 
 		// if question is an abstraction question --> readonly
@@ -129,5 +130,4 @@ public class AnswerImgOCD3webRenderer extends AbstractD3webRenderer implements A
 
 		return sb.toString();
 	}
-
 }

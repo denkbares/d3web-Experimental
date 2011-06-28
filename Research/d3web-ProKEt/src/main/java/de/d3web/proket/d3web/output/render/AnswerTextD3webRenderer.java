@@ -67,9 +67,10 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
 		StringTemplate st = TemplateUtils.getStringTemplate(
 					super.getTemplateName("TextAnswer"), "html");
 
-		st.setAttribute("fullId", tq.getName().replace(" ", "_"));
+		st.setAttribute("fullId", getID(tq));// .getName().replace(" ", "_"));
 		st.setAttribute("realAnswerType", "text");
-		st.setAttribute("parentFullId", parent.getName().replace(" ", "_"));
+		st.setAttribute("parentFullId", getID(parent));// .getName().replace(" ",
+														// "_"));
 
 		Blackboard bb = d3webSession.getBlackboard();
 		Value value = bb.getValue((ValueObject) to);
@@ -128,5 +129,4 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
 
 		return sb.toString();
 	}
-
 }

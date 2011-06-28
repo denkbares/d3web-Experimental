@@ -67,12 +67,13 @@ public class AnswerImgMCD3webRenderer extends AbstractD3webRenderer implements A
 		StringTemplate st = TemplateUtils.getStringTemplate(
 					super.getTemplateName("McAnswerTabular"), "html");
 
-		st.setAttribute("fullId", c.getName().replace(" ", "_"));
+		st.setAttribute("fullId", getID(c));
 		st.setAttribute("realAnswerType", "mc");
-		st.setAttribute("parentFullId", mcq.getName().replace(" ", "_"));
+		st.setAttribute("parentFullId", getID(mcq));// .getName().replace(" ",
+													// "_"));
 		st.setAttribute("text", c.getName());
 
-		Blackboard bb = super.d3webSession.getBlackboard();
+		Blackboard bb = d3webSession.getBlackboard();
 		Value value = bb.getValue((ValueObject) to);
 
 		// if question is an abstraction question --> readonly
