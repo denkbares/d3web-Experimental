@@ -46,12 +46,32 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="DiaFluxDialogSetFindingAction">
+		<parameter id="class"
+			value="de.d3web.we.diaFlux.dialog.DiaFluxDialogSetFindingAction" />
+		<parameter id="name" value="DiaFluxDialogSetFindingAction" />
+		<parameter id="description" value="Action DiaFluxDialogSetFindingAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="DiaFluxDialogResetAction">
+		<parameter id="class"
+			value="de.d3web.we.diaFlux.dialog.DiaFluxDialogResetAction" />
+		<parameter id="name" value="DiaFluxDialogResetAction" />
+		<parameter id="description" value="Action DiaFluxDialogResetAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="de.d3web.we.diaFlux.dialog.DiaFluxDialogType">
+		id="DiaFluxDialogType">
 		<parameter id="class"
 			value="de.d3web.we.diaFlux.dialog.DiaFluxDialogType" />
-		<parameter id="name" value="de.d3web.we.diaFlux.dialog.DiaFluxDialogType" />
-		<parameter id="description" value="Type de.d3web.we.diaFlux.dialog.DiaFluxDialogType" />
+		<parameter id="name" value="DiaFluxDialogType" />
+		<parameter id="description" value="DiaFluxDialogType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />

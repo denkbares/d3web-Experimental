@@ -1,21 +1,53 @@
-
 DiaFluxDialog = {};
 
 DiaFluxDialog.FLOWCHARTID = 'DiaFluxDialogFlowchart';
 DiaFluxDialog.FLOWCHARTPATHID = 'DiaFluxDialogPath';
 DiaFluxDialog.flowcharts = [];
+DiaFluxDialog.activeFlowchart = '';
 
 /**
  * the entry function to the dialog "fires" startNodes and adds events to the
  * next nodes
  */
-DiaFluxDialog.addEvents = function() {
-	
-	if (!DiaFluxDialog.flowcharts.contains(theFlowchart)) {
-		DiaFluxDialog.flowcharts.push(theFlowchart);
+DiaFluxDialog.start = function() {
+	var divs = $(DiaFluxDialog.FLOWCHARTID).getElements('.FlowchartGroup');
+	DiaFluxDialog.activeFlowchart = divs[divs.length - 1].__flowchart;
+	if (!DiaFluxDialog.flowcharts.contains(DiaFluxDialog.activeFlowchart)) {
+		DiaFluxDialog.flowcharts.push(DiaFluxDialog.activeFlowchart);
 	}
 	DiaFluxDialog.fireStartNodes();
+	
+	var path = $('hiddenPath');
+	if (!path) {
+		return;
+	}
+	
+	var value = path.value;
+	var pairs = value.split('#####');
+	
+	for (var i = 0; i < pairs.length; i++) {
+		if (pairs[i] !== "") {
+			var temp = pairs[i].split('+++++');
+			var question = temp[0];
+			var answer = temp[1].split('+-+-+');
+			
+			var node = DiaFluxDialog.Utils.findNodeWithName(question);
+			var outgoingRules = DiaFluxDialog.Utils.findOutgoingRules(node);
+			
+			for (var j = 0; j < outgoingRules.length; j++) {
+				if (outgoingRules[j].guard.displayHTML === answer[0]) {
+					DiaFluxDialog.activateRule(outgoingRules[j], false, true);
+				}
+			}
+		}
+		
+		var bla = 1;
+	}
+	
+	var a = 1;
 }
+
+
 
 /**
  * adds the onclick event to all follow up nodes (and their rules) of a node
@@ -59,7 +91,7 @@ DiaFluxDialog.addClickHandlerToNode = function(flowNode) {
  * fires all start nodes and returns them in an array
  */
 DiaFluxDialog.fireStartNodes = function() {
-	var nodes = theFlowchart.nodes;
+	var nodes = DiaFluxDialog.activeFlowchart.nodes;
 
 	for (var i = 0; i < nodes.length; i++) {
 		if (i === 0) {
@@ -91,16 +123,19 @@ DiaFluxDialog.clickRule = function(event) {
 
 }
 
+
 /**
  * activates a rule, e.g. colors the rule and adds the event to its target node
  * and the outgoing rules
  */
-DiaFluxDialog.activateRule = function(flowRule, sendRequest) {
-	if (!flowRule.isActive) {
-		flowRule.isActive = true;
-	} else {
-		DiaFluxDialog.deactivateRule(flowRule);
-		return;
+DiaFluxDialog.activateRule = function(flowRule, sendRequest, activate) {
+	if (!activate) {
+		if (!flowRule.isActive) {
+			flowRule.isActive = true;
+		} else {
+			DiaFluxDialog.deactivateRule(flowRule);
+			return;
+		}
 	}
 	var sourceNode = flowRule.sourceNode;
 	var targetNode = flowRule.targetNode;
@@ -112,11 +147,27 @@ DiaFluxDialog.activateRule = function(flowRule, sendRequest) {
 	DiaFluxDialog.increaseSupportForNode(targetNode);
 	
 	
-	// -> exit node
+	// if start || !sendRequest -> no setsinglefinding request
+	// is needed
+	var start = DiaFluxDialog.Utils.isStartNode(sourceNode);
+	if (!start && sendRequest) {
+		DiaFluxDialog.prepareSetSingleFindingRequest(flowRule, sourceNode);
+	}
+	
+	var targetNodeType = DiaFluxDialog.Utils.getNodeType(targetNode);
+	// -> exit node or last node in a flowchart
 	if (!DiaFluxDialog.Utils.hasOutgoingRules(targetNode)){
-		DiaFluxDialog.colorNode(targetNode);
-		DiaFluxDialog.sendGetNextActiveFlowchartRequest();
-		return;
+		if (targetNodeType !== 'subflow') {
+			var outcome = '';
+			if (targetNodeType === 'exit') {
+				outcome = targetNode.nodeModel.exit;
+			} else {
+				outcome = targetNode.actionPane.action.infoObjectName;
+			}
+			DiaFluxDialog.colorNode(targetNode);
+			DiaFluxDialog.sendGetNextActiveFlowchartRequest(outcome);
+			return;
+		}
 	}
 	
 	var action = targetNode.actionPane.action;
@@ -124,35 +175,31 @@ DiaFluxDialog.activateRule = function(flowRule, sendRequest) {
 	
 	// -> solution or subflowchart
 	if (!infoObject.type) {
+		DiaFluxDialog.colorNode(targetNode);
 		
 		// subflowchart
 		if (infoObject.startNames && infoObject.exitNames) {
 			DiaFluxDialog.sendGetFlowchartRequest(infoObject.name);
+		} else {
+			// solution
+			var outGoingRules = DiaFluxDialog.Utils.findOutgoingRules(targetNode);
+			for (var i = 0; i < outGoingRules.length; i++) {
+				DiaFluxDialog.activateRule(outGoingRules[i], false);
+			}
 			return;
-		} 
-		
-		// solution
-		DiaFluxDialog.colorNode(targetNode);
-		var outGoingRules = DiaFluxDialog.Utils.findOutgoingRules(targetNode);
-		for (var i = 0; i < outGoingRules.length; i++) {
-			DiaFluxDialog.activateRule(outGoingRules[i], false);
 		}
-		return;
 	}
 
-
+	// add the click handler
 	DiaFluxDialog.addClickHandlerToNode(targetNode);	
 	DiaFluxDialog.addClickHandlerToRules(targetNode);
-	
-	var start = DiaFluxDialog.Utils.isStartNode(sourceNode);
-	if (start || !sendRequest) {
-		return;
-	}
-	
-	var sourceAction = sourceNode.actionPane.action;
-	var sourceInfoObject = KBInfo.lookupInfoObject(sourceAction.getInfoObjectName());
-	var type = sourceInfoObject.type;
-	var question = sourceInfoObject.name;
+}
+
+DiaFluxDialog.prepareSetSingleFindingRequest = function(flowRule, flowNode) {
+	var action = flowNode.actionPane.action;
+	var infoObject = KBInfo.lookupInfoObject(action.getInfoObjectName());
+	var type = infoObject.type;
+	var question = infoObject.name;
 	if (type !== KBInfo.Question.TYPE_NUM) {	
 		var selected = flowRule.guard.displayHTML;
 		DiaFluxDialog.sendSetSingleFindingRequest(question, {ValueID : selected});
@@ -198,7 +245,7 @@ DiaFluxDialog.fireNode = function(event) {
 
 	
 	var question = $('hiddenQuestion').innerHTML;
-	var contextMenu = theFlowchart.dom.getElement('div.dialogBox');
+	var contextMenu = DiaFluxDialog.activeFlowchart.dom.getElement('div.dialogBox');
 		
 	var trs = $(contextMenu).getElements('tr');
 	var selected = '';
@@ -249,7 +296,7 @@ DiaFluxDialog.sendSetSingleFindingRequest = function(question, selected) {
 		return;
 	}
 	params = {
-			action : 'SetSingleFindingAction',
+			action : 'DiaFluxDialogSetFindingAction',
 	        KWikiWeb : 'default_web',
 	        namespace : master,
 	        ObjectID : question,
@@ -329,7 +376,7 @@ DiaFluxDialog.replaceFlowchart = function(request, name) {
 	// activate the new flowchart
 	KBInfo._updateCache($('referredKBInfo'));
 	Flowchart.createFromXML(DiaFluxDialog.FLOWCHARTID, $(name)).setVisible(true);
-	DiaFluxDialog.addEvents();
+	DiaFluxDialog.start();
 
 }
 
@@ -378,7 +425,7 @@ DiaFluxDialog.sendAddActiveFlowchartRequest = function(name) {
 /**
  * removes the current active flowchart and returns the next
  */
-DiaFluxDialog.sendGetNextActiveFlowchartRequest = function() {
+DiaFluxDialog.sendGetNextActiveFlowchartRequest = function(outcome) {
 	params = {
 			action : 'DiaFluxDialogManageAction',
 	        KWikiWeb : 'default_web',
@@ -392,7 +439,7 @@ DiaFluxDialog.sendGetNextActiveFlowchartRequest = function() {
         response : {
     		action : 'none',
         	fn : function(){
- 				DiaFluxDialog.activatePreviousFlowchart(this);
+ 				DiaFluxDialog.activatePreviousFlowchart(this, outcome);
     		}
         }
     };
@@ -404,11 +451,12 @@ DiaFluxDialog.sendGetNextActiveFlowchartRequest = function() {
 
 /**
  * activates the parent flowchart, after dead end
- * is reached
+ * is reached, with the outcome of the dead end
  */
-DiaFluxDialog.activatePreviousFlowchart = function(request) {
+DiaFluxDialog.activatePreviousFlowchart = function(request, outcome) {
 	var text = request.responseText.split('#####');
 	var nextFlowchart = text[0];
+	var oldFlowchart = text[1];
 	
 	DiaFluxDialog.Utils.createPath(text);
 	
@@ -416,17 +464,79 @@ DiaFluxDialog.activatePreviousFlowchart = function(request) {
 	
 	for (var i = 0; i < DiaFluxDialog.flowcharts.length; i++) {
 		if (DiaFluxDialog.flowcharts[i].name === nextFlowchart) {
-			theFlowchart = DiaFluxDialog.flowcharts[i];
+			DiaFluxDialog.activeFlowchart = DiaFluxDialog.flowcharts[i];
 			break;
 		}
 	}
 	
-	var next = $(DiaFluxDialog.FLOWCHARTID).getElement('#' + theFlowchart.dom.id);
-	next.setStyle('display', 'block');
-
-//	var test3 = $(theFlowchart.dom.id);
-
+	// haxx because of strange bug
+	var next = $(DiaFluxDialog.FLOWCHARTID);
+	var fc = $(DiaFluxDialog.activeFlowchart.dom.id);
 	
+	// if the flowchart is already on the page
+	if (fc.parentNode !== next) {
+		fc = next.getElement('#' + DiaFluxDialog.activeFlowchart.dom.id);
+	}
+	fc.parentNode.replaceChild(DiaFluxDialog.activeFlowchart.dom, fc);
+	DiaFluxDialog.activeFlowchart.dom.setStyle('display', 'block');
+
+
+	DiaFluxDialog.readdEvents();
+	DiaFluxDialog.manageOutcomeOfSubFlowchart(oldFlowchart, outcome)
+	var a = 1;
+}
+
+DiaFluxDialog.readdEvents = function(){
+	var nodes = DiaFluxDialog.activeFlowchart.nodes;
+	for (var i = 0; i < nodes.length; i++) {
+		if (nodes[i].support > 0) {
+			DiaFluxDialog.activateNode(nodes[i]);
+		}
+	}
+	
+	var rules = DiaFluxDialog.activeFlowchart.rules;
+	for (var i = 0; i < rules.length; i++) {
+		if (rules[i].isActive > 0) {
+			DiaFluxDialog.colorRule(rules[i]);
+		}
+	}
+}
+
+/**
+ * searches the node of the subflowchart and either removes 
+ * the events if there is no fitting outgoing edge or 
+ * else changes nothing
+ */
+DiaFluxDialog.manageOutcomeOfSubFlowchart = function(nodeName, outcome) {
+	var nodes = DiaFluxDialog.activeFlowchart.nodes;
+	var subflowNode = '';
+	for (var i = 0; i < nodes.length; i++) {
+		if (DiaFluxDialog.Utils.getNodeType(nodes[i]) === 'subflow') {
+			var action = nodes[i].actionPane.action;
+			var infoObject = KBInfo.lookupInfoObject(action.getInfoObjectName());
+			if (infoObject.startNames && infoObject.exitNames) {
+				if (infoObject.name === nodeName) {
+					subflowNode = nodes[i];
+					break;
+				}
+			}
+		}
+	}
+	var outgoingRules = DiaFluxDialog.Utils.findOutgoingRules(subflowNode);
+	
+	var correctRule = null;
+	for (var i = 0; i < outgoingRules.length; i++) {
+		if (outgoingRules[i].guard.displayHTML === outcome) {
+			correctRule = outgoingRules[i];
+		}
+	}
+	DiaFluxDialog.deactivateAllRulesExcept(correctRule);
+	
+	// if an outgoing rules was the outcome if the subflowchart
+	// activate it
+	if (correctRule) {
+		DiaFluxDialog.activateRule(correctRule, false);
+	}
 	var a = 1;
 }
 
@@ -435,7 +545,7 @@ DiaFluxDialog.activatePreviousFlowchart = function(request) {
  * creates the context menu, when nodes are clicked
  */
 DiaFluxDialog.createContextMenu = function(event) {
-	var contextMenu = theFlowchart.dom.getElement('div.dialogBox');
+	var contextMenu = DiaFluxDialog.activeFlowchart.dom.getElement('div.dialogBox');
 	if (contextMenu) {
 		contextMenu.parentNode.removeChild(contextMenu);
 	}
@@ -466,7 +576,7 @@ DiaFluxDialog.createContextMenu = function(event) {
 		style: 'position: absolute; left: ' + left + 'px; top: ' + top + 'px; min-height: ' + height + 'px; min-width: ' + width + 'px; background-color: #ffb;'
 	});
 	
-	theFlowchart.dom.firstChild.appendChild(dom);
+	DiaFluxDialog.activeFlowchart.dom.firstChild.appendChild(dom);
 	dom.innerHTML = answers + hiddenId + hiddenQuestion;
 	
 	
@@ -551,7 +661,7 @@ DiaFluxDialog.resetRuleColor = function(flowRule) {
 }
 
 DiaFluxDialog.removeContextMenu = function() {
-	var contextMenu = theFlowchart.dom.getElement('div.dialogBox');
+	var contextMenu = DiaFluxDialog.activeFlowchart.dom.getElement('div.dialogBox');
 	if (contextMenu) {
 		contextMenu.parentNode.removeChild(contextMenu);
 	}
@@ -605,18 +715,43 @@ DiaFluxDialog.decreaseSupportForNode = function(flowNode) {
 	}
 }
 
+DiaFluxDialog.reset = function(sectionID) {
+	var topic = KNOWWE.helper.gup('page')
+	params = {
+			action : 'DiaFluxDialogResetAction',
+	        KWikiWeb : 'default_web'
+	};
+	
+
+	// options for AJAX request
+ 	options = {
+        url : KNOWWE.core.util.getURL( params ),
+        response : {
+    		action : 'none',
+        	fn : function(){
+				KNOWWE.core.rerendercontent.updateNode(sectionID, topic, null);
+				KNOWWE.core.util.updateProcessingState(-1); 
+    		}
+        }
+    };
+    
+    // send AJAX request
+ 	KNOWWE.core.util.updateProcessingState(1);
+    new _KA( options ).send();
+}
+
 DiaFluxDialog.Utils = {};
 
 DiaFluxDialog.Utils.findFlowNodeById = function(fcid) {
-	for (var i = 0; i < theFlowchart.nodes.length; i++) {
-		if (theFlowchart.nodes[i].nodeModel.fcid === fcid) {
-			return theFlowchart.nodes[i];
+	for (var i = 0; i < DiaFluxDialog.activeFlowchart.nodes.length; i++) {
+		if (DiaFluxDialog.activeFlowchart.nodes[i].nodeModel.fcid === fcid) {
+			return DiaFluxDialog.activeFlowchart.nodes[i];
 		}
 	}
 }
 
 DiaFluxDialog.Utils.findOutgoingRules = function(flowNode) {
-	var rules = theFlowchart.rules;
+	var rules = DiaFluxDialog.activeFlowchart.rules;
 	var outgoingRules = [];
 	for (var i = 0; i < rules.length; i++) {
 		if (rules[i].sourceNode === flowNode) {
@@ -627,7 +762,7 @@ DiaFluxDialog.Utils.findOutgoingRules = function(flowNode) {
 }
 
 DiaFluxDialog.Utils.findIncomingRules = function(flowNode) {
-	var rules = theFlowchart.rules;
+	var rules = DiaFluxDialog.activeFlowchart.rules;
 	var outgoingRules = [];
 	for (var i = 0; i < rules.length; i++) {
 		if (rules[i].targetNode === flowNode) {
@@ -638,7 +773,7 @@ DiaFluxDialog.Utils.findIncomingRules = function(flowNode) {
 }
 
 DiaFluxDialog.Utils.findFittingNode = function(htmlNode) {
-	var nodes = theFlowchart.nodes;
+	var nodes = DiaFluxDialog.activeFlowchart.nodes;
 	for (var i = 0; i < nodes.length; i++) {
 		if (nodes[i].dom === htmlNode) {
 			return nodes[i];
@@ -648,7 +783,7 @@ DiaFluxDialog.Utils.findFittingNode = function(htmlNode) {
 }
 
 DiaFluxDialog.Utils.findFittingRule = function(htmlRule) {
-	var rules = theFlowchart.rules;
+	var rules = DiaFluxDialog.activeFlowchart.rules;
 	for (var i = 0; i < rules.length; i++) {
 		if (rules[i].dom === htmlRule) {
 			return rules[i];
@@ -678,10 +813,10 @@ DiaFluxDialog.Utils.hasOutgoingRules = function(flowNode) {
 	return (DiaFluxDialog.Utils.findOutgoingRules(flowNode).length !== 0);
 }
 
-DiaFluxDialog.Utils.createPath =  function(array) {
+DiaFluxDialog.Utils.createPath = function(array) {
 	var path = 'Path: ';
-	if (array.length > 1) {
-		for (var i = 1; i < array.length; i++) {
+	if (array.length > 2) {
+		for (var i = 2; i < array.length; i++) {
 			if (array[i] !== '') {
 				path += array[i] + ' - ';
 			}
@@ -692,4 +827,57 @@ DiaFluxDialog.Utils.createPath =  function(array) {
 	}
 }
 
+DiaFluxDialog.Utils.getNodeType = function(flowNode) {
+	var nodeModel = flowNode.nodeModel;
+	if (nodeModel.start) {
+		return 'start';
+	} else if (nodeModel.exit) {
+		return 'exit';
+	} else if (nodeModel.snapshot) {
+		return 'snapshot';
+	}
+	
+	var action = flowNode.actionPane.action;
+	var infoObject = KBInfo.lookupInfoObject(action.getInfoObjectName()); 
+	
+	if (infoObject.startNames && infoObject.exitNames) {
+		return 'subflow';
+	} else if (infoObject.type) {
+		return 'question';
+	} 
+	return 'solution';
+}
 
+DiaFluxDialog.Utils.findNodeWithName = function(name) {
+	var nodes = DiaFluxDialog.activeFlowchart.nodes;
+	for (var i = 0; i < nodes.length; i++) {
+		var nodeType = DiaFluxDialog.Utils.getNodeType(nodes[i]);
+		
+		if (nodeType === 'start') {
+			if (nodes[i].nodeModel.start === name) {
+				return nodes[i];
+			}
+			continue;
+		} else if (nodeType === 'exit') {
+			if (nodes[i].nodeModel.exit === name) {
+				return nodes[i];
+			}
+			continue;
+		} else if (nodeType === 'snapshot') {
+			continue;
+		} 
+		
+		var action = nodes[i].actionPane.action;
+		var infoObject = KBInfo.lookupInfoObject(action.getInfoObjectName()); 
+		if (infoObject.name === name) {
+			return nodes[i];
+		}
+//		if (nodeType === 'subflow') {
+//			
+//		} else if (nodeType === 'question') {
+//			
+//		} else if (nodeType === 'solution') {
+//			
+//		}
+	}
+}

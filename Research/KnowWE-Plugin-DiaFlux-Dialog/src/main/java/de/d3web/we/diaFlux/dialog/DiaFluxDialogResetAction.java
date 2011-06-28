@@ -22,33 +22,21 @@ import java.io.IOException;
 
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
+import de.d3web.we.basic.D3webModule;
+import de.d3web.we.basic.SessionBroker;
 
 /**
  * 
  * @author Florian Ziegler
- * @created 20.06.2011
+ * @created 27.06.2011
  */
-public class DiaFluxDialogManageAction extends AbstractAction {
+public class DiaFluxDialogResetAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-		String type = context.getParameter("type");
-
-		// add active flowchart via manager
-		if (type.equalsIgnoreCase("addActiveFlowchart")) {
-			String name = context.getParameter("name");
-			DiaFluxDialogManager.getInstance().addActiveFlowchart(name);
-		}
-
-		// get flowchart
-		else if (type.equalsIgnoreCase("getNextActiveFlowchart")) {
-			String current = DiaFluxDialogManager.getInstance().getActiveFlowchart();
-			String next = DiaFluxDialogManager.getInstance().getNextActiveFlowchart();
-			String path = DiaFluxDialogUtils.createPathStringForRequest();
-			context.getWriter().write(
-					next + DiaFluxDialogUtils.DIAFLUXDIALOG_SEPARATOR + current + path);
-		}
-
+		DiaFluxDialogManager.getInstance().reset();
+		SessionBroker broker = D3webModule.getBroker(context.getParameters());
+		broker.clear();
 	}
 
 }

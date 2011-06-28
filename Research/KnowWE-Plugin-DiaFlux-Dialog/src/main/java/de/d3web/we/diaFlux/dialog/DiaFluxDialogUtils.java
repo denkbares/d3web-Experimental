@@ -24,8 +24,14 @@ import de.d3web.core.session.Session;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.FlowSet;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
+import de.d3web.we.core.KnowWEEnvironment;
+import de.d3web.we.flow.FlowchartSubTreeHandler;
+import de.d3web.we.flow.FlowchartUtils;
+import de.d3web.we.flow.type.FlowchartType;
+import de.d3web.we.kdom.Section;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.D3webUtils;
+import de.d3web.we.utils.KnowWEUtils;
 
 /**
  * 
@@ -35,7 +41,7 @@ import de.d3web.we.utils.D3webUtils;
 public class DiaFluxDialogUtils {
 
 	public static final String DIAFLUXDIALOG_FLOWCHART = "DiaFluxDialogFlowchart";
-	private static String DIAFLUXDIALOG_SEPARATOR = "#####";
+	public static String DIAFLUXDIALOG_SEPARATOR = "#####";
 
 	public static FlowSet getFlowSet(String master, UserContext user) {
 		Session session = D3webUtils.getSession(master, user,
@@ -51,28 +57,29 @@ public class DiaFluxDialogUtils {
 	// TODO fix in flowchartutils vor comitten
 	@SuppressWarnings("unchecked")
 	public static String extractFlowchartRendererFromFlow(Flow flow, UserContext user) {
-		// String origin = (String) FlowchartUtils.getFlowProperty(flow,
-		// FlowchartSubTreeHandler.ORIGIN_KEY);
-		//
-		// if (origin == null) {
-		// return null;
-		// }
-		//
-		// Section<FlowchartType> node = (Section<FlowchartType>)
-		// KnowWEEnvironment.getInstance().getArticleManager(
-		// user.getWeb()).findNode(origin);
-		//
-		// return FlowchartUtils.createFlowchartRenderer(node, user,
-		// DIAFLUXDIALOG_FLOWCHART);
-		return null;
+		String origin = (String) FlowchartUtils.getFlowProperty(flow,
+				FlowchartSubTreeHandler.ORIGIN_KEY);
+
+		if (origin == null) {
+			return null;
+		}
+
+		Section<FlowchartType> node = (Section<FlowchartType>)
+				KnowWEEnvironment.getInstance().getArticleManager(
+						user.getWeb()).findNode(origin);
+
+		return FlowchartUtils.createFlowchartRenderer(node, user,
+				DIAFLUXDIALOG_FLOWCHART);
 	}
 
 	public static String extraxtMinimalFlowchart(String flowchart) {
+		flowchart = KnowWEUtils.unmaskHTML(flowchart);
 		// führt sonst zu komischen pfeilen
 		flowchart = "<div>" + flowchart.substring(flowchart.indexOf("<xml"));
 
-		String part1 = flowchart.substring(0, flowchart.indexOf("<preview"));
-		String part2 = flowchart.substring(flowchart.indexOf("</flowchart>"));
+		String part1 = flowchart.substring(0, flowchart.indexOf("</flowchart>"));
+		String part2 =
+				flowchart.substring(flowchart.indexOf("</flowchart>"));
 
 		// script braucht man beim rendern
 		part2 = part2.substring(part2.indexOf("<script")) + "";
