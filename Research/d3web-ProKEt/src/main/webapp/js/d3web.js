@@ -422,7 +422,11 @@ function d3web_addFacts() {
 				d3web_resetSession();
 			} else if (html.startsWith("##replaceid##")) {
 				var updateArray = html.split(/##replaceid##|##replacecontent##/);
-				for (var i = 1; i < updateArray.length - 1; i+=2) {
+				for (var i = 0; i < updateArray.length - 1; i+=2) {
+					if (updateArray[i].length == 0) {
+						i--;
+						continue;
+					}
 					$("#" + updateArray[i]).replaceWith(updateArray[i + 1]);
 				}
 				setup();
@@ -448,12 +452,12 @@ function handleUnsupportedBrowsers() {
       browser = "Internet Explorer";
     else
       browser = $.browser.name;
-    
+    $("#unsupportedbrowserwarning").remove();
 	if (!($.browser.webkit
 		|| $.browser.opera 
 		|| $.browser.mozilla)) {
 		$('#head').children("table").children("tbody").append(
-				"<tr><td colspan='3' style='color:red; font-variant:normal' >Sie benutzen " +
+				"<tr id='unsupportedbrowserwarning'><td colspan='3' style='color:red; font-variant:normal' >Sie benutzen " +
 				"den Browser '" + browser + "'. Dieser Browser wird von dieser Seite " +
 				"noch nicht unterstützt. Bitte nutzen sie stattdessen " +
 				"<a href='http://www.mozilla-europe.org/de/'>Mozilla Firefox</a> " +
