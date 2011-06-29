@@ -33,11 +33,8 @@ public class TimeEventTest extends TestCase {
 	@Before
 	public void setUp() throws Exception {
 		InitPluginManager.init();
-
 		KnowWEPackageManager.overrideAutocompileArticle(true);
-
 		RootType.getInstance().addChildType(new SemanticAnnotation());
-
 		KnowWEEnvironment.initKnowWE(new KnowWETestWikiConnector());
 		ke = KnowWEEnvironment.getInstance();
 		type = ke.getRootType();
@@ -46,10 +43,10 @@ public class TimeEventTest extends TestCase {
 
 	@Test
 	public void testTimeEvent() {
-		List<TimeEvent> eventsInput = new ArrayList<TimeEvent>();
-		List<TimeEvent> eventsOutput = new ArrayList<TimeEvent>();
-
 		String testtopic = "Testpage";
+
+		// Create TimeEvents
+		List<TimeEvent> eventsInput = new ArrayList<TimeEvent>();
 		List<String> sources = new ArrayList<String>();
 		eventsInput.add(new TimeEvent("Testing", "!§$&/=?#-.,;:_", 1, sources, "8jv-9jv", "",
 				testtopic));
@@ -58,12 +55,16 @@ public class TimeEventTest extends TestCase {
 		eventsInput.add(new TimeEvent("Noch ein Event", "eine Test-Beschreibung", 2, sources,
 				"1jv",
 				"", testtopic));
-		eventsInput.add(new TimeEvent("MeinTestevent", "Beschreibung dieses Events", 1, sources,
+		eventsInput.add(new TimeEvent("MeinTestevent",
+				"Beschreibung dieses Events", 1, sources,
 				"8jv", "", testtopic));
+
+		List<TimeEvent> eventsOutput = new ArrayList<TimeEvent>();
 
 		// added line break because the new time event markup works only with a
 		// beginning linebreak
 		String content = "\n";
+
 		// Create Page-Content from eventsInput
 		for (TimeEvent t : eventsInput) {
 			content += "<<" + t.getTitle() + "(" + t.getImportance() + ")\n"
@@ -74,6 +75,9 @@ public class TimeEventTest extends TestCase {
 
 		// Removing duplicate event from the input list
 		eventsInput.remove(3);
+		// Remove both from input, because duplicate definitions produce an
+		// compile error in the wiki
+		eventsInput.remove(1);
 
 		ke.processAndUpdateArticleJunit(null, content, testtopic, KnowWEEnvironment.DEFAULT_WEB,
 				type);
