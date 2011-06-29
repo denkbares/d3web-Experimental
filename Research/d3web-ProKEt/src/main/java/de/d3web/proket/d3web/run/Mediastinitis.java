@@ -85,6 +85,7 @@ public class Mediastinitis extends D3webDialog {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		response.setContentType("text; charset=UTF-8");
 		// set both persistence (case saving) and image (images streamed from
 		// kb) folder
 		String fca = GlobalSettings.getInstance().getCaseFolder();
@@ -203,8 +204,6 @@ public class Mediastinitis extends D3webDialog {
 		}
 		else if (action.equalsIgnoreCase("checklogin")) {
 
-			response.setContentType("text/html");
-			response.setCharacterEncoding("utf8");
 			PrintWriter writer = response.getWriter();
 
 			if (httpSession.getAttribute("user") == null) {
@@ -224,8 +223,6 @@ public class Mediastinitis extends D3webDialog {
 		else if (action.equalsIgnoreCase("sendmail")) {
 			try {
 				sendMail(request, response, httpSession);
-				response.setContentType("text/html");
-				response.setCharacterEncoding("utf8");
 				PrintWriter writer = response.getWriter();
 				writer.append("success");
 			}
@@ -236,8 +233,7 @@ public class Mediastinitis extends D3webDialog {
 			return;
 		}
 		else if (action.equalsIgnoreCase("checkrange")) {
-			response.setContentType("text/html");
-			response.setCharacterEncoding("utf8");
+
 			PrintWriter writer = response.getWriter();
 
 			String qidsString = request.getParameter("qids");
@@ -280,14 +276,12 @@ public class Mediastinitis extends D3webDialog {
 			HttpSession httpSession)
 			throws IOException {
 
-		response.setContentType("text/html");
-		response.setCharacterEncoding("utf8");
 		PrintWriter writer = response.getWriter();
 
 		// get the root renderer --> call getRenderer with null
 		MediastinitisDefaultRootD3webRenderer d3webr =
 				(MediastinitisDefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRendererObject(
-				null);
+						null);
 
 		// new ContainerCollection needed each time to get an updated dialog
 		ContainerCollection cc = new ContainerCollection();
@@ -295,7 +289,8 @@ public class Mediastinitis extends D3webDialog {
 		Session d3webSess = (Session) httpSession.getAttribute("d3webSession");
 		AbstractD3webRenderer.storeSession(d3webSess);
 
-		// set clinic to user name, since its the only clinic it can see cases of
+		// set clinic to user name, since its the only clinic it can see cases
+		// of
 		String user = (String) httpSession.getAttribute("user");
 		if (user != null && user != "") {
 			String definingObject = "Betreffende Klinik";
@@ -306,7 +301,6 @@ public class Mediastinitis extends D3webDialog {
 				setValue(definingObject, user, d3webSess);
 			}
 		}
-
 
 		cc = d3webr.renderRoot(cc, d3webSess, httpSession);
 

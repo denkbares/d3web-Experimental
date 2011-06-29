@@ -148,6 +148,7 @@ public class D3webDialog extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		response.setContentType("text/html; charset=UTF-8");
 		// set both persistence (case saving) and image (images streamed from
 		// kb) folder
 		String fca = GlobalSettings.getInstance().getCaseFolder();
@@ -269,8 +270,6 @@ public class D3webDialog extends HttpServlet {
 		}
 		else if (action.equalsIgnoreCase("checklogin")) {
 
-			response.setContentType("text/html");
-			response.setCharacterEncoding("utf8");
 			PrintWriter writer = response.getWriter();
 
 			if (httpSession.getAttribute("user") == null) {
@@ -290,8 +289,6 @@ public class D3webDialog extends HttpServlet {
 		else if (action.equalsIgnoreCase("sendmail")) {
 			try {
 				sendMail(request, response, httpSession);
-				response.setContentType("text/html");
-				response.setCharacterEncoding("utf8");
 				PrintWriter writer = response.getWriter();
 				writer.append("success");
 			}
@@ -302,8 +299,6 @@ public class D3webDialog extends HttpServlet {
 			return;
 		}
 		else if (action.equalsIgnoreCase("checkrange")) {
-			response.setContentType("text/html");
-			response.setCharacterEncoding("utf8");
 			PrintWriter writer = response.getWriter();
 
 			String qidsString = request.getParameter("qids");
@@ -346,8 +341,6 @@ public class D3webDialog extends HttpServlet {
 			HttpSession httpSession)
 			throws IOException {
 
-		response.setContentType("text/html");
-		response.setCharacterEncoding("utf8");
 		PrintWriter writer = response.getWriter();
 
 		// get the root renderer --> call getRenderer with null
@@ -379,8 +372,6 @@ public class D3webDialog extends HttpServlet {
 			HttpServletResponse response, HttpSession httpSession)
 			throws IOException {
 
-		response.setContentType("text/html");
-		response.setCharacterEncoding("utf8");
 		PrintWriter writer = response.getWriter();
 
 		Session sess = (Session) httpSession.getAttribute("d3webSession");
@@ -540,8 +531,6 @@ public class D3webDialog extends HttpServlet {
 			HttpServletResponse response, HttpSession httpSession)
 			throws IOException {
 
-		response.setContentType("text/html");
-		response.setCharacterEncoding("utf8");
 		PrintWriter writer = null;
 		writer = response.getWriter();
 
@@ -719,8 +708,6 @@ public class D3webDialog extends HttpServlet {
 	protected void login(HttpServletRequest req,
 			HttpServletResponse res, HttpSession httpSession)
 			throws IOException {
-
-		res.setContentType("text/html");
 
 		// fetch the information sent via the request string from login
 		String u = req.getParameter("u");

@@ -18,11 +18,13 @@ $endif$
 								$CaseNewButton()$
 							</div>
 						$endif$
-						$if(loadcase)$
+						
+						$if(statistics)$
 							<div class="leftButton">
-								$CaseLoadButton()$
+								$StatisticsButton()$
 							</div>
 						$endif$
+
 						$if(summary)$
 							<div class="leftButton">
 								$SummaryButton()$
@@ -38,9 +40,9 @@ $endif$
 							</div>
 						$endif$
 						
-						$if(statistics)$
+						$if(loadcase)$
 							<div class="leftButton">
-								$StatisticsButton()$
+								$CaseLoadButton()$
 							</div>
 						$endif$
 						

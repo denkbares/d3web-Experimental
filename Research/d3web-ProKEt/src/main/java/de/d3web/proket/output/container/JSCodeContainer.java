@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2010 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -28,11 +28,12 @@ import de.d3web.proket.d3web.input.D3webConnector;
 
 /**
  * Container for JavaScript code.
- *
+ * 
  * @author Martina Freiberg, Johannes Mitlmeier
- *
+ * 
  */
 public class JSCodeContainer implements ICodeContainer {
+
 	private boolean d3web = false;
 	private final Map<Integer, StringBuilder> data = new HashMap<Integer, StringBuilder>();
 	private boolean dateAnswer = false;
@@ -76,7 +77,6 @@ public class JSCodeContainer implements ICodeContainer {
 		login = true;
 	}
 
-
 	/**
 	 * Putting together the complete JS-defining and -linking String
 	 */
@@ -87,7 +87,7 @@ public class JSCodeContainer implements ICodeContainer {
 		Vector<String> ownBibs = new Vector<String>();
 
 		// FIRST define all necessary bibs
-		linkedBibs.add("jquery/jquery-1.5.min.js");
+		linkedBibs.add("jquery/jquery-1.6.1.min.js");
 		// linkedBibs.add("jquery/jquery.min.js");
 		// linkedBibs.add("jquery/jquery-ui-position.min.js");
 		linkedBibs.add("jquery/jquery.cookie.js");
@@ -107,7 +107,8 @@ public class JSCodeContainer implements ICodeContainer {
 			linkedBibs.add("jquery/jquery.datepick.pack.js");
 			linkedBibs.add("jquery/jquery.datepick-de.js");
 			add("var dateanswer = true;", 0);
-		} else {
+		}
+		else {
 			add("var dateanswer = false;", 0);
 		}
 		if (imageQuestions) {
@@ -130,12 +131,11 @@ public class JSCodeContainer implements ICodeContainer {
 			ownBibs.add("d3webBasic.js");
 			linkedBibs.add("jquery/jquery.object.js");
 			add("var d3web = true;", 0);
-		} else {
+		}
+		else {
 			ownBibs.add("code.js");
 			add("var d3web = false;", 0);
 		}
-
-
 
 		// SECOND assemble bibs and singular js data to a string
 		// assemble all defined bibs to one String
@@ -160,8 +160,6 @@ public class JSCodeContainer implements ICodeContainer {
 			}
 		}
 		output.append("\n</script>\n");
-
-
 
 		// THIRD remove debug lines for Firebug
 		if (!debug) {

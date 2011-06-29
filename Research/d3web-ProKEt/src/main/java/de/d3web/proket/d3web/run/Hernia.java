@@ -80,6 +80,7 @@ public class Hernia extends D3webDialog {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		response.setContentType("text/html; charset=UTF-8");
 		// set both persistence (case saving) and image (images streamed from
 		// kb) folder
 		String fca = GlobalSettings.getInstance().getCaseFolder();
@@ -201,8 +202,6 @@ public class Hernia extends D3webDialog {
 		}
 		else if (action.equalsIgnoreCase("checklogin")) {
 
-			response.setContentType("text/html");
-			response.setCharacterEncoding("utf8");
 			PrintWriter writer = response.getWriter();
 
 			if (httpSession.getAttribute("user") == null) {
@@ -222,8 +221,6 @@ public class Hernia extends D3webDialog {
 		else if (action.equalsIgnoreCase("sendmail")) {
 			try {
 				sendMail(request, response, httpSession);
-				response.setContentType("text/html");
-				response.setCharacterEncoding("utf8");
 				PrintWriter writer = response.getWriter();
 				writer.append("success");
 			}
@@ -234,7 +231,6 @@ public class Hernia extends D3webDialog {
 			return;
 		}
 	}
-
 
 	/**
 	 * Basic servlet method for displaying the dialog.
@@ -249,8 +245,6 @@ public class Hernia extends D3webDialog {
 			HttpSession httpSession)
 			throws IOException {
 
-		response.setContentType("text/html");
-		response.setCharacterEncoding("utf8");
 		PrintWriter writer = response.getWriter();
 
 		// get the root renderer --> call getRenderer with null
@@ -269,7 +263,6 @@ public class Hernia extends D3webDialog {
 		writer.close(); // and close
 	}
 
-
 	/**
 	 * Handle login of new user
 	 * 
@@ -283,8 +276,6 @@ public class Hernia extends D3webDialog {
 	protected void login(HttpServletRequest req,
 			HttpServletResponse res, HttpSession httpSession)
 			throws IOException {
-
-		res.setContentType("text/html");
 
 		// fetch the information sent via the request string from login
 		String u = req.getParameter("u");
