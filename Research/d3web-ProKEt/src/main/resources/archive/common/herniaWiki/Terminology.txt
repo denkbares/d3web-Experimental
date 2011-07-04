@@ -524,10 +524,5 @@ THEN Diameter of the ventral hernia = (Width of the ventral hernia + Length of t
 @package: Hernia
 %
 
-%%solution
-Dummy
-
-@package: Hernia
-%
 
 
