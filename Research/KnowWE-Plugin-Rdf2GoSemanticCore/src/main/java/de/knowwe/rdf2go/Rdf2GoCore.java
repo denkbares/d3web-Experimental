@@ -19,7 +19,6 @@
 package de.knowwe.rdf2go;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,9 +31,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.WeakHashMap;
@@ -111,7 +110,8 @@ public class Rdf2GoCore implements EventListener {
 	private Map<String, String> namespaces;
 	private List<Statement> addCache;
 	private List<Statement> removeCache;
-	Properties properties = new Properties();
+
+	private ResourceBundle properties = ResourceBundle.getBundle("model", Locale.getDefault());
 
 	Map<String, WeakHashMap<Section<? extends Type>, List<Statement>>> getStatementCache() {
 		return statementcache;
@@ -151,11 +151,8 @@ public class Rdf2GoCore implements EventListener {
 	 * @throws ModelRuntimeException
 	 */
 	public void initModel() throws ModelRuntimeException, ReasoningNotSupportedException {
-
-		readProperties();
-
-		String useModel = properties.getProperty("model").toLowerCase();
-		String useReasoning = properties.getProperty("reasoning").toLowerCase();
+		String useModel = properties.getString("model").toLowerCase();
+		String useReasoning = properties.getString("reasoning").toLowerCase();
 
 		if (useModel.equals(JENA)) {
 			// Jena dependency currently commented out because of clashing
@@ -198,20 +195,6 @@ public class Rdf2GoCore implements EventListener {
 		Logger.getLogger(this.getClass().getName()).log(Level.FINE,
 				"-> RDF2Go model '" + useModel + "' initialized");
 
-	}
-
-	private void readProperties() {
-		String path = KnowWEEnvironment.getInstance().getKnowWEExtensionPath();
-		try {
-			properties.load(new FileInputStream(path + File.separatorChar
-					+ "model.properties"));
-		}
-		catch (IOException e) {
-			// this case happens on junit-tests
-			properties.put("model", SESAME);
-			properties.put("reasoning", RDFS_REASONING);
-			properties.put("compile", IGNOREFULLPARSE);
-		}
 	}
 
 	/**
@@ -698,11 +681,9 @@ public class Rdf2GoCore implements EventListener {
 
 	@Override
 	public void notify(Event event) {
-		// quick fix for initialization problem
-		readProperties();
 		if (event instanceof FullParseEvent) {
 			if (properties.containsKey("compile")
-					&& properties.get("compile").equals("ignoreFullParse")) {
+					&& properties.getString("compile").equals("ignoreFullParse")) {
 				// do nothing on full-parse
 			}
 			else {
