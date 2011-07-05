@@ -31,7 +31,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
@@ -101,8 +100,6 @@ public class Rdf2GoCore implements EventListener {
 	private static final String OWL_REASONING = "owl";
 	private static final String RDFS_REASONING = "rdfs";
 
-	private static final String IGNOREFULLPARSE = "ignoreFullParse";
-
 	private static Rdf2GoCore me;
 	private Model model;
 	private Map<String, WeakHashMap<Section<? extends Type>, List<Statement>>> statementcache;
@@ -110,8 +107,7 @@ public class Rdf2GoCore implements EventListener {
 	private Map<String, String> namespaces;
 	private List<Statement> addCache;
 	private List<Statement> removeCache;
-
-	private ResourceBundle properties = ResourceBundle.getBundle("model", Locale.getDefault());
+	ResourceBundle properties = ResourceBundle.getBundle("model");
 
 	Map<String, WeakHashMap<Section<? extends Type>, List<Statement>>> getStatementCache() {
 		return statementcache;
@@ -151,6 +147,7 @@ public class Rdf2GoCore implements EventListener {
 	 * @throws ModelRuntimeException
 	 */
 	public void initModel() throws ModelRuntimeException, ReasoningNotSupportedException {
+
 		String useModel = properties.getString("model").toLowerCase();
 		String useReasoning = properties.getString("reasoning").toLowerCase();
 
