@@ -30,8 +30,8 @@ import java.util.logging.Logger;
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.Statement;
-import org.ontoware.rdf2go.model.impl.DelegatingModel;
 import org.ontoware.rdf2go.util.RDFTool;
+import org.openrdf.rdf2go.RepositoryModelFactory;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.DefaultOntologyFormat;
 import org.semanticweb.owlapi.model.OWLAxiom;
@@ -88,9 +88,13 @@ public class RDF2GoSync {
 	public static void synchronize(Set<OWLAxiom> axioms, Section<?> sec, RDF2GoSync.Mode mode) {
 		if (mode.equals(RDF2GoSync.Mode.ADD)) {
 			String rdfXML = axiomsToRDF(axioms);
-			// TODO: Nullcheck, but for testing an Exception might be better ;-)
-			DelegatingModel rdfModel = new DelegatingModel(RDFTool.stringToModel(rdfXML));
-			Iterator<Statement> iter = rdfModel.iterator();
+
+			RepositoryModelFactory factory = new org.openrdf.rdf2go.RepositoryModelFactory();
+			Model model = factory.createModel();
+			model.open();
+			model.addModel(RDFTool.stringToModel(rdfXML));
+
+			Iterator<Statement> iter = model.iterator();
 			Statement s;
 			List<Statement> statements = new LinkedList<Statement>();
 			while (iter.hasNext()) {
