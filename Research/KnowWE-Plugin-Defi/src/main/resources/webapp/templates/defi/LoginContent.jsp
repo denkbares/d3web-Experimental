@@ -44,6 +44,9 @@
 #footer a.data, #footer a.about, #footer a.start {
 	display:none !important;
 } 
+.tabmenu {
+	display:none;
+}
 </style>
 
 <div id="login_defi"> 

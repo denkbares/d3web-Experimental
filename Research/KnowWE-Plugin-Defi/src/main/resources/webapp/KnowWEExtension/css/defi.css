@@ -5,7 +5,9 @@ body.view {
 	/*font: 12px/1.5 "Lucida Grande", Arial, Helvetica, Sans-Serif;*/
 	/*font:76%/140% Verdana,Arial,Helvetica,sans-serif;*/
 }
-
+input[type=submit], input[type=reset], input[type=button] {
+	font-size:105%;
+}
 textarea {
     font-size: 150%;
 }

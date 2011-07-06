@@ -1579,10 +1579,10 @@ table.calendar tr.weekdays {
 	float:left;
 	margin:0 0 -1px -1px;
 	padding:0.25em 0.5em;
-	border:1px solid #ddd;
+	border:1px solid black;
 	border-bottom:none;
-	color:gray;
-	background:#f9f9f9;
+	color:black;
+	background-color:#CCCCCC;
 	text-decoration:none;
 	cursor:pointer;
 	white-space:nowrap;
@@ -1590,14 +1590,17 @@ table.calendar tr.weekdays {
 }
 .tabmenu a:hover {
 	background:#eee;
+	color:black;
+	text-decoration:none;
 }
 .tabmenu a.activetab {
 	color:black;
 	background:transparent;
+	background-color:#F8BB90;
 	border-bottom:1px solid white;
 	cursor:default;
 }
-
+.pagecontent
 
 /* +++ 910 Accordion +++ */
 .accordion, .tabbedAccordion {
