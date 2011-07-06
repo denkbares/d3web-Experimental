@@ -39,6 +39,7 @@ import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.packaging.KnowWEPackageManager;
 import de.d3web.we.kdom.KnowWEArticle;
+import de.d3web.we.kdom.RootType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
@@ -150,6 +151,30 @@ public class IncrementalCompilerTest {
 		newText = "Assistent subclassof:: Person";
 		changeText(oldText, newText, TripleMarkupSimple.class);
 		assertTrue(core.sparqlAsk(Query.Update.ASSISTENTPERSON));
+	}
+
+	@Test
+	public void testChangeAll() {
+		/* replace the whole text */
+		String oldText = article.getSection().getOriginalText();
+		String newText = "def Schnurtzelpieper livesIn:: Dingenskirchen" + "\n\n" + "def is"
+				+ "\n\n" + "def livesIn" + "\n\n" + "def Dingenskirchen" + "\n\n"
+				+ "def inDaHouse" + "\n\n"
+				+ "{Schnurtzelpieper is:: inDaHouse}" + "\n\n";
+		changeText(oldText, newText, RootType.class);
+		/* Check that the old statements are invalid now */
+		assertFalse(core.sparqlAsk(Query.ASSIPERSON));
+		assertFalse(core.sparqlAsk(Query.JOCHENASSI));
+		assertFalse(core.sparqlAsk(Query.JOCHENWUERZBURG));
+		assertFalse(core.sparqlAsk(Query.PETERASSI));
+		assertFalse(core.sparqlAsk(Query.PETERWUERZBURG));
+		assertFalse(core.sparqlAsk(Query.REINHARDWUERZBURG));
+		assertFalse(core.sparqlAsk(Query.Update.ASSISTENTPERSON));
+		assertFalse(core.sparqlAsk(Query.Update.JOCHENASSISTENT));
+		assertFalse(core.sparqlAsk(Query.Update.PETERASSISTENT));
+		/* check that new statemants are valid */
+		assertTrue(core.sparqlAsk(Query.Update.SCHNURTZELPIEPERDINGENSKIRCHEN));
+		assertTrue(core.sparqlAsk(Query.Update.SCHNURTZELPIEPERINDAHOUSE));
 	}
 
 	private <T extends Type> void changeText(String oldText, String newText,

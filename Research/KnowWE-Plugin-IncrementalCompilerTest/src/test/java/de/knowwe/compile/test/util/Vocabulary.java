@@ -38,16 +38,21 @@ public class Vocabulary {
 	public static URI PETER = core.createlocalURI("Peter");
 	public static URI JOCHEN = core.createlocalURI("Jochen");
 	public static URI REINHARD = core.createlocalURI("Reinhard");
+	public static URI SCHNURTZELPIEPER = core.createlocalURI("Schnurtzelpieper");
 
 	/* Properties */
 	public static URI ISTEIN = core.createlocalURI("istEin");
 	public static URI WOHNTIN = core.createlocalURI("wohntIn");
 	public static URI SUBCLASSOF = core.createlocalURI("subclassof");
+	public static URI IS = core.createlocalURI("is");
+	public static URI LIVESIN = core.createlocalURI("livesIn");
 
 	/* Objects */
 	public static URI ASSI = core.createlocalURI("Assi");
 	public static URI ASSISTENT = core.createlocalURI("Assistent");
 	public static URI WUERZBURG = core.createlocalURI("Wuerzburg");
 	public static URI PERSON = core.createlocalURI("Person");
+	public static URI DINGENSKIRCHEN = core.createlocalURI("Dingenskirchen");
+	public static URI INDAHOUSE = core.createlocalURI("inDaHouse");
 
 }

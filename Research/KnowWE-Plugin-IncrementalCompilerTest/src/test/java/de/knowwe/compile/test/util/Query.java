@@ -77,6 +77,17 @@ public class Query {
 				Vocabulary.SUBCLASSOF,
 				Vocabulary.PERSON);
 
+		/** Test: def Schnurtzelpieper livesIn:: Dingenskirchen */
+		public static String SCHNURTZELPIEPERDINGENSKIRCHEN = createQuery(
+				Vocabulary.SCHNURTZELPIEPER,
+				Vocabulary.LIVESIN,
+				Vocabulary.DINGENSKIRCHEN);
+
+		/** Test: Schnurtzelpieper is:: inDaHouse */
+		public static String SCHNURTZELPIEPERINDAHOUSE = createQuery(Vocabulary.SCHNURTZELPIEPER,
+				Vocabulary.IS,
+				Vocabulary.INDAHOUSE);
+
 	}
 
 }
