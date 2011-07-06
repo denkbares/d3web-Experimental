@@ -8,7 +8,7 @@
  * @version 2.1.7
  *
  **/
-new function(settings) { 
+(function(settings) { 
   // Various Settings
   var $separator = settings.separator || '&';
   var $spaces = settings.spaces === false ? false : true;
@@ -221,4 +221,4 @@ new function(settings) {
     
     return new queryObject(location.search, location.hash);
   };
-}(jQuery.query || {}); // Pass in jQuery.query as settings object
+})(jQuery.query || {}); // Pass in jQuery.query as settings object
