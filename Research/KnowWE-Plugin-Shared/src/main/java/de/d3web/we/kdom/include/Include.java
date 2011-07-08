@@ -64,8 +64,7 @@ public class Include extends AbstractXMLType {
 	public static final String INCLUDE_ADDRESS_KEY = "INCLUDE_ADDRESS_KEY";
 
 	public static IncludeAddress getIncludeAddress(Section<Include> s) {
-		return (IncludeAddress) KnowWEUtils.getStoredObject(s.getWeb(), s.getArticle().getTitle(),
-				s.getID(), INCLUDE_ADDRESS_KEY);
+		return (IncludeAddress) KnowWEUtils.getStoredObject(s.getArticle(), s, INCLUDE_ADDRESS_KEY);
 	}
 
 }

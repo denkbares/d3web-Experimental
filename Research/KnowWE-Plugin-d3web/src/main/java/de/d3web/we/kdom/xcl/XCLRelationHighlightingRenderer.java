@@ -65,8 +65,8 @@ public class XCLRelationHighlightingRenderer extends KnowWEDomRenderer {
 	@Override
 	public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
 
-		String kbrelId = (String) KnowWEUtils.getStoredObject(sec.getArticle().getWeb(),
-				sec.getTitle(), sec.getID(), CoveringListContent.KBID_KEY);
+		String kbrelId = (String) KnowWEUtils.getStoredObject(sec.getArticle(), sec,
+				CoveringListContent.KBID_KEY);
 
 		StringBuilder buffi = new StringBuilder();
 		if (kbrelId == null) {

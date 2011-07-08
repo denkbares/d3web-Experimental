@@ -33,7 +33,6 @@ import de.d3web.KnOfficeParser.rule.D3ruleBuilder;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.report.Message;
 import de.d3web.report.Report;
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
@@ -155,9 +154,7 @@ public class Rule extends AbstractType {
 							new SingleKBMIDObjectManager(kb), null);
 
 					if (builder.getRules().size() == 1) {
-						KnowWEUtils.storeObject(article.getWeb(), article
-								.getTitle(), s.getID(), KBID_KEY, builder
-								.getRules().get(0));
+						KnowWEUtils.storeObject(article, s, KBID_KEY, builder.getRules().get(0));
 					}
 
 					KnowWEUtils.storeMessages(article, s, this.getClass(), Message.class,
@@ -200,8 +197,7 @@ public class Rule extends AbstractType {
 	 * @param message
 	 */
 	public static void storeErrorMessages(KnowWEArticle article, Section s, List<Message> message) {
-		KnowWEUtils.storeObject(s.getWeb(), article
-				.getTitle(), s.getID(), RULE_ERROR_MESSAGE_STORE_KEY, message);
+		KnowWEUtils.storeObject(article, s, RULE_ERROR_MESSAGE_STORE_KEY, message);
 	}
 
 	/**
@@ -211,8 +207,7 @@ public class Rule extends AbstractType {
 	 * @param message
 	 */
 	public static List<Message> getErrorMessages(KnowWEArticle article, Section s) {
-		return (List<Message>) KnowWEUtils.getStoredObject(
-				KnowWEEnvironment.DEFAULT_WEB, article.getTitle(), s.getID(),
+		return (List<Message>) KnowWEUtils.getStoredObject(article, s,
 				RULE_ERROR_MESSAGE_STORE_KEY);
 	}
 

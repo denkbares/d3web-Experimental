@@ -26,7 +26,6 @@ import de.d3web.we.kdom.Sectionizer;
 import de.d3web.we.kdom.SectionizerModule;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.d3web.we.utils.KnowWEUtils;
 
 public class IncludeSectionizerModule implements SectionizerModule {
 
@@ -37,12 +36,11 @@ public class IncludeSectionizerModule implements SectionizerModule {
 		if (result.getParameterMap() != null && parser instanceof Sectionizer) {
 			((Sectionizer) parser).addParameterMap(result.getParameterMap());
 		}
+		@SuppressWarnings("rawtypes")
 		Section s = null;
 		if (result instanceof IncludeSectionFinderResult) {
 			s = parser.parse(text, father);
-
-			KnowWEUtils.storeObject(s.getWeb(), s.getTitle(), s.getID(),
-					Include.INCLUDE_ADDRESS_KEY,
+			s.getSectionStore().storeObject(father.getArticle(), Include.INCLUDE_ADDRESS_KEY,
 					((IncludeSectionFinderResult) result).getIncludeAddress());
 			KnowWEIncludeManager.getInstance().registerInclude(s);
 

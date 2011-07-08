@@ -96,7 +96,7 @@ public class CommentRenderer extends KnowWEDomRenderer<CommentType> {
 			if (id.isEmpty()) {
 
 				int newID = ids.get(commentTag);
-				Sections.findChildOfType(idSec, PlainText.class).setOriginalText(newID + " ");
+				Sections.findChildOfType(idSec, PlainText.class).setText(newID + " ");
 
 				// save id:
 				StringBuilder buffy = new StringBuilder();
@@ -136,7 +136,7 @@ public class CommentRenderer extends KnowWEDomRenderer<CommentType> {
 
 					if (found.size() != 0) {
 						Section<?> changeSec = found.get(found.size() - 1);
-						Sections.findChildOfType(changeSec, PlainText.class).setOriginalText(save);
+						Sections.findChildOfType(changeSec, PlainText.class).setText(save);
 					}
 
 					StringBuilder buffi = new StringBuilder();

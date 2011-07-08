@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -44,7 +44,7 @@ import de.d3web.we.utils.MessageUtils;
 
 /**
  * Compiles parsed AssigmentTypes to d3web @link{Assignment}s.
- *
+ * 
  * @author Sebastian Furth
  * @created Mar 31, 2011
  */
@@ -89,7 +89,7 @@ public abstract class AssignmentCompiler<T extends AssignmentType> extends D3web
 	@Override
 	public void destroy(KnowWEArticle article, Section<T> s) {
 		Assignment assignment =
-				(Assignment) KnowWEUtils.getObjectFromLastVersion(article, s, STOREKEY);
+				(Assignment) s.getSectionStore().getObject(article, STOREKEY);
 		if (assignment != null) {
 			KnowledgeBase kb = getKB(article);
 			if (kb != null) {

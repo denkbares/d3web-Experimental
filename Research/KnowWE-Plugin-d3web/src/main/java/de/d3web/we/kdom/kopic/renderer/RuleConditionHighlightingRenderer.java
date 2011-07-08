@@ -113,8 +113,7 @@ public class RuleConditionHighlightingRenderer extends KnowWEDomRenderer {
 
 		// get the rule: Eval it and highlight the condition
 		Section ruleSection = Sections.findAncestorOfType(sec, de.d3web.we.kdom.rules.Rule.class);
-		Rule kbRule = (Rule) KnowWEUtils.getStoredObject(sec.getWeb(),
-				sec.getTitle(), ruleSection.getID(),
+		Rule kbRule = (Rule) KnowWEUtils.getStoredObject(sec.getArticle(), sec,
 				de.d3web.we.kdom.rules.Rule.KBID_KEY);
 
 		Session session = D3webUtils.getSession(article.getTitle(), user, article.getWeb());

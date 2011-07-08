@@ -595,15 +595,15 @@ public class Rdf2GoCore implements EventListener {
 			if (temp.get(sec) != null) {
 				scContainsCurrentSection = true;
 			}
-			else {
-				// Not necessary because of full-pasre-listener being active
-				// for (Section cur : temp.keySet()) {
-				// if (cur.getID().equals(sec.getID())) {
-				// scContainsCurrentSection = true;
-				// }
-				// break;
-				// }
-			}
+			// else {
+			// Not necessary because of full-pasre-listener being active
+			// for (Section cur : temp.keySet()) {
+			// if (cur.getID().equals(sec.getID())) {
+			// scContainsCurrentSection = true;
+			// }
+			// break;
+			// }
+			// }
 		}
 		if (!scContainsCurrentSection) {
 			for (Statement s : allStatements) {

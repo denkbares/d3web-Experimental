@@ -74,7 +74,7 @@ public class BoxRenderer extends KnowWEDomRenderer<ForumBox> {
 			if (date == null) date = ForumRenderer.getDate();
 
 			Section<XMLHead> head = Sections.findChildOfType(sec, XMLHead.class);
-			head.setOriginalText("<box name=\"" + name + "\" date=\"" + date + "\">");
+			head.setText("<box name=\"" + name + "\" date=\"" + date + "\">");
 
 			// save article:
 			try {

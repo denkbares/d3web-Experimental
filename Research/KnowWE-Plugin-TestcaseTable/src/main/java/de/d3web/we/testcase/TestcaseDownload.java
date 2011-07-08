@@ -27,6 +27,7 @@ import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
 import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.core.KnowWEEnvironment;
+import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.utils.KnowWEUtils;
@@ -51,9 +52,10 @@ public class TestcaseDownload extends AbstractAction {
 
 		Section<TestcaseTable> table = Sections.findSuccessor(tableDMType, TestcaseTable.class);
 
-		String master = TestcaseTableType.getMaster(tableDMType, topic);
+		KnowWEArticle master = KnowWEEnvironment.getInstance().getArticleManager(
+				web).getArticle(TestcaseTableType.getMaster(tableDMType, topic));
 
-		TestCase t = (TestCase) KnowWEUtils.getStoredObject(web, master, table.getID(),
+		TestCase t = (TestCase) KnowWEUtils.getStoredObject(master, table,
 				TestcaseTable.TESTCASE_KEY);
 
 		if (t == null) {

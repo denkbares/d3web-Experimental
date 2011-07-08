@@ -101,7 +101,7 @@ public class CreateScoresHandler extends D3webSubtreeHandler {
 
 				Rule rule = RuleFactory.createHeuristicPSRule(d, scoreV, cond);
 				KnowWEUtils.storeObject(
-						s.getArticle().getWeb(), article.getTitle(), s.getID(),
+						article, s,
 						de.d3web.we.kdom.rules.Rule.KBID_KEY, rule);
 
 			}

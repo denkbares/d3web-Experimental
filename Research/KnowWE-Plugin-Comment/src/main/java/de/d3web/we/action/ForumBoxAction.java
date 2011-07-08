@@ -110,7 +110,7 @@ public class ForumBoxAction extends AbstractAction {
 
 				if (found.size() != 0 && save != "") {
 					Section<?> changeSec = found.get(found.size() - 1);
-					changeSec.setOriginalText(save);
+					changeSec.setText(save);
 				}
 
 				StringBuilder buffi = new StringBuilder();
