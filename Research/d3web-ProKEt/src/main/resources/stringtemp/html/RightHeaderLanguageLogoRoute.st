@@ -25,7 +25,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td colspan="6" >$if(info)$ $info$ $endif$ </td>
+		<td colspan="6">$info$</td>
 	</tr>
 	<tr>
 		

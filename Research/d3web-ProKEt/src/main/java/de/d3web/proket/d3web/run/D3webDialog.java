@@ -118,6 +118,10 @@ import de.d3web.proket.utils.GlobalSettings;
  */
 public class D3webDialog extends HttpServlet {
 
+	private static final String REPLACECONTENT = "##replacecontent##";
+
+	private static final String REPLACEID = "##replaceid##";
+
 	private static final long serialVersionUID = -2466200526894064976L;
 
 	/* special parser for reading in the d3web-specification xml */
@@ -441,13 +445,18 @@ public class D3webDialog extends HttpServlet {
 		ContainerCollection cc = new ContainerCollection();
 		for (TerminologyObject to : diff) {
 			IQuestionD3webRenderer toRenderer = AbstractD3webRenderer.getRenderer(to);
-			writer.append("##replaceid##" + AbstractD3webRenderer.getID(to));
-			writer.append("##replacecontent##");
+			writer.append(REPLACEID + AbstractD3webRenderer.getID(to));
+			writer.append(REPLACECONTENT);
 			writer.append(toRenderer.renderTerminologyObject(cc, to, to instanceof QContainer
 					? d3wcon.getKb().getRootQASet()
 					: getQuestionnaireAncestor(to)));
 		}
-
+		writer.append(REPLACEID + "headerInfoLine");
+		writer.append(REPLACECONTENT);
+		DefaultRootD3webRenderer rootRenderer =
+				(DefaultRootD3webRenderer) D3webRendererMapping
+						.getInstance().getRendererObject(null);
+		writer.append(rootRenderer.renderHeaderInfoLine(d3webSession));
 	}
 
 	private Set<TerminologyObject> getUnknownQuestions(Session sess) {

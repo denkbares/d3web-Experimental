@@ -12,5 +12,5 @@
 	login = "no"
 	required = "none"
 	language = "en">
-	<data kb="HerniaJun2011.d3web" />
+	<data kb="HerniaDialog.d3web" />
 </dialog>

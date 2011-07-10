@@ -20,6 +20,8 @@ package de.d3web.proket.d3web.output.render;
 
 import javax.servlet.http.HttpSession;
 
+import org.antlr.stringtemplate.StringTemplate;
+
 import de.d3web.core.session.Session;
 import de.d3web.proket.output.container.ContainerCollection;
 
@@ -39,5 +41,32 @@ public interface RootD3webRenderer {
 	 * @return the resulting ContainerCollection specifying the dialog.
 	 */
 	public ContainerCollection renderRoot(ContainerCollection cc, Session d3webSession, HttpSession http);
+
+	public String renderHeaderInfoLine(Session d3webSession);
+
+	public String getAvailableFiles(HttpSession http);
+
+	public void addButtons(StringTemplate st);
+
+	/**
+	 * Handles CSS specifications from the specification XML, i.e. checks the
+	 * format, retrieves the corresponding CSS files from file system, and adds
+	 * them to the final ContainerCollection of the dialog.
+	 * 
+	 * @created 15.01.2011
+	 * @param cc ContainerCollection containing all infos about the resulting
+	 *        dialog.
+	 * @param d3wcon the d3web Connector for retrieving the css
+	 */
+	public void handleCss(ContainerCollection cc);
+
+	/**
+	 * Defines the necessary JavaScript required by this renderer/dialog, and
+	 * adds it to the JS into the ContainerCollection.
+	 * 
+	 * @created 15.01.2011
+	 * @param cc The ContainerCollection
+	 */
+	public void defineAndAddJS(ContainerCollection cc);
 
 }

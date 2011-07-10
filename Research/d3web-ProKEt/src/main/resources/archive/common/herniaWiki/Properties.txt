@@ -28,3 +28,27 @@ Date of repair done.date_format = dd.MM.yyyy
 @package: Hernia
 %
 
+%%Property
+Please choose the database level.show_in_header = true
+Please choose the database level.position_in_header = 1
+Please choose the database level.header_text = Level
+
+Please choose the database level#Level 1.header_text = 1
+Please choose the database level#Level 2.header_text = 2
+
+@package: Hernia
+%
+
+
+%%Property
+Please select your hernia route.show_in_header = true
+Please select your hernia route.position_in_header = 2
+Please select your hernia route.header_text = Route
+
+Please select your hernia route#Primary ventral hernia route.header_text = Primary ventral hernia
+Please select your hernia route#Incisional ventral hernia route .header_text = Incisional ventral hernia
+Please select your hernia route#Parastomal hernia route.header_text = Parastomal hernia
+
+@package: Hernia
+%
+

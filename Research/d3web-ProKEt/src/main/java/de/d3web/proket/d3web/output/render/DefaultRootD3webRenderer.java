@@ -19,15 +19,23 @@
  */
 package de.d3web.proket.d3web.output.render;
 
+import java.util.TreeMap;
+
 import javax.servlet.http.HttpSession;
 
 import org.antlr.stringtemplate.StringTemplate;
 
-import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.knowledge.terminology.Choice;
+import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.session.Session;
+import de.d3web.core.session.Value;
+import de.d3web.core.session.values.ChoiceValue;
+import de.d3web.core.session.values.UndefinedValue;
+import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
-import de.d3web.proket.data.DialogType;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
@@ -45,30 +53,19 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 
 		D3webConnector d3wcon = D3webConnector.getInstance();
 
-		TerminologyObject root = d3wcon.getKb().getRootQASet();
-
 		// get the d3web base template according to dialog type
-		StringTemplate st = null;
-		if (d3wcon.getDialogType().equals(DialogType.SINGLEFORM)) {
-			st = TemplateUtils.getStringTemplate("D3webDialog", "html");
-		}
+		StringTemplate st = TemplateUtils.getStringTemplate(d3wcon.getUserprefix() + "D3webDialog",
+				"html");
 
-		if (d3wcon.getUserprefix() != "") {
-			st = TemplateUtils.getStringTemplate(d3wcon.getUserprefix() + "D3webDialog", "html");
-		}
 		/* fill some basic attributes */
 		st.setAttribute("header", D3webConnector.getInstance().getHeader());
 
 		// load case list dependent from logged in user, e.g. MEDIASTINITIS
-		String opts = "";
-		if ((String) http.getAttribute("user") != null && (String) http.getAttribute("user") != "") {
-			opts = PersistenceD3webUtils.getCaseListFromUserFilename((String) http.getAttribute("user"));
-		}
-		// otherwise
-		else {
-			opts = PersistenceD3webUtils.getCaseList();
-		}
+		String opts = getAvailableFiles(http);
 		st.setAttribute("fileselectopts", opts);
+
+		String info = renderHeaderInfoLine(d3webSession);
+		st.setAttribute("info", info);
 
 		// Summary dialog
 		String sum = fillSummaryDialog();
@@ -84,9 +81,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		}
 
 		// add some buttons for basic functionality
-		st.setAttribute("loadcase", "true");
-		st.setAttribute("savecase", "true");
-		st.setAttribute("reset", "true");
+		addButtons(st);
 
 		/*
 		 * handle custom ContainerCollection modification, e.g., enabling
@@ -101,7 +96,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		handleCss(cc);
 
 		// render the children
-		renderChildren(st, cc, root);
+		renderChildren(st, cc, d3wcon.getKb().getRootQASet());
 
 		// global JS initialization
 		defineAndAddJS(cc);
@@ -112,6 +107,123 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 
 		cc.html.add(st.toString());
 		return cc;
+	}
+
+	@Override
+	public String getAvailableFiles(HttpSession http) {
+		String opts;
+		if ((String) http.getAttribute("user") != null && (String) http.getAttribute("user") != "") {
+			opts = PersistenceD3webUtils.getCaseListFromUserFilename((String) http.getAttribute("user"));
+		}
+		else {
+			opts = PersistenceD3webUtils.getCaseList();
+		}
+		return opts;
+	}
+
+	@Override
+	public void addButtons(StringTemplate st) {
+		st.setAttribute("loadcase", "true");
+		st.setAttribute("savecase", "true");
+		st.setAttribute("reset", "true");
+	}
+
+	@Override
+	public String renderHeaderInfoLine(Session d3webSession) {
+
+		StringTemplate st = TemplateUtils.getStringTemplate("HeaderInfoLine", "html");
+
+		TreeMap<Integer, Question> headerQuestions = new TreeMap<Integer, Question>();
+		for (Question question : D3webConnector.getInstance().getKb().getManager().getQuestions()) {
+			Boolean showInHeader = question.getInfoStore().getValue(ProKEtProperties.SHOW_IN_HEADER);
+			if (showInHeader != null && showInHeader) {
+				Integer pos = question.getInfoStore().getValue(ProKEtProperties.POSITION_IN_HEADER);
+				headerQuestions.put(pos, question);
+			}
+		}
+		StringBuilder infoStringBuilder = new StringBuilder();
+		boolean first = true;
+		for (Question headerQuestion : headerQuestions.values()) {
+			Value value = AbstractD3webRenderer.d3webSession.getBlackboard().getValue(
+					headerQuestion);
+			first = verbalizeHeaderQuestion(headerQuestion, value, infoStringBuilder, first);
+		}
+		st.setAttribute("infoVerbalization", infoStringBuilder.toString());
+		return st.toString();
+
+	}
+
+	private Boolean verbalizeHeaderQuestion(Question headerQuestion, Value headerQuestionValue, StringBuilder infoStringBuilder, Boolean first) {
+		if (headerQuestionValue != null && UndefinedValue.isNotUndefinedValue(headerQuestionValue)
+				&& !Unknown.getInstance().equals(headerQuestionValue)) {
+			String questionString = headerQuestion.getName();
+			String specificQuestionString = headerQuestion.getInfoStore().getValue(
+					ProKEtProperties.HEADER_TEXT);
+			if (specificQuestionString != null) questionString = specificQuestionString;
+			String valueString = headerQuestionValue.toString();
+			if (headerQuestionValue instanceof ChoiceValue) {
+				Choice choice = ((ChoiceValue) headerQuestionValue).getChoice((QuestionChoice) headerQuestion);
+				String specificHeaderText = choice.getInfoStore().getValue(
+						ProKEtProperties.HEADER_TEXT);
+				if (specificHeaderText != null) valueString = specificHeaderText;
+			}
+			if (!first) infoStringBuilder.append(", ");
+			infoStringBuilder.append(questionString + ": " + valueString);
+			first = false;
+		}
+		return first;
+	}
+
+	@Override
+	public void handleCss(ContainerCollection cc) {
+
+		D3webConnector d3wcon = D3webConnector.getInstance();
+		// css code from the specification XML
+		String css = d3wcon.getCss();
+
+		if (css != null) {
+			// file reference or inline css?
+			// regex prüft ob der css-String was in der Form
+			// "file1, file2, file3" ist, also 1-mehrere CSS File Angaben
+			if (css.matches("[\\w-,\\s]*")) {
+				String[] parts = css.split(","); // aufspilitten
+
+				for (String partCSS : parts) {
+					// replace whitespace characters with empty string
+					// and then get the corresponding css file
+					StringTemplate stylesheet =
+							TemplateUtils.getStringTemplate
+									(partCSS.replaceAll("\\s", ""), "css");
+
+					// if not at the end of stylesheet string
+					if (stylesheet != null) {
+
+						// Write css into codecontainer
+						cc.css.add(stylesheet.toString());
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Defines the necessary JavaScript required by this renderer/dialog, and
+	 * adds it to the JS into the ContainerCollection.
+	 * 
+	 * @created 15.01.2011
+	 * @param cc The ContainerCollection
+	 */
+	@Override
+	public void defineAndAddJS(ContainerCollection cc) {
+		cc.js.enableD3Web();
+		cc.js.add("$(function() {init_all();});", 1);
+		cc.js.add("function init_all() {", 1);
+		// cc.js.add("building = true;", 2);
+		// cc.js.add("building = false;", 2);
+		cc.js.add("hide_all_tooltips()", 2);
+		cc.js.add("generate_tooltip_functions();", 3);
+		cc.js.add("}", 31);
+
 	}
 
 }

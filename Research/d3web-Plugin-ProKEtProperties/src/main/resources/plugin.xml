@@ -53,6 +53,36 @@
 	</extension>
 	
 	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="show_in_header">
+		<parameter id="name" value="show_in_header" />
+		<parameter id="description" value="Set to true if a question should be shown in the header" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.Boolean" />
+	</extension>
+	
+	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="position_in_header">
+		<parameter id="name" value="position_in_header" />
+		<parameter id="description" value="Sets the position of question in the header" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.Integer" />
+	</extension>
+	
+	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="header_text">
+		<parameter id="name" value="header_text" />
+		<parameter id="description" value="Sets the text of the NamedObject for the header" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.String" />
+	</extension>
+	
+	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
 		id="image">
 		<parameter id="name" value="image" />
 		<parameter id="description" value="can be used for images in image questions" />

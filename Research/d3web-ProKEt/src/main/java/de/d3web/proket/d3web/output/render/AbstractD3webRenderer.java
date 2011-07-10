@@ -44,7 +44,6 @@ import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.data.IndicationMode;
 import de.d3web.proket.output.container.ContainerCollection;
-import de.d3web.proket.utils.TemplateUtils;
 
 /**
  * Basic Renderer Class for d3web-based dialogs. Defines the basic rendering of
@@ -371,66 +370,6 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 			}
 		}
 		return fus.toString();
-	}
-
-	/**
-	 * Handles CSS specifications from the specification XML, i.e. checks the
-	 * format, retrieves the corresponding CSS files from file system, and adds
-	 * them to the final ContainerCollection of the dialog.
-	 * 
-	 * @created 15.01.2011
-	 * @param cc ContainerCollection containing all infos about the resulting
-	 *        dialog.
-	 * @param d3wcon the d3web Connector for retrieving the css
-	 */
-	protected void handleCss(ContainerCollection cc) {
-
-		D3webConnector d3wcon = D3webConnector.getInstance();
-		// css code from the specification XML
-		String css = d3wcon.getCss();
-
-		if (css != null) {
-			// file reference or inline css?
-			// regex prüft ob der css-String was in der Form
-			// "file1, file2, file3" ist, also 1-mehrere CSS File Angaben
-			if (css.matches("[\\w-,\\s]*")) {
-				String[] parts = css.split(","); // aufspilitten
-
-				for (String partCSS : parts) {
-					// replace whitespace characters with empty string
-					// and then get the corresponding css file
-					StringTemplate stylesheet =
-							TemplateUtils.getStringTemplate
-									(partCSS.replaceAll("\\s", ""), "css");
-
-					// if not at the end of stylesheet string
-					if (stylesheet != null) {
-
-						// Write css into codecontainer
-						cc.css.add(stylesheet.toString());
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Defines the necessary JavaScript required by this renderer/dialog, and
-	 * adds it to the JS into the ContainerCollection.
-	 * 
-	 * @created 15.01.2011
-	 * @param cc The ContainerCollection
-	 */
-	protected void defineAndAddJS(ContainerCollection cc) {
-		cc.js.enableD3Web();
-		cc.js.add("$(function() {init_all();});", 1);
-		cc.js.add("function init_all() {", 1);
-		// cc.js.add("building = true;", 2);
-		// cc.js.add("building = false;", 2);
-		cc.js.add("hide_all_tooltips()", 2);
-		cc.js.add("generate_tooltip_functions();", 3);
-		cc.js.add("}", 31);
-
 	}
 
 	/**

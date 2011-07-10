@@ -63,13 +63,6 @@ public class Hernia extends D3webDialog {
 	private static final long serialVersionUID = -4790211381203716706L;
 
 	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public Hernia() {
-		super();
-	}
-
-	/**
 	 * Basic initialization and servlet method. Always called first, if servlet
 	 * is refreshed, called newly etc.
 	 * 
