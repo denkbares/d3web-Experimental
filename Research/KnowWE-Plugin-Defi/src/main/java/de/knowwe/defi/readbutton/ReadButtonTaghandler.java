@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.defi.readbutton;
 
@@ -55,7 +55,6 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 	private static final String LINKTEXT = "linkText";
 	private static final String ID = "id";
 
-
 	/**
 	 * @param name
 	 */
@@ -95,7 +94,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 
 			labels = new String[number];
 			values = new String[number];
-			
+
 			for (int i = 0; i < number; i++) {
 				if (parameters.containsKey(LABEL + (i + 1))) labels[i] = parameters.get(LABEL
 						+ (i + 1));
@@ -107,15 +106,15 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				}
 				else values[i] = "";
 			}
-			
+
 			if (parameters.containsKey(THRESHOLD)) threshold = Integer.parseInt(parameters.get(THRESHOLD));
 			else threshold = (int) Math.floor(number / 2);
-			
+
 			if (parameters.containsKey(ADDLINK)) link = parameters.get(ADDLINK);
 			else link = "";
 
 			if (parameters.containsKey(LINKTEXT)) linkText = parameters.get(LINKTEXT);
-			else linkText = "";
+			else linkText = link;
 
 			if (parameters.containsKey(ID)) id = parameters.get(ID);
 			else return KnowWEUtils.maskHTML("<p>Fehler: Dem Button fehlt das Attribut 'id'.</p>");
@@ -187,38 +186,47 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			// - user can talk about it
 			else if (talkAbout) {
 				readbutton.append("</table></form>");
-				String talkPage = userContext.getUserName() + "_comment_therapist";
-				title = parameters.get("title");
-				if (title == null) {
-					title = " &raquo; " + talkPage;
-				}
 
-				// subject = pagename
-				readbutton.append("<p><a href=\"Wiki.jsp?page=");
-				readbutton.append(KnowWEUtils.urlencode(talkPage.trim()));
-				readbutton.append("&amp;talkabout=");
-				readbutton.append(KnowWEUtils.urlencode(pagename.trim()));
-				readbutton.append("\" title=\"Title:");
-				readbutton.append(title);
-				readbutton.append("\" rel=\"nofollow\">");
-				readbutton.append("Mit Therapeuten dar&uuml;ber sprechen");
-				readbutton.append("</a>");
-				readbutton.append(" - <a href='#' onclick='getReadButtonValue(1," + number + ",\""
-						+ id + "\");return false'>Nicht Besprechen</a></p>");
-				if (link.startsWith("[") && link.endsWith("]")) {
-					// is wiki link (because of ajax not rendering by jspwiki
-					// pipeline
-					// => render here
-					String linkPagename = link.substring(1, link.length() - 1).trim();
-					String baseUrl = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
-					readbutton.append("<a href='" + baseUrl + "Wiki.jsp?page="
-							+ linkPagename
-							+ "' target='_blank'>"
-							+ linkPagename + "</a>");
+				// link replaces "talk about"
+				if (link != "") {
+					if (link.startsWith("[") && link.endsWith("]")) {
+						// is wiki link (because of ajax not rendering by
+						// jspwiki
+						// pipeline
+						// => render here
+						String linkPagename = link.substring(1, link.length() - 1).trim();
+						String baseUrl = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
+						readbutton.append("<a href='" + baseUrl + "Wiki.jsp?page="
+								+ linkPagename
+								+ "' target='_blank'>"
+								+ linkPagename + "</a>");
+					}
+					else {
+						readbutton.append("<a href='" + link + "' target='_blank'>"
+								+ linkText + "</a>");
+					}
 				}
 				else {
-					readbutton.append("<a href='" + link + "' target='_blank'>"
-							+ linkText + "</a>");
+
+					String talkPage = userContext.getUserName() + "_comment_therapist";
+					title = parameters.get("title");
+					if (title == null) {
+						title = " &raquo; " + talkPage;
+					}
+
+					// subject = pagename
+					readbutton.append("<p><a href=\"Wiki.jsp?page=");
+					readbutton.append(KnowWEUtils.urlencode(talkPage.trim()));
+					readbutton.append("&amp;talkabout=");
+					readbutton.append(KnowWEUtils.urlencode(pagename.trim()));
+					readbutton.append("\" title=\"Title:");
+					readbutton.append(title);
+					readbutton.append("\" rel=\"nofollow\">");
+					readbutton.append("Mit Therapeuten dar&uuml;ber sprechen");
+					readbutton.append("</a>");
+					readbutton.append(" - <a href='#' onclick='getReadButtonValue(1," + number
+							+ ",\""
+							+ id + "\");return false'>Nicht Besprechen</a></p>");
 				}
 			}
 			// - user has already rated
