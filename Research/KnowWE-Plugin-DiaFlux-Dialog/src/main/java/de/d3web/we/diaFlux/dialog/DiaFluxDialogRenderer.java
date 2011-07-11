@@ -49,6 +49,8 @@ public class DiaFluxDialogRenderer extends KnowWEDomRenderer<DiaFluxDialogType> 
 		DiaFluxDialogManager manager = DiaFluxDialogManager.getInstance();
 		LinkedList<DiaFluxDialogQuestionFindingPair> path = manager.getExactPath();
 
+		manager.resetActiveFlowcharts();
+
 		String hiddenPathDiv = "";
 		// already answered questions -> recreate state
 		if (path.size() > 0) {

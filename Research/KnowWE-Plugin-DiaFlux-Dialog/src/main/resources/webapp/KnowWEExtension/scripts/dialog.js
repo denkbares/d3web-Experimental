@@ -34,17 +34,73 @@ DiaFluxDialog.start = function() {
 			var node = DiaFluxDialog.Utils.findNodeWithName(question);
 			var outgoingRules = DiaFluxDialog.Utils.findOutgoingRules(node);
 			
+//			var nodeType = DiaFluxDialog.Utils.getNodeType(node);
+//			if (nodeType === 'question') {
+//				var action = node.actionPane.action;
+//				var infoObject = KBInfo.lookupInfoObject(action.getInfoObjectName()); 
+//				var questionType = infoObject.type;
+//			
+//			}
+			
 			for (var j = 0; j < outgoingRules.length; j++) {
-				if (outgoingRules[j].guard.displayHTML === answer[0]) {
+				
+				// check if num edges must be activated
+//				if (nodeType === 'question' && questionType === 'num') {
+				
+				// geht anders nicht, nur mit breakpoints
+				if (outgoingRules[j].guard.unit) {
+					var operator = DiaFluxDialog.Utils.extractOperator(outgoingRules[j]);
+					var number = DiaFluxDialog.Utils.extractNumber(outgoingRules[j]);
+				
+					if (operator === '>') {
+						if (answer > number) {
+							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
+						}
+					} else if (operator === '<') {
+						if (answer < number) {
+							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
+						}
+					} else if (operator === '>=') {
+						if (answer >= number) {
+							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
+						}
+					} else if (operator === '<=') {
+						if (answer <= number) {
+							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
+						}
+					} else if (operator === '=') {
+						if (answer == number) {
+							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
+						}
+					} else if (operator === '!=') {
+						if (answer != number) {
+							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
+						}
+					} else if (operator === 'inin') {
+						if (answer >= number[0] && answer <= number[1]) {
+							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
+						}
+					} else if (operator === 'inex') {
+						if (answer >= number[0] && answer < number[1]) {
+							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
+						}
+					} else if (operator === 'exin') {
+						if (answer > number[0] && answer <= number[1]) {
+							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
+						}
+					} else if (operator === 'exex') {
+						if (answer > number[0] && answer < number[1]) {
+							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
+						}
+					}
+					
+				// not num questions
+				} else if (outgoingRules[j].guard.displayHTML === answer[0]) {
 					DiaFluxDialog.activateRule(outgoingRules[j], false, true);
 				}
 			}
 		}
-		
-		var bla = 1;
 	}
-	
-	var a = 1;
 }
 
 
@@ -206,7 +262,54 @@ DiaFluxDialog.prepareSetSingleFindingRequest = function(flowRule, flowNode) {
 	
 	// TODO num werte generieren
 	} else {
-		DiaFluxDialog.sendSetSingleFindingRequest();
+		var guard = flowRule.guard.displayHTML;
+		var maxRange = infoObject.range;
+		
+		var min = parseInt(maxRange[0]);
+		var max = parseInt(maxRange[1]);
+		
+		var operator = DiaFluxDialog.Utils.extractOperator(flowRule);
+		var number = DiaFluxDialog.Utils.extractNumber(flowRule);
+		
+		number[0] = parseInt(number[0]);
+		number[1] = parseInt(number[1]);
+		
+		var r;
+		if (operator === '>') {
+			min = number + 0.1;
+		} else if (operator === '<') {
+			max = number - 0.1;
+		} else if (operator === '>=') {
+			min = number;
+		} else if (operator === '<=') {
+			max = number;
+		} else if (operator === '!=') {
+			r = min + Math.floor(Math.random() * ( max-min) * 10) / 10;
+			while (r === number) {
+				r = min + Math.floor(Math.random() * ( max-min) * 10) / 10;
+			}
+		} else if (operator === '=') {
+			r = number;
+		} else if (operator === 'inin') {
+			min = number[0];
+			max = number[1];
+		} else if (operator === 'inex') {
+			min = number[0];
+			max = number[1] - 0.1;
+		} else if (operator === 'exin') {
+			min = number[0] + 0.1;
+			max = number[1];
+		} else if (operator === 'exex') {
+			min = number[0] + 0.1;
+			max = number[1] - 0.1;
+		}
+		
+		if (!r) {
+			r = min + Math.floor(Math.random() * ( max-min) * 10) / 10;
+		}
+		
+		DiaFluxDialog.sendSetSingleFindingRequest(question, {ValueNum: r});
+	
 	}
 }
 
@@ -879,5 +982,55 @@ DiaFluxDialog.Utils.findNodeWithName = function(name) {
 //		} else if (nodeType === 'solution') {
 //			
 //		}
+	}
+}
+
+/**
+ * extracts the operator from an outgoing edge of a num question
+ */
+DiaFluxDialog.Utils.extractOperator = function(flowRule) {
+	var guard = flowRule.guard.displayHTML;
+	
+	if (guard.startsWith('[') && guard.endsWith(']')) {
+		return 'inin';
+	} else if (guard.startsWith('[') && guard.endsWith('{')) {
+		return 'inex';
+	} else if (guard.startsWith(']') && guard.endsWith('[')) {
+		return 'exex';
+	} else if (guard.startsWith(']') && guard.endsWith(']')) {
+		return 'exin';
+	} else {
+		var parts = guard.split(' ');
+
+		if (parts[0] === '&gt;') {
+			return '>';
+		} else if (parts[0] === '&lt;') {
+			return '<';
+		} else if (parts[0] === '&ge;') {
+			return '>=';
+		} else if (parts[0] === '&le;') {
+			return '<=';
+		} else if (parts[0] === '=') {
+			return '=';
+		} else if (parts[0] === '&ne;') {
+			return '!=';
+		}
+	}
+}
+
+/**
+ * extracts the number from an outgoing edge of a num question
+ */
+DiaFluxDialog.Utils.extractNumber = function(flowRule) {
+	var guard = flowRule.guard.displayHTML;
+	if (guard.startsWith('[') || guard.startsWith(']')) {
+		guard = guard.replace('[', '');
+		guard = guard.replace(']', '');
+		
+		var parts = guard.split('..');
+		return new Array(parts[0].trim(), parts[1].trim());
+	} else {
+		var parts = guard.split(' ');
+		return parts[1];
 	}
 }

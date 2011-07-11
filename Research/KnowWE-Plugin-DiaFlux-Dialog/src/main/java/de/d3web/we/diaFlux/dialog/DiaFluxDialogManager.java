@@ -19,6 +19,7 @@
 package de.d3web.we.diaFlux.dialog;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -74,10 +75,26 @@ public class DiaFluxDialogManager {
 
 	public void addItemToExactPath(DiaFluxDialogQuestionFindingPair pair) {
 		exactPath.add(pair);
+
+		List<DiaFluxDialogQuestionFindingPair> p1 = exactPath.subList(0, exactPath.size() / 2);
+		List<DiaFluxDialogQuestionFindingPair> p2 = exactPath.subList(exactPath.size() / 2,
+				exactPath.size());
+
+		if (p1.equals(p2)) {
+			exactPath.clear();
+			for (DiaFluxDialogQuestionFindingPair p : p1) {
+				exactPath.add(p);
+			}
+		}
+
+	}
+
+	public void resetActiveFlowcharts() {
+		activeFlowcharts = new Stack<String>();
 	}
 
 	public void reset() {
-		activeFlowcharts = new Stack<String>();
+		resetActiveFlowcharts();
 		exactPath = new LinkedList<DiaFluxDialogQuestionFindingPair>();
 	}
 
