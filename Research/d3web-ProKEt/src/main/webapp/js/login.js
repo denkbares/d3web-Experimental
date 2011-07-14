@@ -115,39 +115,41 @@ function sendData() {
 
 	var servletPartNew = "d3web-ProKEt/LoginServlet" + querylink;
 
-	// link = window.location.href.replace(servletPart, servletPartNew);
-	var link = $.query.set("action", "login").set("u", usr).set("p", encrypt(pw)).toString();
-	link = window.location.href.replace(window.location.search, "") + link;
-
+	var link = $.query.set("action", "login").set("u", usr).set("p", encrypt(pw));
 	
-	var jxhr = $.get(link, function(html) {
+	$.ajax({
+		type : "GET",
+		url : link,
+		cache : false, // needed for IE, call is not made otherwise
+		success : function(html) {
 		
-		// not successfully logged in
-		if (html == "nosuccess"){
-			$('#loginError').html("<font color=\"red\">Login erfolglos. Bitte versuchen Sie es noch einmal.</font><br />");
-			$('#loginErrorMailRequest').html("" +
-					"<b>Logindaten vergessen?</b> <font color=\"blue\"><u>Daten erneut zuschicken</u></font><br/>" +
-					"(Feld <b>Benutzer</b> muss ausgefüllt sein!)" );
-		} else {
-			// successful login: remove error message
-			$('#loginError').html("");
-			
-			// just close login dialog, but NOT reset session
-			$("#jqLoginDialog").dialog("close");	
-			
-			// in case another user than before logged in successfully
-			if(html=="newUser"){
-				
-				// TODO for safety reasons, autosave old case for old user
-				
-				// ... and finally reset the dialog
-				d3web_sessionForNewUser();
-				
+			// not successfully logged in
+			if (html == "nosuccess"){
+				$('#loginError').html("<font color=\"red\">Login erfolglos. Bitte versuchen Sie es noch einmal.</font><br />");
+				$('#loginErrorMailRequest').html("" +
+						"<b>Logindaten vergessen?</b> <font color=\"blue\"><u>Daten erneut zuschicken</u></font><br/>" +
+						"(Feld <b>Benutzer</b> muss ausgefüllt sein!)" );
 			} else {
+				// successful login: remove error message
+				$('#loginError').html("");
 				
-				// otherwise just show previous dialog mask/link
-				d3web_show();
-			}	
+				// just close login dialog, but NOT reset session
+				$("#jqLoginDialog").dialog("close");	
+				
+				// in case another user than before logged in successfully
+				if(html=="newUser"){
+					
+					// TODO for safety reasons, autosave old case for old user
+					
+					// ... and finally reset the dialog
+					d3web_sessionForNewUser();
+					
+				} else {
+					
+					// otherwise just show previous dialog mask/link
+					d3web_show();
+				}	
+			}
 		}
 	});
 }

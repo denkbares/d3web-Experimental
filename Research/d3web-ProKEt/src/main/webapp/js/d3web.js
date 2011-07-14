@@ -42,6 +42,7 @@ $(function() {
 		$.ajax({
 			type: "GET",
 			async: false,
+			cache : false, // needed for IE, call is not made otherwise
 			url: link,
 			success : function(html) {
 				if (html == "NLI") {
@@ -401,15 +402,16 @@ function d3web_addFacts() {
 	$.ajax({
 		type : "GET",
 		url : link,
+		cache : false, // needed for IE, call is not made otherwise
 		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 		success : function(html) {
 			if (html.startsWith("##missingfield##")) {
 				// Error message and reset session so user can provide input
 				// first
-				var errMsg = "Das Feld '" + html.replace("##missingfield##", "")
-						+ "' muss immer zuerst ausgefüllt werden!";
-				alert(errMsg);
-				d3web_resetSession();
+//				var errMsg = "Das Feld '" + html.replace("##missingfield##", "")
+//						+ "' muss immer zuerst ausgefüllt werden!";
+//				alert(errMsg);
+//				d3web_resetSession();
 			} else {
 				updateDialog(html);
 				setup();
@@ -458,6 +460,7 @@ function d3web_updateSummary() {
 	$.ajax({
 		type : "GET",
 		url : link,
+		cache : false, // needed for IE, call is not made otherwise
 		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 		success : function(html) {
 			updateDialog(html);
@@ -516,6 +519,7 @@ function d3web_resetSession() {
 	$.ajax({
 		type : "GET",
 		url : link,
+		cache : false, // needed for IE, call is not made otherwise
 		success : function() {
 			window.location.reload(true);
 			initFunctionality();
@@ -525,12 +529,12 @@ function d3web_resetSession() {
 
 function d3web_sessionForNewUser() {
 
-	var link = $.query.set("action", "resetNewUser").toString();
-	link = window.location.href.replace(window.location.search, "") + link;
+	var link = $.query.set("action", "resetNewUser");
 
 	$.ajax({
 		type : "GET",
 		url : link,
+		cache : false, // needed for IE, call is not made otherwise
 		success : function() {
 
 			d3web_show();
@@ -592,6 +596,7 @@ function d3web_show() {
 	$.ajax({
 		type : "GET",
 		async : false,
+		cache : false, // needed for IE, call is not made otherwise
 		url : link,
 		success : function(html) {
 			// d3web_nextform();
@@ -640,6 +645,7 @@ function d3web_loadCase(filename) {
 	$.ajax({
 		type : "GET",
 		async : false,
+		cache : false, // needed for IE, call is not made otherwise
 		url : link,
 		success : function(html) {
 			// d3web_nextform();
@@ -674,6 +680,7 @@ function d3web_nextform() {
 	$.ajax({
 		type : "GET",
 		async : false,
+		cache : false, // needed for IE, call is not made otherwise
 		// url : link,
 		success : function(html) { // compare resulting html to former
 			if (html != "same") { // replace target id of content if not the
@@ -698,6 +705,7 @@ function d3web_selectQuestionnaire(qid) {
 	$.ajax({
 		type : "GET",
 		async : false,
+		cache : false, // needed for IE, call is not made otherwise
 		url : link,
 		success : function(html) {
 			// d3web_nextform();
@@ -715,6 +723,7 @@ function d3web_getChildren(pid) {
 	$.ajax({
 		type : "GET",
 		async : false,
+		cache : false, // needed for IE, call is not made otherwise
 		url : link,
 		success : function(html) {
 			$("#sub-" + pid).html(html);
@@ -733,6 +742,7 @@ function d3web_getRatings(list_of_ids) {
 	$.ajax({
 		type : "GET",
 		async : false,
+		cache : false, // needed for IE, call is not made otherwise
 		url : link,
 		success : function(html) {
 			var elements = html.split(";");
@@ -761,6 +771,7 @@ function d3web_show_solutions(target_id) {
 	$.ajax({
 		type : "GET",
 		// async : false,
+		cache : false, // needed for IE, call is not made otherwise
 		url : link,
 		success : function(html) {
 			$('#' + target_id).html(html).fadeIn(3000);
