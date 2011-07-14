@@ -50,12 +50,10 @@ public class D3webRendererMapping extends HashMap<String, String> {
 
 	// the instance
 	private static D3webRendererMapping instance = null;
+
 	// the prefix, i.e. the package declaration where renderer classes are
 	// found plus, optionally, a user prefix from the XML specifying specific
 	// Renderers.
-	private static String userPref = D3webConnector.getInstance().getUserprefix();
-	private static String prefix = GlobalSettings.getInstance().getD3webRendererPath();
-
 	/**
 	 * Creates or returns the one & only instance of the RendererMapping Map.
 	 * 
@@ -96,7 +94,8 @@ public class D3webRendererMapping extends HashMap<String, String> {
 	 * @return The renderer as a simple Object.
 	 */
 	public Object getRendererObject(TerminologyObject to) {
-
+		String prefix = GlobalSettings.getInstance().getD3webRendererPath();
+		String userPref = D3webConnector.getInstance().getUserprefix();
 		Class<?> result = null;
 		try {
 			if (to == null) {
@@ -149,7 +148,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
 	 * @return The renderer as a simple Object.
 	 */
 	public Object getAnswerRendererObject(TerminologyObject to) {
-
+		String prefix = GlobalSettings.getInstance().getD3webRendererPath();
 		Class<?> result = null;
 		try {
 			if (to == null) {
@@ -201,6 +200,8 @@ public class D3webRendererMapping extends HashMap<String, String> {
 	}
 
 	public Object getUnknownRenderer() {
+
+		String prefix = GlobalSettings.getInstance().getD3webRendererPath();
 		Class<?> result = null;
 
 		try {

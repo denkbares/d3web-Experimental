@@ -201,8 +201,9 @@ public class D3webDialog extends HttpServlet {
 
 		// only invoke parser, if XML hasn't been parsed before
 		// if it has, a knowledge base already exists
-		if (d3wcon.getKb() == null ||
-				!source.equals(sourceSave)) {
+		if (d3wcon.getKb() == null
+				|| !source.equals(sourceSave)
+				|| !d3wcon.getUserprefix().equals(d3webParser.getUserPrefix())) {
 			d3wcon.setKb(d3webParser.getKnowledgeBase());
 			d3wcon.setKbName(d3webParser.getKnowledgeBaseName());
 			d3wcon.setDialogStrat(d3webParser.getStrategy());
