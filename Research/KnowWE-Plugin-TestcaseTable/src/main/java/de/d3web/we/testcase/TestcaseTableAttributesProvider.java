@@ -20,10 +20,23 @@
 
 package de.d3web.we.testcase;
 
+import java.util.List;
+
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.terminology.QuestionChoice;
+import de.d3web.core.knowledge.terminology.QuestionNum;
+import de.d3web.core.knowledge.terminology.QuestionYN;
+import de.d3web.we.basic.D3webModule;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.table.Table;
 import de.d3web.we.kdom.table.TableAttributesProvider;
+import de.d3web.we.kdom.table.TableCell;
 import de.d3web.we.kdom.table.TableCellContent;
+import de.d3web.we.kdom.table.TableLine;
+import de.d3web.we.kdom.table.TableUtils;
 
 /**
  * @author Florian Ziegler
@@ -52,6 +65,72 @@ public class TestcaseTableAttributesProvider implements TableAttributesProvider 
 	@Override
 	public String getWidthAttribute(Section<Table> s) {
 		return null;
+	}
+
+	@Override
+	public String getCellForAppendRowQuickEdit(Section<TableCell> cell) {
+		Section<TableCellContent> content = Sections.findChildOfType(cell, TableCellContent.class);
+		int col = TableUtils.getColumn(content);
+		int row = TableUtils.getRow(content);
+
+		KnowledgeBase knowledgeService = D3webModule.getAD3webKnowledgeServiceInTopic(
+				cell.getWeb(), cell.getTitle());
+
+		// if autocompile is off
+		if (knowledgeService == null) {
+			return null;
+		}
+		List<Question> questions = knowledgeService.getManager().getQuestions();
+		String header = TableUtils.getColumnHeadingForCellContent(content).trim();
+
+		if (col == 0) {
+			return " ";
+		}
+		else if (col == 1) {
+			if (row > 1) {
+				Section<Table> table = Sections.findAncestorOfType(cell, Table.class);
+				List<Section<TableLine>> lines = Sections.findChildrenOfType(table, TableLine.class);
+				Section<TableLine> line = lines.get(row);
+				Section<? extends Type> cells = line.getChildren().get(col);
+				Section<TimeStampType> asdf = Sections.findSuccessor(cells,
+						TimeStampType.class);
+				return TimeStampType.createTimeAsTimeStamp(TimeStampType.getTimeInMillis(asdf) + 1);
+
+			}
+			return "1s";
+		}
+		else if (row == 0) {
+			return questions.get(0).getName();
+		}
+		else {
+			for (Question q : questions) {
+				if (q.getName().equals(header)) {
+					if (q instanceof QuestionYN) {
+						return "Yes";
+					}
+					else if (q instanceof QuestionChoice) {
+						return ((QuestionChoice) q).getAllAlternatives().get(0).getName();
+
+					}
+					else if (q instanceof QuestionNum) {
+						return "0";
+					}
+				}
+			}
+
+
+		}
+		return "established";
+	}
+
+
+	@Override
+	public String getCellForAppendColQuickEdit(Section<TableLine> line) {
+		Section<? extends Type> lastChild =
+				line.getChildren().get(line.getChildren().size() - 1);
+		Section<TableCellContent> content = Sections.findSuccessor(lastChild,
+				TableCellContent.class);
+		return content.getText();
 	}
 
 }

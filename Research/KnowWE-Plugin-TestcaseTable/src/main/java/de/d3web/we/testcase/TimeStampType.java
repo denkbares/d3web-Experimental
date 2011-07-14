@@ -68,6 +68,20 @@ public class TimeStampType extends AbstractType {
 		return TIMESTAMP_PATTERN.matcher(sectionText).matches();
 	}
 
+	public static String createTimeAsTimeStamp(long time) {
+		String t = "";
+		for (int i = TIME_FACTORS.length - 1; i >= 0; i--) {
+			long factor = TIME_FACTORS[i];
+			long amount = (time / factor);
+			if (amount >= 1) {
+
+				t += amount + TIME_UNITS[i];
+				time -= amount * factor;
+			}
+		}
+		return t;
+	}
+
 	public static long getTimeInMillis(Section<TimeStampType> sec) {
 		return getTimeInMillis(sec.getOriginalText());
 	}

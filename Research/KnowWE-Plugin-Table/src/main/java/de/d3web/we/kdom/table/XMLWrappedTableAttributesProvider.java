@@ -71,4 +71,16 @@ public class XMLWrappedTableAttributesProvider implements TableAttributesProvide
 		}
 		return null;
 	}
+
+	@Override
+	public String getCellForAppendRowQuickEdit(Section<TableCell> cell) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getCellForAppendColQuickEdit(Section<TableLine> line) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

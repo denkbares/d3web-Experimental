@@ -119,7 +119,7 @@ public class TestcaseUtils {
 		}
 
 		List<String> temp = new ArrayList<String>();
-		String text = TableUtils.getColumnHeadingForCellContent(s);
+		String text = TableUtils.getColumnHeadingForCellContent(s).trim();
 
 		if (text == null) {
 			return null;

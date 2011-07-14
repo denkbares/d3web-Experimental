@@ -47,4 +47,16 @@ public class NullTableAttributesProvider implements TableAttributesProvider {
 		return null;
 	}
 
+	@Override
+	public String getCellForAppendRowQuickEdit(Section<TableCell> cell) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getCellForAppendColQuickEdit(Section<TableLine> line) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

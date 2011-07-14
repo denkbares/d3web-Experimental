@@ -45,24 +45,47 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 		int column = TableUtils.getColumn(sec);
 
 		StringBuilder html = new StringBuilder();
+		if (!sec.hasQuickEditModeSet(user.getUserName())) {
+			if (!messages.isEmpty()) {
+				html.append("<td class='error'>");
+			}
+			else if (column != 0) {
+				html.append("<td>");
+			}
+			else {
 
-		if (!messages.isEmpty()) {
-			html.append("<td class='error'>");
-		}
-		else if (column != 0) {
-			html.append("<td>");
+				html.append("<td>");
+				html.append("<div class='startTestcaseIncluding' title='run Testcases until and including this' onclick='Testcase.runTestcase(this, true)'>"
+							+ "</div>"
+							+ "<div class='startTestcase' title='run Testcase' onclick='Testcase.runTestcase(this, false)'></div>");
 
+			}
+			html.append(sec.getText());
 		}
 		else {
+			if (!messages.isEmpty()) {
+				html.append("<td class='error'>");
+				html.append(sec.getText());
+			}
+			else if (column == 1) {
+				html.append("<td>");
+				html.append("<input type='text' name='" + sec.getOriginalText() + "' id='" + sec.getID()
+						+ "' value='" + TableUtils.quote(sec.getOriginalText())
+						+ "' class='table-edit-node'/>");
+			}
+			else if (column != 0) {
+				html.append("<td>");
+				generateContent(sec.getOriginalText(), sec, user, sec.getID(), html);
 
-			html.append("<td>");
-			html.append("<div class='startTestcaseIncluding' title='run Testcases until and including this' onclick='Testcase.runTestcase(this, true)'>"
-						+ "</div>"
-						+ "<div class='startTestcase' title='run Testcase' onclick='Testcase.runTestcase(this, false)'></div>");
+			}
+			else {
+				html.append("<td>");
+				html.append("<div class='startTestcaseIncluding' title='run Testcases until and including this' onclick='Testcase.runTestcase(this, true)'>"
+							+ "</div>"
+							+ "<div class='startTestcase' title='run Testcase' onclick='Testcase.runTestcase(this, false)'></div>");
 
+			}
 		}
-
-		html.append(sec.getText());
 
 		html.append("</td>");
 		string.append(KnowWEUtils.maskHTML(html.toString()));

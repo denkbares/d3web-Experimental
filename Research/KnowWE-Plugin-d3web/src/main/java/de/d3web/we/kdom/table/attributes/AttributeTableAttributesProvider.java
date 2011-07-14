@@ -24,7 +24,9 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.table.Table;
 import de.d3web.we.kdom.table.TableAttributesProvider;
+import de.d3web.we.kdom.table.TableCell;
 import de.d3web.we.kdom.table.TableCellContent;
+import de.d3web.we.kdom.table.TableLine;
 import de.d3web.we.kdom.xml.AbstractXMLType;
 
 /**
@@ -74,6 +76,18 @@ public class AttributeTableAttributesProvider implements TableAttributesProvider
 			return AbstractXMLType.getAttributeMapFor(xml).get(
 					TableAttributesProvider.ATT_WIDTH);
 		}
+		return null;
+	}
+
+	@Override
+	public String getCellForAppendRowQuickEdit(Section<TableCell> cell) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getCellForAppendColQuickEdit(Section<TableLine> line) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

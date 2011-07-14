@@ -69,7 +69,14 @@ Testcase.sendRequest = function(type, element) {
  * returns the tablelines of the currently edited table
  */
 Testcase.getTableLines = function(table) {
-	return table.getElement('tbody').childNodes;
+	var lines = table.getElement('tbody').childNodes;
+	var tableLines = [];
+	for (var i = 0 ; i < lines.length; i++) {
+		if (lines[i].nodeName === 'TR') {
+			tableLines.push(lines[i]);
+		}
+	}
+	return tableLines;
 }
 
 /**

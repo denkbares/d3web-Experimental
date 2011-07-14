@@ -85,4 +85,8 @@ public interface TableAttributesProvider {
 	 */
 	public String[] getAttributeValues(Section<? extends TableCellContent> s);
 
+	public String getCellForAppendRowQuickEdit(Section<TableCell> cell);
+
+	public String getCellForAppendColQuickEdit(Section<TableLine> line);
+
 }

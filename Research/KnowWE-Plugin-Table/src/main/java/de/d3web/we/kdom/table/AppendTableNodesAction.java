@@ -99,10 +99,13 @@ public class AppendTableNodesAction extends AbstractAction {
 			List<Section<TableCell>> cells = new LinkedList<Section<TableCell>>();
 			Sections.findSuccessorsOfType(line, TableCell.class, cells);
 			for (Section<TableCell> cell : cells) {
+				String content = table.get().getTableAttributesProvider().getCellForAppendRowQuickEdit(
+						cell);
+				content = content != null ? content : " - ";
 				if (TableCell.isTableHead(cell)) {
-					newLine.append(" || - ");
+					newLine.append("||" + content);
 				} else {
-					newLine.append(" | - ");
+					newLine.append("|" + content);
 				}
 			}
 		} else {
@@ -132,11 +135,13 @@ public class AppendTableNodesAction extends AbstractAction {
 		String originalText = "";
 
 		for (Section<TableLine> line : lines) {
+			String content = table.get().getTableAttributesProvider().getCellForAppendColQuickEdit(
+					line);
 			if (TableLine.isHeaderLine(line)) {
-				originalText = line.getOriginalText().trim() + " || - \n";
+				originalText = line.getOriginalText().trim() + "||" + content + "\n";
 			}
 			else {
-				originalText = line.getOriginalText().trim() + " | - \n";
+				originalText = line.getOriginalText().trim() + "|" + content + "\n";
 			}
 			nodesMap.put(line.getID(), originalText);
 		}
