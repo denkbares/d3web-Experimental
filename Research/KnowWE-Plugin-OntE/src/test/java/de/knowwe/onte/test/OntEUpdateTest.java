@@ -36,6 +36,7 @@ import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
 import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEEnvironment;
+import de.d3web.we.core.KnowWEEnvironment.CompilationMode;
 import de.d3web.we.core.packaging.KnowWEPackageManager;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
@@ -68,6 +69,7 @@ public class OntEUpdateTest {
 	@BeforeClass
 	public static void setUp() throws IOException {
 		InitPluginManager.init();
+		KnowWEEnvironment.getInstance().setCompilationMode(CompilationMode.INCREMENTAL);
 		KnowWEPackageManager.overrideAutocompileArticle(true);
 		MyTestArticleManager.getArticle(TESTFILE);
 	}
