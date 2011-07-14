@@ -886,7 +886,7 @@ public class D3webDialog extends HttpServlet {
 			// NUM questions
 			else if (to instanceof QuestionNum) {
 				try {
-					value = new NumValue(Double.parseDouble(valString));
+					value = new NumValue(Double.parseDouble(valString.replace(",", ".")));
 				}
 				catch (NumberFormatException ex) {
 					// value still null, will not be set

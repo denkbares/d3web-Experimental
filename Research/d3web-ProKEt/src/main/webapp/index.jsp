@@ -1,2 +1,2 @@
 
-<jsp:forward page="/Hernia"/>
+<jsp:forward page="/Mediastinitis"/>

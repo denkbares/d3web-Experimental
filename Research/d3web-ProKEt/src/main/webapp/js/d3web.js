@@ -246,8 +246,10 @@ function initFunctionality() {
 			}
 		});
 	});
-	$('[type=text]').blur(function() {
+	
+	$('[type=text]').unbind('focusout').focusout(function() {
 		d3web_storeQuestionText($(this));
+		d3web_addFacts($(this));
 	});
 
 	$('[type=textarea]').unbind('click').click(function() {
@@ -260,10 +262,7 @@ function initFunctionality() {
 			}
 		});
 	});
-	$('[type=text]').blur(function() {
-		d3web_storeQuestionText($(this));
-	});
-
+	
 	// bind reset button to resetSession() function
 	$('#reset').unbind('click').click(function() {
 		d3web_resetSession();
