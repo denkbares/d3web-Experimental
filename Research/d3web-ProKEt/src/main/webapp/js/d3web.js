@@ -175,36 +175,25 @@ $(function() {
 	/* Initialize the JS binding to the dialog elements */
 	initFunctionality();
 
-	$()
-			.ready(
-					function() {
+	$().ready(function() {
+			// enable buttons in save case and load case dialogs to
+			// react on pressing enter
+		$(document).keypress(function(e) {
+		if ((e.which && e.which == 13)
+				|| (e.keyCode && e.keyCode == 13)) {
+			
+			if ($('#jqConfirmDialog').dialog('isOpen'))
+				$('[aria-labelledby$=jqConfirmDialog]').find(
+						":button:contains('Speichern')").click();
+			
+			if ($('#jqLoadCaseDialog').dialog('isOpen'))
+				$('[aria-labelledby$=jqLoadCaseDialog]').find(
+						":button:contains('OK')").click();
+				return false;
+			}
+		});
 
-						// enable buttons in save case and load case dialogs to
-						// react on pressing enter
-						$(document)
-								.keypress(
-										function(e) {
-											if ((e.which && e.which == 13)
-													|| (e.keyCode && e.keyCode == 13)) {
-												if ($('#jqConfirmDialog')
-														.dialog('isOpen'))
-													$(
-															'[aria-labelledby$=jqConfirmDialog]')
-															.find(
-																	":button:contains('Speichern')")
-															.click();
-												if ($('#jqLoadCaseDialog')
-														.dialog('isOpen'))
-													$(
-															'[aria-labelledby$=jqLoadCaseDialog]')
-															.find(
-																	":button:contains('OK')")
-															.click();
-												return false;
-											}
-										});
-
-					});
+	});
 });
 
 /**
@@ -282,6 +271,7 @@ function initFunctionality() {
 
 	// bind send/save button to sendexit function
 	$('#savecase').unbind('click').click(function(event) {
+		d3web_addFacts($(this));
 		d3web_prepareSave();
 	});
 
@@ -296,6 +286,7 @@ function initFunctionality() {
 	});
 	
 	$('#summary').click(function(event){
+		d3web_updateSummary();
 		$("#jqSummaryDialog").dialog("open");
 	});
 	
@@ -420,18 +411,10 @@ function d3web_addFacts() {
 						+ "' muss immer zuerst ausgefüllt werden!";
 				alert(errMsg);
 				d3web_resetSession();
-			} else if (html.startsWith("##replaceid##")) {
-				var updateArray = html.split(/##replaceid##|##replacecontent##/);
-				for (var i = 0; i < updateArray.length - 1; i+=2) {
-					if (updateArray[i].length == 0) {
-						i--;
-						continue;
-					}
-					$("#" + updateArray[i]).replaceWith(updateArray[i + 1]);
-				}
+			} else {
+				updateDialog(html);
 				setup();
 				initFunctionality();
-//				d3web_show();
 			}
 		},
 		error : function(html) {
@@ -468,6 +451,36 @@ function handleUnsupportedBrowsers() {
 
 function moveContentPart() {
 	$('#content').css("margin-top", (getHeaderHeight() + 10) + "px");
+}
+
+function d3web_updateSummary() {
+	var link = $.query.set("action", "updatesummary");
+	
+	$.ajax({
+		type : "GET",
+		url : link,
+		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+		success : function(html) {
+			updateDialog(html);
+		},
+		error : function(html) {
+			alert("ajax error");
+		}
+	});
+	
+}
+
+function updateDialog(html) {
+	if (html.startsWith("##replaceid##")) {
+		var updateArray = html.split(/##replaceid##|##replacecontent##/);
+		for (var i = 0; i < updateArray.length - 1; i+=2) {
+			if (updateArray[i].length == 0) {
+				i--;
+				continue;
+			}
+			$("#" + updateArray[i]).replaceWith(updateArray[i + 1]);
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

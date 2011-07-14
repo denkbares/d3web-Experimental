@@ -24,7 +24,6 @@ import org.antlr.stringtemplate.StringTemplate;
 import de.d3web.core.knowledge.Indication.State;
 import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.NamedObject;
 import de.d3web.core.knowledge.terminology.QContainer;
@@ -36,9 +35,7 @@ import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.knowledge.terminology.QuestionZC;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Session;
-import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
-import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
@@ -512,44 +509,6 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 			}
 		}
 		return false;
-	}
-
-	protected String fillSummaryDialog() {
-
-		StringBuilder bui = new StringBuilder();
-		D3webConnector d3wcon = D3webConnector.getInstance();
-
-		TerminologyObject root = d3wcon.getKb().getRootQASet();
-
-		fillSummaryChildren(bui, root);
-
-		return bui.toString();
-	}
-
-	private void fillSummaryChildren(StringBuilder bui, TerminologyObject to) {
-
-		if (to instanceof QContainer && !to.getName().contains("Q000")) {
-			bui.append("<div style='margin-top:10px;'><b>" + countQcon + " " + to.getName()
-					+ "</b></div>");
-			countQcon++;
-		}
-		else if (to instanceof Question) {
-			Value val =
-					d3webSession.getBlackboard().getValue((ValueObject) to);
-
-			if (val != null && UndefinedValue.isNotUndefinedValue(val)) {
-				bui.append("<div style='margin-left:10px;'>" + countQ + " " + to.getName()
-						+ " -- " + val + "</div>");
-			}
-			countQ++;
-		}
-
-		if (to.getChildren() != null && to.getChildren().length != 0) {
-			for (TerminologyObject toc : to.getChildren()) {
-				fillSummaryChildren(bui, toc);
-			}
-		}
-
 	}
 
 	public static String getID(NamedObject no) {

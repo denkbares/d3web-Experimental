@@ -187,7 +187,7 @@ public class D3webDialog extends HttpServlet {
 		// try to get the src parameter, which defines the specification xml
 		// with special properties for this dialog/knowledge base
 		// if none available, default.xml is set
-		String source = "default.xml";
+		String source = getSource();
 		if (request.getParameter("src") != null) {
 			source = request.getParameter("src");
 		}
@@ -256,6 +256,10 @@ public class D3webDialog extends HttpServlet {
 		}
 		else if (action.equalsIgnoreCase("loadcase")) {
 			loadCase(request, response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("updatesummary")) {
+			updateSummary(request, response, httpSession);
 			return;
 		}
 		else if (action.equalsIgnoreCase("reset")) {
@@ -332,6 +336,22 @@ public class D3webDialog extends HttpServlet {
 		}
 	}
 
+	protected String getSource() {
+		String source = "default.xml";
+		return source;
+	}
+
+	protected void updateSummary(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
+		PrintWriter writer = response.getWriter();
+
+		writer.append(REPLACEID + "sumQuestionnaire");
+		writer.append(REPLACECONTENT);
+		DefaultRootD3webRenderer rootRenderer =
+				(DefaultRootD3webRenderer) D3webRendererMapping
+						.getInstance().getRendererObject(null);
+		writer.append(rootRenderer.fillSummaryDialog());
+	}
+
 	/**
 	 * Basic servlet method for displaying the dialog.
 	 * 
@@ -341,7 +361,7 @@ public class D3webDialog extends HttpServlet {
 	 * @param d3webSession
 	 * @throws IOException
 	 */
-	private void show(HttpServletRequest request, HttpServletResponse response,
+	protected void show(HttpServletRequest request, HttpServletResponse response,
 			HttpSession httpSession)
 			throws IOException {
 
@@ -1023,7 +1043,7 @@ public class D3webDialog extends HttpServlet {
 	 * @param password The password.
 	 * @return True, if permissions are correct.
 	 */
-	private boolean permitUser(String user, String password) {
+	protected boolean permitUser(String user, String password) {
 
 		List<String> values = getUserDat().get(user);
 		if (values != null) {
