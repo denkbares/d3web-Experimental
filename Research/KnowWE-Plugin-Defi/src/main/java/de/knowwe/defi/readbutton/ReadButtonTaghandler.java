@@ -187,27 +187,6 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			else if (talkAbout) {
 				readbutton.append("</table></form>");
 
-				// link replaces "talk about"
-				if (link != "") {
-					if (link.startsWith("[") && link.endsWith("]")) {
-						// is wiki link (because of ajax not rendering by
-						// jspwiki
-						// pipeline
-						// => render here
-						String linkPagename = link.substring(1, link.length() - 1).trim();
-						String baseUrl = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
-						readbutton.append("<a href='" + baseUrl + "Wiki.jsp?page="
-								+ linkPagename
-								+ "' target='_blank'>"
-								+ linkPagename + "</a>");
-					}
-					else {
-						readbutton.append("<a href='" + link + "' target='_blank'>"
-								+ linkText + "</a>");
-					}
-				}
-				else {
-
 					String talkPage = userContext.getUserName() + "_comment_therapist";
 					title = parameters.get("title");
 					if (title == null) {
@@ -222,11 +201,27 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 					readbutton.append("\" title=\"Title:");
 					readbutton.append(title);
 					readbutton.append("\" rel=\"nofollow\">");
-					readbutton.append("Mit Therapeuten dar&uuml;ber sprechen");
+				readbutton.append("Mit dem Berater dar&uuml;ber sprechen");
 					readbutton.append("</a>");
 					readbutton.append(" - <a href='#' onclick='getReadButtonValue(1," + number
 							+ ",\""
 							+ id + "\");return false'>Nicht Besprechen</a></p>");
+
+				if (link.startsWith("[") && link.endsWith("]")) {
+					// is wiki link (because of ajax not rendering by
+					// jspwiki
+					// pipeline
+					// => render here
+					String linkPagename = link.substring(1, link.length() - 1).trim();
+					String baseUrl = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
+					readbutton.append("<a href='" + baseUrl + "Wiki.jsp?page="
+								+ linkPagename
+								+ "' target='_blank'>"
+								+ linkPagename + "</a>");
+				}
+				else {
+					readbutton.append("<a href='" + link + "' target='_blank'>"
+								+ linkText + "</a>");
 				}
 			}
 			// - user has already rated

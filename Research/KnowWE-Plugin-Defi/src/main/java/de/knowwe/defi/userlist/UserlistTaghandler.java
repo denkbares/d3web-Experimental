@@ -57,6 +57,7 @@ public class UserlistTaghandler extends AbstractTagHandler {
 
 		userlist.append("<table class='userlist'>");
 		for (int i = 0; i < users.length; i++) {
+			if (!users[i].startsWith("Patient")) {
 			userlist.append("<tr>");
 			userlist.append("<td><img src=\"KnowWEExtension/images/"
 					+ getAvatar(users[i])
@@ -66,6 +67,7 @@ public class UserlistTaghandler extends AbstractTagHandler {
 					+ "</a><br />- " + getStatus(activeUsers, users[i])
 					+ " -</td>");
 			userlist.append("</tr>");
+			}
 		}
 
 		userlist.append("</table>");

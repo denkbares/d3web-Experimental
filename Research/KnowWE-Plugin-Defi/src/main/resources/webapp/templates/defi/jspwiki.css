@@ -80,6 +80,37 @@
 .infobox h3 {
 	margin:4px 0;
 }
+.infobox_row1 td {
+	width:180px;	
+	height:131px;
+	text-align:center;
+}
+.infobox_row1 td:hover {
+	background-color:#eeeeee;
+}
+.infobox_row2 td {
+	width:180px;	
+	background-color:#F9F9F9;
+	text-align:center;
+	
+}
+.infobox a {
+	display:inline-block;
+	width:100%;
+	height:121px;
+	padding-top:10px;
+}
+.infobox a.action {
+	border:1px solid #063D79 !important;
+	width:100%;
+	display:inline-block;
+	padding:0.25em 0 !important;
+	text-decoration:none;
+	background-color:transparent;
+}
+.infobox a.action:hover {
+	background:transparent;
+}
 #header .companylogo { 
 	display:none; 
 }
@@ -121,7 +152,7 @@
 	text-decoration:none;	
 }
 .userbox a.action {
-	border:1px solid black !important;
+	border:1px solid #063D79 !important;
 	width:100%;
 	display:inline-block;
 	padding:0.25em 0 !important;

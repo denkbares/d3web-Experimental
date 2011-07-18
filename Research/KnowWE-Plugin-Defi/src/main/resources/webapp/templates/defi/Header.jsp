@@ -6,10 +6,22 @@
 <%@ page import="com.ecyrd.jspwiki.*"%>
 <%@page import="de.d3web.we.jspwiki.JSPWikiUserContext"%>
 <%@ page import="de.knowwe.defi.*"%>
-
 <%@page import="de.knowwe.defi.utils.DefiUtils"%><fmt:setLocale
 	value="${prefs.Language}" />
 <fmt:setBundle basename="templates.default" />
+<script type="text/javascript">
+function highlight(colnum, inout){
+	if (inout == 0) {
+	document.getElementsByName("infobox_col"+colnum)[0].style.backgroundColor = "#eee";
+	document.getElementsByName("infobox_col"+colnum)[1].style.backgroundColor = "#eee";
+	document.getElementById("info_col"+colnum+"_a").style.color = "blue";
+	} else {
+	document.getElementsByName("infobox_col"+colnum)[0].style.backgroundColor = "transparent";
+	document.getElementsByName("infobox_col"+colnum)[1].style.backgroundColor = "#F9F9F9";
+	document.getElementById("info_col"+colnum+"_a").style.color = "#036";
+	}
+}
+</script>
 <%
 	// *********************************************
 	// Benutzername des Beraters:
@@ -46,6 +58,29 @@
 	<div class="companylogo"></div>
 
 	<div class="infobox">
+		<table>
+			<tr class="infobox_row1">
+				<td name="infobox_col1" onmouseover="highlight(1, 0)" onmouseout="highlight(1, 1)">
+				<a href="Wiki.jsp?page=<%= BERATER %>"><img src="KnowWEExtension/images/
+				<% if (beraterOnline) { %>
+					berater_farbig.jpg
+				<% } else { %>
+					berater_grau.jpg
+				<% } %>
+				" height="115px" width="86px" alt="Berater" /> </a>
+				</td>
+				<td name="infobox_col2" onmouseover="highlight(2, 0)" onmouseout="highlight(2, 1)">
+				<a href="Wiki.jsp?page=Gruppe"><img
+				src="KnowWEExtension/images/Gruppe.jpg" height="98px" width="141px"
+				alt="Gruppe" /> </a>
+				</td>
+			</tr>
+			<tr class="infobox_row2">
+				<td name="infobox_col1" onmouseover="highlight(1, 0)" onmouseout="highlight(1, 1)"><a id="info_col1_a" href="Wiki.jsp?page=<%= BERATER %>" class="action">Berater</a></td>
+				<td name="infobox_col2" onmouseover="highlight(2, 0)" onmouseout="highlight(2, 1)"><a id="info_col2_a" href="Wiki.jsp?page=Gruppe" class="action">Gruppe</a></td>
+			</tr>
+		</table>
+		<!-- 
 		<div class="therapeut">
 			<h3>Berater</h3>
 			<a href="Wiki.jsp?page=<%= BERATER %>">
@@ -66,6 +101,7 @@
 				src="KnowWEExtension/images/Gruppe.jpg" height="98px" width="141px"
 				alt="Gruppe" /> </a>
 		</div>
+		 -->
 	</div>
 
 	<wiki:Include page="UserBox.jsp" />
