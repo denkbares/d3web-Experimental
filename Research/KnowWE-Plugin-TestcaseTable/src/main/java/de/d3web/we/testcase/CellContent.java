@@ -29,6 +29,7 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.d3web.we.kdom.table.TableCellContent;
 import de.d3web.we.kdom.table.TableUtils;
 import de.d3web.we.kdom.type.AnonymousType;
+import de.d3web.we.testcase.kdom.TimeStampType;
 
 /**
  * @author Florian Ziegler

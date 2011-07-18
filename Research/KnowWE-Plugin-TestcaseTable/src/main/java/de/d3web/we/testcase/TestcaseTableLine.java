@@ -43,6 +43,7 @@ import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.d3web.we.kdom.table.TableCell;
 import de.d3web.we.kdom.table.TableLine;
 import de.d3web.we.object.QuestionReference;
+import de.d3web.we.testcase.kdom.TimeStampType;
 import de.d3web.we.utils.KnowWEUtils;
 
 /**

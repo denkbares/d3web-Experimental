@@ -37,6 +37,7 @@ import de.d3web.we.kdom.table.TableCell;
 import de.d3web.we.kdom.table.TableCellContent;
 import de.d3web.we.kdom.table.TableLine;
 import de.d3web.we.kdom.table.TableUtils;
+import de.d3web.we.testcase.kdom.TimeStampType;
 
 /**
  * @author Florian Ziegler
