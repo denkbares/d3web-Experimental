@@ -35,4 +35,5 @@
   		<scope>compile</scope>
   	</dependency>
   </dependencies>
+  <name>KnowWE-Plugin-WimVentRuleTable</name>
 </project>
