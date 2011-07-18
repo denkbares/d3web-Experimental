@@ -34,68 +34,23 @@ DiaFluxDialog.start = function() {
 			var node = DiaFluxDialog.Utils.findNodeWithName(question);
 			var outgoingRules = DiaFluxDialog.Utils.findOutgoingRules(node);
 			
-//			var nodeType = DiaFluxDialog.Utils.getNodeType(node);
-//			if (nodeType === 'question') {
-//				var action = node.actionPane.action;
-//				var infoObject = KBInfo.lookupInfoObject(action.getInfoObjectName()); 
-//				var questionType = infoObject.type;
-//			
-//			}
+			if (!node) {
+				continue;
+			}
 			
+			var nodeType = DiaFluxDialog.Utils.getNodeType(node);
+			if (nodeType === 'question') {
+				var action = node.actionPane.action;
+				var infoObject = KBInfo.lookupInfoObject(action.getInfoObjectName()); 
+				var abs = infoObject.is_abstract;
+				if (abs){
+					DiaFluxDialog.getStatusOfQuestion(node, false);
+					continue;
+				}			
+			}
+
 			for (var j = 0; j < outgoingRules.length; j++) {
-				
-				// check if num edges must be activated
-//				if (nodeType === 'question' && questionType === 'num') {
-				
-				// geht anders nicht, nur mit breakpoints
-				if (outgoingRules[j].guard.unit) {
-					var operator = DiaFluxDialog.Utils.extractOperator(outgoingRules[j]);
-					var number = DiaFluxDialog.Utils.extractNumber(outgoingRules[j]);
-				
-					if (operator === '>') {
-						if (answer > number) {
-							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
-						}
-					} else if (operator === '<') {
-						if (answer < number) {
-							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
-						}
-					} else if (operator === '>=') {
-						if (answer >= number) {
-							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
-						}
-					} else if (operator === '<=') {
-						if (answer <= number) {
-							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
-						}
-					} else if (operator === '=') {
-						if (answer == number) {
-							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
-						}
-					} else if (operator === '!=') {
-						if (answer != number) {
-							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
-						}
-					} else if (operator === 'inin') {
-						if (answer >= number[0] && answer <= number[1]) {
-							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
-						}
-					} else if (operator === 'inex') {
-						if (answer >= number[0] && answer < number[1]) {
-							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
-						}
-					} else if (operator === 'exin') {
-						if (answer > number[0] && answer <= number[1]) {
-							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
-						}
-					} else if (operator === 'exex') {
-						if (answer > number[0] && answer < number[1]) {
-							DiaFluxDialog.activateRule(outgoingRules[j], false, true);
-						}
-					}
-					
-				// not num questions
-				} else if (outgoingRules[j].guard.displayHTML === answer[0]) {
+				if (DiaFluxDialog.Utils.checkRuleCondition(outgoingRules[j], answer)) {
 					DiaFluxDialog.activateRule(outgoingRules[j], false, true);
 				}
 			}
@@ -258,16 +213,23 @@ DiaFluxDialog.prepareSetSingleFindingRequest = function(flowRule, flowNode) {
 	var question = infoObject.name;
 	if (type !== KBInfo.Question.TYPE_NUM) {	
 		var selected = flowRule.guard.displayHTML;
-		DiaFluxDialog.sendSetSingleFindingRequest(question, {ValueID : selected});
+		DiaFluxDialog.sendSetSingleFindingRequest(question, {ValueID : selected}, true);
 	
 	// TODO num werte generieren
 	} else {
 		var guard = flowRule.guard.displayHTML;
 		var maxRange = infoObject.range;
 		
-		var min = parseInt(maxRange[0]);
-		var max = parseInt(maxRange[1]);
-		
+		var min = 0;
+		var max = 100;
+		if (maxRange) {
+			if (maxRange[0]) {
+				min = parseInt(maxRange[0]);
+			}
+			if (maxRange[1]) {
+				max = parseInt(maxRange[1]);
+			}
+		}
 		var operator = DiaFluxDialog.Utils.extractOperator(flowRule);
 		var number = DiaFluxDialog.Utils.extractNumber(flowRule);
 		
@@ -308,7 +270,7 @@ DiaFluxDialog.prepareSetSingleFindingRequest = function(flowRule, flowNode) {
 			r = min + Math.floor(Math.random() * ( max-min) * 10) / 10;
 		}
 		
-		DiaFluxDialog.sendSetSingleFindingRequest(question, {ValueNum: r});
+		DiaFluxDialog.sendSetSingleFindingRequest(question, {ValueNum: r}, true);
 	
 	}
 }
@@ -387,23 +349,25 @@ DiaFluxDialog.fireNode = function(event) {
 	}
 	
 	DiaFluxDialog.activateNode(flowNode);
-	DiaFluxDialog.sendSetSingleFindingRequest(question, answer);
+	DiaFluxDialog.sendSetSingleFindingRequest(question, answer, true);
 	contextMenu.parentNode.removeChild(contextMenu);
 }
 
-DiaFluxDialog.sendSetSingleFindingRequest = function(question, selected) {
+DiaFluxDialog.sendSetSingleFindingRequest = function(question, selected, savePath) {
 	var master = $('hiddenMaster');
 	if (master) {
 		master = master.value;
 	} else {
 		return;
 	}
+
 	params = {
 			action : 'DiaFluxDialogSetFindingAction',
 	        KWikiWeb : 'default_web',
 	        namespace : master,
 	        ObjectID : question,
-	        TermName : 'undefined'
+	        TermName : 'undefined',
+	        save : savePath
 		};
 	
 	params = KNOWWE.helper.enrich( selected, params );
@@ -645,6 +609,161 @@ DiaFluxDialog.manageOutcomeOfSubFlowchart = function(nodeName, outcome) {
 
 
 /**
+ * request required forward knowledge for abstract questions
+ */
+DiaFluxDialog.requestRequiredQuestions = function(question, flowNode) {
+	var topic = KNOWWE.helper.gup('page')
+	params = {
+			action : 'DiaFluxDialogGetRequiredQuestions',
+			question : question,
+	        KWikiWeb : 'default_web',
+	        type : 'getQuestions'
+	};
+	
+
+	// options for AJAX request
+ 	options = {
+        url : KNOWWE.core.util.getURL( params ),
+        response : {
+    		action : 'none',
+        	fn : function(){
+ 				DiaFluxDialog.askNeededQuestions(this, flowNode);
+    		}
+        }
+    };
+    
+    // send AJAX request
+    new _KA( options ).send();
+}
+
+
+/**
+ * asks the required forward knowledge question from
+ * the response of the request
+ */
+DiaFluxDialog.askNeededQuestions = function(request, flowNode) {
+	var text = request.responseText.split('#####');
+	var boxes = [];
+	
+	for (var i = 0; i < text.length; i++) {
+		if (text[i] != null && text[i] != "") {
+			var parts = text[i].split('+-+-+');
+			var name = parts[0];
+			var type = parts[1];
+			var answers = '';
+			
+			if (parts.length > 2) {
+				answers = parts[2].split('+#+#+');
+			}
+			var htmlAnswers = DiaFluxDialog.createAnswerPossibilites(name, answers, type);
+			boxes.push(DiaFluxDialog.createContextMenuDiv(flowNode, name, htmlAnswers));
+		}
+	}
+	this.requiredInfo = boxes;
+	DiaFluxDialog.askNextNeededQuestion(flowNode);
+}
+
+
+/**
+ * asks the next required forward knowledge question
+ */
+DiaFluxDialog.askNextNeededQuestion = function(flowNode) {
+	if (this.requiredInfo.length > 0) {
+		var current = this.requiredInfo.pop();
+		DiaFluxDialog.activeFlowchart.dom.firstChild.appendChild(current);
+		DiaFluxDialog.appendContextMenuCloseButton(current);
+		
+		$('sendAnswer').addEvent('click', function(event) {
+			DiaFluxDialog.setForwardKnowledge(flowNode);
+		});
+	} else {
+		var question = flowNode.actionPane.action.expression;
+		DiaFluxDialog.getStatusOfQuestion(flowNode, true);
+	}
+}
+
+/**
+ * returns the current value of a question
+ */
+DiaFluxDialog.getStatusOfQuestion = function(flowNode, sendRequest) {
+	var question = flowNode.actionPane.action.expression;
+	var topic = KNOWWE.helper.gup('page')
+	params = {
+			action : 'DiaFluxDialogGetRequiredQuestions',
+			question : question,
+	        KWikiWeb : 'default_web',
+	        type : 'getStatus'
+	};
+	
+
+	// options for AJAX request
+ 	options = {
+        url : KNOWWE.core.util.getURL( params ),
+        response : {
+    		action : 'none',
+        	fn : function(){
+ 				DiaFluxDialog.activateAbstractQuestionEdge(flowNode, this, sendRequest);
+    		}
+        }
+    };
+    
+    // send AJAX request
+    new _KA( options ).send();
+}
+
+/**
+ * checks the outgoing rules of an abstract node, and
+ * activates those whose condition is satisfied
+ */
+DiaFluxDialog.activateAbstractQuestionEdge = function(flowNode, request, sendRequest) {
+	var answer = request.responseText;
+	var outgoingRules = DiaFluxDialog.Utils.findOutgoingRules(flowNode);
+	
+	for (var i = 0; i < outgoingRules.length; i++) {
+		var checked = DiaFluxDialog.Utils.checkRuleCondition(outgoingRules[i]);
+		DiaFluxDialog.activateRule(outgoingRules[i], sendRequest);
+		var b = 1;
+	}
+	
+	var a = 1;
+}
+
+/**
+ * calls the SetSingleFindingAction and sets the required forward knowledge
+ * from the input of the context menu
+ */
+DiaFluxDialog.setForwardKnowledge = function(flowNode) {
+	var contextMenu = DiaFluxDialog.activeFlowchart.dom.getElement('div.dialogBox');
+	var question = $('hiddenQuestion').textContent;
+	var trs = $(contextMenu).getElements('tr');
+	var selected = '';
+	var answer;
+	
+	// mc or oc question
+	if (trs.length !== 0) {
+		for (var i = 0; i < trs.length; i++) {
+			var checkbox = trs[i].getElement('input')
+			if (checkbox.checked) {
+				// putting together the string with selected values
+				if (selected != '') {
+					selected += '#####';
+				}
+				selected += checkbox.value;
+			}	
+		}
+		answer = {ValueID : selected};
+	// numquestion
+	} else {
+		selected = $('numQuestion').value;
+		answer = {ValueNum : selected};
+	}
+	DiaFluxDialog.sendSetSingleFindingRequest(question, answer, false);
+	contextMenu.parentNode.removeChild(contextMenu);
+	DiaFluxDialog.askNextNeededQuestion(flowNode);
+}
+
+
+/**
  * creates the context menu, when nodes are clicked
  */
 DiaFluxDialog.createContextMenu = function(event) {
@@ -659,10 +778,32 @@ DiaFluxDialog.createContextMenu = function(event) {
 	
 	var action = flowNode.actionPane.action;
 	var infoObject = KBInfo.lookupInfoObject(action.getInfoObjectName());
-	var nodeId = flowNode.nodeModel.fcid;
 	
 	var question = action.infoObjectName;
-	var answers = DiaFluxDialog.createAnswerPossibilites(infoObject);
+	
+	// -> abstract question -> no context menu
+	if (infoObject.is_abstract) {
+		DiaFluxDialog.requestRequiredQuestions(question, flowNode);
+		return;
+	}
+	
+	var answers = DiaFluxDialog.createAnswerPossibilites(infoObject.getName(), infoObject.getOptions(), infoObject.getType(), infoObject.unit);
+	
+	var contextMenuDom = DiaFluxDialog.createContextMenuDiv(flowNode, question, answers);
+	DiaFluxDialog.activeFlowchart.dom.firstChild.appendChild(contextMenuDom);
+	DiaFluxDialog.appendContextMenuCloseButton(contextMenuDom);
+		
+	$('sendAnswer').addEvent('click', function(event) {
+		DiaFluxDialog.fireNode(event);
+	});
+}
+
+/**
+ * creates the context menu
+ */
+DiaFluxDialog.createContextMenuDiv = function(flowNode, question, answers) {
+	var htmlNode = flowNode.dom;
+	var nodeId = flowNode.nodeModel.fcid;
 	
 	var height = htmlNode.offsetHeight;
 	var width = htmlNode.offsetWidth > 110 ? htmlNode.offsetWidth : 110;
@@ -679,72 +820,66 @@ DiaFluxDialog.createContextMenu = function(event) {
 		style: 'position: absolute; left: ' + left + 'px; top: ' + top + 'px; min-height: ' + height + 'px; min-width: ' + width + 'px; background-color: #ffb;'
 	});
 	
-	DiaFluxDialog.activeFlowchart.dom.firstChild.appendChild(dom);
+
 	dom.innerHTML = answers + hiddenId + hiddenQuestion;
 	
-	
-	var closeLeft = $(dom).offsetWidth - 20;
+	return dom;
+}
+
+
+/**
+ * appends the close button
+ */
+DiaFluxDialog.appendContextMenuCloseButton = function(contextmenu) {
+	var closeLeft = $(contextmenu).offsetWidth - 20;
 	var closeButton = Builder.node('div', {
 		id: 'closeButton', 
 		onclick: 'DiaFluxDialog.removeContextMenu();',
 		style: 'left: ' + closeLeft + 'px; top: 4px;'
 	});
-	dom.appendChild(closeButton);
-	
-	
-	// increase size of the box and move the close button
-	// for num questions
-	if (infoObject.type === KBInfo.Question.TYPE_NUM) {
-		var width = $(dom).getStyle('width').toInt() + 10;
-		var left = $(closeButton).getStyle('left').toInt() + 10;
-		$(dom).setStyle('width', width);
-		$(closeButton).setStyle('left', left);
-	}
-	
-	$('sendAnswer').addEvent('click', function(event) {
-		DiaFluxDialog.fireNode(event);
-	});
+	contextmenu.appendChild(closeButton);
+	return closeButton;
 }
+
+
 
 /**
  * creates the possible answers for the context menu
  */
-DiaFluxDialog.createAnswerPossibilites = function(infoObject) {
+DiaFluxDialog.createAnswerPossibilites = function(question, answers, questionType, unitType) {
 	var html = '';
 	var type = '';
 	
-	if (infoObject.getClassInstance() == KBInfo.Question) {
-		switch (infoObject.getType()) {
-		
-			case KBInfo.Question.TYPE_BOOL:
-			case KBInfo.Question.TYPE_OC:
-				type = 'radio';
-			case KBInfo.Question.TYPE_MC:
-				if (type === '') type = 'checkbox';
-				
-				html += '<div>Select your answer</div>';
-				html += '<table>';
+	switch (questionType) {
+	
+		case KBInfo.Question.TYPE_BOOL:
+		case KBInfo.Question.TYPE_OC:
+			type = 'radio';
+		case KBInfo.Question.TYPE_MC:
+			if (type === '') type = 'checkbox';
+			
+			html += '<div>Select your answer</div>';
+			html += '<table>';
 
-				var options = infoObject.getOptions();
-				for (var i=0; i<options.length; i++) {
-					html += '<tr><td class="noPadding">';
-					html += '<input name="answer" type="' + type + '" value="' + options[i] + '"></td><td class="noPadding">"' + infoObject.getName()+'" = "'+options[i]+'"</td></tr>';
-				}
-				html += '</table>';
-				break;
+			for (var i=0; i<answers.length; i++) {
+				html += '<tr><td class="noPadding">';
+				html += '<input name="answer" type="' + type + '" value="' + answers[i] + '"></td><td class="noPadding">"' + question +'" = "'+ answers[i] + '"</td></tr>';
+			}
+			html += '</table>';
+			break;
 
-			case KBInfo.Question.TYPE_NUM:
-				var unit = infoObject.unit ? (' in ' + infoObject.unit) : '';
-				html += '<div>Enter value';
-				html += unit;
-				html += ': <input id="numQuestion" type="text"></div>'
-				break;
-		}
+		case KBInfo.Question.TYPE_NUM:
+			var unit = unitType ? ('<br /> in ' + unitType) : '';
+			html += '<div>Enter value for <br />' + question;
+			html += unit;
+			html += ': <input id="numQuestion" type="text"></div>'
+			break;
 	}
+	
 	
 	html += '<button id="sendAnswer">Select</button>'
 	
-	return html;	
+	return html;
 }
 
 DiaFluxDialog.colorNode = function(flowNode) {
@@ -774,6 +909,9 @@ DiaFluxDialog.removeContextMenu = function() {
  * deactivates all rules sharing the same source node
  */
 DiaFluxDialog.deactivateAllRulesExcept = function(flowRule) {
+	if (!flowRule) {
+		return;
+	}
 	var sourceNode = flowRule.sourceNode;
 	
 	// dont deactivate if the source node is the start node
@@ -1018,6 +1156,7 @@ DiaFluxDialog.Utils.extractOperator = function(flowRule) {
 	}
 }
 
+
 /**
  * extracts the number from an outgoing edge of a num question
  */
@@ -1034,3 +1173,71 @@ DiaFluxDialog.Utils.extractNumber = function(flowRule) {
 		return parts[1];
 	}
 }
+
+DiaFluxDialog.Utils.checkRuleCondition = function(flowRule, answer) {
+	var node = flowRule.sourceNode;
+	var nodeType = DiaFluxDialog.Utils.getNodeType(node);
+	var questionType = '';
+	if (nodeType === 'question') {
+		var action = node.actionPane.action;
+		var infoObject = KBInfo.lookupInfoObject(action.getInfoObjectName()); 
+		questionType = infoObject.type;
+	
+	}
+	// check if num edges must be activated
+//	if (nodeType === 'question' && questionType === 'num') {
+	
+	// geht anders nicht, nur mit breakpoints
+	if (questionType === 'num') {
+		var operator = DiaFluxDialog.Utils.extractOperator(flowRule);
+		var number = DiaFluxDialog.Utils.extractNumber(flowRule);
+	
+		if (operator === '>') {
+			if (answer > number) {
+				return true;
+			}
+		} else if (operator === '<') {
+			if (answer < number) {
+				return true;
+			}
+		} else if (operator === '>=') {
+			if (answer >= number) {
+				return true;
+			}
+		} else if (operator === '<=') {
+			if (answer <= number) {
+				return true;
+			}
+		} else if (operator === '=') {
+			if (answer == number) {
+				return true;
+			}
+		} else if (operator === '!=') {
+			if (answer != number) {
+				return true;
+			}
+		} else if (operator === 'inin') {
+			if (answer >= number[0] && answer <= number[1]) {
+				return true;
+			}
+		} else if (operator === 'inex') {
+			if (answer >= number[0] && answer < number[1]) {
+				return true;
+			}
+		} else if (operator === 'exin') {
+			if (answer > number[0] && answer <= number[1]) {
+				return true;
+			}
+		} else if (operator === 'exex') {
+			if (answer > number[0] && answer < number[1]) {
+				return true;
+			}
+		}
+		
+	// not num questions
+	} else if (answer.length > 0 && flowRule.guard.displayHTML === answer[0]) {
+		return true;
+	}
+	return false;
+}
+

@@ -42,9 +42,15 @@ public class DiaFluxDialogSetFindingAction extends AbstractAction {
 		SetSingleFindingAction ssfa = new SetSingleFindingAction();
 		ssfa.execute(context);
 
+		String savePath = context.getParameter("save");
 		String objectId = context.getParameter(KnowWEAttributes.SEMANO_OBJECT_ID);
 		String valueId = context.getParameter(KnowWEAttributes.SEMANO_VALUE_ID);
 		String valueNum = context.getParameter(KnowWEAttributes.SEMANO_VALUE_NUM);
+
+		boolean save = Boolean.valueOf(savePath);
+		if (!save) {
+			return;
+		}
 
 		LinkedList<String> finding = new LinkedList<String>();
 		
