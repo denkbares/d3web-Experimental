@@ -43,7 +43,7 @@ public class XMLReaderTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullAsFile() throws IOException {
 		XMLReader reader = new XMLReader();
-		reader.read(null);
+		reader.read((File) null);
 	}
 
 	@Test

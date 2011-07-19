@@ -52,23 +52,20 @@ import de.knowwe.metatool.QualifiedClass;
  */
 public class XMLReader implements ObjectTypeReader {
 
-	public ObjectType read(File input) throws IOException {
-
-		if (input == null) {
+	public ObjectType read(InputStream stream) throws IOException {
+		if (stream == null) {
 			throw new IllegalArgumentException();
 		}
 
 		ObjectType result = null;
 
 		try {
-
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 
 			ObjectTypeHandler handler = new ObjectTypeHandler();
 
-			InputStream inputStream = new FileInputStream(input);
-			Reader reader = new InputStreamReader(inputStream, "UTF-8");
+			Reader reader = new InputStreamReader(stream, "UTF-8");
 
 			InputSource is = new InputSource(reader);
 			is.setEncoding("UTF-8");
@@ -91,6 +88,15 @@ public class XMLReader implements ObjectTypeReader {
 		}
 
 		return result;
+	}
+	
+	public ObjectType read(File input) throws IOException {
+		if (input == null) {
+			throw new IllegalArgumentException();
+		}
+		
+		InputStream is = new FileInputStream(input);
+		return read(is);
 	}
 
 	/**

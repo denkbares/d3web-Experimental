@@ -33,7 +33,7 @@ import de.knowwe.metatool.io.XMLReader;
  */
 public class Demo {
 
-	private static final String outputDir = "/Users/sebastian/Desktop/";
+	private static final String outputDir = "/home/alex/Desktop/";
 	private static final String inputFile = "src/main/resources/examples/TurtleMarkupSimple.xml";
 
 	public static void main(String[] args) throws IOException {

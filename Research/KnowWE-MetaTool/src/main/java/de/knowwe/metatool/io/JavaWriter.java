@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.util.Collection;
@@ -62,7 +63,7 @@ public class JavaWriter implements ObjectTypeWriter {
 	// Singleton-Pattern
 	private static final JavaWriter instance = new JavaWriter();
 
-	private JavaWriter() {
+	protected JavaWriter() {
 	}
 
 	public static JavaWriter getInstance() {
@@ -213,7 +214,7 @@ public class JavaWriter implements ObjectTypeWriter {
 	private String loadTemplate() throws IOException {
 		StringBuilder content = new StringBuilder();
 		BufferedReader bufferedReader = new BufferedReader(
-				new InputStreamReader(new FileInputStream(TEMPLATE), "UTF-8"));
+				new InputStreamReader(getTemplateInputStream(), "UTF-8"));
 		int currentChar = bufferedReader.read();
 		while (currentChar != -1) {
 			content.append((char) currentChar);
@@ -222,5 +223,8 @@ public class JavaWriter implements ObjectTypeWriter {
 		bufferedReader.close();
 		return content.toString();
 	}
-
+	
+	protected InputStream getTemplateInputStream() throws IOException {
+		return new FileInputStream(TEMPLATE);
+	}
 }
