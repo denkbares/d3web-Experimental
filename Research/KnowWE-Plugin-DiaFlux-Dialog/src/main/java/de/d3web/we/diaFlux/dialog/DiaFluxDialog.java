@@ -32,7 +32,10 @@ public class DiaFluxDialog implements DiaFluxDisplayEnhancement {
 
 	@Override
 	public String[] getScripts() {
-		return new String[] { "KnowWEExtension/scripts/dialog.js" };
+		return new String[] {
+				"KnowWEExtension/scripts/dialog.js",
+				"KnowWEExtension/scripts/dialogUtils.js",
+				"KnowWEExtension/scripts/dialogSession.js" };
 	}
 
 	@Override

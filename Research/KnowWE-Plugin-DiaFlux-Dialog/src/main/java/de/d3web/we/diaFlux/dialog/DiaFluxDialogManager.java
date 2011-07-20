@@ -19,7 +19,6 @@
 package de.d3web.we.diaFlux.dialog;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Stack;
 
 /**
@@ -31,11 +30,11 @@ public class DiaFluxDialogManager {
 
 	private static DiaFluxDialogManager instance = null;
 	private Stack<String> activeFlowcharts;
-	private LinkedList<DiaFluxDialogQuestionFindingPair> exactPath;
+	private DiaFluxDialogSession session;
 
 	private DiaFluxDialogManager() {
 		activeFlowcharts = new Stack<String>();
-		exactPath = new LinkedList<DiaFluxDialogQuestionFindingPair>();
+		session = new DiaFluxDialogSession();
 	}
 
 	public static DiaFluxDialogManager getInstance() {
@@ -70,23 +69,37 @@ public class DiaFluxDialogManager {
 	}
 
 	public LinkedList<DiaFluxDialogQuestionFindingPair> getExactPath() {
-		return exactPath;
+		return session.getPath();
 	}
 
 	public void addItemToExactPath(DiaFluxDialogQuestionFindingPair pair) {
-		exactPath.add(pair);
+		// exactPath.add(pair);
+		//
+		// List<DiaFluxDialogQuestionFindingPair> p1 = exactPath.subList(0,
+		// exactPath.size() / 2);
+		// List<DiaFluxDialogQuestionFindingPair> p2 =
+		// exactPath.subList(exactPath.size() / 2,
+		// exactPath.size());
+		//
+		// if (p1.equals(p2)) {
+		// exactPath.clear();
+		// for (DiaFluxDialogQuestionFindingPair p : p1) {
+		// exactPath.add(p);
+		// }
+		// }
+		session.addPairToPath(pair);
+	}
 
-		List<DiaFluxDialogQuestionFindingPair> p1 = exactPath.subList(0, exactPath.size() / 2);
-		List<DiaFluxDialogQuestionFindingPair> p2 = exactPath.subList(exactPath.size() / 2,
-				exactPath.size());
+	public LinkedList<DiaFluxDialogQuestionFindingPair> getForwardKnowledge() {
+		return session.getForwardKnowledge();
+	}
 
-		if (p1.equals(p2)) {
-			exactPath.clear();
-			for (DiaFluxDialogQuestionFindingPair p : p1) {
-				exactPath.add(p);
-			}
-		}
+	public void addItemToForwardKnowledge(DiaFluxDialogQuestionFindingPair pair) {
+		session.addPairToForwardKnowledge(pair);
+	}
 
+	public DiaFluxDialogSession getSession() {
+		return session;
 	}
 
 	public void resetActiveFlowcharts() {
@@ -95,7 +108,7 @@ public class DiaFluxDialogManager {
 
 	public void reset() {
 		resetActiveFlowcharts();
-		exactPath = new LinkedList<DiaFluxDialogQuestionFindingPair>();
+		session = new DiaFluxDialogSession();
 	}
 
 

@@ -18,6 +18,7 @@
  */
 package de.d3web.we.diaFlux.dialog;
 
+import java.util.Collection;
 import java.util.Stack;
 
 import de.d3web.core.session.Session;
@@ -32,6 +33,7 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
+import de.d3web.we.wikiConnector.ConnectorAttachment;
 
 /**
  * 
@@ -103,6 +105,47 @@ public class DiaFluxDialogUtils {
 		}
 
 		return path;
+	}
+
+	public static String createHiddenSessionContent(DiaFluxDialogSession session, boolean forwardKnowledge) {
+		StringBuilder bob = new StringBuilder();
+
+		if (forwardKnowledge) {
+			bob.append("[FORWARDKNOWLEDGE]");
+			for (DiaFluxDialogQuestionFindingPair pair : session.getForwardKnowledge()) {
+				bob.append(pair.getQuestion());
+				bob.append("+++++");
+				for (String s : pair.getFinding()) {
+					bob.append(s);
+					bob.append("+-+-+");
+				}
+				bob = bob.delete(bob.length() - 5, bob.length());
+				bob.append(DiaFluxDialogUtils.DIAFLUXDIALOG_SEPARATOR);
+			}
+			bob.append("[PATH]");
+		}
+
+		for (DiaFluxDialogQuestionFindingPair pair : session.getPath()) {
+			bob.append(pair.getQuestion());
+			bob.append("+++++");
+			for (String s : pair.getFinding()) {
+				bob.append(s);
+				bob.append("+-+-+");
+			}
+			bob = bob.delete(bob.length() - 5, bob.length());
+			bob.append(DiaFluxDialogUtils.DIAFLUXDIALOG_SEPARATOR);
+		}
+
+		return bob.toString();
+	}
+
+	public static ConnectorAttachment findConnectorAttachmentWithName(Collection<ConnectorAttachment> attachments, String fileName) {
+		for (ConnectorAttachment attachment : attachments) {
+			if (attachment.getFileName().equals(fileName)) {
+				return attachment;
+			}
+		}
+		return null;
 	}
 
 }

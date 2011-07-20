@@ -48,9 +48,6 @@ public class DiaFluxDialogSetFindingAction extends AbstractAction {
 		String valueNum = context.getParameter(KnowWEAttributes.SEMANO_VALUE_NUM);
 
 		boolean save = Boolean.valueOf(savePath);
-		if (!save) {
-			return;
-		}
 
 		LinkedList<String> finding = new LinkedList<String>();
 		
@@ -72,8 +69,11 @@ public class DiaFluxDialogSetFindingAction extends AbstractAction {
 		DiaFluxDialogQuestionFindingPair pair = new DiaFluxDialogQuestionFindingPair(objectId,
 				finding);
 		
-		DiaFluxDialogManager.getInstance().addItemToExactPath(pair);
-
+		if (!save) {
+			DiaFluxDialogManager.getInstance().addItemToForwardKnowledge(pair);
+		}
+		else {
+			DiaFluxDialogManager.getInstance().addItemToExactPath(pair);
+		}
 	}
-
 }

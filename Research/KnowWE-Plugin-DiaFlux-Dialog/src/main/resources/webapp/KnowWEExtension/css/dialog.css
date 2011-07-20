@@ -30,3 +30,57 @@ div#closeButton{
 	cursor: pointer;
 	background-image: url("../images/cross.png");
 }
+
+div.resetButton{
+	background-image: url("../images/progress_stop.gif");
+	background-repeat: no-repeat;
+	height: 16px;
+	width: 20px;
+	cursor: pointer;
+	float: left;
+}
+
+div#sessionNavigator{
+	display: none;	
+}
+
+div#nextStep{
+	background-image: url("../images/arrow_right.png");
+	background-repeat: no-repeat;
+	height: 16px;
+	width: 20px;
+	cursor: pointer;
+	clear: left;
+}
+
+div#playSession{
+	background-image: url("../images/arrow_right_old.png");
+	background-repeat: no-repeat;
+	height: 16px;
+	width: 20px;
+	cursor: pointer;
+}
+
+div#showButton{
+	cursor: pointer;
+	float: left;
+}
+
+div#Buttons{
+	height: 64px;	
+}
+
+div#saveSession{
+	height: 16px;
+	width: 20px;
+	cursor: pointer;
+	background-image: url("../images/disk.png");
+	background-repeat: no-repeat;
+	float: left;
+}
+
+div#loadSessionParent{
+	clear:left;	
+}
+
+

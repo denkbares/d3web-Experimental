@@ -18,8 +18,6 @@
  */
 package de.d3web.we.diaFlux.dialog;
 
-import java.util.LinkedList;
-
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.FlowSet;
 import de.d3web.we.kdom.KnowWEArticle;
@@ -44,34 +42,20 @@ public class DiaFluxDialogRenderer extends KnowWEDomRenderer<DiaFluxDialogType> 
 		StringBuilder html = new StringBuilder();
 		html.append("<div class=\"defaultMarkup\">");
 		html.append("<h2>DiaFluxDialog</h2>");
-		html.append("<div onclick=\"DiaFluxDialog.reset('" + sec.getID() + "');\">reset</div>");
+		html.append("<div id=\"Buttons\">");
+		html.append("<div class=\"resetButton\" onclick=\"DiaFluxDialog.reset('" + sec.getID()
+				+ "');\"></div>");
+		html.append("<div id=\"saveSession\" onclick=\"DiaFluxDialog.Session.saveSession();\"></div>");
+		html.append("<div id=\"showButton\" onclick=\"DiaFluxDialog.Session.showSessions();\">load Cases</div>");
+		html.append("<div id=\"loadSessionParent\"></div>");
+		html.append("<div id=\"sessionNavigator\">");
+		html.append("<div id=\"nextStep\" onclick=\"DiaFluxDialog.Session.nextStep();\"></div>");
+		html.append("<div id=\"playSession\" onclick=\"DiaFluxDialog.Session.playSession();\"></div>");
 
-		DiaFluxDialogManager manager = DiaFluxDialogManager.getInstance();
-		LinkedList<DiaFluxDialogQuestionFindingPair> path = manager.getExactPath();
+		html.append("</div></div>");
 
-		manager.resetActiveFlowcharts();
-
-		String hiddenPathDiv = "";
-		// already answered questions -> recreate state
-		if (path.size() > 0) {
-			StringBuilder hiddenPath = new StringBuilder();
-			for (DiaFluxDialogQuestionFindingPair pair : path) {
-				hiddenPath.append(pair.getQuestion());
-				hiddenPath.append("+++++");
-					for (String s : pair.getFinding()) {
-						hiddenPath.append(s);
-						hiddenPath.append("+-+-+");
-					}
-				hiddenPath = hiddenPath.delete(hiddenPath.length() - 5, hiddenPath.length());
-				hiddenPath.append(DiaFluxDialogUtils.DIAFLUXDIALOG_SEPARATOR);
-			}
-			
-
-			hiddenPathDiv = "<input type=\"hidden\" id=\"hiddenPath\" value=\"" + hiddenPath
-					+ "\">";
-
-		}
-		
+		DiaFluxDialogManager.getInstance().resetActiveFlowcharts();
+		String hiddenPathDiv = createPathDiv();
 		
 		FlowSet flowSet = DiaFluxDialogUtils.getFlowSet(master, user);
 
@@ -95,10 +79,33 @@ public class DiaFluxDialogRenderer extends KnowWEDomRenderer<DiaFluxDialogType> 
 		}
 		html.append("<div id=\"DiaFluxDialogPath\">Path: " + name + "</div>");
 		html.append("<input type=\"hidden\" id=\"hiddenMaster\" value=\"" + master + "\">");
+		html.append("<div id=\"hiddenSessions\"></div>");
 		html.append(hiddenPathDiv);
 		html.append(fc);
 		string.append(KnowWEUtils.maskHTML(html.toString()));
 
 	}
+
+	/**
+	 * creates the path
+	 * 
+	 * @created 13.07.2011
+	 * @return
+	 */
+	private static String createPathDiv() {
+		String hiddenPathDiv = "";
+		DiaFluxDialogSession session = DiaFluxDialogManager.getInstance().getSession();
+
+		// already answered questions -> recreate state
+		if (session.getPath().size() > 0) {
+			String hiddenPath = DiaFluxDialogUtils.createHiddenSessionContent(session, false);
+
+			hiddenPathDiv = "<input type=\"hidden\" id=\"hiddenPath\" value=\"" + hiddenPath
+					+ "\">";
+
+		}
+		return hiddenPathDiv;
+	}
+
 
 }

@@ -66,7 +66,6 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="DiaFluxDialogGetRequiredQuestions">
 		<parameter id="class"
@@ -77,6 +76,15 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="DiaFluxDialogSessionAction">
+		<parameter id="class"
+			value="de.d3web.we.diaFlux.dialog.DiaFluxDialogSessionAction" />
+		<parameter id="name" value="DiaFluxDialogSessionAction" />
+		<parameter id="description" value="Action DiaFluxDialogSessionAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="DiaFluxDialogType">

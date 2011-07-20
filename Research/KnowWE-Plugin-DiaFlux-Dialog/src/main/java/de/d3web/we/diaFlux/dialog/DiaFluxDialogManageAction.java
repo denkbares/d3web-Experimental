@@ -30,6 +30,8 @@ import de.d3web.we.action.UserActionContext;
  */
 public class DiaFluxDialogManageAction extends AbstractAction {
 
+	public static String DIAFLUXDIALOG_ENDOFDIALOG = "ENDOFDIALOG";
+
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		String type = context.getParameter("type");
@@ -42,11 +44,17 @@ public class DiaFluxDialogManageAction extends AbstractAction {
 
 		// get flowchart
 		else if (type.equalsIgnoreCase("getNextActiveFlowchart")) {
+			int size = DiaFluxDialogManager.getInstance().getActiveFlowcharts().size();
+
+			if (size > 1) {
 			String current = DiaFluxDialogManager.getInstance().getActiveFlowchart();
 			String next = DiaFluxDialogManager.getInstance().getNextActiveFlowchart();
 			String path = DiaFluxDialogUtils.createPathStringForRequest();
 			context.getWriter().write(
 					next + DiaFluxDialogUtils.DIAFLUXDIALOG_SEPARATOR + current + path);
+			} else {
+				context.getWriter().write(DIAFLUXDIALOG_ENDOFDIALOG);
+			}
 		}
 
 	}
