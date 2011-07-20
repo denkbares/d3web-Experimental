@@ -29,11 +29,11 @@ import de.d3web.we.user.UserContext;
 
 /**
  * Renders the SearchMask for the TypeBrowser.
- *
+ * 
  * @see TypeBrowserRenderer.
- *
+ * 
  * @author Johannes Dienst
- *
+ * 
  */
 public class KnowWETypeBrowserHandler extends AbstractHTMLTagHandler {
 
@@ -85,9 +85,10 @@ public class KnowWETypeBrowserHandler extends AbstractHTMLTagHandler {
 				selected = "selected=\"1\"";
 			}
 
-			html.append("<option " + selected + " value=\"" + name + "\">" + type.getName()
+			html.append("<option " + selected + " value=\"" + name + "\">"
+					+ type.getName()
 					+ "</option> \n"); // \n only to avoid hmtl-code being cut
-										// by JspWiki (String.length > 10000)
+			// by JspWiki (String.length > 10000)
 		}
 
 		html.append("</select>");
@@ -95,8 +96,7 @@ public class KnowWETypeBrowserHandler extends AbstractHTMLTagHandler {
 		// Create a Search Button to start the Search for every Type
 		html.append("<p><input type='button'"
 				+ " value='"
-				+ KnowWEEnvironment.getInstance().getKwikiBundle(user).getString(
-						"KnowWE.TypeBrowser.searchbutton")
+				+ "KnowWE.TypeBrowser.searchbutton"
 				+ "' name='' class='button' title=''/></p>");
 
 		html.append("<div id=\"TypeSearchResult\"> </div>");

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.d3web.we.utils.SplitUtility;
+import de.d3web.we.utils.StringFragment;
 
 /**
  * 
@@ -56,12 +57,13 @@ public class SearchWordPreprocessor {
 	 * @return
 	 */
 	public Collection<SearchTerm> processForSearch(String searchText) {
-		List<String> terms = SplitUtility.splitUnquoted(searchText, " ");
+		List<StringFragment> terms = SplitUtility.splitUnquoted(searchText, " ");
 
 		Set<SearchTerm> resultTmp = new HashSet<SearchTerm>();
 		Set<SearchTerm> result = new HashSet<SearchTerm>();
 
-		for (String word : terms) {
+		for (StringFragment fr : terms) {
+			String word = fr.getContent().trim();
 			if (word.startsWith("\"") && word.endsWith("\"")) {
 				word = word.substring(1, word.length() - 1);
 			}
@@ -87,12 +89,13 @@ public class SearchWordPreprocessor {
 	 * @return
 	 */
 	public Collection<SearchTerm> processForRecommendation(String searchText) {
-		List<String> terms = SplitUtility.splitUnquoted(searchText, " ");
+		List<StringFragment> terms = SplitUtility.splitUnquoted(searchText, " ");
 
 		Set<SearchTerm> resultTmp = new HashSet<SearchTerm>();
 		Set<SearchTerm> result = new HashSet<SearchTerm>();
 
-		for (String word : terms) {
+		for (StringFragment fr : terms) {
+			String word = fr.getContent().trim();
 			if (word.startsWith("\"") && word.endsWith("\"")) {
 				word = word.substring(1, word.length() - 1);
 			}
