@@ -82,7 +82,7 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Hernia</servlet-name>
-		<url-pattern>/Hernia</url-pattern>
+		<url-pattern>/EuraHS-Dialog</url-pattern>
 	</servlet-mapping>
 	
 </web-app>
