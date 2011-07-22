@@ -18,6 +18,8 @@
  * site: http://www.fsf.org.
  */
 
+/* THIS FILE IS GENERATED. DO NOT EDIT */
+
 package de.knowwe.kdom;
 
 import de.d3web.we.kdom.objects.TermDefinition;
