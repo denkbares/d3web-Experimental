@@ -96,4 +96,14 @@
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="DiaFluxDialogToolProvider">
+		<parameter id="class" value="de.d3web.we.diaFlux.dialog.DiaFluxDialogToolProvider" />
+		<parameter id="name" value="DiaFluxDialogToolProvider" />
+		<parameter id="description" value="Offers a button to reset the session" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="/DiaFluxDialogType" />
+	</extension>
 </plugin>

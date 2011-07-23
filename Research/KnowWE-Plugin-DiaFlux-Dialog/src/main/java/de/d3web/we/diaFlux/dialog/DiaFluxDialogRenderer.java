@@ -22,7 +22,7 @@ import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.FlowSet;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
 
@@ -31,27 +31,23 @@ import de.d3web.we.utils.KnowWEUtils;
  * @author Florian Ziegler
  * @created 08.06.2011
  */
-public class DiaFluxDialogRenderer extends KnowWEDomRenderer<DiaFluxDialogType> {
+public class DiaFluxDialogRenderer extends DefaultMarkupRenderer<DiaFluxDialogType> {
 
 	@Override
-	public void render(KnowWEArticle article, Section<DiaFluxDialogType> sec, UserContext user, StringBuilder string) {
+	public void renderContents(KnowWEArticle article, Section<DiaFluxDialogType> sec, UserContext user, StringBuilder string) {
 		String master = DiaFluxDialogType.getMaster(sec);
 		if (master == null) {
 			master = article.getTitle();
 		}
 		StringBuilder html = new StringBuilder();
-		html.append("<div class=\"defaultMarkup\">");
+		html.append("<div>");
 		html.append("<h2>DiaFluxDialog</h2>");
 		html.append("<div id=\"Buttons\">");
-		html.append("<div class=\"resetButton\" onclick=\"DiaFluxDialog.reset('" + sec.getID()
-				+ "');\"></div>");
-		html.append("<div id=\"saveSession\" onclick=\"DiaFluxDialog.Session.saveSession();\"></div>");
-		html.append("<div id=\"showButton\" onclick=\"DiaFluxDialog.Session.showSessions();\">load Cases</div>");
 		html.append("<div id=\"loadSessionParent\"></div>");
+		html.append("<div id=\"compareSessionParent\"></div>");
 		html.append("<div id=\"sessionNavigator\">");
 		html.append("<div id=\"nextStep\" onclick=\"DiaFluxDialog.Session.nextStep();\"></div>");
 		html.append("<div id=\"playSession\" onclick=\"DiaFluxDialog.Session.playSession();\"></div>");
-
 		html.append("</div></div>");
 
 		DiaFluxDialogManager.getInstance().resetActiveFlowcharts();

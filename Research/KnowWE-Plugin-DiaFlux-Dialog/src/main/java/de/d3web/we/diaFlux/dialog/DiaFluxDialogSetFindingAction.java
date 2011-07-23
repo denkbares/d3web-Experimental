@@ -21,9 +21,16 @@ package de.d3web.we.diaFlux.dialog;
 import java.io.IOException;
 import java.util.LinkedList;
 
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.terminology.info.BasicProperties;
+import de.d3web.core.session.Session;
+import de.d3web.core.session.Value;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
+import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.KnowWEAttributes;
+import de.d3web.we.utils.D3webUtils;
 import de.knowwe.d3web.action.SetSingleFindingAction;
 
 /**
@@ -42,6 +49,10 @@ public class DiaFluxDialogSetFindingAction extends AbstractAction {
 		SetSingleFindingAction ssfa = new SetSingleFindingAction();
 		ssfa.execute(context);
 
+		String topic = context.getTopic();
+		String web = context.getWeb();
+		
+		String objectid = context.getParameter(KnowWEAttributes.SEMANO_OBJECT_ID);
 		String savePath = context.getParameter("save");
 		String objectId = context.getParameter(KnowWEAttributes.SEMANO_OBJECT_ID);
 		String valueId = context.getParameter(KnowWEAttributes.SEMANO_VALUE_ID);
@@ -66,6 +77,18 @@ public class DiaFluxDialogSetFindingAction extends AbstractAction {
 			finding.add(valueNum);
 		}
 		
+		KnowledgeBase kb = D3webModule.getKnowledgeRepresentationHandler(web).getKB(
+				topic);
+		Session s = D3webUtils.getSession(topic, context.getUserName(),
+				web);
+		Question q = kb.getManager().searchQuestion(objectid);
+		if (BasicProperties.isAbstract(q)) {
+			finding.clear();
+			Value v = s.getBlackboard().getValue(q);
+			finding.add(v.toString());
+		}
+
+
 		DiaFluxDialogQuestionFindingPair pair = new DiaFluxDialogQuestionFindingPair(objectId,
 				finding);
 		

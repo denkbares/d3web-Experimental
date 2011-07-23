@@ -197,6 +197,11 @@ DiaFluxDialog.activateRule = function(flowRule, sendRequest, activate) {
 	var action = targetNode.actionPane.action;
 	var infoObject = KBInfo.lookupInfoObject(action.getInfoObjectName());
 	
+	if (targetNodeType === 'question' && infoObject.is_abstract && !start) {
+		DiaFluxDialog.requestRequiredQuestions(infoObject.name, targetNode);
+		return;
+	}
+	
 	// -> solution or subflowchart
 	if (!infoObject.type) {
 		DiaFluxDialog.colorNode(targetNode);
@@ -227,8 +232,6 @@ DiaFluxDialog.prepareSetSingleFindingRequest = function(flowRule, flowNode) {
 	if (type !== KBInfo.Question.TYPE_NUM) {	
 		var selected = flowRule.guard.displayHTML;
 		DiaFluxDialog.sendSetSingleFindingRequest(question, {ValueID : selected}, true);
-	
-	// TODO num werte generieren
 	} else {
 		var guard = flowRule.guard.displayHTML;
 		var maxRange = infoObject.range;
@@ -237,17 +240,17 @@ DiaFluxDialog.prepareSetSingleFindingRequest = function(flowRule, flowNode) {
 		var max = 100;
 		if (maxRange) {
 			if (maxRange[0]) {
-				min = parseInt(maxRange[0]);
+				min = parseFloat(maxRange[0]);
 			}
 			if (maxRange[1]) {
-				max = parseInt(maxRange[1]);
+				max = parseFloat(maxRange[1]);
 			}
 		}
 		var operator = DiaFluxDialog.Utils.extractOperator(flowRule);
-		var number = DiaFluxDialog.Utils.extractNumber(flowRule);
+		var number = parseFloat(DiaFluxDialog.Utils.extractNumber(flowRule));
 		
-		number[0] = parseInt(number[0]);
-		number[1] = parseInt(number[1]);
+		number[0] = parseFloat(number[0]);
+		number[1] = parseFloat(number[1]);
 		
 		var r;
 		if (operator === '>') {
@@ -351,8 +354,14 @@ DiaFluxDialog.fireNode = function(event) {
 		answer = {ValueID : selected};
 	// numquestion
 	} else {
+		// coloring the rules
 		selected = $('numQuestion').value;
 		answer = {ValueNum : selected};
+		for (var j = 0; j < outgoingRules.length; j++) {
+			if (DiaFluxDialog.Utils.checkRuleCondition(outgoingRules[j],selected)) {
+				DiaFluxDialog.activateRule(outgoingRules[j], false);
+			}
+		}
 	}
 	var incomingRules = DiaFluxDialog.Utils.findIncomingRules(flowNode);
 	for (var i = 0; i < incomingRules.length; i++) {
@@ -696,7 +705,6 @@ DiaFluxDialog.askNextNeededQuestion = function(flowNode) {
 			DiaFluxDialog.setForwardKnowledge(flowNode);
 		});
 	} else {
-		var question = flowNode.actionPane.action.expression;
 		DiaFluxDialog.getStatusOfQuestion(flowNode, true);
 	}
 }
@@ -705,7 +713,7 @@ DiaFluxDialog.askNextNeededQuestion = function(flowNode) {
  * returns the current value of a question
  */
 DiaFluxDialog.getStatusOfQuestion = function(flowNode, sendRequest) {
-	var question = flowNode.actionPane.action.expression;
+	var question = flowNode.actionPane.action.infoObjectName;
 	var topic = KNOWWE.helper.gup('page')
 	params = {
 			action : 'DiaFluxDialogGetRequiredQuestions',
@@ -1007,8 +1015,4 @@ DiaFluxDialog.reset = function(sectionID) {
  	}
     new _KA( options ).send();
 }
-
-
-
-
 

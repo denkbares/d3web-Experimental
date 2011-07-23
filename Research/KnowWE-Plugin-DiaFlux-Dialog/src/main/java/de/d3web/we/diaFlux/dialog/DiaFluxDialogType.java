@@ -46,6 +46,7 @@ public class DiaFluxDialogType extends DefaultMarkupType {
 
 	public DiaFluxDialogType() {
 		super(MARKUP);
+		setIgnorePackageCompile(true);
 	}
 
 	@Override

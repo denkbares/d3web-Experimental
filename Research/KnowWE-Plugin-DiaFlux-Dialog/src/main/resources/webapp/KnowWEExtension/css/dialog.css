@@ -67,7 +67,7 @@ div#showButton{
 }
 
 div#Buttons{
-	height: 64px;	
+
 }
 
 div#saveSession{
@@ -83,4 +83,11 @@ div#loadSessionParent{
 	clear:left;	
 }
 
+.sessionDifferenceRule .v_line, .sessionDifferenceRule .h_line{
+	border: 1px solid blue;
+}
+
+.sessionDifferenceNode {
+ 	border: 3px solid blue;
+}
 

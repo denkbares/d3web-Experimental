@@ -73,20 +73,6 @@ public class DiaFluxDialogManager {
 	}
 
 	public void addItemToExactPath(DiaFluxDialogQuestionFindingPair pair) {
-		// exactPath.add(pair);
-		//
-		// List<DiaFluxDialogQuestionFindingPair> p1 = exactPath.subList(0,
-		// exactPath.size() / 2);
-		// List<DiaFluxDialogQuestionFindingPair> p2 =
-		// exactPath.subList(exactPath.size() / 2,
-		// exactPath.size());
-		//
-		// if (p1.equals(p2)) {
-		// exactPath.clear();
-		// for (DiaFluxDialogQuestionFindingPair p : p1) {
-		// exactPath.add(p);
-		// }
-		// }
 		session.addPairToPath(pair);
 	}
 

@@ -25,7 +25,6 @@ import java.util.List;
 import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.inference.Rule;
 import de.d3web.core.inference.RuleSet;
-import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.KnowledgeStore;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
@@ -38,7 +37,6 @@ import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
-import de.d3web.we.basic.D3webModule;
 import de.d3web.we.utils.D3webUtils;
 
 /**
@@ -55,21 +53,10 @@ public class DiaFluxDialogGetRequiredQuestions extends AbstractAction {
 		String type = context.getParameter("type");
 
 		String response = "";
-		KnowledgeBase kb = D3webModule.getKnowledgeRepresentationHandler(web).getKB(
-				topic);
-		List<Question> questions = kb.getManager().getQuestions();
 		Session session = D3webUtils.getSession(topic, context.getUserName(),
 				web);
-		Question abstractQuestion = null;
-		for (Question q : questions) {
-			if (q.getName().equals(question)) {
-				abstractQuestion = q;
-				break;
-			}
-		}
+		Question abstractQuestion = session.getKnowledgeBase().getManager().searchQuestion(question);
 		if (type.equals("getQuestions")) {
-
-
 			List<Question> neededQuestions = getNeededUnansweredQuestions(abstractQuestion, session);
 			response = createQuestionString(neededQuestions);
 		}
