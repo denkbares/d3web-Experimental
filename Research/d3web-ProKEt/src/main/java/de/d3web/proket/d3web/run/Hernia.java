@@ -72,7 +72,7 @@ public class Hernia extends D3webDialog {
 	 * @throws IOException
 	 */
 	@Override
-	protected void show(HttpServletRequest request, HttpServletResponse response,
+	protected void render(HttpServletRequest request, HttpServletResponse response,
 			HttpSession httpSession)
 			throws IOException {
 
@@ -104,7 +104,7 @@ public class Hernia extends D3webDialog {
 	 * @throws IOException
 	 */
 	@Override
-	protected void login(HttpServletRequest req,
+	protected void loginUsrDat(HttpServletRequest req,
 			HttpServletResponse res, HttpSession httpSession)
 			throws IOException {
 

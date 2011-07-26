@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
 
 /**
  * Container for JavaScript code.
@@ -39,7 +40,8 @@ public class JSCodeContainer implements ICodeContainer {
 	private boolean dateAnswer = false;
 	private final boolean debug = false;
 	private boolean imageQuestions = false;
-	private boolean login = false;
+	private boolean usrdatLogin = false;
+	private boolean dbLogin = false;
 
 	@Override
 	public void add(String data) {
@@ -73,8 +75,9 @@ public class JSCodeContainer implements ICodeContainer {
 		imageQuestions = true;
 	}
 
-	public void enableLogin() {
-		login = true;
+	public void setLoginMode(LoginMode mode) {
+		if (mode == LoginMode.usrdat) usrdatLogin = true;
+		else if (mode == LoginMode.db) dbLogin = true;
 	}
 
 	/**
@@ -115,15 +118,24 @@ public class JSCodeContainer implements ICodeContainer {
 			linkedBibs.add("jquery/jquery.maphilight.min.js");
 		}
 
-		if (login) {
+		if (usrdatLogin) {
 			ownBibs.add("login.js");
 			ownBibs.add("encrypt.js");
 			// flag that enables login mechanism in d3web.js
-			add("var login = true;", 0);
+			add("var usrdatLogin = true;", 0);
 		}
 		else {
 			// flag that disables login mechanism in d3web.js
-			add("var login = false;", 0);
+			add("var usrdatLogin = false;", 0);
+		}
+
+		if (dbLogin) {
+			// flag that enables login mechanism in d3web.js
+			add("var dbLogin = true;", 0);
+		}
+		else {
+			// flag that disables login mechanism in d3web.js
+			add("var dbLogin = false;", 0);
 		}
 
 		if (d3web) {

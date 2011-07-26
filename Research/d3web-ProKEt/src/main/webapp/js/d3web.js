@@ -33,10 +33,10 @@ var headerHeight = -1;
 $(function() {
 	
 	// if login should be enabled: set in minimal XML and JSCodeContainer
-	if(login){
+	if(usrdatLogin){
 		window.setTimeout("logintimeout()", 57000 * 60);
 
-		var link = $.query.set("action", "checkLogin").toString();
+		var link = $.query.set("action", "checkUsrDatLogin").toString();
 		link = window.location.href.replace(window.location.search, "") + link;
 		
 		$.ajax({
@@ -443,7 +443,7 @@ function handleUnsupportedBrowsers() {
 		$('#head').children("table").children("tbody").append(
 				"<tr id='unsupportedbrowserwarning'><td colspan='3' style='color:red; font-variant:normal' >Sie benutzen " +
 				"den Browser '" + browser + "'. Dieser Browser wird von dieser Seite " +
-				"noch nicht unterstützt. Bitte nutzen sie stattdessen " +
+				"noch nicht vollständig unterstützt. Bitte nutzen sie stattdessen " +
 				"<a href='http://www.mozilla-europe.org/de/'>Mozilla Firefox</a> " +
 				"oder " +
 				"<a href='http://www.google.com/chrome/'>Google Chrome</a>!</td></tr>");
@@ -483,6 +483,17 @@ function updateDialog(html) {
 			$("#" + updateArray[i]).replaceWith(updateArray[i + 1]);
 		}
 	}
+}
+
+function getUrlParameter(name) {
+  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regexS = "[\\?&]"+name+"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( window.location.href );
+  if( results == null )
+    return "";
+  else
+    return results[1];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

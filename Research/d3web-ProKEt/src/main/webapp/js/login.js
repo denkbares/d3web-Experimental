@@ -115,7 +115,7 @@ function sendData() {
 
 	var servletPartNew = "d3web-ProKEt/LoginServlet" + querylink;
 
-	var link = $.query.set("action", "login").set("u", usr).set("p", encrypt(pw));
+	var link = $.query.set("action", "usrDatlogin").set("u", usr).set("p", encrypt(pw));
 	
 	$.ajax({
 		type : "GET",

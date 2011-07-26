@@ -8,7 +8,7 @@
 	questionnairecolumns="3"
 	questioncolumns = "2"
 	userprefix = "Mediastinitis" 
-	login = "yes"
+	login = "usrdat"
 	required = "Betreffende Klinik"
 	language = "de"
 	>

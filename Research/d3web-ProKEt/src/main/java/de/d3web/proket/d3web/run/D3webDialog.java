@@ -53,6 +53,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.binary.Base64;
+
 import au.com.bytecode.opencsv.CSVReader;
 import de.d3web.core.knowledge.Indication.State;
 import de.d3web.core.knowledge.InterviewObject;
@@ -94,6 +96,7 @@ import de.d3web.proket.d3web.output.render.IQuestionD3webRenderer;
 import de.d3web.proket.d3web.output.render.ImageHandler;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
+import de.d3web.proket.database.DB;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
 
@@ -264,35 +267,26 @@ public class D3webDialog extends HttpServlet {
 			return;
 		}
 		else if (action.equalsIgnoreCase("reset")) {
-
 			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
 			httpSession.setAttribute("d3webSession", d3webSession);
 			httpSession.setAttribute("lastLoaded", "");
 			return;
 		}
 		else if (action.equalsIgnoreCase("resetNewUser")) {
-
 			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
 			httpSession.setAttribute("d3webSession", d3webSession);
-
 			return;
 		}
-		else if (action.equalsIgnoreCase("checklogin")) {
-
-			PrintWriter writer = response.getWriter();
-
-			if (httpSession.getAttribute("user") == null) {
-				httpSession.setAttribute("log", true);
-				writer.append("NLI");
-			}
-			else {
-				writer.append("NOLI");
-			}
-
+		else if (action.equalsIgnoreCase("checkUsrDatLogin")) {
+			checkUsrDatLogin(response, httpSession);
 			return;
 		}
-		else if (action.equalsIgnoreCase("login")) {
-			login(request, response, httpSession);
+		else if (action.equalsIgnoreCase("usrDatlogin")) {
+			loginUsrDat(request, response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("dbLogin")) {
+			loginDB(request, response, httpSession);
 			return;
 		}
 		else if (action.equalsIgnoreCase("sendmail")) {
@@ -308,32 +302,78 @@ public class D3webDialog extends HttpServlet {
 			return;
 		}
 		else if (action.equalsIgnoreCase("checkrange")) {
-			PrintWriter writer = response.getWriter();
+			checkRange(request, response);
+			return;
+		}
+	}
 
-			String qidsString = request.getParameter("qids");
-			qidsString = qidsString.replace("q_", "");
+	protected void loginDB(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
+		String token = request.getParameter("t");
+		String email = new String(Base64.decodeBase64(request.getParameter("e")));
 
-			String[] qids = qidsString.split(";");
-			String qidBackstring = "";
+		if (DB.isValidToken(token, email)) {
+			httpSession.setAttribute("authenticated", "yes");
+			response.sendRedirect("../EuraHS-Dialog");
+		}
+		else {
+			response.sendRedirect("../EuraHS-Login");
+		}
+	}
 
-			for (String qid : qids) {
-				String[] idVal = qid.split("%");
+	protected void checkRange(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		PrintWriter writer = response.getWriter();
 
-				Question to = d3wcon.getKb().getManager().searchQuestion(idVal[0]);
+		String qidsString = request.getParameter("qids");
+		qidsString = qidsString.replace("q_", "");
 
-				if (to instanceof QuestionNum) {
-					if (to.getInfoStore().getValue(BasicProperties.QUESTION_NUM_RANGE) != null) {
-						NumericalInterval range = to.getInfoStore().getValue(
-								BasicProperties.QUESTION_NUM_RANGE);
-						qidBackstring += to.getName() + "%" + idVal[1] + "%";
-						qidBackstring += range.getLeft() + "-" + range.getRight() + ";";
-					}
+		String[] qids = qidsString.split(";");
+		String qidBackstring = "";
+
+		for (String qid : qids) {
+			String[] idVal = qid.split("%");
+
+			Question to = d3wcon.getKb().getManager().searchQuestion(idVal[0]);
+
+			if (to instanceof QuestionNum) {
+				if (to.getInfoStore().getValue(BasicProperties.QUESTION_NUM_RANGE) != null) {
+					NumericalInterval range = to.getInfoStore().getValue(
+							BasicProperties.QUESTION_NUM_RANGE);
+					qidBackstring += to.getName() + "%" + idVal[1] + "%";
+					qidBackstring += range.getLeft() + "-" + range.getRight() + ";";
 				}
-
 			}
 
-			writer.append(qidBackstring);
-			return;
+		}
+
+		writer.append(qidBackstring);
+	}
+
+	/**
+	 * 
+	 * @created 26.07.2011
+	 * @param response
+	 * @param httpSession
+	 * @throws IOException
+	 */
+	protected void checkUsrDatLogin(HttpServletResponse response, HttpSession httpSession) throws IOException {
+		PrintWriter writer = response.getWriter();
+
+		if (httpSession.getAttribute("user") == null) {
+			httpSession.setAttribute("log", true);
+			writer.append("NLI");
+		}
+		else {
+			writer.append("NOLI");
+		}
+	}
+
+	protected void show(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
+		String authenticated = (String) httpSession.getAttribute("authenticated");
+		if (authenticated != null && authenticated.equals("yes")) {
+			render(request, response, httpSession);
+		}
+		else {
+			response.sendRedirect("../EuraHS-Login");
 		}
 	}
 
@@ -362,7 +402,7 @@ public class D3webDialog extends HttpServlet {
 	 * @param d3webSession
 	 * @throws IOException
 	 */
-	protected void show(HttpServletRequest request, HttpServletResponse response,
+	protected void render(HttpServletRequest request, HttpServletResponse response,
 			HttpSession httpSession)
 			throws IOException {
 
@@ -735,7 +775,7 @@ public class D3webDialog extends HttpServlet {
 	 * @param httpSession
 	 * @throws IOException
 	 */
-	protected void login(HttpServletRequest req,
+	protected void loginUsrDat(HttpServletRequest req,
 			HttpServletResponse res, HttpSession httpSession)
 			throws IOException {
 

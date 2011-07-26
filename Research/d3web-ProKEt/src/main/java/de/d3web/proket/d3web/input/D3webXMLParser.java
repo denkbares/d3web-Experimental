@@ -203,14 +203,18 @@ public class D3webXMLParser {
 		return col;
 	}
 
-	// returns false in case "no" is given OR nothing
-	public boolean getLogin() {
+	public enum LoginMode {
+		off, usrdat, db
+	}
 
+	// returns false in case "no" is given OR nothing
+	public LoginMode getLogin() {
+		LoginMode currentMode = LoginMode.off;
 		String log = XMLUtils.getStr((Element) dialogSpec, "login", null);
-		if (log != null && log.toLowerCase().equals("yes")) {
-			return true;
+		if (log != null) {
+			currentMode = LoginMode.valueOf(log);
 		}
-		return false;
+		return currentMode;
 	}
 
 	// returns the specification of required fields

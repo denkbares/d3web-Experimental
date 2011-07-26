@@ -74,7 +74,7 @@ public class Mediastinitis extends D3webDialog {
 	 * @throws IOException
 	 */
 	@Override
-	public void show(HttpServletRequest request, HttpServletResponse response,
+	public void render(HttpServletRequest request, HttpServletResponse response,
 			HttpSession httpSession)
 			throws IOException {
 

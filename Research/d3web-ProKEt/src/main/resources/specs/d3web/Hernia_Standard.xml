@@ -9,7 +9,7 @@
 	questionnairecolumns="3"
 	questioncolumns="1"
 	userprefix = "Hernia" 
-	login = "no"
+	login = "db"
 	required = "none"
 	language = "en">
 	<data kb="HerniaDialog.d3web" />

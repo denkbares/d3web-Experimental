@@ -37,6 +37,7 @@ import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.output.container.ContainerCollection;
@@ -90,10 +91,9 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		 * handle custom ContainerCollection modification, e.g., enabling
 		 * certain JS stuff
 		 */
-		if (D3webConnector.getInstance().getD3webParser().getLogin()) {
-			st.setAttribute("login", "true");
-			cc.js.enableLogin();
-		}
+		LoginMode loginMode = D3webConnector.getInstance().getD3webParser().getLogin();
+		cc.js.setLoginMode(loginMode);
+		if (loginMode == LoginMode.usrdat) st.setAttribute("login", "true");
 
 		// handle Css
 		handleCss(cc);
