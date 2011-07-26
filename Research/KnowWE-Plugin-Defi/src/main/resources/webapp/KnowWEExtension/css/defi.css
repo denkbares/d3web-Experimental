@@ -46,7 +46,7 @@ td.menulinkroot {
 td.menulinkrootclosed {
     color: #AAAAAA;
     background-color: #595959;
-    text-decoration: none;
+    text-decoration:none;
     font-weight: bold;
 }
 td.menulink {
@@ -69,6 +69,12 @@ td.menulink a, td.menulinkcurrent a, td.menulinkrootcurrent a {
 }
 td.menulinkrootcurrent {
 	font-weight:bold;
+}
+td.menulinkroot:hover {
+	background-color:highlight;
+}
+td.menulink:hover {
+	background-color:#eee;
 }
 table.menulink td {
 	padding:0.25em 0.5em;
