@@ -26,7 +26,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-import java.util.NoSuchElementException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -34,9 +33,11 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import de.knowwe.metatool.MetatoolParseException;
 import de.knowwe.metatool.ObjectType;
 import de.knowwe.metatool.ParameterizedClass;
 import de.knowwe.metatool.QualifiedClass;
@@ -52,7 +53,7 @@ import de.knowwe.metatool.QualifiedClass;
  */
 public class XMLReader implements ObjectTypeReader {
 
-	public ObjectType read(InputStream stream) throws IOException {
+	public ObjectType read(InputStream stream) throws IOException, MetatoolParseException {
 		if (stream == null) {
 			throw new IllegalArgumentException();
 		}
@@ -75,22 +76,21 @@ public class XMLReader implements ObjectTypeReader {
 			result = handler.getObjectType();
 		}
 		catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new MetatoolParseException(e.getMessage(), null);
 		}
 		catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			if (e.getException() instanceof MetatoolParseException) {
+				throw (MetatoolParseException) e.getException();
+			}
 		}
 		catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new MetatoolParseException(e.getMessage(), null);
 		}
 
 		return result;
 	}
 	
-	public ObjectType read(File input) throws IOException {
+	public ObjectType read(File input) throws IOException, MetatoolParseException {
 		if (input == null) {
 			throw new IllegalArgumentException();
 		}
@@ -115,6 +115,16 @@ public class XMLReader implements ObjectTypeReader {
 		private ObjectType nextParent;
 		private int nextPosition;
 		private boolean color;
+		
+		private Locator locator;
+		
+		/* (non-Javadoc)
+		 * @see org.xml.sax.helpers.DefaultHandler#setDocumentLocator(org.xml.sax.Locator)
+		 */
+		@Override
+		public void setDocumentLocator(Locator locator) {
+			this.locator = locator;
+		}
 
 		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -159,7 +169,7 @@ public class XMLReader implements ObjectTypeReader {
 			builder.setSuperType(superTypeClass);
 		}
 
-		private void prepareChildrenAddition(Attributes attributes) {
+		private void prepareChildrenAddition(Attributes attributes) throws SAXException {
 			String parent = attributes.getValue("Parent");
 			String position = attributes.getValue("Position");
 			if (parent != null && typesByID.containsKey(parent)) {
@@ -167,17 +177,20 @@ public class XMLReader implements ObjectTypeReader {
 				nextPosition = Integer.parseInt(position);
 			}
 			else if (root != null && (parent == null || !typesByID.containsKey(parent))) {
-				throw new NoSuchElementException(
+				throw new SAXException(new MetatoolParseException(
 						"ObjectType with ID \""
 								+ parent
-								+ "\" doesn't exist. Unable to add child. Parents have to parsed before children!");
+								+ "\" doesn't exist. Unable to add child. Parents have to parsed before children!",
+						locator
+						));
 			}
 		}
 
-		private void setSectionFinder(Attributes attributes) {
+		private void setSectionFinder(Attributes attributes) throws SAXException {
 			if (builder == null) {
-				throw new NullPointerException(
-						"There is no builder! You have specified a sectionFinder outside of an ObjectType element");
+				throw new SAXException(new MetatoolParseException(
+						"There is no builder! You have specified a sectionFinder outside of an ObjectType element",
+						locator));
 			}
 
 			// Set SectionFinder
@@ -188,10 +201,11 @@ public class XMLReader implements ObjectTypeReader {
 			builder.setSectionFinder(sectionFinder);
 		}
 
-		private void addConstraint(Attributes attributes) {
+		private void addConstraint(Attributes attributes) throws  SAXException {
 			if (builder == null) {
-				throw new NullPointerException(
-						"There is no builder! Probably you have defined the constraint on a wrong position.");
+				throw new SAXException(new MetatoolParseException(
+						"There is no builder! Probably you have defined the constraint on a wrong position.",
+						locator));
 			}
 
 			// Add Constraint
@@ -214,9 +228,10 @@ public class XMLReader implements ObjectTypeReader {
 					nextParent.addChild(nextPosition, temp);
 				}
 				else if (nextParent == null && root != null) {
-					throw new IllegalStateException(
+					throw new SAXException(new MetatoolParseException(
 							"The following ObjectType is not the root but has no parent: "
-									+ temp.getClassName());
+									+ temp.getClassName(),
+							locator));
 				}
 
 				// Create root

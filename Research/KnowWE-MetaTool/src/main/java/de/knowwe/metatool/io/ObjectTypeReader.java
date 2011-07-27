@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import de.knowwe.metatool.MetatoolParseException;
 import de.knowwe.metatool.ObjectType;
 
 
@@ -44,6 +45,6 @@ public interface ObjectTypeReader {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	ObjectType read(File input) throws IOException;
+	ObjectType read(File input) throws IOException, MetatoolParseException;
 
 }

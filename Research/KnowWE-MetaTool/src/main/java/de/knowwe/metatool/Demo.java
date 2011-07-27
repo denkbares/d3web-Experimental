@@ -39,13 +39,24 @@ public class Demo {
 	public static void main(String[] args) throws IOException {
 
 		ObjectType temp = read();
+		
+		if (temp == null) {
+			return;
+		}
+		
 		write(temp);
 		// write(createObjectType());
 	}
 
 	private static ObjectType read() throws IOException {
 		XMLReader reader = new XMLReader();
-		return reader.read(new File(inputFile));
+		try {
+			return reader.read(new File(inputFile));
+		} catch (MetatoolParseException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 
 	private static void write(ObjectType objectType) throws IOException {

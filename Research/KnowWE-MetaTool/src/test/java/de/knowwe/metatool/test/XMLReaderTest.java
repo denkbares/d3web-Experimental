@@ -26,6 +26,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import de.knowwe.metatool.MetatoolParseException;
 import de.knowwe.metatool.ObjectType;
 import de.knowwe.metatool.ParameterizedClass;
 import de.knowwe.metatool.QualifiedClass;
@@ -41,13 +42,13 @@ public class XMLReaderTest {
 	private static final String TESTFILE = "src/test/resources/TestTypes.xml";
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testNullAsFile() throws IOException {
+	public void testNullAsFile() throws IOException, MetatoolParseException {
 		XMLReader reader = new XMLReader();
 		reader.read((File) null);
 	}
 
 	@Test
-	public void testGeneratedObjectTypes() throws IOException {
+	public void testGeneratedObjectTypes() throws IOException, MetatoolParseException {
 		XMLReader reader = new XMLReader();
 		ObjectType actual = reader.read(new File(TESTFILE));
 		ObjectType expected = getObjectType();
