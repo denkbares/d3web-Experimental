@@ -20,10 +20,16 @@ Operation date.date_format = dd.MM.yyyy
 "End of operation (last skin suture)".date_format = HH:mm:ss OR HH:mm
 Date of discharge.date_format = dd.MM.yyyy
 Hour of discharge.date_format = HH
-Date of death.date_format = dd.MM.yyyy
-Date of follow up.date_format = dd.MM.yyyy
-Date of diagnosis.date_format = dd.MM.yyyy
-Date of repair done.date_format = dd.MM.yyyy
+
+"Date of death (Follow up 1)".date_format = dd.MM.yyyy
+"Date of follow up (Follow up 1)".date_format = dd.MM.yyyy
+"Date of diagnosis (Follow up 1)".date_format = dd.MM.yyyy
+"Date of repair done (Follow up 1)".date_format = dd.MM.yyyy
+
+"Date of death (Follow up 2)".date_format = dd.MM.yyyy
+"Date of follow up (Follow up 2)".date_format = dd.MM.yyyy
+"Date of diagnosis (Follow up 2)".date_format = dd.MM.yyyy
+"Date of repair done (Follow up 2)".date_format = dd.MM.yyyy
 
 @package: Hernia
 %
