@@ -31,7 +31,6 @@ import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.HerniaDefaultRootD3webRenderer;
 import de.d3web.proket.output.container.ContainerCollection;
-import de.d3web.proket.utils.GlobalSettings;
 
 /**
  * Servlet for creating and using dialogs with d3web binding. Binding is more of
@@ -110,13 +109,6 @@ public class Hernia extends D3webDialog {
 
 		// fetch the information sent via the request string from login
 		String u = req.getParameter("u");
-
-		// with login mechanism needed here for initially loading cases,
-		// otherwise
-		// put it into doGet
-		String folderPath = req.getSession().getServletContext().getRealPath("/cases");
-
-		GlobalSettings.getInstance().setCaseFolder(folderPath);
 
 		// get the response writer for communicating back via Ajax
 		PrintWriter writer = res.getWriter();

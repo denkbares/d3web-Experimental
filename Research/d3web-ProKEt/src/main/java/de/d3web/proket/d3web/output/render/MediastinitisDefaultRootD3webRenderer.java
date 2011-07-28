@@ -61,14 +61,8 @@ public class MediastinitisDefaultRootD3webRenderer extends DefaultRootD3webRende
 		st.setAttribute("header", D3webConnector.getInstance().getHeader());
 
 		// load case list dependent from logged in user, e.g. MEDIASTINITIS
-		String opts = "";
-		if ((String) http.getAttribute("user") != null && (String) http.getAttribute("user") != "") {
-			opts = PersistenceD3webUtils.getCaseListFromUserFilename((String) http.getAttribute("user"));
-		}
-		// otherwise
-		else {
-			opts = PersistenceD3webUtils.getCaseList();
-		}
+		String opts = PersistenceD3webUtils.getUserCaseList((String) http.getAttribute("user"));
+
 		st.setAttribute("fileselectopts", opts);
 
 		// Summary dialog

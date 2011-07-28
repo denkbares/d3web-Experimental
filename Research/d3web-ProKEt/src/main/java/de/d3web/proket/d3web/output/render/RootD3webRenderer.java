@@ -44,8 +44,6 @@ public interface RootD3webRenderer {
 
 	public String renderHeaderInfoLine(Session d3webSession);
 
-	public String getAvailableFiles(HttpSession http);
-
 	public void addButtons(StringTemplate st);
 
 	/**

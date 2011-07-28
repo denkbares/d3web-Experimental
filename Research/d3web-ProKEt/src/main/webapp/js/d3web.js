@@ -182,20 +182,12 @@ $(function() {
 		$(document).keypress(function(e) {
 		if ((e.which && e.which == 13)
 				|| (e.keyCode && e.keyCode == 13)) {
-			
-			if ($('#jqConfirmDialog').dialog('isOpen'))
-				$('[aria-labelledby$=jqConfirmDialog]').find(
-						":button:contains('Speichern')").click();
-			
-			if ($('#jqLoadCaseDialog').dialog('isOpen'))
-				$('[aria-labelledby$=jqLoadCaseDialog]').find(
-						":button:contains('OK')").click();
-				return false;
+				submitLoadAndSaveDialog();
 			}
 		});
-
 	});
 });
+
 
 /**
  * Set a click function to all form elements for enabling the sending of values
@@ -277,12 +269,7 @@ function initFunctionality() {
 
 	// bind the loadcase button to making the fileselect list visible
 	$('#loadcase').unbind('click').click(function(event) {
-
 		$("#jqLoadCaseDialog").dialog("open");
-
-		// make selectbox visible
-		// var filesel = $('#fileselect');
-		// filesel.attr("style", "display:block");
 	});
 	
 	$('#summary').click(function(event){
@@ -496,6 +483,17 @@ function getUrlParameter(name) {
     return results[1];
 }
 
+
+function submitLoadAndSaveDialog() {
+	if ($('#jqConfirmDialog').dialog('isOpen'))
+		$('[aria-labelledby$=jqConfirmDialog]').find(
+				":button:contains('Speichern')").click();
+	
+	if ($('#jqLoadCaseDialog').dialog('isOpen'))
+		$('[aria-labelledby$=jqLoadCaseDialog]').find(
+				":button:contains('OK')").click();
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// OLD STUFF, NOT SURE IF NEEDED ///////////////////////////
@@ -573,8 +571,7 @@ function d3web_sendSave() {
 
 	// d3web_getRemainingFacts();
 
-	var confirmFilename = "";
-	confirmFilename = $('#confirmFilename').val();
+	var confirmFilename = $('#confirmFilename').val();
 
 	var link = $.query.set("action", "savecase").set("userfn", confirmFilename)
 			.toString();
@@ -582,21 +579,14 @@ function d3web_sendSave() {
 	link = window.location.href.replace(window.location.search, "") + link;
 
 	// new jquery 1.5 syntax
-	$
-			.get(
-					link,
-					function(data) {
-						if (data == "exists") {
-							$('#confirmError')
-									.html(
-											"<font color=\"red\">Dateiname exisitiert bereits. Bitte anderen Namen wählen.</font>");
-						} else {
-
-							d3web_show();
-							// window.location.reload();
-							// initFunctionality();
-						}
-					});
+	$.get(link, function(data) {
+		if (data == "exists") {
+			$('#confirmError').html("<font color=\"red\">Dateiname exisitiert " +
+					"bereits. Bitte anderen Namen wählen.</font>");
+		} else {
+			d3web_show();
+		}
+	});
 }
 
 function d3web_show() {

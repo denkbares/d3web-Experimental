@@ -48,37 +48,34 @@ public class GlobalSettings {
 	}
 
 	/* Paths */
-	private String d3webSpecsPath = "/specs/d3web";
-	private String prototypeSpecsPath = "/specs/prototypes";
-	private String baseSpecsPath = "/specs/";
+	private final String d3webSpecsPath = "/specs/d3web";
+	private final String prototypeSpecsPath = "/specs/prototypes";
+	private final String baseSpecsPath = "/specs/";
 
-	private String baseTempPath = "/stringtemp";
-	private String htmlTempPath = "/stringtemp/html";
-	private String cssTempPath = "/stringtemp/css";
+	private final String baseTempPath = "/stringtemp";
+	private final String htmlTempPath = "/stringtemp/html";
+	private final String cssTempPath = "/stringtemp/css";
 
-	private String proketPath = "de.d3web.proket.";
-	private String d3webRendererPath = "de.d3web.proket.d3web.output.render.";
-	private String rendererBasePath = "de.d3web.proket.output.render";
+	private final String proketPath = "de.d3web.proket.";
+	private final String d3webRendererPath = "de.d3web.proket.d3web.output.render.";
+	private final String rendererBasePath = "de.d3web.proket.output.render";
 
-	private String applicationBasePath = "/controlcenterResources";
-
+	private final String applicationBasePath = "/controlcenterResources";
 
 	/* File names */
-	private String defaultKB = "defaultKB.jar"; // TODO
-	private String defaultPrototypeXML = "defaultPrototype.xml"; // TODO
-
+	private final String defaultKB = "defaultKB.jar"; // TODO
+	private final String defaultPrototypeXML = "defaultPrototype.xml"; // TODO
 
 	/* Default dialog settings */
-	private DialogType defaultDialogType = DialogType.DEFAULT;
-	private DialogStrategy defaultDialogStrategy = DialogStrategy.DEFAULT;
-	private String defaultCSSSpec = "default"; // TODO
+	private final DialogType defaultDialogType = DialogType.DEFAULT;
+	private final DialogStrategy defaultDialogStrategy = DialogStrategy.DEFAULT;
+	private final String defaultCSSSpec = "default"; // TODO
 
 	/* The folder, where persistence is stored, e.g., case-files */
 	private String caseFolder = "";
 
 	private String kbImgFolder = "";
-
-
+	private String servletBasePath;
 
 	/* The getters for retrieving all those values */
 	public String getProketPath() {
@@ -129,7 +126,7 @@ public class GlobalSettings {
 		return cssTempPath;
 	}
 
-	public String getRendererBasePath(){
+	public String getRendererBasePath() {
 		return rendererBasePath;
 	}
 
@@ -156,6 +153,14 @@ public class GlobalSettings {
 
 	public String getKbImgFolder() {
 		return kbImgFolder;
+	}
+
+	public void setServletBasePath(String servletBasePath) {
+		this.servletBasePath = servletBasePath;
+	}
+
+	public String getServletBasePath() {
+		return this.servletBasePath;
 	}
 
 }

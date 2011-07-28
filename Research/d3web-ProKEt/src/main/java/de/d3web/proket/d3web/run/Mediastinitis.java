@@ -95,7 +95,7 @@ public class Mediastinitis extends D3webDialog {
 		// of
 		String user = (String) httpSession.getAttribute("user");
 		if (user != null && user != "") {
-			String definingObject = "Betreffende Klinik";
+			String definingObject = D3webConnector.getInstance().getD3webParser().getRequired();
 			Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(
 					definingObject);
 			Fact fact = d3webSess.getBlackboard().getValueFact(to);
@@ -110,5 +110,4 @@ public class Mediastinitis extends D3webDialog {
 
 		writer.close(); // and close
 	}
-
 }

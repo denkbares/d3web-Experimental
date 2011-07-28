@@ -19,11 +19,7 @@
  */
 package de.d3web.proket.d3web.output.render;
 
-import javax.servlet.http.HttpSession;
-
 import org.antlr.stringtemplate.StringTemplate;
-
-import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 
 /**
  * Basic Renderer Class for d3web-based dialogs. Defines the basic rendering of
@@ -34,26 +30,6 @@ import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
  * @created 13.01.2011
  */
 public class HerniaDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
-
-	@Override
-	public String getAvailableFiles(HttpSession http) {
-		String opts;
-		if ((String) http.getAttribute("login") != null
-				&& (String) http.getAttribute("login") != "" &&
-				(String) http.getAttribute("nname") != null
-				&& (String) http.getAttribute("nname") != "" &&
-				(String) http.getAttribute("institute") != null
-				&& (String) http.getAttribute("institute") != "") {
-
-			String idString = (String) http.getAttribute("login") +
-					(String) http.getAttribute("nname") + (String) http.getAttribute("institute");
-			opts = PersistenceD3webUtils.getCaseListFilterByID(idString);
-		}
-		else {
-			opts = PersistenceD3webUtils.getCaseList();
-		}
-		return opts;
-	}
 
 	@Override
 	public void addButtons(StringTemplate st) {

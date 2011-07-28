@@ -65,7 +65,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		st.setAttribute("header", D3webConnector.getInstance().getHeader());
 
 		// load case list dependent from logged in user, e.g. MEDIASTINITIS
-		String opts = getAvailableFiles(http);
+		String opts = PersistenceD3webUtils.getUserCaseList((String) http.getAttribute("user"));
 		st.setAttribute("fileselectopts", opts);
 
 		String info = renderHeaderInfoLine(d3webSession);
@@ -110,18 +110,6 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 
 		cc.html.add(st.toString());
 		return cc;
-	}
-
-	@Override
-	public String getAvailableFiles(HttpSession http) {
-		String opts;
-		if ((String) http.getAttribute("user") != null && (String) http.getAttribute("user") != "") {
-			opts = PersistenceD3webUtils.getCaseListFromUserFilename((String) http.getAttribute("user"));
-		}
-		else {
-			opts = PersistenceD3webUtils.getCaseList();
-		}
-		return opts;
 	}
 
 	@Override
