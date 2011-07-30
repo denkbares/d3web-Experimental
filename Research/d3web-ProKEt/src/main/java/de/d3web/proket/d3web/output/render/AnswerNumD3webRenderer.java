@@ -31,6 +31,7 @@ import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.knowledge.terminology.info.NumericalInterval;
+import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.UndefinedValue;
@@ -53,8 +54,8 @@ public class AnswerNumD3webRenderer extends AbstractD3webRenderer implements Ans
 	/**
 	 * Specifically adapted for rendering NumAnswers
 	 */
-	public String renderTerminologyObject(ContainerCollection cc, Choice c, TerminologyObject to,
-			TerminologyObject parent) {
+	public String renderTerminologyObject(ContainerCollection cc, Session d3webSession, Choice c,
+			TerminologyObject to, TerminologyObject parent) {
 
 		QuestionNum nq = (QuestionNum) to;
 

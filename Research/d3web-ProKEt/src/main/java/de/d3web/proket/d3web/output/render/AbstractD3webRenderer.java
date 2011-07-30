@@ -67,13 +67,13 @@ import de.d3web.proket.output.container.ContainerCollection;
  */
 public abstract class AbstractD3webRenderer implements D3webRenderer {
 
-	protected static Session d3webSession;
+	// protected static Session d3webSession;
 	protected int countQcon = 1;
 	protected int countQ = 1;
 
-	public static void storeSession(Session session) {
-		d3webSession = session;
-	}
+	// public static void storeSession(Session session) {
+	// d3webSession = session;
+	// }
 
 	/**
 	 * Retrieves the appropriate renderer class according to what base object is
@@ -136,7 +136,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 	 * @param cc The ContainerCollection for writing into
 	 * @param to The TerminologyObject the children of which are rendered.
 	 */
-	protected void renderChildren(StringTemplate st, ContainerCollection cc,
+	protected void renderChildren(StringTemplate st, Session d3webSession, ContainerCollection cc,
 			TerminologyObject to) {
 
 		StringBuilder childrenHTML = new StringBuilder();
@@ -177,7 +177,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
 			// receive the rendering code from the Renderer and append
 			String childHTML =
-					childRenderer.renderTerminologyObject(cc, child, to);
+					childRenderer.renderTerminologyObject(d3webSession, cc, child, to);
 			if (childHTML != null) {
 				childrenHTML.append(childHTML);
 			}
@@ -186,7 +186,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 			// as this is done after having inserted the normal child, the
 			// follow up is appended in between the child and its follow-up
 			if (child instanceof Question) {
-				childrenHTML.append(renderFollowUps(cc, child, to));
+				childrenHTML.append(renderFollowUps(d3webSession, cc, child, to));
 			}
 		}
 
@@ -211,9 +211,10 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 	 * @param st The StringTemplate
 	 * @param cc The ContainerCollection
 	 * @param to The TerminologyObject
+	 * @param d3webSession TODO
 	 */
 	protected void renderChoices(StringTemplate st, ContainerCollection cc,
-			TerminologyObject to, TerminologyObject parent) {
+			TerminologyObject to, TerminologyObject parent, Session d3webSession) {
 
 		StringBuilder childrenHTML = new StringBuilder();
 
@@ -261,7 +262,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
 					// receive the matching HTML from the Renderer and append
 					String childHTML =
-							childRenderer.renderTerminologyObject(cc, c, to, parent);
+							childRenderer.renderTerminologyObject(cc, d3webSession, c, to, parent);
 					if (childHTML != null) {
 						childrenHTML.append(childHTML);
 					}
@@ -277,7 +278,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
 			// receive the matching HTML from the Renderer and append
 			String childHTML =
-					childRenderer.renderTerminologyObject(cc, null, to, parent);
+					childRenderer.renderTerminologyObject(cc, d3webSession, null, to, parent);
 			if (childHTML != null) {
 				childrenHTML.append(childHTML);
 			}
@@ -303,7 +304,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
 					// receive the matching HTML from the Renderer and append
 					String childHTML =
-							unknownRenderer.renderTerminologyObject(cc, null, to, parent);
+							unknownRenderer.renderTerminologyObject(cc, d3webSession, null, to, parent);
 					// System.out.println(childHTML);
 					if (childHTML != null) {
 						childrenHTML.append(childHTML);
@@ -337,7 +338,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 	 * @param parent The parent TerminologyObject.
 	 * @return
 	 */
-	private String renderFollowUps(ContainerCollection cc, TerminologyObject child,
+	private String renderFollowUps(Session d3webSession, ContainerCollection cc, TerminologyObject child,
 			TerminologyObject parent) {
 		StringBuilder fus = new StringBuilder();
 
@@ -357,9 +358,9 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
 				// receive the rendering code from the Renderer and append
 				StringBuilder childHTML = new StringBuilder(
-						childRenderer.renderTerminologyObject(cc, childsChild, parent));
+						childRenderer.renderTerminologyObject(d3webSession, cc, childsChild, parent));
 				if (child instanceof Question) {
-					childHTML.append(renderFollowUps(cc, childsChild, parent));
+					childHTML.append(renderFollowUps(d3webSession, cc, childsChild, parent));
 				}
 				if (childHTML != null) {
 					fus.append(childHTML);

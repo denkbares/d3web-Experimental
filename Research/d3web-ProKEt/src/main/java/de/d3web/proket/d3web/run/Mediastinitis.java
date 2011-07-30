@@ -31,7 +31,6 @@ import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
-import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.MediastinitisDefaultRootD3webRenderer;
 import de.d3web.proket.output.container.ContainerCollection;
 
@@ -88,8 +87,7 @@ public class Mediastinitis extends D3webDialog {
 		// new ContainerCollection needed each time to get an updated dialog
 		ContainerCollection cc = new ContainerCollection();
 
-		Session d3webSess = (Session) httpSession.getAttribute("d3webSession");
-		AbstractD3webRenderer.storeSession(d3webSess);
+		Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
 
 		// set clinic to user name, since its the only clinic it can see cases
 		// of

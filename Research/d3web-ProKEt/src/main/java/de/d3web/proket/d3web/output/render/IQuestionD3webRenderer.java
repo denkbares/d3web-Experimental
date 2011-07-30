@@ -19,6 +19,7 @@
 package de.d3web.proket.d3web.output.render;
 
 import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.session.Session;
 import de.d3web.proket.output.container.ContainerCollection;
 
 /**
@@ -32,13 +33,14 @@ public interface IQuestionD3webRenderer {
 	 * Renders the current terminology object.
 	 * 
 	 * @created 14.01.2011
+	 * @param d3webSession TODO
 	 * @param cc ContainerCollection to be used.
 	 * @param to TerminologyObject to be rendered.
 	 * @param parent The parent object of to
 	 * @return the resulting String that is inserted in the parent
 	 *         StringTemplate as a result.
 	 */
-	public String renderTerminologyObject(ContainerCollection cc, TerminologyObject to,
-			TerminologyObject parent);
+	public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
+			TerminologyObject to, TerminologyObject parent);
 
 }

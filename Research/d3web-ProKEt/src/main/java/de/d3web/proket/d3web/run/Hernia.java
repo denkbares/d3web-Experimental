@@ -28,7 +28,6 @@ import javax.servlet.http.HttpSession;
 
 import de.d3web.core.session.Session;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
-import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.HerniaDefaultRootD3webRenderer;
 import de.d3web.proket.output.container.ContainerCollection;
 
@@ -84,8 +83,7 @@ public class Hernia extends D3webDialog {
 		// new ContainerCollection needed each time to get an updated dialog
 		ContainerCollection cc = new ContainerCollection();
 
-		Session d3webSess = (Session) httpSession.getAttribute("d3webSession");
-		AbstractD3webRenderer.storeSession(d3webSess);
+		Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
 		cc = d3webr.renderRoot(cc, d3webSess, httpSession);
 
 		writer.print(cc.html.toString()); // deliver the rendered output

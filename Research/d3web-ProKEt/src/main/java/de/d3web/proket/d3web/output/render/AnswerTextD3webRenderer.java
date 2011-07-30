@@ -27,6 +27,7 @@ import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
+import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.UndefinedValue;
@@ -50,8 +51,8 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
 	/**
 	 * Specifically adapted for rendering NumAnswers
 	 */
-	public String renderTerminologyObject(ContainerCollection cc, Choice c, TerminologyObject to,
-			TerminologyObject parent) {
+	public String renderTerminologyObject(ContainerCollection cc, Session d3webSession, Choice c,
+			TerminologyObject to, TerminologyObject parent) {
 
 		QuestionText tq = (QuestionText) to;
 
@@ -116,13 +117,6 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
 		// Description of the input to provide is read from the knowledge base
 		st.setAttribute("text", tq.getInfoStore().getValue(MMInfo.DESCRIPTION));
 
-		// TODO IMG QUESTIONS TEST
-		String imgName = "";
-		// String desc = tq.getInfoStore().getValue(MMInfo.DESCRIPTION);
-		// if (desc.contains("IMG#####")) {
-		// imgName = desc.replace("IMG#####", "");
-		// }
-		// st.setAttribute("img", imgName);
 		sb.append(st.toString());
 
 		super.makeTables(to, to, cc, sb);

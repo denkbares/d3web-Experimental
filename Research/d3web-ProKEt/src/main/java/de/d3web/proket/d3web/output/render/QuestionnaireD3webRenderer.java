@@ -22,6 +22,7 @@ package de.d3web.proket.d3web.output.render;
 import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
@@ -43,8 +44,8 @@ public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements
 	/**
 	 * Adapted specifically for questionnaire rendering
 	 */
-	public String renderTerminologyObject(ContainerCollection cc, TerminologyObject to,
-			TerminologyObject parent) {
+	public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
+			TerminologyObject to, TerminologyObject parent) {
 
 		StringBuilder sb = new StringBuilder();
 
@@ -68,7 +69,7 @@ public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements
 			st.setAttribute("tooltip", resString);
 		}
 
-		Blackboard bb = AbstractD3webRenderer.d3webSession.getBlackboard();
+		Blackboard bb = d3webSession.getBlackboard();
 
 		if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(to)
 				|| isIndicated(to, bb)) {
@@ -82,7 +83,7 @@ public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements
 		}
 
 		// render the children
-		super.renderChildren(st, cc, to);
+		super.renderChildren(st, d3webSession, cc, to);
 
 		sb.append(st.toString());
 

@@ -25,6 +25,7 @@ import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
+import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.Unknown;
@@ -39,8 +40,8 @@ public class AnswerUnknownD3webRenderer extends AbstractD3webRenderer implements
 	/**
 	 * Specifically adapted for Unknown Option rendering
 	 */
-	public String renderTerminologyObject(ContainerCollection cc, Choice c, TerminologyObject to,
-			TerminologyObject parent) {
+	public String renderTerminologyObject(ContainerCollection cc, Session d3webSession, Choice c,
+			TerminologyObject to, TerminologyObject parent) {
 
 		StringBuilder sb = new StringBuilder();
 		StringTemplate st = null;

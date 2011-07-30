@@ -6,6 +6,6 @@
     <redirectLogger>true</redirectLogger>
     <updateXml>true</updateXml>
     <warLocation></warLocation>
-    <extraInfo>%09%3CResource%0A%09%09name%3D%22jdbc%2FEuraHS%22%0A%09%09auth%3D%22Container%22%0A%09%09type%3D%22javax.sql.DataSource%22%0A%09%09username%3D%22root%22+password%3D%22eurahspw11%22%0A%09%09driverClassName%3D%22com.mysql.jdbc.Driver%22%0A%09%09url%3D%22jdbc%3Amysql%3A%2F%2Flocalhost%3A3306%2FEuraHS%22%0A%09%09maxActive%3D%2220%22%0A%09%09%2F%3E</extraInfo>
+    <extraInfo>%09%3CResource%0D%0A%09%09name%3D%22jdbc%2FEuraHS%22%0D%0A%09%09auth%3D%22Container%22%0D%0A%09%09type%3D%22javax.sql.DataSource%22%0D%0A%09%09username%3D%22root%22+password%3D%22eurahspw11%22%0D%0A%09%09driverClassName%3D%22com.mysql.jdbc.Driver%22%0D%0A%09%09url%3D%22jdbc%3Amysql%3A%2F%2Flocalhost%3A3306%2FEuraHS%22%0D%0A%09%09maxActive%3D%2220%22%0D%0A%09%09%2F%3E</extraInfo>
     <webPath>/EuraHS-Dialog</webPath>
 </tomcatProjectProperties>

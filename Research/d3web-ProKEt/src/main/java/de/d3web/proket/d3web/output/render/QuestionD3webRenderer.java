@@ -58,8 +58,8 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 	/**
 	 * Adapted specifically for question rendering
 	 */
-	public String renderTerminologyObject(ContainerCollection cc, TerminologyObject to,
-			TerminologyObject parent) {
+	public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
+			TerminologyObject to, TerminologyObject parent) {
 
 		StringBuilder sb = new StringBuilder();
 
@@ -106,9 +106,8 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 		}
 
 		// get d3web properties
-		Session sess = AbstractD3webRenderer.d3webSession;
-		Form current = sess.getInterview().nextForm();
-		Blackboard bb = sess.getBlackboard();
+		Form current = d3webSession.getInterview().nextForm();
+		Blackboard bb = d3webSession.getBlackboard();
 		Value val = bb.getValue((ValueObject) to);
 
 		/* the following handles follow-up questions that get activated */
@@ -167,7 +166,7 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 		}
 
 		// underneath="within" a rendered question, always answers are rendered
-		super.renderChoices(st, cc, to, parent);
+		super.renderChoices(st, cc, to, parent, d3webSession);
 
 		sb.append(st.toString());
 

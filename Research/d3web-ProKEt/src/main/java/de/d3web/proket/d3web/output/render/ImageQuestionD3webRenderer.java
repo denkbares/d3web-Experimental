@@ -28,6 +28,7 @@ import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
+import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.interviewmanager.Form;
@@ -54,8 +55,8 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 	/**
 	 * Adapted specifically for question rendering
 	 */
-	public String renderTerminologyObject(ContainerCollection cc, TerminologyObject to,
-			TerminologyObject parent) {
+	public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
+			TerminologyObject to, TerminologyObject parent) {
 
 		StringBuilder sb = new StringBuilder();
 
@@ -136,7 +137,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 		// }
 
 		// underneath="within" a rendered question, always answers are rendered
-		super.renderChoices(st, cc, to, parent);
+		super.renderChoices(st, cc, to, parent, d3webSession);
 
 		sb.append(st.toString());
 

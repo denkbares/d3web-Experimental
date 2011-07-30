@@ -20,6 +20,7 @@ package de.d3web.proket.d3web.output.render;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
+import de.d3web.core.session.Session;
 import de.d3web.proket.output.container.ContainerCollection;
 
 /**
@@ -36,12 +37,13 @@ public interface AnswerD3webRenderer {
 	 * @see renderTerminologyObject(cc, to, parent)
 	 * @created 14.01.2011
 	 * @param cc ContainerCollection to be used.
+	 * @param d3webSession TODO
 	 * @param c Choice to be rendered.
 	 * @param parent The parent object of to
 	 * @return the resulting String that is inserted in the parent
 	 *         StringTemplate as a result.
 	 */
-	public String renderTerminologyObject(ContainerCollection cc, Choice c,
-			TerminologyObject to, TerminologyObject parent);
+	public String renderTerminologyObject(ContainerCollection cc, Session d3webSession,
+			Choice c, TerminologyObject to, TerminologyObject parent);
 
 }

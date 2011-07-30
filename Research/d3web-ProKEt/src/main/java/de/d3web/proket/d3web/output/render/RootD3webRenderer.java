@@ -67,6 +67,6 @@ public interface RootD3webRenderer {
 	 */
 	public void defineAndAddJS(ContainerCollection cc);
 
-	public String fillSummaryDialog();
+	public String fillSummaryDialog(Session d3webSession);
 
 }

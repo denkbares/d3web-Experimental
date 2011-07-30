@@ -29,6 +29,7 @@ import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QuestionDate;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
+import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.DateValue;
@@ -54,7 +55,7 @@ public class AnswerDateD3webRenderer extends AbstractD3webRenderer implements An
 	 * Specifically adapted for rendering NumAnswers
 	 */
 	@Override
-	public String renderTerminologyObject(ContainerCollection cc, Choice C, TerminologyObject to, TerminologyObject parent) {
+	public String renderTerminologyObject(ContainerCollection cc, Session d3webSession, Choice C, TerminologyObject to, TerminologyObject parent) {
 
 		QuestionDate dq = (QuestionDate) to;
 
@@ -74,7 +75,7 @@ public class AnswerDateD3webRenderer extends AbstractD3webRenderer implements An
 		st.setAttribute("realAnswerType", "date");
 		st.setAttribute("parentFullId", parent.getName().replace(" ", "_"));
 
-		Blackboard bb = AbstractD3webRenderer.d3webSession.getBlackboard();
+		Blackboard bb = d3webSession.getBlackboard();
 		Value value = bb.getValue((ValueObject) to);
 
 		if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {

@@ -60,6 +60,7 @@ import de.d3web.core.knowledge.Indication.State;
 import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.knowledge.Resource;
 import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.QContainer;
@@ -119,6 +120,8 @@ import de.d3web.proket.utils.GlobalSettings;
  * 
  */
 public class D3webDialog extends HttpServlet {
+
+	protected static final String D3WEB_SESSION = "d3webSession";
 
 	private static final String REPLACECONTENT = "##replacecontent##";
 
@@ -194,7 +197,7 @@ public class D3webDialog extends HttpServlet {
 
 		PrintWriter writer = response.getWriter();
 
-		Session sess = (Session) httpSession.getAttribute("d3webSession");
+		Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
 
 		List<String> questions = new ArrayList<String>();
 		List<String> values = new ArrayList<String>();
@@ -216,7 +219,7 @@ public class D3webDialog extends HttpServlet {
 		all.addAll(values);
 		String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
 		if (!reqVal.equals("")
-				&& !checkReqVal(reqVal, sess, all)) {
+				&& !checkReqVal(reqVal, d3webSession, all)) {
 
 			writer.append("##missingfield##");
 			writer.append(reqVal);
@@ -224,25 +227,24 @@ public class D3webDialog extends HttpServlet {
 		}
 
 		// get dialog state before setting values
-		Set<QASet> indicatedTOsBefore = getActiveSet(sess);
-		List<Question> answeredQuestionsBefore = sess.getBlackboard().getAnsweredQuestions();
-		Set<TerminologyObject> unknownQuestionsBefore = getUnknownQuestions(sess);
+		Set<QASet> indicatedTOsBefore = getActiveSet(d3webSession);
+		List<Question> answeredQuestionsBefore = d3webSession.getBlackboard().getAnsweredQuestions();
+		Set<TerminologyObject> unknownQuestionsBefore = getUnknownQuestions(d3webSession);
 
 		for (int i = 0; i < questions.size(); i++) {
-			setValue(questions.get(i), values.get(i), sess);
+			setValue(questions.get(i), values.get(i), d3webSession);
 		}
 
-		resetAbandonedPaths(sess);
+		resetAbandonedPaths(d3webSession);
 
 		// AUTOSAVE
-		Session d3webSession = (Session) httpSession.getAttribute("d3webSession");
 		PersistenceD3webUtils.saveCase((String) httpSession.getAttribute("user"), "autosave",
 				d3webSession);
 
 		// Rerender changed Questions and Quesitonnaires
-		Set<QASet> indicatedTOsAfter = getActiveSet(sess);
+		Set<QASet> indicatedTOsAfter = getActiveSet(d3webSession);
 
-		Set<TerminologyObject> unknownQuestionsAfter = getUnknownQuestions(sess);
+		Set<TerminologyObject> unknownQuestionsAfter = getUnknownQuestions(d3webSession);
 
 		Set<TerminologyObject> diff = new HashSet<TerminologyObject>();
 		for (TerminologyObject to : unknownQuestionsBefore) {
@@ -252,8 +254,8 @@ public class D3webDialog extends HttpServlet {
 		getDiff(indicatedTOsBefore, indicatedTOsAfter, diff);
 		getDiff(indicatedTOsAfter, indicatedTOsBefore, diff);
 
-		List<Question> answeredQuestionsAfter = sess.getBlackboard().getAnsweredQuestions();
-		diff.addAll(getUnknownQuestions(sess));
+		List<Question> answeredQuestionsAfter = d3webSession.getBlackboard().getAnsweredQuestions();
+		diff.addAll(getUnknownQuestions(d3webSession));
 		answeredQuestionsAfter.removeAll(answeredQuestionsBefore);
 		// System.out.println(answeredQuestionsAfter);
 		diff.addAll(answeredQuestionsAfter);
@@ -263,9 +265,10 @@ public class D3webDialog extends HttpServlet {
 			IQuestionD3webRenderer toRenderer = AbstractD3webRenderer.getRenderer(to);
 			writer.append(REPLACEID + AbstractD3webRenderer.getID(to));
 			writer.append(REPLACECONTENT);
-			writer.append(toRenderer.renderTerminologyObject(cc, to, to instanceof QContainer
-					? d3wcon.getKb().getRootQASet()
-					: getQuestionnaireAncestor(to)));
+			writer.append(toRenderer.renderTerminologyObject(d3webSession, cc, to,
+					to instanceof QContainer
+							? d3wcon.getKb().getRootQASet()
+							: getQuestionnaireAncestor(to)));
 		}
 		writer.append(REPLACEID + "headerInfoLine");
 		writer.append(REPLACECONTENT);
@@ -450,11 +453,11 @@ public class D3webDialog extends HttpServlet {
 		 * otherwise, i.e. if session is null create a session according to the
 		 * specified dialog strategy
 		 */
-		if (httpSession.getAttribute("d3webSession") == null) {
+		if (httpSession.getAttribute(D3WEB_SESSION) == null) {
 			// create d3web session and store in http session
 			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(),
 					d3wcon.getDialogStrat());
-			httpSession.setAttribute("d3webSession", d3webSession);
+			httpSession.setAttribute(D3WEB_SESSION, d3webSession);
 		}
 
 		// switch action as defined by the servlet call
@@ -480,13 +483,13 @@ public class D3webDialog extends HttpServlet {
 		}
 		else if (action.equalsIgnoreCase("reset")) {
 			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
-			httpSession.setAttribute("d3webSession", d3webSession);
+			httpSession.setAttribute(D3WEB_SESSION, d3webSession);
 			httpSession.setAttribute("lastLoaded", "");
 			return;
 		}
 		else if (action.equalsIgnoreCase("resetNewUser")) {
 			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
-			httpSession.setAttribute("d3webSession", d3webSession);
+			httpSession.setAttribute(D3WEB_SESSION, d3webSession);
 			return;
 		}
 		else if (action.equalsIgnoreCase("checkUsrDatLogin")) {
@@ -587,7 +590,7 @@ public class D3webDialog extends HttpServlet {
 	private Set<TerminologyObject> getUnknownQuestions(Session sess) {
 		Set<TerminologyObject> unknownQuestions = new HashSet<TerminologyObject>();
 		for (TerminologyObject to : sess.getBlackboard().getValuedObjects()) {
-			Fact mergedFact = sess.getBlackboard().getValueFact(to);
+			Fact mergedFact = sess.getBlackboard().getValueFact((ValueObject) to);
 			if (mergedFact != null && Unknown.assignedTo(mergedFact.getValue())) {
 				unknownQuestions.add(to);
 			}
@@ -637,7 +640,7 @@ public class D3webDialog extends HttpServlet {
 
 		Session session = PersistenceD3webUtils.loadUserCase(user, filename);
 
-		httpSession.setAttribute("d3webSession", session);
+		httpSession.setAttribute(D3WEB_SESSION, session);
 
 		httpSession.setAttribute("lastLoaded", filename);
 	}
@@ -750,8 +753,7 @@ public class D3webDialog extends HttpServlet {
 		// new ContainerCollection needed each time to get an updated dialog
 		ContainerCollection cc = new ContainerCollection();
 
-		Session d3webSess = (Session) httpSession.getAttribute("d3webSession");
-		AbstractD3webRenderer.storeSession(d3webSess);
+		Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
 		cc = d3webr.renderRoot(cc, d3webSess, httpSession);
 
 		writer.print(cc.html.toString()); // deliver the rendered output
@@ -794,7 +796,7 @@ public class D3webDialog extends HttpServlet {
 		String lastLoaded = (String) httpSession.getAttribute("lastLoaded");
 
 		// if any file had been loaded before as a case
-		Session d3webSession = (Session) httpSession.getAttribute("d3webSession");
+		Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
 		if (lastLoaded != null && !lastLoaded.equals("")) {
 
 			if (PersistenceD3webUtils.existsCase(user, userFilename)) {
@@ -1127,6 +1129,6 @@ public class D3webDialog extends HttpServlet {
 		DefaultRootD3webRenderer rootRenderer =
 				(DefaultRootD3webRenderer) D3webRendererMapping
 						.getInstance().getRendererObject(null);
-		writer.append(rootRenderer.fillSummaryDialog());
+		writer.append(rootRenderer.fillSummaryDialog((Session) httpSession.getAttribute(D3WEB_SESSION)));
 	}
 }

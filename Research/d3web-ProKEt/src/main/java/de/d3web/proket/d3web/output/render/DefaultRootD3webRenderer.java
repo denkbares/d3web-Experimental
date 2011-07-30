@@ -99,7 +99,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		handleCss(cc);
 
 		// render the children
-		renderChildren(st, cc, d3wcon.getKb().getRootQASet());
+		renderChildren(st, d3webSession, cc, d3wcon.getKb().getRootQASet());
 
 		// global JS initialization
 		defineAndAddJS(cc);
@@ -135,7 +135,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		StringBuilder infoStringBuilder = new StringBuilder();
 		boolean first = true;
 		for (Question headerQuestion : headerQuestions.values()) {
-			Value value = AbstractD3webRenderer.d3webSession.getBlackboard().getValue(
+			Value value = d3webSession.getBlackboard().getValue(
 					headerQuestion);
 			first = verbalizeHeaderQuestion(headerQuestion, value, infoStringBuilder, first);
 		}
@@ -218,8 +218,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 	}
 
 	@Override
-	public String fillSummaryDialog() {
-
+	public String fillSummaryDialog(Session d3webSession) {
 		StringTemplate st = TemplateUtils.getStringTemplate("Summary",
 				"html");
 
@@ -228,14 +227,14 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 
 		TerminologyObject root = d3wcon.getKb().getRootQASet();
 
-		fillSummaryChildren(bui, root);
+		fillSummaryChildren(d3webSession, bui, root);
 
 		st.setAttribute("sumQuestionnaire", bui.toString());
 
 		return st.toString();
 	}
 
-	private void fillSummaryChildren(StringBuilder bui, TerminologyObject to) {
+	private void fillSummaryChildren(Session d3webSession, StringBuilder bui, TerminologyObject to) {
 
 		if (to instanceof QContainer && !to.getName().contains("Q000")) {
 			bui.append("<div style='margin-top:10px;'><b>" + countQcon + " " + to.getName()
@@ -255,7 +254,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 
 		if (to.getChildren() != null && to.getChildren().length != 0) {
 			for (TerminologyObject toc : to.getChildren()) {
-				fillSummaryChildren(bui, toc);
+				fillSummaryChildren(d3webSession, bui, toc);
 			}
 		}
 
