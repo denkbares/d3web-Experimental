@@ -29,7 +29,6 @@ Common Route #2
 - Gender [oc]
 -- Male
 -- Female
-- Scheduled date of operation [date]
 - Informed consent obtained [yn]
 
 Comorbidities &only if: Please choose the database level = Level 2 &
@@ -303,11 +302,13 @@ Common Route - Operative Data - Surgical technique #9
 ---- Suture
 ----- Name of the suture material [text]
 ----- Transfascial [yn]
----- Fixation device [oc]
------ Absorbable
------ Non absorbable
+---- Fixation device
+----- Absorbable [yn]
 ---- Glue
 ---- Combination
+----- Name of the suture material [text]
+----- Transfascial [yn]
+----- Absorbable [yn]
 
 Common Route - Operation data - Intraoperative complications &only if: Please choose the database level = Level 2 &
 - Conversion from laparoscopic to open surgery [yn]

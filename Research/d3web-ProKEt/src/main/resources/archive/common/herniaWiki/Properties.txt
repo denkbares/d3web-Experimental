@@ -12,7 +12,6 @@ Please choose the database level.init = Level 1
 
 %%Property
 Year of birth.date_format = yyyy
-Scheduled date of operation.date_format = dd.MM.yyyy
 Date of operation that caused the incisional hernia.date_format = dd.MM.yyyy OR MM.yyyy OR yyyy
 Date of the last repair.date_format = dd.MM.yyyy OR MM.yyyy OR yyyy
 Operation date.date_format = dd.MM.yyyy
