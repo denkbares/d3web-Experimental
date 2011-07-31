@@ -220,8 +220,10 @@ DiaFluxDialog.activateRule = function(flowRule, sendRequest, activate) {
 	}
 
 	// add the click handler
-	DiaFluxDialog.addClickHandlerToNode(targetNode);	
-	DiaFluxDialog.addClickHandlerToRules(targetNode);
+	DiaFluxDialog.addClickHandlerToNode(targetNode);
+	if (!infoObject.is_abstract) {
+		DiaFluxDialog.addClickHandlerToRules(targetNode);
+	}
 }
 
 DiaFluxDialog.prepareSetSingleFindingRequest = function(flowRule, flowNode) {
@@ -331,12 +333,14 @@ DiaFluxDialog.fireNode = function(event) {
 	var trs = $(contextMenu).getElements('tr');
 	var selected = '';
 	var answer;
+	var correctInput = false;
 	
 	// mc or oc question
 	if (trs.length !== 0) {
 		for (var i = 0; i < trs.length; i++) {
 			var checkbox = trs[i].getElement('input')
 			if (checkbox.checked) {
+				correctInput = true;
 				// putting together the string with selected values
 				if (selected != '') {
 					selected += '#####';
@@ -351,12 +355,23 @@ DiaFluxDialog.fireNode = function(event) {
 				}
 			}	
 		}
+		if (!correctInput) {
+			DiaFluxDialog.appendErrorDiv(contextMenu, $('sendAnswer'));
+			return;
+		}
 		answer = {ValueID : selected};
 	// numquestion
 	} else {
 		// coloring the rules
-		selected = $('numQuestion').value;
+		selected = $('numQuestion').value.trim();
+		correctInput = DiaFluxDialog.checkNumInput(selected);
+		if (!correctInput) {
+			DiaFluxDialog.appendErrorDiv(contextMenu, $('sendAnswer'));
+			return;
+		}
+		
 		answer = {ValueNum : selected};
+		
 		for (var j = 0; j < outgoingRules.length; j++) {
 			if (DiaFluxDialog.Utils.checkRuleCondition(outgoingRules[j],selected)) {
 				DiaFluxDialog.activateRule(outgoingRules[j], false);
@@ -765,6 +780,7 @@ DiaFluxDialog.setForwardKnowledge = function(flowNode) {
 	var trs = $(contextMenu).getElements('tr');
 	var selected = '';
 	var answer;
+	var correctInput = false;
 	
 	// mc or oc question
 	if (trs.length !== 0) {
@@ -778,17 +794,79 @@ DiaFluxDialog.setForwardKnowledge = function(flowNode) {
 				selected += checkbox.value;
 			}	
 		}
+		correctInput = DiaFluxDialog.checkChoiceInput();
 		answer = {ValueID : selected};
 	// numquestion
 	} else {
-		selected = $('numQuestion').value;
+		selected = $('numQuestion').value.trim();
+		correctInput = DiaFluxDialog.checkNumInput(selected);
 		answer = {ValueNum : selected};
 	}
-	DiaFluxDialog.sendSetSingleFindingRequest(question, answer, false);
-	contextMenu.parentNode.removeChild(contextMenu);
-	DiaFluxDialog.askNextNeededQuestion(flowNode);
+
+	if (correctInput) {
+		DiaFluxDialog.sendSetSingleFindingRequest(question, answer, false);
+		contextMenu.parentNode.removeChild(contextMenu);
+		DiaFluxDialog.askNextNeededQuestion(flowNode);
+	} else {
+		DiaFluxDialog.appendErrorDiv(contextMenu,$('sendAnswer'));
+	}
 }
 
+
+/** 
+ * checks wether an input is empty or only whitespaces
+ */
+DiaFluxDialog.checkInput = function(selected) {
+	if (selected.length === 0) {
+		return false;
+	}
+	
+	var whitespace = /^\s+$/;
+	return !whitespace.test(selected);
+}
+
+/**
+ * checks wether an input is a number
+ */
+DiaFluxDialog.checkNumInput = function(selected) {
+	if (DiaFluxDialog.checkInput(selected)) {
+		var digit = /^\d+$/;
+		var a = digit.test(selected)
+		return a;
+	} else {
+		return false;
+	}	
+}
+
+
+/**
+ * checks if atleast 1 checkbox was slected
+ */
+DiaFluxDialog.checkChoiceInput = function() {
+	for (var i = 0; i < trs.length; i++) {
+		var checkbox = trs[i].getElement('input')
+		if (checkbox.checked) {
+			return true;
+		}
+	}
+	return false;
+}
+
+
+/**
+ * appends the error div to a parent as the child
+ * before nextChild
+ */
+DiaFluxDialog.appendErrorDiv = function(parent, nextChild) {
+	var error = $('inputError');
+	if (!error) {
+		var errorDiv = Builder.node('div', {
+			id : 'inputError'
+		});
+		errorDiv.appendChild(Document.createTextNode('Unültige Eingabe'));
+		$(parent).insertBefore(errorDiv, $(nextChild));
+	}
+}
 
 /**
  * creates the context menu, when nodes are clicked
@@ -1001,10 +1079,7 @@ DiaFluxDialog.reset = function(sectionID) {
         response : {
     		action : 'none',
         	fn : function(){
- 				if (sectionID) {
-					KNOWWE.core.rerendercontent.updateNode(sectionID, topic, null);
-					KNOWWE.core.util.updateProcessingState(-1); 
- 				}
+ 				DiaFluxDialog.resetFlowchart();
     		}
         }
     };
@@ -1015,4 +1090,25 @@ DiaFluxDialog.reset = function(sectionID) {
  	}
     new _KA( options ).send();
 }
+
+
+DiaFluxDialog.resetFlowchart = function() {
+		var flow = $('DiaFluxDialogFlowchart');
+		var main = DiaFluxDialog.flowcharts[0].name;
+		var name = main + 'Source';
+			
+		DiaFluxDialog.Utils.removeAllChildNodes(flow);
+//		KNOWWE.core.rerendercontent.updateNode(sectionID, topic, null);
+		KNOWWE.core.util.updateProcessingState(-1); 
+		KBInfo._updateCache($('referredKBInfo'));
+		var flowchart = Flowchart.createFromXML('DiaFluxDialogFlowchart', $(name));
+		KNOWWE.helper.observer.notify('flowchartrendered', {flow: flowchart});
+		var path = $('hiddenPath');
+		if (path) {
+			path.parentNode.removeChild(path);
+		}
+		$('DiaFluxDialogPath').firstChild.nodeValue = "Path: " + main;
+		DiaFluxDialog.start();
+}
+
 

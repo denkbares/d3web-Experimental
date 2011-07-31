@@ -3,6 +3,8 @@ if (!DiaFluxDialog) {
 }
 
 DiaFluxDialog.Session = {};
+DiaFluxDialog.sessionNavigator = 'sessionNavigator';
+DiaFluxDialog.loadSessionParent = 'loadSessionParent';
 
 
 /**
@@ -11,9 +13,9 @@ DiaFluxDialog.Session = {};
 DiaFluxDialog.Session.showSessions = function() {
 	DiaFluxDialog.Session.removeAllSelects();
 	
-	if ($('sessionNavigator').getStyle('display') === 'block') {
-		sessionParent.setStyle('display', 'block');
-		$('sessionNavigator').setStyle('display', 'none');
+	if ($(DiaFluxDialog.sessionNavigator).getStyle('display') === 'block') {
+		$(DiaFluxDialog.loadSessionParent).setStyle('display', 'block');
+		$(DiaFluxDialog.sessionNavigator).setStyle('display', 'none');
 	}
 	DiaFluxDialog.Session.loadRequest();
 }
@@ -105,7 +107,7 @@ DiaFluxDialog.Session.createSelect = function(sessions) {
 	});
 	
 	
-	$('loadSessionParent').appendChild(select);
+	$(DiaFluxDialog.loadSessionParent).appendChild(select);
 //	var sessions = $$('.session');
 	
 	DiaFluxDialog.Session.appendOptionsToSelect(select, sessions);
@@ -115,8 +117,8 @@ DiaFluxDialog.Session.createSelect = function(sessions) {
 		onClick : 'DiaFluxDialog.Session.loadSession()'
 	});
 	button.appendChild(Document.createTextNode('Select'));
-	$('loadSessionParent').appendChild(Document.createElement('br'));
-	$('loadSessionParent').appendChild(button);
+	$(DiaFluxDialog.loadSessionParent).appendChild(Document.createElement('br'));
+	$(DiaFluxDialog.loadSessionParent).appendChild(button);
 }
 
 
@@ -146,9 +148,9 @@ DiaFluxDialog.Session.loadSession = function() {
 	var value = selected.value;
 	DiaFluxDialog.loadedSession = DiaFluxDialog.Session.extractPairs(value);
 	
-	if ($('sessionNavigator').getStyle('display') === 'none') {
-		$('sessionNavigator').setStyle('display','block');
-		$('loadSessionParent').setStyle('display', 'none');
+	if ($(DiaFluxDialog.sessionNavigator).getStyle('display') === 'none') {
+		$(DiaFluxDialog.sessionNavigator).setStyle('display','block');
+		$(DiaFluxDialog.loadSessionParent).setStyle('display', 'none');
 		DiaFluxDialog.reset();
 	}	
 }
@@ -432,7 +434,7 @@ DiaFluxDialog.Session.colorDifferenceNode = function(flowNode) {
  * removes all selects and so on from load/compare
  */
 DiaFluxDialog.Session.removeAllSelects = function() {
-	DiaFluxDialog.Utils.removeAllChildNodes($('loadSessionParent'));
+	DiaFluxDialog.Utils.removeAllChildNodes($(DiaFluxDialog.loadSessionParent));
 	DiaFluxDialog.Utils.removeAllChildNodes($('compareSessionParent'));
 }
 

@@ -91,3 +91,7 @@ div#loadSessionParent{
  	border: 3px solid blue;
 }
 
+div#inputError{
+	color: red;	
+}
+
