@@ -8,7 +8,7 @@
 	dialogcolumns="1"
 	questionnairecolumns="3"
 	questioncolumns="1"
-	userprefix = "Hernia" 
+	userprefix = "Hernia"
 	login = "db"
 	required = "none"
 	language = "en">

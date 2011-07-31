@@ -57,10 +57,10 @@ $(function() {
 	var save, goon;
 	if(language=="en"){
 		save = "Save";
-		goon = "Continue";
+		goon = "Cancel";
 	} else if(language=="de"){
 		save = "Speichern";
-		goon = "Nein, weiter eingeben";
+		goon = "Abbrechen";
 	}
 	
 	/* creating and configuring the jquery UI save-case dialog */
@@ -68,12 +68,12 @@ $(function() {
 
 		var opts = {
 			autoOpen: false,
-			position: top,
+			position: [ "left", "top" ],
 			modal: false,
-			width: 410,
-			height: 210,
-			minWidth: 410,
-			minHeight: 210,
+			width: 210,
+			height: 145,
+			minWidth: 210,
+			minHeight: 145,
 			buttons: [{
 				id: "saveOK",
 				text: save,
@@ -553,17 +553,19 @@ function d3web_sessionForNewUser() {
 
 function d3web_prepareSave() {
 
+	$('#confirmFilename').val($('#f_q_PleaseenteraEuraHSregistrationnumberinsteadofapatientname').val());
+	
 	// get number of unanswered questions
-	questionsAll = $('#content [id^="q_"]');
-	questionsAnswered = questionsAll.filter('[class$="question-d"]');
-	questionsUnanswered = questionsAll.size() - questionsAnswered.size();
+//	questionsAll = $('#content [id^="q_"]');
+//	questionsAnswered = questionsAll.filter('[class$="question-d"]');
+//	questionsUnanswered = questionsAll.size() - questionsAnswered.size();
+//
+//	var qua = "<b> " + questionsUnanswered + " </b>";
+//	$('#numberUnanswered').html(qua);
 
-	var qua = "<b> " + questionsUnanswered + " </b>";
-	$('#numberUnanswered').html(qua);
-
-	if (questionsUnanswered !== 0) {
-		$('#jqConfirmDialog').dialog("open");
-	}
+//	if (questionsUnanswered !== 0) {
+	$('#jqConfirmDialog').dialog("open");
+//	}
 
 }
 
