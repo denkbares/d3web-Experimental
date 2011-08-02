@@ -68,15 +68,15 @@ public class SetFindingAction extends AbstractAction {
 		String user = context.getUserName();
 		String web = context.getWeb();
 		String namespace = null;
-		String term = null;
+		String term = context.getParameter(KnowWEAttributes.SEMANO_TERM_NAME);
 		String valueid = null;
 		try {
 			namespace = java.net.URLDecoder.decode(
 					context.getParameter(KnowWEAttributes.SEMANO_NAMESPACE), "UTF-8");
 			String tempValueID = context.getParameter(KnowWEAttributes.SEMANO_VALUE_ID);
 			if (tempValueID != null) valueid = URLDecoder.decode(tempValueID, "UTF-8");
-			term = URLDecoder.decode(context.getParameter(KnowWEAttributes.SEMANO_TERM_NAME),
-			"UTF-8");
+			if (term != null)
+				term = URLDecoder.decode(term, "UTF-8");
 		}
 		catch (UnsupportedEncodingException e1) {
 			// should not occur
