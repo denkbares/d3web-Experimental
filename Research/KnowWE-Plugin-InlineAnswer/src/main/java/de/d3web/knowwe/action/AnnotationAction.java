@@ -94,7 +94,7 @@ public class AnnotationAction extends AbstractAction {
 
 		if (session == null) {
 			session = D3webUtils.getFirstSession(context.getWeb(),
-					context.getUserName(), context.getTopic(), id);
+					context.getUserName(), context.getTopic());
 		}
 
 		TerminologyObject obj = session.getKnowledgeBase().getManager().search(id);

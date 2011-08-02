@@ -101,8 +101,8 @@ public class RetractFindingAction extends AbstractAction {
 				topic);
 		Session session = D3webUtils.getSession(topic, user, web);
 		if (session == null) {
-			session = D3webUtils.getFirstSession(web, user, topic, objectid);
-			kb = D3webUtils.getFirstKnowledgeBase(web, objectid);
+			session = D3webUtils.getFirstSession(web, user, topic);
+			kb = D3webUtils.getFirstKnowledgeBase(web);
 		}
 		Blackboard blackboard = session.getBlackboard();
 

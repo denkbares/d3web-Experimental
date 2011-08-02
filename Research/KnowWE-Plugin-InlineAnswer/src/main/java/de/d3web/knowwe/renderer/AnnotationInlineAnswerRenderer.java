@@ -87,7 +87,7 @@ public class AnnotationInlineAnswerRenderer extends KnowWEDomRenderer {
 		KnowledgeBase service = repHandler.getKB(title);
 		String name = service.getName();
 		if (name == null) {
-			KnowledgeBase base = D3webUtils.getFirstKnowledgeBase(web, question);
+			KnowledgeBase base = D3webUtils.getFirstKnowledgeBase(web);
 			if (base != null)
 				service = base;
 		}
