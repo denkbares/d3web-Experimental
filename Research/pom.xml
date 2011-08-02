@@ -212,6 +212,7 @@
 		<module>KnowWE-Plugin-IncrementalCompilerTest</module>
 		<module>KnowWE-Plugin-QuickEdit</module>
 		<module>KnowWE-Plugin-InlineIndication</module>
+		<module>KnowWE-Plugin-InlineAnswer</module>
 	</modules>
 	<repositories>
 		<repository>
