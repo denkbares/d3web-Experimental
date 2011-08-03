@@ -33,4 +33,9 @@ public class ProKEtProperties {
 
 	public static final Property<String> IMAGEMAP = Property.getProperty("imagemap", String.class);
 
+	public static final Property<String> DROPDOWN_MENU_OPTIONS = Property.getProperty(
+			"dropdown_menu_options", String.class);
+
+	public static final Property<String> DROPDOWN_MENU_DEFAULT = Property.getProperty(
+			"dropdown_menu_default", String.class);
 }

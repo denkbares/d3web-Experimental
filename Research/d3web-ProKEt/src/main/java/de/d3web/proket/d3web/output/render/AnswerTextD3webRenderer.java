@@ -33,6 +33,7 @@ import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webUtils;
+import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
@@ -68,10 +69,9 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
 		StringTemplate st = TemplateUtils.getStringTemplate(
 					super.getTemplateName("TextAnswer"), "html");
 
-		st.setAttribute("fullId", getID(tq));// .getName().replace(" ", "_"));
+		st.setAttribute("fullId", getID(tq));
 		st.setAttribute("realAnswerType", "text");
-		st.setAttribute("parentFullId", getID(parent));// .getName().replace(" ",
-														// "_"));
+		st.setAttribute("parentFullId", getID(parent));
 
 		Blackboard bb = d3webSession.getBlackboard();
 		Value value = bb.getValue((ValueObject) to);
@@ -80,13 +80,21 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
 			st.setAttribute("readonly", "true");
 		}
 
-		// QContainer indicated
-		if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent) ||
-				isIndicated(parent, bb)) {
+		String dropdownMenuOptions = to.getInfoStore().getValue(
+				ProKEtProperties.DROPDOWN_MENU_OPTIONS);
 
-			// show, if indicated follow up
-			if ((D3webUtils.isFollowUpTOinQCon(to, parent) && isIndicated(to, bb))
-					|| (!D3webUtils.isFollowUpTOinQCon(to, parent))) {
+		if (dropdownMenuOptions != null) {
+			String dropdownDefault = to.getInfoStore().getValue(
+					ProKEtProperties.DROPDOWN_MENU_DEFAULT);
+			st.setAttribute("dropdown_menu",
+					createDropDownOptions(dropdownDefault, dropdownMenuOptions, value));
+		}
+		else {
+			// QContainer indicated
+			if ((bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
+					|| isIndicated(parent, bb))
+					&& ((D3webUtils.isFollowUpTOinQCon(to, parent) && isIndicated(to, bb))
+						|| (!D3webUtils.isFollowUpTOinQCon(to, parent)))) {
 				st.removeAttribute("readonly");
 			}
 			else {
@@ -95,23 +103,18 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
 				st.removeAttribute("selection");
 				st.setAttribute("selection", "");
 			}
-		}
 
-		else {
-			st.setAttribute("readonly", "true");
-			// also remove possible set values
-			st.removeAttribute("selection");
-			st.setAttribute("selection", "");
-		}
-
-		if (value != null && UndefinedValue.isNotUndefinedValue(value)
-				&& !value.equals(Unknown.getInstance())) {
-			st.setAttribute("selection", value);
-		}
-		else if (value.equals(Unknown.getInstance())
-				|| UndefinedValue.isUndefinedValue(value)) {
-			st.removeAttribute("selection"); // don't want to have "undefined"
-			st.setAttribute("selection", ""); // displayed in the input field
+			if (value != null && UndefinedValue.isNotUndefinedValue(value)
+					&& !value.equals(Unknown.getInstance())) {
+				st.setAttribute("selection", value);
+			}
+			else if (value.equals(Unknown.getInstance())
+					|| UndefinedValue.isUndefinedValue(value)) {
+				st.removeAttribute("selection"); // don't want to have
+													// "undefined"
+				st.setAttribute("selection", ""); // displayed in the input
+													// field
+			}
 		}
 
 		// Description of the input to provide is read from the knowledge base
@@ -122,5 +125,20 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
 		super.makeTables(to, to, cc, sb);
 
 		return sb.toString();
+	}
+
+	private String createDropDownOptions(String dropdownDefault, String dropdownMenu, Value value) {
+		StringBuilder builder = new StringBuilder();
+		String defaultValue = dropdownDefault == null ? "Please choose..." : dropdownDefault;
+		builder.append("<option>" + defaultValue + "</option>\n");
+		String[] options = dropdownMenu.split(",");
+		for (String option : options) {
+			option = option.trim();
+			builder.append("<option value='" + option + "'"
+					+ (value.toString().equals(option) ? "selected='selected'" : "")
+					+ ">" + option
+					+ "</option>\n");
+		}
+		return builder.toString();
 	}
 }

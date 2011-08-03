@@ -4,7 +4,16 @@
 	$if(readonly)$
 		<input id="f_$fullId$" type="readonly" $if(selection)$value="$selection$"$endif$ title="$title$" $if(width)$size="$width$"$endif$ />
 	$else$
-		<input id="f_$fullId$" type="text" $if(selection)$value="$selection$"$endif$ title="$title$" $if(width)$size="$width$"$endif$ />
+		$if (dropdown_menu)$
+		<select id="f_$fullId$" type="select">
+			$dropdown_menu$
+		</select>
+		$else$
+		<input id="f_$fullId$" type="text" 
+				$if(selection)$value="$selection$"$endif$ 
+				title="$title$" 
+				$if(width)$size="$width$"$endif$ />
+		$endif$
 	$endif$
 	
 	

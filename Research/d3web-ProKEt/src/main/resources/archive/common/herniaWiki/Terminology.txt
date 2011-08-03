@@ -249,9 +249,6 @@ Common Route - Operative data - Approach #7
 -- Laparoscopic surgery
 --- Number of ports used [num]
 --- Conversion to open [yn]
-- Type of repair [oc]
--- Mesh repair
--- Non mesh repair
 
 Common Route - Operative Data - Concomitant procedures &only if: Please choose the database level = Level 2 &
 - Concomitant abdominal surgery [yn]
@@ -294,10 +291,10 @@ Common Route - Operative Data - Surgical technique #9
 --- Production company [text]
 --- Other mesh [text]
 --- Was the hernia defect closed? [yn] &only if: Please choose the database level = Level 2 &
---- Length of the implanted mesh [num] {cm} &only if: Please choose the database level = Level 2 &
 --- Width of the implanted mesh [num] {cm} &only if: Please choose the database level = Level 2 &
+--- Length of the implanted mesh [num] {cm} &only if: Please choose the database level = Level 2 &
 --- Estimated minimal overlap of the mesh beyond the hernia defect [num] {cm} &only if: Please choose the database level = Level 2 &
---- Fixation of the mesh [oc]
+--- Fixation of the mesh [mc]
 ---- No fixation
 ---- Suture
 ----- Name of the suture material [text]
@@ -305,10 +302,6 @@ Common Route - Operative Data - Surgical technique #9
 ---- Fixation device
 ----- Absorbable [yn]
 ---- Glue
----- Combination
------ Name of the suture material [text]
------ Transfascial [yn]
------ Absorbable [yn]
 
 Common Route - Operation data - Intraoperative complications &only if: Please choose the database level = Level 2 &
 - Conversion from laparoscopic to open surgery [yn]

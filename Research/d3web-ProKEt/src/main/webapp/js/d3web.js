@@ -245,6 +245,11 @@ function initFunctionality() {
 		d3web_storeQuestionText($(this));
 		d3web_addFacts($(this));
 	});
+	
+	$('[type=select]').unbind('change').change(function() {
+		d3web_storeQuestionText($(this));
+		d3web_addFacts($(this));
+	});
 
 	$('[type=textarea]').unbind('click').click(function() {
 		var thisEl = $(this);
@@ -300,16 +305,6 @@ function getHeaderHeight() {
 function d3web_storeQuestionText(textInput) {
 	var textQuestion = getQuestionName(textInput);
 	textStore[textQuestion] = $(textInput).val();
-}
-
-function d3web_storeQuestionNum(numInput) {
-	var numQuestion = getQuestionName(numInput);
-	numStore[numQuestion] = $(numInput).val();
-}
-
-function d3web_storeQuestionDate(dateInput) {
-	var dateQuestion = getQuestionName(dateInput);
-	dateStore[dateQuestion] = $(dateInput).val();
 }
 
 function d3web_storeQuestionOC(ocInput) {
