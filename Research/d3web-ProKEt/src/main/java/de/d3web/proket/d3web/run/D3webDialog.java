@@ -638,11 +638,15 @@ public class D3webDialog extends HttpServlet {
 		String filename = request.getParameter("fn");
 		String user = (String) httpSession.getAttribute("user");
 
-		Session session = PersistenceD3webUtils.loadUserCase(user, filename);
+		loadCase(httpSession, user, filename);
+	}
 
-		httpSession.setAttribute(D3WEB_SESSION, session);
-
-		httpSession.setAttribute("lastLoaded", filename);
+	protected void loadCase(HttpSession httpSession, String user, String filename) {
+		if (PersistenceD3webUtils.existsCase(user, filename)) {
+			httpSession.setAttribute(D3WEB_SESSION,
+					PersistenceD3webUtils.loadUserCase(user, filename));
+			httpSession.setAttribute("lastLoaded", filename);
+		}
 	}
 
 	protected void loginDB(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
@@ -652,6 +656,9 @@ public class D3webDialog extends HttpServlet {
 		if (DB.isValidToken(token, email)) {
 			httpSession.setAttribute("authenticated", "yes");
 			httpSession.setAttribute("user", email);
+
+			loadCase(httpSession, email, "autosave");
+
 			response.sendRedirect("../EuraHS-Dialog");
 		}
 		else {
@@ -794,54 +801,22 @@ public class D3webDialog extends HttpServlet {
 		String userFilename = request.getParameter("userfn");
 		String user = (String) httpSession.getAttribute("user");
 		String lastLoaded = (String) httpSession.getAttribute("lastLoaded");
-
-		// if any file had been loaded before as a case
+		String forceString = request.getParameter("force");
+		boolean force = forceString != null && forceString.equals("true");
 		Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
-		if (lastLoaded != null && !lastLoaded.equals("")) {
 
-			if (PersistenceD3webUtils.existsCase(user, userFilename)) {
-
-				// if user loaded case before, he can save with that already
-				// existing filename
-				if (lastLoaded.equals(userFilename)) {
-					PersistenceD3webUtils.saveCase(
-							user,
-							userFilename,
-							d3webSession);
-					httpSession.setAttribute("lastLoaded", userFilename);
-				}
-				else {
-					writer.append("exists");
-				}
-			}
-
-			// otherwise
-			else {
-				System.out.println("save");
-				PersistenceD3webUtils.saveCase(
-						user,
-						userFilename,
-						d3webSession);
-				httpSession.setAttribute("lastLoaded", userFilename);
-			}
+		if (force
+				|| !PersistenceD3webUtils.existsCase(user, userFilename)
+				|| (PersistenceD3webUtils.existsCase(user, userFilename)
+						&& lastLoaded != null && lastLoaded.equals(userFilename))) {
+			PersistenceD3webUtils.saveCase(
+					user,
+					userFilename,
+					d3webSession);
+			httpSession.setAttribute("lastLoaded", userFilename);
 		}
-
-		// if no file loaded, there should be no chance of saving with same name
 		else {
-
-			// if case already exists, do not enable saving
-			if (PersistenceD3webUtils.existsCase(user, userFilename)) {
-				writer.append("exists");
-			}
-
-			// otherwise if filename/case is not existent, it can be saved
-			else {
-				PersistenceD3webUtils.saveCase(
-						user,
-						userFilename,
-						d3webSession);
-				httpSession.setAttribute("lastLoaded", userFilename);
-			}
+			writer.append("exists");
 		}
 	}
 

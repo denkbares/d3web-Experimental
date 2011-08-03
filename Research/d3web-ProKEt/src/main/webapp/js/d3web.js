@@ -27,7 +27,7 @@ var dateStore = new Object();
 var textStore = new Object();
 var numStore = new Object();
 var headerHeight = -1;
-
+var warningRecieved = false;
 
 
 $(function() {
@@ -71,14 +71,14 @@ $(function() {
 			position: [ "left", "top" ],
 			modal: false,
 			width: 210,
-			height: 145,
+			height: 180,
 			minWidth: 210,
-			minHeight: 145,
+			minHeight: 180,
 			buttons: [{
 				id: "saveOK",
 				text: save,
 				click: function(){
-					d3web_sendSave();
+					d3web_sendSave(warningRecieved);
 				}
 				},
 				{
@@ -86,6 +86,7 @@ $(function() {
 				text: goon,
 				click: function(){
 					 closeJQConfirmDialog();
+					 warningRecieved = false;
 					}
 				}]
 		};
@@ -569,22 +570,23 @@ function d3web_prepareSave() {
 
 }
 
-function d3web_sendSave() {
+function d3web_sendSave(force) {
 
 	// d3web_getRemainingFacts();
 
 	var confirmFilename = $('#confirmFilename').val();
 
-	var link = $.query.set("action", "savecase").set("userfn", confirmFilename)
-			.toString();
-
-	link = window.location.href.replace(window.location.search, "") + link;
-
+	var link = $.query.set("action", "savecase").set("userfn", confirmFilename).set("force", force.toString());
+	
 	// new jquery 1.5 syntax
 	$.get(link, function(data) {
 		if (data == "exists") {
-			$('#confirmError').html("<font color=\"red\">Dateiname exisitiert " +
-					"bereits. Bitte anderen Namen wählen.</font>");
+			var warning = "File already exists. Do you want to overwrite?";
+			if(language=="de"){
+				warning = "Die Datei existiert bereits. Möchten sie überschreiben?";
+			}
+			$('#confirmMessage').html("<font color=\"red\">" + warning + "</font>");
+			warningRecieved = true;
 		} else {
 			d3web_show();
 		}
