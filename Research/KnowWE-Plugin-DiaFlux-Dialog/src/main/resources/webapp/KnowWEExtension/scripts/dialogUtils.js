@@ -263,7 +263,14 @@ DiaFluxDialog.Utils.checkRuleCondition = function(flowRule, answer) {
 	// geht anders nicht, nur mit breakpoints
 	if (questionType === 'num') {
 		var operator = DiaFluxDialog.Utils.extractOperator(flowRule);
-		var number = parseFloat(DiaFluxDialog.Utils.extractNumber(flowRule));
+		var number = DiaFluxDialog.Utils.extractNumber(flowRule);
+		
+		if (number && number.length > 1) {
+			number[0] = parseFloat(number[0]);
+			number[1] = parseFloat(number[1]);
+		} else {
+			number = parseFloat(number);
+		}
 		answer = parseFloat(answer);
 		
 		

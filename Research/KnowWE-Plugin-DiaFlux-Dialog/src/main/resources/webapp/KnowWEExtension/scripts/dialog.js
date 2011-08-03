@@ -207,7 +207,7 @@ DiaFluxDialog.activateRule = function(flowRule, sendRequest, activate) {
 		DiaFluxDialog.colorNode(targetNode);
 		
 		// subflowchart
-		if (infoObject.startNames && infoObject.exitNames) {
+		else if (infoObject.startNames && infoObject.exitNames) {
 			DiaFluxDialog.sendGetFlowchartRequest(infoObject.name);
 		} else {
 			// solution
@@ -249,10 +249,14 @@ DiaFluxDialog.prepareSetSingleFindingRequest = function(flowRule, flowNode) {
 			}
 		}
 		var operator = DiaFluxDialog.Utils.extractOperator(flowRule);
-		var number = parseFloat(DiaFluxDialog.Utils.extractNumber(flowRule));
+		var number = DiaFluxDialog.Utils.extractNumber(flowRule);
 		
-		number[0] = parseFloat(number[0]);
-		number[1] = parseFloat(number[1]);
+		if (number && number.length > 1) {
+			number[0] = parseFloat(number[0]);
+			number[1] = parseFloat(number[1]);
+		} else {
+			number = parseFloat(number);
+		}
 		
 		var r;
 		if (operator === '>') {
@@ -762,12 +766,11 @@ DiaFluxDialog.activateAbstractQuestionEdge = function(flowNode, request, sendReq
 	var outgoingRules = DiaFluxDialog.Utils.findOutgoingRules(flowNode);
 	
 	for (var i = 0; i < outgoingRules.length; i++) {
-		var checked = DiaFluxDialog.Utils.checkRuleCondition(outgoingRules[i]);
-		DiaFluxDialog.activateRule(outgoingRules[i], sendRequest);
-		var b = 1;
+		var checked = DiaFluxDialog.Utils.checkRuleCondition(outgoingRules[i], answer);
+		if (checked) {
+			DiaFluxDialog.activateRule(outgoingRules[i], sendRequest);
+		}
 	}
-	
-	var a = 1;
 }
 
 /**
@@ -830,9 +833,8 @@ DiaFluxDialog.checkInput = function(selected) {
  */
 DiaFluxDialog.checkNumInput = function(selected) {
 	if (DiaFluxDialog.checkInput(selected)) {
-		var digit = /^\d+$/;
-		var a = digit.test(selected)
-		return a;
+		var digit = /^\d+.?\d*$/;
+		return digit.test(selected)
 	} else {
 		return false;
 	}	
