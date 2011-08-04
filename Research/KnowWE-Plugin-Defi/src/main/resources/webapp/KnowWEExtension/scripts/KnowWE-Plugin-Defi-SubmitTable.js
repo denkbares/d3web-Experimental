@@ -12,7 +12,7 @@ function submitTable(kdomid,user,tableid,versions) {
             action : 'SubmitTableContentAction',
             user : user,
             tableid: tableid,
-            data : text
+            daten : text
         }
 
         var options = {

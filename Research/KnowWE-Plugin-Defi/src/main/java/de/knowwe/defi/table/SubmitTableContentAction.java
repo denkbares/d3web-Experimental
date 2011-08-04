@@ -51,7 +51,7 @@ public class SubmitTableContentAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-		String data = context.getParameter("data");
+		String data = context.getParameter("daten");
 		String tableid = context.getParameter(TABLE_ID);
 
 		String versionNumber = data.substring(0, data.indexOf('#'));
