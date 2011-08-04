@@ -60,7 +60,6 @@ import de.d3web.core.knowledge.Indication.State;
 import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.knowledge.Resource;
 import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.QContainer;
@@ -370,6 +369,24 @@ public class D3webDialog extends HttpServlet {
 			throws ServletException, IOException {
 
 		response.setContentType("text/html; charset=UTF-8");
+
+		HttpSession httpSession = request.getSession(true);
+		// in case nothing other is provided, "show" is the default action
+		String action = request.getParameter("action");
+		if (action == null) {
+			// action = "mail";
+			action = "show";
+		}
+		if (action.equalsIgnoreCase("dbLogin")) {
+			loginDB(request, response, httpSession);
+			return;
+		}
+		// Get the current httpSession or a new one
+		String authenticated = (String) httpSession.getAttribute("authenticated");
+		if (authenticated == null || !authenticated.equals("yes")) {
+			response.sendRedirect("../EuraHS-Login");
+		}
+
 		// set both persistence (case saving) and image (images streamed from
 		// kb) folder
 		String fca = GlobalSettings.getInstance().getCaseFolder();
@@ -394,13 +411,6 @@ public class D3webDialog extends HttpServlet {
 		// GlobalSettings.getInstance().setCaseFolder(persistencePath);
 
 		d3wcon = D3webConnector.getInstance();
-
-		// in case nothing other is provided, "show" is the default action
-		String action = request.getParameter("action");
-		if (action == null) {
-			// action = "mail";
-			action = "show";
-		}
 
 		// try to get the src parameter, which defines the specification xml
 		// with special properties for this dialog/knowledge base
@@ -440,9 +450,6 @@ public class D3webDialog extends HttpServlet {
 			}
 			streamImages();
 		}
-
-		// Get the current httpSession or a new one
-		HttpSession httpSession = request.getSession(true);
 
 		// if (httpSession.getAttribute("imgStreamed") == null) {
 		// streamImages();
@@ -498,10 +505,6 @@ public class D3webDialog extends HttpServlet {
 		}
 		else if (action.equalsIgnoreCase("usrDatlogin")) {
 			loginUsrDat(request, response, httpSession);
-			return;
-		}
-		else if (action.equalsIgnoreCase("dbLogin")) {
-			loginDB(request, response, httpSession);
 			return;
 		}
 		else if (action.equalsIgnoreCase("sendmail")) {
@@ -590,7 +593,7 @@ public class D3webDialog extends HttpServlet {
 	private Set<TerminologyObject> getUnknownQuestions(Session sess) {
 		Set<TerminologyObject> unknownQuestions = new HashSet<TerminologyObject>();
 		for (TerminologyObject to : sess.getBlackboard().getValuedObjects()) {
-			Fact mergedFact = sess.getBlackboard().getValueFact((ValueObject) to);
+			Fact mergedFact = sess.getBlackboard().getValueFact(to);
 			if (mergedFact != null && Unknown.assignedTo(mergedFact.getValue())) {
 				unknownQuestions.add(to);
 			}
@@ -747,7 +750,7 @@ public class D3webDialog extends HttpServlet {
 	 * @param d3webSession
 	 * @throws IOException
 	 */
-	protected void render(HttpServletRequest request, HttpServletResponse response,
+	protected void show(HttpServletRequest request, HttpServletResponse response,
 			HttpSession httpSession)
 			throws IOException {
 
@@ -1041,16 +1044,6 @@ public class D3webDialog extends HttpServlet {
 			}
 		}
 
-	}
-
-	protected void show(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
-		String authenticated = (String) httpSession.getAttribute("authenticated");
-		if (authenticated != null && authenticated.equals("yes")) {
-			render(request, response, httpSession);
-		}
-		else {
-			response.sendRedirect("../EuraHS-Login");
-		}
 	}
 
 	/**
