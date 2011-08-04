@@ -215,6 +215,17 @@
         <parameter id="css" value="defi.css" />
     </extension>  
     
+    <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="ForumMenuTagHandler">
+        <parameter id="class" value="de.knowwe.defi.forum.ForumMenuTagHandler" />
+        <parameter id="name" value="ForumMenuTagHandler" />
+        <parameter id="description" value="TagHandler ForumMenuTagHandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="css" value="defi.css" />
+        <parameter id="script" value="KnowWE-Plugin-Defi-Forum.js" />
+    </extension>  
+    
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="AboutMeSaveAction">
         <parameter id="class"
@@ -266,6 +277,16 @@
         <parameter id="priority" value="5" />      
     </extension>
     
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="NewForumAction">
+        <parameter id="class"
+            value="de.knowwe.defi.forum.NewForumAction" />
+        <parameter id="name" value="NewForumAction" />
+        <parameter id="description" value="Action NewForumAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />      
+    </extension>
+   
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="MailFormAction">
         <parameter id="class"
