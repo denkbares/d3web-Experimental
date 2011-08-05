@@ -54,7 +54,7 @@
 					berater_grau.jpg
 				<% } %>
 				" height="115px" width="86px" alt="Berater" style="margin:9px 0 3px 0;" />
-				<span id="infobox1">Berater</span>
+				<span id="infobox1">Berater Dr. Schulz</span>
 				</a>
 			</div>
 			<div>
