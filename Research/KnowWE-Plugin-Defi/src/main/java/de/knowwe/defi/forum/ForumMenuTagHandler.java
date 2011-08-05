@@ -81,6 +81,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 		fm.append("<ul>");
 		for (String s : units) {
+			fm.append("\n"); //fixes JSPWiki's "10000 characters without linebreak-bug"
 			if (s.startsWith("###")) {
 				s = s.substring(3);
 				fm.append("<li class='root'><span>" + s + "</span>");
