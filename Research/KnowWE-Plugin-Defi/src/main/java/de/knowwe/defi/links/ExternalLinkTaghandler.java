@@ -47,9 +47,11 @@ public class ExternalLinkTaghandler extends AbstractTagHandler {
 			if (parameters.containsKey("title")) {
 				text = parameters.get("title");
 			}
+			
+			String externalLinkHintText = "Sie verlassen nun die Webseite von ICD-Forum und folgen einem externen Link. Wir haben keinen Einfluss auf den Inhalt der folgenden Webseite und sind nicht für den Inhalt verantwortlich.";
 
 			StringBuffer buffy = new StringBuffer();
-			buffy.append(KnowWEUtils.maskHTML("<a href='" + url + "' target='_blank'>"));
+			buffy.append(KnowWEUtils.maskHTML("<a href='" + url + "' target='_blank' onclick='alert(\""+externalLinkHintText+"\")'>"));
 			buffy.append(text);
 			buffy.append(KnowWEUtils.maskHTML("</a>"));
 			return buffy.toString();
