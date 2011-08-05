@@ -90,7 +90,7 @@ public class JavaWriter implements ObjectTypeWriter {
 		boolean constraints = type.getConstraints().size() > 0;
 		template = replaceSectionFinder(type.getSectionFinder(), template, constraints);
 		template = replaceConstraints(type.getConstraints(), template);
-		template = replaceColor(type.getColor(), template);
+		template = replaceRenderer(type.getColor(), type.getClassName(), template);
 		// do this at the end, because imports could have been added before
 		template = replaceImports(type.getImports(), template);
 
@@ -197,17 +197,27 @@ public class JavaWriter implements ObjectTypeWriter {
 		return template.replaceAll(CONSTRAINTS, instantiations.toString());
 	}
 
-	private String replaceColor(String color, String template) {
+	private String replaceRenderer(String color, String title, String template) {
 		StringBuilder instantiation = new StringBuilder();
+		instantiation.append(INDENT);
+		instantiation.append("setCustomRenderer(new GenericHTMLRenderer<");
+		instantiation.append(title);
+		instantiation.append(">(\"span\", new String[] {");
+		
 		if (color != null) {
-			instantiation.append(INDENT);
-			instantiation.append("setCustomRenderer(new StyleRenderer(\"color:");
+			instantiation.append("\"style\", \"color: ");
 			instantiation.append(color);
-			instantiation.append("\"));\n");
+			instantiation.append(";\", ");
 		}
+		
+		instantiation.append("\"title\", \"");
+		instantiation.append(title);
+		instantiation.append("\"}));\n");
+
 		if (instantiation.length() > 0) {
 			instantiation.delete(instantiation.length() - 1, instantiation.length());
 		}
+		
 		return template.replaceAll(STYLERENDER, instantiation.toString());
 	}
 

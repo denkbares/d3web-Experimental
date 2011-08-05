@@ -451,9 +451,8 @@ public class ObjectType {
 				imports.addAll(constraints);
 				checkPatternImport();
 			}
-			if (color != null) {
-				imports.add(new QualifiedClass("de.d3web.we.kdom.rendering", "StyleRenderer"));
-			}
+
+			imports.add(new QualifiedClass("de.knowwe.core.renderer", "GenericHTMLRenderer"));
 		}
 
 		private void checkPatternImport() {

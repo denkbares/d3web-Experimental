@@ -42,9 +42,11 @@ public class ParameterizedClass extends QualifiedClass {
 	 */
 	public ParameterizedClass(String packageName, String className, Object value) {
 		super(packageName, className);
+		
 		if (value == null) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Value is null");
 		}
+		
 		this.value = value;
 	}
 

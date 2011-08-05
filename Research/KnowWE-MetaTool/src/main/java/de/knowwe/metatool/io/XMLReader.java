@@ -151,21 +151,33 @@ public class XMLReader implements ObjectTypeReader {
 			}
 		}
 
-		private void createMinimalBuilder(Attributes attributes) {
+		private void createMinimalBuilder(Attributes attributes) throws SAXException {
 			String id = attributes.getValue("ID");
 			String className = attributes.getValue("ClassName");
 			String packageName = attributes.getValue("PackageName");
 			boolean exists = Boolean.parseBoolean(attributes.getValue("Exists"));
 
-			QualifiedClass objectTypeClass = new QualifiedClass(packageName, className);
+			QualifiedClass objectTypeClass;
+			try {
+				objectTypeClass = new QualifiedClass(packageName, className);
+			} catch (IllegalArgumentException e) {
+				throw new SAXException(new MetatoolParseException("Cannot create ObjectType: " + e.getMessage(), locator));
+			}
+			
 			builder = new ObjectType.Builder(id, objectTypeClass, exists);
 		}
 
-		private void changeSuperType(Attributes attributes) {
+		private void changeSuperType(Attributes attributes) throws SAXException {
 			String className = attributes.getValue("SuperTypeClass");
 			String packageName = attributes.getValue("SuperTypePackage");
 
-			QualifiedClass superTypeClass = new QualifiedClass(packageName, className);
+			QualifiedClass superTypeClass;
+			try {
+				superTypeClass = new QualifiedClass(packageName, className);
+			} catch (IllegalArgumentException e) {
+				throw new SAXException(new MetatoolParseException("Cannot set super type: " + e.getMessage(), locator));
+			}
+			
 			builder.setSuperType(superTypeClass);
 		}
 
@@ -197,11 +209,18 @@ public class XMLReader implements ObjectTypeReader {
 			String packageName = attributes.getValue("PackageName");
 			String className = attributes.getValue("ClassName");
 			String value = attributes.getValue("Value") != null ? attributes.getValue("Value") : "";
-			ParameterizedClass sectionFinder = new ParameterizedClass(packageName, className, value);
+			
+			ParameterizedClass sectionFinder;
+			try {
+				sectionFinder = new ParameterizedClass(packageName, className, value);
+			} catch (IllegalArgumentException e) {
+				throw new SAXException(new MetatoolParseException("Cannot set SectionFinder: " + e.getMessage(), locator));
+			}
+			
 			builder.setSectionFinder(sectionFinder);
 		}
 
-		private void addConstraint(Attributes attributes) throws  SAXException {
+		private void addConstraint(Attributes attributes) throws SAXException {
 			if (builder == null) {
 				throw new SAXException(new MetatoolParseException(
 						"There is no builder! Probably you have defined the constraint on a wrong position.",
@@ -211,9 +230,15 @@ public class XMLReader implements ObjectTypeReader {
 			// Add Constraint
 			String packageName = attributes.getValue("PackageName");
 			String className = attributes.getValue("ClassName");
-			QualifiedClass constraint = new QualifiedClass(packageName, className);
+			
+			QualifiedClass constraint;
+			try {
+				constraint = new QualifiedClass(packageName, className);
+			} catch (IllegalArgumentException e) {
+				throw new SAXException(new MetatoolParseException("Cannot add constraint: " + e.getMessage(), locator));
+			}
+			
 			builder.addConstraint(constraint);
-
 		}
 
 		@Override
@@ -225,7 +250,12 @@ public class XMLReader implements ObjectTypeReader {
 
 				// Add ObjectType as child
 				if (nextParent != null) {
-					nextParent.addChild(nextPosition, temp);
+					try {
+						nextParent.addChild(nextPosition, temp);
+					} catch (IllegalArgumentException e) {
+						throw new SAXException(new MetatoolParseException(
+								"The Position parameter is invalid.", locator));
+					}
 				}
 				else if (nextParent == null && root != null) {
 					throw new SAXException(new MetatoolParseException(

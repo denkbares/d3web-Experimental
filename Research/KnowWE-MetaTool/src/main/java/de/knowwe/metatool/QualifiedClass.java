@@ -41,10 +41,14 @@ public class QualifiedClass {
 	 * @param className The name of the class
 	 */
 	public QualifiedClass(String packageName, String className) {
-		if (packageName == null || className == null
-				|| packageName.isEmpty() || className.isEmpty()) {
-			throw new IllegalArgumentException();
+		if (packageName == null || packageName.isEmpty()) {
+			throw new IllegalArgumentException("Class name is null or empty");
 		}
+		
+		if (className == null || className.isEmpty()) {
+			throw new IllegalArgumentException("Class name is null or empty");
+		}
+		
 		if (packageName.endsWith(".")) {
 			packageName = packageName.substring(0, packageName.length() - 1);
 			Logger.getAnonymousLogger().info(
