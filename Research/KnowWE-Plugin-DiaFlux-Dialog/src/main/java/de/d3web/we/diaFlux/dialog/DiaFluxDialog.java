@@ -19,8 +19,6 @@
 package de.d3web.we.diaFlux.dialog;
 
 import de.d3web.we.flow.DiaFluxDisplayEnhancement;
-import de.d3web.we.flow.type.FlowchartType;
-import de.d3web.we.kdom.Section;
 import de.d3web.we.user.UserContext;
 
 /**
@@ -43,7 +41,7 @@ public class DiaFluxDialog implements DiaFluxDisplayEnhancement {
 		return new String[] { "KnowWEExtension/css/dialog.css" };
 	}
 
-	public boolean activate(Section<FlowchartType> section, UserContext user) {
+	public boolean activate(UserContext user) {
 		return true;
 	}
 

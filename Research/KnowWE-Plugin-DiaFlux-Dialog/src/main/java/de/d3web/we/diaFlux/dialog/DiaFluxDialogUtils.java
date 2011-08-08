@@ -70,8 +70,8 @@ public class DiaFluxDialogUtils {
 				KnowWEEnvironment.getInstance().getArticleManager(
 						user.getWeb()).findNode(origin);
 
-		return FlowchartUtils.createFlowchartRenderer(node, user,
-				DIAFLUXDIALOG_FLOWCHART);
+		return KnowWEUtils.maskHTML(FlowchartUtils.createFlowchartRenderer(node, user,
+				DIAFLUXDIALOG_FLOWCHART, "diafluxdialog"));
 	}
 
 	public static String extraxtMinimalFlowchart(String flowchart) {
