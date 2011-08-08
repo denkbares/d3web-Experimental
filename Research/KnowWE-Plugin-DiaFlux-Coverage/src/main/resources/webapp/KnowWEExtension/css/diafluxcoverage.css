@@ -1,0 +1,9 @@
+.Flowchart .coverCovered {
+	border: 2px solid blue;
+}
+
+
+.Flowchart .coverUncovered {
+	border: 2px solid red;
+}
+	
