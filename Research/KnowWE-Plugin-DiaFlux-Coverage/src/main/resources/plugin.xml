@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-DiaFlux-Coverage" version="0.0.1">
+	
+	<requires>
+		<import plugin-id="KnowWE-Plugin-DiaFlux" />
+		<import plugin-id="KnowWEExtensionPoints" />
+		<import plugin-id="d3web-Kernel-ExtensionPoints" />
+	</requires>
+	
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+	
+
+	
+	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="PSMethod"
+		id="PSMDiaFluxCoverage">
+		<parameter id="class"
+			value="de.d3web.diaflux.coverage.PSMDiaFluxCoverage"/>
+		<parameter id="name" value="PSMDiaFluxCoverage" />
+		<parameter id="description" value="PSMDiaFluxCoverage" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="6" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="DiaFluxCoverageType">
+		<parameter id="class"
+			value="de.d3web.we.diaflux.coverage.DiaFluxCoverageType" />
+		<parameter id="name" value="DiaFluxCoverageType" />
+		<parameter id="description" value="DiaFluxCoverageType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWE-Plugin-DiaFlux" point-id="DiaFluxDisplayEnhancement"
+		id="DiaFluxCoverageHighlight">
+		<parameter id="class"
+			value="de.d3web.we.diaflux.coverage.DiaFluxCoverageHighlight" />
+		<parameter id="name" value="DiaFluxCoverageHighlight" />
+		<parameter id="description" value="DiaFluxCoverageHighlight" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="diafluxcoverage" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="GetCoverageHighlightAction">
+		<parameter id="class"
+			value="de.d3web.we.diaflux.coverage.GetCoverageHighlightAction" />
+		<parameter id="name" value="GetCoverageHighlightAction" />
+		<parameter id="description" value="Action GetCoverageHighlightAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+
+</plugin>
