@@ -26,7 +26,7 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.AtMostOneFindingConstraint;
-import de.d3web.we.kdom.rendering.StyleRenderer;
+import de.knowwe.core.renderer.GenericHTMLRenderer;
 import de.knowwe.kdom.TestChildren1;
 import de.knowwe.kdom.TestChildren2;
 import de.knowwe.kdom.TestChildren3;
@@ -41,7 +41,7 @@ public class TestTypeWithConstraint extends TermDefinition {
 		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder(".*"));
 		setSectionFinder(c);
 		c.addConstraint(AtMostOneFindingConstraint.getInstance());
-		setCustomRenderer(new StyleRenderer("color:red"));
+		setCustomRenderer(new GenericHTMLRenderer<TestTypeWithConstraint>("span", new String[] {"style", "color: red;", "title", "TestTypeWithConstraint"}));
 	}
 
 }

@@ -334,7 +334,7 @@ public class ObjectTypeCreationTest {
 				"ConstraintSectionFinder", sectionFinder));
 		imports.add(constraint);
 		imports.add(new QualifiedClass("java.util.regex", "Pattern"));
-		imports.add(new QualifiedClass("de.d3web.we.kdom.rendering", "StyleRenderer"));
+		imports.add(new QualifiedClass("de.knowwe.core.renderer", "GenericHTMLRenderer"));
 		imports.add(childClass1);
 
 		// assertEquals("Wrong number of imports.", imports.size(),
