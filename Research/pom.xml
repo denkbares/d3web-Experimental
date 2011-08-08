@@ -213,6 +213,7 @@
 		<module>KnowWE-Plugin-QuickEdit</module>
 		<module>KnowWE-Plugin-InlineIndication</module>
 		<module>KnowWE-Plugin-InlineAnswer</module>
+		<module>KnowWE-Plugin-DiaFlux-Coverage</module>
 	</modules>
 	<repositories>
 		<repository>
