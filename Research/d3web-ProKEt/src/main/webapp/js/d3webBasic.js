@@ -577,15 +577,31 @@ function tooltip_over(id, element) {
 		
 		// store currently shown tooltip and tooltipShownTrigger
 		tooltipShown = target;
-
+		
 		target.css({
 			position : "absolute"
 		});
 		
+
+		
 		//tooltip_move(element);
 
-		// show for 500 ms if not moved anymore
-		target.show(500);
+		target.fadeIn(300);
+		setLeftOffset(target);
+	}
+}
+
+function setLeftOffset(target) {
+	var pOffset = target.parent().offset();
+	var width = target.width();
+	var widthW = $(window).width() - 25; // remove some for the scrollbar
+	var overlap = pOffset.left + width - widthW;
+	var leftOffset = pOffset.left;
+	if (overlap > 0){
+		leftOffset = pOffset.left - overlap;
+		if (leftOffset < 0) leftOffset = 0;
+		target.offset({ top: pOffset.top + target.parent().height(), left: leftOffset });
+		target.width(width);
 	}
 }
 
@@ -622,7 +638,7 @@ function tooltip_out(object) {
 		target = $("#tt-" + object);
 	}
 
-	target.hide(500);
+	target.fadeOut(300);
 	tooltipShown = undefined;
 	//tooltipShownTrigger = undefined;
 }
