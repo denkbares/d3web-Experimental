@@ -214,6 +214,7 @@
 		<module>KnowWE-Plugin-InlineIndication</module>
 		<module>KnowWE-Plugin-InlineAnswer</module>
 		<module>KnowWE-Plugin-DiaFlux-Coverage</module>
+		<module>metatool-test-launcher</module>
 	</modules>
 	<repositories>
 		<repository>
