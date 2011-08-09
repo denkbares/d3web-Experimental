@@ -35,6 +35,8 @@ import de.d3web.proket.utils.GlobalSettings;
 
 public class PersistenceD3webUtils {
 
+	private static final String AUTOSAVE = "autosave";
+
 	private static File getFile(String user, String filename) {
 		return new File(GlobalSettings.getInstance().getCaseFolder() + File.separator
 				+ (user != null && !user.isEmpty() ? user + File.separator : "")
@@ -75,7 +77,8 @@ public class PersistenceD3webUtils {
 							record1);
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			Logger.getLogger(PersistenceD3webUtils.class.getSimpleName()).warning(
+					"'" + filename + "' for user '" + user + "' could not be loaded.");
 		}
 		return session;
 	}
@@ -105,21 +108,25 @@ public class PersistenceD3webUtils {
 		if (user != null && !user.isEmpty()) folderPath += File.separator + user;
 		File folder = new File(folderPath);
 
+		/* add autosaved as first item always */
+		cases.append("<option");
+		cases.append(" title='" + AUTOSAVE + "'>");
+		cases.append(AUTOSAVE);
+		cases.append("</option>");
+
 		if (folder.listFiles() != null && folder.listFiles().length > 0) {
 
 			File[] files = folder.listFiles();
 
-			/* add autosaved as first item always */
-			cases.append("<option>");
-			cases.append("autosave");
-			cases.append("</option>");
-
 			Arrays.sort(files);
 
 			for (File f : files) {
-				if (!f.getName().startsWith("autosave")) {
-					cases.append("<option>");
-					cases.append(f.getName().substring(0, f.getName().lastIndexOf(".")));
+				if (!f.getName().startsWith(AUTOSAVE)) {
+					cases.append("<option");
+					String filename = f.getName().substring(0, f.getName().lastIndexOf("."));
+					cases.append(" title='"
+							+ filename + "'>");
+					cases.append(filename);
 					cases.append("</option>");
 				}
 			}

@@ -110,9 +110,7 @@ $(function() {
 			position: [ "left", "top" ],
 			modal: false,
 			width: 180,
-			height: 360,
-			minWidth: 180,
-			minHeight: 360,
+			height: 375,
 			buttons: [{
 				id: "loadOK",
 				text: load,
