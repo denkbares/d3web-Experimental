@@ -22,23 +22,6 @@ var scrollHtml = 0;
 
 function setup() {
 
-	/*// load questionnaires and questions into memory
-	questionnaires = $('#content [id^="qu_"]');
-	questionsDirty = $('#content [id^="q_"]');
-	
-	// clean question set of zero choice questions
-	questions = questionsDirty.filter(':not([id$="-trigger"])').filter(
-			function(index) {
-				return !$(this).hasClass("question-zc");
-			}
-	);
-	
-	// REMOVE one day
-	// alle oc etc die OHNE button Druck gehen müssen
-	markingQuestions = questions.filter(function(index) {
-		return $(this).find(".ok-button").size() == 0;
-	});
-*/
 	// setup popup stuff
 	// each time the document is clicked somewhere
 	$(document).click(function() {	
@@ -49,31 +32,8 @@ function setup() {
 	});
 	hide_popup(0); // initially hiding popup per default
 
-	// if alternating colors flag set, e.g., for Hierarchy dialog
-	/*if (alternatingColors) {
-		alternating_colors();	// create alternating colors
-	}
-
-	// set numeric separator for num-questions
-	$(".answer-num").numeric(".");
-	
-	// in case of dateanswers
-	if (dateanswer) {
-		
-		// call remark_selectively if date is chosen
-		$(".answer-date").find(":text").datepick({
-			onSelect : function(dates) {
-				remark_selectively($(this));
-			}
-		});
-	}
-*/
-	//prepare_question_marking(); // prepare marking of questions
-	hide_all_tooltips(); // hide tooltips
-	generate_tooltip_functions(); // generate tooltip functions
-	//hide_all_subquestions(); // hide subquestions
-	//make_sidenav();	// make sidenavigation
-	//highlight_sidenav();	// style sidenav 
+	hide_all_tooltips();
+	generate_tooltip_functions();
 }
 
 /**
@@ -676,9 +636,9 @@ function generate_tooltip_functions() {
 	triggers = $("[class*='-tt-trigger']");
 	
 	// if mouse is moved over an element define potential tooltips position
-	$(document).mousemove(function(e) {
+//	$(document).mousemove(function(e) {
 		//tooltip_move(e);
-	});
+//	});
 	
 	// go through all existing tooltip triggers
 	triggers.each(function() {
@@ -693,10 +653,10 @@ function generate_tooltip_functions() {
 		var classComplete = $(this).attr("class");
 		var id = classComplete.replace("-tt-trigger tooltip-trigger", "");
 		
-		$(this).mouseover(function() {
+		$(this).unbind('mouseover').mouseover(function() {
 			tooltip_over(id, $(this));
 		});
-		$(this).mouseout(function() {
+		$(this).unbind('mouseout').mouseout(function() {
 			tooltip_out(id);
 		});
 	});

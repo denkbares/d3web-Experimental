@@ -276,18 +276,18 @@ function initFunctionality() {
 		$("#jqLoadCaseDialog").dialog("open");
 	});
 	
-	$('#summary').click(function(event){
+	$('#summary').unbind('click').click(function(event){
 		d3web_updateSummary();
 		$("#jqSummaryDialog").dialog("open");
 	});
 	
-    $('[type=imageAnswer]').mouseenter(function() {
+    $('[type=imageAnswer]').unbind('mouseenter').mouseenter(function() {
         $("#img-" + $(this).attr("id")).focus();
     }).mouseleave(function() {
     	$("#img-" + $(this).attr("id")).blur();
     });
     
-    $('area').mouseenter(function() {
+    $('area').unbind('mouseenter').mouseenter(function() {
         $("#f_" + $(this).attr("id").replace("img-", "")).focus();
     }).mouseleave(function() {
         $("#f_" + $(this).attr("id").replace("img-", "")).focus();
