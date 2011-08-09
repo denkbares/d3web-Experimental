@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.session.Session;
 import de.d3web.diaFlux.flow.CommentNode;
 import de.d3web.diaFlux.flow.Edge;
 import de.d3web.diaFlux.flow.Flow;
@@ -69,11 +70,12 @@ public class GetCoverageHighlightAction extends AbstractAction {
 			return;
 		}
 		
-		
 		KnowledgeBase kb = D3webUtils.getKB(context.getWeb(), master);
-		if (kb == null)
-		;// TODO error handling
+		if (kb == null) return;// TODO error handling
 		
+		Session session = D3webUtils.getSession(master, context, web);
+		if (session == null) return;// TODO error handling
+
 		FlowSet flowSet = DiaFluxUtils.getFlowSet(kb);
 
 		Flow flow = null;
@@ -85,8 +87,7 @@ public class GetCoverageHighlightAction extends AbstractAction {
 			}
 		}
 
-		if (flow == null)
-		;// TODO error handling
+		if (flow == null) return;// TODO error handling
 		
 		StringBuilder builder = new StringBuilder();
 
@@ -95,8 +96,9 @@ public class GetCoverageHighlightAction extends AbstractAction {
 		List<Edge> coveredEdges = new LinkedList<Edge>();
 		List<Edge> uncoveredEdges = new LinkedList<Edge>();
 
+
 		for (Edge edge : flow.getEdges()) {
-			int count = PSMDiaFluxCoverage.getCount(edge);
+			int count = PSMDiaFluxCoverage.getTraceCount(edge, session);
 			if (count != 0) coveredEdges.add(edge);
 			else uncoveredEdges.add(edge);
 
@@ -110,7 +112,7 @@ public class GetCoverageHighlightAction extends AbstractAction {
 
 		for (Node node : flow.getNodes()) {
 			if (node instanceof CommentNode && node.getIncomingEdges().isEmpty()) continue;
-			int count = PSMDiaFluxCoverage.getCount(node);
+			int count = PSMDiaFluxCoverage.getTraceCount(node, session);
 			if (count != 0) coveredNodes.add(node);
 			else uncoveredNodes.add(node);
 

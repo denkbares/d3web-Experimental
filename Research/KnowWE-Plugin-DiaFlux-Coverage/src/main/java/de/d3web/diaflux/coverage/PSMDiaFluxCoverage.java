@@ -19,14 +19,14 @@
 package de.d3web.diaflux.coverage;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import de.d3web.core.inference.PSMethodAdapter;
 import de.d3web.core.inference.PostHookablePSMethod;
 import de.d3web.core.inference.PropagationEntry;
 import de.d3web.core.session.Session;
+import de.d3web.core.session.SessionObjectSource;
 import de.d3web.core.session.blackboard.Fact;
+import de.d3web.core.session.blackboard.Facts;
 import de.d3web.diaFlux.flow.DiaFluxCaseObject;
 import de.d3web.diaFlux.flow.Edge;
 import de.d3web.diaFlux.flow.Node;
@@ -35,68 +35,51 @@ import de.d3web.diaFlux.inference.FluxSolver;
 
 
 /**
+ * This PSM keeps track of the pathes taken in the DiaFlux models during a
+ * session.
  * 
  * @author Reinhard Hatko
  * @created 05.08.2011
  */
-public class PSMDiaFluxCoverage extends PSMethodAdapter implements PostHookablePSMethod {
+public class PSMDiaFluxCoverage extends PSMethodAdapter implements PostHookablePSMethod, SessionObjectSource<CoverageSessionObject> {
 
-	private static Map<Edge, Integer> edges = new HashMap<Edge, Integer>();
-	private static Map<Node, Integer> nodes = new HashMap<Node, Integer>();
 
 	@Override
 	public void postPropagate(Session session) {
 		FluxSolver fluxSolver = session.getPSMethodInstance(FluxSolver.class);
-		if (fluxSolver == null) {
-			System.out.println("No DiaFlux");
-			return;
-		}
 
+		if (fluxSolver == null) return;
 		if (!DiaFluxUtils.isFlowCase(session)) return;
 
 		DiaFluxCaseObject caseObject = DiaFluxUtils.getDiaFluxCaseObject(session);
+		CoverageSessionObject coverage = session.getSessionObject(this);
 
 		for (Node node : caseObject.getTracedNodes()) {
-
-			if (!nodes.containsKey(node)) {
-				nodes.put(node, 0);
-			}
-
-			nodes.put(node, nodes.get(node) + 1);
-
+			coverage.addTracedNode(node);
 		}
 
 		for (Edge edge : caseObject.getTracedEdges()) {
-
-			if (!edges.containsKey(edge)) {
-				edges.put(edge, 0);
-			}
-
-			edges.put(edge, edges.get(edge) + 1);
-
+			coverage.addTracedEdge(edge);
 		}
 	}
 
 	@Override
 	public void init(Session session) {
-		edges.clear();
-		nodes.clear();
 	}
 
 
 	@Override
 	public void propagate(Session session, Collection<PropagationEntry> changes) {
-
 	}
 
 	@Override
 	public Fact mergeFacts(Fact[] facts) {
-		return null;
+		return Facts.mergeError(facts);
 	}
 
 	@Override
 	public boolean hasType(Type type) {
-		return false;
+		return type == Type.consumer;
 	}
 
 	@Override
@@ -104,22 +87,28 @@ public class PSMDiaFluxCoverage extends PSMethodAdapter implements PostHookableP
 		return 6;
 	}
 
-	public static int getCount(Node node) {
-		Integer count = nodes.get(node);
-		if (count == null) {
-			return 0;
-		}
-		else return count;
 
+	@Override
+	public CoverageSessionObject createSessionObject(Session session) {
+		return new CoverageSessionObject();
 	}
 
-	public static int getCount(Edge edge) {
-		Integer count = edges.get(edge);
-		if (count == null) {
-			return 0;
-		}
-		else return count;
+	/**
+	 * Returns the number of times the edge was active during the session.
+	 */
+	public static int getTraceCount(Edge edge, Session session) {
+		return getCoverage(session).getTraceCount(edge);
+	}
 
+	/**
+	 * Returns the number of times the node was active during the session.
+	 */
+	public static int getTraceCount(Node node, Session session) {
+		return getCoverage(session).getTraceCount(node);
+	}
+
+	private static CoverageSessionObject getCoverage(Session session) {
+		return session.getSessionObject(session.getPSMethodInstance(PSMDiaFluxCoverage.class));
 	}
 
 }
