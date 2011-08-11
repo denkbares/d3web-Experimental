@@ -219,7 +219,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 
 	@Override
 	public String fillSummaryDialog(Session d3webSession) {
-		StringTemplate st = TemplateUtils.getStringTemplate("Summary",
+		StringTemplate st = TemplateUtils.getStringTemplate("QuestionnaireSummary",
 				"html");
 
 		StringBuilder bui = new StringBuilder();
