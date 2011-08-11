@@ -285,6 +285,10 @@ function initFunctionality() {
 		$("#jqSummaryDialog").dialog("open");
 	});
 	
+	$('#statistics').unbind('click').click(function(event){
+		window.location.href = "/Statistics/Statistics.jsp";
+	});
+	
     $('[type=imageAnswer]').unbind('mouseenter').mouseenter(function() {
         $("#img-" + $(this).attr("id")).focus();
     }).mouseleave(function() {
