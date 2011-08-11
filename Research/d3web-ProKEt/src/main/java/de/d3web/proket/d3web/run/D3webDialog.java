@@ -1093,7 +1093,7 @@ public class D3webDialog extends HttpServlet {
 	protected void updateSummary(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
 		PrintWriter writer = response.getWriter();
 
-		writer.append(REPLACEID + "sumQuestionnaire");
+		writer.append(REPLACEID + "questionnaireSummary");
 		writer.append(REPLACECONTENT);
 		DefaultRootD3webRenderer rootRenderer =
 				(DefaultRootD3webRenderer) D3webRendererMapping

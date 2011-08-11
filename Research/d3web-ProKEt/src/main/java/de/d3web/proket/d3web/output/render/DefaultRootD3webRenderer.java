@@ -229,7 +229,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 
 		fillSummaryChildren(d3webSession, bui, root);
 
-		st.setAttribute("sumQuestionnaire", bui.toString());
+		st.setAttribute("questionnaireSummary", bui.toString());
 
 		return st.toString();
 	}

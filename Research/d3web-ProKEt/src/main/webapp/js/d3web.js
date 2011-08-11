@@ -280,6 +280,10 @@ function initFunctionality() {
 		$("#jqLoadCaseDialog").dialog("open");
 	});
 	
+	$('#followup').unbind('click').click(function(event) {
+		$("#jqLoadCaseDialog").dialog("open");
+	});
+	
 	$('#summary').unbind('click').click(function(event){
 		d3web_updateSummary();
 		$("#jqSummaryDialog").dialog("open");
