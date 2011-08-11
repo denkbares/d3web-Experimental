@@ -398,7 +398,7 @@ public class D3webDialog extends HttpServlet {
 			String servletBasePath =
 					request.getSession().getServletContext().getRealPath("/");
 			GlobalSettings.getInstance().setServletBasePath(servletBasePath);
-			GlobalSettings.getInstance().setCaseFolder(servletBasePath + "cases");
+			GlobalSettings.getInstance().setCaseFolder(servletBasePath + "../../EuraHS-Data/cases");
 			GlobalSettings.getInstance().setKbImgFolder(servletBasePath + "kbimg");
 		}
 		/*

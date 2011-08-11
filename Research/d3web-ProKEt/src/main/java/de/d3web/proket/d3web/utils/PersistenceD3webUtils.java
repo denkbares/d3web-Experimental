@@ -155,7 +155,7 @@ public class PersistenceD3webUtils {
 
 			try {
 				sessionRepository.save(file);
-				System.out.println("Saved case to file: " + file.getAbsolutePath());
+				System.out.println("Saved case to file: " + file.getCanonicalPath());
 			}
 			catch (IOException e1) {
 				// TODO Auto-generated catch block

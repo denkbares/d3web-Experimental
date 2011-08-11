@@ -205,6 +205,10 @@ function initFunctionality() {
 		moveContentPart();
 	});
 	
+	$(document).ready(function() {
+	    $("#jqSummaryDialog").tabs();
+	});
+	
 	/*
 	 * bind "get selected facts" method to radio buttons, checkboxes and
 	 * textareas
