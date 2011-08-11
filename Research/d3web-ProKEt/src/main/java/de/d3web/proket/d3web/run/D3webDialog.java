@@ -385,6 +385,7 @@ public class D3webDialog extends HttpServlet {
 		String authenticated = (String) httpSession.getAttribute("authenticated");
 		if (authenticated == null || !authenticated.equals("yes")) {
 			response.sendRedirect("../EuraHS-Login");
+			return;
 		}
 
 		// set both persistence (case saving) and image (images streamed from
