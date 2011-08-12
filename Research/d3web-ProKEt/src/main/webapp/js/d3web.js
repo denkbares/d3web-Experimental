@@ -290,7 +290,7 @@ function initFunctionality() {
 	});
 	
 	$('#statistics').unbind('click').click(function(event){
-		window.location.href = "/Statistics/Statistics.jsp";
+		gotoStatistics();
 	});
 	
     $('[type=imageAnswer]').unbind('mouseenter').mouseenter(function() {
@@ -422,6 +422,20 @@ function d3web_addFacts() {
 	 textStore = new Object();
 	 numStore = new Object();
 }
+
+function gotoStatistics() {
+	var link = $.query.set("action", "gotoStatistics");
+	$.ajax({
+		type : "GET",
+		url : link,
+		cache : false, // needed for IE, call is not made otherwise
+		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+		success : function(url) {
+			window.location.href = url;
+		},
+	});
+}
+
 
 function handleUnsupportedBrowsers() {
 	var browser;

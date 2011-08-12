@@ -96,6 +96,8 @@ import de.d3web.proket.d3web.output.render.ImageHandler;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.database.DB;
+import de.d3web.proket.database.DateCoDec;
+import de.d3web.proket.database.TokenThread;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
 
@@ -500,6 +502,10 @@ public class D3webDialog extends HttpServlet {
 			httpSession.setAttribute(D3WEB_SESSION, d3webSession);
 			return;
 		}
+		else if (action.equalsIgnoreCase("gotoStatistics")) {
+			gotoStatistics(response, httpSession);
+			return;
+		}
 		else if (action.equalsIgnoreCase("checkUsrDatLogin")) {
 			checkUsrDatLogin(response, httpSession);
 			return;
@@ -770,6 +776,24 @@ public class D3webDialog extends HttpServlet {
 		writer.print(cc.html.toString()); // deliver the rendered output
 
 		writer.close(); // and close
+	}
+
+	protected void gotoStatistics(HttpServletResponse response,
+			HttpSession httpSession) throws IOException {
+
+		String email = (String) httpSession.getAttribute("user");
+
+		String gotoUrl = "../Statistics/Statistic.jsp?action=dbLogin";
+
+		String token = DateCoDec.getCode();
+		gotoUrl += "&t=" + token;
+		gotoUrl += "&e=" + Base64.encodeBase64String(email.getBytes());
+
+		new TokenThread(token, email).start();
+		PrintWriter writer = response.getWriter();
+		writer.print(gotoUrl);
+		writer.close();
+		// response.sendRedirect(gotoUrl);
 	}
 
 	private Collection<Question> resetAbandonedPaths(Session sess) {
