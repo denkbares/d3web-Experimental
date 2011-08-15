@@ -27,7 +27,8 @@ import de.d3web.we.kdom.objects.TermReference;
 
 public interface ComplexDefinition<T extends Type> extends Type {
 
-	public Collection<Section<TermReference>> getAllReferencesOfComplexDefinition(Section<? extends ComplexDefinition<T>> section);
+	//public Collection<Section<TermReference>> getAllReferencesOfComplexDefinition(Section<? extends ComplexDefinition<T>> section);
+	
 	
 	
 }

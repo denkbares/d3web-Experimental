@@ -33,6 +33,7 @@ import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.objects.TermReference;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.TypedTermDefinition;
 
 /**
  * 
@@ -45,21 +46,34 @@ import de.knowwe.compile.object.KnowledgeUnit;
  */
 public class ReferenceManager {
 
-	private final Map<String, Section<? extends TermDefinition>> validObjects = new HashMap<String, Section<? extends TermDefinition>>();
+	private final Map<String, TermDefinitionInformation> validObjects = new HashMap<String, TermDefinitionInformation>();
 	private final Map<String, Section<? extends TermDefinition>> validPredefinedObjects = new HashMap<String, Section<? extends TermDefinition>>();
 
-	private Map<String, Section<? extends TermDefinition>> validObjectsOld = new HashMap<String, Section<? extends TermDefinition>>();
+	private Map<String, TermDefinitionInformation> validObjectsOld = new HashMap<String,TermDefinitionInformation>();
 
 	private final Map<String, Set<Section<? extends TermReference>>> allReferences = new HashMap<String, Set<Section<? extends TermReference>>>();
 	private final Map<String, Set<Section<? extends TermDefinition>>> allDefinitions = new HashMap<String, Set<Section<? extends TermDefinition>>>();
 
 	public void newCompilationStep() {
-		validObjectsOld = new HashMap<String, Section<? extends TermDefinition>>();
+		validObjectsOld = new HashMap<String, TermDefinitionInformation>();
 		validObjectsOld.putAll(validObjects);
 	}
 
 	public void addToValidObjects(Section<? extends TermDefinition> s) {
-		validObjects.put(s.get().getTermIdentifier(s), s);
+		// store (generic) type-compiler-information along with the definition
+		TermDefinitionInformation termDefinitionInformation = new TermDefinitionInformation(s);
+		if(s.get() instanceof TypedTermDefinition) {
+			Object typedTermInformation = ((TypedTermDefinition)s.get()).getTypedTermInformation(s);
+			termDefinitionInformation.setTypeInformation(typedTermInformation);
+		}
+		validObjects.put(s.get().getTermIdentifier(s), termDefinitionInformation);
+	}
+	
+	public Object getDefinitionInformationForValidTerm(String termname) {
+		if(validObjects.containsKey(termname)) {
+			return validObjects.get(termname).getTypeInformation();
+		}
+		return null;
 	}
 
 	/**
@@ -85,10 +99,6 @@ public class ReferenceManager {
 		return validObjects.containsKey(termIdentifier)
 				|| validPredefinedObjects.containsKey(termIdentifier);
 	}
-
-	// public boolean isValid(Section<? extends TermDefinition> s) {
-	// return validObjects.containsValue(s);
-	// }
 
 	public boolean wasValidInOldVersion(String termIdentifier) {
 		return validObjectsOld.containsKey(termIdentifier);
@@ -179,4 +189,29 @@ public class ReferenceManager {
 		return result;
 	}
 
+}
+
+class TermDefinitionInformation {
+
+	private Section<? extends TermDefinition> def;
+	
+	private Object typeInformation;
+	
+	public TermDefinitionInformation(Section<? extends TermDefinition> d) {
+		this.def = d;
+	}
+	
+	public TermDefinitionInformation(Section<? extends TermDefinition> d, Object o) {
+		this(d);
+		this.typeInformation = o;
+	}
+	
+	public Object getTypeInformation() {
+		return typeInformation;
+	}
+
+	public void setTypeInformation(Object typeInformation) {
+		this.typeInformation = typeInformation;
+	}
+	
 }

@@ -41,9 +41,11 @@ import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.report.message.NoSuchObjectError;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.ComplexDefinitionError;
+import de.knowwe.compile.object.ComplexDefinitionWithTypeConstraints;
 import de.knowwe.compile.object.ConcurrentDefinitionsError;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.PredefinedTermWarning;
+import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.compile.utils.CompileUtils;
 
 /**
@@ -163,6 +165,15 @@ public class IncrementalCompiler implements EventListener {
 					compilationUnitIterator.remove();
 					break;
 				}
+				// check Types of referenced objects here
+				if(ref.get() instanceof TypeRestrictedReference) {
+					// TODO: Think of rendering of this violation!
+					if(((TypeRestrictedReference)ref.get()).checkTypeConstraints(ref) == false) {
+						compilationUnitIterator.remove();
+						break;
+					}
+				}
+				
 			}
 		}
 
@@ -284,8 +295,17 @@ public class IncrementalCompiler implements EventListener {
 		if (complexDef != null) {
 			Collection<Section<TermReference>> allReferencesOfComplexDefinition = CompileUtils.getAllReferencesOfComplexDefinition(complexDef);
 			for (Section<TermReference> ref : allReferencesOfComplexDefinition) {
-				if (!terminology.isValid(ref.get().getTermIdentifier(ref))) {
+				if ((!terminology.isValid(ref.get().getTermIdentifier(ref)))) {        //if one reference is not defined 
+					
 					messages.add(new ComplexDefinitionError(
+							ref.get().getTermIdentifier(ref)));
+					return messages;
+				}
+				
+				// ADD-ON for type constraints
+				if (complexDef.get() instanceof ComplexDefinitionWithTypeConstraints && 
+						!((ComplexDefinitionWithTypeConstraints)complexDef.get()).checkTypeConstraints(def,ref)) {   //or has a wrong type
+					messages.add(new ComplexDefinitionError(((ComplexDefinitionWithTypeConstraints)complexDef.get()).getProblemMessageForConstraintViolation(def, ref)+" :"+
 							ref.get().getTermIdentifier(ref)));
 					return messages;
 				}
