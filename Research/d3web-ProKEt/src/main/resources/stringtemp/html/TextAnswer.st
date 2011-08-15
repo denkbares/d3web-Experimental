@@ -11,7 +11,8 @@
 		$else$
 		<input id="f_$fullId$" type="text" 
 				$if(selection)$value="$selection$"$endif$ 
-				title="$title$" 
+				$if(title)$title="$title$"$endif$ 
+				$if (useasfilename)$useasfilename="true"$endif$ 
 				$if(width)$size="$width$"$endif$ />
 		$endif$
 	$endif$

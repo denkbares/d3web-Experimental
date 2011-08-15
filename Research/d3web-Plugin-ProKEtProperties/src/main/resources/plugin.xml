@@ -142,5 +142,14 @@
 		<parameter id="instanceof" value="java.lang.String" />
 	</extension>
 	
-	
+	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="use_as_filename">
+		<parameter id="name" value="use_as_filename" />
+		<parameter id="description" value="can be used to suggest the value of the question as the filename" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.Boolean" />
+	</extension>
+		
 </plugin>

@@ -10,6 +10,14 @@ Please choose the database level.init = Level 1
 @package: Hernia
 %
 
+
+%%Property
+Please enter a EuraHS registration number instead of a patient name.use_as_filename = true
+
+@package: Hernia
+%
+
+
 %%Property
 Year of birth.date_format = yyyy
 Date of operation that caused the incisional hernia.date_format = dd.MM.yyyy OR MM.yyyy OR yyyy

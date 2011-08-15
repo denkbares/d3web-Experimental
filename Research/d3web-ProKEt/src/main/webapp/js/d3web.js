@@ -572,8 +572,7 @@ function d3web_sessionForNewUser() {
 }
 
 function d3web_prepareSave() {
-
-	$('#confirmFilename').val($('#f_q_PleaseenteraEuraHSregistrationnumberinsteadofapatientname').val());
+	$('#confirmFilename').val($("#" + $("[useasfilename=true]").first().attr("id")).val());
 	
 	// get number of unanswered questions
 //	questionsAll = $('#content [id^="q_"]');

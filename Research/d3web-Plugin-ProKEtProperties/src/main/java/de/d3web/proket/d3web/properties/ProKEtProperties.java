@@ -38,4 +38,7 @@ public class ProKEtProperties {
 
 	public static final Property<String> DROPDOWN_MENU_DEFAULT = Property.getProperty(
 			"dropdown_menu_default", String.class);
+
+	public static final Property<Boolean> USE_AS_FILENAME = Property.getProperty(
+			"use_as_filename", Boolean.class);
 }
