@@ -175,9 +175,5 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 		return CompileUtils.getAllReferencesOfCompilationUnit(section);
 	}
 
-	@Override
-	public Collection<Section<TermReference>> getAllReferencesOfComplexDefinition(Section<? extends ComplexDefinition<ComplexIRIDefinitionMarkup>> section) {
-		return CompileUtils.getAllReferencesOfComplexDefinition(section);
-	}
 
 }
