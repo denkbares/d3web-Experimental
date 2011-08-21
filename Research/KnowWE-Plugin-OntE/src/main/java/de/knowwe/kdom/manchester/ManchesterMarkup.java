@@ -22,7 +22,6 @@ package de.knowwe.kdom.manchester;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Priority;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.frames.clazz.ClassFrame;
@@ -71,7 +70,6 @@ public class ManchesterMarkup extends AbstractType {
 
 		protected ManchesterMarkupContentType() {
 			this.setSectionFinder(new AllTextSectionFinder());
-			this.addSubtreeHandler(Priority.HIGH, new ManchesterSubtreeHandler());
 
 			this.addChildType(new ClassFrame());
 			this.addChildType(new IndividualFrame());
