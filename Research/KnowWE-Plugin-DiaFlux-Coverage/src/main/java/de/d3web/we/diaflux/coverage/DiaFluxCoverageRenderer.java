@@ -18,6 +18,11 @@
  */
 package de.d3web.we.diaflux.coverage;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.FlowSet;
@@ -57,22 +62,34 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer<DiaFluxCovera
 			return;
 		}
 
+		List<Flow> flows = new ArrayList<Flow>(flowSet.getFlows());
+
+		Collections.sort(flows, new Comparator<Flow>() {
+
+			public int compare(Flow o1, Flow o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+
+
 		StringBuilder builder = new StringBuilder();
 		String web = user.getWeb();
 
 		
-		builder.append("<div id='coverage' class='diafluxcoverage'>\n");
+		builder.append("<div id='coverage' class='diafluxcoverage' height='500'>\n");
 		builder.append("<input id='coveragemaster' type='hidden' value='" + master + "'/>");
 		builder.append("<select name='coverageSelector' onchange='DiaFlux.Coverage.refresh(this);'>");
 
 
-		for (Flow flow : flowSet) {
+		for (Flow flow : flows) {
 			String name = flow.getName();
 
 			Section<FlowchartType> flowSec = FlowchartRenderer.findFlowchartSection(web, name);
 
 			if (flowSec != null) {
-				builder.append("<option value ='" + flowSec.getID() + "'>");
+				builder.append("<option ");
+				if (flow.isAutostart()) builder.append("selected='selected' ");
+				builder.append("value='" + flowSec.getID() + "'>");
 				builder.append(name);
 				builder.append("</option>");
 
@@ -83,7 +100,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer<DiaFluxCovera
 		builder.append("</select>");
 
 		// TODO show autostart flow
-		Flow firstFlow = flowSet.getFlows().iterator().next();
+		Flow firstFlow = flows.get(0);
 		Section<FlowchartType> flowSec = FlowchartRenderer.findFlowchartSection(web,
 				firstFlow.getName());
 		builder.append(FlowchartUtils.createFlowchartRenderer(flowSec, user, "coverageContent",
