@@ -51,7 +51,7 @@ public class StartQuizAction extends AbstractAction {
 
 		String kdomid = context.getParameter("kdomid");
 		Section<? extends Type> sec = KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB).findNode(kdomid);
+				KnowWEEnvironment.DEFAULT_WEB).getSection(kdomid);
 
 		// boundaries necessary here ?
 		Integer from = null;

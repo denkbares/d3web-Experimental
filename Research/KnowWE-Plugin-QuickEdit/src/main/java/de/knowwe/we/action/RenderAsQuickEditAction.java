@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -24,15 +24,14 @@ import java.util.regex.Pattern;
 
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
-import de.d3web.we.core.KnowWEArticleManager;
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
 
 /**
  * Renders the section in QuickEdit mode.
- *
+ * 
  * @author smark
  * @created 22.06.2011
  */
@@ -50,21 +49,16 @@ public class RenderAsQuickEditAction extends AbstractAction {
 
 	/**
 	 * Wraps the text of a section in a HTML textarea fur quick editing.
-	 *
+	 * 
 	 * @created 15.06.2011
 	 * @param context
 	 * @return success JSON string
 	 */
 	private String handle(UserActionContext context) {
 
-		String web = context.getWeb();
 		String sectionID = context.getParameter("KdomNodeId");
-		String topic = context.getTopic();
 
-		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
-		KnowWEArticle article = mgr.getArticle(topic);
-
-		Section<? extends Type> sec = article.findSection(sectionID);
+		Section<? extends Type> sec = Sections.getSection(sectionID);
 
 		StringBuilder html = new StringBuilder();
 		html.append("<div id=\"" + sec.getID() + "\">");
@@ -86,9 +80,9 @@ public class RenderAsQuickEditAction extends AbstractAction {
 
 	/**
 	 * Calculates the height of the HTML textarea.
-	 *
+	 * 
 	 * Note: Copied from the EditSectonRenderer
-	 *
+	 * 
 	 * @param str - The string used to calculate the height.
 	 * @param isInline - If true the textarea gets no additional newlines.
 	 * @return The height of the HTML textarea element.
@@ -109,9 +103,9 @@ public class RenderAsQuickEditAction extends AbstractAction {
 	 * Searches the first ancestor Section of section with some text right in
 	 * front of the section's one, and checks whether both are separated by '\n'
 	 * or '\f' or not (inline).
-	 *
+	 * 
 	 * Note: Copied from the EditSectonRenderer
-	 *
+	 * 
 	 * @created 07.08.2010
 	 * @param sec The section used by the ESR which could be inline.
 	 * @return True if the section (its OrignialText) is in the same line as the

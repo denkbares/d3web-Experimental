@@ -51,7 +51,7 @@ public class TestcaseTableResetAction extends AbstractAction {
 			String web = context.getWeb();
 			KnowWEArticleManager articleManager = KnowWEEnvironment.getInstance().getArticleManager(
 					web);
-			Section<TestcaseTableType> tableDMType = (Section<TestcaseTableType>) articleManager.findNode(table);
+			Section<TestcaseTableType> tableDMType = (Section<TestcaseTableType>) articleManager.getSection(table);
 
 			String master = TestcaseTableType.getMaster(tableDMType, context.getTopic());
 			// get tests before clearing the session

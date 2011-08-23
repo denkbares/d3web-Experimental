@@ -4,12 +4,11 @@ import java.io.IOException;
 
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
-import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEAttributes;
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.packaging.KnowWEPackageManager;
 import de.d3web.we.flow.type.DiaFluxType;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
@@ -25,12 +24,9 @@ public class GetPackageName extends AbstractAction {
 	public void execute(UserActionContext context) throws IOException {
 
 		// get parameters
-		String web = context.getWeb();
 		String nodeID = context.getParameter(KnowWEAttributes.TARGET);
-		String topic = context.getTopic();
 
-		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
-		Section<DiaFluxType> diaFluxSection = (Section<DiaFluxType>) mgr.getArticle(topic).findSection(
+		Section<DiaFluxType> diaFluxSection = (Section<DiaFluxType>) Sections.getSection(
 				nodeID);
 		String packageName = DefaultMarkupType.getAnnotation(diaFluxSection,
 				KnowWEPackageManager.ATTRIBUTE_NAME);

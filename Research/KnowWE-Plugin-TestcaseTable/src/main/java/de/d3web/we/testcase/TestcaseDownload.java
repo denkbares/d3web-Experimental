@@ -48,7 +48,7 @@ public class TestcaseDownload extends AbstractAction {
 		String nodeID = context.getParameter("nodeid");
 
 		Section<TestcaseTableType> tableDMType = (Section<TestcaseTableType>) KnowWEEnvironment.getInstance().getArticleManager(
-				web).findNode(nodeID);
+				web).getSection(nodeID);
 
 		Section<TestcaseTable> table = Sections.findSuccessor(tableDMType, TestcaseTable.class);
 

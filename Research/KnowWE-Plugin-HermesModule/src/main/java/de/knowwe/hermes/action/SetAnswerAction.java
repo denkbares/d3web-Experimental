@@ -50,7 +50,7 @@ public class SetAnswerAction extends AbstractAction {
 
 		String kdomid = parameterMap.get("kdomid");
 		Section<? extends Type> sec = KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB).findNode(kdomid);
+				KnowWEEnvironment.DEFAULT_WEB).getSection(kdomid);
 		String user = context.getUserName();
 		String answerString = parameterMap.get("answer");
 		int answer = -1;

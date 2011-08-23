@@ -68,7 +68,7 @@ public class DiaFluxDialogUtils {
 
 		Section<FlowchartType> node = (Section<FlowchartType>)
 				KnowWEEnvironment.getInstance().getArticleManager(
-						user.getWeb()).findNode(origin);
+						user.getWeb()).getSection(origin);
 
 		return KnowWEUtils.maskHTML(FlowchartUtils.createFlowchartRenderer(node, user,
 				DIAFLUXDIALOG_FLOWCHART, "diafluxdialog"));

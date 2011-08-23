@@ -46,7 +46,7 @@ public class StopQuizAction extends AbstractAction {
 	private String perform(UserActionContext context) {
 		String kdomid = context.getParameter("kdomid");
 		Section<? extends Type> sec = KnowWEEnvironment.getInstance().getArticleManager(
-				KnowWEEnvironment.DEFAULT_WEB).findNode(kdomid);
+				KnowWEEnvironment.DEFAULT_WEB).getSection(kdomid);
 		QuizSessionManager.getInstance().stopSession(context.getUserName());
 		return QuizHandler.renderQuizPanel(context.getUserName(),
 				QuizSessionManager.getInstance().getSession(context.getUserName()),
