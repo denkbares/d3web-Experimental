@@ -25,11 +25,11 @@ import de.d3web.core.session.Session;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.FlowSet;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.flow.FlowchartSubTreeHandler;
 import de.d3web.we.flow.FlowchartUtils;
 import de.d3web.we.flow.type.FlowchartType;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
@@ -67,8 +67,7 @@ public class DiaFluxDialogUtils {
 		}
 
 		Section<FlowchartType> node = (Section<FlowchartType>)
-				KnowWEEnvironment.getInstance().getArticleManager(
-						user.getWeb()).getSection(origin);
+				Sections.getSection(origin);
 
 		return KnowWEUtils.maskHTML(FlowchartUtils.createFlowchartRenderer(node, user,
 				DIAFLUXDIALOG_FLOWCHART, "diafluxdialog"));

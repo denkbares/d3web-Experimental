@@ -27,10 +27,10 @@ import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.SessionBroker;
-import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.utils.D3webUtils;
 
 /**
@@ -49,9 +49,8 @@ public class TestcaseTableResetAction extends AbstractAction {
 		if (rerun) {
 			String table = context.getParameter("table");
 			String web = context.getWeb();
-			KnowWEArticleManager articleManager = KnowWEEnvironment.getInstance().getArticleManager(
-					web);
-			Section<TestcaseTableType> tableDMType = (Section<TestcaseTableType>) articleManager.getSection(table);
+
+			Section<TestcaseTableType> tableDMType = (Section<TestcaseTableType>) Sections.getSection(table);
 
 			String master = TestcaseTableType.getMaster(tableDMType, context.getTopic());
 			// get tests before clearing the session

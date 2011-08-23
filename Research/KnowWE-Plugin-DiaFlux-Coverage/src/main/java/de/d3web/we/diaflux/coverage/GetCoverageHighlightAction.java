@@ -33,8 +33,6 @@ import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
-import de.d3web.we.core.KnowWEArticleManager;
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.flow.GetTraceHighlightAction;
 import de.d3web.we.flow.type.DiaFluxType;
 import de.d3web.we.flow.type.FlowchartType;
@@ -60,8 +58,8 @@ public class GetCoverageHighlightAction extends AbstractAction {
 		String master = context.getParameter("master");
 		String web = context.getWeb();
 
-		KnowWEArticleManager articleManager = KnowWEEnvironment.getInstance().getArticleManager(web);
-		Section<DiaFluxType> diaFluxSec = (Section<DiaFluxType>) articleManager.getSection(kdomid);
+		Section<DiaFluxType> diaFluxSec = (Section<DiaFluxType>) Sections.getSection(
+				kdomid);
 
 		Section<FlowchartType> flowchart = Sections.findSuccessor(diaFluxSec, FlowchartType.class);
 		if (flowchart == null) {
@@ -125,5 +123,4 @@ public class GetCoverageHighlightAction extends AbstractAction {
 		context.getWriter().write(builder.toString());
 
 	}
-
 }

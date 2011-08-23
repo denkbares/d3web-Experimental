@@ -37,7 +37,6 @@ import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.core.KnowWEArticleManager;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
@@ -57,8 +56,7 @@ public class RunTestcaseAction extends AbstractAction {
 		String execLine = context.getParameter("execLine");
 		boolean multiLines = Boolean.valueOf(context.getParameter("multiLines"));
 
-		KnowWEArticleManager articleManager = KnowWEEnvironment.getInstance().getArticleManager(web);
-		Section<TestcaseTableLine> line = (Section<TestcaseTableLine>) articleManager.getSection(execLine);
+		Section<TestcaseTableLine> line = (Section<TestcaseTableLine>) Sections.getSection(execLine);
 
 		Section<TestcaseTableType> tableDMType = Sections.findAncestorOfExactType(line,
 				TestcaseTableType.class);
