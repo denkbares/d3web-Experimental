@@ -71,10 +71,13 @@ public class IncrementalCompilerTest {
 	/* Just for convenience */
 	private final KnowWEEnvironment environment = KnowWEEnvironment.getInstance();
 	private final KnowWEArticleManager articleManager = environment.getArticleManager(KnowWEEnvironment.DEFAULT_WEB);
-	private final KnowWEArticle article = articleManager.getArticle(Vocabulary.ARTICLENAME);
 
-	private ReferenceManager manager = IncrementalCompiler.getInstance().getTerminology();
+	private final ReferenceManager manager = IncrementalCompiler.getInstance().getTerminology();
 	private final Rdf2GoCore core = Rdf2GoCore.getInstance();
+
+	private KnowWEArticle getArticle() {
+		return articleManager.getArticle(Vocabulary.ARTICLENAME);
+	}
 
 	@BeforeClass
 	public static void setUp() throws IOException {
@@ -156,7 +159,7 @@ public class IncrementalCompilerTest {
 	@Test
 	public void testChangeAll() {
 		/* replace the whole text */
-		String oldText = article.getSection().getOriginalText();
+		String oldText = getArticle().getSection().getOriginalText();
 		String newText = "def Schnurtzelpieper livesIn:: Dingenskirchen" + "\n\n" + "def is"
 				+ "\n\n" + "def livesIn" + "\n\n" + "def Dingenskirchen" + "\n\n"
 				+ "def inDaHouse" + "\n\n"
@@ -195,7 +198,7 @@ public class IncrementalCompilerTest {
 
 	private <T extends Type> Section<T> findSectionWithText(String text, Class<T>
 			sectionType) {
-		Section<?> root = article.getSection();
+		Section<?> root = getArticle().getSection();
 		List<Section<T>> typedSections = new LinkedList<Section<T>>();
 		Sections.findSuccessorsOfType(root, sectionType, typedSections);
 		for (Section<T> section : typedSections) {
