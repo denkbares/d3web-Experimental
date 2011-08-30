@@ -29,8 +29,19 @@ import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionText;
-import de.d3web.core.knowledge.terminology.info.MMInfo;
+import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
+import de.d3web.proket.d3web.output.render.AnswerD3webRenderer;
+import de.d3web.proket.d3web.output.render.AnswerDateD3webRenderer;
+import de.d3web.proket.d3web.output.render.AnswerMCD3webRenderer;
+import de.d3web.proket.d3web.output.render.AnswerNumD3webRenderer;
+import de.d3web.proket.d3web.output.render.AnswerOCD3webRenderer;
+import de.d3web.proket.d3web.output.render.AnswerTextD3webRenderer;
+import de.d3web.proket.d3web.output.render.AnswerUnknownD3webRenderer;
 import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
+import de.d3web.proket.d3web.output.render.ImageQuestionD3webRenderer;
+import de.d3web.proket.d3web.output.render.QuestionD3webRenderer;
+import de.d3web.proket.d3web.output.render.QuestionnaireD3webRenderer;
+import de.d3web.proket.d3web.output.render.SummaryD3webRenderer;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.utils.GlobalSettings;
 
@@ -47,6 +58,20 @@ import de.d3web.proket.utils.GlobalSettings;
  * @created 14.01.2011
  */
 public class D3webRendererMapping extends HashMap<String, String> {
+
+	private static final long serialVersionUID = 6572371579568756873L;
+
+	private static final String UNKNOWN_ANSWER = "UNKNOWN";
+	private static final String DATE_ANSWER = "DATE";
+	private static final String NUM_ANSWER = "NUM";
+	private static final String TXT_ANSWER = "TXT";
+	private static final String MC_ANSWER = "MC";
+	private static final String OC_ANSWER = "OC";
+	private static final String SUMMARY = "Summary";
+	private static final String Q_CONT = "QCont";
+	private static final String IMG_QUESTION = "IMGQuestion";
+	private static final String QUESTION = "Question";
+	private static final String DEFAULT = "Default";
 
 	// the instance
 	private static D3webRendererMapping instance = null;
@@ -68,21 +93,18 @@ public class D3webRendererMapping extends HashMap<String, String> {
 	}
 
 	private D3webRendererMapping() {
-		this.put("Root", "DefaultRootD3webRenderer");
-		this.put("Default", "DefaultRootD3webRenderer");
-		this.put("Question", "QuestionD3webRenderer");
-		this.put("IMGQuestion", "ImageQuestionD3webRenderer");
-		this.put("QCont", "QuestionnaireD3webRenderer");
+		this.put(DEFAULT, DefaultRootD3webRenderer.class.getSimpleName());
+		this.put(QUESTION, QuestionD3webRenderer.class.getSimpleName());
+		this.put(IMG_QUESTION, ImageQuestionD3webRenderer.class.getSimpleName());
+		this.put(Q_CONT, QuestionnaireD3webRenderer.class.getSimpleName());
+		this.put(SUMMARY, SummaryD3webRenderer.class.getSimpleName());
 
-		this.put("IMGOC", "AnswerImgOCD3webRenderer");
-		this.put("IMGMC", "AnswerImgMCD3webRenderer");
-		this.put("OC", "AnswerOCD3webRenderer");
-		// this.put("YN", prefix + "AnswerYND3webRenderer");
-		this.put("MC", "AnswerMCD3webRenderer");
-		this.put("TXT", "AnswerTextD3webRenderer");
-		this.put("NUM", "AnswerNumD3webRenderer");
-		this.put("DATE", "AnswerDateD3webRenderer");
-		this.put("UNKNOWN", "AnswerUnknownD3webRenderer");
+		this.put(OC_ANSWER, AnswerOCD3webRenderer.class.getSimpleName());
+		this.put(MC_ANSWER, AnswerMCD3webRenderer.class.getSimpleName());
+		this.put(TXT_ANSWER, AnswerTextD3webRenderer.class.getSimpleName());
+		this.put(NUM_ANSWER, AnswerNumD3webRenderer.class.getSimpleName());
+		this.put(DATE_ANSWER, AnswerDateD3webRenderer.class.getSimpleName());
+		this.put(UNKNOWN_ANSWER, AnswerUnknownD3webRenderer.class.getSimpleName());
 	}
 
 	/**
@@ -93,50 +115,23 @@ public class D3webRendererMapping extends HashMap<String, String> {
 	 * @param to The TerminologyObject an appropriate renderer is sought-after
 	 * @return The renderer as a simple Object.
 	 */
-	public Object getRendererObject(TerminologyObject to) {
-		String prefix = GlobalSettings.getInstance().getD3webRendererPath();
+	public AbstractD3webRenderer getRenderer(TerminologyObject to) {
 		String userPref = D3webConnector.getInstance().getUserprefix();
-		Class<?> result = null;
-		try {
-			if (to == null) {
-
-				// TODO refactor so it flexibly works with all subrenderers too
-				String pref =
-						userPref.equals("") ? prefix : prefix + userPref;
-				result = Class.forName(pref + this.get("Root"));
-			}
-			else if (to instanceof Question) {
-				result = Class.forName(prefix + this.get("Question"));
-				if (to.getInfoStore().getValue(ProKEtProperties.IMAGE) != null) {
-					result = Class.forName(prefix + this.get("IMGQuestion"));
-				}
-			}
-			else if (to instanceof QContainer) {
-				result = Class.forName(prefix + this.get("QCont"));
-			}
-			else {
-				result = Class.forName(this.get(prefix + "Default"));
+		String name = DEFAULT;
+		if (to == null) {
+			return (AbstractD3webRenderer) getRenderer(userPref, name);
+		}
+		else if (to instanceof Question) {
+			name = QUESTION;
+			if (to.getInfoStore().getValue(ProKEtProperties.IMAGE) != null) {
+				name = IMG_QUESTION;
 			}
 		}
-		catch (ClassNotFoundException cne) {
-			System.out.println(cne);
-
-			if (result == null) {
-				result = DefaultRootD3webRenderer.class;
-			}
+		else if (to instanceof QContainer) {
+			name = Q_CONT;
 		}
 
-		Object instance;
-		try {
-			instance = result.newInstance();
-		}
-		catch (InstantiationException e) {
-			return null;
-		}
-		catch (IllegalAccessException e) {
-			return null;
-		}
-		return instance;
+		return (AbstractD3webRenderer) getRenderer(name);
 	}
 
 	/**
@@ -147,68 +142,50 @@ public class D3webRendererMapping extends HashMap<String, String> {
 	 * @param to The TerminologyObject an appropriate renderer is sought-after
 	 * @return The renderer as a simple Object.
 	 */
-	public Object getAnswerRendererObject(TerminologyObject to) {
-		String prefix = GlobalSettings.getInstance().getD3webRendererPath();
-		Class<?> result = null;
-		try {
-			if (to == null) {
-				result = Class.forName(prefix + this.get("Root"));
-			}
+	public AnswerD3webRenderer getAnswerRendererObject(TerminologyObject to) {
 
-			if (to instanceof QuestionOC) {
-				result = Class.forName(prefix + this.get("OC"));
-				if (to.getInfoStore().getValue(MMInfo.DESCRIPTION) != null &&
-						to.getInfoStore().getValue(MMInfo.DESCRIPTION).contains("IMG#####")) {
-					result = Class.forName(prefix + this.get("IMGOC"));
-				}
-			}
-			// else if (parentto instanceof QuestionYN) {
-			// result = Class.forName(this.get("YN"));
-			// }
-			else if (to instanceof QuestionMC) {
-				result = Class.forName(prefix + this.get("MC"));
-				if (to.getInfoStore().getValue(MMInfo.DESCRIPTION) != null &&
-						to.getInfoStore().getValue(MMInfo.DESCRIPTION).contains("IMG#####")) {
-					result = Class.forName(prefix + this.get("IMGMC"));
-				}
-			}
-			else if (to instanceof QuestionText) {
-				result = Class.forName(prefix + this.get("TXT"));
-			}
-			else if (to instanceof QuestionNum) {
-				result = Class.forName(prefix + this.get("NUM"));
-			}
-			else if (to instanceof QuestionDate) {
-				result = Class.forName(prefix + this.get("DATE"));
-			}
-			// result = Class.forName(this.get("Choice"));
+		String name = DEFAULT;
+		if (to instanceof QuestionOC) {
+			name = OC_ANSWER;
 		}
-		catch (ClassNotFoundException cne) {
+		else if (to instanceof QuestionMC) {
+			name = MC_ANSWER;
+		}
+		else if (to instanceof QuestionText) {
+			name = TXT_ANSWER;
+		}
+		else if (to instanceof QuestionNum) {
+			name = NUM_ANSWER;
+		}
+		else if (to instanceof QuestionDate) {
+			name = DATE_ANSWER;
 		}
 
-		Object instance;
-		try {
-			instance = result.newInstance();
-		}
-		catch (InstantiationException e) {
-			return null;
-		}
-		catch (IllegalAccessException e) {
-			return null;
-		}
-		return instance;
+		return (AnswerD3webRenderer) getRenderer(name);
 	}
 
-	public Object getUnknownRenderer() {
+	public SummaryD3webRenderer getSummaryRenderer() {
+		return (SummaryD3webRenderer) getRenderer(SUMMARY);
+	}
+
+	public AnswerD3webRenderer getUnknownRenderer() {
+		return (AnswerD3webRenderer) getRenderer(UNKNOWN_ANSWER);
+	}
+
+	private Object getRenderer(String name) {
+		return getRenderer("", name);
+	}
+
+	private Object getRenderer(String userPrefix, String name) {
 
 		String prefix = GlobalSettings.getInstance().getD3webRendererPath();
 		Class<?> result = null;
 
 		try {
-			result = Class.forName(prefix + this.get("UNKNOWN"));
+			result = Class.forName(prefix + userPrefix + this.get(name));
 		}
-
 		catch (ClassNotFoundException cne) {
+			return null;
 		}
 
 		Object instance;

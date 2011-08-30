@@ -81,7 +81,7 @@ public class Mediastinitis extends D3webDialog {
 
 		// get the root renderer --> call getRenderer with null
 		MediastinitisDefaultRootD3webRenderer d3webr =
-				(MediastinitisDefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRendererObject(
+				(MediastinitisDefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(
 						null);
 
 		// new ContainerCollection needed each time to get an updated dialog

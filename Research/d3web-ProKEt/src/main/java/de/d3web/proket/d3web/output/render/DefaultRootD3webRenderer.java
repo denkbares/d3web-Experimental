@@ -25,10 +25,7 @@ import javax.servlet.http.HttpSession;
 
 import org.antlr.stringtemplate.StringTemplate;
 
-import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
-import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.session.Session;
@@ -214,45 +211,6 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		cc.js.add("hide_all_tooltips()", 2);
 		cc.js.add("generate_tooltip_functions();", 3);
 		cc.js.add("}", 31);
-
-	}
-
-	@Override
-	public String fillSummaryDialog(Session d3webSession) {
-
-		StringBuilder bui = new StringBuilder();
-		D3webConnector d3wcon = D3webConnector.getInstance();
-
-		TerminologyObject root = d3wcon.getKb().getRootQASet();
-
-		fillSummaryChildren(d3webSession, bui, root);
-
-		return bui.toString();
-	}
-
-	private void fillSummaryChildren(Session d3webSession, StringBuilder bui, TerminologyObject to) {
-
-		if (to instanceof QContainer && !to.getName().contains("Q000")) {
-			bui.append("<div style='margin-top:10px;'><b>" + countQcon + " " + to.getName()
-					+ "</b></div>\n");
-			countQcon++;
-		}
-		else if (to instanceof Question) {
-			Value val =
-					d3webSession.getBlackboard().getValue((ValueObject) to);
-
-			if (val != null && UndefinedValue.isNotUndefinedValue(val)) {
-				bui.append("<div style='margin-left:10px;'>" + countQ + " " + to.getName()
-						+ " -- " + val + "</div>\n");
-			}
-			countQ++;
-		}
-
-		if (to.getChildren() != null && to.getChildren().length != 0) {
-			for (TerminologyObject toc : to.getChildren()) {
-				fillSummaryChildren(d3webSession, bui, toc);
-			}
-		}
 
 	}
 

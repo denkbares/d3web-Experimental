@@ -65,10 +65,6 @@ public class MediastinitisDefaultRootD3webRenderer extends DefaultRootD3webRende
 
 		st.setAttribute("fileselectopts", opts);
 
-		// Summary dialog
-		String sum = fillSummaryDialog(d3webSession);
-		st.setAttribute("sumQuestionnaire", sum);
-
 		// set language variable for StringTemplate Widgets
 		String lang = D3webConnector.getInstance().getLanguage();
 		if (lang.equals("de")) {

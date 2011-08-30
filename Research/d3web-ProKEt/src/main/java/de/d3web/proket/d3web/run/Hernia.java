@@ -77,8 +77,8 @@ public class Hernia extends D3webDialog {
 		PrintWriter writer = response.getWriter();
 
 		// get the root renderer --> call getRenderer with null
-		HerniaDefaultRootD3webRenderer d3webr = (HerniaDefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRendererObject(
-				null);
+		HerniaDefaultRootD3webRenderer d3webr = (HerniaDefaultRootD3webRenderer)
+				D3webRendererMapping.getInstance().getRenderer(null);
 
 		// new ContainerCollection needed each time to get an updated dialog
 		ContainerCollection cc = new ContainerCollection();

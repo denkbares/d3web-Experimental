@@ -93,6 +93,7 @@ import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
 import de.d3web.proket.d3web.output.render.IQuestionD3webRenderer;
 import de.d3web.proket.d3web.output.render.ImageHandler;
+import de.d3web.proket.d3web.output.render.SummaryD3webRenderer;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.database.DB;
@@ -275,7 +276,7 @@ public class D3webDialog extends HttpServlet {
 		writer.append(REPLACECONTENT);
 		DefaultRootD3webRenderer rootRenderer =
 				(DefaultRootD3webRenderer) D3webRendererMapping
-						.getInstance().getRendererObject(null);
+						.getInstance().getRenderer(null);
 		writer.append(rootRenderer.renderHeaderInfoLine(d3webSession));
 	}
 
@@ -764,7 +765,7 @@ public class D3webDialog extends HttpServlet {
 		PrintWriter writer = response.getWriter();
 
 		// get the root renderer --> call getRenderer with null
-		DefaultRootD3webRenderer d3webr = (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRendererObject(
+		DefaultRootD3webRenderer d3webr = (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(
 				null);
 
 		// new ContainerCollection needed each time to get an updated dialog
@@ -1117,15 +1118,26 @@ public class D3webDialog extends HttpServlet {
 	protected void updateSummary(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
 		PrintWriter writer = response.getWriter();
 
-		String contentID = "questionnaireSummaryContent";
+		String questionnaireContentID = "questionnaireSummaryContent";
 
-		writer.append(REPLACEID + contentID);
+		writer.append(REPLACEID + questionnaireContentID);
 		writer.append(REPLACECONTENT);
-		DefaultRootD3webRenderer rootRenderer =
-				(DefaultRootD3webRenderer) D3webRendererMapping
-						.getInstance().getRendererObject(null);
-		writer.append("<div id='" + contentID + "'>"
-				+ rootRenderer.fillSummaryDialog((Session) httpSession.getAttribute(D3WEB_SESSION))
-				+ "<div>");
+		SummaryD3webRenderer rootRenderer = D3webRendererMapping
+						.getInstance().getSummaryRenderer();
+		writer.append("<div id='" + questionnaireContentID + "'>");
+		writer.append(rootRenderer.renderSummaryDialog(
+						(Session) httpSession.getAttribute(D3WEB_SESSION),
+						SummaryD3webRenderer.SummaryType.QUESTIONNAIRE));
+		writer.append("<div>");
+
+		String gridContentID = "gridSummaryContent";
+
+		writer.append(REPLACEID + questionnaireContentID);
+		writer.append(REPLACECONTENT);
+		writer.append("<div id='" + gridContentID + "'>");
+		writer.append(rootRenderer.renderSummaryDialog(
+						(Session) httpSession.getAttribute(D3WEB_SESSION),
+						SummaryD3webRenderer.SummaryType.GRID));
+		writer.append("<div>");
 	}
 }

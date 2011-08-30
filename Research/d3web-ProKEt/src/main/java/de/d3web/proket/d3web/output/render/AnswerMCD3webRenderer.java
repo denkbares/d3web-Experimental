@@ -69,10 +69,9 @@ public class AnswerMCD3webRenderer extends AbstractD3webRenderer implements Answ
 		StringTemplate st = TemplateUtils.getStringTemplate(
 					super.getTemplateName("McAnswerTabular"), "html");
 
-		st.setAttribute("fullId", getID(c));// .getName().replace(" ", "_"));
+		st.setAttribute("fullId", getID(c));
 		st.setAttribute("realAnswerType", "mc");
-		st.setAttribute("parentFullId", getID(mcq));// .getName().replace(" ",
-													// "_"));
+		st.setAttribute("parentFullId", getID(mcq));
 		st.setAttribute("text", c.getName());
 		if (to.getInfoStore().getValue(ProKEtProperties.IMAGE) != null) {
 			st.setAttribute("imageAnswer", "true");

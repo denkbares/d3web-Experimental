@@ -67,14 +67,6 @@ import de.d3web.proket.output.container.ContainerCollection;
  */
 public abstract class AbstractD3webRenderer implements D3webRenderer {
 
-	// protected static Session d3webSession;
-	protected int countQcon = 1;
-	protected int countQ = 1;
-
-	// public static void storeSession(Session session) {
-	// d3webSession = session;
-	// }
-
 	/**
 	 * Retrieves the appropriate renderer class according to what base object is
 	 * given from the d3web knowledge base. EXCLUDES answers, as those need a
@@ -87,7 +79,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 	public static IQuestionD3webRenderer getRenderer(TerminologyObject to) {
 
 		IQuestionD3webRenderer renderer =
-				(IQuestionD3webRenderer) D3webRendererMapping.getInstance().getRendererObject(to);
+				(IQuestionD3webRenderer) D3webRendererMapping.getInstance().getRenderer(to);
 
 		return renderer;
 	}
@@ -304,7 +296,8 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
 					// receive the matching HTML from the Renderer and append
 					String childHTML =
-							unknownRenderer.renderTerminologyObject(cc, d3webSession, null, to, parent);
+							unknownRenderer.renderTerminologyObject(cc, d3webSession, null, to,
+									parent);
 					// System.out.println(childHTML);
 					if (childHTML != null) {
 						childrenHTML.append(childHTML);
