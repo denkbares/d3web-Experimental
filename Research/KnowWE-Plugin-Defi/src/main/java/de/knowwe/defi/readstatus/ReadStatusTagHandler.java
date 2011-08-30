@@ -118,7 +118,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 				/* AUSGABE                                                      */
 				/* ------------------------------------------------------------ */
 				if (!read) {
-					readstatus.append("<li>Achtung: ");
+					readstatus.append("<li class='readstatus'>Achtung: ");
 					readstatus.append("<a href='Wiki.jsp?page="
 							+ getPageName(rootUnit) + "'>" + getLabel(rootUnit)
 								+ "</a> ");
