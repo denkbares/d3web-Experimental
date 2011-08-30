@@ -113,3 +113,8 @@ li.noListMarker {list-style-type: none;}
 .langSelect {float:right; margin-right: 10px;}
 
 .header{padding-top: 7px;}
+
+.summarycell {
+	padding:2px;
+	background-color: #B1E6BD
+}

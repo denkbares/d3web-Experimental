@@ -1117,11 +1117,15 @@ public class D3webDialog extends HttpServlet {
 	protected void updateSummary(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
 		PrintWriter writer = response.getWriter();
 
-		writer.append(REPLACEID + "questionnaireSummary");
+		String contentID = "questionnaireSummaryContent";
+
+		writer.append(REPLACEID + contentID);
 		writer.append(REPLACECONTENT);
 		DefaultRootD3webRenderer rootRenderer =
 				(DefaultRootD3webRenderer) D3webRendererMapping
 						.getInstance().getRendererObject(null);
-		writer.append(rootRenderer.fillSummaryDialog((Session) httpSession.getAttribute(D3WEB_SESSION)));
+		writer.append("<div id='" + contentID + "'>"
+				+ rootRenderer.fillSummaryDialog((Session) httpSession.getAttribute(D3WEB_SESSION))
+				+ "<div>");
 	}
 }

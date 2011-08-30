@@ -97,7 +97,6 @@ Primary ventral hernia route
 - Indication for ventral hernia surgery [oc] &only if: Please choose the database level = Level 2 &
 -- Elective
 -- Emergency
-- Primary ventral hernia summary [info]
 
 Incisional ventral hernia route 
 - Width of the hernia [num] {cm}
@@ -149,12 +148,11 @@ Incisional ventral hernia route
 ----- Indication for previous surgery [oc]
 ------ Elective
 ------ Emergency
-- Incisional ventral hernia summary [info]
 
 Parastomal hernia route
 - Years since stoma creation [num] &only if: Please choose the database level = Level 2 &
 - Years with parastomal hernia [num] &only if: Please choose the database level = Level 2 &
-- Tyoe of stoma [oc]
+- Type of stoma [oc]
 -- Colostomy
 -- Ilestomy
 -- Ileal conduit

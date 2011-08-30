@@ -219,8 +219,6 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 
 	@Override
 	public String fillSummaryDialog(Session d3webSession) {
-		StringTemplate st = TemplateUtils.getStringTemplate("QuestionnaireSummary",
-				"html");
 
 		StringBuilder bui = new StringBuilder();
 		D3webConnector d3wcon = D3webConnector.getInstance();
@@ -229,9 +227,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 
 		fillSummaryChildren(d3webSession, bui, root);
 
-		st.setAttribute("questionnaireSummary", bui.toString());
-
-		return st.toString();
+		return bui.toString();
 	}
 
 	private void fillSummaryChildren(Session d3webSession, StringBuilder bui, TerminologyObject to) {

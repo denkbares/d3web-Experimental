@@ -1,14 +1,16 @@
 <div style="display:none">
 	<div id="jqSummaryDialog" title="$if(langEN)$Summary$endif$$if (langDE)$Zusammenfassung$endif$">
 		<ul>
-			<li><a href="#tabularSummary"><span>Tabular Summary</span></a></li>
-			<li><a href="#questionnaireSummary"><span>Complete Summary</span></a></li>
+			<li><a href="#gridSummary">Grid Summary</a></li>
+			<li><a href="#questionnaireSummary">Complete Summary</a></li>
 		</ul>
-		<div style="float:left;" id="tabularSummary"> 
-			$TabularSummary()$
+		<div style="float:left;" id="gridSummary"> 
+			<div id="gridSummaryContent"> 
+			</div>
 		</div>
-		<div style="float:left;" id="questionnaireSummary"> 
-			$QuestionnaireSummary()$
+		<div style="float:left;" id="questionnaireSummary">
+			<div id="questionnaireSummaryContent">
+			</div>
 		</div>
 	</div>
 </div>
