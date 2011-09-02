@@ -3,12 +3,12 @@ package de.d3web.we.testcaseexecutor;
 import java.util.Collection;
 
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.user.UserContext;
+import de.d3web.we.utils.D3webUtils;
 import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wikiConnector.ConnectorAttachment;
 import de.d3web.we.wikiConnector.KnowWEWikiConnector;
@@ -33,8 +33,7 @@ public class TestCaseExecutorRender extends KnowWEDomRenderer<TestCaseExecutorTy
 		}
 
 		// no kb would cause massive amount of nullpointers
-		KnowledgeBase kb = D3webModule.getAD3webKnowledgeServiceInTopic(
-				article.getWeb(), master);
+		KnowledgeBase kb = D3webUtils.getKB(user.getWeb(), master);
 		if (kb == null) {
 			string.append(KnowWEUtils.maskHTML("<div id=\"testcases\">No Knowledgebase found on "
 					+ master + "</div>"));
@@ -54,7 +53,7 @@ public class TestCaseExecutorRender extends KnowWEDomRenderer<TestCaseExecutorTy
 		html.append("<option value=\"\">-- Choose file --</option>");
 		for (ConnectorAttachment attachment : attachments) {
 			if (attachment.getParentName().equals(articleName)
-					&& attachment.getFileName().endsWith(".xml")) {
+					&& attachment.getFileName().matches("stc.*.xml")) {
 				String name = attachment.getFileName();
 
 				html.append("<option value=\"" + name + "\">" + name + "</option>");
