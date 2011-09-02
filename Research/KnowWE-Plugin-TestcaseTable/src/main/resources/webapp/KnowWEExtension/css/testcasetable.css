@@ -34,7 +34,7 @@ div.startTestcase{
 	height: 16px;
 	width: 16px;
 	margin-right: 5px;
-	background-image: url(../testcasetable/images/run_exc.gif);
+	background-image: url(../images/testcasetable/run_exc.gif);
 	cursor: pointer;
 }
 
@@ -43,7 +43,7 @@ div.startTestcaseIncluding{
 	height: 16px;
 	width: 16px;
 	margin-right: 5px;
-	background-image: url(../testcasetable/images/runlast_co.gif);
+	background-image: url(../images/testcasetable/runlast_co.gif);
 	cursor: pointer;
 }
 

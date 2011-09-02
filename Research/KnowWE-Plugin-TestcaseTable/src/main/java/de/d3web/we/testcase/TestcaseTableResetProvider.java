@@ -43,7 +43,7 @@ public class TestcaseTableResetProvider implements ToolProvider {
 	private Tool getResetAndRerunTool(KnowWEArticle article, Section<?> section, UserContext userContext) {
 		String jsAction = createResetAction(section, userContext, true);
 		return new DefaultTool(
-				"KnowWEExtension/testcasetable/images/resetRerun.png",
+				"KnowWEExtension/images/testcasetable/resetRerun.png",
 				"Clear session and rerun",
 				"Clears the session and reruns the last tests",
 				jsAction);

@@ -436,3 +436,37 @@ Testcase.resetTableCSS = function(sectionID) {
 		}
 	}
 }
+
+
+Testcase.importTestcase = function(sectionID) {
+	
+	var form = new Element('form', {
+		id: 'testcaseImport',
+		method:'post',
+		enctype: 'multipart/form-data',
+		action: 'KnowWE.jsp?action=TestcaseImportAction'
+	});
+	
+	var chooser = new Element('input', {
+		type: 'file',
+		name: 'testcasefile',
+		size: 50
+	});
+	
+	var section = new Element('input', {
+		type: 'hidden',
+		name: 'kdomid',
+		value: sectionID
+	});
+	
+	chooser.inject(form);
+	section.inject(form);
+	
+	var action = function() {
+		$('testcaseImport').submit();
+	}
+	
+	KNOWWE.helper.message.showOKCancelDialog(form,'Import testcase' ,action);
+	
+}
+

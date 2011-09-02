@@ -71,6 +71,17 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="TestcaseImportAction">
+		<parameter id="class"
+			value="de.d3web.we.testcase.TestcaseImportAction" />
+		<parameter id="name" value="TestcaseImportAction" />
+		<parameter id="description" value="Action TestcaseImportAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
 		id="TestcaseTableResetProvider">
 		<parameter id="class" value="de.d3web.we.testcase.TestcaseTableResetProvider" />
@@ -86,6 +97,16 @@
 		<parameter id="class" value="de.d3web.we.testcase.TestcaseTableDownloadProvider" />
 		<parameter id="name" value="TestcaseTableDownloadProvider" />
 		<parameter id="description" value="Offers a button to download the testcase" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="/TestcaseTableType" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="TestcaseImportProvider">
+		<parameter id="class" value="de.d3web.we.testcase.TestcaseImportProvider" />
+		<parameter id="name" value="TestcaseImportProvider" />
+		<parameter id="description" value="Offers a button to inport a testcase" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="/TestcaseTableType" />

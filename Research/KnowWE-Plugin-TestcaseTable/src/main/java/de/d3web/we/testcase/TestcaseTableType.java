@@ -30,7 +30,7 @@ import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
  */
 public class TestcaseTableType extends DefaultMarkupType {
 
-	private static final String ANNOTATION_MASTER = "master";
+	public static final String ANNOTATION_MASTER = "master";
 	private static DefaultMarkup m = null;
 
 	static {
