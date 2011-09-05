@@ -45,7 +45,7 @@ public class InsertRelationAction extends AbstractAction {
 
 	}
 
-	private String perform(UserActionContext context) {
+	private String perform(UserActionContext context) throws IOException {
 
 		KnowWEArticleManager articleManager = KnowWEEnvironment.getInstance().getArticleManager(
 				KnowWEEnvironment.DEFAULT_WEB);

@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -23,6 +23,7 @@
  */
 package tests;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -50,7 +51,7 @@ import dummies.KnowWETestWikiConnector;
 
 /**
  * @author kazamatzuri
- *
+ * 
  */
 public class TaggingManglerTest extends TestCase {
 
@@ -63,7 +64,7 @@ public class TaggingManglerTest extends TestCase {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	@Override
@@ -95,7 +96,8 @@ public class TaggingManglerTest extends TestCase {
 	}
 
 	/**
-	 * Test method for {@link de.d3web.we.core.semantic.tagging.TaggingMangler#clone()}.
+	 * Test method for
+	 * {@link de.d3web.we.core.semantic.tagging.TaggingMangler#clone()}.
 	 */
 	@Test
 	public void testClone() {
@@ -116,9 +118,11 @@ public class TaggingManglerTest extends TestCase {
 	 * . Test method for
 	 * {@link de.d3web.we.core.semantic.tagging.TaggingMangler#removeTag(java.lang.String, java.lang.String, de.d3web.we.core.KnowWEParameterMap)}
 	 * .
+	 * 
+	 * @throws IOException
 	 */
 	@Test
-	public void testAddRemoveTag() {
+	public void testAddRemoveTag() throws IOException {
 		KnowWEArticle article1 = KnowWEArticle.createArticle("", "AddTag", type,
 				"default_web");
 		am.registerArticle(article1);
@@ -135,11 +139,13 @@ public class TaggingManglerTest extends TestCase {
 	 * Test method for
 	 * {@link de.d3web.we.core.semantic.tagging.TaggingMangler#addTag(java.lang.String, java.lang.String, de.d3web.we.core.KnowWEParameterMap)}
 	 * . Test method for
-	 *
+	 * 
 	 * .
+	 * 
+	 * @throws IOException
 	 */
 	@Test
-	public void testAddTag() {
+	public void testAddTag() throws IOException {
 		KnowWEArticle article1 = KnowWEArticle.createArticle("", "AddTag", type,
 				KnowWEEnvironment.DEFAULT_WEB);
 		am.registerArticle(article1);
@@ -180,9 +186,11 @@ public class TaggingManglerTest extends TestCase {
 	 * Test method for
 	 * {@link de.d3web.we.core.semantic.tagging.TaggingMangler#getPages(java.lang.String)}
 	 * .
+	 * 
+	 * @throws IOException
 	 */
 	@Test
-	public void testGetPages() {
+	public void testGetPages() throws IOException {
 		KnowWEArticle article1 = KnowWEArticle.createArticle("", "Tag1", type,
 				KnowWEEnvironment.DEFAULT_WEB);
 		KnowWEArticle article2 = KnowWEArticle.createArticle("", "Tag2", type,
@@ -219,9 +227,11 @@ public class TaggingManglerTest extends TestCase {
 	 * Test method for
 	 * {@link de.d3web.we.core.semantic.tagging.TaggingMangler#getPageTags(java.lang.String)}
 	 * .
+	 * 
+	 * @throws IOException
 	 */
 	@Test
-	public void testGetPageTags() {
+	public void testGetPageTags() throws IOException {
 		KnowWEArticle article = KnowWEArticle.createArticle("", "Tag", type,
 				"default_web");
 		am.registerArticle(article);
@@ -241,9 +251,11 @@ public class TaggingManglerTest extends TestCase {
 	/**
 	 * Test method for
 	 * {@link de.d3web.we.core.semantic.tagging.TaggingMangler#getAllTags()}.
+	 * 
+	 * @throws IOException
 	 */
 	@Test
-	public void testGetAllTags() {
+	public void testGetAllTags() throws IOException {
 		KnowWEArticle article1 = KnowWEArticle.createArticle("", "Tag1", type,
 				"default_web");
 		KnowWEArticle article2 = KnowWEArticle.createArticle("", "Tag2", type,
@@ -273,10 +285,13 @@ public class TaggingManglerTest extends TestCase {
 
 	/**
 	 * Test method for
-	 * {@link de.d3web.we.core.semantic.tagging.TaggingMangler#getCloudList(int, int)}.
+	 * {@link de.d3web.we.core.semantic.tagging.TaggingMangler#getCloudList(int, int)}
+	 * .
+	 * 
+	 * @throws IOException
 	 */
 	@Test
-	public void testGetCloudList() {
+	public void testGetCloudList() throws IOException {
 		KnowWEArticle article1 = KnowWEArticle.createArticle("", "Tag1", type,
 				"default_web");
 		KnowWEArticle article2 = KnowWEArticle.createArticle("", "Tag2", type,
@@ -304,10 +319,13 @@ public class TaggingManglerTest extends TestCase {
 
 	/**
 	 * Test method for
-	 * {@link de.d3web.we.core.semantic.tagging.TaggingMangler#getCloudList(int, int)}.
+	 * {@link de.d3web.we.core.semantic.tagging.TaggingMangler#getCloudList(int, int)}
+	 * .
+	 * 
+	 * @throws IOException
 	 */
 	@Test
-	public void testGetCloudList2() {
+	public void testGetCloudList2() throws IOException {
 		// clear out the articles from the previous tests
 		Iterator<KnowWEArticle> ait = am.getArticleIterator();
 		while (ait.hasNext()) {
@@ -342,9 +360,11 @@ public class TaggingManglerTest extends TestCase {
 	 * Test method for
 	 * {@link de.d3web.we.core.semantic.tagging.TaggingMangler#setTags(java.lang.String, java.lang.String, de.d3web.we.core.KnowWEParameterMap)}
 	 * .
+	 * 
+	 * @throws IOException
 	 */
 	@Test
-	public void testSetTags() {
+	public void testSetTags() throws IOException {
 		KnowWEArticle article1 = KnowWEArticle.createArticle("", "AddTag", type,
 				"default_web");
 		am.registerArticle(article1);
@@ -358,9 +378,11 @@ public class TaggingManglerTest extends TestCase {
 	 * Test method for
 	 * {@link de.d3web.we.core.semantic.tagging.TaggingMangler#searchPages(java.lang.String)}
 	 * .
+	 * 
+	 * @throws IOException
 	 */
 	@Test
-	public void testSearchPages() {
+	public void testSearchPages() throws IOException {
 		KnowWEArticle article1 = KnowWEArticle.createArticle("", "Tag1", type,
 				"default_web");
 		KnowWEArticle article2 = KnowWEArticle.createArticle("", "Tag2", type,

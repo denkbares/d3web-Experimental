@@ -75,7 +75,7 @@ public class OntEUpdateTest {
 	}
 
 	@Test
-	public void testSubjectDefinitionChange() {
+	public void testSubjectDefinitionChange() throws IOException {
 		/* Change text */
 		String oldText = "[def Alexander the Great type:: Person]";
 		String newText = "[def Alexander the Little type:: Person]";
@@ -90,7 +90,7 @@ public class OntEUpdateTest {
 	}
 
 	@Test
-	public void testSubjectChange() {
+	public void testSubjectChange() throws IOException {
 		/* Change text */
 		String oldText = "[Alexander the Great deathPlace:: Babylon]";
 		String newText = "[Alexander the Little deathPlace:: Babylon]";
@@ -102,7 +102,7 @@ public class OntEUpdateTest {
 	}
 
 	@Test
-	public void testPredicateChange() {
+	public void testPredicateChange() throws IOException {
 		/* Change text */
 		String oldText2 = "[deathPlace range:: Location]";
 		String newText2 = "[deathPlace domain:: Location]";
@@ -125,7 +125,7 @@ public class OntEUpdateTest {
 	}
 
 	@Test
-	public void testObjectChange() {
+	public void testObjectChange() throws IOException {
 		/* Change text */
 		String oldText = "[def deathPlace type:: ObjectProperty]";
 		String newText = "[def deathPlace type:: DatatypeProperty]";
@@ -137,7 +137,7 @@ public class OntEUpdateTest {
 	}
 
 	@Test
-	public void testLiteralObjectChange() {
+	public void testLiteralObjectChange() throws IOException {
 		/* Change text */
 		String oldText = "[Alexander the Great yearOfDeath:: 323bc]";
 		String newText = "[Alexander the Little yearOfDeath:: 2011]";
@@ -149,7 +149,7 @@ public class OntEUpdateTest {
 	}
 
 	@Test
-	public void testThisChanges() {
+	public void testThisChanges() throws IOException {
 		/* Change text */
 		String oldText = "[def this type:: Historical Essay]";
 		String newText = "[def this type:: Person]";
@@ -166,7 +166,7 @@ public class OntEUpdateTest {
 	}
 
 	@Test
-	public void testSubClassingChange() {
+	public void testSubClassingChange() throws IOException {
 		/* Change text */
 		String oldText = "King";
 		String newText = "Queen";
@@ -180,7 +180,7 @@ public class OntEUpdateTest {
 		assertTrue(core.sparqlAsk(Query.Update.PERSONQUEEN));
 	}
 
-	private <T extends Type> void changeText(String oldText, String newText, Class<T> sectionType) {
+	private <T extends Type> void changeText(String oldText, String newText, Class<T> sectionType) throws IOException {
 		Section<T> oldSection = findSectionWithText(oldText, sectionType);
 		if (oldSection != null) {
 			Map<String, String> nodesMap = new HashMap<String, String>();

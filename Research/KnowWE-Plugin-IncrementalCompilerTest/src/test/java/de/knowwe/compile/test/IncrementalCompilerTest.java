@@ -116,7 +116,7 @@ public class IncrementalCompilerTest {
 	}
 
 	@Test
-	public void testCorrectedSimpleIRIDefinition() {
+	public void testCorrectedSimpleIRIDefinition() throws IOException {
 		/* Change text */
 		String oldText = "def Perso";
 		String newText = "def Person";
@@ -126,7 +126,7 @@ public class IncrementalCompilerTest {
 	}
 
 	@Test
-	public void testInvalidatedSimpleIRIDefinition() {
+	public void testInvalidatedSimpleIRIDefinition() throws IOException {
 		/* Change text */
 		String oldText = "def Assi";
 		String newText = "def Assistent";
@@ -138,7 +138,7 @@ public class IncrementalCompilerTest {
 	}
 
 	@Test
-	public void testCorrectedTripleMarkupSimple() {
+	public void testCorrectedTripleMarkupSimple() throws IOException {
 		/* Change text and test */
 		String oldText = " Jochen istEin:: Assi";
 		String newText = " Jochen istEin:: Assistent";
@@ -157,7 +157,7 @@ public class IncrementalCompilerTest {
 	}
 
 	@Test
-	public void testChangeAll() {
+	public void testChangeAll() throws IOException {
 		/* replace the whole text */
 		String oldText = getArticle().getSection().getOriginalText();
 		String newText = "def Schnurtzelpieper livesIn:: Dingenskirchen" + "\n\n" + "def is"
@@ -181,14 +181,13 @@ public class IncrementalCompilerTest {
 	}
 
 	private <T extends Type> void changeText(String oldText, String newText,
-			Class<T> sectionType) {
+			Class<T> sectionType) throws IOException {
 		Section<T> oldSection = findSectionWithText(oldText, sectionType);
 		if (oldSection != null) {
 			Map<String, String> nodesMap = new HashMap<String, String>();
 			nodesMap.put(oldSection.getID(), newText);
 			articleManager.replaceKDOMNodesSaveAndBuild(TestUtils.createTestActionContext("",
-					""),
-					Vocabulary.ARTICLENAME, nodesMap);
+					""), Vocabulary.ARTICLENAME, nodesMap);
 		}
 		else {
 			Logger.getLogger(getClass()).fatal("Unable to get section with text: " +
