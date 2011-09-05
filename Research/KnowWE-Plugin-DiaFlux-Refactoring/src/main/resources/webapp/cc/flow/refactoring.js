@@ -131,10 +131,11 @@ Flowchart.prototype.findOutboundRulesForSelection = function(selection) {
  * Pseudo class for refactoring functions, abused as name space.
  * @author Ralf Oechsner
  */
-function Refactoring() {
-	
-}
+//function Refactoring() {
+//}
 
+
+Refactoring = {};
 
 /**
  * Selects all outbound rules of a selection.
@@ -167,7 +168,7 @@ Refactoring.selectInbound = function(selection) {
  * @param rule rule which connects nodes
  * @param type node type {decision, comment, snapshot}
  */
-Refactoring.insertNode = function(rule, x, y, type, expression) {
+FlowEditor.insertNode = function(rule, x, y, type, expression) {
 	
 	// this refactoring is only possible for one 
 	if (rule.length > 1) {
@@ -208,7 +209,7 @@ Refactoring.insertNode = function(rule, x, y, type, expression) {
  * Insert a content from clipboard between two nodes which are connected with a given rule.
  * @param rule rule which connects nodes
  */
-Refactoring.insertFromClipboard = function(rule, x, y) {
+FlowEditor.insertFromClipboard = function(rule, x, y) {
 	
 	if (CCClipboard.fromClipboard() == null)
 		return;
@@ -592,7 +593,9 @@ Refactoring.saveModule = function(xml) {
 		onSuccess: function(transport) {
 			xml += '\r\n';
 			var packageName = transport.responseText;
-			xml += '@package: ' + packageName + '\r\n';
+			if (packageName != "#undefined#") {
+				xml += '@package: ' + packageName + '\r\n';
+			}
 			Refactoring.newFlowchartText(xml);
 		},
 		onFailure: function() {
@@ -688,4 +691,5 @@ document.observe("dom:loaded", function() {
 	contextMenuNode.addItem("Remove Node", "Refactoring.removeNode(contextMenuNode.getSelection());", Flowchart.imagePath + "contextmenu/remove.png");
 
 	
-}
+});
+

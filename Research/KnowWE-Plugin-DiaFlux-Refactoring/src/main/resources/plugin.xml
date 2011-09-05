@@ -4,6 +4,7 @@
 	
 	<requires>
 		<import plugin-id="KnowWE-Plugin-DiaFlux" />
+		<import plugin-id="KnowWEExtensionPoints" />
 	</requires>
 	
 	<runtime>

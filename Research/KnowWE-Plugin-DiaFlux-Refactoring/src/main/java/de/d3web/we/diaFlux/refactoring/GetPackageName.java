@@ -32,6 +32,6 @@ public class GetPackageName extends AbstractAction {
 				KnowWEPackageManager.ATTRIBUTE_NAME);
 
 		context.setContentType("text/plain; charset=UTF-8");
-		context.getWriter().write(packageName);
+		context.getWriter().write(packageName != null ? packageName : "#undefined#");
 	}
 }
