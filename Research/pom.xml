@@ -207,7 +207,6 @@
 		<module>KnowWE-Plugin-DiaFlux-Refactoring</module>
 		<module>KnowWE-Plugin-OWLAPI</module>
 		<module>KnowWE-Plugin-Example</module>
-		<module>KnowWE-Plugin-DiaFlux-Dialog</module>
 		<module>KnowWE-Plugin-IncrementalCompiler</module>
 		<module>KnowWE-Plugin-IncrementalCompilerTest</module>
 		<module>KnowWE-Plugin-QuickEdit</module>
