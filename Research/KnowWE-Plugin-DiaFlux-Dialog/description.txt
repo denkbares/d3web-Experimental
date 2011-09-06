@@ -1,1 +1,0 @@
-Plugin for DiaFlux-specific dialogs. BA-Thesis of Florian Ziegler.
