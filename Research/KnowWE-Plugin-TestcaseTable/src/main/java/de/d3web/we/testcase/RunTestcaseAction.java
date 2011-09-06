@@ -19,6 +19,7 @@
 package de.d3web.we.testcase;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -65,7 +66,6 @@ public class RunTestcaseAction extends AbstractAction {
 
 		Session session = D3webUtils.getSession(master, context, web);
 
-		// TODO lines are colored nevertheless. Give hint to user...
 		if (session == null) return;
 
 		List<Section<TestcaseTableLine>> alreadyExecuted = TestcaseTable.getExecutedLinesOfTable(
@@ -81,9 +81,6 @@ public class RunTestcaseAction extends AbstractAction {
 		else {
 			List<Section<TestcaseTableLine>> toBeExecutedLines = findTestcaseIncluding(line,
 					alreadyExecuted);
-
-			// TODO remove
-			System.out.println("executing lines: " + toBeExecutedLines.size());
 
 			for (Section<TestcaseTableLine> testLine : toBeExecutedLines) {
 				executeTableLine(article, session, alreadyExecuted, kb, testLine);
@@ -147,8 +144,6 @@ public class RunTestcaseAction extends AbstractAction {
 	 */
 	private static long getPropagationTime(Session session, KnowledgeBase kb, long offSet) {
 
-		// TODO remove
-		System.out.println(offSet);
 		Question question = kb.getManager().searchQuestion("start");
 		if (question == null) { // no timeDB present
 			return offSet;
@@ -188,9 +183,12 @@ public class RunTestcaseAction extends AbstractAction {
 			firstLine = allLines.indexOf(lastExLineSec) + 1;
 		}
 
-		int lastLine = allLines.indexOf(line);
+		int lastLine = allLines.indexOf(line) + 1;
 
-		return allLines.subList(firstLine, lastLine + 1);
+		// can happen, when executing the table in more than 1 tab
+		if (lastLine < firstLine) return Collections.emptyList();
+
+		return allLines.subList(firstLine, lastLine);
 
 	}
 
