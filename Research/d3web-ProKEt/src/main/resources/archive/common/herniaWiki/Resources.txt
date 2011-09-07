@@ -1,4 +1,18 @@
 %%Resource
+@src=Grid Primary Ventral Hernia.txt
+@path: Grid Primary Ventral Hernia.txt
+
+@package: Hernia
+%
+
+%%Resource
+@src=Grid Incisional Ventral Hernia.txt
+@path: Grid Incisional Ventral Hernia.txt
+
+@package: Hernia
+%
+
+%%Resource
 @src=Fig6_MeshPos.JPG
 @path: Fig6_MeshPos.JPG
 

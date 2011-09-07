@@ -1,5 +1,4 @@
 This article contains the knowledge, respectively the dialog of the hernia project.
-
 %%Question
 EuraHS Initialization #1
 - Please enter a EuraHS registration number instead of a patient name [text]
@@ -21,6 +20,10 @@ EuraHS Initialization #1
 --- "Please select parastomal hernia" [oc]
 ---- Parastomal hernia
 
+@package: Hernia
+%
+
+%%Question
 Common Route #2
 - Please choose the database level [oc]
 -- Level 1
@@ -30,7 +33,10 @@ Common Route #2
 -- Male
 -- Female
 - Informed consent obtained [yn]
+@package: Hernia
+%
 
+%%Question
 Comorbidities &only if: Please choose the database level = Level 2 &
 - Are there Comorbidities? [yn]
 -- Yes
@@ -47,7 +53,10 @@ Comorbidities &only if: Please choose the database level = Level 2 &
 ----- Peritoneal dialysis [yn]
 ---- Malignant disease 
 ----- Curatively treated [yn]
+@package: Hernia
+%
 
+%%Question
 Risk factors &only if: Please choose the database level = Level 2 &
 - Are there other risk factors? [yn]
 -- Yes
@@ -67,7 +76,10 @@ Risk factors &only if: Please choose the database level = Level 2 &
 --- Weight of the patient [num]{kg}
 --- Length/size of the patient [num]{cm}
 --- BMI: [num]{kg/m2}<abstract>
+@package: Hernia
+%
 
+%%Question
 Other risk factors &only if: Please choose the database level = Level 2 &
 - Occupation [oc]
 -- Heavy physical labour
@@ -85,7 +97,10 @@ Other risk factors &only if: Please choose the database level = Level 2 &
 -- Occasional smoker
 -- Daily smoker
 --- Pack years [num]
+@package: Hernia
+%
 
+%%Question
 Primary ventral hernia route 
 - Width of the ventral hernia [num] {cm}
 - Length of the ventral hernia [num] {cm}
@@ -97,7 +112,10 @@ Primary ventral hernia route
 - Indication for ventral hernia surgery [oc] &only if: Please choose the database level = Level 2 &
 -- Elective
 -- Emergency
+@package: Hernia
+%
 
+%%Question
 Incisional ventral hernia route 
 - Width of the hernia [num] {cm}
 - Length of the hernia [num] {cm}
@@ -148,7 +166,10 @@ Incisional ventral hernia route
 ----- Indication for previous surgery [oc]
 ------ Elective
 ------ Emergency
+@package: Hernia
+%
 
+%%Question
 Parastomal hernia route
 - Years since stoma creation [num] &only if: Please choose the database level = Level 2 &
 - Years with parastomal hernia [num] &only if: Please choose the database level = Level 2 &
@@ -201,7 +222,10 @@ Parastomal hernia route
 ---- "L4:L"
 ---- "L4:R"
 - Parastomal hernia route summary [info]
+@package: Hernia
+%
 
+%%Question
 Common Route - Operative data #6
 - Operation date [date]
 - Anesthesia [oc]
@@ -240,14 +264,20 @@ Common Route - Operative data #6
 -- No
 -- "Yes (small bowel)"
 -- "Yes (colon)"
+@package: Hernia
+%
 
+%%Question
 Common Route - Operative data - Approach #7
 - Type of acces [mc]
 -- Open surgery
 -- Laparoscopic surgery
 --- Number of ports used [num]
 --- Conversion to open [yn]
+@package: Hernia
+%
 
+%%Question
 Common Route - Operative Data - Concomitant procedures &only if: Please choose the database level = Level 2 &
 - Concomitant abdominal surgery [yn]
 -- Yes
@@ -265,7 +295,10 @@ Common Route - Operative Data - Concomitant procedures &only if: Please choose t
 ---- Vascular
 ---- Other
 - Is the hernia repair the main indication for surgery? [yn]
+@package: Hernia
+%
 
+%%Question
 Common Route - Operative Data - Surgical technique #9
 - Surgical technique [oc]
 -- Non mesh repair
@@ -300,7 +333,10 @@ Common Route - Operative Data - Surgical technique #9
 ---- Fixation device
 ----- Absorbable [yn]
 ---- Glue
+@package: Hernia
+%
 
+%%Question
 Common Route - Operation data - Intraoperative complications &only if: Please choose the database level = Level 2 &
 - Conversion from laparoscopic to open surgery [yn]
 -- Yes
@@ -334,7 +370,10 @@ Common Route - Operation data - Intraoperative complications &only if: Please ch
 ---- Bladder injury
 ---- "General complication (e.g. cardiac)"
 ---- Other
+@package: Hernia
+%
 
+%%Question
 Common Route - Discharge data #11
 - Date of discharge [date]
 - Hour of discharge [date]
@@ -372,7 +411,10 @@ Common Route - Discharge data #11
 ---- Multiple organ failure
 - Did the patient die postoperatively? [yn]
 - Classification of surgical complications [text]
+@package: Hernia
+%
 
+%%Question
 Common Route - Follow up 1 &only if: Please choose the database level = Level 2 &
 - "Lost to follow up (Follow up 1)" [oc]
 -- Unable to contact the patient
@@ -387,7 +429,10 @@ Common Route - Follow up 1 &only if: Please choose the database level = Level 2 
 -- Clinical and with medical imaging
 -- Telephone questioning the patient
 -- Telephone questioning the family doctor
+@package: Hernia
+%
 
+%%Question
 Common Route - Follow up 1 - Quality of life measurement &only if: Please choose the database level = Level 2 &
 - "Chronic abdominal wall pain at the operation site (Follow up 1)" [yn]
 -- Yes
@@ -402,7 +447,10 @@ Common Route - Follow up 1 - Quality of life measurement &only if: Please choose
 ---- Frequent
 ---- Constant
 --- "Foreign body feeling at operation site (Follow up 1)" [yn]
+@package: Hernia
+%
 
+%%Question
 Common Route - Follow up 1 - Late complications &only if: Please choose the database level = Level 2 &
 - "Late complications (Follow up 1)" [yn]
 -- Yes
@@ -494,7 +542,10 @@ Common Route - Follow up 1 - Late complications &only if: Please choose the data
 ------ "Central mesh failure (recurrence through the mesh)"
 ------ Increased patient risk
 ----- "Other cause of recurrence (Follow up 1)" [text]
+@package: Hernia
+%
 
+%%Question
 Common Route - Follow up 2 &only if: Please choose the database level = Level 2 &
 - "Lost to follow up (Follow up 2)" [oc]
 -- Unable to contact the patient
@@ -509,7 +560,10 @@ Common Route - Follow up 2 &only if: Please choose the database level = Level 2 
 -- Clinical and with medical imaging
 -- Telephone questioning the patient
 -- Telephone questioning the family doctor
+@package: Hernia
+%
 
+%%Question
 Common Route - Follow up 2 - Quality of life measurement &only if: Please choose the database level = Level 2 &
 - "Chronic abdominal wall pain at the operation site (Follow up 2)" [yn]
 -- Yes
@@ -524,7 +578,10 @@ Common Route - Follow up 2 - Quality of life measurement &only if: Please choose
 ---- Frequent
 ---- Constant
 --- "Foreign body feeling at operation site (Follow up 2)" [yn]
+@package: Hernia
+%
 
+%%Question
 Common Route - Follow up 2 - Late complications &only if: Please choose the database level = Level 2 &
 - "Late complications (Follow up 2)" [yn]
 -- Yes

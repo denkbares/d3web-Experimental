@@ -185,6 +185,174 @@ public class D3webDialog extends HttpServlet {
 	}
 
 	/**
+	 * Basic initialization and servlet method. Always called first, if servlet
+	 * is refreshed, called newly etc.
+	 * 
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		response.setContentType("text/html; charset=UTF-8");
+
+		HttpSession httpSession = request.getSession(true);
+		// in case nothing other is provided, "show" is the default action
+		String action = request.getParameter("action");
+		if (action == null) {
+			// action = "mail";
+			action = "show";
+		}
+		if (action.equalsIgnoreCase("dbLogin")) {
+			loginDB(request, response, httpSession);
+			return;
+		}
+		// Get the current httpSession or a new one
+		String authenticated = (String) httpSession.getAttribute("authenticated");
+		if (authenticated == null || !authenticated.equals("yes")) {
+			response.sendRedirect("../EuraHS-Login");
+			return;
+		}
+
+		// set both persistence (case saving) and image (images streamed from
+		// kb) folder
+		String fca = GlobalSettings.getInstance().getCaseFolder();
+		String fim = GlobalSettings.getInstance().getKbImgFolder();
+		if ((fca.equals(null) || fca.equals("")) &&
+				(fim.equals(null) || fim.equals(""))) {
+
+			String servletBasePath =
+					request.getSession().getServletContext().getRealPath("/");
+			GlobalSettings.getInstance().setServletBasePath(servletBasePath);
+			GlobalSettings.getInstance().setCaseFolder(servletBasePath + "../../EuraHS-Data/cases");
+			GlobalSettings.getInstance().setKbImgFolder(servletBasePath + "kbimg");
+		}
+		/*
+		 * FOLDER PATH: get the folder on the server for persistence storing
+		 * only needed here in case the dialog is used without login mechanisms
+		 */
+		// String folderPath =
+		// request.getSession().getServletContext().getRealPath("/");
+		// String persistencePath = folderPath.replace("d3web-ProKEt",
+		// "persistence");
+		// GlobalSettings.getInstance().setCaseFolder(persistencePath);
+
+		d3wcon = D3webConnector.getInstance();
+
+		// try to get the src parameter, which defines the specification xml
+		// with special properties for this dialog/knowledge base
+		// if none available, default.xml is set
+		String source = getSource();
+		if (request.getParameter("src") != null) {
+			source = request.getParameter("src");
+		}
+		if (!source.endsWith(".xml")) {
+			source = source + ".xml";
+		}
+
+		// d3web parser for interpreting the source/specification xml
+		d3webParser = new D3webXMLParser(source);
+		d3wcon.setD3webParser(d3webParser);
+
+		// only invoke parser, if XML hasn't been parsed before
+		// if it has, a knowledge base already exists
+		if (d3wcon.getKb() == null
+				|| !source.equals(sourceSave)
+				|| !d3wcon.getUserprefix().equals(d3webParser.getUserPrefix())) {
+			d3wcon.setKb(d3webParser.getKnowledgeBase());
+			d3wcon.setKbName(d3webParser.getKnowledgeBaseName());
+			d3wcon.setDialogStrat(d3webParser.getStrategy());
+			d3wcon.setDialogType(d3webParser.getType());
+			d3wcon.setIndicationMode(d3webParser.getIndicationMode());
+			d3wcon.setDialogColumns(d3webParser.getDialogColumns());
+			d3wcon.setQuestionColumns(d3webParser.getQuestionColumns());
+			d3wcon.setQuestionnaireColumns(d3webParser.getQuestionnaireColumns());
+			d3wcon.setCss(d3webParser.getCss());
+			d3wcon.setHeader(d3webParser.getHeader());
+			d3wcon.setUserprefix(d3webParser.getUserPrefix());
+			d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
+			sourceSave = source;
+			if (!d3webParser.getLanguage().equals("")) {
+				d3wcon.setLanguage(d3webParser.getLanguage());
+			}
+			streamImages();
+		}
+
+		/*
+		 * otherwise, i.e. if session is null create a session according to the
+		 * specified dialog strategy
+		 */
+		if (httpSession.getAttribute(D3WEB_SESSION) == null) {
+			// create d3web session and store in http session
+			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(),
+					d3wcon.getDialogStrat());
+			httpSession.setAttribute(D3WEB_SESSION, d3webSession);
+		}
+
+		// switch action as defined by the servlet call
+		if (action.equalsIgnoreCase("show")) {
+			show(request, response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("addfacts")) {
+			addFacts(request, response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("savecase")) {
+			saveCase(request, response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("loadcase")) {
+			loadCase(request, response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("updatesummary")) {
+			updateSummary(request, response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("reset")) {
+			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
+			httpSession.setAttribute(D3WEB_SESSION, d3webSession);
+			httpSession.setAttribute("lastLoaded", "");
+			return;
+		}
+		else if (action.equalsIgnoreCase("resetNewUser")) {
+			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
+			httpSession.setAttribute(D3WEB_SESSION, d3webSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("gotoStatistics")) {
+			gotoStatistics(response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("checkUsrDatLogin")) {
+			checkUsrDatLogin(response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("usrDatlogin")) {
+			loginUsrDat(request, response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("sendmail")) {
+			try {
+				sendMail(request, response, httpSession);
+				PrintWriter writer = response.getWriter();
+				writer.append("success");
+			}
+			catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return;
+		}
+		else if (action.equalsIgnoreCase("checkrange")) {
+			checkRange(request, response);
+			return;
+		}
+	}
+
+	/**
 	 * Add one or several given facts. Thereby, first check whether input-store
 	 * has elements, if yes, parse them and set them (for num/text/date
 	 * questions), if no, just parse and set a given single value.
@@ -360,179 +528,6 @@ public class D3webDialog extends HttpServlet {
 		}
 	}
 
-	/**
-	 * Basic initialization and servlet method. Always called first, if servlet
-	 * is refreshed, called newly etc.
-	 * 
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		response.setContentType("text/html; charset=UTF-8");
-
-		HttpSession httpSession = request.getSession(true);
-		// in case nothing other is provided, "show" is the default action
-		String action = request.getParameter("action");
-		if (action == null) {
-			// action = "mail";
-			action = "show";
-		}
-		if (action.equalsIgnoreCase("dbLogin")) {
-			loginDB(request, response, httpSession);
-			return;
-		}
-		// Get the current httpSession or a new one
-		String authenticated = (String) httpSession.getAttribute("authenticated");
-		if (authenticated == null || !authenticated.equals("yes")) {
-			response.sendRedirect("../EuraHS-Login");
-			return;
-		}
-
-		// set both persistence (case saving) and image (images streamed from
-		// kb) folder
-		String fca = GlobalSettings.getInstance().getCaseFolder();
-		String fim = GlobalSettings.getInstance().getKbImgFolder();
-		if ((fca.equals(null) || fca.equals("")) &&
-				(fim.equals(null) || fim.equals(""))) {
-
-			String servletBasePath =
-					request.getSession().getServletContext().getRealPath("/");
-			GlobalSettings.getInstance().setServletBasePath(servletBasePath);
-			GlobalSettings.getInstance().setCaseFolder(servletBasePath + "../../EuraHS-Data/cases");
-			GlobalSettings.getInstance().setKbImgFolder(servletBasePath + "kbimg");
-		}
-		/*
-		 * FOLDER PATH: get the folder on the server for persistence storing
-		 * only needed here in case the dialog is used without login mechanisms
-		 */
-		// String folderPath =
-		// request.getSession().getServletContext().getRealPath("/");
-		// String persistencePath = folderPath.replace("d3web-ProKEt",
-		// "persistence");
-		// GlobalSettings.getInstance().setCaseFolder(persistencePath);
-
-		d3wcon = D3webConnector.getInstance();
-
-		// try to get the src parameter, which defines the specification xml
-		// with special properties for this dialog/knowledge base
-		// if none available, default.xml is set
-		String source = getSource();
-		if (request.getParameter("src") != null) {
-			source = request.getParameter("src");
-		}
-		if (!source.endsWith(".xml")) {
-			source = source + ".xml";
-		}
-
-		// d3web parser for interpreting the source/specification xml
-		d3webParser = new D3webXMLParser(source);
-		d3wcon.setD3webParser(d3webParser);
-
-		// only invoke parser, if XML hasn't been parsed before
-		// if it has, a knowledge base already exists
-		if (d3wcon.getKb() == null
-				|| !source.equals(sourceSave)
-				|| !d3wcon.getUserprefix().equals(d3webParser.getUserPrefix())) {
-			d3wcon.setKb(d3webParser.getKnowledgeBase());
-			d3wcon.setKbName(d3webParser.getKnowledgeBaseName());
-			d3wcon.setDialogStrat(d3webParser.getStrategy());
-			d3wcon.setDialogType(d3webParser.getType());
-			d3wcon.setIndicationMode(d3webParser.getIndicationMode());
-			d3wcon.setDialogColumns(d3webParser.getDialogColumns());
-			d3wcon.setQuestionColumns(d3webParser.getQuestionColumns());
-			d3wcon.setQuestionnaireColumns(d3webParser.getQuestionnaireColumns());
-			d3wcon.setCss(d3webParser.getCss());
-			d3wcon.setHeader(d3webParser.getHeader());
-			d3wcon.setUserprefix(d3webParser.getUserPrefix());
-			d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
-			sourceSave = source;
-			if (!d3webParser.getLanguage().equals("")) {
-				d3wcon.setLanguage(d3webParser.getLanguage());
-			}
-			streamImages();
-		}
-
-		// if (httpSession.getAttribute("imgStreamed") == null) {
-		// streamImages();
-		// httpSession.setAttribute("imgStreamed", true);
-		// }
-
-		/*
-		 * otherwise, i.e. if session is null create a session according to the
-		 * specified dialog strategy
-		 */
-		if (httpSession.getAttribute(D3WEB_SESSION) == null) {
-			// create d3web session and store in http session
-			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(),
-					d3wcon.getDialogStrat());
-			httpSession.setAttribute(D3WEB_SESSION, d3webSession);
-		}
-
-		// switch action as defined by the servlet call
-		if (action.equalsIgnoreCase("show")) {
-			show(request, response, httpSession);
-			return;
-		}
-		else if (action.equalsIgnoreCase("addfacts")) {
-			addFacts(request, response, httpSession);
-			return;
-		}
-		else if (action.equalsIgnoreCase("savecase")) {
-			saveCase(request, response, httpSession);
-			return;
-		}
-		else if (action.equalsIgnoreCase("loadcase")) {
-			loadCase(request, response, httpSession);
-			return;
-		}
-		else if (action.equalsIgnoreCase("updatesummary")) {
-			updateSummary(request, response, httpSession);
-			return;
-		}
-		else if (action.equalsIgnoreCase("reset")) {
-			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
-			httpSession.setAttribute(D3WEB_SESSION, d3webSession);
-			httpSession.setAttribute("lastLoaded", "");
-			return;
-		}
-		else if (action.equalsIgnoreCase("resetNewUser")) {
-			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
-			httpSession.setAttribute(D3WEB_SESSION, d3webSession);
-			return;
-		}
-		else if (action.equalsIgnoreCase("gotoStatistics")) {
-			gotoStatistics(response, httpSession);
-			return;
-		}
-		else if (action.equalsIgnoreCase("checkUsrDatLogin")) {
-			checkUsrDatLogin(response, httpSession);
-			return;
-		}
-		else if (action.equalsIgnoreCase("usrDatlogin")) {
-			loginUsrDat(request, response, httpSession);
-			return;
-		}
-		else if (action.equalsIgnoreCase("sendmail")) {
-			try {
-				sendMail(request, response, httpSession);
-				PrintWriter writer = response.getWriter();
-				writer.append("success");
-			}
-			catch (MessagingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return;
-		}
-		else if (action.equalsIgnoreCase("checkrange")) {
-			checkRange(request, response);
-			return;
-		}
-	}
-
 	private Set<QASet> getActiveSet(Session sess) {
 		Set<QASet> activeSet = new HashSet<QASet>();
 		Set<QASet> initQuestions = new HashSet<QASet>(sess.getKnowledgeBase().getInitQuestions());
@@ -607,6 +602,24 @@ public class D3webDialog extends HttpServlet {
 			}
 		}
 		return unknownQuestions;
+	}
+
+	protected void gotoStatistics(HttpServletResponse response,
+			HttpSession httpSession) throws IOException {
+
+		String email = (String) httpSession.getAttribute("user");
+
+		String gotoUrl = "../Statistics/Statistic.jsp?action=dbLogin";
+
+		String token = DateCoDec.getCode();
+		gotoUrl += "&t=" + token;
+		gotoUrl += "&e=" + Base64.encodeBase64String(email.getBytes());
+
+		new TokenThread(token, email).start();
+		PrintWriter writer = response.getWriter();
+		writer.print(gotoUrl);
+		writer.close();
+		// response.sendRedirect(gotoUrl);
 	}
 
 	/**
@@ -777,24 +790,6 @@ public class D3webDialog extends HttpServlet {
 		writer.print(cc.html.toString()); // deliver the rendered output
 
 		writer.close(); // and close
-	}
-
-	protected void gotoStatistics(HttpServletResponse response,
-			HttpSession httpSession) throws IOException {
-
-		String email = (String) httpSession.getAttribute("user");
-
-		String gotoUrl = "../Statistics/Statistic.jsp?action=dbLogin";
-
-		String token = DateCoDec.getCode();
-		gotoUrl += "&t=" + token;
-		gotoUrl += "&e=" + Base64.encodeBase64String(email.getBytes());
-
-		new TokenThread(token, email).start();
-		PrintWriter writer = response.getWriter();
-		writer.print(gotoUrl);
-		writer.close();
-		// response.sendRedirect(gotoUrl);
 	}
 
 	private Collection<Question> resetAbandonedPaths(Session sess) {
@@ -1079,37 +1074,19 @@ public class D3webDialog extends HttpServlet {
 	 */
 	protected void streamImages() {
 
-		List<Resource> kbimages = D3webConnector.getInstance().getKb().getResources();
+		for (Resource resource : D3webConnector.getInstance().getKb().getResources()) {
+			String rName = resource.getPathName();
+			String rType = rName.substring(rName.lastIndexOf('.') + 1).toLowerCase();
 
-		if (kbimages != null && kbimages.size() != 0) {
-			for (Resource r : kbimages) {
-				String rname = r.getPathName();
-
-				if (rname.endsWith(".jpg") || rname.endsWith(".JPG")) {
-					BufferedImage bui = ImageHandler.getResourceAsBUI(r);
-					try {
-						File file =
-								new File(GlobalSettings.getInstance().getKbImgFolder()
-										+ "/" + rname);
-						ImageIO.write(bui, "jpg", file);
-					}
-					catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+			if (rType.equals("jpg") || rType.equals("png")) {
+				BufferedImage bui = ImageHandler.getResourceAsBUI(resource);
+				try {
+					File file = new File(GlobalSettings.getInstance().getKbImgFolder() + "/"
+							+ rName);
+					ImageIO.write(bui, rType, file);
 				}
-				if (rname.endsWith(".png") || rname.endsWith(".PNG")) {
-					BufferedImage bui = ImageHandler.getResourceAsBUI(r);
-					try {
-						File file =
-								new File(GlobalSettings.getInstance().getKbImgFolder()
-										+ "/" + rname);
-						ImageIO.write(bui, "png", file);
-					}
-					catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
 		}
@@ -1132,7 +1109,7 @@ public class D3webDialog extends HttpServlet {
 
 		String gridContentID = "gridSummaryContent";
 
-		writer.append(REPLACEID + questionnaireContentID);
+		writer.append(REPLACEID + gridContentID);
 		writer.append(REPLACECONTENT);
 		writer.append("<div id='" + gridContentID + "'>");
 		writer.append(rootRenderer.renderSummaryDialog(
