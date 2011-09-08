@@ -62,7 +62,7 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
 
 			StringBuilder content = getText(resource);
 
-			List<Pair<Pair<Integer, Integer>, Pair<String, Object>>> result = parse(content.toString());
+			List<Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>> result = parse(content.toString());
 			if (result.isEmpty()) continue;
 
 			boolean nothingAnswered = enrichGrid(d3webSession, content, result);
@@ -77,51 +77,74 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
 
 	private boolean enrichGrid(Session d3webSession,
 			StringBuilder content,
-			List<Pair<Pair<Integer, Integer>, Pair<String, Object>>> result) {
+			List<Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>> result) {
 
-		Blackboard bb = d3webSession.getBlackboard();
-		KnowledgeBase knowledgeBase = d3webSession.getKnowledgeBase();
 		boolean nothingAnswered = true;
-		for (Pair<Pair<Integer, Integer>, Pair<String, Object>> parsePair : result) {
+		for (Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>> parsePair : result) {
 			int matchStart = parsePair.getA().getA();
 			int matchEnd = parsePair.getA().getB();
 
-			String questionName = parsePair.getB().getA();
-			Question question = knowledgeBase.getManager().searchQuestion(questionName);
-			if (question == null) continue;
+			Pair<String, Object> questionAnswerPair1 = parsePair.getB().getA();
+			Pair<String, Object> questionAnswerPair2 = parsePair.getB().getB();
 
-			Value value = bb.getValue(question);
-			if (UndefinedValue.isUndefinedValue(value)) {
-				content.replace(matchStart, matchEnd, "<div> </div>");
-				continue;
-			}
+			boolean isCondition1Matching = isConditionMatchingOrNull(d3webSession,
+					questionAnswerPair1);
 
-			Object answerTypeObject = parsePair.getB().getB();
+			boolean isCondition2Matching = isConditionMatchingOrNull(d3webSession,
+					questionAnswerPair2);
 
-			if (answerTypeObject instanceof String[]) {
-				if (!isCorrectChoiceValue((String[]) answerTypeObject, value)) {
-					content.replace(matchStart, matchEnd, "<div> </div>");
-					continue;
+			if (isCondition1Matching && isCondition2Matching) {
+				Value value = getValue(d3webSession, questionAnswerPair1.getA());
+				if (value.getValue() instanceof Double) {
+					content.replace(matchStart, matchEnd, String.valueOf(value.getValue()));
 				}
-				content.replace(matchStart, matchEnd, "X");
+				else {
+					content.replace(matchStart, matchEnd, "X");
+				}
+				nothingAnswered = false;
 			}
 			else {
-				@SuppressWarnings("unchecked")
-				Pair<Integer, Integer> interval = (Pair<Integer, Integer>) answerTypeObject;
-				if (!isCorrectNumValue(interval, value)) {
-					content.replace(matchStart, matchEnd, "<div> </div>");
-					continue;
-				}
-				content.replace(matchStart, matchEnd, String.valueOf(value.getValue()));
+				content.replace(matchStart, matchEnd, "<div> </div>");
 			}
-
-			nothingAnswered = false;
 
 		}
 		return nothingAnswered;
 	}
 
-	private boolean isCorrectChoiceValue(String[] answerNames, Value value) {
+	private boolean isConditionMatchingOrNull(Session d3webSession, Pair<String, Object> questionAnswerPair) {
+
+		if (questionAnswerPair == null) return true;
+
+		String questionName = questionAnswerPair.getA();
+
+		Value value = getValue(d3webSession, questionName);
+
+		if (value == null || UndefinedValue.isUndefinedValue(value)) return false;
+
+		Object answerTypeObject = questionAnswerPair.getB();
+
+		if (answerTypeObject instanceof String[]) {
+			return isMatchingChoiceCondition((String[]) answerTypeObject, value);
+		}
+		else {
+			@SuppressWarnings("unchecked")
+			Pair<Integer, Integer> interval = (Pair<Integer, Integer>) answerTypeObject;
+			return isMatchingNumCondition(interval, value);
+		}
+	}
+
+	private Value getValue(Session d3webSession, String questionName) {
+		Blackboard bb = d3webSession.getBlackboard();
+		KnowledgeBase knowledgeBase = d3webSession.getKnowledgeBase();
+
+		Question question = knowledgeBase.getManager().searchQuestion(questionName);
+
+		if (question == null) return null;
+
+		return bb.getValue(question);
+	}
+
+	private boolean isMatchingChoiceCondition(String[] answerNames, Value value) {
 		for (String answerName : answerNames) {
 			if (value instanceof MultipleChoiceValue) {
 				if (((MultipleChoiceValue) value).contains(new ChoiceID(answerName))) {
@@ -137,7 +160,7 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
 		return false;
 	}
 
-	private boolean isCorrectNumValue(Pair<Integer, Integer> interval, Value value) {
+	private boolean isMatchingNumCondition(Pair<Integer, Integer> interval, Value value) {
 		if (value instanceof NumValue) {
 			Double doubleValue = ((NumValue) value).getDouble();
 			int intervalStart = interval.getA();
@@ -150,42 +173,68 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
 		return false;
 	}
 
-	private List<Pair<Pair<Integer, Integer>, Pair<String, Object>>> parse(String content) {
+	private List<Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>> parse(String content) {
 
-		Matcher matcher = Pattern.compile("##(.+?)\\|(?:choice\\|(.+?)|num\\|(\\d*),(\\d*))##").matcher(
-				content);
-		LinkedList<Pair<Pair<Integer, Integer>, Pair<String, Object>>> result = new LinkedList<Pair<Pair<Integer, Integer>, Pair<String, Object>>>();
+		String questionPattern = "(.+?)::";
+		String numIntervalPattern = "num::(\\d*),(\\d*)";
+		String choicePattern = "choice::(.+?)";
+
+		String questionAnswerCondition = questionPattern + "(?:" + choicePattern + "|"
+				+ numIntervalPattern + ")";
+
+		Pattern conditionPattern = Pattern.compile(
+				"##" + questionAnswerCondition + "(&&" + questionAnswerCondition + ")?##");
+
+		Matcher matcher = conditionPattern.matcher(content);
+		LinkedList<Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>> result =
+				new LinkedList<Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>>();
 		while (matcher.find()) {
 
 			Pair<Integer, Integer> startEndPair = new Pair<Integer, Integer>(matcher.start(),
 					matcher.end());
 
-			String question = matcher.group(1);
-			String choice = matcher.group(2);
-			String intervalStart = matcher.group(3);
-			String intervalEnd = matcher.group(4);
+			Pair<String, Object> questionAnswerPair = getQuestionAnswerPair(matcher, 0);
+			Pair<String, Object> questionAnswerPair2 = null;
 
-			Pair<String, Object> questionAnswerPair = null;
-			if (choice != null) {
-				String[] choiceSplit = choice.split("\\|");
-				questionAnswerPair = new Pair<String, Object>(question, choiceSplit);
+			boolean secondCondition = matcher.group(5) != null;
+
+			if (secondCondition) {
+				questionAnswerPair2 = getQuestionAnswerPair(matcher, 5);
 			}
-			else {
-				int start = intervalStart.isEmpty()
-						? Integer.MIN_VALUE
-						: Integer.parseInt(intervalStart);
-				int end = intervalEnd.isEmpty()
-						? Integer.MAX_VALUE
-						: Integer.parseInt(intervalEnd);
-				questionAnswerPair = new Pair<String, Object>(question,
-						new Pair<Integer, Integer>(start, end));
-			}
-			// Pair 1: start of the match + end of the match
-			// Pair 2: question + answer(s) or interval
-			result.addFirst(new Pair<Pair<Integer, Integer>, Pair<String, Object>>(startEndPair,
-					questionAnswerPair));
+
+			Pair<Pair<String, Object>, Pair<String, Object>> questionAnswerPairs =
+					new Pair<Pair<String, Object>, Pair<String, Object>>(
+							questionAnswerPair, questionAnswerPair2);
+
+			result.addFirst(new Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>(
+					startEndPair, questionAnswerPairs));
 		}
 		return result;
+	}
+
+	private Pair<String, Object> getQuestionAnswerPair(Matcher matcher, int groupIndex) {
+		String question = matcher.group(groupIndex + 1);
+		String choice = matcher.group(groupIndex + 2);
+		String intervalStart = matcher.group(groupIndex + 3);
+		String intervalEnd = matcher.group(groupIndex + 4);
+
+		Pair<String, Object> questionAnswerPair = null;
+		if (choice != null) {
+			String[] choiceSplit = choice.trim().split("\\s*\\|\\|\\s*");
+			questionAnswerPair = new Pair<String, Object>(question.trim(), choiceSplit);
+		}
+		else {
+			int start = intervalStart.trim().isEmpty()
+					? Integer.MIN_VALUE
+					: Integer.parseInt(intervalStart.trim());
+			int end = intervalEnd.trim().isEmpty()
+					? Integer.MAX_VALUE
+					: Integer.parseInt(intervalEnd.trim());
+			questionAnswerPair = new Pair<String, Object>(question.trim(),
+					new Pair<Integer, Integer>(start, end));
+		}
+
+		return questionAnswerPair;
 	}
 
 	private StringBuilder getText(Resource resource) {

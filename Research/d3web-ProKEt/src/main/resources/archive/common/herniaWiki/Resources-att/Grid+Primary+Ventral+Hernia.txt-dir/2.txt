@@ -1,0 +1,37 @@
+<table align="center" border='1' cellspacing="0" cellpadding="3">
+  <tr>
+    <td align="left" colspan="2" rowspan="2" style="padding:5px"><b>E H S<p/>Primary Abdominal Wall<br/>Hernia Classification</b></td>
+    <td align="center" colspan="3" style="padding:3px"><b>Diameter (cm)</b></th>
+  </tr>
+  <tr>
+    <td align="center" style="padding:3px"><b>Small (cm)</b><p/>< 2 cm</td>
+    <td align="center" style="padding:3px"><b>Medium (cm)</b><p/>2-4 cm</td>
+    <td align="center" style="padding:3px"><b>Large (cm)</b><p/>≥ 4 cm</td>
+  </tr>
+  <tr>
+    <th align="center" rowspan="2">Midline</th>
+    <td align="center" style="padding:2px">Epigastric</td>
+    <td align="center" style="color: green">##Diameter of the ventral hernia::num::,2&&Please select primary ventral hernia::choice::Epigastric hernia##</td>
+    <td align="center" style="color: green">##Diameter of the ventral hernia::num::2,4&&Please select primary ventral hernia::choice::Epigastric hernia##</td>
+    <td align="center" style="color: green">##Diameter of the ventral hernia::num::4,&&Please select primary ventral hernia::choice::Epigastric hernia##</td>
+  </tr>
+  <tr>
+    <td align="center" style="padding:2px">Umbilical</td>
+    <td align="center" style="color: green">##Diameter of the ventral hernia::num::,2&&Please select primary ventral hernia::choice::Umbilical hernia##</td>
+    <td align="center" style="color: green">##Diameter of the ventral hernia::num::2,4&&Please select primary ventral hernia::choice::Umbilical hernia##</td>
+    <td align="center" style="color: green">##Diameter of the ventral hernia::num::4,&&Please select primary ventral hernia::choice::Umbilical hernia##</td>
+  </tr>
+  <tr>
+    <th rowspan="2">Lateral</th>
+    <td align="center" style="padding:2px">Spigelian</td>
+    <td align="center" style="color: green">##Diameter of the ventral hernia::num::,2&&Please select primary ventral hernia::choice::Spigelian hernia##</td>
+    <td align="center" style="color: green">##Diameter of the ventral hernia::num::2,4&&Please select primary ventral hernia::choice::Spigelian hernia##</td>
+    <td align="center" style="color: green">##Diameter of the ventral hernia::num::4,&&Please select primary ventral hernia::choice::Spigelian hernia##</td>
+  </tr>
+  <tr>
+    <td align="center" style="padding:2px">Lumbar</td>
+    <td align="center" style="color: green">##Diameter of the ventral hernia::num::,2&&Please select primary ventral hernia::choice::Lumbar hernia##</td>
+    <td align="center" style="color: green">##Diameter of the ventral hernia::num::2,4&&Please select primary ventral hernia::choice::Lumbar hernia##</td>
+    <td align="center" style="color: green">##Diameter of the ventral hernia::num::4,&&Please select primary ventral hernia::choice::Lumbar hernia##</td>
+  </tr>
+</table>

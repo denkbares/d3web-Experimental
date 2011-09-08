@@ -8,7 +8,7 @@ EuraHS Initialization #1
 ---- Epigastric hernia
 ---- Umbilical hernia
 ---- Lumbar hernia
----- Spighelian hernia
+---- Spigelian hernia
 -- Incisional ventral hernia route
 --- "Please select incisional ventral hernia" [oc]
 ---- Incisional ventral hernia
@@ -22,6 +22,7 @@ EuraHS Initialization #1
 
 @package: Hernia
 %
+
 
 %%Question
 Common Route #2
