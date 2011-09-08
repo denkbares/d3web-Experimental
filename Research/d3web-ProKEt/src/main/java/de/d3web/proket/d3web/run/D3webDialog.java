@@ -198,29 +198,13 @@ public class D3webDialog extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 
 		HttpSession httpSession = request.getSession(true);
-		// in case nothing other is provided, "show" is the default action
-		String action = request.getParameter("action");
-		if (action == null) {
-			// action = "mail";
-			action = "show";
-		}
-		if (action.equalsIgnoreCase("dbLogin")) {
-			loginDB(request, response, httpSession);
-			return;
-		}
-		// Get the current httpSession or a new one
-		String authenticated = (String) httpSession.getAttribute("authenticated");
-		if (authenticated == null || !authenticated.equals("yes")) {
-			response.sendRedirect("../EuraHS-Login");
-			return;
-		}
 
 		// set both persistence (case saving) and image (images streamed from
 		// kb) folder
 		String fca = GlobalSettings.getInstance().getCaseFolder();
 		String fim = GlobalSettings.getInstance().getKbImgFolder();
-		if ((fca.equals(null) || fca.equals("")) &&
-				(fim.equals(null) || fim.equals(""))) {
+		if ((fca == (null) || fca.equals("")) &&
+				(fim == null || fim.equals(""))) {
 
 			String servletBasePath =
 					request.getSession().getServletContext().getRealPath("/");
@@ -228,16 +212,6 @@ public class D3webDialog extends HttpServlet {
 			GlobalSettings.getInstance().setCaseFolder(servletBasePath + "../../EuraHS-Data/cases");
 			GlobalSettings.getInstance().setKbImgFolder(servletBasePath + "kbimg");
 		}
-		/*
-		 * FOLDER PATH: get the folder on the server for persistence storing
-		 * only needed here in case the dialog is used without login mechanisms
-		 */
-		// String folderPath =
-		// request.getSession().getServletContext().getRealPath("/");
-		// String persistencePath = folderPath.replace("d3web-ProKEt",
-		// "persistence");
-		// GlobalSettings.getInstance().setCaseFolder(persistencePath);
-
 		d3wcon = D3webConnector.getInstance();
 
 		// try to get the src parameter, which defines the specification xml
@@ -288,6 +262,23 @@ public class D3webDialog extends HttpServlet {
 			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(),
 					d3wcon.getDialogStrat());
 			httpSession.setAttribute(D3WEB_SESSION, d3webSession);
+		}
+
+		// in case nothing other is provided, "show" is the default action
+		String action = request.getParameter("action");
+		if (action == null) {
+			// action = "mail";
+			action = "show";
+		}
+		if (action.equalsIgnoreCase("dbLogin")) {
+			loginDB(request, response, httpSession);
+			return;
+		}
+		// Get the current httpSession or a new one
+		String authenticated = (String) httpSession.getAttribute("authenticated");
+		if (authenticated == null || !authenticated.equals("yes")) {
+			response.sendRedirect("../EuraHS-Login");
+			return;
 		}
 
 		// switch action as defined by the servlet call

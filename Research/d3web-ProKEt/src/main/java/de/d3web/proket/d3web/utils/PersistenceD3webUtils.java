@@ -38,9 +38,10 @@ public class PersistenceD3webUtils {
 	private static final String AUTOSAVE = "autosave";
 
 	private static File getFile(String user, String filename) {
-		return new File(GlobalSettings.getInstance().getCaseFolder() + File.separator
+		String path = GlobalSettings.getInstance().getCaseFolder() + File.separator
 				+ (user != null && !user.isEmpty() ? user + File.separator : "")
-				+ filename + ".xml");
+				+ filename + ".xml";
+		return new File(path);
 	}
 
 	public static boolean existsCase(String user, String filename) {
@@ -79,6 +80,7 @@ public class PersistenceD3webUtils {
 		catch (IOException e) {
 			Logger.getLogger(PersistenceD3webUtils.class.getSimpleName()).warning(
 					"'" + filename + "' for user '" + user + "' could not be loaded.");
+			// e.printStackTrace();
 		}
 		return session;
 	}
@@ -171,23 +173,31 @@ public class PersistenceD3webUtils {
 	 * It allows old cases to be loaded with a {@link KnowledgeBase}, that has
 	 * different {@link TerminologyObject}s.
 	 */
-	private static Session copyToSession(KnowledgeBase knowledgeBase, SessionRecord source) throws IOException {
+	/**
+	 * Converts a SessionRecord to a Session
+	 * 
+	 * @created 05.08.2011
+	 * @param knowledgeBase {@link KnowledgeBase}
+	 * @param source {@link SessionRecord}
+	 * @return {@link Session}
+	 * @throws IOException
+	 */
+	public static Session copyToSession(KnowledgeBase knowledgeBase, SessionRecord source) throws IOException {
 		DefaultSession target = SessionFactory.createSession(source.getId(),
 				knowledgeBase, source.getCreationDate());
 		target.setName(source.getName());
 		InfoStoreUtil.copyEntries(source.getInfoStore(), target.getInfoStore());
 
-		// Search psmethods of session (improves performance)
+		// Search psmethods of session
 		Map<String, PSMethod> psMethods = new HashMap<String, PSMethod>();
 		for (PSMethod psm : target.getPSMethods()) {
-			psMethods.put(psm.getClass().toString(), psm);
+			psMethods.put(psm.getClass().getName(), psm);
 		}
 		target.getPropagationManager().openPropagation();
 		try {
-			List<Fact> valueFacts = new LinkedList<Fact>();
-			List<Fact> interviewFacts = new LinkedList<Fact>();
-			getFacts(knowledgeBase, source.getValueFacts(), psMethods, valueFacts);
-			getFacts(knowledgeBase, source.getInterviewFacts(), psMethods, interviewFacts);
+			List<Fact> valueFacts = getFacts(knowledgeBase, source.getValueFacts(), psMethods);
+			List<Fact> interviewFacts =
+					getFacts(knowledgeBase, source.getInterviewFacts(), psMethods);
 			for (Fact fact : valueFacts) {
 				target.getBlackboard().addValueFact(fact);
 			}
@@ -220,7 +230,8 @@ public class PersistenceD3webUtils {
 	 * different {@link TerminologyObject}s, because instead of throwing an
 	 * exception, a warning is logged in case the Value does not fit.
 	 */
-	private static void getFacts(KnowledgeBase kb, List<FactRecord> factRecords, Map<String, PSMethod> psMethods, List<Fact> valueFacts) throws IOException {
+	private static List<Fact> getFacts(KnowledgeBase kb, List<FactRecord> factRecords, Map<String, PSMethod> psMethods) throws IOException {
+		List<Fact> valueFacts = new LinkedList<Fact>();
 		for (FactRecord factRecord : factRecords) {
 			String psm = factRecord.getPsm();
 			if (psm != null) {
@@ -259,5 +270,6 @@ public class PersistenceD3webUtils {
 				}
 			}
 		}
+		return valueFacts;
 	}
 }

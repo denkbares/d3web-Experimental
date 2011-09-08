@@ -148,12 +148,10 @@ $(function() {
 
 		var opts = {
 			autoOpen: false,
-			position: [ "center", "top" ],
+			position: [ "left", "top" ],
 			modal: false,
-			width: 900,
-			height: 700,
-			minWidth: 900,
-			minHeight: 700,
+			width: 450,
+			height: 550,
 			buttons: [{
 				id: "sumPrint",
 				text: print,
