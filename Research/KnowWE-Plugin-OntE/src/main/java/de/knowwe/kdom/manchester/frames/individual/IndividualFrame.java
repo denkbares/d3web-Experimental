@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -68,41 +68,42 @@ public class IndividualFrame extends AbstractType {
 			this.addChildType(new Facts());
 		}
 	}
-}
-
-/**
- *
- * @author smark
- * @created 24.06.2011
- */
-class IndividualDefinition extends AbstractType {
-
-	public static String PATTERN = IndividualFrame.KEYWORD + "\\p{Blank}+(.+)";
-
-	public IndividualDefinition() {
-
-		Pattern p = Pattern.compile(PATTERN);
-		SectionFinder sf = new RegexSectionFinder(p, 0);
-		this.setSectionFinder(sf);
-
-		Keyword key = new Keyword(IndividualFrame.KEYWORD);
-		this.addChildType(key);
-
-		Individual individual = new Individual();
-		individual.setSectionFinder(new AllTextFinderTrimmed());
-		this.addChildType(individual);
-	}
 
 	/**
-	 *
 	 *
 	 * @author smark
 	 * @created 24.06.2011
 	 */
-	class Individual extends NamedIndividualIRIDefinition {
+	public static class IndividualDefinition extends AbstractType {
+
+		public static String PATTERN = IndividualFrame.KEYWORD + "\\p{Blank}+(.+)";
+
+		public IndividualDefinition() {
+
+			Pattern p = Pattern.compile(PATTERN);
+			SectionFinder sf = new RegexSectionFinder(p, 0);
+			this.setSectionFinder(sf);
+
+			Keyword key = new Keyword(IndividualFrame.KEYWORD);
+			this.addChildType(key);
+
+			Individual individual = new Individual();
+			individual.setSectionFinder(new AllTextFinderTrimmed());
+			this.addChildType(individual);
+		}
+	}
+
+	/**
+	 * 
+	 * 
+	 * @author smark
+	 * @created 24.06.2011
+	 */
+	public static class Individual extends NamedIndividualIRIDefinition {
 
 		public Individual() {
 
 		}
 	}
 }
+

@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -44,7 +44,8 @@ public class ClassFrame extends AbstractType {
 	public static final String KEYWORDS = "("
 			+ DisjointWith.KEYWORD + "|"
 			+ SubClassOf.KEYWORD + "|"
-			+ EquivalentTo.KEYWORD
+			+ EquivalentTo.KEYWORD + "|"
+			+ Annotations.KEYWORD
 			+ "|\\z)";
 
 	public ClassFrame() {
@@ -67,39 +68,40 @@ public class ClassFrame extends AbstractType {
 		DisjointWith dis = new DisjointWith();
 		this.addChildType(dis);
 	}
-}
-/**
- *
- * @author smark
- * @created 24.05.2011
- */
-class OWLClassDefinition extends AbstractType {
+	/**
+	 *
+	 * @author smark
+	 * @created 24.05.2011
+	 */
+	public static class OWLClassDefinition extends AbstractType {
 
-	public static String PATTERN = ClassFrame.KEYWORD + "\\p{Blank}+(.+)";
+		public static String PATTERN = ClassFrame.KEYWORD + "\\p{Blank}+(.+)";
 
-	public OWLClassDefinition() {
+		public OWLClassDefinition() {
 
-		Pattern p = Pattern.compile(PATTERN);
-		SectionFinder sf = new RegexSectionFinder(p, 0);
-		this.setSectionFinder(sf);
+			Pattern p = Pattern.compile(PATTERN);
+			SectionFinder sf = new RegexSectionFinder(p, 0);
+			this.setSectionFinder(sf);
 
-		Keyword key = new Keyword(ClassFrame.KEYWORD);
-		this.addChildType(key);
+			Keyword key = new Keyword(ClassFrame.KEYWORD);
+			this.addChildType(key);
 
-		OWLClass owl = new OWLClass();
-		owl.setSectionFinder(new AllTextFinderTrimmed());
-		this.addChildType(owl);
+			OWLClass owl = new OWLClass();
+			owl.setSectionFinder(new AllTextFinderTrimmed());
+			this.addChildType(owl);
+		}
 	}
-
 	/**
 	 *
 	 * @author smark
 	 * @created 06.06.2011
 	 */
-	class OWLClass extends ClassIRIDefinition {
+	public static class OWLClass extends ClassIRIDefinition {
 
 		public OWLClass() {
 
 		}
 	}
 }
+
+

@@ -51,7 +51,7 @@ public class Characteristics extends AbstractType {
 	}
 
 	/**
-	 * 
+	 *
 	 * @author smark
 	 * @created 18.05.2011
 	 */
@@ -70,23 +70,32 @@ public class Characteristics extends AbstractType {
 			this.addChildType(csl);
 		}
 	}
-}
 
-/**
- *
- *
- * @author smark
- * @created 13.08.2011
- */
-class CharacteristicsTerm extends AbstractType {
+	/**
+	 * 
+	 * 
+	 * @author smark
+	 * @created 13.08.2011
+	 */
+	public static class CharacteristicsTerm extends AbstractType {
 
-	private static String TERMS = "InverseFunctional|Functional|Irreflexive|Reflexive|Asymmetric|Symmetric|Transitive";
+		// private static String TERMS =
+		// "InverseFunctional|Functional|Irreflexive|Reflexive|Asymmetric|Symmetric|Transitive";
 
-	public static final StyleRenderer CLASS_RENDERER = new StyleRenderer("color:rgb(115, 0, 70)");
+		public static final StyleRenderer CLASS_RENDERER = new StyleRenderer(
+				"color:rgb(115, 0, 70)");
 
-	public CharacteristicsTerm() {
-		this.setCustomRenderer(CLASS_RENDERER);
-		Pattern p = Pattern.compile(TERMS);
-		this.setSectionFinder(new RegexSectionFinder(p));
+		public CharacteristicsTerm() {
+
+			StringBuilder t = new StringBuilder();
+			for (CharacteristicTypes c : CharacteristicTypes.values()) {
+				t.append(c.getType());
+				t.append("|");
+			}
+
+			this.setCustomRenderer(CLASS_RENDERER);
+			Pattern p = Pattern.compile(t.toString().substring(0, t.toString().length() - 1));
+			this.setSectionFinder(new RegexSectionFinder(p));
+		}
 	}
 }

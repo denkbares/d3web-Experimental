@@ -59,6 +59,7 @@ public class ManchesterMarkup extends AbstractType {
 		this.setSectionFinder(new RegexSectionFinder(pattern, 0));
 		this.setCustomRenderer(new ManchesterSyntaxRenderer());
 		this.addChildType(new ManchesterMarkupContentType());
+
 	}
 	/**
 	 * @author smark
@@ -70,6 +71,7 @@ public class ManchesterMarkup extends AbstractType {
 
 		protected ManchesterMarkupContentType() {
 			this.setSectionFinder(new AllTextSectionFinder());
+			this.addSubtreeHandler(new ManchesterSubtreeHandler());
 
 			this.addChildType(new ClassFrame());
 			this.addChildType(new IndividualFrame());

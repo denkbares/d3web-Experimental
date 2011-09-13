@@ -37,7 +37,7 @@ import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
  */
 public class Annotations extends AbstractType {
 
-	private final String KEYWORD = "Annotations[:]?";
+	public final static String KEYWORD = "Annotations[:]?";
 
 	public final static String KEYWORDS = "("
 			+ RDFSLabel.KEYWORD + "|"
@@ -46,7 +46,7 @@ public class Annotations extends AbstractType {
 
 	public static final StyleRenderer LABEL_RENDERER = new StyleRenderer("color:rgb(181, 159, 19)");
 	public static final StyleRenderer TERM_RENDERER = new StyleRenderer("color:rgb(67, 85, 190)");
-	public static final StyleRenderer LANG_RENDERER = new StyleRenderer("color:rgb(255, 83, 13)");
+	public static final StyleRenderer TAG_RENDERER = new StyleRenderer("color:rgb(255, 83, 13)");
 
 	/**
 	 *
@@ -81,67 +81,80 @@ public class Annotations extends AbstractType {
 			this.addChildType(csl);
 		}
 	}
-}
 
-/**
- *
- *
- * @author smark
- * @created 13.08.2011
- */
-class RDFSLabel extends AbstractType {
+	/**
+	 *
+	 *
+	 * @author smark
+	 * @created 13.08.2011
+	 */
+	public static class RDFSLabel extends AbstractType {
 
-	public static final String KEYWORD = "rdfs:label";
+		public static final String KEYWORD = "rdfs:label";
 
-	public RDFSLabel() {
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(Annotations.KEYWORDS, KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p));
+		public RDFSLabel() {
+			Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(Annotations.KEYWORDS, KEYWORD);
+			this.setSectionFinder(new RegexSectionFinder(p));
 
-		Keyword key = new Keyword(KEYWORD);
-		key.setCustomRenderer(Annotations.LABEL_RENDERER);
-		this.addChildType(key);
-		this.addChildType(new AnnotationTerm());
-		this.addChildType(new AnnotationLanguage());
+			Keyword key = new Keyword(KEYWORD);
+			key.setCustomRenderer(Annotations.LABEL_RENDERER);
+			this.addChildType(key);
+			this.addChildType(new AnnotationTerm());
+			this.addChildType(new AnnotationLanguageTag());
+			this.addChildType(new AnnotationDatatypeTag());
+		}
 	}
-}
 
-/**
- *
- *
- * @author smark
- * @created 13.08.2011
- */
-class RDFSComment extends AbstractType {
+	/**
+	 *
+	 *
+	 * @author smark
+	 * @created 13.08.2011
+	 */
+	public static class RDFSComment extends AbstractType {
 
-	public static final String KEYWORD = "rdfs:comment";
+		public static final String KEYWORD = "rdfs:comment";
 
-	public RDFSComment() {
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(Annotations.KEYWORDS, KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p));
+		public RDFSComment() {
+			Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(Annotations.KEYWORDS, KEYWORD);
+			this.setSectionFinder(new RegexSectionFinder(p));
 
-		Keyword key = new Keyword(KEYWORD);
-		key.setCustomRenderer(Annotations.LABEL_RENDERER);
-		this.addChildType(key);
-		this.addChildType(new AnnotationTerm());
-		this.addChildType(new AnnotationLanguage());
+			Keyword key = new Keyword(KEYWORD);
+			key.setCustomRenderer(Annotations.LABEL_RENDERER);
+			this.addChildType(key);
+			this.addChildType(new AnnotationTerm());
+			this.addChildType(new AnnotationLanguageTag());
+			this.addChildType(new AnnotationDatatypeTag());
+		}
 	}
-}
 
-class AnnotationTerm extends AbstractType {
+	public static class AnnotationTerm extends AbstractType {
 
-	public AnnotationTerm() {
-		this.setSectionFinder(new RegexSectionFinder("\".*\""));
-		this.setCustomRenderer(Annotations.TERM_RENDERER);
+		public AnnotationTerm() {
+			this.setSectionFinder(new RegexSectionFinder("\".*\""));
+			this.setCustomRenderer(Annotations.TERM_RENDERER);
+		}
 	}
-}
 
-class AnnotationLanguage extends AbstractType {
+	public static class AnnotationLanguageTag extends AbstractType {
 
-	private final String LANG_REGEX = "@(.*)";
+		private final String LANG_REGEX = "@([a-z]{2})";
 
-	public AnnotationLanguage() {
-		Pattern p = Pattern.compile(LANG_REGEX);
-		this.setSectionFinder(new RegexSectionFinder(p, 1));
-		this.setCustomRenderer(Annotations.LANG_RENDERER);
+		public AnnotationLanguageTag() {
+			Pattern p = Pattern.compile(LANG_REGEX);
+			this.setSectionFinder(new RegexSectionFinder(p, 1));
+			this.setCustomRenderer(Annotations.TAG_RENDERER);
+		}
+	}
+
+	public static class AnnotationDatatypeTag extends AbstractType {
+
+		private final String LANG_REGEX = "\\^\\^([a-zA-Z:]+)";
+
+		public AnnotationDatatypeTag() {
+			Pattern p = Pattern.compile(LANG_REGEX);
+			this.setSectionFinder(new RegexSectionFinder(p, 1));
+			this.setCustomRenderer(Annotations.TAG_RENDERER);
+		}
 	}
 }

@@ -17,22 +17,27 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.kdom.manchester.types;
+package de.knowwe.kdom.manchester.frames.objectproperty;
 
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.termObject.IRITermReference;
 
-/**
- *
- *
- * @author smark
- * @created 18.05.2011
- */
-public class OWLTermReferenceManchester extends IRITermReference {
+public enum CharacteristicTypes {
+	// InverseFunctional|Functional|Irreflexive|Reflexive|Asymmetric|Symmetric|Transitive
 
-	public static final String PATTERN = "([A-Z]|owl)[A-Za-z0-9:]+";
+	INVERSEFUNCTIONAL("InverseFunctional"),
+	FUNCTIONAL("Functional"),
+	IRREFLEXIVE("Irreflexive"),
+	REFLEXIVE("Reflexive"),
+	ASYMMETRIC("Asymmetric"),
+	SYMMETRIC("Symmetric"),
+	TRANSITIVE("Transitive");
 
-	public OWLTermReferenceManchester() {
-		this.setSectionFinder(new RegexSectionFinder(PATTERN));
+	private String type;
+
+	private CharacteristicTypes(String type) {
+		this.type = type;
+	}
+
+	public String getType() {
+		return this.type;
 	}
 }
