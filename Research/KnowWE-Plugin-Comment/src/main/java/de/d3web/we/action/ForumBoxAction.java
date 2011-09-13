@@ -93,7 +93,7 @@ public class ForumBoxAction extends AbstractAction {
 				String reply = map.get("reply");
 				if (reply != null && reply != "") {
 
-					save = "<box name=\"" + context.getUserName() + "\"; date=\""
+					save = "<box name=\"" + context.getUserName() + "\" date=\""
 							+ ForumRenderer.getDate() + "\">" + text + "</box>\n</box>\n";
 
 					sec = Sections.getSection(reply);
@@ -101,7 +101,7 @@ public class ForumBoxAction extends AbstractAction {
 					sec = article.getSection();
 				}
 				else {
-					save = "<box name=\"" + context.getUserName() + "\"; date=\""
+					save = "<box name=\"" + context.getUserName() + "\" date=\""
 							+ ForumRenderer.getDate() + "\">" + text + "</box>\n</forum>";
 
 					Sections.findSuccessorsOfType(Sections.findSuccessor(sec, Forum.class),
