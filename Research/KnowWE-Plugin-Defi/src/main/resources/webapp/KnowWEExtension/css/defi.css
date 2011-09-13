@@ -125,12 +125,34 @@ li.readstatus {
 }
 
 /* Form Menu */
-#forummenu form {
-	margin:0 0 50px 0;
+table.forumMenu {
+	width:100%;
 }
-#forummenu li.root span {
-	font-weight:bold;
+table.forumMenu tr {
+	border:2px solid black;
 }
-#forummenu li.subUnit {
-	margin-left:40px;
+table.forumMenu tr.inactive {
+	background-color:grey;
+	color:#CCC;
+	height:75px;
 }
+table.forumMenu input[type="button"].fm_open {
+	float:right;
+}
+table.forumMenu input[type="text"] {
+	font-size:100%;
+}
+table.forumMenu tr td {
+	padding:15px;
+}
+table.forumMenu tr td.fm_status {
+	background-color:grey;
+	width:10px;
+}
+table.forumMenu select {
+	font-size:100%;
+}
+p.fm_newforum {
+	margin:0 0 8px 0;
+}
+
