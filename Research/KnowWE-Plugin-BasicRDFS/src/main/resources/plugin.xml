@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-BasicRDFS" version="0.0.1">
+	
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+	</requires>
+	
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="ObjectPropertyDefinition">
+		<parameter id="class"
+			value="de.knowwe.rdfs.ObjectPropertyDefinitionMarkup" />
+		<parameter id="name" value="ObjectPropertyDefinition" />
+		<parameter id="description" value="Type ObjectPropertyDefinition" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="ClassDefinitionMarkup">
+		<parameter id="class"
+			value="de.knowwe.rdfs.ClassDefinitionMarkup" />
+		<parameter id="name" value="ClassDefinitionMarkup" />
+		<parameter id="description" value="Type ClassDefinitionMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="TripleMarkup">
+		<parameter id="class"
+			value="de.knowwe.rdfs.TripleMarkup" />
+		<parameter id="name" value="TripleMarkup" />
+		<parameter id="description" value="Type TripleMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+	</extension>
+
+	
+</plugin>
