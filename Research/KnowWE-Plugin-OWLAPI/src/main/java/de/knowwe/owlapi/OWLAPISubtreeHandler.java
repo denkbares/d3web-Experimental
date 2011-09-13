@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -35,19 +35,19 @@ import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 /**
  * OWLAPISubtreeHandler class which provides access to an OWL ontology
  * represented using the OWLAPI.
- * 
+ *
  * By default, everything is applied to KnowWE's global ontology and synced to
  * the @link{Rdf2GoCore}. For special purposes one can define an alternative
  * instance of the @link{OWLAPIConnector} class, giving access to another
  * ontology. Additionally the syncing with the @link{Rdf2GoCore} can be
  * disabled.
- * 
+ *
  * The created axioms will be automatically removed from the underlying ontology
  * during incremental compilation. In case syncing is active they are also
  * removed from the @link{Rdf2GoCore}.
- * 
+ *
  * Syncing with the @link{Rdf2GoCore} is done by the @link{RDF2GoSync} class.
- * 
+ *
  * @author Sebastian Furth
  * @created May 24, 2011
  */
@@ -81,7 +81,7 @@ public abstract class OWLAPISubtreeHandler<T extends Type> extends SubtreeHandle
 	 * Creates an OWLAPISubtreeHandler instance using KnowWE's global ontology
 	 * but letting you decide whether the changes to the ontology shall be
 	 * applied to the RDF2Go-Store.
-	 * 
+	 *
 	 * @param sync specifies the sync with the RDF2Go-Store (true means sync is
 	 *        active).
 	 */
@@ -93,12 +93,13 @@ public abstract class OWLAPISubtreeHandler<T extends Type> extends SubtreeHandle
 	 * Creates an OWLAPISubtreeHandler using the specified connector and letting
 	 * you decide whether the changes to the ontology shall be applied to the
 	 * RDF2Go-Store.
-	 * 
+	 *
 	 * @param connector specifies to OWLAPIConnector used in the subtreehandler
 	 * @param sync specifies the sync with the RDF2Go-Store (true means sync is
 	 *        active).
 	 */
 	public OWLAPISubtreeHandler(OWLAPIConnector connector, boolean sync) {
+		super(true);
 		if (connector == null) {
 			throw new NullPointerException("The connector can't be null!");
 		}
@@ -109,7 +110,7 @@ public abstract class OWLAPISubtreeHandler<T extends Type> extends SubtreeHandle
 	/**
 	 * Specifies the OWLAxioms which will be added to @link{OWLOntology}
 	 * instance accessible via the underlying @link{OWLAPIConnector} instance.
-	 * 
+	 *
 	 * @created May 24, 2011
 	 * @param article the processed article.
 	 * @param s the processed section belonging to the specified article.

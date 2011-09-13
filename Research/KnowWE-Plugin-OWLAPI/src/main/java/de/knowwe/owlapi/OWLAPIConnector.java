@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -39,18 +39,18 @@ import de.knowwe.rdf2go.Rdf2GoCore;
  * This class enables KnowWE to connect to the OWLAPI. In general everything can
  * be done using KnowWE's global ontology. This ontology is accessible via a
  * static method.
- * 
+ *
  * If you want a clean ontology for a special purpose you can create it by
  * specifying it's base URI. The created ontology can be accessed with it's base
  * URI.
- * 
+ *
  * Every OWLAPIConnecton instance offers convenience methods to access the
  * encapsulated instance of an @link{OWLReasoner} and to add and remove axioms
  * from the underlying ontology.
- * 
+ *
  * If you need more features, the underlying ontology can be accessed via the
  * encapsulated instance of the @link{OWLOntologyManger} class.
- * 
+ *
  * @author Sebastian Furth
  * @created May 24, 2011
  */
@@ -63,12 +63,12 @@ public class OWLAPIConnector {
 	 * Returns an OWLAPIConnector instance granting access to KnowWE's global
 	 * ontology. The returned ontology has the base-URI that is specified by the
 	 * basens in the @link{Rdf2GoCore} class as base-URI.
-	 * 
+	 *
 	 * This ontology should store everything that is not intended for a special
 	 * purpose. If you are not sure, you are probably right by choosing the
 	 * returned ontology as the target for your axioms and as source for your
 	 * reasoning.
-	 * 
+	 *
 	 * @created May 24, 2011
 	 * @return OWLAPIConnector instance for KnowWE's global ontology.
 	 */
@@ -79,13 +79,13 @@ public class OWLAPIConnector {
 	/**
 	 * Returns an OWLAPIConnector instance granting access to an ontology with
 	 * the specified base IRI.
-	 * 
+	 *
 	 * An IRI can be created from an @link{String} or an @link{URI} by the
 	 * <strong>createIRI</strong> method of the @link{IRI} class.
-	 * 
+	 *
 	 * If the desired OWLAPIConnector object doesn't exist yet, it will be
 	 * created and initialized.
-	 * 
+	 *
 	 * @created May 24, 2011
 	 * @param baseIRI the IRI identifying the OWLAPIConnector/OWLOntology
 	 * @return OWLAPIConnector instance for a specified ontology/IRI.
@@ -126,10 +126,10 @@ public class OWLAPIConnector {
 	/**
 	 * Returns the @link{OWLOntologyManager} instance responsible for the
 	 * maintenance of this connectors's @link{OWLOntology} instance.
-	 * 
+	 *
 	 * The @link{OWLOntologyManager} enables you to do almost everything with
 	 * the underlying instance of the @link{OWLOntology} class.
-	 * 
+	 *
 	 * @created May 24, 2011
 	 * @return OWLOntologyManager instance.
 	 */
@@ -140,14 +140,14 @@ public class OWLAPIConnector {
 	/**
 	 * Returns an @link{OWLReasoner} object which enables reasoning on the
 	 * ontology accessible by this OWLAPIConnector instance.
-	 * 
+	 *
 	 * Please note that the reasoner is flushed / synchronized before it is
 	 * returned. Thus the reasoner will take all changes done until now into
 	 * account!
-	 * 
+	 *
 	 * If you do any changes on the ontology after calling this method, you have
 	 * to synchronize the reasoner manually by calling it's flush method.
-	 * 
+	 *
 	 * @created May 24, 2011
 	 * @return OWLReasoner instance.
 	 */
@@ -160,7 +160,7 @@ public class OWLAPIConnector {
 	/**
 	 * Returns the @link{OWLOntology} instance managed by this OWLAPIConnector
 	 * instance.
-	 * 
+	 *
 	 * @created May 24, 2011
 	 * @return OWLOntology instance.
 	 */
@@ -171,7 +171,7 @@ public class OWLAPIConnector {
 	/**
 	 * Adds the specified @link{OWLAxiom}s to the @link{OWLOntology} instance
 	 * accessible by this OWLAPIConnector instance.
-	 * 
+	 *
 	 * @created May 24, 2011
 	 * @param axioms the OWLAxioms to be added to the ontology.
 	 */
@@ -184,7 +184,7 @@ public class OWLAPIConnector {
 	/**
 	 * Removes the specified @link{OWLAxiom}s from the @link{OWLOntology}
 	 * instance accessible by this OWLAPIConnector instance.
-	 * 
+	 *
 	 * @created May 24, 2011
 	 * @param axiom the OWLAxioms to be removed from the ontology.
 	 */
