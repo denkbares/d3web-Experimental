@@ -33,24 +33,20 @@ import de.d3web.we.kdom.constraint.AtMostOneFindingConstraint;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.SingleChildConstraint;
 import de.d3web.we.kdom.objects.TermReference;
-import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.compile.test.IRITermRef;
 import de.knowwe.compile.test.Utils;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.we.tools.ToolOuterMenuDecoratingRenderer;
 
 public class TripleMarkup extends AbstractType implements KnowledgeUnit<TripleMarkup> {
 
 	public TripleMarkup() {
 
-		//this.setCustomRenderer(new ToolOuterMenuDecoratingRenderer<TripleMarkup>(DelegateRenderer.getInstance()));
 		
-		this.setSectionFinder(new RegexSectionFinder("^>(.*?::.*?)$", Pattern.DOTALL,
+		this.setSectionFinder(new RegexSectionFinder("^>(.*?::.*?)$", Pattern.DOTALL| Pattern.MULTILINE,
 				1));
 		this.addChildType(new SimpleTurtlePredicate());
 		this.addChildType(new SimpleTurtleSubject());

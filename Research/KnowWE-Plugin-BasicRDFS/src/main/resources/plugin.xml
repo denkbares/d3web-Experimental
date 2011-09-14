@@ -48,6 +48,32 @@
 		<parameter id="priority" value="4" />
 		<parameter id="scope" value="root" />
 	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="ObjectInfoPageToolProvider">
+		<parameter id="class"
+			value="de.d3web.we.kdom.objects.ObjectInfoPageToolProvider" />
+		<parameter id="name" value="ObjectInfoPageToolProvider" />
+		<parameter id="description"
+			value="Offer a button to navigate to the object information page of an selected object." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="IRITermRef" />
+
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="ConceptPageLinkProvider">
+		<parameter id="class"
+			value="de.knowwe.tool.conceptLink.ConceptPageLinkProvider" />
+		<parameter id="name" value="ConceptPageLinkProvider" />
+		<parameter id="description"
+			value="Offer a link to the page with the corresponding name." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="IRITermRef" />
+
+	</extension>
 
 	
 </plugin>
