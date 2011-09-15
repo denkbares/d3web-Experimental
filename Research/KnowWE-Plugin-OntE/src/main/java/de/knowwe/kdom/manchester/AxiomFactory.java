@@ -22,7 +22,6 @@ package de.knowwe.kdom.manchester;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.semanticweb.owlapi.model.IRI;
@@ -44,9 +43,6 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.condition.TerminalCondition;
-import de.d3web.we.kdom.condition.CompositeCondition.Conjunct;
-import de.d3web.we.kdom.condition.CompositeCondition.Disjunct;
-import de.d3web.we.kdom.condition.CompositeCondition.NegatedExpression;
 import de.d3web.we.kdom.condition.helper.BracedCondition;
 import de.knowwe.kdom.manchester.frames.clazz.ClassFrame;
 import de.knowwe.kdom.manchester.frames.clazz.DisjointWith;
@@ -264,40 +260,46 @@ public class AxiomFactory {
 
 		Set<OWLClassExpression> parts = new HashSet<OWLClassExpression>();
 
-		List<Section<Disjunct>> disjuncts = new ArrayList<Section<Disjunct>>();
-		Sections.findSuccessorsOfType(section, Disjunct.class, depth, disjuncts);
-		if (disjuncts.size() > 0) {
-			for (Section<?> child : disjuncts) {
-				OWLClassExpression expression = handleBracedConditionPart(child);
-				if (expression != null) {
-					parts.add(expression);
-				}
-			}
-			return factory.getOWLObjectUnionOf(parts); // OR
-		}
-
-		List<Section<Conjunct>> conjuncts = new ArrayList<Section<Conjunct>>();
-		Sections.findSuccessorsOfType(section, Conjunct.class, depth, conjuncts);
-		if (conjuncts.size() > 0) {
-			for (Section<?> child : conjuncts) {
-				OWLClassExpression expression = handleBracedConditionPart(child);
-				if (expression != null) {
-					parts.add(expression);
-				}
-			}
-			return factory.getOWLObjectIntersectionOf(parts); // AND
-		}
-
-		List<Section<NegatedExpression>> neg = new ArrayList<Section<NegatedExpression>>();
-		Sections.findSuccessorsOfType(section, NegatedExpression.class, depth, neg);
-		if (neg.size() > 0) {
-			for (Section<?> child : neg) {
-				OWLClassExpression expression = handleBracedConditionPart(child);
-				if (expression != null) {
-					factory.getOWLObjectComplementOf(expression); // NOT
-				}
-			}
-		}
+		// List<Section<Disjunct>> disjuncts = new
+		// ArrayList<Section<Disjunct>>();
+		// Sections.findSuccessorsOfType(section, Disjunct.class, depth,
+		// disjuncts);
+		// if (disjuncts.size() > 0) {
+		// for (Section<?> child : disjuncts) {
+		// OWLClassExpression expression = handleBracedConditionPart(child);
+		// if (expression != null) {
+		// parts.add(expression);
+		// }
+		// }
+		// return factory.getOWLObjectUnionOf(parts); // OR
+		// }
+		//
+		// List<Section<Conjunct>> conjuncts = new
+		// ArrayList<Section<Conjunct>>();
+		// Sections.findSuccessorsOfType(section, Conjunct.class, depth,
+		// conjuncts);
+		// if (conjuncts.size() > 0) {
+		// for (Section<?> child : conjuncts) {
+		// OWLClassExpression expression = handleBracedConditionPart(child);
+		// if (expression != null) {
+		// parts.add(expression);
+		// }
+		// }
+		// return factory.getOWLObjectIntersectionOf(parts); // AND
+		// }
+		//
+		// List<Section<NegatedExpression>> neg = new
+		// ArrayList<Section<NegatedExpression>>();
+		// Sections.findSuccessorsOfType(section, NegatedExpression.class,
+		// depth, neg);
+		// if (neg.size() > 0) {
+		// for (Section<?> child : neg) {
+		// OWLClassExpression expression = handleBracedConditionPart(child);
+		// if (expression != null) {
+		// factory.getOWLObjectComplementOf(expression); // NOT
+		// }
+		// }
+		// }
 
 		Section<?> resriction = Sections.findSuccessor(section, Restriction.class);
 		if (resriction != null) {
@@ -375,9 +377,9 @@ public class AxiomFactory {
 				}
 			}
 		}
-		else if (childOfType.get() instanceof Conjunct) { // Conjuncts
-			return handleBracedCondition(section, 1);
-		}
+		// else if (childOfType.get() instanceof Conjunct) { // Conjuncts
+		// return handleBracedCondition(section, 1);
+		// }
 		return null;
 	}
 
