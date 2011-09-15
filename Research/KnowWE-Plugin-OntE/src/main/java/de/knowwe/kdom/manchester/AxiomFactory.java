@@ -22,6 +22,7 @@ package de.knowwe.kdom.manchester;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.semanticweb.owlapi.model.IRI;
@@ -42,6 +43,8 @@ import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
+import de.d3web.we.kdom.condition.CompositeCondition;
+import de.d3web.we.kdom.condition.NonTerminalCondition;
 import de.d3web.we.kdom.condition.TerminalCondition;
 import de.d3web.we.kdom.condition.helper.BracedCondition;
 import de.knowwe.kdom.manchester.frames.clazz.ClassFrame;
@@ -240,7 +243,7 @@ public class AxiomFactory {
 					null);
 		}
 		if (mce.getChildren().get(0).get() instanceof BracedCondition) {
-			expression = handleBracedCondition(mce, 3);
+			expression = handleBracedCondition(mce, 2);
 		}
 		return expression;
 	}
@@ -260,46 +263,46 @@ public class AxiomFactory {
 
 		Set<OWLClassExpression> parts = new HashSet<OWLClassExpression>();
 
-		// List<Section<Disjunct>> disjuncts = new
-		// ArrayList<Section<Disjunct>>();
-		// Sections.findSuccessorsOfType(section, Disjunct.class, depth,
-		// disjuncts);
-		// if (disjuncts.size() > 0) {
-		// for (Section<?> child : disjuncts) {
-		// OWLClassExpression expression = handleBracedConditionPart(child);
-		// if (expression != null) {
-		// parts.add(expression);
-		// }
-		// }
-		// return factory.getOWLObjectUnionOf(parts); // OR
-		// }
-		//
-		// List<Section<Conjunct>> conjuncts = new
-		// ArrayList<Section<Conjunct>>();
-		// Sections.findSuccessorsOfType(section, Conjunct.class, depth,
-		// conjuncts);
-		// if (conjuncts.size() > 0) {
-		// for (Section<?> child : conjuncts) {
-		// OWLClassExpression expression = handleBracedConditionPart(child);
-		// if (expression != null) {
-		// parts.add(expression);
-		// }
-		// }
-		// return factory.getOWLObjectIntersectionOf(parts); // AND
-		// }
-		//
-		// List<Section<NegatedExpression>> neg = new
-		// ArrayList<Section<NegatedExpression>>();
-		// Sections.findSuccessorsOfType(section, NegatedExpression.class,
-		// depth, neg);
-		// if (neg.size() > 0) {
-		// for (Section<?> child : neg) {
-		// OWLClassExpression expression = handleBracedConditionPart(child);
-		// if (expression != null) {
-		// factory.getOWLObjectComplementOf(expression); // NOT
-		// }
-		// }
-		// }
+		List<Section<ManchesterClassExpression>> nodes = new ArrayList<Section<ManchesterClassExpression>>();
+		Sections.findSuccessorsOfType(section, ManchesterClassExpression.class, depth, nodes);
+
+		boolean isDisjunct = false, isConjunct = false, isComplement = false;
+		List<Section<? extends NonTerminalCondition>> xjunctions = new ArrayList<Section<? extends NonTerminalCondition>>();
+
+
+		// check for disjunct, conjunct or complement
+		if (nodes.size() > 0) {
+			Section<ManchesterClassExpression> mce = nodes.get(0);
+			CompositeCondition cc = mce.get();
+			if (cc.isDisjunction(mce)) {
+				isDisjunct = true;
+				xjunctions = cc.getDisjuncts(mce);
+			}
+			if (cc.isConjunction(mce)) {
+				isConjunct = true;
+				xjunctions = cc.getConjuncts(mce);
+			}
+			if (cc.isNegation(mce)) {
+				isComplement = true;
+				OWLClassExpression expression = handleBracedConditionPart(mce.getChildren().get(0));
+				if (expression != null) {
+					return factory.getOWLObjectComplementOf(expression); // NOT
+				}
+			}
+		}
+
+		for (Section<?> child : xjunctions) {
+			OWLClassExpression expression = handleBracedConditionPart(child);
+			if (expression != null && isComplement == false) {
+				parts.add(expression);
+			}
+		}
+		if (isDisjunct) {
+			return factory.getOWLObjectUnionOf(parts); // OR
+		}
+		if (isConjunct) {
+			return factory.getOWLObjectIntersectionOf(parts); // AND
+		}
 
 		Section<?> resriction = Sections.findSuccessor(section, Restriction.class);
 		if (resriction != null) {
@@ -327,7 +330,7 @@ public class AxiomFactory {
 				currentExpression = createSimpleRestriction(section, null);
 			}
 			else if (mce.getChildren().get(0).get() instanceof BracedCondition) {
-				OWLClassExpression expression = handleBracedCondition(mce.getChildren().get(0), 3);
+				OWLClassExpression expression = handleBracedCondition(mce.getChildren().get(0), 2);
 				if (expression != null) {
 					currentExpression = createSimpleRestriction(section, expression);
 				}
@@ -354,7 +357,7 @@ public class AxiomFactory {
 	 * @param OWLClass father The {@link OWLClass} the restriction belongs to.
 	 * @return
 	 */
-	public static OWLClassExpression createDescriptionExpression(Section<?> section) {
+	public static OWLClassExpression createDescriptionExpression(Section<ManchesterClassExpression> section) {
 
 		Section<?> childOfType = section.getChildren().get(0);
 
@@ -377,9 +380,11 @@ public class AxiomFactory {
 				}
 			}
 		}
-		// else if (childOfType.get() instanceof Conjunct) { // Conjuncts
-		// return handleBracedCondition(section, 1);
-		// }
+
+		CompositeCondition cc = (ManchesterClassExpression) section.get();
+		if (cc.isConjunction(section)) {
+			return handleBracedCondition(section, 1); // CONJUNCT
+		}
 		return null;
 	}
 
@@ -393,6 +398,7 @@ public class AxiomFactory {
 	 * @param OWLClass father The {@link OWLClass} the restriction belongs to.
 	 * @return
 	 */
+	@Deprecated
 	public static Collection<OWLAxiom> createDisjointWith(Section<?> section, OWLClass father) {
 		Collection<OWLAxiom> axioms = new ArrayList<OWLAxiom>();
 		if (section.get() instanceof OWLTermReferenceManchester) {
@@ -412,6 +418,7 @@ public class AxiomFactory {
 	 * @param OWLClass father The {@link OWLClass} the restriction belongs to.
 	 * @return
 	 */
+	@Deprecated
 	public static Collection<OWLAxiom> createEquivalentTo(Section<?> section, OWLClass father) {
 
 		Collection<OWLAxiom> axioms = new ArrayList<OWLAxiom>();
@@ -496,15 +503,43 @@ public class AxiomFactory {
 		return axioms;
 	}
 
+	/**
+	 * Handle the {@link IndividualFrame} nodes and create {@link OWLIndividual}
+	 * axioms.
+	 *
+	 * @created 15.09.2011
+	 * @param section
+	 * @return
+	 */
 	public static OWLNamedIndividual createIndividual(Section<?> section) {
 		Section<?> s = Sections.findSuccessor(section, IndividualFrame.Individual.class);
 		return factory.getOWLNamedIndividual(":" + s.getOriginalText(), pm);
 	}
 
-	public static OWLAxiom createIndividualAssertion(OWLNamedIndividual i, OWLClass clazz) {
-		return factory.getOWLClassAssertionAxiom(clazz, i);
+	/**
+	 *
+	 *
+	 * @created 15.09.2011
+	 * @param section
+	 * @param i
+	 * @return
+	 */
+	public static OWLAxiom createNamedIndividualAxiom(OWLClassExpression e, OWLIndividual i) {
+		return factory.getOWLClassAssertionAxiom(e, i);
 	}
 
+	public static OWLAxiom createSameIndividualsAxiom(OWLClassExpression e, OWLIndividual i) {
+		return factory.getOWLSameIndividualAxiom(i, (OWLIndividual) e);
+	}
+
+	/**
+	 *
+	 *
+	 * @created 15.09.2011
+	 * @param section
+	 * @param annotatetObject
+	 * @return
+	 */
 	public static OWLAxiom createAnnotations(Section<?> section, IRI annotatetObject) {
 
 		IRI i = null;

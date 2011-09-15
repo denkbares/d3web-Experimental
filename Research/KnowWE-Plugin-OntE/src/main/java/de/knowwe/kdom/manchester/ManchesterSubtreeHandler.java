@@ -41,7 +41,10 @@ import de.knowwe.kdom.manchester.frames.clazz.DisjointWith;
 import de.knowwe.kdom.manchester.frames.clazz.EquivalentTo;
 import de.knowwe.kdom.manchester.frames.clazz.SubClassOf;
 import de.knowwe.kdom.manchester.frames.clazz.ClassFrame.OWLClassDefinition;
+import de.knowwe.kdom.manchester.frames.individual.Facts;
 import de.knowwe.kdom.manchester.frames.individual.IndividualFrame;
+import de.knowwe.kdom.manchester.frames.individual.SameAs;
+import de.knowwe.kdom.manchester.frames.individual.Types;
 import de.knowwe.kdom.manchester.frames.individual.IndividualFrame.IndividualContentType;
 import de.knowwe.kdom.manchester.frames.individual.IndividualFrame.IndividualDefinition;
 import de.knowwe.kdom.manchester.frames.objectproperty.Characteristics;
@@ -84,7 +87,7 @@ public class ManchesterSubtreeHandler extends OWLAPISubtreeHandler<ManchesterMar
 						Sections.findChildOfType(child,
 								IndividualContentType.class);
 				if (section != null) {
-					// createIndividuals(section);
+					createIndividuals(section);
 				}
 			}
 		}
@@ -135,7 +138,8 @@ public class ManchesterSubtreeHandler extends OWLAPISubtreeHandler<ManchesterMar
 						child,
 						ListItem.class);
 				for (Section<ListItem> item : items) {
-					Section<?> mce = Sections.findSuccessor(item, ManchesterClassExpression.class);
+					Section<ManchesterClassExpression> mce = Sections.findSuccessor(item,
+							ManchesterClassExpression.class);
 					if (mce != null) {
 						OWLClassExpression e = AxiomFactory.createDescriptionExpression(
 								mce);
@@ -242,14 +246,36 @@ public class ManchesterSubtreeHandler extends OWLAPISubtreeHandler<ManchesterMar
 	 */
 	private void createIndividuals(Section<?> section) {
 		OWLIndividual i = null;
-		OWLAxiom e = null;
 
-		for (Section<?> child : section.getChildren()) {
+		List<Section<?>> children = section.getChildren();
+
+		for (Section<?> child : children) {
 			Type t = child.get();
 			if (t instanceof IndividualDefinition) {
 				i = AxiomFactory.createIndividual(child);
-				// e = AxiomFactory.createIndividualAssertion(i);
-				axioms.add(e);
+			}
+			else if (t instanceof Facts) {
+				// TODO: not yet implemented
+			}
+			else {
+				// Type|SameAs --> ListItems
+				List<Section<ListItem>> items = Sections.findSuccessorsOfType(
+						child,
+						ListItem.class);
+				for (Section<ListItem> item : items) {
+					Section<ManchesterClassExpression> mce = Sections.findSuccessor(item,
+							ManchesterClassExpression.class);
+					if (mce != null) {
+						OWLClassExpression e = AxiomFactory.createDescriptionExpression(
+								mce);
+						if (t instanceof Types) {
+							axioms.add(AxiomFactory.createNamedIndividualAxiom(e, i));
+						}
+						else if (t instanceof SameAs) {
+							axioms.add(AxiomFactory.createSameIndividualsAxiom(e, i));
+						}
+					}
+				}
 			}
 		}
 	}
