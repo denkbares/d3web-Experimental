@@ -42,11 +42,11 @@ public class QualifiedClass {
 	 */
 	public QualifiedClass(String packageName, String className) {
 		if (packageName == null || packageName.isEmpty()) {
-			throw new IllegalArgumentException("Class name is null or empty");
+			throw new IllegalArgumentException("PackageName is null or empty");
 		}
 		
 		if (className == null || className.isEmpty()) {
-			throw new IllegalArgumentException("Class name is null or empty");
+			throw new IllegalArgumentException("ClassName is null or empty");
 		}
 		
 		if (packageName.endsWith(".")) {
