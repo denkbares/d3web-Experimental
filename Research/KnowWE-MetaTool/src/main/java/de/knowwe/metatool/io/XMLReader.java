@@ -164,7 +164,11 @@ public class XMLReader implements ObjectTypeReader {
 				throw new SAXException(new MetatoolParseException("Cannot create ObjectType: " + e.getMessage(), locator));
 			}
 			
-			builder = new ObjectType.Builder(id, objectTypeClass, exists);
+			try {
+				builder = new ObjectType.Builder(id, objectTypeClass, exists);
+			} catch (IllegalArgumentException e) {
+				throw new SAXException(new MetatoolParseException("Cannot create ObjectType Builder: " + e.getMessage(), locator));
+			}
 		}
 
 		private void changeSuperType(Attributes attributes) throws SAXException {
@@ -184,17 +188,21 @@ public class XMLReader implements ObjectTypeReader {
 		private void prepareChildrenAddition(Attributes attributes) throws SAXException {
 			String parent = attributes.getValue("Parent");
 			String position = attributes.getValue("Position");
-			if (parent != null && typesByID.containsKey(parent)) {
+			if (parent != null && position != null && typesByID.containsKey(parent)) {
 				nextParent = typesByID.get(parent);
 				nextPosition = Integer.parseInt(position);
 			}
-			else if (root != null && (parent == null || !typesByID.containsKey(parent))) {
-				throw new SAXException(new MetatoolParseException(
-						"ObjectType with ID \""
-								+ parent
-								+ "\" doesn't exist. Unable to add child. Parents have to parsed before children!",
-						locator
-						));
+			else if (root != null) {
+				if (parent == null || !typesByID.containsKey(parent)) {
+					throw new SAXException(new MetatoolParseException(
+							"ObjectType with ID \""
+									+ parent
+									+ "\" doesn't exist. Unable to add child. Parents have to parsed before children!",
+							locator
+							));
+				} else if (position == null) {
+					throw new SAXException(new MetatoolParseException("Missing or invalid Position parameter", locator));
+				}
 			}
 		}
 

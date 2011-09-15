@@ -341,7 +341,7 @@ public class ObjectType {
 		 */
 		public Builder(String id, QualifiedClass objectType, boolean exists) {
 			if (id == null || objectType == null || id.isEmpty()) {
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Empty ID or missing ObjectType");
 			}
 			this.id = id;
 			this.objectType = objectType;
@@ -360,7 +360,7 @@ public class ObjectType {
 		 */
 		public Builder setSuperType(QualifiedClass superType) {
 			if (superType == null || exists) {
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Missing or already created super type");
 			}
 			this.superType = superType;
 			return this;
@@ -378,7 +378,7 @@ public class ObjectType {
 		 */
 		public Builder setSectionFinder(ParameterizedClass sectionFinder) {
 			if (sectionFinder == null || exists) {
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Missing section finder");
 			}
 			this.sectionFinder = sectionFinder;
 			return this;
@@ -398,7 +398,7 @@ public class ObjectType {
 		 */
 		public Builder addConstraint(QualifiedClass constraint) {
 			if (constraint == null || exists) {
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Missing constraint");
 			}
 			if (sectionFinder == null) {
 				throw new IllegalStateException(
@@ -426,7 +426,7 @@ public class ObjectType {
 		 */
 		public Builder setColor(String color) {
 			if (color == null || exists) {
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Missing color");
 			}
 			this.color = color;
 			return this;
