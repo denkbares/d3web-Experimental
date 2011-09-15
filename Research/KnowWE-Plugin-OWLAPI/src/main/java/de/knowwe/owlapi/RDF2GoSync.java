@@ -21,6 +21,7 @@ package de.knowwe.owlapi;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -181,14 +182,23 @@ public class RDF2GoSync {
 	}
 
 	private static OWLOntology createTempOntology(String rdfXML) {
-		InputStream input = new ByteArrayInputStream(rdfXML.getBytes());
+		String exceptionMessage = null;
 		try {
-			return manager.loadOntologyFromOntologyDocument(input);
+			InputStream input = new ByteArrayInputStream(rdfXML.getBytes("UTF-8"));
+			if (input != null) {
+				try {
+					return manager.loadOntologyFromOntologyDocument(input);
+				}
+				catch (OWLOntologyCreationException e) {
+					exceptionMessage = e.getMessage();
+				}
+			}
 		}
-		catch (OWLOntologyCreationException e) {
-			Logger.getLogger(RDF2GoSync.class.getSimpleName()).severe(
-					"Unable to create new OWLOntology instance.");
+		catch (UnsupportedEncodingException e) {
+			exceptionMessage = e.getMessage();
 		}
+		Logger.getLogger(RDF2GoSync.class.getSimpleName()).severe(
+				"Unable to create new OWLOntology instance: " + exceptionMessage);
 		return null;
 	}
 
