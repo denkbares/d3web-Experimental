@@ -61,10 +61,11 @@ public class EquivalentTo extends AbstractType{
 			this.addChildType(key);
 
 			// necessary to support correct clamping
+			// removed due issues with owlapi
 			ManchesterClassExpression mce = new ManchesterClassExpression();
 			mce.setSectionFinder(new AllTextFinderTrimmed());
 			mce.initRestrictionTypes();
-			this.addChildType(mce);
+			// this.addChildType(mce);
 
 			CommaSeparatedList list = new CommaSeparatedList(ManchesterSyntaxUtil.getMCE());
 			this.addChildType(list);

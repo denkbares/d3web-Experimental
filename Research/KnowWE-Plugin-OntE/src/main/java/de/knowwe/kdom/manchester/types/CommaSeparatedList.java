@@ -63,13 +63,14 @@ public class CommaSeparatedList extends AbstractType {
 	 * {@link ListItem} objects for further handling. Note: Each ListItem can
 	 * have different childs. See {@link CommaSeparatedList} for further
 	 * informations.
-	 * 
+	 *
 	 * @author smark
 	 * @created 08.06.2011
 	 */
 	public static class ListItem extends AbstractType {
 
 		public ListItem() {
+			// TODO one Of List
 			this.setSectionFinder(new AllTextFinderTrimComma());
 		}
 	}

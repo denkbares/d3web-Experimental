@@ -19,7 +19,6 @@
  */
 package de.knowwe.kdom.manchester;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +26,7 @@ import java.util.Set;
 
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 
@@ -54,7 +54,6 @@ import de.knowwe.kdom.manchester.frames.objectproperty.ObjectPropertyFrame.Objec
 import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
 import de.knowwe.kdom.manchester.types.ObjectPropertyExpression;
-import de.knowwe.kdom.manchester.types.Restriction;
 import de.knowwe.kdom.manchester.types.CommaSeparatedList.ListItem;
 import de.knowwe.owlapi.OWLAPISubtreeHandler;
 
@@ -89,6 +88,12 @@ public class ManchesterSubtreeHandler extends OWLAPISubtreeHandler<ManchesterMar
 				}
 			}
 		}
+
+		// get axioms from the singleton and return them
+		Collection<OWLAxiom> objects = AxiomStorageSubtree.getInstance().getAxioms();
+		axioms.addAll(objects);
+		AxiomStorageSubtree.getInstance().clear();
+
 		return axioms;
 	}
 
@@ -125,29 +130,23 @@ public class ManchesterSubtreeHandler extends OWLAPISubtreeHandler<ManchesterMar
 				}
 			}
 			else {
+				// SubClassOf, DisJointWith, EquivalentTo
 				List<Section<ListItem>> items = Sections.findSuccessorsOfType(
 						child,
 						ListItem.class);
 				for (Section<ListItem> item : items) {
-					List<Section<Restriction>> restriction = new ArrayList<Section<Restriction>>();
-					Sections.findSuccessorsOfType(item, Restriction.class, 3, restriction);
-
-					if (restriction.size() > 0) {
-						OWLAxiom e = null;
+					Section<?> mce = Sections.findSuccessor(item, ManchesterClassExpression.class);
+					if (mce != null) {
+						OWLClassExpression e = AxiomFactory.createDescriptionExpression(
+								mce);
 						if (t instanceof SubClassOf) {
-							e = AxiomFactory.createSubClassOf(restriction.get(0), clazz);
+							axioms.add(AxiomFactory.createOWLSubClassOf(clazz, e));
 						}
-						if (t instanceof EquivalentTo) {
-							// e = AxiomFactory.createEquivalentTo(child2,
-							// clazz);
+						else if (t instanceof DisjointWith) {
+							axioms.add(AxiomFactory.createOWLDisjointWith(clazz, e));
 						}
-						if (t instanceof DisjointWith) {
-							// e =
-							// AxiomFactory.createDisjointWith(restriction.get(0),
-							// clazz);
-						}
-						if (e != null) {
-							axioms.add(e);
+						else if (t instanceof EquivalentTo) {
+							axioms.add(AxiomFactory.createOWLEquivalentTo(clazz, e));
 						}
 					}
 				}
@@ -214,10 +213,13 @@ public class ManchesterSubtreeHandler extends OWLAPISubtreeHandler<ManchesterMar
 				axioms.addAll(AxiomFactory.createSubPropertyOf(s, p));
 			}
 			else if (t instanceof Annotations) {
-				List<Section<ListItem>> items = Sections.findSuccessorsOfType(section,
+				List<Section<ListItem>> items = Sections.findSuccessorsOfType(child,
 						ListItem.class);
 				for (Section<ListItem> item : items) {
-					axioms.add(AxiomFactory.createAnnotations(item, p.getIRI()));
+					OWLAxiom a = AxiomFactory.createAnnotations(item, p.getIRI());
+					if( a != null ) {
+						axioms.add(a);
+					}
 				}
 			}
 		}

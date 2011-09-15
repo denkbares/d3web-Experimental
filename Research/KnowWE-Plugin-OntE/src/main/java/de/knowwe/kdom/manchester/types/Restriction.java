@@ -64,6 +64,8 @@ public class Restriction extends AbstractType {
 
 		OWLTermReferenceManchester def = new OWLTermReferenceManchester();
 		this.addChildType(def);
+
+		// TODO oneOf restriction missing
 	}
 
 	public static synchronized Restriction getInstance() {
