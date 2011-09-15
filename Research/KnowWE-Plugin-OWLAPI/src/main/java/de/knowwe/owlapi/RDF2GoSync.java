@@ -185,13 +185,11 @@ public class RDF2GoSync {
 		String exceptionMessage = null;
 		try {
 			InputStream input = new ByteArrayInputStream(rdfXML.getBytes("UTF-8"));
-			if (input != null) {
-				try {
-					return manager.loadOntologyFromOntologyDocument(input);
-				}
-				catch (OWLOntologyCreationException e) {
-					exceptionMessage = e.getMessage();
-				}
+			try {
+				return manager.loadOntologyFromOntologyDocument(input);
+			}
+			catch (OWLOntologyCreationException e) {
+				exceptionMessage = e.getMessage();
 			}
 		}
 		catch (UnsupportedEncodingException e) {
