@@ -215,6 +215,7 @@
 		<module>metatool-test-launcher</module>
 		<module>KnowWE-Plugin-BasicRDFS</module>
 		<module>KnowWE-Plugin-ConceptPageLinkToolProvider</module>
+		<module>KnowWE-Plugin-Markup-TurtleN3</module>
 	</modules>
 	<repositories>
 		<repository>
