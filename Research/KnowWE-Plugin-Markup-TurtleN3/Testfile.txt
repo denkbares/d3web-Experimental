@@ -1,0 +1,53 @@
+!!! This is a Testfile for the N3-TurtleMarkup
+
+<br>
+
+def Subject
+
+def predicate
+
+def predicate2
+def predicate3
+def predicate4
+def predicate5
+
+def Object
+
+def Object1
+
+def Object2
+
+def Object3
+
+def Object 4
+
+! Simple Example:
+
+<br>
+
+N3: Subject predicate:: Object.
+
+<br>
+
+!! Example with multiple Objects:
+
+<br>
+
+N3: Subject predicate:: Object1 , Object2 ; predicate2:: Object3 , Object 4.
+
+!! Example with multiple Objects with linebreaks:
+
+<br>
+
+N3: Subject 
+
+
+
+    predicate:: Object1 , Object2 ; \\
+    predicate2:: Object1 , Object2, Object2, Object2, Object2, Object2 ; \\
+    predicate3:: Object1 , Object2, Object2, Object2, Object2 ;   \\
+    predicate4:: Object1 , Object2 ; \\
+    predicate5:: Object3 , Object 4.\\
+
+<br>
+
