@@ -36,6 +36,7 @@ import de.knowwe.core.renderer.GenericHTMLRenderer;
 import de.knowwe.kdom.n3.TurtleSubjectSection;
 import de.knowwe.kdom.n3.TurtlePredSentence;
 import de.knowwe.kdom.n3.compile.TurtleCompiler;
+import de.knowwe.kdom.n3.render.TurtleN3Renderer;
 import de.d3web.we.kdom.type.AnonymousType;
 
 public class TurtleMarkupN3 extends AbstractType implements KnowledgeUnit<TurtleMarkupN3>{
@@ -52,6 +53,7 @@ public class TurtleMarkupN3 extends AbstractType implements KnowledgeUnit<Turtle
 		setSectionFinder(new RegexSectionFinder("N3:(.*?)\\.",Pattern.DOTALL|Pattern.MULTILINE,1));
 
 		setCustomRenderer(new GenericHTMLRenderer<TurtleMarkupN3>("span", new String[] {"style", "color: yellow;", "title", "TurtleMarkupN3"}));
+		setCustomRenderer(new TurtleN3Renderer());
 	}
 
 	public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit<TurtleMarkupN3>> section) {
