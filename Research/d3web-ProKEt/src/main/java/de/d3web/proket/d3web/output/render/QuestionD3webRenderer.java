@@ -157,7 +157,7 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 			st.removeAttribute("qstate");
 			st.setAttribute("qstate", "question-d");
 		}
-
+		else
 		// currently active question (next interview object)
 		// is marked highlighted
 		if (current != null && current.getInterviewObject() != null
