@@ -68,7 +68,7 @@ $(function() {
 
 		var opts = {
 			autoOpen: false,
-			position: [ "left", "top" ],
+			position: [ 0, getHeaderHeight()],
 			modal: false,
 			width: 210,
 			height: 180,
@@ -107,7 +107,7 @@ $(function() {
 
 		var opts = {
 			autoOpen: false,
-			position: [ "left", "top" ],
+			position: [ 0, getHeaderHeight()],
 			modal: false,
 			width: 180,
 			height: 375,
@@ -152,7 +152,7 @@ $(function() {
 
 		var opts = {
 			autoOpen: false,
-			position: [ "left", "top" ],
+			position: [ 0, getHeaderHeight()],
 			modal: false,
 			width: 450,
 			height: 550,
