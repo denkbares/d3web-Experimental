@@ -128,7 +128,7 @@ $(function() {
 		};
 		var loadCaseDialog = $("#jqLoadCaseDialog");
 		loadCaseDialog.dialog(opts);
-		loadCaseDialog.find("option").unbind("dblclick").dblcklick(function(){
+		loadCaseDialog.find("option").unbind("dblclick").dblclick(function(){
 			d3web_getSelectedCaseFileAndLoad();
 		});
 	});

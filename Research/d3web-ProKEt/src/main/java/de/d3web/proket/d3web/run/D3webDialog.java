@@ -402,7 +402,7 @@ public class D3webDialog extends HttpServlet {
 		PersistenceD3webUtils.saveCase((String) httpSession.getAttribute("user"), "autosave",
 				d3webSession);
 
-		// Rerender changed Questions and Quesitonnaires
+		// Rerender changed Questions and Questionnaires
 		Set<QASet> indicatedTOsAfter = getActiveSet(d3webSession);
 
 		Set<TerminologyObject> unknownQuestionsAfter = getUnknownQuestions(d3webSession);
@@ -927,20 +927,7 @@ public class D3webDialog extends HttpServlet {
 
 		// check if unknown option was chosen
 		if (valString.equalsIgnoreCase("unknown")) {
-
-			// remove a previously set value
-			lastFact = blackboard.getValueFact(to);
-			if (lastFact != null) {
-				blackboard.removeValueFact(lastFact);
-			}
-
-			// and add the unknown value
-			value = Unknown.getInstance();
-			Fact fact = FactFactory.createFact(sess, to, value,
-					PSMethodUserSelected.getInstance(),
-					PSMethodUserSelected.getInstance());
-			blackboard.addValueFact(fact);
-
+			value = setQuestionToUnknown(sess, to);
 		}
 
 		// otherwise, i.e., for all other "not-unknown" values
@@ -948,94 +935,19 @@ public class D3webDialog extends HttpServlet {
 
 			// CHOICE questions
 			if (to instanceof QuestionChoice) {
-				if (to instanceof QuestionOC) {
-					// valueString is the ID of the selected item
-					try {
-						value = KnowledgeBaseUtils.findValue(to, valString);
-					}
-					catch (NumberFormatException nfe) {
-						// value still null, will not be set
-					}
-				}
-				else if (to instanceof QuestionMC) {
-
-					if (valString.equals("")) {
-						value = UndefinedValue.getInstance();
-					}
-					else {
-						String[] choices = valString.split(",");
-						List<Choice> cs = new ArrayList<Choice>();
-
-						for (String c : choices) {
-							cs.add(new Choice(c));
-						}
-						value = MultipleChoiceValue.fromChoices(cs);
-
-					}
-				}
+				value = setQuestionChoice(to, valString);
 			}
 			// TEXT questions
 			else if (to instanceof QuestionText) {
-				String textPattern = to.getInfoStore().getValue(ProKEtProperties.TEXT_FORMAT);
-				Pattern p = null;
-				if (textPattern != null && !textPattern.isEmpty()) {
-					try {
-						p = Pattern.compile(textPattern);
-					}
-					catch (Exception e) {
-
-					}
-				}
-				if (p != null) {
-					Matcher m = p.matcher(valString);
-					if (m.find()) {
-						value = new TextValue(m.group());
-					}
-				}
-				else {
-					value = new TextValue(valString);
-				}
+				value = setQuestionText(to, valString);
 			}
 			// NUM questions
 			else if (to instanceof QuestionNum) {
-				try {
-					value = new NumValue(Double.parseDouble(valString.replace(",", ".")));
-				}
-				catch (NumberFormatException ex) {
-					// value still null, will not be set
-				}
+				value = setQuestionNum(valString);
 			}
 			// DATE questions
 			else if (to instanceof QuestionDate) {
-				String dateDescription = to.getInfoStore().getValue(ProKEtProperties.DATE_FORMAT);
-				if (dateDescription != null && !dateDescription.isEmpty()) {
-					String[] dateDescSplit = dateDescription.split("OR");
-					for (String dateDesc : dateDescSplit) {
-						dateDesc = dateDesc.trim();
-						try {
-							SimpleDateFormat dateFormat = new SimpleDateFormat(dateDesc);
-							value = new DateValue(dateFormat.parse(valString));
-						}
-						catch (ParseException e) {
-							// value still null, will not be set
-						}
-						catch (IllegalArgumentException e) {
-							// value still null, will not be set
-						}
-						if (value != null) {
-							break;
-						}
-					}
-				}
-				else {
-					try {
-						SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-						value = new DateValue(dateFormat.parse(valString));
-					}
-					catch (ParseException e) {
-						// value still null, will not be set
-					}
-				}
+				value = setQuestionDate(to, valString);
 			}
 
 			// if reasonable value retrieved, set it for the given
@@ -1056,6 +968,121 @@ public class D3webDialog extends HttpServlet {
 			}
 		}
 
+	}
+
+	private Value setQuestionDate(Question to, String valString) {
+		Value value = null;
+		String dateDescription = to.getInfoStore().getValue(ProKEtProperties.DATE_FORMAT);
+		if (dateDescription != null && !dateDescription.isEmpty()) {
+			String[] dateDescSplit = dateDescription.split("OR");
+			for (String dateDesc : dateDescSplit) {
+				dateDesc = dateDesc.trim();
+				try {
+					SimpleDateFormat dateFormat = new SimpleDateFormat(dateDesc);
+					value = new DateValue(dateFormat.parse(valString));
+				}
+				catch (ParseException e) {
+					// value still null, will not be set
+				}
+				catch (IllegalArgumentException e) {
+					// value still null, will not be set
+				}
+				if (value != null) {
+					break;
+				}
+			}
+		}
+		else {
+			try {
+				SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+				value = new DateValue(dateFormat.parse(valString));
+			}
+			catch (ParseException e) {
+				// value still null, will not be set
+			}
+		}
+		return value;
+	}
+
+	private Value setQuestionNum(String valString) {
+		try {
+			return new NumValue(Double.parseDouble(valString.replace(",", ".")));
+		}
+		catch (NumberFormatException ex) {
+			return null;
+		}
+	}
+
+	private Value setQuestionText(Question to, String valString) {
+		Value value = null;
+		String textPattern = to.getInfoStore().getValue(ProKEtProperties.TEXT_FORMAT);
+		Pattern p = null;
+		if (textPattern != null && !textPattern.isEmpty()) {
+			try {
+				p = Pattern.compile(textPattern);
+			}
+			catch (Exception e) {
+
+			}
+		}
+		if (p != null) {
+			Matcher m = p.matcher(valString);
+			if (m.find()) {
+				value = new TextValue(m.group());
+			}
+		}
+		else {
+			value = new TextValue(valString);
+		}
+		return value;
+	}
+
+	private Value setQuestionChoice(Question to, String valString) {
+		Value value = null;
+		if (to instanceof QuestionOC) {
+			// valueString is the ID of the selected item
+			try {
+				value = KnowledgeBaseUtils.findValue(to, valString);
+			}
+			catch (NumberFormatException nfe) {
+				// value still null, will not be set
+			}
+		}
+		else if (to instanceof QuestionMC) {
+
+			if (valString.equals("")) {
+				value = UndefinedValue.getInstance();
+			}
+			else {
+				String[] choices = valString.split(",");
+				List<Choice> cs = new ArrayList<Choice>();
+
+				for (String c : choices) {
+					cs.add(new Choice(c));
+				}
+				value = MultipleChoiceValue.fromChoices(cs);
+
+			}
+		}
+		return value;
+	}
+
+	private Value setQuestionToUnknown(Session sess, Question to) {
+		Blackboard blackboard = sess.getBlackboard();
+
+		// remove a previously set value
+		Fact lastFact = blackboard.getValueFact(to);
+		if (lastFact != null) {
+			blackboard.removeValueFact(lastFact);
+		}
+
+		// and add the unknown value
+		Value value = Unknown.getInstance();
+		Fact fact = FactFactory.createFact(sess, to, value,
+				PSMethodUserSelected.getInstance(),
+				PSMethodUserSelected.getInstance());
+		blackboard.addValueFact(fact);
+		return value;
 	}
 
 	/**
