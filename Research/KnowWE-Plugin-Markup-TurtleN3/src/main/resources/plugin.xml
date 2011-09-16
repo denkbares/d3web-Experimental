@@ -14,9 +14,9 @@
 
 	<parameter id="scope" value="root"/>
 	<parameter id="priority" value="5"/>
-	<parameter id="description" value="Type de.knowwe.kdom.TurtleMarkupN3"/>
+	<parameter id="description" value="Type de.knowwe.kdom.n3.TurtleMarkupN3"/>
 	<parameter id="name" value="TurtleMarkupN3"/>
-	<parameter id="class" value="de.knowwe.kdom.TurtleMarkupN3"/>
+	<parameter id="class" value="de.knowwe.kdom.n3.TurtleMarkupN3"/>
 	<parameter id="version" value="1.0"/>
 </extension>
 </plugin>

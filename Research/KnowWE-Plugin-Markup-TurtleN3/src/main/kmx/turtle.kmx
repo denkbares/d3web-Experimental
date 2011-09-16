@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ObjectTypes>
 	<ObjectType ID="turtleRoot" ClassName="TurtleMarkupN3"
-		PackageName="de.knowwe.kdom" SuperTypeClass="AbstractType"
+		PackageName="de.knowwe.kdom.n3" SuperTypeClass="AbstractType"
 		SuperTypePackage="de.d3web.we.kdom">
 		<SectionFinder ClassName="RegexSectionFinder"
 			PackageName="de.d3web.we.kdom.sectionFinder" Value='"N3:(.*?)\\\\.",Pattern.DOTALL|Pattern.MULTILINE,1' />
@@ -10,7 +10,7 @@
 
 
 <ObjectType ID="SubjectSection" ClassName="TurtleSubjectSection"
-		PackageName="de.knowwe.kdom" SuperTypeClass="AbstractType"
+		PackageName="de.knowwe.kdom.n3" SuperTypeClass="AbstractType"
 		SuperTypePackage="de.d3web.we.kdom" Parent="turtleRoot" Position="0">
 
 		<SectionFinder ClassName="RegexSectionFinder"
@@ -29,7 +29,7 @@
 
 
 	<ObjectType ID="Subject" ClassName="TurtleSubject"
-		PackageName="de.knowwe.kdom" SuperTypeClass="IRITermRef"
+		PackageName="de.knowwe.kdom.n3" SuperTypeClass="IRITermRef"
 		SuperTypePackage="de.knowwe.compile.test" Parent="SubjectSection" Position="0">
 		<SectionFinder ClassName="AllTextFinderTrimmed"
 			PackageName="de.d3web.we.kdom.sectionFinder"
@@ -47,7 +47,7 @@
 
 
 	<ObjectType ID="PredSentenceSubtree" ClassName="TurtlePredSentence"
-		PackageName="de.knowwe.kdom" SuperTypeClass="AbstractType"
+		PackageName="de.knowwe.kdom.n3" SuperTypeClass="AbstractType"
 		SuperTypePackage="de.d3web.we.kdom" Parent="turtleRoot" Position="1">
 
 		<SectionFinder ClassName="SplitSectionFinderUnquoted"
@@ -62,7 +62,7 @@
 
 
 	<ObjectType ID="PredicateSection" ClassName="TurtlePredicateSectiom"
-		PackageName="de.knowwe.kdom" SuperTypeClass="AbstractType"
+		PackageName="de.knowwe.kdom.n3" SuperTypeClass="AbstractType"
 		SuperTypePackage="de.d3web.we.kdom" Parent="PredSentenceSubtree"
 		Position="0">
 
@@ -79,7 +79,7 @@
 	</ObjectType>
 	
 		<ObjectType ID="Predicate" ClassName="TurtlePredicate"
-		PackageName="de.knowwe.kdom" SuperTypeClass="IRITermRef"
+		PackageName="de.knowwe.kdom.n3" SuperTypeClass="IRITermRef"
 		SuperTypePackage="de.knowwe.compile.test" Parent="PredicateSection"
 		Position="0">
 
@@ -97,7 +97,7 @@
 	
 
 	<ObjectType ID="Object" ClassName="TurtleObject"
-		PackageName="de.knowwe.kdom" SuperTypeClass="IRITermRef"
+		PackageName="de.knowwe.kdom.n3" SuperTypeClass="IRITermRef"
 		SuperTypePackage="de.knowwe.compile.test" Parent="PredSentenceSubtree"
 		Position="1">
 
