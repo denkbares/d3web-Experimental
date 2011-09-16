@@ -19,7 +19,7 @@ def Object2
 
 def Object3
 
-def Object 4
+def Object4
 
 ! Simple Example:
 
@@ -40,14 +40,16 @@ N3: Subject predicate:: Object1 , Object2 ; predicate2:: Object3 , Object 4.
 <br>
 
 N3: Subject 
-
-
-
-    predicate:: Object1 , Object2 ; \\
-    predicate2:: Object1 , Object2, Object2, Object2, Object2, Object2 ; \\
-    predicate3:: Object1 , Object2, Object2, Object2, Object2 ;   \\
-    predicate4:: Object1 , Object2 ; \\
-    predicate5:: Object3 , Object 4.\\
+    predicate:: Object1 , Object2 ; 
+    predicate2:: Object1 , Object2, Object3, Object4 ; 
+    predicate3:: Object1 , Object2, Object3, Object4 ;   
+    predicate4:: Object1 , Object2 ; 
+    predicate5:: Object3 , Object4.
 
 <br>
 
+<sparql2go>
+SELECT  ?y ?z where { lns:Subject ?y ?z .}
+</sparql2go>
+
+[{KnowWEPlugin renderKDOM}]
