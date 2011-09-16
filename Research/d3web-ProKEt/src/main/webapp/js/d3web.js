@@ -126,7 +126,11 @@ $(function() {
 					}
 				}]
 		};
-		$("#jqLoadCaseDialog").dialog(opts);
+		var loadCaseDialog = $("#jqLoadCaseDialog");
+		loadCaseDialog.dialog(opts);
+		loadCaseDialog.find("option").unbind("dblclick").dblcklick(function(){
+			d3web_getSelectedCaseFileAndLoad();
+		});
 	});
 	
 	var close;
