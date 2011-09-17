@@ -27,10 +27,9 @@ import de.d3web.core.session.Session;
 import de.d3web.diaFlux.flow.CommentNode;
 import de.d3web.diaFlux.flow.Edge;
 import de.d3web.diaFlux.flow.Flow;
-import de.d3web.diaFlux.flow.FlowSet;
 import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
-import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
+import de.d3web.diaflux.coverage.CoverageResult;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
 import de.d3web.we.flow.GetTraceHighlightAction;
@@ -54,12 +53,16 @@ public class GetCoverageHighlightAction extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 
-		String kdomid = context.getParameter("kdomid");
+		String flowKdomid = context.getParameter("kdomid");
+		String coverageKdomid = context.getParameter("coveragesection");
 		String master = context.getParameter("master");
+
 		String web = context.getWeb();
 
 		Section<DiaFluxType> diaFluxSec = (Section<DiaFluxType>) Sections.getSection(
-				kdomid);
+				flowKdomid);
+		Section<DiaFluxCoverageType> coverageSec = (Section<DiaFluxCoverageType>) Sections.getSection(
+				coverageKdomid);
 
 		Section<FlowchartType> flowchart = Sections.findSuccessor(diaFluxSec, FlowchartType.class);
 		if (flowchart == null) {
@@ -73,18 +76,18 @@ public class GetCoverageHighlightAction extends AbstractAction {
 		Session session = D3webUtils.getSession(master, context, web);
 		if (session == null) return;// TODO error handling
 
-		FlowSet flowSet = DiaFluxUtils.getFlowSet(kb);
 
-		Flow flow = null;
 		String flowchartName = FlowchartType.getFlowchartName(flowchart);
-		for (Flow kbFlow : flowSet) {
-			if (kbFlow.getName().equalsIgnoreCase(flowchartName)) {
-				flow = kbFlow;
-				break;
-			}
-		}
+		Flow flow = DiaFluxUtils.getFlowSet(kb).get(flowchartName);
 
 		if (flow == null) return;// TODO error handling
+
+		CoverageResult result = DiaFluxCoverageType.getResult(coverageSec, session);
+
+		if (result == null) {
+			context.getWriter().write("<flow></flow>");
+			return;
+		}
 
 		StringBuilder builder = new StringBuilder();
 
@@ -94,7 +97,7 @@ public class GetCoverageHighlightAction extends AbstractAction {
 		List<Edge> uncoveredEdges = new LinkedList<Edge>();
 
 		for (Edge edge : flow.getEdges()) {
-			int count = PSMDiaFluxCoverage.getTraceCount(edge, session);
+			int count = result.getTraceCount(edge);
 			if (count != 0) coveredEdges.add(edge);
 			else uncoveredEdges.add(edge);
 
@@ -108,7 +111,7 @@ public class GetCoverageHighlightAction extends AbstractAction {
 
 		for (Node node : flow.getNodes()) {
 			if (node instanceof CommentNode && node.getIncomingEdges().isEmpty()) continue;
-			int count = PSMDiaFluxCoverage.getTraceCount(node, session);
+			int count = result.getTraceCount(node);
 			if (count != 0) coveredNodes.add(node);
 			else uncoveredNodes.add(node);
 

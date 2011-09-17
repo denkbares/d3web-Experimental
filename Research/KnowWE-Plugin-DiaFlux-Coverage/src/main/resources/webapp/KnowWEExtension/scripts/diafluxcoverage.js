@@ -14,10 +14,24 @@ DiaFlux.Coverage.refresh = function(el) {
 
 
 DiaFlux.Coverage.highlight = function(){
+	DiaFlux.Highlight.getHighlights.call(this, 'GetCoverageHighlightAction', {master: $('coveragemaster').value, coveragesection: $('coveragesection').value});
+}
+
+DiaFlux.Coverage.calculateCoverage = function(kdomid){
+	var params = {
+		action : 'CalculateCoverageAction',
+        kdomid: kdomid
+	};
 	
-//	DiaFlux.Highlight.getHighlights('GetCoverageHighlightAction');
-	DiaFlux.Highlight.getHighlights.call(this, 'GetCoverageHighlightAction', $('coveragemaster').value);
-	
+	var options = {
+		url: KNOWWE.core.util.getURL( params ),
+        response : {
+            action: 'none'
+        }
+    };
+    new _KA(options).send();
+		
+			
 }
 
 KNOWWE.helper.observer.subscribe("flowchartrendered", DiaFlux.Coverage.highlight);

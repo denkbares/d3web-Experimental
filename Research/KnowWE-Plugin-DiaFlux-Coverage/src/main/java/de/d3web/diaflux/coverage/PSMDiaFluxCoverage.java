@@ -93,22 +93,10 @@ public class PSMDiaFluxCoverage extends PSMethodAdapter implements PostHookableP
 		return new CoverageSessionObject();
 	}
 
-	/**
-	 * Returns the number of times the edge was active during the session.
-	 */
-	public static int getTraceCount(Edge edge, Session session) {
-		return getCoverage(session).getTraceCount(edge);
-	}
-
-	/**
-	 * Returns the number of times the node was active during the session.
-	 */
-	public static int getTraceCount(Node node, Session session) {
-		return getCoverage(session).getTraceCount(node);
-	}
-
-	private static CoverageSessionObject getCoverage(Session session) {
+	public static CoverageSessionObject getCoverage(Session session) {
 		return session.getSessionObject(session.getPSMethodInstance(PSMDiaFluxCoverage.class));
 	}
+
+
 
 }

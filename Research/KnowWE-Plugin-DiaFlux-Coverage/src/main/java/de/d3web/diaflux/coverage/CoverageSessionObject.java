@@ -27,7 +27,7 @@ import de.d3web.diaFlux.flow.Node;
 
 
 /**
- * This class stores the coverage fo DiaFlux models for a specific session.
+ * This class stores the coverage of DiaFlux models for a specific session.
  * 
  * @author Reinhard Hatko
  * @created 09.08.2011
@@ -58,22 +58,14 @@ public class CoverageSessionObject implements SessionObject {
 		edges.put(edge, edges.get(edge) + 1);
 	}
 
-	public int getTraceCount(Node node) {
-		Integer count = nodes.get(node);
-		if (count == null) {
-			return 0;
-		}
-		else return count;
-
+	protected Map<Edge, Integer> getEdgeCounts() {
+		return edges;
 	}
 
-	public int getTraceCount(Edge edge) {
-		Integer count = edges.get(edge);
-		if (count == null) {
-			return 0;
-		}
-		else return count;
-
+	protected Map<Node, Integer> getNodeCounts() {
+		return nodes;
 	}
+
+
 
 }
