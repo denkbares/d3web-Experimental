@@ -18,11 +18,28 @@
  */
 package de.d3web.we.testcaseexecutor;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLStreamException;
+
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.empiricaltesting.SequentialTestCase;
+import de.d3web.empiricaltesting.TestCase;
+import de.d3web.empiricaltesting.TestPersistence;
+import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysis;
+import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.KnowWERessourceLoader;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
 import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.d3web.we.utils.D3webUtils;
+import de.d3web.we.wikiConnector.KnowWEWikiConnector;
 
 /**
  * 
@@ -32,11 +49,13 @@ import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 public class TestCaseExecutorType extends DefaultMarkupType {
 
 	public static final String ANNOTATION_MASTER = "master";
+	public static final String ANNOTATION_FILE = "file";
 	private static final DefaultMarkup MARKUP;
 
 	static {
 		MARKUP = new DefaultMarkup("TestCaseExecutor");
 		MARKUP.addAnnotation(ANNOTATION_MASTER, false);
+		MARKUP.addAnnotation(ANNOTATION_FILE, false);
 
 		KnowWERessourceLoader.getInstance().add("testcaseexecutor.js",
 				KnowWERessourceLoader.RESOURCE_SCRIPT);
@@ -54,7 +73,55 @@ public class TestCaseExecutorType extends DefaultMarkupType {
 	}
 
 	public static String getMaster(Section<TestCaseExecutorType> section) {
-		return DefaultMarkupType.getAnnotation(section, ANNOTATION_MASTER);
+		String master = DefaultMarkupType.getAnnotation(section, ANNOTATION_MASTER);
+		return master != null ? master : section.getArticle().getTitle();
+	}
+
+	/**
+	 * 
+	 * @created 13.09.2011
+	 * @param section
+	 */
+	public static void execute(Section<TestCaseExecutorType> section, TestCaseAnalysis analysis) {
+		String files = DefaultMarkupType.getAnnotation(section, ANNOTATION_FILE);
+		if (files == null) return;
+
+		Pattern pattern = Pattern.compile(files, Pattern.CASE_INSENSITIVE);
+		
+		KnowWEWikiConnector connector = KnowWEEnvironment.getInstance().getWikiConnector();
+		String title = section.getArticle().getTitle();
+		List<String> page = connector.getAttachmentFilenamesForPage(title);
+		String master = getMaster(section);
+		KnowledgeBase kb = D3webUtils.getKB(section.getWeb(), master);
+		for (String file : page) {
+			if (pattern.matcher(file).matches()) {
+				try {
+					String path = title + "/" + file;
+					System.out.println(path);
+					InputStream stream = connector.getAttachment(path).getInputStream();
+					List<SequentialTestCase> cases = TestPersistence.getInstance().loadCases(
+							stream, kb);
+					TestCase suite = new TestCase();
+					suite.setRepository(cases);
+					suite.setKb(kb);
+					analysis.runAndAnalyze(suite);
+
+				}
+				catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				catch (FactoryConfigurationError e) {
+					e.printStackTrace();
+				}
+				catch (XMLStreamException e) {
+					e.printStackTrace();
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
 	}
 
 }

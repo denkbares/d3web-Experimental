@@ -8,12 +8,6 @@ div.selectXMLFile {
 }
 
 
-div#testcases {
-	border: 1px solid #DDDDDD;
-	background-color: #F9F9F9;
-	padding: 3px;
-}
-
 div.runCasesButton {
 	background-image: url(../images/testcaseexecutor/run.gif);
 	height: 16px;

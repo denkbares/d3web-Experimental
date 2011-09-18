@@ -19,9 +19,11 @@
 package de.d3web.we.testcaseexecutor;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -29,10 +31,15 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.empiricaltesting.SequentialTestCase;
 import de.d3web.empiricaltesting.TestCase;
 import de.d3web.empiricaltesting.TestPersistence;
+import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysis;
+import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysisReport;
 import de.d3web.we.action.AbstractAction;
 import de.d3web.we.action.UserActionContext;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.core.KnowWEEnvironment;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.testcase.action.TestCaseRunAction;
 import de.d3web.we.wikiConnector.ConnectorAttachment;
 import de.d3web.we.wikiConnector.KnowWEWikiConnector;
@@ -47,26 +54,34 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 	private static final String TESTCASEEXECUTOR_SEPARATOR = "#####";
 	private static final String TESTCASEEXECUTOR_UNNAMED = "Unnamed TestCase";
 
+
+
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 
-		String testCases = context.getParameter("testcases");
-		String fileName = context.getParameter("filename");
 		String master = context.getParameter("master");
-		String topic = context.getTopic();
-		String[] cases = testCases.split(TESTCASEEXECUTOR_SEPARATOR);
-
 		KnowledgeBase kb = D3webModule.getAD3webKnowledgeServiceInTopic(
 				context.getWeb(), master);
 
+		String sectionID = context.getParameter("kdomid");
+		if (sectionID != null) {
+			executeFromSection(context, kb, sectionID);
+			return;
+		}
+
+		String testCases = context.getParameter("testcases");
+		String fileName = context.getParameter("filename");
+		String topic = context.getTopic();
+		String[] cases = testCases.split(TESTCASEEXECUTOR_SEPARATOR);
+
+
 		KnowWEWikiConnector connector = KnowWEEnvironment.getInstance().getWikiConnector();
-		Collection<ConnectorAttachment> attachments = connector.getAttachments();
+		Collection<String> attachments = connector.getAttachmentFilenamesForPage(topic);
 		ConnectorAttachment selectedAttachment = null;
 
-		for (ConnectorAttachment attachment : attachments) {
-			if (attachment.getParentName().equals(topic)
-					&& attachment.getFileName().equals(fileName)) {
-				selectedAttachment = attachment;
+		for (String attachment : attachments) {
+			if (attachment.equals(fileName)) {
+				selectedAttachment = connector.getAttachment(topic + "/" + attachment);
 				break;
 			}
 		}
@@ -102,8 +117,7 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 			// render the result
 			t.setKb(kb);
 			t.setRepository(repo);
-			TestCaseRunAction action = new TestCaseRunAction();
-			action.renderTests(context, t);
+			TestCaseRunAction.renderTests(context, t);
 
 			// append back button
 			result.append("<br />");
@@ -115,6 +129,48 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 		catch (XMLStreamException e) {
 			e.printStackTrace();
 		}
+
+	}
+
+	/**
+	 * 
+	 * @param context
+	 * @param kb
+	 * @param sectionID
+	 * @created 16.09.2011
+	 */
+	private void executeFromSection(UserActionContext context, KnowledgeBase kb, String sectionID) {
+
+		Section<TestCaseExecutorType> section = (Section<TestCaseExecutorType>) Sections.getSection(sectionID);
+
+		String file = DefaultMarkupType.getAnnotation(section, TestCaseExecutorType.ANNOTATION_FILE);
+
+		KnowWEWikiConnector connector = KnowWEEnvironment.getInstance().getWikiConnector();
+		ConnectorAttachment attachment = connector.getAttachment(section.getArticle().getTitle()
+				+ "/" + file);
+
+
+		List<SequentialTestCase> testcases;
+		try {
+			testcases = TestPersistence.getInstance().loadCases(attachment.getInputStream(), kb);
+		}
+		catch (Exception e) {
+			// TODO error handling
+			e.printStackTrace();
+			return;
+		}
+
+
+		TestCase t = new TestCase();
+		t.setKb(kb);
+		t.setRepository(testcases);
+		TestCaseAnalysis analysis = new TestCaseAnalysis();
+		TestCaseAnalysisReport result = analysis.runAndAnalyze(t);
+
+		ResourceBundle rb = D3webModule.getKwikiBundle_d3web(context);
+		MessageFormat mf = new MessageFormat("");
+		TestCaseRunAction.renderTestAnalysisResult(t, result, rb, mf);
+
 
 	}
 

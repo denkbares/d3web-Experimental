@@ -8,7 +8,7 @@ TestCaseExecutor.getTestcases = function(filename, master) {
 	}
 	
 	
-	params = {
+	var params = {
 		action : 'TestCaseExecutorAction',
         KWikiWeb : 'default_web',
         filename : filename, 
@@ -16,7 +16,7 @@ TestCaseExecutor.getTestcases = function(filename, master) {
 	};
 	
 	// options for AJAX request
-    options = {
+    var options = {
         url : KNOWWE.core.util.getURL( params ),
         response : {
     		action : 'none',
@@ -66,29 +66,29 @@ TestCaseExecutor.runTestcase = function() {
 
 	var filename = $('filename').innerHTML;
 	var master = $('master').innerHTML;
-	params = {
-			action : 'TestCaseExecutorRunTestcaseAction',
-	        KWikiWeb : 'default_web',
-	        testcases : selectedCases,
-	        filename : filename,
-	        master : master
-		};
+	var params = {
+		action : 'TestCaseExecutorRunTestcaseAction',
+        KWikiWeb : 'default_web',
+        testcases : selectedCases,
+        filename : filename,
+        master : master
+	};
 		
 		// options for AJAX request
-	    options = {
-	        url : KNOWWE.core.util.getURL( params ),
-	        response : {
-	    		action : 'none',
-            	fn : function(){
-	    			var text = this.responseText;
-	    			var parent = $('testcases');
-	    			parent.innerHTML = text;
-	    		}
-	        }
-	    };
-	    
-	    // send AJAX request
-	    new _KA( options ).send();
+	 var options = {
+        url : KNOWWE.core.util.getURL( params ),
+        response : {
+    		action : 'none',
+        	fn : function(){
+    			var text = this.responseText;
+    			var parent = $('testcases');
+    			parent.innerHTML = text;
+    		}
+        }
+    };
+    
+    // send AJAX request
+    new _KA( options ).send();
 
 }
 
@@ -116,4 +116,30 @@ TestCaseExecutor.selectAllCases = function() {
 			checkbox.checked = false;
 		}
 	}
+}
+
+TestCaseExecutor.runTestcaseFromSection = function(kdomid){
+
+	var params = {
+		action : 'TestCaseExecutorRunTestcaseAction',
+		kdomid : kdomid
+	};
+
+	// options for AJAX request
+	var options = {
+		url : KNOWWE.core.util.getURL(params),
+		response : {
+			action : 'none',
+			fn : function() {
+				var text = this.responseText;
+				var parent = $('testcases');
+				parent.innerHTML = text;
+			}
+		}
+	};
+
+	// send AJAX request
+	new _KA(options).send();
+	
+	
 }
