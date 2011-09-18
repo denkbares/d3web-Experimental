@@ -53,7 +53,7 @@ import de.d3web.proket.output.container.ContainerCollection;
  * @date 14.01.2011; Update: 28/01/2011
  * 
  */
-public class Mediastinitis extends D3webDialog {
+public class MediastinitisDialog extends D3webDialog {
 
 	private static final long serialVersionUID = 4798072917307992413L;
 

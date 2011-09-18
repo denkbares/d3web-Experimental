@@ -44,7 +44,7 @@ public interface RootD3webRenderer {
 
 	public String renderHeaderInfoLine(Session d3webSession);
 
-	public void addButtons(StringTemplate st);
+	public void setDialogSpecificAttributes(HttpSession httpSession, StringTemplate st);
 
 	/**
 	 * Handles CSS specifications from the specification XML, i.e. checks the
@@ -67,4 +67,21 @@ public interface RootD3webRenderer {
 	 */
 	public void defineAndAddJS(ContainerCollection cc);
 
+	/**
+	 * 
+	 * @created 12.03.2011
+	 * @return String representation of the files that can be loaded in the form
+	 *         of an options-list. (For to be included within the corresponding
+	 *         FileSelect-StringTemplate.
+	 */
+	public String renderCaseList();
+
+	/**
+	 * 
+	 * @created 12.03.2011
+	 * @return String representation of the files that can be loaded in the form
+	 *         of an options-list. (For to be included within the corresponding
+	 *         FileSelect-StringTemplate.
+	 */
+	public String renderUserCaseList(String user);
 }

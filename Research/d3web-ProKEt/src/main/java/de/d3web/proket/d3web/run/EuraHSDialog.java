@@ -50,7 +50,7 @@ import de.d3web.proket.output.container.ContainerCollection;
  * @date 14.01.2011; Update: 28/01/2011
  * 
  */
-public class Hernia extends D3webDialog {
+public class EuraHSDialog extends D3webDialog {
 
 	private static final long serialVersionUID = -4790211381203716706L;
 
@@ -143,4 +143,5 @@ public class Hernia extends D3webDialog {
 		// causes JS to start new session and d3web case finally
 		writer.append("newUser");
 	}
+
 }

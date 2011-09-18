@@ -54,7 +54,7 @@ import de.d3web.proket.utils.GlobalSettings;
  * whether also an extended enum structure would be sufficient for achieving
  * such a mapping-thing.
  * 
- * @author Martina Freiberg
+ * @author Martina Freiberg, Albrecht Striffler
  * @created 14.01.2011
  */
 public class D3webRendererMapping extends HashMap<String, String> {

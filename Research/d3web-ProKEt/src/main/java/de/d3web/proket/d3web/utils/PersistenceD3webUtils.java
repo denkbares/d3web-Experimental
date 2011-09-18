@@ -2,7 +2,6 @@ package de.d3web.proket.d3web.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -35,7 +34,7 @@ import de.d3web.proket.utils.GlobalSettings;
 
 public class PersistenceD3webUtils {
 
-	private static final String AUTOSAVE = "autosave";
+	public static final String AUTOSAVE = "autosave";
 
 	private static File getFile(String user, String filename) {
 		String path = GlobalSettings.getInstance().getCaseFolder() + File.separator
@@ -85,56 +84,12 @@ public class PersistenceD3webUtils {
 		return session;
 	}
 
-	/**
-	 * 
-	 * @created 12.03.2011
-	 * @return String representation of the files that can be loaded in the form
-	 *         of an options-list. (For to be included within the corresponding
-	 *         FileSelect-StringTemplate.
-	 */
-	public static String getCaseList() {
-		return getUserCaseList(null);
-	}
-
-	/**
-	 * 
-	 * @created 12.03.2011
-	 * @return String representation of the files that can be loaded in the form
-	 *         of an options-list. (For to be included within the corresponding
-	 *         FileSelect-StringTemplate.
-	 */
-	public static String getUserCaseList(String user) {
-		StringBuffer cases = new StringBuffer();
-
+	public static File[] getCaseList(String user) {
 		String folderPath = GlobalSettings.getInstance().getCaseFolder();
 		if (user != null && !user.isEmpty()) folderPath += File.separator + user;
 		File folder = new File(folderPath);
-
-		/* add autosaved as first item always */
-		cases.append("<option");
-		cases.append(" title='" + AUTOSAVE + "'>");
-		cases.append(AUTOSAVE);
-		cases.append("</option>");
-
-		if (folder.listFiles() != null && folder.listFiles().length > 0) {
-
-			File[] files = folder.listFiles();
-
-			Arrays.sort(files);
-
-			for (File f : files) {
-				if (!f.getName().startsWith(AUTOSAVE)) {
-					cases.append("<option");
-					String filename = f.getName().substring(0, f.getName().lastIndexOf("."));
-					cases.append(" title='"
-							+ filename + "'>");
-					cases.append(filename);
-					cases.append("</option>");
-				}
-			}
-		}
-
-		return cases.toString();
+		File[] files = folder.listFiles();
+		return files;
 	}
 
 	private static class SaveThread extends Thread {

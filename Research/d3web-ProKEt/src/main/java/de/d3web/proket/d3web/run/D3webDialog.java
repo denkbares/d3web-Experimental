@@ -125,9 +125,9 @@ public class D3webDialog extends HttpServlet {
 
 	protected static final String D3WEB_SESSION = "d3webSession";
 
-	private static final String REPLACECONTENT = "##replacecontent##";
+	protected static final String REPLACECONTENT = "##replacecontent##";
 
-	private static final String REPLACEID = "##replaceid##";
+	protected static final String REPLACEID = "##replaceid##";
 
 	private static final long serialVersionUID = -2466200526894064976L;
 
@@ -341,6 +341,13 @@ public class D3webDialog extends HttpServlet {
 			checkRange(request, response);
 			return;
 		}
+		else {
+			handleDialogSpecificActions(httpSession, request, response, action);
+		}
+	}
+
+	protected void handleDialogSpecificActions(HttpSession httpSession, HttpServletRequest request, HttpServletResponse response, String action) throws IOException {
+		// Overwrite if necessary
 	}
 
 	/**

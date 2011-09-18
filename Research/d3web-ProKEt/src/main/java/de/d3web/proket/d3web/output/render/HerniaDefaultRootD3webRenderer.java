@@ -19,7 +19,18 @@
  */
 package de.d3web.proket.d3web.output.render;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
 import org.antlr.stringtemplate.StringTemplate;
+
+import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 
 /**
  * Basic Renderer Class for d3web-based dialogs. Defines the basic rendering of
@@ -31,18 +42,45 @@ import org.antlr.stringtemplate.StringTemplate;
  */
 public class HerniaDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 
-	@Override
-	public void addButtons(StringTemplate st) {
-		// add some buttons for basic functionality
-		st.setAttribute("loadcase", "true");
-		st.setAttribute("savecase", "true");
-		st.setAttribute("reset", "true");
+	private static Map<String, Map<String, String>> caseCache = new HashMap<String, Map<String, String>>();
 
+	@Override
+	public void setDialogSpecificAttributes(HttpSession httpSession, StringTemplate st) {
 		// ONLY FOR HERNIA, 3 custom buttons
 		st.setAttribute("summary", true);
 		st.setAttribute("statistics", true);
-		st.setAttribute("followup", true);
+		st.setAttribute("followupbutton", true);
 
+		String opts = renderFollowUpList((String) httpSession.getAttribute("user"));
+		st.setAttribute("followupdialog", opts);
+
+	}
+
+	private String renderFollowUpList(String user) {
+
+		File[] caseFiles = PersistenceD3webUtils.getCaseList(user);
+		StringBuffer cases = new StringBuffer();
+		if (caseFiles != null && caseFiles.length > 0) {
+
+			Arrays.sort(caseFiles);
+
+			for (File caseFile : caseFiles) {
+				if (!caseFile.getName().startsWith(PersistenceD3webUtils.AUTOSAVE)) {
+					cases.append("<option");
+					String filename = caseFile.getName().substring(0,
+							caseFile.getName().lastIndexOf("."));
+					cases.append(" title='"
+							+ filename + "'>");
+					cases.append("<span style='border=1px solid;'>" + filename + "</span>");
+					cases.append("<span style='border=1px solid;'>"
+							+ new SimpleDateFormat("dd.MM.yyyy").format(new Date(
+									caseFile.lastModified()))
+							+ "</span>");
+					cases.append("</option>");
+				}
+			}
+		}
+		return cases.toString();
 	}
 
 }

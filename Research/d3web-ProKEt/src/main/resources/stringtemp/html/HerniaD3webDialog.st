@@ -34,7 +34,7 @@ $endif$
 				</tr>
 				<tr>
 					<td>
-						$if(followup)$
+						$if(followupbutton)$
 							<div class="leftButton">
 								$FollowUpButton()$
 							</div>

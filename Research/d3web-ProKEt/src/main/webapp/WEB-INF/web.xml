@@ -23,8 +23,8 @@
 		<servlet-class>de.d3web.proket.d3web.run.D3webDialog</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>Mediastinitis</servlet-name>
-		<servlet-class>de.d3web.proket.d3web.run.Mediastinitis</servlet-class>
+		<servlet-name>MediastinitisDialog</servlet-name>
+		<servlet-class>de.d3web.proket.d3web.run.MediastinitisDialog</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>Debug</servlet-name>
@@ -43,8 +43,8 @@
 		<servlet-class>de.d3web.proket.run.LoginServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>Hernia</servlet-name>
-		<servlet-class>de.d3web.proket.d3web.run.Hernia</servlet-class>
+		<servlet-name>EuraHSDialog</servlet-name>
+		<servlet-class>de.d3web.proket.d3web.run.EuraHSDialog</servlet-class>
 	</servlet>
 	
 	
@@ -61,8 +61,8 @@
 		<url-pattern>/D3webDialog</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>Mediastinitis</servlet-name>
-		<url-pattern>/Mediastinitis</url-pattern>
+		<servlet-name>MediastinitisDialog</servlet-name>
+		<url-pattern>/Mediastinitis-Dialog</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Debug</servlet-name>
@@ -81,7 +81,7 @@
 		<url-pattern>/LoginServlet</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>Hernia</servlet-name>
+		<servlet-name>EuraHSDialog</servlet-name>
 		<url-pattern>/EuraHS-Dialog</url-pattern>
 	</servlet-mapping>
 	

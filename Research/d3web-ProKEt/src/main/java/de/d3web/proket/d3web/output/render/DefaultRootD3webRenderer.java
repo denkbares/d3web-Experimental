@@ -19,6 +19,8 @@
  */
 package de.d3web.proket.d3web.output.render;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpSession;
@@ -50,27 +52,19 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 	public ContainerCollection renderRoot(ContainerCollection cc,
 			Session d3webSession, HttpSession http) {
 
-		// D3webRenderer.d3webSession = d3webSession;
-
-		D3webConnector d3wcon = D3webConnector.getInstance();
-
 		// get the d3web base template according to dialog type
-		StringTemplate st = TemplateUtils.getStringTemplate(d3wcon.getUserprefix() + "D3webDialog",
+		StringTemplate st = TemplateUtils.getStringTemplate(
+				D3webConnector.getInstance().getUserprefix() + "D3webDialog",
 				"html");
-
 		/* fill some basic attributes */
 		st.setAttribute("header", D3webConnector.getInstance().getHeader());
 
 		// load case list dependent from logged in user, e.g. MEDIASTINITIS
-		String opts = PersistenceD3webUtils.getUserCaseList((String) http.getAttribute("user"));
+		String opts = renderUserCaseList((String) http.getAttribute("user"));
 		st.setAttribute("fileselectopts", opts);
 
 		String info = renderHeaderInfoLine(d3webSession);
 		st.setAttribute("info", info);
-
-		// Summary dialog
-		// String sum = fillSummaryDialog();
-		// st.setAttribute("sumQuestionnaire", sum);
 
 		// set language variable for StringTemplate Widgets
 		String lang = D3webConnector.getInstance().getLanguage();
@@ -82,7 +76,9 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		}
 
 		// add some buttons for basic functionality
-		addButtons(st);
+		st.setAttribute("loadcase", "true");
+		st.setAttribute("savecase", "true");
+		st.setAttribute("reset", "true");
 
 		/*
 		 * handle custom ContainerCollection modification, e.g., enabling
@@ -96,7 +92,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		handleCss(cc);
 
 		// render the children
-		renderChildren(st, d3webSession, cc, d3wcon.getKb().getRootQASet());
+		renderChildren(st, d3webSession, cc, D3webConnector.getInstance().getKb().getRootQASet());
 
 		// global JS initialization
 		defineAndAddJS(cc);
@@ -105,15 +101,15 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		st.setAttribute("fulljs", cc.js.generateOutput());
 		st.setDefaultArgumentValues();
 
+		setDialogSpecificAttributes(http, st);
+
 		cc.html.add(st.toString());
 		return cc;
 	}
 
 	@Override
-	public void addButtons(StringTemplate st) {
-		st.setAttribute("loadcase", "true");
-		st.setAttribute("savecase", "true");
-		st.setAttribute("reset", "true");
+	public void setDialogSpecificAttributes(HttpSession httpSession, StringTemplate st) {
+		// overwrite if you have specific attributes
 	}
 
 	@Override
@@ -141,7 +137,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 
 	}
 
-	private Boolean verbalizeHeaderQuestion(Question headerQuestion, Value headerQuestionValue, StringBuilder infoStringBuilder, Boolean first) {
+	protected Boolean verbalizeHeaderQuestion(Question headerQuestion, Value headerQuestionValue, StringBuilder infoStringBuilder, Boolean first) {
 		if (headerQuestionValue != null && UndefinedValue.isNotUndefinedValue(headerQuestionValue)
 				&& !Unknown.getInstance().equals(headerQuestionValue)) {
 			String questionString = headerQuestion.getName();
@@ -212,6 +208,42 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		cc.js.add("generate_tooltip_functions();", 3);
 		cc.js.add("}", 31);
 
+	}
+
+	@Override
+	public String renderCaseList() {
+		return renderUserCaseList(null);
+	}
+
+	@Override
+	public String renderUserCaseList(String user) {
+
+		File[] files = PersistenceD3webUtils.getCaseList(user);
+
+		StringBuffer cases = new StringBuffer();
+		/* add autosaved as first item always */
+		cases.append("<option");
+		cases.append(" title='" + PersistenceD3webUtils.AUTOSAVE + "'>");
+		cases.append(PersistenceD3webUtils.AUTOSAVE);
+		cases.append("</option>");
+
+		if (files != null && files.length > 0) {
+
+			Arrays.sort(files);
+
+			for (File f : files) {
+				if (!f.getName().startsWith(PersistenceD3webUtils.AUTOSAVE)) {
+					cases.append("<option");
+					String filename = f.getName().substring(0, f.getName().lastIndexOf("."));
+					cases.append(" title='"
+							+ filename + "'>");
+					cases.append(filename);
+					cases.append("</option>");
+				}
+			}
+		}
+
+		return cases.toString();
 	}
 
 }

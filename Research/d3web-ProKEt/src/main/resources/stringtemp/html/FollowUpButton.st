@@ -1,8 +1,9 @@
-<div id="followup" class="caseButton">
+<div id="followupbutton" class="caseButton">
 	$if(langEN)$
 		Follow Up
 	$endif$ 
 	$if (langDE)$
     	Folgeeintrag
     $endif$
+    $FollowUpDialog()$
 </div>

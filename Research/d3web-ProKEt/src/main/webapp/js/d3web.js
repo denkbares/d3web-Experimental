@@ -85,7 +85,7 @@ $(function() {
 				id: "saveCancel",
 				text: goon,
 				click: function(){
-					 closeJQConfirmDialog();
+					$('#jqConfirmDialog').dialog('close');
 					 warningRecieved = false;
 					}
 				}]
@@ -122,7 +122,7 @@ $(function() {
 				id: "loadCancel",
 				text: cancelload,
 				click: function(){
-					closeJQLoadCaseDialog();
+						$('#jqLoadCaseDialog').dialog('close');
 					}
 				}]
 		};
@@ -167,11 +167,42 @@ $(function() {
 				id: "sumClose",
 				text: close,
 				click: function(){
-					closeJQSummaryDialog();
+					$('#jqSummaryDialog').dialog('close');
 				}
 			}]
 		};
 		$("#jqSummaryDialog").dialog(opts);
+	});
+	
+	/* creating and configuring the jquery UI followup dialog */
+	$(function() {
+
+		var opts = {
+			autoOpen: false,
+			position: [ 0, getHeaderHeight()],
+			modal: false,
+			width: 180,
+			height: 375,
+			buttons: [{
+				id: "loadOK",
+				text: load,
+				click: function(){
+					d3web_getSelectedCaseFileAndLoad();
+				}
+				},
+				{
+				id: "loadCancel",
+				text: cancelload,
+				click: function(){
+						$('#jqFollowUpDialog').dialog('close');
+					}
+				}]
+		};
+		var followUpDialog = $("#jqFollowUpDialog");
+		followUpDialog.dialog(opts);
+		followUpDialog.find("option").unbind("dblclick").dblclick(function(){
+			d3web_getSelectedCaseFileAndLoad();
+		});
 	});
 
 	/* Initialize the JS binding to the dialog elements */
@@ -282,8 +313,8 @@ function initFunctionality() {
 		$("#jqLoadCaseDialog").dialog("open");
 	});
 	
-	$('#followup').unbind('click').click(function(event) {
-		$("#jqLoadCaseDialog").dialog("open");
+	$('#followupbutton').unbind('click').click(function(event) {
+		$("#jqFollowUpDialog").dialog("open");
 	});
 	
 	$('#summary').unbind('click').click(function(event){
@@ -804,20 +835,3 @@ function d3web_show_solutions(target_id) {
 	});
 }
 
-
-
-function closeJQConfirmDialog() {
-	$('#jqConfirmDialog').dialog('close');
-}
-
-
-function closeJQSummaryDialog() {
-	$('#jqSummaryDialog').dialog('close');
-}
-// function closeJQLoginDialog() {
-// $('#jqLoginDialog').dialog('close');
-// }
-
-function closeJQLoadCaseDialog() {
-	$('#jqLoadCaseDialog').dialog('close');
-}
