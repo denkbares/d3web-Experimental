@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.node.Node;
-import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
@@ -37,14 +36,16 @@ import de.d3web.we.kdom.objects.TermReference;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.test.Utils;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
-public class TripleMarkupSimple extends AbstractType implements KnowledgeUnit<TripleMarkupSimple> {
+public class TripleMarkup extends AbstractType implements KnowledgeUnit<TripleMarkup> {
 
-	public TripleMarkupSimple() {
+	public TripleMarkup() {
 
-		this.setSectionFinder(new RegexSectionFinder("\\{(.*?::.*?)\\}", Pattern.DOTALL,
+		
+		this.setSectionFinder(new RegexSectionFinder("^>(.*?::.*?)$", Pattern.DOTALL| Pattern.MULTILINE,
 				1));
 		this.addChildType(new SimpleTurtlePredicate());
 		this.addChildType(new SimpleTurtleSubject());
@@ -61,7 +62,7 @@ public class TripleMarkupSimple extends AbstractType implements KnowledgeUnit<Tr
 		}
 	}
 
-	class SimpleTurtleSubject extends IRITermRef {
+	class SimpleTurtleSubject extends IRITermRef{
 		public SimpleTurtleSubject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new AllTextFinderTrimmed());
@@ -71,7 +72,7 @@ public class TripleMarkupSimple extends AbstractType implements KnowledgeUnit<Tr
 
 	}
 
-	class SimpleTurtleObject extends IRITermRef {
+	class SimpleTurtleObject extends IRITermRef{
 		public SimpleTurtleObject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new RegexSectionFinder("::\\s(.*)", Pattern.DOTALL, 1));
@@ -81,36 +82,28 @@ public class TripleMarkupSimple extends AbstractType implements KnowledgeUnit<Tr
 	}
 
 	@Override
-	public void deleteFromRepository(Section<TripleMarkupSimple> section) {
+	public void deleteFromRepository(Section<TripleMarkup> section) {
 		Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
 	}
 
-	private URI getURI(Section<? extends IRITermRef> s) {
-		URI objURI = null;
-		if(objURI ==null) { 
-			objURI = Utils.getURI(s);
-		}
-		return objURI;
-	}
-	
 	@Override
-	public void insertIntoRepository(Section<TripleMarkupSimple> section) {
+	public void insertIntoRepository(Section<TripleMarkup> section) {
 
-		List<Section<IRITermRef>> found = new ArrayList<Section<IRITermRef>>();
+		List<Section<TermReference>> found = new ArrayList<Section<TermReference>>();
 		Node subURI = null;
 		Node predURI = null;
 		Node objURI = null;
 
-		Sections.findSuccessorsOfType(section, IRITermRef.class, found);
+		Sections.findSuccessorsOfType(section, TermReference.class, found);
 
 		if (found.size() == 3) {
-			Section<IRITermRef> subject = found.get(0);
-			Section<IRITermRef> predicate = found.get(1);
-			Section<IRITermRef> object = found.get(2);
+			Section<TermReference> subject = found.get(0);
+			Section<TermReference> predicate = found.get(1);
+			Section<TermReference> object = found.get(2);
 
-			subURI = getURI(subject);
-			predURI = getURI(predicate);
-			objURI = getURI(object);
+			subURI = Utils.getURI(subject);
+			predURI = Utils.getURI(predicate);
+			objURI = Utils.getURI(object);
 		}
 		else {
 			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
@@ -138,7 +131,7 @@ public class TripleMarkupSimple extends AbstractType implements KnowledgeUnit<Tr
 
 	@Override
 	public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(
-			Section<? extends KnowledgeUnit<TripleMarkupSimple>> section) {
+			Section<? extends KnowledgeUnit<TripleMarkup>> section) {
 		return CompileUtils.getAllReferencesOfCompilationUnit(section);
 	}
 }

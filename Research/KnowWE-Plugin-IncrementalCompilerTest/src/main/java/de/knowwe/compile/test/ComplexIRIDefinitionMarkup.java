@@ -40,6 +40,7 @@ import de.d3web.we.utils.SplitUtility;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.test.Utils;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
