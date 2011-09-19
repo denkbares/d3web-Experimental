@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.node.Node;
-import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
@@ -85,32 +84,24 @@ public class TripleMarkupSimple extends AbstractType implements KnowledgeUnit<Tr
 		Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
 	}
 
-	private URI getURI(Section<? extends IRITermRef> s) {
-		URI objURI = null;
-		if(objURI ==null) { 
-			objURI = Utils.getURI(s);
-		}
-		return objURI;
-	}
-	
 	@Override
 	public void insertIntoRepository(Section<TripleMarkupSimple> section) {
 
-		List<Section<IRITermRef>> found = new ArrayList<Section<IRITermRef>>();
+		List<Section<TermReference>> found = new ArrayList<Section<TermReference>>();
 		Node subURI = null;
 		Node predURI = null;
 		Node objURI = null;
 
-		Sections.findSuccessorsOfType(section, IRITermRef.class, found);
+		Sections.findSuccessorsOfType(section, TermReference.class, found);
 
 		if (found.size() == 3) {
-			Section<IRITermRef> subject = found.get(0);
-			Section<IRITermRef> predicate = found.get(1);
-			Section<IRITermRef> object = found.get(2);
+			Section<TermReference> subject = found.get(0);
+			Section<TermReference> predicate = found.get(1);
+			Section<TermReference> object = found.get(2);
 
-			subURI = getURI(subject);
-			predURI = getURI(predicate);
-			objURI = getURI(object);
+			subURI = Utils.getURI(subject);
+			predURI = Utils.getURI(predicate);
+			objURI = Utils.getURI(object);
 		}
 		else {
 			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
