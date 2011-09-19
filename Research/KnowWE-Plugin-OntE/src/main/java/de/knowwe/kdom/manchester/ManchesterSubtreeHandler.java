@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.ontoware.rdf2go.RDF2Go;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
@@ -35,6 +36,7 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.report.KDOMReportMessage;
+import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.kdom.manchester.ManchesterMarkup.ManchesterMarkupContentType;
 import de.knowwe.kdom.manchester.frames.clazz.ClassFrame;
 import de.knowwe.kdom.manchester.frames.clazz.DisjointWith;
@@ -67,6 +69,15 @@ import de.knowwe.owlapi.OWLAPISubtreeHandler;
 public class ManchesterSubtreeHandler extends OWLAPISubtreeHandler<ManchesterMarkupContentType> {
 
 	private Set<OWLAxiom> axioms;
+
+	/**
+	 * Constructor for the {@link SubtreeHandler}. here one can set if a sync
+	 * with {@link RDF2Go} should be done. For further information see
+	 * {@link OWLAPISubtreeHandler}.
+	 */
+	public ManchesterSubtreeHandler() {
+		super(true);
+	}
 
 	@Override
 	public Set<OWLAxiom> createOWLAxioms(KnowWEArticle article, Section<ManchesterMarkupContentType> s, Collection<KDOMReportMessage> messages) {

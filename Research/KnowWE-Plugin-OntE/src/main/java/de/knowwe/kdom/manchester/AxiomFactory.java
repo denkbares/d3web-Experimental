@@ -53,6 +53,7 @@ import de.knowwe.kdom.manchester.frames.clazz.EquivalentTo;
 import de.knowwe.kdom.manchester.frames.clazz.SubClassOf;
 import de.knowwe.kdom.manchester.frames.individual.IndividualFrame;
 import de.knowwe.kdom.manchester.frames.objectproperty.CharacteristicTypes;
+import de.knowwe.kdom.manchester.frames.objectproperty.ObjectPropertyFrame.ObjectProperty;
 import de.knowwe.kdom.manchester.types.ExactlyRestriction;
 import de.knowwe.kdom.manchester.types.MaxRestriction;
 import de.knowwe.kdom.manchester.types.MinRestriction;
@@ -243,7 +244,7 @@ public class AxiomFactory {
 					null);
 		}
 		if (mce.getChildren().get(0).get() instanceof BracedCondition) {
-			expression = handleBracedCondition(mce, 2);
+			expression = handleBracedCondition(mce.getChildren().get(0), 2);
 		}
 		return expression;
 	}
@@ -325,14 +326,27 @@ public class AxiomFactory {
 		if (section.get() instanceof Restriction) {
 			Section<?> mce = Sections.findSuccessor(section, ManchesterClassExpression.class);
 
-			if (mce.getChildren().get(0).get() instanceof TerminalCondition) {
-				// simple restriction, no recursion
-				currentExpression = createSimpleRestriction(section, null);
+			if (mce != null) {
+				if (mce.getChildren().get(0).get() instanceof TerminalCondition) {
+					// simple restriction, no recursion
+					currentExpression = createSimpleRestriction(section, null);
+				}
+				else if (mce.getChildren().get(0).get() instanceof BracedCondition) {
+					OWLClassExpression expression = handleBracedCondition(mce.getChildren().get(0),
+							2);
+					if (expression != null) {
+						currentExpression = createSimpleRestriction(section, expression);
+					}
+				}
 			}
-			else if (mce.getChildren().get(0).get() instanceof BracedCondition) {
-				OWLClassExpression expression = handleBracedCondition(mce.getChildren().get(0), 2);
-				if (expression != null) {
-					currentExpression = createSimpleRestriction(section, expression);
+			else {
+				mce = Sections.findSuccessor(section, OWLTermReferenceManchester.class);
+				if(mce != null) { //OWLTermReferenceManchester
+					OWLClass clazz = factory.getOWLClass(":"
+							+ mce.getOriginalText(),
+							pm);
+					storage.addAxiom(factory.getOWLDeclarationAxiom(clazz));
+					currentExpression = clazz;
 				}
 			}
 		}
@@ -382,8 +396,8 @@ public class AxiomFactory {
 		}
 
 		CompositeCondition cc = (ManchesterClassExpression) section.get();
-		if (cc.isConjunction(section)) {
-			return handleBracedCondition(section, 1); // CONJUNCT
+		if (cc.isConjunction(section) || cc.isDisjunction(section)) {
+			return handleBracedCondition(section, 1); // CONJUNCT || DISJUNCT
 		}
 		return null;
 	}
@@ -442,6 +456,10 @@ public class AxiomFactory {
 	}
 
 	public static OWLObjectProperty createProperty(Section<?> section) {
+		Section<?> expression = Sections.findSuccessor(section, ObjectProperty.class);
+		if (expression != null) {
+			return factory.getOWLObjectProperty(":" + expression.getOriginalText(), pm);
+		}
 		return factory.getOWLObjectProperty(":" + section.getOriginalText(), pm);
 	}
 

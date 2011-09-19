@@ -65,7 +65,7 @@ public class ObjectPropertyFrame extends AbstractType {
 	}
 
 	/**
-	 * 
+	 *
 	 * @author smark
 	 * @created 24.05.2011
 	 */
