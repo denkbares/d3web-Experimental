@@ -797,7 +797,8 @@ public class D3webDialog extends HttpServlet {
 		for (Question question : bb.getAnsweredQuestions()) {
 			if (!isActive(question, bb, initQuestions)) {
 				Fact lastFact = bb.getValueFact(question);
-				if (lastFact != null) {
+				if (lastFact != null
+						&& lastFact.getPSMethod() == PSMethodUserSelected.getInstance()) {
 					bb.removeValueFact(lastFact);
 					resetQuestions.add(question);
 				}
@@ -960,12 +961,6 @@ public class D3webDialog extends HttpServlet {
 			// if reasonable value retrieved, set it for the given
 			// TerminologyObject
 			if (value != null) {
-
-				// remove previously set value
-				lastFact = blackboard.getValueFact(to);
-				if (lastFact != null) {
-					blackboard.removeValueFact(lastFact);
-				}
 
 				if (UndefinedValue.isNotUndefinedValue(value)) {
 					// add new value as UserEnteredFact

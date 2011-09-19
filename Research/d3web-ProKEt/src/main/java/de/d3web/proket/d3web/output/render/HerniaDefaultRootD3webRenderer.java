@@ -120,7 +120,7 @@ public class HerniaDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 		followUpTable.append("<tr>");
 		renderHeaderCell("Case Name", followUpTable);
 		renderHeaderCell("Last Modified", followUpTable);
-		renderHeaderCell("Date of surgery", followUpTable);
+		renderHeaderCell("Date of Surgery", followUpTable);
 		renderHeaderCell("Follow-Up 1", followUpTable);
 		renderHeaderCell("Follow-Up 2", followUpTable);
 		followUpTable.append("</tr>");

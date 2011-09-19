@@ -89,6 +89,7 @@ public class PersistenceD3webUtils {
 		if (user != null && !user.isEmpty()) folderPath += File.separator + user;
 		File folder = new File(folderPath);
 		File[] files = folder.listFiles();
+		if (files == null) return null;
 		List<File> filesList = new ArrayList<File>(files.length);
 		for (File file : files) {
 			if (file.isFile() && file.getName().endsWith(".xml")) {
