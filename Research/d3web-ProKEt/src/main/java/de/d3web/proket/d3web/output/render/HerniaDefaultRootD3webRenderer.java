@@ -33,10 +33,12 @@ import javax.servlet.http.HttpSession;
 
 import org.antlr.stringtemplate.StringTemplate;
 
+import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionDate;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
+import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
@@ -54,7 +56,8 @@ public class HerniaDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 	private static final String COLOR_OK = "green";
 	private static final String COLOR_LATE = "red";
 
-	private static final long MONTH = new Long(1000) * 60 * 60 * 24 * 30;
+	private static final long DAY = 1000 * 60 * 60 * 24;
+	private static final long MONTH = DAY * 30;
 	private static final long THREE_MONTH = MONTH * 3;
 
 	private static final SimpleDateFormat DD_MM_YYYY = new SimpleDateFormat("dd.MM.yyyy");
@@ -67,7 +70,8 @@ public class HerniaDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 
 	private static final String OPERATION_DATE = "operationDate";
 	private static final String OPERATION_DATE_ANSWERED = "operationDateAnswered";
-	private static final String LAST_MODIFIED = "lastModified";
+	private static final String LAST_CASE_CHANGE = "lastCaseChange";
+	private static final String LAST_FILE_CHANGE = "lastFileChange";
 	private static final String FOLLOW_UP1_DONE = "followUp1Done";
 	private static final String FOLLOW_UP2_DONE = "followUp2Done";
 
@@ -184,9 +188,12 @@ public class HerniaDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 				Date followUpDueDate = new Date(time + add);
 				Date now = new Date();
 				String followUpDueFormatted = DD_MM_YYYY.format(followUpDueDate);
-				renderColoredCell(followUpDueFormatted,
-						followUpDueDate.after(now) ? COLOR_OK : COLOR_LATE,
-						followUpTable);
+				if (followUpDueDate.after(now)) {
+					renderColoredCell("Due " + followUpDueFormatted, COLOR_OK, followUpTable);
+				}
+				else {
+					renderColoredCell("Was due " + followUpDueFormatted, COLOR_LATE, followUpTable);
+				}
 			}
 		}
 	}
@@ -206,7 +213,9 @@ public class HerniaDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 	private Map<String, Object> parseCase(String user, File caseFile) {
 		Map<String, Object> parameters = caseCache.get(caseFile.getPath());
 		if (parameters != null) {
-			if ((Long) parameters.get(LAST_MODIFIED) == caseFile.lastModified()) {
+			long lastLastFileChange = (Long) parameters.get(LAST_FILE_CHANGE);
+			long lastFileChange = caseFile.lastModified();
+			if (lastLastFileChange == lastFileChange) {
 				return parameters;
 			}
 		}
@@ -214,9 +223,9 @@ public class HerniaDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 			parameters = new HashMap<String, Object>();
 			caseCache.put(caseFile.getPath(), parameters);
 		}
-
-		parameters.put(LAST_MODIFIED, caseFile.lastModified());
+		parameters.put(LAST_FILE_CHANGE, caseFile.lastModified());
 		Session loadedUserCase = PersistenceD3webUtils.loadUserCase(user, caseFile);
+		parameters.put(LAST_CASE_CHANGE, loadedUserCase.getLastChangeDate().getTime());
 		parseFollowUpParameters(parameters, loadedUserCase);
 		parseOperationDate(parameters, loadedUserCase);
 
@@ -262,19 +271,52 @@ public class HerniaDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 		List<Question> allFollowUp2Questions = new LinkedList<Question>();
 		getFollowUpQuestions(allQuestions, allFollowUp1Questions, allFollowUp2Questions);
 
+		List<Question> allIndicatedFollowUp1Questions = getIndicatedOrTopLevelQuestions(
+				allFollowUp1Questions,
+				loadedUserCase);
+		List<Question> allIndicatedFollowUp2Questions = getIndicatedOrTopLevelQuestions(
+				allFollowUp2Questions,
+				loadedUserCase);
+
 		List<Question> allAnsweredQuestions = loadedUserCase.getBlackboard().getAnsweredQuestions();
 		List<Question> allAnsweredFollowUp1Questions = new LinkedList<Question>();
 		List<Question> allAnsweredFollowUp2Questions = new LinkedList<Question>();
 		getFollowUpQuestions(allAnsweredQuestions, allAnsweredFollowUp1Questions,
 				allAnsweredFollowUp2Questions);
 
-		boolean followUp1Done = allAnsweredFollowUp1Questions.size() >
-				allFollowUp1Questions.size() * PERCENTAGE_ANSWERED_QUESTIONS_NEEDED;
-		parameters.put(FOLLOW_UP1_DONE, followUp1Done);
+		parameters.put(FOLLOW_UP1_DONE,
+				isFollowUpDone(allAnsweredFollowUp1Questions, allIndicatedFollowUp1Questions));
 
-		boolean followUp2Done = allAnsweredFollowUp2Questions.size() >
-				allFollowUp2Questions.size() * PERCENTAGE_ANSWERED_QUESTIONS_NEEDED;
-		parameters.put(FOLLOW_UP2_DONE, followUp2Done);
+		parameters.put(FOLLOW_UP2_DONE,
+				isFollowUpDone(allAnsweredFollowUp2Questions, allIndicatedFollowUp2Questions));
+	}
+
+	private boolean isFollowUpDone(List<Question> answeredQuestions, List<Question> allIndicatedQuestions) {
+		boolean percentageAnswered = answeredQuestions.size() >=
+				allIndicatedQuestions.size() * PERCENTAGE_ANSWERED_QUESTIONS_NEEDED;
+		return percentageAnswered && !answeredQuestions.isEmpty();
+	}
+
+	private List<Question> getIndicatedOrTopLevelQuestions(List<Question> questions, Session session) {
+		Blackboard blackboard = session.getBlackboard();
+		List<Question> indicatedOrTopLevelQuestions = new LinkedList<Question>();
+		for (Question question : questions) {
+			if (isIndicated(question, blackboard) || isTopLevelQuestion(question)) {
+				indicatedOrTopLevelQuestions.add(question);
+			}
+		}
+		return indicatedOrTopLevelQuestions;
+	}
+
+	private boolean isTopLevelQuestion(Question question) {
+		TerminologyObject[] parents = question.getParents();
+		if (parents == null || parents.length == 0) return true;
+		if (parents.length > 1) return false;
+		TerminologyObject[] grandParents = parents[0].getParents();
+		if (grandParents == null || grandParents.length == 0) return true;
+		if (grandParents.length == 1
+				&& grandParents[0] == question.getKnowledgeBase().getRootQASet()) return true;
+		return false;
 	}
 
 	private void getFollowUpQuestions(List<Question> allQuestions, List<Question> allFollowUp1Questions, List<Question> allFollowUp2Questions) {

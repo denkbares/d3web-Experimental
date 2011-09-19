@@ -48,12 +48,6 @@ public class PersistenceD3webUtils {
 		return getFile(user, filename).exists();
 	}
 
-	public static void saveCase(String user,
-			String filename, Session d3webSession) {
-
-		new SaveThread(getFile(user, filename), d3webSession).start();
-	}
-
 	/**
 	 * Loads a case-file (.xml) of given filename back into the application.
 	 * 
@@ -104,6 +98,35 @@ public class PersistenceD3webUtils {
 		return filesList;
 	}
 
+	public static void saveCase(String user,
+			String filename, Session d3webSession) {
+		File file = getFile(user, filename);
+		if (filename.equals("autosave")) {
+			new SaveThread(file, d3webSession).start();
+		}
+		else {
+			saveCase(file, d3webSession);
+			file.setLastModified(System.currentTimeMillis());
+		}
+	}
+
+	private static void saveCase(File file, Session session) {
+		/* d3web related persistence setup */
+		SessionRecord sessionRecord = SessionConversionFactory.copyToSessionRecord(
+				session);
+		SingleXMLSessionRepository sessionRepository = new SingleXMLSessionRepository();
+		sessionRepository.add(sessionRecord);
+
+		try {
+			sessionRepository.save(file);
+			System.out.println("Saved case to file: " + file.getCanonicalPath());
+		}
+		catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+
 	private static class SaveThread extends Thread {
 
 		private final File file;
@@ -116,20 +139,7 @@ public class PersistenceD3webUtils {
 
 		@Override
 		public void run() {
-			/* d3web related persistence setup */
-			SessionRecord sessionRecord = SessionConversionFactory.copyToSessionRecord(
-					d3webSession);
-			SingleXMLSessionRepository sessionRepository = new SingleXMLSessionRepository();
-			sessionRepository.add(sessionRecord);
-
-			try {
-				sessionRepository.save(file);
-				System.out.println("Saved case to file: " + file.getCanonicalPath());
-			}
-			catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			saveCase(file, d3webSession);
 		}
 	}
 
