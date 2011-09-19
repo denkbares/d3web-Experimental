@@ -21,15 +21,24 @@ package de.d3web.proket.d3web.output.render;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpSession;
 
 import org.antlr.stringtemplate.StringTemplate;
 
+import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.terminology.QuestionDate;
+import de.d3web.core.session.Session;
+import de.d3web.core.session.Value;
+import de.d3web.core.session.values.UndefinedValue;
+import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 
 /**
@@ -42,7 +51,33 @@ import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
  */
 public class HerniaDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 
-	private static Map<String, Map<String, String>> caseCache = new HashMap<String, Map<String, String>>();
+	private static final String COLOR_OK = "green";
+	private static final String COLOR_LATE = "red";
+
+	private static final long MONTH = new Long(1000) * 60 * 60 * 24 * 30;
+	private static final long THREE_MONTH = MONTH * 3;
+
+	private static final SimpleDateFormat DD_MM_YYYY = new SimpleDateFormat("dd.MM.yyyy");
+	private static final SimpleDateFormat DD_MM_YYYY_HH_MM = new SimpleDateFormat(
+			"dd.MM.yyyy HH:mm");
+
+	private static final String OPERATION_DATE_QUESTION_NAME = "Operation date";
+	private static final String FOLLOW_UP1_NAME_SUFFIX = "(Follow up 1)";
+	private static final String FOLLOW_UP2_NAME_SUFFIX = "(Follow up 2)";
+
+	private static final String OPERATION_DATE = "operationDate";
+	private static final String OPERATION_DATE_ANSWERED = "operationDateAnswered";
+	private static final String LAST_MODIFIED = "lastModified";
+	private static final String FOLLOW_UP1_DONE = "followUp1Done";
+	private static final String FOLLOW_UP2_DONE = "followUp2Done";
+
+	private static final double PERCENTAGE_ANSWERED_QUESTIONS_NEEDED = 0.5;
+
+	private static enum FollowUp {
+		FIRST, SECOND
+	}
+
+	private static Map<String, Map<String, Object>> caseCache = new HashMap<String, Map<String, Object>>();
 
 	@Override
 	public void setDialogSpecificAttributes(HttpSession httpSession, StringTemplate st) {
@@ -51,36 +86,205 @@ public class HerniaDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 		st.setAttribute("statistics", true);
 		st.setAttribute("followupbutton", true);
 
-		String opts = renderFollowUpList((String) httpSession.getAttribute("user"));
+		String opts = renderFollowUpTable((String) httpSession.getAttribute("user"));
 		st.setAttribute("followupdialog", opts);
 
 	}
 
-	private String renderFollowUpList(String user) {
+	private String renderFollowUpTable(String user) {
 
-		File[] caseFiles = PersistenceD3webUtils.getCaseList(user);
-		StringBuffer cases = new StringBuffer();
-		if (caseFiles != null && caseFiles.length > 0) {
+		List<File> caseFiles = PersistenceD3webUtils.getCaseList(user);
+		StringBuilder followUpTable = new StringBuilder();
+		if (caseFiles != null && caseFiles.size() > 0) {
 
-			Arrays.sort(caseFiles);
+			renderTableHeader(followUpTable);
+
+			Collections.sort(caseFiles);
 
 			for (File caseFile : caseFiles) {
 				if (!caseFile.getName().startsWith(PersistenceD3webUtils.AUTOSAVE)) {
-					cases.append("<option");
-					String filename = caseFile.getName().substring(0,
-							caseFile.getName().lastIndexOf("."));
-					cases.append(" title='"
-							+ filename + "'>");
-					cases.append("<span style='border=1px solid;'>" + filename + "</span>");
-					cases.append("<span style='border=1px solid;'>"
-							+ new SimpleDateFormat("dd.MM.yyyy").format(new Date(
-									caseFile.lastModified()))
-							+ "</span>");
-					cases.append("</option>");
+					renderRow(user, caseFile, followUpTable);
 				}
 			}
+			followUpTable.append("</table>");
 		}
-		return cases.toString();
+		return followUpTable.toString();
 	}
 
+	private void renderTableHeader(StringBuilder followUpTable) {
+		followUpTable.append("<table style='border-spacing: 0px' border='1'>");
+		followUpTable.append("<tr>");
+		renderHeaderCell("Case Name", followUpTable);
+		renderHeaderCell("Last Modified", followUpTable);
+		renderHeaderCell("Date of surgery", followUpTable);
+		renderHeaderCell("Follow-Up 1", followUpTable);
+		renderHeaderCell("Follow-Up 2", followUpTable);
+		followUpTable.append("</tr>");
+	}
+
+	private void renderHeaderCell(String content, StringBuilder followUpTable) {
+		followUpTable.append("<th>" + content + "</th>");
+	}
+
+	private void renderRow(String user, File caseFile, StringBuilder followUpTable) {
+		Map<String, Object> parsedCase = parseCase(user, caseFile);
+
+		followUpTable.append("<tr>");
+
+		renderFileNameCell(caseFile, followUpTable);
+		renderLastModifiedCell(caseFile, followUpTable);
+		renderOperationDateCell(parsedCase, followUpTable);
+		renderFollowUpCell(parsedCase, FollowUp.FIRST, followUpTable);
+		renderFollowUpCell(parsedCase, FollowUp.SECOND, followUpTable);
+
+		followUpTable.append("</tr>");
+	}
+
+	private void renderFileNameCell(File caseFile, StringBuilder followUpTable) {
+		String filename = caseFile.getName().substring(0,
+				caseFile.getName().lastIndexOf("."));
+		renderCell(filename, followUpTable);
+	}
+
+	private void renderLastModifiedCell(File caseFile, StringBuilder followUpTable) {
+		Date lastModified = new Date(caseFile.lastModified());
+		String lastModifiedFormatted = DD_MM_YYYY_HH_MM.format(lastModified) + " h";
+		renderCell(lastModifiedFormatted, followUpTable);
+	}
+
+	private void renderOperationDateCell(Map<String, Object> parsedCase, StringBuilder followUpTable) {
+		boolean operationDateAnswered = (Boolean) parsedCase.get(OPERATION_DATE_ANSWERED);
+		if (!operationDateAnswered) {
+			renderCell("No date found", followUpTable);
+		}
+		else {
+			Date operationDate = (Date) parsedCase.get(OPERATION_DATE);
+			String operationDateFormatted = DD_MM_YYYY.format(operationDate);
+			renderCell(operationDateFormatted, followUpTable);
+		}
+	}
+
+	private void renderFollowUpCell(Map<String, Object> parsedCase, FollowUp followUp, StringBuilder followUpTable) {
+		boolean operationDateAnswered = (Boolean) parsedCase.get(OPERATION_DATE_ANSWERED);
+		if (!operationDateAnswered) {
+			renderCell("Unknown", followUpTable);
+		}
+		else {
+			boolean followUpDone = (Boolean) parsedCase.get(followUp == FollowUp.FIRST
+					? FOLLOW_UP1_DONE
+					: FOLLOW_UP2_DONE);
+
+			if (followUpDone) {
+				renderColoredCell("Done", COLOR_OK, followUpTable);
+			}
+			else {
+				Date operationDate = (Date) parsedCase.get(OPERATION_DATE);
+				long time = operationDate.getTime();
+				long add = (followUp == FollowUp.FIRST ? MONTH : THREE_MONTH);
+				Date followUpDueDate = new Date(time + add);
+				Date now = new Date();
+				String followUpDueFormatted = DD_MM_YYYY.format(followUpDueDate);
+				renderColoredCell(followUpDueFormatted,
+						followUpDueDate.after(now) ? COLOR_OK : COLOR_LATE,
+						followUpTable);
+			}
+		}
+	}
+
+	private void renderColoredCell(String content, String color, StringBuilder followUpTable) {
+		renderCell(getColoredText(content, color), followUpTable);
+	}
+
+	private String getColoredText(String text, String colorCode) {
+		return "<span style='color:" + colorCode + "'>" + text + "</span>";
+	}
+
+	private void renderCell(String content, StringBuilder followUpTable) {
+		followUpTable.append("<td style='padding:3px'>" + content + "</td>");
+	}
+
+	private Map<String, Object> parseCase(String user, File caseFile) {
+		Map<String, Object> parameters = caseCache.get(caseFile.getPath());
+		if (parameters != null) {
+			if ((Long) parameters.get(LAST_MODIFIED) == caseFile.lastModified()) {
+				return parameters;
+			}
+		}
+		if (parameters == null) {
+			parameters = new HashMap<String, Object>();
+			caseCache.put(caseFile.getPath(), parameters);
+		}
+
+		parameters.put(LAST_MODIFIED, caseFile.lastModified());
+		Session loadedUserCase = PersistenceD3webUtils.loadUserCase(user, caseFile);
+		parseFollowUpParameters(parameters, loadedUserCase);
+		parseOperationDate(parameters, loadedUserCase);
+
+		return parameters;
+
+	}
+
+	private void parseOperationDate(Map<String, Object> parameters, Session loadedUserCase) {
+		Question operationDateQuestion = loadedUserCase.getKnowledgeBase().getManager().searchQuestion(
+				OPERATION_DATE_QUESTION_NAME);
+		Date operationDate = null;
+		boolean operationDateAnswered = false;
+		if (operationDateQuestion == null) {
+			Logger.getLogger(this.getClass().getSimpleName()).warning(
+					"Question '" + OPERATION_DATE_QUESTION_NAME
+							+ "' expected but not found.");
+		}
+		else if (!(operationDateQuestion instanceof QuestionDate)) {
+			Logger.getLogger(this.getClass().getSimpleName()).warning(
+					"Question '" + OPERATION_DATE_QUESTION_NAME
+							+ "' is expected to be of the Type '"
+							+ QuestionDate.class.getSimpleName()
+							+ "' but was '" + operationDateQuestion.getClass().getSimpleName()
+							+ "'.");
+		}
+		else {
+			Value operationDateValue = loadedUserCase.getBlackboard().getValue(
+					operationDateQuestion);
+			if (UndefinedValue.isNotUndefinedValue(operationDateValue)
+						&& !(operationDateValue instanceof Unknown)) {
+				operationDate = (Date) operationDateValue.getValue();
+				parameters.put(OPERATION_DATE, operationDate);
+				operationDateAnswered = true;
+			}
+		}
+		parameters.put(OPERATION_DATE_ANSWERED, operationDateAnswered);
+	}
+
+	private void parseFollowUpParameters(Map<String, Object> parameters, Session loadedUserCase) {
+
+		List<Question> allQuestions = loadedUserCase.getKnowledgeBase().getManager().getQuestions();
+		List<Question> allFollowUp1Questions = new LinkedList<Question>();
+		List<Question> allFollowUp2Questions = new LinkedList<Question>();
+		getFollowUpQuestions(allQuestions, allFollowUp1Questions, allFollowUp2Questions);
+
+		List<Question> allAnsweredQuestions = loadedUserCase.getBlackboard().getAnsweredQuestions();
+		List<Question> allAnsweredFollowUp1Questions = new LinkedList<Question>();
+		List<Question> allAnsweredFollowUp2Questions = new LinkedList<Question>();
+		getFollowUpQuestions(allAnsweredQuestions, allAnsweredFollowUp1Questions,
+				allAnsweredFollowUp2Questions);
+
+		boolean followUp1Done = allAnsweredFollowUp1Questions.size() >
+				allFollowUp1Questions.size() * PERCENTAGE_ANSWERED_QUESTIONS_NEEDED;
+		parameters.put(FOLLOW_UP1_DONE, followUp1Done);
+
+		boolean followUp2Done = allAnsweredFollowUp2Questions.size() >
+				allFollowUp2Questions.size() * PERCENTAGE_ANSWERED_QUESTIONS_NEEDED;
+		parameters.put(FOLLOW_UP2_DONE, followUp2Done);
+	}
+
+	private void getFollowUpQuestions(List<Question> allQuestions, List<Question> allFollowUp1Questions, List<Question> allFollowUp2Questions) {
+		for (Question question : allQuestions) {
+			if (question.getName().contains(FOLLOW_UP1_NAME_SUFFIX)) {
+				allFollowUp1Questions.add(question);
+			}
+			else if (question.getName().contains(FOLLOW_UP2_NAME_SUFFIX)) {
+				allFollowUp2Questions.add(question);
+			}
+		}
+	}
 }

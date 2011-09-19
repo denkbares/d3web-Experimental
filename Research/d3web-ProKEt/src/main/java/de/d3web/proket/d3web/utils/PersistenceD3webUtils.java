@@ -2,6 +2,7 @@ package de.d3web.proket.d3web.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -67,6 +68,11 @@ public class PersistenceD3webUtils {
 
 		File fileToLoad = getFile(user, filename);
 
+		return loadUserCase(user, fileToLoad);
+	}
+
+	public static Session loadUserCase(String user, File fileToLoad) {
+
 		SingleXMLSessionRepository sessionRepository = new SingleXMLSessionRepository();
 		Session session = null;
 		try {
@@ -78,18 +84,24 @@ public class PersistenceD3webUtils {
 		}
 		catch (IOException e) {
 			Logger.getLogger(PersistenceD3webUtils.class.getSimpleName()).warning(
-					"'" + filename + "' for user '" + user + "' could not be loaded.");
+					"'" + fileToLoad.getName() + "' for user '" + user + "' could not be loaded.");
 			// e.printStackTrace();
 		}
 		return session;
 	}
 
-	public static File[] getCaseList(String user) {
+	public static List<File> getCaseList(String user) {
 		String folderPath = GlobalSettings.getInstance().getCaseFolder();
 		if (user != null && !user.isEmpty()) folderPath += File.separator + user;
 		File folder = new File(folderPath);
 		File[] files = folder.listFiles();
-		return files;
+		List<File> filesList = new ArrayList<File>(files.length);
+		for (File file : files) {
+			if (file.isFile() && file.getName().endsWith(".xml")) {
+				filesList.add(file);
+			}
+		}
+		return filesList;
 	}
 
 	private static class SaveThread extends Thread {

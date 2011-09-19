@@ -32,7 +32,7 @@ var warningRecieved = false;
 
 $(function() {
 	
-	// if login should be enabled: set in minimal XML and JSCodeContainer
+	/* LOGIN DIALOG */
 	if(usrdatLogin){
 		window.setTimeout("logintimeout()", 57000 * 60);
 
@@ -63,7 +63,7 @@ $(function() {
 		goon = "Abbrechen";
 	}
 	
-	/* creating and configuring the jquery UI save-case dialog */
+	/* SAVE CASE DIALOG */
 	$(function() {
 
 		var opts = {
@@ -102,7 +102,7 @@ $(function() {
 		cancelload = "Abbrechen";
 	}
 	
-	/* creating and configuring the jquery UI load-case dialog */
+	/* LOAD CASE DIALOG */
 	$(function() {
 
 		var opts = {
@@ -147,7 +147,7 @@ $(function() {
 		print = "Drucken";
 	}
 	
-	/* creating and configuring the jquery UI summary dialog */
+	/* SUMMARY DIALOG */
 	$(function() {
 
 		var opts = {
@@ -174,28 +174,21 @@ $(function() {
 		$("#jqSummaryDialog").dialog(opts);
 	});
 	
-	/* creating and configuring the jquery UI followup dialog */
+	/* FOLLOW UP DIALOG */
 	$(function() {
 
 		var opts = {
 			autoOpen: false,
 			position: [ 0, getHeaderHeight()],
 			modal: false,
-			width: 180,
-			height: 375,
+			width: 750,
+			height: 650,
 			buttons: [{
 				id: "loadOK",
 				text: load,
 				click: function(){
-					d3web_getSelectedCaseFileAndLoad();
+					$('#jqFollowUpDialog').dialog('close');
 				}
-				},
-				{
-				id: "loadCancel",
-				text: cancelload,
-				click: function(){
-						$('#jqFollowUpDialog').dialog('close');
-					}
 				}]
 		};
 		var followUpDialog = $("#jqFollowUpDialog");

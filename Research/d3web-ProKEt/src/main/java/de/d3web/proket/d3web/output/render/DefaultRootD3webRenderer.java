@@ -20,7 +20,8 @@
 package de.d3web.proket.d3web.output.render;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpSession;
@@ -218,7 +219,7 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 	@Override
 	public String renderUserCaseList(String user) {
 
-		File[] files = PersistenceD3webUtils.getCaseList(user);
+		List<File> files = PersistenceD3webUtils.getCaseList(user);
 
 		StringBuffer cases = new StringBuffer();
 		/* add autosaved as first item always */
@@ -227,9 +228,9 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		cases.append(PersistenceD3webUtils.AUTOSAVE);
 		cases.append("</option>");
 
-		if (files != null && files.length > 0) {
+		if (files != null && files.size() > 0) {
 
-			Arrays.sort(files);
+			Collections.sort(files);
 
 			for (File f : files) {
 				if (!f.getName().startsWith(PersistenceD3webUtils.AUTOSAVE)) {

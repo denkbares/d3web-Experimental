@@ -1,160 +1,67 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <repository>
-<session changed="2011-08-15 18:48:25.929" created="2011-08-15 18:48:25.917" id="2ac867bd-e147-46f6-bfd2-bbf81413f670">
+<session changed="2011-08-15 18:20:47.693" created="2011-08-15 18:20:47.682" id="c39de0f2-dbc1-4a5a-8e12-cfd8bd5e868f">
 <name/>
 <facts>
 <valueFacts>
-<fact objectName="Please select your hernia route" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Incisional ventral hernia route</choiceValue>
-</fact>
-<fact objectName="Please select incisional ventral hernia" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Recurrent epigastric hernia</choiceValue>
-</fact>
 <fact objectName="Please enter a EuraHS registration number instead of a patient name" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<textValue>sdgsd</textValue>
+<textValue>sdgsdg</textValue>
 </fact>
-<fact objectName="Hour of discharge" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<dateValue>1970-01-01 12:00:00.00</dateValue>
+<fact objectName="Please choose the database level" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Level 2</choiceValue>
 </fact>
-<fact objectName="Year of birth" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<dateValue>12412-01-01 00:00:00.00</dateValue>
-</fact>
-<fact objectName="Please choose the database level" psm="de.d3web.core.inference.PSMethodInit">
-<choiceValue>Level 1</choiceValue>
+<fact objectName="Operation date" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<dateValue>2011-03-04 00:00:00.00</dateValue>
 </fact>
 </valueFacts>
 <interviewFacts>
 <fact objectName="Common Route - Follow up 2" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Date of operation that caused the incisional hernia" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
+<indication>INDICATED</indication>
 </fact>
 <fact objectName="Common Route - Follow up 1 - Late complications" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Please select incisional ventral hernia" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
 <fact objectName="Common Route - Follow up 1 - Quality of life measurement" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
+<indication>INDICATED</indication>
 </fact>
 <fact objectName="Common Route - Follow up 1" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Width of the implanted mesh" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
+<indication>INDICATED</indication>
 </fact>
 <fact objectName="EuraHS Initialization" psm="de.d3web.core.inference.PSMethodInit">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Type of bleeding complications" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Was the hernia defect closed?" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Bowel resection needed" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
 <fact objectName="Common Route - Operative Data - Concomitant procedures" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Content of the hernia sac" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Length of the implanted mesh" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Indication for surgery" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="End of operation (last skin suture)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Incarceration" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Intraoperative wound contamination" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Common Route - Follow up 2 - Late complications" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Type of operation (speciality) that caused the incisional hernia" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Common Route" psm="de.d3web.core.inference.PSMethodInit">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Incisional ventral hernia route" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Common Route - Follow up 2 - Late complications" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Common Route" psm="de.d3web.core.inference.PSMethodInit">
 <indication>INDICATED</indication>
 </fact>
 <fact objectName="Common Route - Discharge data" psm="de.d3web.core.inference.PSMethodInit">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Operator" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Number of previous repairs" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Start of operation (first incision)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
 <fact objectName="Common Route - Operation data - Intraoperative complications" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Antibiotic prophylaxis" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Indication for ventral hernia surgery" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Reducibility of the ventral hernia" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
+<indication>INDICATED</indication>
 </fact>
 <fact objectName="Other risk factors" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Reducibility of the hernia" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
+<indication>INDICATED</indication>
 </fact>
 <fact objectName="Comorbidities" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
+<indication>INDICATED</indication>
 </fact>
-<fact objectName="Years since stoma creation" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Symptoms of the parastomal hernia" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Mesh infection" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
+<fact objectName="Risk factors" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
 </fact>
 <fact objectName="Common Route - Operative data - Approach" psm="de.d3web.core.inference.PSMethodInit">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Risk factors" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Type of SSI" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Estimated minimal overlap of the mesh beyond the hernia defect" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
-<fact objectName="Indication for stoma creation" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
 <fact objectName="Common Route - Operative Data - Surgical technique" psm="de.d3web.core.inference.PSMethodInit">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Years with parastomal hernia" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
-</fact>
 <fact objectName="Common Route - Follow up 2 - Quality of life measurement" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>CONTRA_INDICATED</indication>
+<indication>INDICATED</indication>
 </fact>
 <fact objectName="Common Route - Operative data" psm="de.d3web.core.inference.PSMethodInit">
 <indication>INDICATED</indication>
@@ -162,20 +69,20 @@
 </interviewFacts>
 </facts>
 <protocol>
-<entry date="2011-08-15 18:48:32.147" objectName="Please enter a EuraHS registration number instead of a patient name" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
-<textValue>sdgsd</textValue>
+<entry date="2011-08-15 18:20:51.360" objectName="Please enter a EuraHS registration number instead of a patient name" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<textValue>sdgsdg</textValue>
 </entry>
-<entry date="2011-08-15 18:48:37.130" objectName="Year of birth" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
-<dateValue>12412-01-01 00:00:00.00</dateValue>
+<entry date="2011-09-19 02:42:58.203" objectName="Operation date" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<dateValue>0020-03-04 00:00:00.00</dateValue>
 </entry>
-<entry date="2011-08-15 18:48:45.114" objectName="Hour of discharge" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
-<dateValue>1970-01-01 12:00:00.00</dateValue>
+<entry date="2011-09-19 02:43:07.729" objectName="Operation date" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<dateValue>2011-03-04 00:00:00.00</dateValue>
 </entry>
-<entry date="2011-09-16 14:21:56.61" objectName="Please select your hernia route" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
-<choiceValue>Incisional ventral hernia route</choiceValue>
+<entry date="2011-09-19 02:43:11.336" objectName="Operation date" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<dateValue>2011-03-04 00:00:00.00</dateValue>
 </entry>
-<entry date="2011-09-16 14:21:57.322" objectName="Please select incisional ventral hernia" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
-<choiceValue>Recurrent epigastric hernia</choiceValue>
+<entry date="2011-09-19 03:16:06.515" objectName="Please choose the database level" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Level 2</choiceValue>
 </entry>
 </protocol>
 </session>
