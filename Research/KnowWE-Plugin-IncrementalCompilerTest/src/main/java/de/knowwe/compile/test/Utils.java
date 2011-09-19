@@ -6,25 +6,14 @@ import java.net.URLEncoder;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
-import de.d3web.plugin.Extension;
-import de.d3web.plugin.PluginManager;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.objects.KnowWETerm;
-import de.knowwe.compile.TerminologyExtension;
-import de.knowwe.plugin.Plugins;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class Utils {
 
 	public static URI getURI(Section<? extends KnowWETerm> s) {
-		if(s == null) return null;
-		
-		
-		
-		
 		URI uri = null;
-		
-		
 		String baseUrl = Rdf2GoCore.localns;
 		try {
 			String name = URLEncoder.encode(s.get().getTermIdentifier(s), "UTF-8");
