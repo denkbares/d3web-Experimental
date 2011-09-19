@@ -42,6 +42,10 @@ public abstract class IncrementalTermReference<TermObject> extends TermReference
 	final KnowWEDomRenderer<IncrementalTermReference> REF_RENDERER =
 			new ToolMenuDecoratingRenderer<IncrementalTermReference>(new StyleRenderer(
 					"color:rgb(25, 180, 120)"));
+	@SuppressWarnings("unchecked")
+	final KnowWEDomRenderer<IncrementalTermReference> PREDEFINDED_TERM_RENDERER =
+			new ToolMenuDecoratingRenderer<IncrementalTermReference>(new StyleRenderer(
+					"font-weight:bold"));
 
 	public IncrementalTermReference(Class termObjectClass) {
 		super(termObjectClass);
@@ -55,7 +59,7 @@ public abstract class IncrementalTermReference<TermObject> extends TermReference
 	/**
 	 * 
 	 * This renderer does rendering of error messages. The incremental
-	 * compilation algorithm currently does not explicitly store instatiated
+	 * compilation algorithm currently does not explicitly store instantiated
 	 * messages but the state of a term can be asked on demand at any time
 	 * 
 	 * @author Jochen
@@ -91,7 +95,13 @@ public abstract class IncrementalTermReference<TermObject> extends TermReference
 									kdomReportMessage, user));
 				}
 			}
-			r.render(article, sec, user, string);
+			if (IncrementalCompiler.getInstance().getTerminology().isPredefinedObject(
+					sec.get().getTermIdentifier(sec))) {
+				PREDEFINDED_TERM_RENDERER.render(article, sec, user, string);
+			}
+			else {
+				r.render(article, sec, user, string);
+			}
 			for (KDOMReportMessage kdomReportMessage : messages) {
 				if (kdomReportMessage instanceof KDOMError) {
 					string.append(

@@ -26,6 +26,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import de.d3web.plugin.Extension;
+import de.d3web.plugin.PluginManager;
 import de.d3web.we.event.Event;
 import de.d3web.we.event.EventListener;
 import de.d3web.we.event.KDOMCreatedEvent;
@@ -47,6 +49,7 @@ import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.PredefinedTermWarning;
 import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.compile.utils.CompileUtils;
+import de.knowwe.plugin.Plugins;
 
 /**
  * This class implements the incremental compilation algorithm as proposed by
@@ -58,6 +61,8 @@ import de.knowwe.compile.utils.CompileUtils;
  */
 @SuppressWarnings("unchecked")
 public class IncrementalCompiler implements EventListener {
+	
+	
 
 	private final ReferenceManager terminology = new ReferenceManager();
 
@@ -68,6 +73,7 @@ public class IncrementalCompiler implements EventListener {
 	private static IncrementalCompiler instance;
 
 	public static IncrementalCompiler getInstance() {
+		if(instance == null) instance = new IncrementalCompiler();
 		return instance;
 	}
 
@@ -76,11 +82,37 @@ public class IncrementalCompiler implements EventListener {
 		instance = this;
 
 		// TODO: add extension point for plugins defining predefined terminology
-		Section<PreDefinedTerm> subclassDef =
-				Section.createSection("subclassof",
-						new PreDefinedTerm(), null);
-		terminology.addPredefinedObject(subclassDef);
-		terminology.registerTermDefinition(subclassDef);
+		Extension[] exts = PluginManager.getInstance().getExtensions(
+				Plugins.EXTENDED_PLUGIN_ID,
+				Plugins.EXTENDED_POINT_TERMINOLOGY);
+		for (Extension extension : exts) {
+			Object o = extension.getSingleton();
+			if (o instanceof TerminologyExtension) {
+				registerTerminology(((TerminologyExtension) o));
+			}
+		}
+		
+		
+		
+	
+	}
+
+	private void registerTerminology(TerminologyExtension terminologyExtension) {
+		String[] termNames = terminologyExtension.getTermNames();
+		for (String string : termNames) {
+			Section<PreDefinedTerm> predefinedTermname =
+					Section.createSection(string,
+							new PreDefinedTerm(), null);
+			terminology.addPredefinedObject(predefinedTermname);
+			terminology.registerTermDefinition(predefinedTermname);
+		}
+		
+//		Section<PreDefinedTerm> subclassDef =
+//				Section.createSection("subclassof",
+//						new PreDefinedTerm(), null);
+//		terminology.addPredefinedObject(subclassDef);
+//		terminology.registerTermDefinition(subclassDef);
+		
 	}
 
 	class PreDefinedTerm extends TermDefinition<String> {
