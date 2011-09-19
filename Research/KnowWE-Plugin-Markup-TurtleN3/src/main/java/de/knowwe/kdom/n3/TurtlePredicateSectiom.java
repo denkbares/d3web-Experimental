@@ -39,7 +39,7 @@ public class TurtlePredicateSectiom extends AbstractType {
 		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder("([^\\s]*::)", Pattern.DOTALL, 1));
 		setSectionFinder(c);
 		c.addConstraint(AtMostOneFindingConstraint.getInstance());
-		setCustomRenderer(new GenericHTMLRenderer<TurtlePredicateSectiom>("span", new String[] {"style", "color: green;", "title", "TurtlePredicateSectiom"}));
+		//setCustomRenderer(new GenericHTMLRenderer<TurtlePredicateSectiom>("span", new String[] {"style", "color: green;", "title", "TurtlePredicateSectiom"}));
 	}
 
 }

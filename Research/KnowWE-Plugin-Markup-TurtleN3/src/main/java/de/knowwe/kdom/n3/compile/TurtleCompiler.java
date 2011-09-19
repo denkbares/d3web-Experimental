@@ -28,11 +28,12 @@ import org.ontoware.rdf2go.model.node.URI;
 
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
-import de.knowwe.compile.test.Utils;
 import de.knowwe.kdom.n3.TurtleObject;
 import de.knowwe.kdom.n3.TurtlePredicate;
 import de.knowwe.kdom.n3.TurtleSubject;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdfs.IRITermRef;
+import de.knowwe.rdfs.util.RDFSUtil;
 
 public class TurtleCompiler {
 
@@ -45,16 +46,16 @@ public class TurtleCompiler {
 
 		for (Section<TurtleObject> objectSec : found) {
 
-			URI objURI = Utils.getURI(objectSec);
+			URI objURI = RDFSUtil.getURI(objectSec);
 
 			Section<TurtlePredicate> predSec = Sections.findSuccessor(
 					objectSec.getFather(), TurtlePredicate.class);
 
-			URI predURI = Utils.getURI(predSec);
+			URI predURI = RDFSUtil.getURI(predSec);
 
 			Section<TurtleSubject> subjectSec = Sections.findSuccessor(
 					objectSec.getFather().getFather(), TurtleSubject.class);
-			URI subjectURI = Utils.getURI(subjectSec);
+			URI subjectURI = RDFSUtil.getURI(subjectSec);
 
 			if (objURI != null && predURI != null && subjectURI != null) {
 				Statement triple = Rdf2GoCore.getInstance().createStatement(subjectURI,
@@ -66,6 +67,7 @@ public class TurtleCompiler {
 		}
 		Rdf2GoCore.getInstance().addStatements(triples, section);
 	}
+	
 
 	public static void removeTriples(Section<de.knowwe.kdom.n3.TurtleMarkupN3> s) {
 		Rdf2GoCore.getInstance().removeSectionStatementsRecursive(s);

@@ -23,11 +23,11 @@
 package de.knowwe.kdom.n3;
 
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.compile.test.IRITermRef;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.AtMostOneFindingConstraint;
 import java.util.regex.Pattern;
 import de.knowwe.core.renderer.GenericHTMLRenderer;
+import de.knowwe.rdfs.IRITermRef;
 import de.d3web.we.kdom.type.AnonymousType;
 
 public class TurtlePredicate extends IRITermRef {
@@ -40,7 +40,7 @@ public class TurtlePredicate extends IRITermRef {
 		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder("([^\\s]*)::", Pattern.DOTALL, 1));
 		setSectionFinder(c);
 		c.addConstraint(AtMostOneFindingConstraint.getInstance());
-		setCustomRenderer(new GenericHTMLRenderer<TurtlePredicate>("span", new String[] {"style", "color: green;", "title", "TurtlePredicate"}));
+		//setCustomRenderer(new GenericHTMLRenderer<TurtlePredicate>("span", new String[] {"style", "color: green;", "title", "TurtlePredicate"}));
 	}
 
 }

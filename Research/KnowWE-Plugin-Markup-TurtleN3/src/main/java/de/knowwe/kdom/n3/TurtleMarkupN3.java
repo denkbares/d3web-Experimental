@@ -52,7 +52,7 @@ public class TurtleMarkupN3 extends AbstractType implements KnowledgeUnit<Turtle
 		childrenTypes.add(new TurtlePredSentence());
 		setSectionFinder(new RegexSectionFinder("N3:(.*?)\\.",Pattern.DOTALL|Pattern.MULTILINE,1));
 
-		setCustomRenderer(new GenericHTMLRenderer<TurtleMarkupN3>("span", new String[] {"style", "color: yellow;", "title", "TurtleMarkupN3"}));
+		//setCustomRenderer(new GenericHTMLRenderer<TurtleMarkupN3>("span", new String[] {"style", "color: yellow;", "title", "TurtleMarkupN3"}));
 		setCustomRenderer(new TurtleN3Renderer());
 	}
 

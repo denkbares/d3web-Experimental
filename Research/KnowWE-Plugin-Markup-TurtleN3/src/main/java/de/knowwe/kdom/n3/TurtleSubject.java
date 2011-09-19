@@ -23,10 +23,10 @@
 package de.knowwe.kdom.n3;
 
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.knowwe.compile.test.IRITermRef;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.core.renderer.GenericHTMLRenderer;
+import de.knowwe.rdfs.IRITermRef;
 
 public class TurtleSubject extends IRITermRef {
 
@@ -36,7 +36,7 @@ public class TurtleSubject extends IRITermRef {
 		ConstraintSectionFinder c = new ConstraintSectionFinder(new AllTextFinderTrimmed());
 		setSectionFinder(c);
 		c.addConstraint(AtMostOneFindingConstraint.getInstance());
-		setCustomRenderer(new GenericHTMLRenderer<TurtleSubject>("span", new String[] {"style", "color: red;", "title", "TurtleSubject"}));
+		//setCustomRenderer(new GenericHTMLRenderer<TurtleSubject>("span", new String[] {"style", "color: red;", "title", "TurtleSubject"}));
 	}
 
 }

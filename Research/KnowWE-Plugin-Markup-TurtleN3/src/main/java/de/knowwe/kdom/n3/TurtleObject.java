@@ -22,9 +22,9 @@
 
 package de.knowwe.kdom.n3;
 
-import de.knowwe.compile.test.IRITermRef;
 import de.d3web.we.kdom.sectionFinder.SplitSectionFinderUnquoted;
 import de.knowwe.core.renderer.GenericHTMLRenderer;
+import de.knowwe.rdfs.IRITermRef;
 
 public class TurtleObject extends IRITermRef {
 
@@ -33,7 +33,7 @@ public class TurtleObject extends IRITermRef {
 
 		setSectionFinder(new SplitSectionFinderUnquoted(","));
 
-		setCustomRenderer(new GenericHTMLRenderer<TurtleObject>("span", new String[] {"style", "color: orange;", "title", "TurtleObject"}));
+		//setCustomRenderer(new GenericHTMLRenderer<TurtleObject>("span", new String[] {"style", "color: orange;", "title", "TurtleObject"}));
 	}
 
 }

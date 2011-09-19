@@ -38,7 +38,12 @@
 	</dependency>
 	<dependency>
 		<groupId>de.uniwue.d3web</groupId>
-		<artifactId>KnowWE-Plugin-IncrementalCompilerTest</artifactId>
+		<artifactId>KnowWE-Plugin-BasicRDFS</artifactId>
+		<version>0.2-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+		<groupId>de.uniwue.d3web</groupId>
+		<artifactId>KnowWE-Plugin-IncrementalCompiler</artifactId>
 		<version>0.2-SNAPSHOT</version>
 	</dependency>
 </dependencies>
