@@ -10,7 +10,6 @@ import de.d3web.we.kdom.objects.KnowWETerm;
 import de.d3web.we.kdom.objects.TermDefinition;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.compile.object.TypedTermDefinition;
-import de.knowwe.compile.test.AbstractIRITermDefinition;
 import de.knowwe.rdfs.ObjectPropertyDefinitionMarkup.PropertyDef;
 import de.knowwe.rdfs.ObjectPropertyDefinitionMarkup.RangeDomainSpec;
 

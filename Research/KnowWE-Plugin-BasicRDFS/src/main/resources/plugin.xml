@@ -74,6 +74,52 @@
 		<parameter id="scope" value="IRITermRef" />
 
 	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Terminology"
+		id="RDFSTerminology">
+		<parameter id="class"
+			value="de.knowwe.rdfs.RDFSTerminology" />
+		<parameter id="name" value="RDFSTerminology" />
+		<parameter id="description"
+			value="Introduce RDFS-Terminology to TerminologyManager." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+
+	</extension>
+	
+
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="TurtleMarkupSimple">
+		<parameter id="class"
+			value="de.knowwe.rdfs.TripleMarkupSimple" />
+		<parameter id="name" value="TurtleMarkupSimple" />
+		<parameter id="description" value="Type TurtleMarkupSimple" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="3" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="SimpleIRIDefinition">
+		<parameter id="class"
+			value="de.knowwe.rdfs.SimpleIRIDefintionMarkup" />
+		<parameter id="name" value="SimpleIRIDefinition" />
+		<parameter id="description" value="Type SimpleIRIDefinition" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="4" />
+		<parameter id="scope" value="root" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="ComplexIRIDefinitionMarkup">
+		<parameter id="class"
+			value="de.knowwe.rdfs.ComplexIRIDefinitionMarkup" />
+		<parameter id="name" value="ComplexIRIDefinitionMarkup" />
+		<parameter id="description" value="Type ComplexIRIDefinitionMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="3" />
+		<parameter id="scope" value="root" />
+	</extension>
 
 	
 </plugin>

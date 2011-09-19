@@ -41,12 +41,11 @@ import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.util.RDFSUtil;
 
-public class TripleMarkup extends AbstractType implements KnowledgeUnit<TripleMarkup> {
+public class TripleMarkupSimple extends AbstractType implements KnowledgeUnit<TripleMarkupSimple> {
 
-	public TripleMarkup() {
+	public TripleMarkupSimple() {
 
-		
-		this.setSectionFinder(new RegexSectionFinder("^>(.*?::.*?)$", Pattern.DOTALL| Pattern.MULTILINE,
+		this.setSectionFinder(new RegexSectionFinder("\\{(.*?::.*?)\\}", Pattern.DOTALL,
 				1));
 		this.addChildType(new SimpleTurtlePredicate());
 		this.addChildType(new SimpleTurtleSubject());
@@ -63,7 +62,7 @@ public class TripleMarkup extends AbstractType implements KnowledgeUnit<TripleMa
 		}
 	}
 
-	class SimpleTurtleSubject extends IRITermRef{
+	class SimpleTurtleSubject extends IRITermRef {
 		public SimpleTurtleSubject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new AllTextFinderTrimmed());
@@ -73,7 +72,7 @@ public class TripleMarkup extends AbstractType implements KnowledgeUnit<TripleMa
 
 	}
 
-	class SimpleTurtleObject extends IRITermRef{
+	class SimpleTurtleObject extends IRITermRef {
 		public SimpleTurtleObject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new RegexSectionFinder("::\\s(.*)", Pattern.DOTALL, 1));
@@ -83,14 +82,13 @@ public class TripleMarkup extends AbstractType implements KnowledgeUnit<TripleMa
 	}
 
 	@Override
-	public void deleteFromRepository(Section<TripleMarkup> section) {
+	public void deleteFromRepository(Section<TripleMarkupSimple> section) {
 		Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
 	}
-	
-	
 
+	
 	@Override
-	public void insertIntoRepository(Section<TripleMarkup> section) {
+	public void insertIntoRepository(Section<TripleMarkupSimple> section) {
 
 		List<Section<IRITermRef>> found = new ArrayList<Section<IRITermRef>>();
 		Node subURI = null;
@@ -134,7 +132,7 @@ public class TripleMarkup extends AbstractType implements KnowledgeUnit<TripleMa
 
 	@Override
 	public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(
-			Section<? extends KnowledgeUnit<TripleMarkup>> section) {
+			Section<? extends KnowledgeUnit<TripleMarkupSimple>> section) {
 		return CompileUtils.getAllReferencesOfCompilationUnit(section);
 	}
 }

@@ -24,8 +24,6 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.ComplexDefinitionWithTypeConstraints;
 import de.knowwe.compile.object.TypedTermDefinition;
-import de.knowwe.compile.test.AbstractIRITermDefinition;
-import de.knowwe.compile.test.IRITermRef;
 
 public class ObjectPropertyDefinitionMarkup extends AbstractType implements ComplexDefinitionWithTypeConstraints<ObjectPropertyDefinitionMarkup> {
 

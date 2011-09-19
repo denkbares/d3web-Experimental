@@ -14,14 +14,16 @@
   		<groupId>de.uniwue.d3web</groupId>
   		<artifactId>KnowWE-core</artifactId>
   		<version>0.2-SNAPSHOT</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
   	</dependency>
   	<dependency>
   		<groupId>de.uniwue.d3web</groupId>
-  		<artifactId>KnowWE-Plugin-IncrementalCompilerTest</artifactId>
+  		<artifactId>KnowWE-Plugin-IncrementalCompiler</artifactId>
   		<version>0.2-SNAPSHOT</version>
-  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>de.uniwue.d3web</groupId>
+  		<artifactId>KnowWE-Plugin-Rdf2GoSemanticCore</artifactId>
+  		<version>0.2-SNAPSHOT</version>
   	</dependency>
   </dependencies>
 </project>
