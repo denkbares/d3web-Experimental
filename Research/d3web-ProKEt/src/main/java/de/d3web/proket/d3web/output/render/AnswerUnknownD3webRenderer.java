@@ -72,8 +72,8 @@ public class AnswerUnknownD3webRenderer extends AbstractD3webRenderer implements
 				isIndicated(parent, bb)) {
 
 			// show, if indicated follow up
-			if ((D3webUtils.isFollowUpTOinQCon(to, parent) && isIndicated(to, bb))
-					|| (!D3webUtils.isFollowUpTOinQCon(to, parent))) {
+			if ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
+					|| (!D3webUtils.isFollowUpToQCon(to, parent))) {
 				st.removeAttribute("inactive");
 				st.removeAttribute("readonly");
 				st.removeAttribute("qstate");

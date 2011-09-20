@@ -92,8 +92,8 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
 				isIndicated(parent, bb)) {
 
 			// show, if indicated follow up
-			if ((D3webUtils.isFollowUpTOinQCon(to, parent) && isIndicated(to, bb))
-					|| (!D3webUtils.isFollowUpTOinQCon(to, parent))) {
+			if ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
+					|| (!D3webUtils.isFollowUpToQCon(to, parent))) {
 				st.removeAttribute("readonly");
 				st.removeAttribute("inactive");
 				st.removeAttribute("qstate");

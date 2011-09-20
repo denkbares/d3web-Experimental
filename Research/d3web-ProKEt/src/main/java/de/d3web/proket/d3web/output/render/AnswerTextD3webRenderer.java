@@ -100,8 +100,8 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
 			// QContainer indicated
 			if ((bb.getSession().getKnowledgeBase().getInitQuestions().contains(parent)
 					|| isIndicated(parent, bb))
-					&& ((D3webUtils.isFollowUpTOinQCon(to, parent) && isIndicated(to, bb))
-						|| (!D3webUtils.isFollowUpTOinQCon(to, parent)))) {
+					&& ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
+						|| (!D3webUtils.isFollowUpToQCon(to, parent)))) {
 				st.removeAttribute("readonly");
 			}
 			else {

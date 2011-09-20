@@ -71,14 +71,14 @@ public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements
 
 		Blackboard bb = d3webSession.getBlackboard();
 
-		if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(to)
-				|| isIndicated(to, bb)) {
+		Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
 
-			// st.removeAttribute("questInactive");
+		if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(to)
+				|| isIndicated(to, bb) && (hidden == null || !hidden)) {
+
 			st.removeAttribute("hidden");
 		}
 		else {
-			// st.setAttribute("questInactive", "true");
 			st.setAttribute("hidden", "true");
 		}
 
@@ -92,5 +92,4 @@ public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements
 
 		return sb.toString();
 	}
-
 }

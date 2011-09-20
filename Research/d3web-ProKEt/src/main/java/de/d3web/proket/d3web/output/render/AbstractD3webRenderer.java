@@ -96,8 +96,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 	public static AnswerD3webRenderer getAnswerRenderer(TerminologyObject to) {
 
 		AnswerD3webRenderer renderer =
-				(AnswerD3webRenderer)
-					D3webRendererMapping.getInstance().getAnswerRendererObject(to);
+				D3webRendererMapping.getInstance().getAnswerRendererObject(to);
 
 		return renderer;
 	}
@@ -112,8 +111,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 	public static AnswerD3webRenderer getUnknownRenderer() {
 
 		AnswerD3webRenderer renderer =
-				(AnswerD3webRenderer)
-					D3webRendererMapping.getInstance().getUnknownRenderer();
+				D3webRendererMapping.getInstance().getUnknownRenderer();
 
 		return renderer;
 	}
@@ -158,11 +156,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 		TerminologyObject[] children = to.getChildren();
 		// Blackboard bb = d3webSession.getBlackboard();
 		for (TerminologyObject child : children) {
-			// if (D3webConnector.getInstance().getIndicationMode() ==
-			// IndicationMode.HIDE_UNINDICATED
-			// && child instanceof QContainer && !isIndicated(child, bb)) {
-			// continue;
-			// }
+
 			// get the matching renderer
 			IQuestionD3webRenderer childRenderer = AbstractD3webRenderer.getRenderer(child);
 			// System.out.println(childRenderer);

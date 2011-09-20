@@ -17,6 +17,8 @@ public class ProKEtProperties {
 	public static final Property<Boolean> SHOW_IN_HEADER = Property.getProperty("show_in_header",
 			Boolean.class);
 
+	public static final Property<Boolean> HIDE = Property.getProperty("hide", Boolean.class);
+
 	public static final Property<Integer> POSITION_IN_HEADER = Property.getProperty(
 			"position_in_header", Integer.class);
 

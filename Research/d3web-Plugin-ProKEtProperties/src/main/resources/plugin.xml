@@ -63,6 +63,16 @@
 	</extension>
 	
 	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="hide">
+		<parameter id="name" value="hide" />
+		<parameter id="description" value="Set to true if a question should no be shown in the dialog" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.Boolean" />
+	</extension>
+	
+	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
 		id="position_in_header">
 		<parameter id="name" value="position_in_header" />
 		<parameter id="description" value="Sets the position of question in the header" />

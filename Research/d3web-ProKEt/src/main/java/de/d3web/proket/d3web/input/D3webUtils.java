@@ -431,7 +431,7 @@ public class D3webUtils {
 		return null;
 	}
 
-	public static boolean isFollowUpTOinQCon(TerminologyObject to, TerminologyObject currentQCon) {
+	public static boolean isFollowUpToQCon(TerminologyObject to, TerminologyObject currentQCon) {
 
 		TerminologyObject[] parents = to.getParents();
 

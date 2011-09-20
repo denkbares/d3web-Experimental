@@ -61,12 +61,12 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 	public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
 			TerminologyObject to, TerminologyObject parent) {
 
-		StringBuilder sb = new StringBuilder();
-
+		Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
 		// return if the InterviewObject is null
-		if (to == null) {
+		if (to == null || (hidden != null && hidden)) {
 			return "";
 		}
+		StringBuilder sb = new StringBuilder();
 
 		// get the fitting template. In case user prefix was specified, the
 		// specific TemplateName is returned, otherwise, the base object name.
@@ -118,8 +118,8 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 				isIndicated(parent, bb)) {
 
 			// show, if indicated follow up
-			if ((D3webUtils.isFollowUpTOinQCon(to, parent) && isIndicated(to, bb))
-					|| (!D3webUtils.isFollowUpTOinQCon(to, parent))) {
+			if ((D3webUtils.isFollowUpToQCon(to, parent) && isIndicated(to, bb))
+					|| (!D3webUtils.isFollowUpToQCon(to, parent))) {
 				st.removeAttribute("inactiveQuestion");
 				st.removeAttribute("qstate");
 				st.setAttribute("qstate", "");
