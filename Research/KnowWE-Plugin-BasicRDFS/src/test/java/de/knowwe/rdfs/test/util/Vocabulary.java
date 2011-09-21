@@ -34,10 +34,16 @@ public class Vocabulary {
 	private static final Rdf2GoCore core = Rdf2GoCore.getInstance();
 	
 	public static URI RDFS_SUBCLASSOF = new URIImpl("http://www.w3.org/2000/01/rdf-schema#subClassOf");
+	public static URI RDFS_SUBPROPERTYOF = new URIImpl("http://www.w3.org/2000/01/rdf-schema#subPropertyOf");
 
 	public static URI MAMMAL = core.createlocalURI("Mammal");
 	public static URI PERSON = core.createlocalURI("Person");
 	public static URI ANIMAL = core.createlocalURI("Animal");
+	
+	public static URI BOB = core.createlocalURI("Bob");
+	public static URI JIM = core.createlocalURI("Jim");
+	public static URI KNOWS = core.createlocalURI("knows");
+	public static URI ISFRIENDOF = core.createlocalURI("isFriendOf");
 
 
 }

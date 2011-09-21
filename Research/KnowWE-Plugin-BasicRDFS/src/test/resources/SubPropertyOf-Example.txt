@@ -1,0 +1,29 @@
+!! Test für rdfs:subPropertyOf
+
+
+
+def Bob
+
+def Jim
+
+>isFriendOf subpropertyOf:: knows
+
+>Bob isFriendOf:: Jim
+
+ObjectProperty knows
+ObjectProperty isFriendOf
+
+!Who knows Jim?
+<sparql2go>
+SELECT  ?y  where { ?y lns:knows lns:Jim.}
+</sparql2go>
+
+!Who is friend of Jim?
+<sparql2go>
+SELECT  ?y  where { ?y lns:isFriendOf lns:Jim .}
+</sparql2go>
+
+!What is subpropertyof knows?
+<sparql2go>
+SELECT  ?y  where { ?y rdfs:subPropertyOf lns:knows .}
+</sparql2go>
