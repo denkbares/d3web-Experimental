@@ -84,6 +84,31 @@
 		<parameter id="scope" value="IRITermReference" />
 	</extension>
 
-	
-	
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+        id="ManchesterMarkup">
+        <parameter id="class" value="de.knowwe.kdom.manchester.ManchesterMarkup" />
+        <parameter id="name" value="ManchesterMarkup" />
+        <parameter id="description" value="Type ManchestertMarkup" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5"  />
+        <parameter id="scope" value="root" />
+    </extension>
+       
+    <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="OWLApiInferenceTagHandler">
+        <parameter id="class" value="de.knowwe.taghandler.OWLApiInferenceTagHandler" />
+        <parameter id="name" value="OWLApiInferenceTagHandler" />
+        <parameter id="description" value="TagHandler OWLApiInferenceTagHandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>    
+
+    <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="OWLApiDebugTagHandler">
+        <parameter id="class" value="de.knowwe.taghandler.OWLApiDebugTagHandler" />
+        <parameter id="name" value="OWLApiDebugTagHandler" />
+        <parameter id="description" value="TagHandler OWLApiDebugTagHandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>        
 </plugin>
