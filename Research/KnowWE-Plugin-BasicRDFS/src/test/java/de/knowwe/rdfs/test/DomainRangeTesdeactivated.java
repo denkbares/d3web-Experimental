@@ -66,7 +66,7 @@ public class DomainRangeTesdeactivated {
 	@Test
 	public void testDomainAndRange() {
 		
-		core.dumpModel();
+		//core.dumpModel();
 		
 		// asserted
 		assertTrue(core.sparqlAsk(Query.createQuery(Vocabulary.EATS, Vocabulary.RDFS_RANGE,Vocabulary.FOOD )));
