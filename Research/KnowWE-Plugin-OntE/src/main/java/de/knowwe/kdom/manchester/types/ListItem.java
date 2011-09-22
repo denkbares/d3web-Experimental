@@ -11,6 +11,9 @@ import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 
 public class ListItem extends NonTerminalCondition {
 
+	/**
+	 * OLD regular expression for matching comma separated lists.
+	 */
 	public static final String PATTERN = "(" +
 			"[^\"]" + // everything not in quotes
 			"|" +
@@ -18,7 +21,8 @@ public class ListItem extends NonTerminalCondition {
 			")*?" +
 			"(,|\\z)"; // till comma or line end
 
-	public static final char KOMMA = ',';
+	public static final char COMMA = '\u002c';
+	public static final char QUOTE = '\u0022';
 
 	@Override
 	protected void init() {
@@ -32,8 +36,13 @@ public class ListItem extends NonTerminalCondition {
 
 			String trimmed = text.trim();
 
-			if (text.contains(Character.toString(KOMMA))) {
+			if (text.contains(Character.toString(COMMA))) {
 				List<SectionFinderResult> results = new ArrayList<SectionFinderResult>();
+
+				// Comma should be marked as PlainText
+				if (trimmed.length() == 1 && trimmed.equals(Character.valueOf(COMMA))) {
+					return null;
+				}
 
 				char[] chars = text.toCharArray();
 
@@ -42,7 +51,7 @@ public class ListItem extends NonTerminalCondition {
 				boolean quoted = false;
 
 				for (int i = 0; i < chars.length; i++) {
-					if (Character.valueOf('\u002c').equals(chars[i]) && !quoted) {
+					if (Character.valueOf(COMMA).equals(chars[i]) && !quoted) {
 						currentEnd = i;
 						results.add(new SectionFinderResult(currentStart, currentEnd));
 						currentStart = i + 1;
@@ -50,7 +59,7 @@ public class ListItem extends NonTerminalCondition {
 						currentEnd = text.length();
 						results.add(new SectionFinderResult(currentStart, currentEnd));
 					}
-					else if (Character.valueOf('\u0022').equals(chars[i])) {
+					else if (Character.valueOf(QUOTE).equals(chars[i])) {
 						quoted = !quoted;
 					}
 				}

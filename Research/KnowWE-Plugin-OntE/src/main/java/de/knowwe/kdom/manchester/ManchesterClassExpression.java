@@ -105,7 +105,12 @@ public class ManchesterClassExpression extends CompositeCondition {
 
 		private static OWLClassContentType instance = null;
 
-		private static ManchesterClassExpression cc = new ManchesterClassExpression();
+		private static ManchesterClassExpression cc;
+
+		static {
+			cc = new ManchesterClassExpression();
+			cc.initRestrictionTypes();
+		}
 
 		protected OWLClassContentType() {
 			this.setSectionFinder(new AllTextFinderTrimmed());
