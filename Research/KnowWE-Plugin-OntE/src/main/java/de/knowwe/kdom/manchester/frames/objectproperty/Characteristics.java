@@ -19,18 +19,15 @@
  */
 package de.knowwe.kdom.manchester.frames.objectproperty;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
-import de.knowwe.kdom.manchester.types.CommaSeparatedList;
 import de.knowwe.kdom.manchester.types.Keyword;
+import de.knowwe.kdom.manchester.types.ListItem;
 
 /**
  *
@@ -63,17 +60,19 @@ public class Characteristics extends AbstractType {
 			Keyword key = new Keyword(KEYWORD);
 			this.addChildType(key);
 
-			List<Type> types = new ArrayList<Type>();
-			types.add(new CharacteristicsTerm());
+			// List<Type> types = new ArrayList<Type>();
+			// types.add(new CharacteristicsTerm());
 
-			CommaSeparatedList csl = new CommaSeparatedList(types);
-			this.addChildType(csl);
+			ListItem list = new ListItem();
+			list.addChildType(new CharacteristicsTerm());
+			this.addChildType(list);
+			this.addChildType(new CharacteristicsTerm());
 		}
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @author smark
 	 * @created 13.08.2011
 	 */

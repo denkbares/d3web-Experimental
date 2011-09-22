@@ -25,8 +25,8 @@ import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
-import de.knowwe.kdom.manchester.types.CommaSeparatedList;
 import de.knowwe.kdom.manchester.types.Keyword;
+import de.knowwe.kdom.manchester.types.ListItem;
 
 /**
  *
@@ -59,8 +59,11 @@ public class Range extends AbstractType {
 			Keyword key = new Keyword(KEYWORD);
 			this.addChildType(key);
 
-			CommaSeparatedList csl = new CommaSeparatedList(ManchesterSyntaxUtil.getMCE());
-			this.addChildType(csl);
+			ListItem list = new ListItem();
+			list.addChildType(ManchesterSyntaxUtil.getMCE());
+			this.addChildType(list);
+
+			this.addChildType(ManchesterSyntaxUtil.getMCE());
 		}
 	}
 }

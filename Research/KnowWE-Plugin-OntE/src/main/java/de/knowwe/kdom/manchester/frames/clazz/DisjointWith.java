@@ -25,7 +25,6 @@ import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
-import de.knowwe.kdom.manchester.types.CommaSeparatedList;
 import de.knowwe.kdom.manchester.types.Keyword;
 
 /**
@@ -59,8 +58,11 @@ public class DisjointWith extends AbstractType {
 			Keyword key = new Keyword(KEYWORD);
 			this.addChildType(key);
 
-			CommaSeparatedList list = new CommaSeparatedList(ManchesterSyntaxUtil.getMCE());
-			this.addChildType(list);
+			// CommaSeparatedList list = new CommaSeparatedList();
+			// list.addListItem(ManchesterSyntaxUtil.getMCE());
+			// this.addChildType(list);
+
+			this.addChildType(ManchesterSyntaxUtil.getMCE());
 		}
 	}
 }

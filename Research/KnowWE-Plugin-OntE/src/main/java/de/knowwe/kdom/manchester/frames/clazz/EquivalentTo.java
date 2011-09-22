@@ -24,9 +24,7 @@ import java.util.regex.Pattern;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.kdom.manchester.ManchesterClassExpression;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
-import de.knowwe.kdom.manchester.types.CommaSeparatedList;
 import de.knowwe.kdom.manchester.types.Keyword;
 
 /**
@@ -60,15 +58,11 @@ public class EquivalentTo extends AbstractType{
 			Keyword key = new Keyword(KEYWORD);
 			this.addChildType(key);
 
-			// necessary to support correct clamping
-			// removed due issues with owlapi
-			ManchesterClassExpression mce = new ManchesterClassExpression();
-			mce.setSectionFinder(new AllTextFinderTrimmed());
-			mce.initRestrictionTypes();
-			// this.addChildType(mce);
+			// CommaSeparatedList list = new CommaSeparatedList();
+			// list.addListItem(ManchesterSyntaxUtil.getMCE());
+			// this.addChildType(list);
 
-			CommaSeparatedList list = new CommaSeparatedList(ManchesterSyntaxUtil.getMCE());
-			this.addChildType(list);
+			this.addChildType(ManchesterSyntaxUtil.getMCE());
 		}
 	}
 }

@@ -19,8 +19,6 @@
  */
 package de.knowwe.kdom.manchester;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.Type;
@@ -74,14 +72,12 @@ public class ManchesterSyntaxUtil {
 	 * @created 02.07.2011
 	 * @return
 	 */
-	public static List<Type> getMCE() {
-		List<Type> t = new ArrayList<Type>();
+	public static Type getMCE() {
 
 		ManchesterClassExpression mce = new ManchesterClassExpression();
 		mce.setSectionFinder(new AllTextFinderTrimmed());
 		mce.initRestrictionTypes();
 
-		t.add(mce);
-		return t;
+		return mce;
 	}
 }

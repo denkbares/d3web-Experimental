@@ -23,9 +23,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.condition.CompositeCondition;
+import de.d3web.we.kdom.condition.TerminalCondition;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.kdom.manchester.types.ListItem;
+import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
+import de.knowwe.kdom.manchester.types.OneOfBracedCondition;
+import de.knowwe.kdom.manchester.types.OneOfBracedConditionContent;
 import de.knowwe.kdom.manchester.types.Restriction;
 
 /**
@@ -37,12 +44,55 @@ import de.knowwe.kdom.manchester.types.Restriction;
  */
 public class ManchesterClassExpression extends CompositeCondition {
 
-
+	/**
+	 * Initializes the {@link TerminalCondition}s.
+	 *
+	 * @created 21.09.2011
+	 */
 	public void initRestrictionTypes() {
+
+		// include oneof on the same level as the other brackets
+		OneOfBracedCondition oneOf = new OneOfBracedCondition();
+		OneOfBracedConditionContent oneOfContent = new OneOfBracedConditionContent();
+		oneOfContent.addChildType(this);
+		oneOf.addChildType(oneOfContent);
+		this.childrenTypes.add(0, oneOf);
+
+		// include list to the children
+		ListItem list = new ListItem();
+		list.addChildType(this);
+		this.childrenTypes.add(getAllowedChildrenTypes().size() - 1, list);
+
+		// set terminal conditions (only restrictions are terminal!)
 		List<Type> types = new ArrayList<Type>();
 		types.add(Restriction.getInstance());
-
 		this.setAllowedTerminalConditions(types);
+	}
+
+	/**
+	 * Check whether the current {@link ManchesterClassExpression} has a
+	 * {@link OneOfBracedCondition} section as child.
+	 *
+	 * @param Section<ManchesterClassExpression> a A
+	 *        {@link ManchesterClassExpression} section
+	 * @return TRUE if found, FALSE otherwise
+	 */
+	public boolean hasOneOf(Section<ManchesterClassExpression> section) {
+		if (Sections.findSuccessor(section, OneOfBracedCondition.class) != null) {
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * Retrieves each fragment of the OneOfList and the returns a list for
+	 * further handling.
+	 *
+	 * @param Section<ManchesterClassExpression> a A
+	 *        {@link ManchesterClassExpression} section
+	 * @return The found {@link OWLTermReferenceManchester} sections
+	 */
+	public List<Section<OWLTermReferenceManchester>> getOneOfs(Section<ManchesterClassExpression> section) {
+		return Sections.findSuccessorsOfType(section, OWLTermReferenceManchester.class);
 	}
 
 	/**

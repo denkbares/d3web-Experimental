@@ -19,17 +19,14 @@
  */
 package de.knowwe.kdom.manchester.frames.objectproperty;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
-import de.knowwe.kdom.manchester.types.CommaSeparatedList;
 import de.knowwe.kdom.manchester.types.Keyword;
+import de.knowwe.kdom.manchester.types.ListItem;
 import de.knowwe.kdom.manchester.types.ObjectPropertyExpression;
 
 /**
@@ -66,11 +63,13 @@ public class InverseOf extends AbstractType {
 			ObjectPropertyExpression ope = new ObjectPropertyExpression();
 			ope.setSectionFinder(new AllTextFinderTrimmed());
 
-			List<Type> t = new ArrayList<Type>();
-			t.add(ope);
+//			List<Type> t = new ArrayList<Type>();
+//			t.add(ope);
 
-			CommaSeparatedList csl = new CommaSeparatedList(t);
-			this.addChildType(csl);
+			ListItem list = new ListItem();
+			list.addChildType(ope);
+			this.addChildType(list);
+			this.addChildType(ope);
 		}
 	}
 }

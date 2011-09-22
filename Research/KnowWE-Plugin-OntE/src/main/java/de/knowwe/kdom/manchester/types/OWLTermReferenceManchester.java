@@ -23,14 +23,15 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.termObject.IRITermReference;
 
 /**
+ * Simple {@link IRITermReference} that represents OWL classes and OWL
+ * individuals.
  *
- *
- * @author smark
+ * @author Stefan Mark
  * @created 18.05.2011
  */
 public class OWLTermReferenceManchester extends IRITermReference {
 
-	public static final String PATTERN = "([A-Z]|owl)[A-Za-z0-9:]+";
+	public static final String PATTERN = "\\b([A-Z]|owl)[A-Za-z0-9:]+\\b";
 
 	public OWLTermReferenceManchester() {
 		this.setSectionFinder(new RegexSectionFinder(PATTERN));

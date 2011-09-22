@@ -37,7 +37,10 @@ import de.knowwe.util.AllTextFinderTrimComma;
  * @author smark
  * @created 08.06.2011
  */
+@Deprecated
 public class CommaSeparatedList extends AbstractType {
+
+	private final ListItem item = new ListItem();
 
 	public static final String PATTERN = "(" +
 			"[^\"]" + // everything not in quotes
@@ -46,16 +49,41 @@ public class CommaSeparatedList extends AbstractType {
 			")*?" +
 			"(,|\\z)"; // till comma or line end
 
-	public CommaSeparatedList(List<Type> children) {
-		this.setSectionFinder(new RegexSectionFinder(PATTERN, Pattern.DOTALL | Pattern.MULTILINE));
+	public CommaSeparatedList() {
+		this(null);
+	}
 
-		ListItem item = new ListItem();
-		if (children != null && children.size() > 0) {
-			for (Type t : children) {
-				item.addChildType(t);
-			}
-		}
+	public CommaSeparatedList(Type t) {
+		this.setSectionFinder(new RegexSectionFinder(PATTERN, Pattern.DOTALL | Pattern.MULTILINE));
 		this.addChildType(item);
+
+		if (t != null) {
+			item.addChildType(t);
+		}
+	}
+
+	/**
+	 * Adds possible {@link AbstractType} types to the children list of the
+	 * {@link CommaSeparatedList}.
+	 *
+	 * @created 21.09.2011
+	 * @param t
+	 */
+	public void addListItem(Type t) {
+		item.addChildType(t);
+	}
+
+	/**
+	 * Adds possible {@link AbstractType} types to the children list of the
+	 * {@link CommaSeparatedList}.
+	 *
+	 * @created 21.09.2011
+	 * @param t
+	 */
+	public void addListItems(List<Type> types) {
+		for (Type t : types) {
+			this.addListItem(t);
+		}
 	}
 
 	/**
@@ -70,7 +98,6 @@ public class CommaSeparatedList extends AbstractType {
 	public static class ListItem extends AbstractType {
 
 		public ListItem() {
-			// TODO one Of List
 			this.setSectionFinder(new AllTextFinderTrimComma());
 		}
 	}

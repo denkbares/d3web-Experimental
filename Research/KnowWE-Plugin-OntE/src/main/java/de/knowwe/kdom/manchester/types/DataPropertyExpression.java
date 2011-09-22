@@ -19,25 +19,19 @@
  */
 package de.knowwe.kdom.manchester.types;
 
-import java.util.regex.Pattern;
-
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
-import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.termObject.IRITermReference;
 
 /**
  *
- *
- * @author Stefan Mark
- * @created 23.05.2011
+ * @author smark
+ * @created 16.05.2011
  */
-public class Keyword extends AbstractType {
+public class DataPropertyExpression extends IRITermReference {
 
-	public Keyword(String pattern) {
-		ConstraintSectionFinder csf = new ConstraintSectionFinder(new RegexSectionFinder(pattern,
-				Pattern.MULTILINE));
-		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
-		this.setSectionFinder(csf);
+	public static final String PATTERN = "\\b[a-z][A-Za-z0-9:]+\\b";
+
+	public DataPropertyExpression() {
+		this.setSectionFinder(new RegexSectionFinder(PATTERN));
 	}
 }

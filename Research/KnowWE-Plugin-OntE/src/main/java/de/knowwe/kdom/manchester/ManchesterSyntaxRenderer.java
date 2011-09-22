@@ -21,24 +21,44 @@ package de.knowwe.kdom.manchester;
 
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.rendering.DelegateRenderer;
 import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.kdom.manchester.ManchesterMarkup.ManchesterMarkupContentType;
 
 /**
- * Highlights elements of the Manchester Syntax in the article. Also wraps the
- * long lines so no ugly horizontal scrolling is necessary.
- *
- * @author smark
+ * Highlights elements of the Manchester OWL syntax in the article. Also wraps
+ * the long lines so no ugly horizontal scrolling is necessary.
+ * 
+ * @author Stefan Mark
  * @created 10.08.2011
  */
 public class ManchesterSyntaxRenderer extends KnowWEDomRenderer<ManchesterMarkup> {
 
 	@Override
 	public void render(KnowWEArticle article, Section<ManchesterMarkup> sec, UserContext user, StringBuilder string) {
-		string.append(KnowWEUtils.maskHTML("<pre style=\"white-space:pre-wrap;background-color:#C8C8C8;\">"));
+		string.append(KnowWEUtils.maskHTML("<pre style=\"white-space:pre-wrap;background: none repeat scroll 0 0 #F5F5F5;border: 1px solid #E5E5E5;position:relative;\">"));
+		string.append(KnowWEUtils.maskHTML("<div style=\"position:absolute;top:0px;right:0px;border-bottom: 1px solid #E5E5E5;border-left: 1px solid #E5E5E5;padding:5px\">"
+				+ getFrameName(sec)
+				+ "</div>"));
+
 		DelegateRenderer.getInstance().render(article, sec, user, string);
 		string.append(KnowWEUtils.maskHTML("</pre>"));
+	}
+
+	/**
+	 *
+	 *
+	 * @created 22.09.2011
+	 * @param section
+	 * @return
+	 */
+	private String getFrameName(Section<ManchesterMarkup> section) {
+		Section<ManchesterMarkupContentType> child = Sections.findSuccessor(section,
+				ManchesterMarkupContentType.class);
+		Section<?> frame = child.getChildren().get(0);
+		return frame.get().getName();
 	}
 }

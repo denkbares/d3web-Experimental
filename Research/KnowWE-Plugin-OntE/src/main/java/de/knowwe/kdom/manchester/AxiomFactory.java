@@ -31,11 +31,11 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
-import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.PrefixManager;
 import org.semanticweb.owlapi.util.DefaultPrefixManager;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
@@ -52,8 +52,12 @@ import de.knowwe.kdom.manchester.frames.clazz.DisjointWith;
 import de.knowwe.kdom.manchester.frames.clazz.EquivalentTo;
 import de.knowwe.kdom.manchester.frames.clazz.SubClassOf;
 import de.knowwe.kdom.manchester.frames.individual.IndividualFrame;
+import de.knowwe.kdom.manchester.frames.misc.MiscFrame;
 import de.knowwe.kdom.manchester.frames.objectproperty.CharacteristicTypes;
 import de.knowwe.kdom.manchester.frames.objectproperty.ObjectPropertyFrame.ObjectProperty;
+import de.knowwe.kdom.manchester.types.Annotation;
+import de.knowwe.kdom.manchester.types.Annotations;
+import de.knowwe.kdom.manchester.types.DataPropertyExpression;
 import de.knowwe.kdom.manchester.types.ExactlyRestriction;
 import de.knowwe.kdom.manchester.types.MaxRestriction;
 import de.knowwe.kdom.manchester.types.MinRestriction;
@@ -64,12 +68,6 @@ import de.knowwe.kdom.manchester.types.OnlyRestriction;
 import de.knowwe.kdom.manchester.types.Restriction;
 import de.knowwe.kdom.manchester.types.SomeRestriction;
 import de.knowwe.kdom.manchester.types.ValueRestriction;
-import de.knowwe.kdom.manchester.types.Annotations.AnnotationDatatypeTag;
-import de.knowwe.kdom.manchester.types.Annotations.AnnotationLanguageTag;
-import de.knowwe.kdom.manchester.types.Annotations.AnnotationTerm;
-import de.knowwe.kdom.manchester.types.Annotations.RDFSComment;
-import de.knowwe.kdom.manchester.types.Annotations.RDFSLabel;
-import de.knowwe.kdom.manchester.types.CommaSeparatedList.ListItem;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
@@ -84,14 +82,12 @@ public class AxiomFactory {
 	private static final OWLAPIConnector connector;
 	private static final PrefixManager pm;
 	private static final OWLDataFactory factory;
-	private static final OWLOntology ontology;
 	private static final AxiomStorageSubtree storage;
 
 	static {
 		connector = OWLAPIConnector.getGlobalInstance();
 		factory = connector.getManager().getOWLDataFactory();
 		pm = new DefaultPrefixManager(Rdf2GoCore.basens);
-		ontology = connector.getOntology();
 		storage = AxiomStorageSubtree.getInstance();
 	}
 
@@ -271,7 +267,7 @@ public class AxiomFactory {
 		List<Section<? extends NonTerminalCondition>> xjunctions = new ArrayList<Section<? extends NonTerminalCondition>>();
 
 
-		// check for disjunct, conjunct or complement
+		// check for disjunct, conjunct or complement or oneOf
 		if (nodes.size() > 0) {
 			Section<ManchesterClassExpression> mce = nodes.get(0);
 			CompositeCondition cc = mce.get();
@@ -289,6 +285,21 @@ public class AxiomFactory {
 				if (expression != null) {
 					return factory.getOWLObjectComplementOf(expression); // NOT
 				}
+			}
+			if (mce.get().hasOneOf(mce)) { // ONE OF
+				List<Section<OWLTermReferenceManchester>> refs = mce.get().getOneOfs(mce);
+				for (Section<OWLTermReferenceManchester> r : refs) {
+					OWLClassExpression expression = handleBracedConditionPart(r);
+					if (expression != null && isComplement == false) {
+						parts.add(expression);
+					}
+				}
+
+				Set<OWLIndividual> individuals = new HashSet<OWLIndividual>();
+				for (OWLClassExpression c : parts) {
+					individuals.add(factory.getOWLNamedIndividual(((OWLClass) c).getIRI()));
+				}
+				return factory.getOWLObjectOneOf(individuals); // ONE OF
 			}
 		}
 
@@ -551,47 +562,178 @@ public class AxiomFactory {
 	}
 
 	/**
-	 *
+	 * Creates out of the found {@link Annotations} in the KDOM correct
+	 * {@link OWLAnnotation} axioms. Those {@link OWLAxiom} can than be added to
+	 * the ontology.
 	 *
 	 * @created 15.09.2011
-	 * @param section
-	 * @param annotatetObject
+	 * @param Section<Annotation> section A {@link Annotation} section
+	 * @param IRI annotatetObject The resource the {@link Annotation} belongs
+	 *        to.
 	 * @return
 	 */
-	public static OWLAxiom createAnnotations(Section<?> section, IRI annotatetObject) {
+	public static OWLAxiom createAnnotations(Section<Annotation> section, IRI annotatetObject) {
 
-		IRI i = null;
-		Section<?> s = Sections.findSuccessor(section, RDFSComment.class);
-		if (s == null) {
-			s = Sections.findSuccessor(section, RDFSLabel.class);
+		IRI annotationIRI = null;
+		Annotation annotationType = section.get();
+
+		if (annotationType.isLabel(section)) {
+			annotationIRI = OWLRDFVocabulary.RDFS_LABEL.getIRI();
 		}
-		if (s == null) return null;
-		if (s != null) {
-			if (s.get() instanceof RDFSComment) {
-				i = OWLRDFVocabulary.RDFS_COMMENT.getIRI();
+		else if (annotationType.isComment(section)) {
+			annotationIRI = OWLRDFVocabulary.RDFS_COMMENT.getIRI();
+		}
+
+		if (annotationIRI != null) {
+
+			OWLAnnotation a = null;
+			String term = "";
+			String tag = "";
+
+			term = annotationType.getTerm(section).getOriginalText();
+
+			// check for optional tags (language, data type)
+			if (annotationType.hasLanguageTag(section)) {
+				tag = annotationType.getLanguage(section).getOriginalText();
 			}
-			else if (s.get() instanceof RDFSLabel) {
-				i = OWLRDFVocabulary.RDFS_LABEL.getIRI();
+			else if (annotationType.hasDatatypeTag(section)) {
+				tag = annotationType.getDatatype(section).getOriginalText();
 			}
+
+			// create the OWLAnnotation axiom
+			if (!tag.isEmpty()) {
+				a = factory.getOWLAnnotation(
+						factory.getOWLAnnotationProperty(annotationIRI),
+						factory.getOWLLiteral(term, tag));
+			}
+			else {
+				a = factory.getOWLAnnotation(
+						factory.getOWLAnnotationProperty(annotationIRI),
+							factory.getOWLLiteral(term));
+			}
+			return factory.getOWLAnnotationAssertionAxiom(annotatetObject, a);
+		}
+		return null;
+	}
+
+	/**
+	 * Create the axioms for the EquivalentClasses and DisjointClasses frame of
+	 * the Manchester OWL syntax.
+	 *
+	 * @created 22.09.2011
+	 * @param Section<MiscFrame> section The section containing the information
+	 *        about the {@link MiscFrame}
+	 * @return {@link OWLAxiom}
+	 */
+	public static OWLAxiom createMiscFrameClasses(Section<MiscFrame> section) {
+
+		MiscFrame type = section.get();
+		List<Section<OWLTermReferenceManchester>> references = Sections.findSuccessorsOfType(
+				section, OWLTermReferenceManchester.class);
+
+		Set<OWLClassExpression> parts = new HashSet<OWLClassExpression>();
+
+		for (Section<OWLTermReferenceManchester> r : references) {
+			OWLClass clazz = factory.getOWLClass(":" + r.getOriginalText(), pm);
+			storage.addAxiom(factory.getOWLDeclarationAxiom(clazz));
 		}
 
-		OWLAnnotation a = null;
-		Section<?> annotation = Sections.findSuccessor(s, AnnotationTerm.class);
-		Section<?> tag = Sections.findSuccessor(s, AnnotationLanguageTag.class);
-		if (tag == null) {
-			tag = Sections.findSuccessor(s, AnnotationDatatypeTag.class);
+		if (type.isDisjointClasses(section)) {
+			return factory.getOWLDisjointClassesAxiom(parts);
+		}
+		else if (type.isEquivalentClasses(section)) {
+			return factory.getOWLEquivalentClassesAxiom(parts);
+		}
+		return null;
+	}
+
+	/**
+	 * Create the axioms for the SameIndividual and DifferentIndividuals frame
+	 * of the Manchester OWL syntax.
+	 *
+	 * @created 22.09.2011
+	 * @param Section<MiscFrame> section The section containing the information
+	 *        about the {@link MiscFrame}
+	 * @return {@link OWLAxiom}
+	 */
+	public static OWLAxiom createMiscFrameIndividuals(Section<MiscFrame> section) {
+
+		MiscFrame type = section.get();
+		List<Section<OWLTermReferenceManchester>> references = Sections.findSuccessorsOfType(
+				section, OWLTermReferenceManchester.class);
+
+		Set<OWLNamedIndividual> parts = new HashSet<OWLNamedIndividual>();
+
+		for (Section<OWLTermReferenceManchester> r : references) {
+			parts.add(factory.getOWLNamedIndividual(":" + r.getOriginalText(), pm));
 		}
 
-		if (tag != null) {
-			a = factory.getOWLAnnotation(
-				factory.getOWLAnnotationProperty(i),
-					factory.getOWLLiteral(annotation.getOriginalText(), tag.getOriginalText()));
+		if (type.isDifferentIndividuals(section)) {
+			return factory.getOWLDifferentIndividualsAxiom(parts);
 		}
-		else {
-			a = factory.getOWLAnnotation(
-					factory.getOWLAnnotationProperty(i),
-						factory.getOWLLiteral(annotation.getOriginalText()));
+		else if (type.isSameIndividuals(section)) {
+			return factory.getOWLSameIndividualAxiom(parts);
 		}
-		return factory.getOWLAnnotationAssertionAxiom(annotatetObject, a);
+		return null;
+	}
+
+	/**
+	 * Create the axioms for the EquivalentObjectProperties and
+	 * DisjointObjectProperties frame of the Manchester OWL syntax.
+	 *
+	 * @created 22.09.2011
+	 * @param Section<MiscFrame> section The section containing the information
+	 *        about the {@link MiscFrame}
+	 * @return {@link OWLAxiom}
+	 */
+	public static OWLAxiom createMiscFrameObjectProperties(Section<MiscFrame> section) {
+
+		MiscFrame type = section.get();
+		List<Section<ObjectPropertyExpression>> references = Sections.findSuccessorsOfType(
+				section, ObjectPropertyExpression.class);
+
+		Set<OWLObjectProperty> parts = new HashSet<OWLObjectProperty>();
+
+		for (Section<ObjectPropertyExpression> r : references) {
+			parts.add(factory.getOWLObjectProperty(":" + r.getOriginalText(), pm));
+		}
+
+		if (type.isDisjointProperties(section)) {
+			return factory.getOWLDisjointObjectPropertiesAxiom(parts);
+		}
+		else if (type.isEquivalentProperties(section)) {
+			return factory.getOWLEquivalentObjectPropertiesAxiom(parts);
+		}
+		return null;
+	}
+
+	/**
+	 * Create the axioms for the EquivalentDatatypeProperties and
+	 * DisjointDatatypeProperties frame of the Manchester OWL syntax.
+	 *
+	 * @created 22.09.2011
+	 * @param Section<MiscFrame> section The section containing the information
+	 *        about the {@link MiscFrame}
+	 * @return {@link OWLAxiom}
+	 */
+	public static OWLAxiom createMiscFrameDataProperties(Section<MiscFrame> section) {
+
+		MiscFrame type = section.get();
+		List<Section<DataPropertyExpression>> references = Sections.findSuccessorsOfType(
+				section, DataPropertyExpression.class);
+
+		Set<OWLDataProperty> parts = new HashSet<OWLDataProperty>();
+
+		for (Section<DataPropertyExpression> r : references) {
+			parts.add(factory.getOWLDataProperty(":" + r.getOriginalText(), pm));
+		}
+
+		if (type.isDisjointProperties(section)) {
+			return factory.getOWLDisjointDataPropertiesAxiom(parts);
+		}
+		else if (type.isEquivalentProperties(section)) {
+			return factory.getOWLEquivalentDataPropertiesAxiom(parts);
+		}
+		return null;
 	}
 }
