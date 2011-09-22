@@ -35,6 +35,9 @@ public class Vocabulary {
 	
 	public static URI RDFS_SUBCLASSOF = new URIImpl("http://www.w3.org/2000/01/rdf-schema#subClassOf");
 	public static URI RDFS_SUBPROPERTYOF = new URIImpl("http://www.w3.org/2000/01/rdf-schema#subPropertyOf");
+	public static URI RDFS_DOMAIN = new URIImpl("http://www.w3.org/2000/01/rdf-schema#domain");
+	public static URI RDFS_RANGE = new URIImpl("http://www.w3.org/2000/01/rdf-schema#range");
+	public static URI RDF_TYPE = new URIImpl("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
 
 	public static URI MAMMAL = core.createlocalURI("Mammal");
 	public static URI PERSON = core.createlocalURI("Person");
@@ -44,6 +47,10 @@ public class Vocabulary {
 	public static URI JIM = core.createlocalURI("Jim");
 	public static URI KNOWS = core.createlocalURI("knows");
 	public static URI ISFRIENDOF = core.createlocalURI("isFriendOf");
+	
+	public static URI EATS = core.createlocalURI("eats");
+	public static URI FOOD = core.createlocalURI("Food");
+	public static URI REDAPPLE = core.createlocalURI("the red apple");
 
 
 }

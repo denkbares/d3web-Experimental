@@ -1,0 +1,27 @@
+!! Test für rdfs:domain /rdfs:range
+
+Class Food
+Class Animal
+ObjectProperty eats
+
+def Bob
+
+def the red apple
+
+>eats range:: Food
+>eats domain:: Animal
+
+>Bob eats:: the red apple
+
+
+!Who is an Animal?
+<sparql2go>
+SELECT  ?y  where { ?y rdf:type lns:Animal.}
+</sparql2go>
+
+!What is the apple?
+<sparql2go>
+SELECT  ?y  where { <http://localhost:8080/KnowWE/OwlDownload.jsp#the+red+apple> rdf:type ?y.}
+</sparql2go>
+
+
