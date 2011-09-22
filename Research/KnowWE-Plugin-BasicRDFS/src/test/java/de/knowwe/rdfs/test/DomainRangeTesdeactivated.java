@@ -58,7 +58,7 @@ public class DomainRangeTesdeactivated {
 		InitPluginManager.init();
 		KnowWEPackageManager.overrideAutocompileArticle(true);
 		
-		System.out.println(IncrementalCompiler.getInstance().getTerminology().toString());
+		//System.out.println(IncrementalCompiler.getInstance().getTerminology().toString());
 		
 		MyTestArticleManager.getArticle(TESTFILE);
 	}
@@ -93,7 +93,7 @@ public class DomainRangeTesdeactivated {
 		Rdf2GoCore.getInstance().removeAllCachedStatements();
 		// Finally remove the formerly created article
 		//MyTestArticleManager.deleteArticle(TESTFILE);
-		IncrementalCompiler.getInstance().reset();
+		//IncrementalCompiler.getInstance().reset();
 		MyTestArticleManager.clear();
 		
 		System.out.println("teardown!");
