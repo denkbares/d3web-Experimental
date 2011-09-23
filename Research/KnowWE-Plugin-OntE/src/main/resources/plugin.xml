@@ -23,7 +23,7 @@
 		<parameter id="name" value="ClassHierarchyMarkup" />
 		<parameter id="description" value="KnowWEObjectType ClassHierarchyMarkup" />
 		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="4" />
+		<parameter id="priority" value="100" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
@@ -34,7 +34,7 @@
 		<parameter id="name" value="TurtleMarkup" />
 		<parameter id="description" value="Type TurtleMarkup" />
 		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="4" />
+		<parameter id="priority" value="100" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
@@ -46,7 +46,7 @@
 		<parameter id="name" value="SimpleIRIDefinition" />
 		<parameter id="description" value="Type SimpleIRIDefinition" />
 		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="4" />
+		<parameter id="priority" value="100" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
@@ -58,7 +58,7 @@
 		<parameter id="name" value="TurtleMarkupSimple" />
 		<parameter id="description" value="Type TurtleMarkupSimple" />
 		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="4" />
+		<parameter id="priority" value="100" />
 		<parameter id="scope" value="root" />
 	</extension>
 	
@@ -80,7 +80,7 @@
 		<parameter id="description"
 			value="Generates correction suggestions for OWL" />
 		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
+		<parameter id="priority" value="105" />
 		<parameter id="scope" value="IRITermReference" />
 	</extension>
 
