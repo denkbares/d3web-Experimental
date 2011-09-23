@@ -540,6 +540,15 @@ function submitLoadAndSaveDialog() {
 				":button:contains('OK')").click();
 }
 
+function escapeExpression(str) {
+	return str.replace(/([#;&,\.\+\*\~':"\!\^$\[\]\(\)=>\|])/g, "\\$1");
+}
+
+function d3web_prepareSave() {
+	$('#confirmFilename').val($("#" + $("[useasfilename=true]").first().attr("id")).val());
+	$('#jqConfirmDialog').dialog("open");
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// OLD STUFF, NOT SURE IF NEEDED ///////////////////////////
@@ -547,9 +556,6 @@ function submitLoadAndSaveDialog() {
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 
-function escapeExpression(str) {
-    return str.replace(/([#;&,\.\+\*\~':"\!\^$\[\]\(\)=>\|])/g, "\\$1");
-}
 
 function d3web_IQClicked(id) {
 	//alert("image answer " + id + " was clicked");
@@ -597,22 +603,6 @@ function d3web_sessionForNewUser() {
 	});
 }
 
-function d3web_prepareSave() {
-	$('#confirmFilename').val($("#" + $("[useasfilename=true]").first().attr("id")).val());
-	
-	// get number of unanswered questions
-//	questionsAll = $('#content [id^="q_"]');
-//	questionsAnswered = questionsAll.filter('[class$="question-d"]');
-//	questionsUnanswered = questionsAll.size() - questionsAnswered.size();
-//
-//	var qua = "<b> " + questionsUnanswered + " </b>";
-//	$('#numberUnanswered').html(qua);
-
-//	if (questionsUnanswered !== 0) {
-	$('#jqConfirmDialog').dialog("open");
-//	}
-
-}
 
 function d3web_sendSave(force) {
 
