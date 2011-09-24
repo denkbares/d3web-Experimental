@@ -7,7 +7,6 @@ package de.knowwe.rdf2go.modelfactory;
 
 import java.io.File;
 import java.io.FileReader;
-import java.util.Date;
 import java.util.Properties;
 
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
@@ -41,11 +40,13 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class SesameSwiftOwlimModelFactory extends AbstractModelFactory {
 
+	@Override
 	public Model createModel(Properties properties)
 			throws ModelRuntimeException {
 		return new RepositoryModel(createRepository(properties));
 	}
 
+	@Override
 	public Model createModel(URI contextURI)
 			throws ModelRuntimeException {
 		return new RepositoryModel(contextURI, createRepository(null));
@@ -67,7 +68,7 @@ public class SesameSwiftOwlimModelFactory extends AbstractModelFactory {
 		String path = KnowWEEnvironment.getInstance().getKnowWEExtensionPath();
 		String ontfile = path + File.separatorChar + "knowwe_base.owl";
 		String reppath = System.getProperty("java.io.tmpdir") + File.separatorChar
-					+ "repository" + (new Date()).toString().hashCode();
+					+ "repository" + System.nanoTime();
 		String config_file = path + File.separatorChar + "owlim.ttl";
 		File rfile = new File(reppath);
 		delete(rfile);
