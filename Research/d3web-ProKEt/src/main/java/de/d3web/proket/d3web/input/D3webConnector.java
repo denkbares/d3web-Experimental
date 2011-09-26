@@ -28,6 +28,7 @@ import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Session;
+import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
 import de.d3web.proket.data.DialogStrategy;
 import de.d3web.proket.data.DialogType;
 import de.d3web.proket.data.IndicationMode;
@@ -98,6 +99,8 @@ public class D3webConnector {
 
 	// set english as default language setting
 	private String language = "en";
+
+	private LoginMode loginMode;
 
 	public static D3webConnector getInstance() {
 		if (instance == null) {
@@ -257,5 +260,13 @@ public class D3webConnector {
 
 	public String getLanguage() {
 		return this.language;
+	}
+
+	public void setLoginMode(LoginMode login) {
+		this.loginMode = login;
+	}
+
+	public LoginMode getLoginMode() {
+		return this.loginMode;
 	}
 }

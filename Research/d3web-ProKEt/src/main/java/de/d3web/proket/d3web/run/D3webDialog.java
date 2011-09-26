@@ -89,6 +89,7 @@ import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser;
+import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
 import de.d3web.proket.d3web.output.render.IQuestionD3webRenderer;
@@ -199,21 +200,6 @@ public class D3webDialog extends HttpServlet {
 
 		HttpSession httpSession = request.getSession(true);
 
-		// set both persistence (case saving) and image (images streamed from
-		// kb) folder
-		String fca = GlobalSettings.getInstance().getCaseFolder();
-		String fim = GlobalSettings.getInstance().getKbImgFolder();
-		if ((fca == (null) || fca.equals("")) &&
-				(fim == null || fim.equals(""))) {
-
-			String servletBasePath =
-					request.getSession().getServletContext().getRealPath("/");
-			GlobalSettings.getInstance().setServletBasePath(servletBasePath);
-			GlobalSettings.getInstance().setCaseFolder(servletBasePath + "../../EuraHS-Data/cases");
-			GlobalSettings.getInstance().setKbImgFolder(servletBasePath + "kbimg");
-		}
-		d3wcon = D3webConnector.getInstance();
-
 		// try to get the src parameter, which defines the specification xml
 		// with special properties for this dialog/knowledge base
 		// if none available, default.xml is set
@@ -227,6 +213,7 @@ public class D3webDialog extends HttpServlet {
 
 		// d3web parser for interpreting the source/specification xml
 		d3webParser = new D3webXMLParser(source);
+		d3wcon = D3webConnector.getInstance();
 		d3wcon.setD3webParser(d3webParser);
 
 		// only invoke parser, if XML hasn't been parsed before
@@ -246,10 +233,19 @@ public class D3webDialog extends HttpServlet {
 			d3wcon.setHeader(d3webParser.getHeader());
 			d3wcon.setUserprefix(d3webParser.getUserPrefix());
 			d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
+			d3wcon.setLoginMode(d3webParser.getLogin());
 			sourceSave = source;
 			if (!d3webParser.getLanguage().equals("")) {
 				d3wcon.setLanguage(d3webParser.getLanguage());
 			}
+			String servletBasePath =
+					request.getSession().getServletContext().getRealPath("/");
+			GlobalSettings.getInstance().setServletBasePath(servletBasePath);
+			GlobalSettings.getInstance().setCaseFolder(
+					servletBasePath + "../../"
+							+ d3wcon.getUserprefix()
+							+ "-Data/cases");
+			GlobalSettings.getInstance().setKbImgFolder(servletBasePath + "kbimg");
 			streamImages();
 		}
 
@@ -276,7 +272,8 @@ public class D3webDialog extends HttpServlet {
 		}
 		// Get the current httpSession or a new one
 		String authenticated = (String) httpSession.getAttribute("authenticated");
-		if (authenticated == null || !authenticated.equals("yes")) {
+		if (d3wcon.getLoginMode() == LoginMode.db &&
+				(authenticated == null || !authenticated.equals("yes"))) {
 			response.sendRedirect("../EuraHS-Login");
 			return;
 		}

@@ -62,7 +62,7 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>MediastinitisDialog</servlet-name>
-		<url-pattern>/Mediastinitis-Dialog</url-pattern>
+		<url-pattern>/Mediastinitis</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Debug</servlet-name>

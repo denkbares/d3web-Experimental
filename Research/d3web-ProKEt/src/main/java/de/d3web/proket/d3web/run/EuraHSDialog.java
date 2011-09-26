@@ -28,7 +28,7 @@ import javax.servlet.http.HttpSession;
 
 import de.d3web.core.session.Session;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
-import de.d3web.proket.d3web.output.render.HerniaDefaultRootD3webRenderer;
+import de.d3web.proket.d3web.output.render.EuraHSDefaultRootD3webRenderer;
 import de.d3web.proket.output.container.ContainerCollection;
 
 /**
@@ -77,7 +77,7 @@ public class EuraHSDialog extends D3webDialog {
 		PrintWriter writer = response.getWriter();
 
 		// get the root renderer --> call getRenderer with null
-		HerniaDefaultRootD3webRenderer d3webr = (HerniaDefaultRootD3webRenderer)
+		EuraHSDefaultRootD3webRenderer d3webr = (EuraHSDefaultRootD3webRenderer)
 				D3webRendererMapping.getInstance().getRenderer(null);
 
 		// new ContainerCollection needed each time to get an updated dialog

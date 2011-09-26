@@ -51,7 +51,7 @@ import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
  * @author Martina Freiberg, Albrecht Striffler
  * @created 13.01.2011
  */
-public class HerniaDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
+public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 
 	private static final String COLOR_OK = "green";
 	private static final String COLOR_LATE = "red";
