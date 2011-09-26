@@ -5,6 +5,6 @@
 	$if (langDE)$
     	Fall speichern
     $endif$
-	$ConfirmSaveDialog()$
+	$SaveDialog()$
 </div>
 	

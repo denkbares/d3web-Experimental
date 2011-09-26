@@ -84,6 +84,11 @@ public class PersistenceD3webUtils {
 		return session;
 	}
 
+	public static void deleteUserCase(String user, String filename) {
+		File fileToDelete = getFile(user, filename);
+		fileToDelete.delete();
+	}
+
 	public static List<File> getCaseList(String user) {
 		String folderPath = GlobalSettings.getInstance().getCaseFolder();
 		if (user != null && !user.isEmpty()) folderPath += File.separator + user;
@@ -250,4 +255,5 @@ public class PersistenceD3webUtils {
 		}
 		return valueFacts;
 	}
+
 }

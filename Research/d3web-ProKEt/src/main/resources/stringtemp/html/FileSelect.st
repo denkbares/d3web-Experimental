@@ -6,7 +6,7 @@
 			$if (langDE)$
 		    	Fall laden
 		    $endif$">
-	<select id="caseSelect" name="files" size="15" style="width:150px;">
+	<select id="caseSelect" name="files" size="15" style="width:250px;">
     	$fileselectopts$ 
     </select>
 </div>

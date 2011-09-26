@@ -295,6 +295,10 @@ public class D3webDialog extends HttpServlet {
 			loadCase(request, response, httpSession);
 			return;
 		}
+		else if (action.equalsIgnoreCase("deletecase")) {
+			deleteCase(request, response, httpSession);
+			return;
+		}
 		else if (action.equalsIgnoreCase("updatesummary")) {
 			updateSummary(request, response, httpSession);
 			return;
@@ -520,6 +524,28 @@ public class D3webDialog extends HttpServlet {
 		}
 		else {
 			writer.append("NOLI");
+		}
+	}
+
+	/**
+	 * Loading a case.
+	 * 
+	 * @created 09.03.2011
+	 * @param request ServletRequest
+	 * @param response ServletResponse
+	 */
+	protected void deleteCase(HttpServletRequest request,
+			HttpServletResponse response, HttpSession httpSession) {
+
+		String filename = request.getParameter("fn");
+		String user = (String) httpSession.getAttribute("user");
+
+		deleteCase(httpSession, user, filename);
+	}
+
+	protected void deleteCase(HttpSession httpSession, String user, String filename) {
+		if (PersistenceD3webUtils.existsCase(user, filename)) {
+			PersistenceD3webUtils.deleteUserCase(user, filename);
 		}
 	}
 
