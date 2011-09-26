@@ -70,10 +70,6 @@ $(function() {
 			autoOpen: false,
 			position: [ 0, getHeaderHeight()],
 			modal: false,
-			width: 210,
-			height: 180,
-			minWidth: 210,
-			minHeight: 180,
 			buttons: [{
 				id: "saveOK",
 				text: save,
