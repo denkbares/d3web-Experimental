@@ -55,16 +55,33 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 
 	private static DefaultMarkup MARKUP = null;
 
-	public static String HTMLID_AVATAR = "defi-avatar";
-	public static String HTMLID_ABOUT = "defi-about";
+	// public static final String HTMLID_AVATAR = "defi-avatar";
+	// public static final String HTMLID_ABOUT = "defi-about";
+
+	public static final String HTML_CITY = "city";
+	public static final String HTML_AGE = "age";
+
+	public static final String HTML_TYPE = "type";
+	public static final String HTML_PRODUCER = "manufacture";
+	public static final String HTML_REASON = "reason";
+	public static final String HTML_HOBBIES = "hobbies";
+
+	public static final String HTML_ABOUT = "about";
+	public static final String HTML_AVATAR = "avatar";
 
 	public static String LOGOUT_FILENAME = "defi.logout.txt";
 	public static String DATE_FORMAT = "yyyy/MM/dd HH:mm:ss";
 
 	static {
 		MARKUP = new DefaultMarkup("aboutme");
-		MARKUP.addAnnotation("avatar", true);
-		MARKUP.addAnnotation("about", true);
+		MARKUP.addAnnotation(HTML_AVATAR, true);
+		MARKUP.addAnnotation(HTML_ABOUT, true);
+		MARKUP.addAnnotation(HTML_AGE, true);
+		MARKUP.addAnnotation(HTML_CITY, true);
+		MARKUP.addAnnotation(HTML_TYPE, true);
+		MARKUP.addAnnotation(HTML_PRODUCER, true);
+		MARKUP.addAnnotation(HTML_REASON, true);
+		MARKUP.addAnnotation(HTML_HOBBIES, true);
 	}
 
 	/**

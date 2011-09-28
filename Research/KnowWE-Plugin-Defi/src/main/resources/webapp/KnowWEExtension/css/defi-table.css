@@ -1,0 +1,58 @@
+body {
+	font-family: sans-serif;
+	font: Verdana;
+	font-size: 100%;
+}
+
+/* attribute für die ganze Tabelle  */
+table {
+/*position:absolute; top:180px; left:150px;*/
+margin-left: auto;
+margin-right: auto;
+border: solid thin;
+border-color: rgb(6,61,121)
+}
+
+
+/* Zellen mit der Frage  */
+td.rowhead{
+width: 540px;
+font-weight: bold;
+padding: 3px 15px 3px; 
+background-color: rgb(216,218,220);
+}
+
+
+/* Antwort-Zellen*/
+td.answer {
+width: 500px;
+}
+
+
+/* allgemeine Zellen (default-setting) */
+td {
+text-align: left;
+}
+
+/* Zellen mit einem Radio-Button  */
+td.radio{
+	text-align: center;
+	width: 15px;
+}
+ 
+
+/*Überschrift*/
+p.header {
+	font-weight:bold;
+	text-align: center;
+	color: rgb(6,61,121);
+	font-size: x-large;
+}
+
+/*Zwischen-Überschrift*/
+p.header2 {
+	font-weight:bold;
+	color: rgb(6,61,121);
+	font-size: large;
+}
+

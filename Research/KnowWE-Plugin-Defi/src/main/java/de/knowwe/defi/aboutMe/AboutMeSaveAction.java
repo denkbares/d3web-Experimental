@@ -42,8 +42,6 @@ public class AboutMeSaveAction extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 
-		String title = context.getTopic();
-
 		boolean isAuthenticated = context.userIsAsserted();
 
 		// Check for user access
@@ -52,28 +50,54 @@ public class AboutMeSaveAction extends AbstractAction {
 			return;
 		}
 
+		String title = context.getTopic();
 		String username = context.getUserName();
-		String avatar = context.getParameter(AboutMe.HTMLID_AVATAR);
-		String about = context.getParameter(AboutMe.HTMLID_ABOUT);
 		String web = context.getWeb();
-
 
 		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
 		Section<?> section = mgr.getArticle(title).getSection();
 		Section<AboutMe> child = Sections.findSuccessor(section, AboutMe.class);
 
-		int aboutFound = 0;
-		if (about != null) {
-			KnowWEEnvironment.getInstance().getWikiConnector().appendContentToPage(title, about);
-			aboutFound = 1;
-		}
+		StringBuilder params = new StringBuilder();
+
+		params.append("@" + AboutMe.HTML_AGE + ": " + getAnnotationValue(context, AboutMe.HTML_AGE));
+		params.append("\n");
+		params.append("@" + AboutMe.HTML_CITY + ": "
+				+ getAnnotationValue(context, AboutMe.HTML_CITY));
+		params.append("\n");
+		params.append("@" + AboutMe.HTML_PRODUCER + ": "
+				+ getAnnotationValue(context, AboutMe.HTML_PRODUCER));
+		params.append("\n");
+		params.append("@" + AboutMe.HTML_TYPE + ": "
+				+ getAnnotationValue(context, AboutMe.HTML_TYPE));
+		params.append("\n");
+		params.append("@" + AboutMe.HTML_REASON + ": "
+				+ getAnnotationValue(context, AboutMe.HTML_REASON));
+		params.append("\n");
+		params.append("@" + AboutMe.HTML_HOBBIES + ": "
+				+ getAnnotationValue(context, AboutMe.HTML_HOBBIES));
+		params.append("\n");
+		params.append("@" + AboutMe.HTML_ABOUT + ": "
+				+ getAnnotationValue(context, AboutMe.HTML_ABOUT));
+		params.append("\n");
+		params.append("@" + AboutMe.HTML_AVATAR + ": "
+				+ getAnnotationValue(context, AboutMe.HTML_AVATAR));
+		params.append("\n");
 
 		HashMap<String, String> nodesMap = new HashMap<String, String>();
-		nodesMap.put(child.getID(), "%%aboutme\r\n@avatar: " + avatar
-				+ "\r\n@about: " + aboutFound + "\r\n%\r\n");
+		nodesMap.put(child.getID(), "%%aboutme\n"
+				+ params.toString()
+				+ "%\n");
 		mgr.replaceKDOMNodesSaveAndBuild(context, title, nodesMap);
 
 		HttpServletResponse response = context.getResponse();
 		response.sendRedirect("Wiki.jsp?page=" + username);
+	}
+
+	private String getAnnotationValue(UserActionContext context, String key) {
+		if (context.getParameter(key) != null) {
+			return context.getParameter(key);
+		}
+		return "";
 	}
 }

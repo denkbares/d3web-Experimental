@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.defi.aboutMe;
 
@@ -40,63 +40,163 @@ public class AboutMeRenderer<T extends AbstractType> extends KnowWEDomRenderer<T
 	@Override
 	public void render(KnowWEArticle article, Section<T> sec, UserContext user, StringBuilder string) {
 
-		String avatar = DefaultMarkupType.getAnnotation(sec, "avatar");
-		String about = DefaultMarkupType.getAnnotation(sec, "about");
-
 		String username = user.getUserName();
 		String pageName = article.getTitle();
 
-		if (pageName.toLowerCase().equals(username.toLowerCase()) && user.userIsAsserted()) {
-			string.append(KnowWEUtils.maskHTML("<form action=\"KnowWE.jsp\" method=\"post\">"));
-			string.append(KnowWEUtils.maskHTML("<p>Bitte wählen Sie einen Bild aus:</p><div>"));
+		boolean isOwner = pageName.toLowerCase().equals(username.toLowerCase())
+				&& user.userIsAsserted();
 
-			this.createAvatarHTML(string, avatar, "");
-			this.createAvatarHTML(string, avatar, "F");
+		StringBuilder noneHTML = new StringBuilder();
 
-			string.append(KnowWEUtils.maskHTML("</div>"));
+		noneHTML.append("<h1>Meine Profileinstellungen im WIKI</h1>");
 
-			if (about == null) {
-				string.append(KnowWEUtils.maskHTML("<p>Schreiben Sie ein paar Worte über sich:</p>"));
-				string.append(KnowWEUtils.maskHTML("<p><textarea cols=\"60\" rows=\"15\" name=\""
-						+ AboutMe.HTMLID_ABOUT + "\"></textarea></p>"));
+		if (isOwner) {
+			noneHTML.append("<strong>Hinweis</strong>: Alle Daten, die Sie hier angeben, sind für andere Benutzer sichtbar. "
+					+
+					"Sie können selbst entscheiden, was Sie von sich preisgeben möchten. Selbstverständlich "
+					+
+					"können Sie hier eingegebene Daten auch jederzeit ändern oder löschen.");
+			noneHTML.append("<form action=\"KnowWE.jsp\" method=\"post\">");
+		}
+
+		noneHTML.append("<p>Alter: ");
+		noneHTML.append(getInputDependingOnUserState(sec, AboutMe.HTML_AGE, isOwner));
+		noneHTML.append("</p>");
+
+		noneHTML.append("<p>Wohnort: ");
+		noneHTML.append(getInputDependingOnUserState(sec, AboutMe.HTML_CITY, isOwner));
+		noneHTML.append("</p>");
+
+		if (isOwner) {
+			noneHTML.append("<p>Avatar: (Mit diesem Bild können Sie Ihrem Profil ein „Gesicht“ verleihen. Hier können "
+					+ "Sie entweder eines der vorgegebenen Bilder auswählen, oder ein eigenes Bild von Ihrem PC hochladen. "
+					+ "(Hinweis auf Vermeidung anstößiger oder rechtswidriger Inhalte)</p>");
+		}
+
+		this.createAvatarHTML(sec, noneHTML, AboutMe.HTML_AVATAR, isOwner);
+		// this.createAvatarHTML(string, avatar, "F");
+		// string.append(KnowWEUtils.maskHTML("</div>"));
+
+		noneHTML.append("<h2>Über mich und meinen Defi:</h2>");
+		noneHTML.append("<dl>");
+		noneHTML.append("<dt>Defi-Modell</dt>");
+		noneHTML.append("<dd>Hersteller: "
+				+ getInputDependingOnUserState(sec, AboutMe.HTML_PRODUCER, isOwner) +
+				"</dd>");
+		noneHTML.append("<dd>Type: "
+				+ getInputDependingOnUserState(sec, AboutMe.HTML_TYPE, isOwner)
+				+ "</dd>");
+		noneHTML.append("</dl>");
+
+		noneHTML.append("<p>Warum ich einen Defi habe: "
+				+ getInputDependingOnUserState(sec, AboutMe.HTML_REASON, isOwner) + "</p>");
+		noneHTML.append("<p>Meine Hobbies: "
+				+ getTextareaDependingOnUserState(sec, AboutMe.HTML_HOBBIES, isOwner)
+				+ "</p>");
+		noneHTML.append("<p>Was ich sonst noch über mich sagen möchte: "
+				+ getTextareaDependingOnUserState(sec, AboutMe.HTML_ABOUT, isOwner) + "</p>");
+
+		// if (about == null) {
+		// string.append(KnowWEUtils.maskHTML("<p>Schreiben Sie ein paar Worte über sich:</p>"));
+		// string.append(KnowWEUtils.maskHTML("<p><textarea cols=\"60\" rows=\"15\" name=\""
+		// + AboutMe.HTMLID_ABOUT + "\"></textarea></p>"));
+		// }
+		if (isOwner) {
+			noneHTML.append("<p><input type=\"submit\" value=\"Speichern\"/></p>");
+			noneHTML.append("<input type=\"hidden\" name=\"action\" value=\"AboutMeSaveAction\" />");
+			noneHTML.append("<input type=\"hidden\" name=\"KWiki_Topic\" value=\""
+					+ article.getTitle() + "\" />");
+			noneHTML.append("</form>");
+		}
+
+		string.append(KnowWEUtils.maskHTML(noneHTML.toString()));
+	}
+
+	/**
+	 * Creates an HTML Input element or a normal string depending on the user
+	 * that called the page.
+	 * 
+	 * @created 22.09.2011
+	 * @param section
+	 * @param value
+	 * @param isOwner
+	 * @return
+	 */
+	private String getInputDependingOnUserState(Section<T> section, String value, boolean isOwner) {
+
+		String input = DefaultMarkupType.getAnnotation(section, value);
+
+		if (isOwner) {
+			if (input != null) {
+				return "<br /><input type=\"text\" name=\"" + value + "\"  value=\"" + input
+						+ "\" size=\"43\" />";
 			}
-			string.append(KnowWEUtils.maskHTML("<p><input type=\"submit\" value=\"Speichern\"/></p>"));
-			string.append(KnowWEUtils.maskHTML("<input type=\"hidden\" name=\"action\" value=\"AboutMeSaveAction\" />"));
-			string.append(KnowWEUtils.maskHTML("<input type=\"hidden\" name=\"KWiki_Topic\" value=\""
-					+ article.getTitle() + "\" />"));
-			string.append(KnowWEUtils.maskHTML("</form>"));
+			return "<br /><input type=\"text\" name=\"" + value + "\"  value=\"\" size=\"43\" />";
 		}
 		else {
-			if (avatar != null) {
-				string.append(KnowWEUtils.maskHTML("<img src=\"KnowWEExtension/images/"
-						+ avatar + ".png\" height=\"80\" width=\"80\" />"));
+			if (input != null) {
+				return input + "<br />";
 			}
+			return "<br />";
+		}
+	}
+
+	/**
+	 * Creates an HTML Input element or a normal string depending on the user
+	 * that called the page.
+	 * 
+	 * @created 22.09.2011
+	 * @param section
+	 * @param value
+	 * @param isOwner
+	 * @return
+	 */
+	private String getTextareaDependingOnUserState(Section<T> section, String value, boolean isOwner) {
+
+		String input = DefaultMarkupType.getAnnotation(section, value);
+
+		if (isOwner) {
+			if (input != null) {
+				return "<br /><textarea type=\"text\" name=\"" + value + "\" cols=\"40\">" + input
+						+ "</textarea>";
+			}
+			return "<br /><textarea type=\"text\" name=\"" + value + "\" cols=\"40\"></textarea>";
+		}
+		else {
+			if (input != null) {
+				return input + "<br />";
+			}
+			return "<br />";
 		}
 	}
 
 	/**
 	 *
 	 */
-	private void createAvatarHTML(StringBuilder string, String avatar, String prefix) {
-		String letters = "ACE";
-		for (int j = 0; j < letters.length(); j++) {
-			for (int i = 1; i < 6; i++) {
-				String icon = (prefix != "")
-						? (prefix + letters.charAt(j) + "0" + i)
-						: letters.charAt(j) + "0" + i;
+	private void createAvatarHTML(Section<T> section, StringBuilder string, String key, boolean isOwner) {
+
+		String avatar = DefaultMarkupType.getAnnotation(section, key);
+
+		if (!isOwner && avatar != null) {
+			string.append("<img src=\"KnowWEExtension/images/" + avatar
+					+ ".png\" height=\"80\" width=\"80\" />\n");
+		}
+		else {
+			for (int i = 1; i < 3; i++) {
+				String icon = "A0" + i;
 				String checked = "";
 
 				if (avatar != null && avatar.equals(icon)) {
 					checked = " checked='checked'";
 				}
 
-				string.append(KnowWEUtils.maskHTML("<img src=\"KnowWEExtension/images/" + icon
-						+ ".png\" height=\"80\" width=\"80\" />\n"));
-				string.append(KnowWEUtils.maskHTML("<input type=\"radio\" name=\"defi-avatar\" id=\""
-						+ AboutMe.HTMLID_AVATAR + "\" value=\""
-						+ icon + "\" " + checked + " />\n"));
+				string.append("<img src=\"KnowWEExtension/images/" + icon
+							+ ".png\" height=\"80\" width=\"80\" />\n");
+				string.append("<input type=\"radio\" name=\"" + AboutMe.HTML_AVATAR + "\" id=\""
+							+ AboutMe.HTML_AVATAR + "\" value=\""
+							+ icon + "\" " + checked + " />\n");
 			}
-			string.append(KnowWEUtils.maskHTML("<br />"));
+			string.append("<br />");
 		}
 	}
 }
