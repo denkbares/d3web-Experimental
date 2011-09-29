@@ -50,14 +50,11 @@ KNOWWE.plugin.comment = function(){
                         action : 'none',
                         ids : [],
                         fn : function() {
-                            document.getElementById('knowwe-plugin-comment').value = "";                
-                            result = JSON.parse(this.responseText);
-                            if(result.url) {
-                            	window.location.assign( result.url );
-                            }
                         }
                     }
             }
+            setTimeout ( 'document.location.reload()', 100 );
+            document.getElementById("knowwe-plugin-comment").value = "";
             new _KA( options ).send(); 
         },
         /**
