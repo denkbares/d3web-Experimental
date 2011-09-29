@@ -49,7 +49,7 @@ public class NewForumAction extends AbstractAction {
 		String message = context.getParameter("message");
 		String title = "";
 		GregorianCalendar now = new GregorianCalendar();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(
 				KnowWEEnvironment.DEFAULT_WEB);
 		JOptionPane jop = new JOptionPane(
@@ -68,7 +68,7 @@ public class NewForumAction extends AbstractAction {
 					+ message + "</box>\n</forum>";
 		}
 
-		title = pageName + " (" + topic + ")";
+		title = "Forum zu " + pageName + " (" + topic + ")";
 		if (mgr.getArticle(title) == null) {
 				KnowWEEnvironment.getInstance().buildAndRegisterArticle(username, content,
 						title, KnowWEEnvironment.DEFAULT_WEB);
