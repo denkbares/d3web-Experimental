@@ -63,18 +63,17 @@ public class OneQuestionDialogUtils {
 		 * return SessionFactory.createSession(knowledgeService.getBase());
 		 */
 
-		KnowledgeBase knowledgeServiceInTopic = D3webModule.getAD3webKnowledgeServiceInTopic(
+		KnowledgeBase knowledgeServiceInTopic = D3webModule.getKnowledgeBase(
 				web, topic);
 		String kbid = knowledgeServiceInTopic.getId();
 
 		SessionBroker broker = D3webModule.getBroker(user.getUserName(), web);
 
-		Session session = broker.getServiceSession(kbid);
+		Session session = broker.getSession(kbid);
 
 		if (session == null) {
-			kbid = KnowWEEnvironment.WIKI_FINDINGS + ".."
-					+ KnowWEEnvironment.generateDefaultID(KnowWEEnvironment.WIKI_FINDINGS);
-			session = broker.getServiceSession(kbid);
+			kbid = KnowWEEnvironment.generateDefaultID(KnowWEEnvironment.WIKI_FINDINGS);
+			session = broker.getSession(kbid);
 
 		}
 		return session;

@@ -91,7 +91,7 @@ public class XCLExplanationAction extends AbstractAction {
 		String id = context.getParameter(KnowWEAttributes.SESSION_ID);
 		String solutionid = context.getParameter(KnowWEAttributes.TERM);
 		SessionBroker broker = D3webModule.getBroker(context.getParameters());
-		this.currentCase = broker.getServiceSession(id);
+		this.currentCase = broker.getSession(id);
 
 		// String namespace;
 		//

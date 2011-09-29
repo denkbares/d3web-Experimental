@@ -51,7 +51,7 @@ public class AnomalyUnusedElements extends AbstractCITest {
 
 		// get the KB of this article
 		KnowledgeBase kb =
-				D3webModule.getAD3webKnowledgeServiceInTopic(
+				D3webModule.getKnowledgeBase(
 						KnowWEEnvironment.DEFAULT_WEB, articleName);
 
 		CITestResult res = new CITestResult(Type.SUCCESSFUL, null, config);

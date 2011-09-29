@@ -49,7 +49,7 @@ public class AnomalyAutostartFlow extends AbstractCITest {
 		String config = "knowledge base article: " + articleName;
 
 		KnowledgeBase kb =
-				D3webModule.getAD3webKnowledgeServiceInTopic(
+				D3webModule.getKnowledgeBase(
 						KnowWEEnvironment.DEFAULT_WEB, articleName);
 
 		CITestResult res = new CITestResult(Type.SUCCESSFUL, null, config);

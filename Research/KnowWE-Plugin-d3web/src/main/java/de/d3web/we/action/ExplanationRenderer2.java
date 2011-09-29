@@ -118,7 +118,7 @@ public class ExplanationRenderer2 extends AbstractAction {
 		String namespace = map.get(KnowWEAttributes.NAMESPACE);
 		WikiEnvironment dpse = D3webModule.getDPSE(map);
 
-		KnowledgeBase base = dpse.getService(namespace);
+		KnowledgeBase base = dpse.getKnowledgeBase(namespace);
 		Solution diag = base.getManager().searchSolution(id);
 		if (diag != null) {
 			KnowledgeSlice heu = diag.getKnowledgeStore().getKnowledge(PSMethodHeuristic.BACKWARD);

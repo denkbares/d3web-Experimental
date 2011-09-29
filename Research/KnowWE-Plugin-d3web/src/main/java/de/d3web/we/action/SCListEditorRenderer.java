@@ -80,7 +80,7 @@ public class SCListEditorRenderer extends AbstractAction {
 		// String type = map.get(KnowWEAttributes.SEMANO_TERM_TYPE);
 		// String user = map.get(KnowWEAttributes.USER);
 
-		KnowledgeBase base = dpse.getService(namespace);
+		KnowledgeBase base = dpse.getKnowledgeBase(namespace);
 		if (namespace == null) {
 			return null;
 		}

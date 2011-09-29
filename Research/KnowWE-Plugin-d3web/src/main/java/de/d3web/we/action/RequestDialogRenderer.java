@@ -64,7 +64,7 @@ public class RequestDialogRenderer extends AbstractAction {
 	public void prepareDialog(UserActionContext context) {
 		String id = context.getParameter(KnowWEAttributes.SESSION_ID);
 		SessionBroker broker = D3webModule.getBroker(context.getParameters());
-		Session serviceSession = broker.getServiceSession(id);
+		Session serviceSession = broker.getSession(id);
 		String namespace;
 		namespace = context.getParameter(KnowWEAttributes.TARGET);
 		if (namespace == null) {

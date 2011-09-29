@@ -73,8 +73,8 @@ public class QuestionStateReportAction extends AbstractAction {
 		WikiEnvironment env = WikiEnvironmentManager.getInstance().getEnvironments(web);
 		SessionBroker broker = env.getBroker(user);
 
-		Session session = broker.getServiceSession(namespace);
-		KnowledgeBase base = env.getService(namespace);
+		Session session = broker.getSession(namespace);
+		KnowledgeBase base = env.getKnowledgeBase(namespace);
 		Question q = null;
 
 		if (questionID != null) {

@@ -46,13 +46,13 @@ public class RemoveD3webKnowledgeServiceAction extends AbstractAction {
 		String baseID = context.getParameter(KnowWEAttributes.KNOWLEDGEBASE_ID);
 		if (baseID == null) return "no kbid to remove knowledge service";
 		WikiEnvironment env = D3webModule.getDPSE(context.getParameters());
-		KnowledgeBase service = env.getService(baseID);
+		KnowledgeBase service = env.getKnowledgeBase(baseID);
 		if (service == null) return "no service found for id: " + baseID;
-		env.removeService(service);
+		env.removeKnowledgeBase(service);
 		for (SessionBroker broker : env.getBrokers()) {
-			Session serviceSession = env.createServiceSession(
+			Session serviceSession = env.createSession(
 					service.getId());
-			broker.addServiceSession(service.getId(), serviceSession);
+			broker.addSession(service.getId(), serviceSession);
 		}
 		return "done";
 	}

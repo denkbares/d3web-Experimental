@@ -84,7 +84,7 @@ public class SemanticAnnotationAction extends AbstractAction {
 		}
 		StringBuffer sb = new StringBuffer();
 
-		Session session = broker.getServiceSession(namespace);
+		Session session = broker.getSession(namespace);
 		TerminologyObject obj = session.getKnowledgeBase().getManager().search(id);
 		if (obj instanceof Question) {
 

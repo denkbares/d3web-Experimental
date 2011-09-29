@@ -105,7 +105,7 @@ public class ImageQuestionHandler extends AbstractHTMLTagHandler {
 		this.web = web;
 		this.user = user;
 
-		KnowledgeBase kb = D3webModule.getAD3webKnowledgeServiceInTopic(web, topic);
+		KnowledgeBase kb = D3webModule.getKnowledgeBase(web, topic);
 
 		// Read out the properties
 		String questionID =
@@ -301,8 +301,7 @@ public class ImageQuestionHandler extends AbstractHTMLTagHandler {
 		StringBuffer relBuffi = new StringBuffer();
 		relBuffi.append("rel=\"{oid: '" + answerID + "',");
 		relBuffi.append(" web:'" + this.web + "',");
-		relBuffi.append(" ns:'" + this.topic + ".."
-				+ KnowWEEnvironment.generateDefaultID(this.topic) + "',");
+		relBuffi.append(" ns:'" + KnowWEEnvironment.generateDefaultID(this.topic) + "',");
 		relBuffi.append(" qid:'" + id + "' }\"");
 		return relBuffi.toString();
 	}

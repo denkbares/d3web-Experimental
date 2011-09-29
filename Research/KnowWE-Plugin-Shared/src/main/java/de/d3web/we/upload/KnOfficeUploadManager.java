@@ -216,8 +216,7 @@ public class KnOfficeUploadManager {
 				String text = fileItem.getString();
 				String name = fileItem.getName();
 				if (text != null && text.length() > 0) {
-					String folderName = pagename + "PP"
-							+ KnowWEEnvironment.generateDefaultID(pagename);
+					String folderName = KnowWEEnvironment.generateDefaultID(pagename);
 					File f = new File(path + "/kbResources" + "/" + folderName
 							+ "/multimedia/");
 					if (!f.exists()) {

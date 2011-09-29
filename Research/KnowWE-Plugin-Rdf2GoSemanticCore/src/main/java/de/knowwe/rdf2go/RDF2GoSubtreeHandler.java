@@ -48,9 +48,9 @@ public abstract class RDF2GoSubtreeHandler<T extends Type> extends
 	}
 
 	@Override
-	public void destroy(KnowWEArticle article, Section<T> s) {
+	public void destroy(KnowWEArticle article, Section<T> section) {
 		try {
-			Rdf2GoCore.getInstance().removeSectionStatementsRecursive(s);
+			Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -64,8 +64,8 @@ public abstract class RDF2GoSubtreeHandler<T extends Type> extends
 		}
 
 		@Override
-		public boolean violatedConstraints(KnowWEArticle article, Section<T2> s) {
-			return !s.getTitle().equals(article.getTitle());
+		public boolean violatedConstraints(KnowWEArticle article, Section<T2> section) {
+			return !section.getTitle().equals(article.getTitle());
 		}
 
 	}

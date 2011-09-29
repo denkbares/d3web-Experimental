@@ -191,7 +191,7 @@ public class WISECFindingSetEventListener implements EventListener {
 		// Get the KnowledgeServiceSession
 		WikiEnvironment env = WikiEnvironmentManager.getInstance().getEnvironments(web);
 		Session kss =
-				env.getBroker(user).getServiceSession(namespace);
+				env.getBroker(user).getSession(namespace);
 		if (kss == null) {
 			Logger.getLogger(this.getClass()).error(
 					"Unable to get KnowledgeServiceSession for namespace: " + namespace);

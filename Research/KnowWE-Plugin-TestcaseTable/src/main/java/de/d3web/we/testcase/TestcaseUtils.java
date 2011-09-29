@@ -45,7 +45,7 @@ public class TestcaseUtils {
 	 */
 	public static String[] getKnowledge(Section<? extends TableCellContent> s) {
 
-		KnowledgeBase knowledgeService = D3webModule.getAD3webKnowledgeServiceInTopic(
+		KnowledgeBase knowledgeService = D3webModule.getKnowledgeBase(
 				s.getWeb(), s.getTitle());
 
 		// if autocompile is off

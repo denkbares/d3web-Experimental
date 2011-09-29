@@ -68,7 +68,7 @@ public class D3webAnnotationRenderer extends KnowWEDomRenderer {
 			new StandardAnnotationRenderer().render(article, sec, user, string);
 		}
 
-		KnowledgeBase service = D3webModule.getAD3webKnowledgeServiceInTopic(sec.getWeb(),
+		KnowledgeBase service = D3webModule.getKnowledgeBase(sec.getWeb(),
 				sec.getTitle());
 
 		String middle = renderline(sec, user.getUserName(), question, text, service);

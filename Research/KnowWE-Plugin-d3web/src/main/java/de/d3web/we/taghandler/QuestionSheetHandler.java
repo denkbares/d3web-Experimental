@@ -59,7 +59,7 @@ public class QuestionSheetHandler extends AbstractHTMLTagHandler {
 
 		Session session = D3webUtils.getSession(topic, user, web);
 
-		KnowledgeBase kb = D3webModule.getAD3webKnowledgeServiceInTopic(web, topic);
+		KnowledgeBase kb = D3webModule.getKnowledgeBase(web, topic);
 
 		ResourceBundle rb = D3webModule.getKwikiBundle_d3web(user);
 

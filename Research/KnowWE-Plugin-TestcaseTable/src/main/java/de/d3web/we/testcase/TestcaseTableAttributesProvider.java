@@ -74,7 +74,7 @@ public class TestcaseTableAttributesProvider implements TableAttributesProvider 
 		int col = TableUtils.getColumn(content);
 		int row = TableUtils.getRow(content);
 
-		KnowledgeBase knowledgeService = D3webModule.getAD3webKnowledgeServiceInTopic(
+		KnowledgeBase knowledgeService = D3webModule.getKnowledgeBase(
 				cell.getWeb(), cell.getTitle());
 
 		// if autocompile is off

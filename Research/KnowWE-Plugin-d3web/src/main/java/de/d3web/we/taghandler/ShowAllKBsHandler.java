@@ -56,7 +56,7 @@ public class ShowAllKBsHandler extends AbstractHTMLTagHandler {
 	@Override
 	public String renderHTML(String topic, UserContext user, Map<String, String> values, String web) {
 		List<KnowledgeBase> ks = new ArrayList<KnowledgeBase>(
-				WikiEnvironmentManager.getInstance().getEnvironments(web).getServices());
+				WikiEnvironmentManager.getInstance().getEnvironments(web).getKnowledgeBases());
 		Collections.sort(ks, new KDComparator());
 		StringBuffer html = new StringBuffer();
 		int cnt = ks.size();

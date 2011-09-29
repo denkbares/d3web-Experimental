@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -38,7 +38,7 @@ import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.xcl.CoveringListSection;
 
 /**
- *
+ * 
  * @author smark
  */
 public class SaveDialogAsXCLAction extends AbstractAction {
@@ -99,7 +99,7 @@ public class SaveDialogAsXCLAction extends AbstractAction {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param c
 	 * @param answeredQuestions
 	 * @param content
@@ -123,7 +123,7 @@ public class SaveDialogAsXCLAction extends AbstractAction {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param d
 	 * @return
 	 */
@@ -139,34 +139,32 @@ public class SaveDialogAsXCLAction extends AbstractAction {
 	 * @return
 	 */
 	private Session getSession(String web, String topic, String user) {
-		KnowledgeBase knowledgeServiceInTopic = D3webModule.getAD3webKnowledgeServiceInTopic(
+		KnowledgeBase knowledgeServiceInTopic = D3webModule.getKnowledgeBase(
 				web, topic);
 
 		if (knowledgeServiceInTopic == null) return null;
 		String kbid = knowledgeServiceInTopic.getId();
 
 		SessionBroker broker = D3webModule.getBroker(user, web);
-		Session c = broker.getServiceSession(
+		Session c = broker.getSession(
 				kbid);
 		if (c == null) {
-			kbid = KnowWEEnvironment.WIKI_FINDINGS
-					+ ".."
-					+ KnowWEEnvironment.generateDefaultID(KnowWEEnvironment.WIKI_FINDINGS);
-			c = broker.getServiceSession(kbid);
+			kbid = KnowWEEnvironment.generateDefaultID(KnowWEEnvironment.WIKI_FINDINGS);
+			c = broker.getSession(kbid);
 		}
 
 		return c;
 	}
 
 	/**
-	 *
+	 * 
 	 * @param web
 	 * @param topic
 	 * @param solution
 	 * @return
 	 */
 	private Solution findSolution(String web, String topic, String solution) {
-		KnowledgeBase base = D3webModule.getAD3webKnowledgeServiceInTopic(web,
+		KnowledgeBase base = D3webModule.getKnowledgeBase(web,
 				topic);
 
 		Solution d = base.getManager().searchSolution(solution);

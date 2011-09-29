@@ -58,7 +58,7 @@ public class OneQuestionDialogTagHandler extends AbstractHTMLTagHandler {
 			topic = articleName;
 		}
 
-		KnowledgeBase knowledgeServiceInTopic = D3webModule.getAD3webKnowledgeServiceInTopic(
+		KnowledgeBase knowledgeServiceInTopic = D3webModule.getKnowledgeBase(
 				web, topic);
 		if (knowledgeServiceInTopic == null) return rb.getString("KnowWE.quicki.error");
 

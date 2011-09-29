@@ -60,7 +60,7 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 	public void execute(UserActionContext context) throws IOException {
 
 		String master = context.getParameter("master");
-		KnowledgeBase kb = D3webModule.getAD3webKnowledgeServiceInTopic(
+		KnowledgeBase kb = D3webModule.getKnowledgeBase(
 				context.getWeb(), master);
 
 		String sectionID = context.getParameter("kdomid");
