@@ -29,17 +29,18 @@ import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.condition.CompositeCondition;
 import de.d3web.we.kdom.condition.TerminalCondition;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.knowwe.kdom.manchester.types.ListItem;
+import de.knowwe.kdom.manchester.types.NonTerminalList;
+import de.knowwe.kdom.manchester.types.NonTerminalListContent;
 import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
 import de.knowwe.kdom.manchester.types.OneOfBracedCondition;
 import de.knowwe.kdom.manchester.types.OneOfBracedConditionContent;
 import de.knowwe.kdom.manchester.types.Restriction;
 
 /**
- * Allows different markups to use the manchester syntax expressions so one can
- * use with or without the default markup, own markup etc.
+ * Allows different markups to use the Manchester OWL Syntax expressions so one
+ * can use with or without the default markup, own markup etc.
  *
- * @author Jochen, smark
+ * @author Jochen, Stefan Mark
  * @created 24.05.2011
  */
 public class ManchesterClassExpression extends CompositeCondition {
@@ -51,19 +52,25 @@ public class ManchesterClassExpression extends CompositeCondition {
 	 */
 	public void initRestrictionTypes() {
 
-		// include oneof on the same level as the other brackets
+		// get count of the CompositeConditions children
+		int ccChildren = getAllowedChildrenTypes().size();
+
+		// add new NonTerminalChildren ...
+		// ... like a NonTerminalList ...
+		NonTerminalList list = new NonTerminalList();
+		NonTerminalListContent listContent = new NonTerminalListContent();
+		listContent.addChildType(this);
+		list.addChildType(listContent);
+		this.childrenTypes.add(ccChildren - 1, list);
+
+		// ... or a OneOfBracedList
 		OneOfBracedCondition oneOf = new OneOfBracedCondition();
 		OneOfBracedConditionContent oneOfContent = new OneOfBracedConditionContent();
 		oneOfContent.addChildType(this);
 		oneOf.addChildType(oneOfContent);
-		this.childrenTypes.add(0, oneOf);
+		this.childrenTypes.add(ccChildren - 1, oneOf);
 
-		// include list to the children
-		ListItem list = new ListItem();
-		list.addChildType(this);
-		this.childrenTypes.add(getAllowedChildrenTypes().size() - 1, list);
-
-		// set terminal conditions (only restrictions are terminal!)
+		// ... or finally a TerminalCondition which stops the recursive descent
 		List<Type> types = new ArrayList<Type>();
 		types.add(Restriction.getInstance());
 		this.setAllowedTerminalConditions(types);
@@ -78,10 +85,7 @@ public class ManchesterClassExpression extends CompositeCondition {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean hasOneOf(Section<ManchesterClassExpression> section) {
-		if (Sections.findSuccessor(section, OneOfBracedCondition.class) != null) {
-			return true;
-		}
-		return false;
+		return Sections.findSuccessor(section, OneOfBracedCondition.class) != null;
 	}
 	/**
 	 * Retrieves each fragment of the OneOfList and the returns a list for
@@ -96,9 +100,33 @@ public class ManchesterClassExpression extends CompositeCondition {
 	}
 
 	/**
+	 * Check whether the current {@link ManchesterClassExpression} has a
+	 * {@link OneOfBracedCondition} section as child.
+	 *
+	 * @param Section<ManchesterClassExpression> a A
+	 *        {@link ManchesterClassExpression} section
+	 * @return TRUE if found, FALSE otherwise
+	 */
+	public boolean isNonTerminalList(Section<ManchesterClassExpression> section) {
+		return Sections.findSuccessor(section, NonTerminalList.class) != null;
+	}
+
+	/**
+	 * Retrieves each fragment of the OneOfList and the returns a list for
+	 * further handling.
+	 *
+	 * @param Section<ManchesterClassExpression> a A
+	 *        {@link ManchesterClassExpression} section
+	 * @return The found {@link NonTerminalListContent} sections
+	 */
+	public List<Section<NonTerminalListContent>> getNonTerminalListElements(Section<ManchesterClassExpression> section) {
+		return Sections.findSuccessorsOfType(section, NonTerminalListContent.class);
+	}
+
+	/**
 	 * Bundle the content within the Default Markup in a separate content type.
 	 *
-	 * @author smark
+	 * @author Stefan Mark
 	 * @created 18.05.2011
 	 */
 	public static class OWLClassContentType extends AbstractType {

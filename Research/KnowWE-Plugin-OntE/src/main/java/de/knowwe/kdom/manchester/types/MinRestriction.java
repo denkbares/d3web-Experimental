@@ -27,8 +27,8 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 
 /**
- * 
- * @author smark
+ *
+ * @author Stefan Mark
  * @created 18.05.2011
  */
 public class MinRestriction extends AbstractType {
@@ -59,5 +59,8 @@ public class MinRestriction extends AbstractType {
 		p = Pattern.compile(Restriction.AFTER_INTEGER);
 		nni.setSectionFinder(new RegexSectionFinder(p, 1));
 		this.addChildType(nni);
+
+		// FIXME OPTIONAL primary like OWLTermreferences
+		// simply add MacnhesterClassExpression?
 	}
 }

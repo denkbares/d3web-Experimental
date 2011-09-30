@@ -24,14 +24,17 @@ import java.util.regex.Pattern;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 /**
+ * <p>
  * Simple {@link AbstractType} for a {@link Annotation} of an element in a
  * ontology. For example: An annotation could be a RDFSLabel or RDFSComment
  * element.
+ * </p>
  *
  * @author Stefan Mark
  * @created 21.09.2011
@@ -60,6 +63,7 @@ public class Annotation extends AbstractType {
 		this.addChildType(new AnnotationTerm());
 		this.addChildType(new AnnotationLanguageTag());
 		this.addChildType(new AnnotationDatatypeTag());
+		this.addChildType(new PlainText());
 	}
 
 	/**

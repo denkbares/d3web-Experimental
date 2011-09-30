@@ -17,31 +17,25 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.kdom.manchester.types;
+package de.knowwe.kdom.manchester.frame;
 
 import de.d3web.we.kdom.AbstractType;
+import de.knowwe.kdom.manchester.ManchesterSyntaxFrameRenderer;
 
 /**
- * This is the main class for all lists in context of the manchster syntax.
- * Because comma-separated lists occur in very many places in the syntax, to
- * save space the grammar has three meta-productions, one for non-empty lists,
- * one for lists of minimum length two, and one for non-empty lists with
- * annotations in them.
+ * The {@link DefaultFrame} is the root class for all frames used in the
+ * Manchester OWL syntax. if you want to add a new frame, please extend the
+ * {@link DefaultFrame}.
  *
  * @author Stefan Mark
- * @created 19.09.2011
+ * @created 23.09.2011
  */
-public class NonEmptyList extends AbstractType {
+public class DefaultFrame extends AbstractType {
 
-
-	public static final String PATTERN = "(" +
-			"[^\"]" + // everything not in quotes
-			"|" +
-			"\"[^\"]*\"" + // if in quotes everything that is not a quote
-			")*?" +
-			"(,|\\z)"; // till comma or line end
-
-	public NonEmptyList() {
-
+	/**
+	 * Constructor for the {@link DefaultFrame}.
+	 */
+	public DefaultFrame() {
+		this.setCustomRenderer(new ManchesterSyntaxFrameRenderer());
 	}
 }

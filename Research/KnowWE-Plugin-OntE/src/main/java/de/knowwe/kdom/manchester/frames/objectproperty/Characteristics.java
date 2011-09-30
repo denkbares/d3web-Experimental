@@ -23,16 +23,16 @@ import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.types.Keyword;
-import de.knowwe.kdom.manchester.types.ListItem;
+import de.knowwe.kdom.manchester.types.NonTerminalList;
+import de.knowwe.kdom.manchester.types.NonTerminalListContent;
 
 /**
  *
  *
- * @author smark
+ * @author Stefan Mark
  * @created 24.06.2011
  */
 public class Characteristics extends AbstractType {
@@ -44,36 +44,23 @@ public class Characteristics extends AbstractType {
 		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(ObjectPropertyFrame.KEYWORDS,
 				KEYWORD);
 		this.setSectionFinder(new RegexSectionFinder(p, 1));
-		this.addChildType(new CharacteristicsContentType());
-	}
 
-	/**
-	 *
-	 * @author smark
-	 * @created 18.05.2011
-	 */
-	class CharacteristicsContentType extends AbstractType {
+		Keyword key = new Keyword(KEYWORD);
+		this.addChildType(key);
 
-		protected CharacteristicsContentType() {
-			this.setSectionFinder(new AllTextFinderTrimmed());
+		NonTerminalList list = new NonTerminalList();
+		NonTerminalListContent listContent = new NonTerminalListContent();
+		listContent.addChildType(new CharacteristicsTerm());
+		list.addChildType(listContent);
+		this.addChildType(list);
 
-			Keyword key = new Keyword(KEYWORD);
-			this.addChildType(key);
-
-			// List<Type> types = new ArrayList<Type>();
-			// types.add(new CharacteristicsTerm());
-
-			ListItem list = new ListItem();
-			list.addChildType(new CharacteristicsTerm());
-			this.addChildType(list);
-			this.addChildType(new CharacteristicsTerm());
-		}
+		this.addChildType(new CharacteristicsTerm());
 	}
 
 	/**
 	 *
 	 *
-	 * @author smark
+	 * @author Stefan Mark
 	 * @created 13.08.2011
 	 */
 	public static class CharacteristicsTerm extends AbstractType {

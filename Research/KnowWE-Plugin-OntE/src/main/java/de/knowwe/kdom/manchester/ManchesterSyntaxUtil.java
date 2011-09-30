@@ -19,10 +19,15 @@
  */
 package de.knowwe.kdom.manchester;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.kdom.manchester.types.Annotation;
+import de.knowwe.kdom.manchester.types.Annotations;
 
 /**
  * Helper class for storing regular expressions needed in the AbstractTypes of
@@ -80,4 +85,13 @@ public class ManchesterSyntaxUtil {
 
 		return mce;
 	}
+
+	public static boolean hasAnnotations(Section<?> section) {
+		return Sections.findSuccessor(section, Annotations.class) != null;
+	}
+
+	public static List<Section<Annotation>> getAnnotations(Section<?> section) {
+		return Sections.findSuccessorsOfType(section, Annotation.class);
+	}
+
 }

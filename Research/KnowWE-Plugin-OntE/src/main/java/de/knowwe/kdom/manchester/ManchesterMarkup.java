@@ -24,16 +24,15 @@ import java.util.regex.Pattern;
 import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.kdom.manchester.frame.MiscFrame;
 import de.knowwe.kdom.manchester.frames.clazz.ClassFrame;
-import de.knowwe.kdom.manchester.frames.datatype.DataTypeFrame;
 import de.knowwe.kdom.manchester.frames.individual.IndividualFrame;
-import de.knowwe.kdom.manchester.frames.misc.MiscFrame;
 import de.knowwe.kdom.manchester.frames.objectproperty.ObjectPropertyFrame;
 
 /**
  *
  *
- * @author smark
+ * @author Stefan Mark
  * @created 24.05.2011
  */
 public class ManchesterMarkup extends AbstractType {
@@ -45,11 +44,13 @@ public class ManchesterMarkup extends AbstractType {
 	 * those added here are considered when parsing the page.
 	 */
 	private final static String FRAME_KEYWORDS = "("
+			+ MiscFrame.FRAME_KEYWORDS + "|"
 			+ ClassFrame.KEYWORD + "|"
 			+ IndividualFrame.KEYWORD + "|"
-			+ ObjectPropertyFrame.KEYWORD + "|"
-			+ DataTypeFrame.KEYWORD + "|"
-			+ MiscFrame.FRAME_KEYWORDS + ")";
+			+ ObjectPropertyFrame.KEYWORD
+			// + DataTypeFrame.KEYWORD + "|"
+
+			+ ")";
 
 	/**
 	 *
@@ -57,12 +58,12 @@ public class ManchesterMarkup extends AbstractType {
 	public ManchesterMarkup() {
 		Pattern pattern = ManchesterSyntaxUtil.getFramePattern(FRAME_KEYWORDS);
 		this.setSectionFinder(new RegexSectionFinder(pattern, 0));
-		this.setCustomRenderer(new ManchesterSyntaxRenderer());
 		this.addChildType(new ManchesterMarkupContentType());
 
 	}
+
 	/**
-	 * @author smark
+	 * @author Stefan Mark
 	 * @created 24.05.2011
 	 */
 	public static class ManchesterMarkupContentType extends AbstractType {
@@ -71,12 +72,10 @@ public class ManchesterMarkup extends AbstractType {
 
 		protected ManchesterMarkupContentType() {
 			this.setSectionFinder(new AllTextSectionFinder());
-			this.addSubtreeHandler(new ManchesterSubtreeHandler());
 
 			this.addChildType(new ClassFrame());
 			this.addChildType(new IndividualFrame());
 			this.addChildType(new ObjectPropertyFrame());
-
 			this.addChildType(new MiscFrame());
 		}
 

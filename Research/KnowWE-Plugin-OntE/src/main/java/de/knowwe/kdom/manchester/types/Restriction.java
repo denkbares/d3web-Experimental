@@ -24,7 +24,7 @@ import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 /**
  *
  *
- * @author smark
+ * @author Stefan Mark
  * @created 16.05.2011
  */
 public class Restriction extends AbstractType {
@@ -62,10 +62,14 @@ public class Restriction extends AbstractType {
 		ValueRestriction value = new ValueRestriction();
 		this.addChildType(value);
 
+		Fact fact = new Fact();
+		this.addChildType(fact);
+
 		OWLTermReferenceManchester def = new OWLTermReferenceManchester();
 		this.addChildType(def);
 
-		// TODO oneOf restriction missing
+		ObjectPropertyExpression ope = new ObjectPropertyExpression();
+		this.addChildType(ope);
 	}
 
 	public static synchronized Restriction getInstance() {

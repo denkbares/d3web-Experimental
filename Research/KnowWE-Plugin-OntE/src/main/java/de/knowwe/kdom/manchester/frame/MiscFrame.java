@@ -17,7 +17,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.kdom.manchester.frames.misc;
+package de.knowwe.kdom.manchester.frame;
 
 import java.util.regex.Pattern;
 
@@ -26,19 +26,35 @@ import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
+import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.kdom.manchester.types.Keyword;
-import de.knowwe.kdom.manchester.types.ListItem;
+import de.knowwe.kdom.manchester.types.NonTerminalList;
+import de.knowwe.kdom.manchester.types.NonTerminalListContent;
 import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
 import de.knowwe.kdom.manchester.types.ObjectPropertyExpression;
+import de.knowwe.kdom.subtreehandler.MiscFrameSubtreeHandler;
 
 /**
+ * <p>
  * Simple {@link AbstractType} for the {@link MiscFrame} Manchester OWL syntax
- * frame.
+ * frame. It follows an excerpt from the Manchester OWL syntax definition from
+ * the W3C.
+ * </p>
+ * <code>
+ * misc ::= 'EquivalentClasses:' annotations description2List<br />
+ * | 'DisjointClasses:' annotations description2List<br />
+ * | 'EquivalentProperties:' annotations objectProperty2List<br />
+ * | 'DisjointProperties:' annotations objectProperty2List<br />
+ * | 'EquivalentProperties:' annotations dataProperty2List<br />
+ * | 'DisjointProperties:' annotations dataProperty2List<br />
+ * | 'SameIndividual:' annotations individual2List<br />
+ * | 'DifferentIndividuals:' annotations individual2List
+ * </code>
  *
  * @author Stefan Mark
  * @created 22.09.2011
  */
-public class MiscFrame extends AbstractType {
+public class MiscFrame extends DefaultFrame {
 
 	public static final String KEYWORD_SAME_INDIVIDUAL = "SameIndividual[:]?";
 	public static final String KEYWORD_DIFFERENT_INDIVIDUAL = "DifferentIndividuals[:]?";
@@ -66,15 +82,16 @@ public class MiscFrame extends AbstractType {
 
 		Pattern p = ManchesterSyntaxUtil.getFramePattern(FRAME_KEYWORDS);
 		this.setSectionFinder(new RegexSectionFinder(p));
+		this.addSubtreeHandler(new MiscFrameSubtreeHandler());
 
 		this.addChildType(new Keyword(FRAME_KEYWORDS));
+		this.addChildType(new Annotations());
 
-		// FIXME add annotations
-
-		// must have two items
-		ListItem list = new ListItem();
-		list.addChildType(new ObjectPropertyExpression());
-		list.addChildType(new OWLTermReferenceManchester());
+		NonTerminalList list = new NonTerminalList();
+		NonTerminalListContent listContent = new NonTerminalListContent();
+		listContent.addChildType(new ObjectPropertyExpression());
+		listContent.addChildType(new OWLTermReferenceManchester());
+		list.addChildType(listContent);
 		this.addChildType(list);
 	}
 
@@ -85,7 +102,7 @@ public class MiscFrame extends AbstractType {
 	 * @param Section<MiscFrame> a A {@link MiscFrame} section
 	 * @return TRUE if EquivalentClasses, FALSE otherwise
 	 */
-	public boolean isEquivalentClasses(Section<MiscFrame> section) {
+	public boolean isEquivalentClasses(Section<? extends DefaultFrame> section) {
 
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
@@ -103,7 +120,7 @@ public class MiscFrame extends AbstractType {
 	 * @param Section<MiscFrame> a A {@link MiscFrame} section
 	 * @return TRUE if DisjointClasses, FALSE otherwise
 	 */
-	public boolean isDisjointClasses(Section<MiscFrame> section) {
+	public boolean isDisjointClasses(Section<? extends DefaultFrame> section) {
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
 			if (keyword.getOriginalText().matches(KEYWORD_DISJOINT_CLASSES)) {
@@ -120,7 +137,7 @@ public class MiscFrame extends AbstractType {
 	 * @param Section<MiscFrame> a A {@link MiscFrame} section
 	 * @return TRUE if SameIndividual, FALSE otherwise
 	 */
-	public boolean isSameIndividuals(Section<MiscFrame> section) {
+	public boolean isSameIndividuals(Section<? extends DefaultFrame> section) {
 
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
@@ -139,7 +156,7 @@ public class MiscFrame extends AbstractType {
 	 * @param Section<MiscFrame> a A {@link MiscFrame} section
 	 * @return TRUE if DifferentIndividuals, FALSE otherwise
 	 */
-	public boolean isDifferentIndividuals(Section<MiscFrame> section) {
+	public boolean isDifferentIndividuals(Section<? extends DefaultFrame> section) {
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
 			if (keyword.getOriginalText().matches(KEYWORD_DIFFERENT_INDIVIDUAL)) {
@@ -157,7 +174,7 @@ public class MiscFrame extends AbstractType {
 	 * @param Section<MiscFrame> a A {@link MiscFrame} section
 	 * @return TRUE if EquivalentProperties, FALSE otherwise
 	 */
-	public boolean isEquivalentProperties(Section<MiscFrame> section) {
+	public boolean isEquivalentProperties(Section<? extends DefaultFrame> section) {
 
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
@@ -176,7 +193,7 @@ public class MiscFrame extends AbstractType {
 	 * @param Section<MiscFrame> a A {@link MiscFrame} section
 	 * @return TRUE if DisjointProperties, FALSE otherwise
 	 */
-	public boolean isDisjointProperties(Section<MiscFrame> section) {
+	public boolean isDisjointProperties(Section<? extends DefaultFrame> section) {
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
 			if (keyword.getOriginalText().matches(KEYWORD_DISJOINT_PROPERTIES)) {
@@ -189,12 +206,12 @@ public class MiscFrame extends AbstractType {
 	/**
 	 * Check whether the current {@link MiscFrame} is a EquivalentProperties
 	 * frame.
-	 * 
+	 *
 	 * @created 21.09.2011
 	 * @param Section<MiscFrame> a A {@link MiscFrame} section
 	 * @return TRUE if EquivalentProperties, FALSE otherwise
 	 */
-	public boolean isEquivalentDataProperties(Section<MiscFrame> section) {
+	public boolean isEquivalentDataProperties(Section<? extends DefaultFrame> section) {
 
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
@@ -208,12 +225,12 @@ public class MiscFrame extends AbstractType {
 	/**
 	 * Check whether the current {@link MiscFrame} is a DisjointProperties
 	 * frame.
-	 * 
+	 *
 	 * @created 21.09.2011
 	 * @param Section<MiscFrame> a A {@link MiscFrame} section
 	 * @return TRUE if DisjointProperties, FALSE otherwise
 	 */
-	public boolean isDisjointDataProperties(Section<MiscFrame> section) {
+	public boolean isDisjointDataProperties(Section<? extends DefaultFrame> section) {
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
 			if (keyword.getOriginalText().matches(KEYWORD_DISJOINT_PROPERTIES)) {

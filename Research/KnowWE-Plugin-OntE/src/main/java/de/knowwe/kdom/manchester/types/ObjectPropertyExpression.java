@@ -23,8 +23,8 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.termObject.IRITermReference;
 
 /**
- *
- * @author smark
+ * 
+ * @author Stefan Mark
  * @created 16.05.2011
  */
 public class ObjectPropertyExpression extends IRITermReference {

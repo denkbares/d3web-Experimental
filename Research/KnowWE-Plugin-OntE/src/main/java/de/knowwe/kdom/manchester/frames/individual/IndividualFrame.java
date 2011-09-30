@@ -19,91 +19,354 @@
  */
 package de.knowwe.kdom.manchester.frames.individual;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
+import org.semanticweb.owlapi.model.OWLIndividual;
+
 import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
+import de.knowwe.kdom.manchester.frame.DefaultFrame;
+import de.knowwe.kdom.manchester.types.Annotation;
+import de.knowwe.kdom.manchester.types.Annotations;
+import de.knowwe.kdom.manchester.types.Fact;
 import de.knowwe.kdom.manchester.types.Keyword;
+import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
+import de.knowwe.kdom.subtreehandler.IndividualFrameSubtreeHandler;
 import de.knowwe.termObject.NamedIndividualIRIDefinition;
 
 /**
+ * <p>
+ * Simple {@link AbstractType} for the {@link IndividualFrame} Manchester OWL
+ * syntax frame. It follows an excerpt from the Manchester OWL syntax definition
+ * from the W3C.
+ * </p>
  *
+ *<code>
+ * individualFrame ::= 'Individual:' individual<br />
+ * { 'Annotations:' annotationAnnotatedList<br />
+ * | 'Types:' descriptionAnnotatedList<br />
+ * | 'Facts:' factAnnotatedList<br />
+ * | 'SameAs:' individualAnnotatedList<br />
+ * | 'DifferentFrom:' individualAnnotatedList }
+ *</code>
  *
- * @author smark
+ * @author Stefan Mark
  * @created 24.06.2011
  */
-public class IndividualFrame extends AbstractType {
+public class IndividualFrame extends DefaultFrame {
 
 	public static final String KEYWORD = "Individual[:]?";
 
 	public static final String KEYWORDS = "("
 			+ Types.KEYWORD + "|"
 			+ SameAs.KEYWORD + "|"
-			+ Facts.KEYWORD
+			+ DifferentFrom.KEYWORD + "|"
+			+ Facts.KEYWORD + "|"
+			+ Annotations.KEYWORD
 			+ "|\\z)";
 
 	public IndividualFrame() {
 
+		this.addSubtreeHandler(new IndividualFrameSubtreeHandler());
+
 		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
 		this.setSectionFinder(new RegexSectionFinder(p));
-		this.addChildType(new IndividualContentType());
+
+		this.addChildType(new IndividualDefinition());
+		this.addChildType(new Types());
+		this.addChildType(new SameAs());
+		this.addChildType(new DifferentFrom());
+		this.addChildType(new Facts());
+		this.addChildType(new Annotations(KEYWORDS));
 	}
+
 	/**
-	 * Bundle the content within the Default Markup in a separate content type.
+	 * Checks if the current {@link IndividualFrame} has a {@link Individual}
+	 * section.
 	 *
-	 * @author smark
-	 * @created 24.05.2011
+	 * @created 27.09.2011
+	 * @param Section<DefaultFrame> section
+	 * @return TRUE if such an section exists, FALSE otherwise
 	 */
-	public static class IndividualContentType extends AbstractType {
-
-		public IndividualContentType() {
-			this.setSectionFinder(new AllTextFinderTrimmed());
-
-			this.addChildType(new IndividualDefinition());
-			this.addChildType(new Types());
-			this.addChildType(new SameAs());
-			this.addChildType(new Facts());
-		}
+	public boolean hasIndividualDefinition(Section<? extends DefaultFrame> section) {
+		return !Sections.findSuccessor(section, Individual.class).isEmpty();
 	}
 
 	/**
+	 * Returns the {@link Individual} section containing the name of the to
+	 * define {@link OWLIndividual}.
 	 *
-	 * @author smark
-	 * @created 24.06.2011
+	 * @created 27.09.2011
+	 * @param Section<DefaultFrame> section
+	 * @return The found section
 	 */
-	public static class IndividualDefinition extends AbstractType {
-
-		public static String PATTERN = IndividualFrame.KEYWORD + "\\p{Blank}+(.+)";
-
-		public IndividualDefinition() {
-
-			Pattern p = Pattern.compile(PATTERN);
-			SectionFinder sf = new RegexSectionFinder(p, 0);
-			this.setSectionFinder(sf);
-
-			Keyword key = new Keyword(IndividualFrame.KEYWORD);
-			this.addChildType(key);
-
-			Individual individual = new Individual();
-			individual.setSectionFinder(new AllTextFinderTrimmed());
-			this.addChildType(individual);
-		}
+	public Section<? extends Type> getIndividualDefinition(Section<? extends DefaultFrame> section) {
+		return Sections.findSuccessor(section, Individual.class);
 	}
 
 	/**
-	 * 
-	 * 
-	 * @author smark
-	 * @created 24.06.2011
+	 * Returns if the current class definition has a {@link Facts} description.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<IndividualFrame> section
+	 * @return The found section
 	 */
-	public static class Individual extends NamedIndividualIRIDefinition {
+	public boolean hasFacts(Section<IndividualFrame> section) {
+		return Sections.findSuccessor(section, Facts.class) != null;
+	}
+	/**
+	 * Returns the {@link FactsItem} sections of the current
+	 * {@link IndividualFrame}.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<IndividualFrame> section
+	 * @return The found section
+	 */
+	public List<Section<? extends Type>> getFacts(Section<IndividualFrame> section) {
+		List<Section<? extends Type>> nodes = new ArrayList<Section<? extends Type>>();
+		List<Section<Fact>> items = Sections.findSuccessorsOfType(section, Fact.class);
+		nodes.addAll(items);
+		return nodes;
+	}
 
-		public Individual() {
+	/**
+	 * Returns if the current class definition has a {@link Facts} description.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<IndividualFrame> section
+	 * @return The found section
+	 */
+	public boolean hasSameAs(Section<IndividualFrame> section) {
+		return Sections.findSuccessor(section, SameAs.class) != null;
+	}
 
+	/**
+	 * Returns the {@link SameAs} sections of the current
+	 * {@link IndividualFrame}.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<IndividualFrame> section
+	 * @return The found section
+	 */
+	public List<Section<OWLTermReferenceManchester>> getSameAs(Section<IndividualFrame> section) {
+		Section<SameAs> sameAs = Sections.findSuccessor(section, SameAs.class);
+		if (sameAs != null) {
+			return Sections.findSuccessorsOfType(sameAs, OWLTermReferenceManchester.class);
 		}
+		return new ArrayList<Section<OWLTermReferenceManchester>>();
+	}
+
+	/**
+	 * Returns if the current class definition has a {@link DifferentFrom}
+	 * description.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<IndividualFrame> section
+	 * @return The found section
+	 */
+	public boolean hasDifferentFrom(Section<IndividualFrame> section) {
+		return Sections.findSuccessor(section, DifferentFrom.class) != null;
+	}
+
+	/**
+	 * Returns the {@link DifferentFrom} sections of the current
+	 * {@link IndividualFrame}.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<IndividualFrame> section
+	 * @return The found section
+	 */
+	public List<Section<OWLTermReferenceManchester>> getDifferentFrom(Section<IndividualFrame> section) {
+		Section<DifferentFrom> sameAs = Sections.findSuccessor(section, DifferentFrom.class);
+		if (sameAs != null) {
+			return Sections.findSuccessorsOfType(sameAs, OWLTermReferenceManchester.class);
+		}
+		return new ArrayList<Section<OWLTermReferenceManchester>>();
+	}
+
+	/**
+	 * Returns if the current class definition has a {@link Types} description.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<IndividualFrame> section
+	 * @return The found section
+	 */
+	public boolean hasTypes(Section<IndividualFrame> section) {
+		return Sections.findSuccessor(section, Types.class) != null;
+	}
+
+	/**
+	 * Returns the {@link Types} sections of the current {@link IndividualFrame}
+	 * .
+	 *
+	 * @created 27.09.2011
+	 * @param Section<IndividualFrame> section
+	 * @return The found section
+	 */
+	public Section<Types> getTypes(Section<IndividualFrame> section) {
+		return Sections.findSuccessor(section, Types.class);
+	}
+
+	/**
+	 * Returns if the current class definition has a SubClassOf description.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<ClassFrame> section
+	 * @return The found section
+	 */
+	public boolean hasAnnotations(Section<IndividualFrame> section) {
+		return Sections.findSuccessor(section, Annotations.class) != null;
+	}
+
+	/**
+	 * Returns the {@link SubClassOf} section containing a SubClassOf
+	 * description for the current class.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<ClassFrame> section
+	 * @return The found section
+	 */
+	public List<Section<Annotation>> getAnnotations(Section<IndividualFrame> section) {
+		Section<Annotations> a = Sections.findSuccessor(section, Annotations.class);
+		if (a != null) {
+			Sections.findSuccessorsOfType(a, Annotation.class);
+		}
+		return new ArrayList<Section<Annotation>>();
+	}
+}
+/**
+ *
+ * @author Stefan Mark
+ * @created 24.06.2011
+ */
+class IndividualDefinition extends AbstractType {
+
+	public static String PATTERN = IndividualFrame.KEYWORD + "\\p{Blank}+(.+)";
+
+	public IndividualDefinition() {
+
+		Pattern p = Pattern.compile(PATTERN);
+		SectionFinder sf = new RegexSectionFinder(p, 0);
+		this.setSectionFinder(sf);
+
+		Keyword key = new Keyword(IndividualFrame.KEYWORD);
+		this.addChildType(key);
+
+		Individual individual = new Individual();
+		individual.setSectionFinder(new AllTextFinderTrimmed());
+		this.addChildType(individual);
 	}
 }
 
+/**
+ *
+ *
+ * @author Stefan Mark
+ * @created 24.06.2011
+ */
+class Individual extends NamedIndividualIRIDefinition {
+
+	public Individual() {
+
+	}
+}
+
+/**
+ *
+ *
+ * @author Stefan Mark
+ * @created 28.09.2011
+ */
+class SameAs extends AbstractType {
+
+	public static final String KEYWORD = "SameAs[:]?";
+
+	public SameAs() {
+
+		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(IndividualFrame.KEYWORDS, KEYWORD);
+		this.setSectionFinder(new RegexSectionFinder(p, 1));
+
+		Keyword key = new Keyword(KEYWORD);
+		this.addChildType(key);
+
+		this.addChildType(ManchesterSyntaxUtil.getMCE());
+	}
+}
+
+/**
+ *
+ *
+ * @author Stefan Mark
+ * @created 24.06.2011
+ */
+class Types extends AbstractType {
+
+	public static final String KEYWORD = "Types[:]?";
+
+	public Types() {
+
+		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(IndividualFrame.KEYWORDS, KEYWORD);
+		this.setSectionFinder(new RegexSectionFinder(p, 1));
+
+		Keyword key = new Keyword(KEYWORD);
+		this.addChildType(key);
+		this.addChildType(new Annotations());
+
+		List<Type> types = new ArrayList<Type>();
+		types.add(ManchesterSyntaxUtil.getMCE());
+
+		this.addChildType(ManchesterSyntaxUtil.getMCE());
+	}
+}
+
+/**
+ *
+ *
+ * @author Stefan Mark
+ * @created 28.09.2011
+ */
+class DifferentFrom extends AbstractType {
+
+	public static final String KEYWORD = "DifferentFrom[:]?";
+
+	public DifferentFrom() {
+
+		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(IndividualFrame.KEYWORDS, KEYWORD);
+		this.setSectionFinder(new RegexSectionFinder(p, 1));
+
+		Keyword key = new Keyword(KEYWORD);
+		this.addChildType(key);
+
+		this.addChildType(ManchesterSyntaxUtil.getMCE());
+	}
+}
+
+/**
+ *
+ *
+ * @author Stefan Mark
+ * @created 28.09.2011
+ */
+class Facts extends AbstractType {
+
+	public static final String KEYWORD = "Facts[:]?";
+
+	public Facts() {
+
+		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(IndividualFrame.KEYWORDS, KEYWORD);
+		this.setSectionFinder(new RegexSectionFinder(p, 1));
+
+		Keyword key = new Keyword(KEYWORD);
+		this.addChildType(key);
+
+		this.addChildType(ManchesterSyntaxUtil.getMCE());
+	}
+}

@@ -26,7 +26,8 @@ import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 
 /**
- * Simple {@link AbstractType} to wrap {@link Annotations} in a ontology.
+ * Simple {@link AbstractType} to wrap {@link Annotations} in a Manchester OWL
+ * Syntax ontology.
  *
  * @author Stefan Mark
  * @created 13.08.2011
@@ -35,29 +36,48 @@ public class Annotations extends AbstractType {
 
 	public final static String KEYWORD = "Annotations[:]?";
 
-	public final static String KEYWORDS = "("
-			+ Annotation.KEYWORD_COMMENT + "|"
-			+ Annotation.KEYWORD_LABEL
-			+ "|\\z)";
+	public final static String INSIDE_PATTERN = "(?m)" +
+			"(" + KEYWORD + ".+$" +
+			"(\r\n?|\n)" +
+			"((^.*$)(\r\n?|\n))" +
+			"+?)" +
+			"((^\\s*$)){1}";
 
 	/**
+	 * Empty Constructor. Just for nested support of Annotations
+	 */
+	public Annotations() {
+		this(null);
+	}
+
+	/**
+	 * Constructor for the {@link Annotations} description of an element in the
+	 * Manchester OWL Syntax. The Constructor needs to know the frame the
+	 * annotation is inside for correct sectioning.
 	 *
 	 * @param String frame The keywords that appear in the current frame
 	 */
 	public Annotations(String frame) {
 
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(frame, KEYWORD);
+		Pattern p = null;
+		if (frame != null && !frame.isEmpty()) {
+			p = ManchesterSyntaxUtil.getDescriptionPattern(frame, KEYWORD);
+		}
+		else {
+			p = Pattern.compile(INSIDE_PATTERN);
+		}
 		this.setSectionFinder(new RegexSectionFinder(p, 1));
 
-		Keyword key = new Keyword(KEYWORD);
-		this.addChildType(key);
+		this.addChildType(new Keyword(KEYWORD));
 
-		Annotation a = new Annotation();
-
-		ListItem list = new ListItem();
-		list.addChildType(a);
+		// List occurrence of annotations ...
+		NonTerminalList list = new NonTerminalList();
+		NonTerminalListContent listContent = new NonTerminalListContent();
+		listContent.addChildType(new Annotation());
+		list.addChildType(listContent);
 		this.addChildType(list);
 
-		this.addChildType(a);
+		// ... or non list occurrence of a annotation
+		this.addChildType(new Annotation());
 	}
 }

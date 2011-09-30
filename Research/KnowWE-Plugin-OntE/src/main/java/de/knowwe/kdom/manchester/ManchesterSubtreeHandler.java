@@ -21,46 +21,23 @@ package de.knowwe.kdom.manchester;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.ontoware.rdf2go.RDF2Go;
 import org.semanticweb.owlapi.model.OWLAxiom;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLIndividual;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
 
+import de.d3web.core.session.blackboard.Facts;
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.kdom.manchester.ManchesterMarkup.ManchesterMarkupContentType;
+import de.knowwe.kdom.manchester.frame.MiscFrame;
 import de.knowwe.kdom.manchester.frames.clazz.ClassFrame;
-import de.knowwe.kdom.manchester.frames.clazz.DisjointWith;
-import de.knowwe.kdom.manchester.frames.clazz.EquivalentTo;
-import de.knowwe.kdom.manchester.frames.clazz.SubClassOf;
-import de.knowwe.kdom.manchester.frames.clazz.ClassFrame.OWLClassDefinition;
-import de.knowwe.kdom.manchester.frames.individual.Facts;
 import de.knowwe.kdom.manchester.frames.individual.IndividualFrame;
-import de.knowwe.kdom.manchester.frames.individual.SameAs;
-import de.knowwe.kdom.manchester.frames.individual.Types;
-import de.knowwe.kdom.manchester.frames.individual.IndividualFrame.IndividualContentType;
-import de.knowwe.kdom.manchester.frames.individual.IndividualFrame.IndividualDefinition;
-import de.knowwe.kdom.manchester.frames.misc.MiscFrame;
 import de.knowwe.kdom.manchester.frames.objectproperty.Characteristics;
-import de.knowwe.kdom.manchester.frames.objectproperty.Domain;
-import de.knowwe.kdom.manchester.frames.objectproperty.InverseOf;
 import de.knowwe.kdom.manchester.frames.objectproperty.ObjectPropertyFrame;
-import de.knowwe.kdom.manchester.frames.objectproperty.Range;
-import de.knowwe.kdom.manchester.frames.objectproperty.SubPropertyOf;
-import de.knowwe.kdom.manchester.frames.objectproperty.ObjectPropertyFrame.ObjectPropertyDefinition;
-import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
-import de.knowwe.kdom.manchester.types.ListItem;
-import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
 import de.knowwe.kdom.manchester.types.ObjectPropertyExpression;
 import de.knowwe.owlapi.OWLAPISubtreeHandler;
 
@@ -85,36 +62,26 @@ public class ManchesterSubtreeHandler extends OWLAPISubtreeHandler<ManchesterMar
 	public Set<OWLAxiom> createOWLAxioms(KnowWEArticle article, Section<ManchesterMarkupContentType> s, Collection<KDOMReportMessage> messages) {
 
 		axioms = new HashSet<OWLAxiom>();
-
-		for (Section<? extends Type> child : s.getChildren()) {
-			Type t = child.get();
-
-			if (t instanceof ClassFrame) {
-				createClass(child);
-			}
-			else if (t instanceof ObjectPropertyFrame) {
-				createObjectProperties(child);
-			}
-			else if (t instanceof IndividualFrame) {
-				Section<IndividualContentType> section =
-						Sections.findChildOfType(child,
-								IndividualContentType.class);
-				if (section != null) {
-					createIndividuals(section);
-				}
-			}
-			else if (t instanceof MiscFrame) {
-				Section<MiscFrame> f = Sections.findSuccessor(s, MiscFrame.class);
-				createMiscFrame(f);
-			}
-		}
-
-		// get axioms from the singleton and return them
-		Collection<OWLAxiom> objects = AxiomStorageSubtree.getInstance().getAxioms();
-		axioms.addAll(objects);
-		AxiomStorageSubtree.getInstance().clear();
-
 		return axioms;
+
+		// for (Section<? extends Type> child : s.getChildren()) {
+		// Type t = child.get();
+		//
+		// if (t instanceof ClassFrame) {
+		// // createClass(child);
+		// }
+		// else if (t instanceof IndividualFrame) {
+		// Section<IndividualFrame> section = Sections.findChildOfType(s,
+		// IndividualFrame.class);
+		// createIndividuals(section);
+		// }
+		// }
+		//
+		// // get axioms from the singleton and return them
+		// Collection<OWLAxiom> objects =
+		// AxiomStorageSubtree.getInstance().getAxioms();
+		// axioms.addAll(objects);
+		// AxiomStorageSubtree.getInstance().clear();
 	}
 
 	/**
@@ -131,71 +98,74 @@ public class ManchesterSubtreeHandler extends OWLAPISubtreeHandler<ManchesterMar
 	 * @created 24.08.2011
 	 * @param Section s A section containing a {@link ClassFrame}.
 	 */
+	@Deprecated
 	private void createClass(Section<?> section) {
 
-		OWLClass clazz = null;
-
-		for (Section<?> child : section.getChildren()) {
-			Type t = child.get();
-			if (t instanceof OWLClassDefinition) {
-				clazz = AxiomFactory.createClass(child);
-				OWLAxiom e = AxiomFactory.createOWLClass(clazz);
-				axioms.add(e);
-			}
-			else if (t instanceof Annotations) {
-				List<Section<Annotation>> items = Sections.findSuccessorsOfType(child,
-						Annotation.class);
-				for (Section<Annotation> item : items) {
-					OWLAxiom a = AxiomFactory.createAnnotations(item, clazz.getIRI());
-					if (a != null) {
-						axioms.add(a);
-					}
-				}
-			}
-			else {
-				// SubClassOf, DisJointWith, EquivalentTo
-				List<Section<ListItem>> items = Sections.findSuccessorsOfType(
-						child,
-						ListItem.class);
-				if (items.size() > 0) {
-					for (Section<ListItem> item : items) {
-						Section<ManchesterClassExpression> mce = Sections.findSuccessor(item,
-								ManchesterClassExpression.class);
-						if (mce != null) {
-							OWLClassExpression e = AxiomFactory.createDescriptionExpression(
-									mce);
-							if (t instanceof SubClassOf) {
-								axioms.add(AxiomFactory.createOWLSubClassOf(clazz, e));
-							}
-							else if (t instanceof DisjointWith) {
-								axioms.add(AxiomFactory.createOWLDisjointWith(clazz, e));
-							}
-							else if (t instanceof EquivalentTo) {
-								axioms.add(AxiomFactory.createOWLEquivalentTo(clazz, e));
-							}
-						}
-					}
-				}
-				else {
-					// ManchesterClassExpression
-					Section<ManchesterClassExpression> mce = Sections.findSuccessor(child,
-							ManchesterClassExpression.class);
-					if (mce != null) {
-						OWLClassExpression e = AxiomFactory.createDescriptionExpression(
-								mce);
-						if (t instanceof SubClassOf) {
-							axioms.add(AxiomFactory.createOWLSubClassOf(clazz, e));
-						}
-						else if (t instanceof DisjointWith) {
-							axioms.add(AxiomFactory.createOWLDisjointWith(clazz, e));
-						}
-						else if (t instanceof EquivalentTo) {
-							axioms.add(AxiomFactory.createOWLEquivalentTo(clazz, e));
-						}
-					}
-				}
-			}
-		}
+		// OWLClass clazz = null;
+		//
+		// for (Section<?> child : section.getChildren()) {
+		// Type t = child.get();
+		// // if (t instanceof OWLClassDefinition) {
+		// // clazz = AxiomFactory.createClass(child);
+		// // OWLAxiom e = AxiomFactory.getOWLAPIEntityDeclaration(clazz);
+		// // axioms.add(e);
+		// // }
+		// if (t instanceof Annotations) {
+		// List<Section<Annotation>> items =
+		// Sections.findSuccessorsOfType(child,
+		// Annotation.class);
+		// for (Section<Annotation> item : items) {
+		// OWLAxiom a = AxiomFactory.createAnnotations(item, clazz.getIRI());
+		// if (a != null) {
+		// axioms.add(a);
+		// }
+		// }
+		// }
+		// else {
+		// // SubClassOf, DisJointWith, EquivalentTo
+		// List<Section<ListItem>> items = Sections.findSuccessorsOfType(
+		// child,
+		// ListItem.class);
+		// if (items.size() > 0) {
+		// for (Section<ListItem> item : items) {
+		// Section<ManchesterClassExpression> mce = Sections.findSuccessor(item,
+		// ManchesterClassExpression.class);
+		// if (mce != null) {
+		// OWLClassExpression e = AxiomFactory.createDescriptionExpression(
+		// mce);
+		// if (t instanceof SubClassOf) {
+		// axioms.add(AxiomFactory.createOWLSubClassOf(clazz, e));
+		// }
+		// else if (t instanceof DisjointWith) {
+		// axioms.add(AxiomFactory.createOWLDisjointWith(clazz, e));
+		// }
+		// else if (t instanceof EquivalentTo) {
+		// axioms.add(AxiomFactory.createOWLEquivalentTo(clazz, e));
+		// }
+		// }
+		// }
+		// }
+		// else {
+		// // ManchesterClassExpression
+		// Section<ManchesterClassExpression> mce =
+		// Sections.findSuccessor(child,
+		// ManchesterClassExpression.class);
+		// if (mce != null) {
+		// OWLClassExpression e = AxiomFactory.createDescriptionExpression(
+		// mce);
+		// if (t instanceof SubClassOf) {
+		// axioms.add(AxiomFactory.createOWLSubClassOf(clazz, e));
+		// }
+		// else if (t instanceof DisjointWith) {
+		// axioms.add(AxiomFactory.createOWLDisjointWith(clazz, e));
+		// }
+		// else if (t instanceof EquivalentTo) {
+		// axioms.add(AxiomFactory.createOWLEquivalentTo(clazz, e));
+		// }
+		// }
+		// }
+//			}
+		// }
 	}
 
 	/**
@@ -213,111 +183,146 @@ public class ManchesterSubtreeHandler extends OWLAPISubtreeHandler<ManchesterMar
 	 * @created 07.09.2011
 	 * @param Section s A section containing a {@link ObjectPropertyExpression}.
 	 */
-	private void createObjectProperties(Section<?> section) {
+	@Deprecated
+	private void createObjectProperties(Section<ObjectPropertyFrame> section) {
 
-		OWLObjectProperty p = null;
-		OWLAxiom e = null;
-
-		for (Section<?> child : section.getChildren()) {
-			Type t = child.get();
-
-			if (t instanceof ObjectPropertyDefinition) {
-				p = AxiomFactory.createProperty(child);
-				e = AxiomFactory.createPropertyDefinition(p);
-				if (e != null) {
-					axioms.add(e);
-				}
-			}
-			else if (t instanceof Characteristics) {
-				List<Section<Characteristics.CharacteristicsTerm>> l = Sections.findSuccessorsOfType(child,
-						Characteristics.CharacteristicsTerm.class);
-				if (l != null) {
-					for (Section<Characteristics.CharacteristicsTerm> s : l) {
-						e = AxiomFactory.createCharacteristics(s, p);
-						if (e != null) {
-							axioms.add(e);
-						}
-					}
-				}
-			}
-			else if (t instanceof Domain) {
-				Section<?> s = Sections.findSuccessor(child, OWLTermReferenceManchester.class);
-				axioms.add(AxiomFactory.createDomain(s, p));
-			}
-			else if (t instanceof Range) {
-				Section<?> s = Sections.findSuccessor(child, OWLTermReferenceManchester.class);
-				axioms.add(AxiomFactory.createRange(s, p));
-			}
-			else if (t instanceof InverseOf) {
-				Section<?> s = Sections.findSuccessor(child, ObjectPropertyExpression.class);
-				axioms.add(AxiomFactory.createInverseOf(s, p));
-			}
-			else if (t instanceof SubPropertyOf) {
-				Section<?> s = Sections.findSuccessor(child, ObjectPropertyExpression.class);
-				axioms.addAll(AxiomFactory.createSubPropertyOf(s, p));
-			}
-			else if (t instanceof Annotations) {
-				List<Section<Annotation>> items = Sections.findSuccessorsOfType(child,
-						Annotation.class);
-				for (Section<Annotation> item : items) {
-					OWLAxiom a = AxiomFactory.createAnnotations(item, p.getIRI());
-					if( a != null ) {
-						axioms.add(a);
-					}
-				}
-			}
-		}
+		// OWLObjectProperty p = null;
+		// OWLAxiom e = null;
+		//
+		// // handle definition, then the rest
+		// ObjectPropertyFrame frame = section.get();
+		// if (frame.hasObjectPropertyDefinition(section)) {
+		// Section<?> def = frame.getObjectPropertyDefinition(section);
+		// p = (OWLObjectProperty) AxiomFactory.getOWLAPIEntity(def,
+		// OWLObjectProperty.class);
+		// e = AxiomFactory.getOWLAPIEntityDeclaration(p);
+		// if (e != null) {
+		// axioms.add(e);
+		// }
+		// }
+		//
+		// // done with the definition handle the rest
+		// for (Section<?> child : section.getChildren()) {
+		// Type t = child.get();
+		//
+		// if (t instanceof Characteristics) {
+		// List<Section<Characteristics.CharacteristicsTerm>> l =
+		// Sections.findSuccessorsOfType(child,
+		// Characteristics.CharacteristicsTerm.class);
+		// if (l != null) {
+		// for (Section<Characteristics.CharacteristicsTerm> s : l) {
+		// e = AxiomFactory.createCharacteristics(s, p);
+		// if (e != null) {
+		// axioms.add(e);
+		// }
+		// }
+		// } // term missing, please remove definition or one
+		// }
+		// else if (t instanceof Domain) {
+		// // get SingleListItems and handle each accordingly
+		// Section<?> s = Sections.findSuccessor(child,
+		// OWLTermReferenceManchester.class);
+		// axioms.add(AxiomFactory.createDomain(s, p));
+		// }
+		// else if (t instanceof Range) {
+		// Section<?> s = Sections.findSuccessor(child,
+		// OWLTermReferenceManchester.class);
+		// axioms.add(AxiomFactory.createRange(s, p));
+		// }
+		// else if (t instanceof InverseOf) {
+		// Section<?> s = Sections.findSuccessor(child,
+		// ObjectPropertyExpression.class);
+		// axioms.add(AxiomFactory.createInverseOf(s, p));
+		// }
+		// else if (t instanceof SubPropertyOf) {
+		//
+		// Sections.findSuccessorsOfType(child, ObjectPropertyExpression.class);
+		//
+		// Section<?> s = Sections.findSuccessor(child,
+		// ObjectPropertyExpression.class);
+		// axioms.addAll(AxiomFactory.createSubPropertyOf(s, p));
+		// }
+		// else if (t instanceof Annotations) {
+		// List<Section<Annotation>> items =
+		// Sections.findSuccessorsOfType(child,
+		// Annotation.class);
+		// for (Section<Annotation> item : items) {
+		// e = AxiomFactory.createAnnotations(item, p.getIRI());
+		// if (e != null) {
+		// axioms.add(e);
+		// }
+		// }
+		// }
+		// }
 	}
 
 	/**
 	 * <p>
-	 * Walk over the KDOM and looks for {@link ObjectPropertyExpression} and
-	 * creates correct OWL axioms out of the found KDOM nodes. Those nodes are
-	 * then added to the ontology.
+	 * Walk over the KDOM and looks for {@link IndividualFrame} and creates
+	 * correct OWL axioms out of the found KDOM nodes. Those nodes are then
+	 * added to the ontology.
 	 * </p>
 	 * <p>
-	 * Currently handles: {@link ObjectPropertyDefinition}, {link
-	 * Characteristics}, {@link Annotations}, {@link InverseOf},
-	 * {@link SubPropertyOf}, {@link Domain} and {@link Range}
+	 * Currently handles: IndividualDefinition, {@link Annotations},
+	 * {@link Types}, {@link Facts}, {@link SameAs} and {@link DifferentFrom}
 	 * </p>
 	 *
 	 * @created 07.09.2011
-	 * @param Section s A section containing a {@link ObjectPropertyExpression}.
+	 * @param Section s A section containing a {@link IndividualFrame}.
 	 */
-	private void createIndividuals(Section<?> section) {
-		OWLIndividual i = null;
-
-		List<Section<?>> children = section.getChildren();
-
-		for (Section<?> child : children) {
-			Type t = child.get();
-			if (t instanceof IndividualDefinition) {
-				i = AxiomFactory.createIndividual(child);
-			}
-			else if (t instanceof Facts) {
-				// TODO: not yet implemented
-			}
-			else {
-				// Type|SameAs --> ListItems
-				List<Section<ListItem>> items = Sections.findSuccessorsOfType(
-						child,
-						ListItem.class);
-				for (Section<ListItem> item : items) {
-					Section<ManchesterClassExpression> mce = Sections.findSuccessor(item,
-							ManchesterClassExpression.class);
-					if (mce != null) {
-						OWLClassExpression e = AxiomFactory.createDescriptionExpression(
-								mce);
-						if (t instanceof Types) {
-							axioms.add(AxiomFactory.createNamedIndividualAxiom(e, i));
-						}
-						else if (t instanceof SameAs) {
-							axioms.add(AxiomFactory.createSameIndividualsAxiom(e, i));
-						}
-					}
-				}
-			}
-		}
+	private void createIndividuals(Section<IndividualFrame> section) {
+		// OWLIndividual i = null;
+		//
+		// // handle definition, then the rest
+		// IndividualFrame frame = section.get();
+		// if (frame.hasIndividualDefinition(section)) {
+		// Section<?> def = frame.getIndividualDefinition(section);
+		// i = (OWLIndividual) AxiomFactory.getOWLAPIEntity(def,
+		// OWLIndividual.class);
+		// }
+		//
+		// // handle the rest
+		// List<Section<?>> children = section.getChildren();
+		// for (Section<?> child : children) {
+		// Type t = child.get();
+		// if (t instanceof Facts) { // FACTS
+		// Section<Facts> facts = Sections.findSuccessor(section, Facts.class);
+		// List<Section<?>> factItems = ((Facts) t).getFacts(facts);
+		// for (Section<?> item : factItems) {
+		// OWLAxiom a = null;
+		// a = AxiomFactory.createFact(item, i);
+		// if (a != null) {
+		// axioms.add(a);
+		// }
+		// }
+		// }
+		// else if (t instanceof DifferentFrom) {
+		//
+		// }
+		// else {
+		// // Type|SameAs -> List of one or more objects, handle directly
+		// List<Section<ManchesterClassExpression>> items =
+		// Sections.findSuccessorsOfType(
+		// child,
+		// ManchesterClassExpression.class);
+		//
+		// // FIXME list
+		// for (Section<ManchesterClassExpression> mce : items) {
+		// OWLClassExpression o = AxiomFactory.createDescriptionExpression(
+		// mce);
+		// OWLAxiom a = null;
+		// if (t instanceof Types) {
+		// a = AxiomFactory.createNamedIndividualAxiom(o, i);
+		// }
+		// else if (t instanceof SameAs) {
+		// a = AxiomFactory.createSameIndividualsAxiom(o, i);
+		// }
+		// if (a != null) {
+		// axioms.add(a);
+		// }
+		// }
+		// }
+		// }
 	}
 
 	/**
@@ -332,24 +337,29 @@ public class ManchesterSubtreeHandler extends OWLAPISubtreeHandler<ManchesterMar
 	 * </p>
 	 *
 	 * @created 07.09.2011
-	 * @param Section s A section containing a {@link ObjectPropertyExpression}.
+	 * @param Section<MiscFrame> s A section containing a {@link MiscFrame}.
 	 */
+	@Deprecated
 	private void createMiscFrame(Section<MiscFrame> section) {
 
-		MiscFrame type = (MiscFrame) section.get();
-
-		if (type.isDifferentIndividuals(section) || type.isSameIndividuals(section)) {
-			axioms.add(AxiomFactory.createMiscFrameIndividuals(section));
-
-		}
-		else if (type.isDisjointClasses(section) || type.isEquivalentClasses(section)) {
-			axioms.add(AxiomFactory.createMiscFrameClasses(section));
-		}
-		else if (type.isDisjointProperties(section) || type.isEquivalentProperties(section)) {
-			axioms.add(AxiomFactory.createMiscFrameObjectProperties(section));
-		}
-		else if (type.isDisjointDataProperties(section) || type.isEquivalentDataProperties(section)) {
-			axioms.add(AxiomFactory.createMiscFrameDataProperties(section));
-		}
+		// MiscFrame type = (MiscFrame) section.get();
+		//
+		// if (type.isDifferentIndividuals(section) ||
+		// type.isSameIndividuals(section)) {
+		// axioms.add(AxiomFactory.createMiscFrameIndividuals(section));
+		//
+		// }
+		// else if (type.isDisjointClasses(section) ||
+		// type.isEquivalentClasses(section)) {
+		// axioms.add(AxiomFactory.createMiscFrameClasses(section));
+		// }
+		// else if (type.isDisjointProperties(section) ||
+		// type.isEquivalentProperties(section)) {
+		// axioms.add(AxiomFactory.createMiscFrameObjectProperties(section));
+		// }
+		// else if (type.isDisjointDataProperties(section) ||
+		// type.isEquivalentDataProperties(section)) {
+		// axioms.add(AxiomFactory.createMiscFrameDataProperties(section));
+		// }
 	}
 }
