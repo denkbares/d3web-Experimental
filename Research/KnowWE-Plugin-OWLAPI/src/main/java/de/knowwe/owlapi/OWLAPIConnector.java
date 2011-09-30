@@ -20,10 +20,10 @@ package de.knowwe.owlapi;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
@@ -112,6 +112,7 @@ public class OWLAPIConnector {
 	private final OWLOntologyManager manager;
 	private final OWLReasoner reasoner;
 	private final OWLOntology ontology;
+	private final OWLReasonerFactory factory;
 
 	private OWLAPIConnector(IRI baseIRI) throws OWLOntologyCreationException {
 		if (baseIRI == null) {
@@ -119,8 +120,18 @@ public class OWLAPIConnector {
 		}
 		this.manager = OWLManager.createOWLOntologyManager();
 		this.ontology = manager.createOntology(baseIRI);
-		OWLReasonerFactory factory = new Reasoner.ReasonerFactory();
-		this.reasoner = factory.createReasoner(ontology);
+
+		ResourceBundle properties = ResourceBundle.getBundle("owlapi");
+		String reasoner = properties.getString("owlapi.reasoner");
+
+		if (reasoner.equals("pellet")) {
+			this.factory = com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory.getInstance();
+			this.reasoner = factory.createReasoner(ontology);
+		}
+		else {
+			factory = new org.semanticweb.HermiT.Reasoner.ReasonerFactory();
+			this.reasoner = factory.createReasoner(ontology);
+		}
 	}
 
 	/**
@@ -166,6 +177,17 @@ public class OWLAPIConnector {
 	 */
 	public OWLOntology getOntology() {
 		return ontology;
+	}
+
+	/**
+	 * Returns the @link{OWLReasonerFactory} instance responsible for the
+	 * creation of {@link OWLReasoner} instances.
+	 *
+	 * @created September 27, 2011
+	 * @return OWLReasonerFactory instance.
+	 */
+	public OWLReasonerFactory getFactory() {
+		return factory;
 	}
 
 	/**
