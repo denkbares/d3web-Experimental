@@ -103,7 +103,7 @@ public class Rdf2GoCore implements EventListener {
 	private static Rdf2GoCore me;
 	private Model model;
 	private Map<String, WeakHashMap<Section<? extends Type>, List<Statement>>> statementcache;
-	private Map<Statement, Integer> duplicateStatements;
+	private Map<Statement, Set<String>> duplicateStatements;
 	private Map<String, String> namespaces;
 	private List<Statement> addCache;
 	private List<Statement> removeCache;
@@ -119,7 +119,7 @@ public class Rdf2GoCore implements EventListener {
 	public void init() {
 		initModel();
 		statementcache = new HashMap<String, WeakHashMap<Section<? extends Type>, List<Statement>>>();
-		duplicateStatements = new HashMap<Statement, Integer>();
+		duplicateStatements = new HashMap<Statement, Set<String>>();
 
 		addCache = new ArrayList<Statement>();
 		removeCache = new ArrayList<Statement>();
@@ -530,48 +530,38 @@ public class Rdf2GoCore implements EventListener {
 	 * @param sec
 	 */
 	private void removeStatementsofSingleSection(Section<? extends Type> sec) {
-		WeakHashMap<Section<? extends Type>, List<Statement>> temp = statementcache.get(sec.getArticle().getTitle());
+		WeakHashMap<Section<? extends Type>, List<Statement>> allStatmentSectionsOfArticle =
+				statementcache.get(sec.getTitle());
 
-		if (temp != null) {
-			if (temp.containsKey(sec)) {
-				List<Statement> statementsOfSection = temp.get(sec);
+		if (allStatmentSectionsOfArticle != null) {
+			if (allStatmentSectionsOfArticle.containsKey(sec)) {
+				List<Statement> statementsOfSection = allStatmentSectionsOfArticle.get(sec);
 				List<Statement> removedStatements = new ArrayList<Statement>();
 
 				for (Statement s : statementsOfSection) {
-
-					if (duplicateStatements.containsKey(s)) {
-						if (duplicateStatements.get(s) != 1) {
-							duplicateStatements.put(s,
-									duplicateStatements.get(s) - 1);
-						}
-						else {
-							duplicateStatements.remove(s);
-						}
+					Set<String> sectionIDsForStatement = duplicateStatements.get(s);
+					boolean removed = false;
+					if (sectionIDsForStatement != null) {
+						removed = sectionIDsForStatement.remove(sec.getID());
+					}
+					if (removed && sectionIDsForStatement.isEmpty()) {
+						removedStatements.add(s);
+						duplicateStatements.remove(s);
 					}
 					else {
-						removedStatements.add(s);
-						// model.removeStatement(s);
+						Logger.getLogger(this.getClass().getName()).log(
+								Level.INFO,
+								"Tried to remove statement from Section '" + sec.get().getName()
+										+ "', ' " + sec.getID() + "' that wasn't there:\n"
+										+ s.toString());
 					}
 				}
-				temp.remove(sec);
-				if (temp.isEmpty()) {
+				allStatmentSectionsOfArticle.remove(sec);
+				if (allStatmentSectionsOfArticle.isEmpty()) {
 					statementcache.remove(sec.getArticle().getTitle());
-				}
-				if (removedStatements.size() == 0) {
-					Logger.getLogger(this.getClass().getName()).log(Level.INFO,
-							"found no statement to remove for: " + sec.toString());
 				}
 				removeStatementsFromCache(removedStatements);
 				// model.removeAll(removedStatements.iterator());
-			}
-			else {
-				// Not necessary because of full-pasre-listener being active
-				// for (Section cur : temp.keySet()) {
-				// if (cur.getID().equals(sec.getID())) {
-				// removeStatementsofSingleSection(cur);
-				// }
-				// break;
-				// }
 			}
 		}
 	}
@@ -589,34 +579,15 @@ public class Rdf2GoCore implements EventListener {
 		Logger.getLogger(this.getClass().getName()).finer(
 				"semantic core updating " + sec.getID() + "  " + allStatements.size());
 
-		WeakHashMap<Section<? extends Type>, List<Statement>> temp = statementcache.get(sec.getTitle());
-		boolean scContainsCurrentSection = false;
-		if (temp != null) {
-			if (temp.get(sec) != null) {
-				scContainsCurrentSection = true;
+		for (Statement s : allStatements) {
+			Set<String> registeredSectionIDsForStatements = duplicateStatements.get(s);
+			if (registeredSectionIDsForStatements == null) {
+				registeredSectionIDsForStatements = new HashSet<String>();
+				duplicateStatements.put(s, registeredSectionIDsForStatements);
 			}
-			// else {
-			// Not necessary because of full-pasre-listener being active
-			// for (Section cur : temp.keySet()) {
-			// if (cur.getID().equals(sec.getID())) {
-			// scContainsCurrentSection = true;
-			// }
-			// break;
-			// }
-			// }
+			registeredSectionIDsForStatements.add(sec.getID());
 		}
-		if (!scContainsCurrentSection) {
-			for (Statement s : allStatements) {
-				if (model.contains(s)) {
-					if (duplicateStatements.containsKey(s)) {
-						duplicateStatements.put(s, duplicateStatements.get(s) + 1);
-					}
-					else {
-						duplicateStatements.put(s, 1);
-					}
-				}
-			}
-		}
+
 		addToStatementcache(sec, allStatements);
 
 		// Maybe remove duplicates before adding to store, if performance is
@@ -709,10 +680,13 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	public void removeArticleStatementsRecursive(KnowWEArticle art) {
-		if (statementcache.get(art.getTitle()) != null) {
-			Set<Section<? extends Type>> temp = new HashSet<Section<? extends Type>>();
-			temp.addAll(statementcache.get(art.getTitle()).keySet());
-			for (Section<? extends Type> cur : temp) {
+		WeakHashMap<Section<? extends Type>, List<Statement>> oldStatementsOfArticle =
+				statementcache.get(art.getTitle());
+		if (oldStatementsOfArticle != null) {
+			Set<Section<? extends Type>> sectionsWithStatements =
+					new HashSet<Section<? extends Type>>();
+			sectionsWithStatements.addAll(oldStatementsOfArticle.keySet());
+			for (Section<? extends Type> cur : sectionsWithStatements) {
 				removeStatementsofSingleSection(cur);
 			}
 		}
