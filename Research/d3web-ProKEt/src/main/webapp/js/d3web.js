@@ -89,13 +89,15 @@ $(function() {
 		$("#jqConfirmDialog").dialog(opts);
 	});
 
-	var load, cancelload;
+	var load, cancelload, deleteCase;
 	if(language=="en"){
 		load = "OK";
 		cancelload = "Cancel";
+		deleteCase = "Delete";
 	} else if(language=="de"){
 		load = "OK";
 		cancelload = "Abbrechen";
+		deleteCase = "Löschen";
 	}
 	
 	/* LOAD CASE DIALOG */
@@ -105,13 +107,11 @@ $(function() {
 			autoOpen: false,
 			position: [ 0, getHeaderHeight()],
 			modal: false,
-			width: 180,
-			height: 375,
 			buttons: [{
 				id: "loadOK",
 				text: load,
 				click: function(){
-					d3web_getSelectedCaseFileAndLoad();
+					d3web_loadSelectedFile();
 				}
 				},
 				{
@@ -120,12 +120,19 @@ $(function() {
 				click: function(){
 						$('#jqLoadCaseDialog').dialog('close');
 					}
-				}]
+				},
+				{
+				id: "deleteCase",
+				text: deleteCase,
+				click: function(){
+					d3web_deleteSelectedFile();
+				}
+			}]
 		};
 		var loadCaseDialog = $("#jqLoadCaseDialog");
 		loadCaseDialog.dialog(opts);
 		loadCaseDialog.find("option").unbind("dblclick").dblclick(function(){
-			d3web_getSelectedCaseFileAndLoad();
+			d3web_loadSelectedFile();
 		});
 	});
 	
@@ -187,11 +194,6 @@ $(function() {
 				}
 				}]
 		};
-		var followUpDialog = $("#jqFollowUpDialog");
-		followUpDialog.dialog(opts);
-		followUpDialog.find("option").unbind("dblclick").dblclick(function(){
-			d3web_getSelectedCaseFileAndLoad();
-		});
 	});
 
 	/* Initialize the JS binding to the dialog elements */
@@ -207,6 +209,12 @@ $(function() {
 			}
 		});
 	});
+	
+	// check browser and warn if the wrong one is used
+	handleUnsupportedBrowsers();
+	
+	// move the content below the header
+	moveContentPart();
 });
 
 
@@ -216,12 +224,6 @@ $(function() {
  * entered followed by pressing enter.
  */
 function initFunctionality() {
-
-	// check browser and warn if the wrong one is used
-	handleUnsupportedBrowsers();
-	
-	// move the content below the header
-	moveContentPart();
 	
 	$(window).resize(function() {
 		moveContentPart();
@@ -650,18 +652,28 @@ function d3web_show() {
  * selectbox. This function is directly defined/linked in the FileSelect.st
  * StringTemplate.
  */
-function d3web_getSelectedCaseFileAndLoad() {
+function d3web_loadSelectedFile() {
 
 	// get selected text = filename
-	var filename = $('#caseSelect :selected').text();
+	var filename = d3web_getSelectedFile();
 
-	if (filename !== "") {
-
-		// call AJAX function for loading the case with specified filename.
+	if (filename != "") {
 		d3web_loadCase(filename);
-	} else {
-		closeJQLoadCaseDialog();
 	}
+}
+
+function d3web_deleteSelectedFile() {
+
+	// get selected text = filename
+	var filename = d3web_getSelectedFile();
+
+	if (filename != "") {
+		d3web_deleteCase(filename);
+	}
+}
+
+function d3web_getSelectedFile() {
+	return $('#caseSelect :selected').text();
 }
 
 /**
@@ -690,6 +702,31 @@ function d3web_loadCase(filename) {
 			window.location.reload();
 			initFunctionality();
 			// }
+		}
+	});
+}
+
+function d3web_deleteCase(filename) {
+	
+	var areYouSure = "";
+	if(language=="en"){
+		areYouSure = "Click 'OK' to delete the selected case '" + filename + "'.";
+	} else if(language=="de"){
+		areYouSure = "Klicken sie 'OK' um den ausgewählten Fall '" + filename + "' zu löschen.";
+	}
+	
+	if (!confirm(areYouSure)) return;
+
+	var link = $.query.set("action", "deletecase").set("fn", filename);
+
+	$.ajax({
+		type : "GET",
+		async : false,
+		cache : false, // needed for IE, call is not made otherwise
+		url : link,
+		success : function(html) {
+			window.location.reload();
+			initFunctionality();
 		}
 	});
 }
