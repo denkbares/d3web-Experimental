@@ -90,7 +90,12 @@ public class AnnotationAction extends AbstractAction {
 		}
 		StringBuffer sb = new StringBuffer();
 
-		Session session = broker.getSession(namespace);
+		// TODO HOTFIX: This Action was not refactored: New Method for getting
+		// the Session.
+		String fixMe = namespace;
+		if (fixMe.contains(".."))
+			fixMe = fixMe.substring(0,fixMe.indexOf(".."));
+		Session session = broker.getSession(fixMe);
 
 		if (session == null) {
 			session = D3webUtils.getFirstSession(context.getWeb(),
