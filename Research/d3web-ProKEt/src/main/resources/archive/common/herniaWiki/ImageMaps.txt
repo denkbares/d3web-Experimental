@@ -34,8 +34,8 @@ Mark the incisional hernia areas involved.image = Fig7_Areas.JPG
 Mark the incisional hernia areas involved.imagewidth = 250
 Localization of the concomitant incisional hernia.image = Fig7_Areas.JPG
 Localization of the concomitant incisional hernia.imagewidth = 250
-Mesh position.image = Fig6_MeshPos.JPG
-Mesh position.imagewidth = 300
+Mesh positions.image = Fig6_MeshPos.JPG
+Mesh positions.imagewidth = 300
 
 @package: Hernia
 %

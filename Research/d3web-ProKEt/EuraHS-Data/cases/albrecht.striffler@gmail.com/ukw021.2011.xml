@@ -4,19 +4,62 @@
 <name/>
 <facts>
 <valueFacts>
-<fact objectName="Date of repair done (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<fact objectName="Is the hernia repair the main indication for surgery?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Date of repair done (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <unknown/>
 </fact>
+<fact objectName="Weight of the patient" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<numValue>10.0</numValue>
+</fact>
+<fact objectName="Are there other risk factors?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Indication for ventral hernia surgery" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Emergency</choiceValue>
+</fact>
+<fact objectName="Operator" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Resident with direct supervisor (surgeon scrubbed in)</choiceValue>
+</fact>
+<fact objectName="Symptoms of the recurrence (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<multipleChoiceValue>
+<choice>None (asymptomatic)</choice>
+<choice>Pain</choice>
+<choice>Obstructive symptoms</choice>
+<choice>Incarceration</choice>
+<choice>Other</choice>
+</multipleChoiceValue>
+</fact>
+<fact objectName="New Repair done (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Sporting activities" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>None</choiceValue>
+</fact>
+<fact objectName="Treatment of abdominal wall pain (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Surgucal intervention because of pain, e.g. removing of fication suture (local anesthesia)</choiceValue>
+</fact>
+<fact objectName="Superficial surgical site infection (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Wound infection</choiceValue>
+</fact>
+<fact objectName="Type of bulging (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Symptomatic and reason for reoperation</choiceValue>
+</fact>
+<fact objectName="Estimated minimal overlap of the mesh beyond the hernia defect" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<unknown/>
+</fact>
+<fact objectName="Was the mesh completely removed (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Intrabdominal surgical site infection (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<multipleChoiceValue>
+<choice>Mesh infection</choice>
+<choice>Intraabdominal abscess</choice>
+<choice>Bowel perforation</choice>
+</multipleChoiceValue>
+</fact>
 <fact objectName="Foreign body feeling at operation site (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Was the hernia defect closed?" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Site of recurrence (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>At hte margin of the repair or the mesh</choiceValue>
-</fact>
-<fact objectName="Late complications (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <choiceValue>Yes</choiceValue>
 </fact>
 <fact objectName="Symptoms of the recurrence (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
@@ -28,82 +71,38 @@
 <choice>Other</choice>
 </multipleChoiceValue>
 </fact>
-<fact objectName="Intraoperative complications" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<fact objectName="Was the hernia defect closed?" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <choiceValue>Yes</choiceValue>
 </fact>
-<fact objectName="Deep surgical site infection (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<multipleChoiceValue>
-<choice>Wound infection</choice>
-<choice> including subcutaneous abscess</choice>
-<choice>Mesh infection</choice>
-<choice>Enterocutaneous fistula</choice>
-</multipleChoiceValue>
+<fact objectName="Size of the implanted mesh" psm="de.d3web.abstraction.inference.PSMethodAbstraction">
+<numValue>20.0</numValue>
 </fact>
-<fact objectName="Smoking habits" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Never smoked</choiceValue>
+<fact objectName="Classification of surgical complications" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<textValue/>
+</fact>
+<fact objectName="Date of follow up (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<unknown/>
+</fact>
+<fact objectName="Intraoperative complications" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
 </fact>
 <fact objectName="Treatment of abdominal wall pain (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <choiceValue>"Surgical intervention because of pain, e.g. laparoscopic exploration, removal of fixation or mesh, (general anesthesia)</choiceValue>
 </fact>
-<fact objectName="Origin of bleeding" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<multipleChoiceValue>
-<choice>Abdominal wall</choice>
-<choice>Mesentery</choice>
-<choice>Liver</choice>
-<choice>Spleen</choice>
-<choice>Large retroperitoneal vessels</choice>
-</multipleChoiceValue>
+<fact objectName="Superficial surgical site infection (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Wound infection</choiceValue>
 </fact>
-<fact objectName="Type of bulging (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Symptomatic and reason for reoperation</choiceValue>
+<fact objectName="Smoking habits" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Never smoked</choiceValue>
+</fact>
+<fact objectName="Operation date" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<dateValue>2009-09-25 00:00:00.00</dateValue>
 </fact>
 <fact objectName="Was the mesh completely removed (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <choiceValue>Yes</choiceValue>
 </fact>
-<fact objectName="Surgical technique" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Mesh repair</choiceValue>
-</fact>
-<fact objectName="Was the mesh completely removed (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Type of life threatening complications" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Single organ failure</choiceValue>
-</fact>
-<fact objectName="Mesh position" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Preperitoneal</choiceValue>
-</fact>
-<fact objectName="Conversion from laparoscopic to open surgery" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Treatment of bowel obstruction (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Operative treatment with need for small bowel resection</choiceValue>
-</fact>
-<fact objectName="Intraoperative wound contamination" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Class II</choiceValue>
-</fact>
-<fact objectName="Is the hernia repair the main indication for surgery?" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Date of repair done (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<unknown/>
-</fact>
-<fact objectName="Operator" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Resident with direct supervisor (surgeon scrubbed in)</choiceValue>
-</fact>
-<fact objectName="Weight of the patient" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<numValue>10.0</numValue>
-</fact>
-<fact objectName="Foreign body feeling at operation site (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Name of mesh" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<unknown/>
-</fact>
-<fact objectName="Production company" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<unknown/>
-</fact>
-<fact objectName="Indication for ventral hernia surgery" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Emergency</choiceValue>
+<fact objectName="Type of bulging (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Symptomatic and reason for reoperation</choiceValue>
 </fact>
 <fact objectName="Type of Concomitant abdominal surgery" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <multipleChoiceValue>
@@ -115,85 +114,114 @@
 <choice>Other</choice>
 </multipleChoiceValue>
 </fact>
-<fact objectName="Number of ports used" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<numValue>3.0</numValue>
-</fact>
-<fact objectName="Superficial surgical site infection (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Wound infection</choiceValue>
-</fact>
-<fact objectName="Classification of surgical complications" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<textValue/>
-</fact>
-<fact objectName="Estimated minimal overlap of the mesh beyond the hernia defect" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<unknown/>
-</fact>
-<fact objectName="Intrabdominal surgical site infection (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<fact objectName="Intrabdominal surgical site infection (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <multipleChoiceValue>
 <choice>Mesh infection</choice>
 <choice>Intraabdominal abscess</choice>
 <choice>Bowel perforation</choice>
 </multipleChoiceValue>
 </fact>
-<fact objectName="Treatment of bowel obstruction (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<fact objectName="Type of life threatening complications" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Single organ failure</choiceValue>
+</fact>
+<fact objectName="Intraoperative wound contamination" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Class II</choiceValue>
+</fact>
+<fact objectName="End of operation (last skin suture)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<dateValue>1970-01-01 08:45:00.00</dateValue>
+</fact>
+<fact objectName="Treatment of bowel obstruction (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <choiceValue>Operative treatment with need for small bowel resection</choiceValue>
 </fact>
-<fact objectName="State at discharge" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<fact objectName="Please select primary ventral hernia" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Epigastric hernia</choiceValue>
+</fact>
+<fact objectName="Select Comorbidities" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <multipleChoiceValue>
-<choice>No Complications</choice>
-<choice>Bleeding complications</choice>
-<choice>Surgical site infection (SSI)</choice>
-<choice>Postoperative seroma</choice>
-<choice>Prolonged ileus or obstruction</choice>
-<choice>Organ lesion or perforation</choice>
-<choice>Urinary complication</choice>
-<choice>General complications</choice>
+<choice>Diabetes mellitus type I (juvenil)</choice>
+<choice>Diabetes mellitus type II (adult)</choice>
+<choice>Cardiac disease</choice>
+<choice>Arterial hypertension</choice>
+<choice>Pulmonary disease</choice>
+<choice>Hepatic disease</choice>
+<choice>Renal disease</choice>
+<choice>Malignant disease</choice>
 </multipleChoiceValue>
 </fact>
-<fact objectName="Type of follow up (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Clinical and with medical imaging</choiceValue>
-</fact>
-<fact objectName="Treatment needed (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<fact objectName="Are there Comorbidities?" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <choiceValue>Yes</choiceValue>
 </fact>
-<fact objectName="Other mesh" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<unknown/>
+<fact objectName="Name of mesh" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<textValue>Composix Kugel Patch</textValue>
 </fact>
-<fact objectName="Type of bleeding complications" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<multipleChoiceValue>
-<choice>Abdominal wall bleeding or hematoma</choice>
-<choice>Intraperitoneal bleeding</choice>
-<choice>Revision not under general anaesthesia</choice>
-<choice>Revision under general anaesthesia</choice>
-</multipleChoiceValue>
+<fact objectName="Diameter of the ventral hernia" psm="de.d3web.abstraction.inference.PSMethodAbstraction">
+<numValue>17.5</numValue>
+</fact>
+<fact objectName="Reducibility of the ventral hernia" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Completely reducible</choiceValue>
+</fact>
+<fact objectName="Foreign body feeling at operation site (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Treatment needed (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Late complications (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Occupation" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Heavy physical labour</choiceValue>
+</fact>
+<fact objectName="Conversion to open" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>No</choiceValue>
+</fact>
+<fact objectName="Lost to follow up (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Patient refuses futher follow up</choiceValue>
+</fact>
+<fact objectName="Date of repair done (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<unknown/>
 </fact>
 <fact objectName="Please enter a EuraHS registration number instead of a patient name" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <textValue>ukw021.2011</textValue>
 </fact>
-<fact objectName="Gender" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Female</choiceValue>
-</fact>
-<fact objectName="Bowel resection needed" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes (small bowel)</choiceValue>
-</fact>
-<fact objectName="Informed consent obtained" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Chronic abdominal wall pain at the operation site (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Fixation of the mesh" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<fact objectName="Deep surgical site infection (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <multipleChoiceValue>
-<choice>No fixation</choice>
-<choice>Suture</choice>
-<choice>Fixation device</choice>
-<choice>Glue</choice>
+<choice>Wound infection</choice>
+<choice> including subcutaneous abscess</choice>
+<choice>Mesh infection</choice>
+<choice>Enterocutaneous fistula</choice>
 </multipleChoiceValue>
 </fact>
-<fact objectName="Content of the hernia sac" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<fact objectName="Duration of the operation in minutes" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<numValue>45.0</numValue>
+</fact>
+<fact objectName="Postulated cause of recurrence (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <multipleChoiceValue>
-<choice>Small bowel</choice>
-<choice>Ovaries</choice>
-<choice>Bladder</choice>
+<choice>Mesh had to be removed</choice>
+<choice>Hernia was induced by the repair itself</choice>
+<choice>Missed during repair (recurrent hernia in a part of the incision that was not repaired)</choice>
+<choice>Mesh shrinkage</choice>
+<choice>Inadequate mesh fixation</choice>
+<choice>Inadequate mesh overlap</choice>
+<choice>Central mesh failure (recurrence through the mesh)</choice>
+<choice>Increased patient risk</choice>
+</multipleChoiceValue>
+</fact>
+<fact objectName="Origin of bleeding" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<multipleChoiceValue>
+<choice>Abdominal wall</choice>
+<choice>Mesentery</choice>
+<choice>Liver</choice>
+<choice>Spleen</choice>
+<choice>Large retroperitoneal vessels</choice>
+</multipleChoiceValue>
+</fact>
+<fact objectName="Late complications (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Type of acces" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<multipleChoiceValue>
+<choice>Laparoscopic surgery</choice>
 </multipleChoiceValue>
 </fact>
 <fact objectName="Concomitant gastrointestinal surgery on?" psm="de.d3web.indication.inference.PSMethodUserSelected">
@@ -205,38 +233,21 @@
 <choice>Liver/spleen</choice>
 </multipleChoiceValue>
 </fact>
-<fact objectName="End of operation (last skin suture)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<dateValue>1970-01-01 08:45:00.00</dateValue>
-</fact>
-<fact objectName="Incarceration" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Was mesh removed" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Partially</choiceValue>
-</fact>
-<fact objectName="Intrabdominal surgical site infection (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<fact objectName="Deep surgical site infection (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <multipleChoiceValue>
+<choice>Wound infection</choice>
+<choice> including subcutaneous abscess</choice>
 <choice>Mesh infection</choice>
-<choice>Intraabdominal abscess</choice>
-<choice>Bowel perforation</choice>
+<choice>Enterocutaneous fistula</choice>
 </multipleChoiceValue>
 </fact>
-<fact objectName="Please select primary ventral hernia" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Epigastric hernia</choiceValue>
+<fact objectName="Surgical technique" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Mesh repair</choiceValue>
 </fact>
-<fact objectName="Are there other risk factors?" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
+<fact objectName="Lost to follow up (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Unable to contact the patient</choiceValue>
 </fact>
-<fact objectName="Are there Comorbidities?" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Treatment needed (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Reducibility of the ventral hernia" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Completely reducible</choiceValue>
-</fact>
-<fact objectName="Absorbable" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<fact objectName="Incarceration" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <choiceValue>Yes</choiceValue>
 </fact>
 <fact objectName="Postulated cause of recurrence (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
@@ -251,260 +262,6 @@
 <choice>Increased patient risk</choice>
 </multipleChoiceValue>
 </fact>
-<fact objectName="Postulated cause of recurrence (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<multipleChoiceValue>
-<choice>Mesh had to be removed</choice>
-<choice>Hernia was induced by the repair itself</choice>
-<choice>Missed during repair (recurrent hernia in a part of the incision that was not repaired)</choice>
-<choice>Mesh shrinkage</choice>
-<choice>Inadequate mesh fixation</choice>
-<choice>Inadequate mesh overlap</choice>
-<choice>Central mesh failure (recurrence through the mesh)</choice>
-<choice>Increased patient risk</choice>
-</multipleChoiceValue>
-</fact>
-<fact objectName="Late complications (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Type of SSI" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Intra-abdominal</choiceValue>
-</fact>
-<fact objectName="Sporting activities" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>None</choiceValue>
-</fact>
-<fact objectName="Deep surgical site infection (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<multipleChoiceValue>
-<choice>Wound infection</choice>
-<choice> including subcutaneous abscess</choice>
-<choice>Mesh infection</choice>
-<choice>Enterocutaneous fistula</choice>
-</multipleChoiceValue>
-</fact>
-<fact objectName="Types of late complications (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<multipleChoiceValue>
-<choice>Late surgical site infection</choice>
-<choice>Small bowel obstruction</choice>
-<choice>Persisting clinical seroma (more than 30 days)</choice>
-<choice>Persisting abdominal wall pain (more than 30 days)</choice>
-<choice>Need for removal of the mesh</choice>
-<choice>Postoperative bulging (recurrence excluded by imaging)</choice>
-<choice>Recurrent abdominal wall hernia</choice>
-</multipleChoiceValue>
-</fact>
-<fact objectName="Lost to follow up (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Patient refuses futher follow up</choiceValue>
-</fact>
-<fact objectName="Treatment of abdominal wall pain (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Surgucal intervention because of pain, e.g. removing of fication suture (local anesthesia)</choiceValue>
-</fact>
-<fact objectName="Ascites present" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Width of the implanted mesh" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<unknown/>
-</fact>
-<fact objectName="Type of seroma (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Seroma requiring evacuating puncture (Type III)</choiceValue>
-</fact>
-<fact objectName="Type of induced hernia (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Suture induced hernia</choiceValue>
-</fact>
-<fact objectName="Other cause of recurrence (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<unknown/>
-</fact>
-<fact objectName="Lost to follow up (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Unable to contact the patient</choiceValue>
-</fact>
-<fact objectName="Types of late complications (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<multipleChoiceValue>
-<choice>Late surgical site infection</choice>
-<choice>Small bowel obstruction</choice>
-<choice>Persisting clinical seroma (more than 30 days)</choice>
-<choice>Persisting abdominal wall pain (more than 30 days)</choice>
-<choice>Need for removal of the mesh</choice>
-<choice>Postoperative bulging (recurrence excluded by imaging)</choice>
-<choice>Recurrent abdominal wall hernia</choice>
-</multipleChoiceValue>
-</fact>
-<fact objectName="Select Comorbidities" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<multipleChoiceValue>
-<choice>Diabetes mellitus type I (juvenil)</choice>
-<choice>Diabetes mellitus type II (adult)</choice>
-<choice>Cardiac disease</choice>
-<choice>Arterial hypertension</choice>
-<choice>Pulmonary disease</choice>
-<choice>Hepatic disease</choice>
-<choice>Renal disease</choice>
-<choice>Malignant disease</choice>
-</multipleChoiceValue>
-</fact>
-<fact objectName="Type of follow up (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Clinical</choiceValue>
-</fact>
-<fact objectName="Type of acces" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<multipleChoiceValue>
-<choice>Laparoscopic surgery</choice>
-</multipleChoiceValue>
-</fact>
-<fact objectName="Frequency of pain (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Sporatic</choiceValue>
-</fact>
-<fact objectName="Method of repair (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<multipleChoiceValue>
-<choice>Laparoscopic</choice>
-</multipleChoiceValue>
-</fact>
-<fact objectName="Did the patient need intensive care because of life threatening complications?" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Width of the ventral hernia" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<numValue>5.0</numValue>
-</fact>
-<fact objectName="Transfascial" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Type of lesion" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<multipleChoiceValue>
-<choice>Small bowel</choice>
-<choice>Colon</choice>
-<choice>Not full thickness lesion</choice>
-<choice>Full thickness lesion</choice>
-</multipleChoiceValue>
-</fact>
-<fact objectName="Type of seroma (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Asymptomatic seroma (Type I)</choiceValue>
-</fact>
-<fact objectName="BMI:" psm="de.d3web.abstraction.inference.PSMethodAbstraction">
-<numValue>4000.0</numValue>
-</fact>
-<fact objectName="Management" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Bowel resection</choiceValue>
-</fact>
-<fact objectName="Date of discharge" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<unknown/>
-</fact>
-<fact objectName="Diameter of the ventral hernia" psm="de.d3web.abstraction.inference.PSMethodAbstraction">
-<numValue>17.5</numValue>
-</fact>
-<fact objectName="Severity" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<unknown/>
-</fact>
-<fact objectName="Type of induced hernia (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Suture induced hernia</choiceValue>
-</fact>
-<fact objectName="Please select your hernia route" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Primary ventral hernia route</choiceValue>
-</fact>
-<fact objectName="Mesh infection" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Concomitant abdominal surgery" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Other cause of recurrence (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<unknown/>
-</fact>
-<fact objectName="Occupation" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Heavy physical labour</choiceValue>
-</fact>
-<fact objectName="Chronic abdominal wall pain at the operation site (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Reason(s) for conversion" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<multipleChoiceValue>
-<choice>Bleeding</choice>
-<choice>Adhesions</choice>
-<choice>Bowel injury</choice>
-<choice>Bladder injury</choice>
-<choice>Technical problems</choice>
-<choice>Other</choice>
-</multipleChoiceValue>
-</fact>
-<fact objectName="Hour of discharge" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<unknown/>
-</fact>
-<fact objectName="Haemodyalysis" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Did the patient die postoperatively?" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>No</choiceValue>
-</fact>
-<fact objectName="Types of intraoperative complications" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<multipleChoiceValue>
-<choice>Severe bleeding</choice>
-<choice>Bowel lesion</choice>
-<choice>General complication (e.g. cardiac)</choice>
-<choice>Other</choice>
-</multipleChoiceValue>
-</fact>
-<fact objectName="Conversion to open" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>No</choiceValue>
-</fact>
-<fact objectName="Reason for mesh removal (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<multipleChoiceValue>
-<choice>Mesh infection</choice>
-<choice>Enterocutaneous fistula</choice>
-<choice>Bowel perforation</choice>
-<choice>Small bowel obstruction due to mesh adhesions</choice>
-<choice>Persisting abdominal wall pain</choice>
-<choice>Mesh removed during operation not related to complications of the mesh</choice>
-<choice>Other reason</choice>
-</multipleChoiceValue>
-</fact>
-<fact objectName="Operation date" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<dateValue>2009-09-25 00:00:00.00</dateValue>
-</fact>
-<fact objectName="Intensity of pain (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Mild pain</choiceValue>
-</fact>
-<fact objectName="Date of follow up (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<unknown/>
-</fact>
-<fact objectName="Anesthesia" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>General</choiceValue>
-</fact>
-<fact objectName="Length of the implanted mesh" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<unknown/>
-</fact>
-<fact objectName="Symptoms of the recurrence (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<multipleChoiceValue>
-<choice>None (asymptomatic)</choice>
-<choice>Pain</choice>
-<choice>Obstructive symptoms</choice>
-<choice>Incarceration</choice>
-<choice>Other</choice>
-</multipleChoiceValue>
-</fact>
-<fact objectName="Date of diagnosis (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<unknown/>
-</fact>
-<fact objectName="Type of collagen related disease:" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Lung emphysema</choiceValue>
-</fact>
-<fact objectName="Peritoneal dialysis" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Year of birth" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<dateValue>1990-01-01 00:00:00.00</dateValue>
-</fact>
-<fact objectName="New Repair done (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
-<fact objectName="Please choose the database level" psm="de.d3web.core.inference.PSMethodInit">
-<choiceValue>Level 1</choiceValue>
-</fact>
-<fact objectName="Please choose the database level" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Level 2</choiceValue>
-</fact>
-<fact objectName="Please choose the database level">
-<choiceValue>Level 2</choiceValue>
-</fact>
-<fact objectName="Treatment" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Transfusion</choiceValue>
-</fact>
-<fact objectName="Length of the ventral hernia" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<numValue>30.0</numValue>
-</fact>
 <fact objectName="Reason for mesh removal (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <multipleChoiceValue>
 <choice>Mesh infection</choice>
@@ -516,37 +273,25 @@
 <choice>Other reason</choice>
 </multipleChoiceValue>
 </fact>
-<fact objectName="Curatively treated" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Yes</choiceValue>
-</fact>
 <fact objectName="Start of operation (first incision)" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <dateValue>1970-01-01 08:00:00.00</dateValue>
 </fact>
-<fact objectName="Antibiotic prophylaxis" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<fact objectName="Type of seroma (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Asymptomatic seroma (Type I)</choiceValue>
+</fact>
+<fact objectName="Type of lesion" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <multipleChoiceValue>
-<choice>None</choice>
-<choice>Single dose</choice>
-<choice>Prolonged (therapeutic)</choice>
-<choice>Patient is on AB or another infection</choice>
+<choice>Small bowel</choice>
+<choice>Colon</choice>
+<choice>Not full thickness lesion</choice>
+<choice>Full thickness lesion</choice>
 </multipleChoiceValue>
 </fact>
-<fact objectName="Frequency of pain (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Sporatic</choiceValue>
-</fact>
-<fact objectName="Name of the suture material" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<textValue>Ethibond</textValue>
-</fact>
-<fact objectName="Superficial surgical site infection (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Wound infection</choiceValue>
-</fact>
-<fact objectName="Length/size of the patient" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<numValue>5.0</numValue>
-</fact>
-<fact objectName="Intensity of pain (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Mild pain</choiceValue>
-</fact>
-<fact objectName="Date of diagnosis (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<fact objectName="Date of discharge" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <unknown/>
+</fact>
+<fact objectName="BMI:" psm="de.d3web.abstraction.inference.PSMethodAbstraction">
+<numValue>4000.0</numValue>
 </fact>
 <fact objectName="Select risk factors" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <multipleChoiceValue>
@@ -559,161 +304,430 @@
 <choice>Use of anticoagulant therapy (cumarine)</choice>
 </multipleChoiceValue>
 </fact>
-<fact objectName="Site of recurrence (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>At a distance from the original hernia</choiceValue>
-</fact>
-<fact objectName="Type of bulging (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
-<choiceValue>Symptomatic and reason for reoperation</choiceValue>
-</fact>
-<fact objectName="Date of follow up (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<fact objectName="Severity" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <unknown/>
+</fact>
+<fact objectName="Concomitant abdominal surgery" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Types of late complications (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<multipleChoiceValue>
+<choice>Late surgical site infection</choice>
+<choice>Small bowel obstruction</choice>
+<choice>Persisting clinical seroma (more than 30 days)</choice>
+<choice>Persisting abdominal wall pain (more than 30 days)</choice>
+<choice>Need for removal of the mesh</choice>
+<choice>Postoperative bulging (recurrence excluded by imaging)</choice>
+<choice>Recurrent abdominal wall hernia</choice>
+</multipleChoiceValue>
+</fact>
+<fact objectName="Type of follow up (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Clinical and with medical imaging</choiceValue>
+</fact>
+<fact objectName="Hour of discharge" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<unknown/>
+</fact>
+<fact objectName="Reason(s) for conversion" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<multipleChoiceValue>
+<choice>Bleeding</choice>
+<choice>Adhesions</choice>
+<choice>Bowel injury</choice>
+<choice>Bladder injury</choice>
+<choice>Technical problems</choice>
+<choice>Other</choice>
+</multipleChoiceValue>
+</fact>
+<fact objectName="Chronic abdominal wall pain at the operation site (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Haemodyalysis" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
 </fact>
 <fact objectName="Method of repair (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <multipleChoiceValue>
 <choice>Laparoscopic</choice>
 </multipleChoiceValue>
 </fact>
-<fact objectName="New Repair done (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<fact objectName="Ascites present" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Intensity of pain (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Mild pain</choiceValue>
+</fact>
+<fact objectName="Treatment needed (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Type of induced hernia (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Suture induced hernia</choiceValue>
+</fact>
+<fact objectName="Is the patient aware, that datarecording is beeing performed?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Anesthesia" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>General</choiceValue>
+</fact>
+<fact objectName="Types of late complications (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<multipleChoiceValue>
+<choice>Late surgical site infection</choice>
+<choice>Small bowel obstruction</choice>
+<choice>Persisting clinical seroma (more than 30 days)</choice>
+<choice>Persisting abdominal wall pain (more than 30 days)</choice>
+<choice>Need for removal of the mesh</choice>
+<choice>Postoperative bulging (recurrence excluded by imaging)</choice>
+<choice>Recurrent abdominal wall hernia</choice>
+</multipleChoiceValue>
+</fact>
+<fact objectName="Gender" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Female</choiceValue>
+</fact>
+<fact objectName="Other cause of recurrence (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<unknown/>
+</fact>
+<fact objectName="Bowel suture or resection needed" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<multipleChoiceValue>
+<choice>Yes (small bowel)</choice>
+</multipleChoiceValue>
+</fact>
+<fact objectName="Chronic abdominal wall pain at the operation site (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Content of the hernia sac" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<multipleChoiceValue>
+<choice>Small bowel</choice>
+<choice>Ovaries</choice>
+<choice>Bladder</choice>
+</multipleChoiceValue>
+</fact>
+<fact objectName="Type of follow up (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Clinical</choiceValue>
+</fact>
+<fact objectName="Method of repair (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<multipleChoiceValue>
+<choice>Laparoscopic</choice>
+</multipleChoiceValue>
+</fact>
+<fact objectName="Fixation of the mesh" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<multipleChoiceValue>
+<choice>No fixation</choice>
+<choice>Suture</choice>
+<choice>Fixation device</choice>
+<choice>Glue</choice>
+</multipleChoiceValue>
+</fact>
+<fact objectName="Number of meshs" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>One</choiceValue>
+</fact>
+<fact objectName="Frequency of pain (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Sporatic</choiceValue>
+</fact>
+<fact objectName="Antibiotic prophylaxis" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<multipleChoiceValue>
+<choice>None</choice>
+<choice>Single dose</choice>
+<choice>Prolonged (therapeutic)</choice>
+<choice>Patient is on AB or another infection</choice>
+</multipleChoiceValue>
+</fact>
+<fact objectName="Number of ports used" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<numValue>3.0</numValue>
+</fact>
+<fact objectName="Name of the suture material" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<textValue>Ethibond</textValue>
+</fact>
+<fact objectName="Curatively treated" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Length of the ventral hernia" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<numValue>30.0</numValue>
+</fact>
+<fact objectName="Length/size of the patient" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<numValue>5.0</numValue>
+</fact>
+<fact objectName="Mesh positions" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<multipleChoiceValue>
+<choice>Combination of above</choice>
+</multipleChoiceValue>
+</fact>
+<fact objectName="Intensity of pain (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Mild pain</choiceValue>
+</fact>
+<fact objectName="Width of the ventral hernia" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<numValue>5.0</numValue>
+</fact>
+<fact objectName="Transfascial" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Date of follow up (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<unknown/>
+</fact>
+<fact objectName="Treatment of bowel obstruction (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Operative treatment with need for small bowel resection</choiceValue>
+</fact>
+<fact objectName="Please select your hernia route" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Primary ventral hernia route</choiceValue>
+</fact>
+<fact objectName="Type of induced hernia (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Suture induced hernia</choiceValue>
+</fact>
+<fact objectName="Site of recurrence (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>At a distance from the original hernia</choiceValue>
+</fact>
+<fact objectName="Did the patient die postoperatively?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>No</choiceValue>
+</fact>
+<fact objectName="Other cause of recurrence (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<unknown/>
+</fact>
+<fact objectName="Reason for mesh removal (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<multipleChoiceValue>
+<choice>Mesh infection</choice>
+<choice>Enterocutaneous fistula</choice>
+<choice>Bowel perforation</choice>
+<choice>Small bowel obstruction due to mesh adhesions</choice>
+<choice>Persisting abdominal wall pain</choice>
+<choice>Mesh removed during operation not related to complications of the mesh</choice>
+<choice>Other reason</choice>
+</multipleChoiceValue>
+</fact>
+<fact objectName="Frequency of pain (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Sporatic</choiceValue>
+</fact>
+<fact objectName="Type of seroma (Follow up 1)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Seroma requiring evacuating puncture (Type III)</choiceValue>
+</fact>
+<fact objectName="Width of the implanted mesh" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<numValue>4.0</numValue>
+</fact>
+<fact objectName="Length of the implanted mesh" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<numValue>5.0</numValue>
+</fact>
+<fact objectName="Site of recurrence (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>At hte margin of the repair or the mesh</choiceValue>
+</fact>
+<fact objectName="Conversion from laparoscopic to open surgery" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Did the patient need intensive care because of life threatening complications?" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Types of intraoperative complications" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<multipleChoiceValue>
+<choice>Severe bleeding</choice>
+<choice>Bowel lesion</choice>
+<choice>General complication (e.g. cardiac)</choice>
+<choice>Other</choice>
+</multipleChoiceValue>
+</fact>
+<fact objectName="Please choose the database level" psm="de.d3web.core.inference.PSMethodInit">
+<choiceValue>Level 1</choiceValue>
+</fact>
+<fact objectName="Please choose the database level" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Level 2</choiceValue>
+</fact>
+<fact objectName="Please choose the database level">
+<choiceValue>Level 2</choiceValue>
+</fact>
+<fact objectName="New Repair done (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Year of birth" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<dateValue>1990-01-01 00:00:00.00</dateValue>
+</fact>
+<fact objectName="Peritoneal dialysis" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Type of collagen related disease:" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Lung emphysema</choiceValue>
 </fact>
 </valueFacts>
 <interviewFacts>
-<fact objectName="Date of repair done (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Foreign body feeling at operation site (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Was the hernia defect closed?" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Site of recurrence (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Symptoms of the recurrence (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Treatment of abdominal wall pain (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Deep surgical site infection (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Common Route - Operative Data - Concomitant procedures" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Origin of bleeding" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Type of bulging (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Was the mesh completely removed (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Was the mesh completely removed (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Mesh position" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Type of life threatening complications" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Treatment of bowel obstruction (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Weight of the patient" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
 <fact objectName="Date of repair done (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Primary ventral hernia route" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Production company of the glue" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Weight of the patient" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Symptoms of the recurrence (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Foreign body feeling at operation site (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Management of intestinal lesion" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Name of mesh" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="New Repair done (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Production company" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Type of Concomitant abdominal surgery" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Number of ports used" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Treatment of abdominal wall pain (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
 <fact objectName="Superficial surgical site infection (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
+<fact objectName="Date of diagnosis of recurrent hernia (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
 <fact objectName="Estimated minimal overlap of the mesh beyond the hernia defect" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Type of bulging (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Was the mesh completely removed (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
 <fact objectName="Intrabdominal surgical site infection (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Treatment of bowel obstruction (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Primary ventral hernia route" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Other mesh" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Foreign body feeling at operation site (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Treatment needed (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Symptoms of the recurrence (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Type of bleeding complications" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Was the hernia defect closed?" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="EuraHS Initialization" psm="de.d3web.core.inference.PSMethodInit">
+<fact objectName="Size of the implanted mesh" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Fixation of the mesh" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Treatment of abdominal wall pain (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Concomitant gastrointestinal surgery on?" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Date of diagnosis of recurrent hernia (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Was mesh removed" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Superficial surgical site infection (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Common Route - Operative Data - Concomitant procedures" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Was the mesh completely removed (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Type of bulging (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Type of Concomitant abdominal surgery" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Type of life threatening complications" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
 <fact objectName="Intrabdominal surgical site infection (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Common Route - Discharge data" psm="de.d3web.core.inference.PSMethodInit">
+<fact objectName="Treatment of bowel obstruction (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
 <fact objectName="Please select primary ventral hernia" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
+<fact objectName="Select Comorbidities" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Name of mesh" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Common Route - Discharge data" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Foreign body feeling at operation site (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
 <fact objectName="Treatment needed (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Other risk factors" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Absorbable" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Postulated cause of recurrence (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Postulated cause of recurrence (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Conversion to open" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
 <fact objectName="Risk factors" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Type of SSI" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Date of repair done (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="EuraHS Initialization" psm="de.d3web.core.inference.PSMethodInit">
 <indication>INDICATED</indication>
 </fact>
 <fact objectName="Deep surgical site infection (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
+<fact objectName="Common Route - Follow up 1 - Late complications" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Postulated cause of recurrence (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Origin of bleeding" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Comorbidities" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Concomitant gastrointestinal surgery on?" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Deep surgical site infection (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Name of tracker device" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Postulated cause of recurrence (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Reason for mesh removal (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Type of seroma (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Type of lesion" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Type of glue" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="BMI:" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Select risk factors" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Severity" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Other risk factors" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
 <fact objectName="Types of late complications (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Reason(s) for conversion" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Common Route - Operative data" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Common Route - Follow up 2 - Quality of life measurement" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Haemodyalysis" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Common Route - Operative Data - Surgical technique" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Method of repair (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Common Route - Follow up 1" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
 <fact objectName="Common Route - Follow up 2" psm="de.d3web.indication.inference.PSMethodStrategic">
@@ -722,169 +736,115 @@
 <fact objectName="Ascites present" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Treatment of abdominal wall pain (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Intensity of pain (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Common Route - Follow up 1 - Late complications" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Treatment needed (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Common Route - Follow up 1" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Width of the implanted mesh" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Type of seroma (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Production company of the mesh" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
 <fact objectName="Type of induced hernia (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Other cause of recurrence (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
 <fact objectName="Types of late complications (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Select Comorbidities" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Common Route - Follow up 2 - Late complications" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Other cause of recurrence (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
 <fact objectName="Common Route" psm="de.d3web.core.inference.PSMethodInit">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Frequency of pain (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Method of repair (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Method of repair (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Fixation of the mesh" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Production company of the tracker device" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Common Route - Follow up 2 - Late complications" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
 <fact objectName="Common Route - Operation data - Intraoperative complications" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Transfascial" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Type of lesion" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="BMI:" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Type of seroma (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Management" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Comorbidities" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Severity" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Type of induced hernia (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Mesh infection" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Other cause of recurrence (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Reason(s) for conversion" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Common Route - Operative Data - Surgical technique" psm="de.d3web.core.inference.PSMethodInit">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Haemodyalysis" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Common Route - Follow up 2 - Quality of life measurement" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Types of intraoperative complications" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Conversion to open" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Common Route - Follow up 1 - Quality of life measurement" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Reason for mesh removal (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Intensity of pain (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Length of the implanted mesh" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Symptoms of the recurrence (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Date of diagnosis (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Peritoneal dialysis" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Type of collagen related disease:" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="New Repair done (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Treatment" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Reason for mesh removal (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
-<fact objectName="Curatively treated" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
 <fact objectName="Frequency of pain (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Number of meshs" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Number of ports used" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
 <fact objectName="Name of the suture material" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Superficial surgical site infection (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Curatively treated" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
 <fact objectName="Length/size of the patient" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
+<fact objectName="Mesh positions" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
 <fact objectName="Intensity of pain (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Date of diagnosis (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Transfascial" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Treatment of bowel obstruction (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Type of induced hernia (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
 <fact objectName="Common Route - Operative data - Approach" psm="de.d3web.core.inference.PSMethodInit">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Select risk factors" psm="de.d3web.indication.inference.PSMethodStrategic">
-<indication>INDICATED</indication>
-</fact>
 <fact objectName="Site of recurrence (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Type of bulging (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Other cause of recurrence (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Method of repair (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Reason for mesh removal (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="New Repair done (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<fact objectName="Common Route - Follow up 1 - Quality of life measurement" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
-<fact objectName="Common Route - Operative data" psm="de.d3web.core.inference.PSMethodInit">
+<fact objectName="Frequency of pain (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Type of seroma (Follow up 1)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Width of the implanted mesh" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Length of the implanted mesh" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Site of recurrence (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Types of intraoperative complications" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="New Repair done (Follow up 2)" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Type of collagen related disease:" psm="de.d3web.indication.inference.PSMethodStrategic">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Peritoneal dialysis" psm="de.d3web.indication.inference.PSMethodStrategic">
 <indication>INDICATED</indication>
 </fact>
 </interviewFacts>
@@ -4067,6 +4027,34 @@
 </entry>
 <entry date="2011-09-14 21:25:00.116" objectName="Other cause of recurrence (Follow up 2)" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
 <unknown/>
+</entry>
+<entry date="2011-10-04 15:42:47.325" objectName="Is the patient aware, that datarecording is beeing performed?" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Yes</choiceValue>
+</entry>
+<entry date="2011-10-04 15:42:55.83" objectName="Duration of the operation in minutes" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<numValue>45.0</numValue>
+</entry>
+<entry date="2011-10-04 15:42:57.732" objectName="Bowel suture or resection needed" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<multipleChoiceValue>
+<choice>Yes (small bowel)</choice>
+</multipleChoiceValue>
+</entry>
+<entry date="2011-10-04 15:43:04.739" objectName="Number of meshs" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>One</choiceValue>
+</entry>
+<entry date="2011-10-04 15:43:06.778" objectName="Name of mesh" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<textValue>Composix Kugel Patch</textValue>
+</entry>
+<entry date="2011-10-04 15:43:08.345" objectName="Mesh positions" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<multipleChoiceValue>
+<choice>Combination of above</choice>
+</multipleChoiceValue>
+</entry>
+<entry date="2011-10-04 15:43:10.902" objectName="Length of the implanted mesh" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<numValue>5.0</numValue>
+</entry>
+<entry date="2011-10-04 15:43:12.835" objectName="Width of the implanted mesh" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<numValue>4.0</numValue>
 </entry>
 </protocol>
 </session>

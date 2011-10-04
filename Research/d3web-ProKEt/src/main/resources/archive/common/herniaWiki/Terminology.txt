@@ -17,8 +17,6 @@ EuraHS Initialization #1
 ---- Recurrent lumbar hernia
 ---- Recurrent Spighelian hernia
 -- Parastomal hernia route
---- "Please select parastomal hernia" [oc]
----- Parastomal hernia
 
 @package: Hernia
 %
@@ -33,7 +31,9 @@ Common Route #2
 - Gender [oc]
 -- Male
 -- Female
-- Informed consent obtained [yn]
+- Is the patient aware, that datarecording is beeing performed? [oc]
+-- Yes
+-- Not applicable to my country
 @package: Hernia
 %
 
@@ -153,7 +153,7 @@ Incisional ventral hernia route
 -- Urological
 - Recurrent hernia [yn]
 -- Yes
---- Number of previous repairs [num] &only if: Please choose the database level = Level 2 &
+--- Number of previous incisional ventral hernia repairs [num] &only if: Please choose the database level = Level 2 &
 --- Has there been a previous mesh repair? [yn]
 ---- Yes
 ----- Date of the last repair [date]
@@ -167,6 +167,7 @@ Incisional ventral hernia route
 ----- Indication for previous surgery [oc]
 ------ Elective
 ------ Emergency
+- Trocar hernia [yn]
 @package: Hernia
 %
 
@@ -190,7 +191,7 @@ Parastomal hernia route
 -- Difficulty for bag appliance
 - Previous repair of the parastomal hernia [yn]
 -- Yes
---- Number of previous repairs [num] &only if: Please choose the database level = Level 2 &
+--- Number of previous parastomal hernia repairs [num] &only if: Please choose the database level = Level 2 &
 --- Has there been a previous parastomal mesh repair? [yn]
 ---- Yes
 ----- Date of the last parastomal hernia repair [date]
@@ -222,7 +223,6 @@ Parastomal hernia route
 ---- "L3:R"
 ---- "L4:L"
 ---- "L4:R"
-- Parastomal hernia route summary [info]
 @package: Hernia
 %
 
@@ -250,6 +250,7 @@ Common Route - Operative data #6
 -- Resident without supervision
 - "Start of operation (first incision)" [date] &only if: Please choose the database level = Level 2 &
 - "End of operation (last skin suture)" [date] &only if: Please choose the database level = Level 2 &
+- "Duration of the operation in minutes" [num] &only if: Please choose the database level = Level 2 &
 - Content of the hernia sac [mc] &only if: Please choose the database level = Level 2 &
 -- None
 -- Small bowel
@@ -261,7 +262,7 @@ Common Route - Operative data #6
 -- Bladder
 -- Other
 - Incarceration [yn] &only if: Please choose the database level = Level 2 &
-- Bowel resection needed [oc] &only if: Please choose the database level = Level 2 &
+- Bowel suture or resection needed [mc] &only if: Please choose the database level = Level 2 &
 -- No
 -- "Yes (small bowel)"
 -- "Yes (colon)"
@@ -287,7 +288,7 @@ Common Route - Operative Data - Concomitant procedures &only if: Please choose t
 ----- Concomitant gastrointestinal surgery on? [mc]
 ------ Gallbladder
 ------ Stomach
------- SMall bowel
+------ Small bowel
 ------ Colon
 ------ Liver/spleen
 ---- Other hernia repair
@@ -310,8 +311,18 @@ Common Route - Operative Data - Surgical technique #9
 ------ Running suture
 ----- Name of the suture material [text]
 ---- Component separation technique without mesh augmentation
+----- Name of the suture material [text]
 -- Mesh repair
---- Mesh position [oc]
+--- Number of meshs [oc]
+---- One
+----- Name of mesh [text]
+----- Production company of the mesh [text]
+---- Two
+----- Name of first mesh [text]
+----- Name of second mesh [text]
+----- Production company of the first mesh [text]
+----- Production company of the second mesh [text]
+--- Mesh positions [mc]
 ---- Onlay
 ---- Inlay
 ---- Retromuscular
@@ -319,12 +330,10 @@ Common Route - Operative Data - Surgical technique #9
 ---- Intraperitoneal
 ---- Combination of above
 ---- Non-classifiable
---- Name of mesh [text]
---- Production company [text]
---- Other mesh [text]
 --- Was the hernia defect closed? [yn] &only if: Please choose the database level = Level 2 &
 --- Width of the implanted mesh [num] {cm} &only if: Please choose the database level = Level 2 &
 --- Length of the implanted mesh [num] {cm} &only if: Please choose the database level = Level 2 &
+--- Size of the implanted mesh [num] {cm^2} <abstract> &only if: Please choose the database level = Level 2 &
 --- Estimated minimal overlap of the mesh beyond the hernia defect [num] {cm} &only if: Please choose the database level = Level 2 &
 --- Fixation of the mesh [mc]
 ---- No fixation
@@ -332,8 +341,14 @@ Common Route - Operative Data - Surgical technique #9
 ----- Name of the suture material [text]
 ----- Transfascial [yn]
 ---- Fixation device
------ Absorbable [yn]
+----- Name of tracker device [text]
+----- Production company of the tracker device [text]
 ---- Glue
+----- Type of glue [oc]
+------ Biologic
+------ Synthetic
+----- Production company of the glue [text]
+-- Component separation + mesh
 @package: Hernia
 %
 
@@ -365,7 +380,7 @@ Common Route - Operation data - Intraoperative complications &only if: Please ch
 ------- Severity [oc]
 ------ Not full thickness lesion
 ------ Full thickness lesion
------ Management [oc]
+----- Management of intestinal lesion [oc]
 ------ Suture
 ------ Bowel resection
 ---- Bladder injury
@@ -378,7 +393,8 @@ Common Route - Operation data - Intraoperative complications &only if: Please ch
 Common Route - Discharge data #11
 - Date of discharge [date]
 - Hour of discharge [date]
-- State at discharge [mc]
+- Duration of stay in days [num]
+- Intrahospital complications [mc]
 -- No Complications
 -- Bleeding complications
 --- Type of bleeding complications [mc] &only if: Please choose the database level = Level 2 &
@@ -412,6 +428,9 @@ Common Route - Discharge data #11
 ---- Multiple organ failure
 - Did the patient die postoperatively? [yn]
 - Classification of surgical complications [text]
+- Type of data collection [oc]
+-- Prospective
+-- Retrospective
 @package: Hernia
 %
 
@@ -438,12 +457,10 @@ Common Route - Follow up 1 - Quality of life measurement &only if: Please choose
 - "Chronic abdominal wall pain at the operation site (Follow up 1)" [yn]
 -- Yes
 --- "Intensity of pain (Follow up 1)" [oc]
----- No pain
 ---- Mild pain
 ---- Moderate pain
 ---- Severe pain
 --- "Frequency of pain (Follow up 1)" [oc]
----- No pain
 ---- Sporatic
 ---- Frequent
 ---- Constant
@@ -506,7 +523,7 @@ Common Route - Follow up 1 - Late complications &only if: Please choose the data
 ------ Symptomatic but accepted as it is
 ------ Symptomatic and reason for reoperation
 ---- Recurrent abdominal wall hernia
------ "Date of diagnosis (Follow up 1)" [date]
+----- "Date of diagnosis of recurrent hernia (Follow up 1)" [date]
 ----- "Site of recurrence (Follow up 1)" [oc]
 ------ At the original hernia site
 ------ At hte margin of the repair or the mesh
@@ -569,12 +586,10 @@ Common Route - Follow up 2 - Quality of life measurement &only if: Please choose
 - "Chronic abdominal wall pain at the operation site (Follow up 2)" [yn]
 -- Yes
 --- "Intensity of pain (Follow up 2)" [oc]
----- No pain
 ---- Mild pain
 ---- Moderate pain
 ---- Severe pain
 --- "Frequency of pain (Follow up 2)" [oc]
----- No pain
 ---- Sporatic
 ---- Frequent
 ---- Constant
@@ -637,7 +652,7 @@ Common Route - Follow up 2 - Late complications &only if: Please choose the data
 ------ Symptomatic but accepted as it is
 ------ Symptomatic and reason for reoperation
 ---- Recurrent abdominal wall hernia
------ "Date of diagnosis (Follow up 2)" [date]
+----- "Date of diagnosis of recurrent hernia (Follow up 2)" [date]
 ----- "Site of recurrence (Follow up 2)" [oc]
 ------ At the original hernia site
 ------ At hte margin of the repair or the mesh
@@ -692,6 +707,10 @@ THEN BMI: = (("Weight of the patient" / ("Length/size of the patient" * "Length/
 
 IF KNOWN[Width of the ventral hernia] AND KNOWN[Length of the ventral hernia]
 THEN Diameter of the ventral hernia = (Width of the ventral hernia + Length of the ventral hernia) / 2
+
+IF KNOWN[Width of the implanted mesh] AND KNOWN[Length of the implanted mesh]
+THEN Size of the implanted mesh = (Width of the implanted mesh * Length of the implanted mesh)
+
 
 @package: Hernia
 %

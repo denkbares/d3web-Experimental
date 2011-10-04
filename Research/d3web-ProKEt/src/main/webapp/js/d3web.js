@@ -194,6 +194,7 @@ $(function() {
 				}
 				}]
 		};
+		$("#jqFollowUpDialog").dialog(opts);
 	});
 
 	/* Initialize the JS binding to the dialog elements */

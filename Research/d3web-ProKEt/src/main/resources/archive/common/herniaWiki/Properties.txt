@@ -30,12 +30,12 @@ Hour of discharge.date_format = HH
 
 "Date of death (Follow up 1)".date_format = dd.MM.yyyy
 "Date of follow up (Follow up 1)".date_format = dd.MM.yyyy
-"Date of diagnosis (Follow up 1)".date_format = dd.MM.yyyy
+"Date of diagnosis of recurrent hernia (Follow up 1)".date_format = dd.MM.yyyy
 "Date of repair done (Follow up 1)".date_format = dd.MM.yyyy
 
 "Date of death (Follow up 2)".date_format = dd.MM.yyyy
 "Date of follow up (Follow up 2)".date_format = dd.MM.yyyy
-"Date of diagnosis (Follow up 2)".date_format = dd.MM.yyyy
+"Date of diagnosis of recurrent hernia (Follow up 1)".date_format = dd.MM.yyyy
 "Date of repair done (Follow up 2)".date_format = dd.MM.yyyy
 
 @package: Hernia
@@ -95,8 +95,67 @@ Ultrapro Hernia System,
 Vicryl,
 Vypro II
 """
+Name of first mesh.dropdown_menu_options = 
+"""
+Composix,
+Composix Kugel Patch,
+C-Qur,
+DualMesh,
+DualMesh Plus,
+DynaMesh-IPOM,
+DynaMesh-IPST,
+DynaMesh-PP,
+Omyra,
+Optilene Mesh Elastic,
+Optilene Mesh LP,
+Parietene,
+Parietex,
+Parietex Composite Mono,
+Physiomesh,
+Premilene Mesh LP,
+Proceed,
+Prolene,
+ProlyteUltra,
+PVP,
+Safil,
+TiMesh,
+Ultrapro,
+Ultrapro Hernia System,
+Vicryl,
+Vypro II
+"""
 
-Production company.dropdown_menu_options = 
+Name of second mesh.dropdown_menu_options = 
+"""
+Composix,
+Composix Kugel Patch,
+C-Qur,
+DualMesh,
+DualMesh Plus,
+DynaMesh-IPOM,
+DynaMesh-IPST,
+DynaMesh-PP,
+Omyra,
+Optilene Mesh Elastic,
+Optilene Mesh LP,
+Parietene,
+Parietex,
+Parietex Composite Mono,
+Physiomesh,
+Premilene Mesh LP,
+Proceed,
+Prolene,
+ProlyteUltra,
+PVP,
+Safil,
+TiMesh,
+Ultrapro,
+Ultrapro Hernia System,
+Vicryl,
+Vypro II
+"""
+
+Production company of the mesh.dropdown_menu_options = 
 """
 Atrium,
 B.Braun Aesculap,
@@ -107,7 +166,30 @@ Ethicon,
 Gore
 """
 
-Name of the suture material .dropdown_menu_options = 
+Production company of the first mesh.dropdown_menu_options = 
+"""
+Atrium,
+B.Braun Aesculap,
+Bard,
+Covidien,
+Dahlhausen,
+Ethicon,
+Gore
+"""
+
+Production company of the second mesh.dropdown_menu_options = 
+"""
+Atrium,
+B.Braun Aesculap,
+Bard,
+Covidien,
+Dahlhausen,
+Ethicon,
+Gore
+"""
+
+
+Name of the suture material.dropdown_menu_options = 
 """
 Biosyn,
 Ethibond,

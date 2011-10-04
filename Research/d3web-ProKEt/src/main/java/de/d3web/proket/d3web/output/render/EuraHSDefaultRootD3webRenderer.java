@@ -57,8 +57,9 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 	private static final String COLOR_LATE = "red";
 
 	private static final long DAY = 1000 * 60 * 60 * 24;
-	private static final long MONTH = DAY * 30;
-	private static final long THREE_MONTH = MONTH * 3;
+	private static final long WEEK = DAY * 7;
+	private static final long SIX_WEEKS = WEEK * 7;
+	private static final long YEAR = DAY * 365;
 
 	private static final SimpleDateFormat DD_MM_YYYY = new SimpleDateFormat("dd.MM.yyyy");
 	private static final SimpleDateFormat DD_MM_YYYY_HH_MM = new SimpleDateFormat(
@@ -184,7 +185,7 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 			else {
 				Date operationDate = (Date) parsedCase.get(OPERATION_DATE);
 				long time = operationDate.getTime();
-				long add = (followUp == FollowUp.FIRST ? MONTH : THREE_MONTH);
+				long add = (followUp == FollowUp.FIRST ? SIX_WEEKS : YEAR);
 				Date followUpDueDate = new Date(time + add);
 				Date now = new Date();
 				String followUpDueFormatted = DD_MM_YYYY.format(followUpDueDate);
