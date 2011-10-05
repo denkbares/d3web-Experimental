@@ -96,6 +96,7 @@
 }
 #page { 
 	width:80%;
+	text-align:justify;
 }
 #wikibody.fav-slide #page {
 	width:100%;
@@ -148,6 +149,7 @@ table {
 	border-collapse:collapse; 
 	border-spacing:0;
 	empty-cells:show; 
+text-align:left;
 }
 
 h1, h2, h3, h4, p, blockquote, label, ul, ol, dl, hr, .hr, .quote {
