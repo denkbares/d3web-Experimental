@@ -36,7 +36,7 @@ import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.manchester.ManchesterClassExpression;
-import de.knowwe.kdom.manchester.frames.clazz.ClassFrame;
+import de.knowwe.kdom.manchester.frame.ClassFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.owlapi.OWLAPISubtreeHandler;
 

@@ -39,7 +39,7 @@ import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.manchester.ManchesterClassExpression;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
-import de.knowwe.kdom.manchester.frames.individual.IndividualFrame;
+import de.knowwe.kdom.manchester.frame.IndividualFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
