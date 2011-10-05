@@ -22,6 +22,7 @@ package de.knowwe.kdom.manchester.types;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
@@ -39,5 +40,9 @@ public class Keyword extends AbstractType {
 				Pattern.MULTILINE));
 		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 		this.setSectionFinder(csf);
+	}
+
+	public String getKeyword(Section<Keyword> section) {
+		return section.getOriginalText();
 	}
 }

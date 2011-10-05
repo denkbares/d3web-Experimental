@@ -1,0 +1,304 @@
+!!! OntE-OWLApi-Pizza-Test
+(for testing purpose only, see [http://www.co-ode.org/ontologies/])
+
+Class: Pizza
+
+    Annotations: 
+        rdfs:label "Pizza"@en
+
+    SubClassOf: 
+        Food,
+        hasBase SOME PizzaBase
+
+    DisjointWith: 
+        IceCream, PizzaTopping, PizzaBase
+
+
+Class: InterestingPizza
+
+    Annotations: 
+        rdfs:comment "Any pizza that has at least 3 toppings. Note that this is a cardinality constraint on the hasTopping property AND NOT a qualified cardinality constraint (QCR). A QCR would specify from which class the members in this relationship must be. eg has at least 3 toppings from PizzaTopping. This is currently not suppORted in OWL."@en,
+        rdfs:label "PizzaInteressante"@pt
+
+    EquivalentTo: 
+        Pizza
+         AND (hasTopping MIN 3 owl:Thing)
+
+
+Class: owl:Thing
+
+
+
+Class: ValuePartition
+
+    Annotations: 
+        rdfs:label "ValORDaParticao"@pt,
+        rdfs:comment "A ValuePartition is a pattern that describes a restricted set of classes from which a property can be associated. The parent class is used in restrictions, AND the covering axiom means that ONLY members of the subclasses may be used as values. The possible subclasses cannot be extended without updating the ValuePartition class."^^xsd:string
+    
+    DisjointWith: 
+        DomainConcept
+
+
+
+Class: DomainConcept
+
+    DisjointWith: 
+        ValuePartition
+
+
+Class: PizzaBase
+
+    Annotations: 
+        rdfs:label "BaseDaPizza"@pt
+
+    SubClassOf: 
+        Food
+
+    DisjointWith: 
+        Pizza, IceCream, PizzaTopping
+
+
+
+
+Class: IceCream
+
+    Annotations: 
+        rdfs:comment "A class to demonstrate mistakes made with setting a property domain. The property hasTopping has a domain of Pizza. This means that the reasoner can infer that all individuals using the hasTopping property must be of type Pizza. Because of the restriction on this class, all members of IceCream must use the hasTopping property, AND therefORe must also be members of Pizza. However, Pizza AND IceCream are disjoint, so this causes an inconsistency. If they were not disjoint, IceCream would be inferred to be a subclass of Pizza."@en,
+        rdfs:label "SORvete"@pt
+
+    SubClassOf: 
+        hasTopping some FruitTopping,
+        Food
+
+    DisjointWith: 
+        Pizza, PizzaTopping, PizzaBase
+
+
+Class: FruitTopping
+
+    Annotations: 
+        rdfs:label "CoberturaDeFrutas"@pt
+    
+    SubClassOf: 
+        PizzaTopping
+    
+    DisjointWith: 
+        CheeseTopping
+
+
+Class: CheeseTopping
+
+    Annotations: 
+        rdfs:label "CoberturaDeQueijo"@pt
+    
+    SubClassOf: 
+        PizzaTopping
+    
+    DisjointWith: 
+        FruitTopping
+
+
+Class: NamedPizza
+
+    Annotations: 
+        rdfs:label "PizzaComUmNome"@pt,
+        rdfs:comment "A pizza that can be found on a pizza menu"@en
+
+    SubClassOf: 
+        Pizza
+
+
+Class: Country
+
+    Annotations: 
+        rdfs:label "Pais"@pt,
+        rdfs:comment "A class that is equivalent to the set of individuals that are described in the enumeration - ie Countries can ONLY be either America, England, France, Germany ot Italy AND nothing else. Note that these individuals have been asserted to be allDifferent from each other."@en
+
+    EquivalentTo: 
+        DomainConcept
+         AND ({America , England , France , Germany , Italy})
+
+
+Class: Food
+
+    SubClassOf: 
+        DomainConcept
+
+
+Class: PizzaTopping
+
+    Annotations: 
+        rdfs:label "CoberturaDaPizza"@pt
+
+    SubClassOf: 
+        Food
+
+    DisjointWith: 
+        Pizza, IceCream, PizzaBase
+
+
+
+ObjectProperty: isBaseOf
+
+
+
+ObjectProperty: hasBase
+
+    SubPropertyOf: 
+        hasIngredient
+
+    Characteristics: 
+        InverseFunctional,
+        Functional
+
+    Domain: 
+        Pizza
+
+    Range: 
+        PizzaBase
+
+    InverseOf: 
+        isBaseOf
+
+
+
+Class: Spiciness
+
+    Annotations: 
+        rdfs:comment "A ValuePartition that describes ONLY values from Hot, Medium OR Mild. NB Subclasses can themselves be divided up into further partitions."@en,
+        rdfs:label "Tempero"@pt
+    
+    EquivalentTo: 
+        Hot
+         OR Medium
+         OR Mild
+    
+    SubClassOf: 
+        ValuePartition
+
+
+Class: Hot
+    
+    SubClassOf: 
+        Spiciness
+    
+    DisjointWith: 
+        Medium, Mild
+
+
+Class: Mild
+    
+    SubClassOf: 
+        Spiciness
+    
+    DisjointWith: 
+        Hot, Medium
+
+
+Class: Medium
+    
+    SubClassOf: 
+        Spiciness
+    
+    DisjointWith: 
+        Hot, Mild
+
+
+ObjectProperty: hasSpiciness
+
+    Annotations: 
+        rdfs:comment "A property created to be used with the ValuePartition - Spiciness."@en
+
+    Characteristics: 
+        Functional
+
+    Range: 
+        Spiciness
+
+
+ObjectProperty: hasIngredient
+
+    Annotations: 
+        rdfs:comment "NB Transitive - the ingredients of ingredients are ingredients of the whole"@en
+
+    Characteristics: 
+        Transitive
+
+    Domain: 
+        Food
+
+    Range: 
+        Food
+
+    InverseOf: 
+        isIngredientOf
+
+
+ObjectProperty: isIngredientOf
+
+
+ObjectProperty: isToppingOf
+
+
+ObjectProperty: hasTopping
+
+    Annotations: 
+        rdfs:comment "Note that hasTopping is inverse functional because isToppingOf is functional"@en
+
+    SubPropertyOf: 
+        hasIngredient
+
+    Characteristics: 
+        InverseFunctional
+
+    Domain: 
+        Pizza
+
+    Range: 
+        PizzaTopping
+
+    InverseOf: 
+        isToppingOf
+
+
+
+
+Individual: France
+
+    Types: 
+        owl:Thing,
+        Country
+
+
+Individual: England
+
+    Types: 
+        owl:Thing,
+        Country
+
+
+Individual: Italy
+
+    Types: 
+        owl:Thing,
+        Country
+
+
+Individual: Germany
+
+    Types: 
+        owl:Thing,
+        Country
+
+
+Individual: America
+
+    Types: 
+        owl:Thing,
+        Country
+
+
+DifferentIndividuals: 
+    America,England,France,Germany,Italy
+
+

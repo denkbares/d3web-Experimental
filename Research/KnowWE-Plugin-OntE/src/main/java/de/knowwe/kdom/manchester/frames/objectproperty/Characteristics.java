@@ -19,9 +19,14 @@
  */
 package de.knowwe.kdom.manchester.frames.objectproperty;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
+import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.rendering.StyleRenderer;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
@@ -58,30 +63,43 @@ public class Characteristics extends AbstractType {
 	}
 
 	/**
+	 * Returns the {@link CharacteristicsTerm} sections for further handling.
 	 *
-	 *
-	 * @author Stefan Mark
-	 * @created 13.08.2011
+	 * @created 27.09.2011
+	 * @param Section<Characteristics> section
+	 * @return The found section
 	 */
-	public static class CharacteristicsTerm extends AbstractType {
+	public List<Section<? extends Type>> getCharacteristics(Section<Characteristics> section) {
+		List<Section<? extends Type>> list = new ArrayList<Section<? extends Type>>();
+		list.addAll(Sections.findSuccessorsOfType(section, CharacteristicsTerm.class));
+		return list;
+	}
+}
 
-		// private static String TERMS =
-		// "InverseFunctional|Functional|Irreflexive|Reflexive|Asymmetric|Symmetric|Transitive";
+/**
+ *
+ *
+ * @author Stefan Mark
+ * @created 13.08.2011
+ */
+class CharacteristicsTerm extends AbstractType {
 
-		public static final StyleRenderer CLASS_RENDERER = new StyleRenderer(
-				"color:rgb(115, 0, 70)");
+	// private static String TERMS =
+	// "InverseFunctional|Functional|Irreflexive|Reflexive|Asymmetric|Symmetric|Transitive";
 
-		public CharacteristicsTerm() {
+	public static final StyleRenderer CLASS_RENDERER = new StyleRenderer(
+			"color:rgb(115, 0, 70)");
 
-			StringBuilder t = new StringBuilder();
-			for (CharacteristicTypes c : CharacteristicTypes.values()) {
-				t.append(c.getType());
-				t.append("|");
-			}
+	public CharacteristicsTerm() {
 
-			this.setCustomRenderer(CLASS_RENDERER);
-			Pattern p = Pattern.compile(t.toString().substring(0, t.toString().length() - 1));
-			this.setSectionFinder(new RegexSectionFinder(p));
+		StringBuilder t = new StringBuilder();
+		for (CharacteristicTypes c : CharacteristicTypes.values()) {
+			t.append(c.getType());
+			t.append("|");
 		}
+
+		this.setCustomRenderer(CLASS_RENDERER);
+		Pattern p = Pattern.compile(t.toString().substring(0, t.toString().length() - 1));
+		this.setSectionFinder(new RegexSectionFinder(p));
 	}
 }

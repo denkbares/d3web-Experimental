@@ -120,7 +120,7 @@ public class IndividualFrame extends DefaultFrame {
 	 * @return The found section
 	 */
 	public boolean hasFacts(Section<IndividualFrame> section) {
-		return Sections.findSuccessor(section, Facts.class) != null;
+		return Sections.findChildOfType(section, Facts.class) != null;
 	}
 	/**
 	 * Returns the {@link FactsItem} sections of the current
@@ -145,7 +145,7 @@ public class IndividualFrame extends DefaultFrame {
 	 * @return The found section
 	 */
 	public boolean hasSameAs(Section<IndividualFrame> section) {
-		return Sections.findSuccessor(section, SameAs.class) != null;
+		return Sections.findChildOfType(section, SameAs.class) != null;
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class IndividualFrame extends DefaultFrame {
 	 * @return The found section
 	 */
 	public List<Section<OWLTermReferenceManchester>> getSameAs(Section<IndividualFrame> section) {
-		Section<SameAs> sameAs = Sections.findSuccessor(section, SameAs.class);
+		Section<SameAs> sameAs = Sections.findChildOfType(section, SameAs.class);
 		if (sameAs != null) {
 			return Sections.findSuccessorsOfType(sameAs, OWLTermReferenceManchester.class);
 		}
@@ -173,7 +173,7 @@ public class IndividualFrame extends DefaultFrame {
 	 * @return The found section
 	 */
 	public boolean hasDifferentFrom(Section<IndividualFrame> section) {
-		return Sections.findSuccessor(section, DifferentFrom.class) != null;
+		return Sections.findChildOfType(section, DifferentFrom.class) != null;
 	}
 
 	/**
@@ -185,7 +185,7 @@ public class IndividualFrame extends DefaultFrame {
 	 * @return The found section
 	 */
 	public List<Section<OWLTermReferenceManchester>> getDifferentFrom(Section<IndividualFrame> section) {
-		Section<DifferentFrom> sameAs = Sections.findSuccessor(section, DifferentFrom.class);
+		Section<DifferentFrom> sameAs = Sections.findChildOfType(section, DifferentFrom.class);
 		if (sameAs != null) {
 			return Sections.findSuccessorsOfType(sameAs, OWLTermReferenceManchester.class);
 		}
@@ -200,7 +200,7 @@ public class IndividualFrame extends DefaultFrame {
 	 * @return The found section
 	 */
 	public boolean hasTypes(Section<IndividualFrame> section) {
-		return Sections.findSuccessor(section, Types.class) != null;
+		return Sections.findChildOfType(section, Types.class) != null;
 	}
 
 	/**
@@ -212,7 +212,7 @@ public class IndividualFrame extends DefaultFrame {
 	 * @return The found section
 	 */
 	public Section<Types> getTypes(Section<IndividualFrame> section) {
-		return Sections.findSuccessor(section, Types.class);
+		return Sections.findChildOfType(section, Types.class);
 	}
 
 	/**
@@ -223,7 +223,7 @@ public class IndividualFrame extends DefaultFrame {
 	 * @return The found section
 	 */
 	public boolean hasAnnotations(Section<IndividualFrame> section) {
-		return Sections.findSuccessor(section, Annotations.class) != null;
+		return Sections.findChildOfType(section, Annotations.class) != null;
 	}
 
 	/**
@@ -235,7 +235,7 @@ public class IndividualFrame extends DefaultFrame {
 	 * @return The found section
 	 */
 	public List<Section<Annotation>> getAnnotations(Section<IndividualFrame> section) {
-		Section<Annotations> a = Sections.findSuccessor(section, Annotations.class);
+		Section<Annotations> a = Sections.findChildOfType(section, Annotations.class);
 		if (a != null) {
 			Sections.findSuccessorsOfType(a, Annotation.class);
 		}
@@ -320,8 +320,8 @@ class Types extends AbstractType {
 		this.addChildType(key);
 		this.addChildType(new Annotations());
 
-		List<Type> types = new ArrayList<Type>();
-		types.add(ManchesterSyntaxUtil.getMCE());
+		// List<Type> types = new ArrayList<Type>();
+		// types.add(ManchesterSyntaxUtil.getMCE());
 
 		this.addChildType(ManchesterSyntaxUtil.getMCE());
 	}

@@ -84,8 +84,8 @@ public class ManchesterClassExpression extends CompositeCondition {
 	 *        {@link ManchesterClassExpression} section
 	 * @return TRUE if found, FALSE otherwise
 	 */
-	public boolean hasOneOf(Section<ManchesterClassExpression> section) {
-		return Sections.findSuccessor(section, OneOfBracedCondition.class) != null;
+	public boolean isOneOfCurlyBracket(Section<ManchesterClassExpression> section) {
+		return Sections.findChildOfType(section, OneOfBracedCondition.class) != null;
 	}
 	/**
 	 * Retrieves each fragment of the OneOfList and the returns a list for
@@ -95,8 +95,8 @@ public class ManchesterClassExpression extends CompositeCondition {
 	 *        {@link ManchesterClassExpression} section
 	 * @return The found {@link OWLTermReferenceManchester} sections
 	 */
-	public List<Section<OWLTermReferenceManchester>> getOneOfs(Section<ManchesterClassExpression> section) {
-		return Sections.findSuccessorsOfType(section, OWLTermReferenceManchester.class);
+	public Section<OneOfBracedCondition> getOneOfCurlyBracket(Section<ManchesterClassExpression> section) {
+		return Sections.findChildOfType(section, OneOfBracedCondition.class);
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class ManchesterClassExpression extends CompositeCondition {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean isNonTerminalList(Section<ManchesterClassExpression> section) {
-		return Sections.findSuccessor(section, NonTerminalList.class) != null;
+		return Sections.findChildOfType(section, NonTerminalList.class) != null;
 	}
 
 	/**
@@ -119,8 +119,8 @@ public class ManchesterClassExpression extends CompositeCondition {
 	 *        {@link ManchesterClassExpression} section
 	 * @return The found {@link NonTerminalListContent} sections
 	 */
-	public List<Section<NonTerminalListContent>> getNonTerminalListElements(Section<ManchesterClassExpression> section) {
-		return Sections.findSuccessorsOfType(section, NonTerminalListContent.class);
+	public List<Section<NonTerminalList>> getNonTerminalListElements(Section<ManchesterClassExpression> section) {
+		return Sections.findChildrenOfType(section, NonTerminalList.class);
 	}
 
 	/**

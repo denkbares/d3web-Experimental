@@ -19,6 +19,8 @@
 package de.knowwe.kdom.manchester.types;
 
 import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
 
 /**
@@ -33,7 +35,7 @@ public class Restriction extends AbstractType {
 
 	public static final String AFTER_REGEX = "(?:\\s)+(.+)";
 
-	public static final String AFTER_INTEGER = "(?:\\s)+(\\d+)";
+	public static final String AFTER_INTEGER = "(?:\\s)+(\\d+)\\s+(.+)?";
 
 	private static Restriction instance = null;
 
@@ -50,14 +52,8 @@ public class Restriction extends AbstractType {
 		OnlyRestriction only = new OnlyRestriction();
 		this.addChildType(only);
 
-		MinRestriction min = new MinRestriction();
-		this.addChildType(min);
-
-		MaxRestriction max = new MaxRestriction();
-		this.addChildType(max);
-
-		ExactlyRestriction exactly = new ExactlyRestriction();
-		this.addChildType(exactly);
+		CardinalityRestriction i = new CardinalityRestriction(this);
+		this.addChildType(i);
 
 		ValueRestriction value = new ValueRestriction();
 		this.addChildType(value);
@@ -78,4 +74,131 @@ public class Restriction extends AbstractType {
 		}
 		return instance;
 	}
+
+	/**
+	 * Check whether the current {@link Restriction} is a
+	 * {@link SomeRestriction} section.
+	 *
+	 * @param Section<Restriction> a A {@link Restriction} section
+	 * @return TRUE if found, FALSE otherwise
+	 */
+	public boolean isSomeRestriction(Section<Restriction> section) {
+		return Sections.findChildOfType(section, SomeRestriction.class) != null;
+	}
+
+	/**
+	 * Retrieves a {@link SomeRestriction} section
+	 *
+	 * @param Section<Restriction> a A {@link Restriction} section
+	 * @return The found {@link OWLTermReferenceManchester} sections
+	 */
+	public Section<SomeRestriction> getSomeRestriction(Section<Restriction> section) {
+		return Sections.findChildOfType(section, SomeRestriction.class);
+	}
+
+	/**
+	 * Check whether the current {@link Restriction} is a
+	 * {@link OnlyRestriction} section.
+	 *
+	 * @param Section<Restriction> a A {@link Restriction} section
+	 * @return TRUE if found, FALSE otherwise
+	 */
+	public boolean isOnlyRestriction(Section<Restriction> section) {
+		return Sections.findChildOfType(section, OnlyRestriction.class) != null;
+	}
+
+	/**
+	 * Retrieves a {@link OnlyRestriction} section
+	 *
+	 * @param Section<Restriction> a A {@link Restriction} section
+	 * @return The found {@link OWLTermReferenceManchester} sections
+	 */
+	public Section<OnlyRestriction> getOnlyRestriction(Section<Restriction> section) {
+		return Sections.findChildOfType(section, OnlyRestriction.class);
+	}
+
+	/**
+	 * Check whether the current {@link Restriction} is a
+	 * {@link CardinalityRestriction} section.
+	 *
+	 * @param Section<Restriction> a A {@link Restriction} section
+	 * @return TRUE if found, FALSE otherwise
+	 */
+	public boolean isCardinalityRestriction(Section<Restriction> section) {
+		return Sections.findChildOfType(section, CardinalityRestriction.class) != null;
+	}
+
+	/**
+	 * Retrieves a {@link CardinalityRestriction} section
+	 *
+	 * @param Section<Restriction> a A {@link Restriction} section
+	 * @return The found {@link OWLTermReferenceManchester} sections
+	 */
+	public Section<CardinalityRestriction> getCardinalityRestriction(Section<Restriction> section) {
+		return Sections.findChildOfType(section, CardinalityRestriction.class);
+	}
+
+	/**
+	 * Check whether the current {@link Restriction} is a
+	 * {@link ValueRestriction} section.
+	 *
+	 * @param Section<Restriction> a A {@link Restriction} section
+	 * @return TRUE if found, FALSE otherwise
+	 */
+	public boolean isValueRestriction(Section<Restriction> section) {
+		return Sections.findChildOfType(section, ValueRestriction.class) != null;
+	}
+
+	/**
+	 * Retrieves a {@link ValueRestriction} section
+	 *
+	 * @param Section<Restriction> a A {@link Restriction} section
+	 * @return The found {@link OWLTermReferenceManchester} sections
+	 */
+	public Section<ValueRestriction> getValueRestriction(Section<Restriction> section) {
+		return Sections.findChildOfType(section, ValueRestriction.class);
+	}
+
+	/**
+	 * Check whether the current {@link Restriction} is a
+	 * {@link OWLTermReferenceManchester} section.
+	 *
+	 * @param Section<Restriction> a A {@link Restriction} section
+	 * @return TRUE if found, FALSE otherwise
+	 */
+	public boolean isTermReference(Section<Restriction> section) {
+		return Sections.findChildOfType(section, OWLTermReferenceManchester.class) != null;
+	}
+
+	/**
+	 * Retrieves a {@link OWLTermReferenceManchester} section
+	 *
+	 * @param Section<Restriction> a A {@link Restriction} section
+	 * @return The found {@link OWLTermReferenceManchester} sections
+	 */
+	public Section<OWLTermReferenceManchester> getTermReference(Section<Restriction> section) {
+		return Sections.findChildOfType(section, OWLTermReferenceManchester.class);
+	}
+
+	/**
+	 * Check whether the current {@link Restriction} is a
+	 * {@link ObjectPropertyExpression} section.
+	 *
+	 * @param Section<Restriction> a A {@link Restriction} section
+	 * @return TRUE if found, FALSE otherwise
+	 */
+	public boolean isObjectProperty(Section<Restriction> section) {
+		return Sections.findChildOfType(section, ObjectPropertyExpression.class) != null;
+	}
+
+	/**
+	 * Retrieves a {@link ObjectPropertyExpression} section
+	 *
+	 * @param Section<Restriction> a A {@link Restriction} section
+	 * @return The found {@link ObjectPropertyExpression} sections
+	 */
+	public Section<ObjectPropertyExpression> getObjectProperty(Section<Restriction> section) {
+		return Sections.findChildOfType(section, ObjectPropertyExpression.class);
+	}
+
 }

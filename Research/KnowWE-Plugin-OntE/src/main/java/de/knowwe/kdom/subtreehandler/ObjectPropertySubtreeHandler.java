@@ -25,15 +25,16 @@ import java.util.List;
 import java.util.Set;
 
 import org.semanticweb.owlapi.model.OWLAxiom;
+import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.manchester.ManchesterClassExpression;
+import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.frames.objectproperty.Characteristics;
 import de.knowwe.kdom.manchester.frames.objectproperty.ObjectPropertyFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
@@ -63,16 +64,16 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 
 		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
 		OWLObjectProperty p = null;
-		OWLAxiom e = null;
+		OWLAxiom axiom = null;
 
 		// handle definition, then the rest
 		ObjectPropertyFrame type = s.get();
 		if (type.hasObjectPropertyDefinition(s)) {
 			Section<?> def = type.getObjectPropertyDefinition(s);
 			p = (OWLObjectProperty) AxiomFactory.getOWLAPIEntity(def, OWLObjectProperty.class);
-			e = AxiomFactory.getOWLAPIEntityDeclaration(p);
-			if (e != null) {
-				axioms.add(e);
+			axiom = AxiomFactory.getOWLAPIEntityDeclaration(p);
+			if (axiom != null) {
+				axioms.add(axiom);
 			}
 		}
 
@@ -80,39 +81,80 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 			Section<?> desc = type.getRange(s);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
 					ManchesterClassExpression.class);
-			// handle children such as OWLTerReferences, Lists, Conjuncts, etc.
-			// Set<OWLClassExpression> expressions =
-			// AxiomFactory.createDescriptionExpression(mce);
+			Set<OWLClassExpression> exp = AxiomFactory.createDescriptionExpression(mce);
+
+			for (OWLClassExpression e : exp) {
+				axiom = AxiomFactory.createRange(p, e);
+				if (axiom != null) {
+					axioms.add(axiom);
+				}
+			}
 		}
 
-		// done with the definition handle the rest
-		for (Section<?> child : s.getChildren()) {
-			Type t = child.get();
+		if (type.hasDomain(s)) { // Handle Domain
+			Section<?> desc = type.getDomain(s);
+			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+					ManchesterClassExpression.class);
+			Set<OWLClassExpression> exp = AxiomFactory.createDescriptionExpression(mce);
 
-			if (t instanceof Characteristics) {
-				List<Section<Characteristics.CharacteristicsTerm>> l = Sections.findSuccessorsOfType(child,
-						Characteristics.CharacteristicsTerm.class);
-				if (l != null) {
-					for (Section<Characteristics.CharacteristicsTerm> r : l) {
-						e = AxiomFactory.createCharacteristics(r, p);
-						if (e != null) {
-							axioms.add(e);
-						}
-					}
-				} // term missing, please remove definition or one
+			for (OWLClassExpression e : exp) {
+				axiom = AxiomFactory.createDomain(p, e);
+				if (axiom != null) {
+					axioms.add(axiom);
+				}
 			}
-			else if (t instanceof Annotations) {
-				List<Section<Annotation>> items = Sections.findSuccessorsOfType(child,
-						Annotation.class);
-				for (Section<Annotation> item : items) {
-					e = AxiomFactory.createAnnotations(item, p.getIRI());
-					if (e != null) {
-						axioms.add(e);
-					}
+		}
+		if (type.hasInverseOf(s)) { // Handle InverseOf
+			Section<?> desc = type.getInverseOf(s);
+			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+					ManchesterClassExpression.class);
+			Set<OWLObjectProperty> props = AxiomFactory.createObjectPropertyExpression(mce);
+
+			for (OWLObjectProperty e : props) {
+				axiom = AxiomFactory.createInverseOf(p, e);
+				if (axiom != null) {
+					axioms.add(axiom);
+				}
+			}
+		}
+		if (type.hasSubPropertyOf(s)) { // Handle SubPropertyOf
+			Section<?> desc = type.getSubPropertyOf(s);
+			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+					ManchesterClassExpression.class);
+			Set<OWLObjectProperty> props = AxiomFactory.createObjectPropertyExpression(mce);
+
+			for (OWLObjectProperty e : props) {
+				axiom = AxiomFactory.createSubPropertyOf(p, e);
+				if (axiom != null) {
+					axioms.add(axiom);
+				}
+			}
+		}
+		// FIXME not possible with the OWLApi ???
+		if (type.hasEquivalentTo(s)) { // Handle EquivalentTo
+
+		}
+
+		if (type.hasCharacteristics(s)) { // Handle Characteristics
+			Section<Characteristics> c = type.getCharacteristics(s);
+			List<Section<?>> terms = c.get().getCharacteristics(c);
+			for (Section<?> term : terms) {
+				axiom = AxiomFactory.createCharacteristics(term, p);
+				if (axiom != null) {
+					axioms.add(axiom);
+				}
+			}
+		}
+
+		if(ManchesterSyntaxUtil.hasAnnotations(s)) { //Handle Annotations
+			List<Section<Annotation>> annotations = ManchesterSyntaxUtil.getAnnotations(s);
+			for (Section<Annotation> annotation : annotations) {
+				axiom = AxiomFactory.createAnnotations(annotation, p.getIRI());
+				if (axiom != null) {
+					axioms.add(axiom);
 				}
 			}
 		}
 		return axioms;
 	}
-
 }

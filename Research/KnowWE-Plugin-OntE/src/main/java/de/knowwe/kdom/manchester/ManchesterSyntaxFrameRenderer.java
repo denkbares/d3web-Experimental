@@ -86,9 +86,9 @@ public class ManchesterSyntaxFrameRenderer extends KnowWEDomRenderer<DefaultFram
 	 */
 	private String getLink(Section<DefaultFrame> section) {
 		if (renderLink) {
-			return KnowWEUtils.maskHTML(" - <a href=\"Wiki.jsp?page=" + section.getTitle()
+			return " - <a href=\"Wiki.jsp?page=" + section.getTitle()
 					+ "\" title=\"View section in occuring article\"/>"
-					+ section.getTitle() + "</a>");
+					+ section.getTitle() + "</a>";
 		}
 		return "";
 	}

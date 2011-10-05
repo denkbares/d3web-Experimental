@@ -70,6 +70,27 @@ public class ObjectPropertyFrame extends DefaultFrame {
 		this.addChildType(new Range());
 		this.addChildType(new InverseOf());
 	}
+
+	/**
+	 *
+	 * @created 27.09.2011
+	 * @param Section<ObjectPropertyFrame> section
+	 * @return The found section
+	 */
+	public boolean hasCharacteristics(Section<ObjectPropertyFrame> section) {
+		return Sections.findSuccessor(section, Characteristics.class) != null;
+	}
+
+	/**
+	 *
+	 * @created 27.09.2011
+	 * @param Section<ObjectPropertyFrame> section
+	 * @return The found section
+	 */
+	public Section<Characteristics> getCharacteristics(Section<ObjectPropertyFrame> section) {
+		return Sections.findSuccessor(section, Characteristics.class);
+	}
+
 	/**
 	 * Returns the {@link ObjectProperty} section containing the name of the to
 	 * define OWLObjectProperty.
@@ -138,6 +159,78 @@ public class ObjectPropertyFrame extends DefaultFrame {
 	 */
 	public Section<Range> getRange(Section<ObjectPropertyFrame> section) {
 		return Sections.findSuccessor(section, Range.class);
+	}
+
+	/**
+	 * Returns if the current class definition has a {@link InverseOf}
+	 * description.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<ObjectPropertyFrame> section
+	 * @return The found section
+	 */
+	public boolean hasInverseOf(Section<ObjectPropertyFrame> section) {
+		return Sections.findSuccessor(section, InverseOf.class) != null;
+	}
+
+	/**
+	 * Returns the {@link InverseOf} sections of the current
+	 * {@link ObjectPropertyFrame}.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<ObjectPropertyFrame> section
+	 * @return The found section
+	 */
+	public Section<InverseOf> getInverseOf(Section<ObjectPropertyFrame> section) {
+		return Sections.findSuccessor(section, InverseOf.class);
+	}
+
+	/**
+	 * Returns if the current class definition has a {@link SubPropertyOf}
+	 * description.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<ObjectPropertyFrame> section
+	 * @return The found section
+	 */
+	public boolean hasSubPropertyOf(Section<ObjectPropertyFrame> section) {
+		return Sections.findSuccessor(section, SubPropertyOf.class) != null;
+	}
+
+	/**
+	 * Returns the {@link SubPropertyOf} sections of the current
+	 * {@link ObjectPropertyFrame}.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<ObjectPropertyFrame> section
+	 * @return The found section
+	 */
+	public Section<SubPropertyOf> getSubPropertyOf(Section<ObjectPropertyFrame> section) {
+		return Sections.findSuccessor(section, SubPropertyOf.class);
+	}
+
+	/**
+	 * Returns if the current class definition has a {@link EquivalentTo}
+	 * description.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<ObjectPropertyFrame> section
+	 * @return The found section
+	 */
+	public boolean hasEquivalentTo(Section<ObjectPropertyFrame> section) {
+		return Sections.findSuccessor(section, EquivalentTo.class) != null;
+	}
+
+	/**
+	 * Returns the {@link EquivalentTo} sections of the current
+	 * {@link ObjectPropertyFrame}.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<ObjectPropertyFrame> section
+	 * @return The found section
+	 */
+	public Section<EquivalentTo> getEquivalentTo(Section<ObjectPropertyFrame> section) {
+		return Sections.findSuccessor(section, EquivalentTo.class);
 	}
 }
 

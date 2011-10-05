@@ -21,15 +21,18 @@ package de.knowwe.kdom.manchester.types;
 import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.AbstractType;
+import de.d3web.we.kdom.Section;
+import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
 import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.d3web.we.kdom.sectionFinder.SectionFinder;
+import de.knowwe.kdom.manchester.ManchesterClassExpression;
 import de.knowwe.kdom.manchester.ManchesterClassExpression.OWLClassContentType;
 
 /**
- * 
- * @author smark
+ *
+ * @author Stefan Mark
  * @created 28.06.2011
  */
 public class ValueRestriction extends AbstractType {
@@ -61,5 +64,13 @@ public class ValueRestriction extends AbstractType {
 		this.addChildType(key);
 
 		this.addChildType(OWLClassContentType.getCompositeCondition());
+	}
+
+	public Section<ObjectPropertyExpression> getObjectProperty(Section<ValueRestriction> section) {
+		return Sections.findChildOfType(section, ObjectPropertyExpression.class);
+	}
+
+	public Section<ManchesterClassExpression> getManchesterClassExpression(Section<ValueRestriction> section) {
+		return Sections.findChildOfType(section, ManchesterClassExpression.class);
 	}
 }

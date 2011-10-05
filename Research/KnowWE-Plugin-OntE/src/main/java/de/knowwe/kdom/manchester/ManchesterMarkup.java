@@ -25,6 +25,8 @@ import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.frame.MiscFrame;
+import de.knowwe.kdom.manchester.frame.OntologyFrame;
+import de.knowwe.kdom.manchester.frame.PrefixFrame;
 import de.knowwe.kdom.manchester.frames.clazz.ClassFrame;
 import de.knowwe.kdom.manchester.frames.individual.IndividualFrame;
 import de.knowwe.kdom.manchester.frames.objectproperty.ObjectPropertyFrame;
@@ -47,9 +49,10 @@ public class ManchesterMarkup extends AbstractType {
 			+ MiscFrame.FRAME_KEYWORDS + "|"
 			+ ClassFrame.KEYWORD + "|"
 			+ IndividualFrame.KEYWORD + "|"
-			+ ObjectPropertyFrame.KEYWORD
+			+ ObjectPropertyFrame.KEYWORD + "|"
+			+ PrefixFrame.KEYWORD + "|"
 			// + DataTypeFrame.KEYWORD + "|"
-
+			+ OntologyFrame.KEYWORD
 			+ ")";
 
 	/**
@@ -77,6 +80,8 @@ public class ManchesterMarkup extends AbstractType {
 			this.addChildType(new IndividualFrame());
 			this.addChildType(new ObjectPropertyFrame());
 			this.addChildType(new MiscFrame());
+			this.addChildType(new PrefixFrame());
+			this.addChildType(new OntologyFrame());
 		}
 
 		public static synchronized ManchesterMarkupContentType getInstance() {

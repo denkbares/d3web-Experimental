@@ -1,0 +1,230 @@
+!!! OntE-OWLApi-Generation-Test
+(for testing purpose only, see [http://www.co-ode.org/ontologies/])
+
+
+ObjectProperty: hasSibling
+
+    Characteristics: 
+        Symmetric
+
+
+ObjectProperty: hasSex
+
+    Characteristics: 
+        Functional
+
+    Range: 
+        Sex
+
+
+ObjectProperty: hasParent
+
+    InverseOf: 
+        hasChild
+
+
+ObjectProperty: hasChild
+
+    InverseOf: 
+        hasParent
+
+
+Class: GrandFather
+
+    EquivalentTo: 
+        Person
+         AND (hasChild SOME 
+            (Person
+             AND (hasChild SOME Person)))
+         AND (hasSex VALUE MaleSex)
+
+
+Class: Female
+
+    EquivalentTo: 
+        hasSex VALUE FemaleSex
+
+
+Class: Parent
+
+    EquivalentTo: 
+        Person
+         AND (hasChild SOME Person)
+
+
+Class: Mother
+
+    EquivalentTo: 
+        Person
+         AND (hasChild SOME Person)
+         AND (hasSex VALUE FemaleSex)
+
+
+Class: Woman
+
+    EquivalentTo: 
+        Person
+         AND (hasSex VALUE FemaleSex)
+
+
+Class: Brother
+
+    EquivalentTo: 
+        Person
+         AND ((hasSibling SOME Person)
+         AND (hasSex VALUE MaleSex))
+
+
+Class: Father
+
+    EquivalentTo: 
+        Person
+         AND (hasChild SOME Person)
+         AND (hasSex VALUE MaleSex)
+
+
+Class: Male
+
+    EquivalentTo: 
+        hasSex VALUE MaleSex
+
+
+Class: Sex
+
+    EquivalentTo: 
+        {FemaleSex , MaleSex}
+
+
+Class: GrandMother
+
+    EquivalentTo: 
+        Person
+         AND (hasChild SOME 
+            (Person
+             AND (hasChild SOME Person)))
+         AND (hasSex VALUE FemaleSex)
+
+
+Class: Son
+
+    EquivalentTo: 
+        Person
+         AND (hasParent SOME Person)
+         AND (hasSex VALUE MaleSex)
+
+
+Class: Person
+
+
+Class: GrandParent
+
+    EquivalentTo: 
+        Person
+         AND (hasChild SOME 
+            (Person
+             AND (hasChild SOME Person)))
+
+
+Class: Daughter
+
+    EquivalentTo: 
+        Person
+         AND (hasParent SOME Person)
+         AND (hasSex VALUE FemaleSex)
+
+
+Class: Man
+
+    EquivalentTo: 
+        Person
+         AND (hasSex VALUE MaleSex)
+
+
+Class: Sister
+
+    EquivalentTo: 
+        Person
+         AND (hasSibling SOME Person)
+         AND (hasSex VALUE FemaleSex)
+
+
+Class: OffSpring
+
+    EquivalentTo: 
+        Person
+         AND (hasParent SOME Person)
+
+
+Class: Sibling
+
+    EquivalentTo: 
+        Person
+         AND (hasSibling SOME Person)
+
+
+Individual: FemaleSex
+
+    Types: 
+        Sex
+
+
+Individual: Matthew
+
+    Types: 
+        Person
+
+    SameAs: 
+        Matt
+
+
+Individual: Peter
+
+    Types: 
+        Person
+
+    Facts:  
+     hasChild  Matt,
+     hasSex  MaleSex,
+     hasParent  William
+
+
+Individual: William
+
+    Types: 
+        Person
+
+    Facts:  
+     hasSex  MaleSex,
+     hasChild  Peter
+
+
+Individual: Matt
+
+    Types: 
+        Person
+
+    Facts:  
+     hasParent  Peter,
+     hasSex  MaleSex,
+     hasSibling  Gemma
+
+    SameAs: 
+        Matthew
+
+
+Individual: Gemma
+
+    Types: 
+        Person
+
+    Facts:  
+     hasSex  FemaleSex
+
+
+Individual: MaleSex
+
+    Types: 
+        Sex
+
+
+

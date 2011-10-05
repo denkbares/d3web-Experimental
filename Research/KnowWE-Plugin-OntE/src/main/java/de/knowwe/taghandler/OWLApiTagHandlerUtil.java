@@ -19,23 +19,35 @@
  */
 package de.knowwe.taghandler;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Set;
 
+import org.semanticweb.owlapi.debugging.DebuggerClassExpressionGenerator;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
+import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
+import org.semanticweb.owlapi.util.ShortFormProvider;
+import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
+import uk.ac.manchester.cs.owl.owlapi.mansyntaxrenderer.ManchesterOWLSyntaxObjectRenderer;
+
+import com.clarkparsia.owlapi.explanation.BlackBoxExplanation;
+import com.clarkparsia.owlapi.explanation.HSTExplanationGenerator;
+
 import de.knowwe.owlapi.OWLAPIConnector;
-import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**
  * Simple helper methods to retrieve inferred knowledge from the used
@@ -50,6 +62,18 @@ public class OWLApiTagHandlerUtil {
 	 * The indent used in the output (hierarchies, etc.).
 	 */
 	public static final int INDENT = 4;
+
+	private static final OWLAPIConnector connector;
+	private static final OWLOntology ontology;
+	private static final OWLDataFactory factory;
+	private static final OWLReasoner reasoner;
+
+	static {
+		connector = OWLAPIConnector.getGlobalInstance();
+		ontology = connector.getOntology();
+		factory = connector.getManager().getOWLDataFactory();
+		reasoner = connector.getReasoner();
+	}
 
 	/**
 	 * Ask an {@link OWLReasoner} for the hierarchy of a given {@link OWLClass}.
@@ -106,7 +130,7 @@ public class OWLApiTagHandlerUtil {
 			html.append("<dl>");
 			html.append("<dt>Instances for: " + labelClass(clazz) + "</dt>");
 
-			NodeSet<OWLNamedIndividual> individualsNodeSet = reasoner.getInstances(clazz, false);
+			NodeSet<OWLNamedIndividual> individualsNodeSet = reasoner.getInstances(clazz, true);
 			if (!individualsNodeSet.isEmpty()) {
 				Set<OWLNamedIndividual> individuals = individualsNodeSet.getFlattened();
 
@@ -134,51 +158,16 @@ public class OWLApiTagHandlerUtil {
 	 */
 	public static String labelClass(OWLClass clazz) {
 
-		OWLAPIConnector connector = OWLAPIConnector.getGlobalInstance();
-		OWLOntology ontology = connector.getOntology();
-
-		String label = null;
-		Set<OWLAnnotation> annotations = clazz.getAnnotations(ontology);
-		for (OWLAnnotation annotation : annotations) {
-			if (annotation.getProperty().isLabel()) {
-				OWLLiteral c = (OWLLiteral) annotation.getValue();
-				label = c.getLiteral();
-			}
-		}
-		if (label != null) {
-			return label;
-		}
-		else {
-			return clazz.getIRI().toString().replace(Rdf2GoCore.basens, "");
-		}
-	}
-
-	@Deprecated
-	public static String localizedClassLabel(OWLClass clazz) {
 		IRI annotation = OWLRDFVocabulary.RDFS_LABEL.getIRI();
 
-		OWLAPIConnector connector = OWLAPIConnector.getGlobalInstance();
-		OWLOntology ontology = connector.getOntology();
-		OWLDataFactory factory = connector.getManager().getOWLDataFactory();
-
-		clazz.getAnnotations(ontology, factory.getOWLAnnotationProperty(annotation));
-		return "";
-	}
-
-	@Deprecated
-	public static String localizedString(Set<OWLAnnotation> annotations) {
-
-		List<OWLLiteral> labels = new ArrayList<OWLLiteral>();
-        for (OWLAnnotation label : annotations) {
-            if (label.getValue() instanceof OWLLiteral) {
-            	labels.add((OWLLiteral) label.getValue());
-            }
-        }
-
-        for (OWLLiteral literal : labels) {
-            if (!literal.hasLang()) return literal.getLiteral();
-        }
-		return "";
+		Set<OWLAnnotation> annotations = clazz.getAnnotations(ontology,
+				factory.getOWLAnnotationProperty(annotation));
+		String label = localizedString(annotations);
+		if (!label.isEmpty()) {
+			return label;
+		}
+		SimpleShortFormProvider provider = new SimpleShortFormProvider();
+		return provider.getShortForm(clazz);
 	}
 
 	/**
@@ -194,22 +183,126 @@ public class OWLApiTagHandlerUtil {
 	 */
 	public static String labelIndividual(OWLNamedIndividual i) {
 
-		OWLAPIConnector connector = OWLAPIConnector.getGlobalInstance();
-		OWLOntology ontology = connector.getOntology();
+		IRI annotation = OWLRDFVocabulary.RDFS_LABEL.getIRI();
 
-		String label = null;
-		Set<OWLAnnotation> annotations = i.getAnnotations(ontology);
-		for (OWLAnnotation annotation : annotations) {
-			if (annotation.getProperty().isLabel()) {
-				OWLLiteral c = (OWLLiteral) annotation.getValue();
-				label = c.getLiteral();
-			}
-		}
-		if (label != null) {
+		Set<OWLAnnotation> annotations = i.getAnnotations(ontology,
+				factory.getOWLAnnotationProperty(annotation));
+		String label = localizedString(annotations);
+		if (!label.isEmpty()) {
 			return label;
 		}
-		else {
-			return i.getIRI().toString().replace(Rdf2GoCore.basens, "");
+
+		SimpleShortFormProvider provider = new SimpleShortFormProvider();
+		return provider.getShortForm(i);
+	}
+
+	/**
+	 * Finds in a set of {@link OWLAnnotation} a localized {@link OWLLiteral}.
+	 * The language can be specified in a properties file. If an
+	 * {@link OWLLiteral} with the set language could be found the according
+	 * value is returned.
+	 *
+	 * @created 27.09.2011
+	 * @param Set<OWLAnnotation> annotations
+	 * @return
+	 */
+	public static String localizedString(Set<OWLAnnotation> annotations) {
+
+		ResourceBundle properties = ResourceBundle.getBundle("onte");
+		String lang = properties.getString("onte.lang");
+
+		List<OWLLiteral> labels = new ArrayList<OWLLiteral>();
+		for (OWLAnnotation label : annotations) {
+			if (label.getValue() instanceof OWLLiteral) {
+				labels.add((OWLLiteral) label.getValue());
+			}
 		}
+
+		for (OWLLiteral literal : labels) {
+			if (literal.hasLang()) {
+				if (literal.getLang().equals(lang)) {
+					return literal.getLiteral();
+				}
+			}
+		}
+		return "";
+	}
+
+	/**
+	 *
+	 *
+	 * @created 27.09.2011
+	 * @param OWLClassExpression expression
+	 * @return String
+	 */
+	public static String verbalizeToManchesterSyntax(OWLClassExpression expression) {
+		StringWriter sw = new StringWriter();
+		ShortFormProvider sfp = new SimpleShortFormProvider();
+		ManchesterOWLSyntaxObjectRenderer renderer = new ManchesterOWLSyntaxObjectRenderer(sw, sfp);
+		expression.accept(renderer);
+		return sw.toString();
+	}
+
+	/**
+	 *
+	 *
+	 * @created 27.09.2011
+	 * @param OWLClassExpression expression
+	 * @return String
+	 */
+	public static String verbalizeToManchesterSyntax(OWLAxiom axiom) {
+		StringWriter sw = new StringWriter();
+		ShortFormProvider sfp = new SimpleShortFormProvider();
+		ManchesterOWLSyntaxObjectRenderer renderer = new ManchesterOWLSyntaxObjectRenderer(sw, sfp);
+		axiom.accept(renderer);
+		return sw.toString();
+	}
+
+	/**
+	 * Returns an explanation for a given {@link OWLAxiom}.
+	 *
+	 * @created 27.09.2011
+	 * @param OWLAxiom axiom
+	 */
+	public static Set<Set<OWLAxiom>> getExplanation(OWLAxiom axiom) {
+
+		DebuggerClassExpressionGenerator visitor = new DebuggerClassExpressionGenerator(factory);
+		axiom.accept(visitor);
+		OWLClassExpression expression = visitor.getDebuggerClassExpression();
+
+		BlackBoxExplanation explain = new BlackBoxExplanation(ontology, connector.getFactory(),
+				reasoner);
+		Set<OWLAxiom> axioms = explain.getExplanation(expression);
+		Set<Set<OWLAxiom>> setOfSets = new HashSet<Set<OWLAxiom>>();
+		setOfSets.add(axioms);
+		return setOfSets;
+	}
+
+	/**
+	 * <p>
+	 * Returns a {@link Set} containing explanations for the current class.
+	 * </p>
+	 * <p>
+	 * Uses an implementation of MultipleExplanationGenerator interface using
+	 * Reiter's Hitting Set Tree (HST) algorithm as described in Aditya
+	 * Kalyanpur's thesis. This class relies on a SingleExplanationGenerator
+	 * that can compute a minimal set of axioms that cause the unsatisfiability.
+	 * The core of the functionality is based on Matthew Horridge's
+	 * implementation.
+	 * </p>
+	 *
+	 * @see BlackBoxExplanation
+	 * @see HSTExplanationGenerator
+	 * @created 27.09.2011
+	 * @param clazz
+	 * @return
+	 */
+	public static Set<Set<OWLAxiom>> getExplanations(OWLClass clazz) {
+
+		BlackBoxExplanation exp = new BlackBoxExplanation(ontology, connector.getFactory(),
+				reasoner);
+		HSTExplanationGenerator multExplanator = new HSTExplanationGenerator(exp);
+		Set<Set<OWLAxiom>> explanations = multExplanator.getExplanations(clazz);
+		return explanations;
 	}
 }

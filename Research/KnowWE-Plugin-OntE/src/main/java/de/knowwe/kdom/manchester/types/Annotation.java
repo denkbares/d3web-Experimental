@@ -43,6 +43,7 @@ public class Annotation extends AbstractType {
 
 	public static final String KEYWORD_COMMENT = "rdfs:comment";
 	public static final String KEYWORD_LABEL = "rdfs:label";
+	public static final String KEYWORD_VERSION = "owl:versionInfo";
 	public static final String PATTERN_LANG = "@([a-z]{2})";
 	public static final String PATTERN_DATATYPE = "\\^\\^([a-zA-Z:]+)";
 
@@ -56,7 +57,7 @@ public class Annotation extends AbstractType {
 	public Annotation() {
 		this.setSectionFinder(new AllTextFinderTrimmed());
 
-		Keyword k = new Keyword(KEYWORD_COMMENT + "|" + KEYWORD_LABEL);
+		Keyword k = new Keyword(KEYWORD_COMMENT + "|" + KEYWORD_LABEL + "|" + KEYWORD_VERSION);
 		k.setCustomRenderer(LABEL_RENDERER);
 
 		this.addChildType(k);
@@ -74,10 +75,7 @@ public class Annotation extends AbstractType {
 	 * @return TRUE if RDFSLabel, FALSE otherwise
 	 */
 	public boolean isLabel(Section<Annotation> a) {
-		if (a.getOriginalText().contains(KEYWORD_LABEL)) {
-			return true;
-		}
-		return false;
+		return checkAnnotationType(a, KEYWORD_LABEL);
 	}
 
 	/**
@@ -88,8 +86,26 @@ public class Annotation extends AbstractType {
 	 * @return TRUE if RDFSComment, FALSE otherwise
 	 */
 	public boolean isComment(Section<Annotation> a) {
-		if (a.getOriginalText().contains(KEYWORD_COMMENT)) {
-			return true;
+		return checkAnnotationType(a, KEYWORD_COMMENT);
+	}
+	/**
+	 * Check whether the current {@link Annotation} is a comment adding
+	 * additional information to a element in the ontology.
+	 *
+	 * @param Section<Annotation> a A {@link Annotation} section
+	 * @return TRUE if RDFSComment, FALSE otherwise
+	 */
+	public boolean isVersion(Section<Annotation> a) {
+		return checkAnnotationType(a, KEYWORD_VERSION);
+	}
+
+	private boolean checkAnnotationType(Section<Annotation> section, String key) {
+		Section<Keyword> keywordSection = Sections.findSuccessor(section, Keyword.class);
+		if (keywordSection != null) {
+			String keywordTerm = keywordSection.get().getKeyword(keywordSection);
+			if (keywordTerm.equals(key)) {
+				return true;
+			}
 		}
 		return false;
 	}

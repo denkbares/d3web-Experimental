@@ -39,7 +39,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
  * the {@link TagHandler} can show to a given class the inferred hierarchy
  * relations, to a given class all the instances.
  * </p>
- * 
+ *
  * necessary features???
  * <ul>
  * <li>get inverse of a property, i.e. which individuals are in relation with a
@@ -64,7 +64,7 @@ public class OWLApiInferenceTagHandler extends AbstractHTMLTagHandler {
 	public final static String PARAM_INFERENCE_PROPERTY = "property";
 
 	public OWLApiInferenceTagHandler() {
-		super("owlapiinference");
+		super("owlapi.inference");
 	}
 
 	@Override

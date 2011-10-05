@@ -42,7 +42,6 @@ import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.frames.individual.IndividualFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
-import de.knowwe.kdom.manchester.types.NonTerminalList;
 import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
 import de.knowwe.owlapi.OWLAPISubtreeHandler;
 
@@ -102,7 +101,7 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 			for (Section<OWLTermReferenceManchester> node : nodes) {
 				OWLIndividual sameInd = (OWLIndividual) AxiomFactory.getOWLAPIEntity(node,
 						OWLIndividual.class);
-				AxiomFactory.createSameIndividualsAxiom(i, sameInd);
+				axioms.add(AxiomFactory.createSameIndividualsAxiom(i, sameInd));
 
 				// handleOptionalAnnotations(node, i); // Optional annotations
 			}
@@ -113,7 +112,7 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 			for (Section<OWLTermReferenceManchester> node : nodes) {
 				OWLIndividual two = (OWLIndividual) AxiomFactory.getOWLAPIEntity(node,
 						OWLIndividual.class);
-				AxiomFactory.createDifferentFromIndividualsAxiom(i, two);
+				axioms.add(AxiomFactory.createDifferentFromIndividualsAxiom(i, two));
 
 				// handleOptionalAnnotations(node, i); // Optional annotations
 			}
@@ -121,19 +120,15 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 
 		if (type.hasTypes(s)) { // Handle Types
 			Section<?> types = type.getTypes(s);
-			List<Section<NonTerminalList>> listItems = Sections.findSuccessorsOfType(types,
-					NonTerminalList.class);
 
-			for (Section<NonTerminalList> item : listItems) {
-				Section<ManchesterClassExpression> mce = Sections.findSuccessor(
-						item, ManchesterClassExpression.class);
+			Section<ManchesterClassExpression> mce = Sections.findChildOfType(types,
+					ManchesterClassExpression.class);
+			Set<OWLClassExpression> exp = AxiomFactory.createDescriptionExpression(mce);
 
-				Set<OWLClassExpression> expressions = AxiomFactory.createDescriptionExpression(mce);
-				for (OWLClassExpression owlClassExpression : expressions) {
-					axiom = AxiomFactory.createNamedIndividualAxiom(owlClassExpression, i);
-					if (axiom != null) {
-						axioms.add(axiom);
-					}
+			for (OWLClassExpression e : exp) {
+				axiom = AxiomFactory.createNamedIndividualAxiom(e, i);
+				if (axiom != null) {
+					axioms.add(axiom);
 				}
 			}
 			// FIXME handleOptionalAnnotations(types, i); optional Annotations

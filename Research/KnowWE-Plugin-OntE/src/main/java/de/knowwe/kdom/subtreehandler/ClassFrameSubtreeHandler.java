@@ -27,6 +27,7 @@ import org.ontoware.rdf2go.RDF2Go;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
 
 import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.Section;
@@ -95,10 +96,9 @@ public class ClassFrameSubtreeHandler extends OWLAPISubtreeHandler<ClassFrame> {
 			Section<?> desc = type.getSubClassOf(s);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
 					ManchesterClassExpression.class);
-			 //handle children such as OWLTerReferences, Lists, Conjuncts, etc.
-			Set<OWLClassExpression> expressions = AxiomFactory.createDescriptionExpression(mce);
-			for (OWLClassExpression exp : expressions) {
-				axiom = AxiomFactory.createOWLSubClassOf(clazz, exp);
+			Set<OWLClassExpression> exp = AxiomFactory.createDescriptionExpression(mce);
+			for (OWLClassExpression e : exp) {
+				axiom = AxiomFactory.createOWLSubClassOf(clazz, e);
 				if(axiom != null) {
 					axioms.add(axiom);
 				}
@@ -109,25 +109,25 @@ public class ClassFrameSubtreeHandler extends OWLAPISubtreeHandler<ClassFrame> {
 			Section<?> desc = type.getDisjointWith(s);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
 					ManchesterClassExpression.class);
-			 //handle children such as OWLTerReferences, Lists, Conjuncts, etc.
-			Set<OWLClassExpression> expressions = AxiomFactory.createDescriptionExpression(mce);
-			for (OWLClassExpression exp : expressions) {
-				axiom = AxiomFactory.createOWLDisjointWith(clazz, exp);
-				if(axiom != null) {
+			Set<OWLClassExpression> exp = AxiomFactory.createDescriptionExpression(mce);
+
+			for (OWLClassExpression e : exp) {
+				axiom = AxiomFactory.createOWLDisjointWith(clazz, e);
+				if (axiom != null) {
 					axioms.add(axiom);
 				}
 			}
 		}
 
-		if(type.hasEquivalentTo(s)){ //Handle DisjointWith
+		if (type.hasEquivalentTo(s)) { // Handle EquivalentTo
 			Section<?> desc = type.getEquivalentTo(s);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
 					ManchesterClassExpression.class);
-			// handle children such as Lists, Conjuncts, Disjuncts etc.
-			Set<OWLClassExpression> expressions = AxiomFactory.createDescriptionExpression(mce);
-			for (OWLClassExpression exp : expressions) {
-				axiom = AxiomFactory.createOWLEquivalentTo(clazz, exp);
-				if(axiom != null) {
+			Set<OWLClassExpression> exp = AxiomFactory.createDescriptionExpression(mce);
+
+			for (OWLClassExpression e : exp) {
+				axiom = AxiomFactory.createOWLEquivalentTo(clazz, e);
+				if (axiom != null) {
 					axioms.add(axiom);
 				}
 			}
@@ -137,11 +137,11 @@ public class ClassFrameSubtreeHandler extends OWLAPISubtreeHandler<ClassFrame> {
 			Section<?> desc = type.getDisjointUnionOf(s);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
 					ManchesterClassExpression.class);
-			// handle children such as OWLTerReferences, Lists, Conjuncts, etc.
-			// FIXME not yet implemented
-			Set<OWLClassExpression> expressions = AxiomFactory.createDescriptionExpression(mce);
-			for (OWLClassExpression exp : expressions) {
-				// axiom = AxiomFactory.createOWLDisjointUnionOf(clazz, exp);
+			Set<OWLClassExpression> exp = AxiomFactory.createDescriptionExpression(mce);
+
+			for (OWLClassExpression e : exp) {
+				// FIXME not yet implemented
+				// axiom = AxiomFactory.createOWLDisjointUnionOf(clazz, e);
 				axiom = null;
 				if (axiom != null) {
 					axioms.add(axiom);
@@ -149,6 +149,23 @@ public class ClassFrameSubtreeHandler extends OWLAPISubtreeHandler<ClassFrame> {
 			}
 		}
 
-		return axioms;
+		// Note: use OWLEntityCollector instead of below?
+		// necessary to avoid errors through the OWLApi due not defined entities
+		Set<OWLAxiom> addAxioms = new HashSet<OWLAxiom>();
+		for (OWLAxiom a : axioms) {
+			Set<OWLClass> classes = a.getClassesInSignature();
+			for (OWLClass owlClass : classes) {
+				OWLAxiom t = AxiomFactory.getOWLAPIEntityDeclaration(owlClass);
+				addAxioms.add(t);
+			}
+
+			Set<OWLObjectProperty> properties = a.getObjectPropertiesInSignature();
+			for (OWLObjectProperty p : properties) {
+				OWLAxiom t = AxiomFactory.getOWLAPIEntityDeclaration(p);
+				addAxioms.add(t);
+			}
+		}
+		addAxioms.addAll(axioms);
+		return addAxioms;
 	}
 }
