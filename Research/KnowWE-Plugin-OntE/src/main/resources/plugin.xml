@@ -111,4 +111,21 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>        
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="OWLApiOntologyOverviewTagHandler">
+        <parameter id="class" value="de.knowwe.taghandler.OWLApiOntologyOverviewTagHandler" />
+        <parameter id="name" value="OWLApiOntologyOverviewTagHandler" />
+        <parameter id="description" value="TagHandler OWLApiOntologyOverviewTagHandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="OWLApiOntologySerialize">
+        <parameter id="class" value="de.knowwe.taghandler.OWLApiOntologySerialize" />
+        <parameter id="name" value="OWLApiOntologySerialize" />
+        <parameter id="description" value="TagHandler OWLApiOntologySerialize" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
 </plugin>
