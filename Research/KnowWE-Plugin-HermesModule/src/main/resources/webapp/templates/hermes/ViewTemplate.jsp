@@ -26,13 +26,9 @@
 </head>
 
 <body class="view">
+
 <div id="wikibody" class="${prefs.Orientation}">
  
-  <div class="applicationlogo" > 
-    <a href="<wiki:LinkTo page='<%=frontpage%>' format='url' />"
-       title="<fmt:message key='actions.home.title' ><fmt:param><%=frontpage%></fmt:param></fmt:message> "><fmt:message key='actions.home' /></a>
-  </div>
-
   <wiki:Include page="Header.jsp" />
 
   <div id="content">
@@ -50,5 +46,6 @@
   <wiki:Include page="Footer.jsp" />
 
 </div>
+
 </body>
 </html>

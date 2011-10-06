@@ -19,7 +19,6 @@
 /* +++ 010 LAYOUT of main ID blocks +++ */
 #wikibody {
 	background: #FFF url(images/background-torus.jpg) 0 0 repeat;
-	position:relative;
 	margin:auto;
 	padding:0.25em;
 	max-width:1000px;
@@ -27,12 +26,16 @@
 #header, #footer {
 	padding:0 0 0 20%;
 }
-#wikibody .applicationlogo {
+#header .applicationlogo {
 	position:absolute;
-	left:2em;
+	top:3em;
+	left:-16em;
 	right:auto;
 	width:18%;
 	max-width:180px;
+}
+#header .applicationlogospan {
+	position:relative;
 }
 #footer .applicationlogo,
 #footer .companylogo,
