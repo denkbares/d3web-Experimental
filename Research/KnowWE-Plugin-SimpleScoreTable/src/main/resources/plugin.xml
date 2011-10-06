@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-SimpleScoreTable" version="0.0.1">
+<requires>
+<import plugin-id="KnowWEExtensionPoints"/>
+</requires>
+<runtime>
+<library id="de.d3web" path="." type="code">
+<export prefix="*"/>
+</library>
+</runtime>
+<extension id="de.knowwe.d3web.scoreTable.SimpleScoreTable" plugin-id="KnowWEExtensionPoints" point-id="Type">
+<parameter id="scope" value="root"/>
+<parameter id="priority" value="5"/>
+<parameter id="description" value="Type de.knowwe.d3web.scoreTable.SimpleScoreTable"/>
+<parameter id="name" value="de.knowwe.d3web.scoreTable.SimpleScoreTable"/>
+<parameter id="class" value="de.knowwe.d3web.scoreTable.SimpleScoreTable"/>
+<parameter id="version" value="1.0"/>
+</extension>
+</plugin>

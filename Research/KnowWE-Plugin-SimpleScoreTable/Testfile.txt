@@ -1,0 +1,44 @@
+!!! Testfile for Simple-Score-Table
+
+
+bla
+<br><br>
+
+|   SCORE| solution 1 | solution 2  <br>
+|cond1| P0         |   P0		 <br>
+|cond2| P0         |   P0		 <br>
+
+<br><br>
+blub#
+
+
+
+bla
+<br><br>
+
+|SCORE| solution 1 | solution 2  <br>
+| Frage1 = Antwort1| P0         |   P0		 <br>
+| Loesung = ESTABLISHED | P0         |   P0		 <br>
+
+<br><br>
+blub
+
+bla
+<br><br>
+
+|SCORE| solution 1 | solution 2  <br>
+|Frage2 > 5 | P0         |   P0		 <br>
+|BEKANNT[Frage3]| P0         |   P0		 <br>
+
+<br><br>
+blub#
+
+bla
+<br><br>
+
+| SCORE| solution 1 | solution 2  <br>
+|Frage3 = 2.8| P0         |   P0		 <br>
+|cond2| P0         |   P0		 <br>
+
+<br><br>
+blub#
