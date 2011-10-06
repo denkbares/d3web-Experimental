@@ -139,7 +139,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				String pagePermissions = "[{ALLOW view All}]\r\n[{ALLOW delete "
 						+ username + "}]\r\n\r\n";
 				String content = pagePermissions + "%%data\r\n%\r\n";
-				KnowWEEnvironment.getInstance().buildAndRegisterArticle(username, content,
+				KnowWEEnvironment.getInstance().buildAndRegisterArticle(content,
 						title, KnowWEEnvironment.DEFAULT_WEB);
 				KnowWEEnvironment.getInstance().getWikiConnector()
 						.createWikiPage(title, content, username);
@@ -187,23 +187,23 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			else if (talkAbout) {
 				readbutton.append("</table></form>");
 
-					String talkPage = userContext.getUserName() + "_comment_therapist";
-					title = parameters.get("title");
-					if (title == null) {
-						title = " &raquo; " + talkPage;
-					}
+				String talkPage = userContext.getUserName() + "_comment_therapist";
+				title = parameters.get("title");
+				if (title == null) {
+					title = " &raquo; " + talkPage;
+				}
 
-					// subject = pagename
-					readbutton.append("<p><a href=\"Wiki.jsp?page=");
-					readbutton.append(KnowWEUtils.urlencode(talkPage.trim()));
-					readbutton.append("&amp;talkabout=");
-					readbutton.append(KnowWEUtils.urlencode(pagename.trim()));
-					readbutton.append("\" title=\"Title:");
-					readbutton.append(title);
-					readbutton.append("\" rel=\"nofollow\">");
+				// subject = pagename
+				readbutton.append("<p><a href=\"Wiki.jsp?page=");
+				readbutton.append(KnowWEUtils.urlencode(talkPage.trim()));
+				readbutton.append("&amp;talkabout=");
+				readbutton.append(KnowWEUtils.urlencode(pagename.trim()));
+				readbutton.append("\" title=\"Title:");
+				readbutton.append(title);
+				readbutton.append("\" rel=\"nofollow\">");
 				readbutton.append("Mit dem Berater dar&uuml;ber sprechen");
-					readbutton.append("</a>");
-					readbutton.append(" - <a href='#' onclick='getReadButtonValue(1," + number
+				readbutton.append("</a>");
+				readbutton.append(" - <a href='#' onclick='getReadButtonValue(1," + number
 							+ ",\""
 							+ id + "\");return false'>Nicht Besprechen</a></p>");
 

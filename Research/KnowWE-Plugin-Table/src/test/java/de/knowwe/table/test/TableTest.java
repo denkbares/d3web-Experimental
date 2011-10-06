@@ -60,7 +60,7 @@ public class TableTest extends TestCase {
 		 */
 		String content = "!!Table\n\n<Table default=\"+,-,0\" width=\"100\" row=\"1\" column=\"1\" cell=\"2,2\">\n| |Apple|Lemon|Coconut\n|sweetness|+|-|hm\n|grows in central europe|+|+|-\n|size|-|+|+\n</Table>";
 		String title = "Test_Article";
-		env.buildAndRegisterArticle("testuser", content, title, web, false);
+		env.buildAndRegisterArticle(content, title, web, false);
 		KnowWEArticle article = env.getArticle(web, title);
 
 		/**
@@ -108,7 +108,7 @@ public class TableTest extends TestCase {
 		article.getSection().collectTextsFromLeaves(buddy);
 		assertEquals("Two methdos collectTextsFromLeaves() with different results",
 				article.collectTextsFromLeaves(), buddy.toString());
-		env.buildAndRegisterArticle("testuser", buddy.toString(), title,
+		env.buildAndRegisterArticle(buddy.toString(), title,
 				web);
 		article = env.getArticle(web, title);
 		assertNotSame(content, article.getSection().getOriginalText());

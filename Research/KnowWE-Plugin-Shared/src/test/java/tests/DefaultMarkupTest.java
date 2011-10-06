@@ -124,7 +124,7 @@ public class DefaultMarkupTest {
 						"%\r\n" +
 						"BLUUUUUUUBB";
 
-		env.buildAndRegisterArticle("testuser", text, "Test_Article", web);
+		env.buildAndRegisterArticle(text, "Test_Article", web);
 		KnowWEArticle article = env.getArticle(web, "Test_Article");
 
 		Section<DefaultMarkupTestType> sec = Sections.
@@ -162,7 +162,7 @@ public class DefaultMarkupTest {
 				"%\r\n" +
 						"BLUUUUUUUBB";
 
-		env.buildAndRegisterArticle("testuser", text, "Test_Article", web);
+		env.buildAndRegisterArticle(text, "Test_Article", web);
 		KnowWEArticle article = env.getArticle(web, "Test_Article");
 
 		Section<DefaultMarkupTestType> sec = Sections.
@@ -203,7 +203,7 @@ public class DefaultMarkupTest {
 				"Dieser Text darf nichtmehr im Content stehen!\r\n" +
 					"%";
 
-		env.buildAndRegisterArticle("testuser", text, "Test_Article", web);
+		env.buildAndRegisterArticle(text, "Test_Article", web);
 		KnowWEArticle article = env.getArticle(web, "Test_Article");
 		Section<DefaultMarkupTestType> sec = Sections.
 				findSuccessor(article.getSection(), DefaultMarkupTestType.class);
@@ -247,7 +247,7 @@ public class DefaultMarkupTest {
 				"Dieser Text darf nichtmehr im Content stehen!\r\n" +
 					"%";
 
-		env.buildAndRegisterArticle("testuser", text, "Test_Article", web);
+		env.buildAndRegisterArticle(text, "Test_Article", web);
 		KnowWEArticle article = env.getArticle(web, "Test_Article");
 		Section<DefaultMarkupTestType> sec = Sections.
 				findSuccessor(article.getSection(), DefaultMarkupTestType.class);

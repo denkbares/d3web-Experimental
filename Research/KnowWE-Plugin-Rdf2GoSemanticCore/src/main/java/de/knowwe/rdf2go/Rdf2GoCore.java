@@ -641,7 +641,7 @@ public class Rdf2GoCore implements EventListener {
 	@Override
 	public Collection<Class<? extends Event>> getEvents() {
 		ArrayList<Class<? extends Event>> events = new ArrayList<Class<? extends Event>>(
-				1);
+				2);
 		events.add(FullParseEvent.class);
 		events.add(ArticleUpdatesFinishedEvent.class);
 		return events;

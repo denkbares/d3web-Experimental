@@ -70,9 +70,9 @@ public class NewForumAction extends AbstractAction {
 
 		title = "Forum zu " + pageName + " (" + topic + ")";
 		if (mgr.getArticle(title) == null) {
-				KnowWEEnvironment.getInstance().buildAndRegisterArticle(username, content,
+			KnowWEEnvironment.getInstance().buildAndRegisterArticle(content,
 						title, KnowWEEnvironment.DEFAULT_WEB);
-				KnowWEEnvironment.getInstance().getWikiConnector()
+			KnowWEEnvironment.getInstance().getWikiConnector()
 						.createWikiPage(title, content, username);
 		}
 		else {
