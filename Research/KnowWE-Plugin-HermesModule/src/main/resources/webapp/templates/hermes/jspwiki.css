@@ -289,8 +289,10 @@ pre {
 }
                            
 /* +++ 250 Hyperlinks +++ */
+/* REMEMBER: Changes to this Section have to be made to hermes.css too.*/
 a {
-	color:blue;
+	color:#0063C9;
+	text-decoration:underline;
 }
 a:link {
 }
@@ -311,6 +313,8 @@ a:active {
 }
 
 a:hover {
+	color:blue;
+	text-decoration:none;
 }
 a:focus {
 }
