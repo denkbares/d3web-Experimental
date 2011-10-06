@@ -17,6 +17,8 @@
 
     public boolean resetPassword( WikiEngine wiki, HttpServletRequest request, ResourceBundle rb )
     {
+    	// This method is customised to reset multiple accounts by splitting the names with semicolons.
+    	
         // Reset pw for account name
         String names = request.getParameter( "name" );
 
