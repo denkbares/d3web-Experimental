@@ -50,6 +50,11 @@
 				<checksumPolicy>fail</checksumPolicy>
 			</snapshots>
 		</repository>
+   		<repository>
+	        <id>isci</id>
+	        <name>isci-releases</name>
+	        <url>https://isci.informatik.uni-wuerzburg.de/artifactory/infovi-contrib</url>
+    	</repository>
 	</repositories>
 	
 	<dependencies>
@@ -63,12 +68,17 @@
 		<dependency>
 			<groupId>org.semweb4j</groupId>
 			<artifactId>rdf2go.api</artifactId>
-			<version>4.7.3</version>
+			<version>4.7.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.semweb4j</groupId>
-			<artifactId>rdf2go.impl.sesame23</artifactId>
-			<version>4.7.3</version>
+			<artifactId>rdf2go.impl.sesame25</artifactId>
+			<version>4.7.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-runtime-osgi</artifactId>
+			<version>2.5.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.ontotext</groupId>
