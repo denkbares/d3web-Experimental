@@ -8,6 +8,7 @@
 		<Color>red</Color>
 	</ObjectType>
 	
+	
     <ObjectType ClassName="HeaderLine" ID="HeaderLine" PackageName="de.knowwe.d3web.scoreTable" SuperTypeClass="AbstractType" SuperTypePackage="de.d3web.we.kdom" Parent="scoreTableRoot" Position="0">
 	<SectionFinder ClassName="RegexSectionFinder"
 		PackageName="de.d3web.we.kdom.sectionFinder" Value='"\\\\s*(\\\\|{1,2}.*?)\\\\r?\\\\n",Pattern.DOTALL|Pattern.MULTILINE,0'>
@@ -46,9 +47,11 @@
 	    <ObjectType ClassName="Score" ID="Score"
 	    	PackageName="de.knowwe.d3web.scoreTable" Parent="ScoreCell"
 	    	Position="0" SuperTypeClass="ScoreValue" SuperTypePackage="de.d3web.we.object">
-	    	<SectionFinder ClassName="AllTextFinderTrimmed"
+	    	
+	    	
+	    	<!--  <SectionFinder ClassName="AllTextFinderTrimmed"
 		PackageName="de.d3web.we.kdom.sectionFinder" Value=''>
-		</SectionFinder>
+		</SectionFinder>-->
 	    	<Color>brown</Color>
 	    </ObjectType>
 
