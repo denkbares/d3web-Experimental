@@ -18,9 +18,16 @@
  */
 package de.knowwe.defi.forum;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.StringReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,7 +65,6 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 	private static final String OPEN_FORM_BUTTON = "Neues Forum";
 	private static final String CLOSE_FORM_BUTTON = "Schließen";
-	private static final String SHOW_FORUMS_BUTTON = "Foren anzeigen";
 	private static final String SEND_BUTTON = "Abschicken";
 
 	/**
@@ -75,8 +81,10 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 				KnowWEEnvironment.DEFAULT_WEB).getArticleIterator();
 		List<Section<? extends Forum>> forums = new LinkedList<Section<? extends Forum>>();
 		List<Section<? extends Forum>> other = new LinkedList<Section<? extends Forum>>();
-		String pageName, unit, topic;
-		boolean noForum = true;
+		String pageName, unit, topic, lastVisit;
+		boolean noForum = true, newEntry;
+		int numberOfNewEntries = 0;
+		HashMap<String, String> logPages = checkLog(userContext);
 
 		// Hole Lektionen aus dem Left Menu
 		List<Section<DashTreeElement>> rootUnits = getAllRootUnits();
@@ -98,15 +106,15 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		other.addAll(forums);
 
 		/* Foren zu Einheiten */
-		// <tr>-Klassen: inactive - active - new
 		fm.append("<table class='forumMenu'>");
 		for (Section<DashTreeElement> rootUnit : rootUnits) {
+			newEntry = false;
 			pageName = getPageName(rootUnit);
 			fm.append("\n"); // fixes JSPWiki's
 								// "10000 characters without linebreak-bug"
 
 			if (isFree(rootUnit)) {
-				fm.append("<tr class='active'><td class='fm_status'></td><td>" + pageName);
+				fm.append("<tr class='active'><td>" + pageName);
 
 				// "Neues Forum"-Button
 				fm.append(" <input class='fm_open' type='button' value='"
@@ -123,9 +131,29 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 					if (pageName.equals(unit.split(":")[0])) {
 						
-							fm.append("<li><a href='Wiki.jsp?page=" + sec.getTitle() + "'>"
+						// Testen ob es neue Beiträge gibt
+						lastVisit = logPages.get(sec.getTitle());
+						if (userContext.userIsAsserted()) {
+
+							if (lastVisit == null) {
+								numberOfNewEntries = -1;
+							}
+							else {
+								numberOfNewEntries = getNumberOfNewEntries(sec.getText(),
+										lastVisit);
+							}
+
+							if (numberOfNewEntries != 0) newEntry = true;
+						}
+
+						fm.append("<li><a href='Wiki.jsp?page=" + sec.getTitle() + "'>"
 								+ topic + " (" + unit + ")"
-								+ "</a></li>");
+								+ "</a>");
+						if (numberOfNewEntries == -1) fm.append("&nbsp;<span class='fm_new'>(ungelesenes Thema)</span>");
+						else if (numberOfNewEntries == 1) fm.append("&nbsp;<span class='fm_new'>(1 neuer Beitrag)</span>");
+						else if (numberOfNewEntries > 0) fm.append("&nbsp;<span class='fm_new'>("
+								+ numberOfNewEntries + " neue Beiträge)</span>");
+						fm.append("</li>");
 						other.remove(sec);
 						noForum = false;
 					}
@@ -172,7 +200,12 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 							+ pageName
 							+ "\");return false' value='" + CLOSE_FORM_BUTTON + "' /></form>");
 
-				fm.append("</td></tr>");
+				if (newEntry) {
+					fm.append("</td><td class='fm_new'></td></tr>");
+				}
+				else {
+					fm.append("</td><td class='fm_old'></td></tr>");
+				}
 			}
 			else {
 				fm.append("<tr class='inactive'><td colspan='2'>" + pageName
@@ -182,7 +215,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 		/* Sonstige Foren */
 		pageName = "Sonstiges";
-		fm.append("<tr class='active'><td class='fm_status'></td><td>" + pageName);
+		fm.append("<tr class='active'><td>" + pageName);
 
 		// "Neues Forum"-Button
 		fm.append(" <input class='fm_open' type='button' value='"
@@ -224,7 +257,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 					+ pageName
 					+ "\");return false' value='" + CLOSE_FORM_BUTTON + "' /></form>");
 
-		fm.append("</td></tr></table>");
+		fm.append("</td><td class='fm_status'></td></tr></table>");
 
 		return KnowWEUtils.maskHTML(fm.toString());
 	}
@@ -346,6 +379,86 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
        }
 		
 		return attributeContent;
+	}
+
+	private int getNumberOfNewEntries(String forumXML, String date) {
+		int number = 0;
+		Date thresholdDate, entryDate;
+
+		thresholdDate = stringToDate(date);
+		if (thresholdDate != null) {
+			
+		try {
+			DocumentBuilderFactory dbf =
+					DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			InputSource is = new InputSource();
+			is.setCharacterStream(new StringReader(forumXML));
+
+			Document doc = db.parse(is);
+			NodeList nodes = doc.getElementsByTagName("forum");
+			NodeList boxes = ((Element) nodes.item(0)).getElementsByTagName("box");
+
+			for (int i = 0; i < boxes.getLength(); i++) {
+				Element element = (Element) boxes.item(i);
+					entryDate = stringToDate(element.getAttribute("date"));
+				
+				if (entryDate.after(thresholdDate)) number++;
+			}
+		}
+		catch (Exception e) {
+		}
+		}
+
+		return number;
+	}
+
+	private HashMap<String, String> checkLog(UserContext uc) {
+		HashMap<String, String> logPages = new HashMap<String, String>();
+		String log = KnowWEEnvironment.getInstance().getKnowWEExtensionPath()
+				+ "/tmp/Pagelogger.log";
+		String line;
+
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(log));
+			while ((line = br.readLine()) != null) {
+				if (uc.getUserName().equals(line.split(";")[1])) {
+					logPages.put(line.split(";")[2], line.split(";")[0]);
+				}
+			}
+		}
+		catch (FileNotFoundException e) {
+		}
+		catch (IOException e) {
+		}
+
+		return logPages;
+	}
+
+	private Date stringToDate(String s) {
+		SimpleDateFormat sdfToDate = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss");
+		Date date = null;
+
+		try {
+			date = sdfToDate.parse(s);
+		}
+		catch (ParseException e) {
+			try {
+				sdfToDate = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+				date = sdfToDate.parse(s);
+			}
+			catch (ParseException e1) {
+				try {
+					sdfToDate = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+					date = sdfToDate.parse(s);
+				}
+				catch (ParseException e2) {
+				}
+			}
+		}
+
+		return date;
 	}
 
 }
