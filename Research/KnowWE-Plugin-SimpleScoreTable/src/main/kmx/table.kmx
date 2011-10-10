@@ -15,7 +15,42 @@
 		<Constraint ClassName="AtMostOneFindingConstraint"
 				PackageName="de.d3web.we.kdom.constraint" />
 	</SectionFinder>
-	<Color>blue</Color></ObjectType>
+	<Color>blue</Color>
+	</ObjectType>
+	
+		    
+		    
+    <ObjectType ClassName="CornerCell" ID="CornerCell"
+	    	PackageName="de.knowwe.d3web.scoreTable" Parent="HeaderLine"
+	    	Position="0" SuperTypeClass="AbstractType" SuperTypePackage="de.d3web.we.kdom">
+	    	<SectionFinder ClassName="RegexSectionFinder"
+		PackageName="de.d3web.we.kdom.sectionFinder" Value='"\\\\|([^\\\\|]*)",Pattern.DOTALL|Pattern.MULTILINE,1'>
+		<Constraint ClassName="AtMostOneFindingConstraint"
+				PackageName="de.d3web.we.kdom.constraint" />
+		</SectionFinder>
+
+	    </ObjectType>
+	    
+	    <ObjectType ClassName="SolutionCell" ID="SolutionCell"
+	    	PackageName="de.knowwe.d3web.scoreTable" Parent="HeaderLine"
+	    	Position="1" SuperTypeClass="AbstractType" SuperTypePackage="de.d3web.we.kdom">
+	    	<SectionFinder ClassName="RegexSectionFinder"
+		PackageName="de.d3web.we.kdom.sectionFinder" Value='"\\\\|([^\\\\|]*)",Pattern.DOTALL|Pattern.MULTILINE,1'>
+		</SectionFinder>
+	    	<Color>purple</Color>
+	    </ObjectType>
+	    
+	    
+	    <ObjectType ClassName="Solution" ID="Solution"
+	    	PackageName="de.knowwe.d3web.scoreTable" Parent="SolutionCell"
+	    	Position="0" SuperTypeClass="SolutionReference" SuperTypePackage="de.d3web.we.object">
+	    	
+	    	<SectionFinder ClassName="AllTextFinderTrimmed"
+		PackageName="de.d3web.we.kdom.sectionFinder" Value=''>
+		</SectionFinder>
+	    	
+	    	<Color>grey</Color>
+	    </ObjectType>
 	
 	    <ObjectType ClassName="ContentLine" ID="ContentLine" PackageName="de.knowwe.d3web.scoreTable" SuperTypeClass="AbstractType" SuperTypePackage="de.d3web.we.kdom" Parent="scoreTableRoot" Position="1">
 	<SectionFinder ClassName="RegexSectionFinder"
@@ -49,10 +84,9 @@
 	    	Position="0" SuperTypeClass="ScoreValue" SuperTypePackage="de.d3web.we.object">
 	    	
 	    	
-	    	<!--  <SectionFinder ClassName="AllTextFinderTrimmed"
-		PackageName="de.d3web.we.kdom.sectionFinder" Value=''>
-		</SectionFinder>-->
 	    	<Color>brown</Color>
 	    </ObjectType>
+	    
+	    
 
 </ObjectTypes>

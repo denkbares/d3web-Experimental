@@ -37,7 +37,7 @@ bla
 <br><br>
 
 | SCORE| solution 1 | solution 2  <br>
-|Frage3 = 2.8| P0         |   P0		 <br>
+|Frage3 = 2.8| P0         |   VERDECHTIGT		 <br>
 |cond2| ETABLIERT         |   VERDAECHTIGT		 <br>
 
 <br><br>
