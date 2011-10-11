@@ -108,7 +108,8 @@ public class BoxRenderer extends KnowWEDomRenderer<ForumBox> {
 		//Nested link not used at the moment
 
 		ret.append("<div class=\"forumbutton\">");
-		ret.append("<a class=\"forum-reply\" rel='{\"id\" : \"" + sec.getID() + "\"}' href=\"#\">");
+		ret.append("<a class=\"forum-reply\" rel='{\"id\" : \"" + sec.getID()
+				+ "\"}' href=\"#message\">");
 		ret.append(rb.getString("Forum.button.reply"));
 		ret.append("</a>");
 		ret.append("</div>");

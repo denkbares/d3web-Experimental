@@ -78,12 +78,14 @@ KNOWWE.plugin.comment = function(){
         	
         	var comString = _KS('#forum-comment-'+id);
         	//var value = comString.innerText || comString.textContent || '';
+        	var author = comString.parentNode.parentNode.getElementsByTagName("th")[0].innerHTML;
+        	var date = comString.parentNode.parentNode.getElementsByTagName("th")[1].innerHTML;
         	var value = comString.innerHTML;
         	value = value.replace(/<br>/g, "\n> ");
         	value = value.replace(/&gt;/g, "> ");
         	
         	if(_KS('#knowwe-plugin-comment')) {
-        		_KS('#knowwe-plugin-comment').value = "> " + value + "\n\n";
+        		_KS('#knowwe-plugin-comment').value = "> " + author + " schrieb am " + date + "\n>  " + value + "\n\n";
         	}
         }
     }
