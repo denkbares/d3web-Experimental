@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -336,8 +337,9 @@ public class Rdf2GoCore implements EventListener {
 
 	private void logStatements(List<Statement> list, String key) {
 		StringBuffer buffy = new StringBuffer();
-		for (Statement statement : list) {
-			buffy.append(statement.toString());
+		for (Iterator<Statement> statements = list.iterator(); statements.hasNext();) {
+			buffy.append(statements.next().toString());
+			if (statements.hasNext()) buffy.append("\n");
 		}
 		Logger.getLogger(this.getClass().getName()).log(Level.INFO,
 				key + buffy.toString());
