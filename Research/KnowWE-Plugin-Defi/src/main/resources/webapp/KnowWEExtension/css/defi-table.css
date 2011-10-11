@@ -4,7 +4,7 @@ body {
 	font-size: 100%;
 }
 
-/* attribute für die ganze Tabelle  */
+/* attribute fÃ¼r die ganze Tabelle  */
 table {
 /*position:absolute; top:180px; left:150px;*/
 margin-left: auto;
@@ -22,10 +22,29 @@ padding: 3px 15px 3px;
 background-color: rgb(216,218,220);
 }
 
+/* Zellen mit der Frage  */
+td.rowhead2{
+width: 270px;
+font-weight: bold;
+padding: 1px 15px 1px;
+border-top: thin;
+border-left: thin;
+border-right: thin;
+border-color: Black;
+}
+
 
 /* Antwort-Zellen*/
 td.answer {
 width: 500px;
+}
+
+/* Antwort-Zellen fÃ¼r 2-spaltige Tabellen*/
+td.answer2 {
+width: 255px;
+border-left: thin;
+border-right: thin;
+border-color: Black;
 }
 
 
@@ -41,7 +60,7 @@ td.radio{
 }
  
 
-/*Überschrift*/
+/*Ueberschrift*/
 p.header {
 	font-weight:bold;
 	text-align: center;
@@ -49,8 +68,9 @@ p.header {
 	font-size: x-large;
 }
 
-/*Zwischen-Überschrift*/
+/*Zwischen-Ueberschrift*/
 p.header2 {
+	text-align:center;
 	font-weight:bold;
 	color: rgb(6,61,121);
 	font-size: large;

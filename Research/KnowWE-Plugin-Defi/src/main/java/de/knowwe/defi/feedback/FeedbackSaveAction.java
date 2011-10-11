@@ -18,7 +18,6 @@
  */
 package de.knowwe.defi.feedback;
 
-import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
@@ -37,7 +36,7 @@ import de.d3web.we.utils.KnowWEUtils;
  */
 public class FeedbackSaveAction extends AbstractAction {
 
-	private final int QUESTIONS = 10;
+	private final int QUESTIONS = 27;
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
@@ -47,7 +46,7 @@ public class FeedbackSaveAction extends AbstractAction {
 
 		StringBuilder xml = new StringBuilder();
 
-		xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+		xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n");
 		xml.append("<feedback>\n");
 
 		// answer have ID FBx where x is a natural number
@@ -58,16 +57,41 @@ public class FeedbackSaveAction extends AbstractAction {
 			String q = context.getParameter("QFB" + i);
 			String a = context.getParameter("FB" + i);
 
-			if (q != null && a != null) {
+			if (q != null) {
 				xml.append("<question" + i + ">\n");
-				xml.append("<question>\n");
+				xml.append("    <question>");
 				xml.append(q);
 				xml.append("</question>\n");
-				xml.append("<answer>\n");
-				xml.append(a);
+				xml.append("    <answer>");
+
+				if (a != null) {
+					xml.append(a);
+				}
+				else {
+					// QFB1-1-1 FB1-1-1
+					for (int j = 1; j < 6; j++) {
+						String sub = context.getParameter("QFB" + i + "-" + j);
+						if (sub != null) {
+							xml.append("\n        <subquestion>");
+							xml.append(sub);
+							xml.append("</subquestion>\n");
+						}
+						for (int k = 1; k < 6; k++) {
+							String sa = context.getParameter("FB" + i + "-" + j + "-" + k);
+							if (sa != null) {
+								xml.append("        <subanswer>");
+								xml.append(sa);
+								xml.append("</subanswer>\n");
+							}
+						}
+					}
+				}
+
+				// xml.append(a);
 				xml.append("<answer>\n");
 				xml.append("</question" + i + ">\n");
 			}
+
 		}
 		xml.append("</feedback>");
 
