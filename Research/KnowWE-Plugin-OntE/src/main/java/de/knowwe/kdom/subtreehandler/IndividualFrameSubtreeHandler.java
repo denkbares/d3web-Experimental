@@ -31,11 +31,11 @@ import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLIndividual;
 
 import de.d3web.core.session.blackboard.Facts;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.report.KDOMReportMessage;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.KDOMReportMessage;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.manchester.ManchesterClassExpression;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;

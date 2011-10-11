@@ -18,7 +18,7 @@
  */
 package de.d3web.we.kdom.table.attributes;
 
-import de.d3web.we.kdom.table.TableCellContent;
+import de.knowwe.kdom.table.TableCellContent;
 
 
 /**

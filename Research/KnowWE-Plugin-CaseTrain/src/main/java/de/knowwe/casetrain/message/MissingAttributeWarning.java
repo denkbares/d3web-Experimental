@@ -18,8 +18,8 @@
  */
 package de.knowwe.casetrain.message;
 
-import de.d3web.we.kdom.report.KDOMWarning;
 import de.knowwe.casetrain.util.Utils;
+import de.knowwe.core.report.KDOMWarning;
 
 
 /**

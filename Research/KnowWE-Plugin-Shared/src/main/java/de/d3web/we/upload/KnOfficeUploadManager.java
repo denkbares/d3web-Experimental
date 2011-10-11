@@ -25,12 +25,12 @@ import java.util.Collection;
 
 import org.apache.commons.fileupload.FileItem;
 
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.taghandler.ImportKnOfficeHandler;
 import de.d3web.we.taghandler.OwlUploadHandler;
-import de.d3web.we.utils.KopicWriter;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.utils.KopicWriter;
 
 public class KnOfficeUploadManager {
 

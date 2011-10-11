@@ -34,12 +34,12 @@ import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
 import de.d3web.report.Message;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * ReviseSubtreehandler for KnowledgeReaderType

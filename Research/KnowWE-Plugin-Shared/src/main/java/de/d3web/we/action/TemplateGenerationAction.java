@@ -26,13 +26,15 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-import de.d3web.we.core.KnowWEAttributes;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.wikiTemplate.Template;
 import de.d3web.we.taghandler.TemplateTagHandler;
+import de.knowwe.core.KnowWEAttributes;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.basicType.PlainText;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 
 /**
  * Creates a new WikiPage out of a Template text:

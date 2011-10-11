@@ -44,11 +44,11 @@ import org.semanticweb.owlapi.util.DefaultPrefixManager;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 import de.d3web.core.session.blackboard.Fact;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.condition.NonTerminalCondition;
 import de.d3web.we.kdom.condition.TerminalCondition;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.manchester.frame.MiscFrame;
 import de.knowwe.kdom.manchester.frames.objectproperty.CharacteristicTypes;
 import de.knowwe.kdom.manchester.types.Annotation;

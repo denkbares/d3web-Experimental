@@ -8,22 +8,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.objects.KnowWETerm;
-import de.d3web.we.kdom.objects.TermDefinition;
-import de.d3web.we.kdom.objects.TermReference;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.d3web.we.utils.SplitUtility;
-import de.d3web.we.utils.StringFragment;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.ComplexDefinitionWithTypeConstraints;
 import de.knowwe.compile.object.TypedTermDefinition;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.objects.TermDefinition;
+import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.core.utils.SplitUtility;
+import de.knowwe.core.utils.StringFragment;
 
 public class ObjectPropertyDefinitionMarkup extends AbstractType implements ComplexDefinitionWithTypeConstraints<ObjectPropertyDefinitionMarkup> {
 

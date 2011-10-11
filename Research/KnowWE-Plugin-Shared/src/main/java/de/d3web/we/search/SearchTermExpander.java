@@ -22,6 +22,8 @@ package de.d3web.we.search;
 
 import java.util.Collection;
 
+import de.knowwe.search.SearchTerm;
+
 
 /**
  * @author Jochen

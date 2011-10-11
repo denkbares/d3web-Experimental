@@ -20,12 +20,12 @@
 
 package de.d3web.we.kdom.renderer;
 
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * A renderer that renders font size depending of its depth in the KDOM as a

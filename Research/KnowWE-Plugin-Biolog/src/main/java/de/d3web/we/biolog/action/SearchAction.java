@@ -33,17 +33,17 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
 import de.d3web.we.biolog.BiologSearchTagHandler;
 import de.d3web.we.biolog.search.AnnotationsProvider;
 import de.d3web.we.biolog.search.BibtexSearchProvider;
 import de.d3web.we.biolog.search.EMLSearchProvider;
-import de.d3web.we.search.GenericSearchResult;
-import de.d3web.we.search.KnowWESearchProvider;
 import de.d3web.we.search.MultiSearchEngine;
-import de.d3web.we.search.SearchTerm;
 import de.d3web.we.search.SearchWordPreprocessor;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
+import de.knowwe.search.GenericSearchResult;
+import de.knowwe.search.KnowWESearchProvider;
+import de.knowwe.search.SearchTerm;
 import de.knowwe.tagging.TaggingMangler;
 
 /**

@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.table.attributes;
 
-import de.d3web.we.kdom.table.TableCell;
+import de.knowwe.kdom.table.TableCell;
 
 public class AttributeTableCell extends TableCell {
 

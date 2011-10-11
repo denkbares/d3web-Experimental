@@ -33,10 +33,6 @@ import org.json.simple.JSONValue;
 
 import com.google.gson.JsonObject;
 
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
-import de.d3web.we.core.KnowWEArticleManager;
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.drools.action.utils.DroolsUtils;
 import de.d3web.we.drools.action.utils.ResponseType;
 import de.d3web.we.drools.kdom.DroolsSessionRootType;
@@ -46,14 +42,18 @@ import de.d3web.we.drools.terminology.ChoiceInput;
 import de.d3web.we.drools.terminology.DroolsKnowledgeHandler;
 import de.d3web.we.drools.terminology.NumInput;
 import de.d3web.we.drools.terminology.SolutionInput;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.logging.Logging;
-import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.utils.SplitUtility;
-import de.d3web.we.utils.StringFragment;
+import de.knowwe.core.KnowWEArticleManager;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.SplitUtility;
+import de.knowwe.core.utils.StringFragment;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.logging.Logging;
 
 /**
  * The DroolsAction handles most command entered in the command line.

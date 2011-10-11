@@ -24,21 +24,21 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
-import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.casetrain.info.AnswersBlock.Heading;
 import de.knowwe.casetrain.info.AnswersBlock.Postfix;
 import de.knowwe.casetrain.info.AnswersBlock.Praefix;
 import de.knowwe.casetrain.renderer.DivStyleClassRenderer;
 import de.knowwe.casetrain.renderer.MouseOverTitleRenderer;
 import de.knowwe.casetrain.renderer.SpanClassRenderer;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.kdom.constraint.ConstraintSectionFinder;
+import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
 
 /**
  * Antwort is a Antwort Line.

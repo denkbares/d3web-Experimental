@@ -27,9 +27,9 @@ import org.semanticweb.owlapi.model.PrefixManager;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.util.DefaultPrefixManager;
 
-import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.taghandler.TagHandler;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.taghandler.TagHandler;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.rdf2go.Rdf2GoCore;
 

@@ -26,9 +26,9 @@ import java.util.Map.Entry;
 
 import org.ontoware.rdf2go.model.node.URI;
 
-import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class ListIndividualsHandler extends AbstractHTMLTagHandler {

@@ -36,8 +36,9 @@ import org.openrdf.repository.RepositoryException;
 
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.semantic.sparql.DefaultSparqlRenderer;
 import de.knowwe.semantic.sparql.SparqlDelegateRenderer;
 

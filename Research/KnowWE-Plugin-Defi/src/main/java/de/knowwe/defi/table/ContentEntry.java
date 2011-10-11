@@ -1,11 +1,11 @@
 package de.knowwe.defi.table;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.basic.LineBreak;
-import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.basicType.LineBreak;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 class ContentEntry extends AbstractType {
 

@@ -21,11 +21,11 @@ package de.knowwe.kdom.turtle.simple;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.objects.KnowWETerm;
-import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.termObject.AbstractIRITermDefinition;
 import de.knowwe.termObject.IRIEntityType;
 import de.knowwe.termObject.IRIEntityType.IRIDeclarationType;

@@ -21,9 +21,9 @@ package de.d3web.we.drools.kdom;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * The name of the Fact/Input (first arugment in the brackets)

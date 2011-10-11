@@ -20,8 +20,8 @@
 
 package de.d3web.we.wisec.kdom;
 
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * The root type of the UpperListCategories section

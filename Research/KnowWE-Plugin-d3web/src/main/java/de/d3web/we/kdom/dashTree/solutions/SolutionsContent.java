@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.dashTree.solutions;
 
-import de.d3web.we.kdom.xml.XMLContent;
+import de.knowwe.kdom.xml.XMLContent;
 
 public class SolutionsContent extends XMLContent {
 

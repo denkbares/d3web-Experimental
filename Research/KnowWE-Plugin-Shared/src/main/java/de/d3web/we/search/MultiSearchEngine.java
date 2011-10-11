@@ -30,9 +30,12 @@ import javax.servlet.ServletContext;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.plugin.Instantiation;
 import de.knowwe.plugin.Plugins;
+import de.knowwe.search.GenericSearchResult;
+import de.knowwe.search.KnowWESearchProvider;
+import de.knowwe.search.SearchTerm;
 import de.knowwe.tagging.TaggingMangler;
 
 /**

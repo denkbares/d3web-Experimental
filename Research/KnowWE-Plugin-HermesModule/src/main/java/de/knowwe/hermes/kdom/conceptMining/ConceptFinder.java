@@ -32,10 +32,10 @@ import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.SectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public abstract class ConceptFinder implements SectionFinder {

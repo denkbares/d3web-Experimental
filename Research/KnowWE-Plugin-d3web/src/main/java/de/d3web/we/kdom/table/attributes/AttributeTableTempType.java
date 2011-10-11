@@ -21,13 +21,13 @@ package de.d3web.we.kdom.table.attributes;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.d3web.we.kdom.table.TableCellContent;
-import de.d3web.we.kdom.table.TableUtils;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.SectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.kdom.table.TableCellContent;
+import de.knowwe.kdom.table.TableUtils;
 
 /**
  * Temp Type which will be overridden by the AttributeTable's SubtreeHandler.

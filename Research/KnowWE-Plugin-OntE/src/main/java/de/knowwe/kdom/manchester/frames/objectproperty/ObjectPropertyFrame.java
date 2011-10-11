@@ -21,13 +21,13 @@ package de.knowwe.kdom.manchester.frames.objectproperty;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.frame.DefaultFrame;
 import de.knowwe.kdom.manchester.types.Annotations;

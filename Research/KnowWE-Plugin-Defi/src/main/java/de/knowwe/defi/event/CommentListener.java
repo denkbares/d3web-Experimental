@@ -14,10 +14,10 @@ import com.ecyrd.jspwiki.auth.NoSuchPrincipalException;
 import com.ecyrd.jspwiki.auth.user.UserProfile;
 import com.ecyrd.jspwiki.util.MailUtil;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.event.Event;
-import de.d3web.we.event.EventListener;
 import de.d3web.we.event.NewCommentEvent;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.event.Event;
+import de.knowwe.core.event.EventListener;
 
 /**
  * Listens to the NewCommentEvent of the Comment plugin. If fired a user

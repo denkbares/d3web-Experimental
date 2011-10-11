@@ -19,10 +19,10 @@
  */
 package de.knowwe.casetrain.type.general;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
-import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
-import de.d3web.we.kdom.sectionFinder.LineSectionFinder;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.kdom.constraint.ConstraintSectionFinder;
+import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
+import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 
 /**
  * 

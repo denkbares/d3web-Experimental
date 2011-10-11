@@ -23,13 +23,13 @@ package de.knowwe.kdom.turtle;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Priority;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.subtreeHandler.IncrementalConstraint;
-import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
+import de.knowwe.core.compile.IncrementalConstraint;
+import de.knowwe.core.compile.Priority;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
+import de.knowwe.core.report.KDOMReportMessage;
 import de.knowwe.termObject.IRITermReference;
 import de.knowwe.termObject.RDFNodeType;
 
@@ -41,7 +41,7 @@ public class OWLTermReferenceTurtle extends IRITermReference implements Incremen
 		// consider this priority after type is overriden with other type..
 		this.addSubtreeHandler(Priority.LOWER, new SubtreeHandler<DataTypeValueTurtle>() {
 			@Override
-			public java.util.Collection<de.d3web.we.kdom.report.KDOMReportMessage> create(KnowWEArticle article, de.d3web.we.kdom.Section<DataTypeValueTurtle> s) {
+			public java.util.Collection<de.knowwe.core.report.KDOMReportMessage> create(KnowWEArticle article, de.knowwe.core.kdom.parsing.Section<DataTypeValueTurtle> s) {
 				return new ArrayList<KDOMReportMessage>(0);
 			}
 				;

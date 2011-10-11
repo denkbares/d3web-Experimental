@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.objects.KnowWETerm;
-import de.d3web.we.kdom.objects.TermDefinition;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.compile.object.TypedTermDefinition;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.objects.TermDefinition;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.rdfs.ObjectPropertyDefinitionMarkup.PropertyDef;
 import de.knowwe.rdfs.ObjectPropertyDefinitionMarkup.RangeDomainSpec;
 

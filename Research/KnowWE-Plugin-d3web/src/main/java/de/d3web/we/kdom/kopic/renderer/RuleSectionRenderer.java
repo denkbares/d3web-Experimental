@@ -27,16 +27,16 @@ import java.util.List;
 import de.d3web.KnOfficeParser.util.MessageKnOfficeGenerator;
 import de.d3web.report.Message;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.core.packaging.PackageRenderUtils;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.kopic.AbstractKopicSection;
-import de.d3web.we.kdom.rendering.DelegateRenderer;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.rules.Rule;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.compile.packaging.PackageRenderUtils;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 
 public class RuleSectionRenderer extends KnowWEDomRenderer {
 

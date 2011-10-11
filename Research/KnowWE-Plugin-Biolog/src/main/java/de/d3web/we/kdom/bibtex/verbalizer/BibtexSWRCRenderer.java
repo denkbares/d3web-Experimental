@@ -35,14 +35,14 @@ import bibtex.dom.BibtexEntry;
 import bibtex.dom.BibtexPerson;
 import bibtex.dom.BibtexPersonList;
 import bibtex.dom.BibtexString;
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.IntermediateOwlObject;
 import de.d3web.we.core.semantic.OwlHelper;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
-import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.bibtex.verbalizer.BibTexRenderManager.RenderingFormat;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.parsing.Section;
 
 /**
  * @author Fabian Haupt

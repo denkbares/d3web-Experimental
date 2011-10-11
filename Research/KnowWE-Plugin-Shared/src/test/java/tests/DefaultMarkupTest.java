@@ -30,19 +30,19 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.RootType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.RootType;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import dummies.KnowWETestWikiConnector;
 
 /**
  * This class contains some tests for the DefaultMarkup.
  * 
- * @see de.d3web.we.kdom.defaultMarkup.DefaultMarkupType
+ * @see de.knowwe.kdom.defaultMarkup.DefaultMarkupType
  * @author Marc-Oliver Ochlast
  */
 public class DefaultMarkupTest {

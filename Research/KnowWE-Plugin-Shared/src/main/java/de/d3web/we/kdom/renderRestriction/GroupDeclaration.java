@@ -22,9 +22,9 @@ package de.d3web.we.kdom.renderRestriction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 
 /**
  * Type for the group-declaration for the RenderRestriction types

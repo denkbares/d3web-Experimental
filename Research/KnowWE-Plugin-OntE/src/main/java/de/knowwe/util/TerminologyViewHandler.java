@@ -23,15 +23,15 @@ package de.knowwe.util;
 import java.util.Collection;
 import java.util.Map;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.objects.KnowWETerm.Scope;
-import de.d3web.we.kdom.objects.TermDefinition;
-import de.d3web.we.taghandler.AbstractTagHandler;
-import de.d3web.we.terminology.TerminologyHandler;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.compile.TerminologyHandler;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.objects.TermDefinition;
+import de.knowwe.core.kdom.objects.KnowWETerm.Scope;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.taghandler.AbstractTagHandler;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.termObject.IRIEntityType;
 
 public class TerminologyViewHandler extends AbstractTagHandler{

@@ -24,14 +24,14 @@ import java.util.HashMap;
 import bibtex.dom.BibtexEntry;
 import bibtex.dom.BibtexFile;
 import bibtex.dom.BibtexToplevelComment;
-import de.d3web.we.core.KnowWEAttributes;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.bibtex.verbalizer.BibTexRenderManager;
 import de.d3web.we.kdom.bibtex.verbalizer.BibTexRenderManager.RenderingFormat;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.KnowWEAttributes;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  *

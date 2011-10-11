@@ -28,16 +28,16 @@ import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionYN;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.table.Table;
-import de.d3web.we.kdom.table.TableAttributesProvider;
-import de.d3web.we.kdom.table.TableCell;
-import de.d3web.we.kdom.table.TableCellContent;
-import de.d3web.we.kdom.table.TableLine;
-import de.d3web.we.kdom.table.TableUtils;
 import de.d3web.we.testcase.kdom.TimeStampType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.kdom.table.Table;
+import de.knowwe.kdom.table.TableAttributesProvider;
+import de.knowwe.kdom.table.TableCell;
+import de.knowwe.kdom.table.TableCellContent;
+import de.knowwe.kdom.table.TableLine;
+import de.knowwe.kdom.table.TableUtils;
 
 /**
  * @author Florian Ziegler

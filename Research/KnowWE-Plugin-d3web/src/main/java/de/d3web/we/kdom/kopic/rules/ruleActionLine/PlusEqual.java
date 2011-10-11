@@ -20,7 +20,7 @@
 package de.d3web.we.kdom.kopic.rules.ruleActionLine;
 
 import de.d3web.we.kdom.Annotation.FindingComparator;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 /**
  * @author Johannes Dienst

@@ -22,9 +22,9 @@ package de.knowwe.compile.object;
 
 import java.util.Collection;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.objects.TermReference;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.parsing.Section;
 
 /**
  * 

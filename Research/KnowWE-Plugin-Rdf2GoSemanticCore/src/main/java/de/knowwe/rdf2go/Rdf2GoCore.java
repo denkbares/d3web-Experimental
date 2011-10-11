@@ -59,16 +59,16 @@ import org.ontoware.rdf2go.util.RDFTool;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.event.ArticleUpdatesFinishedEvent;
-import de.d3web.we.event.Event;
-import de.d3web.we.event.EventListener;
-import de.d3web.we.event.EventManager;
-import de.d3web.we.event.FullParseEvent;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.event.Event;
+import de.knowwe.core.event.EventListener;
+import de.knowwe.core.event.EventManager;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.event.ArticleUpdatesFinishedEvent;
+import de.knowwe.event.FullParseEvent;
 
 /**
  * 

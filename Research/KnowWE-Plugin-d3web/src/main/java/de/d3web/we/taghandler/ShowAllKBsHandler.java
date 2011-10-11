@@ -36,11 +36,12 @@ import de.d3web.core.inference.RuleSet;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.WikiEnvironmentManager;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelation;
 import de.d3web.xcl.XCLRelationType;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 
 public class ShowAllKBsHandler extends AbstractHTMLTagHandler {
 

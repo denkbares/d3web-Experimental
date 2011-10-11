@@ -27,10 +27,12 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import de.d3web.report.Message;
-import de.d3web.we.core.KnowWEAttributes;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.KnowWEAttributes;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.utils.KnowWEUtils;
 
 public class ParseWebOfflineRenderer extends AbstractAction {
 

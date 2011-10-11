@@ -2,8 +2,8 @@ package de.knowwe.lod.taghandler;
 
 import java.util.Map;
 
-import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
 
 public class GetDataHandler extends AbstractHTMLTagHandler {
 

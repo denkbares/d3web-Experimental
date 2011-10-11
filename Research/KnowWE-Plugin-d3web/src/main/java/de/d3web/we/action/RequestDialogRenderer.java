@@ -29,7 +29,9 @@ import javax.servlet.http.HttpSession;
 import de.d3web.core.session.Session;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.SessionBroker;
-import de.d3web.we.core.KnowWEAttributes;
+import de.knowwe.core.KnowWEAttributes;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 
 public class RequestDialogRenderer extends AbstractAction {
 

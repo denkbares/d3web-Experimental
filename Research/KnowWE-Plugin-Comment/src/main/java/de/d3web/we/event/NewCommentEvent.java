@@ -18,6 +18,8 @@
  */
 package de.d3web.we.event;
 
+import de.knowwe.core.event.Event;
+
 /**
  * The NewCommentEvent is fired when a user adds a new comment. You can listen
  * to this event through your own event handler and do whatever you need in your

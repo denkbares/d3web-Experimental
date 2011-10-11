@@ -28,21 +28,21 @@ import java.util.Map;
 import org.openrdf.model.URI;
 import org.openrdf.repository.RepositoryException;
 
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.IntermediateOwlObject;
 import de.d3web.we.core.semantic.OwlHelper;
 import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.rendering.DelegateRenderer;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.xml.AbstractXMLType;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.xml.AbstractXMLType;
 
 /**
  * 

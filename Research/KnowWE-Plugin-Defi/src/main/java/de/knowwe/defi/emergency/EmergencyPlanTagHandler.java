@@ -20,8 +20,8 @@ package de.knowwe.defi.emergency;
 
 import java.util.Map;
 
-import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
 
 /**
  * Renders a link to the emergency plan of a user in the ICD forum. The

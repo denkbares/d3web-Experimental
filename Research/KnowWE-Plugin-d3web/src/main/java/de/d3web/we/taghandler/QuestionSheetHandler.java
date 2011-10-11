@@ -29,9 +29,10 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Session;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.D3webUtils;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 
 public class QuestionSheetHandler extends AbstractHTMLTagHandler {
 

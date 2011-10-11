@@ -35,15 +35,15 @@ import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.empiricaltesting.Finding;
 import de.d3web.empiricaltesting.RatedTestCase;
 import de.d3web.indication.inference.PSMethodUserSelected;
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
 import de.d3web.we.utils.D3webUtils;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * @author Florian Ziegler

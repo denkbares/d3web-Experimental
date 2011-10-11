@@ -24,15 +24,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.d3web.we.core.KnowWEArticleManager;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.report.KDOMError;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.KDOMWarning;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.KnowWEArticleManager;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.report.KDOMError;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.KDOMWarning;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
 
 /**
  * The ReportOverview TagHandler renders all {@link KDOMError} and

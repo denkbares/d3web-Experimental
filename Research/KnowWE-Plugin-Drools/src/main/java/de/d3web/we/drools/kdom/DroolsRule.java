@@ -31,18 +31,18 @@ import de.d3web.we.drools.kdom.rendering.DroolsRuleRenderer;
 import de.d3web.we.drools.kdom.rendering.DroolsRuleWarningRenderer;
 import de.d3web.we.drools.rules.Rule;
 import de.d3web.we.drools.terminology.DroolsKnowledgeHandler;
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.MessageRenderer;
-import de.d3web.we.kdom.report.message.NewObjectCreated;
-import de.d3web.we.kdom.report.message.NoSuchObjectError;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
-import de.d3web.we.logging.Logging;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.MessageRenderer;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.logging.Logging;
+import de.knowwe.report.message.NewObjectCreated;
+import de.knowwe.report.message.NoSuchObjectError;
 
 /**
  * DroolsRule contains a complete Drools rule Rules start with `rule "name"' and

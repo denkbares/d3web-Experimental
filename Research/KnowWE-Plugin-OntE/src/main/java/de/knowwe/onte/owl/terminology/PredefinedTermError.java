@@ -19,7 +19,7 @@
  */
 package de.knowwe.onte.owl.terminology;
 
-import de.d3web.we.kdom.report.KDOMError;
+import de.knowwe.core.report.KDOMError;
 
 public class PredefinedTermError extends KDOMError {
 

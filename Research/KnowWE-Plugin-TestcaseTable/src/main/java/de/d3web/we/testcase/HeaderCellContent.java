@@ -24,21 +24,21 @@ import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.rendering.DefaultTextRenderer;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.message.NoSuchObjectError;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
-import de.d3web.we.kdom.table.TableCellContent;
-import de.d3web.we.kdom.table.TableCellContentRenderer;
-import de.d3web.we.kdom.table.TableLine;
 import de.d3web.we.object.QuestionReference;
 import de.d3web.we.utils.D3webUtils;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.DefaultTextRenderer;
+import de.knowwe.core.kdom.sectionFinder.SectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.kdom.table.TableCellContent;
+import de.knowwe.kdom.table.TableCellContentRenderer;
+import de.knowwe.kdom.table.TableLine;
+import de.knowwe.report.message.NoSuchObjectError;
 
 /**
  * 

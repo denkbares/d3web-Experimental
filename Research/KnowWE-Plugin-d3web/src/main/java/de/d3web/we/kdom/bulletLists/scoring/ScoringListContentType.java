@@ -20,13 +20,13 @@
 
 package de.d3web.we.kdom.bulletLists.scoring;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.bulletLists.BulletContentType;
 import de.d3web.we.kdom.bulletLists.BulletListItemLine;
-import de.d3web.we.kdom.xml.XMLContent;
-import de.d3web.we.utils.KnowWETypeSet;
-import de.d3web.we.utils.KnowWETypeUtils;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.utils.KnowWETypeSet;
+import de.knowwe.core.utils.KnowWETypeUtils;
+import de.knowwe.kdom.xml.XMLContent;
 
 public class ScoringListContentType extends XMLContent {
 

@@ -30,10 +30,10 @@ import org.semanticweb.owlapi.model.OWLOntologyFormat;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
-import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.taghandler.TagHandler;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.taghandler.TagHandler;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.owlapi.OWLAPIConnector;
 
 /**

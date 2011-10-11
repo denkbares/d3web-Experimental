@@ -18,8 +18,8 @@
  */
 package de.knowwe.d3web.kdom.knowledgereader;
 
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * Type to read knowledge with plugged KnowledgeReaders

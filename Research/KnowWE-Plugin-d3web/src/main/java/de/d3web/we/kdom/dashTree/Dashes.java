@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.dashTree;
 
-import de.knowwe.core.LineContent;
+import de.knowwe.core.kdom.basicType.LineContent;
 
 public class Dashes extends LineContent {
 

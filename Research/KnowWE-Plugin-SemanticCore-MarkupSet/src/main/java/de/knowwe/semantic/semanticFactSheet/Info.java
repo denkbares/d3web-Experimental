@@ -23,7 +23,7 @@
  */
 package de.knowwe.semantic.semanticFactSheet;
 
-import de.d3web.we.kdom.xml.AbstractXMLType;
+import de.knowwe.kdom.xml.AbstractXMLType;
 
 /**
  * @author kazamatzuri

@@ -20,8 +20,8 @@
 
 package de.d3web.we.kdom.renderer;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 
 public abstract class ColorRenderer extends KnowWEDomRenderer {
 

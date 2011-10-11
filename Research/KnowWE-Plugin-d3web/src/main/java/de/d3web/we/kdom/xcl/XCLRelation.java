@@ -37,19 +37,19 @@ import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.d3webModule.D3WebOWLVokab;
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.Annotation.Finding;
 import de.d3web.we.kdom.condition.antlr.ComplexFinding;
-import de.d3web.we.kdom.contexts.ContextManager;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.SimpleMessageError;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.utils.Patterns;
 import de.d3web.we.utils.XCLRelationWeight;
+import de.knowwe.core.contexts.ContextManager;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.SimpleMessageError;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Patterns;
 
 public class XCLRelation extends AbstractType {
 

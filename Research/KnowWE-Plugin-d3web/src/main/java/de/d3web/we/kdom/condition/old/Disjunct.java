@@ -34,16 +34,16 @@ import de.d3web.we.core.semantic.OwlHelper;
 import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.d3web.we.d3webModule.D3WebOWLVokab;
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.basic.RoundBracedType;
 import de.d3web.we.kdom.condition.antlr.AndOperator;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.SimpleMessageError;
-import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.basicType.RoundBracedType;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.SimpleMessageError;
+import de.knowwe.core.utils.KnowWEUtils;
 
 public class Disjunct extends AbstractType {
 

@@ -20,9 +20,9 @@
 
 package de.d3web.we.plugin.calendar;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 public class Appointment extends AbstractType {
 

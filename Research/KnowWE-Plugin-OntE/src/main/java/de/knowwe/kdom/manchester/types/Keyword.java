@@ -21,11 +21,11 @@ package de.knowwe.kdom.manchester.types;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
-import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.kdom.constraint.ConstraintSectionFinder;
+import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
 
 /**
  *

@@ -21,13 +21,13 @@ package de.d3web.we.kdom.Annotation;
 
 import java.util.Collection;
 
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.user.UserContext;
-import de.knowwe.core.renderer.ObjectInfoLinkRenderer;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.kdom.renderer.ObjectInfoLinkRenderer;
+import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * Renders red background for Findings and questions when there was an error

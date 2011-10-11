@@ -19,7 +19,7 @@
 package de.d3web.we.diaflux.coverage;
 
 import de.d3web.we.flow.DiaFluxDisplayEnhancement;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.user.UserContext;
 
 
 /**

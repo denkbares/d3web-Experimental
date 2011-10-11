@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import de.d3web.we.event.Event;
-import de.d3web.we.event.EventListener;
+import de.knowwe.core.event.Event;
+import de.knowwe.core.event.EventListener;
 import de.knowwe.rdf2go.InsertStatementsEvent;
 import de.knowwe.rdf2go.RemoveStatementsEvent;
 

@@ -23,7 +23,8 @@ import java.util.Map;
 
 import de.d3web.we.action.SessionValuesViewAction;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
 
 /**
  * Displays the values of the article's d3web-Session. The magic is done with

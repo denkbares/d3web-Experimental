@@ -22,16 +22,16 @@ package de.d3web.we.wisec.kdom;
 
 import java.util.List;
 
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.basic.PlainText;
-import de.d3web.we.kdom.defaultMarkup.AnnotationType;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.wisec.kdom.subtreehandler.ListCriteriaOWLSubtreeHandler;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.basicType.PlainText;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.defaultMarkup.AnnotationType;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * The root type of the ListCriteria section

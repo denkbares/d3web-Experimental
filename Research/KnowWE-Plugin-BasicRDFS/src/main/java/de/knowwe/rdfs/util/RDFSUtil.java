@@ -28,8 +28,8 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.plugin.Plugins;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.RDFSTerminology;

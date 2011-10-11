@@ -22,8 +22,8 @@ package de.d3web.we.plugin.calendar;
 
 import java.util.Map;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 public class AppointmentAuthor extends AbstractType {
 

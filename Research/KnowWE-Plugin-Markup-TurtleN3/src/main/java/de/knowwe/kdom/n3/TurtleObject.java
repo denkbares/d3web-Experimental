@@ -22,8 +22,8 @@
 
 package de.knowwe.kdom.n3;
 
-import de.d3web.we.kdom.sectionFinder.SplitSectionFinderUnquoted;
-import de.knowwe.core.renderer.GenericHTMLRenderer;
+import de.knowwe.kdom.renderer.GenericHTMLRenderer;
+import de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquoted;
 import de.knowwe.rdfs.IRITermRef;
 
 public class TurtleObject extends IRITermRef {

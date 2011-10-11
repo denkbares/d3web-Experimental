@@ -30,17 +30,17 @@ import de.d3web.owl.OntologyProvider;
 import de.d3web.owl.assignment.Assignment;
 import de.d3web.owl.assignment.AssignmentSet;
 import de.d3web.owl.assignment.Quantifier;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.SimpleMessageError;
-import de.d3web.we.kdom.report.SyntaxError;
-import de.d3web.we.kdom.report.message.NoSuchObjectError;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
-import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.utils.MessageUtils;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.SimpleMessageError;
+import de.knowwe.core.report.SyntaxError;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.report.message.NoSuchObjectError;
 
 /**
  * Compiles parsed AssigmentTypes to d3web @link{Assignment}s.

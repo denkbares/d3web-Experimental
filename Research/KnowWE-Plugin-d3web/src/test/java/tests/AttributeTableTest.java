@@ -29,8 +29,8 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.core.packaging.KnowWEPackageManager;
-import de.d3web.we.kdom.KnowWEArticle;
+import de.knowwe.core.compile.packaging.KnowWEPackageManager;
+import de.knowwe.core.kdom.KnowWEArticle;
 
 /**
  * This class tests whether the Objects got the right MMInfo from the

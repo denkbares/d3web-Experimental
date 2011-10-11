@@ -22,17 +22,17 @@ package de.knowwe.compile.object;
 
 import java.util.Collection;
 
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.objects.TermDefinition;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.d3web.we.kdom.report.DefaultErrorRenderer;
-import de.d3web.we.kdom.report.KDOMError;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.KDOMWarning;
-import de.d3web.we.user.UserContext;
 import de.knowwe.compile.IncrementalCompiler;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.objects.TermDefinition;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.report.DefaultErrorRenderer;
+import de.knowwe.core.report.KDOMError;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.KDOMWarning;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.kdom.renderer.StyleRenderer;
 
 public abstract class IncrementalTermDefinition<TermObject> extends TermDefinition<TermObject> {
 

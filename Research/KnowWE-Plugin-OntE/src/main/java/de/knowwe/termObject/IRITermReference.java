@@ -22,17 +22,17 @@ package de.knowwe.termObject;
 
 import org.ontoware.rdf2go.model.node.URI;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.objects.GlobalTermReference;
-import de.d3web.we.kdom.objects.KnowWETerm;
-import de.d3web.we.kdom.objects.TermDefinition;
-import de.d3web.we.kdom.objects.TermReference;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.d3web.we.terminology.TerminologyHandler;
-import de.d3web.we.tools.ToolMenuDecoratingRenderer;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.compile.TerminologyHandler;
+import de.knowwe.core.kdom.objects.GlobalTermReference;
+import de.knowwe.core.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.objects.TermDefinition;
+import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.renderer.StyleRenderer;
+import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 public class IRITermReference extends GlobalTermReference<IRIEntityType> implements RDFNodeType {
 

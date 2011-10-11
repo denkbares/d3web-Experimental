@@ -21,14 +21,14 @@ package de.d3web.we.kdom.dashTree.subclassing;
 
 import java.util.List;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.xml.AbstractXMLType;
-import de.d3web.we.kdom.xml.XMLContent;
-import de.knowwe.core.dashtree.DashSubtree;
-import de.knowwe.core.dashtree.DashTree;
-import de.knowwe.core.dashtree.DashTreeElement;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.InvalidKDOMSchemaModificationOperation;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.kdom.dashtree.DashSubtree;
+import de.knowwe.kdom.dashtree.DashTree;
+import de.knowwe.kdom.dashtree.DashTreeElement;
+import de.knowwe.kdom.xml.AbstractXMLType;
+import de.knowwe.kdom.xml.XMLContent;
 
 /**
  * @author Jochen

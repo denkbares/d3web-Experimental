@@ -18,9 +18,9 @@
  */
 package de.d3web.we.testcase;
 
-import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
-import de.d3web.we.kdom.table.TableCell;
-import de.d3web.we.kdom.table.TableCellContent;
+import de.knowwe.core.kdom.InvalidKDOMSchemaModificationOperation;
+import de.knowwe.kdom.table.TableCell;
+import de.knowwe.kdom.table.TableCellContent;
 
 /**
  * 

@@ -27,11 +27,11 @@ import org.openrdf.query.BindingSet;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 
-import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.user.UserContext;
 import de.d3web.we.wisec.util.Criteria;
 import de.d3web.we.wisec.util.WISECUtil;
 import de.d3web.wisec.writers.SubstanceListWriter;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 /**

@@ -32,8 +32,8 @@ import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 
 import de.d3web.we.core.semantic.UpperOntology;
-import de.d3web.we.search.SearchTerm;
 import de.d3web.we.search.SearchTermExpander;
+import de.knowwe.search.SearchTerm;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 /**

@@ -28,8 +28,8 @@ import java.util.List;
 import de.d3web.we.ci4ke.handling.CIConfig;
 import de.d3web.we.ci4ke.testing.AbstractCITest;
 import de.d3web.we.ci4ke.testing.CITest;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
 
 /**
  * Abstract {@link Script}-based implementation of a {@link CITest}.

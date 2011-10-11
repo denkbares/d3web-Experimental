@@ -23,9 +23,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.knowwe.casetrain.info.AnswerLine.AnswerExplanation;
 import de.knowwe.casetrain.info.AnswerLine.AnswerMark;
 import de.knowwe.casetrain.info.AnswerLine.AnswerText;
@@ -41,6 +38,9 @@ import de.knowwe.casetrain.message.InvalidArgumentWarning;
 import de.knowwe.casetrain.message.InvalidAttributeError;
 import de.knowwe.casetrain.message.MissingComponentWarning;
 import de.knowwe.casetrain.message.MissingContentWarning;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.KDOMReportMessage;
 
 
 /**

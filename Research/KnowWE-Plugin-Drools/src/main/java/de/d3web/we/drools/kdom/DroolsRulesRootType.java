@@ -19,8 +19,8 @@
  */
 package de.d3web.we.drools.kdom;
 
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * The root type of the DroolsRules section

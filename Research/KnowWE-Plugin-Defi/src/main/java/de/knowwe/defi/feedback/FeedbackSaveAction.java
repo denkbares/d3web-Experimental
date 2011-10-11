@@ -22,10 +22,10 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * The FeedbackSaveAction stores the user input of the feedback form in a file

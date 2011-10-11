@@ -23,10 +23,10 @@
  */
 package de.d3web.we.kdom.Annotation;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotationProperty;
 import de.d3web.we.kdom.semanticAnnotation.SimpleAnnotation;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 
 /**
  * @author kazamatzuri

@@ -19,7 +19,7 @@
  */
 package de.knowwe.kdom.manchester.frame;
 
-import de.d3web.we.kdom.AbstractType;
+import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.kdom.manchester.ManchesterSyntaxFrameRenderer;
 
 /**

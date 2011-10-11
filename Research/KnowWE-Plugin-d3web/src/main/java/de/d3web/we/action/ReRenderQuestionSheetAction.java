@@ -23,6 +23,8 @@ package de.d3web.we.action;
 import java.io.IOException;
 
 import de.d3web.we.taghandler.QuestionSheetHandler;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 
 public class ReRenderQuestionSheetAction extends AbstractAction {
 

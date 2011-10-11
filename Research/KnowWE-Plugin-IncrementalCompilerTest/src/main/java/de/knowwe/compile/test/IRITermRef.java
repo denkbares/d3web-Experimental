@@ -20,12 +20,12 @@
 
 package de.knowwe.compile.test;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.objects.KnowWETerm;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.d3web.we.tools.ToolMenuDecoratingRenderer;
 import de.knowwe.compile.object.IncrementalTermReference;
+import de.knowwe.core.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.kdom.renderer.StyleRenderer;
+import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 public class IRITermRef extends IncrementalTermReference<String> {
 

@@ -28,10 +28,10 @@ import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnnotationAxiom;
 import org.semanticweb.owlapi.model.OWLAxiom;
 
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.report.KDOMReportMessage;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.report.KDOMReportMessage;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.frame.MiscFrame;

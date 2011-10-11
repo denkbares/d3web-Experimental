@@ -24,12 +24,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.basic.PlainText;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.knowwe.casetrain.message.MissingContentWarning;
 import de.knowwe.casetrain.message.MissingPictureNotice;
 import de.knowwe.casetrain.message.MissingTitleError;
@@ -39,6 +33,12 @@ import de.knowwe.casetrain.type.multimedia.Audio;
 import de.knowwe.casetrain.type.multimedia.Image;
 import de.knowwe.casetrain.type.multimedia.Link;
 import de.knowwe.casetrain.type.multimedia.Video;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.basicType.PlainText;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
  * 

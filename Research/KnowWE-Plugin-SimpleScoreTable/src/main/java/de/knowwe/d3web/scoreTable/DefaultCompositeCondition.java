@@ -23,7 +23,6 @@ package de.knowwe.d3web.scoreTable;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.condition.CompositeCondition;
 import de.d3web.we.kdom.condition.CondKnownUnknown;
 import de.d3web.we.kdom.condition.Finding;
@@ -31,6 +30,7 @@ import de.d3web.we.kdom.condition.NumericalFinding;
 import de.d3web.we.kdom.condition.NumericalIntervallFinding;
 import de.d3web.we.kdom.condition.SolutionStateCond;
 import de.d3web.we.kdom.condition.UserRatingConditionType;
+import de.knowwe.core.kdom.Type;
 
 public class DefaultCompositeCondition extends CompositeCondition {
 	

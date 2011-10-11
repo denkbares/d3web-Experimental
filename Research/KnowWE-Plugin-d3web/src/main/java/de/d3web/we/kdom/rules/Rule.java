@@ -33,19 +33,19 @@ import de.d3web.KnOfficeParser.rule.D3ruleBuilder;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.report.Message;
 import de.d3web.report.Report;
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.rendering.DefaultTextRenderer;
-import de.d3web.we.kdom.rendering.DelegateRenderer;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.DefaultTextRenderer;
+import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.xml.AbstractXMLType;
 
 public class Rule extends AbstractType {
 

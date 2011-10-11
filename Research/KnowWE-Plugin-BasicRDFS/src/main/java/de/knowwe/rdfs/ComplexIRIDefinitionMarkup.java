@@ -27,20 +27,20 @@ import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.node.Node;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.objects.KnowWETerm;
-import de.d3web.we.kdom.objects.TermDefinition;
-import de.d3web.we.kdom.objects.TermReference;
-import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinderSingle;
-import de.d3web.we.utils.SplitUtility;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.utils.CompileUtils;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.objects.TermDefinition;
+import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.utils.SplitUtility;
+import de.knowwe.kdom.renderer.StyleRenderer;
+import de.knowwe.kdom.sectionFinder.RegexSectionFinderSingle;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.util.RDFSUtil;
 

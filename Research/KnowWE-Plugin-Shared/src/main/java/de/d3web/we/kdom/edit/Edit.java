@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.edit;
 
-import de.d3web.we.kdom.xml.AbstractXMLType;
+import de.knowwe.kdom.xml.AbstractXMLType;
 
 /**
  * The Edit class. Used for inplace editing of wiki article content.

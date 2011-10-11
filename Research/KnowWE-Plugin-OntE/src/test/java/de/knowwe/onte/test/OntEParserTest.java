@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import utils.MyTestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.core.packaging.KnowWEPackageManager;
+import de.knowwe.core.compile.packaging.KnowWEPackageManager;
 import de.knowwe.onte.test.util.Query;
 import de.knowwe.onte.test.util.Vocabulary;
 import de.knowwe.rdf2go.Rdf2GoCore;

@@ -34,10 +34,10 @@ import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 
 import de.d3web.we.biolog.freemap.SubmethodExpander;
-import de.d3web.we.search.GenericSearchResult;
-import de.d3web.we.search.KnowWESearchProvider;
-import de.d3web.we.search.SearchTerm;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.search.GenericSearchResult;
+import de.knowwe.search.KnowWESearchProvider;
+import de.knowwe.search.SearchTerm;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 /**

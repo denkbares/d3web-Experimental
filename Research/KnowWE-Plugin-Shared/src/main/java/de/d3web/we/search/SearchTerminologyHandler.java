@@ -31,6 +31,9 @@ import java.util.Set;
 
 import com.wcohen.ss.Levenstein;
 
+import de.knowwe.search.KnowWESearchProvider;
+import de.knowwe.search.SearchTerm;
+
 /**
  * This class is part of the MultiSearchEngine. It allows to expand some *
  * SearchTerm to multiple (related) SearchTerms. Further, for some SearchTerm it

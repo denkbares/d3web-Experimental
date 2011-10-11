@@ -19,8 +19,8 @@
  */
 package de.knowwe.kdom.classHierarchy;
 
-import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
-import de.knowwe.core.dashtree.DashTree;
+import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.kdom.dashtree.DashTree;
 
 public class SubClassingDashtree extends DashTree {
 

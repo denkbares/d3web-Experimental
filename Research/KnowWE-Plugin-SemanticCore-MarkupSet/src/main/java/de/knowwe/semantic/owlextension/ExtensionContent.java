@@ -39,11 +39,11 @@ import de.d3web.we.core.semantic.IntermediateOwlObject;
 import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.xml.XMLContent;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.xml.XMLContent;
 
 public class ExtensionContent extends XMLContent {
 

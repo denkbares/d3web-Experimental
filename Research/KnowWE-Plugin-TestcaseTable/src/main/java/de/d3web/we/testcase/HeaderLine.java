@@ -20,15 +20,15 @@ package de.d3web.we.testcase;
 
 import java.util.List;
 
-import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
-import de.d3web.we.kdom.constraint.SectionFinderConstraint;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.d3web.we.kdom.table.TableCell;
-import de.d3web.we.kdom.table.TableLine;
+import de.knowwe.core.kdom.InvalidKDOMSchemaModificationOperation;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.kdom.constraint.ConstraintSectionFinder;
+import de.knowwe.kdom.constraint.SectionFinderConstraint;
+import de.knowwe.kdom.table.TableCell;
+import de.knowwe.kdom.table.TableLine;
 
 /**
  * The header line of the testcase table.

@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import de.d3web.we.kdom.imagequestion.ImageQuestionHandler;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 
 /**
  * Handles the rerendering of an Image Question.

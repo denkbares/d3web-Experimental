@@ -26,13 +26,13 @@ package de.knowwe.casetrain.type.general;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.MessageRenderer;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.type.AnonymousTypeInvisible;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.MessageRenderer;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.kdom.AnonymousTypeInvisible;
 
 /**
  * 

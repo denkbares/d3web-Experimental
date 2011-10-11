@@ -22,10 +22,10 @@
 
 package de.knowwe.kdom.n3;
 
-import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
-import de.d3web.we.kdom.constraint.AtMostOneFindingConstraint;
-import de.knowwe.core.renderer.GenericHTMLRenderer;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
+import de.knowwe.kdom.constraint.ConstraintSectionFinder;
+import de.knowwe.kdom.renderer.GenericHTMLRenderer;
 import de.knowwe.rdfs.IRITermRef;
 
 public class TurtleSubject extends IRITermRef {

@@ -45,9 +45,9 @@ import de.d3web.core.session.values.NumValue;
 import de.d3web.we.basic.WikiEnvironment;
 import de.d3web.we.basic.WikiEnvironmentManager;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
-import de.d3web.we.event.Event;
-import de.d3web.we.event.EventListener;
 import de.d3web.we.wisec.util.Criteria;
+import de.knowwe.core.event.Event;
+import de.knowwe.core.event.EventListener;
 import de.knowwe.d3web.event.FindingSetEvent;
 
 public class WISECFindingSetEventListener implements EventListener {

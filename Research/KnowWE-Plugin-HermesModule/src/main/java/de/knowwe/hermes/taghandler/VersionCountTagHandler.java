@@ -23,10 +23,10 @@ package de.knowwe.hermes.taghandler;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.wikiConnector.KnowWEWikiConnector;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.wikiConnector.KnowWEWikiConnector;
 
 public class VersionCountTagHandler extends AbstractHTMLTagHandler {
 

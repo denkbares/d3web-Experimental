@@ -19,7 +19,7 @@
  */
 package de.d3web.we.drools.kdom.report;
 
-import de.d3web.we.kdom.report.KDOMError;
+import de.knowwe.core.report.KDOMError;
 
 /**
  * ParseError is used for Drools-Related markup parsing errors, i.e.

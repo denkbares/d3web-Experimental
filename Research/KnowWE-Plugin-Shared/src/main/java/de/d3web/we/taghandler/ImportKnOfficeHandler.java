@@ -23,8 +23,9 @@ package de.d3web.we.taghandler;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
 
 public class ImportKnOfficeHandler extends AbstractHTMLTagHandler {
 

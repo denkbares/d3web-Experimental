@@ -24,8 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.xml.AbstractXMLType;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.kdom.xml.AbstractXMLType;
 
 public class BulletScoring extends AbstractXMLType {
 

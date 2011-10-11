@@ -19,8 +19,8 @@
  */
 package de.d3web.we.kdom;
 
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.utils.Patterns;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.utils.Patterns;
 
 /**
  * SectionFinder for one valid d3 identifier. Either: * one word * many words

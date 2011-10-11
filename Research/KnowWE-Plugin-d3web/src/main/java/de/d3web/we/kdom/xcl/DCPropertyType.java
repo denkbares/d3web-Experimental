@@ -22,10 +22,10 @@ package de.d3web.we.kdom.xcl;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Priority;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.utils.Patterns;
+import de.knowwe.core.compile.Priority;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.utils.Patterns;
 
 /**
  * A Markup for MMInfos.

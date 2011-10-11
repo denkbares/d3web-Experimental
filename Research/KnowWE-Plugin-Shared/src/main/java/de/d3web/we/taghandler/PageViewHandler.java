@@ -27,10 +27,11 @@ import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.Value;
 
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
 
 public class PageViewHandler extends AbstractHTMLTagHandler {
 

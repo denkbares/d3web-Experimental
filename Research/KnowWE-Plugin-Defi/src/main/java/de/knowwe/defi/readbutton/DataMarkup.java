@@ -28,11 +28,11 @@ import com.ecyrd.jspwiki.event.WikiEventListener;
 import com.ecyrd.jspwiki.event.WikiEventManager;
 import com.ecyrd.jspwiki.event.WikiSecurityEvent;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * 

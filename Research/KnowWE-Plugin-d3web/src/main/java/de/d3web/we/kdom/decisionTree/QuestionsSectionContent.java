@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.decisionTree;
 
-import de.d3web.we.kdom.xml.XMLContent;
+import de.knowwe.kdom.xml.XMLContent;
 
 public class QuestionsSectionContent extends XMLContent {
 

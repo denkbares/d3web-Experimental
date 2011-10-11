@@ -37,21 +37,21 @@ import de.d3web.we.core.semantic.OwlHelper;
 import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.basic.LineBreak;
-import de.d3web.we.kdom.contexts.ContextManager;
-import de.d3web.we.kdom.contexts.DefaultSubjectContext;
 import de.d3web.we.kdom.decisionTree.SolutionID;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.d3web.we.logging.Logging;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
-import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.utils.Patterns;
+import de.knowwe.core.contexts.ContextManager;
+import de.knowwe.core.contexts.DefaultSubjectContext;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.basicType.LineBreak;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.SectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.utils.Patterns;
+import de.knowwe.logging.Logging;
 
 public class XCLHead extends AbstractType {
 

@@ -30,14 +30,14 @@ import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.CoverageResult;
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
 import de.d3web.we.flow.GetTraceHighlightAction;
 import de.d3web.we.flow.type.DiaFluxType;
 import de.d3web.we.flow.type.FlowchartType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
 import de.d3web.we.utils.D3webUtils;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 
 /**
  * 

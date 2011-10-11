@@ -25,8 +25,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 import de.knowwe.hermes.TimeEvent;
 import de.knowwe.hermes.util.TimeEventSPARQLUtils;
 import de.knowwe.hermes.util.TimeLineEventRenderer;

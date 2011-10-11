@@ -18,8 +18,8 @@
  */
 package de.knowwe.d3web.owl.assignment;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.objects.IncrementalMarker;
+import de.knowwe.core.compile.IncrementalMarker;
+import de.knowwe.core.kdom.AbstractType;
 
 /**
  *

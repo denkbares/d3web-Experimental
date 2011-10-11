@@ -22,11 +22,11 @@ package de.d3web.we.kdom.rules;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.basic.LineBreak;
 import de.d3web.we.kdom.kopic.renderer.RuleConditionHighlightingRenderer;
 import de.d3web.we.kdom.rule.If;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.basicType.LineBreak;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 public class RuleCondLine extends AbstractType {
 

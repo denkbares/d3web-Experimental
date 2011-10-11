@@ -24,10 +24,11 @@ import java.io.File;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
 
 public class OwlUploadHandler extends AbstractHTMLTagHandler {
 

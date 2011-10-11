@@ -18,7 +18,7 @@
  */
 package de.knowwe.kdom.manchester.types;
 
-import de.d3web.we.kdom.AbstractType;
+import de.knowwe.core.kdom.AbstractType;
 
 /**
  *

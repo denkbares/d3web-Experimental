@@ -24,10 +24,10 @@ import java.util.List;
 import java.util.Stack;
 
 import de.d3web.we.kdom.ExpandedSectionFinderResult;
-import de.d3web.we.kdom.basic.PlainText;
 import de.d3web.we.kdom.dashTree.DashTreeKDOMBuilder;
 import de.d3web.we.kdom.dashTree.Tilde;
-import de.knowwe.core.TextLine;
+import de.knowwe.core.kdom.basicType.PlainText;
+import de.knowwe.core.kdom.basicType.TextLine;
 
 public class SolutionsKDOMBuilder implements DashTreeKDOMBuilder {
 

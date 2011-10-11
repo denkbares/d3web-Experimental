@@ -20,9 +20,9 @@
 
 package de.d3web.we.kdom.dashTree.solutions;
 
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.knowwe.core.LineContent;
+import de.knowwe.core.kdom.basicType.LineContent;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.kdom.renderer.StyleRenderer;
 
 public class SolutionDescription extends LineContent {
 

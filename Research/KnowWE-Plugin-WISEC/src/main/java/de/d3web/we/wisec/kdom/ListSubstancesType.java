@@ -20,15 +20,15 @@
 
 package de.d3web.we.wisec.kdom;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Priority;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.rendering.DelegateRenderer;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
-import de.d3web.we.user.UserContext;
 import de.d3web.we.wisec.kdom.subtreehandler.ListSubstancesOWLSubtreeHandler;
+import de.knowwe.core.compile.Priority;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.user.UserContext;
 
 /**
  * Content type for the ListSubstances section.

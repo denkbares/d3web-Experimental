@@ -22,10 +22,10 @@ package de.d3web.we.biolog.action;
 
 import java.io.IOException;
 
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
 import de.d3web.we.biolog.BiologSearchTagHandler;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * UpdateCloudAction.

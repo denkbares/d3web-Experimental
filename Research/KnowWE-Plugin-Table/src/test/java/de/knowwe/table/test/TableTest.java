@@ -24,9 +24,9 @@ import java.io.IOException;
 
 import junit.framework.TestCase;
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
 import dummies.KnowWETestWikiConnector;
 
 /**

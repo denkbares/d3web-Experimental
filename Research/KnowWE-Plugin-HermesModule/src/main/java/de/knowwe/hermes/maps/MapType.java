@@ -30,14 +30,14 @@ import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.URI;
 
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.xml.AbstractXMLType;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.kdom.xml.AbstractXMLType;
 import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 

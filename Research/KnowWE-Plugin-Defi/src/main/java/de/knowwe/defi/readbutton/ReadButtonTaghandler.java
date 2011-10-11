@@ -21,16 +21,16 @@ package de.knowwe.defi.readbutton;
 import java.util.List;
 import java.util.Map;
 
-import de.d3web.we.core.KnowWEArticleManager;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.taghandler.AbstractTagHandler;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.KnowWEArticleManager;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.taghandler.AbstractTagHandler;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * With the readbutton, the user can rate a lesson. If the rated Value is lower

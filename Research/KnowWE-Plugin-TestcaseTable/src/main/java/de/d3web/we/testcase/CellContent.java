@@ -20,16 +20,16 @@ package de.d3web.we.testcase;
 
 import java.util.List;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
-import de.d3web.we.kdom.constraint.SectionFinderConstraint;
-import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.d3web.we.kdom.table.TableCellContent;
-import de.d3web.we.kdom.table.TableUtils;
-import de.d3web.we.kdom.type.AnonymousType;
 import de.d3web.we.testcase.kdom.TimeStampType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.kdom.AnonymousType;
+import de.knowwe.kdom.constraint.ConstraintSectionFinder;
+import de.knowwe.kdom.constraint.SectionFinderConstraint;
+import de.knowwe.kdom.table.TableCellContent;
+import de.knowwe.kdom.table.TableUtils;
 
 /**
  * @author Florian Ziegler

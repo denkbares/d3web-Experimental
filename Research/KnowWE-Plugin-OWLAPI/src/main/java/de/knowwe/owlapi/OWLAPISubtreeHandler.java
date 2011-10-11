@@ -26,11 +26,11 @@ import java.util.WeakHashMap;
 
 import org.semanticweb.owlapi.model.OWLAxiom;
 
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
+import de.knowwe.core.report.KDOMReportMessage;
 
 /**
  * OWLAPISubtreeHandler class which provides access to an OWL ontology

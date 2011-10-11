@@ -31,8 +31,10 @@ import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.scoring.inference.PSMethodHeuristic;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.WikiEnvironment;
-import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.utils.ProblemSolverType;
+import de.knowwe.core.KnowWEAttributes;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 
 public class ExplanationRenderer2 extends AbstractAction {
 

@@ -22,7 +22,7 @@ package de.knowwe.hermes.util;
 
 import java.util.List;
 
-import de.d3web.we.core.KnowWEEnvironment;
+import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.hermes.TimeEvent;
 
 public class TimeLineEventRenderer {

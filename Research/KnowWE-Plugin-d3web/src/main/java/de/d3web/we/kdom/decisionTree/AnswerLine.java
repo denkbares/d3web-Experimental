@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.decisionTree;
 
-import de.knowwe.core.TextLine;
+import de.knowwe.core.kdom.basicType.TextLine;
 
 public class AnswerLine extends TextLine {
 

@@ -25,8 +25,8 @@ import org.ontoware.rdf2go.vocabulary.OWL;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.termObject.BasicVocabularyReference;
 
 public class URIUtil {

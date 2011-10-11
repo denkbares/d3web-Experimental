@@ -26,8 +26,8 @@ import java.util.List;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.n3.TurtleObject;
 import de.knowwe.kdom.n3.TurtlePredicate;
 import de.knowwe.kdom.n3.TurtleSubject;

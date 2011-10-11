@@ -24,12 +24,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
-import de.d3web.we.core.KnowWEArticleManager;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
+import de.knowwe.core.KnowWEArticleManager;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.hermes.kdom.TimeEventDescriptionType;
 
 public class InsertRelationAction extends AbstractAction {

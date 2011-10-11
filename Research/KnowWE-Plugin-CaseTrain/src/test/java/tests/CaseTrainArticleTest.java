@@ -9,10 +9,6 @@ import org.junit.Test;
 
 import utils.MyTestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.basic.PlainText;
 import de.knowwe.casetrain.evaluation.Evaluation;
 import de.knowwe.casetrain.evaluation.EvaluationEnd;
 import de.knowwe.casetrain.info.AnswerLine;
@@ -44,6 +40,10 @@ import de.knowwe.casetrain.type.multimedia.Link;
 import de.knowwe.casetrain.type.multimedia.Link.Url;
 import de.knowwe.casetrain.type.multimedia.MultimediaItem.MultimediaItemContent;
 import de.knowwe.casetrain.type.multimedia.Video;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.basicType.PlainText;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 
 
 /*

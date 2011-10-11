@@ -30,9 +30,9 @@ import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.QuestionYN;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.table.TableCellContent;
-import de.d3web.we.kdom.table.TableUtils;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.kdom.table.TableCellContent;
+import de.knowwe.kdom.table.TableUtils;
 
 /**
  * @author Florian Ziegler

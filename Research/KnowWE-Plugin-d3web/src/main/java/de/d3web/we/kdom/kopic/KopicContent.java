@@ -27,7 +27,7 @@ import de.d3web.we.kdom.decisionTree.QuestionsSection;
 import de.d3web.we.kdom.rules.RulesSection;
 import de.d3web.we.kdom.table.attributes.AttributeTableSection;
 import de.d3web.we.kdom.xcl.CoveringListSection;
-import de.d3web.we.kdom.xml.XMLContent;
+import de.knowwe.kdom.xml.XMLContent;
 
 public class KopicContent extends XMLContent {
 

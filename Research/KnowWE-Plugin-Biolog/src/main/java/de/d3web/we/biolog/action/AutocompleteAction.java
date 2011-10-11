@@ -23,9 +23,9 @@ package de.d3web.we.biolog.action;
 import java.io.IOException;
 import java.util.List;
 
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
 import de.d3web.we.search.SearchTerminologyHandler;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 
 /**
  * AutocompleteAction.

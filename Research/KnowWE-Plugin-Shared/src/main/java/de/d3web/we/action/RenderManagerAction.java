@@ -27,10 +27,12 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.rendering.CustomRenderer;
-import de.d3web.we.kdom.rendering.RendererManager;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.rendering.CustomRenderer;
+import de.knowwe.core.kdom.rendering.RendererManager;
 
 /**
  * RenderManagerAction. Sets or removes a {@link CustomRenderer} from the

@@ -19,8 +19,8 @@
  */
 package de.d3web.we.kdom.imagequestion;
 
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * Adds a image from the attachment of a Wiki-Page to the knowledgebase as a

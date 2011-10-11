@@ -1,13 +1,13 @@
 package de.d3web.we.testcase;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
-import de.d3web.we.kdom.constraint.SingleChildConstraint;
-import de.d3web.we.kdom.report.MessageRenderer;
 import de.d3web.we.object.AnswerReference;
 import de.d3web.we.object.QuestionReference;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.MessageRenderer;
+import de.knowwe.kdom.constraint.ConstraintSectionFinder;
+import de.knowwe.kdom.constraint.SingleChildConstraint;
 
 /**
  * 

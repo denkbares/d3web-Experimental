@@ -51,15 +51,15 @@ import de.d3web.core.session.values.TextValue;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.report.Message;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Annotation.Finding;
 import de.d3web.we.kdom.Annotation.FindingAnswer;
 import de.d3web.we.kdom.Annotation.FindingComparator;
 import de.d3web.we.kdom.Annotation.FindingQuestion;
-import de.d3web.we.kdom.filter.TypeSectionFilter;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.filter.TypeSectionFilter;
 
 /**
  * Supplies a method for creating a condition from a (Complex)Finding

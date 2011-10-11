@@ -18,10 +18,10 @@
  */
 package de.knowwe.d3web.owl;
 
-import de.d3web.we.core.packaging.KnowWEPackageManager;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.kdom.objects.IncrementalMarker;
+import de.knowwe.core.compile.IncrementalMarker;
+import de.knowwe.core.compile.packaging.KnowWEPackageManager;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * Type for providing OWL ontologies. The provided ontologies will be attached

@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import de.d3web.we.ci4ke.testing.DynamicCITestManager;
-import de.d3web.we.event.Event;
-import de.d3web.we.event.EventListener;
-import de.d3web.we.event.InitEvent;
+import de.knowwe.core.event.Event;
+import de.knowwe.core.event.EventListener;
+import de.knowwe.event.InitEvent;
 
 /**
  * Registers the {@link GroovyDynamicCITestHandler} in the

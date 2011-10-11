@@ -24,7 +24,8 @@
 package de.d3web.we.kdom.contexts;
 
 import de.d3web.core.manage.KnowledgeBaseUtils;
-import de.d3web.we.kdom.Section;
+import de.knowwe.core.contexts.StringContext;
+import de.knowwe.core.kdom.parsing.Section;
 
 /**
  * @author kazamatzuri

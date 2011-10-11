@@ -18,9 +18,9 @@
  */
 package de.knowwe.d3web.owl.assignment;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.sectionFinder.AllTextFinderDivCorrectTrimmed;
-import de.knowwe.core.CommentLineType;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.basicType.CommentLineType;
+import de.knowwe.kdom.sectionFinder.AllTextFinderDivCorrectTrimmed;
 
 /**
  *

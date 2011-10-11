@@ -26,14 +26,14 @@ import de.d3web.we.ci4ke.handling.CIConfig;
 import de.d3web.we.ci4ke.testing.CITest;
 import de.d3web.we.ci4ke.testing.CITestResult;
 import de.d3web.we.ci4ke.testing.CITestResult.Type;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.SimpleMessageError;
-import de.d3web.we.kdom.report.message.ObjectCreatedMessage;
-import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.SimpleMessageError;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.report.message.ObjectCreatedMessage;
 
 public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType> {
 

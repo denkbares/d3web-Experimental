@@ -23,18 +23,18 @@ package de.d3web.we.kdom.kopic.renderer;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.Annotation.AnnotationObject;
 import de.d3web.we.kdom.Annotation.StandardAnnotationRenderer;
-import de.d3web.we.kdom.contexts.AnnotationContext;
-import de.d3web.we.kdom.contexts.ContextManager;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.kdom.semanticAnnotation.AnnotatedString;
 import de.d3web.we.kdom.semanticAnnotation.SimpleAnnotation;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.contexts.AnnotationContext;
+import de.knowwe.core.contexts.ContextManager;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 
 @SuppressWarnings("unchecked")
 public class D3webAnnotationRenderer extends KnowWEDomRenderer {

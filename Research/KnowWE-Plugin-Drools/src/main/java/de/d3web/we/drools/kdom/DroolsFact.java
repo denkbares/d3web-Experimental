@@ -32,15 +32,15 @@ import de.d3web.we.drools.terminology.NumInput;
 import de.d3web.we.drools.terminology.OCInput;
 import de.d3web.we.drools.terminology.SolutionInput;
 import de.d3web.we.drools.terminology.TextValue;
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Priority;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.message.NewObjectCreated;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
+import de.knowwe.core.compile.Priority;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.report.message.NewObjectCreated;
 
 /**
  * DroolsFact contains the type, name and possible values of an input.

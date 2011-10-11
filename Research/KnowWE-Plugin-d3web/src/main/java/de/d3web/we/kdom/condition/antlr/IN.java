@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.condition.antlr;
 
-import de.d3web.we.kdom.AbstractType;
+import de.knowwe.core.kdom.AbstractType;
 
 public class IN extends AbstractType {
 

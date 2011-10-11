@@ -20,8 +20,8 @@
 
 package de.d3web.we.testcase;
 
-import de.d3web.we.kdom.xml.AbstractXMLType;
-import de.d3web.we.kdom.xml.XMLContent;
+import de.knowwe.kdom.xml.AbstractXMLType;
+import de.knowwe.kdom.xml.XMLContent;
 
 public class TestcaseTableXMLType extends AbstractXMLType {
 

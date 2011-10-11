@@ -1,8 +1,8 @@
 package de.knowwe.compile.object;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.objects.TermDefinition;
-import de.d3web.we.kdom.report.KDOMError;
+import de.knowwe.core.kdom.objects.TermDefinition;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.report.KDOMError;
 
 public class ConcurrentDefinitionsError extends KDOMError {
 

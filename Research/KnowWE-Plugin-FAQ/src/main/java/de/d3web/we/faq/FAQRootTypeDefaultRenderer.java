@@ -20,12 +20,12 @@
 
 package de.d3web.we.faq;
 
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupRenderer;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * Default renderer for the custom FAQ type; renders the faq entries in the same

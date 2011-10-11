@@ -30,13 +30,13 @@ import junit.framework.TestCase;
 import objectTypes.SplitObjectType;
 import objectTypes.WordObjectType;
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.core.KnowWEAttributes;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.RootType;
+import de.knowwe.core.KnowWEAttributes;
+import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.WordBasedRenameFinding;
 import de.knowwe.core.action.WordBasedRenamingAction;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.RootType;
 import dummies.KnowWETestWikiConnector;
 
 public class RenamingToolTest extends TestCase {

@@ -22,12 +22,12 @@ package de.knowwe.termObject;
 
 import java.util.List;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.objects.KnowWETerm;
-import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 
 /**
  * References the local page as concept IRI. (possible using the keyword "this")

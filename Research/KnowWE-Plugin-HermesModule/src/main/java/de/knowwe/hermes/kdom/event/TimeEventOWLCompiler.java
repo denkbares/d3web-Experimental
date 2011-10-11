@@ -10,11 +10,11 @@ import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.contexts.ContextManager;
-import de.d3web.we.kdom.contexts.DefaultSubjectContext;
-import de.d3web.we.kdom.report.KDOMReportMessage;
+import de.knowwe.core.contexts.ContextManager;
+import de.knowwe.core.contexts.DefaultSubjectContext;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.report.KDOMReportMessage;
 import de.knowwe.hermes.TimeEvent;
 import de.knowwe.hermes.TimeStamp;
 import de.knowwe.rdf2go.DefaultURIContext;

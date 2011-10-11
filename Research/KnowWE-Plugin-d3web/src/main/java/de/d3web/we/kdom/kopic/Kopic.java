@@ -21,8 +21,8 @@
 package de.d3web.we.kdom.kopic;
 
 import de.d3web.we.kdom.kopic.renderer.KopicRenderer;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.xml.AbstractXMLType;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.kdom.xml.AbstractXMLType;
 
 public class Kopic extends AbstractXMLType {
 

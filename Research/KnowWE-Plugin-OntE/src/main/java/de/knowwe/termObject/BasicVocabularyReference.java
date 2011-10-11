@@ -22,9 +22,9 @@ package de.knowwe.termObject;
 
 import org.ontoware.rdf2go.model.node.URI;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.rendering.StyleRenderer;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.onte.owl.terminology.URIUtil;
 
 /**

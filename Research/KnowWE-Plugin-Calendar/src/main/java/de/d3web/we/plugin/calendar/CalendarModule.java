@@ -27,8 +27,8 @@ import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.plugin.Instantiation;
 
 public class CalendarModule implements Instantiation {

@@ -22,9 +22,9 @@ package de.d3web.we.kdom.css;
 
 import java.util.List;
 
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.xml.AbstractXMLType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.kdom.xml.AbstractXMLType;
 
 /**
  * <p>

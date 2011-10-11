@@ -29,14 +29,14 @@ import de.d3web.we.core.semantic.IntermediateOwlObject;
 import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.subtreeHandler.IncrementalConstraint;
-import de.knowwe.core.dashtree.DashTreeElement;
-import de.knowwe.core.dashtree.DashTreeElementContent;
-import de.knowwe.core.dashtree.DashTreeUtils;
+import de.knowwe.core.compile.IncrementalConstraint;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.kdom.dashtree.DashTreeElement;
+import de.knowwe.kdom.dashtree.DashTreeElementContent;
+import de.knowwe.kdom.dashtree.DashTreeUtils;
 
 public class SubClassingDashTreeElement extends DashTreeElement implements
 		IncrementalConstraint<SubClassingDashTreeElement> {

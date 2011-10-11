@@ -21,13 +21,13 @@ package de.knowwe.kdom.turtle.simple;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Priority;
-import de.d3web.we.kdom.constraint.AtMostOneFindingConstraint;
-import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
-import de.d3web.we.kdom.constraint.SingleChildConstraint;
-import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.compile.Priority;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
+import de.knowwe.kdom.constraint.ConstraintSectionFinder;
+import de.knowwe.kdom.constraint.SingleChildConstraint;
 import de.knowwe.kdom.turtle.TurtleRDF2GoCompiler;
 import de.knowwe.termObject.IRITermReference;
 

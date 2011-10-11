@@ -35,18 +35,18 @@ import org.junit.Test;
 import utils.MyTestArticleManager;
 import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.core.KnowWEArticleManager;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.packaging.KnowWEPackageManager;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.RootType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
 import de.knowwe.compile.test.util.Query;
 import de.knowwe.compile.test.util.Vocabulary;
+import de.knowwe.core.KnowWEArticleManager;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.compile.packaging.KnowWEPackageManager;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.RootType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**

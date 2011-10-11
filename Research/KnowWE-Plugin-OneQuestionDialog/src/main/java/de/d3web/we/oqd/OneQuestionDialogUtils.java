@@ -32,8 +32,8 @@ import de.d3web.core.knowledge.terminology.QuestionYN;
 import de.d3web.core.session.Session;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.SessionBroker;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.user.UserContext;
 
 /**
  * 

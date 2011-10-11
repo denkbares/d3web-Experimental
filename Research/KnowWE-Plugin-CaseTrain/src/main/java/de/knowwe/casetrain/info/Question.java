@@ -23,15 +23,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
-import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.knowwe.casetrain.message.InvalidArgumentError;
 import de.knowwe.casetrain.message.MissingAttributeWarning;
 import de.knowwe.casetrain.message.MissingComponentError;
@@ -42,6 +33,15 @@ import de.knowwe.casetrain.type.general.SubblockMarkup;
 import de.knowwe.casetrain.type.general.Title;
 import de.knowwe.casetrain.type.multimedia.Image;
 import de.knowwe.casetrain.type.multimedia.Video;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.kdom.constraint.ConstraintSectionFinder;
+import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
+import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 
 /**

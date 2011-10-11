@@ -20,11 +20,11 @@
 
 package de.d3web.we.kdom.Annotation;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sectionizable;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.sectionFinder.AllBeforeTypeSectionFinder;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sectionizable;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.kdom.sectionFinder.AllBeforeTypeSectionFinder;
 
 public class FindingQuestion extends AbstractType {
 

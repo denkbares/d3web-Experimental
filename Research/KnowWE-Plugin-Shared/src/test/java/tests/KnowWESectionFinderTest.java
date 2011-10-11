@@ -23,19 +23,19 @@ package tests;
 import java.util.List;
 
 import junit.framework.TestCase;
-import de.d3web.we.kdom.basic.LineBreak;
-import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
-import de.d3web.we.kdom.sectionFinder.LineSectionFinder;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.d3web.we.kdom.sectionFinder.SentenceSectionFinder;
-import de.d3web.we.kdom.sectionFinder.StringSectionFinder;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotationProperty;
-import de.d3web.we.kdom.table.TableCell;
-import de.d3web.we.kdom.table.TableCellStart;
-import de.d3web.we.kdom.table.TableHeadStart;
-import de.d3web.we.kdom.table.TableLine;
+import de.knowwe.core.kdom.basicType.LineBreak;
+import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.kdom.sectionFinder.LineSectionFinder;
+import de.knowwe.kdom.sectionFinder.SentenceSectionFinder;
+import de.knowwe.kdom.sectionFinder.StringSectionFinder;
+import de.knowwe.kdom.table.TableCell;
+import de.knowwe.kdom.table.TableCellStart;
+import de.knowwe.kdom.table.TableHeadStart;
+import de.knowwe.kdom.table.TableLine;
 
 /**
  * Tests all KnowWESectionFinders

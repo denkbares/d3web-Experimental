@@ -25,12 +25,12 @@ import java.util.List;
 import de.d3web.empiricaltesting.RatedTestCase;
 import de.d3web.empiricaltesting.SequentialTestCase;
 import de.d3web.empiricaltesting.TestCase;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * 

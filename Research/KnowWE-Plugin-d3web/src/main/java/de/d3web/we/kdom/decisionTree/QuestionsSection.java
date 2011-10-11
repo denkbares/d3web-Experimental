@@ -29,13 +29,13 @@ import de.d3web.KnOfficeParser.decisiontree.D3DTBuilder;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.report.Message;
 import de.d3web.report.Report;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Priority;
-import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.kopic.AbstractKopicSection;
-import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.compile.Priority;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.utils.KnowWEUtils;
 
 public class QuestionsSection extends AbstractKopicSection {
 

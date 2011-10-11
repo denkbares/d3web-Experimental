@@ -21,14 +21,14 @@
 package de.d3web.we.kdom.wikiTemplate;
 
 import de.d3web.we.action.TemplateGenerationAction;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.rendering.DelegateRenderer;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.taghandler.TemplateTagHandler;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.kdom.xml.AbstractXMLType;
 
 /**
  * Template Type used to generate WikiPages out of templates.

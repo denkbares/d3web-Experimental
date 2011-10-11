@@ -21,7 +21,7 @@
 package de.d3web.we.kdom.condition.antlr;
 
 import de.d3web.we.kdom.Annotation.FindingQuestion;
-import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 
 public class SimpleQuestionType extends FindingQuestion {
 

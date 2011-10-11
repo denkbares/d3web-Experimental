@@ -24,19 +24,19 @@ import java.util.Collection;
 import java.util.List;
 
 import de.d3web.core.session.Session;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.condition.antlr.ComplexFinding;
-import de.d3web.we.kdom.rendering.DelegateRenderer;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.D3webUtils;
-import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.utils.XCLRelationWeight;
 import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelation;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * Highlights XCLRelations. Answer Right: Green Answer wrong: Red Answer

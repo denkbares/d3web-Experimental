@@ -7,14 +7,14 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.report.KDOMError;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
-import de.d3web.we.kdom.sectionFinder.LineSectionFinder;
-import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.report.KDOMError;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.kdom.sectionFinder.LineSectionFinder;
+import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 public class TimeTableContentType extends AbstractType {
 

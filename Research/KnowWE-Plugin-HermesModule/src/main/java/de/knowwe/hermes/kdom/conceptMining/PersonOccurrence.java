@@ -20,7 +20,7 @@
 
 package de.knowwe.hermes.kdom.conceptMining;
 
-import de.d3web.we.kdom.AbstractType;
+import de.knowwe.core.kdom.AbstractType;
 
 public class PersonOccurrence extends AbstractType {
 

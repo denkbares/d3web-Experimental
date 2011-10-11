@@ -22,22 +22,22 @@
 
 package de.knowwe.kdom.n3;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.objects.TermReference;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 
 import java.util.Collection;
 import java.util.regex.Pattern;
 
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.utils.CompileUtils;
-import de.knowwe.core.renderer.GenericHTMLRenderer;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.n3.TurtleSubjectSection;
 import de.knowwe.kdom.n3.TurtlePredSentence;
 import de.knowwe.kdom.n3.compile.TurtleCompiler;
 import de.knowwe.kdom.n3.render.TurtleN3Renderer;
-import de.d3web.we.kdom.type.AnonymousType;
+import de.knowwe.kdom.renderer.GenericHTMLRenderer;
 
 public class TurtleMarkupN3 extends AbstractType implements KnowledgeUnit<TurtleMarkupN3>{
 

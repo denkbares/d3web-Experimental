@@ -22,11 +22,11 @@ package de.knowwe.hermes.kdom;
 
 import java.util.List;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotation;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotationContent;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.hermes.kdom.conceptMining.LocationOccurrence;
 import de.knowwe.hermes.kdom.conceptMining.PersonOccurrence;
 

@@ -30,9 +30,9 @@ import javax.swing.JOptionPane;
 import com.ecyrd.jspwiki.WikiEngine;
 import com.ecyrd.jspwiki.util.MailUtil;
 
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
-import de.d3web.we.core.KnowWEEnvironment;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 
 /**
  * Send a mail, show/hide form.

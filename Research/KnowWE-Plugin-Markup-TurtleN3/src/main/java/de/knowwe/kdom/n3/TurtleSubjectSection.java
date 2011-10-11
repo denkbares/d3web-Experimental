@@ -22,14 +22,15 @@
 
 package de.knowwe.kdom.n3;
 
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
-import de.d3web.we.kdom.constraint.AtMostOneFindingConstraint;
 import java.util.regex.Pattern;
-import de.knowwe.core.renderer.GenericHTMLRenderer;
+
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.kdom.AnonymousType;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
+import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.n3.TurtleSubject;
-import de.d3web.we.kdom.type.AnonymousType;
+import de.knowwe.kdom.renderer.GenericHTMLRenderer;
 
 public class TurtleSubjectSection extends AbstractType {
 

@@ -20,10 +20,10 @@
 
 package de.d3web.we.wisec.kdom;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Priority;
-import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
 import de.d3web.we.wisec.kdom.subtreehandler.ListCriteriaOWLSubtreeHandler;
+import de.knowwe.core.compile.Priority;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 
 /**
  * Content type for the ListCriteria section.

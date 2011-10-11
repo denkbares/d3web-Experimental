@@ -2,8 +2,8 @@ package de.knowwe.compile.object;
 
 import java.util.Map;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.objects.TermDefinition;
+import de.knowwe.core.kdom.objects.TermDefinition;
+import de.knowwe.core.kdom.parsing.Section;
 
 public interface TypedTermDefinition {
 	

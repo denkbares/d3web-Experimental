@@ -19,9 +19,9 @@
  */
 package de.d3web.we.drools.kdom.rendering;
 
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.MessageRenderer;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.MessageRenderer;
+import de.knowwe.core.user.UserContext;
 
 public class DroolsRuleNoticeRenderer implements MessageRenderer{
 

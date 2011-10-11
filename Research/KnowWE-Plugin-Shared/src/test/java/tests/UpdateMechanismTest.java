@@ -26,13 +26,13 @@ import java.util.List;
 import junit.framework.TestCase;
 import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWEEnvironment.CompilationMode;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.RootType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.xml.GenericXMLObjectType;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.KnowWEEnvironment.CompilationMode;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.RootType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.kdom.xml.GenericXMLObjectType;
 import dummies.KnowWETestWikiConnector;
 
 public class UpdateMechanismTest extends TestCase {

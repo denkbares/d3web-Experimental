@@ -19,10 +19,11 @@
  */
 package de.d3web.we.kdom.basic;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.basicType.SquareBracedType;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * A type that finds a subtype in [] after a keyword. E.g. KNOWN[Question1],

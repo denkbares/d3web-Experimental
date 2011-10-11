@@ -36,7 +36,7 @@ import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.IntermediateOwlObject;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
-import de.d3web.we.kdom.Section;
+import de.knowwe.core.kdom.parsing.Section;
 
 public class ExtensionObject {
 

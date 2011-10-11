@@ -26,9 +26,9 @@ import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.rendering.PageAppendHandler;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.append.PageAppendHandler;
+import de.knowwe.core.user.UserContext;
 
 public class PageLoggerHandler implements PageAppendHandler {
 

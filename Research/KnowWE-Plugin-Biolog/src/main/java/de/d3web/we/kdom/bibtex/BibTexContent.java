@@ -29,17 +29,17 @@ import bibtex.dom.BibtexEntry;
 import bibtex.dom.BibtexFile;
 import bibtex.parser.BibtexParser;
 import bibtex.parser.ParseException;
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.IntermediateOwlObject;
 import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
 import de.d3web.we.kdom.bibtex.verbalizer.BibTexRenderManager;
 import de.d3web.we.kdom.bibtex.verbalizer.BibTexRenderManager.RenderingFormat;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.xml.XMLContent;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.xml.XMLContent;
 
 /**
  * A type that translates the bibtex data into the triple-store using the SWRC

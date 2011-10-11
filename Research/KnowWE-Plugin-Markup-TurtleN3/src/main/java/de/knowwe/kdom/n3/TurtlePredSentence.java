@@ -22,11 +22,11 @@
 
 package de.knowwe.kdom.n3;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.sectionFinder.SplitSectionFinderUnquoted;
-import de.knowwe.core.renderer.GenericHTMLRenderer;
+import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.kdom.n3.TurtlePredicateSectiom;
 import de.knowwe.kdom.n3.TurtleObject;
+import de.knowwe.kdom.renderer.GenericHTMLRenderer;
+import de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquoted;
 
 public class TurtlePredSentence extends AbstractType {
 

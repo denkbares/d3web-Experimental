@@ -21,7 +21,7 @@
 package objectTypes;
 
 import copies.StringSectionFinder;
-import de.d3web.we.kdom.AbstractType;
+import de.knowwe.core.kdom.AbstractType;
 
 public class BracketsOpenObjectType extends AbstractType {
 

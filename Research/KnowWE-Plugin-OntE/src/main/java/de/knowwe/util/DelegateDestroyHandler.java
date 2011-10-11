@@ -22,12 +22,12 @@ package de.knowwe.util;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
-import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 public class DelegateDestroyHandler extends GeneralSubtreeHandler<Type> {
 

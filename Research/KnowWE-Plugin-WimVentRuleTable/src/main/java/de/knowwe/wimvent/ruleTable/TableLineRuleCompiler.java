@@ -36,20 +36,20 @@ import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.manage.RuleFactory;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.basic.Number;
 import de.d3web.we.kdom.condition.D3webCondition;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.message.CreateRelationFailed;
-import de.d3web.we.kdom.report.message.ObjectCreatedMessage;
-import de.d3web.we.kdom.table.TableCellContent;
 import de.d3web.we.object.AnswerReference;
 import de.d3web.we.object.QuestionReference;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.basicType.Number;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.kdom.table.TableCellContent;
+import de.knowwe.report.message.CreateRelationFailed;
+import de.knowwe.report.message.ObjectCreatedMessage;
 import de.knowwe.wimvent.ruleTable.WimVentTable.WimVentRuleTableRuleLine;
 
 public class TableLineRuleCompiler extends D3webSubtreeHandler<WimVentRuleTableRuleLine> {
@@ -114,7 +114,7 @@ public class TableLineRuleCompiler extends D3webSubtreeHandler<WimVentRuleTableR
 
 			// check for number
 			Section<Number> numberSec = Sections.findSuccessor(cell,
-					de.d3web.we.kdom.basic.Number.class);
+					de.knowwe.core.kdom.basicType.Number.class);
 			if (q != null && numberSec != null) {
 				if (q instanceof QuestionNum) {
 					QuestionNum qNum = (QuestionNum) q;

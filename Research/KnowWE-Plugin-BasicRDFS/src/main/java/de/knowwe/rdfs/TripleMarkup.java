@@ -27,17 +27,17 @@ import java.util.regex.Pattern;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.constraint.AtMostOneFindingConstraint;
-import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
-import de.d3web.we.kdom.constraint.SingleChildConstraint;
-import de.d3web.we.kdom.objects.TermReference;
-import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.utils.CompileUtils;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
+import de.knowwe.kdom.constraint.ConstraintSectionFinder;
+import de.knowwe.kdom.constraint.SingleChildConstraint;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.util.RDFSUtil;
 

@@ -23,8 +23,8 @@ package de.knowwe.hermes.action;
 import java.io.IOException;
 import java.util.Map;
 
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 import de.knowwe.hermes.quiz.QuizSessionManager;
 import de.knowwe.hermes.taghandler.QuizHandler;
 

@@ -18,7 +18,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Instantiation"
 		id="CommentModule">
 		<parameter id="class"
-			value="de.d3web.we.plugin.comment.CommentModule" />
+			value="de.knowwe.comment.kdom.CommentModule" />
 		<parameter id="name" value="CommentModule" />
 		<parameter id="description" value="Instantiation CommentModule" />
 		<parameter id="version" value="1.0" />
@@ -28,7 +28,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="ForumBoxAction">
 		<parameter id="class"
-			value="de.d3web.we.action.ForumBoxAction" />
+			value="de.knowwe.comment.action.ForumBoxAction" />
 		<parameter id="name" value="ForumBoxAction" />
 		<parameter id="description" value="Action ForumBoxAction" />
 		<parameter id="version" value="1.0" />
@@ -38,7 +38,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="CommentType">
 		<parameter id="class"
-			value="de.d3web.we.plugin.comment.CommentType" />
+			value="de.knowwe.comment.kdom.CommentType" />
 		<parameter id="name" value="CommentType" />
 		<parameter id="description" value="Type CommentType" />
 		<parameter id="version" value="1.0" />
@@ -49,7 +49,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Forum">
 		<parameter id="class"
-			value="de.d3web.we.plugin.forum.Forum" />
+			value="de.knowwe.comment.forum.Forum" />
 		<parameter id="name" value="Forum" />
 		<parameter id="description" value="Type Forum" />
 		<parameter id="version" value="1.0" />

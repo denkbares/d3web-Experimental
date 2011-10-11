@@ -23,13 +23,13 @@ import java.io.IOException;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.session.Session;
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
 import de.d3web.we.basic.SessionBroker;
 import de.d3web.we.basic.WikiEnvironment;
 import de.d3web.we.basic.WikiEnvironmentManager;
-import de.d3web.we.core.KnowWEAttributes;
 import de.d3web.we.utils.D3webUtils;
+import de.knowwe.core.KnowWEAttributes;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 
 
 /**

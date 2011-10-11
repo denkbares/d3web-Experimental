@@ -24,8 +24,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.hermes.TimeEvent;
 import de.knowwe.hermes.util.TimeEventSPARQLUtils;
 import de.knowwe.hermes.util.TimeLineEventRenderer;

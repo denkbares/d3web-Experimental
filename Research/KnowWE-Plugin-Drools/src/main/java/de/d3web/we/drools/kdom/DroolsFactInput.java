@@ -19,9 +19,9 @@
  */
 package de.d3web.we.drools.kdom;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * DroolsFactInput covers the word "Input" and the type

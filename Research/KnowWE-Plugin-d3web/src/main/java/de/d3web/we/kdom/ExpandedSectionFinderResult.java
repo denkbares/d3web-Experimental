@@ -23,7 +23,8 @@ package de.d3web.we.kdom;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 
 public class ExpandedSectionFinderResult extends SectionFinderResult {
 

@@ -35,14 +35,14 @@ import de.d3web.KnOfficeParser.DefaultLexer;
 import de.d3web.KnOfficeParser.dashtree.DashTree;
 import de.d3web.KnOfficeParser.util.DefaultD3webParserErrorHandler;
 import de.d3web.report.Message;
-import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.ExpandedSectionFinderResult;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.dashTree.DashTreeKDOMBuilder;
 import de.d3web.we.kdom.kopic.renderer.DefaultLineNumberDeligateRenderer;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.SectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 
 public class SolutionsTreeANTLR extends AbstractType {
 

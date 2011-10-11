@@ -19,8 +19,8 @@
  */
 package de.d3web.we.kdom.kopic.rules.ruleActionLine;
 
-import de.d3web.we.kdom.AbstractType;
 import de.d3web.we.kdom.decisionTree.SolutionID;
+import de.knowwe.core.kdom.AbstractType;
 
 /**
  * ATM unused

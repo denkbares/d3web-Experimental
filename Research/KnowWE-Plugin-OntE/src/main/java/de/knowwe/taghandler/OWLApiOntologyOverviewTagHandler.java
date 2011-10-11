@@ -25,15 +25,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.d3web.we.core.KnowWEArticleManager;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.taghandler.TagHandler;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.KnowWEArticleManager;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.taghandler.TagHandler;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.manchester.ManchesterSyntaxFrameRenderer;
 import de.knowwe.kdom.manchester.frame.DefaultFrame;
 

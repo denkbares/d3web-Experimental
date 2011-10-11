@@ -21,9 +21,9 @@ package de.knowwe.kdom.manchester;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.frame.ClassFrame;
 import de.knowwe.kdom.manchester.frame.IndividualFrame;
 import de.knowwe.kdom.manchester.frame.MiscFrame;

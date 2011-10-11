@@ -23,16 +23,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.types.Keyword;
 import de.knowwe.kdom.manchester.types.NonTerminalList;
 import de.knowwe.kdom.manchester.types.NonTerminalListContent;
+import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  *

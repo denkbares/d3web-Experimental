@@ -10,9 +10,9 @@ import org.semanticweb.owlapi.model.OWLOntologyID;
 import org.semanticweb.owlapi.reasoner.Node;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
-import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.taghandler.TagHandler;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.taghandler.TagHandler;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.owlapi.OWLAPIConnector;
 
 /**

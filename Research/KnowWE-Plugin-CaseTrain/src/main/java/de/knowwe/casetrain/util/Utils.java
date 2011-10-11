@@ -23,12 +23,12 @@ import java.util.Collection;
 import java.util.ResourceBundle;
 
 import de.casetrain.cleanup.Cleaner;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.report.KDOMError;
-import de.d3web.we.kdom.report.KDOMNotice;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.KDOMWarning;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.report.KDOMError;
+import de.knowwe.core.report.KDOMNotice;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.KDOMWarning;
+import de.knowwe.core.utils.KnowWEUtils;
 
 public class Utils {
 

@@ -3,16 +3,16 @@ package de.d3web.we.testcaseexecutor;
 import java.util.Collection;
 
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupRenderer;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.D3webUtils;
-import de.d3web.we.utils.KnowWEUtils;
-import de.d3web.we.wikiConnector.ConnectorAttachment;
-import de.d3web.we.wikiConnector.KnowWEWikiConnector;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.wikiConnector.ConnectorAttachment;
+import de.knowwe.core.wikiConnector.KnowWEWikiConnector;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * 

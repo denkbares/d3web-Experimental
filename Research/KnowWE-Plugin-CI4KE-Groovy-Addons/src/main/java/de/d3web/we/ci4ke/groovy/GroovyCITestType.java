@@ -18,8 +18,8 @@
  */
 package de.d3web.we.ci4ke.groovy;
 
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * Type for dynamically implemented CITests with Groovy

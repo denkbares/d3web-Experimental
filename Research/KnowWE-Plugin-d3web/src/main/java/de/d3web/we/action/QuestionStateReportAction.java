@@ -32,7 +32,9 @@ import de.d3web.core.session.Value;
 import de.d3web.we.basic.SessionBroker;
 import de.d3web.we.basic.WikiEnvironment;
 import de.d3web.we.basic.WikiEnvironmentManager;
-import de.d3web.we.core.KnowWEAttributes;
+import de.knowwe.core.KnowWEAttributes;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 
 public class QuestionStateReportAction extends AbstractAction {
 

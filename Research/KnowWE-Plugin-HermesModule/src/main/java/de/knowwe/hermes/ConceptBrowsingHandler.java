@@ -27,9 +27,9 @@ import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryRow;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.rendering.PageAppendHandler;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.append.PageAppendHandler;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**

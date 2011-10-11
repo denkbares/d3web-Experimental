@@ -20,12 +20,12 @@ package de.knowwe.d3web.owl;
 
 import java.util.List;
 
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.basic.PlainText;
-import de.d3web.we.kdom.defaultMarkup.ContentType;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupRenderer;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.basicType.PlainText;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.kdom.defaultMarkup.ContentType;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 
 /**
  *

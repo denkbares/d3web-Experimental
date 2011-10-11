@@ -29,16 +29,16 @@ import de.d3web.core.inference.condition.CondNumLessEqual;
 import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionNum;
-import de.d3web.we.kdom.ExclusiveType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.condition.D3webCondition;
-import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.table.TableCellContent;
-import de.d3web.we.kdom.table.TableUtils;
 import de.d3web.we.object.QuestionReference;
+import de.knowwe.core.kdom.ExclusiveType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.kdom.table.TableCellContent;
+import de.knowwe.kdom.table.TableUtils;
 
 public abstract class TableCondNum extends D3webCondition<TableCondNum> implements ExclusiveType {
 
@@ -46,7 +46,7 @@ public abstract class TableCondNum extends D3webCondition<TableCondNum> implemen
 		this.setSectionFinder(new RegexSectionFinder(op + "(.+)",
 				Pattern.CASE_INSENSITIVE,
 				1));
-		de.d3web.we.kdom.basic.Number t = new de.d3web.we.kdom.basic.Number(
+		de.knowwe.core.kdom.basicType.Number t = new de.knowwe.core.kdom.basicType.Number(
 				new AllTextFinderTrimmed());
 		t.setCustomRenderer(WimVentTable.NUMBER_RENDERER);
 		this.addChildType(t);
@@ -55,10 +55,10 @@ public abstract class TableCondNum extends D3webCondition<TableCondNum> implemen
 
 	@Override
 	protected Condition createCondition(KnowWEArticle article, Section<TableCondNum> section) {
-		Section<de.d3web.we.kdom.basic.Number> numberSec = Sections.findChildOfType(
-				section, de.d3web.we.kdom.basic.Number.class);
+		Section<de.knowwe.core.kdom.basicType.Number> numberSec = Sections.findChildOfType(
+				section, de.knowwe.core.kdom.basicType.Number.class);
 		if (numberSec != null) {
-			Double number = de.d3web.we.kdom.basic.Number.getNumber(numberSec);
+			Double number = de.knowwe.core.kdom.basicType.Number.getNumber(numberSec);
 			if (number != null) {
 				Section<TableCellContent> cell = Sections.findAncestorOfType(section,
 							TableCellContent.class);

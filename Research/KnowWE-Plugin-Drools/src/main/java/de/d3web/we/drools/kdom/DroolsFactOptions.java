@@ -19,8 +19,8 @@
  */
 package de.d3web.we.drools.kdom;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 /**
  * DroolsFactOptions is the bracketed section after the InputType.

@@ -20,14 +20,14 @@ package de.d3web.we.testcase;
 
 import java.util.Collection;
 
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.report.KDOMError;
-import de.d3web.we.kdom.table.TableCellContent;
-import de.d3web.we.kdom.table.TableCellContentRenderer;
-import de.d3web.we.kdom.table.TableUtils;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.report.KDOMError;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.table.TableCellContent;
+import de.knowwe.kdom.table.TableCellContentRenderer;
+import de.knowwe.kdom.table.TableUtils;
 
 /**
  * 

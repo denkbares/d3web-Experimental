@@ -31,11 +31,13 @@ import de.d3web.core.session.Value;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.SessionBroker;
-import de.d3web.we.core.KnowWEArticleManager;
-import de.d3web.we.core.KnowWEAttributes;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
 import de.d3web.we.kdom.xcl.CoveringListSection;
+import de.knowwe.core.KnowWEArticleManager;
+import de.knowwe.core.KnowWEAttributes;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.KnowWEArticle;
 
 /**
  * 

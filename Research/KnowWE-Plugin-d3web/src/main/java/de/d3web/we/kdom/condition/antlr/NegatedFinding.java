@@ -20,9 +20,9 @@
 
 package de.d3web.we.kdom.condition.antlr;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.rendering.StyleRenderer;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.kdom.renderer.StyleRenderer;
 
 public class NegatedFinding extends AbstractType {
 

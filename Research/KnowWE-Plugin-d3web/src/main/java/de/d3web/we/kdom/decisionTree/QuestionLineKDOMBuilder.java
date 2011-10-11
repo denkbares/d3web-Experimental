@@ -25,11 +25,11 @@ import java.util.Stack;
 
 import de.d3web.KnOfficeParser.decisiontree.DTBuilder;
 import de.d3web.we.kdom.ExpandedSectionFinderResult;
-import de.d3web.we.kdom.basic.LineBreak;
 import de.d3web.we.kdom.dashTree.Dashes;
 import de.d3web.we.kdom.dashTree.questionnaires.QuestionnaireLine;
 import de.d3web.we.kdom.dashTree.solutions.SolutionLine;
-import de.knowwe.core.TextLine;
+import de.knowwe.core.kdom.basicType.LineBreak;
+import de.knowwe.core.kdom.basicType.TextLine;
 
 public class QuestionLineKDOMBuilder implements DTBuilder {
 

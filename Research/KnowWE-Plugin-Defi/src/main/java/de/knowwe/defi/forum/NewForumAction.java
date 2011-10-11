@@ -26,10 +26,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
-import de.d3web.we.core.KnowWEArticleManager;
-import de.d3web.we.core.KnowWEEnvironment;
+import de.knowwe.core.KnowWEArticleManager;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 
 /**
  * Reachable from the ForumMenu. Buildes new Forum.

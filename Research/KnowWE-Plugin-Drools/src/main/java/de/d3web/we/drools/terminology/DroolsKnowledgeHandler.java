@@ -12,14 +12,14 @@ import org.drools.builder.KnowledgeBuilderFactory;
 import org.drools.runtime.StatefulKnowledgeSession;
 
 import de.d3web.plugin.PluginManager;
-import de.d3web.we.action.UserActionContext;
 import de.d3web.we.drools.action.utils.DroolsUtils;
-import de.d3web.we.event.ArticleCreatedEvent;
-import de.d3web.we.event.Event;
-import de.d3web.we.event.EventListener;
-import de.d3web.we.event.FullParseEvent;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.logging.Logging;
+import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.event.Event;
+import de.knowwe.core.event.EventListener;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.event.ArticleCreatedEvent;
+import de.knowwe.event.FullParseEvent;
+import de.knowwe.logging.Logging;
 import de.knowwe.plugin.Plugins;
 
 public class DroolsKnowledgeHandler implements EventListener {

@@ -23,13 +23,13 @@ package de.knowwe.hermes.action;
 import java.io.IOException;
 import java.util.Map;
 
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.taghandler.TagHandlerAttributeSubTreeHandler;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.taghandler.TagHandlerAttributeSubTreeHandler;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.hermes.quiz.QuizSessionManager;
 import de.knowwe.hermes.taghandler.QuizHandler;
 

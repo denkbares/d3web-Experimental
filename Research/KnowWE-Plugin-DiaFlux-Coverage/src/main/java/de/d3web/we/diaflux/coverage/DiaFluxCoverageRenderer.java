@@ -34,13 +34,13 @@ import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
 import de.d3web.we.flow.FlowchartRenderer;
 import de.d3web.we.flow.FlowchartUtils;
 import de.d3web.we.flow.type.FlowchartType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupRenderer;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.D3webUtils;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 
 /**

@@ -10,8 +10,8 @@ import java.util.Map;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryRow;
 
-import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.lod.quiz.map.MapForConcepts;
 import de.knowwe.rdf2go.Rdf2GoCore;
 

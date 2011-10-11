@@ -31,16 +31,16 @@ import org.openrdf.repository.RepositoryException;
 import de.d3web.we.core.semantic.IntermediateOwlObject;
 import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.table.TableCellContent;
-import de.d3web.we.kdom.table.TableLine;
-import de.d3web.we.logging.Logging;
 import de.d3web.we.wisec.kdom.ListSubstancesRootType;
 import de.d3web.we.wisec.kdom.ListSubstancesType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.kdom.table.TableCellContent;
+import de.knowwe.kdom.table.TableLine;
+import de.knowwe.logging.Logging;
 
 public class ListSubstancesOWLSubtreeHandler extends OwlSubtreeHandler<ListSubstancesType> {
 

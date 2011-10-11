@@ -23,14 +23,14 @@ import java.util.Collection;
 import java.util.Map;
 
 import de.d3web.we.drools.terminology.DroolsKnowledgeHandler;
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Priority;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
-import de.d3web.we.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.CommentLineType;
+import de.knowwe.core.compile.Priority;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.basicType.CommentLineType;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
+import de.knowwe.core.report.KDOMReportMessage;
 
 /**
  * Content type for the DroolsFacts section.

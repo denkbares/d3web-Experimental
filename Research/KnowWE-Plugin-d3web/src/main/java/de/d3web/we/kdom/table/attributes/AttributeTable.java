@@ -29,19 +29,19 @@ import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.knowledge.terminology.info.Property;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Priority;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.message.CreateRelationFailed;
-import de.d3web.we.kdom.table.Table;
-import de.d3web.we.kdom.table.TableCellContent;
-import de.d3web.we.kdom.table.TableLine;
 import de.d3web.we.object.QuestionReference;
 import de.d3web.we.object.QuestionnaireReference;
 import de.d3web.we.object.SolutionReference;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
+import de.knowwe.core.compile.Priority;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.kdom.table.Table;
+import de.knowwe.kdom.table.TableCellContent;
+import de.knowwe.kdom.table.TableLine;
+import de.knowwe.report.message.CreateRelationFailed;
 
 /**
  * 

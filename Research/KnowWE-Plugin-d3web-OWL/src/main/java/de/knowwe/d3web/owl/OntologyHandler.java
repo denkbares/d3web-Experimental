@@ -36,18 +36,18 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.owl.OWLOntologyUtil;
 import de.d3web.owl.OntologyProvider;
 import de.d3web.owl.Vocabulary;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.KDOMWarning;
-import de.d3web.we.kdom.report.SimpleMessageError;
-import de.d3web.we.kdom.report.SyntaxError;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
-import de.d3web.we.utils.KnowWEUtils;
 import de.d3web.we.utils.MessageUtils;
-import de.d3web.we.wikiConnector.ConnectorAttachment;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.KDOMWarning;
+import de.knowwe.core.report.SimpleMessageError;
+import de.knowwe.core.report.SyntaxError;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.wikiConnector.ConnectorAttachment;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * Attaches an OWL ontology to a d3web knowledge base.

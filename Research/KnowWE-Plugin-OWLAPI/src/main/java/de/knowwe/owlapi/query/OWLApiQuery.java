@@ -18,10 +18,10 @@
  */
 package de.knowwe.owlapi.query;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * 

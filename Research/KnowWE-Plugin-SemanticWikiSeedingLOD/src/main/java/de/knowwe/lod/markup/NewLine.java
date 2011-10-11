@@ -1,10 +1,10 @@
 package de.knowwe.lod.markup;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.basic.LineBreak;
-import de.d3web.we.kdom.sectionFinder.LineSectionFinder;
-import de.knowwe.core.LineContent;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.basicType.LineBreak;
+import de.knowwe.core.kdom.basicType.LineContent;
+import de.knowwe.kdom.sectionFinder.LineSectionFinder;
 
 public class NewLine extends AbstractType {
 

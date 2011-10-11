@@ -14,11 +14,11 @@ import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryRow;
 
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.core.KnowWEArticleManager;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.packaging.KnowWEPackageManager;
-import de.d3web.we.kdom.RootType;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotation;
+import de.knowwe.core.KnowWEArticleManager;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.compile.packaging.KnowWEPackageManager;
+import de.knowwe.core.kdom.RootType;
 import de.knowwe.hermes.TimeEvent;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import dummies.KnowWETestWikiConnector;

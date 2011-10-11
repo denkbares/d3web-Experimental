@@ -21,10 +21,10 @@ package de.d3web.we.drools.kdom;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.basic.PlainText;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.utils.Patterns;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.basicType.PlainText;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.utils.Patterns;
 
 /**
  * A simple line in the rule body.

@@ -20,9 +20,9 @@
 
 package de.d3web.we.kdom.condition.antlr;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.basic.QuotedType;
-import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.basicType.QuotedType;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 
 public class QuotedQuestion extends AbstractType {
 

@@ -23,9 +23,10 @@ package de.d3web.we.taghandler;
 import java.util.List;
 import java.util.Map;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
 
 /**
  * Renders the SearchMask for the TypeBrowser.

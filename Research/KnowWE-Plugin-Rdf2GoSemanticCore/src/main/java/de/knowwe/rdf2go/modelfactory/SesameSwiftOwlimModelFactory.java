@@ -35,7 +35,7 @@ import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.Rio;
 import org.openrdf.rio.helpers.StatementCollector;
 
-import de.d3web.we.core.KnowWEEnvironment;
+import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class SesameSwiftOwlimModelFactory extends AbstractModelFactory {

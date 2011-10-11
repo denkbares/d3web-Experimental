@@ -23,12 +23,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.knowwe.casetrain.info.AnswerLine.AnswerMark;
 import de.knowwe.casetrain.message.InvalidArgumentError;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 
 /**

@@ -34,12 +34,12 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.packaging.KnowWEPackageManager;
-import de.d3web.we.event.ArticleUpdatesFinishedEvent;
-import de.d3web.we.event.EventManager;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.compile.packaging.KnowWEPackageManager;
+import de.knowwe.core.event.EventManager;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.event.ArticleUpdatesFinishedEvent;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.owlapi.RDF2GoSync;
 import de.knowwe.rdf2go.Rdf2GoCore;

@@ -9,8 +9,8 @@ import java.util.Map;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryRow;
 
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 import de.knowwe.lod.quiz.YearOfBirthQuizHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;
 

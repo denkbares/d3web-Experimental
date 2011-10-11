@@ -7,8 +7,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 import de.knowwe.lod.ConceptType;
 import de.knowwe.lod.LinkedOpenData;
 import de.knowwe.lod.LinkedOpenDataSet;

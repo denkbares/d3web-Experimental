@@ -19,7 +19,7 @@
  */
 package de.d3web.we.kdom.bibtex;
 
-import de.d3web.we.kdom.xml.AbstractXMLType;
+import de.knowwe.kdom.xml.AbstractXMLType;
 
 /**
  * 

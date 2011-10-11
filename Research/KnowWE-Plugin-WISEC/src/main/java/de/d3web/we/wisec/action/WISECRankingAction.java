@@ -32,12 +32,12 @@ import org.openrdf.repository.RepositoryException;
 
 import common.Logger;
 
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
 import de.d3web.we.wisec.util.Criteria;
 import de.d3web.we.wisec.util.WISECUtil;
 import de.d3web.wisec.model.RatedSubstance;
 import de.d3web.wisec.writers.SubstanceInfoWriter;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 import de.knowwe.semantic.sparql.SPARQLUtil;
 
 /**

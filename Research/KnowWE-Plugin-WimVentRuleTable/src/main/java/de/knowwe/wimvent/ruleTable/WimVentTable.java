@@ -22,25 +22,25 @@ package de.knowwe.wimvent.ruleTable;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
-import de.d3web.we.kdom.constraint.ExactlyOneFindingConstraint;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
-import de.d3web.we.kdom.subtreeHandler.IncrementalConstraint;
-import de.d3web.we.kdom.table.TableCellContent;
-import de.d3web.we.kdom.table.TableLine;
-import de.d3web.we.kdom.table.TableRenderer;
-import de.d3web.we.kdom.table.TableUtils;
 import de.d3web.we.object.AnswerReference;
 import de.d3web.we.object.QuestionReference;
+import de.knowwe.core.compile.IncrementalConstraint;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinder;
+import de.knowwe.kdom.constraint.ConstraintSectionFinder;
+import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.kdom.renderer.StyleRenderer;
+import de.knowwe.kdom.table.TableCellContent;
+import de.knowwe.kdom.table.TableLine;
+import de.knowwe.kdom.table.TableRenderer;
+import de.knowwe.kdom.table.TableUtils;
 
 public class WimVentTable extends AbstractType implements IncrementalConstraint<WimVentTable> {
 
@@ -94,7 +94,7 @@ public class WimVentTable extends AbstractType implements IncrementalConstraint<
 			this.injectTableCellContentChildtype(new EqTableCondNum());
 			// this.injectTableCellContentChildtype(new
 			// IntervallTableCondNum());
-			de.d3web.we.kdom.basic.Number number = new de.d3web.we.kdom.basic.Number();
+			de.knowwe.core.kdom.basicType.Number number = new de.knowwe.core.kdom.basicType.Number();
 			number.setCustomRenderer(NUMBER_RENDERER);
 			this.injectTableCellContentChildtype(number);
 			this.injectTableCellContentChildtype(new TableAnswerRef());

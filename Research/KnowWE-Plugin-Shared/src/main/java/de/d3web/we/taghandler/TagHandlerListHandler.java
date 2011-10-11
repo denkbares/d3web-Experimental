@@ -25,8 +25,10 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.taghandler.TagHandler;
+import de.knowwe.core.user.UserContext;
 
 /**
  * Creates a list of all TagHandlers mentioned in the Hash-map

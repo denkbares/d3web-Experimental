@@ -37,13 +37,13 @@ import de.d3web.core.manage.RuleFactory;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.scoring.Score;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.xml.AbstractXMLType;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.xml.AbstractXMLType;
 
 public class CreateScoresHandler extends D3webSubtreeHandler {
 

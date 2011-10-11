@@ -23,17 +23,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.user.UserContext;
-import de.knowwe.core.dashtree.DashTreeElement;
-import de.knowwe.core.dashtree.DashTreeElementContent;
-import de.knowwe.core.dashtree.DashTreeUtils;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.defi.time.TimeTableMarkup;
+import de.knowwe.kdom.dashtree.DashTreeElement;
+import de.knowwe.kdom.dashtree.DashTreeElementContent;
+import de.knowwe.kdom.dashtree.DashTreeUtils;
 
 public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 

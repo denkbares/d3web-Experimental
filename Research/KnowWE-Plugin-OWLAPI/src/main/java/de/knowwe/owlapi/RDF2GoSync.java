@@ -40,7 +40,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
-import de.d3web.we.kdom.Section;
+import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**

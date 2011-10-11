@@ -29,21 +29,21 @@ import org.openrdf.model.URI;
 import org.openrdf.model.vocabulary.RDF;
 import org.openrdf.repository.RepositoryException;
 
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.IntermediateOwlObject;
 import de.d3web.we.core.semantic.OwlHelper;
 import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.SimpleMessageError;
-import de.d3web.we.kdom.xml.AbstractXMLType;
-import de.d3web.we.kdom.xml.GenericXMLObjectType;
-import de.d3web.we.kdom.xml.XMLContent;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.SimpleMessageError;
+import de.knowwe.kdom.xml.AbstractXMLType;
+import de.knowwe.kdom.xml.GenericXMLObjectType;
+import de.knowwe.kdom.xml.XMLContent;
 
 /**
  * Root type recognizing the xml-representation of EML (Ecological Markup

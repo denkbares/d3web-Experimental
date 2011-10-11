@@ -27,13 +27,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.objects.TermDefinition;
-import de.d3web.we.kdom.objects.TermReference;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.TypedTermDefinition;
+import de.knowwe.core.kdom.objects.TermDefinition;
+import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 
 /**
  * 

@@ -24,8 +24,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import de.d3web.we.utils.SplitUtility;
-import de.d3web.we.utils.StringFragment;
+import de.knowwe.core.utils.SplitUtility;
+import de.knowwe.core.utils.StringFragment;
+import de.knowwe.search.SearchTerm;
 
 /**
  * 

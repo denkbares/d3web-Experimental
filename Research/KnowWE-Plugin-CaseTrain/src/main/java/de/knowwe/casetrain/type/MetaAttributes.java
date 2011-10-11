@@ -25,11 +25,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.report.KDOMReportMessage;
 import de.knowwe.casetrain.message.DuplicateAttributeError;
 import de.knowwe.casetrain.message.InvalidAttributeError;
 import de.knowwe.casetrain.message.MissingAttributeError;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.report.KDOMReportMessage;
 
 
 /**

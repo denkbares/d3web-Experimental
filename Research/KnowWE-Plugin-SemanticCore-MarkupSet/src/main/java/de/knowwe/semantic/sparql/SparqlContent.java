@@ -25,8 +25,8 @@ package de.knowwe.semantic.sparql;
 
 import java.util.HashMap;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.xml.XMLContent;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.kdom.xml.XMLContent;
 
 /**
  * @author kazamatzuri

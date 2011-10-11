@@ -19,7 +19,7 @@
  */
 package de.d3web.we.kdom.kopic.rules.ruleActionLine;
 
-import de.d3web.we.kdom.AbstractType;
+import de.knowwe.core.kdom.AbstractType;
 
 /**
  * @author Johannes Dienst

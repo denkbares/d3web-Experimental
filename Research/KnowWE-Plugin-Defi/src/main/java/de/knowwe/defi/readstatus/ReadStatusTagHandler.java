@@ -26,19 +26,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.taghandler.AbstractTagHandler;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
-import de.knowwe.core.dashtree.DashTreeElement;
-import de.knowwe.core.dashtree.DashTreeUtils;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.taghandler.AbstractTagHandler;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.defi.menu.DynamicMenuMarkup;
 import de.knowwe.defi.readbutton.DataMarkup;
 import de.knowwe.defi.time.TimeTableMarkup;
+import de.knowwe.kdom.dashtree.DashTreeElement;
+import de.knowwe.kdom.dashtree.DashTreeUtils;
 
 /**
  * 

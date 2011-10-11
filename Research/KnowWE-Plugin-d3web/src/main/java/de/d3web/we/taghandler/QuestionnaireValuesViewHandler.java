@@ -25,7 +25,8 @@ import java.util.Map;
 
 import de.d3web.we.action.QuestionnaireValuesViewAction;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
 
 /**
  * Displays the values of the questions in a specified questionnaire. The magic

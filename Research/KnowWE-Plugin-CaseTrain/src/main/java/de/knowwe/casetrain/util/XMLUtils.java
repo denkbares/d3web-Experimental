@@ -62,12 +62,6 @@ import de.casetrain.binding.traincase.jaxb.SimpleSection;
 import de.casetrain.binding.traincase.jaxb.Titledmmcontent;
 import de.casetrain.binding.traincase.jaxb.WordAnswers;
 import de.casetrain.binding.traincase.jaxb.WordAnswers.WordAnswer;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.basic.PlainText;
-import de.d3web.we.kdom.type.AnonymousType;
 import de.knowwe.casetrain.info.AnswerLine;
 import de.knowwe.casetrain.info.AnswerLine.AnswerExplanation;
 import de.knowwe.casetrain.info.AnswerLine.AnswerText;
@@ -99,6 +93,12 @@ import de.knowwe.casetrain.type.multimedia.Image;
 import de.knowwe.casetrain.type.multimedia.Link;
 import de.knowwe.casetrain.type.multimedia.MultimediaItem;
 import de.knowwe.casetrain.type.multimedia.Video;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.basicType.PlainText;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.kdom.AnonymousType;
 
 /**
  * 

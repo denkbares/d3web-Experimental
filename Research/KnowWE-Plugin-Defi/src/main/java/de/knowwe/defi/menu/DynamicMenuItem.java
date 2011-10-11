@@ -19,9 +19,9 @@
  */
 package de.knowwe.defi.menu;
 
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.knowwe.core.dashtree.DashTreeElementContent;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.kdom.dashtree.DashTreeElementContent;
 
 public class DynamicMenuItem extends DashTreeElementContent {
 

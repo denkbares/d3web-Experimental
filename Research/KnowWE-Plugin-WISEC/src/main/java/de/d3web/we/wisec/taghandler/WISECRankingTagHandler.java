@@ -38,12 +38,12 @@ import org.openrdf.repository.RepositoryException;
 import common.Logger;
 
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
-import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.user.UserContext;
 import de.d3web.we.wisec.util.Criteria;
 import de.d3web.we.wisec.util.WISECUtil;
 import de.d3web.wisec.model.RatedSubstance;
 import de.d3web.wisec.writers.SubstanceInfoWriter;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
 
 /**
  * Displays a ranking of the substances with the highest rating. The

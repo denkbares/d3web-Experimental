@@ -19,8 +19,8 @@
 
 package de.knowwe.defi.table;
 
-import de.d3web.we.kdom.table.NullTableAttributesProvider;
-import de.d3web.we.kdom.table.Table;
+import de.knowwe.kdom.table.NullTableAttributesProvider;
+import de.knowwe.kdom.table.Table;
 
 public class TableTemplateType extends Table {
 

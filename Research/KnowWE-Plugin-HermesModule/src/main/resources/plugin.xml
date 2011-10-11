@@ -231,19 +231,6 @@
 		<parameter id="script" value="Hermes.js" />
 		<parameter id="css" value="hermes.css" />
 	</extension>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="PropertyDefinitionType">
-		<parameter id="class"
-			value="de.d3web.we.kdom.dashTree.propertyDefinition.PropertyDefinitionType" />
-		<parameter id="name" value="PropertyDefinitionType" />
-		<parameter id="description" value="Type PropertyDefinitionType" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-		<parameter id="scope" value="root" />
-		<parameter id="script" value="Hermes.js" />
-		<parameter id="css" value="hermes.css" />
-	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="SearchTimeEventsAction">

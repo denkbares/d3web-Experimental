@@ -20,7 +20,7 @@
 
 package de.knowwe.semantic.sparql.groovy;
 
-import de.d3web.we.kdom.xml.XMLContent;
+import de.knowwe.kdom.xml.XMLContent;
 
 public class GroovySparqlRendererContent extends XMLContent {
 

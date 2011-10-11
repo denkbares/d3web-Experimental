@@ -43,9 +43,11 @@ import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.NumValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.core.KnowWEAttributes;
-import de.d3web.we.event.EventManager;
 import de.d3web.we.utils.D3webUtils;
+import de.knowwe.core.KnowWEAttributes;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.event.EventManager;
 import de.knowwe.d3web.action.SetSingleFindingAction;
 import de.knowwe.d3web.event.FindingSetEvent;
 

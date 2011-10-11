@@ -24,10 +24,10 @@ import java.io.File;
 
 import javax.servlet.ServletContext;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWERessourceLoader;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.KnowWERessourceLoader;
 import de.knowwe.plugin.Instantiation;
 
 /**

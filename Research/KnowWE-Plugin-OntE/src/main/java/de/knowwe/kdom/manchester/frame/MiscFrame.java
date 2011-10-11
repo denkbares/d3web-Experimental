@@ -21,10 +21,10 @@ package de.knowwe.kdom.manchester.frame;
 
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.kdom.manchester.types.Keyword;

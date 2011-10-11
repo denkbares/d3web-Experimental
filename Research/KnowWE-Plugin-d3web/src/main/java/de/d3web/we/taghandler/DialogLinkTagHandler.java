@@ -27,8 +27,9 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
 
 public class DialogLinkTagHandler extends AbstractHTMLTagHandler {
 

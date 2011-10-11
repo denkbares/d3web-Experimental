@@ -23,13 +23,13 @@ import java.util.List;
 
 import org.semanticweb.owlapi.model.OWLObjectOneOf;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.condition.NonTerminalCondition;
 import de.d3web.we.kdom.condition.helper.BracedConditionContent;
-import de.d3web.we.kdom.sectionFinder.SectionFinder;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.d3web.we.utils.SplitUtility;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.SectionFinder;
+import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.core.utils.SplitUtility;
 
 /**
  * A content element enclosed in curly brackets is a {@link OWLObjectOneOf}

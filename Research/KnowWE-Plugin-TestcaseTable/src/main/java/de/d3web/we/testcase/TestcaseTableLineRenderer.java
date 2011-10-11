@@ -22,16 +22,16 @@ import java.util.Collection;
 import java.util.List;
 
 import de.d3web.core.session.Session;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.report.KDOMError;
-import de.d3web.we.kdom.table.TableLine;
-import de.d3web.we.kdom.table.TableLineRenderer;
-import de.d3web.we.kdom.table.TableUtils;
-import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.D3webUtils;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.KDOMError;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.table.TableLine;
+import de.knowwe.kdom.table.TableLineRenderer;
+import de.knowwe.kdom.table.TableUtils;
 
 /**
  * 

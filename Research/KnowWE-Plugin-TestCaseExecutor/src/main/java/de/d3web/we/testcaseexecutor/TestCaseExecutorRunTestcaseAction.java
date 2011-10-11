@@ -33,16 +33,16 @@ import de.d3web.empiricaltesting.TestCase;
 import de.d3web.empiricaltesting.TestPersistence;
 import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysis;
 import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysisReport;
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
 import de.d3web.we.testcase.action.TestCaseRunAction;
-import de.d3web.we.wikiConnector.ConnectorAttachment;
-import de.d3web.we.wikiConnector.KnowWEWikiConnector;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.wikiConnector.ConnectorAttachment;
+import de.knowwe.core.wikiConnector.KnowWEWikiConnector;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * 

@@ -19,7 +19,7 @@
  */
 package de.knowwe.kdom.manchester.types;
 
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.termObject.IRITermReference;
 
 /**

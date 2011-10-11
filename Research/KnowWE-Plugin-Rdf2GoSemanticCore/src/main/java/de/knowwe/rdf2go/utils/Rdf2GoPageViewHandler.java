@@ -27,9 +27,9 @@ import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class Rdf2GoPageViewHandler extends AbstractHTMLTagHandler {

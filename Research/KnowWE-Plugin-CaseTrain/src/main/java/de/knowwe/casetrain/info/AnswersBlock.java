@@ -22,18 +22,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
-import de.d3web.we.kdom.type.AnonymousType;
 import de.knowwe.casetrain.message.MissingComponentWarning;
 import de.knowwe.casetrain.renderer.DivStyleClassRenderer;
 import de.knowwe.casetrain.renderer.SpanClassRenderer;
 import de.knowwe.casetrain.type.general.SubblockMarkup;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.kdom.AnonymousType;
+import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 
 /**

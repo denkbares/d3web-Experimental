@@ -29,22 +29,22 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.we.basic.WikiEnvironmentManager;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.decisionTree.QuestionsSection;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.message.NewObjectCreated;
-import de.d3web.we.kdom.report.message.ObjectCreationError;
-import de.d3web.we.kdom.table.TableCellContent;
-import de.d3web.we.kdom.table.TableLine;
-import de.d3web.we.logging.Logging;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.d3web.we.wisec.kdom.ListSubstancesRootType;
 import de.d3web.we.wisec.kdom.ListSubstancesType;
 import de.d3web.we.wisec.kdom.WISECTable;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.kdom.table.TableCellContent;
+import de.knowwe.kdom.table.TableLine;
+import de.knowwe.logging.Logging;
+import de.knowwe.report.message.NewObjectCreated;
+import de.knowwe.report.message.ObjectCreationError;
 
 public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubstancesType> {
 

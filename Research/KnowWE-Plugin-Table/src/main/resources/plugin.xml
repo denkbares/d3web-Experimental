@@ -18,7 +18,7 @@
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="AppendTableNodesAction">
         <parameter id="class"
-            value="de.d3web.we.kdom.table.AppendTableNodesAction" />
+            value="de.knowwe.kdom.table.AppendTableNodesAction" />
         <parameter id="name" value="AppendTableNodesAction" />
         <parameter id="description" value="Action AppendTableNodesAction" />
         <parameter id="version" value="1.0" />
@@ -29,7 +29,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Table">
 		<parameter id="class"
-			value="de.d3web.we.kdom.table.TableXMLType" />
+			value="de.knowwe.kdom.table.TableXMLType" />
 		<parameter id="name" value="TableXMLType" />
 		<parameter id="description" value="Type TableXMLType" />
 		<parameter id="version" value="1.0" />
@@ -41,7 +41,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="UpdateTableKDOMNodesAction">
 		<parameter id="class"
-			value="de.d3web.we.kdom.table.UpdateTableKDOMNodesAction" />
+			value="de.knowwe.kdom.table.UpdateTableKDOMNodesAction" />
 		<parameter id="name" value="UpdateTableKDOMNodesAction" />
 		<parameter id="description" value="Action UpdateTableKDOMNodesAction" />
 		<parameter id="version" value="1.0" />

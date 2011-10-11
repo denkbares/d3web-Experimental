@@ -28,19 +28,6 @@ import java.util.List;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
-import de.d3web.we.event.Event;
-import de.d3web.we.event.EventListener;
-import de.d3web.we.event.KDOMCreatedEvent;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.objects.KnowWETerm;
-import de.d3web.we.kdom.objects.TermDefinition;
-import de.d3web.we.kdom.objects.TermReference;
-import de.d3web.we.kdom.report.KDOMError;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.message.NoSuchObjectError;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.ComplexDefinitionError;
 import de.knowwe.compile.object.ComplexDefinitionWithTypeConstraints;
@@ -49,7 +36,20 @@ import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.PredefinedTermWarning;
 import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.compile.utils.CompileUtils;
+import de.knowwe.core.event.Event;
+import de.knowwe.core.event.EventListener;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.objects.TermDefinition;
+import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.KDOMError;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.event.KDOMCreatedEvent;
 import de.knowwe.plugin.Plugins;
+import de.knowwe.report.message.NoSuchObjectError;
 
 /**
  * This class implements the incremental compilation algorithm as proposed by

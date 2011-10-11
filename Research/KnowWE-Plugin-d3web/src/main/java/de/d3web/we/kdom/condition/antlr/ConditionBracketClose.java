@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.condition.antlr;
 
-import de.d3web.we.kdom.AbstractType;
+import de.knowwe.core.kdom.AbstractType;
 
 @Deprecated
 public class ConditionBracketClose extends AbstractType {

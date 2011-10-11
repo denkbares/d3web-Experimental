@@ -21,7 +21,7 @@
 package de.d3web.we.kdom.dashTree.solutions;
 
 import de.d3web.we.kdom.dashTree.Tilde;
-import de.knowwe.core.TextLine;
+import de.knowwe.core.kdom.basicType.TextLine;
 
 public class SolutionLine extends TextLine {
 

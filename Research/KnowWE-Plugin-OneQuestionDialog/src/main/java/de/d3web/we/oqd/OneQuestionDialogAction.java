@@ -23,8 +23,8 @@ import java.util.Map;
 
 import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.session.Session;
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 
 /**
  *

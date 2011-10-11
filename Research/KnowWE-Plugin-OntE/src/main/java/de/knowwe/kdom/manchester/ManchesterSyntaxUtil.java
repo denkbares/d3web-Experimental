@@ -22,10 +22,10 @@ package de.knowwe.kdom.manchester;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
 

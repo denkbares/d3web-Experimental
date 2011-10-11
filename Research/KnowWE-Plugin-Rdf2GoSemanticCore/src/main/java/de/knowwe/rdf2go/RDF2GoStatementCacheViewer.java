@@ -6,10 +6,10 @@ import java.util.WeakHashMap;
 
 import org.ontoware.rdf2go.model.Statement;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.taghandler.AbstractHTMLTagHandler;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
 
 public class RDF2GoStatementCacheViewer extends AbstractHTMLTagHandler {
 

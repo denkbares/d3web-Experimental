@@ -24,13 +24,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.d3web.report.Message;
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.renderer.SettingsModeRenderer;
-import de.d3web.we.kdom.rendering.DelegateRenderer;
-import de.d3web.we.kdom.table.TableCellContent;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.kdom.table.TableCellContent;
 
 public class KopicTableSectionRenderer extends KopicSectionRenderer {
 

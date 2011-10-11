@@ -24,12 +24,12 @@ import java.util.List;
 import java.util.Stack;
 
 import de.d3web.we.kdom.ExpandedSectionFinderResult;
-import de.d3web.we.kdom.basic.LineBreak;
 import de.d3web.we.kdom.dashTree.DashTreeKDOMBuilder;
 import de.d3web.we.kdom.dashTree.Dashes;
 import de.d3web.we.kdom.dashTree.Tilde;
 import de.d3web.we.kdom.decisionTree.QClassID;
-import de.knowwe.core.TextLine;
+import de.knowwe.core.kdom.basicType.LineBreak;
+import de.knowwe.core.kdom.basicType.TextLine;
 
 public class QuestionnairesKDOMBuilder implements DashTreeKDOMBuilder {
 

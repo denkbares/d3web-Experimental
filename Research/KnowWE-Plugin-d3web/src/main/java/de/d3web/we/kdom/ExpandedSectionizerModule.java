@@ -20,7 +20,10 @@
 
 package de.d3web.we.kdom;
 
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.SectionizerModule;
+import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 
 
 public class ExpandedSectionizerModule implements SectionizerModule {

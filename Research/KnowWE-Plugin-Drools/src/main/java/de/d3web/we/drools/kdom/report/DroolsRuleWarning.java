@@ -22,7 +22,7 @@ package de.d3web.we.drools.kdom.report;
 import org.drools.builder.KnowledgeBuilderError;
 import org.drools.builder.KnowledgeBuilderErrors;
 
-import de.d3web.we.kdom.report.KDOMWarning;
+import de.knowwe.core.report.KDOMWarning;
 
 public class DroolsRuleWarning extends KDOMWarning {
 

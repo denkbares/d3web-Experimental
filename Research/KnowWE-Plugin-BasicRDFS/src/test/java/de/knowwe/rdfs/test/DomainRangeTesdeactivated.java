@@ -29,12 +29,12 @@ import org.junit.Test;
 
 import utils.MyTestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.core.KnowWEArticleManager;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.packaging.KnowWEPackageManager;
-import de.d3web.we.kdom.KnowWEArticle;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
+import de.knowwe.core.KnowWEArticleManager;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.compile.packaging.KnowWEPackageManager;
+import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.test.util.Query;
 import de.knowwe.rdfs.test.util.Vocabulary;

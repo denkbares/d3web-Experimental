@@ -29,14 +29,14 @@ import de.d3web.owl.OWLOntologyUtil;
 import de.d3web.owl.assignment.Assignment;
 import de.d3web.owl.assignment.Quantifier;
 import de.d3web.owl.assignment.RatingAssignment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Priority;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
 import de.d3web.we.kdom.auxiliary.Equals;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.report.message.NoSuchObjectError;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.compile.Priority;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.report.message.NoSuchObjectError;
 
 /**
  *

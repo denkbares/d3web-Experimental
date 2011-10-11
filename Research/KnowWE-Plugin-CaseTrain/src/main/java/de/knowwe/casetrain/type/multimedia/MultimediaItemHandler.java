@@ -23,18 +23,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.report.KDOMReportMessage;
-import de.d3web.we.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.knowwe.casetrain.message.InvalidArgumentError;
 import de.knowwe.casetrain.message.MissingAudioError;
 import de.knowwe.casetrain.message.MissingContentWarning;
 import de.knowwe.casetrain.message.MissingPictureError;
 import de.knowwe.casetrain.message.MissingVideoError;
 import de.knowwe.casetrain.type.multimedia.MultimediaItem.MultimediaItemContent;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 
 /**

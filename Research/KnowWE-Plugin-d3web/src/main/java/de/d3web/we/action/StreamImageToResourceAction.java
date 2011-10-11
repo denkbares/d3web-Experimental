@@ -26,6 +26,8 @@ import java.io.OutputStream;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.Resource;
 import de.d3web.we.basic.D3webModule;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 
 /**
  * @author Johannes Dienst

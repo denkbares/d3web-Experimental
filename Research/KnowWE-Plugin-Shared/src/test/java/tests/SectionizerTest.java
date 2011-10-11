@@ -27,10 +27,10 @@ import junit.framework.TestCase;
 import objectTypes.SplitObjectType;
 import objectTypes.WordObjectType;
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.RootType;
-import de.d3web.we.kdom.Section;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.RootType;
+import de.knowwe.core.kdom.parsing.Section;
 import dummies.KnowWETestWikiConnector;
 
 /**

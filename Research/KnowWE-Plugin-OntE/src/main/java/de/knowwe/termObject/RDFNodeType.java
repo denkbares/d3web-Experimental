@@ -22,8 +22,8 @@ package de.knowwe.termObject;
 
 import org.ontoware.rdf2go.model.node.Node;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
 
 /**
  * An interface for types which can be compiled to a (RDF2Go) Node

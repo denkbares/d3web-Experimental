@@ -18,8 +18,8 @@
  */
 package de.knowwe.defi.table;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 
 public class DefineTableContentType extends AbstractType {
 	

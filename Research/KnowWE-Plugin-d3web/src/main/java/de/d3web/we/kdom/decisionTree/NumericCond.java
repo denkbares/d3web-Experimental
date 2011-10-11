@@ -20,8 +20,8 @@
 
 package de.d3web.we.kdom.decisionTree;
 
-import de.d3web.we.kdom.rendering.StyleRenderer;
-import de.knowwe.core.LineContent;
+import de.knowwe.core.kdom.basicType.LineContent;
+import de.knowwe.kdom.renderer.StyleRenderer;
 
 public class NumericCond extends LineContent {
 

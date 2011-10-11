@@ -18,9 +18,9 @@
  */
 package de.knowwe.casetrain.type.multimedia;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 
 /**

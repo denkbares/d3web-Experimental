@@ -20,8 +20,8 @@
 
 package de.knowwe.termObject;
 
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.termObject.IRIEntityType.IRIDeclarationType;
 
 public class DatatypePropertyIRIDefinition extends AbstractIRITermDefinition {

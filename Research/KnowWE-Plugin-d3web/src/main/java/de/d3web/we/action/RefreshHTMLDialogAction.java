@@ -29,9 +29,11 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.SessionBroker;
-import de.d3web.we.core.KnowWEAttributes;
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.d3webModule.HTMLDialogRenderer;
+import de.knowwe.core.KnowWEAttributes;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 
 public class RefreshHTMLDialogAction extends AbstractAction {
 

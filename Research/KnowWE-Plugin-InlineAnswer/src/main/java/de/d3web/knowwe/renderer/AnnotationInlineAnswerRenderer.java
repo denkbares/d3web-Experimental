@@ -29,15 +29,15 @@ import de.d3web.knowwe.type.AnnotationProperty;
 import de.d3web.knowwe.type.SimpleAnnotation;
 import de.d3web.we.basic.D3webKnowledgeHandler;
 import de.d3web.we.basic.D3webModule;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.contexts.AnnotationContext;
-import de.d3web.we.kdom.contexts.ContextManager;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.user.UserContext;
 import de.d3web.we.utils.D3webUtils;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.contexts.AnnotationContext;
+import de.knowwe.core.contexts.ContextManager;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 
 
 /**

@@ -32,14 +32,14 @@ import de.d3web.empiricaltesting.SequentialTestCase;
 import de.d3web.empiricaltesting.TestCase;
 import de.d3web.empiricaltesting.TestPersistence;
 import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysis;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.core.KnowWERessourceLoader;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkup;
-import de.d3web.we.kdom.defaultMarkup.DefaultMarkupType;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
 import de.d3web.we.utils.D3webUtils;
-import de.d3web.we.wikiConnector.KnowWEWikiConnector;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.KnowWERessourceLoader;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.wikiConnector.KnowWEWikiConnector;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * 

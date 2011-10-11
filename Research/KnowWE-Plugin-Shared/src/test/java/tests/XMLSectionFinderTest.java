@@ -30,14 +30,14 @@ import java.util.List;
 import junit.framework.TestCase;
 import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.RootType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.sectionFinder.SectionFinderResult;
-import de.d3web.we.kdom.xml.GenericXMLObjectType;
-import de.d3web.we.kdom.xml.XMLSectionFinder;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.RootType;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
+import de.knowwe.kdom.xml.GenericXMLObjectType;
+import de.knowwe.kdom.xml.XMLSectionFinder;
 import dummies.KnowWETestWikiConnector;
 
 public class XMLSectionFinderTest extends TestCase {

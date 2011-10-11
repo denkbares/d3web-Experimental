@@ -22,13 +22,13 @@ package de.knowwe.kdom.manchester;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.Type;
 import de.d3web.we.kdom.condition.CompositeCondition;
 import de.d3web.we.kdom.condition.TerminalCondition;
-import de.d3web.we.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.kdom.manchester.types.NonTerminalList;
 import de.knowwe.kdom.manchester.types.NonTerminalListContent;
 import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;

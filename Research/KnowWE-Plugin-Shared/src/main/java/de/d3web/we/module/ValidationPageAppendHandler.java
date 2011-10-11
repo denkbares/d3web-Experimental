@@ -20,9 +20,9 @@
 
 package de.d3web.we.module;
 
-import de.d3web.we.kdom.rendering.PageAppendHandler;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.append.PageAppendHandler;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 
 public class ValidationPageAppendHandler implements PageAppendHandler {
 

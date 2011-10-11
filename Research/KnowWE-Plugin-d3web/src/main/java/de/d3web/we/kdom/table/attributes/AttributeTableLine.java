@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.table.attributes;
 
-import de.d3web.we.kdom.table.TableLine;
+import de.knowwe.kdom.table.TableLine;
 
 public class AttributeTableLine extends TableLine {
 

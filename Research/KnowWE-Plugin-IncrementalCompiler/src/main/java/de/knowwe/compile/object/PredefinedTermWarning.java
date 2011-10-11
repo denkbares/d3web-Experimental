@@ -20,7 +20,7 @@
 
 package de.knowwe.compile.object;
 
-import de.d3web.we.kdom.report.KDOMWarning;
+import de.knowwe.core.report.KDOMWarning;
 
 public class PredefinedTermWarning extends KDOMWarning {
 

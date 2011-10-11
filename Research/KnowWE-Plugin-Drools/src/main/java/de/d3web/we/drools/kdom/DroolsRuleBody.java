@@ -19,9 +19,9 @@
  */
 package de.d3web.we.drools.kdom;
 
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.sectionFinder.AllTextSectionFinder;
-import de.knowwe.core.CommentLineType;
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.basicType.CommentLineType;
+import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 
 /**
  * The rule body, after the title line

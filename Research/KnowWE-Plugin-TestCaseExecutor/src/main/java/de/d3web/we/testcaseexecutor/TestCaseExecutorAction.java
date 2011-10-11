@@ -24,10 +24,10 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.d3web.we.action.AbstractAction;
-import de.d3web.we.action.UserActionContext;
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.wikiConnector.ConnectorAttachment;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.wikiConnector.ConnectorAttachment;
 
 /**
  * 

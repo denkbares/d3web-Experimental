@@ -20,7 +20,7 @@
 
 package de.d3web.we.kdom.rules;
 
-import de.d3web.we.kdom.xml.XMLContent;
+import de.knowwe.kdom.xml.XMLContent;
 
 public class RulesSectionContent extends XMLContent {
 

@@ -36,16 +36,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.action.ActionContext;
-import de.d3web.we.action.UserActionContext;
-import de.d3web.we.core.KnowWEArticleManager;
-import de.d3web.we.core.KnowWEAttributes;
-import de.d3web.we.core.KnowWEEnvironment;
 import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.RootType;
-import de.d3web.we.search.GenericSearchResult;
+import de.knowwe.core.KnowWEArticleManager;
+import de.knowwe.core.KnowWEAttributes;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.action.ActionContext;
+import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.RootType;
+import de.knowwe.search.GenericSearchResult;
 import de.knowwe.tagging.TaggingMangler;
 import dummies.KnowWETestWikiConnector;
 

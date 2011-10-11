@@ -22,7 +22,8 @@ package de.d3web.we.taghandler;
 
 import java.util.Map;
 
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.user.UserContext;
 
 public class ParseAllButton extends AbstractHTMLTagHandler {
 

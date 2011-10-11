@@ -29,13 +29,13 @@ import java.util.logging.Logger;
 import de.d3web.core.session.Session;
 import de.d3web.we.basic.WikiEnvironment;
 import de.d3web.we.basic.WikiEnvironmentManager;
-import de.d3web.we.core.KnowWERessourceLoader;
-import de.d3web.we.kdom.InvalidKDOMSchemaModificationOperation;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
-import de.d3web.we.kdom.table.Table;
-import de.d3web.we.kdom.table.TableLine;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.KnowWERessourceLoader;
+import de.knowwe.core.kdom.InvalidKDOMSchemaModificationOperation;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.kdom.table.Table;
+import de.knowwe.kdom.table.TableLine;
 
 /**
  * @author Florian Ziegler

@@ -20,8 +20,8 @@
 
 package de.knowwe.hermes;
 
-import de.d3web.we.kdom.rendering.PageAppendHandler;
-import de.d3web.we.user.UserContext;
+import de.knowwe.core.append.PageAppendHandler;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.tagging.TagEditPanel;
 
 public class AppendTagEditHandler implements PageAppendHandler {

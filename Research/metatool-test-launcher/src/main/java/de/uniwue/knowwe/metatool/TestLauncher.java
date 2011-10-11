@@ -26,9 +26,9 @@ import java.io.IOException;
 import utils.MyTestArticleManager;
 import utils.TestUtils;
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * A launcher class that renders an article

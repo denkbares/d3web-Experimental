@@ -12,10 +12,10 @@ import java.util.regex.Pattern;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryRow;
 
-import de.d3web.we.core.KnowWEEnvironment;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Sections;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.lod.markup.IgnoreContentType;
 import de.knowwe.lod.markup.IgnoreContentType.IgnoreChild;
 import de.knowwe.lod.markup.IgnoreContentType.IgnoreConcept;
