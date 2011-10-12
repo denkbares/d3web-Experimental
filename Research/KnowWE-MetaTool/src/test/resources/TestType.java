@@ -22,8 +22,8 @@
 
 package de.knowwe.kdom;
 
-import de.d3web.we.kdom.objects.TermDefinition;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.kdom.core.objects.TermDefinition;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.renderer.GenericHTMLRenderer;
 import de.knowwe.kdom.TestChildren1;
 import de.knowwe.kdom.TestChildren2;

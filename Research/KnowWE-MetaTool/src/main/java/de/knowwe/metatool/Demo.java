@@ -91,14 +91,14 @@ public class Demo {
 		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
 
 		// Parent's custom super class
-		QualifiedClass superType = new QualifiedClass("de.d3web.we.kdom.objects", "TermDefinition");
+		QualifiedClass superType = new QualifiedClass("de.knowwe.core.kdom.objects", "TermDefinition");
 
 		// Parent's section finder
-		ParameterizedClass sectionFinder = new ParameterizedClass("de.d3web.we.kdom.sectionFinder",
+		ParameterizedClass sectionFinder = new ParameterizedClass("de.knowwe.core.kdom.sectionFinder",
 				"RegexSectionFinder", "\".*\"");
 
 		// Parent's contraint
-		QualifiedClass constraint = new QualifiedClass("de.d3web.we.kdom.constraint",
+		QualifiedClass constraint = new QualifiedClass("de.knowwe.kdom.constraint",
 				"AtMostOneFindingConstraint");
 
 		// Creation of ObjectType

@@ -161,7 +161,7 @@ public class ObjectType {
 
 		if (matchFound && matcher.groupCount() == 3) {
 			// Necessary import
-			imports.add(new QualifiedClass("de.d3web.we.kdom.type", "AnonymousType"));
+			imports.add(new QualifiedClass("de.knowwe.kdom", "AnonymousType"));
 			// add anonymous types
 			String before = matcher.group(1);
 			if (before != null && !before.isEmpty()) {
@@ -321,7 +321,7 @@ public class ObjectType {
 		/*
 		 * Optional attributes
 		 */
-		private QualifiedClass superType = new QualifiedClass("de.d3web.we.kdom",
+		private QualifiedClass superType = new QualifiedClass("de.knowwe.core.kdom",
 				"AbstractType");
 		private ParameterizedClass sectionFinder = null;
 		private final List<QualifiedClass> constraints = new LinkedList<QualifiedClass>();
@@ -405,10 +405,10 @@ public class ObjectType {
 						"You have to specify a sectionfinder before you can apply a constraint.");
 			}
 			if (!sectionFinder.getQualifiedClassName().equals(
-					"de.d3web.we.kdom.constraint.ConstraintSectionFinder")) {
+					"de.knowwe.core.kdom.constraint.ConstraintSectionFinder")) {
 				// We lose the information if we don't do the import here!
 				imports.add(sectionFinder);
-				sectionFinder = new ParameterizedClass("de.d3web.we.kdom.constraint",
+				sectionFinder = new ParameterizedClass("de.knowwe.kdom.constraint",
 														"ConstraintSectionFinder",
 														sectionFinder);
 			}
@@ -452,7 +452,7 @@ public class ObjectType {
 				checkPatternImport();
 			}
 
-			imports.add(new QualifiedClass("de.knowwe.core.renderer", "GenericHTMLRenderer"));
+			imports.add(new QualifiedClass("de.knowwe.kdom.renderer", "GenericHTMLRenderer"));
 		}
 
 		private void checkPatternImport() {

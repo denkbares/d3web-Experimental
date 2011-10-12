@@ -115,11 +115,11 @@ public class XMLReaderTest {
 		QualifiedClass childClass3 = new QualifiedClass("de.knowwe.kdom", "TestChildren3");
 		ObjectType child3 = new ObjectType.Builder("B2", childClass3, true).build();
 
-		QualifiedClass superType = new QualifiedClass("de.d3web.we.kdom.objects", "TermDefinition");
-		ParameterizedClass sectionFinder = new ParameterizedClass("de.d3web.we.kdom.sectionFinder",
+		QualifiedClass superType = new QualifiedClass("de.knowwe.core.kdom.objects", "TermDefinition");
+		ParameterizedClass sectionFinder = new ParameterizedClass("de.knowwe.core.kdom.sectionFinder",
 				"RegexSectionFinder", "\".*\"");
 
-		QualifiedClass constraint = new QualifiedClass("de.d3web.we.kdom.constraint",
+		QualifiedClass constraint = new QualifiedClass("de.knowwe.kdom.constraint",
 				"AtMostOneFindingConstraint");
 
 		QualifiedClass objectTypeClass = new QualifiedClass("de.knowwe.kdom", "TestType");
