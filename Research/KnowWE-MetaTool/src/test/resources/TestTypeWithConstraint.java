@@ -22,11 +22,11 @@
 
 package de.knowwe.kdom;
 
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.objects.TermDefinition;
-import de.d3web.we.kdom.constraint.ConstraintSectionFinder;
-import de.d3web.we.kdom.constraint.AtMostOneFindingConstraint;
-import de.knowwe.core.renderer.GenericHTMLRenderer;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.kdom.objects.TermDefinition;
+import de.knowwe.kdom.constraint.ConstraintSectionFinder;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
+import de.knowwe.kdom.renderer.GenericHTMLRenderer;
 import de.knowwe.kdom.TestChildren1;
 import de.knowwe.kdom.TestChildren2;
 import de.knowwe.kdom.TestChildren3;

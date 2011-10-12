@@ -67,7 +67,7 @@ public class ObjectTypeCreationTest {
 		// Default Attributes
 		assertEquals("SuperType has wrong Class.", "AbstractType",
 				objectType.getSuperType().getClassName());
-		assertEquals("SuperType has wrong package", "de.knowwe.kdom",
+		assertEquals("SuperType has wrong package", "de.knowwe.core.kdom",
 				objectType.getSuperType().getPackageName());
 		assertEquals("Wrong number of children.", 0, objectType.getChildren().size());
 	}
@@ -334,7 +334,7 @@ public class ObjectTypeCreationTest {
 				"ConstraintSectionFinder", sectionFinder));
 		imports.add(constraint);
 		imports.add(new QualifiedClass("java.util.regex", "Pattern"));
-		imports.add(new QualifiedClass("de.knowwe.core.renderer", "GenericHTMLRenderer"));
+		imports.add(new QualifiedClass("de.knowwe.kdom.renderer", "GenericHTMLRenderer"));
 		imports.add(childClass1);
 
 		// assertEquals("Wrong number of imports.", imports.size(),

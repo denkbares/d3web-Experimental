@@ -22,9 +22,9 @@
 
 package de.knowwe.kdom;
 
-import de.knowwe.kdom.core.objects.TermDefinition;
+import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.renderer.GenericHTMLRenderer;
+import de.knowwe.kdom.renderer.GenericHTMLRenderer;
 import de.knowwe.kdom.TestChildren1;
 import de.knowwe.kdom.TestChildren2;
 import de.knowwe.kdom.TestChildren3;

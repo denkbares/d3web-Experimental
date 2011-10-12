@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ObjectTypes>
 	<ObjectType ID="A0" PackageName="de.knowwe.kdom" ClassName="TestType"
-		SuperTypeClass="TermDefinition" SuperTypePackage="de.d3web.we.kdom.objects">
+		SuperTypeClass="TermDefinition" SuperTypePackage="de.knowwe.core.kdom.objects">
 		<SectionFinder ClassName="RegexSectionFinder"
-			PackageName="de.d3web.we.kdom.sectionFinder" Value='".*"'>
+			PackageName="de.knowwe.core.kdom.sectionFinder" Value='".*"'>
 			<Constraint ClassName="AtMostOneFindingConstraint"
-				PackageName="de.d3web.we.kdom.constraint" />
+				PackageName="de.knowwe.kdom.constraint" />
 		</SectionFinder>
 		<Color>red</Color>
 	</ObjectType>
 	<ObjectType ID="B0" PackageName="de.knowwe.kdom" ClassName="TestChildren1"
-		SuperTypeClass="AbstractType" SuperTypePackage="de.d3web.we.kdom"
+		SuperTypeClass="AbstractType" SuperTypePackage="de.knowwe.core.kdom"
 		Parent="A0" Position="0">
 	</ObjectType>
 	<ObjectType ID="B1" PackageName="de.knowwe.kdom" ClassName="TestChildren2"
-		SuperTypeClass="AbstractType" SuperTypePackage="de.d3web.we.kdom"
+		SuperTypeClass="AbstractType" SuperTypePackage="de.knowwe.core.kdom"
 		Parent="A0" Position="1">
 	</ObjectType>
 	<ObjectType ID="B2" PackageName="de.knowwe.kdom" ClassName="TestChildren3"
-		SuperTypeClass="AbstractType" SuperTypePackage="de.d3web.we.kdom"
+		SuperTypeClass="AbstractType" SuperTypePackage="de.knowwe.core.kdom"
 		Parent="A0" Position="2">
 	</ObjectType>
 </ObjectTypes>
