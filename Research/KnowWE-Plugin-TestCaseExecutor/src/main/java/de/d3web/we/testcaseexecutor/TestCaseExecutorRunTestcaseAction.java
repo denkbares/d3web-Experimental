@@ -42,7 +42,6 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.wikiConnector.ConnectorAttachment;
 import de.knowwe.core.wikiConnector.KnowWEWikiConnector;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * 
@@ -59,19 +58,20 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 
+
+		String sectionID = context.getParameter("kdomid");
+		if (sectionID != null) {
+			executeFromSection(context, sectionID);
+			return;
+		}
+
 		String master = context.getParameter("master");
 		KnowledgeBase kb = D3webModule.getKnowledgeBase(
 				context.getWeb(), master);
 
-		String sectionID = context.getParameter("kdomid");
-		if (sectionID != null) {
-			executeFromSection(context, kb, sectionID);
-			return;
-		}
-
 		String testCases = context.getParameter("testcases");
 		String fileName = context.getParameter("filename");
-		String topic = context.getTopic();
+		String topic = context.getTitle();
 		String[] cases = testCases.split(TESTCASEEXECUTOR_SEPARATOR);
 
 
@@ -133,44 +133,31 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 	}
 
 	/**
+	 * Executes the testcase files provided in the according
+	 * {@link TestCaseExecutorType} section's file Annotation.
 	 * 
 	 * @param context
-	 * @param kb
 	 * @param sectionID
+	 * @throws IOException
 	 * @created 16.09.2011
 	 */
-	private void executeFromSection(UserActionContext context, KnowledgeBase kb, String sectionID) {
+	private void executeFromSection(UserActionContext context, String sectionID) throws IOException {
 
 		Section<TestCaseExecutorType> section = (Section<TestCaseExecutorType>) Sections.getSection(sectionID);
 
-		String file = DefaultMarkupType.getAnnotation(section, TestCaseExecutorType.ANNOTATION_FILE);
-
-		KnowWEWikiConnector connector = KnowWEEnvironment.getInstance().getWikiConnector();
-		ConnectorAttachment attachment = connector.getAttachment(section.getArticle().getTitle()
-				+ "/" + file);
-
-
-		List<SequentialTestCase> testcases;
-		try {
-			testcases = TestPersistence.getInstance().loadCases(attachment.getInputStream(), kb);
-		}
-		catch (Exception e) {
-			// TODO error handling
-			e.printStackTrace();
-			return;
-		}
-
-
-		TestCase t = new TestCase();
-		t.setKb(kb);
-		t.setRepository(testcases);
 		TestCaseAnalysis analysis = new TestCaseAnalysis();
-		TestCaseAnalysisReport result = analysis.runAndAnalyze(t);
+		TestCaseExecutorType.execute(section, analysis);
+
+		TestCaseAnalysisReport result = (TestCaseAnalysisReport) section.getSectionStore().getObject(
+				TestCaseExecutorType.TEST_RESULT_KEY);
+		TestCase t = (TestCase) section.getSectionStore().getObject(
+				TestCaseExecutorType.TESTCASE_KEY);
 
 		ResourceBundle rb = D3webModule.getKwikiBundle_d3web(context);
 		MessageFormat mf = new MessageFormat("");
-		TestCaseRunAction.renderTestAnalysisResult(t, result, rb, mf);
+		String result2 = TestCaseRunAction.renderTestAnalysisResult(t, result, rb, mf);
 
+		context.getWriter().write(result2);
 
 	}
 
