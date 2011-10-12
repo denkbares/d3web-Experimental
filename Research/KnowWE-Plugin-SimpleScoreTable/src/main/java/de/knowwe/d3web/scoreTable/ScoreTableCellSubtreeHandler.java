@@ -63,14 +63,14 @@ public class ScoreTableCellSubtreeHandler extends D3webSubtreeHandler<ScoreCell>
 			a.setSolution(s);
 			a.setScore(score);
 			
-			Rule r = RuleFactory.createRule(a, d3webCond,
-					null, a.get().getActionPSContext());
-			if (r != null) {
-				KnowWEUtils.storeObject(article, s, ruleStoreKey, r);
-				return Arrays
-						.asList((KDOMReportMessage) new ObjectCreatedMessage(
-								"Rule"));
-			}
+//			Rule r = RuleFactory.createRule(a, d3webCond,
+//					null, a.getActionPSContext());
+//			if (r != null) {
+//				KnowWEUtils.storeObject(article, s, ruleStoreKey, r);
+//				return Arrays
+//						.asList((KDOMReportMessage) new ObjectCreatedMessage(
+//								"Rule"));
+//			}
 		}
 		
 		
