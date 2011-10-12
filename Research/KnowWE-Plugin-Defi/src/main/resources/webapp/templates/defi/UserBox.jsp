@@ -2,15 +2,15 @@
 <%@page import="java.io.IOException"%>
 <%@page import="java.io.FileReader"%>
 <%@page import="java.io.BufferedReader"%>
-<%@page import="de.d3web.we.kdom.defaultMarkup.DefaultMarkupType"%>
+<%@page import="de.knowwe.kdom.defaultMarkup.DefaultMarkupType"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="de.d3web.we.kdom.Sections"%>
 <%@page import="de.knowwe.defi.aboutMe.AboutMe"%>
 <%@page import="de.knowwe.defi.readbutton.DataMarkup"%>
-<%@page import="de.d3web.we.jspwiki.JSPWikiUserContext"%>
-<%@page import="de.d3web.we.kdom.Section"%>
-<%@page import="de.d3web.we.core.KnowWEEnvironment"%>
-<%@page import="de.d3web.we.kdom.KnowWEArticle"%>
+<%@page import="de.knowwe.jspwiki.JSPWikiUserContext"%>
+<%@page import="de.knowwe.core.kdom.parsing.Section"%>
+<%@page import="de.knowwe.core.kdom.parsing.Sections" %>
+<%@page import="de.knowwe.core.kdom.KnowWEArticle"%>
+<%@page import="de.knowwe.core.KnowWEEnvironment"%>
 <%@ page import="com.ecyrd.jspwiki.WikiContext"%>
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>

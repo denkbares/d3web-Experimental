@@ -1,10 +1,10 @@
-<%@page import="de.d3web.we.core.KnowWEEnvironment"%>
-<%@page import="de.d3web.we.jspwiki.JSPWikiKnowWEConnector"%>
+<%@page import="de.knowwe.core.KnowWEEnvironment"%>
+<%@page import="de.knowwe.jspwiki.JSPWikiKnowWEConnector"%>
 <%@ taglib uri="/WEB-INF/jspwiki.tld" prefix="wiki"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@page import="java.util.HashMap"%>
 <%@ page import="com.ecyrd.jspwiki.*"%>
-<%@page import="de.d3web.we.jspwiki.JSPWikiUserContext"%>
+<%@page import="de.knowwe.jspwiki.JSPWikiUserContext"%>
 <%@ page import="de.knowwe.defi.*"%>
 <%@page import="de.knowwe.defi.utils.DefiUtils"%><fmt:setLocale
 	value="${prefs.Language}" />
