@@ -30,6 +30,10 @@ public class OWLApiQueryEngine {
 		this.parser = new OWLApiQueryParser(shortFormProvider);
 	}
 
+	public OWLApiQueryParser getParser() {
+		return parser;
+	}
+
 	/**
 	 *
 	 *

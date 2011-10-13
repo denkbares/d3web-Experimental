@@ -24,7 +24,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
- * 
+ *
  * @author Stefan Mark
  * @created 04.10.2011
  */
@@ -35,6 +35,7 @@ public class OWLApiQuery extends DefaultMarkupType {
 	static {
 		MARKUP = new DefaultMarkup("owlapi.query");
 		MARKUP.addAnnotation("query", true);
+		MARKUP.addAnnotation("show", false);
 	}
 
 	/**
