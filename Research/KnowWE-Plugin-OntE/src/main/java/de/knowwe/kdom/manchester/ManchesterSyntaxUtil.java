@@ -28,6 +28,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
+import de.knowwe.kdom.manchester.types.DataRangeExpression;
 
 /**
  * Helper class for storing regular expressions needed in the AbstractTypes of
@@ -84,6 +85,21 @@ public class ManchesterSyntaxUtil {
 		mce.initRestrictionTypes();
 
 		return mce;
+	}
+
+	/**
+	 * 
+	 * 
+	 * @created 02.07.2011
+	 * @return
+	 */
+	public static Type getDataRangeExpression() {
+
+		DataRangeExpression dre = new DataRangeExpression();
+		dre.setSectionFinder(new AllTextFinderTrimmed());
+		dre.initRestrictionTypes();
+
+		return dre;
 	}
 
 	public static boolean hasAnnotations(Section<?> section) {
