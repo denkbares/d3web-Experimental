@@ -50,11 +50,20 @@ import de.knowwe.owlapi.OWLAPISubtreeHandler;
  * DifferentIndividuals, EquivalentProperties, DisjointProperties. Also
  * {@link Annotations} are possible in each of the mentioned frames.
  * </p>
- * 
+ *
  * @author Stefan Mark
  * @created 28.09.2011
  */
 public class MiscFrameSubtreeHandler extends OWLAPISubtreeHandler<MiscFrame> {
+
+	/**
+	 * Constructor for the SubtreeHandler. Here you can set if a sync
+	 * with RDF2Go should occur. For further information see
+	 * {@link OWLAPISubtreeHandler}.
+	 */
+	public MiscFrameSubtreeHandler() {
+		super(false);
+	}
 
 	@Override
 	public Set<OWLAxiom> createOWLAxioms(KnowWEArticle article, Section<MiscFrame> s, Collection<KDOMReportMessage> messages) {

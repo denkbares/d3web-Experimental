@@ -44,10 +44,9 @@ public class Characteristics extends AbstractType {
 
 	public static final String KEYWORD = "Characteristics[:]?";
 
-	public Characteristics() {
+	public Characteristics(boolean isObject, String description) {
 
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(ObjectPropertyFrame.KEYWORDS,
-				KEYWORD);
+		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(description, KEYWORD);
 		this.setSectionFinder(new RegexSectionFinder(p, 1));
 
 		Keyword key = new Keyword(KEYWORD);
@@ -55,15 +54,22 @@ public class Characteristics extends AbstractType {
 
 		NonTerminalList list = new NonTerminalList();
 		NonTerminalListContent listContent = new NonTerminalListContent();
-		listContent.addChildType(new CharacteristicsTerm());
+
+		if (isObject) {
+			listContent.addChildType(new ObjectPropertyCharacteristic());
+		}
+		else {
+			listContent.addChildType(new DataPropertyCharacteristic());
+		}
+
 		list.addChildType(listContent);
 		this.addChildType(list);
 
-		this.addChildType(new CharacteristicsTerm());
+		this.addChildType(new ObjectPropertyCharacteristic());
 	}
 
 	/**
-	 * Returns the {@link CharacteristicsTerm} sections for further handling.
+	 * Returns the {@link ObjectPropertyCharacteristic} sections for further handling.
 	 *
 	 * @created 27.09.2011
 	 * @param Section<Characteristics> section
@@ -71,7 +77,7 @@ public class Characteristics extends AbstractType {
 	 */
 	public List<Section<? extends Type>> getCharacteristics(Section<Characteristics> section) {
 		List<Section<? extends Type>> list = new ArrayList<Section<? extends Type>>();
-		list.addAll(Sections.findSuccessorsOfType(section, CharacteristicsTerm.class));
+		list.addAll(Sections.findSuccessorsOfType(section, ObjectPropertyCharacteristic.class));
 		return list;
 	}
 }
@@ -82,7 +88,7 @@ public class Characteristics extends AbstractType {
  * @author Stefan Mark
  * @created 13.08.2011
  */
-class CharacteristicsTerm extends AbstractType {
+class ObjectPropertyCharacteristic extends AbstractType {
 
 	// private static String TERMS =
 	// "InverseFunctional|Functional|Irreflexive|Reflexive|Asymmetric|Symmetric|Transitive";
@@ -90,7 +96,7 @@ class CharacteristicsTerm extends AbstractType {
 	public static final StyleRenderer CLASS_RENDERER = new StyleRenderer(
 			"color:rgb(115, 0, 70)");
 
-	public CharacteristicsTerm() {
+	public ObjectPropertyCharacteristic() {
 
 		StringBuilder t = new StringBuilder();
 		for (CharacteristicTypes c : CharacteristicTypes.values()) {
@@ -101,5 +107,24 @@ class CharacteristicsTerm extends AbstractType {
 		this.setCustomRenderer(CLASS_RENDERER);
 		Pattern p = Pattern.compile(t.toString().substring(0, t.toString().length() - 1));
 		this.setSectionFinder(new RegexSectionFinder(p));
+	}
+}
+
+/**
+ * The {@link DataPropertyCharacteristic} only allows 'Functional' as value.
+ * 
+ * @author Stefan Mark
+ * @created 13.08.2011
+ */
+class DataPropertyCharacteristic extends AbstractType {
+
+	public static final StyleRenderer CLASS_RENDERER = new StyleRenderer(
+			"color:rgb(115, 0, 70)");
+
+	public DataPropertyCharacteristic() {
+
+		Pattern p = Pattern.compile(CharacteristicTypes.FUNCTIONAL.getType());
+		this.setSectionFinder(new RegexSectionFinder(p));
+		this.setCustomRenderer(CLASS_RENDERER);
 	}
 }

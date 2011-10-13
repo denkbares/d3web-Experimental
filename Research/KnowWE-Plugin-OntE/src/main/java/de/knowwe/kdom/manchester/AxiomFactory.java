@@ -43,7 +43,6 @@ import org.semanticweb.owlapi.model.PrefixManager;
 import org.semanticweb.owlapi.util.DefaultPrefixManager;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
-import de.d3web.core.session.blackboard.Fact;
 import de.d3web.we.kdom.condition.NonTerminalCondition;
 import de.d3web.we.kdom.condition.TerminalCondition;
 import de.knowwe.core.kdom.Type;
@@ -226,7 +225,7 @@ public class AxiomFactory {
 
 		// ... or a Negation ...
 		if (type.isNegation(section)) {
-			Section<? extends NonTerminalCondition> neg = type.getNegation(section);
+			Section<?> neg = type.getNegation(section);
 
 			Set<OWLObject> set = new HashSet<OWLObject>();
 			set.addAll(createDescriptionExpression(Sections.findSuccessor(neg,
@@ -239,7 +238,7 @@ public class AxiomFactory {
 
 		// ... or simply a TerminalCondition
 		if (type.isTerminal(section)) {
-			Section<? extends TerminalCondition> terminal = type.getTerminal(section);
+			Section<?> terminal = type.getTerminal(section);
 			OWLClassExpression oce = handleTerminals(terminal);
 			if (oce != null) {
 				exp.add(oce);
@@ -458,6 +457,10 @@ public class AxiomFactory {
 
 	public static OWLAxiom createSubPropertyOf(OWLObjectProperty p, OWLObjectProperty subProperty) {
 		return factory.getOWLSubObjectPropertyOfAxiom(p, subProperty);
+	}
+
+	public static OWLAxiom createDisjointWith(OWLObjectProperty p1, OWLObjectProperty p2) {
+		return factory.getOWLDisjointObjectPropertiesAxiom(p1, p2);
 	}
 
 	/**

@@ -21,7 +21,7 @@ package de.knowwe.kdom.manchester;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import de.knowwe.kdom.manchester.ManchesterClassExpression.OWLClassContentType;
+import de.knowwe.kdom.manchester.ManchesterMarkup.ManchesterMarkupContentType;
 
 /**
  *
@@ -34,8 +34,9 @@ public class ManchesterDefaultMarkup extends DefaultMarkupType {
 	private static DefaultMarkup MARKUP = null;
 
 	static {
-		MARKUP = new DefaultMarkup("owl-class");
-		MARKUP.addContentType(OWLClassContentType.getInstance());
+		MARKUP = new DefaultMarkup("owl.class");
+		MARKUP.addAnnotation("class", true);
+		MARKUP.addContentType(ManchesterMarkupContentType.getInstance());
 	}
 
 	public ManchesterDefaultMarkup() {

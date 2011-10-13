@@ -35,6 +35,10 @@ import de.knowwe.kdom.renderer.StyleRenderer;
  * ontology. For example: An annotation could be a RDFSLabel or RDFSComment
  * element.
  * </p>
+ * <p>
+ * The possible properties for an {@link Annotation} are defined by the W3C, see
+ * http://www.w3.org/TR/owl-ref/#Header for further information.
+ * </p>
  *
  * @author Stefan Mark
  * @created 21.09.2011
@@ -44,6 +48,9 @@ public class Annotation extends AbstractType {
 	public static final String KEYWORD_COMMENT = "rdfs:comment";
 	public static final String KEYWORD_LABEL = "rdfs:label";
 	public static final String KEYWORD_VERSION = "owl:versionInfo";
+	public static final String KEYWORD_SEEALSO = "rdfs:seeAlso";
+	public static final String KEYWORD_ISDEFINEDBY = "rdfs:isDefinedBy";
+
 	public static final String PATTERN_LANG = "@([a-z]{2})";
 	public static final String PATTERN_DATATYPE = "\\^\\^([a-zA-Z:]+)";
 
@@ -57,7 +64,8 @@ public class Annotation extends AbstractType {
 	public Annotation() {
 		this.setSectionFinder(new AllTextFinderTrimmed());
 
-		Keyword k = new Keyword(KEYWORD_COMMENT + "|" + KEYWORD_LABEL + "|" + KEYWORD_VERSION);
+		Keyword k = new Keyword(KEYWORD_COMMENT + "|" + KEYWORD_LABEL + "|" + KEYWORD_VERSION
+				+ KEYWORD_ISDEFINEDBY + "|" + KEYWORD_SEEALSO);
 		k.setCustomRenderer(LABEL_RENDERER);
 
 		this.addChildType(k);
@@ -68,8 +76,8 @@ public class Annotation extends AbstractType {
 	}
 
 	/**
-	 * Check whether the current {@link Annotation} is a label adding additional
-	 * language information to a element in the ontology.
+	 * Check whether the current {@link Annotation} is a rdfs:label adding
+	 * additional language information to a element in the ontology.
 	 *
 	 * @param Section<Annotation> a A {@link Annotation} section
 	 * @return TRUE if RDFSLabel, FALSE otherwise
@@ -79,7 +87,7 @@ public class Annotation extends AbstractType {
 	}
 
 	/**
-	 * Check whether the current {@link Annotation} is a comment adding
+	 * Check whether the current {@link Annotation} is a rdfs:comment adding
 	 * additional information to a element in the ontology.
 	 *
 	 * @param Section<Annotation> a A {@link Annotation} section
@@ -88,8 +96,9 @@ public class Annotation extends AbstractType {
 	public boolean isComment(Section<Annotation> a) {
 		return checkAnnotationType(a, KEYWORD_COMMENT);
 	}
+
 	/**
-	 * Check whether the current {@link Annotation} is a comment adding
+	 * Check whether the current {@link Annotation} is a owl:version adding
 	 * additional information to a element in the ontology.
 	 *
 	 * @param Section<Annotation> a A {@link Annotation} section
@@ -97,6 +106,28 @@ public class Annotation extends AbstractType {
 	 */
 	public boolean isVersion(Section<Annotation> a) {
 		return checkAnnotationType(a, KEYWORD_VERSION);
+	}
+
+	/**
+	 * Check whether the current {@link Annotation} is a rdfs:seeAlso adding
+	 * additional information to a element in the ontology.
+	 *
+	 * @param Section<Annotation> a A {@link Annotation} section
+	 * @return TRUE if RDFSComment, FALSE otherwise
+	 */
+	public boolean isSeeAlso(Section<Annotation> a) {
+		return checkAnnotationType(a, KEYWORD_SEEALSO);
+	}
+
+	/**
+	 * Check whether the current {@link Annotation} is a rdfs:isDefinedBy adding
+	 * additional information to a element in the ontology.
+	 *
+	 * @param Section<Annotation> a A {@link Annotation} section
+	 * @return TRUE if RDFSComment, FALSE otherwise
+	 */
+	public boolean isVDefinedBy(Section<Annotation> a) {
+		return checkAnnotationType(a, KEYWORD_ISDEFINEDBY);
 	}
 
 	private boolean checkAnnotationType(Section<Annotation> section, String key) {
@@ -182,6 +213,7 @@ public class Annotation extends AbstractType {
 class AnnotationTerm extends AbstractType {
 
 	public AnnotationTerm() {
+		// StringLiteral
 		this.setSectionFinder(new RegexSectionFinder("\".*\""));
 		this.setCustomRenderer(Annotation.TERM_RENDERER);
 	}

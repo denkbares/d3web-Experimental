@@ -17,27 +17,24 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.kdom.manchester.frames.objectproperty;
+package de.knowwe.kdom.manchester.frame;
 
+import de.knowwe.core.kdom.AbstractType;
 
-public enum CharacteristicTypes {
-	// InverseFunctional|Functional|Irreflexive|Reflexive|Asymmetric|Symmetric|Transitive
+/**
+ * The {@link DefaultDescription} is the root class for all descriptions used in
+ * the Manchester OWL syntax. If you want to add a new description, please
+ * extend the {@link DefaultDescription}.
+ * 
+ * @author Stefan Mark
+ * @created 23.09.2011
+ */
+public class DefaultDescription extends AbstractType {
 
-	INVERSEFUNCTIONAL("InverseFunctional"),
-	FUNCTIONAL("Functional"),
-	IRREFLEXIVE("Irreflexive"),
-	REFLEXIVE("Reflexive"),
-	ASYMMETRIC("Asymmetric"),
-	SYMMETRIC("Symmetric"),
-	TRANSITIVE("Transitive");
+	/**
+	 * Constructor for the {@link DefaultDescription}.
+	 */
+	public DefaultDescription() {
 
-	private String type;
-
-	private CharacteristicTypes(String type) {
-		this.type = type;
-	}
-
-	public String getType() {
-		return this.type;
 	}
 }

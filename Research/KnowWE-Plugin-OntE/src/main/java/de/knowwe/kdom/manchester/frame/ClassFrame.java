@@ -34,6 +34,7 @@ import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
+import de.knowwe.kdom.manchester.types.EquivalentTo;
 import de.knowwe.kdom.manchester.types.Keyword;
 import de.knowwe.kdom.subtreehandler.ClassFrameSubtreeHandler;
 import de.knowwe.termObject.ClassIRIDefinition;
@@ -72,7 +73,8 @@ public class ClassFrame extends DefaultFrame {
 		Annotations a = new Annotations(KEYWORDS);
 		this.addChildType(a);
 
-		EquivalentTo to = new EquivalentTo();
+		EquivalentTo to = new EquivalentTo(ClassFrame.KEYWORDS);
+		to.addChildType(ManchesterSyntaxUtil.getMCE());
 		this.addChildType(to);
 
 		SubClassOf sc = new SubClassOf();
@@ -272,7 +274,7 @@ class OWLClass extends ClassIRIDefinition {
  * @author Stefan Mark
  * @created 24.05.2011
  */
-class SubClassOf extends AbstractType {
+class SubClassOf extends DefaultDescription {
 
 	public static final String KEYWORD = "SubClassOf[:]?";
 
@@ -284,34 +286,13 @@ class SubClassOf extends AbstractType {
 		this.addChildType(ManchesterSyntaxUtil.getMCE());
 	}
 }
-
-/**
- *
- *
- * @author Stefan Mark
- * @created 28.09.2011
- */
-class EquivalentTo extends AbstractType {
-
-	public static final String KEYWORD = "EquivalentTo[:]?";
-
-	public EquivalentTo() {
-
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(ClassFrame.KEYWORDS, KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 1));
-
-		this.addChildType(new Keyword(KEYWORD));
-		this.addChildType(ManchesterSyntaxUtil.getMCE());
-	}
-}
-
 /**
  *
  *
  * @author Stefan Mark
  * @created 24.05.2011
  */
-class DisjointWith extends AbstractType {
+class DisjointWith extends DefaultDescription {
 
 	public static final String KEYWORD = "DisjointWith[:]?";
 
@@ -331,7 +312,7 @@ class DisjointWith extends AbstractType {
  * @author Stefan Mark
  * @created 24.05.2011
  */
-class DisjointUnionOf extends AbstractType {
+class DisjointUnionOf extends DefaultDescription {
 
 	public static final String KEYWORD = "DisjointUnionOf[:]?";
 

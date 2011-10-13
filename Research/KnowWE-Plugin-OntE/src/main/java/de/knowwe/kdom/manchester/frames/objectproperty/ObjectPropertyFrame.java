@@ -31,7 +31,12 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.frame.DefaultFrame;
 import de.knowwe.kdom.manchester.types.Annotations;
+import de.knowwe.kdom.manchester.types.DisjointWith;
+import de.knowwe.kdom.manchester.types.Domain;
+import de.knowwe.kdom.manchester.types.EquivalentTo;
 import de.knowwe.kdom.manchester.types.Keyword;
+import de.knowwe.kdom.manchester.types.Range;
+import de.knowwe.kdom.manchester.types.SubPropertyOf;
 import de.knowwe.kdom.subtreehandler.ObjectPropertySubtreeHandler;
 import de.knowwe.termObject.ObjectPropertyIRIDefinition;
 
@@ -64,10 +69,26 @@ public class ObjectPropertyFrame extends DefaultFrame {
 		this.addChildType(dt);
 
 		this.addChildType(new Annotations(KEYWORDS));
-		this.addChildType(new SubPropertyOf());
-		this.addChildType(new Characteristics());
-		this.addChildType(new Domain());
-		this.addChildType(new Range());
+
+		SubPropertyOf sub = new SubPropertyOf(KEYWORDS);
+		sub.addChildType(ManchesterSyntaxUtil.getMCE());
+		this.addChildType(sub);
+
+		EquivalentTo to = new EquivalentTo(KEYWORDS);
+		to.addChildType(ManchesterSyntaxUtil.getMCE());
+		this.addChildType(to);
+
+		DisjointWith dis = new DisjointWith(KEYWORDS);
+		dis.addChildType(ManchesterSyntaxUtil.getMCE());
+		this.addChildType(dis);
+
+		this.addChildType(new Characteristics(true, KEYWORDS));
+		this.addChildType(new Domain(KEYWORDS));
+
+		Range r = new Range(KEYWORDS);
+		r.addChildType(ManchesterSyntaxUtil.getMCE());
+		this.addChildType(r);
+
 		this.addChildType(new InverseOf());
 	}
 
@@ -232,6 +253,30 @@ public class ObjectPropertyFrame extends DefaultFrame {
 	public Section<EquivalentTo> getEquivalentTo(Section<ObjectPropertyFrame> section) {
 		return Sections.findSuccessor(section, EquivalentTo.class);
 	}
+
+	/**
+	 * Returns if the current class definition has a {@link DisjointWith}
+	 * description.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<ObjectPropertyFrame> section
+	 * @return The found section
+	 */
+	public boolean hasDisjointWith(Section<ObjectPropertyFrame> section) {
+		return Sections.findSuccessor(section, DisjointWith.class) != null;
+	}
+
+	/**
+	 * Returns the {@link DisjointWith} sections of the current
+	 * {@link ObjectPropertyFrame}.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<ObjectPropertyFrame> section
+	 * @return The found section
+	 */
+	public Section<DisjointWith> getDisjointWith(Section<ObjectPropertyFrame> section) {
+		return Sections.findSuccessor(section, DisjointWith.class);
+	}
 }
 
 /**
@@ -282,121 +327,6 @@ class InverseOf extends AbstractType {
 	public static final String KEYWORD = "InverseOf[:]?";
 
 	public InverseOf() {
-
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(ObjectPropertyFrame.KEYWORDS,
-				KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 1));
-
-		Keyword key = new Keyword(KEYWORD);
-		this.addChildType(key);
-
-		this.addChildType(ManchesterSyntaxUtil.getMCE());
-	}
-}
-
-/**
- *
- *
- * @author Stefan Mark
- * @created 24.05.2011
- */
-class SubPropertyOf extends AbstractType {
-
-	public static final String KEYWORD = "SubPropertyOf[:]?";
-
-	public SubPropertyOf() {
-
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(ObjectPropertyFrame.KEYWORDS,
-				KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 1));
-
-		Keyword key = new Keyword(KEYWORD);
-		this.addChildType(key);
-
-		this.addChildType(ManchesterSyntaxUtil.getMCE());
-	}
-}
-
-/**
- *
- *
- * @author Stefan Mark
- * @created 24.05.2011
- */
-class Range extends AbstractType {
-
-	public static final String KEYWORD = "Range[:]?";
-
-	public Range() {
-
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(ObjectPropertyFrame.KEYWORDS,
-				KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 1));
-
-		Keyword key = new Keyword(KEYWORD);
-		this.addChildType(key);
-
-		this.addChildType(ManchesterSyntaxUtil.getMCE());
-	}
-}
-
-/**
- *
- *
- * @author Stefan Mark
- * @created 24.05.2011
- */
-class Domain extends AbstractType {
-
-	public static final String KEYWORD = "Domain[:]?";
-
-	public Domain() {
-
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(ObjectPropertyFrame.KEYWORDS,
-				KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 1));
-
-		Keyword key = new Keyword(KEYWORD);
-		this.addChildType(key);
-
-		this.addChildType(ManchesterSyntaxUtil.getMCE());
-	}
-}
-
-/**
- *
- *
- * @author smark
- * @created 24.05.2011
- */
-class EquivalentTo extends AbstractType {
-
-	public static final String KEYWORD = "EquivalentTo[:]?";
-
-	public EquivalentTo() {
-
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(ObjectPropertyFrame.KEYWORDS,
-				KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 1));
-
-		Keyword key = new Keyword(KEYWORD);
-		this.addChildType(key);
-
-		this.addChildType(ManchesterSyntaxUtil.getMCE());
-	}
-}
-
-/**
- *
- *
- * @author Stefan Mark
- * @created 24.05.2011
- */
-class DisjointWith extends AbstractType {
-
-	public static final String KEYWORD = "DisjointWith[:]?";
-
-	public DisjointWith() {
 
 		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(ObjectPropertyFrame.KEYWORDS,
 				KEYWORD);

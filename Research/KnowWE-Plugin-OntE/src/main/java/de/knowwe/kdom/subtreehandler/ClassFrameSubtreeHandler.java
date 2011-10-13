@@ -38,6 +38,7 @@ import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.manchester.ManchesterClassExpression;
 import de.knowwe.kdom.manchester.frame.ClassFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
+import de.knowwe.kdom.manchester.types.EquivalentTo;
 import de.knowwe.owlapi.OWLAPISubtreeHandler;
 
 /**
@@ -62,7 +63,7 @@ public class ClassFrameSubtreeHandler extends OWLAPISubtreeHandler<ClassFrame> {
 	 * {@link OWLAPISubtreeHandler}.
 	 */
 	public ClassFrameSubtreeHandler() {
-		super(true);
+		super(false);
 	}
 
 	@Override

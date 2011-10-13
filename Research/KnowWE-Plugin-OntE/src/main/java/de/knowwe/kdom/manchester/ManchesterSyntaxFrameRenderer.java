@@ -48,7 +48,8 @@ public class ManchesterSyntaxFrameRenderer extends KnowWEDomRenderer<DefaultFram
 		string.append(KnowWEUtils.maskHTML("<pre style=\"white-space:pre-wrap;background: none repeat scroll 0 0 #F5F5F5;border: 1px solid #E5E5E5;position:relative;\">"));
 
 		string.append(KnowWEUtils.maskHTML("<div style=\"position:absolute;top:0px;right:0px;border-bottom: 1px solid #E5E5E5;border-left: 1px solid #E5E5E5;padding:5px\">"
-				+ getFrameName(sec)
+				// + getFrameName(sec)
+				+ getEditorIcon(sec)
 				+ getLink(sec)
 				+ "</div>"));
 
@@ -62,6 +63,22 @@ public class ManchesterSyntaxFrameRenderer extends KnowWEDomRenderer<DefaultFram
 
 	public void setRenderLink(boolean render) {
 		renderLink = render;
+	}
+
+	/**
+	 *
+	 *
+	 * @created 07.10.2011
+	 * @param Section<DefaultFrame> section The current {@link DefaultFrame}
+	 * @return
+	 */
+	private String getEditorIcon(Section<DefaultFrame> section) {
+		StringBuilder icon = new StringBuilder();
+		icon.append("<a href=\"javascript:KNOWWE.plugin.onte.popEditor('Edit current frame');\">");
+		icon.append("<img src=\"KnowWEExtension/images/owl_class_24.png\" width=\"32\"/>");
+		icon.append("</a>");
+		return icon.toString();
+
 	}
 
 	/**

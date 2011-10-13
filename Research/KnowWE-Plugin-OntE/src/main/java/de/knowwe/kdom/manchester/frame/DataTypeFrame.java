@@ -29,9 +29,9 @@ import de.knowwe.kdom.manchester.types.Keyword;
 import de.knowwe.termObject.DatatypePropertyIRIDefinition;
 
 /**
- *
- *
- * @author smark
+ * 
+ * 
+ * @author Stefan Mark
  * @created 24.05.2011
  */
 public class DataTypeFrame extends AbstractType {

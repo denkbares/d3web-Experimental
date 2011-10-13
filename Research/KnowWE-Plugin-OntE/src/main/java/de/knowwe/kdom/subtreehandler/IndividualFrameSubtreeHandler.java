@@ -61,6 +61,15 @@ import de.knowwe.owlapi.OWLAPISubtreeHandler;
  */
 public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<IndividualFrame> {
 
+	/**
+	 * Constructor for the SubtreeHandler. Here you can set if a sync
+	 * with RDF2Go should occur. For further information see
+	 * {@link OWLAPISubtreeHandler}.
+	 */
+	public IndividualFrameSubtreeHandler() {
+		super(false);
+	}
+
 	@Override
 	public Set<OWLAxiom> createOWLAxioms(KnowWEArticle article, Section<IndividualFrame> s, Collection<KDOMReportMessage> messages) {
 

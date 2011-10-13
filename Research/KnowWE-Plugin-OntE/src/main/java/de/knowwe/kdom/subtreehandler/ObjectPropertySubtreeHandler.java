@@ -39,7 +39,9 @@ import de.knowwe.kdom.manchester.frames.objectproperty.Characteristics;
 import de.knowwe.kdom.manchester.frames.objectproperty.ObjectPropertyFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
+import de.knowwe.kdom.manchester.types.Domain;
 import de.knowwe.kdom.manchester.types.ObjectPropertyExpression;
+import de.knowwe.kdom.manchester.types.SubPropertyOf;
 import de.knowwe.owlapi.OWLAPISubtreeHandler;
 
 /**
@@ -58,6 +60,15 @@ import de.knowwe.owlapi.OWLAPISubtreeHandler;
  * @created 07.09.2011
  */
 public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPropertyFrame> {
+
+	/**
+	 * Constructor for the SubtreeHandler. Here you can set if a sync
+	 * with RDF2Go should occur. For further information see
+	 * {@link OWLAPISubtreeHandler}.
+	 */
+	public ObjectPropertySubtreeHandler() {
+		super(false);
+	}
 
 	@Override
 	public Set<OWLAxiom> createOWLAxioms(KnowWEArticle article, Section<ObjectPropertyFrame> s, Collection<KDOMReportMessage> messages) {
@@ -110,8 +121,8 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 					ManchesterClassExpression.class);
 			Set<OWLObjectProperty> props = AxiomFactory.createObjectPropertyExpression(mce);
 
-			for (OWLObjectProperty e : props) {
-				axiom = AxiomFactory.createInverseOf(p, e);
+			for (OWLObjectProperty px : props) {
+				axiom = AxiomFactory.createInverseOf(p, px);
 				if (axiom != null) {
 					axioms.add(axiom);
 				}
@@ -123,8 +134,8 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 					ManchesterClassExpression.class);
 			Set<OWLObjectProperty> props = AxiomFactory.createObjectPropertyExpression(mce);
 
-			for (OWLObjectProperty e : props) {
-				axiom = AxiomFactory.createSubPropertyOf(p, e);
+			for (OWLObjectProperty px : props) {
+				axiom = AxiomFactory.createSubPropertyOf(p, px);
 				if (axiom != null) {
 					axioms.add(axiom);
 				}
@@ -133,6 +144,20 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 		// FIXME not possible with the OWLApi ???
 		if (type.hasEquivalentTo(s)) { // Handle EquivalentTo
 
+		}
+
+		if (type.hasDisjointWith(s)) { // handle DisjointWith
+			Section<?> desc = type.getDisjointWith(s);
+			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+					ManchesterClassExpression.class);
+			Set<OWLObjectProperty> props = AxiomFactory.createObjectPropertyExpression(mce);
+
+			for (OWLObjectProperty px : props) {
+				axiom = AxiomFactory.createDisjointWith(p, px);
+				if (axiom != null) {
+					axioms.add(axiom);
+				}
+			}
 		}
 
 		if (type.hasCharacteristics(s)) { // Handle Characteristics
