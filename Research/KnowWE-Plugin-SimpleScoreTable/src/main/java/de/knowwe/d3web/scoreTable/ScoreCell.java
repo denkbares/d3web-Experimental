@@ -24,6 +24,7 @@ package de.knowwe.d3web.scoreTable;
 
 import java.util.regex.Pattern;
 
+import de.knowwe.core.compile.Priority;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.AnonymousType;
@@ -40,7 +41,7 @@ public class ScoreCell extends AbstractType {
 
 		//setCustomRenderer(new GenericHTMLRenderer<ScoreCell>("span", new String[] {"style", "color: black;", "title", "ScoreCell"}));
 		
-		this.addSubtreeHandler(new ScoreTableCellSubtreeHandler());
+		this.addSubtreeHandler(Priority.LOW,new ScoreTableCellSubtreeHandler());
 	}
 
 }

@@ -24,6 +24,8 @@
 	
 	
 	
+	
+	
 		    
 		    
     <ObjectType ClassName="CornerCell" ID="CornerCell"
@@ -32,7 +34,7 @@
 	    	<SectionFinder ClassName="RegexSectionFinder"
 		PackageName="de.knowwe.core.kdom.sectionFinder" Value='"\\\\|([^\\\\|]*)",Pattern.DOTALL|Pattern.MULTILINE,1'>
 		<Constraint ClassName="AtMostOneFindingConstraint"
-				PackageName="de.d3web.we.kdom.constraint" />
+				PackageName="de.knowwe.kdom.constraint" />
 		</SectionFinder>
 
 	    </ObjectType>
