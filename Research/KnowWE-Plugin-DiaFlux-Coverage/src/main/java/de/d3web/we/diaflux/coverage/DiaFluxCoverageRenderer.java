@@ -31,7 +31,6 @@ import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.CoverageResult;
 import de.d3web.diaflux.coverage.CoverageSessionObject;
 import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
-import de.d3web.we.flow.FlowchartRenderer;
 import de.d3web.we.flow.FlowchartUtils;
 import de.d3web.we.flow.type.FlowchartType;
 import de.d3web.we.utils.D3webUtils;
@@ -78,7 +77,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer<DiaFluxCovera
 	private void renderAutomated(UserContext user, StringBuilder string, Section<DiaFluxCoverageType> section, KnowWEArticle article, String tests) {
 		String master = DiaFluxCoverageType.getMaster(section, article.getTitle());
 		Session session = D3webUtils.getSession(master, user, user.getWeb());
-		CoverageResult result = DiaFluxCoverageType.getResult(section, session);
+		CoverageResult result = DiaFluxCoverageType.getResult(section);
 
 		if (result == null) {
 			result = CoverageResult.calculateResult(new CoverageSessionObject(),
@@ -160,7 +159,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer<DiaFluxCovera
 		for (Flow flow : flows) {
 			String name = flow.getName();
 
-			Section<FlowchartType> flowSec = FlowchartRenderer.findFlowchartSection(web, name);
+			Section<FlowchartType> flowSec = FlowchartUtils.findFlowchartSection(web, name);
 
 			if (flowSec != null) {
 				builder.append("<option ");
@@ -179,7 +178,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer<DiaFluxCovera
 
 		if (selectedFlow == null) selectedFlow = (Flow) flows.get(0);
 
-		Section<FlowchartType> flowSec = FlowchartRenderer.findFlowchartSection(web,
+		Section<FlowchartType> flowSec = FlowchartUtils.findFlowchartSection(web,
 				selectedFlow.getName());
 		builder.append(FlowchartUtils.createFlowchartRenderer(flowSec, user, "coverageContent",
 				DIA_FLUX_COVERAGE, true));

@@ -30,14 +30,18 @@ import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.CoverageResult;
+import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
 import de.d3web.we.flow.GetTraceHighlightAction;
 import de.d3web.we.flow.type.DiaFluxType;
 import de.d3web.we.flow.type.FlowchartType;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.compile.packaging.PackageRenderUtils;
+import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.user.UserContext;
 
 /**
  * 
@@ -50,19 +54,66 @@ public class GetCoverageHighlightAction extends AbstractAction {
 	private static final String COVERED = PREFIX + "Covered";
 	private static final String UNCOVERED = PREFIX + "Uncovered";
 
+	private CoverageResult getResult(Session session) {
+
+		CoverageResult result = CoverageResult.calculateResult(
+				PSMDiaFluxCoverage.getCoverage(session),
+				session.getKnowledgeBase());
+
+		return result;
+
+	}
+
+	/**
+	 * 
+	 * @created 10.10.2011
+	 * @param context
+	 * @return
+	 */
+	private Session getSession(UserContext context) {
+		String coverageKdomid = context.getParameter("coveragesection");
+
+		if (coverageKdomid != null) { // coverage shown in coverage section
+			String master = context.getParameter("master");
+			Section<DiaFluxCoverageType> coverageSec = (Section<DiaFluxCoverageType>) Sections.getSection(
+					coverageKdomid);
+			return D3webUtils.getSession(master, context, context.getWeb());
+
+		}
+		else { // coverage shown in diaflux section
+			String flowKdomid = context.getParameter("kdomid");
+			Section<DiaFluxType> diaFluxSec = (Section<DiaFluxType>) Sections.getSection(
+					flowKdomid);
+
+			KnowWEArticle article = PackageRenderUtils.checkArticlesCompiling(
+					diaFluxSec.getArticle(),
+					diaFluxSec, new StringBuilder());
+
+			return D3webUtils.getSession(article.getTitle(), context, article.getWeb());
+
+		}
+
+	}
+
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 
+		Session session = getSession(context);
+
+		CoverageResult result = getResult(session);
+		if (result == null) {
+			context.getWriter().write("<flow></flow>");
+			return;
+		}
 		String flowKdomid = context.getParameter("kdomid");
-		String coverageKdomid = context.getParameter("coveragesection");
-		String master = context.getParameter("master");
-
-		String web = context.getWeb();
-
 		Section<DiaFluxType> diaFluxSec = (Section<DiaFluxType>) Sections.getSection(
 				flowKdomid);
-		Section<DiaFluxCoverageType> coverageSec = (Section<DiaFluxCoverageType>) Sections.getSection(
-				coverageKdomid);
+
+		KnowWEArticle article = PackageRenderUtils.checkArticlesCompiling(diaFluxSec.getArticle(),
+				diaFluxSec, new StringBuilder());
+
+		KnowledgeBase kb = session.getKnowledgeBase();
+		if (kb == null) return;// TODO error handling
 
 		Section<FlowchartType> flowchart = Sections.findSuccessor(diaFluxSec, FlowchartType.class);
 		if (flowchart == null) {
@@ -70,28 +121,29 @@ public class GetCoverageHighlightAction extends AbstractAction {
 			return;
 		}
 
-		KnowledgeBase kb = D3webUtils.getKB(context.getWeb(), master);
-		if (kb == null) return;// TODO error handling
-
-		Session session = D3webUtils.getSession(master, context, web);
-		if (session == null) return;// TODO error handling
-
-
 		String flowchartName = FlowchartType.getFlowchartName(flowchart);
 		Flow flow = DiaFluxUtils.getFlowSet(kb).get(flowchartName);
 
 		if (flow == null) return;// TODO error handling
 
-		CoverageResult result = DiaFluxCoverageType.getResult(coverageSec, session);
+		StringBuilder builder = createCoverageXML(result, flow);
 
-		if (result == null) {
-			context.getWriter().write("<flow></flow>");
-			return;
-		}
+		context.setContentType("text/xml");
+		context.getWriter().write(builder.toString());
 
+	}
+
+	/**
+	 * 
+	 * @created 10.10.2011
+	 * @param result
+	 * @param flow
+	 * @return
+	 */
+	private StringBuilder createCoverageXML(CoverageResult result, Flow flow) {
 		StringBuilder builder = new StringBuilder();
 
-		GetTraceHighlightAction.appendHeader(builder, flowchartName, PREFIX);
+		GetTraceHighlightAction.appendHeader(builder, flow.getName(), PREFIX);
 
 		List<Edge> coveredEdges = new LinkedList<Edge>();
 		List<Edge> uncoveredEdges = new LinkedList<Edge>();
@@ -121,9 +173,6 @@ public class GetCoverageHighlightAction extends AbstractAction {
 		GetTraceHighlightAction.addNodeHighlight(builder, uncoveredNodes, UNCOVERED);
 
 		GetTraceHighlightAction.appendFooter(builder);
-
-		context.setContentType("text/xml");
-		context.getWriter().write(builder.toString());
-
+		return builder;
 	}
 }

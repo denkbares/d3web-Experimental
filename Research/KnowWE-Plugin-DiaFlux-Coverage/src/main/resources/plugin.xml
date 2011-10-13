@@ -49,6 +49,7 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="diafluxcoverage" />
+		<parameter id="scope" value="diaflux" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
@@ -70,6 +71,19 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="CoverageProvider">
+		<parameter id="class"
+			value="de.d3web.we.diaflux.coverage.CoverageProvider" />
+		<parameter id="name" value="CoverageProvider" />
+		<parameter id="description"
+			value="Enables coverage for active nodes and edges." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="/DiaFlux" />
+	</extension>
+	
 	
 
 </plugin>

@@ -18,9 +18,7 @@
  */
 package de.d3web.we.diaflux.coverage;
 
-import de.d3web.core.session.Session;
 import de.d3web.diaflux.coverage.CoverageResult;
-import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
 import de.d3web.we.flow.type.FlowchartType;
 import de.knowwe.core.compile.packaging.KnowWEPackageManager;
 import de.knowwe.core.kdom.parsing.Section;
@@ -62,15 +60,8 @@ public class DiaFluxCoverageType extends DefaultMarkupType {
 		else return topic;
 	}
 
-	public static CoverageResult getResult(Section<DiaFluxCoverageType> section, Session session) {
-		String tests = DefaultMarkupType.getAnnotation(section, ANNOTATION_TEST);
-		if (tests == null) {
-			return CoverageResult.calculateResult(PSMDiaFluxCoverage.getCoverage(session),
-					session.getKnowledgeBase());
-		}
-		else {
-			return (CoverageResult) section.getSectionStore().getObject(COVERAGE_RESULT);
-		}
+	public static CoverageResult getResult(Section<DiaFluxCoverageType> section) {
+		return (CoverageResult) section.getSectionStore().getObject(COVERAGE_RESULT);
 
 	}
 }

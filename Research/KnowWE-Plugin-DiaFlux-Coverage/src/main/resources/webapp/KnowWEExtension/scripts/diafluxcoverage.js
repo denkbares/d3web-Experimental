@@ -14,7 +14,13 @@ DiaFlux.Coverage.refresh = function(el) {
 
 
 DiaFlux.Coverage.highlight = function(){
-	DiaFlux.Highlight.getHighlights.call(this, 'GetCoverageHighlightAction', {master: $('coveragemaster').value, coveragesection: $('coveragesection').value});
+	
+	if ($('coveragemaster')) {
+		DiaFlux.Highlight.getHighlights.call(this, 'GetCoverageHighlightAction', {master: $('coveragemaster').value, coveragesection: $('coveragesection').value});
+	} else {
+		DiaFlux.Highlight.getHighlights.call(this, 'GetCoverageHighlightAction', {});
+	} 
+	
 }
 
 DiaFlux.Coverage.calculateCoverage = function(kdomid){
