@@ -32,7 +32,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  * something about himself. From the list of avatars the user can choose one
  * that fits him/her.
  * 
- * @author smark
+ * @author Stefan Mark
  * @created 25.01.2011
  */
 public class AboutMeRenderer<T extends AbstractType> extends KnowWEDomRenderer<T> {
@@ -178,20 +178,93 @@ public class AboutMeRenderer<T extends AbstractType> extends KnowWEDomRenderer<T
 		String avatar = DefaultMarkupType.getAnnotation(section, key);
 
 		if (!isOwner && avatar != null) {
-			string.append("<img src=\"KnowWEExtension/images/" + avatar
-					+ ".png\" height=\"80\" width=\"80\" />\n");
+			string.append("<img src=\"KnowWEExtension/images/avatars/" + avatar
+					+ "\" height=\"80\" width=\"80\" />\n");
 		}
 		else {
-			for (int i = 1; i < 3; i++) {
-				String icon = "A0" + i;
+
+			String[] avatars = {
+					"004.jpg",
+					"006.jpg",
+					"1000px-Comic_image_missing.svg.jpg",
+					"2006-02-13_Drop-impact.jpg",
+					"425px-Hen_and_chicks_cartoon_04.svg.jpg",
+					"500px-Cosmic-eidex-herz.svg.jpg",
+					"Absolute_mer_de_glace_01.jpg",
+					"Adler.jpg",
+					"Anatomy_Heart_English_Tiesworks.jpg",
+					"Aster_Tataricus.jpg",
+					"Bali_june_aft.jpg",
+					"Blackbird-sunset-03.jpg",
+					"Boelge_stor.jpg",
+					"Booby_chick.jpg",
+					"Cartoon-cats-black-cat.jpg",
+					"Cartoon-Fish.jpg",
+					"Cello_study.jpg",
+					"Chess_queen_0994.jpg",
+					"Chick_(PSF).jpg",
+					"Citrus_fruits.jpg",
+					"Colouring_pencils.jpg",
+					"Dof_bloom_mental_ray.jpg",
+					"DSC_0042.jpg",
+					"DSC_0440_1.jpg",
+					"DSC_0483.jpg",
+					"DSC_0553.jpg",
+					"DSC_0656.jpg",
+					"DSC_1057-1.jpg",
+					"DSC_1065.jpg",
+					"DSC_1240.jpg",
+					"DSC_1315_1.jpg",
+					"DSC_1428.jpg",
+					"DSC_1434.jpg",
+					"DSC_1460.jpg",
+					"DSC_1617.jpg",
+					"DSC_1620.jpg",
+					"DSC_1918.jpg",
+					"DSC_1932.jpg",
+					"DSC_2196.jpg",
+					"DSC_3440.jpg",
+					"DSC_4213.jpg",
+					"DSC_4214.jpg",
+					"DSC_4257.jpg",
+					"DSC_4823.jpg",
+					"DSC_4910.jpg",
+					"DSC_4911.jpg",
+					"DSC_4913.jpg",
+					"DSC_4914.jpg",
+					"DSC_4917.jpg",
+					"DSC_4918.jpg",
+					"Fruit_Stall_in_Barcelona_Market.jpg",
+					"Funny_Cide.jpg",
+					"Funny_dog.jpg",
+					"German_garden_gnome.jpg",
+					"Heart_frontally_PDA.jpg",
+					"Howmet_TX_at_Silverstone_Classic_Endurance_Car_Racing_in_September_2009.jpg",
+					"Hund4.jpg",
+					"ICD.jpg",
+					"Lautsprecher_01_KMJ.jpg",
+					"Lions_on_rock.jpg",
+					"Maserati_3500_GT_Touring_Coupe_1963.jpg",
+					"Postauto_oldtimer_Grimsel.jpg",
+					"Red_Apple.jpg",
+					"safd.jpg",
+					"Sealion_-Whipsnade_Zoo_-14Apr2009_(2).jpg",
+					"Strombus_sinuatus_2010_G1.jpg",
+					"Sunrise,_Manaslu.jpg",
+					"Train_face_at_Danzig_train_station.jpg",
+					"Two_cups_of_tea_with_spoon.jpg",
+					"United_Autosports_Cars.jpg" };
+
+			for (int i = 0; i < avatars.length; i++) {
+				String icon = avatars[i];
 				String checked = "";
 
 				if (avatar != null && avatar.equals(icon)) {
 					checked = " checked='checked'";
 				}
 
-				string.append("<img src=\"KnowWEExtension/images/" + icon
-							+ ".png\" height=\"80\" width=\"80\" />\n");
+				string.append("<img src=\"KnowWEExtension/images/avatars/" + icon
+							+ "\" height=\"80\" width=\"80\" />\n");
 				string.append("<input type=\"radio\" name=\"" + AboutMe.HTML_AVATAR + "\" id=\""
 							+ AboutMe.HTML_AVATAR + "\" value=\""
 							+ icon + "\" " + checked + " />\n");
