@@ -107,9 +107,6 @@
 			PackageName="de.knowwe.kdom.sectionFinder" Value='","'>
 
 		</SectionFinder>
-		
-		<Constraint ClassName="AtMostOneFindingConstraint"
-				PackageName="de.knowwe.kdom.constraint" />
 
 		<Color>red</Color>
 
