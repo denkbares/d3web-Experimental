@@ -15,7 +15,7 @@
 		</library>
 	</runtime>
 
-	
+	<!--
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
 		id="ConceptPageLinkProvider">
 		<parameter id="class"
@@ -28,6 +28,6 @@
 		<parameter id="scope" value="TermReference" />
 
 	</extension>
-
+-->
 	
 </plugin>
