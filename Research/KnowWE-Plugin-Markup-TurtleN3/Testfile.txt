@@ -33,7 +33,7 @@ N3: Subject predicate:: Object.
 
 <br>
 
-N3: Subject predicate:: Object1 , Object2 ; predicate2:: Object3 , Object 4.
+N3: Subject predicate:: Object1 , 'hallo' ; predicate2:: Object3 , '5'.
 
 !! Example with multiple Objects with linebreaks:
 

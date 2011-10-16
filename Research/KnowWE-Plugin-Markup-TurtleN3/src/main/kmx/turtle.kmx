@@ -2,23 +2,24 @@
 <ObjectTypes>
 	<ObjectType ID="turtleRoot" ClassName="TurtleMarkupN3"
 		PackageName="de.knowwe.kdom.n3" SuperTypeClass="AbstractType"
-		SuperTypePackage="de.d3web.we.kdom">
+		SuperTypePackage="de.knowwe.core.kdom">
 		<SectionFinder ClassName="RegexSectionFinder"
-			PackageName="de.d3web.we.kdom.sectionFinder" Value='"N3:(.*?)\\\\.",Pattern.DOTALL|Pattern.MULTILINE,1' />
-		<Color>yellow</Color>
+			PackageName="de.knowwe.core.kdom.sectionFinder" Value='"N3:(.*?)\\\\.",Pattern.DOTALL|Pattern.MULTILINE,1' />
+		
 	</ObjectType>
+
 
 
 <ObjectType ID="SubjectSection" ClassName="TurtleSubjectSection"
 		PackageName="de.knowwe.kdom.n3" SuperTypeClass="AbstractType"
-		SuperTypePackage="de.d3web.we.kdom" Parent="turtleRoot" Position="0">
+		SuperTypePackage="de.knowwe.core.kdom" Parent="turtleRoot" Position="0">
 
 		<SectionFinder ClassName="RegexSectionFinder"
-			PackageName="de.d3web.we.kdom.sectionFinder"
+			PackageName="de.knowwe.core.kdom.sectionFinder"
 			Value='"(.*?)\\\\b[^\\\\s]*::",Pattern.DOTALL|Pattern.MULTILINE,1'>
 
 			<Constraint ClassName="AtMostOneFindingConstraint"
-				PackageName="de.d3web.we.kdom.constraint" />
+				PackageName="de.knowwe.kdom.constraint" />
 
 		</SectionFinder>
 
@@ -30,13 +31,14 @@
 
 	<ObjectType ID="Subject" ClassName="TurtleSubject"
 		PackageName="de.knowwe.kdom.n3" SuperTypeClass="IRITermRef"
-		SuperTypePackage="de.knowwe.compile.test" Parent="SubjectSection" Position="0">
+		SuperTypePackage="de.knowwe.rdfs" Parent="SubjectSection" Position="0">
 		<SectionFinder ClassName="AllTextFinderTrimmed"
-			PackageName="de.d3web.we.kdom.sectionFinder"
+			PackageName="de.knowwe.core.kdom.sectionFinder"
 			Value=''>
 
+
 			<Constraint ClassName="AtMostOneFindingConstraint"
-				PackageName="de.d3web.we.kdom.constraint" />
+				PackageName="de.knowwe.kdom.constraint" />
 
 		</SectionFinder>
 
@@ -48,10 +50,10 @@
 
 	<ObjectType ID="PredSentenceSubtree" ClassName="TurtlePredSentence"
 		PackageName="de.knowwe.kdom.n3" SuperTypeClass="AbstractType"
-		SuperTypePackage="de.d3web.we.kdom" Parent="turtleRoot" Position="1">
+		SuperTypePackage="de.knowwe.core.kdom" Parent="turtleRoot" Position="1">
 
 		<SectionFinder ClassName="SplitSectionFinderUnquoted"
-			PackageName="de.d3web.we.kdom.sectionFinder" Value='";"'>
+			PackageName="de.knowwe.kdom.sectionFinder" Value='";"'>
 
 		</SectionFinder>
 
@@ -61,17 +63,17 @@
 	</ObjectType>
 
 
-	<ObjectType ID="PredicateSection" ClassName="TurtlePredicateSectiom"
+	<ObjectType ID="PredicateSection" ClassName="TurtlePredicateSection"
 		PackageName="de.knowwe.kdom.n3" SuperTypeClass="AbstractType"
-		SuperTypePackage="de.d3web.we.kdom" Parent="PredSentenceSubtree"
+		SuperTypePackage="de.knowwe.core.kdom" Parent="PredSentenceSubtree"
 		Position="0">
 
 		<SectionFinder ClassName="RegexSectionFinder"
-			PackageName="de.d3web.we.kdom.sectionFinder" Value='"([^\\\\s]*::)", Pattern.DOTALL, 1'>
+			PackageName="de.knowwe.core.kdom.sectionFinder" Value='"([^\\\\s]*::)", Pattern.DOTALL, 1'>
 
 		</SectionFinder>
 		<Constraint ClassName="AtMostOneFindingConstraint"
-				PackageName="de.d3web.we.kdom.constraint" />
+				PackageName="de.knowwe.kdom.constraint" />
 
 		<Color>green</Color>
 
@@ -80,15 +82,15 @@
 	
 		<ObjectType ID="Predicate" ClassName="TurtlePredicate"
 		PackageName="de.knowwe.kdom.n3" SuperTypeClass="IRITermRef"
-		SuperTypePackage="de.knowwe.compile.test" Parent="PredicateSection"
+		SuperTypePackage="de.knowwe.rdfs" Parent="PredicateSection"
 		Position="0">
 
 		<SectionFinder ClassName="RegexSectionFinder"
-			PackageName="de.d3web.we.kdom.sectionFinder" Value='"([^\\\\s]*)::", Pattern.DOTALL, 1'>
+			PackageName="de.knowwe.core.kdom.sectionFinder" Value='"([^\\\\s]*)::", Pattern.DOTALL, 1'>
 
 		</SectionFinder>
 		<Constraint ClassName="AtMostOneFindingConstraint"
-				PackageName="de.d3web.we.kdom.constraint" />
+				PackageName="de.knowwe.kdom.constraint" />
 
 		<Color>green</Color>
 
@@ -96,13 +98,47 @@
 	</ObjectType>
 	
 
-	<ObjectType ID="Object" ClassName="TurtleObject"
-		PackageName="de.knowwe.kdom.n3" SuperTypeClass="IRITermRef"
-		SuperTypePackage="de.knowwe.compile.test" Parent="PredSentenceSubtree"
+	<ObjectType ID="TurtleObjectSection" ClassName="TurtleObjectSection"
+		PackageName="de.knowwe.kdom.n3" SuperTypeClass="AbstractType"
+		SuperTypePackage="de.knowwe.core.kdom" Parent="PredSentenceSubtree"
 		Position="1">
 
 		<SectionFinder ClassName="SplitSectionFinderUnquoted"
-			PackageName="de.d3web.we.kdom.sectionFinder" Value='","'>
+			PackageName="de.knowwe.kdom.sectionFinder" Value='","'>
+
+		</SectionFinder>
+		
+		<Constraint ClassName="AtMostOneFindingConstraint"
+				PackageName="de.knowwe.kdom.constraint" />
+
+		<Color>red</Color>
+
+
+	</ObjectType>
+	
+	<ObjectType ID="TurtleObjectLiteral" ClassName="TurtleObjectLiteral"
+		PackageName="de.knowwe.kdom.n3" SuperTypeClass="AbstractType"
+		SuperTypePackage="de.knowwe.core.kdom" Parent="TurtleObjectSection"
+		Position="0">
+
+<SectionFinder ClassName="RegexSectionFinder"
+			PackageName="de.knowwe.core.kdom.sectionFinder" Value='"&apos;(.*?)&apos;", Pattern.DOTALL, 1'>
+
+		</SectionFinder>
+
+		<Color>yellow</Color>
+
+
+	</ObjectType>
+
+
+<ObjectType ID="Object" ClassName="TurtleObjectTerm"
+		PackageName="de.knowwe.kdom.n3" SuperTypeClass="IRITermRef"
+		SuperTypePackage="de.knowwe.rdfs" Parent="TurtleObjectSection"
+		Position="1">
+
+		<SectionFinder ClassName="SplitSectionFinderUnquoted"
+			PackageName="de.knowwe.kdom.sectionFinder" Value='","'>
 
 		</SectionFinder>
 
