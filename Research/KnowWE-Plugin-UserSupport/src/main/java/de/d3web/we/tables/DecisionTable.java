@@ -18,14 +18,12 @@
  */
 package de.d3web.we.tables;
 
-import de.d3web.we.renderer.SpanIDRenderer;
+import de.d3web.we.renderer.TableRenderer;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.basicType.CommentLineType;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.kdom.AnonymousType;
-import de.knowwe.kdom.renderer.ReRenderSectionMarkerRenderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
 import de.knowwe.kdom.sectionFinder.UnquotedExpressionFinder;
@@ -57,8 +55,9 @@ public class DecisionTable extends AbstractType{
 		// Lines of the table
 		this.addChildType(new TableLine());
 
-		this.setCustomRenderer(new ReRenderSectionMarkerRenderer<Type>(
-				new SpanIDRenderer()));
+		this.setCustomRenderer(new TableRenderer());
+		//		this.setCustomRenderer(new ReRenderSectionMarkerRenderer<Type>(
+		//				new SpanIDRenderer()));
 
 		// anything left is comment
 		AnonymousType residue = new AnonymousType("rest");
