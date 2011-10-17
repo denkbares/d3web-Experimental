@@ -217,6 +217,7 @@
 		<module>KnowWE-Plugin-ConceptPageLinkToolProvider</module>
 		<module>KnowWE-Plugin-Markup-TurtleN3</module>
 		<module>KnowWE-Plugin-SimpleScoreTable</module>
+		<module>KnowWE-Plugin-UserSupport</module>
 	</modules>
 	<repositories>
 		<repository>
