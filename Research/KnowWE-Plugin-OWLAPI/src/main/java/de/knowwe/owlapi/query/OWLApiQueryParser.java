@@ -6,6 +6,7 @@ import org.coode.owlapi.manchesterowlsyntax.ManchesterOWLSyntaxEditorParser;
 import org.semanticweb.owlapi.expression.OWLEntityChecker;
 import org.semanticweb.owlapi.expression.ParserException;
 import org.semanticweb.owlapi.expression.ShortFormEntityChecker;
+import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -23,38 +24,63 @@ import de.knowwe.owlapi.OWLAPIConnector;
  */
 public class OWLApiQueryParser {
 
-	private final BidirectionalShortFormProvider bidiProvider;
+	private OWLDataFactory factory = null;
 
+	private OWLOntology ontology = null;
+
+	private OWLEntityChecker owlEntityChecker = null;
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param shortFormProvider
+	 */
 	public OWLApiQueryParser(ShortFormProvider shortFormProvider) {
 
 		OWLAPIConnector connector = OWLAPIConnector.getGlobalInstance();
-		OWLOntology ontology = connector.getOntology();
+		ontology = connector.getOntology();
 
 		Set<OWLOntology> importsClosure = ontology.getImportsClosure();
-		bidiProvider = new BidirectionalShortFormProviderAdapter(connector.getManager(),
+		BidirectionalShortFormProvider bidiProvider = new BidirectionalShortFormProviderAdapter(
+				connector.getManager(),
 				importsClosure,
 				shortFormProvider);
+
+		factory = OWLAPIConnector.getGlobalInstance().getManager().getOWLDataFactory();
+		owlEntityChecker = new ShortFormEntityChecker(bidiProvider);
 	}
 
 	/**
 	 * Parses a string given in Manchester OWL Syntax into a
 	 * {@link OWLClassExpression}. The OWLClassexpression can then further used
 	 * to obtain results from the loaded ontology.
-	 * 
-	 * @param String query The entered query String
+	 *
+	 * @param String query The to parse String
 	 * @throws ParserException
 	 */
 	public OWLClassExpression parseManchesterOWLsyntax(String query) throws ParserException {
-
-		OWLDataFactory factory = OWLAPIConnector.getGlobalInstance().getManager().getOWLDataFactory();
-		OWLOntology ontology = OWLAPIConnector.getGlobalInstance().getOntology();
-
-		OWLEntityChecker owlEntityChecker = new ShortFormEntityChecker(bidiProvider);
 
 		ManchesterOWLSyntaxEditorParser parser = new ManchesterOWLSyntaxEditorParser(factory, query);
 		parser.setDefaultOntology(ontology);
 		parser.setOWLEntityChecker(owlEntityChecker);
 
 		return parser.parseClassExpression();
+	}
+
+	/**
+	 * Parses a string given in Manchester OWL Syntax into a {@link OWLAxiom}.
+	 * The OWLAxiom can then further used to obtain results from the loaded
+	 * ontology.
+	 *
+	 * @param String query The to parse String
+	 * @throws ParserException
+	 */
+	public OWLAxiom parseStringToOWLAxiom(String query) throws ParserException {
+
+		ManchesterOWLSyntaxEditorParser parser = new ManchesterOWLSyntaxEditorParser(factory, query);
+		parser.setDefaultOntology(ontology);
+		parser.setOWLEntityChecker(owlEntityChecker);
+
+		return parser.parseAxiom();
 	}
 }
