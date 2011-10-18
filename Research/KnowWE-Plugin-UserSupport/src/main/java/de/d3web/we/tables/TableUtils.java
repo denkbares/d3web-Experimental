@@ -21,6 +21,8 @@ package de.d3web.we.tables;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.d3web.we.action.TableExportAction;
+import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 
@@ -121,5 +123,29 @@ public class TableUtils {
 		cells.addAll(Sections.findSuccessorsOfType(lines.get(row), TableCell.class));
 
 		return cells;
+	}
+
+	/**
+	 * Return the ITable with a given Section-Id.
+	 * If not found null.
+	 * Used in {@link TableExportAction}
+	 * 
+	 * @created 18.10.2011
+	 * @param article
+	 * @param id
+	 * @return
+	 */
+	public static Section<ITable> getTableWithId(KnowWEArticle article, String id) {
+		Section<KnowWEArticle> articleSection = article.getSection();
+
+		List<Section<ITable>> tables = new ArrayList<Section<ITable>>();
+		Sections.findSuccessorsOfType(articleSection, ITable.class, tables);
+
+		for ( Section<ITable> table : tables ) {
+			if (table.getID().equals(id) )
+				return table;
+		}
+
+		return null;
 	}
 }

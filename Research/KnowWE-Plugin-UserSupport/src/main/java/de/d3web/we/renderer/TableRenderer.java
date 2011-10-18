@@ -20,10 +20,10 @@ package de.d3web.we.renderer;
 
 import java.util.List;
 
+import de.d3web.we.tables.ITable;
 import de.d3web.we.tables.TableCell;
 import de.d3web.we.tables.TableLine;
 import de.knowwe.core.kdom.KnowWEArticle;
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
@@ -37,10 +37,10 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @author Johannes Dienst
  * @created 14.10.2011
  */
-public class TableRenderer extends KnowWEDomRenderer<Type> {
+public class TableRenderer extends KnowWEDomRenderer<ITable> {
 
 	@Override
-	public void render(KnowWEArticle article, Section<Type> section,
+	public void render(KnowWEArticle article, Section<ITable> section,
 			UserContext user, StringBuilder string) {
 
 		string.append(KnowWEUtils.maskHTML("<span id='" + section.getID() + "'>"));
@@ -58,13 +58,16 @@ public class TableRenderer extends KnowWEDomRenderer<Type> {
 
 		buildi.append("</table>");
 
+		// Render import und export buttons
+		renderExportImportButton(buildi, section);
+
 		string.append(KnowWEUtils.maskHTML(buildi.toString()));
 
 		string.append(KnowWEUtils.maskHTML("</span>"));
 
 	}
 
-	private static void renderTableHeader(StringBuilder buildi, Section<Type> section) {
+	private static void renderTableHeader(StringBuilder buildi, Section<ITable> section) {
 		Section<TableLine> sec = Sections.findChildOfType(section, TableLine.class);
 		if (sec != null) {
 			buildi.append("<thead>");
@@ -81,7 +84,7 @@ public class TableRenderer extends KnowWEDomRenderer<Type> {
 		}
 	}
 
-	private static void renderTableBody(StringBuilder buildi, Section<Type> section) {
+	private static void renderTableBody(StringBuilder buildi, Section<ITable> section) {
 		buildi.append("<tbody>");
 
 		List<Section<TableLine>> lines = Sections.findChildrenOfType(section, TableLine.class);
@@ -105,5 +108,24 @@ public class TableRenderer extends KnowWEDomRenderer<Type> {
 		}
 
 		buildi.append("</tbody>");
+	}
+
+	private static void renderExportImportButton(StringBuilder buildi, Section<ITable> section) {
+
+		String rel = "rel=\"{ " +
+				"		objectId : '" + section.getID() + "',"
+				+ "}\" ";
+		//		+ "namespace : '" + java.net.URLEncoder.encode(namespace) + "',"
+		//		+ KnowWEAttributes.WEB + ": '" + webname + "',"
+		//		+ KnowWEAttributes.TOPIC + ": '" + topic + "',";
+
+		String exportButton =
+				"<input class=\"button table-export\" type=\"button\" name=\"Export\" " +
+						"value=\"Export\" id=\"" + section.getID()  + "-Export\"" + rel  + ">";
+		String importButton =
+				"<input class=\"button table-import\" type=\"button\" name=\"Import\"" +
+						" value=\"Import\" id=\"" + section.getID()  + "-Import\"" + rel + ">";
+
+		buildi.append(exportButton + importButton);
 	}
 }
