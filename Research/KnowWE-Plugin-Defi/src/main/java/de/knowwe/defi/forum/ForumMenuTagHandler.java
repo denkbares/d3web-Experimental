@@ -61,11 +61,19 @@ import de.knowwe.kdom.dashtree.DashTreeUtils;
  */
 public class ForumMenuTagHandler extends AbstractTagHandler {
 
-	// TODO: Usernames Mit Berater sprechen individuell anzeigen oder überlegen
-
+	/** Beschriftungen für das "Neues Forum"-Formular */
 	private static final String OPEN_FORM_BUTTON = "Neues Forum";
 	private static final String CLOSE_FORM_BUTTON = "Schließen";
 	private static final String SEND_BUTTON = "Abschicken";
+	private static final String FORM_LABEL = "Neues Forum erstellen:";
+	private static final String TEXTAREA_LABEL = "Geben Sie bitte Ihre Nachricht ein:";
+	private static final String OPTION_LABEL = "W&auml;hlen Sie ein Thema aus:";
+	private static final String TOPIC_LABEL = "Geben Sie bitte eine &Uuml;berschrift ein:";
+
+	/** Größe der Eingabefelder */
+	private static final int TOPIC_PANEL_SIZE = 70;
+	private static final int TEXTAREA_COLS = 55;
+	private static final int TEXTAREA_ROWS = 10;
 
 	/**
 	 * @param name
@@ -82,7 +90,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		List<Section<? extends Forum>> forums = new LinkedList<Section<? extends Forum>>();
 		List<Section<? extends Forum>> other = new LinkedList<Section<? extends Forum>>();
 		String pageName, unit, topic, lastVisit;
-		boolean noForum = true, newEntry;
+		boolean noForum = true, newEntry = false;
 		int numberOfNewEntries = 0;
 		HashMap<String, String> logPages = checkLog(userContext);
 
@@ -135,8 +143,15 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 						lastVisit = logPages.get(sec.getTitle());
 						if (userContext.userIsAsserted()) {
 
+							// Benutzer war noch nicht in diesem Forum
 							if (lastVisit == null) {
-								numberOfNewEntries = -1;
+								// Hat er es selbst erstellt?
+								if (userContext.getUserName().equals(getAuthor(sec.getText()))) {
+									// Gibt es mehr als den eigenen Eintrag?
+									numberOfNewEntries = getNumberOfNewEntries(sec.getText(),
+											"01.01.1900 00:00") - 1;
+								}
+								else numberOfNewEntries = -1;
 							}
 							else {
 								numberOfNewEntries = getNumberOfNewEntries(sec.getText(),
@@ -164,10 +179,11 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 				// Formular zur Erstellung eines neuen Forums
 				fm.append("<br /><form style='display:none' name='" + pageName
-							+ "'><br /><h4>Neues Forum erstellen:</h4>");
+							+ "'><br /><h4>" + FORM_LABEL + "</h4>");
 
 				// ++ Select-Tag zur Lektionsauswahl
-				fm.append("<p class='fm_newforum'>Thema:&nbsp;<select name='" + pageName
+				fm.append("<p class='fm_newforum'>" + OPTION_LABEL + "<br /><select name='"
+						+ pageName
 						+ "_select'>");
 				fm.append("<option value='" + pageName + "'>" + pageName + "</option>");
 
@@ -186,13 +202,15 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 				fm.append("</select></p>");
 
 				// ++ Ueberschrift
-				fm.append("<p class='fm_newforum'>&Uuml;berschrift:&nbsp<input type='text' size='50' name='"
+				fm.append("<p class='fm_newforum'>" + TOPIC_LABEL
+						+ "<br /><input type='text' size='" + TOPIC_PANEL_SIZE + "' name='"
 						+ pageName
 						+ "_topic' /></p>");
 
 				// ++ Nachrichteneingabe
-				fm.append("<p>Beitrag:</p><textarea name='" + pageName
-							+ "_text' rows='10' cols='50'></textarea><br />");
+				fm.append("<p>" + TEXTAREA_LABEL + "</p><textarea name='" + pageName
+							+ "_text' rows='" + TEXTAREA_ROWS + "' cols='" + TEXTAREA_COLS
+						+ "'></textarea><br />");
 				fm.append("<input type='button' value='" + SEND_BUTTON +
 							"' onclick='sendforumForm(\""
 							+ pageName +
@@ -215,6 +233,8 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 		/* Sonstige Foren */
 		pageName = "Sonstiges";
+		fm.append("\n"); // fixes JSPWiki's
+		// "10000 characters without linebreak-bug"
 		fm.append("<tr class='active'><td>" + pageName);
 
 		// "Neues Forum"-Button
@@ -230,8 +250,34 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 			topic = getForumAttribute("topic", sec.getText());
 			if (topic == "") topic = sec.getTitle();
 
+			// Testen ob es neue Beiträge gibt
+			lastVisit = logPages.get(sec.getTitle());
+			if (userContext.userIsAsserted()) {
+
+				if (lastVisit == null) {
+					// Hat er es selbst erstellt?
+					if (userContext.getUserName().equals(getAuthor(sec.getText()))) {
+						// Gibt es mehr als den eigenen Eintrag?
+						numberOfNewEntries = getNumberOfNewEntries(sec.getText(),
+								"01.01.1900 00:00") - 1;
+					}
+					else numberOfNewEntries = -1;
+				}
+				else {
+					numberOfNewEntries = getNumberOfNewEntries(sec.getText(),
+							lastVisit);
+				}
+
+				if (numberOfNewEntries != 0) newEntry = true;
+			}
+
 			fm.append("<li><a href='Wiki.jsp?page=" + sec.getTitle() + "'>"
-					+ topic + "</a></li>");
+					+ topic + "</a>");
+			if (numberOfNewEntries == -1) fm.append("&nbsp;<span class='fm_new'>(ungelesenes Thema)</span>");
+			else if (numberOfNewEntries == 1) fm.append("&nbsp;<span class='fm_new'>(1 neuer Beitrag)</span>");
+			else if (numberOfNewEntries > 0) fm.append("&nbsp;<span class='fm_new'>("
+					+ numberOfNewEntries + " neue Beiträge)</span>");
+			fm.append("</li>");
 			noForum = false;
 		}
 		if (noForum) fm.append("<li>Noch keine Foren vorhanden</p></li>");
@@ -240,16 +286,18 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 		// Formular zur Erstellung eines neuen Forums
 		fm.append("<br /><form style='display:none' name='" + pageName
-					+ "'><br /><h4>Neues Forum erstellen:</h4>");
+					+ "'><br /><h4>" + FORM_LABEL + "</h4>");
 
 		// ++ Ueberschrift
-		fm.append("<p class='fm_newforum'>&Uuml;berschrift:&nbsp<input type='text' size='50' name='"
+		fm.append("<p class='fm_newforum'>" + TOPIC_LABEL
+				+ ":<br /><input type='text' size='" + TOPIC_PANEL_SIZE + "' name='"
 				+ pageName
 				+ "_topic' /></p>");
 
 		// ++ Nachrichteneingabe
-		fm.append("<p>Beitrag:</p><textarea name='" + pageName
-					+ "_text' rows='10' cols='50'></textarea><br />");
+		fm.append("<p>" + TEXTAREA_LABEL + "</p><textarea name='" + pageName
+				+ "_text' rows='" + TEXTAREA_ROWS + "' cols='" + TEXTAREA_COLS
+				+ "'></textarea><br />");
 		fm.append("<input type='button' value='" + SEND_BUTTON +
 					"' onclick='sendforumForm(\""
 					+ pageName +
@@ -257,7 +305,14 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 					+ pageName
 					+ "\");return false' value='" + CLOSE_FORM_BUTTON + "' /></form>");
 
-		fm.append("</td><td class='fm_status'></td></tr></table>");
+		if (newEntry) {
+			fm.append("</td><td class='fm_new'></td></tr>");
+		}
+		else {
+			fm.append("</td><td class='fm_old'></td></tr>");
+		}
+
+		fm.append("</table>");
 
 		return KnowWEUtils.maskHTML(fm.toString());
 	}
@@ -411,6 +466,27 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		}
 
 		return number;
+	}
+	
+	private String getAuthor(String forumXML) {
+		String author = "";
+		
+		try {
+			DocumentBuilderFactory dbf =
+					DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			InputSource is = new InputSource();
+			is.setCharacterStream(new StringReader(forumXML));
+
+			Document doc = db.parse(is);
+			NodeList nodes = doc.getElementsByTagName("forum");
+			Element firstBox = (Element) ((Element) nodes.item(0)).getElementsByTagName("box").item(0);
+			author = firstBox.getAttribute("name");
+		}
+		catch (Exception e) {
+		}
+
+		return author;
 	}
 
 	private HashMap<String, String> checkLog(UserContext uc) {

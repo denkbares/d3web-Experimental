@@ -54,20 +54,24 @@ public class NewForumAction extends AbstractAction {
 				KnowWEEnvironment.DEFAULT_WEB);
 		JOptionPane jop = new JOptionPane(
 				"Ihr Forum wurde erfolgreich erstellt.");
-		String content;
+		String content = "<a href=\"Wiki.jsp?page=Diskussion\"><< zur&uuml;ck zur Diskussion</a><br />\n";
 
 		if (pageName == "") {
-			content = "\n<forum topic='" + topic + "' name='" + topic + "'>\n" +
+			content += "\n<forum topic='" + topic + "' name='" + topic + "'>\n" +
 					"<box name=\"" + username + "\" date=\"" + sdf.format(now.getTime()) + "\">"
 					+ message + "</box>\n</forum>";
 		}
 		else {
-			content = "\n<forum topic='" + topic + "' unit='" + pageName + "' name='" + topic
+			content += "\n<forum topic='" + topic + "' unit='" + pageName + "' name='" + topic
 					+ " (" + pageName + ")" + "'>\n" +
 					"<box name=\"" + username + "\" date=\"" + sdf.format(now.getTime()) + "\">"
 					+ message + "</box>\n</forum>";
 		}
 
+		content += "<br /><br />\n<a href=\"Wiki.jsp?page=Diskussion\"><< zur&uuml;ck zur Diskussion</a>";
+
+		if (pageName == "") title = "Forum zu " + " \"" + topic + "\"";
+		else
 		title = "Forum zu " + pageName + " (" + topic + ")";
 		if (mgr.getArticle(title) == null) {
 			KnowWEEnvironment.getInstance().buildAndRegisterArticle(content,
