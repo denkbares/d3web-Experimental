@@ -1,0 +1,88 @@
+#onte_overlay
+{ width: 100%; height: 100%; position: fixed; opacity: 0.4; z-index: 200;background-color: #3F4C58;left:0; top:0; }
+      
+#onte_modal 
+{ z-index: 200; position: absolute;}
+    
+    #onte_modal_close
+    {cursor: pointer;}
+      
+    .onte_modal_rounded
+    {-moz-border-radius: 10px;-webkit-border-radius: 10px; border-radius: 10px; 
+     -moz-box-shadow: 0 0 5px 5px #666; -webkit-box-shadow: 0 0 5px 5px#666; box-shadow: 0 0 5px 5px #666;
+      border-width: 5px; border-color:rgb(255,255,255);border-style: solid; }
+      
+    
+
+
+.onte-box
+    {background: none repeat scroll 0 0 #F5F5F5;border: 1px solid #E5E5E5;padding:8px 0 10px 20px;position:relative;overflow:auto;}
+    
+    .onte-button 
+    { border: 1px solid #CCCCCC; background-color: #F5F5F5; border-radius: 2px 2px 2px 2px; color: #444444;
+      display: inline-block; line-height: 27px; padding: 0 8px; text-align: center; }
+      
+    .onte-button-txt 
+    {border: 1px solid #CCCCCC; background-color: #87A890; border-radius: 2px 2px 2px 2px; color: #FFFFFF;
+      display: inline-block; line-height: 27px; padding: 0 8px; text-align: center;}
+    
+    .onte-button.small 
+    { min-width: 34px; padding: 0; width: 34px;}
+
+    .onte-button:active, .onte-button-txt:active
+    {box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) inset; }
+    
+    .consistency
+    {background: url(../images/onte/utilities-system-monitor.png) no-repeat scroll center 6px transparent; height: 22px; width: 16px;}
+    
+    .consistency-error
+    {background: url(../images/onte/utilities-system-monitor-error.png) no-repeat scroll center 6px transparent; height: 22px; width: 16px;}
+    
+    .export
+    {background: url(../images/onte/emblem-downloads.png) no-repeat scroll center 6px transparent; height: 22px; width: 16px;}
+    
+    .import
+    {background: url(../images/onte/document-import-2.png) no-repeat scroll center 6px transparent; height: 22px; width: 16px;}
+    
+    .query
+    {background: url(../images/onte/system-search.png) no-repeat scroll center 6px transparent; height: 22px; width: 16px;}
+    
+    .article-link
+    {background: url(../images/onte/emblem-link.png) no-repeat scroll center center transparent; height: 8px; width: 8px;}  
+    
+    .onte-input-container 
+    {background: none repeat scroll 0 0 #FFFFFF; border: 1px solid #CCCCCC; display: block; height: 30px; padding-right: 12px; }
+    
+    .onte-focused
+    {border-color: #4D90FE}
+    
+    .onte-input
+    {background: none repeat scroll 0 0 transparent; border: 0 none;
+    font-size: 138%; height: 22px; padding: 4px 0 0 6px; vertical-align: top; width: 200px;}
+    
+    .onte-options input[text], .onte-options select
+    {width: 200px;}
+    
+        .onte-input-field:focus
+        {outline: medium none; }
+    
+    .onte-textarea
+    {-moz-box-sizing: border-box;
+    height: 160px; overflow-x: auto; overflow-y: hidden; padding-right: 20px; }
+
+    
+    .onte-options label.option
+    {display: inline-block; margin: 9px 0 0;}
+    
+    .onte-option-label
+    { color: #666666; font-weight: normal; line-height: 0; padding: 0 0 0 0.4em;}
+    
+    #onte-query-tab-results-content
+    {overflow-x: hidden; overflow-y: auto; width:100%; height:200px;background-color:rgb(255,255,255);}
+    
+    
+ .onte-result .onte-explanation-details  
+ { display: none;}
+ 
+    .onte-result:hover .onte-explanation-details, onte-result.hover .onte-explanation-details
+    { position:absolute;display:block; z-index:200; margin-left:100px; bottom:10%; left: 10%;}
