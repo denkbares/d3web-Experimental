@@ -47,7 +47,7 @@ public class NonTerminalList extends AbstractType {
 	class NoneTerminalListFinder implements SectionFinder {
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section<? extends Type> father, Type type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 
 			String trimmed = text.trim();
 
