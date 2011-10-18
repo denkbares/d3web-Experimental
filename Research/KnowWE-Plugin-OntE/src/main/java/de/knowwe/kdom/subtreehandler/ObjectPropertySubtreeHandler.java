@@ -22,13 +22,16 @@ package de.knowwe.kdom.subtreehandler;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 
+import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.KDOMReportMessage;
@@ -42,6 +45,7 @@ import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.kdom.manchester.types.Domain;
 import de.knowwe.kdom.manchester.types.ObjectPropertyExpression;
 import de.knowwe.kdom.manchester.types.SubPropertyOf;
+import de.knowwe.onte.editor.OWLApiAxiomCacheUpdateEvent;
 import de.knowwe.owlapi.OWLAPISubtreeHandler;
 
 /**
@@ -84,6 +88,7 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 			p = (OWLObjectProperty) AxiomFactory.getOWLAPIEntity(def, OWLObjectProperty.class);
 			axiom = AxiomFactory.getOWLAPIEntityDeclaration(p);
 			if (axiom != null) {
+				EventManager.getInstance().fireEvent(new OWLApiAxiomCacheUpdateEvent(axiom, s));
 				axioms.add(axiom);
 			}
 		}
@@ -92,11 +97,13 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 			Section<?> desc = type.getRange(s);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
 					ManchesterClassExpression.class);
-			Set<OWLClassExpression> exp = AxiomFactory.createDescriptionExpression(mce);
+			Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(mce);
 
-			for (OWLClassExpression e : exp) {
+			for (OWLClassExpression e : exp.keySet()) {
 				axiom = AxiomFactory.createRange(p, e);
 				if (axiom != null) {
+					EventManager.getInstance().fireEvent(
+							new OWLApiAxiomCacheUpdateEvent(axiom, exp.get(e)));
 					axioms.add(axiom);
 				}
 			}
@@ -106,11 +113,13 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 			Section<?> desc = type.getDomain(s);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
 					ManchesterClassExpression.class);
-			Set<OWLClassExpression> exp = AxiomFactory.createDescriptionExpression(mce);
+			Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(mce);
 
-			for (OWLClassExpression e : exp) {
+			for (OWLClassExpression e : exp.keySet()) {
 				axiom = AxiomFactory.createDomain(p, e);
 				if (axiom != null) {
+					EventManager.getInstance().fireEvent(
+							new OWLApiAxiomCacheUpdateEvent(axiom, exp.get(e)));
 					axioms.add(axiom);
 				}
 			}
@@ -124,6 +133,8 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 			for (OWLObjectProperty px : props) {
 				axiom = AxiomFactory.createInverseOf(p, px);
 				if (axiom != null) {
+					EventManager.getInstance().fireEvent(
+							new OWLApiAxiomCacheUpdateEvent(axiom, mce));
 					axioms.add(axiom);
 				}
 			}
@@ -137,6 +148,8 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 			for (OWLObjectProperty px : props) {
 				axiom = AxiomFactory.createSubPropertyOf(p, px);
 				if (axiom != null) {
+					EventManager.getInstance().fireEvent(
+							new OWLApiAxiomCacheUpdateEvent(axiom, mce));
 					axioms.add(axiom);
 				}
 			}
@@ -155,6 +168,8 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 			for (OWLObjectProperty px : props) {
 				axiom = AxiomFactory.createDisjointWith(p, px);
 				if (axiom != null) {
+					EventManager.getInstance().fireEvent(
+							new OWLApiAxiomCacheUpdateEvent(axiom, mce));
 					axioms.add(axiom);
 				}
 			}
@@ -166,6 +181,8 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 			for (Section<?> term : terms) {
 				axiom = AxiomFactory.createCharacteristics(term, p);
 				if (axiom != null) {
+					EventManager.getInstance().fireEvent(
+							new OWLApiAxiomCacheUpdateEvent(axiom, term));
 					axioms.add(axiom);
 				}
 			}
@@ -176,6 +193,8 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 			for (Section<Annotation> annotation : annotations) {
 				axiom = AxiomFactory.createAnnotations(annotation, p.getIRI());
 				if (axiom != null) {
+					EventManager.getInstance().fireEvent(
+							new OWLApiAxiomCacheUpdateEvent(axiom, annotation));
 					axioms.add(axiom);
 				}
 			}

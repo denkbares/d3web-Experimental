@@ -20,8 +20,10 @@
 package de.knowwe.kdom.manchester;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.semanticweb.owlapi.model.IRI;
@@ -49,7 +51,6 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.manchester.frame.MiscFrame;
-import de.knowwe.kdom.manchester.frames.objectproperty.CharacteristicTypes;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.kdom.manchester.types.CardinalityRestriction;
@@ -64,6 +65,7 @@ import de.knowwe.kdom.manchester.types.SomeRestriction;
 import de.knowwe.kdom.manchester.types.ValueRestriction;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
  *
@@ -110,7 +112,6 @@ public class AxiomFactory {
 		// should never happen
 		throw new Error("OWL API entity conversion for " + entity + " not supported.");
 	}
-
 	/**
 	 * Returns the correct {@link OWLEntity} object for a given
 	 * {@link OWLEntity}. An entity could be a {@link OWLClass},
@@ -123,18 +124,33 @@ public class AxiomFactory {
 	 * @return OWLEntity
 	 */
 	public static OWLEntity getOWLAPIEntity(Section<? extends Type> section, Class<?> c) {
+		return getOWLAPIEntity(section.getOriginalText(), c);
+	}
+
+	/**
+	 * Returns the correct {@link OWLEntity} object for a given
+	 * {@link OWLEntity}. An entity could be a {@link OWLClass},
+	 * {@link OWLDataProperty}, {@link OWLObjectProperty} or
+	 * {@link OWLIndividual}.
+	 * 
+	 * @created 27.09.2011
+	 * @param Section<? extends Type> section
+	 * @param Class c
+	 * @return OWLEntity
+	 */
+	public static OWLEntity getOWLAPIEntity(String concept, Class<?> c) {
 
 		if (c.equals(OWLObjectProperty.class)) {
-			return factory.getOWLObjectProperty(section.getOriginalText(), pm);
+			return factory.getOWLObjectProperty(concept, pm);
 		}
 		else if (c.equals(OWLDataProperty.class)) {
-			return factory.getOWLDataProperty(section.getOriginalText(), pm);
+			return factory.getOWLDataProperty(concept, pm);
 		}
 		else if (c.equals(OWLClass.class)) {
-			return factory.getOWLClass(section.getOriginalText(), pm);
+			return factory.getOWLClass(concept, pm);
 		}
 		else if (c.equals(OWLIndividual.class) || c.equals(OWLNamedIndividual.class)) {
-			return factory.getOWLNamedIndividual(section.getOriginalText(), pm);
+			return factory.getOWLNamedIndividual(concept, pm);
 		}
 		// should never happen
 		throw new Error("OWL API entity conversion for " + c + " not supported.");
@@ -151,36 +167,36 @@ public class AxiomFactory {
 	 * @param Section<ManchesterClassExpression> section
 	 * @return A set of {@link OWLClassExpression} for further processing.
 	 */
-	public static Set<OWLClassExpression> createDescriptionExpression(Section<ManchesterClassExpression> section) {
+	public static Map<OWLClassExpression, Section<? extends Type>> createDescriptionExpression(Section<ManchesterClassExpression> section) {
 
 		ManchesterClassExpression type = section.get();
-		Set<OWLClassExpression> exp = new HashSet<OWLClassExpression>();
+		Map<OWLClassExpression, Section<? extends Type>> exp = new HashMap<OWLClassExpression, Section<? extends Type>>();
 
 		// A description may either be NonTerminalList ...
 		if (type.isNonTerminalList(section)) {
 			List<Section<NonTerminalList>> xjunctions = type.getNonTerminalListElements(section);
-			Set<OWLClassExpression> set = new HashSet<OWLClassExpression>();
+			Map<OWLClassExpression, Section<? extends Type>> set = new HashMap<OWLClassExpression, Section<? extends Type>>();
 			for (Section<NonTerminalList> child : xjunctions) {
-				set.addAll(createDescriptionExpression(Sections.findSuccessor(child,
+				set.putAll(createDescriptionExpression(Sections.findSuccessor(child,
 						ManchesterClassExpression.class)));
 			}
-			exp.addAll(set);
+			exp.putAll(set);
 			return exp;
 		}
 
 		// ... or a OneOfCurlyBracket ...
 		if (type.isOneOfCurlyBracket(section)) {
-			Set<OWLObject> set = new HashSet<OWLObject>();
+			Map<OWLObject, Section<? extends Type>> set = new HashMap<OWLObject, Section<? extends Type>>();
 			Section<OneOfBracedCondition> one = type.getOneOfCurlyBracket(section);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(one,
 					ManchesterClassExpression.class);
-			set.addAll(createDescriptionExpression(mce));
+			set.putAll(createDescriptionExpression(mce));
 
 			Set<OWLIndividual> individuals = new HashSet<OWLIndividual>();
-			for (OWLObject c : set) {
+			for (OWLObject c : set.keySet()) {
 				individuals.add(factory.getOWLNamedIndividual(((OWLClass) c).getIRI()));
 			}
-			exp.add(factory.getOWLObjectOneOf(individuals));
+			exp.put(factory.getOWLObjectOneOf(individuals), mce);
 			return exp;
 		}
 
@@ -189,7 +205,7 @@ public class AxiomFactory {
 			Section<? extends NonTerminalCondition> braced = type.getBraced(section);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(braced,
 					ManchesterClassExpression.class);
-			exp.addAll(createDescriptionExpression(mce));
+			exp.putAll(createDescriptionExpression(mce));
 			return exp;
 		}
 
@@ -197,13 +213,16 @@ public class AxiomFactory {
 		if (type.isConjunction(section)) {
 			List<Section<? extends NonTerminalCondition>> xjunctions = new ArrayList<Section<? extends NonTerminalCondition>>();
 			xjunctions = type.getConjuncts(section);
-			Set<OWLClassExpression> set = new HashSet<OWLClassExpression>();
+			Map<OWLClassExpression, Section<? extends Type>> set = new HashMap<OWLClassExpression, Section<? extends Type>>();
+
 			for (Section<?> child : xjunctions) {
-				set.addAll(createDescriptionExpression(Sections.findSuccessor(child,
+				set.putAll(createDescriptionExpression(Sections.findSuccessor(child,
 						ManchesterClassExpression.class)));
 			}
 			if (!set.isEmpty()) {
-				exp.add(factory.getOWLObjectIntersectionOf(set));
+				Set<OWLClassExpression> tmp = new HashSet<OWLClassExpression>();
+				tmp.addAll(set.keySet());
+				exp.put(factory.getOWLObjectIntersectionOf(tmp), section);
 			}
 			return exp;
 		}
@@ -212,13 +231,15 @@ public class AxiomFactory {
 		if (type.isDisjunction(section)) {
 			List<Section<? extends NonTerminalCondition>> xjunctions = new ArrayList<Section<? extends NonTerminalCondition>>();
 			xjunctions = type.getDisjuncts(section);
-			Set<OWLClassExpression> set = new HashSet<OWLClassExpression>();
+			Map<OWLClassExpression, Section<? extends Type>> set = new HashMap<OWLClassExpression, Section<? extends Type>>();
 			for (Section<?> child : xjunctions) {
-				set.addAll(createDescriptionExpression(Sections.findSuccessor(child,
+				set.putAll(createDescriptionExpression(Sections.findSuccessor(child,
 						ManchesterClassExpression.class)));
 			}
 			if (!set.isEmpty()) {
-				exp.add(factory.getOWLObjectUnionOf(set));
+				Set<OWLClassExpression> tmp = new HashSet<OWLClassExpression>();
+				tmp.addAll(set.keySet());
+				exp.put(factory.getOWLObjectUnionOf(tmp), section);
 			}
 			return exp;
 		}
@@ -227,11 +248,12 @@ public class AxiomFactory {
 		if (type.isNegation(section)) {
 			Section<?> neg = type.getNegation(section);
 
-			Set<OWLObject> set = new HashSet<OWLObject>();
-			set.addAll(createDescriptionExpression(Sections.findSuccessor(neg,
+			Map<OWLObject, Section<? extends Type>> set = new HashMap<OWLObject, Section<? extends Type>>();
+			set.putAll(createDescriptionExpression(Sections.findSuccessor(neg,
 					ManchesterClassExpression.class)));
 			if (set.size() > 0) {
-				exp.add(factory.getOWLObjectComplementOf((OWLClassExpression) set.toArray()[0]));
+				exp.put(factory.getOWLObjectComplementOf(
+						(OWLClassExpression) set.keySet().iterator().next()), section);
 			}
 			return exp;
 		}
@@ -241,7 +263,7 @@ public class AxiomFactory {
 			Section<?> terminal = type.getTerminal(section);
 			OWLClassExpression oce = handleTerminals(terminal);
 			if (oce != null) {
-				exp.add(oce);
+				exp.put(oce, section);
 			}
 		}
 		return exp;
@@ -269,9 +291,10 @@ public class AxiomFactory {
 
 			OWLObjectProperty p = (OWLObjectProperty) getOWLAPIEntity(ope, OWLObjectProperty.class);
 
-			Set<OWLClassExpression> exp = createDescriptionExpression(mce);
+			Map<OWLClassExpression, Section<? extends Type>> exp = createDescriptionExpression(mce);
 			if (!exp.isEmpty()) {
-				return factory.getOWLObjectSomeValuesFrom(p, (OWLClassExpression) exp.toArray()[0]);
+				return factory.getOWLObjectSomeValuesFrom(p,
+						(OWLClassExpression) exp.keySet().iterator().next());
 			}
 		}
 
@@ -283,9 +306,10 @@ public class AxiomFactory {
 
 			OWLObjectProperty p = (OWLObjectProperty) getOWLAPIEntity(ope, OWLObjectProperty.class);
 
-			Set<OWLClassExpression> exp = createDescriptionExpression(mce);
+			Map<OWLClassExpression, Section<? extends Type>> exp = createDescriptionExpression(mce);
 			if (!exp.isEmpty()) {
-				return factory.getOWLObjectAllValuesFrom(p, (OWLClassExpression) exp.toArray()[0]);
+				return factory.getOWLObjectAllValuesFrom(p,
+						(OWLClassExpression) exp.keySet().iterator().next());
 			}
 		}
 
@@ -296,12 +320,9 @@ public class AxiomFactory {
 			Section<ManchesterClassExpression> mce = only.get().getManchesterClassExpression(only);
 
 			OWLObjectProperty p = (OWLObjectProperty) getOWLAPIEntity(ope, OWLObjectProperty.class);
-			Set<OWLClassExpression> exp = createDescriptionExpression(mce);
 			OWLEntity entity = getOWLAPIEntity(mce, OWLIndividual.class);
 
-			if (!exp.isEmpty()) {
-				return factory.getOWLObjectHasValue(p, (OWLNamedIndividual) entity);
-			}
+			return factory.getOWLObjectHasValue(p, (OWLNamedIndividual) entity);
 		}
 
 		// ... or a CardinalityRestriction ...
@@ -324,7 +345,8 @@ public class AxiomFactory {
 				} else {
 					// FIXME not yet tested
 					Section<ManchesterClassExpression> mce = Sections.findSuccessor(cardSection, ManchesterClassExpression.class);
-					exp = createDescriptionExpression(mce).iterator().next();
+
+					exp = createDescriptionExpression(mce).keySet().iterator().next();
 				}
 			}
 
@@ -419,25 +441,25 @@ public class AxiomFactory {
 	public static OWLAxiom createCharacteristics(Section<?> section, OWLObjectProperty p) {
 		String str = section.getOriginalText();
 
-		if (str.equals(CharacteristicTypes.FUNCTIONAL.getType())) {
+		if (str.equals(ManchesterSyntaxKeywords.FUNCTIONAL.getKeyword())) {
 			return factory.getOWLFunctionalObjectPropertyAxiom(p);
 		}
-		else if (str.equals(CharacteristicTypes.ASYMMETRIC.getType())) {
+		else if (str.equals(ManchesterSyntaxKeywords.ASYMMETRIC.getKeyword())) {
 			return factory.getOWLAsymmetricObjectPropertyAxiom(p);
 		}
-		else if (str.equals(CharacteristicTypes.INVERSEFUNCTIONAL.getType())) {
+		else if (str.equals(ManchesterSyntaxKeywords.INVERSE_FUNCTIONAL.getKeyword())) {
 			return factory.getOWLInverseFunctionalObjectPropertyAxiom(p);
 		}
-		else if (str.equals(CharacteristicTypes.IRREFLEXIVE.getType())) {
+		else if (str.equals(ManchesterSyntaxKeywords.IRREFLEXIVE.getKeyword())) {
 			return factory.getOWLIrreflexiveObjectPropertyAxiom(p);
 		}
-		else if (str.equals(CharacteristicTypes.REFLEXIVE.getType())) {
+		else if (str.equals(ManchesterSyntaxKeywords.REFLEXIVE.getKeyword())) {
 			return factory.getOWLReflexiveObjectPropertyAxiom(p);
 		}
-		else if (str.equals(CharacteristicTypes.SYMMETRIC.getType())) {
+		else if (str.equals(ManchesterSyntaxKeywords.SYMMETRIC.getKeyword())) {
 			return factory.getOWLSymmetricObjectPropertyAxiom(p);
 		}
-		else if (str.equals(CharacteristicTypes.TRANSITIVE.getType())) {
+		else if (str.equals(ManchesterSyntaxKeywords.TRANSITIVE.getKeyword())) {
 			return factory.getOWLTransitiveObjectPropertyAxiom(p);
 		}
 		return null; // FIXME return KDOMReportMessage

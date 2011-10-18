@@ -27,6 +27,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
+import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
  *
@@ -35,9 +36,9 @@ import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
  */
 public class CardinalityRestriction extends AbstractType {
 
-	public static final String MIN = "MIN";
-	public static final String MAX = "MAX";
-	public static final String EXACTLY = "EXACTLY";
+	public static final String MIN = ManchesterSyntaxKeywords.MIN.getKeyword();
+	public static final String MAX = ManchesterSyntaxKeywords.MAX.getKeyword();
+	public static final String EXACTLY = ManchesterSyntaxKeywords.EXACTLY.getKeyword();
 
 	public static final String KEYWORD_PATTERN = "("
 			+ MIN + "|"

@@ -22,6 +22,7 @@ package de.knowwe.kdom.subtreehandler;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.semanticweb.owlapi.model.IRI;
@@ -31,6 +32,7 @@ import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLIndividual;
 
 import de.d3web.core.session.blackboard.Facts;
+import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -43,6 +45,7 @@ import de.knowwe.kdom.manchester.frame.IndividualFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
+import de.knowwe.onte.editor.OWLApiAxiomCacheUpdateEvent;
 import de.knowwe.owlapi.OWLAPISubtreeHandler;
 
 /**
@@ -89,6 +92,8 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 				IRI annotatetObject = i.asOWLNamedIndividual().getIRI();
 				axiom = AxiomFactory.createAnnotations(annotation, annotatetObject);
 				if (axiom != null) {
+					EventManager.getInstance().fireEvent(
+							new OWLApiAxiomCacheUpdateEvent(axiom, annotation));
 					axioms.add(axiom);
 				}
 			}
@@ -99,6 +104,8 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 			for (Section<?> fact : facts) {
 				axiom = AxiomFactory.createFact(fact, i);
 				if (axiom != null) {
+					EventManager.getInstance().fireEvent(
+							new OWLApiAxiomCacheUpdateEvent(axiom, fact));
 					axioms.add(axiom);
 				}
 				// handleOptionalAnnotations(fact, i); // Optional annotations
@@ -110,8 +117,12 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 			for (Section<OWLTermReferenceManchester> node : nodes) {
 				OWLIndividual sameInd = (OWLIndividual) AxiomFactory.getOWLAPIEntity(node,
 						OWLIndividual.class);
-				axioms.add(AxiomFactory.createSameIndividualsAxiom(i, sameInd));
-
+				axiom = AxiomFactory.createSameIndividualsAxiom(i, sameInd);
+				if (axiom != null) {
+					EventManager.getInstance().fireEvent(
+							new OWLApiAxiomCacheUpdateEvent(axiom, node));
+					axioms.add(axiom);
+				}
 				// handleOptionalAnnotations(node, i); // Optional annotations
 			}
 		}
@@ -121,8 +132,12 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 			for (Section<OWLTermReferenceManchester> node : nodes) {
 				OWLIndividual two = (OWLIndividual) AxiomFactory.getOWLAPIEntity(node,
 						OWLIndividual.class);
-				axioms.add(AxiomFactory.createDifferentFromIndividualsAxiom(i, two));
-
+				axiom = AxiomFactory.createDifferentFromIndividualsAxiom(i, two);
+				if (axiom != null) {
+					EventManager.getInstance().fireEvent(
+							new OWLApiAxiomCacheUpdateEvent(axiom, node));
+					axioms.add(axiom);
+				}
 				// handleOptionalAnnotations(node, i); // Optional annotations
 			}
 		}
@@ -132,11 +147,13 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 
 			Section<ManchesterClassExpression> mce = Sections.findChildOfType(types,
 					ManchesterClassExpression.class);
-			Set<OWLClassExpression> exp = AxiomFactory.createDescriptionExpression(mce);
+			Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(mce);
 
-			for (OWLClassExpression e : exp) {
+			for (OWLClassExpression e : exp.keySet()) {
 				axiom = AxiomFactory.createNamedIndividualAxiom(e, i);
 				if (axiom != null) {
+					EventManager.getInstance().fireEvent(
+							new OWLApiAxiomCacheUpdateEvent(axiom, exp.get(e)));
 					axioms.add(axiom);
 				}
 			}

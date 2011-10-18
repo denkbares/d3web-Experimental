@@ -28,6 +28,7 @@ import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnnotationAxiom;
 import org.semanticweb.owlapi.model.OWLAxiom;
 
+import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -37,6 +38,7 @@ import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.frame.MiscFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
+import de.knowwe.onte.editor.OWLApiAxiomCacheUpdateEvent;
 import de.knowwe.owlapi.OWLAPISubtreeHandler;
 
 /**
@@ -88,6 +90,7 @@ public class MiscFrameSubtreeHandler extends OWLAPISubtreeHandler<MiscFrame> {
 
 		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
 		if (a != null) {
+			EventManager.getInstance().fireEvent(new OWLApiAxiomCacheUpdateEvent(a, s));
 			axioms.add(a);
 		}
 		return axioms;
@@ -109,6 +112,8 @@ public class MiscFrameSubtreeHandler extends OWLAPISubtreeHandler<MiscFrame> {
 			for (Section<Annotation> annotation : annotationSections) {
 				OWLAnnotation a = AxiomFactory.createOWLAnnotation(annotation);
 				if (a != null) {
+					EventManager.getInstance().fireEvent(
+							new OWLApiAxiomCacheUpdateEvent(a, section));
 					annotations.add(a);
 				}
 			}

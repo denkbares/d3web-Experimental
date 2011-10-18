@@ -19,6 +19,7 @@
  */
 package de.knowwe.taghandler;
 
+import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,16 +27,27 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import org.coode.owlapi.manchesterowlsyntax.ManchesterOWLSyntaxOntologyFormat;
+import org.coode.owlapi.turtle.TurtleOntologyFormat;
 import org.semanticweb.owlapi.debugging.DebuggerClassExpressionGenerator;
+import org.semanticweb.owlapi.io.OWLXMLOntologyFormat;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLClassAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDataPropertyAxiom;
+import org.semanticweb.owlapi.model.OWLEntity;
+import org.semanticweb.owlapi.model.OWLIndividualAxiom;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyFormat;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.util.ShortFormProvider;
@@ -48,6 +60,7 @@ import com.clarkparsia.owlapi.explanation.BlackBoxExplanation;
 import com.clarkparsia.owlapi.explanation.HSTExplanationGenerator;
 
 import de.knowwe.owlapi.OWLAPIConnector;
+import de.knowwe.util.OntologyFormats;
 
 /**
  * Simple helper methods to retrieve inferred knowledge from the used
@@ -61,7 +74,7 @@ public class OWLApiTagHandlerUtil {
 	/**
 	 * The indent used in the output (hierarchies, etc.).
 	 */
-	public static final int INDENT = 4;
+	public static final int INDENT = 1;
 
 	private static final OWLAPIConnector connector;
 	private static final OWLOntology ontology;
@@ -73,6 +86,62 @@ public class OWLApiTagHandlerUtil {
 		ontology = connector.getOntology();
 		factory = connector.getManager().getOWLDataFactory();
 		reasoner = connector.getReasoner();
+	}
+
+	/**
+	 * Checks weather the local ontology has inconsistent classes.
+	 *
+	 * @created 16.10.2011
+	 * @return boolean
+	 */
+	public static boolean hasInconsistentClasses() {
+		reasoner.precomputeInferences();
+		if (reasoner.getUnsatisfiableClasses().getEntitiesMinusBottom().isEmpty()) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Returns for a given {@link OWLEntity} all OWLAxiom that can be found in
+	 * an {@link OWLOntology} the {@link OWLEntity} is linked to.
+	 *
+	 * @created 16.10.2011
+	 * @param OWLEntity entity
+	 * @return
+	 */
+	public static Set<OWLAxiom> getAxiomsForEntitiyInOntology(OWLEntity entity, OWLClassExpression exp) {
+		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
+
+		// entity can be a OWLClass ...
+		if (entity.isOWLClass()) {
+			Set<OWLClassAxiom> tmp = ontology.getAxioms(entity.asOWLClass());
+			for (OWLClassAxiom axiom : tmp) {
+				axioms.add(axiom.getAxiomWithoutAnnotations());
+			}
+		}
+		// .. or a OWLNamedIndividual ...
+		else if (entity.isOWLNamedIndividual()) {
+			Set<OWLIndividualAxiom> tmp = ontology.getAxioms(entity.asOWLNamedIndividual());
+			for (OWLIndividualAxiom axiom : tmp) {
+				axioms.add(axiom.getAxiomWithoutAnnotations());
+			}
+		}
+		// ... or a OWLObjectProperty ...
+		else if (entity.isOWLDataProperty()) {
+			Set<OWLDataPropertyAxiom> tmp = ontology.getAxioms(entity.asOWLDataProperty());
+			for (OWLDataPropertyAxiom axiom : tmp) {
+				axioms.add(axiom.getAxiomWithoutAnnotations());
+			}
+		}
+		// ... or a OWLDataProperty
+		else if (entity.isOWLObjectProperty()) {
+			Set<OWLObjectPropertyAxiom> tmp = ontology.getAxioms(entity.asOWLObjectProperty());
+			for (OWLObjectPropertyAxiom axiom : tmp) {
+				axioms.add(axiom.getAxiomWithoutAnnotations());
+			}
+		}
+		return axioms;
 	}
 
 	/**
@@ -264,18 +333,61 @@ public class OWLApiTagHandlerUtil {
 	 * @created 27.09.2011
 	 * @param OWLAxiom axiom
 	 */
-	public static Set<Set<OWLAxiom>> getExplanation(OWLAxiom axiom) {
+	public static Set<OWLAxiom> getExplanations(OWLClassExpression exp, OWLEntity entity) {
+
+		OWLAxiom axiom = null;
+		Set<OWLAxiom> explanations = null;
+
+		if (entity.isOWLNamedIndividual()) {
+			OWLNamedIndividual ind = entity.asOWLNamedIndividual();
+			axiom = factory.getOWLClassAssertionAxiom(exp, ind);
+			explanations = getExplanations(axiom);
+		}
+		else if (entity.isOWLClass()) {
+			OWLClass cls = entity.asOWLClass(); // TODO subclass or superclass
+												// relationship ???
+			axiom = factory.getOWLSubClassOfAxiom(cls, exp);
+			explanations = getExplanations(axiom);
+
+		}
+		else if (entity.isOWLObjectProperty()) {
+
+		}
+
+		// getOWLEquivalentClassesAxiom(description, cls) equivalent
+		// factory.getOWLSubClassOfAxiom(description, superClass) super
+		// factory.getOWLSubClassOfAxiom(subClass, description) sub
+		// factory.getOWLClassAssertionAxiom(description, ind) individuals
+
+		explanations = getExplanations(axiom);
+
+		if (explanations.isEmpty()) {
+			// explanations = getAxiomsForEntitiyInOntology(entity,
+			// exp);
+		}
+		return explanations;
+	}
+
+	/**
+	 * Returns an explanation for a given {@link OWLAxiom}.
+	 *
+	 * @created 27.09.2011
+	 * @param OWLAxiom axiom
+	 */
+	public static Set<OWLAxiom> getExplanations(OWLAxiom axiom) {
 
 		DebuggerClassExpressionGenerator visitor = new DebuggerClassExpressionGenerator(factory);
 		axiom.accept(visitor);
 		OWLClassExpression expression = visitor.getDebuggerClassExpression();
+
+		reasoner.precomputeInferences();
 
 		BlackBoxExplanation explain = new BlackBoxExplanation(ontology, connector.getFactory(),
 				reasoner);
 		Set<OWLAxiom> axioms = explain.getExplanation(expression);
 		Set<Set<OWLAxiom>> setOfSets = new HashSet<Set<OWLAxiom>>();
 		setOfSets.add(axioms);
-		return setOfSets;
+		return axioms;
 	}
 
 	/**
@@ -304,5 +416,62 @@ public class OWLApiTagHandlerUtil {
 		HSTExplanationGenerator multExplanator = new HSTExplanationGenerator(exp);
 		Set<Set<OWLAxiom>> explanations = multExplanator.getExplanations(clazz);
 		return explanations;
+	}
+
+	/**
+	 * Gets a serialized form of the local OWLOntology. Possible formats are
+	 * RDF/XML, OWL/XML, Turtle and Manchester OWL syntax.
+	 *
+	 * @created 16.10.2011
+	 * @param String format The format of the output ontology file
+	 * @return
+	 * @throws OWLOntologyStorageException
+	 */
+	public static String getSerializedOntology(String format) throws OWLOntologyStorageException {
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		OWLOntologyManager manager = connector.getManager();
+
+		if (format != null) {
+			format = format.toLowerCase();
+		}
+
+		OWLOntologyFormat ontologyFormat = null;
+		if (format.equals(OntologyFormats.RDFXML.getFormat())) {
+			manager.saveOntology(ontology, stream);
+			return stream.toString();
+		}
+		else if (format.equals(OntologyFormats.OWLXML.getFormat())) {
+			ontologyFormat = new OWLXMLOntologyFormat();
+		}
+		else if (format.equals(OntologyFormats.TURTLE.getFormat())) {
+			ontologyFormat = new TurtleOntologyFormat();
+		}
+		else if (format.equals(OntologyFormats.MANCHESTER.getFormat())) {
+			ontologyFormat = new ManchesterOWLSyntaxOntologyFormat();
+		}
+
+		if (ontologyFormat != null) {
+			manager.saveOntology(ontology, ontologyFormat, stream);
+			return stream.toString();
+		}
+		return "";
+	}
+
+	public static void write() {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+		OWLOntologyManager manager = connector.getManager();
+		OWLOntology ontology = connector.getOntology();
+
+		OWLOntologyFormat format = null;
+		try {
+			format = new ManchesterOWLSyntaxOntologyFormat();
+			manager.saveOntology(ontology, format, stream);
+			System.out.println(stream.toString());
+		}
+		catch (OWLOntologyStorageException e) {
+			e.printStackTrace();
+		}
 	}
 }

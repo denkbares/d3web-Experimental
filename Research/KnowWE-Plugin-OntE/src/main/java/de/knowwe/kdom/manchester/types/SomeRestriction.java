@@ -29,6 +29,7 @@ import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
 import de.knowwe.kdom.manchester.ManchesterClassExpression;
 import de.knowwe.kdom.manchester.ManchesterClassExpression.OWLClassContentType;
+import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
  *
@@ -40,7 +41,7 @@ public class SomeRestriction extends AbstractType {
 	/**
 	 * Keyword for the <code>some</code> restriction.
 	 */
-	public static final String KEY = "SOME";
+	public static final String KEY = ManchesterSyntaxKeywords.SOME.getKeyword();
 
 	public static final String REGEX = Restriction.BEFORE_REGEX + KEY + Restriction.AFTER_REGEX;
 

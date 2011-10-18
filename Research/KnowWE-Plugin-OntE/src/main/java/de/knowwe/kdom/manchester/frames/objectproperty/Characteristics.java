@@ -33,6 +33,7 @@ import de.knowwe.kdom.manchester.types.Keyword;
 import de.knowwe.kdom.manchester.types.NonTerminalList;
 import de.knowwe.kdom.manchester.types.NonTerminalListContent;
 import de.knowwe.kdom.renderer.StyleRenderer;
+import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
  *
@@ -90,29 +91,29 @@ public class Characteristics extends AbstractType {
  */
 class ObjectPropertyCharacteristic extends AbstractType {
 
-	// private static String TERMS =
-	// "InverseFunctional|Functional|Irreflexive|Reflexive|Asymmetric|Symmetric|Transitive";
-
 	public static final StyleRenderer CLASS_RENDERER = new StyleRenderer(
 			"color:rgb(115, 0, 70)");
 
 	public ObjectPropertyCharacteristic() {
 
 		StringBuilder t = new StringBuilder();
-		for (CharacteristicTypes c : CharacteristicTypes.values()) {
-			t.append(c.getType());
-			t.append("|");
-		}
+		t.append(ManchesterSyntaxKeywords.ASYMMETRIC.getKeyword() + "|");
+		t.append(ManchesterSyntaxKeywords.SYMMETRIC.getKeyword() + "|");
+		t.append(ManchesterSyntaxKeywords.FUNCTIONAL.getKeyword() + "|");
+		t.append(ManchesterSyntaxKeywords.INVERSE_FUNCTIONAL.getKeyword() + "|");
+		t.append(ManchesterSyntaxKeywords.TRANSITIVE.getKeyword() + "|");
+		t.append(ManchesterSyntaxKeywords.REFLEXIVE.getKeyword() + "|");
+		t.append(ManchesterSyntaxKeywords.IRREFLEXIVE.getKeyword());
 
 		this.setCustomRenderer(CLASS_RENDERER);
-		Pattern p = Pattern.compile(t.toString().substring(0, t.toString().length() - 1));
+		Pattern p = Pattern.compile(t.toString());
 		this.setSectionFinder(new RegexSectionFinder(p));
 	}
 }
 
 /**
  * The {@link DataPropertyCharacteristic} only allows 'Functional' as value.
- * 
+ *
  * @author Stefan Mark
  * @created 13.08.2011
  */
@@ -123,7 +124,7 @@ class DataPropertyCharacteristic extends AbstractType {
 
 	public DataPropertyCharacteristic() {
 
-		Pattern p = Pattern.compile(CharacteristicTypes.FUNCTIONAL.getType());
+		Pattern p = Pattern.compile(ManchesterSyntaxKeywords.FUNCTIONAL.getKeyword());
 		this.setSectionFinder(new RegexSectionFinder(p));
 		this.setCustomRenderer(CLASS_RENDERER);
 	}

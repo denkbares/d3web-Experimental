@@ -200,5 +200,4 @@ public class Restriction extends AbstractType {
 	public Section<ObjectPropertyExpression> getObjectProperty(Section<Restriction> section) {
 		return Sections.findChildOfType(section, ObjectPropertyExpression.class);
 	}
-
 }

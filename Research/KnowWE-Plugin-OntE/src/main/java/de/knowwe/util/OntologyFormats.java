@@ -17,27 +17,35 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.kdom.manchester.frames.objectproperty;
+package de.knowwe.util;
 
+/**
+ *
+ *
+ * @author Stefan Mark
+ * @created 16.10.2011
+ */
+public enum OntologyFormats {
 
-public enum CharacteristicTypes {
-	// InverseFunctional|Functional|Irreflexive|Reflexive|Asymmetric|Symmetric|Transitive
+	RDFXML("rdf", "RDF/XML"),
+	OWLXML("owl", "OWL/XML"),
+	TURTLE("turtle", "Turtle"),
+	MANCHESTER("manchester", "Manchester OWL syntax");
 
-	INVERSEFUNCTIONAL("InverseFunctional"),
-	FUNCTIONAL("Functional"),
-	IRREFLEXIVE("Irreflexive"),
-	REFLEXIVE("Reflexive"),
-	ASYMMETRIC("Asymmetric"),
-	SYMMETRIC("Symmetric"),
-	TRANSITIVE("Transitive");
+	private String format;
+	private String title;
 
-	private String type;
-
-	private CharacteristicTypes(String type) {
-		this.type = type;
+	private OntologyFormats(String format, String title) {
+		this.format = format;
+		this.title = title;
 	}
 
-	public String getType() {
-		return this.type;
+	public String getFormat() {
+		return this.format;
+	}
+
+	public String getTitle() {
+		return this.title;
 	}
 }
+

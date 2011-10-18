@@ -21,6 +21,7 @@ package de.knowwe.kdom.subtreehandler;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.ontoware.rdf2go.RDF2Go;
@@ -29,7 +30,9 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 
+import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
@@ -39,6 +42,7 @@ import de.knowwe.kdom.manchester.ManchesterClassExpression;
 import de.knowwe.kdom.manchester.frame.ClassFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.EquivalentTo;
+import de.knowwe.onte.editor.OWLApiAxiomCacheUpdateEvent;
 import de.knowwe.owlapi.OWLAPISubtreeHandler;
 
 /**
@@ -80,6 +84,7 @@ public class ClassFrameSubtreeHandler extends OWLAPISubtreeHandler<ClassFrame> {
 			clazz = (OWLClass) AxiomFactory.getOWLAPIEntity(def, OWLClass.class);
 			axiom = AxiomFactory.getOWLAPIEntityDeclaration(clazz);
 			if (axiom != null) {
+				EventManager.getInstance().fireEvent(new OWLApiAxiomCacheUpdateEvent(axiom, s));
 				axioms.add(axiom);
 			}
 		}
@@ -88,6 +93,8 @@ public class ClassFrameSubtreeHandler extends OWLAPISubtreeHandler<ClassFrame> {
 			for (Section<Annotation> annotation : type.getAnnotations(s)) {
 				axiom = AxiomFactory.createAnnotations(annotation, clazz.getIRI());
 				if (axiom != null) {
+					EventManager.getInstance().fireEvent(
+							new OWLApiAxiomCacheUpdateEvent(axiom, annotation));
 					axioms.add(axiom);
 				}
 			}
@@ -97,10 +104,13 @@ public class ClassFrameSubtreeHandler extends OWLAPISubtreeHandler<ClassFrame> {
 			Section<?> desc = type.getSubClassOf(s);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
 					ManchesterClassExpression.class);
-			Set<OWLClassExpression> exp = AxiomFactory.createDescriptionExpression(mce);
-			for (OWLClassExpression e : exp) {
+
+			Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(mce);
+			for (OWLClassExpression e : exp.keySet()) {
 				axiom = AxiomFactory.createOWLSubClassOf(clazz, e);
 				if(axiom != null) {
+					EventManager.getInstance().fireEvent(
+							new OWLApiAxiomCacheUpdateEvent(axiom, mce));
 					axioms.add(axiom);
 				}
 			}
@@ -110,11 +120,13 @@ public class ClassFrameSubtreeHandler extends OWLAPISubtreeHandler<ClassFrame> {
 			Section<?> desc = type.getDisjointWith(s);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
 					ManchesterClassExpression.class);
-			Set<OWLClassExpression> exp = AxiomFactory.createDescriptionExpression(mce);
+			Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(mce);
 
-			for (OWLClassExpression e : exp) {
+			for (OWLClassExpression e : exp.keySet()) {
 				axiom = AxiomFactory.createOWLDisjointWith(clazz, e);
 				if (axiom != null) {
+					EventManager.getInstance().fireEvent(
+							new OWLApiAxiomCacheUpdateEvent(axiom, exp.get(e)));
 					axioms.add(axiom);
 				}
 			}
@@ -124,11 +136,13 @@ public class ClassFrameSubtreeHandler extends OWLAPISubtreeHandler<ClassFrame> {
 			Section<?> desc = type.getEquivalentTo(s);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
 					ManchesterClassExpression.class);
-			Set<OWLClassExpression> exp = AxiomFactory.createDescriptionExpression(mce);
+			Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(mce);
 
-			for (OWLClassExpression e : exp) {
+			for (OWLClassExpression e : exp.keySet()) {
 				axiom = AxiomFactory.createOWLEquivalentTo(clazz, e);
 				if (axiom != null) {
+					EventManager.getInstance().fireEvent(
+							new OWLApiAxiomCacheUpdateEvent(axiom, exp.get(e)));
 					axioms.add(axiom);
 				}
 			}
@@ -138,13 +152,15 @@ public class ClassFrameSubtreeHandler extends OWLAPISubtreeHandler<ClassFrame> {
 			Section<?> desc = type.getDisjointUnionOf(s);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
 					ManchesterClassExpression.class);
-			Set<OWLClassExpression> exp = AxiomFactory.createDescriptionExpression(mce);
+			Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(mce);
 
-			for (OWLClassExpression e : exp) {
+			for (OWLClassExpression e : exp.keySet()) {
 				// FIXME not yet implemented
 				// axiom = AxiomFactory.createOWLDisjointUnionOf(clazz, e);
 				axiom = null;
 				if (axiom != null) {
+					EventManager.getInstance().fireEvent(
+							new OWLApiAxiomCacheUpdateEvent(axiom, exp.get(e)));
 					axioms.add(axiom);
 				}
 			}
