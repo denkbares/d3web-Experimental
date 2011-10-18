@@ -15,6 +15,81 @@
 		</library>
 	</runtime>
 
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="OWLApiCheckConsistency">
+        <parameter id="class" value="de.knowwe.onte.action.OWLApiCheckConsistency" />
+        <parameter id="name" value="OWLApiCheckConsistency" />
+        <parameter id="description"
+            value="Checks for inconsistency concpt in an OWL ontology." />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="OWLApiClassExpressionQueryAction">
+        <parameter id="class" value="de.knowwe.onte.action.OWLApiClassExpressionQueryAction" />
+        <parameter id="name" value="OWLApiClassExpressionQueryAction" />
+        <parameter id="description"
+            value="Querys the OWL ontology with a OWLCLassExpression written in OWL Manchester syntax." />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="OWLApiOntologyExport">
+        <parameter id="class" value="de.knowwe.onte.action.OWLApiOntologyExport" />
+        <parameter id="name" value="OWLApiOntologyExport" />
+        <parameter id="description"
+            value="Returns the serialized local ontology in the specified format." />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>  
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="OWLApiRepairInconsistencies">
+        <parameter id="class" value="de.knowwe.onte.action.OWLApiRepairInconsistencies" />
+        <parameter id="name" value="OWLApiRepairInconsistencies" />
+        <parameter id="description"
+            value="Repair inconsistencies in a local ontology." />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>  
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="ShowExportTabAction">
+        <parameter id="class" value="de.knowwe.onte.action.ShowExportTabAction" />
+        <parameter id="name" value="ShowExportTabAction" />
+        <parameter id="description"
+            value="Returns the export ontology form." />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+        id="OntologyConsistencyTest">
+        <parameter id="class"
+            value="de.knowwe.onte.ci4ke.OntologyConsistencyTest" />
+        <parameter id="name" value="OntologyConsistencyTest" />
+        <parameter id="description" value="CITest OntologyConsistencyTest" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    <extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+        id="OntologyIndividualExistTest">
+        <parameter id="class"
+            value="de.knowwe.onte.ci4ke.OntologyIndividualExistTest" />
+        <parameter id="name" value="OntologyIndividualExistTest" />
+        <parameter id="description" value="CITest OntologyIndividualExistTest" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>        
+    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="EventListener"
+        id="OWLApiAxiomCacheEventListener">
+        <parameter id="class"
+            value="de.knowwe.onte.editor.OWLApiAxiomCacheEventListener" />
+        <parameter id="name" value="OWLApiAxiomCacheEventListener" />
+        <parameter id="description" value="EventListener OWLApiAxiomCacheEventListener" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="ClassHierarchyMarkup">
@@ -85,6 +160,16 @@
 	</extension>
 
     <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+        id="ManchesterDefaultMarkup">
+        <parameter id="class" value="de.knowwe.kdom.manchester.ManchesterDefaultMarkup" />
+        <parameter id="name" value="ManchesterDefaultMarkup" />
+        <parameter id="description" value="Type ManchesterDefaultMarkup" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5"  />
+        <parameter id="scope" value="root" />
+    </extension>
+
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
         id="ManchesterMarkup">
         <parameter id="class" value="de.knowwe.kdom.manchester.ManchesterMarkup" />
         <parameter id="name" value="ManchesterMarkup" />
@@ -92,6 +177,8 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5"  />
         <parameter id="scope" value="root" />
+        <parameter id="css" value="onte.css" />
+        <parameter id="script" value="knowwe-plugin-onte.js" />
     </extension>
        
     <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
@@ -128,4 +215,12 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>
+    <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="OntEToolbarTagHandler">
+        <parameter id="class" value="de.knowwe.onte.editor.OntEToolbarTagHandler" />
+        <parameter id="name" value="OntEToolbarTagHandler" />
+        <parameter id="description" value="TagHandler OntEToolbarTagHandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>      
 </plugin>
