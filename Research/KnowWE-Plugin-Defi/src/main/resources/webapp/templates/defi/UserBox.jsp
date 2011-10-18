@@ -59,6 +59,7 @@
 	// Startseiten-Test-Ende - - - - - - - - - - - -
 %>
 <div class="userbox">
+	<span>Pers&ouml;nliche Funktionen</span>
 	<div class="notfall">
 		<a href="<%=notfallplan%>" target="_blank" class="notfall"
 			title="test"> <img src="KnowWEExtension/images/notfall.png"
@@ -75,7 +76,7 @@
 		<wiki:UserCheck status="asserted">
 			<p>(nicht angemeldet)</p>
 		</wiki:UserCheck>
-		<br /> <a href="<%= start %>" class="princ">Meine
+		<a href="<%= start %>" class="princ">Meine
 			Startseite</a>
 		<%
 			}
@@ -91,8 +92,8 @@
 		if (user.userIsAsserted()) {
 	%>
 	<div class="avatar">
-		<img src="KnowWEExtension/images/<%=avatar%>.png" height="110px"
-			width="110px" alt="avatar" />
+		<img src="KnowWEExtension/images/<%=avatar%>.png" height="100px"
+			width="100px" alt="avatar" />
 	</div>
 	<%
 		}

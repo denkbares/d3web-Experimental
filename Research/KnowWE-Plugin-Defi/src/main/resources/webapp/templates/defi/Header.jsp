@@ -45,6 +45,7 @@
 	<div class="companylogo"></div>
 
 		<div class="infobox">
+			<span>Kontaktfunktion</span>
 			<div>
 				<a href="Wiki.jsp?page=<%= BERATER %>" class="infobox_link" onmouseover="document.getElementById('infobox1').style.backgroundColor = '#eeeeee';" onmouseout="document.getElementById('infobox1').style.backgroundColor = '#F9F9F9';">
 				<img src="KnowWEExtension/images/
@@ -53,15 +54,15 @@
 				<% } else { %>
 					berater_grau.jpg
 				<% } %>
-				" height="115px" width="86px" alt="Berater" style="margin:9px 0 3px 0;" />
+				" height="92px" width="70px" alt="Berater" style="margin:9px 0 0 0;" />
 				<span id="infobox1">Berater Dr. Schulz</span>
 				</a>
 			</div>
 			<div>
-				<a href="Wiki.jsp?page=Gruppe" class="infobox_link" onmouseover="document.getElementById('infobox2').style.backgroundColor = '#eeeeee';" onmouseout="document.getElementById('infobox2').style.backgroundColor = '#F9F9F9';"><img
-				src="KnowWEExtension/images/Gruppe.jpg" height="98px" width="141px"
+				<a href="Wiki.jsp?page=Diskussion" class="infobox_link" onmouseover="document.getElementById('infobox2').style.backgroundColor = '#eeeeee';" onmouseout="document.getElementById('infobox2').style.backgroundColor = '#F9F9F9';"><img
+				src="KnowWEExtension/images/Gruppe.jpg" height="77px" width="111px"
 				alt="Gruppe" style="margin:14px 0 0 0;" />
-				<span style="margin:15px 0 0 0;" id="infobox2">Gruppe</span></a>
+				<span style="margin:10px 0 0 0;" id="infobox2">Diskussion</span></a>
 			</div>
 		</div>
 
