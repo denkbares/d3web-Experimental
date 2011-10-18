@@ -41,9 +41,9 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.kdom.manchester.frames.objectproperty.CharacteristicTypes;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
  *
@@ -176,25 +176,25 @@ public class OWLStoreDebuggingTagHandler extends AbstractHTMLTagHandler {
 		StringBuilder c = new StringBuilder();
 
 		if (property.isAsymmetric(ontology)) {
-			c.append(CharacteristicTypes.ASYMMETRIC.getType() + " ");
+			c.append(ManchesterSyntaxKeywords.ASYMMETRIC.getKeyword() + " ");
 		}
 		if (property.isSymmetric(ontology)) {
-			c.append(CharacteristicTypes.SYMMETRIC.getType() + " ");
+			c.append(ManchesterSyntaxKeywords.SYMMETRIC.getKeyword() + " ");
 		}
 		if (property.isFunctional(ontology)) {
-			c.append(CharacteristicTypes.FUNCTIONAL.getType() + " ");
+			c.append(ManchesterSyntaxKeywords.FUNCTIONAL.getKeyword() + " ");
 		}
 		if (property.isInverseFunctional(ontology)) {
-			c.append(CharacteristicTypes.INVERSEFUNCTIONAL.getType() + " ");
+			c.append(ManchesterSyntaxKeywords.INVERSE_FUNCTIONAL.getKeyword() + " ");
 		}
 		if (property.isTransitive(ontology)) {
-			c.append(CharacteristicTypes.TRANSITIVE.getType() + " ");
+			c.append(ManchesterSyntaxKeywords.TRANSITIVE.getKeyword() + " ");
 		}
 		if (property.isReflexive(ontology)) {
-			c.append(CharacteristicTypes.REFLEXIVE.getType() + " ");
+			c.append(ManchesterSyntaxKeywords.REFLEXIVE.getKeyword() + " ");
 		}
 		if (property.isIrreflexive(ontology)) {
-			c.append(CharacteristicTypes.IRREFLEXIVE.getType() + " ");
+			c.append(ManchesterSyntaxKeywords.IRREFLEXIVE.getKeyword() + " ");
 		}
 		if (c.length() > 0) {
 			html.append("&nbsp;&nbsp;&nbsp;&nbsp;<small>Characteristics: </small>");
