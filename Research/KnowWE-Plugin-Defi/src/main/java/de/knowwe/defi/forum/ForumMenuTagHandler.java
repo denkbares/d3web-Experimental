@@ -50,6 +50,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.defi.logger.PageLoggerHandler;
 import de.knowwe.defi.menu.DynamicMenuMarkup;
 import de.knowwe.defi.time.TimeTableMarkup;
 import de.knowwe.kdom.dashtree.DashTreeElement;
@@ -491,8 +492,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 	private HashMap<String, String> checkLog(UserContext uc) {
 		HashMap<String, String> logPages = new HashMap<String, String>();
-		String log = KnowWEEnvironment.getInstance().getKnowWEExtensionPath()
-				+ "/tmp/Pagelogger.log";
+		String log = PageLoggerHandler.getPath();
 		String line;
 
 		try {

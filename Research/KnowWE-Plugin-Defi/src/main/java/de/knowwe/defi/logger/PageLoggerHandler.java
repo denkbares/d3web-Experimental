@@ -18,7 +18,7 @@
  * site: http://www.fsf.org.
  */
 
-package de.knowwe.defi.readon;
+package de.knowwe.defi.logger;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -33,15 +33,15 @@ import de.knowwe.core.user.UserContext;
 public class PageLoggerHandler implements PageAppendHandler {
 
 	public boolean log = true;
+	private final static String path = KnowWEEnvironment.getInstance().getWikiConnector().getSavePath()
+			+ "/Pagelogger.log";
 
 	@Override
 	public String getDataToAppend(String topic, String web,
 			UserContext user) {
 		if (log) {
 			try {
-				BufferedWriter buffy = new BufferedWriter(new FileWriter(
-						KnowWEEnvironment.getInstance().getKnowWEExtensionPath()
-								+ "/tmp/Pagelogger.log", true));
+				BufferedWriter buffy = new BufferedWriter(new FileWriter(path, true));
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				String uhrzeit = sdf.format(new Date(System.currentTimeMillis()));
 				buffy.append(uhrzeit + ";" + user.getUserName() + ";" + user.getTopic() + "\n");
@@ -57,5 +57,10 @@ public class PageLoggerHandler implements PageAppendHandler {
 	@Override
 	public boolean isPre() {
 		return false;
+	}
+
+	public static String getPath() {
+
+		return path;
 	}
 }
