@@ -23,6 +23,15 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 
 /**
+ * One table for each diagnosis. Each column is one rule with
+ * the following meaning
+ * 
+ * Header consists of two rows:
+ * 		1. The condition when the when the rule fires
+ * 		2. The weighting of this rule
+ * 
+ * Left column: Questions
+ * Rest: consist of Yes/No(+/-) rating for the Questions.
  * 
  * @author Johannes Dienst
  * @created 14.10.2011

@@ -193,7 +193,6 @@ public class PoiUtils {
 			PoiUtils.writeTableLine(line, row);
 		}
 
-
 	}
 
 

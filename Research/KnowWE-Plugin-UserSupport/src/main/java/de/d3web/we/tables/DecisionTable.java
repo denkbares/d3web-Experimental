@@ -18,6 +18,7 @@
  */
 package de.d3web.we.tables;
 
+import de.d3web.we.kdom.xcl.list.ListSolutionType;
 import de.d3web.we.renderer.TableRenderer;
 import de.knowwe.core.kdom.basicType.CommentLineType;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -37,6 +38,7 @@ public class DecisionTable extends ITable {
 
 	public DecisionTable() {
 		this.sectionFinder = new AllTextSectionFinder();
+		this.addChildType(new ListSolutionType());
 
 		// cut the optional closing }
 		AnonymousType closing = new AnonymousType("closing-bracket");

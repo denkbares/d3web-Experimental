@@ -23,6 +23,11 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 
 /**
+ * Header: Contains the rules
+ * Leftcolumn is divided in 2 sections:
+ * 		1. Conditions: Usually answered in Yes/No
+ * 		2. Actions: A rule can cause more than 1 Action to happen
+ * Rest: Conditions are answered with Yes/No. Actions to take are marked.
  * 
  * @author Johannes Dienst
  * @created 14.10.2011

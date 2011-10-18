@@ -24,12 +24,13 @@ import de.knowwe.core.kdom.basicType.CommentLineType;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.kdom.AnonymousType;
+import de.knowwe.kdom.AnonymousTypeInvisible;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
 import de.knowwe.kdom.sectionFinder.UnquotedExpressionFinder;
 
 /**
- * 
+ *
  * @author Johannes Dienst
  * @created 14.10.2011
  */
@@ -40,7 +41,7 @@ public class CausalDiagnosisScore extends ITable {
 		this.addChildType(new ListSolutionType());
 
 		// cut the optional closing }
-		AnonymousType closing = new AnonymousType("closing-bracket");
+		AnonymousTypeInvisible closing = new AnonymousTypeInvisible("closing-bracket");
 		closing.setSectionFinder(new StringSectionFinderUnquoted("}"));
 		this.addChildType(closing);
 

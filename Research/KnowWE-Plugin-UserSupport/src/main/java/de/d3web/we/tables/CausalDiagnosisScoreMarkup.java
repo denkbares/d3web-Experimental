@@ -23,6 +23,10 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 
 /**
+ * Layout of CausalDiagnosisScore is
+ * LeftColumn: Questions
+ * Header: Diagnosis
+ * Columns: Points for Questions
  * 
  * @author Johannes Dienst
  * @created 14.10.2011

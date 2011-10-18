@@ -18,6 +18,7 @@
  */
 package de.d3web.we.tables;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.knowwe.core.kdom.parsing.Section;
@@ -39,7 +40,7 @@ public class TableUtils {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static int getRow(Section<? extends TableCell> s) {
+	public static int getRowNumber(Section<? extends TableCell> s) {
 		Section<TableLine> tableLine = Sections.findAncestorOfType(s, TableLine.class);
 
 		Section<ITable> table = (Section<ITable>) tableLine.getFather();
@@ -54,7 +55,7 @@ public class TableUtils {
 	 * @param s current section
 	 * @return
 	 */
-	public static int getColumn(Section<? extends TableCell> s) {
+	public static int getColumnNumber(Section<? extends TableCell> s) {
 		Section<TableLine> tableLine = Sections.findAncestorOfType(s, TableLine.class);
 
 		List<Section<TableCell>> cells = Sections.findSuccessorsOfType(tableLine, TableCell.class);
@@ -63,12 +64,62 @@ public class TableUtils {
 
 	/**
 	 * The row number of the given table line.
+	 * TODO Needed?
 	 * 
 	 * @created 16.03.2011
 	 * @param s
 	 * @return
 	 */
-	public static int getRowOfLine(Section<? extends TableLine> s) {
+	public static int getRowNumberOfLine(Section<? extends TableLine> s) {
 		return Sections.findAncestorOfType(s, ITable.class).getChildren().indexOf(s);
+	}
+
+	/**
+	 * Gets all TableCells for a given column. Columns numeration starts at 0.
+	 * It includes the TableHeader.
+	 * 
+	 * @created 18.10.2011
+	 * @param rowNumber
+	 * @return
+	 */
+	public static List<Section<TableCell>> getColumnCells(int columnNumber, Section<ITable> table) {
+		List<Section<TableCell>> cells = new ArrayList<Section<TableCell>>();
+
+		// get all TableLines
+		List<Section<TableLine>> lines = Sections.findSuccessorsOfType(table, TableLine.class);
+
+		for (Section<TableLine> line : lines) {
+			cells.add(
+					Sections.findSuccessorsOfType(line, TableCell.class).
+					get(columnNumber));
+		}
+
+		return cells;
+	}
+
+	/**
+	 * Gets all TableCells for a given rowNumber.
+	 * If you want the header use {@see getHeaderCells}.
+	 * If you call this method with 0 as argument, it will
+	 * return null.
+	 * 
+	 * @created 18.10.2011
+	 * @param row
+	 * @param table
+	 * @return
+	 */
+	public static List<Section<TableCell>> getRowCells(int row, Section<ITable> table) {
+
+		// no header return
+		if (row == 0) return null;
+
+		List<Section<TableCell>> cells = new ArrayList<Section<TableCell>>();
+
+		// get all TableLines
+		List<Section<TableLine>> lines = Sections.findSuccessorsOfType(table, TableLine.class);
+
+		cells.addAll(Sections.findSuccessorsOfType(lines.get(row), TableCell.class));
+
+		return cells;
 	}
 }
