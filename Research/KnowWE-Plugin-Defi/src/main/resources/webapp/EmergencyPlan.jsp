@@ -34,62 +34,75 @@
 
 <style type="text/css" media="all">
 	table 
-	{ border: 2px dashed black; background-color: firebrick; margin-bottom: 0%; padding: 0%; vertical-align: 0%;}
+	{ border: 2px dashed black; background-color: firebrick; margin-bottom: 0%; padding: 0%; vertical-align: 0%; }
 	
 	.other 
-	{border: 0px; background-color: white;}
+	{ border: 0px; background-color: transparent; }
 	
 	#inner 
-	{ border-top: 0px;	border-left: 0px; border-right: 0px; border-bottom: 1px; border-style: solid; border-color: black; 
-	  font-family: Arial, Helvetica, sans-serif; font-size: 14pt; text-align: center; vertical-align: top; line-height: 1em; }
+	{ border-top: 0px; border-left: 0px; border-right: 0px; border-bottom: 1px; border-style: solid; border-color: black; font-family: Arial, Helvetica, sans-serif;
+      font-size: 12pt; text-align: center; vertical-align: top; line-height: 0.98em; }
 	
 	.inner2 
 	{ border-top: 0px; border-left: 0px; border-right: 0px; border-bottom: 0px; border-style: solid; border-color: black; font-family: Arial, Helvetica, sans-serif;
-	  font-size: 14pt; text-align: center; vertical-align: top; line-height: 1em; }
+      font-size: 12pt; text-align: center; vertical-align: top; line-height: 0.98em; }
 	
 	th 
 	{ border-top: 0px; border-left: 0px; border-right: 0px; border-bottom: 1px; border-style: solid; border-color: black; font-family: Arial, Helvetica, sans-serif;
-      font-size: 14pt; text-align: center; vertical-align: top; line-height: 1em;}
+      font-size: 12pt; text-align: center; vertical-align: top; line-height: 0.98em; }
 	
 	td,tr 
-	{ border: 0px; border-style: solid; border-color: red; padding-top: 20%; padding-left: 6%;
-	padding-bottom: 0%; font-family: Arial, Helvetica, sans-serif; font-size: 14pt; text-align: left; vertical-align: top; line-height: 1.4em;}
+	{ border: 0px; border-style: solid; border-color: red; padding-top: 18%; padding-left: 6%; padding-bottom: 0%; font-family: Arial, Helvetica, sans-serif;
+      font-size: 12pt; text-align: left; vertical-align: top; line-height: 1.2em; }
 
 	.engl
-	{ font-size:11pt; font-style:italic }
+	{font-size:11pt; font-style:italic}
 	
 	.inhalt
-	{ color:blue }
+	{color: blue; font-size: 12pt;}
 </style>
 <%
 if(requestUserCorrect) {
 %>
 <table border="1" style="border-collaps:collaps">
 	<tr>
-		<td width="400" height="290px" class="front" style="background-image:url(KnowWEExtension/images/front2.png); background-repeat:no-repeat"></td>
+		<td width="280px" height="190px" style="background-image:url(KnowWEExtension/images/front3.png); background-repeat:no-repeat">	
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+			<table class="other" border="0">
+				<tr>
+					<th width="239px" height="15px">
+					<span class="inhalt"><%=context.getUserName()%></span>
+					</th>
+				</tr>
+			</table>		
+		</td>
 	</tr>
-
 	<tr>
-		<td width="400px" height="290px" class="tel" style="background-image: url(KnowWEExtension/images/tel.jpg); background-repeat: no-repeat">
-		Mein Kardiologe / <span class="engl">cardiologist</span>
+		<td width="280px" height="190px" class="tel" style="background-image: url(KnowWEExtension/images/tel.png); background-repeat: no-repeat">
+		Mein Kardiologe 
 		<%=EmergencyPlanUtils.getCardiologist(context.getUserName())%>
 		
-		Mein Hausarzt / <span class="engl">attending physician</span>
+		Mein Hausarzt 
 		<%=EmergencyPlanUtils.getPhysician(context.getUserName())%>
 
-		Im Notfall zu verst&auml;ndigen <div class="engl">In case of emergency please contact</div>
+		Im Notfall zu verst&auml;ndigen 
 		<%=EmergencyPlanUtils.getEmergencyPerson(context.getUserName())%>
 		</td>
 	</tr>
 	
 	<tr>
-		<td width="405px" height="290px" style="background-image:url(KnowWEExtension/images/plan.jpg); background-repeat:no-repeat"></td>
+		<td width="280px" height="190px" style="background-image:url(KnowWEExtension/images/plan.png); background-repeat:no-repeat"></td>
 	</tr>
 
 	<tr>
-		<td width="400px" height="290px"
-			style="background-image: url(KnowWEExtension/images/info.jpg); background-repeat: no-repeat">
-		ICD Modell / <span class="engl">ICD model</span>
+		<td width="280px" height="190px"
+			style="background-image: url(KnowWEExtension/images/info.png); background-repeat: no-repeat">
+		ICD Modell 
 		<table class="other" border="0">
 			<tr>
 				<th width="160px" height="20px"><span class="inhalt"><%=EmergencyPlanUtils.getICDModelTitle(context.getUserName())%></span></th>
@@ -97,13 +110,13 @@ if(requestUserCorrect) {
 				<th width="160px" height="20px"><span class="inhalt"><%=EmergencyPlanUtils.getICDModelID(context.getUserName())%></span></th>
 			</tr>
 		</table>
-		Grunderkrankung / <span class="engl">diagnosis</span>
+		Grunderkrankung 
 		<table class="other" border="0">
 			<tr>
 				<th width="349px" height="20px"><span class="inhalt"><%=EmergencyPlanUtils.getDiagnosis(context.getUserName())%></span></th>
 			</tr>
 		</table>
-		Blutgruppe / <span class="engl">blood type</span>
+		Blutgruppe 
 		<table class="other" border="0">
 			<tr>
 				<th width="349px" height="20px"><span class="inhalt"> <%=EmergencyPlanUtils.getBloodType(context.getUserName())%></span></th>
@@ -114,9 +127,9 @@ if(requestUserCorrect) {
 		</td>
 	</tr>
 	<tr>
-		<td width="400px" height="290px"
-			style="background-image: url(KnowWEExtension/images/info.jpg); background-repeat: no-repeat">
-		Medikament&ouml;se Dauerbehandlung / <div class="engl">long term medication</div>
+		<td width="280px" height="190px"
+			style="background-image: url(KnowWEExtension/images/info.png); background-repeat: no-repeat">
+		Medikament&ouml;se Dauerbehandlung
 		<table class="other" border="0">
 		<%= EmergencyPlanUtils.getMedics(context.getUserName())%>
 		</table>
