@@ -27,17 +27,6 @@
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="CausalDiagnosisScoreMarkup">
-		<parameter id="class"
-			value="de.d3web.we.tables.CausalDiagnosisScoreMarkup" />
-		<parameter id="name" value="CausalDiagnosisScoreMarkup" />
-		<parameter id="description" value="Type CausalDiagnosisScoreMarkup" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-		<parameter id="scope" value="root" />
-	</extension>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="DecisionTableMarkup">
 		<parameter id="class"
 			value="de.d3web.we.tables.DecisionTableMarkup" />

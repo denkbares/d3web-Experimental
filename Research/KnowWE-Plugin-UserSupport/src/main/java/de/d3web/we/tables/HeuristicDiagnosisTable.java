@@ -19,7 +19,6 @@
 package de.d3web.we.tables;
 
 import de.d3web.we.renderer.TableRenderer;
-import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.basicType.CommentLineType;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
@@ -34,7 +33,7 @@ import de.knowwe.kdom.sectionFinder.UnquotedExpressionFinder;
  * @author Johannes Dienst
  * @created 14.10.2011
  */
-public class HeuristicDiagnosisTable extends AbstractType {
+public class HeuristicDiagnosisTable extends ITable {
 
 	public HeuristicDiagnosisTable() {
 		this.sectionFinder = new AllTextSectionFinder();
