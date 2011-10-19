@@ -41,6 +41,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import com.ecyrd.jspwiki.WikiEngine;
+
 import de.knowwe.comment.forum.Forum;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.KnowWEArticle;
@@ -50,17 +52,27 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.defi.aboutMe.AboutMe;
 import de.knowwe.defi.logger.PageLoggerHandler;
 import de.knowwe.defi.menu.DynamicMenuMarkup;
 import de.knowwe.defi.time.TimeTableMarkup;
+import de.knowwe.jspwiki.JSPWikiKnowWEConnector;
 import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.dashtree.DashTreeUtils;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 /**
  * 
  * @author dupke
  * @created 03.08.2011
  */
 public class ForumMenuTagHandler extends AbstractTagHandler {
+
+	/** Label für Einheiten-Foren */
+	private static final String UNIT_DISCUSSION_LABEL = "Foren zu Einheiten";
+	/** Label für sonstige Foren */
+	private static final String LEFTOVER_LABEL = "Sonstige Foren";
+	/** Label für User-Chat */
+	private static final String USER_CHAT_LABEL = "Mit anderen Benutzern diskutieren";
 
 	/** Beschriftungen für das "Neues Forum"-Formular */
 	private static final String OPEN_FORM_BUTTON = "Neues Forum";
@@ -70,6 +82,9 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	private static final String TEXTAREA_LABEL = "Geben Sie bitte Ihre Nachricht ein:";
 	private static final String OPTION_LABEL = "W&auml;hlen Sie ein Thema aus:";
 	private static final String TOPIC_LABEL = "Geben Sie bitte eine &Uuml;berschrift ein:";
+
+	/** Button für persönliche Nachricht an Benutzer */
+	private static final String PERSONAL_MESSAGE_BUTTON = "Pers&ouml;nliche Nachricht";
 
 	/** Größe der Eingabefelder */
 	private static final int TOPIC_PANEL_SIZE = 70;
@@ -99,8 +114,6 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		List<Section<DashTreeElement>> rootUnits = getAllRootUnits();
 		List<Section<DashTreeElement>> units = getAllUnits();
 
-		fm.append("<h3>Foren-Übersicht</h3>");
-
 		// Hole alle Foren
 		while (it.hasNext()) {
 			for (Section<? extends Type> sec : it.next().getAllNodesPreOrder()) {
@@ -114,8 +127,11 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		}
 		other.addAll(forums);
 
-		/* Foren zu Einheiten */
+		/* ######################################### */
+		/* # -----------EINHEITEN-FOREN----------- # */
+		/* ######################################### */
 		fm.append("<table class='forumMenu'>");
+		fm.append("<tr><th colspan=2>" + UNIT_DISCUSSION_LABEL + "</th></tr>");
 		for (Section<DashTreeElement> rootUnit : rootUnits) {
 			newEntry = false;
 			pageName = getPageName(rootUnit);
@@ -232,14 +248,15 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 			}
 		}
 
-		/* Sonstige Foren */
+		/* ######################################### */
+		/* # -----------SONSTIGE-FOREN------------ # */
+		/* ######################################### */
+		fm.append("<tr><th colspan=2>" + LEFTOVER_LABEL + "</th></tr>");
 		pageName = "Sonstiges";
-		fm.append("\n"); // fixes JSPWiki's
-		// "10000 characters without linebreak-bug"
-		fm.append("<tr class='active'><td>" + pageName);
+		fm.append("<tr class='active'><td>");
 
 		// "Neues Forum"-Button
-		fm.append(" <input class='fm_open' type='button' value='"
+		fm.append("<input class='fm_open' type='button' value='"
 				+ OPEN_FORM_BUTTON
 				+ "' onclick='forumForm(\"" + pageName
 				+ "\");return false' />");
@@ -311,6 +328,45 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		}
 		else {
 			fm.append("</td><td class='fm_old'></td></tr>");
+		}
+
+		/* ######################################### */
+		/* # ------------BENUTZER-CHAT------------ # */
+		/* ######################################### */
+		fm.append("<tr><th colspan=2>" + USER_CHAT_LABEL + "</th></tr>");
+		JSPWikiKnowWEConnector wc = new JSPWikiKnowWEConnector(WikiEngine.getInstance(
+				KnowWEEnvironment.getInstance().getContext(), null));
+		String[] users = wc.getAllUsers();
+		String[] activeUsers = wc.getAllActiveUsers();
+
+		for (int i = 0; i < users.length; i++) {
+			if (!users[i].startsWith("Patient")) {
+				// Hole Section des entsprechenden Chats
+				//
+
+				fm.append("<tr class='active'><td>");
+
+				fm.append("<div class='userchat'>");
+				// Avatar
+				fm.append("<img src=\"KnowWEExtension/images/"
+						+ getAvatar(users[i])
+						+ ".png\" height=\"80px\" width=\"80px\" alt=\"avatar\" />");
+
+				// Username + status
+				fm.append("<span class='userchat'><a href='" + JSPWikiKnowWEConnector.LINK_PREFIX
+						+ users[i] + "'>"
+						+ users[i] + "</a><br />- " + getStatus(activeUsers, users[i])
+						+ " -</span>");
+
+				// "Persönliche Nachricht"-Button
+				fm.append("<input class='fm_open' type='button' value='"
+						+ PERSONAL_MESSAGE_BUTTON
+						+ "' onclick='alert(\"Funktioniert noch nicht.\");return false' />");
+				fm.append("</div>");
+
+				fm.append("</td><td class='fm_new'></td></tr>");
+			}
+
 		}
 
 		fm.append("</table>");
@@ -535,6 +591,46 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		}
 
 		return date;
+	}
+
+	/**
+	 * Get the user's avatar.
+	 * 
+	 * @param userName
+	 * @return
+	 */
+	private String getAvatar(String userName) {
+		String avatar = "";
+
+		try {
+			KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
+					KnowWEEnvironment.DEFAULT_WEB, userName);
+			Section<?> s = article.getSection();
+			Section<AboutMe> sec = Sections.findSuccessor(s, AboutMe.class);
+			avatar = DefaultMarkupType.getAnnotation(sec, "avatar");
+		}
+		catch (NullPointerException e) {
+			// e.printStackTrace();
+		}
+		if (avatar == null || avatar == "") avatar = "A01";
+
+		return avatar;
+	}
+
+	/**
+	 * Get the user's status.
+	 * 
+	 * @param activeUsers
+	 * @param userName
+	 * @return
+	 */
+	private String getStatus(String[] activeUsers, String userName) {
+
+		for (String s : activeUsers) {
+			if (s.equals(userName)) return "<span class='online'>online</span>";
+		}
+
+		return "<span class='offline'>offline</span>";
 	}
 
 }
