@@ -120,11 +120,18 @@ public class TableRenderer extends KnowWEDomRenderer<ITable> {
 		//		+ KnowWEAttributes.TOPIC + ": '" + topic + "',";
 
 		String exportButton =
-				"<input class=\"button table-export\" type=\"button\" name=\"Export\" " +
-						"value=\"Export\" id=\"" + section.getID()  + "-Export\"" + rel  + ">";
+				"<div>" +
+						"<input class=\"button table-export\" type=\"button\" name=\"Export\" " +
+						"value=\"Export\" id=\"" + section.getID()  + "-Export\"" + rel  + ">" +
+						"<span id=\"export-download" + section.getID() + "\"> </span>" +
+						"</div>"
+						;
 		String importButton =
-				"<input class=\"button table-import\" type=\"button\" name=\"Import\"" +
-						" value=\"Import\" id=\"" + section.getID()  + "-Import\"" + rel + ">";
+				"<div>" +
+						"<input class=\"button table-import\" type=\"button\" name=\"Import\"" +
+						" value=\"Import\" id=\"" + section.getID()  + "-Import\"" + rel + ">" +
+						"<span id=\"import-upload" + section.getID() + "\"> </span>" +
+						"</div>";
 
 		buildi.append(exportButton + importButton);
 	}

@@ -18,8 +18,11 @@
  */
 package de.d3web.we.poi;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
@@ -32,7 +35,9 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import de.d3web.we.tables.CausalDiagnosisScore;
 import de.d3web.we.tables.DecisionTable;
+import de.d3web.we.tables.HeuristicDiagnosisTable;
 import de.d3web.we.tables.TableCell;
 import de.d3web.we.tables.TableLine;
 import de.knowwe.core.kdom.parsing.Section;
@@ -171,33 +176,121 @@ public class PoiUtils {
 		return wb;
 	}
 
-	public static void writeCausalDiagnosisScoreToFile() {
+	/**
+	 * Constructs the table-markup from a given xls-File.
+	 * 
+	 * @created 19.10.2011
+	 * @param in Inputstream for xls file
+	 * @return the table-markup
+	 * @throws IOException
+	 */
+	public static String importTableFromFile(FileInputStream in) throws IOException {
+		Workbook wb = new HSSFWorkbook(in);
 
+		Sheet sheet = wb.getSheetAt(0); // TODO is there only 1 sheet
+
+		// If there are no rows do nothing
+		if ( (sheet.getLastRowNum() == 0) && (sheet.getPhysicalNumberOfRows() == 0) )
+			return null;
+
+		// Iterate over rows and push each row in an array
+		// So it is easier to build the new table
+		// TODO perhaps build table directly from sheet
+		List<String[]> rowsList = new ArrayList<String[]>();
+		Row row = null;
+		for ( Iterator<Row> it = sheet.rowIterator(); it.hasNext(); ) {
+			row = it.next();
+			String[] cells = new String[row.getPhysicalNumberOfCells()];
+
+			for ( int i = 0; i < row.getPhysicalNumberOfCells(); i++) {
+				cells[0] = row.getCell(i).getStringCellValue();
+			}
+
+			rowsList.add(cells);
+		}
+
+		// Rebuild the Table with the arrays
+		StringBuilder buildi = new StringBuilder();
+		for ( String[] arr : rowsList ) {
+			for (String c : arr) {
+				buildi.append(c+"|");
+			}
+			buildi.replace(buildi.length(), buildi.length(), ",");
+		}
+
+		return buildi.toString();
 	}
 
-	public static void writeHeuristicDiagnosTableToFile() {
-
-	}
-
-	public static void writeDecisionTableToFile(Section<DecisionTable> decisionTable) {
+	public static void writeCausalDiagnosisScoreToFile(
+			Section<CausalDiagnosisScore> diagnosisTable, FileOutputStream out) throws IOException {
 		Workbook wb = new HSSFWorkbook();
-		Sheet sheet = wb.createSheet("Table");
+		Sheet sheet = wb.createSheet("CausalDiagnosisTable");
 
 		Row row = null;
-		List<Section<TableLine>> lines = Sections.findChildrenOfType(decisionTable, TableLine.class);
+		List<Section<TableLine>> lines =
+				Sections.findChildrenOfType(diagnosisTable, TableLine.class);
 		Section<TableLine> line = null;
 
 		for ( int i = 0; i < lines.size(); i++) {
 			row = sheet.createRow(i);
 			line = lines.get(i);
-			PoiUtils.writeTableLine(line, row);
+			PoiUtils.writeTableLine(line, row, out);
 		}
 
+		// Write workbook to file
+		wb.write(out);
+	}
+
+	public static void writeHeuristicDiagnosTableToFile(
+			Section<HeuristicDiagnosisTable> heuristicTable, FileOutputStream out) throws IOException {
+		Workbook wb = new HSSFWorkbook();
+		Sheet sheet = wb.createSheet("CausalDiagnosisTableSheet");
+
+		Row row = null;
+		List<Section<TableLine>> lines =
+				Sections.findChildrenOfType(heuristicTable, TableLine.class);
+		Section<TableLine> line = null;
+
+		for ( int i = 0; i < lines.size(); i++) {
+			row = sheet.createRow(i);
+			line = lines.get(i);
+			PoiUtils.writeTableLine(line, row, out);
+		}
+
+		// Write workbook to file
+		wb.write(out);
+	}
+
+	public static void writeDecisionTableToFile(Section<DecisionTable> decisionTable,
+			FileOutputStream out) throws IOException {
+		Workbook wb = new HSSFWorkbook();
+		Sheet sheet = wb.createSheet("DecisionTable");
+
+		Row row = null;
+		List<Section<TableLine>> lines =
+				Sections.findChildrenOfType(decisionTable, TableLine.class);
+		Section<TableLine> line = null;
+
+		for ( int i = 0; i < lines.size(); i++) {
+			row = sheet.createRow(i);
+			line = lines.get(i);
+			PoiUtils.writeTableLine(line, row, out);
+		}
+
+		// Write workbook to file
+		wb.write(out);
 	}
 
 
-
-	public static void writeTableLine(Section<TableLine> line, Row row) {
+	/**
+	 * Writes a complete TableLine into the OutputStream.
+	 * 
+	 * @created 19.10.2011
+	 * @param line
+	 * @param row
+	 * @param out
+	 */
+	public static void writeTableLine(Section<TableLine> line, Row row, FileOutputStream out) {
 
 		List<Section<TableCell>> cells = Sections.findChildrenOfType(line, TableCell.class);
 

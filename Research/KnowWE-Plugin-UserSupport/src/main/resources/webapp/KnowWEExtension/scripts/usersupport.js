@@ -65,12 +65,14 @@ KNOWWE.plugin.usersupport = function() {
 			}
 			for (var i = 0; i < importbuttons.length; i++) {
 				 _KE.add('click', importbuttons, KNOWWE.plugin.usersupport.importAction);
-			} 
+			}
         },
 		
 		/**
 		 * Function: exportAction
-		 * adds the ImportTableAction for Tables to the Button
+		 * adds the ExportTableAction for Tables to the Button.
+		 * Renders a download button as response. The xls is
+		 * stored on the server.
 		 */
 		exportAction : function(event) {
 			var rel = eval("(" + _KE.target( event ).getAttribute('rel') + ")");
@@ -80,10 +82,17 @@ KNOWWE.plugin.usersupport = function() {
 				// objectname : objectName.innerHTML
 			}
 
+			var id = "export-download"+rel.objectId;
+
 			var options = {
 				url : KNOWWE.core.util.getURL(params),
 				response : {
-					// Empty for now
+					action : 'insert',
+                    ids : [ exportId ],
+//                    fn : function(){
+//			        	try {
+//			        	}
+//                    },
 				}
 			}
 			new _KA(options).send();
@@ -102,10 +111,17 @@ KNOWWE.plugin.usersupport = function() {
 				// objectname : objectName.innerHTML
 			}
 
+			var id = "import-upload"+rel.objectId;
+			
 			var options = {
 				url : KNOWWE.core.util.getURL(params),
 				response : {
-					// Empty for now
+					action : 'insert',
+                    ids : [ id ],
+//                    fn : function(){
+//			        	try {
+//			        	}
+//                    },
 				}
 			}
 			new _KA(options).send();

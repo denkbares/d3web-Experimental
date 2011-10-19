@@ -18,13 +18,20 @@
  */
 package de.d3web.we.action;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.Writer;
+import java.util.logging.Logger;
 
+import de.d3web.we.poi.PoiUtils;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 
 
 /**
+ * TODO Perhaps enable the user to upload a file that is not.
+ * TODO Load the file from cookie.
+ * 
  * 
  * @author Johannes Dienst
  * @created 18.10.2011
@@ -32,8 +39,24 @@ import de.knowwe.core.action.UserActionContext;
 public class TableImportAction extends AbstractAction {
 
 	@Override
-	public void execute(UserActionContext context) throws IOException {
-		System.out.println("Test");
+	public void execute(UserActionContext context) {
+
+		try {
+			String tableId = context.getParameter("tableId");
+			String title = context.getTitle();
+			String web = context.getWeb();
+			String user = context.getUserName();
+
+			// TODO load the file from cookie
+			FileInputStream in = new FileInputStream("Bla");
+			PoiUtils.importTableFromFile(in);
+
+			Writer writer = context.getWriter();
+			writer.append("Import successful");
+		} catch (IOException e) {
+			Logger.getLogger(this.getClass().getName()).warning(
+					"Import of xls failed");
+		}
 
 	}
 
