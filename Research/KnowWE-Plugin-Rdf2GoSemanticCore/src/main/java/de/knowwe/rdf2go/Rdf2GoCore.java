@@ -374,6 +374,9 @@ public class Rdf2GoCore implements EventListener {
 		List<String> l = qrt.getVariables();
 		ClosableIterator<QueryRow> i = qrt.iterator();
 		String result = "";
+		if (!tablemode) {
+			tablemode = l.size() > 1;
+		}
 		if (tablemode) {
 			result += KnowWEUtils.maskHTML("<table>");
 			for (String var : l) {
