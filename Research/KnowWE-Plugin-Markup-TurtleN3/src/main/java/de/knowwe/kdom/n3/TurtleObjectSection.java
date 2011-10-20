@@ -22,18 +22,22 @@
 
 package de.knowwe.kdom.n3;
 
-import de.knowwe.kdom.renderer.GenericHTMLRenderer;
+import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquoted;
-import de.knowwe.rdfs.IRITermRef;
-
-public class TurtleObject extends IRITermRef {
-
-	public TurtleObject() {
+import de.knowwe.kdom.renderer.GenericHTMLRenderer;
+import de.knowwe.kdom.n3.TurtleObjectLiteral;
+import de.knowwe.kdom.n3.TurtleObjectTerm;
 
 
+public class TurtleObjectSection extends AbstractType {
+
+	public TurtleObjectSection() {
+
+		childrenTypes.add(new TurtleObjectLiteral());
+		childrenTypes.add(new TurtleObjectTerm());
 		setSectionFinder(new SplitSectionFinderUnquoted(","));
 
-		//setCustomRenderer(new GenericHTMLRenderer<TurtleObject>("span", new String[] {"style", "color: orange;", "title", "TurtleObject"}));
+		setCustomRenderer(new GenericHTMLRenderer<TurtleObjectSection>("span", new String[] {"style", "color: red;", "title", "TurtleObjectSection"}));
 	}
 
 }

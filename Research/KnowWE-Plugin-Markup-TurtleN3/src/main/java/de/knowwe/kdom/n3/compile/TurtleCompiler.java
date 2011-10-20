@@ -24,11 +24,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.ontoware.rdf2go.model.Statement;
+import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.kdom.n3.TurtleObject;
+import de.knowwe.kdom.n3.TurtleObjectLiteral;
+import de.knowwe.kdom.n3.TurtleObjectLiteralText;
+import de.knowwe.kdom.n3.TurtleObjectSection;
+import de.knowwe.kdom.n3.TurtleObjectTerm;
 import de.knowwe.kdom.n3.TurtlePredicate;
 import de.knowwe.kdom.n3.TurtleSubject;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -37,17 +41,29 @@ import de.knowwe.rdfs.util.RDFSUtil;
 
 public class TurtleCompiler {
 
-	public static void insertTriples(Section<de.knowwe.kdom.n3.TurtleMarkupN3> section) {
-		List<Section<TurtleObject>> found = new ArrayList<Section<TurtleObject>>();
+	public static void insertTriples(
+			Section<de.knowwe.kdom.n3.TurtleMarkupN3> section) {
+		List<Section<TurtleObjectSection>> found = new ArrayList<Section<TurtleObjectSection>>();
 
-		Sections.findSuccessorsOfType(section, TurtleObject.class, found);
+		Sections.findSuccessorsOfType(section, TurtleObjectSection.class, found);
 
 		List<Statement> triples = new ArrayList<Statement>();
 
-		for (Section<TurtleObject> objectSec : found) {
+		for (Section<TurtleObjectSection> objectSec : found) {
 
-			URI objURI = RDFSUtil.getURI(objectSec);
+			Section<TurtleObjectTerm> termSec = Sections.findSuccessor(
+					objectSec, TurtleObjectTerm.class);
+			
+			Section<TurtleObjectLiteralText> literalSec = Sections.findSuccessor(
+					objectSec, TurtleObjectLiteralText.class);
 
+			Node objURI = null;
+			if (termSec != null) {
+				objURI = RDFSUtil.getURI(termSec);
+			}
+			if(literalSec != null) {
+				objURI = Rdf2GoCore.getInstance().createLiteral(literalSec.getOriginalText());
+			}
 			Section<TurtlePredicate> predSec = Sections.findSuccessor(
 					objectSec.getFather(), TurtlePredicate.class);
 
@@ -58,8 +74,8 @@ public class TurtleCompiler {
 			URI subjectURI = RDFSUtil.getURI(subjectSec);
 
 			if (objURI != null && predURI != null && subjectURI != null) {
-				Statement triple = Rdf2GoCore.getInstance().createStatement(subjectURI,
-						predURI, objURI);
+				Statement triple = Rdf2GoCore.getInstance().createStatement(
+						subjectURI, predURI, objURI);
 
 				triples.add(triple);
 			}
@@ -67,7 +83,6 @@ public class TurtleCompiler {
 		}
 		Rdf2GoCore.getInstance().addStatements(triples, section);
 	}
-	
 
 	public static void removeTriples(Section<de.knowwe.kdom.n3.TurtleMarkupN3> s) {
 		Rdf2GoCore.getInstance().removeSectionStatementsRecursive(s);

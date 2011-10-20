@@ -23,20 +23,17 @@
 package de.knowwe.kdom.n3;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquoted;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.kdom.renderer.GenericHTMLRenderer;
-import de.knowwe.kdom.n3.TurtlePredicateSection;
-import de.knowwe.kdom.n3.TurtleObjectSection;
 
-public class TurtlePredSentence extends AbstractType {
+public class TurtleObjectLiteralText extends AbstractType {
 
-	public TurtlePredSentence() {
+	public TurtleObjectLiteralText() {
 
-		childrenTypes.add(new TurtlePredicateSection());
-		childrenTypes.add(new TurtleObjectSection());
-		setSectionFinder(new SplitSectionFinderUnquoted(";"));
 
-		setCustomRenderer(new GenericHTMLRenderer<TurtlePredSentence>("span", new String[] {"style", "color: blue;", "title", "TurtlePredSentence"}));
+		setSectionFinder(new AllTextFinderTrimmed());
+
+		setCustomRenderer(new GenericHTMLRenderer<TurtleObjectLiteralText>("span", new String[] {"style", "color: green;", "title", "TurtleObjectLiteralText"}));
 	}
 
 }

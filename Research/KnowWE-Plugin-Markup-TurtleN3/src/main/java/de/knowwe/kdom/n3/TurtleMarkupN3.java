@@ -22,24 +22,22 @@
 
 package de.knowwe.kdom.n3;
 
-
-import java.util.Collection;
-import java.util.regex.Pattern;
-
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.kdom.AnonymousType;
+
+import java.util.Collection;
+import java.util.regex.Pattern;
+import de.knowwe.kdom.renderer.GenericHTMLRenderer;
 import de.knowwe.kdom.n3.TurtleSubjectSection;
 import de.knowwe.kdom.n3.TurtlePredSentence;
 import de.knowwe.kdom.n3.compile.TurtleCompiler;
-import de.knowwe.kdom.n3.render.TurtleN3Renderer;
-import de.knowwe.kdom.renderer.GenericHTMLRenderer;
+import de.knowwe.kdom.AnonymousType;
 
-public class TurtleMarkupN3 extends AbstractType implements KnowledgeUnit<TurtleMarkupN3>{
+public class TurtleMarkupN3 extends AbstractType implements KnowledgeUnit<TurtleMarkupN3> {
 
 	public TurtleMarkupN3() {
 		AnonymousType before = new AnonymousType("Before");
@@ -52,22 +50,24 @@ public class TurtleMarkupN3 extends AbstractType implements KnowledgeUnit<Turtle
 		childrenTypes.add(new TurtlePredSentence());
 		setSectionFinder(new RegexSectionFinder("N3:(.*?)\\.",Pattern.DOTALL|Pattern.MULTILINE,1));
 
-		//setCustomRenderer(new GenericHTMLRenderer<TurtleMarkupN3>("span", new String[] {"style", "color: yellow;", "title", "TurtleMarkupN3"}));
-		setCustomRenderer(new TurtleN3Renderer());
+		setCustomRenderer(new GenericHTMLRenderer<TurtleMarkupN3>("span", new String[] {"title", "TurtleMarkupN3"}));
 	}
 
-	public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit<TurtleMarkupN3>> section) {
+	@Override
+	public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(
+			Section<? extends KnowledgeUnit<TurtleMarkupN3>> section) {
 		return CompileUtils.getAllReferencesOfCompilationUnit(section);
 	}
 
+	@Override
 	public void insertIntoRepository(Section<TurtleMarkupN3> section) {
 		TurtleCompiler.insertTriples(section);
 		
 	}
 
+	@Override
 	public void deleteFromRepository(Section<TurtleMarkupN3> section) {
-		TurtleCompiler.removeTriples(section);
-		
+		TurtleCompiler.removeTriples(section);		
 	}
 
 }

@@ -119,11 +119,26 @@
 		Position="0">
 
 <SectionFinder ClassName="RegexSectionFinder"
-			PackageName="de.knowwe.core.kdom.sectionFinder" Value='"&apos;(.*?)&apos;", Pattern.DOTALL, 1'>
+			PackageName="de.knowwe.core.kdom.sectionFinder" Value='"&apos;(.*?)&apos;", Pattern.DOTALL, 0'>
 
 		</SectionFinder>
 
 		<Color>yellow</Color>
+
+
+	</ObjectType>
+	
+	<ObjectType ID="TurtleObjectLiteralText" ClassName="TurtleObjectLiteralText"
+		PackageName="de.knowwe.kdom.n3" SuperTypeClass="AbstractType"
+		SuperTypePackage="de.knowwe.core.kdom" Parent="TurtleObjectLiteral"
+		Position="0">
+
+<SectionFinder ClassName="AllTextFinderTrimmed"
+			PackageName="de.knowwe.core.kdom.sectionFinder" Value=''>
+
+		</SectionFinder>
+
+		<Color>green</Color>
 
 
 	</ObjectType>

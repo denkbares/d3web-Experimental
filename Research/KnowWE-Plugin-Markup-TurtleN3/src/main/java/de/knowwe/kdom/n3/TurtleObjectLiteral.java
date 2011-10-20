@@ -23,20 +23,25 @@
 package de.knowwe.kdom.n3;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquoted;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import java.util.regex.Pattern;
 import de.knowwe.kdom.renderer.GenericHTMLRenderer;
-import de.knowwe.kdom.n3.TurtlePredicateSection;
-import de.knowwe.kdom.n3.TurtleObjectSection;
+import de.knowwe.kdom.n3.TurtleObjectLiteralText;
+import de.knowwe.kdom.AnonymousType;
 
-public class TurtlePredSentence extends AbstractType {
+public class TurtleObjectLiteral extends AbstractType {
 
-	public TurtlePredSentence() {
+	public TurtleObjectLiteral() {
+		AnonymousType before = new AnonymousType("Before");
+		before.setSectionFinder(new RegexSectionFinder("'"));
+		childrenTypes.add(before);
+		AnonymousType after = new AnonymousType("After");
+		after.setSectionFinder(new RegexSectionFinder("'"));
+		childrenTypes.add(after);
+		childrenTypes.add(new TurtleObjectLiteralText());
+		setSectionFinder(new RegexSectionFinder("'(.*?)'", Pattern.DOTALL, 0));
 
-		childrenTypes.add(new TurtlePredicateSection());
-		childrenTypes.add(new TurtleObjectSection());
-		setSectionFinder(new SplitSectionFinderUnquoted(";"));
-
-		setCustomRenderer(new GenericHTMLRenderer<TurtlePredSentence>("span", new String[] {"style", "color: blue;", "title", "TurtlePredSentence"}));
+		setCustomRenderer(new GenericHTMLRenderer<TurtleObjectLiteral>("span", new String[] {"style", "color: yellow;", "title", "TurtleObjectLiteral"}));
 	}
 
 }

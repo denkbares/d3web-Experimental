@@ -22,25 +22,24 @@
 
 package de.knowwe.kdom.n3;
 
-import java.util.regex.Pattern;
-
-import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.kdom.AnonymousType;
-import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
+import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
-import de.knowwe.kdom.n3.TurtlePredicate;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
+import java.util.regex.Pattern;
 import de.knowwe.kdom.renderer.GenericHTMLRenderer;
+import de.knowwe.kdom.n3.TurtlePredicate;
+import de.knowwe.kdom.AnonymousType;
 
-public class TurtlePredicateSectiom extends AbstractType {
+public class TurtlePredicateSection extends AbstractType {
 
-	public TurtlePredicateSectiom() {
+	public TurtlePredicateSection() {
 
 		childrenTypes.add(new TurtlePredicate());
 		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder("([^\\s]*::)", Pattern.DOTALL, 1));
 		setSectionFinder(c);
 		c.addConstraint(AtMostOneFindingConstraint.getInstance());
-		//setCustomRenderer(new GenericHTMLRenderer<TurtlePredicateSectiom>("span", new String[] {"style", "color: green;", "title", "TurtlePredicateSectiom"}));
+		setCustomRenderer(new GenericHTMLRenderer<TurtlePredicateSection>("span", new String[] {"style", "color: green;", "title", "TurtlePredicateSection"}));
 	}
 
 }
