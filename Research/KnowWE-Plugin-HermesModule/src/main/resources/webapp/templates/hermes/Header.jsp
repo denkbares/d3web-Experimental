@@ -23,10 +23,11 @@
 
   <wiki:Include page="UserBox.jsp" />
 
-  <div class="pagename"><wiki:PageName /></div>
+  <!-- div class="pagename"><wiki:PageName /></div-->
+    <div class="pagename"><img src="images/eule.gif" alt="eule">Hermes Wiki</div>
 
   <div class="searchbox"><wiki:Include page="SearchBox.jsp" /></div>
 
-  <div class="breadcrumbs"><fmt:message key="header.yourtrail"/><wiki:Breadcrumbs /></div>
+  <!-- div class="breadcrumbs"><fmt:message key="header.yourtrail"/><wiki:Breadcrumbs /></div -->
 
 </div>

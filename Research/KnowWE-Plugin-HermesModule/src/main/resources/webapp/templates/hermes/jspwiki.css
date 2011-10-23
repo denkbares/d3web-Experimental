@@ -18,15 +18,21 @@
 
 /* +++ 010 LAYOUT of main ID blocks +++ */
 #wikibody {
-	background: #FFF url(images/background-torus.jpg) 0 0 repeat;
+	background: #DCE6F2;
 	margin:auto;
 	padding:0.25em;
 	max-width:1000px;
 }
 #header, #footer {
+	border-width: 2px;
+	border-style: solid;
+	border-color: #385D8A;
+	background: #C6D9F1;
 	padding:0 0 0 20%;
 }
 #header .applicationlogo {
+	background: url(images/uni-logo.jpg);
+	background-color: #4F81BD;
 	position:absolute;
 	top:3em;
 	left:-16em;
@@ -35,6 +41,9 @@
 	max-width:180px;
 }
 #header .applicationlogospan {
+	border-width: 2px;
+	border-style: solid;
+	border-color: #385D8A;
 	position:relative;
 }
 #footer .applicationlogo,
@@ -51,6 +60,9 @@
 	float:left;
 }
 #header .searchbox {
+	border-width: 2px;
+	border-style: solid;
+	border-color: #385D8A;
 	clear:right;
 	float:right;
 }
@@ -58,6 +70,10 @@
 	clear:both;
 }
 #favorites {
+	border-width: 2px;
+	border-style: solid;
+	border-color: #385D8A;
+	background-color: #C6D9F1;
 	float:left;
 	margin-top:3.75em;
 	width:18%;
@@ -1120,6 +1136,9 @@ a.action.quick2top {
 
 /* +++ 472 PageContent.jsp +++ */
 #pagecontent {
+	border-width: 2px;
+	border-style: solid;
+	border-color: #385D8A;
 	padding:0.5em 0;
 }
 html>body #previewcontent, html>body #info, html>body #pagecontent, html>body #attach, html>body #findcontent {
