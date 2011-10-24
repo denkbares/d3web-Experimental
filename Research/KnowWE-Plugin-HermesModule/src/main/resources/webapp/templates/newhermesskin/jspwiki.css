@@ -17,8 +17,9 @@
  */
 
 /* +++ 010 LAYOUT of main ID blocks +++ */
+
 #wikibody {
-	background: #DCE6F2;
+	/*background: #DCE6F2;*/
 	margin:auto;
 	padding:0.25em;
 	max-width:1000px;
@@ -28,22 +29,23 @@
 	border-style: solid;
 	border-color: #385D8A;
 	background: #C6D9F1;
+	width: 80%;
+	max-width: 800px;
+	height: 80px;
+	margin-bottom: 0px;
 	padding:0 0 0 20%;
 }
 #header .applicationlogo {
-	background: url(images/uni-logo.jpg);
 	background-color: #4F81BD;
 	position:absolute;
-	top:3em;
+	top:0.3em;
 	left:-16em;
 	right:auto;
 	width:18%;
 	max-width:180px;
 }
 #header .applicationlogospan {
-	border-width: 2px;
-	border-style: solid;
-	border-color: #385D8A;
+	top:1em;
 	position:relative;
 }
 #footer .applicationlogo,
@@ -57,7 +59,13 @@
 	float:right;
 }
 #header .pagename {
-	float:left;
+	margin-left: auto;
+	margin-right: auto;
+	/*float:left;*/
+}
+#header .eule-logo {
+	background-image:url(images/eule.gif);
+	background-position:0 0;
 }
 #header .searchbox {
 	border-width: 2px;
@@ -65,6 +73,9 @@
 	border-color: #385D8A;
 	clear:right;
 	float:right;
+	margin-top: 0%;
+	margin-right: 1%;
+	padding: 0px;
 }
 #header .breadcrumbs {
 	clear:both;
@@ -75,9 +86,12 @@
 	border-color: #385D8A;
 	background-color: #C6D9F1;
 	float:left;
-	margin-top:3.75em;
+	margin-top:0em;
 	width:18%;
 	padding:0.5em;
+	margin: auto; /* Div soll zentriert werden */
+	height: 496px;
+	max-height: 100%;
 }
 #favorites .userbox {
 	border:1px solid #ddd;
@@ -91,7 +105,10 @@
 #footer .copyright { 
 }
 #content { 
-	margin:1em 0;
+	margin: 0px 0;
+	height: 500px;
+	max-height: 100%;
+	width: 100%;
 }
 /*#wikibody.fav-left*/ #page, #wikibody.fav-right #favorites {
 	float:right;
@@ -113,8 +130,11 @@
 	left:auto;
 	right:2em; 
 }
-#page { 
-	width:80%;
+#page {
+	border: 2px solid #385D8A;
+	margin: 8px 0px 0px 8px;
+	width:79%;
+	height: 100%;
 	text-align:justify;
 }
 #wikibody.fav-slide #page {
@@ -168,7 +188,7 @@ table {
 	border-collapse:collapse; 
 	border-spacing:0;
 	empty-cells:show; 
-text-align:left;
+	text-align:left;
 }
 
 h1, h2, h3, h4, p, blockquote, label, ul, ol, dl, hr, .hr, .quote {
@@ -195,6 +215,9 @@ hr, .hr, .clearbox {
 	line-height:1.4;
 	font-weight:bold;
 	margin-bottom:0.5em;
+	margin-top: 0.5em;
+	margin-left: auto;
+    margin-right: auto;
 }
 h2, h3, h4 {
 	clear:left;
@@ -337,7 +360,11 @@ a:hover {
 }
 a:focus {
 }
-a.wikipage {
+a.wikipage {	
+}
+.leftmenu .wikipage {
+	border: 2px solid #385D8A;
+	padding: 20 20 20 20;
 }
 a.createpage {
 	color:red;
@@ -388,13 +415,13 @@ img.attlink {
 } 
 .applicationlogo a {
 	display:block;
-	height:152px;
-	width:185px;
+	height:72px;
+	width:169px;
 	overflow:hidden;
 	margin-left:auto;
 	margin-right:auto;
 	text-indent:-1000px;
-	background-image:url(images/eule-uni.gif);
+	background-image:url(images/uni-logo.gif);
 	background-repeat:no-repeat;
 	background-position:0 0;
 }
@@ -1025,7 +1052,7 @@ th.changenote, td.changenote {
 }
 .pageactions li ul {
 	position:absolute;
-	background:white;
+	background:E5F9FF;
 	border:2px solid #ddd;
 	left:0; /*right:2.5em; */
 	z-index:10;
@@ -1065,6 +1092,7 @@ th.changenote, td.changenote {
 	padding:0.25em 0.5em;
 	text-decoration:none;
 	cursor:pointer;
+	background:#E5F9FF;
 }
 .pageactions a.action {
 	display:block;
@@ -1090,16 +1118,17 @@ a.action.logout {
 	text-decoration:none;
 	line-height:normal;
 	border:1px solid #ddd;		
-	background:#f9f9f9;
+	background:#f9f9f9;	
 	white-space:nowrap;
 }
 a.action.edit, a.action.more {
+	background: #E5F9FF;
 	margin-left:4px;
 	border-bottom:none;
 }
 a.action.more {
 	padding-right:1.5em;
-	background: #f9f9f9 url(images/arrdownsmall.gif) 95% center no-repeat;
+	background: #E5F9FF url(images/arrdownsmall.gif) 95% center no-repeat;
 }
 a.action.quick2top, a.action.quick2bottom {
  	overflow:hidden;
@@ -1235,6 +1264,7 @@ html>body #previewcontent, html>body #info, html>body #pagecontent, html>body #a
 
 /* +++ 490 ViewTemplate +++ */
 body.view {
+	background: #DCE6F2;
 	/*background-image:white;*/ 
 }
 
@@ -1476,7 +1506,8 @@ table.calendar tr.weekdays {
 	border:1px solid #ddd;
 	border-bottom:none;
 	color:gray;
-	background:#f9f9f9;
+	/*background:#f9f9f9;*/
+	background:#E5F9FF;
 	text-decoration:none;
 	cursor:pointer;
 	white-space:nowrap;
@@ -1491,7 +1522,6 @@ table.calendar tr.weekdays {
 	border-bottom:1px solid white;
 	cursor:default;
 }
-
 
 /* +++ 910 Accordion +++ */
 .accordion, .tabbedAccordion {

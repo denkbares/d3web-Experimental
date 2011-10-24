@@ -8,7 +8,7 @@
   WikiContext c = WikiContext.findContext(pageContext);
   String frontpage = c.getEngine().getFrontPage(); 
 %> 
-<div id="footer">
+<!-- div id="footer">
 
   <div class="applicationlogo" > 
     <a href="<wiki:LinkTo page='<%=frontpage%>' format='url' />"
@@ -27,4 +27,4 @@
     <wiki:RSSImageLink title="Aggregate the RSS feed" />
   </div>
 
-</div>
+</div-->

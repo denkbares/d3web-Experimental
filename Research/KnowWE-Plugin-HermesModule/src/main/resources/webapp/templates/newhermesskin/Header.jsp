@@ -17,17 +17,15 @@
     </div>
   </span>
 
-  <div class="titlebox"><wiki:InsertPage page="TitleBox"/></div>
-
-  <div class="companylogo"></div>
-
-  <wiki:Include page="UserBox.jsp" />
-
   <!-- div class="pagename"><wiki:PageName /></div-->
-    <div class="pagename"><img src="images/eule.gif" alt="eule">Hermes Wiki</div>
+    <div class="pagename">
+    	<span class="eule-logo"></span>Hermes Wiki
+    </div>
 
-  <div class="searchbox"><wiki:Include page="SearchBox.jsp" /></div>
-
+	<wiki:Include page="UserBox.jsp" />
+	<span class="searchbox">
+		<wiki:Include page="SearchBox.jsp" />
+  	</span>
   <!-- div class="breadcrumbs"><fmt:message key="header.yourtrail"/><wiki:Breadcrumbs /></div -->
 
 </div>
