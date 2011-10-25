@@ -53,6 +53,7 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 		if (inputSec != null) {
 			String content = InputFieldCellContent.InputRenderer.getStoredContentForInput(
 					inputSec, 0, user.getUserName());
+			if (content == null) content = "";
 			if (content.length() > 1) {
 				previousInputExists = true;
 

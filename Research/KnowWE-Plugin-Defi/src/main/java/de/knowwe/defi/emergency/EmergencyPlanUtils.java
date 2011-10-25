@@ -18,6 +18,14 @@
  */
 package de.knowwe.defi.emergency;
 
+import java.util.List;
+
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.defi.table.TableEntryType;
+
 
 /**
  * 
@@ -26,49 +34,133 @@ package de.knowwe.defi.emergency;
  */
 public class EmergencyPlanUtils {
 
+	private static final String CARDIOLOGIST = "tel2";
+	private static final String PHYSICIAN = "tel3";
+	private static final String EMERGENCY_PERSON = "tel4";
+	private static final String MEDIC = "med";
+	private static final int NUMBER_OF_MEDICS = 5;
+	private static final String BLOOD_TYPE = "blood";
+	private static final String DIAGNOSIS = "disease";
+	private static final String ICD_MODEL = "model";
+
+	/**
+	 * tableid: tel2 INPUT0: Cardiologist INPUT1: Tele
+	 * 
+	 * @created 25.10.2011
+	 * @param user
+	 * @return
+	 */
 	public static String getCardiologist(String user) {
-		String doctor = "Dr. Oetker ";
-		String phonenumber = "0190/1234567";
+		String entry = getTableEntry(CARDIOLOGIST, user);
+		String doctor = getEntryLine(entry, "INPUT0");
+		String phonenumber = getEntryLine(entry, "INPUT1");
+		
 		return doctorTemplate(doctor, phonenumber);
 	}
 
+	/**
+	 * tableid: tel3 INPUT0: Physician INPUT1: Tele
+	 * 
+	 * @created 25.10.2011
+	 * @param user
+	 * @return
+	 */
 	public static String getPhysician(String user) {
-		String doctor = "Dr. Best";
-		String phonenumber = "0666/111111";
+		String entry = getTableEntry(PHYSICIAN, user);
+		String doctor = getEntryLine(entry, "INPUT0");
+		String phonenumber = getEntryLine(entry, "INPUT1");
+
 		return doctorTemplate(doctor, phonenumber);
 	}
 
+	/**
+	 * tableid: tel4 INPUT0: EmergencyPerson INPUT1: Tele
+	 * 
+	 * @created 25.10.2011
+	 * @param user
+	 * @return
+	 */
 	public static String getEmergencyPerson(String user) {
-		String doctor = "Daisy Duck";
-		String phonenumber = "0999/9876543";
+		String entry = getTableEntry(EMERGENCY_PERSON, user);
+		String doctor = getEntryLine(entry, "INPUT0");
+		String phonenumber = getEntryLine(entry, "INPUT1");
+
 		return doctorTemplate(doctor, phonenumber);
 	}
 
+	/**
+	 * tableid: med1, med2, med3, med4, med5 INPUT0: drug INPUT1: dose
+	 * 
+	 * @created 25.10.2011
+	 * @param user
+	 * @return
+	 */
 	public static String getMedics(String user) {
-
+		String entry, drug, dose;
 		StringBuilder html = new StringBuilder();
 
-		html.append(medTemplate("Benazepril", "XX mg"));
-		html.append(medTemplate("Adenosin", "XX mg"));
-		html.append(medTemplate("Retard", "XX mg"));
+		for (int i = 1; i <= NUMBER_OF_MEDICS; i++) {
+			entry = getTableEntry(MEDIC + i, user);
+			drug = getEntryLine(entry, "INPUT0");
+			dose = getEntryLine(entry, "INPUT1");
+
+			html.append(medTemplate(drug, dose));
+
+		}
 
 		return html.toString();
 	}
 
+	/**
+	 * tableid: blood INPUT0: blood group
+	 * 
+	 * @created 25.10.2011
+	 * @param user
+	 * @return
+	 */
 	public static String getBloodType(String user) {
-		return "A+";
+		String entry = getTableEntry(BLOOD_TYPE, user);
+
+		return getEntryLine(entry, "INPUT0");
 	}
 
+	/**
+	 * tableid: disease INPUT0: diagnosis
+	 * 
+	 * @created 25.10.2011
+	 * @param user
+	 * @return
+	 */
 	public static String getDiagnosis(String user) {
-		return "Linksherzinsuffizienz";
+		String entry = getTableEntry(DIAGNOSIS, user);
+
+		return getEntryLine(entry, "INPUT0");
 	}
 
+	/**
+	 * tableid: model INPUT0: title
+	 * 
+	 * @created 25.10.2011
+	 * @param user
+	 * @return
+	 */
 	public static String getICDModelTitle(String user) {
-		return "Biotronik";
+		String entry = getTableEntry(ICD_MODEL, user);
+
+		return getEntryLine(entry, "INPUT0");
 	}
 
+	/**
+	 * tableid: model INPUT1: type
+	 * 
+	 * @created 25.10.2011
+	 * @param user
+	 * @return
+	 */
 	public static String getICDModelID(String user) {
-		return "XYZ 1234";
+		String entry = getTableEntry(ICD_MODEL, user);
+
+		return getEntryLine(entry, "INPUT1");
 	}
 
 	private static String medTemplate(String med, String dosis) {
@@ -93,5 +185,34 @@ public class EmergencyPlanUtils {
 				+ "</th>"
 				+ "</tr>"
 				+ "</table>";
+	}
+
+	private static String getTableEntry(String id, String user) {
+		List<Section<TableEntryType>> tableEntries;
+
+		try {
+			KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
+					KnowWEEnvironment.DEFAULT_WEB, user + "_data");
+			tableEntries = Sections.findSuccessorsOfType(article.getSection(), TableEntryType.class);
+			for (Section<TableEntryType> sec : tableEntries) {
+				if (TableEntryType.getAnnotation(sec, "tableid").equals(id)) return sec.getText();
+			}
+		}
+		catch (NullPointerException e) {
+			// e.printStackTrace();
+		}
+
+		return "";
+	}
+
+	private static String getEntryLine(String entry, String identifier) {
+		String[] lines = entry.split("\n");
+		identifier += ":";
+
+		for (String line : lines) {
+			if (line.startsWith(identifier)) return line.split(identifier)[1];
+		}
+
+		return "";
 	}
 }
