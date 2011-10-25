@@ -26,6 +26,7 @@ import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -104,6 +105,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		Iterator<KnowWEArticle> it = KnowWEEnvironment.getInstance().getArticleManager(
 				KnowWEEnvironment.DEFAULT_WEB).getArticleIterator();
 		List<Section<? extends Forum>> forums = new LinkedList<Section<? extends Forum>>();
+		List<Section<? extends Forum>> chats = new LinkedList<Section<? extends Forum>>();
 		List<Section<? extends Forum>> other = new LinkedList<Section<? extends Forum>>();
 		String pageName, unit, topic, lastVisit;
 		boolean noForum = true, newEntry = false;
@@ -189,6 +191,10 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 						other.remove(sec);
 						noForum = false;
 					}
+					else if (topic.startsWith("Persönliche Nachrichten(")) {
+						chats.add(sec);
+						other.remove(sec);
+					}
 				}
 				if (noForum) fm.append("<li>Noch keine Foren vorhanden</p></li>");
 				noForum = true;
@@ -249,6 +255,83 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		}
 
 		/* ######################################### */
+		/* # ------------BENUTZER-CHAT------------ # */
+		/* ######################################### */
+		fm.append("<tr><th colspan=2>" + USER_CHAT_LABEL + "</th></tr>");
+		JSPWikiKnowWEConnector wc = new JSPWikiKnowWEConnector(WikiEngine.getInstance(
+				KnowWEEnvironment.getInstance().getContext(), null));
+		String[] users = wc.getAllUsers();
+		String[] activeUsers = wc.getAllActiveUsers();
+
+		for (int i = 0; i < users.length; i++) {
+			if (!users[i].startsWith("Patient") && !users[i].equals(userContext.getUserName())) {
+				newEntry = false;
+				noForum = true;
+				// Sortiere Namen alphabetisch
+				String[] names = {
+						userContext.getUserName(), users[i] };
+				Arrays.sort(names);
+				// Hole Section des entsprechenden Chats
+				for (Section<? extends Forum> sec : chats) {
+					topic = getForumAttribute("topic", sec.getText());
+					if (topic.equals("Persönliche Nachrichten(" + names[0] + "," + names[1] + ")")) {
+						noForum = false;
+
+						// Testen ob es neue Beiträge gibt
+						lastVisit = logPages.get(sec.getTitle());
+						if (userContext.userIsAsserted()) {
+
+							// Benutzer war noch nicht in diesem Forum
+							if (lastVisit == null) {
+								// Hat er es selbst erstellt?
+								if (userContext.getUserName().equals(getAuthor(sec.getText()))) {
+									// Gibt es mehr als den eigenen Eintrag?
+									numberOfNewEntries = getNumberOfNewEntries(sec.getText(),
+											"01.01.1900 00:00") - 1;
+								}
+								else numberOfNewEntries = -1;
+							}
+							else {
+								numberOfNewEntries = getNumberOfNewEntries(sec.getText(),
+										lastVisit);
+							}
+
+							if (numberOfNewEntries != 0) newEntry = true;
+						}
+
+						break;
+					}
+
+				}
+
+				fm.append("<tr class='active'><td>");
+
+				fm.append("<div class='userchat'>");
+				// Avatar
+				fm.append("<img src=\"KnowWEExtension/images/"
+						+ getAvatar(users[i])
+						+ ".png\" height=\"80px\" width=\"80px\" alt=\"avatar\" />");
+
+				// Username + status
+				fm.append("<span class='userchat'><a href='" + JSPWikiKnowWEConnector.LINK_PREFIX
+						+ users[i] + "'>"
+						+ users[i] + "</a><br />- " + getStatus(activeUsers, users[i])
+						+ " -</span>");
+
+				// "Persönliche Nachricht"-Button
+				fm.append("<input class='fm_open' type='button' value='"
+						+ PERSONAL_MESSAGE_BUTTON
+						+ "' onclick='newChat(\"" + names[0] + "\", \"" + names[1]
+						+ "\");return false' />");
+				fm.append("</div>");
+
+				if (newEntry) fm.append("</td><td class='fm_new'></td></tr>");
+				else fm.append("</td><td class='fm_old'></td></tr>");
+			}
+
+		}
+
+		/* ######################################### */
 		/* # -----------SONSTIGE-FOREN------------ # */
 		/* ######################################### */
 		fm.append("<tr><th colspan=2>" + LEFTOVER_LABEL + "</th></tr>");
@@ -264,6 +347,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		// Auflistung der Foren
 		fm.append("<div name='" + pageName + "_forums'><ul>");
 		for (Section<? extends Forum> sec : other) {
+			newEntry = false;
 			// Hole Attribute aus Forum-XML
 			topic = getForumAttribute("topic", sec.getText());
 			if (topic == "") topic = sec.getTitle();
@@ -328,45 +412,6 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		}
 		else {
 			fm.append("</td><td class='fm_old'></td></tr>");
-		}
-
-		/* ######################################### */
-		/* # ------------BENUTZER-CHAT------------ # */
-		/* ######################################### */
-		fm.append("<tr><th colspan=2>" + USER_CHAT_LABEL + "</th></tr>");
-		JSPWikiKnowWEConnector wc = new JSPWikiKnowWEConnector(WikiEngine.getInstance(
-				KnowWEEnvironment.getInstance().getContext(), null));
-		String[] users = wc.getAllUsers();
-		String[] activeUsers = wc.getAllActiveUsers();
-
-		for (int i = 0; i < users.length; i++) {
-			if (!users[i].startsWith("Patient")) {
-				// Hole Section des entsprechenden Chats
-				//
-
-				fm.append("<tr class='active'><td>");
-
-				fm.append("<div class='userchat'>");
-				// Avatar
-				fm.append("<img src=\"KnowWEExtension/images/"
-						+ getAvatar(users[i])
-						+ ".png\" height=\"80px\" width=\"80px\" alt=\"avatar\" />");
-
-				// Username + status
-				fm.append("<span class='userchat'><a href='" + JSPWikiKnowWEConnector.LINK_PREFIX
-						+ users[i] + "'>"
-						+ users[i] + "</a><br />- " + getStatus(activeUsers, users[i])
-						+ " -</span>");
-
-				// "Persönliche Nachricht"-Button
-				fm.append("<input class='fm_open' type='button' value='"
-						+ PERSONAL_MESSAGE_BUTTON
-						+ "' onclick='alert(\"Funktioniert noch nicht.\");return false' />");
-				fm.append("</div>");
-
-				fm.append("</td><td class='fm_new'></td></tr>");
-			}
-
 		}
 
 		fm.append("</table>");

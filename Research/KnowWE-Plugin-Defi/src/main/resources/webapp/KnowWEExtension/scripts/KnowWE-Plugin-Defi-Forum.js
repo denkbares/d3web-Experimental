@@ -50,3 +50,24 @@ function sendforumForm(id) {
 	
 	new _KA(options).send();
 }
+
+function newChat(user1, user2) {
+			
+	var params = {
+			action : 'PersonalMessageAction',
+			user1 : user1,
+			user2 : user2
+	}
+
+	var options = {
+			url : KNOWWE.core.util.getURL(params),
+			response : {
+				action : '',
+				ids : [ '' ],
+				fn : function(){ setTimeout ( 'window.location = "Wiki.jsp?page=Persönliche Nachrichten('+user1+','+user2+')"',200 ); }
+			}
+	}
+	
+	
+	new _KA(options).send();
+}

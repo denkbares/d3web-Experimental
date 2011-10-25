@@ -32,7 +32,7 @@ import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 
 /**
- * Reachable from the ForumMenu. Buildes new Forum.
+ * Reachable from the ForumMenu. Builds new forum.
  * 
  * @author dupke
  */
