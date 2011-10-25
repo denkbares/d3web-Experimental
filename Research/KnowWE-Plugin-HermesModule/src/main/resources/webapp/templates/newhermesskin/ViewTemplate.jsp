@@ -34,16 +34,20 @@
   <div id="content">
 
     <div id="page">
-	      <wiki:Include page="PageActionsTop.jsp"/>
-	      <wiki:Content/>
-	      <wiki:Include page="PageActionsBottom.jsp"/>
+		<wiki:UserCheck status="authenticated">
+			<wiki:Include page="PageActionsTop.jsp"/>
+		</wiki:UserCheck>
+	      	<wiki:Content/>
+		<wiki:UserCheck status="authenticated">
+	      	<wiki:Include page="PageActionsBottom.jsp"/>
+	    </wiki:UserCheck>
     </div>
     <wiki:Include page="Favorites.jsp"/>
 
 	<div class="clearbox"></div>
   </div>
 
-  <wiki:Include page="Footer.jsp" />
+  <!--  wiki:Include page="Footer.jsp" / -->
 
 </div>
 

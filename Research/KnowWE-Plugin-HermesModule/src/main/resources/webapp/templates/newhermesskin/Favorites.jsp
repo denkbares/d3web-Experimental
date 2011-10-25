@@ -96,7 +96,7 @@
     </wiki:NoSuchPage>
   </div>
   
-  <div class="leftmenufooter">
+  <!-- div class="leftmenufooter">
     <wiki:InsertPage page="LeftMenuFooter" />
     <wiki:NoSuchPage page="LeftMenuFooter">
       <div class="error">
@@ -105,16 +105,16 @@
         </wiki:EditLink>
       </div>
     </wiki:NoSuchPage>
-  </div>
+  </div -->
 
   </wiki:Permission>
 
   </wiki:CheckRequestContext>
   
-  <div class="wikiversion"><%=Release.APPNAME%> v<%=Release.getVersionString()%>
+  <!-- div class="wikiversion"><%=Release.APPNAME%> v<%=Release.getVersionString()%>
   <span class="rssfeed">
     <wiki:RSSImageLink title='<%=LocaleSupport.getLocalizedMessage(pageContext,"fav.aggregatewiki.title")%>' />
   </span>
-  </div>  
+  </div -->  
   
 </div>

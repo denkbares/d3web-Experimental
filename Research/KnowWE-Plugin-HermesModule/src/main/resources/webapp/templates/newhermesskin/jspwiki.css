@@ -45,7 +45,7 @@
 	max-width:180px;
 }
 #header .applicationlogospan {
-	top:1em;
+	float: left;
 	position:relative;
 }
 #footer .applicationlogo,
@@ -58,14 +58,32 @@
 #header .userbox {
 	float:right;
 }
+#pagename-container {
+}
 #header .pagename {
-	margin-left: auto;
-	margin-right: auto;
-	/*float:left;*/
+	background-image:url(images/eule-kleiner-transparent.gif);
+	background-repeat: no-repeat;
+	/*float: left;
+	padding-top: 00px;
+	padding-bottom: 00px;
+	padding-left: 80px;
+	margin-left: 200px;
+	margin-bottom: 0px;
+	margin-top: 5px;
+	height: 72px;*/
+	float: left;
+	height: 72px;
+	margin-left: 200px;
+	margin-top: 3px;
+	max-width: 300px;
+	padding-left: 90px;
+	width: 30%;
 }
 #header .eule-logo {
-	background-image:url(images/eule.gif);
-	background-position:0 0;
+	background-image:url(images/eule-klein.gif);
+	float: left;
+	height: 122px;
+	position: relative;
 }
 #header .searchbox {
 	border-width: 2px;
@@ -215,7 +233,6 @@ hr, .hr, .clearbox {
 	line-height:1.4;
 	font-weight:bold;
 	margin-bottom:0.5em;
-	margin-top: 0.5em;
 	margin-left: auto;
     margin-right: auto;
 }
@@ -929,6 +946,12 @@ label[for="edittoc"] {
 	overflow:hidden;
 	padding:0.5em 0;
 }
+
+#header .user-search-box {
+	position : relative;
+	float:right;
+}
+
 #favorites .userbox a.action, #favorites .userbox .username {
 	float:left;
 	display:block;
@@ -1118,7 +1141,7 @@ a.action.logout {
 	text-decoration:none;
 	line-height:normal;
 	border:1px solid #ddd;		
-	background:#f9f9f9;	
+	background:#E5F9FF;	
 	white-space:nowrap;
 }
 a.action.edit, a.action.more {

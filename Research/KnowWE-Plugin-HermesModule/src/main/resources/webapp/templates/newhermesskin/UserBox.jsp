@@ -7,28 +7,30 @@
 <%
   WikiContext c = WikiContext.findContext(pageContext);
 %>
-<div class="userbox">
-
-  <wiki:UserCheck status="anonymous">
-    <span class="username anonymous">
-      <fmt:message key="fav.greet.anonymous" />
-    </span>
-  </wiki:UserCheck>
-  <wiki:UserCheck status="asserted">
-    <span class="username asserted">
-      <fmt:message key="fav.greet.asserted">
-      <fmt:param><wiki:Translate>[<wiki:UserName />]</wiki:Translate></fmt:param>
-    </fmt:message>
-    </span>
-  </wiki:UserCheck>
-  <wiki:UserCheck status="authenticated">
-    <span class="username authenticated">
-      <fmt:message key="fav.greet.authenticated">
-        <fmt:param><wiki:Translate>[<wiki:UserName />]</wiki:Translate></fmt:param>
-      </fmt:message>
-    </span>
-  </wiki:UserCheck>
-
+<span class="userbox">
+  <div class="greet-user">
+  	<wiki:UserCheck status="anonymous">
+    	<span class="username anonymous">
+     	 <fmt:message key="fav.greet.anonymous" />
+    	</span>
+  	</wiki:UserCheck>
+  	<wiki:UserCheck status="asserted">
+    	<span class="username asserted">
+      	<fmt:message key="fav.greet.asserted">
+      	<fmt:param><wiki:Translate>[<wiki:UserName />]</wiki:Translate></fmt:param>
+    	</fmt:message>
+    	</span>
+  	</wiki:UserCheck>
+  	<wiki:UserCheck status="authenticated">
+    	<span class="username authenticated">
+      	<fmt:message key="fav.greet.authenticated">
+       	 <fmt:param><wiki:Translate>[<wiki:UserName />]</wiki:Translate></fmt:param>
+     	 </fmt:message>
+    	</span>
+  	</wiki:UserCheck>
+  </div>
+  
+  <div class="user-action-buttons">
   <%-- action buttons --%>
   <wiki:UserCheck status="notAuthenticated">
   <wiki:CheckRequestContext context='!login'>
@@ -59,5 +61,5 @@
   </wiki:CheckRequestContext>
 
   <div class="clearbox"></div>
-
-</div>
+  </div>
+</span>
