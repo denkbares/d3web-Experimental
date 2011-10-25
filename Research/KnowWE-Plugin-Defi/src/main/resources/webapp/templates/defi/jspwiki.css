@@ -82,7 +82,7 @@
 	height:19px;
 	font-size:18px;
 	text-align:center;
-	padding:0.1em 0 0.2em !important;
+	padding:0 0 0.3em !important;
 	margin:0 !important;
 	border-top:0;
 	border-left:0;
@@ -125,20 +125,23 @@
 	background-color:#F9F9F9;
 	display:inline-block;
 	font-size:18px;
-	padding:0.1em 0 0.2em !important;
+	padding:0 0 0.3em !important;
 	margin:0 !important;
 	text-align:center;
 	border-bottom:1px solid #063D79;
 }
-.userbox .notfall, .userbox .avatar {
-	width:110px;
-	height:107px;
+.userbox .notfall, .userbox .message {
+	height:107px !important;
+}
+.userbox .avatar {
+	margin:5px 0 -1px 0;
 }
 .userbox .message {
-	width:242px;
+	width:245px;
+	height:101px !important;
 	font-weight:bold;
 	font-size:18px;
-	margin:5px 0 0 0;
+	padding:3px 7px;
 }
 .userbox .message a.princ {
 	display:block;
@@ -147,8 +150,9 @@
 	font-size:20px;
 }
 .userbox div.notfall {
+	height:101px !important;
+	width:100px;
 	margin:3px 0 0 0;
-	height:104px;
 }
 .userbox a.notfall {
 	text-decoration:none;	

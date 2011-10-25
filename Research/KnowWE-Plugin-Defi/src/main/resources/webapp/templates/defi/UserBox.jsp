@@ -19,7 +19,7 @@
 <fmt:setBundle basename="templates.default" />
 <%
 	WikiContext c = WikiContext.findContext(pageContext);
-	String avatar = "A01";
+	String avatar = "1000px-Comic_image_missing.svg.jpg";
 	JSPWikiUserContext user = new JSPWikiUserContext(c, new HashMap<String, String>());
 	if (user.userIsAsserted()) {
 		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(
@@ -92,8 +92,8 @@
 		if (user.userIsAsserted()) {
 	%>
 	<div class="avatar">
-		<img src="KnowWEExtension/images/<%=avatar%>.png" height="100px"
-			width="100px" alt="avatar" />
+		<img src="KnowWEExtension/images/avatars/<%=avatar%>" height="95px"
+			width="95px" alt="avatar" style="border:1px solid #063D79;" />
 	</div>
 	<%
 		}

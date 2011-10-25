@@ -308,9 +308,9 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 				fm.append("<div class='userchat'>");
 				// Avatar
-				fm.append("<img src=\"KnowWEExtension/images/"
+				fm.append("<img src=\"KnowWEExtension/images/avatars/"
 						+ getAvatar(users[i])
-						+ ".png\" height=\"80px\" width=\"80px\" alt=\"avatar\" />");
+						+ "\" height=\"80px\" width=\"80px\" alt=\"avatar\" />");
 
 				// Username + status
 				fm.append("<span class='userchat'><a href='" + JSPWikiKnowWEConnector.LINK_PREFIX
@@ -657,7 +657,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		catch (NullPointerException e) {
 			// e.printStackTrace();
 		}
-		if (avatar == null || avatar == "") avatar = "A01";
+		if (avatar == null || avatar == "") avatar = "1000px-Comic_image_missing.svg.jpg";
 
 		return avatar;
 	}

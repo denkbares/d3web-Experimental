@@ -59,9 +59,9 @@ public class UserlistTaghandler extends AbstractTagHandler {
 		for (int i = 0; i < users.length; i++) {
 			if (!users[i].startsWith("Patient")) {
 			userlist.append("<tr>");
-			userlist.append("<td><img src=\"KnowWEExtension/images/"
-					+ getAvatar(users[i])
-					+ ".png\" height=\"80px\" width=\"80px\" alt=\"avatar\" /></td>");
+				userlist.append("<td><img src=\"KnowWEExtension/images/avatars/"
+						+ getAvatar(users[i])
+						+ "\" height=\"80px\" width=\"80px\" alt=\"avatar\" /></td>");
 			userlist.append("<td><a href='" + JSPWikiKnowWEConnector.LINK_PREFIX + users[i] + "'>"
 					+ users[i]
 					+ "</a><br />- " + getStatus(activeUsers, users[i])
@@ -93,7 +93,7 @@ public class UserlistTaghandler extends AbstractTagHandler {
 		catch (NullPointerException e) {
 			// e.printStackTrace();
 		}
-		if (avatar == null || avatar == "") avatar = "A01";
+		if (avatar == null || avatar == "") avatar = "1000px-Comic_image_missing.svg.jpg";
 
 		return avatar;
 	}
