@@ -51,11 +51,11 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 			return "<p class=\"info\">Bitte melden Sie sich an, um die Seite sehen zu können!</p>";
 		}
 
-		html.append("<h1>Abschluss-Fragebogen</h1>");
-
-		html.append("Bei den folgenden Fragen geht es um Ihr Resümee des Programms und der Plattform im "
-				+ "Allgemeinen und auf bestimmte Teilaspekte bezogen. "
-				+ "Bitte Antworten Sie so ehrlich wie möglich und seien Sie ruhig kritisch.");
+		// html.append("<h1>Abschluss-Fragebogen</h1>");
+		// html.append("Bei den folgenden Fragen geht es um Ihr Resümee des Programms und der Plattform im "
+		// + "Allgemeinen und auf bestimmte Teilaspekte bezogen. "
+		// +
+		// "Bitte Antworten Sie so ehrlich wie möglich und seien Sie ruhig kritisch.");
 
 		String path = KnowWEEnvironment.getInstance().getWikiConnector().getSavePath();
 		String filename = user.getUserName().toLowerCase() + ".xml";

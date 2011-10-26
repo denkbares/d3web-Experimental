@@ -61,7 +61,7 @@
 <div class="userbox">
 	<span>Pers&ouml;nliche Funktionen</span>
 	<div class="notfall">
-		<a href="<%=notfallplan%>" target="_blank" class="notfall"
+		<a href="<%=notfallplan%>" class="notfall"
 			title="test"> <img src="KnowWEExtension/images/notfall.png"
 			width="73px" height="69px" alt="Notfallplan" />
 			<p>Notfallplan</p> </a>

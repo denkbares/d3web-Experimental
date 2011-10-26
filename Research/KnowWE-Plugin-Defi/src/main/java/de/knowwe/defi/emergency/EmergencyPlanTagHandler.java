@@ -46,8 +46,8 @@ public class EmergencyPlanTagHandler extends AbstractHTMLTagHandler {
 		StringBuilder html = new StringBuilder();
 
 		html.append("<a href=\"EmergencyPlan.jsp?user=" + user.getUserName()
-				+ "\" title=\"Notfallplan ansehen!\">");
-		html.append("Notfallplan");
+				+ "\" title=\"&gt;&gt;Notfallplan erzeugen&lt;&lt;\" target=\"_new\">");
+		html.append("&gt;&gt;Notfallplan erzeugen&lt;&lt;");
 		html.append("</a>");
 
 		return html.toString();
