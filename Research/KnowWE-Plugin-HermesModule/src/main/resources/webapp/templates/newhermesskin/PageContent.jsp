@@ -12,8 +12,9 @@
   if( attCount != 0 ) attTitle += " (" + attCount + ")";
 %>
 
-<wiki:TabbedSection defaultTab='${param.tab}' >
-
+<!-- Display this block, if the user is authenticated -->
+<wiki:UserCheck status="authenticated">
+<wiki:TabbedSection defaultTab='${param.tab}'>
   <wiki:Tab id="pagecontent" title='<%=LocaleSupport.getLocalizedMessage(pageContext, "view.tab")%>' accesskey="v">
     <wiki:Include page="PageTab.jsp"/>
     <wiki:PageType type="attachment">
@@ -25,9 +26,9 @@
       <div style="overflow:hidden;">
         <wiki:Translate>[<%= c.getPage().getName()%>]</wiki:Translate>
       </div>
-    </wiki:PageType>    
+    </wiki:PageType> 
   </wiki:Tab>
-
+  
   <wiki:PageExists>
 
   <wiki:PageType type="page">
@@ -37,14 +38,31 @@
     </wiki:Tab>
   </wiki:Permission>
   </wiki:PageType>
-    
+  
   <wiki:Permission permission="edit"> 
     <wiki:Tab id="info" title='<%=LocaleSupport.getLocalizedMessage(pageContext, "info.tab")%>'
              url="<%=c.getURL(WikiContext.INFO, c.getPage().getName())%>"
              accesskey="i" >
     </wiki:Tab>
   </wiki:Permission>
-    
+
   </wiki:PageExists>
 
 </wiki:TabbedSection>
+</wiki:UserCheck>
+
+<!-- Display this block, if the user is NOT authenticated -->
+<wiki:UserCheck status="anonymous">
+
+    <wiki:Include page="PageTab.jsp"/>
+    <wiki:PageType type="attachment">
+      <div class="information">
+	    <fmt:message key="info.backtoparentpage" >
+	      <fmt:param><wiki:LinkToParent><wiki:ParentPageName/></wiki:LinkToParent></fmt:param>
+        </fmt:message>
+      </div>
+      <div style="overflow:hidden;">
+        <wiki:Translate>[<%= c.getPage().getName()%>]</wiki:Translate>
+      </div>
+    </wiki:PageType> 
+</wiki:UserCheck>

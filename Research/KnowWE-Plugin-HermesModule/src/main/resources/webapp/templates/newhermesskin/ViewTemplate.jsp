@@ -34,14 +34,24 @@
   <div id="content">
 
     <div id="page">
+    	<!-- The user is logged in: Show all action buttons -->
 		<wiki:UserCheck status="authenticated">
 			<wiki:Include page="PageActionsTop.jsp"/>
 		</wiki:UserCheck>
 	      	<wiki:Content/>
-		<wiki:UserCheck status="authenticated">
+	    <wiki:UserCheck status="authenticated"> 	
 	      	<wiki:Include page="PageActionsBottom.jsp"/>
 	    </wiki:UserCheck>
+	    
+	    <!-- The user is NOT logged in: Only show page content -->
+	    <wiki:UserCheck status="anonymous">
+     	 	
+ 		</wiki:UserCheck>
+  		<wiki:UserCheck status="asserted">
+			
+  		</wiki:UserCheck>
     </div>
+    
     <wiki:Include page="Favorites.jsp"/>
 
 	<div class="clearbox"></div>

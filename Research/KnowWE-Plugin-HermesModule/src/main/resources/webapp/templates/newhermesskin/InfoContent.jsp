@@ -64,16 +64,20 @@
 
   <wiki:TabbedSection defaultTab="info">
 
+<!-- wiki:UserCheck status="authenticated" -->
   <wiki:Tab id="pagecontent"
          title='<%=LocaleSupport.getLocalizedMessage(pageContext, "actions.view")%>'
      accesskey="v"
 	       url="<%=c.getURL(WikiContext.VIEW, c.getPage().getName())%>">
       <%--<wiki:Include page="PageTab.jsp"/> --%>
   </wiki:Tab>
+<!-- /wiki:UserCheck-->
 
+<!-- wiki:UserCheck-->
   <wiki:Tab id="attach" title="<%= attTitle %>" accesskey="a">
     <wiki:Include page="AttachmentTab.jsp"/>
   </wiki:Tab>
+<!-- /wiki:UserCheck-->
 
   <%-- actual infopage content --%>
   <wiki:Tab id="info" title='<%=LocaleSupport.getLocalizedMessage(pageContext, "info.tab")%>' accesskey="i" >
