@@ -44,7 +44,11 @@ function sendforumForm(id) {
 			response : {
 				action : '',
 				ids : [ '' ],
-				fn : function(){ setTimeout ( 'document.location.reload()', 100 ); }
+				fn : function(){ 
+						var res = this.responseText.split("\n");
+						if(res[0] != "") alert(res[0]); 
+						window.location = "Wiki.jsp?page="+res[1];
+					}
 			}
 	}
 	

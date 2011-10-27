@@ -23,8 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 
 import de.knowwe.core.KnowWEArticleManager;
 import de.knowwe.core.KnowWEEnvironment;
@@ -48,12 +46,11 @@ public class NewForumAction extends AbstractAction {
 		// Nachricht
 		String message = context.getParameter("message");
 		String title = "";
+		String responseString = "\n";
 		GregorianCalendar now = new GregorianCalendar();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(
 				KnowWEEnvironment.DEFAULT_WEB);
-		JOptionPane jop = new JOptionPane(
-				"Ihr Forum wurde erfolgreich erstellt.");
 		String content = "<a href=\"Wiki.jsp?page=Diskussion\"><< zur&uuml;ck zur Diskussion</a><br />\n";
 
 		if (pageName == "") {
@@ -71,8 +68,7 @@ public class NewForumAction extends AbstractAction {
 		content += "<br /><br />\n<a href=\"Wiki.jsp?page=Diskussion\"><< zur&uuml;ck zur Diskussion</a>";
 
 		if (pageName == "") title = "Forum zu " + " \"" + topic + "\"";
-		else
-		title = "Forum zu " + pageName + " (" + topic + ")";
+		else title = "Forum zu " + pageName + " (" + topic + ")";
 		if (mgr.getArticle(title) == null) {
 			KnowWEEnvironment.getInstance().buildAndRegisterArticle(content,
 						title, KnowWEEnvironment.DEFAULT_WEB);
@@ -80,15 +76,11 @@ public class NewForumAction extends AbstractAction {
 						.createWikiPage(title, content, username);
 		}
 		else {
-			jop.setMessage("Es existiert bereits ein Forum zu diesem Thema.");
+			responseString = "Ein Forum zu diesem Thema existiert bereits.\n";
 		}
 
-		JDialog dialog = jop.createDialog(null, "Hinweis");
-		dialog.setAlwaysOnTop(true);
-		dialog.setModal(true);
-		dialog.setVisible(true);
-
+		responseString += title;
 		HttpServletResponse response = context.getResponse();
-		response.sendRedirect("Wiki.jsp?redirect=" + title);
+		response.getWriter().write(responseString);
 	}
 }
