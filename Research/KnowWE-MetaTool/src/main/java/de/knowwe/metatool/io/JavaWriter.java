@@ -30,6 +30,7 @@ import java.util.Map;
 
 import de.knowwe.metatool.ObjectType;
 import de.knowwe.metatool.ParameterizedClass;
+import de.knowwe.metatool.ParserContext;
 import de.knowwe.metatool.QualifiedClass;
 
 /**
@@ -58,16 +59,13 @@ public class JavaWriter implements ObjectTypeWriter {
 	private final String ANONYMOUSCHILDREN = "%ANONYMOUSCHILDREN%";
 	private final String STYLERENDER = "%STYLERENDERER%";
 	private final String INDENT = "		";
+	
+	public static final String SETTING_DEFAULT_RENDERER = "DEFAULT_RENDERER";
+	
+	private ParserContext parserContext;
 
-
-	// Singleton-Pattern
-	private static final JavaWriter instance = new JavaWriter();
-
-	protected JavaWriter() {
-	}
-
-	public static JavaWriter getInstance() {
-		return instance;
+	public JavaWriter(ParserContext parserContext) {
+		this.parserContext = parserContext;
 	}
 
 	@Override
@@ -91,6 +89,7 @@ public class JavaWriter implements ObjectTypeWriter {
 		template = replaceSectionFinder(type.getSectionFinder(), template, constraints);
 		template = replaceConstraints(type.getConstraints(), template);
 		template = replaceRenderer(type.getColor(), type.getClassName(), template);
+
 		// do this at the end, because imports could have been added before
 		template = replaceImports(type.getImports(), template);
 
@@ -199,23 +198,26 @@ public class JavaWriter implements ObjectTypeWriter {
 
 	private String replaceRenderer(String color, String title, String template) {
 		StringBuilder instantiation = new StringBuilder();
-		instantiation.append(INDENT);
-		instantiation.append("setCustomRenderer(new GenericHTMLRenderer<");
-		instantiation.append(title);
-		instantiation.append(">(\"span\", new String[] {");
 		
-		if (color != null) {
-			instantiation.append("\"style\", \"color: ");
-			instantiation.append(color);
-			instantiation.append(";\", ");
-		}
-		
-		instantiation.append("\"title\", \"");
-		instantiation.append(title);
-		instantiation.append("\"}));\n");
-
-		if (instantiation.length() > 0) {
-			instantiation.delete(instantiation.length() - 1, instantiation.length());
+		if ("1".equals(parserContext.getSetting(SETTING_DEFAULT_RENDERER, "1"))) {
+			instantiation.append(INDENT);
+			instantiation.append("setCustomRenderer(new GenericHTMLRenderer<");
+			instantiation.append(title);
+			instantiation.append(">(\"span\", new String[] {");
+			
+			if (color != null) {
+				instantiation.append("\"style\", \"color: ");
+				instantiation.append(color);
+				instantiation.append(";\", ");
+			}
+			
+			instantiation.append("\"title\", \"");
+			instantiation.append(title);
+			instantiation.append("\"}));\n");
+	
+			if (instantiation.length() > 0) {
+				instantiation.delete(instantiation.length() - 1, instantiation.length());
+			}
 		}
 		
 		return template.replaceAll(STYLERENDER, instantiation.toString());

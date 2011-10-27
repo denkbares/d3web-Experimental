@@ -30,6 +30,7 @@ import org.junit.Test;
 
 import de.knowwe.metatool.ObjectType;
 import de.knowwe.metatool.ParameterizedClass;
+import de.knowwe.metatool.ParserContext;
 import de.knowwe.metatool.QualifiedClass;
 import de.knowwe.metatool.io.JavaWriter;
 
@@ -42,15 +43,15 @@ public class JavaWriterTest {
 
 	private static final String EXPECTEDSIMPLEFILE = "src/test/resources/TestType.java";
 	private static final String EXPECTEDCONSTRAINTFILE = "src/test/resources/TestTypeWithConstraint.java";
-
+	
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullAsObjectType() throws IOException {
-		JavaWriter.getInstance().write(null, new StringWriter());
+		(new JavaWriter(new ParserContext())).write(null, new StringWriter());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullAsWriter() throws IOException {
-		JavaWriter.getInstance().write(getSimpleObjectType(), null);
+		(new JavaWriter(new ParserContext())).write(getSimpleObjectType(), null);
 	}
 
 	@Test
@@ -58,7 +59,7 @@ public class JavaWriterTest {
 		String expected = loadExpectedFile(EXPECTEDSIMPLEFILE);
 		StringWriter w = new StringWriter();
 		ObjectType type = getSimpleObjectType();
-		JavaWriter.getInstance().write(type, w);
+		(new JavaWriter(new ParserContext())).write(type, w);
 		assertEquals("Generated Java File differs.", expected, w.toString());
 	}
 
@@ -67,7 +68,7 @@ public class JavaWriterTest {
 		String expected = loadExpectedFile(EXPECTEDCONSTRAINTFILE);
 		StringWriter w = new StringWriter();
 		ObjectType type = getObjectTypeWithConstraint();
-		JavaWriter.getInstance().write(type, w);
+		(new JavaWriter(new ParserContext())).write(type, w);
 		assertEquals("Generated Java File differs.", expected, w.toString());
 	}
 

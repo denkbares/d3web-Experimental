@@ -35,6 +35,8 @@ public class Demo {
 
 	private static final String outputDir = "/home/alex/Desktop/";
 	private static final String inputFile = "src/main/resources/examples/TurtleMarkupSimple.xml";
+	
+	private static ParserContext pc;
 
 	public static void main(String[] args) throws IOException {
 
@@ -49,7 +51,8 @@ public class Demo {
 	}
 
 	private static ObjectType read() throws IOException {
-		XMLReader reader = new XMLReader();
+		pc = new ParserContext();
+		XMLReader reader = new XMLReader(pc);
 		try {
 			return reader.read(new File(inputFile));
 		} catch (MetatoolParseException e) {
@@ -64,7 +67,7 @@ public class Demo {
 		// Write the object type
 		if (!objectType.alreadyExists()) {
 			Writer w = new FileWriter(outputDir + objectType.getClassName() + ".java");
-			JavaWriter.getInstance().write(objectType, w);
+			(new JavaWriter(pc)).write(objectType, w);
 		}
 
 		// Write all children

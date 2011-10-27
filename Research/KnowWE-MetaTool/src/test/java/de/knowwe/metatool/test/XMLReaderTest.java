@@ -29,6 +29,7 @@ import org.junit.Test;
 import de.knowwe.metatool.MetatoolParseException;
 import de.knowwe.metatool.ObjectType;
 import de.knowwe.metatool.ParameterizedClass;
+import de.knowwe.metatool.ParserContext;
 import de.knowwe.metatool.QualifiedClass;
 import de.knowwe.metatool.io.XMLReader;
 
@@ -43,13 +44,13 @@ public class XMLReaderTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullAsFile() throws IOException, MetatoolParseException {
-		XMLReader reader = new XMLReader();
+		XMLReader reader = new XMLReader(new ParserContext());
 		reader.read((File) null);
 	}
 
 	@Test
 	public void testGeneratedObjectTypes() throws IOException, MetatoolParseException {
-		XMLReader reader = new XMLReader();
+		XMLReader reader = new XMLReader(new ParserContext());
 		ObjectType actual = reader.read(new File(TESTFILE));
 		ObjectType expected = getObjectType();
 		testObjectType(expected, actual);

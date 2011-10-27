@@ -40,6 +40,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import de.knowwe.metatool.MetatoolParseException;
 import de.knowwe.metatool.ObjectType;
 import de.knowwe.metatool.ParameterizedClass;
+import de.knowwe.metatool.ParserContext;
 import de.knowwe.metatool.QualifiedClass;
 
 /**
@@ -52,6 +53,11 @@ import de.knowwe.metatool.QualifiedClass;
  * @created Jan 31, 2011
  */
 public class XMLReader implements ObjectTypeReader {
+	private ParserContext parserContext;
+	
+	public XMLReader(ParserContext parserContext) {
+		this.parserContext = parserContext;
+	}
 
 	public ObjectType read(InputStream stream) throws IOException, MetatoolParseException {
 		if (stream == null) {
@@ -153,9 +159,21 @@ public class XMLReader implements ObjectTypeReader {
 
 		private void createMinimalBuilder(Attributes attributes) throws SAXException {
 			String id = attributes.getValue("ID");
-			String className = attributes.getValue("ClassName");
-			String packageName = attributes.getValue("PackageName");
+			String className = null;
+			String packageName = null;
 			boolean exists = Boolean.parseBoolean(attributes.getValue("Exists"));
+			
+			String qualifiedClass = attributes.getValue("QualifiedName");
+			
+			if (qualifiedClass != null) {
+				int pos = qualifiedClass.lastIndexOf(".");
+				
+				packageName = qualifiedClass.substring(0, pos);
+				className = qualifiedClass.substring(pos + 1);
+			} else {
+				className = attributes.getValue("ClassName");
+				packageName = attributes.getValue("PackageName");
+			}
 
 			QualifiedClass objectTypeClass;
 			try {
@@ -172,8 +190,27 @@ public class XMLReader implements ObjectTypeReader {
 		}
 
 		private void changeSuperType(Attributes attributes) throws SAXException {
-			String className = attributes.getValue("SuperTypeClass");
-			String packageName = attributes.getValue("SuperTypePackage");
+			String className = null;
+			String packageName = null;
+			
+			String qualifiedSuperType = attributes.getValue("QualifiedSuperType");
+			
+			// Fallback to old method if needed
+			if (qualifiedSuperType != null) {
+				int pos = qualifiedSuperType.lastIndexOf(".");
+				
+				packageName = qualifiedSuperType.substring(0, pos - 1);
+				className = qualifiedSuperType.substring(pos + 1);
+			} else {
+				className = attributes.getValue("SuperTypeClass");
+				packageName = attributes.getValue("SuperTypePackage");
+			}
+			
+			// Default if even the old method doesn't yield a result
+			if (className == null && packageName == null) {
+				packageName = "de.knowwe.core.kdom";
+				className = "AbstractType";
+			}
 
 			QualifiedClass superTypeClass;
 			try {
@@ -214,9 +251,26 @@ public class XMLReader implements ObjectTypeReader {
 			}
 
 			// Set SectionFinder
-			String packageName = attributes.getValue("PackageName");
-			String className = attributes.getValue("ClassName");
+			String packageName = null;
+			String className = null;
 			String value = attributes.getValue("Value") != null ? attributes.getValue("Value") : "";
+			
+			String qualifiedName = attributes.getValue("QualifiedName");
+			if (qualifiedName != null) {
+				int pos = qualifiedName.lastIndexOf(".");
+				
+				// Default package name if no . is in the QualifiedName attribute
+				if (pos >= 0) {
+					packageName = qualifiedName.substring(0, pos - 1);
+					className = qualifiedName.substring(pos + 1);
+				} else {
+					packageName = "de.knowwe.core.kdom.sectionFinder";
+					className = qualifiedName;
+				}
+			} else {
+				packageName = attributes.getValue("PackageName");
+				className = attributes.getValue("ClassName");
+			}
 			
 			ParameterizedClass sectionFinder;
 			try {
@@ -236,8 +290,25 @@ public class XMLReader implements ObjectTypeReader {
 			}
 
 			// Add Constraint
-			String packageName = attributes.getValue("PackageName");
-			String className = attributes.getValue("ClassName");
+			String packageName = null;
+			String className = null;
+			
+			String qualifiedName = attributes.getValue("QualifiedName");
+			if (qualifiedName != null) {
+				int pos = qualifiedName.lastIndexOf(".");
+				
+				// Default package name if no . is in the QualifiedName attribute
+				if (pos >= 0) {
+					packageName = qualifiedName.substring(0, pos - 1);
+					className = qualifiedName.substring(pos + 1);
+				} else {
+					packageName = "de.knowwe.kdom.constraint";
+					className = qualifiedName;
+				}
+			} else {
+				packageName = attributes.getValue("PackageName");
+				className = attributes.getValue("ClassName");
+			}
 			
 			QualifiedClass constraint;
 			try {
