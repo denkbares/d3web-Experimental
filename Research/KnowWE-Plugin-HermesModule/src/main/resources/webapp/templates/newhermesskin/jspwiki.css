@@ -30,7 +30,7 @@
 	border-color: #385D8A;
 	background: #C6D9F1;
 	width: 80%;
-	max-width: 800px;
+	max-width: 796px;
 	height: 80px;
 	margin-bottom: 0px;
 	padding:0 0 0 20%;
@@ -56,6 +56,10 @@
 	display:none; 
 }
 #header .userbox {
+	float:right;
+}
+#header .userbox .greet-user{
+	padding-bottom: 4px;
 	float:right;
 }
 #pagename-container {
@@ -151,10 +155,11 @@
 #page {
 	border: 2px solid #385D8A;
 	margin: 0;
-	width:79%;
+	width:78%;
 	height: 100%;
 	text-align:justify;
 	padding-left: 5px;
+	padding-right: 5px;
 }
 #wikibody.fav-slide #page {
 	width:100%;
@@ -230,8 +235,8 @@ hr, .hr, .clearbox {
 	padding:0.25em 1em;
 }
 .pagename {
-	font-size:175%;
-	line-height:1.4;
+	font-size:200%;
+	line-height:1.0;
 	font-weight:bold;
 	margin-bottom:0.5em;
 	margin-left: auto;
@@ -386,9 +391,9 @@ a.wikipage {
 	
 }
 .leftmenu .wikipage {
-	border: 2px solid #385D8A;
+	border-bottom: 2px solid #385D8A;
 	max-width: 195px;
-	padding: 12px 40px 10px 71px;
+	padding: 12px 40px 10px 75px;
 	float: right;
 }
 .leftmenu a.wikipage {
@@ -959,7 +964,7 @@ label[for="edittoc"] {
 
 .userbox {
 	overflow:hidden;
-	padding:0.5em 0;
+	padding:0.5em 1px;
 }
 
 #header .user-search-box {
@@ -1203,10 +1208,7 @@ a.action.quick2top {
 
 /* +++ 472 PageContent.jsp +++ */
 #pagecontent {
-	border-width: 2px;
-	border-style: solid;
-	border-color: #385D8A;
-	padding:0.5em 0;
+	padding:0.5em 0 0.5em 0.5em;
 }
 html>body #previewcontent, html>body #info, html>body #pagecontent, html>body #attach, html>body #findcontent {
 	overflow:auto;
