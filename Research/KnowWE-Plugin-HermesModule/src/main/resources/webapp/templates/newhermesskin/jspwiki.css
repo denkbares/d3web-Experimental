@@ -106,7 +106,6 @@
 	float:left;
 	margin-top:0em;
 	width:18%;
-	padding:0.5em;
 	margin: auto; /* Div soll zentriert werden */
 	height: 496px;
 	max-height: 100%;
@@ -133,6 +132,7 @@
 }
 #wikibody.fav-right #page, /*#wikibody.fav-left*/ #favorites {
 	float:left;
+	width:195px;
 }
 /*ie6 hack*/
 * html /*#wikibody.fav-left*/ #page, * html #wikibody.fav-right #favorites {
@@ -150,10 +150,11 @@
 }
 #page {
 	border: 2px solid #385D8A;
-	margin: 8px 0px 0px 8px;
+	margin: 0;
 	width:79%;
 	height: 100%;
 	text-align:justify;
+	padding-left: 5px;
 }
 #wikibody.fav-slide #page {
 	width:100%;
@@ -377,11 +378,25 @@ a:hover {
 }
 a:focus {
 }
-a.wikipage {	
+a.wikipage {
+
+}
+
+.leftmenu {
+	
 }
 .leftmenu .wikipage {
 	border: 2px solid #385D8A;
-	padding: 20 20 20 20;
+	max-width: 195px;
+	padding: 12px 40px 10px 71px;
+	float: right;
+}
+.leftmenu a.wikipage {
+	width: 80px;
+}
+.leftmenu br {
+	clear: both;
+	margin: 10px;
 }
 a.createpage {
 	color:red;
