@@ -21,7 +21,7 @@
   <!-- span class="eule-logo"> </span-->
   <span id="pagename-container">
     <span class="pagename">
-  		<br>Hermes Wiki
+  		<br>HermesWiki
     </span>
   </span>
 
