@@ -69,21 +69,11 @@
 #header .pagename {
 	background-image:url(images/eule-kleiner-transparent.gif);
 	background-repeat: no-repeat;
-	/*float: left;
-	padding-top: 00px;
-	padding-bottom: 00px;
-	padding-left: 80px;
-	margin-left: 200px;
-	margin-bottom: 0px;
-	margin-top: 5px;
-	height: 72px;*/
 	float: left;
 	height: 72px;
-	margin-left: 200px;
+	margin-left: 170px;
 	margin-top: 3px;
-	max-width: 300px;
 	padding-left: 90px;
-	width: 30%;
 }
 #header .eule-logo {
 	background-image:url(images/eule-klein.gif);
@@ -966,7 +956,8 @@ label[for="edittoc"] {
 
 .userbox {
 	overflow:hidden;
-	padding:0.5em 1px;
+	padding: 3px 1px;
+	margin: 3px;
 }
 
 #header .user-search-box {
