@@ -203,7 +203,7 @@ public class IncrementalCompiler implements EventListener {
 		Iterator<Section<? extends KnowledgeUnit>> compilationUnitIterator = potentiallyNewKnowledgeSlices.iterator();
 		while (compilationUnitIterator.hasNext()) {
 			Section<? extends KnowledgeUnit> section = compilationUnitIterator.next();
-			Collection<Section<TermReference>> refs = section.get().getAllReferencesOfKnowledgeUnit(
+			Collection<Section<TermReference>> refs = section.get().getCompileScript().getAllReferencesOfKnowledgeUnit(
 					section);
 			for (Section<TermReference> ref : refs) {
 				if (!terminology.isValid(ref.get().getTermIdentifier(ref))) {
@@ -231,14 +231,14 @@ public class IncrementalCompiler implements EventListener {
 		for (Section<? extends KnowledgeUnit> section : potentiallyNewKnowledgeSlices) {
 			// System.out.println("Inserting Knowledge Slice: " +
 			// section.toString());
-			section.get().insertIntoRepository(section);
+			section.get().getCompileScript().insertIntoRepository(section);
 		}
 
 		// and remove knowledge
 		for (Section<? extends KnowledgeUnit> section : knowledgeSlicesToRemove) {
 			// System.out.println("Deleting Knowledge Slice: " +
 			// section.toString());
-			section.get().deleteFromRepository(section);
+			section.get().getCompileScript().deleteFromRepository(section);
 		}
 
 	}

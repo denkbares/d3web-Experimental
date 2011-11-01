@@ -37,10 +37,6 @@ import de.knowwe.core.kdom.parsing.Section;
  */
 public interface KnowledgeUnit<T extends Type> extends Type {
 
-	public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit<T>> section);
-
-	public void insertIntoRepository(Section<T> section);
-
-	public void deleteFromRepository(Section<T> section);
+	public KnowledgeUnitCompileScript getCompileScript();
 
 }
