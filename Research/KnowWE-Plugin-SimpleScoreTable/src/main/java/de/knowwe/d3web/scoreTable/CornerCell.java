@@ -25,7 +25,9 @@ package de.knowwe.d3web.scoreTable;
 import java.util.regex.Pattern;
 
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.rendering.NothingRenderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.d3web.scoreTable.renderer.TableCellRenderer;
 import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
@@ -35,13 +37,13 @@ public class CornerCell extends AbstractType {
 
 	public CornerCell() {
 		AnonymousType before = new AnonymousType("Before");
-		before.setSectionFinder(new RegexSectionFinder("\\|"));
+		before.setCustomRenderer(NothingRenderer.getInstance());
 		childrenTypes.add(before);
 
 		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder("\\|([^\\|]*)",Pattern.DOTALL|Pattern.MULTILINE,1));
 		setSectionFinder(c);
 		c.addConstraint(AtMostOneFindingConstraint.getInstance());
-		
+		setCustomRenderer(new TableCellRenderer());
 		//setCustomRenderer(new GenericHTMLRenderer<CornerCell>("span", new String[] {"title", "CornerCell"}));
 	}
 

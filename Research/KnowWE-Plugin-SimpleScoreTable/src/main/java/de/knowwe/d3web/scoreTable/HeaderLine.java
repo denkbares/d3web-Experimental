@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.d3web.scoreTable.renderer.TableLineRenderer;
 import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
@@ -42,10 +43,12 @@ public class HeaderLine extends AbstractType {
 		childrenTypes.add(after);
 		childrenTypes.add(new CornerCell());
 		childrenTypes.add(new SolutionCell());
+		childrenTypes.add(new Bar());
 		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder("\\s*(\\|{1,2}.*?)\\r?\\n",Pattern.DOTALL|Pattern.MULTILINE,0));
 		setSectionFinder(c);
 		c.addConstraint(AtMostOneFindingConstraint.getInstance());
 		//setCustomRenderer(new GenericHTMLRenderer<HeaderLine>("span", new String[] {"style", "color: blue;", "title", "HeaderLine"}));
+		setCustomRenderer(new TableLineRenderer());
 	}
 
 }

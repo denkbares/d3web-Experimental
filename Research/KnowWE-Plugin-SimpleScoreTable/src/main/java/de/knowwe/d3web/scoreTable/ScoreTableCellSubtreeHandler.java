@@ -29,7 +29,7 @@ public class ScoreTableCellSubtreeHandler extends D3webSubtreeHandler<ScoreCell>
 	private static final String ruleStoreKey = "rule-store-key";
 	
 	public ScoreTableCellSubtreeHandler() {
-		this.setIgnorePackageCompile(true);
+		//this.setIgnorePackageCompile(true);
 	}
 
 	@Override

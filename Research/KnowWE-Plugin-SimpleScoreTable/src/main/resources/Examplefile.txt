@@ -1,0 +1,31 @@
+!! ScoreTableTest
+
+%%question
+Fragebogen
+- Frage X [num] 
+- Frage y [oc]
+-- JA
+-- NEIN
+%
+
+%%solution
+resolution
+mysolution
+%
+
+
+
+%%knowledgebase
+@uses: default
+%
+
+%%scoretable
+|    | resolution | mysolution
+| Frage X < 1 | ESTABLISHED | N7
+| Frage y = NEIN | N77 | P5
+Scoretable
+%
+
+
+
+[{KnowWEPlugin renderKnowledge}]

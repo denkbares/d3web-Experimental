@@ -24,16 +24,18 @@ package de.knowwe.d3web.scoreTable;
 
 import java.util.regex.Pattern;
 
+import de.knowwe.core.kdom.rendering.NothingRenderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.d3web.scoreTable.renderer.TableCellRenderer;
 import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
-import de.knowwe.kdom.renderer.GenericHTMLRenderer;
 
 public class CondCell extends DefaultCompositeCondition {
 
 	public CondCell() {
 		AnonymousType before = new AnonymousType("Before");
+		
 		before.setSectionFinder(new RegexSectionFinder("\\|"));
 		childrenTypes.add(before);
 
@@ -41,6 +43,7 @@ public class CondCell extends DefaultCompositeCondition {
 		setSectionFinder(c);
 		c.addConstraint(AtMostOneFindingConstraint.getInstance());
 		//setCustomRenderer(new GenericHTMLRenderer<CondCell>("span", new String[] {"title", "CondCell"}));
+		setCustomRenderer(new TableCellRenderer());
 	}
 
 }

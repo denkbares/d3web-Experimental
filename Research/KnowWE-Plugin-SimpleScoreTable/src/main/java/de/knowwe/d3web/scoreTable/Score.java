@@ -23,7 +23,13 @@
 package de.knowwe.d3web.scoreTable;
 
 import de.d3web.we.object.ScoreValue;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.renderer.GenericHTMLRenderer;
+import de.knowwe.kdom.renderer.StyleRenderer;
+import de.knowwe.kdom.sectionFinder.OneOfStringEnumFinderExact;
 
 public class Score extends ScoreValue {
 
@@ -31,7 +37,8 @@ public class Score extends ScoreValue {
 
 
 
-
+		setCustomRenderer(new StyleRenderer("font-weight:bold;"));
+		this.setSectionFinder(new OneOfStringEnumFinderExact(this.values));
 		//setCustomRenderer(new GenericHTMLRenderer<Score>("span", new String[] {"style", "color: brown;", "title", "Score"}));
 	}
 

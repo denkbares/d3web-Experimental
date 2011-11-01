@@ -25,7 +25,14 @@ package de.knowwe.d3web.scoreTable;
 import java.util.regex.Pattern;
 
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.renderer.GenericHTMLRenderer;
 
 public class SimpleScoreTable extends AbstractType {
@@ -34,9 +41,20 @@ public class SimpleScoreTable extends AbstractType {
 
 		childrenTypes.add(new HeaderLine());
 		childrenTypes.add(new ContentLine());
-		setSectionFinder(new RegexSectionFinder("\\|\\s*?SCORE.*?\\r?\\n\\r?\\n",Pattern.DOTALL|Pattern.MULTILINE,0));
-
+		//setSectionFinder(new RegexSectionFinder("\\|\\s*?SCORE.*?\\r?\\n\\r?\\n",Pattern.DOTALL|Pattern.MULTILINE,0));
+		this.setSectionFinder(new AllTextFinderTrimmed());
 		//setCustomRenderer(new GenericHTMLRenderer<SimpleScoreTable>("span", new String[] {"style", "color: red;", "title", "SimpleScoreTable"}));
+		this.setCustomRenderer(new KnowWEDomRenderer() {
+
+			@Override
+			public void render(KnowWEArticle article, Section section,
+					UserContext user, StringBuilder string) {
+				string.append(KnowWEUtils.maskHTML("<table class='wikitable' border='1'>"));
+				DelegateRenderer.getInstance().render(article, section, user, string);
+				string.append(KnowWEUtils.maskHTML("</table>"));
+				
+			}
+		});
 	}
 
 }

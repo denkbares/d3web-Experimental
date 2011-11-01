@@ -26,8 +26,8 @@ import java.util.regex.Pattern;
 
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.d3web.scoreTable.renderer.TableLineRenderer;
 import de.knowwe.kdom.AnonymousType;
-import de.knowwe.kdom.renderer.GenericHTMLRenderer;
 
 public class ContentLine extends AbstractType {
 
@@ -40,8 +40,9 @@ public class ContentLine extends AbstractType {
 		childrenTypes.add(after);
 		childrenTypes.add(new CondCell());
 		childrenTypes.add(new ScoreCell());
+		childrenTypes.add(new Bar());
 		setSectionFinder(new RegexSectionFinder("\\s*(\\|{1,2}.*?)\\r?\\n",Pattern.DOTALL|Pattern.MULTILINE,0));
-
+		setCustomRenderer(new TableLineRenderer());
 		//setCustomRenderer(new GenericHTMLRenderer<ContentLine>("span", new String[] {"style", "color: orange;", "title", "ContentLine"}));
 	}
 
