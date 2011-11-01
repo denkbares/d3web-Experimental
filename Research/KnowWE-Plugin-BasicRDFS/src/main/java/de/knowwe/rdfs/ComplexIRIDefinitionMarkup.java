@@ -30,6 +30,7 @@ import org.ontoware.rdf2go.model.node.Node;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.KnowWETerm;
@@ -121,6 +122,14 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 			return s.getOriginalText().trim();
 		}
 	}
+	
+	
+	class ComplexIRIDefinitionCompileScript implements KnowledgeUnitCompileScript<ComplexIRIDefinitionMarkup> {
+	
+	@Override
+	public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit<ComplexIRIDefinitionMarkup>> section) {
+		return CompileUtils.getAllReferencesOfCompilationUnit(section);
+	}
 
 	@Override
 	public void deleteFromRepository(Section<ComplexIRIDefinitionMarkup> section) {
@@ -171,9 +180,12 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 
 	}
 
+	}
+
+
 	@Override
-	public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit<ComplexIRIDefinitionMarkup>> section) {
-		return CompileUtils.getAllReferencesOfCompilationUnit(section);
+	public KnowledgeUnitCompileScript<ComplexIRIDefinitionMarkup> getCompileScript() {
+		return new ComplexIRIDefinitionCompileScript();
 	}
 
 
