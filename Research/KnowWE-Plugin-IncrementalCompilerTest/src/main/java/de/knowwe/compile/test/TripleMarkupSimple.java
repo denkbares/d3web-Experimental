@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 import org.ontoware.rdf2go.model.node.Node;
 
 import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.TermReference;
@@ -39,12 +40,13 @@ import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
-public class TripleMarkupSimple extends AbstractType implements KnowledgeUnit<TripleMarkupSimple> {
+public class TripleMarkupSimple extends AbstractType implements
+		KnowledgeUnit<TripleMarkupSimple> {
 
 	public TripleMarkupSimple() {
 
-		this.setSectionFinder(new RegexSectionFinder("\\{(.*?::.*?)\\}", Pattern.DOTALL,
-				1));
+		this.setSectionFinder(new RegexSectionFinder("\\{(.*?::.*?)\\}",
+				Pattern.DOTALL, 1));
 		this.addChildType(new SimpleTurtlePredicate());
 		this.addChildType(new SimpleTurtleSubject());
 		this.addChildType(new SimpleTurtleObject());
@@ -79,57 +81,66 @@ public class TripleMarkupSimple extends AbstractType implements KnowledgeUnit<Tr
 		}
 	}
 
-	@Override
-	public void deleteFromRepository(Section<TripleMarkupSimple> section) {
-		Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
+	class TripleMarkupSimpleCompileScript implements
+			KnowledgeUnitCompileScript<TripleMarkupSimple> {
+
+		@Override
+		public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(
+				Section<? extends KnowledgeUnit<TripleMarkupSimple>> section) {
+			return CompileUtils.getAllReferencesOfCompilationUnit(section);
+		}
+
+		@Override
+		public void deleteFromRepository(Section<TripleMarkupSimple> section) {
+			Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
+		}
+
+		@Override
+		public void insertIntoRepository(Section<TripleMarkupSimple> section) {
+
+			List<Section<TermReference>> found = new ArrayList<Section<TermReference>>();
+			Node subURI = null;
+			Node predURI = null;
+			Node objURI = null;
+
+			Sections.findSuccessorsOfType(section, TermReference.class, found);
+
+			if (found.size() == 3) {
+				Section<TermReference> subject = found.get(0);
+				Section<TermReference> predicate = found.get(1);
+				Section<TermReference> object = found.get(2);
+
+				subURI = Utils.getURI(subject);
+				predURI = Utils.getURI(predicate);
+				objURI = Utils.getURI(object);
+			} else {
+				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+				// "invalid term combination:" + found.size()));
+			}
+			if (subURI == null) {
+				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+				// "subject URI not found"));
+			}
+			if (predURI == null) {
+				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+				// "predicate URI not found"));
+			}
+			if (objURI == null) {
+				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+				// "object URI not found"));
+			}
+
+			Rdf2GoCore.getInstance().addStatement(subURI.asResource(),
+					predURI.asURI(), objURI, section);
+
+			// return new ArrayList<KDOMReportMessage>(0);
+
+		}
 	}
 
 	@Override
-	public void insertIntoRepository(Section<TripleMarkupSimple> section) {
-
-		List<Section<TermReference>> found = new ArrayList<Section<TermReference>>();
-		Node subURI = null;
-		Node predURI = null;
-		Node objURI = null;
-
-		Sections.findSuccessorsOfType(section, TermReference.class, found);
-
-		if (found.size() == 3) {
-			Section<TermReference> subject = found.get(0);
-			Section<TermReference> predicate = found.get(1);
-			Section<TermReference> object = found.get(2);
-
-			subURI = Utils.getURI(subject);
-			predURI = Utils.getURI(predicate);
-			objURI = Utils.getURI(object);
-		}
-		else {
-			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-			// "invalid term combination:" + found.size()));
-		}
-		if (subURI == null) {
-			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-			// "subject URI not found"));
-		}
-		if (predURI == null) {
-			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-			// "predicate URI not found"));
-		}
-		if (objURI == null) {
-			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-			// "object URI not found"));
-		}
-
-		Rdf2GoCore.getInstance().addStatement(subURI.asResource(),
-				predURI.asURI(), objURI, section);
-
-		// return new ArrayList<KDOMReportMessage>(0);
-
+	public KnowledgeUnitCompileScript getCompileScript() {
+		return new TripleMarkupSimpleCompileScript();
 	}
 
-	@Override
-	public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(
-			Section<? extends KnowledgeUnit<TripleMarkupSimple>> section) {
-		return CompileUtils.getAllReferencesOfCompilationUnit(section);
-	}
 }
