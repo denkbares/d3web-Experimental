@@ -1,100 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ObjectTypes>
-	<ObjectType ID="scoreTableRoot" ClassName="SimpleScoreTable"
-		PackageName="de.knowwe.d3web.scoreTable" SuperTypeClass="AbstractType"
-		SuperTypePackage="de.knowwe.core.kdom">
-		<SectionFinder ClassName="RegexSectionFinder"
-			PackageName="de.knowwe.core.kdom.sectionFinder" Value='"\\\\|\\\\s*?SCORE.*?\\\\r?\\\\n\\\\r?\\\\n",Pattern.DOTALL|Pattern.MULTILINE,0' />
+	<ObjectType ID="scoreTableRoot" 
+				ClassName="SimpleScoreTable"
+				PackageName="de.knowwe.d3web.scoreTable">
+				
+		<SectionFinder QualifiedName="RegexSectionFinder"
+					   Value='"\\\\|\\\\s*?SCORE.*?\\\\r?\\\\n\\\\r?\\\\n",Pattern.DOTALL|Pattern.MULTILINE,0' />
 		<Color>red</Color>
 	</ObjectType>
 	
 	
-	
-    <ObjectType ClassName="HeaderLine" ID="HeaderLine" PackageName="de.knowwe.d3web.scoreTable" SuperTypeClass="AbstractType" SuperTypePackage="de.knowwe.core.kdom" Parent="scoreTableRoot" Position="0">
-	<SectionFinder ClassName="RegexSectionFinder"
-		PackageName="de.knowwe.core.kdom.sectionFinder" Value='"\\\\s*(\\\\|{1,2}.*?)\\\\r?\\\\n",Pattern.DOTALL|Pattern.MULTILINE,0'>
-		<Constraint ClassName="AtMostOneFindingConstraint"
-				PackageName="de.d3web.we.kdom.constraint" />
-	</SectionFinder>
-	<Color>blue</Color>
+    <ObjectType ID="HeaderLine" 
+    			ClassName="HeaderLine" 
+    			PackageName="de.knowwe.d3web.scoreTable"
+    			Parent="scoreTableRoot" 
+    			Position="0">
+		<SectionFinder QualifiedName="RegexSectionFinder"
+				   Value='"\\\\s*(\\\\|{1,2}.*?)\\\\r?\\\\n",Pattern.DOTALL|Pattern.MULTILINE,0'/>
+		<Constraint QualifiedName="AtMostOneFindingConstraint"/>
+		<Color>blue</Color>
 	</ObjectType>
 	
-	
-	
-	
-	
-	
-	
-	
-		    
-		    
-    <ObjectType ClassName="CornerCell" ID="CornerCell"
-	    	PackageName="de.knowwe.d3web.scoreTable" Parent="HeaderLine"
-	    	Position="0" SuperTypeClass="AbstractType" SuperTypePackage="de.knowwe.core.kdom">
-	    	<SectionFinder ClassName="RegexSectionFinder"
-		PackageName="de.knowwe.core.kdom.sectionFinder" Value='"\\\\|([^\\\\|]*)",Pattern.DOTALL|Pattern.MULTILINE,1'>
-		<Constraint ClassName="AtMostOneFindingConstraint"
-				PackageName="de.knowwe.kdom.constraint" />
-		</SectionFinder>
-
-	    </ObjectType>
+    
+    <ObjectType ID="CornerCell" 
+    			ClassName="CornerCell" 
+	    		PackageName="de.knowwe.d3web.scoreTable" Parent="HeaderLine"
+	    		Position="0">
+	    	<SectionFinder QualifiedName="RegexSectionFinder"
+						   Value='"\\\\|([^\\\\|]*)",Pattern.DOTALL|Pattern.MULTILINE,1'/>
+		<Constraint QualifiedName="AtMostOneFindingConstraint" />
+	</ObjectType>
 	    
-	    <ObjectType ClassName="SolutionCell" ID="SolutionCell"
-	    	PackageName="de.knowwe.d3web.scoreTable" Parent="HeaderLine"
-	    	Position="1" SuperTypeClass="AbstractType" SuperTypePackage="de.knowwe.core.kdom">
-	    	<SectionFinder ClassName="RegexSectionFinder"
-		PackageName="de.knowwe.core.kdom.sectionFinder" Value='"\\\\|([^\\\\|]*)",Pattern.DOTALL|Pattern.MULTILINE,1'>
-		</SectionFinder>
+	<ObjectType ID="SolutionCell"
+				ClassName="SolutionCell"
+	    		PackageName="de.knowwe.d3web.scoreTable" 
+	    		Parent="HeaderLine"
+	    		Position="1" >
+	    	<SectionFinder QualifiedName="RegexSectionFinder"
+						   Value='"\\\\|([^\\\\|]*)",Pattern.DOTALL|Pattern.MULTILINE,1' />
 	    	<Color>purple</Color>
-	    </ObjectType>
+	 </ObjectType>
 	    
 	    
-	    <ObjectType ClassName="Solution" ID="Solution"
-	    	PackageName="de.knowwe.d3web.scoreTable" Parent="SolutionCell"
-	    	Position="0" SuperTypeClass="SolutionReference" SuperTypePackage="de.d3web.we.object">
+	 <ObjectType ID="Solution" 
+	 			 ClassName="Solution" 
+	    		 PackageName="de.knowwe.d3web.scoreTable" 
+	    		 Parent="SolutionCell"
+	    		 Position="0" 
+	    		 SuperTypeClass="SolutionReference" SuperTypePackage="de.d3web.we.object">
 	    	
-	    	<SectionFinder ClassName="AllTextFinderTrimmed"
-		PackageName="de.knowwe.core.kdom.sectionFinder" Value=''>
-		</SectionFinder>
-	    	
+	    	<SectionFinder QualifiedName="AllTextFinderTrimmed" Value='' />
 	    	<Color>grey</Color>
-	    </ObjectType>
+	 </ObjectType>
 	
-	    <ObjectType ClassName="ContentLine" ID="ContentLine" PackageName="de.knowwe.d3web.scoreTable" SuperTypeClass="AbstractType" SuperTypePackage="de.knowwe.core.kdom" Parent="scoreTableRoot" Position="1">
-	<SectionFinder ClassName="RegexSectionFinder"
-		PackageName="de.knowwe.core.kdom.sectionFinder" Value='"\\\\s*(\\\\|{1,2}.*?)\\\\r?\\\\n",Pattern.DOTALL|Pattern.MULTILINE,0'>
+	 <ObjectType ID="ContentLine" 
+	 			 ClassName="ContentLine"  
+	 			 PackageName="de.knowwe.d3web.scoreTable" 
+	 			 Parent="scoreTableRoot" 
+	 			 Position="1">
+	 			 
+		<SectionFinder QualifiedName="RegexSectionFinder"
+					   Value='"\\\\s*(\\\\|{1,2}.*?)\\\\r?\\\\n",Pattern.DOTALL|Pattern.MULTILINE,0' />
 		
-	</SectionFinder>
-	<Color>orange</Color></ObjectType>
+		<Color>orange</Color>
+	</ObjectType>
 	
-	    <ObjectType ClassName="CondCell" ID="CondCell"
-	    	PackageName="de.knowwe.d3web.scoreTable" Parent="ContentLine"
-	    	Position="0" SuperTypeClass="DefaultCompositeCondition" SuperTypePackage="de.knowwe.d3web.scoreTable">
-	    	<SectionFinder ClassName="RegexSectionFinder"
-		PackageName="de.knowwe.core.kdom.sectionFinder" Value='"\\\\|([^\\\\|]*)",Pattern.DOTALL|Pattern.MULTILINE,1'>
-		<Constraint ClassName="AtMostOneFindingConstraint"
-				PackageName="de.d3web.we.kdom.constraint" />
-		</SectionFinder>
+	<ObjectType ID="CondCell" 
+				ClassName="CondCell" 
+	    		PackageName="de.knowwe.d3web.scoreTable" 
+	    		Parent="ContentLine"
+	    		Position="0" 
+	    		SuperTypeClass="DefaultCompositeCondition" 
+	    		SuperTypePackage="de.knowwe.d3web.scoreTable">
+	    		
+	    <SectionFinder QualifiedName="RegexSectionFinder"
+					   Value='"\\\\|([^\\\\|]*)",Pattern.DOTALL|Pattern.MULTILINE,1' />
+		<Constraint QualifiedName="AtMostOneFindingConstraint" />
 
-	    </ObjectType>
+	</ObjectType>
 	    
-	    	    <ObjectType ClassName="ScoreCell" ID="ScoreCell"
-	    	PackageName="de.knowwe.d3web.scoreTable" Parent="ContentLine"
-	    	Position="1" SuperTypeClass="AbstractType" SuperTypePackage="de.knowwe.core.kdom">
-	    	<SectionFinder ClassName="RegexSectionFinder"
-		PackageName="de.knowwe.core.kdom.sectionFinder" Value='"\\\\|([^\\\\|]*)",Pattern.DOTALL|Pattern.MULTILINE,1'>
-		</SectionFinder>
+	<ObjectType ID="ScoreCell" 
+				ClassName="ScoreCell" 
+	    		PackageName="de.knowwe.d3web.scoreTable" 
+	    		Parent="ContentLine"
+	    		Position="1" >
+	    		
+	    	<SectionFinder QualifiedName="RegexSectionFinder"
+						   Value='"\\\\|([^\\\\|]*)",Pattern.DOTALL|Pattern.MULTILINE,1' />
 	    	<Color>black</Color>
-	    </ObjectType>
+	</ObjectType>
 	    
-	    <ObjectType ClassName="Score" ID="Score"
-	    	PackageName="de.knowwe.d3web.scoreTable" Parent="ScoreCell"
-	    	Position="0" SuperTypeClass="ScoreValue" SuperTypePackage="de.d3web.we.object">
-	    	
+	<ObjectType ID="Score" 
+				ClassName="Score" 
+	    		PackageName="de.knowwe.d3web.scoreTable" 
+	    		Parent="ScoreCell"
+	    		Position="0" 
+	    		QualifiedSuperType="de.d3web.we.object.ScoreValue" >
 	    	
 	    	<Color>brown</Color>
-	    </ObjectType>
+	 </ObjectType>
 	    
-	    
-
 </ObjectTypes>
