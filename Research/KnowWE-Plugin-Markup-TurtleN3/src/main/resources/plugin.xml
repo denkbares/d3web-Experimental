@@ -19,4 +19,16 @@
 	<parameter id="class" value="de.knowwe.kdom.n3.TurtleMarkupN3"/>
 	<parameter id="version" value="1.0"/>
 </extension>
+
+<extension id="TurtleCompileScript" plugin-id="KnowWEExtensionPoints" point-id="CompileScript">
+
+	<parameter id="scope" value="de.knowwe.kdom.n3.TurtleMarkupN3"/>
+	<parameter id="description" value="TurtleCompileScript"/>
+	<parameter id="name" value="TurtleCompileScript"/>
+	<parameter id="class" value="de.knowwe.kdom.n3.compile.TurtleCompileScript"/>
+	<parameter id="version" value="1.0"/>
+</extension>
+
+
+
 </plugin>

@@ -22,23 +22,15 @@
 
 package de.knowwe.kdom.n3;
 
-import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.KnowledgeUnitCompileScript;
-import de.knowwe.compile.utils.CompileUtils;
-import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.objects.TermReference;
-import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.compile.object.AbstractKnowledgeUnitCompilerDecorator;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-
-import java.util.Collection;
 import java.util.regex.Pattern;
 import de.knowwe.kdom.renderer.GenericHTMLRenderer;
 import de.knowwe.kdom.n3.TurtleSubjectSection;
 import de.knowwe.kdom.n3.TurtlePredSentence;
-import de.knowwe.kdom.n3.compile.TurtleCompileScript;
 import de.knowwe.kdom.AnonymousType;
 
-public class TurtleMarkupN3 extends AbstractType implements KnowledgeUnit<TurtleMarkupN3> {
+public class TurtleMarkupN3 extends AbstractKnowledgeUnitCompilerDecorator {
 
 	public TurtleMarkupN3() {
 		AnonymousType before = new AnonymousType("Before");
@@ -53,12 +45,5 @@ public class TurtleMarkupN3 extends AbstractType implements KnowledgeUnit<Turtle
 
 		setCustomRenderer(new GenericHTMLRenderer<TurtleMarkupN3>("span", new String[] {"title", "TurtleMarkupN3"}));
 	}
-
-	@Override
-	public KnowledgeUnitCompileScript<TurtleMarkupN3> getCompileScript() {
-		return new TurtleCompileScript();
-	}
-
-
 
 }

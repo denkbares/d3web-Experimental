@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ObjectTypes>
-	<ObjectType ID="turtleRoot" ClassName="TurtleMarkupN3"
-		PackageName="de.knowwe.kdom.n3">
+
+<ObjectType ID="turtleRoot" 
+			ClassName="TurtleMarkupN3"
+			QualifiedSuperType="de.knowwe.compile.object.AbstractKnowledgeUnitCompilerDecorator"
+			PackageName="de.knowwe.kdom.n3">
 		<SectionFinder QualifiedName="RegexSectionFinder"
 			Value='"N3:(.*?)\\\\.",Pattern.DOTALL|Pattern.MULTILINE,1' />	
-	</ObjectType>
+</ObjectType>
 
 
 <ObjectType ID="SubjectSection" 
