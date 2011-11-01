@@ -21,14 +21,20 @@
 package de.knowwe.kdom.n3.compile;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 
+import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.KnowledgeUnitCompileScript;
+import de.knowwe.compile.utils.CompileUtils;
+import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.kdom.n3.TurtleMarkupN3;
 import de.knowwe.kdom.n3.TurtleObjectLiteral;
 import de.knowwe.kdom.n3.TurtleObjectLiteralText;
 import de.knowwe.kdom.n3.TurtleObjectSection;
@@ -39,10 +45,10 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.IRITermRef;
 import de.knowwe.rdfs.util.RDFSUtil;
 
-public class TurtleCompiler {
+public class TurtleCompileScript implements KnowledgeUnitCompileScript<TurtleMarkupN3> {
 
-	public static void insertTriples(
-			Section<de.knowwe.kdom.n3.TurtleMarkupN3> section) {
+	@Override
+	public void insertIntoRepository(Section<TurtleMarkupN3> section) {
 		List<Section<TurtleObjectSection>> found = new ArrayList<Section<TurtleObjectSection>>();
 
 		Sections.findSuccessorsOfType(section, TurtleObjectSection.class, found);
@@ -83,9 +89,19 @@ public class TurtleCompiler {
 		}
 		Rdf2GoCore.getInstance().addStatements(triples, section);
 	}
-
-	public static void removeTriples(Section<de.knowwe.kdom.n3.TurtleMarkupN3> s) {
-		Rdf2GoCore.getInstance().removeSectionStatementsRecursive(s);
+	
+	@Override
+	public void deleteFromRepository(Section<TurtleMarkupN3> section) {
+		Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
 	}
+
+	@Override
+	public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(
+			Section<? extends KnowledgeUnit<TurtleMarkupN3>> section) {
+		return CompileUtils.getAllReferencesOfCompilationUnit(section);
+	}
+
+
+	
 
 }

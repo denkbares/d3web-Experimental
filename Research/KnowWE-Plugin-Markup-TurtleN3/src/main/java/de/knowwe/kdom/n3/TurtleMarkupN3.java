@@ -23,6 +23,7 @@
 package de.knowwe.kdom.n3;
 
 import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.TermReference;
@@ -34,7 +35,7 @@ import java.util.regex.Pattern;
 import de.knowwe.kdom.renderer.GenericHTMLRenderer;
 import de.knowwe.kdom.n3.TurtleSubjectSection;
 import de.knowwe.kdom.n3.TurtlePredSentence;
-import de.knowwe.kdom.n3.compile.TurtleCompiler;
+import de.knowwe.kdom.n3.compile.TurtleCompileScript;
 import de.knowwe.kdom.AnonymousType;
 
 public class TurtleMarkupN3 extends AbstractType implements KnowledgeUnit<TurtleMarkupN3> {
@@ -54,20 +55,10 @@ public class TurtleMarkupN3 extends AbstractType implements KnowledgeUnit<Turtle
 	}
 
 	@Override
-	public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(
-			Section<? extends KnowledgeUnit<TurtleMarkupN3>> section) {
-		return CompileUtils.getAllReferencesOfCompilationUnit(section);
+	public KnowledgeUnitCompileScript<TurtleMarkupN3> getCompileScript() {
+		return new TurtleCompileScript();
 	}
 
-	@Override
-	public void insertIntoRepository(Section<TurtleMarkupN3> section) {
-		TurtleCompiler.insertTriples(section);
-		
-	}
 
-	@Override
-	public void deleteFromRepository(Section<TurtleMarkupN3> section) {
-		TurtleCompiler.removeTriples(section);		
-	}
 
 }
