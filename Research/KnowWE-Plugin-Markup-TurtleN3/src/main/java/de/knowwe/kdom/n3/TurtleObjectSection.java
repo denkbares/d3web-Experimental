@@ -28,7 +28,6 @@ import de.knowwe.kdom.renderer.GenericHTMLRenderer;
 import de.knowwe.kdom.n3.TurtleObjectLiteral;
 import de.knowwe.kdom.n3.TurtleObjectTerm;
 
-
 public class TurtleObjectSection extends AbstractType {
 
 	public TurtleObjectSection() {
