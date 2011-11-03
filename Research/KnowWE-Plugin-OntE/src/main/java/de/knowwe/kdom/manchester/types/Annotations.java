@@ -78,6 +78,7 @@ public class Annotations extends AbstractType {
 		this.addChildType(list);
 
 		// ... or non list occurrence of a annotation
+		this.addChildType(new Delimiter());
 		this.addChildType(new Annotation());
 	}
 }

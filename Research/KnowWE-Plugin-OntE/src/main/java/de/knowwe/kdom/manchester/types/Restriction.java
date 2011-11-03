@@ -52,6 +52,9 @@ public class Restriction extends AbstractType {
 		OnlyRestriction only = new OnlyRestriction();
 		this.addChildType(only);
 
+		SelfRestriction self = new SelfRestriction();
+		this.addChildType(self);
+
 		CardinalityRestriction i = new CardinalityRestriction(this);
 		this.addChildType(i);
 
@@ -94,6 +97,27 @@ public class Restriction extends AbstractType {
 	 */
 	public Section<SomeRestriction> getSomeRestriction(Section<Restriction> section) {
 		return Sections.findChildOfType(section, SomeRestriction.class);
+	}
+
+	/**
+	 * Check whether the current {@link Restriction} is a
+	 * {@link SelfRestriction} section.
+	 *
+	 * @param Section<Restriction> a A {@link Restriction} section
+	 * @return TRUE if found, FALSE otherwise
+	 */
+	public boolean isSelfRestriction(Section<Restriction> section) {
+		return Sections.findChildOfType(section, SelfRestriction.class) != null;
+	}
+
+	/**
+	 * Retrieves a {@link SelfRestriction} section
+	 *
+	 * @param Section<Restriction> a A {@link Restriction} section
+	 * @return The found {@link OWLTermReferenceManchester} sections
+	 */
+	public Section<SelfRestriction> getSelfRestriction(Section<Restriction> section) {
+		return Sections.findChildOfType(section, SelfRestriction.class);
 	}
 
 	/**

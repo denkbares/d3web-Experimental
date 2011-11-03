@@ -27,28 +27,33 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
-import de.knowwe.kdom.manchester.ManchesterClassExpression;
-import de.knowwe.kdom.manchester.ManchesterClassExpression.OWLClassContentType;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
- * 
+ *
+ * Represents an <a
+ * href="http://www.w3.org/TR/2009/REC-owl2-syntax-20091027/#Self-Restriction"
+ * >ObjectHasSelf</a> class expression in the OWL 2 Specification. Simple class
+ * for the <code>self-restriction</code> restriction. A self-restriction
+ * ObjectHasSelf( OPE ) consists of an object property expression OPE, and it
+ * contains all those individuals that are connected by OPE to themselves.
+ *
  * @author Stefan Mark
  * @created 18.05.2011
  */
-public class SomeRestriction extends AbstractType {
+public class SelfRestriction extends AbstractType {
 
 	/**
 	 * Keyword for the <code>some</code> restriction.
 	 */
-	public static final String KEY = ManchesterSyntaxKeywords.SOME.getKeyword();
+	public static final String KEY = ManchesterSyntaxKeywords.SELF.getKeyword();
 
-	public static final String REGEX = Restriction.BEFORE_REGEX + KEY + Restriction.AFTER_REGEX;
+	public static final String REGEX = Restriction.BEFORE_REGEX + KEY;
 
 	/**
 	 *
 	 */
-	public SomeRestriction() {
+	public SelfRestriction() {
 
 		SectionFinder sf = new RegexSectionFinder(REGEX, Pattern.DOTALL);
 		this.setSectionFinder(sf);
@@ -63,15 +68,9 @@ public class SomeRestriction extends AbstractType {
 
 		Keyword key = new Keyword(KEY);
 		this.addChildType(key);
-
-		this.addChildType(OWLClassContentType.getCompositeCondition());
 	}
 
-	public Section<ObjectPropertyExpression> getObjectProperty(Section<SomeRestriction> section) {
+	public Section<ObjectPropertyExpression> getObjectProperty(Section<SelfRestriction> section) {
 		return Sections.findChildOfType(section, ObjectPropertyExpression.class);
-	}
-
-	public Section<ManchesterClassExpression> getManchesterClassExpression(Section<SomeRestriction> section) {
-		return Sections.findChildOfType(section, ManchesterClassExpression.class);
 	}
 }

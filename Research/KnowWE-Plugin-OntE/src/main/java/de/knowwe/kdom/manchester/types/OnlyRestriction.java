@@ -32,8 +32,8 @@ import de.knowwe.kdom.manchester.ManchesterClassExpression.OWLClassContentType;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
- *
- * @author smark
+ * 
+ * @author Stefan Mark
  * @created 18.05.2011
  */
 public class OnlyRestriction extends AbstractType {

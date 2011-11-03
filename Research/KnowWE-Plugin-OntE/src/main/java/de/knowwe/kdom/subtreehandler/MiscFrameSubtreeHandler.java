@@ -73,19 +73,19 @@ public class MiscFrameSubtreeHandler extends OWLAPISubtreeHandler<MiscFrame> {
 		OWLAxiom a = null;
 		MiscFrame type = (MiscFrame) s.get();
 
-		Set<OWLAnnotation> annotations = handleOptionalAnnotations(s);
+		Set<OWLAnnotation> annotations = handleOptionalAnnotations(s, messages);
 
 		if (type.isDifferentIndividuals(s) || type.isSameIndividuals(s)) {
-			a = AxiomFactory.createMiscFrameIndividuals(s, annotations);
+			a = AxiomFactory.createMiscFrameIndividuals(s, annotations, messages);
 		}
 		else if (type.isDisjointClasses(s) || type.isEquivalentClasses(s)) {
-			a = AxiomFactory.createMiscFrameClasses(s, annotations);
+			a = AxiomFactory.createMiscFrameClasses(s, annotations, messages);
 		}
 		else if (type.isDisjointProperties(s) || type.isEquivalentProperties(s)) {
-			a = AxiomFactory.createMiscFrameObjectProperties(s, annotations);
+			a = AxiomFactory.createMiscFrameObjectProperties(s, annotations, messages);
 		}
 		else if (type.isDisjointDataProperties(s) || type.isEquivalentDataProperties(s)) {
-			a = AxiomFactory.createMiscFrameDataProperties(s, annotations);
+			a = AxiomFactory.createMiscFrameDataProperties(s, annotations, messages);
 		}
 
 		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
@@ -103,14 +103,14 @@ public class MiscFrameSubtreeHandler extends OWLAPISubtreeHandler<MiscFrame> {
 	 * @param Section<? extends Type> section
 	 * @return A Set with {@link OWLAnnotationAxiom}
 	 */
-	private Set<OWLAnnotation> handleOptionalAnnotations(Section<? extends Type> section) {
+	private Set<OWLAnnotation> handleOptionalAnnotations(Section<? extends Type> section, Collection<KDOMReportMessage> messages) {
 
 		Set<OWLAnnotation> annotations = new HashSet<OWLAnnotation>();
 
 		if (ManchesterSyntaxUtil.hasAnnotations(section)) {
 			List<Section<Annotation>> annotationSections = ManchesterSyntaxUtil.getAnnotations(section);
 			for (Section<Annotation> annotation : annotationSections) {
-				OWLAnnotation a = AxiomFactory.createOWLAnnotation(annotation);
+				OWLAnnotation a = AxiomFactory.createOWLAnnotation(annotation, messages);
 				if (a != null) {
 					EventManager.getInstance().fireEvent(
 							new OWLApiAxiomCacheUpdateEvent(a, section));

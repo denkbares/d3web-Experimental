@@ -38,6 +38,7 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.SyntaxError;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.manchester.ManchesterClassExpression;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
@@ -90,7 +91,7 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 		if (type.hasAnnotations(s)) { // Handle Annotations
 			for (Section<Annotation> annotation : type.getAnnotations(s)) {
 				IRI annotatetObject = i.asOWLNamedIndividual().getIRI();
-				axiom = AxiomFactory.createAnnotations(annotation, annotatetObject);
+				axiom = AxiomFactory.createAnnotations(annotation, annotatetObject, messages);
 				if (axiom != null) {
 					EventManager.getInstance().fireEvent(
 							new OWLApiAxiomCacheUpdateEvent(axiom, annotation));
@@ -101,8 +102,13 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 
 		if (type.hasFacts(s)) { // Handle Facts
 			List<Section<?>> facts = type.getFacts(s);
+
+			if (facts.isEmpty()) {
+				messages.add(new SyntaxError("Facts keyword specified, but no facts found!"));
+			}
+
 			for (Section<?> fact : facts) {
-				axiom = AxiomFactory.createFact(fact, i);
+				axiom = AxiomFactory.createFact(fact, i, messages);
 				if (axiom != null) {
 					EventManager.getInstance().fireEvent(
 							new OWLApiAxiomCacheUpdateEvent(axiom, fact));
@@ -114,6 +120,11 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 
 		if (type.hasSameAs(s)) { // Handle SameAs
 			List<Section<OWLTermReferenceManchester>> nodes = type.getSameAs(s);
+
+			if (nodes.isEmpty()) {
+				messages.add(new SyntaxError("SameAs found, but no individuals specified!"));
+			}
+
 			for (Section<OWLTermReferenceManchester> node : nodes) {
 				OWLIndividual sameInd = (OWLIndividual) AxiomFactory.getOWLAPIEntity(node,
 						OWLIndividual.class);
@@ -129,6 +140,11 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 
 		if (type.hasDifferentFrom(s)) { // Handle DifferentFrom
 			List<Section<OWLTermReferenceManchester>> nodes = type.getDifferentFrom(s);
+
+			if (nodes.isEmpty()) {
+				messages.add(new SyntaxError("DifferentFrom found, but no individuals specified!"));
+			}
+
 			for (Section<OWLTermReferenceManchester> node : nodes) {
 				OWLIndividual two = (OWLIndividual) AxiomFactory.getOWLAPIEntity(node,
 						OWLIndividual.class);
@@ -147,7 +163,13 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 
 			Section<ManchesterClassExpression> mce = Sections.findChildOfType(types,
 					ManchesterClassExpression.class);
-			Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(mce);
+
+			if (mce.isEmpty()) {
+				messages.add(new SyntaxError("Types found, but no concepts specified!"));
+			}
+
+			Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(
+					mce, messages);
 
 			for (OWLClassExpression e : exp.keySet()) {
 				axiom = AxiomFactory.createNamedIndividualAxiom(e, i);
@@ -169,7 +191,7 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 	 * @param Section<? extends Type> section
 	 * @return A Set with {@link OWLAnnotationAxiom}
 	 */
-	private Set<OWLAxiom> handleOptionalAnnotations(Section<? extends Type> section, OWLIndividual i) {
+	private Set<OWLAxiom> handleOptionalAnnotations(Section<? extends Type> section, OWLIndividual i, Collection<KDOMReportMessage> messages) {
 
 		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
 
@@ -177,7 +199,7 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 			List<Section<Annotation>> annotations = ManchesterSyntaxUtil.getAnnotations(section);
 			IRI annotatetObject = i.asOWLNamedIndividual().getIRI();
 			for (Section<Annotation> annotation : annotations) {
-				OWLAxiom a = AxiomFactory.createAnnotations(annotation, annotatetObject);
+				OWLAxiom a = AxiomFactory.createAnnotations(annotation, annotatetObject, messages);
 				if (a != null) {
 					axioms.add(a);
 				}

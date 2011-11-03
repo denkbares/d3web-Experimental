@@ -29,16 +29,28 @@ import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.kdom.manchester.types.DataRangeExpression;
+import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
  * Helper class for storing regular expressions needed in the AbstractTypes of
  * the Manchester Syntax and some other utility functions. For more information
  * read the comment on each function.
  *
- * @author smark
+ * @author Stefan Mark
  * @created 15.08.2011
  */
 public class ManchesterSyntaxUtil {
+
+	/**
+	 * Returns a regular expression that matches the frame keywords.
+	 *
+	 * @created 25.10.2011
+	 * @param keyword
+	 * @return
+	 */
+	public static String getFrameKeywordPattern(ManchesterSyntaxKeywords keyword) {
+		return keyword.getKeyword() + "[:]?\\s+";
+	}
 
 	/**
 	 * Returns a regular expression string that maps a frame of the Manchester
@@ -58,6 +70,22 @@ public class ManchesterSyntaxUtil {
 				"((^$)(\r\n?|\n)){2}";
 		String regex = frame.replace("$TOKEN$", keyword);
 		return Pattern.compile(regex);
+	}
+
+	/**
+	 * Returns a regular expression that matches everything till a certain token
+	 * (keywords).
+	 *
+	 * @created 25.10.2011
+	 * @param keyword
+	 * @return
+	 */
+	public static Pattern getTillKeywordPattern(String keyword) {
+		String pattern = "(.*?)" // Everything, until
+			+ "(?="    //followed by the keywords
+			+ keyword
+				+ ")";
+		return Pattern.compile(pattern);
 	}
 
 	/**
@@ -88,8 +116,8 @@ public class ManchesterSyntaxUtil {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @created 02.07.2011
 	 * @return
 	 */

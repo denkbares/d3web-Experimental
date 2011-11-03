@@ -28,9 +28,9 @@ import de.knowwe.kdom.manchester.frame.ClassFrame;
 import de.knowwe.kdom.manchester.frame.DataPropertyFrame;
 import de.knowwe.kdom.manchester.frame.IndividualFrame;
 import de.knowwe.kdom.manchester.frame.MiscFrame;
+import de.knowwe.kdom.manchester.frame.ObjectPropertyFrame;
 import de.knowwe.kdom.manchester.frame.OntologyFrame;
 import de.knowwe.kdom.manchester.frame.PrefixFrame;
-import de.knowwe.kdom.manchester.frames.objectproperty.ObjectPropertyFrame;
 
 /**
  *

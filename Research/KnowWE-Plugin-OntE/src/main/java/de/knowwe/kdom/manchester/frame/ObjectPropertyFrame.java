@@ -17,7 +17,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.kdom.manchester.frames.objectproperty;
+package de.knowwe.kdom.manchester.frame;
 
 import java.util.regex.Pattern;
 
@@ -27,10 +27,9 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
-import de.knowwe.kdom.manchester.frame.DefaultFrame;
 import de.knowwe.kdom.manchester.types.Annotations;
+import de.knowwe.kdom.manchester.types.Characteristics;
 import de.knowwe.kdom.manchester.types.DisjointWith;
 import de.knowwe.kdom.manchester.types.Domain;
 import de.knowwe.kdom.manchester.types.EquivalentTo;
@@ -39,25 +38,41 @@ import de.knowwe.kdom.manchester.types.Range;
 import de.knowwe.kdom.manchester.types.SubPropertyOf;
 import de.knowwe.kdom.subtreehandler.ObjectPropertySubtreeHandler;
 import de.knowwe.termObject.ObjectPropertyIRIDefinition;
+import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
- *
+ * Simple {@link AbstractType} for an Object Property in the OWL 2
+ * Specification. (Object properties connect pairs of individuals.)
  *
  * @author Stefan Mark
  * @created 24.05.2011
  */
 public class ObjectPropertyFrame extends DefaultFrame {
 
-	public static final String KEYWORD = "ObjectProperty[:]?";
+	public static final String KEYWORD;
+	public static final String KEYWORDS;
 
-	public static final String KEYWORDS = "("
+	static {
+		KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.OBJECT_PROPERTY);
+
+		// add all children's keywords so they can be handled accordingly
+		KEYWORDS = "("
+			+ Annotations.KEYWORD + "|"
 			+ SubPropertyOf.KEYWORD + "|"
+			+ SubPropertyChain.KEYWORD + "|"
+			+ EquivalentTo.KEYWORD + "|"
+			+ DisjointWith.KEYWORD + "|"
 			+ Characteristics.KEYWORD + "|"
 			+ Range.KEYWORD + "|"
 			+ Domain.KEYWORD + "|"
 			+ InverseOf.KEYWORD
 			+ "|\\z)";
+	}
 
+	/**
+	 * Constructor. Add here all possible children of the
+	 * {@link ObjectPropertyFrame}.
+	 */
 	public ObjectPropertyFrame() {
 
 		this.addSubtreeHandler(new ObjectPropertySubtreeHandler());
@@ -90,6 +105,7 @@ public class ObjectPropertyFrame extends DefaultFrame {
 		this.addChildType(r);
 
 		this.addChildType(new InverseOf());
+		this.addChildType(new SubPropertyChain());
 	}
 
 	/**
@@ -277,6 +293,30 @@ public class ObjectPropertyFrame extends DefaultFrame {
 	public Section<DisjointWith> getDisjointWith(Section<ObjectPropertyFrame> section) {
 		return Sections.findSuccessor(section, DisjointWith.class);
 	}
+
+	/**
+	 * Returns if the current class definition has a {@link SubPropertyChain}
+	 * description.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<ObjectPropertyFrame> section
+	 * @return The found section
+	 */
+	public boolean hasSubPropertyChain(Section<ObjectPropertyFrame> section) {
+		return Sections.findSuccessor(section, SubPropertyChain.class) != null;
+	}
+
+	/**
+	 * Returns the {@link SubPropertyChain} sections of the current
+	 * {@link ObjectPropertyFrame}.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<ObjectPropertyFrame> section
+	 * @return The found section
+	 */
+	public Section<SubPropertyChain> getSubPropertyChain(Section<ObjectPropertyFrame> section) {
+		return Sections.findSuccessor(section, SubPropertyChain.class);
+	}
 }
 
 /**
@@ -286,13 +326,15 @@ public class ObjectPropertyFrame extends DefaultFrame {
  */
 class ObjectPropertyDefinition extends AbstractType {
 
-	public static String PATTERN = ObjectPropertyFrame.KEYWORD + "\\p{Blank}+(.+)";
+	// public static String PATTERN = ObjectPropertyFrame.KEYWORD +
+	// "\\p{Blank}+(.+)";
 
 	public ObjectPropertyDefinition() {
 
-		Pattern p = Pattern.compile(PATTERN);
-		SectionFinder sf = new RegexSectionFinder(p, 0);
-		this.setSectionFinder(sf);
+		Pattern p = Pattern.compile(ObjectPropertyFrame.KEYWORD
+				+ ManchesterSyntaxUtil.getTillKeywordPattern(ObjectPropertyFrame.KEYWORDS),
+				Pattern.DOTALL);
+		this.setSectionFinder(new RegexSectionFinder(p, 0));
 
 		Keyword key = new Keyword(ObjectPropertyFrame.KEYWORD);
 		this.addChildType(key);
@@ -324,7 +366,7 @@ class ObjectProperty extends ObjectPropertyIRIDefinition {
  */
 class InverseOf extends AbstractType {
 
-	public static final String KEYWORD = "InverseOf[:]?";
+	public static final String KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.INVERSE_OF);
 
 	public InverseOf() {
 
@@ -336,5 +378,31 @@ class InverseOf extends AbstractType {
 		this.addChildType(key);
 
 		this.addChildType(ManchesterSyntaxUtil.getMCE());
+	}
+}
+
+/**
+ *
+ *
+ * @author Stefan Mark
+ * @created 25.10.2011
+ */
+class SubPropertyChain extends AbstractType {
+
+	public static final String KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.SUB_PROPERTY_CHAIN);
+
+	public SubPropertyChain() {
+		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(ObjectPropertyFrame.KEYWORDS,
+				KEYWORD);
+		this.setSectionFinder(new RegexSectionFinder(p, 1));
+
+		Keyword key = new Keyword(KEYWORD);
+		this.addChildType(key);
+
+		// objectPropertyExpression 'o' objectPropertyExpression { 'o'
+		// objectPropertyExpression }
+
+		this.addChildType(ManchesterSyntaxUtil.getMCE());
+		this.addChildType(new Keyword("\\s+o\\s+"));
 	}
 }

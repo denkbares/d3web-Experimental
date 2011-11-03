@@ -35,13 +35,14 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.SyntaxError;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.manchester.ManchesterClassExpression;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
-import de.knowwe.kdom.manchester.frames.objectproperty.Characteristics;
-import de.knowwe.kdom.manchester.frames.objectproperty.ObjectPropertyFrame;
+import de.knowwe.kdom.manchester.frame.ObjectPropertyFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
+import de.knowwe.kdom.manchester.types.Characteristics;
 import de.knowwe.kdom.manchester.types.Domain;
 import de.knowwe.kdom.manchester.types.ObjectPropertyExpression;
 import de.knowwe.kdom.manchester.types.SubPropertyOf;
@@ -97,14 +98,21 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 			Section<?> desc = type.getRange(s);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
 					ManchesterClassExpression.class);
-			Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(mce);
 
-			for (OWLClassExpression e : exp.keySet()) {
-				axiom = AxiomFactory.createRange(p, e);
-				if (axiom != null) {
-					EventManager.getInstance().fireEvent(
-							new OWLApiAxiomCacheUpdateEvent(axiom, exp.get(e)));
-					axioms.add(axiom);
+			if (mce == null) {
+				messages.add(new SyntaxError("Range is empty!"));
+			}
+			else {
+				Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(
+						mce, messages);
+
+				for (OWLClassExpression e : exp.keySet()) {
+					axiom = AxiomFactory.createRange(p, e);
+					if (axiom != null) {
+						EventManager.getInstance().fireEvent(
+								new OWLApiAxiomCacheUpdateEvent(axiom, exp.get(e)));
+						axioms.add(axiom);
+					}
 				}
 			}
 		}
@@ -113,14 +121,21 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 			Section<?> desc = type.getDomain(s);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
 					ManchesterClassExpression.class);
-			Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(mce);
 
-			for (OWLClassExpression e : exp.keySet()) {
-				axiom = AxiomFactory.createDomain(p, e);
-				if (axiom != null) {
-					EventManager.getInstance().fireEvent(
-							new OWLApiAxiomCacheUpdateEvent(axiom, exp.get(e)));
-					axioms.add(axiom);
+			if (mce == null) {
+				messages.add(new SyntaxError("Domain is empty!"));
+			}
+			else {
+				Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(
+						mce, messages);
+
+				for (OWLClassExpression e : exp.keySet()) {
+					axiom = AxiomFactory.createDomain(p, e);
+					if (axiom != null) {
+						EventManager.getInstance().fireEvent(
+								new OWLApiAxiomCacheUpdateEvent(axiom, exp.get(e)));
+						axioms.add(axiom);
+					}
 				}
 			}
 		}
@@ -128,14 +143,20 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 			Section<?> desc = type.getInverseOf(s);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
 					ManchesterClassExpression.class);
-			Set<OWLObjectProperty> props = AxiomFactory.createObjectPropertyExpression(mce);
 
-			for (OWLObjectProperty px : props) {
-				axiom = AxiomFactory.createInverseOf(p, px);
-				if (axiom != null) {
-					EventManager.getInstance().fireEvent(
-							new OWLApiAxiomCacheUpdateEvent(axiom, mce));
-					axioms.add(axiom);
+			if (mce == null) {
+				messages.add(new SyntaxError("InverseOf is empty!"));
+			}
+			else {
+				Set<OWLObjectProperty> props = AxiomFactory.createObjectPropertyExpression(mce);
+
+				for (OWLObjectProperty px : props) {
+					axiom = AxiomFactory.createInverseOf(p, px);
+					if (axiom != null) {
+						EventManager.getInstance().fireEvent(
+								new OWLApiAxiomCacheUpdateEvent(axiom, mce));
+						axioms.add(axiom);
+					}
 				}
 			}
 		}
@@ -143,14 +164,20 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 			Section<?> desc = type.getSubPropertyOf(s);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
 					ManchesterClassExpression.class);
-			Set<OWLObjectProperty> props = AxiomFactory.createObjectPropertyExpression(mce);
 
-			for (OWLObjectProperty px : props) {
-				axiom = AxiomFactory.createSubPropertyOf(p, px);
-				if (axiom != null) {
-					EventManager.getInstance().fireEvent(
-							new OWLApiAxiomCacheUpdateEvent(axiom, mce));
-					axioms.add(axiom);
+			if (mce == null) {
+				messages.add(new SyntaxError("SubPropertyOf is empty!"));
+			}
+			else {
+				Set<OWLObjectProperty> props = AxiomFactory.createObjectPropertyExpression(mce);
+
+				for (OWLObjectProperty px : props) {
+					axiom = AxiomFactory.createSubPropertyOf(p, px);
+					if (axiom != null) {
+						EventManager.getInstance().fireEvent(
+								new OWLApiAxiomCacheUpdateEvent(axiom, mce));
+						axioms.add(axiom);
+					}
 				}
 			}
 		}
@@ -163,14 +190,20 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 			Section<?> desc = type.getDisjointWith(s);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
 					ManchesterClassExpression.class);
-			Set<OWLObjectProperty> props = AxiomFactory.createObjectPropertyExpression(mce);
 
-			for (OWLObjectProperty px : props) {
-				axiom = AxiomFactory.createDisjointWith(p, px);
-				if (axiom != null) {
-					EventManager.getInstance().fireEvent(
-							new OWLApiAxiomCacheUpdateEvent(axiom, mce));
-					axioms.add(axiom);
+			if (mce == null) {
+				messages.add(new SyntaxError("DisJointWith is empty!"));
+			}
+			else {
+				Set<OWLObjectProperty> props = AxiomFactory.createObjectPropertyExpression(mce);
+
+				for (OWLObjectProperty px : props) {
+					axiom = AxiomFactory.createDisjointWith(p, px);
+					if (axiom != null) {
+						EventManager.getInstance().fireEvent(
+								new OWLApiAxiomCacheUpdateEvent(axiom, mce));
+						axioms.add(axiom);
+					}
 				}
 			}
 		}
@@ -178,11 +211,38 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 		if (type.hasCharacteristics(s)) { // Handle Characteristics
 			Section<Characteristics> c = type.getCharacteristics(s);
 			List<Section<?>> terms = c.get().getCharacteristics(c);
-			for (Section<?> term : terms) {
-				axiom = AxiomFactory.createCharacteristics(term, p);
+
+			if (terms.isEmpty()) {
+				messages.add(new SyntaxError("No Characteristics found!"));
+			}
+			else {
+
+				for (Section<?> term : terms) {
+					axiom = AxiomFactory.createCharacteristics(term, p, messages);
+					if (axiom != null) {
+						EventManager.getInstance().fireEvent(
+								new OWLApiAxiomCacheUpdateEvent(axiom, term));
+						axioms.add(axiom);
+					}
+				}
+			}
+		}
+
+		if (type.hasSubPropertyChain(s)) { // Handle SubPropertyChain
+			Section<?> chain = type.getSubPropertyChain(s);
+
+			List<Section<ObjectPropertyExpression>> objectProperties = Sections.findSuccessorsOfType(
+					chain,
+					ObjectPropertyExpression.class);
+			if (objectProperties.isEmpty()) {
+				messages.add(new SyntaxError(
+						"no object properties found! SubpropertyChain expects  aleast two."));
+			}
+			else {
+				axiom = AxiomFactory.createSubPropertyChain(p, objectProperties);
 				if (axiom != null) {
 					EventManager.getInstance().fireEvent(
-							new OWLApiAxiomCacheUpdateEvent(axiom, term));
+							new OWLApiAxiomCacheUpdateEvent(axiom, chain));
 					axioms.add(axiom);
 				}
 			}
@@ -191,7 +251,7 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 		if(ManchesterSyntaxUtil.hasAnnotations(s)) { //Handle Annotations
 			List<Section<Annotation>> annotations = ManchesterSyntaxUtil.getAnnotations(s);
 			for (Section<Annotation> annotation : annotations) {
-				axiom = AxiomFactory.createAnnotations(annotation, p.getIRI());
+				axiom = AxiomFactory.createAnnotations(annotation, p.getIRI(), messages);
 				if (axiom != null) {
 					EventManager.getInstance().fireEvent(
 							new OWLApiAxiomCacheUpdateEvent(axiom, annotation));

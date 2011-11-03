@@ -19,10 +19,17 @@
  */
 package de.knowwe.kdom.manchester;
 
+import java.util.Collection;
+
 import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
+import de.knowwe.core.report.KDOMError;
+import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.KDOMWarning;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.manchester.frame.DefaultFrame;
@@ -45,11 +52,12 @@ public class ManchesterSyntaxFrameRenderer extends KnowWEDomRenderer<DefaultFram
 	@Override
 	public void render(KnowWEArticle article, Section<DefaultFrame> sec, UserContext user, StringBuilder string) {
 
-		string.append(KnowWEUtils.maskHTML("<pre style=\"white-space:pre-wrap;background: none repeat scroll 0 0 #F5F5F5;border: 1px solid #E5E5E5;position:relative;\">"));
+		string.append(KnowWEUtils.maskHTML("<pre style=\"white-space:pre-wrap;background: none repeat scroll 0 0 #F5F5F5;border: 1px solid #E5E5E5;position:relative;margin:0px\">"));
 
+		renderMessages(article, sec, string);
 		string.append(KnowWEUtils.maskHTML("<div style=\"position:absolute;top:0px;right:0px;border-bottom: 1px solid #E5E5E5;border-left: 1px solid #E5E5E5;padding:5px\">"
 				// + getFrameName(sec)
-				+ getEditorIcon(sec)
+				// + getEditorIcon(sec)
 				+ getLink(sec)
 				+ "</div>"));
 
@@ -57,12 +65,40 @@ public class ManchesterSyntaxFrameRenderer extends KnowWEDomRenderer<DefaultFram
 		string.append(KnowWEUtils.maskHTML("</pre>"));
 	}
 
-	public boolean getRenderLink() {
-		return renderLink;
+	/**
+	 * Renders possible messages returned by the {@link SubtreeHandler}.
+	 *
+	 * @created 18.10.2011
+	 * @param KnowWEArticle article
+	 * @param Section<? extends Type> section
+	 * @param StringBuilder string
+	 */
+	private void renderMessages(KnowWEArticle article, Section<? extends Type> section, StringBuilder string) {
+		renderKDOMReportMessages(KnowWEUtils.getMessagesFromSubtree(article, section,
+				KDOMError.class), string);
+		renderKDOMReportMessages(KnowWEUtils.getMessagesFromSubtree(article, section,
+				KDOMWarning.class), string);
 	}
 
-	public void setRenderLink(boolean render) {
-		renderLink = render;
+	private void renderKDOMReportMessages(Collection<? extends KDOMReportMessage> messages, StringBuilder string) {
+		if (messages == null) return;
+		if (messages.isEmpty()) return;
+
+		Class<? extends KDOMReportMessage> type = messages.iterator().next().getClass();
+		String className = "";
+		if (KDOMWarning.class.isAssignableFrom(type)) {
+			className = "warning";
+		}
+		else if (KDOMError.class.isAssignableFrom(type)) {
+			className = "error";
+		}
+
+		string.append(KnowWEUtils.maskHTML("<span class='" + className + "'>"));
+		for (KDOMReportMessage error : messages) {
+			string.append(error.getVerbalization());
+			string.append("\n");
+		}
+		string.append(KnowWEUtils.maskHTML("</span>"));
 	}
 
 	/**
@@ -108,5 +144,13 @@ public class ManchesterSyntaxFrameRenderer extends KnowWEDomRenderer<DefaultFram
 					+ section.getTitle() + "</a>";
 		}
 		return "";
+	}
+
+	public boolean getRenderLink() {
+		return renderLink;
+	}
+
+	public void setRenderLink(boolean render) {
+		renderLink = render;
 	}
 }

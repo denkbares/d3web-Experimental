@@ -48,7 +48,7 @@ public class OntEToolbarTagHandler extends AbstractHTMLTagHandler {
 			return html.toString();
 		}
 
-		html.append("<div class=\"onte-buttons onte-buttonbar\">");
+		html.append("<div class=\"onte-buttons onte-buttonbar\" style=\"width: 100%; height: 44px;\">");
 
 		html.append(getButton("Import", "KNOWWE.plugin.onte.actions.import()", "import"));
 		html.append(getButton("Export", "KNOWWE.plugin.onte.actions.showExportTab()", "export"));
