@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ResourceBundle;
 
 import de.d3web.we.poi.PoiUtils;
 import de.d3web.we.tables.CausalDiagnosisScore;
@@ -50,13 +51,14 @@ import de.knowwe.core.kdom.parsing.Section;
  */
 public class TableExportAction extends AbstractAction {
 
+	private static ResourceBundle bundle = ResourceBundle.getBundle("Usersupport_messages");
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 
 		String tableId = context.getParameter("tableId");
 		String title = context.getTitle();
-		String web = context.getWeb();
 		String user = context.getUserName();
 
 		// Get the table to be exported
@@ -64,15 +66,8 @@ public class TableExportAction extends AbstractAction {
 				KnowWEEnvironment.getInstance().getArticle(context.getWeb(), context.getTitle());
 		Section<?> table = TableUtils.getTableWithId(article, tableId);
 
-		// TODO should i store this here?
-		String extensionPath = System.getProperty("java.io.tmpdir");
-		extensionPath += "/workbook-" +tableId+ ".xls";
+		String extensionPath = System.getProperty("java.io.tmpdir") + "/workbook-" +tableId+ ".xls";
 		File file = new File(extensionPath);
-
-		// Create the FileOutPutStream
-		//		File file =
-		//				new File("C:/Users/ManiaC/Vorlesungen/Diplomarbeit/Export/workbook-"
-		//						+tableId+".xls");
 		FileOutputStream out = new FileOutputStream(file);
 
 		// Export the Table via PoiUtils
@@ -97,7 +92,8 @@ public class TableExportAction extends AbstractAction {
 		// write the downloadlink beneath the exportbutton
 		Writer writer = context.getWriter();
 		writer.append(
-				"<a href=\"file://"+ extensionPath + "\">Download exported file</a>"
+				"<a href=\"file://"+ extensionPath + "\">" +
+						bundle.getString("download-export") +  "</a>"
 				);
 
 	}

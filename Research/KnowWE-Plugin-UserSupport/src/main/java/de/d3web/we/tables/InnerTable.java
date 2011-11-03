@@ -49,9 +49,7 @@ public class InnerTable extends ITable {
 		// Lines of the table
 		this.addChildType(new TableLine());
 
-		// TODO new TableRenderer
-		//		this.setCustomRenderer(new ReRenderSectionMarkerRenderer<Type>(
-		//				new SpanIDRenderer()));
+		// Renderer
 		this.setCustomRenderer(new TableRenderer());
 
 		// anything left is comment

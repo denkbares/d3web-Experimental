@@ -25,8 +25,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeBodyPart;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,7 +36,8 @@ import de.knowwe.core.action.UserActionContext;
 
 
 /**
- * TODO Perhaps enable the user to upload a file that is not exported first.
+ * TODO This class is not used. It was a quickshot trying to upload a file
+ * over AJAX. But this will not work!
  * 
  * 
  * @author Johannes Dienst
@@ -52,20 +51,13 @@ public class TableImportAction extends AbstractAction {
 		try {
 			String tableId = context.getParameter("tableId");
 			String title = context.getTitle();
-			String web = context.getWeb();
-			String user = context.getUserName();
 
 			this.uploadFile(context);
 
 			// TODO should i store this here?
-			String extensionPath = KnowWEEnvironment.getInstance().getKnowWEExtensionPath();
-			extensionPath += "/workbook-" +tableId+ ".xls";
+			String extensionPath = KnowWEEnvironment.getInstance().getKnowWEExtensionPath()
+					+ "/workbook-" +tableId+ ".xls";
 			File file = new File(extensionPath);
-			//			FileInputStream in = new FileInputStream(file);
-			//			FileInputStream in =
-			//					new FileInputStream(
-			//							"C:/Users/ManiaC/Vorlesungen/Diplomarbeit/Export/workbook-"
-			//									+tableId+".xls");
 			String tableMarkup = PoiUtils.
 					importTableFromFile(file, tableId, title, (ActionContext)context);
 
@@ -146,20 +138,6 @@ public class TableImportAction extends AbstractAction {
 		//		}
 
 
-	}
-
-	private void handleIncomingFile(MimeBodyPart content)
-			throws MessagingException {
-		String type = content.getContentType();
-		Object o;
-		try {
-			o = content.getContent();
-		}
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("hierä");
 	}
 
 }

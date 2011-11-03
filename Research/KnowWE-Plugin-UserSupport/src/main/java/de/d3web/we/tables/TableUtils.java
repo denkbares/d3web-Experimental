@@ -28,6 +28,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 
 
 /**
+ * Utils class that offers static-methods for tables.
  * 
  * @author Johannes Dienst
  * @created 18.10.2011
@@ -36,7 +37,6 @@ public class TableUtils {
 
 	/**
 	 * Returns the row of the table in which the current cell occurs.
-	 * TODO Header counts as TableLine
 	 * 
 	 * @param s current section
 	 * @return

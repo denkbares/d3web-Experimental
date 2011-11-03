@@ -61,8 +61,6 @@ public class TableCell extends AbstractType {
 
 		};
 
-		//		this.sectionFinder = new AllTextSectionFinder();
-
 		this.setCustomRenderer(new ObjectInfoLinkRenderer(StyleRenderer.CHOICE));
 	}
 

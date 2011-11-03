@@ -24,6 +24,8 @@ import de.knowwe.core.kdom.AbstractType;
 
 /**
  * Interface all Tables should implement.
+ * In fact this is not an Interface because the class hierarchy
+ * does not allow this.
  * 
  * @author Johannes Dienst
  * @created 18.10.2011
