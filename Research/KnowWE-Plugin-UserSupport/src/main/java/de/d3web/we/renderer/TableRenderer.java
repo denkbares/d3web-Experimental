@@ -19,6 +19,7 @@
 package de.d3web.we.renderer;
 
 import java.util.List;
+import java.util.ResourceBundle;
 
 import de.d3web.we.tables.ITable;
 import de.d3web.we.tables.TableCell;
@@ -38,6 +39,8 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @created 14.10.2011
  */
 public class TableRenderer extends KnowWEDomRenderer<ITable> {
+
+	private static ResourceBundle bundle = ResourceBundle.getBundle("Usersupport_messages");
 
 	@Override
 	public void render(KnowWEArticle article, Section<ITable> section,
@@ -122,7 +125,7 @@ public class TableRenderer extends KnowWEDomRenderer<ITable> {
 		String exportButton =
 				"<div>" +
 						"<input class=\"button table-export\" type=\"button\" name=\"Export\" " +
-						"value=\"Export\" id=\"" + section.getID()  + "-Export\"" + rel  + ">" +
+						"value=\"" + bundle.getString("export_button") + "\" id=\"" + section.getID()  + "-Export\"" + rel  + ">" +
 						"<span id=\"export-download" + section.getID() + "\"> </span>" +
 						"</div>"
 						;
@@ -145,11 +148,12 @@ public class TableRenderer extends KnowWEDomRenderer<ITable> {
 				"&article=" + section.getTitle() + "\" " +
 				"method=\"post\" enctype=\"multipart/form-data\" accept-charset=\"UTF-8\">" +
 				"<P>" +
-				"Excel Datei zum Upload auswählen:" +
+				bundle.getString("excel-upload") +
 				"<P>" +
 				"<INPUT type=\"file\" size=\"60\" name=\"excelcontent\">" +
 				"<P>" +
-				"<INPUT type=\"submit\" name=\"enter\" value=\"Hochladen\">" +
+				"<INPUT type=\"submit\" name=\"enter\" value=\"" +
+				bundle.getString("upload_button") + "\">" +
 				"</form>";
 
 		buildi.append(exportButton + importButton);
