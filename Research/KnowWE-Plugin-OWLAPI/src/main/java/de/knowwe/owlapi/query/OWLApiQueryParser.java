@@ -9,6 +9,7 @@ import org.semanticweb.owlapi.expression.ShortFormEntityChecker;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.util.BidirectionalShortFormProvider;
 import org.semanticweb.owlapi.util.BidirectionalShortFormProviderAdapter;
@@ -32,7 +33,7 @@ public class OWLApiQueryParser {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param shortFormProvider
 	 */
 	public OWLApiQueryParser(ShortFormProvider shortFormProvider) {
@@ -65,6 +66,23 @@ public class OWLApiQueryParser {
 		parser.setOWLEntityChecker(owlEntityChecker);
 
 		return parser.parseClassExpression();
+	}
+
+	/**
+	 * Parses a string given in Manchester OWL Syntax into a
+	 * {@link OWLClassExpression}. The OWLClassexpression can then further used
+	 * to obtain results from the loaded ontology.
+	 *
+	 * @param String query The to parse String
+	 * @throws ParserException
+	 */
+	public OWLObjectPropertyExpression parseOWLObjectPropertyExpression(String query) throws ParserException {
+
+		ManchesterOWLSyntaxEditorParser parser = new ManchesterOWLSyntaxEditorParser(factory, query);
+		parser.setDefaultOntology(ontology);
+		parser.setOWLEntityChecker(owlEntityChecker);
+
+		return parser.parseObjectPropertyExpression();
 	}
 
 	/**

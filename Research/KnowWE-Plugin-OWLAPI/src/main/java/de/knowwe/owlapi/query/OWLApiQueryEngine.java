@@ -11,6 +11,7 @@ import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.reasoner.Node;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
@@ -119,6 +120,18 @@ public class OWLApiQueryEngine {
 		OWLClassExpression exp = parser.parseManchesterOWLsyntax(query);
 		NodeSet<OWLNamedIndividual> individuals = reasoner.getInstances(exp, direct);
 		return individuals.getFlattened();
+	}
+
+	public Set<OWLObjectPropertyExpression> getSubProperties(String query, boolean direct) throws ParserException {
+		if (query == null || query.trim().isEmpty()) {
+			return Collections.emptySet();
+		}
+
+		OWLObjectPropertyExpression exp = parser.parseOWLObjectPropertyExpression(query);
+		NodeSet<OWLObjectPropertyExpression> properties = reasoner.getSubObjectProperties(exp,
+				direct);
+		return properties.getFlattened();
+
 	}
 
 	/**
