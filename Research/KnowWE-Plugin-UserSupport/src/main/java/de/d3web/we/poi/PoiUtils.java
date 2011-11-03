@@ -18,12 +18,15 @@
  */
 package de.d3web.we.poi;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -38,8 +41,14 @@ import org.apache.poi.ss.usermodel.Workbook;
 import de.d3web.we.tables.CausalDiagnosisScore;
 import de.d3web.we.tables.DecisionTable;
 import de.d3web.we.tables.HeuristicDiagnosisTable;
+import de.d3web.we.tables.ITable;
+import de.d3web.we.tables.InnerTable;
 import de.d3web.we.tables.TableCell;
 import de.d3web.we.tables.TableLine;
+import de.knowwe.core.KnowWEArticleManager;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.action.ActionContext;
+import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 
@@ -180,12 +189,16 @@ public class PoiUtils {
 	 * Constructs the table-markup from a given xls-File.
 	 * 
 	 * @created 19.10.2011
-	 * @param in Inputstream for xls file
+	 * @param file file to load xls from
+	 * @param tableId
+	 * @param article
 	 * @return the table-markup
 	 * @throws IOException
 	 */
-	public static String importTableFromFile(FileInputStream in) throws IOException {
-		Workbook wb = new HSSFWorkbook(in);
+	public static String importTableFromFile(File in, String tableId,
+			String article, ActionContext context) throws IOException {
+		FileInputStream input = new FileInputStream(in);
+		Workbook wb = new HSSFWorkbook(input);
 
 		Sheet sheet = wb.getSheetAt(0); // TODO is there only 1 sheet
 
@@ -203,7 +216,7 @@ public class PoiUtils {
 			String[] cells = new String[row.getPhysicalNumberOfCells()];
 
 			for ( int i = 0; i < row.getPhysicalNumberOfCells(); i++) {
-				cells[0] = row.getCell(i).getStringCellValue();
+				cells[i] = row.getCell(i).getStringCellValue();
 			}
 
 			rowsList.add(cells);
@@ -215,8 +228,28 @@ public class PoiUtils {
 			for (String c : arr) {
 				buildi.append(c+"|");
 			}
-			buildi.replace(buildi.length(), buildi.length(), ",");
+			buildi.replace(buildi.length(), buildi.length(), ",\n");
 		}
+
+		// Replace the old table with the new one
+		KnowWEArticleManager manager =
+				KnowWEEnvironment.getInstance().getArticleManager(KnowWEEnvironment.DEFAULT_WEB);
+		KnowWEArticle art = manager.getArticle(article);
+		List<Section<ITable>> itables = Sections.findSuccessorsOfType(art.getSection(), ITable.class);
+		Section<ITable> searchedOne = null;
+
+		for (Section<ITable> table : itables) {
+			if (table.getID().equals(tableId)) {
+				// TODO my context is null here because the call
+				// comes from a servlet
+				Map<String, String> nodeMap = new HashMap<String, String>();
+				nodeMap.put(tableId, buildi.toString());
+
+				manager.replaceKDOMNodesSaveAndBuild(context, article, nodeMap);
+				Sections.findSuccessor(table, InnerTable.class);
+			}
+		}
+
 
 		return buildi.toString();
 	}

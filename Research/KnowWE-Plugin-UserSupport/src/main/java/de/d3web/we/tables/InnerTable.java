@@ -18,28 +18,46 @@
  */
 package de.d3web.we.tables;
 
-import de.d3web.we.kdom.xcl.list.ListSolutionType;
+import de.d3web.we.renderer.TableRenderer;
+import de.knowwe.core.kdom.basicType.CommentLineType;
+import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.kdom.AnonymousType;
-import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
+import de.knowwe.kdom.renderer.StyleRenderer;
+import de.knowwe.kdom.sectionFinder.UnquotedExpressionFinder;
 
 
 /**
  * 
  * @author Johannes Dienst
- * @created 14.10.2011
+ * @created 19.10.2011
  */
-public class DecisionTable extends ITable {
+public class InnerTable extends ITable {
 
-	public DecisionTable() {
+	public InnerTable() {
+
 		this.sectionFinder = new AllTextSectionFinder();
-		this.addChildType(new ListSolutionType());
 
-		// cut the optional closing }
-		AnonymousType closing = new AnonymousType("closing-bracket");
-		closing.setSectionFinder(new StringSectionFinderUnquoted("}"));
-		this.addChildType(closing);
+		// allow for comment lines
+		this.addChildType(new CommentLineType());
 
-		this.addChildType(new InnerTable());
+		// split by search for komas
+		AnonymousType koma = new AnonymousType("koma");
+		koma.setSectionFinder(new UnquotedExpressionFinder(","));
+		this.addChildType(koma);
+
+		// Lines of the table
+		this.addChildType(new TableLine());
+
+		// TODO new TableRenderer
+		//		this.setCustomRenderer(new ReRenderSectionMarkerRenderer<Type>(
+		//				new SpanIDRenderer()));
+		this.setCustomRenderer(new TableRenderer());
+
+		// anything left is comment
+		AnonymousType residue = new AnonymousType("rest");
+		residue.setSectionFinder(new AllTextFinderTrimmed());
+		residue.setCustomRenderer(StyleRenderer.COMMENT);
+		this.addChildType(residue);
 	}
 }

@@ -149,6 +149,21 @@
 			<artifactId>poi</artifactId>
 			<version>3.7</version>
 		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.4</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>KnowWE-GlobalTestUtils</artifactId>
+			<version>0.2-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<distributionManagement>
 		<snapshotRepository>

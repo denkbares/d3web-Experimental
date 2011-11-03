@@ -16,30 +16,44 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.d3web.we.tables;
+package tests;
 
-import de.d3web.we.kdom.xcl.list.ListSolutionType;
-import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
-import de.knowwe.kdom.AnonymousTypeInvisible;
-import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
+import java.io.IOException;
+
+import junit.framework.TestCase;
+
+import org.junit.Test;
+
+import utils.MyTestArticleManager;
+import de.d3web.plugin.test.InitPluginManager;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
 
 
 /**
  * 
  * @author Johannes Dienst
- * @created 14.10.2011
+ * @created 28.10.2011
  */
-public class HeuristicDiagnosisTable extends ITable {
+public class TableTest extends TestCase {
 
-	public HeuristicDiagnosisTable() {
-		this.sectionFinder = new AllTextSectionFinder();
-		this.addChildType(new ListSolutionType());
+	private final String TESTSUITEARTICLE = "src/test/resources/TableMarkup.txt";
+	Section<KnowWEArticle> articleSec = null;
 
-		// cut the optional closing }
-		AnonymousTypeInvisible closing = new AnonymousTypeInvisible("closing-bracket");
-		closing.setSectionFinder(new StringSectionFinderUnquoted("}"));
-		this.addChildType(closing);
+	@Override
+	protected void setUp() throws IOException {
+		InitPluginManager.init();
+		KnowWEArticle article = MyTestArticleManager.getArticle(TESTSUITEARTICLE);
+		articleSec = article.getSection();
+	}
 
-		this.addChildType(new InnerTable());
+	/**
+	 * Only tests if there are the right count of TableCells etc.
+	 * 
+	 * @created 28.10.2011
+	 */
+	@Test
+	public void testTableStructureSimple() {
+
 	}
 }

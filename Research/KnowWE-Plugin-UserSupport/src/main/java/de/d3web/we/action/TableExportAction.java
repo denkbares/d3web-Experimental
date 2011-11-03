@@ -64,20 +64,27 @@ public class TableExportAction extends AbstractAction {
 				KnowWEEnvironment.getInstance().getArticle(context.getWeb(), context.getTitle());
 		Section<?> table = TableUtils.getTableWithId(article, tableId);
 
+		// TODO should i store this here?
+		String extensionPath = System.getProperty("java.io.tmpdir");
+		extensionPath += "/workbook-" +tableId+ ".xls";
+		File file = new File(extensionPath);
+
 		// Create the FileOutPutStream
-		File file = new File("C:/Users/ManiaC/Vorlesungen/Diplomarbeit/Export/workbook.xls");
+		//		File file =
+		//				new File("C:/Users/ManiaC/Vorlesungen/Diplomarbeit/Export/workbook-"
+		//						+tableId+".xls");
 		FileOutputStream out = new FileOutputStream(file);
 
 		// Export the Table via PoiUtils
-		if (table.get().isType(CausalDiagnosisScore.class))
+		if (table.getFather().get().isType(CausalDiagnosisScore.class))
 			PoiUtils.writeCausalDiagnosisScoreToFile(
 					(Section<CausalDiagnosisScore>) table, out);
 
-		if (table.get().isType(DecisionTable.class))
+		if (table.getFather().get().isType(DecisionTable.class))
 			PoiUtils.writeDecisionTableToFile(
 					(Section<DecisionTable>) table, out);
 
-		if (table.get().isType(HeuristicDiagnosisTable.class))
+		if (table.getFather().get().isType(HeuristicDiagnosisTable.class))
 			PoiUtils.writeHeuristicDiagnosTableToFile(
 					(Section<HeuristicDiagnosisTable>) table, out);
 
@@ -90,8 +97,7 @@ public class TableExportAction extends AbstractAction {
 		// write the downloadlink beneath the exportbutton
 		Writer writer = context.getWriter();
 		writer.append(
-				"<a href=\"file://C:/Users/ManiaC/Vorlesungen/Diplomarbeit/Export/workbook.xls\"" +
-						">Download exported file</a>"
+				"<a href=\"file://"+ extensionPath + "\">Download exported file</a>"
 				);
 
 	}

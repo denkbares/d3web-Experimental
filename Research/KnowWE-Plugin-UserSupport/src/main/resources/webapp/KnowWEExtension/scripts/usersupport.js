@@ -64,8 +64,9 @@ KNOWWE.plugin.usersupport = function() {
 				 _KE.add('click', exportbuttons[i], KNOWWE.plugin.usersupport.exportAction);
 			}
 			for (var i = 0; i < importbuttons.length; i++) {
-				 _KE.add('click', importbuttons, KNOWWE.plugin.usersupport.importAction);
+				 _KE.add('click', importbuttons[i], KNOWWE.plugin.usersupport.importAction);
 			}
+
         },
 		
 		/**
@@ -88,7 +89,7 @@ KNOWWE.plugin.usersupport = function() {
 				url : KNOWWE.core.util.getURL(params),
 				response : {
 					action : 'insert',
-                    ids : [ exportId ],
+                    ids : [ id ],
 //                    fn : function(){
 //			        	try {
 //			        	}
@@ -104,25 +105,20 @@ KNOWWE.plugin.usersupport = function() {
 		 * adds the ImportTableAction for Tables to the Button
 		 */
 		importAction : function(event) {
+			
 			var rel = eval("(" + _KE.target( event ).getAttribute('rel') + ")");
 			var params = {
 				action : 'TableImportAction',
 				tableId : rel.objectId,
-				// objectname : objectName.innerHTML
 			}
-
-			var id = "import-upload"+rel.objectId;
 			
 			var options = {
 				url : KNOWWE.core.util.getURL(params),
-				response : {
-					action : 'insert',
-                    ids : [ id ],
-//                    fn : function(){
-//			        	try {
-//			        	}
-//                    },
-				}
+				tableId : rel.objectId,
+//				response : {
+//					action : 'insert',
+//                    ids : [ id ],
+//				}
 			}
 			new _KA(options).send();
 

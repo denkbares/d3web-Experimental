@@ -126,12 +126,31 @@ public class TableRenderer extends KnowWEDomRenderer<ITable> {
 						"<span id=\"export-download" + section.getID() + "\"> </span>" +
 						"</div>"
 						;
-		String importButton =
-				"<div>" +
-						"<input class=\"button table-import\" type=\"button\" name=\"Import\"" +
-						" value=\"Import\" id=\"" + section.getID()  + "-Import\"" + rel + ">" +
-						"<span id=\"import-upload" + section.getID() + "\"> </span>" +
-						"</div>";
+
+		//		String inputForm = "<form action=\"\" method=\"post\" enctype=\"multipart/form-data\">" +
+		//				"<input name=\"import-textfield-" + section.getID() +"\" type=\"file\" size=\"50\" maxlength=\"100000\" accept=\"application/msexcel/*\">" +
+		//				"</form>";
+		//
+		//		String importButton =
+		//				"<div>" +
+		//						"<input class=\"button table-import\" type=\"submit\" name=\"Import\"" +
+		//						" value=\"Import\" id=\"" + section.getID()  + "-Import\"" + rel + ">" +
+		//						"<span id=\"import-upload" + section.getID() + "\">" +
+		//						inputForm +
+		//						"</span>" +
+		//						"</div>";
+
+		String importButton = "<form id=\"file_upload_form\" action=\"uploadreceptor?" +
+				"tableId=" + section.getID() +
+				"&article=" + section.getTitle() + "\" " +
+				"method=\"post\" enctype=\"multipart/form-data\" accept-charset=\"UTF-8\">" +
+				"<P>" +
+				"Excel Datei zum Upload auswählen:" +
+				"<P>" +
+				"<INPUT type=\"file\" size=\"60\" name=\"excelcontent\">" +
+				"<P>" +
+				"<INPUT type=\"submit\" name=\"enter\" value=\"Hochladen\">" +
+				"</form>";
 
 		buildi.append(exportButton + importButton);
 	}

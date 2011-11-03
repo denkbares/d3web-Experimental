@@ -18,19 +18,27 @@
  */
 package de.d3web.we.action;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import de.d3web.we.poi.PoiUtils;
+import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.ActionContext;
 import de.knowwe.core.action.UserActionContext;
 
 
 /**
- * TODO Perhaps enable the user to upload a file that is not.
- * TODO Load the file from cookie.
+ * TODO Perhaps enable the user to upload a file that is not exported first.
  * 
  * 
  * @author Johannes Dienst
@@ -47,17 +55,111 @@ public class TableImportAction extends AbstractAction {
 			String web = context.getWeb();
 			String user = context.getUserName();
 
-			// TODO load the file from cookie
-			FileInputStream in = new FileInputStream("Bla");
-			PoiUtils.importTableFromFile(in);
+			this.uploadFile(context);
+
+			// TODO should i store this here?
+			String extensionPath = KnowWEEnvironment.getInstance().getKnowWEExtensionPath();
+			extensionPath += "/workbook-" +tableId+ ".xls";
+			File file = new File(extensionPath);
+			//			FileInputStream in = new FileInputStream(file);
+			//			FileInputStream in =
+			//					new FileInputStream(
+			//							"C:/Users/ManiaC/Vorlesungen/Diplomarbeit/Export/workbook-"
+			//									+tableId+".xls");
+			String tableMarkup = PoiUtils.
+					importTableFromFile(file, tableId, title, (ActionContext)context);
+
+
+			// TODO Right method?
+			Map<String,String> nodesMap = new HashMap<String,String>();
+			nodesMap.put(tableId, tableMarkup);
+			KnowWEEnvironment.getInstance().getArticleManager(context.getWeb()).
+			replaceKDOMNodesSaveAndBuild(context, title, nodesMap);
 
 			Writer writer = context.getWriter();
 			writer.append("Import successful");
+			//			in.close();
 		} catch (IOException e) {
 			Logger.getLogger(this.getClass().getName()).warning(
 					"Import of xls failed");
 		}
 
+	}
+
+	/**
+	 * 
+	 * @created 21.10.2011
+	 * @param context
+	 */
+	private void uploadFile(UserActionContext context) {
+		HttpServletRequest req = context.getRequest();
+		HttpServletResponse res = context.getResponse();
+		//		try {
+		//		PrintWriter out = res.getWriter();
+		//		res.setContentType("text/plain");
+		//
+		//		DiskFileItemFactory  fileItemFactory = new DiskFileItemFactory ();
+		//		fileItemFactory.setSizeThreshold(1*1024*1024); //1 MB
+		//		ServletFileUpload uploadHandler = new ServletFileUpload(fileItemFactory);
+		//
+		//		File tmpDir = new File(System.getProperty("java.io.tmpdir"));
+		//		File destinationDir = new File(System.getProperty("java.io.tmpdir"));
+		//		fileItemFactory.setRepository( tmpDir );
+
+		/*
+		 * Parse the request
+		 */
+		//			List items = uploadHandler.parseRequest(req);
+		String tableId = req.getParameter("tableId");
+		String article = req.getParameter("article");
+		//			Iterator itr = items.iterator();
+		//
+		//			while(itr.hasNext()) {
+		//				FileItem item = (FileItem) itr.next();
+		//				/*
+		//				 * Handle Form Fields.
+		//				 */
+		//				if(item.isFormField()) {
+		//					out.println("File Name = "+item.getFieldName()+", Value = "+item.getString());
+		//				} else {
+		//					//Handle Uploaded files.
+		//					out.println("Field Name = "+item.getFieldName()+
+		//							", File Name = "+item.getName()+
+		//							", Content type = "+item.getContentType()+
+		//							", File Size = "+item.getSize());
+		//					/*
+		//					 * Write file to the ultimate location.
+		//					 */
+		//					File file = new File(destinationDir, "workbook-" + tableId + ".xls");
+		//					item.write(file);
+		//
+		//					// import the file to Wiki via PoiUtils
+		//					PoiUtils.importTableFromFile(file, tableId, article);
+		//				}
+		//				out.close();
+		//			}
+		//
+		//		} catch(FileUploadException ex) {
+		//			//			log("Error encountered while parsing the request",ex);
+		//		} catch(Exception ex) {
+		//			//			log("Error encountered while uploading file",ex);
+		//		}
+
+
+	}
+
+	private void handleIncomingFile(MimeBodyPart content)
+			throws MessagingException {
+		String type = content.getContentType();
+		Object o;
+		try {
+			o = content.getContent();
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("hierä");
 	}
 
 }
