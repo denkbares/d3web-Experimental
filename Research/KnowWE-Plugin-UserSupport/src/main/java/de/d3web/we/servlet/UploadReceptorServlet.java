@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -39,19 +40,21 @@ import de.knowwe.core.action.ActionContext;
 
 
 /**
-   Simple servlet for receiving a file and launching
-   a command, specified in settings, to run it.
+ * Simple servlet for receiving a file and launching
+ * a command, specified in settings, to run it.
+ * 
+ * @author Johannes Dienst
+ * @created 01.11.2011
  */
 public class UploadReceptorServlet extends HttpServlet {
+
 	private static final long serialVersionUID = -4681782387262665746L;
-	// Index of the one-time key code.
-	private static int m_ix = 0;
-	String storageDir;
+
+	private ResourceBundle bundle;
 
 	@Override
 	public void init() {
-		// read application init info
-		storageDir = System.getProperty("java.io.tmpdir");
+		ResourceBundle.getBundle("Usersupport_messages");
 	}
 
 
@@ -87,7 +90,7 @@ public class UploadReceptorServlet extends HttpServlet {
 			String article = req.getParameter("article");
 
 			// TODO works everywhere?
-			res.sendRedirect("/KnowWE/Wiki.jsp?page="+article);
+			res.sendRedirect(bundle.getString("redirect_path")+article);
 
 			Iterator itr = items.iterator();
 
