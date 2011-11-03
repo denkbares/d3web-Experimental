@@ -36,7 +36,7 @@ import de.knowwe.taghandler.OWLApiTagHandlerUtil;
 /**
  * A simple test for the continuous integration plugin for KnowWE. This test
  * checks if a certain amount of individuals could be found for a given concept.
- * 
+ *
  * @author Stefan Mark
  * @created 17.10.2011
  */
@@ -69,8 +69,10 @@ public class OntologyIndividualExistTest extends AbstractCITest {
 		StringBuilder configuration = new StringBuilder();
 		configuration.append("Concept of individuals: ");
 		configuration.append(concept);
-		configuration.append("; Min amount expected: ");
+		configuration.append("; Minimum amount expected: ");
 		configuration.append(amount);
+		configuration.append("; Reasoner: ");
+		configuration.append(reasoner.getReasonerName());
 
 		OWLClass cls = (OWLClass) AxiomFactory.getOWLAPIEntity(concept, OWLClass.class);
 		NodeSet<OWLNamedIndividual> individualsNodeSet = reasoner.getInstances(cls, true);

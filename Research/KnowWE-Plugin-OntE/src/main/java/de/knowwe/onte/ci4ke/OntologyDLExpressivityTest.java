@@ -21,66 +21,46 @@ package de.knowwe.onte.ci4ke;
 
 import java.util.Set;
 
-import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.reasoner.Node;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
+import org.semanticweb.owlapi.util.DLExpressivityChecker;
 
 import de.d3web.we.ci4ke.testing.AbstractCITest;
 import de.d3web.we.ci4ke.testing.CITestResult;
 import de.d3web.we.ci4ke.testing.CITestResult.Type;
 import de.knowwe.owlapi.OWLAPIConnector;
-import de.knowwe.taghandler.OWLApiTagHandlerUtil;
 
 /**
  * A simple test for the continuous integration plugin for KnowWE. This test
- * checks the consistency of the local ontology. In case of inconsistency, the
- * concept responsible are printed into the ci4ke dashboard.
+ * checks the expressivity of the ontology. eg. if its is in OWL Lite, OWL DL or
+ * OWL Full. The result of the check is printed to the CI dashboard.
  *
  * @author Stefan Mark
  * @created 17.10.2011
  */
-public class OntologyConsistencyTest extends AbstractCITest {
+public class OntologyDLExpressivityTest extends AbstractCITest {
 
 	@Override
 	public CITestResult call() throws Exception {
 
 		OWLAPIConnector connector = OWLAPIConnector.getGlobalInstance();
+		OWLOntologyManager manager = connector.getManager();
 		OWLOntology ontology = connector.getOntology();
 		OWLReasoner reasoner = connector.getReasoner();
 
-		reasoner.precomputeInferences();
+		Set<OWLOntology> importsClosure = manager.getImportsClosure(ontology);
 
 		StringBuilder configuration = new StringBuilder();
 		configuration.append("Ontology IRI: ");
 		configuration.append(ontology.getOntologyID().getOntologyIRI());
 		configuration.append("; Reasoner: ");
 		configuration.append(reasoner.getReasonerName());
-		configuration.append("; Ontology facts:");
-		configuration.append(" Axiom count: ");
-		configuration.append(ontology.getAxiomCount());
 
-		Node<OWLClass> unsatNodes = reasoner.getUnsatisfiableClasses();
-		Set<OWLClass> unsatisfiable = unsatNodes.getEntitiesMinusBottom();
+		DLExpressivityChecker checker = new DLExpressivityChecker(importsClosure);
 
-		if (!unsatisfiable.isEmpty()) {
-			StringBuilder message = new StringBuilder();
-			message.append("Ontology is inconsistent due to the following concepts:<br />");
-
-			for (OWLClass cls : unsatisfiable) {
-				String conceptName = OWLApiTagHandlerUtil.labelClass(cls);
-				message.append("<strong>");
-				message.append(conceptName);
-				message.append("</strong> ");
-				message.append(OnteCi4keUtil.renderHyperlink(conceptName));
-				message.append("<br />");
-
-			}
-			return new CITestResult(Type.ERROR, message.toString(), configuration.toString());
-		}
-		else {
-			return new CITestResult(Type.SUCCESSFUL, "Ontology is consistent! Gratulations!",
-					configuration.toString());
-		}
+		return new CITestResult(Type.SUCCESSFUL, "Expressivity of the ontology: "
+				+ checker.getDescriptionLogicName(),
+				configuration.toString());
 	}
 }
