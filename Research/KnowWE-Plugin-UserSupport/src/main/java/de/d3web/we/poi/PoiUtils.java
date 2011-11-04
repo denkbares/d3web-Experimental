@@ -45,6 +45,7 @@ import de.d3web.we.tables.ITable;
 import de.d3web.we.tables.InnerTable;
 import de.d3web.we.tables.TableCell;
 import de.d3web.we.tables.TableLine;
+import de.d3web.we.tables.TableUtils;
 import de.knowwe.core.KnowWEArticleManager;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.ActionContext;
@@ -200,7 +201,8 @@ public class PoiUtils {
 		FileInputStream input = new FileInputStream(in);
 		Workbook wb = new HSSFWorkbook(input);
 
-		Sheet sheet = wb.getSheetAt(0); // TODO is there only 1 sheet
+		// TODO is there only 1 sheet
+		Sheet sheet = wb.getSheetAt(0);
 
 		// If there are no rows do nothing
 		if ( (sheet.getLastRowNum() == 0) && (sheet.getPhysicalNumberOfRows() == 0) )
@@ -208,7 +210,6 @@ public class PoiUtils {
 
 		// Iterate over rows and push each row in an array
 		// So it is easier to build the new table
-		// TODO perhaps build table directly from sheet
 		List<String[]> rowsList = new ArrayList<String[]>();
 		Row row = null;
 		for ( Iterator<Row> it = sheet.rowIterator(); it.hasNext(); ) {
@@ -222,11 +223,16 @@ public class PoiUtils {
 			rowsList.add(cells);
 		}
 
+		// calculate the maximum cell length
+		int maxCellLength = TableUtils.getWidestTableCellLengthPoiUtils(rowsList);
+
 		// Rebuild the Table with the arrays
 		StringBuilder buildi = new StringBuilder();
 		for ( String[] arr : rowsList ) {
 			for (String c : arr) {
-				buildi.append(c+"|");
+				buildi.append(c);
+				buildi.append(TableUtils.generateFillString(c, maxCellLength));
+				buildi.append("|");
 			}
 			buildi.replace(buildi.length(), buildi.length(), ",\n");
 		}

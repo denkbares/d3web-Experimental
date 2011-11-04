@@ -90,7 +90,7 @@ public class UploadReceptorServlet extends HttpServlet {
 			String article = req.getParameter("article");
 
 			// TODO works everywhere?
-			res.sendRedirect(bundle.getString("redirect_path")+article);
+			res.sendRedirect("/KnowWE/Wiki.jsp?page="+article);
 
 			Iterator itr = items.iterator();
 

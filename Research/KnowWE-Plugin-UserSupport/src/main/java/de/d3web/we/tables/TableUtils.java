@@ -160,11 +160,37 @@ public class TableUtils {
 		return max;
 	}
 
+	public static int getWidestTableCellLengthPoiUtils(List<String[]> rowsList) {
+		int max = 0;
+
+		// Iterate over all rows and cells
+		for (String[] row : rowsList)
+			for (String cell : row)
+				if (cell.length() > max)
+					max = cell.length();
+
+		return max;
+	}
+
 	public static String generateStringWithLength( int len, char fill ) {
 		if ( len < 0 )
 			return null;
 		char[] cs = new char[ len ];
 		Arrays.fill( cs, fill );
 		return new String( cs );
+	}
+
+	/**
+	 * 
+	 * @created 04.11.2011
+	 * @param toFill
+	 * @param maxCellLength
+	 * @return
+	 */
+	public static String generateFillString(String toFill, int maxCellLength) {
+		if (toFill.length() < maxCellLength)
+			return TableUtils.generateStringWithLength(
+					Math.abs(toFill.length()-maxCellLength), ' ');
+		return "";
 	}
 }

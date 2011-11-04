@@ -81,22 +81,16 @@ public class TableRenderer extends KnowWEDomRenderer<ITable> {
 
 		Section<TableLine> sec = Sections.findChildOfType(section, TableLine.class);
 
-		// calculate the lines to be added left and right
-		String right = null;
-
 		if (sec != null) {
 			buildi.append("<thead>");
 			buildi.append("<tr>");
 
 			for (Section<TableCell> cell : Sections.findChildrenOfType(sec, TableCell.class)) {
 				String cellText = cell.getText().trim();
-				right = "";
-				if (cellText.length() < maxCellLength)
-					right = TableUtils.generateStringWithLength(
-							Math.abs(cellText.length()-maxCellLength), ' ');
 				buildi.append("<th>");
-				buildi.append(cell.getText());
-				buildi.append(right);
+				buildi.append(cellText);
+				buildi.append(TableUtils.generateStringWithLength(
+						Math.abs(cellText.length()-maxCellLength), ' '));
 				buildi.append("</th>");
 			}
 
@@ -111,9 +105,6 @@ public class TableRenderer extends KnowWEDomRenderer<ITable> {
 
 		List<Section<TableLine>> lines = Sections.findChildrenOfType(section, TableLine.class);
 
-		// calculate the lines to be added left and right
-		String right = null;
-
 		// First line is header
 		if ( lines.size() >= 2 ) {
 			lines.remove(0);
@@ -124,14 +115,10 @@ public class TableRenderer extends KnowWEDomRenderer<ITable> {
 
 				for (Section<TableCell> cell : Sections.findChildrenOfType(line, TableCell.class)) {
 					String cellText = cell.getText().trim();
-					right = "";
-					if (cellText.length() < maxCellLength)
-						right = TableUtils.generateStringWithLength(
-								Math.abs(cellText.length()-maxCellLength), ' ');
-
 					buildi.append("<td>");
 					buildi.append(cellText);
-					buildi.append(right);
+					buildi.append(TableUtils.generateStringWithLength(
+							Math.abs(cellText.length()-maxCellLength), ' '));
 					buildi.append("</td>");
 				}
 
