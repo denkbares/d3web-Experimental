@@ -11,7 +11,6 @@ EntscheidungsTabelle {
                             | Regel1  | Regel2 | Regel3 | Regel4,
     Lieferfähig             | Yes     | Yes    | No     | No,
     Angaben vollständig     | No      | Yes    | Yes    | No,
-    
     Lieferung mit Rechnung  | x       |        | x      |   ,
     Lieferung mit Nachnahme |         | x      |        | x ,  
     Angaben vervollständige |         |        | x      | x ,
@@ -21,13 +20,12 @@ EntscheidungsTabelle {
 %%HeuristicDiagnosisTable
 HeuristischeDiagnoseTabelle {
     Verknüpfungsart          | und     | oder   | oder  | 2 aus 4,
-    Bewertung                | P4      | P7     | N7    | N7,
-    
-    Nadeln = nein            | +       |        | -     |,
-    Bräunliche Stammfarbe    |         |        | -     |,
+    Bewertung                | P4      | P7     | N7    | N7,   
+    Nadeln = nein            | +       |        | -     | ,
+    Bräunliche Stammfarbe    |         |        | -     | ,
     Frucht: Propeller        |         | +      |       | -,
     Blüte: Weiß/Gelb         |         | +      |       | -,
-    Ein Blatt pro Stiel      |         | +      | -     |,
+    Ein Blatt pro Stiel      |         | +      | -     | ,
     -- ungeteiltes Blatt     |         |        | -     | ,
       -- herzförmiges Form   |         | +      |       | -,
       --- gesägter Blattrand |         | +      |       | -,
