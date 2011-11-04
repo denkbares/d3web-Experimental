@@ -19,6 +19,7 @@
 package de.d3web.we.tables;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import de.d3web.we.action.TableExportAction;
@@ -147,5 +148,23 @@ public class TableUtils {
 		}
 
 		return null;
+	}
+
+	public static int getWidestTableCellLength(List<Section<TableCell>> cells) {
+		int max = 0;
+
+		for (Section<TableCell> cell : cells)
+			if (cell.getText().length() > max)
+				max = cell.getText().length();
+
+		return max;
+	}
+
+	public static String generateStringWithLength( int len, char fill ) {
+		if ( len < 0 )
+			return null;
+		char[] cs = new char[ len ];
+		Arrays.fill( cs, fill );
+		return new String( cs );
 	}
 }

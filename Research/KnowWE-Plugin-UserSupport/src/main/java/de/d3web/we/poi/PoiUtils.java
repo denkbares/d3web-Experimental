@@ -189,7 +189,7 @@ public class PoiUtils {
 	 * Constructs the table-markup from a given xls-File.
 	 * 
 	 * @created 19.10.2011
-	 * @param file file to load xls from
+	 * @param file load xls from
 	 * @param tableId
 	 * @param article
 	 * @return the table-markup
