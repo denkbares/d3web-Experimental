@@ -234,7 +234,7 @@ public class PoiUtils {
 				buildi.append(TableUtils.generateFillString(c, maxCellLength));
 				buildi.append("|");
 			}
-			buildi.replace(buildi.length(), buildi.length(), ",\n");
+			buildi.replace(buildi.length()-1, buildi.length(), ",\r\n");
 		}
 
 		// Replace the old table with the new one
@@ -246,8 +246,6 @@ public class PoiUtils {
 
 		for (Section<ITable> table : itables) {
 			if (table.getID().equals(tableId)) {
-				// TODO my context is null here because the call
-				// comes from a servlet
 				Map<String, String> nodeMap = new HashMap<String, String>();
 				nodeMap.put(tableId, buildi.toString());
 
