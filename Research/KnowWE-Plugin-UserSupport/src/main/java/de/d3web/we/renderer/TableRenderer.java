@@ -57,8 +57,11 @@ public class TableRenderer extends KnowWEDomRenderer<ITable> {
 				TableUtils.getWidestTableCellLength(
 						Sections.findSuccessorsOfType(section,TableCell.class));
 
+		// Get average cell count for line
+		int averageCellCount = TableUtils.getAverageTableCellCount(section);
+
 		// Render the Header
-		renderTableHeader(buildi, section, maxCellLength);
+		renderTableHeader(buildi, section, maxCellLength, averageCellCount);
 
 		buildi.append("<tfoot></tfoot>");
 
@@ -77,13 +80,22 @@ public class TableRenderer extends KnowWEDomRenderer<ITable> {
 	}
 
 	private static void renderTableHeader(
-			StringBuilder buildi, Section<ITable> section, int maxCellLength) {
+			StringBuilder buildi, Section<ITable> section, int maxCellLength, int averageCellCount) {
 
 		Section<TableLine> sec = Sections.findChildOfType(section, TableLine.class);
 
 		if (sec != null) {
 			buildi.append("<thead>");
 			buildi.append("<tr>");
+
+
+			// Add a dummy line, when the table contains one cell less then the rest lines
+			if (averageCellCount > Sections.findSuccessorsOfType(sec, TableCell.class).size()) {
+				buildi.append("<th>");
+				buildi.append(TableUtils.generateStringWithLength(
+						Math.abs(maxCellLength), ' '));
+				buildi.append("</th>");
+			}
 
 			for (Section<TableCell> cell : Sections.findChildrenOfType(sec, TableCell.class)) {
 				String cellText = cell.getText().trim();

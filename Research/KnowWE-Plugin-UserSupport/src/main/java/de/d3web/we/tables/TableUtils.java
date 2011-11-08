@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.d3web.we.action.TableExportAction;
+import de.d3web.we.renderer.TableRenderer;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -192,5 +193,25 @@ public class TableUtils {
 			return TableUtils.generateStringWithLength(
 					Math.abs(toFill.length()-maxCellLength), ' ');
 		return "";
+	}
+
+	/**
+	 * Used to get an average cell count for a table.
+	 * Used in {@link TableRenderer}
+	 * 
+	 * @created 08.11.2011
+	 * @param section
+	 * @return
+	 */
+	public static int getAverageTableCellCount(Section<ITable> section) {
+		List<Section<TableLine>> tableLines =
+				Sections.findSuccessorsOfType(section, TableLine.class);
+		int maxCount = 0;
+		for (Section<TableLine> line : tableLines) {
+			if (Sections.findSuccessorsOfType(line, TableCell.class).size() > maxCount)
+				maxCount = Sections.findSuccessorsOfType(line, TableCell.class).size();
+		}
+
+		return maxCount;
 	}
 }
