@@ -7,9 +7,9 @@
     <version>0.2-SNAPSHOT</version>
   </parent>
   <groupId>KnowWE-MetaTool-Markups</groupId>
-  <artifactId>KnowWE-Plugin-SimpleScoreTable</artifactId>
+  <artifactId>KnowWE-Plugin-d3web-SimpleScoreTable</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>KnowWE-Plugin-SimpleScoreTable</name>
+  <name>KnowWE-Plugin-d3web-SimpleScoreTable</name>
   <description>A simple table for diagnose scores</description>
 <dependencies>
 <dependency>
