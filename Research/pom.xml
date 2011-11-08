@@ -213,7 +213,7 @@
 		<module>KnowWE-Plugin-InlineAnswer</module>
 		<module>KnowWE-Plugin-DiaFlux-Coverage</module>
 		<module>metatool-test-launcher</module>
-		<module>KnowWE-Plugin-BasicRDFS</module>
+		<module>KnowWE-Plugin-RDFS-Basic</module>
 		<module>KnowWE-Plugin-ConceptPageLinkToolProvider</module>
 		<module>KnowWE-Plugin-Markup-TurtleN3</module>
 		<module>KnowWE-Plugin-SimpleScoreTable</module>
