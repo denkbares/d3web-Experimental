@@ -8,7 +8,8 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>KnowWE-MetaTool-Markups</groupId>
-  <artifactId>KnowWE-Plugin-Markup-TurtleN3</artifactId>
+  <artifactId>KnowWE-Plugin-RDFS-TurtleN3</artifactId>
+  <name>KnowWE-Plugin-RDFS-TurtleN3</name>
   <version>0.0.1-SNAPSHOT</version>
 
   
@@ -92,5 +93,4 @@
 </plugin>
 </plugins>
 </build>
-	<name>KnowWE-Plugin-Markup-TurtleN3</name>
 </project>
