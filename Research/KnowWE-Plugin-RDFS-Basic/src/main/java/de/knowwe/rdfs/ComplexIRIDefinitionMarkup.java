@@ -21,7 +21,6 @@
 package de.knowwe.rdfs;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -31,7 +30,6 @@ import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
-import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.KnowWETerm;
 import de.knowwe.core.kdom.objects.TermDefinition;
@@ -124,17 +122,8 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 	}
 	
 	
-	class ComplexIRIDefinitionCompileScript implements KnowledgeUnitCompileScript<ComplexIRIDefinitionMarkup> {
+	class ComplexIRIDefinitionCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<ComplexIRIDefinitionMarkup> {
 	
-	@Override
-	public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit<ComplexIRIDefinitionMarkup>> section) {
-		return CompileUtils.getAllReferencesOfCompilationUnit(section);
-	}
-
-	@Override
-	public void deleteFromRepository(Section<ComplexIRIDefinitionMarkup> section) {
-		Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
-	}
 
 	@Override
 	public void insertIntoRepository(Section<ComplexIRIDefinitionMarkup> section) {

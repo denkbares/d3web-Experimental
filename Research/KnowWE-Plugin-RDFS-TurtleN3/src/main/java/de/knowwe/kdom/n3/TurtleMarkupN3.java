@@ -22,7 +22,7 @@
 
 package de.knowwe.kdom.n3;
 
-import de.knowwe.compile.object.AbstractKnowledgeUnitCompilerDecorator;
+import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import java.util.regex.Pattern;
 import de.knowwe.kdom.renderer.GenericHTMLRenderer;
@@ -30,7 +30,7 @@ import de.knowwe.kdom.n3.TurtleSubjectSection;
 import de.knowwe.kdom.n3.TurtlePredSentence;
 import de.knowwe.kdom.AnonymousType;
 
-public class TurtleMarkupN3 extends AbstractKnowledgeUnitCompilerDecorator {
+public class TurtleMarkupN3 extends AbstractKnowledgeUnitType {
 
 	public TurtleMarkupN3() {
 		AnonymousType before = new AnonymousType("Before");

@@ -82,12 +82,9 @@ public class TripleMarkup extends AbstractType implements
 		}
 	}
 
-	class TripleCompileScript implements KnowledgeUnitCompileScript<TripleMarkup> {
+	class TripleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<TripleMarkup> {
 
-		@Override
-		public void deleteFromRepository(Section<TripleMarkup> section) {
-			Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
-		}
+
 
 		@Override
 		public void insertIntoRepository(Section<TripleMarkup> section) {
@@ -131,11 +128,6 @@ public class TripleMarkup extends AbstractType implements
 
 		}
 
-		@Override
-		public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(
-				Section<? extends KnowledgeUnit<TripleMarkup>> section) {
-			return CompileUtils.getAllReferencesOfCompilationUnit(section);
-		}
 
 	}
 

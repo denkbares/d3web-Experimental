@@ -10,6 +10,7 @@ import de.knowwe.kdom.n3.TurtleMarkupN3;
 
 public class TurtleN3Renderer extends KnowWEDomRenderer<TurtleMarkupN3> {
 
+	
 	@Override
 	public void render(KnowWEArticle article, Section<TurtleMarkupN3> sec, UserContext user, StringBuilder string) {
 		string.append(KnowWEUtils.maskHTML("<pre>"));

@@ -29,24 +29,23 @@ import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 
 import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.n3.TurtleMarkupN3;
-import de.knowwe.kdom.n3.TurtleObjectLiteral;
 import de.knowwe.kdom.n3.TurtleObjectLiteralText;
 import de.knowwe.kdom.n3.TurtleObjectSection;
 import de.knowwe.kdom.n3.TurtleObjectTerm;
 import de.knowwe.kdom.n3.TurtlePredicate;
 import de.knowwe.kdom.n3.TurtleSubject;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdfs.IRITermRef;
+import de.knowwe.rdfs.AbstractKnowledgeUnitCompileScriptRDFS;
 import de.knowwe.rdfs.util.RDFSUtil;
 
-public class TurtleCompileScript implements KnowledgeUnitCompileScript<TurtleMarkupN3> {
+public class TurtleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<TurtleMarkupN3> {
 
+	
 	@Override
 	public void insertIntoRepository(Section<TurtleMarkupN3> section) {
 		List<Section<TurtleObjectSection>> found = new ArrayList<Section<TurtleObjectSection>>();
@@ -89,17 +88,7 @@ public class TurtleCompileScript implements KnowledgeUnitCompileScript<TurtleMar
 		}
 		Rdf2GoCore.getInstance().addStatements(triples, section);
 	}
-	
-	@Override
-	public void deleteFromRepository(Section<TurtleMarkupN3> section) {
-		Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
-	}
 
-	@Override
-	public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(
-			Section<? extends KnowledgeUnit<TurtleMarkupN3>> section) {
-		return CompileUtils.getAllReferencesOfCompilationUnit(section);
-	}
 
 
 	
