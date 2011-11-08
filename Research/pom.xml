@@ -218,6 +218,7 @@
 		<module>KnowWE-Plugin-RDFS-TurtleN3</module>
 		<module>KnowWE-Plugin-d3web-SimpleScoreTable</module>
 		<module>KnowWE-Plugin-UserSupport</module>
+		<module>KnowWE-Plugin-RDFS-SubclassingTree</module>
 	</modules>
 	<repositories>
 		<repository>

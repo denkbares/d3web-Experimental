@@ -8,4 +8,16 @@
   </parent>
   <artifactId>KnowWE-Plugin-RDFS-SubclassingTree</artifactId>
   <description>dashtree for subclassing</description>
+  <dependencies>
+  	<dependency>
+  		<groupId>de.uniwue.d3web</groupId>
+  		<artifactId>KnowWE-core</artifactId>
+  		<version>0.2-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>de.uniwue.d3web</groupId>
+  		<artifactId>KnowWE-Plugin-RDFS-Basic</artifactId>
+  		<version>0.2-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>
