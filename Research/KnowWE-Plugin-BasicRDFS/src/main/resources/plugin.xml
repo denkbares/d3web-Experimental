@@ -62,6 +62,7 @@
 
 	</extension>
 	
+	<!--
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
 		id="ConceptPageLinkProvider">
 		<parameter id="class"
@@ -74,7 +75,7 @@
 		<parameter id="scope" value="IRITermRef" />
 
 	</extension>
-	
+	-->
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Terminology"
 		id="RDFSTerminology">
 		<parameter id="class"
