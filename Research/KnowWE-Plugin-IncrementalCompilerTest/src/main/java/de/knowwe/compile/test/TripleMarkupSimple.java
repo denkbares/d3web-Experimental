@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.node.Node;
 
+import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.utils.CompileUtils;
@@ -81,15 +82,10 @@ public class TripleMarkupSimple extends AbstractType implements
 		}
 	}
 
-	class TripleMarkupSimpleCompileScript implements
-			KnowledgeUnitCompileScript<TripleMarkupSimple> {
+	class TripleMarkupSimpleCompileScript extends
+			AbstractKnowledgeUnitCompileScript<TripleMarkupSimple> {
 
-		@Override
-		public Collection<Section<TermReference>> getAllReferencesOfKnowledgeUnit(
-				Section<? extends KnowledgeUnit<TripleMarkupSimple>> section) {
-			return CompileUtils.getAllReferencesOfCompilationUnit(section);
-		}
-
+		
 		@Override
 		public void deleteFromRepository(Section<TripleMarkupSimple> section) {
 			Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
