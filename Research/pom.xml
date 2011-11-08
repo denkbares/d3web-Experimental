@@ -216,7 +216,7 @@
 		<module>KnowWE-Plugin-RDFS-Basic</module>
 		<module>KnowWE-Plugin-ConceptPageLinkToolProvider</module>
 		<module>KnowWE-Plugin-RDFS-TurtleN3</module>
-		<module>KnowWE-Plugin-SimpleScoreTable</module>
+		<module>KnowWE-Plugin-d3web-SimpleScoreTable</module>
 		<module>KnowWE-Plugin-UserSupport</module>
 	</modules>
 	<repositories>
