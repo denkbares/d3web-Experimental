@@ -4,53 +4,70 @@
 
 def Subject
 
+<br>
 def predicate
+<br>
 
 def predicate2
+
+<br>
 def predicate3
+
+<br>
 def predicate4
+<br>
+
 def predicate5
+
+<br>
 
 def Object
 
+<br>
+
 def Object1
+<br>
+
 
 def Object2
-
+<br>
 def Object3
-
+<br>
 def Object4
-
+<br><br>
 ! Simple Example:
 
-<br>
+<br><br>
 
 N3: Subject predicate:: Object.
 
-<br>
+<br><br>
 
 N3: Subject predicate:: 'blubb'.
 
-<br>
+<br><br>
 
 !! Example with multiple Objects:
 
-<br>
+<br><br>
 
 N3: Subject predicate:: Object1 , 'hallo' ; predicate2:: Object3 ,'5'.
 
+<br><br>
+
 !! Example with multiple Objects with linebreaks:
 
-<br>
-
+<br><br>
+<pre>
 N3: Subject 
-    predicate:: Object1 , Object2 ; 
-    predicate2:: Object1 , Object2, Object3, Object4 ; 
-    predicate3:: Object1 , Object2, Object3, Object4 ;   
-    predicate4:: Object1 , Object2 ; 
-    predicate5:: Object3 , Object4.
+    	predicate:: Object1 , Object2 ;
+    	predicate2:: Object1 , Object2, Object3, ObjectY ; 
+    	predicate3:: Object1 , Object2, Object3, Object4 ;   
+    	predicate4:: Object1 , Object2 ; 
+    	predicate5:: Object3 , Object4.
 
-<br>
+</pre>
+<br><br>
 
 <sparql2go>
 SELECT  ?y ?z where { lns:Subject ?y ?z .}

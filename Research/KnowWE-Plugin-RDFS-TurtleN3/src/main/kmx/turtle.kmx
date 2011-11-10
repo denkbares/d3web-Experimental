@@ -3,7 +3,7 @@
 
 <ObjectType ID="turtleRoot" 
 			ClassName="TurtleMarkupN3"
-			QualifiedSuperType="de.knowwe.compile.object.AbstractKnowledgeUnitCompilerDecorator"
+			QualifiedSuperType="de.knowwe.compile.object.AbstractKnowledgeUnitType"
 			PackageName="de.knowwe.kdom.n3">
 		<SectionFinder QualifiedName="RegexSectionFinder"
 			Value='"N3:(.*?)\\\\.",Pattern.DOTALL|Pattern.MULTILINE,1' />	
