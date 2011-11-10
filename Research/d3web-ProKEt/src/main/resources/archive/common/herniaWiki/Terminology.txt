@@ -227,6 +227,30 @@ Parastomal hernia route
 %
 
 %%Question
+Common Route - Follow up 1 - Preoperative Quality of life - Pain at the site of the hernia &only if: Please choose the database level = Level 2 &
+- In rest pre [text]
+- During activities pre [text]
+- Worst pain felt during the last week pre [text]
+@package: Hernia
+%
+
+%%Question
+Common Route - Follow up 1 - Preoperative Quality of life - Restrictions of activities &only if: Please choose the database level = Level 2 &
+- Daily activities pre [text]
+- Outside the house pre [text]
+- During sports pre [text]
+- During heavy labour pre [text]
+@package: Hernia
+%
+
+%%Question
+Common Route - Follow up 1 - Preoperative Quality of life - Esthetical discomfort &only if: Please choose the database level = Level 2 &
+- The shape of your abdomen pre [text]
+- The hernia itself pre [text]
+@package: Hernia
+%
+
+%%Question
 Common Route - Operative data #6
 - Operation date [date]
 - Anesthesia [oc]
@@ -453,18 +477,26 @@ Common Route - Follow up 1 &only if: Please choose the database level = Level 2 
 %
 
 %%Question
-Common Route - Follow up 1 - Quality of life measurement &only if: Please choose the database level = Level 2 &
-- "Chronic abdominal wall pain at the operation site (Follow up 1)" [yn]
--- Yes
---- "Intensity of pain (Follow up 1)" [oc]
----- Mild pain
----- Moderate pain
----- Severe pain
---- "Frequency of pain (Follow up 1)" [oc]
----- Sporatic
----- Frequent
----- Constant
---- "Foreign body feeling at operation site (Follow up 1)" [yn]
+Common Route - Follow up 1 - Quality of life - Pain at the site of the hernia &only if: Please choose the database level = Level 2 &
+- In rest [text]
+- During activities [text]
+- Worst pain felt during the last week [text]
+@package: Hernia
+%
+
+%%Question
+Common Route - Follow up 1 - Quality of life - Restrictions of activities &only if: Please choose the database level = Level 2 &
+- Daily activities [text]
+- Outside the house [text]
+- During sports [text]
+- During heavy labour [text]
+@package: Hernia
+%
+
+%%Question
+Common Route - Follow up 1 - Quality of life - Esthetical discomfort &only if: Please choose the database level = Level 2 &
+- The shape of your abdomen [text]
+- The hernia itself [text]
 @package: Hernia
 %
 

@@ -169,3 +169,89 @@ Please choose the database level.popup = """
 
 @package: Hernia
 %
+
+%%Property
+In rest.popup = """
+0 = no pain, 10 = worst pain imaginable
+"""
+During activities.popup = """
+0 = no pain, 10 = worst pain imaginable
+"""
+
+Worst pain felt during the last week.popup = """
+0 = no pain, 10 = worst pain imaginable
+"""
+
+@package: Hernia
+%
+
+%%Property
+In rest pre.popup = """
+0 = no pain, 10 = worst pain imaginable
+"""
+During activities pre.popup = """
+0 = no pain, 10 = worst pain imaginable
+"""
+
+Worst pain felt during the last week pre.popup = """
+0 = no pain, 10 = worst pain imaginable
+"""
+
+@package: Hernia
+%
+
+%%Property
+Daily activities.popup = """
+0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+"""
+Outside the house.popup = """
+0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+"""
+During sports.popup = """
+0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+"""
+During heavy labour.popup = """
+0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+"""
+
+@package: Hernia
+%
+
+%%Property
+Daily activities pre.popup = """
+0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+"""
+Outside the house pre.popup = """
+0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+"""
+During sports pre.popup = """
+0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+"""
+During heavy labour pre.popup = """
+0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+"""
+
+@package: Hernia
+%
+
+%%Property
+The shape of your abdomen.popup = """
+0 = very beautiful, 10 = extremely ugly
+"""
+The hernia itself.popup = """
+0 = very beautiful, 10 = extremely ugly
+"""
+
+@package: Hernia
+%
+
+%%Property
+The shape of your abdomen pre.popup = """
+0 = very beautiful, 10 = extremely ugly
+"""
+The hernia itself pre.popup = """
+0 = very beautiful, 10 = extremely ugly
+"""
+
+@package: Hernia
+%

@@ -66,6 +66,248 @@ Please select your hernia route#Parastomal hernia route.header_text = Parastomal
 %
 
 %%Property
+In rest.dropdown_menu_options = 
+"""
+0,1,2,3,4,5,6,7,8,9,10
+"""
+In rest pre.dropdown_menu_options = 
+"""
+0,1,2,3,4,5,6,7,8,9,10
+"""
+@package: Hernia
+%
+
+%%Property
+During activities.dropdown_menu_options = 
+"""
+0,
+1,
+2,
+3,
+4,
+5,
+6,
+7,
+8,
+9,
+10
+"""
+
+During activities pre.dropdown_menu_options = 
+"""
+0,
+1,
+2,
+3,
+4,
+5,
+6,
+7,
+8,
+9,
+10
+"""
+@package: Hernia
+%
+
+%%Property
+Worst pain felt during the last week.dropdown_menu_options = 
+"""
+0,
+1,
+2,
+3,
+4,
+5,
+6,
+7,
+8,
+9,
+10
+"""
+
+Worst pain felt during the last week pre.dropdown_menu_options = 
+"""
+0,
+1,
+2,
+3,
+4,
+5,
+6,
+7,
+8,
+9,
+10
+"""
+@package: Hernia
+%
+
+
+%%Property
+Daily activities.dropdown_menu_options = 
+"""
+0,
+1,
+2,
+3,
+4,
+5,
+6,
+7,
+8,
+9,
+10,
+X
+"""
+Daily activities pre.dropdown_menu_options = 
+"""
+0,
+1,
+2,
+3,
+4,
+5,
+6,
+7,
+8,
+9,
+10,
+X
+"""
+@package: Hernia
+%
+
+
+
+%%Property
+Outside the house.dropdown_menu_options = 
+"""
+0,
+1,
+2,
+3,
+4,
+5,
+6,
+7,
+8,
+9,
+10,
+X
+"""
+Outside the house pre.dropdown_menu_options = 
+"""
+0,
+1,
+2,
+3,
+4,
+5,
+6,
+7,
+8,
+9,
+10,
+X
+"""
+@package: Hernia
+%
+
+%%Property
+During sports.dropdown_menu_options = 
+"""
+0,
+1,
+2,
+3,
+4,
+5,
+6,
+7,
+8,
+9,
+10,
+X
+"""
+During sports pre.dropdown_menu_options = 
+"""
+0,
+1,
+2,
+3,
+4,
+5,
+6,
+7,
+8,
+9,
+10,
+X
+"""
+@package: Hernia
+%
+
+
+%%Property
+During heavy labour.dropdown_menu_options = 
+"""
+0,
+1,
+2,
+3,
+4,
+5,
+6,
+7,
+8,
+9,
+10,
+X
+"""
+During heavy labour pre.dropdown_menu_options = 
+"""
+0,
+1,
+2,
+3,
+4,
+5,
+6,
+7,
+8,
+9,
+10,
+X
+"""
+@package: Hernia
+%
+
+%%Property
+The shape of your abdomen.dropdown_menu_options = 
+"""
+0,1,2,3,4,5,6,7,8,9,10
+"""
+The shape of your abdomen pre.dropdown_menu_options = 
+"""
+0,1,2,3,4,5,6,7,8,9,10
+"""
+@package: Hernia
+%
+
+%%Property
+The hernia itself.dropdown_menu_options = 
+"""
+0,1,2,3,4,5,6,7,8,9,10
+"""
+The hernia itself pre.dropdown_menu_options = 
+"""
+0,1,2,3,4,5,6,7,8,9,10
+"""
+@package: Hernia
+%
+
+%%Property
 Name of mesh.dropdown_menu_options = 
 """
 Composix,
