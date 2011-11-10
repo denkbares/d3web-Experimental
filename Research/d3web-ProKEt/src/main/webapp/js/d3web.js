@@ -257,7 +257,7 @@ function initFunctionality() {
 	});
 	
 	
-	$('[type=text]').unbind('click').click(function() {
+	$('[type=textselect]').unbind('click').click(function() {
 		var thisEl = $(this);
 		thisEl.bind('keydown', function(e) {
 			var code = (e.keyCode ? e.keyCode : e.which);
@@ -268,13 +268,24 @@ function initFunctionality() {
 		});
 	});
 	
-	$('[type=text]').unbind('focusout').focusout(function() {
+	$('[type=textselect]').unbind('focusout').focusout(function() {
 		d3web_storeQuestionText($(this));
 		d3web_addFacts($(this));
 	});
 	
 	$('[type=textselect]').unbind('change').change(function() {
 		d3web_storeQuestionText($(this));
+		d3web_addFacts($(this));
+	});
+	
+	$("[type=Yearselect]," +
+			"[type=Monthselect]," +
+			"[type=Dayselect]," +
+			"[type=Hourselect]," +
+			"[type=Minuteselect]," +
+			"[type=Secondselect]"
+			).unbind('change').change(function() {
+		d3web_storeQuestionDate($(this));
 		d3web_addFacts($(this));
 	});
 
@@ -335,6 +346,32 @@ function initFunctionality() {
 function getHeaderHeight() {
 	var head = $('#head');
 	return head.height() + parseInt(head.css("padding-top")) + parseInt(head.css("padding-bottom"));
+}
+
+function d3web_storeQuestionDate(dateSelect) {
+	var answer = $(dateSelect).parents(".answer").first();
+	var yearSelect = answer.find("[type=Yearselect]");
+	var monthSelect = answer.find("[type=Monthselect]");
+	var daySelect = answer.find("[type=Dayselect]");
+	var hourSelect = answer.find("[type=Hourselect]");
+	var minuteSelect = answer.find("[type=Minuteselect]");
+	var secondSelect = answer.find("[type=Secondselect]");
+	var question = getQuestionName(dateSelect);
+	
+	var second = getDateValue(secondSelect, "00");
+	var minute = getDateValue(minuteSelect, "00");
+	var hour = getDateValue(hourSelect, "00");
+	var day = getDateValue(daySelect, "01");
+	var month = getDateValue(monthSelect, "01");
+	var year = getDateValue(yearSelect, new Date().getFullYear());
+	
+	var separator = ".";
+	dateStore[question] = second + separator + minute + separator + hour + separator 
+			+ day + separator + month + separator + year;
+}
+
+function getDateValue(select, def) {
+	return select.length == 1 && select.val() != "" ? select.val() : def;
 }
 
 function d3web_storeQuestionText(textInput) {

@@ -140,7 +140,7 @@ public class AnswerDateD3webRenderer extends AnswerTextD3webRenderer implements 
 
 		if (dateCal != null) {
 			year = String.valueOf(dateCal.get(Calendar.YEAR));
-			month = String.valueOf(dateCal.get(Calendar.MONTH));
+			month = String.valueOf(dateCal.get(Calendar.MONTH) + 1);
 			day = String.valueOf(dateCal.get(Calendar.DAY_OF_MONTH));
 			hour = String.valueOf(dateCal.get(Calendar.HOUR_OF_DAY));
 			minute = String.valueOf(dateCal.get(Calendar.MINUTE));
