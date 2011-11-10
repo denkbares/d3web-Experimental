@@ -147,6 +147,13 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 		// if more than one column is required, get open-table tag from
 		// TableContainer and append it to the HTML
 		if (columns > 1) {
+			if (columns == 3
+					&& to instanceof QContainer
+					&& to.getChildren().length == 4) {
+				// minor tweak to fix ugly display with 4 questions in one
+				// questionnaire
+				columns = 2;
+			}
 			String tableOpening =
 					cc.tc.openTable(to.getName().replace(" ", "_"), columns);
 			childrenHTML.append(tableOpening);
