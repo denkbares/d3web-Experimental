@@ -171,14 +171,80 @@ Please choose the database level.popup = """
 %
 
 %%Property
-In rest.popup = """
-0 = no pain, 10 = worst pain imaginable
+Mesh positions.popup = """
+TODO Uli: Text einfügen
 """
-During activities.popup = """
+
+Mesh positions#Retromuscular.popup = """
+TODO Uli: Text einfügen (wird im Moment noch nicht angezeigt hinter Dialogen, ist aber gut machbar)
+"""
+
+Classification of surgical complications.popup = """
+<table border="1" cellspacing="0" cellpadding="3">
+  <colgroup>
+    <col width="150">
+    <col width="450">
+  </colgroup>
+  <tr>
+    <th>Grade</th>
+    <th>Definition</th>
+  </tr>
+  <tr>
+    <th align="center">Grade I</th>
+    <td style="padding:5px">Any deviation from the normal postoperative course without the need for pharmacological treatment or surgical, endoscopic, and radiological nterventions<br/>Allowed therapeutic regimens are: drugs as antiemetics, antipyretics, analgetics, diuretics, electrolytes, and physiotherapy. This grade also includes wound infections opened at the bedside</td>
+  </tr>
+  <tr>
+    <th align="center">Grade II</th>
+    <td style="padding:5px">Requiring pharmacological treatment with drugs other than such allowed for grade I complications<br/>Blood transfusions and total parenteral nutrition are also included</td>
+  </tr>
+  <tr>
+    <th align="center">Grade III</th>
+    <td style="padding:5px">Requiring surgical, endoscopic or radiological intervention</td>
+  </tr>
+  <tr>
+    <th align="center">Grade IIIa</th>
+    <td style="padding:5px">Intervention not under general anesthesia</td>
+  </tr>
+  <tr>
+    <th align="center">Grade IIIb</th>
+    <td style="padding:5px">Intervention under general anesthesia</td>
+  </tr>
+  <tr>
+    <th align="center">Grade IV</th>
+    <td style="padding:5px">Life-threatening complication (including CNS complications)"*" requiring IC/ICU management</td>
+  </tr>
+  <tr>
+    <th align="center">Grade IVa</th>
+    <td style="padding:5px">Single organ dysfunction (including dialysis)</td>
+  </tr>
+  <tr>
+    <th align="center">Grade IVb</th>
+    <td style="padding:5px">Multiorgan dysfunction</td>
+  </tr>
+  <tr>
+    <th align="center">Grade V</th>
+    <td style="padding:5px">Death of a patient</td>
+  </tr>
+</table>
+Suffix “d” If the patient suffers from a complication at the time of discharge (see examples in Table 2), the suffix “d” (for “disability”) is added to the respective grade of complication. This label indicates the need for a follow-up to fully evaluate the complication.
+"*"Brain hemorrhage, ischemic stroke, subarrachnoidal bleeding, but excluding transient ischemic attacks.
+CNS, central nervous system; IC, intermediate care; ICU, intensive care unit.
+"""
+
+@package: Hernia
+%
+
+
+%%Property
+"In rest (Follow up 1)".popup = """
 0 = no pain, 10 = worst pain imaginable
 """
 
-Worst pain felt during the last week.popup = """
+"During activities (Follow up 1)".popup = """
+0 = no pain, 10 = worst pain imaginable
+"""
+
+"Worst pain felt during the last week (Follow up 1)".popup = """
 0 = no pain, 10 = worst pain imaginable
 """
 
@@ -186,14 +252,15 @@ Worst pain felt during the last week.popup = """
 %
 
 %%Property
-In rest pre.popup = """
-0 = no pain, 10 = worst pain imaginable
-"""
-During activities pre.popup = """
+"In rest (Follow up 2)".popup = """
 0 = no pain, 10 = worst pain imaginable
 """
 
-Worst pain felt during the last week pre.popup = """
+"During activities (Follow up 2)".popup = """
+0 = no pain, 10 = worst pain imaginable
+"""
+
+"Worst pain felt during the last week (Follow up 2)".popup = """
 0 = no pain, 10 = worst pain imaginable
 """
 
@@ -201,16 +268,35 @@ Worst pain felt during the last week pre.popup = """
 %
 
 %%Property
-Daily activities.popup = """
+"In rest (preoperative)".popup = """
+0 = no pain, 10 = worst pain imaginable
+"""
+
+"During activities (preoperative)".popup = """
+0 = no pain, 10 = worst pain imaginable
+"""
+
+"Worst pain felt during the last week (preoperative)".popup = """
+0 = no pain, 10 = worst pain imaginable
+"""
+
+@package: Hernia
+%
+
+%%Property
+"Daily activities (Follow up 1)".popup = """
 0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
 """
-Outside the house.popup = """
+
+"Outside the house (Follow up 1)".popup = """
 0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
 """
-During sports.popup = """
+
+"During sports (Follow up 1)".popup = """
 0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
 """
-During heavy labour.popup = """
+
+"During heavy labour (Follow up 1)".popup = """
 0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
 """
 
@@ -218,16 +304,19 @@ During heavy labour.popup = """
 %
 
 %%Property
-Daily activities pre.popup = """
+"Daily activities (Follow up 2)".popup = """
 0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
 """
-Outside the house pre.popup = """
+
+"Outside the house (Follow up 2)".popup = """
 0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
 """
-During sports pre.popup = """
+
+"During sports (Follow up 2)".popup = """
 0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
 """
-During heavy labour pre.popup = """
+
+"During heavy labour (Follow up 2)".popup = """
 0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
 """
 
@@ -235,10 +324,31 @@ During heavy labour pre.popup = """
 %
 
 %%Property
-The shape of your abdomen.popup = """
+"Daily activities (preoperative)".popup = """
+0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+"""
+
+"Outside the house (preoperative)".popup = """
+0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+"""
+
+"During sports (preoperative)".popup = """
+0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+"""
+
+"During heavy labour (preoperative)".popup = """
+0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+"""
+
+@package: Hernia
+%
+
+%%Property
+"The shape of your abdomen (Follow up 1)".popup = """
 0 = very beautiful, 10 = extremely ugly
 """
-The hernia itself.popup = """
+
+"The hernia itself (Follow up 1)".popup = """
 0 = very beautiful, 10 = extremely ugly
 """
 
@@ -246,12 +356,26 @@ The hernia itself.popup = """
 %
 
 %%Property
-The shape of your abdomen pre.popup = """
+"The shape of your abdomen (Follow up 2)".popup = """
 0 = very beautiful, 10 = extremely ugly
 """
-The hernia itself pre.popup = """
+
+"The hernia itself (Follow up 2)".popup = """
 0 = very beautiful, 10 = extremely ugly
 """
 
 @package: Hernia
 %
+
+%%Property
+"The shape of your abdomen (preoperative)".popup = """
+0 = very beautiful, 10 = extremely ugly
+"""
+
+"The hernia itself (preoperative)".popup = """
+0 = very beautiful, 10 = extremely ugly
+"""
+
+@package: Hernia
+%
+

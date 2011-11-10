@@ -1,4 +1,3 @@
-
 __[EuraHS Home|Main]__
 
 
@@ -7,8 +6,9 @@ __[EuraHS Home|Main]__
 * [Resources]
 * [ImageMap]
 * [Popups]
+* [Dropdowns]
 \\
-[Leftmenu]
+[LeftMenu]
 
 [{KnowWEPlugin tagcloud}]
 

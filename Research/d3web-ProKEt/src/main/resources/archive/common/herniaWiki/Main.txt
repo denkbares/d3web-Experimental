@@ -9,6 +9,7 @@
 * JOBA: [info] questions = zero choice?
 
 
+
 \\
 !!! Knowledge base / dialog
 The dialog is defined distributed over the following articles:\\
@@ -18,6 +19,7 @@ The dialog is defined distributed over the following articles:\\
 [Resources]\\
 [ImageMap]\\
 [Popups]\\
+[Dropdowns]\\
 \\
 
 %%knowledgebase 
@@ -29,5 +31,5 @@ HerniaDialog
 \\
 !Defined Knowledge 
 
-[{KnowWEPlugin renderKnowledge}]
+
 

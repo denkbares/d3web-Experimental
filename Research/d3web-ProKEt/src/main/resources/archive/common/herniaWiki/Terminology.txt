@@ -1,14 +1,15 @@
 This article contains the knowledge, respectively the dialog of the hernia project.
 %%Question
-EuraHS Initialization #1
+EuraHS Initialization #1 
 - Please enter a EuraHS registration number instead of a patient name [text]
-- Please select your hernia route [oc]
+//Zusätzlich soll eine laufende Nummer vom System vergeben werden und als nich änderbare Kennzahl sichtbar sein
+- Please select your hernia route [oc] //TODO3
 -- Primary ventral hernia route
 --- "Please select primary ventral hernia" [oc]
 ---- Epigastric hernia
----- Umbilical hernia
+---- Umbilical hernia    //TODO1
 ---- Lumbar hernia
----- Spigelian hernia
+---- Spighelian hernia
 -- Incisional ventral hernia route
 --- "Please select incisional ventral hernia" [oc]
 ---- Incisional ventral hernia
@@ -17,6 +18,7 @@ EuraHS Initialization #1
 ---- Recurrent lumbar hernia
 ---- Recurrent Spighelian hernia
 -- Parastomal hernia route
+
 
 @package: Hernia
 %
@@ -27,7 +29,8 @@ Common Route #2
 - Please choose the database level [oc]
 -- Level 1
 -- Level 2
-- Year of birth [date]
+- Year of birth [date] // muss in Zukunft angepasst werden.
+// Für Uli: Kongruenzen der Kalender-Daten einfügen
 - Gender [oc]
 -- Male
 -- Female
@@ -35,6 +38,8 @@ Common Route #2
 -- Yes
 -- Not applicable to my country
 @package: Hernia
+
+
 %
 
 %%Question
@@ -43,16 +48,24 @@ Comorbidities &only if: Please choose the database level = Level 2 &
 -- Yes
 --- Select Comorbidities [mc]
 ---- "Diabetes mellitus type I (juvenil)"
+----- "SOC Score of Diabetes mellitus type I (juvenil)" [text] //Beim löschen der letzten MC Alternative verschwindet die Folgefrage nicht
 ---- "Diabetes mellitus type II (adult)"
+----- "SOC Score of Diabetes mellitus type II (adult)" [text] //Wäre besser direkt hinter der Alternative eine drop-down Antwort auszuwählen
 ---- Cardiac disease
+----- "SOC Score of cardiac disease" [text]
 ---- Arterial hypertension
+----- "SOC Score of arterial hypertension" [text]
 ---- Pulmonary disease
+----- "SOC Score of pulmonary disease" [text]
 ---- Hepatic disease
+----- "SOC Score of hepatic disease" [text]
 ----- Ascites present [yn]
 ---- Renal disease
+----- "SOC Score of renal disease" [text]
 ----- Haemodyalysis [yn]
 ----- Peritoneal dialysis [yn]
----- Malignant disease 
+---- Malignant disease
+----- "SOC Score of malignant disease" [text]
 ----- Curatively treated [yn]
 @package: Hernia
 %
@@ -65,7 +78,7 @@ Risk factors &only if: Please choose the database level = Level 2 &
 ---- Aneurysmatic disease
 ---- Collagen related disease
 ----- Type of collagen related disease: [oc]
------- Lung emphysema
+------ Lung emphysema  //TODO1
 ------ Marfan syndrome
 ------ Ehlers Danlos
 ------ Polycystic kidney disease
@@ -127,7 +140,7 @@ Incisional ventral hernia route
 - Indication for surgery [oc] &only if: Please choose the database level = Level 2 &
 -- Elective
 -- Emergency
-- Mark the incisional hernia areas involved [mc]
+- Mark the incisional hernia areas involved [mc] //Bitte die Umrahmung beim Anklicken auch im Bild fest machen und z.B. mit der gleichen gelben Farbe wie die Pop-ups markieren.
 -- M1
 -- M2
 -- M3
@@ -141,6 +154,7 @@ Incisional ventral hernia route
 -- "L3:R"
 -- "L4:L"
 -- "L4:R"
+- "Upload fotography" [info] //bitte den erhöhten Aufwand zur Erstellung berücksichtigen, dass dieses Tool auch bis Mitte Dezember funktionsfähing ist.
 - Date of operation that caused the incisional hernia [date] &only if: Please choose the database level = Level 2 &
 - "Type of operation (speciality) that caused the incisional hernia" [oc] &only if: Please choose the database level = Level 2 &
 -- Gastrointestinal
@@ -226,27 +240,28 @@ Parastomal hernia route
 @package: Hernia
 %
 
+
 %%Question
-Common Route - Follow up 1 - Preoperative Quality of life - Pain at the site of the hernia &only if: Please choose the database level = Level 2 &
-- In rest pre [text]
-- During activities pre [text]
-- Worst pain felt during the last week pre [text]
+Common Route - Preoperative Quality of life - Pain at the site of the hernia &only if: Please choose the database level = Level 2 &
+- "In rest (preoperative)" [text]
+- "During activities (preoperative)" [text]
+- "Worst pain felt during the last week (preoperative)" [text]
 @package: Hernia
 %
 
 %%Question
-Common Route - Follow up 1 - Preoperative Quality of life - Restrictions of activities &only if: Please choose the database level = Level 2 &
-- Daily activities pre [text]
-- Outside the house pre [text]
-- During sports pre [text]
-- During heavy labour pre [text]
+Common Route - Preoperative Quality of life - Restrictions of activities &only if: Please choose the database level = Level 2 &
+- "Daily activities (preoperative)" [text]
+- "Outside the house (preoperative)" [text]
+- "During sports (preoperative)"[text]
+- "During heavy labour (preoperative)" [text]
 @package: Hernia
 %
 
 %%Question
-Common Route - Follow up 1 - Preoperative Quality of life - Esthetical discomfort &only if: Please choose the database level = Level 2 &
-- The shape of your abdomen pre [text]
-- The hernia itself pre [text]
+Common Route - Preoperative Quality of life - Esthetical discomfort &only if: Please choose the database level = Level 2 &
+- "The shape of your abdomen (preoperative)" [text]
+- "The hernia itself (preoperative)" [text]
 @package: Hernia
 %
 
@@ -275,6 +290,8 @@ Common Route - Operative data #6
 - "Start of operation (first incision)" [date] &only if: Please choose the database level = Level 2 &
 - "End of operation (last skin suture)" [date] &only if: Please choose the database level = Level 2 &
 - "Duration of the operation in minutes" [num] &only if: Please choose the database level = Level 2 &
+//Automatische Kalkulationsfunktion in Munuten einfügen
+//Keine Sekunden-Angabe
 - Content of the hernia sac [mc] &only if: Please choose the database level = Level 2 &
 -- None
 -- Small bowel
@@ -358,7 +375,10 @@ Common Route - Operative Data - Surgical technique #9
 --- Width of the implanted mesh [num] {cm} &only if: Please choose the database level = Level 2 &
 --- Length of the implanted mesh [num] {cm} &only if: Please choose the database level = Level 2 &
 --- Size of the implanted mesh [num] {cm^2} <abstract> &only if: Please choose the database level = Level 2 &
+//wird bei Änderung nicht aktualisiert. 
+//Soll auch bei Level 1 erscheinen (immer erscheinen) 
 --- Estimated minimal overlap of the mesh beyond the hernia defect [num] {cm} &only if: Please choose the database level = Level 2 &
+--- "Was the complete scar repaired by the mesh?" [yn]
 --- Fixation of the mesh [mc]
 ---- No fixation
 ---- Suture
@@ -404,9 +424,10 @@ Common Route - Operation data - Intraoperative complications &only if: Please ch
 ------- Severity [oc]
 ------ Not full thickness lesion
 ------ Full thickness lesion
------ Management of intestinal lesion [oc]
+----- Management of intestinal lesion [mc]
 ------ Suture
------- Bowel resection
+------ Bowel resection with anastomosis
+------ Ostomy
 ---- Bladder injury
 ---- "General complication (e.g. cardiac)"
 ---- Other
@@ -451,7 +472,16 @@ Common Route - Discharge data #11
 ---- Single organ failure
 ---- Multiple organ failure
 - Did the patient die postoperatively? [yn]
-- Classification of surgical complications [text]
+- Classification of surgical complications [oc]
+-- Grade I
+-- Grade II 
+-- Grade III
+-- Grade IIIa
+-- Grade IIIb
+-- Grade IV
+-- Grade IVa
+-- Grade IVb
+-- Grade V
 - Type of data collection [oc]
 -- Prospective
 -- Retrospective
@@ -478,25 +508,26 @@ Common Route - Follow up 1 &only if: Please choose the database level = Level 2 
 
 %%Question
 Common Route - Follow up 1 - Quality of life - Pain at the site of the hernia &only if: Please choose the database level = Level 2 &
-- In rest [text]
-- During activities [text]
-- Worst pain felt during the last week [text]
+- "In rest (Follow up 1)" [text]
+- "During activities (Follow up 1)" [text]
+- "Worst pain felt during the last week (Follow up 1)" [text]
 @package: Hernia
 %
 
+
 %%Question
 Common Route - Follow up 1 - Quality of life - Restrictions of activities &only if: Please choose the database level = Level 2 &
-- Daily activities [text]
-- Outside the house [text]
-- During sports [text]
-- During heavy labour [text]
+- "Daily activities (Follow up 1)" [text]
+- "Outside the house (Follow up 1)" [text]
+- "During sports (Follow up 1)"[text]
+- "During heavy labour (Follow up 1)" [text]
 @package: Hernia
 %
 
 %%Question
 Common Route - Follow up 1 - Quality of life - Esthetical discomfort &only if: Please choose the database level = Level 2 &
-- The shape of your abdomen [text]
-- The hernia itself [text]
+- "The shape of your abdomen (Follow up 1)" [text]
+- "The hernia itself (Follow up 1)" [text]
 @package: Hernia
 %
 
@@ -599,7 +630,7 @@ Common Route - Follow up 1 - Late complications &only if: Please choose the data
 Common Route - Follow up 2 &only if: Please choose the database level = Level 2 &
 - "Lost to follow up (Follow up 2)" [oc]
 -- Unable to contact the patient
--- Patient refuses futher follow up
+-- Patient refuses futher follow up  //TODO1
 -- The patien deceased
 --- "Date of death (Follow up 2)" [date]
 --- "Cause of death (Follow up 2)" [text]
@@ -613,19 +644,29 @@ Common Route - Follow up 2 &only if: Please choose the database level = Level 2 
 @package: Hernia
 %
 
+
 %%Question
-Common Route - Follow up 2 - Quality of life measurement &only if: Please choose the database level = Level 2 &
-- "Chronic abdominal wall pain at the operation site (Follow up 2)" [yn]
--- Yes
---- "Intensity of pain (Follow up 2)" [oc]
----- Mild pain
----- Moderate pain
----- Severe pain
---- "Frequency of pain (Follow up 2)" [oc]
----- Sporatic
----- Frequent
----- Constant
---- "Foreign body feeling at operation site (Follow up 2)" [yn]
+Common Route - Follow up 2 - Quality of life - Pain at the site of the hernia &only if: Please choose the database level = Level 2 &
+- "In rest (Follow up 2)" [text]
+- "During activities (Follow up 2)" [text]
+- "Worst pain felt during the last week (Follow up 2)" [text]
+@package: Hernia
+%
+
+
+%%Question
+Common Route - Follow up 2 - Quality of life - Restrictions of activities &only if: Please choose the database level = Level 2 &
+- "Daily activities (Follow up 2)" [text]
+- "Outside the house (Follow up 2)" [text]
+- "During sports (Follow up 2)"[text]
+- "During heavy labour (Follow up 2)" [text]
+@package: Hernia
+%
+
+%%Question
+Common Route - Follow up 2 - Quality of life - Esthetical discomfort &only if: Please choose the database level = Level 2 &
+- "The shape of your abdomen (Follow up 2)" [text]
+- "The hernia itself (Follow up 2)" [text]
 @package: Hernia
 %
 
@@ -721,6 +762,7 @@ Common Route - Follow up 2 - Late complications &only if: Please choose the data
 ------ "Central mesh failure (recurrence through the mesh)"
 ------ Increased patient risk
 ----- "Other cause of recurrence (Follow up 2)" [text]
+//Neuen Obertitel einfügen, als eigenständiger Block, mit der Frage "Type of data collection" und den Alternativen "Prospective" oder "Retrospective"
 @package: Hernia
 %
 
@@ -749,3 +791,13 @@ THEN Size of the implanted mesh = (Width of the implanted mesh * Length of the i
 
 
 
+!!! TODOs
+
+Änderungen, die noch umgesetzt werden müssen
+
+|| Schlüsselwort || Beschreibung
+| TODO1          | Ein Beispielproblem, welches mehrere Stellen der Wissensbasis betrifft
+| TODO2          | weiteres Beispiel
+
+
+----
