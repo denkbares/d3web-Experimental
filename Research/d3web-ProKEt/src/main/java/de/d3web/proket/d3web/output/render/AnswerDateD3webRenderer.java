@@ -20,7 +20,11 @@
 package de.d3web.proket.d3web.output.render;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.antlr.stringtemplate.StringTemplate;
 
@@ -49,7 +53,7 @@ import de.d3web.proket.utils.TemplateUtils;
  * @author Martina Freiberg
  * @created 16.01.2011
  */
-public class AnswerDateD3webRenderer extends AbstractD3webRenderer implements AnswerD3webRenderer {
+public class AnswerDateD3webRenderer extends AnswerTextD3webRenderer implements AnswerD3webRenderer {
 
 	/**
 	 * Specifically adapted for rendering NumAnswers
@@ -106,43 +110,137 @@ public class AnswerDateD3webRenderer extends AbstractD3webRenderer implements An
 			st.setAttribute("selection", "");
 		}
 
+		String dateDescription = to.getInfoStore().getValue(ProKEtProperties.DATE_FORMAT);
+
+		SimpleDateFormat dateFormat = null;
+
+		if (dateDescription != null && !dateDescription.isEmpty()) {
+			String[] dateDescSplit = dateDescription.split("OR");
+			try {
+				dateFormat = new SimpleDateFormat(dateDescSplit[0].trim());
+			}
+			catch (IllegalArgumentException e) {
+			}
+		}
+		if (dateFormat == null) {
+			dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+		}
+		dateDescription = dateFormat.toPattern();
+
+		GregorianCalendar dateCal = null;
 		if (value != null && UndefinedValue.isNotUndefinedValue(value)
 				&& !value.equals(Unknown.getInstance())) {
 
 			Date d = ((DateValue) value).getDate();
-			SimpleDateFormat dateFormat = null;
-
-			String dateDescription = to.getInfoStore().getValue(ProKEtProperties.DATE_FORMAT);
-
-			if (dateDescription != null && !dateDescription.isEmpty()) {
-				String[] dateDescSplit = dateDescription.split("OR");
-				try {
-					dateFormat = new SimpleDateFormat(dateDescSplit[0].trim());
-				}
-				catch (IllegalArgumentException e) {
-				}
-			}
-			if (dateFormat == null) {
-				dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-			}
-
-			String val = dateFormat.format(d).toString();
-			st.setAttribute("selection", val);
-		}
-		else if (UndefinedValue.isUndefinedValue(value) ||
-				value.equals(Unknown.getInstance())) {
-			st.removeAttribute("selection"); // don't want to have "undefined"
-			st.setAttribute("selection", ""); // displayed in the input field
+			dateCal = new GregorianCalendar();
+			dateCal.setTime(d);
 		}
 
-		// Description of the input to provide is read from the knowledge base
-		st.setAttribute("text", dq.getInfoStore().getValue(ProKEtProperties.DATE_FORMAT));
+		String year = null, month = null, day = null, hour = null, minute = null, second = null;
+
+		if (dateCal != null) {
+			year = String.valueOf(dateCal.get(Calendar.YEAR));
+			month = String.valueOf(dateCal.get(Calendar.MONTH));
+			day = String.valueOf(dateCal.get(Calendar.DAY_OF_MONTH));
+			hour = String.valueOf(dateCal.get(Calendar.HOUR_OF_DAY));
+			minute = String.valueOf(dateCal.get(Calendar.MINUTE));
+			second = String.valueOf(dateCal.get(Calendar.SECOND));
+		}
+
+		StringBuilder table = new StringBuilder();
+		StringBuilder firstRow = new StringBuilder();
+		StringBuilder secondRow = new StringBuilder();
+		table.append("<table style=\"width:0px\"><tr>");
+		if (dateDescription.contains("d")) {
+			firstRow.append("<td>Day:</td>");
+			secondRow.append(createDayDropDown(day));
+		}
+
+		if (dateDescription.contains("M")) {
+			firstRow.append("<td>Month:</td>");
+			secondRow.append(createMonthDropDown(month));
+		}
+
+		if (dateDescription.contains("y")) {
+			firstRow.append("<td>Year:</td>");
+			secondRow.append(createYearDropDown(year));
+		}
+
+		if (dateDescription.contains("H")) {
+			firstRow.append("<td>Hour:</td>");
+			secondRow.append(createHourDropDown(hour));
+		}
+
+		if (dateDescription.contains("m")) {
+			firstRow.append("<td>Minute:</td>");
+			secondRow.append(createMinuteDropDown(minute));
+		}
+
+		if (dateDescription.contains("s")) {
+			firstRow.append("<td>Second:</td>");
+			secondRow.append(createSecondDropDown(second));
+		}
+		table.append(firstRow);
+		table.append("</tr><tr>");
+		table.append(secondRow);
+		table.append("</tr></table>");
+		st.setAttribute(
+				"dropdown_menu", table.toString());
 
 		sb.append(st.toString());
 
 		super.makeTables(to, to, cc, sb);
 
 		return sb.toString();
+	}
+
+	private String createYearDropDown(String selectedValue) {
+		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+		return createDropDownOptions(selectedValue, "Year", currentYear, 1900);
+	}
+
+	private String createMonthDropDown(String selectedValue) {
+		return createDropDownOptions(selectedValue, "Month", 1, 12);
+	}
+
+	private String createDayDropDown(String selectedValue) {
+		return createDropDownOptions(selectedValue, "Day", 1, 31);
+	}
+
+	private String createHourDropDown(String selectedValue) {
+		return createDropDownOptions(selectedValue, "Hour", 23);
+	}
+
+	private String createMinuteDropDown(String selectedValue) {
+		return createDropDownOptions(selectedValue, "Minute", 59);
+	}
+
+	private String createSecondDropDown(String selectedValue) {
+		return createDropDownOptions(selectedValue, "Second", 59);
+	}
+
+	private String createDropDownOptions(String selectedValue, String name, int end) {
+		return createDropDownOptions(selectedValue, name, 0, end);
+	}
+
+	private String createDropDownOptions(String selectedValue, String name, int start, int end) {
+		ArrayList<String> measure = new ArrayList<String>();
+		boolean reverse = false;
+		if (end < start) {
+			reverse = true;
+			int temp = start;
+			start = end;
+			end = temp;
+		}
+		for (int i = start; i <= end; i++) {
+			measure.add(String.valueOf(i));
+		}
+		if (reverse) {
+			Collections.reverse(measure);
+		}
+		return "<td><select type='" + name + "select'>\n"
+				+ createDropDownOptions("", selectedValue,
+						measure.toArray(new String[] {})) + "<select/></td>";
 	}
 
 }

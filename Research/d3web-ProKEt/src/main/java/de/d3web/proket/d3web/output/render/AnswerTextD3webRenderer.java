@@ -93,8 +93,12 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
 		if (dropdownMenuOptions != null) {
 			String dropdownDefault = to.getInfoStore().getValue(
 					ProKEtProperties.DROPDOWN_MENU_DEFAULT);
-			st.setAttribute("dropdown_menu",
-					createDropDownOptions(dropdownDefault, dropdownMenuOptions, value));
+			if (dropdownDefault == null) dropdownDefault = "Please select...";
+			String dropdownMenu = "<select  type='textselect'>"
+					+ createDropDownOptions(dropdownDefault, value.toString(),
+							dropdownMenuOptions.split(",")) + "<select/>";
+			st.setAttribute(
+					"dropdown_menu", dropdownMenu);
 		}
 		else {
 			// QContainer indicated
@@ -134,15 +138,15 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
 		return sb.toString();
 	}
 
-	private String createDropDownOptions(String dropdownDefault, String dropdownMenu, Value value) {
+	protected String createDropDownOptions(String dropdownDefault, String selectedValue, String... options) {
 		StringBuilder builder = new StringBuilder();
-		String defaultValue = dropdownDefault == null ? "Please choose..." : dropdownDefault;
-		builder.append("<option>" + defaultValue + "</option>\n");
-		String[] options = dropdownMenu.split(",");
+		if (dropdownDefault != null) {
+			builder.append("<option>" + dropdownDefault + "</option>\n");
+		}
 		for (String option : options) {
 			option = option.trim();
 			builder.append("<option value='" + option + "'"
-					+ (value.toString().equals(option) ? "selected='selected'" : "")
+					+ (option.equals(selectedValue) ? "selected='selected'" : "")
 					+ ">" + option
 					+ "</option>\n");
 		}

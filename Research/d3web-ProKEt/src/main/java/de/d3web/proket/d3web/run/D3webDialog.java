@@ -997,34 +997,12 @@ public class D3webDialog extends HttpServlet {
 
 	private Value setQuestionDate(Question to, String valString) {
 		Value value = null;
-		String dateDescription = to.getInfoStore().getValue(ProKEtProperties.DATE_FORMAT);
-		if (dateDescription != null && !dateDescription.isEmpty()) {
-			String[] dateDescSplit = dateDescription.split("OR");
-			for (String dateDesc : dateDescSplit) {
-				dateDesc = dateDesc.trim();
-				try {
-					SimpleDateFormat dateFormat = new SimpleDateFormat(dateDesc);
-					value = new DateValue(dateFormat.parse(valString));
-				}
-				catch (ParseException e) {
-					// value still null, will not be set
-				}
-				catch (IllegalArgumentException e) {
-					// value still null, will not be set
-				}
-				if (value != null) {
-					break;
-				}
-			}
+		try {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("ss.mm.HH.dd.MM.yyyy");
+			value = new DateValue(dateFormat.parse(valString));
 		}
-		else {
-			try {
-				SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-				value = new DateValue(dateFormat.parse(valString));
-			}
-			catch (ParseException e) {
-				// value still null, will not be set
-			}
+		catch (ParseException e) {
+			// value still null, will not be set
 		}
 		return value;
 	}

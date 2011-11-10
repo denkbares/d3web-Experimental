@@ -5,9 +5,7 @@
 		<input id="f_$fullId$" type="readonly" $if(selection)$value="$selection$"$endif$ title="$title$" $if(width)$size="$width$"$endif$ />
 	$else$
 		$if (dropdown_menu)$
-		<select id="f_$fullId$" type="select">
-			$dropdown_menu$
-		</select>
+		$dropdown_menu$
 		$else$
 		<input id="f_$fullId$" type="text" 
 				$if(selection)$value="$selection$"$endif$ 

@@ -273,7 +273,7 @@ function initFunctionality() {
 		d3web_addFacts($(this));
 	});
 	
-	$('[type=select]').unbind('change').change(function() {
+	$('[type=textselect]').unbind('change').change(function() {
 		d3web_storeQuestionText($(this));
 		d3web_addFacts($(this));
 	});
@@ -819,7 +819,7 @@ function d3web_getRatings(list_of_ids) {
 		url : link,
 		success : function(html) {
 			var elements = html.split(";");
-			for (i = 0; i < elements.length; i++) {
+			for (var i = 0; i < elements.length; i++) {
 				var elementId = elements[i].split(",")[0];
 				var clazz = elements[i].split(",")[1];
 				element = $("[id='" + elementId + "']");
@@ -851,4 +851,3 @@ function d3web_show_solutions(target_id) {
 		}
 	});
 }
-
