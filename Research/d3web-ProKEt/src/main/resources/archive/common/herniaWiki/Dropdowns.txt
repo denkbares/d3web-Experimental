@@ -1,0 +1,251 @@
+%%Property
+Name of mesh.dropdown_menu_options = 
+"""
+Composix,
+Composix Kugel Patch,
+C-Qur,
+DualMesh,
+DualMesh Plus,
+DynaMesh-IPOM,
+DynaMesh-IPST,
+DynaMesh-PP,
+Omyra,
+Optilene Mesh Elastic,
+Optilene Mesh LP,
+Parietene,
+Parietex,
+Parietex Composite Mono,
+Physiomesh,
+Premilene Mesh LP,
+Proceed,
+Prolene,
+ProlyteUltra,
+PVP,
+Safil,
+TiMesh,
+Ultrapro,
+Ultrapro Hernia System,
+Vicryl,
+Vypro II
+"""
+
+@package: Hernia
+%
+
+%%Property
+Name of first mesh.dropdown_menu_options = 
+"""
+Composix,
+Composix Kugel Patch,
+C-Qur,
+DualMesh,
+DualMesh Plus,
+DynaMesh-IPOM,
+DynaMesh-IPST,
+DynaMesh-PP,
+Omyra,
+Optilene Mesh Elastic,
+Optilene Mesh LP,
+Parietene,
+Parietex,
+Parietex Composite Mono,
+Physiomesh,
+Premilene Mesh LP,
+Proceed,
+Prolene,
+ProlyteUltra,
+PVP,
+Safil,
+TiMesh,
+Ultrapro,
+Ultrapro Hernia System,
+Vicryl,
+Vypro II
+"""
+@package: Hernia
+%
+
+%%Property
+Name of second mesh.dropdown_menu_options = 
+"""
+Composix,
+Composix Kugel Patch,
+C-Qur,
+DualMesh,
+DualMesh Plus,
+DynaMesh-IPOM,
+DynaMesh-IPST,
+DynaMesh-PP,
+Omyra,
+Optilene Mesh Elastic,
+Optilene Mesh LP,
+Parietene,
+Parietex,
+Parietex Composite Mono,
+Physiomesh,
+Premilene Mesh LP,
+Proceed,
+Prolene,
+ProlyteUltra,
+PVP,
+Safil,
+TiMesh,
+Ultrapro,
+Ultrapro Hernia System,
+Vicryl,
+Vypro II
+"""
+@package: Hernia
+%
+
+%%Property
+Production company of the mesh.dropdown_menu_options = 
+"""
+Atrium,
+B.Braun Aesculap,
+Bard,
+Covidien,
+Dahlhausen,
+Ethicon,
+Gore
+"""
+@package: Hernia
+%
+
+%%Property
+Production company of the first mesh.dropdown_menu_options = 
+"""
+Atrium,
+B.Braun Aesculap,
+Bard,
+Covidien,
+Dahlhausen,
+Ethicon,
+Gore
+"""
+@package: Hernia
+%
+
+%%Property
+Production company of the second mesh.dropdown_menu_options = 
+"""
+Atrium,
+B.Braun Aesculap,
+Bard,
+Covidien,
+Dahlhausen,
+Ethicon,
+Gore
+"""
+@package: Hernia
+%
+
+%%Property
+
+Name of the suture material.dropdown_menu_options = 
+"""
+Biosyn,
+Ethibond,
+Goretex,
+Monoplus,
+PDS,
+Premilene,
+Prolene,
+Safil,
+Surgipro,
+Vicryl,
+Vicryl Plus
+"""
+
+
+@package: Hernia
+%
+
+
+%%Property
+"In rest (Follow up 1)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10"
+"In rest (Follow up 2)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10"
+"In rest (preoperative)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10"
+
+@package: Hernia
+%
+
+%%Property
+"During activities (Follow up 1)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10"
+"During activities (Follow up 2)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10"
+"During activities (preoperative)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10"
+
+@package: Hernia
+%
+
+%%Property
+"Worst pain felt during the last week (Follow up 1)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10"
+"Worst pain felt during the last week (Follow up 2)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10"
+"Worst pain felt during the last week (preoperative)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10"
+
+@package: Hernia
+%
+
+
+%%Property
+"Daily activities (Follow up 1)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10,X"
+"Daily activities (Follow up 2)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10,X"
+"Daily activities (preoperative)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10,X"
+
+@package: Hernia
+%
+
+
+
+%%Property
+"Outside the house (Follow up 1)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10,X"
+"Outside the house (Follow up 1)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10,X"
+"Outside the house (preoperative)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10,X"
+
+@package: Hernia
+%
+
+%%Property
+"During sports (Follow up 1)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10,X"
+"During sports (Follow up 2)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10,X"
+"During sports (preoperative)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10,X"
+
+@package: Hernia
+%
+
+
+%%Property
+"During heavy labour (Follow up 1)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10,X"
+"During heavy labour (Follow up 2)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10,X"
+"During heavy labour (preoperative)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10,X"
+
+@package: Hernia
+%
+
+%%Property
+"The shape of your abdomen (Follow up 1)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10"
+"The shape of your abdomen (Follow up 2)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10"
+"The shape of your abdomen (preoperative)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10"
+
+@package: Hernia
+%
+
+%%Property
+"The hernia itself (Follow up 1)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10"
+"The hernia itself (Follow up 2)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10"
+"The hernia itself (preoperative)".dropdown_menu_options = "0,1,2,3,4,5,6,7,8,9,10"
+
+@package: Hernia
+%
+
+%%Property
+"SOC Score of Diabetes mellitus type I (juvenil)".dropdown_menu_options = "1,2,3,4,5"
+"SOC Score of Diabetes mellitus type II (adult)".dropdown_menu_options = "1,2,3,4,5"
+"SOC Score of cardiac disease".dropdown_menu_options = "1,2,3,4,5"
+"SOC Score of arterial hypertension".dropdown_menu_options = "1,2,3,4,5"
+"SOC Score of pulmonary disease".dropdown_menu_options = "1,2,3,4,5"
+"SOC Score of hepatic disease".dropdown_menu_options = "1,2,3,4,5"
+"SOC Score of renal disease".dropdown_menu_options = "1,2,3,4,5"
+"SOC Score of malignant disease".dropdown_menu_options = "1,2,3,4,5"
+@package: Hernia
+%
