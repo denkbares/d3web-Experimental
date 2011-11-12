@@ -24,16 +24,5 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
-	
-	
-    <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-        id="OWLApiQuery">
-        <parameter id="class" value="de.knowwe.owlapi.query.OWLApiQuery" />
-        <parameter id="name" value="OWLApiQuery" />
-        <parameter id="description" value="Type OWLApiQuery" />
-        <parameter id="version" value="1.0" />
-        <parameter id="priority" value="5"  />
-        <parameter id="scope" value="root" />
-    </extension>	
 
 </plugin>
