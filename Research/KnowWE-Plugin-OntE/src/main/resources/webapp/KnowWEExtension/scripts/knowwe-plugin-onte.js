@@ -136,6 +136,32 @@ KNOWWE.plugin.onte.actions = function() {
                 }
             });
         },
+        /**
+         * Performs correction for a given Section ID and correction
+         */
+        doCorrection : function(sectionID, correction) {
+            var params = {
+                    action : 'KeywordReplaceAction',
+                    TargetNamespace :  sectionID,
+                    KWiki_Topic : KNOWWE.helper.gup('page'),
+                    KWikitext : encodeURIComponent(correction.replace(/\s*$/im,""))
+            };
+
+            var options = {
+                    url : KNOWWE.core.util.getURL(params),
+                    loader : true,
+                    response : {
+                        action : 'none',
+                        fn : function() { 
+                            window.location.reload();
+                        },
+                        onError : function(http) {
+                            KNOWWE.helper.message.showMessage(http.responseText, "AJAX call failed");
+                        }
+                    }
+            };
+            new _KA(options).send();  
+        },
         exportOntology : function() {
             var s = document.getElementById('onte-export-tab-format').value;
             var f = document.getElementById('onte-export-tab-filename').value;

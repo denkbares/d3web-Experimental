@@ -29,7 +29,6 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.knowwe.kdom.manchester.types.Delimiter;
 import de.knowwe.kdom.manchester.types.NonTerminalList;
 import de.knowwe.kdom.manchester.types.NonTerminalListContent;
 import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
@@ -51,7 +50,7 @@ public class ManchesterClassExpression extends CompositeCondition {
 	 *
 	 * @created 21.09.2011
 	 */
-	public void initRestrictionTypes() {
+	public void initRestrictionTypes(boolean isLast) {
 
 		// get count of the CompositeConditions children
 		int ccChildren = getAllowedChildrenTypes().size();
@@ -62,18 +61,19 @@ public class ManchesterClassExpression extends CompositeCondition {
 		NonTerminalListContent listContent = new NonTerminalListContent();
 		listContent.addChildType(this);
 		list.addChildType(listContent);
-		this.childrenTypes.add(ccChildren - 1, list);
+
 
 		// ... or a OneOfBracedList
 		OneOfBracedCondition oneOf = new OneOfBracedCondition();
 		OneOfBracedConditionContent oneOfContent = new OneOfBracedConditionContent();
 		oneOfContent.addChildType(this);
 		oneOf.addChildType(oneOfContent);
+
+		this.childrenTypes.add(ccChildren - 1, list);
 		this.childrenTypes.add(ccChildren - 1, oneOf);
 
 		// ... or finally a TerminalCondition which stops the recursive descent
 		List<Type> types = new ArrayList<Type>();
-		types.add(new Delimiter());
 		types.add(Restriction.getInstance());
 		this.setAllowedTerminalConditions(types);
 	}
@@ -139,12 +139,12 @@ public class ManchesterClassExpression extends CompositeCondition {
 
 		static {
 			cc = new ManchesterClassExpression();
-			cc.initRestrictionTypes();
+			cc.initRestrictionTypes(true);
 		}
 
 		protected OWLClassContentType() {
 			this.setSectionFinder(new AllTextFinderTrimmed());
-			cc.initRestrictionTypes();
+			cc.initRestrictionTypes(true);
 			this.addChildType(cc);
 
 		}

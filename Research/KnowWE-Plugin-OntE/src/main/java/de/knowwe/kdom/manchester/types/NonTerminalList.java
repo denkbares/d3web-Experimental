@@ -28,10 +28,22 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 
+/**
+ *
+ *
+ * @author Stefan Mark
+ * @created 27.10.2011
+ */
 public class NonTerminalList extends AbstractType {
 
 	public static final char COMMA = '\u002c';
 	public static final char QUOTE = '\u0022';
+
+	public static final char LEFT_PARENTHESIS = '\u0028';
+	public static final char RIGHT_PARENTHESIS = '\u0029';
+
+	public static final char LEFT_CURLY_BRACKET = '\u007B';
+	public static final char RIGHT_CURLY_BRACKET = '\u007D';
 
 	@Override
 	protected void init() {
@@ -64,24 +76,45 @@ public class NonTerminalList extends AbstractType {
 				int currentEnd = 0;
 				int currentStart = text.indexOf(trimmed);
 				boolean quoted = false;
+				int braced = 0;
 
 				for (int i = 0; i < chars.length; i++) {
-					if (Character.valueOf(COMMA).equals(chars[i]) && !quoted) {
-						// found comma, not quoted -> create result
-						currentEnd = i;
-						results.add(new SectionFinderResult(currentStart, currentEnd));
-						currentStart = i + 1;
-					}
-					else if (i + 1 == text.length()) {
-						// take everything till the end of the input as the
-						// token after the last comma
-						currentEnd = text.length();
-						results.add(new SectionFinderResult(currentStart, currentEnd));
-					}
-					else if (Character.valueOf(QUOTE).equals(chars[i])) {
-						// found quote, not comma in quotes should be handled
+
+					char current = chars[i];
+
+					switch (current) {
+					case LEFT_PARENTHESIS:
+					case LEFT_CURLY_BRACKET:
+						braced++;
+						break;
+					case RIGHT_PARENTHESIS:
+					case RIGHT_CURLY_BRACKET:
+						braced--;
+						break;
+					case QUOTE:
 						quoted = !quoted;
+						break;
+					default:
+						if (Character.valueOf(COMMA).equals(current) && !quoted && braced == 0) {
+							// found comma, not quoted -> create result
+							currentEnd = i;
+							results.add(new SectionFinderResult(currentStart, currentEnd));
+							currentStart = i + 1;
+						}
+						else if (i + 1 == text.length()) {
+							// take everything till the end of the input as the
+							// token after the last comma
+							// if (!commaInParenthesis) {
+							currentEnd = text.length();
+							results.add(new SectionFinderResult(currentStart, currentEnd));
+							// }
+						}
+						break;
 					}
+				}
+
+				if (results.isEmpty()) {
+					return null;
 				}
 				return results; // return found results
 			}
