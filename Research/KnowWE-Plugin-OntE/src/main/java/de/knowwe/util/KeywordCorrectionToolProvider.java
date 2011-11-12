@@ -6,16 +6,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import de.d3web.plugin.Extension;
+import de.d3web.plugin.PluginManager;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.correction.CorrectionProvider;
-import de.knowwe.core.correction.CorrectionToolProvider;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.ScopeUtils;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
+import de.knowwe.tools.ToolProvider;
 
-public class KeywordCorrectionToolProvider extends CorrectionToolProvider {
+public class KeywordCorrectionToolProvider implements ToolProvider {
 
 	@Override
 	public Tool[] getTools(KnowWEArticle article, Section<?> section, UserContext userContext) {
@@ -68,5 +71,19 @@ public class KeywordCorrectionToolProvider extends CorrectionToolProvider {
 					);
 		}
 		return tools;
+	}
+
+	public static CorrectionProvider[] getProviders(Section<?> section) {
+		Extension[] extensions = PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
+				"CorrectionProvider");
+		extensions = ScopeUtils.getMatchingExtensions(extensions, section);
+		CorrectionProvider[] providers = new CorrectionProvider[extensions.length];
+
+		for (int i = 0; i < extensions.length; i++) {
+			Extension extension = extensions[i];
+			providers[i] = (CorrectionProvider) extension.getSingleton();
+		}
+
+		return providers;
 	}
 }
