@@ -20,6 +20,12 @@
 
 package de.knowwe.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import de.knowwe.kdom.manchester.frame.ClassFrame;
+import de.knowwe.kdom.manchester.frame.ObjectPropertyFrame;
+
 /**
  * Some keywords of the Manchester OWL syntax.
  *
@@ -72,17 +78,17 @@ public enum ManchesterSyntaxKeywords {
 
 	SELF("SELF"),
 
-	SUBCLASS_OF("SubClassOf"),
+	SUBCLASS_OF("SubClassOf", ClassFrame.class),
 
 	SUPERCLASS_OF("SuperClassOf"),
 
-	EQUIVALENT_TO("EquivalentTo"),
+	EQUIVALENT_TO("EquivalentTo", ClassFrame.class),
 
 	EQUIVALENT_CLASSES("EquivalentClasses"),
 
 	EQUIVALENT_PROPERTIES("EquivalentProperties"),
 
-	DISJOINT_WITH("DisjointWith"),
+	DISJOINT_WITH("DisjointWith", ClassFrame.class),
 
 	INDIVIDUALS("Individuals"),
 
@@ -90,7 +96,7 @@ public enum ManchesterSyntaxKeywords {
 
 	DISJOINT_PROPERTIES("DisjointProperties"),
 
-	DISJOINT_UNION_OF("DisjointUnionOf"),
+	DISJOINT_UNION_OF("DisjointUnionOf", ClassFrame.class),
 
 	FACTS("Facts"),
 
@@ -140,18 +146,41 @@ public enum ManchesterSyntaxKeywords {
 
 	SUB_PROPERTY_OF("SubPropertyOf"),
 
-	SUB_PROPERTY_CHAIN("SubPropertyChain"),
+	SUB_PROPERTY_CHAIN("SubPropertyChain", ObjectPropertyFrame.class, ObjectPropertyFrame.class),
 
 	HAS_KEY("HasKey");
 
-
 	private String keyword = "";
 
+	private List<Class<?>> context = null;
+
+
 	private ManchesterSyntaxKeywords(String keyword) {
+		this(keyword, null, null);
+	}
+
+	private ManchesterSyntaxKeywords(String keyword, Class<?>... context) {
 		this.keyword = keyword;
+		this.context = new ArrayList<Class<?>>();
+
+		for (int i = 0; i < context.length; i++) {
+			if (context[i] != null) {
+				this.context.add(context[i]);
+			}
+		}
 	}
 
 	public String getKeyword() {
 		return this.keyword;
+	}
+
+	public boolean inContext(Class<?> cls) {
+
+		for (Class<?> clazz : context) {
+			if (cls.equals(clazz)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

@@ -38,6 +38,7 @@ import de.knowwe.kdom.manchester.types.EquivalentTo;
 import de.knowwe.kdom.manchester.types.Keyword;
 import de.knowwe.kdom.subtreehandler.ClassFrameSubtreeHandler;
 import de.knowwe.termObject.ClassIRIDefinition;
+import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
  * An {@link AbstractType} for the Manchester OWL syntax ClassFrame. Specifies
@@ -49,7 +50,7 @@ import de.knowwe.termObject.ClassIRIDefinition;
  */
 public class ClassFrame extends DefaultFrame {
 
-	public static final String KEYWORD = "Class[:]?";
+	public static final String KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.CLASS);
 
 	// add all children's keywords so they can be handled accordingly
 	public static final String KEYWORDS = "("
@@ -67,24 +68,20 @@ public class ClassFrame extends DefaultFrame {
 		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
 		this.setSectionFinder(new RegexSectionFinder(p));
 
-		OWLClassDefinition c = new OWLClassDefinition();
-		this.addChildType(c);
+		List<Type> types = new ArrayList<Type>();
 
-		Annotations a = new Annotations(KEYWORDS);
-		this.addChildType(a);
+		types.add(new OWLClassDefinition());
+		types.add(new Annotations(KEYWORDS));
 
 		EquivalentTo to = new EquivalentTo(ClassFrame.KEYWORDS);
 		to.addChildType(ManchesterSyntaxUtil.getMCE());
-		this.addChildType(to);
+		types.add(to);
 
-		SubClassOf sc = new SubClassOf();
-		this.addChildType(sc);
+		types.add(new SubClassOf());
+		types.add(new DisjointWith());
+		types.add(new DisjointUnionOf());
 
-		DisjointWith dis = new DisjointWith();
-		this.addChildType(dis);
-
-		DisjointUnionOf disUnion = new DisjointUnionOf();
-		this.addChildType(disUnion);
+		this.setKnownDescriptions(types);
 	}
 
 	/**
@@ -276,9 +273,10 @@ class OWLClass extends ClassIRIDefinition {
  */
 class SubClassOf extends DefaultDescription {
 
-	public static final String KEYWORD = "SubClassOf[:]?";
+	public static final String KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.SUBCLASS_OF);
 
 	public SubClassOf() {
+
 		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(ClassFrame.KEYWORDS, KEYWORD);
 		this.setSectionFinder(new RegexSectionFinder(p, 1));
 
@@ -294,7 +292,7 @@ class SubClassOf extends DefaultDescription {
  */
 class DisjointWith extends DefaultDescription {
 
-	public static final String KEYWORD = "DisjointWith[:]?";
+	public static final String KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.DISJOINT_WITH);
 
 	public DisjointWith() {
 
@@ -314,7 +312,7 @@ class DisjointWith extends DefaultDescription {
  */
 class DisjointUnionOf extends DefaultDescription {
 
-	public static final String KEYWORD = "DisjointUnionOf[:]?";
+	public static final String KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.DISJOINT_UNION_OF);
 
 	public DisjointUnionOf() {
 

@@ -1,0 +1,72 @@
+package de.knowwe.util;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.correction.CorrectionProvider;
+import de.knowwe.core.correction.CorrectionToolProvider;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.tools.DefaultTool;
+import de.knowwe.tools.Tool;
+
+public class KeywordCorrectionToolProvider extends CorrectionToolProvider {
+
+	@Override
+	public Tool[] getTools(KnowWEArticle article, Section<?> section, UserContext userContext) {
+		List<CorrectionProvider.Suggestion> suggestions = new LinkedList<CorrectionProvider.Suggestion>();
+		ResourceBundle wikiConfig = ResourceBundle.getBundle("KnowWE_config");
+
+		int threshold = Integer.valueOf(wikiConfig.getString("knowweplugin.correction.threshold"));
+
+		if (!section.hasErrorInSubtree(article)) {
+			return new Tool[0];
+		}
+
+		for (CorrectionProvider c : getProviders(section)) {
+			List<CorrectionProvider.Suggestion> s = c.getSuggestions(article, section, threshold);
+
+			if (s != null) {
+				suggestions.addAll(s);
+			}
+		}
+
+		// Ensure there are no duplicates
+		suggestions = new LinkedList<CorrectionProvider.Suggestion>(
+				new HashSet<CorrectionProvider.Suggestion>(suggestions));
+
+		// Sort by ascending distance
+		Collections.sort(suggestions);
+
+		if (suggestions.size() == 0) {
+			return new Tool[0];
+		}
+
+		Tool[] tools = new Tool[suggestions.size() + 1];
+
+		tools[0] = new DefaultTool(
+				"KnowWEExtension/images/quickfix.gif",
+				KnowWEEnvironment.getInstance().getKwikiBundle().getString("KnowWE.Correction.do"),
+				KnowWEEnvironment.getInstance().getKwikiBundle().getString("KnowWE.Correction.do"),
+				null,
+				"correct"
+				);
+
+		for (int i = 0; i < suggestions.size(); i++) {
+			tools[i + 1] = new DefaultTool(
+					"KnowWEExtension/images/correction_change.gif",
+					suggestions.get(i).getSuggestion(),
+					"",
+					"KNOWWE.plugin.onte.actions.doCorrection('" + section.getID() + "', '"
+							+ suggestions.get(i).getSuggestion() + "');",
+					"correct/item"
+					);
+		}
+		return tools;
+	}
+}

@@ -38,8 +38,11 @@ import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.taghandler.OWLApiTagHandlerUtil;
 
 /**
- *
- *
+ * 
+ * We can determine if the pizza ontology is actually consistent. (If an
+ * ontology is inconsistent then owl:Thing is equivalent to owl:Nothing - i.e.
+ * there can't be any models of the ontology)
+ * 
  * @author Stefan Mark
  * @created 12.10.2011
  */

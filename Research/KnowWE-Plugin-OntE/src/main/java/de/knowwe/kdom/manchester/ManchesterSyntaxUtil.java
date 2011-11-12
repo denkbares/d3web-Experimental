@@ -49,7 +49,7 @@ public class ManchesterSyntaxUtil {
 	 * @return
 	 */
 	public static String getFrameKeywordPattern(ManchesterSyntaxKeywords keyword) {
-		return keyword.getKeyword() + "[:]?\\s+";
+		return keyword.getKeyword() + "[:]?";
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class ManchesterSyntaxUtil {
 
 		ManchesterClassExpression mce = new ManchesterClassExpression();
 		mce.setSectionFinder(new AllTextFinderTrimmed());
-		mce.initRestrictionTypes();
+		mce.initRestrictionTypes(false);
 
 		return mce;
 	}

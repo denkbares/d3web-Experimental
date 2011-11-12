@@ -33,6 +33,9 @@ import de.knowwe.core.report.KDOMWarning;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.manchester.frame.DefaultFrame;
+import de.knowwe.tools.Tool;
+import de.knowwe.tools.ToolMenuDecoratingRenderer;
+import de.knowwe.tools.ToolUtils;
 
 /**
  * Highlights elements of the Manchester OWL syntax in the article. Also wraps
@@ -52,16 +55,25 @@ public class ManchesterSyntaxFrameRenderer extends KnowWEDomRenderer<DefaultFram
 	@Override
 	public void render(KnowWEArticle article, Section<DefaultFrame> sec, UserContext user, StringBuilder string) {
 
-		string.append(KnowWEUtils.maskHTML("<pre style=\"white-space:pre-wrap;background: none repeat scroll 0 0 #F5F5F5;border: 1px solid #E5E5E5;position:relative;margin:0px\">"));
+		string.append(KnowWEUtils.maskHTML("<pre id=\""
+				+ sec.getID()
+				+ "\"style=\"white-space:pre-wrap;background: none repeat scroll 0 0 #F5F5F5;border: 1px solid #E5E5E5;position:relative;margin:0px\">"));
 
 		renderMessages(article, sec, string);
 		string.append(KnowWEUtils.maskHTML("<div style=\"position:absolute;top:0px;right:0px;border-bottom: 1px solid #E5E5E5;border-left: 1px solid #E5E5E5;padding:5px\">"
 				// + getFrameName(sec)
 				// + getEditorIcon(sec)
+				+ renderTools(article, sec, user)
 				+ getLink(sec)
 				+ "</div>"));
 
-		DelegateRenderer.getInstance().render(article, sec, user, string);
+		StringBuilder frame = new StringBuilder();
+		DelegateRenderer.getInstance().render(article, sec, user, frame);
+
+		// remove the newlines at the end for nicer rendering
+		frame.replace(frame.length() - 2, frame.length(), "");
+		string.append(frame);
+
 		string.append(KnowWEUtils.maskHTML("</pre>"));
 	}
 
@@ -127,6 +139,45 @@ public class ManchesterSyntaxFrameRenderer extends KnowWEDomRenderer<DefaultFram
 	 */
 	private String getFrameName(Section<DefaultFrame> section) {
 		return section.get().getName();
+	}
+
+	/**
+	 * Has the section some ToolProvider attached, render the tools into the
+	 * resulting HTML output. This is a adaption from the
+	 * ToolMenuDecoratingRenderer. This was needed to include some of
+	 * the ToolProvider beside the DefaultMarkup. Maybe this can be
+	 * handled better in the future.
+	 *
+	 * @created 12.11.2011
+	 * @param article
+	 * @param sec
+	 * @param user
+	 * @return
+	 */
+	private String renderTools(KnowWEArticle article, Section<DefaultFrame> sec, UserContext user) {
+
+		StringBuilder string = new StringBuilder();
+
+		Tool[] tools = ToolUtils.getTools(article, sec, user);
+
+		for (Tool t : tools) {
+			String icon = t.getIconPath();
+			String jsAction = t.getJSAction();
+			boolean hasIcon = icon != null && !icon.trim().isEmpty();
+
+			string.append("<span class=\"" + t.getClass().getSimpleName() + "\" >"
+					+ "<"
+					+ (jsAction == null ? "span" : "a")
+					+ " class=\"markupMenuItem\""
+					+ (jsAction != null
+							? " href=\"javascript:" + t.getJSAction() + ";undefined;\""
+							: "") +
+					" title=\"" + t.getDescription() + "\">" +
+					(hasIcon ? ("<img src=\"" + icon + "\"></img>") : "") +
+					"</" + (jsAction == null ? "span" : "a") + ">" +
+					"</span>");
+		}
+		return string.toString();
 	}
 
 	/**

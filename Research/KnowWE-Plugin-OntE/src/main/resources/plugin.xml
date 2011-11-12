@@ -60,7 +60,25 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="KeywordReplaceAction">
+        <parameter id="class" value="de.knowwe.onte.action.KeywordReplaceAction" />
+        <parameter id="name" value="KeywordReplaceAction" />
+        <parameter id="description"
+            value="Replaces misspelled or misplaced keywords" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>    
     
+    <extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+        id="OntologyClassificationTest">
+        <parameter id="class"
+            value="de.knowwe.onte.ci4ke.OntologyClassificationTest" />
+        <parameter id="name" value="OntologyClassificationTest" />
+        <parameter id="description" value="CITest OntologyClassificationTest" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>     
     <extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
         id="OntologyConsistencyTest">
         <parameter id="class"
@@ -70,6 +88,15 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>
+    <extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+        id="OntologyDLExpressivityTest">
+        <parameter id="class"
+            value="de.knowwe.onte.ci4ke.OntologyDLExpressivityTest" />
+        <parameter id="name" value="OntologyDLExpressivityTest" />
+        <parameter id="description" value="CITest OntologyDLExpressivityTest" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>     
     <extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
         id="OntologyIndividualExistTest">
         <parameter id="class"
@@ -158,6 +185,46 @@
 		<parameter id="priority" value="105" />
 		<parameter id="scope" value="IRITermReference" />
 	</extension>
+    <extension plugin-id="KnowWEExtensionPoints" point-id="CorrectionProvider"
+        id="KeywordCorrectionProvider">
+        <parameter id="class"
+            value="de.knowwe.util.KeywordCorrectionProvider" />
+        <parameter id="name" value="KeywordCorrectionProvider" />
+        <parameter id="description"
+            value="Generates correction suggestions for Manchester OWL syntax frame keywords" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="105" />
+        <parameter id="scope" value="MisspelledSyntaxConstruct" />
+    </extension>
+    <extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+        id="KeywordCorrectionToolProvider">
+        <parameter id="class"
+            value="de.knowwe.util.KeywordCorrectionToolProvider" />
+        <parameter id="name" value="KeywordCorrectionToolProvider" />
+        <parameter id="description"
+            value="Offers to quickly correct typos in term references." />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="scope" value="MisspelledSyntaxConstruct" />
+    </extension>    
+    <extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+        id="InstantEditToolProvider">
+        <parameter id="class"
+            value="de.knowwe.instantedit.tools.InstantEditToolProvider" />
+        <parameter id="name" value="InstantEditToolProvider" />
+        <parameter id="description"
+            value="Offers a button for quick editing a certain section." />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="script" value="KnowWE-Plugin-InstantEdit.js" />
+        <parameter id="script" value="KnowWE-Plugin-AutoComplete.js" />
+        <parameter id="script" value="DefaultEditTool.js" />
+        <parameter id="script" value="TextArea.js" />
+        <parameter id="css" value="KnowWE-Plugin-InstantEdit.css" />
+        <parameter id="css" value="DefaultEditTool.css" />       
+        <parameter id="scope" value="DefaultFrame" />
+    </extension>    
+	
 
     <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
         id="ManchesterDefaultMarkup">
@@ -180,6 +247,15 @@
         <parameter id="css" value="onte.css" />
         <parameter id="script" value="knowwe-plugin-onte.js" />
     </extension>
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+        id="OWLApiQuery">
+        <parameter id="class" value="de.knowwe.taghandler.OWLApiQuery" />
+        <parameter id="name" value="OWLApiQuery" />
+        <parameter id="description" value="Type OWLApiQuery" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5"  />
+        <parameter id="scope" value="root" />
+    </extension>        
        
     <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
         id="OWLApiInferenceTagHandler">
@@ -222,5 +298,5 @@
         <parameter id="description" value="TagHandler OntEToolbarTagHandler" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
-    </extension>      
+    </extension> 
 </plugin>

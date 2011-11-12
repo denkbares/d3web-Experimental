@@ -59,6 +59,8 @@ import uk.ac.manchester.cs.owl.owlapi.mansyntaxrenderer.ManchesterOWLSyntaxObjec
 import com.clarkparsia.owlapi.explanation.BlackBoxExplanation;
 import com.clarkparsia.owlapi.explanation.HSTExplanationGenerator;
 
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.util.OntologyFormats;
 
@@ -158,6 +160,7 @@ public class OWLApiTagHandlerUtil {
 	 */
 	public static void printInferredClassHierarchy(OWLReasoner reasoner, OWLClass clazz, int level, StringBuilder html) {
 
+		reasoner.precomputeInferences();
 		if (reasoner.isSatisfiable(clazz)) {
 			for (int i = 0; i < level * INDENT; i++) {
 				html.append("-");
@@ -474,4 +477,14 @@ public class OWLApiTagHandlerUtil {
 			e.printStackTrace();
 		}
 	}
+
+	public static void renderHyperlink(Section<? extends Type> section, StringBuilder doc) {
+		if (section != null) {
+			doc.append("<a href=\"Wiki.jsp?page=" + section.getArticle().getTitle()
+				+ "\" title=\"Goto definition article\">");
+			doc.append(section.getArticle().getTitle());
+			doc.append("</a>");
+		}
+	}
+
 }

@@ -19,14 +19,18 @@
  */
 package de.knowwe.kdom.manchester.frame;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.types.Annotations;
+import de.knowwe.kdom.manchester.types.Delimiter;
 import de.knowwe.kdom.manchester.types.Keyword;
 import de.knowwe.kdom.manchester.types.NonTerminalList;
 import de.knowwe.kdom.manchester.types.NonTerminalListContent;
@@ -84,15 +88,20 @@ public class MiscFrame extends DefaultFrame {
 		this.setSectionFinder(new RegexSectionFinder(p));
 		this.addSubtreeHandler(new MiscFrameSubtreeHandler());
 
-		this.addChildType(new Keyword(FRAME_KEYWORDS));
-		this.addChildType(new Annotations());
+		List<Type> types = new ArrayList<Type>();
+
+		types.add(new Keyword(FRAME_KEYWORDS));
+		types.add(new Annotations());
 
 		NonTerminalList list = new NonTerminalList();
 		NonTerminalListContent listContent = new NonTerminalListContent();
 		listContent.addChildType(new ObjectPropertyExpression());
 		listContent.addChildType(new OWLTermReferenceManchester());
 		list.addChildType(listContent);
-		this.addChildType(list);
+		types.add(list);
+
+		types.add(new Delimiter());
+		this.setKnownDescriptions(types);
 	}
 
 	/**

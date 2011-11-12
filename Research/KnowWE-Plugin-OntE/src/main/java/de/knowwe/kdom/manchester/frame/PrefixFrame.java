@@ -19,9 +19,12 @@
  */
 package de.knowwe.kdom.manchester.frame;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
@@ -51,9 +54,12 @@ public class PrefixFrame extends DefaultFrame {
 		Pattern p = Pattern.compile(KEYWORD + ".*>");
 		this.setSectionFinder(new RegexSectionFinder(p));
 
-		this.addChildType(new Keyword(KEYWORD));
-		this.addChildType(new Prefix());
-		this.addChildType(new PrefixIRI());
+		List<Type> types = new ArrayList<Type>();
+
+		types.add(new Keyword(KEYWORD));
+		types.add(new Prefix());
+		types.add(new PrefixIRI());
+		this.setKnownDescriptions(types);
 	}
 }
 

@@ -24,8 +24,10 @@ import org.ontoware.rdf2go.model.node.URI;
 
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.onte.owl.terminology.URIUtil;
+import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 /**
  * Reference type for basic RDFS/OWL vocabulary
@@ -35,8 +37,8 @@ import de.knowwe.onte.owl.terminology.URIUtil;
  */
 public class BasicVocabularyReference extends AbstractType implements RDFNodeType{
 
-	public static final StyleRenderer REF_RENDERER = new StyleRenderer("font-weight:bold");
-
+	public static final KnowWEDomRenderer REF_RENDERER = new ToolMenuDecoratingRenderer<BasicVocabularyReference>(
+			new StyleRenderer("font-weight:bold"));
 
 	public BasicVocabularyReference() {
 		this.setCustomRenderer(REF_RENDERER);

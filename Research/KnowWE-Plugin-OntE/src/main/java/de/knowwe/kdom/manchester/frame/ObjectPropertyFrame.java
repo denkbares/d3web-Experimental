@@ -19,6 +19,8 @@
  */
 package de.knowwe.kdom.manchester.frame;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import de.knowwe.core.kdom.AbstractType;
@@ -80,32 +82,34 @@ public class ObjectPropertyFrame extends DefaultFrame {
 		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
 		this.setSectionFinder(new RegexSectionFinder(p));
 
-		ObjectPropertyDefinition dt = new ObjectPropertyDefinition();
-		this.addChildType(dt);
+		List<Type> types = new ArrayList<Type>();
 
-		this.addChildType(new Annotations(KEYWORDS));
+		types.add(new ObjectPropertyDefinition());
+		types.add(new Annotations(KEYWORDS));
 
 		SubPropertyOf sub = new SubPropertyOf(KEYWORDS);
 		sub.addChildType(ManchesterSyntaxUtil.getMCE());
-		this.addChildType(sub);
+		types.add(sub);
 
 		EquivalentTo to = new EquivalentTo(KEYWORDS);
 		to.addChildType(ManchesterSyntaxUtil.getMCE());
-		this.addChildType(to);
+		types.add(to);
 
 		DisjointWith dis = new DisjointWith(KEYWORDS);
 		dis.addChildType(ManchesterSyntaxUtil.getMCE());
-		this.addChildType(dis);
+		types.add(dis);
 
-		this.addChildType(new Characteristics(true, KEYWORDS));
-		this.addChildType(new Domain(KEYWORDS));
+		types.add(new Characteristics(true, KEYWORDS));
+		types.add(new Domain(KEYWORDS));
 
 		Range r = new Range(KEYWORDS);
 		r.addChildType(ManchesterSyntaxUtil.getMCE());
-		this.addChildType(r);
+		types.add(r);
 
-		this.addChildType(new InverseOf());
-		this.addChildType(new SubPropertyChain());
+		types.add(new InverseOf());
+		types.add(new SubPropertyChain());
+
+		this.setKnownDescriptions(types);
 	}
 
 	/**

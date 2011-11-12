@@ -79,12 +79,16 @@ public class IndividualFrame extends DefaultFrame {
 		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
 		this.setSectionFinder(new RegexSectionFinder(p));
 
-		this.addChildType(new IndividualDefinition());
-		this.addChildType(new Types());
-		this.addChildType(new SameAs());
-		this.addChildType(new DifferentFrom());
-		this.addChildType(new Facts());
-		this.addChildType(new Annotations(KEYWORDS));
+		List<Type> types = new ArrayList<Type>();
+
+		types.add(new IndividualDefinition());
+		types.add(new Types());
+		types.add(new SameAs());
+		types.add(new DifferentFrom());
+		types.add(new Facts());
+		types.add(new Annotations(KEYWORDS));
+
+		this.setKnownDescriptions(types);
 	}
 
 	/**

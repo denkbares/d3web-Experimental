@@ -68,6 +68,7 @@ import de.knowwe.kdom.manchester.types.Restriction;
 import de.knowwe.kdom.manchester.types.SelfRestriction;
 import de.knowwe.kdom.manchester.types.SomeRestriction;
 import de.knowwe.kdom.manchester.types.ValueRestriction;
+import de.knowwe.onte.owl.terminology.URIUtil;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.util.ManchesterSyntaxKeywords;
@@ -158,7 +159,7 @@ public class AxiomFactory {
 	 */
 	public static OWLEntity getOWLAPIEntity(String concept, Class<?> c) {
 
-		if (concept.toLowerCase().equals("thing")) {
+		if (concept.equalsIgnoreCase(URIUtil.THING)) {
 			return factory.getOWLThing();
 		}
 
@@ -733,7 +734,7 @@ public class AxiomFactory {
 	/**
 	 * Create the axioms for the SameIndividual and DifferentIndividuals frame
 	 * of the Manchester OWL syntax.
-	 * 
+	 *
 	 * @created 22.09.2011
 	 * @param Section<MiscFrame> section The section containing the information
 	 *        about the {@link MiscFrame}
@@ -771,7 +772,7 @@ public class AxiomFactory {
 	/**
 	 * Create the axioms for the EquivalentObjectProperties and
 	 * DisjointObjectProperties frame of the Manchester OWL syntax.
-	 * 
+	 *
 	 * @created 22.09.2011
 	 * @param Section<MiscFrame> section The section containing the information
 	 *        about the {@link MiscFrame}

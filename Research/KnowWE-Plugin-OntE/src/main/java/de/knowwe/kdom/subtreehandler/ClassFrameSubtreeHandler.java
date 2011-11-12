@@ -21,6 +21,7 @@ package de.knowwe.kdom.subtreehandler;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -91,13 +92,20 @@ public class ClassFrameSubtreeHandler extends OWLAPISubtreeHandler<ClassFrame> {
 		}
 
 		if (type.hasAnnotations(s)) { // Handle Annotations
-			for (Section<Annotation> annotation : type.getAnnotations(s)) {
-				axiom = AxiomFactory.createAnnotations(annotation, clazz.getIRI(), messages);
-				if (axiom != null) {
-					EventManager.getInstance().fireEvent(
-							new OWLApiAxiomCacheUpdateEvent(axiom, annotation));
-					axioms.add(axiom);
+			List<Section<Annotation>> annotations = type.getAnnotations(s);
+			if (!annotations.isEmpty()) {
+				for (Section<Annotation> annotation : annotations) {
+					axiom = AxiomFactory.createAnnotations(annotation, clazz.getIRI(), messages);
+					if (axiom != null) {
+						EventManager.getInstance().fireEvent(
+								new OWLApiAxiomCacheUpdateEvent(axiom, annotation));
+						axioms.add(axiom);
+					}
 				}
+			}
+			else {
+				messages.add(new SyntaxError(
+						"Annotations missing! Please specify atleast one annotation or delete the keyword."));
 			}
 		}
 

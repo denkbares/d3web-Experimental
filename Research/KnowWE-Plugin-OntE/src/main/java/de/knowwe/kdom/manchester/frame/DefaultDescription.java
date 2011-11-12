@@ -25,7 +25,7 @@ import de.knowwe.core.kdom.AbstractType;
  * The {@link DefaultDescription} is the root class for all descriptions used in
  * the Manchester OWL syntax. If you want to add a new description, please
  * extend the {@link DefaultDescription}.
- * 
+ *
  * @author Stefan Mark
  * @created 23.09.2011
  */

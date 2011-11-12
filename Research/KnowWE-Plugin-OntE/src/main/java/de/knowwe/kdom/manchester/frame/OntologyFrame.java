@@ -1,8 +1,11 @@
 package de.knowwe.kdom.manchester.frame;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
@@ -27,11 +30,15 @@ public class OntologyFrame extends DefaultFrame {
 		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
 		this.setSectionFinder(new RegexSectionFinder(p));
 
-		this.addChildType(new Keyword(KEYWORD));
-		this.addChildType(new Annotations());
+		List<Type> types = new ArrayList<Type>();
 
-		this.addChildType(new OntologyIRI());
-		this.addChildType(new OntologyVersionIRI());
+		types.add(new Keyword(KEYWORD));
+		types.add(new Annotations());
+
+		types.add(new OntologyIRI());
+		types.add(new OntologyVersionIRI());
+
+		this.setKnownDescriptions(types);
 	}
 }
 

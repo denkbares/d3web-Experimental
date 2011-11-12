@@ -64,6 +64,8 @@ public class Restriction extends AbstractType {
 		Fact fact = new Fact();
 		this.addChildType(fact);
 
+		this.addChildType(new Delimiter());
+
 		OWLTermReferenceManchester def = new OWLTermReferenceManchester();
 		this.addChildType(def);
 
