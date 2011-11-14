@@ -29,7 +29,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.kdom.defaultMarkup.AnnotationType;
+import de.knowwe.kdom.defaultMarkup.AnnotationContentType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -122,7 +122,7 @@ public class ListCriteriaRootType extends DefaultMarkupType {
 				if (subsec.getOriginalText().trim().startsWith("@")) {
 					annotationPartStarted = true;
 				}
-				if (!(subsec.get() instanceof AnnotationType)
+				if (!(subsec.get() instanceof AnnotationContentType)
 						&& !annotationPartStarted) {
 					subsec.get().getRenderer().render(article, subsec, user,
 							string);
