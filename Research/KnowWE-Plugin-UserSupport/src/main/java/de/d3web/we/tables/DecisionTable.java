@@ -82,6 +82,11 @@ public class DecisionTable extends ITable {
 		public Collection<KDOMReportMessage> create(
 				KnowWEArticle article, Section<DecisionTable> decisionTable) {
 
+			Section<InnerTable> innerTable =
+					Sections.findChildOfType(decisionTable, InnerTable.class);
+			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty())
+				return null;
+
 			// TODO Right KnowledgeBase?
 			Set<String> packages =
 					Sections.findAncestorOfExactType(
@@ -106,12 +111,10 @@ public class DecisionTable extends ITable {
 
 			// Collect cells for columns
 			// TODO Check if header misses 1st Tablecell
-			// TODO check if table is empty
-			int cellCount = TableUtils.getMaximumTableCellCount(
-					Sections.findChildOfType(decisionTable, InnerTable.class));
+			int cellCount = TableUtils.getMaximumTableCellCount(innerTable);
 
 			// Create all Yes/No Questions
-			// TODO First Cell is no Question
+			// TODO First Cell is no Question: Removed it! But what if empty?
 			List<List<Section<TableCell>>> columnCells = new ArrayList<List<Section<TableCell>>>();
 			List<Section<TableCell>> firstColumn = TableUtils.getColumnCells(
 					0, Sections.findChildOfType(decisionTable, InnerTable.class));

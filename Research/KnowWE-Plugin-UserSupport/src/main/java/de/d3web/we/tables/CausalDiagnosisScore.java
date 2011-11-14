@@ -71,6 +71,11 @@ public class CausalDiagnosisScore extends AbstractType {
 		public Collection<KDOMReportMessage> create(
 				KnowWEArticle article, Section<CausalDiagnosisScore> scoreSec) {
 
+			Section<InnerTable> innerTable =
+					Sections.findChildOfType(scoreSec, InnerTable.class);
+			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty())
+				return null;
+
 			// TODO Right KnowledgeBase?
 			Set<String> packages =
 					Sections.findAncestorOfExactType(scoreSec, CausalDiagnosisScoreMarkup.class).getPackageNames();

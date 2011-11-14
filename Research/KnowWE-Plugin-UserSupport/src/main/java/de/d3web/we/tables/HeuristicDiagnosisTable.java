@@ -23,6 +23,7 @@ import java.util.Collection;
 import de.d3web.we.kdom.xcl.list.ListSolutionType;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.report.KDOMReportMessage;
 import de.knowwe.kdom.AnonymousTypeInvisible;
@@ -61,8 +62,12 @@ public class HeuristicDiagnosisTable extends ITable {
 
 		@Override
 		public Collection<KDOMReportMessage> create(
-				KnowWEArticle article, Section<HeuristicDiagnosisTable> section) {
+				KnowWEArticle article, Section<HeuristicDiagnosisTable> heuristicSec) {
 
+			Section<InnerTable> innerTable =
+					Sections.findChildOfType(heuristicSec, InnerTable.class);
+			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty())
+				return null;
 
 
 			return null;
