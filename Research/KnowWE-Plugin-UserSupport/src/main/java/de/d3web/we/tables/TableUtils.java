@@ -86,7 +86,8 @@ public class TableUtils {
 	 * @param rowNumber
 	 * @return
 	 */
-	public static List<Section<TableCell>> getColumnCells(int columnNumber, Section<ITable> table) {
+	public static List<Section<TableCell>> getColumnCells(
+			int columnNumber, Section<InnerTable> table) {
 		List<Section<TableCell>> cells = new ArrayList<Section<TableCell>>();
 
 		// get all TableLines
@@ -196,14 +197,14 @@ public class TableUtils {
 	}
 
 	/**
-	 * Used to get an average cell count for a table.
+	 * Used to get an maximum cell count for rows of a table.
 	 * Used in {@link TableRenderer}
 	 * 
 	 * @created 08.11.2011
 	 * @param section
 	 * @return
 	 */
-	public static int getAverageTableCellCount(Section<ITable> section) {
+	public static int getMaximumTableCellCount(Section<InnerTable> section) {
 		List<Section<TableLine>> tableLines =
 				Sections.findSuccessorsOfType(section, TableLine.class);
 		int maxCount = 0;

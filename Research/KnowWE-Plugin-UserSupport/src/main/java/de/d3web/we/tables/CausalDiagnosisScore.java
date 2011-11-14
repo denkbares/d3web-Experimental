@@ -18,11 +18,24 @@
  */
 package de.d3web.we.tables;
 
+import java.util.Collection;
+import java.util.Set;
+
+import de.d3web.KnOfficeParser.SingleKBMIDObjectManager;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.KnowledgeStore;
+import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.we.kdom.xcl.list.ListSolutionType;
+import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.report.KDOMReportMessage;
 import de.knowwe.kdom.AnonymousTypeInvisible;
 import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
+import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
  *
@@ -42,6 +55,51 @@ public class CausalDiagnosisScore extends AbstractType {
 		this.addChildType(closing);
 
 		this.addChildType(new InnerTable());
+
+		this.addSubtreeHandler(new CausalDiagnosisScoreHandler());
 	}
 
+	/**
+	 * Handles the creation of XCLRelations from CausalDiagnosisScoreMarkup
+	 * 
+	 * @author Johannes Dienst
+	 * @created 10.11.2011
+	 */
+	public class CausalDiagnosisScoreHandler extends GeneralSubtreeHandler<CausalDiagnosisScore> {
+
+		@Override
+		public Collection<KDOMReportMessage> create(
+				KnowWEArticle article, Section<CausalDiagnosisScore> scoreSec) {
+
+			// TODO Right KnowledgeBase?
+			Set<String> packages =
+					Sections.findAncestorOfExactType(scoreSec, CausalDiagnosisScoreMarkup.class).getPackageNames();
+			String packageName = packages.iterator().next();
+			KnowledgeBase kb = D3webUtils.getKB(article.getWeb(), packageName + " - master");
+
+
+			// Create XCLRelations
+			SingleKBMIDObjectManager kbm = new SingleKBMIDObjectManager(kb);
+
+			// First create solution if necessary
+			Section<ListSolutionType> sol =
+					Sections.findChildOfType(scoreSec, ListSolutionType.class);
+			String solText = sol.getText();
+			Solution solution = kbm.findSolution(solText);
+			if (solution == null) {
+				Solution newSolution = kbm.createSolution(solText, null);
+				kb.getManager().putTerminologyObject(newSolution);
+			}
+
+			// Create XCLRelations: 1. get first column
+			//			TableUtils.getColumnCells(columnNumber, table);
+
+
+			KnowledgeStore store = kbm.getKnowledgeBase().getKnowledgeStore();
+
+
+			return null;
+		}
+
+	}
 }

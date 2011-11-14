@@ -164,6 +164,11 @@
 			<artifactId>KnowWE-GlobalTestUtils</artifactId>
 			<version>0.2-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>d3web-KnOfficeParser</artifactId>
+			<version>0.2-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<distributionManagement>
 		<snapshotRepository>

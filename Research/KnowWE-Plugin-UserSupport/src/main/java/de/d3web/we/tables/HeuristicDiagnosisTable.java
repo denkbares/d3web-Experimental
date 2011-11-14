@@ -18,10 +18,16 @@
  */
 package de.d3web.we.tables;
 
+import java.util.Collection;
+
 import de.d3web.we.kdom.xcl.list.ListSolutionType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.report.KDOMReportMessage;
 import de.knowwe.kdom.AnonymousTypeInvisible;
 import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
+import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 
 /**
@@ -41,5 +47,27 @@ public class HeuristicDiagnosisTable extends ITable {
 		this.addChildType(closing);
 
 		this.addChildType(new InnerTable());
+
+		this.addSubtreeHandler(new HeuristicDiagnosisTableHandler());
 	}
+
+	/**
+	 * Handles the creation of rules from HeuristicDiagnosisTableMarkup
+	 * 
+	 * @author Johannes Dienst
+	 * @created 10.11.2011
+	 */
+	public class HeuristicDiagnosisTableHandler extends GeneralSubtreeHandler<HeuristicDiagnosisTable> {
+
+		@Override
+		public Collection<KDOMReportMessage> create(
+				KnowWEArticle article, Section<HeuristicDiagnosisTable> section) {
+
+
+
+			return null;
+		}
+
+	}
+
 }

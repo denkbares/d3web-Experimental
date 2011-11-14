@@ -1,19 +1,19 @@
 %%CausalDiagnosisScore 
 Kausaler Score {
-      |Gewicht|Kiefer|Tanne|Fichte,
+      |Gewicht|Kiefer|Tanne| ,
 Nadeln|G5(32) |++    |     |++    ,
-Nadeln|G5(32) |++    |++   |++    ,
+Stamm |G5(32) |++    |++   |++    ,
 }
 %
 
 %%DecisionTable
 EntscheidungsTabelle {
-                            | Regel1  | Regel2 | Regel3 | Regel4,
-    Lieferfähig             | Yes     | Yes    | No     | No,
-    Angaben vollständig     | No      | Yes    | Yes    | No,
-    Lieferung mit Rechnung  | x       |        | x      |   ,
-    Lieferung mit Nachnahme |         | x      |        | x ,  
-    Angaben vervollständige |         |        | x      | x ,
+                             | Regel1  | Regel2 | Regel3 | Regel4,
+    Lieferfähig              | Yes     | Yes    | No     | No,
+    Angaben vollständig      | No      | Yes    | Yes    | No,
+    Lieferung mit Rechnung   | x       |        | x      |   ,
+    Lieferung mit Nachnahme  |         | x      |        | x ,  
+    Angaben vervollständigen |         |        | x      | x ,
     }
 %
 

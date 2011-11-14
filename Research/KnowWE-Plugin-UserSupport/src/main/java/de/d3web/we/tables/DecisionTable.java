@@ -18,10 +18,35 @@
  */
 package de.d3web.we.tables;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import de.d3web.KnOfficeParser.SingleKBMIDObjectManager;
+import de.d3web.abstraction.ActionSetValue;
+import de.d3web.abstraction.inference.PSMethodAbstraction;
+import de.d3web.core.inference.Rule;
+import de.d3web.core.inference.RuleSet;
+import de.d3web.core.inference.condition.CondAnd;
+import de.d3web.core.inference.condition.CondEqual;
+import de.d3web.core.inference.condition.Condition;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.terminology.QuestionYN;
+import de.d3web.core.knowledge.terminology.Solution;
+import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.we.kdom.xcl.list.ListSolutionType;
+import de.d3web.we.utils.D3webUtils;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.report.KDOMReportMessage;
 import de.knowwe.kdom.AnonymousTypeInvisible;
 import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
+import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 
 /**
@@ -41,5 +66,150 @@ public class DecisionTable extends ITable {
 		this.addChildType(closing);
 
 		this.addChildType(new InnerTable());
+
+		this.addSubtreeHandler(new DecisionTableHandler());
+	}
+
+	/**
+	 * Handles the creation of Rules from DecisionTableMarkup
+	 * 
+	 * @author Johannes Dienst
+	 * @created 10.11.2011
+	 */
+	public class DecisionTableHandler extends GeneralSubtreeHandler<DecisionTable> {
+
+		@Override
+		public Collection<KDOMReportMessage> create(
+				KnowWEArticle article, Section<DecisionTable> decisionTable) {
+
+			// TODO Right KnowledgeBase?
+			Set<String> packages =
+					Sections.findAncestorOfExactType(
+							decisionTable, DecisionTableMarkup.class).getPackageNames();
+			String packageName = packages.iterator().next();
+			KnowledgeBase kb = D3webUtils.getKB(article.getWeb(), packageName + " - master");
+
+
+			// Create Rules: 1. Create Solution if necessary
+			SingleKBMIDObjectManager kbm = new SingleKBMIDObjectManager(kb);
+
+			// First create solution if necessary
+			Section<ListSolutionType> sol =
+					Sections.findChildOfType(decisionTable, ListSolutionType.class);
+			String solText = sol.getText();
+			solText = solText.replaceAll("[\\r\\n\\{\\s]", "");
+			Solution solution = kbm.findSolution(solText);
+			if (solution == null) {
+				Solution newSolution = kbm.createSolution(solText, null);
+				kb.getManager().putTerminologyObject(newSolution);
+			}
+
+			// Collect cells for columns
+			// TODO Check if header misses 1st Tablecell
+			// TODO check if table is empty
+			int cellCount = TableUtils.getMaximumTableCellCount(
+					Sections.findChildOfType(decisionTable, InnerTable.class));
+
+			// Create all Yes/No Questions
+			// TODO First Cell is no Question
+			List<List<Section<TableCell>>> columnCells = new ArrayList<List<Section<TableCell>>>();
+			List<Section<TableCell>> firstColumn = TableUtils.getColumnCells(
+					0, Sections.findChildOfType(decisionTable, InnerTable.class));
+			firstColumn.remove(0);
+			LinkedList<Question> questionList = new LinkedList<Question>();
+			for (Section<TableCell> cell : firstColumn) {
+				String questionText = cell.getText().trim();
+				if (questionText.equals("")) continue;
+				if (kb.getManager().searchQuestion(questionText) == null) {
+					QuestionYN question = new QuestionYN(kb, questionText);
+					questionList.add(question);
+				} else {
+					questionList.add(kb.getManager().searchQuestion(questionText));
+				}
+			}
+
+
+			// Do for every column
+			LinkedList<Section<TableCell>> column = null;
+			for (int i = 1; i < cellCount; i++) {
+				column = new LinkedList<Section<TableCell>>(
+						TableUtils.getColumnCells(
+								i, Sections.findChildOfType(decisionTable, InnerTable.class)));
+				// Remove RuleName
+				column.removeFirst();
+
+				// create rule choices
+				Section<TableCell> cell = null;
+				List<ChoiceValue> choices = new ArrayList<ChoiceValue>();
+				for (int j = 0; j < column.size(); j++) {
+					cell = column.removeFirst();
+					String cellText = cell.getText().trim();
+
+					if (cellText.equals("x") || cellText.equals("")) break;
+					ChoiceValue choice = null;
+					if (cellText.equals("Yes"))
+						choice = new ChoiceValue("YES");
+					if (cellText.equals("No"))
+						choice = new ChoiceValue("NO");
+					choices.add(choice);
+				}
+
+				// create condition from choices
+				List<Condition> conditions = new ArrayList<Condition>();
+				for (int j = 0; j < choices.size(); j++) {
+					CondEqual cond = new CondEqual(questionList.get(j), choices.get(j));
+					conditions.add(cond);
+				}
+
+				// Create final CondAnd
+				CondAnd conditionAnd = new CondAnd(conditions);
+
+				// Get the Actions from the rest of TableCells
+				// TODO Right ChoiceValue set?
+				List<ActionSetValue> actions = new ArrayList<ActionSetValue>();
+				ActionSetValue action = null;
+				// int to get the right questions for actions
+				int b = choices.size();
+				if ( cell != null ) {
+					if ( cell.getText().trim().equals("x") ) {
+						action = new ActionSetValue();
+						action.setQuestion(questionList.get(b));
+						action.setValue(new ChoiceValue(cell.getText().trim()));
+						actions.add(action);
+					}
+					b++;
+				}
+
+				while ( !column.isEmpty() ) {
+					cell = column.removeFirst();
+					String cellText = cell.getText().trim();
+
+					// action not to fire
+					if (cellText.equals("")) {
+						b++;
+						continue;
+					}
+					action = new ActionSetValue();
+					action.setQuestion(questionList.get(b++));
+					action.setValue(new ChoiceValue(cell.getText().trim()));
+					actions.add(action);
+				}
+
+				// Create Rule for every action
+				RuleSet ruleSet = new RuleSet();
+				for (ActionSetValue actionValue : actions) {
+					Rule rule = new Rule(PSMethodAbstraction.class);
+					rule.setAction(actionValue);
+					rule.setCondition(conditionAnd);
+					rule.setException(null);
+					ruleSet.addRule(rule);
+				}
+
+			}
+
+
+			return null;
+		}
+
 	}
 }

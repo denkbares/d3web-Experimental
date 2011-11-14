@@ -21,7 +21,7 @@ package de.d3web.we.renderer;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import de.d3web.we.tables.ITable;
+import de.d3web.we.tables.InnerTable;
 import de.d3web.we.tables.TableCell;
 import de.d3web.we.tables.TableLine;
 import de.d3web.we.tables.TableUtils;
@@ -39,12 +39,12 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @author Johannes Dienst
  * @created 14.10.2011
  */
-public class TableRenderer extends KnowWEDomRenderer<ITable> {
+public class TableRenderer extends KnowWEDomRenderer<InnerTable> {
 
 	private static ResourceBundle bundle = ResourceBundle.getBundle("Usersupport_messages");
 
 	@Override
-	public void render(KnowWEArticle article, Section<ITable> section,
+	public void render(KnowWEArticle article, Section<InnerTable> section,
 			UserContext user, StringBuilder string) {
 
 		string.append(KnowWEUtils.maskHTML("<span id='" + section.getID() + "'>"));
@@ -58,7 +58,7 @@ public class TableRenderer extends KnowWEDomRenderer<ITable> {
 						Sections.findSuccessorsOfType(section,TableCell.class));
 
 		// Get average cell count for line
-		int averageCellCount = TableUtils.getAverageTableCellCount(section);
+		int averageCellCount = TableUtils.getMaximumTableCellCount(section);
 
 		// Render the Header
 		renderTableHeader(buildi, section, maxCellLength, averageCellCount);
@@ -80,7 +80,7 @@ public class TableRenderer extends KnowWEDomRenderer<ITable> {
 	}
 
 	private static void renderTableHeader(
-			StringBuilder buildi, Section<ITable> section, int maxCellLength, int averageCellCount) {
+			StringBuilder buildi, Section<InnerTable> section, int maxCellLength, int averageCellCount) {
 
 		Section<TableLine> sec = Sections.findChildOfType(section, TableLine.class);
 
@@ -112,7 +112,7 @@ public class TableRenderer extends KnowWEDomRenderer<ITable> {
 	}
 
 	private static void renderTableBody(
-			StringBuilder buildi, Section<ITable> section, int maxCellLength) {
+			StringBuilder buildi, Section<InnerTable> section, int maxCellLength) {
 		buildi.append("<tbody>");
 
 		List<Section<TableLine>> lines = Sections.findChildrenOfType(section, TableLine.class);
@@ -141,7 +141,7 @@ public class TableRenderer extends KnowWEDomRenderer<ITable> {
 		buildi.append("</tbody>");
 	}
 
-	private static void renderExportImportButton(StringBuilder buildi, Section<ITable> section) {
+	private static void renderExportImportButton(StringBuilder buildi, Section<InnerTable> section) {
 
 		String rel = "rel=\"{ " +
 				"		objectId : '" + section.getID() + "',"

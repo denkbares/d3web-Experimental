@@ -45,7 +45,7 @@ public class HeuristicDiagnosisTableMarkup extends DefaultMarkupType {
 	static {
 		m = new DefaultMarkup("HeuristicDiagnosisTable");
 		m.addContentType(new HeuristicDiagnosisTable());
-		//m.addAnnotation(ESTABLISHED_THRESHOLD, false);
+		m.addAnnotation("package", true);
 	}
 
 	public HeuristicDiagnosisTableMarkup () {

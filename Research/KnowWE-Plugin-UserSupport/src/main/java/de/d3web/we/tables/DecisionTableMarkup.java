@@ -41,7 +41,7 @@ public class DecisionTableMarkup extends DefaultMarkupType {
 	static {
 		m = new DefaultMarkup("DecisionTable");
 		m.addContentType(new DecisionTable());
-		//m.addAnnotation(ESTABLISHED_THRESHOLD, false);
+		m.addAnnotation("package", true);
 	}
 
 	public DecisionTableMarkup() {

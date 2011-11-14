@@ -39,6 +39,7 @@ public class CausalDiagnosisScoreMarkup extends DefaultMarkupType {
 	static {
 		m = new DefaultMarkup("CausalDiagnosisScore");
 		m.addContentType(new CausalDiagnosisScore());
+		m.addAnnotation("package", true);
 		//m.addAnnotation(ESTABLISHED_THRESHOLD, false);
 	}
 
