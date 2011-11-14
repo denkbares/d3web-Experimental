@@ -63,14 +63,14 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 
 		// render save button or note that feedback already found
 		if (f.exists()) {
-			html.append("<p class=\"info\">Sie haben den Feedbackbogen bereits ausgefüllt! Vielen Dank!</p>");
+			html.append("<p class=\"info\">Sie haben den Feedbackbogen bereits ausgefüllt! Vielen Dank!</p>\n");
 		}
 
-		html.append("<form action=\"KnowWE.jsp\" method=\"post\">");
+		html.append("<form action=\"KnowWE.jsp\" method=\"post\">\n");
 
 		// render the feedback form
 		StringBuilder q = new StringBuilder();
-		q.append("<p class=\"header2\">Allgemeines</p>");
+		q.append("<p class=\"header2\">Allgemeines</p>\n");
 		renderQuestion1(q);
 		q.append("<br />");
 		renderQuestion2(q);
@@ -79,7 +79,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		q.append("<br />");
 		renderQuestion4(q);
 
-		q.append("<p class=\"header2\">Zu den Inhalten</p>");
+		q.append("<p class=\"header2\">Zu den Inhalten</p>\n");
 		renderQuestion5(q);
 		q.append("<br />");
 		renderQuestion6(q);
@@ -88,7 +88,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		q.append("<br />");
 		renderQuestion8(q);
 
-		q.append("<p class=\"header2\">Zum Diskussionsforum</p>");
+		q.append("<p class=\"header2\">Zum Diskussionsforum</p>\n");
 		renderQuestion9(q);
 		q.append("<br />");
 		renderQuestion10(q);
@@ -108,7 +108,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		renderQuestion17(q);
 		q.append("<br />");
 
-		q.append("<p class=\"header2\">zu Ihren Aktivitäten</p>");
+		q.append("<p class=\"header2\">zu Ihren Aktivitäten</p>\n");
 		renderQuestion18(q);
 		q.append("<br />");
 		renderQuestion19(q);
@@ -130,7 +130,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		html.append(q);
 
 		if (!f.exists()) {
-			html.append("<p><input type=\"submit\" value=\"Speichern\"/></p>");
+			html.append("<p><input type=\"submit\" value=\"Speichern\"/></p>\n");
 			html.append("<input type=\"hidden\" name=\"action\" value=\"FeedbackSaveAction\" />");
 			html.append("<input type=\"hidden\" name=\"KWiki_Topic\" value=\""
 					+ topic + "\" />");
@@ -142,14 +142,14 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	private void renderQuestion1(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Die Teilnahme am ICD Forum hat mir insgesamt weitergeholfen.");
 		result.append("<input type=\"hidden\" name=\"QFB" + questionNum + "\" value=\""
 				+ questionNum
 				+ ") Die Teilnahme am ICD Forum hat mir insgesamt weitergeholfen.\" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
@@ -157,19 +157,19 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createRadioButton("Unentschieden.", radioID));
 		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
 		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion2(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") ICD-Forum hat mir geholfen, meinen Alltag besser zu bewältigen.");
 		result.append("<input type=\"hidden\" name=\"QFB" + questionNum + "\" value=\""
 				+ questionNum
 				+ ") ICD-Forum hat mir geholfen, meinen Alltag besser zu bewältigen. \" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
@@ -177,19 +177,19 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createRadioButton("Unentschieden.", radioID));
 		result.append(createRadioButton("Trifft für mich zu.", radioID));
 		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion3(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") ICD-Forum hat mich motiviert, neue Dinge auszuprobieren.");
 		result.append("<input type=\"hidden\" name=\"QFB" + questionNum + "\" value=\""
 				+ questionNum
 				+ ") ICD-Forum hat mich motiviert, neue Dinge auszuprobieren.\"/>");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
@@ -197,12 +197,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createRadioButton("Unentschieden.", radioID));
 		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
 		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion4(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Durch die Teilnahme am ICD-Forum, komme ich mit meiner Erkrankung besser zurecht. ");
@@ -211,7 +211,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") Durch die Teilnahme am ICD-Forum, komme ich mit meiner Erkrankung besser zurecht. \" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
@@ -219,12 +219,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createRadioButton("Unentschieden.", radioID));
 		result.append(createRadioButton("Trifft für mich zu.", radioID));
 		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion5(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"4\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Welche Themen waren für Sie besonders wichtig?  ");
@@ -233,7 +233,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") Welche Themen waren für Sie besonders wichtig?  \" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createDoubleHeader("Einheit 1 - Kennenlernen", "QFB" + questionNum + "-1",
@@ -280,12 +280,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "-3-5", "", ""));
 		result.append(createDoubleCheckBox("Intimität", radioID + "-3-6", "", ""));
 
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion6(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"4\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Welche Themen waren für Sie besonders wichtig?  ");
@@ -294,7 +294,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") Welche Themen waren für Sie besonders wichtig?  \" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createDoubleHeader("Einheit 1 - Kennenlernen", "QFB" + questionNum + "-1",
@@ -341,12 +341,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "-3-5", "", ""));
 		result.append(createDoubleCheckBox("Intimität", radioID + "-3-6", "", ""));
 
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion7(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Wie haben Sie den Gesamtumfang des Programms empfunden? ");
@@ -355,7 +355,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") Wie haben Sie den Gesamtumfang des Programms empfunden?  \" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createCheckBox(
@@ -364,12 +364,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				"zu wenig - ich hätte mir mehr zusätzliche Inhalte gewünscht ", radioID));
 		result.append(createCheckBox("zu viel", radioID));
 		result.append(createCheckBox("genau passen", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion8(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Was haben Sie bei unserem inhaltlichen Angebot vermisst?   ");
@@ -378,16 +378,16 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") Was haben Sie bei unserem inhaltlichen Angebot vermisst?   \" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createTextArea(radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion9(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Haben Sie das Diskussionsforum genutzt?  ");
@@ -396,26 +396,26 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") Haben Sie das Diskussionsforum genutzt?\" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton("Nein", radioID));
 		result.append(createRadioButton("Ja, ich habe mitgelesen ", radioID));
 		result.append(createRadioButton("Ja, ich habe mitgelesen und eigene Beiträge geschrieben ",
 				radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion10(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Es hat mir gut getan, im Diskussionsforum mitzulesen.");
 		result.append("<input type=\"hidden\" name=\"QFB" + questionNum + "\" value=\""
 				+ questionNum
 				+ ") Es hat mir gut getan, im Diskussionsforum mitzulesen.\"/>");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
@@ -424,19 +424,19 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
 		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
 		result.append(createRadioButton("Ich habe im Diskussionsforum nicht mitgelesen. ", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion11(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Ich habe den Moderator im Diskussionsforum als hilfreich empfunden ");
 		result.append("<input type=\"hidden\" name=\"QFB" + questionNum + "\" value=\""
 				+ questionNum
 				+ ") Ich habe den Moderator im Diskussionsforum als hilfreich empfunden\" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
@@ -445,19 +445,19 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
 		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
 		result.append(createRadioButton("Kann ich nicht beurteilen. ", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion12(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Es hat mir gut getan, im Diskussionsforum Fragen zu stellen  ");
 		result.append("<input type=\"hidden\" name=\"QFB" + questionNum + "\" value=\""
 				+ questionNum
 				+ ") Es hat mir gut getan, im Diskussionsforum Fragen zu stellen\"  />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
@@ -467,12 +467,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
 		result.append(createRadioButton(
 				"Ich habe im Diskussionsforum keine eigenen Fragen gestellt. ", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion13(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Es hat mir gut getan, im Diskussionsforum Antworten auf meine Fragen zu erhalten");
@@ -481,7 +481,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") Es hat mir gut getan, im Diskussionsforum Antworten auf meine Fragen zu erhalten\" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
@@ -491,12 +491,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
 		result.append(createRadioButton(
 				"Ich habe im Diskussionsforum Antworten auf meine Fragen erhalten. ", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion14(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Es hat mir gut getan, im Diskussionsforum auf die Fragen anderer antworten zu können. ");
@@ -505,7 +505,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") Es hat mir gut getan, im Diskussionsforum auf die Fragen anderer antworten zu können. \" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
@@ -515,12 +515,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
 		result.append(createRadioButton(
 				"Ich habe im Diskussionsforum nicht auf die Fragen anderer geantwortet. ", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion15(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Ich habe den Eindruck, dass der Moderator im Diskussionsforum an meinen Fragen und Problemen interessiert war.");
@@ -529,7 +529,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") Ich habe den Eindruck, dass der Moderator im Diskussionsforum an meinen Fragen und Problemen interessiert war.\" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
@@ -538,12 +538,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
 		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
 		result.append(createRadioButton("Weiß nicht ", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion16(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Ich habe den Eindruck, dass die Teilnehmer an meinen Fragen und Problemen wirklich interessiert waren.");
@@ -552,7 +552,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") Ich habe den Eindruck, dass die Teilnehmer an meinen Fragen und Problemen wirklich interessiert waren.\" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
@@ -561,12 +561,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
 		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
 		result.append(createRadioButton("Weiß nicht ", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion17(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Was haben Sie im Diskussionsforum vermisst? ");
@@ -575,16 +575,16 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") Was haben Sie im Diskussionsforum vermisst? \" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createTextArea(radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion18(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Ich wusste, an wen ich mich bei ICD-Forum mit meinen persönlichen Fragen wenden kann? ");
@@ -593,7 +593,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") Ich wusste, an wen ich mich bei ICD-Forum mit meinen persönlichen Fragen wenden kann? \" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
@@ -601,12 +601,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createRadioButton("Unentschieden.", radioID));
 		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
 		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion19(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") ICD-Forum hat mir einen vertrauensvollen Rahmen geboten, in dem ich mich über die Themen austauschen konnte, die mir wirklich wichtig sind.  ");
@@ -615,7 +615,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") ICD-Forum hat mir einen vertrauensvollen Rahmen geboten, in dem ich mich über die Themen austauschen konnte, die mir wirklich wichtig sind.  \" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton("Trifft für mich voll zu.", radioID));
@@ -623,12 +623,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createRadioButton("Unentschieden.", radioID));
 		result.append(createRadioButton("Trifft für mich eher nicht zu.", radioID));
 		result.append(createRadioButton("Trifft für mich überhaupt nicht zu.", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion20(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Wieviel Zeit haben Sie auf ICD-Forum verbracht?");
@@ -637,19 +637,19 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") Wieviel Zeit haben Sie auf ICD-Forum verbracht?\" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton("Ich war (fast) jeden Tag hier.", radioID));
 		result.append(createRadioButton("Mehrmals die Woche", radioID));
 		result.append(createRadioButton("1-2 Mal pro Woche.", radioID));
 		result.append(createRadioButton("seltener", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion21(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") In welchen Bereichen von ICD-Forum haben Sie mehr Zeit verbracht? ");
@@ -658,18 +658,18 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") In welchen Bereichen von ICD-Forum haben Sie mehr Zeit verbracht? \" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton("in den Inhalten", radioID));
 		result.append(createRadioButton("im Forum", radioID));
 		result.append(createRadioButton("ausgeglichen ", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion22(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Wie haben Sie die Dauer des Programms empfunden? 6 Wochen waren... ");
@@ -678,18 +678,18 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") Wie haben Sie die Dauer des Programms empfunden? 6 Wochen waren... \" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton("...zu kurz.", radioID));
 		result.append(createRadioButton("...zu lang.", radioID));
 		result.append(createRadioButton("...genau passend. ", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion23(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Wie fanden Sie die Bedienbarkeit von ICD-Forum?  ");
@@ -698,7 +698,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") Wie fanden Sie die Bedienbarkeit von ICD-Forum?  \" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton(
@@ -709,12 +709,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createRadioButton(
 				"Ich hatte immer wieder Schwierigkeiten bei der Benutzung der Plattform.", radioID));
 		result.append(createRadioButton("Die Bedienung war sehr schwierig.", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion24(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Wenn Sie Schwierigkeiten bei der Bedienung hatten - Woran lag das?  ");
@@ -723,16 +723,16 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") Wenn Sie Schwierigkeiten bei der Bedienung hatten - Woran lag das? \" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createTextArea(radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion25(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Würden Sie in Zukunft an einem ähnlichen Angebot teilnehmen?   ");
@@ -741,7 +741,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") Würden Sie in Zukunft an einem ähnlichen Angebot teilnehmen?  \" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 
@@ -763,12 +763,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createTextArea(radioID + "-4"));
 
 		result.append(createRadioButton("Nein, ich habe kein Interesse. ", radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private void renderQuestion26(StringBuilder result) {
-		result.append("<table><tbody><tr>");
+		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
 				+ ") Haben Sie sonst noch Wünsche, Kritik oder Erfahrungen, die Sie uns mitteilen möchten?  ");
@@ -777,18 +777,18 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "\" value=\""
 				+ questionNum
 				+ ") Haben Sie sonst noch Wünsche, Kritik oder Erfahrungen, die Sie uns mitteilen möchten?  \" />");
-		result.append("</td></tr>");
+		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createTextArea(radioID));
-		result.append("</tbody></table>");
+		result.append("</tbody></table>\n");
 		questionNum++;
 	}
 
 	private String createTextArea(String radioID) {
 		return "<tr><td colspan=\"2\"><textarea style=\"font-size:100%;\"rows=\"6\" cols=\"70\" name=\""
 				+ radioID
-				+ "\"></textarea></td></tr>";
+				+ "\"></textarea></td></tr>\n";
 	}
 
 	private String createRadioButton(String answer, String radioID) {
@@ -798,7 +798,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "</td>"
 				+ "<td class=\"answer\">"
 				+ answer
-				+ "</td></tr>";
+				+ "</td></tr>\n";
 	}
 
 	private String createCheckBox(String answer, String radioID) {
@@ -808,7 +808,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "</td>"
 				+ "<td class=\"answer\">"
 				+ answer
-				+ "</td></tr>";
+				+ "</td></tr>\n";
 	}
 
 	private String createDoubleCheckBox(String answer1, String radioID1, String answer2, String radioID2) {
@@ -837,7 +837,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		tmp.append("</td>"
 				+ "<td class=\"answer2\">"
 				+ answer2
-				+ "</td></tr>");
+				+ "</td></tr>\n");
 		return tmp.toString();
 	}
 
@@ -850,6 +850,6 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				+ "<td colspan=\"2\" class=\"rowhead2\">"
 				+ head2
 				+ "<input type=\"hidden\" name=\"" + qfb2 + "\" value=\"" + head2 + "\" />"
-				+ "</td></tr>";
+				+ "</td></tr>\n";
 	}
 }
