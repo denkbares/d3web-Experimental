@@ -1,4 +1,4 @@
-package de.d3web.we.proket.deploy;
+package de.knowwe.d3web.proket.deploy;
 
 import de.knowwe.core.KnowWEAttributes;
 import de.knowwe.core.kdom.KnowWEArticle;

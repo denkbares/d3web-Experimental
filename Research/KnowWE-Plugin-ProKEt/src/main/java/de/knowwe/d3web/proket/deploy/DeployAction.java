@@ -1,4 +1,4 @@
-package de.d3web.we.proket.deploy;
+package de.knowwe.d3web.proket.deploy;
 
 import java.io.File;
 import java.io.IOException;

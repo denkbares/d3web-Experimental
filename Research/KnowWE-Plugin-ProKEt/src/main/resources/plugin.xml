@@ -18,7 +18,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
 		id="KnowledgebaseDeployProvider">
 		<parameter id="class"
-			value="de.d3web.we.proket.deploy.KnowledgebaseDeployProvider" />
+			value="de.knowwe.d3web.proket.deploy.KnowledgebaseDeployProvider" />
 		<parameter id="name" value="KnowledgebaseDeployProvider" />
 		<parameter id="description"
 			value="Allows to update the knowledgebase used by the EuraHS-Dialog running on the same tomcat." />
@@ -29,7 +29,7 @@
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="DeployAction">
-		<parameter id="class" value="de.knowwe.we.proket.deploy.DeployAction" />
+		<parameter id="class" value="de.knowwe.d3web.proket.deploy.DeployAction" />
 		<parameter id="name" value="DeployAction" />
 		<parameter id="description"
 			value="Deploys the current knowledgebase to the EuraHS-Dialog." />
