@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-ProKEt" version="0.0.1">
+
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+	</requires>
+
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="KnowledgebaseDeployProvider">
+		<parameter id="class"
+			value="de.d3web.we.proket.deploy.KnowledgebaseDeployProvider" />
+		<parameter id="name" value="KnowledgebaseDeployProvider" />
+		<parameter id="description"
+			value="Allows to update the knowledgebase used by the EuraHS-Dialog running on the same tomcat." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="/KnowledgeBase" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="DeployAction">
+		<parameter id="class" value="de.knowwe.we.proket.deploy.DeployAction" />
+		<parameter id="name" value="DeployAction" />
+		<parameter id="description"
+			value="Deploys the current knowledgebase to the EuraHS-Dialog." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+
+</plugin>

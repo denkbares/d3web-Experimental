@@ -219,6 +219,7 @@
 		<module>KnowWE-Plugin-d3web-SimpleScoreTable</module>
 		<module>KnowWE-Plugin-UserSupport</module>
 		<module>KnowWE-Plugin-RDFS-SubclassingTree</module>
+		<module>KnowWE-Plugin-ProKEt</module>
 	</modules>
 	<repositories>
 		<repository>
