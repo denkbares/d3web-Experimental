@@ -24,7 +24,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import de.d3web.KnOfficeParser.SingleKBMIDObjectManager;
 import de.d3web.abstraction.ActionSetValue;
 import de.d3web.abstraction.inference.PSMethodAbstraction;
 import de.d3web.core.inference.Rule;
@@ -94,21 +93,6 @@ public class DecisionTable extends ITable {
 							decisionTable, DecisionTableMarkup.class).getPackageNames();
 			String packageName = packages.iterator().next();
 			KnowledgeBase kb = D3webUtils.getKB(article.getWeb(), packageName + " - master");
-
-
-			// Create Rules: 1. Create Solution if necessary
-			SingleKBMIDObjectManager kbm = new SingleKBMIDObjectManager(kb);
-
-			// First create solution if necessary
-			//			Section<ListSolutionType> sol =
-			//					Sections.findChildOfType(decisionTable, ListSolutionType.class);
-			//			String solText = sol.getText();
-			//			solText = solText.replaceAll("[\\r\\n\\{\\s]", "");
-			//			Solution solution = kbm.findSolution(solText);
-			//			if (solution == null) {
-			//				Solution newSolution = kbm.createSolution(solText, null);
-			//				kb.getManager().putTerminologyObject(newSolution);
-			//			}
 
 			// Create all Yes/No Questions
 			// TODO First Cell is no Question: Removed it! But what if empty?

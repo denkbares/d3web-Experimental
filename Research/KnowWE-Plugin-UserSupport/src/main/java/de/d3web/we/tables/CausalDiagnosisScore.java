@@ -99,17 +99,6 @@ public class CausalDiagnosisScore extends AbstractType {
 			// Create XCLRelations
 			SingleKBMIDObjectManager kbm = new SingleKBMIDObjectManager(kb);
 
-			// First create solution if necessary
-			//			Section<ListSolutionType> sol =
-			//					Sections.findChildOfType(scoreSec, ListSolutionType.class);
-			//			String solText = sol.getText();
-			//			solText = solText.replaceAll("[\\r\\n\\{\\s]", "");
-			//			Solution solution = kbm.findSolution(solText);
-			//			if (solution == null) {
-			//				Solution newSolution = kbm.createSolution(solText, null);
-			//				kb.getManager().putTerminologyObject(newSolution);
-			//			}
-
 			// Create all Conditions and Weights: 1st and 2end column
 			// TODO First Cell is no Question: Removed it! But what if empty?
 			// TODO no checks or whatsoever. Write security check!
@@ -159,7 +148,7 @@ public class CausalDiagnosisScore extends AbstractType {
 						TableUtils.getColumnCells(
 								i, Sections.findChildOfType(scoreSec, InnerTable.class)));
 
-				// Get Solution and create it if necessary in kb
+				// Get Solution and create it, if necessary, in kb
 				Section<TableCell> solutionCell = column.removeFirst();
 				String solText = solutionCell.getText();
 				solText = solText.replaceAll("[\\r\\n\\{\\s]", "");
