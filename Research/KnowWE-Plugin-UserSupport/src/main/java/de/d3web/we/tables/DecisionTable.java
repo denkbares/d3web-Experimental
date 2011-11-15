@@ -35,7 +35,6 @@ import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionYN;
-import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.we.kdom.xcl.list.ListSolutionType;
 import de.d3web.we.utils.D3webUtils;
@@ -50,6 +49,8 @@ import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 
 /**
+ * 
+ * TODO Add ReportMessages
  * 
  * @author Johannes Dienst
  * @created 14.10.2011
@@ -99,23 +100,18 @@ public class DecisionTable extends ITable {
 			SingleKBMIDObjectManager kbm = new SingleKBMIDObjectManager(kb);
 
 			// First create solution if necessary
-			Section<ListSolutionType> sol =
-					Sections.findChildOfType(decisionTable, ListSolutionType.class);
-			String solText = sol.getText();
-			solText = solText.replaceAll("[\\r\\n\\{\\s]", "");
-			Solution solution = kbm.findSolution(solText);
-			if (solution == null) {
-				Solution newSolution = kbm.createSolution(solText, null);
-				kb.getManager().putTerminologyObject(newSolution);
-			}
-
-			// Collect cells for columns
-			// TODO Check if header misses 1st Tablecell
-			int cellCount = TableUtils.getMaximumTableCellCount(innerTable);
+			//			Section<ListSolutionType> sol =
+			//					Sections.findChildOfType(decisionTable, ListSolutionType.class);
+			//			String solText = sol.getText();
+			//			solText = solText.replaceAll("[\\r\\n\\{\\s]", "");
+			//			Solution solution = kbm.findSolution(solText);
+			//			if (solution == null) {
+			//				Solution newSolution = kbm.createSolution(solText, null);
+			//				kb.getManager().putTerminologyObject(newSolution);
+			//			}
 
 			// Create all Yes/No Questions
 			// TODO First Cell is no Question: Removed it! But what if empty?
-			List<List<Section<TableCell>>> columnCells = new ArrayList<List<Section<TableCell>>>();
 			List<Section<TableCell>> firstColumn = TableUtils.getColumnCells(
 					0, Sections.findChildOfType(decisionTable, InnerTable.class));
 			firstColumn.remove(0);
@@ -131,6 +127,9 @@ public class DecisionTable extends ITable {
 				}
 			}
 
+			// Collect cells for columns
+			// TODO Check if header misses 1st Tablecell
+			int cellCount = TableUtils.getMaximumTableCellCount(innerTable);
 
 			// Do for every column
 			LinkedList<Section<TableCell>> column = null;

@@ -1,8 +1,8 @@
 %%CausalDiagnosisScore 
 Kausaler Score {
-      |Gewicht|Kiefer|Tanne| ,
-Nadeln|G5(32) |++    |     |++    ,
-Stamm |G5(32) |++    |++   |++    ,
+              |Gewicht|Kiefer|Tanne| ,
+Nadeln = ja   |G5(32) |++    |     |++    ,
+Stamm = braun |G5(32) |++    |++   |++    ,
 }
 %
 
