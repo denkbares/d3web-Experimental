@@ -22,7 +22,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.d3web.KnOfficeParser.SingleKBMIDObjectManager;
+import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.we.action.TableExportAction;
+import de.d3web.we.kdom.xcl.list.ListSolutionType;
 import de.d3web.we.renderer.TableRenderer;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
@@ -215,4 +219,27 @@ public class TableUtils {
 
 		return maxCount;
 	}
+
+	/**
+	 * 
+	 * @created 15.11.2011
+	 * @param sec
+	 * @param kb
+	 * @return
+	 */
+	public static Solution findSolutionInKB(Section<?> sec, KnowledgeBase kb) {
+		SingleKBMIDObjectManager kbm = new SingleKBMIDObjectManager(kb);
+		Section<ListSolutionType> sol =
+				Sections.findChildOfType(sec, ListSolutionType.class);
+		String solText = sol.getText();
+		solText = solText.replaceAll("[\\r\\n\\{\\s]", "");
+		Solution solution = kbm.findSolution(solText);
+		if (solution == null) {
+			Solution newSolution = kbm.createSolution(solText, null);
+			kb.getManager().putTerminologyObject(newSolution);
+		}
+		return solution;
+	}
+
+
 }

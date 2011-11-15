@@ -25,7 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import de.d3web.KnOfficeParser.SingleKBMIDObjectManager;
 import de.d3web.abstraction.inference.PSMethodAbstraction;
 import de.d3web.core.inference.Rule;
 import de.d3web.core.inference.RuleSet;
@@ -100,16 +99,7 @@ public class HeuristicDiagnosisTable extends ITable {
 
 			// First create solution if necessary
 			// Create Rules: 1. Create Solution if necessary
-			SingleKBMIDObjectManager kbm = new SingleKBMIDObjectManager(kb);
-			Section<ListSolutionType> sol =
-					Sections.findChildOfType(heuristicSec, ListSolutionType.class);
-			String solText = sol.getText();
-			solText = solText.replaceAll("[\\r\\n\\{\\s]", "");
-			Solution solution = kbm.findSolution(solText);
-			if (solution == null) {
-				Solution newSolution = kbm.createSolution(solText, null);
-				kb.getManager().putTerminologyObject(newSolution);
-			}
+			Solution solution = TableUtils.findSolutionInKB(heuristicSec, kb);
 
 			// Create all Conditions: 1st column
 			// TODO First + Second Cell is no Question: Removed it! But what if empty?
@@ -204,7 +194,7 @@ public class HeuristicDiagnosisTable extends ITable {
 
 				// TODO add right score here
 				ActionHeuristicPS action = new ActionHeuristicPS();
-
+				action.setSolution(solution);
 				Score score = Score.N1;
 
 				try {
