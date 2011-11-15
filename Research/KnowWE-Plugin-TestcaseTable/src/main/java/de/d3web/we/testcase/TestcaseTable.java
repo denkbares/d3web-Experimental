@@ -104,25 +104,24 @@ public class TestcaseTable extends Table {
 	@SuppressWarnings("unchecked")
 	public static Section<? extends HeaderCell> findHeaderCell(Section<?> s) {
 		Section<TableLine> line = Sections.findAncestorOfType(s, TableLine.class);
-		boolean found = false;
 		int i = 0;
 		for (Section<?> section : line.getChildren()) {
 
 			if (s.equalsOrIsSuccessorOf(section)) {
-				found = true;
 				break;
 			}
 
 			i++;
 		}
 
-		if (!found) {
+		Section<Table> table = Sections.findAncestorOfType(line, Table.class);
+		Section<TableLine> hLine = Sections.findSuccessor(table, TableLine.class);
+
+		if (i >= hLine.getChildren().size()) {
 			Logger.getLogger(TestcaseTable.class.getName()).warning("no header cell for: " + s);
 			return null;
 		}
 
-		Section<Table> table = Sections.findAncestorOfType(line, Table.class);
-		Section<TableLine> hLine = Sections.findSuccessor(table, TableLine.class);
 		Section<? extends HeaderCell> hCell = (Section<? extends HeaderCell>) hLine.getChildren().get(
 				i);
 		return hCell;

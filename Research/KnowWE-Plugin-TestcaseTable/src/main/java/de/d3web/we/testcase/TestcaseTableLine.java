@@ -98,6 +98,17 @@ public class TestcaseTableLine extends TableLine {
 
 				Section<? extends HeaderCell> headerCell = TestcaseTable.findHeaderCell(valueSec);
 
+				if (headerCell == null) {
+					KnowWEUtils.storeSingleMessage(
+							article,
+							valueSec,
+							getClass(),
+							KDOMError.class,
+							new NoSuchObjectError("No header found for answer '"
+									+ valueSec.getText() + "'."));
+					continue;
+				}
+
 				Section<QuestionReference> qRef = Sections.findSuccessor(headerCell,
 						QuestionReference.class);
 				String qName = qRef.getText();

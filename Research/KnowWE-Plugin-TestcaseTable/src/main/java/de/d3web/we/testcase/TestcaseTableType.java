@@ -31,6 +31,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 public class TestcaseTableType extends DefaultMarkupType {
 
 	public static final String ANNOTATION_MASTER = "master";
+	public static final String ANNOTATION_SHOW_SKIP_BUTTON = "showskip";
 	private static DefaultMarkup m = null;
 
 	static {
@@ -38,6 +39,7 @@ public class TestcaseTableType extends DefaultMarkupType {
 		m.addContentType(new TestcaseTable());
 		m.addAnnotation(KnowWEPackageManager.ATTRIBUTE_NAME, false);
 		m.addAnnotation(ANNOTATION_MASTER, false);
+		m.addAnnotation(ANNOTATION_SHOW_SKIP_BUTTON, false, "true", "false");
 
 	}
 

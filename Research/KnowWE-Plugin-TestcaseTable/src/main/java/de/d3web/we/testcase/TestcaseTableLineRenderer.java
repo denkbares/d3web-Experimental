@@ -58,7 +58,7 @@ public class TestcaseTableLineRenderer extends TableLineRenderer {
 		// get execution status
 		Section<TestcaseTableType> table = Sections.findAncestorOfExactType(sec,
 				TestcaseTableType.class);
-		String master = TestcaseTableType.getMaster(table, user.getTopic());
+		String master = TestcaseTableType.getMaster(table, user.getTitle());
 		Session session = D3webUtils.getSession(master, user, sec.getWeb());
 
 		if (session == null) {

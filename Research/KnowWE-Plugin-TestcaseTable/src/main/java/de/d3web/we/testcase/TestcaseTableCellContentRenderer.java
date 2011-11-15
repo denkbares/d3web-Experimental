@@ -22,9 +22,11 @@ import java.util.Collection;
 
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.KDOMError;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.table.TableCellContent;
 import de.knowwe.kdom.table.TableCellContentRenderer;
 import de.knowwe.kdom.table.TableUtils;
@@ -54,10 +56,15 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 			}
 			else {
 
+				Section<TestcaseTableType> table = Sections.findAncestorOfExactType(sec,
+						TestcaseTableType.class);
+				String skipAnnotation = DefaultMarkupType.getAnnotation(table,
+						TestcaseTableType.ANNOTATION_SHOW_SKIP_BUTTON);
 				html.append("<td>");
-				html.append("<div class='startTestcaseIncluding' title='run Testcases until and including this' onclick='Testcase.runTestcase(this, true)'>"
-							+ "</div>"
-							+ "<div class='startTestcase' title='run Testcase' onclick='Testcase.runTestcase(this, false)'></div>");
+				html.append("<div class='startTestcaseIncluding' title='run testcases until this' onclick='Testcase.runTestcase(this, true)'></div>");
+				if ("true".equalsIgnoreCase(skipAnnotation)) {
+					html.append("<div class='startTestcase' title='run testcase' onclick='Testcase.runTestcase(this, false)'></div>");
+				}
 
 			}
 			html.append(sec.getText());
