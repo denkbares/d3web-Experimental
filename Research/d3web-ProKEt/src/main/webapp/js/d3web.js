@@ -257,7 +257,7 @@ function initFunctionality() {
 	});
 	
 	
-	$('[type=textselect]').unbind('click').click(function() {
+	$('[type=text]').unbind('click').click(function() {
 		var thisEl = $(this);
 		thisEl.bind('keydown', function(e) {
 			var code = (e.keyCode ? e.keyCode : e.which);
@@ -268,12 +268,12 @@ function initFunctionality() {
 		});
 	});
 	
-	$('[type=textselect]').unbind('focusout').focusout(function() {
+	$('[type=text]').unbind('focusout').focusout(function() {
 		d3web_storeQuestionText($(this));
 		d3web_addFacts($(this));
 	});
 	
-	$('[type=textselect]').unbind('change').change(function() {
+	$('[type=text]').unbind('change').change(function() {
 		d3web_storeQuestionText($(this));
 		d3web_addFacts($(this));
 	});
