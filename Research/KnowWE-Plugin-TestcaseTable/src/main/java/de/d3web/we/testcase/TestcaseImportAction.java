@@ -101,6 +101,11 @@ public class TestcaseImportAction extends AbstractAction {
 			e.printStackTrace(new PrintWriter(context.getWriter()));
 			return;
 		}
+		if (cases == null) {
+			context.getWriter().write("No testcases found. " +
+					"<a href='Wiki.jsp?page=" + section.getTitle() + "'>back</a>");
+			return;
+		}
 		String stcs = STCToTestcaseTableConverter.convert(cases, master);
 
 		Map<String, String> nodesMap = new HashMap<String, String>();
