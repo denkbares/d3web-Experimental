@@ -94,7 +94,7 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
 			String dropdownDefault = to.getInfoStore().getValue(
 					ProKEtProperties.DROPDOWN_MENU_DEFAULT);
 			if (dropdownDefault == null) dropdownDefault = "Please select...";
-			String dropdownMenu = "<select  type='text'>"
+			String dropdownMenu = "<select  type='textselect'>"
 					+ createDropDownOptions(dropdownDefault, value.toString(),
 							dropdownMenuOptions.split(",")) + "<select/>";
 			st.setAttribute(

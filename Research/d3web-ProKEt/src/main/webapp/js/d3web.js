@@ -273,7 +273,7 @@ function initFunctionality() {
 		d3web_addFacts($(this));
 	});
 	
-	$('[type=text]').unbind('change').change(function() {
+	$('[type=textselect]').unbind('change').change(function() {
 		d3web_storeQuestionText($(this));
 		d3web_addFacts($(this));
 	});
