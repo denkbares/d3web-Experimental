@@ -13,10 +13,10 @@ public class TableCellRenderer extends KnowWEDomRenderer {
 	public void render(KnowWEArticle article, Section section,
 			UserContext user, StringBuilder string) {
 
-		string.append(KnowWEUtils.maskHTML("<td>"));
+		string.append(KnowWEUtils.maskHTML("<td style=\"white-space: normal\">"));
 		DelegateRenderer.getInstance().render(article, section, user, string);
 		string.append(KnowWEUtils.maskHTML("</td>"));
-		
+
 	}
 
 }

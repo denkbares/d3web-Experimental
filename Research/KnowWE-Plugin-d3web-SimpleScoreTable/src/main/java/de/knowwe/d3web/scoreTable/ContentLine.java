@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -41,9 +41,11 @@ public class ContentLine extends AbstractType {
 		childrenTypes.add(new CondCell());
 		childrenTypes.add(new ScoreCell());
 		childrenTypes.add(new Bar());
-		setSectionFinder(new RegexSectionFinder("\\s*(\\|{1,2}.*?)\\r?\\n",Pattern.DOTALL|Pattern.MULTILINE,0));
+		setSectionFinder(new RegexSectionFinder("\\s*(\\|{1,2}.*?)(?:\\r?\\n|\\z)", Pattern.DOTALL
+				| Pattern.MULTILINE, 0));
 		setCustomRenderer(new TableLineRenderer());
-		//setCustomRenderer(new GenericHTMLRenderer<ContentLine>("span", new String[] {"style", "color: orange;", "title", "ContentLine"}));
+		// setCustomRenderer(new GenericHTMLRenderer<ContentLine>("span", new
+		// String[] {"style", "color: orange;", "title", "ContentLine"}));
 	}
 
 }
