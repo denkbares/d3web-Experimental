@@ -21,6 +21,7 @@ package de.knowwe.casetrain.type.general;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import de.knowwe.casetrain.util.Utils;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -71,6 +72,21 @@ public class BlockMarkupContentRenderer extends KnowWEDomRenderer<BlockMarkupCon
 						+ "\r\n")
 		);
 
+		string.append(KnowWEUtils.maskHTML("<pre id=\""
+				+ sec.getID()
+				+ "\"style=\"white-space:pre-wrap;" +
+				"background: none repeat scroll 0 0 #F5F5F5;" +
+		"border: 1px solid #E5E5E5;position:relative;margin:0px\">"));
+		string.append(KnowWEUtils.maskHTML("<div style=\"position:relative;top:0px;" +
+				"right:0px;border-bottom: 1px solid #E5E5E5;" +
+				"border-left: 1px solid #E5E5E5;padding:5px;" +
+				"float:right;\">"
+				// + getFrameName(sec)
+				// + getEditorIcon(sec)
+				+ Utils.renderTools(article, sec, user)
+				//				+ getLink(sec)
+				+ "</div>"));
+
 		// Dont ask why I use this hack here!
 		// DelegateRenderer should find the SubblockMarkupRender, but in fact
 		// it does NOT! Johannes
@@ -81,6 +97,8 @@ public class BlockMarkupContentRenderer extends KnowWEDomRenderer<BlockMarkupCon
 		}
 
 		string.append(KnowWEUtils.maskHTML("/%\r\n"));
+
+		string.append(KnowWEUtils.maskHTML("</pre>"));
 		return;
 	}
 

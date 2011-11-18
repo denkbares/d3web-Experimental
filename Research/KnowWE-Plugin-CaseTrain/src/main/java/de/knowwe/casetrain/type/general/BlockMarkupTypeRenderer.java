@@ -40,6 +40,7 @@ public class BlockMarkupTypeRenderer extends KnowWEDomRenderer<BlockMarkupType> 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void render(KnowWEArticle article, Section<BlockMarkupType> sec, UserContext user, StringBuilder string) {
+
 		string.append(KnowWEUtils.maskHTML("<div class='"
 				+ sec.get().getCSSClass()
 				+ "'>"));
@@ -59,11 +60,26 @@ public class BlockMarkupTypeRenderer extends KnowWEDomRenderer<BlockMarkupType> 
 				KDOMNotice.class), string);
 
 		// TODO Delegation renders PlainText around collapsebox!
+		//		string.append(KnowWEUtils.maskHTML("<pre id=\""
+		//				+ sec.getID()
+		//				+ "\"style=\"white-space:pre-wrap;" +
+		//				"background: none repeat scroll 0 0 #F5F5F5;" +
+		//		"border: 1px solid #E5E5E5;position:relative;margin:0px\">"));
+		//		string.append(KnowWEUtils.maskHTML("<div style=\"position:relative;top:0px;" +
+		//				"right:0px;border-bottom: 1px solid #E5E5E5;" +
+		//				"border-left: 1px solid #E5E5E5;padding:5px;" +
+		//				"float:right;\">"
+		//				// + getFrameName(sec)
+		//				// + getEditorIcon(sec)
+		//				+ Utils.renderTools(article, sec, user)
+		//				//				+ getLink(sec)
+		//				+ "</div>"));
 		Section<BlockMarkupContent> con =
 			Sections.findSuccessor(sec, BlockMarkupContent.class);
 		BlockMarkupContentRenderer.getInstance().render(article, con, user, string);
 		string.append(KnowWEUtils.maskHTML("</div>"));
 
+		//		string.append(KnowWEUtils.maskHTML("</pre>"));
 	}
 
 }

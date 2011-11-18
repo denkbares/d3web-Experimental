@@ -92,6 +92,23 @@ public class MetaData extends BlockMarkupType {
 								+ ResourceBundle.getBundle("casetrain_messages")
 								.getString(META)
 								+ "\r\n"));
+
+				// Quickedit button
+				string.append(KnowWEUtils.maskHTML("<pre id=\""
+						+ sec.getID()
+						+ "\"style=\"white-space:pre-wrap;" +
+						"background: none repeat scroll 0 0 #F5F5F5;" +
+				"border: 1px solid #E5E5E5;position:relative;margin:0px\">"));
+				string.append(KnowWEUtils.maskHTML("<div style=\"position:relative;top:0px;" +
+						"right:0px;border-bottom: 1px solid #E5E5E5;" +
+						"border-left: 1px solid #E5E5E5;padding:5px;" +
+						"float:right;\">"
+						// + getFrameName(sec)
+						// + getEditorIcon(sec)
+						+ Utils.renderTools(article, sec, user)
+						//				+ getLink(sec)
+						+ "</div>"));
+
 				string.append(KnowWEUtils.maskHTML("<table class='wikitable'>"));
 				string.append(KnowWEUtils.maskHTML("<th>Metadaten:</th><th></th>"));
 
@@ -106,6 +123,8 @@ public class MetaData extends BlockMarkupType {
 
 				string.append(KnowWEUtils.maskHTML("</table>"));
 				string.append(KnowWEUtils.maskHTML("/%\r\n"));
+
+				string.append(KnowWEUtils.maskHTML("</pre>"));
 			}
 		});
 
