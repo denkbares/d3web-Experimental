@@ -83,20 +83,26 @@ public class SubClassingDashTreeElementContent extends DashTreeElementContent
 		@Override
 		public Collection<Section<? extends TermReference>> getAllReferencesOfKnowledgeUnit(
 				Section<? extends KnowledgeUnit<SubClassingDashTreeElementContent>> section) {
-			
+
 			Set<Section<? extends TermReference>> result = new HashSet<Section<? extends TermReference>>();
-			
-			Section<? extends DashTreeElement> father = DashTreeUtils
-					.getFatherDashTreeElement(section);
-			Section<? extends IRITermRef> fatherElement = Sections
-					.findSuccessor(father, IRITermRef.class);
+
+			// add child-DTE to ref-list
 			Section<? extends IRITermRef> childElement = Sections
 					.findSuccessor(section, IRITermRef.class);
-			
 			result.add(childElement);
-			result.add(fatherElement);
+
+			// add parent-DTE to ref-list
+			Section<? extends DashTreeElement> father = DashTreeUtils
+					.getFatherDashTreeElement(section);
+			if (father != null) {
+
+				Section<? extends IRITermRef> fatherElement = Sections
+						.findSuccessor(father, IRITermRef.class);
+				result.add(fatherElement);
+			}
 			
 			
+
 			return result;
 		}
 
