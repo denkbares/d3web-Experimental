@@ -199,7 +199,7 @@ public class XMLReader implements ObjectTypeReader {
 			if (qualifiedSuperType != null) {
 				int pos = qualifiedSuperType.lastIndexOf(".");
 				
-				packageName = qualifiedSuperType.substring(0, pos - 1);
+				packageName = qualifiedSuperType.substring(0, pos);
 				className = qualifiedSuperType.substring(pos + 1);
 			} else {
 				className = attributes.getValue("SuperTypeClass");
@@ -261,7 +261,7 @@ public class XMLReader implements ObjectTypeReader {
 				
 				// Default package name if no . is in the QualifiedName attribute
 				if (pos >= 0) {
-					packageName = qualifiedName.substring(0, pos - 1);
+					packageName = qualifiedName.substring(0, pos);
 					className = qualifiedName.substring(pos + 1);
 				} else {
 					packageName = "de.knowwe.core.kdom.sectionFinder";
