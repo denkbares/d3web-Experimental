@@ -395,11 +395,17 @@ public class Rdf2GoCore implements EventListener {
 				tablemode = qrt.getVariables().size() > 1;
 			}
 			QueryRow s = i.next();
+
 			if (tablemode) {
 				result += KnowWEUtils.maskHTML("<tr>");
 			}
 			for (String var : l) {
-				String erg = reduceNamespace(s.getValue(var).toString());
+				Node n = s.getValue(var);
+				String erg = "";
+				if (n != null) {
+					erg = reduceNamespace(s.getValue(var).toString());
+				}
+
 				try {
 					erg = URLDecoder.decode(erg, "UTF-8");
 				}
@@ -407,6 +413,7 @@ public class Rdf2GoCore implements EventListener {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+
 				if (links) {
 					if (erg.startsWith("lns:")) {
 						erg = erg.substring(4);
@@ -419,14 +426,16 @@ public class Rdf2GoCore implements EventListener {
 												URLDecoder.decode(erg,
 														"UTF-8"))) {
 							erg = KnowWEUtils.maskHTML("<a href=\"Wiki.jsp?page=")
-											+ erg + KnowWEUtils.maskHTML("\">") + erg
+									+ erg + KnowWEUtils.maskHTML("\">") + erg
 									+ KnowWEUtils.maskHTML("</a>");
 						}
 					}
 					catch (UnsupportedEncodingException e) {
 						e.printStackTrace();
 					}
+
 				}
+
 				if (tablemode) {
 					result += KnowWEUtils.maskHTML("<td>") + erg
 							+ KnowWEUtils.maskHTML("</td>\n");
@@ -435,6 +444,7 @@ public class Rdf2GoCore implements EventListener {
 					result += KnowWEUtils.maskHTML("<li>") + erg
 							+ KnowWEUtils.maskHTML("</li>\n");
 				}
+
 			}
 			if (tablemode) {
 				result += KnowWEUtils.maskHTML("</tr>");
