@@ -79,6 +79,14 @@ KNOWWE.plugin.defi = function() {
             }
         },        
         /**
+         * Changes display of usernametag-parentDiv to "inline"
+         */
+        changeUsernameTagDisplay : function() {
+    		for (var i = 0; i < document.getElementsByName("usernametag").length; i++) {
+				document.getElementsByName("usernametag")[i].parentNode.style.display = "inline";
+    		}
+        },    
+        /**
          * Enables the logging on the page tabs. Only the tabs within the
          * Wiki page are affected.
          */
@@ -119,6 +127,7 @@ KNOWWE.plugin.defi = function() {
             KNOWWE.helper.observer.subscribe( 'onload', KNOWWE.plugin.defi.checkURLForTab);
             KNOWWE.helper.observer.subscribe( 'onload', KNOWWE.plugin.defi.checkURLForSubject);
             KNOWWE.helper.observer.subscribe( 'onload', KNOWWE.plugin.defi.enableLogTabClicks);
+            KNOWWE.helper.observer.subscribe( 'onload', KNOWWE.plugin.defi.changeUsernameTagDisplay);
         });
         window.addEvent('load', function(){
         	KNOWWE.plugin.defi.beatifyTabNames();
