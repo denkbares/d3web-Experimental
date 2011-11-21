@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
-import de.d3web.we.algorithm.Suggestion;
+import de.d3web.we.dialog.algorithm.Suggestion;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;

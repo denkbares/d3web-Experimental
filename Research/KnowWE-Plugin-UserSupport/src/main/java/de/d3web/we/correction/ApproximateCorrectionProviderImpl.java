@@ -22,8 +22,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.d3web.we.algorithm.DialogComponent;
-import de.d3web.we.algorithm.Suggestion;
+import de.d3web.we.dialog.algorithm.DialogComponent;
+import de.d3web.we.dialog.algorithm.Suggestion;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.compile.TerminologyHandler;
 import de.knowwe.core.kdom.KnowWEArticle;

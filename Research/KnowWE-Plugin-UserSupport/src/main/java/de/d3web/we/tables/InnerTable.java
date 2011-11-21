@@ -18,7 +18,7 @@
  */
 package de.d3web.we.tables;
 
-import de.d3web.we.renderer.TableRenderer;
+import de.d3web.we.tables.renderer.TableRenderer;
 import de.knowwe.core.kdom.basicType.CommentLineType;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
