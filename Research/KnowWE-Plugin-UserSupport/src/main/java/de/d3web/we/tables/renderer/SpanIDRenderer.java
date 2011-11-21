@@ -16,22 +16,29 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.d3web.we.types;
+package de.d3web.we.tables.renderer;
 
-import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 
 
 /**
  * 
  * @author Johannes Dienst
- * @created 15.09.2011
+ * @created 14.10.2011
  */
-public class ApproximateMatchingType extends AbstractType {
+public class SpanIDRenderer extends KnowWEDomRenderer<Type> {
 
-	public ApproximateMatchingType() {
-		this.sectionFinder = new AllTextFinderTrimmed();
-		this.setCustomRenderer(new ApproximateMatchingTypeRenderer());
+	@Override
+	public void render(KnowWEArticle article, Section<Type> sec, UserContext user, StringBuilder string) {
+		string.append(KnowWEUtils.maskHTML("<span id='" + sec.getID() + "'>"));
+		DelegateRenderer.getInstance().render(article, sec, user, string);
+		string.append(KnowWEUtils.maskHTML("</span>"));
 	}
 
 }

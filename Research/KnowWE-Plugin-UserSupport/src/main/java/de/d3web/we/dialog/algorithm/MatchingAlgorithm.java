@@ -16,30 +16,23 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.d3web.we.types;
+package de.d3web.we.dialog.algorithm;
 
-import de.knowwe.core.kdom.KnowWEArticle;
-import de.knowwe.core.kdom.Type;
+import java.util.Collection;
+import java.util.List;
+
+import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
-import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.kdom.renderer.StyleRenderer;
-import de.knowwe.tools.ToolMenuDecoratingRenderer;
+
 
 
 /**
  * 
  * @author Johannes Dienst
- * @created 16.09.2011
+ * @created 04.10.2011
  */
-public class ApproximateMatchingTypeRenderer extends KnowWEDomRenderer<ApproximateMatchingType> {
-	@Override
-	public void render(KnowWEArticle article, Section<ApproximateMatchingType> sec, UserContext user, StringBuilder string) {
-		string.append(KnowWEUtils.maskHTML("<div>"));
-		new ToolMenuDecoratingRenderer<Type>(
-				new StyleRenderer("color:rgb(40, 40, 160)")).render(article, sec, user, string);
-		string.append(KnowWEUtils.maskHTML("</div>"));
-	}
+public interface MatchingAlgorithm {
 
+	public List<Suggestion> getMatches(int maxCount, String toMatch
+			,Collection<Section<? extends TermDefinition>> localTermMatches);
 }
