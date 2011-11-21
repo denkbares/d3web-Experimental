@@ -96,13 +96,8 @@ public class MetaData extends BlockMarkupType {
 				// Quickedit button
 				string.append(KnowWEUtils.maskHTML("<pre id=\""
 						+ sec.getID()
-						+ "\"style=\"white-space:pre-wrap;" +
-						"background: none repeat scroll 0 0 #F5F5F5;" +
-				"border: 1px solid #E5E5E5;position:relative;margin:0px\">"));
-				string.append(KnowWEUtils.maskHTML("<div style=\"position:relative;top:0px;" +
-						"right:0px;border-bottom: 1px solid #E5E5E5;" +
-						"border-left: 1px solid #E5E5E5;padding:5px;" +
-						"float:right;\">"
+						+ "\" class=\"casetrain-instantedit-pre\">"));
+				string.append(KnowWEUtils.maskHTML("<div class=\"casetrain-instantedit\">"
 						// + getFrameName(sec)
 						// + getEditorIcon(sec)
 						+ Utils.renderTools(article, sec, user)

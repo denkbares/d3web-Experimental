@@ -154,3 +154,21 @@ span.casetrainlink a:link,
 span.casetrainlink a:visited {
 	color: #5C8513;
 }
+
+.casetrain-instantedit {
+	position:relative;
+	top:0px;
+	right:0px;
+	border-bottom: 1px solid #E5E5E5;
+	border-left: 1px solid #E5E5E5;
+	padding:5px;
+	float:right;
+}
+
+.casetrain-instantedit-pre {
+	white-space:pre-wrap;
+	background: none repeat scroll 0 0 #F5F5F5;
+	border: 1px solid #E5E5E5;
+	position:relative;
+	margin:0px;
+}
