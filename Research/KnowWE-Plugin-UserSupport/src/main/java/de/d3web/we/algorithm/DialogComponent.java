@@ -107,7 +107,7 @@ public class DialogComponent {
 
 		List<Suggestion> bestSuggs = new ArrayList<Suggestion>();
 
-		// Put all Suggestions in HashMap
+		// Put all Suggestions in List
 		List<Suggestion> suggs = new ArrayList<Suggestion>();
 		List<SuggestionValuePair> matchList = new ArrayList<SuggestionValuePair>();
 
@@ -115,7 +115,7 @@ public class DialogComponent {
 			suggs = algo.getMatches(maxSuggestions, toMatch, localTermMatches);
 
 			for (Suggestion s : suggs) {
-				int exists = DialogComponent.containsSuggestion(matchList, s);
+				int exists = AlgorithmUtil.containsSuggestion(matchList, s);
 				if (exists != -1)
 					matchList.get(exists).increment();
 				else
@@ -132,25 +132,31 @@ public class DialogComponent {
 		return bestSuggs;
 	}
 
-	/**
-	 * 
-	 * Returns if the matchList has a SuggestionValuePair with a
-	 * searched Suggestion s in it.
-	 * -1 if not in List
-	 * index of SuggestionValuePair otherwise
-	 * 
-	 * @created 21.11.2011
-	 * @param matchList
-	 * @param s
-	 * @return
-	 */
-	private static int containsSuggestion(
-			List<SuggestionValuePair> matchList, Suggestion s) {
-		for (SuggestionValuePair pair : matchList) {
-			if (pair.getSuggestion().compareTo(s) == 0)
-				return matchList.indexOf(pair);
+	public List<Suggestion> getBestSuggestionsUsedAlgorithm(String toMatch,
+			Collection<Section<? extends TermDefinition>> localTermMatches) {
+
+		List<Suggestion> bestSuggs = new ArrayList<Suggestion>();
+
+		// Put all Suggestions in List
+		List<Suggestion> suggs = new ArrayList<Suggestion>();
+		List<SuggestionValuePair> matchList = new ArrayList<SuggestionValuePair>();
+
+		suggs = usedAlgorithm.getMatches(maxSuggestions, toMatch, localTermMatches);
+
+		for (Suggestion s : suggs) {
+			int exists = AlgorithmUtil.containsSuggestion(matchList, s);
+			if (exists != -1)
+				matchList.get(exists).increment();
+			else
+				matchList.add(new SuggestionValuePair(s));
 		}
-		return -1;
+
+		// Sort the matchList and add the count of
+		// maxSuggestions to best Suggestions
+		Collections.sort(matchList, new SuggestionValuePairComparator());
+		for (int i = 0; i < maxSuggestions; i++)
+			bestSuggs.add(matchList.get(i).getSuggestion());
+		return bestSuggs;
 	}
 
 	// Getters and Setters for Suggestion staff
@@ -176,7 +182,7 @@ public class DialogComponent {
 	/*
 	 *  Helper Classes
 	 */
-	private class SuggestionValuePair {
+	public class SuggestionValuePair {
 		private final Suggestion s;
 		private int val;
 
@@ -187,7 +193,7 @@ public class DialogComponent {
 			s = suggestion;
 			val = value;
 		}
-		private Suggestion getSuggestion() {
+		public Suggestion getSuggestion() {
 			return s;
 		}
 		public int getValue() {
@@ -198,7 +204,7 @@ public class DialogComponent {
 		}
 	}
 
-	private class SuggestionValuePairComparator implements Comparator<SuggestionValuePair> {
+	public class SuggestionValuePairComparator implements Comparator<SuggestionValuePair> {
 
 		@Override
 		public int compare(SuggestionValuePair o1, SuggestionValuePair o2) {
