@@ -1,0 +1,33 @@
+%%CausalDiagnosisScore 
+Kausaler Score {
+              |Gewicht|Kiefer|Tanne| ,
+Nadeln = ja   |G5(32) |++    |     |++    ,
+Stamm = braun |G5(32) |++    |++   |++    ,
+}
+%
+
+%%DecisionTable
+EntscheidungsTabelle {
+                             | Regel1  | Regel2 | Regel3 | Regel4,
+    Lieferfähig              | Yes     | Yes    | No     | No,
+    Angaben vollständig      | No      | Yes    | Yes    | No,
+    Lieferung mit Rechnung   | x       |        | x      |   ,
+    Lieferung mit Nachnahme  |         | x      |        | x ,  
+    Angaben vervollständigen |         |        | x      | x ,
+    }
+%
+
+%%HeuristicDiagnosisTable
+HeuristischeDiagnoseTabelle {
+    Verknüpfungsart          | und     | oder   | oder  | 2 aus 4,
+    Bewertung                | P4      | P7     | N7    | N7,   
+    Nadeln = nein            | +       |        | -     | ,
+    Bräunliche Stammfarbe    |         |        | -     | ,
+    Frucht: Propeller        |         | +      |       | -,
+    Blüte: Weiß/Gelb         |         | +      |       | -,
+    Ein Blatt pro Stiel      |         | +      | -     | ,
+    -- ungeteiltes Blatt     |         |        | -     | ,
+      -- herzförmiges Form   |         | +      |       | -,
+      --- gesägter Blattrand |         | +      |       | -,
+    }
+%
