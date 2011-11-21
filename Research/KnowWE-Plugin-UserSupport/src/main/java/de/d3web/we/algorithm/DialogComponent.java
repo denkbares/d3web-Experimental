@@ -20,7 +20,8 @@ package de.d3web.we.algorithm;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -30,31 +31,77 @@ import de.knowwe.core.kdom.parsing.Section;
 
 /**
  * 
+ * Searches for Terms in the Terminology of a KnowledgeBase.
+ * Can handle approximative String Matching algorithms.
+ * 
+ * All used Algorithms have to implement the {@link MatchingAlgorithm} Interface
+ * to be fully plugable. Add them in the private Constroctur if you have implemented
+ * a new one. TODO Find better way to plug new Algorithms
+ * 
+ * The DialogComponent is configurable over the ResourceBundle <em>UserSupport_configuration</em>
+ * 
  * @author Johannes Dienst
  * @created 04.10.2011
  */
 public class DialogComponent {
 
 	private final List<MatchingAlgorithm> algorithms = new ArrayList<MatchingAlgorithm>();
-	private final ResourceBundle bundle = ResourceBundle.getBundle("UserSupport");
+	private final ResourceBundle bundle = ResourceBundle.getBundle("UserSupport_configuration");
 	private int maxSuggestions;
 
-	// TODO ResourceBundle
+	private MatchingAlgorithm usedAlgorithm;
 
 	private static DialogComponent uniqueInstance;
 
-	private DialogComponent(){
+	/**
+	 * To avoid instantiation
+	 */
+	private DialogComponent() {
 		maxSuggestions =
-				Integer.parseInt(
-						bundle.getString("usersupport.dialogcomponent.maxSuggestions"));
+			Integer.parseInt(
+					bundle.getString("usersupport.dialogcomponent.maxSuggestions"));
+
+		try {
+			usedAlgorithm = MatchingAlgorithm.class.cast(
+					Class.forName(
+							bundle.getString("usersupport.dialogcomponent.standardmatchingalgorithm")));
+		}
+		catch (ClassNotFoundException e) {
+			usedAlgorithm = new LevenshteinAlgorithm();
+		}
+
+		// Add all known Algorithms
+		algorithms.add(new DoubleMetaphoneAlgorithm());
+		algorithms.add(new JaroWinklerAlgorithm());
+		algorithms.add(new LevenshteinAlgorithm());
+		algorithms.add(new MonkeElkanAlgorithm());
+		algorithms.add(new RefinedSoundexAlgorithm());
 	}
 
+	/**
+	 * Singleton.
+	 * 
+	 * @created 21.11.2011
+	 * @return
+	 */
 	public static DialogComponent getInstance() {
 		if (uniqueInstance == null)
 			uniqueInstance = new DialogComponent();
 		return uniqueInstance;
 	}
 
+	/**
+	 * 
+	 * Collects the best suggestions found by all
+	 * Matching in the terminology.
+	 * 
+	 * This is slow but will definitely find the Best matches!
+	 * 
+	 * @created 21.11.2011
+	 * @param toMatch
+	 * @param localTermMatches
+	 * @return
+	 */
 	public List<Suggestion> getBestSuggestions(String toMatch,
 			Collection<Section<? extends TermDefinition>> localTermMatches) {
 
@@ -62,22 +109,51 @@ public class DialogComponent {
 
 		// Put all Suggestions in HashMap
 		List<Suggestion> suggs = new ArrayList<Suggestion>();
-		HashMap<Suggestion, Integer> matchHash = new HashMap<Suggestion, Integer>();
+		List<SuggestionValuePair> matchList = new ArrayList<SuggestionValuePair>();
+
 		for (MatchingAlgorithm algo : algorithms) {
 			suggs = algo.getMatches(maxSuggestions, toMatch, localTermMatches);
-			for (Suggestion s : suggs)
-				if (matchHash.containsKey(s.getSuggestion()))
-					matchHash.put(s, matchHash.get(s)+1);
+
+			for (Suggestion s : suggs) {
+				int exists = DialogComponent.containsSuggestion(matchList, s);
+				if (exists != -1)
+					matchList.get(exists).increment();
 				else
-					matchHash.put(s, 1);
+					matchList.add(new SuggestionValuePair(s));
+			}
+
 		}
 
-		// Sort the HashMap
-		matchHash.entrySet();
-		//		Collections.sort(list, c);
+		// Sort the matchList and add the count of
+		// maxSuggestions to best Suggestions
+		Collections.sort(matchList, new SuggestionValuePairComparator());
+		for (int i = 0; i < maxSuggestions; i++)
+			bestSuggs.add(matchList.get(i).getSuggestion());
 		return bestSuggs;
 	}
 
+	/**
+	 * 
+	 * Returns if the matchList has a SuggestionValuePair with a
+	 * searched Suggestion s in it.
+	 * -1 if not in List
+	 * index of SuggestionValuePair otherwise
+	 * 
+	 * @created 21.11.2011
+	 * @param matchList
+	 * @param s
+	 * @return
+	 */
+	private static int containsSuggestion(
+			List<SuggestionValuePair> matchList, Suggestion s) {
+		for (SuggestionValuePair pair : matchList) {
+			if (pair.getSuggestion().compareTo(s) == 0)
+				return matchList.indexOf(pair);
+		}
+		return -1;
+	}
+
+	// Getters and Setters for Suggestion staff
 	public void setMaxSuggestions(int max) {
 		this.maxSuggestions = max;
 	}
@@ -85,4 +161,51 @@ public class DialogComponent {
 		return this.maxSuggestions;
 	}
 
+	// Getters and setters for MatchingAlgorithm staff
+	public List<MatchingAlgorithm> getPossibleMatchingAlgorithms() {
+		return Collections.unmodifiableList(algorithms);
+	}
+	public boolean setUsedMatchingAlgorithm(MatchingAlgorithm algorithm) {
+		if (algorithms.contains(algorithm)) {
+			usedAlgorithm = algorithm;
+			return true;
+		}
+		return false;
+	}
+
+	/*
+	 *  Helper Classes
+	 */
+	private class SuggestionValuePair {
+		private final Suggestion s;
+		private int val;
+
+		public SuggestionValuePair(Suggestion suggestion) {
+			this(suggestion, 0);
+		}
+		public SuggestionValuePair(Suggestion suggestion, int value) {
+			s = suggestion;
+			val = value;
+		}
+		private Suggestion getSuggestion() {
+			return s;
+		}
+		public int getValue() {
+			return val;
+		}
+		public void increment(){
+			val++;
+		}
+	}
+
+	private class SuggestionValuePairComparator implements Comparator<SuggestionValuePair> {
+
+		@Override
+		public int compare(SuggestionValuePair o1, SuggestionValuePair o2) {
+			if (o1.getValue() > o2.getValue()) return 1;
+			if (o1.getValue() < o2.getValue()) return -1;
+			return 0;
+		}
+
+	}
 }

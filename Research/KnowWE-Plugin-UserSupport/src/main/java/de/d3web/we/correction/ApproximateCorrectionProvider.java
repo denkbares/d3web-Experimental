@@ -27,6 +27,8 @@ import de.knowwe.core.kdom.parsing.Section;
 
 /**
  * 
+ * Interface for CorrectionProvider.
+ * 
  * @author Johannes Dienst
  * @created 19.09.2011
  */
@@ -39,9 +41,13 @@ public interface ApproximateCorrectionProvider {
 	 * @created 20.02.2011
 	 * @param article The article the misspelled reference is in
 	 * @param section The section the misspelled reference is in
-	 * @param threshold The maximium Levenshtein distance suggestions can have. (KnowWE includes an implementation in secondstring/com.wcohen.ss.Levenstein)
-	 * @return A list of {@link Suggestion} objects containing the found suggestions and their distances.
+	 * @param threshold The maximium Levenshtein distance suggestions
+	 * can have. (KnowWE includes an implementation in
+	 * secondstring/com.wcohen.ss.Levenstein)
+	 * @return A list of {@link Suggestion} objects containing the
+	 * found suggestions and their distances.
 	 */
-	public List<Suggestion> getSuggestions(KnowWEArticle article, Section<?> section, int threshold);
+	public List<Suggestion> getSuggestions(KnowWEArticle article,
+			Section<?> section, int threshold);
 
 }

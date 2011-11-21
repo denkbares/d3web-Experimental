@@ -193,7 +193,6 @@ public class DecisionTable extends ITable {
 
 			}
 
-
 			return null;
 		}
 

@@ -34,6 +34,8 @@ import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * 
+ * There is only this
+ * 
  * @author Johannes Dienst
  * @created 15.09.2011
  */
@@ -41,14 +43,16 @@ public class ApproximateCorrectionProviderImpl implements ApproximateCorrectionP
 
 
 	@Override
-	public List<Suggestion> getSuggestions(KnowWEArticle article, Section<?> section, int threshold) {
+	public List<Suggestion> getSuggestions(
+			KnowWEArticle article, Section<?> section, int threshold) {
 
 		TerminologyHandler terminologyHandler =
-				KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
+			KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
 
 		// Get all Terms from Terminology used
+		// TODO get right KnowledgeBase
 		Collection<Section<? extends TermDefinition>> localTermMatches =
-				terminologyHandler.getAllLocalTermDefs("Demo - Master");
+			terminologyHandler.getAllLocalTermDefs("Demo - Master");
 
 		String originalText = section.getOriginalText();
 

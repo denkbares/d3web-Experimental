@@ -21,6 +21,7 @@ package de.d3web.we.algorithm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.language.RefinedSoundex;
@@ -41,7 +42,8 @@ public class RefinedSoundexAlgorithm implements MatchingAlgorithm {
 			Collection<Section<? extends TermDefinition>> localTermMatches) {
 
 		RefinedSoundex rS = new RefinedSoundex();
-		List<Suggestion> suggestions = new ArrayList<Suggestion>();
+		PriorityQueue<Suggestion> suggestions =
+			new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
 
 		for (Section<? extends TermDefinition> match : localTermMatches) {
 			try {
@@ -50,7 +52,6 @@ public class RefinedSoundexAlgorithm implements MatchingAlgorithm {
 				// TODO experimental value
 				if (diff <= 1) {
 					suggestions.add(new Suggestion(toMatch, diff));
-					if (suggestions.size() >= maxCount) break;
 				}
 
 			}
@@ -59,7 +60,11 @@ public class RefinedSoundexAlgorithm implements MatchingAlgorithm {
 			}
 		}
 
-		return suggestions;
+		List<Suggestion> toReturn = new ArrayList<Suggestion>();
+		for (int i = 0; i < maxCount; i++)
+			toReturn.add(suggestions.poll());
+
+		return toReturn;
 	}
 
 }

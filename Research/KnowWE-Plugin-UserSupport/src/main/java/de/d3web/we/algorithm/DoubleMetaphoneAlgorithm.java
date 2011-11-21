@@ -21,6 +21,7 @@ package de.d3web.we.algorithm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import org.apache.commons.codec.language.DoubleMetaphone;
 
@@ -39,16 +40,20 @@ public class DoubleMetaphoneAlgorithm implements MatchingAlgorithm {
 			,Collection<Section<? extends TermDefinition>> localTermMatches) {
 
 		DoubleMetaphone dM = new DoubleMetaphone();
-		List<Suggestion> suggestions = new ArrayList<Suggestion>();
+		PriorityQueue<Suggestion> suggestions =
+			new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
 
 		for (Section<? extends TermDefinition> match : localTermMatches) {
 			if (dM.isDoubleMetaphoneEqual(toMatch, match.getOriginalText())) {
 				suggestions.add(new Suggestion(match.getText(), 0));
-				if (suggestions.size() >= maxCount) break;
 			}
 		}
 
-		return suggestions;
+		List<Suggestion> toReturn = new ArrayList<Suggestion>();
+		for (int i = 0; i < maxCount; i++)
+			toReturn.add(suggestions.poll());
+
+		return toReturn;
 	}
 
 }
