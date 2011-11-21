@@ -10,7 +10,7 @@
 	</parent>
   	
 	<groupId>de.uniwue.d3web</groupId>
-	<artifactId>KnowWE-Plugin-UserSupport</artifactId>
+	<artifactId>KnowWE-Plugin-UserSupportNew</artifactId>
 	<packaging>jar</packaging>
 	<name>KnowWE-Plugin: UserSupport</name>
 	<version>0.2-SNAPSHOT</version>
