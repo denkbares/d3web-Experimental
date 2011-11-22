@@ -1,0 +1,186 @@
+/*
+ * Copyright (C) 2011 University Wuerzburg, Computer Science VI
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+package de.d3web.we.servlet;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import javax.activation.DataSource;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+/**
+   Simple servlet for receiving a file and launching
+   a command, specified in settings, to run it.
+ */
+public class UploadReceptorServlet extends HttpServlet
+{
+	private static final long serialVersionUID = -4681782387262665746L;
+	// Index of the one-time key code.
+	private static int m_ix = 0;
+	// Initialize a key set somehow:
+	private final String[] m_keys = { "fee", "fie", "foe", "foo" };
+
+	@Override
+	public void init()
+	{
+		// read application init info
+		String storageDir  = System.getProperty("java.io.tmpdir");
+	}
+
+
+	@Override
+	public void doGet(HttpServletRequest  req, HttpServletResponse res)
+			throws IOException, ServletException {
+		doPost(req, res);
+	}
+
+
+	@Override
+	public void doPost(HttpServletRequest  req, HttpServletResponse res)
+			throws IOException, ServletException {
+		ServletContext ctx = getServletContext();
+		RequestDispatcher rd = null;
+		String msg = null;
+		try
+		{
+			StreamDataSource sds = new StreamDataSource(req);
+			MimeMultipart multi = new MimeMultipart(sds);
+			// Check that an authentication key exists and is valid. We expect the key to
+			// be the first part of the MultiPart, the second the content.
+			// (This is pretty inflexible, tune it a bit...)
+			MimeBodyPart key = (MimeBodyPart)multi.getBodyPart(0);
+
+			MimeBodyPart content = (MimeBodyPart)multi.getBodyPart(1);
+			validateCode((String)(key.getContent())); // throws exception if failed
+			handleIncomingFile(content);
+			//			rd = ctx.getRequestDispatcher(successURLString);
+			msg = "The content has been handled and stored.";
+		}
+		catch(MessagingException e)
+		{
+			// We arrive here e.g. if the input was not a MultiPart.
+			// That's fine; add some output and show the submit page.
+			msg = "Welcome to the Traveller " +
+					"interface. Use the form to input content.";
+			// Maybe add some information to the context:
+			//			req.setAttribute(ATTR_CODEIX, "index: " + m_ix);
+			//			rd = ctx.getRequestDispatcher(submitURLString);
+		}
+		catch(Exception e)
+		{
+			// Show the submit page again, but with a bit more
+			// intimidating output.
+			msg = "Traveller failure: " + e.getMessage();
+			//			req.setAttribute(ATTR_CODEIX, "index: " + m_ix);
+			//			rd = ctx.getRequestDispatcher(submitURLString);
+		}
+
+		// add some messages to the request...
+		if(msg != null)
+			//			req.setAttribute(ATTR_MSG, msg);
+
+			// ...and forward it to the correct result page.
+			if(rd != null)
+				rd.forward(req, res);
+	}
+
+
+	private void handleIncomingFile(MimeBodyPart content)
+			throws MessagingException
+			{
+		// Implement your nice dynamic handling code here
+			}
+
+
+
+	/**
+       Trivial one-time key authentication example.
+       Compares the offered code string to the currently expected
+       passkey. Throws an IllegalAccessException if it is not valid.
+       The message contains information on the next key to send.
+	 */
+	private void validateCode(String code)
+			throws IllegalAccessException,
+			MessagingException
+			{
+		if(m_ix >= m_keys.length)
+			m_ix = 0;
+		if(m_keys[m_ix].equals(code))
+			m_ix++;
+		else
+			throw new IllegalAccessException("Next code index is " + m_ix + ".");
+			}
+
+
+	/**
+	 * This class maps the request stream to the content parser that is
+	 * able to pick files from it.
+	 */
+	private class StreamDataSource implements DataSource
+	{
+		private final HttpServletRequest m_req;
+		public StreamDataSource(HttpServletRequest req)
+		{
+			m_req = req;
+		}
+
+		/**
+		 * Returns the content type for the request stream.
+		 */
+		public String getContentType()
+		{
+			return m_req.getContentType();
+		}
+
+		/**
+		 * Returns a stream from the request.
+		 */
+		public InputStream getInputStream()
+				throws IOException
+				{
+			return m_req.getInputStream();
+				}
+
+		/**
+		 * This method is useless and it always returns a null.
+		 */
+		public String getName()
+		{
+			return null;
+		}
+		/**
+        Maps output to System.out. Do something more sensible here...
+		 */
+		public OutputStream getOutputStream()
+		{
+			return System.out;
+		}
+
+	}
+}
