@@ -21,6 +21,7 @@ package de.d3web.we.algorithm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import com.wcohen.ss.Levenstein;
 
@@ -49,17 +50,22 @@ public class LevenshteinAlgorithm implements MatchingAlgorithm {
 			Collection<Section<? extends TermDefinition>> localTermMatches) {
 
 		Levenstein l = new Levenstein();
-		List<Suggestion> suggestions = new ArrayList<Suggestion>();
+
+		PriorityQueue<Suggestion> suggestions =
+				new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
 
 		for (Section<? extends TermDefinition> match : localTermMatches) {
 			double score = l.score(toMatch, match.getOriginalText());
 			if (score >= -threshold) {
 				suggestions.add(new Suggestion(match.getText(), score));
-				if (suggestions.size() >= maxCount) break;
 			}
 		}
 
-		return suggestions;
+		List<Suggestion> toReturn = new ArrayList<Suggestion>();
+		for (int i = 0; i < maxCount; i++)
+			toReturn.add(suggestions.poll());
+
+		return toReturn;
 	}
 
 }
