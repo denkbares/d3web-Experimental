@@ -24,11 +24,11 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ResourceBundle;
 
-import de.d3web.we.poi.PoiUtils;
 import de.d3web.we.tables.CausalDiagnosisScore;
 import de.d3web.we.tables.DecisionTable;
 import de.d3web.we.tables.HeuristicDiagnosisTable;
 import de.d3web.we.tables.TableUtils;
+import de.d3web.we.tables.poi.PoiUtils;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
