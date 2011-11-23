@@ -10,12 +10,10 @@ import de.knowwe.core.kdom.objects.KnowWETerm;
 import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.rdfs.ObjectPropertyDefinitionMarkup.PropertyDef;
-import de.knowwe.rdfs.ObjectPropertyDefinitionMarkup.RangeDomainSpec;
 
 public class ClassDefinitionMarkup extends AbstractType {
 
-	private static final String CLASS_REGEX = "^Class\\s+(.*?)(\\(.*?\\))?$";
+	private static final String CLASS_REGEX = "^Class:?\\s+(.*?)(\\(.*?\\))?$";
 
 	public ClassDefinitionMarkup() {
 		this.setSectionFinder(new RegexSectionFinder(CLASS_REGEX,
@@ -40,7 +38,7 @@ public class ClassDefinitionMarkup extends AbstractType {
 		public Map<String, ? extends Object> getTypedTermInformation(
 				Section<? extends TermDefinition> s) {
 			// says that IRIs created with this markup have the type 'Class'
-			Map<String, Object> map = new HashMap<String,Object>();
+			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(RDFSTermCategory.KEY, RDFSTermCategory.Class);
 			return map;
 		}
