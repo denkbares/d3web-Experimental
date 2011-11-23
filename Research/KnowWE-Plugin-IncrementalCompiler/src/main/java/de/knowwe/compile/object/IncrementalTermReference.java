@@ -45,7 +45,7 @@ public abstract class IncrementalTermReference<TermObject> extends TermReference
 	@SuppressWarnings("unchecked")
 	final KnowWEDomRenderer<IncrementalTermReference> PREDEFINDED_TERM_RENDERER =
 			new ToolMenuDecoratingRenderer<IncrementalTermReference>(new StyleRenderer(
-					"font-weight:bold"));
+					"font-weight:bold;font-color:black"));
 
 	public IncrementalTermReference(Class termObjectClass) {
 		super(termObjectClass);
@@ -85,8 +85,7 @@ public abstract class IncrementalTermReference<TermObject> extends TermReference
 					sec.get().getTermIdentifier(sec));
 			for (KDOMReportMessage kdomReportMessage : messages) {
 				if (kdomReportMessage instanceof KDOMError) {
-					string.append(
-							DefaultErrorRenderer.INSTANCE_ERROR.preRenderMessage(
+					string.append(DefaultErrorRenderer.INSTANCE_ERROR.preRenderMessage(
 									kdomReportMessage, user));
 				}
 				if (kdomReportMessage instanceof KDOMWarning) {
