@@ -99,7 +99,8 @@ public class BoxRenderer extends KnowWEDomRenderer<ForumBox> {
 		StringBuilder ret = new StringBuilder();
 
 		ret.append("<table class=wikitable width=99% border=0><tr>\n");
-		ret.append("<th align=\"left\">" + name + "</th>\n");
+		ret.append("<th align=\"left\"><a href='Wiki.jsp?page=" + name + "'>" + name
+				+ "</a></th>\n");
 		ret.append("<th align=\"right\" width=\"150\">" + date + "</th>\n");
 		ret.append("<th align=\"right\" width=\"100\">\n");
 
