@@ -21,9 +21,6 @@
 package de.knowwe.comment.action;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -71,18 +68,18 @@ public class ForumBoxAction extends AbstractAction {
 		if (canEditPage) {
 			if (text != null && text.length() > 0) { // don't add an empty box
 
-				// ISO 8859-1 --> UTF-8
-				Charset iso = Charset.forName("ISO-8859-1");
-				ByteBuffer bb = iso.encode(text);
-				Charset utf8 = Charset.forName("UTF-8");
-				text = utf8.decode(bb).toString();
-
-				try {
-					text = java.net.URLDecoder.decode(text, "UTF-8");
-				}
-				catch (UnsupportedEncodingException e) {
-					// do nothing!
-				}
+				// // ISO 8859-1 --> UTF-8
+				// Charset iso = Charset.forName("ISO-8859-1");
+				// ByteBuffer bb = iso.encode(text);
+				// Charset utf8 = Charset.forName("UTF-8");
+				// text = utf8.decode(bb).toString();
+				//
+				// try {
+				// text = java.net.URLDecoder.decode(text, "UTF-8");
+				// }
+				// catch (UnsupportedEncodingException e) {
+				// // do nothing!
+				// }
 
 				text = text.replace("\n", "\\\\ ");
 
