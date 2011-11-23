@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ObjectTypes>
 
+
+<ObjectType ID="turtleComplete" 
+			ClassName="TurtleComplete"
+			PackageName="de.knowwe.kdom.n3">
+		<SectionFinder QualifiedName="RegexSectionFinder"
+			Value='"ttl:?.*?\\\\.",Pattern.DOTALL|Pattern.MULTILINE,0' />	
+</ObjectType>
+
 <ObjectType ID="turtleRoot" 
 			ClassName="TurtleMarkupN3"
 			QualifiedSuperType="de.knowwe.compile.object.AbstractKnowledgeUnitType"
-			PackageName="de.knowwe.kdom.n3">
+			PackageName="de.knowwe.kdom.n3"
+			Parent="turtleComplete"
+			Position="0">
 		<SectionFinder QualifiedName="RegexSectionFinder"
 			Value='"ttl:?(.*?)\\\\.",Pattern.DOTALL|Pattern.MULTILINE,1' />	
 </ObjectType>

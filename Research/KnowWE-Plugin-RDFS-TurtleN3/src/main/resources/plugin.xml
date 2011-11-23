@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
 <plugin id="KnowWE-Plugin-Markup-Turtle1" version="0.0.1">
+
 <requires>
 <import plugin-id="KnowWEExtensionPoints"/>
 </requires>
+
 <runtime>
-<library id="de.d3web" path="." type="code">
-<export prefix="*"/>
-</library>
+	<library id="de.d3web" path="." type="code">
+	<export prefix="*"/>
+	</library>
+	 <library id="webapp" path="webapp/" type="resources">
+            <export prefix="*" />
+     </library>
 </runtime>
 
-<extension id="de.knowwe.kdom.TurtleMarkupN3" plugin-id="KnowWEExtensionPoints" point-id="Type">
-
+<extension id="de.knowwe.kdom.TurtleComplete" plugin-id="KnowWEExtensionPoints" point-id="Type">
 	<parameter id="scope" value="root"/>
 	<parameter id="priority" value="5"/>
-	<parameter id="description" value="Type de.knowwe.kdom.n3.TurtleMarkupN3"/>
+	<parameter id="description" value="Type de.knowwe.kdom.n3.TurtleComplete"/>
 	<parameter id="name" value="TurtleMarkupN3"/>
-	<parameter id="class" value="de.knowwe.kdom.n3.TurtleMarkupN3"/>
+	<parameter id="class" value="de.knowwe.kdom.n3.TurtleComplete"/>
 	<parameter id="version" value="1.0"/>
 </extension>
 
@@ -28,6 +32,25 @@
 	<parameter id="class" value="de.knowwe.kdom.n3.compile.TurtleCompileScript"/>
 	<parameter id="version" value="1.0"/>
 </extension>
+
+ <extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+ 	  	         id="InstantEditToolProvider">
+ 	  	         <parameter id="class"
+ 	             value="de.knowwe.instantedit.tools.InstantEditToolProvider" />
+ 	  	         <parameter id="name" value="InstantEditToolProvider" />
+ 	  	         <parameter id="description"
+ 	  	             value="Offers a button for quick editing a certain section." />
+ 	  	         <parameter id="version" value="1.0" />
+ 	  	         <parameter id="priority" value="5" />
+ 	  	         <parameter id="script" value="KnowWE-Plugin-InstantEdit.js" />
+ 	  	         <parameter id="script" value="KnowWE-Plugin-AutoComplete.js" />
+ 	  	         <parameter id="script" value="DefaultEditTool.js" />
+ 	  	         <parameter id="script" value="TextArea.js" />
+ 	  	         <parameter id="css" value="KnowWE-Plugin-InstantEdit.css" />
+ 	  	         <parameter id="css" value="DefaultEditTool.css" />
+ 	  	          <parameter id="css" value="turtle.css" />
+ 	  	         <parameter id="scope" value="TurtleComplete" />
+ </extension>
 
 
 
