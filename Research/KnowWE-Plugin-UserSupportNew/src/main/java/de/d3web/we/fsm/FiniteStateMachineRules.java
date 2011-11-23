@@ -18,6 +18,12 @@
  */
 package de.d3web.we.fsm;
 
+import java.util.List;
+
+import de.d3web.we.fsm.finitestates.FinalState;
+import de.d3web.we.fsm.finitestates.IFiniteState;
+import de.d3web.we.fsm.finitestates.StartState;
+
 
 
 /**
@@ -28,17 +34,17 @@ package de.d3web.we.fsm;
  */
 public class FiniteStateMachineRules {
 
-	//	private final IFiniteState actualState;
-	//
-	//	private final IFiniteState startState;
-	//	private final IFiniteState finalState;
-	//
-	//	private List<IFiniteState> possibleStates;
-	//
-	//	public FiniteStateMachineRules() {
-	//		this.startState = new StartState();
-	//		this.finalState = new FinalState();
-	//
-	//		actualState = this.startState;
-	//	}
+	private final IFiniteState actualState;
+
+	private final IFiniteState startState;
+	private final IFiniteState finalState;
+
+	private List<IFiniteState> possibleStates;
+
+	public FiniteStateMachineRules() {
+		this.startState = new StartState();
+		this.finalState = new FinalState();
+
+		actualState = this.startState;
+	}
 }
