@@ -6,14 +6,24 @@
 			QualifiedSuperType="de.knowwe.compile.object.AbstractKnowledgeUnitType"
 			PackageName="de.knowwe.kdom.n3">
 		<SectionFinder QualifiedName="RegexSectionFinder"
-			Value='"N3:(.*?)\\\\.",Pattern.DOTALL|Pattern.MULTILINE,1' />	
+			Value='"ttl:?(.*?)\\\\.",Pattern.DOTALL|Pattern.MULTILINE,1' />	
 </ObjectType>
+
+<ObjectType ID="turtleContent" 
+			ClassName="TurtleMarkupN3Content"
+			PackageName="de.knowwe.kdom.n3"
+			Parent="turtleRoot"
+			Position="0">
+		<SectionFinder QualifiedName="AllTextSectionFinder"
+			Value='' />	
+</ObjectType>
+
 
 
 <ObjectType ID="SubjectSection" 
 		ClassName="TurtleSubjectSection"
 		PackageName="de.knowwe.kdom.n3" 
-		Parent="turtleRoot" 
+		Parent="turtleContent" 
 		Position="0">
 
 		<SectionFinder QualifiedName="RegexSectionFinder"			
@@ -24,12 +34,23 @@
 </ObjectType>
 
 
+<ObjectType ID="SubjectBNode" 
+		ClassName="SubjectBNode"
+		PackageName="de.knowwe.kdom.n3" 
+		Parent="SubjectSection" 
+		Position="0">
+		<SectionFinder QualifiedName="RegexSectionFinder"			
+			Value='"_.*[^\\\\s]",Pattern.DOTALL|Pattern.MULTILINE,0'></SectionFinder>
+		<Constraint QualifiedName="AtMostOneFindingConstraint" />
+		<Color>red</Color>
+</ObjectType>
+
 <ObjectType ID="Subject" 
 		ClassName="TurtleSubject"
 		PackageName="de.knowwe.kdom.n3" 
 		QualifiedSuperType="de.knowwe.rdfs.IRITermRef"
 		Parent="SubjectSection" 
-		Position="0">
+		Position="1">
 		<SectionFinder QualifiedName="AllTextFinderTrimmed"	Value=''></SectionFinder>
 		<Constraint QualifiedName="AtMostOneFindingConstraint" />
 		<Color>red</Color>
@@ -39,7 +60,7 @@
 <ObjectType ID="PredSentenceSubtree" 
 			ClassName="TurtlePredSentence"
 			PackageName="de.knowwe.kdom.n3" 
-			Parent="turtleRoot" 
+			Parent="turtleContent" 
 			Position="1">
 
 		<SectionFinder ClassName="SplitSectionFinderUnquoted"
@@ -82,11 +103,33 @@
 		</SectionFinder>
 		<Color>red</Color>
 </ObjectType>
+
+<ObjectType ID="TurtleObjectBlankNode" 
+			QualifiedName="de.knowwe.kdom.n3.TurtleObjectBlankNode"
+			Parent="TurtleObjectSection" 
+			Position="0">
+
+		<SectionFinder QualifiedName="de.knowwe.kdom.sectionFinder.EmbracedContentFinder" Value='&apos;[&apos;, &apos;]&apos;'>
+		</SectionFinder>
+		<Color>pink</Color>
+</ObjectType>
+
+<ObjectType ID="TurtleObjectBlankNodeContent" 
+			QualifiedName="de.knowwe.kdom.n3.TurtleObjectBlankNodeContent"
+			Parent="TurtleObjectBlankNode" 
+			Position="0">
+
+		<SectionFinder QualifiedName="de.knowwe.kdom.sectionFinder.EmbracedContentFinder" Value='&apos;[&apos;, &apos;]&apos;,true'>
+		</SectionFinder>
+		<Color>black</Color>
+</ObjectType>
+
+
 	
 <ObjectType ID="TurtleObjectLiteral" 
 			QualifiedName="de.knowwe.kdom.n3.TurtleObjectLiteral"
 			Parent="TurtleObjectSection" 
-			Position="0">
+			Position="1">
 
 		<SectionFinder QualifiedName="RegexSectionFinder" Value='"&apos;(.*?)&apos;", Pattern.DOTALL, 0'>
 		</SectionFinder>
@@ -111,7 +154,7 @@
 			PackageName="de.knowwe.kdom.n3" 
 			QualifiedSuperType="de.knowwe.rdfs.IRITermRef" 
 			Parent="TurtleObjectSection" 
-			Position="1">
+			Position="2">
 
 		<SectionFinder QualifiedName="de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquoted"
 			Value='","'></SectionFinder>

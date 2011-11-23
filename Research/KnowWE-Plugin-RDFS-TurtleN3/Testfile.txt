@@ -35,11 +35,19 @@ def Object3
 <br>
 def Object4
 <br><br>
+def Red
+
+<br><br>
+
 ! Simple Example:
 
 <br><br>
 
 N3: Subject predicate:: Object.
+
+<br><br>
+
+N3: Subject predicate:: [ hasColor: Red].
 
 <br><br>
 

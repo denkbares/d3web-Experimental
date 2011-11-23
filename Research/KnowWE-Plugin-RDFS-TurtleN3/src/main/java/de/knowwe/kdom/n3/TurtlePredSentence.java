@@ -24,9 +24,6 @@ package de.knowwe.kdom.n3;
 
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquoted;
-import de.knowwe.kdom.renderer.GenericHTMLRenderer;
-import de.knowwe.kdom.n3.TurtlePredicateSection;
-import de.knowwe.kdom.n3.TurtleObjectSection;
 
 public class TurtlePredSentence extends AbstractType {
 
@@ -36,7 +33,9 @@ public class TurtlePredSentence extends AbstractType {
 		childrenTypes.add(new TurtleObjectSection());
 		setSectionFinder(new SplitSectionFinderUnquoted(";"));
 
-		setCustomRenderer(new GenericHTMLRenderer<TurtlePredSentence>("span", new String[] {"style", "color: blue;", "title", "TurtlePredSentence"}));
+		// setCustomRenderer(new GenericHTMLRenderer<TurtlePredSentence>("span",
+		// new String[] {"style", "color: blue;", "title",
+		// "TurtlePredSentence"}));
 	}
 
 }

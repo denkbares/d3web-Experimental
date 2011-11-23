@@ -24,16 +24,16 @@ package de.knowwe.kdom.n3;
 
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.knowwe.kdom.renderer.GenericHTMLRenderer;
 
 public class TurtleObjectLiteralText extends AbstractType {
 
 	public TurtleObjectLiteralText() {
 
-
 		setSectionFinder(new AllTextFinderTrimmed());
 
-		setCustomRenderer(new GenericHTMLRenderer<TurtleObjectLiteralText>("span", new String[] {"style", "color: green;", "title", "TurtleObjectLiteralText"}));
+		// setCustomRenderer(new
+		// GenericHTMLRenderer<TurtleObjectLiteralText>("span", new String[]
+		// {"style", "color: green;", "title", "TurtleObjectLiteralText"}));
 	}
 
 }

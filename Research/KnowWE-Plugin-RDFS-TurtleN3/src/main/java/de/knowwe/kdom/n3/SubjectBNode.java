@@ -26,23 +26,20 @@ import java.util.regex.Pattern;
 
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.kdom.AnonymousType;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
+import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 
-public class TurtleObjectLiteral extends AbstractType {
+public class SubjectBNode extends AbstractType {
 
-	public TurtleObjectLiteral() {
-		AnonymousType before = new AnonymousType("Before");
-		before.setSectionFinder(new RegexSectionFinder("'"));
-		childrenTypes.add(before);
-		AnonymousType after = new AnonymousType("After");
-		after.setSectionFinder(new RegexSectionFinder("'"));
-		childrenTypes.add(after);
-		childrenTypes.add(new TurtleObjectLiteralText());
-		setSectionFinder(new RegexSectionFinder("'(.*?)'", Pattern.DOTALL, 0));
+	public SubjectBNode() {
 
-		// setCustomRenderer(new
-		// GenericHTMLRenderer<TurtleObjectLiteral>("span", new String[]
-		// {"style", "color: yellow;", "title", "TurtleObjectLiteral"}));
+		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder(
+				"_.*[^\\s]", Pattern.DOTALL | Pattern.MULTILINE, 0));
+		setSectionFinder(c);
+		c.addConstraint(AtMostOneFindingConstraint.getInstance());
+		// setCustomRenderer(new GenericHTMLRenderer<SubjectBNode>("span", new
+		// String[] {
+		// "style", "color: red;", "title", "SubjectBNode" }));
 	}
 
 }

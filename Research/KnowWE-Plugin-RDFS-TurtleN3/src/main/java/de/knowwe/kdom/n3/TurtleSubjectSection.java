@@ -22,14 +22,13 @@
 
 package de.knowwe.kdom.n3;
 
-import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.kdom.constraint.ConstraintSectionFinder;
-import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import java.util.regex.Pattern;
-import de.knowwe.kdom.renderer.GenericHTMLRenderer;
-import de.knowwe.kdom.n3.TurtleSubject;
+
+import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.AnonymousType;
+import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
+import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 
 public class TurtleSubjectSection extends AbstractType {
 
@@ -37,11 +36,16 @@ public class TurtleSubjectSection extends AbstractType {
 		AnonymousType after = new AnonymousType("After");
 		after.setSectionFinder(new RegexSectionFinder("\\b[^\\s]*::"));
 		childrenTypes.add(after);
+		childrenTypes.add(new SubjectBNode());
 		childrenTypes.add(new TurtleSubject());
-		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder("(.*?)\\b[^\\s]*::",Pattern.DOTALL|Pattern.MULTILINE,1));
+		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder(
+				"(.*?)\\b[^\\s]*::", Pattern.DOTALL | Pattern.MULTILINE, 1));
 		setSectionFinder(c);
 		c.addConstraint(AtMostOneFindingConstraint.getInstance());
-		setCustomRenderer(new GenericHTMLRenderer<TurtleSubjectSection>("span", new String[] {"style", "color: red;", "title", "TurtleSubjectSection"}));
+		// setCustomRenderer(new
+		// GenericHTMLRenderer<TurtleSubjectSection>("span",
+		// new String[] {
+		// "style", "color: red;", "title", "TurtleSubjectSection" }));
 	}
 
 }

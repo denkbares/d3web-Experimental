@@ -22,28 +22,28 @@
 
 package de.knowwe.kdom.n3;
 
+import java.util.regex.Pattern;
+
 import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import java.util.regex.Pattern;
-import de.knowwe.kdom.renderer.GenericHTMLRenderer;
-import de.knowwe.kdom.n3.TurtleSubjectSection;
-import de.knowwe.kdom.n3.TurtlePredSentence;
 import de.knowwe.kdom.AnonymousType;
 
 public class TurtleMarkupN3 extends AbstractKnowledgeUnitType {
 
 	public TurtleMarkupN3() {
 		AnonymousType before = new AnonymousType("Before");
-		before.setSectionFinder(new RegexSectionFinder("N3:"));
+		before.setSectionFinder(new RegexSectionFinder("ttl:?"));
 		childrenTypes.add(before);
 		AnonymousType after = new AnonymousType("After");
 		after.setSectionFinder(new RegexSectionFinder("\\."));
 		childrenTypes.add(after);
-		childrenTypes.add(new TurtleSubjectSection());
-		childrenTypes.add(new TurtlePredSentence());
-		setSectionFinder(new RegexSectionFinder("N3:(.*?)\\.",Pattern.DOTALL|Pattern.MULTILINE,1));
+		childrenTypes.add(new TurtleMarkupN3Content());
+		setSectionFinder(new RegexSectionFinder("ttl:?(.*?)\\.", Pattern.DOTALL
+				| Pattern.MULTILINE, 1));
 
-		setCustomRenderer(new GenericHTMLRenderer<TurtleMarkupN3>("span", new String[] {"title", "TurtleMarkupN3"}));
+		// setCustomRenderer(new GenericHTMLRenderer<TurtleMarkupN3>("span", new
+		// String[] {
+		// "title", "TurtleMarkupN3" }));
 	}
 
 }

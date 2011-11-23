@@ -21,31 +21,30 @@
 package de.knowwe.kdom.n3.compile;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.Node;
+import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 
-import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.utils.CompileUtils;
-import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.n3.TurtleMarkupN3;
+import de.knowwe.kdom.n3.TurtleMarkupN3Content;
+import de.knowwe.kdom.n3.TurtleObjectBlankNode;
 import de.knowwe.kdom.n3.TurtleObjectLiteralText;
 import de.knowwe.kdom.n3.TurtleObjectSection;
 import de.knowwe.kdom.n3.TurtleObjectTerm;
 import de.knowwe.kdom.n3.TurtlePredicate;
 import de.knowwe.kdom.n3.TurtleSubject;
+import de.knowwe.rdf2go.BlankNodeImpl;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.AbstractKnowledgeUnitCompileScriptRDFS;
 import de.knowwe.rdfs.util.RDFSUtil;
 
 public class TurtleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<TurtleMarkupN3> {
 
-	
 	@Override
 	public void insertIntoRepository(Section<TurtleMarkupN3> section) {
 		List<Section<TurtleObjectSection>> found = new ArrayList<Section<TurtleObjectSection>>();
@@ -56,41 +55,78 @@ public class TurtleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<
 
 		for (Section<TurtleObjectSection> objectSec : found) {
 
-			Section<TurtleObjectTerm> termSec = Sections.findSuccessor(
-					objectSec, TurtleObjectTerm.class);
-			
-			Section<TurtleObjectLiteralText> literalSec = Sections.findSuccessor(
-					objectSec, TurtleObjectLiteralText.class);
-
-			Node objURI = null;
-			if (termSec != null) {
-				objURI = RDFSUtil.getURI(termSec);
-			}
-			if(literalSec != null) {
-				objURI = Rdf2GoCore.getInstance().createLiteral(literalSec.getOriginalText());
-			}
-			Section<TurtlePredicate> predSec = Sections.findSuccessor(
-					objectSec.getFather(), TurtlePredicate.class);
-
-			URI predURI = RDFSUtil.getURI(predSec);
-
-			Section<TurtleSubject> subjectSec = Sections.findSuccessor(
-					objectSec.getFather().getFather(), TurtleSubject.class);
-			URI subjectURI = RDFSUtil.getURI(subjectSec);
-
-			if (objURI != null && predURI != null && subjectURI != null) {
-				Statement triple = Rdf2GoCore.getInstance().createStatement(
-						subjectURI, predURI, objURI);
-
-				triples.add(triple);
-			}
+			createTriplesForObject(triples, objectSec);
 
 		}
 		Rdf2GoCore.getInstance().addStatements(triples, section);
 	}
 
+	private void createTriplesForObject(List<Statement> triples, Section<TurtleObjectSection> objectSec) {
 
+		// Section<TurtleObjectBlankNode> blankNodeSection =
+		// Sections.findSuccessor(
+		// objectSec, TurtleObjectBlankNode.class);
+		// if (blankNodeSection != null) {
+		// Section<TurtleMarkupN3Content> blankTurtleContent =
+		// Sections.findSuccessor(
+		// blankNodeSection, TurtleMarkupN3Content.class);
+		// List<Section<TurtleObjectSection>> found = new
+		// ArrayList<Section<TurtleObjectSection>>();
+		//
+		// Sections.findSuccessorsOfType(blankTurtleContent,
+		// TurtleObjectSection.class,
+		// found);
+		// for (Section<TurtleObjectSection> internalObSec : found) {
+		// createTriplesForObject(triples, internalObSec);
+		// }
+		//
+		// }
 
-	
+		Section<TurtleObjectLiteralText> literalSec = Sections.findSuccessor(
+				objectSec, TurtleObjectLiteralText.class);
+
+		Node objURI = null;
+
+		Section<TurtleObjectBlankNode> bn = Sections.findChildOfType(objectSec,
+				TurtleObjectBlankNode.class);
+		if (bn != null) {
+			Section<TurtleMarkupN3Content> turtleInner = Sections.findSuccessor(bn,
+					TurtleMarkupN3Content.class);
+			objURI = new BlankNodeImpl(turtleInner);
+
+		}
+		else {
+			Section<TurtleObjectTerm> termSec = Sections.findSuccessor(objectSec,
+					TurtleObjectTerm.class);
+			if (termSec != null) {
+				objURI = RDFSUtil.getURI(termSec);
+			}
+			if (literalSec != null) {
+				objURI = Rdf2GoCore.getInstance().createLiteral(
+						literalSec.getOriginalText());
+			}
+		}
+
+		Section<TurtlePredicate> predSec = Sections.findSuccessor(
+				objectSec.getFather(), TurtlePredicate.class);
+
+		URI predURI = RDFSUtil.getURI(predSec);
+
+		Section<TurtleSubject> subjectSec = Sections.findSuccessor(
+				objectSec.getFather().getFather(), TurtleSubject.class);
+		Resource subjectURI = RDFSUtil.getURI(subjectSec);
+		if (subjectURI == null) {
+			subjectURI = new BlankNodeImpl(Sections.findSuccessor(
+					objectSec.getFather().getFather().getFather(),
+					TurtleMarkupN3Content.class));
+		}
+
+		if (objURI != null && predURI != null && subjectURI != null) {
+			Statement triple = Rdf2GoCore.getInstance().createStatement(
+					subjectURI, predURI, objURI);
+
+			triples.add(triple);
+		}
+	}
 
 }

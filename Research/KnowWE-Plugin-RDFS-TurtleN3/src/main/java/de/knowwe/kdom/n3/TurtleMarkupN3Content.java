@@ -22,27 +22,23 @@
 
 package de.knowwe.kdom.n3;
 
-import java.util.regex.Pattern;
-
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.kdom.AnonymousType;
+import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 
-public class TurtleObjectLiteral extends AbstractType {
+public class TurtleMarkupN3Content extends AbstractType {
 
-	public TurtleObjectLiteral() {
-		AnonymousType before = new AnonymousType("Before");
-		before.setSectionFinder(new RegexSectionFinder("'"));
-		childrenTypes.add(before);
-		AnonymousType after = new AnonymousType("After");
-		after.setSectionFinder(new RegexSectionFinder("'"));
-		childrenTypes.add(after);
-		childrenTypes.add(new TurtleObjectLiteralText());
-		setSectionFinder(new RegexSectionFinder("'(.*?)'", Pattern.DOTALL, 0));
+	public static TurtleMarkupN3Content instance;
+
+	public TurtleMarkupN3Content() {
+		TurtleMarkupN3Content.instance = this;
+		childrenTypes.add(new TurtleSubjectSection());
+		childrenTypes.add(new TurtlePredSentence());
+		setSectionFinder(new AllTextSectionFinder());
 
 		// setCustomRenderer(new
-		// GenericHTMLRenderer<TurtleObjectLiteral>("span", new String[]
-		// {"style", "color: yellow;", "title", "TurtleObjectLiteral"}));
+		// GenericHTMLRenderer<TurtleMarkupN3Content>("span",
+		// new String[] {
+		// "title", "TurtleMarkupN3Content" }));
 	}
 
 }
