@@ -102,6 +102,9 @@
 	<%-- action buttons --%>
 	<table>
 		<tr>
+			<td><a href="Wiki.jsp?page=<%=user.getUserName()%>"
+				class="action">Meine Einstellungen</a>
+			</td>
 			<td><wiki:UserCheck status="notAuthenticated">
 					<wiki:CheckRequestContext context='!login'>
 						<wiki:Permission permission="login">
@@ -120,9 +123,6 @@
 							key="actions.logout" /> </a>
 					<%--onclick="return( confirm('<fmt:message key="actions.confirmlogout"/>') && (location=this.href) );"--%>
 				</wiki:UserCheck>
-			</td>
-			<td><a href="Wiki.jsp?page=<%=user.getUserName()%>"
-				class="action">Meine Einstellungen</a>
 			</td>
 		</tr>
 	</table>

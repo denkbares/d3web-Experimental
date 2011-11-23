@@ -77,7 +77,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 	/** Beschriftungen für das "Neues Forum"-Formular */
 	private static final String OPEN_FORM_BUTTON = "Neues Forum";
-	private static final String CLOSE_FORM_BUTTON = "Schließen";
+	private static final String CLOSE_FORM_BUTTON = "Abbrechen";
 	private static final String SEND_BUTTON = "Abschicken";
 	private static final String FORM_LABEL = "Neues Forum erstellen:";
 	private static final String TEXTAREA_LABEL = "Geben Sie bitte Ihre Nachricht ein:";
