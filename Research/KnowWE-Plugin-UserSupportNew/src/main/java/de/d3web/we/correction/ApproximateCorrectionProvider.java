@@ -43,6 +43,6 @@ public interface ApproximateCorrectionProvider {
 	 * @param threshold The maximium Levenshtein distance suggestions can have. (KnowWE includes an implementation in secondstring/com.wcohen.ss.Levenstein)
 	 * @return A list of {@link Suggestion} objects containing the found suggestions and their distances.
 	 */
-	public List<Suggestion> getSuggestions(KnowWEArticle article, Section<?> section, int threshold);
+	public List<Suggestion> getSuggestions(KnowWEArticle article, Section<?> section);
 
 }

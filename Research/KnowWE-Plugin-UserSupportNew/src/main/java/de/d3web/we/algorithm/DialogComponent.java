@@ -61,11 +61,13 @@ public class DialogComponent {
 						bundle.getString("usersupport.dialogcomponent.maxSuggestions"));
 
 		try {
+			String className =
+					bundle.getString("usersupport.dialogcomponent.standardmatchingalgorithm");
 			usedAlgorithm = MatchingAlgorithm.class.cast(
-					Class.forName(
-							bundle.getString("usersupport.dialogcomponent.standardmatchingalgorithm")));
+					Class.forName(className
+							));
 		}
-		catch (ClassNotFoundException e) {
+		catch (Exception e) {
 			usedAlgorithm = new LevenshteinAlgorithm();
 		}
 
@@ -140,9 +142,12 @@ public class DialogComponent {
 		List<Suggestion> suggs = new ArrayList<Suggestion>();
 		List<SuggestionValuePair> matchList = new ArrayList<SuggestionValuePair>();
 
+		// TODO returns a list of nulls!
 		suggs = usedAlgorithm.getMatches(maxSuggestions, toMatch, localTermMatches);
 
 		for (Suggestion s : suggs) {
+			// TODO HOTFIX for problem above
+			if (s == null) continue;
 			int exists = AlgorithmUtil.containsSuggestion(matchList, s);
 			if (exists != -1)
 				matchList.get(exists).increment();
@@ -153,7 +158,7 @@ public class DialogComponent {
 		// Sort the matchList and add the count of
 		// maxSuggestions to best Suggestions
 		Collections.sort(matchList, new SuggestionValuePairComparator());
-		for (int i = 0; i < maxSuggestions; i++)
+		for (int i = 0; (i < maxSuggestions) && (i < matchList.size()); i++)
 			bestSuggs.add(matchList.get(i).getSuggestion());
 		return bestSuggs;
 	}

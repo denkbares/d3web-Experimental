@@ -46,26 +46,24 @@ public class ApproximateCorrectionToolProvider implements ToolProvider {
 
 	@Override
 	public Tool[] getTools(KnowWEArticle article, Section<?> section, UserContext userContext) {
+
 		List<Suggestion> suggestions = new LinkedList<Suggestion>();
 		ResourceBundle wikiConfig = ResourceBundle.getBundle("KnowWE_config");
 
 
-		//		int threshold = Integer.valueOf(wikiConfig.getString("knowweplugin.correction.threshold"));
-		// Set this rather high. Just for Testing
-		int threshold = 5;
+		//		for (ApproximateCorrectionProvider c : getProviders(section)) {
+		//			List<Suggestion> s = c.getSuggestions(article, section);
+		//
+		//			if (s != null) {
+		//				suggestions.addAll(s);
+		//			}
+		//		}
 
-
-		for (ApproximateCorrectionProvider c : getProviders(section)) {
-			List<Suggestion> s = c.getSuggestions(article, section, threshold);
-
-			if (s != null) {
-				suggestions.addAll(s);
-			}
-		}
+		ApproximateCorrectionProviderImpl impl = new ApproximateCorrectionProviderImpl();
 
 		// Ensure there are no duplicates
 		suggestions = new LinkedList<Suggestion>(
-				new HashSet<Suggestion>(suggestions));
+				new HashSet<Suggestion>(impl.getSuggestions(article, section)));
 
 		// Sort by ascending distance
 		Collections.sort(suggestions);
@@ -100,6 +98,10 @@ public class ApproximateCorrectionToolProvider implements ToolProvider {
 
 	private static ApproximateCorrectionProvider[] getProviders(Section<?> section) {
 		Extension[] extensions = PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
+				"ApproximateCorrectionProviderImpl");
+		extensions = PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
+				"ApproximateCorrectionToolProvider");
+		extensions = PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
 				"ApproximateCorrectionProvider");
 		extensions = ScopeUtils.getMatchingExtensions(extensions, section);
 		ApproximateCorrectionProvider[] providers = new ApproximateCorrectionProvider[extensions.length];

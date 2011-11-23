@@ -25,11 +25,12 @@ import java.util.regex.Pattern;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
-import de.knowwe.kdom.renderer.ObjectInfoLinkRenderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
+import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 
 /**
@@ -38,6 +39,11 @@ import de.knowwe.kdom.renderer.StyleRenderer;
  * @created 14.10.2011
  */
 public class TableCell extends AbstractType {
+
+	@SuppressWarnings("unchecked")
+	public static final KnowWEDomRenderer<TableCell> INDIVIDUAL_RENDERER =
+	new ToolMenuDecoratingRenderer<TableCell>(new StyleRenderer(
+			"color:rgb(152, 180, 12)"));
 
 	public TableCell() {
 
@@ -61,7 +67,10 @@ public class TableCell extends AbstractType {
 
 		};
 
-		this.setCustomRenderer(new ObjectInfoLinkRenderer(StyleRenderer.CHOICE));
+		//		this.setCustomRenderer(INDIVIDUAL_RENDERER);
+		//		this.setCustomRenderer(new ToolMenuDecoratingRenderer(StyleRenderer.CHOICE));
+		//		customRenderer = new ToolMenuDecoratingRenderer(StyleRenderer.CHOICE);
+		//		this.setCustomRenderer(new ObjectInfoLinkRenderer(StyleRenderer.CHOICE));
 	}
 
 }

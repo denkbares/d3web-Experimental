@@ -26,6 +26,10 @@
 		<parameter id="scope" value="root" />
 		<parameter id="css" value="usersupport.css" />
 		<parameter id="script" value="usersupport.js" />
+		<parameter id="script" value="codemirror.js" />
+		<parameter id="css" value="codemirror.css" />
+		<parameter id="script" value="javascript.js" />
+		<parameter id="css" value="default.css" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -39,6 +43,10 @@
 		<parameter id="scope" value="root" />
 		<parameter id="css" value="usersupport.css" />
 		<parameter id="script" value="usersupport.js" />
+		<parameter id="script" value="codemirror.js" />
+		<parameter id="css" value="codemirror.css" />
+		<parameter id="script" value="javascript.js" />
+		<parameter id="css" value="default.css" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -52,6 +60,10 @@
 		<parameter id="scope" value="root" />
 		<parameter id="css" value="usersupport.css" />
 		<parameter id="script" value="usersupport.js" />
+		<parameter id="script" value="codemirror.js" />
+		<parameter id="css" value="codemirror.css" />
+		<parameter id="script" value="javascript.js" />
+		<parameter id="css" value="default.css" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
@@ -95,7 +107,7 @@
         <parameter id="scope" value="HeuristicDiagnosisTableMarkup" />
     </extension>
     
-	<!-- extension plugin-id="KnowWEExtensionPoints" point-id="CorrectionProvider"
+	<!--extension plugin-id="KnowWEExtensionPoints" point-id="CorrectionProvider"
 		id="ApproximateCorrectionProviderImpl">
 		<parameter id="class"
 			value="de.d3web.we.correction.ApproximateCorrectionProviderImpl" />
@@ -106,11 +118,41 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
         <parameter id="scope" value="TableCell" />
-        <parameter id="scope" value="PropertyReference" />
-		<parameter id="scope" value="QuestionReference" />
-		<parameter id="scope" value="QuestionnaireReference" />
-		<parameter id="scope" value="SolutionReference" />
-		<parameter id="scope" value="IDObjectReference" />
-	</extension -->
+	</extension-->
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="PageAppendHandler"
+		id="ApproximateCorrectionAppendHandler">
+		<parameter id="class"
+			value="de.d3web.we.correction.ApproximateCorrectionAppendHandler" />
+		<parameter id="name" value="ApproximateCorrectionAppendHandler" />
+		<parameter id="description" value="Dummy for adding CSS/JS" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="script" value="correction.js" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="ApproximateCorrectionToolProvider">
+		<parameter id="class"
+			value="de.d3web.we.correction.ApproximateCorrectionToolProvider" />
+		<parameter id="name" value="ApproximateCorrectionToolProvider" />
+		<parameter id="description"
+			value="Offers to quickly correct typos in term references." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="TableCell" />
+	</extension>
+	
+	<!-- extension plugin-id="KnowWEExtensionPoints" point-id="ApproximateCorrectionProvider"
+		id="ApproximateCorrectionProviderImpl">
+		<parameter id="class"
+			value="de.d3web.we.correction.ApproximateCorrectionProviderImpl" />
+		<parameter id="name" value="ApproximateCorrectionToolProviderImpl" />
+		<parameter id="description"
+			value="Offers to quickly correct typos in term references." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="TableCell" />
+	</extension-->
 
 </plugin>

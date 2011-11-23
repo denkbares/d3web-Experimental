@@ -19,7 +19,6 @@
 package de.d3web.we.correction;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import de.d3web.we.algorithm.DialogComponent;
@@ -40,20 +39,21 @@ import de.knowwe.core.utils.KnowWEUtils;
 public class ApproximateCorrectionProviderImpl implements ApproximateCorrectionProvider {
 
 	@Override
-	public List<Suggestion> getSuggestions(KnowWEArticle article, Section<?> section, int threshold) {
+	public List<Suggestion> getSuggestions(KnowWEArticle article, Section<?> section) {
 
 		TerminologyHandler terminologyHandler =
 				KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
 
 		// Get all Terms from Terminology used
+		// TODO Right Terms?
 		Collection<Section<? extends TermDefinition>> localTermMatches =
 				terminologyHandler.getAllLocalTermDefs("Demo - Master");
 
-		String originalText = section.getOriginalText();
+		String toMatch = section.getText().trim();
 
-		List<Suggestion> suggestions = new LinkedList<Suggestion>();
-
-		DialogComponent.getInstance();
+		List<Suggestion> suggestions =
+				DialogComponent.getInstance().
+				getBestSuggestionsUsedAlgorithm(toMatch, localTermMatches);
 
 
 		return suggestions;

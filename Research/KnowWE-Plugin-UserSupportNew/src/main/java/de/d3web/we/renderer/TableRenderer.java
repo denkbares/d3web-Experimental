@@ -61,12 +61,12 @@ public class TableRenderer extends KnowWEDomRenderer<InnerTable> {
 		int averageCellCount = TableUtils.getMaximumTableCellCount(section);
 
 		// Render the Header
-		renderTableHeader(buildi, section, maxCellLength, averageCellCount);
+		renderTableHeader(buildi, section, maxCellLength, averageCellCount, user);
 
 		buildi.append("<tfoot></tfoot>");
 
 		// Render the Body
-		renderTableBody(buildi, section, maxCellLength);
+		renderTableBody(buildi, section, maxCellLength, user);
 
 		buildi.append("</table>");
 
@@ -80,7 +80,8 @@ public class TableRenderer extends KnowWEDomRenderer<InnerTable> {
 	}
 
 	private static void renderTableHeader(
-			StringBuilder buildi, Section<InnerTable> section, int maxCellLength, int averageCellCount) {
+			StringBuilder buildi, Section<InnerTable> section, int maxCellLength, int averageCellCount,
+			UserContext user) {
 
 		Section<TableLine> sec = Sections.findChildOfType(section, TableLine.class);
 
@@ -89,7 +90,7 @@ public class TableRenderer extends KnowWEDomRenderer<InnerTable> {
 			buildi.append("<tr>");
 
 
-			// Add a dummy line, when the table contains one cell less then the rest lines
+			// Add a dummy cell, when the table contains one cell less then the rest lines
 			if (averageCellCount > Sections.findSuccessorsOfType(sec, TableCell.class).size()) {
 				buildi.append("<th>");
 				buildi.append(TableUtils.generateStringWithLength(
@@ -100,7 +101,8 @@ public class TableRenderer extends KnowWEDomRenderer<InnerTable> {
 			for (Section<TableCell> cell : Sections.findChildrenOfType(sec, TableCell.class)) {
 				String cellText = cell.getText().trim();
 				buildi.append("<th>");
-				buildi.append(cellText);
+				TableCell.INDIVIDUAL_RENDERER.render(cell.getArticle(), cell, user, buildi);
+				//				buildi.append(cellText);
 				buildi.append(TableUtils.generateStringWithLength(
 						Math.abs(cellText.length()-maxCellLength), ' '));
 				buildi.append("</th>");
@@ -112,7 +114,8 @@ public class TableRenderer extends KnowWEDomRenderer<InnerTable> {
 	}
 
 	private static void renderTableBody(
-			StringBuilder buildi, Section<InnerTable> section, int maxCellLength) {
+			StringBuilder buildi, Section<InnerTable> section, int maxCellLength,
+			UserContext user) {
 		buildi.append("<tbody>");
 
 		List<Section<TableLine>> lines = Sections.findChildrenOfType(section, TableLine.class);
@@ -128,7 +131,8 @@ public class TableRenderer extends KnowWEDomRenderer<InnerTable> {
 				for (Section<TableCell> cell : Sections.findChildrenOfType(line, TableCell.class)) {
 					String cellText = cell.getText().trim();
 					buildi.append("<td>");
-					buildi.append(cellText);
+					TableCell.INDIVIDUAL_RENDERER.render(cell.getArticle(), cell, user, buildi);
+					//				buildi.append(cellText);
 					buildi.append(TableUtils.generateStringWithLength(
 							Math.abs(cellText.length()-maxCellLength), ' '));
 					buildi.append("</td>");
