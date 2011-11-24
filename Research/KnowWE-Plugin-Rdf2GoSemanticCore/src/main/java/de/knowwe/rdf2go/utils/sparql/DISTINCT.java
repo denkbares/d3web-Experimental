@@ -31,7 +31,7 @@ public class DISTINCT extends SparqlQuery {
 
 	@Override
 	public String verbalize() {
-		return "DISTINCT\n";
+		return "";
 	}
 
 }

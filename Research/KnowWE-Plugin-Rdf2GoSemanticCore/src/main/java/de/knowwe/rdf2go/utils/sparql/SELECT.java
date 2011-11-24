@@ -35,7 +35,7 @@ public class SELECT extends SparqlQuery {
 
 	@Override
 	public String verbalize() {
-		return "SELECT " + this.content + "\n";
+		return "SELECT " + (next instanceof DISTINCT ? "DISTINCT " : "") + this.content + "\n";
 	}
 
 }
