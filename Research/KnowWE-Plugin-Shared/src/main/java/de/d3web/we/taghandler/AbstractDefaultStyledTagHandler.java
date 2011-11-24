@@ -29,11 +29,12 @@ import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.taghandler.TagHandlerTypeContent;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolUtils;
 
 /**
- * A bas class for tag handlers having their rendered wiki markup content
+ * A base class for tag handlers having their rendered wiki markup content
  * integrated in a section like for DefaultMarkupTypes. It automatically support
  * the tool extensions, identically to DefaultMarkupType.
  * 
@@ -41,6 +42,9 @@ import de.knowwe.tools.ToolUtils;
  * @created 15.10.2010
  */
 public abstract class AbstractDefaultStyledTagHandler extends AbstractTagHandler {
+
+	private static DefaultMarkupRenderer<DefaultMarkupType> defaultMarkupRenderer =
+			new DefaultMarkupRenderer<DefaultMarkupType>();
 
 	public AbstractDefaultStyledTagHandler(String name) {
 		super(name);
@@ -60,8 +64,8 @@ public abstract class AbstractDefaultStyledTagHandler extends AbstractTagHandler
 
 		StringBuilder buffer = new StringBuilder();
 		String cssClassName = "type_" + section.get().getName();
-		DefaultMarkupRenderer.renderDefaultMarkupStyled(
-				getTagName(), content, sectionID, cssClassName, tools, buffer, null);
+		defaultMarkupRenderer.renderDefaultMarkupStyled(
+				getTagName(), content, sectionID, cssClassName, tools, userContext, buffer);
 		return buffer.toString();
 	}
 

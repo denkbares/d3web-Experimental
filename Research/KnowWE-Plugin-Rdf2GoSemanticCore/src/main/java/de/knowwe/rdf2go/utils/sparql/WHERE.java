@@ -31,7 +31,7 @@ public class WHERE extends SparqlQuery {
 
 	@Override
 	public String verbalize() {
-		return "WHERE { " + content + " }\n";
+		return "WHERE { " + content + "}\n";
 	}
 
 	@Override
