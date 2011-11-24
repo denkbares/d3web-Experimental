@@ -72,6 +72,12 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
 		st.setAttribute("realAnswerType", "oc");
 		st.setAttribute("parentFullId", getID(to));// getName().replace(" ",
 													// "_"));
+
+		String resString = c.getInfoStore().getValue(ProKEtProperties.POPUP);
+		if (resString != null) {
+			st.setAttribute("tooltip", resString);
+		}
+
 		st.setAttribute("text", c.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 		if (to.getInfoStore().getValue(ProKEtProperties.IMAGE) != null) {

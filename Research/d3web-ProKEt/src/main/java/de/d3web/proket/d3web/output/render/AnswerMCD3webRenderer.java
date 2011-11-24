@@ -77,6 +77,11 @@ public class AnswerMCD3webRenderer extends AbstractD3webRenderer implements Answ
 			st.setAttribute("imageAnswer", "true");
 		}
 
+		String resString = c.getInfoStore().getValue(ProKEtProperties.POPUP);
+		if (resString != null) {
+			st.setAttribute("tooltip", resString);
+		}
+
 		Blackboard bb = d3webSession.getBlackboard();
 		Value value = bb.getValue((ValueObject) to);
 

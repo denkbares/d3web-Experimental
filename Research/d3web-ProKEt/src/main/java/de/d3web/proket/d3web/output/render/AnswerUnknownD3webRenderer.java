@@ -31,6 +31,7 @@ import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webUtils;
+import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
@@ -65,6 +66,13 @@ public class AnswerUnknownD3webRenderer extends AbstractD3webRenderer implements
 		if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
 			st.setAttribute("readonly", "true");
 			st.setAttribute("inactive", "true");
+		}
+
+		if (c != null) {
+			String resString = c.getInfoStore().getValue(ProKEtProperties.POPUP);
+			if (resString != null) {
+				st.setAttribute("tooltip", resString);
+			}
 		}
 
 		// QContainer indicated

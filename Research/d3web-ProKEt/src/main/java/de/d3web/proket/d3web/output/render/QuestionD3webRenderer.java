@@ -78,7 +78,6 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 		st.setAttribute("title", to.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
-		// TODO extend for HERNIA --> Popup in separate Window?!
 		// read html popups from properties
 		String resString = to.getInfoStore().getValue(ProKEtProperties.POPUP);
 		if (resString != null) {

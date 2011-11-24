@@ -8,6 +8,7 @@
 				</td>
 				<td id="text-$fullId$" width="95%" $if(inactive)$ class="inactive" $endif$>
 					Unknown
+					$Tooltip()$
 				</td>
 			</tr>
 		</table>

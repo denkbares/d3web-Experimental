@@ -5,8 +5,8 @@
 		$text$
 		<table>
 			<tr>
-				<td width="90%" valign="center">
-					<img $if(width)$width="$width$"$endif$ $if(height)$height="$height$"$endif$ src="kbimg/$image$" alt="$image$" 
+				<td valign="center">
+					<img style="margin-right: 15px" $if(width)$width="$width$"$endif$ $if(height)$height="$height$"$endif$ src="kbimg/$image$" alt="$image$" 
 					$if(inactive)$
 						usemap="">
 					$else$
@@ -16,7 +16,7 @@
 							</map>
 					$endif$
 				</td>
-				<td valign="center">
+				<td valign="center" width="100%">
 					$if(children)$$children$$endif$
 				</td>
 		</table>
