@@ -80,6 +80,28 @@
 		<parameter id="css" value="default.css" />
 	</extension>
 	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="ApproximateCoveringListMarkup">
+		<parameter id="class"
+			value="de.d3web.we.covering.ApproximateCoveringListMarkup" />
+		<parameter id="name" value="ApproximateCoveringListMarkup" />
+		<parameter id="description" value="Type ApproximateCoveringListMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="ApproximateRulesMarkup">
+		<parameter id="class"
+			value="de.d3web.we.rules.ApproximateRulesMarkup" />
+		<parameter id="name" value="ApproximateRulesMarkup" />
+		<parameter id="description" value="Type ApproximateRulesMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="TableExportAction">
 		<parameter id="class"

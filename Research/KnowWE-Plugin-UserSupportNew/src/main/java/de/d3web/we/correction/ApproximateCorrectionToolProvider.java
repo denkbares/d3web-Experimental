@@ -24,14 +24,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import de.d3web.plugin.Extension;
-import de.d3web.plugin.PluginManager;
 import de.d3web.we.algorithm.Suggestion;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.ScopeUtils;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
@@ -96,22 +93,22 @@ public class ApproximateCorrectionToolProvider implements ToolProvider {
 		return tools;
 	}
 
-	private static ApproximateCorrectionProvider[] getProviders(Section<?> section) {
-		Extension[] extensions = PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
-				"ApproximateCorrectionProviderImpl");
-		extensions = PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
-				"ApproximateCorrectionToolProvider");
-		extensions = PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
-				"ApproximateCorrectionProvider");
-		extensions = ScopeUtils.getMatchingExtensions(extensions, section);
-		ApproximateCorrectionProvider[] providers = new ApproximateCorrectionProvider[extensions.length];
-
-		for (int i = 0; i < extensions.length; i++) {
-			Extension extension = extensions[i];
-			providers[i] = (ApproximateCorrectionProvider) extension.getSingleton();
-		}
-
-		return providers;
-	}
+	//	private static ApproximateCorrectionProvider[] getProviders(Section<?> section) {
+	//		Extension[] extensions = PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
+	//				"ApproximateCorrectionProviderImpl");
+	//		extensions = PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
+	//				"ApproximateCorrectionToolProvider");
+	//		extensions = PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
+	//				"ApproximateCorrectionProvider");
+	//		extensions = ScopeUtils.getMatchingExtensions(extensions, section);
+	//		ApproximateCorrectionProvider[] providers = new ApproximateCorrectionProvider[extensions.length];
+	//
+	//		for (int i = 0; i < extensions.length; i++) {
+	//			Extension extension = extensions[i];
+	//			providers[i] = (ApproximateCorrectionProvider) extension.getSingleton();
+	//		}
+	//
+	//		return providers;
+	//	}
 
 }
