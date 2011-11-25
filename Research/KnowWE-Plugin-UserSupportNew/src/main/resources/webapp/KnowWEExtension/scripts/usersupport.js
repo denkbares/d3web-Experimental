@@ -123,6 +123,33 @@ KNOWWE.plugin.usersupport = function() {
 			new _KA(options).send();
 
 		},
+		
+		/**
+		 * Performs correction for a given Section ID and correction
+		 */
+		doCorrection : function(sectionID, correction) {
+			var params = {
+					action : 'KDOMReplaceTermUserSupportAction',
+					TargetNamespace :  sectionID,
+					KWiki_Topic : KNOWWE.helper.gup('page'),
+					KWikitext : encodeURIComponent(correction.replace(/\s*$/im,""))
+			};
+
+			var options = {
+					url : KNOWWE.core.util.getURL(params),
+					loader : true,
+					response : {
+						action : 'none',
+						fn : function() { 
+							window.location.reload();
+						},
+						onError : function(http) {
+							KNOWWE.helper.message.showMessage(http.responseText, "AJAX call failed");
+						}
+					}
+			};
+			new _KA(options).send();  
+		}
 	}
 }();
 

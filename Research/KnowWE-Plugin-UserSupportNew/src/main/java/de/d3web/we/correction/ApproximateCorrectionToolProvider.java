@@ -87,7 +87,7 @@ public class ApproximateCorrectionToolProvider implements ToolProvider {
 					"KnowWEExtension/images/correction_change.gif",
 					suggestions.get(i).getSuggestion(),
 					"",
-					"KNOWWE.plugin.correction.doCorrection('" + section.getID() + "', '"
+					"KNOWWE.plugin.usersupport.doCorrection('" + section.getID() + "', '"
 							+ suggestions.get(i).getSuggestion() + "');",
 							"correct/item"
 					);

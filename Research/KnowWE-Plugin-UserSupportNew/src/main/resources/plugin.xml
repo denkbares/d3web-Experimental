@@ -14,7 +14,30 @@
 			<export prefix="*" />
 		</library>
 	</runtime>
-	
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+        id="UserSupportInstantEditToolProvider">
+        <parameter id="class"
+            value="de.d3web.we.instantedit.UserSupportInstantEditToolProvider" />
+        <parameter id="name" value="UserSupportInstantEditToolProvider" />
+        <parameter id="description"
+            value="Offers a button for quick editing a certain section." />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="script" value="KnowWE-Plugin-InstantEdit.js" />
+        <parameter id="script" value="KnowWE-Plugin-AutoComplete.js" />
+		<parameter id="css" value="codemirror.css" />
+		<parameter id="script" value="simple-hint.js" />
+		<parameter id="script" value="javascript-hint.js" />
+        <parameter id="script" value="UserSupportInstantEdit.js" />
+        <parameter id="script" value="TextArea.js" />
+        <parameter id="css" value="KnowWE-Plugin-InstantEdit.css" />
+        <parameter id="css" value="DefaultEditTool.css" />
+        <parameter id="scope" value="CausalDiagnosisScoreMarkup" />
+        <parameter id="scope" value="DecisionTableMarkup" />
+        <parameter id="scope" value="HeuristicDiagnosisTableMarkup" />
+    </extension>
+ 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="CausalDiagnosisScoreMarkup">
 		<parameter id="class"
@@ -26,9 +49,6 @@
 		<parameter id="scope" value="root" />
 		<parameter id="css" value="usersupport.css" />
 		<parameter id="script" value="usersupport.js" />
-		<parameter id="script" value="codemirror.js" />
-		<parameter id="css" value="codemirror.css" />
-		<parameter id="script" value="javascript.js" />
 		<parameter id="css" value="default.css" />
 	</extension>
 	
@@ -43,9 +63,6 @@
 		<parameter id="scope" value="root" />
 		<parameter id="css" value="usersupport.css" />
 		<parameter id="script" value="usersupport.js" />
-		<parameter id="script" value="codemirror.js" />
-		<parameter id="css" value="codemirror.css" />
-		<parameter id="script" value="javascript.js" />
 		<parameter id="css" value="default.css" />
 	</extension>
 	
@@ -60,9 +77,6 @@
 		<parameter id="scope" value="root" />
 		<parameter id="css" value="usersupport.css" />
 		<parameter id="script" value="usersupport.js" />
-		<parameter id="script" value="codemirror.js" />
-		<parameter id="css" value="codemirror.css" />
-		<parameter id="script" value="javascript.js" />
 		<parameter id="css" value="default.css" />
 	</extension>
 	
@@ -86,26 +100,16 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
-
-	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
-        id="UserSupportInstantEditToolProvider">
-        <parameter id="class"
-            value="de.d3web.we.instantedit.UserSupportInstantEditToolProvider" />
-        <parameter id="name" value="UserSupportInstantEditToolProvider" />
-        <parameter id="description"
-            value="Offers a button for quick editing a certain section." />
-        <parameter id="version" value="1.0" />
-        <parameter id="priority" value="5" />
-        <parameter id="script" value="KnowWE-Plugin-InstantEdit.js" />
-        <parameter id="script" value="KnowWE-Plugin-AutoComplete.js" />
-        <parameter id="script" value="UserSupportInstantEdit.js" />
-        <parameter id="script" value="TextArea.js" />
-        <parameter id="css" value="KnowWE-Plugin-InstantEdit.css" />
-        <parameter id="css" value="DefaultEditTool.css" />
-        <parameter id="scope" value="CausalDiagnosisScoreMarkup" />
-        <parameter id="scope" value="DecisionTableMarkup" />
-        <parameter id="scope" value="HeuristicDiagnosisTableMarkup" />
-    </extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="KDOMReplaceTermUserSupportAction">
+		<parameter id="class"
+			value="de.d3web.we.correction.action.KDOMReplaceTermUserSupportAction" />
+		<parameter id="name" value="KDOMReplaceTermUserSupportAction" />
+		<parameter id="description" value="Action KDOMReplaceTermUserSupportAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
     
 	<!--extension plugin-id="KnowWEExtensionPoints" point-id="CorrectionProvider"
 		id="ApproximateCorrectionProviderImpl">
@@ -129,6 +133,8 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="script" value="correction.js" />
+		<parameter id="script" value="codemirror.js" />
+		<parameter id="script" value="javascript.js" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"

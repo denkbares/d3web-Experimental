@@ -180,6 +180,7 @@ public class CausalDiagnosisScore extends AbstractType {
 
 					// Normal
 					if (cellText.equals("+")) {
+						// TODO what if it no double?
 						rel.setWeight(Double.parseDouble(weightList.get(j)));
 						model.addRelation(rel);
 					}

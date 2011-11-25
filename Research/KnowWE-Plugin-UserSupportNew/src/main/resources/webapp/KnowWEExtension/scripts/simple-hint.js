@@ -1,17 +1,4 @@
 (function() {
-  // Minimal event-handling wrapper.
-  function stopEvent() {
-    if (this.preventDefault) {this.preventDefault(); this.stopPropagation();}
-    else {this.returnValue = false; this.cancelBubble = true;}
-  }
-  function connect(node, type, handler) {
-    function wrapHandler(event) {handler(event || window.event);}
-    if (typeof node.addEventListener == "function")
-      node.addEventListener(type, wrapHandler, false);
-    else
-      node.attachEvent("on" + type, wrapHandler);
-  }
-
   CodeMirror.simpleHint = function(editor, getHints) {
     // We want a single cursor position.
     if (editor.somethingSelected()) return;
@@ -41,6 +28,9 @@
     var pos = editor.cursorCoords();
     complete.style.left = pos.x + "px";
     complete.style.top = pos.yBot + "px";
+    
+    complete.style.position = "absolute";
+    
     document.body.appendChild(complete);
     // Hack to hide the scrollbar.
     if (completions.length <= 10)
@@ -57,19 +47,19 @@
       close();
       setTimeout(function(){editor.focus();}, 50);
     }
-    connect(sel, "blur", close);
-    connect(sel, "keydown", function(event) {
+    CodeMirror.connect(sel, "blur", close);
+    CodeMirror.connect(sel, "keydown", function(event) {
       var code = event.keyCode;
       // Enter
-      if (code == 13) {stopEvent(event); pick();}
+      if (code == 13) {CodeMirror.e_stop(event); pick();}
       // Escape
-      else if (code == 27) {stopEvent(event); close(); editor.focus();}
+      else if (code == 27) {CodeMirror.e_stop(event); close(); editor.focus();}
       else if (code != 38 && code != 40) {
         close(); editor.focus();
         setTimeout(function(){CodeMirror.simpleHint(editor, getHints);}, 50);
       }
     });
-    connect(sel, "dblclick", pick);
+    CodeMirror.connect(sel, "dblclick", pick);
 
     sel.focus();
     // Opera sometimes ignores focusing a freshly created node
