@@ -1,0 +1,145 @@
+<MedicineButtons>
+
+def ImportSettings
+def ExportSettings
+def exportToDB
+
+def SqlIp
+def SqlDb
+def SqlUser
+def SqlPw
+def SqlTable
+def useMarkup
+def SqlId
+def idTag
+def hasId
+def subject
+def parent
+
+def MedicineParameter
+def tag
+def split
+def splitPattern
+
+ttl: SqlIp type:: DatatypeProperty.
+ttl: SqlDb type:: DatatypeProperty.
+ttl: SqlUser type:: DatatypeProperty.
+ttl: SqlPw type:: DatatypeProperty.
+ttl: SqlTable type:: DatatypeProperty.
+ttl: useMarkup type:: DatatypeProperty.
+ttl: SqlId type:: DatatypeProperty.
+ttl: idTag type:: ObjectProperty.
+ttl: hasId type:: DatatypeProperty.
+ttl: subject type:: DatatypeProperty.
+ttl: parent type:: DatatypeProperty.
+ttl: split type:: DatatypeProperty.
+ttl: splitPattern type:: DatatypeProperty.
+ttl: exportToDB type:: DatatypeProperty.
+
+ttl: ImportSettings
+                    SqlIp::      'localhost';
+                    SqlDb::      'ekg';
+                    SqlUser::    'root';
+                    SqlPw::      'Asdf';
+                    SqlTable::   'ekgkatalog';
+                    SqlId::      'Leistung';
+                    idTag::      'hasId';
+                    subject::    'textfull';
+                    parent::     'Parent';
+                    useMarkup::  'n3single'.
+
+                    
+ttl: ExportSettings
+                    exportToDB:: 'false';
+                    SqlIp::      'localhost';
+                    SqlDb::      'ekg';
+                    SqlUser::    'root';
+                    SqlPw::      'Asdf';
+                    SqlTable::   'Medicineexport';
+                    SqlId::      'Leistung';
+                    idTag::      'hasId';
+                    subject::    'textfull';
+                    parent::     'Parent';
+                    useMarkup::  'n3single'.
+                    
+ttl: tag type:: ObjectProperty.
+
+def dataType
+def integer
+def string
+def boolean
+ttl: dataType type:: Class.
+ttl: integer type:: dataType.
+ttl: string type:: dataType.
+ttl: boolean type:: dataType.
+
+def Typ
+def hasType
+ttl: hasType type:: DatatypeProperty.
+ttl: Typ 
+            type::     MedicineParameter;
+            dataType:: integer;
+            tag::      hasType.
+
+def Text
+def hasTitle
+ttl: hasTitle type:: DatatypeProperty.
+ttl: Text
+            type::     MedicineParameter;
+            dataType:: string;
+            tag::      hasTitle.
+
+def singleChoice
+def isSingleChoice
+ttl: isSingleChoice type:: DatatypeProperty.
+ttl: singleChoice
+            type::     MedicineParameter;
+            dataType:: integer;
+            tag::      isSingleChoice.
+
+def parentAbnorm
+def parentIsAbnorm
+ttl: parentIsAbnorm type:: DatatypeProperty.
+ttl: parentAbnorm
+            type::     MedicineParameter;
+            dataType:: integer;
+            tag::      parentIsAbnorm.
+
+def variants
+def hasVariant
+ttl: hasVariant type:: DatatypeProperty.
+ttl: variants
+            type::         MedicineParameter;
+            dataType::     string;
+            tag::          hasVariant;
+            splitPattern:: '\s\|\s';
+            split::        '|'.
+
+def einheit
+def isUnit
+ttl: isUnit type:: DatatypeProperty.
+ttl: einheit
+            type::     MedicineParameter;
+            dataType:: string;
+            tag::      isUnit.
+            
+def parentNeeded
+def parentIsNeeded
+ttl: parentIsNeeded type:: DatatypeProperty.
+ttl: parentNeeded
+            type::     MedicineParameter;
+            dataType:: integer;
+            tag::      parentIsNeeded.
+
+def oneTimePerDoc
+def isOneTimePerDoc
+ttl: isOneTimePerDoc type:: DatatypeProperty.
+
+ttl: oneTimePerDoc
+            type::     MedicineParameter;
+            dataType:: integer;
+            tag::      isOneTimePerDoc.
+
+
+def directSubclassOf
+ttl: directSubclassOf subpropertyOf:: subclassOf.

@@ -1,0 +1,72 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-MedicineOntology" version="0.0.1">
+	
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+	</requires>
+	
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="ButtonType">
+		<parameter id="class"
+			value="de.knowwe.medicine.ButtonType" />
+		<parameter id="name" value="ButtonType" />
+		<parameter id="description" value="Type ButtonType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="2.5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="WriteDB">
+		<parameter id="class"
+			value="de.knowwe.medicine.action.WriteDB" />
+		<parameter id="name" value="WriteDB" />
+		<parameter id="description" value="Action WriteDB" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="ReadDB">
+		<parameter id="class"
+			value="de.knowwe.medicine.action.ReadDB" />
+		<parameter id="name" value="ReadDB" />
+		<parameter id="description" value="Action ReadDB" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="TableExistCheckAction">
+		<parameter id="class"
+			value="de.knowwe.medicine.action.TableExistCheckAction" />
+		<parameter id="name" value="TableExistCheckAction" />
+		<parameter id="description" value="Action TableExistCheckAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="ConceptPageLinkProvider">
+		<parameter id="class"
+			value="de.knowwe.tool.conceptLink.ConceptPageLinkProvider" />
+		<parameter id="name" value="ConceptPageLinkProvider" />
+		<parameter id="description"
+			value="Offer a link to the page with the corresponding name." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="TermReference" />
+
+	</extension>
+	
+</plugin>
