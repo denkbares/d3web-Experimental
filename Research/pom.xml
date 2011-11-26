@@ -220,6 +220,7 @@
 		<module>KnowWE-Plugin-UserSupportNew</module>
 		<module>KnowWE-Plugin-RDFS-SubclassingTree</module>
 		<module>KnowWE-Plugin-ProKEt</module>
+		<module>KnowWE-Plugin-MedicineOntology</module>
 	</modules>
 	<repositories>
 		<repository>
