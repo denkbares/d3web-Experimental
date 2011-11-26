@@ -1,0 +1,2 @@
+The project contains all components which are specific for the Medicine-Ontology, which is used to define a hierarchy of medical terms.
+Especially it is used to import from / export to mysql databases.
