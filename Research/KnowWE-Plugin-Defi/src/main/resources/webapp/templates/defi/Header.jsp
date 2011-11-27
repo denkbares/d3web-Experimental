@@ -87,9 +87,9 @@
 			</div>
 			<div>
 				<a href="Wiki.jsp?page=Diskussion" class="infobox_link" onmouseover="document.getElementById('infobox2').style.backgroundColor = '#eeeeee';" onmouseout="document.getElementById('infobox2').style.backgroundColor = '#F9F9F9';"><img
-				src="KnowWEExtension/images/Gruppe.jpg" height="77px" width="111px"
-				alt="Gruppe" style="margin:14px 0 0 0;" />
-				<span style="margin:10px 0 0 0;" id="infobox2">Diskussion</span></a>
+				src="KnowWEExtension/images/Gruppe.png" height="100px" width="133px"
+				alt="Gruppe" style="margin:3px 0 -2px 0;" />
+				<span style="margin:0 0 0 0;" id="infobox2">Diskussion</span></a>
 			</div>
 		</div>
 
