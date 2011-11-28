@@ -20,14 +20,14 @@
 package de.knowwe.kdom.manchester.types;
 
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.termObject.IRITermReference;
+import de.knowwe.rdfs.IRITermRef;
 
 /**
- * 
+ *
  * @author Stefan Mark
  * @created 16.05.2011
  */
-public class ObjectPropertyExpression extends IRITermReference {
+public class ObjectPropertyExpression extends IRITermRef {
 
 	public static final String PATTERN = "\\b[a-z][A-Za-z0-9:]+\\b";
 

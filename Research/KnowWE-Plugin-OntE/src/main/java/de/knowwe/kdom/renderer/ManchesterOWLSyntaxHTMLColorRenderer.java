@@ -23,7 +23,6 @@ import java.util.StringTokenizer;
 
 import org.semanticweb.owlapi.model.OWLAxiom;
 
-import de.knowwe.core.compile.TerminologyHandler;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.onte.editor.OWLApiAxiomCache;
@@ -36,12 +35,6 @@ import de.knowwe.util.ManchesterSyntaxKeywords;
  * @created 17.10.2011
  */
 public class ManchesterOWLSyntaxHTMLColorRenderer {
-
-	private final TerminologyHandler terminology;
-
-	public ManchesterOWLSyntaxHTMLColorRenderer(TerminologyHandler terminology) {
-		this.terminology = terminology;
-	}
 
 	/**
 	 *
@@ -69,7 +62,7 @@ public class ManchesterOWLSyntaxHTMLColorRenderer {
 				doc.append(curToken);
 				doc.append("</span> ");
 			}
-			else if (terminology.getAllGlobalTerms().contains(curToken)) {
+			else if (OnteRenderingUtils.isKnownTerm(curToken)) {
 				doc.append(" <span style=\"color:rgb(25, 180, 120);\">");
 				doc.append(curToken);
 				doc.append("</span> ");
@@ -83,7 +76,7 @@ public class ManchesterOWLSyntaxHTMLColorRenderer {
 		Section<? extends Type> section = OWLApiAxiomCache.getInstance().lookUpSection(axiom,
 				OWLApiAxiomCache.STORE_CACHE);
 		if (section != null) {
-			renderHyperlink(section, doc);
+			OnteRenderingUtils.renderHyperlink(section);
 		}
 	}
 
@@ -127,16 +120,5 @@ public class ManchesterOWLSyntaxHTMLColorRenderer {
 			return true;
 		}
 		return false;
-	}
-
-
-
-	public static void renderHyperlink(Section<? extends Type> section, StringBuilder doc) {
-		doc.append("<br /><span style=\"font-size:9px;padding-left:30px;\">(Asserted in local article: ");
-		doc.append("<a href=\"Wiki.jsp?page=" + section.getArticle().getTitle()
-				+ "\" title=\"Goto definition article\">");
-		doc.append(section.getArticle().getTitle());
-		doc.append("</a>");
-		doc.append(")</span>");
 	}
 }

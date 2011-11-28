@@ -30,6 +30,7 @@ import de.d3web.we.ci4ke.testing.AbstractCITest;
 import de.d3web.we.ci4ke.testing.CITestResult;
 import de.d3web.we.ci4ke.testing.CITestResult.Type;
 import de.knowwe.kdom.manchester.AxiomFactory;
+import de.knowwe.kdom.renderer.OnteRenderingUtils;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.taghandler.OWLApiTagHandlerUtil;
 
@@ -101,7 +102,7 @@ public class OntologyIndividualExistTest extends AbstractCITest {
 				message.append("<strong>");
 				message.append(individual);
 				message.append("</strong> ");
-				message.append(OnteCi4keUtil.renderHyperlink(individual));
+				message.append(OnteRenderingUtils.renderHyperlink(individual));
 				message.append(" ");
 
 			}

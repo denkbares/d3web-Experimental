@@ -19,12 +19,6 @@
  */
 package de.knowwe.onte.ci4ke;
 
-import java.util.Collection;
-
-import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.objects.TermDefinition;
-import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * Simple helper functions for the ci4ke integration.
@@ -34,20 +28,5 @@ import de.knowwe.core.utils.KnowWEUtils;
  */
 public class OnteCi4keUtil {
 
-	public static String renderHyperlink(String conceptName) {
-		Collection<Section<? extends TermDefinition>> terminology = KnowWEUtils.getTerminologyHandler(
-				KnowWEEnvironment.DEFAULT_WEB).getAllGlobalTermDefs();
 
-		StringBuilder link = new StringBuilder();
-		for (Section<? extends TermDefinition> section : terminology) {
-			if (section.getOriginalText().equals(conceptName)) {
-				link.append("<span style=\"font-size:9px;\">(Asserted in local article: ");
-				link.append("<a href=\"Wiki.jsp?page=" + section.getArticle().getTitle()
-						+ "\" title=\"Goto definition article\">");
-				link.append(section.getArticle().getTitle());
-				link.append("</a>)</span>");
-			}
-		}
-		return link.toString();
-	}
 }

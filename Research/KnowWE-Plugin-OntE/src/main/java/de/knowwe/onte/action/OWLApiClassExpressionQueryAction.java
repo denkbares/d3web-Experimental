@@ -38,7 +38,6 @@ import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.renderer.ManchesterOWLSyntaxHTMLColorRenderer;
 import de.knowwe.owlapi.query.OWLApiQueryEngine;
 import de.knowwe.taghandler.OWLApiTagHandlerUtil;
@@ -64,8 +63,7 @@ public class OWLApiClassExpressionQueryAction extends AbstractAction {
 		String query = context.getParameter("query");
 		String option = context.getParameter("options");
 
-		renderer = new ManchesterOWLSyntaxHTMLColorRenderer(
-				KnowWEUtils.getTerminologyHandler(context.getWeb()));
+		renderer = new ManchesterOWLSyntaxHTMLColorRenderer();
 
 		if (query != null && !query.trim().isEmpty()) {
 			query = query.replace(",", "");

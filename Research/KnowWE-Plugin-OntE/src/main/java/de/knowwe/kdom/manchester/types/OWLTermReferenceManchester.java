@@ -20,6 +20,7 @@
 package de.knowwe.kdom.manchester.types;
 
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.rdfs.IRITermRef;
 import de.knowwe.termObject.IRITermReference;
 
 /**
@@ -29,7 +30,7 @@ import de.knowwe.termObject.IRITermReference;
  * @author Stefan Mark
  * @created 18.05.2011
  */
-public class OWLTermReferenceManchester extends IRITermReference {
+public class OWLTermReferenceManchester extends IRITermRef {
 
 	public static final String PATTERN = "\\b([A-Z]|owl)[A-Za-z0-9:]+\\b";
 

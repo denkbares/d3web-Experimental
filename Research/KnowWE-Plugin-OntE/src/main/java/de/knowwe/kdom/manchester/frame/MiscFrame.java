@@ -23,12 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
+import de.knowwe.kdom.manchester.compile.MiscFrameCompileScript;
 import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.kdom.manchester.types.Delimiter;
 import de.knowwe.kdom.manchester.types.Keyword;
@@ -36,7 +39,6 @@ import de.knowwe.kdom.manchester.types.NonTerminalList;
 import de.knowwe.kdom.manchester.types.NonTerminalListContent;
 import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
 import de.knowwe.kdom.manchester.types.ObjectPropertyExpression;
-import de.knowwe.kdom.subtreehandler.MiscFrameSubtreeHandler;
 
 /**
  * <p>
@@ -58,7 +60,7 @@ import de.knowwe.kdom.subtreehandler.MiscFrameSubtreeHandler;
  * @author Stefan Mark
  * @created 22.09.2011
  */
-public class MiscFrame extends DefaultFrame {
+public class MiscFrame extends DefaultFrame implements KnowledgeUnit<MiscFrame> {
 
 	public static final String KEYWORD_SAME_INDIVIDUAL = "SameIndividual[:]?";
 	public static final String KEYWORD_DIFFERENT_INDIVIDUAL = "DifferentIndividuals[:]?";
@@ -86,7 +88,7 @@ public class MiscFrame extends DefaultFrame {
 
 		Pattern p = ManchesterSyntaxUtil.getFramePattern(FRAME_KEYWORDS);
 		this.setSectionFinder(new RegexSectionFinder(p));
-		this.addSubtreeHandler(new MiscFrameSubtreeHandler());
+		// this.addSubtreeHandler(new MiscFrameSubtreeHandler());
 
 		List<Type> types = new ArrayList<Type>();
 
@@ -247,5 +249,10 @@ public class MiscFrame extends DefaultFrame {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public KnowledgeUnitCompileScript getCompileScript() {
+		return new MiscFrameCompileScript();
 	}
 }

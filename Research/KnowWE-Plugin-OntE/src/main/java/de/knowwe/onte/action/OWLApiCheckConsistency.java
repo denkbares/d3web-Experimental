@@ -31,18 +31,17 @@ import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.renderer.ManchesterOWLSyntaxHTMLColorRenderer;
 import de.knowwe.onte.editor.OWLApiAxiomCache;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.taghandler.OWLApiTagHandlerUtil;
 
 /**
- * 
+ *
  * We can determine if the pizza ontology is actually consistent. (If an
  * ontology is inconsistent then owl:Thing is equivalent to owl:Nothing - i.e.
  * there can't be any models of the ontology)
- * 
+ *
  * @author Stefan Mark
  * @created 12.10.2011
  */
@@ -65,8 +64,7 @@ public class OWLApiCheckConsistency extends AbstractAction {
 		Set<OWLClass> unsatisfiable = unsatNodes.getEntitiesMinusBottom();
 		if (!unsatisfiable.isEmpty()) {
 
-			ManchesterOWLSyntaxHTMLColorRenderer renderer = new ManchesterOWLSyntaxHTMLColorRenderer(
-					KnowWEUtils.getTerminologyHandler(context.getWeb()));
+			ManchesterOWLSyntaxHTMLColorRenderer renderer = new ManchesterOWLSyntaxHTMLColorRenderer();
 
 			html.append("<dd><small>(Check any axiom in order to remove it and to restore consistency! Note: Changes cannot be undone!)</small></dd>");
 

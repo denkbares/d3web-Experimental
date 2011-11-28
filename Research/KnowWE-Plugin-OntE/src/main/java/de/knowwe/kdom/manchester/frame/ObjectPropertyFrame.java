@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -30,6 +32,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
+import de.knowwe.kdom.manchester.compile.ObjectPropertyCompileScript;
 import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.kdom.manchester.types.Characteristics;
 import de.knowwe.kdom.manchester.types.DisjointWith;
@@ -38,7 +41,6 @@ import de.knowwe.kdom.manchester.types.EquivalentTo;
 import de.knowwe.kdom.manchester.types.Keyword;
 import de.knowwe.kdom.manchester.types.Range;
 import de.knowwe.kdom.manchester.types.SubPropertyOf;
-import de.knowwe.kdom.subtreehandler.ObjectPropertySubtreeHandler;
 import de.knowwe.termObject.ObjectPropertyIRIDefinition;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
@@ -49,7 +51,7 @@ import de.knowwe.util.ManchesterSyntaxKeywords;
  * @author Stefan Mark
  * @created 24.05.2011
  */
-public class ObjectPropertyFrame extends DefaultFrame {
+public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<ObjectPropertyFrame> {
 
 	public static final String KEYWORD;
 	public static final String KEYWORDS;
@@ -77,14 +79,14 @@ public class ObjectPropertyFrame extends DefaultFrame {
 	 */
 	public ObjectPropertyFrame() {
 
-		this.addSubtreeHandler(new ObjectPropertySubtreeHandler());
+		// this.addSubtreeHandler(new ObjectPropertySubtreeHandler());
 
 		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
 		this.setSectionFinder(new RegexSectionFinder(p));
 
 		List<Type> types = new ArrayList<Type>();
 
-		types.add(new ObjectPropertyDefinition());
+		types.add(ObjectPropertyDefinition.getInstance());
 		types.add(new Annotations(KEYWORDS));
 
 		SubPropertyOf sub = new SubPropertyOf(KEYWORDS);
@@ -321,6 +323,11 @@ public class ObjectPropertyFrame extends DefaultFrame {
 	public Section<SubPropertyChain> getSubPropertyChain(Section<ObjectPropertyFrame> section) {
 		return Sections.findSuccessor(section, SubPropertyChain.class);
 	}
+
+	@Override
+	public KnowledgeUnitCompileScript getCompileScript() {
+		return new ObjectPropertyCompileScript();
+	}
 }
 
 /**
@@ -333,7 +340,9 @@ class ObjectPropertyDefinition extends AbstractType {
 	// public static String PATTERN = ObjectPropertyFrame.KEYWORD +
 	// "\\p{Blank}+(.+)";
 
-	public ObjectPropertyDefinition() {
+	private static ObjectPropertyDefinition instance = null;
+
+	private ObjectPropertyDefinition() {
 
 		Pattern p = Pattern.compile(ObjectPropertyFrame.KEYWORD
 				+ ManchesterSyntaxUtil.getTillKeywordPattern(ObjectPropertyFrame.KEYWORDS),
@@ -347,6 +356,14 @@ class ObjectPropertyDefinition extends AbstractType {
 		owl.setSectionFinder(new AllTextFinderTrimmed());
 		this.addChildType(owl);
 	}
+
+	public static synchronized ObjectPropertyDefinition getInstance() {
+		if (instance == null) {
+			instance = new ObjectPropertyDefinition();
+		}
+		return instance;
+	}
+
 }
 
 /**

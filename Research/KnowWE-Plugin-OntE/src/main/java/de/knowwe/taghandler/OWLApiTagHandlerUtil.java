@@ -478,11 +478,12 @@ public class OWLApiTagHandlerUtil {
 		}
 	}
 
-	public static void renderHyperlink(Section<? extends Type> section, StringBuilder doc) {
+	public static void renderHyperlink(String conceptName, Section<? extends
+			Type> section, StringBuilder doc) {
 		if (section != null) {
 			doc.append("<a href=\"Wiki.jsp?page=" + section.getArticle().getTitle()
-				+ "\" title=\"Goto definition article\">");
-			doc.append(section.getArticle().getTitle());
+					+ "\" title=\"Goto defining article\">");
+			doc.append(conceptName);
 			doc.append("</a>");
 		}
 	}

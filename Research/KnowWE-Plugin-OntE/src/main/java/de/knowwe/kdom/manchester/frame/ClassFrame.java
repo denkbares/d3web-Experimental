@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -32,11 +34,11 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
+import de.knowwe.kdom.manchester.compile.ClassFrameCompileScript;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.kdom.manchester.types.EquivalentTo;
 import de.knowwe.kdom.manchester.types.Keyword;
-import de.knowwe.kdom.subtreehandler.ClassFrameSubtreeHandler;
 import de.knowwe.termObject.ClassIRIDefinition;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
@@ -48,7 +50,7 @@ import de.knowwe.util.ManchesterSyntaxKeywords;
  * @author Stefan Mark
  * @created 24.05.2011
  */
-public class ClassFrame extends DefaultFrame {
+public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame> {
 
 	public static final String KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.CLASS);
 
@@ -63,14 +65,14 @@ public class ClassFrame extends DefaultFrame {
 
 	public ClassFrame() {
 
-		this.addSubtreeHandler(new ClassFrameSubtreeHandler());
+		// this.addSubtreeHandler(new ClassFrameSubtreeHandler());
 
 		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
 		this.setSectionFinder(new RegexSectionFinder(p));
 
 		List<Type> types = new ArrayList<Type>();
 
-		types.add(new OWLClassDefinition());
+		types.add(OWLClassDefinition.getInstance());
 		types.add(new Annotations(KEYWORDS));
 
 		EquivalentTo to = new EquivalentTo(ClassFrame.KEYWORDS);
@@ -92,7 +94,7 @@ public class ClassFrame extends DefaultFrame {
 	 * @param Section<ClassFrame> section
 	 * @return The found section
 	 */
-	public boolean hasClassDefinition(Section<ClassFrame> section) {
+	public boolean hasClassDefinition(Section<? extends ClassFrame> section) {
 		return Sections.findSuccessor(section, OWLClass.class) != null;
 	}
 
@@ -104,7 +106,7 @@ public class ClassFrame extends DefaultFrame {
 	 * @param Section<ClassFrame> section
 	 * @return The found section
 	 */
-	public Section<? extends Type> getClassDefinition(Section<ClassFrame> section) {
+	public Section<? extends Type> getClassDefinition(Section<? extends ClassFrame> section) {
 		return Sections.findSuccessor(section, OWLClass.class);
 	}
 
@@ -226,6 +228,11 @@ public class ClassFrame extends DefaultFrame {
 		}
 		return new ArrayList<Section<Annotation>>();
 	}
+
+	@Override
+	public KnowledgeUnitCompileScript getCompileScript() {
+		return new ClassFrameCompileScript();
+	}
 }
 
 /**
@@ -237,7 +244,9 @@ class OWLClassDefinition extends AbstractType {
 
 	public static String PATTERN = ClassFrame.KEYWORD + "\\p{Blank}+(.+)";
 
-	public OWLClassDefinition() {
+	private static OWLClassDefinition instance = null;
+
+	private OWLClassDefinition() {
 
 		Pattern p = Pattern.compile(PATTERN);
 		SectionFinder sf = new RegexSectionFinder(p, 0);
@@ -249,6 +258,13 @@ class OWLClassDefinition extends AbstractType {
 		OWLClass owl = new OWLClass();
 		owl.setSectionFinder(new AllTextFinderTrimmed());
 		this.addChildType(owl);
+	}
+
+	public static synchronized OWLClassDefinition getInstance() {
+		if (instance == null) {
+			instance = new OWLClassDefinition();
+		}
+		return instance;
 	}
 }
 
@@ -264,7 +280,6 @@ class OWLClass extends ClassIRIDefinition {
 
 	}
 }
-
 /**
  *
  *

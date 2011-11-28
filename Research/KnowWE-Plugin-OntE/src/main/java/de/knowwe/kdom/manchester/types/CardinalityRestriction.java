@@ -48,7 +48,9 @@ public class CardinalityRestriction extends AbstractType {
 
 	public static final String REGEX = Restriction.BEFORE_REGEX
 			+ KEYWORD_PATTERN
-			+ Restriction.AFTER_INTEGER;
+			+ Restriction.AFTER_REGEX;
+
+	// + Restriction.AFTER_INTEGER;
 
 	/**
 	 *

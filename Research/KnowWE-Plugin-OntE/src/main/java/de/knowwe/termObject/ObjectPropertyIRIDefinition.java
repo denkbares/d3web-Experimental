@@ -23,10 +23,9 @@ import de.knowwe.core.kdom.objects.KnowWETerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
-import de.knowwe.termObject.IRIEntityType.IRIDeclarationType;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
-public class ObjectPropertyIRIDefinition extends AbstractIRITermDefinition {
+public class ObjectPropertyIRIDefinition extends de.knowwe.rdfs.AbstractIRITermDefinition {
 
 
 	@SuppressWarnings("unchecked")
@@ -39,14 +38,21 @@ public class ObjectPropertyIRIDefinition extends AbstractIRITermDefinition {
 	}
 
 	@Override
-	public String getTermIdentifier(Section<? extends KnowWETerm<IRIEntityType>> s) {
+	public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
+		// TODO Auto-generated method stub
 		return s.getOriginalText();
 	}
 
-	@Override
-	protected IRIDeclarationType getIRIDeclarationType() {
-		return IRIDeclarationType.OBJECT_PROPERTY;
-	}
+	// @Override
+	// public String getTermIdentifier(Section<? extends
+	// KnowWETerm<IRIEntityType>> s) {
+	// return s.getOriginalText();
+	// }
+	//
+	// @Override
+	// protected IRIDeclarationType getIRIDeclarationType() {
+	// return IRIDeclarationType.OBJECT_PROPERTY;
+	// }
 }
 
 

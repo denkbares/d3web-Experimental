@@ -20,7 +20,7 @@ public class IRISectionFinder implements SectionFinder {
 	public static final char GREATER_THAN = '\u003e';
 
 	@Override
-	public List<SectionFinderResult> lookForSections(String text, Section father, Type type) {
+	public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 
 		String trimmed = text.trim();
 

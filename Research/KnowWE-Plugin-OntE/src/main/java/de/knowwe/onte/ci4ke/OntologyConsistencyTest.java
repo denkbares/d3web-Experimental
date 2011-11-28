@@ -29,6 +29,7 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import de.d3web.we.ci4ke.testing.AbstractCITest;
 import de.d3web.we.ci4ke.testing.CITestResult;
 import de.d3web.we.ci4ke.testing.CITestResult.Type;
+import de.knowwe.kdom.renderer.OnteRenderingUtils;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.taghandler.OWLApiTagHandlerUtil;
 
@@ -72,7 +73,7 @@ public class OntologyConsistencyTest extends AbstractCITest {
 				message.append("<strong>");
 				message.append(conceptName);
 				message.append("</strong> ");
-				message.append(OnteCi4keUtil.renderHyperlink(conceptName));
+				message.append(OnteRenderingUtils.renderHyperlink(conceptName));
 				message.append("<br />");
 
 			}

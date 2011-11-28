@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.knowwe.kdom.manchester.frame.ClassFrame;
+import de.knowwe.kdom.manchester.frame.DataPropertyFrame;
+import de.knowwe.kdom.manchester.frame.IndividualFrame;
 import de.knowwe.kdom.manchester.frame.ObjectPropertyFrame;
 
 /**
@@ -82,13 +84,13 @@ public enum ManchesterSyntaxKeywords {
 
 	SUPERCLASS_OF("SuperClassOf"),
 
-	EQUIVALENT_TO("EquivalentTo", ClassFrame.class),
+	EQUIVALENT_TO("EquivalentTo", ClassFrame.class, ObjectPropertyFrame.class, DataPropertyFrame.class),
 
 	EQUIVALENT_CLASSES("EquivalentClasses"),
 
 	EQUIVALENT_PROPERTIES("EquivalentProperties"),
 
-	DISJOINT_WITH("DisjointWith", ClassFrame.class),
+	DISJOINT_WITH("DisjointWith", ClassFrame.class, ObjectPropertyFrame.class, DataPropertyFrame.class),
 
 	INDIVIDUALS("Individuals"),
 
@@ -98,13 +100,13 @@ public enum ManchesterSyntaxKeywords {
 
 	DISJOINT_UNION_OF("DisjointUnionOf", ClassFrame.class),
 
-	FACTS("Facts"),
+	FACTS("Facts", IndividualFrame.class),
 
-	SAME_AS("SameAs"),
+	SAME_AS("SameAs", IndividualFrame.class),
 
 	SAME_INDIVIDUAL("SameIndividual"),
 
-	DIFFERENT_FROM("DifferentFrom"),
+	DIFFERENT_FROM("DifferentFrom", IndividualFrame.class),
 
 	DIFFERENT_INDIVIDUALS("DifferentIndividuals"),
 
@@ -116,17 +118,17 @@ public enum ManchesterSyntaxKeywords {
 
 	MAX_EXCLUSIVE_FACET("<"),
 
-	TYPES("Types"),
+	TYPES("Types", IndividualFrame.class),
 
 	TYPE("Type"),
 
-	ANNOTATIONS("Annotations"),
+	ANNOTATIONS("Annotations", ClassFrame.class, IndividualFrame.class, ObjectPropertyFrame.class, DataPropertyFrame.class),
 
-	DOMAIN("Domain"),
+	DOMAIN("Domain", ObjectPropertyFrame.class, DataPropertyFrame.class),
 
-	RANGE("Range"),
+	RANGE("Range", ObjectPropertyFrame.class, DataPropertyFrame.class),
 
-	CHARACTERISTICS("Characteristics"),
+	CHARACTERISTICS("Characteristics", ObjectPropertyFrame.class, DataPropertyFrame.class),
 
 	FUNCTIONAL("Functional"),
 
@@ -142,13 +144,13 @@ public enum ManchesterSyntaxKeywords {
 
 	ASYMMETRIC("Asymmetric"),
 
-	INVERSE_OF("InverseOf"),
+	INVERSE_OF("InverseOf", ObjectPropertyFrame.class, DataPropertyFrame.class),
 
-	SUB_PROPERTY_OF("SubPropertyOf"),
+	SUB_PROPERTY_OF("SubPropertyOf", ObjectPropertyFrame.class, DataPropertyFrame.class),
 
-	SUB_PROPERTY_CHAIN("SubPropertyChain", ObjectPropertyFrame.class, ObjectPropertyFrame.class),
+	SUB_PROPERTY_CHAIN("SubPropertyChain", ObjectPropertyFrame.class),
 
-	HAS_KEY("HasKey");
+	HAS_KEY("HasKey", ClassFrame.class);
 
 	private String keyword = "";
 

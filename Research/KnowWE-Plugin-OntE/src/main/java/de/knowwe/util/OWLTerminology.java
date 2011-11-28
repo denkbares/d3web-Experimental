@@ -17,21 +17,29 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.kdom.manchester.types;
+package de.knowwe.util;
 
-import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.rdfs.IRITermRef;
+import java.util.ResourceBundle;
+
+import de.d3web.core.knowledge.TerminologyManager;
+import de.knowwe.compile.TerminologyExtension;
 
 /**
- * 
+ * Loads predefined OWL Terms into the {@link TerminologyManager}.
+ *
  * @author Stefan Mark
- * @created 16.05.2011
+ * @created 22.11.2011
  */
-public class DataPropertyExpression extends IRITermRef {
+public class OWLTerminology implements TerminologyExtension {
 
-	public static final String PATTERN = "\\b[a-z][A-Za-z0-9:]+\\b";
+	private static ResourceBundle terms;
 
-	public DataPropertyExpression() {
-		this.setSectionFinder(new RegexSectionFinder(PATTERN));
+	static {
+		terms = ResourceBundle.getBundle("OWL-Terminology");
+	}
+
+	@Override
+	public String[] getTermNames() {
+		return terms.keySet().toArray(new String[terms.keySet().size()]);
 	}
 }

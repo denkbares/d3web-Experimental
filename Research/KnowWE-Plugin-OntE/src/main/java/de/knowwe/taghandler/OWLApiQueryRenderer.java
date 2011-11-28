@@ -180,7 +180,10 @@ public class OWLApiQueryRenderer<T extends AbstractType> extends KnowWEDomRender
 						a, OWLApiAxiomCache.STORE_CACHE);
 
 				string.append("<li>");
-				OWLApiTagHandlerUtil.renderHyperlink(section, string);
+				String conceptName = entity.getIRI().getFragment();
+				// String link = OnteRenderingUtils.renderHyperlink(section);
+				// string.append(link);
+				OWLApiTagHandlerUtil.renderHyperlink(conceptName, section, string);
 				string.append("</li>");
 			}
 		}

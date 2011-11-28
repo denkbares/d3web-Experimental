@@ -25,6 +25,8 @@ import java.util.regex.Pattern;
 
 import org.semanticweb.owlapi.model.OWLIndividual;
 
+import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -33,13 +35,15 @@ import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
+import de.knowwe.kdom.manchester.compile.IndividualFrameCompileScript;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.kdom.manchester.types.Fact;
 import de.knowwe.kdom.manchester.types.Keyword;
 import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
-import de.knowwe.kdom.subtreehandler.IndividualFrameSubtreeHandler;
+import de.knowwe.kdom.sectionfinder.DescriptionSectionFinder;
 import de.knowwe.termObject.NamedIndividualIRIDefinition;
+import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
  * <p>
@@ -60,9 +64,9 @@ import de.knowwe.termObject.NamedIndividualIRIDefinition;
  * @author Stefan Mark
  * @created 24.06.2011
  */
-public class IndividualFrame extends DefaultFrame {
+public class IndividualFrame extends DefaultFrame implements KnowledgeUnit<IndividualFrame> {
 
-	public static final String KEYWORD = "Individual[:]?";
+	public static final String KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.INDIVIDUAL);
 
 	public static final String KEYWORDS = "("
 			+ Types.KEYWORD + "|"
@@ -74,14 +78,14 @@ public class IndividualFrame extends DefaultFrame {
 
 	public IndividualFrame() {
 
-		this.addSubtreeHandler(new IndividualFrameSubtreeHandler());
+		// this.addSubtreeHandler(new IndividualFrameSubtreeHandler());
 
 		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
 		this.setSectionFinder(new RegexSectionFinder(p));
 
 		List<Type> types = new ArrayList<Type>();
 
-		types.add(new IndividualDefinition());
+		types.add(IndividualDefinition.getInstance());
 		types.add(new Types());
 		types.add(new SameAs());
 		types.add(new DifferentFrom());
@@ -244,6 +248,11 @@ public class IndividualFrame extends DefaultFrame {
 		}
 		return new ArrayList<Section<Annotation>>();
 	}
+
+	@Override
+	public KnowledgeUnitCompileScript getCompileScript() {
+		return new IndividualFrameCompileScript();
+	}
 }
 /**
  *
@@ -254,7 +263,9 @@ class IndividualDefinition extends AbstractType {
 
 	public static String PATTERN = IndividualFrame.KEYWORD + "\\p{Blank}+(.+)";
 
-	public IndividualDefinition() {
+	private static IndividualDefinition instance = null;
+
+	private IndividualDefinition() {
 
 		Pattern p = Pattern.compile(PATTERN);
 		SectionFinder sf = new RegexSectionFinder(p, 0);
@@ -266,6 +277,13 @@ class IndividualDefinition extends AbstractType {
 		Individual individual = new Individual();
 		individual.setSectionFinder(new AllTextFinderTrimmed());
 		this.addChildType(individual);
+	}
+
+	public static synchronized IndividualDefinition getInstance() {
+		if (instance == null) {
+			instance = new IndividualDefinition();
+		}
+		return instance;
 	}
 }
 
@@ -316,8 +334,12 @@ class Types extends AbstractType {
 
 	public Types() {
 
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(IndividualFrame.KEYWORDS, KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 1));
+		// Pattern p =
+		// ManchesterSyntaxUtil.getDescriptionPattern(IndividualFrame.KEYWORDS,
+		// KEYWORD);
+		// this.setSectionFinder(new RegexSectionFinder(p, 1));
+		this.setSectionFinder(new DescriptionSectionFinder(
+				ManchesterSyntaxKeywords.TYPES.getKeyword()));
 
 		Keyword key = new Keyword(KEYWORD);
 		this.addChildType(key);
@@ -364,8 +386,12 @@ class Facts extends AbstractType {
 
 	public Facts() {
 
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(IndividualFrame.KEYWORDS, KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 1));
+		// Pattern p =
+		// ManchesterSyntaxUtil.getDescriptionPattern(IndividualFrame.KEYWORDS,
+		// KEYWORD);
+		// this.setSectionFinder(new RegexSectionFinder(p, 1));
+		this.setSectionFinder(new DescriptionSectionFinder(
+				ManchesterSyntaxKeywords.FACTS.getKeyword()));
 
 		Keyword key = new Keyword(KEYWORD);
 		this.addChildType(key);
