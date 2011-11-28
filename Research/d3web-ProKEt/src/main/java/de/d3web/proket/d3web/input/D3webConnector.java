@@ -29,6 +29,7 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Session;
 import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
+import de.d3web.proket.d3web.ue.log.JSONLogger;
 import de.d3web.proket.data.DialogStrategy;
 import de.d3web.proket.data.DialogType;
 import de.d3web.proket.data.IndicationMode;
@@ -42,231 +43,246 @@ import de.d3web.proket.data.IndicationMode;
  */
 public class D3webConnector {
 
-	private static D3webConnector instance;
+    private static D3webConnector instance;
 
-	/* The current session */
-	private Session session;
+    /* The current session */
+    private Session session;
 
-	/* The default strategy */
-	private DialogStrategy dialogStrat = DialogStrategy.NEXTFORM;
+    /* The default strategy */
+    private DialogStrategy dialogStrat = DialogStrategy.NEXTFORM;
 
-	/* The default dialogtype */
-	private DialogType dialogType = DialogType.SINGLEFORM;
+    /* The default dialogtype */
+    private DialogType dialogType = DialogType.SINGLEFORM;
 
-	/* Mode how not indicated qasets are handles */
-	private IndicationMode indicationMode = IndicationMode.NORMAL;
+    /* Mode how not indicated qasets are handles */
+    private IndicationMode indicationMode = IndicationMode.NORMAL;
 
-	/* The knowledge base */
-	private KnowledgeBase kb;
+    /* The knowledge base */
+    private KnowledgeBase kb;
 
-	/* Map that contains an ID for each TO connected to the root */
-	private Map<TerminologyObject, String> idMap;
+    /* Map that contains an ID for each TO connected to the root */
+    private Map<TerminologyObject, String> idMap;
 
-	/* Counter for question IDs */
-	private int qCount = 1;
+    /* Counter for question IDs */
+    private int qCount = 1;
 
-	/* Counter for questionnaire IDs */
-	private int qcCount = 0;
+    /* Counter for questionnaire IDs */
+    private int qcCount = 0;
 
-	/* Counter for solution IDs */
-	private int sCount = 0;
+    /* Counter for solution IDs */
+    private int sCount = 0;
 
-	/* The Css parsed from the d3web XML */
-	private String css;
+    /* The Css parsed from the d3web XML */
+    private String css;
 
-	/* The header / title of the dialog parsed from the d3web XML */
-	private String header;
+    /* The header / title of the dialog parsed from the d3web XML */
+    private String header;
 
-	/* The knowledge base management */
-	private String kbn;
+    /* The knowledge base management */
+    private String kbn;
 
-	/* number of columns for multicolumn styles (dialog) */
-	private int dcols;
+    /* number of columns for multicolumn styles (dialog) */
+    private int dcols;
 
-	/* number of columns for multicolumn styles (questionnaire) */
-	private int questcols = -1;
+    /* number of columns for multicolumn styles (questionnaire) */
+    private int questcols = -1;
 
-	/* number of columns for multicolumn styles (questionnaire) */
-	private int qcols = -1;
+    /* number of columns for multicolumn styles (questionnaire) */
+    private int qcols = -1;
 
-	/* prefix that can be set by the user to define more specific dialog types */
-	private String userprefix = "";
+    /* prefix that can be set by the user to define more specific dialog types */
+    private String userprefix = "";
 
-	/* single element specification, e.g. selectbox... */
-	private HashMap<String, HashMap<String, String>> singleSpecs;
+    /* single element specification, e.g. selectbox... */
+    private HashMap<String, HashMap<String, String>> singleSpecs;
+    private D3webXMLParser d3webParser = null;
+    // set english as default language setting
+    private String language = "en";
+    private JSONLogger logger = null;
+    private LoginMode loginMode;
+    private boolean loggingActive = false;
 
-	private D3webXMLParser d3webParser = null;
+    public static D3webConnector getInstance() {
+        if (instance == null) {
+            instance = new D3webConnector();
+        }
+        return instance;
+    }
 
-	// set english as default language setting
-	private String language = "en";
+    private D3webConnector() {
+    }
 
-	private LoginMode loginMode;
+    public Session getSession() {
+        return session;
+    }
 
-	public static D3webConnector getInstance() {
-		if (instance == null) {
-			instance = new D3webConnector();
-		}
-		return instance;
-	}
+    public void setSession(Session s) {
+        session = s;
+    }
 
-	private D3webConnector() {
-	}
+    public DialogStrategy getDialogStrat() {
+        return dialogStrat;
+    }
 
-	public Session getSession() {
-		return session;
-	}
+    public void setDialogStrat(DialogStrategy dialogStrat) {
+        this.dialogStrat = dialogStrat;
+    }
 
-	public void setSession(Session s) {
-		session = s;
-	}
+    public DialogType getDialogType() {
+        return dialogType;
+    }
 
-	public DialogStrategy getDialogStrat() {
-		return dialogStrat;
-	}
+    public void setDialogType(DialogType dialogType) {
+        this.dialogType = dialogType;
+    }
 
-	public void setDialogStrat(DialogStrategy dialogStrat) {
-		this.dialogStrat = dialogStrat;
-	}
+    public IndicationMode getIndicationMode() {
+        return this.indicationMode;
+    }
 
-	public DialogType getDialogType() {
-		return dialogType;
-	}
+    public void setIndicationMode(IndicationMode mode) {
+        this.indicationMode = mode;
+    }
 
-	public void setDialogType(DialogType dialogType) {
-		this.dialogType = dialogType;
-	}
+    public KnowledgeBase getKb() {
+        return kb;
+    }
 
-	public IndicationMode getIndicationMode() {
-		return this.indicationMode;
-	}
+    public void setKb(KnowledgeBase kb) {
+        this.kb = kb;
+        this.idMap = new HashMap<TerminologyObject, String>();
+        generateIDs(kb.getRootQASet());
+        generateIDs(kb.getRootSolution());
 
-	public void setIndicationMode(IndicationMode mode) {
-		this.indicationMode = mode;
-	}
+    }
 
-	public KnowledgeBase getKb() {
-		return kb;
-	}
+    private void generateIDs(TerminologyObject... tos) {
+        for (TerminologyObject to : tos) {
+            int count = -1;
+            if (to instanceof QContainer) {
+                count = qcCount;
+                qcCount++;
+            } else if (to instanceof Question) {
+                count = qCount;
+                qCount++;
+            } else if (to instanceof Solution) {
+                count = sCount;
+                sCount++;
+            }
+            idMap.put(to, count == -1 ? "" : String.valueOf(count));
+            generateIDs(to.getChildren());
+        }
+    }
 
-	public void setKb(KnowledgeBase kb) {
-		this.kb = kb;
-		this.idMap = new HashMap<TerminologyObject, String>();
-		generateIDs(kb.getRootQASet());
-		generateIDs(kb.getRootSolution());
+    public String getID(TerminologyObject to) {
+        String id = idMap.get(to);
+        if (id == null) {
+            id = "";
+        }
+        return id;
+    }
 
-	}
+    public String getCss() {
+        return css;
+    }
 
-	private void generateIDs(TerminologyObject... tos) {
-		for (TerminologyObject to : tos) {
-			int count = -1;
-			if (to instanceof QContainer) {
-				count = qcCount;
-				qcCount++;
-			}
-			else if (to instanceof Question) {
-				count = qCount;
-				qCount++;
-			}
-			else if (to instanceof Solution) {
-				count = sCount;
-				sCount++;
-			}
-			idMap.put(to, count == -1 ? "" : String.valueOf(count));
-			generateIDs(to.getChildren());
-		}
-	}
+    public void setCss(String css) {
+        this.css = css;
+    }
 
-	public String getID(TerminologyObject to) {
-		String id = idMap.get(to);
-		if (id == null) id = "";
-		return id;
-	}
+    public String getHeader() {
+        return header;
+    }
 
-	public String getCss() {
-		return css;
-	}
+    public void setHeader(String header) {
+        this.header = header;
+    }
 
-	public void setCss(String css) {
-		this.css = css;
-	}
+    public int getDialogColumns() {
+        return this.dcols;
+    }
 
-	public String getHeader() {
-		return header;
-	}
+    public void setDialogColumns(int c) {
+        this.dcols = c;
+    }
 
-	public void setHeader(String header) {
-		this.header = header;
-	}
+    public int getQuestionColumns() {
+        return this.qcols;
+    }
 
-	public int getDialogColumns() {
-		return this.dcols;
-	}
+    public void setQuestionColumns(int c) {
+        this.qcols = c;
+    }
 
-	public void setDialogColumns(int c) {
-		this.dcols = c;
-	}
+    public int getQuestionnaireColumns() {
+        return this.questcols;
+    }
 
-	public int getQuestionColumns() {
-		return this.qcols;
-	}
+    public void setQuestionnaireColumns(int c) {
+        this.questcols = c;
+    }
 
-	public void setQuestionColumns(int c) {
-		this.qcols = c;
-	}
+    public String getKbName() {
+        return this.kbn;
+    }
 
-	public int getQuestionnaireColumns() {
-		return this.questcols;
-	}
+    public void setKbName(String kbn) {
+        this.kbn = kbn;
+    }
 
-	public void setQuestionnaireColumns(int c) {
-		this.questcols = c;
-	}
+    public String getUserprefix() {
+        return this.userprefix;
+    }
 
-	public String getKbName() {
-		return this.kbn;
-	}
+    public void setUserprefix(String pref) {
+        this.userprefix = pref;
+    }
 
-	public void setKbName(String kbn) {
-		this.kbn = kbn;
-	}
+    public void setSingleSpecs(HashMap<String, HashMap<String, String>> singleSpecs) {
+        this.singleSpecs = singleSpecs;
+    }
 
-	public String getUserprefix() {
-		return this.userprefix;
-	}
+    public HashMap<String, HashMap<String, String>> getSingleSpecs() {
+        return this.singleSpecs;
+    }
 
-	public void setUserprefix(String pref) {
-		this.userprefix = pref;
-	}
+    public void setD3webParser(D3webXMLParser parser) {
+        this.d3webParser = parser;
+    }
 
-	public void setSingleSpecs(HashMap<String, HashMap<String, String>> singleSpecs) {
-		this.singleSpecs = singleSpecs;
-	}
+    public D3webXMLParser getD3webParser() {
+        return d3webParser;
+    }
 
-	public HashMap<String, HashMap<String, String>> getSingleSpecs() {
-		return this.singleSpecs;
-	}
+    public void setLanguage(String lang) {
+        this.language = lang;
+    }
 
-	public void setD3webParser(D3webXMLParser parser) {
-		this.d3webParser = parser;
-	}
+    public String getLanguage() {
+        return this.language;
+    }
 
-	public D3webXMLParser getD3webParser() {
-		return d3webParser;
-	}
+    public void setLoginMode(LoginMode login) {
+        this.loginMode = login;
+    }
 
-	public void setLanguage(String lang) {
-		this.language = lang;
-	}
+    public LoginMode getLoginMode() {
+        return this.loginMode;
+    }
 
-	public String getLanguage() {
-		return this.language;
-	}
+    public void setLogger(JSONLogger logger) {
+        this.logger = logger;
+    }
 
-	public void setLoginMode(LoginMode login) {
-		this.loginMode = login;
-	}
+    public JSONLogger getLogger() {
+        return this.logger;
+    }
 
-	public LoginMode getLoginMode() {
-		return this.loginMode;
-	}
+    public void activateLogging(){
+        this.loggingActive = true;
+    }
+    
+    public boolean loggingActive(){
+        return this.loggingActive;
+    }
 }

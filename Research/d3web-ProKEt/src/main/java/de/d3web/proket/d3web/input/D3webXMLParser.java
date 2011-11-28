@@ -77,6 +77,7 @@ public class D3webXMLParser {
 		try {
 			// try to get the corresponding XML from the resources folder
 			inputFile = FileUtils.getResourceFile("/specs/d3web/" + xMLFilename);
+                        System.out.println("Input:" + inputFile);
 		}
 		catch (FileNotFoundException e2) {
 		}
@@ -85,6 +86,7 @@ public class D3webXMLParser {
 			try {
 				// try to read xml root node
 				dialogSpec = XMLUtils.getRoot(inputFile, null);
+                                System.out.println("Dialogspec:" + dialogSpec.getAttributes());
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -212,6 +214,7 @@ public class D3webXMLParser {
 		LoginMode currentMode = LoginMode.off;
 		String log = XMLUtils.getStr((Element) dialogSpec, "login", null);
 		if (log != null) {
+                       
 			currentMode = LoginMode.valueOf(log);
 		}
 		return currentMode;
@@ -236,6 +239,11 @@ public class D3webXMLParser {
 		return XMLUtils.getStr((Element) dialogSpec, "language", "");
 	}
 
+        public String getLogging(){
+                return XMLUtils.getStr((Element) dialogSpec, "logging", "OFF");
+        }
+        
+        
 	public HashMap<String, HashMap<String, String>> getSingleSpecs() {
 		HashMap<String, HashMap<String, String>> specs =
 				new HashMap<String, HashMap<String, String>>();

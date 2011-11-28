@@ -73,9 +73,11 @@ public class GlobalSettings {
 
 	/* The folder, where persistence is stored, e.g., case-files */
 	private String caseFolder = "";
-
 	private String kbImgFolder = "";
 	private String servletBasePath;
+        
+        /* Save log files */
+        private String logFolder = "";
 
 	/* The getters for retrieving all those values */
 	public String getProketPath() {
@@ -162,5 +164,12 @@ public class GlobalSettings {
 	public String getServletBasePath() {
 		return this.servletBasePath;
 	}
+        
+        public void setLogFolder(String log){
+            logFolder = log;
+        }
 
+        public String getLogFolder() {
+		return this.logFolder;
+	}
 }
