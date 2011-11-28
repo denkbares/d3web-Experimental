@@ -96,6 +96,12 @@
 			<artifactId>pellet-owlapiv3</artifactId>
 			<version>pellet-owlapiv3</version>
 		</dependency>
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>KnowWE-Plugin-IncrementalCompiler</artifactId>
+			<version>0.2-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 </project>
