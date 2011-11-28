@@ -100,11 +100,13 @@ public class RunTestcaseAction extends AbstractAction {
 	 * @param line
 	 */
 	public static void executeTableLine(KnowWEArticle article, Session session, List<Section<TestcaseTableLine>> alreadyExecuted, KnowledgeBase kb, Section<TestcaseTableLine> line) {
-		alreadyExecuted.add(line);
 
 		RatedTestCase testcase = (RatedTestCase) KnowWEUtils.getStoredObject(article,
 				line, TestcaseTableLine.TESTCASE_KEY);
-		executeTestCase(testcase, session, kb);
+		if (testcase != null) {
+			executeTestCase(testcase, session, kb);
+			alreadyExecuted.add(line);
+		}
 	}
 
 	/**
