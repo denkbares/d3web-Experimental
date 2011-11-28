@@ -19,8 +19,8 @@ CodeMirror.defineMode("diff", function() {
 	function tokenize(stream) {
 		var token = "";
 		
-		// if stream starts with whitespace
-		if (stream.peek() == " ")
+		// if stream starts with whitespaces
+		while (stream.peek() == " ")
 			stream.next();
 			
 		// brackets and equals

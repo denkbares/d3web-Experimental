@@ -1,11 +1,11 @@
 .cm-s-default span.cm-comment {color: #a0b;}
 .cm-s-default span.cm-keyword{color: #a22;}
 .cm-s-default span.cm-bracket{color: #2b2;}
-.cm-s-default span.cm-equals {color: 3b3#}
-.cm-s-default span.cm-term {color: 1b1#}
+.cm-s-default span.cm-equals {color: 3b3#;}
+.cm-s-default span.cm-term {color: 1b1#;}
 
-.cm-s-elegant span.cm-comment {color: #a0b;}
-.cm-s-elegant span.cm-keyword{color: #a22;}
-.cm-s-elegant span.cm-bracket{color: #2b2;}
-.cm-s-elegant span.cm-equals {color: 3b3#}
-.cm-s-elegant span.cm-term {color: 1b1#}
+.cm-s-elegant span.cm-comment {color: #9F2828;}
+.cm-s-elegant span.cm-keyword{color: #003366;}
+.cm-s-elegant span.cm-bracket{color: #2828A0;}
+.cm-s-elegant span.cm-equals {color: #2828A0;}
+.cm-s-elegant span.cm-term {color: #008000;}
