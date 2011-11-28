@@ -6,8 +6,8 @@
     <version>0.2-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
-  <artifactId>KnowWE-Plugin-EKG</artifactId>
-  <name>KnowWE Plugin EKG</name>
+  <artifactId>KnowWE-Plugin-MedicineOntology</artifactId>
+  <name>KnowWE Plugin Medicine Ontology</name>
   <description>Medizin Ontologie</description>
   <dependencies>
   	<dependency>
