@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<repository>
+<session changed="2011-11-28 12:30:08.603" created="2011-11-28 12:30:08.603" id="67137876-0b8e-467f-b1cf-0374b29c8d9d">
+<name/>
+<facts>
+<valueFacts>
+<fact objectName="Notfall" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Ja</choiceValue>
+</fact>
+<fact objectName="pAVK" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Ja</choiceValue>
+</fact>
+<fact objectName="Op-Datum" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<dateValue>2011-03-01 00:00:00.00</dateValue>
+</fact>
+<fact objectName="Betreffende Klinik" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<textValue>HA</textValue>
+</fact>
+<fact objectName="Konsumierende Erkrankung" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Ja</choiceValue>
+</fact>
+<fact objectName="COPD" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Nein</choiceValue>
+</fact>
+</valueFacts>
+<interviewFacts>
+<fact objectName="Abschließende Bemerkungen" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Präoperative Daten (Initial-OP)" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Postoperative Daten (Initial-OP)" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Intraoperative Daten (Initial-OP)" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Allgemeine Daten" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Intraoperative Daten bei erster Revision" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Demographische Daten" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+</interviewFacts>
+</facts>
+<protocol>
+<entry date="2011-11-28 12:30:13.198" objectName="Betreffende Klinik" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<textValue>HA</textValue>
+</entry>
+<entry date="2011-11-28 12:30:16.854" objectName="Op-Datum" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<dateValue>2011-03-01 00:00:00.00</dateValue>
+</entry>
+<entry date="2011-11-28 12:30:18.538" objectName="COPD" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Nein</choiceValue>
+</entry>
+<entry date="2011-11-28 12:30:41.930" objectName="pAVK" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Ja</choiceValue>
+</entry>
+<entry date="2011-11-28 12:30:42.974" objectName="Konsumierende Erkrankung" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Ja</choiceValue>
+</entry>
+<entry date="2011-11-28 12:30:43.739" objectName="Notfall" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Ja</choiceValue>
+</entry>
+</protocol>
+</session>
+</repository>

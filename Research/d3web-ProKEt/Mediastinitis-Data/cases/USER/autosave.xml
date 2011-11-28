@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<repository>
+<session changed="2011-11-28 12:29:31.528" created="2011-11-28 12:29:31.528" id="da786715-0be0-4e93-b576-744893a5e1fd">
+<name/>
+<facts>
+<valueFacts>
+<fact objectName="Geschlecht des Patienten" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Weiblich</choiceValue>
+</fact>
+<fact objectName="Betreffende Klinik" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<textValue>asd</textValue>
+</fact>
+</valueFacts>
+<interviewFacts>
+<fact objectName="Abschließende Bemerkungen" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Präoperative Daten (Initial-OP)" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Postoperative Daten (Initial-OP)" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Intraoperative Daten (Initial-OP)" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Allgemeine Daten" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Intraoperative Daten bei erster Revision" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="Demographische Daten" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+</interviewFacts>
+</facts>
+<protocol>
+<entry date="2011-11-28 12:29:35.490" objectName="Betreffende Klinik" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<textValue>asd</textValue>
+</entry>
+<entry date="2011-11-28 12:29:37.880" objectName="Geschlecht des Patienten" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Weiblich</choiceValue>
+</entry>
+</protocol>
+</session>
+</repository>
