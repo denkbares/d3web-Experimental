@@ -67,7 +67,7 @@ public class DecisionTable extends ITable {
 
 		this.addChildType(new InnerTable());
 
-		this.addSubtreeHandler(new DecisionTableHandler());
+		//		this.addSubtreeHandler(new DecisionTableHandler());
 	}
 
 	/**

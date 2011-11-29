@@ -23,7 +23,11 @@ import java.util.ResourceBundle;
 
 import de.d3web.we.tables.InnerTable;
 import de.d3web.we.tables.TableCell;
+import de.d3web.we.tables.TableCellFirstColumn;
+import de.d3web.we.tables.TableHeaderCell;
+import de.d3web.we.tables.TableHeaderLine;
 import de.d3web.we.tables.TableLine;
+import de.d3web.we.tables.TableNormalCell;
 import de.d3web.we.tables.TableUtils;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
@@ -83,7 +87,7 @@ public class TableRenderer extends KnowWEDomRenderer<InnerTable> {
 			StringBuilder buildi, Section<InnerTable> section, int maxCellLength, int averageCellCount,
 			UserContext user) {
 
-		Section<TableLine> sec = Sections.findChildOfType(section, TableLine.class);
+		Section<TableHeaderLine> sec = Sections.findChildOfType(section, TableHeaderLine.class);
 
 		if (sec != null) {
 			buildi.append("<thead>");
@@ -91,17 +95,17 @@ public class TableRenderer extends KnowWEDomRenderer<InnerTable> {
 
 
 			// Add a dummy cell, when the table contains one cell less then the rest lines
-			if (averageCellCount > Sections.findSuccessorsOfType(sec, TableCell.class).size()) {
+			if (averageCellCount > Sections.findSuccessorsOfType(sec, TableHeaderCell.class).size()) {
 				buildi.append("<th>");
 				buildi.append(TableUtils.generateStringWithLength(
 						Math.abs(maxCellLength), ' '));
 				buildi.append("</th>");
 			}
 
-			for (Section<TableCell> cell : Sections.findChildrenOfType(sec, TableCell.class)) {
+			for (Section<TableHeaderCell> cell : Sections.findChildrenOfType(sec, TableHeaderCell.class)) {
 				String cellText = cell.getText().trim();
 				buildi.append("<th>");
-				TableCell.INDIVIDUAL_RENDERER.render(cell.getArticle(), cell, user, buildi);
+				TableHeaderCell.INDIVIDUAL_RENDERER.render(cell.getArticle(), cell, user, buildi);
 				//				buildi.append(cellText);
 				buildi.append(TableUtils.generateStringWithLength(
 						Math.abs(cellText.length()-maxCellLength), ' '));
@@ -121,25 +125,28 @@ public class TableRenderer extends KnowWEDomRenderer<InnerTable> {
 		List<Section<TableLine>> lines = Sections.findChildrenOfType(section, TableLine.class);
 
 		// First line is header
-		if ( lines.size() >= 2 ) {
-			lines.remove(0);
+		for (Section<TableLine> line : lines) {
 
-			for (Section<TableLine> line : lines) {
+			buildi.append("<tr>");
 
-				buildi.append("<tr>");
+			// First Column is to delegate to children
+			buildi.append("<td>");
+			Section<TableCellFirstColumn> firstColumn = Sections.findChildOfType(line, TableCellFirstColumn.class);
+			TableCellFirstColumn.INDIVIDUAL_RENDERER.render(firstColumn.getArticle(), firstColumn, user, buildi);
+			buildi.append("</td>");
 
-				for (Section<TableCell> cell : Sections.findChildrenOfType(line, TableCell.class)) {
-					String cellText = cell.getText().trim();
-					buildi.append("<td>");
-					TableCell.INDIVIDUAL_RENDERER.render(cell.getArticle(), cell, user, buildi);
-					//				buildi.append(cellText);
-					buildi.append(TableUtils.generateStringWithLength(
-							Math.abs(cellText.length()-maxCellLength), ' '));
-					buildi.append("</td>");
-				}
+			for (Section<TableNormalCell> cell : Sections.findChildrenOfType(line, TableNormalCell.class)) {
+				String cellText = cell.getText().trim();
 
-				buildi.append("</tr>");
+				buildi.append("<td>");
+				TableNormalCell.INDIVIDUAL_RENDERER.render(cell.getArticle(), cell, user, buildi);
+				//				buildi.append(cellText);
+				buildi.append(TableUtils.generateStringWithLength(
+						Math.abs(cellText.length()-maxCellLength), ' '));
+				buildi.append("</td>");
 			}
+
+			buildi.append("</tr>");
 		}
 
 		buildi.append("</tbody>");

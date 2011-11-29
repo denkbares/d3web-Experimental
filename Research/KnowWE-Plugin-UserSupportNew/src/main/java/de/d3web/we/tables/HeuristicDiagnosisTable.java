@@ -71,7 +71,7 @@ public class HeuristicDiagnosisTable extends ITable {
 
 		this.addChildType(new InnerTable());
 
-		this.addSubtreeHandler(new HeuristicDiagnosisTableHandler());
+		//		this.addSubtreeHandler(new HeuristicDiagnosisTableHandler());
 	}
 
 	/**

@@ -68,7 +68,7 @@ public class CausalDiagnosisScore extends AbstractType {
 
 		this.addChildType(new InnerTable());
 
-		this.addSubtreeHandler(new CausalDiagnosisScoreHandler());
+		//		this.addSubtreeHandler(new CausalDiagnosisScoreHandler());
 	}
 
 	/**

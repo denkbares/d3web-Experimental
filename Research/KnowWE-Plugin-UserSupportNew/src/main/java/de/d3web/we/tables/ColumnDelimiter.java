@@ -20,37 +20,19 @@ package de.d3web.we.tables;
 
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.renderer.StyleRenderer;
 
 
 /**
  * 
  * @author Johannes Dienst
- * @created 14.10.2011
+ * @created 29.11.2011
  */
-public class TableLine extends AbstractType {
+public class ColumnDelimiter extends AbstractType {
 
-	public TableLine() {
-
-		// here also a comment might occur:
-		AnonymousType relationComment = new AnonymousType("comment");
-		relationComment.setSectionFinder(new RegexSectionFinder("[\\t ]*"
-				+ "//[^\r\n]*+" + "\\r?\\n"));
-		relationComment.setCustomRenderer(StyleRenderer.COMMENT);
-		this.addChildType(relationComment);
-
-		this.sectionFinder = new RegexSectionFinder("([^\\|]+\\|)+[^\\|]+");
-
-		// divide the line in delimiters and cells
-		//		AnonymousType delimiter = new AnonymousType("delimiter");
-		//		delimiter.setSectionFinder(new RegexSectionFinder("\\|"));
-		//		delimiter.setCustomRenderer(StyleRenderer.COMMENT); // TODO Just a quick-shot
-		//		this.addChildType(delimiter);
-		this.addChildType(new ColumnDelimiter());
-
-		this.addChildType(new TableCellFirstColumn());
-		this.addChildType(new TableNormalCell());
+	public ColumnDelimiter() {
+		this.setSectionFinder(new RegexSectionFinder("\\|"));
+		this.setCustomRenderer(StyleRenderer.COMMENT); // TODO Just a quick-shot
 	}
 
 }

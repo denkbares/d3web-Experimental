@@ -18,7 +18,6 @@
  */
 package de.d3web.we.tables;
 
-import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 
@@ -26,20 +25,14 @@ import de.knowwe.kdom.renderer.StyleRenderer;
 /**
  * 
  * @author Johannes Dienst
- * @created 14.10.2011
+ * @created 28.11.2011
  */
-public class TableCell extends AbstractType {
+public class TableNormalCell extends TableCell {
 
 	@SuppressWarnings("unchecked")
-	public static final KnowWEDomRenderer<TableCell> INDIVIDUAL_RENDERER = StyleRenderer.CONTENT;
+	public static final KnowWEDomRenderer<TableNormalCell> INDIVIDUAL_RENDERER = StyleRenderer.CONTENT;
 
-	public TableCell() {
-
-		// finds everything except an empty cell
-		//		this.sectionFinder = new RegexSectionFinder("[^\\|\\s]+");
-
-		this.sectionFinder = new TableCellSectionFinder();
-		this.customRenderer = INDIVIDUAL_RENDERER;
+	public TableNormalCell() {
+		super();
 	}
-
 }

@@ -42,6 +42,8 @@
         <parameter id="scope" value="CausalDiagnosisScoreMarkup" />
         <parameter id="scope" value="DecisionTableMarkup" />
         <parameter id="scope" value="HeuristicDiagnosisTableMarkup" />
+        <parameter id="scope" value="ApproximateCoveringListMarkup" />
+        <parameter id="scope" value="ApproximateRulesMarkup" />
     </extension>
  
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -85,7 +87,7 @@
 		<parameter id="css" value="default.css" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+	<!-- extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="ApproximateCoveringListMarkup">
 		<parameter id="class"
 			value="de.d3web.we.covering.ApproximateCoveringListMarkup" />
@@ -94,9 +96,9 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
-	</extension>
+	</extension-->
 
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+	<!--extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="ApproximateRulesMarkup">
 		<parameter id="class"
 			value="de.d3web.we.rules.ApproximateRulesMarkup" />
@@ -105,7 +107,7 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
-	</extension>
+	</extension-->
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="TableExportAction">
@@ -159,7 +161,8 @@
 		<parameter id="description" value="Dummy for adding CSS/JS" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="script" value="correction.js" />
+		<parameter id="css" value="usersupport.css" />
+		<parameter id="script" value="usersupport.js" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
@@ -172,6 +175,7 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="TableCell" />
+		<parameter id="scope" value="TermReference" />
 	</extension>
 	
 	<!-- extension plugin-id="KnowWEExtensionPoints" point-id="ApproximateCorrectionProvider"

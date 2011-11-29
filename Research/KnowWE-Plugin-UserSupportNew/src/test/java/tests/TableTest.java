@@ -36,6 +36,9 @@ import de.d3web.we.tables.HeuristicDiagnosisTable;
 import de.d3web.we.tables.HeuristicDiagnosisTableMarkup;
 import de.d3web.we.tables.InnerTable;
 import de.d3web.we.tables.TableCell;
+import de.d3web.we.tables.TableCellFirstColumn;
+import de.d3web.we.tables.TableHeaderCell;
+import de.d3web.we.tables.TableHeaderLine;
 import de.d3web.we.tables.TableLine;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
@@ -53,16 +56,25 @@ public class TableTest extends TestCase {
 	private Section<KnowWEArticle> articleSec = null;
 
 	private Section<CausalDiagnosisScoreMarkup> causalTable = null;
-	private final int causalLineCount = 3;
+	private final int causalHeaderLineCount = 1;
+	private final int causalHeaderCellCount = 5;
+	private final int causalLineCount = 2;
 	private final int causalCellCount = 15;
+	private final int causalCellFirstColumnCount = 2;
 
 	private Section<DecisionTableMarkup> decisionTable = null;
-	private final int decisionLineCount = 6;
+	private final int decisionHeaderLineCount = 1;
+	private final int decisionHeaderCellCount = 5;
+	private final int decisionLineCount = 5;
 	private final int decisionCellCount = 30;
+	private final int decisionCellFirstColumnCount = 5;
 
 	private Section<HeuristicDiagnosisTableMarkup> heuristicTable = null;
-	private final int heuristicLineCount = 10;
+	private final int heuristicHeaderLineCount = 1;
+	private final int heuristicHeaderCellCount = 5;
+	private final int heuristicLineCount = 9;
 	private final int heuristicCellCount = 50;
+	private final int heuristicCellFirstColumnCount = 9;
 
 	@Override
 	protected void setUp() throws IOException {
@@ -82,17 +94,26 @@ public class TableTest extends TestCase {
 
 		Section<ListSolutionType> solution = Sections.findSuccessor(score, ListSolutionType.class);
 		assertNotNull(solution);
-		assertEquals(solution.getText(), "Kausaler Score {\r\n");
+		assertEquals("Kausaler Score {\r\n", solution.getText());
 
 		Section<InnerTable> innerTable =
 				Sections.findSuccessor(score, InnerTable.class);
 		assertNotNull(innerTable);
 
+		List<Section<TableHeaderLine>> headerlines = Sections.findSuccessorsOfType(innerTable, TableHeaderLine.class);
+		assertEquals(causalHeaderLineCount, headerlines.size());
+
+		List<Section<TableHeaderCell>> headercells = Sections.findSuccessorsOfType(innerTable, TableHeaderCell.class);
+		assertEquals(causalHeaderCellCount, headercells.size());
+
 		List<Section<TableLine>> lines = Sections.findSuccessorsOfType(innerTable, TableLine.class);
-		assertEquals(lines.size(), causalLineCount);
+		assertEquals(causalLineCount, lines.size());
 
 		List<Section<TableCell>> cells = Sections.findSuccessorsOfType(innerTable, TableCell.class);
-		assertEquals(cells.size(), causalCellCount);
+		assertEquals(causalCellCount, cells.size());
+
+		List<Section<TableCellFirstColumn>> firstColumncells = Sections.findSuccessorsOfType(innerTable, TableCellFirstColumn.class);
+		assertEquals(causalCellFirstColumnCount, firstColumncells.size());
 	}
 
 	@Test
@@ -103,17 +124,26 @@ public class TableTest extends TestCase {
 
 		Section<ListSolutionType> solution = Sections.findSuccessor(score, ListSolutionType.class);
 		assertNotNull(solution);
-		assertEquals(solution.getText(), "EntscheidungsTabelle {\r\n");
+		assertEquals("EntscheidungsTabelle {\r\n", solution.getText());
 
 		Section<InnerTable> innerTable =
 				Sections.findSuccessor(score, InnerTable.class);
 		assertNotNull(innerTable);
 
+		List<Section<TableHeaderLine>> headerlines = Sections.findSuccessorsOfType(innerTable, TableHeaderLine.class);
+		assertEquals(decisionHeaderLineCount, headerlines.size());
+
+		List<Section<TableHeaderCell>> headercells = Sections.findSuccessorsOfType(innerTable, TableHeaderCell.class);
+		assertEquals(decisionHeaderCellCount, headercells.size());
+
 		List<Section<TableLine>> lines = Sections.findSuccessorsOfType(innerTable, TableLine.class);
-		assertEquals(lines.size(), decisionLineCount);
+		assertEquals(decisionLineCount, lines.size());
 
 		List<Section<TableCell>> cells = Sections.findSuccessorsOfType(innerTable, TableCell.class);
-		assertEquals(cells.size(), decisionCellCount);
+		assertEquals(decisionCellCount, cells.size());
+
+		List<Section<TableCellFirstColumn>> firstColumncells = Sections.findSuccessorsOfType(innerTable, TableCellFirstColumn.class);
+		assertEquals(decisionCellFirstColumnCount, firstColumncells.size());
 	}
 
 	@Test
@@ -124,16 +154,25 @@ public class TableTest extends TestCase {
 
 		Section<ListSolutionType> solution = Sections.findSuccessor(score, ListSolutionType.class);
 		assertNotNull(solution);
-		assertEquals(solution.getText(), "HeuristischeDiagnoseTabelle {\r\n");
+		assertEquals("HeuristischeDiagnoseTabelle {\r\n", solution.getText());
 
 		Section<InnerTable> innerTable =
 				Sections.findSuccessor(score, InnerTable.class);
 		assertNotNull(innerTable);
 
+		List<Section<TableHeaderLine>> headerlines = Sections.findSuccessorsOfType(innerTable, TableHeaderLine.class);
+		assertEquals(heuristicHeaderLineCount, headerlines.size());
+
+		List<Section<TableHeaderCell>> headercells = Sections.findSuccessorsOfType(innerTable, TableHeaderCell.class);
+		assertEquals(heuristicHeaderCellCount, headercells.size());
+
 		List<Section<TableLine>> lines = Sections.findSuccessorsOfType(innerTable, TableLine.class);
-		assertEquals(lines.size(), heuristicLineCount);
+		assertEquals(heuristicLineCount, lines.size());
 
 		List<Section<TableCell>> cells = Sections.findSuccessorsOfType(innerTable, TableCell.class);
-		assertEquals(cells.size(), heuristicCellCount);
+		assertEquals(heuristicCellCount, cells.size());
+
+		List<Section<TableCellFirstColumn>> firstColumncells = Sections.findSuccessorsOfType(innerTable, TableCellFirstColumn.class);
+		assertEquals(heuristicCellFirstColumnCount, firstColumncells.size());
 	}
 }

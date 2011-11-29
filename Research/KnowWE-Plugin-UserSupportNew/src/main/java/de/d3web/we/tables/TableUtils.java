@@ -41,7 +41,7 @@ import de.knowwe.core.kdom.parsing.Sections;
  */
 public class TableUtils {
 
-	
+
 	/**
 	 * Returns the row of the table in which the current cell occurs.
 	 * 
@@ -210,9 +210,18 @@ public class TableUtils {
 	 * @return
 	 */
 	public static int getMaximumTableCellCount(Section<InnerTable> section) {
+
+		int maxCount = 0;
+
+		List<Section<TableHeaderLine>> headerLines =
+				Sections.findSuccessorsOfType(section, TableHeaderLine.class);
+		for (Section<TableHeaderLine> line : headerLines) {
+			if (Sections.findSuccessorsOfType(line, TableCell.class).size() > maxCount)
+				maxCount = Sections.findSuccessorsOfType(line, TableCell.class).size();
+		}
+
 		List<Section<TableLine>> tableLines =
 				Sections.findSuccessorsOfType(section, TableLine.class);
-		int maxCount = 0;
 		for (Section<TableLine> line : tableLines) {
 			if (Sections.findSuccessorsOfType(line, TableCell.class).size() > maxCount)
 				maxCount = Sections.findSuccessorsOfType(line, TableCell.class).size();

@@ -20,6 +20,7 @@ package de.d3web.we.tables;
 
 import de.d3web.we.renderer.TableRenderer;
 import de.knowwe.core.kdom.basicType.CommentLineType;
+import de.knowwe.core.kdom.basicType.LineBreak;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.kdom.AnonymousType;
@@ -36,7 +37,6 @@ public class InnerTable extends ITable {
 
 	public InnerTable() {
 
-		
 		this.sectionFinder = new AllTextSectionFinder();
 
 		// allow for comment lines
@@ -47,7 +47,10 @@ public class InnerTable extends ITable {
 		koma.setSectionFinder(new UnquotedExpressionFinder(","));
 		this.addChildType(koma);
 
+		this.addChildType(new LineBreak());
+
 		// Lines of the table
+		this.addChildType(new TableHeaderLine());
 		this.addChildType(new TableLine());
 
 		// Renderer

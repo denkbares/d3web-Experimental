@@ -23,13 +23,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.d3web.we.correction.ApproximateCorrectionProvider;
-import de.d3web.we.tables.TableCell;
 import de.knowwe.core.KnowWEArticleManager;
 import de.knowwe.core.KnowWEAttributes;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.KDOMReplaceTermNameAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -76,17 +76,17 @@ public class KDOMReplaceTermUserSupportAction extends AbstractAction {
 
 		Section<?> section = Sections.getSection(nodeID);
 
-		if (!(section.get() instanceof TableCell)) {
+		if (!(section.get() instanceof TermReference)) {
 			context.sendError(500, "Invalid section type");
 			return;
 		}
 
-		//		TermReference t = (TermReference) section.get();
+		TermReference t = (TermReference) section.get();
 		String originalText = section.getOriginalText();
-		//		String oldTermName = t.getTermName(section);
-		//		String newNodeText = originalText.replace(oldTermName, newText);
+		String oldTermName = t.getTermName(section);
+		String newNodeText = originalText.replace(oldTermName, newText);
 
-		//		nodesMap.put(nodeID, newNodeText);
+		nodesMap.put(nodeID, newNodeText);
 		nodesMap.put(nodeID, newText);
 		mgr.replaceKDOMNodesSaveAndBuild(context, name, nodesMap);
 
