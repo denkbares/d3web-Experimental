@@ -73,13 +73,11 @@ public class NonTerminalList extends AbstractType {
 
 				char[] chars = text.toCharArray();
 
-				int currentEnd = 0;
 				int currentStart = text.indexOf(trimmed);
 				boolean quoted = false;
 				int braced = 0;
 
 				for (int i = 0; i < chars.length; i++) {
-
 					char current = chars[i];
 
 					switch (current) {
@@ -94,22 +92,15 @@ public class NonTerminalList extends AbstractType {
 					case QUOTE:
 						quoted = !quoted;
 						break;
-					default:
-						if (Character.valueOf(COMMA).equals(current) && !quoted && braced == 0) {
-							// found comma, not quoted -> create result
-							currentEnd = i;
-							results.add(new SectionFinderResult(currentStart, currentEnd));
-							currentStart = i + 1;
-						}
-						else if (i + 1 == text.length()) {
-							// take everything till the end of the input as the
-							// token after the last comma
-							// if (!commaInParenthesis) {
-							currentEnd = text.length();
-							results.add(new SectionFinderResult(currentStart, currentEnd));
-							// }
-						}
-						break;
+					}
+
+					if (Character.valueOf(COMMA).equals(current) && !quoted && braced == 0) {
+						// found comma, not quoted -> create result
+						results.add(new SectionFinderResult(currentStart, i));
+						currentStart = i + 1;
+					}
+					else if (i + 1 == text.length()) {
+						results.add(new SectionFinderResult(currentStart, text.length()));
 					}
 				}
 
