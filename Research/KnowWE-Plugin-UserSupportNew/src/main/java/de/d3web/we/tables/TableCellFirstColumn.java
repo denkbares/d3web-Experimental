@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.d3web.we.kdom.condition.CompositeCondition;
+import de.d3web.we.kdom.condition.Finding;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -49,12 +50,18 @@ public class TableCellFirstColumn extends TableCell {
 	new ToolMenuDecoratingRenderer<TableCellFirstColumn>(new StyleRenderer(
 			"color:rgb(152, 180, 12)"));
 
-	// TODO Insert the right hierarchy here
+	// TODO Insert the right hierarchy for CompositeCondition here
 	public TableCellFirstColumn() {
 		super();
 		this.customRenderer = INDIVIDUAL_RENDERER;
 		this.sectionFinder = new TableCellFirstColumnSectionFinder();
-		this.addChildType(new CompositeCondition());
+
+		// Add the possible TerminalConditions here
+		CompositeCondition cc = new CompositeCondition();
+		List<Type> types = new ArrayList<Type>();
+		types.add(new Finding());
+		cc.setAllowedTerminalConditions(types);
+		this.addChildType(cc);
 	}
 
 	private class TableCellFirstColumnSectionFinder implements SectionFinder {
