@@ -1,20 +1,4 @@
 (function () {
-  function forEach(arr, f) {
-    for (var i = 0, e = arr.length; i < e; ++i) f(arr[i]);
-  }
-  
-  function arrayContains(arr, item) {
-    if (!Array.prototype.indexOf) {
-      var i = arr.length;
-      while (i--) {
-        if (arr[i] === item) {
-          return true;
-        }
-      }
-      return false;
-    }
-    return arr.indexOf(item) != -1;
-  }
   
   CodeMirror.javascriptHint = function(editor) {
     // Find the token at the cursor
@@ -32,52 +16,106 @@
       if (!context) var context = [];
       context.push(tprop);
     }
-    return {list: getCompletions(token, context),
+    return {list: KNOWWE.plugin.usersupport.getCompletions(token, context),
             from: {line: cur.line, ch: token.start},
             to: {line: cur.line, ch: token.end}};
   }
-
-  var stringProps = ("charAt charCodeAt indexOf lastIndexOf substring substr slice trim trimLeft trimRight " +
-                     "toUpperCase toLowerCase split concat match replace search").split(" ");
-  var arrayProps = ("length concat join splice push pop shift unshift slice reverse sort indexOf " +
-                    "lastIndexOf every some filter forEach map reduce reduceRight ").split(" ");
-  var funcProps = "prototype apply call bind".split(" ");
-  var keywords = ("break case catch continue debugger default delete do else false finally for function " +
-                  "if in instanceof new null return switch throw true try typeof var void while with").split(" ");
-
-  function getCompletions(token, context) {
-    var found = [], start = token.string;
-    function maybeAdd(str) {
-      if (str.indexOf(start) == 0 && !arrayContains(found, str)) found.push(str);
-    }
-    function gatherCompletions(obj) {
-      if (typeof obj == "string") forEach(stringProps, maybeAdd);
-      else if (obj instanceof Array) forEach(arrayProps, maybeAdd);
-      else if (obj instanceof Function) forEach(funcProps, maybeAdd);
-      for (var name in obj) maybeAdd(name);
-    }
-
-    if (context) {
-      // If this is a property, see if it belongs to some object we can
-      // find in the current environment.
-      var obj = context.pop(), base;
-      if (obj.className == "variable")
-        base = window[obj.string];
-      else if (obj.className == "string")
-        base = "";
-      else if (obj.className == "atom")
-        base = 1;
-      while (base != null && context.length)
-        base = base[context.pop().string];
-      if (base != null) gatherCompletions(base);
-    }
-    else {
-      // If not, just look in the window object and any local scope
-      // (reading into JS mode internals to get at the local variables)
-      for (var v = token.state.localVars; v; v = v.next) maybeAdd(v.name);
-      gatherCompletions(window);
-      forEach(keywords, maybeAdd);
-    }
-    return found;
-  }
 })();
+
+//  /**
+//   * The real work starts here: Gathering of completions!
+//   */
+//  KNOWWE.plugin.javascriptHint = function() {
+//  	
+//	// the global array for the suggestions
+//    var found = [];
+//    var start = token.string;
+//  	
+//  	var keywords = ("IF WENN THEN DANN AND UND & OR ODER | NOT NICHT ! KNOWN UNKNOWN AUSSER EXCEPT").split(" ");
+//  	var brackets = ("{ } ( ) | [ ] ,").split(" ");
+//  	var d3webScorings = ("P7 P6 P5x P5 P4 P3 P2 P1 N1 N2 N3 N4 N5 N5x N6 N7 ESTABLISHED ETABLIERT SUGGESTED VERDAECHTIGT ++ + x YES JA NO NEIN -").split(" ");
+//  	var information = ("@ %").split(" ");
+//	
+//	return {
+//		
+//		// do function: f for each element in array: arr
+//  		forEach: function(arr, f) {
+//    		for (var i = 0, e = arr.length; i < e; ++i) f(arr[i]);
+//  		},
+//  
+//  		// checks if array: arr contains an item: item
+//  		arrayContains: function(arr, item) {
+//    		if (!Array.prototype.indexOf) {
+//      			var i = arr.length;
+//      			while (i--) {
+//        			if (arr[i] === item) {
+//          				return true;
+//        			}
+//      			}
+//      		return false;
+//    		}
+//    		return arr.indexOf(item) != -1;
+//  		},
+//		
+//		// tests if String str matches the start and if it is not
+//    	// in found already adds it
+//    	maybeAdd: function (str) {
+//      		if (str.indexOf(start) == 0 && !arrayContains(found, str))
+//      		found.push(str);
+//    	},
+//    	
+//    	// gathers the completions from the given static arrays
+//    	// keywords, brackets, d3webScorings, information...
+//       	gatherStaticCompletions: function() {
+//      		KNOWWE.plugin.javascriptHint.forEach(keywords, maybeAdd);
+//      		KNOWWE.plugin.javascriptHint.forEach(brackets, maybeAdd);
+//     		KNOWWE.plugin.javascriptHint.forEach(d3webScorings, maybeAdd);
+//     		KNOWWE.plugin.javascriptHint.forEach(information, maybeAdd);
+//    	},
+//    	
+//    	// Calls the DialogComponent over KnowWE-Ajax-Invocation
+//    	// TODO show loading-gif
+//   		gatherDialogComponentCompletions: function (matchMe) {
+//			var params = {
+//				action : 'GetSuggestionsAction',
+//				toMatch: matchMe
+//			}
+//
+//			var options = {
+//				url : KNOWWE.core.util.getURL(params),
+//				response : {
+//					action : 'none',
+//                    fn : function() {
+//			        	var suggestions = JSON.parse(this.responseText);
+//			        	KNOWWE.plugin.javascriptHint.foreach(suggestions, maybeAdd);
+//                    },
+//				}
+//			}
+//			new _KA(options).send();
+//		},
+//		
+//		getCompletions: function (token, context) {   
+//
+//    		if (context) {
+//      			// If this is a property, see if it belongs to some object we can
+//      			// find in the current environment.
+//      			var obj = context.pop(), base;
+//      			if (obj.className == "variable")
+//       				base = window[obj.string];
+//      			else if (obj.className == "string")
+//        			base = "";
+//      			else if (obj.className == "atom")
+//        			base = 1;
+//      			while (base != null && context.length)
+//        			base = base[context.pop().string];
+//      			if (base != null) gatherCompletions(base);
+//    		}
+//    		else {
+//      			KNOWWE.plugin.javascriptHint.gatherStaticCompletions();
+////      			KNOWWE.plugin.javascriptHint.gatherDialogComponentCompletions();
+//    		}
+//    		return found;
+// 		}
+//	}
+
+//  }();

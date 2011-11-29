@@ -25,12 +25,12 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
         <parameter id="script" value="KnowWE-Plugin-InstantEdit.js" />
-        <!--parameter id="script" value="KnowWE-Plugin-AutoComplete.js" /-->
 		<parameter id="script" value="codemirror.js" />
 		<parameter id="css" value="diff.css" />
 		<parameter id="css" value="default.css" />
 		<parameter id="css" value="elegant.css" />
 		<parameter id="css" value="codemirror.css" />
+		<parameter id="script" value="usersupport.js" />
 		<parameter id="script" value="simple-hint.js" />
 		<parameter id="script" value="javascript-hint.js" />
 		<parameter id="script" value="javascript.js" />
@@ -136,6 +136,16 @@
 			value="de.d3web.we.correction.action.KDOMReplaceTermUserSupportAction" />
 		<parameter id="name" value="KDOMReplaceTermUserSupportAction" />
 		<parameter id="description" value="Action KDOMReplaceTermUserSupportAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="GetSuggestionsAction">
+		<parameter id="class"
+			value="de.d3web.we.editor.action.GetSuggestionsAction" />
+		<parameter id="name" value="GetSuggestionsAction" />
+		<parameter id="description" value="Action GetSuggestionsAction" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
