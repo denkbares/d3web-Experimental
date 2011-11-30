@@ -88,7 +88,7 @@ public class OWLStoreDebuggingTagHandler extends AbstractHTMLTagHandler {
 			try {
 				if (syntax.equals("rdf")) {
 					manager.saveOntology(ontology, stream);
-					html.append(KnowWEUtils.html_escape(stream.toString()));
+					html.append(KnowWEUtils.escapeHTML(stream.toString()));
 					html.append("</pre>");
 					return html.toString();
 				}
@@ -104,7 +104,7 @@ public class OWLStoreDebuggingTagHandler extends AbstractHTMLTagHandler {
 				}
 				if (format != null) {
 					manager.saveOntology(ontology, format, stream);
-					html.append(KnowWEUtils.html_escape(stream.toString()));
+					html.append(KnowWEUtils.escapeHTML(stream.toString()));
 				}
 			}
 			catch (OWLOntologyStorageException e) {

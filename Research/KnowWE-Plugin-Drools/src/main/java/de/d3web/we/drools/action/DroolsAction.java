@@ -387,7 +387,7 @@ public class DroolsAction extends AbstractAction {
 		json.addProperty("status", responseType.ordinal());
 
 		json.addProperty("command", context.getParameter("command"));
-		json.addProperty("message", JSONValue.escape(KnowWEUtils.html_escape(message)));
+		json.addProperty("message", JSONValue.escape(KnowWEUtils.escapeHTML(message)));
 
 		context.getWriter().write(json.toString() + "\n");
 	}

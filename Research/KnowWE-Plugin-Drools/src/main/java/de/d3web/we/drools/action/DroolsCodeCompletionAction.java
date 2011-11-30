@@ -74,7 +74,7 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 				// add suggestion to JSON Object
 				JsonArray a = new JsonArray();
 				a.add(new JsonPrimitive(JSONValue.escape(KnowWEUtils
-						.html_escape(output))));
+						.escapeHTML(output))));
 
 				json.add("suggestions", a);
 
@@ -98,7 +98,7 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 
 				for (String s : input)
 					a.add(new JsonPrimitive(JSONValue.escape(KnowWEUtils
-							.html_escape(action + " " + s))));
+							.escapeHTML(action + " " + s))));
 
 				json.add("suggestions", a);
 			} else if (query.startsWith("set")) {
@@ -115,7 +115,7 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 
 				for (String s : values)
 					a.add(new JsonPrimitive(JSONValue.escape(KnowWEUtils
-							.html_escape(action + " " + object + " = " + s))));
+							.escapeHTML(action + " " + object + " = " + s))));
 
 				json.add("suggestions", a);
 			} else if (query.startsWith("load")) {
@@ -130,7 +130,7 @@ public class DroolsCodeCompletionAction extends AbstractAction {
 
 				for (String s : values)
 					a.add(new JsonPrimitive(JSONValue.escape(KnowWEUtils
-							.html_escape(action + " " + s))));
+							.escapeHTML(action + " " + s))));
 
 				json.add("suggestions", a);
 			}
