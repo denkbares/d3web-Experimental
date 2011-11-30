@@ -29,4 +29,17 @@
 	
 
 	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="ObjectInfoTagHandlerIncr">
+		<parameter id="class" value="de.knowwe.compile.support.ObjectInfoTagHandlerIncr" />
+		<parameter id="name" value="ObjectInfoTagHandlerIncr" />
+		<parameter id="description" value="TagHandler ObjectInfoTagHandlerIncr" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="2" />
+		<parameter id="script" value="KnowWE-Plugin-Core.js" />
+	</extension>
+	
+
+
+	
 </plugin>

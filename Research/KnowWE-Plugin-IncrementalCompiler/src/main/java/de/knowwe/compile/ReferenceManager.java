@@ -175,6 +175,13 @@ public class ReferenceManager {
 		return new ArrayList<Section<? extends TermDefinition>>();
 	}
 
+	public Collection<Section<? extends TermReference>> getTermReferences(String identifier) {
+		if (allReferences.containsKey(identifier)) {
+			return allReferences.get(identifier);
+		}
+		return new ArrayList<Section<? extends TermReference>>();
+	}
+
 	public Collection<Section<? extends ComplexDefinition>> getReferencingDefinitions(Section<? extends TermDefinition> section) {
 		Collection<Section<? extends ComplexDefinition>> result = new HashSet<Section<? extends ComplexDefinition>>();
 		String termIdentifier = section.get().getTermIdentifier(section);
