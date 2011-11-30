@@ -33,7 +33,6 @@
 	// if user has visited welcomepage, link him to welcomepage_firsttime
 	boolean welcomePage_firstTime = false;
 	if (user.getTitle().equals(WELCOME_PAGE)) {
-		System.out.println("jetzt");
 		welcomePage_firstTime = true;
 		String[] readpages = new String[0];
 		
