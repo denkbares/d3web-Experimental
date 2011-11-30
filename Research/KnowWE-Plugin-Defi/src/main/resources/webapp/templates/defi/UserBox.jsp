@@ -35,28 +35,6 @@
 
 	ResourceBundle rb = ResourceBundle.getBundle("KnowWE_Defi_config");
 	String notfallplan = rb.getString("defi.link.notfall");
-	
-	// Prüfe ob Startseite bereits bewertet wurde
-	String[] readpages = new String[0];
-	String start = "Wiki.jsp?page=Startseite_firstTime";
-	KnowWEArticle userData = KnowWEEnvironment.getInstance().getArticleManager(
-			KnowWEEnvironment.DEFAULT_WEB).getArticle(user.getUserName() + "_data");
-	if (userData != null) {
-		Section<DataMarkup> data = Sections.findSuccessor(
-				userData.getSection(), DataMarkup.class);
-		if (data != null && DataMarkup.getAnnotation(data, "readpages") != null) {
-			// Hole alle gelesenen Readbuttons
-			readpages = DataMarkup.getAnnotation(data, "readpages").split(";");
-			// Ist gesuchter dabei?
-			for (String s : readpages) {
-				// Vergleiche pagenames und ids 
-				if (s.split("::")[0].equals("Startseite_firstTime")) {
-					start = "Wiki.jsp?page=Startseite";
-				}
-			}
-		}
-	}
-	// Startseiten-Test-Ende - - - - - - - - - - - -
 %>
 <div class="userbox">
 	<span>Pers&ouml;nliche Funktionen</span>
@@ -76,7 +54,7 @@
 		<wiki:UserCheck status="asserted">
 			<p>(nicht angemeldet)</p>
 		</wiki:UserCheck>
-		<a href="<%= start %>" class="princ">Meine
+		<a href="Wiki.jsp?page=Startseite" class="princ">Meine
 			Startseite</a>
 		<%
 			}

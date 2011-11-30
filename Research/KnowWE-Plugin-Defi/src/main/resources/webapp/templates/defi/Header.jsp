@@ -14,10 +14,9 @@
 	value="${prefs.Language}" />
 <fmt:setBundle basename="templates.default" />
 <%
-	// *********************************************
-	// Benutzername des Beraters:
 	final String BERATER = "Dr. Stefan M. Schulz";
-	// *********************************************
+	final String WELCOME_PAGE = "Startseite";
+	final String WELCOME_PAGE_FIRSTTIME = WELCOME_PAGE + "_firstTime";
 
 	WikiContext c = WikiContext.findContext(pageContext);
 	String frontpage = c.getEngine().getFrontPage();
@@ -31,38 +30,47 @@
 		if (s.equals(BERATER)) beraterOnline = true;
 	}
 	
-	
-	// Prüfe ob Startseite bereits bewertet wurde
-	String[] readpages = new String[0];
-	String start = "Wiki.jsp?page=Startseite_firstTime";
-	KnowWEArticle userData = KnowWEEnvironment.getInstance().getArticleManager(
-			KnowWEEnvironment.DEFAULT_WEB).getArticle(user.getUserName() + "_data");
-	if (userData != null) {
-		Section<DataMarkup> data = Sections.findSuccessor(
-				userData.getSection(), DataMarkup.class);
-		if (data != null && DataMarkup.getAnnotation(data, "readpages") != null) {
-			// Hole alle gelesenen Readbuttons
-			readpages = DataMarkup.getAnnotation(data, "readpages").split(";");
-			// Ist gesuchter dabei?
-			for (String s : readpages) {
-				// Vergleiche pagenames und ids 
-				if (s.split("::")[0].equals("Startseite_firstTime")) {
-					start = "Wiki.jsp?page=Startseite";
+	// if user has visited welcomepage, link him to welcomepage_firsttime
+	boolean welcomePage_firstTime = false;
+	if (user.getTitle().equals(WELCOME_PAGE)) {
+		System.out.println("jetzt");
+		welcomePage_firstTime = true;
+		String[] readpages = new String[0];
+		
+		KnowWEArticle userData = KnowWEEnvironment.getInstance().getArticleManager(
+				KnowWEEnvironment.DEFAULT_WEB).getArticle(user.getUserName() + "_data");
+		if (userData != null) {
+			Section<DataMarkup> data = Sections.findSuccessor(
+					userData.getSection(), DataMarkup.class);
+			if (data != null && DataMarkup.getAnnotation(data, "readpages") != null) {
+				// Hole alle gelesenen Readbuttons
+				readpages = DataMarkup.getAnnotation(data, "readpages").split(";");
+				// Ist gesuchter dabei?
+				for (String s : readpages) {
+					// Vergleiche pagenames und ids 
+					if (s.split("::")[0].equals(WELCOME_PAGE_FIRSTTIME)) {
+						welcomePage_firstTime = false;
+					}
 				}
 			}
 		}
 	}
-	// Startseiten-Test-Ende - - - - - - - - - - - -
+	
+if(welcomePage_firstTime) { 
 %>
+<script type="text/javascript">
+	window.location = "Wiki.jsp?page=<%=WELCOME_PAGE_FIRSTTIME%>";
+</script>
+<% } %>
 
 <div id="header">
-
+	
 	<div class="titlebox">
 		<wiki:InsertPage page="TitleBox" />
 	</div>
 
 	<div class="applicationlogo">
-		<a id="logo" href="<%= start %>"
+		<a id="logo" href="Wiki.jsp?page=Startseite"
 			title="<fmt:message key='actions.home.title' ><fmt:param><%=frontpage%></fmt:param></fmt:message> ">
 			<!--<fmt:message key='actions.home' />--> <img
 			src="KnowWEExtension/images/Logo_icd-forum.gif" height="101px"
