@@ -173,7 +173,6 @@
 	</properties>
 	<modules>
 		<module>d3web-Report</module>
-		<module>d3web-KnOfficeParser</module>
 		<module>KnowWE-Plugin-Biolog</module>
 		<module>KnowWE-Plugin-CI4KE-Groovy-Addons</module>
 		<module>KnowWE-Plugin-Comment</module>
