@@ -1,7 +1,6 @@
 package de.knowwe.d3web.scoreTable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,10 +17,9 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.report.message.NoSuchObjectError;
-import de.knowwe.report.message.ObjectCreatedMessage;
 
 public class ScoreTableCellSubtreeHandler extends D3webSubtreeHandler<ScoreCell> {
 
@@ -32,10 +30,10 @@ public class ScoreTableCellSubtreeHandler extends D3webSubtreeHandler<ScoreCell>
 	}
 
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article,
+	public Collection<Message> create(KnowWEArticle article,
 			Section<ScoreCell> section) {
 
-		List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>();
+		List<Message> messages = new ArrayList<Message>();
 
 		if (section.getOriginalText().trim().length() == 0) {
 			return messages;
@@ -59,10 +57,10 @@ public class ScoreTableCellSubtreeHandler extends D3webSubtreeHandler<ScoreCell>
 		Section<Solution> solution = Sections.findSuccessor(solutionCell, Solution.class);
 
 		if (solution == null) {
-			messages.add(new NoSuchObjectError("Solution not found"));
+			messages.add(Messages.noSuchObjectError("Solution not found"));
 		}
 		if (condition == null) {
-			messages.add(new NoSuchObjectError("Condition not found"));
+			messages.add(Messages.noSuchObjectError("Condition not found"));
 		}
 
 		if (solution != null && condition != null) {
@@ -81,8 +79,7 @@ public class ScoreTableCellSubtreeHandler extends D3webSubtreeHandler<ScoreCell>
 					null, PSMethodHeuristic.class);
 			if (r != null) {
 				KnowWEUtils.storeObject(article, section, ruleStoreKey, r);
-				return Arrays
-						.asList((KDOMReportMessage) new ObjectCreatedMessage(
+				return Messages.asList(Messages.objectCreatedNotice(
 								"Rule"));
 			}
 		}

@@ -37,7 +37,7 @@ public class AssignmentMarkup extends DefaultMarkupType {
 	static {
 		MARKUP = new DefaultMarkup("Assignment");
 		MARKUP.addContentType(new AssignmentContentType());
-		MARKUP.addAnnotation(KnowWEPackageManager.ATTRIBUTE_NAME, false);
+		MARKUP.addAnnotation(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME, false);
 		MARKUP.addAnnotation(BASEURI, false);
 	}
 

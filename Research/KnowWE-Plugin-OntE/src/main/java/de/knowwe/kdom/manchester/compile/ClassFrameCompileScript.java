@@ -17,8 +17,8 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.SyntaxError;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.manchester.ManchesterClassExpression;
 import de.knowwe.kdom.manchester.frame.ClassFrame;
@@ -39,7 +39,7 @@ public class ClassFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<Cl
 	}
 
 	@Override
-	public Set<OWLAxiom> createOWLAxioms(Section<ClassFrame> section, Collection<KDOMReportMessage> messages) {
+	public Set<OWLAxiom> createOWLAxioms(Section<ClassFrame> section, Collection<Message> messages) {
 		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
 		OWLClass clazz = null;
 		OWLAxiom axiom = null;
@@ -70,7 +70,7 @@ public class ClassFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<Cl
 				}
 			}
 			else {
-				messages.add(new SyntaxError(
+				messages.add(Messages.syntaxError(
 						"Annotations missing! Please specify atleast one annotation or delete the keyword."));
 			}
 		}
@@ -81,7 +81,7 @@ public class ClassFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<Cl
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("SubClassOf is empty!"));
+				messages.add(Messages.syntaxError("SubClassOf is empty!"));
 			}
 			else {
 				Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(
@@ -103,7 +103,7 @@ public class ClassFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<Cl
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("DisJointWith is empty!"));
+				messages.add(Messages.syntaxError("DisJointWith is empty!"));
 			}
 			else {
 				Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(
@@ -126,7 +126,7 @@ public class ClassFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<Cl
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("EquivalentTo is empty!"));
+				messages.add(Messages.syntaxError("EquivalentTo is empty!"));
 			}
 			else {
 				Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(
@@ -149,7 +149,7 @@ public class ClassFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<Cl
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("DisjointUnionOf is empty!"));
+				messages.add(Messages.syntaxError("DisjointUnionOf is empty!"));
 			}
 			else {
 				Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(

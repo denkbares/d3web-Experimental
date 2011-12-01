@@ -14,7 +14,7 @@ import de.knowwe.core.contexts.ContextManager;
 import de.knowwe.core.contexts.DefaultSubjectContext;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.hermes.TimeEvent;
 import de.knowwe.hermes.TimeStamp;
 import de.knowwe.rdf2go.DefaultURIContext;
@@ -24,11 +24,11 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 public class TimeEventOWLCompiler extends RDF2GoSubtreeHandler<TimeEventNew> {
 
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TimeEventNew> s) {
+	public Collection<Message> create(KnowWEArticle article, Section<TimeEventNew> s) {
 
 		TimeEvent event = TimeEventNew.createTimeEvent(s);
 		if (s.hasErrorInSubtree(article) || event == null) {
-			return new ArrayList<KDOMReportMessage>(0);
+			return new ArrayList<Message>(0);
 		}
 		List<Statement> io = new ArrayList<Statement>();
 		try {
@@ -99,7 +99,7 @@ public class TimeEventOWLCompiler extends RDF2GoSubtreeHandler<TimeEventNew> {
 		}
 
 		Rdf2GoCore.getInstance().addStatements(io, s);
-		return new ArrayList<KDOMReportMessage>(0);
+		return new ArrayList<Message>(0);
 	}
 
 	private void createDateTripels(TimeStamp timeStamp, ArrayList<Statement> slist, URI localURI) throws ModelRuntimeException {

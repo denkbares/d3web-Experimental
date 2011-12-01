@@ -30,7 +30,7 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 
 /**
  * OWLAPISubtreeHandler class which provides access to an OWL ontology
@@ -118,11 +118,11 @@ public abstract class OWLAPISubtreeHandler<T extends Type> extends SubtreeHandle
 	 * @return a @link{Set} of @link{OWLAxiom}s which will be added to the
 	 *         ontology.
 	 */
-	public abstract Set<OWLAxiom> createOWLAxioms(KnowWEArticle article, Section<T> s, Collection<KDOMReportMessage> messages);
+	public abstract Set<OWLAxiom> createOWLAxioms(KnowWEArticle article, Section<T> s, Collection<Message> messages);
 
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<T> s) {
-		Collection<KDOMReportMessage> messages = new LinkedList<KDOMReportMessage>();
+	public Collection<Message> create(KnowWEArticle article, Section<T> s) {
+		Collection<Message> messages = new LinkedList<Message>();
 		Set<OWLAxiom> axioms = createOWLAxioms(article, s, messages);
 		connector.addAxioms(axioms);
 		axiomCache.put(s, axioms);

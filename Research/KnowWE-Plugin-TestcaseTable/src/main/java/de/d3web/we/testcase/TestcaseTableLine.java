@@ -38,13 +38,11 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.report.KDOMError;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.table.TableCell;
 import de.knowwe.kdom.table.TableLine;
-import de.knowwe.report.message.InvalidNumberError;
-import de.knowwe.report.message.NoSuchObjectError;
 
 /**
  * 
@@ -75,7 +73,7 @@ public class TestcaseTableLine extends TableLine {
 	private final class TestcaseTableLineSubtreeHandler extends SubtreeHandler<TestcaseTableLine> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TestcaseTableLine> s) {
+		public Collection<Message> create(KnowWEArticle article, Section<TestcaseTableLine> s) {
 
 			KnowledgeBase kb = findKB(s, article);
 
@@ -93,18 +91,14 @@ public class TestcaseTableLine extends TableLine {
 
 			for (Section<ValueType> valueSec : values) {
 
-				//if value is unchanged, ignore it
+				// if value is unchanged, ignore it
 				if (Sections.findSuccessor(valueSec, UnchangedType.class) != null) continue;
 
 				Section<? extends HeaderCell> headerCell = TestcaseTable.findHeaderCell(valueSec);
 
 				if (headerCell == null) {
-					KnowWEUtils.storeSingleMessage(
-							article,
-							valueSec,
-							getClass(),
-							KDOMError.class,
-							new NoSuchObjectError("No header found for answer '"
+					Messages.storeMessage(article, valueSec, getClass(),
+							Messages.noSuchObjectError("No header found for answer '"
 									+ valueSec.getText() + "'."));
 					continue;
 				}
@@ -129,11 +123,11 @@ public class TestcaseTableLine extends TableLine {
 				catch (NumberFormatException e) {
 					// on sectionizing an invalid AnswerRef was found.
 					// replace message...
-					KnowWEUtils.clearMessages(article,
+					Messages.clearMessages(article,
 							Sections.findSuccessor(valueSec, CellAnswerRef.class));
 
-					KnowWEUtils.storeSingleMessage(article, valueSec, getClass(), KDOMError.class,
-							new InvalidNumberError(valueString));
+					Messages.storeMessage(article, valueSec, getClass(),
+							Messages.invalidNumberError(valueString));
 					continue;
 				}
 
@@ -142,8 +136,8 @@ public class TestcaseTableLine extends TableLine {
 					testCase.add(finding);
 				}
 				else {
-					KnowWEUtils.storeSingleMessage(article, valueSec, getClass(), KDOMError.class,
-							new NoSuchObjectError(valueString));
+					Messages.storeMessage(article, valueSec, getClass(),
+							Messages.noSuchObjectError(valueString));
 				}
 
 			}

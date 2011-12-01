@@ -42,7 +42,7 @@ public class DiaFluxCoverageType extends DefaultMarkupType {
 
 		MARKUP = new DefaultMarkup("DiaFluxCoverage");
 		MARKUP.addContentType(new FlowchartType());
-		MARKUP.addAnnotation(KnowWEPackageManager.ATTRIBUTE_NAME, false);
+		MARKUP.addAnnotation(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME, false);
 		MARKUP.addAnnotation(ANNOTATION_MASTER, false);
 		MARKUP.addAnnotation(ANNOTATION_TEST, true);
 

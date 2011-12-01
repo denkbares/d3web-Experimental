@@ -39,11 +39,11 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.wikiConnector.KnowWEWikiConnector;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import de.knowwe.report.message.NoSuchObjectError;
 
 /**
  * 
@@ -73,19 +73,21 @@ public class TestCaseExecutorType extends DefaultMarkupType {
 	public TestCaseExecutorType() {
 		super(MARKUP);
 		addSubtreeHandler(new SubtreeHandler<TestCaseExecutorType>() {
+
 			@Override
-			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TestCaseExecutorType> section) {
-				List<KDOMReportMessage> errors = new LinkedList<KDOMReportMessage>();
+			public Collection<Message> create(KnowWEArticle article, Section<TestCaseExecutorType> section) {
+				List<Message> errors = new LinkedList<Message>();
 
 				String[] files = DefaultMarkupType.getAnnotations(section, ANNOTATION_FILE);
 				KnowWEWikiConnector connector = KnowWEEnvironment.getInstance().getWikiConnector();
 				List<String> attachments = connector.getAttachmentFilenamesForPage(section.getArticle().getTitle());
-				
+
 				for (String file : files) {
-					if (!attachments.contains(file)) errors.add(new NoSuchObjectError("File", file));
+					if (!attachments.contains(file)) errors.add(Messages.noSuchObjectError("File",
+							file));
 
 				}
-				
+
 				return errors;
 			}
 		});
@@ -139,7 +141,7 @@ public class TestCaseExecutorType extends DefaultMarkupType {
 			section.getSectionStore().storeObject(TEST_RESULT_KEY, report);
 			section.getSectionStore().storeObject(TESTCASE_KEY, suite);
 		}
-		
+
 		return cases.size();
 	}
 

@@ -14,8 +14,8 @@ import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.SyntaxError;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.manchester.ManchesterClassExpression;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
@@ -26,7 +26,6 @@ import de.knowwe.kdom.manchester.types.ObjectPropertyExpression;
 import de.knowwe.onte.editor.OWLApiAxiomCacheUpdateEvent;
 import de.knowwe.owlapi.OWLAPIKnowledgeUnitCompileScript;
 import de.knowwe.owlapi.OWLAPISubtreeHandler;
-
 
 public class ObjectPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScript<ObjectPropertyFrame> {
 
@@ -40,7 +39,7 @@ public class ObjectPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScrip
 	}
 
 	@Override
-	public Set<OWLAxiom> createOWLAxioms(Section<ObjectPropertyFrame> section, Collection<KDOMReportMessage> messages) {
+	public Set<OWLAxiom> createOWLAxioms(Section<ObjectPropertyFrame> section, Collection<Message> messages) {
 		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
 		OWLObjectProperty p = null;
 		OWLAxiom axiom = null;
@@ -64,7 +63,7 @@ public class ObjectPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScrip
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("Range is empty!"));
+				messages.add(Messages.syntaxError("Range is empty!"));
 			}
 			else {
 				Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(
@@ -87,7 +86,7 @@ public class ObjectPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScrip
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("Domain is empty!"));
+				messages.add(Messages.syntaxError("Domain is empty!"));
 			}
 			else {
 				Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(
@@ -109,7 +108,7 @@ public class ObjectPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScrip
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("InverseOf is empty!"));
+				messages.add(Messages.syntaxError("InverseOf is empty!"));
 			}
 			else {
 				Set<OWLObjectProperty> props = AxiomFactory.createObjectPropertyExpression(mce);
@@ -130,7 +129,7 @@ public class ObjectPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScrip
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("SubPropertyOf is empty!"));
+				messages.add(Messages.syntaxError("SubPropertyOf is empty!"));
 			}
 			else {
 				Set<OWLObjectProperty> props = AxiomFactory.createObjectPropertyExpression(mce);
@@ -156,7 +155,7 @@ public class ObjectPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScrip
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("DisJointWith is empty!"));
+				messages.add(Messages.syntaxError("DisJointWith is empty!"));
 			}
 			else {
 				Set<OWLObjectProperty> props = AxiomFactory.createObjectPropertyExpression(mce);
@@ -177,7 +176,7 @@ public class ObjectPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScrip
 			List<Section<?>> terms = c.get().getCharacteristics(c);
 
 			if (terms.isEmpty()) {
-				messages.add(new SyntaxError("No Characteristics found!"));
+				messages.add(Messages.syntaxError("No Characteristics found!"));
 			}
 			else {
 
@@ -199,7 +198,7 @@ public class ObjectPropertyCompileScript extends OWLAPIKnowledgeUnitCompileScrip
 					chain,
 					ObjectPropertyExpression.class);
 			if (objectProperties.isEmpty()) {
-				messages.add(new SyntaxError(
+				messages.add(Messages.syntaxError(
 						"no object properties found! SubpropertyChain expects  aleast two."));
 			}
 			else {

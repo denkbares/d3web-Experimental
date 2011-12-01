@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -37,8 +37,8 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.SyntaxError;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.manchester.ManchesterClassExpression;
 import de.knowwe.kdom.manchester.frame.ClassFrame;
@@ -57,7 +57,7 @@ import de.knowwe.owlapi.OWLAPISubtreeHandler;
  * Currently handles: {@link OWLClassDefinition}, {@link SubClassOf},
  * {@link EquivalentTo}, {@link DisJointWith}
  * </p>
- *
+ * 
  * @author Stefan Mark
  * @created 24.08.2011
  */
@@ -73,7 +73,7 @@ public class ClassFrameSubtreeHandler extends OWLAPISubtreeHandler<ClassFrame> {
 	}
 
 	@Override
-	public Set<OWLAxiom> createOWLAxioms(KnowWEArticle article, Section<ClassFrame> s, Collection<KDOMReportMessage> messages) {
+	public Set<OWLAxiom> createOWLAxioms(KnowWEArticle article, Section<ClassFrame> s, Collection<Message> messages) {
 
 		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
 		OWLClass clazz = null;
@@ -104,18 +104,18 @@ public class ClassFrameSubtreeHandler extends OWLAPISubtreeHandler<ClassFrame> {
 				}
 			}
 			else {
-				messages.add(new SyntaxError(
+				messages.add(Messages.syntaxError(
 						"Annotations missing! Please specify atleast one annotation or delete the keyword."));
 			}
 		}
 
-		if(type.hasSubClassOf(s)){ //Handle SubClassOf
+		if (type.hasSubClassOf(s)) { // Handle SubClassOf
 			Section<?> desc = type.getSubClassOf(s);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("SubClassOf is empty!"));
+				messages.add(Messages.syntaxError("SubClassOf is empty!"));
 			}
 			else {
 				Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(
@@ -131,13 +131,13 @@ public class ClassFrameSubtreeHandler extends OWLAPISubtreeHandler<ClassFrame> {
 			}
 		}
 
-		if(type.hasDisjointWith(s)){ //Handle DisjointWith
+		if (type.hasDisjointWith(s)) { // Handle DisjointWith
 			Section<?> desc = type.getDisjointWith(s);
 			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("DisJointWith is empty!"));
+				messages.add(Messages.syntaxError("DisJointWith is empty!"));
 			}
 			else {
 				Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(
@@ -160,7 +160,7 @@ public class ClassFrameSubtreeHandler extends OWLAPISubtreeHandler<ClassFrame> {
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("EquivalentTo is empty!"));
+				messages.add(Messages.syntaxError("EquivalentTo is empty!"));
 			}
 			else {
 				Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(
@@ -183,7 +183,7 @@ public class ClassFrameSubtreeHandler extends OWLAPISubtreeHandler<ClassFrame> {
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("DisjointUnionOf is empty!"));
+				messages.add(Messages.syntaxError("DisjointUnionOf is empty!"));
 			}
 			else {
 				Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(

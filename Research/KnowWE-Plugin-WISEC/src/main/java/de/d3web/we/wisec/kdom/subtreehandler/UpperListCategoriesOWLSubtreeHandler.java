@@ -39,7 +39,7 @@ import de.d3web.we.wisec.kdom.WISECTable;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.table.TableCellContent;
 import de.knowwe.kdom.table.TableLine;
@@ -48,7 +48,7 @@ import de.knowwe.logging.Logging;
 public class UpperListCategoriesOWLSubtreeHandler extends OwlSubtreeHandler<UpperListCategoriesType> {
 
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<UpperListCategoriesType> s) {
+	public Collection<Message> create(KnowWEArticle article, Section<UpperListCategoriesType> s) {
 
 		// Get the necessary Annotations
 		Section<UpperListCategoriesRootType> root = Sections.findAncestorOfType(s,

@@ -34,11 +34,11 @@ import de.knowwe.core.kdom.rendering.DefaultTextRenderer;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.table.TableCellContent;
 import de.knowwe.kdom.table.TableCellContentRenderer;
 import de.knowwe.kdom.table.TableLine;
-import de.knowwe.report.message.NoSuchObjectError;
 
 /**
  * 
@@ -83,16 +83,16 @@ public class HeaderCellContent extends TableCellContent {
 		qref.addSubtreeHandler(new SubtreeHandler<QuestionReference>() {
 
 			@Override
-			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<QuestionReference> s) {
+			public Collection<Message> create(KnowWEArticle article, Section<QuestionReference> s) {
 
 				KnowledgeBase kb = D3webUtils.getKB(article.getWeb(), article.getTitle());
 
 				Question question = kb.getManager().searchQuestion(s.getText());
 
 				if (question == null) {
-					List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>();
-					//TODO message is not shown
-					messages.add(new NoSuchObjectError(s.getText()));
+					List<Message> messages = new ArrayList<Message>();
+					// TODO message is not shown
+					messages.add(Messages.noSuchObjectError(s.getText()));
 					return messages;
 				}
 				else

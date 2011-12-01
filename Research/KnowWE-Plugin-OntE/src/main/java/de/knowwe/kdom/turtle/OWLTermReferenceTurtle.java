@@ -29,7 +29,7 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.termObject.IRITermReference;
 import de.knowwe.termObject.RDFNodeType;
 
@@ -41,8 +41,8 @@ public class OWLTermReferenceTurtle extends IRITermReference implements Incremen
 		// consider this priority after type is overriden with other type..
 		this.addSubtreeHandler(Priority.LOWER, new SubtreeHandler<DataTypeValueTurtle>() {
 			@Override
-			public java.util.Collection<de.knowwe.core.report.KDOMReportMessage> create(KnowWEArticle article, de.knowwe.core.kdom.parsing.Section<DataTypeValueTurtle> s) {
-				return new ArrayList<KDOMReportMessage>(0);
+			public java.util.Collection<de.knowwe.core.report.Message> create(KnowWEArticle article, de.knowwe.core.kdom.parsing.Section<DataTypeValueTurtle> s) {
+				return new ArrayList<Message>(0);
 			}
 				;
 		});

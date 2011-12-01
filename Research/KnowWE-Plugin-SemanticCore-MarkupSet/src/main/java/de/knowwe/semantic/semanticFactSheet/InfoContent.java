@@ -35,7 +35,7 @@ import de.knowwe.core.contexts.ContextManager;
 import de.knowwe.core.contexts.DefaultSubjectContext;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.xml.XMLContent;
 
@@ -54,7 +54,7 @@ public class InfoContent extends XMLContent {
 	private class InfoContentOWLSubTreeHandler extends OwlSubtreeHandler {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
+		public Collection<Message> create(KnowWEArticle article, Section s) {
 			IntermediateOwlObject io = new IntermediateOwlObject();
 			String text = s.getOriginalText();
 			PropertyManager pm = PropertyManager.getInstance();

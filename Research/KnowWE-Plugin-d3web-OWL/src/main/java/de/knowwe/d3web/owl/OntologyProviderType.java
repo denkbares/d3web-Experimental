@@ -40,7 +40,7 @@ public class OntologyProviderType extends DefaultMarkupType implements Increment
 	static {
 		MARKUP = new DefaultMarkup(MARKUP_NAME);
 		MARKUP.addAnnotation(ANNOTATION_SRC, false);
-		MARKUP.addAnnotation(KnowWEPackageManager.ATTRIBUTE_NAME, false);
+		MARKUP.addAnnotation(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME, false);
 	}
 
 	public OntologyProviderType() {

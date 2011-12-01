@@ -20,7 +20,6 @@
 package de.knowwe.kdom.classHierarchy;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,13 +31,13 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.dashtree.DashTreeElementContent;
 import de.knowwe.kdom.dashtree.DashTreeUtils;
 import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.report.message.ObjectNotFoundWarning;
 import de.knowwe.termObject.IRITermReference;
 
 public class SubClassingDashTreeElementContent extends DashTreeElementContent implements
@@ -61,10 +60,11 @@ public class SubClassingDashTreeElementContent extends DashTreeElementContent im
 
 	private class SubClassingDashTreeElementOWLSubTreeHandler extends
 			RDF2GoSubtreeHandler<SubClassingDashTreeElementContent> {
-		
+
 		@Override
 		public void destroy(KnowWEArticle article, Section<SubClassingDashTreeElementContent> s) {
-			if (s.getOriginalText().startsWith("Hermes-Object") | s.getOriginalText().startsWith("Kulturkreis")) {
+			if (s.getOriginalText().startsWith("Hermes-Object")
+					| s.getOriginalText().startsWith("Kulturkreis")) {
 				int k = 0;
 				k++;
 			}
@@ -72,18 +72,21 @@ public class SubClassingDashTreeElementContent extends DashTreeElementContent im
 		}
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<SubClassingDashTreeElementContent> elementContent) {
+		public Collection<Message> create(KnowWEArticle article, Section<SubClassingDashTreeElementContent> elementContent) {
 			if (elementContent.hasErrorInSubtree(article)) {
 				this.destroy(article, elementContent);
-				Section<DashTreeElement> element = Sections.findAncestorOfType(elementContent, DashTreeElement.class);
+				Section<DashTreeElement> element = Sections.findAncestorOfType(elementContent,
+						DashTreeElement.class);
 				List<Section<DashTreeElement>> found = DashTreeUtils.findChildrenDashtreeElements(element);
 				for (Section<DashTreeElement> section : found) {
-					Section<SubClassingDashTreeElementContent> content = Sections.findSuccessor(section, SubClassingDashTreeElementContent.class);
+					Section<SubClassingDashTreeElementContent> content = Sections.findSuccessor(
+							section, SubClassingDashTreeElementContent.class);
 					this.destroy(article, content);
 				}
-				return new ArrayList<KDOMReportMessage>(0);
+				return new ArrayList<Message>(0);
 			}
-			if (elementContent.getOriginalText().startsWith("Hermes-Object") | elementContent.getOriginalText().startsWith("Kulturkreis")) {
+			if (elementContent.getOriginalText().startsWith("Hermes-Object")
+					| elementContent.getOriginalText().startsWith("Kulturkreis")) {
 				int k = 0;
 				k++;
 			}
@@ -100,18 +103,16 @@ public class SubClassingDashTreeElementContent extends DashTreeElementContent im
 					URI localURI = childElement.get().getNode(childElement);
 					URI fatherURI = fatherElement.get().getNode(fatherElement);
 					if (localURI == null || fatherURI == null) {
-						return Arrays.asList((KDOMReportMessage) new ObjectNotFoundWarning(
-								element.getOriginalText()));
+						return Messages.asList(Messages.warning("Object not found: '"
+								+ element.getText() + "'"));
 					}
 					Rdf2GoCore.getInstance().addStatement(localURI,
 								RDFS.subClassOf, fatherURI, childElement);
 				}
 			}
 
-			return new ArrayList<KDOMReportMessage>(0);
+			return new ArrayList<Message>(0);
 		}
-
-		
 
 	}
 

@@ -12,7 +12,7 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.frame.MiscFrame;
@@ -35,7 +35,7 @@ public class MiscFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<Mis
 	}
 
 	@Override
-	public Set<OWLAxiom> createOWLAxioms(Section<MiscFrame> section, Collection<KDOMReportMessage> messages) {
+	public Set<OWLAxiom> createOWLAxioms(Section<MiscFrame> section, Collection<Message> messages) {
 		OWLAxiom a = null;
 		MiscFrame type = (MiscFrame) section.get();
 
@@ -69,7 +69,7 @@ public class MiscFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<Mis
 	 * @param Section<? extends Type> section
 	 * @return A Set with {@link OWLAnnotationAxiom}
 	 */
-	private Set<OWLAnnotation> handleOptionalAnnotations(Section<? extends Type> section, Collection<KDOMReportMessage> messages) {
+	private Set<OWLAnnotation> handleOptionalAnnotations(Section<? extends Type> section, Collection<Message> messages) {
 
 		Set<OWLAnnotation> annotations = new HashSet<OWLAnnotation>();
 

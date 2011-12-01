@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -34,8 +34,8 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.SyntaxError;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.manchester.ManchesterClassExpression;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
@@ -60,15 +60,15 @@ import de.knowwe.owlapi.OWLAPISubtreeHandler;
  * {@link Annotations}, {@link InverseOf}, {@link SubPropertyOf}, {@link Domain}
  * and {@link Range}
  * </p>
- *
+ * 
  * @author Stefan Mark
  * @created 07.09.2011
  */
 public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPropertyFrame> {
 
 	/**
-	 * Constructor for the SubtreeHandler. Here you can set if a sync
-	 * with RDF2Go should occur. For further information see
+	 * Constructor for the SubtreeHandler. Here you can set if a sync with
+	 * RDF2Go should occur. For further information see
 	 * {@link OWLAPISubtreeHandler}.
 	 */
 	public ObjectPropertySubtreeHandler() {
@@ -76,7 +76,7 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 	}
 
 	@Override
-	public Set<OWLAxiom> createOWLAxioms(KnowWEArticle article, Section<ObjectPropertyFrame> s, Collection<KDOMReportMessage> messages) {
+	public Set<OWLAxiom> createOWLAxioms(KnowWEArticle article, Section<ObjectPropertyFrame> s, Collection<Message> messages) {
 
 		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
 		OWLObjectProperty p = null;
@@ -100,7 +100,7 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("Range is empty!"));
+				messages.add(Messages.syntaxError("Range is empty!"));
 			}
 			else {
 				Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(
@@ -123,7 +123,7 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("Domain is empty!"));
+				messages.add(Messages.syntaxError("Domain is empty!"));
 			}
 			else {
 				Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(
@@ -145,7 +145,7 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("InverseOf is empty!"));
+				messages.add(Messages.syntaxError("InverseOf is empty!"));
 			}
 			else {
 				Set<OWLObjectProperty> props = AxiomFactory.createObjectPropertyExpression(mce);
@@ -166,7 +166,7 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("SubPropertyOf is empty!"));
+				messages.add(Messages.syntaxError("SubPropertyOf is empty!"));
 			}
 			else {
 				Set<OWLObjectProperty> props = AxiomFactory.createObjectPropertyExpression(mce);
@@ -192,7 +192,7 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("DisJointWith is empty!"));
+				messages.add(Messages.syntaxError("DisJointWith is empty!"));
 			}
 			else {
 				Set<OWLObjectProperty> props = AxiomFactory.createObjectPropertyExpression(mce);
@@ -213,7 +213,7 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 			List<Section<?>> terms = c.get().getCharacteristics(c);
 
 			if (terms.isEmpty()) {
-				messages.add(new SyntaxError("No Characteristics found!"));
+				messages.add(Messages.syntaxError("No Characteristics found!"));
 			}
 			else {
 
@@ -235,7 +235,7 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 					chain,
 					ObjectPropertyExpression.class);
 			if (objectProperties.isEmpty()) {
-				messages.add(new SyntaxError(
+				messages.add(Messages.syntaxError(
 						"no object properties found! SubpropertyChain expects  aleast two."));
 			}
 			else {
@@ -248,7 +248,7 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 			}
 		}
 
-		if(ManchesterSyntaxUtil.hasAnnotations(s)) { //Handle Annotations
+		if (ManchesterSyntaxUtil.hasAnnotations(s)) { // Handle Annotations
 			List<Section<Annotation>> annotations = ManchesterSyntaxUtil.getAnnotations(s);
 			for (Section<Annotation> annotation : annotations) {
 				axiom = AxiomFactory.createAnnotations(annotation, p.getIRI(), messages);

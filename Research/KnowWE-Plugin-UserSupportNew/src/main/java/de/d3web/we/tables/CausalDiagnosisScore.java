@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.d3web.we.tables;
 
@@ -23,7 +23,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import de.d3web.KnOfficeParser.SingleKBMIDObjectManager;
 import de.d3web.core.inference.condition.CondEqual;
 import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.KnowledgeBase;
@@ -41,16 +40,15 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.kdom.AnonymousTypeInvisible;
 import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
 import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
- *
- * TODO Add standard scores
- * TODO Add ReportMessages
- *
+ * 
+ * TODO Add standard scores TODO Add ReportMessages
+ * 
  * @author Johannes Dienst
  * @created 14.10.2011
  */
@@ -68,7 +66,7 @@ public class CausalDiagnosisScore extends AbstractType {
 
 		this.addChildType(new InnerTable());
 
-		//		this.addSubtreeHandler(new CausalDiagnosisScoreHandler());
+		// this.addSubtreeHandler(new CausalDiagnosisScoreHandler());
 	}
 
 	/**
@@ -82,13 +80,12 @@ public class CausalDiagnosisScore extends AbstractType {
 		private static final String NO_WEIGHT = "Weightless";
 
 		@Override
-		public Collection<KDOMReportMessage> create(
+		public Collection<Message> create(
 				KnowWEArticle article, Section<CausalDiagnosisScore> scoreSec) {
 
 			Section<InnerTable> innerTable =
 					Sections.findChildOfType(scoreSec, InnerTable.class);
-			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty())
-				return null;
+			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty()) return null;
 
 			// TODO Right KnowledgeBase?
 			Set<String> packages =
@@ -97,7 +94,7 @@ public class CausalDiagnosisScore extends AbstractType {
 			KnowledgeBase kb = D3webUtils.getKB(article.getWeb(), packageName + " - master");
 
 			// Create XCLRelations
-			SingleKBMIDObjectManager kbm = new SingleKBMIDObjectManager(kb);
+			// SingleKBMIDObjectManager kbm = new SingleKBMIDObjectManager(kb);
 
 			// Create all Conditions and Weights: 1st and 2end column
 			// TODO First Cell is no Question: Removed it! But what if empty?
@@ -118,9 +115,9 @@ public class CausalDiagnosisScore extends AbstractType {
 				String questionName = splittedCondition[0].trim();
 				Question question = kb.getManager().searchQuestion(questionName);
 
-				if ( (question == null))
-					question = new QuestionText(kb, questionName);
-				CondEqual cond = new CondEqual(question, new ChoiceValue(splittedCondition[1].trim()));
+				if ((question == null)) question = new QuestionText(kb, questionName);
+				CondEqual cond = new CondEqual(question, new ChoiceValue(
+						splittedCondition[1].trim()));
 				conditionList.add(cond);
 			}
 
@@ -152,9 +149,10 @@ public class CausalDiagnosisScore extends AbstractType {
 				Section<TableCell> solutionCell = column.removeFirst();
 				String solText = solutionCell.getText();
 				solText = solText.replaceAll("[\\r\\n\\{\\s]", "");
-				Solution solution = kbm.findSolution(solText);
+				Solution solution = kb.getManager().searchSolution(solText);
 				if (solution == null) {
-					solution = kbm.createSolution(solText, null);
+
+					solution = new Solution(kb.getRootSolution(), solText);
 					kb.getManager().putTerminologyObject(solution);
 				}
 
@@ -162,10 +160,10 @@ public class CausalDiagnosisScore extends AbstractType {
 				XCLModel model = new XCLModel(solution);
 
 				// One column can contain Cells with the following symbols
-				//				Standard: [+]
-				//			   	Necessary to derive solution: [!]
-				//			    Excludes this solution: [--]
-				//			    Suffices to derive solution: [++]
+				// Standard: [+]
+				// Necessary to derive solution: [!]
+				// Excludes this solution: [--]
+				// Suffices to derive solution: [++]
 				Section<TableCell> cell = null;
 				for (int j = 0; j < column.size(); j++) {
 					cell = column.removeFirst();
@@ -173,8 +171,7 @@ public class CausalDiagnosisScore extends AbstractType {
 
 					// No text -> no Relation
 					if (cellText.equals("") ||
-							conditionList.get(j) == null)
-						continue;
+							conditionList.get(j) == null) continue;
 
 					XCLRelation rel = XCLRelation.createXCLRelation(conditionList.get(j));
 

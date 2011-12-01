@@ -1,7 +1,6 @@
 package de.d3web.we.kdom.questionTree.extension;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -28,15 +27,13 @@ import de.knowwe.core.kdom.rendering.NothingRenderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.utils.SplitUtility;
 import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.sectionFinder.UnquotedExpressionFinder;
-import de.knowwe.report.message.CreateRelationFailed;
-import de.knowwe.report.message.ObjectCreatedMessage;
-import de.knowwe.report.message.ObjectCreationError;
 
 /**
  * This type allows to define within the definition of a question, when this
@@ -100,10 +97,10 @@ public class InlineIndicationCondition extends AbstractType {
 	static class CreateIndicationRulesHandler extends D3webSubtreeHandler<InlineIndicationCondition> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<InlineIndicationCondition> s) {
+		public Collection<Message> create(KnowWEArticle article, Section<InlineIndicationCondition> s) {
 
 			if (s.hasErrorInSubtree(article)) {
-				return Arrays.asList((KDOMReportMessage) new CreateRelationFailed("Rule"));
+				return Messages.asList(Messages.creationFailedWarning("Rule"));
 			}
 
 			Section<Finding> finding = Sections.findSuccessor(s, Finding.class);
@@ -111,7 +108,7 @@ public class InlineIndicationCondition extends AbstractType {
 			@SuppressWarnings("rawtypes")
 			Section<QASetDefinition> qDef = Sections.findSuccessor(s.getFather(),
 					QASetDefinition.class);
-			Collection<KDOMReportMessage> msgs = new HashSet<KDOMReportMessage>();
+			Collection<Message> msgs = new HashSet<Message>();
 			if (finding != null && qDef != null) {
 
 				@SuppressWarnings("unchecked")
@@ -119,7 +116,7 @@ public class InlineIndicationCondition extends AbstractType {
 
 				Condition condition = finding.get().getCondition(article, finding);
 				if (condition == null) {
-					msgs.add(new ObjectCreationError(Condition.class.getSimpleName(),
+					msgs.add(Messages.objectCreationError(Condition.class.getSimpleName(),
 							this.getClass()));
 					return msgs;
 				}
@@ -134,12 +131,12 @@ public class InlineIndicationCondition extends AbstractType {
 					r2 = RuleFactory.createIndicationRule(qasets, condition);
 				}
 				if (r == null || (qaset instanceof QContainer && r2 == null)) {
-					msgs.add(new ObjectCreationError(Rule.class.getSimpleName(),
+					msgs.add(Messages.objectCreationError(Rule.class.getSimpleName(),
 								this.getClass()));
 				}
 				if (r != null && !(qaset instanceof QContainer && r2 == null)) {
 					KnowWEUtils.storeObject(article, s, RuleContentType.ruleStoreKey, r);
-					return Arrays.asList((KDOMReportMessage) new ObjectCreatedMessage("Rule"));
+					return Messages.asList(Messages.objectCreatedNotice("Rule"));
 				}
 
 			}

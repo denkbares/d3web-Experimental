@@ -7,7 +7,7 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 
 /**
  * A very simple abstract SubtreeHandler that only executes the crateAttribute()
@@ -20,9 +20,9 @@ import de.knowwe.core.report.KDOMReportMessage;
 public abstract class TimeEventAttributeHandler<T extends Type> extends SubtreeHandler<T> {
 
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<T> s) {
+	public Collection<Message> create(KnowWEArticle article, Section<T> s) {
 		if (s.getFather().hasErrorInSubtree(article)) {
-			return new ArrayList<KDOMReportMessage>(0);
+			return new ArrayList<Message>(0);
 		}
 		else {
 			createAttribute(article, s);
@@ -30,7 +30,7 @@ public abstract class TimeEventAttributeHandler<T extends Type> extends SubtreeH
 		return null;
 	}
 
-	protected abstract Collection<KDOMReportMessage> createAttribute(KnowWEArticle article, Section<T> s);
+	protected abstract Collection<Message> createAttribute(KnowWEArticle article, Section<T> s);
 
 	// @Override
 	// public boolean needsToCreate(KnowWEArticle article, Section<T> s) {

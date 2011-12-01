@@ -29,7 +29,7 @@ public class GetPackageName extends AbstractAction {
 		Section<DiaFluxType> diaFluxSection = (Section<DiaFluxType>) Sections.getSection(
 				nodeID);
 		String packageName = DefaultMarkupType.getAnnotation(diaFluxSection,
-				KnowWEPackageManager.ATTRIBUTE_NAME);
+				KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME);
 
 		context.setContentType("text/plain; charset=UTF-8");
 		context.getWriter().write(packageName != null ? packageName : "#undefined#");

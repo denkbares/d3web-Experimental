@@ -29,16 +29,15 @@ import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.report.KDOMError;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.KDOMWarning;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 
 /**
- * The ReportOverview TagHandler renders all {@link KDOMError} and
- * {@link KDOMWarning} messages into a wiki page. The rendered list helps to
- * identify errors/warnings in articles.
+ * The ReportOverview TagHandler renders all {@link Error} and {@link Warning}
+ * messages into a wiki page. The rendered list helps to identify
+ * errors/warnings in articles.
  * 
  * The Syntax for the TagHandler is:
  * 
@@ -51,8 +50,8 @@ import de.knowwe.core.user.UserContext;
  * 
  * The key, value pair specifies witch reports are shown. If the pair is not
  * present all reports are shown as a default. Set to <strong>warning</strong>
- * only messages from type {@link KDOMWarning} are shown, set to
- * <strong>error</strong> only {@link KDOMError}.
+ * only messages from type {@link Warning} are shown, set to
+ * <strong>error</strong> only {@link Error}.
  * 
  * 
  * @author smark
@@ -97,8 +96,8 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 		for (KnowWEArticle article : articles) {
 			Section<KnowWEArticle> root = article.getSection();
 
-			Collection<KDOMReportMessage> errors = new ArrayList<KDOMReportMessage>();
-			Collection<KDOMReportMessage> warnings = new ArrayList<KDOMReportMessage>();
+			Collection<Message> errors = new ArrayList<Message>();
+			Collection<Message> warnings = new ArrayList<Message>();
 
 			// search messages
 			findMessages(root, article, errors, warnings);
@@ -126,28 +125,28 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 	}
 
 	/**
-	 * Creates the output HTML for a {@link KDOMReportMessage}.
+	 * Creates the output HTML for a {@link Message}.
 	 * 
 	 * @created 12.10.2010
-	 * @param messages A {@link HashMap} containing the
-	 *        {@link KDOMReportMessage} and the section the message occurred in.
+	 * @param messages A {@link HashMap} containing the {@link Message} and the
+	 *        section the message occurred in.
 	 * @param article The {@link KnowWEArticle} containing the erroneous
 	 *        {@link Section}
-	 * @param result The StringBuilder the verbalized {@link KDOMReportMessage}
-	 *        should stored in.
+	 * @param result The StringBuilder the verbalized {@link Message} should
+	 *        stored in.
 	 */
-	private void renderMessages(Collection<KDOMReportMessage> messages, StringBuilder result, KnowWEArticle article) {
+	private void renderMessages(Collection<Message> messages, StringBuilder result, KnowWEArticle article) {
 		if (messages.size() > 0) {
 
 			result.append("<dt><a href=\"Wiki.jsp?page=");
 			result.append(article.getTitle()).append("\" class=\"wikipage\">");
 			result.append(article.getTitle()).append("</a></dt>\n");
 
-			for (KDOMReportMessage kdomReportMessage : messages) {
+			for (Message kdomReportMessage : messages) {
 				if (kdomReportMessage.getSection() == null) {
 					continue;
 				}
-				if (kdomReportMessage instanceof KDOMError) {
+				if (kdomReportMessage.getType() == Message.Type.ERROR) {
 					result.append("<dd><img src=\"templates/knowweTmps/images/error.gif\" title=\"KnowWEError\" />");
 				}
 				else {
@@ -162,9 +161,9 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 	}
 
 	/**
-	 * Searches for all {@link KDOMReportMessage} messages in the current
-	 * article. All found {@link KDOMError} and {@link KDOMWarning} messages are
-	 * added to the according StringBuilder.
+	 * Searches for all {@link Message} messages in the current article. All
+	 * found {@link Error} and {@link Warning} messages are added to the
+	 * according StringBuilder.
 	 * 
 	 * @created 12.10.2010
 	 * @param section The root section of an {@link KnowWEArticle}.
@@ -174,18 +173,18 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 	 * @param warnings {@link StringBuilder} containing all warning messages
 	 */
 	private void findMessages(Section<?> section, KnowWEArticle article,
-			Collection<KDOMReportMessage> errors, Collection<KDOMReportMessage> warnings) {
+			Collection<Message> errors, Collection<Message> warnings) {
 
 		List<Section<? extends Type>> children = section.getChildren();
 		for (Section<?> child : children) {
 
-			Collection<KDOMError> e = KDOMReportMessage.getErrors(article, child);
-			for (KDOMReportMessage kdomReportMessage : e) {
+			Collection<Message> e = Messages.getErrors(article, child);
+			for (Message kdomReportMessage : e) {
 				errors.add(kdomReportMessage);
 			}
 
-			Collection<KDOMWarning> w = KDOMReportMessage.getWarnings(article, child);
-			for (KDOMReportMessage kdomReportMessage : w) {
+			Collection<Message> w = Messages.getWarnings(article, child);
+			for (Message kdomReportMessage : w) {
 				warnings.add(kdomReportMessage);
 			}
 			findMessages(child, article, errors, warnings);

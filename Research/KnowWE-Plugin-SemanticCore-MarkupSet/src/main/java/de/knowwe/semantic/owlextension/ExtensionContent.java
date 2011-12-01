@@ -41,7 +41,7 @@ import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.xml.XMLContent;
 
@@ -56,7 +56,7 @@ public class ExtensionContent extends XMLContent {
 	private class ExtensionContentOWLSubTreeHandler extends OwlSubtreeHandler {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
+		public Collection<Message> create(KnowWEArticle article, Section s) {
 			String text = s.getOriginalText();
 
 			IntermediateOwlObject io = extend(text, s);

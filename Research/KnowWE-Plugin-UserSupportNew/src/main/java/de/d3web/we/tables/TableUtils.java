@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.d3web.we.tables;
 
@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.d3web.KnOfficeParser.SingleKBMIDObjectManager;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.we.kdom.xcl.list.ListSolutionType;
@@ -32,7 +31,6 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 
-
 /**
  * Utils class that offers static-methods for tables.
  * 
@@ -40,7 +38,6 @@ import de.knowwe.core.kdom.parsing.Sections;
  * @created 18.10.2011
  */
 public class TableUtils {
-
 
 	/**
 	 * Returns the row of the table in which the current cell occurs.
@@ -72,8 +69,7 @@ public class TableUtils {
 	}
 
 	/**
-	 * The row number of the given table line.
-	 * TODO Needed?
+	 * The row number of the given table line. TODO Needed?
 	 * 
 	 * @created 16.03.2011
 	 * @param s
@@ -101,17 +97,16 @@ public class TableUtils {
 		for (Section<TableLine> line : lines) {
 			cells.add(
 					Sections.findSuccessorsOfType(line, TableCell.class).
-					get(columnNumber));
+							get(columnNumber));
 		}
 
 		return cells;
 	}
 
 	/**
-	 * Gets all TableCells for a given rowNumber.
-	 * If you want the header use {@see getHeaderCells}.
-	 * If you call this method with 0 as argument, it will
-	 * return null.
+	 * Gets all TableCells for a given rowNumber. If you want the header use
+	 * {@see getHeaderCells}. If you call this method with 0 as argument, it
+	 * will return null.
 	 * 
 	 * @created 18.10.2011
 	 * @param row
@@ -134,9 +129,8 @@ public class TableUtils {
 	}
 
 	/**
-	 * Return the ITable with a given Section-Id.
-	 * If not found null.
-	 * Used in {@link TableExportAction}
+	 * Return the ITable with a given Section-Id. If not found null. Used in
+	 * {@link TableExportAction}
 	 * 
 	 * @created 18.10.2011
 	 * @param article
@@ -149,9 +143,8 @@ public class TableUtils {
 		List<Section<ITable>> tables = new ArrayList<Section<ITable>>();
 		Sections.findSuccessorsOfType(articleSection, ITable.class, tables);
 
-		for ( Section<ITable> table : tables ) {
-			if (table.getID().equals(id) )
-				return table;
+		for (Section<ITable> table : tables) {
+			if (table.getID().equals(id)) return table;
 		}
 
 		return null;
@@ -161,8 +154,7 @@ public class TableUtils {
 		int max = 0;
 
 		for (Section<TableCell> cell : cells)
-			if (cell.getText().length() > max)
-				max = cell.getText().length();
+			if (cell.getText().length() > max) max = cell.getText().length();
 
 		return max;
 	}
@@ -173,18 +165,16 @@ public class TableUtils {
 		// Iterate over all rows and cells
 		for (String[] row : rowsList)
 			for (String cell : row)
-				if (cell.length() > max)
-					max = cell.length();
+				if (cell.length() > max) max = cell.length();
 
 		return max;
 	}
 
-	public static String generateStringWithLength( int len, char fill ) {
-		if ( len < 0 )
-			return null;
-		char[] cs = new char[ len ];
-		Arrays.fill( cs, fill );
-		return new String( cs );
+	public static String generateStringWithLength(int len, char fill) {
+		if (len < 0) return null;
+		char[] cs = new char[len];
+		Arrays.fill(cs, fill);
+		return new String(cs);
 	}
 
 	/**
@@ -195,15 +185,14 @@ public class TableUtils {
 	 * @return
 	 */
 	public static String generateFillString(String toFill, int maxCellLength) {
-		if (toFill.length() < maxCellLength)
-			return TableUtils.generateStringWithLength(
-					Math.abs(toFill.length()-maxCellLength), ' ');
+		if (toFill.length() < maxCellLength) return TableUtils.generateStringWithLength(
+					Math.abs(toFill.length() - maxCellLength), ' ');
 		return "";
 	}
 
 	/**
-	 * Used to get an maximum cell count for rows of a table.
-	 * Used in {@link TableRenderer}
+	 * Used to get an maximum cell count for rows of a table. Used in
+	 * {@link TableRenderer}
 	 * 
 	 * @created 08.11.2011
 	 * @param section
@@ -216,15 +205,15 @@ public class TableUtils {
 		List<Section<TableHeaderLine>> headerLines =
 				Sections.findSuccessorsOfType(section, TableHeaderLine.class);
 		for (Section<TableHeaderLine> line : headerLines) {
-			if (Sections.findSuccessorsOfType(line, TableCell.class).size() > maxCount)
-				maxCount = Sections.findSuccessorsOfType(line, TableCell.class).size();
+			if (Sections.findSuccessorsOfType(line, TableCell.class).size() > maxCount) maxCount = Sections.findSuccessorsOfType(
+					line, TableCell.class).size();
 		}
 
 		List<Section<TableLine>> tableLines =
 				Sections.findSuccessorsOfType(section, TableLine.class);
 		for (Section<TableLine> line : tableLines) {
-			if (Sections.findSuccessorsOfType(line, TableCell.class).size() > maxCount)
-				maxCount = Sections.findSuccessorsOfType(line, TableCell.class).size();
+			if (Sections.findSuccessorsOfType(line, TableCell.class).size() > maxCount) maxCount = Sections.findSuccessorsOfType(
+					line, TableCell.class).size();
 		}
 
 		return maxCount;
@@ -238,18 +227,16 @@ public class TableUtils {
 	 * @return
 	 */
 	public static Solution findSolutionInKB(Section<?> sec, KnowledgeBase kb) {
-		SingleKBMIDObjectManager kbm = new SingleKBMIDObjectManager(kb);
 		Section<ListSolutionType> sol =
 				Sections.findChildOfType(sec, ListSolutionType.class);
 		String solText = sol.getText();
 		solText = solText.replaceAll("[\\r\\n\\{\\s]", "");
-		Solution solution = kbm.findSolution(solText);
+		Solution solution = kb.getManager().searchSolution(solText);
 		if (solution == null) {
-			Solution newSolution = kbm.createSolution(solText, null);
+			Solution newSolution = new Solution(kb.getRootSolution(), solText);
 			kb.getManager().putTerminologyObject(newSolution);
 		}
 		return solution;
 	}
-
 
 }

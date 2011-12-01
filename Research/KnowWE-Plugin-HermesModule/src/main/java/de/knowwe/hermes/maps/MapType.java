@@ -35,7 +35,7 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.xml.AbstractXMLType;
 import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
@@ -60,7 +60,7 @@ public class MapType extends AbstractXMLType {
 	private class MapTypeOWLSubTreeHandler extends RDF2GoSubtreeHandler<MapType> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<MapType> s) {
+		public Collection<Message> create(KnowWEArticle article, Section<MapType> s) {
 			List<Statement> ioo = new ArrayList<Statement>();
 			String url = getIFrameSrcURL(s);
 			KMLLoader kmlLoader = new KMLLoader(url);

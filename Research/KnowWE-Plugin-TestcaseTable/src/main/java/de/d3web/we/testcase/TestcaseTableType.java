@@ -37,7 +37,7 @@ public class TestcaseTableType extends DefaultMarkupType {
 	static {
 		m = new DefaultMarkup("TestcaseTable");
 		m.addContentType(new TestcaseTable());
-		m.addAnnotation(KnowWEPackageManager.ATTRIBUTE_NAME, false);
+		m.addAnnotation(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME, false);
 		m.addAnnotation(ANNOTATION_MASTER, false);
 		m.addAnnotation(ANNOTATION_SHOW_SKIP_BUTTON, false, "true", "false");
 

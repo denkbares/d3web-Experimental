@@ -16,8 +16,8 @@ import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.SyntaxError;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.manchester.ManchesterClassExpression;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
@@ -28,7 +28,6 @@ import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
 import de.knowwe.onte.editor.OWLApiAxiomCacheUpdateEvent;
 import de.knowwe.owlapi.OWLAPIKnowledgeUnitCompileScript;
 import de.knowwe.owlapi.OWLAPISubtreeHandler;
-
 
 public class IndividualFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<IndividualFrame> {
 
@@ -42,7 +41,7 @@ public class IndividualFrameCompileScript extends OWLAPIKnowledgeUnitCompileScri
 	}
 
 	@Override
-	public Set<OWLAxiom> createOWLAxioms(Section<IndividualFrame> section, Collection<KDOMReportMessage> messages) {
+	public Set<OWLAxiom> createOWLAxioms(Section<IndividualFrame> section, Collection<Message> messages) {
 		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
 		OWLIndividual i = null;
 		OWLAxiom axiom = null;
@@ -70,7 +69,7 @@ public class IndividualFrameCompileScript extends OWLAPIKnowledgeUnitCompileScri
 			List<Section<?>> facts = type.getFacts(section);
 
 			if (facts.isEmpty()) {
-				messages.add(new SyntaxError("Facts keyword specified, but no facts found!"));
+				messages.add(Messages.syntaxError("Facts keyword specified, but no facts found!"));
 			}
 
 			for (Section<?> fact : facts) {
@@ -88,7 +87,7 @@ public class IndividualFrameCompileScript extends OWLAPIKnowledgeUnitCompileScri
 			List<Section<OWLTermReferenceManchester>> nodes = type.getSameAs(section);
 
 			if (nodes.isEmpty()) {
-				messages.add(new SyntaxError("SameAs found, but no individuals specified!"));
+				messages.add(Messages.syntaxError("SameAs found, but no individuals specified!"));
 			}
 
 			for (Section<OWLTermReferenceManchester> node : nodes) {
@@ -108,7 +107,7 @@ public class IndividualFrameCompileScript extends OWLAPIKnowledgeUnitCompileScri
 			List<Section<OWLTermReferenceManchester>> nodes = type.getDifferentFrom(section);
 
 			if (nodes.isEmpty()) {
-				messages.add(new SyntaxError("DifferentFrom found, but no individuals specified!"));
+				messages.add(Messages.syntaxError("DifferentFrom found, but no individuals specified!"));
 			}
 
 			for (Section<OWLTermReferenceManchester> node : nodes) {
@@ -131,7 +130,7 @@ public class IndividualFrameCompileScript extends OWLAPIKnowledgeUnitCompileScri
 					ManchesterClassExpression.class);
 
 			if (mce.isEmpty()) {
-				messages.add(new SyntaxError("Types found, but no concepts specified!"));
+				messages.add(Messages.syntaxError("Types found, but no concepts specified!"));
 			}
 
 			Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(
@@ -157,7 +156,7 @@ public class IndividualFrameCompileScript extends OWLAPIKnowledgeUnitCompileScri
 	 * @param Section<? extends Type> section
 	 * @return A Set with {@link OWLAnnotationAxiom}
 	 */
-	private Set<OWLAxiom> handleOptionalAnnotations(Section<? extends Type> section, OWLIndividual i, Collection<KDOMReportMessage> messages) {
+	private Set<OWLAxiom> handleOptionalAnnotations(Section<? extends Type> section, OWLIndividual i, Collection<Message> messages) {
 
 		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
 

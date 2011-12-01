@@ -39,8 +39,8 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.basicType.RoundBracedType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.SimpleMessageError;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.dashtree.DashTreeElementContent;
 import de.knowwe.kdom.dashtree.DashTreeUtils;
@@ -68,18 +68,20 @@ public class PropertyDashTreeElementContent extends DashTreeElementContent {
 	private class PropertyDashTreeElementContentOWLSubTreeHandler extends OwlSubtreeHandler<PropertyDashTreeElementContent> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<PropertyDashTreeElementContent> s) {
+		public Collection<Message> create(KnowWEArticle article, Section<PropertyDashTreeElementContent> s) {
 
-			List<KDOMReportMessage> msgs = new ArrayList<KDOMReportMessage>();
+			List<Message> msgs = new ArrayList<Message>();
 
 			Section<PropertyDashTreeElementContent> sec = s;
 			if (s.get() instanceof PropertyDashTreeElementContent) {
-				Section<PropertyIDDefinition> propIDSection =  Sections.findSuccessor(sec, PropertyIDDefinition.class);
+				Section<PropertyIDDefinition> propIDSection = Sections.findSuccessor(sec,
+						PropertyIDDefinition.class);
 				if (propIDSection != null) {
 					String propertyName = propIDSection.getOriginalText();
 					String rangeDef = null;
 					String domainDef = null;
-					Section<DomainDefinition> domainDefS =  Sections.findSuccessor(sec, DomainDefinition.class);
+					Section<DomainDefinition> domainDefS = Sections.findSuccessor(sec,
+							DomainDefinition.class);
 					if (domainDefS != null) {
 						domainDef = domainDefS.getOriginalText();
 					}
@@ -142,7 +144,7 @@ public class PropertyDashTreeElementContent extends DashTreeElementContent {
 						SemanticCoreDelegator.getInstance().addStatements(io, s);
 					}
 					catch (RepositoryException e) {
-						msgs.add(new SimpleMessageError(e.getMessage()));
+						msgs.add(Messages.error(e.getMessage()));
 					}
 
 				}

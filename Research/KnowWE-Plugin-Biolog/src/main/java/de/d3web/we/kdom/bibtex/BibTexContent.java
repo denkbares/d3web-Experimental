@@ -37,7 +37,7 @@ import de.d3web.we.kdom.bibtex.verbalizer.BibTexRenderManager.RenderingFormat;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.xml.XMLContent;
 
@@ -63,8 +63,8 @@ public class BibTexContent extends XMLContent{
 	private class BibTexContentSubTreeHandler extends OwlSubtreeHandler<BibTexContent> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<BibTexContent> s) {
-			KDOMReportMessage msg=null;
+		public Collection<Message> create(KnowWEArticle article, Section<BibTexContent> s) {
+			Message msg=null;
 			IntermediateOwlObject io = new IntermediateOwlObject();
 			String text = s.getOriginalText();
 			BibtexFile bibtexFile = new BibtexFile();

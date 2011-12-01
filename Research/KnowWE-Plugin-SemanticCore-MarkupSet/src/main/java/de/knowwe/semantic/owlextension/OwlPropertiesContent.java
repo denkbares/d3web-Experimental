@@ -32,7 +32,7 @@ import de.d3web.we.core.semantic.UpperOntology;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.kdom.xml.XMLContent;
 
 /**
@@ -51,7 +51,7 @@ public class OwlPropertiesContent extends XMLContent {
 	private class OwlPropertiesContentOWLSubTreeHandler extends OwlSubtreeHandler {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
+		public Collection<Message> create(KnowWEArticle article, Section s) {
 			IntermediateOwlObject io = new IntermediateOwlObject();
 			String text = s.getOriginalText();
 			for (String cur : text.split("\r\n|\r|\n")) {

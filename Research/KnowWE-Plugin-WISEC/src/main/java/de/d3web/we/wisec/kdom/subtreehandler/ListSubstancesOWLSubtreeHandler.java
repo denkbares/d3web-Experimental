@@ -36,7 +36,7 @@ import de.d3web.we.wisec.kdom.ListSubstancesType;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.table.TableCellContent;
 import de.knowwe.kdom.table.TableLine;
@@ -47,7 +47,7 @@ public class ListSubstancesOWLSubtreeHandler extends OwlSubtreeHandler<ListSubst
 	private static final String CAS_IDENTIFIER_COLUMN = "CAS_No";
 
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<ListSubstancesType> s) {
+	public Collection<Message> create(KnowWEArticle article, Section<ListSubstancesType> s) {
 
 		// Get the ListID
 		Section<ListSubstancesRootType> root = Sections.findAncestorOfType(s,
@@ -56,7 +56,7 @@ public class ListSubstancesOWLSubtreeHandler extends OwlSubtreeHandler<ListSubst
 
 		if (listID == null) {
 			// TODO: Fehlermeldung!
-			return new ArrayList<KDOMReportMessage>();
+			return new ArrayList<Message>();
 		}
 
 		// Get the WISEC Namespace and create OwlObject

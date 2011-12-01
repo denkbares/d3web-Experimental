@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -37,8 +37,8 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.SyntaxError;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.manchester.ManchesterClassExpression;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
@@ -59,15 +59,15 @@ import de.knowwe.owlapi.OWLAPISubtreeHandler;
  * Currently handles: IndividualDefinition, {@link Annotations}, {@link Types},
  * {@link Facts}, {@link SameAs} and {@link DifferentFrom}
  * </p>
- *
+ * 
  * @author Stefan Mark
  * @created 07.09.2011
  */
 public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<IndividualFrame> {
 
 	/**
-	 * Constructor for the SubtreeHandler. Here you can set if a sync
-	 * with RDF2Go should occur. For further information see
+	 * Constructor for the SubtreeHandler. Here you can set if a sync with
+	 * RDF2Go should occur. For further information see
 	 * {@link OWLAPISubtreeHandler}.
 	 */
 	public IndividualFrameSubtreeHandler() {
@@ -75,7 +75,7 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 	}
 
 	@Override
-	public Set<OWLAxiom> createOWLAxioms(KnowWEArticle article, Section<IndividualFrame> s, Collection<KDOMReportMessage> messages) {
+	public Set<OWLAxiom> createOWLAxioms(KnowWEArticle article, Section<IndividualFrame> s, Collection<Message> messages) {
 
 		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
 		OWLIndividual i = null;
@@ -104,7 +104,7 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 			List<Section<?>> facts = type.getFacts(s);
 
 			if (facts.isEmpty()) {
-				messages.add(new SyntaxError("Facts keyword specified, but no facts found!"));
+				messages.add(Messages.syntaxError("Facts keyword specified, but no facts found!"));
 			}
 
 			for (Section<?> fact : facts) {
@@ -122,7 +122,7 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 			List<Section<OWLTermReferenceManchester>> nodes = type.getSameAs(s);
 
 			if (nodes.isEmpty()) {
-				messages.add(new SyntaxError("SameAs found, but no individuals specified!"));
+				messages.add(Messages.syntaxError("SameAs found, but no individuals specified!"));
 			}
 
 			for (Section<OWLTermReferenceManchester> node : nodes) {
@@ -142,7 +142,7 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 			List<Section<OWLTermReferenceManchester>> nodes = type.getDifferentFrom(s);
 
 			if (nodes.isEmpty()) {
-				messages.add(new SyntaxError("DifferentFrom found, but no individuals specified!"));
+				messages.add(Messages.syntaxError("DifferentFrom found, but no individuals specified!"));
 			}
 
 			for (Section<OWLTermReferenceManchester> node : nodes) {
@@ -165,7 +165,7 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 					ManchesterClassExpression.class);
 
 			if (mce.isEmpty()) {
-				messages.add(new SyntaxError("Types found, but no concepts specified!"));
+				messages.add(Messages.syntaxError("Types found, but no concepts specified!"));
 			}
 
 			Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(
@@ -186,12 +186,12 @@ public class IndividualFrameSubtreeHandler extends OWLAPISubtreeHandler<Individu
 
 	/**
 	 * Handles the optional {@link Annotations} inside each description.
-	 *
+	 * 
 	 * @created 29.09.2011
 	 * @param Section<? extends Type> section
 	 * @return A Set with {@link OWLAnnotationAxiom}
 	 */
-	private Set<OWLAxiom> handleOptionalAnnotations(Section<? extends Type> section, OWLIndividual i, Collection<KDOMReportMessage> messages) {
+	private Set<OWLAxiom> handleOptionalAnnotations(Section<? extends Type> section, OWLIndividual i, Collection<Message> messages) {
 
 		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
 

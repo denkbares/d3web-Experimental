@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.casetrain.type;
 
@@ -25,16 +25,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import de.knowwe.casetrain.message.DuplicateAttributeError;
-import de.knowwe.casetrain.message.InvalidAttributeError;
-import de.knowwe.casetrain.message.MissingAttributeError;
+import de.knowwe.casetrain.util.Utils;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.report.KDOMReportMessage;
-
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 
 /**
- * Managing the MetaAttributes used in {@link MetaData}
- * Attributes taken from {@link http://casetrain.uni-wuerzburg.de/doku/format_case.shtml}
+ * Managing the MetaAttributes used in {@link MetaData} Attributes taken from
+ * {@link http://casetrain.uni-wuerzburg.de/doku/format_case.shtml}
  * 
  * @author Johannes Dienst
  * @created 20.04.2011
@@ -103,15 +101,14 @@ public class MetaAttributes {
 	private static MetaAttributes uniqueInstance;
 
 	public static MetaAttributes getInstance() {
-		if(uniqueInstance == null) {
+		if (uniqueInstance == null) {
 			uniqueInstance = new MetaAttributes();
 		}
 		return uniqueInstance;
 	}
 
 	/**
-	 * Returns true if attribute is specified.
-	 * False otherwise.
+	 * Returns true if attribute is specified. False otherwise.
 	 * 
 	 * @created 28.04.2011
 	 * @param attribute
@@ -119,32 +116,34 @@ public class MetaAttributes {
 	 */
 	public boolean contains(String attribute) {
 		boolean retBool = demandedAttributes.contains(attribute);
-		if(retBool) {return true;}
+		if (retBool) {
+			return true;
+		}
 		return optionalAttributes.contains(attribute);
 	}
 
 	/**
-	 * Compares the given List if it is conform with the
-	 * required MetaAttrubites. Duplicates, Missing etc.
+	 * Compares the given List if it is conform with the required
+	 * MetaAttrubites. Duplicates, Missing etc.
 	 * 
 	 * @param atts
 	 * @return
 	 */
-	public Collection<KDOMReportMessage> compareAttributeList(
+	public Collection<Message> compareAttributeList(
 			List<Section<AttributeName>> atts) {
 
-		List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>();
+		List<Message> messages = new ArrayList<Message>();
 		Set<String> foundOnes = new TreeSet<String>();
 
 		String ori = "";
 		for (Section<AttributeName> section : atts) {
 			ori = section.getOriginalText().trim();
 			if (foundOnes.contains(ori) && !ori.equals(CASE_TODO)) {
-				messages.add(new DuplicateAttributeError(ori));
+				messages.add(Messages.error(Utils.getBundle().getString("DOUBLE_ATTRIBUTE") + ori));
 				continue;
 			}
 			if (!this.contains(ori)) {
-				messages.add(new InvalidAttributeError(ori));
+				messages.add(Utils.invalidAttributeError(ori));
 				continue;
 			}
 			foundOnes.add(ori);
@@ -152,7 +151,7 @@ public class MetaAttributes {
 
 		for (String s : this.demandedAttributes) {
 			if (!foundOnes.contains(s)) {
-				messages.add(new MissingAttributeError(s));
+				messages.add(Utils.missingAttributeError(s));
 			}
 		}
 
@@ -162,8 +161,7 @@ public class MetaAttributes {
 	private HashMap<String, String> attributesForXML;
 
 	public HashMap<String, String> getAttributesForXMLMap() {
-		if (this.attributesForXML != null)
-			return this.attributesForXML;
+		if (this.attributesForXML != null) return this.attributesForXML;
 
 		this.attributesForXML = new HashMap<String, String>();
 

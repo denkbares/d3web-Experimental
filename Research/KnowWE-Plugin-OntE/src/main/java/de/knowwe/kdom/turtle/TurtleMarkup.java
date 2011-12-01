@@ -21,7 +21,6 @@
 package de.knowwe.kdom.turtle;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -46,8 +45,8 @@ import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.SyntaxError;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.AnonymousType;
@@ -59,7 +58,6 @@ import de.knowwe.kdom.sectionFinder.AllBeforeTypeSectionFinder;
 import de.knowwe.kdom.sectionFinder.ConditionalSectionFinder;
 import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 import de.knowwe.onte.owl.terminology.URIUtil;
-import de.knowwe.report.message.UnexpectedSequence;
 import de.knowwe.termObject.AbstractIRITermDefinition;
 import de.knowwe.termObject.BasicVocabularyReference;
 import de.knowwe.termObject.IRIEntityType;
@@ -171,7 +169,7 @@ public class TurtleMarkup extends AbstractType {
 					URIUtil.PREDICATE_VOCABULARY));
 			this.addSubtreeHandler(Priority.LOWER, new TermReferenceCheckerPredicate());
 		}
-		
+
 		@Override
 		public String getTermName(Section<? extends KnowWETerm<String>> s) {
 			return getTermIdentifier(s);
@@ -272,7 +270,7 @@ public class TurtleMarkup extends AbstractType {
 			}
 
 			@Override
-			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<SubjectDefinition> s) {
+			public Collection<Message> create(KnowWEArticle article, Section<SubjectDefinition> s) {
 				Section<TurtleMarkup> turtle = Sections.findAncestorOfType(s,
 						TurtleMarkup.class);
 				List<Section<BasicVocabularyReference>> l = new ArrayList<Section<BasicVocabularyReference>>();
@@ -282,7 +280,7 @@ public class TurtleMarkup extends AbstractType {
 					URI predURI = l.get(0).get().getNode(l.get(0));
 					URI objURI = l.get(1).get().getNode(l.get(1));
 					IRIEntityType termObject = s.get().getTermObject(article, s);
-					if (termObject == null) return new ArrayList<KDOMReportMessage>(0);
+					if (termObject == null) return new ArrayList<Message>(0);
 					IRIDeclarationType uriType = termObject.getIRIDeclarationType();
 
 					if (predURI.equals(RDF.type)) {
@@ -291,7 +289,7 @@ public class TurtleMarkup extends AbstractType {
 								termObject.setIRIDeclarationType(IRIDeclarationType.CLASS);
 							}
 							else {
-								return Arrays.asList((KDOMReportMessage) new UnexpectedSequence(
+								return Messages.asList(Messages.syntaxError(
 										s.getOriginalText()));
 							}
 						}
@@ -300,7 +298,7 @@ public class TurtleMarkup extends AbstractType {
 								termObject.setIRIDeclarationType(IRIDeclarationType.OBJECT_PROPERTY);
 							}
 							else {
-								return Arrays.asList((KDOMReportMessage) new UnexpectedSequence(
+								return Messages.asList(Messages.syntaxError(
 											s.getOriginalText()));
 							}
 
@@ -310,7 +308,7 @@ public class TurtleMarkup extends AbstractType {
 								termObject.setIRIDeclarationType(IRIDeclarationType.DATATYPE_PROPERTY);
 							}
 							else {
-								return Arrays.asList((KDOMReportMessage) new UnexpectedSequence(
+								return Messages.asList(Messages.syntaxError(
 											s.getOriginalText()));
 							}
 
@@ -320,8 +318,7 @@ public class TurtleMarkup extends AbstractType {
 								termObject.setIRIDeclarationType(IRIDeclarationType.NAMED_INDIVIDUAL);
 							}
 							else {
-								return Arrays.asList((KDOMReportMessage) new UnexpectedSequence(
-											s.getOriginalText()));
+								return Messages.asList(Messages.syntaxError(s.getOriginalText()));
 							}
 
 						}
@@ -329,7 +326,7 @@ public class TurtleMarkup extends AbstractType {
 
 				}
 
-				return new ArrayList<KDOMReportMessage>(0);
+				return new ArrayList<Message>(0);
 			}
 
 		}
@@ -367,7 +364,7 @@ public class TurtleMarkup extends AbstractType {
 	private class TermReferenceCheckerPredicate extends GeneralSubtreeHandler<Type> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Type> s) {
+		public Collection<Message> create(KnowWEArticle article, Section<Type> s) {
 
 			String termName = s.getOriginalText();
 			if (s.get() instanceof KnowWETerm) {
@@ -383,7 +380,7 @@ public class TurtleMarkup extends AbstractType {
 				s.setType(termReference);
 			}
 
-			return new ArrayList<KDOMReportMessage>(0);
+			return new ArrayList<Message>(0);
 		}
 	}
 
@@ -401,7 +398,7 @@ public class TurtleMarkup extends AbstractType {
 		}
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Type> s) {
+		public Collection<Message> create(KnowWEArticle article, Section<Type> s) {
 
 			String termName = s.getOriginalText();
 			if (s.get() instanceof KnowWETerm) {
@@ -424,7 +421,7 @@ public class TurtleMarkup extends AbstractType {
 						if (predSec != null && predSec.get() instanceof IRITermReference) {
 							Section<IRITermReference> prop = predSec;
 							IRIEntityType termObject = prop.get().getTermObject(article, prop);
-							if (termObject == null) return new ArrayList<KDOMReportMessage>(0);
+							if (termObject == null) return new ArrayList<Message>(0);
 
 							if (termObject.getIRIDeclarationType() == IRIDeclarationType.DATATYPE_PROPERTY) {
 								DataTypeValueTurtle dataTypeValue = new DataTypeValueTurtle();
@@ -443,7 +440,7 @@ public class TurtleMarkup extends AbstractType {
 					s.setType(termReference);
 				}
 			}
-			return new ArrayList<KDOMReportMessage>(0);
+			return new ArrayList<Message>(0);
 		}
 	}
 
@@ -456,7 +453,7 @@ public class TurtleMarkup extends AbstractType {
 		}
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Type> s) {
+		public Collection<Message> create(KnowWEArticle article, Section<Type> s) {
 			// if turtle object check for datatype prop!
 			String termName = s.getOriginalText();
 			if (s.get() instanceof KnowWETerm) {
@@ -471,24 +468,24 @@ public class TurtleMarkup extends AbstractType {
 				s.setType(new LocalConceptReference());
 			}
 
-			return new ArrayList<KDOMReportMessage>(0);
+			return new ArrayList<Message>(0);
 		}
 	}
 
 	class TripleChecker extends GeneralSubtreeHandler<TurtleMarkup> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
+		public Collection<Message> create(KnowWEArticle article, Section s) {
 			if (Sections.findSuccessor(s, TurtlePredicate.class) == null) {
-				return Arrays.asList((KDOMReportMessage) new SyntaxError(
+				return Messages.asList(Messages.syntaxError(
 						"TurtleMarkup: Predicate missing!"));
 			}
 			if (Sections.findSuccessor(s, TurtleObject.class) == null) {
-				return Arrays.asList((KDOMReportMessage) new SyntaxError(
+				return Messages.asList(Messages.syntaxError(
 						"TurtleMarkup: Object missing!"));
 			}
 
-			return new ArrayList<KDOMReportMessage>();
+			return new ArrayList<Message>();
 		}
 
 	}

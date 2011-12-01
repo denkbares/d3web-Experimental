@@ -19,7 +19,6 @@
 package de.d3web.we.ci4ke.groovy;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 import de.d3web.we.ci4ke.handling.CIConfig;
@@ -29,11 +28,10 @@ import de.d3web.we.ci4ke.testing.CITestResult.Type;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.SimpleMessageError;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import de.knowwe.report.message.ObjectCreatedMessage;
 
 public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType> {
 
@@ -45,9 +43,9 @@ public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType>
 						"import static " + Type.class.getName() + ".*;\n";
 
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<GroovyCITestType> s) {
+	public Collection<Message> create(KnowWEArticle article, Section<GroovyCITestType> s) {
 		// create collection for return messages
-		Collection<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>();
+		Collection<Message> messages = new ArrayList<Message>();
 		// parse name of test and check if its name is unique in the wiki
 		String testname = DefaultMarkupType.getAnnotation(s, GroovyCITestType.ANNOTATION_NAME);
 		for (Section<GroovyCITestType> section : GroovyDynamicCITestHandler.getAllGroovyCITestSectionsByList()) {
@@ -55,7 +53,7 @@ public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType>
 					GroovyCITestType.ANNOTATION_NAME);
 			if (testname.equals(annotationName) && !s.getID().equals(section.getID())) {
 				// found other CITest with the same name!
-				messages.add(new SimpleMessageError("The name '" + testname
+				messages.add(Messages.error("The name '" + testname
 						+ "' of this CITest is not unique. " +
 						"Please select another name!"));
 			}
@@ -70,18 +68,18 @@ public class GroovyCITestSubtreeHandler extends SubtreeHandler<GroovyCITestType>
 		catch (Exception e) {
 			String errorMessageMasked = KnowWEUtils.maskHTML(
 					KnowWEUtils.maskNewline(e.getLocalizedMessage()));
-			messages.add(new SimpleMessageError(errorMessageMasked));
+			messages.add(Messages.error(errorMessageMasked));
 		}
 		if (messages.size() == 0 && result == null) {
 			// only report this error if no other error was found until now!
-			messages.add(new SimpleMessageError("The test didn't returned a CITestResult!"));
+			messages.add(Messages.error("The test didn't returned a CITestResult!"));
 		}
 		// now check for errors and return the appropriate result.
 		if (messages.size() > 0) {// there were errors!
 			return messages;
 		}
 		else {
-			return Arrays.asList((KDOMReportMessage) new ObjectCreatedMessage(
+			return Messages.asList(Messages.objectCreatedNotice(
 					"CITest successfully created!"));
 		}
 	}

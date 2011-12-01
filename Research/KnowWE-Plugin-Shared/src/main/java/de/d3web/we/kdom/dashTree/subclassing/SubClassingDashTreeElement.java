@@ -33,7 +33,7 @@ import de.knowwe.core.compile.IncrementalConstraint;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.dashtree.DashTreeElementContent;
 import de.knowwe.kdom.dashtree.DashTreeUtils;
@@ -56,7 +56,7 @@ public class SubClassingDashTreeElement extends DashTreeElement implements
 			OwlSubtreeHandler<SubClassingDashTreeElement> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<SubClassingDashTreeElement> element) {
+		public Collection<Message> create(KnowWEArticle article, Section<SubClassingDashTreeElement> element) {
 			IntermediateOwlObject io = new IntermediateOwlObject();
 			if (element.get().isAssignableFromType(DashTreeElement.class)) {
 				Section<? extends DashTreeElement> father = DashTreeUtils

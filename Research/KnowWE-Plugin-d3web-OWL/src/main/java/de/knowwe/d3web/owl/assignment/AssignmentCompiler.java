@@ -31,16 +31,13 @@ import de.d3web.owl.assignment.Assignment;
 import de.d3web.owl.assignment.AssignmentSet;
 import de.d3web.owl.assignment.Quantifier;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
-import de.d3web.we.utils.MessageUtils;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.SimpleMessageError;
-import de.knowwe.core.report.SyntaxError;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import de.knowwe.report.message.NoSuchObjectError;
 
 /**
  * Compiles parsed AssigmentTypes to d3web @link{Assignment}s.
@@ -53,19 +50,19 @@ public abstract class AssignmentCompiler<T extends AssignmentType> extends D3web
 	private final String STOREKEY = "Assignment-Store-Key";
 
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<T> s) {
+	public Collection<Message> create(KnowWEArticle article, Section<T> s) {
 		// Load the underlying knowledge base
 		KnowledgeBase kb = getKB(article);
 		if (kb == null) {
-			return MessageUtils.asList(new SimpleMessageError(
+			return Messages.asList(Messages.error(
 					"Unable to load knowledge base from article: " + article.getTitle()));
 		}
 		// Container for the messages
-		Collection<KDOMReportMessage> messages = new LinkedList<KDOMReportMessage>();
+		Collection<Message> messages = new LinkedList<Message>();
 		// Load an instance of the underlying ontology
 		OWLOntology ontology = loadOntology(kb);
 		if (ontology == null) {
-			return MessageUtils.asList(new SimpleMessageError(
+			return Messages.asList(Messages.error(
 					"Unable to load ontology from knowledge base: " + kb.getName()));
 		}
 		// Create OWLOntologyUtil instance
@@ -101,26 +98,27 @@ public abstract class AssignmentCompiler<T extends AssignmentType> extends D3web
 		}
 	}
 
-	protected abstract Assignment createAssignment(KnowWEArticle article, Section<T> s, KnowledgeBase kb, OWLOntologyUtil util, String baseURI, Collection<KDOMReportMessage> messages);
+	protected abstract Assignment createAssignment(KnowWEArticle article, Section<T> s, KnowledgeBase kb, OWLOntologyUtil util, String baseURI, Collection<Message> messages);
 
-	protected IRI getOWLClassIRI(Section<T> assignment, String baseURI, OWLOntologyUtil util, Collection<KDOMReportMessage> messages) {
+	protected IRI getOWLClassIRI(Section<T> assignment, String baseURI, OWLOntologyUtil util, Collection<Message> messages) {
 		Section<ComplexOWLClassType> owlClass = Sections.findSuccessor(assignment,
 				ComplexOWLClassType.class);
 		IRI iri = IRI.create(baseURI + "#" + owlClass.getText());
 		// Check existence of OWLClass in the ontology
 		if (util.getOWLClassFor(iri) == null) {
-			messages.add(new NoSuchObjectError("There is no OWLClass with IRI: " + iri));
+			messages.add(Messages.noSuchObjectError("There is no OWLClass with IRI: " + iri));
 			return null;
 		}
 		return iri;
 	}
 
-	protected boolean checkQuantifier(Section<T> assignment, Quantifier quantifier, Collection<KDOMReportMessage> messages) {
+	protected boolean checkQuantifier(Section<T> assignment, Quantifier quantifier, Collection<Message> messages) {
 		Section<QuantifierType> quantifierSection = Sections.findSuccessor(assignment,
 				QuantifierType.class);
 		boolean exists = quantifierSection.getText().equalsIgnoreCase(quantifier.getSymbol());
 		if (!exists) {
-			messages.add(new SyntaxError("Wrong quantifier, expected: " + quantifier.getSymbol()));
+			messages.add(Messages.syntaxError("Wrong quantifier, expected: "
+					+ quantifier.getSymbol()));
 		}
 		return exists;
 	}

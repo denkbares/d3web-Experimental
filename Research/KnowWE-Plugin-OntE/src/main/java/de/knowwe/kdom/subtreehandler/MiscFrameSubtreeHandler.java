@@ -32,7 +32,7 @@ import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.frame.MiscFrame;
@@ -68,7 +68,7 @@ public class MiscFrameSubtreeHandler extends OWLAPISubtreeHandler<MiscFrame> {
 	}
 
 	@Override
-	public Set<OWLAxiom> createOWLAxioms(KnowWEArticle article, Section<MiscFrame> s, Collection<KDOMReportMessage> messages) {
+	public Set<OWLAxiom> createOWLAxioms(KnowWEArticle article, Section<MiscFrame> s, Collection<Message> messages) {
 
 		OWLAxiom a = null;
 		MiscFrame type = (MiscFrame) s.get();
@@ -103,7 +103,7 @@ public class MiscFrameSubtreeHandler extends OWLAPISubtreeHandler<MiscFrame> {
 	 * @param Section<? extends Type> section
 	 * @return A Set with {@link OWLAnnotationAxiom}
 	 */
-	private Set<OWLAnnotation> handleOptionalAnnotations(Section<? extends Type> section, Collection<KDOMReportMessage> messages) {
+	private Set<OWLAnnotation> handleOptionalAnnotations(Section<? extends Type> section, Collection<Message> messages) {
 
 		Set<OWLAnnotation> annotations = new HashSet<OWLAnnotation>();
 

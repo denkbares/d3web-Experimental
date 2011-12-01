@@ -19,7 +19,7 @@
  */
 package de.d3web.we.drools.kdom.rendering;
 
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.core.report.MessageRenderer;
 import de.knowwe.core.user.UserContext;
 
@@ -36,12 +36,12 @@ public class DroolsRuleNoticeRenderer implements MessageRenderer{
 	}
 	
 	@Override
-	public String postRenderMessage(KDOMReportMessage m, UserContext user) {
+	public String postRenderMessage(Message m, UserContext user) {
 		return "";
 	}
 
 	@Override
-	public String preRenderMessage(KDOMReportMessage m, UserContext user) {
+	public String preRenderMessage(Message m, UserContext user) {
 		return "";
 	}
 

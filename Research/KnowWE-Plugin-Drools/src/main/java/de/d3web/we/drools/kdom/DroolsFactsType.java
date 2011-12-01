@@ -30,7 +30,7 @@ import de.knowwe.core.kdom.basicType.CommentLineType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 
 /**
  * Content type for the DroolsFacts section.
@@ -56,7 +56,7 @@ public class DroolsFactsType extends AbstractType {
 		 */
 		@SuppressWarnings("unchecked")
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section s) {
+		public Collection<Message> create(KnowWEArticle article, Section s) {
 									
 			// try to load factsStore
 			Map<String, Object> factsStore = DroolsKnowledgeHandler.getInstance().getFactsStore(

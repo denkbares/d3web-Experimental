@@ -20,7 +20,6 @@
 package de.d3web.we.wisec.kdom.subtreehandler;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -36,18 +35,17 @@ import de.d3web.we.wisec.kdom.WISECTable;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.table.TableCellContent;
 import de.knowwe.kdom.table.TableLine;
 import de.knowwe.logging.Logging;
-import de.knowwe.report.message.NewObjectCreated;
-import de.knowwe.report.message.ObjectCreationError;
 
 public class ListCriteriaD3SubtreeHandler extends D3webSubtreeHandler<ListCriteriaType> {
 
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<ListCriteriaType> s) {
+	public Collection<Message> create(KnowWEArticle article, Section<ListCriteriaType> s) {
 
 		KnowledgeBase kb = getKB(article);
 
@@ -73,12 +71,12 @@ public class ListCriteriaD3SubtreeHandler extends D3webSubtreeHandler<ListCriter
 				createD3Objects(s.getOriginalText().trim(), kb, listID);
 			}
 
-			return Arrays.asList((KDOMReportMessage) new NewObjectCreated(
+			return Messages.asList(Messages.objectCreatedNotice(
 					"Successfully created D3Web Objects"));
 
 		}
-		else return Arrays.asList((KDOMReportMessage) new ObjectCreationError
-				("Unable to create d3web Objects. KBM was null!", this.getClass()));
+		else return Messages.asList(Messages.objectCreationError(
+				"Unable to create d3web Objects. KBM was null!", this.getClass()));
 	}
 
 	private void createAbstractListQuestion(KnowledgeBase kb,
@@ -99,7 +97,7 @@ public class ListCriteriaD3SubtreeHandler extends D3webSubtreeHandler<ListCriter
 
 			// Get all lines
 			List<Section<TableLine>> tableLines = new ArrayList<Section<TableLine>>();
-			 Sections.findSuccessorsOfType(section, TableLine.class, tableLines);
+			Sections.findSuccessorsOfType(section, TableLine.class, tableLines);
 
 			for (Section<TableLine> line : tableLines) {
 

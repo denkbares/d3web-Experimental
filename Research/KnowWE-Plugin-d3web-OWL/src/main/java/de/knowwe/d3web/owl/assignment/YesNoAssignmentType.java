@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.d3web.owl.assignment;
 
@@ -37,12 +37,12 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.SyntaxError;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.sectionFinder.AllBeforeTypeSectionFinder;
 
 /**
- *
+ * 
  * @author Sebastian Furth
  * @created Mar 30, 2011
  */
@@ -68,7 +68,7 @@ public class YesNoAssignmentType extends AssignmentType {
 	private class YesNoAssignmentCompiler extends AssignmentCompiler<YesNoAssignmentType> {
 
 		@Override
-		protected Assignment createAssignment(KnowWEArticle article, Section<YesNoAssignmentType> s, KnowledgeBase kb, OWLOntologyUtil util, String baseURI, Collection<KDOMReportMessage> messages) {
+		protected Assignment createAssignment(KnowWEArticle article, Section<YesNoAssignmentType> s, KnowledgeBase kb, OWLOntologyUtil util, String baseURI, Collection<Message> messages) {
 			/* Get the question */
 			QuestionYN question = getQuestion(article, s, messages);
 			if (question == null) {
@@ -87,7 +87,7 @@ public class YesNoAssignmentType extends AssignmentType {
 			return new YesNoAssignment(owlClassIRI, question);
 		}
 
-		private QuestionYN getQuestion(KnowWEArticle article, Section<YesNoAssignmentType> s, Collection<KDOMReportMessage> messages) {
+		private QuestionYN getQuestion(KnowWEArticle article, Section<YesNoAssignmentType> s, Collection<Message> messages) {
 			// Get Question section
 			Section<QuestionReference> questionSection = Sections.findSuccessor(s,
 					QuestionReference.class);
@@ -95,7 +95,8 @@ public class YesNoAssignmentType extends AssignmentType {
 			Question question = questionSection.get().getTermObject(article, questionSection);
 			// Check QuestionYN
 			if (!(question instanceof QuestionYN)) {
-				messages.add(new SyntaxError("There is no QuestionYN: " + questionSection.getText()));
+				messages.add(Messages.syntaxError("There is no QuestionYN: "
+						+ questionSection.getText()));
 				return null;
 			}
 			return (QuestionYN) question;

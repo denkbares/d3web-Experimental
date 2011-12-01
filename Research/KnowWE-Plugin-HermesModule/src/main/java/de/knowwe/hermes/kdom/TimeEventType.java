@@ -21,7 +21,6 @@
 package de.knowwe.hermes.kdom;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -47,8 +46,8 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.SimpleMessageError;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.hermes.TimeStamp;
 import de.knowwe.hermes.kdom.renderer.TimeEventTypeRenderer;
 
@@ -79,7 +78,7 @@ public class TimeEventType extends AbstractType {
 			OwlSubtreeHandler<TimeEventType> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article,
+		public Collection<Message> create(KnowWEArticle article,
 				Section<TimeEventType> section) {
 
 			UpperOntology uo = UpperOntology.getInstance();
@@ -103,15 +102,15 @@ public class TimeEventType extends AbstractType {
 								TimeEventSourceType.class, sources);
 
 				if (descriptionSection == null) {
-					return Arrays.asList((KDOMReportMessage) new SimpleMessageError(
+					return Messages.asList(Messages.error(
 							"descriptionSection was null"));
 				}
 				if (importanceSection == null) {
-					return Arrays.asList((KDOMReportMessage) new SimpleMessageError(
+					return Messages.asList(Messages.error(
 							"importanceSection was null"));
 				}
 				if (dateSection == null) {
-					return Arrays.asList((KDOMReportMessage) new SimpleMessageError(
+					return Messages.asList(Messages.error(
 							"dateSection was null"));
 				}
 
@@ -208,7 +207,7 @@ public class TimeEventType extends AbstractType {
 			}
 
 			SemanticCoreDelegator.getInstance().addStatements(io, section);
-			return new ArrayList<KDOMReportMessage>(0);
+			return new ArrayList<Message>(0);
 		}
 
 	}

@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.core.report.MessageRenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.AnonymousTypeInvisible;
@@ -67,12 +67,12 @@ public abstract class BlockMarkupType extends AbstractType {
 		return new MessageRenderer() {
 
 			@Override
-			public String preRenderMessage(KDOMReportMessage m, UserContext user) {
+			public String preRenderMessage(Message m, UserContext user) {
 				return "";
 			}
 
 			@Override
-			public String postRenderMessage(KDOMReportMessage m, UserContext user) {
+			public String postRenderMessage(Message m, UserContext user) {
 				return "";
 			}
 		};

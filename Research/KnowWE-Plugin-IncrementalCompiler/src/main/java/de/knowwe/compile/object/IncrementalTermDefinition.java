@@ -28,9 +28,7 @@ import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.core.report.DefaultErrorRenderer;
-import de.knowwe.core.report.KDOMError;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.KDOMWarning;
+import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.renderer.StyleRenderer;
 
@@ -60,28 +58,28 @@ public abstract class IncrementalTermDefinition<TermObject> extends TermDefiniti
 		@Override
 		public void render(KnowWEArticle article, Section<IncrementalTermDefinition> sec, UserContext user, StringBuilder string) {
 
-			Collection<KDOMReportMessage> messages = IncrementalCompiler.getInstance().checkDefinition(
+			Collection<Message> messages = IncrementalCompiler.getInstance().checkDefinition(
 					sec.get().getTermIdentifier(sec));
-			for (KDOMReportMessage kdomReportMessage : messages) {
-				if (kdomReportMessage instanceof KDOMError) {
+			for (Message kdomReportMessage : messages) {
+				if (kdomReportMessage.getType() == Message.Type.ERROR) {
 					string.append(
 							DefaultErrorRenderer.INSTANCE_ERROR.preRenderMessage(
 									kdomReportMessage, user));
 				}
-				if (kdomReportMessage instanceof KDOMWarning) {
+				if (kdomReportMessage.getType() == Message.Type.WARNING) {
 					string.append(
 							DefaultErrorRenderer.INSTANCE_WARNING.preRenderMessage(
 									kdomReportMessage, user));
 				}
 			}
 			r.render(article, sec, user, string);
-			for (KDOMReportMessage kdomReportMessage : messages) {
-				if (kdomReportMessage instanceof KDOMError) {
+			for (Message kdomReportMessage : messages) {
+				if (kdomReportMessage.getType() == Message.Type.ERROR) {
 					string.append(
 							DefaultErrorRenderer.INSTANCE_ERROR.postRenderMessage(
 									kdomReportMessage, user));
 				}
-				if (kdomReportMessage instanceof KDOMWarning) {
+				if (kdomReportMessage.getType() == Message.Type.WARNING) {
 					string.append(
 							DefaultErrorRenderer.INSTANCE_WARNING.postRenderMessage(
 									kdomReportMessage, user));

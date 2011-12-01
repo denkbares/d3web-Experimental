@@ -26,7 +26,7 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 public class DelegateDestroyHandler extends GeneralSubtreeHandler<Type> {
@@ -43,8 +43,8 @@ public class DelegateDestroyHandler extends GeneralSubtreeHandler<Type> {
 	}
 
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Type> s) {
-		return new ArrayList<KDOMReportMessage>(0);
+	public Collection<Message> create(KnowWEArticle article, Section<Type> s) {
+		return new ArrayList<Message>(0);
 	}
 
 }

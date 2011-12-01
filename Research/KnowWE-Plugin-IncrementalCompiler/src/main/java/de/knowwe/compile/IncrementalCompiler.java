@@ -29,11 +29,8 @@ import java.util.List;
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
 import de.knowwe.compile.object.ComplexDefinition;
-import de.knowwe.compile.object.ComplexDefinitionError;
 import de.knowwe.compile.object.ComplexDefinitionWithTypeConstraints;
-import de.knowwe.compile.object.ConcurrentDefinitionsError;
 import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.PredefinedTermWarning;
 import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.event.Event;
@@ -45,11 +42,10 @@ import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.KDOMError;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.event.KDOMCreatedEvent;
 import de.knowwe.plugin.Plugins;
-import de.knowwe.report.message.NoSuchObjectError;
 
 /**
  * This class implements the incremental compilation algorithm as proposed by
@@ -61,8 +57,6 @@ import de.knowwe.report.message.NoSuchObjectError;
  */
 @SuppressWarnings("unchecked")
 public class IncrementalCompiler implements EventListener {
-	
-	
 
 	private final ReferenceManager terminology = new ReferenceManager();
 
@@ -73,7 +67,7 @@ public class IncrementalCompiler implements EventListener {
 	private static IncrementalCompiler instance;
 
 	public static IncrementalCompiler getInstance() {
-		if(instance == null) instance = new IncrementalCompiler();
+		if (instance == null) instance = new IncrementalCompiler();
 		return instance;
 	}
 
@@ -82,8 +76,7 @@ public class IncrementalCompiler implements EventListener {
 		instance = this;
 
 		/*
-		 * This term is for the tests only
-		 * TODO: remove when tests are adapted
+		 * This term is for the tests only TODO: remove when tests are adapted
 		 */
 		Section<PreDefinedTerm> subclassDef =
 				Section.createSection("subclassof",
@@ -93,9 +86,8 @@ public class IncrementalCompiler implements EventListener {
 		/*
 		 * END term for testing
 		 */
-		
-		
-		//extension point for plugins defining predefined terminology
+
+		// extension point for plugins defining predefined terminology
 		Extension[] exts = PluginManager.getInstance().getExtensions(
 				Plugins.EXTENDED_PLUGIN_ID,
 				Plugins.EXTENDED_POINT_TERMINOLOGY);
@@ -105,10 +97,7 @@ public class IncrementalCompiler implements EventListener {
 				registerTerminology(((TerminologyExtension) o));
 			}
 		}
-		
-		
-		
-	
+
 	}
 
 	private void registerTerminology(TerminologyExtension terminologyExtension) {
@@ -120,13 +109,13 @@ public class IncrementalCompiler implements EventListener {
 			terminology.addPredefinedObject(predefinedTermname);
 			terminology.registerTermDefinition(predefinedTermname);
 		}
-		
-//		Section<PreDefinedTerm> subclassDef =
-//				Section.createSection("subclassof",
-//						new PreDefinedTerm(), null);
-//		terminology.addPredefinedObject(subclassDef);
-//		terminology.registerTermDefinition(subclassDef);
-		
+
+		// Section<PreDefinedTerm> subclassDef =
+		// Section.createSection("subclassof",
+		// new PreDefinedTerm(), null);
+		// terminology.addPredefinedObject(subclassDef);
+		// terminology.registerTermDefinition(subclassDef);
+
 	}
 
 	class PreDefinedTerm extends TermDefinition<String> {
@@ -212,14 +201,14 @@ public class IncrementalCompiler implements EventListener {
 					break;
 				}
 				// check Types of referenced objects here
-				if(ref.get() instanceof TypeRestrictedReference) {
+				if (ref.get() instanceof TypeRestrictedReference) {
 					// TODO: Think of rendering of this violation!
-					if(((TypeRestrictedReference)ref.get()).checkTypeConstraints(ref) == false) {
+					if (((TypeRestrictedReference) ref.get()).checkTypeConstraints(ref) == false) {
 						compilationUnitIterator.remove();
 						break;
 					}
 				}
-				
+
 			}
 		}
 
@@ -302,30 +291,31 @@ public class IncrementalCompiler implements EventListener {
 
 	public boolean hasValidDefinition(String termIdentifier) {
 
-		Collection<KDOMReportMessage> messages = checkDefinition(termIdentifier);
-		for (KDOMReportMessage kdomReportMessage : messages) {
-			if (kdomReportMessage instanceof KDOMError) {
+		Collection<Message> messages = checkDefinition(termIdentifier);
+		for (Message kdomReportMessage : messages) {
+			if (kdomReportMessage.getType() == Message.Type.ERROR) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	public Collection<KDOMReportMessage> checkDefinition(String termIdentifier) {
-		Collection<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>();
+	public Collection<Message> checkDefinition(String termIdentifier) {
+		Collection<Message> messages = new ArrayList<Message>();
 
 		Collection<Section<? extends TermDefinition>> termDefiningSections = terminology.getTermDefinitions(termIdentifier);
 		if (termDefiningSections.size() == 0) {
-			messages.add(new NoSuchObjectError(termIdentifier));
+			messages.add(Messages.noSuchObjectError(termIdentifier));
 			return messages;
 		}
 
 		if (termDefiningSections.size() > 1) {
 			if (terminology.isPredefinedObject(termIdentifier)) {
-				messages.add(new PredefinedTermWarning());
+				messages.add(Messages.warning("This is a predefined term. " +
+						"Concurrent definitions are existing but will be ignored!"));
 				return messages;
 			}
-			messages.add(new ConcurrentDefinitionsError(termIdentifier));
+			messages.add(Messages.error("Object has concurrent definitions: " + termIdentifier));
 			return messages;
 		}
 
@@ -341,18 +331,23 @@ public class IncrementalCompiler implements EventListener {
 		if (complexDef != null) {
 			Collection<Section<TermReference>> allReferencesOfComplexDefinition = CompileUtils.getAllReferencesOfComplexDefinition(complexDef);
 			for (Section<TermReference> ref : allReferencesOfComplexDefinition) {
-				if ((!terminology.isValid(ref.get().getTermIdentifier(ref)))) {        //if one reference is not defined 
-					
-					messages.add(new ComplexDefinitionError(
+				String errorMsg = "ComplexDefinition has dependency error: ";
+				// if one reference is not defined
+				if ((!terminology.isValid(ref.get().getTermIdentifier(ref)))) {
+					messages.add(new Message(Message.Type.ERROR, errorMsg +
 							ref.get().getTermIdentifier(ref)));
 					return messages;
 				}
-				
+
 				// ADD-ON for type constraints
-				if (complexDef.get() instanceof ComplexDefinitionWithTypeConstraints && 
-						!((ComplexDefinitionWithTypeConstraints)complexDef.get()).checkTypeConstraints(def,ref)) {   //or has a wrong type
-					messages.add(new ComplexDefinitionError(((ComplexDefinitionWithTypeConstraints)complexDef.get()).getProblemMessageForConstraintViolation(def, ref)+" :"+
-							ref.get().getTermIdentifier(ref)));
+				if (complexDef.get() instanceof ComplexDefinitionWithTypeConstraints
+						&& !((ComplexDefinitionWithTypeConstraints) complexDef.get()).checkTypeConstraints(
+								def, ref)) { // or has a wrong type
+					messages.add(new Message(
+							Message.Type.ERROR,
+							errorMsg + ((ComplexDefinitionWithTypeConstraints) complexDef.get())
+									.getProblemMessageForConstraintViolation(def, ref) + " :" +
+									ref.get().getTermIdentifier(ref)));
 					return messages;
 				}
 			}

@@ -32,9 +32,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.report.KDOMError;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.SyntaxError;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.Patterns;
 import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
@@ -81,7 +79,8 @@ public class ApproximateCondKnownUnknown extends D3webCondition<ApproximateCondK
 
 	@Override
 	protected Condition createCondition(KnowWEArticle article, Section<ApproximateCondKnownUnknown> section) {
-		Section<ApproximateQuestionReference> qRef = Sections.findSuccessor(section, ApproximateQuestionReference.class);
+		Section<ApproximateQuestionReference> qRef = Sections.findSuccessor(section,
+				ApproximateQuestionReference.class);
 		Section<AssignmentType> valueSec = Sections.findSuccessor(section, AssignmentType.class);
 
 		if (valueSec == null || qRef == null) {
@@ -114,8 +113,8 @@ public class ApproximateCondKnownUnknown extends D3webCondition<ApproximateCondK
 			return new CondUnknown(question);
 		}
 
-		KDOMError msg = new SyntaxError("unexpected internal error");
-		KDOMReportMessage.storeSingleError(article, section, getClass(), msg);
+		Messages.storeMessages(article, section, getClass(),
+				Messages.asList(Messages.syntaxError("Unexpected internal error")));
 		return null;
 	}
 

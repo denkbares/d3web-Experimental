@@ -35,7 +35,7 @@ public class ScoreTableDefaultMarkup extends DefaultMarkupType {
 	static {
 		m = new DefaultMarkup("ScoreTable");
 		m.addContentType(new SimpleScoreTable());
-		m.addAnnotation(KnowWEPackageManager.ATTRIBUTE_NAME, false);
+		m.addAnnotation(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME, false);
 	}
 
 	public ScoreTableDefaultMarkup() {

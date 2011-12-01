@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -27,20 +27,18 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.report.KDOMError;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.KDOMWarning;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.manchester.frame.DefaultFrame;
 import de.knowwe.tools.Tool;
-import de.knowwe.tools.ToolMenuDecoratingRenderer;
 import de.knowwe.tools.ToolUtils;
 
 /**
  * Highlights elements of the Manchester OWL syntax in the article. Also wraps
  * the long lines so no ugly horizontal scrolling is necessary.
- *
+ * 
  * @author Stefan Mark
  * @created 10.08.2011
  */
@@ -79,34 +77,35 @@ public class ManchesterSyntaxFrameRenderer extends KnowWEDomRenderer<DefaultFram
 
 	/**
 	 * Renders possible messages returned by the {@link SubtreeHandler}.
-	 *
+	 * 
 	 * @created 18.10.2011
 	 * @param KnowWEArticle article
 	 * @param Section<? extends Type> section
 	 * @param StringBuilder string
 	 */
 	private void renderMessages(KnowWEArticle article, Section<? extends Type> section, StringBuilder string) {
-		renderKDOMReportMessages(KnowWEUtils.getMessagesFromSubtree(article, section,
-				KDOMError.class), string);
-		renderKDOMReportMessages(KnowWEUtils.getMessagesFromSubtree(article, section,
-				KDOMWarning.class), string);
+		Collection<Message> allmsgs = Messages.getMessagesFromSubtree(article, section);
+		Collection<Message> errors = Messages.getErrors(allmsgs);
+		Collection<Message> warnings = Messages.getWarnings(allmsgs);
+		renderKDOMReportMessages(errors, string);
+		renderKDOMReportMessages(warnings, string);
 	}
 
-	private void renderKDOMReportMessages(Collection<? extends KDOMReportMessage> messages, StringBuilder string) {
+	private void renderKDOMReportMessages(Collection<Message> messages, StringBuilder string) {
 		if (messages == null) return;
 		if (messages.isEmpty()) return;
 
-		Class<? extends KDOMReportMessage> type = messages.iterator().next().getClass();
+		Message msg = messages.iterator().next();
 		String className = "";
-		if (KDOMWarning.class.isAssignableFrom(type)) {
+		if (msg.getType() == Message.Type.WARNING) {
 			className = "warning";
 		}
-		else if (KDOMError.class.isAssignableFrom(type)) {
+		else if (msg.getType() == Message.Type.ERROR) {
 			className = "error";
 		}
 
 		string.append(KnowWEUtils.maskHTML("<span class='" + className + "'>"));
-		for (KDOMReportMessage error : messages) {
+		for (Message error : messages) {
 			string.append(error.getVerbalization());
 			string.append("\n");
 		}
@@ -114,8 +113,8 @@ public class ManchesterSyntaxFrameRenderer extends KnowWEDomRenderer<DefaultFram
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @created 07.10.2011
 	 * @param Section<DefaultFrame> section The current {@link DefaultFrame}
 	 * @return
@@ -132,7 +131,7 @@ public class ManchesterSyntaxFrameRenderer extends KnowWEDomRenderer<DefaultFram
 	/**
 	 * Returns the name of the current {@link DefaultFrame} for visual
 	 * highlighting to the user on the article page.
-	 *
+	 * 
 	 * @created 22.09.2011
 	 * @param Section<DefaultFrame> section The current {@link DefaultFrame}
 	 * @return The name of the {@link DefaultFrame}
@@ -144,10 +143,10 @@ public class ManchesterSyntaxFrameRenderer extends KnowWEDomRenderer<DefaultFram
 	/**
 	 * Has the section some ToolProvider attached, render the tools into the
 	 * resulting HTML output. This is a adaption from the
-	 * ToolMenuDecoratingRenderer. This was needed to include some of
-	 * the ToolProvider beside the DefaultMarkup. Maybe this can be
-	 * handled better in the future.
-	 *
+	 * ToolMenuDecoratingRenderer. This was needed to include some of the
+	 * ToolProvider beside the DefaultMarkup. Maybe this can be handled better
+	 * in the future.
+	 * 
 	 * @created 12.11.2011
 	 * @param article
 	 * @param sec
@@ -183,7 +182,7 @@ public class ManchesterSyntaxFrameRenderer extends KnowWEDomRenderer<DefaultFram
 	/**
 	 * Renders a link to the current article the {@link DefaultFrame} can be
 	 * found.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<DefaultFrame> section The current {@link DefaultFrame}
 	 * @return A link to the article the section can be found

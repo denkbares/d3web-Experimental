@@ -29,7 +29,7 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.core.utils.KnowWEUtils;
 
 /**
@@ -40,7 +40,7 @@ import de.knowwe.core.utils.KnowWEUtils;
 public class TestcaseTableSubtreeHandler extends SubtreeHandler<TestcaseTable> {
 
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TestcaseTable> s) {
+	public Collection<Message> create(KnowWEArticle article, Section<TestcaseTable> s) {
 
 		TestCase testcase = new TestCase();
 		SequentialTestCase stc = new SequentialTestCase();

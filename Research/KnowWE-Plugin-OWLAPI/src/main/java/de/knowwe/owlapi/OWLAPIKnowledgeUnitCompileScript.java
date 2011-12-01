@@ -30,14 +30,16 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 
 /**
- * OWLAPIKnowledgeUnitCompileScript class which handles basic knowledge creation.
- *
+ * OWLAPIKnowledgeUnitCompileScript class which handles basic knowledge
+ * creation.
+ * 
  * Simply adapted the {@link OWLAPISubtreeHandler} to the new
  * {@link IncrementalCompiler}.
- *
+ * 
  * @author Stefan Mark
  * @created 22.11.2011
  * @param <T>
@@ -50,7 +52,7 @@ public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends A
 	private static final Map<Section<?>, Set<OWLAxiom>> axiomCache = new WeakHashMap<Section<?>, Set<OWLAxiom>>();
 
 	/**
-	 *The instance of the {@link OWLAPIConnector} handles the access to the
+	 * The instance of the {@link OWLAPIConnector} handles the access to the
 	 * ontology.
 	 */
 	private final OWLAPIConnector connector;
@@ -73,7 +75,7 @@ public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends A
 	 * Creates an OWLAPISubtreeHandler instance using KnowWE's global ontology
 	 * but letting you decide whether the changes to the ontology shall be
 	 * applied to the RDF2Go-Store.
-	 *
+	 * 
 	 * @param sync specifies the sync with the RDF2Go-Store (true means sync is
 	 *        active).
 	 */
@@ -85,7 +87,7 @@ public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends A
 	 * Creates an OWLAPISubtreeHandler using the specified connector and letting
 	 * you decide whether the changes to the ontology shall be applied to the
 	 * RDF2Go-Store.
-	 *
+	 * 
 	 * @param connector specifies to OWLAPIConnector used in the subtreehandler
 	 * @param sync specifies the sync with the RDF2Go-Store (true means sync is
 	 *        active).
@@ -109,13 +111,13 @@ public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends A
 
 	@Override
 	public void insertIntoRepository(Section<T> section) {
-		Collection<KDOMReportMessage> messages = new LinkedList<KDOMReportMessage>();
+		Collection<Message> messages = new LinkedList<Message>();
 		Set<OWLAxiom> axioms = createOWLAxioms(section, messages);
 		connector.addAxioms(axioms);
 		axiomCache.put(section, axioms);
 
 		// store messages found while compiling the current section
-		KDOMReportMessage.storeMessages(section.getArticle(), section, getClass(), messages);
+		Messages.storeMessages(section.getArticle(), section, getClass(), messages);
 
 		if (sync) {
 			RDF2GoSync.synchronize(axioms, section, RDF2GoSync.Mode.ADD);
@@ -125,12 +127,12 @@ public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends A
 	/**
 	 * Creates the {@link OWLAxiom} that will be added to the ontology via the
 	 * underlying @link{OWLAPIConnector} instance.
-	 *
+	 * 
 	 * @created 22.11.2011
 	 * @param section The processed section belonging to the specified article.
 	 * @param messages messages returned after compiling this section.
 	 * @return a @link{Set} of @link{OWLAxiom}s which will be added to the
 	 *         ontology.
 	 */
-	public abstract Set<OWLAxiom> createOWLAxioms(Section<T> section, Collection<KDOMReportMessage> messages);
+	public abstract Set<OWLAxiom> createOWLAxioms(Section<T> section, Collection<Message> messages);
 }

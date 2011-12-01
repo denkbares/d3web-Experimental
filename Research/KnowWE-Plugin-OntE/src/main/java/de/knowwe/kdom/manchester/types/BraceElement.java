@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -28,15 +28,14 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.SyntaxError;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.SplitUtility;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 
 /**
- *
+ * 
  * Copied from {@link BracedCondition}
- *
+ * 
  * @author Stefan Mark
  * @created 21.09.2011
  */
@@ -83,19 +82,18 @@ class BracedExpressionFinder implements SectionFinder {
 
 		// closing brace could not be found -> throw error message
 		if (closingBracket == -1) {
-			KDOMReportMessage.storeSingleError(father.getArticle(), father,
-						this.getClass(), new SyntaxError("missing \""
+			Messages.storeMessage(father.getArticle(), father,
+						this.getClass(), Messages.syntaxError("missing \""
 								+ BraceElement.CLOSED + "\""));
 			return null;
 		}
 		else {
 			// clear messages and look for matching braces
-			KDOMReportMessage.clearMessages(father.getArticle(), father, this.getClass());
+			Messages.clearMessages(father.getArticle(), father, this.getClass());
 		}
 
 		int leadingSpaces = text.indexOf(trimmed);
 		int followingSpaces = text.length() - trimmed.length() - leadingSpaces;
-
 
 		// an bracedExpression needs to start and end with OPEN and CLOSED
 		if (startsWithOpen && trimmed.endsWith(Character.toString(BraceElement.CLOSED))) {

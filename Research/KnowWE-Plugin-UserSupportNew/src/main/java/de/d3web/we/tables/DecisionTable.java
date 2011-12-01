@@ -41,7 +41,7 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.kdom.AnonymousTypeInvisible;
 import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
 import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
@@ -79,7 +79,7 @@ public class DecisionTable extends ITable {
 	public class DecisionTableHandler extends GeneralSubtreeHandler<DecisionTable> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(
+		public Collection<Message> create(
 				KnowWEArticle article, Section<DecisionTable> decisionTable) {
 
 			Section<InnerTable> innerTable =

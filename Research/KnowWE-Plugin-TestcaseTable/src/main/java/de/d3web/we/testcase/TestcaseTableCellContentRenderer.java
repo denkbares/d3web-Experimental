@@ -23,7 +23,8 @@ import java.util.Collection;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.KDOMError;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -41,8 +42,8 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 	@Override
 	public void render(KnowWEArticle article, Section<TableCellContent> sec, UserContext user, StringBuilder string) {
 
-		Collection<KDOMError> messages = KnowWEUtils.getMessagesFromSubtree(article, sec,
-				KDOMError.class);
+		Collection<Message> messages = Messages.getErrors(Messages.getMessagesFromSubtree(article,
+				sec));
 
 		int column = TableUtils.getColumn(sec);
 
@@ -76,7 +77,8 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 			}
 			else if (column == 1) {
 				html.append("<td>");
-				html.append("<input type='text' name='" + sec.getOriginalText() + "' id='" + sec.getID()
+				html.append("<input type='text' name='" + sec.getOriginalText() + "' id='"
+						+ sec.getID()
 						+ "' value='" + TableUtils.quote(sec.getOriginalText())
 						+ "' class='table-edit-node'/>");
 			}

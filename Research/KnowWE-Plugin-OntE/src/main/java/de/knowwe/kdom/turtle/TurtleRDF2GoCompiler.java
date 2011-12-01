@@ -21,7 +21,6 @@
 package de.knowwe.kdom.turtle;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -31,12 +30,12 @@ import org.ontoware.rdf2go.model.node.URI;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.compile.TerminologyHandler;
 import de.knowwe.core.kdom.KnowWEArticle;
-import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.objects.KnowWETerm.Scope;
+import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.SyntaxError;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -45,10 +44,10 @@ import de.knowwe.termObject.RDFNodeType;
 public class TurtleRDF2GoCompiler extends RDF2GoSubtreeHandler<TurtleMarkup> {
 
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<TurtleMarkup> s) {
+	public Collection<Message> create(KnowWEArticle article, Section<TurtleMarkup> s) {
 		if (s.hasErrorInSubtree(article)) {
 			this.destroy(article, s);
-			return new ArrayList<KDOMReportMessage>(0);
+			return new ArrayList<Message>(0);
 		}
 
 		List<Section<RDFNodeType>> found = new ArrayList<Section<RDFNodeType>>();
@@ -68,26 +67,26 @@ public class TurtleRDF2GoCompiler extends RDF2GoSubtreeHandler<TurtleMarkup> {
 			objURI = object.get().getNode(object);
 		}
 		else {
-			return Arrays.asList((KDOMReportMessage) new SyntaxError(
+			return Messages.asList(Messages.syntaxError(
 					"invalid term combination:" + found.size()));
 		}
-		if(subURI == null) {
-			return Arrays.asList((KDOMReportMessage) new SyntaxError(
+		if (subURI == null) {
+			return Messages.asList(Messages.syntaxError(
 					"subject URI not found"));
 		}
-		if(predURI == null) {
-			return Arrays.asList((KDOMReportMessage) new SyntaxError(
+		if (predURI == null) {
+			return Messages.asList(Messages.syntaxError(
 					"predicate URI not found"));
 		}
-		if(objURI == null) {
-			return Arrays.asList((KDOMReportMessage) new SyntaxError(
+		if (objURI == null) {
+			return Messages.asList(Messages.syntaxError(
 					"object URI not found"));
 		}
-		
+
 		Rdf2GoCore.getInstance().addStatement(subURI.asResource(),
 				predURI.asURI(), objURI, s);
 
-		return new ArrayList<KDOMReportMessage>(0);
+		return new ArrayList<Message>(0);
 	}
 
 	private URI getSubject(Section<TurtleMarkup> s) {

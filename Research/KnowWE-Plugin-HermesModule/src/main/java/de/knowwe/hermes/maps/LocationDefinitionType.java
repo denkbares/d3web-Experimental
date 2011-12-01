@@ -30,7 +30,7 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
@@ -51,7 +51,7 @@ public class LocationDefinitionType extends AbstractType {
 	private class LocationDefinitionTypeOWLSubTreeHandler extends RDF2GoSubtreeHandler<LocationDefinitionType> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<LocationDefinitionType> s) {
+		public Collection<Message> create(KnowWEArticle article, Section<LocationDefinitionType> s) {
 			ArrayList<Statement> ioo = new ArrayList<Statement>();
 			Placemark placem = extractPlacemark(s);
 			MapType.addPlacemarkToOwlObject(placem, ioo);

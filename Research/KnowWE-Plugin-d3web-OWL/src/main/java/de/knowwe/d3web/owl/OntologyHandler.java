@@ -37,14 +37,11 @@ import de.d3web.owl.OWLOntologyUtil;
 import de.d3web.owl.OntologyProvider;
 import de.d3web.owl.Vocabulary;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
-import de.d3web.we.utils.MessageUtils;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.KDOMWarning;
-import de.knowwe.core.report.SimpleMessageError;
-import de.knowwe.core.report.SyntaxError;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.wikiConnector.ConnectorAttachment;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -61,10 +58,10 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 	private final String STOREKEY = "Ontology-Provider-Store-Key";
 
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<OntologyProviderType> section) {
+	public Collection<Message> create(KnowWEArticle article, Section<OntologyProviderType> section) {
 		KnowledgeBase kb = getKB(article);
 		if (kb == null) {
-			return MessageUtils.asList(new SimpleMessageError(
+			return Messages.asList(Messages.error(
 					"Unable to load knowledge base from article: " + article.getTitle()));
 		}
 
@@ -80,8 +77,8 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 
 		// no data available
 		if (!hasSourcePath && !hasContent) {
-			return MessageUtils.syntaxErrorAsList(
-					"There is neither a path to an ontology file nor content which can be attached.");
+			return Messages.asList(Messages.syntaxError(
+					"There is neither a path to an ontology file nor content which can be attached."));
 		}
 		// take the content as ontology
 		else if (!hasSourcePath && hasContent) {
@@ -89,8 +86,8 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 				ontology = createOntologyFromContent(content, manager);
 			}
 			catch (OWLOntologyCreationException e) {
-				return MessageUtils.syntaxErrorAsList(
-						"The provided content doesn't represent a valid ontolgy!");
+				return Messages.asList(Messages.syntaxError(
+						"The provided content doesn't represent a valid ontolgy!"));
 			}
 		}
 		// take the specified attachment as ontology
@@ -99,17 +96,17 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 				ontology = getOntologyAttachment(sourcePath, section, manager);
 			}
 			catch (OWLOntologyCreationException e) {
-				return MessageUtils.syntaxErrorAsList(
-						"The provided file doesn't contain a valid ontolgy!");
+				return Messages.asList(Messages.syntaxError(
+						"The provided file doesn't contain a valid ontolgy!"));
 			}
 			catch (IOException io) {
-				return MessageUtils.asList(new SimpleMessageError(
+				return Messages.asList(Messages.error(
 						"Unexpected IOException while loading of ontology file: "
 								+ sourcePath + "\n"
 								+ io.getLocalizedMessage()));
 			}
 			if (ontology == null) {
-				return MessageUtils.asList(new SimpleMessageError("Attachment \"" + sourcePath
+				return Messages.asList(Messages.error("Attachment \"" + sourcePath
 						+ "\" doesn't exist."));
 			}
 
@@ -117,7 +114,7 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 
 		// Check if the vocabulary of the d3web task ontology is present
 		if (!checkOntology(ontology)) {
-			return MessageUtils.asList(new SyntaxError(
+			return Messages.asList(Messages.syntaxError(
 					"The provided ontology doesn't meet the requirements of a valid d3web task-ontology. Check the vocabulary."));
 		}
 
@@ -132,7 +129,7 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 			KnowWEUtils.storeObject(article, section, STOREKEY, provider);
 		}
 		catch (OWLOntologyStorageException e) {
-			return MessageUtils.asList(new SimpleMessageError(
+			return Messages.asList(Messages.error(
 					"An error occured while saving the ontology to the knowledge base: "
 							+ e.getLocalizedMessage()));
 		}
@@ -140,13 +137,7 @@ public class OntologyHandler extends D3webSubtreeHandler<OntologyProviderType> {
 		// content and attachment was defined.
 		// Warn the user that the content has been ignored!
 		if (hasContent && hasSourcePath) {
-			return MessageUtils.asList(new KDOMWarning() {
-
-				@Override
-				public String getVerbalization() {
-					return "both src and content is specified, the content has been ignored.";
-				}
-			});
+			return Messages.asList(Messages.warning("both src and content is specified, the content has been ignored."));
 		}
 
 		// all right, no errors and warnings

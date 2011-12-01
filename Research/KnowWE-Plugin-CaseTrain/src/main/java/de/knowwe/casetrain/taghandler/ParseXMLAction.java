@@ -30,10 +30,8 @@ import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.KDOMError;
-import de.knowwe.core.report.KDOMNotice;
-import de.knowwe.core.report.KDOMWarning;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 
 /**
  * Parses the WikiPage to XML via {@link XMLUtils}
@@ -77,13 +75,10 @@ public class ParseXMLAction extends AbstractAction {
 					"</span>");
 			return buildi.toString();
 		}
-
-		Collection<KDOMError> errors =
-				KnowWEUtils.getMessagesFromSubtree(article, sec, KDOMError.class);
-		Collection<KDOMWarning> warnings =
-				KnowWEUtils.getMessagesFromSubtree(article, sec, KDOMWarning.class);
-		Collection<KDOMNotice> notices =
-				KnowWEUtils.getMessagesFromSubtree(article, sec, KDOMNotice.class);
+		Collection<Message> allmsgs = Messages.getMessagesFromSubtree(article, sec);
+		Collection<Message> errors = Messages.getErrors(allmsgs);
+		Collection<Message> warnings = Messages.getWarnings(allmsgs);
+		Collection<Message> notices = Messages.getNotices(allmsgs);
 
 		if (!errors.isEmpty()) {
 			buildi.append("<span class=\"error\">" +
@@ -111,5 +106,4 @@ public class ParseXMLAction extends AbstractAction {
 
 		return buildi.toString();
 	}
-
 }

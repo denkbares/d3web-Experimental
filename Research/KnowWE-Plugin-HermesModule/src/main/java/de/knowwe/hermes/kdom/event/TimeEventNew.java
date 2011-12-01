@@ -1,7 +1,6 @@
 package de.knowwe.hermes.kdom.event;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -19,7 +18,8 @@ import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.SplitUtility;
 import de.knowwe.core.utils.StringFragment;
 import de.knowwe.hermes.TimeEvent;
@@ -35,7 +35,6 @@ import de.knowwe.kdom.AnonymousTypeInvisible;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
 import de.knowwe.kdom.turtle.TurtleMarkup;
-import de.knowwe.report.message.InvalidNumberError;
 import de.knowwe.termObject.AbstractIRITermDefinition;
 import de.knowwe.termObject.IRIEntityType;
 import de.knowwe.termObject.IRIEntityType.IRIDeclarationType;
@@ -187,7 +186,7 @@ public class TimeEventNew extends AbstractType {
 			this.addSubtreeHandler(new TimeEventAttributeHandler<DateType>() {
 
 				@Override
-				public Collection<KDOMReportMessage> createAttribute(
+				public Collection<Message> createAttribute(
 						KnowWEArticle article, Section<DateType> s) {
 					// TimeStamp t = DateType.getTimeStamp(s);
 					// if (false /* t is invalid */) { // TODO: set appropriate
@@ -197,7 +196,7 @@ public class TimeEventNew extends AbstractType {
 					// s.get().getName()
 					// + ": " + s.getOriginalText()));
 					// }
-					return new ArrayList<KDOMReportMessage>(0);
+					return new ArrayList<Message>(0);
 				}
 
 			});
@@ -264,14 +263,14 @@ public class TimeEventNew extends AbstractType {
 			this.addSubtreeHandler(new TimeEventAttributeHandler<ImportanceType>() {
 
 				@Override
-				protected Collection<KDOMReportMessage> createAttribute(KnowWEArticle article, Section<ImportanceType> s) {
+				protected Collection<Message> createAttribute(KnowWEArticle article, Section<ImportanceType> s) {
 					Integer i = ImportanceType.getImportance(s);
 					if (i == null || i < 1 || i > 3) {
-						return Arrays.asList((KDOMReportMessage) new InvalidNumberError(
+						return Messages.asList(Messages.invalidNumberError(
 								s.get().getName() + ": " + s.getOriginalText()));
 					}
 
-					return new ArrayList<KDOMReportMessage>(0);
+					return new ArrayList<Message>(0);
 
 				}
 			});

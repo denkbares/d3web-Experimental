@@ -26,9 +26,9 @@ import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.KDOMError;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.table.TableLine;
 import de.knowwe.kdom.table.TableLineRenderer;
 import de.knowwe.kdom.table.TableUtils;
@@ -48,8 +48,8 @@ public class TestcaseTableLineRenderer extends TableLineRenderer {
 	@Override
 	protected String getClasses(KnowWEArticle article, Section<TableLine> sec, UserContext user) {
 
-		Collection<KDOMError> errorMessages = KnowWEUtils.getMessagesFromSubtree(article, sec,
-				KDOMError.class);
+		Collection<Message> errorMessages = Messages.getErrors(Messages.getMessagesFromSubtree(
+				article, sec));
 
 		if (errorMessages != null && !errorMessages.isEmpty()) {
 			return TESTCASELINE + " " + TESTCASEERROR;

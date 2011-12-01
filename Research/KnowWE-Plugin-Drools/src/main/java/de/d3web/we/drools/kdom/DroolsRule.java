@@ -37,12 +37,11 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.core.report.MessageRenderer;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.logging.Logging;
-import de.knowwe.report.message.NewObjectCreated;
-import de.knowwe.report.message.NoSuchObjectError;
 
 /**
  * DroolsRule contains a complete Drools rule Rules start with `rule "name"' and
@@ -75,8 +74,8 @@ public class DroolsRule extends AbstractType {
 	static class DroolsRuleSubtreeHandler extends SubtreeHandler<DroolsRule> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<DroolsRule> s) {
-			Collection<KDOMReportMessage> messages = new LinkedList<KDOMReportMessage>();
+		public Collection<Message> create(KnowWEArticle article, Section<DroolsRule> s) {
+			Collection<Message> messages = new LinkedList<Message>();
 			Section<DroolsRule> section = s;
 
 			Section<? extends DroolsRulesRootType> rtSection =
@@ -85,7 +84,7 @@ public class DroolsRule extends AbstractType {
 
 			if (rtSection == null) {
 				Logging.getInstance().warning("DroolsRulesRootType Section not found!");
-				messages.add(new NoSuchObjectError("DroolsRulesRootType Section not found!"));
+				messages.add(Messages.noSuchObjectError("DroolsRulesRootType Section not found!"));
 				return messages;
 			}
 
@@ -110,7 +109,7 @@ public class DroolsRule extends AbstractType {
 
 			KnowWEUtils.storeObject(article, section, rule_store_key, r);
 
-			messages.add(new NewObjectCreated(b.toString()));
+			messages.add(Messages.objectCreatedNotice(b.toString()));
 			return messages;
 		}
 

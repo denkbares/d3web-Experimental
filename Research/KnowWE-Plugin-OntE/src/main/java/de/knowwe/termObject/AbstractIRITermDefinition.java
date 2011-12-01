@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -23,7 +23,6 @@ package de.knowwe.termObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 import org.ontoware.rdf2go.model.node.URI;
@@ -36,9 +35,9 @@ import de.knowwe.core.kdom.objects.GlobalTermDefinition;
 import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.onte.owl.terminology.PredefinedTermError;
 import de.knowwe.onte.owl.terminology.URIUtil;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.termObject.IRIEntityType.IRIDeclarationType;
@@ -74,7 +73,7 @@ public abstract class AbstractIRITermDefinition extends GlobalTermDefinition<IRI
 	static class URIDefinitionRegistrationHandler extends SubtreeHandler<AbstractIRITermDefinition> {
 
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<AbstractIRITermDefinition> s) {
+		public Collection<Message> create(KnowWEArticle article, Section<AbstractIRITermDefinition> s) {
 
 			TerminologyHandler tHandler = KnowWEUtils.getTerminologyHandler(article.getWeb());
 
@@ -82,19 +81,17 @@ public abstract class AbstractIRITermDefinition extends GlobalTermDefinition<IRI
 
 			if (URIUtil.checkForKnownTerms(termName, URIUtil.OBJECT_VOCABULARY)
 					|| URIUtil.checkForKnownTerms(termName, URIUtil.PREDICATE_VOCABULARY)) {
-				return Arrays.asList((KDOMReportMessage) new PredefinedTermError(
+				return Messages.asList(Messages.error("This term is already predefined: " +
 						s.get().getName() + ": " + s.get().getTermIdentifier(s)));
 			}
 
 			tHandler.registerTermDefinition(article, s);
 
-
-
 			IRIEntityType uri = createTermObject(s);
 
 			s.get().storeTermObject(null, s, uri);
 
-			return new ArrayList<KDOMReportMessage>(0);
+			return new ArrayList<Message>(0);
 		}
 
 		protected IRIEntityType createTermObject(Section<AbstractIRITermDefinition> s) {

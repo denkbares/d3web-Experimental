@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -52,8 +52,8 @@ import de.d3web.we.kdom.condition.TerminalCondition;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.SyntaxError;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.manchester.frame.MiscFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
@@ -74,8 +74,8 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 07.09.2011
  */
@@ -92,11 +92,12 @@ public class AxiomFactory {
 		pm = new DefaultPrefixManager(Rdf2GoCore.basens);
 		storage = AxiomStorageSubtree.getInstance();
 	}
+
 	/**
 	 * Returns the a {@link OWLDeclarationAxiom} for a {@link OWLEntity} object.
 	 * An entity could be a {@link OWLClass}, {@link OWLDataProperty},
 	 * {@link OWLObjectProperty} or {@link OWLIndividual}.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param OWLEntity entity
 	 * @return OWLAxiom
@@ -110,7 +111,7 @@ public class AxiomFactory {
 	 * Returns the a {@link OWLDeclarationAxiom} for a {@link OWLEntity} object.
 	 * An entity could be a {@link OWLClass}, {@link OWLDataProperty},
 	 * {@link OWLObjectProperty} or {@link OWLIndividual}.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param OWLEntity entity
 	 * @return OWLAxiom
@@ -131,12 +132,13 @@ public class AxiomFactory {
 		// should never happen
 		throw new Error("OWL API entity conversion for " + entity + " not supported.");
 	}
+
 	/**
 	 * Returns the correct {@link OWLEntity} object for a given
 	 * {@link OWLEntity}. An entity could be a {@link OWLClass},
 	 * {@link OWLDataProperty}, {@link OWLObjectProperty} or
 	 * {@link OWLIndividual}.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<? extends Type> section
 	 * @param Class c
@@ -151,7 +153,7 @@ public class AxiomFactory {
 	 * {@link OWLEntity}. An entity could be a {@link OWLClass},
 	 * {@link OWLDataProperty}, {@link OWLObjectProperty} or
 	 * {@link OWLIndividual}.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<? extends Type> section
 	 * @param Class c
@@ -185,12 +187,12 @@ public class AxiomFactory {
 	 * The Input is a {@link ManchesterClassExpression} that contains all the
 	 * necessary information about its children, e.g. Conjuncts, Disjuncts,
 	 * ListElements or TerminalConditions.
-	 *
+	 * 
 	 * @created 08.09.2011
 	 * @param Section<ManchesterClassExpression> section
 	 * @return A set of {@link OWLClassExpression} for further processing.
 	 */
-	public static Map<OWLClassExpression, Section<? extends Type>> createDescriptionExpression(Section<ManchesterClassExpression> section, Collection<KDOMReportMessage> messages) {
+	public static Map<OWLClassExpression, Section<? extends Type>> createDescriptionExpression(Section<ManchesterClassExpression> section, Collection<Message> messages) {
 
 		ManchesterClassExpression type = section.get();
 		Map<OWLClassExpression, Section<? extends Type>> exp = new HashMap<OWLClassExpression, Section<? extends Type>>();
@@ -215,7 +217,7 @@ public class AxiomFactory {
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("OneOfCurlyBracket is empty!"));
+				messages.add(Messages.syntaxError("OneOfCurlyBracket is empty!"));
 				return null;
 			}
 
@@ -236,7 +238,7 @@ public class AxiomFactory {
 					ManchesterClassExpression.class);
 
 			if (mce == null) {
-				messages.add(new SyntaxError("Bracket is empty!"));
+				messages.add(Messages.syntaxError("Bracket is empty!"));
 				return null;
 			}
 
@@ -308,12 +310,12 @@ public class AxiomFactory {
 	 * Handles all the possible {@link TerminalCondition} of the
 	 * {@link ManchesterClassExpression}. If you add a new
 	 * {@link TerminalCondition}, please update the following lines accordingly.
-	 *
+	 * 
 	 * @created 30.09.2011
 	 * @param Section<? extends TerminalCondition> section
 	 * @return OWLClassExpression
 	 */
-	private static OWLClassExpression handleTerminals(Section<?> section, Collection<KDOMReportMessage> messages) {
+	private static OWLClassExpression handleTerminals(Section<?> section, Collection<Message> messages) {
 
 		Section<Restriction> restrictionSection = Sections.findSuccessor(section, Restriction.class);
 		Restriction r = restrictionSection.get();
@@ -330,7 +332,7 @@ public class AxiomFactory {
 					messages);
 			if (!exp.isEmpty()) {
 				return factory.getOWLObjectSomeValuesFrom(p,
-						(OWLClassExpression) exp.keySet().iterator().next());
+						exp.keySet().iterator().next());
 			}
 		}
 
@@ -346,7 +348,7 @@ public class AxiomFactory {
 					messages);
 			if (!exp.isEmpty()) {
 				return factory.getOWLObjectAllValuesFrom(p,
-						(OWLClassExpression) exp.keySet().iterator().next());
+						exp.keySet().iterator().next());
 			}
 		}
 
@@ -388,9 +390,11 @@ public class AxiomFactory {
 				Section<Restriction> optional = cr.getOptionalRestriction(cardSection);
 				if (optional.get().isTermReference(optional)) {
 					exp = handleTerminals(cardSection, messages);
-				} else {
+				}
+				else {
 					// FIXME not yet tested
-					Section<ManchesterClassExpression> mce = Sections.findSuccessor(cardSection, ManchesterClassExpression.class);
+					Section<ManchesterClassExpression> mce = Sections.findSuccessor(cardSection,
+							ManchesterClassExpression.class);
 
 					exp = createDescriptionExpression(mce, messages).keySet().iterator().next();
 				}
@@ -413,13 +417,13 @@ public class AxiomFactory {
 					OWLClass.class);
 			return (OWLClass) entity;
 		}
-		messages.add(new SyntaxError("Unknown TerminalCondition found!"));
+		messages.add(Messages.syntaxError("Unknown TerminalCondition found!"));
 		return null; // ... or 'This should never happen' :)
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @created 04.10.2011
 	 * @param Section<ManchesterClassExpression> section
 	 * @return
@@ -449,7 +453,7 @@ public class AxiomFactory {
 					Restriction.class);
 			Restriction r = restrictionSection.get();
 
-			 if (r.isObjectProperty(restrictionSection)) {
+			if (r.isObjectProperty(restrictionSection)) {
 				OWLEntity entity = getOWLAPIEntity(r.getObjectProperty(restrictionSection),
 								OWLObjectProperty.class);
 				exp.add((OWLObjectProperty) entity);
@@ -460,7 +464,7 @@ public class AxiomFactory {
 
 	/**
 	 * Create a {@link OWLSubClassOf} declaration axiom.
-	 *
+	 * 
 	 * @created 14.09.2011
 	 * @param clazz
 	 * @return
@@ -478,14 +482,14 @@ public class AxiomFactory {
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @created 28.09.2011
 	 * @param section
 	 * @param p
 	 * @return
 	 */
-	public static OWLAxiom createCharacteristics(Section<?> section, OWLObjectProperty p, Collection<KDOMReportMessage> messages) {
+	public static OWLAxiom createCharacteristics(Section<?> section, OWLObjectProperty p, Collection<Message> messages) {
 		String str = section.getOriginalText();
 
 		if (str.equals(ManchesterSyntaxKeywords.FUNCTIONAL.getKeyword())) {
@@ -509,7 +513,7 @@ public class AxiomFactory {
 		else if (str.equals(ManchesterSyntaxKeywords.TRANSITIVE.getKeyword())) {
 			return factory.getOWLTransitiveObjectPropertyAxiom(p);
 		}
-		messages.add(new SyntaxError("Characteristic is unknown"));
+		messages.add(Messages.syntaxError("Characteristic is unknown"));
 		return null;
 	}
 
@@ -544,8 +548,8 @@ public class AxiomFactory {
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @created 15.09.2011
 	 * @param section
 	 * @param i
@@ -561,9 +565,10 @@ public class AxiomFactory {
 		}
 		return null;
 	}
+
 	/**
 	 * Create a {@link OWLSameIndividualAxiom} between two {@link OWLIndividual}
-	 *
+	 * 
 	 * @created 28.09.2011
 	 * @param OOWLIndividual one
 	 * @param OWLIndividual two
@@ -572,10 +577,11 @@ public class AxiomFactory {
 	public static OWLAxiom createSameIndividualsAxiom(OWLIndividual one, OWLIndividual two) {
 		return factory.getOWLSameIndividualAxiom(one, two);
 	}
+
 	/**
 	 * Create a {@link OWLDifferentIndividualsAxiom} between two
 	 * {@link OWLIndividual}.
-	 *
+	 * 
 	 * @created 28.09.2011
 	 * @param OOWLIndividual one
 	 * @param OWLIndividual two
@@ -584,15 +590,16 @@ public class AxiomFactory {
 	public static OWLAxiom createDifferentFromIndividualsAxiom(OWLIndividual one, OWLIndividual two) {
 		return factory.getOWLDifferentIndividualsAxiom(one, two);
 	}
+
 	/**
 	 * Create Facts axioms out of the {@link Fact} KDOM nodes.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<?> section
 	 * @param OWLIndividual i
 	 * @return
 	 */
-	public static OWLAxiom createFact(Section<?> section, OWLIndividual i, Collection<KDOMReportMessage> messages) {
+	public static OWLAxiom createFact(Section<?> section, OWLIndividual i, Collection<Message> messages) {
 		Section<ObjectPropertyExpression> ope = Sections.findSuccessor(section,
 				ObjectPropertyExpression.class);
 		Section<OWLTermReferenceManchester> ref = Sections.findSuccessor(section,
@@ -604,21 +611,22 @@ public class AxiomFactory {
 					OWLIndividual.class);
 			return factory.getOWLObjectPropertyAssertionAxiom(p, i, ind);
 		}
-		messages.add(new SyntaxError("ObjectProperty or Termreference missing!"));
+		messages.add(Messages.syntaxError("ObjectProperty or Termreference missing!"));
 		return null;
 	}
+
 	/**
 	 * Creates out of the found {@link Annotations} in the KDOM correct
 	 * {@link OWLAnnotation} axioms. Those {@link OWLAxiom} can than be added to
 	 * the ontology.
-	 *
+	 * 
 	 * @created 15.09.2011
 	 * @param Section<Annotation> section A {@link Annotation} section
 	 * @param IRI annotatetObject The resource the {@link Annotation} belongs
 	 *        to.
 	 * @return
 	 */
-	public static OWLAxiom createAnnotations(Section<Annotation> section, IRI annotatetObject, Collection<KDOMReportMessage> messages) {
+	public static OWLAxiom createAnnotations(Section<Annotation> section, IRI annotatetObject, Collection<Message> messages) {
 		OWLAnnotation a = createOWLAnnotation(section, messages);
 		if (a != null) {
 			return factory.getOWLAnnotationAssertionAxiom(annotatetObject, a);
@@ -627,13 +635,13 @@ public class AxiomFactory {
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @created 29.09.2011
 	 * @param Section<Annotation> section
 	 * @return
 	 */
-	public static OWLAnnotation createOWLAnnotation(Section<Annotation> section, Collection<KDOMReportMessage> messages) {
+	public static OWLAnnotation createOWLAnnotation(Section<Annotation> section, Collection<Message> messages) {
 		IRI annotationIRI = null;
 		Annotation annotationType = section.get();
 		if (annotationType.isLabel(section)) {
@@ -648,7 +656,7 @@ public class AxiomFactory {
 			String tag = "";
 
 			if (annotationType.getTerm(section) == null) {
-				messages.add(new SyntaxError("annotationterm not found!"));
+				messages.add(Messages.syntaxError("annotationterm not found!"));
 				return null;
 			}
 			term = annotationType.getTerm(section).getOriginalText();
@@ -662,13 +670,14 @@ public class AxiomFactory {
 			}
 			return createOWLAnnotation(annotationIRI, term, tag);
 		}
-		messages.add(new SyntaxError(
+		messages.add(Messages.syntaxError(
 				"undefined annotation type found, please specify {rdfs:label, rdfs:comment}!"));
 		return null;
 	}
+
 	/**
 	 * Creates {@link OWLAnnotation}.
-	 *
+	 * 
 	 * @created 29.09.2011
 	 * @param property
 	 * @param value
@@ -695,7 +704,7 @@ public class AxiomFactory {
 	/**
 	 * Create the axioms for the EquivalentClasses and DisjointClasses frame of
 	 * the Manchester OWL syntax.
-	 *
+	 * 
 	 * @created 22.09.2011
 	 * @param Section<MiscFrame> section The section containing the information
 	 *        about the {@link MiscFrame}
@@ -704,14 +713,14 @@ public class AxiomFactory {
 	 *        due to the handling of the KDOM
 	 * @return {@link OWLAxiom}
 	 */
-	public static OWLAxiom createMiscFrameClasses(Section<MiscFrame> section, Set<OWLAnnotation> annotations, Collection<KDOMReportMessage> messages) {
+	public static OWLAxiom createMiscFrameClasses(Section<MiscFrame> section, Set<OWLAnnotation> annotations, Collection<Message> messages) {
 
 		MiscFrame type = section.get();
 		List<Section<OWLTermReferenceManchester>> references = Sections.findSuccessorsOfType(
 				section, OWLTermReferenceManchester.class);
 
 		if (references.isEmpty()) {
-			messages.add(new SyntaxError("list of classes not found!"));
+			messages.add(Messages.syntaxError("list of classes not found!"));
 			return null;
 		}
 
@@ -734,7 +743,7 @@ public class AxiomFactory {
 	/**
 	 * Create the axioms for the SameIndividual and DifferentIndividuals frame
 	 * of the Manchester OWL syntax.
-	 *
+	 * 
 	 * @created 22.09.2011
 	 * @param Section<MiscFrame> section The section containing the information
 	 *        about the {@link MiscFrame}
@@ -743,7 +752,7 @@ public class AxiomFactory {
 	 *        due to the handling of the KDOM
 	 * @return {@link OWLAxiom}
 	 */
-	public static OWLAxiom createMiscFrameIndividuals(Section<MiscFrame> section, Set<OWLAnnotation> annotations, Collection<KDOMReportMessage> messages) {
+	public static OWLAxiom createMiscFrameIndividuals(Section<MiscFrame> section, Set<OWLAnnotation> annotations, Collection<Message> messages) {
 
 		MiscFrame type = section.get();
 		List<Section<OWLTermReferenceManchester>> references = Sections.findSuccessorsOfType(
@@ -752,7 +761,7 @@ public class AxiomFactory {
 		Set<OWLNamedIndividual> parts = new HashSet<OWLNamedIndividual>();
 
 		if (references.isEmpty()) {
-			messages.add(new SyntaxError("list of individuals not found!"));
+			messages.add(Messages.syntaxError("list of individuals not found!"));
 			return null;
 		}
 
@@ -772,7 +781,7 @@ public class AxiomFactory {
 	/**
 	 * Create the axioms for the EquivalentObjectProperties and
 	 * DisjointObjectProperties frame of the Manchester OWL syntax.
-	 *
+	 * 
 	 * @created 22.09.2011
 	 * @param Section<MiscFrame> section The section containing the information
 	 *        about the {@link MiscFrame}
@@ -781,14 +790,14 @@ public class AxiomFactory {
 	 *        due to the handling of the KDOM
 	 * @return {@link OWLAxiom}
 	 */
-	public static OWLAxiom createMiscFrameObjectProperties(Section<MiscFrame> section, Set<OWLAnnotation> annotations, Collection<KDOMReportMessage> messages) {
+	public static OWLAxiom createMiscFrameObjectProperties(Section<MiscFrame> section, Set<OWLAnnotation> annotations, Collection<Message> messages) {
 
 		MiscFrame type = section.get();
 		List<Section<ObjectPropertyExpression>> references = Sections.findSuccessorsOfType(
 				section, ObjectPropertyExpression.class);
 
 		if (references.isEmpty()) {
-			messages.add(new SyntaxError("list of object properties not found!"));
+			messages.add(Messages.syntaxError("list of object properties not found!"));
 			return null;
 		}
 
@@ -810,7 +819,7 @@ public class AxiomFactory {
 	/**
 	 * Create the axioms for the EquivalentDatatypeProperties and
 	 * DisjointDatatypeProperties frame of the Manchester OWL syntax.
-	 *
+	 * 
 	 * @created 22.09.2011
 	 * @param Section<MiscFrame> section The section containing the information
 	 *        about the {@link MiscFrame}
@@ -819,14 +828,14 @@ public class AxiomFactory {
 	 *        due to the handling of the KDOM
 	 * @return {@link OWLAxiom}
 	 */
-	public static OWLAxiom createMiscFrameDataProperties(Section<MiscFrame> section, Set<OWLAnnotation> annotations, Collection<KDOMReportMessage> messages) {
+	public static OWLAxiom createMiscFrameDataProperties(Section<MiscFrame> section, Set<OWLAnnotation> annotations, Collection<Message> messages) {
 
 		MiscFrame type = section.get();
 		List<Section<DataPropertyExpression>> references = Sections.findSuccessorsOfType(
 				section, DataPropertyExpression.class);
 
 		if (references.isEmpty()) {
-			messages.add(new SyntaxError("list of data properties not found!"));
+			messages.add(Messages.syntaxError("list of data properties not found!"));
 			return null;
 		}
 

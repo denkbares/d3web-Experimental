@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.casetrain.evaluation;
 
@@ -30,10 +30,6 @@ import de.knowwe.casetrain.info.Hint;
 import de.knowwe.casetrain.info.Info;
 import de.knowwe.casetrain.info.Question;
 import de.knowwe.casetrain.info.Question.QuestionType;
-import de.knowwe.casetrain.message.InvalidArgumentError;
-import de.knowwe.casetrain.message.MissingComponentError;
-import de.knowwe.casetrain.message.MissingComponentWarning;
-import de.knowwe.casetrain.message.MissingContentWarning;
 import de.knowwe.casetrain.type.general.BlockMarkupContent;
 import de.knowwe.casetrain.type.general.BlockMarkupContentRenderer;
 import de.knowwe.casetrain.type.general.BlockMarkupType;
@@ -49,14 +45,11 @@ import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
-import de.knowwe.core.report.KDOMError;
-import de.knowwe.core.report.KDOMNotice;
-import de.knowwe.core.report.KDOMReportMessage;
-import de.knowwe.core.report.KDOMWarning;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
-
 
 /**
  * 
@@ -87,22 +80,19 @@ public class Evaluation extends BlockMarkupType {
 						+ "'>"));
 				string.append(KnowWEUtils.maskHTML("<div class='Evaluationstart'></div>"));
 
-				Utils.renderKDOMReportMessageBlock(KnowWEUtils.getMessagesFromSubtree(
-						article,
-						sec,
-						KDOMError.class), string);
+				Utils.renderKDOMReportMessageBlock(
+						Messages.getErrors(Messages.getMessagesFromSubtree(
+								article, sec)), string);
 
-				Utils.renderKDOMReportMessageBlock(KnowWEUtils.getMessagesFromSubtree(
-						article,
-						sec,
-						KDOMWarning.class), string);
+				Utils.renderKDOMReportMessageBlock(
+						Messages.getWarnings(Messages.getMessagesFromSubtree(
+								article, sec)), string);
 
-				Utils.renderKDOMReportMessageBlock(KnowWEUtils.getMessagesFromSubtree(
-						article,
-						sec,
-						KDOMNotice.class), string);
+				Utils.renderKDOMReportMessageBlock(
+						Messages.getNotices(Messages.getMessagesFromSubtree(
+								article, sec)), string);
 				Section<BlockMarkupContent> con =
-					Sections.findSuccessor(sec, BlockMarkupContent.class);
+						Sections.findSuccessor(sec, BlockMarkupContent.class);
 				BlockMarkupContentRenderer.getInstance().render(article, con, user, string);
 				string.append(KnowWEUtils.maskHTML("<div class='Evaluationend'></div>"));
 				string.append(KnowWEUtils.maskHTML("</div>"));
@@ -112,59 +102,59 @@ public class Evaluation extends BlockMarkupType {
 		this.addSubtreeHandler(new GeneralSubtreeHandler<Evaluation>() {
 
 			@Override
-			public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<Evaluation> s) {
+			public Collection<Message> create(KnowWEArticle article, Section<Evaluation> s) {
 
-				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
+				List<Message> messages = new ArrayList<Message>(0);
 
 				/*
-				 *  Evaluation has no content if:
-				 *  - Only title as children and no other children
-				 *  - It has no children at all
+				 * Evaluation has no content if: - Only title as children and no
+				 * other children - It has no children at all
 				 */
 				List<Section<? extends Type>> blockMarkupChildren =
-					Sections.findSuccessor(s, BlockMarkupContent.class).getChildren();
-				if ( blockMarkupChildren.size() == 0 ) {
-					messages.add(new MissingContentWarning(Info.class.getSimpleName()));
-				} else {
+						Sections.findSuccessor(s, BlockMarkupContent.class).getChildren();
+				if (blockMarkupChildren.size() == 0) {
+					messages.add(Utils.missingContentWarning(Info.class.getSimpleName()));
+				}
+				else {
 					messages.addAll(this.testQuestionAnswerComposition(s));
 				}
 
 				return messages;
 			}
 
-			/**
-			 * Tests the following:
-			 * {@link Question} has {@link AnswersBlock)/{@link Explanation}
+/**
+			 * Tests the following: {@link Question} has {@link AnswersBlock)/
 			 * 
-			 * TODO Does not test if {@link AnswersBlock} has {@link Question}!
-			 * Is this necessary?
+			 * @link Explanation}
+			 * 
+			 *       TODO Does not test if {@link AnswersBlock} has
+			 *       {@link Question}! Is this necessary?
 			 * 
 			 * @created 28.04.2011
 			 * @param s
 			 * @return
 			 */
 			@SuppressWarnings("unchecked")
-			private List<KDOMReportMessage> testQuestionAnswerComposition(Section<Evaluation> s) {
+			private List<Message> testQuestionAnswerComposition(Section<Evaluation> s) {
 
-				List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>(0);
+				List<Message> messages = new ArrayList<Message>(0);
 
 				List<Section<Question>> found = new ArrayList<Section<Question>>();
 				Sections.findSuccessorsOfType(s, Question.class, found);
 				if (found.isEmpty()) {
-					messages.add(new MissingComponentWarning(Question.class.getSimpleName()));
+					messages.add(Utils.missingComponentWarning(Question.class.getSimpleName()));
 					return messages;
 				}
 
 				/*
-				 *  check children if the right order is given or some
-				 *  thing is missing. Right is:
-				 *  Hint* Question Hint* AnswersBlock Hint* Explanation
+				 * check children if the right order is given or some thing is
+				 * missing. Right is: Hint* Question Hint* AnswersBlock Hint*
+				 * Explanation
 				 * 
-				 *  Also validates the given AnswerBlock.
-				 * 
+				 * Also validates the given AnswerBlock.
 				 */
 				List<Section<? extends Type>> children =
-					Sections.findSuccessor(s, BlockMarkupContent.class).getChildren();
+						Sections.findSuccessor(s, BlockMarkupContent.class).getChildren();
 				Section<? extends Type> actual = null;
 				boolean antwortenMissing = true;
 				boolean moreAnswersBlocks = false;
@@ -177,7 +167,7 @@ public class Evaluation extends BlockMarkupType {
 						continue;
 					}
 
-					if ( sec.get().isType(Question.class) ) {
+					if (sec.get().isType(Question.class)) {
 
 						if (actual == null) {
 							actual = sec;
@@ -196,22 +186,21 @@ public class Evaluation extends BlockMarkupType {
 						if (!antwortenMissing) {
 							moreAnswersBlocks = true;
 							String typ =
-								Sections.findSuccessor(actual, QuestionType.class)
-								.getOriginalText().trim();
-							if ( !(AnswersBlockValidator.getInstance()
+									Sections.findSuccessor(actual, QuestionType.class)
+											.getOriginalText().trim();
+							if (!(AnswersBlockValidator.getInstance()
 									.getTypesMultiple().contains(typ))) {
-								messages.add(
-										new InvalidArgumentError(
+								messages.add(Utils.invalidArgumentError(
 												bundle.getString("NO_MULTIPLE_ANSWERS")
-												+typ)
-								);
+														+ typ)
+										);
 							}
 
 						}
 						antwortenMissing = false;
 						AnswersBlockValidator.getInstance().
-						validateAnswersBlock((Section<Question>) actual,
-								(Section<AnswersBlock>) sec, messages, true);
+								validateAnswersBlock((Section<Question>) actual,
+										(Section<AnswersBlock>) sec, messages, true);
 					}
 
 				}
@@ -223,28 +212,27 @@ public class Evaluation extends BlockMarkupType {
 
 			private void validateQuestion(Section<? extends Type> actual,
 					boolean antwortenMissing, boolean moreAnswersBlocks,
-					List<KDOMReportMessage> messages) {
+					List<Message> messages) {
 
 				if (actual == null) {
 					messages.add(
-							new MissingComponentError(
+							Utils.missingComponentError(
 									Question.class.getSimpleName()));
 					return;
 				}
 
 				if (antwortenMissing) {
-					messages.add(
-							new MissingComponentWarning(
+					messages.add(Utils.missingComponentWarning(
 									AnswersBlock.class.getSimpleName()));
 				}
 				String typ =
-					Sections.findSuccessor(actual, QuestionType.class)
-					.getOriginalText().trim();
+						Sections.findSuccessor(actual, QuestionType.class)
+								.getOriginalText().trim();
 				if (!moreAnswersBlocks && AnswersBlockValidator.getInstance()
 						.getTypesMultiple().contains(typ)) {
 					messages.add(
-							new MissingComponentError(
-									bundle.getString("MIN_TWO_BLOCKS")+typ));
+							Utils.missingComponentError(
+									bundle.getString("MIN_TWO_BLOCKS") + typ));
 				}
 
 			}

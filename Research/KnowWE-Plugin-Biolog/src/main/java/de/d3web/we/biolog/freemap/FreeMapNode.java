@@ -39,7 +39,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.xml.AbstractXMLType;
@@ -102,7 +102,7 @@ public class FreeMapNode extends AbstractXMLType {
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<FreeMapNode> s) {
+		public Collection<Message> create(KnowWEArticle article, Section<FreeMapNode> s) {
 			Section<FreeMapNode> element = s; // warning
 			IntermediateOwlObject io = new IntermediateOwlObject();
 			if (s.get().isAssignableFromType(FreeMapNode.class)) {
@@ -124,7 +124,7 @@ public class FreeMapNode extends AbstractXMLType {
 			}
 			SemanticCoreDelegator.getInstance(KnowWEEnvironment.getInstance()).addStatements(io, s);
 			KnowWEUtils.storeObject(article, s, OwlHelper.IOO, io);
-			return new ArrayList<KDOMReportMessage>();
+			return new ArrayList<Message>();
 		}
 
 	}

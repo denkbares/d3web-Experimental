@@ -20,7 +20,6 @@
 package de.knowwe.wimvent.ruleTable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -44,12 +43,11 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.basicType.Number;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.report.KDOMReportMessage;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.table.TableCellContent;
-import de.knowwe.report.message.CreateRelationFailed;
-import de.knowwe.report.message.ObjectCreatedMessage;
 import de.knowwe.wimvent.ruleTable.WimVentTable.WimVentRuleTableRuleLine;
 
 public class TableLineRuleCompiler extends D3webSubtreeHandler<WimVentRuleTableRuleLine> {
@@ -57,13 +55,13 @@ public class TableLineRuleCompiler extends D3webSubtreeHandler<WimVentRuleTableR
 	public static final String ruleStoreKey = "RULE_STORE_KEY";
 
 	@Override
-	public Collection<KDOMReportMessage> create(KnowWEArticle article, Section<WimVentRuleTableRuleLine> s) {
+	public Collection<Message> create(KnowWEArticle article, Section<WimVentRuleTableRuleLine> s) {
 
 		if (s.hasErrorInSubtree(article)) {
-			return Arrays.asList((KDOMReportMessage) new CreateRelationFailed("Rule"));
+			return Messages.asList(Messages.creationFailedWarning("Rule"));
 		}
 
-		List<KDOMReportMessage> messages = new ArrayList<KDOMReportMessage>();
+		List<Message> messages = new ArrayList<Message>();
 
 		Section<DefaultMarkupType> defaultMarkup = Sections.findAncestorOfType(s,
 				DefaultMarkupType.class);
@@ -90,14 +88,14 @@ public class TableLineRuleCompiler extends D3webSubtreeHandler<WimVentRuleTableR
 					conditions.add(cond);
 				}
 				else {
-					return Arrays.asList((KDOMReportMessage) new CreateRelationFailed(
+					return Messages.asList(Messages.creationFailedWarning(
 							D3webModule.getKwikiBundle_d3web().
 									getString("KnowWE.rulesNew.notcreated")
 							));
 				}
 			}
 			else {
-				return Arrays.asList((KDOMReportMessage) new CreateRelationFailed(
+				return Messages.asList(Messages.creationFailedWarning(
 						D3webModule.getKwikiBundle_d3web().
 								getString("KnowWE.rulesNew.notcreated")
 						));
@@ -124,7 +122,7 @@ public class TableLineRuleCompiler extends D3webSubtreeHandler<WimVentRuleTableR
 					a = asv;
 				}
 				else {
-					messages.add(new CreateRelationFailed(
+					messages.add(Messages.creationFailedWarning(
 							"wrong question-answer combination")
 							);
 				}
@@ -142,7 +140,7 @@ public class TableLineRuleCompiler extends D3webSubtreeHandler<WimVentRuleTableR
 					a = asv;
 				}
 				else {
-					return Arrays.asList((KDOMReportMessage) new CreateRelationFailed(
+					return Messages.asList(Messages.creationFailedWarning(
 							"wrong question-answer combination")
 							);
 				}
@@ -153,13 +151,13 @@ public class TableLineRuleCompiler extends D3webSubtreeHandler<WimVentRuleTableR
 						null, PSMethodAbstraction.class);
 				if (r != null) {
 					KnowWEUtils.storeObject(article, s, ruleStoreKey, r);
-					messages.add(new ObjectCreatedMessage(
+					messages.add(Messages.objectCreatedNotice(
 							"Rule"));
 				}
 
 			}
 			else {
-				messages.add(new CreateRelationFailed("Rule"));
+				messages.add(Messages.creationFailedWarning("Rule"));
 			}
 
 		}
