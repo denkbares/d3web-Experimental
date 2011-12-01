@@ -220,6 +220,7 @@
 		<module>KnowWE-Plugin-RDFS-SubclassingTree</module>
 		<module>KnowWE-Plugin-ProKEt</module>
 		<module>KnowWE-Plugin-MedicineOntology</module>
+		<module>KnowWE-Plugin-DiaFlux-Anomalies</module>
 	</modules>
 	<repositories>
 		<repository>
