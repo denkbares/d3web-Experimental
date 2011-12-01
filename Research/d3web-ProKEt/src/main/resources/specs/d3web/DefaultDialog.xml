@@ -7,11 +7,11 @@
 	dialogcolumns="1"
 	questionnairecolumns="3"
 	questioncolumns = "2"
-	userprefix = "DefaultDialog" 
+	userprefix = "EuraHS" 
 	login = "off"
-	required = "Betreffende Klinik"
+	required = ""
 	language = "de"
         logging = "ON"
 	>
-	<data kb="MediastinitisMai2011.d3web" />
+	<data kb="Languages.d3web" />
 </dialog>

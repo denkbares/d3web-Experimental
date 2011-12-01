@@ -25,9 +25,11 @@ import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
+
 
 /**
  * Renderer for rendering basic Questionnaires.
@@ -40,56 +42,57 @@ import de.d3web.proket.utils.TemplateUtils;
  */
 public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements IQuestionD3webRenderer {
 
-	@Override
-	/**
-	 * Adapted specifically for questionnaire rendering
-	 */
-	public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
-			TerminologyObject to, TerminologyObject parent) {
+    @Override
+    /**
+     * Adapted specifically for questionnaire rendering
+     */
+    public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
+            TerminologyObject to, TerminologyObject parent) {
 
-		StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-		// return if the InterviewObject is null
-		if (to == null) {
-			return "";
-		}
+        // return if the InterviewObject is null
+        if (to == null) {
+            return "";
+        }
 
-		// get the fitting template. In case user prefix was specified, the
-		// specific TemplateName is returned, otherwise, the base object name.
-		StringTemplate st = TemplateUtils.getStringTemplate(
-				super.getTemplateName("Questionnaire"), "html");
+        // get the fitting template. In case user prefix was specified, the
+        // specific TemplateName is returned, otherwise, the base object name.
+        StringTemplate st = TemplateUtils.getStringTemplate(
+                super.getTemplateName("Questionnaire"), "html");
 
-		st.setAttribute("fullId", getID(to));// to.getName().replace(" ",
-												// "_"));
-		st.setAttribute("title", to.getName());
-		st.setAttribute("count", D3webConnector.getInstance().getID(to));
+        st.setAttribute("fullId", getID(to));// to.getName().replace(" ",
 
-		String resString = to.getInfoStore().getValue(ProKEtProperties.POPUP);
-		if (resString != null) {
-			st.setAttribute("tooltip", resString);
-		}
+        st.setAttribute("title", D3webUtils.getPrompt(to));
+        //st.setAttribute("title", to.getName());
 
-		Blackboard bb = d3webSession.getBlackboard();
+        st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
-		Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
+        String resString = to.getInfoStore().getValue(ProKEtProperties.POPUP);
+        if (resString != null) {
+            st.setAttribute("tooltip", resString);
+        }
 
-		if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(to)
-				|| isIndicated(to, bb) && (hidden == null || !hidden)) {
+        Blackboard bb = d3webSession.getBlackboard();
 
-			st.removeAttribute("hidden");
-		}
-		else {
-			st.setAttribute("hidden", "true");
-		}
+        Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
 
-		// render the children
-		super.renderChildren(st, d3webSession, cc, to);
+        if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(to)
+                || isIndicated(to, bb) && (hidden == null || !hidden)) {
 
-		sb.append(st.toString());
+            st.removeAttribute("hidden");
+        } else {
+            st.setAttribute("hidden", "true");
+        }
 
-		// make tables "around" the to
-		super.makeTables(to, parent, cc, sb);
+        // render the children
+        super.renderChildren(st, d3webSession, cc, to);
 
-		return sb.toString();
-	}
+        sb.append(st.toString());
+
+        // make tables "around" the to
+        super.makeTables(to, parent, cc, sb);
+
+        return sb.toString();
+    }
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<repository>
+<session changed="2011-12-01 11:32:26.961" created="2011-12-01 11:32:26.947" id="8df236f0-e308-4f5f-b8b2-6c42059d7124">
+<name/>
+<facts>
+<valueFacts>
+<fact objectName="Please select your hernia route" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Yes</choiceValue>
+</fact>
+</valueFacts>
+<interviewFacts>
+<fact objectName="LanguageTest" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+<fact objectName="SecondQuestionnaire" psm="de.d3web.core.inference.PSMethodInit">
+<indication>INDICATED</indication>
+</fact>
+</interviewFacts>
+</facts>
+<protocol>
+<entry date="2011-12-01 11:32:30.393" objectName="Please select your hernia route" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Yes</choiceValue>
+</entry>
+</protocol>
+</session>
+</repository>

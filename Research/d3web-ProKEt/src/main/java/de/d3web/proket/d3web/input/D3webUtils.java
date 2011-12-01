@@ -53,6 +53,7 @@ import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.knowledge.terminology.Rating;
 import de.d3web.core.knowledge.terminology.Rating.State;
 import de.d3web.core.knowledge.terminology.Solution;
+import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.SessionFactory;
@@ -76,6 +77,7 @@ import de.d3web.proket.data.DialogStrategy;
 import de.d3web.proket.utils.FileUtils;
 import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.IDUtils;
+import java.util.Locale;
 
 /**
  * Util methods for the binding of d3web to the ProKEt system.
@@ -876,4 +878,53 @@ public class D3webUtils {
 			}
 		}
 	}
+        
+        /**
+     * Retrieve a language specific prompt text for a TerminologyObject.
+     * If no language was specified, return the name of the TerminologyObject 
+     * via getName().
+     * 
+     * @param to the TerminologyObject the prompt is needed for.
+     * @return the prompt or the name repsectively.
+     */
+    public static String getPrompt(TerminologyObject to) {
+       
+        int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
+        String prompt = null;
+
+        switch (locIdent) {
+            case 1:   // german
+                prompt =
+                        to.getInfoStore().getValue(MMInfo.PROMPT, Locale.GERMAN);
+                System.out.println(prompt);
+                break;
+            case 2:   // english
+                prompt =
+                        to.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
+                System.out.println(prompt);
+                break;
+            case 3:   // spanish
+                Locale SPANISH = new Locale("es", "ES");
+                prompt =
+                        to.getInfoStore().getValue(MMInfo.PROMPT, SPANISH);
+                System.out.println(prompt);
+                break;
+            case 4:   // italian
+                prompt =
+                        to.getInfoStore().getValue(MMInfo.PROMPT, Locale.ITALIAN);
+                break;
+            case 5:   // french
+                prompt =
+                        to.getInfoStore().getValue(MMInfo.PROMPT, Locale.FRENCH);
+                break;
+            case 6:   // polish
+                Locale POLISH = new Locale("pl", "PL");
+                prompt =
+                        to.getInfoStore().getValue(MMInfo.PROMPT, POLISH);
+                break;
+        }
+      
+        // default prompt = getName() if no locale specific was given
+        return prompt==null?to.getName():prompt;
+    }
 }

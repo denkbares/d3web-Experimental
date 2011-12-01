@@ -338,11 +338,16 @@ public class D3webDialog extends HttpServlet {
 			}
 			return;
 		}
+                
 		else if (action.equalsIgnoreCase("checkrange")) {
 			checkRange(request, response);
 			return;
 		}
-		else {
+		else if (action.equalsIgnoreCase("language")){                        
+                         String langID = request.getParameter("langID").toString();
+                         int localeID = Integer.parseInt(langID);
+                         GlobalSettings.getInstance().setLocaleIdentifier(localeID);
+                }else {
 			handleDialogSpecificActions(httpSession, request, response, action);
 		}
 	}

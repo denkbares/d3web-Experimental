@@ -99,7 +99,7 @@ body,table,div {
 	width: 1em;
 	height: 1em;
 	cursor: help;
-	background-image: url(images/hint.png);
+	background-image: url(img/hint.png);
 	background-repeat: no-repeat;
 }
 

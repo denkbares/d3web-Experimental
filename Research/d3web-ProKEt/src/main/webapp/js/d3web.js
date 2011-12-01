@@ -32,190 +32,196 @@ var warningRecieved = false;
 
 $(function() {
 	
-	/* LOGIN DIALOG */
-	if(usrdatLogin){
-		window.setTimeout("logintimeout()", 57000 * 60);
+    // retrieve the browser used
+    jQuery.each(jQuery.browser, function(i, val) {
+        //alert(i + " " + val);
+    });
+        
+        
+    /* LOGIN DIALOG */
+    if(usrdatLogin){
+        window.setTimeout("logintimeout()", 57000 * 60);
 
-		var link = $.query.set("action", "checkUsrDatLogin").toString();
-		link = window.location.href.replace(window.location.search, "") + link;
+        var link = $.query.set("action", "checkUsrDatLogin").toString();
+        link = window.location.href.replace(window.location.search, "") + link;
 		
-		$.ajax({
-			type: "GET",
-			async: false,
-			cache : false, // needed for IE, call is not made otherwise
-			url: link,
-			success : function(html) {
-				if (html == "NLI") {
-					$("#jqLoginDialog").dialog("open");
-				} else {
-					$("#jqLoginDialog").dialog("close");
-				}
-			}
-		});
-	}
+        $.ajax({
+            type: "GET",
+            async: false,
+            cache : false, // needed for IE, call is not made otherwise
+            url: link,
+            success : function(html) {
+                if (html == "NLI") {
+                    $("#jqLoginDialog").dialog("open");
+                } else {
+                    $("#jqLoginDialog").dialog("close");
+                }
+            }
+        });
+    }
 
-	var save, goon;
-	if(language=="en"){
-		save = "Save";
-		goon = "Cancel";
-	} else if(language=="de"){
-		save = "Speichern";
-		goon = "Abbrechen";
-	}
+    var save, goon;
+    if(language=="en"){
+        save = "Save";
+        goon = "Cancel";
+    } else if(language=="de"){
+        save = "Speichern";
+        goon = "Abbrechen";
+    }
 	
-	/* SAVE CASE DIALOG */
-	$(function() {
+    /* SAVE CASE DIALOG */
+    $(function() {
 
-		var opts = {
-			autoOpen: false,
-			position: [ 0, getHeaderHeight()],
-			modal: false,
-			buttons: [{
-				id: "saveOK",
-				text: save,
-				click: function(){
-					d3web_sendSave(warningRecieved);
-				}
-				},
-				{
-				id: "saveCancel",
-				text: goon,
-				click: function(){
-					$('#jqConfirmDialog').dialog('close');
-					 warningRecieved = false;
-					}
-				}]
-		};
-		$("#jqConfirmDialog").dialog(opts);
-	});
+        var opts = {
+            autoOpen: false,
+            position: [ 0, getHeaderHeight()],
+            modal: false,
+            buttons: [{
+                id: "saveOK",
+                text: save,
+                click: function(){
+                    d3web_sendSave(warningRecieved);
+                }
+            },
+            {
+                id: "saveCancel",
+                text: goon,
+                click: function(){
+                    $('#jqConfirmDialog').dialog('close');
+                    warningRecieved = false;
+                }
+            }]
+        };
+        $("#jqConfirmDialog").dialog(opts);
+    });
 
-	var load, cancelload, deleteCase;
-	if(language=="en"){
-		load = "OK";
-		cancelload = "Cancel";
-		deleteCase = "Delete";
-	} else if(language=="de"){
-		load = "OK";
-		cancelload = "Abbrechen";
-		deleteCase = "Löschen";
-	}
+    var load, cancelload, deleteCase;
+    if(language=="en"){
+        load = "OK";
+        cancelload = "Cancel";
+        deleteCase = "Delete";
+    } else if(language=="de"){
+        load = "OK";
+        cancelload = "Abbrechen";
+        deleteCase = "Löschen";
+    }
 	
-	/* LOAD CASE DIALOG */
-	$(function() {
+    /* LOAD CASE DIALOG */
+    $(function() {
 
-		var opts = {
-			autoOpen: false,
-			position: [ 0, getHeaderHeight()],
-			modal: false,
-			buttons: [{
-				id: "loadOK",
-				text: load,
-				click: function(){
-					d3web_loadSelectedFile();
-				}
-				},
-				{
-				id: "loadCancel",
-				text: cancelload,
-				click: function(){
-						$('#jqLoadCaseDialog').dialog('close');
-					}
-				},
-				{
-				id: "deleteCase",
-				text: deleteCase,
-				click: function(){
-					d3web_deleteSelectedFile();
-				}
-			}]
-		};
-		var loadCaseDialog = $("#jqLoadCaseDialog");
-		loadCaseDialog.dialog(opts);
-		loadCaseDialog.find("option").unbind("dblclick").dblclick(function(){
-			d3web_loadSelectedFile();
-		});
-	});
+        var opts = {
+            autoOpen: false,
+            position: [ 0, getHeaderHeight()],
+            modal: false,
+            buttons: [{
+                id: "loadOK",
+                text: load,
+                click: function(){
+                    d3web_loadSelectedFile();
+                }
+            },
+            {
+                id: "loadCancel",
+                text: cancelload,
+                click: function(){
+                    $('#jqLoadCaseDialog').dialog('close');
+                }
+            },
+            {
+                id: "deleteCase",
+                text: deleteCase,
+                click: function(){
+                    d3web_deleteSelectedFile();
+                }
+            }]
+        };
+        var loadCaseDialog = $("#jqLoadCaseDialog");
+        loadCaseDialog.dialog(opts);
+        loadCaseDialog.find("option").unbind("dblclick").dblclick(function(){
+            d3web_loadSelectedFile();
+        });
+    });
 	
-	var close;
-	if(language=="en"){
-		close = "Close";
-	} else if(language=="de"){
-		close = "Schließen";
-	}
+    var close;
+    if(language=="en"){
+        close = "Close";
+    } else if(language=="de"){
+        close = "Schließen";
+    }
 	
-	var print;
-	if(language=="en"){
-		print = "Print";
-	} else if(language=="de"){
-		print = "Drucken";
-	}
+    var print;
+    if(language=="en"){
+        print = "Print";
+    } else if(language=="de"){
+        print = "Drucken";
+    }
 	
-	/* SUMMARY DIALOG */
-	$(function() {
+    /* SUMMARY DIALOG */
+    $(function() {
 
-		var opts = {
-			autoOpen: false,
-			position: [ 0, getHeaderHeight()],
-			modal: false,
-			width: 450,
-			height: 550,
-			buttons: [{
-				id: "sumPrint",
-				text: print,
-				click: function(){
-					$("#jqSummaryDialog").jqprint();
-				}
-			},
-			{
-				id: "sumClose",
-				text: close,
-				click: function(){
-					$('#jqSummaryDialog').dialog('close');
-				}
-			}]
-		};
-		$("#jqSummaryDialog").dialog(opts);
-	});
+        var opts = {
+            autoOpen: false,
+            position: [ 0, getHeaderHeight()],
+            modal: false,
+            width: 450,
+            height: 550,
+            buttons: [{
+                id: "sumPrint",
+                text: print,
+                click: function(){
+                    $("#jqSummaryDialog").jqprint();
+                }
+            },
+            {
+                id: "sumClose",
+                text: close,
+                click: function(){
+                    $('#jqSummaryDialog').dialog('close');
+                }
+            }]
+        };
+        $("#jqSummaryDialog").dialog(opts);
+    });
 	
-	/* FOLLOW UP DIALOG */
-	$(function() {
+    /* FOLLOW UP DIALOG */
+    $(function() {
 
-		var opts = {
-			autoOpen: false,
-			position: [ 0, getHeaderHeight()],
-			modal: false,
-			width: 750,
-			height: 650,
-			buttons: [{
-				id: "loadOK",
-				text: load,
-				click: function(){
-					$('#jqFollowUpDialog').dialog('close');
-				}
-				}]
-		};
-		$("#jqFollowUpDialog").dialog(opts);
-	});
+        var opts = {
+            autoOpen: false,
+            position: [ 0, getHeaderHeight()],
+            modal: false,
+            width: 750,
+            height: 650,
+            buttons: [{
+                id: "loadOK",
+                text: load,
+                click: function(){
+                    $('#jqFollowUpDialog').dialog('close');
+                }
+            }]
+        };
+        $("#jqFollowUpDialog").dialog(opts);
+    });
 
-	/* Initialize the JS binding to the dialog elements */
-	initFunctionality();
+    /* Initialize the JS binding to the dialog elements */
+    initFunctionality();
 
-	$().ready(function() {
-			// enable buttons in save case and load case dialogs to
-			// react on pressing enter
-		$(document).keypress(function(e) {
-		if ((e.which && e.which == 13)
-				|| (e.keyCode && e.keyCode == 13)) {
-				submitLoadAndSaveDialog();
-			}
-		});
-	});
+    $().ready(function() {
+        // enable buttons in save case and load case dialogs to
+        // react on pressing enter
+        $(document).keypress(function(e) {
+            if ((e.which && e.which == 13)
+                || (e.keyCode && e.keyCode == 13)) {
+                submitLoadAndSaveDialog();
+            }
+        });
+    });
 	
-	// check browser and warn if the wrong one is used
-	handleUnsupportedBrowsers();
+    // check browser and warn if the wrong one is used
+    handleUnsupportedBrowsers();
 	
-	// move the content below the header
-	moveContentPart();
+    // move the content below the header
+    moveContentPart();
 });
 
 
@@ -225,114 +231,114 @@ $(function() {
  * entered followed by pressing enter.
  */
 function initFunctionality() {
+        
+    $(window).resize(function() {
+        moveContentPart();
+    });
 	
-	$(window).resize(function() {
-		moveContentPart();
-	});
+    $(document).ready(function() {
+        $("#jqSummaryDialog").tabs();
+    });
 	
-	$(document).ready(function() {
-	    $("#jqSummaryDialog").tabs();
-	});
-	
-	/*
+    /*
 	 * bind "get selected facts" method to radio buttons, checkboxes and
 	 * textareas
 	 */
-	$('[type=radio]').unbind('click').click(function() {
-		d3web_storeQuestionOC($(this));
-		d3web_addFacts($(this));
-	});
+    $('[type=radio]').unbind('click').click(function() {
+        d3web_storeQuestionOC($(this));
+        d3web_addFacts($(this));
+    });
 	
 	
-	/* TODO MC QUESTIONS */
-	/* the following ensures, that MC questions behave like OC questions,
+    /* TODO MC QUESTIONS */
+    /* the following ensures, that MC questions behave like OC questions,
 	 * i.e., a v*/
-	$('[type=checkbox]').unbind('click').click(function() {
-		d3web_storeQuestionMC($(this));
-		d3web_addFacts($(this));
-	});
+    $('[type=checkbox]').unbind('click').click(function() {
+        d3web_storeQuestionMC($(this));
+        d3web_addFacts($(this));
+    });
 
-	$('[id^=ok-]').unbind('click').click(function(event) {
-		d3web_addFacts($(this));
-	});
+    $('[id^=ok-]').unbind('click').click(function(event) {
+        d3web_addFacts($(this));
+    });
 	
 	
-	$('[type=text]').unbind('click').click(function() {
-		var thisEl = $(this);
-		thisEl.bind('keydown', function(e) {
-			var code = (e.keyCode ? e.keyCode : e.which);
-			if (code == 13) {
-				d3web_storeQuestionText($(this));
-				d3web_addFacts($(this));
-			}
-		});
-	});
+    $('[type=text]').unbind('click').click(function() {
+        var thisEl = $(this);
+        thisEl.bind('keydown', function(e) {
+            var code = (e.keyCode ? e.keyCode : e.which);
+            if (code == 13) {
+                d3web_storeQuestionText($(this));
+                d3web_addFacts($(this));
+            }
+        });
+    });
 	
-	$('[type=text]').unbind('focusout').focusout(function() {
-		d3web_storeQuestionText($(this));
-		d3web_addFacts($(this));
-	});
+    $('[type=text]').unbind('focusout').focusout(function() {
+        d3web_storeQuestionText($(this));
+        d3web_addFacts($(this));
+    });
 	
-	$('[type=textselect]').unbind('change').change(function() {
-		d3web_storeQuestionText($(this));
-		d3web_addFacts($(this));
-	});
+    $('[type=textselect]').unbind('change').change(function() {
+        d3web_storeQuestionText($(this));
+        d3web_addFacts($(this));
+    });
 	
-	$("[type=Yearselect]," +
-			"[type=Monthselect]," +
-			"[type=Dayselect]," +
-			"[type=Hourselect]," +
-			"[type=Minuteselect]," +
-			"[type=Secondselect]"
-			).unbind('change').change(function() {
-		d3web_storeQuestionDate($(this));
-		d3web_addFacts($(this));
-	});
+    $("[type=Yearselect]," +
+        "[type=Monthselect]," +
+        "[type=Dayselect]," +
+        "[type=Hourselect]," +
+        "[type=Minuteselect]," +
+        "[type=Secondselect]"
+        ).unbind('change').change(function() {
+        d3web_storeQuestionDate($(this));
+        d3web_addFacts($(this));
+    });
 
-	$('[type=textarea]').unbind('click').click(function() {
-		var thisEl = $(this);
-		thisEl.bind('keydown', function(e) {
-			var code = (e.keyCode ? e.keyCode : e.which);
-			if (code == 13) {
-				d3web_storeQuestionText($(this));
-				d3web_addFacts($(this));
-			}
-		});
-	});
+    $('[type=textarea]').unbind('click').click(function() {
+        var thisEl = $(this);
+        thisEl.bind('keydown', function(e) {
+            var code = (e.keyCode ? e.keyCode : e.which);
+            if (code == 13) {
+                d3web_storeQuestionText($(this));
+                d3web_addFacts($(this));
+            }
+        });
+    });
 	
-	// bind reset button to resetSession() function
-	$('#reset').unbind('click').click(function() {
-		d3web_resetSession();
-	});
+    // bind reset button to resetSession() function
+    $('#reset').unbind('click').click(function() {
+        d3web_resetSession();
+    });
 
-	// bind send/save button to sendexit function
-	$('#savecase').unbind('click').click(function(event) {
-		d3web_addFacts($(this));
-		d3web_prepareSave();
-	});
+    // bind send/save button to sendexit function
+    $('#savecase').unbind('click').click(function(event) {
+        d3web_addFacts($(this));
+        d3web_prepareSave();
+    });
 
-	// bind the loadcase button to making the fileselect list visible
-	$('#loadcase').unbind('click').click(function(event) {
-		$("#jqLoadCaseDialog").dialog("open");
-	});
+    // bind the loadcase button to making the fileselect list visible
+    $('#loadcase').unbind('click').click(function(event) {
+        $("#jqLoadCaseDialog").dialog("open");
+    });
 	
-	$('#followupbutton').unbind('click').click(function(event) {
-		$("#jqFollowUpDialog").dialog("open");
-	});
+    $('#followupbutton').unbind('click').click(function(event) {
+        $("#jqFollowUpDialog").dialog("open");
+    });
 	
-	$('#summary').unbind('click').click(function(event){
-		d3web_updateSummary();
-		$("#jqSummaryDialog").dialog("open");
-	});
+    $('#summary').unbind('click').click(function(event){
+        d3web_updateSummary();
+        $("#jqSummaryDialog").dialog("open");
+    });
 	
-	$('#statistics').unbind('click').click(function(event){
-		gotoStatistics();
-	});
+    $('#statistics').unbind('click').click(function(event){
+        gotoStatistics();
+    });
 	
     $('[type=imageAnswer]').unbind('mouseenter').mouseenter(function() {
         $("#img-" + $(this).attr("id")).focus();
     }).mouseleave(function() {
-    	$("#img-" + $(this).attr("id")).blur();
+        $("#img-" + $(this).attr("id")).blur();
     });
     
     $('area').unbind('mouseenter').mouseenter(function() {
@@ -344,245 +350,261 @@ function initFunctionality() {
 }
 
 function getHeaderHeight() {
-	var head = $('#head');
-	return head.height() + parseInt(head.css("padding-top")) + parseInt(head.css("padding-bottom"));
+    var head = $('#head');
+    return head.height() + parseInt(head.css("padding-top")) + parseInt(head.css("padding-bottom"));
 }
 
 function d3web_storeQuestionDate(dateSelect) {
-	var answer = $(dateSelect).parents(".answer").first();
-	var yearSelect = answer.find("[type=Yearselect]");
-	var monthSelect = answer.find("[type=Monthselect]");
-	var daySelect = answer.find("[type=Dayselect]");
-	var hourSelect = answer.find("[type=Hourselect]");
-	var minuteSelect = answer.find("[type=Minuteselect]");
-	var secondSelect = answer.find("[type=Secondselect]");
-	var question = getQuestionName(dateSelect);
+    var answer = $(dateSelect).parents(".answer").first();
+    var yearSelect = answer.find("[type=Yearselect]");
+    var monthSelect = answer.find("[type=Monthselect]");
+    var daySelect = answer.find("[type=Dayselect]");
+    var hourSelect = answer.find("[type=Hourselect]");
+    var minuteSelect = answer.find("[type=Minuteselect]");
+    var secondSelect = answer.find("[type=Secondselect]");
+    var question = getQuestionName(dateSelect);
 	
-	var second = getDateValue(secondSelect, "00");
-	var minute = getDateValue(minuteSelect, "00");
-	var hour = getDateValue(hourSelect, "00");
-	var day = getDateValue(daySelect, "01");
-	var month = getDateValue(monthSelect, "01");
-	var year = getDateValue(yearSelect, new Date().getFullYear());
+    var second = getDateValue(secondSelect, "00");
+    var minute = getDateValue(minuteSelect, "00");
+    var hour = getDateValue(hourSelect, "00");
+    var day = getDateValue(daySelect, "01");
+    var month = getDateValue(monthSelect, "01");
+    var year = getDateValue(yearSelect, new Date().getFullYear());
 	
-	var separator = ".";
-	dateStore[question] = second + separator + minute + separator + hour + separator 
-			+ day + separator + month + separator + year;
+    var separator = ".";
+    dateStore[question] = second + separator + minute + separator + hour + separator 
+    + day + separator + month + separator + year;
 }
 
 function getDateValue(select, def) {
-	return select.length == 1 && select.val() != "" ? select.val() : def;
+    return select.length == 1 && select.val() != "" ? select.val() : def;
 }
 
 function d3web_storeQuestionText(textInput) {
-	var textQuestion = getQuestionName(textInput);
-	textStore[textQuestion] = $(textInput).val();
+    var textQuestion = getQuestionName(textInput);
+    textStore[textQuestion] = $(textInput).val();
 }
 
 function d3web_storeQuestionOC(ocInput) {
-	var ocQuestion = getQuestionName(ocInput);
-	ocStore[ocQuestion] = getAnswerName(ocInput);
+    var ocQuestion = getQuestionName(ocInput);
+    ocStore[ocQuestion] = getAnswerName(ocInput);
 }
 
 function d3web_storeQuestionMC(mcCheckBox) {
 	
-	var mcQParent = $(mcCheckBox.parents("[id^=q_]"));
-	var mcQuestion = getQuestionName(mcCheckBox);
-	var checkBoxes = mcQParent.find(":checkbox");
+    var mcQParent = $(mcCheckBox.parents("[id^=q_]"));
+    var mcQuestion = getQuestionName(mcCheckBox);
+    var checkBoxes = mcQParent.find(":checkbox");
 
-	// get the question-content-parent element and go through all its
-	// checkbox-children
-	var checkedBoxes = new Array();
-	checkBoxes.each(function() {
-		if ($(this).prop("checked") == true) {
-			checkedBoxes.push(getAnswerName($(this)));
-		}
-	});
+    // get the question-content-parent element and go through all its
+    // checkbox-children
+    var checkedBoxes = new Array();
+    checkBoxes.each(function() {
+        if ($(this).prop("checked") == true) {
+            checkedBoxes.push(getAnswerName($(this)));
+        }
+    });
 	
-	mcStore[mcQuestion] = checkedBoxes;
+    mcStore[mcQuestion] = checkedBoxes;
 }
 
 function getQuestionName(input) {
-	  return getTerminologyObjectName(input, "q");
+    return getTerminologyObjectName(input, "q");
 }
 
 function getAnswerName(input) {
-	  return getTerminologyObjectName(input, "a");
+    return getTerminologyObjectName(input, "a");
 }
 
 function getTerminologyObjectName(input, prefix) {
-	 var parent = $(input.parents("[id^=" + prefix + "_]"));
-	 var valTd = $("#text-" + parent.attr("id"));
-	 // get text of this element only
-	 var text = valTd.clone().children().remove().end().text(); 
-	 return $.trim(text);
+    var parent = $(input.parents("[id^=" + prefix + "_]"));
+    var valTd = $("#text-" + parent.attr("id"));
+    // get text of this element only
+    var text = valTd.clone().children().remove().end().text(); 
+    return $.trim(text);
 }
 
 function d3web_addFacts() {
 
-	var link = $.query.set("action", "addFacts");
+    var link = $.query.set("action", "addFacts");
 
-	var i = 0;
-	for (var qid in mcStore) {
-		link = link.set("mcq" + i, qid).set("mcchoices" + i, mcStore[qid].toString());
-		i++;
-	}
+    var i = 0;
+    for (var qid in mcStore) {
+        link = link.set("mcq" + i, qid).set("mcchoices" + i, mcStore[qid].toString());
+        i++;
+    }
 	
-	i = 0;
-	for (var qid in ocStore) {
-		link = link.set("ocq" + i, qid).set("occhoice" + i, ocStore[qid]);
-		i++;
-	}
+    i = 0;
+    for (var qid in ocStore) {
+        link = link.set("ocq" + i, qid).set("occhoice" + i, ocStore[qid]);
+        i++;
+    }
 	
-	i = 0;
-	for (var qid in dateStore) {
-		link = link.set("dateq" + i, qid).set("date" + i, dateStore[qid]);
-		i++;
-	}
+    i = 0;
+    for (var qid in dateStore) {
+        link = link.set("dateq" + i, qid).set("date" + i, dateStore[qid]);
+        i++;
+    }
 	
-	for (var qid in textStore) {
-		link = link.set("textq" + i, qid).set("text" + i, textStore[qid]);
-		i++;
-	}
+    for (var qid in textStore) {
+        link = link.set("textq" + i, qid).set("text" + i, textStore[qid]);
+        i++;
+    }
 	
-	i = 0;
-	for (var qid in numStore) {
-		link = link.set("numq" + i, qid).set("num" + i, numStore[qid]);
-		i++;
-	}
+    i = 0;
+    for (var qid in numStore) {
+        link = link.set("numq" + i, qid).set("num" + i, numStore[qid]);
+        i++;
+    }
 	
 	
-	//link = window.location.href.replace(window.location.search, "") + link.toString();
+    //link = window.location.href.replace(window.location.search, "") + link.toString();
 
-	$.ajax({
-		type : "GET",
-		url : link,
-		cache : false, // needed for IE, call is not made otherwise
-		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-		success : function(html) {
-			if (html.startsWith("##missingfield##")) {
-				// Error message and reset session so user can provide input
-				// first
-//				var errMsg = "Das Feld '" + html.replace("##missingfield##", "")
-//						+ "' muss immer zuerst ausgefüllt werden!";
-//				alert(errMsg);
-//				d3web_resetSession();
-			} else {
-				updateDialog(html);
-				setup();
-				initFunctionality();
-			}
-		},
-		error : function(html) {
-			alert("ajax error");
-		}
-	});
+    $.ajax({
+        type : "GET",
+        url : link,
+        cache : false, // needed for IE, call is not made otherwise
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        success : function(html) {
+            if (html.startsWith("##missingfield##")) {
+            // Error message and reset session so user can provide input
+            // first
+            //				var errMsg = "Das Feld '" + html.replace("##missingfield##", "")
+            //						+ "' muss immer zuerst ausgefüllt werden!";
+            //				alert(errMsg);
+            //				d3web_resetSession();
+            } else {
+                updateDialog(html);
+                setup();
+                initFunctionality();
+            }
+        },
+        error : function(html) {
+            alert("ajax error");
+        }
+    });
 	
-	 mcStore = new Object();
-	 ocStore = new Object();
-	 dateStore = new Object();
-	 textStore = new Object();
-	 numStore = new Object();
+    mcStore = new Object();
+    ocStore = new Object();
+    dateStore = new Object();
+    textStore = new Object();
+    numStore = new Object();
 }
 
 function gotoStatistics() {
-	var link = $.query.set("action", "gotoStatistics");
-	$.ajax({
-		type : "GET",
-		url : link,
-		cache : false, // needed for IE, call is not made otherwise
-		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-		success : function(url) {
-			window.location.href = url;
-		},
-	});
+    var link = $.query.set("action", "gotoStatistics");
+    $.ajax({
+        type : "GET",
+        url : link,
+        cache : false, // needed for IE, call is not made otherwise
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        success : function(url) {
+            window.location.href = url;
+        },
+    });
 }
 
 
 function handleUnsupportedBrowsers() {
-	var browser;
+    var browser;
     if($.browser.msie)
-      browser = "Internet Explorer";
+        browser = "Internet Explorer";
     else
-      browser = $.browser.name;
+        browser = $.browser.name;
     $("#unsupportedbrowserwarning").remove();
-	if (!($.browser.webkit
-		|| $.browser.opera 
-		|| $.browser.mozilla)) {
-		$('#head').children("table").children("tbody").append(
-				"<tr id='unsupportedbrowserwarning'><td colspan='3' style='color:red; font-variant:normal' >Sie benutzen " +
-				"den Browser '" + browser + "'. Dieser Browser wird von dieser Seite " +
-				"noch nicht vollständig unterstützt. Bitte nutzen sie stattdessen " +
-				"<a href='http://www.mozilla-europe.org/de/'>Mozilla Firefox</a> " +
-				"oder " +
-				"<a href='http://www.google.com/chrome/'>Google Chrome</a>!</td></tr>");
-	}
+    if (!($.browser.webkit
+        || $.browser.opera 
+        || $.browser.mozilla)) {
+        $('#head').children("table").children("tbody").append(
+            "<tr id='unsupportedbrowserwarning'><td colspan='3' style='color:red; font-variant:normal' >Sie benutzen " +
+            "den Browser '" + browser + "'. Dieser Browser wird von dieser Seite " +
+            "noch nicht vollständig unterstützt. Bitte nutzen sie stattdessen " +
+            "<a href='http://www.mozilla-europe.org/de/'>Mozilla Firefox</a> " +
+            "oder " +
+            "<a href='http://www.google.com/chrome/'>Google Chrome</a>!</td></tr>");
+    }
 }
 
 function moveContentPart() {
-	$('#content').css("margin-top", (getHeaderHeight() + 10) + "px");
+    $('#content').css("margin-top", (getHeaderHeight() + 10) + "px");
 }
 
 function d3web_updateSummary() {
-	var link = $.query.set("action", "updatesummary");
+    var link = $.query.set("action", "updatesummary");
 	
-	$.ajax({
-		type : "GET",
-		url : link,
-		cache : false, // needed for IE, call is not made otherwise
-		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-		success : function(html) {
-			updateDialog(html);
-		},
-		error : function(html) {
-			alert("ajax error");
-		}
-	});
+    $.ajax({
+        type : "GET",
+        url : link,
+        cache : false, // needed for IE, call is not made otherwise
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        success : function(html) {
+            updateDialog(html);
+        },
+        error : function(html) {
+            alert("ajax error");
+        }
+    });
 	
 }
 
+function toggle_language(langID){
+    var link = $.query.set("action", "language").set("langID", langID.toString());
+    link = window.location.href.replace(window.location.search, "") + link;
+
+    $.ajax({
+        type : "GET",
+        url : link,
+        cache : false, // needed for IE, call is not made otherwise
+        success : function(html) {
+            window.location.reload(true);
+            initFunctionality();
+        }
+    });
+}
+
+
 function updateDialog(html) {
-	if (html.startsWith("##replaceid##")) {
-		var updateArray = html.split(/##replaceid##|##replacecontent##/);
-		for (var i = 0; i < updateArray.length - 1; i+=2) {
-			if (updateArray[i].length == 0) {
-				i--;
-				continue;
-			}
-			$("#" + updateArray[i]).replaceWith(updateArray[i + 1]);
-		}
-	}
+    if (html.startsWith("##replaceid##")) {
+        var updateArray = html.split(/##replaceid##|##replacecontent##/);
+        for (var i = 0; i < updateArray.length - 1; i+=2) {
+            if (updateArray[i].length == 0) {
+                i--;
+                continue;
+            }
+            $("#" + updateArray[i]).replaceWith(updateArray[i + 1]);
+        }
+    }
 }
 
 function getUrlParameter(name) {
-  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-  var regexS = "[\\?&]"+name+"=([^&#]*)";
-  var regex = new RegExp( regexS );
-  var results = regex.exec( window.location.href );
-  if( results == null )
-    return "";
-  else
-    return results[1];
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec( window.location.href );
+    if( results == null )
+        return "";
+    else
+        return results[1];
 }
 
 
 function submitLoadAndSaveDialog() {
-	if ($('#jqConfirmDialog').dialog('isOpen'))
-		$('[aria-labelledby$=jqConfirmDialog]').find(
-				":button:contains('Speichern')").click();
+    if ($('#jqConfirmDialog').dialog('isOpen'))
+        $('[aria-labelledby$=jqConfirmDialog]').find(
+            ":button:contains('Speichern')").click();
 	
-	if ($('#jqLoadCaseDialog').dialog('isOpen'))
-		$('[aria-labelledby$=jqLoadCaseDialog]').find(
-				":button:contains('OK')").click();
+    if ($('#jqLoadCaseDialog').dialog('isOpen'))
+        $('[aria-labelledby$=jqLoadCaseDialog]').find(
+            ":button:contains('OK')").click();
 }
 
 function escapeExpression(str) {
-	return str.replace(/([#;&,\.\+\*\~':"\!\^$\[\]\(\)=>\|])/g, "\\$1");
+    return str.replace(/([#;&,\.\+\*\~':"\!\^$\[\]\(\)=>\|])/g, "\\$1");
 }
 
 function d3web_prepareSave() {
-	$('#confirmFilename').val($("#" + $("[useasfilename=true]").first().attr("id")).val());
-	$('#jqConfirmDialog').dialog("open");
+    $('#confirmFilename').val($("#" + $("[useasfilename=true]").first().attr("id")).val());
+    $('#jqConfirmDialog').dialog("open");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -594,15 +616,15 @@ function d3web_prepareSave() {
 
 
 function d3web_IQClicked(id) {
-	//alert("image answer " + id + " was clicked");
-	// d3web_getSelectedFacts($('#' + id));
-	var target = $("#" + id);	// get the clicked element
-	var selected = target.find(":input:checked");	// find clicked input 
-	var deselected = target.find(":input:not(:checked)"); // find not clicked inputs
-	selected.attr('checked', false);
-	deselected.attr('checked', true);
-	d3web_storeQuestionMC(target);
-	d3web_addFacts($(this));
+    //alert("image answer " + id + " was clicked");
+    // d3web_getSelectedFacts($('#' + id));
+    var target = $("#" + id);	// get the clicked element
+    var selected = target.find(":input:checked");	// find clicked input 
+    var deselected = target.find(":input:not(:checked)"); // find not clicked inputs
+    selected.attr('checked', false);
+    deselected.attr('checked', true);
+    d3web_storeQuestionMC(target);
+    d3web_addFacts($(this));
 }
 
 /**
@@ -610,79 +632,79 @@ function d3web_IQClicked(id) {
  * thus starting a new problem solving case/session.
  */
 function d3web_resetSession() {
-	var link = $.query.set("action", "reset").toString();
-	link = window.location.href.replace(window.location.search, "") + link;
+    var link = $.query.set("action", "reset").toString();
+    link = window.location.href.replace(window.location.search, "") + link;
 
-	$.ajax({
-		type : "GET",
-		url : link,
-		cache : false, // needed for IE, call is not made otherwise
-		success : function() {
-			window.location.reload(true);
-			initFunctionality();
-		}
-	});
+    $.ajax({
+        type : "GET",
+        url : link,
+        cache : false, // needed for IE, call is not made otherwise
+        success : function() {
+            window.location.reload(true);
+            initFunctionality();
+        }
+    });
 }
 
 function d3web_sessionForNewUser() {
 
-	var link = $.query.set("action", "resetNewUser");
+    var link = $.query.set("action", "resetNewUser");
 
-	$.ajax({
-		type : "GET",
-		url : link,
-		cache : false, // needed for IE, call is not made otherwise
-		success : function() {
+    $.ajax({
+        type : "GET",
+        url : link,
+        cache : false, // needed for IE, call is not made otherwise
+        success : function() {
 
-			d3web_show();
-		}
-	});
+            d3web_show();
+        }
+    });
 }
 
 
 function d3web_sendSave(force) {
 
-	// d3web_getRemainingFacts();
+    // d3web_getRemainingFacts();
 
-	var confirmFilename = $('#confirmFilename').val();
+    var confirmFilename = $('#confirmFilename').val();
 
-	var link = $.query.set("action", "savecase").set("userfn", confirmFilename).set("force", force.toString());
+    var link = $.query.set("action", "savecase").set("userfn", confirmFilename).set("force", force.toString());
 	
-	// new jquery 1.5 syntax
-	$.get(link, function(data) {
-		if (data == "exists") {
-			var warning = "File already exists. Do you want to overwrite?";
-			if(language=="de"){
-				warning = "Die Datei existiert bereits. Möchten sie überschreiben?";
-			}
-			$('#confirmMessage').html("<font color=\"red\">" + warning + "</font>");
-			warningRecieved = true;
-		} else {
-			d3web_show();
-		}
-	});
+    // new jquery 1.5 syntax
+    $.get(link, function(data) {
+        if (data == "exists") {
+            var warning = "File already exists. Do you want to overwrite?";
+            if(language=="de"){
+                warning = "Die Datei existiert bereits. Möchten sie überschreiben?";
+            }
+            $('#confirmMessage').html("<font color=\"red\">" + warning + "</font>");
+            warningRecieved = true;
+        } else {
+            d3web_show();
+        }
+    });
 }
 
 function d3web_show() {
 
-	var link = $.query.set("action", "show").toString();
-	link = window.location.href.replace(window.location.search, "") + link;
+    var link = $.query.set("action", "show").toString();
+    link = window.location.href.replace(window.location.search, "") + link;
 
-	$.ajax({
-		type : "GET",
-		async : false,
-		cache : false, // needed for IE, call is not made otherwise
-		url : link,
-		success : function(html) {
-			// d3web_nextform();
+    $.ajax({
+        type : "GET",
+        async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function(html) {
+            // d3web_nextform();
 
-			// if (html != "same") { // replace target id of content if not the
-			// same
-			window.location.reload();
-			initFunctionality();
-			// }
-		}
-	});
+            // if (html != "same") { // replace target id of content if not the
+            // same
+            window.location.reload();
+            initFunctionality();
+        // }
+        }
+    });
 }
 
 /**
@@ -692,26 +714,26 @@ function d3web_show() {
  */
 function d3web_loadSelectedFile() {
 
-	// get selected text = filename
-	var filename = d3web_getSelectedFile();
+    // get selected text = filename
+    var filename = d3web_getSelectedFile();
 
-	if (filename != "") {
-		d3web_loadCase(filename);
-	}
+    if (filename != "") {
+        d3web_loadCase(filename);
+    }
 }
 
 function d3web_deleteSelectedFile() {
 
-	// get selected text = filename
-	var filename = d3web_getSelectedFile();
+    // get selected text = filename
+    var filename = d3web_getSelectedFile();
 
-	if (filename != "") {
-		d3web_deleteCase(filename);
-	}
+    if (filename != "") {
+        d3web_deleteCase(filename);
+    }
 }
 
 function d3web_getSelectedFile() {
-	return $('#caseSelect :selected').text();
+    return $('#caseSelect :selected').text();
 }
 
 /**
@@ -724,49 +746,49 @@ function d3web_getSelectedFile() {
  */
 function d3web_loadCase(filename) {
 
-	var link = $.query.set("action", "loadcase").set("fn", filename).toString();
-	link = window.location.href.replace(window.location.search, "") + link;
+    var link = $.query.set("action", "loadcase").set("fn", filename).toString();
+    link = window.location.href.replace(window.location.search, "") + link;
 
-	$.ajax({
-		type : "GET",
-		async : false,
-		cache : false, // needed for IE, call is not made otherwise
-		url : link,
-		success : function(html) {
-			// d3web_nextform();
+    $.ajax({
+        type : "GET",
+        async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function(html) {
+            // d3web_nextform();
 
-			// if (html != "same") { // replace target id of content if not the
-			// same
-			window.location.reload();
-			initFunctionality();
-			// }
-		}
-	});
+            // if (html != "same") { // replace target id of content if not the
+            // same
+            window.location.reload();
+            initFunctionality();
+        // }
+        }
+    });
 }
 
 function d3web_deleteCase(filename) {
 	
-	var areYouSure = "";
-	if(language=="en"){
-		areYouSure = "Click 'OK' to delete the selected case '" + filename + "'.";
-	} else if(language=="de"){
-		areYouSure = "Klicken sie 'OK' um den ausgewählten Fall '" + filename + "' zu löschen.";
-	}
+    var areYouSure = "";
+    if(language=="en"){
+        areYouSure = "Click 'OK' to delete the selected case '" + filename + "'.";
+    } else if(language=="de"){
+        areYouSure = "Klicken sie 'OK' um den ausgewählten Fall '" + filename + "' zu löschen.";
+    }
 	
-	if (!confirm(areYouSure)) return;
+    if (!confirm(areYouSure)) return;
 
-	var link = $.query.set("action", "deletecase").set("fn", filename);
+    var link = $.query.set("action", "deletecase").set("fn", filename);
 
-	$.ajax({
-		type : "GET",
-		async : false,
-		cache : false, // needed for IE, call is not made otherwise
-		url : link,
-		success : function(html) {
-			window.location.reload();
-			initFunctionality();
-		}
-	});
+    $.ajax({
+        type : "GET",
+        async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function(html) {
+            window.location.reload();
+            initFunctionality();
+        }
+    });
 }
 
 /**
@@ -777,96 +799,96 @@ function d3web_deleteCase(filename) {
  */
 function d3web_nextform() {
 
-	// changes the querystring part of action into nextform
-	// eg: formerly D3webDialog?src=HeartMed2010&action=show
-	// --> &action=nextform
-	// var link = $.query.set("action", "show").toString();
+    // changes the querystring part of action into nextform
+    // eg: formerly D3webDialog?src=HeartMed2010&action=show
+    // --> &action=nextform
+    // var link = $.query.set("action", "show").toString();
 
-	// assemble the new link; replace the parts of the query string after ? with
-	// nothing ("") and add the action nextform string part. result e.g.:
-	// http://localhost:8080/d3web-ProKEt/D3webDialog?src=HeartMed2010&action=nextform
-	// link = window.location.href.replace(window.location.search, "") + link;
+    // assemble the new link; replace the parts of the query string after ? with
+    // nothing ("") and add the action nextform string part. result e.g.:
+    // http://localhost:8080/d3web-ProKEt/D3webDialog?src=HeartMed2010&action=nextform
+    // link = window.location.href.replace(window.location.search, "") + link;
 
-	$.ajax({
-		type : "GET",
-		async : false,
-		cache : false, // needed for IE, call is not made otherwise
-		// url : link,
-		success : function(html) { // compare resulting html to former
-			if (html != "same") { // replace target id of content if not the
-				// same
-				window.location.reload();
-				initFunctionality();
-			}
-		}
-	});
+    $.ajax({
+        type : "GET",
+        async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        // url : link,
+        success : function(html) { // compare resulting html to former
+            if (html != "same") { // replace target id of content if not the
+                // same
+                window.location.reload();
+                initFunctionality();
+            }
+        }
+    });
 
-	// d3web_show_solutions("right"); // show solutions
+// d3web_show_solutions("right"); // show solutions
 }
 
 /**
  * Select a questionnaire in d3web.
  */
 function d3web_selectQuestionnaire(qid) {
-	var link = $.query.set("action", "selectQuestionnaire").set("qid", qid)
-			.toString();
-	link = window.location.href.replace(window.location.search, "") + link;
+    var link = $.query.set("action", "selectQuestionnaire").set("qid", qid)
+    .toString();
+    link = window.location.href.replace(window.location.search, "") + link;
 
-	$.ajax({
-		type : "GET",
-		async : false,
-		cache : false, // needed for IE, call is not made otherwise
-		url : link,
-		success : function(html) {
-			// d3web_nextform();
-		}
-	});
+    $.ajax({
+        type : "GET",
+        async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function(html) {
+        // d3web_nextform();
+        }
+    });
 }
 
 /**
  * Transfer children from d3web.
  */
 function d3web_getChildren(pid) {
-	var link = $.query.set("action", "getChildren").set("pid", pid).toString();
-	link = window.location.href.replace(window.location.search, "") + link;
+    var link = $.query.set("action", "getChildren").set("pid", pid).toString();
+    link = window.location.href.replace(window.location.search, "") + link;
 
-	$.ajax({
-		type : "GET",
-		async : false,
-		cache : false, // needed for IE, call is not made otherwise
-		url : link,
-		success : function(html) {
-			$("#sub-" + pid).html(html);
-		}
-	});
+    $.ajax({
+        type : "GET",
+        async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function(html) {
+            $("#sub-" + pid).html(html);
+        }
+    });
 }
 
 /**
  * Get new ratings.
  */
 function d3web_getRatings(list_of_ids) {
-	var link = $.query.set("action", "getRatings").set("ids", list_of_ids)
-			.toString();
-	link = window.location.href.replace(window.location.search, "") + link;
+    var link = $.query.set("action", "getRatings").set("ids", list_of_ids)
+    .toString();
+    link = window.location.href.replace(window.location.search, "") + link;
 
-	$.ajax({
-		type : "GET",
-		async : false,
-		cache : false, // needed for IE, call is not made otherwise
-		url : link,
-		success : function(html) {
-			var elements = html.split(";");
-			for (var i = 0; i < elements.length; i++) {
-				var elementId = elements[i].split(",")[0];
-				var clazz = elements[i].split(",")[1];
-				element = $("[id='" + elementId + "']");
-				element.removeClass("rating-high rating-medium rating-low");
-				if (clazz !== "remove") {
-					element.addClass(clazz);
-				}
-			}
-		}
-	});
+    $.ajax({
+        type : "GET",
+        async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function(html) {
+            var elements = html.split(";");
+            for (var i = 0; i < elements.length; i++) {
+                var elementId = elements[i].split(",")[0];
+                var clazz = elements[i].split(",")[1];
+                element = $("[id='" + elementId + "']");
+                element.removeClass("rating-high rating-medium rating-low");
+                if (clazz !== "remove") {
+                    element.addClass(clazz);
+                }
+            }
+        }
+    });
 }
 
 /**
@@ -875,16 +897,16 @@ function d3web_getRatings(list_of_ids) {
  */
 function d3web_show_solutions(target_id) {
 
-	var link = $.query.set("action", "solutions").toString();
-	link = window.location.href.replace(window.location.search, "") + link;
+    var link = $.query.set("action", "solutions").toString();
+    link = window.location.href.replace(window.location.search, "") + link;
 
-	$.ajax({
-		type : "GET",
-		// async : false,
-		cache : false, // needed for IE, call is not made otherwise
-		url : link,
-		success : function(html) {
-			$('#' + target_id).html(html).fadeIn(3000);
-		}
-	});
+    $.ajax({
+        type : "GET",
+        // async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function(html) {
+            $('#' + target_id).html(html).fadeIn(3000);
+        }
+    });
 }

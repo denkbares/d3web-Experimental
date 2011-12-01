@@ -31,145 +31,150 @@ import de.d3web.proket.data.DialogType;
  */
 public class GlobalSettings {
 
-	/*
-	 * Let DefaultSettings implement a Singleton template as only one instance
-	 * is needed per program flow
-	 */
-	private static GlobalSettings instance = null;
+    /*
+     * Let DefaultSettings implement a Singleton template as only one instance
+     * is needed per program flow
+     */
+    private static GlobalSettings instance = null;
 
-	public static GlobalSettings getInstance() {
-		if (instance == null) {
-			instance = new GlobalSettings();
-		}
-		return instance;
-	}
-
-	private GlobalSettings() {
-	}
-
-	/* Paths */
-	private final String d3webSpecsPath = "/specs/d3web";
-	private final String prototypeSpecsPath = "/specs/prototypes";
-	private final String baseSpecsPath = "/specs/";
-
-	private final String baseTempPath = "/stringtemp";
-	private final String htmlTempPath = "/stringtemp/html";
-	private final String cssTempPath = "/stringtemp/css";
-
-	private final String proketPath = "de.d3web.proket.";
-	private final String d3webRendererPath = "de.d3web.proket.d3web.output.render.";
-	private final String rendererBasePath = "de.d3web.proket.output.render";
-
-	private final String applicationBasePath = "/controlcenterResources";
-
-	/* File names */
-	private final String defaultKB = "defaultKB.jar"; // TODO
-	private final String defaultPrototypeXML = "defaultPrototype.xml"; // TODO
-
-	/* Default dialog settings */
-	private final DialogType defaultDialogType = DialogType.DEFAULT;
-	private final DialogStrategy defaultDialogStrategy = DialogStrategy.DEFAULT;
-	private final String defaultCSSSpec = "default"; // TODO
-
-	/* The folder, where persistence is stored, e.g., case-files */
-	private String caseFolder = "";
-	private String kbImgFolder = "";
-	private String servletBasePath;
-        
-        /* Save log files */
-        private String logFolder = "";
-
-	/* The getters for retrieving all those values */
-	public String getProketPath() {
-		return proketPath;
-	}
-
-	public String getD3webSpecsPath() {
-		return d3webSpecsPath;
-	}
-
-	public String getPrototypeSpecsPath() {
-		return prototypeSpecsPath;
-	}
-
-	public String getBaseSpecsPath() {
-		return baseSpecsPath;
-	}
-
-	public String getDefaultKbFileName() {
-		return defaultKB;
-	}
-
-	public String getDefaultPrototypeFileName() {
-		return defaultPrototypeXML;
-	}
-
-	public DialogType getDefaultDialogType() {
-		return defaultDialogType;
-	}
-
-	public DialogStrategy getDefaultDialogStrategy() {
-		return defaultDialogStrategy;
-	}
-
-	public String getDefaultCSSSpec() {
-		return defaultCSSSpec;
-	}
-
-	public String getBaseTempPath() {
-		return baseTempPath;
-	}
-
-	public String getHtmlTempPath() {
-		return htmlTempPath;
-	}
-
-	public String getCssTempPath() {
-		return cssTempPath;
-	}
-
-	public String getRendererBasePath() {
-		return rendererBasePath;
-	}
-
-	public String getApplicationBasePath() {
-		return applicationBasePath;
-	}
-
-	public String getD3webRendererPath() {
-		return d3webRendererPath;
-	}
-
-	/* Some values need to be set at runtime from outside */
-	public void setCaseFolder(String folderPath) {
-		caseFolder = folderPath;
-	}
-
-	public String getCaseFolder() {
-		return caseFolder;
-	}
-
-	public void setKbImgFolder(String path) {
-		kbImgFolder = path;
-	}
-
-	public String getKbImgFolder() {
-		return kbImgFolder;
-	}
-
-	public void setServletBasePath(String servletBasePath) {
-		this.servletBasePath = servletBasePath;
-	}
-
-	public String getServletBasePath() {
-		return this.servletBasePath;
-	}
-        
-        public void setLogFolder(String log){
-            logFolder = log;
+    public static GlobalSettings getInstance() {
+        if (instance == null) {
+            instance = new GlobalSettings();
         }
+        return instance;
+    }
 
-        public String getLogFolder() {
-		return this.logFolder;
-	}
+    private GlobalSettings() {
+    }
+
+    /* Paths */
+    private final String d3webSpecsPath = "/specs/d3web";
+    private final String prototypeSpecsPath = "/specs/prototypes";
+    private final String baseSpecsPath = "/specs/";
+    private final String baseTempPath = "/stringtemp";
+    private final String htmlTempPath = "/stringtemp/html";
+    private final String cssTempPath = "/stringtemp/css";
+    private final String proketPath = "de.d3web.proket.";
+    private final String d3webRendererPath = "de.d3web.proket.d3web.output.render.";
+    private final String rendererBasePath = "de.d3web.proket.output.render";
+    private final String applicationBasePath = "/controlcenterResources";
+
+    /* File names */
+    private final String defaultKB = "defaultKB.jar"; // TODO
+    private final String defaultPrototypeXML = "defaultPrototype.xml"; // TODO
+
+    /* Default dialog settings */
+    private final DialogType defaultDialogType = DialogType.DEFAULT;
+    private final DialogStrategy defaultDialogStrategy = DialogStrategy.DEFAULT;
+    private final String defaultCSSSpec = "default"; // TODO
+
+    /* The folder, where persistence is stored, e.g., case-files */
+    private String caseFolder = "";
+    private String kbImgFolder = "";
+    private String servletBasePath;
+    private int localeIdent = 0;
+    /* Save log files */
+    private String logFolder = "";
+
+    /* The getters for retrieving all those values */
+    public String getProketPath() {
+        return proketPath;
+    }
+
+    public String getD3webSpecsPath() {
+        return d3webSpecsPath;
+    }
+
+    public String getPrototypeSpecsPath() {
+        return prototypeSpecsPath;
+    }
+
+    public String getBaseSpecsPath() {
+        return baseSpecsPath;
+    }
+
+    public String getDefaultKbFileName() {
+        return defaultKB;
+    }
+
+    public String getDefaultPrototypeFileName() {
+        return defaultPrototypeXML;
+    }
+
+    public DialogType getDefaultDialogType() {
+        return defaultDialogType;
+    }
+
+    public DialogStrategy getDefaultDialogStrategy() {
+        return defaultDialogStrategy;
+    }
+
+    public String getDefaultCSSSpec() {
+        return defaultCSSSpec;
+    }
+
+    public String getBaseTempPath() {
+        return baseTempPath;
+    }
+
+    public String getHtmlTempPath() {
+        return htmlTempPath;
+    }
+
+    public String getCssTempPath() {
+        return cssTempPath;
+    }
+
+    public String getRendererBasePath() {
+        return rendererBasePath;
+    }
+
+    public String getApplicationBasePath() {
+        return applicationBasePath;
+    }
+
+    public String getD3webRendererPath() {
+        return d3webRendererPath;
+    }
+
+    /* Some values need to be set at runtime from outside */
+    public void setCaseFolder(String folderPath) {
+        caseFolder = folderPath;
+    }
+
+    public String getCaseFolder() {
+        return caseFolder;
+    }
+
+    public void setKbImgFolder(String path) {
+        kbImgFolder = path;
+    }
+
+    public String getKbImgFolder() {
+        return kbImgFolder;
+    }
+
+    public void setServletBasePath(String servletBasePath) {
+        this.servletBasePath = servletBasePath;
+    }
+
+    public String getServletBasePath() {
+        return this.servletBasePath;
+    }
+
+    public void setLogFolder(String log) {
+        logFolder = log;
+    }
+
+    public String getLogFolder() {
+        return this.logFolder;
+    }
+
+    public int getLocaleIdentifier() {
+        return this.localeIdent;
+    }
+
+    public void setLocaleIdentifier(int localId) {
+        this.localeIdent = localId;
+    }
 }

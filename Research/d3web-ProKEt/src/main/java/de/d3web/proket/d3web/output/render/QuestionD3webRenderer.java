@@ -30,6 +30,7 @@ import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.knowledge.terminology.QuestionZC;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
+import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
@@ -41,6 +42,7 @@ import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
+import java.util.Locale;
 
 /**
  * Renderer for rendering basic Questions.
@@ -72,10 +74,11 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 		// specific TemplateName is returned, otherwise, the base object name.
 		StringTemplate st = TemplateUtils.getStringTemplate(
 				super.getTemplateName("Question"), "html");
-
+                
 		// set some basic properties
 		st.setAttribute("fullId", getID(to));
-		st.setAttribute("title", to.getName());
+		st.setAttribute("title", D3webUtils.getPrompt(to));
+                //st.setAttribute("title", to.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
 		// read html popups from properties
