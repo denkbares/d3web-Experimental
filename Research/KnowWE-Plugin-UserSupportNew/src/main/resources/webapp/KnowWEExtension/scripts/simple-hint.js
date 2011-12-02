@@ -1,8 +1,8 @@
 (function() {
-  CodeMirror.simpleHint = function(editor, getHints) {
+  CodeMirror.simpleHint = function(editor, getHints, id) {
     // We want a single cursor position.
     if (editor.somethingSelected()) return;
-    var result = getHints(editor);
+    var result = getHints(editor, id);
     if (!result || !result.list.length) return;
     var completions = result.list;
     function insert(str) {

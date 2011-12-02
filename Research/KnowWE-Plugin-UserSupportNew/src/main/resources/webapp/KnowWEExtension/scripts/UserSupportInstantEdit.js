@@ -35,7 +35,7 @@ KNOWWE.plugin.usersupportinstantedit = function() {
             	lineNumbers: true,
             	mode: "diff",
             	theme: "elegant",
-            	extraKeys: {"Ctrl-Space": function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint);}}           		
+            	extraKeys: {"Ctrl-Space": function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint, id)}}           		
             });
 	        
 	    },

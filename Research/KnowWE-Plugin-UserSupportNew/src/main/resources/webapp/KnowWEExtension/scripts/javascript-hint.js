@@ -1,6 +1,6 @@
 (function () {
   
-  CodeMirror.javascriptHint = function(editor) {
+  CodeMirror.javascriptHint = function(editor, id) {
     // Find the token at the cursor
     var cur = editor.getCursor(), token = editor.getTokenAt(cur), tprop = token;
     // If it's not a 'word-style' token, ignore the token.
@@ -16,7 +16,7 @@
       if (!context) var context = [];
       context.push(tprop);
     }
-    var liste = KNOWWE.plugin.usersupport.getCompletions(token, context);
+    var liste = KNOWWE.plugin.usersupport.getCompletions(token, context, id);
     return {list: liste,
             from: {line: cur.line, ch: token.start},
             to: {line: cur.line, ch: token.end}};
