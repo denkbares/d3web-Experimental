@@ -47,7 +47,7 @@ public class TableExistCheckAction extends AbstractAction {
 		}
 		else {
 			WriteDB o = new WriteDB();
-			result = o.getStatements();
+			result = "<pre>\n" + o.getStatements() + "\n</pre>";
 		}
 		if (result != null && context.getWriter() != null) {
 			context.setContentType("text/html; charset=UTF-8");

@@ -34,7 +34,6 @@ import java.util.Map.Entry;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.medicine.DbConnection;
 import de.knowwe.medicine.Medicine;
 import de.knowwe.medicine.MedicineObject;
@@ -47,7 +46,6 @@ public class ReadDB extends AbstractAction {
 	private static final String N3BLOCK = "n3block";
 	private static final String N3SINGLE = "n3single";
 
-	private ResultSet resultSet = null;
 	private Medicine med;
 
 	private String perform(UserActionContext context) {
@@ -57,7 +55,7 @@ public class ReadDB extends AbstractAction {
 		// read from database and create objects with params and values
 		try {
 			String table = med.getImportSetting(4);
-			resultSet = con.readDatabase("select * from " + table);
+			ResultSet resultSet = con.readDatabase("select * from " + table);
 			createEKGObjects(resultSet);
 
 		}
@@ -69,7 +67,7 @@ public class ReadDB extends AbstractAction {
 		}
 
 		generateParents();
-		generateFiles("D:\\knowwe\\content\\", context);
+		generateFiles(context);
 
 		return "<div class='error' style='background-image:url(KnowWEExtension/images/msg_checkmark.png)'>Sucessfully imported</div>";
 	}
@@ -95,7 +93,8 @@ public class ReadDB extends AbstractAction {
 			int id = resultSet.getInt(med.getImportSetting(6));
 			o.setId(id);
 			o.setParent(resultSet.getInt(med.getImportSetting(8)));
-			o.setSubject(resultSet.getString(med.getImportSetting(9)).replaceAll("%", "Prozent"));
+			o.setSubject(resultSet.getString(med.getImportSetting(9)).replaceAll("%", "Prozent").replaceAll(
+					":", " "));
 
 			objects.put(id, o);
 		}
@@ -132,25 +131,22 @@ public class ReadDB extends AbstractAction {
 		med.setParents(parents);
 	}
 
-	private void generateFiles(String filepath, UserActionContext context) {
+	private void generateFiles(UserActionContext context) {
 		// Generate and write other pages
 		for (MedicineObject x : med.getObjects().values()) {
 			String title = x.getSubject();
-			// KnowWEEnvironment.getInstance().processAndUpdateArticleJunit(context.getUserName(),
-			// createPageString(x), title, context.getWeb(),
-			// KnowWEEnvironment.getInstance().getRootType());
+
 			String page = createPageString(x);
-			KnowWEUtils.writeFile(filepath + beautify(title) + ".txt",
-					page);
-			KnowWEEnvironment.getInstance().buildAndRegisterArticle(page, title,
-					context.getWeb());
+
+			KnowWEEnvironment.getInstance().getWikiConnector().createWikiPage(title, page,
+					context.getUserName());
+			KnowWEEnvironment.getInstance().buildAndRegisterArticle(page, title, context.getWeb());
 		}
 
 		// Generate and write Main page
-		String mainContent = generateMain();
-		KnowWEUtils.writeFile(filepath + "Main.txt", mainContent);
-		KnowWEEnvironment.getInstance().buildAndRegisterArticle(mainContent, "Main",
-				context.getWeb());
+		KnowWEEnvironment.getInstance().getWikiConnector().createWikiPage("Main", generateMain(),
+				context.getUserName());
+
 	}
 
 	private String createPageString(MedicineObject x) {
