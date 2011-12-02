@@ -16,7 +16,8 @@
       if (!context) var context = [];
       context.push(tprop);
     }
-    return {list: KNOWWE.plugin.usersupport.getCompletions(token, context),
+    var liste = KNOWWE.plugin.usersupport.getCompletions(token, context);
+    return {list: liste,
             from: {line: cur.line, ch: token.start},
             to: {line: cur.line, ch: token.end}};
   }
