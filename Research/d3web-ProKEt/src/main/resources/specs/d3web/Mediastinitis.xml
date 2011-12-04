@@ -12,5 +12,5 @@
 	required = "Betreffende Klinik"
 	language = "de"
 	>
-	<data kb="MediastinitisMai2011.d3web" />
+	<data kb="MediastinitisDez2011.d3web" />
 </dialog>

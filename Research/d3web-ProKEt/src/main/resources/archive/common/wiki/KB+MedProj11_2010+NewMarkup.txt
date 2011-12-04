@@ -4,24 +4,27 @@
 Herzmedizin
 @Comment: Herzmedizinische Wissensbasis Stand Nov 2010 / Jan 2011
 @uses: this
-@unknownByDefault: true
 /%
 
 
-%%question
+%%Question
 Allgemeine Daten #0
 - Betreffende Klinik [text]
 - "Primär-Op" [oc]
 -- "Primär-OP in domo"
 -- "Primär-Op extern"
- 
+%
+
+%%Question
 Demographische Daten #1
 - Geschlecht des Patienten [oc] 
 -- Männlich
 -- Weiblich
 - Alter des Patienten [num] {Jahre}
 - "Op-Datum" [date]
+%
 
+%%Question
 "Präoperative Daten (Initial-OP)" #2
 - COPD [oc]
 -- Ja
@@ -55,7 +58,9 @@ Demographische Daten #1
 - EF [num] {"%"}
 - Kreatinin [num] {"mg/dl"}
 - Harnstoff [num] {"mg/dl"}
+%
 
+%%Question
 "Intraoperative Daten (Initial-OP)" #3
 - Knochenwachs [oc]
 -- Ja 
@@ -82,13 +87,13 @@ Demographische Daten #1
 - Integuseal [oc]
 -- Ja
 -- Nein
-- "OP-Art" [oc]
+- "OP-Art" [mc]
 -- ACVB 
 -- Klappenchirurgie
 -- Kombination
 -- Aortenchirurgie
 -- Andere
-- Sternumverschlusstechnik [oc]
+- Sternumverschlusstechnik [mc]
 -- "Trans/peristernale Drahtcerclagen"
 --- Anzahl der Drahtcerclagen [num]
 -- "8-Touren"
@@ -99,7 +104,9 @@ Demographische Daten #1
 - "HLM-Zeit" [num] {Minuten}
 - "X-clamp-Zeit" [num] {Minuten}
 - Hautdesinfektionsmittel [text]
+%
 
+%%Question
 "Postoperative Daten (Initial-OP)" #4
 - Rethorakotomie [oc]
 -- Ja
@@ -139,14 +146,16 @@ Demographische Daten #1
 - CRP [num] {"mg/dl"}
 - PCT [num] {"ng/ml"}
 - "Zeitraum der periop. AB-Gabe" [num] {Tage}
+%
 
+%%Question
 "Intraoperative Daten bei erster Revision" #5
-- Sternumsituation [oc]
+- Sternumsituation [mc]
 -- Stabil
 -- Instabil
 -- Einfach querfrakturiert
 -- Mehrfachfrakturiert
-- Infektionsort [oc]
+- Infektionsort [mc]
 -- Cranial
 -- Medial
 -- Caudal
@@ -154,7 +163,7 @@ Demographische Daten #1
 - "Jet-Lavage" [oc]
 -- Ja
 -- Nein
-- Keimnachweis [oc]
+- Keimnachweis [mc]
 -- Staphylokokkus aureus
 -- MRSA
 -- Staphylokokken
@@ -181,30 +190,36 @@ Demographische Daten #1
 - "Postop. KH-Aufenthalt (gesamt)" [num] {Tage}
 - "Nachblutungsmenge (gesamt)" [num] {ml}
 - Besonderheiten [text]
+%
 
+%%Question
 "Bei VAC Therapie:" 
 - Wechselintervalle [oc]
 -- "2-Tages Rhythmus"
 -- "3-Tages Rhythmus"
 -- "> 3-Tages Rhythmus"
-- Art des sek. Thoraxverschlusses [oc]
+- "Art des sek. Thoraxverschlusses" [mc]
 -- Drahtcerclagen
 -- Robiscek
 -- Clips
 -- Plattenosteosynthese
 -- Andere
-- "Kriterium zum sek. Thoraxverschluss" [oc]
+- "Kriterium zum sek. Thoraxverschluss" [mc]
 -- Steril
 -- Granulation suffizient
 -- Andere
 - "Anzahl der VAC Wechsel bis zum sek. Thoraxverschluss" [num]
+%
 
+%%Question
 "Bei Reverdrahtung:"
 - Spülung [oc]
 -- Spülung
 --- "Spülung vorgenommen"
 -- Keine Spülung
+%
 
+%%Question
 "Spülung vorgenommen"
 - "Art der Spülung" [oc]
 -- Klar
@@ -216,7 +231,9 @@ Demographische Daten #1
 -- Diskontinuierlich
 - Spülmenge in 24h [num] {ml}
 - Dauer der Spülung [num] {Tage}
+%
 
+%%Question
 "Abschließende Bemerkungen" #6
 - Bemerkungen [text]
 
