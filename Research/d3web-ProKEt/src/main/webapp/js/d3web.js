@@ -278,6 +278,22 @@ function initFunctionality() {
         d3web_storeQuestionText($(this));
         d3web_addFacts($(this));
     });
+    
+    $('[type=num]').unbind('click').click(function() {
+        var thisEl = $(this);
+        thisEl.bind('keydown', function(e) {
+            var code = (e.keyCode ? e.keyCode : e.which);
+            if (code == 13) {
+                d3web_storeQuestionNum($(this));
+                d3web_addFacts($(this));
+            }
+        });
+    });
+	
+    $('[type=num]').unbind('focusout').focusout(function() {
+        d3web_storeQuestionNum($(this));
+        d3web_addFacts($(this));
+    });
 	
     $('[type=textselect]').unbind('change').change(function() {
         d3web_storeQuestionText($(this));
@@ -383,6 +399,29 @@ function getDateValue(select, def) {
 function d3web_storeQuestionText(textInput) {
     var textQuestion = getQuestionName(textInput);
     textStore[textQuestion] = $(textInput).val();
+}
+
+function d3web_storeQuestionNum(numInput) {
+    var toHigh;
+    var toLow;
+    if(language=="de"){
+    	toHigh = "Der gewählte Wert ist zu hoch!";
+    	toLow = "Der gewählte Wert ist zu niedrig!";
+    } else {
+        toHigh = "The chosen value is to high!";
+        toLow = "The chosen value is to low!";
+    }
+	var val = parseInt($(numInput).val());
+	var left = parseInt($(numInput).attr("left"));
+	if (val < left) {
+		alert(toLow);
+	}
+	var right = parseInt($(numInput).attr("right"));
+	if (val > right) {
+		alert(toHigh);
+	}
+    var numQuestion = getQuestionName(numInput);
+    textStore[numQuestion] = $(numInput).val();
 }
 
 function d3web_storeQuestionOC(ocInput) {

@@ -83,7 +83,11 @@ public class AnswerNumD3webRenderer extends AbstractD3webRenderer implements Ans
 					BasicProperties.QUESTION_NUM_RANGE);
 			String inter = "";
 			if (interVal != null) {
-				inter = trimPZ(interVal.getLeft()) + " - " + trimPZ(interVal.getRight()) + " ";
+				String left = trimPZ(interVal.getLeft());
+				String right = trimPZ(interVal.getRight());
+				inter = left + " - " + right + " ";
+				st.setAttribute("left", left);
+				st.setAttribute("right", right);
 			}
 			st.setAttribute("text", inter + unit);
 		}
@@ -132,16 +136,20 @@ public class AnswerNumD3webRenderer extends AbstractD3webRenderer implements Ans
 			}
 
 			// quick tweak for double-num values formatting
-			BigDecimal myDec = new BigDecimal((Double) value.getValue());
-			Double numround = myDec.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-			DecimalFormat df =
-					(DecimalFormat) DecimalFormat.getInstance(Locale.GERMAN);
-			df.applyPattern("#,###,##0.00");
-			String doubleString = df.format(numround);
-			if (doubleString.endsWith("00")) {
-				doubleString = doubleString.substring(0, doubleString.length() - 3);
+			String doubleString = value.getValue().toString();
+			try {
+				BigDecimal myDec = new BigDecimal((Double) value.getValue());
+				Double numround = myDec.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+				DecimalFormat df =
+						(DecimalFormat) DecimalFormat.getInstance(Locale.GERMAN);
+				df.applyPattern("#,###,##0.00");
+				doubleString = df.format(numround);
+				if (doubleString.endsWith("00")) {
+					doubleString = doubleString.substring(0, doubleString.length() - 3);
+				}
 			}
-
+			catch (NumberFormatException e) {
+			}
 			st.removeAttribute("selection");
 			st.setAttribute("selection", doubleString);
 		}
