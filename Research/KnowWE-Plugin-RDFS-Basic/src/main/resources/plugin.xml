@@ -121,6 +121,30 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CorrectionProvider"
+		id="IRITermCorrectionProvider">
+		<parameter id="class"
+			value="de.knowwe.compile.correction.IncrementalTermReferenceCorrectionProvider" />
+		<parameter id="name" value="IRITermCorrectionProvider" />
+		<parameter id="description"
+			value="Generates correction suggestions for RDFS" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="105" />
+		<parameter id="scope" value="IRITermRef" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="KnowledgeUnitInstantEditToolProvider">
+		<parameter id="class"
+			value="de.knowwe.rdfs.rendering.KnowledgeUnitInstantEditToolProvider" />
+		<parameter id="name" value="KnowledgeUnitInstantEditToolProvider" />
+		<parameter id="description"
+			value="Offers quick edit mechanism for knowledge units." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="IRITermRef" />
+	</extension>
+	
 	<!--<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
 		id="ObjectInfoPageToolProvider">
 		<parameter id="class"
