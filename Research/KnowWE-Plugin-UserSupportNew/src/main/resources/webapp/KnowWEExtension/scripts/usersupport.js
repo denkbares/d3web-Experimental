@@ -81,11 +81,11 @@ KNOWWE.plugin.usersupport = function() {
         },
 		
 		/**
-		 * Function:    exportAction
+		 * Function     : exportAction
 		 * @param event
-		 * Description: adds the ExportTableAction for Tables to the Button.
-		 * 				Renders a download button as response. The xls is
-		 * 				stored on the server.
+		 * Description  : adds the ExportTableAction for Tables to the Button.
+		 * 				  Renders a download button as response. The xls is
+		 * 				  stored on the server.
 		 */
 		exportAction : function(event) {
 			var rel = eval("(" + _KE.target( event ).getAttribute('rel') + ")");
@@ -108,9 +108,9 @@ KNOWWE.plugin.usersupport = function() {
 		},
 		
 		/**
-		 * Function:    importAction
+		 * Function      : importAction
 		 * @param event
-		 * Description: adds the ImportTableAction for Tables to the Button
+		 * Description   : adds the ImportTableAction for Tables to the Button
 		 */
 		importAction : function(event) {
 			
@@ -129,12 +129,13 @@ KNOWWE.plugin.usersupport = function() {
 		},
 		
 		/**
-		 * Function:    docorrection
+		 * Function   :   docorrection
+		 * 
 		 * @param sectionID
 		 * @param correction
-		 * Description: Performs correction for a given Section ID and correction
-		 *              This is a copy from correction.js.
-		 *              TODO could be generalized with it!
+		 * Description : Performs correction for a given Section ID and correction
+		 *               This is a copy from correction.js.
+		 *               TODO could be generalized with it!
 		 */
 		doCorrection : function(sectionID, correction) {
 			var params = {
@@ -161,12 +162,13 @@ KNOWWE.plugin.usersupport = function() {
 		},
 		
 		/**
-		 * Function:    forEach
+		 * Function     : forEach
+		 * 
 		 * @param arr
 		 * @param token : token object; no string!
 		 * @param found : already found suggestions
 		 * @param f     : function
-		 * Description: do function: f for each element in array: arr
+		 * Description  : do function: f for each element in array: arr
 		 */
   		forEach : function(arr, token, found, f) {
     		for (var i = 0, e = arr.length; i < e; ++i)
@@ -176,10 +178,10 @@ KNOWWE.plugin.usersupport = function() {
   
   		/**
   		 * 
-  		 * Function:    arrayContains
-  		 * @param arr: array
-  		 * @param item: string
-  		 * Description: checks if arr contains an item
+  		 * Function    :    arrayContains
+  		 * @param arr  : array
+  		 * @param item : string
+  		 * Description : checks if arr contains an item
   		 */ 
   		arrayContains : function(arr, item) {
     		if (!Array.prototype.indexOf) {
@@ -196,11 +198,12 @@ KNOWWE.plugin.usersupport = function() {
 		
 		/**
   		 * 
-  		 * Function:    maybeAdd
+  		 * Function     : maybeAdd
+  		 * 
   		 * @param token : token object; no string!
 		 * @param found : already found suggestions
-  		 * @param item: string
-  		 * Description: adds item to found if it starts with token
+  		 * @param item  : string
+  		 * Description  : adds item to found if it starts with token
   		 */ 
     	maybeAdd : function (token, found, item) {
     		var tokenstring = token.string;
@@ -215,6 +218,7 @@ KNOWWE.plugin.usersupport = function() {
 		/**
   		 * 
   		 * Function:    maybeAdd
+  		 * 
   		 * @param token : token object; no string!
 		 * @param found : already found suggestions
     	 * Description: gathers the completions from the given static arrays
@@ -231,6 +235,7 @@ KNOWWE.plugin.usersupport = function() {
     	/**
     	 * 
     	 * Function: gatherDialogComponentCompletions
+    	 * 
     	 * @param matchMe : token object; no string!
     	 * @param found : already found suggestions
     	 * @param id : section ID to show loader gif for
@@ -265,6 +270,7 @@ KNOWWE.plugin.usersupport = function() {
 		
 		/**
 		 * Function:    showAjaxLoader
+		 * 
 		 * @param id : section ID
 		 * Description:
 		 */
@@ -279,6 +285,7 @@ KNOWWE.plugin.usersupport = function() {
 	
 		/**
 		 * Function:   hideAjaxLoader
+		 * 
 		 * @param id : section ID
 		 * Description:
 		 */
@@ -290,6 +297,7 @@ KNOWWE.plugin.usersupport = function() {
 		/**
 		 * 
 		 * Function:    getCompletions
+		 * 
 		 * @param token : token object; no string!
 		 * @param context : TODO needed?
 		 * @param id : section ID
