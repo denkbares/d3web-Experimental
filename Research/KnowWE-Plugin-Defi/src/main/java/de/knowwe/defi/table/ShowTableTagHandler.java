@@ -32,7 +32,6 @@ import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.table.Table;
-import de.knowwe.kdom.table.TableRenderer;
 
 public class ShowTableTagHandler extends AbstractTagHandler {
 
@@ -72,7 +71,7 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 		string.append(KnowWEUtils.maskHTML("<div id='" + myTable.getID()
 				+ "' style=''>"));
 
-		user.getParameters().put(TableRenderer.QUICK_EDIT_FLAG, "false");
+		// user.getParameters().put(TableRenderer.QUICK_EDIT_FLAG, "false");
 
 		for (int versionIndex = 0; versionIndex < versionsExisting; versionIndex++) {
 			user.getParameters().put(VERSION_KEY, Integer.toString(versionIndex));

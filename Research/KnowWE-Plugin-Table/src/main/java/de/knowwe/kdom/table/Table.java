@@ -62,7 +62,7 @@ import de.knowwe.kdom.xml.XMLContent;
  * @author smark
  * @see XMLContent
  */
-public abstract class Table extends AbstractType {
+public class Table extends AbstractType {
 
 	private final TableAttributesProvider tableAttributesProvider;
 

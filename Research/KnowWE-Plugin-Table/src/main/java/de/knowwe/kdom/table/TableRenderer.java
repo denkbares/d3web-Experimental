@@ -20,9 +20,6 @@
 
 package de.knowwe.kdom.table;
 
-import java.util.ResourceBundle;
-
-import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
@@ -39,12 +36,9 @@ import de.knowwe.core.utils.KnowWEUtils;
  */
 public class TableRenderer extends KnowWEDomRenderer<Table> {
 
-	public static final String QUICK_EDIT_FLAG = "noQuickEdit";
 
 	@Override
 	public void render(KnowWEArticle article, Section<Table> sec, UserContext user, StringBuilder string) {
-
-		final ResourceBundle rb = KnowWEEnvironment.getInstance().getKwikiBundle(user);
 
 		boolean sortable = TableUtils.sortOption(sec);
 
@@ -53,46 +47,16 @@ public class TableRenderer extends KnowWEDomRenderer<Table> {
 		DelegateRenderer.getInstance().render(article, sec, user, b);
 
 		buffi.append(getOpeningTag(sec));
-		if (!sec.hasQuickEditModeSet(user.getUserName())) {
-			if (!user.getParameters().containsKey(QUICK_EDIT_FLAG)) {
-				buffi.append(generateQuickEdit(sec.getID(),
-					rb.getString("KnowWE.TableContentRenderer.setQE")));
-			}
+
+		if (sortable) {
+			buffi.append("<div class=\"sortable\">");
 		}
-
-		if (sec.hasQuickEditModeSet(user.getUserName())) {
-
-			// adds the buttons for addRow/addCol
-			buffi.append("\n<table style='border:1px solid #999999; float: left' class='wikitable knowwetable' border='1'><tbody>");
-			buffi.append(getHeader());
-			buffi.append(b.toString());
-			buffi.append("</tbody></table>");
-			buffi.append("<div id=\"addCol\" class=\"addCol\" title=\"Spalte hinzufügen\" onclick=\"return Testcase.addCol(this)\"></div>");
-			buffi.append("<div style=\"width: 50%; clear: left\"></div>");
-			buffi.append("<div id=\"addRow\" class=\"addRow\" title=\"Zeile hinzufügen\" onclick=\"return Testcase.addRow(this)\"></div>");
-
-			buffi.append("<input class=\"pointer\" id=\""
-					+ sec.getID()
-					+ "\" style=\"padding:0 0 0 0; width: 25px; height: 25px; background: #FFF url(KnowWEExtension/images/msg_checkmark.png) no-repeat; border: none; vertical-align:top;\" name=\""
-					+ sec.getID() + "_accept\" type=\"submit\" value=\"\" title=\""
-					+ rb.getString("KnowWE.TableContentRenderer.accept") + "\">");
-			buffi.append("<img class=\"quickedit table pointer\" id=\"" + sec.getID()
-					+ "_cancel\" width=\"25\" title=\""
-					+ rb.getString("KnowWE.TableContentRenderer.cancel")
-					+ "\" src=\"KnowWEExtension/images/msg_cross.png\"/>");
-
-		}
-		else {
-			if (sortable) {
-				buffi.append("<div class=\"sortable\">");
-			}
-			buffi.append("\n<table style='border:1px solid #999999;' class='wikitable knowwetable' border='1'><tbody>");
-			buffi.append(getHeader());
-			buffi.append(b.toString());
-			buffi.append("</tbody></table>");
-			if (sortable) {
-				buffi.append("</div>");
-			}
+		buffi.append("\n<table style='border:1px solid #999999;' class='wikitable knowwetable' border='1'><tbody>");
+		buffi.append(getHeader());
+		buffi.append(b.toString());
+		buffi.append("</tbody></table>");
+		if (sortable) {
+			buffi.append("</div>");
 		}
 
 		buffi.append(getClosingTag());
@@ -100,20 +64,6 @@ public class TableRenderer extends KnowWEDomRenderer<Table> {
 		string.append(KnowWEUtils.maskHTML(buffi.toString()));
 	}
 
-	/**
-	 * Generates a link used to enable or disable the Quick-Edit-Flag.
-	 * 
-	 * @see UserSetting, UserSettingsManager, NodeFlagSetting
-	 * @param topic name of the current page
-	 * @param id of the section the flag should assigned to
-	 * @return
-	 */
-	protected String generateQuickEdit(String id, String title) {
-		String icon = " <img id='" + id
-				+ "_pencil' src='KnowWEExtension/images/pencil.png' title='" + title
-				+ "' width='10' class='quickedit table pointer'/>";
-		return icon;
-	}
 
 	protected String getHeader() {
 		return "";
