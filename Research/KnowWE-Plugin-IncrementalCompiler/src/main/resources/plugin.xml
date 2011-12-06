@@ -27,6 +27,18 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CorrectionProvider"
+		id="IRITermCorrectionProvider">
+		<parameter id="class"
+			value="de.knowwe.compile.correction.IncrementalTermReferenceCorrectionProvider" />
+		<parameter id="name" value="IncrementalTermReferenceCorrectionProvider" />
+		<parameter id="description"
+			value="Generates correction suggestions for RDFS" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="105" />
+		<parameter id="scope" value="IncrementalTermReference" />
+	</extension>
+	
 
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
@@ -38,6 +50,24 @@
 		<parameter id="priority" value="2" />
 		<parameter id="script" value="KnowWE-Plugin-Core.js" />
 	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="CorrectionToolProvider">
+		<parameter id="class"
+			value="de.knowwe.compile.correction.IncrementalCorrectionToolProvider" />
+		<parameter id="name" value="CorrectionToolProvider" />
+		<parameter id="description"
+			value="Offers to quickly correct typos in term references." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="TermReference" />
+		<parameter id="scope" value="IncrementalTermReference" />
+		<parameter id="scope" value="IRITermRef" />
+	</extension>
+	
+
+	
+	
 	
 
 

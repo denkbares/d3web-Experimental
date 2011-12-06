@@ -197,6 +197,23 @@ public class ReferenceManager {
 		return result;
 	}
 
+	public Collection<Section<? extends TermDefinition>> getAllTermDefinitions() {
+		Set<Section<? extends TermDefinition>> result = new HashSet<Section<? extends TermDefinition>>();
+		for (String termName : validObjects.keySet()) {
+			Collection<Section<? extends TermDefinition>> termDefinitions = this.getTermDefinitions(termName);
+			if (termDefinitions.size() > 0) {
+				result.add(termDefinitions.iterator().next());
+			}
+		}
+		for (String termName : validPredefinedObjects.keySet()) {
+			Collection<Section<? extends TermDefinition>> termDefinitions = this.getTermDefinitions(termName);
+			if (termDefinitions.size() > 0) {
+				result.add(termDefinitions.iterator().next());
+			}
+		}
+		return result;
+	}
+
 }
 
 class TermDefinitionInformation {
