@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import de.d3web.core.session.Session;
 import de.d3web.we.basic.WikiEnvironment;
@@ -118,7 +117,6 @@ public class TestcaseTable extends Table {
 		Section<TableLine> hLine = Sections.findSuccessor(table, TableLine.class);
 
 		if (i >= hLine.getChildren().size()) {
-			Logger.getLogger(TestcaseTable.class.getName()).warning("no header cell for: " + s);
 			return null;
 		}
 
