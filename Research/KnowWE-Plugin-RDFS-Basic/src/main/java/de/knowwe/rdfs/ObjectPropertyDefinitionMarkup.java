@@ -23,6 +23,7 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.core.utils.SplitUtility;
 import de.knowwe.core.utils.StringFragment;
+import de.knowwe.rdfs.rendering.PreEnvRenderer;
 
 public class ObjectPropertyDefinitionMarkup extends AbstractType implements ComplexDefinitionWithTypeConstraints<ObjectPropertyDefinitionMarkup> {
 
@@ -38,6 +39,8 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 
 		this.addChildType(new PropertyDef());
 		this.addChildType(new RangeDomainSpec());
+
+		this.setCustomRenderer(new PreEnvRenderer());
 	}
 
 	class RangeDomainSpec extends AbstractType {

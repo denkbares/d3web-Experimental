@@ -41,6 +41,7 @@ import de.knowwe.core.utils.SplitUtility;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.kdom.sectionFinder.RegexSectionFinderSingle;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdfs.rendering.PreEnvRenderer;
 import de.knowwe.rdfs.util.RDFSUtil;
 
 public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexDefinition<ComplexIRIDefinitionMarkup>, KnowledgeUnit<ComplexIRIDefinitionMarkup> {
@@ -56,6 +57,8 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 		this.addChildType(new DefinitionTerm());
 		this.addChildType(new Predicate());
 		this.addChildType(new Object());
+
+		this.setCustomRenderer(new PreEnvRenderer());
 	}
 
 	// @Override
@@ -120,62 +123,58 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 			return s.getOriginalText().trim();
 		}
 	}
-	
-	
+
 	class ComplexIRIDefinitionCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<ComplexIRIDefinitionMarkup> {
-	
 
-	@Override
-	public void insertIntoRepository(Section<ComplexIRIDefinitionMarkup> section) {
-		List<Section<TermReference>> found = new ArrayList<Section<TermReference>>();
-		Node subURI = null;
-		Node predURI = null;
-		Node objURI = null;
+		@Override
+		public void insertIntoRepository(Section<ComplexIRIDefinitionMarkup> section) {
+			List<Section<TermReference>> found = new ArrayList<Section<TermReference>>();
+			Node subURI = null;
+			Node predURI = null;
+			Node objURI = null;
 
-		Sections.findSuccessorsOfType(section, TermReference.class, found);
-		Section<TermDefinition> subject = Sections.findSuccessor(section,
-				TermDefinition.class);
+			Sections.findSuccessorsOfType(section, TermReference.class, found);
+			Section<TermDefinition> subject = Sections.findSuccessor(section,
+					TermDefinition.class);
 
-		if (found.size() == 2) {
+			if (found.size() == 2) {
 
-			Section<TermReference> predicate = found.get(0);
-			Section<TermReference> object = found.get(1);
+				Section<TermReference> predicate = found.get(0);
+				Section<TermReference> object = found.get(1);
 
-			subURI = RDFSUtil.getURI(subject);
-			predURI = RDFSUtil.getURI(predicate);
-			objURI = RDFSUtil.getURI(object);
+				subURI = RDFSUtil.getURI(subject);
+				predURI = RDFSUtil.getURI(predicate);
+				objURI = RDFSUtil.getURI(object);
+			}
+			else {
+				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+				// "invalid term combination:" + found.size()));
+			}
+			if (subURI == null) {
+				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+				// "subject URI not found"));
+			}
+			if (predURI == null) {
+				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+				// "predicate URI not found"));
+			}
+			if (objURI == null) {
+				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+				// "object URI not found"));
+			}
+
+			Rdf2GoCore.getInstance().addStatement(subURI.asResource(),
+					predURI.asURI(), objURI, section);
+
+			// return new ArrayList<KDOMReportMessage>(0);
+
 		}
-		else {
-			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-			// "invalid term combination:" + found.size()));
-		}
-		if (subURI == null) {
-			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-			// "subject URI not found"));
-		}
-		if (predURI == null) {
-			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-			// "predicate URI not found"));
-		}
-		if (objURI == null) {
-			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-			// "object URI not found"));
-		}
-
-		Rdf2GoCore.getInstance().addStatement(subURI.asResource(),
-				predURI.asURI(), objURI, section);
-
-		// return new ArrayList<KDOMReportMessage>(0);
 
 	}
-
-	}
-
 
 	@Override
 	public KnowledgeUnitCompileScript<ComplexIRIDefinitionMarkup> getCompileScript() {
 		return new ComplexIRIDefinitionCompileScript();
 	}
-
 
 }

@@ -62,8 +62,7 @@
 
 	</extension>
 	
-	<!--
-	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
 		id="ConceptPageLinkProvider">
 		<parameter id="class"
 			value="de.knowwe.tool.conceptLink.ConceptPageLinkProvider" />
@@ -75,7 +74,7 @@
 		<parameter id="scope" value="IRITermRef" />
 
 	</extension>
-	-->
+	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Terminology"
 		id="RDFSTerminology">
 		<parameter id="class"
@@ -121,6 +120,21 @@
 		<parameter id="priority" value="3" />
 		<parameter id="scope" value="root" />
 	</extension>
+	
+	<!--<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="ObjectInfoPageToolProvider">
+		<parameter id="class"
+			value="de.knowwe.core.toolprovider.ObjectInfoPageToolProvider" />
+		<parameter id="name" value="ObjectInfoPageToolProvider" />
+		<parameter id="description"
+			value="Offer a button to navigate to the object information page of an selected object." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+
+		<parameter id="scope" value="ClassDef" />
+		<parameter id="scope" value="AbstractIRITermDefinition" />
+		
+	</extension> -->
 
 	
 </plugin>

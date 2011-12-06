@@ -20,7 +20,6 @@
 package de.knowwe.rdfs;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -28,9 +27,7 @@ import org.ontoware.rdf2go.model.node.Node;
 
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
-import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -39,18 +36,32 @@ import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdfs.rendering.PreEnvRenderer;
 import de.knowwe.rdfs.util.RDFSUtil;
 
 public class TripleMarkup extends AbstractType implements
 		KnowledgeUnit<TripleMarkup> {
 
+	static final String TRIPLE_REGEX = "^>(.*?::.*?)$";
+
 	public TripleMarkup() {
 
-		this.setSectionFinder(new RegexSectionFinder("^>(.*?::.*?)$",
-				Pattern.DOTALL | Pattern.MULTILINE, 1));
-		this.addChildType(new SimpleTurtlePredicate());
-		this.addChildType(new SimpleTurtleSubject());
-		this.addChildType(new SimpleTurtleObject());
+		this.setSectionFinder(new RegexSectionFinder(TRIPLE_REGEX,
+				Pattern.DOTALL | Pattern.MULTILINE, 0));
+
+		this.addChildType(new TripleMarkupContent());
+		this.setCustomRenderer(new PreEnvRenderer());
+	}
+
+	class TripleMarkupContent extends AbstractType {
+
+		public TripleMarkupContent() {
+			this.setSectionFinder(new RegexSectionFinder(TRIPLE_REGEX,
+					Pattern.DOTALL | Pattern.MULTILINE, 1));
+			this.addChildType(new SimpleTurtlePredicate());
+			this.addChildType(new SimpleTurtleSubject());
+			this.addChildType(new SimpleTurtleObject());
+		}
 	}
 
 	class SimpleTurtlePredicate extends IRITermRef {
@@ -84,8 +95,6 @@ public class TripleMarkup extends AbstractType implements
 
 	class TripleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<TripleMarkup> {
 
-
-
 		@Override
 		public void insertIntoRepository(Section<TripleMarkup> section) {
 
@@ -104,7 +113,8 @@ public class TripleMarkup extends AbstractType implements
 				subURI = RDFSUtil.getURI(subject);
 				predURI = RDFSUtil.getURI(predicate);
 				objURI = RDFSUtil.getURI(object);
-			} else {
+			}
+			else {
 				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
 				// "invalid term combination:" + found.size()));
 			}
@@ -127,7 +137,6 @@ public class TripleMarkup extends AbstractType implements
 			// return new ArrayList<KDOMReportMessage>(0);
 
 		}
-
 
 	}
 

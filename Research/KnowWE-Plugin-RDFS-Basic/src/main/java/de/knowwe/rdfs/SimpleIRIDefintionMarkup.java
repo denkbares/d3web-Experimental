@@ -30,6 +30,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.utils.SplitUtility;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.kdom.sectionFinder.RegexSectionFinderSingle;
+import de.knowwe.rdfs.rendering.PreEnvRenderer;
 
 public class SimpleIRIDefintionMarkup extends AbstractType {
 
@@ -41,6 +42,8 @@ public class SimpleIRIDefintionMarkup extends AbstractType {
 
 		this.addChildType(new DefType());
 		this.addChildType(new DefinitionTerm());
+
+		this.setCustomRenderer(new PreEnvRenderer());
 	}
 
 	class DefType extends AbstractType {
