@@ -202,7 +202,6 @@ public class IncrementalCompiler implements EventListener {
 				}
 				// check Types of referenced objects here
 				if (ref.get() instanceof TypeRestrictedReference) {
-					// TODO: Think of rendering of this violation!
 					if (((TypeRestrictedReference) ref.get()).checkTypeConstraints(ref) == false) {
 						compilationUnitIterator.remove();
 						break;
@@ -315,7 +314,8 @@ public class IncrementalCompiler implements EventListener {
 						"Concurrent definitions are existing but will be ignored!"));
 				return messages;
 			}
-			messages.add(Messages.error("Object has concurrent definitions: " + termIdentifier));
+			messages.add(Messages.error("Object has concurrent definitions: "
+					+ termIdentifier));
 			return messages;
 		}
 
@@ -345,8 +345,10 @@ public class IncrementalCompiler implements EventListener {
 								def, ref)) { // or has a wrong type
 					messages.add(new Message(
 							Message.Type.ERROR,
-							errorMsg + ((ComplexDefinitionWithTypeConstraints) complexDef.get())
-									.getProblemMessageForConstraintViolation(def, ref) + " :" +
+							errorMsg
+									+ ((ComplexDefinitionWithTypeConstraints) complexDef.get())
+											.getProblemMessageForConstraintViolation(def,
+													ref) + " :" +
 									ref.get().getTermIdentifier(ref)));
 					return messages;
 				}

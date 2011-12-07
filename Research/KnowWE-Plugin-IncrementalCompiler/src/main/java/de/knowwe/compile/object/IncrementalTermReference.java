@@ -81,10 +81,20 @@ public abstract class IncrementalTermReference<TermObject> extends TermReference
 
 			Collection<Message> messages = IncrementalCompiler.getInstance().checkDefinition(
 					sec.get().getTermIdentifier(sec));
+
+			// insert TypeConstraint-warnings
+			if (sec.get() instanceof TypeRestrictedReference) {
+				if (((TypeRestrictedReference) sec.get()).checkTypeConstraints(sec) == false) {
+					messages.add(new Message(
+							Message.Type.WARNING,
+							((TypeRestrictedReference) sec.get()).getMessageForConstraintViolation(sec)));
+				}
+			}
+
 			for (Message kdomReportMessage : messages) {
 				if (kdomReportMessage.getType() == Message.Type.ERROR) {
 					string.append(DefaultErrorRenderer.INSTANCE_ERROR.preRenderMessage(
-									kdomReportMessage, user));
+							kdomReportMessage, user));
 				}
 				if (kdomReportMessage.getType() == Message.Type.WARNING) {
 					string.append(
