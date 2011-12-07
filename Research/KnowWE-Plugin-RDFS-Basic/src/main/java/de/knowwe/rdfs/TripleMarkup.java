@@ -21,13 +21,18 @@ package de.knowwe.rdfs;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.node.Node;
 
+import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
+import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -64,13 +69,40 @@ public class TripleMarkup extends AbstractType implements
 		}
 	}
 
-	class SimpleTurtlePredicate extends IRITermRef {
+	class SimpleTurtlePredicate extends IRITermRef implements TypeRestrictedReference {
 		public SimpleTurtlePredicate() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new RegexSectionFinder("\\b([^\\s]*)::", Pattern.DOTALL, 1));
 			c.addConstraint(SingleChildConstraint.getInstance());
 			c.addConstraint(AtMostOneFindingConstraint.getInstance());
 			this.setSectionFinder(c);
+		}
+
+		@Override
+		public boolean checkTypeConstraints(Section<? extends TermReference> s) {
+			Object info = IncrementalCompiler.getInstance().getTerminology().getDefinitionInformationForValidTerm(
+					s.get().getTermIdentifier(s));
+			if (info != null) {
+				if (info instanceof Map) {
+					Set keyset = ((Map) info).keySet();
+					for (Object key : keyset) {
+						if (((Map) info).get(key) instanceof RDFSTermCategory) {
+							RDFSTermCategory rdfsTermCategory = (RDFSTermCategory) ((Map) info).get(key);
+							if (rdfsTermCategory.equals(RDFSTermCategory.Class)
+									|| rdfsTermCategory.equals(RDFSTermCategory.Individual)) {
+								return false;
+							}
+						}
+					}
+				}
+
+			}
+			return true;
+		}
+
+		@Override
+		public String getMessageForConstraintViolation(Section<? extends TermReference> s) {
+			return "only properties allowed here";
 		}
 	}
 

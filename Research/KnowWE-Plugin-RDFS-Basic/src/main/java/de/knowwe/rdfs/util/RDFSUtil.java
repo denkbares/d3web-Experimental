@@ -22,16 +22,21 @@ package de.knowwe.rdfs.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Map;
+import java.util.Set;
 
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
+import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.plugin.Plugins;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdfs.RDFSTermCategory;
 import de.knowwe.rdfs.RDFSTerminology;
 
 public class RDFSUtil {
@@ -54,6 +59,26 @@ public class RDFSUtil {
 		}
 		return uri;
 
+	}
+
+	public static boolean isTermCategory(Section<? extends TermReference> ref, RDFSTermCategory c) {
+		Object info = IncrementalCompiler.getInstance().getTerminology().getDefinitionInformationForValidTerm(
+				ref.get().getTermIdentifier(ref));
+		if (info != null) {
+
+			if (info instanceof Map) {
+				Set keyset = ((Map) info).keySet();
+				for (Object key : keyset) {
+					if (((Map) info).get(key) instanceof RDFSTermCategory) {
+						RDFSTermCategory rdfsTermCategory = (RDFSTermCategory) ((Map) info).get(key);
+						if (rdfsTermCategory.equals(c)) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	public static URI getRDFSURI(String termname) {

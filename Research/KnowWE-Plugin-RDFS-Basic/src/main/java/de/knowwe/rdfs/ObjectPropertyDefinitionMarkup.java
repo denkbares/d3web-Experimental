@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Pattern;
 
-import de.knowwe.compile.IncrementalCompiler;
+import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.vocabulary.RDFS;
+
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.ComplexDefinitionWithTypeConstraints;
+import de.knowwe.compile.object.IncrementalTermDefinition;
+import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.KnowledgeUnitCompileScript;
+import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
@@ -23,9 +28,11 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.core.utils.SplitUtility;
 import de.knowwe.core.utils.StringFragment;
+import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.rendering.PreEnvRenderer;
+import de.knowwe.rdfs.util.RDFSUtil;
 
-public class ObjectPropertyDefinitionMarkup extends AbstractType implements ComplexDefinitionWithTypeConstraints<ObjectPropertyDefinitionMarkup> {
+public class ObjectPropertyDefinitionMarkup extends AbstractType implements ComplexDefinitionWithTypeConstraints<ObjectPropertyDefinitionMarkup>, KnowledgeUnit<ObjectPropertyDefinitionMarkup> {
 
 	public static final String RDFS_DOMAIN_KEY = "rdfs:domain";
 	public static final String RDFS_RANGE_KEY = "rdfs:range";
@@ -50,7 +57,7 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 		}
 	}
 
-	class ClassRef extends IRITermRef {
+	class ClassRef extends IRITermRef implements TypeRestrictedReference {
 		public ClassRef() {
 			this.setSectionFinder(new SectionFinder() {
 
@@ -67,6 +74,16 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 					return result;
 				}
 			});
+		}
+
+		@Override
+		public boolean checkTypeConstraints(Section<? extends TermReference> s) {
+			return RDFSUtil.isTermCategory(s, RDFSTermCategory.Class);
+		}
+
+		@Override
+		public String getMessageForConstraintViolation(Section<? extends TermReference> s) {
+			return "Only classes are allowed here";
 		}
 	}
 
@@ -104,30 +121,8 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 	public boolean checkTypeConstraints(
 			Section<? extends ComplexDefinition<ObjectPropertyDefinitionMarkup>> def,
 			Section<? extends TermReference> ref) {
-		Object info = IncrementalCompiler.getInstance().getTerminology().getDefinitionInformationForValidTerm(
-				ref.get().getTermIdentifier(ref));
-		if (info != null) {
-			if (info instanceof RDFSTermCategory) {
-				if (info.equals(RDFSTermCategory.Class)) {
-					return true;
-				}
-			}
-			else {
-				if (info instanceof Map) {
-					Set keyset = ((Map) info).keySet();
-					for (Object key : keyset) {
-						if (((Map) info).get(key) instanceof RDFSTermCategory) {
-							RDFSTermCategory rdfsTermCategory = (RDFSTermCategory) ((Map) info).get(key);
-							if (rdfsTermCategory.equals(RDFSTermCategory.Class)) {
-								return true;
-							}
-						}
-					}
-				}
-			}
 
-		}
-		return false;
+		return RDFSUtil.isTermCategory(ref, RDFSTermCategory.Class);
 	}
 
 	@Override
@@ -136,6 +131,43 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 			Section<? extends TermReference> ref) {
 
 		return "Object of type 'Class' expected";
+	}
+
+	@Override
+	public KnowledgeUnitCompileScript getCompileScript() {
+		return new DomainRangeCompileScript();
+	}
+
+	class DomainRangeCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<ObjectPropertyDefinitionMarkup> {
+
+		@Override
+		public void insertIntoRepository(Section<ObjectPropertyDefinitionMarkup> section) {
+			List<Section<IRITermRef>> refs = Sections.findSuccessorsOfType(section,
+					IRITermRef.class);
+			if (refs.size() == 2) {
+				Section<IncrementalTermDefinition> propDef = Sections.findSuccessor(
+						section, IncrementalTermDefinition.class);
+				URI propURI = RDFSUtil.getURI(propDef);
+
+				// prop domain:: arg0
+				URI objectURI = RDFSUtil.getURI(refs.get(0));
+				Rdf2GoCore.getInstance().addStatement(
+						propURI,
+						RDFS.domain,
+						objectURI, section);
+
+				// prop range:: arg1
+				Rdf2GoCore.getInstance().addStatement(
+						propURI,
+						RDFS.range,
+						RDFSUtil.getURI(refs.get(1)), section);
+
+			}
+			else {
+				// shit, what to do?
+			}
+
+		}
 	}
 
 }
