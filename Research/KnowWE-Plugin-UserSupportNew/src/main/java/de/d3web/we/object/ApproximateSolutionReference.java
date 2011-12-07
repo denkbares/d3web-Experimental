@@ -58,9 +58,4 @@ public class ApproximateSolutionReference extends D3webTermReference<Solution> {
 		return null;
 	}
 
-	@Override
-	public String getTermObjectDisplayName() {
-		return "Solution";
-	}
-
 }

@@ -61,9 +61,4 @@ public class ApproximateQuestionReference extends D3webTermReference<Question> {
 		return null;
 	}
 
-	@Override
-	public String getTermObjectDisplayName() {
-		return "Question";
-	}
-
 }

@@ -192,6 +192,12 @@ public class TurtleMarkup extends AbstractType {
 		}
 
 		@Override
+		public String getTermObjectDisplayName() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
 		public Scope getTermScope() {
 			// TODO Auto-generated method stub
 			return Scope.LOCAL;
