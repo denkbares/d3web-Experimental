@@ -26,7 +26,7 @@
         <parameter id="priority" value="5" />
         <parameter id="script" value="KnowWE-Plugin-InstantEdit.js" />
 		<parameter id="script" value="codemirror.js" />
-		<parameter id="css" value="diff.css" />
+		<parameter id="css" value="usersupport.css" />
 		<parameter id="css" value="default.css" />
 		<parameter id="css" value="elegant.css" />
 		<parameter id="css" value="codemirror.css" />
