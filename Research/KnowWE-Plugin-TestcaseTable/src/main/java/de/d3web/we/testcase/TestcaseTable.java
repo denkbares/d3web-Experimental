@@ -50,8 +50,6 @@ public class TestcaseTable extends Table {
 				KnowWERessourceLoader.RESOURCE_SCRIPT);
 		KnowWERessourceLoader.getInstance().add("testcasetable.css",
 				KnowWERessourceLoader.RESOURCE_STYLESHEET);
-		KnowWERessourceLoader.getInstance().add("KnowWE-Plugin-Shared.js",
-				KnowWERessourceLoader.RESOURCE_SCRIPT);
 
 		try {
 			replaceChildType(new HeaderLine(), TableLine.class);
