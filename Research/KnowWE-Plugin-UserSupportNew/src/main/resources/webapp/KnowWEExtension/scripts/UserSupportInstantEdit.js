@@ -56,9 +56,9 @@ KNOWWE.plugin.usersupportinstantedit = function() {
 	        var editorID = "defaultEdit"+id;
             editor = CodeMirror.fromTextArea(document.getElementById(editorID), {
             	lineNumbers: true,
-            	mode: "diff",
+            	mode: "usersupportmode",
             	theme: "elegant",
-            	extraKeys: {"Ctrl-Space": function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint, id)}}           		
+            	extraKeys: {"Ctrl-Space": function(cm) {CodeMirror.simpleHint(cm, CodeMirror.usersupportHint, id)}}           		
             });
 	        
 	    },

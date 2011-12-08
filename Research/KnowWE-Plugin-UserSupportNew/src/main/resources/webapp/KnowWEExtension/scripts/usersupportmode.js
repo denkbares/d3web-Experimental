@@ -1,4 +1,4 @@
-CodeMirror.defineMode("diff", function() {
+CodeMirror.defineMode("usersupportmode", function() {
 
 	var keywords = ("IF WENN THEN DANN AND UND & OR ODER | NOT NICHT ! KNOWN UNKNOWN AUSSER EXCEPT").split(" ");
 	var brackets = ("{ } ( ) | [ ] ,").split(" ");
@@ -83,4 +83,4 @@ CodeMirror.defineMode("diff", function() {
   };
 });
 
-CodeMirror.defineMIME("text/x-diff", "diff");
+CodeMirror.defineMIME("text/x-usersupportmode", "usersupportmode");

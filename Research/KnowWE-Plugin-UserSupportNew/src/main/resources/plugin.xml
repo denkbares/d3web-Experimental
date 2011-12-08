@@ -32,9 +32,8 @@
 		<parameter id="css" value="codemirror.css" />
 		<parameter id="script" value="usersupport.js" />
 		<parameter id="script" value="simple-hint.js" />
-		<parameter id="script" value="javascript-hint.js" />
-		<parameter id="script" value="javascript.js" />
-		<parameter id="script" value="diff.js" />
+		<parameter id="script" value="usersupportHint.js" />
+		<parameter id="script" value="usersupportmode.js" />
         <parameter id="script" value="UserSupportInstantEdit.js" />
         <parameter id="script" value="TextArea.js" />
         <parameter id="css" value="KnowWE-Plugin-InstantEdit.css" />
