@@ -6,7 +6,7 @@
     <groupId>de.uniwue.d3web</groupId>
     <version>0.2-SNAPSHOT</version>
   </parent>
-  <groupId>KnowWE-MetaTool-Markups</groupId>
+  <groupId>de.uniwue.d3web</groupId>
   <artifactId>KnowWE-Plugin-d3web-SimpleScoreTable</artifactId>
   <version>0.2-SNAPSHOT</version>
   <name>KnowWE-Plugin-d3web-SimpleScoreTable</name>
