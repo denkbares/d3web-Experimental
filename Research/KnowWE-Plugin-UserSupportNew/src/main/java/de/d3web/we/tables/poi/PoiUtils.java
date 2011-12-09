@@ -44,6 +44,8 @@ import de.d3web.we.tables.HeuristicDiagnosisTable;
 import de.d3web.we.tables.ITable;
 import de.d3web.we.tables.InnerTable;
 import de.d3web.we.tables.TableCell;
+import de.d3web.we.tables.TableHeaderCell;
+import de.d3web.we.tables.TableHeaderLine;
 import de.d3web.we.tables.TableLine;
 import de.d3web.we.tables.TableUtils;
 import de.knowwe.core.KnowWEArticleManager;
@@ -264,13 +266,23 @@ public class PoiUtils {
 		Sheet sheet = wb.createSheet("CausalDiagnosisTable");
 
 		Row row = null;
+
+		// write header
+		Section<TableHeaderLine> headerLine = Sections.findSuccessor(diagnosisTable, TableHeaderLine.class);
+		int i = 0;
+		if (headerLine != null) {
+			row = sheet.createRow(i++);
+			PoiUtils.writeTableHeaderLine(headerLine, row, out);
+		}
+
+		// write all other lines
 		List<Section<TableLine>> lines =
 				Sections.findChildrenOfType(diagnosisTable, TableLine.class);
 		Section<TableLine> line = null;
 
-		for ( int i = 0; i < lines.size(); i++) {
-			row = sheet.createRow(i);
-			line = lines.get(i);
+		for (int j = 0;j < lines.size();j++) {
+			row = sheet.createRow(i++);
+			line = lines.get(j);
 			PoiUtils.writeTableLine(line, row, out);
 		}
 
@@ -284,13 +296,22 @@ public class PoiUtils {
 		Sheet sheet = wb.createSheet("CausalDiagnosisTableSheet");
 
 		Row row = null;
+
+		// write header
+		Section<TableHeaderLine> headerLine = Sections.findSuccessor(heuristicTable, TableHeaderLine.class);
+		int i = 0;
+		if (headerLine != null) {
+			row = sheet.createRow(i++);
+			PoiUtils.writeTableHeaderLine(headerLine, row, out);
+		}
+
 		List<Section<TableLine>> lines =
 				Sections.findChildrenOfType(heuristicTable, TableLine.class);
 		Section<TableLine> line = null;
 
-		for ( int i = 0; i < lines.size(); i++) {
-			row = sheet.createRow(i);
-			line = lines.get(i);
+		for (int j = 0;j < lines.size();j++) {
+			row = sheet.createRow(i++);
+			line = lines.get(j);
 			PoiUtils.writeTableLine(line, row, out);
 		}
 
@@ -304,13 +325,22 @@ public class PoiUtils {
 		Sheet sheet = wb.createSheet("DecisionTable");
 
 		Row row = null;
+
+		// write header
+		Section<TableHeaderLine> headerLine = Sections.findSuccessor(decisionTable, TableHeaderLine.class);
+		int i = 0;
+		if (headerLine != null) {
+			row = sheet.createRow(i++);
+			PoiUtils.writeTableHeaderLine(headerLine, row, out);
+		}
+
 		List<Section<TableLine>> lines =
 				Sections.findChildrenOfType(decisionTable, TableLine.class);
 		Section<TableLine> line = null;
 
-		for ( int i = 0; i < lines.size(); i++) {
-			row = sheet.createRow(i);
-			line = lines.get(i);
+		for (int j = 0;j < lines.size();j++) {
+			row = sheet.createRow(i++);
+			line = lines.get(j);
 			PoiUtils.writeTableLine(line, row, out);
 		}
 
@@ -318,6 +348,26 @@ public class PoiUtils {
 		wb.write(out);
 	}
 
+	/**
+	 * Writes a TableHeaderLine into the OutputStream.
+	 * 
+	 * @created 19.10.2011
+	 * @param line
+	 * @param row
+	 * @param out
+	 */
+	public static void writeTableHeaderLine(Section<TableHeaderLine> line, Row row, FileOutputStream out) {
+
+		List<Section<TableHeaderCell>> cells = Sections.findChildrenOfType(line, TableHeaderCell.class);
+
+		Cell c = null;
+		Section<TableHeaderCell> cell = null;
+		for (int i = 0; i < cells.size(); i++) {
+			cell = cells.get(i);
+			c = row.createCell(i);
+			c.setCellValue(cell.getText());
+		}
+	}
 
 	/**
 	 * Writes a complete TableLine into the OutputStream.
