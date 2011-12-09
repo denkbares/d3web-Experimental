@@ -259,7 +259,7 @@ KNOWWE.plugin.usersupport = function() {
                     	var found = [];
 			        	var suggestions = JSON.parse(this.responseText);
 			        	var found = KNOWWE.plugin.usersupport.forEach(suggestions, matchMe, found, KNOWWE.plugin.usersupport.maybeAdd);
-			        	foundArray = found; 
+			        	foundArray = found;
                     },
 				}
 			}

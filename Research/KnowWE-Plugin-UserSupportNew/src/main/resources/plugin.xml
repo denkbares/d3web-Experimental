@@ -25,6 +25,7 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
         <parameter id="script" value="KnowWE-Plugin-InstantEdit.js" />
+        <parameter id="script" value="InstantEditHook.js" />
 		<parameter id="script" value="codemirror.js" />
 		<parameter id="css" value="usersupport.css" />
 		<parameter id="css" value="default.css" />

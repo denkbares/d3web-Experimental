@@ -36,7 +36,7 @@ KNOWWE.plugin.usersupportinstantedit = function() {
 	    		+ " class='defaultEditTool' style='height: " + $(id).clientHeight + "px;'>"
 		    	+ KNOWWE.plugin.instantEdit.getWikiText(id)
 		    	+ "</textarea>"
-		    	+ KNOWWE.plugin.usersupportinstantedit.getSaveCancelDeleteButtons(id);
+		    	+ KNOWWE.plugin.instantEditHook.getSaveCancelDeleteButtons(id, "KNOWWE.plugin.usersupportinstantedit");
 	    },
 	    
 	    postProcessHTML : function(id) {
@@ -62,21 +62,6 @@ KNOWWE.plugin.usersupportinstantedit = function() {
             });
 	        
 	    },
-	    
-	    getSaveCancelDeleteButtons : function(id) {
-    		return KNOWWE.plugin.instantEdit.getButtonsTable(new Array(
-    				KNOWWE.plugin.usersupportinstantedit.getSaveButton(id), 
-    				KNOWWE.plugin.instantEdit.getCancelButton(id), 
-    				"       ",  
-    				KNOWWE.plugin.instantEdit.getDeleteSectionButton(id)));
-    	},
-    	
-    	getSaveButton : function(id) {
-    		return "<a class=\"action save\" " 
-    			+ "href=\"javascript:KNOWWE.plugin.usersupportinstantedit.save('"
-    			+ id
-    			+ "')\">Save</a>";
-    	},
     	
     	save : function(id) {
     		editor.toTextArea();
