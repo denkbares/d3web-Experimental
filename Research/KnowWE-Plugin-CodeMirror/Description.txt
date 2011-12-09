@@ -1,0 +1,3 @@
+Functionality of CodeMirror is stored here.
+
+See: www.codemirror.net for more information.
