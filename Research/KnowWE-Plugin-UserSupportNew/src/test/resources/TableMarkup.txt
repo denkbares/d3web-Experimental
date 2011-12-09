@@ -3,6 +3,8 @@ Kausaler Score {
               |Gewicht|Kiefer|Tanne| ,
 Nadeln = ja   |G5(32) |++    |     |++    ,
 Stamm = braun |G5(32) |++    |++   |++    ,
+
+@package tabledemo
 }
 %
 
@@ -15,6 +17,8 @@ EntscheidungsTabelle {
     Lieferung mit Nachnahme  |         | x      |        | x ,  
     Angaben vervollständigen |         |        | x      | x ,
     }
+
+@package tabledemo
 %
 
 %%HeuristicDiagnosisTable
@@ -30,4 +34,6 @@ HeuristischeDiagnoseTabelle {
       -- herzförmiges Form   |         | +      |       | -,
       --- gesägter Blattrand |         | +      |       | -,
     }
+    
+@package tabledemo
 %

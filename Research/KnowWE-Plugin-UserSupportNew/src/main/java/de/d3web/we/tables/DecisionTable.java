@@ -19,10 +19,8 @@
 package de.d3web.we.tables;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import de.d3web.abstraction.ActionSetValue;
 import de.d3web.abstraction.inference.PSMethodAbstraction;
@@ -37,14 +35,15 @@ import de.d3web.core.knowledge.terminology.QuestionYN;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.we.kdom.xcl.list.ListSolutionType;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
+import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
-import de.knowwe.core.report.Message;
 import de.knowwe.kdom.AnonymousTypeInvisible;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
-import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 
 /**
@@ -54,7 +53,7 @@ import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
  * @author Johannes Dienst
  * @created 14.10.2011
  */
-public class DecisionTable extends ITable {
+public class DecisionTable extends ITable implements KnowledgeUnit<DecisionTable> {
 
 	public DecisionTable() {
 		this.sectionFinder = new AllTextSectionFinder();
@@ -66,8 +65,6 @@ public class DecisionTable extends ITable {
 		this.addChildType(closing);
 
 		this.addChildType(new InnerTable());
-
-		//		this.addSubtreeHandler(new DecisionTableHandler());
 	}
 
 	/**
@@ -76,37 +73,38 @@ public class DecisionTable extends ITable {
 	 * @author Johannes Dienst
 	 * @created 10.11.2011
 	 */
-	public class DecisionTableHandler extends GeneralSubtreeHandler<DecisionTable> {
+	public class DecisionTableCompileScript extends AbstractKnowledgeUnitCompileScript<DecisionTable> {
 
 		@Override
-		public Collection<Message> create(
-				KnowWEArticle article, Section<DecisionTable> decisionTable) {
+		public void insertIntoRepository(Section<DecisionTable> decisionSec) {
 
 			Section<InnerTable> innerTable =
-					Sections.findChildOfType(decisionTable, InnerTable.class);
+					Sections.findChildOfType(decisionSec, InnerTable.class);
 			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty())
-				return null;
+				return;
 
 			// TODO Right KnowledgeBase?
-			Set<String> packages =
-					Sections.findAncestorOfExactType(
-							decisionTable, DecisionTableMarkup.class).getPackageNames();
-			String packageName = packages.iterator().next();
-			KnowledgeBase kb = D3webUtils.getKB(article.getWeb(), packageName + " - master");
+			Section<DecisionTableMarkup> mark = Sections.findAncestorOfExactType(
+					decisionSec, DecisionTableMarkup.class);
+			String packageName = DefaultMarkupType.getAnnotation(mark, "package");
+			KnowledgeBase kb = D3webUtils.getKB(decisionSec.getWeb(), packageName + " - master");
 
 			// Create all Yes/No Questions
 			// TODO First Cell is no Question: Removed it! But what if empty?
 			List<Section<TableCell>> firstColumn = TableUtils.getColumnCells(
-					0, Sections.findChildOfType(decisionTable, InnerTable.class));
+					0, Sections.findChildOfType(decisionSec, InnerTable.class));
 			firstColumn.remove(0);
 			LinkedList<Question> questionList = new LinkedList<Question>();
-			for (Section<TableCell> cell : firstColumn) {
+			for (Section<TableCell> cell : firstColumn)
+			{
 				String questionText = cell.getText().trim();
 				if (questionText.equals("")) continue;
-				if (kb.getManager().searchQuestion(questionText) == null) {
+				if (kb.getManager().searchQuestion(questionText) == null)
+				{
 					QuestionYN question = new QuestionYN(kb, questionText);
 					questionList.add(question);
-				} else {
+				} else
+				{
 					questionList.add(kb.getManager().searchQuestion(questionText));
 				}
 			}
@@ -120,7 +118,7 @@ public class DecisionTable extends ITable {
 			for (int i = 1; i < cellCount; i++) {
 				column = new LinkedList<Section<TableCell>>(
 						TableUtils.getColumnCells(
-								i, Sections.findChildOfType(decisionTable, InnerTable.class)));
+								i, Sections.findChildOfType(decisionSec, InnerTable.class)));
 				// Remove RuleName
 				column.removeFirst();
 
@@ -193,9 +191,18 @@ public class DecisionTable extends ITable {
 
 			}
 
-
-			return null;
 		}
 
+		@Override
+		public void deleteFromRepository(Section<DecisionTable> section) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+
+	@Override
+	public KnowledgeUnitCompileScript getCompileScript() {
+		return new DecisionTableCompileScript();
 	}
 }

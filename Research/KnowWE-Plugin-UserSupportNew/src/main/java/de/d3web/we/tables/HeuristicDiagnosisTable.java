@@ -20,10 +20,8 @@ package de.d3web.we.tables;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import de.d3web.abstraction.inference.PSMethodAbstraction;
 import de.d3web.core.inference.Rule;
@@ -43,14 +41,15 @@ import de.d3web.scoring.ActionHeuristicPS;
 import de.d3web.scoring.Score;
 import de.d3web.we.kdom.xcl.list.ListSolutionType;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
+import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
-import de.knowwe.core.report.Message;
 import de.knowwe.kdom.AnonymousTypeInvisible;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
-import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 
 /**
@@ -58,7 +57,7 @@ import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
  * @author Johannes Dienst
  * @created 14.10.2011
  */
-public class HeuristicDiagnosisTable extends ITable {
+public class HeuristicDiagnosisTable extends ITable implements KnowledgeUnit<HeuristicDiagnosisTable> {
 
 	public HeuristicDiagnosisTable() {
 		this.sectionFinder = new AllTextSectionFinder();
@@ -70,8 +69,6 @@ public class HeuristicDiagnosisTable extends ITable {
 		this.addChildType(closing);
 
 		this.addChildType(new InnerTable());
-
-		//		this.addSubtreeHandler(new HeuristicDiagnosisTableHandler());
 	}
 
 	/**
@@ -80,22 +77,21 @@ public class HeuristicDiagnosisTable extends ITable {
 	 * @author Johannes Dienst
 	 * @created 10.11.2011
 	 */
-	public class HeuristicDiagnosisTableHandler extends GeneralSubtreeHandler<HeuristicDiagnosisTable> {
+	public class HeuristicDiagnosisTableCompileScript extends AbstractKnowledgeUnitCompileScript<HeuristicDiagnosisTable> {
 
 		@Override
-		public Collection<Message> create(
-				KnowWEArticle article, Section<HeuristicDiagnosisTable> heuristicSec) {
+		public void insertIntoRepository(Section<HeuristicDiagnosisTable> heuristicSec) {
 
 			Section<InnerTable> innerTable =
 					Sections.findChildOfType(heuristicSec, InnerTable.class);
 			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty())
-				return null;
+				return;
 
 			// TODO Right KnowledgeBase?
-			Set<String> packages =
-					Sections.findAncestorOfExactType(heuristicSec, HeuristicDiagnosisTableMarkup.class).getPackageNames();
-			String packageName = packages.iterator().next();
-			KnowledgeBase kb = D3webUtils.getKB(article.getWeb(), packageName + " - master");
+			Section<HeuristicDiagnosisTableMarkup> mark = Sections.findAncestorOfExactType(
+					heuristicSec, HeuristicDiagnosisTableMarkup.class);
+			String packageName = DefaultMarkupType.getAnnotation(mark, "package");
+			KnowledgeBase kb = D3webUtils.getKB(heuristicSec.getWeb(), packageName + " - master");
 
 			// First create solution if necessary
 			// Create Rules: 1. Create Solution if necessary
@@ -218,9 +214,19 @@ public class HeuristicDiagnosisTable extends ITable {
 
 			}
 
-			return null;
 		}
 
+		@Override
+		public void deleteFromRepository(Section<HeuristicDiagnosisTable> section) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+
+	@Override
+	public KnowledgeUnitCompileScript getCompileScript() {
+		return new HeuristicDiagnosisTableCompileScript();
 	}
 
 }

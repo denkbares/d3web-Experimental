@@ -18,32 +18,29 @@
  */
 package de.d3web.we.tables;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
-import de.d3web.core.inference.condition.CondEqual;
 import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.core.session.values.ChoiceValue;
+import de.d3web.we.kdom.condition.CompositeCondition;
+import de.d3web.we.kdom.condition.KDOMConditionFactory;
 import de.d3web.we.kdom.xcl.list.ListSolutionType;
 import de.d3web.we.utils.D3webUtils;
 import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelation;
 import de.d3web.xcl.XCLRelationType;
+import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
+import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
-import de.knowwe.core.report.Message;
 import de.knowwe.kdom.AnonymousTypeInvisible;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
-import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
  * 
@@ -52,7 +49,7 @@ import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
  * @author Johannes Dienst
  * @created 14.10.2011
  */
-public class CausalDiagnosisScore extends AbstractType {
+public class CausalDiagnosisScore extends AbstractType implements KnowledgeUnit<CausalDiagnosisScore> {
 
 	public CausalDiagnosisScore() {
 		this.sectionFinder = new AllTextSectionFinder();
@@ -65,8 +62,6 @@ public class CausalDiagnosisScore extends AbstractType {
 		this.addChildType(closing);
 
 		this.addChildType(new InnerTable());
-
-		// this.addSubtreeHandler(new CausalDiagnosisScoreHandler());
 	}
 
 	/**
@@ -75,23 +70,22 @@ public class CausalDiagnosisScore extends AbstractType {
 	 * @author Johannes Dienst
 	 * @created 10.11.2011
 	 */
-	public class CausalDiagnosisScoreHandler extends GeneralSubtreeHandler<CausalDiagnosisScore> {
+	public class CausalDiagnosisScoreCompileScript extends AbstractKnowledgeUnitCompileScript<CausalDiagnosisScore> {
 
 		private static final String NO_WEIGHT = "Weightless";
 
 		@Override
-		public Collection<Message> create(
-				KnowWEArticle article, Section<CausalDiagnosisScore> scoreSec) {
+		public void insertIntoRepository(Section<CausalDiagnosisScore> scoreSec) {
 
 			Section<InnerTable> innerTable =
 					Sections.findChildOfType(scoreSec, InnerTable.class);
-			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty()) return null;
+			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty()) return;
 
 			// TODO Right KnowledgeBase?
-			Set<String> packages =
-					Sections.findAncestorOfExactType(scoreSec, CausalDiagnosisScoreMarkup.class).getPackageNames();
-			String packageName = packages.iterator().next();
-			KnowledgeBase kb = D3webUtils.getKB(article.getWeb(), packageName + " - master");
+			Section<CausalDiagnosisScoreMarkup> mark = Sections.findAncestorOfExactType(
+					scoreSec, CausalDiagnosisScoreMarkup.class);
+			String packageName = DefaultMarkupType.getAnnotation(mark, "package");
+			KnowledgeBase kb = D3webUtils.getKB(scoreSec.getWeb(), packageName + " - master");
 
 			// Create XCLRelations
 			// SingleKBMIDObjectManager kbm = new SingleKBMIDObjectManager(kb);
@@ -99,35 +93,25 @@ public class CausalDiagnosisScore extends AbstractType {
 			// Create all Conditions and Weights: 1st and 2end column
 			// TODO First Cell is no Question: Removed it! But what if empty?
 			// TODO no checks or whatsoever. Write security check!
-			List<Section<TableCell>> firstColumn = TableUtils.getColumnCells(
-					0, Sections.findChildOfType(scoreSec, InnerTable.class));
+			List<Section<TableCellFirstColumn>> firstColumn = Sections.findChildrenOfType(scoreSec, TableCellFirstColumn.class);
 			firstColumn.remove(0);
 			LinkedList<Condition> conditionList = new LinkedList<Condition>();
-			for (Section<TableCell> cell : firstColumn) {
-				String conditionText = cell.getText().trim();
-				String[] splittedCondition = conditionText.split("=");
-
-				if (splittedCondition.length != 2) {
-					conditionList.add(null);
-					continue;
-				}
-
-				String questionName = splittedCondition[0].trim();
-				Question question = kb.getManager().searchQuestion(questionName);
-
-				if ((question == null)) question = new QuestionText(kb, questionName);
-				CondEqual cond = new CondEqual(question, new ChoiceValue(
-						splittedCondition[1].trim()));
-				conditionList.add(cond);
+			for (Section<TableCellFirstColumn> cell : firstColumn) {
+				Section<CompositeCondition> cond = Sections.findChildOfType(cell, CompositeCondition.class);
+				Condition d3Cond = KDOMConditionFactory.createCondition(cell.getArticle(), cond);
+				conditionList.add(d3Cond);
 			}
 
+			// Weights
 			List<Section<TableCell>> secondColumn = TableUtils.getColumnCells(
 					1, Sections.findChildOfType(scoreSec, InnerTable.class));
 			secondColumn.remove(0);
 			LinkedList<String> weightList = new LinkedList<String>();
-			for (Section<TableCell> cell : secondColumn) {
+			for (Section<TableCell> cell : secondColumn)
+			{
 				String weightText = cell.getText().trim();
-				if (weightText.equals("")) {
+				if (weightText.equals(""))
+				{
 					weightList.add(NO_WEIGHT);
 					continue;
 				}
@@ -140,18 +124,19 @@ public class CausalDiagnosisScore extends AbstractType {
 
 			// Do for every column/XCLRelation
 			LinkedList<Section<TableCell>> column = null;
-			for (int i = 2; i < cellCount; i++) {
+			for (int i = 2; i < cellCount; i++)
+			{
 				column = new LinkedList<Section<TableCell>>(
 						TableUtils.getColumnCells(
 								i, Sections.findChildOfType(scoreSec, InnerTable.class)));
 
-				// Get Solution and create it, if necessary, in kb
+				// Get Solution and create it, if necessary in kb
 				Section<TableCell> solutionCell = column.removeFirst();
 				String solText = solutionCell.getText();
 				solText = solText.replaceAll("[\\r\\n\\{\\s]", "");
 				Solution solution = kb.getManager().searchSolution(solText);
-				if (solution == null) {
-
+				if (solution == null)
+				{
 					solution = new Solution(kb.getRootSolution(), solText);
 					kb.getManager().putTerminologyObject(solution);
 				}
@@ -165,7 +150,8 @@ public class CausalDiagnosisScore extends AbstractType {
 				// Excludes this solution: [--]
 				// Suffices to derive solution: [++]
 				Section<TableCell> cell = null;
-				for (int j = 0; j < column.size(); j++) {
+				for (int j = 0; j < column.size(); j++)
+				{
 					cell = column.removeFirst();
 					String cellText = cell.getText().trim();
 
@@ -176,24 +162,28 @@ public class CausalDiagnosisScore extends AbstractType {
 					XCLRelation rel = XCLRelation.createXCLRelation(conditionList.get(j));
 
 					// Normal
-					if (cellText.equals("+")) {
-						// TODO what if it no double?
+					if (cellText.equals("+"))
+					{
+						// TODO what if it is no double?
 						rel.setWeight(Double.parseDouble(weightList.get(j)));
 						model.addRelation(rel);
 					}
 
 					// Necessary
-					else if (cellText.equals("!")) {
+					else if (cellText.equals("!"))
+					{
 						model.addRelation(rel, XCLRelationType.requires);
 					}
 
 					// Excluded
-					else if (cellText.equals("--")) {
+					else if (cellText.equals("--"))
+					{
 						model.addRelation(rel, XCLRelationType.contradicted);
 					}
 
 					// Suffices
-					else if (cellText.equals("++")) {
+					else if (cellText.equals("++"))
+					{
 						model.addRelation(rel, XCLRelationType.sufficiently);
 					}
 
@@ -201,8 +191,17 @@ public class CausalDiagnosisScore extends AbstractType {
 
 			}
 
-			return null;
 		}
 
+		@Override
+		public void deleteFromRepository(Section<CausalDiagnosisScore> scoreSec) {
+
+		}
+
+	}
+
+	@Override
+	public KnowledgeUnitCompileScript getCompileScript() {
+		return new CausalDiagnosisScoreCompileScript();
 	}
 }
