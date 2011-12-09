@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <repository>
-<session changed="2011-12-01 11:32:26.961" created="2011-12-01 11:32:26.947" id="8df236f0-e308-4f5f-b8b2-6c42059d7124">
+<session changed="2011-12-09 11:24:53.697" created="2011-12-09 11:24:53.675" id="c58923d5-e7e6-481b-944c-de6880a0b128">
 <name/>
 <facts>
 <valueFacts>
 <fact objectName="Please select your hernia route" psm="de.d3web.indication.inference.PSMethodUserSelected">
 <choiceValue>Yes</choiceValue>
+</fact>
+<fact objectName="Another question" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<unknown/>
+</fact>
+<fact objectName="OC question" psm="de.d3web.indication.inference.PSMethodUserSelected">
+<choiceValue>Answer1</choiceValue>
 </fact>
 </valueFacts>
 <interviewFacts>
@@ -18,8 +24,14 @@
 </interviewFacts>
 </facts>
 <protocol>
-<entry date="2011-12-01 11:32:30.393" objectName="Please select your hernia route" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<entry date="2011-12-09 11:24:56.143" objectName="Please select your hernia route" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
 <choiceValue>Yes</choiceValue>
+</entry>
+<entry date="2011-12-09 11:24:57.853" objectName="Another question" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<unknown/>
+</entry>
+<entry date="2011-12-09 11:24:58.982" objectName="OC question" psm="de.d3web.indication.inference.PSMethodUserSelected" type="fact">
+<choiceValue>Answer1</choiceValue>
 </entry>
 </protocol>
 </session>

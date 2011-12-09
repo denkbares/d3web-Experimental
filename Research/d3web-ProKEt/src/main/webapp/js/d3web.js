@@ -31,11 +31,6 @@ var warningRecieved = false;
 
 
 $(function() {
-	
-    // retrieve the browser used
-    jQuery.each(jQuery.browser, function(i, val) {
-        //alert(i + " " + val);
-    });
         
         
     /* LOGIN DIALOG */
@@ -539,7 +534,7 @@ function gotoStatistics() {
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
         success : function(url) {
             window.location.href = url;
-        },
+        }
     });
 }
 

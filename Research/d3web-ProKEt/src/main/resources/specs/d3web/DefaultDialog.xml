@@ -9,7 +9,7 @@
 	questioncolumns = "2"
 	userprefix = "EuraHS" 
 	login = "off"
-	required = ""
+        required = "none"
 	language = "de"
         logging = "ON"
 	>

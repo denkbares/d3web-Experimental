@@ -98,7 +98,7 @@ DONE - Req Fields beim ersten abschicken direkt mitgeben
 - Num Fields / Range: Ajax Warnung
 
 - SPRACHEN/Internationalisierung:
-    - check polish!
+DONE    - check polish!
     - check sonderzeichen etc
 
 ----------------------------
@@ -133,10 +133,9 @@ REFACTOR
 - Language String Template:
   --> LanguageSelectFlags und RightHeaderLanguageLogoRoute zusammenlegen, selbe
       Basis verwenden!
-- Include Language toggle for ALL knowledge base related elements!
-  (currently Questionnaires and Questions work)
-
-
+DONE - Include Language toggle for ALL knowledge base related elements!
+- URGENTLY: js file(s)
+- PROBLEM MIT YN Fragen und Sprachen --> choices können dann nicht ausgelesen werden
 
 
 

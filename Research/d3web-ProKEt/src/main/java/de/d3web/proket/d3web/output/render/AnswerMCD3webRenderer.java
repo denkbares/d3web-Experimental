@@ -72,7 +72,10 @@ public class AnswerMCD3webRenderer extends AbstractD3webRenderer implements Answ
 		st.setAttribute("fullId", getID(c));
 		st.setAttribute("realAnswerType", "mc");
 		st.setAttribute("parentFullId", getID(mcq));
-		st.setAttribute("text", c.getName());
+		//st.setAttribute("text", c.getName());
+                
+                st.setAttribute("text", D3webUtils.getAnswerPrompt(to, c));              
+                
 		if (to.getInfoStore().getValue(ProKEtProperties.IMAGE) != null) {
 			st.setAttribute("imageAnswer", "true");
 		}

@@ -63,7 +63,7 @@ public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements
 
         st.setAttribute("fullId", getID(to));// to.getName().replace(" ",
 
-        st.setAttribute("title", D3webUtils.getPrompt(to));
+        st.setAttribute("title", D3webUtils.getTOPrompt(to));
         //st.setAttribute("title", to.getName());
 
         st.setAttribute("count", D3webConnector.getInstance().getID(to));

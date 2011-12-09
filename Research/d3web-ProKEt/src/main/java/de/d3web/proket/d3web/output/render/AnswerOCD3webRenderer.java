@@ -78,7 +78,8 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
 			st.setAttribute("tooltip", resString);
 		}
 
-		st.setAttribute("text", c.getName());
+		//st.setAttribute("text", c.getName());
+                st.setAttribute("text", D3webUtils.getAnswerPrompt(to, c)); 
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 		if (to.getInfoStore().getValue(ProKEtProperties.IMAGE) != null) {
 			st.setAttribute("imageAnswer", "true");

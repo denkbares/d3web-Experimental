@@ -3,11 +3,11 @@
 		<table>
 			<tr>
 				<td width=*>
-					<input id="i_unknown_$fullId$" type="radio" $selection$ title="Unknown" 
+					<input id="i_unknown_$fullId$" type="radio" $selection$ title=$title$ 
 					name="group-$count$-$fullId$" $selection$ $if(readonly)$ DISABLED $endif$ />
 				</td>
 				<td id="text-$fullId$" width="95%" $if(inactive)$ class="inactive" $endif$>
-					Unknown
+					$title$
 					$Tooltip()$
 				</td>
 			</tr>

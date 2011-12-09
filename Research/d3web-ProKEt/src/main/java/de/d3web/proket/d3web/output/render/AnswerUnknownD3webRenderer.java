@@ -54,9 +54,10 @@ public class AnswerUnknownD3webRenderer extends AbstractD3webRenderer implements
 		// set basic properties
 		st.setAttribute("fullId", getID(new Choice("Unknown")));// .getName().replace(" ",
 																// "_"));
-		st.setAttribute("parentFullId", getID(parent));// .getName().replace(" ",
-														// "_"));
+		st.setAttribute("parentFullId", getID(parent));// .getName().replace(" ",		// "_"));
 
+                st.setAttribute("title", D3webUtils.getUnknownPrompt()); 
+                
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
 		Blackboard bb = d3webSession.getBlackboard();

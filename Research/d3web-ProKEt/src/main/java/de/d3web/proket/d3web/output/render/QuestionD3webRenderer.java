@@ -77,7 +77,7 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
                 
 		// set some basic properties
 		st.setAttribute("fullId", getID(to));
-		st.setAttribute("title", D3webUtils.getPrompt(to));
+		st.setAttribute("title", D3webUtils.getTOPrompt(to));
                 //st.setAttribute("title", to.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
