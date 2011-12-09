@@ -79,6 +79,8 @@ grant principal com.ecyrd.jspwiki.auth.authorize.Role "Authenticated" {
     permission com.ecyrd.jspwiki.auth.permissions.GroupPermission "*:*", "view";
     permission com.ecyrd.jspwiki.auth.permissions.GroupPermission "*:<groupmember>", "edit";
     permission com.ecyrd.jspwiki.auth.permissions.WikiPermission "*", "createPages,createGroups";
+    permission com.ecyrd.jspwiki.auth.permissions.PagePermission "*:Forum*", "edit";
+    permission com.ecyrd.jspwiki.auth.permissions.PagePermission "*:Persönliche Nachrichten*", "edit";
 };
 
 

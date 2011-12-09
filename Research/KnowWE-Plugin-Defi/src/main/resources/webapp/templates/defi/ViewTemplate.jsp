@@ -33,6 +33,7 @@
   <% if(!user.userIsAdmin()) { %>
   <style type="text/css">
   	#menu-pagecontent, #menu-attach, #menu-info { display:none; }
+  	a.action.edit, a.action.more { display:none; }
   </style>
   <% } %>
 </head>
