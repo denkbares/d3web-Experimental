@@ -27,18 +27,16 @@ import de.d3web.abstraction.inference.PSMethodAbstraction;
 import de.d3web.core.inference.Rule;
 import de.d3web.core.inference.RuleSet;
 import de.d3web.core.inference.condition.CondAnd;
-import de.d3web.core.inference.condition.CondEqual;
 import de.d3web.core.inference.condition.CondMofN;
 import de.d3web.core.inference.condition.CondNot;
 import de.d3web.core.inference.condition.CondOr;
 import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.scoring.ActionHeuristicPS;
 import de.d3web.scoring.Score;
+import de.d3web.we.kdom.condition.CompositeCondition;
+import de.d3web.we.kdom.condition.KDOMConditionFactory;
 import de.d3web.we.kdom.xcl.list.ListSolutionType;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
@@ -57,9 +55,11 @@ import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
  * @author Johannes Dienst
  * @created 14.10.2011
  */
-public class HeuristicDiagnosisTable extends ITable implements KnowledgeUnit<HeuristicDiagnosisTable> {
+public class HeuristicDiagnosisTable extends ITable implements KnowledgeUnit<HeuristicDiagnosisTable>
+{
 
-	public HeuristicDiagnosisTable() {
+	public HeuristicDiagnosisTable()
+	{
 		this.sectionFinder = new AllTextSectionFinder();
 		this.addChildType(new ListSolutionType());
 
@@ -71,13 +71,20 @@ public class HeuristicDiagnosisTable extends ITable implements KnowledgeUnit<Heu
 		this.addChildType(new InnerTable());
 	}
 
+	@Override
+	public KnowledgeUnitCompileScript getCompileScript()
+	{
+		return new HeuristicDiagnosisTableCompileScript();
+	}
+
 	/**
 	 * Handles the creation of rules from HeuristicDiagnosisTableMarkup
 	 * 
 	 * @author Johannes Dienst
 	 * @created 10.11.2011
 	 */
-	public class HeuristicDiagnosisTableCompileScript extends AbstractKnowledgeUnitCompileScript<HeuristicDiagnosisTable> {
+	public class HeuristicDiagnosisTableCompileScript extends AbstractKnowledgeUnitCompileScript<HeuristicDiagnosisTable>
+	{
 
 		@Override
 		public void insertIntoRepository(Section<HeuristicDiagnosisTable> heuristicSec) {
@@ -100,28 +107,17 @@ public class HeuristicDiagnosisTable extends ITable implements KnowledgeUnit<Heu
 			// Create all Conditions: 1st column
 			// TODO First + Second Cell is no Question: Removed it! But what if empty?
 			// TODO no checks or whatsoever. Write security check!
-			List<Section<TableCell>> firstColumn = TableUtils.getColumnCells(
-					0, Sections.findChildOfType(heuristicSec, InnerTable.class));
+			List<Section<TableCellFirstColumn>> firstColumn =
+					Sections.findChildrenOfType(heuristicSec, TableCellFirstColumn.class);
 			firstColumn.remove(0);
 			firstColumn.remove(0);
 
 			LinkedList<Condition> conditionList = new LinkedList<Condition>();
-			for (Section<TableCell> cell : firstColumn) {
-				String conditionText = cell.getText().trim();
-				String[] splittedCondition = conditionText.split("=");
-
-				if (splittedCondition.length != 2) {
-					conditionList.add(null);
-					continue;
-				}
-
-				String questionName = splittedCondition[0].trim();
-				Question question = kb.getManager().searchQuestion(questionName);
-
-				if ( (question == null))
-					question = new QuestionText(kb, questionName);
-				CondEqual cond = new CondEqual(question, new ChoiceValue(splittedCondition[1].trim()));
-				conditionList.add(cond);
+			for (Section<TableCellFirstColumn> cell : firstColumn)
+			{
+				Section<CompositeCondition> cond = Sections.findChildOfType(cell, CompositeCondition.class);
+				Condition d3Cond = KDOMConditionFactory.createCondition(cell.getArticle(), cond);
+				conditionList.add(d3Cond);
 			}
 
 			// Collect cells for columns
@@ -130,14 +126,16 @@ public class HeuristicDiagnosisTable extends ITable implements KnowledgeUnit<Heu
 
 			// Do for every heuristicRule
 			LinkedList<Section<TableCell>> column = null;
-			for (int i = 1; i < cellCount; i++) {
+			List<Section<TableHeaderCell>> headerCells = Sections.findSuccessorsOfType(heuristicSec, TableHeaderCell.class);
 
+			for (int i = 1; i < cellCount; i++)
+			{
 				column = new LinkedList<Section<TableCell>>(
 						TableUtils.getColumnCells(
 								i, Sections.findChildOfType(heuristicSec, InnerTable.class)));
 
 				// get conjunction type
-				String conjunctionType = column.removeFirst().getText().trim();
+				String conjunctionType = headerCells.get(i).getText().trim();
 
 				// get scoring
 				String scoring = column.removeFirst().getText().trim();
@@ -157,10 +155,7 @@ public class HeuristicDiagnosisTable extends ITable implements KnowledgeUnit<Heu
 						choices.add(null);
 				}
 
-				// There are three possible conjunction Types
-				//				AND
-				//				OR
-				//				x from y with x<=y
+				// Build condition
 				Condition condition = null;
 				List<Condition> terms = new ArrayList<Condition>();
 				for (int j = 0; j < choices.size(); j++) {
@@ -172,6 +167,10 @@ public class HeuristicDiagnosisTable extends ITable implements KnowledgeUnit<Heu
 						terms.add(new CondNot(conditionList.get(j)));
 				}
 
+				// There are three possible conjunction Types
+				//				AND
+				//				OR
+				//				x from y with x<=y
 				if (conjunctionType.equals("AND")) {
 					condition = new CondAnd(terms);
 				}
@@ -211,7 +210,7 @@ public class HeuristicDiagnosisTable extends ITable implements KnowledgeUnit<Heu
 					ruleSet.addRule(rule);
 				}
 
-
+				System.out.println();
 			}
 
 		}
@@ -224,9 +223,5 @@ public class HeuristicDiagnosisTable extends ITable implements KnowledgeUnit<Heu
 
 	}
 
-	@Override
-	public KnowledgeUnitCompileScript getCompileScript() {
-		return new HeuristicDiagnosisTableCompileScript();
-	}
 
 }

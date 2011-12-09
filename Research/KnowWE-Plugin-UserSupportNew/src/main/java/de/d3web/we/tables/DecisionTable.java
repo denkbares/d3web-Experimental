@@ -93,7 +93,7 @@ public class DecisionTable extends ITable implements KnowledgeUnit<DecisionTable
 			// TODO First Cell is no Question: Removed it! But what if empty?
 			List<Section<TableCell>> firstColumn = TableUtils.getColumnCells(
 					0, Sections.findChildOfType(decisionSec, InnerTable.class));
-			firstColumn.remove(0);
+
 			LinkedList<Question> questionList = new LinkedList<Question>();
 			for (Section<TableCell> cell : firstColumn)
 			{
@@ -120,33 +120,36 @@ public class DecisionTable extends ITable implements KnowledgeUnit<DecisionTable
 						TableUtils.getColumnCells(
 								i, Sections.findChildOfType(decisionSec, InnerTable.class)));
 				// Remove RuleName
-				column.removeFirst();
+				//				column.removeFirst();
 
 				// create rule choices
 				Section<TableCell> cell = null;
 				List<ChoiceValue> choices = new ArrayList<ChoiceValue>();
-				for (int j = 0; j < column.size(); j++) {
-					cell = column.removeFirst();
+				while (true)
+				{
+					cell = column.get(0);
 					String cellText = cell.getText().trim();
 
+					// only until we get to the actions
 					if (cellText.equals("x") || cellText.equals("")) break;
+
+					column.removeFirst();
+
 					ChoiceValue choice = null;
 					if (cellText.equals("Yes"))
 						choice = new ChoiceValue("YES");
-					if (cellText.equals("No"))
+					else if (cellText.equals("No"))
 						choice = new ChoiceValue("NO");
 					choices.add(choice);
 				}
 
 				// create condition from choices
 				List<Condition> conditions = new ArrayList<Condition>();
-				for (int j = 0; j < choices.size(); j++) {
+				for (int j = 0; j < choices.size(); j++)
+				{
 					CondEqual cond = new CondEqual(questionList.get(j), choices.get(j));
 					conditions.add(cond);
 				}
-
-				// Create final CondAnd
-				CondAnd conditionAnd = new CondAnd(conditions);
 
 				// Get the Actions from the rest of TableCells
 				// TODO Right ChoiceValue set?
@@ -154,22 +157,26 @@ public class DecisionTable extends ITable implements KnowledgeUnit<DecisionTable
 				ActionSetValue action = null;
 				// int to get the right questions for actions
 				int b = choices.size();
-				if ( cell != null ) {
-					if ( cell.getText().trim().equals("x") ) {
-						action = new ActionSetValue();
-						action.setQuestion(questionList.get(b));
-						action.setValue(new ChoiceValue(cell.getText().trim()));
-						actions.add(action);
-					}
-					b++;
-				}
+				//				if ( cell != null )
+				//				{
+				//					if ( cell.getText().trim().equals("x") )
+				//					{
+				//						action = new ActionSetValue();
+				//						action.setQuestion(questionList.get(b));
+				//						action.setValue(new ChoiceValue(cell.getText().trim()));
+				//						actions.add(action);
+				//					}
+				//					b++;
+				//				}
 
-				while ( !column.isEmpty() ) {
+				while (!column.isEmpty())
+				{
 					cell = column.removeFirst();
 					String cellText = cell.getText().trim();
 
 					// action not to fire
-					if (cellText.equals("")) {
+					if (cellText.equals(""))
+					{
 						b++;
 						continue;
 					}
@@ -179,9 +186,13 @@ public class DecisionTable extends ITable implements KnowledgeUnit<DecisionTable
 					actions.add(action);
 				}
 
+				// Create final CondAnd
+				CondAnd conditionAnd = new CondAnd(conditions);
+
 				// Create Rule for every action
 				RuleSet ruleSet = new RuleSet();
-				for (ActionSetValue actionValue : actions) {
+				for (ActionSetValue actionValue : actions)
+				{
 					Rule rule = new Rule(PSMethodAbstraction.class);
 					rule.setAction(actionValue);
 					rule.setCondition(conditionAnd);

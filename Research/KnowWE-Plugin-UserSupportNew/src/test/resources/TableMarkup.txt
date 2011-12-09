@@ -23,16 +23,16 @@ EntscheidungsTabelle {
 
 %%HeuristicDiagnosisTable
 HeuristischeDiagnoseTabelle {
-    Verknüpfungsart          | und     | oder   | oder  | 2 aus 4,
-    Bewertung                | P4      | P7     | N7    | N7,   
-    Nadeln = nein            | +       |        | -     | ,
-    Bräunliche Stammfarbe    |         |        | -     | ,
-    Frucht: Propeller        |         | +      |       | -,
-    Blüte: Weiß/Gelb         |         | +      |       | -,
-    Ein Blatt pro Stiel      |         | +      | -     | ,
-    -- ungeteiltes Blatt     |         |        | -     | ,
-      -- herzförmiges Form   |         | +      |       | -,
-      --- gesägter Blattrand |         | +      |       | -,
+    Verknüpfungsart                 | und     | oder   | oder  | 2 aus 4,
+    Bewertung                       | P4      | P7     | N7    | N7,   
+    Nadeln = nein                   | +       |        | -     | ,
+    Bräunliche Stammfarbe = ja      |         |        | -     | ,
+    Propeller = ja                  |         | +      |       | -,
+    Weiß = ja                       |         | +      |       | -,
+    Ein Blatt pro Stiel = ja        |         | +      | -     | ,
+    -- ungeteiltes Blatt = ja       |         |        | -     | ,
+      -- herzförmiges Form = nein   |         | +      |       | -,
+      --- gesägter Blattrand = nein |         | +      |       | -,
     }
     
 @package tabledemo
