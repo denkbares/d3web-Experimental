@@ -305,11 +305,29 @@ KNOWWE.plugin.usersupport = function() {
 		 */
 		getCompletions : function(token, context, id) {
 			var found = [];
+			foundArray = new Array("undefined");
 			KNOWWE.plugin.usersupport.gatherDialogComponentCompletions(token, found, id);
-      		found = KNOWWE.plugin.usersupport.gatherStaticCompletions(token, found);
+			KNOWWE.plugin.usersupport.wait(id);
+      		found = KNOWWE.plugin.usersupport.gatherStaticCompletions(token, found);     		
 			found = found.concat(foundArray);
     		return found;
- 		}
+ 		},
+ 		
+ 		/**
+ 		 * 
+ 		 * Function    : wait
+ 		 * @param id   : for which element to show the ajax-loader
+ 		 * Description : Blocks workflow and user-interaction until
+ 		 * 				 Dialog-Sugestions are ready
+ 		 */
+ 		wait : function(id) {
+  			KNOWWE.plugin.usersupport.showAjaxLoader(id);
+			while (foundArray.length == 1)
+				if (foundArray[1] != "undefined")
+					break;
+  			KNOWWE.plugin.usersupport.hideAjaxLoader(id);
+		}
+
 	}
 }();
 
