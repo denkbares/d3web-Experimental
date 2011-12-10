@@ -220,6 +220,7 @@
 		<module>KnowWE-Plugin-ProKEt</module>
 		<module>KnowWE-Plugin-MedicineOntology</module>
 		<module>KnowWE-Plugin-DiaFlux-Anomalies</module>
+		<module>KnowWE-Plugin-CodeMirror</module>
 	</modules>
 	<repositories>
 		<repository>
