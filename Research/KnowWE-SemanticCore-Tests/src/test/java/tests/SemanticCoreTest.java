@@ -71,6 +71,7 @@ public class SemanticCoreTest {
 
 		Map<String, String> map = new HashMap<String, String>();
 		map.put(KnowWEAttributes.USER, "testuser");
+		map.put(KnowWEAttributes.WEB, KnowWEEnvironment.DEFAULT_WEB);
 		context = new ActionContext("", "", map, null, null, null, null);
 		sc = SemanticCoreDelegator.getInstance();
 	}
