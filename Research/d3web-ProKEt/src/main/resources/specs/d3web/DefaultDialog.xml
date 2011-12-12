@@ -10,7 +10,7 @@
 	userprefix = "EuraHS" 
 	login = "off"
         required = "none"
-	language = "de"
+	language = ""
         logging = "ON"
 	>
 	<data kb="Languages.d3web" />

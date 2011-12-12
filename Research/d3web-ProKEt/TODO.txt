@@ -130,13 +130,22 @@ LISTING of possible dialog styles etc
 
 REFACTOR
 --------
-- Language String Template:
-  --> LanguageSelectFlags und RightHeaderLanguageLogoRoute zusammenlegen, selbe
+DONE - Language String Template:  LanguageSelectFlags und RightHeaderLanguageLogoRoute zusammenlegen, selbe
       Basis verwenden!
 DONE - Include Language toggle for ALL knowledge base related elements!
-- URGENTLY: js file(s)
-- PROBLEM MIT YN Fragen und Sprachen --> choices können dann nicht ausgelesen werden
+DONE - PROBLEM MIT YN Fragen und Sprachen --> choices können dann nicht ausgelesen werden
+ (helper method retrieves verbalization of YN / adapt one day when YN verb is done via markup
+  and stored in KB)
 
+- URGENTLY: js file(s)
+- Setting of default -Data folder
+- Dateinamen für Logfiles? Currently: Date(yyMMdd)_Session.txt
+- Unter welchem Namen gecklickte Widgets speichern?! (für Fragen momentan Fragetext?!)
+- JEDEN Click loggen, also auch clicks auf nicht-Frage Elemente
+!!! - setzen von ALLEN werten in anderer Sprache geht nicht!
+- Startup JS Errors!
+- Check logging of image answers
+- unknown zu weit rechts verrückt bei num/text questinos
 
 
 BROWSER ABFRAGE MIT JQUERY

@@ -215,6 +215,11 @@ $(function() {
     // check browser and warn if the wrong one is used
     handleUnsupportedBrowsers();
 	
+    var browser = retrieveBrowserVal();    
+    var user = retrieveUserVal();
+    d3web_ue_logBrowserAndUser(browser, user);
+    // 
+    // 
     // move the content below the header
     moveContentPart();
 });
@@ -319,33 +324,51 @@ function initFunctionality() {
 	
     // bind reset button to resetSession() function
     $('#reset').unbind('click').click(function() {
+        logWidgetClicked($(this));
         d3web_resetSession();
     });
 
     // bind send/save button to sendexit function
     $('#savecase').unbind('click').click(function(event) {
+        logWidgetClicked($(this));
         d3web_addFacts($(this));
         d3web_prepareSave();
     });
 
     // bind the loadcase button to making the fileselect list visible
     $('#loadcase').unbind('click').click(function(event) {
+        logWidgetClicked($(this));
         $("#jqLoadCaseDialog").dialog("open");
     });
 	
     $('#followupbutton').unbind('click').click(function(event) {
+        logWidgetClicked($(this));
         $("#jqFollowUpDialog").dialog("open");
     });
 	
     $('#summary').unbind('click').click(function(event){
+        logWidgetClicked($(this));
         d3web_updateSummary();
         $("#jqSummaryDialog").dialog("open");
     });
 	
     $('#statistics').unbind('click').click(function(event){
+        logWidgetClicked($(this));
         gotoStatistics();
     });
+    
+    // click on info-tooltip
+    $('img[id*="tooltip"]').unbind('click').click(function(event){
+        logTooltipWidgetClicked($(this));
+    });
+    
+    // click on language toggle
+    $('img[id*="lang"]').unbind('click').click(function(event){
+        logLanguageWidgetClicked($(this));
+        toggleLanguage($(this));
+    })
 	
+    // click on image answer
     $('[type=imageAnswer]').unbind('mouseenter').mouseenter(function() {
         $("#img-" + $(this).attr("id")).focus();
     }).mouseleave(function() {
@@ -491,7 +514,6 @@ function d3web_addFacts() {
         i++;
     }
 	
-	
     //link = window.location.href.replace(window.location.search, "") + link.toString();
 
     $.ajax({
@@ -514,7 +536,7 @@ function d3web_addFacts() {
             }
         },
         error : function(html) {
-            alert("ajax error");
+            alert("ajax error add facts");
         }
     });
 	
@@ -575,25 +597,10 @@ function d3web_updateSummary() {
             updateDialog(html);
         },
         error : function(html) {
-            alert("ajax error");
+            alert("ajax error update summary");
         }
     });
 	
-}
-
-function toggle_language(langID){
-    var link = $.query.set("action", "language").set("langID", langID.toString());
-    link = window.location.href.replace(window.location.search, "") + link;
-
-    $.ajax({
-        type : "GET",
-        url : link,
-        cache : false, // needed for IE, call is not made otherwise
-        success : function(html) {
-            window.location.reload(true);
-            initFunctionality();
-        }
-    });
 }
 
 
@@ -941,6 +948,168 @@ function d3web_show_solutions(target_id) {
         url : link,
         success : function(html) {
             $('#' + target_id).html(html).fadeIn(3000);
+        }
+    });
+}
+
+/**
+ * Retrieve the browser information, i.e. the type and version. 
+ * Returns a String in the form "<type> <version>"
+ */
+function retrieveBrowserVal(){
+    var val = "";
+    // retrieve the browser used
+    jQuery.each(jQuery.browser, function(i, value) {
+        var v = "";
+        if(i=="version"){
+            v = value + " ";
+        } else{
+            v = i + " ";
+        }
+        val += v;
+    });
+    return val;
+}
+
+function retrieveUserVal(){
+    return "user";
+}
+
+/**
+ * Send Ajax request for logging basic information, currently browser information
+ * type and version, as well as user info
+ */
+function d3web_ue_logBrowserAndUser(browser, user){
+    
+    var link = $.query.set("action", "logInit").set("browser", browser)
+        .set("user", user).toString();
+    link = window.location.href.replace(window.location.search, "") + link;
+
+    $.ajax({
+        type : "GET",
+        // async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function() {
+            // no action needed
+        }
+    });
+}
+
+// log clicks on widgets that do NOT set values in d3web, e.g. info button,
+// reset, save case etc
+function logWidgetClicked(el){
+    
+    var link = $.query.set("action", "logWidget").set("widget", el.attr("id")).toString();
+    link = window.location.href.replace(window.location.search, "") + link;
+
+    $.ajax({
+        type : "GET",
+        // async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function() {
+            // no action needed
+        }
+    });
+}
+
+function logLanguageWidgetClicked(el){
+    
+    var id = el.attr("id");
+    var lang;
+    
+    if(id.indexOf("de") != -1){
+        lang = "DE";
+    } else if (id.indexOf("en") != -1){
+        lang = "EN";
+    } else if (id.indexOf("es") != -1){
+        lang = "ES";
+    } else if (id.indexOf("it") != -1){
+        lang = "IT";
+    }  else if (id.indexOf("fr") != -1){
+        lang = "FR";
+    }  else if (id.indexOf("pl") != -1){
+        lang = "PL";
+    }
+    
+    var link = $.query.set("action", "logLanguageWidget").set("widget", el.attr("id")).set("language", lang).toString();
+    link = window.location.href.replace(window.location.search, "") + link;
+
+    $.ajax({
+        type : "GET",
+        // async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function() {
+            // no action needed
+        }
+    });
+}
+
+
+function toggleLanguage(el){
+    
+    var id = el.attr("id");
+    var langID;
+    
+    if(id.indexOf("de") != -1){
+        langID = 1;
+    } else if (id.indexOf("en") != -1){
+        langID = 2;
+    } else if (id.indexOf("es") != -1){
+        langID = 3;
+    } else if (id.indexOf("it") != -1){
+        langID = 4;
+    }  else if (id.indexOf("fr") != -1){
+        langID = 5;
+    }  else if (id.indexOf("pl") != -1){
+        langID = 6;
+    }
+     
+    var link = $.query.set("action", "language").set("langID", langID);
+    link = window.location.href.replace(window.location.search, "") + link;
+
+    $.ajax({
+        type : "GET",
+        url : link,
+        cache : false, // needed for IE, call is not made otherwise
+        success : function(html) {
+            window.location.reload(true);
+            initFunctionality();
+        }
+    });
+}
+
+function logLanguageWidgetClicked(el){
+    
+    var id = el.attr("id");
+    var lang;
+    
+    if(id.indexOf("de") != -1){
+        lang = "DE";
+    } else if (id.indexOf("en") != -1){
+        lang = "EN";
+    } else if (id.indexOf("es") != -1){
+        lang = "ES";
+    } else if (id.indexOf("it") != -1){
+        lang = "IT";
+    }  else if (id.indexOf("fr") != -1){
+        lang = "FR";
+    }  else if (id.indexOf("pl") != -1){
+        lang = "PL";
+    }
+    
+    var link = $.query.set("action", "logLanguageWidget").set("widget", el.attr("id")).set("language", lang).toString();
+    link = window.location.href.replace(window.location.search, "") + link;
+
+    $.ajax({
+        type : "GET",
+        // async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function() {
+            // no action needed
         }
     });
 }

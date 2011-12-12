@@ -1,35 +1,22 @@
 
-<table>
-	<tbody>
-	<tr>
-		<td style="padding-left:10px;">
-			<img src="kbimg/enFlag.png" 
-                         alt="english" width="30px"
-                         onclick="toggle_language(2)" />
+		<td>
+			<img id="lang_en" src="kbimg/enFlag.png" alt="english" width="30px" />
 		</td>
-		<td style="padding-left:10px;">
-			<img src="kbimg/frFlag.png" alt="français" width="30px" 
-                        onclick="toggle_language(5)/>
+		<td style="padding-left:12px;">
+			<img id="lang_fr" src="kbimg/frFlag.png" alt="français" width="30px" />
 		</td>
-		<td style="padding-left:10px;">
-			<img src="kbimg/itFlag.png" alt="italiano" width="30px" 
-                        onclick="toggle_language(4)/>
+		<td style="padding-left:12px;">
+			<img id="lang_it" src="kbimg/itFlag.png" alt="italiano" width="30px" />
 		</td>
-		<td style="padding-left:10px;">
-			<img src="kbimg/deFlag.png" alt="deutsch" width="30px" 
-                        onclick="toggle_language(1) />
+		<td style="padding-left:12px;">
+			<img id="lang_de" src="kbimg/deFlag.png" alt="deutsch" width="30px"/>
 		</td>
-		<td style="padding-left:10px;">
-			<img src="kbimg/esFlag.png" alt="español" width="30px" 
-                        onclick="toggle_language(3)/>
+		<td style="padding-left:12px;">
+			<img id="lang_es" src="kbimg/esFlag.png" alt="español" width="30px" />
 		</td>
-		<td style="padding-left:10px;">
-			<img src="kbimg/plFlag.png" alt="polski" width="30px" 
-                        onclick="toggle_language(6)/>
+		<td style="padding-left:12px;">
+			<img id="lang_pl" src="kbimg/plFlag.png" alt="polski" width="30px" />
 		</td>
-		<td style="padding-left:20px;">
+		<td style="padding-left:25px;" rowspan="2">
 			$Logo()$
 		</td>
-	</tr>
-	</tbody>
-</table>

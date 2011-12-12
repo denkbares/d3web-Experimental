@@ -876,18 +876,18 @@ public class D3webUtils {
             case 1:   // german
                 prompt =
                         to.getInfoStore().getValue(MMInfo.PROMPT, Locale.GERMAN);
-                System.out.println(prompt);
+                
                 break;
             case 2:   // english
                 prompt =
                         to.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
-                System.out.println(prompt);
+               
                 break;
             case 3:   // spanish
                 Locale SPANISH = new Locale("es", "ES");
                 prompt =
                         to.getInfoStore().getValue(MMInfo.PROMPT, SPANISH);
-                System.out.println(prompt);
+               
                 break;
             case 4:   // italian
                 prompt =
@@ -933,18 +933,18 @@ public class D3webUtils {
             case 1:   // german
                 prompt =
                         c.getInfoStore().getValue(MMInfo.PROMPT, Locale.GERMAN);
-                System.out.println(prompt);
+                
                 break;
             case 2:   // english
                 prompt =
                         c.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
-                System.out.println(prompt);
+                
                 break;
             case 3:   // spanish
                 Locale SPANISH = new Locale("es", "ES");
                 prompt =
                         c.getInfoStore().getValue(MMInfo.PROMPT, SPANISH);
-                System.out.println(prompt);
+                
                 break;
             case 4:   // italian
                 prompt =

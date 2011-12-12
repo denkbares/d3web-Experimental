@@ -75,6 +75,7 @@ public class GlobalSettings {
     private int localeIdent = 0;
     /* Save log files */
     private String logFolder = "";
+    private boolean initLog = false;
 
     /* The getters for retrieving all those values */
     public String getProketPath() {
@@ -176,5 +177,13 @@ public class GlobalSettings {
 
     public void setLocaleIdentifier(int localId) {
         this.localeIdent = localId;
+    }
+    
+    public boolean initLogged() {
+        return this.initLog;
+    }
+
+    public void setInitLogged(boolean iLog) {
+        this.initLog = iLog;
     }
 }
