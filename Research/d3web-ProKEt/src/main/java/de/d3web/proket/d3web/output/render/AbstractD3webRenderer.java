@@ -517,7 +517,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 		else if (no instanceof Choice) {
 			prefix = "a";
 		}
-		return prefix + "_" + no.getName().replaceAll("\\W", "");
+		return prefix + "_" + no.getName().replaceAll("\\W", "_");
 	}
 
 }

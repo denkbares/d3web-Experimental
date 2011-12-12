@@ -246,7 +246,7 @@ function initFunctionality() {
 	 */
     $('[type=radio]').unbind('click').click(function() {
         d3web_storeQuestionOC($(this));
-        d3web_addFacts($(this));
+        d3web_addFacts();
     });
 	
 	
@@ -255,7 +255,7 @@ function initFunctionality() {
 	 * i.e., a v*/
     $('[type=checkbox]').unbind('click').click(function() {
         d3web_storeQuestionMC($(this));
-        d3web_addFacts($(this));
+        d3web_addFacts();
     });
 
     $('[id^=ok-]').unbind('click').click(function(event) {
@@ -269,14 +269,14 @@ function initFunctionality() {
             var code = (e.keyCode ? e.keyCode : e.which);
             if (code == 13) {
                 d3web_storeQuestionText($(this));
-                d3web_addFacts($(this));
+                d3web_addFacts();
             }
         });
     });
 	
     $('[type=text]').unbind('focusout').focusout(function() {
         d3web_storeQuestionText($(this));
-        d3web_addFacts($(this));
+        d3web_addFacts();
     });
     
     $('[type=num]').unbind('click').click(function() {
@@ -285,19 +285,19 @@ function initFunctionality() {
             var code = (e.keyCode ? e.keyCode : e.which);
             if (code == 13) {
                 d3web_storeQuestionNum($(this));
-                d3web_addFacts($(this));
+                d3web_addFacts();
             }
         });
     });
 	
     $('[type=num]').unbind('focusout').focusout(function() {
         d3web_storeQuestionNum($(this));
-        d3web_addFacts($(this));
+        d3web_addFacts();
     });
 	
     $('[type=textselect]').unbind('change').change(function() {
         d3web_storeQuestionText($(this));
-        d3web_addFacts($(this));
+        d3web_addFacts();
     });
 	
     $("[type=Yearselect]," +
@@ -308,7 +308,7 @@ function initFunctionality() {
         "[type=Secondselect]"
         ).unbind('change').change(function() {
         d3web_storeQuestionDate($(this));
-        d3web_addFacts($(this));
+        d3web_addFacts();
     });
 
     $('[type=textarea]').unbind('click').click(function() {
@@ -317,7 +317,7 @@ function initFunctionality() {
             var code = (e.keyCode ? e.keyCode : e.which);
             if (code == 13) {
                 d3web_storeQuestionText($(this));
-                d3web_addFacts($(this));
+                d3web_addFacts();
             }
         });
     });
@@ -331,7 +331,7 @@ function initFunctionality() {
     // bind send/save button to sendexit function
     $('#savecase').unbind('click').click(function(event) {
         logWidgetClicked($(this));
-        d3web_addFacts($(this));
+        d3web_addFacts();
         d3web_prepareSave();
     });
 
@@ -476,8 +476,14 @@ function getAnswerName(input) {
 function getTerminologyObjectName(input, prefix) {
     var parent = $(input.parents("[id^=" + prefix + "_]"));
     var valTd = $("#text-" + parent.attr("id"));
-    // get text of this element only
-    var text = valTd.clone().children().remove().end().text(); 
+    
+    // var text = valTd.clone().children().remove().end().text(); 
+   
+    var pref = prefix + "_";
+   
+    // get id (sthg like a_eine_Antwort) and replace a_ and ALL "_" with """
+    var text = parent.attr("id").replace(pref, "").replace(/_/g, " ");
+   
     return $.trim(text);
 }
 
