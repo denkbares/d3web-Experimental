@@ -30,6 +30,7 @@ import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Sections;
 
 /**
  * @author Jochen
@@ -52,7 +53,7 @@ public class AppendToPageContentAction extends AbstractAction {
 		// append
 		Map<String, String> nodesMap = new HashMap<String, String>();
 		nodesMap.put(art.getSection().getID(), art.getSection().getOriginalText() + appendText);
-		mgr.replaceKDOMNodesSaveAndBuild(context, name, nodesMap);
+		Sections.replaceSections(context, nodesMap);
 
 	}
 

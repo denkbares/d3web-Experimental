@@ -274,8 +274,7 @@ public class DroolsAction extends AbstractAction {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put(article.getSection().getID(), article.getSection().getOriginalText()
 					+ sessionText.toString());
-			mgr.replaceKDOMNodesSaveAndBuild(context, article.getTitle(),
-					map);
+			Sections.replaceSections(context, map);
 			returnMessage(context, "Session was successfully saved.", ResponseType.OK);
 			return;
 		}

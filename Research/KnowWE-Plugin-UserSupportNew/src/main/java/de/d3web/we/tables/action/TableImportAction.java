@@ -33,6 +33,7 @@ import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.ActionContext;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.parsing.Sections;
 
 
 /**
@@ -65,8 +66,8 @@ public class TableImportAction extends AbstractAction {
 			// TODO Right method?
 			Map<String,String> nodesMap = new HashMap<String,String>();
 			nodesMap.put(tableId, tableMarkup);
-			KnowWEEnvironment.getInstance().getArticleManager(context.getWeb()).
-			replaceKDOMNodesSaveAndBuild(context, title, nodesMap);
+			Sections.
+			replaceSections(context, nodesMap);
 
 			Writer writer = context.getWriter();
 			writer.append("Import successful");

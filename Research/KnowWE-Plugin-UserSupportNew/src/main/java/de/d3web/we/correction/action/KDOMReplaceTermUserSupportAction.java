@@ -88,7 +88,7 @@ public class KDOMReplaceTermUserSupportAction extends AbstractAction {
 
 		nodesMap.put(nodeID, newNodeText);
 		nodesMap.put(nodeID, newText);
-		mgr.replaceKDOMNodesSaveAndBuild(context, name, nodesMap);
+		Sections.replaceSections(context, nodesMap);
 
 		context.setContentType("text/html; charset=UTF-8");
 		context.getWriter().write("done");

@@ -88,7 +88,7 @@ public class AboutMeSaveAction extends AbstractAction {
 		nodesMap.put(child.getID(), "%%aboutme\n"
 				+ params.toString()
 				+ "%\n");
-		mgr.replaceKDOMNodesSaveAndBuild(context, title, nodesMap);
+		Sections.replaceSections(context, nodesMap);
 
 		HttpServletResponse response = context.getResponse();
 		response.sendRedirect("Wiki.jsp?page=" + username);

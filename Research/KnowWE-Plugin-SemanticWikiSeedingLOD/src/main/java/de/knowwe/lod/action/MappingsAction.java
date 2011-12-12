@@ -152,11 +152,8 @@ public class MappingsAction extends AbstractAction {
 								+ System.getProperty("line.separator") + add);
 			}
 
-			KnowWEEnvironment
-						.getInstance()
-						.getArticleManager(web)
-						.replaceKDOMNodesSaveAndBuild(context, mappingTopic,
-								nodesMap);
+			Sections
+						.replaceSections(context, nodesMap);
 
 			StringBuffer updates = new StringBuffer();
 

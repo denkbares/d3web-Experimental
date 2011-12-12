@@ -251,7 +251,7 @@ public class PoiUtils {
 				Map<String, String> nodeMap = new HashMap<String, String>();
 				nodeMap.put(tableId, buildi.toString());
 
-				manager.replaceKDOMNodesSaveAndBuild(context, article, nodeMap);
+				Sections.replaceSections(context, nodeMap);
 				Sections.findSuccessor(table, InnerTable.class);
 			}
 		}

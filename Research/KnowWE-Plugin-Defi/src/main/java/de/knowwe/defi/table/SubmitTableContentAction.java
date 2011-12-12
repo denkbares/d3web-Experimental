@@ -109,8 +109,8 @@ public class SubmitTableContentAction extends AbstractAction {
 			}
 
 			// submit change
-			articleManager.replaceKDOMNodesSaveAndBuild(context,
-					articleNameForData, nodesMap);
+			Sections.replaceSections(context,
+					nodesMap);
 		}
 
 		context.getOutputStream().write(" (Wurde gespeichert)".getBytes());

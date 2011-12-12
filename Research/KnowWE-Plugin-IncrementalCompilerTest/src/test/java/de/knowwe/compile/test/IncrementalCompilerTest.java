@@ -186,8 +186,8 @@ public class IncrementalCompilerTest {
 		if (oldSection != null) {
 			Map<String, String> nodesMap = new HashMap<String, String>();
 			nodesMap.put(oldSection.getID(), newText);
-			articleManager.replaceKDOMNodesSaveAndBuild(TestUtils.createTestActionContext("",
-					""), Vocabulary.ARTICLENAME, nodesMap);
+			Sections.replaceSections(TestUtils.createTestActionContext("",
+					""), nodesMap);
 		}
 		else {
 			Logger.getLogger(getClass()).fatal("Unable to get section with text: " +

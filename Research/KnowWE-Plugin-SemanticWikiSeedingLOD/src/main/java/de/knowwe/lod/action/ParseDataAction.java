@@ -190,8 +190,7 @@ public class ParseDataAction extends AbstractAction {
 					Map<String, String> nodesMap = new HashMap<String, String>();
 					nodesMap.put(lastNode.getChildren().get(0).getID(), add);
 
-					KnowWEEnvironment.getInstance().getArticleManager(
-							web).replaceKDOMNodesSaveAndBuild(context, noParseTopic, nodesMap);
+					Sections.replaceSections(context, nodesMap);
 
 				}
 
@@ -287,7 +286,7 @@ public class ParseDataAction extends AbstractAction {
 						}
 
 					}
-					mgr.replaceKDOMNodesSaveAndBuild(context, ignoredTopic, nodesMap);
+					Sections.replaceSections(context, nodesMap);
 				}
 			}
 			i++;
@@ -326,8 +325,7 @@ public class ParseDataAction extends AbstractAction {
 				Map<String, String> nodesMap = new HashMap<String, String>();
 				nodesMap.put(lastNode.getChildren().get(0).getID(), add);
 
-				KnowWEEnvironment.getInstance().getArticleManager(
-						web).replaceKDOMNodesSaveAndBuild(context, mappingTopic, nodesMap);
+				Sections.replaceSections(context, nodesMap);
 
 				context.getWriter().write(
 						"<br/><div style='margin-left:10px;'><img src='KnowWEExtension/images/success.png' align='top'>"

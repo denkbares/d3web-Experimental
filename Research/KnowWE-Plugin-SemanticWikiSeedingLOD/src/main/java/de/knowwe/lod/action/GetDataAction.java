@@ -147,8 +147,7 @@ public class GetDataAction extends AbstractAction {
 									"<br/><p><b>Mapping erfolgreich aktualisiert.</b></p>");
 						}
 					}
-					KnowWEEnvironment.getInstance().getArticleManager(
-							web).replaceKDOMNodesSaveAndBuild(context, mappingTopic, nodesMap);
+					Sections.replaceSections(context, nodesMap);
 				}
 
 				String hermesConcept = concept;

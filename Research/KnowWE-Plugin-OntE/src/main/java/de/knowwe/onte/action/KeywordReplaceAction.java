@@ -81,7 +81,7 @@ public class KeywordReplaceAction extends AbstractAction {
 		String newNodeText = originalText.replace(originalText, newText);
 
 		nodesMap.put(nodeID, newNodeText);
-		mgr.replaceKDOMNodesSaveAndBuild(context, name, nodesMap);
+		Sections.replaceSections(context, nodesMap);
 
 		context.setContentType("text/html; charset=UTF-8");
 		context.getWriter().write("done");

@@ -83,7 +83,7 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 					nodesMap.put(possibleDelimiter.getID(), "");
 				}
 
-				mgr.replaceKDOMNodesSaveAndBuild(context, articlename, nodesMap);
+				Sections.replaceSections(context, nodesMap);
 
 				// .. and finally delete the page lock
 				KnowWEEnvironment.getInstance().getWikiConnector().undoPageLocked(articlename);

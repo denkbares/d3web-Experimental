@@ -60,8 +60,8 @@ public class InsertAdditionalTableVersionAction extends AbstractAction {
 				+ newContent + "\n-";
 		nodesMap.put(contentSectionForTableID.getID(),
 				completeNewText);
-		articleManager.replaceKDOMNodesSaveAndBuild(context,
-				articleName, nodesMap);
+		Sections.replaceSections(context,
+				nodesMap);
 	}
 
 }

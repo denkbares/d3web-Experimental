@@ -71,7 +71,7 @@ public class InsertRelationAction extends AbstractAction {
 						Map<String, String> nodesMap = new HashMap<String, String>();
 						nodesMap.put(description.getID(), description.getOriginalText() + " - "
 								+ insertion.toString());
-						articleManager.replaceKDOMNodesSaveAndBuild(context, topic, nodesMap);
+						Sections.replaceSections(context, nodesMap);
 					}
 					return "done";
 				}

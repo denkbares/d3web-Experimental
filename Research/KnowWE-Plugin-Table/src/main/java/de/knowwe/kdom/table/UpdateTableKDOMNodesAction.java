@@ -29,6 +29,7 @@ import de.knowwe.core.KnowWEAttributes;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.parsing.Sections;
 
 /**
  * <p>
@@ -82,7 +83,7 @@ public class UpdateTableKDOMNodesAction extends AbstractAction {
 					nodesMap.put(node[0], node[1]);
 				}
 			}
-			mgr.replaceKDOMNodesSaveAndBuild(context, name, nodesMap);
+			Sections.replaceSections(context, nodesMap);
 		}
 
 		return "done";

@@ -110,7 +110,7 @@ public class TestcaseImportAction extends AbstractAction {
 
 		Map<String, String> nodesMap = new HashMap<String, String>();
 		nodesMap.put(sectionID, stcs);
-		manager.replaceKDOMNodesSaveAndBuild(context, section.getTitle(), nodesMap);
+		Sections.replaceSections(context, nodesMap);
 		context.getResponse().sendRedirect("Wiki.jsp?page=" + section.getTitle());
 	}
 

@@ -185,8 +185,8 @@ public class OntEUpdateTest {
 		if (oldSection != null) {
 			Map<String, String> nodesMap = new HashMap<String, String>();
 			nodesMap.put(oldSection.getID(), newText);
-			manager.replaceKDOMNodesSaveAndBuild(TestUtils.createTestActionContext("", ""),
-					Vocabulary.ARTICLENAME, nodesMap);
+			Sections.replaceSections(TestUtils.createTestActionContext("", ""),
+					nodesMap);
 		}
 		else {
 			Logger.getLogger(getClass()).warn("Unable to get section with text: " + oldText);

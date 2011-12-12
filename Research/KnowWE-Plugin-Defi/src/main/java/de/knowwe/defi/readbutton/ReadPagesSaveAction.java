@@ -74,7 +74,7 @@ public class ReadPagesSaveAction extends AbstractAction {
 			}
 			HashMap<String, String> nodesMap = new HashMap<String, String>();
 			nodesMap.put(child.getID(), "%%data\r\n@readpages: " + readpages + "\r\n%");
-			mgr.replaceKDOMNodesSaveAndBuild(context, title, nodesMap);
+			Sections.replaceSections(context, nodesMap);
 		}
 		// ...else try to add a new entry
 		else {
@@ -93,7 +93,7 @@ public class ReadPagesSaveAction extends AbstractAction {
 				HashMap<String, String> nodesMap = new HashMap<String, String>();
 				readpages += pagename + "::" + id + "::" + value + "::" + 0 + ";";
 				nodesMap.put(child.getID(), "%%data\r\n@readpages: " + readpages + "\r\n%");
-				mgr.replaceKDOMNodesSaveAndBuild(context, title, nodesMap);
+				Sections.replaceSections(context, nodesMap);
 			}
 		}
 
