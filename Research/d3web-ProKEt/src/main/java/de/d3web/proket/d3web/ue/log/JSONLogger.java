@@ -164,8 +164,8 @@ public class JSONLogger {
             if (!dir.exists()) {
                 dir.mkdir();
             }
-            String filepath = file;
-
+            String filepath = dir + "/" + file;
+            
             bw = new BufferedWriter(new FileWriter(filepath));
             bw.write(getLogAsJSON().toString());
 

@@ -234,6 +234,9 @@ public class D3webDialog extends HttpServlet {
             d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
             d3wcon.setLoginMode(d3webParser.getLogin());
             sourceSave = source;
+            if(d3webParser.getLogging().contains("ON")){
+                d3wcon.activateLogging();
+            }
             if (!d3webParser.getLanguage().equals("")) {
                 d3wcon.setLanguage(d3webParser.getLanguage());
             }
@@ -428,15 +431,18 @@ public class D3webDialog extends HttpServlet {
            
              d3wcon.getLogger().writeJSONToFile(logfilename);
                 
-        } else if(action.equalsIgnoreCase("logTooltipWidget")){
-            
-            String ttObject = request.getParameter("ttObject");
-            Date now = new Date();
+        }  else if(action.equalsIgnoreCase("logInfoPopup")){
+           
+            String prefix = request.getParameter("prefix");
+            String ttwidget = request.getParameter("widget");
+            ttwidget = ttwidget.replace("+", " ");
+            String timestring = request.getParameter("timestring");
+           
             JSONLogger logger = d3wcon.getLogger();
                
              // TODO rename tooltip --> infopopup
             logger.logClickedObjects(
-                      "INFOPOPUP", FORMATTER.format(now), ttObject);
+                      "INFOPOPUP_" + prefix, timestring, ttwidget);
            
              d3wcon.getLogger().writeJSONToFile(logfilename);
                 

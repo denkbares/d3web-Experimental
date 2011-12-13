@@ -144,8 +144,12 @@ DONE - PROBLEM MIT YN Fragen und Sprachen --> choices können dann nicht ausgele
 - JEDEN Click loggen, also auch clicks auf nicht-Frage Elemente
 !!! - setzen von ALLEN werten in anderer Sprache geht nicht!
 - Startup JS Errors!
-- Check logging of image answers
 - unknown zu weit rechts verrückt bei num/text questinos
+- logging zeug raus aus js
+- check JS Inclusion Reihenfolge
+- check sind alle wichtigen Elemente geloggt?
+- Log end value --> timespan
+- Check logging of image answers
 
 
 BROWSER ABFRAGE MIT JQUERY

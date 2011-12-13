@@ -1,1 +1,1 @@
-$if(title)$<div id="t-$fullId$" class="title t-$fullId$">$title$</div>$endif$
+$if(title)$<div id="text-$fullId$" class="title t-$fullId$">$title$</div>$endif$

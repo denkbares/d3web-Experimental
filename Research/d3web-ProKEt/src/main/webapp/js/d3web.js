@@ -473,6 +473,9 @@ function getAnswerName(input) {
     return getTerminologyObjectName(input, "a");
 }
 
+// return the pure name of the terminology object without prefixes such as e.g.
+// q_, a_ etc. and without trailing whitespaces and where all _ and + are replaced
+// by whitespace
 function getTerminologyObjectName(input, prefix) {
     var parent = $(input.parents("[id^=" + prefix + "_]"));
     var valTd = $("#text-" + parent.attr("id"));
@@ -482,8 +485,7 @@ function getTerminologyObjectName(input, prefix) {
     var pref = prefix + "_";
    
     // get id (sthg like a_eine_Antwort) and replace a_ and ALL "_" with """
-    var text = parent.attr("id").replace(pref, "").replace(/_/g, " ");
-   
+    var text = parent.attr("id").replace(pref, "").replace(/_/g, " ");   
     return $.trim(text);
 }
 
@@ -1107,6 +1109,22 @@ function logLanguageWidgetClicked(el){
     }
     
     var link = $.query.set("action", "logLanguageWidget").set("widget", el.attr("id")).set("language", lang).toString();
+    link = window.location.href.replace(window.location.search, "") + link;
+
+    $.ajax({
+        type : "GET",
+        // async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function() {
+            // no action needed
+        }
+    });
+}
+
+function logInfoPopupClicked(ID, prefix, timestring){
+    
+    var link = $.query.set("action", "logInfoPopup").set("widget", ID).set("prefix", prefix).set("timestring", timestring);
     link = window.location.href.replace(window.location.search, "") + link;
 
     $.ajax({

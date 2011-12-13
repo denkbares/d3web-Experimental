@@ -202,6 +202,9 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 	@Override
 	public void defineAndAddJS(ContainerCollection cc) {
 		cc.js.enableD3Web();
+                if(D3webConnector.getInstance().loggingActive()){
+                    cc.js.enableClickLogging();
+                }
 		cc.js.add("$(function() {init_all();});", 1);
 		cc.js.add("function init_all() {", 1);
 		// cc.js.add("building = true;", 2);

@@ -22,18 +22,18 @@ var scrollHtml = 0;
 
 function setup() {
 
-	// setup popup stuff
-	// each time the document is clicked somewhere
-	$(document).click(function() {	
-		if (!clariPopupShowing) { // TODO try out 
-			hide_popup(250); // fade out popup in 250 ms
-		}
-		clariPopupShowing = false;	
-	});
-	hide_popup(0); // initially hiding popup per default
+    // setup popup stuff
+    // each time the document is clicked somewhere
+    $(document).click(function() {	
+        if (!clariPopupShowing) { // TODO try out 
+            hide_popup(250); // fade out popup in 250 ms
+        }
+        clariPopupShowing = false;	
+    });
+    hide_popup(0); // initially hiding popup per default
 
-	hide_all_tooltips();
-	generate_tooltip_functions();
+    hide_all_tooltips();
+    generate_tooltip_functions();
 }
 
 /**
@@ -41,113 +41,119 @@ function setup() {
  * scrollTop to 0
  */
 function scroll_up() {
-	$("html:not(:animated),body:not(:animated)").animate({
-		scrollTop : 0
-	}, 450);
+    $("html:not(:animated),body:not(:animated)").animate({
+        scrollTop : 0
+    }, 450);
 }
 
 /**
  * Add startsWith() function to String.
  */
 String.prototype.startsWith = function(str) 
-	{return (this.match("^"+str)==str);};
+{
+    return (this.match("^"+str)==str);
+};
 
 /**
  * Add endsWith() function to String.
  */
 String.prototype.endsWith = function(str) 
-	{return (this.match(str+"$")==str);};
+{
+    return (this.match(str+"$")==str);
+};
 
 /**
  * Add trim() function to String.
  */
-String.prototype.trim = function(){return 
-	(this.replace(/^[\s\xA0]+/, "").replace(/[\s\xA0]+$/, ""));};
+String.prototype.trim = function(){
+    return 
+    (this.replace(/^[\s\xA0]+/, "").replace(/[\s\xA0]+$/, ""));
+};
 
 /**
  * Show everything
  */
 function show_everything() {
-	$("*").show(0);
+    $("*").show(0);
 }
 
 /**
  * Hide all the questionnaires
  */
 function hide_all_questionnaires() {
-	questionnaires.each(function() {
-		$(this).hide(0);
-	});
+    questionnaires.each(function() {
+        $(this).hide(0);
+    });
 }
 
 /**
  * Hide all the questions
  */
 function hide_all_questions() {
-	questions.each(function() {
-		$(this).hide(0);
-	});
+    questions.each(function() {
+        $(this).hide(0);
+    });
 }
 
 /**
  * Show the first questionnaire that is not hidden
  */
 function show_first_questionnaire() {
-	var id = questionnaires.filter(":not([title='hidden-questionnaire'])")
-			.filter(":first").attr('id');
-	if (id != undefined) {
-		show_questionnaire(id);
-	}
+    var id = questionnaires.filter(":not([title='hidden-questionnaire'])")
+    .filter(":first").attr('id');
+    if (id != undefined) {
+        show_questionnaire(id);
+    }
 }
 
 /**
  * Set highlighting styles for sidenav
  */
 function highlight_sidenav() {
-	items = $("[class*='navigation-item']");
-	items
-			.each(function() {
+    items = $("[class*='navigation-item']");
+    items
+    .each(function() {
 				
-				// if the object that corresponds to the navigation item
-				// is already answered also mark navigation item as answered
-				if (parseDone($("#" + $(this).attr('id').replace(/nav-/, "")),
-						"true")) {
-					// set to navigation-done
-					$(this).addClass("navigation-item-d");
-				} else {
-					// set to navigation not-yet-done
-					$(this).removeClass("navigation-item-d");
-				}
-			});
+        // if the object that corresponds to the navigation item
+        // is already answered also mark navigation item as answered
+        if (parseDone($("#" + $(this).attr('id').replace(/nav-/, "")),
+            "true")) {
+            // set to navigation-done
+            $(this).addClass("navigation-item-d");
+        } else {
+            // set to navigation not-yet-done
+            $(this).removeClass("navigation-item-d");
+        }
+    });
 }
 
 /**
  * Show a questionnaire by id
  */
 function show_questionnaire(id) {
-	hide_all_questionnaires();	// hide all questionnaires
-	target = $("#" + id);		// get target element
-	target.parents().show(0);   // ensure visibility: check parents' visibility
-	hide_all_questions();		// hide all the questions
-	target.siblings("[id^='qu_']").hide(0);	// hide all siblings of the questionnaire
-	target.find("[id^='q_']").show(0);	// show all questions of the questionnaire
-	target.fadeIn(700);			// fade it in again
-	target.find("[id^='qu_']").hide(0);	// hide all questionnaires beneath
+    hide_all_questionnaires();	// hide all questionnaires
+    target = $("#" + id);		// get target element
+    target.parents().show(0);   // ensure visibility: check parents' visibility
+    hide_all_questions();		// hide all the questions
+    target.siblings("[id^='qu_']").hide(0);	// hide all siblings of the questionnaire
+    target.find("[id^='q_']").show(0);	// show all questions of the questionnaire
+    target.fadeIn(700);			// fade it in again
+    target.find("[id^='qu_']").hide(0);	// hide all questionnaires beneath
 
-	// highlight current-marker from all existing navigation items
-	$(".navigation-item").removeClass("navigation-item-c");	
-	navTarget = $("#nav-" + id);	// get navigation item
-	navTarget.addClass("navigation-item-c"); // add current marker to actual item
-	// show element by opening parent node
-	var parent = navTarget;
-	do {
-		parent = jQuery.jstree._reference($("#navigation-list"))._get_parent(
-				parent);
-		$("#navigation-list").jstree("open_node", parent);
-	} while (parent !== -1);
-	highlight_sidenav();	// highlight side-navigation accordingly
-	scroll_up();			// scroll to page top
-	mark_current();			// mark currently active element
+    // highlight current-marker from all existing navigation items
+    $(".navigation-item").removeClass("navigation-item-c");	
+    navTarget = $("#nav-" + id);	// get navigation item
+    navTarget.addClass("navigation-item-c"); // add current marker to actual item
+    // show element by opening parent node
+    var parent = navTarget;
+    do {
+        parent = jQuery.jstree._reference($("#navigation-list"))._get_parent(
+            parent);
+        $("#navigation-list").jstree("open_node", parent);
+    } while (parent !== -1);
+    highlight_sidenav();	// highlight side-navigation accordingly
+    scroll_up();			// scroll to page top
+    mark_current();			// mark currently active element
 }
 
 /**
@@ -155,16 +161,16 @@ function show_questionnaire(id) {
  * list into a jquery jstree
  */
 function make_sidenav() {
-	// convert navigation-list to tree with jquery plugin
-	$("#navigation-list").jstree({
-		"plugins" : [ "themes", "html_data" ],
+    // convert navigation-list to tree with jquery plugin
+    $("#navigation-list").jstree({
+        "plugins" : [ "themes", "html_data" ],
 
-		"themes" : {
-			"theme" : "default", // or apple
-			"dots" : true,
-			"icons" : true
-		}
-	});
+        "themes" : {
+            "theme" : "default", // or apple
+            "dots" : true,
+            "icons" : true
+        }
+    });
 }
 
 /**
@@ -175,10 +181,10 @@ function make_sidenav() {
  * @param removeSuffix the suffix to be removed
  */
 function styleParentQ(object, suffix, blockingSuffix, removeSuffix) {
-	// searching parent
-	var parent = object.closest('[id^="q_"]');
-	// set style
-	style(parent, suffix, blockingSuffix, removeSuffix, true);
+    // searching parent
+    var parent = object.closest('[id^="q_"]');
+    // set style
+    style(parent, suffix, blockingSuffix, removeSuffix, true);
 }
 
 /**
@@ -191,57 +197,57 @@ function styleParentQ(object, suffix, blockingSuffix, removeSuffix) {
  */
 function style(object, suffix, blockingSuffix, removeSuffix, recurse) {
 	
-	// if currently active and done questions are rendered
-	if (renderCurrentDone) {
-		if (object == undefined) {
-			return;
-		}
-		var nowClassString = object.attr('class'); // actual class string
-		if (nowClassString == undefined) {
-			return;
-		}
-		var nowClassArray = nowClassString.split(" ");	// class string split up
-		for ( var i = 0; i < nowClassArray.length; i++) {
-			var nowClass = nowClassArray[i]; // get one class part after another
-			var newClass = nowClass;		 // copy
-			// if suffix to remove is part of currently processed class part
-			if ((nowClass.substring(nowClass.length - 2, nowClass.length)) == '-'
-					+ removeSuffix) {
-				// remove the suffix
-				newClass = nowClass.substring(0, nowClass.length - 2);
-			}
+    // if currently active and done questions are rendered
+    if (renderCurrentDone) {
+        if (object == undefined) {
+            return;
+        }
+        var nowClassString = object.attr('class'); // actual class string
+        if (nowClassString == undefined) {
+            return;
+        }
+        var nowClassArray = nowClassString.split(" ");	// class string split up
+        for ( var i = 0; i < nowClassArray.length; i++) {
+            var nowClass = nowClassArray[i]; // get one class part after another
+            var newClass = nowClass;		 // copy
+            // if suffix to remove is part of currently processed class part
+            if ((nowClass.substring(nowClass.length - 2, nowClass.length)) == '-'
+                + removeSuffix) {
+                // remove the suffix
+                newClass = nowClass.substring(0, nowClass.length - 2);
+            }
 
-			if (nowClass.length > 0) {
-				// if nowClass is not already styled with new attribute or the blocking suffix
-				if ((nowClass.substring(nowClass.length - 2, nowClass.length) !== '-'
-						+ suffix)
-						&& (nowClass.substring(nowClass.length - 2,
-								nowClass.length) !== '-' + blockingSuffix)) {
-					// add new styling
-					object.addClass(newClass + '-' + suffix);
-				}
-			}
-		}
+            if (nowClass.length > 0) {
+                // if nowClass is not already styled with new attribute or the blocking suffix
+                if ((nowClass.substring(nowClass.length - 2, nowClass.length) !== '-'
+                    + suffix)
+                && (nowClass.substring(nowClass.length - 2,
+                    nowClass.length) !== '-' + blockingSuffix)) {
+                    // add new styling
+                    object.addClass(newClass + '-' + suffix);
+                }
+            }
+        }
 
-		if (recurse) { // if recursion is desired
-			object.find(
-					// find all answers, g??, solutions, ??, tooltips
-					'[id^="a_"],[id^="g_"],[id^="s_"],[id^="t-"],[id^="tt-"]')
-					.each(
-							function() {
-								// recursive styling, only one time, then recursion stops
-								style($(this), suffix, blockingSuffix,
-										removeSuffix, false);
-							});
-		}
-	}
+        if (recurse) { // if recursion is desired
+            object.find(
+                // find all answers, g??, solutions, ??, tooltips
+                '[id^="a_"],[id^="g_"],[id^="s_"],[id^="t-"],[id^="tt-"]')
+            .each(
+                function() {
+                    // recursive styling, only one time, then recursion stops
+                    style($(this), suffix, blockingSuffix,
+                        removeSuffix, false);
+                });
+        }
+    }
 }
 
 /**
  * remove special style (-c/-d) of parent question
  */
 function destyleParentQ(object) {
-	destyle(object.closest('[id^="q_"]'));
+    destyle(object.closest('[id^="q_"]'));
 }
 
 /**
@@ -249,22 +255,22 @@ function destyleParentQ(object) {
  * @param object
  */
 function destyle(object) {
-	if (renderCurrentDone) { // current and done are rendered
-		var nowClassString = object.attr('class');	// get current classstring
-		if (nowClassString !== undefined) {
-			var nowClassArray = nowClassString.split(" ");	// split string parts
-			for ( var i = 0; i < nowClassArray.length; i++) {
-				var nowClass = nowClassArray[i];			// if any of those parts is
-				if (endsWith(nowClass, '-c') || endsWith(nowClass, '-d')) {
-					object.removeClass(nowClass); // -c/-d, remove this class
-				}
-			}
-		}
-		// recursion for all children of this object
-		object.children().each(function() {
-			destyle($(this));
-		});
-	}
+    if (renderCurrentDone) { // current and done are rendered
+        var nowClassString = object.attr('class');	// get current classstring
+        if (nowClassString !== undefined) {
+            var nowClassArray = nowClassString.split(" ");	// split string parts
+            for ( var i = 0; i < nowClassArray.length; i++) {
+                var nowClass = nowClassArray[i];			// if any of those parts is
+                if (endsWith(nowClass, '-c') || endsWith(nowClass, '-d')) {
+                    object.removeClass(nowClass); // -c/-d, remove this class
+                }
+            }
+        }
+        // recursion for all children of this object
+        object.children().each(function() {
+            destyle($(this));
+        });
+    }
 }
 
 /**
@@ -275,27 +281,27 @@ function destyle(object) {
  * @returns {Boolean} TRUE if it ends with, FALSE otherwise
  */
 function endsWith(fullString, testString) {
-	var regexp = new RegExp(testString + "$");
-	if (regexp.test(fullString))
-		return true;
-	else
-		return false;
+    var regexp = new RegExp(testString + "$");
+    if (regexp.test(fullString))
+        return true;
+    else
+        return false;
 }
 
 /**
  * Hide all the tooltip elements, starting with an "tt-"
  */
 function hide_all_tooltips() {
-	$("[id^='tt-']").hide(0);
-	tooltipShown = undefined;
-	tooltipShownTrigger = undefined;
+    $("[id^='tt-']").hide(0);
+    tooltipShown = undefined;
+    tooltipShownTrigger = undefined;
 }
 
 /**
  * Hide all the sub-questions, i.e., elements starting with sub-
  */
 function hide_all_subquestions() {
-	$("[id^='sub-']").hide(0);
+    $("[id^='sub-']").hide(0);
 }
 
 /**
@@ -305,9 +311,9 @@ function hide_all_subquestions() {
  * @param object Object to be marked
  */
 function remark_selectively(object) {
-	if (!building) {
-		mark_object_done(object);
-	}
+    if (!building) {
+        mark_object_done(object);
+    }
 }
 
 /**
@@ -318,90 +324,90 @@ function remark_selectively(object) {
  */
 function parseDone(object, options) {
 	
-	var result = true;
-	// question itself?
-	if (object.attr('id') != undefined && object.attr('id').indexOf("q_") == 0) {
-		if (!object.hasClass("question-d")) {
-			result = false;
-		}
-	} else {
-		if (object.find("[id^='q_']").filter(function() {
-			return !($(this).hasClass("question-d"));
-		}).size() > 0) {
-			result = false;
-		}
-	}
+    var result = true;
+    // question itself?
+    if (object.attr('id') != undefined && object.attr('id').indexOf("q_") == 0) {
+        if (!object.hasClass("question-d")) {
+            result = false;
+        }
+    } else {
+        if (object.find("[id^='q_']").filter(function() {
+            return !($(this).hasClass("question-d"));
+        }).size() > 0) {
+            result = false;
+        }
+    }
 
-	if (options == "false") {
-		result = !result;
-	}
-	return result;
+    if (options == "false") {
+        result = !result;
+    }
+    return result;
 }
 
 /**
  * Remove all done-marks of done questions
  */
 function unmark_done() {
-	$("#content [class$='-d']").each(function() {
-		destyle($(this));
-	});
+    $("#content [class$='-d']").each(function() {
+        destyle($(this));
+    });
 }
 
 /**
  * Mark all active question(s)
  */
 function mark_current() {
-	if (renderCurrentDone && !building) {
-		var found = false;
+    if (renderCurrentDone && !building) {
+        var found = false;
 	
-		// get all questions NOT currently done and still visible
-		var temp = questions.filter(":not([class$='-d'])").filter(":visible");
+        // get all questions NOT currently done and still visible
+        var temp = questions.filter(":not([class$='-d'])").filter(":visible");
 
-		// if there is a freshly done question, filter it out
-		if (freshlyDoneQ != undefined) {
-			temp = temp.filter("[id!='" + freshlyDoneQ.attr('id') + "']");
-		}
+        // if there is a freshly done question, filter it out
+        if (freshlyDoneQ != undefined) {
+            temp = temp.filter("[id!='" + freshlyDoneQ.attr('id') + "']");
+        }
 		
-		// get the next first question 
-		temp.filter(":first").each(function() {
+        // get the next first question 
+        temp.filter(":first").each(function() {
 			
-			// var id = $(this).attr('id');
+            // var id = $(this).attr('id');
 			
-			// if it's not the currently active question
-			if ($(this).attr('class').indexOf("-c") == -1) {
+            // if it's not the currently active question
+            if ($(this).attr('class').indexOf("-c") == -1) {
 				
-				// destyle the previous currentQuestion
-				if (currentQ != undefined) {
-					destyle(currentQ);
-				}
-				// style next current question in row (next first) new
-				style($(this), "c", "-", "d", true);
-				currentQ = $(this);
-			}
+                // destyle the previous currentQuestion
+                if (currentQ != undefined) {
+                    destyle(currentQ);
+                }
+                // style next current question in row (next first) new
+                style($(this), "c", "-", "d", true);
+                currentQ = $(this);
+            }
 
-			// style freshly done question from c to d
-			if (freshlyDoneQ != undefined) {
-				style(freshlyDoneQ, "d", "", "c", true);
-				freshlyDoneQ = undefined;
-			}
+            // style freshly done question from c to d
+            if (freshlyDoneQ != undefined) {
+                style(freshlyDoneQ, "d", "", "c", true);
+                freshlyDoneQ = undefined;
+            }
 
-			found = true;
-		});
+            found = true;
+        });
 
-		// no appropriate element for styling as current was found
-		if (!found) {
-			// style freshly done question from c to d
-			if (freshlyDoneQ != undefined) {
-				style(freshlyDoneQ, "d", "", "c", true);
-				freshlyDoneQ = undefined; // reset currently freshly done
-			} else {
-				if (currentQ != undefined) {
-					destyle(currentQ); // remove style of current q
-				}
-			}
-			currentQ = undefined;
-		}
-	}
+        // no appropriate element for styling as current was found
+        if (!found) {
+            // style freshly done question from c to d
+            if (freshlyDoneQ != undefined) {
+                style(freshlyDoneQ, "d", "", "c", true);
+                freshlyDoneQ = undefined; // reset currently freshly done
+            } else {
+                if (currentQ != undefined) {
+                    destyle(currentQ); // remove style of current q
+                }
+            }
+            currentQ = undefined;
+        }
+    }
 }
 
 /**
@@ -409,47 +415,47 @@ function mark_current() {
  */
 function mark_done() {
 	
-	// when current and done are rendered and no setting up process running
-	if (renderCurrentDone && !building) {
+    // when current and done are rendered and no setting up process running
+    if (renderCurrentDone && !building) {
 		
-		// radio: find checked radio buttons and mark parent as done
-		markingQuestions.find(':radio:checked').each(function() {
-			styleParentQ($(this), "d", "-", "c");
-		});
+        // radio: find checked radio buttons and mark parent as done
+        markingQuestions.find(':radio:checked').each(function() {
+            styleParentQ($(this), "d", "-", "c");
+        });
 
-		// checkbox: find checked checkbox and mark parent as done
-		markingQuestions.find(':checkbox:checked').each(function() {
-			styleParentQ($(this), "d", "-", "c");
-		});
+        // checkbox: find checked checkbox and mark parent as done
+        markingQuestions.find(':checkbox:checked').each(function() {
+            styleParentQ($(this), "d", "-", "c");
+        });
 
-		// text/input fields: find text and mark parent as done
-		markingQuestions.find(':text').each(function() {
-			if (this.value.length !== 0 && this.value !== '--,--') {
-				styleParentQ($(this), "d", "-", "c");
-			}
-		});
+        // text/input fields: find text and mark parent as done
+        markingQuestions.find(':text').each(function() {
+            if (this.value.length !== 0 && this.value !== '--,--') {
+                styleParentQ($(this), "d", "-", "c");
+            }
+        });
 
-		// textarea: find textarea with value and mark parent as done
-		markingQuestions.find('textarea').each(function() {
-			if (this.value.length !== 0) {
-				styleParentQ($(this), "d", "-", "c");
-			}
-		});
+        // textarea: find textarea with value and mark parent as done
+        markingQuestions.find('textarea').each(function() {
+            if (this.value.length !== 0) {
+                styleParentQ($(this), "d", "-", "c");
+            }
+        });
 
-		// lists: find all not non-selected lists and mark parent as done 
-		markingQuestions.find('select').each(function() {
-			if ($(this).selectedIndex != -1) {
-				styleParentQ($(this), "d", "-", "c");
-			}
-		});
+        // lists: find all not non-selected lists and mark parent as done 
+        markingQuestions.find('select').each(function() {
+            if ($(this).selectedIndex != -1) {
+                styleParentQ($(this), "d", "-", "c");
+            }
+        });
 
-		// "labels"
-		markingQuestions.find("[id^='f_a_']").each(function() {
-			if ($(this).hasClass('selected')) {
-				styleParentQ($(this), "d", "-", "c");
-			}
-		});
-	}
+        // "labels"
+        markingQuestions.find("[id^='f_a_']").each(function() {
+            if ($(this).hasClass('selected')) {
+                styleParentQ($(this), "d", "-", "c");
+            }
+        });
+    }
 }
 
 /**
@@ -458,63 +464,63 @@ function mark_done() {
  */
 function mark_object_done(object) {
 	
-	// if rendering of current & done is defined and no building/setting up
-	if (renderCurrentDone && !building) {
+    // if rendering of current & done is defined and no building/setting up
+    if (renderCurrentDone && !building) {
 
-		// the closest parent of the given object
-		var parent = object.closest('[id^="q_"]');
-		var finished = false;
+        // the closest parent of the given object
+        var parent = object.closest('[id^="q_"]');
+        var finished = false;
 
-		// get children, i.e. answers/text
-		parent.find('[id^="f_"]').each(
-				function() {
-					if (finished) {
-						return;
-					}
+        // get children, i.e. answers/text
+        parent.find('[id^="f_"]').each(
+            function() {
+                if (finished) {
+                    return;
+                }
 
-					// radio: found a checked, set parent as the
-					// freshliest done question and finish
-					if ($(this).attr('checked')) {
-						freshlyDoneQ = parent;
-						finished = true;
-					}
-					if (finished) {
-						return;
-					}
+                // radio: found a checked, set parent as the
+                // freshliest done question and finish
+                if ($(this).attr('checked')) {
+                    freshlyDoneQ = parent;
+                    finished = true;
+                }
+                if (finished) {
+                    return;
+                }
 
-					// text: found some text, set parent as the 
-					// freshliest done question and finish
-					if ($(this).attr('type') == 'text'
-							|| $(this).attr('nodeName') == 'TEXTAREA') {
-						if ($(this).val().length !== 0
-								&& $(this).val() !== '--,--') {
-							freshlyDoneQ = parent;
-							finished = true;
-						}
-					}
-					if (finished) {
-						return;
-					}
+                // text: found some text, set parent as the 
+                // freshliest done question and finish
+                if ($(this).attr('type') == 'text'
+                    || $(this).attr('nodeName') == 'TEXTAREA') {
+                    if ($(this).val().length !== 0
+                        && $(this).val() !== '--,--') {
+                        freshlyDoneQ = parent;
+                        finished = true;
+                    }
+                }
+                if (finished) {
+                    return;
+                }
 
-					// "labels": the same for labels
-					if ($(this).hasClass('selected')) {
-						freshlyDoneQ = parent;
-						finished = true;
-					}
-					if (finished) {
-						return;
-					}
-				});
+                // "labels": the same for labels
+                if ($(this).hasClass('selected')) {
+                    freshlyDoneQ = parent;
+                    finished = true;
+                }
+                if (finished) {
+                    return;
+                }
+            });
 
-		// no answer or else found, so destyle the parent 
-		// as it shouldn't be marked done
-		if (!finished) {
-			destyle(parent);
-		}
+        // no answer or else found, so destyle the parent 
+        // as it shouldn't be marked done
+        if (!finished) {
+            destyle(parent);
+        }
 
-		// update current active question
-		mark_current();
-	}
+        // update current active question
+        mark_current();
+    }
 }
 
 /**
@@ -522,8 +528,8 @@ function mark_object_done(object) {
  * @param time the time the popup should take to fade out
  */
 function hide_popup(time) {
-	$("#__popup").fadeOut(time);
-	lastPopup = null;
+    $("#__popup").fadeOut(time);
+    lastPopup = null;
 }
 
 /**
@@ -534,7 +540,7 @@ function hide_popup(time) {
  */
 function prepare_question_marking() {
 	
-	/*// bind remark_selectively function to all OK buttons
+/*// bind remark_selectively function to all OK buttons
 	$(".ok-button").unbind("click").bind("click", function() {
 		remark_selectively($(this));
 	});
@@ -558,51 +564,54 @@ function prepare_question_marking() {
  */
 function tooltip_over(id, element) {
 	
-	targetid = "#tt-" + id;
+    targetid = "#tt-" + id;
 	
-	//target = $("#tt-" + id).filter(":not(:animated)");
-	var target = $(targetid);
+    //target = $("#tt-" + id).filter(":not(:animated)");
+    var target = $(targetid);
 	
-	if (target.size() == 0) {
-		return;
-	}
+    if (target.size() == 0) {
+        return;
+    }
 	
-	// if target element is not currently shown
-	if (target !== tooltipShown) {
+    // if target element is not currently shown
+    if (target !== tooltipShown) {
 		
-		// hide old tooltip if existing
-		if (tooltipShown !== undefined) {
-			tooltip_out(tooltipShown);
-		}
+        // hide old tooltip if existing
+        if (tooltipShown !== undefined) {
+            tooltip_out(tooltipShown);
+        }
 		
-		// store currently shown tooltip and tooltipShownTrigger
-		tooltipShown = target;
+        // store currently shown tooltip and tooltipShownTrigger
+        tooltipShown = target;
 		
-		target.css({
-			position : "absolute"
-		});
+        target.css({
+            position : "absolute"
+        });
 		
 
 		
-		//tooltip_move(element);
+        //tooltip_move(element);
 
-		target.fadeIn(300);
-		setLeftOffset(target);
-	}
+        target.fadeIn(300);
+        setLeftOffset(target);
+    }
 }
 
 function setLeftOffset(target) {
-	var pOffset = target.parent().offset();
-	var width = target.width();
-	var widthW = $(window).width() - 25; // remove some for the scrollbar
-	var overlap = pOffset.left + width - widthW;
-	var leftOffset = pOffset.left;
-	if (overlap > 0){
-		leftOffset = pOffset.left - overlap;
-		if (leftOffset < 0) leftOffset = 0;
-		target.offset({ top: pOffset.top + target.parent().height(), left: leftOffset });
-		target.width(width);
-	}
+    var pOffset = target.parent().offset();
+    var width = target.width();
+    var widthW = $(window).width() - 25; // remove some for the scrollbar
+    var overlap = pOffset.left + width - widthW;
+    var leftOffset = pOffset.left;
+    if (overlap > 0){
+        leftOffset = pOffset.left - overlap;
+        if (leftOffset < 0) leftOffset = 0;
+        target.offset({
+            top: pOffset.top + target.parent().height(), 
+            left: leftOffset
+        });
+        target.width(width);
+    }
 }
 
 /**
@@ -610,16 +619,16 @@ function setLeftOffset(target) {
  * @param e
  */
 function tooltip_move(e) {
-	if (tooltipShown != undefined) {
-		tooltipShown.position({
-			"my" : "left top",
-			"at" : "right bottom",
-			"of" : e,
-			"offset" : "15 15",
-			"collision" : "fit flip",
-			"bgiframe" : false
-		});
-	}
+    if (tooltipShown != undefined) {
+        tooltipShown.position({
+            "my" : "left top",
+            "at" : "right bottom",
+            "of" : e,
+            "offset" : "15 15",
+            "collision" : "fit flip",
+            "bgiframe" : false
+        });
+    }
 }
 
 /**
@@ -629,18 +638,18 @@ function tooltip_move(e) {
  */
 function tooltip_out(object) {
 	
-	// if a jquery tooltip or
-	if (object instanceof jQuery) {
-		target = object;
-	} else {
+    // if a jquery tooltip or
+    if (object instanceof jQuery) {
+        target = object;
+    } else {
 		
-		// a specifically marked element
-		target = $("#tt-" + object);
-	}
+        // a specifically marked element
+        target = $("#tt-" + object);
+    }
 
-	target.fadeOut(300);
-	tooltipShown = undefined;
-	//tooltipShownTrigger = undefined;
+    target.fadeOut(300);
+    tooltipShown = undefined;
+//tooltipShownTrigger = undefined;
 }
 
 /**
@@ -648,36 +657,71 @@ function tooltip_out(object) {
  */
 function generate_tooltip_functions() {
 	
-	// get all triggering elements
-	triggers = $("[class*='-tt-trigger']");
+    // get all triggering elements
+    triggers = $("[class*='-tt-trigger']");
 	
-	// if mouse is moved over an element define potential tooltips position
-//	$(document).mousemove(function(e) {
-		//tooltip_move(e);
-//	});
+    // if mouse is moved over an element define potential tooltips position
+    //	$(document).mousemove(function(e) {
+    //tooltip_move(e);
+    //	});
 	
-	// go through all existing tooltip triggers
-	triggers.each(function() {
+    // go through all existing tooltip triggers
+    triggers.each(function() {
 		
-		// get all elements with -tt-trigger in class name or
-		// anywhere else
-		// var classes = /(\s*\w)*-tt-trigger/;	// regex
-		// var result = classes.exec($(this).attr('class'));
-		// var id = result[1];	// id of the tooltip trigger
-		
-		// complete class name
-		var classComplete = $(this).attr("class");
-		var id = classComplete.replace("-tt-trigger tooltip-trigger", "");
-		
-		$(this).unbind('mouseover').mouseover(function() {
-			tooltip_over(id, $(this));
-		});
-		$(this).unbind('mouseout').mouseout(function() {
-			tooltip_out(id);
-		});
-	});
+        // complete class name
+        var classComplete = $(this).attr("class");
+        var id = classComplete.replace("-tt-trigger tooltip-trigger", "");
+        var ttstart, ttend;
+        var hour = min*60;
+        var min = sec*60;
+        var sec = 1000;
+        var now;
+                
+        $(this).unbind('mouseover').mouseover(function() {
+            //if logging is activated get the time tooltip is triggered
+            if(logging){
+                now = new Date();
+                ttstart = now.getTime();
+            }
+            tooltip_over(id, $(this));
+        });
+        $(this).unbind('mouseout').mouseout(function() {
+            //if logging is activated get the time tooltip is deactivated again
+            if(logging){
+                now = new Date();
+                ttend = now.getTime();
+                logTooltipVisited(ttstart, ttend, $(this));
+            }
+            tooltip_out(id);
+        });
+    });
 }
 
+/**
+ * retrieve the values to be logged and call logger function
+ */
+function logTooltipVisited(starttime, endtime, widget){
+    var diffDate = new Date(endtime-starttime);
+    var parentid = widget.parent().attr("id");
+    var parent, prefix;
+    var timestring = diffDate.getHours()-1 +  ":" 
+                + diffDate.getMinutes() + ":" 
+                + diffDate.getSeconds();
+            
+            
+    if(parentid.indexOf("text-q_")!=-1){
+        parent = getTerminologyObjectName(widget, "q");
+        prefix = "Q"; 
+    } else if (parentid.indexOf("text-a_")!=-1){
+        parent = getTerminologyObjectName(widget, "a");
+        prefix = "A";
+} else if (parentid.indexOf("t-qc_")!=-1){
+        parent = getTerminologyObjectName(widget, "qc");
+        prefix = "QC"
+}
+    
+    logInfoPopupClicked(parent, prefix, timestring);
+}
 
 /**********************************************************
 * FUNCTIONS added to StringTemplates or JS CodeContainers *
@@ -690,19 +734,19 @@ function generate_tooltip_functions() {
  * Gets and show next questionnaire
  */
 function next_questionnaire() {
-	// get the inner-most visible questionnaire in hierarchy
-	var visibleQuestionnaire = questionnaires.filter(":visible:last");
+    // get the inner-most visible questionnaire in hierarchy
+    var visibleQuestionnaire = questionnaires.filter(":visible:last");
 
-	// get the next Questionnaire by reducing the set of all 
-	// questionnaires with jquery .eq to the one at the next index
-	// after the previous one
-	var pos = questionnaires.index(visibleQuestionnaire);
-	var nextQuestionnaire = questionnaires.eq(pos + 1);
+    // get the next Questionnaire by reducing the set of all 
+    // questionnaires with jquery .eq to the one at the next index
+    // after the previous one
+    var pos = questionnaires.index(visibleQuestionnaire);
+    var nextQuestionnaire = questionnaires.eq(pos + 1);
 
-	// show this next questionnaire
-	if (nextQuestionnaire.attr('id') !== undefined) {
-		show_questionnaire(nextQuestionnaire.attr('id'));
-	}
+    // show this next questionnaire
+    if (nextQuestionnaire.attr('id') !== undefined) {
+        show_questionnaire(nextQuestionnaire.attr('id'));
+    }
 }
 
 /**
@@ -713,11 +757,11 @@ function next_questionnaire() {
  * mark current questions new
  */
 function remark() {
-	if (!building) {
-		unmark_done();
-		mark_done();
-		mark_current();
-	}
+    if (!building) {
+        unmark_done();
+        mark_done();
+        mark_current();
+    }
 }
 
 
@@ -730,12 +774,12 @@ function remark() {
  * @param id ID of the image area clicked
  */
 function click_box(id) {
-	var target = $("#" + id);	// get the clicked element
-	var selected = target.find(":input:checked");	// find clicked input 
-	var deselected = target.find(":input:not(:checked)"); // find not clicked inputs
-	selected.attr('checked', false);
-	deselected.attr('checked', true);
-	remark_selectively(target);	// mark question accordingly
+    var target = $("#" + id);	// get the clicked element
+    var selected = target.find(":input:checked");	// find clicked input 
+    var deselected = target.find(":input:not(:checked)"); // find not clicked inputs
+    selected.attr('checked', false);
+    deselected.attr('checked', true);
+    remark_selectively(target);	// mark question accordingly
 }
 
 
@@ -749,51 +793,51 @@ function click_box(id) {
  */
 function toggle_sub(id) {
 	
-	// TODO get d3web-related stuff out here
-	if (d3web) {
-		d3web_getChildren(id);
-	}
-	toggle_hide("sub-" + id); // toggle sub-elements
-	toggle_folder_image(id); // toggle folder image
-	hide_all_tooltips();	// on toggling all tooltips should disappear
+    // TODO get d3web-related stuff out here
+    if (d3web) {
+        d3web_getChildren(id);
+    }
+    toggle_hide("sub-" + id); // toggle sub-elements
+    toggle_folder_image(id); // toggle folder image
+    hide_all_tooltips();	// on toggling all tooltips should disappear
 }
 
 /**
  * toggle element's visibility by ID
  */
 function toggle_hide(id) {
-	// toggle (0 means no animation as time=0 for animation and on
-	// callback (animation complete) the function is processed
-	$("#" + id).toggle(0, function() {
-		alternating_colors();	// update alternating color scheme
-		checkAnswers();			// check on answers
-	});
+    // toggle (0 means no animation as time=0 for animation and on
+    // callback (animation complete) the function is processed
+    $("#" + id).toggle(0, function() {
+        alternating_colors();	// update alternating color scheme
+        checkAnswers();			// check on answers
+    });
 }
 
 /**
  * Generate alternating colors for all elements
  */
 function alternating_colors() {
-	$(function() {
+    $(function() {
 		
-		// counts the elements level
-		var pos = 0;
-		$(		// select all questions, answers, solutions visible
-				"div[id^='t-q_']:visible,div[id^='t-a_']:visible,div[id^='t-s_']:visible")
-				.each(
-						// set coloring style accordingly
-						function() {
-							if (pos % 2 !== 1) {
-								$(this).removeClass("color-even").addClass(
-										"color-odd");
-							} else {
-								$(this).removeClass("color-odd").addClass(
-										"color-even");
-							}
-							pos = pos + 1;
-						}
-					);
-	});
+        // counts the elements level
+        var pos = 0;
+        $(		// select all questions, answers, solutions visible
+            "div[id^='t-q_']:visible,div[id^='t-a_']:visible,div[id^='t-s_']:visible")
+        .each(
+            // set coloring style accordingly
+            function() {
+                if (pos % 2 !== 1) {
+                    $(this).removeClass("color-even").addClass(
+                        "color-odd");
+                } else {
+                    $(this).removeClass("color-odd").addClass(
+                        "color-even");
+                }
+                pos = pos + 1;
+            }
+            );
+    });
 }
 
 /**
@@ -802,36 +846,36 @@ function alternating_colors() {
  * TODO try out if it is reasonable
  */
 function checkAnswers() {
-	$(function() {
-		// var pos = 0;
+    $(function() {
+        // var pos = 0;
 		
-		// for each visible answer element remove 
-		// coloring scheme
-		$("div[id^='a_']:visible").each(function() {
-			if ($(this).hasClass("color-odd")) {
-				$(this).removeClass("color-odd");
-			}
-			if ($(this).hasClass("color-even")) {
-				$(this).removeClass("color-even");
-			}
-		});
-	});
+        // for each visible answer element remove 
+        // coloring scheme
+        $("div[id^='a_']:visible").each(function() {
+            if ($(this).hasClass("color-odd")) {
+                $(this).removeClass("color-odd");
+            }
+            if ($(this).hasClass("color-even")) {
+                $(this).removeClass("color-even");
+            }
+        });
+    });
 }
 
 /**
  * Toggle folder image (open/close) (needed in hierarchy dialog)
  */
 function toggle_folder_image(id) {
-	var target = $("#" + id);
-	if (target.attr('class').indexOf("question-open") != -1) {
-		target.removeClass("question-open").addClass("question-closed");
-	} else if (target.attr('class').indexOf("question-closed") != -1) {
-		target.removeClass("question-closed").addClass("question-open");
-	} else if (target.attr('class').indexOf("answer-open") != -1) {
-		target.removeClass("answer-open").addClass("answer-closed");
-	} else if (target.attr('class').indexOf("answer-closed") != -1) {
-		target.removeClass("answer-closed").addClass("answer-open");
-	}
+    var target = $("#" + id);
+    if (target.attr('class').indexOf("question-open") != -1) {
+        target.removeClass("question-open").addClass("question-closed");
+    } else if (target.attr('class').indexOf("question-closed") != -1) {
+        target.removeClass("question-closed").addClass("question-open");
+    } else if (target.attr('class').indexOf("answer-open") != -1) {
+        target.removeClass("answer-open").addClass("answer-closed");
+    } else if (target.attr('class').indexOf("answer-closed") != -1) {
+        target.removeClass("answer-closed").addClass("answer-open");
+    }
 
 }
 
@@ -839,16 +883,16 @@ function toggle_folder_image(id) {
  * Toggle folder image (open/close) (needed in hierarchy dialog)
  */
 function toggle_folder_image(id) {
-	var target = $("#" + id);
-	if (target.attr('class').indexOf("question-open") != -1) {
-		target.removeClass("question-open").addClass("question-closed");
-	} else if (target.attr('class').indexOf("question-closed") != -1) {
-		target.removeClass("question-closed").addClass("question-open");
-	} else if (target.attr('class').indexOf("answer-open") != -1) {
-		target.removeClass("answer-open").addClass("answer-closed");
-	} else if (target.attr('class').indexOf("answer-closed") != -1) {
-		target.removeClass("answer-closed").addClass("answer-open");
-	}
+    var target = $("#" + id);
+    if (target.attr('class').indexOf("question-open") != -1) {
+        target.removeClass("question-open").addClass("question-closed");
+    } else if (target.attr('class').indexOf("question-closed") != -1) {
+        target.removeClass("question-closed").addClass("question-open");
+    } else if (target.attr('class').indexOf("answer-open") != -1) {
+        target.removeClass("answer-open").addClass("answer-closed");
+    } else if (target.attr('class').indexOf("answer-closed") != -1) {
+        target.removeClass("answer-closed").addClass("answer-open");
+    }
 
 }
 
@@ -862,34 +906,34 @@ function toggle_folder_image(id) {
  */
 function toggle_sub_4boxes(id) {
 	
-	// get d3web stuff out of here
-	if (d3web) {
-		d3web_getChildren(id);
-		/*
+    // get d3web stuff out of here
+    if (d3web) {
+        d3web_getChildren(id);
+        /*
 		 * get new ratings, they changed at least for the element we are looking
 		 * at
 		 */
-		var ids = "";
-		$("[id^='q_']").each(function() {
-			ids = ids + $(this).attr('id') + ",";
-		});
-		d3web_getRatings(ids);
-	}
-	toggle_hide("sub-" + id); 
-	toggle_folder_image_4boxes(id);
-	hide_all_tooltips();
+        var ids = "";
+        $("[id^='q_']").each(function() {
+            ids = ids + $(this).attr('id') + ",";
+        });
+        d3web_getRatings(ids);
+    }
+    toggle_hide("sub-" + id); 
+    toggle_folder_image_4boxes(id);
+    hide_all_tooltips();
 }
 
 /**
  * Toggle folder image (open/close) for the legal dialog style
  */
 function toggle_folder_image_4boxes(id) {
-	var temp = $("#" + id + "-folderimg");
-	if (temp.attr('src') !== 'images/plus.gif') {
-		temp.attr('src', 'images/plus.gif');
-	} else {
-		temp.attr('src', 'images/minus.gif');
-	}
+    var temp = $("#" + id + "-folderimg");
+    if (temp.attr('src') !== 'images/plus.gif') {
+        temp.attr('src', 'images/plus.gif');
+    } else {
+        temp.attr('src', 'images/minus.gif');
+    }
 }
 
 /**
@@ -900,54 +944,54 @@ function toggle_folder_image_4boxes(id) {
  * @param value the value that indicates in what regard the item is marked
  */
 function h4boxes(value, id) {
-	if (!d3web) {
+    if (!d3web) {
 		
-		// get dialog item
-		var item = $("#" + id);
+        // get dialog item
+        var item = $("#" + id);
 		
-		// set image attribute to the correctly selected one
-		item.attr('src', "img/panel" + value + ".gif");
+        // set image attribute to the correctly selected one
+        item.attr('src', "img/panel" + value + ".gif");
 		
-		// get the first ancestor, i.e. the first upper question
-		var target = $(item).closest("div[id^='q_']");
+        // get the first ancestor, i.e. the first upper question
+        var target = $(item).closest("div[id^='q_']");
 
-		// remove existing classes
-		target.removeClass('rating-low rating-medium rating-high');
+        // remove existing classes
+        target.removeClass('rating-low rating-medium rating-high');
 
-		// set classes new according to given value
-		switch (value) {
-		case "1": // yes
-			target.addClass('rating-high');
-			break;
-		case "2": // no
-			target.addClass('rating-low');
-			break;
-		case "3": // undecided
-			target.addClass('rating-medium');
-			break;
-		case "4": // nothing, default val, undecided
-			break;
-		}
-		// also mark parents of the target while excluding target
-		h4boxes_mark(target, true);
+        // set classes new according to given value
+        switch (value) {
+            case "1": // yes
+                target.addClass('rating-high');
+                break;
+            case "2": // no
+                target.addClass('rating-low');
+                break;
+            case "3": // undecided
+                target.addClass('rating-medium');
+                break;
+            case "4": // nothing, default val, undecided
+                break;
+        }
+        // also mark parents of the target while excluding target
+        h4boxes_mark(target, true);
 		
-	} else {
-		// d3web specific toolchain
-		if (value < 4) {
+    } else {
+        // d3web specific toolchain
+        if (value < 4) {
 			
-			// add fact in d3web
-			d3web_addfact(id, value - 1); // zero-based
-		} else {
-			// set default empty fact
-			d3web_addfact(id, "[empty]");
-		}
-		// get new ratings, changed at least for the element we are looking at
-		var ids = "";
-		$("[id^='q_']").each(function() {
-			ids = ids + $(this).attr('id') + ",";
-		});
-		d3web_getRatings(ids);
-	}
+            // add fact in d3web
+            d3web_addfact(id, value - 1); // zero-based
+        } else {
+            // set default empty fact
+            d3web_addfact(id, "[empty]");
+        }
+        // get new ratings, changed at least for the element we are looking at
+        var ids = "";
+        $("[id^='q_']").each(function() {
+            ids = ids + $(this).attr('id') + ",";
+        });
+        d3web_getRatings(ids);
+    }
 }
 
 /**
@@ -958,103 +1002,103 @@ function h4boxes(value, id) {
  */
 function h4boxes_mark(object, skip_self) {
 
-	// TODO refactor algorithm and mapping between 0-3 and image 1-4 numbers
-	// check object itself unless skip_self
-	if (!skip_self) {
+    // TODO refactor algorithm and mapping between 0-3 and image 1-4 numbers
+    // check object itself unless skip_self
+    if (!skip_self) {
 		
-		// we need this as a coloring flag
-		var oc = object.hasClass('oc');
-		var color; 
+        // we need this as a coloring flag
+        var oc = object.hasClass('oc');
+        var color; 
 		
-		if (oc) {	// in oc questions, rating default for parents
-					// is always low
-			color = 3;
-		} else { // otherwise it is high (green) per default
-			color = 0;
-		}
+        if (oc) {	// in oc questions, rating default for parents
+            // is always low
+            color = 3;
+        } else { // otherwise it is high (green) per default
+            color = 0;
+        }
 
-		// for each of the children questions
-		$("#sub-" + object.attr('id')).children("div[id^='q_']").each(
-				function() {
+        // for each of the children questions
+        $("#sub-" + object.attr('id')).children("div[id^='q_']").each(
+            function() {
 					
-					// if child is rated medium
-					if ($(this).hasClass("rating-medium")) {
+                // if child is rated medium
+                if ($(this).hasClass("rating-medium")) {
 						
-						// if higher rating and mc question
-						if (color < 2 && !oc) {
-							color = 2; // set medium rating
-						}
-						// if lower rating and oc question
-						// leave medium
-						if (color > 2 && oc) {
-							color = 2;
-						}
+                    // if higher rating and mc question
+                    if (color < 2 && !oc) {
+                        color = 2; // set medium rating
+                    }
+                    // if lower rating and oc question
+                    // leave medium
+                    if (color > 2 && oc) {
+                        color = 2;
+                    }
 						
-					// if child is rated low	
-					} else if ($(this).hasClass("rating-low")) {
+                // if child is rated low	
+                } else if ($(this).hasClass("rating-low")) {
 						
-						if (color < 3 && !oc) {
-							color = 3;
-						}
+                    if (color < 3 && !oc) {
+                        color = 3;
+                    }
 					
-					} else if ($(this).hasClass("rating-high")) {
-						if (color > 0 && oc) {
-							color = 0;
-						}
-					} else {
-						// set color to transparent in case of undecided questions
-						// if ($(this).hasClass("question-unanswered")) {
-						if (color < 1 && !oc) {
-							color = 1;
-						}
-						if (color > 1 && oc) {
-							color = 1;
-						}
-					}
-				});
+                } else if ($(this).hasClass("rating-high")) {
+                    if (color > 0 && oc) {
+                        color = 0;
+                    }
+                } else {
+                    // set color to transparent in case of undecided questions
+                    // if ($(this).hasClass("question-unanswered")) {
+                    if (color < 1 && !oc) {
+                        color = 1;
+                    }
+                    if (color > 1 && oc) {
+                        color = 1;
+                    }
+                }
+            });
 
-		// retrieve target element and target image
-		var target = $("#" + $(object).attr('id'));
-		var imgTarget = $("#panel-" + $(object).attr('id'));
-		// remove old classes
-		target.removeClass('rating-low rating-medium rating-high');
-		// set new class
-		switch (color) {
-		case 0: // green
-			target.addClass("rating-high");
-			imgTarget.attr('src', "img/panel1.gif");
-			break;
-		case 1: // transparent
-			imgTarget.attr('src', "img/panel4.gif");
-			break;
-		case 2: // yellow
-			target.addClass("rating-medium");
-			imgTarget.attr('src', "img/panel3.gif");
-			break;
-		case 3: // red
-			target.addClass("rating-low");
-			imgTarget.attr('src', "img/panel2.gif");
-			break;
-		}
-	}
+        // retrieve target element and target image
+        var target = $("#" + $(object).attr('id'));
+        var imgTarget = $("#panel-" + $(object).attr('id'));
+        // remove old classes
+        target.removeClass('rating-low rating-medium rating-high');
+        // set new class
+        switch (color) {
+            case 0: // green
+                target.addClass("rating-high");
+                imgTarget.attr('src', "img/panel1.gif");
+                break;
+            case 1: // transparent
+                imgTarget.attr('src', "img/panel4.gif");
+                break;
+            case 2: // yellow
+                target.addClass("rating-medium");
+                imgTarget.attr('src', "img/panel3.gif");
+                break;
+            case 3: // red
+                target.addClass("rating-low");
+                imgTarget.attr('src', "img/panel2.gif");
+                break;
+        }
+    }
 
-	// get first parent div
-	var walking = $(object).parent("div:first");
-	var reg = new RegExp(/^sub-.*$/);
-	var counter = 0;
+    // get first parent div
+    var walking = $(object).parent("div:first");
+    var reg = new RegExp(/^sub-.*$/);
+    var counter = 0;
 	
-	while (!reg.test($(walking).attr('id'))) {
-		counter += 1;
-		if (counter > 6) // why 6?! what about larger dialogs?! TODO
-			break; // break if there is no more parent question
-		walking = $(walking).parent("div");
-	}
+    while (!reg.test($(walking).attr('id'))) {
+        counter += 1;
+        if (counter > 6) // why 6?! what about larger dialogs?! TODO
+            break; // break if there is no more parent question
+        walking = $(walking).parent("div");
+    }
 
-	// get first parent of element and call 
-	// recursively, also resetting the parents coloring
-	$(walking).parent(":first").each(function() {
-		h4boxes_mark($(this), false);
-	});
+    // get first parent of element and call 
+    // recursively, also resetting the parents coloring
+    $(walking).parent(":first").each(function() {
+        h4boxes_mark($(this), false);
+    });
 }
 
 /**
@@ -1064,15 +1108,15 @@ function h4boxes_mark(object, skip_self) {
  */
 function copy_div(sourceId, destId) {
 	
-	// get content, which is the innerHTML of the source
-	var newContent = $("#" + sourceId).attr('innerHTML');
-	var dest = $("#" + destId);
-	if (newContent.length == 0) {
-		dest.hide(0); // if nothing to copy, hide new element
-	} else {
-		// else set content to new element and show it animated
-		dest.attr('innerHTML', newContent).show(1000);
-	}
+    // get content, which is the innerHTML of the source
+    var newContent = $("#" + sourceId).attr('innerHTML');
+    var dest = $("#" + destId);
+    if (newContent.length == 0) {
+        dest.hide(0); // if nothing to copy, hide new element
+    } else {
+        // else set content to new element and show it animated
+        dest.attr('innerHTML', newContent).show(1000);
+    }
 }
 
 
@@ -1086,68 +1130,68 @@ function copy_div(sourceId, destId) {
  */
 function flat_button_toggle(id) {
 	
-	var targetId = "#f_" + id;
-	// get target element
-	var target = $(targetId);
+    var targetId = "#f_" + id;
+    // get target element
+    var target = $(targetId);
 	
-	// check if oc question
-	var oc = target.closest("div[id^='q_']").hasClass("question-oc")
-			|| target.parent().hasClass("oc");
+    // check if oc question
+    var oc = target.closest("div[id^='q_']").hasClass("question-oc")
+    || target.parent().hasClass("oc");
 	
-	// check selection state
-	var selected = target.hasClass("selected");
+    // check selection state
+    var selected = target.hasClass("selected");
 	
-	// Toggle selection: if selected, deselect, otherwise vice versa
-	if (selected) {
-		class_deselect(target);
-	} else {
+    // Toggle selection: if selected, deselect, otherwise vice versa
+    if (selected) {
+        class_deselect(target);
+    } else {
 		
-		// standard coloring case
-		target.removeClass('not-selected').addClass('selected');
+        // standard coloring case
+        target.removeClass('not-selected').addClass('selected');
 		
-		// check if currently active and not selected
-		if (target.hasClass('not-selected-c')) {
-			target.removeClass('not-selected-c').addClass('selected-c');
-		}
+        // check if currently active and not selected
+        if (target.hasClass('not-selected-c')) {
+            target.removeClass('not-selected-c').addClass('selected-c');
+        }
 		
-		// check if currently done and not selected
-		if (target.hasClass('not-selected-d')) {
-			target.removeClass('not-selected-d').addClass('selected-d');
-		}
-	}
+        // check if currently done and not selected
+        if (target.hasClass('not-selected-d')) {
+            target.removeClass('not-selected-d').addClass('selected-d');
+        }
+    }
 
-	// oc questions: deselect all other answer alternatives
-	var parent = target.closest("div[id^='q_']");
-	if (oc) {
-		var children = parent.find("div[id^='f_a_']");
-		children.each(function() {
-			if ($(this).attr('id') != target.attr('id')) {
-				class_deselect($(this));
-			}
-		});
-	}
+    // oc questions: deselect all other answer alternatives
+    var parent = target.closest("div[id^='q_']");
+    if (oc) {
+        var children = parent.find("div[id^='f_a_']");
+        children.each(function() {
+            if ($(this).attr('id') != target.attr('id')) {
+                class_deselect($(this));
+            }
+        });
+    }
 	
-	// now the corresponding fact needs to be set in the kb
-	//var answer = "";
+    // now the corresponding fact needs to be set in the kb
+    //var answer = "";
 	
-	// if we have a oc or mc question, we need the text
-	// such questions don't have "type" attributes
-	//if((target.attr("type") == null) || (target.attr("type") == "")){
+    // if we have a oc or mc question, we need the text
+    // such questions don't have "type" attributes
+    //if((target.attr("type") == null) || (target.attr("type") == "")){
 		
-	//} 
+    //} 
 	
-	// otherwise we need the value (e.g. input fields)
-	//else {
-		//answer = target.val();
-	//}
+    // otherwise we need the value (e.g. input fields)
+    //else {
+    //answer = target.val();
+    //}
 		
-	var qid = target.closest("div[id^='q_']").attr("id");
-	qid = qid.substring(2); // remove "q_" to get the pure question id
+    var qid = target.closest("div[id^='q_']").attr("id");
+    qid = qid.substring(2); // remove "q_" to get the pure question id
 	
-	var answerid = target.attr("id").substring(2);
+    var answerid = target.attr("id").substring(2);
 	
-	// add the fact
-	d3web_addfact(qid, answerid);
+    // add the fact
+    d3web_addfact(qid, answerid);
 }
 
 /**
@@ -1155,13 +1199,13 @@ function flat_button_toggle(id) {
  * @param target the target element
  */
 function class_deselect(target) {
-	target.removeClass('selected').addClass('not-selected');
-	if (target.hasClass('selected-c')) {
-		target.removeClass('selected-c').addClass('not-selected-c');
-	}
-	if (target.hasClass('selected-d')) {
-		target.removeClass('selected-d').addClass('not-selected-d');
-	}
+    target.removeClass('selected').addClass('not-selected');
+    if (target.hasClass('selected-c')) {
+        target.removeClass('selected-c').addClass('not-selected-c');
+    }
+    if (target.hasClass('selected-d')) {
+        target.removeClass('selected-d').addClass('not-selected-d');
+    }
 }
 
 /**
@@ -1171,93 +1215,93 @@ function class_deselect(target) {
  * @param e the clicked-evebt
  */
 function show_clarification_popup(question_id, e) {
-	//var counter = 0;
+    //var counter = 0;
 
-	if (lastPopup != question_id) {
-		var divHTML = '<b>Weitere Optionen:</b><br />';
-		var popup = $("#__popup");
-		// try to get existing popup window, else create it
-		if (popup.size() == 0) {
-			$("body").append('<div id="__popup"></div>');
-			popup = $("#__popup");
-		}
-		// Set the basic HTML
-		popup.attr('innerHTML', divHTML);
+    if (lastPopup != question_id) {
+        var divHTML = '<b>Weitere Optionen:</b><br />';
+        var popup = $("#__popup");
+        // try to get existing popup window, else create it
+        if (popup.size() == 0) {
+            $("body").append('<div id="__popup"></div>');
+            popup = $("#__popup");
+        }
+        // Set the basic HTML
+        popup.attr('innerHTML', divHTML);
 
-		// find answers to show in popup, i.e., currently (by XML) hidden answers
-		var hiddenAnswers = $("#" + question_id).find("div[id^='a_']:hidden");
+        // find answers to show in popup, i.e., currently (by XML) hidden answers
+        var hiddenAnswers = $("#" + question_id).find("div[id^='a_']:hidden");
 
-		if (hiddenAnswers.size() > 0) {
-			var divWidth = 0; // determine width (for IE)
-			hiddenAnswers.each(function() {
-				// fix to make selectable
-				var thisWidth = $(this).width();
-				divWidth = Math.max(divWidth, thisWidth);
-			});
+        if (hiddenAnswers.size() > 0) {
+            var divWidth = 0; // determine width (for IE)
+            hiddenAnswers.each(function() {
+                // fix to make selectable
+                var thisWidth = $(this).width();
+                divWidth = Math.max(divWidth, thisWidth);
+            });
 
-			// make the div
-			hiddenAnswers.each(function() {
-				var result = $(this).clone(false); // remove handlers and data
-				result.unbind();
-				result.attr('onclick', ''); // remove click events
-				answer_id = $(this).attr('id');
-				jQuery.data(result, 'targetId', answer_id); // add answer ID as data
-				result.click(function() {
-					// bind function to it so that answer can be selected
-					select_clarification(jQuery.data(result, 'targetId'));
-				});
-				popup.css('position', 'absolute').css('display', 'block');
-				result.attr('id', 'pop_' + result.attr('id'));
-				result.show(0);
-				result.appendTo(popup); // append new answer value to popup
-			});
+            // make the div
+            hiddenAnswers.each(function() {
+                var result = $(this).clone(false); // remove handlers and data
+                result.unbind();
+                result.attr('onclick', ''); // remove click events
+                answer_id = $(this).attr('id');
+                jQuery.data(result, 'targetId', answer_id); // add answer ID as data
+                result.click(function() {
+                    // bind function to it so that answer can be selected
+                    select_clarification(jQuery.data(result, 'targetId'));
+                });
+                popup.css('position', 'absolute').css('display', 'block');
+                result.attr('id', 'pop_' + result.attr('id'));
+                result.show(0);
+                result.appendTo(popup); // append new answer value to popup
+            });
 
-			// IE specific
-			if ($.browser.msie) {
-				var height = popup.height();
-				var width = popup.width();
+            // IE specific
+            if ($.browser.msie) {
+                var height = popup.height();
+                var width = popup.width();
 
-			//	var scrOfY = 0;
-				if (typeof (window.pageYOffset) == 'number') {
-					// Netscape compliant
-					yOffset = window.pageYOffset;
-				} else if (document.body
-						&& (document.body.scrollLeft || document.body.scrollTop)) {
-					// DOM compliant
-					yOffset = document.body.scrollTop;
-				} else if (document.documentElement
-						&& (document.documentElement.scrollLeft || document.documentElement.scrollTop)) {
-					// IE6 standards compliant mode
-					yOffset = document.documentElement.scrollTop;
-				}
+                //	var scrOfY = 0;
+                if (typeof (window.pageYOffset) == 'number') {
+                    // Netscape compliant
+                    yOffset = window.pageYOffset;
+                } else if (document.body
+                    && (document.body.scrollLeft || document.body.scrollTop)) {
+                    // DOM compliant
+                    yOffset = document.body.scrollTop;
+                } else if (document.documentElement
+                    && (document.documentElement.scrollLeft || document.documentElement.scrollTop)) {
+                    // IE6 standards compliant mode
+                    yOffset = document.documentElement.scrollTop;
+                }
 
-				leftVal = (($(window).width() - width) / 2) + "px";
-				topVal = ((($(window).height() - height) / 2) + yOffset) + "px";
-				// show the popup message and hide with fading effect
-				popup.css('left', leftVal);
-				popup.css('top', topVal);
-			} else {
-				// set popup position for other than IE based browsers
-				popup.position({
-					"my" : "left top",
-					"at" : "right bottom",
-					"of" : e,
-					"offset" : "15 15",
-					"collision" : "fit flip",
-					"bgiframe" : false
-				});
-			}
+                leftVal = (($(window).width() - width) / 2) + "px";
+                topVal = ((($(window).height() - height) / 2) + yOffset) + "px";
+                // show the popup message and hide with fading effect
+                popup.css('left', leftVal);
+                popup.css('top', topVal);
+            } else {
+                // set popup position for other than IE based browsers
+                popup.position({
+                    "my" : "left top",
+                    "at" : "right bottom",
+                    "of" : e,
+                    "offset" : "15 15",
+                    "collision" : "fit flip",
+                    "bgiframe" : false
+                });
+            }
 
-			// show div
-			popup.fadeIn(250);
+            // show div
+            popup.fadeIn(250);
 
-			// set flag to say that popup is showing currently
-			clariPopupShowing = true;
+            // set flag to say that popup is showing currently
+            clariPopupShowing = true;
 			
-			// add to lastPopup storage
-			lastPopup = question_id;
-		}
-	}
+            // add to lastPopup storage
+            lastPopup = question_id;
+        }
+    }
 }
 
 
@@ -1266,10 +1310,10 @@ function show_clarification_popup(question_id, e) {
  * @param answer_id id of the newly to add answer
  */
 function select_clarification(answer_id) {
-	var answer = $("#" + answer_id);
-	answer.show();	// show the answer element
-	hide_popup(250); // hide popup again
-	flat_button_toggle(answer_id); // toggle answer selection state
+    var answer = $("#" + answer_id);
+    answer.show();	// show the answer element
+    hide_popup(250); // hide popup again
+    flat_button_toggle(answer_id); // toggle answer selection state
 }
 
 
@@ -1278,7 +1322,7 @@ function select_clarification(answer_id) {
  * @param id the ID of the element to toggle
  */
 function toggle(id) {
-	$("#" + id).toggle(500);
+    $("#" + id).toggle(500);
 }
 
 /**
@@ -1286,17 +1330,17 @@ function toggle(id) {
  * (http://blog.t8d.de/2008/11/03/firebug-windowconsole-is-undefined-verhindern/)
  */
 if (typeof window.loadFirebugConsole == "undefined"
-		|| typeof window.console == 'undefined') {
-	var names = [ "log", "debug", "info", "warn", "error", "assert", "dir",
-			"dirxml", "group", "groupEnd", "time", "timeEnd", "count", "trace",
-			"profile", "profileEnd" ];
-	window.console = {};
+    || typeof window.console == 'undefined') {
+    var names = [ "log", "debug", "info", "warn", "error", "assert", "dir",
+    "dirxml", "group", "groupEnd", "time", "timeEnd", "count", "trace",
+    "profile", "profileEnd" ];
+    window.console = {};
 	
-	// create for each of above console printing keywords an empty dummy-function
-	for ( var i = 0; i < names.length; ++i) {
-		window.console[names[i]] = function() {
-		};
-	}
+    // create for each of above console printing keywords an empty dummy-function
+    for ( var i = 0; i < names.length; ++i) {
+        window.console[names[i]] = function() {
+            };
+    }
 }
 
 /* 
