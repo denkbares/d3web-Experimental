@@ -45,7 +45,7 @@ public class IRISectionFinder implements SectionFinder {
 				if (Character.valueOf(GREATER_THAN).equals(chars[i])) {
 					// found greater than -> create result
 					currentEnd = i;
-					results.add(new SectionFinderResult(currentStart, currentEnd + 1));
+					results.add(new SectionFinderResult(currentStart + 1, currentEnd));
 					currentStart = i + 1;
 				}
 			}
