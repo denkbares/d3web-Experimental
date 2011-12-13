@@ -25,13 +25,17 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.AddImport;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
+import org.semanticweb.owlapi.model.OWLImportsDeclaration;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.RemoveImport;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
+import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
 
 import de.knowwe.rdf2go.Rdf2GoCore;
 
@@ -126,12 +130,14 @@ public class OWLAPIConnector {
 
 		if (reasoner.equals("pellet")) {
 			this.factory = com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory.getInstance();
-			this.reasoner = factory.createReasoner(ontology);
+		}
+		else if (reasoner.equals("structural")) {
+			this.factory = new StructuralReasonerFactory();
 		}
 		else {
 			factory = new org.semanticweb.HermiT.Reasoner.ReasonerFactory();
-			this.reasoner = factory.createReasoner(ontology);
 		}
+		this.reasoner = factory.createReasoner(ontology);
 	}
 
 	/**
@@ -216,4 +222,28 @@ public class OWLAPIConnector {
 		}
 	}
 
+	/**
+	 * Adds an Import Declaration to the local ontology. Note: The import of the
+	 * axioms contained in the ontology has to be done separately so a reasoner
+	 * can take them into account.
+	 *
+	 * @created 01.12.2011
+	 */
+	public void addImport(IRI iri) {
+		OWLImportsDeclaration oid = manager.getOWLDataFactory().getOWLImportsDeclaration(iri);
+		AddImport addImp = new AddImport(ontology, oid);
+		manager.applyChange(addImp);
+	}
+
+	/**
+	 * Removes an Import Declaration from the local ontology. Note: The stored 
+     * axioms from the import need to be removed separately.
+	 *
+	 * @created 01.12.2011
+	 */
+	public void removeImport(IRI iri) {
+		OWLImportsDeclaration oid = manager.getOWLDataFactory().getOWLImportsDeclaration(iri);
+		RemoveImport removeImp = new RemoveImport(ontology, oid);
+		manager.applyChange(removeImp);
+	}
 }

@@ -102,6 +102,67 @@
 			<version>0.2-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>pellet-core</groupId>
+			<artifactId>pellet-core</artifactId>
+			<version>pellet-core</version>
+		</dependency>
+		<dependency>
+			<groupId>pellet-explanation</groupId>
+			<artifactId>pellet-explanation</artifactId>
+			<version>pellet-explanation</version>
+		</dependency>
+		<dependency>
+			<groupId>aterm-java</groupId>
+			<artifactId>aterm-java</artifactId>
+			<version>aterm-java</version>
+		</dependency>
+		<dependency>
+			<groupId>pellet-query</groupId>
+			<artifactId>pellet-query</artifactId>
+			<version>pellet-query</version>
+		</dependency>
+		<dependency>
+			<groupId>pellet-datatypes</groupId>
+			<artifactId>pellet-datatypes</artifactId>
+			<version>pellet-datatypes</version>
+		</dependency>
+		<dependency>
+			<groupId>pellet-jena</groupId>
+			<artifactId>pellet-jena</artifactId>
+			<version>pellet-jena</version>
+		</dependency>
+		<dependency>
+			<groupId>pellet-rules</groupId>
+			<artifactId>pellet-rules</artifactId>
+			<version>pellet-rules</version>
+		</dependency>
+		<dependency>
+			<groupId>pellet-el</groupId>
+			<artifactId>pellet-el</artifactId>
+			<version>pellet-el</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.hpl.jena</groupId>
+			<artifactId>jena</artifactId>
+			<version>2.6.4</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.hpl.jena</groupId>
+			<artifactId>arq</artifactId>
+			<version>2.8.8</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jgrapht</groupId>
+			<artifactId>jgrapht-jdk1.5</artifactId>
+			<version>0.7.3</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 </project>
