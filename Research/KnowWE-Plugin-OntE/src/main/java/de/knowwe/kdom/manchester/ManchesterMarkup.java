@@ -29,6 +29,7 @@ import de.knowwe.kdom.manchester.frame.DataPropertyFrame;
 import de.knowwe.kdom.manchester.frame.ExtendClassFrame;
 import de.knowwe.kdom.manchester.frame.ExtendIndividualFrame;
 import de.knowwe.kdom.manchester.frame.ExtendObjectPropertyFrame;
+import de.knowwe.kdom.manchester.frame.ImportFrame;
 import de.knowwe.kdom.manchester.frame.IndividualFrame;
 import de.knowwe.kdom.manchester.frame.MiscFrame;
 import de.knowwe.kdom.manchester.frame.ObjectPropertyFrame;
@@ -60,7 +61,8 @@ public class ManchesterMarkup extends AbstractType {
 			+ OntologyFrame.KEYWORD + "|"
 			+ ExtendClassFrame.KEYWORD + "|"
 			+ ExtendIndividualFrame.KEYWORD + "|"
-			+ ExtendObjectPropertyFrame.KEYWORD
+			+ ExtendObjectPropertyFrame.KEYWORD + "|"
+			+ ImportFrame.KEYWORD
 			+ ")";
 
 	/**
@@ -95,6 +97,8 @@ public class ManchesterMarkup extends AbstractType {
 			this.addChildType(new ExtendClassFrame());
 			this.addChildType(new ExtendIndividualFrame());
 			this.addChildType(new ExtendObjectPropertyFrame());
+
+			this.addChildType(new ImportFrame());
 		}
 
 		public static synchronized ManchesterMarkupContentType getInstance() {

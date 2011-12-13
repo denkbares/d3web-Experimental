@@ -76,7 +76,7 @@ public class ManchesterOWLSyntaxHTMLColorRenderer {
 		Section<? extends Type> section = OWLApiAxiomCache.getInstance().lookUpSection(axiom,
 				OWLApiAxiomCache.STORE_CACHE);
 		if (section != null) {
-			OnteRenderingUtils.renderHyperlink(section);
+			doc.append(OnteRenderingUtils.renderHyperlink(section));
 		}
 	}
 

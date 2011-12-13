@@ -20,6 +20,7 @@
 package de.knowwe.kdom.manchester.frame;
 
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.kdom.manchester.types.HiddenComment;
 
 /**
  * The {@link DefaultDescription} is the root class for all descriptions used in
@@ -35,6 +36,6 @@ public class DefaultDescription extends AbstractType {
 	 * Constructor for the {@link DefaultDescription}.
 	 */
 	public DefaultDescription() {
-
+		this.addChildType(new HiddenComment());
 	}
 }

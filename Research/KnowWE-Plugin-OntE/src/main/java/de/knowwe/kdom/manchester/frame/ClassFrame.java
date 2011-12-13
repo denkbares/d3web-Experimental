@@ -230,7 +230,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 	}
 
 	@Override
-	public KnowledgeUnitCompileScript getCompileScript() {
+	public KnowledgeUnitCompileScript<ClassFrame> getCompileScript() {
 		return new ClassFrameCompileScript();
 	}
 }

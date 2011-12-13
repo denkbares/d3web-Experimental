@@ -31,6 +31,27 @@ public class OnteRenderingUtils {
 	}
 
 	/**
+	 * Create the HTML of a button of the toolbar.
+	 *
+	 * @created 12.10.2011
+	 * @param title
+	 * @param action
+	 * @param image
+	 * @return
+	 */
+	public static String getButton(String title, String action, String imageClass) {
+		return "<a href=\"javascript:"
+				+ action
+				+ ";void(0);\" jsaction=\""
+				+ action
+				+ "\" title=\""
+				+ title
+				+ "\" class=\"onte-button left small\">"
+				+ "<img src=\"KnowWEExtension/images/onte/transparent.png\" class=\""
+				+ imageClass + "\" /></a>";
+	}
+
+	/**
 	 * Renders a nice hyperlink to the article a concept is defined. used for
 	 * Inter-Wiki linking of the ontology definitions.
 	 *
@@ -46,8 +67,8 @@ public class OnteRenderingUtils {
 
 		StringBuilder s = new StringBuilder();
 
-		s.append("<span style=\"font-size:9px;padding-left:30px;\">(Defined in: ");
-		s.append("<a href=\"Wiki.jsp?page=" + term.getOriginalText()
+		s.append("<span style=\"font-size:9px;padding-left:10px;\">(Article: ");
+		s.append("<a href=\"Wiki.jsp?page=" + term.getTitle()
 				+ "\" title=\"Goto definition article\">");
 		s.append(term.getTitle());
 		s.append("</a>");

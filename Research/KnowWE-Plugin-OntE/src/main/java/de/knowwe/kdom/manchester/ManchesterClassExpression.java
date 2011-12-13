@@ -45,6 +45,15 @@ import de.knowwe.kdom.manchester.types.Restriction;
  */
 public class ManchesterClassExpression extends CompositeCondition {
 
+	public ManchesterClassExpression() {
+		super(new String[] {
+				"AND", "UND", "&", "THAT" },
+				new String[] {
+						"OR", "ODER", "|" },
+				new String[] {
+						"NOT", "NICHT", "!" });
+	}
+
 	/**
 	 * Initializes the {@link TerminalCondition}s.
 	 *

@@ -26,10 +26,11 @@ import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
 import de.knowwe.onte.editor.OWLApiAxiomCacheUpdateEvent;
-import de.knowwe.owlapi.OWLAPIKnowledgeUnitCompileScript;
+import de.knowwe.owlapi.OWLAPIAbstractKnowledgeUnitCompileScript;
 import de.knowwe.owlapi.OWLAPISubtreeHandler;
 
-public class IndividualFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<IndividualFrame> {
+
+public class IndividualFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCompileScript<IndividualFrame> {
 
 	/**
 	 * Constructor for the SubtreeHandler. Here you can set if a sync with

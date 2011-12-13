@@ -19,11 +19,11 @@ import de.knowwe.kdom.manchester.frame.MiscFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.onte.editor.OWLApiAxiomCacheUpdateEvent;
-import de.knowwe.owlapi.OWLAPIKnowledgeUnitCompileScript;
+import de.knowwe.owlapi.OWLAPIAbstractKnowledgeUnitCompileScript;
 import de.knowwe.owlapi.OWLAPISubtreeHandler;
 
 
-public class MiscFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<MiscFrame> {
+public class MiscFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCompileScript<MiscFrame> {
 
 	/**
 	 * Constructor for the SubtreeHandler. Here you can set if a sync with

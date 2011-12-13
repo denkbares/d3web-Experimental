@@ -10,7 +10,6 @@ import org.ontoware.rdf2go.RDF2Go;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
 
 import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.Type;
@@ -24,10 +23,10 @@ import de.knowwe.kdom.manchester.ManchesterClassExpression;
 import de.knowwe.kdom.manchester.frame.ClassFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.onte.editor.OWLApiAxiomCacheUpdateEvent;
-import de.knowwe.owlapi.OWLAPIKnowledgeUnitCompileScript;
+import de.knowwe.owlapi.OWLAPIAbstractKnowledgeUnitCompileScript;
 import de.knowwe.owlapi.OWLAPISubtreeHandler;
 
-public class ClassFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<ClassFrame> {
+public class ClassFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCompileScript<ClassFrame> {
 
 	/**
 	 * Constructor for the {@link SubtreeHandler}. Here you can set if a sync
@@ -168,23 +167,26 @@ public class ClassFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<Cl
 			}
 		}
 
+		// TODO: really necessary new compile script should handle this ???
+		// needs testing
 		// Note: use OWLEntityCollector instead of below?
 		// necessary to avoid errors through the OWLApi due not defined entities
-		Set<OWLAxiom> addAxioms = new HashSet<OWLAxiom>();
-		for (OWLAxiom a : axioms) {
-			Set<OWLClass> classes = a.getClassesInSignature();
-			for (OWLClass owlClass : classes) {
-				OWLAxiom t = AxiomFactory.getOWLAPIEntityDeclaration(owlClass);
-				addAxioms.add(t);
-			}
-
-			Set<OWLObjectProperty> properties = a.getObjectPropertiesInSignature();
-			for (OWLObjectProperty p : properties) {
-				OWLAxiom t = AxiomFactory.getOWLAPIEntityDeclaration(p);
-				addAxioms.add(t);
-			}
-		}
-		addAxioms.addAll(axioms);
-		return addAxioms;
+		// Set<OWLAxiom> addAxioms = new HashSet<OWLAxiom>();
+		// for (OWLAxiom a : axioms) {
+		// Set<OWLClass> classes = a.getClassesInSignature();
+		// for (OWLClass owlClass : classes) {
+		// OWLAxiom t = AxiomFactory.getOWLAPIEntityDeclaration(owlClass);
+		// addAxioms.add(t);
+		// }
+		//
+		// Set<OWLObjectProperty> properties =
+		// a.getObjectPropertiesInSignature();
+		// for (OWLObjectProperty p : properties) {
+		// OWLAxiom t = AxiomFactory.getOWLAPIEntityDeclaration(p);
+		// addAxioms.add(t);
+		// }
+		// }
+		// addAxioms.addAll(axioms);
+		return axioms;
 	}
 }
