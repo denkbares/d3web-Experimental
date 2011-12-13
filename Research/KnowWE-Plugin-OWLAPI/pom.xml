@@ -115,7 +115,7 @@
 		<dependency>
 			<groupId>aterm-java</groupId>
 			<artifactId>aterm-java</artifactId>
-			<version>aterm-java</version>
+			<version>1.6</version>
 		</dependency>
 		<dependency>
 			<groupId>pellet-query</groupId>
