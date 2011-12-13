@@ -102,6 +102,7 @@ public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends A
 
 	@Override
 	public void deleteFromRepository(Section<T> section) {
+		deleteFromOntology(section);
 		Set<OWLAxiom> axioms = axiomCache.remove(section);
 		connector.removeAxioms(axioms);
 		if (sync) {
@@ -118,6 +119,7 @@ public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends A
 
 		// store messages found while compiling the current section
 		Messages.storeMessages(section.getArticle(), section, getClass(), messages);
+		insertIntoOntology(section);
 
 		if (sync) {
 			RDF2GoSync.synchronize(axioms, section, RDF2GoSync.Mode.ADD);
@@ -135,4 +137,8 @@ public abstract class OWLAPIKnowledgeUnitCompileScript<T extends Type> extends A
 	 *         ontology.
 	 */
 	public abstract Set<OWLAxiom> createOWLAxioms(Section<T> section, Collection<Message> messages);
+
+	public abstract void deleteFromOntology(Section<T> section);
+
+	public abstract void insertIntoOntology(Section<T> section);
 }
