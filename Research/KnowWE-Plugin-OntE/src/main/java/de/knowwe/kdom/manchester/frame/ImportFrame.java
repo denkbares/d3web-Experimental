@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -33,7 +31,6 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
-import de.knowwe.kdom.manchester.compile.ImportFrameCompileScript;
 import de.knowwe.kdom.manchester.types.Keyword;
 import de.knowwe.kdom.renderer.IRITypeRenderer;
 import de.knowwe.kdom.sectionfinder.IRISectionFinder;
@@ -46,7 +43,7 @@ import de.knowwe.kdom.sectionfinder.IRISectionFinder;
  * @author Stefan Mark
  * @created 22.09.2011
  */
-public class ImportFrame extends DefaultFrame implements KnowledgeUnit<ImportFrame> {
+public class ImportFrame extends DefaultFrame {
 
 	public static final String KEYWORD = "Import:";
 
@@ -114,11 +111,6 @@ public class ImportFrame extends DefaultFrame implements KnowledgeUnit<ImportFra
 	 */
 	public Section<? extends Type> getPrefix(Section<? extends ImportFrame> section) {
 		return Sections.findSuccessor(section, ImportPrefix.class);
-	}
-
-	@Override
-	public KnowledgeUnitCompileScript<ImportFrame> getCompileScript() {
-		return new ImportFrameCompileScript();
 	}
 }
 /**
