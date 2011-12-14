@@ -195,7 +195,7 @@ public class IncrementalCompiler implements EventListener {
 		while (compilationUnitIterator.hasNext()) {
 			Section<? extends KnowledgeUnit> section = compilationUnitIterator.next();
 			KnowledgeUnitCompileScript compileScript = section.get().getCompileScript();
-			if (compileScript == null) {
+			if (compileScript != null) {
 				Collection<Section<TermReference>> refs = compileScript.getAllReferencesOfKnowledgeUnit(
 						section);
 				if (refs != null) {
