@@ -74,8 +74,7 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 
 		}
 		else return Messages.asList(Messages.objectCreationError(
-				"Unable to create d3web Objects. KBM was null!",
-				this.getClass()));
+				"Unable to create d3web Objects. KBM was null!"));
 	}
 
 	private void createD3ObjectsUsingKDom(Section<ListSubstancesType> section,

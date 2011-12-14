@@ -76,7 +76,7 @@ public class ListCriteriaD3SubtreeHandler extends D3webSubtreeHandler<ListCriter
 
 		}
 		else return Messages.asList(Messages.objectCreationError(
-				"Unable to create d3web Objects. KBM was null!", this.getClass()));
+				"Unable to create d3web Objects. KBM was null!"));
 	}
 
 	private void createAbstractListQuestion(KnowledgeBase kb,

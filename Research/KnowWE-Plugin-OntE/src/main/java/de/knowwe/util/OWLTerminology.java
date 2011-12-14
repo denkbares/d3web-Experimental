@@ -22,7 +22,7 @@ package de.knowwe.util;
 import java.util.ResourceBundle;
 
 import de.d3web.core.knowledge.TerminologyManager;
-import de.knowwe.compile.TerminologyExtension;
+import de.knowwe.core.compile.TerminologyExtension;
 
 /**
  * Loads predefined OWL Terms into the {@link TerminologyManager}.

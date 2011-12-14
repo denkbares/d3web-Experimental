@@ -4,7 +4,7 @@ import java.util.ResourceBundle;
 
 import org.ontoware.rdf2go.model.node.URI;
 
-import de.knowwe.compile.TerminologyExtension;
+import de.knowwe.core.compile.TerminologyExtension;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class RDFSTerminology implements TerminologyExtension {

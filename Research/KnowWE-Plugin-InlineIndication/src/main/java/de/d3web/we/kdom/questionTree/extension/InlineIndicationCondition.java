@@ -116,8 +116,7 @@ public class InlineIndicationCondition extends AbstractType {
 
 				Condition condition = finding.get().getCondition(article, finding);
 				if (condition == null) {
-					msgs.add(Messages.objectCreationError(Condition.class.getSimpleName(),
-							this.getClass()));
+					msgs.add(Messages.objectCreationError(Condition.class.getSimpleName()));
 					return msgs;
 				}
 
@@ -131,8 +130,7 @@ public class InlineIndicationCondition extends AbstractType {
 					r2 = RuleFactory.createIndicationRule(qasets, condition);
 				}
 				if (r == null || (qaset instanceof QContainer && r2 == null)) {
-					msgs.add(Messages.objectCreationError(Rule.class.getSimpleName(),
-								this.getClass()));
+					msgs.add(Messages.objectCreationError(Rule.class.getSimpleName()));
 				}
 				if (r != null && !(qaset instanceof QContainer && r2 == null)) {
 					KnowWEUtils.storeObject(article, s, RuleContentType.ruleStoreKey, r);
