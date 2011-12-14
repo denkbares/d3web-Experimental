@@ -219,8 +219,10 @@ public class Rdf2GoCore implements EventListener {
 	/**
 	 * add a namespace to the model
 	 * 
-	 * @param sh prefix
-	 * @param ns url
+	 * @param sh
+	 *            prefix
+	 * @param ns
+	 *            url
 	 */
 	public void addNamespace(String sh, String ns) {
 		namespaces.put(sh, ns);
@@ -473,6 +475,51 @@ public class Rdf2GoCore implements EventListener {
 		return model.sparqlAsk(getSparqlNamespaceShorts() + query);
 	}
 
+	/**
+	 * Asks a sparql query on the model as if a specific Section wouldnt be
+	 * there. The statements of this section are removed from the model before
+	 * the query is executed. Afterwards these statements are inserted again to
+	 * provide a consistent model.
+	 * 
+	 * @created 14.12.2011
+	 * @param query
+	 *            the query to be ask
+	 * @param sec
+	 *            the section determining the statements to be excluded for the
+	 *            query
+	 * @return
+	 * @throws ModelRuntimeException
+	 * @throws MalformedQueryException
+	 */
+	public boolean sparqlAskExcludeStatementForSection(String query, Section<?> sec) throws ModelRuntimeException, MalformedQueryException {
+
+		// retrieve statements to be excluded
+		WeakHashMap<Section<? extends Type>, List<Statement>> allStatmentSectionsOfArticle =
+				statementcache.get(sec.getTitle());
+		List<Statement> statementsOfSection = allStatmentSectionsOfArticle.get(sec);
+
+		// remove these statements
+		if (statementsOfSection != null) {
+			model.removeAll(statementsOfSection.iterator());
+		}
+
+		boolean result;
+
+		// ask query
+		if (query.startsWith(getSparqlNamespaceShorts())) {
+			result = model.sparqlAsk(query);
+		}
+		result = model.sparqlAsk(getSparqlNamespaceShorts() + query);
+
+		// reinsert statements
+		if (statementsOfSection != null) {
+			model.addAll(statementsOfSection.iterator());
+		}
+
+		// return query result
+		return result;
+	}
+
 	public QueryResultTable sparqlSelect(String query) throws ModelRuntimeException, MalformedQueryException {
 		if (query.startsWith(getSparqlNamespaceShorts())) {
 			return model.sparqlSelect(query);
@@ -566,8 +613,10 @@ public class Rdf2GoCore implements EventListener {
 					else {
 						Logger.getLogger(this.getClass().getName()).log(
 								Level.INFO,
-								"Tried to remove statement from Section '" + sec.get().getName()
-										+ "', ' " + sec.getID() + "' that wasn't there:\n"
+								"Tried to remove statement from Section '"
+										+ sec.get().getName()
+										+ "', ' " + sec.getID()
+										+ "' that wasn't there:\n"
 										+ s.toString());
 					}
 				}
@@ -874,10 +923,13 @@ public class Rdf2GoCore implements EventListener {
 	 * Resource is of the right type if applicable (eg attachto RDF.TYPE
 	 * RDF.STATEMENT)
 	 * 
-	 * @param attachto The Resource that will be annotated bei the TO-Node
-	 * @param source The source section that should be used
-	 * @param io the ex-IntermediateOwlObject (now List<Statements> that should
-	 *        collect the statements
+	 * @param attachto
+	 *            The Resource that will be annotated bei the TO-Node
+	 * @param source
+	 *            The source section that should be used
+	 * @param io
+	 *            the ex-IntermediateOwlObject (now List<Statements> that should
+	 *            collect the statements
 	 */
 	public void attachTextOrigin(Resource attachto, Section source, List<Statement> io) {
 		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
