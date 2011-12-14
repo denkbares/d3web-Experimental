@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2010 Chair of Artificial Intelligence and Applied Informatics
- * Computer Science VI, University of Wuerzburg
+ * Copyright (C) 2010 University Wuerzburg, Computer Science VI
  * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
@@ -17,23 +16,16 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
+package de.knowwe.compile.support;
 
-package de.knowwe.compile.object;
-
-import de.knowwe.compile.support.Editable;
 import de.knowwe.core.kdom.Type;
 
 /**
- * 
- * Interface for types that have to be compiled to a knowledge repository
- * creating one or multiple knowledge slices
- * 
+ * Marker interface for types that should be editable by instant-edit
  * 
  * @author Jochen
- * @created 08.06.2011
+ * @created 14.12.2011
  */
-public interface KnowledgeUnit<T extends Type> extends Type, Editable {
-
-	public KnowledgeUnitCompileScript getCompileScript();
+public interface Editable extends Type {
 
 }

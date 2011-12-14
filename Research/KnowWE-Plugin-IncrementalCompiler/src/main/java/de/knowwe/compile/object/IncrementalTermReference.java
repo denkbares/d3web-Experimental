@@ -31,6 +31,7 @@ import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.core.report.DefaultErrorRenderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
@@ -107,7 +108,9 @@ public abstract class IncrementalTermReference<TermObject> extends TermReference
 				PREDEFINDED_TERM_RENDERER.render(article, sec, user, string);
 			}
 			else {
+				string.append(KnowWEUtils.maskHTML("<a name='" + sec.getID() + "'>"));
 				r.render(article, sec, user, string);
+				string.append(KnowWEUtils.maskHTML("</a>"));
 			}
 			for (Message kdomReportMessage : messages) {
 				if (kdomReportMessage.getType() == Message.Type.ERROR) {
