@@ -1,7 +1,9 @@
 package de.knowwe.owlapi.query;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.semanticweb.owlapi.debugging.DebuggerClassExpressionGenerator;
 import org.semanticweb.owlapi.expression.ParserException;
@@ -9,8 +11,10 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.reasoner.Node;
 import org.semanticweb.owlapi.reasoner.NodeSet;
@@ -249,5 +253,87 @@ public class OWLApiQueryEngine {
 	 */
 	public OWLClassExpression getOWLClassExpression(String query) throws ParserException {
 		return parser.parseManchesterOWLsyntax(query);
+	}
+
+	/**
+	 *
+	 *
+	 * @created 07.12.2011
+	 * @param entities
+	 * @return
+	 */
+	public void getInferredObjectPropertyHierarchy(Map<OWLEntity, Set<OWLEntity>> entities, OWLObjectProperty property, OWLObjectProperty father) {
+
+		if (father != null && !property.isBottomEntity()) {
+			if (!entities.containsKey(father)) {
+				entities.put(father, new TreeSet<OWLEntity>());
+			}
+			if (!entities.get(father).contains(property)) {
+				entities.get(father).add(property);
+			}
+		}
+
+		Set<OWLObjectPropertyExpression> children =
+				reasoner.getSubObjectProperties(property, true).getFlattened();
+		for (OWLObjectPropertyExpression child : children) {
+			if (!child.getNamedProperty().equals(property) && !child.isAnonymous()) {
+				getInferredObjectPropertyHierarchy(entities, child.getNamedProperty(), property);
+			}
+		}
+	}
+
+	/**
+	 *
+	 *
+	 * @created 07.12.2011
+	 * @param entities
+	 * @return
+	 */
+	public void getInferredDataPropertyHierarchy(Map<OWLEntity, Set<OWLEntity>> entities, OWLDataProperty property, OWLDataProperty father) {
+
+		if (father != null && !property.isBottomEntity()) {
+			if (!entities.containsKey(father)) {
+				entities.put(father, new TreeSet<OWLEntity>());
+			}
+			if (!entities.get(father).contains(property)) {
+				entities.get(father).add(property);
+			}
+		}
+
+		Set<OWLDataProperty> children =
+				reasoner.getSubDataProperties(property, true).getFlattened();
+		for (OWLDataProperty child : children) {
+			if (!child.isAnonymous() && !child.equals(property)) {
+				getInferredDataPropertyHierarchy(entities, child, property);
+			}
+		}
+	}
+
+	/**
+	 *
+	 *
+	 * @created 07.12.2011
+	 * @param entities
+	 * @param owlClass
+	 * @param owlClassFather
+	 * @return
+	 */
+	public void getInferredClassHierarchie(Map<OWLEntity, Set<OWLEntity>> entities, OWLClass owlClass, OWLClass owlClassFather) {
+
+		if (reasoner.isSatisfiable(owlClass)) {
+			if (owlClassFather != null) {
+				if (!entities.containsKey(owlClassFather)) {
+					entities.put(owlClassFather, new TreeSet<OWLEntity>());
+				}
+				entities.get(owlClassFather).add(owlClass);
+			}
+
+			Set<OWLClass> children = reasoner.getSubClasses(owlClass, true).getFlattened();
+			for (OWLClass child : children) {
+				if (!child.equals(owlClass)) {
+					getInferredClassHierarchie(entities, child, owlClass);
+				}
+			}
+		}
 	}
 }

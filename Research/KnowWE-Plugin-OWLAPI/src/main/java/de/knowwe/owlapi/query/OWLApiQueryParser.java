@@ -101,4 +101,41 @@ public class OWLApiQueryParser {
 
 		return parser.parseAxiom();
 	}
+
+	public boolean isClassName(String termIdentifier) {
+		ManchesterOWLSyntaxEditorParser parser = new ManchesterOWLSyntaxEditorParser(factory,
+				termIdentifier);
+		parser.setDefaultOntology(ontology);
+		parser.setOWLEntityChecker(owlEntityChecker);
+
+		return parser.isClassName(termIdentifier);
+	}
+
+	public boolean isObjectPropertyName(String termIdentifier) {
+		ManchesterOWLSyntaxEditorParser parser = new ManchesterOWLSyntaxEditorParser(factory,
+				termIdentifier);
+		parser.setDefaultOntology(ontology);
+		parser.setOWLEntityChecker(owlEntityChecker);
+
+		return parser.isObjectPropertyName(termIdentifier);
+	}
+
+	public boolean isDataPropertyName(String termIdentifier) {
+		ManchesterOWLSyntaxEditorParser parser = new ManchesterOWLSyntaxEditorParser(factory,
+				termIdentifier);
+		parser.setDefaultOntology(ontology);
+		parser.setOWLEntityChecker(owlEntityChecker);
+
+		return parser.isDataPropertyName(termIdentifier);
+	}
+
+	public boolean isIndividualName(String termIdentifier) {
+		ManchesterOWLSyntaxEditorParser parser = new ManchesterOWLSyntaxEditorParser(factory,
+				termIdentifier);
+		parser.setDefaultOntology(ontology);
+		parser.setOWLEntityChecker(owlEntityChecker);
+
+		return parser.isIndividualName(termIdentifier);
+	}
+
 }
