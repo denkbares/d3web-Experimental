@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -74,8 +74,8 @@ import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
- * 
- * 
+ *
+ *
  * @author Stefan Mark
  * @created 07.09.2011
  */
@@ -97,7 +97,7 @@ public class AxiomFactory {
 	 * Returns the a {@link OWLDeclarationAxiom} for a {@link OWLEntity} object.
 	 * An entity could be a {@link OWLClass}, {@link OWLDataProperty},
 	 * {@link OWLObjectProperty} or {@link OWLIndividual}.
-	 * 
+	 *
 	 * @created 27.09.2011
 	 * @param OWLEntity entity
 	 * @return OWLAxiom
@@ -107,11 +107,16 @@ public class AxiomFactory {
 		return getOWLAPIEntityDeclaration(entity);
 	}
 
+	public static OWLAxiom getOWLAPIEntityDeclaration(String termIdentifier, Class<?> c) {
+		OWLEntity entity = getOWLAPIEntity(termIdentifier, c);
+		return getOWLAPIEntityDeclaration(entity);
+	}
+
 	/**
 	 * Returns the a {@link OWLDeclarationAxiom} for a {@link OWLEntity} object.
 	 * An entity could be a {@link OWLClass}, {@link OWLDataProperty},
 	 * {@link OWLObjectProperty} or {@link OWLIndividual}.
-	 * 
+	 *
 	 * @created 27.09.2011
 	 * @param OWLEntity entity
 	 * @return OWLAxiom
@@ -138,7 +143,7 @@ public class AxiomFactory {
 	 * {@link OWLEntity}. An entity could be a {@link OWLClass},
 	 * {@link OWLDataProperty}, {@link OWLObjectProperty} or
 	 * {@link OWLIndividual}.
-	 * 
+	 *
 	 * @created 27.09.2011
 	 * @param Section<? extends Type> section
 	 * @param Class c
@@ -153,7 +158,7 @@ public class AxiomFactory {
 	 * {@link OWLEntity}. An entity could be a {@link OWLClass},
 	 * {@link OWLDataProperty}, {@link OWLObjectProperty} or
 	 * {@link OWLIndividual}.
-	 * 
+	 *
 	 * @created 27.09.2011
 	 * @param Section<? extends Type> section
 	 * @param Class c
@@ -187,7 +192,7 @@ public class AxiomFactory {
 	 * The Input is a {@link ManchesterClassExpression} that contains all the
 	 * necessary information about its children, e.g. Conjuncts, Disjuncts,
 	 * ListElements or TerminalConditions.
-	 * 
+	 *
 	 * @created 08.09.2011
 	 * @param Section<ManchesterClassExpression> section
 	 * @return A set of {@link OWLClassExpression} for further processing.
@@ -310,7 +315,7 @@ public class AxiomFactory {
 	 * Handles all the possible {@link TerminalCondition} of the
 	 * {@link ManchesterClassExpression}. If you add a new
 	 * {@link TerminalCondition}, please update the following lines accordingly.
-	 * 
+	 *
 	 * @created 30.09.2011
 	 * @param Section<? extends TerminalCondition> section
 	 * @return OWLClassExpression
@@ -422,8 +427,8 @@ public class AxiomFactory {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @created 04.10.2011
 	 * @param Section<ManchesterClassExpression> section
 	 * @return
@@ -464,7 +469,7 @@ public class AxiomFactory {
 
 	/**
 	 * Create a {@link OWLSubClassOf} declaration axiom.
-	 * 
+	 *
 	 * @created 14.09.2011
 	 * @param clazz
 	 * @return
@@ -482,8 +487,8 @@ public class AxiomFactory {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @created 28.09.2011
 	 * @param section
 	 * @param p
@@ -548,8 +553,8 @@ public class AxiomFactory {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @created 15.09.2011
 	 * @param section
 	 * @param i
@@ -568,7 +573,7 @@ public class AxiomFactory {
 
 	/**
 	 * Create a {@link OWLSameIndividualAxiom} between two {@link OWLIndividual}
-	 * 
+	 *
 	 * @created 28.09.2011
 	 * @param OOWLIndividual one
 	 * @param OWLIndividual two
@@ -581,7 +586,7 @@ public class AxiomFactory {
 	/**
 	 * Create a {@link OWLDifferentIndividualsAxiom} between two
 	 * {@link OWLIndividual}.
-	 * 
+	 *
 	 * @created 28.09.2011
 	 * @param OOWLIndividual one
 	 * @param OWLIndividual two
@@ -593,7 +598,7 @@ public class AxiomFactory {
 
 	/**
 	 * Create Facts axioms out of the {@link Fact} KDOM nodes.
-	 * 
+	 *
 	 * @created 27.09.2011
 	 * @param Section<?> section
 	 * @param OWLIndividual i
@@ -619,7 +624,7 @@ public class AxiomFactory {
 	 * Creates out of the found {@link Annotations} in the KDOM correct
 	 * {@link OWLAnnotation} axioms. Those {@link OWLAxiom} can than be added to
 	 * the ontology.
-	 * 
+	 *
 	 * @created 15.09.2011
 	 * @param Section<Annotation> section A {@link Annotation} section
 	 * @param IRI annotatetObject The resource the {@link Annotation} belongs
@@ -635,8 +640,8 @@ public class AxiomFactory {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @created 29.09.2011
 	 * @param Section<Annotation> section
 	 * @return
@@ -677,7 +682,7 @@ public class AxiomFactory {
 
 	/**
 	 * Creates {@link OWLAnnotation}.
-	 * 
+	 *
 	 * @created 29.09.2011
 	 * @param property
 	 * @param value
@@ -704,7 +709,7 @@ public class AxiomFactory {
 	/**
 	 * Create the axioms for the EquivalentClasses and DisjointClasses frame of
 	 * the Manchester OWL syntax.
-	 * 
+	 *
 	 * @created 22.09.2011
 	 * @param Section<MiscFrame> section The section containing the information
 	 *        about the {@link MiscFrame}
@@ -743,7 +748,7 @@ public class AxiomFactory {
 	/**
 	 * Create the axioms for the SameIndividual and DifferentIndividuals frame
 	 * of the Manchester OWL syntax.
-	 * 
+	 *
 	 * @created 22.09.2011
 	 * @param Section<MiscFrame> section The section containing the information
 	 *        about the {@link MiscFrame}
@@ -781,7 +786,7 @@ public class AxiomFactory {
 	/**
 	 * Create the axioms for the EquivalentObjectProperties and
 	 * DisjointObjectProperties frame of the Manchester OWL syntax.
-	 * 
+	 *
 	 * @created 22.09.2011
 	 * @param Section<MiscFrame> section The section containing the information
 	 *        about the {@link MiscFrame}
@@ -819,7 +824,7 @@ public class AxiomFactory {
 	/**
 	 * Create the axioms for the EquivalentDatatypeProperties and
 	 * DisjointDatatypeProperties frame of the Manchester OWL syntax.
-	 * 
+	 *
 	 * @created 22.09.2011
 	 * @param Section<MiscFrame> section The section containing the information
 	 *        about the {@link MiscFrame}

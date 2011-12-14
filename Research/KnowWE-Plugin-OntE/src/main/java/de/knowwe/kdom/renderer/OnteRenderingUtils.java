@@ -2,11 +2,14 @@ package de.knowwe.kdom.renderer;
 
 import java.util.Collection;
 
+import org.semanticweb.owlapi.util.SimpleShortFormProvider;
+
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.owlapi.query.OWLApiQueryParser;
 
 /**
  * The OnteRenderingUtils class contains methods used in the rendering process
@@ -24,10 +27,36 @@ public class OnteRenderingUtils {
 	 * @param term
 	 * @return
 	 */
-	public static boolean isKnownTerm(String term) {
-
+	public static boolean isKnownTerm(String termIdendifier) {
 		ReferenceManager manager = IncrementalCompiler.getInstance().getTerminology();
-		return manager.isValid(term);
+		return manager.isValid(termIdendifier);
+	}
+
+	public static String determineTypeOfTermIdentifier(String termIdendifier) {
+
+		OWLApiQueryParser parser = new OWLApiQueryParser(new SimpleShortFormProvider());
+		if (parser.isClassName(termIdendifier)) {
+			return "OWLClass";
+		}
+		else if (parser.isObjectPropertyName(termIdendifier)) {
+			return "OWLObjectProperty";
+		}
+		else if (parser.isDataPropertyName(termIdendifier)) {
+			return "OWLDataProperty";
+		}
+		else if (parser.isIndividualName(termIdendifier)) {
+			return "OWLIndividual";
+		}
+		return null;
+	}
+
+	public static String getHyperlink(String term) {
+		Collection<Section<? extends TermDefinition>> termDefs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+				term);
+		if (!termDefs.isEmpty()) {
+			return "Wiki.jsp?page=" + termDefs.iterator().next().getOriginalText();
+		}
+		return "";
 	}
 
 	/**
@@ -59,7 +88,7 @@ public class OnteRenderingUtils {
 	 * @param concept
 	 * @return
 	 */
-	public static String renderHyperlink(Section<? extends Type> term) {
+	public static String renderHyperlink(Section<? extends Type> term, boolean raw) {
 
 		if (term == null) {
 			return "";
@@ -67,12 +96,17 @@ public class OnteRenderingUtils {
 
 		StringBuilder s = new StringBuilder();
 
-		s.append("<span style=\"font-size:9px;padding-left:10px;\">(Article: ");
+		if (!raw) {
+			s.append("<span style=\"font-size:9px;padding-left:10px;\">(Defined in: ");
+		}
 		s.append("<a href=\"Wiki.jsp?page=" + term.getTitle()
 				+ "\" title=\"Goto definition article\">");
 		s.append(term.getTitle());
 		s.append("</a>");
-		s.append(")</span>");
+
+		if (!raw) {
+			s.append(")</span>");
+		}
 
 		return s.toString();
 	}
@@ -85,7 +119,7 @@ public class OnteRenderingUtils {
 	 * @param concept
 	 * @return
 	 */
-	public static String renderHyperlink(String term) {
+	public static String renderHyperlink(String term, boolean raw) {
 
 		Collection<Section<? extends TermDefinition>> termDefs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 				term);
@@ -93,8 +127,12 @@ public class OnteRenderingUtils {
 		// only one definition allowed in the onte plugin, so simply use the
 		// first result
 		if (!termDefs.isEmpty()) {
-			return renderHyperlink(termDefs.iterator().next());
+			return renderHyperlink(termDefs.iterator().next(), raw);
 		}
 		return "";
+	}
+
+	public static String renderHyperlink(String term) {
+		return renderHyperlink(term, false);
 	}
 }

@@ -43,7 +43,11 @@ public class ManchesterOWLSyntaxHTMLColorRenderer {
 	 * @param axiom
 	 */
 	public void colorize(String token, StringBuilder doc, OWLAxiom axiom) {
+		colorize(token, doc, axiom, null);
+	}
 
+	public void colorize(String token, StringBuilder doc, OWLAxiom axiom, String jsAction) {
+		token = token.replace("\n", "").replace("\r", "");
 		StringTokenizer st = new StringTokenizer(token, " ([{}])", true);
 
 		while (st.hasMoreTokens()) {
@@ -63,9 +67,15 @@ public class ManchesterOWLSyntaxHTMLColorRenderer {
 				doc.append("</span> ");
 			}
 			else if (OnteRenderingUtils.isKnownTerm(curToken)) {
-				doc.append(" <span style=\"color:rgb(25, 180, 120);\">");
-				doc.append(curToken);
-				doc.append("</span> ");
+
+				doc.append(" <span style=\"color:rgb(25, 180, 120);\"");
+
+				String termType = OnteRenderingUtils.determineTypeOfTermIdentifier(curToken);
+				if (termType != null) {
+					doc.append(" class=\"pointer\" data-type=\"").append(termType).append("\"");
+				}
+				doc.append(">").append(curToken).append(
+						"</span> ");
 			}
 			else {
 				doc.append(curToken);
@@ -76,9 +86,10 @@ public class ManchesterOWLSyntaxHTMLColorRenderer {
 		Section<? extends Type> section = OWLApiAxiomCache.getInstance().lookUpSection(axiom,
 				OWLApiAxiomCache.STORE_CACHE);
 		if (section != null) {
-			doc.append(OnteRenderingUtils.renderHyperlink(section));
+			doc.append(OnteRenderingUtils.renderHyperlink(section, false));
 		}
 	}
+
 
 	/**
 	 * Checks weather a given token is a restriction keyword.

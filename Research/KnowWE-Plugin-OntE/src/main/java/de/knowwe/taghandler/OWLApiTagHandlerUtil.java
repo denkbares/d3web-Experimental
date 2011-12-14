@@ -43,6 +43,7 @@ import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLIndividualAxiom;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyFormat;
@@ -322,7 +323,7 @@ public class OWLApiTagHandlerUtil {
 	 * @param OWLClassExpression expression
 	 * @return String
 	 */
-	public static String verbalizeToManchesterSyntax(OWLAxiom axiom) {
+	public static String verbalizeToManchesterSyntax(OWLObject axiom) {
 		StringWriter sw = new StringWriter();
 		ShortFormProvider sfp = new SimpleShortFormProvider();
 		ManchesterOWLSyntaxObjectRenderer renderer = new ManchesterOWLSyntaxObjectRenderer(sw, sfp);

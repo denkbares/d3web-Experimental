@@ -5,6 +5,9 @@
 {background-color: transparent;}
 
 
+.pointer
+{cursor: pointer;}
+
 #onte_overlay
 { width: 100%; height: 100%; position: fixed; opacity: 0.4; z-index: 200;background-color: #3F4C58;left:0; top:0; }
       
@@ -20,7 +23,8 @@
       border-width: 5px; border-color:rgb(255,255,255);border-style: solid; }
       
     
-
+.ox 
+{ background-color: #0067CF; border-bottom: 1px solid #0264C7; color: rgb(255,255,255); font-weight bold; height: 29px; width: 100%; }
 
 .onte-box
     {background: none repeat scroll 0 0 #F5F5F5;border: 1px solid #E5E5E5;padding:8px 0 10px 20px;position:relative;overflow:auto;}
@@ -93,3 +97,94 @@
  
     .onte-result:hover .onte-explanation-details, onte-result.hover .onte-explanation-details
     { position:absolute;display:block; z-index:200; margin-left:100px; bottom:10%; left: 10%;}
+    
+    
+ul
+{padding-left: 0px}
+
+li 
+{padding-left:20px; list-style-type:none;}
+
+    .treeview li
+    {background: url("../images/onte/treeview-default-line.gif") no-repeat scroll 0 0 transparent;}
+    
+    .treeview li.last
+    {background-position: 0 -1766px;}
+    
+    .treeview span
+    { cursor: pointer; }
+
+
+.treeicon
+{height:16px; width:16px;margin-left: -20px;float:left; cursor: pointer; }
+    
+    .expanded
+    {background: url("../images/onte/expanded.png") no-repeat scroll top left transparent;}
+
+    .last_expanded
+    {background: url("../images/onte/last_expanded.png") no-repeat scroll top left transparent;}
+
+    .closed
+    {background: url("../images/onte/closed.png") no-repeat scroll top left transparent;}
+
+    .last_closed
+    {background: url("../images/onte/last_closed.png") no-repeat scroll top left transparent;}
+
+    .leaf
+    {background: url("../images/onte/leaf.png") no-repeat scroll top left transparent;}
+
+    .last_leaf
+    {background: url("../images/onte/last_leaf.png") no-repeat scroll top left transparent;}
+
+    
+.noShow
+{ display:none; visibility:hidden;}
+
+.show
+{ display:block; visibility:visible;}
+
+
+#onte-ontology-browser
+{padding: 0;}
+
+    #oob-header
+    {padding: 8px 0 10px 20px;}
+    
+        #oob-header img
+        {vertical-align:-5px; padding-right:20px;}
+
+    #oob-navigation
+    {}
+    
+        #oob-navigation ul 
+        {margin:0;}
+        
+        #oob-navigation ul li
+        {float: left; border-right: 1px solid #E5E5E5; padding: 4px; font: bold 16px/32px Arial,sans-serif; height: 35px; padding: 0 32px;}
+                
+    #oob-buttons
+    {float: left; width: 35px; padding: 4px;}
+        
+        
+    #oob-hierarchy
+    {float:left; width:30%;}
+
+    #oob-information
+    {float:right; width:58%;}
+    
+    .oob-bar
+    {border-top: 1px solid #E5E5E5;}
+    
+    .oob-box
+    {background-color: rgb(255,255,255); border:1px solid #E5E5E5; border-radius: 5px 5px 5px 5px; margin: 0 5px 10px; padding: 20px 20px 9px;}
+    
+    .oob-clicked
+    {background-color:#FFFE9D;}
+    
+    
+.simpletabs li
+{cursor: pointer; }
+
+.simpletab-active 
+{background-color:#BF0000; color: #FFF}
+    

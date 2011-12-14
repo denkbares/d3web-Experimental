@@ -117,7 +117,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 	 * @param Section<ClassFrame> section
 	 * @return The found section
 	 */
-	public boolean hasSubClassOf(Section<ClassFrame> section) {
+	public boolean hasSubClassOf(Section<?> section) {
 		return Sections.findSuccessor(section, SubClassOf.class) != null;
 	}
 
@@ -129,7 +129,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 	 * @param Section<ClassFrame> section
 	 * @return The found section
 	 */
-	public Section<? extends Type> getSubClassOf(Section<ClassFrame> section) {
+	public Section<? extends Type> getSubClassOf(Section<?> section) {
 		return Sections.findSuccessor(section, SubClassOf.class);
 	}
 
@@ -140,7 +140,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 	 * @param Section<ClassFrame> section
 	 * @return The found section
 	 */
-	public boolean hasEquivalentTo(Section<ClassFrame> section) {
+	public boolean hasEquivalentTo(Section<?> section) {
 		return Sections.findSuccessor(section, EquivalentTo.class) != null;
 	}
 
@@ -152,7 +152,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 	 * @param Section<ClassFrame> section
 	 * @return The found section
 	 */
-	public Section<? extends Type> getEquivalentTo(Section<ClassFrame> section) {
+	public Section<? extends Type> getEquivalentTo(Section<?> section) {
 		return Sections.findSuccessor(section, EquivalentTo.class);
 	}
 
@@ -163,7 +163,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 	 * @param Section<ClassFrame> section
 	 * @return The found section
 	 */
-	public boolean hasDisjointWith(Section<ClassFrame> section) {
+	public boolean hasDisjointWith(Section<?> section) {
 		return Sections.findSuccessor(section, DisjointWith.class) != null;
 	}
 
@@ -175,7 +175,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 	 * @param Section<ClassFrame> section
 	 * @return The found section
 	 */
-	public Section<? extends Type> getDisjointWith(Section<ClassFrame> section) {
+	public Section<? extends Type> getDisjointWith(Section<?> section) {
 		return Sections.findSuccessor(section, DisjointWith.class);
 	}
 
@@ -186,7 +186,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 	 * @param Section<ClassFrame> section
 	 * @return The found section
 	 */
-	public boolean hasDisjointUnionOf(Section<ClassFrame> section) {
+	public boolean hasDisjointUnionOf(Section<?> section) {
 		return Sections.findSuccessor(section, DisjointUnionOf.class) != null;
 	}
 
@@ -198,7 +198,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 	 * @param Section<ClassFrame> section
 	 * @return The found section
 	 */
-	public Section<? extends Type> getDisjointUnionOf(Section<ClassFrame> section) {
+	public Section<? extends Type> getDisjointUnionOf(Section<?> section) {
 		return Sections.findSuccessor(section, DisjointUnionOf.class);
 	}
 
