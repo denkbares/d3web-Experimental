@@ -58,7 +58,12 @@ KNOWWE.plugin.usersupportinstantedit = function() {
             	lineNumbers: true,
             	mode: "usersupportmode",
             	theme: "elegant",
-            	extraKeys: {"Ctrl-Space": function(cm) {CodeMirror.simpleHint(cm, CodeMirror.usersupportHint, id)}}           		
+//            	extraKeys: {"Ctrl-Space": function(cm) {CodeMirror.simpleHint(cm, CodeMirror.usersupportHint, id)}}
+ 		        extraKeys: {"Ctrl-Space": function(cm)
+ 		        	{
+ 		        		KNOWWE.plugin.usersupport.gatherDialogComponentCompletions(cm, CodeMirror.usersupportHint, id)
+ 		        	}
+ 		        }
             });
 	        
 	    },

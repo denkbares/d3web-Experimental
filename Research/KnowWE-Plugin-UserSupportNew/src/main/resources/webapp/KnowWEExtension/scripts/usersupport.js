@@ -63,7 +63,7 @@ KNOWWE.plugin.usersupport = function() {
 	var d3webScorings = ("P7 P6 P5x P5 P4 P3 P2 P1 N1 N2 N3 N4 N5 N5x N6 N7 ESTABLISHED ETABLIERT SUGGESTED VERDAECHTIGT ++ + x YES JA NO NEIN -").split(" ");
 	var information = ("@ %").split(" ");
 	
-	var foundArray = [];
+//	var foundArray = [];
 	
 	return {
 		
@@ -241,13 +241,14 @@ KNOWWE.plugin.usersupport = function() {
     	 * @param id : section ID to show loader gif for
     	 * Description: Calls the DialogComponent over KnowWE-Ajax-Invocation
     	 */
-   		gatherDialogComponentCompletions : function(matchMe, found, id) {
+   		gatherDialogComponentCompletions : function(editor, getHints, id) {
    			
-   			KNOWWE.plugin.usersupport.showAjaxLoader(id);
+   			// Get token/from/to as object; function called usersupportHint()
+   			var tokenInfo = getHints(editor, id);
    			
 			var params = {
 				action : 'GetSuggestionsAction',
-				toMatch: matchMe.string
+				toMatch: tokenInfo.tok
 			}
 
 			var options = {
@@ -255,78 +256,178 @@ KNOWWE.plugin.usersupport = function() {
 				response : {
 					action : 'none',
 					async : false,
-                    fn : function() {
-                    	var found = [];
-			        	var suggestions = JSON.parse(this.responseText);
-			        	var found = KNOWWE.plugin.usersupport.forEach(suggestions, matchMe, found, KNOWWE.plugin.usersupport.maybeAdd);
-			        	foundArray = found;
+                    fn : function() {                  	
+						var found = [];
+						found = KNOWWE.plugin.usersupport.gatherStaticCompletions(tokenInfo.tok, found);
+						var suggestions = JSON.parse(this.responseText);
+						found = found.concat(suggestions);
+						var toSimpleHint = {list : found,
+    										from: tokenInfo.from,
+            								to: tokenInfo.to
+            								};
+                    	KNOWWE.plugin.usersupport.simpleHint(editor, toSimpleHint, id);
                     },
 				}
 			}
 			new _KA(options).send();
-			
-			KNOWWE.plugin.usersupport.hideAjaxLoader(id);
+
 		},
-		
-		/**
-		 * Function:    showAjaxLoader
-		 * 
-		 * @param id : section ID
-		 * Description:
-		 */
-		showAjaxLoader : function(id) {
-			var ajaxLoaderGif = new Element("img", {
-				'id' : 'loader_' + id,
-				'src' : 'KnowWEExtension/images/ajax-100.gif',
-				'class' : 'ajaxloader',
-			});
-			$(id).appendChild(ajaxLoaderGif);
-		},
-	
-		/**
-		 * Function:   hideAjaxLoader
-		 * 
-		 * @param id : section ID
-		 * Description:
-		 */
-		hideAjaxLoader : function (id) {
-			var ajaxLoaderGif = $('loader_' + id);
-			ajaxLoaderGif.parentNode.removeChild(ajaxLoaderGif);
-		},
-		
-		/**
-		 * 
-		 * Function:    getCompletions
-		 * 
-		 * @param token : token object; no string!
-		 * @param context : TODO needed?
-		 * @param id : section ID
-		 * Description:  called from javascript-hint
-		 */
-		getCompletions : function(token, context, id) {
-			var found = [];
-			foundArray = new Array("undefined");
-			KNOWWE.plugin.usersupport.gatherDialogComponentCompletions(token, found, id);
-			KNOWWE.plugin.usersupport.wait(id);
-      		found = KNOWWE.plugin.usersupport.gatherStaticCompletions(token, found);     		
-			found = found.concat(foundArray);
-    		return found;
- 		},
- 		
- 		/**
- 		 * 
- 		 * Function    : wait
- 		 * @param id   : for which element to show the ajax-loader
- 		 * Description : Blocks workflow and user-interaction until
- 		 * 				 Dialog-Sugestions are ready
- 		 */
- 		wait : function(id) {
-  			KNOWWE.plugin.usersupport.showAjaxLoader(id);
-			while (foundArray.length == 1)
-				if (foundArray[1] != "undefined")
-					break;
-  			KNOWWE.plugin.usersupport.hideAjaxLoader(id);
-		}
+    	
+    	/**
+    	 * Function          : simpleHint
+    	 * 
+    	 * @param editor     : The CodeMirror Object
+    	 * @param resultList : Object containing a list of results
+    	 * Description       : This is nearly the same as in simpleHint.js from CodeMirror;
+    	 *                     Only that it is given a resultList object instead of a hint-function.
+    	 *                     So it can be called within a ajax response.
+    	 */
+    	simpleHint : function(editor, resultList, id) {
+    		
+			// We want a single cursor position.
+   			if (editor.somethingSelected()) return;
+   			
+   			/*
+   			 * INFO Replaced this here. The results are computed earlier now!
+   			 * Johannes Dienst
+   			 */
+   			var result = resultList;
+   			 
+    		if (!result || !result.list.length) return;
+    		
+    		var completions = result.list;
+    		
+    		function insert(str) {
+      			editor.replaceRange(str, result.from, result.to);
+    		}
+    		
+    		// When there is only one completion, use it directly.
+    		if (completions.length == 1) {insert(completions[0]); return true;}
+
+    		// Build the select widget
+    		var complete = document.createElement("div");
+    		complete.className = "CodeMirror-completions";
+    		var sel = complete.appendChild(document.createElement("select"));
+    		
+    		// Opera doesn't move the selection when pressing up/down in a
+    		// multi-select, but it does properly support the size property on
+    		// single-selects, so no multi-select is necessary.
+    		if (!window.opera) sel.multiple = true;
+    		for (var i = 0; i < completions.length; ++i) {
+      			var opt = sel.appendChild(document.createElement("option"));
+      			opt.appendChild(document.createTextNode(completions[i]));
+    		}
+    		
+    		sel.firstChild.selected = true;
+    		sel.size = Math.min(10, completions.length);
+    		var pos = editor.cursorCoords();
+    		complete.style.left = pos.x + "px";
+    		complete.style.top = pos.yBot + "px";
+    
+    		complete.style.position = "absolute";
+    
+    		document.body.appendChild(complete);
+    		
+    		// Hack to hide the scrollbar.
+    		if (completions.length <= 10)
+      		complete.style.width = (sel.clientWidth - 1) + "px";
+
+    		var done = false;
+    		function close() {
+      			if (done) return;
+      			done = true;
+      			complete.parentNode.removeChild(complete);
+    		}
+    		function pick() {
+      			insert(completions[sel.selectedIndex]);
+      			close();
+      			setTimeout(function(){editor.focus();}, 50);
+    		}
+    		
+    		CodeMirror.connect(sel, "blur", close);
+   			CodeMirror.connect(sel, "keydown", function(event) {
+      			var code = event.keyCode;
+      		
+      			// Enter
+      			if (code == 13) {CodeMirror.e_stop(event); pick();}
+      		
+      			// Escape
+      			else if (code == 27) {CodeMirror.e_stop(event); close(); editor.focus();}
+      			else if (code != 38 && code != 40) {
+       				close(); editor.focus();
+       				setTimeout(function(){CodeMirror.simpleHint(editor, getHints);}, 50);
+      			}
+    		});
+    	
+    		CodeMirror.connect(sel, "dblclick", pick);
+
+    		sel.focus();
+    	
+    		// Opera sometimes ignores focusing a freshly created node
+    		if (window.opera) setTimeout(function(){if (!done) sel.focus();}, 100);
+    			return true;
+    	}   	
+
+//		
+//		/**
+//		 * Function:    showAjaxLoader
+//		 * 
+//		 * @param id : section ID
+//		 * Description:
+//		 */
+//		showAjaxLoader : function(id) {
+//			var ajaxLoaderGif = new Element("img", {
+//				'id' : 'loader_' + id,
+//				'src' : 'KnowWEExtension/images/ajax-100.gif',
+//				'class' : 'ajaxloader',
+//			});
+//			$(id).appendChild(ajaxLoaderGif);
+//		},
+//	
+//		/**
+//		 * Function:   hideAjaxLoader
+//		 * 
+//		 * @param id : section ID
+//		 * Description:
+//		 */
+//		hideAjaxLoader : function (id) {
+//			var ajaxLoaderGif = $('loader_' + id);
+//			ajaxLoaderGif.parentNode.removeChild(ajaxLoaderGif);
+//		},
+//		
+//		/**
+//		 * 
+//		 * Function:    getCompletions
+//		 * 
+//		 * @param token : token object; no string!
+//		 * @param context : TODO needed?
+//		 * @param id : section ID
+//		 * Description:  called from javascript-hint
+//		 */
+//		getCompletions : function(token, context, id) {
+//			var found = [];
+//			foundArray = new Array("undefined");
+//			KNOWWE.plugin.usersupport.gatherDialogComponentCompletions(token, found, id);
+//			KNOWWE.plugin.usersupport.wait(id);
+//      		found = KNOWWE.plugin.usersupport.gatherStaticCompletions(token, found);     		
+//			found = found.concat(foundArray);
+//    		return found;
+// 		},
+// 		
+// 		/**
+// 		 * 
+// 		 * Function    : wait
+// 		 * @param id   : for which element to show the ajax-loader
+// 		 * Description : Blocks workflow and user-interaction until
+// 		 * 				 Dialog-Sugestions are ready
+// 		 */
+// 		wait : function(id) {
+//  			KNOWWE.plugin.usersupport.showAjaxLoader(id);
+//			while (foundArray.length === 1)
+//				if (foundArray[1] !== "undefined")
+//					break;
+//  			KNOWWE.plugin.usersupport.hideAjaxLoader(id);
+//		}
 
 	}
 }();

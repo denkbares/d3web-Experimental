@@ -16,9 +16,10 @@
       if (!context) var context = [];
       context.push(tprop);
     }
-    var liste = KNOWWE.plugin.usersupport.getCompletions(token, context, id);
-    return {list: liste,
-            from: {line: cur.line, ch: token.start},
-            to: {line: cur.line, ch: token.end}};
+    
+    return {tok : token,
+    		from: {line: cur.line, ch: token.start},
+            to: {line: cur.line, ch: token.end}
+            };
   }
 })();
