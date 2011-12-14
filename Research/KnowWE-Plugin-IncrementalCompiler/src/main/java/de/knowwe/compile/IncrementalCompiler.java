@@ -31,6 +31,7 @@ import de.d3web.plugin.PluginManager;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.ComplexDefinitionWithTypeConstraints;
 import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.compile.TerminologyExtension;
@@ -193,22 +194,26 @@ public class IncrementalCompiler implements EventListener {
 		Iterator<Section<? extends KnowledgeUnit>> compilationUnitIterator = potentiallyNewKnowledgeSlices.iterator();
 		while (compilationUnitIterator.hasNext()) {
 			Section<? extends KnowledgeUnit> section = compilationUnitIterator.next();
-			Collection<Section<TermReference>> refs = section.get().getCompileScript().getAllReferencesOfKnowledgeUnit(
-					section);
-			for (Section<TermReference> ref : refs) {
-				if (!terminology.isValid(ref.get().getTermIdentifier(ref))) {
-					// compilation unit not valid => remove
-					compilationUnitIterator.remove();
-					break;
-				}
-				// check Types of referenced objects here
-				if (ref.get() instanceof TypeRestrictedReference) {
-					if (((TypeRestrictedReference) ref.get()).checkTypeConstraints(ref) == false) {
-						compilationUnitIterator.remove();
-						break;
+			KnowledgeUnitCompileScript compileScript = section.get().getCompileScript();
+			if (compileScript == null) {
+				Collection<Section<TermReference>> refs = compileScript.getAllReferencesOfKnowledgeUnit(
+						section);
+				if (refs != null) {
+					for (Section<TermReference> ref : refs) {
+						if (!terminology.isValid(ref.get().getTermIdentifier(ref))) {
+							// compilation unit not valid => remove
+							compilationUnitIterator.remove();
+							break;
+						}
+						// check Types of referenced objects here
+						if (ref.get() instanceof TypeRestrictedReference) {
+							if (((TypeRestrictedReference) ref.get()).checkTypeConstraints(ref) == false) {
+								compilationUnitIterator.remove();
+								break;
+							}
+						}
 					}
 				}
-
 			}
 		}
 
