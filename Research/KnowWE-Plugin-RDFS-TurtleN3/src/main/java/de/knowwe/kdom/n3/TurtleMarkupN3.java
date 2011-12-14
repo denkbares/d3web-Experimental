@@ -24,12 +24,11 @@ package de.knowwe.kdom.n3;
 
 import java.util.regex.Pattern;
 
-import de.knowwe.compile.object.AbstractKnowledgeUnitType;
+import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.AnonymousType;
-import de.knowwe.kdom.renderer.GenericHTMLRenderer;
 
-public class TurtleMarkupN3 extends AbstractKnowledgeUnitType {
+public class TurtleMarkupN3 extends AbstractType {
 
 	public TurtleMarkupN3() {
 		AnonymousType before = new AnonymousType("Before");
@@ -42,8 +41,6 @@ public class TurtleMarkupN3 extends AbstractKnowledgeUnitType {
 		setSectionFinder(new RegexSectionFinder("ttl:?(.*?)\\.", Pattern.DOTALL
 				| Pattern.MULTILINE, 1));
 
-		setCustomRenderer(new GenericHTMLRenderer<TurtleMarkupN3>("span", new String[] {
-				"title", "TurtleMarkupN3" }));
 	}
 
 }

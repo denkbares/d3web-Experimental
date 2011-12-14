@@ -24,11 +24,11 @@ package de.knowwe.kdom.n3;
 
 import java.util.regex.Pattern;
 
-import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.n3.render.TurtleN3Renderer;
 
-public class TurtleComplete extends AbstractType {
+public class TurtleComplete extends AbstractKnowledgeUnitType {
 
 	public TurtleComplete() {
 

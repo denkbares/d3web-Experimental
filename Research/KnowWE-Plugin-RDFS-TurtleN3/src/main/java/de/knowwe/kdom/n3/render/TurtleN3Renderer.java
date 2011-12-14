@@ -14,16 +14,13 @@ public class TurtleN3Renderer extends KnowWEDomRenderer<TurtleComplete> {
 
 	@Override
 	public void render(KnowWEArticle article, Section<TurtleComplete> sec, UserContext user, StringBuilder string) {
-		// Quickedit button
 		string.append(KnowWEUtils.maskHTML("<pre id=\""
 				+ sec.getID()
 				+ "\" class=\"turtle-instantedit-pre\">"));
-		string.append(KnowWEUtils.maskHTML("<div class=\"casetrain-instantedit\">"
-				+ renderTools(article, sec, user)
-				+ "</div>"));
+		string.append(KnowWEUtils.maskHTML("<div class=\"casetrain-instantedit\">"));
 
-		// string.append(KnowWEUtils.maskHTML("<pre>"));
 		DelegateRenderer.getInstance().render(article, sec, user, string);
+		string.append(KnowWEUtils.maskHTML("</div>"));
 		string.append(KnowWEUtils.maskHTML("</pre>"));
 
 	}
