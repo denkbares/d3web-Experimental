@@ -26,17 +26,25 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.ontoware.rdf2go.model.node.Node;
+import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.vocabulary.RDF;
 
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.core.report.DefaultErrorRenderer;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
@@ -66,6 +74,105 @@ public class TripleMarkup extends AbstractType implements
 			this.addChildType(new SimpleTurtlePredicate());
 			this.addChildType(new SimpleTurtleSubject());
 			this.addChildType(new SimpleTurtleObject());
+
+			this.setCustomRenderer(new RangeCheckRenderer());
+		}
+
+		class RangeCheckRenderer extends KnowWEDomRenderer {
+
+			@Override
+			public void render(KnowWEArticle article, Section section, UserContext user, StringBuilder string) {
+				Section<KnowledgeUnit> triple = Sections.findAncestorOfType(section,
+						KnowledgeUnit.class);
+
+				Section<SimpleTurtlePredicate> predicate = Sections.findSuccessor(triple,
+						SimpleTurtlePredicate.class);
+
+				Section<SimpleTurtleObject> object = Sections.findSuccessor(triple,
+						SimpleTurtleObject.class);
+
+				Section<SimpleTurtleSubject> subject = Sections.findSuccessor(triple,
+						SimpleTurtleSubject.class);
+
+				String predName = predicate.get().getTermName(predicate);
+
+				// IncrementalCompiler.getInstance().getTerminology().getDefinitionInformationForValidTerm(predName);
+
+				Object info = IncrementalCompiler.getInstance().getTerminology().getDefinitionInformationForValidTerm(
+						predName);
+				String domainClassName = null;
+				String rangeClassName = null;
+				boolean warningRange = false;
+				boolean warningDomain = false;
+				if (info != null
+						&& RDFSUtil.isTermCategory(predicate,
+								RDFSTermCategory.ObjectProperty)) {
+
+					if (info instanceof Map) {
+						Set keyset = ((Map) info).keySet();
+						for (Object key : keyset) {
+							if (key.equals(
+									ObjectPropertyDefinitionMarkup.RDFS_DOMAIN_KEY)) {
+								domainClassName = (String) ((Map) info).get(key);
+							}
+							if (key.equals(
+									ObjectPropertyDefinitionMarkup.RDFS_RANGE_KEY)) {
+								rangeClassName = (String) ((Map) info).get(key);
+							}
+						}
+					}
+					URI rangeClassURI = RDFSUtil.getURI(IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+							rangeClassName).iterator().next());
+					URI domainClassURI = RDFSUtil.getURI(IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+							domainClassName).iterator().next());
+
+					URI objectURI = RDFSUtil.getURI(object);
+					URI subjectURI = RDFSUtil.getURI(subject);
+
+					String queryRange = "ASK { <" + objectURI + "> <" + RDF.type + "> <"
+							+ rangeClassURI + "> .}";
+					warningRange = !Rdf2GoCore.getInstance().sparqlAskExcludeStatementForSection(
+							queryRange, triple);
+
+					String queryDomain = "ASK { <" + subjectURI + "> <" + RDF.type
+							+ "> <"
+							+ domainClassURI + "> .}";
+					warningDomain = !Rdf2GoCore.getInstance().sparqlAskExcludeStatementForSection(
+							queryDomain, triple);
+				}
+
+				if (warningRange) {
+					string.append(
+							DefaultErrorRenderer.INSTANCE_WARNING.preRenderMessage(
+									new Message(Message.Type.WARNING,
+											"Triple object does not match range definition"),
+									user));
+				}
+				if (warningDomain) {
+					string.append(
+							DefaultErrorRenderer.INSTANCE_WARNING.preRenderMessage(
+									new Message(Message.Type.WARNING,
+											"Triple subject does not match domain definition"),
+									user));
+				}
+
+				DelegateRenderer.getInstance().render(article, section, user, string);
+
+				if (warningRange) {
+					string.append(
+							DefaultErrorRenderer.INSTANCE_WARNING.postRenderMessage(
+									new Message(Message.Type.WARNING,
+											""), user));
+				}
+				if (warningDomain) {
+					string.append(
+							DefaultErrorRenderer.INSTANCE_WARNING.postRenderMessage(
+									new Message(Message.Type.WARNING,
+											""), user));
+				}
+
+			}
+
 		}
 	}
 
@@ -122,7 +229,9 @@ public class TripleMarkup extends AbstractType implements
 					new RegexSectionFinder("::\\s(.*)", Pattern.DOTALL, 1));
 			c.addConstraint(SingleChildConstraint.getInstance());
 			this.setSectionFinder(c);
+
 		}
+
 	}
 
 	class TripleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<TripleMarkup> {

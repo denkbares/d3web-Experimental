@@ -102,7 +102,11 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 		public Map getTypedTermInformation(
 				Section<? extends TermDefinition> s) {
 			Map<String, Object> map = new HashMap<String, Object>();
+
+			// add entity type
 			map.put(RDFSTermCategory.KEY, RDFSTermCategory.ObjectProperty);
+
+			// add domain and range information
 			List<Section<ClassRef>> classRefs = Sections.findSuccessorsOfType(
 					s.getFather(), ClassRef.class);
 			if (classRefs.size() == 2) {
