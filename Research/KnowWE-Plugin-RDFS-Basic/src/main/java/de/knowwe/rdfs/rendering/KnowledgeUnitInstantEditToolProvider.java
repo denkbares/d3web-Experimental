@@ -18,7 +18,7 @@
  */
 package de.knowwe.rdfs.rendering;
 
-import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.support.Editable;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -30,8 +30,8 @@ public class KnowledgeUnitInstantEditToolProvider extends InstantEditToolProvide
 
 	@Override
 	public Tool[] getTools(KnowWEArticle article, Section<?> section, UserContext userContext) {
-		Section<KnowledgeUnit> knowledgeUnit = Sections.findAncestorOfType(section,
-				KnowledgeUnit.class);
+		Section<Editable> knowledgeUnit = Sections.findAncestorOfType(section,
+				Editable.class);
 		if (knowledgeUnit == null) return new Tool[] {};
 
 		return new Tool[] { getQuickEditPageTool(article, knowledgeUnit, userContext) };

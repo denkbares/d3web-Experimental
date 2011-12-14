@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import de.knowwe.compile.object.TypedTermDefinition;
+import de.knowwe.compile.support.Editable;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.KnowWETerm;
 import de.knowwe.core.kdom.objects.TermDefinition;
@@ -31,7 +32,7 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.rdfs.rendering.PreEnvRenderer;
 
-public class ClassDefinitionMarkup extends AbstractType {
+public class ClassDefinitionMarkup extends AbstractType implements Editable {
 
 	private static final String CLASS_REGEX = "^Class:?\\s+(.*?)(\\(.*?\\))?$";
 

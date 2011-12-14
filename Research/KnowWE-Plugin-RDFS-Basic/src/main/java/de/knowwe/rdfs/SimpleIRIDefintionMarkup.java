@@ -22,6 +22,7 @@ package de.knowwe.rdfs;
 import java.util.regex.Pattern;
 
 import de.knowwe.compile.object.IncrementalTermDefinition;
+import de.knowwe.compile.support.Editable;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.KnowWETerm;
 import de.knowwe.core.kdom.parsing.Section;
@@ -32,7 +33,7 @@ import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.kdom.sectionFinder.RegexSectionFinderSingle;
 import de.knowwe.rdfs.rendering.PreEnvRenderer;
 
-public class SimpleIRIDefintionMarkup extends AbstractType {
+public class SimpleIRIDefintionMarkup extends AbstractType implements Editable {
 
 	private static final String REGEX = "^def\\s(.+)$";
 
