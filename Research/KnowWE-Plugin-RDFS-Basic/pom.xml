@@ -6,11 +6,13 @@
 		<version>0.2-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
+	<groupId>de.uniwue.d3web</groupId>
 	<artifactId>KnowWE-Plugin-RDFS-Basic</artifactId>
 	<name>KnowWE-Plugin-RDFS-Basic</name>
 	
 	
-		<build>
+	<version>0.2-SNAPSHOT</version>
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
