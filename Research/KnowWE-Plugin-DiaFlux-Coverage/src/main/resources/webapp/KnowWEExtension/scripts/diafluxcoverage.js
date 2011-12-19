@@ -1,4 +1,27 @@
-DiaFlux.Coverage = {};
+if (typeof DiaFlux == "undefined" || !DiaFlux) {
+    var DiaFlux = {};
+}
+
+if (typeof DiaFlux.Coverage == "undefined" || !DiaFlux.Coverage) {
+    DiaFlux.Coverage = {};
+}
+
+DiaFlux.Coverage.calculateCoverage = function(kdomid){
+	var params = {
+		action : 'CalculateCoverageAction',
+        kdomid: kdomid
+	};
+	
+	var options = {
+		url: KNOWWE.core.util.getURL( params ),
+        response : {
+            fn: function(){window.location.reload();}
+        }
+    };
+    new _KA(options).send();
+			
+}
+
 
 DiaFlux.Coverage.refresh = function(el) {
 	
@@ -11,33 +34,3 @@ DiaFlux.Coverage.refresh = function(el) {
 	
 	
 }
-
-
-DiaFlux.Coverage.highlight = function(){
-	
-	if ($('coveragemaster')) {
-		DiaFlux.Highlight.getHighlights.call(this, 'GetCoverageHighlightAction', {master: $('coveragemaster').value, coveragesection: $('coveragesection').value});
-	} else {
-		DiaFlux.Highlight.getHighlights.call(this, 'GetCoverageHighlightAction', {});
-	} 
-	
-}
-
-DiaFlux.Coverage.calculateCoverage = function(kdomid){
-	var params = {
-		action : 'CalculateCoverageAction',
-        kdomid: kdomid
-	};
-	
-	var options = {
-		url: KNOWWE.core.util.getURL( params ),
-        response : {
-            action: 'none'
-        }
-    };
-    new _KA(options).send();
-		
-			
-}
-
-KNOWWE.helper.observer.subscribe("flowchartrendered", DiaFlux.Coverage.highlight);

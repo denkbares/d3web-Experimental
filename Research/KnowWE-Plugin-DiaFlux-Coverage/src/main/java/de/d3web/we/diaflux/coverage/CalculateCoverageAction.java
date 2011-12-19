@@ -28,6 +28,7 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
 import de.d3web.diaflux.coverage.CoverageResult;
 import de.d3web.diaflux.coverage.CoverageSessionObject;
+import de.d3web.diaflux.coverage.DefaultCoverageResult;
 import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
 import de.d3web.empiricaltesting.RatedTestCase;
 import de.d3web.empiricaltesting.SequentialTestCase;
@@ -64,8 +65,8 @@ public class CalculateCoverageAction extends AbstractAction {
 				coverageKdomid);
 
 		String tests = DefaultMarkupType.getAnnotation(coverageSec,
-				DiaFluxCoverageType.ANNOTATION_TEST);
-		String master = DiaFluxCoverageType.getMaster(coverageSec, context.getTopic());
+				DiaFluxCoverageType.ANNOTATION_TEST).replace("*", ".*").replace("?", ".");
+		String master = DiaFluxCoverageType.getMaster(coverageSec, context.getTitle());
 
 		Pattern pattern = Pattern.compile(tests, Pattern.CASE_INSENSITIVE);
 
@@ -121,7 +122,7 @@ public class CalculateCoverageAction extends AbstractAction {
 		}
 
 		KnowledgeBase kb = D3webUtils.getKB(context.getWeb(), master);
-		CoverageResult result = CoverageResult.calculateResult(results.values(), kb);
+		CoverageResult result = DefaultCoverageResult.calculateResult(results.values(), kb);
 		coverageSec.getSectionStore().storeObject(DiaFluxCoverageType.COVERAGE_RESULT, result);
 
 	}

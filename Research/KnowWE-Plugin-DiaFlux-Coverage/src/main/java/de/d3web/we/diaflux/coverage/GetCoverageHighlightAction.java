@@ -19,17 +19,18 @@
 package de.d3web.we.diaflux.coverage;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
-import de.d3web.diaFlux.flow.CommentNode;
 import de.d3web.diaFlux.flow.Edge;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.CoverageResult;
+import de.d3web.diaflux.coverage.DefaultCoverageResult;
 import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
 import de.d3web.we.flow.GetTraceHighlightAction;
 import de.d3web.we.flow.type.DiaFluxType;
@@ -54,30 +55,16 @@ public class GetCoverageHighlightAction extends AbstractAction {
 	private static final String COVERED = PREFIX + "Covered";
 	private static final String UNCOVERED = PREFIX + "Uncovered";
 
-	private CoverageResult getResult(Session session) {
+	private CoverageResult getResult(UserContext context) {
 
-		CoverageResult result = CoverageResult.calculateResult(
-				PSMDiaFluxCoverage.getCoverage(session),
-				session.getKnowledgeBase());
-
-		return result;
-
-	}
-
-	/**
-	 * 
-	 * @created 10.10.2011
-	 * @param context
-	 * @return
-	 */
-	private Session getSession(UserContext context) {
 		String coverageKdomid = context.getParameter("coveragesection");
+		CoverageResult result;
 
 		if (coverageKdomid != null) { // coverage shown in coverage section
-			String master = context.getParameter("master");
 			Section<DiaFluxCoverageType> coverageSec = (Section<DiaFluxCoverageType>) Sections.getSection(
 					coverageKdomid);
-			return D3webUtils.getSession(master, context, context.getWeb());
+
+			return DiaFluxCoverageType.getResult(coverageSec, context);
 
 		}
 		else { // coverage shown in diaflux section
@@ -89,31 +76,32 @@ public class GetCoverageHighlightAction extends AbstractAction {
 					diaFluxSec.getArticle(),
 					diaFluxSec, new StringBuilder());
 
-			return D3webUtils.getSession(article.getTitle(), context, article.getWeb());
+			Session session = D3webUtils.getSession(article.getTitle(), context, article.getWeb());
+
+			result = DefaultCoverageResult.calculateResult(
+					PSMDiaFluxCoverage.getCoverage(session),
+					session.getKnowledgeBase());
 
 		}
+
+		return result;
 
 	}
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 
-		Session session = getSession(context);
-
-		CoverageResult result = getResult(session);
+		CoverageResult result = getResult(context);
 		if (result == null) {
 			context.getWriter().write("<flow></flow>");
 			return;
 		}
 		String flowKdomid = context.getParameter("kdomid");
+
+		@SuppressWarnings("unchecked")
 		Section<DiaFluxType> diaFluxSec = (Section<DiaFluxType>) Sections.getSection(
 				flowKdomid);
 
-		KnowWEArticle article = PackageRenderUtils.checkArticlesCompiling(diaFluxSec.getArticle(),
-				diaFluxSec, new StringBuilder());
-
-		KnowledgeBase kb = session.getKnowledgeBase();
-		if (kb == null) return;// TODO error handling
 
 		Section<FlowchartType> flowchart = Sections.findSuccessor(diaFluxSec, FlowchartType.class);
 		if (flowchart == null) {
@@ -122,6 +110,7 @@ public class GetCoverageHighlightAction extends AbstractAction {
 		}
 
 		String flowchartName = FlowchartType.getFlowchartName(flowchart);
+		KnowledgeBase kb = result.getKb();
 		Flow flow = DiaFluxUtils.getFlowSet(kb).get(flowchartName);
 
 		if (flow == null) return;// TODO error handling
@@ -148,7 +137,10 @@ public class GetCoverageHighlightAction extends AbstractAction {
 		List<Edge> coveredEdges = new LinkedList<Edge>();
 		List<Edge> uncoveredEdges = new LinkedList<Edge>();
 
-		for (Edge edge : flow.getEdges()) {
+		
+		Collection<Node> validNodes = DefaultCoverageResult.getValidNodes(flow);
+		
+		for (Edge edge : DefaultCoverageResult.getValidEdges(validNodes)) {
 			int count = result.getTraceCount(edge);
 			if (count != 0) coveredEdges.add(edge);
 			else uncoveredEdges.add(edge);
@@ -161,8 +153,7 @@ public class GetCoverageHighlightAction extends AbstractAction {
 		List<Node> coveredNodes = new LinkedList<Node>();
 		List<Node> uncoveredNodes = new LinkedList<Node>();
 
-		for (Node node : flow.getNodes()) {
-			if (node instanceof CommentNode && node.getIncomingEdges().isEmpty()) continue;
+		for (Node node : validNodes) {
 			int count = result.getTraceCount(node);
 			if (count != 0) coveredNodes.add(node);
 			else uncoveredNodes.add(node);

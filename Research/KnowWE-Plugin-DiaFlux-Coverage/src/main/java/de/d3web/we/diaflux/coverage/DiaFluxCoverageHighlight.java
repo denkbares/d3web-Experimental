@@ -30,14 +30,14 @@ import de.knowwe.core.user.UserContext;
  */
 public class DiaFluxCoverageHighlight implements DiaFluxDisplayEnhancement {
 
-	public static String[] SCRIPTS = new String[] { "KnowWEExtension/scripts/diafluxcoverage.js" };
+	public static String[] SCRIPTS = new String[] { "KnowWEExtension/scripts/diafluxcoveragehighlight.js" };
 	public static String[] CSSS = new String[] { "KnowWEExtension/css/diafluxcoverage.css" };
 
 	public static final String COVERAGE_HIGHLIGHT = "coverage";
 
 	@Override
 	public boolean activate(UserContext user, String scope) {
-		if (scope.equals(DiaFluxCoverageRenderer.DIA_FLUX_COVERAGE)) return true;
+		if (scope.equals(DiaFluxCoverageRenderer.DIA_FLUX_COVERAGE_SCOPE)) return true;
 		else {
 
 			return DiaFluxTraceHighlight.checkForHighlight(user, COVERAGE_HIGHLIGHT);

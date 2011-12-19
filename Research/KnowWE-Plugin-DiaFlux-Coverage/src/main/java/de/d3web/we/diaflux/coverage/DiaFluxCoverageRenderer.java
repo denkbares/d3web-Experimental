@@ -24,22 +24,17 @@ import java.util.Comparator;
 import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.session.Session;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.FlowSet;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.CoverageResult;
-import de.d3web.diaflux.coverage.CoverageSessionObject;
-import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
 import de.d3web.we.flow.FlowchartUtils;
 import de.d3web.we.flow.type.FlowchartType;
-import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 
 /**
@@ -49,52 +44,34 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  */
 public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer<DiaFluxCoverageType> {
 
-	public static final String DIA_FLUX_COVERAGE = "diafluxcoverage";
+	public static final String DIA_FLUX_COVERAGE_SCOPE = "diafluxcoverage";
 
 	@Override
 	protected void renderContents(KnowWEArticle article, Section<DiaFluxCoverageType> section, UserContext user, StringBuilder string) {
 
-		String tests = DefaultMarkupType.getAnnotation(section, DiaFluxCoverageType.ANNOTATION_TEST);
-
-		if (tests == null) {
-			renderLocalSession(user, string, section, article);
-		}
-		else {
-			renderAutomated(user, string, section, article, tests);
-		}
-
-	}
-
-	/**
-	 * 
-	 * @created 13.09.2011
-	 * @param user
-	 * @param string
-	 * @param section
-	 * @param article
-	 * @param tests
-	 */
-	private void renderAutomated(UserContext user, StringBuilder string, Section<DiaFluxCoverageType> section, KnowWEArticle article, String tests) {
-		String master = DiaFluxCoverageType.getMaster(section, article.getTitle());
-		Session session = D3webUtils.getSession(master, user, user.getWeb());
-		CoverageResult result = DiaFluxCoverageType.getResult(section);
+		CoverageResult result = DiaFluxCoverageType.getResult(section, user);
 
 		if (result == null) {
-			result = CoverageResult.calculateResult(new CoverageSessionObject(),
-					session.getKnowledgeBase());
-			StringBuilder bob = new StringBuilder();
-			bob.append("<em>No coverage has been calculated yet.</em><input type='button' value='Calculate' onclick='DiaFlux.Coverage.calculateCoverage(\""
-					+ section.getID() + "\")'>");
-			
-			string.append(KnowWEUtils.maskHTML(bob.toString()));
-			renderResult(user, string, section, master, session, result);
+			renderButton(user, string, section, article);
 		}
 		else {
-			renderResult(user, string, section, master, session, result);
+			renderResult(user, string, section, result);
 		}
 
+	}
+
+
+	private void renderButton(UserContext user, StringBuilder string, Section<DiaFluxCoverageType> section, KnowWEArticle article) {
+
+		StringBuilder bob = new StringBuilder();
+		bob.append("<em>No coverage has been calculated yet.</em><input type='button' value='Calculate' onclick='DiaFlux.Coverage.calculateCoverage(\""
+				+ section.getID() + "\")'></input>");
+
+		string.append(KnowWEUtils.maskHTML(bob.toString()));
+
 
 	}
+
 
 	/**
 	 * 
@@ -102,29 +79,11 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer<DiaFluxCovera
 	 * @param user
 	 * @param string
 	 * @param section
-	 * @param article
-	 */
-	private void renderLocalSession(UserContext user, StringBuilder string, Section<DiaFluxCoverageType> section, KnowWEArticle article) {
-		String master = DiaFluxCoverageType.getMaster(section, article.getTitle());
-		Session session = D3webUtils.getSession(master, user, user.getWeb());
-		CoverageSessionObject coverage = PSMDiaFluxCoverage.getCoverage(session);
-		CoverageResult result = CoverageResult.calculateResult(coverage, session.getKnowledgeBase());
-
-		renderResult(user, string, section, master, session, result);
-	}
-
-	/**
-	 * 
-	 * @created 13.09.2011
-	 * @param user
-	 * @param string
-	 * @param section
-	 * @param master
-	 * @param session
 	 * @param result
+	 * @param session
 	 */
-	private void renderResult(UserContext user, StringBuilder string, Section<DiaFluxCoverageType> section, String master, Session session, CoverageResult result) {
-		KnowledgeBase kb = session.getKnowledgeBase();
+	private void renderResult(UserContext user, StringBuilder string, Section<DiaFluxCoverageType> section, CoverageResult result) {
+		KnowledgeBase kb = result.getKb();
 		FlowSet flowSet = DiaFluxUtils.getFlowSet(kb);
 
 		if (flowSet.size() == 0) {
@@ -142,13 +101,11 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer<DiaFluxCovera
 		});
 
 
-
 		StringBuilder builder = new StringBuilder();
 		String web = user.getWeb();
 
 		
 		builder.append("<div id='coverage' class='diafluxcoverage' height='500'>\n");
-		builder.append("<input id='coveragemaster' type='hidden' value='" + master + "'/>");
 		builder.append("<input id='coveragesection' type='hidden' value='" + section.getID()
 				+ "'/>");
 		builder.append("<select name='coverageSelector' onchange='DiaFlux.Coverage.refresh(this);'>");
@@ -181,7 +138,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer<DiaFluxCovera
 		Section<FlowchartType> flowSec = FlowchartUtils.findFlowchartSection(web,
 				selectedFlow.getName());
 		builder.append(FlowchartUtils.createFlowchartRenderer(flowSec, user, "coverageContent",
-				DIA_FLUX_COVERAGE, true));
+				DIA_FLUX_COVERAGE_SCOPE, true));
 
 		builder.append("</div>");
 
