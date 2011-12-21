@@ -25,7 +25,7 @@
 			value="Offer a link to the page with the corresponding name." />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="scope" value="TermReference" />
+		<parameter id="scope" value="IncrementalTermReference" />
 
 	</extension>
 -->
