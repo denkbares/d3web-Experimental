@@ -37,7 +37,7 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
 
-import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.core.KnowWEEnvironment;
 
 /**
  * This class enables KnowWE to connect to the OWLAPI. In general everything can
@@ -60,8 +60,13 @@ import de.knowwe.rdf2go.Rdf2GoCore;
  */
 public class OWLAPIConnector {
 
-	private static final Map<IRI, OWLAPIConnector> connectors = new HashMap<IRI, OWLAPIConnector>();
-	private static final IRI globalBaseIRI = IRI.create(Rdf2GoCore.basens);
+	private static final Map<IRI, OWLAPIConnector> connectors;
+	private static final IRI globalBaseIRI;
+
+	static {
+		globalBaseIRI = IRI.create(KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl());
+		connectors = new HashMap<IRI, OWLAPIConnector>();
+	}
 
 	/**
 	 * Returns an OWLAPIConnector instance granting access to KnowWE's global
@@ -236,7 +241,7 @@ public class OWLAPIConnector {
 	}
 
 	/**
-	 * Removes an Import Declaration from the local ontology. Note: The stored 
+	 * Removes an Import Declaration from the local ontology. Note: The stored
      * axioms from the import need to be removed separately.
 	 *
 	 * @created 01.12.2011
@@ -245,5 +250,16 @@ public class OWLAPIConnector {
 		OWLImportsDeclaration oid = manager.getOWLDataFactory().getOWLImportsDeclaration(iri);
 		RemoveImport removeImp = new RemoveImport(ontology, oid);
 		manager.applyChange(removeImp);
+	}
+
+	/**
+	 * Returns the global base IRI for the local ontology (simply the WIKI URL).
+	 *
+	 * @return IRI the base IRI of the wiki
+	 * @created 21.12.2011
+	 * @return
+	 */
+	public IRI getGlobalBaseIRI() {
+		return globalBaseIRI;
 	}
 }
