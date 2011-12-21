@@ -270,19 +270,40 @@ public class IncrementalCompiler implements EventListener {
 
 	private void resolveRecursively(Section<? extends TermDefinition> section) {
 		if (hasValidDefinition(section)) {
-			if (!terminology.wasValidInOldVersion(section)) {
-				terminology.addToValidObjects(section);
-				Collection<Section<? extends KnowledgeUnit>> referencingSlices = terminology.getReferencingSlices(section);
-				potentiallyNewKnowledgeSlices.addAll(referencingSlices);
+			// we cannot check on "!terminology.wasValidInOldVersion(section)"
+			// here,
+			// as it might occur that we have to rehabilitate a definition which
+			// was already valid in the last version, but was temporarily
+			// invalidated by the previous iterations of THIS compilation run
 
-				// recursion for complex definitions
-				Collection<Section<? extends ComplexDefinition>> referencingDefs = terminology.getReferencingDefinitions(section);
-				for (Section<? extends ComplexDefinition> ref : referencingDefs) {
-					resolveRecursively(Sections.findChildOfType(ref,
-							TermDefinition.class));
+			// if (!terminology.wasValidInOldVersion(section)) {
+
+			terminology.addToValidObjects(section);
+			Collection<Section<? extends KnowledgeUnit>> referencingSlices = terminology.getReferencingSlices(section);
+			potentiallyNewKnowledgeSlices.addAll(referencingSlices);
+
+			// recursion for complex definitions
+			Collection<Section<? extends ComplexDefinition>> referencingDefs = terminology.getReferencingDefinitions(section);
+			for (Section<? extends ComplexDefinition> ref : referencingDefs) {
+				Section<TermDefinition> def = Sections.findChildOfType(ref,
+						TermDefinition.class);
+
+				// beware of infinite recursion due to self recursive
+				// definitions
+				if (def.get().getTermIdentifier(def).equals(
+						section.get().getTermIdentifier(section))) {
+					// chicken-egg problem cursing infinite recursion
+					// TODO: error handling !?
+					// System.out.println("chicken-egg!!!");
 				}
-
+				else {
+					System.out.println("resolving recursivly: "
+							+ def.get().getTermIdentifier(def));
+					resolveRecursively(def);
+				}
 			}
+
+			// }
 		}
 
 	}
@@ -296,9 +317,11 @@ public class IncrementalCompiler implements EventListener {
 
 	public boolean hasValidDefinition(String termIdentifier) {
 
+		System.out.println("CheckDefinition: " + termIdentifier);
 		Collection<Message> messages = checkDefinition(termIdentifier);
 		for (Message kdomReportMessage : messages) {
 			if (kdomReportMessage.getType() == Message.Type.ERROR) {
+				System.out.println("FALSE");
 				return false;
 			}
 		}
@@ -340,6 +363,7 @@ public class IncrementalCompiler implements EventListener {
 				String errorMsg = "ComplexDefinition has dependency error: ";
 				// if one reference is not defined
 				if ((!terminology.isValid(ref.get().getTermIdentifier(ref)))) {
+					System.out.println("dependency error");
 					messages.add(new Message(Message.Type.ERROR, errorMsg +
 							ref.get().getTermIdentifier(ref)));
 					return messages;

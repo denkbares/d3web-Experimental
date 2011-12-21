@@ -25,7 +25,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.ComplexDefinition;
+import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
@@ -33,6 +35,7 @@ import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * Some util methods needed for the compilation algorithm
@@ -150,5 +153,47 @@ public class CompileUtils {
 		List<Section<TermReference>> result = new ArrayList<Section<TermReference>>();
 		Sections.findSuccessorsOfType(section, TermReference.class, result);
 		return result;
+	}
+
+	public static String createLinkToDefinition(String termname) {
+		Collection<Section<? extends TermReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(
+				termname);
+		if (termReferences != null && termReferences.size() > 0) {
+			return createLinkToDefinition((Section<? extends IncrementalTermReference>) termReferences.iterator().next());
+		}
+
+		return null;
+	}
+
+	public static String createLinkToDefinition(Section<? extends IncrementalTermReference> section) {
+		return createLinkToDefinition(section, section.get().getTermIdentifier(section));
+	}
+
+	public static String createLinkToDefinition(Section<? extends IncrementalTermReference> section, String linktext) {
+		String termName = ((IncrementalTermReference) (section.get())).getTermName(section);
+		Collection<Section<? extends TermDefinition>> definitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+				termName);
+		if (definitions != null && definitions.size() > 0) {
+			Section<? extends TermDefinition> definition = definitions.iterator().next();
+			KnowWEArticle defArticle = definition.getArticle();
+
+			if (defArticle == null) {
+				return linktext; // predefined/imported/undefined Term !?
+			}
+			String defArticleName = defArticle.getTitle();
+			StringBuffer link = new StringBuffer();
+			link.append(KnowWEUtils.maskHTML("<a href='Wiki.jsp?page="));
+			link.append(defArticleName);
+			link.append("#");
+			link.append(definition.getID());
+
+			link.append(KnowWEUtils.maskHTML("'>"));
+			link.append(linktext);
+			link.append(KnowWEUtils.maskHTML("</a>"));
+			return link.toString();
+		}
+
+		return linktext;
+
 	}
 }

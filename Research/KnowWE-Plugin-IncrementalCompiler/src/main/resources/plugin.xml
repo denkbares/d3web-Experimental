@@ -66,7 +66,16 @@
 	</extension>
 	
 
-	
+	    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="TermRenamingAction">
+        <parameter id="class"
+            value="de.knowwe.compile.support.TermRenamingAction" />
+        <parameter id="name" value="TermRenamingAction" />
+        <parameter id="description" value="Action TermRenamingAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="4" />
+    </extension>
+    
 	
 	
 
