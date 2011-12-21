@@ -10,11 +10,7 @@
 %> 
 <div id="footer">
   <div class="logosDefi">
-  	<img src="KnowWEExtension/images/unilogo4cohne.jpg" width="" height="60px" alt="Universität Würzburg" />
-  	<img src="KnowWEExtension/images/klinik bad neustadt.png" width="205" height="60" alt="Klinik Bad Neustadt" />
-  	<img src="KnowWEExtension/images/Uniklinikum_Wue_logo.png" width="" height="60" alt="Uniklinikum Würzburg" />
-  	<img src="KnowWEExtension/images/verbundklinikum.png" width="" height="60" alt="Verbundsklinikum" />
-  	<img src="KnowWEExtension/images/Logo_CHFC.gif" width="" height="60" alt="CHFC" />
+  	<img src="KnowWEExtension/images/logos-alle.png" width="" height="70px" alt="Logos" />
   </div>
 
   <div class="footerlinks">
