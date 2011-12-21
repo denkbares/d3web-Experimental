@@ -16,45 +16,37 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.d3web.we.tables;
+package de.d3web.we.renderer;
 
-import de.d3web.we.renderer.DefaultMarkupRendererUserSupport;
+import de.d3web.we.tables.InnerTable;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 
 /**
- * Layout of CausalDiagnosisScore is
- * LeftColumn: Questions
- * Header: Diagnosis
- * Columns: Points for Questions
+ * This is a workaround class. Because the import/export-buttons will not
+ * be functional inside the DefaultMarkup.
  * 
  * @author Johannes Dienst
- * @created 14.10.2011
+ * @created 15.12.2011
  */
-public class CausalDiagnosisScoreMarkup extends DefaultMarkupType {
-	//		public static final String ESTABLISHED_THRESHOLD = "establishedThreshold";
-
-	private static DefaultMarkup m = null;
-
-	static
-	{
-		m = new DefaultMarkup("CausalDiagnosisScore");
-		m.addContentType(new CausalDiagnosisScore());
-		m.addAnnotation("package", true);
-		//m.addAnnotation(ESTABLISHED_THRESHOLD, false);
-	}
-
-	public CausalDiagnosisScoreMarkup()
-	{
-		super(m);
-	}
+public class DefaultMarkupRendererUserSupport<T extends DefaultMarkupType> extends KnowWEDomRenderer<T>
+{
 
 	@Override
-	protected KnowWEDomRenderer<?> getDefaultRenderer()
+	public void render(KnowWEArticle article, Section<T> section, UserContext user, StringBuilder string)
 	{
-		return new DefaultMarkupRendererUserSupport<DefaultMarkupType>();
+		new DefaultMarkupRenderer<T>().render(article, section, user, string);
+		Section<InnerTable> iT = Sections.findSuccessor(section, InnerTable.class);
+		StringBuilder buildi = new StringBuilder();
+		TableRenderer.renderExportImportButton(buildi, iT);
+		string.append(KnowWEUtils.maskHTML(buildi.toString()));
 	}
 
 }

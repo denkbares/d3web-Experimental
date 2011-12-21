@@ -248,7 +248,8 @@ KNOWWE.plugin.usersupport = function() {
    			
 			var params = {
 				action : 'GetSuggestionsAction',
-				toMatch: tokenInfo.tok
+				toMatch: tokenInfo.tok.string,
+				sectionID : id
 			}
 
 			var options = {
@@ -256,7 +257,7 @@ KNOWWE.plugin.usersupport = function() {
 				response : {
 					action : 'none',
 					async : false,
-                    fn : function() {                  	
+                    fn : function() {
 						var found = [];
 						found = KNOWWE.plugin.usersupport.gatherStaticCompletions(tokenInfo.tok, found);
 						var suggestions = JSON.parse(this.responseText);

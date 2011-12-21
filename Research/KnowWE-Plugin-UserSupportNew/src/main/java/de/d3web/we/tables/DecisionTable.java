@@ -19,6 +19,7 @@
 package de.d3web.we.tables;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,15 +36,16 @@ import de.d3web.core.knowledge.terminology.QuestionYN;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.we.kdom.xcl.list.ListSolutionType;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
-import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.KnowledgeUnitCompileScript;
+import de.knowwe.core.compile.Priority;
+import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.report.Message;
 import de.knowwe.kdom.AnonymousTypeInvisible;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
+import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 
 /**
@@ -53,10 +55,11 @@ import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
  * @author Johannes Dienst
  * @created 14.10.2011
  */
-public class DecisionTable extends ITable implements KnowledgeUnit<DecisionTable> {
+public class DecisionTable extends ITable {
 
 	public DecisionTable() {
 		this.sectionFinder = new AllTextSectionFinder();
+		this.addSubtreeHandler(Priority.LOW, new DecisionTableSubtreehandler());
 		this.addChildType(new ListSolutionType());
 
 		// cut the optional closing }
@@ -73,15 +76,15 @@ public class DecisionTable extends ITable implements KnowledgeUnit<DecisionTable
 	 * @author Johannes Dienst
 	 * @created 10.11.2011
 	 */
-	public class DecisionTableCompileScript extends AbstractKnowledgeUnitCompileScript<DecisionTable> {
+	public class DecisionTableSubtreehandler extends GeneralSubtreeHandler<DecisionTable> {
 
 		@Override
-		public void insertIntoRepository(Section<DecisionTable> decisionSec) {
-
+		public Collection<Message> create(KnowWEArticle article, Section<DecisionTable> decisionSec)
+		{
 			Section<InnerTable> innerTable =
 					Sections.findChildOfType(decisionSec, InnerTable.class);
 			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty())
-				return;
+				return null;
 
 			// TODO Right KnowledgeBase?
 			Section<DecisionTableMarkup> mark = Sections.findAncestorOfExactType(
@@ -201,19 +204,9 @@ public class DecisionTable extends ITable implements KnowledgeUnit<DecisionTable
 				}
 
 			}
-
-		}
-
-		@Override
-		public void deleteFromRepository(Section<DecisionTable> section) {
-			// TODO Auto-generated method stub
-
+			return null;
 		}
 
 	}
 
-	@Override
-	public KnowledgeUnitCompileScript getCompileScript() {
-		return new DecisionTableCompileScript();
-	}
 }

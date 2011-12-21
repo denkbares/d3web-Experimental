@@ -16,57 +16,49 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.d3web.we.algorithm;
+package de.d3web.we.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.PriorityQueue;
 
-import com.wcohen.ss.Levenstein;
-
+import de.knowwe.core.compile.TerminologyHandler;
+import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.utils.KnowWEUtils;
 
 
 /**
  * 
  * @author Johannes Dienst
- * @created 04.10.2011
+ * @created 15.12.2011
  */
-public class LevenshteinAlgorithm implements MatchingAlgorithm {
+public class UserSupportUtil {
 
-	private final double threshold;
+	/**
+	 * This method collects all TermDefinitions in the whole system.
+	 * 
+	 * TODO There should be a method to collect only the TermDefinitions used by a given Section.
+	 * 		But in fact this doesnt work yet. So this is better than nothing!
+	 * 
+	 * @created 15.12.2011
+	 * @param article
+	 * @return
+	 */
+	public static Collection<Section<? extends TermDefinition>> getTermReferences(KnowWEArticle article)
+	{
+		TerminologyHandler tH =
+				KnowWEUtils.getTerminologyHandler(article.getWeb());
 
-	public LevenshteinAlgorithm(int threshold) {
-		this.threshold = threshold;
-	}
+		Collection<String> globalTerms = tH.getAllGlobalTerms();
 
-	public LevenshteinAlgorithm() {
-		this.threshold = 5;
-	}
-
-	@Override
-	public List<Suggestion> getMatches(int maxCount, String toMatch,
-			Collection<Section<? extends TermDefinition>> localTermMatches) {
-
-		Levenstein l = new Levenstein();
-
-		PriorityQueue<Suggestion> suggestions =
-				new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
-
-		for (Section<? extends TermDefinition> match : localTermMatches) {
-			double score = l.score(toMatch, match.getOriginalText());
-			if (score >= -threshold) {
-				suggestions.add(new Suggestion(match.getText(), score));
-			}
+		Collection<Section<? extends TermDefinition>> toReturn = new ArrayList<Section<? extends TermDefinition>>();
+		for (String gT : globalTerms)
+		{
+			Collection<Section<? extends TermDefinition>> allLocalTermDefs = tH.getAllLocalTermDefs(gT);
+			toReturn.addAll(allLocalTermDefs);
 		}
-
-		List<Suggestion> toReturn = new ArrayList<Suggestion>();
-		for (int i = 0; i < maxCount; i++)
-			toReturn.add(suggestions.poll());
 
 		return toReturn;
 	}
-
 }

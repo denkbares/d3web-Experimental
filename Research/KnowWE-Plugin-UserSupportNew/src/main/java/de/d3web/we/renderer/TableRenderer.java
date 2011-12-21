@@ -74,12 +74,12 @@ public class TableRenderer extends KnowWEDomRenderer<InnerTable> {
 
 		buildi.append("</table>");
 
+		string.append(KnowWEUtils.maskHTML("</span>"));
+
 		// Render import und export buttons
-		renderExportImportButton(buildi, section);
+		//		renderExportImportButton(buildi, section);
 
 		string.append(KnowWEUtils.maskHTML(buildi.toString()));
-
-		string.append(KnowWEUtils.maskHTML("</span>"));
 
 	}
 
@@ -152,7 +152,7 @@ public class TableRenderer extends KnowWEDomRenderer<InnerTable> {
 		buildi.append("</tbody>");
 	}
 
-	private static void renderExportImportButton(StringBuilder buildi, Section<InnerTable> section) {
+	public static void renderExportImportButton(StringBuilder buildi, Section<InnerTable> section) {
 
 		String rel = "rel=\"{ " +
 				"		objectId : '" + section.getID() + "',"
@@ -162,10 +162,10 @@ public class TableRenderer extends KnowWEDomRenderer<InnerTable> {
 		//		+ KnowWEAttributes.TOPIC + ": '" + topic + "',";
 
 		String exportButton =
-				"<div>" +
+				"<div class=\"table_export_div\">" +
 						"<input class=\"button table-export\" type=\"button\" name=\"Export\" " +
 						"value=\"" + bundle.getString("export_button") + "\" id=\"" + section.getID()  + "-Export\"" + rel  + ">" +
-						"<span id=\"export-download" + section.getID() + "\"> </span>" +
+						"<span class=\"table_export_result\" id=\"export-download" + section.getID() + "\"> </span>" +
 						"</div>"
 						;
 
@@ -182,7 +182,7 @@ public class TableRenderer extends KnowWEDomRenderer<InnerTable> {
 		//						"</span>" +
 		//						"</div>";
 
-		String importButton = "<form id=\"file_upload_form\" action=\"uploadreceptor?" +
+		String importButton = "<form class=\"file_upload_form\" id=\"file_upload_form\" action=\"uploadreceptor?" +
 				"tableId=" + section.getID() +
 				"&article=" + section.getTitle() + "\" " +
 				"method=\"post\" enctype=\"multipart/form-data\" accept-charset=\"UTF-8\">" +
@@ -195,6 +195,14 @@ public class TableRenderer extends KnowWEDomRenderer<InnerTable> {
 				bundle.getString("upload_button") + "\">" +
 				"</form>";
 
-		buildi.append(exportButton + importButton);
+		StringBuilder buttons = new StringBuilder();
+		buttons.append("<div class=\"table_export_frame\">");
+		buttons.append("<div class=\"defaultMarkup\">");
+		buttons.append(exportButton + importButton);
+		buttons.append("</div>");
+		buttons.append("</div>");
+
+
+		buildi.append(buttons);
 	}
 }

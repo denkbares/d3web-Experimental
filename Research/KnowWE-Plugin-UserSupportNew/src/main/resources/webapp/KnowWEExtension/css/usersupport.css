@@ -64,3 +64,23 @@
 .cm-s-rubyblue span.cm-term {color: #008000;}
 .cm-s-rubyblue span.cm-scoring {color: #63289F;}
 .cm-s-rubyblue span.cm-information {color: #A168D9;}
+
+/*
+ * Styling for table export/import-form
+ */
+.file_upload_form {
+	padding: 5pt;
+
+ }
+ .table_export_div {
+ 	padding: 5pt 5pt 0pt 5pt;
+ }
+ .table_export_result {
+ 	margin-left: 6pt;
+ }
+ .table_export_frame {
+	border: 1px solid #DDDDDD;
+	margin: 0 0 5px;
+	padding: 0;
+	position: relative;
+}

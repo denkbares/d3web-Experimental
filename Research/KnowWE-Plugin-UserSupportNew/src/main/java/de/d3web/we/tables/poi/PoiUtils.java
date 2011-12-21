@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -34,6 +35,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -54,6 +56,8 @@ import de.knowwe.core.action.ActionContext;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 
 
 /**
@@ -62,6 +66,34 @@ import de.knowwe.core.kdom.parsing.Sections;
  * @created 17.10.2011
  */
 public class PoiUtils {
+
+	public static CellStyle getErrorCellStyle(Workbook wb)
+	{
+		CellStyle cs = wb.createCellStyle();
+		Font f = wb.createFont();
+		f.setColor(IndexedColors.RED.getIndex());
+		cs.setFont(f);
+		return cs;
+	}
+
+	public static CellStyle getWarningCellStyle(Workbook wb)
+	{
+		CellStyle cs = wb.createCellStyle();
+		Font f = wb.createFont();
+		//		f.setColor((short) 0xb);
+		f.setColor(IndexedColors.ORANGE.getIndex());
+		cs.setFont(f);
+		return cs;
+	}
+
+	public static CellStyle getNoticeCellStyle(Workbook wb)
+	{
+		CellStyle cs = wb.createCellStyle();
+		Font f = wb.createFont();
+		f.setColor(IndexedColors.SKY_BLUE.getIndex());
+		cs.setFont(f);
+		return cs;
+	}
 
 	public static Workbook createBlankHSSFWorkbook() throws IOException {
 
@@ -283,8 +315,10 @@ public class PoiUtils {
 		for (int j = 0;j < lines.size();j++) {
 			row = sheet.createRow(i++);
 			line = lines.get(j);
-			PoiUtils.writeTableLine(line, row, out);
+			PoiUtils.writeTableLine(line, row, out, wb);
 		}
+
+		PoiUtils.autoSizeSheetColumns(lines, sheet);
 
 		// Write workbook to file
 		wb.write(out);
@@ -312,8 +346,10 @@ public class PoiUtils {
 		for (int j = 0;j < lines.size();j++) {
 			row = sheet.createRow(i++);
 			line = lines.get(j);
-			PoiUtils.writeTableLine(line, row, out);
+			PoiUtils.writeTableLine(line, row, out, wb);
 		}
+
+		PoiUtils.autoSizeSheetColumns(lines, sheet);
 
 		// Write workbook to file
 		wb.write(out);
@@ -338,14 +374,33 @@ public class PoiUtils {
 				Sections.findChildrenOfType(decisionTable, TableLine.class);
 		Section<TableLine> line = null;
 
-		for (int j = 0;j < lines.size();j++) {
+		for (int j = 0;j < lines.size();j++)
+		{
 			row = sheet.createRow(i++);
 			line = lines.get(j);
-			PoiUtils.writeTableLine(line, row, out);
+			PoiUtils.writeTableLine(line, row, out, wb);
 		}
+
+		PoiUtils.autoSizeSheetColumns(lines, sheet);
 
 		// Write workbook to file
 		wb.write(out);
+	}
+
+	/**
+	 * Autoformats the column width. So that the text fits.
+	 * 
+	 * @created 20.12.2011
+	 * @param lines
+	 * @param sheet
+	 */
+	private static void autoSizeSheetColumns(List<Section<TableLine>> lines, Sheet sheet) {
+
+		if (lines.isEmpty()) return;
+
+		int columnCount = Sections.findChildrenOfType(lines.get(0), TableCell.class).size();
+		for (int k = 0; k < columnCount; k++)
+			sheet.autoSizeColumn(k);
 	}
 
 	/**
@@ -362,7 +417,8 @@ public class PoiUtils {
 
 		Cell c = null;
 		Section<TableHeaderCell> cell = null;
-		for (int i = 0; i < cells.size(); i++) {
+		for (int i = 0; i < cells.size(); i++)
+		{
 			cell = cells.get(i);
 			c = row.createCell(i);
 			c.setCellValue(cell.getText());
@@ -377,16 +433,42 @@ public class PoiUtils {
 	 * @param row
 	 * @param out
 	 */
-	public static void writeTableLine(Section<TableLine> line, Row row, FileOutputStream out) {
+	public static void writeTableLine(Section<TableLine> line, Row row, FileOutputStream out, Workbook wb)
+	{
 
 		List<Section<TableCell>> cells = Sections.findChildrenOfType(line, TableCell.class);
 
 		Cell c = null;
 		Section<TableCell> cell = null;
-		for (int i = 0; i < cells.size(); i++) {
+		for (int i = 0; i < cells.size(); i++)
+		{
 			cell = cells.get(i);
 			c = row.createCell(i);
+
+			// Render warnings/errors/notices
+			CellStyle cs = PoiUtils.colorTableCell(Messages.getMessages(cell.getArticle(), cell), wb);
+			//			cs = PoiUtils.getNoticeCellStyle(wb);
+			if (cs != null) c.setCellStyle(cs);
+
 			c.setCellValue(cell.getText());
+		}
+	}
+
+	public static CellStyle colorTableCell(Collection<Message> messages, Workbook wb)
+	{
+		if (!Messages.getErrors(messages).isEmpty())
+		{
+			return PoiUtils.getErrorCellStyle(wb);
+		}
+		else if (!Messages.getWarnings(messages).isEmpty())
+		{
+			return PoiUtils.getWarningCellStyle(wb);
+		}
+		else if (!Messages.getNotices(messages).isEmpty())
+		{
+			return PoiUtils.getNoticeCellStyle(wb);
+		} else {
+			return null;
 		}
 	}
 }

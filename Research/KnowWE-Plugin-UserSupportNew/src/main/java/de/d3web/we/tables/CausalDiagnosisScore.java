@@ -18,6 +18,7 @@
  */
 package de.d3web.we.tables;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,16 +32,17 @@ import de.d3web.we.utils.D3webUtils;
 import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelation;
 import de.d3web.xcl.XCLRelationType;
-import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
-import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.KnowledgeUnitCompileScript;
+import de.knowwe.core.compile.Priority;
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.report.Message;
 import de.knowwe.kdom.AnonymousTypeInvisible;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
+import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 /**
  * 
@@ -49,10 +51,11 @@ import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
  * @author Johannes Dienst
  * @created 14.10.2011
  */
-public class CausalDiagnosisScore extends AbstractType implements KnowledgeUnit<CausalDiagnosisScore> {
+public class CausalDiagnosisScore extends AbstractType {
 
 	public CausalDiagnosisScore() {
 		this.sectionFinder = new AllTextSectionFinder();
+		this.addSubtreeHandler(Priority.LOW, new CausalDiagnosisSubtreeHandler());
 
 		this.addChildType(new ListSolutionType());
 
@@ -70,16 +73,17 @@ public class CausalDiagnosisScore extends AbstractType implements KnowledgeUnit<
 	 * @author Johannes Dienst
 	 * @created 10.11.2011
 	 */
-	public class CausalDiagnosisScoreCompileScript extends AbstractKnowledgeUnitCompileScript<CausalDiagnosisScore> {
+	public class CausalDiagnosisSubtreeHandler extends GeneralSubtreeHandler<CausalDiagnosisScore> {
 
 		private static final String NO_WEIGHT = "Weightless";
 
 		@Override
-		public void insertIntoRepository(Section<CausalDiagnosisScore> scoreSec) {
+		public Collection<Message> create(KnowWEArticle article, Section<CausalDiagnosisScore> scoreSec)
+		{
 
 			Section<InnerTable> innerTable =
 					Sections.findChildOfType(scoreSec, InnerTable.class);
-			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty()) return;
+			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty()) return null;
 
 			// TODO Right KnowledgeBase?
 			Section<CausalDiagnosisScoreMarkup> mark = Sections.findAncestorOfExactType(
@@ -87,13 +91,10 @@ public class CausalDiagnosisScore extends AbstractType implements KnowledgeUnit<
 			String packageName = DefaultMarkupType.getAnnotation(mark, "package");
 			KnowledgeBase kb = D3webUtils.getKB(scoreSec.getWeb(), packageName + " - master");
 
-			// Create XCLRelations
-			// SingleKBMIDObjectManager kbm = new SingleKBMIDObjectManager(kb);
-
 			// Create all Conditions and Weights: 1st and 2end column
 			// TODO First Cell is no Question: Removed it! But what if empty?
 			// TODO no checks or whatsoever. Write security check!
-			List<Section<TableCellFirstColumn>> firstColumn = Sections.findChildrenOfType(scoreSec, TableCellFirstColumn.class);
+			List<Section<TableCellFirstColumn>> firstColumn = Sections.findSuccessorsOfType(innerTable, TableCellFirstColumn.class);
 			firstColumn.remove(0);
 			LinkedList<Condition> conditionList = new LinkedList<Condition>();
 			for (Section<TableCellFirstColumn> cell : firstColumn) {
@@ -190,18 +191,9 @@ public class CausalDiagnosisScore extends AbstractType implements KnowledgeUnit<
 				}
 
 			}
-
-		}
-
-		@Override
-		public void deleteFromRepository(Section<CausalDiagnosisScore> scoreSec) {
-
+			return null;
 		}
 
 	}
 
-	@Override
-	public KnowledgeUnitCompileScript getCompileScript() {
-		return new CausalDiagnosisScoreCompileScript();
-	}
 }

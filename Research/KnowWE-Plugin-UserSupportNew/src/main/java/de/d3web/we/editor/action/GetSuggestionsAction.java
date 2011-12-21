@@ -24,13 +24,12 @@ import java.util.List;
 
 import de.d3web.we.algorithm.DialogComponent;
 import de.d3web.we.algorithm.Suggestion;
-import de.knowwe.core.KnowWEEnvironment;
+import de.d3web.we.util.UserSupportUtil;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.compile.TerminologyHandler;
 import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.kdom.parsing.Sections;
 
 
 /**
@@ -58,16 +57,19 @@ public class GetSuggestionsAction extends AbstractAction {
 	private String handle(UserActionContext context) throws IOException {
 		String title = context.getTitle();
 		String toMatch = context.getParameter("toMatch");
+		String sectionID = context.getParameter("sectionID");
+
+		Section<?> markup = Sections.getSection(sectionID);
+		//		Section<? extends DefaultMarkup> mark = (Section<? extends DefaultMarkup>) markup;
+		//		String packageName = DefaultMarkupType.getAnnotation(mark, "package");
+		//		packageName = packageName.replaceAll("[\\r\\n\\}]", "");
 
 		if (toMatch == null) {
 			return "[]";
 		}
 
-		// TODO get the right Terminology
-		TerminologyHandler terminologyHandler =
-				KnowWEUtils.getTerminologyHandler(KnowWEEnvironment.DEFAULT_WEB);
 		Collection<Section<? extends TermDefinition>> localTermMatches =
-				terminologyHandler.getAllLocalTermDefs("Demo - Master");
+				UserSupportUtil.getTermReferences(markup.getArticle());
 
 		List<Suggestion> suggestions =
 				DialogComponent.getInstance().

@@ -20,6 +20,7 @@ package de.d3web.we.tables;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,15 +40,16 @@ import de.d3web.we.kdom.condition.CompositeCondition;
 import de.d3web.we.kdom.condition.KDOMConditionFactory;
 import de.d3web.we.kdom.xcl.list.ListSolutionType;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
-import de.knowwe.compile.object.KnowledgeUnit;
-import de.knowwe.compile.object.KnowledgeUnitCompileScript;
+import de.knowwe.core.compile.Priority;
+import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.report.Message;
 import de.knowwe.kdom.AnonymousTypeInvisible;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
+import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
 
 /**
@@ -55,12 +57,13 @@ import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
  * @author Johannes Dienst
  * @created 14.10.2011
  */
-public class HeuristicDiagnosisTable extends ITable implements KnowledgeUnit<HeuristicDiagnosisTable>
+public class HeuristicDiagnosisTable extends ITable
 {
 
 	public HeuristicDiagnosisTable()
 	{
 		this.sectionFinder = new AllTextSectionFinder();
+		this.addSubtreeHandler(Priority.LOWEST, new HeuristicDiagnosisTableSubtreeHandler());
 		this.addChildType(new ListSolutionType());
 
 		// cut the optional closing }
@@ -71,28 +74,23 @@ public class HeuristicDiagnosisTable extends ITable implements KnowledgeUnit<Heu
 		this.addChildType(new InnerTable());
 	}
 
-	@Override
-	public KnowledgeUnitCompileScript getCompileScript()
-	{
-		return new HeuristicDiagnosisTableCompileScript();
-	}
-
 	/**
 	 * Handles the creation of rules from HeuristicDiagnosisTableMarkup
 	 * 
 	 * @author Johannes Dienst
 	 * @created 10.11.2011
 	 */
-	public class HeuristicDiagnosisTableCompileScript extends AbstractKnowledgeUnitCompileScript<HeuristicDiagnosisTable>
+	public class HeuristicDiagnosisTableSubtreeHandler extends GeneralSubtreeHandler<HeuristicDiagnosisTable>
 	{
 
 		@Override
-		public void insertIntoRepository(Section<HeuristicDiagnosisTable> heuristicSec) {
+		public Collection<Message> create(KnowWEArticle article, Section<HeuristicDiagnosisTable> heuristicSec)
+		{
 
 			Section<InnerTable> innerTable =
 					Sections.findChildOfType(heuristicSec, InnerTable.class);
 			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty())
-				return;
+				return null;
 
 			// TODO Right KnowledgeBase?
 			Section<HeuristicDiagnosisTableMarkup> mark = Sections.findAncestorOfExactType(
@@ -108,7 +106,7 @@ public class HeuristicDiagnosisTable extends ITable implements KnowledgeUnit<Heu
 			// TODO First + Second Cell is no Question: Removed it! But what if empty?
 			// TODO no checks or whatsoever. Write security check!
 			List<Section<TableCellFirstColumn>> firstColumn =
-					Sections.findChildrenOfType(heuristicSec, TableCellFirstColumn.class);
+					Sections.findSuccessorsOfType(innerTable, TableCellFirstColumn.class);
 			firstColumn.remove(0);
 			firstColumn.remove(0);
 
@@ -159,7 +157,7 @@ public class HeuristicDiagnosisTable extends ITable implements KnowledgeUnit<Heu
 				Condition condition = null;
 				List<Condition> terms = new ArrayList<Condition>();
 				for (int j = 0; j < choices.size(); j++) {
-					if (choices.get(j) == null)
+					if (choices.get(j) == null || conditionList.get(j) == null)
 						continue;
 					else if (choices.get(j) == 1)
 						terms.add(conditionList.get(j));
@@ -210,15 +208,8 @@ public class HeuristicDiagnosisTable extends ITable implements KnowledgeUnit<Heu
 					ruleSet.addRule(rule);
 				}
 
-				System.out.println();
 			}
-
-		}
-
-		@Override
-		public void deleteFromRepository(Section<HeuristicDiagnosisTable> section) {
-			// TODO Auto-generated method stub
-
+			return null;
 		}
 
 	}

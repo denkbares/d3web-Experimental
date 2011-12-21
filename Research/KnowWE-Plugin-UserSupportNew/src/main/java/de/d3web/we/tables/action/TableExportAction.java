@@ -51,7 +51,6 @@ import de.knowwe.core.kdom.parsing.Section;
  */
 public class TableExportAction extends AbstractAction {
 
-
 	private static ResourceBundle bundle = ResourceBundle.getBundle("Usersupport_messages");
 
 	@SuppressWarnings("unchecked")

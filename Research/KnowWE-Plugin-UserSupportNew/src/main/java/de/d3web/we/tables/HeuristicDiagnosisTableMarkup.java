@@ -18,6 +18,8 @@
  */
 package de.d3web.we.tables;
 
+import de.d3web.we.renderer.DefaultMarkupRendererUserSupport;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -36,19 +38,28 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  * @author Johannes Dienst
  * @created 14.10.2011
  */
-public class HeuristicDiagnosisTableMarkup extends DefaultMarkupType {
+public class HeuristicDiagnosisTableMarkup extends DefaultMarkupType
+{
 
 	//		public static final String ESTABLISHED_THRESHOLD = "establishedThreshold";
 
 	private static DefaultMarkup m = null;
 
-	static {
+	static
+	{
 		m = new DefaultMarkup("HeuristicDiagnosisTable");
 		m.addContentType(new HeuristicDiagnosisTable());
 		m.addAnnotation("package", true);
 	}
 
-	public HeuristicDiagnosisTableMarkup () {
+	public HeuristicDiagnosisTableMarkup ()
+	{
 		super(m);
+	}
+
+	@Override
+	protected KnowWEDomRenderer<?> getDefaultRenderer()
+	{
+		return new DefaultMarkupRendererUserSupport<DefaultMarkupType>();
 	}
 }
