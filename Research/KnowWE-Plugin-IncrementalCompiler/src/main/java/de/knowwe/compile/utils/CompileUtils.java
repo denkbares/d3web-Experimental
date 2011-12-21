@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2010 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -24,11 +24,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import de.knowwe.compile.ImportManager;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.TermDefinition;
@@ -39,17 +43,17 @@ import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * Some util methods needed for the compilation algorithm
- * 
+ *
  * @author Jochen
  * @created 09.06.2011
  */
 public class CompileUtils {
 
 	/**
-	 * 
+	 *
 	 * This method could be improved to higher efficiency by a more elegant data
 	 * management for the resource delta
-	 * 
+	 *
 	 * @created 09.06.2011
 	 * @param parsedArticle
 	 * @return
@@ -58,6 +62,10 @@ public class CompileUtils {
 		Collection<Section<? extends Type>> result = new HashSet<Section<? extends Type>>();
 		addNonReusedSection(parsedArticle.getSection(), result);
 
+		Map<Section<? extends AbstractType>, Set<Section<? extends TermDefinition<?>>>> newImports = ImportManager.fetchNewImports();
+		for (Set<Section<? extends TermDefinition<?>>> anImport : newImports.values()) {
+			result.addAll(anImport);
+		}
 		return result;
 	}
 
@@ -76,10 +84,10 @@ public class CompileUtils {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method could be improved to higher efficiency by a more elegant data
 	 * management for the resource delta
-	 * 
+	 *
 	 * @created 09.06.2011
 	 * @param lastVersionOfArticle
 	 * @return
@@ -89,6 +97,11 @@ public class CompileUtils {
 		if (lastVersionOfArticle == null) return result;
 		addOldNonReusedSection(lastVersionOfArticle.getSection(), result,
 				lastVersionOfArticle);
+
+		Map<Section<? extends AbstractType>, Set<Section<? extends TermDefinition<?>>>> removedImports = ImportManager.fetchRemovedImports();
+		for (Set<Section<? extends TermDefinition<?>>> removed : removedImports.values()) {
+			result.addAll(removed);
+		}
 
 		return result;
 	}
@@ -102,14 +115,13 @@ public class CompileUtils {
 				addNonReusedSection(child, result);
 			}
 		}
-
 	}
 
 	/**
-	 * 
+	 *
 	 * filters a set of sections and returns only those which are of type
 	 * KnowledgeUnit
-	 * 
+	 *
 	 * @created 08.06.2011
 	 * @param oldSectionsNotReused
 	 * @return
@@ -125,10 +137,10 @@ public class CompileUtils {
 	}
 
 	/**
-	 * 
+	 *
 	 * filters a set of sections and returns only those which are of type
 	 * TermDefinition
-	 * 
+	 *
 	 * @created 08.06.2011
 	 * @param oldSectionsNotReused
 	 * @return

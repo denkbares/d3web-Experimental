@@ -65,6 +65,19 @@
 		<parameter id="scope" value="IRITermRef" />
 	</extension>
 	
+    <extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+        id="ImportedConceptPageLinkProvider">
+        <parameter id="class"
+            value="de.knowwe.compile.support.ImportedConceptPageLinkProvider" />
+        <parameter id="name" value="ImportedConceptPageLinkProvider" />
+        <parameter id="description"
+            value="Offers quick jump to links for imported terms" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="scope" value="TermReference" />
+        <parameter id="scope" value="IncrementalTermReference" />
+        <parameter id="scope" value="IRITermRef" />
+    </extension>
 
 	    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="TermRenamingAction">

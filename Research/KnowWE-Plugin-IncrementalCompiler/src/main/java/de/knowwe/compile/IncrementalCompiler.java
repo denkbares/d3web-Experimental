@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2010 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
@@ -37,6 +38,7 @@ import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.compile.TerminologyExtension;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
+import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.KnowWETerm;
@@ -53,7 +55,7 @@ import de.knowwe.plugin.Plugins;
  * This class implements the incremental compilation algorithm as proposed by
  * the paper at KCAP2011 entitled 'Incremental Compilation of Knowledge
  * Documents for Markup-based Closed-World Authoring'
- * 
+ *
  * @author Jochen
  * @created 09.06.2011
  */
@@ -89,6 +91,9 @@ public class IncrementalCompiler implements EventListener {
 		 * END term for testing
 		 */
 
+
+		//extension point for plugins defining predefined terminology
+
 		// extension point for plugins defining predefined terminology
 		Extension[] exts = PluginManager.getInstance().getExtensions(
 				Plugins.EXTENDED_PLUGIN_ID,
@@ -102,6 +107,40 @@ public class IncrementalCompiler implements EventListener {
 
 	}
 
+	/**
+	 *
+	 *
+	 * @created 14.12.2011
+	 * @param key
+	 * @param termIdentifier
+	 */
+	public void registerImportedTerminology(Section<? extends AbstractType> key, String termIdentifier) {
+		Section<ImportedTerm> importedSection = Section.createSection(
+					termIdentifier, new ImportedTerm(), null);
+		terminology.addImportedObject(importedSection);
+		terminology.registerTermDefinition(importedSection);
+		ImportManager.addImport(key, importedSection);
+	}
+
+	/**
+	 *
+	 *
+	 * @created 14.12.2011
+	 * @param key
+	 */
+	public void deregisterImportedTerminology(Section<? extends AbstractType> key) {
+
+		Set<Section<? extends TermDefinition<?>>> imports = ImportManager.getImports(key);
+		Iterator<Section<? extends TermDefinition<?>>> it = imports.iterator();
+
+		while (it.hasNext()) {
+			Section<? extends TermDefinition<?>> termIdentifier = it.next();
+			terminology.deregisterTermDefinition(termIdentifier);
+			terminology.removeImportedObject(termIdentifier.getOriginalText());
+		}
+		ImportManager.removeImport(key);
+	}
+
 	private void registerTerminology(TerminologyExtension terminologyExtension) {
 		String[] termNames = terminologyExtension.getTermNames();
 		for (String string : termNames) {
@@ -112,17 +151,30 @@ public class IncrementalCompiler implements EventListener {
 			terminology.registerTermDefinition(predefinedTermname);
 		}
 
-		// Section<PreDefinedTerm> subclassDef =
-		// Section.createSection("subclassof",
-		// new PreDefinedTerm(), null);
-		// terminology.addPredefinedObject(subclassDef);
-		// terminology.registerTermDefinition(subclassDef);
+//		Section<PreDefinedTerm> subclassDef =
+//				Section.createSection("subclassof",
+//						new PreDefinedTerm(), null);
+//		terminology.addPredefinedObject(subclassDef);
+//		terminology.registerTermDefinition(subclassDef);
 
 	}
 
 	class PreDefinedTerm extends TermDefinition<String> {
 
 		public PreDefinedTerm() {
+			super(String.class);
+		}
+
+		@Override
+		public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
+			return s.getOriginalText();
+		}
+
+	}
+
+	class ImportedTerm extends TermDefinition<String> {
+
+		public ImportedTerm() {
 			super(String.class);
 		}
 
@@ -235,6 +287,11 @@ public class IncrementalCompiler implements EventListener {
 			section.get().getCompileScript().deleteFromRepository(section);
 		}
 
+		if (!ImportManager.fetchNewImports().isEmpty()
+				|| !ImportManager.fetchRemovedImports().isEmpty()) {
+			notify(event);
+		}
+
 	}
 
 	private void hazardFilter(Collection<Section<? extends KnowledgeUnit>> potentiallyNewKnowledgeSlices2, Collection<Section<? extends KnowledgeUnit>> knowledgeSlicesToRemove2) {
@@ -343,8 +400,11 @@ public class IncrementalCompiler implements EventListener {
 						"Concurrent definitions are existing but will be ignored!"));
 				return messages;
 			}
-			messages.add(Messages.error("Object has concurrent definitions: "
-					+ termIdentifier));
+			if (terminology.isImportedObject(termIdentifier)) {
+				messages.add(Messages.warning("This is a imported term. Concurrent definitions are existing but will be ignored!"));
+				return messages;
+			}
+			messages.add(Messages.error("Object has concurrent definitions: " + termIdentifier));
 			return messages;
 		}
 

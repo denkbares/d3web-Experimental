@@ -95,7 +95,7 @@ public abstract class IncrementalTermReference<TermObject> extends TermReference
 			for (Message kdomReportMessage : messages) {
 				if (kdomReportMessage.getType() == Message.Type.ERROR) {
 					string.append(DefaultErrorRenderer.INSTANCE_ERROR.preRenderMessage(
-							kdomReportMessage, user));
+									kdomReportMessage, user));
 				}
 				if (kdomReportMessage.getType() == Message.Type.WARNING) {
 					string.append(
@@ -106,6 +106,10 @@ public abstract class IncrementalTermReference<TermObject> extends TermReference
 			if (IncrementalCompiler.getInstance().getTerminology().isPredefinedObject(
 					sec.get().getTermIdentifier(sec))) {
 				PREDEFINDED_TERM_RENDERER.render(article, sec, user, string);
+			}
+			else if (IncrementalCompiler.getInstance().getTerminology().isImportedObject(
+					sec.get().getTermIdentifier(sec))) {
+				REF_RENDERER.render(article, sec, user, string);
 			}
 			else {
 				string.append(KnowWEUtils.maskHTML("<a name='" + sec.getID() + "'>"));
