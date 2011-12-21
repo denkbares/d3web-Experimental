@@ -4,7 +4,7 @@
 <link rel="icon" type="image/ico" href="images/favicon.ico">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-<script src="libsExternal/jquery/jquery-1.5.min.js" type="text/javascript" language="javascript"></script>
+<script src="libsExternal/jquery/jquery-1.6.1.min.js" type="text/javascript" language="javascript"></script>
 <script src="libsExternal/jqueryUI/jqueryUi-1.8.10.all.min.js" type="text/javascript" language="javascript"></script>
 
 <script type="text/javascript">

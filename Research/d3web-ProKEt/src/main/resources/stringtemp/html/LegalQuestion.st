@@ -6,7 +6,7 @@
 		src="img/panel.gif" style="border: medium none;" id="panel-$fullId$" 
 		$if(hasChildren)$onclick="toggle_sub_4boxes('$fullId$')"$endif$>
     </div> 
-    <div class="title t-$fullId$" id="t-$fullId$" onClick="javascript:copy_div('bonus-$fullId$', 'bonus');">
+    <div class="title t-$fullId$" id="t-$fullId$" onmouseover="showAuxInfo('$fullId$')" onmouseout="hideAuxInfo()">
         $title$
 		$Tooltip()$
 		$Image()$

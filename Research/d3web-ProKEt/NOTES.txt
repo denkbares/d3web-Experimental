@@ -1,0 +1,15 @@
+BROWSER ABFRAGE MIT JQUERY
+// Firefox 2/3
+FF=/a/[-1]=='a'
+// Firefox 3
+FF3=(function x(){})[-5]=='x'
+// Firefox 2
+FF2=(function x(){})[-6]=='x'
+// Internet Explorer 6/7/8:
+IE='\v'=='v'
+// Safari:
+Saf=/a/.__proto__=='//'
+// Chrome
+Chr=/source/.test((/a/.toString+''))
+// Opera
+Op=/^function \(/.test([].sort)

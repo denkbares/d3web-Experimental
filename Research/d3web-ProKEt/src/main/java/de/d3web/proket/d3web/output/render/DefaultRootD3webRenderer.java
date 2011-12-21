@@ -31,13 +31,13 @@ import org.antlr.stringtemplate.StringTemplate;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
-import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
@@ -88,7 +88,14 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		 */
 		LoginMode loginMode = D3webConnector.getInstance().getD3webParser().getLogin();
 		cc.js.setLoginMode(loginMode);
-		if (loginMode == LoginMode.usrdat) st.setAttribute("login", "true");
+		if (loginMode == LoginMode.usrdat) {
+                    st.setAttribute("login", "true");
+                }
+                
+                // if logo is provided by KB
+                if(D3webUtils.isImageProvided("logo")){
+                    st.setAttribute("logo", true);
+                }
 
 		// handle Css
 		handleCss(cc);

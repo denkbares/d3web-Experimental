@@ -8,18 +8,59 @@ body,div {
 	text-color: black;
 }
 
-#middle{
-	margin-left: auto;
-    margin-right: auto;
-    width: 85%; 
+#content {float: none;margin-left: auto; margin-right: auto; width="70%"}
+
+#right {display: none;}
+
+#left {display: none;}
+
+#head{
+	font-size: 1.5em;
+	font-variant: small-caps;
+	text-align: center;
+	background: #e7e7e7;
+	background-image: none;
+	padding: 5px;
 }
+
+#intro{ 
+    font-family: Arial;
+	font-size: 8pt;
+	text-color: darkgrey;
+}
+
+#dialog{
+    float: left;
+    width: 60%;
+}
+
+#auxpanel{
+    margin-top: 5px;
+    margin-left: 25px;
+    background-color: #fffff0;
+    display: block;
+    float: right;
+    width: 30%;
+    margin-right: 10px;
+    height: 100px;
+    -moz-box-shadow: 0 0 3.5px black;
+	-webkit-box-shadow: 0 0 3.5px black;
+	box-shadow: 0 0 3.5px black;
+    padding: 10px;
+}
+
+
+table{
+	margin-top: 10px;
+	width: 100%;
+}
+
 
 .question {
 	background-color: transparent;
 	clear: left;
+        margin-top: 5px;
 }
-
-
 
 .tooltip {
 	z-index: 100;
@@ -43,10 +84,6 @@ body,div {
 	-moz-box-shadow: 0 0 3.5px black;
 	-webkit-box-shadow: 0 0 3.5px black;
 	box-shadow: 0 0 3.5px black;
-}
-
-.question{
-	margin-top: 0px;
 }
 
 .question .title {
@@ -102,30 +139,3 @@ body,div {
 	float: left;
 }
 
-#content {float: none;margin-left: auto; margin-right: auto; width: 85%;}
-
-#right {display: none;}
-
-#left {
-	display: none;
-}
-
-#head{
-	font-size: 1.5em;
-	font-variant: small-caps;
-	text-align: center;
-	background: #e7e7e7;
-	background-image: none;
-	padding: 5px;
-}
-
-
-table{
-	margin-top: 10px;
-	width: 100%;
-}
-
-
-tr, td{
-	width: 100%;
-}

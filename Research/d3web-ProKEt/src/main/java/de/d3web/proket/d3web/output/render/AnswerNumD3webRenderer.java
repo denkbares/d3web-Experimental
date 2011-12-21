@@ -75,9 +75,8 @@ public class AnswerNumD3webRenderer extends AbstractD3webRenderer implements Ans
 		st.setAttribute("realAnswerType", "num");
 		st.setAttribute("parentFullId", getID(parent));// .getName().replace(" ",
 														// "_"));
-
-		// set units if available
-		String unit = nq.getInfoStore().getValue(MMInfo.UNIT);
+                
+                String unit = nq.getInfoStore().getValue(MMInfo.UNIT);
 		if (nq.getInfoStore().getValue(MMInfo.UNIT) != null) {
 			NumericalInterval interVal = nq.getInfoStore().getValue(
 					BasicProperties.QUESTION_NUM_RANGE);
@@ -91,6 +90,26 @@ public class AnswerNumD3webRenderer extends AbstractD3webRenderer implements Ans
 			}
 			st.setAttribute("text", inter + unit);
 		}
+                        
+                /*
+		// set units if available
+		String unit = nq.getInfoStore().getValue(MMInfo.UNIT);
+		if (nq.getInfoStore().getValue(MMInfo.UNIT) != null) {
+			NumericalInterval interVal = nq.getInfoStore().getValue(
+					BasicProperties.QUESTION_NUM_RANGE);
+			String left = ""; 
+                        String right = "";
+			if (interVal != null) {
+				left = trimPZ(interVal.getLeft());
+				right = trimPZ(interVal.getRight());
+				st.setAttribute("left", left);
+				st.setAttribute("right", right);
+			}
+                        
+                        // show interval AND unit as descriptive info for widget
+			st.setAttribute("text", unit + " [" + left + " " + right + "]");
+                        
+		}*/
 
 		Blackboard bb = d3webSession.getBlackboard();
 		Value value = bb.getValue(nq);

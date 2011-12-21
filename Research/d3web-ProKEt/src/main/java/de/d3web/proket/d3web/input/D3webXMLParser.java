@@ -77,7 +77,7 @@ public class D3webXMLParser {
 		try {
 			// try to get the corresponding XML from the resources folder
 			inputFile = FileUtils.getResourceFile("/specs/d3web/" + xMLFilename);
-                        System.out.println("Input:" + inputFile);
+                        //System.out.println("Input:" + inputFile);
 		}
 		catch (FileNotFoundException e2) {
 		}
@@ -86,7 +86,7 @@ public class D3webXMLParser {
 			try {
 				// try to read xml root node
 				dialogSpec = XMLUtils.getRoot(inputFile, null);
-                                System.out.println("Dialogspec:" + dialogSpec.getAttributes());
+                                //System.out.println("Dialogspec:" + dialogSpec.getAttributes());
 			}
 			catch (Exception e) {
 				e.printStackTrace();

@@ -103,6 +103,8 @@ import de.d3web.proket.database.DateCoDec;
 import de.d3web.proket.database.TokenThread;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 /**
  * Servlet for creating and using dialogs with d3web binding. Binding is more of
@@ -130,7 +132,7 @@ public class D3webDialog extends HttpServlet {
     protected static final String REPLACEID = "##replaceid##";
     private static final long serialVersionUID = -2466200526894064976L;
     private String logfilename = "";
-    private static final SimpleDateFormat FORMATTER = 
+    private static final SimpleDateFormat FORMATTER =
             new SimpleDateFormat("E yyyy_MM_dd HH:mm:ss");
 
     protected static Map<String, List<String>> getUserDat() {
@@ -193,6 +195,7 @@ public class D3webDialog extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+      
         response.setContentType("text/html; charset=UTF-8");
 
         HttpSession httpSession = request.getSession(true);
@@ -200,7 +203,7 @@ public class D3webDialog extends HttpServlet {
         // try to get the src parameter, which defines the specification xml
         // with special properties for this dialog/knowledge base
         // if none available, default.xml is set
-        String source = getSource();
+        String source = "";
         if (request.getParameter("src") != null) {
             source = request.getParameter("src");
         }
@@ -234,7 +237,7 @@ public class D3webDialog extends HttpServlet {
             d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
             d3wcon.setLoginMode(d3webParser.getLogin());
             sourceSave = source;
-            if(d3webParser.getLogging().contains("ON")){
+            if (d3webParser.getLogging().contains("ON")) {
                 d3wcon.activateLogging();
             }
             if (!d3webParser.getLanguage().equals("")) {
@@ -258,13 +261,13 @@ public class D3webDialog extends HttpServlet {
             GlobalSettings.getInstance().setLogFolder(
                     servletBasePath + "../../"
                     + userpref
-                    + "-Data/log");
+                    + "-Data/logs");
 
             JSONLogger logger = new JSONLogger();
             d3wcon.setLogger(logger);
 
             GlobalSettings.getInstance().setKbImgFolder(servletBasePath + "kbimg");
-            streamImages();
+            D3webUtils.streamImages();
         }
 
         /*
@@ -294,8 +297,8 @@ public class D3webDialog extends HttpServlet {
                 && (authenticated == null || !authenticated.equals("yes"))) {
             response.sendRedirect("../EuraHS-Login");
             return;
-        }
-
+        } 
+        
         // switch action as defined by the servlet call
         if (action.equalsIgnoreCase("show")) {
             show(request, response, httpSession);
@@ -356,9 +359,9 @@ public class D3webDialog extends HttpServlet {
             if (!GlobalSettings.getInstance().initLogged()) {
 
                 // get values to log initially: browser, user, and start time
-                String browser = 
+                String browser =
                         request.getParameter("browser").replace("+", " ");
-                String user = 
+                String user =
                         request.getParameter("user").replace("+", " ");
                 Date start = new Date();
                 String datestring = start.toString();
@@ -367,85 +370,85 @@ public class D3webDialog extends HttpServlet {
                 d3wcon.getLogger().logStartValue(FORMATTER.format(start));
                 d3wcon.getLogger().logBrowserValue(browser);
                 d3wcon.getLogger().logUserValue(user);
-                
+
                 Date date = new Date();
                 // assemble filename for logfile and save to file
-                SimpleDateFormat format = 
+                SimpleDateFormat format =
                         new SimpleDateFormat("yyyyMMdd_HHmmss");
                 String formatted = format.format(date);
-                String sid = 
-                        ((Session)httpSession.getAttribute(D3WEB_SESSION)).getId();
+                String sid =
+                        ((Session) httpSession.getAttribute(D3WEB_SESSION)).getId();
                 logfilename = formatted + "_" + sid + ".txt";
-               
+
                 d3wcon.getLogger().writeJSONToFile(logfilename);
-             
+
                 GlobalSettings.getInstance().setInitLogged(true);
             }
             return;
 
-        } else if(action.equalsIgnoreCase("logEnd")){
-            
-                // end date
-                Date date = new Date();
-                String datestring = FORMATTER.format(date);
-                d3wcon.getLogger().logEndValue(datestring);
-                d3wcon.getLogger().writeJSONToFile(logfilename);
-                
-        } else if(action.equalsIgnoreCase("logWidget")){
-            
+        } else if (action.equalsIgnoreCase("logEnd")) {
+
+            // end date
+            Date date = new Date();
+            String datestring = FORMATTER.format(date);
+            d3wcon.getLogger().logEndValue(datestring);
+            d3wcon.getLogger().writeJSONToFile(logfilename);
+
+        } else if (action.equalsIgnoreCase("logWidget")) {
+
             // TODO need to check here in case IDs are reworked globally one day
-               String widgetID = request.getParameter("widget");
-               Date now = new Date();
-               JSONLogger logger = d3wcon.getLogger();
-               
-               if(widgetID.contains("reset")){
-                   logger.logClickedObjects(
-                      "RESET", FORMATTER.format(now), "RESET");
-               } else if(widgetID.contains("statistics")){
-                   logger.logClickedObjects(
-                      "STATISTICS", FORMATTER.format(now), "STATISTICS");
-               } else if(widgetID.contains("summary")){
-                   logger.logClickedObjects(
-                      "SUMMARY", FORMATTER.format(now), "SUMMARY");
-               } else if(widgetID.contains("followup")){
-                   logger.logClickedObjects(
-                      "FOLLOWUP", FORMATTER.format(now), "FOLLOWUP");
-               } else if(widgetID.contains("loadcase")){
-                   logger.logClickedObjects(
-                      "LOAD", FORMATTER.format(now), "LOAD");
-               } else if(widgetID.contains("savecase")){
-                   logger.logClickedObjects(
-                      "SAVE", FORMATTER.format(now), "SAVE");
-               }
-               
-             d3wcon.getLogger().writeJSONToFile(logfilename);
-                
-        } else if(action.equalsIgnoreCase("logLanguageWidget")){
-            
+            String widgetID = request.getParameter("widget");
+            Date now = new Date();
+            JSONLogger logger = d3wcon.getLogger();
+
+            if (widgetID.contains("reset")) {
+                logger.logClickedObjects(
+                        "RESET", FORMATTER.format(now), "RESET");
+            } else if (widgetID.contains("statistics")) {
+                logger.logClickedObjects(
+                        "STATISTICS", FORMATTER.format(now), "STATISTICS");
+            } else if (widgetID.contains("summary")) {
+                logger.logClickedObjects(
+                        "SUMMARY", FORMATTER.format(now), "SUMMARY");
+            } else if (widgetID.contains("followup")) {
+                logger.logClickedObjects(
+                        "FOLLOWUP", FORMATTER.format(now), "FOLLOWUP");
+            } else if (widgetID.contains("loadcase")) {
+                logger.logClickedObjects(
+                        "LOAD", FORMATTER.format(now), "LOAD");
+            } else if (widgetID.contains("savecase")) {
+                logger.logClickedObjects(
+                        "SAVE", FORMATTER.format(now), "SAVE");
+            }
+
+            d3wcon.getLogger().writeJSONToFile(logfilename);
+
+        } else if (action.equalsIgnoreCase("logLanguageWidget")) {
+
             String language = request.getParameter("language");
             Date now = new Date();
             JSONLogger logger = d3wcon.getLogger();
-               
+
             logger.logClickedObjects(
-                      "LANGUAGE", FORMATTER.format(now), language);
-           
-             d3wcon.getLogger().writeJSONToFile(logfilename);
-                
-        }  else if(action.equalsIgnoreCase("logInfoPopup")){
-           
+                    "LANGUAGE", FORMATTER.format(now), language);
+
+            d3wcon.getLogger().writeJSONToFile(logfilename);
+
+        } else if (action.equalsIgnoreCase("logInfoPopup")) {
+
             String prefix = request.getParameter("prefix");
             String ttwidget = request.getParameter("widget");
             ttwidget = ttwidget.replace("+", " ");
             String timestring = request.getParameter("timestring");
-           
+
             JSONLogger logger = d3wcon.getLogger();
-               
-             // TODO rename tooltip --> infopopup
+
+            // TODO rename tooltip --> infopopup
             logger.logClickedObjects(
-                      "INFOPOPUP_" + prefix, timestring, ttwidget);
-           
-             d3wcon.getLogger().writeJSONToFile(logfilename);
-                
+                    "INFOPOPUP_" + prefix, timestring, ttwidget);
+
+            d3wcon.getLogger().writeJSONToFile(logfilename);
+
         } else {
             handleDialogSpecificActions(httpSession, request, response, action);
         }
@@ -503,17 +506,17 @@ public class D3webDialog extends HttpServlet {
         Set<QASet> indicatedTOsBefore = getActiveSet(d3webSession);
         List<Question> answeredQuestionsBefore = d3webSession.getBlackboard().getAnsweredQuestions();
         Set<TerminologyObject> unknownQuestionsBefore = getUnknownQuestions(d3webSession);
-       
+
         // log date
         Date now = new Date();
-        
+
         for (int i = 0; i < questions.size(); i++) {
             setValue(questions.get(i), values.get(i), d3webSession);
-            
+
             // log all changed widgets/items
-             d3wcon.getLogger().logClickedObjects(
-                      "q_" + questions.get(i), FORMATTER.format(now), values.get(i));
-             d3wcon.getLogger().writeJSONToFile(logfilename);
+            d3wcon.getLogger().logClickedObjects(
+                    "q_" + questions.get(i), FORMATTER.format(now), values.get(i));
+            d3wcon.getLogger().writeJSONToFile(logfilename);
         }
 
         resetAbandonedPaths(d3webSession);
@@ -543,7 +546,7 @@ public class D3webDialog extends HttpServlet {
         // System.out.println(answeredQuestionsAfter);
         diff.addAll(answeredQuestionsAfter);
 
-       ContainerCollection cc = new ContainerCollection();
+        ContainerCollection cc = new ContainerCollection();
         for (TerminologyObject to : diff) {
             IQuestionD3webRenderer toRenderer = AbstractD3webRenderer.getRenderer(to);
             writer.append(REPLACEID + AbstractD3webRenderer.getID(to));
@@ -1239,4 +1242,5 @@ public class D3webDialog extends HttpServlet {
                 SummaryD3webRenderer.SummaryType.GRID));
         writer.append("<div>");
     }
+
 }

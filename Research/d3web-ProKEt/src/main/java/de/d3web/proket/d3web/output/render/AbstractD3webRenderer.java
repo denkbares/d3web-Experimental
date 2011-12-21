@@ -507,7 +507,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 	}
 
 	public static String getID(NamedObject no) {
-		String prefix = "";
+               String prefix = "";
 		if (no instanceof Question) {
 			prefix = "q";
 		}
@@ -517,7 +517,8 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 		else if (no instanceof Choice) {
 			prefix = "a";
 		}
-		return prefix + "_" + no.getName().replaceAll("\\W", "_");
+		//return prefix + "_" + no.getName().replaceAll("\\W", "_");
+                return prefix + "_" + no.getName().replaceAll(" ", "_");
 	}
 
 }

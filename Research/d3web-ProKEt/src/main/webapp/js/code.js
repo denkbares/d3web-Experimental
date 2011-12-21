@@ -1063,6 +1063,29 @@ function h4boxes(value, id) {
 }
 
 /**
+ * Show the auxiliary information for element with id "id" in the infopanel
+ * element
+ */
+function showAuxInfo(id){
+    
+    // get infotext stored in additional, invisible sub-element of current q
+    var infoid = "#bonus-"+id;
+    var auxinfo = $(infoid).html();
+    
+    // rewrite inner HTML of infopanel widget with info content
+    if(auxinfo==""){
+        auxinfo = "No additional information available for current dialog element."
+    } 
+    $("#infopanel").html(auxinfo);
+}
+
+function hideAuxInfo(){
+    
+    // clear infopanel
+    $("#infopanel").html("No additional information available for current dialog element.");
+}
+
+/**
  * Transfer coloring (in hierarchy dialog) also to parent quesitons
  * @param object the object from where to start marking parents
  * @parents skip_self flag indicating whether element itself should
@@ -1070,18 +1093,21 @@ function h4boxes(value, id) {
  */
 function h4boxes_mark(object, skip_self) {
 
-	// TODO refactor algorithm and mapping between 0-3 and image 1-4 numbers
-	// check object itself unless skip_self
+	// rating: low =    red REJECT,     3
+        //         medium = yellow SUSPECT, 2
+        //         high =   green APPROVE,  0
+        //         undec =  grey UNKNOWN    1 
+        // 
+        // check object itself unless skip_self
 	if (!skip_self) {
 		
 		// we need this as a coloring flag
 		var oc = object.hasClass('oc');
 		var color; 
 		
-		if (oc) {	// in oc questions, rating default for parents
-					// is always low
+		if (oc) {	// in oc questions, default is REJECT
 			color = 3;
-		} else { // otherwise it is high (green) per default
+		} else {        // otherwise it is APPROVE (green) per default
 			color = 0;
 		}
 
@@ -1170,14 +1196,16 @@ function h4boxes_mark(object, skip_self) {
 }
 
 /**
+ * REMOVE?!
  * IN ColorHierarchyMCQuestion.st and LegalQuestion.st
  * @param sourceId the ID of the source element
- * @param destId the ID of the destination elmenet
+ * @param destId the ID of the destination element
  */
 function copy_div(sourceId, destId) {
 	
 	// get content, which is the innerHTML of the source
 	var newContent = $("#" + sourceId).attr('innerHTML');
+        //alert(newContent);
 	var dest = $("#" + destId);
 	if (newContent.length == 0) {
 		dest.hide(0); // if nothing to copy, hide new element

@@ -59,6 +59,7 @@ public class MediastinitisDialog extends D3webDialog {
 
 	@Override
 	protected String getSource() {
+            System.out.println("MEDIASTINITIS source");
 		String source = "Mediastinitis";
 		return source;
 	}
@@ -77,6 +78,7 @@ public class MediastinitisDialog extends D3webDialog {
 			HttpSession httpSession)
 			throws IOException {
 
+                System.out.println("CALLED Mediastinitis Renderer");
 		PrintWriter writer = response.getWriter();
 
 		// get the root renderer --> call getRenderer with null
@@ -92,8 +94,10 @@ public class MediastinitisDialog extends D3webDialog {
 		// set clinic to user name, since its the only clinic it can see cases
 		// of
 		String user = (String) httpSession.getAttribute("user");
+                System.out.println("USER: " + user);
 		if (user != null && user != "") {
 			String definingObject = D3webConnector.getInstance().getD3webParser().getRequired();
+                        System.out.println("REQUIRED: " +definingObject);
 			Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(
 					definingObject);
 			Fact fact = d3webSess.getBlackboard().getValueFact(to);

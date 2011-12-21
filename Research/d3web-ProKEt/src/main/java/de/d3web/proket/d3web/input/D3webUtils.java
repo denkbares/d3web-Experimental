@@ -500,6 +500,21 @@ public class D3webUtils {
         }
     }
 
+    public static boolean isImageProvided(String imgName) {
+        List<Resource> kbimages = D3webConnector.getInstance().getKb().getResources();
+
+        if (kbimages != null && kbimages.size() != 0) {
+            for (Resource r : kbimages) {
+                String rname = r.getPathName();
+                if (rname.contains(imgName)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Checks, whether a potentially required value is already set in the KB or
      * is contained in the current set of values to write to the KB. If yes, the
@@ -876,18 +891,18 @@ public class D3webUtils {
             case 1:   // german
                 prompt =
                         to.getInfoStore().getValue(MMInfo.PROMPT, Locale.GERMAN);
-                
+
                 break;
             case 2:   // english
                 prompt =
                         to.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
-               
+
                 break;
             case 3:   // spanish
                 Locale SPANISH = new Locale("es", "ES");
                 prompt =
                         to.getInfoStore().getValue(MMInfo.PROMPT, SPANISH);
-               
+
                 break;
             case 4:   // italian
                 prompt =
@@ -905,11 +920,15 @@ public class D3webUtils {
         }
 
 
-        // default prompt = getName() if no locale specific was given
+        // default fallback solution: prompt in english
+        if (prompt == null) {
+            prompt = to.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
+        }
+
+        // emergency fallback: getName() if no locale specific and no default english was given
         return prompt == null ? to.getName() : prompt;
     }
 
-    
     /**
      * Retrieve a language specific prompt text for a TerminologyObject (Answer).
      * If no language was specified, return the name of the TerminologyObject 
@@ -933,18 +952,18 @@ public class D3webUtils {
             case 1:   // german
                 prompt =
                         c.getInfoStore().getValue(MMInfo.PROMPT, Locale.GERMAN);
-                
+
                 break;
             case 2:   // english
                 prompt =
                         c.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
-                
+
                 break;
             case 3:   // spanish
                 Locale SPANISH = new Locale("es", "ES");
                 prompt =
                         c.getInfoStore().getValue(MMInfo.PROMPT, SPANISH);
-                
+
                 break;
             case 4:   // italian
                 prompt =
@@ -961,11 +980,15 @@ public class D3webUtils {
                 break;
         }
 
+        // default fallback solution: prompt in english
+        if (prompt == null) {
+            prompt = to.getInfoStore().getValue(MMInfo.PROMPT, Locale.ENGLISH);
+        }
+
         // default prompt = getName() if no locale specific was given
         return prompt == null ? c.getName() : prompt;
     }
 
-    
     /**
      * Util method for retrievinv a localized verbalization for YN Questions.
      * Maybe to be removed in case there will be a possibility to define
@@ -981,10 +1004,10 @@ public class D3webUtils {
         String prompt = null;
 
         if (c.getName().equals("Yes")) {
-
+          
             switch (locIdent) {
                 case 1:   // german
-                    prompt = "Ja"; 
+                    prompt = "Ja";
                     break;
                 case 2:   // english
                     prompt = "Yes";
@@ -999,15 +1022,20 @@ public class D3webUtils {
                     prompt = "Oui";
                     break;
                 case 6:   // polish
-                    prompt = "Tak"; 
+                    prompt = "Tak";
                     break;
             }
-            
+
+            // default fallback solution: prompt in english
+            if (prompt == null) {
+                prompt = "Yes";
+            }
+
         } else {
-   
+
             switch (locIdent) {
                 case 1:   // german
-                    prompt = "Nein"; 
+                    prompt = "Nein";
                     break;
                 case 2:   // english
                     prompt = "No";
@@ -1022,16 +1050,20 @@ public class D3webUtils {
                     prompt = "Non";
                     break;
                 case 6:   // polish
-                    prompt = "Nie"; 
+                    prompt = "Nie";
                     break;
             }
+            
+            // default fallback solution: prompt in english
+            if (prompt == null) {
+                prompt = "No";
+            }
         }
-       
+
         // default prompt = getName() if no locale specific was given
         return prompt == null ? c.getName() : prompt;
     }
 
-    
     /**
      * Retrieve a language specific prompt text for the Unknown Choice.
      * If no language was specified, return "unknown" as default promp.
@@ -1045,7 +1077,7 @@ public class D3webUtils {
         String prompt = null;
 
         D3webConnector d3wcon = D3webConnector.getInstance();
-        String defaultPrompt = "unknown";
+        String defaultPrompt = "Unknown";
 
         switch (locIdent) {
             case 1:   // german

@@ -18,7 +18,11 @@
 				</table>
 				</td>
 				<td>
-					<img src="kbimg/logo.png" alt="logo" width="70px;"/>
+                                    $if(logo)$
+                                        <img src="kbimg/logo.png" alt="logo" width="70px;"/>
+                                    $else$
+					<img src="kbimg/dummy.png" alt="placeholder" width="70px;"/>
+                                    $endif$ 
 				</td>
 			</tr>
 			</tbody>

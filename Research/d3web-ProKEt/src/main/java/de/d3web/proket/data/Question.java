@@ -33,7 +33,7 @@ public class Question extends DefaultDialogObject {
 	 * Adiitional text associated with the question. Intended as more detailed
 	 * description than a tooltip.
 	 */
-	protected String auxilliaryInfo;
+	protected String bonusText;
 	protected Boolean sendButton = false;
 	protected Boolean selectBox = false;
 
@@ -45,7 +45,7 @@ public class Question extends DefaultDialogObject {
 	}
 
 	public String getBonusText() {
-		return auxilliaryInfo;
+		return bonusText;
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class Question extends DefaultDialogObject {
 	}
 
 	public void setBonusText(String bonusText) {
-		this.auxilliaryInfo = bonusText;
+		this.bonusText = bonusText;
 	}
 
 	public void setSendButton(Boolean sendButton) {
