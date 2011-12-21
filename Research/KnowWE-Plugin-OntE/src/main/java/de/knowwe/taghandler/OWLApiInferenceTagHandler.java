@@ -31,7 +31,6 @@ import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.taghandler.TagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.owlapi.OWLAPIConnector;
-import de.knowwe.rdf2go.Rdf2GoCore;
 
 /**
  * <p>
@@ -82,7 +81,8 @@ public class OWLApiInferenceTagHandler extends AbstractHTMLTagHandler {
 			OWLAPIConnector connector = OWLAPIConnector.getGlobalInstance();
 			OWLDataFactory factory = connector.getManager().getOWLDataFactory();
 			OWLReasoner reasoner = connector.getReasoner();
-			PrefixManager pm = new DefaultPrefixManager(Rdf2GoCore.basens);
+			PrefixManager pm = new DefaultPrefixManager(
+					OWLAPIConnector.getGlobalInstance().getGlobalBaseIRI().toString());
 
 			OWLClass clazz = factory.getOWLClass(":" + paramObject, pm);
 
@@ -117,11 +117,11 @@ public class OWLApiInferenceTagHandler extends AbstractHTMLTagHandler {
 		help.append("<dl>");
 
 		help.append("<dt><strong>NAME</strong></dt>");
-		help.append("<dd>[{KnowWEPlugin owlapiinference}] - print inferred knowledge from an OWL ontology</dd>");
+		help.append("<dd>[{KnowWEPlugin owlapi.inference}] - print inferred knowledge from an OWL ontology</dd>");
 
 		help.append("<dt><strong>SYNOPSIS</strong></dt>");
-		help.append("<dd>[{KnowWEPlugin owlapiinference}] - Prints this help message.</dd>");
-		help.append("<dd>[{KnowWEPlugin owlapiinference , inference=class , object=Pizza}] - Prints class hierarchy starting with value from object. In this case \"Pizza\".</dd>");
+		help.append("<dd>[{KnowWEPlugin owlapi.inference}] - Prints this help message.</dd>");
+		help.append("<dd>[{KnowWEPlugin owlapi.inference , inference=class , object=Pizza}] - Prints class hierarchy starting with value from object. In this case \"Pizza\".</dd>");
 
 		help.append("<dt><strong>DESCRIPTION</strong></dt>");
 		help.append("<dd>The OWLApiInferenceTagHandler prints out inferred knowledge from an OWL ontology. "

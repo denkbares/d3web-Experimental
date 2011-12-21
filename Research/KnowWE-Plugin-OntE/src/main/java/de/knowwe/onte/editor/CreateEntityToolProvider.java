@@ -23,6 +23,7 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.manchester.frame.ClassFrame;
+import de.knowwe.kdom.manchester.frame.DataPropertyFrame;
 import de.knowwe.kdom.manchester.frame.ObjectPropertyFrame;
 import de.knowwe.termObject.AbstractIRITermDefinition;
 import de.knowwe.tools.DefaultTool;
@@ -103,6 +104,25 @@ public class CreateEntityToolProvider implements ToolProvider {
 		String action = "KnowWE.plugin.onte.actions.createEntity(urlencode('"
 				+ section.getOriginalText()
 				+ "'), 'OWLObjectProperty')";
+
+		return new DefaultTool(image, name, description, action);
+	}
+
+	/**
+	 * Returns the {@link DefaultTool} for the creation of new
+	 * {@link DataPropertyFrame} out of unknown terms.
+	 *
+	 * @created 06.10.2011
+	 * @param section
+	 * @return
+	 */
+	private Tool getCreateDataPropertyTool(Section<? extends AbstractIRITermDefinition> section) {
+		String image = "KnowWEExtension/images/dt_icon_realisation.png";
+		String name = "Create ObjectProperty";
+		String description = "Creates a article containing a basic OWL DataProperty Frame for adding the term to the Ontology!";
+		String action = "KnowWE.plugin.onte.actions.createEntity(urlencode('"
+				+ section.getOriginalText()
+				+ "'), 'OWLDataProperty')";
 
 		return new DefaultTool(image, name, description, action);
 	}

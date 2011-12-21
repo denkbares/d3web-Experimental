@@ -24,6 +24,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -54,6 +55,7 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.util.ShortFormProvider;
 import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
+import org.semanticweb.owlapi.vocab.PrefixOWLOntologyFormat;
 
 import uk.ac.manchester.cs.owl.owlapi.mansyntaxrenderer.ManchesterOWLSyntaxObjectRenderer;
 
@@ -62,6 +64,9 @@ import com.clarkparsia.owlapi.explanation.HSTExplanationGenerator;
 
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.kdom.manchester.compile.utils.ImportedOntologyManager;
+import de.knowwe.kdom.manchester.frame.ImportFrame;
+import de.knowwe.kdom.renderer.OnteRenderingUtils;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.util.OntologyFormats;
 
@@ -166,11 +171,12 @@ public class OWLApiTagHandlerUtil {
 			for (int i = 0; i < level * INDENT; i++) {
 				html.append("-");
 			}
-			html.append(labelClass(clazz));
+			html.append(OnteRenderingUtils.renderHyperlink(labelClass(clazz), true));
 			// check for equality of certain classes
 			for (OWLClass equivalent : reasoner.getEquivalentClasses(clazz)) {
 				if (!equivalent.equals(clazz)) {
-					html.append(" &equiv; " + labelClass(equivalent));
+					html.append(" &equiv; ").append(
+							OnteRenderingUtils.renderHyperlink(labelClass(equivalent), true));
 				}
 			}
 			// &ne; disjoint classes ???
@@ -209,7 +215,8 @@ public class OWLApiTagHandlerUtil {
 
 				html.append("<dd>");
 				for (OWLNamedIndividual i : individuals) {
-					html.append(" " + labelIndividual(i));
+					html.append(" ").append(
+							OnteRenderingUtils.renderHyperlink(labelIndividual(i), true));
 				}
 				html.append("</dd>");
 			}
@@ -456,6 +463,27 @@ public class OWLApiTagHandlerUtil {
 		}
 
 		if (ontologyFormat != null) {
+
+			// ... set default prefix
+			((PrefixOWLOntologyFormat) ontologyFormat).setDefaultPrefix(OWLAPIConnector.getGlobalInstance().getGlobalBaseIRI().toString());
+
+			// ... and for each import an optional one ...
+			Map<IRI, Section<ImportFrame>> imports = ImportedOntologyManager.getInstance().getImportedOntologies();
+			for (IRI iri : imports.keySet()) {
+				Section<ImportFrame> frame = imports.get(iri);
+				if (frame.get().hasPrefix(frame)) {
+					String prefixName = frame.get().getPrefix(frame).getOriginalText();
+					prefixName = prefixName.replace(":", "");
+					((PrefixOWLOntologyFormat) ontologyFormat).setPrefix(prefixName, iri.toString()
+							+ "#");
+				}
+				// ... also remove axioms from the local ontology ...
+				Set<OWLAxiom> importedAxioms = ImportedOntologyManager.getInstance().getImportedAxiomsForIRI(
+						iri);
+				manager.removeAxioms(OWLAPIConnector.getGlobalInstance().getOntology(),
+						importedAxioms);
+			}
+
 			manager.saveOntology(ontology, ontologyFormat, stream);
 			return stream.toString();
 		}

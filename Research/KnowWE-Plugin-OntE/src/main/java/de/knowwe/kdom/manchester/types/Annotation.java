@@ -45,8 +45,8 @@ import de.knowwe.kdom.renderer.StyleRenderer;
  */
 public class Annotation extends AbstractType {
 
-	public static final String KEYWORD_COMMENT = "rdfs:comment";
-	public static final String KEYWORD_LABEL = "rdfs:label";
+	public static final String KEYWORD_COMMENT = "comment";
+	public static final String KEYWORD_LABEL = "label";
 	public static final String KEYWORD_VERSION = "owl:versionInfo";
 	public static final String KEYWORD_SEEALSO = "rdfs:seeAlso";
 	public static final String KEYWORD_ISDEFINEDBY = "rdfs:isDefinedBy";

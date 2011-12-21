@@ -83,6 +83,7 @@ public class ClassFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCompileS
 				messages.add(Messages.syntaxError("SubClassOf is empty!"));
 			}
 			else {
+
 				Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(
 						mce, messages);
 				for (OWLClassExpression e : exp.keySet()) {
@@ -91,6 +92,7 @@ public class ClassFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCompileS
 						EventManager.getInstance().fireEvent(
 								new OWLApiAxiomCacheUpdateEvent(axiom, mce));
 						axioms.add(axiom);
+						// axioms.add(AxiomFactory.getClassDeclaration(e.asOWLClass()));
 					}
 				}
 			}

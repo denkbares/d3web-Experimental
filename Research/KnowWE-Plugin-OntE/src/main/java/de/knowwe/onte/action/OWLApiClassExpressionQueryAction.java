@@ -77,7 +77,7 @@ public class OWLApiClassExpressionQueryAction extends AbstractAction {
 				expression = engine.getOWLClassExpression(query);
 
 				// Query for individual results ...
-				Set<OWLNamedIndividual> individuals = engine.getIndividuals(query, true);
+				Set<OWLNamedIndividual> individuals = engine.getIndividuals(query, false);
 				for (OWLNamedIndividual owlNamedIndividual : individuals) {
 					Set<OWLAxiom> explanations = engine.getIndividualExplanations(expression,
 							owlNamedIndividual);
@@ -89,7 +89,7 @@ public class OWLApiClassExpressionQueryAction extends AbstractAction {
 				queryResults.clear();
 
 				// ... or query for sub classes ...
-				Set<OWLClass> classes = engine.getSubClasses(query, true);
+				Set<OWLClass> classes = engine.getSubClasses(query, false);
 				for (OWLClass cls : classes) {
 					Set<OWLAxiom> explanations = engine.getSubClassesExplanations(expression, cls);
 					queryResults.put(cls, explanations);
@@ -100,7 +100,7 @@ public class OWLApiClassExpressionQueryAction extends AbstractAction {
 				queryResults.clear();
 
 				// ... or query for super classes ...
-				classes = engine.getSuperClasses(query, true);
+				classes = engine.getSuperClasses(query, false);
 				for (OWLClass cls : classes) {
 					Set<OWLAxiom> explanations = engine.getSuperClassesExplanations(expression, cls);
 					queryResults.put(cls, explanations);

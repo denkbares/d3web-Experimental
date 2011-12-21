@@ -45,8 +45,10 @@ public class NonTerminalList extends AbstractType {
 	public static final char LEFT_CURLY_BRACKET = '\u007B';
 	public static final char RIGHT_CURLY_BRACKET = '\u007D';
 
-	@Override
-	protected void init() {
+	public static final char LEFT_SQUARE_BRACKET = '\u005B';
+	public static final char RIGHT_SQUARE_BRACKET = '\u005D';
+
+	public NonTerminalList() {
 		this.setSectionFinder(new NoneTerminalListFinder());
 	}
 
@@ -83,10 +85,12 @@ public class NonTerminalList extends AbstractType {
 					switch (current) {
 					case LEFT_PARENTHESIS:
 					case LEFT_CURLY_BRACKET:
+					case LEFT_SQUARE_BRACKET:
 						braced++;
 						break;
 					case RIGHT_PARENTHESIS:
 					case RIGHT_CURLY_BRACKET:
+					case RIGHT_SQUARE_BRACKET:
 						braced--;
 						break;
 					case QUOTE:
@@ -100,7 +104,8 @@ public class NonTerminalList extends AbstractType {
 						currentStart = i + 1;
 					}
 					else if (i + 1 == text.length()) {
-						results.add(new SectionFinderResult(currentStart, text.length()));
+						results.add(new SectionFinderResult(currentStart,
+								text.length()));
 					}
 				}
 

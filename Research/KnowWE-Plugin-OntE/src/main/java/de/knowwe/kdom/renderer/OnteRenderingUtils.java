@@ -2,10 +2,14 @@ package de.knowwe.kdom.renderer;
 
 import java.util.Collection;
 
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 
+import de.knowwe.compile.ImportManager;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
+import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.parsing.Section;
@@ -50,11 +54,18 @@ public class OnteRenderingUtils {
 		return null;
 	}
 
-	public static String getHyperlink(String term) {
-		Collection<Section<? extends TermDefinition>> termDefs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-				term);
-		if (!termDefs.isEmpty()) {
-			return "Wiki.jsp?page=" + termDefs.iterator().next().getOriginalText();
+	public static String getHyperlink(String termIdentifier) {
+
+		if (IncrementalCompiler.getInstance().getTerminology().isImportedObject(termIdentifier)) {
+			Section<? extends AbstractType> importSection = ImportManager.resolveImportSection(termIdentifier);
+			return "Wiki.jsp?page=" + importSection.getTitle();
+		}
+		else {
+			Collection<Section<? extends TermDefinition>> termDefs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+					termIdentifier);
+			if (!termDefs.isEmpty()) {
+				return "Wiki.jsp?page=" + termDefs.iterator().next().getTitle();
+			}
 		}
 		return "";
 	}
@@ -121,6 +132,7 @@ public class OnteRenderingUtils {
 	 */
 	public static String renderHyperlink(String term, boolean raw) {
 
+		term = term.replace("\"", "").trim();
 		Collection<Section<? extends TermDefinition>> termDefs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 				term);
 
@@ -134,5 +146,24 @@ public class OnteRenderingUtils {
 
 	public static String renderHyperlink(String term) {
 		return renderHyperlink(term, false);
+	}
+
+	/**
+	 *
+	 *
+	 * @created 21.12.2011
+	 * @param owlEntity
+	 * @return
+	 */
+	public static String getDisplayName(OWLEntity owlEntity) {
+
+		IRI iri = owlEntity.getIRI();
+
+		if(iri.getFragment() != null) {
+			return iri.getFragment();
+		}
+
+		String path = owlEntity.getIRI().toURI().getPath();
+		return path.substring(path.lastIndexOf("/") + 1);
 	}
 }

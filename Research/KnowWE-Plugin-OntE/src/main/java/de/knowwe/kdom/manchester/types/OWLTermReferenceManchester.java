@@ -19,22 +19,25 @@
  */
 package de.knowwe.kdom.manchester.types;
 
+import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.rdfs.IRITermRef;
-import de.knowwe.termObject.IRITermReference;
 
 /**
- * Simple {@link IRITermReference} that represents OWL classes and OWL
- * individuals.
+ * Simple IRITermRef that represents OWL classes and OWL individuals.
  *
  * @author Stefan Mark
  * @created 18.05.2011
  */
-public class OWLTermReferenceManchester extends IRITermRef {
+public class OWLTermReferenceManchester extends AbstractType {
 
 	public static final String PATTERN = "\\b([A-Z]|owl)[A-Za-z0-9:]+\\b";
 
 	public OWLTermReferenceManchester() {
 		this.setSectionFinder(new RegexSectionFinder(PATTERN));
+
+		this.addChildType(new PredefinedTermReference());
+		// this.addChildType(new ImportedTermReference());
+		this.addChildType(new LocalTermReference());
+
 	}
 }

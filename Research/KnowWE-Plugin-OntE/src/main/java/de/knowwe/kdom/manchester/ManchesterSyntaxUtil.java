@@ -62,8 +62,8 @@ public class ManchesterSyntaxUtil {
 	 * @return
 	 */
 	public static Pattern getFramePattern(String keyword) {
-		String frame = "(?m)" +
-				"(\\b$TOKEN$.+$" +
+		String frame = "(?m)(^$)(\r\n?|\n){1}" +
+				"(^$TOKEN$.+$" +
 				"(\r\n?|\n)" +
 				"((^.*$)(\r\n?|\n))" +
 				"*?)" +

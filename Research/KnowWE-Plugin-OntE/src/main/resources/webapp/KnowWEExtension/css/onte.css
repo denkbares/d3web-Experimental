@@ -42,24 +42,9 @@
 
     .onte-button:active, .onte-button-txt:active
     {box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) inset; }
-    
-    .consistency
-    {background: url(../images/onte/utilities-system-monitor.png) no-repeat scroll center 6px transparent; height: 22px; width: 16px;}
-    
-    .consistency-error
-    {background: url(../images/onte/utilities-system-monitor-error.png) no-repeat scroll center 6px transparent; height: 22px; width: 16px;}
-    
-    .export
-    {background: url(../images/onte/emblem-downloads.png) no-repeat scroll center 6px transparent; height: 22px; width: 16px;}
-    
-    .import
-    {background: url(../images/onte/document-import-2.png) no-repeat scroll center 6px transparent; height: 22px; width: 16px;}
-    
-    .query
-    {background: url(../images/onte/system-search.png) no-repeat scroll center 6px transparent; height: 22px; width: 16px;}
-    
+       
     .article-link
-    {background: url(../images/onte/emblem-link.png) no-repeat scroll center center transparent; height: 8px; width: 8px;}  
+    {background: url(../images/onte/emblem-link.png) no-repeat scroll center center transparent; height: 8px; width: 8px;}
     
     .onte-input-container 
     {background: none repeat scroll 0 0 #FFFFFF; border: 1px solid #CCCCCC; display: block; height: 30px; padding-right: 12px; }

@@ -121,6 +121,11 @@ KNOWWE.plugin.onte.actions = function() {
     
     var olay = null; // the current overlay for the actions
     
+    function showDefaultTab(givenOptions) {
+        
+    }
+    
+    
     return {
         /**
          * Checks the consistency of the ontology and displays the results
@@ -198,6 +203,25 @@ KNOWWE.plugin.onte.actions = function() {
             form.submit();
             frame.removeChild(form);
         },
+        removeImportedOntology : function(sectionID) {
+            var options = {
+                url : KNOWWE.core.util.getURL( { 
+                    action : 'OnteRemoveImportedOntologyAction',
+                    section : sectionID
+                }),
+                loader : true,
+                response : {
+                    action : 'none',
+                    fn : function() {
+                        olay.destroy();
+                    },
+                    onError : function(http) {
+                        KNOWWE.helper.message.showMessage(http.responseText, "AJAX call failed");
+                    }
+                }
+            }
+            new _KA( options ).send();
+        },        
         repairOntology : function() {
             var options = {
                 url : KNOWWE.core.util.getURL( { 
@@ -208,8 +232,11 @@ KNOWWE.plugin.onte.actions = function() {
                 response : {
                     action : 'none',
                     fn : function() {
-                        olay.destroy();
+                        olay.destroy();                       
                         KNOWWE.plugin.onte.actions.checkConsistency();
+                    },
+                    onError : function(http) {
+                        KNOWWE.helper.message.showMessage(http.responseText, "AJAX call failed");
                     }
                 }
             }
@@ -255,8 +282,30 @@ KNOWWE.plugin.onte.actions = function() {
                     }
                     new _KA( options ).send();
                 }
-            });         
+            });
         },
+        showImportTab : function() {
+            olay = new KNOWWE.helper.modal({
+                top : '30%',
+                left: '25%',
+                width: '50%',
+                callback: function(){
+                    var options = {
+                        url : KNOWWE.core.util.getURL( { action : 'ShowImportTabAction' } ),
+                        loader : true,
+                        response : {
+                            action : 'insert',
+                            ids : ['onte_body'],
+                            fn : function(){
+                                var _o = olay;
+                                _o.show();
+                            }
+                        }
+                    }
+                    new _KA( options ).send();
+                }
+            });         
+        },        
         showQueryTab : function() {
             olay = new KNOWWE.helper.modal({
                 top : '10%',
@@ -299,7 +348,70 @@ KNOWWE.plugin.onte.actions = function() {
                         + "     </div>";    
             olay.setContent(tab);
             olay.show();
-        }
+        },
+        showUndefinedTermsTab : function() {
+            olay = new KNOWWE.helper.modal({
+                top : '30%',
+                left: '25%',
+                width: '50%',
+                callback: function(){
+                    var options = {
+                        url : KNOWWE.core.util.getURL( { action : 'ShowUndefinedTermsTabAction' } ),
+                        loader : true,
+                        response : {
+                            action : 'insert',
+                            ids : ['onte_body'],
+                            fn : function(){
+                                var _o = olay;
+                                _o.show();
+                            }
+                        }
+                    }
+                    new _KA( options ).send();
+                }
+            });         
+        },
+        showValidationTab : function() {
+            olay = new KNOWWE.helper.modal({
+                top : '30%',
+                left: '25%',
+                width: '50%',
+                callback: function(){
+                    var options = {
+                        url : KNOWWE.core.util.getURL( { action : 'ShowValidationTabAction' } ),
+                        loader : true,
+                        response : {
+                            action : 'insert',
+                            ids : ['onte_body'],
+                            fn : function(){
+                                var _o = olay;
+                                _o.show();
+                            }
+                        }
+                    }
+                    new _KA( options ).send();
+                }
+            });  
+        },
+        validateOWL2Profile : function() {
+            
+            var selectedProfile = document.getElementById('onte-validation-tab-format');
+            if(selectedProfile) {
+                selectedProfile = selectedProfile.options[selectedProfile.selectedIndex].value;
+                var options = {
+                    url : KNOWWE.core.util.getURL( { action : 'OWL2ProfileValidationTabAction', profile : selectedProfile} ),
+                    loader : true,
+                    response : {
+                        action : 'insert',
+                        ids : ['onte-result'],
+                        onError : function(http) {
+                            KNOWWE.helper.message.showMessage(http.responseText, "Error in AJAX call!");
+                        }
+                    }
+                };
+                new _KA( options ).send();
+            }  
+        }         
     }
 }();
 

@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -31,6 +33,7 @@ import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
+import de.knowwe.kdom.manchester.compile.DataPropertyCompileScript;
 import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.kdom.manchester.types.Characteristics;
 import de.knowwe.kdom.manchester.types.DisjointWith;
@@ -40,6 +43,7 @@ import de.knowwe.kdom.manchester.types.Keyword;
 import de.knowwe.kdom.manchester.types.Range;
 import de.knowwe.kdom.manchester.types.SubPropertyOf;
 import de.knowwe.termObject.DatatypePropertyIRIDefinition;
+import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
  *
@@ -48,9 +52,9 @@ import de.knowwe.termObject.DatatypePropertyIRIDefinition;
  * @created 06.09.2011
  */
 
-public class DataPropertyFrame extends DefaultFrame {
+public class DataPropertyFrame extends DefaultFrame implements KnowledgeUnit<DataPropertyFrame> {
 
-	public static final String KEYWORD = "DataProperty[:]?";
+	public static final String KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.DATA_PROPERTY);
 
 	public static final String KEYWORDS = "("
 			+ EquivalentTo.KEYWORD + "|"
@@ -120,6 +124,148 @@ public class DataPropertyFrame extends DefaultFrame {
 		return Sections.findSuccessor(section, DataProperty.class);
 	}
 
+	/**
+	 * Returns if the current class definition has a {@link Domain} description.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<DataPropertyFrame> section
+	 * @return The found section
+	 */
+	public boolean hasDomain(Section<DataPropertyFrame> section) {
+		return Sections.findSuccessor(section, Domain.class) != null;
+	}
+
+	/**
+	 * Returns the {@link Domain} sections of the current
+	 * {@link ObjectPropertyFrame}.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<DataPropertyFrame> section
+	 * @return The found section
+	 */
+	public Section<Domain> getDomain(Section<DataPropertyFrame> section) {
+		return Sections.findSuccessor(section, Domain.class);
+	}
+
+	/**
+	 * Returns if the current class definition has a {@link Domain} description.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<DataPropertyFrame> section
+	 * @return The found section
+	 */
+	public boolean hasRange(Section<DataPropertyFrame> section) {
+		return Sections.findSuccessor(section, Range.class) != null;
+	}
+
+	/**
+	 * Returns the {@link Domain} sections of the current
+	 * {@link ObjectPropertyFrame}.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<DataPropertyFrame> section
+	 * @return The found section
+	 */
+	public Section<Range> getRange(Section<DataPropertyFrame> section) {
+		return Sections.findSuccessor(section, Range.class);
+	}
+
+	/**
+	 * Returns if the current class definition has a {@link SubPropertyOf}
+	 * description.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<DataPropertyFrame> section
+	 * @return The found section
+	 */
+	public boolean hasSubPropertyOf(Section<DataPropertyFrame> section) {
+		return Sections.findSuccessor(section, SubPropertyOf.class) != null;
+	}
+
+	/**
+	 * Returns the {@link SubPropertyOf} sections of the current
+	 * {@link DataPropertyFrame}.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<DataPropertyFrame> section
+	 * @return The found section
+	 */
+	public Section<SubPropertyOf> getSubPropertyOf(Section<DataPropertyFrame> section) {
+		return Sections.findSuccessor(section, SubPropertyOf.class);
+	}
+
+	/**
+	 * Returns if the current class definition has a {@link EquivalentTo}
+	 * description.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<DataPropertyFrame> section
+	 * @return The found section
+	 */
+	public boolean hasEquivalentTo(Section<DataPropertyFrame> section) {
+		return Sections.findSuccessor(section, EquivalentTo.class) != null;
+	}
+
+	/**
+	 * Returns the {@link EquivalentTo} sections of the current
+	 * {@link DataPropertyFrame}.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<DataPropertyFrame> section
+	 * @return The found section
+	 */
+	public Section<EquivalentTo> getEquivalentTo(Section<DataPropertyFrame> section) {
+		return Sections.findSuccessor(section, EquivalentTo.class);
+	}
+
+	/**
+	 * Returns if the current class definition has a {@link DisjointWith}
+	 * description.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<DataPropertyFrame> section
+	 * @return The found section
+	 */
+	public boolean hasDisjointWith(Section<DataPropertyFrame> section) {
+		return Sections.findSuccessor(section, DisjointWith.class) != null;
+	}
+
+	/**
+	 * Returns the {@link DisjointWith} sections of the current
+	 * {@link DataPropertyFrame}.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<DataPropertyFrame> section
+	 * @return The found section
+	 */
+	public Section<DisjointWith> getDisjointWith(Section<DataPropertyFrame> section) {
+		return Sections.findSuccessor(section, DisjointWith.class);
+	}
+
+	/**
+	 *
+	 * @created 27.09.2011
+	 * @param Section<DataPropertyFrame> section
+	 * @return The found section
+	 */
+	public boolean hasCharacteristics(Section<DataPropertyFrame> section) {
+		return Sections.findSuccessor(section, Characteristics.class) != null;
+	}
+
+	/**
+	 *
+	 * @created 27.09.2011
+	 * @param Section<DataPropertyFrame> section
+	 * @return The found section
+	 */
+	public Section<Characteristics> getCharacteristics(Section<DataPropertyFrame> section) {
+		return Sections.findSuccessor(section, Characteristics.class);
+	}
+
+	@Override
+	public KnowledgeUnitCompileScript getCompileScript() {
+		return new DataPropertyCompileScript();
+	}
 }
 
 /**

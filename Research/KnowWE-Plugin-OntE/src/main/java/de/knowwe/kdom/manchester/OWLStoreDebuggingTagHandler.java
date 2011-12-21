@@ -42,7 +42,6 @@ import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.owlapi.OWLAPIConnector;
-import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
@@ -127,7 +126,8 @@ public class OWLStoreDebuggingTagHandler extends AbstractHTMLTagHandler {
 		for (OWLObjectProperty owlObjectProperty : p) {
 			html.append("<br />");
 			// html.append("ObjectProperty: ");
-			html.append(owlObjectProperty.getIRI().toString().replace(Rdf2GoCore.basens, ""));
+			html.append(owlObjectProperty.getIRI().toString().replace(
+					OWLAPIConnector.getGlobalInstance().getGlobalBaseIRI().toString(), ""));
 			html.append("<br />");
 
 			Set<OWLClassExpression> expressions = null;
@@ -266,7 +266,8 @@ public class OWLStoreDebuggingTagHandler extends AbstractHTMLTagHandler {
 			return label;
 		}
 		else {
-			return clazz.getIRI().toString().replace(Rdf2GoCore.basens, "");
+			return clazz.getIRI().toString().replace(
+					OWLAPIConnector.getGlobalInstance().getGlobalBaseIRI().toString(), "");
 		}
 	}
 }

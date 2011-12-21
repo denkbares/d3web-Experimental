@@ -107,7 +107,7 @@ public class ObjectPropertySubtreeHandler extends OWLAPISubtreeHandler<ObjectPro
 						mce, messages);
 
 				for (OWLClassExpression e : exp.keySet()) {
-					axiom = AxiomFactory.createRange(p, e);
+					axiom = AxiomFactory.createObjectPropertyRange(p, e);
 					if (axiom != null) {
 						EventManager.getInstance().fireEvent(
 								new OWLApiAxiomCacheUpdateEvent(axiom, exp.get(e)));

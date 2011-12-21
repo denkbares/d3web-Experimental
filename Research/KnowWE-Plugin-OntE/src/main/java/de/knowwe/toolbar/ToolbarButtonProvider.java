@@ -17,21 +17,26 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.kdom.manchester.types;
+package de.knowwe.toolbar;
 
-import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.rdfs.IRITermRef;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.user.UserContext;
 
 /**
  *
  * @author Stefan Mark
- * @created 16.05.2011
+ * @created 30.11.2011
  */
-public class ObjectPropertyExpression extends IRITermRef {
+public interface ToolbarButtonProvider {
 
-	public static final String PATTERN = "\\b[a-z][A-Za-z0-9_:]+\\b";
-
-	public ObjectPropertyExpression() {
-		this.setSectionFinder(new RegexSectionFinder(PATTERN));
-	}
+	/**
+	 * Returns the button depending on the current {@link UserContext} and
+	 * {@link KnowWEArticle}.
+	 *
+	 * @param KnowWEArticle article The article the button is requested for
+	 * @param UserContext userContext The user's context the button is requested
+	 *        for
+	 * @return ToolbarButton The button that can be provided by this provider
+	 */
+	ToolbarButton[] getButtons(KnowWEArticle article, UserContext userContext);
 }

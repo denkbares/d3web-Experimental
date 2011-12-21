@@ -21,13 +21,19 @@ package de.knowwe.onte.editor;
 
 import java.util.Map;
 
+import de.knowwe.core.KnowWEArticleManager;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.taghandler.TagHandler;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.toolbar.ToolbarButton;
+import de.knowwe.toolbar.ToolbarUtils;
 
 /**
- *
- *
+ * A small flexible toolbar for often used ontology tasks. The buttons of the
+ * toolbar can easily be set as an extension point in the plugin.xml.
+ * 
  * @author Stefan Mark
  * @created 12.10.2011
  */
@@ -48,40 +54,20 @@ public class OntEToolbarTagHandler extends AbstractHTMLTagHandler {
 			return html.toString();
 		}
 
+		KnowWEArticleManager mgr =
+				KnowWEEnvironment.getInstance().getArticleManager(web);
+		KnowWEArticle article = mgr.getArticle(user.getTitle());
+
+		ToolbarButton[] buttons = ToolbarUtils.getButtons(article, user);
+
 		html.append("<div class=\"onte-buttons onte-buttonbar\" style=\"width: 100%; height: 44px;\">");
+		for (ToolbarButton button : buttons) {
+			html.append(ToolbarUtils.getButtonHTML(button));
 
-		html.append(getButton("Import", "KNOWWE.plugin.onte.actions.import()", "import"));
-		html.append(getButton("Export", "KNOWWE.plugin.onte.actions.showExportTab()", "export"));
-		String consistencyClassName = "consistency";
-
-		html.append(getButton("Check Consistency", "KNOWWE.plugin.onte.actions.checkConsistency()",
-				consistencyClassName));
-		html.append(getButton("Query", "KNOWWE.plugin.onte.actions.showQueryTab()", "query"));
-
+		}
 		html.append("</div>");
 
 		return html.toString();
-	}
-
-	/**
-	 * Create the HTML of a button of the toolbar.
-	 *
-	 * @created 12.10.2011
-	 * @param title
-	 * @param action
-	 * @param image
-	 * @return
-	 */
-	private String getButton(String title, String action, String imageClass) {
-		return "<a href=\"javascript:"
-				+ action
-				+ ";void(0);\" jsaction=\""
-				+ action
-				+ "\" title=\""
-				+ title
-				+ "\" class=\"onte-button left small\">"
-				+ "<img src=\"KnowWEExtension/images/onte/transparent.png\" class=\""
-				+ imageClass + "\" /></a>";
 	}
 
 	/**

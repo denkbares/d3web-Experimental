@@ -17,21 +17,26 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.kdom.manchester.types;
-
-import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.rdfs.IRITermRef;
+package de.knowwe.onte.editor;
 
 /**
+ * The ChangeTermToolProvider offers help for quick changing a certain OWL
+ * entity in any declaration. For this it offers depending on the current
+ * description expression possible terms one can substitute the original term
+ * with. The following terms can be replaced:
+ * <ul>
+ * <li>classes</li>
+ * <li>individuals</li>
+ * <li>object properties</li>
+ * <li>data properties</li>
+ * </ul>
  *
  * @author Stefan Mark
- * @created 16.05.2011
+ * @created 06.10.2011
  */
-public class ObjectPropertyExpression extends IRITermRef {
+public class ChangeTermToolProvider {
 
-	public static final String PATTERN = "\\b[a-z][A-Za-z0-9_:]+\\b";
-
-	public ObjectPropertyExpression() {
-		this.setSectionFinder(new RegexSectionFinder(PATTERN));
-	}
+	/*
+	 * check the context of the current section and determine the possible terms one can use to substitute.
+	 */
 }

@@ -20,7 +20,10 @@
 package de.knowwe.onte.action;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -40,14 +43,30 @@ import de.knowwe.kdom.manchester.AxiomFactory;
 import de.knowwe.kdom.manchester.ManchesterClassExpression;
 import de.knowwe.kdom.manchester.frame.ClassFrame;
 import de.knowwe.kdom.manchester.types.Delimiter;
+import de.knowwe.kdom.manchester.types.HiddenComment;
 import de.knowwe.onte.editor.OWLApiAxiomCache;
 import de.knowwe.onte.editor.OWLApiReplacementVisitor;
 import de.knowwe.taghandler.OWLApiTagHandlerUtil;
 
+/**
+ * OWLApiRepairInconsistencies.
+ *
+ * 
+ * @author Stefan Mark
+ * @created 30.11.2011
+ */
 public class OWLApiRepairInconsistencies extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
+
+		// only allow known users to execute the repair action
+		boolean isAuthenticated = context.userIsAsserted();
+		if (!isAuthenticated) {
+			context.sendError(403,
+					"I am sorry. I could not verify your identity. Please log in and try again.");
+			return;
+		}
 
 		String option = context.getParameter("options");
 		String[] selectedAxioms = (option != null) ? option.split("::") : new String[0];
@@ -63,7 +82,10 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 			boolean isPageLocked = KnowWEEnvironment.getInstance().getWikiConnector()
 										.isPageLocked(articlename);
 			 if (isPageLocked) {
-				context.getWriter().write("{msg : 'page locked sorry', success : 'false'}");
+				context.sendError(
+						403,
+						"I am sorry. The page is being edited by another user. Please try again later.");
+				return;
 			 }
 			 else {
 				KnowWEEnvironment.getInstance().getWikiConnector().setPageLocked(articlename,
@@ -73,16 +95,18 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 				KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(
 							context.getWeb());
 
-				// ... replace the results ...
 				String replacement = getReplacementText(sectionID);
 				Map<String, String> nodesMap = new HashMap<String, String>();
-				nodesMap.put(section.getID(), section.getOriginalText().replace(replacement, ""));
 
-				Section<? extends Type> possibleDelimiter = getDelimiterReplacing(sectionID);
+				// ... now check for possible delimiter
+				Section<Delimiter> possibleDelimiter = lookForDelimiter(sectionID);
 				if (possibleDelimiter != null) {
 					nodesMap.put(possibleDelimiter.getID(), "");
 				}
 
+				nodesMap.put(section.getID(),
+						section.getOriginalText().replace(replacement,
+								createHiddenComment(replacement, possibleDelimiter, context)));
 				Sections.replaceSections(context, nodesMap);
 
 				// .. and finally delete the page lock
@@ -92,6 +116,45 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 		}
 	}
 
+	/**
+	 * Creates a comment string that is inserted in the replaced section on
+	 * repair action. This comment indicates when and from whom the action has
+	 * been executed.
+	 *
+	 * @created 30.11.2011
+	 * @param replacement
+	 * @param section
+	 * @return
+	 */
+	private String createHiddenComment(String replacement, Section<?> section, UserActionContext context) {
+
+		StringBuilder comment = new StringBuilder();
+
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+
+		comment.append(HiddenComment.OPEN_TAG);
+		comment.append("$Comment: Ontology Repaired ");
+		comment.append(dfm.format(cal.getTime())).append(" ");
+		comment.append(context.getUserName());
+		comment.append("$ ");
+		comment.append(replacement);
+
+		if (section != null) {
+			comment.append(section.getOriginalText()).append(" ");
+			comment.append(HiddenComment.CLOSE_TAG);
+		}
+		return comment.toString();
+	}
+
+	/**
+	 * Determines the replacement text from the given section. Therefore a look
+	 * up is made in the stored sections.
+	 *
+	 * @created 30.11.2011
+	 * @param sectionID
+	 * @return
+	 */
 	private String getReplacementText(String sectionID) {
 		Section<? extends Type> section = OWLApiAxiomCache.getInstance().lookUpSectionPerID(
 				sectionID, OWLApiAxiomCache.STORE_EXPLANATION);
@@ -116,62 +179,42 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 		return "";
 	}
 
-	private Section<? extends Type> getDelimiterReplacing(String sectionID) {
+	/**
+	 * Determines if the replacement is within a list, etc. and therefore a
+	 * subsequent delimiter should also be removed. If a delimiter can be found
+	 * the according section is returned for further handling.
+	 *
+	 * @created 30.11.2011
+	 * @param sectionID
+	 * @return
+	 */
+	private Section<Delimiter> lookForDelimiter(String sectionID) {
+
+		// look up section for given section ID ...
 		Section<? extends Type> section = OWLApiAxiomCache.getInstance().lookUpSectionPerID(
 				sectionID, OWLApiAxiomCache.STORE_EXPLANATION);
 
-		Set<OWLObject> objects = OWLApiAxiomCache.getInstance().getStoredObjects(section,
-				OWLApiAxiomCache.STORE_EXPLANATION);
+		// ... get father MCE, this is either a list or not ...
+		Section<ManchesterClassExpression> mce = Sections.findAncestorOfExactType(section,
+				ManchesterClassExpression.class);
 
-		Section<ClassFrame> frame = Sections.findAncestorOfExactType(section, ClassFrame.class);
+		if (mce.get().isNonTerminalList(mce)) {
+			List<Section<?>> children = mce.getChildren();
+			for (Section<?> child : children) {
 
-		for (OWLObject owlObject : objects) {
+				// .. found the correct position within the list
+				String sectionText = section.getOriginalText().trim();
+				String childText = child.getOriginalText().trim();
 
-			OWLApiReplacementVisitor visitor = new OWLApiReplacementVisitor();
-			OWLEntity entity = AxiomFactory.getOWLAPIEntity(frame.get().getClassDefinition(frame),
-					OWLClass.class);
-			visitor.setOWLClass(entity);
-			owlObject.accept(visitor);
-			OWLClassExpression exp = visitor.getReplacement();
-
-			String replacement = OWLApiTagHandlerUtil.verbalizeToManchesterSyntax(exp);
-
-			Section<ManchesterClassExpression> mce = Sections.findAncestorOfExactType(section,
-					ManchesterClassExpression.class);
-			if (hasRightSon(mce, Delimiter.class, replacement)) {
-				return getRightSon(mce, Delimiter.class,
-						replacement);
-			}
-		}
-		return null;
-	}
-
-	private <OT extends Type> boolean hasRightSon(Section<?> section, Class<OT> cls, String text) {
-		for (Section<? extends Type> child : section.getChildren()) {
-			if (child.get().isAssignableFromType(cls)) {
-				if (section.getText().indexOf(text) < child.getOffSetFromFatherText()) {
-					return true;
-				}
-			}
-			else {
-				if (hasRightSon(child, cls, text)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	private <OT extends Type> Section<OT> getRightSon(Section<?> section, Class<OT> cls, String text) {
-		for (Section<? extends Type> child : section.getChildren()) {
-			if (child.get().isAssignableFromType(cls)) {
-				if (section.getText().indexOf(text) < child.getOffSetFromFatherText()) {
-					return Sections.findSuccessor(child, cls);
-				}
-			}
-			else {
-				if (getRightSon(child, cls, text) != null) {
-					return Sections.findSuccessor(child, cls);
+				if (childText.equals(sectionText)) {
+					int index = children.indexOf(child);
+					if (index == children.size() - 1) {
+						return null; // .. end of list
+					}
+					else {
+						return Sections.findSuccessor(children.get(index + 1),
+								Delimiter.class);
+					}
 				}
 			}
 		}

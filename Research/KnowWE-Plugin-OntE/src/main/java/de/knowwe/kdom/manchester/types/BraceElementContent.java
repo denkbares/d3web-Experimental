@@ -42,9 +42,13 @@ import de.knowwe.core.utils.SplitUtility;
  */
 public class BraceElementContent extends NonTerminalCondition {
 
-	@Override
-	protected void init() {
-		this.sectionFinder = new BraceElementContentFinder();
+	public static char OPEN = Character.MAX_VALUE;
+	public static char CLOSED = Character.MAX_VALUE;
+
+	public BraceElementContent(char open, char closed) {
+		OPEN = open;
+		CLOSED = closed;
+		this.setSectionFinder(new BraceElementContentFinder());
 	}
 
 	class BraceElementContentFinder implements SectionFinder {
@@ -53,10 +57,9 @@ public class BraceElementContent extends NonTerminalCondition {
 		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 			String trimmed = text.trim();
 			int leadingSpaces = text.indexOf(trimmed);
-			if (trimmed.startsWith(Character.toString(OneOfBracedCondition.CURLY_BRACKET_OPEN))) {
+			if (trimmed.startsWith(Character.toString(OPEN))) {
 				int closingBracket = SplitUtility.findIndexOfClosingBracket(trimmed, 0,
-							OneOfBracedCondition.CURLY_BRACKET_OPEN,
-						OneOfBracedCondition.CURLY_BRACKET_CLOSED);
+							OPEN, CLOSED);
 
 				return SectionFinderResult.createSingleItemList(new SectionFinderResult(
 							leadingSpaces + 1, closingBracket));

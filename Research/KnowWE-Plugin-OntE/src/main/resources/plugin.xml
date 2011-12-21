@@ -7,7 +7,7 @@
 	</requires>
 	
 	<runtime>
-		<library id="de.d3web" path="." type="code">
+		<library id="de.knowwe" path="." type="code">
 			<export prefix="*" />
 		</library>
 		<library id="webapp" path="webapp/" type="resources">
@@ -15,7 +15,25 @@
 		</library>
 	</runtime>
 
+    <extension-point id="ToolbarButtonProvider">
+        <parameter-def id="class" />
+        <parameter-def id="name" />
+        <parameter-def id="description" />
+        <parameter-def id="version" />
+        <parameter-def id="priority" type="number" />
+        <parameter-def id="order" type="number" />
+    </extension-point>  
 
+
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="OnteRemoveImportedOntologyAction">
+        <parameter id="class" value="de.knowwe.onte.action.OnteRemoveImportedOntologyAction" />
+        <parameter id="name" value="OnteRemoveImportedOntologyAction" />
+        <parameter id="description"
+            value="Removes imported ontologies from the wiki" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="OWLApiCheckConsistency">
         <parameter id="class" value="de.knowwe.onte.action.OWLApiCheckConsistency" />
@@ -71,6 +89,33 @@
         <parameter id="priority" value="5" />
     </extension>
     <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="ShowImportTabAction">
+        <parameter id="class" value="de.knowwe.onte.action.ShowImportTabAction" />
+        <parameter id="name" value="ShowImportTabAction" />
+        <parameter id="description"
+            value="Returns the export ontology form." />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="ShowUndefinedTermsTabAction">
+        <parameter id="class" value="de.knowwe.onte.action.ShowUndefinedTermsTabAction" />
+        <parameter id="name" value="ShowUndefinedTermsTabAction" />
+        <parameter id="description"
+            value="Show an overview of undefined terms." />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="ShowValidationTabAction">
+        <parameter id="class" value="de.knowwe.onte.action.ShowValidationTabAction" />
+        <parameter id="name" value="ShowValidationTabAction" />
+        <parameter id="description"
+            value="Shows a tab to validate the local ontology against known OWL2 profiles" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
         id="KeywordReplaceAction">
         <parameter id="class" value="de.knowwe.onte.action.KeywordReplaceAction" />
         <parameter id="name" value="KeywordReplaceAction" />
@@ -88,6 +133,17 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>      
+    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="OWL2ProfileValidationTabAction">
+        <parameter id="class" value="de.knowwe.onte.action.OWL2ProfileValidationTabAction" />
+        <parameter id="name" value="OWL2ProfileValidationTabAction" />
+        <parameter id="description"
+            value="Checks weather the local ontology fulfilles a OWL2 profile" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>     
+    
+    
     
     <extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
         id="OntologyClassificationTest">
@@ -124,8 +180,21 @@
         <parameter id="description" value="CITest OntologyIndividualExistTest" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
-    </extension>        
+    </extension>
+    <extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+        id="OWL2ProfileCheckTest">
+        <parameter id="class"
+            value="de.knowwe.onte.ci4ke.OWL2ProfileCheckTest" />
+        <parameter id="name" value="OWL2ProfileCheckTest" />
+        <parameter id="description" value="CITest OWL2ProfileCheckTest" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>       
     
+    
+    <!-- ########################################################## -->
+    <!-- Some EventListener -->
+    <!-- ########################################################## -->
     <extension plugin-id="KnowWEExtensionPoints" point-id="EventListener"
         id="OWLApiAxiomCacheEventListener">
         <parameter id="class"
@@ -136,7 +205,9 @@
         <parameter id="priority" value="5" />
     </extension>
 
-	
+	<!-- ########################################################## -->
+    <!-- KnowWEObjectTypes used in this plugin -->
+    <!-- ########################################################## -->
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="ClassHierarchyMarkup">
 		<parameter id="class"
@@ -190,8 +261,81 @@
 		<parameter id="description" value="TagHandler TerminologyViewHandler" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-	</extension>
+	</extension>	
 	
+    <!-- ########################################################## -->
+    <!-- Declaration: Buttons used in the Toolbar of OntE -->
+    <!-- ########################################################## -->
+    <extension plugin-id="KnowWE-Plugin-OntE" point-id="ToolbarButtonProvider"
+        id="CheckConsistencyToolbarButton">
+        <parameter id="class"
+            value="de.knowwe.onte.toolbar.CheckConsistencyToolbarButton" />
+        <parameter id="name" value="CheckConsistencyToolbarButton" />
+        <parameter id="description"
+            value="Simple button for the toolbar that lets you check the consistency of the ontology." />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="order" value="5" />
+    </extension>    
+    <extension plugin-id="KnowWE-Plugin-OntE" point-id="ToolbarButtonProvider"
+        id="ExportToolbarButton">
+        <parameter id="class"
+            value="de.knowwe.onte.toolbar.ExportToolbarButton" />
+        <parameter id="name" value="ExportToolbarButton" />
+        <parameter id="description"
+            value="Exports the local ontology!" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="order" value="3" />
+    </extension>
+    <extension plugin-id="KnowWE-Plugin-OntE" point-id="ToolbarButtonProvider"
+        id="ImportToolbarButton">
+        <parameter id="class"
+            value="de.knowwe.onte.toolbar.ImportToolbarButton" />
+        <parameter id="name" value="ImportToolbarButton" />
+        <parameter id="description"
+            value="Shows an overview of imported ontologies and lets you import additional ones!" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="order" value="2" />
+    </extension>
+     <extension plugin-id="KnowWE-Plugin-OntE" point-id="ToolbarButtonProvider"
+        id="CheckOWL2ProfileToolbarButton">
+        <parameter id="class"
+            value="de.knowwe.onte.toolbar.CheckOWL2ProfileToolbarButton" />
+        <parameter id="name" value="CheckOWL2ProfileToolbarButton" />
+        <parameter id="description"
+            value="Validates the local ontology against knwon OWL2 profiles" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="order" value="5" />
+    </extension>       
+    <extension plugin-id="KnowWE-Plugin-OntE" point-id="ToolbarButtonProvider"
+        id="QueryToolbarButton">
+        <parameter id="class"
+            value="de.knowwe.onte.toolbar.QueryToolbarButton" />
+        <parameter id="name" value="QueryToolbarButton" />
+        <parameter id="description"
+            value="Query the ontology with manchester class expressions" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="order" value="6" />
+    </extension>
+     <extension plugin-id="KnowWE-Plugin-OntE" point-id="ToolbarButtonProvider"
+        id="UndefinedTermsToolbarButton">
+        <parameter id="class"
+            value="de.knowwe.onte.toolbar.UndefinedTermsToolbarButton" />
+        <parameter id="name" value="UndefinedTermsToolbarButton" />
+        <parameter id="description"
+            value="Shows a list of currently undefined terms" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="order" value="1" />
+    </extension>   
+	
+	<!-- ########################################################## -->
+    <!-- Declaration: ToolProvider used in this plugin -->
+    <!-- ########################################################## -->
     <extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
         id="CreateEntityToolProvider">
         <parameter id="class"

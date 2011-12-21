@@ -32,6 +32,7 @@ import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 import de.d3web.we.ci4ke.testing.AbstractCITest;
 import de.d3web.we.ci4ke.testing.CITestResult;
 import de.d3web.we.ci4ke.testing.CITestResult.Type;
+import de.knowwe.kdom.renderer.OnteRenderingUtils;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.owlapi.query.OWLApiQueryEngine;
 
@@ -134,7 +135,8 @@ public class OntologyClassificationTest extends AbstractCITest {
 		try {
 			Set<OWLClass> classes = engine.getSubClasses(parent, true);
 			for (OWLClass owlClass : classes) {
-				if (owlClass.getIRI().getFragment().equals(child)) {
+				String displayName = OnteRenderingUtils.getDisplayName(owlClass);
+				if (displayName.equals(child)) {
 					return true;
 				}
 			}

@@ -17,6 +17,7 @@ import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.kdom.renderer.OnteRenderingUtils;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.owlapi.query.OWLApiQueryEngine;
 
@@ -81,7 +82,8 @@ public class GetOntologyHierarchyAction extends AbstractAction {
 	 * @param json
 	 */
 	public void constructJSONString(Map<OWLEntity, Set<OWLEntity>> hierarchy, OWLEntity owlClass, StringBuilder json, String type) {
-		json.append("\"name\" : \"").append(owlClass.getIRI().getFragment()).append("\",\n");
+		json.append("\"name\" : \"").append(OnteRenderingUtils.getDisplayName(owlClass))
+				.append("\",\n");
 		json.append("\"type\" : \"").append(type).append("\"");
 
 		if (hierarchy.containsKey(owlClass)) {
@@ -123,8 +125,9 @@ public class GetOntologyHierarchyAction extends AbstractAction {
 			while (it.hasNext()) {
 				OWLClass owlClass = it.next();
 				nothingConcepts.append("{");
-				nothingConcepts.append("\"name\" : \"").append(owlClass.getIRI().getFragment()).append(
-						"\",");
+				nothingConcepts.append("\"name\" : \"")
+						.append(OnteRenderingUtils.getDisplayName(owlClass))
+							.append("\",");
 				nothingConcepts.append("\"type\" : \"").append(classification).append("\",");
 				nothingConcepts.append("\"color\" : \"#FF0000\"");
 				nothingConcepts.append("}");

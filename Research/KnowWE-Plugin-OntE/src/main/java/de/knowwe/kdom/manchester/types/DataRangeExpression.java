@@ -7,6 +7,8 @@ import de.d3web.we.kdom.condition.CompositeCondition;
 import de.d3web.we.kdom.condition.TerminalCondition;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 
 /**
@@ -28,12 +30,13 @@ public class DataRangeExpression extends CompositeCondition {
 		int ccChildren = getAllowedChildrenTypes().size();
 
 		// add new NonTerminalChildren ...
-		// ... like a NonTerminalList ...
-		NonTerminalList list = new NonTerminalList();
-		NonTerminalListContent listContent = new NonTerminalListContent();
-		listContent.addChildType(this);
-		list.addChildType(listContent);
-		this.childrenTypes.add(ccChildren - 1, list);
+		// ... like a NonTerminalList ...^
+		// ... caused error with facets
+		// NonTerminalList list = new NonTerminalList();
+		// NonTerminalListContent listContent = new NonTerminalListContent();
+		// listContent.addChildType(this);
+		// list.addChildType(listContent);
+		// this.childrenTypes.add(ccChildren - 1, list);
 
 		// ... or a OneOfBracedList
 		OneOfBracedCondition oneOf = new OneOfBracedCondition();
@@ -42,17 +45,59 @@ public class DataRangeExpression extends CompositeCondition {
 		oneOf.addChildType(oneOfContent);
 		this.childrenTypes.add(ccChildren - 1, oneOf);
 
-		BraceElement brace = new BraceElement('[', ']');
-		BraceElementContent braceContent = new BraceElementContent();
-		braceContent.addChildType(this);
-		brace.addChildType(braceContent);
-		this.childrenTypes.add(ccChildren - 1, brace);
-
 		// ... or finally a TerminalCondition which stops the recursive descent
 		// DataType, literal list, dataTyperestriction datarange
 		List<Type> types = new ArrayList<Type>();
 		types.add(DatatypeRestriction.getInstance());
 		this.setAllowedTerminalConditions(types);
+	}
+
+	/**
+	 * Check whether the current {@link DataRangeExpression} has a
+	 * {@link OneOfBracedCondition} section as child.
+	 *
+	 * @param Section<DataRangeExpression> a A {@link DataRangeExpression}
+	 *        section
+	 * @return TRUE if found, FALSE otherwise
+	 */
+	public boolean isOneOfCurlyBracket(Section<DataRangeExpression> section) {
+		return Sections.findChildOfType(section, OneOfBracedCondition.class) != null;
+	}
+
+	/**
+	 * Retrieves each fragment of the OneOfList and the returns a list for
+	 * further handling.
+	 *
+	 * @param Section<DataRangeExpression> a A {@link DataRangeExpression}
+	 *        section
+	 * @return The found {@link OWLTermReferenceManchester} sections
+	 */
+	public Section<OneOfBracedCondition> getOneOfCurlyBracket(Section<DataRangeExpression> section) {
+		return Sections.findChildOfType(section, OneOfBracedCondition.class);
+	}
+
+	/**
+	 * Check whether the current {@link DataRangeExpression} has a
+	 * {@link OneOfBracedCondition} section as child.
+	 *
+	 * @param Section<DataRangeExpression> a A {@link DataRangeExpression}
+	 *        section
+	 * @return TRUE if found, FALSE otherwise
+	 */
+	public boolean isNonTerminalList(Section<DataRangeExpression> section) {
+		return Sections.findChildOfType(section, NonTerminalList.class) != null;
+	}
+
+	/**
+	 * Retrieves each fragment of the OneOfList and the returns a list for
+	 * further handling.
+	 *
+	 * @param Section<DataRangeExpression> a A {@link DataRangeExpression}
+	 *        section
+	 * @return The found {@link NonTerminalListContent} sections
+	 */
+	public List<Section<NonTerminalList>> getNonTerminalListElements(Section<DataRangeExpression> section) {
+		return Sections.findChildrenOfType(section, NonTerminalList.class);
 	}
 
 	/**
