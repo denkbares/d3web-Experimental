@@ -161,5 +161,47 @@
 		
 	</extension> -->
 
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="ClassMemberTagHandler">
+		<parameter id="class" value="de.knowwe.rdfs.inspect.ClassMemberTagHandler" />
+		<parameter id="name" value="ClassMemberTagHandler" />
+		<parameter id="description" value="TagHandler ClassMemberTagHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="ClassMemberLinkToolProvider">
+		<parameter id="class" value="de.knowwe.rdfs.inspect.ClassMemberLinkToolProvider" />
+		<parameter id="name" value="ClassMemberLinkToolProvider" />
+		<parameter id="description"
+			value="Offers link to ClassMember page" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="IRITermRef" />
+		<parameter id="scope" value="AbstractIRITermDefinition" />
+		
+			</extension>
+		
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="PropertyUseLinkToolProvider">
+		<parameter id="class" value="de.knowwe.rdfs.inspect.PropertyUseLinkToolProvider" />
+		<parameter id="name" value="PropertyUseLinkToolProvider" />
+		<parameter id="description"
+			value="Offers link to PropertyUse page" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="IRITermRef" />
+		<parameter id="scope" value="AbstractIRITermDefinition" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="PropertyUseTagHandler">
+		<parameter id="class" value="de.knowwe.rdfs.inspect.PropertyUseTagHandler" />
+		<parameter id="name" value="PropertyUseTagHandler" />
+		<parameter id="description" value="TagHandler PropertyUseTagHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
 	
 </plugin>

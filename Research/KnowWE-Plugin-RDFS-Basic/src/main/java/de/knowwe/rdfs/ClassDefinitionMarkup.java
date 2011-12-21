@@ -23,16 +23,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.vocabulary.OWL;
+import org.ontoware.rdf2go.vocabulary.RDF;
+
+import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.compile.support.Editable;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.KnowWETerm;
 import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.rendering.PreEnvRenderer;
+import de.knowwe.rdfs.util.RDFSUtil;
 
-public class ClassDefinitionMarkup extends AbstractType implements Editable {
+public class ClassDefinitionMarkup extends AbstractType implements Editable, KnowledgeUnit<ClassDefinitionMarkup> {
 
 	private static final String CLASS_REGEX = "^Class:?\\s+(.*?)(\\(.*?\\))?$";
 
@@ -64,6 +73,28 @@ public class ClassDefinitionMarkup extends AbstractType implements Editable {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(RDFSTermCategory.KEY, RDFSTermCategory.Class);
 			return map;
+		}
+
+	}
+
+	@Override
+	public KnowledgeUnitCompileScript<ClassDefinitionMarkup> getCompileScript() {
+		return new DefineClassCompileScript();
+	}
+
+	class DefineClassCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<ClassDefinitionMarkup> {
+
+		@Override
+		public void insertIntoRepository(Section<ClassDefinitionMarkup> section) {
+
+			Section<ClassDef> classTerm = Sections.findSuccessor(section, ClassDef.class);
+
+			URI classURI = RDFSUtil.getURI(classTerm);
+			Rdf2GoCore.getInstance().addStatement(
+					classURI,
+					RDF.type,
+					OWL.Class, section);
+
 		}
 
 	}
