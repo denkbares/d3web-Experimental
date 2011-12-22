@@ -402,7 +402,7 @@ function d3web_storeQuestionDate(dateSelect) {
     var hourSelect = answer.find("[type=Hourselect]");
     var minuteSelect = answer.find("[type=Minuteselect]");
     var secondSelect = answer.find("[type=Secondselect]");
-    var question = getQuestionName(dateSelect);
+    var question = getQuestionId(dateSelect);
 	
     var second = getDateValue(secondSelect, "00");
     var minute = getDateValue(minuteSelect, "00");
@@ -421,7 +421,7 @@ function getDateValue(select, def) {
 }
 
 function d3web_storeQuestionText(textInput) {
-    var textQuestion = getQuestionName(textInput);
+    var textQuestion = getQuestionId(textInput);
     textStore[textQuestion] = $(textInput).val();
 }
 
@@ -452,7 +452,7 @@ function d3web_storeQuestionNum(numInput) {
         errorWid.html("");
     }
     
-    var numQuestion = getQuestionName(numInput);
+    var numQuestion = getQuestionId(numInput);
     textStore[numQuestion] = $(numInput).val();
 }
 
@@ -473,14 +473,14 @@ function getErrorPlaceholder(input){
 
 
 function d3web_storeQuestionOC(ocInput) {
-    var ocQuestion = getQuestionName(ocInput);
-    ocStore[ocQuestion] = getAnswerName(ocInput);
+    var ocQuestion = getQuestionId(ocInput);
+    ocStore[ocQuestion] = getAnswerId(ocInput);
 }
 
 function d3web_storeQuestionMC(mcCheckBox) {
 	
     var mcQParent = $(mcCheckBox.parents("[id^=q_]"));
-    var mcQuestion = getQuestionName(mcCheckBox);
+    var mcQuestion = getQuestionId(mcCheckBox);
     var checkBoxes = mcQParent.find(":checkbox");
 
     // get the question-content-parent element and go through all its
@@ -488,35 +488,24 @@ function d3web_storeQuestionMC(mcCheckBox) {
     var checkedBoxes = new Array();
     checkBoxes.each(function() {
         if ($(this).prop("checked") == true) {
-            checkedBoxes.push(getAnswerName($(this)));
+            checkedBoxes.push(getAnswerId($(this)));
         }
     });
 	
     mcStore[mcQuestion] = checkedBoxes;
 }
 
-function getQuestionName(input) {
-    return getTerminologyObjectName(input, "q");
+function getQuestionId(input) {
+    return getTerminologyId(input, "q");
 }
 
-function getAnswerName(input) {
-    return getTerminologyObjectName(input, "a");
+function getAnswerId(input) {
+    return getTerminologyId(input, "a");
 }
 
-// return the pure name of the terminology object without prefixes such as e.g.
-// q_, a_ etc. and without trailing whitespaces and where all _ and + are replaced
-// by whitespace
-function getTerminologyObjectName(input, prefix) {
+function getTerminologyId(input, prefix) {
     var parent = $(input.parents("[id^=" + prefix + "_]"));
-    var valTd = $("#text-" + parent.attr("id"));
-    
-    // var text = valTd.clone().children().remove().end().text(); 
-   
-    var pref = prefix + "_";
-   
-    // get id (sthg like a_eine_Antwort) and replace a_ and ALL "_" with """
-    var text = parent.attr("id").replace(pref, "").replace(/_/g, " ");   
-    return $.trim(text);
+    return parent.attr("id");
 }
 
 function d3web_addFacts() {

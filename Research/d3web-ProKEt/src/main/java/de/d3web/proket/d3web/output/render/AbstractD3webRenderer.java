@@ -19,6 +19,8 @@
  */
 package de.d3web.proket.d3web.output.render;
 
+import java.util.HashMap;
+
 import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.knowledge.Indication.State;
@@ -66,6 +68,9 @@ import de.d3web.proket.output.container.ContainerCollection;
  * @created 13.01.2011
  */
 public abstract class AbstractD3webRenderer implements D3webRenderer {
+
+	private static HashMap<String, String> nameToIdMap = new HashMap<String, String>();
+	private static HashMap<String, String> idToNameMap = new HashMap<String, String>();
 
 	/**
 	 * Retrieves the appropriate renderer class according to what base object is
@@ -468,30 +473,6 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 		return false;
 	}
 
-	// @Override
-	// public boolean isParentIndicated(TerminologyObject to, Blackboard bb) {
-	// for (QASet qaSet :
-	// bb.getSession().getKnowledgeBase().getManager().getQASets()) {
-	//
-	// // get questionnaires only
-	// if (qaSet instanceof QContainer) {
-	// QContainer qcon = (QContainer) qaSet;
-	//
-	// // and check its indication state
-	// if (bb.getSession().getKnowledgeBase().getInitQuestions().contains(qcon)
-	// || bb.getIndication(qcon).getState() == State.INDICATED
-	// || bb.getIndication(qcon).getState() == State.INSTANT_INDICATED) {
-	//
-	// // if questionnaire indicated, check whether to is its child
-	// if (hasChild(qcon, to)) {
-	// return true;
-	// }
-	// }
-	// }
-	// }
-	// return false;
-	// }
-
 	public boolean isParentOfFollowUpQuIndicated(TerminologyObject to, Blackboard bb) {
 		for (Question q : bb.getSession().getKnowledgeBase().getManager().getQuestions()) {
 
@@ -507,18 +488,26 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 	}
 
 	public static String getID(NamedObject no) {
-               String prefix = "";
-		if (no instanceof Question) {
-			prefix = "q";
+		String id = nameToIdMap.get(no);
+		if (id == null) {
+			String prefix = "";
+			if (no instanceof Question) {
+				prefix = "q";
+			}
+			else if (no instanceof QContainer) {
+				prefix = "qc";
+			}
+			else if (no instanceof Choice) {
+				prefix = "a";
+			}
+			id = prefix + "_" + no.getName().replaceAll("\\W", "_");
+			nameToIdMap.put(no.getName(), id);
+			idToNameMap.put(id, no.getName());
 		}
-		else if (no instanceof QContainer) {
-			prefix = "qc";
-		}
-		else if (no instanceof Choice) {
-			prefix = "a";
-		}
-		//return prefix + "_" + no.getName().replaceAll("\\W", "_");
-                return prefix + "_" + no.getName().replaceAll(" ", "_");
+		return id;
 	}
 
+	public static String getObjectNameForId(String id) {
+		return idToNameMap.get(id);
+	}
 }
