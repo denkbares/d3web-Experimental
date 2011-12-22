@@ -35,6 +35,7 @@ import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.basicType.EndLineComment;
 import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -62,6 +63,7 @@ public class TripleMarkup extends AbstractType implements
 		this.setSectionFinder(new RegexSectionFinder(TRIPLE_REGEX,
 				Pattern.DOTALL | Pattern.MULTILINE, 0));
 
+		this.addChildType(new EndLineComment());
 		this.addChildType(new TripleMarkupContent());
 		this.setCustomRenderer(new PreEnvRenderer());
 	}

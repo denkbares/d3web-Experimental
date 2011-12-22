@@ -32,6 +32,7 @@ import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.compile.support.Editable;
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.basicType.EndLineComment;
 import de.knowwe.core.kdom.objects.KnowWETerm;
 import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.parsing.Section;
@@ -49,6 +50,7 @@ public class ClassDefinitionMarkup extends AbstractType implements Editable, Kno
 		this.setSectionFinder(new RegexSectionFinder(CLASS_REGEX,
 				Pattern.CASE_INSENSITIVE | Pattern.MULTILINE, 0));
 
+		this.addChildType(new EndLineComment());
 		this.addChildType(new ClassDef());
 
 		this.setCustomRenderer(new PreEnvRenderer());

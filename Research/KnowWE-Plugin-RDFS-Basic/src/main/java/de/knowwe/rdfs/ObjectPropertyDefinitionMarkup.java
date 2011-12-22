@@ -18,6 +18,7 @@ import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.basicType.EndLineComment;
 import de.knowwe.core.kdom.objects.KnowWETerm;
 import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.objects.TermReference;
@@ -44,6 +45,7 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 				Pattern.CASE_INSENSITIVE | Pattern.MULTILINE,
 				0));
 
+		this.addChildType(new EndLineComment());
 		this.addChildType(new PropertyDef());
 		this.addChildType(new RangeDomainSpec());
 
