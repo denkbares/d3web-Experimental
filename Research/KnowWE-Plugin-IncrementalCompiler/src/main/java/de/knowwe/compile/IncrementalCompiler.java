@@ -276,14 +276,20 @@ public class IncrementalCompiler implements EventListener {
 		for (Section<? extends KnowledgeUnit> section : potentiallyNewKnowledgeSlices) {
 			// System.out.println("Inserting Knowledge Slice: " +
 			// section.toString());
-			section.get().getCompileScript().insertIntoRepository(section);
+			KnowledgeUnitCompileScript script = section.get().getCompileScript();
+			if (script != null) {
+				script.insertIntoRepository(section);
+			}
 		}
 
 		// and remove knowledge
 		for (Section<? extends KnowledgeUnit> section : knowledgeSlicesToRemove) {
 			// System.out.println("Deleting Knowledge Slice: " +
 			// section.toString());
-			section.get().getCompileScript().deleteFromRepository(section);
+			KnowledgeUnitCompileScript script = section.get().getCompileScript();
+			if (script != null) {
+				script.deleteFromRepository(section);
+			}
 		}
 
 		if (!ImportManager.fetchNewImports().isEmpty()
