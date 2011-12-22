@@ -720,7 +720,7 @@ function logTooltipVisited(starttime, endtime, widget){
         prefix = "QC"
 }
     
-    logInfoPopupClicked(parent, prefix, timestring);
+    logInfoPopup(parent, prefix, timestring);
 }
 
 /**********************************************************

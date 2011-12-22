@@ -225,7 +225,7 @@ public class D3webDialog extends HttpServlet {
 				|| !d3wcon.getUserprefix().equals(d3webParser.getUserPrefix())) {
 			d3wcon.setKb(d3webParser.getKnowledgeBase());
 			d3wcon.setKbName(d3webParser.getKnowledgeBaseName());
-			d3wcon.setDialogStrat(d3webParser.getStrategy());
+			//d3wcon.setDialogStrat(d3webParser.getStrategy());
 			d3wcon.setDialogType(d3webParser.getType());
 			d3wcon.setIndicationMode(d3webParser.getIndicationMode());
 			d3wcon.setDialogColumns(d3webParser.getDialogColumns());
@@ -284,6 +284,7 @@ public class D3webDialog extends HttpServlet {
 
 		// in case nothing other is provided, "show" is the default action
 		String action = request.getParameter("action");
+              
 		if (action == null) {
 			// action = "mail";
 			action = "show";
@@ -329,13 +330,15 @@ public class D3webDialog extends HttpServlet {
 			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
 			httpSession.setAttribute(D3WEB_SESSION, d3webSession);
 			httpSession.setAttribute("lastLoaded", "");
-			GlobalSettings.getInstance().setInitLogged(false);
+                        
+                        GlobalSettings.getInstance().setInitLogged(false);
 			return;
 		}
 		else if (action.equalsIgnoreCase("resetNewUser")) {
 			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
 			httpSession.setAttribute(D3WEB_SESSION, d3webSession);
-			GlobalSettings.getInstance().setInitLogged(false);
+                       
+                        GlobalSettings.getInstance().setInitLogged(false);
 			return;
 		}
 		else if (action.equalsIgnoreCase("gotoStatistics")) {
@@ -410,8 +413,9 @@ public class D3webDialog extends HttpServlet {
 			String datestring = FORMATTER.format(date);
 			d3wcon.getLogger().logEndValue(datestring);
 			d3wcon.getLogger().writeJSONToFile(logfilename);
-
-		}
+                        d3wcon.setLogger(new JSONLogger());
+                        GlobalSettings.getInstance().setInitLogged(false);
+                }		
 		else if (action.equalsIgnoreCase("logWidget")) {
 
 			// TODO need to check here in case IDs are reworked globally one day

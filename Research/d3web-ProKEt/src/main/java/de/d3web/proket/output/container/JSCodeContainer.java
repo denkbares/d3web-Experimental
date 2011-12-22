@@ -158,6 +158,7 @@ public class JSCodeContainer implements ICodeContainer {
 
 		if (logging) {
 			add("var logging = true;", 0);
+                        
 		}
 		else {
 			add("var logging = false;", 0);

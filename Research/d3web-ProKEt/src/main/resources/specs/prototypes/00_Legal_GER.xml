@@ -2,13 +2,19 @@
 <dialog sub-type="col" type="legal" css="legal, nofoot" header="Arbeitsrechtsberatung-Kündigung"
             answer-type="oc">
 		<question title="Arbeitsverhältnis ist wirksam und termingerecht gekündigt worden"
-			id="1" type="mc" bonus-text="Zusatzinfo für die Frage mit ID Nr 1"/>
+			id="1" type="mc" 
+                        bonus-text="Diese Frage überprüft den Sachverhalt, ob das Arbeitsverhältnis
+                        wirksam und termingerecht gekündigt wurde. Hierzu müssen verschiedene einzelne
+                        Tatbestände erfüllt sein, zB. dass Form, Frist, Zugang, und Stellvertretung 
+                        eingehalten wurden."/>
 		<question title="Form, Frist, Zugang und Stellvertretung sind eingehalten"
-			id="2" parent-id="1" type="mc" bonus-text="Zusatzinfo für die Frage mit ID Nr 2 - auch hier wird
-                        etwas mehr Information benötigt und angezeigt"/>
+			id="2" parent-id="1" type="mc" bonus-text="Überprüfung, ob Form, Frist, Zugang sowie Stellvertretung
+                        korrekt eingehalten wurden."/>
 		<question title="Kündigung war nicht durch Sondertatbestände ausgeschlossen"
-			id="3" parent-id="1" type="mc" bonus-text="Zusatzinfo für die Frage mit ID Nr 3, dieses mal
-                        etwas mehr text."/>
+			id="3" parent-id="1" type="mc" bonus-text="Hier wird geklärt, ob die Kündigung durch
+                        verschiedene Sondertatbestände ausgeschollsen war. Beispiele für solche Sondertatbestände sind
+                        das Mutterschutzgesetzt, das Arbeitsplatzschutzgesetzt, oder eine momenane Ableistung
+                        des Wehrdienstes."/>
 		<question title="Kein Mutterschutzgesetz" id="4" parent-id="3" />
 		<question title="Kein Berufsbidlungsgesetz" id="5" parent-id="3" />
 		<question title="Kein Arbeitsplatzschutzgesetz" id="6" parent-id="3" />
