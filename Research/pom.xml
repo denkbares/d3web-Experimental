@@ -221,6 +221,8 @@
 		<module>KnowWE-Plugin-MedicineOntology</module>
 		<module>KnowWE-Plugin-DiaFlux-Anomalies</module>
 		<module>KnowWE-Plugin-CodeMirror</module>
+		
+		<module>KnowWE-Plugin-RDFS-TestCase</module>
 	</modules>
 	<repositories>
 		<repository>

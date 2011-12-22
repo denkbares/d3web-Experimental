@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-RDFS-TestCase" version="0.0.1">
+
+	<requires>
+		<import plugin-id="KnowWEExtensionPoints" />
+	</requires>
+
+	<runtime>
+		<library id="de.d3web" path="." type="code">
+			<export prefix="*" />
+		</library>
+		<library id="webapp" path="webapp/" type="resources">
+			<export prefix="*" />
+		</library>
+	</runtime>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="RDFSTestCaseType">
+		<parameter id="class" value="de.knowwe.rdfs.testcase.kdom.RDFSTestCaseType" />
+		<parameter id="name" value="RDFSTestCaseType" />
+		<parameter id="description"
+			value="Markup-Type for the definition of RDFS test cases." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="CITest"
+		id="RDFSTestCaseRunner">
+		<parameter id="class"
+			value="de.knowwe.rdfs.testcase.ci4ke.RDFSTestCaseRunner" />
+		<parameter id="name" value="RDFSTestCaseRunner" />
+		<parameter id="description" value="CITest RDFSTestCaseRunner" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+
+</plugin>
