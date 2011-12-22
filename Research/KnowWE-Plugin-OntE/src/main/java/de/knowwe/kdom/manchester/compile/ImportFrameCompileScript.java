@@ -25,6 +25,7 @@ import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.kdom.manchester.compile.utils.ImportedOntologyManager;
 import de.knowwe.kdom.manchester.frame.ImportFrame;
+import de.knowwe.kdom.renderer.OnteRenderingUtils;
 import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.owlapi.OWLAPIKnowledgeUnitCompileScript;
 
@@ -186,17 +187,22 @@ public class ImportFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<I
 		Collection<String> entityNames = new LinkedList<String>();
 
 		for (OWLEntity owlEntity : entities) {
-			String conceptName = "";
-			// TODO: replace with getDisplayName from utils
-			if (owlEntity.getIRI().getFragment() != null) {
-				conceptName = owlEntity.getIRI().getFragment();
+
+			if (owlEntity.getIRI().toString().startsWith(ontologyIRI.toString())) {
+
+				String conceptName = OnteRenderingUtils.getDisplayName(owlEntity);
+
+//			if (owlEntity.getIRI().getFragment() != null) {
+//				conceptName = owlEntity.getIRI().getFragment();
+//			}
+//			else {
+//				String path = owlEntity.getIRI().toURI().getPath();
+//				conceptName = path.substring(path.lastIndexOf("/") + 1);
+//			}
+
+				entityNames.add(conceptName);
+				compiler.registerImportedTerminology(section, conceptName);
 			}
-			else {
-				String path = owlEntity.getIRI().toURI().getPath();
-				conceptName = path.substring(path.lastIndexOf("/") + 1);
-			}
-			entityNames.add(conceptName);
-			compiler.registerImportedTerminology(section, conceptName);
 		}
 
 		Collection<Message> messages = new LinkedList<Message>();
