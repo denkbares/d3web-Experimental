@@ -42,7 +42,7 @@ public class JSCodeContainer implements ICodeContainer {
 	private boolean imageQuestions = false;
 	private boolean usrdatLogin = false;
 	private boolean dbLogin = false;
-        private boolean logging = false;
+	private boolean logging = false;
 
 	@Override
 	public void add(String data) {
@@ -80,10 +80,10 @@ public class JSCodeContainer implements ICodeContainer {
 		if (mode == LoginMode.usrdat) usrdatLogin = true;
 		else if (mode == LoginMode.db) dbLogin = true;
 	}
-        
-        public void enableClickLogging (){
-            logging = true;
-        }
+
+	public void enableClickLogging() {
+		logging = true;
+	}
 
 	/**
 	 * Putting together the complete JS-defining and -linking String
@@ -144,10 +144,10 @@ public class JSCodeContainer implements ICodeContainer {
 		}
 
 		if (d3web) {
-			
+
 			ownBibs.add("d3webBasic.js");
-                        ownBibs.add("d3web.js");
-                        
+			ownBibs.add("d3web.js");
+
 			linkedBibs.add("jquery/jquery.object.js");
 			add("var d3web = true;", 0);
 		}
@@ -156,9 +156,12 @@ public class JSCodeContainer implements ICodeContainer {
 			add("var d3web = false;", 0);
 		}
 
-                if(logging){
-                    add("var logging = true;", 0);
-                }
+		if (logging) {
+			add("var logging = true;", 0);
+		}
+		else {
+			add("var logging = false;", 0);
+		}
 		// SECOND assemble bibs and singular js data to a string
 		// assemble all defined bibs to one String
 		for (String filename : linkedBibs) {
