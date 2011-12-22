@@ -10,6 +10,7 @@ import de.d3web.diaFlux.flow.ActionNode;
 import de.d3web.diaFlux.flow.Edge;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.Node;
+import de.d3web.indication.ActionIndication;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.ci4ke.testing.AbstractCITest;
 import de.d3web.we.ci4ke.testing.CITestResult;
@@ -19,11 +20,11 @@ import de.knowwe.core.KnowWEEnvironment;
 
 public class MissingDataTest extends AbstractCITest {
 
-	private HashMap<Node, Status> status = new HashMap<Node, Status>();
-	private List<Node> allNodes = new LinkedList<Node>();
-	private TreeSet<String> knownNodes = new TreeSet<String>();
+	private final HashMap<Node, Status> status = new HashMap<Node, Status>();
+	private final List<Node> allNodes = new LinkedList<Node>();
+	private final TreeSet<String> knownNodes = new TreeSet<String>();
 
-	private String errormsg = "";
+	private final String errormsg = "";
 	
 	private enum Status {
 		UNVISITED,
