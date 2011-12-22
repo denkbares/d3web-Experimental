@@ -25,6 +25,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.manchester.AxiomFactory;
+import de.knowwe.kdom.renderer.OnteRenderingUtils;
 import de.knowwe.onte.editor.OWLApiAxiomCache;
 import de.knowwe.owlapi.query.OWLApiQueryEngine;
 
@@ -180,7 +181,7 @@ public class OWLApiQueryRenderer<T extends AbstractType> extends KnowWEDomRender
 						a, OWLApiAxiomCache.STORE_CACHE);
 
 				string.append("<li>");
-				String conceptName = entity.getIRI().getFragment();
+				String conceptName = OnteRenderingUtils.getDisplayName(entity);
 				// String link = OnteRenderingUtils.renderHyperlink(section);
 				// string.append(link);
 				OWLApiTagHandlerUtil.renderHyperlink(conceptName, section, string);
