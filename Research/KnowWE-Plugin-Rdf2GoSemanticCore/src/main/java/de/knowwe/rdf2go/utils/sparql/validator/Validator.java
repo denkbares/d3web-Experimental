@@ -1,0 +1,66 @@
+/*
+ * Copyright (C) 2011 University Wuerzburg, Computer Science VI
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
+ */
+package de.knowwe.rdf2go.utils.sparql.validator;
+
+import org.openrdf.query.MalformedQueryException;
+import org.openrdf.query.parser.sparql.SPARQLParser;
+
+import de.knowwe.rdf2go.Rdf2GoCore;
+
+/**
+ * 
+ * @author Sebastian Furth
+ * @created 20.12.2011
+ */
+public class Validator {
+
+	private static final SPARQLParser parser = new SPARQLParser();
+	private static final String prefixes = Rdf2GoCore.getInstance().getSparqlNamespaceShorts();
+
+	private Validator() {
+	}
+
+	/**
+	 * Validates the committed SPARQL-Query by parsing it using Sesame's
+	 * SPARQLParser.
+	 * 
+	 * @created 20.12.2011
+	 * @param query A SPARQL-Query
+	 * @param baseURI (optional) The base URI for the SPARQL-Query
+	 * @return ValidatorResult wrapping the validation result
+	 */
+	public static ValidatorResult validate(String query) {
+
+		// add default prefixes if necessary
+		if (!query.startsWith(prefixes)) {
+			query = prefixes + query;
+		}
+		ValidatorResult result = new ValidatorResult(query);
+
+		try {
+			parser.parseQuery(query, Rdf2GoCore.basens);
+		}
+		catch (MalformedQueryException e) {
+			result.addException(e);
+		}
+
+		return result;
+	}
+
+}
