@@ -55,7 +55,7 @@ import de.knowwe.plugin.Plugins;
  * This class implements the incremental compilation algorithm as proposed by
  * the paper at KCAP2011 entitled 'Incremental Compilation of Knowledge
  * Documents for Markup-based Closed-World Authoring'
- *
+ * 
  * @author Jochen
  * @created 09.06.2011
  */
@@ -91,8 +91,7 @@ public class IncrementalCompiler implements EventListener {
 		 * END term for testing
 		 */
 
-
-		//extension point for plugins defining predefined terminology
+		// extension point for plugins defining predefined terminology
 
 		// extension point for plugins defining predefined terminology
 		Extension[] exts = PluginManager.getInstance().getExtensions(
@@ -108,23 +107,23 @@ public class IncrementalCompiler implements EventListener {
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @created 14.12.2011
 	 * @param key
 	 * @param termIdentifier
 	 */
 	public void registerImportedTerminology(Section<? extends AbstractType> key, String termIdentifier) {
 		Section<ImportedTerm> importedSection = Section.createSection(
-					termIdentifier, new ImportedTerm(), null);
+				termIdentifier, new ImportedTerm(), null);
 		terminology.addImportedObject(importedSection);
 		terminology.registerTermDefinition(importedSection);
 		ImportManager.addImport(key, importedSection);
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @created 14.12.2011
 	 * @param key
 	 */
@@ -151,11 +150,11 @@ public class IncrementalCompiler implements EventListener {
 			terminology.registerTermDefinition(predefinedTermname);
 		}
 
-//		Section<PreDefinedTerm> subclassDef =
-//				Section.createSection("subclassof",
-//						new PreDefinedTerm(), null);
-//		terminology.addPredefinedObject(subclassDef);
-//		terminology.registerTermDefinition(subclassDef);
+		// Section<PreDefinedTerm> subclassDef =
+		// Section.createSection("subclassof",
+		// new PreDefinedTerm(), null);
+		// terminology.addPredefinedObject(subclassDef);
+		// terminology.registerTermDefinition(subclassDef);
 
 	}
 
@@ -354,8 +353,8 @@ public class IncrementalCompiler implements EventListener {
 					// System.out.println("chicken-egg!!!");
 				}
 				else {
-					System.out.println("resolving recursivly: "
-							+ def.get().getTermIdentifier(def));
+					// System.out.println("resolving recursivly: "
+					// + def.get().getTermIdentifier(def));
 					resolveRecursively(def);
 				}
 			}
@@ -374,11 +373,11 @@ public class IncrementalCompiler implements EventListener {
 
 	public boolean hasValidDefinition(String termIdentifier) {
 
-		System.out.println("CheckDefinition: " + termIdentifier);
+		// System.out.println("CheckDefinition: " + termIdentifier);
 		Collection<Message> messages = checkDefinition(termIdentifier);
 		for (Message kdomReportMessage : messages) {
 			if (kdomReportMessage.getType() == Message.Type.ERROR) {
-				System.out.println("FALSE");
+				// System.out.println("FALSE");
 				return false;
 			}
 		}
@@ -404,7 +403,8 @@ public class IncrementalCompiler implements EventListener {
 				messages.add(Messages.warning("This is a imported term. Concurrent definitions are existing but will be ignored!"));
 				return messages;
 			}
-			messages.add(Messages.error("Object has concurrent definitions: " + termIdentifier));
+			messages.add(Messages.error("Object has concurrent definitions: "
+					+ termIdentifier));
 			return messages;
 		}
 
@@ -423,7 +423,7 @@ public class IncrementalCompiler implements EventListener {
 				String errorMsg = "ComplexDefinition has dependency error: ";
 				// if one reference is not defined
 				if ((!terminology.isValid(ref.get().getTermIdentifier(ref)))) {
-					System.out.println("dependency error");
+					// System.out.println("dependency error");
 					messages.add(new Message(Message.Type.ERROR, errorMsg +
 							ref.get().getTermIdentifier(ref)));
 					return messages;
