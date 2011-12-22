@@ -87,7 +87,7 @@
 
 	</extension>
 	
-
+	<!-- deprecated markup
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="TurtleMarkupSimple">
 		<parameter id="class"
@@ -98,7 +98,7 @@
 		<parameter id="priority" value="3" />
 		<parameter id="scope" value="root" />
 	</extension>
-	
+	-->
 		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="SimpleIRIDefinition">
 		<parameter id="class"
