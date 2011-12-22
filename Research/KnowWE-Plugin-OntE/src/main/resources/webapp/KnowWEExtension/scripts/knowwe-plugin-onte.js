@@ -429,10 +429,25 @@ KNOWWE.plugin.onte.browser = function() {
         init : function() {
            if(document.getElementById('onte-ontology-browser')) {
             
-                var tabs = [
-                    {'tree' : 'OWLClass', 'dom' : 'oob-class-hierarchy'},
-                    {'tree' : 'OWLObjectProperty', 'dom' : 'oob-object-hierarchy'},
-                    {'tree' : 'OWLDataProperty', 'dom' : 'oob-data-hierarchy'}
+               function handleTreeResponse() {
+                    var nodes = JSON.parse(this.responseText);
+                    trees[tabs[i].tree] = new KNOWWE.helper.treeview({
+                        'nodes' : nodes,
+                        'id' : tabs[i].dom,
+                        'onNodeClick' : KNOWWE.plugin.onte.browser.getEntityInformation,
+                        'toolbarID' : 'oob-buttons'
+                    });
+               }
+               
+               function handleIndividualResponse() {
+                   var nodes = JSON.parse(this.responseText);
+               }
+            
+               var tabs = [
+                    {'tree' : 'OWLClass', 'dom' : 'oob-class-hierarchy', 'fn': handleTreeResponse},
+                    {'tree' : 'OWLObjectProperty', 'dom' : 'oob-object-hierarchy', 'fn': handleTreeResponse},
+                    {'tree' : 'OWLDataProperty', 'dom' : 'oob-data-hierarchy', 'fn': handleTreeResponse},
+                    {'tree' : 'OWLIndividual', 'dom' : 'oob-individual-hierarchy', 'fn' : handleTreeResponse}
                ];
             
                 for(var i = 0, l = tabs.length; i < l; i++) {
@@ -442,19 +457,11 @@ KNOWWE.plugin.onte.browser = function() {
                         async : false,
                         response : {
                             action : 'none',
-                            fn : function(){
-                                var nodes = JSON.parse(this.responseText);
-                                trees[tabs[i].tree] = new KNOWWE.helper.treeview({
-                                    'nodes' : nodes,
-                                    'id' : tabs[i].dom,
-                                    'onNodeClick' : KNOWWE.plugin.onte.browser.getEntityInformation,
-                                    'toolbarID' : 'oob-buttons'
-                                });
-                            }
+                            fn : tabs[i].fn
                         }
                     };
                     new _KA( options ).send();
-                }    
+                }
                 
                 // ... initialize the classification tabs
                 browserTabs = new KNOWWE.helper.simpletabs({'onTabChange' : function() {document.getElementById('oob-information').innerHTML = '';}});
@@ -895,20 +902,41 @@ KNOWWE.helper.treeview = (function(){
         
         var rootUL = document.createElement('ul');
         rootUL.className = 'treeview ';
-        rootUL.appendChild(li);        
+        
+        if(options.nodes['name']) {
+            rootUL.appendChild(li);
+        }    
         
         // ... handle optional roots, sometimes possibles
-        if(options.nodes['optionalRoot']) {
-            var optionalRoot = options.nodes['optionalRoot'];
-            var liOptional = document.createElement('li');
-            liOptional.className = 'last';
-            liOptional.innerHTML = '<div class="last_expanded treeicon"></div>\n<span data-info="' + optionalRoot['type'] + '">'+optionalRoot['name']+'</span>';
+        
+        if(options.nodes['size'] > 0) {
+            for(var i = 0, l = options.nodes['size']; i < l; i++) {
+                var optionalRoot = options.nodes['optionalRoot'+i];
+                var liOptional = document.createElement('li');
+                liOptional.className = 'last';
+                liOptional.innerHTML = '<div class="last_expanded treeicon"></div>\n<span data-info="' + optionalRoot['type'] + '">'+optionalRoot['name']+'</span>';
             
-            var ulOptional = createSubTreeDOMNodeTemplate(optionalRoot['children'].length);
-            liOptional.appendChild(ulOptional);
-            buildUpDOMTree(optionalRoot['children'], ulOptional);
-            rootUL.appendChild(liOptional);         
+               if(optionalRoot['children']) {
+            
+                   var ulOptional = createSubTreeDOMNodeTemplate(optionalRoot['children'].length);
+                   liOptional.appendChild(ulOptional);
+                   buildUpDOMTree(optionalRoot['children'], ulOptional);
+               }
+                rootUL.appendChild(liOptional);
+            }
         }
+        
+//        if(options.nodes['optionalRoot']) {
+//            var optionalRoot = options.nodes['optionalRoot'];
+//            var liOptional = document.createElement('li');
+//            liOptional.className = 'last';
+//            liOptional.innerHTML = '<div class="last_expanded treeicon"></div>\n<span data-info="' + optionalRoot['type'] + '">'+optionalRoot['name']+'</span>';
+//            
+//            var ulOptional = createSubTreeDOMNodeTemplate(optionalRoot['children'].length);
+//            liOptional.appendChild(ulOptional);
+//            buildUpDOMTree(optionalRoot['children'], ulOptional);
+//            rootUL.appendChild(liOptional);         
+//        }
         
                         
         // create header

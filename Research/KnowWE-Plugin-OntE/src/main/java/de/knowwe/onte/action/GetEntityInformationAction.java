@@ -14,6 +14,7 @@ import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
 import org.semanticweb.owlapi.model.OWLDataRange;
 import org.semanticweb.owlapi.model.OWLEntity;
+import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
@@ -73,8 +74,8 @@ public class GetEntityInformationAction extends AbstractAction {
 			else if (entity instanceof OWLDataProperty) {
 				loadDataPropertyInformation((OWLDataProperty) entity, html);
 			}
-			else if(entity instanceof OWLNamedIndividual) {
-				// TODO
+			else if (entity instanceof OWLIndividual) {
+				loadIndividualInformation((OWLNamedIndividual) entity, html);
 			}
 			context.getWriter().write(html.toString());
 		}
@@ -90,7 +91,7 @@ public class GetEntityInformationAction extends AbstractAction {
 		else if (type.equals("OWLDataProperty")) {
 			return OWLDataProperty.class;
 		}
-		else if (type.equals("OWLNamedIndividual")) {
+		else if (type.equals("OWLIndividual")) {
 			return OWLNamedIndividual.class;
 		}
 		return null;
@@ -248,7 +249,14 @@ public class GetEntityInformationAction extends AbstractAction {
 		OWLAPIConnector connector = OWLAPIConnector.getGlobalInstance();
 		OWLOntology ontology = connector.getOntology();
 
-		// TODO ...
+		Set<OWLObject> owlObjects = new HashSet<OWLObject>();
+		Set<OWLClassExpression> types = owlIndividual.getTypes(ontology);
+		if (!types.isEmpty()) {
+			html.append("<div class=\"onte-box\"><strong>Types</strong></div>");
+			owlObjects.addAll(types);
+			renderResult(owlObjects, html);
+		}
+		// TODO rest
 	}
 
 	/**

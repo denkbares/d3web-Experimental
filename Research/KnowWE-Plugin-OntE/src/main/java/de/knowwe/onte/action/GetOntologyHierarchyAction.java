@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
@@ -37,6 +38,7 @@ public class GetOntologyHierarchyAction extends AbstractAction {
 		LinkedHashMap<OWLEntity, Set<OWLEntity>> hierarchy = new LinkedHashMap<OWLEntity, Set<OWLEntity>>();
 
 		OWLEntity topEntity = null;
+		Set<OWLEntity> individuals = null;
 		StringBuilder json = new StringBuilder();
 		String classification = context.getParameter("classification");
 
@@ -56,21 +58,49 @@ public class GetOntologyHierarchyAction extends AbstractAction {
 			engine.getInferredDataPropertyHierarchy(hierarchy, (OWLDataProperty) topEntity, null);
 		}
 		else if (classification.equals("OWLIndividual")) {
-
+			topEntity = factory.getOWLThing();
+			individuals = new TreeSet<OWLEntity>();
+			engine.getIndividuals(individuals, (OWLClass) topEntity, null);
 		}
 
 		json.append("{");
 
-		if (classification.equals("OWLClass")) {
-			json.append("\"optionalRoot\" : { ");
+		if (classification.equals("OWLClass")) { // existence of unsat nodes ?
+			json.append("\"optionalRoot0\" : { ");
 			constructOptionalUnsatNodes(json, classification);
 			json.append("},");
+			json.append("\"size\" : \"1\",");
 		}
 
-		constructJSONString(hierarchy, topEntity, json, classification);
+		if (classification.equals("OWLIndividual")) {
+			constructIndividualJSON(individuals, json, classification);
+		}
+		else {
+			constructJSONString(hierarchy, topEntity, json, classification);
+		}
 		json.append("}");
 
 		context.getWriter().write(json.toString());
+	}
+
+	public void constructIndividualJSON(Set<OWLEntity> individuals, StringBuilder json, String type) {
+
+		int l = individuals.size();
+		int pos = 0;
+
+		Iterator<OWLEntity> it = individuals.iterator();
+		while (it.hasNext()) {
+			OWLEntity individual = it.next();
+
+			json.append("\"optionalRoot").append(pos).append("\" : { ");
+			json.append("\"name\" : \"").append(OnteRenderingUtils.getDisplayName(individual))
+					.append("\",\n");
+			json.append("\"type\" : \"").append(type).append("\"");
+			json.append("},\n");
+
+			pos++;
+		}
+		json.append("\"size\" : \"").append(l).append("\"");
 	}
 
 	/**
