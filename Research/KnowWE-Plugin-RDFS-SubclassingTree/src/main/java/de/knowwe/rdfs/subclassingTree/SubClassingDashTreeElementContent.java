@@ -44,6 +44,9 @@ public class SubClassingDashTreeElementContent extends DashTreeElementContent
 		implements KnowledgeUnit<SubClassingDashTreeElementContent> {
 
 	public SubClassingDashTreeElementContent() {
+
+		this.addChildType(new DashTreeClassDefinition());
+
 		IRITermRef ref = new IRITermRef();
 		ref.setSectionFinder(new AllTextFinderTrimmed());
 		this.addChildType(ref);
@@ -71,7 +74,8 @@ public class SubClassingDashTreeElementContent extends DashTreeElementContent
 
 					if (localURI == null || fatherURI == null) {
 						// error handling here
-					} else {
+					}
+					else {
 						Rdf2GoCore.getInstance().addStatement(localURI,
 								RDFS.subClassOf, fatherURI, childElement);
 					}
@@ -89,7 +93,10 @@ public class SubClassingDashTreeElementContent extends DashTreeElementContent
 			// add child-DTE to ref-list
 			Section<? extends IRITermRef> childElement = Sections
 					.findSuccessor(section, IRITermRef.class);
-			result.add(childElement);
+			if (childElement != null) { // can be null if this line contains a
+										// definition
+				result.add(childElement);
+			}
 
 			// add parent-DTE to ref-list
 			Section<? extends DashTreeElement> father = DashTreeUtils
@@ -100,8 +107,6 @@ public class SubClassingDashTreeElementContent extends DashTreeElementContent
 						.findSuccessor(father, IRITermRef.class);
 				result.add(fatherElement);
 			}
-			
-			
 
 			return result;
 		}
