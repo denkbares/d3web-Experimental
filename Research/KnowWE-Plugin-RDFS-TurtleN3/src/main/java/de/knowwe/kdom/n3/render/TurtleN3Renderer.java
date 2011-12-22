@@ -19,7 +19,14 @@ public class TurtleN3Renderer extends KnowWEDomRenderer<TurtleComplete> {
 				+ "\" class=\"turtle-instantedit-pre\">"));
 		string.append(KnowWEUtils.maskHTML("<div class=\"casetrain-instantedit\">"));
 
-		DelegateRenderer.getInstance().render(article, sec, user, string);
+		StringBuilder buffy = new StringBuilder();
+		DelegateRenderer.getInstance().render(article, sec, user, buffy);
+
+		String result = buffy.toString();
+		result = result.replaceAll("\\[", "~[");
+		result = result.replaceAll("\\]", "~]");
+		string.append(result);
+
 		string.append(KnowWEUtils.maskHTML("</div>"));
 		string.append(KnowWEUtils.maskHTML("</pre>"));
 
