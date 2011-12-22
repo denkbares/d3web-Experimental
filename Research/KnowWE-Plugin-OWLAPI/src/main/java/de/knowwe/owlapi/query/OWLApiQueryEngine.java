@@ -1,6 +1,7 @@
 package de.knowwe.owlapi.query;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -332,6 +333,27 @@ public class OWLApiQueryEngine {
 			for (OWLClass child : children) {
 				if (!child.equals(owlClass)) {
 					getInferredClassHierarchie(entities, child, owlClass);
+				}
+			}
+		}
+	}
+
+	public void getIndividuals(Set<OWLEntity> entities, OWLClass owlClass, OWLClass owlClassFather) {
+		Map<OWLEntity, Set<OWLEntity>> concepts = new HashMap<OWLEntity, Set<OWLEntity>>();
+		getInferredClassHierarchie(concepts, owlClass, owlClassFather);
+
+		for (OWLEntity owlEntity : concepts.keySet()) {
+			Set<OWLEntity> values = concepts.get(owlEntity);
+			for (OWLEntity value : values) {
+				NodeSet<OWLNamedIndividual> individualsNodeSet = reasoner.getInstances(
+						(OWLClass) value, true);
+
+				if (!individualsNodeSet.isEmpty()) {
+					Set<OWLNamedIndividual> individuals = individualsNodeSet.getFlattened();
+
+					for (OWLNamedIndividual i : individuals) {
+						entities.add(i);
+					}
 				}
 			}
 		}
