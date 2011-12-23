@@ -20,6 +20,7 @@ package de.knowwe.rdfs.testcase.kdom;
 
 import de.knowwe.core.compile.IncrementalMarker;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
@@ -47,6 +48,7 @@ public class RDFSTestCaseType extends DefaultMarkupType implements IncrementalMa
 		super(MARKUP);
 		this.setIgnorePackageCompile(true);
 		this.addSubtreeHandler(new RDFSTestCaseHandler());
+		this.setCustomRenderer(new DefaultMarkupRenderer<RDFSTestCaseType>());
 	}
 
 }
