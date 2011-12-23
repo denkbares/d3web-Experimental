@@ -18,15 +18,15 @@
  */
 package de.knowwe.rdfs.testcase.kdom;
 
-import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.rdfs.IRITermRef;
 
 /**
  * 
  * @author Sebastian Furth
  * @created 22.12.2011
  */
-public class ValueType extends AbstractType {
+public class ValueType extends IRITermRef {
 
 	private static final String PATTERN = ExpectedBindingType.SEPARATOR + "\\s*(.*)";
 

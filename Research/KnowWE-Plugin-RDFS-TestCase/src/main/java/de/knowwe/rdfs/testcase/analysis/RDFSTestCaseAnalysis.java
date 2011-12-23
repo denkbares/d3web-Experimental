@@ -107,7 +107,11 @@ public class RDFSTestCaseAnalysis {
 		catch (UnsupportedEncodingException e) {
 			value = URLDecoder.decode(value);
 		}
-		return Rdf2GoCore.getInstance().reduceNamespace(value);
+		value = Rdf2GoCore.getInstance().reduceNamespace(value);
+		if (value.startsWith("lns:")) {
+			return value.substring(4);
+		}
+		return value;
 	}
 
 }
