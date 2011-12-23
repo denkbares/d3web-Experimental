@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 import org.ontoware.rdf2go.model.node.Node;
 
 import de.knowwe.compile.object.ComplexDefinition;
-import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
@@ -76,10 +75,9 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 		}
 	}
 
-	class DefinitionTerm extends IncrementalTermDefinition<String> {
+	class DefinitionTerm extends AbstractIRITermDefinition {
 
 		public DefinitionTerm() {
-			super(String.class);
 			this.setSectionFinder(new RegexSectionFinderSingle(Pattern.compile(REGEX), 1));
 		}
 

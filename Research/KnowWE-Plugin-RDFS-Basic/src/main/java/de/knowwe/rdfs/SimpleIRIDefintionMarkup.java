@@ -21,7 +21,6 @@ package de.knowwe.rdfs;
 
 import java.util.regex.Pattern;
 
-import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.support.Editable;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.objects.KnowWETerm;
@@ -54,10 +53,9 @@ public class SimpleIRIDefintionMarkup extends AbstractType implements Editable {
 		}
 	}
 
-	class DefinitionTerm extends IncrementalTermDefinition<String> {
+	class DefinitionTerm extends AbstractIRITermDefinition {
 
 		public DefinitionTerm() {
-			super(String.class);
 			this.setSectionFinder(new AllTextFinderTrimmed());
 		}
 

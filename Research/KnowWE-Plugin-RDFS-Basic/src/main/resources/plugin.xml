@@ -204,4 +204,26 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
+	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="DescribeIndividualLinkToolProvider">
+		<parameter id="class" value="de.knowwe.rdfs.inspect.DescribeIndividualLinkToolProvider" />
+		<parameter id="name" value="DescribeIndividualLinkToolProvider" />
+		<parameter id="description"
+			value="Offers link to DescribeIndividual page" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="IRITermRef" />
+		<parameter id="scope" value="AbstractIRITermDefinition" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="DescribeIndividualTagHandler">
+		<parameter id="class" value="de.knowwe.rdfs.inspect.DescribeIndividualTagHandler" />
+		<parameter id="name" value="DescribeIndividualTagHandler" />
+		<parameter id="description" value="TagHandler DescribeIndividualTagHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
 </plugin>
