@@ -50,6 +50,8 @@ import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdfs.literal.TurtleObjectLiteral;
+import de.knowwe.rdfs.literal.TurtleObjectLiteralText;
 import de.knowwe.rdfs.rendering.PreEnvRenderer;
 import de.knowwe.rdfs.util.RDFSUtil;
 
@@ -75,7 +77,7 @@ public class TripleMarkup extends AbstractType implements
 					Pattern.DOTALL | Pattern.MULTILINE, 1));
 			this.addChildType(new SimpleTurtlePredicate());
 			this.addChildType(new SimpleTurtleSubject());
-			this.addChildType(new SimpleTurtleObject());
+			this.addChildType(new SimpleTurtleObjectSection());
 
 			this.setCustomRenderer(new RangeCheckRenderer());
 		}
@@ -90,8 +92,8 @@ public class TripleMarkup extends AbstractType implements
 				Section<SimpleTurtlePredicate> predicate = Sections.findSuccessor(triple,
 						SimpleTurtlePredicate.class);
 
-				Section<SimpleTurtleObject> object = Sections.findSuccessor(triple,
-						SimpleTurtleObject.class);
+				Section<SimpleTurtleObjectRef> object = Sections.findSuccessor(triple,
+						SimpleTurtleObjectRef.class);
 
 				Section<SimpleTurtleSubject> subject = Sections.findSuccessor(triple,
 						SimpleTurtleSubject.class);
@@ -106,7 +108,7 @@ public class TripleMarkup extends AbstractType implements
 				String rangeClassName = null;
 				boolean warningRange = false;
 				boolean warningDomain = false;
-				if (info != null
+				if (info != null && object != null
 						&& RDFSUtil.isTermCategory(predicate,
 								RDFSTermCategory.ObjectProperty)) {
 
@@ -225,15 +227,23 @@ public class TripleMarkup extends AbstractType implements
 
 	}
 
-	class SimpleTurtleObject extends IRITermRef {
-		public SimpleTurtleObject() {
+	class SimpleTurtleObjectSection extends AbstractType {
+		public SimpleTurtleObjectSection() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new RegexSectionFinder("::\\s(.*)", Pattern.DOTALL, 1));
 			c.addConstraint(SingleChildConstraint.getInstance());
 			this.setSectionFinder(c);
 
-		}
+			this.addChildType(new TurtleObjectLiteral());
+			this.addChildType(new SimpleTurtleObjectRef());
 
+		}
+	}
+
+	class SimpleTurtleObjectRef extends IRITermRef {
+		public SimpleTurtleObjectRef() {
+			this.setSectionFinder(new AllTextFinderTrimmed());
+		}
 	}
 
 	class TripleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<TripleMarkup> {
@@ -246,38 +256,36 @@ public class TripleMarkup extends AbstractType implements
 			Node predURI = null;
 			Node objURI = null;
 
+			Section<SimpleTurtleObjectSection> objectSec = Sections.findSuccessor(
+					section, SimpleTurtleObjectSection.class);
+			Section<TurtleObjectLiteralText> literalSec = Sections.findSuccessor(
+					objectSec, TurtleObjectLiteralText.class);
+
 			Sections.findSuccessorsOfType(section, IRITermRef.class, found);
 
-			if (found.size() == 3) {
+			if (found.size() >= 2) {
 				Section<IRITermRef> subject = found.get(0);
 				Section<IRITermRef> predicate = found.get(1);
-				Section<IRITermRef> object = found.get(2);
-
 				subURI = RDFSUtil.getURI(subject);
 				predURI = RDFSUtil.getURI(predicate);
-				objURI = RDFSUtil.getURI(object);
-			}
-			else {
-				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-				// "invalid term combination:" + found.size()));
-			}
-			if (subURI == null) {
-				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-				// "subject URI not found"));
-			}
-			if (predURI == null) {
-				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-				// "predicate URI not found"));
-			}
-			if (objURI == null) {
-				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-				// "object URI not found"));
+
+				if (found.size() == 3) {
+
+					Section<IRITermRef> object = found.get(2);
+					objURI = RDFSUtil.getURI(object);
+				}
+				else if (literalSec != null) {
+					objURI = Rdf2GoCore.getInstance().createLiteral(
+							literalSec.getOriginalText());
+				}
+
 			}
 
-			Rdf2GoCore.getInstance().addStatement(subURI.asResource(),
-					predURI.asURI(), objURI, section);
+			if (subURI != null && predURI != null && objURI != null) {
 
-			// return new ArrayList<KDOMReportMessage>(0);
+				Rdf2GoCore.getInstance().addStatement(subURI.asResource(),
+						predURI.asURI(), objURI, section);
+			}
 
 		}
 
