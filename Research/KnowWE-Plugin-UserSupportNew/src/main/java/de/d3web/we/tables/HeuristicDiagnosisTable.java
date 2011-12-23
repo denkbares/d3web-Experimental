@@ -41,13 +41,13 @@ import de.d3web.we.kdom.condition.KDOMConditionFactory;
 import de.d3web.we.kdom.xcl.list.ListSolutionType;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.compile.Priority;
+import de.knowwe.core.compile.packaging.PackageRenderUtils;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.report.Message;
 import de.knowwe.kdom.AnonymousTypeInvisible;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
 import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
@@ -93,10 +93,13 @@ public class HeuristicDiagnosisTable extends ITable
 				return null;
 
 			// TODO Right KnowledgeBase?
-			Section<HeuristicDiagnosisTableMarkup> mark = Sections.findAncestorOfExactType(
-					heuristicSec, HeuristicDiagnosisTableMarkup.class);
-			String packageName = DefaultMarkupType.getAnnotation(mark, "package");
-			KnowledgeBase kb = D3webUtils.getKB(heuristicSec.getWeb(), packageName + " - master");
+			//			Section<HeuristicDiagnosisTableMarkup> mark = Sections.findAncestorOfExactType(
+			//					heuristicSec, HeuristicDiagnosisTableMarkup.class);
+			//			String packageName = DefaultMarkupType.getAnnotation(mark, "package");
+			//			KnowledgeBase kb = D3webUtils.getKB(heuristicSec.getWeb(), packageName + " - master");
+			StringBuilder content = new StringBuilder();
+			KnowWEArticle compilingArticle = PackageRenderUtils.checkArticlesCompiling(heuristicSec.getArticle(), heuristicSec, content);
+			KnowledgeBase kb = D3webUtils.getKB(heuristicSec.getWeb(), compilingArticle.getTitle());
 
 			// First create solution if necessary
 			// Create Rules: 1. Create Solution if necessary

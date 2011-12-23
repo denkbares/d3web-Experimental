@@ -33,6 +33,7 @@ import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelation;
 import de.d3web.xcl.XCLRelationType;
 import de.knowwe.core.compile.Priority;
+import de.knowwe.core.compile.packaging.PackageRenderUtils;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
@@ -40,7 +41,6 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.report.Message;
 import de.knowwe.kdom.AnonymousTypeInvisible;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
 import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
@@ -86,10 +86,13 @@ public class CausalDiagnosisScore extends AbstractType {
 			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty()) return null;
 
 			// TODO Right KnowledgeBase?
-			Section<CausalDiagnosisScoreMarkup> mark = Sections.findAncestorOfExactType(
-					scoreSec, CausalDiagnosisScoreMarkup.class);
-			String packageName = DefaultMarkupType.getAnnotation(mark, "package");
-			KnowledgeBase kb = D3webUtils.getKB(scoreSec.getWeb(), packageName + " - master");
+			//			Section<CausalDiagnosisScoreMarkup> mark = Sections.findAncestorOfExactType(
+			//					scoreSec, CausalDiagnosisScoreMarkup.class);
+			//			String packageName = DefaultMarkupType.getAnnotation(mark, "package");
+			//			KnowledgeBase kb = D3webUtils.getKB(scoreSec.getWeb(), packageName + " - master");
+			StringBuilder content = new StringBuilder();
+			KnowWEArticle compilingArticle = PackageRenderUtils.checkArticlesCompiling(scoreSec.getArticle(), scoreSec, content);
+			KnowledgeBase kb = D3webUtils.getKB(scoreSec.getWeb(), compilingArticle.getTitle());
 
 			// Create all Conditions and Weights: 1st and 2end column
 			// TODO First Cell is no Question: Removed it! But what if empty?

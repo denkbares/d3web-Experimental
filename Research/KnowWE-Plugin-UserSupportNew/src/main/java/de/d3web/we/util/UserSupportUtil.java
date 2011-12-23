@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import de.knowwe.core.compile.TerminologyHandler;
+import de.knowwe.core.compile.packaging.PackageRenderUtils;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.parsing.Section;
@@ -36,10 +37,8 @@ import de.knowwe.core.utils.KnowWEUtils;
 public class UserSupportUtil {
 
 	/**
-	 * This method collects all TermDefinitions in the whole system.
 	 * 
-	 * TODO There should be a method to collect only the TermDefinitions used by a given Section.
-	 * 		But in fact this doesnt work yet. So this is better than nothing!
+	 * This method collects all TermDefinitions in the whole system.
 	 * 
 	 * @created 15.12.2011
 	 * @param article
@@ -61,4 +60,27 @@ public class UserSupportUtil {
 
 		return toReturn;
 	}
+
+	/**
+	 * 
+	 * Collect only the TermDefinitions used by a given Section
+	 * 
+	 * @created 23.12.2011
+	 * @param article
+	 * @param markup
+	 * @return
+	 */
+	public static Collection<Section<? extends TermDefinition>> getTermReferencesCompilingArticle(KnowWEArticle article, Section<?> markup)
+	{
+
+		StringBuilder content = new StringBuilder();
+		KnowWEArticle compilingArticle = PackageRenderUtils.checkArticlesCompiling(article, markup, content);
+
+		TerminologyHandler tH =
+				KnowWEUtils.getTerminologyHandler(compilingArticle.getWeb());
+		Collection<Section<? extends TermDefinition>> globalTerms = tH.getAllLocalTermDefs(compilingArticle.getTitle());
+
+		return globalTerms;
+	}
+
 }

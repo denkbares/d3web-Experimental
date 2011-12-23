@@ -68,8 +68,10 @@ public class GetSuggestionsAction extends AbstractAction {
 			return "[]";
 		}
 
+		//		Collection<Section<? extends TermDefinition>> localTermMatches =
+		//				UserSupportUtil.getTermReferences(markup.getArticle());
 		Collection<Section<? extends TermDefinition>> localTermMatches =
-				UserSupportUtil.getTermReferences(markup.getArticle());
+				UserSupportUtil.getTermReferencesCompilingArticle(markup.getArticle(), markup);
 
 		List<Suggestion> suggestions =
 				DialogComponent.getInstance().

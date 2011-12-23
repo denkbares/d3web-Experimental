@@ -39,7 +39,10 @@ public class ApproximateCorrectionProviderImpl implements ApproximateCorrectionP
 	@Override
 	public List<Suggestion> getSuggestions(KnowWEArticle article, Section<?> section) {
 
-		Collection<Section<? extends TermDefinition>> localTermMatches = UserSupportUtil.getTermReferences(article);
+		//		Collection<Section<? extends TermDefinition>> localTermMatches =
+		//				UserSupportUtil.getTermReferences(markup.getArticle());
+		Collection<Section<? extends TermDefinition>> localTermMatches =
+				UserSupportUtil.getTermReferencesCompilingArticle(section.getArticle(), section);
 		String toMatch = section.getText().trim();
 
 		List<Suggestion> suggestions =

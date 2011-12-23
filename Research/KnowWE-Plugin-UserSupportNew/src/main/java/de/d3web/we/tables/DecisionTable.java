@@ -37,13 +37,13 @@ import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.we.kdom.xcl.list.ListSolutionType;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.compile.Priority;
+import de.knowwe.core.compile.packaging.PackageRenderUtils;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.report.Message;
 import de.knowwe.kdom.AnonymousTypeInvisible;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
 import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
 
@@ -87,29 +87,44 @@ public class DecisionTable extends ITable {
 				return null;
 
 			// TODO Right KnowledgeBase?
-			Section<DecisionTableMarkup> mark = Sections.findAncestorOfExactType(
-					decisionSec, DecisionTableMarkup.class);
-			String packageName = DefaultMarkupType.getAnnotation(mark, "package");
-			KnowledgeBase kb = D3webUtils.getKB(decisionSec.getWeb(), packageName + " - master");
+			//			Section<DecisionTableMarkup> mark = Sections.findAncestorOfExactType(
+			//					decisionSec, DecisionTableMarkup.class);
+			//			String packageName = DefaultMarkupType.getAnnotation(mark, "package");
+			//			KnowledgeBase kb = D3webUtils.getKB(decisionSec.getWeb(), packageName + " - master");
+			// get the article compiling this cell
+			StringBuilder content = new StringBuilder();
+			KnowWEArticle compilingArticle = PackageRenderUtils.checkArticlesCompiling(decisionSec.getArticle(), decisionSec, content);
+			KnowledgeBase kb = D3webUtils.getKB(decisionSec.getWeb(), compilingArticle.getTitle());
 
-			// Create all Yes/No Questions
+			// Create all Questions
 			// TODO First Cell is no Question: Removed it! But what if empty?
 			List<Section<TableCell>> firstColumn = TableUtils.getColumnCells(
 					0, Sections.findChildOfType(decisionSec, InnerTable.class));
 
-			LinkedList<Question> questionList = new LinkedList<Question>();
+			//			LinkedList<Question> questionList = new LinkedList<Question>();
+			//			for (Section<TableCell> cell : firstColumn)
+			//			{
+			//				String questionText = cell.getText().trim();
+			//				// Markup now has a empty line to seperate the Conditions from the diagnoses
+			//				if (questionText.equals("")) continue;
+			//				Question q = kb.getManager().searchQuestion(questionText);
+			//				if (q == null)
+			//				{
+			//					QuestionYN question = new QuestionYN(kb, questionText);
+			//					questionList.add(question);
+			//				}
+			//				else
+			//				{
+			//					questionList.add(q);
+			//				}
+			//			}
+			LinkedList<String> questionList = new LinkedList<String>();
 			for (Section<TableCell> cell : firstColumn)
 			{
 				String questionText = cell.getText().trim();
+				// Markup now has a empty line to seperate the Conditions from the diagnoses
 				if (questionText.equals("")) continue;
-				if (kb.getManager().searchQuestion(questionText) == null)
-				{
-					QuestionYN question = new QuestionYN(kb, questionText);
-					questionList.add(question);
-				} else
-				{
-					questionList.add(kb.getManager().searchQuestion(questionText));
-				}
+				questionList.add(questionText);
 			}
 
 			// Collect cells for columns
@@ -150,7 +165,14 @@ public class DecisionTable extends ITable {
 				List<Condition> conditions = new ArrayList<Condition>();
 				for (int j = 0; j < choices.size(); j++)
 				{
-					CondEqual cond = new CondEqual(questionList.get(j), choices.get(j));
+					// TODO Condition can be any condition: dependent on choice-value
+					Question q = kb.getManager().searchQuestion(questionList.get(j));
+					if (q == null)
+					{
+						q = new QuestionYN(kb, questionList.get(j));
+					}
+
+					CondEqual cond = new CondEqual(q, choices.get(j));
 					conditions.add(cond);
 				}
 
@@ -184,7 +206,15 @@ public class DecisionTable extends ITable {
 						continue;
 					}
 					action = new ActionSetValue();
-					action.setQuestion(questionList.get(b++));
+
+					// TODO Condition can be any condition: dependent on choice-value
+					Question q = kb.getManager().searchQuestion(questionList.get(b));
+					if (q == null)
+					{
+						q = new QuestionYN(kb, questionList.get(b));
+					}
+					b++;
+					action.setQuestion(q);
 					action.setValue(new ChoiceValue(cell.getText().trim()));
 					actions.add(action);
 				}
