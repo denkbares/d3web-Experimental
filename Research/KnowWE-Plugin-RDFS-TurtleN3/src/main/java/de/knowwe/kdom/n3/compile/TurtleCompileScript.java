@@ -33,7 +33,6 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.n3.TurtleMarkupN3;
 import de.knowwe.kdom.n3.TurtleMarkupN3Content;
 import de.knowwe.kdom.n3.TurtleObjectBlankNode;
-import de.knowwe.kdom.n3.TurtleObjectLiteralText;
 import de.knowwe.kdom.n3.TurtleObjectSection;
 import de.knowwe.kdom.n3.TurtleObjectTerm;
 import de.knowwe.kdom.n3.TurtlePredicate;
@@ -41,6 +40,7 @@ import de.knowwe.kdom.n3.TurtleSubject;
 import de.knowwe.rdf2go.BlankNodeImpl;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.AbstractKnowledgeUnitCompileScriptRDFS;
+import de.knowwe.rdfs.literal.TurtleObjectLiteralText;
 import de.knowwe.rdfs.util.RDFSUtil;
 
 public class TurtleCompileScript extends AbstractKnowledgeUnitCompileScriptRDFS<TurtleMarkupN3> {

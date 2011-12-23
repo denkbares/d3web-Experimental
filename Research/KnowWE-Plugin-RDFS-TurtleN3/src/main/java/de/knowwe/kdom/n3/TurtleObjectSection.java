@@ -24,6 +24,7 @@ package de.knowwe.kdom.n3;
 
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquoted;
+import de.knowwe.rdfs.literal.TurtleObjectLiteral;
 
 public class TurtleObjectSection extends AbstractType {
 
