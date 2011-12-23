@@ -53,11 +53,13 @@ import de.d3web.we.tables.TableUtils;
 import de.knowwe.core.KnowWEArticleManager;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.ActionContext;
+import de.knowwe.core.compile.packaging.PackageRenderUtils;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 
 /**
@@ -65,7 +67,8 @@ import de.knowwe.core.report.Messages;
  * @author Johannes Dienst
  * @created 17.10.2011
  */
-public class PoiUtils {
+public class PoiUtils
+{
 
 	public static CellStyle getErrorCellStyle(Workbook wb)
 	{
@@ -95,7 +98,8 @@ public class PoiUtils {
 		return cs;
 	}
 
-	public static Workbook createBlankHSSFWorkbook() throws IOException {
+	public static Workbook createBlankHSSFWorkbook() throws IOException
+	{
 
 		// create a new file
 		FileOutputStream out = new FileOutputStream("workbook.xls");
@@ -230,8 +234,8 @@ public class PoiUtils {
 	 * @return the table-markup
 	 * @throws IOException
 	 */
-	public static String importTableFromFile(File in, String tableId,
-			String article, ActionContext context) throws IOException {
+	public static String importTableFromFile(File in, String tableId, String article, ActionContext context) throws IOException
+	{
 		FileInputStream input = new FileInputStream(in);
 		Workbook wb = new HSSFWorkbook(input);
 
@@ -246,11 +250,13 @@ public class PoiUtils {
 		// So it is easier to build the new table
 		List<String[]> rowsList = new ArrayList<String[]>();
 		Row row = null;
-		for ( Iterator<Row> it = sheet.rowIterator(); it.hasNext(); ) {
+		for ( Iterator<Row> it = sheet.rowIterator(); it.hasNext(); )
+		{
 			row = it.next();
 			String[] cells = new String[row.getPhysicalNumberOfCells()];
 
-			for ( int i = 0; i < row.getPhysicalNumberOfCells(); i++) {
+			for ( int i = 0; i < row.getPhysicalNumberOfCells(); i++)
+			{
 				cells[i] = row.getCell(i).getStringCellValue();
 			}
 
@@ -262,8 +268,10 @@ public class PoiUtils {
 
 		// Rebuild the Table with the arrays
 		StringBuilder buildi = new StringBuilder();
-		for ( String[] arr : rowsList ) {
-			for (String c : arr) {
+		for ( String[] arr : rowsList )
+		{
+			for (String c : arr)
+			{
 				buildi.append(c);
 				buildi.append(TableUtils.generateFillString(c, maxCellLength));
 				buildi.append("|");
@@ -278,8 +286,10 @@ public class PoiUtils {
 		List<Section<ITable>> itables = Sections.findSuccessorsOfType(art.getSection(), ITable.class);
 		Section<ITable> searchedOne = null;
 
-		for (Section<ITable> table : itables) {
-			if (table.getID().equals(tableId)) {
+		for (Section<ITable> table : itables)
+		{
+			if (table.getID().equals(tableId))
+			{
 				Map<String, String> nodeMap = new HashMap<String, String>();
 				nodeMap.put(tableId, buildi.toString());
 
@@ -302,7 +312,8 @@ public class PoiUtils {
 		// write header
 		Section<TableHeaderLine> headerLine = Sections.findSuccessor(diagnosisTable, TableHeaderLine.class);
 		int i = 0;
-		if (headerLine != null) {
+		if (headerLine != null)
+		{
 			row = sheet.createRow(i++);
 			PoiUtils.writeTableHeaderLine(headerLine, row, out);
 		}
@@ -312,7 +323,8 @@ public class PoiUtils {
 				Sections.findChildrenOfType(diagnosisTable, TableLine.class);
 		Section<TableLine> line = null;
 
-		for (int j = 0;j < lines.size();j++) {
+		for (int j = 0;j < lines.size();j++)
+		{
 			row = sheet.createRow(i++);
 			line = lines.get(j);
 			PoiUtils.writeTableLine(line, row, out, wb);
@@ -334,7 +346,8 @@ public class PoiUtils {
 		// write header
 		Section<TableHeaderLine> headerLine = Sections.findSuccessor(heuristicTable, TableHeaderLine.class);
 		int i = 0;
-		if (headerLine != null) {
+		if (headerLine != null)
+		{
 			row = sheet.createRow(i++);
 			PoiUtils.writeTableHeaderLine(headerLine, row, out);
 		}
@@ -343,7 +356,8 @@ public class PoiUtils {
 				Sections.findChildrenOfType(heuristicTable, TableLine.class);
 		Section<TableLine> line = null;
 
-		for (int j = 0;j < lines.size();j++) {
+		for (int j = 0;j < lines.size();j++)
+		{
 			row = sheet.createRow(i++);
 			line = lines.get(j);
 			PoiUtils.writeTableLine(line, row, out, wb);
@@ -365,7 +379,8 @@ public class PoiUtils {
 		// write header
 		Section<TableHeaderLine> headerLine = Sections.findSuccessor(decisionTable, TableHeaderLine.class);
 		int i = 0;
-		if (headerLine != null) {
+		if (headerLine != null)
+		{
 			row = sheet.createRow(i++);
 			PoiUtils.writeTableHeaderLine(headerLine, row, out);
 		}
@@ -445,8 +460,16 @@ public class PoiUtils {
 			cell = cells.get(i);
 			c = row.createCell(i);
 
+			Section<DefaultMarkupType> markup = Sections.findAncestorOfType(cell, DefaultMarkupType.class);
+
+			// get the article compiling this cell
+			StringBuilder content = new StringBuilder();
+			KnowWEArticle compilingArticle = PackageRenderUtils.checkArticlesCompiling(cell.getArticle(), cell, content);
+
+			Collection<Message> allmsgs = Messages.getMessagesFromSubtree(compilingArticle, cell);
+
 			// Render warnings/errors/notices
-			CellStyle cs = PoiUtils.colorTableCell(Messages.getMessages(cell.getArticle(), cell), wb);
+			CellStyle cs = PoiUtils.colorTableCell(allmsgs, wb);
 			//			cs = PoiUtils.getNoticeCellStyle(wb);
 			if (cs != null) c.setCellStyle(cs);
 
