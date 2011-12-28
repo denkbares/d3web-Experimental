@@ -710,13 +710,13 @@ function logTooltipVisited(starttime, endtime, widget){
             
             
     if(parentid.indexOf("text-q_")!=-1){
-        parent = getTerminologyObjectName(widget, "q");
+        parent = getTerminologyId(widget, "q");
         prefix = "Q"; 
     } else if (parentid.indexOf("text-a_")!=-1){
-        parent = getTerminologyObjectName(widget, "a");
+        parent = getTerminologyId(widget, "a");
         prefix = "A";
 } else if (parentid.indexOf("t-qc_")!=-1){
-        parent = getTerminologyObjectName(widget, "qc");
+        parent = getTerminologyId(widget, "qc");
         prefix = "QC"
 }
     
