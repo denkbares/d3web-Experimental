@@ -217,15 +217,15 @@ public class D3webDialog extends HttpServlet {
 		d3webParser = new D3webXMLParser(source);
 		d3wcon = D3webConnector.getInstance();
 		d3wcon.setD3webParser(d3webParser);
-                System.out.println("PREF: "+ d3webParser.getUserPrefix());
-                System.out.println("PREFCON: "+ d3wcon.getUserprefix());
-                
+		// System.out.println("PREF: " + d3webParser.getUserPrefix());
+		// System.out.println("PREFCON: " + d3wcon.getUserprefix());
+
 		// only invoke parser, if XML hasn't been parsed before
 		// if it has, a knowledge base already exists
 		if (d3wcon.getKb() == null
 				|| !source.equals(sourceSave)
 				|| !d3wcon.getUserprefix().equals(d3webParser.getUserPrefix())) {
-                    
+
 			d3wcon.setKb(d3webParser.getKnowledgeBase());
 			d3wcon.setKbName(d3webParser.getKnowledgeBaseName());
 			// d3wcon.setDialogStrat(d3webParser.getStrategy());
@@ -241,7 +241,7 @@ public class D3webDialog extends HttpServlet {
 			d3wcon.setLoginMode(d3webParser.getLogin());
 			sourceSave = source;
 			if (d3webParser.getLogging().contains("ON")) {
-				d3wcon.activateLogging();
+				d3wcon.setLogging(true);
 			}
 			if (!d3webParser.getLanguage().equals("")) {
 				d3wcon.setLanguage(d3webParser.getLanguage());
@@ -330,11 +330,7 @@ public class D3webDialog extends HttpServlet {
 			return;
 		}
 		else if (action.equalsIgnoreCase("reset")) {
-			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
-			httpSession.setAttribute(D3WEB_SESSION, d3webSession);
-			httpSession.setAttribute("lastLoaded", "");
-
-			GlobalSettings.getInstance().setInitLogged(false);
+			resetD3webSession(httpSession);
 			return;
 		}
 		else if (action.equalsIgnoreCase("resetNewUser")) {
@@ -401,7 +397,7 @@ public class D3webDialog extends HttpServlet {
 				String sid =
 						((Session) httpSession.getAttribute(D3WEB_SESSION)).getId();
 				logfilename = formatted + "_" + sid + ".txt";
-                                System.out.println("LOGNAME: " + logfilename);
+				System.out.println("LOGNAME: " + logfilename);
 
 				d3wcon.getLogger().writeJSONToFile(logfilename);
 
@@ -451,8 +447,9 @@ public class D3webDialog extends HttpServlet {
 				logger.logClickedObjects(
 						"SAVE", FORMATTER.format(now), "SAVE");
 			}
-
-			d3wcon.getLogger().writeJSONToFile(logfilename);
+			if (d3wcon.isLogging()) {
+				d3wcon.getLogger().writeJSONToFile(logfilename);
+			}
 
 		}
 		else if (action.equalsIgnoreCase("logLanguageWidget")) {
@@ -471,7 +468,7 @@ public class D3webDialog extends HttpServlet {
 
 			String prefix = request.getParameter("prefix");
 			String ttwidget = request.getParameter("widget");
-                        ttwidget = ttwidget.replace("+", " ");
+			ttwidget = ttwidget.replace("+", " ");
 			String timestring = request.getParameter("timestring");
 
 			JSONLogger logger = d3wcon.getLogger();
@@ -547,10 +544,12 @@ public class D3webDialog extends HttpServlet {
 		for (int i = 0; i < questions.size(); i++) {
 			setValue(questions.get(i), values.get(i), d3webSession);
 
-			// log all changed widgets/items
-			d3wcon.getLogger().logClickedObjects(
-					"q_" + questions.get(i), FORMATTER.format(now), values.get(i));
-			d3wcon.getLogger().writeJSONToFile(logfilename);
+			if (d3wcon.isLogging()) {
+				// log all changed widgets/items
+				d3wcon.getLogger().logClickedObjects(
+						"q_" + questions.get(i), FORMATTER.format(now), values.get(i));
+				d3wcon.getLogger().writeJSONToFile(logfilename);
+			}
 		}
 
 		resetAbandonedPaths(d3webSession);
@@ -939,6 +938,14 @@ public class D3webDialog extends HttpServlet {
 		return false; // trust no one per default
 	}
 
+	protected void resetD3webSession(HttpSession httpSession) {
+		Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
+		httpSession.setAttribute(D3WEB_SESSION, d3webSession);
+		httpSession.setAttribute("lastLoaded", "");
+
+		GlobalSettings.getInstance().setInitLogged(false);
+	}
+
 	/**
 	 * Basic servlet method for displaying the dialog.
 	 * 
@@ -974,7 +981,8 @@ public class D3webDialog extends HttpServlet {
 		Collection<Question> resetQuestions = new LinkedList<Question>();
 		Set<QASet> initQuestions = new HashSet<QASet>(d3wcon.getKb().getInitQuestions());
 		for (Question question : bb.getAnsweredQuestions()) {
-			if (!isActive(question, bb, initQuestions)) {
+			if (!isActive(question, bb, initQuestions)
+					&& !question.getName().equals(d3webParser.getRequired())) {
 				Fact lastFact = bb.getValueFact(question);
 				if (lastFact != null
 						&& lastFact.getPSMethod() == PSMethodUserSelected.getInstance()) {
@@ -1102,7 +1110,6 @@ public class D3webDialog extends HttpServlet {
 			return;
 		}
 
-		Fact lastFact = null;
 		Blackboard blackboard = sess.getBlackboard();
 		Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(termObID);
 

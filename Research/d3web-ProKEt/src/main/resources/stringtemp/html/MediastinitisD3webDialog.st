@@ -48,7 +48,7 @@ $endif$
 	<!-- actual content //-->
 	<div id="content">
 		<div class="dialog">
-			 $TitleTooltip()$$text$
+			$text$
 			
 			<div class="dialog-content">
 				<form autocomplete="off">

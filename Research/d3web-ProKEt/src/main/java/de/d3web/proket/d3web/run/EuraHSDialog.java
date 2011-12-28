@@ -19,17 +19,29 @@
  */
 package de.d3web.proket.d3web.run;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.session.Session;
+import de.d3web.core.session.blackboard.Fact;
+import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.output.render.EuraHSDefaultRootD3webRenderer;
 import de.d3web.proket.output.container.ContainerCollection;
+import de.d3web.proket.utils.GlobalSettings;
 
 /**
  * Servlet for creating and using dialogs with d3web binding. Binding is more of
@@ -144,4 +156,69 @@ public class EuraHSDialog extends D3webDialog {
 		writer.append("newUser");
 	}
 
+	@Override
+	protected void resetD3webSession(HttpSession httpSession) {
+		super.resetD3webSession(httpSession);
+		Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
+		String definingObject = D3webConnector.getInstance().getD3webParser().getRequired();
+		Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(
+				definingObject);
+		Fact fact = d3webSess.getBlackboard().getValueFact(to);
+		if (to != null && fact == null) {
+			setValue(definingObject, generateCaseNumber(definingObject), d3webSess);
+		}
+	}
+
+	private synchronized String generateCaseNumber(String persistenceFileName) {
+		String fileName = GlobalSettings.getInstance().getCaseFolder() + File.separator + ".."
+				+ File.separator + persistenceFileName + ".txt";
+		String persistence = readTxtFile(fileName);
+		int numberOfCases = 0;
+		try {
+			numberOfCases = Integer.parseInt(persistence);
+		}
+		catch (NumberFormatException ne) {
+		}
+		numberOfCases++;
+		writeTxtFile(fileName, String.valueOf(numberOfCases));
+		String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		return date + "-" + numberOfCases;
+	}
+
+	private static String readTxtFile(String fileName) {
+		StringBuffer inContent = new StringBuffer();
+		File file = new File(fileName);
+		if (file.exists()) {
+			try {
+				BufferedReader bufferedReader = new BufferedReader(
+						new InputStreamReader(new FileInputStream(file)));
+				int char1 = bufferedReader.read();
+				while (char1 != -1) {
+					inContent.append((char) char1);
+					char1 = bufferedReader.read();
+				}
+				bufferedReader.close();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return inContent.toString();
+	}
+
+	private static void writeTxtFile(String fileName, String content) {
+		try {
+			File file = new File(fileName);
+			if (!file.getParentFile().exists()) {
+				file.getParentFile().mkdirs();
+			}
+			FileWriter fstream = new FileWriter(file);
+			BufferedWriter out = new BufferedWriter(fstream);
+			out.write(content);
+			out.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

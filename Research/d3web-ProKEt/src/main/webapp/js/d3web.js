@@ -228,7 +228,9 @@ $(function() {
 	
     var browser = retrieveBrowserVal();    
     var user = retrieveUserVal();
-    d3web_ue_logBrowserAndUser(browser, user);
+    if (logging) {
+    	d3web_ue_logBrowserAndUser(browser, user);
+    }
     // 
     // 
     // move the content below the header
@@ -1034,19 +1036,20 @@ function d3web_ue_logBrowserAndUser(browser, user){
 // log clicks on widgets that do NOT set values in d3web, e.g. info button,
 // reset, save case etc
 function logWidgetClicked(el){
-    
-    var link = $.query.set("action", "logWidget").set("widget", el.attr("id")).toString();
-    link = window.location.href.replace(window.location.search, "") + link;
-
-    $.ajax({
-        type : "GET",
-        // async : false,
-        cache : false, // needed for IE, call is not made otherwise
-        url : link,
-        success : function() {
-        // no action needed
-        }
-    });
+    if (logging) {
+	    var link = $.query.set("action", "logWidget").set("widget", el.attr("id")).toString();
+	    link = window.location.href.replace(window.location.search, "") + link;
+	
+	    $.ajax({
+	        type : "GET",
+	        // async : false,
+	        cache : false, // needed for IE, call is not made otherwise
+	        url : link,
+	        success : function() {
+	        // no action needed
+	        }
+	    });
+    }
 }
 
 function logLanguageWidgetClicked(el){

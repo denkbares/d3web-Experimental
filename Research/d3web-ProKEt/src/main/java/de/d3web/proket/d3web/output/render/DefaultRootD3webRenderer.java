@@ -55,11 +55,13 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 			Session d3webSession, HttpSession http) {
 
 		// get the d3web base template according to dialog type
+		String userprefix = D3webConnector.getInstance().getUserprefix();
 		StringTemplate st = TemplateUtils.getStringTemplate(
-				D3webConnector.getInstance().getUserprefix() + "D3webDialog",
+				userprefix + "D3webDialog",
 				"html");
 		/* fill some basic attributes */
 		st.setAttribute("header", D3webConnector.getInstance().getHeader());
+		st.setAttribute("title", userprefix + "-Dialog");
 
 		// load case list dependent from logged in user, e.g. MEDIASTINITIS
 		String opts = renderUserCaseList((String) http.getAttribute("user"));
@@ -89,13 +91,13 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		LoginMode loginMode = D3webConnector.getInstance().getD3webParser().getLogin();
 		cc.js.setLoginMode(loginMode);
 		if (loginMode == LoginMode.usrdat) {
-                    st.setAttribute("login", "true");
-                }
-                
-                // if logo is provided by KB
-                if(D3webUtils.isImageProvided("logo")){
-                    st.setAttribute("logo", true);
-                }
+			st.setAttribute("login", "true");
+		}
+
+		// if logo is provided by KB
+		if (D3webUtils.isImageProvided("logo")) {
+			st.setAttribute("logo", true);
+		}
 
 		// handle Css
 		handleCss(cc);
@@ -160,7 +162,14 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 						ProKEtProperties.HEADER_TEXT);
 				if (specificHeaderText != null) valueString = specificHeaderText;
 			}
-			if (!first) infoStringBuilder.append(", ");
+			if (!first) {
+				infoStringBuilder.append(", ");
+				String lb = "<br/>";
+				int lastLb = infoStringBuilder.indexOf(lb);
+				if (infoStringBuilder.length() - lastLb > 25) {
+					infoStringBuilder.append(lb);
+				}
+			}
 			infoStringBuilder.append(questionString + ": " + valueString);
 			first = false;
 		}
@@ -209,9 +218,9 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 	@Override
 	public void defineAndAddJS(ContainerCollection cc) {
 		cc.js.enableD3Web();
-                if(D3webConnector.getInstance().loggingActive()){
-                    cc.js.enableClickLogging();
-                }
+		if (D3webConnector.getInstance().isLogging()) {
+			cc.js.enableClickLogging();
+		}
 		cc.js.add("$(function() {init_all();});", 1);
 		cc.js.add("function init_all() {", 1);
 		// cc.js.add("building = true;", 2);
