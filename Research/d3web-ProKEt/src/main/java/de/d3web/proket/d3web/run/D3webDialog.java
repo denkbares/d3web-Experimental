@@ -279,10 +279,7 @@ public class D3webDialog extends HttpServlet {
 		 * specified dialog strategy
 		 */
 		if (httpSession.getAttribute(D3WEB_SESSION) == null) {
-			// create d3web session and store in http session
-			Session d3webSession = D3webUtils.createSession(d3wcon.getKb(),
-					d3wcon.getDialogStrat());
-			httpSession.setAttribute(D3WEB_SESSION, d3webSession);
+			resetD3webSession(httpSession);
 		}
 
 		// in case nothing other is provided, "show" is the default action
@@ -942,8 +939,9 @@ public class D3webDialog extends HttpServlet {
 		Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
 		httpSession.setAttribute(D3WEB_SESSION, d3webSession);
 		httpSession.setAttribute("lastLoaded", "");
-
-		GlobalSettings.getInstance().setInitLogged(false);
+		if (d3wcon.isLogging()) {
+			GlobalSettings.getInstance().setInitLogged(false);
+		}
 	}
 
 	/**
