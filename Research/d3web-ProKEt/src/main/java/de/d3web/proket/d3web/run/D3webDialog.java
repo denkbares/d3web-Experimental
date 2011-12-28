@@ -217,12 +217,15 @@ public class D3webDialog extends HttpServlet {
 		d3webParser = new D3webXMLParser(source);
 		d3wcon = D3webConnector.getInstance();
 		d3wcon.setD3webParser(d3webParser);
-
+                System.out.println("PREF: "+ d3webParser.getUserPrefix());
+                System.out.println("PREFCON: "+ d3wcon.getUserprefix());
+                
 		// only invoke parser, if XML hasn't been parsed before
 		// if it has, a knowledge base already exists
 		if (d3wcon.getKb() == null
 				|| !source.equals(sourceSave)
 				|| !d3wcon.getUserprefix().equals(d3webParser.getUserPrefix())) {
+                    
 			d3wcon.setKb(d3webParser.getKnowledgeBase());
 			d3wcon.setKbName(d3webParser.getKnowledgeBaseName());
 			// d3wcon.setDialogStrat(d3webParser.getStrategy());
@@ -398,6 +401,7 @@ public class D3webDialog extends HttpServlet {
 				String sid =
 						((Session) httpSession.getAttribute(D3WEB_SESSION)).getId();
 				logfilename = formatted + "_" + sid + ".txt";
+                                System.out.println("LOGNAME: " + logfilename);
 
 				d3wcon.getLogger().writeJSONToFile(logfilename);
 
@@ -467,7 +471,7 @@ public class D3webDialog extends HttpServlet {
 
 			String prefix = request.getParameter("prefix");
 			String ttwidget = request.getParameter("widget");
-			ttwidget = ttwidget.replace("+", " ");
+                        ttwidget = ttwidget.replace("+", " ");
 			String timestring = request.getParameter("timestring");
 
 			JSONLogger logger = d3wcon.getLogger();
