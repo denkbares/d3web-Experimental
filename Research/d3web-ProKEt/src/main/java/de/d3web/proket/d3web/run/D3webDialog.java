@@ -199,13 +199,20 @@ public class D3webDialog extends HttpServlet {
 
 		HttpSession httpSession = request.getSession(true);
 
-		// try to get the src parameter, which defines the specification xml
-		// with special properties for this dialog/knowledge base
-		// if none available, default.xml is set
+		// try to get the src parameter from a specialized, inherited
+                // dialog servlet that overrides getSource() or from servlet
+                // request parameter (when calling via ControlCenter);
+		// if none available, Default.xml is set
 		String source = getSource();
-		if (request.getParameter("src") != null) {
+                
+                if(source.equals("")|| source==null){
+                    
+                    if (request.getParameter("src") != null) {
 			source = request.getParameter("src");
-		}
+                    } else {
+                        source = "Default.xml";
+                    }
+                }
 		if (!source.endsWith(".xml")) {
 			source = source + ".xml";
 		}
@@ -217,8 +224,6 @@ public class D3webDialog extends HttpServlet {
 		d3webParser = new D3webXMLParser(source);
 		d3wcon = D3webConnector.getInstance();
 		d3wcon.setD3webParser(d3webParser);
-		// System.out.println("PREF: " + d3webParser.getUserPrefix());
-		// System.out.println("PREFCON: " + d3wcon.getUserprefix());
 
 		// only invoke parser, if XML hasn't been parsed before
 		// if it has, a knowledge base already exists
@@ -760,8 +765,7 @@ public class D3webDialog extends HttpServlet {
 	}
 
 	protected String getSource() {
-		String source = "default.xml";
-		return source;
+		return "";
 	}
 
 	private Set<TerminologyObject> getUnknownQuestions(Session sess) {

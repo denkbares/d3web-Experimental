@@ -114,6 +114,11 @@ DONE - PW vergessen: mail Versand automatisiert
 
 REFACTOR
 --------
+- Click in Textfiels loga automatically with null --> desired?!
+- Reload / refresh --> new case?!
+- New case --> new logfile is written, but we need new logger, too
+- When switching dialogs, content is not loaded, needs a new-case click
+
 - URGENTLY: js file(s)
 - Setting of default -Data folder
 - Dateinamen für Logfiles? Currently: Date(yyMMdd)_Session.txt

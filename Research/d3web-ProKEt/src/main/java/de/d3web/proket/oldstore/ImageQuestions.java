@@ -17,7 +17,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.d3web.proket.d3web.run;
+package de.d3web.proket.oldstore;
 
 import java.awt.Graphics2D;
 import java.awt.Image;

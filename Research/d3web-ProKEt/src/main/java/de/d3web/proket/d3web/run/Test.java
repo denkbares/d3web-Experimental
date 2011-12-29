@@ -26,12 +26,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.session.Session;
-import de.d3web.core.session.blackboard.Fact;
-import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
-import de.d3web.proket.d3web.output.render.MediastinitisDefaultRootD3webRenderer;
+import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
 import de.d3web.proket.output.container.ContainerCollection;
 
 /**
@@ -53,13 +50,13 @@ import de.d3web.proket.output.container.ContainerCollection;
  * @date 14.01.2011; Update: 28/01/2011
  * 
  */
-public class MediastinitisDialog extends D3webDialog {
+public class Test extends D3webDialog {
 
 	private static final long serialVersionUID = 4798072917307992413L;
 
 	@Override
 	protected String getSource() {
-		String source = "Mediastinitis";
+		String source = "TestDialog";
 		return source;
 	}
 
@@ -80,30 +77,13 @@ public class MediastinitisDialog extends D3webDialog {
 		PrintWriter writer = response.getWriter();
 
 		// get the root renderer --> call getRenderer with null
-		MediastinitisDefaultRootD3webRenderer d3webr =
-				(MediastinitisDefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(
-						null);
+		DefaultRootD3webRenderer d3webr = (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(
+				null);
 
 		// new ContainerCollection needed each time to get an updated dialog
 		ContainerCollection cc = new ContainerCollection();
 
 		Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
-
-		// set clinic to user name, since its the only clinic it can see cases
-		// of
-		String user = (String) httpSession.getAttribute("user");
-                System.out.println("USER: " + user);
-		if (user != null && user != "") {
-			String definingObject = D3webConnector.getInstance().getD3webParser().getRequired();
-                        System.out.println("REQUIRED: " +definingObject);
-			Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(
-					definingObject);
-			Fact fact = d3webSess.getBlackboard().getValueFact(to);
-			if (to != null && (fact == null || !fact.getValue().getValue().toString().equals(user))) {
-				setValue(definingObject, user, d3webSess);
-			}
-		}
-
 		cc = d3webr.renderRoot(cc, d3webSess, httpSession);
 
 		writer.print(cc.html.toString()); // deliver the rendered output

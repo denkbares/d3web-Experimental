@@ -68,7 +68,7 @@ public class EuraHSDialog extends D3webDialog {
 
 	@Override
 	protected String getSource() {
-		String source = "Hernia_Standard";
+		String source = "Hernia";
 		return source;
 	}
 

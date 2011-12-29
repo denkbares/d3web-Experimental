@@ -34,10 +34,6 @@
         <servlet-class>de.d3web.proket.run.ControlCenter</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ImageQuestions</servlet-name>
-        <servlet-class>de.d3web.proket.d3web.run.ImageQuestions</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>de.d3web.proket.run.LoginServlet</servlet-class>
     </servlet>
@@ -46,9 +42,8 @@
         <servlet-class>de.d3web.proket.d3web.run.EuraHSDialog</servlet-class>
     </servlet>
     <servlet>
-        <description>D3web dialog that includes logging functionality (testing)</description>
-        <servlet-name>D3webDialogLogging</servlet-name>
-        <servlet-class>de.d3web.proket.d3web.run.D3webDialogLogging</servlet-class>
+        <servlet-name>Test</servlet-name>
+        <servlet-class>de.d3web.proket.d3web.run.Test</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>HelloServlet</servlet-name>
@@ -75,10 +70,6 @@
         <url-pattern>/ControlCenter</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ImageQuestions</servlet-name>
-        <url-pattern>/ImageQuestions</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
     </servlet-mapping>
@@ -86,8 +77,8 @@
         <servlet-name>EuraHSDialog</servlet-name>
         <url-pattern>/EuraHS-Dialog</url-pattern>
     </servlet-mapping>
-     <servlet-mapping>
-        <servlet-name>D3webDialogLogging</servlet-name>
-        <url-pattern>/D3webDialogLogging</url-pattern>
+    <servlet-mapping>
+        <servlet-name>Test</servlet-name>
+        <url-pattern>/Test</url-pattern>
     </servlet-mapping>
 </web-app>

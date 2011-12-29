@@ -7,11 +7,11 @@
 	dialogcolumns="1"
 	questionnairecolumns="3"
 	questioncolumns = "2"
-	userprefix = "EuraHS" 
+	userprefix = "" 
 	login = "off"
-    required = "none"
+        required = "none"
 	language = ""
-    logging = "ON"
+        logging = "ON"
 	>
 	<data kb="Languages.d3web" />
 </dialog>

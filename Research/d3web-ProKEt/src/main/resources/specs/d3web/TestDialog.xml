@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog 
+	header="Default Dialog - Example"  
+	dtype="singleform" 
+	dstrategy="nextuaquestion" 
+	css="medi2colsMediastinitis, nonavigation" 
+	dialogcolumns="1"
+	questionnairecolumns="3"
+	questioncolumns = "2"
+	userprefix = "" 
+	login = "off"
+    required = "none"
+	language = ""
+    logging = "ON"
+	>
+	<data kb="Languages.d3web" />
+</dialog>
