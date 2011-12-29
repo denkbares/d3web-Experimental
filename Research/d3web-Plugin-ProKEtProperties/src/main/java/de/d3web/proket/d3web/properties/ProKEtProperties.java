@@ -43,4 +43,10 @@ public class ProKEtProperties {
 
 	public static final Property<Boolean> USE_AS_FILENAME = Property.getProperty(
 			"use_as_filename", Boolean.class);
+
+	public static final Property<String> BEFORE = Property.getProperty(
+			"before", String.class);
+
+	public static final Property<String> AFTER = Property.getProperty(
+			"after", String.class);
 }

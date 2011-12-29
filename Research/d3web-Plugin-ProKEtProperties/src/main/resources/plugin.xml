@@ -161,5 +161,29 @@
 		<parameter id="priority" value="5" />
 		<parameter id="instanceof" value="java.lang.Boolean" />
 	</extension>
+	
+	
+	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="before">
+		<parameter id="name" value="before" />
+		<parameter id="description" 
+			value="add a constraint, that a QuestionDate can only get values before the date entered in another QuestionDate" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.String" />
+	</extension>
+	
+	
+	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="after">
+		<parameter id="name" value="after" />
+		<parameter id="description" 
+			value="add a constraint, that a QuestionDate can only get values after the date entered in another QuestionDate" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.String" />
+	</extension>
 		
 </plugin>

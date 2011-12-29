@@ -17,6 +17,12 @@ Please enter a EuraHS registration number instead of a patient name.use_as_filen
 @package: Hernia
 %
 
+%%Property
+"Start of operation (first incision)".before = "End of operation (last skin suture)"
+"End of operation (last skin suture)".after = "Start of operation (first incision)"
+
+@package: Hernia
+%
 
 %%Property
 Year of birth.date_format = yyyy

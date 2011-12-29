@@ -1,4 +1,5 @@
 <div id="$fullId$" class="answer $fullId$ $if(realAnswerType)$answer-$realAnswerType$$endif$">
+	
 	$title$
 	
 	$if(readonly)$

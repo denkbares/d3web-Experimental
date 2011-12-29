@@ -374,7 +374,7 @@ function initFunctionality() {
     $('img[id*="lang"]').unbind('click').click(function(event){
         logLanguageWidgetClicked($(this));
         toggleLanguage($(this));
-    })
+    });
 	
     // click on image answer
     $('[type=imageAnswer]').unbind('mouseenter').mouseenter(function() {
@@ -396,26 +396,67 @@ function getHeaderHeight() {
     return head.height() + parseInt(head.css("padding-top")) + parseInt(head.css("padding-bottom"));
 }
 
+function getDate(dateSelect) {
+	  var answer = $(dateSelect).parents(".answer").first();
+	    var yearSelect = answer.find("[type=Yearselect]");
+	    var monthSelect = answer.find("[type=Monthselect]");
+	    var daySelect = answer.find("[type=Dayselect]");
+	    var hourSelect = answer.find("[type=Hourselect]");
+	    var minuteSelect = answer.find("[type=Minuteselect]");
+	    var secondSelect = answer.find("[type=Secondselect]");
+
+		
+	    var second = getDateValue(secondSelect, "00");
+	    var minute = getDateValue(minuteSelect, "00");
+	    var hour = getDateValue(hourSelect, "00");
+	    var day = getDateValue(daySelect, "01");
+	    var month = getDateValue(monthSelect, "01") - 1;
+	    var year = getDateValue(yearSelect, new Date().getFullYear());
+	    
+	    return new Date(year, month, day, hour, minute, second);
+}
+
 function d3web_storeQuestionDate(dateSelect) {
-    var answer = $(dateSelect).parents(".answer").first();
-    var yearSelect = answer.find("[type=Yearselect]");
-    var monthSelect = answer.find("[type=Monthselect]");
-    var daySelect = answer.find("[type=Dayselect]");
-    var hourSelect = answer.find("[type=Hourselect]");
-    var minuteSelect = answer.find("[type=Minuteselect]");
-    var secondSelect = answer.find("[type=Secondselect]");
+
+	var date = getDate(dateSelect);
+	
+    var tooSoon = "";
+    var tooLate = "";
+    var beforeId = $("#" + getQuestionId(dateSelect)).attr("before");
+    var afterId = $("#" + getQuestionId(dateSelect)).attr("after");
+    
+    var beforeQuestion = $("#" + beforeId);
+    var afterQuestion = $("#" + afterId);
+    var beforeDate = getDate(beforeQuestion.find("select").first());
+    var afterDate = getDate(afterQuestion.find("select").first());
+    
+    var beforeText = $.trim($("#text-" + beforeId).text());
+    var afterText = $.trim($("#text-" + afterId).text());
+    
+    if(language=="de"){
+    	tooLate = "Erwartet wird ein Datum früher als bei Frage '" + beforeText + "'.";
+    	tooSoon = "Erwartet wird ein Datum später als bei Frage '" + afterText + "'.";
+    } else if(language=="en"){
+    	tooLate = "Expected is a date earlier than the one given in question '" + beforeText + "'.";
+    	tooSoon = "Expected is a date later than the one given in question '" + afterText + "'.";
+    }
+    
+    var errorWid = getErrorPlaceholder(dateSelect);
+    if (afterId != undefined && isAnsweredQuestion(afterQuestion) && date.getTime() <= afterDate.getTime()) {
+    	errorWid.html(tooSoon);
+    }
+    else if (beforeId != undefined && isAnsweredQuestion(beforeQuestion) && date.getTime() >= beforeDate.getTime()) {   
+        errorWid.html(tooLate);
+    } 
+    else {
+        errorWid.html("");
+    }
     var question = getQuestionId(dateSelect);
-	
-    var second = getDateValue(secondSelect, "00");
-    var minute = getDateValue(minuteSelect, "00");
-    var hour = getDateValue(hourSelect, "00");
-    var day = getDateValue(daySelect, "01");
-    var month = getDateValue(monthSelect, "01");
-    var year = getDateValue(yearSelect, new Date().getFullYear());
-	
-    var separator = ".";
-    dateStore[question] = second + separator + minute + separator + hour + separator 
-    + day + separator + month + separator + year;
+    dateStore[question] = date.getTime();
+}
+
+function isAnsweredQuestion(question) {
+	return question.parent().children("[class$=\"question-d\"]") != null;
 }
 
 function getDateValue(select, def) {
@@ -428,8 +469,8 @@ function d3web_storeQuestionText(textInput) {
 }
 
 function d3web_storeQuestionNum(numInput) {
-    var tooHigh;
-    var tooLow;
+    var tooHigh = "";
+    var tooLow = "";
     var errorWid;
     var val = parseInt($(numInput).val());
     var left = parseInt($(numInput).attr("left"));
@@ -446,11 +487,9 @@ function d3web_storeQuestionNum(numInput) {
     errorWid = getErrorPlaceholder(numInput);
     if (val < left) {
         errorWid.html(tooLow);
-    }
-    else if (val > right) {   
+    } else if (val > right) {   
         errorWid.html(tooHigh);
-    } 
-    else {
+    } else {
         errorWid.html("");
     }
     
@@ -459,18 +498,12 @@ function d3web_storeQuestionNum(numInput) {
 }
 
 /**
- * Assembles and returns the id of the error-placeholder element depending
+ * Assembles and returns the error-placeholder element depending
  * on the given widget ID
  */
 function getErrorPlaceholder(input){
-    var id;
-    
-    if(input.attr("id").match(/^f_/) ){
-        id  = input.attr("id").replace("f_", "");
-    }
-
-    var errorPlaceholder = "#error-" + id;
-    return $(errorPlaceholder);
+	var questionId = getQuestionId(input);
+	return $("#error-" + questionId);
 }
 
 
@@ -560,7 +593,7 @@ function d3web_addFacts() {
                 var warning = "Required Field";
                 
                 $(errorPlaceholder).html("<font color=\"red\">" + warning + "</font>");
-                alert("Please fill in the required, marked field(s) first!")
+                alert("Please fill in the required, marked field(s) first!");
    
             } else {
                 updateDialog(html);

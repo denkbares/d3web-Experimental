@@ -25,7 +25,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -200,19 +199,20 @@ public class D3webDialog extends HttpServlet {
 		HttpSession httpSession = request.getSession(true);
 
 		// try to get the src parameter from a specialized, inherited
-                // dialog servlet that overrides getSource() or from servlet
-                // request parameter (when calling via ControlCenter);
+		// dialog servlet that overrides getSource() or from servlet
+		// request parameter (when calling via ControlCenter);
 		// if none available, Default.xml is set
 		String source = getSource();
-                
-                if(source.equals("")|| source==null){
-                    
-                    if (request.getParameter("src") != null) {
-			source = request.getParameter("src");
-                    } else {
-                        source = "Default.xml";
-                    }
-                }
+
+		if (source.equals("") || source == null) {
+
+			if (request.getParameter("src") != null) {
+				source = request.getParameter("src");
+			}
+			else {
+				source = "Default.xml";
+			}
+		}
 		if (!source.endsWith(".xml")) {
 			source = source + ".xml";
 		}
@@ -744,8 +744,10 @@ public class D3webDialog extends HttpServlet {
 			if (para1 == null || para2 == null) {
 				break;
 			}
-			parameters1.add(AbstractD3webRenderer.getObjectNameForId(para1));
-			parameters2.add(AbstractD3webRenderer.getObjectNameForId(para2));
+			String objectNameForId = AbstractD3webRenderer.getObjectNameForId(para1);
+			parameters1.add(objectNameForId == null ? para1 : objectNameForId);
+			String objectNameForId2 = AbstractD3webRenderer.getObjectNameForId(para2);
+			parameters2.add(objectNameForId2 == null ? para2 : objectNameForId2);
 			i++;
 		}
 	}
@@ -1160,10 +1162,9 @@ public class D3webDialog extends HttpServlet {
 	private Value setQuestionDate(Question to, String valString) {
 		Value value = null;
 		try {
-			SimpleDateFormat dateFormat = new SimpleDateFormat("ss.mm.HH.dd.MM.yyyy");
-			value = new DateValue(dateFormat.parse(valString));
+			value = new DateValue(new Date(Long.parseLong(valString)));
 		}
-		catch (ParseException e) {
+		catch (NumberFormatException e) {
 			// value still null, will not be set
 		}
 		return value;

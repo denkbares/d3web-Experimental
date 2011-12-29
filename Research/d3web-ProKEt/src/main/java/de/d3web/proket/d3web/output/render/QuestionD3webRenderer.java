@@ -23,6 +23,7 @@ import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
+import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionDate;
 import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.QuestionNum;
@@ -30,7 +31,6 @@ import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.knowledge.terminology.QuestionZC;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
-import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
@@ -42,7 +42,6 @@ import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
-import java.util.Locale;
 
 /**
  * Renderer for rendering basic Questions.
@@ -74,11 +73,11 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 		// specific TemplateName is returned, otherwise, the base object name.
 		StringTemplate st = TemplateUtils.getStringTemplate(
 				super.getTemplateName("Question"), "html");
-                
+
 		// set some basic properties
 		st.setAttribute("fullId", getID(to));
 		st.setAttribute("title", D3webUtils.getTOPrompt(to));
-                //st.setAttribute("title", to.getName());
+		// st.setAttribute("title", to.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
 		// read html popups from properties
@@ -99,6 +98,22 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 		}
 		else if (to instanceof QuestionDate) {
 			st.setAttribute("type", "date");
+			String before = to.getInfoStore().getValue(ProKEtProperties.BEFORE);
+			String after = to.getInfoStore().getValue(ProKEtProperties.AFTER);
+			if (before != null) {
+				Question beforeQuestion = d3webSession.getKnowledgeBase()
+						.getManager().searchQuestion(before);
+				if (beforeQuestion != null && beforeQuestion instanceof QuestionDate) {
+					st.setAttribute("before", getID(beforeQuestion));
+				}
+			}
+			if (after != null) {
+				Question afterQuestion = d3webSession.getKnowledgeBase()
+						.getManager().searchQuestion(after);
+				if (afterQuestion != null && afterQuestion instanceof QuestionDate) {
+					st.setAttribute("after", getID(afterQuestion));
+				}
+			}
 		}
 		else if (to instanceof QuestionText) {
 			st.setAttribute("type", "text");
