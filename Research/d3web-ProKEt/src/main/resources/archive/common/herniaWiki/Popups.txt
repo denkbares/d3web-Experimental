@@ -1,12 +1,10 @@
 %%Property
 Please enter a EuraHS registration number instead of a patient name.popup = """
-Information about data policy<br/>
-Information about the informed consent<br/>
-Responsibility of the participant institution<br/>
-Confirmation of knowledge about the law<br/>
-Examples of "phantasy-names"<br/>
-PDF for informed consent<br/>
-PDF for List of Patients and EuraHs registration number<br/>
+Pleased fill in with an anonimous number or a phantasy name.
+The registry will not contain personnel data like name, date of birth and adress of the patient and will thus be completely anonymous. 
+The number generated below does not allow you to track the patients identity.
+Creation of phantasy-names and hosting of thle identification files will be the responsibility of the user. 
+<br/>
 """
 
 @package: Hernia
@@ -104,7 +102,7 @@ Mark the incisional hernia areas involved.popup = """
     </tr>
     <tr>
       <td style="padding:5px">The borders of the midline area are defined as: cranial: the xiphoid; caudal: the pubic bone; lateral: the lateral margin of the rectal sheath. So all incisional hernias between the lateral margins of the rectus muscle sheath are classified as midline hernias.</td>
-      <td style="padding:5px">The borders of the lateral area to classifyincisional abdominal wall hernias are defined as: cranial: the costal margin; caudal: the inguinal region; medially: the lateral margin of the rectal sheath; laterally: the lumbar region.</td>
+      <td style="padding:5px">The borders of the lateral area to classify incisional abdominal wall hernias are defined as: cranial: the costal margin; caudal: the inguinal region; medially: the lateral margin of the rectal sheath; laterally: the lumbar region.</td>
     </tr>
   </table>
 """
@@ -162,7 +160,7 @@ Intraoperative wound contamination.popup = """
 
 
 %%Property
-Please choose the database level.popup = """
+Please choose database level.popup = """
 <b>Level 1:</b> Short questionnaire (5 min)<br/>
 <b>Level 2:</b> Comprehensive questionnaire (20 min)
 """
@@ -171,12 +169,42 @@ Please choose the database level.popup = """
 %
 
 %%Property
-Mesh positions.popup = """
-TODO Uli: Text einfügen
+Mesh position(s).popup = """
+<table border="1" cellspacing="0" cellpadding="3">
+  <colgroup>
+    <col width="150">
+    <col width="450">
+  </colgroup>
+  <tr>
+    <th>Mesh position</th>
+    <th>Definition</th>
+  </tr>
+  <tr>
+    <th align="center">Onlay</th>
+    <td style="padding:5px">The onlay position if the mesh is positioned above the abdominal wall muscles, behind the subcutaneous fat.</td>
+  </tr>
+  <tr>
+    <th align="center">Inlay</th>
+    <td style="padding:5px">The inlay position if the mesh is positioned in the hernia defect, without overlap, and fixed to the margins of the hernia gap.</td>
+  </tr>
+  <tr>
+    <th align="center">Retromuscular (syn. = Sublay)</th>
+    <td style="padding:5px">Medial hernias: The retromuscular position for medial abdominal wall hernias if the mesh is positioned behind the rectus abdominis muscle and in front of the posterior rectus fascia or -caudal to the linea arcuata- in front of the peritoneum.<br/>Lateral hernias: The retromuscular position for lateral abdominal wall hernias if the mesh is placed in a plane between the lateral abdominal wall muscles.</td>
+  </tr>
+  <tr>
+    <th align="center">Preperitoneal</th>
+    <td style="padding:5px">The preperitoneal position if the mesh is placed in the plane behind all abdominal wall muscles in front of the peritoneum.</td>
+  </tr>
+  <tr>
+    <th align="center">Intraperitoneal (syn. = IPOM)</th>
+    <td style="padding:5px">The intraperitoneal position if the mesh is placed behind all layers of the abdominal wall including the parietal peritoneum.</td>
+  </tr>
+</table>
 """
 
-Mesh positions#Retromuscular.popup = """
-TODO Uli: Text einfügen (wird im Moment noch nicht angezeigt hinter Dialogen, ist aber gut machbar)
+Mesh position(s)#Retromuscular.popup = """
+Medial hernias: The retromuscular position for medial abdominal wall hernias if the mesh is positioned behind the rectus abdominis muscle and in front of the posterior rectus fascia or -caudal to the linea arcuata- in front of the peritoneum.
+Lateral hernias: The retromuscular position for lateral abdominal wall hernias if the mesh is placed in a plane between the lateral abdominal wall muscles.
 """
 
 Classification of surgical complications.popup = """
@@ -191,7 +219,7 @@ Classification of surgical complications.popup = """
   </tr>
   <tr>
     <th align="center">Grade I</th>
-    <td style="padding:5px">Any deviation from the normal postoperative course without the need for pharmacological treatment or surgical, endoscopic, and radiological nterventions<br/>Allowed therapeutic regimens are: drugs as antiemetics, antipyretics, analgetics, diuretics, electrolytes, and physiotherapy. This grade also includes wound infections opened at the bedside</td>
+    <td style="padding:5px">Any deviation from the normal postoperative course without the need for pharmacological treatment or surgical, endoscopic, and radiological interventions<br/>Allowed therapeutic regimens are: drugs as antiemetics, antipyretics, analgetics, diuretics, electrolytes, and physiotherapy. This grade also includes wound infections opened at the bedside and a seroma requiring aspiration bedside.</td>
   </tr>
   <tr>
     <th align="center">Grade II</th>
@@ -285,39 +313,40 @@ CNS, central nervous system; IC, intermediate care; ICU, intensive care unit.
 
 %%Property
 "Daily activities (Follow up 1)".popup = """
-0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+0 = no restriction, 10 = completely restricted, X = If the patient does not perform this activity
 """
 
 "Outside the house (Follow up 1)".popup = """
-0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+0 = no restriction, 10 = completely restricted, X = If the patient does not perform this activity
 """
 
 "During sports (Follow up 1)".popup = """
-0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+0 = no restriction, 10 = completely restricted, X = If the patient does not perform this activity
 """
 
 "During heavy labour (Follow up 1)".popup = """
-0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+0 = no restriction, 10 = completely restricted, X = If the patient does not perform this activity
 """
+
 
 @package: Hernia
 %
 
 %%Property
 "Daily activities (Follow up 2)".popup = """
-0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+0 = no restriction, 10 = completely restricted, X = If the patient does not perform this activity
 """
 
 "Outside the house (Follow up 2)".popup = """
-0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+0 = no restriction, 10 = completely restricted, X = If the patient does not perform this activity
 """
 
 "During sports (Follow up 2)".popup = """
-0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+0 = no restriction, 10 = completely restricted, X = If the patient does not perform this activity
 """
 
 "During heavy labour (Follow up 2)".popup = """
-0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+0 = no restriction, 10 = completely restricted, X = If the patient does not perform this activity
 """
 
 @package: Hernia
@@ -325,19 +354,19 @@ CNS, central nervous system; IC, intermediate care; ICU, intensive care unit.
 
 %%Property
 "Daily activities (preoperative)".popup = """
-0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+0 = no restriction, 10 = completely restricted, X = If the patient does not perform this activity
 """
 
 "Outside the house (preoperative)".popup = """
-0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+0 = no restriction, 10 = completely restricted, X = If the patient does not perform this activity
 """
 
 "During sports (preoperative)".popup = """
-0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+0 = no restriction, 10 = completely restricted, X = If the patient does not perform this activity
 """
 
 "During heavy labour (preoperative)".popup = """
-0 = no pain, 10 = worst pain imaginable, X = If the patient does not perform this activity
+0 = no restriction, 10 = completely restricted, X = If the patient does not perform this activity
 """
 
 @package: Hernia
@@ -374,6 +403,26 @@ CNS, central nervous system; IC, intermediate care; ICU, intensive care unit.
 
 "The hernia itself (preoperative)".popup = """
 0 = very beautiful, 10 = extremely ugly
+"""
+
+@package: Hernia
+%
+
+%%Property
+
+"Mesh position(s)"#Plug.popup = """
+Select Plug if the mesh is used to fill the hernia gap.
+In case of combined meshes, please select the appropriate additional options.
+"""
+
+"Types of late complication (Follow up 1)"#"Persisting abdominal wall pain (more than 30 days)".popup = """
+"Aasvang E, Kehlet H (1986) Classification of chronic pain. Pain Suppl 3:S1–S226."
+"""
+
+
+"Types of late complication (Follow up 2)"#"Persisting abdominal wall pain (more than 30 days)".popup = """
+"Aasvang E, Kehlet H (1986) Classification of chronic pain. Pain Suppl 3:S1–S226."
+
 """
 
 @package: Hernia

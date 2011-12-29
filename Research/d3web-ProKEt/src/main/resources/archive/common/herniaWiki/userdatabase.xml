@@ -2,4 +2,14 @@
 <users>
     <user uid="85f9c210-f4ce-49af-a975-925ed69deef2" loginName="knowweadmin" wikiName="knowweadmin" fullName="knowweadmin" email="" password="{SSHA}cn8x/Q8SWDmIEkJVPo97TDEQiwq5RnPE5S1tJw==" created="2009.11.25 at 14:23:17:050 CET" lastModified="2009.11.25 at 14:23:17:050 CET" lockExpiry="" >
     </user>
+    <user uid="bbd61a5f-aa70-40c5-bc4e-54077523be9a" loginName="JochenReutelshoefer" wikiName="JochenReutelshöfer" fullName="Jochen Reutelshöfer" email="reutelshoefer@informatik.uni-wuerzburg.de" password="{SSHA}G/Msxbq179oUidsaz5Qr8oFjWGcDgsL+Ob0psw==" created="2011.10.19 at 21:16:45:654 MESZ" lastModified="2011.10.19 at 21:16:45:654 MESZ" lockExpiry="" >
+    </user>
+    <user uid="ecf495c5-1370-452a-a48d-958adc60443b" loginName="FrankPuppe" wikiName="FrankPuppe" fullName="Frank Puppe" email="" password="{SSHA}jrfXD0PTeOx1ceZt85siYCv8aA1n4wZmUu7g5Q==" created="2011.10.20 at 00:34:07:243 MESZ" lastModified="2011.10.20 at 00:34:07:243 MESZ" lockExpiry="" >
+    </user>
+    <user uid="1ae06165-df2a-4493-ba37-8c4b699b8d6c" loginName="Dietz" wikiName="Dr.UlrichDietz" fullName="Dr. Ulrich Dietz" email="Dietz_U@chirurgie.uni-wuerzburg.de" password="{SSHA}nbM0jFwZLI87sYRaOtNVOkYqSaiDPir27TPhjw==" created="2011.10.20 at 02:20:00:574 MESZ" lastModified="2011.10.20 at 02:20:00:574 MESZ" lockExpiry="" >
+    </user>
+    <user uid="ab0185f0-4486-4998-8721-319208ca86c5" loginName="AlbrechtStriffler" wikiName="AlbrechtStriffler" fullName="Albrecht Striffler" email="albrecht.striffler@gmail.com" password="{SSHA}axAuaZqSk+nHiGVi8P6+ALqUe0EjVVlIvJ8AFQ==" created="2011.11.03 at 17:10:52:118 MEZ" lastModified="2011.11.03 at 17:10:52:118 MEZ" lockExpiry="" >
+    </user>
+    <user uid="c01f074a-87f6-4aef-9d58-79d1c7b63db8" loginName="mfreiberg" wikiName="MartinaFreiberg" fullName="Martina Freiberg" email="freiberg@informatik.uni-wuerzburg.de" password="{SSHA}BQKaF4qyOUP4iDA9rQ02gfpbwBuEDMAm5yzsRQ==" created="2011.11.29 at 10:24:28:867 MEZ" lastModified="2011.11.29 at 10:24:28:867 MEZ" lockExpiry="" >
+    </user>
 </users>

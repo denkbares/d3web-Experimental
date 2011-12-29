@@ -1,11 +1,11 @@
 %%Property
-HerniaDialog.unknownVisible = true
+Hernia.unknownVisible = true
 
 @package: Hernia
 %
 
 %%Property
-Please choose the database level.init = Level 1
+Please choose database level.init = Level 1
 
 @package: Hernia
 %
@@ -21,7 +21,7 @@ Please enter a EuraHS registration number instead of a patient name.use_as_filen
 %%Property
 Year of birth.date_format = yyyy
 Date of operation that caused the incisional hernia.date_format = dd.MM.yyyy OR MM.yyyy OR yyyy
-Date of the last repair.date_format = dd.MM.yyyy OR MM.yyyy OR yyyy
+Date of last repair.date_format = dd.MM.yyyy OR MM.yyyy OR yyyy
 Operation date.date_format = dd.MM.yyyy
 "Start of operation (first incision)".date_format = HH:mm:ss OR HH:mm
 "End of operation (last skin suture)".date_format = HH:mm:ss OR HH:mm
@@ -42,12 +42,19 @@ Hour of discharge.date_format = HH
 %
 
 %%Property
-Please choose the database level.show_in_header = true
-Please choose the database level.position_in_header = 1
-Please choose the database level.header_text = Level
+Case-Number.show_in_header = true
+Case-Number.position_in_header = 1
 
-Please choose the database level#Level 1.header_text = 1
-Please choose the database level#Level 2.header_text = 2
+@package: Hernia
+%
+
+%%Property
+Please choose database level.show_in_header = true
+Please choose database level.position_in_header = 2
+Please choose database level.header_text = Level
+
+Please choose database level#Level 1.header_text = 1
+Please choose database level#Level 2.header_text = 2
 
 @package: Hernia
 %
@@ -55,7 +62,7 @@ Please choose the database level#Level 2.header_text = 2
 
 %%Property
 Please select your hernia route.show_in_header = true
-Please select your hernia route.position_in_header = 2
+Please select your hernia route.position_in_header = 3
 Please select your hernia route.header_text = Route
 
 Please select your hernia route#Primary ventral hernia route.header_text = Primary ventral hernia

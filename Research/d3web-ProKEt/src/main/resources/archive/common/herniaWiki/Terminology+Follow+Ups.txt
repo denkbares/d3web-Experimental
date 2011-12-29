@@ -1,0 +1,282 @@
+%%Question
+// Das Follow-up #1 soll automatisch 6 Wochen nach "Operation date" generiert werden
+Common Route - Follow up 1 &only if: Please choose database level = Level 2 &
+- "Lost to follow up (Follow up 1)" [oc]
+-- Unable to contact patient
+-- Patient refuses further follow up
+-- Patient deceased
+--- "Date of death (Follow up 1)" [date]
+--- "Cause of death (Follow up 1)" [text]
+--- "Recurrence at death (Follow up 1)" [yn]
+- "Date of follow up (Follow up 1)" [date]
+- "Type of follow up (Follow up 1)" [oc]
+-- Clinical
+-- Clinical with medical imaging
+-- Telephone contact with the patient
+-- Telephone contact with the family doctor
+@package: Hernia
+%
+
+%%Question
+Common Route - Follow up 1 - Quality of life - Pain at the site of the hernia &only if: Please choose database level = Level 2 &
+- "In rest (Follow up 1)" [text]
+- "During activities (Follow up 1)" [text]
+- "Worst pain felt during the last week (Follow up 1)" [text]
+@package: Hernia
+%
+
+
+%%Question
+Common Route - Follow up 1 - Quality of life - Restrictions of activities &only if: Please choose database level = Level 2 &
+- "Daily activities (Follow up 1)" [text]
+- "Outside the house (Follow up 1)" [text]
+- "During sports (Follow up 1)"[text]
+- "During heavy labour (Follow up 1)" [text]
+@package: Hernia
+%
+
+%%Question
+Common Route - Follow up 1 - Quality of life - Esthetical discomfort &only if: Please choose database level = Level 2 &
+- "The shape of your abdomen (Follow up 1)" [text]
+- "The hernia itself (Follow up 1)" [text]
+@package: Hernia
+%
+
+%%Question
+Common Route - Follow up 1 - Late complications &only if: Please choose database level = Level 2 &
+- "Late complications (Follow up 1)" [yn]
+-- Yes
+--- "Types of late complication (Follow up 1)" [mc]
+---- Late surgical site infection
+----- "Superficial surgical site infection (Follow up 1)" [oc]
+------ Wound infection
+----- "Deep surgical site infection (Follow up 1)" [mc]
+------ "Wound infection, including subcutaneous abscess"
+------ Mesh infection
+------ Enterocutaneous fistula
+----- "Intra-abdominal surgical site infection (Follow up 1)" [mc]
+------ Mesh infection
+------ Intra-abdominal abscess
+------ Bowel perforation
+---- Small bowel obstruction
+----- "Treatment of bowel obstruction (Follow up 1)" [oc]
+------ Conservative treatment without hospitalisation
+------ Conservative treatment with hospitalisation
+------ Operative treatment with adhesiolysis
+------- "Cause of adhesions (Follow up 1)" [oc]
+-------- Adhesions not related to hernia repair
+-------- Adhesions related to hernia repair
+------ Operative treatment with need for small bowel resection
+---- "Transient clinical seroma (less than 30 days)"
+---- "Persisting clinical seroma (more than 30 days)"
+----- "Type of seroma (Follow up 1)" [oc]
+------ "Asymptomatic seroma (Type I)"
+------ "Symptomatic seroma, conservatively treated (Type II)"
+------ "Seroma requiring percutaneous aspiration (Type III)"
+------ "Seroma requiring surgical intervention (Type IV)"
+---- "Persisting abdominal wall pain (more than 30 days)"
+----- "Treatment of abdominal wall pain (Follow up 1)" [oc]
+------ Need for pain medication related to hernia repair
+------ "Non-surgical pain intervention (e.g. local anaesthetic infiltration)"
+------ "Surgical intervention because of pain, e.g. removal of fixation suture/tack under local anaesthesia"
+------ "Surgical intervention because of pain, e.g. laparoscopic exploration, removal of fixation suture/tack or mesh under general anaesthesia"
+---- Need for removal of the mesh
+----- "Reason for mesh removal (Follow up 1)" [mc]
+------ Mesh infection
+------ Enterocutaneous fistula
+------ Bowel perforation
+------ Small bowel obstruction due to mesh adhesions
+------ Persisting abdominal wall pain
+------ Mesh removed during operation not related to complications of the mesh
+------ Other reason
+----- "Was the mesh completely removed (Follow up 1)" [oc]
+------ No, partially
+------ Yes
+---- "Postoperative bulging (recurrence excluded by imaging)"
+----- "Type of bulging (Follow up 1)" [oc]
+------ Asymptomatic
+------ Symptomatic but accepted as it is
+------ Symptomatic and reason for reoperation
+---- Recurrent abdominal wall hernia
+----- "Date of diagnosis of recurrent hernia (Follow up 1)" [date]
+----- "Site of recurrence (Follow up 1)" [oc]
+------ At the original hernia site
+------ At the margin of the repair or the mesh
+------ At a distance from the original hernia repair
+----- "Symptoms of the recurrence (Follow up 1)" [mc]
+------ "None (asymptomatic)"
+------ Pain
+------ Obstructive symptoms
+------ Incarceration
+------ Other
+----- "Treatment needed (Follow up 1)" [yn]
+------ Yes
+------- "New Repair done (Follow up 1)" [oc]
+-------- Yes
+--------- "Date of repair done (Follow up 1)" [date]
+--------- "Method of repair (Follow up 1)" [mc]
+---------- Open
+---------- Laparoscopic
+---------- Mesh
+---------- Non mesh
+-------- No, patient refused repair
+-------- No, patient on waiting list for repair
+----- "Postulated cause of recurrence (Follow up 1)" [mc]
+------ Mesh had to be removed
+------ Hernia was induced by the repair itself
+------- "Type of induced hernia (Follow up 1)" [oc]
+-------- Tack induced hernia
+-------- Suture induced hernia
+-------- Trocar induced hernia
+------ "Missed during repair (recurrent hernia in a part of the incision that was not repaired)"
+------ Mesh shrinkage
+------ Inadequate mesh fixation
+------ Inadequate mesh overlap
+------ "Central mesh failure (recurrence through the mesh)"
+------ Increased patient risk
+----- "Other cause of recurrence (Follow up 1)" [text]
+@package: Hernia
+%
+// Albrecht: Nach dem Follow-up #1 muss ein neuer Themenblock eingefügt werden mit der Bezeichnung "Create addisional visit" mit folgenden Anwendungen: 1) Datum und 2) Eingabemöglichkeit eines Freitextes (ca. 100 Wörter).
+
+%%Question
+// Das Follow-up #2 soll automatisch 1 Jahr nach "Operation date" generiert werden
+Common Route - Follow up 2 &only if: Please choose database level = Level 2 &
+- "Lost to follow up (Follow up 2)" [oc]
+-- Unable to contact the patient
+-- Patient refused further follow up  //TODO1
+-- Patient deceased
+--- "Date of death (Follow up 2)" [date]
+--- "Cause of death (Follow up 2)" [text]
+--- "Recurrence at death (Follow up 2)" [yn]
+- "Date of follow up (Follow up 2)" [date]
+- "Type of follow up (Follow up 2)" [oc]
+-- Clinical
+-- Clinical with medical imaging
+-- Telephone contact with the patient
+-- Telephone contact with the family doctor
+@package: Hernia
+%
+
+
+%%Question
+Common Route - Follow up 2 - Quality of life - Pain at the site of the hernia &only if: Please choose database level = Level 2 &
+- "In rest (Follow up 2)" [text]
+- "During activities (Follow up 2)" [text]
+- "Worst pain felt during the last week (Follow up 2)" [text]
+@package: Hernia
+%
+
+
+%%Question
+Common Route - Follow up 2 - Quality of life - Restrictions of activities &only if: Please choose database level = Level 2 &
+- "Daily activities (Follow up 2)" [text]
+- "Outside the house (Follow up 2)" [text]
+- "During sports (Follow up 2)" [text]
+- "During heavy labour (Follow up 2)" [text]
+@package: Hernia
+%
+
+%%Question
+Common Route - Follow up 2 - Quality of life - Esthetical discomfort &only if: Please choose database level = Level 2 &
+- "The shape of your abdomen (Follow up 2)" [text]
+- "The hernia itself (Follow up 2)" [text]
+@package: Hernia
+%
+
+%%Question
+Common Route - Follow up 2 - Late complications &only if: Please choose database level = Level 2 &
+- "Late complications (Follow up 2)" [yn]
+-- Yes
+--- "Types of late complication (Follow up 2)" [mc]
+---- Late surgical site infection
+----- "Superficial surgical site infection (Follow up 2)" [oc]
+------ Wound infection
+----- "Deep surgical site infection (Follow up 2)" [mc]
+------ "Wound infection, including subcutaneous abscess"
+------ Mesh infection
+------ Enterocutaneous fistula
+----- "Intra-abdominal surgical site infection (Follow up 2)" [mc]
+------ Mesh infection
+------ Intra-abdominal abscess
+------ Bowel perforation
+---- Small bowel obstruction
+----- "Treatment of bowel obstruction (Follow up 2)" [oc]
+------ Conservative treatment without hospitalization
+------ Conservative treatment with hospitalization
+------ Operative treatment with adhesiolysis
+------- "Cause of adhesions (Follow up 2)" [oc]
+-------- Adhesions not related to hernia repair
+-------- Adhesions related to hernia repair
+------ Operative treatment with need for small bowel resection
+---- "Persisting clinical seroma (more than 30 days)"
+----- "Type of seroma (Follow up 2)" [oc]
+------ "Asymptomatic seroma (Type I)"
+------ "Symptomatic seroma, conservatively treated (Type II)"
+------ "Seroma requiring percutaneous drainage (Type III)"
+------ "Seroma requiring surgical intervention (Type IV)"
+---- "Persisting abdominal wall pain (more than 30 days)"
+----- "Treatment of abdominal wall pain (Follow up 2)" [oc]
+------ Need for pain medication related to hernia repair
+------ "Non-surgical pain intervention (e.g. local anaesthetic infiltration)"
+------ "Surgucal intervention because of pain, e.g. removal of fication suture/tack under local anaesthesia"
+------ "Surgical intervention because of pain, e.g. laparoscopic exploration, removal of fixation suture/tack or mesh under general anaesthesia"
+---- Need for removal of the mesh
+----- "Reason for mesh removal (Follow up 2)" [mc]
+------ Mesh infection
+------ Enterocutaneous fistula
+------ Bowel perforation
+------ Small bowel obstruction due to mesh adhesions
+------ Persisting abdominal wall pain
+------ Mesh removed during operation not related to complications of the mesh
+------ Other reason
+----- "Was the mesh completely removed (Follow up 2)" [oc]
+------ No, partially
+------ Yes
+---- "Postoperative bulging (recurrence excluded by imaging)"
+----- "Type of bulging (Follow up 2)" [oc]
+------ Asymptomatic
+------ Symptomatic but accepted as it is
+------ Symptomatic and reason for reoperation
+---- Recurrent abdominal wall hernia
+----- "Date of diagnosis of recurrent hernia (Follow up 2)" [date]
+----- "Site of recurrence (Follow up 2)" [oc]
+------ At the original hernia site
+------ At the margin of the repair or the mesh
+------ At a distance from the original hernia repair
+----- "Symptoms of the recurrence (Follow up 2)" [mc]
+------ "None (asymptomatic)"
+------ Pain
+------ Obstructive symptoms
+------ Incarceration
+------ Other
+----- "Treatment needed (Follow up 2)" [yn]
+------ Yes
+------- "New Repair done (Follow up 2)" [oc]
+-------- Yes
+--------- "Date of repair done (Follow up 2)" [date]
+--------- "Method of repair (Follow up 2)" [mc]
+---------- Open
+---------- Laparoscopic
+---------- Mesh
+---------- Non mesh
+-------- No, patient refused repair
+-------- No, patient on waiting list for repair
+----- "Postulated cause of recurrence (Follow up 2)" [mc]
+------ Mesh had to be removed
+------ Hernia was induced by the repair itself
+------- "Type of induced hernia (Follow up 2)" [oc]
+-------- Tack induced hernia
+-------- Suture induced hernia
+-------- Trocar induced hernia
+------ "Missed during repair (recurrent hernia in a part of the incision that was not repaired)"
+------ Mesh shrinkage
+------ Inadequate mesh fixation
+------ Inadequate mesh overlap
+------ "Central mesh failure (recurrence through the mesh)"
+------ Increased patient risk
+----- "Other cause of recurrence (Follow up 2)" [text]
+@package: Hernia
+%
+
+

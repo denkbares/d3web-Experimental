@@ -239,7 +239,7 @@ Vicryl Plus
 %
 
 %%Property
-"SOC Score of Diabetes mellitus type I (juvenil)".dropdown_menu_options = "1,2,3,4,5"
+"SOC Score of Diabetes mellitus type I (juvenile)".dropdown_menu_options = "1,2,3,4,5"
 "SOC Score of Diabetes mellitus type II (adult)".dropdown_menu_options = "1,2,3,4,5"
 "SOC Score of cardiac disease".dropdown_menu_options = "1,2,3,4,5"
 "SOC Score of arterial hypertension".dropdown_menu_options = "1,2,3,4,5"

@@ -13,17 +13,17 @@
 \\
 !!! Knowledge base / dialog
 The dialog is defined distributed over the following articles:\\
+* [Terminology]
+* [Terminology Follow Ups]
+* [Properties]
+* [Resources]
+* [ImageMap]
+* [Popups]
+* [Dropdowns]
+* [LanguageTest]
 \\
-[Terminology]\\
-[Properties]\\
-[Resources]\\
-[ImageMap]\\
-[Popups]\\
-[Dropdowns]\\
-\\
-
 %%knowledgebase 
-HerniaDialog
+Hernia
 @Comment: EuraHS Hernienregister Stand Juni 2011
 @uses: Hernia
 /%

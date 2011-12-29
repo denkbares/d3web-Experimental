@@ -2,5 +2,6 @@
 <groups>
   <group name="Admin" creator="FabianHaupt" created="2008.11.20 at 09:19:53:777 CET" modifier="JochenReutelshoefer" lastModified="2009.11.25 at 14:25:05:046 CET">
     <member principal="knowweadmin" />
+    <member principal="JochenReutelshoefer" />
   </group>
 </groups>
