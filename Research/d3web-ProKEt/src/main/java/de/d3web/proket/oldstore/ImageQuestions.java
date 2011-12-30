@@ -91,7 +91,8 @@ public class ImageQuestions extends HttpServlet {
 		}
 
 		// d3web parser for interpreting the source/specification xml
-		d3webParser = new D3webXMLParser(source);
+		d3webParser = new D3webXMLParser();
+                d3webParser.setSourceToParse(source);
 
 		d3wcon = D3webConnector.getInstance();
 

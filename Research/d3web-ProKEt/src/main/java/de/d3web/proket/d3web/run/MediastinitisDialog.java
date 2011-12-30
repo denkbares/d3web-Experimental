@@ -58,9 +58,8 @@ public class MediastinitisDialog extends D3webDialog {
 	private static final long serialVersionUID = 4798072917307992413L;
 
 	@Override
-	protected String getSource() {
-		String source = "Mediastinitis";
-		return source;
+	protected String getSource(HttpServletRequest request) {
+		return "Mediastinitis";
 	}
 
 	/**

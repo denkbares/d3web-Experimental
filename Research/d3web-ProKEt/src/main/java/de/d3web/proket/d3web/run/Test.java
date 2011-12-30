@@ -55,9 +55,8 @@ public class Test extends D3webDialog {
 	private static final long serialVersionUID = 4798072917307992413L;
 
 	@Override
-	protected String getSource() {
-		String source = "TestDialog";
-		return source;
+	protected String getSource(HttpServletRequest request) {
+		return "TestDialog";
 	}
 
 	/**

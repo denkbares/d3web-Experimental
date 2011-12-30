@@ -100,7 +100,7 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 			st.setAttribute("type", "date");
 			String before = to.getInfoStore().getValue(ProKEtProperties.BEFORE);
 			String after = to.getInfoStore().getValue(ProKEtProperties.AFTER);
-			if (before != null) {
+                        if (before != null) {
 				Question beforeQuestion = d3webSession.getKnowledgeBase()
 						.getManager().searchQuestion(before);
 				if (beforeQuestion != null && beforeQuestion instanceof QuestionDate) {

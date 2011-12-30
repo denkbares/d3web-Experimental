@@ -54,15 +54,16 @@ public class D3webXMLParser {
 	 * 
 	 * @param xMLFilename
 	 */
-	public D3webXMLParser(Object xMLFilename) {
+	public D3webXMLParser() {
 		super();
-		this.xMLFilename = (String) xMLFilename;
-		if (!this.xMLFilename.endsWith(".xml")) {
-			this.xMLFilename += ".xml";
-		}
-
-		parse();
 	}
+        
+        public void setSourceToParse(String xmlfilename){
+            this.xMLFilename = xmlfilename;
+            if (!this.xMLFilename.endsWith(".xml")) {
+		this.xMLFilename += ".xml";
+            }
+        }
 
 	/**
 	 * Parses the d3web-XML specification file to retrieve both the root node
@@ -70,7 +71,7 @@ public class D3webXMLParser {
 	 * 
 	 * @created 13.10.2010
 	 */
-	private void parse() {
+	public void parse() {
 
 		// try to red the file depending on what was set in the constructor
 		File inputFile = null;

@@ -67,9 +67,8 @@ public class EuraHSDialog extends D3webDialog {
 	private static final long serialVersionUID = -4790211381203716706L;
 
 	@Override
-	protected String getSource() {
-		String source = "Hernia";
-		return source;
+	protected String getSource(HttpServletRequest request){
+		return "Hernia";
 	}
 
 	/**
