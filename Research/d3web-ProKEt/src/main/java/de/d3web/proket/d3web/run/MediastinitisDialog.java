@@ -19,6 +19,7 @@
  */
 package de.d3web.proket.d3web.run;
 
+import au.com.bytecode.opencsv.CSVReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -33,6 +34,13 @@ import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.output.render.MediastinitisDefaultRootD3webRenderer;
 import de.d3web.proket.output.container.ContainerCollection;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 
 /**
  * Servlet for creating and using dialogs with d3web binding. Binding is more of
@@ -57,6 +65,43 @@ public class MediastinitisDialog extends D3webDialog {
 
 	private static final long serialVersionUID = 4798072917307992413L;
 
+        @Override
+        public void init(ServletConfig config) throws ServletException{
+            super.init(config);
+            
+            // initialize userDat map, needed for basic simple login as in Mediastinitis
+        if (usrDat == null) {
+            // get parent folder for storing cases
+            usrDat = new HashMap<String, List<String>>();
+
+            String csvFile = GLOBSET.getServletBasePath()
+                    + "/users/usrdat.csv";
+            CSVReader csvr = null;
+            String[] nextLine = null;
+
+            try {
+                csvr = new CSVReader(new FileReader(csvFile));
+                // go through file
+                while ((nextLine = csvr.readNext()) != null) {
+                    // skip first line
+                    if (!nextLine[0].startsWith("usr")) {
+                        // if username and pw could be found, return true
+                        List<String> values = new ArrayList<String>();
+                        for (String word : nextLine) {
+                            values.add(word);
+                        }
+                        usrDat.put(nextLine[0], values);
+                    }
+                }
+
+            } catch (FileNotFoundException fnfe) {
+                fnfe.printStackTrace();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
+        }
+        
 	@Override
 	protected String getSource(HttpServletRequest request) {
 		return "Mediastinitis";

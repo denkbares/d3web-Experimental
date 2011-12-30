@@ -138,13 +138,10 @@ public class D3webDialog extends HttpServlet {
     protected D3webXMLParser d3webParser;
     protected D3webConnector d3wcon;
     protected static Map<String, List<String>> usrDat = null;
-    // TODO replace global settings with this everywhere
     protected final GlobalSettings GLOBSET = GlobalSettings.getInstance();
 
     // TODO get Date everywhere in JS instead of Servlet
-    // TODO put this in init() method?!
     
-
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -166,43 +163,8 @@ public class D3webDialog extends HttpServlet {
 
         String servletcontext = config.getServletContext().getRealPath("/");
         GLOBSET.setServletBasePath(servletcontext);
-        
-        // initialize userDat map, needed for basic simple login as in Mediastinitis
-        if (usrDat == null) {
-            // get parent folder for storing cases
-            usrDat = new HashMap<String, List<String>>();
-
-            String csvFile = GLOBSET.getServletBasePath()
-                    + "/users/usrdat.csv";
-            CSVReader csvr = null;
-            String[] nextLine = null;
-
-            try {
-                csvr = new CSVReader(new FileReader(csvFile));
-                // go through file
-                while ((nextLine = csvr.readNext()) != null) {
-                    // skip first line
-                    if (!nextLine[0].startsWith("usr")) {
-                        // if username and pw could be found, return true
-                        List<String> values = new ArrayList<String>();
-                        for (String word : nextLine) {
-                            values.add(word);
-                        }
-                        usrDat.put(nextLine[0], values);
-                    }
-                }
-
-            } catch (FileNotFoundException fnfe) {
-                fnfe.printStackTrace();
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-            }
-        }
     
-        System.out.println(usrDat.toString());
         d3webParser = new D3webXMLParser();
-        d3wcon = D3webConnector.getInstance();
-        d3wcon.setD3webParser(d3webParser);
     }
 
     /**
@@ -223,6 +185,9 @@ public class D3webDialog extends HttpServlet {
         // try to get the src parameter, i.e. the specification of the dialog
         String source = getSource(request);
         d3webParser.setSourceToParse(source);
+       
+        d3wcon = D3webConnector.getInstance();
+        d3wcon.setD3webParser(d3webParser);
 
         // set SRC store attribute to "" per default for avoiding nullpointers
         if(httpSession.getAttribute(SRC)==null){
@@ -249,43 +214,38 @@ public class D3webDialog extends HttpServlet {
             d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
             d3wcon.setLoginMode(d3webParser.getLogin());
             
-            // logging specification
+            // switch on/off logging depending on xml specification
             if (d3webParser.getLogging().contains("ON")) {
                 d3wcon.setLogging(true);
             }
             
-            // dialog language specification
+            // set dialog language (for internationalization of widgets, NOT
+            // KB elements (specified in knowledge base
             if (!d3webParser.getLanguage().equals("")) {
                 d3wcon.setLanguage(d3webParser.getLanguage());
             }
 
-               
-            String userpref = "";
-            if (d3wcon.getUserprefix().equals("") || d3wcon.getUserprefix() == null) {
-                userpref = "DEFAULT";
-            } else {
+            // Get userprefix specification
+            String userpref = "DEFAULT";
+            if (!(d3wcon.getUserprefix().equals("")) &&
+                    !(d3wcon.getUserprefix() == null)) {
                 userpref = d3wcon.getUserprefix();
             }
             
             // set necessary paths for saving stuff such as cases, logfiles...
-            String servletBasePath =
-                    request.getSession().getServletContext().getRealPath("/");
-            GlobalSettings.getInstance().setServletBasePath(servletBasePath);
             GLOBSET.setCaseFolder(
-                    servletBasePath + "../../"
-                    + userpref
-                    + "-Data/cases");
+                    GLOBSET.getServletBasePath() 
+                    + "../../" + userpref + "-Data/cases");
 
             GLOBSET.setLogFolder(
-                    servletBasePath + "../../"
-                    + userpref
-                    + "-Data/logs");
+                    GLOBSET.getServletBasePath() 
+                    + "../../" + userpref + "-Data/logs");
 
             JSONLogger logger = new JSONLogger();
             d3wcon.setLogger(logger);
 
             // stream images from KB into webapp
-            GLOBSET.setKbImgFolder(servletBasePath + "kbimg");
+            GLOBSET.setKbImgFolder(GLOBSET.getServletBasePath() + "kbimg");
             D3webUtils.streamImages();
         }
 
@@ -374,7 +334,7 @@ public class D3webDialog extends HttpServlet {
             logLanguageWidget(request);
             return;
         } else if (action.equalsIgnoreCase("logInfoPopup")) {
-            logInfoPopup(request);
+            D3webDialogUtilities.logInfoPopup(request, logfilename);
             return;
         } else {
             handleDialogSpecificActions(httpSession, request, response, action);
@@ -866,7 +826,7 @@ public class D3webDialog extends HttpServlet {
         httpSession.setAttribute(D3WEB_SESSION, d3webSession);
         httpSession.setAttribute("lastLoaded", "");
         if (d3wcon.isLogging()) {
-            GlobalSettings.getInstance().setInitLogged(false);
+            GLOBSET.setInitLogged(false);
             d3wcon.setLogger(new JSONLogger());
         }
     }
@@ -1164,30 +1124,6 @@ public class D3webDialog extends HttpServlet {
         return value;
     }
 
-    /**
-     * Stream images from the KB into intermediate storage in webapp
-     * 
-     * @created 29.04.2011
-     */
-    protected void streamImages() {
-
-        for (Resource resource : D3webConnector.getInstance().getKb().getResources()) {
-            String rName = resource.getPathName();
-            String rType = rName.substring(rName.lastIndexOf('.') + 1).toLowerCase();
-
-            if (rType.equals("jpg") || rType.equals("png")) {
-                BufferedImage bui = ImageHandler.getResourceAsBUI(resource);
-                try {
-                    File file = new File(GlobalSettings.getInstance().getKbImgFolder() + "/"
-                            + rName);
-                    ImageIO.write(bui, rType, file);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
     protected void updateSummary(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
         PrintWriter writer = response.getWriter();
 
@@ -1297,18 +1233,5 @@ public class D3webDialog extends HttpServlet {
         d3wcon.getLogger().writeJSONToFile(logfilename);
     }
 
-    protected void logInfoPopup(HttpServletRequest request) {
-        String prefix = request.getParameter("prefix");
-        String ttwidget = request.getParameter("widget");
-        ttwidget = ttwidget.replace("+", " ");
-        String timestring = request.getParameter("timestring");
-
-        JSONLogger logger = d3wcon.getLogger();
-
-        // TODO rename tooltip --> infopopup
-        logger.logClickedObjects(
-                "INFOPOPUP_" + prefix, timestring, ttwidget);
-
-        d3wcon.getLogger().writeJSONToFile(logfilename);
-    }
+    
 }
