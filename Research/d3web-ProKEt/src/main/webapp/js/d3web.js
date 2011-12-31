@@ -456,7 +456,7 @@ function d3web_storeQuestionDate(dateSelect) {
 }
 
 function isAnsweredQuestion(question) {
-	return question.parent().children("[class$=\"question-d\"]") != null;
+	return question.parent().children("[class$=\"question-d\"]").length > 0;
 }
 
 function getDateValue(select, def) {

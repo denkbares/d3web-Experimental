@@ -139,7 +139,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
 		// number of columns that is to be set for this element, default 1-col
 		int columns = 1;
-		if (to.getName().equals("Q000")) {
+		if (to == d3webSession.getKnowledgeBase().getRootQASet()) {
 			columns = d3wcon.getDialogColumns();
 		}
 		else if (to instanceof QContainer) {
@@ -168,6 +168,13 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 		TerminologyObject[] children = to.getChildren();
 		// Blackboard bb = d3webSession.getBlackboard();
 		for (TerminologyObject child : children) {
+
+			if (child instanceof Question && to == d3webSession.getKnowledgeBase().getRootQASet()) {
+				// skip top level questions... render style does not fit and
+				// also this way they can be used for abstracts that should
+				// never be visible for the user
+				continue;
+			}
 
 			// get the matching renderer
 			IQuestionD3webRenderer childRenderer = AbstractD3webRenderer.getRenderer(child);

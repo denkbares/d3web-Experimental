@@ -58,7 +58,7 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 
 	private static final long DAY = 1000 * 60 * 60 * 24;
 	private static final long WEEK = DAY * 7;
-	private static final long SIX_WEEKS = WEEK * 7;
+	private static final long SIX_WEEKS = WEEK * 6;
 	private static final long YEAR = DAY * 365;
 
 	private static final SimpleDateFormat DD_MM_YYYY = new SimpleDateFormat("dd.MM.yyyy");
@@ -102,6 +102,7 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 		StringBuilder followUpTable = new StringBuilder();
 		if (caseFiles != null && caseFiles.size() > 0) {
 
+			followUpTable.append("<table style='border-spacing: 0px' border='1'>");
 			renderTableHeader(followUpTable);
 
 			Collections.sort(caseFiles);
@@ -117,7 +118,6 @@ public class EuraHSDefaultRootD3webRenderer extends DefaultRootD3webRenderer {
 	}
 
 	private void renderTableHeader(StringBuilder followUpTable) {
-		followUpTable.append("<table style='border-spacing: 0px' border='1'>");
 		followUpTable.append("<tr>");
 		renderHeaderCell("Case Name", followUpTable);
 		renderHeaderCell("Last Modified", followUpTable);
