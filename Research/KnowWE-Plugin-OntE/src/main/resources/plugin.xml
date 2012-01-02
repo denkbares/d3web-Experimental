@@ -399,18 +399,7 @@
         <parameter id="scope" value="TurtleMarkup" />
     </extension>    
     
-    <extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
-        id="StatementImportanceToolProvider">
-        <parameter id="class"
-            value="de.knowwe.util.StatementImportanceToolProvider" />
-        <parameter id="name" value="StatementImportanceToolProvider" />
-        <parameter id="description"
-            value="Test description" />
-        <parameter id="version" value="1.0" />
-        <parameter id="priority" value="5" />       
-        <parameter id="scope" value="TurtleMarkup" />
-    </extension>      
-	
+
 
     <extension plugin-id="KnowWEExtensionPoints" point-id="Type"
         id="ManchesterDefaultMarkup">
