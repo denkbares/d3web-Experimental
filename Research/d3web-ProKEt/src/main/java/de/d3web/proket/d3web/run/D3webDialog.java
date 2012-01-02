@@ -35,6 +35,7 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -69,7 +70,6 @@ import de.d3web.proket.database.DateCoDec;
 import de.d3web.proket.database.TokenThread;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
-import javax.servlet.ServletConfig;
 
 /**
  * Servlet for creating and using dialogs with d3web binding. Binding is more of
@@ -92,835 +92,864 @@ import javax.servlet.ServletConfig;
  */
 public class D3webDialog extends HttpServlet {
 
-    private static final long serialVersionUID = -2466200526894064976L;
-    protected static final String D3WEB_SESSION = "d3webSession";
-    protected static final String SRC = "xmlsource";
-    protected static final String REPLACECONTENT = "##replacecontent##";
-    protected static final String REPLACEID = "##replaceid##";
-    protected D3webXMLParser d3webParser;
-    protected D3webConnector d3wcon;
-    protected static Map<String, List<String>> usrDat = null;
-    protected final GlobalSettings GLOBSET = GlobalSettings.getInstance();
-
-    // TODO get Date everywhere in JS instead of Servlet
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public D3webDialog() {
-        super();
-    }
-
-    /**
-     * Init method -- put all the stuff here, that should be done ONCE for the
-     * Servlet at the beginning, such as initialising paths, DB connections, 
-     * etc.
-     * 
-     * @param config
-     * @throws ServletException 
-     */
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-
-        String servletcontext = config.getServletContext().getRealPath("/");
-        GLOBSET.setServletBasePath(servletcontext);
-
-        d3webParser = new D3webXMLParser();
-    }
-
-    /**
-     * Basic servlet method. 
-     * Always called, if servlet is refreshed, called newly etc.
-     * 
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-     *      response)
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        response.setContentType("text/html; charset=UTF-8");
-
-        HttpSession httpSession = request.getSession(true);
-
-        // try to get the src parameter, i.e. the specification of the dialog
-        String source = getSource(request);
-        d3webParser.setSourceToParse(source);
-
-        d3wcon = D3webConnector.getInstance();
-        d3wcon.setD3webParser(d3webParser);
-
-        // set SRC store attribute to "" per default for avoiding nullpointers
-        if (httpSession.getAttribute(SRC) == null) {
-            httpSession.setAttribute(SRC, "");
-        }
-
-        // only parse again if stored source is not equal to current source
-        String srcStored = httpSession.getAttribute(SRC).toString();
-        if (!(srcStored.equals(source))) {
-
-            httpSession.setAttribute(SRC, source);
-            d3webParser.parse();
-            d3wcon.setKb(d3webParser.getKnowledgeBase());
-            d3wcon.setKbName(d3webParser.getKnowledgeBaseName());
-            // d3wcon.setDialogStrat(d3webParser.getStrategy());
-            d3wcon.setDialogType(d3webParser.getType());
-            d3wcon.setIndicationMode(d3webParser.getIndicationMode());
-            d3wcon.setDialogColumns(d3webParser.getDialogColumns());
-            d3wcon.setQuestionColumns(d3webParser.getQuestionColumns());
-            d3wcon.setQuestionnaireColumns(d3webParser.getQuestionnaireColumns());
-            d3wcon.setCss(d3webParser.getCss());
-            d3wcon.setHeader(d3webParser.getHeader());
-            d3wcon.setUserprefix(d3webParser.getUserPrefix());
-            d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
-            d3wcon.setLoginMode(d3webParser.getLogin());
-
-            // switch on/off logging depending on xml specification
-            if (d3webParser.getLogging().contains("ON")) {
-                d3wcon.setLogging(true);
-            }
-
-            // set dialog language (for internationalization of widgets, NOT
-            // KB elements (specified in knowledge base
-            if (!d3webParser.getLanguage().equals("")) {
-                d3wcon.setLanguage(d3webParser.getLanguage());
-            }
-
-            // Get userprefix specification
-            String userpref = "DEFAULT";
-            if (!(d3wcon.getUserprefix().equals(""))
-                    && !(d3wcon.getUserprefix() == null)) {
-                userpref = d3wcon.getUserprefix();
-            }
-
-            // set necessary paths for saving stuff such as cases, logfiles...
-            GLOBSET.setCaseFolder(
-                    GLOBSET.getServletBasePath()
-                    + "../../" + userpref + "-Data/cases");
-
-            GLOBSET.setLogFolder(
-                    GLOBSET.getServletBasePath()
-                    + "../../" + userpref + "-Data/logs");
-
-            JSONLogger logger = new JSONLogger();
-            d3wcon.setLogger(logger);
-
-            // stream images from KB into webapp
-            GLOBSET.setKbImgFolder(GLOBSET.getServletBasePath() + "kbimg");
-            D3webUtils.streamImages();
-        }
-
-        // if session is null create a session
-        if (httpSession.getAttribute(D3WEB_SESSION) == null) {
-            resetD3webSession(httpSession);
-        }
-
-        // in case of db login (as for EuraHS) redirect to the EuraHS-Login 
-        // Servlet --> TODO refactor: rename EuraHS-Login Servlet or create
-        // superservlet to be overwritten
-        if (d3wcon.getLoginMode() == LoginMode.db) {
-            String authenticated = (String) httpSession.getAttribute("authenticated");
-            if (authenticated == null || !authenticated.equals("yes")) {
-                response.sendRedirect("../EuraHS-Login");
-                return;
-            }
-        }
-
-        // in case nothing other is provided, "show" is the default action
-        String action = request.getParameter("action");
-        if (action == null) {
-            // action = "mail";
-            action = "show";
-        }
-        // switch action as defined by the servlet call
-        if (action.equalsIgnoreCase("show")) {
-            show(request, response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("dbLogin")) {
-            loginDB(request, response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("addfacts")) {
-            addFacts(request, response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("savecase")) {
-            saveCase(request, response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("loadcase")) {
-            loadCase(request, response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("deletecase")) {
-            deleteCase(request, response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("updatesummary")) {
-            updateSummary(request, response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("reset")
-                || action.equalsIgnoreCase("resetNewUser")) {
-            resetD3webSession(httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("gotoStatistics")) {
-            gotoStatistics(response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("checkUsrDatLogin")) {
-            checkUsrDatLogin(response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("usrDatlogin")) {
-            loginUsrDat(request, response, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("sendmail")) {
-            try {
-                sendMail(request, response, httpSession);
-                response.getWriter().append("success");
-            } catch (MessagingException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            return;
-        } else if (action.equalsIgnoreCase("checkrange")) {
-            checkRange(request, response);
-            return;
-        } else if (action.equalsIgnoreCase("language")) {
-            setLanguageID(request);
-            return;
-        } else if (action.equalsIgnoreCase("logInit")) {
-            logInitially(request, httpSession);
-            return;
-        } else if (action.equalsIgnoreCase("logEnd")) {
-            logSessionEnd(request);
-            return;
-        } else if (action.equalsIgnoreCase("logWidget")) {
-            logWidget(request);
-            return;
-        } else if (action.equalsIgnoreCase("logLanguageWidget")) {
-            logLanguageWidget(request);
-            return;
-        } else if (action.equalsIgnoreCase("logInfoPopup")) {
-            logInfoPopup(request);
-            return;
-        } else {
-            handleDialogSpecificActions(httpSession, request, response, action);
-            return;
-        }
-    }
-
-    /**
-     * Add one or several given facts. Thereby, first check whether input-store
-     * has elements, if yes, parse them and set them (for num/text/date
-     * questions), if no, just parse and set a given single value.
-     * 
-     * @created 28.01.2011
-     * @param request ServletRequest
-     * @param response ServletResponse
-     */
-    protected void addFacts(HttpServletRequest request,
-            HttpServletResponse response, HttpSession httpSession)
-            throws IOException {
-
-        PrintWriter writer = response.getWriter();
-
-        Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
-
-        List<String> questions = new ArrayList<String>();
-        List<String> values = new ArrayList<String>();
-        getParameterPairs(request, "ocq", "occhoice", questions, values);
-        getParameterPairs(request, "mcq", "mcchoices", questions, values);
-        getParameterPairs(request, "dateq", "date", questions, values);
-        getParameterPairs(request, "textq", "text", questions, values);
-        getParameterPairs(request, "numq", "num", questions, values);
-
-        /*
-         * Check, whether a required value (for saving) is specified. If yes,
-         * check whether this value has already been set in the KB or is about
-         * to be set in the current call --> go on normally. Otherwise, return a
-         * marker "<required value>" so the user is informed by AJAX to provide
-         * this marked value.
-         */
-        List<String> all = new LinkedList<String>();
-        all.addAll(questions);
-        all.addAll(values);
-        String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
-        if (!reqVal.equals("")
-                && !checkReqVal(reqVal, d3webSession, all)) {
-
-            writer.append("##missingfield##");
-            writer.append(reqVal);
-            return;
-        }
-
-        // get dialog state before setting values
-        Set<QASet> indicatedTOsBefore = D3webUtils.getActiveSet(d3webSession);
-        List<Question> answeredQuestionsBefore = d3webSession.getBlackboard().getAnsweredQuestions();
-        Set<TerminologyObject> unknownQuestionsBefore = D3webUtils.getUnknownQuestions(d3webSession);
-
-        for (int i = 0; i < questions.size(); i++) {
-            D3webUtils.setValue(questions.get(i), values.get(i), d3webSession);
-
-            if (d3wcon.isLogging()) {
-                // logQuestionValue all changed widgets/items
-                D3webServletLogUtils.logQuestionValue("q_" + questions.get(i), values.get(i));
-
-            }
-        }
-
-        D3webUtils.resetAbandonedPaths(d3webSession);
-
-        // AUTOSAVE
-        PersistenceD3webUtils.saveCase((String) httpSession.getAttribute("user"), "autosave",
-                d3webSession);
-
-        // Rerender changed Questions and Questionnaires
-        Set<QASet> indicatedTOsAfter = D3webUtils.getActiveSet(d3webSession);
-
-        Set<TerminologyObject> unknownQuestionsAfter = D3webUtils.getUnknownQuestions(d3webSession);
-
-        Set<TerminologyObject> diff = new HashSet<TerminologyObject>();
-        for (TerminologyObject to : unknownQuestionsBefore) {
-            if (!unknownQuestionsAfter.contains(to)) {
-                diff.add(to);
-            }
-        }
-
-        D3webUtils.getDiff(indicatedTOsBefore, indicatedTOsAfter, diff);
-        D3webUtils.getDiff(indicatedTOsAfter, indicatedTOsBefore, diff);
-
-        List<Question> answeredQuestionsAfter = d3webSession.getBlackboard().getAnsweredQuestions();
-        diff.addAll(D3webUtils.getUnknownQuestions(d3webSession));
-        answeredQuestionsAfter.removeAll(answeredQuestionsBefore);
-        // System.out.println(answeredQuestionsAfter);
-        diff.addAll(answeredQuestionsAfter);
-
-        ContainerCollection cc = new ContainerCollection();
-        for (TerminologyObject to : diff) {
-            IQuestionD3webRenderer toRenderer = AbstractD3webRenderer.getRenderer(to);
-            writer.append(REPLACEID + AbstractD3webRenderer.getID(to));
-            writer.append(REPLACECONTENT);
-            writer.append(toRenderer.renderTerminologyObject(d3webSession, cc, to,
-                    to instanceof QContainer
-                    ? d3wcon.getKb().getRootQASet()
-                    : D3webUtils.getQuestionnaireAncestor(to)));
-        }
-        writer.append(REPLACEID + "headerInfoLine");
-        writer.append(REPLACECONTENT);
-        DefaultRootD3webRenderer rootRenderer =
-                (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
-        writer.append(rootRenderer.renderHeaderInfoLine(d3webSession));
-    }
-
-    /**
-     * Check the range of numerical questions.
-     * 
-     * @param request
-     * @param response
-     * @throws IOException 
-     */
-    protected void checkRange(
-            HttpServletRequest request, HttpServletResponse response) 
-            throws IOException {
-        PrintWriter writer = response.getWriter();
-
-        String qidsString = request.getParameter("qids");
-        qidsString = qidsString.replace("q_", "");
-
-        String[] qids = qidsString.split(";");
-        String qidBackstring = "";
-
-        for (String qid : qids) {
-            String[] idVal = qid.split("%");
-
-            Question to = d3wcon.getKb().getManager().searchQuestion(idVal[0]);
-
-            if (to instanceof QuestionNum) {
-                if (to.getInfoStore().getValue(BasicProperties.QUESTION_NUM_RANGE) != null) {
-                    NumericalInterval range = to.getInfoStore().getValue(
-                            BasicProperties.QUESTION_NUM_RANGE);
-                    qidBackstring += to.getName() + "%" + idVal[1] + "%";
-                    qidBackstring += range.getLeft() + "-" + range.getRight() + ";";
-                }
-            }
-
-        }
-        writer.append(qidBackstring);
-    }
-
-    /**
-     * Parse the language parameter (set via JS depending on what language
-     * (for KB elements) was chosen in the dialog and set it in global settings.
-     * @param request 
-     */
-    protected void setLanguageID(HttpServletRequest request) {
-        int localeID =
-                Integer.parseInt(
-                request.getParameter("langID").toString());
-        GLOBSET.setLocaleIdentifier(localeID);
-    }
-
-    /**
-     * Checks, whether a potentially required value is already set in the KB or
-     * is contained in the current set of values to write to the KB. If yes, the
-     * method returns true, if no, false.
-     * 
-     * @created 15.04.2011
-     * @param requiredVal The required value that is to check
-     * @param sess The d3webSession
-     * @param valToSet The single value to set
-     * @param store The value store
-     * @return TRUE of the required value is already set or contained in the
-     *         current set of values to set
-     */
-    private boolean checkReqVal(String requiredVal, Session sess, List<String> check) {
-        Blackboard blackboard = sess.getBlackboard();
-
-        Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(requiredVal);
-
-        Fact lastFact = blackboard.getValueFact(to);
-
-        boolean contains = false;
-        for (String s : check) {
-            if (s.equals(requiredVal)) {
-                contains = true;
-                break;
-            }
-        }
-        if (contains || (lastFact != null && lastFact.getValue().toString() != "")) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Initial check whether...
-     * @created 26.07.2011
-     * @param response
-     * @param httpSession
-     * @throws IOException
-     */
-    protected void checkUsrDatLogin(HttpServletResponse response, HttpSession httpSession) throws IOException {
-        PrintWriter writer = response.getWriter();
-
-        if (httpSession.getAttribute("user") == null) {
-            httpSession.setAttribute("log", true);
-            writer.append("NLI");
-        } else {
-            writer.append("NOLI");
-        }
-    }
-
-    /**
-     * Delete a case.
-     * 
-     * @created 09.03.2011
-     * @param request ServletRequest
-     * @param response ServletResponse
-     */
-    protected void deleteCase(HttpServletRequest request,
-            HttpServletResponse response, HttpSession httpSession) {
-
-        String filename = request.getParameter("fn");
-        String user = (String) httpSession.getAttribute("user");
-
-        if (PersistenceD3webUtils.existsCase(user, filename)) {
-            PersistenceD3webUtils.deleteUserCase(user, filename);
-        }
-    }
-
-    /**
-     * Get several parameters with specified names from the request object.
-     * Mainly used for getting more than one question with corresponding answers
-     * from the request. 
-     * Return the parameters as a questions and answers list respectively.
-     * 
-     * @param request
-     * @param paraName1 first parameter name
-     * @param paraName2 second parameter name
-     * @param parameters1 
-     * @param parameters2 
-     */
-    private void getParameterPairs(
-            HttpServletRequest request, String paraName1, String paraName2,
-            List<String> parameters1, List<String> parameters2) {
-        int i = 0;
-        while (true) {
-            String para1 = request.getParameter(paraName1 + i);
-            String para2 = request.getParameter(paraName2 + i);
-            if (para1 == null || para2 == null) {
-                break;
-            }
-            String objectNameForId =
-                    AbstractD3webRenderer.getObjectNameForId(para1);
-            parameters1.add(objectNameForId == null ? para1 : objectNameForId);
-            String objectNameForId2 =
-                    AbstractD3webRenderer.getObjectNameForId(para2);
-            parameters2.add(objectNameForId2 == null ? para2 : objectNameForId2);
-            i++;
-        }
-    }
-
-    /**
-     * Redirect to the statistics site.
-     * 
-     * @param response
-     * @param httpSession
-     * @throws IOException 
-     */
-    protected void gotoStatistics(HttpServletResponse response,
-            HttpSession httpSession) throws IOException {
-
-        String email = (String) httpSession.getAttribute("user");
-
-        String gotoUrl = "../Statistics/Statistic.jsp?action=dbLogin";
-
-        String token = DateCoDec.getCode();
-        gotoUrl += "&t=" + token;
-        gotoUrl += "&e=" + Base64.encodeBase64String(email.getBytes());
-
-        new TokenThread(token, email).start();
-        PrintWriter writer = response.getWriter();
-        writer.print(gotoUrl);
-        writer.close();
-        // response.sendRedirect(gotoUrl);
-    }
-
-    /**
-     * Loading a case.
-     * 
-     * @created 09.03.2011
-     * @param request ServletRequest
-     * @param response ServletResponse
-     */
-    protected void loadCase(HttpServletRequest request,
-            HttpServletResponse response, HttpSession httpSession) {
-
-        String filename = request.getParameter("fn");
-        String user = (String) httpSession.getAttribute("user");
-        loadCaseUserFilename(httpSession, user, filename);
-    }
-
-    /* Helper method for above loadCase() method and for single access of 
-    load case mechanism with a given username and filename */
-    protected void loadCaseUserFilename(HttpSession httpSession, String user, String filename) {
-        if (PersistenceD3webUtils.existsCase(user, filename)) {
-            httpSession.setAttribute(D3WEB_SESSION,
-                    PersistenceD3webUtils.loadUserCase(user, filename));
-            httpSession.setAttribute("lastLoaded", filename);
-        }
-    }
-
-    /**
-     * Login redirect - EURAHS only --> refactor: move to EuraHS Servlet
-     * @param request
-     * @param response
-     * @param httpSession
-     * @throws IOException 
-     */
-    protected void loginDB(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
-        String token = request.getParameter("t");
-        String email = new String(Base64.decodeBase64(request.getParameter("e")));
-
-        if (DB.isValidToken(token, email)) {
-            httpSession.setAttribute("authenticated", "yes");
-            httpSession.setAttribute("user", email);
-
-            loadCaseUserFilename(httpSession, email, "autosave");
-
-            response.sendRedirect("../EuraHS-Dialog");
-        } else {
-            response.sendRedirect("../EuraHS-Login");
-        }
-    }
-
-    /**
-     * Handle login of new user in simple-textdatabase case, 
-     * e.g. for Mediastinitis
-     * 
-     * @created 29.04.2011
-     * @param req
-     * @param res
-     * @param httpSession
-     * @throws IOException
-     */
-    protected void loginUsrDat(HttpServletRequest req,
-            HttpServletResponse res, HttpSession httpSession)
-            throws IOException {
-
-        // fetch the information sent via the request string from login
-        String u = req.getParameter("u");
-        String p = req.getParameter("p");
-
-        // get the response writer for communicating back via Ajax
-        PrintWriter writer = res.getWriter();
-
-        httpSession.setMaxInactiveInterval(60 * 60);
-
-        // if no valid login
-        if (!permitUser(u, p)) {
-
-            // causes JS to display error message
-            writer.append("nosuccess");
-            return;
-        }
-
-        // set user attribute for the HttpSession
-        httpSession.setAttribute("user", u);
-
-        httpSession.setAttribute("lastLoaded", "");
-
-        /*
-         * in case we should have more than one user per clinic, we distinguish
-         * them by adding "_1"... to the clinic name, i.e. WUE_1, WUE_2 etc.
-         * Thus we need to extract part of the login name that also denotes the
-         * clinic name and thus the subfolder, where cases are stored that
-         * should be visible for THIS user.
-         */
-        int splitter = u.indexOf("_");
-        if (splitter != -1) {
-            String toReplace = u.substring(splitter, u.length());
-            String userSubfolder = u.replace(toReplace, "");
-            httpSession.setAttribute("user", userSubfolder);
-        }
-
-        // causes JS to start new session and d3web case finally
-        writer.append("newUser");
-    }
-
-    /**
-     * Check, whether the user has permissions to logQuestionValue in. Permissions are stored
-     * in userdat.csv in cases parent folder
-     * 
-     * @created 15.03.2011
-     * @param user The user name.
-     * @param password The password.
-     * @return True, if permissions are correct.
-     */
-    private boolean permitUser(String user, String password) {
-
-        List<String> values = usrDat.get(user);
-        if (values != null) {
-            String pass = values.get(1);
-            if (pass != null && password.equals(pass)) {
-                return true;
-            }
-        }
-        return false; // trust no one per default
-    }
-
-    /**
-     * Reset a running d3web session.
-     * @param httpSession 
-     */
-    protected void resetD3webSession(HttpSession httpSession) {
-        Session d3webSession =
-                D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
-        httpSession.setAttribute(D3WEB_SESSION, d3webSession);
-        httpSession.setAttribute("lastLoaded", "");
-        if (d3wcon.isLogging()) {
-            GLOBSET.setInitLogged(false);
-            d3wcon.setLogger(new JSONLogger());
-        }
-    }
-
-    /**
-     * Basic servlet method for displaying the dialog.
-     * 
-     * @created 28.01.2011
-     * @param request
-     * @param response
-     * @param d3webSession
-     * @throws IOException
-     */
-    protected void show(HttpServletRequest request, HttpServletResponse response,
-            HttpSession httpSession)
-            throws IOException {
-
-        PrintWriter writer = response.getWriter();
-        // get the root renderer --> call getRenderer with null
-        DefaultRootD3webRenderer d3webr =
-                (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
-
-        // new ContainerCollection needed each time to get an updated dialog
-        ContainerCollection cc = new ContainerCollection();
-        Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
-        cc = d3webr.renderRoot(cc, d3webSess, httpSession);
-        writer.print(cc.html.toString()); // deliver the rendered output
-        writer.close(); // and close
-    }
-
-    /**
-     * Saving a case.
-     * 
-     * @created 08.03.2011
-     * @param request ServletRequest
-     * @param response ServletResponse
-     */
-    protected void saveCase(HttpServletRequest request,
-            HttpServletResponse response, HttpSession httpSession)
-            throws IOException {
-
-        PrintWriter writer = null;
-        writer = response.getWriter();
-
-        String userFilename = request.getParameter("userfn");
-        String user = (String) httpSession.getAttribute("user");
-        String lastLoaded = (String) httpSession.getAttribute("lastLoaded");
-        String forceString = request.getParameter("force");
-        boolean force = forceString != null && forceString.equals("true");
-        Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
-
-        if (force
-                || !PersistenceD3webUtils.existsCase(user, userFilename)
-                || (PersistenceD3webUtils.existsCase(user, userFilename)
-                && lastLoaded != null && lastLoaded.equals(userFilename))) {
-            PersistenceD3webUtils.saveCase(
-                    user,
-                    userFilename,
-                    d3webSession);
-            httpSession.setAttribute("lastLoaded", userFilename);
-        } else {
-            writer.append("exists");
-        }
-    }
-
-    /**
-     * Send a mail with login request via account "user" and to the contact
-     * person specified in InternetAdress "to"
-     * 
-     * @created 29.04.2011
-     * @param request
-     * @param response
-     * @param httpSession
-     * @throws MessagingException
-     */
-    protected void sendMail(HttpServletRequest request, HttpServletResponse response,
-            HttpSession httpSession) throws MessagingException {
-
-        final String user = "SendmailAnonymus@freenet.de";
-        final String pw = "sendmail";
-
-        /* setup properties for mail server */
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "mx.freenet.de");
-        props.put("mail.smtp.port", "587");
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.user", user);
-        props.put("mail.password", pw);
-        // props.put("mail.debug", "true");
-
-        javax.mail.Session session = javax.mail.Session.getDefaultInstance(props,
-                new javax.mail.Authenticator() {
-
-                    @Override
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(user, pw);
-                    }
-                });
-
-        MimeMessage message = new MimeMessage(session);
-
-        // from-identificator
-        InternetAddress from = new InternetAddress(user);
-        message.setFrom(from);
-
-        String loginUser = request.getParameter("user");
-
-        // default toAddress if nothing else specified in userdat.csv
-        String toAddress = "striffler@informatik.uni-wuerzburg.de";
-        usrDat.get(loginUser);
-        if (usrDat != null) {
-            String email = usrDat.get(loginUser).get(2);
-            if (email != null) {
-                toAddress = email;
-            }
-        }
-        InternetAddress to = new InternetAddress(toAddress);
-        message.addRecipient(Message.RecipientType.TO, to);
-
-        /* A subject */
-        message.setSubject(this.getClass().getSimpleName() + " Loginanfrage");
-
-        message.setText("Bitte Logindaten erneut zusenden: \n\n"
-                + "Benutzername: " + loginUser);
-        Transport.send(message);
-
-    }
-
-    protected void updateSummary(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
-        PrintWriter writer = response.getWriter();
-
-        String questionnaireContentID = "questionnaireSummaryContent";
-
-        writer.append(REPLACEID + questionnaireContentID);
-        writer.append(REPLACECONTENT);
-        SummaryD3webRenderer rootRenderer = D3webRendererMapping.getInstance().getSummaryRenderer();
-        writer.append("<div id='" + questionnaireContentID + "'>");
-        writer.append(rootRenderer.renderSummaryDialog(
-                (Session) httpSession.getAttribute(D3WEB_SESSION),
-                SummaryD3webRenderer.SummaryType.QUESTIONNAIRE));
-        writer.append("<div>");
-
-        String gridContentID = "gridSummaryContent";
-
-        writer.append(REPLACEID + gridContentID);
-        writer.append(REPLACECONTENT);
-        writer.append("<div id='" + gridContentID + "'>");
-        writer.append(rootRenderer.renderSummaryDialog(
-                (Session) httpSession.getAttribute(D3WEB_SESSION),
-                SummaryD3webRenderer.SummaryType.GRID));
-        writer.append("<div>");
-    }
-
-    protected void logInitially(HttpServletRequest request, HttpSession httpSession) {
-        D3webServletLogUtils.logInitially(request, httpSession);
-    }
-
-    protected void logSessionEnd(HttpServletRequest request) {
-        D3webServletLogUtils.logSessionEnd(request);
-    }
-
-    protected void logWidget(HttpServletRequest request) {
-        D3webServletLogUtils.logWidget(request);
-    }
-
-    protected void logLanguageWidget(HttpServletRequest request) {
-        D3webServletLogUtils.logLanguageWidget(request);
-    }
-
-    protected void logInfoPopup(HttpServletRequest request) {
-        D3webServletLogUtils.logInfoPopup(request);
-    }
-
-    /**
-     * Default additional method that can be used to handle additional (default)
-     * dialog specific actions only by overwriting this.
-     * 
-     * @param httpSession
-     * @param request
-     * @param response
-     * @param action
-     * @throws IOException 
-     */
-    protected void handleDialogSpecificActions(
-            HttpSession httpSession, HttpServletRequest request,
-            HttpServletResponse response, String action)
-            throws IOException {
-        // Overwrite if necessary
-    }
-
-    /**
-     * Default method for getting the source parameter.
-     * As default, Default.xml is suggested; yet if a src parameter is given
-     * by the webapp (when calling from ControlCenter, for example), that one
-     * is taken.
-     * 
-     * @param request the HttpServletRequest
-     * @return the source string
-     */
-    protected String getSource(HttpServletRequest request) {
-
-        // Overwrite if necessary
-        String source = "Default.xml"; // default
-        if (request.getParameter("src") != null) {
-            source = request.getParameter("src");
-        }
-        return source.endsWith(".xml") ? source : source + ".xml";
-    }
+	private static final long serialVersionUID = -2466200526894064976L;
+	protected static final String D3WEB_SESSION = "d3webSession";
+	protected static final String SRC = "xmlsource";
+	protected static final String REPLACECONTENT = "##replacecontent##";
+	protected static final String REPLACEID = "##replaceid##";
+	protected D3webXMLParser d3webParser;
+	protected D3webConnector d3wcon;
+	protected static Map<String, List<String>> usrDat = null;
+	protected final GlobalSettings GLOBSET = GlobalSettings.getInstance();
+
+	// TODO get Date everywhere in JS instead of Servlet
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public D3webDialog() {
+		super();
+	}
+
+	/**
+	 * Init method -- put all the stuff here, that should be done ONCE for the
+	 * Servlet at the beginning, such as initialising paths, DB connections,
+	 * etc.
+	 * 
+	 * @param config
+	 * @throws ServletException
+	 */
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+
+		String servletcontext = config.getServletContext().getRealPath("/");
+		GLOBSET.setServletBasePath(servletcontext);
+
+		d3webParser = new D3webXMLParser();
+	}
+
+	/**
+	 * Basic servlet method. Always called, if servlet is refreshed, called
+	 * newly etc.
+	 * 
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		response.setContentType("text/html; charset=UTF-8");
+
+		HttpSession httpSession = request.getSession(true);
+
+		// try to get the src parameter, i.e. the specification of the dialog
+		String source = getSource(request);
+		d3webParser.setSourceToParse(source);
+
+		d3wcon = D3webConnector.getInstance();
+		d3wcon.setD3webParser(d3webParser);
+
+		// set SRC store attribute to "" per default for avoiding nullpointers
+		if (httpSession.getAttribute(SRC) == null) {
+			httpSession.setAttribute(SRC, "");
+		}
+
+		// only parse again if stored source is not equal to current source
+		String srcStored = httpSession.getAttribute(SRC).toString();
+		if (!(srcStored.equals(source))) {
+
+			httpSession.setAttribute(SRC, source);
+			d3webParser.parse();
+			d3wcon.setKb(d3webParser.getKnowledgeBase());
+			d3wcon.setKbName(d3webParser.getKnowledgeBaseName());
+			// d3wcon.setDialogStrat(d3webParser.getStrategy());
+			d3wcon.setDialogType(d3webParser.getType());
+			d3wcon.setIndicationMode(d3webParser.getIndicationMode());
+			d3wcon.setDialogColumns(d3webParser.getDialogColumns());
+			d3wcon.setQuestionColumns(d3webParser.getQuestionColumns());
+			d3wcon.setQuestionnaireColumns(d3webParser.getQuestionnaireColumns());
+			d3wcon.setCss(d3webParser.getCss());
+			d3wcon.setHeader(d3webParser.getHeader());
+			d3wcon.setUserprefix(d3webParser.getUserPrefix());
+			d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
+			d3wcon.setLoginMode(d3webParser.getLogin());
+
+			// switch on/off logging depending on xml specification
+			if (d3webParser.getLogging().contains("ON")) {
+				d3wcon.setLogging(true);
+			}
+
+			// set dialog language (for internationalization of widgets, NOT
+			// KB elements (specified in knowledge base
+			if (!d3webParser.getLanguage().equals("")) {
+				d3wcon.setLanguage(d3webParser.getLanguage());
+			}
+
+			// Get userprefix specification
+			String userpref = "DEFAULT";
+			if (!(d3wcon.getUserprefix().equals(""))
+					&& !(d3wcon.getUserprefix() == null)) {
+				userpref = d3wcon.getUserprefix();
+			}
+
+			// set necessary paths for saving stuff such as cases, logfiles...
+			GLOBSET.setCaseFolder(
+					GLOBSET.getServletBasePath()
+							+ "../../" + userpref + "-Data/cases");
+
+			GLOBSET.setLogFolder(
+					GLOBSET.getServletBasePath()
+							+ "../../" + userpref + "-Data/logs");
+
+			JSONLogger logger = new JSONLogger();
+			d3wcon.setLogger(logger);
+
+			// stream images from KB into webapp
+			GLOBSET.setKbImgFolder(GLOBSET.getServletBasePath() + "kbimg");
+			D3webUtils.streamImages();
+		}
+
+		// if session is null create a session
+		if (httpSession.getAttribute(D3WEB_SESSION) == null) {
+			resetD3webSession(httpSession);
+		}
+
+		// in case nothing other is provided, "show" is the default action
+		String action = request.getParameter("action");
+		if (action == null) {
+			// action = "mail";
+			action = "show";
+		}
+		if (action.equalsIgnoreCase("dbLogin")) {
+			loginDB(request, response, httpSession);
+			return;
+		}
+
+		// in case of db login (as for EuraHS) redirect to the EuraHS-Login
+		// Servlet --> TODO refactor: rename EuraHS-Login Servlet or create
+		// superservlet to be overwritten
+		if (d3wcon.getLoginMode() == LoginMode.db) {
+			String authenticated = (String) httpSession.getAttribute("authenticated");
+			if (authenticated == null || !authenticated.equals("yes")) {
+				response.sendRedirect("../EuraHS-Login");
+				return;
+			}
+		}
+
+		// switch action as defined by the servlet call
+		if (action.equalsIgnoreCase("show")) {
+			show(request, response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("addfacts")) {
+			addFacts(request, response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("savecase")) {
+			saveCase(request, response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("loadcase")) {
+			loadCase(request, response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("deletecase")) {
+			deleteCase(request, response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("updatesummary")) {
+			updateSummary(request, response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("reset")
+				|| action.equalsIgnoreCase("resetNewUser")) {
+			resetD3webSession(httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("gotoStatistics")) {
+			gotoStatistics(response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("checkUsrDatLogin")) {
+			checkUsrDatLogin(response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("usrDatlogin")) {
+			loginUsrDat(request, response, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("sendmail")) {
+			try {
+				sendMail(request, response, httpSession);
+				response.getWriter().append("success");
+			}
+			catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return;
+		}
+		else if (action.equalsIgnoreCase("checkrange")) {
+			checkRange(request, response);
+			return;
+		}
+		else if (action.equalsIgnoreCase("language")) {
+			setLanguageID(request);
+			return;
+		}
+		else if (action.equalsIgnoreCase("logInit")) {
+			logInitially(request, httpSession);
+			return;
+		}
+		else if (action.equalsIgnoreCase("logEnd")) {
+			logSessionEnd(request);
+			return;
+		}
+		else if (action.equalsIgnoreCase("logWidget")) {
+			logWidget(request);
+			return;
+		}
+		else if (action.equalsIgnoreCase("logLanguageWidget")) {
+			logLanguageWidget(request);
+			return;
+		}
+		else if (action.equalsIgnoreCase("logInfoPopup")) {
+			logInfoPopup(request);
+			return;
+		}
+		else {
+			handleDialogSpecificActions(httpSession, request, response, action);
+			return;
+		}
+	}
+
+	/**
+	 * Add one or several given facts. Thereby, first check whether input-store
+	 * has elements, if yes, parse them and set them (for num/text/date
+	 * questions), if no, just parse and set a given single value.
+	 * 
+	 * @created 28.01.2011
+	 * @param request ServletRequest
+	 * @param response ServletResponse
+	 */
+	protected void addFacts(HttpServletRequest request,
+			HttpServletResponse response, HttpSession httpSession)
+			throws IOException {
+
+		PrintWriter writer = response.getWriter();
+
+		Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
+
+		List<String> questions = new ArrayList<String>();
+		List<String> values = new ArrayList<String>();
+		getParameterPairs(request, "ocq", "occhoice", questions, values);
+		getParameterPairs(request, "mcq", "mcchoices", questions, values);
+		getParameterPairs(request, "dateq", "date", questions, values);
+		getParameterPairs(request, "textq", "text", questions, values);
+		getParameterPairs(request, "numq", "num", questions, values);
+
+		/*
+		 * Check, whether a required value (for saving) is specified. If yes,
+		 * check whether this value has already been set in the KB or is about
+		 * to be set in the current call --> go on normally. Otherwise, return a
+		 * marker "<required value>" so the user is informed by AJAX to provide
+		 * this marked value.
+		 */
+		List<String> all = new LinkedList<String>();
+		all.addAll(questions);
+		all.addAll(values);
+		String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
+		if (!reqVal.equals("")
+				&& !checkReqVal(reqVal, d3webSession, all)) {
+
+			writer.append("##missingfield##");
+			writer.append(reqVal);
+			return;
+		}
+
+		// get dialog state before setting values
+		Set<QASet> indicatedTOsBefore = D3webUtils.getActiveSet(d3webSession);
+		List<Question> answeredQuestionsBefore = d3webSession.getBlackboard().getAnsweredQuestions();
+		Set<TerminologyObject> unknownQuestionsBefore = D3webUtils.getUnknownQuestions(d3webSession);
+
+		for (int i = 0; i < questions.size(); i++) {
+			D3webUtils.setValue(questions.get(i), values.get(i), d3webSession);
+
+			if (d3wcon.isLogging()) {
+				// logQuestionValue all changed widgets/items
+				D3webServletLogUtils.logQuestionValue("q_" + questions.get(i), values.get(i));
+
+			}
+		}
+
+		D3webUtils.resetAbandonedPaths(d3webSession);
+
+		// AUTOSAVE
+		PersistenceD3webUtils.saveCase((String) httpSession.getAttribute("user"), "autosave",
+				d3webSession);
+
+		// Rerender changed Questions and Questionnaires
+		Set<QASet> indicatedTOsAfter = D3webUtils.getActiveSet(d3webSession);
+
+		Set<TerminologyObject> unknownQuestionsAfter = D3webUtils.getUnknownQuestions(d3webSession);
+
+		Set<TerminologyObject> diff = new HashSet<TerminologyObject>();
+		for (TerminologyObject to : unknownQuestionsBefore) {
+			if (!unknownQuestionsAfter.contains(to)) {
+				diff.add(to);
+			}
+		}
+
+		D3webUtils.getDiff(indicatedTOsBefore, indicatedTOsAfter, diff);
+		D3webUtils.getDiff(indicatedTOsAfter, indicatedTOsBefore, diff);
+
+		List<Question> answeredQuestionsAfter = d3webSession.getBlackboard().getAnsweredQuestions();
+		diff.addAll(D3webUtils.getUnknownQuestions(d3webSession));
+		answeredQuestionsAfter.removeAll(answeredQuestionsBefore);
+		// System.out.println(answeredQuestionsAfter);
+		diff.addAll(answeredQuestionsAfter);
+
+		ContainerCollection cc = new ContainerCollection();
+		for (TerminologyObject to : diff) {
+			IQuestionD3webRenderer toRenderer = AbstractD3webRenderer.getRenderer(to);
+			writer.append(REPLACEID + AbstractD3webRenderer.getID(to));
+			writer.append(REPLACECONTENT);
+			writer.append(toRenderer.renderTerminologyObject(d3webSession, cc, to,
+					to instanceof QContainer
+							? d3wcon.getKb().getRootQASet()
+							: D3webUtils.getQuestionnaireAncestor(to)));
+		}
+		writer.append(REPLACEID + "headerInfoLine");
+		writer.append(REPLACECONTENT);
+		DefaultRootD3webRenderer rootRenderer =
+				(DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
+		writer.append(rootRenderer.renderHeaderInfoLine(d3webSession));
+	}
+
+	/**
+	 * Check the range of numerical questions.
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	protected void checkRange(
+			HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+		PrintWriter writer = response.getWriter();
+
+		String qidsString = request.getParameter("qids");
+		qidsString = qidsString.replace("q_", "");
+
+		String[] qids = qidsString.split(";");
+		String qidBackstring = "";
+
+		for (String qid : qids) {
+			String[] idVal = qid.split("%");
+
+			Question to = d3wcon.getKb().getManager().searchQuestion(idVal[0]);
+
+			if (to instanceof QuestionNum) {
+				if (to.getInfoStore().getValue(BasicProperties.QUESTION_NUM_RANGE) != null) {
+					NumericalInterval range = to.getInfoStore().getValue(
+							BasicProperties.QUESTION_NUM_RANGE);
+					qidBackstring += to.getName() + "%" + idVal[1] + "%";
+					qidBackstring += range.getLeft() + "-" + range.getRight() + ";";
+				}
+			}
+
+		}
+		writer.append(qidBackstring);
+	}
+
+	/**
+	 * Parse the language parameter (set via JS depending on what language (for
+	 * KB elements) was chosen in the dialog and set it in global settings.
+	 * 
+	 * @param request
+	 */
+	protected void setLanguageID(HttpServletRequest request) {
+		int localeID =
+				Integer.parseInt(
+						request.getParameter("langID").toString());
+		GLOBSET.setLocaleIdentifier(localeID);
+	}
+
+	/**
+	 * Checks, whether a potentially required value is already set in the KB or
+	 * is contained in the current set of values to write to the KB. If yes, the
+	 * method returns true, if no, false.
+	 * 
+	 * @created 15.04.2011
+	 * @param requiredVal The required value that is to check
+	 * @param sess The d3webSession
+	 * @param valToSet The single value to set
+	 * @param store The value store
+	 * @return TRUE of the required value is already set or contained in the
+	 *         current set of values to set
+	 */
+	private boolean checkReqVal(String requiredVal, Session sess, List<String> check) {
+		Blackboard blackboard = sess.getBlackboard();
+
+		Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(requiredVal);
+
+		Fact lastFact = blackboard.getValueFact(to);
+
+		boolean contains = false;
+		for (String s : check) {
+			if (s.equals(requiredVal)) {
+				contains = true;
+				break;
+			}
+		}
+		if (contains || (lastFact != null && lastFact.getValue().toString() != "")) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Initial check whether...
+	 * 
+	 * @created 26.07.2011
+	 * @param response
+	 * @param httpSession
+	 * @throws IOException
+	 */
+	protected void checkUsrDatLogin(HttpServletResponse response, HttpSession httpSession) throws IOException {
+		PrintWriter writer = response.getWriter();
+
+		if (httpSession.getAttribute("user") == null) {
+			httpSession.setAttribute("log", true);
+			writer.append("NLI");
+		}
+		else {
+			writer.append("NOLI");
+		}
+	}
+
+	/**
+	 * Delete a case.
+	 * 
+	 * @created 09.03.2011
+	 * @param request ServletRequest
+	 * @param response ServletResponse
+	 */
+	protected void deleteCase(HttpServletRequest request,
+			HttpServletResponse response, HttpSession httpSession) {
+
+		String filename = request.getParameter("fn");
+		String user = (String) httpSession.getAttribute("user");
+
+		if (PersistenceD3webUtils.existsCase(user, filename)) {
+			PersistenceD3webUtils.deleteUserCase(user, filename);
+		}
+	}
+
+	/**
+	 * Get several parameters with specified names from the request object.
+	 * Mainly used for getting more than one question with corresponding answers
+	 * from the request. Return the parameters as a questions and answers list
+	 * respectively.
+	 * 
+	 * @param request
+	 * @param paraName1 first parameter name
+	 * @param paraName2 second parameter name
+	 * @param parameters1
+	 * @param parameters2
+	 */
+	private void getParameterPairs(
+			HttpServletRequest request, String paraName1, String paraName2,
+			List<String> parameters1, List<String> parameters2) {
+		int i = 0;
+		while (true) {
+			String para1 = request.getParameter(paraName1 + i);
+			String para2 = request.getParameter(paraName2 + i);
+			if (para1 == null || para2 == null) {
+				break;
+			}
+			String objectNameForId =
+					AbstractD3webRenderer.getObjectNameForId(para1);
+			parameters1.add(objectNameForId == null ? para1 : objectNameForId);
+			String objectNameForId2 =
+					AbstractD3webRenderer.getObjectNameForId(para2);
+			parameters2.add(objectNameForId2 == null ? para2 : objectNameForId2);
+			i++;
+		}
+	}
+
+	/**
+	 * Redirect to the statistics site.
+	 * 
+	 * @param response
+	 * @param httpSession
+	 * @throws IOException
+	 */
+	protected void gotoStatistics(HttpServletResponse response,
+			HttpSession httpSession) throws IOException {
+
+		String email = (String) httpSession.getAttribute("user");
+
+		String gotoUrl = "../Statistics/Statistic.jsp?action=dbLogin";
+
+		String token = DateCoDec.getCode();
+		gotoUrl += "&t=" + token;
+		gotoUrl += "&e=" + Base64.encodeBase64String(email.getBytes());
+
+		new TokenThread(token, email).start();
+		PrintWriter writer = response.getWriter();
+		writer.print(gotoUrl);
+		writer.close();
+		// response.sendRedirect(gotoUrl);
+	}
+
+	/**
+	 * Loading a case.
+	 * 
+	 * @created 09.03.2011
+	 * @param request ServletRequest
+	 * @param response ServletResponse
+	 */
+	protected void loadCase(HttpServletRequest request,
+			HttpServletResponse response, HttpSession httpSession) {
+
+		String filename = request.getParameter("fn");
+		String user = (String) httpSession.getAttribute("user");
+		loadCaseUserFilename(httpSession, user, filename);
+	}
+
+	/*
+	 * Helper method for above loadCase() method and for single access of load
+	 * case mechanism with a given username and filename
+	 */
+	protected void loadCaseUserFilename(HttpSession httpSession, String user, String filename) {
+		if (PersistenceD3webUtils.existsCase(user, filename)) {
+			httpSession.setAttribute(D3WEB_SESSION,
+					PersistenceD3webUtils.loadUserCase(user, filename));
+			httpSession.setAttribute("lastLoaded", filename);
+		}
+	}
+
+	/**
+	 * Login redirect - EURAHS only --> refactor: move to EuraHS Servlet
+	 * 
+	 * @param request
+	 * @param response
+	 * @param httpSession
+	 * @throws IOException
+	 */
+	protected void loginDB(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
+		String token = request.getParameter("t");
+		String email = new String(Base64.decodeBase64(request.getParameter("e")));
+
+		if (DB.isValidToken(token, email)) {
+			httpSession.setAttribute("authenticated", "yes");
+			httpSession.setAttribute("user", email);
+
+			loadCaseUserFilename(httpSession, email, "autosave");
+
+			response.sendRedirect("../EuraHS-Dialog");
+		}
+		else {
+			response.sendRedirect("../EuraHS-Login");
+		}
+	}
+
+	/**
+	 * Handle login of new user in simple-textdatabase case, e.g. for
+	 * Mediastinitis
+	 * 
+	 * @created 29.04.2011
+	 * @param req
+	 * @param res
+	 * @param httpSession
+	 * @throws IOException
+	 */
+	protected void loginUsrDat(HttpServletRequest req,
+			HttpServletResponse res, HttpSession httpSession)
+			throws IOException {
+
+		// fetch the information sent via the request string from login
+		String u = req.getParameter("u");
+		String p = req.getParameter("p");
+
+		// get the response writer for communicating back via Ajax
+		PrintWriter writer = res.getWriter();
+
+		httpSession.setMaxInactiveInterval(60 * 60);
+
+		// if no valid login
+		if (!permitUser(u, p)) {
+
+			// causes JS to display error message
+			writer.append("nosuccess");
+			return;
+		}
+
+		// set user attribute for the HttpSession
+		httpSession.setAttribute("user", u);
+
+		httpSession.setAttribute("lastLoaded", "");
+
+		/*
+		 * in case we should have more than one user per clinic, we distinguish
+		 * them by adding "_1"... to the clinic name, i.e. WUE_1, WUE_2 etc.
+		 * Thus we need to extract part of the login name that also denotes the
+		 * clinic name and thus the subfolder, where cases are stored that
+		 * should be visible for THIS user.
+		 */
+		int splitter = u.indexOf("_");
+		if (splitter != -1) {
+			String toReplace = u.substring(splitter, u.length());
+			String userSubfolder = u.replace(toReplace, "");
+			httpSession.setAttribute("user", userSubfolder);
+		}
+
+		// causes JS to start new session and d3web case finally
+		writer.append("newUser");
+	}
+
+	/**
+	 * Check, whether the user has permissions to logQuestionValue in.
+	 * Permissions are stored in userdat.csv in cases parent folder
+	 * 
+	 * @created 15.03.2011
+	 * @param user The user name.
+	 * @param password The password.
+	 * @return True, if permissions are correct.
+	 */
+	private boolean permitUser(String user, String password) {
+
+		List<String> values = usrDat.get(user);
+		if (values != null) {
+			String pass = values.get(1);
+			if (pass != null && password.equals(pass)) {
+				return true;
+			}
+		}
+		return false; // trust no one per default
+	}
+
+	/**
+	 * Reset a running d3web session.
+	 * 
+	 * @param httpSession
+	 */
+	protected void resetD3webSession(HttpSession httpSession) {
+		Session d3webSession =
+				D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
+		httpSession.setAttribute(D3WEB_SESSION, d3webSession);
+		httpSession.setAttribute("lastLoaded", "");
+		if (d3wcon.isLogging()) {
+			GLOBSET.setInitLogged(false);
+			d3wcon.setLogger(new JSONLogger());
+		}
+	}
+
+	/**
+	 * Basic servlet method for displaying the dialog.
+	 * 
+	 * @created 28.01.2011
+	 * @param request
+	 * @param response
+	 * @param d3webSession
+	 * @throws IOException
+	 */
+	protected void show(HttpServletRequest request, HttpServletResponse response,
+			HttpSession httpSession)
+			throws IOException {
+
+		PrintWriter writer = response.getWriter();
+		// get the root renderer --> call getRenderer with null
+		DefaultRootD3webRenderer d3webr =
+				(DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
+
+		// new ContainerCollection needed each time to get an updated dialog
+		ContainerCollection cc = new ContainerCollection();
+		Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
+		cc = d3webr.renderRoot(cc, d3webSess, httpSession);
+		writer.print(cc.html.toString()); // deliver the rendered output
+		writer.close(); // and close
+	}
+
+	/**
+	 * Saving a case.
+	 * 
+	 * @created 08.03.2011
+	 * @param request ServletRequest
+	 * @param response ServletResponse
+	 */
+	protected void saveCase(HttpServletRequest request,
+			HttpServletResponse response, HttpSession httpSession)
+			throws IOException {
+
+		PrintWriter writer = null;
+		writer = response.getWriter();
+
+		String userFilename = request.getParameter("userfn");
+		String user = (String) httpSession.getAttribute("user");
+		String lastLoaded = (String) httpSession.getAttribute("lastLoaded");
+		String forceString = request.getParameter("force");
+		boolean force = forceString != null && forceString.equals("true");
+		Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
+
+		if (force
+				|| !PersistenceD3webUtils.existsCase(user, userFilename)
+				|| (PersistenceD3webUtils.existsCase(user, userFilename)
+						&& lastLoaded != null && lastLoaded.equals(userFilename))) {
+			PersistenceD3webUtils.saveCase(
+					user,
+					userFilename,
+					d3webSession);
+			httpSession.setAttribute("lastLoaded", userFilename);
+		}
+		else {
+			writer.append("exists");
+		}
+	}
+
+	/**
+	 * Send a mail with login request via account "user" and to the contact
+	 * person specified in InternetAdress "to"
+	 * 
+	 * @created 29.04.2011
+	 * @param request
+	 * @param response
+	 * @param httpSession
+	 * @throws MessagingException
+	 */
+	protected void sendMail(HttpServletRequest request, HttpServletResponse response,
+			HttpSession httpSession) throws MessagingException {
+
+		final String user = "SendmailAnonymus@freenet.de";
+		final String pw = "sendmail";
+
+		/* setup properties for mail server */
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "mx.freenet.de");
+		props.put("mail.smtp.port", "587");
+		props.put("mail.transport.protocol", "smtp");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.user", user);
+		props.put("mail.password", pw);
+		// props.put("mail.debug", "true");
+
+		javax.mail.Session session = javax.mail.Session.getDefaultInstance(props,
+				new javax.mail.Authenticator() {
+
+					@Override
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication(user, pw);
+					}
+				});
+
+		MimeMessage message = new MimeMessage(session);
+
+		// from-identificator
+		InternetAddress from = new InternetAddress(user);
+		message.setFrom(from);
+
+		String loginUser = request.getParameter("user");
+
+		// default toAddress if nothing else specified in userdat.csv
+		String toAddress = "striffler@informatik.uni-wuerzburg.de";
+		usrDat.get(loginUser);
+		if (usrDat != null) {
+			String email = usrDat.get(loginUser).get(2);
+			if (email != null) {
+				toAddress = email;
+			}
+		}
+		InternetAddress to = new InternetAddress(toAddress);
+		message.addRecipient(Message.RecipientType.TO, to);
+
+		/* A subject */
+		message.setSubject(this.getClass().getSimpleName() + " Loginanfrage");
+
+		message.setText("Bitte Logindaten erneut zusenden: \n\n"
+				+ "Benutzername: " + loginUser);
+		Transport.send(message);
+
+	}
+
+	protected void updateSummary(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
+		PrintWriter writer = response.getWriter();
+
+		String questionnaireContentID = "questionnaireSummaryContent";
+
+		writer.append(REPLACEID + questionnaireContentID);
+		writer.append(REPLACECONTENT);
+		SummaryD3webRenderer rootRenderer = D3webRendererMapping.getInstance().getSummaryRenderer();
+		writer.append("<div id='" + questionnaireContentID + "'>");
+		writer.append(rootRenderer.renderSummaryDialog(
+				(Session) httpSession.getAttribute(D3WEB_SESSION),
+				SummaryD3webRenderer.SummaryType.QUESTIONNAIRE));
+		writer.append("<div>");
+
+		String gridContentID = "gridSummaryContent";
+
+		writer.append(REPLACEID + gridContentID);
+		writer.append(REPLACECONTENT);
+		writer.append("<div id='" + gridContentID + "'>");
+		writer.append(rootRenderer.renderSummaryDialog(
+				(Session) httpSession.getAttribute(D3WEB_SESSION),
+				SummaryD3webRenderer.SummaryType.GRID));
+		writer.append("<div>");
+	}
+
+	protected void logInitially(HttpServletRequest request, HttpSession httpSession) {
+		D3webServletLogUtils.logInitially(request, httpSession);
+	}
+
+	protected void logSessionEnd(HttpServletRequest request) {
+		D3webServletLogUtils.logSessionEnd(request);
+	}
+
+	protected void logWidget(HttpServletRequest request) {
+		D3webServletLogUtils.logWidget(request);
+	}
+
+	protected void logLanguageWidget(HttpServletRequest request) {
+		D3webServletLogUtils.logLanguageWidget(request);
+	}
+
+	protected void logInfoPopup(HttpServletRequest request) {
+		D3webServletLogUtils.logInfoPopup(request);
+	}
+
+	/**
+	 * Default additional method that can be used to handle additional (default)
+	 * dialog specific actions only by overwriting this.
+	 * 
+	 * @param httpSession
+	 * @param request
+	 * @param response
+	 * @param action
+	 * @throws IOException
+	 */
+	protected void handleDialogSpecificActions(
+			HttpSession httpSession, HttpServletRequest request,
+			HttpServletResponse response, String action)
+			throws IOException {
+		// Overwrite if necessary
+	}
+
+	/**
+	 * Default method for getting the source parameter. As default, Default.xml
+	 * is suggested; yet if a src parameter is given by the webapp (when calling
+	 * from ControlCenter, for example), that one is taken.
+	 * 
+	 * @param request the HttpServletRequest
+	 * @return the source string
+	 */
+	protected String getSource(HttpServletRequest request) {
+
+		// Overwrite if necessary
+		String source = "Default.xml"; // default
+		if (request.getParameter("src") != null) {
+			source = request.getParameter("src");
+		}
+		return source.endsWith(".xml") ? source : source + ".xml";
+	}
 }

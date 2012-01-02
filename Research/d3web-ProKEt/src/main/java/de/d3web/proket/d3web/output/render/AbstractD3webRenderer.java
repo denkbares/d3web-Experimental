@@ -168,11 +168,8 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 		TerminologyObject[] children = to.getChildren();
 		// Blackboard bb = d3webSession.getBlackboard();
 		for (TerminologyObject child : children) {
-
-			if (child instanceof Question && to == d3webSession.getKnowledgeBase().getRootQASet()) {
-				// skip top level questions... render style does not fit and
-				// also this way they can be used for abstracts that should
-				// never be visible for the user
+			Boolean hide = child.getInfoStore().getValue(ProKEtProperties.HIDE);
+			if (hide != null && hide == true) {
 				continue;
 			}
 

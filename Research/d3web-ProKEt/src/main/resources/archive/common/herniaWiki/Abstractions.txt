@@ -1,5 +1,19 @@
-%%Rule
+%%Question
+Abstractions
+- Case-Number [text]
+- Age [num]
 
+@package: Hernia
+%
+
+%%Variable
+Age = (now - "Year of birth") / 365d
+
+@package: Hernia
+%
+
+%%Property
+Abstractions.hide = true
 
 @package: Hernia
 %

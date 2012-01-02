@@ -500,11 +500,6 @@ Common Route - Discharge data #11
 @package: Hernia
 %
 
-%%Question
-Case-Number [text]
-
-@package: Hernia
-%
 
 %%rule
 IF Please select your hernia route = Primary ventral hernia route
