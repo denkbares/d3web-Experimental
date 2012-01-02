@@ -549,34 +549,37 @@ function d3web_addFacts() {
 
     var i = 0;
     for (var qid in mcStore) {
-        link = link.set("mcq" + i, qid).set("mcchoices" + i, mcStore[qid].toString());
+    	var mcAnswerString = "";
+    	var mcAnswerSeparator = "##mcanswer##";
+    	for (var j in mcStore[qid]) {
+    		if (mcAnswerString != "") {
+    			mcAnswerString += mcAnswerSeparator;
+    		}
+    		mcAnswerString += mcStore[qid][j];
+    	}
+        link = link.set("question" + i, qid).set("value" + i, mcAnswerString);
         i++;
     }
 	
-    i = 0;
     for (var qid in ocStore) {
-        link = link.set("ocq" + i, qid).set("occhoice" + i, ocStore[qid]);
+        link = link.set("question" + i, qid).set("value" + i, ocStore[qid]);
         i++;
     }
 	
-    i = 0;
     for (var qid in dateStore) {
-        link = link.set("dateq" + i, qid).set("date" + i, dateStore[qid]);
+        link = link.set("question" + i, qid).set("value" + i, dateStore[qid]);
         i++;
     }
 	
     for (var qid in textStore) {
-        link = link.set("textq" + i, qid).set("text" + i, textStore[qid]);
+        link = link.set("question" + i, qid).set("value" + i, textStore[qid]);
         i++;
     }
 	
-    i = 0;
     for (var qid in numStore) {
-        link = link.set("numq" + i, qid).set("num" + i, numStore[qid]);
+        link = link.set("question" + i, qid).set("value" + i, numStore[qid]);
         i++;
     }
-	
-    //link = window.location.href.replace(window.location.search, "") + link.toString();
     
    
     $.ajax({

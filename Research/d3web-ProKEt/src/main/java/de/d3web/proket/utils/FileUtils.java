@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2010 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -62,7 +62,8 @@ public class FileUtils {
 		}
 		try {
 			return new File(resourceUrl.toURI());
-		} catch (URISyntaxException e) {
+		}
+		catch (URISyntaxException e) {
 		}
 		return null;
 	}
@@ -82,11 +83,10 @@ public class FileUtils {
 
 		try {
 			return new File(resourceUrl.toURI());
-		} catch (URISyntaxException e) {
+		}
+		catch (URISyntaxException e) {
 			throw new FileNotFoundException(MessageFormat.format(
 					"File {0} not found", fileNameAndPath));
-		} catch (NullPointerException e) {
-			return null;
 		}
 	}
 
@@ -112,11 +112,13 @@ public class FileUtils {
 			while ((line = f.readLine()) != null) {
 				result.append(line).append("\n");
 			}
-		} catch (FileNotFoundException e) {
+		}
+		catch (FileNotFoundException e) {
 			log.severe(MessageFormat.format("Could not find file at \"{0}\"",
 					file));
 			e.printStackTrace();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			log.severe(MessageFormat.format(
 					"Problems occurred while reading from file \"{0}\"", file));
 			e.printStackTrace();
@@ -125,7 +127,8 @@ public class FileUtils {
 		if (f != null) {
 			try {
 				f.close();
-			} catch (IOException e) {
+			}
+			catch (IOException e) {
 			}
 		}
 

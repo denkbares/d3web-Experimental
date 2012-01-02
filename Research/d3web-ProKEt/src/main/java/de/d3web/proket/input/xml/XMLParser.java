@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2010 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -72,9 +72,6 @@ public class XMLParser implements IParser {
 			this.xMLFilename += ".xml";
 		}
 
-		
-
-		 
 	}
 
 	/**
@@ -102,13 +99,17 @@ public class XMLParser implements IParser {
 			if (fieldType.equals(String.class)) {
 				value = XMLUtils.getStr(tag, xmlAttributeName, null);
 				value = handleString((String) value);
-			} else if (fieldType.equals(Integer.class)) {
+			}
+			else if (fieldType.equals(Integer.class)) {
 				value = XMLUtils.getInt(tag, xmlAttributeName, null);
-			} else if (fieldType.equals(Double.class)) {
+			}
+			else if (fieldType.equals(Double.class)) {
 				value = XMLUtils.getDouble(tag, xmlAttributeName, null);
-			} else if (fieldType.equals(Color.class)) {
+			}
+			else if (fieldType.equals(Color.class)) {
 				value = XMLUtils.getColor(tag, xmlAttributeName, null);
-			} else if (fieldType.equals(Boolean.class)) {
+			}
+			else if (fieldType.equals(Boolean.class)) {
 				value = XMLUtils.getBoolean(tag, xmlAttributeName, null);
 			}
 
@@ -121,9 +122,11 @@ public class XMLParser implements IParser {
 			try {
 				// assign the value to the field by reflection
 				field.set(o, value);
-			} catch (IllegalArgumentException e) {
+			}
+			catch (IllegalArgumentException e) {
 				e.printStackTrace();
-			} catch (IllegalAccessException e) {
+			}
+			catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
 		}
@@ -142,13 +145,17 @@ public class XMLParser implements IParser {
 			if (paramType.equals(String.class)) {
 				value = XMLUtils.getStr(tag, xmlAttributeName, null);
 				value = handleString((String) value);
-			} else if (paramType.equals(Integer.class)) {
+			}
+			else if (paramType.equals(Integer.class)) {
 				value = XMLUtils.getInt(tag, xmlAttributeName, null);
-			} else if (paramType.equals(Double.class)) {
+			}
+			else if (paramType.equals(Double.class)) {
 				value = XMLUtils.getDouble(tag, xmlAttributeName, null);
-			} else if (paramType.equals(Color.class)) {
+			}
+			else if (paramType.equals(Color.class)) {
 				value = XMLUtils.getColor(tag, xmlAttributeName, null);
-			} else if (paramType.equals(Boolean.class)) {
+			}
+			else if (paramType.equals(Boolean.class)) {
 				value = XMLUtils.getBoolean(tag, xmlAttributeName, null);
 			}
 
@@ -160,11 +167,14 @@ public class XMLParser implements IParser {
 			// invoke the object's setter method with the retrieved value
 			try {
 				setter.invoke(o, value);
-			} catch (IllegalArgumentException e) {
+			}
+			catch (IllegalArgumentException e) {
 				e.printStackTrace();
-			} catch (IllegalAccessException e) {
+			}
+			catch (IllegalAccessException e) {
 				e.printStackTrace();
-			} catch (InvocationTargetException e) {
+			}
+			catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}
@@ -191,12 +201,14 @@ public class XMLParser implements IParser {
 				return FileUtils.getString(
 						FileUtils.getResourceFile(
 								value.replaceFirst("file:", "")));
-			} catch (FileNotFoundException e) {
+			}
+			catch (FileNotFoundException e) {
 				return value;
 			}
 
 			// get data from the web in case a weblink is specified
-		} else if (value.startsWith("web:")) {
+		}
+		else if (value.startsWith("web:")) {
 			URL url;
 			StringBuilder sb = new StringBuilder();
 			try {
@@ -209,9 +221,11 @@ public class XMLParser implements IParser {
 					sb.append(inputLine);
 				}
 				in.close();
-			} catch (MalformedURLException e) {
+			}
+			catch (MalformedURLException e) {
 				return value;
-			} catch (IOException e) {
+			}
+			catch (IOException e) {
 				return value;
 			}
 			return sb.toString();
@@ -232,9 +246,11 @@ public class XMLParser implements IParser {
 		Class<? extends Object> parserClass = getParserClass(tag);
 		try {
 			return (IDialogObjectParser) parserClass.newInstance();
-		} catch (InstantiationException e) {
+		}
+		catch (InstantiationException e) {
 			return null;
-		} catch (IllegalAccessException e) {
+		}
+		catch (IllegalAccessException e) {
 			return null;
 		}
 	}
@@ -308,7 +324,8 @@ public class XMLParser implements IParser {
 			// filled in additional id's of objects that were not defined by
 			// hand
 
-		} catch (IOException e1) {
+		}
+		catch (IOException e1) {
 			e1.printStackTrace();
 		}
 
@@ -321,7 +338,8 @@ public class XMLParser implements IParser {
 					.newInstance();
 			IDialogObject rootObject = parser.parse(this, root, null, null);
 			dialogTree.setRoot(rootObject);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -355,12 +373,18 @@ public class XMLParser implements IParser {
 	 * 
 	 * @created 13.10.2010
 	 * @return the KnowledgeBase
+	 * @throws IOException
 	 */
 	@Override
 	public KnowledgeBase getKb() {
 		KnowledgeBase kb = null;
 		String kbname = getKnowledgeBaseName();
-		kb = D3webUtils.getKnowledgeBase(kbname);
+		try {
+			kb = D3webUtils.getKnowledgeBase(kbname);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 		return kb;
 	}
 

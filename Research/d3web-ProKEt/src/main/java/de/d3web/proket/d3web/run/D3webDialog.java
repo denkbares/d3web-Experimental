@@ -63,6 +63,7 @@ import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
 import de.d3web.proket.d3web.output.render.IQuestionD3webRenderer;
 import de.d3web.proket.d3web.output.render.SummaryD3webRenderer;
+import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.ue.log.JSONLogger;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.database.DB;
@@ -94,13 +95,13 @@ public class D3webDialog extends HttpServlet {
 
 	private static final long serialVersionUID = -2466200526894064976L;
 	protected static final String D3WEB_SESSION = "d3webSession";
-	protected static final String SRC = "xmlsource";
 	protected static final String REPLACECONTENT = "##replacecontent##";
 	protected static final String REPLACEID = "##replaceid##";
+	protected static String sourceSave;
+	protected final GlobalSettings GLOBSET = GlobalSettings.getInstance();
 	protected D3webXMLParser d3webParser;
 	protected D3webConnector d3wcon;
 	protected static Map<String, List<String>> usrDat = null;
-	protected final GlobalSettings GLOBSET = GlobalSettings.getInstance();
 
 	// TODO get Date everywhere in JS instead of Servlet
 	/**
@@ -151,16 +152,17 @@ public class D3webDialog extends HttpServlet {
 		d3wcon.setD3webParser(d3webParser);
 
 		// set SRC store attribute to "" per default for avoiding nullpointers
-		if (httpSession.getAttribute(SRC) == null) {
-			httpSession.setAttribute(SRC, "");
+		if (sourceSave == null) {
+			sourceSave = "";
 		}
 
 		// only parse again if stored source is not equal to current source
-		String srcStored = httpSession.getAttribute(SRC).toString();
-		if (!(srcStored.equals(source))) {
 
-			httpSession.setAttribute(SRC, source);
+		if (!sourceSave.equals(source)) {
+
+			sourceSave = source;
 			d3webParser.parse();
+
 			d3wcon.setKb(d3webParser.getKnowledgeBase());
 			d3wcon.setKbName(d3webParser.getKnowledgeBaseName());
 			// d3wcon.setDialogStrat(d3webParser.getStrategy());
@@ -210,11 +212,6 @@ public class D3webDialog extends HttpServlet {
 			D3webUtils.streamImages();
 		}
 
-		// if session is null create a session
-		if (httpSession.getAttribute(D3WEB_SESSION) == null) {
-			resetD3webSession(httpSession);
-		}
-
 		// in case nothing other is provided, "show" is the default action
 		String action = request.getParameter("action");
 		if (action == null) {
@@ -235,6 +232,11 @@ public class D3webDialog extends HttpServlet {
 				response.sendRedirect("../EuraHS-Login");
 				return;
 			}
+		}
+
+		// if session is null create a session
+		if (httpSession.getAttribute(D3WEB_SESSION) == null) {
+			resetD3webSession(httpSession);
 		}
 
 		// switch action as defined by the servlet call
@@ -343,11 +345,7 @@ public class D3webDialog extends HttpServlet {
 
 		List<String> questions = new ArrayList<String>();
 		List<String> values = new ArrayList<String>();
-		getParameterPairs(request, "ocq", "occhoice", questions, values);
-		getParameterPairs(request, "mcq", "mcchoices", questions, values);
-		getParameterPairs(request, "dateq", "date", questions, values);
-		getParameterPairs(request, "textq", "text", questions, values);
-		getParameterPairs(request, "numq", "num", questions, values);
+		getParameterPairs(request, "question", "value", questions, values);
 
 		/*
 		 * Check, whether a required value (for saving) is specified. If yes,
@@ -412,6 +410,7 @@ public class D3webDialog extends HttpServlet {
 
 		ContainerCollection cc = new ContainerCollection();
 		for (TerminologyObject to : diff) {
+			if (isHiddenOrHasHiddenParent(to)) continue;
 			IQuestionD3webRenderer toRenderer = AbstractD3webRenderer.getRenderer(to);
 			writer.append(REPLACEID + AbstractD3webRenderer.getID(to));
 			writer.append(REPLACECONTENT);
@@ -425,6 +424,15 @@ public class D3webDialog extends HttpServlet {
 		DefaultRootD3webRenderer rootRenderer =
 				(DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
 		writer.append(rootRenderer.renderHeaderInfoLine(d3webSession));
+	}
+
+	private boolean isHiddenOrHasHiddenParent(TerminologyObject to) {
+		Boolean hide = to.getInfoStore().getValue(ProKEtProperties.HIDE);
+		if (hide != null && hide) return true;
+		for (TerminologyObject parent : to.getParents()) {
+			if (isHiddenOrHasHiddenParent(parent)) return true;
+		}
+		return false;
 	}
 
 	/**
@@ -569,12 +577,8 @@ public class D3webDialog extends HttpServlet {
 			if (para1 == null || para2 == null) {
 				break;
 			}
-			String objectNameForId =
-					AbstractD3webRenderer.getObjectNameForId(para1);
-			parameters1.add(objectNameForId == null ? para1 : objectNameForId);
-			String objectNameForId2 =
-					AbstractD3webRenderer.getObjectNameForId(para2);
-			parameters2.add(objectNameForId2 == null ? para2 : objectNameForId2);
+			parameters1.add(para1);
+			parameters2.add(para2);
 			i++;
 		}
 	}
