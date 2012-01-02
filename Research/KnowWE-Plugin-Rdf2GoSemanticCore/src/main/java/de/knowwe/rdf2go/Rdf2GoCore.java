@@ -520,6 +520,53 @@ public class Rdf2GoCore implements EventListener {
 		return result;
 	}
 
+	/**
+	 * Calculates the Set-subtraction of the inference closure of the model with and without the
+	 * statements created by the given section
+	 * 
+	 * @created 02.01.2012
+	 * @param sec
+	 * @return
+	 * @throws ModelRuntimeException
+	 * @throws MalformedQueryException 
+	 */
+	public Collection<Statement> generateStatementDiffForSection(Section<?> sec) throws ModelRuntimeException, MalformedQueryException {
+
+		Set<Statement> includingSection = modelToSet(model);
+
+		// retrieve statements to be excluded
+		WeakHashMap<Section<? extends Type>, List<Statement>> allStatmentSectionsOfArticle =
+				statementcache.get(sec.getTitle());
+		List<Statement> statementsOfSection = allStatmentSectionsOfArticle.get(sec);
+
+
+		// remove these statements
+		if (statementsOfSection != null) {
+			model.removeAll(statementsOfSection.iterator());
+		}
+		Set<Statement> excludingSection = modelToSet(model);
+		includingSection.removeAll(excludingSection);
+
+		// reinsert statements
+		if (statementsOfSection != null) {
+			model.addAll(statementsOfSection.iterator());
+		}
+
+
+		return includingSection;
+
+	}
+
+	private static Set<Statement> modelToSet(Model m) {
+		HashSet<Statement> result = new HashSet<Statement>();
+
+		for (Statement s : m) {
+			result.add(s);
+		}
+
+		return result;
+	}
+
 	public QueryResultTable sparqlSelect(String query) throws ModelRuntimeException, MalformedQueryException {
 		if (query.startsWith(getSparqlNamespaceShorts())) {
 			return model.sparqlSelect(query);
