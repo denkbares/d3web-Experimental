@@ -78,7 +78,10 @@ import de.d3web.proket.data.DialogStrategy;
 import de.d3web.proket.utils.FileUtils;
 import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.IDUtils;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Util methods for the binding of d3web to the ProKEt system.
@@ -673,7 +676,7 @@ public class D3webUtils {
      * @param valString The value, that is to be added for the TerminologyObject
      *        with ID valID.
      */
-    public static void setValue(String termObID, String valString, Session sess) {
+    public static void setValueOld(String termObID, String valString, Session sess) {
 
         // TODO REFACTOR: can be removed, just provide ID without "q_"
         // remove prefix, e.g. "q_" in "q_BMI"
@@ -1117,4 +1120,286 @@ public class D3webUtils {
         // default prompt = unknown if no locale specific prompt was given
         return prompt == null ? defaultPrompt : prompt;
     }
+    
+    /**
+     * Try to retrieve the questionnaire-ancestor of a given terminology object.
+     * 
+     * @param to
+     * @return the ancestor questionnaire or null if none available 
+     */
+     public static TerminologyObject getQuestionnaireAncestor(TerminologyObject to) {
+        if (to.getParents() != null) {
+            for (TerminologyObject parent : to.getParents()) {
+                if (parent instanceof QContainer) {
+                    return parent;
+                } else {
+                    return getQuestionnaireAncestor(parent);
+                }
+            }
+        }
+        return null;
+    }
+     
+     /**
+      * Get the questionnaire-based differences of two sets of interview objects.
+      * All questionnaires that are contained in the first set but not in the 
+      * second are added to the diff set.
+      * 
+      * @param set1
+      * @param set2
+      * @param diff 
+      */
+      public static void getDiff(Set<QASet> set1, Set<QASet> set2, Set<TerminologyObject> diff) {
+        for (InterviewObject io : set1) {
+            if (!set2.contains(io)) {
+                if (io instanceof Question) {
+                    diff.add(D3webUtils.getQuestionnaireAncestor(io));
+                } else {
+                    diff.add(io);
+                }
+            }
+        }
+    }
+      
+      /**
+     * Retrieve the difference between two date objects in seconds
+     * 
+     * @created 29.04.2011
+     * @param d1 First date
+     * @param d2 Second date
+     * @return the difference in seconds
+     */
+    public static float getDateDifference(Date d1, Date d2) {
+        return (d1.getTime() - d2.getTime()) / 1000;
+    }
+    
+    
+    /**
+     * Utility method for adding values. Adds a single value for a given
+     * question to the current knowledge base in the current problem solving
+     * session.
+     * 
+     * @created 28.01.2011
+     * @param termObID The ID of the TerminologyObject, the value is to be
+     *        added.
+     * @param valString The value, that is to be added for the TerminologyObject
+     *        with ID valID.
+     */
+    public static void setValue(String termObID, String valString, Session sess) {
+
+        if (termObID == null || valString == null) {
+            return;
+        }
+
+        Blackboard blackboard = sess.getBlackboard();
+        Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(termObID);
+
+        // if TerminologyObject not found in the current KB return & do nothing
+        if (to == null) {
+            return;
+        }
+
+        // init Value object...
+        Value value = null;
+
+        // check if unknown option was chosen
+        if (valString.equalsIgnoreCase("unknown")) {
+            value = setQuestionToUnknown(sess, to);
+        } // otherwise, i.e., for all other "not-unknown" values
+        else {
+
+            // CHOICE questions
+            if (to instanceof QuestionChoice) {
+                value = setQuestionChoice(to, valString);
+            } // TEXT questions
+            else if (to instanceof QuestionText) {
+                value = setQuestionText(to, valString);
+            } // NUM questions
+            else if (to instanceof QuestionNum) {
+                value = setQuestionNum(valString);
+            } // DATE questions
+            else if (to instanceof QuestionDate) {
+                value = setQuestionDate(to, valString);
+            }
+
+            // if reasonable value retrieved, set it for the given
+            // TerminologyObject
+            if (value != null) {
+
+                if (UndefinedValue.isNotUndefinedValue(value)) {
+                    // add new value as UserEnteredFact
+                    Fact fact = FactFactory.createUserEnteredFact(to, value);
+                    blackboard.addValueFact(fact);
+                }
+            }
+        }
+
+    }
+
+    private static Value setQuestionDate(Question to, String valString) {
+        Value value = null;
+        try {
+            value = new DateValue(new Date(Long.parseLong(valString)));
+        } catch (NumberFormatException e) {
+            // value still null, will not be set
+        }
+        return value;
+    }
+
+    private static Value setQuestionNum(String valString) {
+        try {
+            return new NumValue(Double.parseDouble(valString.replace(",", ".")));
+        } catch (NumberFormatException ex) {
+            return null;
+        }
+    }
+
+    private static Value setQuestionText(Question to, String valString) {
+        Value value = null;
+        String textPattern = to.getInfoStore().getValue(ProKEtProperties.TEXT_FORMAT);
+        Pattern p = null;
+        if (textPattern != null && !textPattern.isEmpty()) {
+            try {
+                p = Pattern.compile(textPattern);
+            } catch (Exception e) {
+            }
+        }
+        if (p != null) {
+            Matcher m = p.matcher(valString);
+            if (m.find()) {
+                value = new TextValue(m.group());
+            }
+        } else {
+            value = new TextValue(valString);
+        }
+        return value;
+    }
+
+    private static Value setQuestionChoice(Question to, String valString) {
+        Value value = null;
+        if (to instanceof QuestionOC) {
+            // valueString is the ID of the selected item
+            try {
+                value = KnowledgeBaseUtils.findValue(to, valString);
+            } catch (NumberFormatException nfe) {
+                // value still null, will not be set
+            }
+        } else if (to instanceof QuestionMC) {
+
+            if (valString.equals("")) {
+                value = UndefinedValue.getInstance();
+            } else {
+                String[] choices = valString.split(",");
+                List<Choice> cs = new ArrayList<Choice>();
+
+                for (String c : choices) {
+                    cs.add(new Choice(c));
+                }
+                value = MultipleChoiceValue.fromChoices(cs);
+
+            }
+        }
+        return value;
+    }
+
+    private static Value setQuestionToUnknown(Session sess, Question to) {
+        Blackboard blackboard = sess.getBlackboard();
+
+        // remove a previously set value
+        Fact lastFact = blackboard.getValueFact(to);
+        if (lastFact != null) {
+            blackboard.removeValueFact(lastFact);
+        }
+
+        // and add the unknown value
+        Value value = Unknown.getInstance();
+        Fact fact = FactFactory.createFact(sess, to, value,
+                PSMethodUserSelected.getInstance(),
+                PSMethodUserSelected.getInstance());
+        blackboard.addValueFact(fact);
+        return value;
+    }
+    
+    
+    public static Collection<Question> resetAbandonedPaths(Session sess) {
+        Blackboard bb = sess.getBlackboard();
+        Collection<Question> resetQuestions = new LinkedList<Question>();
+        Set<QASet> initQuestions = new HashSet<QASet>(D3webConnector.getInstance().getKb().getInitQuestions());
+        for (Question question : bb.getAnsweredQuestions()) {
+            if (!isActive(question, bb, initQuestions)
+                    && !question.getName().equals(D3webConnector.getInstance().getD3webParser().getRequired())) {
+                Fact lastFact = bb.getValueFact(question);
+                if (lastFact != null
+                        && lastFact.getPSMethod() == PSMethodUserSelected.getInstance()) {
+                    bb.removeValueFact(lastFact);
+                    resetQuestions.add(question);
+                }
+            }
+        }
+        return resetQuestions;
+    }
+    
+    
+    /**
+     * Retrieve all currently indicated QASets
+     * @param sess
+     * @return 
+     */
+    public static Set<QASet> getActiveSet(Session sess) {
+        Set<QASet> activeSet = new HashSet<QASet>();
+        Set<QASet> initQuestions = new HashSet<QASet>(sess.getKnowledgeBase().getInitQuestions());
+        for (QASet qaset : sess.getKnowledgeBase().getManager().getQASets()) {
+            if (D3webUtils.isActive(qaset, sess.getBlackboard(), initQuestions)) {
+                activeSet.add(qaset);
+            }
+        }
+        return activeSet;
+    }
+    
+    
+      /**
+     * Utility method for checking whether a given terminology object is
+     * indicated or instant_indicated or not in the current session.
+     * 
+     * @created 09.03.2011
+     * @param to The terminology object to check
+     * @param bb
+     * @return True, if the terminology object is (instant) indicated.
+     */
+    public static boolean isActive(QASet qaset, Blackboard bb, Set<QASet> initQuestions) {
+        boolean indicatedParent = false;
+        for (TerminologyObject parentQASet : qaset.getParents()) {
+            if (parentQASet instanceof QContainer
+                    && isIndicated((QASet) parentQASet, bb, initQuestions)) {
+                indicatedParent = true;
+                break;
+            }
+        }
+        return indicatedParent || isIndicated(qaset, bb, initQuestions);
+    }
+
+    private static boolean isIndicated(QASet qaset, Blackboard bb, Set<QASet> initQuestions) {
+        return initQuestions.contains(qaset)
+                || bb.getIndication(qaset).getState() == de.d3web.core.knowledge.Indication.State.INDICATED
+                || bb.getIndication(qaset).getState() == de.d3web.core.knowledge.Indication.State.INSTANT_INDICATED;
+    }
+    
+    
+    /**
+     * Get a set of all unknown-answered questions
+     * @param sess
+     * @return 
+     */
+    public static Set<TerminologyObject> getUnknownQuestions(Session sess) {
+        Set<TerminologyObject> unknownQuestions = new HashSet<TerminologyObject>();
+        for (TerminologyObject to : sess.getBlackboard().getValuedObjects()) {
+            Fact mergedFact = sess.getBlackboard().getValueFact(to);
+            if (mergedFact != null && Unknown.assignedTo(mergedFact.getValue())) {
+                unknownQuestions.add(to);
+            }
+        }
+        return unknownQuestions;
+    }
+    
+    
 }

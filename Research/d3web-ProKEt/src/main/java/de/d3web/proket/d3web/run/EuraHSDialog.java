@@ -39,6 +39,7 @@ import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
+import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.output.render.EuraHSDefaultRootD3webRenderer;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
@@ -164,7 +165,7 @@ public class EuraHSDialog extends D3webDialog {
 				definingObject);
 		Fact fact = d3webSess.getBlackboard().getValueFact(to);
 		if (to != null && fact == null) {
-			setValue(definingObject, generateCaseNumber(definingObject), d3webSess);
+			D3webUtils.setValue(definingObject, generateCaseNumber(definingObject), d3webSess);
 		}
 	}
 

@@ -19,27 +19,16 @@
  */
 package de.d3web.proket.d3web.run;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import javax.imageio.ImageIO;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -54,36 +43,16 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.binary.Base64;
 
-import au.com.bytecode.opencsv.CSVReader;
-import de.d3web.core.knowledge.Indication.State;
-import de.d3web.core.knowledge.InterviewObject;
-import de.d3web.core.knowledge.Resource;
 import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.knowledge.terminology.QuestionChoice;
-import de.d3web.core.knowledge.terminology.QuestionDate;
-import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.QuestionNum;
-import de.d3web.core.knowledge.terminology.QuestionOC;
-import de.d3web.core.knowledge.terminology.QuestionText;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.NumericalInterval;
-import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Session;
-import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.blackboard.Fact;
-import de.d3web.core.session.blackboard.FactFactory;
-import de.d3web.core.session.values.DateValue;
-import de.d3web.core.session.values.MultipleChoiceValue;
-import de.d3web.core.session.values.NumValue;
-import de.d3web.core.session.values.TextValue;
-import de.d3web.core.session.values.UndefinedValue;
-import de.d3web.core.session.values.Unknown;
-import de.d3web.indication.inference.PSMethodUserSelected;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webRendererMapping;
 import de.d3web.proket.d3web.input.D3webUtils;
@@ -92,9 +61,7 @@ import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
 import de.d3web.proket.d3web.output.render.IQuestionD3webRenderer;
-import de.d3web.proket.d3web.output.render.ImageHandler;
 import de.d3web.proket.d3web.output.render.SummaryD3webRenderer;
-import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.d3web.ue.log.JSONLogger;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.database.DB;
@@ -102,8 +69,6 @@ import de.d3web.proket.database.DateCoDec;
 import de.d3web.proket.database.TokenThread;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.servlet.ServletConfig;
 
 /**
@@ -132,16 +97,12 @@ public class D3webDialog extends HttpServlet {
     protected static final String SRC = "xmlsource";
     protected static final String REPLACECONTENT = "##replacecontent##";
     protected static final String REPLACEID = "##replaceid##";
-    protected String logfilename = "";
-    protected static final SimpleDateFormat FORMATTER =
-            new SimpleDateFormat("E yyyy_MM_dd HH:mm:ss");
     protected D3webXMLParser d3webParser;
     protected D3webConnector d3wcon;
     protected static Map<String, List<String>> usrDat = null;
     protected final GlobalSettings GLOBSET = GlobalSettings.getInstance();
 
     // TODO get Date everywhere in JS instead of Servlet
-    
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -163,7 +124,7 @@ public class D3webDialog extends HttpServlet {
 
         String servletcontext = config.getServletContext().getRealPath("/");
         GLOBSET.setServletBasePath(servletcontext);
-    
+
         d3webParser = new D3webXMLParser();
     }
 
@@ -185,19 +146,19 @@ public class D3webDialog extends HttpServlet {
         // try to get the src parameter, i.e. the specification of the dialog
         String source = getSource(request);
         d3webParser.setSourceToParse(source);
-       
+
         d3wcon = D3webConnector.getInstance();
         d3wcon.setD3webParser(d3webParser);
 
         // set SRC store attribute to "" per default for avoiding nullpointers
-        if(httpSession.getAttribute(SRC)==null){
+        if (httpSession.getAttribute(SRC) == null) {
             httpSession.setAttribute(SRC, "");
         }
-        
+
         // only parse again if stored source is not equal to current source
         String srcStored = httpSession.getAttribute(SRC).toString();
         if (!(srcStored.equals(source))) {
-            
+
             httpSession.setAttribute(SRC, source);
             d3webParser.parse();
             d3wcon.setKb(d3webParser.getKnowledgeBase());
@@ -213,12 +174,12 @@ public class D3webDialog extends HttpServlet {
             d3wcon.setUserprefix(d3webParser.getUserPrefix());
             d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
             d3wcon.setLoginMode(d3webParser.getLogin());
-            
+
             // switch on/off logging depending on xml specification
             if (d3webParser.getLogging().contains("ON")) {
                 d3wcon.setLogging(true);
             }
-            
+
             // set dialog language (for internationalization of widgets, NOT
             // KB elements (specified in knowledge base
             if (!d3webParser.getLanguage().equals("")) {
@@ -227,18 +188,18 @@ public class D3webDialog extends HttpServlet {
 
             // Get userprefix specification
             String userpref = "DEFAULT";
-            if (!(d3wcon.getUserprefix().equals("")) &&
-                    !(d3wcon.getUserprefix() == null)) {
+            if (!(d3wcon.getUserprefix().equals(""))
+                    && !(d3wcon.getUserprefix() == null)) {
                 userpref = d3wcon.getUserprefix();
             }
-            
+
             // set necessary paths for saving stuff such as cases, logfiles...
             GLOBSET.setCaseFolder(
-                    GLOBSET.getServletBasePath() 
+                    GLOBSET.getServletBasePath()
                     + "../../" + userpref + "-Data/cases");
 
             GLOBSET.setLogFolder(
-                    GLOBSET.getServletBasePath() 
+                    GLOBSET.getServletBasePath()
                     + "../../" + userpref + "-Data/logs");
 
             JSONLogger logger = new JSONLogger();
@@ -257,20 +218,20 @@ public class D3webDialog extends HttpServlet {
         // in case of db login (as for EuraHS) redirect to the EuraHS-Login 
         // Servlet --> TODO refactor: rename EuraHS-Login Servlet or create
         // superservlet to be overwritten
-        if(d3wcon.getLoginMode() == LoginMode.db){
-        String authenticated = (String) httpSession.getAttribute("authenticated");
-            if(authenticated == null || !authenticated.equals("yes")){
-                 response.sendRedirect("../EuraHS-Login");
-                 return;
-            } 
+        if (d3wcon.getLoginMode() == LoginMode.db) {
+            String authenticated = (String) httpSession.getAttribute("authenticated");
+            if (authenticated == null || !authenticated.equals("yes")) {
+                response.sendRedirect("../EuraHS-Login");
+                return;
+            }
         }
-        
+
         // in case nothing other is provided, "show" is the default action
         String action = request.getParameter("action");
         if (action == null) {
             // action = "mail";
             action = "show";
-        } 
+        }
         // switch action as defined by the servlet call
         if (action.equalsIgnoreCase("show")) {
             show(request, response, httpSession);
@@ -334,18 +295,12 @@ public class D3webDialog extends HttpServlet {
             logLanguageWidget(request);
             return;
         } else if (action.equalsIgnoreCase("logInfoPopup")) {
-            D3webDialogUtilities.logInfoPopup(request, logfilename);
+            logInfoPopup(request);
             return;
         } else {
             handleDialogSpecificActions(httpSession, request, response, action);
+            return;
         }
-    }
-
-    protected void handleDialogSpecificActions(
-            HttpSession httpSession, HttpServletRequest request,
-            HttpServletResponse response, String action)
-            throws IOException {
-        // Overwrite if necessary
     }
 
     /**
@@ -367,11 +322,11 @@ public class D3webDialog extends HttpServlet {
 
         List<String> questions = new ArrayList<String>();
         List<String> values = new ArrayList<String>();
-        getParameter(request, "ocq", "occhoice", questions, values);
-        getParameter(request, "mcq", "mcchoices", questions, values);
-        getParameter(request, "dateq", "date", questions, values);
-        getParameter(request, "textq", "text", questions, values);
-        getParameter(request, "numq", "num", questions, values);
+        getParameterPairs(request, "ocq", "occhoice", questions, values);
+        getParameterPairs(request, "mcq", "mcchoices", questions, values);
+        getParameterPairs(request, "dateq", "date", questions, values);
+        getParameterPairs(request, "textq", "text", questions, values);
+        getParameterPairs(request, "numq", "num", questions, values);
 
         /*
          * Check, whether a required value (for saving) is specified. If yes,
@@ -393,34 +348,30 @@ public class D3webDialog extends HttpServlet {
         }
 
         // get dialog state before setting values
-        Set<QASet> indicatedTOsBefore = getActiveSet(d3webSession);
+        Set<QASet> indicatedTOsBefore = D3webUtils.getActiveSet(d3webSession);
         List<Question> answeredQuestionsBefore = d3webSession.getBlackboard().getAnsweredQuestions();
-        Set<TerminologyObject> unknownQuestionsBefore = getUnknownQuestions(d3webSession);
-
-        // log date
-        Date now = new Date();
+        Set<TerminologyObject> unknownQuestionsBefore = D3webUtils.getUnknownQuestions(d3webSession);
 
         for (int i = 0; i < questions.size(); i++) {
-            setValue(questions.get(i), values.get(i), d3webSession);
+            D3webUtils.setValue(questions.get(i), values.get(i), d3webSession);
 
             if (d3wcon.isLogging()) {
-                // log all changed widgets/items
-                d3wcon.getLogger().logClickedObjects(
-                        "q_" + questions.get(i), FORMATTER.format(now), values.get(i));
-                d3wcon.getLogger().writeJSONToFile(logfilename);
+                // logQuestionValue all changed widgets/items
+                D3webServletLogUtils.logQuestionValue("q_" + questions.get(i), values.get(i));
+
             }
         }
 
-        resetAbandonedPaths(d3webSession);
+        D3webUtils.resetAbandonedPaths(d3webSession);
 
         // AUTOSAVE
         PersistenceD3webUtils.saveCase((String) httpSession.getAttribute("user"), "autosave",
                 d3webSession);
 
         // Rerender changed Questions and Questionnaires
-        Set<QASet> indicatedTOsAfter = getActiveSet(d3webSession);
+        Set<QASet> indicatedTOsAfter = D3webUtils.getActiveSet(d3webSession);
 
-        Set<TerminologyObject> unknownQuestionsAfter = getUnknownQuestions(d3webSession);
+        Set<TerminologyObject> unknownQuestionsAfter = D3webUtils.getUnknownQuestions(d3webSession);
 
         Set<TerminologyObject> diff = new HashSet<TerminologyObject>();
         for (TerminologyObject to : unknownQuestionsBefore) {
@@ -429,11 +380,11 @@ public class D3webDialog extends HttpServlet {
             }
         }
 
-        getDiff(indicatedTOsBefore, indicatedTOsAfter, diff);
-        getDiff(indicatedTOsAfter, indicatedTOsBefore, diff);
+        D3webUtils.getDiff(indicatedTOsBefore, indicatedTOsAfter, diff);
+        D3webUtils.getDiff(indicatedTOsAfter, indicatedTOsBefore, diff);
 
         List<Question> answeredQuestionsAfter = d3webSession.getBlackboard().getAnsweredQuestions();
-        diff.addAll(getUnknownQuestions(d3webSession));
+        diff.addAll(D3webUtils.getUnknownQuestions(d3webSession));
         answeredQuestionsAfter.removeAll(answeredQuestionsBefore);
         // System.out.println(answeredQuestionsAfter);
         diff.addAll(answeredQuestionsAfter);
@@ -446,7 +397,7 @@ public class D3webDialog extends HttpServlet {
             writer.append(toRenderer.renderTerminologyObject(d3webSession, cc, to,
                     to instanceof QContainer
                     ? d3wcon.getKb().getRootQASet()
-                    : getQuestionnaireAncestor(to)));
+                    : D3webUtils.getQuestionnaireAncestor(to)));
         }
         writer.append(REPLACEID + "headerInfoLine");
         writer.append(REPLACECONTENT);
@@ -455,7 +406,16 @@ public class D3webDialog extends HttpServlet {
         writer.append(rootRenderer.renderHeaderInfoLine(d3webSession));
     }
 
-    protected void checkRange(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    /**
+     * Check the range of numerical questions.
+     * 
+     * @param request
+     * @param response
+     * @throws IOException 
+     */
+    protected void checkRange(
+            HttpServletRequest request, HttpServletResponse response) 
+            throws IOException {
         PrintWriter writer = response.getWriter();
 
         String qidsString = request.getParameter("qids");
@@ -479,10 +439,14 @@ public class D3webDialog extends HttpServlet {
             }
 
         }
-
         writer.append(qidBackstring);
     }
 
+    /**
+     * Parse the language parameter (set via JS depending on what language
+     * (for KB elements) was chosen in the dialog and set it in global settings.
+     * @param request 
+     */
     protected void setLanguageID(HttpServletRequest request) {
         int localeID =
                 Integer.parseInt(
@@ -524,7 +488,7 @@ public class D3webDialog extends HttpServlet {
     }
 
     /**
-     * 
+     * Initial check whether...
      * @created 26.07.2011
      * @param response
      * @param httpSession
@@ -542,7 +506,7 @@ public class D3webDialog extends HttpServlet {
     }
 
     /**
-     * Loading a case.
+     * Delete a case.
      * 
      * @created 09.03.2011
      * @param request ServletRequest
@@ -554,51 +518,26 @@ public class D3webDialog extends HttpServlet {
         String filename = request.getParameter("fn");
         String user = (String) httpSession.getAttribute("user");
 
-        deleteCase(httpSession, user, filename);
-    }
-
-    protected void deleteCase(HttpSession httpSession, String user, String filename) {
         if (PersistenceD3webUtils.existsCase(user, filename)) {
             PersistenceD3webUtils.deleteUserCase(user, filename);
         }
     }
 
-    private Set<QASet> getActiveSet(Session sess) {
-        Set<QASet> activeSet = new HashSet<QASet>();
-        Set<QASet> initQuestions = new HashSet<QASet>(sess.getKnowledgeBase().getInitQuestions());
-        for (QASet qaset : sess.getKnowledgeBase().getManager().getQASets()) {
-            if (isActive(qaset, sess.getBlackboard(), initQuestions)) {
-                activeSet.add(qaset);
-            }
-        }
-        return activeSet;
-    }
-
-    private void getDiff(Set<QASet> set1, Set<QASet> set2, Set<TerminologyObject> diff) {
-        for (InterviewObject io : set1) {
-            if (!set2.contains(io)) {
-                if (io instanceof Question) {
-                    diff.add(getQuestionnaireAncestor(io));
-                } else {
-                    diff.add(io);
-                }
-            }
-        }
-    }
-
     /**
-     * Retrieve the difference between two date objects in seconds
+     * Get several parameters with specified names from the request object.
+     * Mainly used for getting more than one question with corresponding answers
+     * from the request. 
+     * Return the parameters as a questions and answers list respectively.
      * 
-     * @created 29.04.2011
-     * @param d1 First date
-     * @param d2 Second date
-     * @return the difference in seconds
+     * @param request
+     * @param paraName1 first parameter name
+     * @param paraName2 second parameter name
+     * @param parameters1 
+     * @param parameters2 
      */
-    protected float getDifference(Date d1, Date d2) {
-        return (d1.getTime() - d2.getTime()) / 1000;
-    }
-
-    private void getParameter(HttpServletRequest request, String paraName1, String paraName2, List<String> parameters1, List<String> parameters2) {
+    private void getParameterPairs(
+            HttpServletRequest request, String paraName1, String paraName2,
+            List<String> parameters1, List<String> parameters2) {
         int i = 0;
         while (true) {
             String para1 = request.getParameter(paraName1 + i);
@@ -606,62 +545,23 @@ public class D3webDialog extends HttpServlet {
             if (para1 == null || para2 == null) {
                 break;
             }
-            String objectNameForId = AbstractD3webRenderer.getObjectNameForId(para1);
+            String objectNameForId =
+                    AbstractD3webRenderer.getObjectNameForId(para1);
             parameters1.add(objectNameForId == null ? para1 : objectNameForId);
-            String objectNameForId2 = AbstractD3webRenderer.getObjectNameForId(para2);
+            String objectNameForId2 =
+                    AbstractD3webRenderer.getObjectNameForId(para2);
             parameters2.add(objectNameForId2 == null ? para2 : objectNameForId2);
             i++;
         }
     }
 
-    private TerminologyObject getQuestionnaireAncestor(TerminologyObject to) {
-        if (to.getParents() != null) {
-            for (TerminologyObject parent : to.getParents()) {
-                if (parent instanceof QContainer) {
-                    return parent;
-                } else {
-                    return getQuestionnaireAncestor(parent);
-                }
-            }
-        }
-        return null;
-    }
-
     /**
-     * Default method for getting the source parameter.
-     * As default, Default.xml is suggested; yet if a src parameter is given
-     * by the webapp (when calling from ControlCenter, for example), that one
-     * is taken. 
+     * Redirect to the statistics site.
      * 
-     * OVERRIDE by Application-Specific servlets when a certain src file is
-     * to be used exclusively.
-     * 
-     * @param request the HttpServletRequest
-     * @return the source string
+     * @param response
+     * @param httpSession
+     * @throws IOException 
      */
-    protected String getSource(HttpServletRequest request) {
-
-        String source = "Default.xml"; // default
-        if (request.getParameter("src") != null) {
-            source = request.getParameter("src");
-        }
-        //if (!source.endsWith(".xml")) {
-        //source = source + ".xml";
-        //}
-        return source.endsWith(".xml") ? source : source + ".xml";
-    }
-
-    private Set<TerminologyObject> getUnknownQuestions(Session sess) {
-        Set<TerminologyObject> unknownQuestions = new HashSet<TerminologyObject>();
-        for (TerminologyObject to : sess.getBlackboard().getValuedObjects()) {
-            Fact mergedFact = sess.getBlackboard().getValueFact(to);
-            if (mergedFact != null && Unknown.assignedTo(mergedFact.getValue())) {
-                unknownQuestions.add(to);
-            }
-        }
-        return unknownQuestions;
-    }
-
     protected void gotoStatistics(HttpServletResponse response,
             HttpSession httpSession) throws IOException {
 
@@ -681,33 +581,6 @@ public class D3webDialog extends HttpServlet {
     }
 
     /**
-     * Utility method for checking whether a given terminology object is
-     * indicated or instant_indicated or not in the current session.
-     * 
-     * @created 09.03.2011
-     * @param to The terminology object to check
-     * @param bb
-     * @return True, if the terminology object is (instant) indicated.
-     */
-    private boolean isActive(QASet qaset, Blackboard bb, Set<QASet> initQuestions) {
-        boolean indicatedParent = false;
-        for (TerminologyObject parentQASet : qaset.getParents()) {
-            if (parentQASet instanceof QContainer
-                    && isIndicated((QASet) parentQASet, bb, initQuestions)) {
-                indicatedParent = true;
-                break;
-            }
-        }
-        return indicatedParent || isIndicated(qaset, bb, initQuestions);
-    }
-
-    private boolean isIndicated(QASet qaset, Blackboard bb, Set<QASet> initQuestions) {
-        return initQuestions.contains(qaset)
-                || bb.getIndication(qaset).getState() == State.INDICATED
-                || bb.getIndication(qaset).getState() == State.INSTANT_INDICATED;
-    }
-
-    /**
      * Loading a case.
      * 
      * @created 09.03.2011
@@ -719,11 +592,12 @@ public class D3webDialog extends HttpServlet {
 
         String filename = request.getParameter("fn");
         String user = (String) httpSession.getAttribute("user");
-
-        loadCase(httpSession, user, filename);
+        loadCaseUserFilename(httpSession, user, filename);
     }
 
-    protected void loadCase(HttpSession httpSession, String user, String filename) {
+    /* Helper method for above loadCase() method and for single access of 
+    load case mechanism with a given username and filename */
+    protected void loadCaseUserFilename(HttpSession httpSession, String user, String filename) {
         if (PersistenceD3webUtils.existsCase(user, filename)) {
             httpSession.setAttribute(D3WEB_SESSION,
                     PersistenceD3webUtils.loadUserCase(user, filename));
@@ -731,6 +605,13 @@ public class D3webDialog extends HttpServlet {
         }
     }
 
+    /**
+     * Login redirect - EURAHS only --> refactor: move to EuraHS Servlet
+     * @param request
+     * @param response
+     * @param httpSession
+     * @throws IOException 
+     */
     protected void loginDB(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
         String token = request.getParameter("t");
         String email = new String(Base64.decodeBase64(request.getParameter("e")));
@@ -739,7 +620,7 @@ public class D3webDialog extends HttpServlet {
             httpSession.setAttribute("authenticated", "yes");
             httpSession.setAttribute("user", email);
 
-            loadCase(httpSession, email, "autosave");
+            loadCaseUserFilename(httpSession, email, "autosave");
 
             response.sendRedirect("../EuraHS-Dialog");
         } else {
@@ -748,7 +629,8 @@ public class D3webDialog extends HttpServlet {
     }
 
     /**
-     * Handle login of new user
+     * Handle login of new user in simple-textdatabase case, 
+     * e.g. for Mediastinitis
      * 
      * @created 29.04.2011
      * @param req
@@ -801,7 +683,7 @@ public class D3webDialog extends HttpServlet {
     }
 
     /**
-     * Check, whether the user has permissions to log in. Permissions are stored
+     * Check, whether the user has permissions to logQuestionValue in. Permissions are stored
      * in userdat.csv in cases parent folder
      * 
      * @created 15.03.2011
@@ -809,7 +691,7 @@ public class D3webDialog extends HttpServlet {
      * @param password The password.
      * @return True, if permissions are correct.
      */
-    protected boolean permitUser(String user, String password) {
+    private boolean permitUser(String user, String password) {
 
         List<String> values = usrDat.get(user);
         if (values != null) {
@@ -821,8 +703,13 @@ public class D3webDialog extends HttpServlet {
         return false; // trust no one per default
     }
 
+    /**
+     * Reset a running d3web session.
+     * @param httpSession 
+     */
     protected void resetD3webSession(HttpSession httpSession) {
-        Session d3webSession = D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
+        Session d3webSession =
+                D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
         httpSession.setAttribute(D3WEB_SESSION, d3webSession);
         httpSession.setAttribute("lastLoaded", "");
         if (d3wcon.isLogging()) {
@@ -845,38 +732,16 @@ public class D3webDialog extends HttpServlet {
             throws IOException {
 
         PrintWriter writer = response.getWriter();
-
         // get the root renderer --> call getRenderer with null
-        DefaultRootD3webRenderer d3webr = (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(
-                null);
+        DefaultRootD3webRenderer d3webr =
+                (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
 
         // new ContainerCollection needed each time to get an updated dialog
         ContainerCollection cc = new ContainerCollection();
-
         Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
         cc = d3webr.renderRoot(cc, d3webSess, httpSession);
-
         writer.print(cc.html.toString()); // deliver the rendered output
-
         writer.close(); // and close
-    }
-
-    private Collection<Question> resetAbandonedPaths(Session sess) {
-        Blackboard bb = sess.getBlackboard();
-        Collection<Question> resetQuestions = new LinkedList<Question>();
-        Set<QASet> initQuestions = new HashSet<QASet>(d3wcon.getKb().getInitQuestions());
-        for (Question question : bb.getAnsweredQuestions()) {
-            if (!isActive(question, bb, initQuestions)
-                    && !question.getName().equals(d3webParser.getRequired())) {
-                Fact lastFact = bb.getValueFact(question);
-                if (lastFact != null
-                        && lastFact.getPSMethod() == PSMethodUserSelected.getInstance()) {
-                    bb.removeValueFact(lastFact);
-                    resetQuestions.add(question);
-                }
-            }
-        }
-        return resetQuestions;
     }
 
     /**
@@ -978,152 +843,6 @@ public class D3webDialog extends HttpServlet {
 
     }
 
-    /**
-     * Utility method for adding values. Adds a single value for a given
-     * question to the current knowledge base in the current problem solving
-     * session.
-     * 
-     * @created 28.01.2011
-     * @param termObID The ID of the TerminologyObject, the value is to be
-     *        added.
-     * @param valString The value, that is to be added for the TerminologyObject
-     *        with ID valID.
-     */
-    protected void setValue(String termObID, String valString, Session sess) {
-
-        if (termObID == null || valString == null) {
-            return;
-        }
-
-        Blackboard blackboard = sess.getBlackboard();
-        Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(termObID);
-
-        // if TerminologyObject not found in the current KB return & do nothing
-        if (to == null) {
-            return;
-        }
-
-        // init Value object...
-        Value value = null;
-
-        // check if unknown option was chosen
-        if (valString.equalsIgnoreCase("unknown")) {
-            value = setQuestionToUnknown(sess, to);
-        } // otherwise, i.e., for all other "not-unknown" values
-        else {
-
-            // CHOICE questions
-            if (to instanceof QuestionChoice) {
-                value = setQuestionChoice(to, valString);
-            } // TEXT questions
-            else if (to instanceof QuestionText) {
-                value = setQuestionText(to, valString);
-            } // NUM questions
-            else if (to instanceof QuestionNum) {
-                value = setQuestionNum(valString);
-            } // DATE questions
-            else if (to instanceof QuestionDate) {
-                value = setQuestionDate(to, valString);
-            }
-
-            // if reasonable value retrieved, set it for the given
-            // TerminologyObject
-            if (value != null) {
-
-                if (UndefinedValue.isNotUndefinedValue(value)) {
-                    // add new value as UserEnteredFact
-                    Fact fact = FactFactory.createUserEnteredFact(to, value);
-                    blackboard.addValueFact(fact);
-                }
-            }
-        }
-
-    }
-
-    private Value setQuestionDate(Question to, String valString) {
-        Value value = null;
-        try {
-            value = new DateValue(new Date(Long.parseLong(valString)));
-        } catch (NumberFormatException e) {
-            // value still null, will not be set
-        }
-        return value;
-    }
-
-    private Value setQuestionNum(String valString) {
-        try {
-            return new NumValue(Double.parseDouble(valString.replace(",", ".")));
-        } catch (NumberFormatException ex) {
-            return null;
-        }
-    }
-
-    private Value setQuestionText(Question to, String valString) {
-        Value value = null;
-        String textPattern = to.getInfoStore().getValue(ProKEtProperties.TEXT_FORMAT);
-        Pattern p = null;
-        if (textPattern != null && !textPattern.isEmpty()) {
-            try {
-                p = Pattern.compile(textPattern);
-            } catch (Exception e) {
-            }
-        }
-        if (p != null) {
-            Matcher m = p.matcher(valString);
-            if (m.find()) {
-                value = new TextValue(m.group());
-            }
-        } else {
-            value = new TextValue(valString);
-        }
-        return value;
-    }
-
-    private Value setQuestionChoice(Question to, String valString) {
-        Value value = null;
-        if (to instanceof QuestionOC) {
-            // valueString is the ID of the selected item
-            try {
-                value = KnowledgeBaseUtils.findValue(to, valString);
-            } catch (NumberFormatException nfe) {
-                // value still null, will not be set
-            }
-        } else if (to instanceof QuestionMC) {
-
-            if (valString.equals("")) {
-                value = UndefinedValue.getInstance();
-            } else {
-                String[] choices = valString.split(",");
-                List<Choice> cs = new ArrayList<Choice>();
-
-                for (String c : choices) {
-                    cs.add(new Choice(c));
-                }
-                value = MultipleChoiceValue.fromChoices(cs);
-
-            }
-        }
-        return value;
-    }
-
-    private Value setQuestionToUnknown(Session sess, Question to) {
-        Blackboard blackboard = sess.getBlackboard();
-
-        // remove a previously set value
-        Fact lastFact = blackboard.getValueFact(to);
-        if (lastFact != null) {
-            blackboard.removeValueFact(lastFact);
-        }
-
-        // and add the unknown value
-        Value value = Unknown.getInstance();
-        Fact fact = FactFactory.createFact(sess, to, value,
-                PSMethodUserSelected.getInstance(),
-                PSMethodUserSelected.getInstance());
-        blackboard.addValueFact(fact);
-        return value;
-    }
-
     protected void updateSummary(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
         PrintWriter writer = response.getWriter();
 
@@ -1150,88 +869,58 @@ public class D3webDialog extends HttpServlet {
     }
 
     protected void logInitially(HttpServletRequest request, HttpSession httpSession) {
-        if (!GLOBSET.initLogged()) {
-
-            // get values to log initially: browser, user, and start time
-            String browser =
-                    request.getParameter("browser").replace("+", " ");
-            String user =
-                    request.getParameter("user").replace("+", " ");
-            Date start = new Date();
-            String datestring = start.toString();
-
-            // give values to logger
-            d3wcon.getLogger().logStartValue(FORMATTER.format(start));
-            d3wcon.getLogger().logBrowserValue(browser);
-            d3wcon.getLogger().logUserValue(user);
-
-            Date date = new Date();
-            // assemble filename for logfile and save to file
-            SimpleDateFormat format =
-                    new SimpleDateFormat("yyyyMMdd_HHmmss");
-            String formatted = format.format(date);
-            String sid =
-                    ((Session) httpSession.getAttribute(D3WEB_SESSION)).getId();
-            logfilename = formatted + "_" + sid + ".txt";
-            System.out.println("LOGNAME: " + logfilename);
-
-            d3wcon.getLogger().writeJSONToFile(logfilename);
-
-            GLOBSET.setInitLogged(true);
-        }
+        D3webServletLogUtils.logInitially(request, httpSession);
     }
 
     protected void logSessionEnd(HttpServletRequest request) {
-        // end date
-        Date date = new Date();
-        String datestring = FORMATTER.format(date);
-        d3wcon.getLogger().logEndValue(datestring);
-        d3wcon.getLogger().writeJSONToFile(logfilename);
-        d3wcon.setLogger(new JSONLogger());
-        GLOBSET.setInitLogged(false);
+        D3webServletLogUtils.logSessionEnd(request);
     }
 
     protected void logWidget(HttpServletRequest request) {
-        // TODO need to check here in case IDs are reworked globally one day
-        String widgetID = request.getParameter("widget");
-        Date now = new Date();
-        JSONLogger logger = d3wcon.getLogger();
-
-        if (widgetID.contains("reset")) {
-            logger.logClickedObjects(
-                    "RESET", FORMATTER.format(now), "RESET");
-        } else if (widgetID.contains("statistics")) {
-            logger.logClickedObjects(
-                    "STATISTICS", FORMATTER.format(now), "STATISTICS");
-        } else if (widgetID.contains("summary")) {
-            logger.logClickedObjects(
-                    "SUMMARY", FORMATTER.format(now), "SUMMARY");
-        } else if (widgetID.contains("followup")) {
-            logger.logClickedObjects(
-                    "FOLLOWUP", FORMATTER.format(now), "FOLLOWUP");
-        } else if (widgetID.contains("loadcase")) {
-            logger.logClickedObjects(
-                    "LOAD", FORMATTER.format(now), "LOAD");
-        } else if (widgetID.contains("savecase")) {
-            logger.logClickedObjects(
-                    "SAVE", FORMATTER.format(now), "SAVE");
-        }
-        if (d3wcon.isLogging()) {
-            d3wcon.getLogger().writeJSONToFile(logfilename);
-        }
+        D3webServletLogUtils.logWidget(request);
     }
 
     protected void logLanguageWidget(HttpServletRequest request) {
-
-        String language = request.getParameter("language");
-        Date now = new Date();
-        JSONLogger logger = d3wcon.getLogger();
-
-        logger.logClickedObjects(
-                "LANGUAGE", FORMATTER.format(now), language);
-
-        d3wcon.getLogger().writeJSONToFile(logfilename);
+        D3webServletLogUtils.logLanguageWidget(request);
     }
 
-    
+    protected void logInfoPopup(HttpServletRequest request) {
+        D3webServletLogUtils.logInfoPopup(request);
+    }
+
+    /**
+     * Default additional method that can be used to handle additional (default)
+     * dialog specific actions only by overwriting this.
+     * 
+     * @param httpSession
+     * @param request
+     * @param response
+     * @param action
+     * @throws IOException 
+     */
+    protected void handleDialogSpecificActions(
+            HttpSession httpSession, HttpServletRequest request,
+            HttpServletResponse response, String action)
+            throws IOException {
+        // Overwrite if necessary
+    }
+
+    /**
+     * Default method for getting the source parameter.
+     * As default, Default.xml is suggested; yet if a src parameter is given
+     * by the webapp (when calling from ControlCenter, for example), that one
+     * is taken.
+     * 
+     * @param request the HttpServletRequest
+     * @return the source string
+     */
+    protected String getSource(HttpServletRequest request) {
+
+        // Overwrite if necessary
+        String source = "Default.xml"; // default
+        if (request.getParameter("src") != null) {
+            source = request.getParameter("src");
+        }
+        return source.endsWith(".xml") ? source : source + ".xml";
+    }
 }
