@@ -254,5 +254,26 @@
  	  	         <parameter id="css" value="DefaultEditTool.css" />
  	  	         <parameter id="scope" value="SparqlQueryMarkup" />
  	 </extension>
+ 	 
+ 	 <extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+        id="InferenceDiffToolProvider">
+        <parameter id="class"
+            value="de.knowwe.rdfs.inspect.InferenceDiffToolProvider" />
+        <parameter id="name" value="InferenceDiffToolProvider" />
+        <parameter id="description"
+            value="Test description" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />       
+        <parameter id="scope" value="IRITermRef" />
+    </extension>    
+    
+    	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+		id="InferenceDiffTagHandler">
+		<parameter id="class" value="de.knowwe.rdfs.inspect.InferenceDiffTagHandler" />
+		<parameter id="name" value="InferenceDiffTagHandler" />
+		<parameter id="description" value="TagHandler InferenceDiffTagHandler" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
 	
 </plugin>
