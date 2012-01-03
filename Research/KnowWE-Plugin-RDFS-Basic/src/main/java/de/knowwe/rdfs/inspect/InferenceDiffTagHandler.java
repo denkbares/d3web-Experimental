@@ -30,9 +30,14 @@ import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
+import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
+import de.knowwe.rdfs.util.SparqlResultSetRenderer;
+import de.knowwe.tools.Tool;
 
 /**
  * The StatementImportanceTagHandler shows to a given RDFS statement how
@@ -46,15 +51,10 @@ import de.knowwe.rdf2go.Rdf2GoCore;
  * @author Stefan Mark
  * @created 01.06.2011
  */
-public class InferenceDiffTagHandler extends AbstractHTMLTagHandler {
+public class InferenceDiffTagHandler extends AbstractTagHandler {
 
-	/**
-	 * An instance of the RDF2Go object. Used to connect to the triple store.
-	 */
-	private static final Rdf2GoCore rdf2goCore = Rdf2GoCore.getInstance();
-
-	private static final String[] vars = new String[] {
-			"x", "y", "z" };
+	private static DefaultMarkupRenderer<DefaultMarkupType> defaultMarkupRenderer =
+			new DefaultMarkupRenderer<DefaultMarkupType>();
 
 	/**
 	 * Constructor for the StatementImportanceTagHandler. Defines the used
@@ -65,17 +65,16 @@ public class InferenceDiffTagHandler extends AbstractHTMLTagHandler {
 	}
 
 	@Override
-	public String renderHTML(String topic, UserContext user, Map<String, String> parameters, String web) {
+	public String render(KnowWEArticle article, Section<?> section, UserContext user, Map<String, String> parameters) {
 
 		Map<String, String> urlParameters = user.getParameters();
 		String sectionID = urlParameters.get("section");
-		String title = urlParameters.get("topic");
 
 		if (sectionID == null)
 			return "Could not calculate any difference. No statement given!";
 
-		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
-		KnowWEArticle rdfArticle = mgr.getArticle(title);
+		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(
+				user.getWeb());
 
 		Section<?> statementSection = Sections.getSection(sectionID);
 		StringBuilder html = new StringBuilder();
@@ -86,12 +85,22 @@ public class InferenceDiffTagHandler extends AbstractHTMLTagHandler {
 
 			// render the difference
 
-			html.append("<dl>");
-			html.append("<dt>Removed: " + statementSection.getOriginalText() + "</dt>");
+			html.append("<h3>Diff for: \"" + statementSection.getOriginalText()
+					+ "\"" + "</h3>");
+			html.append("<table>");
 			html.append(renderDiff(diff));
-			html.append("</dl>");
+			html.append("</table>");
 		}
-		return html.toString();
+
+		StringBuilder buffer = new StringBuilder();
+		String cssClassName = "type_" + section.get().getName();
+		defaultMarkupRenderer.renderDefaultMarkupStyled(
+				getTagName(), html.toString(), sectionID, cssClassName, new Tool[] {},
+				user,
+				buffer);
+		KnowWEUtils.maskJSPWikiMarkup(buffer);
+		return buffer.toString();
+
 	}
 
 	/**
@@ -105,22 +114,35 @@ public class InferenceDiffTagHandler extends AbstractHTMLTagHandler {
 	private String renderDiff(Collection<Statement> set) {
 		StringBuilder result = new StringBuilder();
 
+		result.append("<tr>");
+		result.append("<th>");
+		result.append("x");
+		result.append("</th>");
+		result.append("<th>");
+		result.append("y");
+		result.append("</th>");
+		result.append("<th>");
+		result.append("z");
+		result.append("</th>");
+		result.append("</tr>");
+
 		Iterator<Statement> itr = set.iterator();
 		while (itr.hasNext()) {
 			Statement row = itr.next();
 			// x y z (variables names of the query, see above)
 
-			result.append("<dd>");
-
-			result.append(row.getSubject().toString());
-			result.append(" ");
-			result.append(row.getPredicate().toString());
-			result.append(" ");
-			result.append(row.getObject().toString());
-
-			result.append("</dd>");
+			result.append("<tr>");
+			result.append("<td>");
+			result.append(SparqlResultSetRenderer.renderNode(true, row.getSubject()));
+			result.append("</td>");
+			result.append("<td>");
+			result.append(SparqlResultSetRenderer.renderNode(true, row.getPredicate()));
+			result.append("</td>");
+			result.append("<td>");
+			result.append(SparqlResultSetRenderer.renderNode(true, row.getObject()));
+			result.append("</td>");
+			result.append("</tr>");
 		}
 		return result.toString();
 	}
-
 }
