@@ -85,11 +85,12 @@ public class InferenceDiffTagHandler extends AbstractTagHandler {
 
 			// render the difference
 
-			html.append("<h3>Diff for: \"" + statementSection.getOriginalText()
-					+ "\"" + "</h3>");
-			html.append("<table>");
+			html.append(KnowWEUtils.maskHTML("<h3>"));
+			html.append("Diff for: \"" + statementSection.getOriginalText() + "\"");
+			html.append(KnowWEUtils.maskHTML("</h3>"));
+			html.append(KnowWEUtils.maskHTML("<table>"));
 			html.append(renderDiff(diff));
-			html.append("</table>");
+			html.append(KnowWEUtils.maskHTML("</table>"));
 		}
 
 		StringBuilder buffer = new StringBuilder();
@@ -114,34 +115,34 @@ public class InferenceDiffTagHandler extends AbstractTagHandler {
 	private String renderDiff(Collection<Statement> set) {
 		StringBuilder result = new StringBuilder();
 
-		result.append("<tr>");
-		result.append("<th>");
+		result.append(KnowWEUtils.maskHTML("<tr>"));
+		result.append(KnowWEUtils.maskHTML("<th>"));
 		result.append("x");
-		result.append("</th>");
-		result.append("<th>");
+		result.append(KnowWEUtils.maskHTML("</th>"));
+		result.append(KnowWEUtils.maskHTML("<th>"));
 		result.append("y");
-		result.append("</th>");
-		result.append("<th>");
+		result.append(KnowWEUtils.maskHTML("</th>"));
+		result.append(KnowWEUtils.maskHTML("<th>"));
 		result.append("z");
-		result.append("</th>");
-		result.append("</tr>");
+		result.append(KnowWEUtils.maskHTML("</th>"));
+		result.append(KnowWEUtils.maskHTML("</tr>"));
 
 		Iterator<Statement> itr = set.iterator();
 		while (itr.hasNext()) {
 			Statement row = itr.next();
 			// x y z (variables names of the query, see above)
 
-			result.append("<tr>");
-			result.append("<td>");
+			result.append(KnowWEUtils.maskHTML("<tr>"));
+			result.append(KnowWEUtils.maskHTML("<td>"));
 			result.append(SparqlResultSetRenderer.renderNode(true, row.getSubject()));
-			result.append("</td>");
-			result.append("<td>");
+			result.append(KnowWEUtils.maskHTML("</td>"));
+			result.append(KnowWEUtils.maskHTML("<td>"));
 			result.append(SparqlResultSetRenderer.renderNode(true, row.getPredicate()));
-			result.append("</td>");
-			result.append("<td>");
+			result.append(KnowWEUtils.maskHTML("</td>"));
+			result.append(KnowWEUtils.maskHTML("<td>"));
 			result.append(SparqlResultSetRenderer.renderNode(true, row.getObject()));
-			result.append("</td>");
-			result.append("</tr>");
+			result.append(KnowWEUtils.maskHTML("</td>"));
+			result.append(KnowWEUtils.maskHTML("</tr>"));
 		}
 		return result.toString();
 	}

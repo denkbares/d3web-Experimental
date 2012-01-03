@@ -70,7 +70,7 @@ public class InferenceDiffToolProvider implements ToolProvider {
 				+ "')";
 		return new DefaultTool(
 				"KnowWEExtension/images/minus.png",
-				"Show Statement Importance",
+				"Show inference diff for statement",
 				"Removes the selected statement from the triple store and calculates shows a diff between the data before and after the deletion to show the importance of the statement..",
 				jsAction);
 	}
