@@ -347,67 +347,91 @@ public class D3webDialog extends HttpServlet {
 		List<String> values = new ArrayList<String>();
 		getParameterPairs(request, "question", "value", questions, values);
 
-		/*
-		 * Check, whether a required value (for saving) is specified. If yes,
-		 * check whether this value has already been set in the KB or is about
-		 * to be set in the current call --> go on normally. Otherwise, return a
-		 * marker "<required value>" so the user is informed by AJAX to provide
-		 * this marked value.
-		 */
+		if (!handleRequiredValueCheck(writer, d3webSession, questions, values)) return;
+
+		DialogState stateBefore = new DialogState(d3webSession);
+
+		setValues(d3webSession, questions, values);
+		D3webUtils.resetAbandonedPaths(d3webSession);
+
+		PersistenceD3webUtils.saveCase((String) httpSession.getAttribute("user"), "autosave",
+				d3webSession);
+
+		DialogState stateAfter = new DialogState(d3webSession);
+
+		Set<TerminologyObject> diff = calculateDiff(d3webSession, stateBefore, stateAfter);
+
+		renderAndUpdateDiff(writer, d3webSession, diff);
+	}
+
+	/**
+	 * Check, whether a required value (for saving) is specified. If yes, check
+	 * whether this value has already been set in the KB or is about to be set
+	 * in the current call --> go on normally. Otherwise, return a marker
+	 * "<required value>" so the user is informed by AJAX to provide this marked
+	 * value.
+	 * 
+	 * @return true of the value is set, false if it is not yet set
+	 */
+	private boolean handleRequiredValueCheck(PrintWriter writer, Session d3webSession, List<String> questions, List<String> values) {
 		List<String> all = new LinkedList<String>();
 		all.addAll(questions);
 		all.addAll(values);
 		String reqVal = D3webConnector.getInstance().getD3webParser().getRequired();
-		if (!reqVal.equals("")
-				&& !checkReqVal(reqVal, d3webSession, all)) {
-
+		if (!reqVal.equals("") && !checkReqVal(reqVal, d3webSession, all)) {
 			writer.append("##missingfield##");
 			writer.append(reqVal);
-			return;
+			return false;
 		}
+		return true;
+	}
 
-		// get dialog state before setting values
-		Set<QASet> indicatedTOsBefore = D3webUtils.getActiveSet(d3webSession);
-		List<Question> answeredQuestionsBefore = d3webSession.getBlackboard().getAnsweredQuestions();
-		Set<TerminologyObject> unknownQuestionsBefore = D3webUtils.getUnknownQuestions(d3webSession);
-
+	private void setValues(Session d3webSession, List<String> questions, List<String> values) {
 		for (int i = 0; i < questions.size(); i++) {
 			D3webUtils.setValue(questions.get(i), values.get(i), d3webSession);
 
 			if (d3wcon.isLogging()) {
 				// logQuestionValue all changed widgets/items
-				D3webServletLogUtils.logQuestionValue("q_" + questions.get(i), values.get(i));
-
+				D3webServletLogUtils.logQuestionValue(questions.get(i), values.get(i));
 			}
 		}
+	}
 
-		D3webUtils.resetAbandonedPaths(d3webSession);
-
-		// AUTOSAVE
-		PersistenceD3webUtils.saveCase((String) httpSession.getAttribute("user"), "autosave",
-				d3webSession);
-
-		// Rerender changed Questions and Questionnaires
-		Set<QASet> indicatedTOsAfter = D3webUtils.getActiveSet(d3webSession);
-
-		Set<TerminologyObject> unknownQuestionsAfter = D3webUtils.getUnknownQuestions(d3webSession);
+	private Set<TerminologyObject> calculateDiff(Session d3webSession, DialogState beforeState, DialogState afterState) {
 
 		Set<TerminologyObject> diff = new HashSet<TerminologyObject>();
-		for (TerminologyObject to : unknownQuestionsBefore) {
-			if (!unknownQuestionsAfter.contains(to)) {
+
+		for (TerminologyObject to : beforeState.unknownQuestions) {
+			if (!afterState.unknownQuestions.contains(to)) {
 				diff.add(to);
 			}
 		}
 
-		D3webUtils.getDiff(indicatedTOsBefore, indicatedTOsAfter, diff);
-		D3webUtils.getDiff(indicatedTOsAfter, indicatedTOsBefore, diff);
+		D3webUtils.getDiff(beforeState.indicatedQASets, afterState.indicatedQASets, diff);
+		D3webUtils.getDiff(afterState.indicatedQASets, beforeState.indicatedQASets, diff);
 
-		List<Question> answeredQuestionsAfter = d3webSession.getBlackboard().getAnsweredQuestions();
 		diff.addAll(D3webUtils.getUnknownQuestions(d3webSession));
-		answeredQuestionsAfter.removeAll(answeredQuestionsBefore);
+		// we simply update answered abstract questions every time
+		// actually we only need to update them if their facts have changed, but
+		// thats more complex to test and probably not even faster...
+		List<Question> abstractAnsweredQuestionsBefore = new ArrayList<Question>(
+				beforeState.answeredQuestions.size());
+		for (Question answeredQuestionBefore : beforeState.answeredQuestions) {
+			Boolean isAbstract = answeredQuestionBefore.getInfoStore().getValue(
+					BasicProperties.ABSTRACTION_QUESTION);
+			if (isAbstract != null && isAbstract) {
+				abstractAnsweredQuestionsBefore.add(answeredQuestionBefore);
+			}
+		}
+		beforeState.answeredQuestions.removeAll(abstractAnsweredQuestionsBefore);
+		afterState.answeredQuestions.removeAll(beforeState.answeredQuestions);
 		// System.out.println(answeredQuestionsAfter);
-		diff.addAll(answeredQuestionsAfter);
+		diff.addAll(afterState.answeredQuestions);
 
+		return diff;
+	}
+
+	private void renderAndUpdateDiff(PrintWriter writer, Session d3webSession, Set<TerminologyObject> diff) {
 		ContainerCollection cc = new ContainerCollection();
 		for (TerminologyObject to : diff) {
 			if (isHiddenOrHasHiddenParent(to)) continue;
@@ -506,6 +530,9 @@ public class D3webDialog extends HttpServlet {
 
 		boolean contains = false;
 		for (String s : check) {
+			String objectNameForId = AbstractD3webRenderer.getObjectNameForId(s);
+			if (objectNameForId != null) s = objectNameForId;
+
 			if (s.equals(requiredVal)) {
 				contains = true;
 				break;
@@ -955,5 +982,19 @@ public class D3webDialog extends HttpServlet {
 			source = request.getParameter("src");
 		}
 		return source.endsWith(".xml") ? source : source + ".xml";
+	}
+
+	private class DialogState {
+
+		Set<QASet> indicatedQASets;
+		List<Question> answeredQuestions;
+		Set<TerminologyObject> unknownQuestions;
+
+		DialogState(Session d3webSession) {
+			indicatedQASets = D3webUtils.getActiveSet(d3webSession);
+			answeredQuestions = d3webSession.getBlackboard().getAnsweredQuestions();
+			unknownQuestions = D3webUtils.getUnknownQuestions(d3webSession);
+		}
+
 	}
 }
