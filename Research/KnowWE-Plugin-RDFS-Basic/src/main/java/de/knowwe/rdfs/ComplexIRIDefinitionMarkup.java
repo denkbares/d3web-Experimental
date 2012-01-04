@@ -30,6 +30,7 @@ import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.basicType.EndLineComment;
 import de.knowwe.core.kdom.objects.KnowWETerm;
 import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.objects.TermReference;
@@ -51,6 +52,8 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 
 	public ComplexIRIDefinitionMarkup() {
 		this.sectionFinder = new RegexSectionFinder(REGEX_DEF + REGEX, Pattern.MULTILINE);
+
+		this.addChildType(new EndLineComment());
 
 		this.addChildType(new DefType());
 		this.addChildType(new DefinitionTerm());
