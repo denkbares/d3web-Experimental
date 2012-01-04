@@ -13,8 +13,8 @@ $HTMLHeader()$
 
     
     <div id="intro">
-            Dieser Dialog bewertet die Diagnose "Arbeitsverhältnis ist wirksam und termingerecht gekündigt worden".
-            Um (weitere) klärende Fragen - in Aussagenform - auszuklappen und zu beantworten, klicken Sie auf das ">" (Pfeil) Symbol.<p>
+           Dieser Dialog bewertet die Diagnose "Arbeitsverhältnis ist wirksam und termingerecht gekündigt worden".
+            Um (weitere) klärende Fragen - in Aussagenform - auszuklappen und zu beantworten, klicken Sie auf das ">" (Pfeil) Symbol.
             Bitte bewerten Sie die nachfolgenden Aussagen nach dem Schema "trifft zu" (Haken), "trifft nicht zu" (Kreuz),
 	    oder "weiß nicht" (Fragezeichen). Um eine Antwort zurückzunehmen klicken Sie das leere Quadrat.
     </div>

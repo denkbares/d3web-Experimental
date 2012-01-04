@@ -5,12 +5,15 @@
 			id="1" type="mc" 
                         bonus-text="Diese Frage überprüft den Sachverhalt, ob das Arbeitsverhältnis
                         wirksam und termingerecht gekündigt wurde. Hierzu müssen verschiedene einzelne
-                        Tatbestände erfüllt sein, zB. dass Form, Frist, Zugang, und Stellvertretung 
-                        eingehalten wurden."/>
-		<question title="Form, Frist, Zugang und Stellvertretung sind eingehalten"
+                        Tatbestände erfüllt sein..."/>
+                <question title="Form, Frist, Zugang und Stellvertretung sind eingehalten"
 			id="2" parent-id="1" type="mc" bonus-text="Überprüfung, ob Form, Frist, Zugang sowie Stellvertretung
                         korrekt eingehalten wurden."/>
-		<question title="Kündigung war nicht durch Sondertatbestände ausgeschlossen"
+		<question title="Form wurde eingehalten" id="18" parent-id="2" />
+		<question title="Frist wurde eingehalten" id="19" parent-id="2" />
+		<question title="Bedingungen für Zugang wurden eingehalten" id="20" parent-id="2" />
+		<question title="Bedingungen für Stellvertretung wurden eingehalten" id="21" parent-id="2" />
+                <question title="Kündigung war nicht durch Sondertatbestände ausgeschlossen"
 			id="3" parent-id="1" type="mc" bonus-text="Hier wird geklärt, ob die Kündigung durch
                         verschiedene Sondertatbestände ausgeschollsen war. Beispiele für solche Sondertatbestände sind
                         das Mutterschutzgesetzt, das Arbeitsplatzschutzgesetzt, oder eine momenane Ableistung

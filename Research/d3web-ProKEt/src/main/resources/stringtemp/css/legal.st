@@ -8,7 +8,8 @@ body,div {
 	text-color: black;
 }
 
-#content {float: none;margin-left: auto; margin-right: auto; width="70%"}
+#content {float: none;margin-left: auto; margin-right: auto; width="70%";
+    clear: both; padding-top: 35px;}
 
 #right {display: none;}
 
@@ -21,32 +22,37 @@ body,div {
 	background: #e7e7e7;
 	background-image: none;
 	padding: 5px;
+        position: fixed;
+        margin: 0px;
 }
 
 #intro{ 
     font-family: Arial;
 	font-size: 8pt;
 	text-color: darkgrey;
+        position: fixed; 
+        left: 10%; right: 10%;
+        background-color: white;
+padding: 10px;
 }
 
 #dialog{
     float: left;
-    width: 60%;
+    width: 70%;
+    margin-top: 60px;
 }
 
 #auxpanel{
-    margin-top: 5px;
-    margin-left: 25px;
     background-color: #fffff0;
-    display: block;
-    float: right;
-    width: 30%;
-    margin-right: 10px;
+    width: 20%;
     height: 100px;
     -moz-box-shadow: 0 0 3.5px black;
 	-webkit-box-shadow: 0 0 3.5px black;
 	box-shadow: 0 0 3.5px black;
+    position: fixed;
+    right: 170px;
     padding: 10px;
+    margin-top: 80px;
 }
 
 
