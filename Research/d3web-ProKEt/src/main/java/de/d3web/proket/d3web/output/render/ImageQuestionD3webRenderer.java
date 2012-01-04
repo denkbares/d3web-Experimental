@@ -32,7 +32,10 @@ import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.interviewmanager.Form;
+import de.d3web.core.session.values.ChoiceValue;
+import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.UndefinedValue;
+import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
@@ -129,7 +132,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 		if (height != null) st.setAttribute("height", height);
 
 		// read clicable-area coordinates from KB
-		String areas = getChoiceAreas(width, height, to);
+		String areas = getChoiceAreas(width, height, to, val);
 		if (areas != null) st.setAttribute("areas", areas);
 
 		// if (to instanceof QuestionMC) {
@@ -161,7 +164,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 	 *        defined for
 	 * @return HTML area map representing String
 	 */
-	protected String getChoiceAreas(String imgWidthString, String imgHeightString, TerminologyObject to) {
+	protected String getChoiceAreas(String imgWidthString, String imgHeightString, TerminologyObject to, Value value) {
 
 		StringBuilder bui = new StringBuilder();
 
@@ -173,10 +176,10 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 		}
 		catch (NumberFormatException e) {
 		}
-
+		int maxX = 0;
+		int maxY = 0;
 		// imagequestions make sense for choice questions only so far
 		if (to instanceof QuestionChoice) {
-
 			for (Choice choice : ((QuestionChoice) to).getAllAlternatives()) {
 
 				// basic StringTemplate file the shape and coords are inserted
@@ -193,7 +196,6 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 				// if no description given at all or part of the description
 				// is empty String then set defaults to avoid HTML errors
 				String fixedCoords = "0,0,0,0";
-				String shape = "rect";
 				if (imgmap != null && (m = imageMapPattern.matcher(imgmap)).find()) {
 					// split shape and coords
 					double mapWidth = Double.valueOf(m.group(1));
@@ -218,28 +220,60 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 						}
 
 						String[] coords = m.group(4).split(",");
+						String shape = m.group(3);
 						StringBuilder coordsBuilder = new StringBuilder();
+						if (shape.equals("rect")) {
+							String[] temp = coords;
+							coords = new String[10];
+							coords[0] = temp[0];
+							coords[1] = temp[1];
+							coords[2] = temp[2];
+							coords[3] = temp[1];
+							coords[4] = temp[2];
+							coords[5] = temp[3];
+							coords[6] = temp[0];
+							coords[7] = temp[3];
+							coords[8] = temp[0];
+							coords[9] = temp[1];
+						}
 						int count = 0;
 						for (String coord : coords) {
-							int c = (int) (Double.valueOf(coord) * (count % 2 == 0
-									? xFactor
-									: yFactor));
-							// somehow this is not completely accurate,
-							// therefore we add 4 to every coord
-							// TODO: Find out why we need this fix
-							coordsBuilder.append((c + 4) + ",");
+							double factor = count % 2 == 0 ? xFactor : yFactor;
+							int c = (int) (Double.valueOf(coord) * factor);
+							if (count % 2 == 0) {
+								if (c > maxX) maxX = c;
+							}
+							else {
+								if (c > maxY) maxY = c;
+							}
+							coordsBuilder.append(c + " ");
+							count++;
 						}
 						fixedCoords = coordsBuilder.substring(0, coordsBuilder.length() - 1);
-						shape = m.group(3);
 					}
 				}
 				st.setAttribute("coords", fixedCoords);
-				st.setAttribute("shape", shape);
-
+				// st.setAttribute("shape", shape);
+				boolean answered = false;
+				if (UndefinedValue.isNotUndefinedValue(value) &&
+						!value.equals(Unknown.getInstance())) {
+					if (value instanceof MultipleChoiceValue) {
+						if (((MultipleChoiceValue) value).contains(choice)) {
+							answered = true;
+						}
+					}
+					else if (value instanceof ChoiceValue) {
+						if (((ChoiceValue) value).getChoice((QuestionChoice) to).equals(choice)) {
+							answered = true;
+						}
+					}
+				}
+				st.setAttribute("opacity", answered ? "0.5" : 0);
 				bui.append(st.toString());
 			}
 		}
+		bui.insert(0, "<svg style=\"width: " + maxX + "px; height: " + maxY + "px;\">");
+		bui.append("</svg>");
 		return bui.toString();
 	}
-
 }

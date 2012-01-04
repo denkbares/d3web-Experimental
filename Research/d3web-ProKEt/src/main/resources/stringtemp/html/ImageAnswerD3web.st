@@ -1,2 +1,10 @@
-<area shape="$shape$" coords="$coords$"
-href="javascript:d3web_IQClicked('$fullId$');" alt="$title$" title="$title$" id="img-$fullId$">
+<polygon points="$coords$"
+title="$title$" id="polygon-$fullId$"
+style="fill: #000000; opacity: $opacity$;"
+clickedopacity="0.5"
+unclickedopacity="0"
+mouseoveropacity="0.3"
+oldmouseoveropacity="0"
+answerid="$fullId$"
+type="imagepolygon"
+></polygon>

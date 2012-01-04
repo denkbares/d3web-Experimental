@@ -502,7 +502,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 				prefix = "qc";
 			}
 			else if (no instanceof Choice) {
-				prefix = "a";
+				prefix = "a_" + getID(((Choice) no).getQuestion());
 			}
 			id = prefix + "_" + no.getName().replaceAll("\\W", "_");
 			nameToIdMap.put(no.getName(), id);

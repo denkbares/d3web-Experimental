@@ -9,7 +9,6 @@
 	questionnairecolumns="3"
 	questioncolumns="1"
 	userprefix = "EuraHS"
-	login = "db"
 	required = "Case-Number"
 	language = "en">
 	<data kb="Hernia.d3web" />

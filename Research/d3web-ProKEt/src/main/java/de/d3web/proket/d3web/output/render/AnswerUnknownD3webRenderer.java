@@ -24,6 +24,7 @@ import org.antlr.stringtemplate.StringTemplate;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.Choice;
+import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
@@ -52,12 +53,15 @@ public class AnswerUnknownD3webRenderer extends AbstractD3webRenderer implements
 					super.getTemplateName("UnknownTabular"), "html");
 
 		// set basic properties
-		st.setAttribute("fullId", getID(new Choice("Unknown")));// .getName().replace(" ",
-																// "_"));
-		st.setAttribute("parentFullId", getID(parent));// .getName().replace(" ",		// "_"));
+		Choice choiceUnknown = new Choice("Unknown");
+		choiceUnknown.setQuestion((Question) to);
+		st.setAttribute("fullId", getID(choiceUnknown));// .getName().replace(" ",
+														// "_"));
+		st.setAttribute("parentFullId", getID(parent));// .getName().replace(" ",
+														// // "_"));
 
-                st.setAttribute("title", D3webUtils.getUnknownPrompt()); 
-                
+		st.setAttribute("title", D3webUtils.getUnknownPrompt());
+
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
 		Blackboard bb = d3webSession.getBlackboard();

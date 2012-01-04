@@ -6,7 +6,7 @@ $if(login)$
 $endif$
 
 <!-- header & footer in one //-->
-<div id="head">
+<div id="head" style="z-index: 1000">
 	<table>
 	<tr>
 		<td width="35%" cellspacing="0" cellpadding="0">
