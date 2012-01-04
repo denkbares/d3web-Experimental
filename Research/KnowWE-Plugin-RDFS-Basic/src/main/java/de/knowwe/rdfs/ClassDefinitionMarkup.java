@@ -65,7 +65,7 @@ public class ClassDefinitionMarkup extends AbstractType implements Editable, Kno
 
 		@Override
 		public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
-			return s.getOriginalText();
+			return s.getOriginalText().trim();
 		}
 
 		@Override
