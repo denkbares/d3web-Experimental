@@ -226,10 +226,10 @@ $(function() {
     // check browser and warn if the wrong one is used
     handleUnsupportedBrowsers();
 	
-    var browser = retrieveBrowserVal();    
-    var user = retrieveUserVal();
+    
     
     if (logging) {
+        
         link = $.query.set("action", "checkInitialLoggingReload").toString();
         link = window.location.href.replace(window.location.search, "") + link;
 		
@@ -239,9 +239,11 @@ $(function() {
             cache : false, // needed for IE, call is not made otherwise
             url: link,
             success : function(html) {
+              
                 if (html == "firsttime") {
+                    var browser = retrieveBrowserVal();    
+                    var user = retrieveUserVal();
                     ue_logBrowserAndUser(browser, user);
-                    
                 } 
             // otherwise, no reload because this would cause endless loop
             }

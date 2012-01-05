@@ -119,8 +119,8 @@ public class D3webServletLogUtils {
      */
     protected static void logWidget(HttpServletRequest request) {
         // TODO need to check here in case IDs are reworked globally one day
-        String widgetID = request.getParameter("widget");
-        String time = request.getParameter("timestring");
+        String widgetID = request.getParameter("widget").replace("+", " ");
+        String time = request.getParameter("timestring").replace("+", " ");
 
         if (request.getParameter("language") != null) {
             String language = request.getParameter("language");

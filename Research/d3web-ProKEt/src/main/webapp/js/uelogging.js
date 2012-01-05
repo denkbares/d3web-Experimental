@@ -42,6 +42,7 @@ function ue_logBrowserAndUser(browser, user){
         cache : false, // needed for IE, call is not made otherwise
         url : link,
         success : function() {
+             //d3web_resetSession();
              window.location.reload(true);
              initFunctionality();
         }
