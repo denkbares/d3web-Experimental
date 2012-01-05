@@ -312,10 +312,6 @@ public class D3webDialog extends HttpServlet {
 			logWidget(request);
 			return;
 		}
-		else if (action.equalsIgnoreCase("logLanguageWidget")) {
-			logLanguageWidget(request);
-			return;
-		}
 		else if (action.equalsIgnoreCase("logInfoPopup")) {
 			logInfoPopup(request);
 			return;
@@ -392,7 +388,7 @@ public class D3webDialog extends HttpServlet {
 
 			if (d3wcon.isLogging()) {
 				// logQuestionValue all changed widgets/items
-				D3webServletLogUtils.logQuestionValue(questions.get(i), values.get(i));
+				//D3webServletLogUtils.logQuestionValue(questions.get(i), values.get(i));
 			}
 		}
 	}
@@ -939,10 +935,6 @@ public class D3webDialog extends HttpServlet {
 
 	protected void logWidget(HttpServletRequest request) {
 		D3webServletLogUtils.logWidget(request);
-	}
-
-	protected void logLanguageWidget(HttpServletRequest request) {
-		D3webServletLogUtils.logLanguageWidget(request);
 	}
 
 	protected void logInfoPopup(HttpServletRequest request) {

@@ -39,44 +39,56 @@ import javax.servlet.http.HttpSession;
  */
 public class D3webServletLogUtils {
 
-    protected static final SimpleDateFormat FORMATTER =
-            new SimpleDateFormat("E yyyy_MM_dd HH:mm:ss");
     protected static final String D3WEB_SESSION = "d3webSession";
     protected static String logfilename = "";
-    protected static JSONLogger logger;
+    protected static JSONLogger logger = null;
 
     /**
-     * Initializes logging mechanism and logs initial values. 
-     * Therefore, the JSONLogger is retrieved from D3webConnector, a filename
-     * for logging is assembled (date plus d3web-sessionid), and  username 
-     * & used browser are logged right away.
+     * Initializes the logging helper servlet by getting the logger, and
+     * assembling the logfilename (date plus d3web-sessionid)
+     * 
+     * @param jlogger
+     * @param loggingstart
+     * @param httpSession 
+     */
+    protected static void initialize(JSONLogger jlogger,
+            Date loggingstart, HttpSession httpSession) {
+
+        logger = jlogger; // set the logger
+
+        // initialize logfile name
+        SimpleDateFormat format =
+                new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String formatted = format.format(loggingstart);
+        String sid =
+                ((Session) httpSession.getAttribute(D3WEB_SESSION)).getId();
+        logfilename = formatted + "_" + sid + ".txt";
+    }
+
+    /**
+     * Logs initial values username and browser info.
+     * Only to be done once, therefore check global setting "initlogged"
+     * 
      * @param request
      * @param httpSession 
      */
     protected static void logInitially(HttpServletRequest request, HttpSession httpSession) {
+
         if (!GlobalSettings.getInstance().initLogged()) {
+
+            //logger = D3webConnector.getInstance().getLogger();
 
             // get values to logQuestionValue initially: browser, user, and start time
             String browser =
                     request.getParameter("browser").replace("+", " ");
             String user =
                     request.getParameter("user").replace("+", " ");
-
-            logger = D3webConnector.getInstance().getLogger();
-            Date now = new Date();
+            String start = 
+                    request.getParameter("timestring").replace("+", " ");
             // give values to logger
-            logger.logStartValue(FORMATTER.format(now));
+            logger.logStartValue(start);
             logger.logBrowserValue(browser);
             logger.logUserValue(user);
-
-            // assemble filemane
-            SimpleDateFormat format =
-                    new SimpleDateFormat("yyyyMMdd_HHmmss");
-            String formatted = format.format(now);
-            String sid =
-                    ((Session) httpSession.getAttribute(D3WEB_SESSION)).getId();
-            logfilename = formatted + "_" + sid + ".txt";
-            System.out.println("LOGNAME: " + logfilename);
 
             logger.writeJSONToFile(logfilename);
 
@@ -92,9 +104,9 @@ public class D3webServletLogUtils {
      */
     protected static void logSessionEnd(HttpServletRequest request) {
         // end date
-        Date date = new Date();
-        String datestring = FORMATTER.format(date);
-        logger.logEndValue(datestring);
+         String end = request.getParameter("timestring").replace("+", " ");
+         
+        logger.logEndValue(end);
         logger.writeJSONToFile(logfilename);
         D3webConnector.getInstance().setLogger(new JSONLogger());
         GlobalSettings.getInstance().setInitLogged(false);
@@ -102,62 +114,57 @@ public class D3webServletLogUtils {
 
     /**
      * Logs the click on a non-KB widget of the dialog, e.g., click on the
-     * save button.
+     * save button, click on a language flag....
      * @param request 
      */
     protected static void logWidget(HttpServletRequest request) {
         // TODO need to check here in case IDs are reworked globally one day
         String widgetID = request.getParameter("widget");
-        Date now = new Date();
+        String time = request.getParameter("timestring");
 
-        if (widgetID.contains("reset")) {
+        if (request.getParameter("language") != null) {
+            String language = request.getParameter("language");
             logger.logClickedObjects(
-                    "RESET", FORMATTER.format(now), "RESET");
-        } else if (widgetID.contains("statistics")) {
-            logger.logClickedObjects(
-                    "STATISTICS", FORMATTER.format(now), "STATISTICS");
-        } else if (widgetID.contains("summary")) {
-            logger.logClickedObjects(
-                    "SUMMARY", FORMATTER.format(now), "SUMMARY");
-        } else if (widgetID.contains("followup")) {
-            logger.logClickedObjects(
-                    "FOLLOWUP", FORMATTER.format(now), "FOLLOWUP");
-        } else if (widgetID.contains("loadcase")) {
-            logger.logClickedObjects(
-                    "LOAD", FORMATTER.format(now), "LOAD");
-        } else if (widgetID.contains("savecase")) {
-            logger.logClickedObjects(
-                    "SAVE", FORMATTER.format(now), "SAVE");
+                    "LANGUAGE", time, language);
+        } else {
+            if (widgetID.contains("reset")) {
+                logger.logClickedObjects(
+                        "RESET", time, "RESET");
+            } else if (widgetID.contains("statistics")) {
+                logger.logClickedObjects(
+                        "STATISTICS", time, "STATISTICS");
+            } else if (widgetID.contains("summary")) {
+                logger.logClickedObjects(
+                        "SUMMARY", time, "SUMMARY");
+            } else if (widgetID.contains("followup")) {
+                logger.logClickedObjects(
+                        "FOLLOWUP", time, "FOLLOWUP");
+            } else if (widgetID.contains("loadcase")) {
+                logger.logClickedObjects(
+                        "LOAD", time, "LOAD");
+            } else if (widgetID.contains("savecase")) {
+                logger.logClickedObjects(
+                        "SAVE", time, "SAVE");
+            }
         }
         logger.writeJSONToFile(logfilename);
 
     }
 
-    /**
-     * Log click on a language widget, i.e. widgets for switching languages of
-     * the dialog (such as the flags in the EuraHS dialog).
-     * @param request 
-     */
-    protected static void logLanguageWidget(HttpServletRequest request) {
-
-        String language = request.getParameter("language");
-        Date now = new Date();
-        logger.logClickedObjects(
-                "LANGUAGE", FORMATTER.format(now), language);
-        logger.writeJSONToFile(logfilename);
-    }
 
     /**
      * Log mouseover on information popup.
      * @param request 
      */
     protected static void logInfoPopup(HttpServletRequest request) {
-        String prefix = request.getParameter("prefix");
-        String ttwidget = request.getParameter("widget");
-        ttwidget = ttwidget.replace("+", " ");
-        String timestring = request.getParameter("timestring");
+        String id = request.getParameter("id");
+        String start = request.getParameter("timestring");
+        String timediff = request.getParameter("value");
+        id = id.replace("+", " ");
+        start = start.replace("+", " ");
+
         logger.logClickedObjects(
-                "INFOPOPUP_" + prefix, timestring, ttwidget);
+                id, start, timediff);
         logger.writeJSONToFile(logfilename);
     }
 
@@ -167,10 +174,10 @@ public class D3webServletLogUtils {
      * @param question
      * @param value 
      */
-    protected static void logQuestionValue(String question, String value) {
-        Date now = new Date();
+    protected static void logQuestionValue(String question, String value, HttpServletRequest request) {
+        String logtime = request.getParameter("timestring").replace("+", " ");
         logger.logClickedObjects(
-                question, FORMATTER.format(now), value);
+                question, logtime, value);
         logger.writeJSONToFile(logfilename);
     }
 }

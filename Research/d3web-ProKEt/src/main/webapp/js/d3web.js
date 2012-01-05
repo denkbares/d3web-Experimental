@@ -210,10 +210,10 @@ $(function() {
             }
         });
         
-        // PROBLEM: so wird direkt am Anfang, also auch VOR dem
-        // initialisieren, schonmal versucht das Ende zu loggen
-        // FEHLER! 
-        /*$(window).unload( function () {
+    // PROBLEM: so wird direkt am Anfang, also auch VOR dem
+    // initialisieren, schonmal versucht das Ende zu loggen
+    // FEHLER! 
+    /*$(window).unload( function () {
            
             d3web_ue_logEnd();
                 
@@ -228,8 +228,24 @@ $(function() {
 	
     var browser = retrieveBrowserVal();    
     var user = retrieveUserVal();
+    
     if (logging) {
-    	d3web_ue_logBrowserAndUser(browser, user);
+        link = $.query.set("action", "checkInitialLoggingReload").toString();
+        link = window.location.href.replace(window.location.search, "") + link;
+		
+        $.ajax({
+            type: "GET",
+            async: false,
+            cache : false, // needed for IE, call is not made otherwise
+            url: link,
+            success : function(html) {
+                if (html == "firsttime") {
+                    ue_logBrowserAndUser(browser, user);
+                    
+                } 
+            // otherwise, no reload because this would cause endless loop
+            }
+        });
     }
     // 
     // 
@@ -275,8 +291,9 @@ function initFunctionality() {
         d3web_addFacts($(this));
     });
 	
-	
-    $('[type=text]').unbind('click').click(function() {
+        
+    /**
+     *$('[type=text]').unbind('click').click(function() {
         var thisEl = $(this);
         thisEl.bind('keydown', function(e) {
             var code = (e.keyCode ? e.keyCode : e.which);
@@ -285,6 +302,14 @@ function initFunctionality() {
                 d3web_addFacts();
             }
         });
+    });*/
+    
+    $('[type=text]').unbind('keydown').keydown(function(e) {
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if (code == 13) {
+            d3web_storeQuestionText($(this));
+            d3web_addFacts();
+        }
     });
 	
     $('[type=text]').unbind('focusout').focusout(function() {
@@ -292,18 +317,15 @@ function initFunctionality() {
         d3web_addFacts();
     });
     
-    $('[type=num]').unbind('click').click(function() {
-        var thisEl = $(this);
-        thisEl.bind('keydown', function(e) {
-            var code = (e.keyCode ? e.keyCode : e.which);
-            if (code == 13) {
-                d3web_storeQuestionNum($(this));
-                d3web_addFacts();
-            }
-        });
+    $('[type=num]').unbind("keydown").keydown(function(e) { 
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if (code == 13) {
+            d3web_storeQuestionNum($(this));
+            d3web_addFacts();
+        }
     });
 	
-    $('[type=num]').unbind('focusout').focusout(function() {
+    $('[type=num]').unbind("focusout").focusout(function() {
         d3web_storeQuestionNum($(this));
         d3web_addFacts();
     });
@@ -337,42 +359,42 @@ function initFunctionality() {
 	
     // bind reset button to resetSession() function
     $('#reset').unbind('click').click(function() {
-        logWidgetClicked($(this));
+        ue_logWidgetClicked($(this));
         d3web_resetSession();
     });
 
     // bind send/save button to sendexit function
     $('#savecase').unbind('click').click(function(event) {
-        logWidgetClicked($(this));
+        ue_logWidgetClicked($(this));
         d3web_addFacts();
         d3web_prepareSave();
     });
 
     // bind the loadcase button to making the fileselect list visible
     $('#loadcase').unbind('click').click(function(event) {
-        logWidgetClicked($(this));
+        ue_logWidgetClicked($(this));
         $("#jqLoadCaseDialog").dialog("open");
     });
 	
     $('#followupbutton').unbind('click').click(function(event) {
-        logWidgetClicked($(this));
+        ue_logWidgetClicked($(this));
         $("#jqFollowUpDialog").dialog("open");
     });
 	
     $('#summary').unbind('click').click(function(event){
-        logWidgetClicked($(this));
+        ue_logWidgetClicked($(this));
         d3web_updateSummary();
         $("#jqSummaryDialog").dialog("open");
     });
 	
     $('#statistics').unbind('click').click(function(event){
-        logWidgetClicked($(this));
+        ue_logWidgetClicked($(this));
         gotoStatistics();
     });
     
     // click on language toggle
     $('img[id*="lang"]').unbind('click').click(function(event){
-        logLanguageWidgetClicked($(this));
+        ue_logLanguageWidgetClicked($(this));
         toggleLanguage($(this));
     });
     
@@ -414,28 +436,28 @@ function getHeaderHeight() {
 }
 
 function getDate(dateSelect) {
-	  var answer = $(dateSelect).parents(".answer").first();
-	    var yearSelect = answer.find("[type=Yearselect]");
-	    var monthSelect = answer.find("[type=Monthselect]");
-	    var daySelect = answer.find("[type=Dayselect]");
-	    var hourSelect = answer.find("[type=Hourselect]");
-	    var minuteSelect = answer.find("[type=Minuteselect]");
-	    var secondSelect = answer.find("[type=Secondselect]");
+    var answer = $(dateSelect).parents(".answer").first();
+    var yearSelect = answer.find("[type=Yearselect]");
+    var monthSelect = answer.find("[type=Monthselect]");
+    var daySelect = answer.find("[type=Dayselect]");
+    var hourSelect = answer.find("[type=Hourselect]");
+    var minuteSelect = answer.find("[type=Minuteselect]");
+    var secondSelect = answer.find("[type=Secondselect]");
 
 		
-	    var second = getDateValue(secondSelect, "00");
-	    var minute = getDateValue(minuteSelect, "00");
-	    var hour = getDateValue(hourSelect, "00");
-	    var day = getDateValue(daySelect, "01");
-	    var month = getDateValue(monthSelect, "01") - 1;
-	    var year = getDateValue(yearSelect, new Date().getFullYear());
+    var second = getDateValue(secondSelect, "00");
+    var minute = getDateValue(minuteSelect, "00");
+    var hour = getDateValue(hourSelect, "00");
+    var day = getDateValue(daySelect, "01");
+    var month = getDateValue(monthSelect, "01") - 1;
+    var year = getDateValue(yearSelect, new Date().getFullYear());
 	    
-	    return new Date(year, month, day, hour, minute, second);
+    return new Date(year, month, day, hour, minute, second);
 }
 
 function d3web_storeQuestionDate(dateSelect) {
 
-	var date = getDate(dateSelect);
+    var date = getDate(dateSelect);
 	
     var tooSoon = "";
     var tooLate = "";
@@ -451,16 +473,16 @@ function d3web_storeQuestionDate(dateSelect) {
     var afterText = $.trim($("#text-" + afterId).text());
     
     if(language=="de"){
-    	tooLate = "Erwartet wird ein Datum früher als bei Frage '" + beforeText + "'.";
-    	tooSoon = "Erwartet wird ein Datum später als bei Frage '" + afterText + "'.";
+        tooLate = "Erwartet wird ein Datum früher als bei Frage '" + beforeText + "'.";
+        tooSoon = "Erwartet wird ein Datum später als bei Frage '" + afterText + "'.";
     } else if(language=="en"){
-    	tooLate = "Expected is a date earlier than the one given in question '" + beforeText + "'.";
-    	tooSoon = "Expected is a date later than the one given in question '" + afterText + "'.";
+        tooLate = "Expected is a date earlier than the one given in question '" + beforeText + "'.";
+        tooSoon = "Expected is a date later than the one given in question '" + afterText + "'.";
     }
     
     var errorWid = getErrorPlaceholder(dateSelect);
     if (afterId != undefined && isAnsweredQuestion(afterQuestion) && date.getTime() <= afterDate.getTime()) {
-    	errorWid.html(tooSoon);
+        errorWid.html(tooSoon);
     }
     else if (beforeId != undefined && isAnsweredQuestion(beforeQuestion) && date.getTime() >= beforeDate.getTime()) {   
         errorWid.html(tooLate);
@@ -473,7 +495,7 @@ function d3web_storeQuestionDate(dateSelect) {
 }
 
 function isAnsweredQuestion(question) {
-	return question.parent().children("[class$=\"question-d\"]").length > 0;
+    return question.parent().children("[class$=\"question-d\"]").length > 0;
 }
 
 function getDateValue(select, def) {
@@ -504,14 +526,15 @@ function d3web_storeQuestionNum(numInput) {
     errorWid = getErrorPlaceholder(numInput);
     if (val < left) {
         errorWid.html(tooLow);
+        ue_logNotAllowedInput(numInput);
     } else if (val > right) {   
         errorWid.html(tooHigh);
+        ue_logNotAllowedInput(numInput);
     } else {
         errorWid.html("");
+        var numQuestion = getQuestionId(numInput);
+        textStore[numQuestion] = $(numInput).val();
     }
-    
-    var numQuestion = getQuestionId(numInput);
-    textStore[numQuestion] = $(numInput).val();
 }
 
 /**
@@ -519,8 +542,8 @@ function d3web_storeQuestionNum(numInput) {
  * on the given widget ID
  */
 function getErrorPlaceholder(input){
-	var questionId = getQuestionId(input);
-	return $("#error-" + questionId);
+    var questionId = getQuestionId(input);
+    return $("#error-" + questionId);
 }
 
 
@@ -562,18 +585,19 @@ function getTerminologyId(input, prefix) {
 
 function d3web_addFacts() {
 
-    var link = $.query.set("action", "addFacts");
+    var now = ue_getCurrentDate();
+    var link = $.query.set("action", "addFacts").set("timestring", now);
 
     var i = 0;
     for (var qid in mcStore) {
-    	var mcAnswerString = "";
-    	var mcAnswerSeparator = "##mcanswer##";
-    	for (var j in mcStore[qid]) {
-    		if (mcAnswerString != "") {
-    			mcAnswerString += mcAnswerSeparator;
-    		}
-    		mcAnswerString += mcStore[qid][j];
-    	}
+        var mcAnswerString = "";
+        var mcAnswerSeparator = "##mcanswer##";
+        for (var j in mcStore[qid]) {
+            if (mcAnswerString != "") {
+                mcAnswerString += mcAnswerSeparator;
+            }
+            mcAnswerString += mcStore[qid][j];
+        }
         link = link.set("question" + i, qid).set("value" + i, mcAnswerString);
         i++;
     }
@@ -1051,103 +1075,6 @@ function d3web_show_solutions(target_id) {
     });
 }
 
-/**
-* Retrieve the browser information, i.e. the type and version. 
-* Returns a String in the form "<type> <version>"
-*/
-function retrieveBrowserVal(){
-    var val = "";
-    // retrieve the browser used
-    jQuery.each(jQuery.browser, function(i, value) {
-        var v = "";
-        if(i=="version"){
-            v = value + " ";
-        } else{
-            v = i + " ";
-        }
-        val += v;
-    });
-    return val;
-}
-
-function retrieveUserVal(){
-    return "user";
-}
-
-/**
-* Send Ajax request for logging basic information, currently browser information
-* type and version, as well as user info
-*/
-function d3web_ue_logBrowserAndUser(browser, user){
-    
-    var link = $.query.set("action", "logInit").set("browser", browser)
-    .set("user", user).toString();
-    link = window.location.href.replace(window.location.search, "") + link;
-
-    $.ajax({
-        type : "GET",
-        // async : false,
-        cache : false, // needed for IE, call is not made otherwise
-        url : link,
-        success : function() {
-        // no action needed
-        }
-    });
-}
-
-// log clicks on widgets that do NOT set values in d3web, e.g. info button,
-// reset, save case etc
-function logWidgetClicked(el){
-    if (logging) {
-	    var link = $.query.set("action", "logWidget").set("widget", el.attr("id")).toString();
-	    link = window.location.href.replace(window.location.search, "") + link;
-	
-	    $.ajax({
-	        type : "GET",
-	        // async : false,
-	        cache : false, // needed for IE, call is not made otherwise
-	        url : link,
-	        success : function() {
-	        // no action needed
-	        }
-	    });
-    }
-}
-
-function logLanguageWidgetClicked(el){
-    
-    var id = el.attr("id");
-    var lang;
-    
-    if(id.indexOf("de") != -1){
-        lang = "DE";
-    } else if (id.indexOf("en") != -1){
-        lang = "EN";
-    } else if (id.indexOf("es") != -1){
-        lang = "ES";
-    } else if (id.indexOf("it") != -1){
-        lang = "IT";
-    } else if (id.indexOf("fr") != -1){
-        lang = "FR";
-    } else if (id.indexOf("pl") != -1){
-        lang = "PL";
-    }
-    
-    var link = $.query.set("action", "logLanguageWidget").set("widget", el.attr("id")).set("language", lang).toString();
-    link = window.location.href.replace(window.location.search, "") + link;
-
-    $.ajax({
-        type : "GET",
-        // async : false,
-        cache : false, // needed for IE, call is not made otherwise
-        url : link,
-        success : function() {
-        // no action needed
-        }
-    });
-}
-
-
 function toggleLanguage(el){
     
     var id = el.attr("id");
@@ -1177,81 +1104,6 @@ function toggleLanguage(el){
         success : function(html) {
             window.location.reload(true);
             initFunctionality();
-        }
-    });
-}
-
-function logLanguageWidgetClicked(el){
-    
-    var id = el.attr("id");
-    var lang;
-    
-    if(id.indexOf("de") != -1){
-        lang = "DE";
-    } else if (id.indexOf("en") != -1){
-        lang = "EN";
-    } else if (id.indexOf("es") != -1){
-        lang = "ES";
-    } else if (id.indexOf("it") != -1){
-        lang = "IT";
-    } else if (id.indexOf("fr") != -1){
-        lang = "FR";
-    } else if (id.indexOf("pl") != -1){
-        lang = "PL";
-    }
-    
-    var link = $.query.set("action", "logLanguageWidget").set("widget", el.attr("id")).set("language", lang).toString();
-    link = window.location.href.replace(window.location.search, "") + link;
-
-    $.ajax({
-        type : "GET",
-        // async : false,
-        cache : false, // needed for IE, call is not made otherwise
-        url : link,
-        success : function() {
-        // no action needed
-        }
-    });
-}
-
-
-/**
- * Called from d3webBasic
- * logs the info popups, on mousout.
- */
-
-function logInfoPopup(ID, prefix, timestring){
-    
-    var link = $.query.set("action", "logInfoPopup").set("widget", ID).set("prefix", prefix).set("timestring", timestring);
-    link = window.location.href.replace(window.location.search, "") + link;
-
-    $.ajax({
-        type : "GET",
-        // async : false,
-        cache : false, // needed for IE, call is not made otherwise
-        url : link,
-        success : function() {
-        // no action needed
-        }
-    });
-}
-
-/**
-* Send the end-of-logging command
- */
-function d3web_ue_logEnd(){
-    
-            
-    var link = $.query.set("action", "logEnd");
-    link = window.location.href.replace(window.location.search, "") + link;
-
-    $.ajax({
-        type : "GET",
-        // async : false,
-        cache : false, // needed for IE, call is not made otherwise
-        url : link,
-        success : function() {
-        // no action needed
         }
     });
 }

@@ -157,11 +157,13 @@ public class JSCodeContainer implements ICodeContainer {
 		}
 
 		if (logging) {
+                        ownBibs.add("uelogging.js");
 			add("var logging = true;", 0);
 
 		}
 		else {
 			add("var logging = false;", 0);
+                       
 		}
 		// SECOND assemble bibs and singular js data to a string
 		// assemble all defined bibs to one String

@@ -690,38 +690,14 @@ function generate_tooltip_functions() {
             if(logging){
                 now = new Date();
                 ttend = now.getTime();
-                logTooltipVisited(ttstart, ttend, $(this));
+                ue_logInfoPopup(ttstart, ttend, $(this));
             }
             tooltip_out(id);
         });
     });
 }
 
-/**
- * retrieve the values to be logged and call logger function
- */
-function logTooltipVisited(starttime, endtime, widget){
-    var diffDate = new Date(endtime-starttime);
-    var parentid = widget.parent().attr("id");
-    var parent, prefix;
-    var timestring = diffDate.getHours()-1 +  ":" 
-                + diffDate.getMinutes() + ":" 
-                + diffDate.getSeconds();
-            
-            
-    if(parentid.indexOf("text-q_")!=-1){
-        parent = getTerminologyId(widget, "q");
-        prefix = "Q"; 
-    } else if (parentid.indexOf("text-a_")!=-1){
-        parent = getTerminologyId(widget, "a");
-        prefix = "A";
-} else if (parentid.indexOf("t-qc_")!=-1){
-        parent = getTerminologyId(widget, "qc");
-        prefix = "QC"
-}
-    
-    logInfoPopup(parent, prefix, timestring);
-}
+
 
 /**********************************************************
 * FUNCTIONS added to StringTemplates or JS CodeContainers *
@@ -1343,51 +1319,3 @@ if (typeof window.loadFirebugConsole == "undefined"
     }
 }
 
-/* 
-REM return n-th closest parent in hierarchy, n being levels parameter
-function getParentTag(object, selector, levels) {
-	var result = object;
-	for ( var i = 0; i < levels; i += 1) {
-		result = result.closest(selector);
-	}
-	return result;
-}
-REM function connect_divs_in_height(sourceId, targetId) {
-	$("#" + targetId).height($("#" + sourceId).height());
-	$("#" + sourceId).resize(function() {
-		$("#" + targetId).height($("#" + sourceId).height());
-	});
-}
-REM  check if an element is really visible (with checking parents)
-function isReallyVisible(object) {
-	var result = true;
-	object.parent("[id^='q_'],[id^='a_']").filter(":hidden").each(function() {
-		result = false;
-	}).end().filter(":visible").each(function() {
-		result = isReallyVisible($(this));
-	});
-	return result;
-}
-REM function startsWith(fullString, testString) {
-return fullString.indexOf(testString) == 0;
-}
-REM
-function generate_weighting_functions() {
-	$("div[id^='weight-']").click(function() {
-		click_weight($(this));
-	});
-}
-REM function click_weight(id) {
-	var impDiv = id;
-	var text = impDiv.text();
-	if (text.indexOf("!") == -1) {
-		text = "!";
-	} else {
-		text += "!";
-		if (text.length == 4) {
-			text = "&nbsp;";
-		}
-	}
-
-	impDiv.html(text);
-}*/

@@ -24,7 +24,6 @@ GENERAL:
   	 momentan All, NextForm, NextUAQuestion
   -- Abhängig vom Typ d3web reinladen oder nicht: für SingleForm/All braucht man den gesamten Tree von 
      Anfang an, für MultipleForm nicht
-- D3web Renderer erben lassen
 - Hierarchy/QuickI Dialogs d3web
 
 - Building Blocks, Modularisierung, Drag and Drop, Visual Edit
@@ -57,25 +56,11 @@ FREECHOICE/QUICKI Dialog
 
 
 
-TODO ALLGEMEIN
------------------
-
--- IF ONE DIALOG IS OPENED/USED and we switch to another (ControlCenter) ALL FIELDS ARE DISPLAYED DISABLED?!?!!!!
--- SETTING values: only use the store, not the single val any more!
--- REQUIRED VALUES: currently, only a single value can be specified as "always required", e.g., if its needed for
-	autosaving mechanism (filename assembly in the MEDIASTINITIS case). Make this more flexible to specify several vals?! 
-- REFACTOR Renderers URGENTLY
-
-
-
-
-
 -------------------------------------------
 --- MEDIASTINITIS (Projekt Herzmedizin) ---
 -------------------------------------------
 
-- Required Field automatisch setzen user login
-       war DONE - FUNTIONIERT MOMENTAN NICHT!
+DONE - Required Field automatisch setzen user login
 
 
 
@@ -89,43 +74,30 @@ LATER - Parallelzugriff auf Dateien verhindern (wenn user derselben usergroup si
   --> erstmal kein Handlungsbedarf, sollte nicht/sehr selten vorkommen da eh nur ein-zwei Bearbeiter pro Klinik
  
 REFINE - Fallsortierung im Laden-Menü: Groß-/Kleinschreibung anders berücksichtigen
-
-
-- Style: Abstand Answers und Radio/CheckButtons: geht teilweise kaputt
-    (EuraHS) - Vermutung: liegt an prozentualer Angabe irgendwo
-DONE - Umlaute
-DONE - Required Fields: Ajax Warnung fehlt
-DONE - Num Fields / Range: Ajax Warnung fehlt
 REFINE - styling of required fields marker and warning!
 
-
-----------------------------
---- KLÄREN KLÄREN KLÄREN ---
-----------------------------
-
-DONE - PW vergessen: mail Versand automatisiert  
-  --> Eigener mail-Alias für den Dialog
-  --> Versand einer notification an den IT Menschen vom Projekt der dem entsprechenden
-	  Nutzer dann die Zugangsdaten nochmal schickt
-	  
-	
-
-
-
-REFACTOR
---------
 - Click in Textfiels loga automatically with null --> desired?!
 - Reload / refresh --> new case?!
-- New case --> new logfile is written, but we need new logger, too
 - When switching dialogs, content is not loaded, needs a new-case click
 
-- URGENTLY: js file(s)
-- Setting of default -Data folder
+
+--------------------
+--- REFACTORINGS ---
+--------------------
+
+DONE - New case --> new logfile is written, but we need new logger, too
+DONE - Setting of default -Data folder
+DONE - Startup JS Errors/JQuery Errors!
+DONE - logging zeug raus aus js und in eigenes js file
+DONE - Fehler bei checkrange numquestions --> manchmal kann man die Werte falsch setzen!
+DONE - refactor naming of log functions: remove d3web prefiX
+
+- REFACTOR js file(s)
 - Dateinamen für Logfiles? Currently: Date(yyMMdd)_Session.txt
 - Unter welchem Namen gecklickte Widgets speichern?! (für Fragen momentan Fragename)
-DONE - Startup JS Errors/JQuery Errors!
 - unknown zu weit rechts verrückt bei num/text questinos
-- logging zeug raus aus js und in eigenes js file
+- Style: Abstand Answers und Radio/CheckButtons: geht teilweise kaputt
+    (EuraHS) - Vermutung: liegt an prozentualer Angabe irgendwo
 - check sind alle wichtigen Elemente geloggt?
 - Log end value --> timespan
 - Check logging of image answers
@@ -136,8 +108,22 @@ DONE - Startup JS Errors/JQuery Errors!
 - before image inclusion call method to find out whether image exists or 
   whether dummy should be used
 - enter error messages as attribute in StringTemplate, not in JS
+- SETTING values: only use the store, not the single val any more!
+- REQUIRED VALUES: currently, only a single value can be specified as "always required", e.g., if its needed for
+	autosaving mechanism (filename assembly in the MEDIASTINITIS case). Make this more flexible to specify several vals?! 
+- REFACTOR Renderers URGENTLY
+
 
 ----------
 JuriSearch
 ----------
-- Zusatzinfo-Kasten: mitscrollen lassen?!
+- Zusatzinfo-Kasten: mitscrollen lassen?! --> erstmal fixed
+
+
+
+
+KLÄREN ALBRECHT:
+----------------
+- Änderungen Mediastinitis
+- Änderungen EuraHS
+- Mailversand immer an "uns" --> Begründung (Neu)?
