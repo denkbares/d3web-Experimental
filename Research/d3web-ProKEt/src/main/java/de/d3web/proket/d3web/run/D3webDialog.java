@@ -160,7 +160,7 @@ public class D3webDialog extends HttpServlet {
         }
 
         // only parse again if stored source is not equal to current source
-
+        // then a new dialog has been called
         if (!sourceSave.equals(source)) {
             httpSession.setAttribute("first", "true");
             sourceSave = source;
@@ -180,6 +180,9 @@ public class D3webDialog extends HttpServlet {
             d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
             d3wcon.setLoginMode(d3webParser.getLogin());
 
+            // if a new dialog is loaded we also need a new session to start
+            resetD3webSession(httpSession);
+            
             // switch on/off logging depending on xml specification
             if (d3webParser.getLogging().contains("ON")) {
                 d3wcon.setLogging(true);
@@ -235,12 +238,7 @@ public class D3webDialog extends HttpServlet {
             }
         }
 
-        System.out.println(httpSession.getAttribute(D3WEB_SESSION));
-        // if session is null create a session
-        if (httpSession.getAttribute(D3WEB_SESSION) == null) {
-            resetD3webSession(httpSession);
-        }
-
+    
         // switch action as defined by the servlet call
         if (action.equalsIgnoreCase("show")) {
             System.out.println("SHOW");

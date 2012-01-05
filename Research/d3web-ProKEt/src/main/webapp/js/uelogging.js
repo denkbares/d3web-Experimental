@@ -43,8 +43,8 @@ function ue_logBrowserAndUser(browser, user){
         url : link,
         success : function() {
              //d3web_resetSession();
-             window.location.reload(true);
-             initFunctionality();
+             //window.location.reload(true);
+             //initFunctionality();
         }
     });
 }
