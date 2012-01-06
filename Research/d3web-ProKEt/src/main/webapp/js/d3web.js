@@ -312,11 +312,11 @@ function initFunctionality() {
             d3web_storeQuestionText($(this));
             d3web_addFacts();
         }
-    });
-	
-    $('[type=text]').unbind('focusout').focusout(function() {
+    }).unbind('focusout').focusout(function() {
         d3web_storeQuestionText($(this));
         d3web_addFacts();
+    }).each(function() {
+        handleUrlInput($(this));
     });
     
     $('[type=num]').unbind("keydown").keydown(function(e) { 
@@ -325,11 +325,11 @@ function initFunctionality() {
             d3web_storeQuestionNum($(this));
             d3web_addFacts();
         }
-    });
-	
-    $('[type=num]').unbind("focusout").focusout(function() {
+    }).unbind("focusout").focusout(function() {
         d3web_storeQuestionNum($(this));
         d3web_addFacts();
+    }).each(function() {
+    	d3web_handleQuestionNum($(this));
     });
 	
     $('[type=textselect]').unbind('change').change(function() {
@@ -346,6 +346,8 @@ function initFunctionality() {
         ).unbind('change').change(function() {
         d3web_storeQuestionDate($(this));
         d3web_addFacts();
+    }).each(function() {
+    	d3web_handleQuestionDate($(this));
     });
 
     $('[type=textarea]').unbind('click').click(function() {
@@ -447,97 +449,17 @@ function getDate(dateSelect) {
     var secondSelect = answer.find("[type=Secondselect]");
 
 		
-    var second = getDateValue(secondSelect, "00");
-    var minute = getDateValue(minuteSelect, "00");
-    var hour = getDateValue(hourSelect, "00");
-    var day = getDateValue(daySelect, "01");
-    var month = getDateValue(monthSelect, "01") - 1;
-    var year = getDateValue(yearSelect, new Date().getFullYear());
+    var second = d3web_getDateValue(secondSelect, "00");
+    var minute = d3web_getDateValue(minuteSelect, "00");
+    var hour = d3web_getDateValue(hourSelect, "00");
+    var day = d3web_getDateValue(daySelect, "01");
+    var month = d3web_getDateValue(monthSelect, "01") - 1;
+    var year = d3web_getDateValue(yearSelect, new Date().getFullYear());
 	    
     return new Date(year, month, day, hour, minute, second);
 }
 
-function d3web_storeQuestionDate(dateSelect) {
 
-    var date = getDate(dateSelect);
-	
-    var tooSoon = "";
-    var tooLate = "";
-    var beforeId = $("#" + getQuestionId(dateSelect)).attr("before");
-    var afterId = $("#" + getQuestionId(dateSelect)).attr("after");
-    
-    var beforeQuestion = $("#" + beforeId);
-    var afterQuestion = $("#" + afterId);
-    var beforeDate = getDate(beforeQuestion.find("select").first());
-    var afterDate = getDate(afterQuestion.find("select").first());
-    
-    var beforeText = $.trim($("#text-" + beforeId).text());
-    var afterText = $.trim($("#text-" + afterId).text());
-    
-    if(language=="de"){
-        tooLate = "Erwartet wird ein Datum früher als bei Frage '" + beforeText + "'.";
-        tooSoon = "Erwartet wird ein Datum später als bei Frage '" + afterText + "'.";
-    } else if(language=="en"){
-        tooLate = "Expected is a date earlier than the one given in question '" + beforeText + "'.";
-        tooSoon = "Expected is a date later than the one given in question '" + afterText + "'.";
-    }
-    
-    var errorWid = getErrorPlaceholder(dateSelect);
-    if (afterId != undefined && isAnsweredQuestion(afterQuestion) && date.getTime() <= afterDate.getTime()) {
-        errorWid.html(tooSoon);
-    }
-    else if (beforeId != undefined && isAnsweredQuestion(beforeQuestion) && date.getTime() >= beforeDate.getTime()) {   
-        errorWid.html(tooLate);
-    } 
-    else {
-        errorWid.html("");
-    }
-    var question = getQuestionId(dateSelect);
-    dateStore[question] = date.getTime();
-}
-
-function isAnsweredQuestion(question) {
-    return question.parent().children("[class$=\"question-d\"]").length > 0;
-}
-
-function getDateValue(select, def) {
-    return select.length == 1 && select.val() != "" ? select.val() : def;
-}
-
-function d3web_storeQuestionText(textInput) {
-    var textQuestion = getQuestionId(textInput);
-    textStore[textQuestion] = $(textInput).val();
-}
-
-function d3web_storeQuestionNum(numInput) {
-    var tooHigh = "";
-    var tooLow = "";
-    var errorWid;
-    var val = parseInt($(numInput).val());
-    var left = parseInt($(numInput).attr("left"));
-    var right = parseInt($(numInput).attr("right"));
-    
-    if(language=="de"){
-        tooHigh = "Der eingegebene Wert ist zu hoch. Zulässig ist das Intervall: [" + left + " " + right + "]";
-        tooLow = "Der eingegebene Wert ist zu niedrig. Zulässig ist das Intervall: [" + left + " " + right + "]";
-    } else if(language=="en"){
-        tooHigh = "The allowed range is: [" + left + " " + right + "]";
-        tooLow = "The allowed range is: [" + left + " " + right + "]";
-    }
-    
-    errorWid = getErrorPlaceholder(numInput);
-    if (val < left) {
-        errorWid.html(tooLow);
-        ue_logNotAllowedInput(numInput);
-    } else if (val > right) {   
-        errorWid.html(tooHigh);
-        ue_logNotAllowedInput(numInput);
-    } else {
-        errorWid.html("");
-        var numQuestion = getQuestionId(numInput);
-        textStore[numQuestion] = $(numInput).val();
-    }
-}
 
 /**
  * Assembles and returns the error-placeholder element depending
@@ -548,29 +470,6 @@ function getErrorPlaceholder(input){
     return $("#error-" + questionId);
 }
 
-
-function d3web_storeQuestionOC(ocInput) {
-    var ocQuestion = getQuestionId(ocInput);
-    ocStore[ocQuestion] = getAnswerId(ocInput);
-}
-
-function d3web_storeQuestionMC(mcCheckBox) {
-	
-    var mcQParent = $(mcCheckBox.parents("[id^=q_]"));
-    var mcQuestion = getQuestionId(mcCheckBox);
-    var checkBoxes = mcQParent.find(":checkbox");
-
-    // get the question-content-parent element and go through all its
-    // checkbox-children
-    var checkedBoxes = new Array();
-    checkBoxes.each(function() {
-        if ($(this).prop("checked") == true) {
-            checkedBoxes.push(getAnswerId($(this)));
-        }
-    });
-	
-    mcStore[mcQuestion] = checkedBoxes;
-}
 
 function getQuestionId(input) {
     return getTerminologyId(input, "q");
@@ -585,10 +484,108 @@ function getTerminologyId(input, prefix) {
     return parent.attr("id");
 }
 
+
+
+function gotoStatistics() {
+    var link = $.query.set("action", "gotoStatistics");
+    $.ajax({
+        type : "GET",
+        url : link,
+        cache : false, // needed for IE, call is not made otherwise
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        success : function(url) {
+            window.location.href = url;
+        }
+    });
+}
+
+function handleUrlInput(input) {
+	var urlRegex = /(ftp|https?|file):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+	var text = input.val();
+	if (urlRegex.test(text)) {
+		if (input.next().length == 0) {			
+			input.after(" <a href='" + text + "'>Follow Link</a>");
+		}
+	}
+	else {
+		input.next().remove();
+	}
+}
+
+
+function handleUnsupportedBrowsers() {
+    var browser;
+    if($.browser.msie)
+        browser = "Internet Explorer";
+    else
+        browser = $.browser.name;
+    $("#unsupportedbrowserwarning").remove();
+    if (!($.browser.webkit
+        || $.browser.opera 
+        || $.browser.mozilla)) {
+        $('#head').children("table").children("tbody").append(
+            "<tr id='unsupportedbrowserwarning'><td colspan='3' style='color:red; font-variant:normal' >Sie benutzen " +
+            "den Browser '" + browser + "'. Dieser Browser wird von dieser Seite " +
+            "noch nicht vollständig unterstützt. Bitte nutzen sie stattdessen " +
+            "<a href='http://www.mozilla-europe.org/de/'>Mozilla Firefox</a> " +
+            "oder " +
+            "<a href='http://www.google.com/chrome/'>Google Chrome</a>!</td></tr>");
+    }
+}
+
+function moveContentPart() {
+    $('#content').css("margin-top", (getHeaderHeight() + 10) + "px");
+}
+
+
+
+function updateDialog(html) {
+    if (html.startsWith("##replaceid##")) {
+        var updateArray = html.split(/##replaceid##|##replacecontent##/);
+        for (var i = 0; i < updateArray.length - 1; i+=2) {
+            if (updateArray[i].length == 0) {
+                i--;
+                continue;
+            }
+            $("#" + updateArray[i]).replaceWith(updateArray[i + 1]);
+        }
+    }
+}
+
+function getUrlParameter(name) {
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec( window.location.href );
+    if( results == null )
+        return "";
+    else
+        return results[1];
+}
+
+
+function submitLoadAndSaveDialog() {
+    if ($('#jqConfirmDialog').dialog('isOpen'))
+        $('[aria-labelledby$=jqConfirmDialog]').find(
+            ":button:contains('Speichern')").click();
+	
+    if ($('#jqLoadCaseDialog').dialog('isOpen'))
+        $('[aria-labelledby$=jqLoadCaseDialog]').find(
+            ":button:contains('OK')").click();
+}
+
+function escapeExpression(str) {
+    return str.replace(/([#;&,\.\+\*\~':"\!\^$\[\]\(\)=>\|])/g, "\\$1");
+}
+
 function d3web_addFacts() {
 
-    var now = ue_getCurrentDate();
-    var link = $.query.set("action", "addFacts").set("timestring", now);
+	var link = $.query.set("action", "addFacts");
+	
+	if (logging) {
+		var now = ue_getCurrentDate();		
+		link = link.set("timestring", now);
+	}
 
     var i = 0;
     for (var qid in mcStore) {
@@ -663,43 +660,37 @@ function d3web_addFacts() {
     numStore = new Object();
 }
 
-function gotoStatistics() {
-    var link = $.query.set("action", "gotoStatistics");
-    $.ajax({
-        type : "GET",
-        url : link,
-        cache : false, // needed for IE, call is not made otherwise
-        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        success : function(url) {
-            window.location.href = url;
+function d3web_storeQuestionOC(ocInput) {
+    var ocQuestion = getQuestionId(ocInput);
+    ocStore[ocQuestion] = getAnswerId(ocInput);
+}
+
+function d3web_storeQuestionMC(mcCheckBox) {
+	
+    var mcQParent = $(mcCheckBox.parents("[id^=q_]"));
+    var mcQuestion = getQuestionId(mcCheckBox);
+    var checkBoxes = mcQParent.find(":checkbox");
+
+    // get the question-content-parent element and go through all its
+    // checkbox-children
+    var checkedBoxes = new Array();
+    checkBoxes.each(function() {
+        if ($(this).prop("checked") == true) {
+            checkedBoxes.push(getAnswerId($(this)));
         }
     });
+	
+    mcStore[mcQuestion] = checkedBoxes;
 }
 
-
-function handleUnsupportedBrowsers() {
-    var browser;
-    if($.browser.msie)
-        browser = "Internet Explorer";
-    else
-        browser = $.browser.name;
-    $("#unsupportedbrowserwarning").remove();
-    if (!($.browser.webkit
-        || $.browser.opera 
-        || $.browser.mozilla)) {
-        $('#head').children("table").children("tbody").append(
-            "<tr id='unsupportedbrowserwarning'><td colspan='3' style='color:red; font-variant:normal' >Sie benutzen " +
-            "den Browser '" + browser + "'. Dieser Browser wird von dieser Seite " +
-            "noch nicht vollständig unterstützt. Bitte nutzen sie stattdessen " +
-            "<a href='http://www.mozilla-europe.org/de/'>Mozilla Firefox</a> " +
-            "oder " +
-            "<a href='http://www.google.com/chrome/'>Google Chrome</a>!</td></tr>");
-    }
+function d3web_isAnsweredQuestion(question) {
+    return question.parent().children("[class$=\"question-d\"]").length > 0;
 }
 
-function moveContentPart() {
-    $('#content').css("margin-top", (getHeaderHeight() + 10) + "px");
+function d3web_getDateValue(select, def) {
+    return select.length == 1 && select.val() != "" ? select.val() : def;
 }
+
 
 function d3web_updateSummary() {
     var link = $.query.set("action", "updatesummary");
@@ -719,44 +710,83 @@ function d3web_updateSummary() {
 	
 }
 
+function d3web_storeQuestionText(textInput) {
+    var textQuestion = getQuestionId(textInput);
+    textStore[textQuestion] = $(textInput).val();
+}
 
-function updateDialog(html) {
-    if (html.startsWith("##replaceid##")) {
-        var updateArray = html.split(/##replaceid##|##replacecontent##/);
-        for (var i = 0; i < updateArray.length - 1; i+=2) {
-            if (updateArray[i].length == 0) {
-                i--;
-                continue;
-            }
-            $("#" + updateArray[i]).replaceWith(updateArray[i + 1]);
-        }
+function d3web_storeQuestionNum(numInput) {
+    var numQuestion = getQuestionId(numInput);
+    textStore[numQuestion] = $(numInput).val();
+}
+
+function d3web_handleQuestionNum(numInput) {
+    var tooHigh = "";
+    var tooLow = "";
+    var errorWid;
+    var val = parseInt($(numInput).val());
+    var left = parseInt($(numInput).attr("left"));
+    var right = parseInt($(numInput).attr("right"));
+    
+    if(language=="de"){
+        tooHigh = "Der eingegebene Wert ist zu hoch. Zulässig ist das Intervall: [" + left + " " + right + "]";
+        tooLow = "Der eingegebene Wert ist zu niedrig. Zulässig ist das Intervall: [" + left + " " + right + "]";
+    } else if(language=="en"){
+        tooHigh = "The allowed range is: [" + left + " " + right + "]";
+        tooLow = "The allowed range is: [" + left + " " + right + "]";
+    }
+    
+    errorWid = getErrorPlaceholder(numInput);
+    if (val < left) {
+        errorWid.html(tooLow);
+        ue_logNotAllowedInput(numInput);
+    } else if (val > right) {   
+        errorWid.html(tooHigh);
+        ue_logNotAllowedInput(numInput);
+    } else {
+        errorWid.html("");
     }
 }
 
-function getUrlParameter(name) {
-    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    var regexS = "[\\?&]"+name+"=([^&#]*)";
-    var regex = new RegExp( regexS );
-    var results = regex.exec( window.location.href );
-    if( results == null )
-        return "";
-    else
-        return results[1];
+function d3web_storeQuestionDate(dateSelect) {
+    var question = getQuestionId(dateSelect);
+    dateStore[question] = getDate(dateSelect).getTime();
 }
 
-
-function submitLoadAndSaveDialog() {
-    if ($('#jqConfirmDialog').dialog('isOpen'))
-        $('[aria-labelledby$=jqConfirmDialog]').find(
-            ":button:contains('Speichern')").click();
-	
-    if ($('#jqLoadCaseDialog').dialog('isOpen'))
-        $('[aria-labelledby$=jqLoadCaseDialog]').find(
-            ":button:contains('OK')").click();
-}
-
-function escapeExpression(str) {
-    return str.replace(/([#;&,\.\+\*\~':"\!\^$\[\]\(\)=>\|])/g, "\\$1");
+function d3web_handleQuestionDate(dateSelect) {
+	 var date = getDate(dateSelect);
+		
+    var tooSoon = "";
+    var tooLate = "";
+    var beforeId = $("#" + getQuestionId(dateSelect)).attr("before");
+    var afterId = $("#" + getQuestionId(dateSelect)).attr("after");
+    
+    var beforeQuestion = $("#" + beforeId);
+    var afterQuestion = $("#" + afterId);
+    var beforeDate = getDate(beforeQuestion.find("select").first());
+    var afterDate = getDate(afterQuestion.find("select").first());
+    
+    var beforeText = $.trim($("#text-" + beforeId).text());
+    var afterText = $.trim($("#text-" + afterId).text());
+    
+    if(language=="de"){
+        tooLate = "Erwartet wird ein Datum früher als bei Frage '" + beforeText + "'.";
+        tooSoon = "Erwartet wird ein Datum später als bei Frage '" + afterText + "'.";
+    } else if(language=="en"){
+        tooLate = "Expected is a date earlier than the one given in question '" + beforeText + "'.";
+        tooSoon = "Expected is a date later than the one given in question '" + afterText + "'.";
+    }
+    
+    var errorWid = getErrorPlaceholder(dateSelect);
+    if (afterId != undefined && d3web_isAnsweredQuestion(afterQuestion) && date.getTime() <= afterDate.getTime()) {
+        errorWid.html(tooSoon);
+    }
+    else if (beforeId != undefined && d3web_isAnsweredQuestion(beforeQuestion) && date.getTime() >= beforeDate.getTime()) {   
+        errorWid.html(tooLate);
+    } 
+    else {
+        errorWid.html("");
+    }
 }
 
 function d3web_prepareSave() {
