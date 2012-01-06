@@ -14,6 +14,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.util.BidirectionalShortFormProvider;
 import org.semanticweb.owlapi.util.BidirectionalShortFormProviderAdapter;
 import org.semanticweb.owlapi.util.ShortFormProvider;
+import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 
 import de.knowwe.owlapi.OWLAPIConnector;
 
@@ -49,6 +50,10 @@ public class OWLApiQueryParser {
 
 		factory = OWLAPIConnector.getGlobalInstance().getManager().getOWLDataFactory();
 		owlEntityChecker = new ShortFormEntityChecker(bidiProvider);
+	}
+
+	public OWLApiQueryParser() {
+		this(new SimpleShortFormProvider());
 	}
 
 	/**
