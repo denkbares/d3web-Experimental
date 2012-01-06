@@ -112,14 +112,13 @@ public class OWLApiQueryRenderer<T extends AbstractType> extends KnowWEDomRender
 
 	private void printDefaultView(StringBuilder html, String query, String show) {
 		html.append("<div style=\"background: none repeat scroll 0 0 #FFFE9D;border: 1px solid #E5E5E5;padding:8px 0 10px 20px;\">");
-		html.append("<dl><dt>Query: " + query + "</dt>");
-
+		html.append("<dl><dt>Query: ").append(query).append("</dt>");
 		try {
 
 			if (show.equals("*") || show.equals("ind")) {
 				OWLClassExpression exp = engine.getOWLClassExpression(query);
 				Set<OWLNamedIndividual> individuals = engine.getIndividuals(query, true);
-				html.append("<dd>Individuals:</dd<dd><ul>");
+				html.append("<dd>Individuals:</dd><dd><ul>");
 				printEntities(individuals, html, exp);
 				html.append("</ul></dd>");
 			}

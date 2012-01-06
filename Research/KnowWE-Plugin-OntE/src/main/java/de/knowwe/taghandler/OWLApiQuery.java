@@ -22,6 +22,7 @@ import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 
 /**
  *
@@ -37,6 +38,7 @@ public class OWLApiQuery extends DefaultMarkupType {
 		MARKUP.addAnnotation("query", true);
 		MARKUP.addAnnotation("show", false);
 		MARKUP.addAnnotation("view", false);
+		MARKUP.addAnnotationContentType("query", ManchesterSyntaxUtil.getMCE());
 	}
 
 	/**
