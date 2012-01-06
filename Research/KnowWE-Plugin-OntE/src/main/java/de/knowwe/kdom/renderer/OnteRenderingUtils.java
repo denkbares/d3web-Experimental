@@ -110,10 +110,29 @@ public class OnteRenderingUtils {
 		if (!raw) {
 			s.append("<span style=\"font-size:9px;padding-left:10px;\">(Defined in: ");
 		}
-		s.append("<a href=\"Wiki.jsp?page=" + term.getTitle()
-				+ "\" title=\"Goto definition article\">");
-		s.append(term.getTitle());
-		s.append("</a>");
+
+		boolean isPredefined = IncrementalCompiler.getInstance().getTerminology().isPredefinedObject(
+				term.getOriginalText());
+
+		if (isPredefined) {
+			s.append(term.getOriginalText());
+		}
+		else {
+			s.append("<a href=\"Wiki.jsp?page=");
+
+			boolean isImported = IncrementalCompiler.getInstance().getTerminology().isImportedObject(
+					term.getOriginalText());
+			if (isImported) {
+				Section<?> importSection = ImportManager.resolveImportSection(term.getOriginalText());
+				s.append(importSection.getTitle());
+			}
+			else {
+				s.append(term.getTitle());
+			}
+			s.append("\" title=\"Goto definition article\">");
+			s.append(term.getOriginalText());
+			s.append("</a>");
+		}
 
 		if (!raw) {
 			s.append(")</span>");

@@ -168,5 +168,9 @@ public class GetOntologyHierarchyAction extends AbstractAction {
 			nothingConcepts.append("]");
 			json.append(nothingConcepts);
 		}
+		else {
+			json.append("\"name\" : \"Nothing\", \"type\" : \"")
+					.append(classification).append("\"");
+		}
 	}
 }

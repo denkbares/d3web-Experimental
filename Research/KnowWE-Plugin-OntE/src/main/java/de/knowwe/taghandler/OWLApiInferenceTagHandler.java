@@ -21,7 +21,9 @@ package de.knowwe.taghandler;
 
 import java.util.Map;
 
+import org.semanticweb.owlapi.expression.ParserException;
 import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.PrefixManager;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
@@ -31,6 +33,7 @@ import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.taghandler.TagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.owlapi.OWLAPIConnector;
+import de.knowwe.owlapi.query.OWLApiQueryParser;
 
 /**
  * <p>
@@ -84,17 +87,27 @@ public class OWLApiInferenceTagHandler extends AbstractHTMLTagHandler {
 			PrefixManager pm = new DefaultPrefixManager(
 					OWLAPIConnector.getGlobalInstance().getGlobalBaseIRI().toString());
 
-			OWLClass clazz = factory.getOWLClass(":" + paramObject, pm);
+			OWLApiQueryParser parser = new OWLApiQueryParser();
+			try {
+				OWLClassExpression exp = parser.parseManchesterOWLsyntax(paramObject);
 
-			if (paramInference.equals(PARAM_INFERENCE_CLASS)) {
-				OWLApiTagHandlerUtil.printInferredClassHierarchy(reasoner, clazz, 0, html);
+				// OWLClass clazz = factory.getOWLClass(":" + paramObject, pm);
+
+				if (paramInference.equals(PARAM_INFERENCE_CLASS)) {
+					OWLApiTagHandlerUtil.printInferredClassHierarchy(reasoner, exp, 0, html);
+				}
+				else if (paramInference.equals(PARAM_INFERENCE_INDIVIDUAL)) {
+					OWLApiTagHandlerUtil.printInferredIndividuals(reasoner, exp, html);
+				}
+				else if (paramInference.equals(PARAM_INFERENCE_PROPERTY)) {
+					// TODO not yet :)
+				}
+
 			}
-			else if (paramInference.equals(PARAM_INFERENCE_INDIVIDUAL)) {
-				OWLApiTagHandlerUtil.printInferredIndividuals(reasoner, clazz, html);
+			catch (ParserException e) {
+				e.printStackTrace();
 			}
-			else if (paramInference.equals(PARAM_INFERENCE_PROPERTY)) {
-				// not yet :)
-			}
+
 		}
 		else {
 			html.append(helpMessage());

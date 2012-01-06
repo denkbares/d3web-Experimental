@@ -18,6 +18,7 @@ import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
@@ -250,13 +251,38 @@ public class GetEntityInformationAction extends AbstractAction {
 		OWLOntology ontology = connector.getOntology();
 
 		Set<OWLObject> owlObjects = new HashSet<OWLObject>();
+
+		Set<OWLIndividual> individuals = owlIndividual.getDifferentIndividuals(ontology);
+		if (!individuals.isEmpty()) {
+			html.append("<div class=\"onte-box\"><strong>DifferentFrom</strong></div>");
+			owlObjects.clear();
+			owlObjects.addAll(individuals);
+			renderResult(owlObjects, html);
+		}
+
+		Set<OWLObjectPropertyAssertionAxiom> assertions = ontology.getObjectPropertyAssertionAxioms(owlIndividual);
+		if (!assertions.isEmpty()) {
+			html.append("<div class=\"onte-box\"><strong>Facts</strong></div>");
+			owlObjects.clear();
+			owlObjects.addAll(assertions);
+			renderResult(owlObjects, html);
+		}
+
+		individuals = owlIndividual.getSameIndividuals(ontology);
+		if (!individuals.isEmpty()) {
+			html.append("<div class=\"onte-box\"><strong>SameAs</strong></div>");
+			owlObjects.clear();
+			owlObjects.addAll(individuals);
+			renderResult(owlObjects, html);
+		}
+
 		Set<OWLClassExpression> types = owlIndividual.getTypes(ontology);
 		if (!types.isEmpty()) {
 			html.append("<div class=\"onte-box\"><strong>Types</strong></div>");
+			owlObjects.clear();
 			owlObjects.addAll(types);
 			renderResult(owlObjects, html);
 		}
-		// TODO rest
 	}
 
 	/**

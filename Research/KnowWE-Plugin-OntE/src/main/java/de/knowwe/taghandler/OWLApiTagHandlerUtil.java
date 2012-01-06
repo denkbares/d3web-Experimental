@@ -164,14 +164,23 @@ public class OWLApiTagHandlerUtil {
 	 * @param int level The level in the class hierarchy.
 	 * @param StringBuilder html The resulting output (may contain HTML)
 	 */
-	public static void printInferredClassHierarchy(OWLReasoner reasoner, OWLClass clazz, int level, StringBuilder html) {
+	public static void printInferredClassHierarchy(OWLReasoner reasoner, OWLClassExpression clazz, int level, StringBuilder html) {
 
 		reasoner.precomputeInferences();
 		if (reasoner.isSatisfiable(clazz)) {
 			for (int i = 0; i < level * INDENT; i++) {
 				html.append("-");
 			}
-			html.append(OnteRenderingUtils.renderHyperlink(labelClass(clazz), true));
+
+			if (clazz.isAnonymous()) {
+				html.append(OnteRenderingUtils.renderHyperlink(verbalizeToManchesterSyntax(clazz), true));
+			}
+			else {
+				html.append(OnteRenderingUtils.renderHyperlink(labelClass(clazz.asOWLClass()), true));
+			}
+
+			// html.append(OnteRenderingUtils.renderHyperlink(labelClass(clazz),
+			// true));
 			// check for equality of certain classes
 			for (OWLClass equivalent : reasoner.getEquivalentClasses(clazz)) {
 				if (!equivalent.equals(clazz)) {
@@ -202,12 +211,18 @@ public class OWLApiTagHandlerUtil {
 	 * @param OWLClass clazz Any {@link OWLClass} of an ontology.
 	 * @param StringBuilder html The resulting output (may contain HTML)
 	 */
-	public static void printInferredIndividuals(OWLReasoner reasoner, OWLClass clazz, StringBuilder html) {
+	public static void printInferredIndividuals(OWLReasoner reasoner, OWLClassExpression clazz, StringBuilder html) {
 
 		if (clazz != null || reasoner != null) {
 
 			html.append("<dl>");
-			html.append("<dt>Instances for: " + labelClass(clazz) + "</dt>");
+
+			if (clazz.isAnonymous()) {
+				html.append("<dt>Instances for: " + verbalizeToManchesterSyntax(clazz) + "</dt>");
+			}
+			else {
+				html.append("<dt>Instances for: " + labelClass(clazz.asOWLClass()) + "</dt>");
+			}
 
 			NodeSet<OWLNamedIndividual> individualsNodeSet = reasoner.getInstances(clazz, true);
 			if (!individualsNodeSet.isEmpty()) {
