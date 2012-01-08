@@ -73,11 +73,16 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
 		st.setAttribute("realAnswerType", "text");
 		st.setAttribute("parentFullId", getID(parent));
 
+		Boolean longText = to.getInfoStore().getValue(
+				ProKEtProperties.LONG_TEXT);
+
+		if (longText != null && longText) st.setAttribute("longtext", "true");
+
 		Boolean useAsFilename = to.getInfoStore().getValue(
 				ProKEtProperties.USE_AS_FILENAME);
 
 		if (useAsFilename != null && useAsFilename) {
-			st.setAttribute("useasfilename", true);
+			st.setAttribute("useasfilename", "true");
 		}
 
 		Blackboard bb = d3webSession.getBlackboard();

@@ -2,20 +2,17 @@
 	$title$
 	
 	$if(readonly)$
-		<input id="f_$fullId$" type="readonly" $if(selection)$value="$selection$"$endif$ title="$title$" $if(width)$size="$width$"$endif$ />
+		<$if(longtext)$textarea$else$input$endif$ id="f_$fullId$" type="readonly" $if(selection)$value="$selection$"$endif$ title="$title$" $if(longtext)$style="width: 100%; height: 100px"$endif$ />
 	$else$
 		$if (dropdown_menu)$
 		$dropdown_menu$
 		$else$
-		<input id="f_$fullId$" type="text" 
-				$if(selection)$value="$selection$"$endif$ 
+		<$if(longtext)$textarea$else$input$endif$ id="f_$fullId$" type="text"
 				$if(title)$title="$title$"$endif$ 
 				$if (useasfilename)$useasfilename="true"$endif$ 
-				$if(width)$size="$width$"$endif$ />
+				$if(longtext)$style="width: 100%; height: 100px"$endif$>$selection$</$if(longtext)$textarea$else$input$endif$>
 		$endif$
 	$endif$
-	
-	
 	$Tooltip()$
 	$text$
 </div>

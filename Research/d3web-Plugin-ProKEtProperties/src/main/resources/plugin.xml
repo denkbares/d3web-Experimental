@@ -73,6 +73,16 @@
 	</extension>
 	
 	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
+		id="long_text">
+		<parameter id="name" value="long_text" />
+		<parameter id="description" value="Set to true if a text question is expected to get a long text as a value" />
+		<parameter id="multilingual" value="false" />
+		<parameter id="autosave" value="basic" />
+		<parameter id="priority" value="5" />
+		<parameter id="instanceof" value="java.lang.Boolean" />
+	</extension>
+	
+	<extension plugin-id="d3web-Kernel-ExtensionPoints" point-id="Property"
 		id="position_in_header">
 		<parameter id="name" value="position_in_header" />
 		<parameter id="description" value="Sets the position of question in the header" />

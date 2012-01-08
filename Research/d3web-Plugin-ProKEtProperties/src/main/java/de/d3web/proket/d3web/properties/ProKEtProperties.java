@@ -10,6 +10,9 @@ public class ProKEtProperties {
 	public static final Property<String> TEXT_FORMAT = Property.getProperty("text_format",
 			String.class);
 
+	public static final Property<Boolean> LONG_TEXT = Property.getProperty("long_text",
+			Boolean.class);
+
 	public static final Property<String> POPUP = Property.getProperty("popup", String.class);
 
 	public static final Property<String> GRID = Property.getProperty("grid", String.class);
