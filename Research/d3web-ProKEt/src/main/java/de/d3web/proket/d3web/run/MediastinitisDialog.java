@@ -70,8 +70,8 @@ public class MediastinitisDialog extends D3webDialog {
         public void init(ServletConfig config) throws ServletException{
             super.init(config);
             
-            // initialize userDat map, needed for basic simple login as in Mediastinitis
-        if (usrDat == null) {
+            if (usrDat == null) {
+            
             // get parent folder for storing cases
             usrDat = new HashMap<String, List<String>>();
 
@@ -94,7 +94,7 @@ public class MediastinitisDialog extends D3webDialog {
                         usrDat.put(nextLine[0], values);
                     }
                 }
-
+                System.out.println(usrDat);
             } catch (FileNotFoundException fnfe) {
                 fnfe.printStackTrace();
             } catch (IOException ioe) {

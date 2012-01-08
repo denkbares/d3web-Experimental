@@ -39,10 +39,8 @@ public class LegalMcQuestionRenderer extends Renderer {
 			IDialogObject dialogObject, boolean force) {
 
 		IDialogObject parent = dialogObject.getParent();
-		System.out.println(parent);
-		System.out.println(dialogObject);
-
-		if (parent != null) {
+		
+                if (parent != null) {
 			Vector<IDialogObject> children = parent.getChildren();
 			StringBuffer childrenHTML = new StringBuffer();
 			for (IDialogObject child : children) {
@@ -62,6 +60,8 @@ public class LegalMcQuestionRenderer extends Renderer {
 
 			}
 
+                        // workaround for removing a doubled-answertype setting in template
+                        st.removeAttribute("answerType");
 			st.setAttribute("answerType", dialogObject
 					.getInheritableAttributes().getAnswerType());
 

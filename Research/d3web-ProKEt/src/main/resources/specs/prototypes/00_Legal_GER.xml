@@ -9,10 +9,25 @@
                 <question title="Form, Frist, Zugang und Stellvertretung sind eingehalten"
 			id="2" parent-id="1" type="mc" bonus-text="Überprüfung, ob Form, Frist, Zugang sowie Stellvertretung
                         korrekt eingehalten wurden."/>
-		<question title="Form wurde eingehalten" id="18" parent-id="2" />
-		<question title="Frist wurde eingehalten" id="19" parent-id="2" />
-		<question title="Bedingungen für Zugang wurden eingehalten" id="20" parent-id="2" />
+		<question title="Form wurde eingehalten" id="18" parent-id="2" 
+                        bonus-text="Überprüfung, ob die Form der Kündigung rechtswirksam vorlag"/>
+                <question title="Schriftform der Kündigung lag vor" id="22" parent-id="18" />
+                <question title="Wille zur Kündigung erkennbar" id="23" parent-id="18" />
+		<question title="Frist wurde eingehalten" id="19" parent-id="2" bonus-text="Überprüfung, ob die Kündigungsfrist korrekt eingehalten wurde" />
+                <question title="Ordentliche Kündigungsfrist wurde eingehalten" id="28" parent-id="19"/>
+                <question title="Es lag eine außerordentliche Kündigung vor" id="28" parent-id="19" />
+		<question title="Zugang lag vor" id="20" parent-id="2" />
 		<question title="Bedingungen für Stellvertretung wurden eingehalten" id="21" parent-id="2" />
+                <question title="Arbeitgeber hat selbst erklärt" id="24" parent-id="21" />
+                <question title="Stellvertreter hat wirksam vertreten" id="25" parent-id="21" />
+                <question title="Stellvertreter war bevollmächtigt" id="26" parent-id="25" />
+                <question title="Stellvertreter hat Legitimation angezeigt" id="27" parent-id="25" />
+                <question title="Stellvertreter hatte Legitimation aus Position" id="39" parent-id="27" />
+                <question title="Stellvertreter war Personalchef" id="42" parent-id="39" />
+                <question title="Stellvertreter war Prokurist" id="43" parent-id="39" />
+                <question title="Stellvertreter hat Orignialvollmacht vorgelegt" id="40" parent-id="27" />
+                <question title="Originalvollmacht lag bei" id="44" parent-id="40" />
+                <question title="Vollmacht wurde wirksam nachgereicht" id="45" parent-id="40" />
                 <question title="Kündigung war nicht durch Sondertatbestände ausgeschlossen"
 			id="3" parent-id="1" type="mc" bonus-text="Hier wird geklärt, ob die Kündigung durch
                         verschiedene Sondertatbestände ausgeschollsen war. Beispiele für solche Sondertatbestände sind
@@ -26,20 +41,26 @@
 		<question title="Kein Wehrdienst" id="9" parent-id="3" />
 		<question title="Kein Betriebsübergang" id="10" parent-id="3" />
 		<question title="Keine sonstigen Unwirksamkeitsgründe" id="11" parent-id="3" />
-		<question 
-			title="Kündigung war nicht durch Befristung ausgeschlossen" id="12"
-			parent-id="1" type="oc" />
-		<question title="Arbeitsvertrag war nicht (mehr) wirksam befristet"
-			id="13" parent-id="12" />
-		<question
-			title="Kündigung während der Befristung war zugelassen" id="14"
-			parent-id="12" />
-		<question title="Befristetes Arbeitsverhältnis war ausgelaufen"
-			id="15" parent-id="12" />
+		<question title="Kündigung war nicht durch Befristung ausgeschlossen" id="12" parent-id="1" type="oc" />
+		<question title="Arbeitsvertrag war nicht (mehr) wirksam befristet" id="13" parent-id="12" />
+                <question title="Es war keine Befristung vereinbart" id="28" parent-id="13" />
+                <question title="Befristetes Arbeitsverhältnis ging in unbefristetes über" id="29" parent-id="13" />
+                <question title="Es fehlte ein Befristungsgrund" id="30" parent-id="13" />
+                <question title="Betriebszugehörigkeit für mehr als 2 Jahre" id="37" parent-id="30" />
+                <question title="Mehr als 2 Verlängerungen" id="38" parent-id="30" />
+		<question title="Kündigung während der Befristung war zugelassen" id="14" parent-id="12" />
+		<question title="Befristetes Arbeitsverhältnis war ausgelaufen" id="15" parent-id="12" />
 		<question 
 			title="Eine soziale Rechtfertigung war nicht nötig oder lag vor" id="16"
 			parent-id="1" />
 		<question 
-			title="Ein Betriebsrat war nicht vorhanden oder korrekt angehört" id="17"
-			parent-id="1" /> 
+			title="Ein Betriebsrat war nicht vorhanden oder wurde korrekt angehört" id="17"
+			parent-id="1" bonus-text="Hier wird geklärt, ob ein Betriebsrat vorhanden
+                        war und falls ja, ob dieser korrekt angehört wurde..."/> 
+                <question title="Es gab keinen Betriebsrat" id="31" parent-id="17" />
+                <question title="Der Betriebsrat wurde korrekt angehört" id="32" parent-id="17" />
+                <question title="Der Betriebsrat war vollständig informiert" id="33" parent-id="32" />
+                <question title="Betriebsrat hat Stellungnahme abgegeben" id="34" parent-id="32" />
+                <question title="Stellungnahme wurde erklärt" id="36" parent-id="34" />
+                <question title="Stellungnahme wird nach Zeitablauf fingiert" id="36" parent-id="34" />
 </dialog>

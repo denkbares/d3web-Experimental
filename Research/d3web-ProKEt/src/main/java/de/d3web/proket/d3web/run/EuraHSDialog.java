@@ -188,7 +188,7 @@ public class EuraHSDialog extends D3webDialog {
 	private static String readTxtFile(String fileName) {
 		StringBuffer inContent = new StringBuffer();
 		File file = new File(fileName);
-		if (file.exists()) {
+                if (file.exists()) {
 			try {
 				BufferedReader bufferedReader = new BufferedReader(
 						new InputStreamReader(new FileInputStream(file)));

@@ -1,5 +1,5 @@
 <div id="$fullId$" class="question $fullId$ $answerType$">
-	<div id="$id$-imagebox" class="question-imagebox">
+	<div id="$id$-imagebox" class="question-imagebox" onmouseover="showAuxInfo('$fullId$')" onmouseout="hideAuxInfo()">
 		<img id="$id$-typeimg" alt="type" src="$typeimg$" height="16" width="16" onclick="toggle_sub_4boxes('$fullId$')">
     	<img height="16" 
 		$if(noChildren)$usemap="#panel-$fullId$"$endif$ 

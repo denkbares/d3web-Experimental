@@ -182,7 +182,7 @@ public class D3webDialog extends HttpServlet {
 
             // if a new dialog is loaded we also need a new session to start
             resetD3webSession(httpSession);
-            
+
             // switch on/off logging depending on xml specification
             if (d3webParser.getLogging().contains("ON")) {
                 d3wcon.setLogging(true);
@@ -217,7 +217,7 @@ public class D3webDialog extends HttpServlet {
 
         // in case nothing other is provided, "show" is the default action
         String action = request.getParameter("action");
-       
+
         if (action == null) {
             // action = "mail";
             action = "show";
@@ -238,7 +238,7 @@ public class D3webDialog extends HttpServlet {
             }
         }
 
-    
+
         // switch action as defined by the servlet call
         if (action.equalsIgnoreCase("show")) {
             System.out.println("SHOW");
@@ -309,7 +309,7 @@ public class D3webDialog extends HttpServlet {
             return;
         }
     }
-    
+
     /* Initial check whether...
      * 
      * @created 26.07.2011
@@ -398,7 +398,7 @@ public class D3webDialog extends HttpServlet {
 
             if (d3wcon.isLogging()) {
                 // logQuestionValue all changed widgets/items
-                 if (questions.get(i).equals(prevQ)) {
+                if (questions.get(i).equals(prevQ)) {
                     if (!values.get(i).equals(prevV)) {
                         D3webServletLogUtils.logQuestionValue(questions.get(i), values.get(i), request);
                         prevQ = questions.get(i);
@@ -481,7 +481,6 @@ public class D3webDialog extends HttpServlet {
         return false;
     }
 
-  
     /**
      * Parse the language parameter (set via JS depending on what language (for
      * KB elements) was chosen in the dialog and set it in global settings.
