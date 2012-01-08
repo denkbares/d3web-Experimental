@@ -243,7 +243,7 @@ $(function() {
                 if (html == "firsttime") {
                     var browser = retrieveBrowserVal();    
                     var user = retrieveUserVal();
-                    ue_logBrowserAndUser(browser, user);
+                    if (logging) ue_logBrowserAndUser(browser, user);
                 } 
             // otherwise, no reload because this would cause endless loop
             }
@@ -363,42 +363,42 @@ function initFunctionality() {
 	
     // bind reset button to resetSession() function
     $('#reset').unbind('click').click(function() {
-        ue_logWidgetClicked($(this));
+        if (logging) ue_logWidgetClicked($(this));
         d3web_resetSession();
     });
 
     // bind send/save button to sendexit function
     $('#savecase').unbind('click').click(function(event) {
-        ue_logWidgetClicked($(this));
+        if (logging) ue_logWidgetClicked($(this));
         d3web_addFacts();
         d3web_prepareSave();
     });
 
     // bind the loadcase button to making the fileselect list visible
     $('#loadcase').unbind('click').click(function(event) {
-        ue_logWidgetClicked($(this));
+        if (logging) ue_logWidgetClicked($(this));
         $("#jqLoadCaseDialog").dialog("open");
     });
 	
     $('#followupbutton').unbind('click').click(function(event) {
-        ue_logWidgetClicked($(this));
+        if (logging) ue_logWidgetClicked($(this));
         $("#jqFollowUpDialog").dialog("open");
     });
 	
     $('#summary').unbind('click').click(function(event){
-        ue_logWidgetClicked($(this));
+        if (logging) ue_logWidgetClicked($(this));
         d3web_updateSummary();
         $("#jqSummaryDialog").dialog("open");
     });
 	
     $('#statistics').unbind('click').click(function(event){
-        ue_logWidgetClicked($(this));
+        if (logging) ue_logWidgetClicked($(this));
         gotoStatistics();
     });
     
     // click on language toggle
     $('img[id*="lang"]').unbind('click').click(function(event){
-        ue_logLanguageWidgetClicked($(this));
+        if (logging) ue_logLanguageWidgetClicked($(this));
         toggleLanguage($(this));
     });
     
@@ -739,10 +739,10 @@ function d3web_handleQuestionNum(numInput) {
     errorWid = getErrorPlaceholder(numInput);
     if (val < left) {
         errorWid.html(tooLow);
-        ue_logNotAllowedInput(numInput);
+        if (logging) ue_logNotAllowedInput(numInput);
     } else if (val > right) {   
         errorWid.html(tooHigh);
-        ue_logNotAllowedInput(numInput);
+        if (logging) ue_logNotAllowedInput(numInput);
     } else {
         errorWid.html("");
     }
