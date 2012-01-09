@@ -9,8 +9,9 @@
 		$else$
 		<$if(longtext)$textarea$else$input$endif$ id="f_$fullId$" type="text"
 				$if(title)$title="$title$"$endif$ 
-				$if (useasfilename)$useasfilename="true"$endif$ 
-				$if(longtext)$style="width: 100%; height: 100px"$endif$>$selection$</$if(longtext)$textarea$else$input$endif$>
+				$if (useasfilename)$useasfilename="true"$endif$
+				$if(longtext)$style="width: 100%; height: 100px"
+				$else$value="$selection$"$endif$>$if(longtext)$$selection$$endif$</$if(longtext)$textarea$else$input$endif$>
 		$endif$
 	$endif$
 	$Tooltip()$
