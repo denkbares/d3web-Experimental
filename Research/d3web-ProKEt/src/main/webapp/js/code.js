@@ -1021,8 +1021,10 @@ function h4boxes(value, id) {
         var target = $(item).closest("div[id^='q_']");
 
         // check whether the calculated rating contradicts the user-chosen rating
-        if(!equalUserAndKBSRating(target)){
-            alert("Ratings stimmen nicht überein!")
+        if(hasChildrenHierachical(target)){
+            if(!equalUserAndKBSRating(target, value)){
+                alert("Ratings stimmen nicht überein!")
+            }
         }
         
         setColorForQuestion(target, item, value);
@@ -1031,8 +1033,8 @@ function h4boxes(value, id) {
         h4boxes_mark(target, true);
 		
     } else {
-        // d3web specific toolchain
-        /*if (value < 4) {
+// d3web specific toolchain
+/*if (value < 4) {
 			
             // add fact in d3web
             d3web_addfact(id, value - 1); // zero-based
@@ -1046,7 +1048,7 @@ function h4boxes(value, id) {
             ids = ids + $(this).attr('id') + ",";
         });
         d3web_getRatings(ids);*/
-    }
+}
 }
 
 /*
@@ -1139,6 +1141,7 @@ function calculateRatingForQuestion(question){
             color = "0";
         }
     }
+    
     return color;
 }
 
@@ -1147,10 +1150,25 @@ function calculateRatingForQuestion(question){
  */
 function equalUserAndKBSRating(question, chosenColor){
     
-    if(!chosenColor == calculateRatingForQuestion(question)){
+    var col = chosenColor+"";
+    if(col != calculateRatingForQuestion(question)){
         return false;
-    } 
+    }
+    
+    
     return true;
+}
+
+function hasChildrenHierachical(question){
+    
+    var ret = false;
+    question.children().each(function(){
+        if($(this).attr("id").indexOf("sub-")==0){
+            ret = true;
+        }
+    });
+    
+    return ret;
 }
 
 /**
