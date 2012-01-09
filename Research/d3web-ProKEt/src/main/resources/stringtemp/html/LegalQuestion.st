@@ -13,9 +13,9 @@
 		$text$
 		<map name="panel-$fullId$">
 			<area href="javascript:h4boxes('1','panel-$fullId$')" coords="0,0,14.5,15" shape="rect">
-			<area href="javascript:h4boxes('2','panel-$fullId$')" coords="14.5,0,29.0,15" shape="rect">
-			<area href="javascript:h4boxes('3','panel-$fullId$')" coords="29.0,0,43.5,15" shape="rect">
-			<area href="javascript:h4boxes('4','panel-$fullId$')" coords="43.5,0,58.0,15" shape="rect">
+			<area href="javascript:h4boxes('3','panel-$fullId$')" coords="14.5,0,29.0,15" shape="rect">
+			<area href="javascript:h4boxes('2','panel-$fullId$')" coords="29.0,0,43.5,15" shape="rect">
+			<area href="javascript:h4boxes('0','panel-$fullId$')" coords="43.5,0,58.0,15" shape="rect">
 		</map>
 	</div>
 	

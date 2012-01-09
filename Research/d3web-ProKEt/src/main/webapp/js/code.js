@@ -1016,36 +1016,23 @@ function h4boxes(value, id) {
 		
         // get dialog item
         var item = $("#" + id);
-		
-        // set image attribute to the correctly selected one
-        item.attr('src', "img/panel" + value + ".gif");
-		
+	
         // get the first ancestor, i.e. the first upper question
         var target = $(item).closest("div[id^='q_']");
 
-        // remove existing rating=coloring classes
-        target.removeClass('rating-low rating-medium rating-high');
-
-        // set classes new according to given value
-        switch (value) {
-            case "1": // yes
-                target.addClass('rating-high');
-                break;
-            case "2": // no
-                target.addClass('rating-low');
-                break;
-            case "3": // probably
-                target.addClass('rating-medium');
-                break;
-            case "4": // nothing, default val, unknown
-                break;
+        // check whether the calculated rating contradicts the user-chosen rating
+        if(!equalUserAndKBSRating(target)){
+            alert("Ratings stimmen nicht überein!")
         }
+        
+        setColorForQuestion(target, item, value);
+        
         // also mark parents of the target while excluding target
         h4boxes_mark(target, true);
 		
     } else {
         // d3web specific toolchain
-        if (value < 4) {
+        /*if (value < 4) {
 			
             // add fact in d3web
             d3web_addfact(id, value - 1); // zero-based
@@ -1058,8 +1045,112 @@ function h4boxes(value, id) {
         $("[id^='q_']").each(function() {
             ids = ids + $(this).attr('id') + ",";
         });
-        d3web_getRatings(ids);
+        d3web_getRatings(ids);*/
     }
+}
+
+/*
+ * Sets the given rating for the given target question
+ */
+function setColorForQuestion(target, imgTarget, color){
+    
+    // remove existing rating=coloring classes
+    target.removeClass('rating-low rating-medium rating-high');
+    
+    // set image attribute to the correctly selected one
+    imgTarget.attr('src', "img/panel" + color + ".gif");
+        
+    switch (color) {
+        case "1": // approve --> green
+            target.addClass("rating-high");
+            //imgTarget.attr('src', "img/panel1.gif");
+            break;
+        case "0": // undecided --> transparent
+            //imgTarget.attr('src', "img/panel0.gif");
+            break;
+        case "2": // suggested  --> yellow
+            target.addClass("rating-medium");
+            //imgTarget.attr('src', "img/panel2.gif");
+            break;
+        case "3": // rejected -_> red
+            target.addClass("rating-low");
+            //imgTarget.attr('src', "img/panel3.gif");
+            break;
+    }
+}
+
+/**
+ * Calculates the rating for the given question and returns
+ * the corresponding color/rating value: 0=undecided, 1=approve, 2=suggest, 3=reject
+ */
+function calculateRatingForQuestion(question){
+    var ocPar = question.hasClass('oc');
+    var mcPar = question.hasClass('mc');
+    var color; 
+        
+    // go through all child-questions and read their ratings into a var
+    var ratings = "";
+        
+    $("#sub-" + question.attr('id')).children("div[id^='q_']").each(
+        function() {
+            var high = $(this).hasClass("rating-high");
+            var med = $(this).hasClass("rating-medium");    
+            var low = $(this).hasClass("rating-low");
+                
+            if(high){
+                ratings += "1 ";
+            } else if (med){
+                ratings += "2 ";
+            } else if (low){
+                ratings += "3 ";
+            } else {
+                ratings += "0 ";
+            }
+        });
+            
+       
+    if(ocPar){
+        // handle OC questions here, i.e. questions where all children
+        // need to be confirmed to get the parent confirmed
+        if(ratings.indexOf("1") != -1 &&
+            ratings.indexOf("0")==-1 && ratings.indexOf("2")==-1 && ratings.indexOf("3")==-1){
+            color = "1";  // only approve if there are solely approve-children
+        } else if (ratings.indexOf("2") != -1 && 
+            ratings.indexOf("0")==-1 && ratings.indexOf("3")==-1){
+            color = "2";  // only suspect if there are no contradictions and no undecideds
+        } else if (ratings.indexOf("3") != -1 &&
+            ratings.indexOf("0") == -1){
+            color = "3";
+        } else {
+            color = "0";
+        }
+           
+    } else if (mcPar){
+        // handle MC questions here, i.e. questions where only one
+        // child is enough to get the parent confirmed      
+        if(ratings.indexOf("1") != -1){
+            color = "1";  
+        } else if (ratings.indexOf("2") != -1 && ratings.indexOf("1") == -1){
+            color = "2";
+        } else if (ratings.indexOf("3") != -1 && ratings.indexOf("2") == -1
+            && ratings.indexOf("1") == -1){
+            color = "3";
+        } else {
+            color = "0";
+        }
+    }
+    return color;
+}
+
+/*
+ * Compares the user-chosen and kbs-calculated color/rating values
+ */
+function equalUserAndKBSRating(question, chosenColor){
+    
+    if(!chosenColor == calculateRatingForQuestion(question)){
+        return false;
+    } 
+    return true;
 }
 
 /**
@@ -1093,11 +1184,6 @@ function hideAuxInfo(){
  */
 function h4boxes_mark(object, skip_self) {
 
-    // rating: low =    red REJECT,     3
-    //         medium = yellow SUSPECT, 2
-    //         high =   green APPROVE,  1
-    //         undec =  grey UNKNOWN    0 
-    // 
     // check object itself unless skip_self
     if (!skip_self) {
 		
@@ -1109,78 +1195,13 @@ function h4boxes_mark(object, skip_self) {
         // go through all child-questions and read their ratings into a var
         var ratings = "";
         
-        $("#sub-" + object.attr('id')).children("div[id^='q_']").each(
-            function() {
-                var high = $(this).hasClass("rating-high");
-                var med = $(this).hasClass("rating-medium");    
-                var low = $(this).hasClass("rating-low");
-                
-                if(high){
-                    ratings += "1 ";
-                } else if (med){
-                    ratings += "2 ";
-                } else if (low){
-                    ratings += "3 ";
-                } else {
-                    ratings += "0 ";
-                }
-        });
-            
-       
-        if(ocPar){
-            // handle OC questions here, i.e. questions where all children
-            // need to be confirmed to get the parent confirmed
-            if(ratings.indexOf("1") != -1 &&
-                ratings.indexOf("0")==-1 && ratings.indexOf("2")==-1 && ratings.indexOf("3")==-1){
-                color = 1;  // only approve if there are solely approve-children
-            } else if (ratings.indexOf("2") != -1 && 
-                ratings.indexOf("0")==-1 && ratings.indexOf("3")==-1){
-                color = 2;  // only suspect if there are no contradictions and no undecideds
-            } else if (ratings.indexOf("3") != -1 &&
-                ratings.indexOf("0") == -1){
-                color = 3;
-            } else {
-                color = 0;
-            }
-           
-        } else if (mcPar){
-            // handle MC questions here, i.e. questions where only one
-            // child is enough to get the parent confirmed      
-            if(ratings.indexOf("1") != -1){
-                color = 1;  
-            } else if (ratings.indexOf("2") != -1 && ratings.indexOf("1") == -1){
-                color = 2;
-            } else if (ratings.indexOf("3") != -1 && ratings.indexOf("2") == -1
-                && ratings.indexOf("1") == -1){
-                color = 3;
-            } else {
-                color = 0;
-            }
-        }
+        color = calculateRatingForQuestion(object);
           
         // retrieve target element and target image
         var target = $("#" + $(object).attr('id'));
         var imgTarget = $("#panel-" + $(object).attr('id'));
-        // remove old classes
-        target.removeClass('rating-low rating-medium rating-high');
-        // set new class
-        switch (color) {
-            case 1: // approve --> green
-                target.addClass("rating-high");
-                imgTarget.attr('src', "img/panel1.gif");
-                break;
-            case 0: // undecided --> transparent
-                imgTarget.attr('src', "img/panel4.gif");
-                break;
-            case 2: // suggested  --> yellow
-                target.addClass("rating-medium");
-                imgTarget.attr('src', "img/panel3.gif");
-                break;
-            case 3: // rejected -_> red
-                target.addClass("rating-low");
-                imgTarget.attr('src', "img/panel2.gif");
-                break;
-        }
+        
+        setColorForQuestion(target, imgTarget, color);
     }
 
     // get first parent div
@@ -1204,6 +1225,8 @@ function h4boxes_mark(object, skip_self) {
         h4boxes_mark($(this), false);
     });
 }
+
+
 
 /**
  * REMOVE?!
