@@ -65,7 +65,7 @@ public class NonTerminalList extends AbstractType {
 
 			String trimmed = text.trim();
 
-			if (text.contains(Character.toString(COMMA))) {
+			if (indexOfUnbraced(text, Character.toString(COMMA)) > 0) {
 				List<SectionFinderResult> results = new ArrayList<SectionFinderResult>();
 
 				// Comma should be marked as PlainText
@@ -115,6 +115,44 @@ public class NonTerminalList extends AbstractType {
 				return results; // return found results
 			}
 			return null;
+		}
+
+		/**
+		 * Scan the given text for the (first) occurrence of the given symbol,
+		 * which is not braced by any brace declared above.
+		 *
+		 * @param String text
+		 * @param String symbol
+		 * @return -1 if symbol could not be found, otherwise index of the
+		 *         position the symbol could be found
+		 */
+		private int indexOfUnbraced(String text, String symbol) {
+			int braced = 0;
+			for (int i = 0; i < text.length(); i++) {
+
+				switch (text.charAt(i)) {
+				case LEFT_PARENTHESIS:
+				case LEFT_CURLY_BRACKET:
+				case LEFT_SQUARE_BRACKET:
+					braced++;
+					break;
+				case RIGHT_PARENTHESIS:
+				case RIGHT_CURLY_BRACKET:
+				case RIGHT_SQUARE_BRACKET:
+					braced--;
+					break;
+				}
+
+				if (braced > 0) {
+					continue;
+				}
+
+				if ((i + symbol.length() <= text.length())
+						&& text.subSequence(i, i + symbol.length()).equals(symbol)) {
+					return i;
+				}
+			}
+			return -1;
 		}
 	}
 }

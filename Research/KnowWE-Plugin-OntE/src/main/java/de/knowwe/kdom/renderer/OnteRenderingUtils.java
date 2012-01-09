@@ -111,28 +111,43 @@ public class OnteRenderingUtils {
 			s.append("<span style=\"font-size:9px;padding-left:10px;\">(Defined in: ");
 		}
 
-		boolean isPredefined = IncrementalCompiler.getInstance().getTerminology().isPredefinedObject(
-				term.getOriginalText());
-
-		if (isPredefined) {
-			s.append(term.getOriginalText());
-		}
-		else {
-			s.append("<a href=\"Wiki.jsp?page=");
-
-			boolean isImported = IncrementalCompiler.getInstance().getTerminology().isImportedObject(
-					term.getOriginalText());
-			if (isImported) {
-				Section<?> importSection = ImportManager.resolveImportSection(term.getOriginalText());
-				s.append(importSection.getTitle());
-			}
-			else {
-				s.append(term.getTitle());
-			}
+		String href = getHyperlink(term.getOriginalText());
+		if (!href.isEmpty()) {
+			s.append("<a href=\"").append(href);
 			s.append("\" title=\"Goto definition article\">");
 			s.append(term.getOriginalText());
 			s.append("</a>");
 		}
+		else {
+			// predefined
+			s.append(term.getOriginalText());
+		}
+
+		// boolean isPredefined =
+		// IncrementalCompiler.getInstance().getTerminology().isPredefinedObject(
+		// term.getOriginalText());
+		//
+		// if (isPredefined) {
+		// s.append(term.getOriginalText());
+		// }
+		// else {
+		// s.append("<a href=\"Wiki.jsp?page=");
+		//
+		// boolean isImported =
+		// IncrementalCompiler.getInstance().getTerminology().isImportedObject(
+		// term.getOriginalText());
+		// if (isImported) {
+		// Section<?> importSection =
+		// ImportManager.resolveImportSection(term.getOriginalText());
+		// s.append(importSection.getTitle());
+		// }
+		// else {
+		// s.append(term.getTitle());
+		// }
+		// s.append("\" title=\"Goto definition article\">");
+		// s.append(term.getOriginalText());
+		// s.append("</a>");
+		// }
 
 		if (!raw) {
 			s.append(")</span>");

@@ -176,14 +176,16 @@ public class OWLApiQueryRenderer<T extends AbstractType> extends KnowWEDomRender
 				else {
 					a = AxiomFactory.getOWLAPIEntityDeclaration(entity);
 				}
+
 				section = OWLApiAxiomCache.getInstance().lookUpSection(
 						a, OWLApiAxiomCache.STORE_CACHE);
 
 				string.append("<li>");
 				String conceptName = OnteRenderingUtils.getDisplayName(entity);
-				// String link = OnteRenderingUtils.renderHyperlink(section);
-				// string.append(link);
-				OWLApiTagHandlerUtil.renderHyperlink(conceptName, section, string);
+
+				String href = OnteRenderingUtils.renderHyperlink(conceptName, true);
+				string.append(href);
+
 				string.append("</li>");
 			}
 		}

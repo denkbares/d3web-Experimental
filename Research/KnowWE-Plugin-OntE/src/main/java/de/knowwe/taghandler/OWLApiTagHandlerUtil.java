@@ -530,6 +530,9 @@ public class OWLApiTagHandlerUtil {
 			doc.append(conceptName);
 			doc.append("</a>");
 		}
+		else {
+			doc.append(conceptName);
+		}
 	}
 
 }
