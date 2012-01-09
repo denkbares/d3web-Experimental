@@ -170,7 +170,7 @@ public class EuraHSDialog extends D3webDialog {
 	}
 
 	private synchronized String generateCaseNumber(String persistenceFileName) {
-		String fileName = GlobalSettings.getInstance().getCaseFolder() + File.separator + ".."
+                String fileName = GlobalSettings.getInstance().getCaseFolder() + File.separator + ".."
 				+ File.separator + persistenceFileName + ".txt";
 		String persistence = readTxtFile(fileName);
 		int numberOfCases = 0;

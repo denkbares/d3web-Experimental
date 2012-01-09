@@ -8,7 +8,7 @@ body,div {
 	text-color: black;
 }
 
-#content {float: none;margin-left: auto; margin-right: auto; width="70%";
+#content {float: none;margin-left: auto; margin-right: auto; width: 85%;
     clear: both; padding-top: 35px;}
 
 #right {display: none;}
@@ -38,19 +38,19 @@ padding: 10px;
 
 #dialog{
     float: left;
-    width: 70%;
-    margin-top: 60px;
+    width: 60%;
+    margin-top: 80px;
 }
 
 #auxpanel{
     background-color: #fffff0;
-    width: 20%;
-    height: 100px;
+    width: 25%;
+    height: 200px;
     -moz-box-shadow: 0 0 3.5px black;
 	-webkit-box-shadow: 0 0 3.5px black;
 	box-shadow: 0 0 3.5px black;
     position: fixed;
-    right: 170px;
+    right: 65px;
     padding: 10px;
     margin-top: 80px;
 }

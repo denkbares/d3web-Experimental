@@ -129,8 +129,11 @@ JuriSearch
 DONE - Zusatzinfo-Kasten: mitscrollen lassen?! --> erstmal fixed
 DONE - Additional Info for more questions, more content
 DONE - Also show aux info when mouseovering the arrow
-- Unterscheidung und/oder Fragen!!!
+DONE - Unterscheidung und/oder Fragen prototyping!!!
 DONE - Refactor IDs: answer type of legal questions is set twice
+
+- Add notification if user sets parent-rating that contradicts calculated child-rating
+- Refactor Hierarchy prototypes as to use own attributes AND/OR instead of OC/MC 
 
 KLÄREN ALBRECHT:
 ----------------
