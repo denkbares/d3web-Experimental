@@ -612,12 +612,12 @@ function d3web_addFacts() {
     }
 	
     for (var qid in textStore) {
-        link = link.set("question" + i, qid).set("value" + i, textStore[qid]);
+        link = link.set("question" + i, qid).set("value" + i, encodeURI(textStore[qid]));
         i++;
     }
 	
     for (var qid in numStore) {
-        link = link.set("question" + i, qid).set("value" + i, numStore[qid]);
+        link = link.set("question" + i, qid).set("value" + i, encodeURI(numStore[qid]));
         i++;
     }
     
