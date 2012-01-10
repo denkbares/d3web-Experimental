@@ -81,6 +81,30 @@ function setup() {
         show_first_questionnaire();
     }
     highlight_sidenav();	// style sidenav 
+    
+
+    if(hierarchy){
+        expandFirstmostElement();
+    }
+    
+}
+
+/**
+ * Retrieve the first element in hierarchical dialogs and expand it on startup
+ * Used e.g. in hierarchy (legal) dialog
+ */
+function expandFirstmostElement(){
+    
+    $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements
+        
+        var first = $(this).attr("id"); // get question id
+        
+        if($(this).attr("id")!=undefined){  
+               
+            toggle_sub_4boxes(first);   // expand the first element
+        }
+      
+    });
 }
 
 /**
@@ -1014,18 +1038,24 @@ function toggle_folder_image_4boxes(id) {
 function h4boxes(value, id) {
     if (!d3web) {
 		
+        alert(value + " " + id);
         // get dialog item
         var item = $("#" + id);
 	
         // get the first ancestor, i.e. the first upper question
         var target = $(item).closest("div[id^='q_']");
+        
+        // set image attribute to the correctly selected one
+        item.attr('src', "img/pane" + value + ".png");
+        
 
         // check whether the calculated rating contradicts the user-chosen rating
-        if(hasChildrenHierachical(target)){
+        // VORLÄUFIG RAUSLASSEN
+        /*if(hasChildrenHierachical(target)){
             if(!equalUserAndKBSRating(target, value)){
                 alert("Ratings stimmen nicht überein!")
             }
-        }
+        }*/
         
         setColorForQuestion(target, item, value);
         
@@ -1059,9 +1089,6 @@ function setColorForQuestion(target, imgTarget, color){
     // remove existing rating=coloring classes
     target.removeClass('rating-low rating-medium rating-high');
     
-    // set image attribute to the correctly selected one
-    imgTarget.attr('src', "img/panel" + color + ".gif");
-        
     switch (color) {
         case "1": // approve --> green
             target.addClass("rating-high");
@@ -1175,23 +1202,30 @@ function hasChildrenHierachical(question){
  * Show the auxiliary information for element with id "id" in the infopanel
  * element
  */
-function showAuxInfo(id){
+function showAuxInfo(id, title){
     
     // get infotext stored in additional, invisible sub-element of current q
     var infoid = "#bonus-"+id;
+    if(title==undefined){
+        title = "";
+    }
+    var auxHeader = "<b>Informationen zu [" + title + "]:</b> <br /><br />";
     var auxinfo = $(infoid).html();
     
     // rewrite inner HTML of infopanel widget with info content
     if(auxinfo==""){
-        auxinfo = "No additional information available for current dialog element."
+        auxinfo = "-";
     } 
-    $("#infopanel").html(auxinfo);
+    
+    $("#auxHeader").html(auxHeader);
+    $("#auxInfo").html(auxinfo);
 }
 
 function hideAuxInfo(){
     
     // clear infopanel
-    $("#infopanel").html("No additional information available for current dialog element.");
+    $("#auxHeader").html("<b>Informationen zu []:</b> <br /><br />");
+    $("#auxInfo").html("-");
 }
 
 /**
@@ -1217,7 +1251,7 @@ function h4boxes_mark(object, skip_self) {
           
         // retrieve target element and target image
         var target = $("#" + $(object).attr('id'));
-        var imgTarget = $("#panel-" + $(object).attr('id'));
+        var imgTarget = $("#pane-" + $(object).attr('id'));
         
         setColorForQuestion(target, imgTarget, color);
     }

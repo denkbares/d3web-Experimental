@@ -39,7 +39,7 @@ padding: 10px;
 #dialog{
     float: left;
     width: 60%;
-    margin-top: 80px;
+    margin-top: 50px;
 }
 
 #auxpanel{

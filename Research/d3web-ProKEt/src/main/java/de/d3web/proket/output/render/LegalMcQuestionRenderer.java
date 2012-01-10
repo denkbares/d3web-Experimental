@@ -25,7 +25,9 @@ import java.util.Vector;
 import org.antlr.stringtemplate.StringTemplate;
 
 import de.d3web.proket.data.IDialogObject;
+import de.d3web.proket.data.Question;
 import de.d3web.proket.output.container.ContainerCollection;
+import de.d3web.proket.utils.TemplateUtils;
 
 /**
  * 
@@ -59,7 +61,7 @@ public class LegalMcQuestionRenderer extends Renderer {
 			if (dialogObject.getChildren().size() == 0) {
 
 			}
-
+                        
                         // workaround for removing a doubled-answertype setting in template
                         st.removeAttribute("answerType");
 			st.setAttribute("answerType", dialogObject

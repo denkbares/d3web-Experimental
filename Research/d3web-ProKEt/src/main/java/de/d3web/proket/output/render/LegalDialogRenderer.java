@@ -34,5 +34,6 @@ public class LegalDialogRenderer extends DialogRenderer {
 	protected void globalJS(ContainerCollection cc, Dialog dialog) {
 		super.globalJS(cc, dialog);
 		cc.js.add("renderCurrentDone = false;", 0);
+                cc.js.setHierarchy();
 	}
 }

@@ -43,6 +43,7 @@ public class JSCodeContainer implements ICodeContainer {
 	private boolean usrdatLogin = false;
 	private boolean dbLogin = false;
 	private boolean logging = false;
+        private boolean hierarchy = false;
 
 	@Override
 	public void add(String data) {
@@ -60,6 +61,9 @@ public class JSCodeContainer implements ICodeContainer {
 		sb.append(newData).append("\n"); // add to existing sb
 	}
 
+        public void setHierarchy(){
+            hierarchy = true;
+        }
 	/**
 	 * Some setters for enabling specific settings: d3web, dateanswers,
 	 * imagequestions --- for eased usage in the Renderers
@@ -165,6 +169,12 @@ public class JSCodeContainer implements ICodeContainer {
 			add("var logging = false;", 0);
                        
 		}
+                
+                if(hierarchy){
+                    add("var hierarchy = true", 0);
+                } else {
+                    add("var hierarchy = false", 0);
+                }
 		// SECOND assemble bibs and singular js data to a string
 		// assemble all defined bibs to one String
 		for (String filename : linkedBibs) {

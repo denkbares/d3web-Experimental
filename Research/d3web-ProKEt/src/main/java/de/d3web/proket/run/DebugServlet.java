@@ -149,7 +149,7 @@ public class DebugServlet extends HttpServlet {
 
 		// load the dialog into memory
 		DialogTree dialogTree = parser.getTree();
-		System.out.println("Tree parsed:\n" + dialogTree);
+		//System.out.println("Tree parsed:\n" + dialogTree);
 
 		StringTemplate dialogTemplate = TemplateUtils.getStringTemplate(
 				"DebugDialog", "html");

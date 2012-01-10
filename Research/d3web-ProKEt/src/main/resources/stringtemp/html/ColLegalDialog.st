@@ -13,10 +13,9 @@ $HTMLHeader()$
 
     
     <div id="intro">
-           Dieser Dialog bewertet die Diagnose "Arbeitsverhältnis ist wirksam und termingerecht gekündigt worden".
-            Um (weitere) klärende Fragen - in Aussagenform - auszuklappen und zu beantworten, klicken Sie auf das ">" (Pfeil) Symbol.
-            Bitte bewerten Sie die nachfolgenden Aussagen nach dem Schema "trifft zu" (Haken), "trifft nicht zu" (Kreuz),
-	    oder "weiß nicht" (Fragezeichen). Um eine Antwort zurückzunehmen klicken Sie das leere Quadrat.
+           Wenn Sie die Maus über den Text einer Frage bewegen, bekommen Sie dazu rechts Zusatzinformationen angezeigt. 
+           Wenn Sie eine Frage nicht direkt beantworten können, klicken Sie auf das Dreieck vor der Frage: dann werden
+           detailliertere Fragen dazu eingeblendet. 
     </div>
     
     <div id="dialog">
@@ -24,8 +23,12 @@ $HTMLHeader()$
     </div>
 
     <div id="auxpanel">
-        <div id="infopanel">
-          No additional information available for current dialog element.
+        <div id="auxHeader">
+        <b>Informationen zu []:</b> <br /><br />
+        </div>
+        
+        <div id="auxInfo">
+        -
         </div>
     </div>
     

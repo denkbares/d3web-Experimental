@@ -137,7 +137,7 @@ public class DialogServlet extends HttpServlet {
 		DialogTree dialogTree;
 		try {
 			dialogTree = parseInput(request, response, writer);
-			System.out.println("Tree parsed:\n" + dialogTree);
+			//System.out.println("Tree parsed:\n" + dialogTree);
 		}
 		catch (ParseException e) {
 			writer.append(e.getLocalizedMessage());

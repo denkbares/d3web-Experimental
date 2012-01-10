@@ -21,6 +21,7 @@ package de.d3web.proket.d3web.run;
 
 import de.d3web.core.session.Session;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.ue.log.JSONLogger;
 import de.d3web.proket.utils.GlobalSettings;
 import java.text.SimpleDateFormat;
@@ -119,8 +120,11 @@ public class D3webServletLogUtils {
      */
     protected static void logWidget(HttpServletRequest request) {
         // TODO need to check here in case IDs are reworked globally one day
-        String widgetID = request.getParameter("widget").replace("+", " ");
+        String widgetID = 
+                AbstractD3webRenderer.getObjectNameForId(
+                request.getParameter("widget"));
         String time = request.getParameter("timestring").replace("+", " ");
+        
 
         if (request.getParameter("language") != null) {
             String language = request.getParameter("language");
@@ -176,8 +180,10 @@ public class D3webServletLogUtils {
      */
     protected static void logQuestionValue(String question, String value, HttpServletRequest request) {
         String logtime = request.getParameter("timestring").replace("+", " ");
-        logger.logClickedObjects(
-                question, logtime, value);
+         logger.logClickedObjects(
+                AbstractD3webRenderer.getObjectNameForId(question), 
+                logtime, 
+                AbstractD3webRenderer.getObjectNameForId(value));
         logger.writeJSONToFile(logfilename);
     }
 }
