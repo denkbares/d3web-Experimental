@@ -87,45 +87,13 @@ public class DecisionTable extends ITable {
 				return null;
 
 			// TODO Right KnowledgeBase?
-			//			Section<DecisionTableMarkup> mark = Sections.findAncestorOfExactType(
-			//					decisionSec, DecisionTableMarkup.class);
-			//			String packageName = DefaultMarkupType.getAnnotation(mark, "package");
-			//			KnowledgeBase kb = D3webUtils.getKB(decisionSec.getWeb(), packageName + " - master");
-			// get the article compiling this cell
 			StringBuilder content = new StringBuilder();
 			KnowWEArticle compilingArticle = PackageRenderUtils.checkArticlesCompiling(decisionSec.getArticle(), decisionSec, content);
 			KnowledgeBase kb = D3webUtils.getKB(decisionSec.getWeb(), compilingArticle.getTitle());
 
-			// Create all Questions
-			// TODO First Cell is no Question: Removed it! But what if empty?
-			List<Section<TableCell>> firstColumn = TableUtils.getColumnCells(
-					0, Sections.findChildOfType(decisionSec, InnerTable.class));
-
-			//			LinkedList<Question> questionList = new LinkedList<Question>();
-			//			for (Section<TableCell> cell : firstColumn)
-			//			{
-			//				String questionText = cell.getText().trim();
-			//				// Markup now has a empty line to seperate the Conditions from the diagnoses
-			//				if (questionText.equals("")) continue;
-			//				Question q = kb.getManager().searchQuestion(questionText);
-			//				if (q == null)
-			//				{
-			//					QuestionYN question = new QuestionYN(kb, questionText);
-			//					questionList.add(question);
-			//				}
-			//				else
-			//				{
-			//					questionList.add(q);
-			//				}
-			//			}
-			LinkedList<String> questionList = new LinkedList<String>();
-			for (Section<TableCell> cell : firstColumn)
-			{
-				String questionText = cell.getText().trim();
-				// Markup now has a empty line to seperate the Conditions from the diagnoses
-				if (questionText.equals("")) continue;
-				questionList.add(questionText);
-			}
+			// Collect all text values from first column
+			LinkedList<String> firstColumnsQuestionStringList = this.getConditionStringsFirstColumn(decisionSec);
+			LinkedList<String> firstColumnsActionStringList = this.getActionStringsFirstColumn(decisionSec);
 
 			// Collect cells for columns
 			// TODO Check if header misses 1st Tablecell
@@ -133,89 +101,42 @@ public class DecisionTable extends ITable {
 
 			// Do for every column
 			LinkedList<Section<TableCell>> column = null;
-			for (int i = 1; i < cellCount; i++) {
+			for (int i = 1; i < cellCount; i++)
+			{
 				column = new LinkedList<Section<TableCell>>(
 						TableUtils.getColumnCells(
 								i, Sections.findChildOfType(decisionSec, InnerTable.class)));
-				// Remove RuleName
-				//				column.removeFirst();
 
-				// create rule choices
-				Section<TableCell> cell = null;
-				List<ChoiceValue> choices = new ArrayList<ChoiceValue>();
-				while (true)
+				// Create all conditions from choices and questions
+				List<ChoiceValue> choices = this.getRuleChoices(column);
+				List<Question> questionList = new LinkedList<Question>();
+				for (int j = 0; j < firstColumnsQuestionStringList.size(); j++)
 				{
-					cell = column.get(0);
-					String cellText = cell.getText().trim();
-
-					// only until we get to the actions
-					if (cellText.equals("x") || cellText.equals("")) break;
-
-					column.removeFirst();
-
-					ChoiceValue choice = null;
-					if (cellText.equals("Yes"))
-						choice = new ChoiceValue("YES");
-					else if (cellText.equals("No"))
-						choice = new ChoiceValue("NO");
-					choices.add(choice);
+					String questionText = firstColumnsQuestionStringList.get(j);
+					ChoiceValue value = choices.get(j);
+					questionList.add(this.createQuestion(kb, questionText, value));
 				}
 
-				// create condition from choices
-				List<Condition> conditions = new ArrayList<Condition>();
-				for (int j = 0; j < choices.size(); j++)
-				{
-					// TODO Condition can be any condition: dependent on choice-value
-					Question q = kb.getManager().searchQuestion(questionList.get(j));
-					if (q == null)
-					{
-						q = new QuestionYN(kb, questionList.get(j));
-					}
-
-					CondEqual cond = new CondEqual(q, choices.get(j));
-					conditions.add(cond);
-				}
+				List<Condition> conditions = this.getRuleConditions(kb, questionList, choices);
 
 				// Get the Actions from the rest of TableCells
 				// TODO Right ChoiceValue set?
 				List<ActionSetValue> actions = new ArrayList<ActionSetValue>();
 				ActionSetValue action = null;
-				// int to get the right questions for actions
-				int b = choices.size();
-				//				if ( cell != null )
-				//				{
-				//					if ( cell.getText().trim().equals("x") )
-				//					{
-				//						action = new ActionSetValue();
-				//						action.setQuestion(questionList.get(b));
-				//						action.setValue(new ChoiceValue(cell.getText().trim()));
-				//						actions.add(action);
-				//					}
-				//					b++;
-				//				}
 
-				while (!column.isEmpty())
+				int bla = firstColumnsQuestionStringList.size();
+				for (int k = bla; k < choices.size(); k++)
 				{
-					cell = column.removeFirst();
-					String cellText = cell.getText().trim();
+					int bla2 = k -bla;
+					String actionText = firstColumnsActionStringList.get(bla2);
 
 					// action not to fire
-					if (cellText.equals(""))
-					{
-						b++;
+					if (choices.get(k) == null)
 						continue;
-					}
-					action = new ActionSetValue();
 
-					// TODO Condition can be any condition: dependent on choice-value
-					Question q = kb.getManager().searchQuestion(questionList.get(b));
-					if (q == null)
-					{
-						q = new QuestionYN(kb, questionList.get(b));
-					}
-					b++;
-					action.setQuestion(q);
-					action.setValue(new ChoiceValue(cell.getText().trim()));
+					action = new ActionSetValue();
+					action.setQuestion(this.createQuestion(kb, actionText, choices.get(k)));
+					action.setValue(choices.get(k));
 					actions.add(action);
 				}
 
@@ -235,6 +156,159 @@ public class DecisionTable extends ITable {
 
 			}
 			return null;
+		}
+
+
+		/**
+		 * 
+		 * Creates all ChoiceValues for a column.
+		 * Element is null if no ChoiceValue for this position
+		 * is available.
+		 * 
+		 * @created 11.01.2012
+		 * @param column
+		 * @return
+		 */
+		private List<ChoiceValue> getRuleChoices(LinkedList<Section<TableCell>> column)
+		{
+			Section<TableCell> cell = null;
+			List<ChoiceValue> choices = new ArrayList<ChoiceValue>();
+			boolean actions = false;
+			while (!column.isEmpty())
+			{
+				cell = column.removeFirst();
+				String cellText = cell.getText().trim();
+
+				if (cellText.equals("") && !actions)
+				{
+					actions=true;
+					continue;
+				}
+
+				// TODO what to do if it is a action: See createChoiceValue
+				ChoiceValue choice = this.createChoiceValue(cellText);
+				choices.add(choice);
+			}
+
+			return choices;
+		}
+
+		/**
+		 * 
+		 * 
+		 * @created 11.01.2012
+		 * @param kb
+		 * @param questions
+		 * @param choices
+		 * @return
+		 */
+		private List<Condition> getRuleConditions(KnowledgeBase kb, List<Question> questions, List<ChoiceValue> choices)
+		{
+			List<Condition> conditions = new ArrayList<Condition>();
+			for (int j = 0; j < questions.size(); j++)
+			{
+				// TODO Condition can be any condition: dependent on choice-value
+				if (questions.get(j) == null) continue;
+				Question q = kb.getManager().searchQuestion(questions.get(j).getName());
+				if ( (q == null) || (choices.get(j) == null) ) continue;
+
+				CondEqual cond = new CondEqual(q, choices.get(j));
+				conditions.add(cond);
+			}
+
+			return conditions;
+		}
+
+
+		/**
+		 * Collects all actiontexts that the DecisionTable
+		 * contains after the empty line.
+		 * 
+		 * @created 11.01.2012
+		 * @param decisionSec
+		 * @return
+		 */
+		private LinkedList<String> getActionStringsFirstColumn(Section<DecisionTable> decisionSec)
+		{
+			List<Section<TableCell>> firstColumn = TableUtils.getColumnCells(
+					0, Sections.findChildOfType(decisionSec, InnerTable.class));
+
+			LinkedList<String> questionList = new LinkedList<String>();
+			boolean add = false;
+			for (Section<TableCell> cell : firstColumn)
+			{
+				String questionText = cell.getText().trim();
+				if (questionText.equals(""))
+				{
+					add = true;
+					continue;
+				}
+				if (add) questionList.add(questionText);
+			}
+			return questionList;
+		}
+
+
+		/**
+		 * Collects all cell text until it reaches the empty line
+		 * of the DecisionTable.
+		 * 
+		 * @created 11.01.2012
+		 * @param decisionSec
+		 * @return
+		 */
+		private LinkedList<String> getConditionStringsFirstColumn(Section<DecisionTable> decisionSec)
+		{
+			List<Section<TableCell>> firstColumn = TableUtils.getColumnCells(
+					0, Sections.findChildOfType(decisionSec, InnerTable.class));
+
+			LinkedList<String> questionList = new LinkedList<String>();
+			for (Section<TableCell> cell : firstColumn)
+			{
+				String questionText = cell.getText().trim();
+				if (questionText.equals("")) break;
+				questionList.add(questionText);
+			}
+			return questionList;
+		}
+
+
+		/**
+		 * 
+		 * @created 23.12.2011
+		 * @param cellText
+		 */
+		private ChoiceValue createChoiceValue(String cellText)
+		{
+			ChoiceValue choice = null;
+			if (cellText.equals("Yes"))
+				choice = new ChoiceValue("YES");
+			else if (cellText.equals("No"))
+				choice = new ChoiceValue("NO");
+			else if (cellText.equals("x"))
+				choice = new ChoiceValue("X");
+			return choice;
+		}
+
+
+		/**
+		 * 
+		 * Creates right QuestionType according to ChoiceValueType
+		 * 
+		 * @created 23.12.2011
+		 * @param kb
+		 * @param questionText
+		 * @param choiceValue
+		 * @return
+		 */
+		private Question createQuestion(KnowledgeBase kb, String questionText, ChoiceValue choiceValue)
+		{
+			if (choiceValue == null) return null;
+
+			Question q = kb.getManager().searchQuestion(questionText);
+			if (q == null)
+				q = new QuestionYN(kb, questionText);
+			return q;
 		}
 
 	}
