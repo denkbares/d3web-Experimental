@@ -180,9 +180,6 @@ public class D3webDialog extends HttpServlet {
 			d3wcon.setSingleSpecs(d3webParser.getSingleSpecs());
 			d3wcon.setLoginMode(d3webParser.getLogin());
 
-			// if a new dialog is loaded we also need a new session to start
-			resetD3webSession(httpSession);
-
 			// switch on/off logging depending on xml specification
 			if (d3webParser.getLogging().contains("ON")) {
 				d3wcon.setLogging(true);
@@ -210,9 +207,17 @@ public class D3webDialog extends HttpServlet {
 					GLOBSET.getServletBasePath()
 							+ "../../" + userpref + "-Data/logs");
 
+			// if a new dialog is loaded we also need a new session to start
+			resetD3webSession(httpSession);
+
 			// stream images from KB into webapp
 			GLOBSET.setKbImgFolder(GLOBSET.getServletBasePath() + "kbimg");
 			D3webUtils.streamImages();
+		}
+
+		// if session is null create a session d
+		if (httpSession.getAttribute(D3WEB_SESSION) == null) {
+			resetD3webSession(httpSession);
 		}
 
 		// in case nothing other is provided, "show" is the default action

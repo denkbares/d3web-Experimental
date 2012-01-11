@@ -68,7 +68,7 @@ public class EuraHSDialog extends D3webDialog {
 	private static final long serialVersionUID = -4790211381203716706L;
 
 	@Override
-	protected String getSource(HttpServletRequest request){
+	protected String getSource(HttpServletRequest request) {
 		return "Hernia";
 	}
 
@@ -170,7 +170,7 @@ public class EuraHSDialog extends D3webDialog {
 	}
 
 	private synchronized String generateCaseNumber(String persistenceFileName) {
-                String fileName = GlobalSettings.getInstance().getCaseFolder() + File.separator + ".."
+		String fileName = GlobalSettings.getInstance().getCaseFolder() + File.separator + ".."
 				+ File.separator + persistenceFileName + ".txt";
 		String persistence = readTxtFile(fileName);
 		int numberOfCases = 0;
@@ -188,7 +188,7 @@ public class EuraHSDialog extends D3webDialog {
 	private static String readTxtFile(String fileName) {
 		StringBuffer inContent = new StringBuffer();
 		File file = new File(fileName);
-                if (file.exists()) {
+		if (file.exists()) {
 			try {
 				BufferedReader bufferedReader = new BufferedReader(
 						new InputStreamReader(new FileInputStream(file)));
@@ -208,10 +208,8 @@ public class EuraHSDialog extends D3webDialog {
 
 	private static void writeTxtFile(String fileName, String content) {
 		try {
-			File file = new File(fileName);
-			if (!file.getParentFile().exists()) {
-				file.getParentFile().mkdirs();
-			}
+			File file = new File(fileName).getCanonicalFile();
+			file.getParentFile().mkdirs();
 			FileWriter fstream = new FileWriter(file);
 			BufferedWriter out = new BufferedWriter(fstream);
 			out.write(content);
