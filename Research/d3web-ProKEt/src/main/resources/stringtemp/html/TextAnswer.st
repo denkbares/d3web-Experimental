@@ -2,7 +2,9 @@
 	$title$
 	
 	$if(readonly)$
-		<$if(longtext)$textarea$else$input$endif$ id="f_$fullId$" type="readonly" $if(selection)$value="$selection$"$endif$ title="$title$" $if(longtext)$style="width: 100%; height: 100px"$endif$ />
+		<$if(longtext)$textarea$else$input$endif$ id="f_$fullId$" 
+				type="readonly" $if(selection)$value="$selection$"$endif$
+				title="$title$" $if(longtext)$style="width: 100%; height: 100px"$else$/$endif$>$if(longtext)$$selection$$endif$</$if(longtext)$textarea$else$input$endif$>
 	$else$
 		$if (dropdown_menu)$
 		$dropdown_menu$
