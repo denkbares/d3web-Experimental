@@ -8,6 +8,7 @@ ObjectProperty: hasSibling
         Symmetric
 
 
+
 ObjectProperty: hasSex
 
     Characteristics: 
@@ -17,16 +18,19 @@ ObjectProperty: hasSex
         Sex
 
 
+
 ObjectProperty: hasParent
 
     InverseOf: 
         hasChild
 
 
+
 ObjectProperty: hasChild
 
     InverseOf: 
         hasParent
+
 
 
 Class: GrandFather
@@ -39,10 +43,12 @@ Class: GrandFather
          AND (hasSex VALUE MaleSex)
 
 
+
 Class: Female
 
     EquivalentTo: 
         hasSex VALUE FemaleSex
+
 
 
 Class: Parent
@@ -50,6 +56,7 @@ Class: Parent
     EquivalentTo: 
         Person
          AND (hasChild SOME Person)
+
 
 
 Class: Mother
@@ -60,11 +67,13 @@ Class: Mother
          AND (hasSex VALUE FemaleSex)
 
 
+
 Class: Woman
 
     EquivalentTo: 
         Person
          AND (hasSex VALUE FemaleSex)
+
 
 
 Class: Brother
@@ -75,6 +84,7 @@ Class: Brother
          AND (hasSex VALUE MaleSex))
 
 
+
 Class: Father
 
     EquivalentTo: 
@@ -83,16 +93,19 @@ Class: Father
          AND (hasSex VALUE MaleSex)
 
 
+
 Class: Male
 
     EquivalentTo: 
         hasSex VALUE MaleSex
 
 
+
 Class: Sex
 
     EquivalentTo: 
         {FemaleSex , MaleSex}
+
 
 
 Class: GrandMother
@@ -105,6 +118,7 @@ Class: GrandMother
          AND (hasSex VALUE FemaleSex)
 
 
+
 Class: Son
 
     EquivalentTo: 
@@ -113,7 +127,9 @@ Class: Son
          AND (hasSex VALUE MaleSex)
 
 
+
 Class: Person
+
 
 
 Class: GrandParent
@@ -125,6 +141,7 @@ Class: GrandParent
              AND (hasChild SOME Person)))
 
 
+
 Class: Daughter
 
     EquivalentTo: 
@@ -133,11 +150,13 @@ Class: Daughter
          AND (hasSex VALUE FemaleSex)
 
 
+
 Class: Man
 
     EquivalentTo: 
         Person
          AND (hasSex VALUE MaleSex)
+
 
 
 Class: Sister
@@ -148,11 +167,13 @@ Class: Sister
          AND (hasSex VALUE FemaleSex)
 
 
+
 Class: OffSpring
 
     EquivalentTo: 
         Person
          AND (hasParent SOME Person)
+
 
 
 Class: Sibling
@@ -162,10 +183,12 @@ Class: Sibling
          AND (hasSibling SOME Person)
 
 
+
 Individual: FemaleSex
 
     Types: 
         Sex
+
 
 
 Individual: Matthew
@@ -175,6 +198,7 @@ Individual: Matthew
 
     SameAs: 
         Matt
+
 
 
 Individual: Peter
@@ -188,6 +212,7 @@ Individual: Peter
      hasParent  William
 
 
+
 Individual: William
 
     Types: 
@@ -196,6 +221,7 @@ Individual: William
     Facts:  
      hasSex  MaleSex,
      hasChild  Peter
+
 
 
 Individual: Matt
@@ -212,6 +238,7 @@ Individual: Matt
         Matthew
 
 
+
 Individual: Gemma
 
     Types: 
@@ -221,10 +248,12 @@ Individual: Gemma
      hasSex  FemaleSex
 
 
+
 Individual: MaleSex
 
     Types: 
         Sex
+
 
 
 
