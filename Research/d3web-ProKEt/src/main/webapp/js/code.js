@@ -1000,32 +1000,17 @@ function toggle_sub_4boxes(id) {
  */
 function toggle_folder_image_4boxes(id) {
 	
-    var count = id.replace("q_", "");
-    var typeimgID = count+'-typeimg';
+    // ids of the arrow/folder image is 2-typeimg, when question is q_2    
+    var typeimgID = id.replace("q_", "") + '-typeimg';
 	
-    //var temp = $("#" + id + "-folderimg");
-    var temp2 = $("[id*="+ typeimgID + "]");
-	
-/*if (temp.attr('src') !== 'img/closedArrow.png') {
-		temp.attr('src', 'img/closedArrow.png');
-	} else {
-		temp.attr('src', 'img/openedArrow.gif');
-	}*/
-	
-//alert(temp2.attr('id'));
-/*if(temp2.attr('src') == 'img/transpSquare.png'){
-		temp2.attr('src', 'img/transpSquare.png');
-	} else {
-
-		alert(temp2.attr('src'));
-		if (temp2.attr('src') == 'img/closedArrow.png') {
-			temp2.attr('src', 'img/openedArrow.gif');
-		} else if (temp2.attr('src') == 'img/openedArrow.gif'){		
-			temp2.attr('src', 'img/closedArrow.png');
-		} else {
-			temp2.attr('src', 'img/transpSquare.png');
-		}
-	}*/
+    // get the div of the arrow/folder image
+    var imgDiv = $("[id^="+ typeimgID + "]");
+    
+    if (imgDiv.attr('src') == 'img/closedArrowOr.png') {
+        imgDiv.attr('src', 'img/openedArrowOr.png');
+    } else if (imgDiv.attr('src') == 'img/openedArrowOr.png') {
+        imgDiv.attr('src', 'img/closedArrowOr.png');
+    }
 }
 
 /**
@@ -1037,8 +1022,7 @@ function toggle_folder_image_4boxes(id) {
  */
 function h4boxes(value, id) {
     if (!d3web) {
-		
-        alert(value + " " + id);
+	
         // get dialog item
         var item = $("#" + id);
 	

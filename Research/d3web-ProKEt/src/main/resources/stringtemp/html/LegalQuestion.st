@@ -1,6 +1,6 @@
 <div id="$fullId$" class="question $fullId$ $answerType$">
 	<div id="$id$-imagebox" class="question-imagebox" onmouseover="showAuxInfo('$fullId$')" onmouseout="hideAuxInfo()">
-		<img id="$id$-typeimg" alt="type" src="$typeimg$" height="16" width="16" onclick="toggle_sub_4boxes('$fullId$')">
+		<img id="$id$-typeimg" alt="type" src="$typeimg$" height="16" width="35" onclick="toggle_sub_4boxes('$fullId$')">
     	<img height="16" 
 		$if(noChildren)$usemap="#panel-$fullId$"$endif$ 
 		src="img/pane.png" style="border: medium none;" id="panel-$fullId$" 
@@ -12,10 +12,10 @@
 		$Image()$
 		$text$
 		<map name="panel-$fullId$">
-			<area href="javascript:h4boxes('1','panel-$fullId$')" coords="0,0,14.5,15" shape="rect">
-			<area href="javascript:h4boxes('3','panel-$fullId$')" coords="14.5,0,29.0,15" shape="rect">
-			<area href="javascript:h4boxes('2','panel-$fullId$')" coords="29.0,0,43.5,15" shape="rect">
-			<area href="javascript:h4boxes('0','panel-$fullId$')" coords="43.5,0,58.0,15" shape="rect">
+			<area href="javascript:h4boxes('1','panel-$fullId$')" coords="0,0,18.5,15" shape="rect">
+			<area href="javascript:h4boxes('3','panel-$fullId$')" coords="18.5,0,37.0,15" shape="rect">
+			<area href="javascript:h4boxes('2','panel-$fullId$')" coords="37.0,0,52,15" shape="rect">
+			<area href="javascript:h4boxes('0','panel-$fullId$')" coords="52,0,67.0,15" shape="rect">
 		</map>
 	</div>
 	

@@ -257,7 +257,7 @@ public class Renderer implements IRenderer {
 		if (children.size() > 0) {
 			st.setAttribute("children", childrenHTML.toString());
 			st.removeAttribute("typeimg");
-			st.setAttribute("typeimg", "img/closedArrow.png");
+			st.setAttribute("typeimg", "img/closedArrowOr.png");
 		}
 		else {
 

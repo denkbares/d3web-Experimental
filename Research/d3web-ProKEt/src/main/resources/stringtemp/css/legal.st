@@ -145,3 +145,4 @@ table{
 	float: left;
 }
 
+area {border: none;}
