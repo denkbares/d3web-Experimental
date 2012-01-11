@@ -92,7 +92,6 @@ public class ClassFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCompileS
 						EventManager.getInstance().fireEvent(
 								new OWLApiAxiomCacheUpdateEvent(axiom, mce));
 						axioms.add(axiom);
-						// axioms.add(AxiomFactory.getClassDeclaration(e.asOWLClass()));
 					}
 				}
 			}
@@ -153,12 +152,15 @@ public class ClassFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCompileS
 				messages.add(Messages.syntaxError("DisjointUnionOf is empty!"));
 			}
 			else {
+
 				Map<OWLClassExpression, Section<? extends Type>> exp = AxiomFactory.createDescriptionExpression(
 						mce, messages);
 
 				for (OWLClassExpression e : exp.keySet()) {
-					// FIXME not yet implemented
-					// axiom = AxiomFactory.createOWLDisjointUnionOf(clazz, e);
+					Set<OWLClassExpression> set = new HashSet<OWLClassExpression>();
+					set.add(e);
+					// TODO: needs testing
+					axiom = AxiomFactory.createOWLDisjointUnionOf(clazz, set);
 					axiom = null;
 					if (axiom != null) {
 						EventManager.getInstance().fireEvent(
@@ -169,10 +171,7 @@ public class ClassFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCompileS
 			}
 		}
 
-		// TODO: really necessary new compile script should handle this ???
-		// needs testing
-		// Note: use OWLEntityCollector instead of below?
-		// necessary to avoid errors through the OWLApi due not defined entities
+		// Not really necessary; if problems occur, comment in
 		// Set<OWLAxiom> addAxioms = new HashSet<OWLAxiom>();
 		// for (OWLAxiom a : axioms) {
 		// Set<OWLClass> classes = a.getClassesInSignature();

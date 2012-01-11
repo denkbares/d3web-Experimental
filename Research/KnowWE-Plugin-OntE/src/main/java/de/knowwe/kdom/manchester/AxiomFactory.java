@@ -430,7 +430,6 @@ public class AxiomFactory {
 					exp = handleTerminals(cardSection, messages);
 				}
 				else {
-					// FIXME not yet tested
 					Section<ManchesterClassExpression> mce = Sections.findSuccessor(cardSection,
 							ManchesterClassExpression.class);
 
@@ -687,6 +686,10 @@ public class AxiomFactory {
 		return factory.getOWLDisjointClassesAxiom(clazz, expression);
 	}
 
+	public static OWLAxiom createOWLDisjointUnionOf(OWLClass clazz, Set<OWLClassExpression> expression) {
+		return factory.getOWLDisjointUnionAxiom(clazz, expression);
+	}
+
 	/**
 	 *
 	 *
@@ -771,6 +774,10 @@ public class AxiomFactory {
 		return factory.getOWLDisjointObjectPropertiesAxiom(p1, p2);
 	}
 
+	public static OWLAxiom createEquivalentTo(OWLObjectProperty p1, OWLObjectProperty p2) {
+		return factory.getOWLEquivalentObjectPropertiesAxiom(p1, p2);
+	}
+
 	public static OWLAxiom createDataPropertyDomain(OWLDataProperty p, OWLClassExpression exp) {
 		return factory.getOWLDataPropertyDomainAxiom(p, exp);
 	}
@@ -785,6 +792,10 @@ public class AxiomFactory {
 
 	public static OWLAxiom createDataPropertyDisjointWith(OWLDataProperty p1, OWLDataProperty p2) {
 		return factory.getOWLDisjointDataPropertiesAxiom(p1, p2);
+	}
+
+	public static OWLAxiom createDataPropertyEquivalentTo(OWLDataProperty p1, OWLDataProperty p2) {
+		return factory.getOWLEquivalentDataPropertiesAxiom(p1, p2);
 	}
 
 	/**

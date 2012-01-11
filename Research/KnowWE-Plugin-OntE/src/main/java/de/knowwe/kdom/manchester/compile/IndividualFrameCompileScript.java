@@ -145,14 +145,14 @@ public class IndividualFrameCompileScript extends OWLAPIAbstractKnowledgeUnitCom
 					axioms.add(axiom);
 				}
 			}
-			// FIXME handleOptionalAnnotations(types, i); optional Annotations
+			// handleOptionalAnnotations(types, i); optional Annotations
 		}
 		return axioms;
 	}
 
 	/**
 	 * Handles the optional {@link Annotations} inside each description.
-	 * 
+	 *
 	 * @created 29.09.2011
 	 * @param Section<? extends Type> section
 	 * @return A Set with {@link OWLAnnotationAxiom}

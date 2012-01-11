@@ -145,9 +145,26 @@ public class ObjectPropertyCompileScript extends OWLAPIAbstractKnowledgeUnitComp
 				}
 			}
 		}
-		// FIXME not possible with the OWLApi ???
-		if (type.hasEquivalentTo(section)) { // Handle EquivalentTo
 
+		if (type.hasEquivalentTo(section)) { // Handle EquivalentTo
+			Section<?> desc = type.getEquivalentTo(section);
+			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
+					ManchesterClassExpression.class);
+			if (mce == null) {
+				messages.add(Messages.syntaxError("EquivalentTo is empty!"));
+			}
+			else {
+				Set<OWLObjectProperty> props = AxiomFactory.createObjectPropertyExpression(mce);
+
+				for (OWLObjectProperty px : props) {
+					axiom = AxiomFactory.createEquivalentTo(p, px);
+					if (axiom != null) {
+						EventManager.getInstance().fireEvent(
+								new OWLApiAxiomCacheUpdateEvent(axiom, mce));
+						axioms.add(axiom);
+					}
+				}
+			}
 		}
 
 		if (type.hasDisjointWith(section)) { // handle DisjointWith

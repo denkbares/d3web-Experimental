@@ -75,7 +75,7 @@ public class DataPropertyFrame extends DefaultFrame implements KnowledgeUnit<Dat
 
 		List<Type> types = new ArrayList<Type>();
 
-		types.add(new DataPropertyDefinition());
+		types.add(DataPropertyDefinition.getInstance());
 		types.add(new Annotations(KEYWORDS));
 
 		EquivalentTo to = new EquivalentTo(KEYWORDS);
@@ -263,7 +263,7 @@ public class DataPropertyFrame extends DefaultFrame implements KnowledgeUnit<Dat
 	}
 
 	@Override
-	public KnowledgeUnitCompileScript getCompileScript() {
+	public KnowledgeUnitCompileScript<DataPropertyFrame> getCompileScript() {
 		return new DataPropertyCompileScript();
 	}
 }
@@ -276,6 +276,8 @@ public class DataPropertyFrame extends DefaultFrame implements KnowledgeUnit<Dat
 class DataPropertyDefinition extends AbstractType {
 
 	public static String PATTERN = DataPropertyFrame.KEYWORD + "\\p{Blank}+(.+)";
+
+	private static DataPropertyDefinition instance = null;
 
 	public DataPropertyDefinition() {
 
@@ -290,6 +292,14 @@ class DataPropertyDefinition extends AbstractType {
 		prop.setSectionFinder(new AllTextFinderTrimmed());
 		this.addChildType(prop);
 	}
+
+	public static synchronized DataPropertyDefinition getInstance() {
+		if (instance == null) {
+			instance = new DataPropertyDefinition();
+		}
+		return instance;
+	}
+
 }
 
 /**
