@@ -28,7 +28,7 @@
                 <question title="Lag die Originalvollmacht bei?" id="44" parent-id="40" />
                 <question title="Wurde die Vollmacht wirksam nachgereicht?" id="45" parent-id="40" />
                 <question title="Die Kündigung war nicht durch Sondertatbestände ausgeschlossen?"
-			id="3" parent-id="1" type="mc" bonus-text="Hier wird geklärt, ob die Kündigung durch
+			id="3" parent-id="1" bonus-text="Hier wird geklärt, ob die Kündigung durch
                         verschiedene Sondertatbestände ausgeschollsen war. Beispiele für solche Sondertatbestände sind
                         das Mutterschutzgesetzt, das Arbeitsplatzschutzgesetzt, oder eine momenane Ableistung
                         des Wehrdienstes."/>

@@ -1010,7 +1010,12 @@ function toggle_folder_image_4boxes(id) {
         imgDiv.attr('src', 'img/openedArrowOr.png');
     } else if (imgDiv.attr('src') == 'img/openedArrowOr.png') {
         imgDiv.attr('src', 'img/closedArrowOr.png');
+    } else if (imgDiv.attr('src') == 'img/openedArrowAnd.png') {
+        imgDiv.attr('src', 'img/closedArrowAnd.png');
+    } else if (imgDiv.attr('src') == 'img/closedArrowAnd.png') {
+        imgDiv.attr('src', 'img/openedArrowAnd.png');
     }
+    
 }
 
 /**

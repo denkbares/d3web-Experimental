@@ -45,7 +45,7 @@ padding: 10px;
 #auxpanel{
     background-color: #fffff0;
     width: 25%;
-    height: 200px;
+    height: 250px;
     -moz-box-shadow: 0 0 3.5px black;
 	-webkit-box-shadow: 0 0 3.5px black;
 	box-shadow: 0 0 3.5px black;

@@ -55,7 +55,7 @@ public class LegalOcQuestionRenderer extends Renderer {
 
             // check if this question has subquestions
             if (!dialogObject.getChildren().isEmpty()) {
-
+                
                 st.removeAttribute("typeimg");
                 st.setAttribute("typeimg", "img/closedArrowAnd.png");
 
