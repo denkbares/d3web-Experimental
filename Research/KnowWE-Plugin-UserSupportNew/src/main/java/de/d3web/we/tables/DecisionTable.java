@@ -108,35 +108,35 @@ public class DecisionTable extends ITable {
 								i, Sections.findChildOfType(decisionSec, InnerTable.class)));
 
 				// Create all conditions from choices and questions
-				List<ChoiceValue> choices = this.getRuleChoices(column);
+				List<ChoiceValue> conditionChoices = this.getRuleConditionChoices(column);
 				List<Question> questionList = new LinkedList<Question>();
 				for (int j = 0; j < firstColumnsQuestionStringList.size(); j++)
 				{
 					String questionText = firstColumnsQuestionStringList.get(j);
-					ChoiceValue value = choices.get(j);
+					ChoiceValue value = conditionChoices.get(j);
 					questionList.add(this.createQuestion(kb, questionText, value));
 				}
 
-				List<Condition> conditions = this.getRuleConditions(kb, questionList, choices);
+				List<Condition> conditions = this.getRuleConditions(kb, questionList, conditionChoices);
 
 				// Get the Actions from the rest of TableCells
 				// TODO Right ChoiceValue set?
+				List<ChoiceValue> actionChoices = this.getRuleActionChoices(column);
+
 				List<ActionSetValue> actions = new ArrayList<ActionSetValue>();
 				ActionSetValue action = null;
 
-				int bla = firstColumnsQuestionStringList.size();
-				for (int k = bla; k < choices.size(); k++)
+				for (int k = 0; k < firstColumnsActionStringList.size(); k++)
 				{
-					int bla2 = k -bla;
-					String actionText = firstColumnsActionStringList.get(bla2);
+					String actionText = firstColumnsActionStringList.get(k);
 
 					// action not to fire
-					if (choices.get(k) == null)
+					if (actionChoices.get(k) == null)
 						continue;
 
 					action = new ActionSetValue();
-					action.setQuestion(this.createQuestion(kb, actionText, choices.get(k)));
-					action.setValue(choices.get(k));
+					action.setQuestion(this.createQuestion(kb, actionText, actionChoices.get(k)));
+					action.setValue(actionChoices.get(k));
 					actions.add(action);
 				}
 
@@ -161,7 +161,37 @@ public class DecisionTable extends ITable {
 
 		/**
 		 * 
-		 * Creates all ChoiceValues for a column.
+		 * @created 12.01.2012
+		 * @param column
+		 * @return
+		 */
+		private List<ChoiceValue> getRuleActionChoices(LinkedList<Section<TableCell>> column)
+		{
+			Section<TableCell> cell = null;
+			List<ChoiceValue> choices = new ArrayList<ChoiceValue>();
+
+			while (!column.isEmpty())
+			{
+				cell = column.removeFirst();
+				String cellText = cell.getText().trim();
+
+				if (cellText.equals(""))
+				{
+					choices.add(null);
+					continue;
+				}
+
+				ChoiceValue choice = this.createChoiceValue(cellText);
+				choices.add(choice);
+			}
+
+			return choices;
+		}
+
+
+		/**
+		 * 
+		 * Creates all ChoiceValues for conditions in a column.
 		 * Element is null if no ChoiceValue for this position
 		 * is available.
 		 * 
@@ -169,19 +199,21 @@ public class DecisionTable extends ITable {
 		 * @param column
 		 * @return
 		 */
-		private List<ChoiceValue> getRuleChoices(LinkedList<Section<TableCell>> column)
+		private List<ChoiceValue> getRuleConditionChoices(LinkedList<Section<TableCell>> column)
 		{
 			Section<TableCell> cell = null;
 			List<ChoiceValue> choices = new ArrayList<ChoiceValue>();
-			boolean actions = false;
+
 			while (!column.isEmpty())
 			{
 				cell = column.removeFirst();
 				String cellText = cell.getText().trim();
 
-				if (cellText.equals("") && !actions)
+				// Check if actions are reached
+				if (cellText.equals(""))
 				{
-					actions=true;
+					Section<?> firstCellFather = cell.getFather().getChildren().get(0);
+					if (firstCellFather.getText().trim().equals("")) break;
 					continue;
 				}
 
@@ -195,6 +227,7 @@ public class DecisionTable extends ITable {
 
 		/**
 		 * 
+		 * TODO Condition can be any condition: dependent on choice-value
 		 * 
 		 * @created 11.01.2012
 		 * @param kb
@@ -207,7 +240,6 @@ public class DecisionTable extends ITable {
 			List<Condition> conditions = new ArrayList<Condition>();
 			for (int j = 0; j < questions.size(); j++)
 			{
-				// TODO Condition can be any condition: dependent on choice-value
 				if (questions.get(j) == null) continue;
 				Question q = kb.getManager().searchQuestion(questions.get(j).getName());
 				if ( (q == null) || (choices.get(j) == null) ) continue;
@@ -238,7 +270,7 @@ public class DecisionTable extends ITable {
 			for (Section<TableCell> cell : firstColumn)
 			{
 				String questionText = cell.getText().trim();
-				if (questionText.equals(""))
+				if (questionText.equals("Actions"))
 				{
 					add = true;
 					continue;
@@ -266,7 +298,7 @@ public class DecisionTable extends ITable {
 			for (Section<TableCell> cell : firstColumn)
 			{
 				String questionText = cell.getText().trim();
-				if (questionText.equals("")) break;
+				if (questionText.equals("Actions")) break;
 				questionList.add(questionText);
 			}
 			return questionList;

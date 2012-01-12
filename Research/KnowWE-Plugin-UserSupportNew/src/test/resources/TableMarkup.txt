@@ -13,6 +13,7 @@ EntscheidungsTabelle {
                              | Regel1  | Regel2 | Regel3 | Regel4,
     Lieferfähig              | Yes     | Yes    | No     | No,
     Angaben vollständig      | No      | Yes    | Yes    | No,
+    Actions                  |         |        |        |   ,
     Lieferung mit Rechnung   | x       |        | x      |   ,
     Lieferung mit Nachnahme  |         | x      |        | x ,  
     Angaben vervollständigen |         |        | x      | x ,

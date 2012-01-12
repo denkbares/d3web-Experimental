@@ -65,9 +65,9 @@ public class TableTest extends TestCase {
 	private Section<DecisionTableMarkup> decisionTable = null;
 	private final int decisionHeaderLineCount = 1;
 	private final int decisionHeaderCellCount = 5;
-	private final int decisionLineCount = 5;
-	private final int decisionCellCount = 30;
-	private final int decisionCellFirstColumnCount = 5;
+	private final int decisionLineCount = 6;
+	private final int decisionCellCount = 35;
+	private final int decisionCellFirstColumnCount = 6;
 
 	private Section<HeuristicDiagnosisTableMarkup> heuristicTable = null;
 	private final int heuristicHeaderLineCount = 1;
