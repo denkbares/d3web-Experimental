@@ -64,8 +64,8 @@ table{
 
 .question {
 	background-color: transparent;
-	clear: left;
-        margin-top: 5px;
+        margin-top: 10px;
+        margin-left: 20px;
 }
 
 .tooltip {
@@ -96,6 +96,7 @@ table{
 	min-height: 16px;
 	padding-left: 90px;
 	line-height: 1.75em;
+        margin-left: 15px;
 }
 
 .question-closed {
@@ -143,6 +144,10 @@ table{
 	line-height: 1.5em;
 	padding: 4px;
 	float: left;
+        margin-left: 15px;
+        margin-right: 15px;
 }
 
 area {border: none;}
+
+.readflow{float: left; clear: both; margin-top: 10px;}

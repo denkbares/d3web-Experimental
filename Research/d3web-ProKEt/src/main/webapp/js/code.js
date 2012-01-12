@@ -85,9 +85,22 @@ function setup() {
 
     if(hierarchy){
         expandFirstmostElement();
+    
+        exchangeTextFirstSub("Wenn");
     }
     
 }
+
+/*Helper function to exchange the text of the first subquestion - usually 
+ *Oder and Und - of a set of subquestions to the given text, e.g. "Wenn" 
+ */
+function exchangeTextFirstSub(textToSet){
+    
+    $("[id^=sub-] [id^=readFlow]:first-child img").each(function(){     
+        $(this).attr('src', 'img/If.png');
+    });
+}
+
 
 /**
  * Retrieve the first element in hierarchical dialogs and expand it on startup
@@ -1018,8 +1031,7 @@ function toggle_folder_image_4boxes(id) {
         imgDiv.attr('src', 'img/closedArrow.png');
     } else if (imgDiv.attr('src') == 'img/closedArrow.png') {
         imgDiv.attr('src', 'img/openedArrow.png');
-    }
-    
+    } 
 }
 
 /**
@@ -1056,8 +1068,8 @@ function h4boxes(value, id) {
         h4boxes_mark(target, true);
 		
     } else {
-// d3web specific toolchain
-/*if (value < 4) {
+    // d3web specific toolchain
+    /*if (value < 4) {
 			
             // add fact in d3web
             d3web_addfact(id, value - 1); // zero-based
@@ -1071,7 +1083,7 @@ function h4boxes(value, id) {
             ids = ids + $(this).attr('id') + ",";
         });
         d3web_getRatings(ids);*/
-}
+    }
 }
 
 /*
@@ -1093,7 +1105,6 @@ function setColorForQuestion(target, imgTarget, color){
         case "0": // undecided --> transparent
             
             var checkCol = calculateRatingForQuestion(target);
-            alert(checkCol);
             setColorForQuestionHelper(target, imgTarget, checkCol);
             break;
         case "2": // suggested  --> yellow

@@ -316,7 +316,7 @@ public class Renderer implements IRenderer {
 		// get the HTML template for the dialog object
 		StringTemplate st = TemplateUtils.getStringTemplate(
 				dialogObject.getVirtualClassName(), "html");
-
+                
 		// get the inh.attributes of this objects and inherit missing
 		// attributes where needed from parents
 		dialogObject.getInheritableAttributes().compileInside();
