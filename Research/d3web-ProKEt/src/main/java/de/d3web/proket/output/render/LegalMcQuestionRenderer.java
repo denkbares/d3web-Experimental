@@ -40,9 +40,9 @@ public class LegalMcQuestionRenderer extends Renderer {
             IDialogObject dialogObject, boolean force) {
 
         IDialogObject parent = dialogObject.getParent();
-        System.out.println(parent.getTitle());
+        String pTitle = parent.getTitle();
 
-        if (parent != null) {
+        if (pTitle != null && parent != null) {
             Vector<IDialogObject> children = parent.getChildren();
             StringBuffer childrenHTML = new StringBuffer();
             for (IDialogObject child : children) {
@@ -99,14 +99,14 @@ public class LegalMcQuestionRenderer extends Renderer {
                 st.setAttribute("noChildren", "");
             }
         } else {
-            System.out.println(parent.getTitle());
+            
             st.removeAttribute("typeimg");
             if (!dialogObject.getChildren().isEmpty()) {
-                System.out.println("NULL");
+               
                 st.setAttribute("typeimg", "img/closedArrow.png");
             } else {
 
-                System.out.println("NULL");
+               
                 st.setAttribute("typeimg", "img/transpSquare.png");
             }
         }
