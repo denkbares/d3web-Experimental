@@ -248,20 +248,11 @@ public class Renderer implements IRenderer {
 			childrenHTML.append(tableClosing);
 		}
 
-		// if there had been children, fill the template attribute children with
-		// the HTML of the children
-
-		st.removeAttribute("typeimg");
-		st.setAttribute("typeimg", "img/transpSquare.png");
 
 		if (children.size() > 0) {
 			st.setAttribute("children", childrenHTML.toString());
-			st.removeAttribute("typeimg");
-			st.setAttribute("typeimg", "img/closedArrowOr.png");
 		}
-		else {
-
-		}
+		
 
 	}
 

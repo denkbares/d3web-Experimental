@@ -17,14 +17,74 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-
 package de.d3web.proket.output.render;
 
-/**
- * 
- * @author Martina Freiberg
- * 
- */
-public class LegalOcQuestionRenderer extends LegalMcQuestionRenderer {
+import de.d3web.proket.data.IDialogObject;
+import de.d3web.proket.output.container.ContainerCollection;
+import java.util.Vector;
+import org.antlr.stringtemplate.StringTemplate;
 
+/**
+ *
+ * @author Martina Freiberg
+ *
+ */
+public class LegalOcQuestionRenderer extends Renderer {
+
+    @Override
+    protected void renderChildren(StringTemplate st, ContainerCollection cc,
+            IDialogObject dialogObject, boolean force) {
+
+        IDialogObject parent = dialogObject.getParent();
+
+        if (parent != null) {
+            Vector<IDialogObject> children = parent.getChildren();
+            StringBuffer childrenHTML = new StringBuffer();
+            for (IDialogObject child : children) {
+
+                if (child.getXMLTag().getAttribute("parent-id").equals(dialogObject.getId())) {
+
+                    IRenderer renderer = Renderer.getRenderer(child);
+                    String childHTML = renderer.renderDialogObject(cc, child);
+                    if (childHTML != null) {
+                        childrenHTML.append(childHTML);
+                    }
+
+                }
+            }
+
+            // check if this question has subquestions
+            if (!dialogObject.getChildren().isEmpty()) {
+
+                st.removeAttribute("typeimg");
+                st.setAttribute("typeimg", "img/closedArrowAnd.png");
+
+            } else {
+
+                st.removeAttribute("typeimg");
+                st.setAttribute("typeimg", "img/transpSquare.png");
+            }
+
+            // workaround for removing a doubled-answertype setting in template
+            st.removeAttribute("answerType");
+            st.setAttribute("answerType", dialogObject.getInheritableAttributes().getAnswerType());
+
+            /*
+             * We have children not necessarily direct dialog object children
+             * (subquestions) but smthg. like the image panel etc.
+             */
+            if (childrenHTML.length() > 0) {
+                // we have children
+                st.setAttribute("children", childrenHTML.toString());
+                st.setAttribute("hasChildren", "");
+
+            } else {
+                // no child questions
+                st.setAttribute("noChildren", "");
+            }
+
+        }
+
+        super.renderChildren(st, cc, dialogObject, force);
+    }
 }

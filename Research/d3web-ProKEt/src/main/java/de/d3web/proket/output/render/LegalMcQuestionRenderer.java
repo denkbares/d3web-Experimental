@@ -17,7 +17,6 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-
 package de.d3web.proket.output.render;
 
 import java.util.Vector;
@@ -30,73 +29,66 @@ import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
 
 /**
- * 
+ *
  * @author Martina Freiberg
- * 
+ *
  */
 public class LegalMcQuestionRenderer extends Renderer {
 
-	@Override
-	protected void renderChildren(StringTemplate st, ContainerCollection cc,
-			IDialogObject dialogObject, boolean force) {
+    @Override
+    protected void renderChildren(StringTemplate st, ContainerCollection cc,
+            IDialogObject dialogObject, boolean force) {
 
-		IDialogObject parent = dialogObject.getParent();
-		
-                if (parent != null) {
-			Vector<IDialogObject> children = parent.getChildren();
-			StringBuffer childrenHTML = new StringBuffer();
-			for (IDialogObject child : children) {
+        IDialogObject parent = dialogObject.getParent();
 
-				if (child.getXMLTag().getAttribute("parent-id")
-						.equals(dialogObject.getId())) {
+        if (parent != null) {
+            Vector<IDialogObject> children = parent.getChildren();
+            StringBuffer childrenHTML = new StringBuffer();
+            for (IDialogObject child : children) {
 
-					IRenderer renderer = Renderer.getRenderer(child);
-					String childHTML = renderer.renderDialogObject(cc, child);
-					if (childHTML != null) {
-						childrenHTML.append(childHTML);
-					}
+                if (child.getXMLTag().getAttribute("parent-id").equals(dialogObject.getId())) {
 
-				}
-			}
-			if (dialogObject.getChildren().size() == 0) {
+                    IRenderer renderer = Renderer.getRenderer(child);
+                    String childHTML = renderer.renderDialogObject(cc, child);
+                    if (childHTML != null) {
+                        childrenHTML.append(childHTML);
+                    }
 
-			}
-                        
-                        // workaround for removing a doubled-answertype setting in template
-                        st.removeAttribute("answerType");
-			st.setAttribute("answerType", dialogObject
-					.getInheritableAttributes().getAnswerType());
+                }
+            }
+            
+            // Check if this question has subquestions
+            if (dialogObject.getChildren().size() != 0) {
+
+                st.removeAttribute("typeimg");
+                st.setAttribute("typeimg", "img/closedArrowOr.png");
+            } else {
+
+                st.removeAttribute("typeimg");
+                st.setAttribute("typeimg", "img/transpSquare.png");
+            }
 
 
-			if (childrenHTML.length() > 0) {
-				// we have children
-				st.setAttribute("children", childrenHTML.toString());
-				st.setAttribute("hasChildren", ""); // a little faking the
-				// template
+            // workaround for removing a doubled-answertype setting in template
+            st.removeAttribute("answerType");
+            st.setAttribute("answerType", dialogObject.getInheritableAttributes().getAnswerType());
 
-				// set default
-				if (dialogObject.getInheritableAttributes().getAnswerType() == null) {
-					dialogObject.getInheritableAttributes().setAnswerType("oc");
-				}
-				if (dialogObject.getInheritableAttributes().getAnswerType()
-						.equalsIgnoreCase("mc")) {
-					st.setAttribute("typeimg", "img/transpSquare.png");
-				} else {
-					st.setAttribute("typeimg", "img/transpSquare.png");
-				}
 
-				st.setAttribute("typeimg", "img/transpSquare.png");
-			} else {
-				// no child questions
-				st.setAttribute("noChildren", ""); /*
-													 * a little trick for the
-													 * template
-													 */
-				// no children, so no folding arrow/sign
-				st.setAttribute("typeimg", "img/transpSquare.png");
-			}
-		}
+            /*
+             * We have children not necessarily direct dialog object children
+             * (subquestions) but smthg. like the image panel etc.
+             */
+            if (childrenHTML.length() > 0) {
+                // we have children
+                st.setAttribute("children", childrenHTML.toString());
+                st.setAttribute("hasChildren", "");
 
-		super.renderChildren(st, cc, dialogObject, force);
-	}
+            } else {
+                // no child questions
+                st.setAttribute("noChildren", "");
+            }
+        }
+
+        super.renderChildren(st, cc, dialogObject, force);
+    }
 }
