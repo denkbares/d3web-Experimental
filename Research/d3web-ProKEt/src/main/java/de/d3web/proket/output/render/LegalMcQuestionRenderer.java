@@ -40,6 +40,7 @@ public class LegalMcQuestionRenderer extends Renderer {
             IDialogObject dialogObject, boolean force) {
 
         IDialogObject parent = dialogObject.getParent();
+        System.out.println(parent.getTitle());
 
         if (parent != null) {
             Vector<IDialogObject> children = parent.getChildren();
@@ -56,18 +57,28 @@ public class LegalMcQuestionRenderer extends Renderer {
 
                 }
             }
-            
+
             // Check if this question has subquestions
             if (dialogObject.getChildren().size() != 0) {
 
+                
                 st.removeAttribute("typeimg");
-                st.setAttribute("typeimg", "img/closedArrowOr.png");
+               if (parent.getInheritableAttributes().getAnswerType().equals("mc")) {
+                    st.setAttribute("typeimg", "img/closedArrowOr.png");
+                } else if (parent.getInheritableAttributes().getAnswerType().equals("oc")) {
+                    st.setAttribute("typeimg", "img/closedArrowAnd.png");
+                }
+                //st.setAttribute("typeimg", "img/closedArrowOr.png");
             } else {
 
-                st.removeAttribute("typeimg");
-                st.setAttribute("typeimg", "img/transpSquare.png");
+                 st.removeAttribute("typeimg");
+                if (parent.getInheritableAttributes().getAnswerType().equals("mc")) {
+                    st.setAttribute("typeimg", "img/transpOr.png");
+                } else if (parent.getInheritableAttributes().getAnswerType().equals("oc")) {
+                    st.setAttribute("typeimg", "img/transpAnd.png");
+                }
+            
             }
-
 
             // workaround for removing a doubled-answertype setting in template
             st.removeAttribute("answerType");
@@ -86,6 +97,17 @@ public class LegalMcQuestionRenderer extends Renderer {
             } else {
                 // no child questions
                 st.setAttribute("noChildren", "");
+            }
+        } else {
+            System.out.println(parent.getTitle());
+            st.removeAttribute("typeimg");
+            if (!dialogObject.getChildren().isEmpty()) {
+                System.out.println("NULL");
+                st.setAttribute("typeimg", "img/closedArrow.png");
+            } else {
+
+                System.out.println("NULL");
+                st.setAttribute("typeimg", "img/transpSquare.png");
             }
         }
 

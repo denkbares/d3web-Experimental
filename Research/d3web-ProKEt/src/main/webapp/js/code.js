@@ -1014,6 +1014,10 @@ function toggle_folder_image_4boxes(id) {
         imgDiv.attr('src', 'img/closedArrowAnd.png');
     } else if (imgDiv.attr('src') == 'img/closedArrowAnd.png') {
         imgDiv.attr('src', 'img/openedArrowAnd.png');
+    } else if (imgDiv.attr('src') == 'img/openedArrow.png') {
+        imgDiv.attr('src', 'img/closedArrow.png');
+    } else if (imgDiv.attr('src') == 'img/closedArrow.png') {
+        imgDiv.attr('src', 'img/openedArrow.png');
     }
     
 }
@@ -1083,8 +1087,14 @@ function setColorForQuestion(target, imgTarget, color){
             target.addClass("rating-high");
             //imgTarget.attr('src', "img/panel1.gif");
             break;
+            
+        // in case the user retracts the answer (gray) check, if 
+        // there is a calculated rating. If not, set gray
         case "0": // undecided --> transparent
-            //imgTarget.attr('src', "img/panel0.gif");
+            
+            var checkCol = calculateRatingForQuestion(target);
+            alert(checkCol);
+            setColorForQuestionHelper(target, imgTarget, checkCol);
             break;
         case "2": // suggested  --> yellow
             target.addClass("rating-medium");
@@ -1096,6 +1106,29 @@ function setColorForQuestion(target, imgTarget, color){
             break;
     }
 }
+
+function setColorForQuestionHelper(target, imgTarget, color){
+    
+    // remove existing rating=coloring classes
+    target.removeClass('rating-low rating-medium rating-high');
+    
+    switch (color) {
+        case "1": // approve --> green
+            target.addClass("rating-high");
+            //imgTarget.attr('src', "img/panel1.gif");
+            break;
+        case "2": // suggested  --> yellow
+            target.addClass("rating-medium");
+            //imgTarget.attr('src', "img/panel2.gif");
+            break;
+        case "3": // rejected -_> red
+            target.addClass("rating-low");
+            //imgTarget.attr('src', "img/panel3.gif");
+            break;
+    }
+}
+
+
 
 /**
  * Calculates the rating for the given question and returns

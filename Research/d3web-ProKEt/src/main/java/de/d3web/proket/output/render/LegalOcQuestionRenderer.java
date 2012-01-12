@@ -36,8 +36,11 @@ public class LegalOcQuestionRenderer extends Renderer {
             IDialogObject dialogObject, boolean force) {
 
         IDialogObject parent = dialogObject.getParent();
+        String pTitle = parent.getTitle();
 
-        if (parent != null) {
+
+        if (pTitle != null && parent != null) {
+
             Vector<IDialogObject> children = parent.getChildren();
             StringBuffer childrenHTML = new StringBuffer();
             for (IDialogObject child : children) {
@@ -53,16 +56,29 @@ public class LegalOcQuestionRenderer extends Renderer {
                 }
             }
 
+
             // check if this question has subquestions
             if (!dialogObject.getChildren().isEmpty()) {
-                
+
                 st.removeAttribute("typeimg");
-                st.setAttribute("typeimg", "img/closedArrowAnd.png");
+
+                if (parent.getInheritableAttributes().getAnswerType().equals("mc")) {
+                    st.setAttribute("typeimg", "img/closedArrowOr.png");
+                } else if (parent.getInheritableAttributes().getAnswerType().equals("oc")) {
+                    st.setAttribute("typeimg", "img/closedArrowAnd.png");
+                }
+                //st.setAttribute("typeimg", "img/closedArrowAnd.png");
 
             } else {
 
                 st.removeAttribute("typeimg");
-                st.setAttribute("typeimg", "img/transpSquare.png");
+
+
+                if (parent.getInheritableAttributes().getAnswerType().equals("mc")) {
+                    st.setAttribute("typeimg", "img/transpOr.png");
+                } else if (parent.getInheritableAttributes().getAnswerType().equals("oc")) {
+                    st.setAttribute("typeimg", "img/transpAnd.png");
+                }
             }
 
             // workaround for removing a doubled-answertype setting in template
@@ -83,6 +99,17 @@ public class LegalOcQuestionRenderer extends Renderer {
                 st.setAttribute("noChildren", "");
             }
 
+        } else {
+
+            st.removeAttribute("typeimg");
+            if (!dialogObject.getChildren().isEmpty()) {
+
+                st.setAttribute("typeimg", "img/closedArrow.png");
+            } else {
+
+
+                st.setAttribute("typeimg", "img/transpSquare.png");
+            }
         }
 
         super.renderChildren(st, cc, dialogObject, force);
