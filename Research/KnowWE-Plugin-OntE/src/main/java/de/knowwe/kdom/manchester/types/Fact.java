@@ -30,13 +30,14 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
  * <p>
  * fact ::= [ 'not' ] (objectPropertyFact | dataPropertyFact)
  * </p>
- * 
+ *
  * @author Stefan Mark
  * @created 30.09.2011
  */
 public class Fact extends AbstractType {
 
-	public static final String PATTERN = "(" + ObjectPropertyExpression.PATTERN + ")\\s+("
+	public static final String PATTERN = "(" + PropertyExpression.PATTERN + ")\\s+("
+			+ Literal.PATTERN + "|"
 			+ OWLTermReferenceManchester.PATTERN + ")";
 
 	public Fact() {
@@ -45,12 +46,14 @@ public class Fact extends AbstractType {
 
 		this.setSectionFinder(new RegexSectionFinder(p));
 
-		ObjectPropertyExpression ope = new ObjectPropertyExpression();
+		PropertyExpression ope = new PropertyExpression();
 		ope.setSectionFinder(new RegexSectionFinder(p, 1));
 
-		OWLTermReferenceManchester ref = new OWLTermReferenceManchester();
-
 		this.addChildType(ope);
-		this.addChildType(ref);
+		// this.addChildType(ref);
+
+		this.addChildType(new Literal());
+		this.addChildType(new OWLTermReferenceManchester());
+
 	}
 }

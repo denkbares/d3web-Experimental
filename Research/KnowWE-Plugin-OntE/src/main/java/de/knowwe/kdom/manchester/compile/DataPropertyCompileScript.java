@@ -9,6 +9,7 @@ import java.util.Set;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLDataRange;
 
 import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.Type;
@@ -22,6 +23,7 @@ import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.frame.DataPropertyFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Characteristics;
+import de.knowwe.kdom.manchester.types.DataRangeExpression;
 import de.knowwe.onte.editor.OWLApiAxiomCacheUpdateEvent;
 import de.knowwe.owlapi.OWLAPIAbstractKnowledgeUnitCompileScript;
 import de.knowwe.owlapi.OWLAPISubtreeHandler;
@@ -58,27 +60,25 @@ public class DataPropertyCompileScript extends OWLAPIAbstractKnowledgeUnitCompil
 
 		if (type.hasRange(section)) { // Handle Range
 			Section<?> desc = type.getRange(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(desc,
-					ManchesterClassExpression.class);
+			Section<DataRangeExpression> dre = Sections.findSuccessor(desc,
+					DataRangeExpression.class);
 
-			// if (mce == null) {
-			// messages.add(Messages.syntaxError("Range is empty!"));
-			// }
-			// else {
-			// // TODO: implement DataRange AbstractTypes
-			// Map<OWLClassExpression, Section<? extends Type>> exp =
-			// AxiomFactory.createDescriptionExpression(
-			// mce, messages);
-			//
-			// for (OWLClassExpression e : exp.keySet()) {
-			// axiom = AxiomFactory.createDataPropertyRange(p, e);
-			// if (axiom != null) {
-			// EventManager.getInstance().fireEvent(
-			// new OWLApiAxiomCacheUpdateEvent(axiom, exp.get(e)));
-			// axioms.add(axiom);
-			// }
-			// }
-			// }
+			 if (dre == null) {
+				messages.add(Messages.syntaxError("Range is empty!"));
+			}
+			else {
+				// handle predefined data types for now
+				Map<OWLDataRange, Section<? extends Type>> ranges = AxiomFactory.createDataRangeExpression(
+						dre, messages);
+				for (OWLDataRange e : ranges.keySet()) {
+					axiom = AxiomFactory.createDataPropertyRange(p, e);
+					if (axiom != null) {
+						EventManager.getInstance().fireEvent(
+								new OWLApiAxiomCacheUpdateEvent(axiom, ranges.get(e)));
+						axioms.add(axiom);
+					}
+				}
+			}
 		}
 
 		if (type.hasDomain(section)) { // Handle Domain

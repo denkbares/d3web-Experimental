@@ -56,17 +56,29 @@ public enum ManchesterSyntaxKeywords {
 
 	SOME("SOME"),
 
+	SOME_("SOME_"),
+
 	ONLY("ONLY"),
+
+	ONLY_("ONLY_"),
 
 	ONLYSOME("ONLYSOME"),
 
 	MIN("MIN"),
 
+	MIN_("MIN_"),
+
 	MAX("MAX"),
+
+	MAX_("MAX_"),
 
 	EXACTLY("EXACTLY"),
 
+	EXACTLY_("EXACTLY_"),
+
 	VALUE("VALUE"),
+
+	VALUE_("VALUE_"),
 
 	AND("AND"),
 

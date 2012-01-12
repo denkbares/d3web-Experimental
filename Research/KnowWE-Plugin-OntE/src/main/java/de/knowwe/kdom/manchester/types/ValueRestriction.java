@@ -28,6 +28,7 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
 import de.knowwe.kdom.manchester.ManchesterClassExpression;
+import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.ManchesterClassExpression.OWLClassContentType;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
@@ -43,13 +44,15 @@ public class ValueRestriction extends AbstractType {
 	 */
 	public static final String KEY = ManchesterSyntaxKeywords.VALUE.getKeyword();
 
-	public static final String REGEX = Restriction.BEFORE_REGEX + KEY + Restriction.AFTER_REGEX;
+	// public static final String REGEX = Restriction.BEFORE_REGEX + KEY +
+	// Restriction.AFTER_REGEX;
 
 	/**
 	 *
 	 */
-	public ValueRestriction() {
+	public ValueRestriction(String keyword) {
 
+		String REGEX = Restriction.BEFORE_REGEX + keyword + Restriction.AFTER_REGEX;
 		SectionFinder sf = new RegexSectionFinder(REGEX, Pattern.DOTALL);
 		this.setSectionFinder(sf);
 
@@ -57,21 +60,40 @@ public class ValueRestriction extends AbstractType {
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(new RegexSectionFinder(p, 1));
 		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 
-		ObjectPropertyExpression ope = new ObjectPropertyExpression();
+		PropertyExpression ope = new PropertyExpression();
 		ope.setSectionFinder(csf);
 		this.addChildType(ope);
 
-		Keyword key = new Keyword(KEY);
+		Keyword key = new Keyword(keyword);
 		this.addChildType(key);
 
 		this.addChildType(OWLClassContentType.getCompositeCondition());
+		this.addChildType(ManchesterSyntaxUtil.getDataRangeExpression());
 	}
 
-	public Section<ObjectPropertyExpression> getObjectProperty(Section<ValueRestriction> section) {
-		return Sections.findChildOfType(section, ObjectPropertyExpression.class);
+	public Section<PropertyExpression> getObjectProperty(Section<ValueRestriction> section) {
+		return Sections.findChildOfType(section, PropertyExpression.class);
 	}
 
 	public Section<ManchesterClassExpression> getManchesterClassExpression(Section<ValueRestriction> section) {
 		return Sections.findChildOfType(section, ManchesterClassExpression.class);
+	}
+
+	public boolean isObjectPropertyExpression(Section<ValueRestriction> section) {
+
+		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
+		if (keyword != null) {
+			return keyword.getOriginalText().equals(ManchesterSyntaxKeywords.VALUE.getKeyword());
+		}
+		return false;
+	}
+
+	public boolean isDataPropertyExpression(Section<ValueRestriction> section) {
+
+		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
+		if (keyword != null) {
+			return keyword.getOriginalText().equals(ManchesterSyntaxKeywords.VALUE_.getKeyword());
+		}
+		return false;
 	}
 }

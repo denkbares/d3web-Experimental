@@ -19,42 +19,120 @@
  */
 package de.knowwe.kdom.manchester.frame;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
+import de.knowwe.compile.object.KnowledgeUnit;
+import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.core.kdom.sectionFinder.SectionFinder;
+import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
+import de.knowwe.kdom.manchester.compile.DatatypeCompileScript;
+import de.knowwe.kdom.manchester.types.Annotations;
+import de.knowwe.kdom.manchester.types.EquivalentTo;
 import de.knowwe.kdom.manchester.types.Keyword;
 import de.knowwe.termObject.DatatypePropertyIRIDefinition;
+import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
- * 
- * 
+ *
+ *
  * @author Stefan Mark
  * @created 24.05.2011
  */
-public class DataTypeFrame extends AbstractType {
+public class DataTypeFrame extends DefaultFrame implements KnowledgeUnit<DataTypeFrame> {
 
-	public static final String KEYWORD = "Datatype[:]?";
+	public static final String KEYWORD;
+	public static final String KEYWORDS;
 
-	public static final String PATTERN = "^\\p{Blank}*" + KEYWORD + "\\p{Blank}+(.+)$" +
-											"(.*)" +
-											"^${2}";
+	static {
+		KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.DATATYPE);
+
+		// add all children's keywords so they can be handled accordingly
+		KEYWORDS = "("
+				+ Annotations.KEYWORD + "|"
+				+ EquivalentTo.KEYWORD
+				+ "|\\z)";
+	}
 
 	public DataTypeFrame() {
 
-		this.setSectionFinder(new AllTextFinderTrimmed());
+		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
+		this.setSectionFinder(new RegexSectionFinder(p));
 
-		DatatypeDefinition dt = new DatatypeDefinition();
-		this.addChildType(dt);
+		List<Type> types = new ArrayList<Type>();
 
+		types.add(new DatatypeDefinition());
+		types.add(new Annotations(KEYWORDS));
+
+		EquivalentTo to = new EquivalentTo(KEYWORDS);
+		to.addChildType(ManchesterSyntaxUtil.getDataRangeExpression());
+		types.add(to);
+
+		this.setKnownDescriptions(types);
+
+	}
+
+	/**
+	 * Returns the {@link Datatype} section containing the name of the to define
+	 * OWLDatatype.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<DefaultFrame> section
+	 * @return The found section
+	 */
+	public boolean hasDefinition(Section<? extends DefaultFrame> section) {
+		return Sections.findSuccessor(section, Datatype.class) != null;
+	}
+
+	/**
+	 * Returns the {@link Datatype} section containing the name of the to define
+	 * OWLDatatype.
+	 *
+	 * @created 27.09.2011
+	 * @param Section<DefaultFrame> section
+	 * @return The found section
+	 */
+	public Section<? extends Type> getDefinition(Section<? extends DefaultFrame> section) {
+		return Sections.findSuccessor(section, Datatype.class);
+	}
+
+	/**
+	 * Returns the {@link EquivalentTo} section
+	 *
+	 * @created 27.09.2011
+	 * @param Section<DefaultFrame> section
+	 * @return The found section
+	 */
+	public boolean hasEquivalentTo(Section<? extends DefaultFrame> section) {
+		return Sections.findSuccessor(section, EquivalentTo.class) != null;
+	}
+
+	/**
+	 * Returns the {@link EquivalentTo} section
+	 *
+	 * @created 27.09.2011
+	 * @param Section<DefaultFrame> section
+	 * @return The found section
+	 */
+	public Section<? extends Type> getEquivalentTo(Section<? extends DefaultFrame> section) {
+		return Sections.findSuccessor(section, EquivalentTo.class);
+	}
+
+	@Override
+	public KnowledgeUnitCompileScript<DataTypeFrame> getCompileScript() {
+		return new DatatypeCompileScript();
 	}
 }
 
 /**
  *
- * @author smark
+ * @author Stefan Mark
  * @created 24.05.2011
  */
 class DatatypeDefinition extends AbstractType {
@@ -64,27 +142,25 @@ class DatatypeDefinition extends AbstractType {
 	public DatatypeDefinition() {
 
 		Pattern p = Pattern.compile(PATTERN);
-		SectionFinder sf = new RegexSectionFinder(p, 0);
-		this.setSectionFinder(sf);
+		this.setSectionFinder(new RegexSectionFinder(p, 0));
 
 		Keyword key = new Keyword(DataTypeFrame.KEYWORD);
 		this.addChildType(key);
 
-		Datatype owl = new Datatype();
-		owl.setSectionFinder(new AllTextFinderTrimmed());
-		this.addChildType(owl);
+		Datatype type = new Datatype();
+		this.addChildType(type);
 	}
+}
 
-	/**
-	 *
-	 *
-	 * @author smark
-	 * @created 06.06.2011
-	 */
-	class Datatype extends DatatypePropertyIRIDefinition {
+/**
+ *
+ *
+ * @author Stefan Mark
+ * @created 06.06.2011
+ */
+class Datatype extends DatatypePropertyIRIDefinition {
 
-		public Datatype() {
-
-		}
+	public Datatype() {
+		this.setSectionFinder(new AllTextFinderTrimmed());
 	}
 }

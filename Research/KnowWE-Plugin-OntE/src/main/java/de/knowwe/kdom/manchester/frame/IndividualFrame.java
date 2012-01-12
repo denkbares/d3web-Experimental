@@ -308,12 +308,15 @@ class Individual extends NamedIndividualIRIDefinition {
  */
 class SameAs extends AbstractType {
 
-	public static final String KEYWORD = "SameAs[:]?";
+	public static final String KEYWORD = ManchesterSyntaxKeywords.SAME_AS.getKeyword();
 
 	public SameAs() {
 
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(IndividualFrame.KEYWORDS, KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 1));
+		// Pattern p =
+		// ManchesterSyntaxUtil.getDescriptionPattern(IndividualFrame.KEYWORDS,
+		// KEYWORD);
+		// this.setSectionFinder(new RegexSectionFinder(p, 1));
+		this.setSectionFinder(new DescriptionSectionFinder(KEYWORD));
 
 		Keyword key = new Keyword(KEYWORD);
 		this.addChildType(key);
@@ -330,7 +333,7 @@ class SameAs extends AbstractType {
  */
 class Types extends AbstractType {
 
-	public static final String KEYWORD = "Types[:]?";
+	public static final String KEYWORD = ManchesterSyntaxKeywords.TYPES.getKeyword();
 
 	public Types() {
 
@@ -338,8 +341,9 @@ class Types extends AbstractType {
 		// ManchesterSyntaxUtil.getDescriptionPattern(IndividualFrame.KEYWORDS,
 		// KEYWORD);
 		// this.setSectionFinder(new RegexSectionFinder(p, 1));
-		this.setSectionFinder(new DescriptionSectionFinder(
-				ManchesterSyntaxKeywords.TYPES.getKeyword()));
+		this.setSectionFinder(new DescriptionSectionFinder(KEYWORD));
+		// this.setSectionFinder(new DescriptionSectionFinder(
+		// ManchesterSyntaxKeywords.TYPES.getKeyword()));
 
 		Keyword key = new Keyword(KEYWORD);
 		this.addChildType(key);
@@ -360,16 +364,14 @@ class Types extends AbstractType {
  */
 class DifferentFrom extends AbstractType {
 
-	public static final String KEYWORD = "DifferentFrom[:]?";
+	public static final String KEYWORD = ManchesterSyntaxKeywords.DIFFERENT_FROM.getKeyword();
 
 	public DifferentFrom() {
 
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(IndividualFrame.KEYWORDS, KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 1));
+		this.setSectionFinder(new DescriptionSectionFinder(KEYWORD));
 
 		Keyword key = new Keyword(KEYWORD);
 		this.addChildType(key);
-
 		this.addChildType(ManchesterSyntaxUtil.getMCE());
 	}
 }
@@ -382,20 +384,14 @@ class DifferentFrom extends AbstractType {
  */
 class Facts extends AbstractType {
 
-	public static final String KEYWORD = "Facts[:]?";
+	public static final String KEYWORD = ManchesterSyntaxKeywords.FACTS.getKeyword();
 
 	public Facts() {
 
-		// Pattern p =
-		// ManchesterSyntaxUtil.getDescriptionPattern(IndividualFrame.KEYWORDS,
-		// KEYWORD);
-		// this.setSectionFinder(new RegexSectionFinder(p, 1));
-		this.setSectionFinder(new DescriptionSectionFinder(
-				ManchesterSyntaxKeywords.FACTS.getKeyword()));
+		this.setSectionFinder(new DescriptionSectionFinder(KEYWORD));
 
 		Keyword key = new Keyword(KEYWORD);
 		this.addChildType(key);
-
 		this.addChildType(ManchesterSyntaxUtil.getMCE());
 	}
 }

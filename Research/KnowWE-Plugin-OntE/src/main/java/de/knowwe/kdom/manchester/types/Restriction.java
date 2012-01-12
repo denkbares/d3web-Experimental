@@ -22,6 +22,7 @@ import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
  *
@@ -46,10 +47,11 @@ public class Restriction extends AbstractType {
 
 		this.setSectionFinder(new AllTextFinderTrimmed());
 
-		SomeRestriction some = new SomeRestriction();
+		// first some types for object property expression ...
+		SomeRestriction some = new SomeRestriction(ManchesterSyntaxKeywords.SOME.getKeyword());
 		this.addChildType(some);
 
-		OnlyRestriction only = new OnlyRestriction();
+		OnlyRestriction only = new OnlyRestriction(ManchesterSyntaxKeywords.ONLY.getKeyword());
 		this.addChildType(only);
 
 		SelfRestriction self = new SelfRestriction();
@@ -58,8 +60,13 @@ public class Restriction extends AbstractType {
 		CardinalityRestriction i = new CardinalityRestriction(this);
 		this.addChildType(i);
 
-		ValueRestriction value = new ValueRestriction();
+		ValueRestriction value = new ValueRestriction(ManchesterSyntaxKeywords.VALUE.getKeyword());
 		this.addChildType(value);
+
+		// ... then some types for data property expression ...
+		this.addChildType(new SomeRestriction(ManchesterSyntaxKeywords.SOME_.getKeyword()));
+		this.addChildType(new SomeRestriction(ManchesterSyntaxKeywords.VALUE_.getKeyword()));
+		this.addChildType(new OnlyRestriction(ManchesterSyntaxKeywords.VALUE_.getKeyword()));
 
 		Fact fact = new Fact();
 		this.addChildType(fact);

@@ -32,7 +32,7 @@ import de.knowwe.kdom.manchester.ManchesterClassExpression.OWLClassContentType;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
- * 
+ *
  * @author Stefan Mark
  * @created 18.05.2011
  */
@@ -43,12 +43,15 @@ public class OnlyRestriction extends AbstractType {
 	 */
 	public static final String KEY = ManchesterSyntaxKeywords.ONLY.getKeyword();
 
-	public static final String REGEX = Restriction.BEFORE_REGEX + KEY + Restriction.AFTER_REGEX;
+	// public static final String REGEX = Restriction.BEFORE_REGEX + KEY +
+	// Restriction.AFTER_REGEX;
 
 	/**
 	 *
 	 */
-	public OnlyRestriction() {
+	public OnlyRestriction(String keyword) {
+
+		String REGEX = Restriction.BEFORE_REGEX + keyword + Restriction.AFTER_REGEX;
 
 		SectionFinder sf = new RegexSectionFinder(REGEX, Pattern.DOTALL);
 		this.setSectionFinder(sf);
@@ -61,7 +64,7 @@ public class OnlyRestriction extends AbstractType {
 		ope.setSectionFinder(csf);
 		this.addChildType(ope);
 
-		Keyword key = new Keyword(KEY);
+		Keyword key = new Keyword(keyword);
 		this.addChildType(key);
 
 		this.addChildType(OWLClassContentType.getCompositeCondition());
@@ -74,4 +77,23 @@ public class OnlyRestriction extends AbstractType {
 	public Section<ManchesterClassExpression> getManchesterClassExpression(Section<OnlyRestriction> section) {
 		return Sections.findSuccessor(section, ManchesterClassExpression.class);
 	}
+
+	public boolean isObjectPropertyExpression(Section<OnlyRestriction> section) {
+
+		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
+		if (keyword != null) {
+			return keyword.getOriginalText().equals(ManchesterSyntaxKeywords.ONLY.getKeyword());
+		}
+		return false;
+	}
+
+	public boolean isDataPropertyExpression(Section<OnlyRestriction> section) {
+
+		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
+		if (keyword != null) {
+			return keyword.getOriginalText().equals(ManchesterSyntaxKeywords.ONLY_.getKeyword());
+		}
+		return false;
+	}
+
 }

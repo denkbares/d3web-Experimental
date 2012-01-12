@@ -35,6 +35,7 @@ public class DatatypeRestriction extends AbstractType {
 
 		NonTerminalList list = new NonTerminalList();
 		NonTerminalListContent listContent = new NonTerminalListContent();
+		listContent.addChildType(new Delimiter());
 		listContent.addChildType(new FacetRestriction());
 		list.addChildType(listContent);
 
@@ -42,8 +43,10 @@ public class DatatypeRestriction extends AbstractType {
 		braceContent.addChildType(new FacetRestriction());
 		brace.addChildType(braceContent);
 		this.addChildType(brace);
-		this.addChildType(new FacetRestriction());
 
+		this.addChildType(new Delimiter());
+
+		this.addChildType(new FacetRestriction());
 		this.addChildType(new Literal());
 	}
 
@@ -58,8 +61,78 @@ public class DatatypeRestriction extends AbstractType {
 		return Sections.findSuccessor(section, PredefinedOWLDatatype.class) != null;
 	}
 
+	// integer|int|double|boolean|float|decimal|string
+
+	public boolean isIntegerDataType(Section<DatatypeRestriction> section) {
+		Section<?> predef = getPredefinedDataType(section);
+		if (predef.getOriginalText().equals("integer") || predef.getOriginalText().equals("int")) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isDoubleDataType(Section<DatatypeRestriction> section) {
+		Section<?> predef = getPredefinedDataType(section);
+		if (predef.getOriginalText().equals("double")) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isBooleanDataType(Section<DatatypeRestriction> section) {
+		Section<?> predef = getPredefinedDataType(section);
+		if (predef.getOriginalText().equals("boolean")) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isFloatDataType(Section<DatatypeRestriction> section) {
+		Section<?> predef = getPredefinedDataType(section);
+		if (predef.getOriginalText().equals("float")) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isDecimalDataType(Section<DatatypeRestriction> section) {
+		Section<?> predef = getPredefinedDataType(section);
+		if (predef.getOriginalText().equals("decimal")) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isStringDataType(Section<DatatypeRestriction> section) {
+		Section<?> predef = getPredefinedDataType(section);
+		if (predef.getOriginalText().equals("string")) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Retrieves a {@link PredefinedOWLDatatype} section
+	 *
+	 * @param Section<Restriction> a A {@link DatatypeRestriction} section
+	 * @return The found {@link PredefinedOWLDatatype} sections
+	 */
+	public Section<?> getPredefinedDataType(Section<DatatypeRestriction> section) {
+		return Sections.findChildOfType(section, PredefinedOWLDatatype.class);
+	}
+
 	public boolean isLiteral(Section<DatatypeRestriction> section) {
 		return Sections.findSuccessor(section, Literal.class) != null;
+	}
+
+	/**
+	 * Retrieves a {@link Literal} section
+	 *
+	 * @param Section<Restriction> a A {@link DatatypeRestriction} section
+	 * @return The found {@link Literal} sections
+	 */
+	public Section<Literal> getLiteral(Section<DatatypeRestriction> section) {
+		return Sections.findChildOfType(section, Literal.class);
 	}
 
 	public boolean isFacet(Section<DatatypeRestriction> section) {
@@ -84,47 +157,6 @@ public class DatatypeRestriction extends AbstractType {
 		return Collections.emptyMap();
 	}
 }
-
-class FacetRestriction extends AbstractType {
-
-	public FacetRestriction() {
-		this.setSectionFinder(new AllTextFinderTrimmed());
-		this.addChildType(new Facet());
-		this.addChildType(new Literal());
-	}
-
-	public boolean hasLiteral(Section<FacetRestriction> section) {
-		return Sections.findSuccessor(section, Literal.class) != null;
-	}
-
-	public Section<Literal> getLiteral(Section<FacetRestriction> section) {
-		return Sections.findSuccessor(section, Literal.class);
-	}
-
-	public boolean hasFacet(Section<FacetRestriction> section) {
-		return Sections.findSuccessor(section, Facet.class) != null;
-	}
-
-	public Section<? extends AbstractType> getFacet(Section<FacetRestriction> section) {
-		return Sections.findSuccessor(section, Facet.class);
-	}
-}
-
-/**
- *
- *
- * @author Stefan Mark
- * @created 05.10.2011
- */
-class Facet extends AbstractType {
-
-	public static final String PATTERN = "length|minLength|maxLength|pattern|langRange|<=|<|>=|>";
-
-	public Facet() {
-		this.setSectionFinder(new RegexSectionFinder(PATTERN));
-	}
-}
-
 /**
  *
  *
@@ -133,7 +165,7 @@ class Facet extends AbstractType {
  */
 class PredefinedOWLDatatype extends AbstractType {
 
-	public static final String PATTERN = "integer|int|double|boolean|float|decimal";
+	public static final String PATTERN = "integer|int|double|boolean|float|decimal|string";
 
 	public PredefinedOWLDatatype() {
 		this.setSectionFinder(new RegexSectionFinder(PATTERN));

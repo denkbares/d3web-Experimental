@@ -26,6 +26,7 @@ import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.manchester.frame.ClassFrame;
 import de.knowwe.kdom.manchester.frame.DataPropertyFrame;
+import de.knowwe.kdom.manchester.frame.DataTypeFrame;
 import de.knowwe.kdom.manchester.frame.ExtendClassFrame;
 import de.knowwe.kdom.manchester.frame.ExtendIndividualFrame;
 import de.knowwe.kdom.manchester.frame.ExtendObjectPropertyFrame;
@@ -56,7 +57,7 @@ public class ManchesterMarkup extends AbstractType {
 			+ IndividualFrame.KEYWORD + "|"
 			+ ObjectPropertyFrame.KEYWORD + "|"
 			+ PrefixFrame.KEYWORD + "|"
-			// + DataTypeFrame.KEYWORD + "|"
+			+ DataTypeFrame.KEYWORD + "|"
 			+ DataPropertyFrame.KEYWORD + "|"
 			+ OntologyFrame.KEYWORD + "|"
 			+ ExtendClassFrame.KEYWORD + "|"
@@ -93,6 +94,7 @@ public class ManchesterMarkup extends AbstractType {
 			this.addChildType(new PrefixFrame());
 			this.addChildType(new OntologyFrame());
 			this.addChildType(new DataPropertyFrame());
+			this.addChildType(new DataTypeFrame());
 
 			this.addChildType(new ExtendClassFrame());
 			this.addChildType(new ExtendIndividualFrame());

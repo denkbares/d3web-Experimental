@@ -39,7 +39,9 @@ import org.semanticweb.owlapi.model.OWLDatatype;
 import org.semanticweb.owlapi.model.OWLDeclarationAxiom;
 import org.semanticweb.owlapi.model.OWLDifferentIndividualsAxiom;
 import org.semanticweb.owlapi.model.OWLEntity;
+import org.semanticweb.owlapi.model.OWLFacetRestriction;
 import org.semanticweb.owlapi.model.OWLIndividual;
+import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
@@ -47,6 +49,7 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLSameIndividualAxiom;
 import org.semanticweb.owlapi.model.PrefixManager;
 import org.semanticweb.owlapi.util.DefaultPrefixManager;
+import org.semanticweb.owlapi.vocab.OWLFacet;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 import de.d3web.we.kdom.condition.NonTerminalCondition;
@@ -63,21 +66,26 @@ import de.knowwe.kdom.manchester.compile.utils.ImportedOntologyManager;
 import de.knowwe.kdom.manchester.frame.MiscFrame;
 import de.knowwe.kdom.manchester.types.Annotation;
 import de.knowwe.kdom.manchester.types.Annotations;
+import de.knowwe.kdom.manchester.types.BraceElement;
 import de.knowwe.kdom.manchester.types.CardinalityRestriction;
 import de.knowwe.kdom.manchester.types.DataPropertyExpression;
 import de.knowwe.kdom.manchester.types.DataRangeExpression;
+import de.knowwe.kdom.manchester.types.DatatypeRestriction;
+import de.knowwe.kdom.manchester.types.Facet;
+import de.knowwe.kdom.manchester.types.FacetRestriction;
+import de.knowwe.kdom.manchester.types.Literal;
 import de.knowwe.kdom.manchester.types.NonTerminalList;
 import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
 import de.knowwe.kdom.manchester.types.ObjectPropertyExpression;
 import de.knowwe.kdom.manchester.types.OneOfBracedCondition;
 import de.knowwe.kdom.manchester.types.OnlyRestriction;
+import de.knowwe.kdom.manchester.types.PropertyExpression;
 import de.knowwe.kdom.manchester.types.Restriction;
 import de.knowwe.kdom.manchester.types.SelfRestriction;
 import de.knowwe.kdom.manchester.types.SomeRestriction;
 import de.knowwe.kdom.manchester.types.ValueRestriction;
 import de.knowwe.onte.owl.terminology.URIUtil;
 import de.knowwe.owlapi.OWLAPIConnector;
-import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
 /**
@@ -89,14 +97,12 @@ import de.knowwe.util.ManchesterSyntaxKeywords;
 public class AxiomFactory {
 
 	private static final OWLAPIConnector connector;
-	private static final PrefixManager pm;
 	private static final OWLDataFactory factory;
 	private static final AxiomStorageSubtree storage;
 
 	static {
 		connector = OWLAPIConnector.getGlobalInstance();
 		factory = connector.getManager().getOWLDataFactory();
-		pm = new DefaultPrefixManager(Rdf2GoCore.basens);
 		storage = AxiomStorageSubtree.getInstance();
 	}
 
@@ -140,6 +146,9 @@ public class AxiomFactory {
 		else if (entity instanceof OWLClass) {
 			OWLClass c = entity.asOWLClass();
 			return factory.getOWLDeclarationAxiom(c);
+		}
+		else if (entity instanceof OWLDatatype) {
+			return factory.getOWLDeclarationAxiom(entity);
 		}
 		// should never happen
 		throw new Error("OWL API entity conversion for " + entity + " not supported.");
@@ -210,6 +219,9 @@ public class AxiomFactory {
 		}
 		else if (c.equals(OWLIndividual.class) || c.equals(OWLNamedIndividual.class)) {
 			return factory.getOWLNamedIndividual(concept, pm);
+		}
+		else if (c.equals(OWLDatatype.class)) {
+			return factory.getOWLDatatype(concept, pm);
 		}
 		// should never happen
 		throw new Error("OWL API entity conversion for " + c + " not supported.");
@@ -361,17 +373,32 @@ public class AxiomFactory {
 		// A TerminalCondition can either be a SomeRestriction ...
 		if (r.isSomeRestriction(restrictionSection)) {
 			Section<SomeRestriction> some = r.getSomeRestriction(restrictionSection);
-			Section<ObjectPropertyExpression> ope = some.get().getObjectProperty(some);
+			Section<PropertyExpression> ope = some.get().getObjectProperty(some);
 			Section<ManchesterClassExpression> mce = some.get().getManchesterClassExpression(some);
 
-			OWLObjectProperty p = (OWLObjectProperty) getOWLAPIEntity(ope, OWLObjectProperty.class);
-
-			Map<OWLClassExpression, Section<? extends Type>> exp = createDescriptionExpression(mce,
-					messages);
-			if (!exp.isEmpty()) {
-				return factory.getOWLObjectSomeValuesFrom(p,
-						(OWLClassExpression) exp.keySet().iterator().next());
+			if (some.get().isObjectPropertyExpression(some)) {
+				OWLObjectProperty p = (OWLObjectProperty) getOWLAPIEntity(ope,
+						OWLObjectProperty.class);
+				Map<OWLClassExpression, Section<? extends Type>> exp = createDescriptionExpression(
+						mce,
+						messages);
+				if (!exp.isEmpty()) {
+					return factory.getOWLObjectSomeValuesFrom(p,
+							(OWLClassExpression) exp.keySet().iterator().next());
+				}
 			}
+			// else if (some.get().isDataPropertyExpression(some)) {
+			// OWLDataProperty p = (OWLDataProperty) getOWLAPIEntity(ope,
+			// OWLDataProperty.class);
+			//
+			// Map<OWLDataRange, Section<? extends Type>> exp =
+			// createDataRangeExpression(mce,
+			// messages);
+			// if (!exp.isEmpty()) {
+			// return factory.getOWLDataSomeValuesFrom(p,
+			// (OWLClassExpression) exp.keySet().iterator().next());
+			// }
+			// }
 		}
 
 		// ... or a OnlyRestriction ...
@@ -401,14 +428,22 @@ public class AxiomFactory {
 
 		// ... or a ValueRestriction ...
 		if (r.isValueRestriction(restrictionSection)) {
-			Section<ValueRestriction> only = r.getValueRestriction(restrictionSection);
-			Section<ObjectPropertyExpression> ope = only.get().getObjectProperty(only);
-			Section<ManchesterClassExpression> mce = only.get().getManchesterClassExpression(only);
+			Section<ValueRestriction> value = r.getValueRestriction(restrictionSection);
 
-			OWLObjectProperty p = (OWLObjectProperty) getOWLAPIEntity(ope, OWLObjectProperty.class);
-			OWLEntity entity = getOWLAPIEntity(mce, OWLIndividual.class);
+			Section<PropertyExpression> ope = value.get().getObjectProperty(value);
+			Section<ManchesterClassExpression> mce = value.get().getManchesterClassExpression(value);
 
-			return factory.getOWLObjectHasValue(p, (OWLNamedIndividual) entity);
+			// check with type of expressions
+			if (value.get().isObjectPropertyExpression(value)) {
+				OWLObjectProperty p = (OWLObjectProperty) getOWLAPIEntity(ope,
+						OWLObjectProperty.class);
+				OWLEntity entity = getOWLAPIEntity(mce, OWLIndividual.class);
+				return factory.getOWLObjectHasValue(p, (OWLNamedIndividual) entity);
+			}
+			else if (value.get().isDataPropertyExpression(value)) {
+				OWLDataProperty p = (OWLDataProperty) getOWLAPIEntity(ope, OWLDataProperty.class);
+				return factory.getOWLDataHasValue(p, factory.getOWLLiteral(mce.getOriginalText()));
+			}
 		}
 
 		// ... or a CardinalityRestriction ...
@@ -543,26 +578,26 @@ public class AxiomFactory {
 	/**
 	 * Create description axioms from the elements found in the KDOM. This is
 	 * rather a complex issue, so be careful when changing the following lines.
-	 * The Input is a {@link ManchesterClassExpression} that contains all the
+	 * The Input is a {@link DataRangeExpression} that contains all the
 	 * necessary information about its children, e.g. Conjuncts, Disjuncts,
 	 * ListElements or TerminalConditions.
 	 *
 	 * @created 08.09.2011
 	 * @param Section<ManchesterClassExpression> section
-	 * @return A set of {@link OWLClassExpression} for further processing.
+	 * @return A set of {@link OWLDataRange} for further processing.
 	 */
-	public static Map<OWLClassExpression, Section<? extends Type>> createDataRangeExpression(Section<DataRangeExpression> section, Collection<Message> messages) {
+	public static Map<OWLDataRange, Section<? extends Type>> createDataRangeExpression(Section<DataRangeExpression> section, Collection<Message> messages) {
 
 		DataRangeExpression type = section.get();
-		Map<OWLClassExpression, Section<? extends Type>> exp = new HashMap<OWLClassExpression, Section<? extends Type>>();
+		Map<OWLDataRange, Section<? extends Type>> exp = new HashMap<OWLDataRange, Section<? extends Type>>();
 
 		// A description may either be NonTerminalList ...
 		if (type.isNonTerminalList(section)) {
 			List<Section<NonTerminalList>> xjunctions = type.getNonTerminalListElements(section);
-			Map<OWLClassExpression, Section<? extends Type>> set = new HashMap<OWLClassExpression, Section<? extends Type>>();
+			Map<OWLDataRange, Section<? extends Type>> set = new HashMap<OWLDataRange, Section<? extends Type>>();
 			for (Section<NonTerminalList> child : xjunctions) {
-				set.putAll(createDescriptionExpression(Sections.findSuccessor(child,
-						ManchesterClassExpression.class), messages));
+				set.putAll(createDataRangeExpression(Sections.findSuccessor(child,
+						DataRangeExpression.class), messages));
 			}
 			exp.putAll(set);
 			return exp;
@@ -572,36 +607,37 @@ public class AxiomFactory {
 		if (type.isOneOfCurlyBracket(section)) {
 			Map<OWLObject, Section<? extends Type>> set = new HashMap<OWLObject, Section<? extends Type>>();
 			Section<OneOfBracedCondition> one = type.getOneOfCurlyBracket(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(one,
-					ManchesterClassExpression.class);
+			Section<DataRangeExpression> mce = Sections.findSuccessor(one,
+					DataRangeExpression.class);
 
 			if (mce == null) {
 				messages.add(Messages.syntaxError("OneOfCurlyBracket is empty!"));
 				return null;
 			}
 
-			set.putAll(createDescriptionExpression(mce, messages));
+			set.putAll(createDataRangeExpression(mce, messages));
 
-			Set<OWLIndividual> individuals = new HashSet<OWLIndividual>();
+			Set<OWLLiteral> individuals = new HashSet<OWLLiteral>();
 			for (OWLObject c : set.keySet()) {
-				individuals.add(factory.getOWLNamedIndividual(((OWLClass) c).getIRI()));
+				// only string or complete iri?
+				individuals.add(factory.getOWLLiteral(c.toString()));
 			}
-			exp.put(factory.getOWLObjectOneOf(individuals), mce);
+			exp.put(factory.getOWLDataOneOf(individuals), mce);
 			return exp;
 		}
 
 		// ... or a BracedCondition ...
 		if (type.isBraced(section)) {
 			Section<? extends NonTerminalCondition> braced = type.getBraced(section);
-			Section<ManchesterClassExpression> mce = Sections.findSuccessor(braced,
-					ManchesterClassExpression.class);
+			Section<DataRangeExpression> mce = Sections.findSuccessor(braced,
+					DataRangeExpression.class);
 
 			if (mce == null) {
 				messages.add(Messages.syntaxError("Bracket is empty!"));
 				return null;
 			}
 
-			exp.putAll(createDescriptionExpression(mce, messages));
+			exp.putAll(createDataRangeExpression(mce, messages));
 			return exp;
 		}
 
@@ -609,16 +645,16 @@ public class AxiomFactory {
 		if (type.isConjunction(section)) {
 			List<Section<? extends NonTerminalCondition>> xjunctions = new ArrayList<Section<? extends NonTerminalCondition>>();
 			xjunctions = type.getConjuncts(section);
-			Map<OWLClassExpression, Section<? extends Type>> set = new HashMap<OWLClassExpression, Section<? extends Type>>();
+			Map<OWLDataRange, Section<? extends Type>> set = new HashMap<OWLDataRange, Section<? extends Type>>();
 
 			for (Section<?> child : xjunctions) {
-				set.putAll(createDescriptionExpression(Sections.findSuccessor(child,
-						ManchesterClassExpression.class), messages));
+				set.putAll(createDataRangeExpression(Sections.findSuccessor(child,
+						DataRangeExpression.class), messages));
 			}
 			if (!set.isEmpty()) {
-				Set<OWLClassExpression> tmp = new HashSet<OWLClassExpression>();
+				Set<OWLDataRange> tmp = new HashSet<OWLDataRange>();
 				tmp.addAll(set.keySet());
-				exp.put(factory.getOWLObjectIntersectionOf(tmp), section);
+				exp.put(factory.getOWLDataIntersectionOf(tmp), section);
 			}
 			return exp;
 		}
@@ -627,15 +663,15 @@ public class AxiomFactory {
 		if (type.isDisjunction(section)) {
 			List<Section<? extends NonTerminalCondition>> xjunctions = new ArrayList<Section<? extends NonTerminalCondition>>();
 			xjunctions = type.getDisjuncts(section);
-			Map<OWLClassExpression, Section<? extends Type>> set = new HashMap<OWLClassExpression, Section<? extends Type>>();
+			Map<OWLDataRange, Section<? extends Type>> set = new HashMap<OWLDataRange, Section<? extends Type>>();
 			for (Section<?> child : xjunctions) {
-				set.putAll(createDescriptionExpression(Sections.findSuccessor(child,
-						ManchesterClassExpression.class), messages));
+				set.putAll(createDataRangeExpression(Sections.findSuccessor(child,
+						DataRangeExpression.class), messages));
 			}
 			if (!set.isEmpty()) {
-				Set<OWLClassExpression> tmp = new HashSet<OWLClassExpression>();
+				Set<OWLDataRange> tmp = new HashSet<OWLDataRange>();
 				tmp.addAll(set.keySet());
-				exp.put(factory.getOWLObjectUnionOf(tmp), section);
+				exp.put(factory.getOWLDataUnionOf(tmp), section);
 			}
 			return exp;
 		}
@@ -645,11 +681,11 @@ public class AxiomFactory {
 			Section<?> neg = type.getNegation(section);
 
 			Map<OWLObject, Section<? extends Type>> set = new HashMap<OWLObject, Section<? extends Type>>();
-			set.putAll(createDescriptionExpression(Sections.findSuccessor(neg,
-					ManchesterClassExpression.class), messages));
+			set.putAll(createDataRangeExpression(Sections.findSuccessor(neg,
+					DataRangeExpression.class), messages));
 			if (set.size() > 0) {
-				exp.put(factory.getOWLObjectComplementOf(
-						(OWLClassExpression) set.keySet().iterator().next()), section);
+				exp.put(factory.getOWLDataComplementOf(
+						(OWLDataRange) set.keySet().iterator().next()), section);
 			}
 			return exp;
 		}
@@ -657,14 +693,190 @@ public class AxiomFactory {
 		// ... or simply a TerminalCondition
 		if (type.isTerminal(section)) {
 			Section<?> terminal = type.getTerminal(section);
-			// TODO :
-			// DataType | Literal | Facet
-			OWLClassExpression oce = handleTerminals(terminal, messages);
+			OWLDataRange oce = handleDataTerminals(terminal, messages);
 			if (oce != null) {
 				exp.put(oce, section);
 			}
 		}
 		return exp;
+	}
+
+	/**
+	 * Handles all the possible {@link TerminalCondition} of the
+	 * {@link DataRangeExpression}. If you add a new {@link TerminalCondition},
+	 * please update the following lines accordingly.
+	 *
+	 * @created 30.09.2011
+	 * @param Section<? extends TerminalCondition> section
+	 * @return OWLDataRange
+	 */
+	private static OWLDataRange handleDataTerminals(Section<?> section, Collection<Message> messages) {
+
+		Section<DatatypeRestriction> restrictionSection = Sections.findSuccessor(section,
+				DatatypeRestriction.class);
+		DatatypeRestriction r = restrictionSection.get();
+
+		// A TerminalCondition can either be a PredefinedDatatype (XML) ...
+		if (r.isPredefinedDataType(restrictionSection)) {
+
+			Set<OWLFacetRestriction> owlFacetRestrictions = new HashSet<OWLFacetRestriction>();
+			Section<BraceElement> brace = Sections.findSuccessor(restrictionSection,
+					BraceElement.class);
+			if (brace != null) { // optional facets found --> handling
+
+				List<Section<FacetRestriction>> facets = Sections.findSuccessorsOfType(brace,
+						FacetRestriction.class);
+				for (Section<FacetRestriction> sec : facets) {
+					OWLFacetRestriction o = createFacet(sec);
+					if (o != null) {
+						owlFacetRestrictions.add(o);
+					}
+				}
+			}
+
+			OWLDatatype dt = null;
+
+			if (r.isIntegerDataType(restrictionSection)) {
+				dt = factory.getIntegerOWLDatatype();
+			}
+			if (r.isDoubleDataType(restrictionSection) || r.isDecimalDataType(restrictionSection)) {
+				dt = factory.getDoubleOWLDatatype();
+			}
+			if (r.isBooleanDataType(restrictionSection)) {
+				dt = factory.getBooleanOWLDatatype();
+			}
+			if (r.isFloatDataType(restrictionSection)) {
+				dt = factory.getFloatOWLDatatype();
+			}
+			if (r.isStringDataType(restrictionSection)) {
+				dt = factory.getRDFPlainLiteral();
+			}
+
+			if(!owlFacetRestrictions.isEmpty()) {
+				return factory.getOWLDatatypeRestriction(dt, owlFacetRestrictions);
+			}
+			else {
+				return factory.getOWLDatatypeRestriction(dt);
+			}
+
+		}
+
+		// ... or a facet ...
+		// if (r.isFacet(restrictionSection)) {
+		// Map<Section<? extends AbstractType>, Section<Literal>>
+		// facetRestriction = r.getFacets(restrictionSection);
+		// }
+
+		// ... or a literal.
+		if (r.isLiteral(restrictionSection)) {
+			Section<Literal> literal = r.getLiteral(restrictionSection);
+
+			if (literal.get().isFloatingPoint(literal)) {
+				// OWLLiteral l =
+				// factory.getOWLLiteral(Float.valueOf(literal.getOriginalText()));
+				// factory.getOWLDatatypeRestriction(factory.getFloatOWLDatatype(),
+				// facetRestrictions)
+				// return l;
+			}
+
+		}
+
+		messages.add(Messages.syntaxError("Unknown TerminalCondition found!"));
+		return null; // ... or 'This should never happen' :)
+	}
+
+	private static OWLFacetRestriction createFacet(Section<FacetRestriction> facet) {
+
+		FacetRestriction t = facet.get();
+
+		if (t.hasFacet(facet) && t.hasLiteral(facet)) {
+
+			Section<Facet> facetSection = t.getFacet(facet);
+			Facet f = facetSection.get();
+
+			String literal = t.getLiteral(facet).getOriginalText();
+			OWLDatatype type = resolveLiteralType(t.getLiteral(facet));
+
+			if (f.isLength(facetSection)) {
+				return factory.getOWLFacetRestriction(OWLFacet.LENGTH,
+						factory.getOWLLiteral(literal, type));
+			}
+			if (f.isMaxLength(facetSection)) {
+				return factory.getOWLFacetRestriction(OWLFacet.MAX_LENGTH, factory.getOWLLiteral(
+						literal,
+						type));
+			}
+			if (f.isMinLength(facetSection)) {
+				return factory.getOWLFacetRestriction(OWLFacet.MIN_LENGTH, factory.getOWLLiteral(
+						literal,
+						type));
+			}
+			if (f.isMaxInclusive(facetSection)) {
+				return factory.getOWLFacetRestriction(OWLFacet.MAX_INCLUSIVE,
+						factory.getOWLLiteral(literal,
+								type));
+			}
+			if (f.isMinExclusive(facetSection)) {
+				return factory.getOWLFacetRestriction(OWLFacet.MIN_EXCLUSIVE,
+						factory.getOWLLiteral(literal,
+								type));
+			}
+			if (f.isMaxExclusive(facetSection)) {
+				return factory.getOWLFacetRestriction(OWLFacet.MAX_EXCLUSIVE,
+						factory.getOWLLiteral(literal,
+								type));
+			}
+			if (f.isMinInclusive(facetSection)) {
+				return factory.getOWLFacetRestriction(OWLFacet.MIN_INCLUSIVE,
+						factory.getOWLLiteral(literal,
+								type));
+			}
+			if (f.isLangRange(facetSection)) {
+				return factory.getOWLFacetRestriction(OWLFacet.LANG_RANGE, factory.getOWLLiteral(
+						literal,
+						type));
+			}
+			if (f.isPattern(facetSection)) {
+				return factory.getOWLFacetRestriction(OWLFacet.PATTERN, factory.getOWLLiteral(
+						literal,
+						type));
+			}
+		}
+		return null;
+	}
+
+	private static OWLDatatype resolveLiteralType(Section<Literal> section) {
+		Literal l = section.get();
+
+		if (l.isFloatingPoint(section)) {
+			return factory.getFloatOWLDatatype();
+		}
+		else if (l.isDecimal(section)) {
+			return factory.getDoubleOWLDatatype();
+		}
+		else if (l.isInteger(section)) {
+			return factory.getIntegerOWLDatatype();
+		}
+		return factory.getRDFPlainLiteral();
+	}
+
+	private static OWLDatatype resolveLiteralType(String value) {
+
+		String INTEGER = Literal.INTEGER_PATTERN;
+		String FLOAT = Literal.FLOATING_PATTERN;
+		String DOUBLE = Literal.DECIMAL_PATTERN;
+
+		if (value.matches(INTEGER)) {
+			return factory.getIntegerOWLDatatype();
+		}
+		if (value.matches(FLOAT)) {
+			return factory.getFloatOWLDatatype();
+		}
+		if (value.matches(DOUBLE)) {
+			return factory.getDoubleOWLDatatype();
+		}
+		return factory.getRDFPlainLiteral();
+
 	}
 
 	/**
@@ -851,18 +1063,44 @@ public class AxiomFactory {
 	 * @return
 	 */
 	public static OWLAxiom createFact(Section<?> section, OWLIndividual i, Collection<Message> messages) {
-		Section<ObjectPropertyExpression> ope = Sections.findSuccessor(section,
-				ObjectPropertyExpression.class);
+		Section<PropertyExpression> ope = Sections.findSuccessor(section,
+				PropertyExpression.class);
 		Section<OWLTermReferenceManchester> ref = Sections.findSuccessor(section,
 				OWLTermReferenceManchester.class);
-		if (ope != null && ref != null) {
+		Section<Literal> lit = Sections.findSuccessor(section, Literal.class);
+
+		if (ope != null) { // object property fact
+
 			OWLObjectProperty p = (OWLObjectProperty) getOWLAPIEntity(ope,
 					OWLObjectProperty.class);
-			OWLNamedIndividual ind = (OWLNamedIndividual) getOWLAPIEntity(ref,
-					OWLIndividual.class);
-			return factory.getOWLObjectPropertyAssertionAxiom(p, i, ind);
+
+			// check type of property and handle accordingly
+			boolean isDataProperty = OWLAPIConnector.getGlobalInstance().getOntology().containsDataPropertyInSignature(
+					p.getIRI(), true);
+
+			if (isDataProperty) {
+				OWLDataProperty pTmp = (OWLDataProperty) getOWLAPIEntity(ope,
+						OWLDataProperty.class);
+
+				String object = (lit != null) ? lit.getOriginalText() : (ref != null)
+						? ref.getOriginalText()
+						: "";
+				object = object.replaceAll("\"", "");
+
+				OWLDatatype dt = resolveLiteralType(object);
+
+				return factory.getOWLDataPropertyAssertionAxiom(pTmp, i,
+						factory.getOWLLiteral(object, dt));
+			}
+			else if (ref != null) {
+				OWLNamedIndividual ind = (OWLNamedIndividual) getOWLAPIEntity(ref,
+						OWLIndividual.class);
+				return factory.getOWLObjectPropertyAssertionAxiom(p, i, ind);
+			}
 		}
-		messages.add(Messages.syntaxError("ObjectProperty or Termreference missing!"));
+		else {
+			messages.add(Messages.syntaxError("Data-/ ObjectProperty or Termreference missing!"));
+		}
 		return null;
 	}
 
@@ -1130,8 +1368,17 @@ public class AxiomFactory {
 			return factory.getFloatOWLDatatype();
 		}
 		return factory.getOWLDatatype(IRI.create(possibleType));
+	}
 
-		// throw new
-		// Error("Unknown Datatype found, please contact the developer :)");
+	/**
+	 * Defines an custom datatype for the ontology.
+	 *
+	 * @created 10.01.2012
+	 * @param OWLDatatype d
+	 * @param OWLDataRange r
+	 * @return
+	 */
+	public static OWLAxiom createOWLDataTypeEquivalentTo(OWLDatatype d, OWLDataRange r) {
+		return factory.getOWLDatatypeDefinitionAxiom(d, r);
 	}
 }

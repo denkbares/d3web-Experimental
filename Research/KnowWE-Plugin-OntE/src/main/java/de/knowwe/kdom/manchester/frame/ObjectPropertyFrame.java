@@ -325,7 +325,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 	}
 
 	@Override
-	public KnowledgeUnitCompileScript getCompileScript() {
+	public KnowledgeUnitCompileScript<ObjectPropertyFrame> getCompileScript() {
 		return new ObjectPropertyCompileScript();
 	}
 }

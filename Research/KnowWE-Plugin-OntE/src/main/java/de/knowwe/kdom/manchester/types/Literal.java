@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 /**
@@ -17,8 +16,28 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
  */
 public class Literal extends AbstractType {
 
+	public static final String EXPONENT = "(e|E)[+-]?\\d*";
+
+	public static final String FLOATING_PATTERN = "[+-]?(\\d+[\\.\\d*]\\s+[" + EXPONENT
+			+ "]|\\.\\d*["
+			+ EXPONENT + "])(f|F)";
+
+	public static final String DECIMAL_PATTERN = "[+-]?\\d+\\.\\d+";
+
+	public static final String INTEGER_PATTERN = "[+-]?\\d+";
+
+	public static final String PATTERN = "(" + TypedLiteral.PATTERN + "|"
+			+ StringLiteral.PATTERN + "|"
+			+ StringLiteralLanguage.PATTERN + "|"
+			+ FLOATING_PATTERN + "|"
+			+ DECIMAL_PATTERN + "|"
+			+ INTEGER_PATTERN + ")";
+
+
+
+
 	public Literal() {
-		this.setSectionFinder(new AllTextFinderTrimmed());
+		this.setSectionFinder(new RegexSectionFinder(PATTERN));
 
 		// typed literals
 		this.addChildType(new TypedLiteral());
@@ -94,12 +113,9 @@ class FloatingPointLiteral extends AbstractType {
 
 	//floatingPointLiteral ::= [ '+' | '-'] ( digits ['.'digits] [exponent] | '.' digits[exponent]) ( 'f' | 'F' )
 	// exponent ::= ('e' | 'E') ['+' | '-'] digits
-	public static final String EXPONENT = "(e|E)[+-]?\\d*";
-	public static final String PATTERN = "[+-]?(\\d+[\\.\\d*]\\s+[" + EXPONENT + "]|\\.\\d*["
-			+ EXPONENT + "])(f|F)";
 
 	public FloatingPointLiteral() {
-		this.setSectionFinder(new RegexSectionFinder(PATTERN));
+		this.setSectionFinder(new RegexSectionFinder(Literal.FLOATING_PATTERN));
 	}
 }
 
@@ -113,10 +129,9 @@ class FloatingPointLiteral extends AbstractType {
 class DecimalLiteral extends AbstractType {
 
 	// decimalLiteral ::= ['+' | '-'] digits '.' digits
-	public static final String PATTERN = "[+-]?\\d+\\.\\d+";
 
 	public DecimalLiteral() {
-		this.setSectionFinder(new RegexSectionFinder(PATTERN));
+		this.setSectionFinder(new RegexSectionFinder(Literal.DECIMAL_PATTERN));
 	}
 }
 
@@ -130,10 +145,9 @@ class DecimalLiteral extends AbstractType {
 class IntegerLiteral extends AbstractType {
 
 	// integerLiteral ::= ['+' | '-'] digits
-	public static final String PATTERN = "[+-]?\\d+";
 
 	public IntegerLiteral() {
-		this.setSectionFinder(new RegexSectionFinder(PATTERN));
+		this.setSectionFinder(new RegexSectionFinder(Literal.INTEGER_PATTERN));
 	}
 }
 
@@ -146,8 +160,10 @@ class IntegerLiteral extends AbstractType {
  */
 class StringLiteral extends AbstractType {
 
+	public static final String PATTERN = "\".*\"";
+
 	public StringLiteral() {
-		this.setSectionFinder(new RegexSectionFinder("\".*\""));
+		this.setSectionFinder(new RegexSectionFinder(PATTERN));
 	}
 }
 
@@ -179,10 +195,11 @@ class StringLiteralLanguage extends AbstractType {
  */
 class TypedLiteral extends AbstractType {
 
+	public static final String PATTERN = "\".*\"^^([A-Za-z0-9]+|integer|decimal|float|string)";
+
 	public TypedLiteral() {
 
-		this.setSectionFinder(new RegexSectionFinder(
-				"\".*\"^^([A-Za-z0-9]+|integer|decimal|float|string)"));
+		this.setSectionFinder(new RegexSectionFinder(PATTERN));
 		this.addChildType(new StringLiteral());
 	}
 }
