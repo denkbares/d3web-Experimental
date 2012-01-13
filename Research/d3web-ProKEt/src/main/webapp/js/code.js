@@ -1063,6 +1063,7 @@ function h4boxes(value, id) {
         }*/
         
         setColorForQuestion(target, item, value);
+        setPropagationColor(target);
         
         // also mark parents of the target while excluding target
         h4boxes_mark(target, true);
@@ -1084,6 +1085,13 @@ function h4boxes(value, id) {
         });
         d3web_getRatings(ids);*/
     }
+}
+
+function setPropagationColor(question){
+    
+    var prop = $("#propagation-"+question.attr("id"));
+    var propColor = calculateRatingForQuestion(question);
+    setColorForQuestion(prop, prop, propColor);
 }
 
 /*
@@ -1284,9 +1292,12 @@ function h4boxes_mark(object, skip_self) {
           
         // retrieve target element and target image
         var target = $("#" + $(object).attr('id'));
-        var imgTarget = $("#pane-" + $(object).attr('id'));
+        var imgTarget = $("#panel-" + $(object).attr('id'));
         
         setColorForQuestion(target, imgTarget, color);
+        setPropagationColor(target);
+        // set image attribute to the correctly selected one
+        imgTarget.attr('src', "img/pane.png");
     }
 
     // get first parent div

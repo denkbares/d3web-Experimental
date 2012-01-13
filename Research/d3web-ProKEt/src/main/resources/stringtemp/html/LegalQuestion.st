@@ -17,6 +17,7 @@
 			<area href="javascript:h4boxes('2','panel-$fullId$')" coords="37.0,0,52,15" shape="rect">
 			<area href="javascript:h4boxes('0','panel-$fullId$')" coords="52,0,67.0,15" shape="rect">
 		</map>
+<div id="propagation-$fullId$" class="propagation"></div>
 	</div>
 	
 	$if(children)$<div id="sub-$fullId$" class="sub-$fullId$" style="padding-left:30px;display:none">

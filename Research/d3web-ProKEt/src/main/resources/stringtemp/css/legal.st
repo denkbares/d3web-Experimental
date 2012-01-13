@@ -99,55 +99,59 @@ table{
         margin-left: 15px;
 }
 
-.question-closed {
-	padding-left: 30px;
-	background: transparent url(images/closed_folder.png) no-repeat top
-		left;
-}
 
-.question-open {
-	padding-left: 30px;
-	background: transparent url(images/open_folder.png) no-repeat top left;
-}
-
+/* initial coloring of questions: alternating greytones */
 .color-even {
 	background-color: #ddd;
 }
-
 .color-odd {
 	background-color: #eee;
 }
 
-.question-yes {
-	background-color: #C3DAA8;
+
+/* rating colors for question backgrounds */
+.rating-high, .rating-medium, .rating-low { 
+    border: 0px solid black; 
+}
+.rating-high > .title { 
+    background-color: #C3DAA8; border: none; 
+}
+.rating-medium > .title { 
+    background-color: #F4F4C7; border: none; 
+}
+.rating-low > .title { 
+    background-color: #E0B59E; border: none; 
 }
 
-.question-no {
-	background-color: #E0B59E;
+
+/* Styles the box containing the button panel */
+.question-imagebox { 
+    line-height: 1.5em; padding: 2px; float: left; margin-left: 15px; margin-right: 15px;
 }
 
-.question-undecided{
-	background-color: #F4F4C7;
+
+/* Style the appearance of area fields, as in the button panel */
+area {
+    border: none;
 }
 
-.question-unanswered {
-	
+
+/* Styles the div that displays hints of the readflow, e.g. "und/and, oder/or"...*/
+.readflow{
+    float: left; clear: both; margin-top: 7px;
 }
 
-/* rating colors */
-.rating-high, .rating-medium, .rating-low { border: 0px solid black; }
-.rating-high > .title { background-color: #C3DAA8; border: none; }
-.rating-medium > .title { background-color: #F4F4C7; border: none; }
-.rating-low > .title { background-color: #E0B59E; border: none; }
 
-.question-imagebox {
-	line-height: 1.5em;
-	padding: 4px;
-	float: left;
-        margin-left: 15px;
-        margin-right: 15px;
+/* Styling of the div within questions that displays the currently propagated value */
+.propagation{
+    display: block; width: 12px; height: 12px; float: right; margin-top: 5px; margin-right: 2px;
 }
-
-area {border: none;}
-
-.readflow{float: left; clear: both; margin-top: 10px;}
+.propagation.rating-high { 
+    background-color: #C3DAA8; border: 1px solid grey; 
+}
+.propagation.rating-medium { 
+    background-color: #F4F4C7; border: 1px solid grey; 
+}
+.propagation.rating-low { 
+    background-color: #E0B59E; border: 1px solid grey; 
+}

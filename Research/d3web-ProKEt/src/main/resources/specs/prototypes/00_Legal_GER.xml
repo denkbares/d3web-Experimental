@@ -29,7 +29,7 @@
                 <question title="Wurde die Vollmacht wirksam nachgereicht?" id="45" parent-id="40" />
                 <question title="Die Kündigung war nicht durch Sondertatbestände ausgeschlossen?"
 			id="3" parent-id="1" bonus-text="Hier wird geklärt, ob die Kündigung durch
-                        verschiedene Sondertatbestände ausgeschollsen war. Beispiele für solche Sondertatbestände sind
+                        verschiedene Sondertatbestände ausgeschlossen war. Beispiele für solche Sondertatbestände sind
                         das Mutterschutzgesetzt, das Arbeitsplatzschutzgesetzt, oder eine momenane Ableistung
                         des Wehrdienstes."/>
 		<question title="Traf kein Mutterschutzgesetz zu?" id="4" parent-id="3" />
