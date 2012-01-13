@@ -6,7 +6,7 @@
 					<input id="i_unknown_$fullId$" type="radio" $selection$ title=$title$ 
 					name="group-$count$-$fullId$" $selection$ $if(readonly)$ DISABLED $endif$ />
 				</td>
-				<td id="text-$fullId$" width="99%" $if(inactive)$ class="inactive" $endif$>
+				<td id="text-$fullId$" width="100%" $if(inactive)$ class="inactive" $endif$>
 					$title$
 					$Tooltip()$
 				</td>

@@ -168,10 +168,11 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 		TerminologyObject[] children = to.getChildren();
 		// Blackboard bb = d3webSession.getBlackboard();
 		for (TerminologyObject child : children) {
-			Boolean hide = child.getInfoStore().getValue(ProKEtProperties.HIDE);
-			if (hide != null && hide == true) {
-				continue;
-			}
+			// Boolean hide =
+			// child.getInfoStore().getValue(ProKEtProperties.HIDE);
+			// if (hide != null && hide == true) {
+			// continue;
+			// }
 
 			// get the matching renderer
 			IQuestionD3webRenderer childRenderer = AbstractD3webRenderer.getRenderer(child);
@@ -492,7 +493,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 	}
 
 	public static String getID(NamedObject no) {
-                
+
 		String id = nameToIdMap.get(no);
 		if (id == null) {
 			String prefix = "";
@@ -509,7 +510,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 			nameToIdMap.put(no.getName(), id);
 			idToNameMap.put(id, no.getName());
 		}
-                return id;
+		return id;
 	}
 
 	public static String getObjectNameForId(String id) {

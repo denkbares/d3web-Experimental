@@ -125,8 +125,8 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 
 	@Override
 	public String renderHeaderInfoLine(Session d3webSession) {
-               
-                StringTemplate st = TemplateUtils.getStringTemplate("HeaderInfoLine", "html");
+
+		StringTemplate st = TemplateUtils.getStringTemplate("HeaderInfoLine", "html");
 
 		TreeMap<Integer, Question> headerQuestions = new TreeMap<Integer, Question>();
 		for (Question question : D3webConnector.getInstance().getKb().getManager().getQuestions()) {
@@ -138,8 +138,8 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		}
 		StringBuilder infoStringBuilder = new StringBuilder();
 		boolean first = true;
-                for (Question headerQuestion : headerQuestions.values()) {
-                        Value value = d3webSession.getBlackboard().getValue(
+		for (Question headerQuestion : headerQuestions.values()) {
+			Value value = d3webSession.getBlackboard().getValue(
 					headerQuestion);
 			first = verbalizeHeaderQuestion(headerQuestion, value, infoStringBuilder, first);
 		}

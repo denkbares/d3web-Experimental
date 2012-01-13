@@ -770,11 +770,11 @@ function d3web_handleQuestionDate(dateSelect) {
     var afterText = $.trim($("#text-" + afterId).text());
     
     if(language=="de"){
-        tooLate = "Erwartet wird ein Datum früher als bei Frage '" + beforeText + "'.";
-        tooSoon = "Erwartet wird ein Datum später als bei Frage '" + afterText + "'.";
+        tooLate = "Erwartet wird ein Datum früher als '" + beforeText + "'.";
+        tooSoon = "Erwartet wird ein Datum später als '" + afterText + "'.";
     } else if(language=="en"){
-        tooLate = "Expected is a date earlier than the one given in question '" + beforeText + "'.";
-        tooSoon = "Expected is a date later than the one given in question '" + afterText + "'.";
+        tooLate = "Expected is a date earlier than '" + beforeText + "'.";
+        tooSoon = "Expected is a date later than '" + afterText + "'.";
     }
     
     var errorWid = getErrorPlaceholder(dateSelect);

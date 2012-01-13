@@ -584,12 +584,13 @@ function tooltip_over(id, element) {
         // store currently shown tooltip and tooltipShownTrigger
         tooltipShown = target;
 		
-        target.css({
-            position : "absolute"
-        });
-		
-
-		
+        target.css("position", "absolute");
+        var height = target.height();
+        var width = target.width();
+		if (height > 0 && width > 0 && height > width) {
+			target.css("width", height);
+			target.css("height", width);
+		}
         //tooltip_move(element);
 
         target.fadeIn(300);

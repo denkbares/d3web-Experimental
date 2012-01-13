@@ -1,4 +1,4 @@
-$if(title)$<div id="text-$fullId$" class="title t-$fullId$">
+$if(title)$<div class="title t-$fullId$">
 <table width="100%"><tr>
 $if(count)$<td style="width:1px; padding-right:3px">$count$</td>$endif$ 
 <td id="text-$fullId$">$title$ $Tooltip()$ $if(sendButton)$</td>
