@@ -357,7 +357,7 @@ public class AxiomFactory {
 		return exp;
 	}
 
-	private static OWLObject handleDataExpressionTerminals(Section<?> section, Collection<Message> messages) {
+	private static OWLClassExpression handleDataExpressionTerminals(Section<?> section, Collection<Message> messages) {
 
 		Section<DataRestriction> restrictionSection = Sections.findSuccessor(section,
 				DataRestriction.class);
@@ -459,7 +459,7 @@ public class AxiomFactory {
 
 		Section<Restriction> restrictionSection = Sections.findSuccessor(section, Restriction.class);
 		if (restrictionSection == null) {
-			handleDataExpressionTerminals(section, messages);
+			return handleDataExpressionTerminals(section, messages);
 		}
 		else {
 			Restriction r = restrictionSection.get();
