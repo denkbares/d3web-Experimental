@@ -64,7 +64,11 @@ public class OnteRenderingUtils {
 			Collection<Section<? extends TermDefinition>> termDefs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 					termIdentifier);
 			if (!termDefs.isEmpty()) {
-				return "Wiki.jsp?page=" + termDefs.iterator().next().getTitle();
+
+				Section<?> next = termDefs.iterator().next();
+				if (next.getArticle() != null) {
+					return "Wiki.jsp?page=" + next.getTitle();
+				}
 			}
 		}
 		return "";
