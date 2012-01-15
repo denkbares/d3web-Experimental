@@ -70,6 +70,7 @@ import de.knowwe.kdom.manchester.types.BraceElement;
 import de.knowwe.kdom.manchester.types.CardinalityRestriction;
 import de.knowwe.kdom.manchester.types.DataPropertyExpression;
 import de.knowwe.kdom.manchester.types.DataRangeExpression;
+import de.knowwe.kdom.manchester.types.DataRestriction;
 import de.knowwe.kdom.manchester.types.DatatypeRestriction;
 import de.knowwe.kdom.manchester.types.Facet;
 import de.knowwe.kdom.manchester.types.FacetRestriction;
@@ -356,6 +357,95 @@ public class AxiomFactory {
 		return exp;
 	}
 
+	private static OWLObject handleDataExpressionTerminals(Section<?> section, Collection<Message> messages) {
+
+		Section<DataRestriction> restrictionSection = Sections.findSuccessor(section,
+				DataRestriction.class);
+		DataRestriction r = restrictionSection.get();
+
+		// A TerminalCondition can either be a SomeRestriction ...
+		if (r.isSomeRestriction(restrictionSection)) {
+			Section<SomeRestriction> some = r.getSomeRestriction(restrictionSection);
+			Section<PropertyExpression> pe = some.get().getObjectProperty(some);
+			Section<DataRangeExpression> dre = some.get().getDataRangeExpression(some);
+
+			if (some.get().isDataPropertyExpression(some)) {
+				OWLDataProperty p = (OWLDataProperty) getOWLAPIEntity(pe,
+						OWLDataProperty.class);
+
+				Map<OWLDataRange, Section<? extends Type>> exp = createDataRangeExpression(
+						dre, messages);
+				if (!exp.isEmpty()) {
+					return factory.getOWLDataSomeValuesFrom(p,
+							(OWLDataRange) exp.keySet().iterator().next());
+				}
+			}
+		}
+
+		// ... or a OnlyRestriction ...
+		if (r.isOnlyRestriction(restrictionSection)) {
+			Section<OnlyRestriction> only = r.getOnlyRestriction(restrictionSection);
+			Section<PropertyExpression> pe = only.get().getObjectProperty(only);
+			Section<DataRangeExpression> dre = only.get().getDataRangeExpression(only);
+
+			OWLDataProperty p = (OWLDataProperty) getOWLAPIEntity(pe, OWLDataProperty.class);
+
+			Map<OWLDataRange, Section<? extends Type>> exp = createDataRangeExpression(dre,
+					messages);
+			if (!exp.isEmpty()) {
+				return factory.getOWLDataAllValuesFrom(p,
+						(OWLDataRange) exp.keySet().iterator().next());
+			}
+		}
+
+		// ... or a ValueRestriction ...
+		if (r.isValueRestriction(restrictionSection)) {
+			Section<ValueRestriction> value = r.getValueRestriction(restrictionSection);
+
+			Section<PropertyExpression> pe = value.get().getObjectProperty(value);
+			Section<ManchesterClassExpression> mce = value.get().getManchesterClassExpression(value);
+
+			OWLDataProperty p = (OWLDataProperty) getOWLAPIEntity(pe, OWLDataProperty.class);
+			return factory.getOWLDataHasValue(p, factory.getOWLLiteral(mce.getOriginalText()));
+		}
+
+		// ... or a CardinalityRestriction ...
+		// ... or a MinRestriction|MaxRestriction|ExactlyRestriction ...
+		if (r.isCardinalityRestriction(restrictionSection)) {
+
+			Section<CardinalityRestriction> cardSection = r.getCardinalityRestriction(restrictionSection);
+			CardinalityRestriction cr = cardSection.get();
+
+			Section<PropertyExpression> pe = cr.getObjectProperty(cardSection);
+
+			OWLDataProperty p = (OWLDataProperty) getOWLAPIEntity(pe, OWLDataProperty.class);
+			Integer digit = cr.getDigit(cardSection);
+
+			OWLDataRange exp = null;
+			if (cr.hasOptionalDataRestriction(cardSection)) {
+				Section<DataRestriction> optional = cr.getOptionalDataRestriction(cardSection);
+
+				// TODO :
+				// exp = handleDataExpressionTerminals(optional, messages);
+			}
+
+			if (cr.isMaxRestriction(cardSection)) {
+				return factory.getOWLDataMaxCardinality(digit, p, exp);
+			}
+			if (cr.isMinRestriction(cardSection)) {
+				return factory.getOWLDataMinCardinality(digit, p, exp);
+			}
+			if (cr.isExactlyRestriction(cardSection)) {
+				return factory.getOWLDataExactCardinality(digit, p, exp);
+			}
+		}
+
+		// ... or a OWLTermReference ...
+
+		messages.add(Messages.syntaxError("Unknown DataTerminalCondition found!"));
+		return null; // ... or 'This should never happen' :)
+	}
+
 	/**
 	 * Handles all the possible {@link TerminalCondition} of the
 	 * {@link ManchesterClassExpression}. If you add a new
@@ -368,128 +458,129 @@ public class AxiomFactory {
 	private static OWLClassExpression handleTerminals(Section<?> section, Collection<Message> messages) {
 
 		Section<Restriction> restrictionSection = Sections.findSuccessor(section, Restriction.class);
-		Restriction r = restrictionSection.get();
+		if (restrictionSection == null) {
+			handleDataExpressionTerminals(section, messages);
+		}
+		else {
+			Restriction r = restrictionSection.get();
 
-		// A TerminalCondition can either be a SomeRestriction ...
-		if (r.isSomeRestriction(restrictionSection)) {
-			Section<SomeRestriction> some = r.getSomeRestriction(restrictionSection);
-			Section<PropertyExpression> ope = some.get().getObjectProperty(some);
-			Section<ManchesterClassExpression> mce = some.get().getManchesterClassExpression(some);
+			// A TerminalCondition can either be a SomeRestriction ...
+			if (r.isSomeRestriction(restrictionSection)) {
+				Section<SomeRestriction> some = r.getSomeRestriction(restrictionSection);
+				Section<PropertyExpression> ope = some.get().getObjectProperty(some);
+				Section<ManchesterClassExpression> mce = some.get().getManchesterClassExpression(
+						some);
 
-			if (some.get().isObjectPropertyExpression(some)) {
+				if (some.get().isObjectPropertyExpression(some)) {
+					OWLObjectProperty p = (OWLObjectProperty) getOWLAPIEntity(ope,
+							OWLObjectProperty.class);
+					Map<OWLClassExpression, Section<? extends Type>> exp = createDescriptionExpression(
+							mce,
+							messages);
+					if (!exp.isEmpty()) {
+						return factory.getOWLObjectSomeValuesFrom(p,
+								(OWLClassExpression) exp.keySet().iterator().next());
+					}
+				}
+			}
+
+			// ... or a OnlyRestriction ...
+			if (r.isOnlyRestriction(restrictionSection)) {
+				Section<OnlyRestriction> only = r.getOnlyRestriction(restrictionSection);
+				Section<PropertyExpression> ope = only.get().getObjectProperty(only);
+				Section<ManchesterClassExpression> mce = only.get().getManchesterClassExpression(
+						only);
+
 				OWLObjectProperty p = (OWLObjectProperty) getOWLAPIEntity(ope,
 						OWLObjectProperty.class);
+
 				Map<OWLClassExpression, Section<? extends Type>> exp = createDescriptionExpression(
 						mce,
 						messages);
 				if (!exp.isEmpty()) {
-					return factory.getOWLObjectSomeValuesFrom(p,
+					return factory.getOWLObjectAllValuesFrom(p,
 							(OWLClassExpression) exp.keySet().iterator().next());
 				}
 			}
-			// else if (some.get().isDataPropertyExpression(some)) {
-			// OWLDataProperty p = (OWLDataProperty) getOWLAPIEntity(ope,
-			// OWLDataProperty.class);
-			//
-			// Map<OWLDataRange, Section<? extends Type>> exp =
-			// createDataRangeExpression(mce,
-			// messages);
-			// if (!exp.isEmpty()) {
-			// return factory.getOWLDataSomeValuesFrom(p,
-			// (OWLClassExpression) exp.keySet().iterator().next());
-			// }
-			// }
-		}
 
-		// ... or a OnlyRestriction ...
-		if (r.isOnlyRestriction(restrictionSection)) {
-			Section<OnlyRestriction> only = r.getOnlyRestriction(restrictionSection);
-			Section<ObjectPropertyExpression> ope = only.get().getObjectProperty(only);
-			Section<ManchesterClassExpression> mce = only.get().getManchesterClassExpression(only);
+			// ... or a SelfRestriction ...
+			if (r.isSelfRestriction(restrictionSection)) {
+				Section<SelfRestriction> self = r.getSelfRestriction(restrictionSection);
+				Section<ObjectPropertyExpression> ope = self.get().getObjectProperty(self);
 
-			OWLObjectProperty p = (OWLObjectProperty) getOWLAPIEntity(ope, OWLObjectProperty.class);
-
-			Map<OWLClassExpression, Section<? extends Type>> exp = createDescriptionExpression(mce,
-					messages);
-			if (!exp.isEmpty()) {
-				return factory.getOWLObjectAllValuesFrom(p,
-						(OWLClassExpression) exp.keySet().iterator().next());
-			}
-		}
-
-		// ... or a SelfRestriction ...
-		if (r.isSelfRestriction(restrictionSection)) {
-			Section<SelfRestriction> self = r.getSelfRestriction(restrictionSection);
-			Section<ObjectPropertyExpression> ope = self.get().getObjectProperty(self);
-
-			OWLObjectProperty p = (OWLObjectProperty) getOWLAPIEntity(ope, OWLObjectProperty.class);
-			return factory.getOWLObjectHasSelf(p);
-		}
-
-		// ... or a ValueRestriction ...
-		if (r.isValueRestriction(restrictionSection)) {
-			Section<ValueRestriction> value = r.getValueRestriction(restrictionSection);
-
-			Section<PropertyExpression> ope = value.get().getObjectProperty(value);
-			Section<ManchesterClassExpression> mce = value.get().getManchesterClassExpression(value);
-
-			// check with type of expressions
-			if (value.get().isObjectPropertyExpression(value)) {
 				OWLObjectProperty p = (OWLObjectProperty) getOWLAPIEntity(ope,
 						OWLObjectProperty.class);
-				OWLEntity entity = getOWLAPIEntity(mce, OWLIndividual.class);
-				return factory.getOWLObjectHasValue(p, (OWLNamedIndividual) entity);
+				return factory.getOWLObjectHasSelf(p);
 			}
-			else if (value.get().isDataPropertyExpression(value)) {
-				OWLDataProperty p = (OWLDataProperty) getOWLAPIEntity(ope, OWLDataProperty.class);
-				return factory.getOWLDataHasValue(p, factory.getOWLLiteral(mce.getOriginalText()));
-			}
-		}
 
-		// ... or a CardinalityRestriction ...
-		// ... or a MinRestriction|MaxRestriction|ExactlyRestriction ...
-		if (r.isCardinalityRestriction(restrictionSection)) {
+			// ... or a ValueRestriction ...
+			if (r.isValueRestriction(restrictionSection)) {
+				Section<ValueRestriction> value = r.getValueRestriction(restrictionSection);
 
-			Section<CardinalityRestriction> cardSection = r.getCardinalityRestriction(restrictionSection);
-			CardinalityRestriction cr = cardSection.get();
+				Section<PropertyExpression> ope = value.get().getObjectProperty(value);
+				Section<ManchesterClassExpression> mce = value.get().getManchesterClassExpression(
+						value);
 
-			Section<ObjectPropertyExpression> ope = cr.getObjectProperty(cardSection);
-
-			OWLObjectProperty p = (OWLObjectProperty) getOWLAPIEntity(ope, OWLObjectProperty.class);
-			Integer digit = cr.getDigit(cardSection);
-
-			OWLClassExpression exp = null;
-			if (cr.hasOptionalRestriction(cardSection)) {
-				Section<Restriction> optional = cr.getOptionalRestriction(cardSection);
-				if (optional.get().isTermReference(optional)) {
-					exp = handleTerminals(cardSection, messages);
+				// check with type of expressions
+				if (value.get().isObjectPropertyExpression(value)) {
+					OWLObjectProperty p = (OWLObjectProperty) getOWLAPIEntity(ope,
+							OWLObjectProperty.class);
+					OWLEntity entity = getOWLAPIEntity(mce, OWLIndividual.class);
+					return factory.getOWLObjectHasValue(p, (OWLNamedIndividual) entity);
 				}
-				else {
-					Section<ManchesterClassExpression> mce = Sections.findSuccessor(cardSection,
-							ManchesterClassExpression.class);
-
-					exp = createDescriptionExpression(mce, messages).keySet().iterator().next();
+				else if (value.get().isDataPropertyExpression(value)) {
+					OWLDataProperty p = (OWLDataProperty) getOWLAPIEntity(ope,
+							OWLDataProperty.class);
+					return factory.getOWLDataHasValue(p,
+							factory.getOWLLiteral(mce.getOriginalText()));
 				}
 			}
 
-			if (cr.isMaxRestriction(cardSection)) {
-				return factory.getOWLObjectMaxCardinality(digit, p, exp);
-			}
-			if (cr.isMinRestriction(cardSection)) {
-				return factory.getOWLObjectMinCardinality(digit, p, exp);
-			}
-			if (cr.isExactlyRestriction(cardSection)) {
-				return factory.getOWLObjectExactCardinality(digit, p, exp);
-			}
-		}
+			// ... or a CardinalityRestriction ...
+			// ... or a MinRestriction|MaxRestriction|ExactlyRestriction ...
+			if (r.isCardinalityRestriction(restrictionSection)) {
+				Section<CardinalityRestriction> cardSection = r.getCardinalityRestriction(restrictionSection);
+				CardinalityRestriction cr = cardSection.get();
 
-		// ... or a OWLTermReference ...
-		if (r.isTermReference(restrictionSection)) {
-			OWLEntity entity = getOWLAPIEntity(r.getTermReference(restrictionSection),
-					OWLClass.class);
-			return (OWLClass) entity;
+				Section<PropertyExpression> ope = cr.getObjectProperty(cardSection);
+				OWLObjectProperty p = (OWLObjectProperty) getOWLAPIEntity(ope,
+						OWLObjectProperty.class);
+				Integer digit = cr.getDigit(cardSection);
+
+				OWLClassExpression exp = null;
+				if (cr.hasOptionalRestriction(cardSection)) {
+					Section<Restriction> optional = cr.getOptionalRestriction(cardSection);
+					if (optional.get().isTermReference(optional)) {
+						exp = handleTerminals(cardSection, messages);
+					}
+					else {
+						Section<ManchesterClassExpression> mce = Sections.findSuccessor(
+								cardSection,
+								ManchesterClassExpression.class);
+
+						exp = createDescriptionExpression(mce, messages).keySet().iterator().next();
+					}
+				}
+
+				if (cr.isMaxRestriction(cardSection)) {
+					return factory.getOWLObjectMaxCardinality(digit, p, exp);
+				}
+				if (cr.isMinRestriction(cardSection)) {
+					return factory.getOWLObjectMinCardinality(digit, p, exp);
+				}
+				if (cr.isExactlyRestriction(cardSection)) {
+					return factory.getOWLObjectExactCardinality(digit, p, exp);
+				}
+			}
+
+			// ... or a OWLTermReference ...
+			if (r.isTermReference(restrictionSection)) {
+				OWLEntity entity = getOWLAPIEntity(r.getTermReference(restrictionSection),
+						OWLClass.class);
+				return (OWLClass) entity;
+			}
+			messages.add(Messages.syntaxError("Unknown TerminalCondition found!"));
 		}
-		messages.add(Messages.syntaxError("Unknown TerminalCondition found!"));
 		return null; // ... or 'This should never happen' :)
 	}
 

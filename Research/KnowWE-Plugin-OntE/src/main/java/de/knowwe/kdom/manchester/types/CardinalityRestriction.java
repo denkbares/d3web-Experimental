@@ -63,7 +63,7 @@ public class CardinalityRestriction extends AbstractType {
 		Pattern p = Pattern.compile(REGEX);
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(new RegexSectionFinder(p, 1));
 		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
-		ObjectPropertyExpression ope = new ObjectPropertyExpression();
+		PropertyExpression ope = new PropertyExpression();
 		ope.setSectionFinder(csf);
 		this.addChildType(ope);
 
@@ -80,8 +80,8 @@ public class CardinalityRestriction extends AbstractType {
 		}
 	}
 
-	public Section<ObjectPropertyExpression> getObjectProperty(Section<CardinalityRestriction> section) {
-		return Sections.findChildOfType(section, ObjectPropertyExpression.class);
+	public Section<PropertyExpression> getObjectProperty(Section<CardinalityRestriction> section) {
+		return Sections.findChildOfType(section, PropertyExpression.class);
 	}
 
 	public Integer getDigit(Section<CardinalityRestriction> section) {
@@ -97,8 +97,16 @@ public class CardinalityRestriction extends AbstractType {
 		return Sections.findChildOfType(section, Restriction.class) != null;
 	}
 
+	public boolean hasOptionalDataRestriction(Section<CardinalityRestriction> section) {
+		return Sections.findChildOfType(section, DataRestriction.class) != null;
+	}
+
 	public Section<Restriction> getOptionalRestriction(Section<CardinalityRestriction> section) {
 		return Sections.findChildOfType(section, Restriction.class);
+	}
+
+	public Section<DataRestriction> getOptionalDataRestriction(Section<CardinalityRestriction> section) {
+		return Sections.findChildOfType(section, DataRestriction.class);
 	}
 
 	public boolean isMinRestriction(Section<CardinalityRestriction> section) {

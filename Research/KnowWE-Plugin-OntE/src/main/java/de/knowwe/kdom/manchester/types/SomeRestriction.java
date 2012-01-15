@@ -47,7 +47,7 @@ public class SomeRestriction extends AbstractType {
 	/**
 	 *
 	 */
-	public SomeRestriction(String keyword) {
+	public SomeRestriction(String keyword, boolean isData) {
 
 		String REGEX = Restriction.BEFORE_REGEX + keyword + Restriction.AFTER_REGEX;
 
@@ -65,8 +65,12 @@ public class SomeRestriction extends AbstractType {
 		Keyword key = new Keyword(keyword);
 		this.addChildType(key);
 
-		this.addChildType(OWLClassContentType.getCompositeCondition());
-		this.addChildType(ManchesterSyntaxUtil.getDataRangeExpression());
+		if (isData) {
+			this.addChildType(ManchesterSyntaxUtil.getDataRangeExpression());
+		}
+		else {
+			this.addChildType(OWLClassContentType.getCompositeCondition());
+		}
 	}
 
 	public boolean isObjectPropertyExpression(Section<SomeRestriction> section) {
@@ -94,4 +98,9 @@ public class SomeRestriction extends AbstractType {
 	public Section<ManchesterClassExpression> getManchesterClassExpression(Section<SomeRestriction> section) {
 		return Sections.findChildOfType(section, ManchesterClassExpression.class);
 	}
+
+	public Section<DataRangeExpression> getDataRangeExpression(Section<SomeRestriction> section) {
+		return Sections.findChildOfType(section, DataRangeExpression.class);
+	}
+
 }

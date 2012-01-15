@@ -48,10 +48,12 @@ public class Restriction extends AbstractType {
 		this.setSectionFinder(new AllTextFinderTrimmed());
 
 		// first some types for object property expression ...
-		SomeRestriction some = new SomeRestriction(ManchesterSyntaxKeywords.SOME.getKeyword());
+		SomeRestriction some = new SomeRestriction(ManchesterSyntaxKeywords.SOME.getKeyword(),
+				false);
 		this.addChildType(some);
 
-		OnlyRestriction only = new OnlyRestriction(ManchesterSyntaxKeywords.ONLY.getKeyword());
+		OnlyRestriction only = new OnlyRestriction(ManchesterSyntaxKeywords.ONLY.getKeyword(),
+				false);
 		this.addChildType(only);
 
 		SelfRestriction self = new SelfRestriction();
@@ -60,13 +62,9 @@ public class Restriction extends AbstractType {
 		CardinalityRestriction i = new CardinalityRestriction(this);
 		this.addChildType(i);
 
-		ValueRestriction value = new ValueRestriction(ManchesterSyntaxKeywords.VALUE.getKeyword());
+		ValueRestriction value = new ValueRestriction(ManchesterSyntaxKeywords.VALUE.getKeyword(),
+				false);
 		this.addChildType(value);
-
-		// ... then some types for data property expression ...
-		this.addChildType(new SomeRestriction(ManchesterSyntaxKeywords.SOME_.getKeyword()));
-		this.addChildType(new SomeRestriction(ManchesterSyntaxKeywords.VALUE_.getKeyword()));
-		this.addChildType(new OnlyRestriction(ManchesterSyntaxKeywords.VALUE_.getKeyword()));
 
 		Fact fact = new Fact();
 		this.addChildType(fact);
@@ -76,7 +74,7 @@ public class Restriction extends AbstractType {
 		OWLTermReferenceManchester def = new OWLTermReferenceManchester();
 		this.addChildType(def);
 
-		ObjectPropertyExpression ope = new ObjectPropertyExpression();
+		PropertyExpression ope = new PropertyExpression();
 		this.addChildType(ope);
 	}
 
@@ -221,7 +219,7 @@ public class Restriction extends AbstractType {
 	 * @return TRUE if found, FALSE otherwise
 	 */
 	public boolean isObjectProperty(Section<Restriction> section) {
-		return Sections.findChildOfType(section, ObjectPropertyExpression.class) != null;
+		return Sections.findChildOfType(section, PropertyExpression.class) != null;
 	}
 
 	/**
@@ -230,7 +228,7 @@ public class Restriction extends AbstractType {
 	 * @param Section<Restriction> a A {@link Restriction} section
 	 * @return The found {@link ObjectPropertyExpression} sections
 	 */
-	public Section<ObjectPropertyExpression> getObjectProperty(Section<Restriction> section) {
-		return Sections.findChildOfType(section, ObjectPropertyExpression.class);
+	public Section<PropertyExpression> getObjectProperty(Section<Restriction> section) {
+		return Sections.findChildOfType(section, PropertyExpression.class);
 	}
 }

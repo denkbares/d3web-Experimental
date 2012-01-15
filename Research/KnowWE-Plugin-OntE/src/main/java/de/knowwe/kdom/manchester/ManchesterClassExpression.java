@@ -29,6 +29,7 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
+import de.knowwe.kdom.manchester.types.DataRestriction;
 import de.knowwe.kdom.manchester.types.NonTerminalList;
 import de.knowwe.kdom.manchester.types.NonTerminalListContent;
 import de.knowwe.kdom.manchester.types.OWLTermReferenceManchester;
@@ -83,6 +84,7 @@ public class ManchesterClassExpression extends CompositeCondition {
 
 		// ... or finally a TerminalCondition which stops the recursive descent
 		List<Type> types = new ArrayList<Type>();
+		types.add(DataRestriction.getInstance());
 		types.add(Restriction.getInstance());
 		this.setAllowedTerminalConditions(types);
 	}

@@ -28,6 +28,7 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
 import de.knowwe.kdom.manchester.ManchesterClassExpression;
+import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.ManchesterClassExpression.OWLClassContentType;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
@@ -49,7 +50,7 @@ public class OnlyRestriction extends AbstractType {
 	/**
 	 *
 	 */
-	public OnlyRestriction(String keyword) {
+	public OnlyRestriction(String keyword, boolean isData) {
 
 		String REGEX = Restriction.BEFORE_REGEX + keyword + Restriction.AFTER_REGEX;
 
@@ -60,22 +61,31 @@ public class OnlyRestriction extends AbstractType {
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(new RegexSectionFinder(p, 1));
 		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 
-		ObjectPropertyExpression ope = new ObjectPropertyExpression();
+		PropertyExpression ope = new PropertyExpression();
 		ope.setSectionFinder(csf);
 		this.addChildType(ope);
 
 		Keyword key = new Keyword(keyword);
 		this.addChildType(key);
 
-		this.addChildType(OWLClassContentType.getCompositeCondition());
+		if (isData) {
+			this.addChildType(ManchesterSyntaxUtil.getDataRangeExpression());
+		}
+		else {
+			this.addChildType(OWLClassContentType.getCompositeCondition());
+		}
 	}
 
-	public Section<ObjectPropertyExpression> getObjectProperty(Section<OnlyRestriction> section) {
-		return Sections.findSuccessor(section, ObjectPropertyExpression.class);
+	public Section<PropertyExpression> getObjectProperty(Section<OnlyRestriction> section) {
+		return Sections.findSuccessor(section, PropertyExpression.class);
 	}
 
 	public Section<ManchesterClassExpression> getManchesterClassExpression(Section<OnlyRestriction> section) {
 		return Sections.findSuccessor(section, ManchesterClassExpression.class);
+	}
+
+	public Section<DataRangeExpression> getDataRangeExpression(Section<OnlyRestriction> section) {
+		return Sections.findChildOfType(section, DataRangeExpression.class);
 	}
 
 	public boolean isObjectPropertyExpression(Section<OnlyRestriction> section) {
@@ -95,5 +105,6 @@ public class OnlyRestriction extends AbstractType {
 		}
 		return false;
 	}
+
 
 }

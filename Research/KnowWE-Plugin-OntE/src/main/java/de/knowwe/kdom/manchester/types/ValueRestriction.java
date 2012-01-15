@@ -50,7 +50,7 @@ public class ValueRestriction extends AbstractType {
 	/**
 	 *
 	 */
-	public ValueRestriction(String keyword) {
+	public ValueRestriction(String keyword, boolean isData) {
 
 		String REGEX = Restriction.BEFORE_REGEX + keyword + Restriction.AFTER_REGEX;
 		SectionFinder sf = new RegexSectionFinder(REGEX, Pattern.DOTALL);
@@ -67,8 +67,13 @@ public class ValueRestriction extends AbstractType {
 		Keyword key = new Keyword(keyword);
 		this.addChildType(key);
 
-		this.addChildType(OWLClassContentType.getCompositeCondition());
-		this.addChildType(ManchesterSyntaxUtil.getDataRangeExpression());
+		if (isData) {
+			this.addChildType(ManchesterSyntaxUtil.getDataRangeExpression());
+		}
+		else {
+			this.addChildType(OWLClassContentType.getCompositeCondition());
+		}
+		;
 	}
 
 	public Section<PropertyExpression> getObjectProperty(Section<ValueRestriction> section) {
@@ -77,6 +82,10 @@ public class ValueRestriction extends AbstractType {
 
 	public Section<ManchesterClassExpression> getManchesterClassExpression(Section<ValueRestriction> section) {
 		return Sections.findChildOfType(section, ManchesterClassExpression.class);
+	}
+
+	public Section<DataRangeExpression> getDataRangeExpression(Section<ValueRestriction> section) {
+		return Sections.findChildOfType(section, DataRangeExpression.class);
 	}
 
 	public boolean isObjectPropertyExpression(Section<ValueRestriction> section) {
