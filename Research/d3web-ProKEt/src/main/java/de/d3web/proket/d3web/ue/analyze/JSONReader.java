@@ -279,6 +279,14 @@ public class JSONReader implements Serializable {
         return forUser;
     }
 
+    /**
+     * Retrieves all sessions of the logfiles for defined user in a defined directory.
+     * Therefore all logfiles in directory are parsed, all files for the defined
+     * user are fetched, and the total number of those matching files is returned.
+     * @param username the defined user
+     * @param directory the uppermost logfile directory
+     * @return 
+     */
     public int getSessionsForUser(String username, String directory){
         
          // TODO factor out the partly answered sessions?!
