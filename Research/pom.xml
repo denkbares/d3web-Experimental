@@ -223,6 +223,7 @@
 		<module>KnowWE-Plugin-CodeMirror</module>
 		
 		<module>KnowWE-Plugin-RDFS-TestCase</module>
+		<module>KnowWE-Plugin-SessionDebugger</module>
 	</modules>
 	<repositories>
 		<repository>
