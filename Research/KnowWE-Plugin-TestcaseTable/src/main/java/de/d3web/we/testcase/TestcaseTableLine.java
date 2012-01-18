@@ -27,7 +27,7 @@ import java.util.List;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.manage.KnowledgeBaseUtils;
-import de.d3web.core.session.Value;
+import de.d3web.core.session.QuestionValue;
 import de.d3web.empiricaltesting.Finding;
 import de.d3web.empiricaltesting.RatedTestCase;
 import de.d3web.we.basic.D3webModule;
@@ -114,7 +114,7 @@ public class TestcaseTableLine extends TableLine {
 
 				String valueString = valueSec.getText();
 				// TODO unknown value
-				Value value;
+				QuestionValue value;
 				try {
 					value = KnowledgeBaseUtils.findValue(question, valueString);
 
