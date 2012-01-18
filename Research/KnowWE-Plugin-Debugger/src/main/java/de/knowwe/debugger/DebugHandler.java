@@ -175,7 +175,9 @@ public class DebugHandler extends AbstractTagHandler {
 	 */
 	private boolean renderCondition(String condition, StringBuffer buffer, HashMap<String, String> facts) {
 		String[] parts = new String[2];
-		boolean truth = false;
+		// No need to check this extra with rule.canFire() if this method is
+		// checking the condition-truth anyway
+		boolean canFire = false;
 		String isTrue = "<span class='true'>";
 		String isFalse = "<span class='false'>";
 
@@ -187,11 +189,11 @@ public class DebugHandler extends AbstractTagHandler {
 
 			if (!evaluateCondition(parts[0], facts)) {
 				buffer.append(isTrue);
-				truth = true;
+				canFire = true;
 			}
 			else {
 				buffer.append(isFalse);
-				truth = false;
+				canFire = false;
 			}
 
 			buffer.append(" !( ");
@@ -205,11 +207,11 @@ public class DebugHandler extends AbstractTagHandler {
 
 			if (evaluateCondition(parts[0], facts) && evaluateCondition(parts[1], facts)) {
 				buffer.append(isTrue);
-				truth = true;
+				canFire = true;
 			}
 			else {
 				buffer.append(isFalse);
-				truth = false;
+				canFire = false;
 			}
 
 			buffer.append(" ( ");
@@ -225,10 +227,10 @@ public class DebugHandler extends AbstractTagHandler {
 
 			if (evaluateCondition(parts[0], facts) || evaluateCondition(parts[1], facts)) {
 				buffer.append(isTrue);
-				truth = true;
+				canFire = true;
 			}
 			else {
-				truth = false;
+				canFire = false;
 				buffer.append(isFalse);
 			}
 
@@ -263,51 +265,73 @@ public class DebugHandler extends AbstractTagHandler {
 			}
 
 			if (evaluateCondition(condition, facts)) {
-				truth = true;
+				canFire = true;
 				buffer.append(isTrue);
 			}
 			else {
-				truth = false;
+				canFire = false;
 				buffer.append(isFalse);
 			}
 
 			buffer.append(condition + "</span>");
 		}
 
-		return truth;
+		return canFire;
 	}
 
 	/**
 	 * evaluate a condition.
 	 */
 	private boolean evaluateCondition(String condition, HashMap<String, String> facts) {
-		int skip = 0;
-		boolean result = false;
+		String[] parts = new String[2];
 
-		// Walk recursively through the conditions text and parse connectors(&&,
-		// ||, !)
-		for (int i = 0; i < condition.length(); i++) {
-			if (skip == 0 && condition.charAt(i) == '!') {
-				return !evaluateCondition(condition.substring(1, condition.length() - 1), facts);
+		// Walk recursively through the conditions text
+		// Get the connector (not, and, or)
+		if (condition.startsWith(NOT)) {
+			condition = condition.replace(NOT, "");
+			condition = condition.substring(2, condition.length() - 1);
+			return !(evaluateCondition(condition, facts));
+		}
+		else if (condition.startsWith(AND)) {
+			condition = condition.replaceFirst(AND, "");
+			condition = condition.substring(2, condition.length() - 1);
+			parts = getConditionParts(condition);
+			return evaluateCondition(parts[0], facts) && evaluateCondition(parts[1], facts);
+		}
+		else if (condition.startsWith(OR)) {
+			condition = condition.replaceFirst(OR, "");
+			condition = condition.substring(2, condition.length() - 1);
+			parts = getConditionParts(condition);
+
+			return evaluateCondition(parts[0], facts) || evaluateCondition(parts[1], facts);
+
+		}
+		// Prepare basic-conditions
+		else {
+			// num-condition(>=, >, <=, <) or state-condition
+			if (condition.startsWith(NUMGREATEREQUAL)) {
+				condition = condition.replaceFirst(NUMGREATEREQUAL + " question: ", "");
+				condition = condition.replaceFirst("value:", ">");
 			}
-			else if (skip == 0 && condition.charAt(i) == '|' && condition.charAt(i + 1) == '|') {
-				return evaluateCondition(condition.substring(1, i - 1), facts)
-						|| evaluateCondition(condition.substring(i + 3, condition.length() - 1),
-								facts);
+			else if (condition.startsWith(NUMGREATER)) {
+				condition = condition.replaceFirst(NUMGREATER + " question: ", "");
+				condition = condition.replaceFirst("value:", ">=");
 			}
-			else if (skip == 0 && condition.charAt(i) == '&' && condition.charAt(i + 1) == '&') {
-				return evaluateCondition(condition.substring(1, i - 1), facts)
-						&& evaluateCondition(condition.substring(i + 3, condition.length() - 1),
-								facts);
+			else if (condition.startsWith(NUMLESSEQUAL)) {
+				condition = condition.replaceFirst(NUMLESSEQUAL + " question: ", "");
+				condition = condition.replaceFirst("value:", "<");
 			}
-			else if (condition.charAt(i) == '(') {
-				skip++;
+			else if (condition.startsWith(NUMLESS)) {
+				condition = condition.replaceFirst(NUMLESS + " question: ", "");
+				condition = condition.replaceFirst("value:", "<=");
 			}
-			else if (condition.charAt(i) == ')') {
-				skip--;
+			else if (condition.startsWith(STATE)) {
+				condition = condition.replaceFirst(STATE + " diagnosis: ", "");
+				condition = condition.replaceFirst("value:", "==");
 			}
 		}
-		// Basic-conditions
+
+		// Evaluate basic-condition
 		try {
 			if (condition.contains("==")) {
 				String fact = facts.get(condition.split(" == ")[0]);
@@ -336,10 +360,9 @@ public class DebugHandler extends AbstractTagHandler {
 			}
 		}
 		catch (Exception e) {
-			return false;
 		}
 
-		return result;
+		return false;
 	}
 
 	/**
