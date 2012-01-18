@@ -29,3 +29,9 @@
 #debugger span.false {
 	color: red;
 }
+#debugger div.single_object {
+	border:	1px dashed gray;
+	padding: 5px 10px 5px 5px;
+	margin: 4px 0;
+	overflow: hidden;	
+}

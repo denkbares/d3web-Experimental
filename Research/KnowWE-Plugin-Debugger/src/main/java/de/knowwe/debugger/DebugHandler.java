@@ -115,9 +115,11 @@ public class DebugHandler extends AbstractTagHandler {
 	 * @param facts the values of the answered questions
 	 */
 	private void getTraceRendering(List<Rule> rules, TerminologyObject to, List<TerminologyObject> checkedTOs, StringBuffer buffer, int depth, Session session, HashMap<String, String> facts) {
+		List<TerminologyObject> conditionTOs = new LinkedList<TerminologyObject>();
+		// If to already was checked -> return
 		if (checkedTOs.contains(to)) return;
 		else checkedTOs.add(to);
-		// render solutions and terminology-objects
+		// render to
 		if (to instanceof Solution) {
 			buffer.append("<div class='solution'>");
 			buffer.append("<div class='indicator' onclick='KNOWWE.plugin.debug.indicate(this);return false;'>&nbsp;</div>");
@@ -127,24 +129,42 @@ public class DebugHandler extends AbstractTagHandler {
 			buffer.append("<div class='non-solutions' style='display:none'>");
 		}
 		else {
-			buffer.append("<hr />");
-			buffer.append("<p style='font-weight:bold'>");
+			buffer.append("<div class='single_object'><p style='font-weight:bold'>");
 			for (int i = 0; i < depth; i++) {
 				buffer.append("-");
 			}
 			buffer.append(" " + to + "</p>");
 		}
-		// render the rules that involve the object in their condition
-		for (Rule r : getRulesWithTO(rules, to)) {
-			renderRule(r, buffer, facts, session);
-			for (TerminologyObject t : r.getCondition().getTerminalObjects()) {
-				getTraceRendering(rules, t, checkedTOs, buffer, depth + 1, session, facts);
+
+		// If there are no rules for to
+		if (getRulesWithTO(rules, to).size() == 0) {
+			buffer.append("> No rules for  \"" + to + "\" declared.");
+
+			if (!(to instanceof Solution)) {
+				buffer.append("</div>");
 			}
 		}
-		if (getRulesWithTO(rules, to).size() == 0) {
-			buffer.append("> No rules with " + to + " declared.");
+		else {
+			// render the rules that involve to in their action
+			for (Rule r : getRulesWithTO(rules, to)) {
+				renderRule(r, buffer, facts, session);
+				for (TerminologyObject t : r.getCondition().getTerminalObjects()) {
+					if (!conditionTOs.contains(t) & !checkedTOs.contains(t)) {
+						conditionTOs.add(t);
+					}
+				}
+			}
+
+			if (!(to instanceof Solution)) {
+				buffer.append("</div>");
+			}
+
+			// Render trace for every object in the condition of a rule before
+			for (TerminologyObject t : conditionTOs) {
+				getTraceRendering(rules, t, checkedTOs, buffer, depth + 1,
+							session, facts);
+			}
 		}
-		buffer.append("<hr />");
 		if (to instanceof Solution) {
 			buffer.append("</div></div>");
 		}
