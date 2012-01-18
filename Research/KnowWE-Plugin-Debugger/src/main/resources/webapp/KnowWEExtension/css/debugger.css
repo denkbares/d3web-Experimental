@@ -1,0 +1,31 @@
+#debugger {
+	padding: 10px;
+}
+#debugger h3 {
+	padding-top: 0;
+}
+#debugger div.solution {
+	border:	1px dashed gray;
+	padding: 5px 10px 5px 5px;
+	margin: 5px 0;
+	overflow: hidden;
+}
+#debugger span.solution {
+	font-weight: bold;
+	cursor: pointer;
+}
+#debugger div.non-solutions {
+	margin: 5px 0 0 0;
+}
+#debugger div.indicator {
+	float: right;
+	width: 20px;
+	background: url("../../templates/knowweTmps/images/arrdownsmall.gif") no-repeat center;
+	cursor: pointer;
+}
+#debugger span.true {
+	color: green;
+}
+#debugger span.false {
+	color: red;
+}
