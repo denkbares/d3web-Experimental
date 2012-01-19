@@ -28,13 +28,11 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
  */
 public class ExpectedBindingType extends AbstractType {
 
-	public static final String SEPARATOR = ":::";
-	public static final String PATTERN = "\n*(.*" + SEPARATOR + ".*)\n*";
+	public static final String PATTERN = "(.+?,)*.+\n?";
 
 	public ExpectedBindingType() {
 		addChildType(new ValueType());
-		addChildType(new VariableType());
-		setSectionFinder(new RegexSectionFinder(PATTERN, 0, 1));
+		setSectionFinder(new RegexSectionFinder(PATTERN));
 	}
 
 }

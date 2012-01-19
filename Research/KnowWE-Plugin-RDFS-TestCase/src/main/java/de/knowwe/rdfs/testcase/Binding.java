@@ -18,6 +18,11 @@
  */
 package de.knowwe.rdfs.testcase;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * 
  * @author Sebastian Furth
@@ -25,45 +30,38 @@ package de.knowwe.rdfs.testcase;
  */
 public class Binding {
 
-	private final String variable;
-	private final String value;
+	private final Set<String> uris = new HashSet<String>();
 
-	public Binding(String variable, String value) {
-		if (variable == null) {
-			throw new NullPointerException("The variable is null!");
+	public void addURI(String uri) {
+		if (uri == null) {
+			throw new NullPointerException("An URI can't be null!");
 		}
-		if (variable.isEmpty()) {
-			throw new IllegalArgumentException("The variable is empty!");
+		if (uri.isEmpty()) {
+			throw new IllegalArgumentException("An URI can't be empty!");
 		}
-		if (value == null) {
-			throw new NullPointerException("The value is null!");
-		}
-		if (value.isEmpty()) {
-			throw new IllegalArgumentException("The value is empty!");
-		}
-		this.variable = variable;
-		this.value = value;
+		uris.add(uri);
 	}
 
-	public String getVariable() {
-		return variable;
-	}
-
-	public String getValue() {
-		return value;
+	public Collection<String> getURIs() {
+		return Collections.unmodifiableCollection(uris);
 	}
 
 	@Override
 	public String toString() {
-		return variable + " = " + value;
+		StringBuilder builder = new StringBuilder();
+		for (String uri : uris) {
+			builder.append(uri);
+			builder.append(", ");
+		}
+		builder.delete(builder.length() - 2, builder.length());
+		return builder.toString();
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((value == null) ? 0 : value.hashCode());
-		result = prime * result + ((variable == null) ? 0 : variable.hashCode());
+		result = prime * result + ((uris == null) ? 0 : uris.hashCode());
 		return result;
 	}
 
@@ -79,20 +77,12 @@ public class Binding {
 			return false;
 		}
 		Binding other = (Binding) obj;
-		if (value == null) {
-			if (other.value != null) {
+		if (uris == null) {
+			if (other.uris != null) {
 				return false;
 			}
 		}
-		else if (!value.equals(other.value)) {
-			return false;
-		}
-		if (variable == null) {
-			if (other.variable != null) {
-				return false;
-			}
-		}
-		else if (!variable.equals(other.variable)) {
+		else if (!uris.equals(other.uris)) {
 			return false;
 		}
 		return true;

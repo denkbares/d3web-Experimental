@@ -31,7 +31,7 @@ import de.knowwe.kdom.sectionFinder.AllBeforeTypeSectionFinder;
  */
 public class RDFSTestCaseContentType extends AbstractType {
 
-	public static final String SEPARATOR = "<==>";
+	public static final String SEPARATOR = "<=>";
 
 	public RDFSTestCaseContentType() {
 		// specify and configure types

@@ -18,7 +18,7 @@
  */
 package de.knowwe.rdfs.testcase.kdom;
 
-import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.kdom.sectionFinder.SplitSectionFinderUnquoted;
 import de.knowwe.rdfs.IRITermRef;
 
 /**
@@ -28,10 +28,8 @@ import de.knowwe.rdfs.IRITermRef;
  */
 public class ValueType extends IRITermRef {
 
-	private static final String PATTERN = ExpectedBindingType.SEPARATOR + "\\s*(.*)";
-
 	public ValueType() {
-		setSectionFinder(new RegexSectionFinder(PATTERN, 0, 1));
+		setSectionFinder(new SplitSectionFinderUnquoted(","));
 	}
 
 }

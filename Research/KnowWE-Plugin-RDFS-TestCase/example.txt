@@ -1,0 +1,13 @@
+%%RDFSTestCase
+SELECT ?x ?y
+WHERE {
+  ?x lns:hasAuthor ?y .
+}
+
+<=>
+
+KnowWE, Jochen Reutelshoefer
+d3web, Joachim Baumeister
+
+@name: TestCase-Name
+%

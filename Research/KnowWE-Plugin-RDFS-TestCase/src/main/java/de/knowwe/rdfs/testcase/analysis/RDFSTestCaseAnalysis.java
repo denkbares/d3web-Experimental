@@ -83,14 +83,17 @@ public class RDFSTestCaseAnalysis {
 			ClosableIterator<QueryRow> iter = result.iterator();
 			while (iter.hasNext()) {
 				QueryRow row = iter.next();
+				Binding binding = new Binding();
 
 				for (String var : result.getVariables()) {
 					String value = row.getValue(var).toString();
 					value = processValue(value);
 					if (value != null) {
-						bindings.add(new Binding(var, value));
+						binding.addURI(value);
 					}
 				}
+
+				bindings.add(binding);
 			}
 		}
 

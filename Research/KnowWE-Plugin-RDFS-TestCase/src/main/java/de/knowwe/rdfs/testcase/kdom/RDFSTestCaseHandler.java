@@ -84,24 +84,20 @@ public class RDFSTestCaseHandler extends SubtreeHandler<RDFSTestCaseType> {
 		}
 
 		for (Section<ExpectedBindingType> expectedBinding : expectedBindings) {
-			// get variable
-			Section<VariableType> variable =
-					Sections.findSuccessor(expectedBinding, VariableType.class);
-			if (variable == null) {
-				return Messages.asList(Messages.syntaxError("There is no variable in binding: "
-						+ expectedBinding.getText()));
-			}
 
 			// get value
-			Section<ValueType> value =
-					Sections.findSuccessor(expectedBinding, ValueType.class);
-			if (value == null) {
+			List<Section<ValueType>> values =
+					Sections.findSuccessorsOfType(expectedBinding, ValueType.class);
+			if (values == null || values.isEmpty()) {
 				return Messages.asList(Messages.syntaxError("There is no value in binding: "
 						+ expectedBinding.getText()));
 			}
 
-			// create binding object and add it to test case
-			Binding b = new Binding(variable.getText().trim(), value.getText().trim());
+			// create binding object, add values and add it to the test case
+			Binding b = new Binding();
+			for (Section<ValueType> value : values) {
+				b.addURI(value.getOriginalText().trim());
+			}
 			testCase.addExpectedBinding(b);
 		}
 

@@ -18,6 +18,7 @@
  */
 package de.knowwe.rdfs.testcase.util;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import de.knowwe.core.KnowWEEnvironment;
@@ -25,6 +26,7 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdfs.testcase.RDFSTestCase;
 import de.knowwe.rdfs.testcase.kdom.RDFSTestCaseType;
 
@@ -48,30 +50,49 @@ public class RDFSTestCaseLoader {
 	public static RDFSTestCase loadTestCase(String article, String web, String testCaseName) {
 
 		KnowWEArticle a = KnowWEEnvironment.getInstance().getArticleManager(web).getArticle(article);
-		Section<RDFSTestCaseType> s = null;
+
 		RDFSTestCase testCase = null;
 
 		// try to get RDFSTestCase section in article
 		if (a != null) {
-			s = Sections.findSuccessor(a.getSection(), RDFSTestCaseType.class);
+
+			// Get all RDFSTestCaseSections
+			List<Section<RDFSTestCaseType>> sections = Sections.findSuccessorsOfType(
+					a.getSection(), RDFSTestCaseType.class);
+
+			if (sections != null && !sections.isEmpty()) {
+				for (Section<RDFSTestCaseType> s : sections) {
+
+					// get name of RDFSTestCase
+					String name = DefaultMarkupType.getAnnotation(s,
+							RDFSTestCaseType.ANNOTATION_NAME);
+
+					// load test case if name matches
+					if (name.equals(testCaseName)) {
+						testCase = (RDFSTestCase) KnowWEUtils.getStoredObject(a, s,
+								RDFSTestCaseType.MARKUP_NAME + testCaseName);
+					}
+				}
+
+				// test case wasn't found
+				if (testCase == null) {
+					Logger.getLogger(RDFSTestCaseLoader.class.getName()).warning(
+							"Article: \"" + article + "\" doesn't contain a test case named \""
+									+ testCaseName + "\".");
+				}
+			}
+
+			else {
+				Logger.getLogger(RDFSTestCaseLoader.class.getName()).warning(
+						"Article: \"" + article + "\" doesn't contain any test case");
+			}
+
 		}
 		else {
 			Logger.getLogger(RDFSTestCaseLoader.class.getName()).warning(
 					"Article: \"" + article + "\" wasn't found. Unable to load test case!");
 		}
 
-		// try to load RDFSTestCase
-		if (s != null) {
-			testCase = (RDFSTestCase) KnowWEUtils.getStoredObject(a, s,
-					RDFSTestCaseType.MARKUP_NAME + testCaseName);
-		}
-		else {
-			Logger.getLogger(RDFSTestCaseLoader.class.getName()).warning(
-					"Article: \"" + article + "\" doesn't contain a test case with name \""
-							+ testCaseName + "\"");
-		}
-
 		return testCase;
 	}
-
 }

@@ -36,21 +36,13 @@ public abstract class BindingDiff implements Diff {
 		this.binding = binding;
 	}
 
-	public String getVariable() {
-		return binding.getVariable();
-	}
-
-	public String getValue() {
-		return binding.getValue();
-	}
-
 	public Binding getBinding() {
 		return binding;
 	}
 
 	@Override
 	public String toString() {
-		return getVariable() + " = " + getValue();
+		return binding.toString();
 	}
 
 	@Override
