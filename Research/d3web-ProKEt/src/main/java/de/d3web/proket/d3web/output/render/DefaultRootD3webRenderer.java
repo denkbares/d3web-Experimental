@@ -93,6 +93,10 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		if (loginMode == LoginMode.usrdat) {
 			st.setAttribute("login", "true");
 		}
+                
+                if(D3webConnector.getInstance().getD3webParser().getLogging().equals("ON")){
+                    st.setAttribute("logging", true);
+                }
 
 		// if logo is provided by KB
 		if (D3webUtils.isImageProvided("logo")) {

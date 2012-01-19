@@ -196,9 +196,60 @@ $(function() {
         };
         $("#jqFollowUpDialog").dialog(opts);
     });
+    
+    
+    var endSess;
+    var goOn;
+    if(language=="en"){
+        endSess = "Yes, end session";
+        goOn = "No, go on"
+    } else if(language=="de"){
+        endSess = "Ja, Session beenden";
+        goOn = "Nein, Eingabe fortsetzen"
+    }
+    
+    /* End of Session Confirmation Dialog */
+    $(function() {
 
-    /* Initialize the JS binding to the dialog elements */
-    initFunctionality();
+        var opts = {
+            autoOpen: false,
+            position : top,
+            width : 480,
+            height : 200,
+            minWidth : 480,
+            minHeight : 200,
+            draggable : false,
+            resizable : false,
+            modal : true,
+            // do NOT close dialog when hitting escape
+            closeOnEscape : false,
+            // for NOT showing the default close button/cross of the dialog
+            open : function(event, ui) {
+            //$(".ui-dialog-titlebar-close").hide();
+            },
+            // two custom buttons
+            buttons : [{
+                id: "endSession",
+                text: endSess,
+                click: function(){
+                    ue_logEnd();
+                    
+                    $('#jqConfirmEoSDialog').dialog("close");
+                    d3web_resetSession();
+                }
+            },
+            {
+                id: "goOn",
+                text: goOn,
+                click: function(){
+                    $('#jqConfirmEoSDialog').dialog("close");
+                }
+            }]
+        };
+        $("#jqConfirmEoSDialog").dialog(opts);
+    });
+
+   
 
     $().ready(function() {
         // enable buttons in save case and load case dialogs to
@@ -248,11 +299,16 @@ $(function() {
             // otherwise, no reload because this would cause endless loop
             }
         });
+        
     }
     // 
-    // 
+    
+    /* Initialize the JS binding to the dialog elements */
+    initFunctionality();
+    
     // move the content below the header
     moveContentPart();
+    
 });
 
 
@@ -262,6 +318,28 @@ $(function() {
  * entered followed by pressing enter.
  */
 function initFunctionality() {
+    
+    link = $.query.set("action", "checkLoggingEnd").toString();
+    link = window.location.href.replace(window.location.search, "") + link;
+        
+    $.ajax({
+        type: "GET",
+        async: false,
+        cache : false, // needed for IE, call is not made otherwise
+        url: link,
+        success : function(html) {
+               
+            // if we have indicated but not yet answered questions, keep
+            // confirmation closed
+            if (html.indexOf("true")>-1) {
+                $('#jqConfirmEoSDialog').dialog('close');
+                    
+            } else  { // otherwise display
+                $('#jqConfirmEoSDialog').dialog("open");
+                    
+            }
+        }
+    });
         
     $(window).resize(function() {
         moveContentPart();
@@ -328,9 +406,9 @@ function initFunctionality() {
     }).unbind("focusout").focusout(function() {
         d3web_storeQuestionNum($(this));
         d3web_addFacts();
-    }).each(function() {
-    	d3web_handleQuestionNum($(this));
-    });
+    });//.each(function() {
+        //d3web_checkQuestionNum($(this));
+    //});
 	
     $('[type=textselect]').unbind('change').change(function() {
         d3web_storeQuestionText($(this));
@@ -347,7 +425,7 @@ function initFunctionality() {
         d3web_storeQuestionDate($(this));
         d3web_addFacts();
     }).each(function() {
-    	d3web_handleQuestionDate($(this));
+        d3web_handleQuestionDate($(this));
     });
 
     $('[type=textarea]').unbind('click').click(function() {
@@ -404,32 +482,32 @@ function initFunctionality() {
     
     // mouseover on image answer
     $('[type=imageAnswer]').unbind('mouseenter').mouseenter(function() {
-    	var poly = $("#polygon-" + $(this).attr("id"));
-    	poly.attr("oldmouseoveropacity", poly.css("opacity"));
-    	poly.css("opacity", poly.attr("mouseoveropacity"));
+        var poly = $("#polygon-" + $(this).attr("id"));
+        poly.attr("oldmouseoveropacity", poly.css("opacity"));
+        poly.css("opacity", poly.attr("mouseoveropacity"));
     }).unbind('mouseleave').mouseleave(function() {
-    	var poly = $("#polygon-" + $(this).attr("id"));
-    	poly.css("opacity", poly.attr("oldmouseoveropacity"));
+        var poly = $("#polygon-" + $(this).attr("id"));
+        poly.css("opacity", poly.attr("oldmouseoveropacity"));
     })
     // click on image answer
-   .find('input').unbind('change').change(function() {
-    	var poly = $("#polygon-" + $(this).parents('[type=imageAnswer]').attr("id"));
-    	if ($(this).attr("checked") == "checked") {
-        	poly.css("opacity",  poly.attr("clickedopacity"));
-    		poly.attr("oldmouseoveropacity", poly.attr("clickedopacity"));
-    	} else {
-        	poly.css("opacity",  poly.attr("unclickedopacity"));
-    		poly.attr("oldmouseoveropacity", poly.attr("unclickedopacity"));
-    	}
+    .find('input').unbind('change').change(function() {
+        var poly = $("#polygon-" + $(this).parents('[type=imageAnswer]').attr("id"));
+        if ($(this).attr("checked") == "checked") {
+            poly.css("opacity",  poly.attr("clickedopacity"));
+            poly.attr("oldmouseoveropacity", poly.attr("clickedopacity"));
+        } else {
+            poly.css("opacity",  poly.attr("unclickedopacity"));
+            poly.attr("oldmouseoveropacity", poly.attr("unclickedopacity"));
+        }
     });
     
     // mouseover on image answer
     $('[type=imagepolygon]').unbind('mouseenter').mouseenter(function() {
-    	d3web_IQMouseOver($(this).attr("answerid"), true);
+        d3web_IQMouseOver($(this).attr("answerid"), true);
     }).unbind('mouseleave').mouseleave(function() {
-    	d3web_IQMouseOver($(this).attr("answerid"), false);
+        d3web_IQMouseOver($(this).attr("answerid"), false);
     }).unbind('click').click(function() {
-    	d3web_IQClicked($(this).attr("answerid"));
+        d3web_IQClicked($(this).attr("answerid"));
     });
     
 }
@@ -500,16 +578,16 @@ function gotoStatistics() {
 }
 
 function handleUrlInput(input) {
-	var urlRegex = /(ftp|https?|file):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-	var text = input.val();
-	if (urlRegex.test(text)) {
-		if (input.next().length == 0) {			
-			input.after(" <a href='" + text + "'>Follow Link</a>");
-		}
-	}
-	else {
-		input.next().remove();
-	}
+    var urlRegex = /(ftp|https?|file):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+    var text = input.val();
+    if (urlRegex.test(text)) {
+        if (input.next().length == 0) {			
+            input.after(" <a href='" + text + "'>Follow Link</a>");
+        }
+    }
+    else {
+        input.next().remove();
+    }
 }
 
 
@@ -580,12 +658,12 @@ function escapeExpression(str) {
 
 function d3web_addFacts() {
 
-	var link = $.query.set("action", "addFacts");
+    var link = $.query.set("action", "addFacts");
 	
-	if (logging) {
-		var now = ue_getCurrentDate();		
-		link = link.set("timestring", now);
-	}
+    if (logging) {
+        var now = ue_getCurrentDate();		
+        link = link.set("timestring", now);
+    }
 
     var i = 0;
     for (var qid in mcStore) {
@@ -716,11 +794,23 @@ function d3web_storeQuestionText(textInput) {
 }
 
 function d3web_storeQuestionNum(numInput) {
-    var numQuestion = getQuestionId(numInput);
-    textStore[numQuestion] = $(numInput).val();
+   
+    if(d3web_checkQuestionNum(numInput)){
+        var numQuestion = getQuestionId(numInput);
+        textStore[numQuestion] = $(numInput).val();
+    } else {
+       // alert("dont store");
+    }
 }
 
-function d3web_handleQuestionNum(numInput) {
+
+/**
+ * Checks the given numInput value whether it is within the given bounds 
+ * (as stored in the attributes left and right)
+ * If yes, returns TRUE, else FALSE
+ */
+function d3web_checkQuestionNum(numInput) {
+    
     var tooHigh = "";
     var tooLow = "";
     var errorWid;
@@ -740,12 +830,16 @@ function d3web_handleQuestionNum(numInput) {
     if (val < left) {
         errorWid.html(tooLow);
         if (logging) ue_logNotAllowedInput(numInput);
+        return false;
     } else if (val > right) {   
         errorWid.html(tooHigh);
         if (logging) ue_logNotAllowedInput(numInput);
+        return false;
     } else {
         errorWid.html("");
     }
+    
+    return true;
 }
 
 function d3web_storeQuestionDate(dateSelect) {
@@ -754,7 +848,7 @@ function d3web_storeQuestionDate(dateSelect) {
 }
 
 function d3web_handleQuestionDate(dateSelect) {
-	 var date = getDate(dateSelect);
+    var date = getDate(dateSelect);
 		
     var tooSoon = "";
     var tooLate = "";
@@ -795,13 +889,13 @@ function d3web_prepareSave() {
 }
 
 function d3web_IQClicked(id) {
-	var poly = $('#' + "polygon-" + id);
-	var opacity = poly.css("opacity");
-	if (opacity == "0.5") {
-		poly.css("opacity", "0");		
-	} else {
-		poly.css("opacity", "0.5");	
-	}
+    var poly = $('#' + "polygon-" + id);
+    var opacity = poly.css("opacity");
+    if (opacity == "0.5") {
+        poly.css("opacity", "0");		
+    } else {
+        poly.css("opacity", "0.5");	
+    }
     var target = $("#" + id);	// get the clicked element
     var selected = target.find(":input:checked");	// find clicked input 
     var deselected = target.find(":input:not(:checked)"); // find not clicked inputs
@@ -814,13 +908,13 @@ function d3web_IQClicked(id) {
 }
 
 function d3web_IQMouseOver(id, isOver) {
-	if (isOver) {
-		var box = $("#f_" + id);
-		box.focus();
-	}
-	else {
-		$("#f_" + id).blur();
-	}
+    if (isOver) {
+        var box = $("#f_" + id);
+        box.focus();
+    }
+    else {
+        $("#f_" + id).blur();
+    }
 }
 
 /**

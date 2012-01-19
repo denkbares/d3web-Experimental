@@ -164,8 +164,20 @@ function ue_logInfoPopup(starttime, endtime, widget){
  */
 function ue_logNotAllowedInput(numInput){
    
-   // TODO log not allowed input
-    //alert("log not allowed also?")
+    var now = ue_getCurrentDate();       
+    var link = $.query.set("action", "logNotAllowed").set("timestring", now)
+        .set("id", getQuestionId(numInput)).set("value", parseInt($(numInput).val()));
+    link = window.location.href.replace(window.location.search, "") + link;
+
+    $.ajax({
+        type : "GET",
+        // async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function() {
+        // no action needed
+        }
+    });
 }
 
 /**

@@ -106,7 +106,6 @@ public class D3webServletLogUtils {
     protected static void logSessionEnd(HttpServletRequest request) {
         // end date
          String end = request.getParameter("timestring").replace("+", " ");
-         
         logger.logEndValue(end);
         logger.writeJSONToFile(logfilename);
         D3webConnector.getInstance().setLogger(new JSONLogger());
@@ -120,9 +119,7 @@ public class D3webServletLogUtils {
      */
     protected static void logWidget(HttpServletRequest request) {
         // TODO need to check here in case IDs are reworked globally one day
-        String widgetID = 
-                AbstractD3webRenderer.getObjectNameForId(
-                request.getParameter("widget"));
+        String widgetID = request.getParameter("widget");
         String time = request.getParameter("timestring").replace("+", " ");
         
 
@@ -133,8 +130,8 @@ public class D3webServletLogUtils {
         } else {
             if (widgetID.contains("reset")) {
                 logger.logClickedObjects(
-                        "RESET", time, "RESET");
-            } else if (widgetID.contains("statistics")) {
+                        "RESETEND", time, "RESET");
+                } else if (widgetID.contains("statistics")) {
                 logger.logClickedObjects(
                         "STATISTICS", time, "STATISTICS");
             } else if (widgetID.contains("summary")) {
@@ -180,10 +177,31 @@ public class D3webServletLogUtils {
      */
     protected static void logQuestionValue(String question, String value, HttpServletRequest request) {
         String logtime = request.getParameter("timestring").replace("+", " ");
+        String val = AbstractD3webRenderer.getObjectNameForId(value);
+        
          logger.logClickedObjects(
                 AbstractD3webRenderer.getObjectNameForId(question), 
                 logtime, 
-                AbstractD3webRenderer.getObjectNameForId(value));
+                val==null?value:AbstractD3webRenderer.getObjectNameForId(value));
+        logger.writeJSONToFile(logfilename);
+    }
+    
+    /**
+     * Log attempts to enter not allowed values, e.g. numerical values outside
+     * a given allowed range.
+     * 
+     * @param request
+     */
+    protected static void logNotAllowed(HttpServletRequest request) {
+        String logtime = request.getParameter("timestring").replace("+", " ");
+        String value = request.getParameter("value");
+        String question = request.getParameter("id");
+        System.out.println(question + " " + AbstractD3webRenderer.getObjectNameForId(question));
+        
+         logger.logClickedObjects(
+                "NOTALLOWED_" + AbstractD3webRenderer.getObjectNameForId(question), 
+                logtime, 
+                value);
         logger.writeJSONToFile(logfilename);
     }
 }

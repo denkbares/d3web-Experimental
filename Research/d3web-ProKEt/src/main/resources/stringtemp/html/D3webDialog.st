@@ -67,5 +67,9 @@ $endif$
 	<div id="right">$sidetext$</div>
 </div>
 
+$if(logging)$
+	$EoSDialog()$
+$endif$
+
 
 </body></html>
