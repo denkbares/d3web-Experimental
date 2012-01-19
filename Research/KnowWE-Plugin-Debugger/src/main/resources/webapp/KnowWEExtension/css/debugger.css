@@ -1,26 +1,38 @@
-#debugger {
-	padding: 10px;
-}
 #debugger h3 {
 	padding-top: 0;
 }
 #debugger div.solution {
-	border:	1px dashed gray;
+	border:	1px solid black;
+	border-radius: 4px;
 	padding: 5px 10px 5px 5px;
 	margin: 5px 0;
 	overflow: hidden;
+	background-color: rgb(247,247,247);
 }
-#debugger span.solution {
+#debugger span.solution_UNCLEAR, span.solution_EXCLUDED, span.solution_SUGGESTED, span.solution_ESTABLISHED {
 	font-weight: bold;
 	cursor: pointer;
 }
+#debugger span.solution_EXCLUDED {
+	color: red;	
+}
+#debugger span.solution_UNCLEAR {
+	color: black;	
+}
+#debugger span.solution_SUGGESTED {
+	color: green;
+}
+#debugger span.solution_ESTABLISHED {
+	color: rgb(100, 200, 50);	
+}
+
 #debugger div.non-solutions {
 	margin: 5px 0 0 0;
 }
 #debugger div.indicator {
 	float: right;
 	width: 20px;
-	background: url("../../templates/knowweTmps/images/arrdownsmall.gif") no-repeat center;
+	background: url("../images/arrow_down.png") no-repeat center;
 	cursor: pointer;
 }
 #debugger span.true {
@@ -30,8 +42,10 @@
 	color: red;
 }
 #debugger div.single_object {
-	border:	1px dashed gray;
+	border:	1px solid black;
+	border-radius: 4px;
 	padding: 5px 10px 5px 5px;
-	margin: 4px 0;
+	margin: 6px 0 4px 0;
 	overflow: hidden;	
+	background-color: rgb(250,250,250);
 }

@@ -34,6 +34,9 @@ public class DebugAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
+		String blocks = context.getParameter("blocks");
+		String[] display_blocks;
+
 		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(context.getWeb(),
 				context.getTitle());
 
@@ -41,6 +44,16 @@ public class DebugAction extends AbstractAction {
 		String result = dh.render(article, article.getSection(), context,
 				context.getParameters());
 		result = cleanHTML(result);
+
+		 if (blocks.length() > 2) {
+			blocks = blocks.substring(2, blocks.length() - 2);
+			display_blocks = blocks.split("\",\"");
+			for (String s : display_blocks) {
+				result = result.replace("id='" + s
+						+ "' style='display:none'", "id='" + s
+						+ "' style='display:block'");
+			}
+		 }
 
 		if (result != null && context.getWriter() != null) {
 			context.setContentType("text/html; charset=UTF-8");

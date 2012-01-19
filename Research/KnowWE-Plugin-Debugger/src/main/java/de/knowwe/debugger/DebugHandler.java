@@ -74,7 +74,6 @@ public class DebugHandler extends AbstractTagHandler {
 			kbid = KnowWEEnvironment.generateDefaultID(KnowWEEnvironment.WIKI_FINDINGS);
 			session = broker.getSession(kbid);
 		}
-
 		// Answered questions
 		List<Question> aqs = session.getBlackboard().getAnsweredQuestions();
 		HashMap<String, String> facts = new HashMap<String, String>();
@@ -92,7 +91,7 @@ public class DebugHandler extends AbstractTagHandler {
 		List<Rule> rules = getAllRules(kb);
 		if (rules.size() == 0) return KnowWEUtils.maskHTML("Error: No rules declared.");
 		/* DEBUGGER-DIV */
-		buffer.append("<div id='debugger' class='defaultMarkupFrame'>");
+		buffer.append("<div id='debugger'>");
 		// Rule -> Solution
 		for (Solution s : solutions) {
 			getTraceRendering(rules, s, new LinkedList<TerminologyObject>(), buffer, 0, session,
@@ -122,11 +121,12 @@ public class DebugHandler extends AbstractTagHandler {
 		// render to
 		if (to instanceof Solution) {
 			buffer.append("<div class='solution'>");
-			buffer.append("<div class='indicator' onclick='KNOWWE.plugin.debug.indicate(this);return false;'>&nbsp;</div>");
-			buffer.append("<span class='solution' onclick='KNOWWE.plugin.debug.indicate(this);return false;'>"
-					+ ": " + to
+			buffer.append("<div class='indicator'>&nbsp;</div>");
+			buffer.append("<span class='solution_"
+					+ session.getBlackboard().getRating((Solution) to)
+					+ "' >" + ": " + to
 					+ " (" + session.getBlackboard().getRating((Solution) to) + ")</span>");
-			buffer.append("<div class='non-solutions' style='display:none'>");
+			buffer.append("<div id='debug_" + to + "' style='display:none' class='non-solutions'>");
 		}
 		else {
 			buffer.append("<div class='single_object'><p style='font-weight:bold'>");
@@ -147,7 +147,9 @@ public class DebugHandler extends AbstractTagHandler {
 		else {
 			// render the rules that involve to in their action
 			for (Rule r : getRulesWithTO(rules, to)) {
+				buffer.append("<ul><li>");
 				renderRule(r, buffer, facts, session);
+				buffer.append("</li></ul>");
 				for (TerminologyObject t : r.getCondition().getTerminalObjects()) {
 					if (!conditionTOs.contains(t) & !checkedTOs.contains(t)) {
 						conditionTOs.add(t);
@@ -175,7 +177,7 @@ public class DebugHandler extends AbstractTagHandler {
 	 */
 	private void renderRule(Rule r, StringBuffer buffer, HashMap<String, String> facts, Session session) {
 		buffer.append("<p>");
-		boolean canFire = renderCondition(r.getCondition().toString(), buffer, facts);
+		boolean canFire = renderCondition(r.getCondition().toString(), buffer, facts, session);
 
 		buffer.append(" &rArr; ");
 		// Render action
@@ -193,8 +195,8 @@ public class DebugHandler extends AbstractTagHandler {
 	/**
 	 * Render the given condition
 	 */
-	private boolean renderCondition(String condition, StringBuffer buffer, HashMap<String, String> facts) {
-		String[] parts = new String[2];
+	private boolean renderCondition(String condition, StringBuffer buffer, HashMap<String, String> facts, Session session) {
+		List<String> parts = new LinkedList<String>();
 		// No need to check this extra with rule.canFire() if this method is
 		// checking the condition-truth anyway
 		boolean canFire = false;
@@ -205,9 +207,8 @@ public class DebugHandler extends AbstractTagHandler {
 		if (condition.startsWith(NOT)) {
 			condition = condition.replace(NOT, "");
 			condition = condition.substring(2, condition.length() - 1);
-			parts[0] = condition;
 
-			if (!evaluateCondition(parts[0], facts)) {
+			if (!evaluateCondition(condition, facts)) {
 				buffer.append(isTrue);
 				canFire = true;
 			}
@@ -217,48 +218,60 @@ public class DebugHandler extends AbstractTagHandler {
 			}
 
 			buffer.append(" !( ");
-			renderCondition(parts[0], buffer, facts);
+			renderCondition(condition, buffer, facts, session);
 			buffer.append(" ) </span>");
 		}
 		else if (condition.startsWith(AND)) {
 			condition = condition.replaceFirst(AND, "");
 			condition = condition.substring(2, condition.length() - 1);
 			parts = getConditionParts(condition);
+			canFire = evaluateCondition(parts.get(0), facts);
+			for (int i = 1; i < parts.size(); i++) {
+				canFire = canFire && evaluateCondition(parts.get(i), facts);
+			}
 
-			if (evaluateCondition(parts[0], facts) && evaluateCondition(parts[1], facts)) {
+			if (canFire) {
 				buffer.append(isTrue);
-				canFire = true;
 			}
 			else {
 				buffer.append(isFalse);
-				canFire = false;
 			}
 
-			buffer.append(" ( ");
-			renderCondition(parts[0], buffer, facts);
-			buffer.append(" ) AND ( ");
-			renderCondition(parts[1], buffer, facts);
-			buffer.append(" ) </span>");
+			for (int i = 0; i < parts.size(); i++) {
+				if (i > 0) {
+					buffer.append("AND");
+				}
+				buffer.append(" ( ");
+				renderCondition(parts.get(i), buffer, facts, session);
+				buffer.append(" ) ");
+			}
+			buffer.append("</span>");
 		}
 		else if (condition.startsWith(OR)) {
 			condition = condition.replaceFirst(OR, "");
 			condition = condition.substring(2, condition.length() - 1);
 			parts = getConditionParts(condition);
+			canFire = evaluateCondition(parts.get(0), facts);
+			for (int i = 1; i < parts.size(); i++) {
+				canFire = canFire || evaluateCondition(parts.get(i), facts);
+			}
 
-			if (evaluateCondition(parts[0], facts) || evaluateCondition(parts[1], facts)) {
+			if (canFire) {
 				buffer.append(isTrue);
-				canFire = true;
 			}
 			else {
-				canFire = false;
 				buffer.append(isFalse);
 			}
 
-			buffer.append(" ( ");
-			renderCondition(parts[0], buffer, facts);
-			buffer.append(" ) OR ( ");
-			renderCondition(parts[1], buffer, facts);
-			buffer.append(" ) </span>");
+			for (int i = 0; i < parts.size(); i++) {
+				if (i > 0) {
+					buffer.append("OR");
+				}
+				buffer.append(" ( ");
+				renderCondition(parts.get(i), buffer, facts, session);
+				buffer.append(" ) ");
+			}
+			buffer.append("</span>");
 		}
 		// Basic-condition
 		else {
@@ -292,18 +305,47 @@ public class DebugHandler extends AbstractTagHandler {
 				canFire = false;
 				buffer.append(isFalse);
 			}
-
+			// Render TO of condition
+			// HashMap<String, TerminologyObject> qs = new HashMap<String,
+			// TerminologyObject>();
+			// getAllQuestions(session.getKnowledgeBase().getRootQASet(), qs);
+			// TerminologyObject to = qs.get(condition.split(" == ")[0]);
+			// if (to instanceof QuestionChoice) {
+			// buffer.append(to.getName() + " ");
+			// buffer.append("<select name='" + condition.split(" == ")[0] +
+			// "' size='3'>");
+			// for (Choice choice : ((QuestionChoice) to).getAllAlternatives())
+			// {
+			// buffer.append("<option>" + choice.getName() + "</option>");
+			// }
+			// buffer.append("</select>");
+			// buffer.append(" == " + condition.split(" == ")[1]);
+			// }
+			// else {
+			// buffer.append(condition + "</span>");
+			// }
 			buffer.append(condition + "</span>");
 		}
 
 		return canFire;
 	}
 
+	private HashMap<String, TerminologyObject> getAllQuestions(TerminologyObject to, HashMap<String, TerminologyObject> qs) {
+		for (TerminologyObject q : to.getChildren()) {
+			qs.put(q.getName(), q);
+			if (q.getChildren().length > 0) {
+				getAllQuestions(q, qs);
+			}
+		}
+		return qs;
+	}
+
 	/**
 	 * evaluate a condition.
 	 */
 	private boolean evaluateCondition(String condition, HashMap<String, String> facts) {
-		String[] parts = new String[2];
+		List<String> parts = new LinkedList<String>();
+		boolean canFire = false;
 
 		// Walk recursively through the conditions text
 		// Get the connector (not, and, or)
@@ -316,15 +358,21 @@ public class DebugHandler extends AbstractTagHandler {
 			condition = condition.replaceFirst(AND, "");
 			condition = condition.substring(2, condition.length() - 1);
 			parts = getConditionParts(condition);
-			return evaluateCondition(parts[0], facts) && evaluateCondition(parts[1], facts);
+			canFire = evaluateCondition(parts.get(0), facts);
+			for (int i = 1; i < parts.size(); i++) {
+				canFire = canFire && evaluateCondition(parts.get(i), facts);
+			}
+			return canFire;
 		}
 		else if (condition.startsWith(OR)) {
 			condition = condition.replaceFirst(OR, "");
 			condition = condition.substring(2, condition.length() - 1);
 			parts = getConditionParts(condition);
-
-			return evaluateCondition(parts[0], facts) || evaluateCondition(parts[1], facts);
-
+			canFire = evaluateCondition(parts.get(0), facts);
+			for (int i = 1; i < parts.size(); i++) {
+				canFire = canFire || evaluateCondition(parts.get(i), facts);
+			}
+			return canFire;
 		}
 		// Prepare basic-conditions
 		else {
@@ -388,16 +436,15 @@ public class DebugHandler extends AbstractTagHandler {
 	/**
 	 * divides the condition in two part.
 	 */
-	private String[] getConditionParts(String condition) {
-		String[] parts = new String[2];
+	private List<String> getConditionParts(String condition) {
+		List<String> parts = new LinkedList<String>();
 		int skip = 0;
+		int lastPos = -2;
 
 		for (int i = 0; i < condition.length(); i++) {
-
 			if (skip == 0 && condition.charAt(i) == ';') {
-				parts[0] = condition.substring(0, i);
-				parts[1] = condition.substring(i + 2);
-				return parts;
+				parts.add(condition.substring(lastPos + 2, i));
+				lastPos = i;
 			}
 			else if (condition.charAt(i) == '{') {
 				skip++;
@@ -406,6 +453,7 @@ public class DebugHandler extends AbstractTagHandler {
 				skip--;
 			}
 		}
+		parts.add(condition.substring(lastPos + 2));
 
 		return parts;
 	}

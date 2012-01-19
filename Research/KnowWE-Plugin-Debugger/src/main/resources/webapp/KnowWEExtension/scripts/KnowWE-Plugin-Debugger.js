@@ -63,26 +63,105 @@ KNOWWE.plugin.debug = function(){
 	
 	return {
 		/**
+		 * just testing.
+		 */
+		test : function (){
+			alert("ja");
+			var pDefault = {
+	            KWikiWeb : 'default_web',
+	            namespace : 'Demo - Master',
+	            ObjectID : 'Check: Battery.',
+	            TermName : 'Check: Battery.'
+			}
+			var params = {action: 'SetSingleFindingAction', ValueID: 'ok'};
+			var paramss = {action: 'RetractSingleFindingAction', ValueID: 'ok'};
+            pDefault = KNOWWE.helper.enrich( paramss, pDefault );
+             
+            var options = {
+                url : KNOWWE.core.util.getURL( pDefault ),
+                response : {
+                	action : 'none',
+                	fn : function(){
+			        	try {
+	                		KNOWWE.helper.observer.notify('update');
+			        	}
+			        	catch (e) { /*ignore*/ }
+			        	KNOWWE.core.util.updateProcessingState(-1);
+                	},
+                    onError : function () {
+			        	KNOWWE.core.util.updateProcessingState(-1);                    	
+                    }
+                }
+            }
+        	KNOWWE.core.util.updateProcessingState(1);
+            new _KA( options ).send();     
+		},
+		/**
+         * Function: initialize
+         * 		add the click events
+         */
+        initialize : function (){
+        	// Add show/hide-events
+        	$$('.indicator').each(function(element){
+                _KE.add('click', element,  
+        		function(event) {
+                	KNOWWE.plugin.debug.indicate(element);
+        		});
+        	});
+        	$$('.solution_UNCLEAR').each(function(element){
+        		_KE.add('click', element,  
+        				function(event) {
+        			KNOWWE.plugin.debug.indicate(element);
+        		});
+        	});
+        	$$('.solution_EXCLUDED').each(function(element){
+        		_KE.add('click', element,  
+        				function(event) {
+        			KNOWWE.plugin.debug.indicate(element);
+        		});
+        	});
+        	$$('.solution_SUGGESTED').each(function(element){
+        		_KE.add('click', element,  
+        				function(event) {
+        			KNOWWE.plugin.debug.indicate(element);
+        		});
+        	});
+        	$$('.solution_ESTABLISHED').each(function(element){
+        		_KE.add('click', element,  
+        				function(event) {
+        			KNOWWE.plugin.debug.indicate(element);
+        		});
+        	});
+        },
+		/**
 		 * 
 		 */
 		rerender : function (){
-            var params = {
-                    action : 'DebugAction'
-            }           
-            
             var id;
+            var blocks = [];
            	$$('div').each(function(element){
         		if (element.id.match(/debugger_/)) {
         			id = element.id;
         		}
             });
-            var options = {
+           	$$('.non-solutions').each(function(element){
+        		if (element.style.display == 'block')
+        			blocks[blocks.length] = element.id;
+            });
+
+            var params = {
+                    action : 'DebugAction',
+                    blocks : blocks
+            }  
+            
+           	var options = {
                 url : KNOWWE.core.util.getURL( params ),
                 response : {
                     action : 'insert',
                     ids : [ id ],
                     fn : function(){
 			        	try {
+			    			KNOWWE.plugin.debug.initialize();
                     		KNOWWE.core.rerendercontent.update(); //Clear new SolutionPanel
 			        	}
 			        	catch (e) { /*ignore*/ }
@@ -100,11 +179,16 @@ KNOWWE.plugin.debug = function(){
 		 * 
 		 */
 		indicate : function (element) {
-			var div = element.parentNode.childNodes[2];
-			if (div.style.display == 'none') {
-				div.style.display = 'block';
-			} else if (div.style.display == 'block') {
-				div.style.display = 'none';
+			var arrow = element.parentNode.childNodes[0];
+			var box = element.parentNode.childNodes[2];
+			
+			// change display and arrow
+			if (box.style.display == 'none') {
+				box.style.display = 'block';
+				arrow.style.background = "url(KnowWEExtension/images/arrow_up.png) no-repeat center";
+			} else if (box.style.display == 'block') {
+				box.style.display = 'none';
+				arrow.style.background = "url(KnowWEExtension/images/arrow_down.png) no-repeat center";
 			}
 		}
     }
@@ -115,6 +199,7 @@ KNOWWE.plugin.debug = function(){
 (function init(){ 
     if( KNOWWE.helper.loadCheck( ['Wiki.jsp'] )){
         window.addEvent( 'domready', function(){
+        	KNOWWE.plugin.debug.initialize();
         	KNOWWE.helper.observer.subscribe( 'update', KNOWWE.plugin.debug.rerender);
         });
     }
