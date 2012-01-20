@@ -45,7 +45,7 @@ public class SparqlResultSetRenderer {
 			}
 		}
 		else {
-			result += KnowWEUtils.maskHTML("<ul>");
+			result += KnowWEUtils.maskHTML("<ul style='white-space: normal'>");
 		}
 
 		while (i.hasNext()) {
