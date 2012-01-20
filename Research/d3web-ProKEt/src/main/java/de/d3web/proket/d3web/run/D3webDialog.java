@@ -398,6 +398,7 @@ public class D3webDialog extends HttpServlet {
         } else {
             indicatedNotAnswered = true;
         }
+        
         if (indicatedNotAnswered) {
             writer.append("true");
 
@@ -734,6 +735,8 @@ public class D3webDialog extends HttpServlet {
             httpSession.setAttribute(D3WEB_SESSION,
                     session);
             httpSession.setAttribute("lastLoaded", filename);
+            D3webConnector.getInstance().setSession(session);
+            D3webServletLogUtils.resetLogfileName(session.getId());
             if (D3webConnector.getInstance().isLogging()) {
                 D3webServletLogUtils.logResume(request, session.getId());
             }

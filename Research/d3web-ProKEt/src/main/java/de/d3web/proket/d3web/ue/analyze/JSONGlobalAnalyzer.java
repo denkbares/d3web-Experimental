@@ -19,6 +19,7 @@
  */
 package de.d3web.proket.d3web.ue.analyze;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.simple.JSONObject;
@@ -60,7 +61,6 @@ public class JSONGlobalAnalyzer {
         return jsonreader.retrieveAllLogfilesAsJSON(getRootDir());
     }
 
-
     /**
      * Retrieves all cases within the root directory that had been worked
      * through in one flow, thus containing both a start and end time value
@@ -80,6 +80,44 @@ public class JSONGlobalAnalyzer {
             }
         }
         return oneFlowJsons;
+    }
+
+    public List<List<JSONObject>> getMultipleFlowCases(JSONFileAnalyzer filea) {
+        List<JSONObject> jsons =
+                jsonreader.retrieveAllLogfilesAsJSON(getRootDir());
+        List<List<JSONObject>> multipleFlowJsons =
+                new ArrayList<List<JSONObject>>();
+
+
+        for (JSONObject json : jsons) {
+
+            // analyze each non-one-flow-json beginning with the last one i.e.
+            // the one containing the end information
+            if ((!filea.isOneFlow(json)) && filea.containsEndMultiple(json)) {
+                List<JSONObject> mjs = new ArrayList<JSONObject>();
+                mjs.add(json);
+
+                recurseMultipleFlows(mjs, json, filea);
+
+                multipleFlowJsons.add(mjs);
+            }
+        }
+        return multipleFlowJsons;
+    }
+
+    private void recurseMultipleFlows(List<JSONObject> mjs, JSONObject json, JSONFileAnalyzer filea) {
+
+        String session = filea.getLoadValue(json);
+        for (File f : jsonreader.retrieveAllLogfiles(getRootDir())) {
+            if (f.getName().contains(session)) {
+                System.out.println("found next part: " + f.getName());
+
+                JSONObject newmjo = jsonreader.getJSONFromTxtFile(f.getAbsolutePath());
+                mjs.add(newmjo);
+
+                recurseMultipleFlows(mjs, newmjo, filea);
+            }
+        }
     }
 
     public String getRootDir() {

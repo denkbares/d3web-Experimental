@@ -19,6 +19,9 @@ public class UEMetricsAnalyst {
     private JSONFileAnalyzer filea = null;
     private String ROOT = "";
 
+    /*
+     * Constructor
+     */
     public UEMetricsAnalyst(String rootDir) {
         globa = new JSONGlobalAnalyzer(rootDir);
         filea = new JSONFileAnalyzer();
@@ -49,12 +52,16 @@ public class UEMetricsAnalyst {
      *
      * @return the number of one flow cases
      */
-    public int getTotalNrOneFlowCases() {
+    public int getNrOneFlowCases() {
         List<JSONObject> oneFlowJsons = globa.getOneFlowCases(filea);
         return oneFlowJsons.size();
     }
-    
-       /**
+
+    public int getNrMultipleFlowCases() {
+        return globa.getMultipleFlowCases(filea).size();
+    }
+
+    /**
      * TODO Retrieve the total number of successful cases. Thereby, a successful
      * case means cases, where all questions had been answered and thus start
      * and end values of time are provided
@@ -64,40 +71,41 @@ public class UEMetricsAnalyst {
     public int getTotalNumberOfSuccessfulCases() {
         return 0;
     }
-    
+
     /**
      * Retrieve total number of cases, independent whether those were completely
-     * finished or only partly entered, resumed, or the like.
-     * Corresponds to the total number of logfiles in the specified root
-     * directory that is analyzed.
-     * 
-     * @return the total number of cases 
+     * finished or only partly entered, resumed, or the like. Corresponds to the
+     * total number of logfiles in the specified root directory that is
+     * analyzed.
+     *
+     * @return the total number of cases
      */
-    public int getTotalNrOfCases(){
+    public int getTotalNrOfCases() {
         return globa.getAllCases().size();
     }
 
-    
-    public String getAnalysisResults(){
+    public String getAnalysisResults() {
         StringBuilder bui = new StringBuilder();
         bui.append("###################################\n");
         bui.append("ANALYSIS OF DIRECTORY: " + ROOT + "\n");
         bui.append("###################################\n");
         bui.append("\n");
-        bui.append("Total # of cases: \t\t" + getTotalNrOfCases() + "\n");
-        bui.append("Total # of one-flow cases: \t" + getTotalNrOneFlowCases() + "\n");
+        bui.append("Total # of cases: \t\t\t" + getTotalNrOfCases() + "\n");
+        bui.append("Total # of one-flow cases: \t\t" + getNrOneFlowCases() + "\n");
+        bui.append("Total # of multiple-flow cases: \t" + getNrMultipleFlowCases() + "\n");
         bui.append("\n");
         bui.append("USER-specific analysis: " + "user\n");
         bui.append("-----------------------------------");
         bui.append("\n");
-        bui.append("Total # one-flow cases: \t" + getNrOneFlowCasesOfUser("user") + "\n");
+        bui.append("Total # one-flow cases: \t\t" + getNrOneFlowCasesOfUser("user") + "\n");
         bui.append("\n");
         bui.append("##############\n");
         bui.append("END OF ANALYIS\n");
         bui.append("##############\n");
-        
+
         return bui.toString();
     }
+
     public static void main(String[] args) {
         UEMetricsAnalyst ue = new UEMetricsAnalyst("DEFAULT-DATA");
         System.out.println(ue.getAnalysisResults());

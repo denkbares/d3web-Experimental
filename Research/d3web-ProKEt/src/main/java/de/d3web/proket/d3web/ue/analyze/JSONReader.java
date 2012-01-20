@@ -52,7 +52,8 @@ public class JSONReader implements Serializable {
     private static final String RESULT = "result";
     private static final String START = "start";
     private static final String END = "end";
-    private static final String CLICKED = "clickedobjects";
+    private static final String LOAD = "LOAD";
+    private static final String CLICKED = "clickedwidgets";
     /*
      * SVUID
      */
@@ -123,7 +124,9 @@ public class JSONReader implements Serializable {
         if (logdata.get(CLICKED) != null) {
             ob.put(CLICKED, getJSONArrayFromString(logdata.get(CLICKED).toString()));
         }
-
+        if (logdata.get(LOAD) != null) {
+            ob.put(LOAD, logdata.get(LOAD).toString());
+        }
         return ob;
     }
 
@@ -184,7 +187,38 @@ public class JSONReader implements Serializable {
 
         return logdata;
     }
+    
+    public ArrayList<File> retrieveAllLogfiles(String directory){
+        ArrayList<File> files = new ArrayList<File>();
+        parseLogfilesRecursively(directory, files);
+        
+        return files;
+    }
 
+    
+    private void parseLogfilesRecursively(String directory, ArrayList<File> files) {
+
+        // check directory and take care it really exists
+        File dir = new File(directory);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        // get all txtfiles from the dir recursively and walk through
+        File[] entries = dir.listFiles();
+        // Go over entries
+        if (entries != null) {
+            for (File file : entries) {
+                // get the JSON from each file and att to the JSON list
+                if (file.isFile() && file.getName().endsWith(".txt")) {
+                    
+                    files.add(file);
+                } else {
+                    parseLogfilesRecursively(file.getAbsolutePath(), files);
+                }
+            }
+        }
+    }
     /**
      * Retrieves a listing of JSON files from a given directory. Thereby, all
      * textfiles contained in the dir are parsed, converted to JSON, and added

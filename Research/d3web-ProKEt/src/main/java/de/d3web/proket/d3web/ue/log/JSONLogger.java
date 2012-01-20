@@ -198,6 +198,43 @@ public class JSONLogger {
 			}
 		}
 	}
+        
+        
+        public void writeJSONToFile(String file, JSONObject json) {
+            
+            // transfer the contents of json into logfile!
+		BufferedWriter bw = null;
+
+		try {
+			File dir = new File(GlobalSettings.getInstance().getLogFolder() + "/");
+			if (!dir.exists()) {
+				dir.mkdirs();
+			}
+			String filepath = dir + "/" + file;
+
+			bw = new BufferedWriter(new FileWriter(filepath));
+			bw.write(json.toString());
+
+		}
+		catch (FileNotFoundException ex) {
+			ex.printStackTrace();
+		}
+		catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		finally {
+			// Close the BufferedWriter
+			try {
+				if (bw != null) {
+					bw.flush();
+					bw.close();
+				}
+			}
+			catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
 
 	public static void main(String[] args) {
 		JSONLogger logger = new JSONLogger();

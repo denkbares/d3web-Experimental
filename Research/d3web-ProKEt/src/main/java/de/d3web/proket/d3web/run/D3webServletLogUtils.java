@@ -19,15 +19,18 @@
  */
 package de.d3web.proket.d3web.run;
 
-import de.d3web.core.session.Session;
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
+import de.d3web.proket.d3web.ue.analyze.JSONReader;
 import de.d3web.proket.d3web.ue.log.JSONLogger;
 import de.d3web.proket.utils.GlobalSettings;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.json.simple.JSONObject;
 
 /**
  * Utility class that contains all methods required for processing the requests
@@ -61,11 +64,32 @@ public class D3webServletLogUtils {
         SimpleDateFormat format =
                 new SimpleDateFormat("yyyyMMdd_HHmmss");
         String formatted = format.format(loggingstart);
-        String sid =
-                ((Session) httpSession.getAttribute(D3WEB_SESSION)).getId();
+        //String sid =
+          //      ((Session) httpSession.getAttribute(D3WEB_SESSION)).getId();
+        String sid = D3webConnector.getInstance().getSession().getId();
         logfilename = formatted + "_" + sid + ".txt";
     }
 
+    
+    public static void resetLogfileName(String newSid){
+        
+        List<File> logfiles = JSONReader.getInstance().retrieveAllLogfiles(
+                GlobalSettings.getInstance().getLogFolder());
+        File THEfile = null;
+        for(File f: logfiles){
+            if(f.getName().contains(newSid)){
+                
+                JSONObject oldContents = JSONReader.getInstance().getJSONFromTxtFile(f.getAbsolutePath());
+                System.out.println(oldContents);
+                logfilename = f.getName();
+                
+                // TODO: correct logging of old contents (restore)
+                logger.writeJSONToFile(logfilename, oldContents);
+            }
+        }
+    }
+    
+    
     /**
      * Logs initial values username and browser info. Only to be done once,
      * therefore check global setting "initlogged"
