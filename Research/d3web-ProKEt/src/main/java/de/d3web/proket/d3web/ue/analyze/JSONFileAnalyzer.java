@@ -19,28 +19,35 @@
  */
 package de.d3web.proket.d3web.ue.analyze;
 
-import java.io.Serializable;
+import org.json.simple.JSONObject;
 
 /**
- * Basic class for analyzing JSON content
+ * Basic class for analyzing JSON content. Operating on single file only.
+ * Retrieves values such as whether the file is of a given user, whether its a 
+ * single flow (start and end) input, etc.
  *
  * @author Martina Freiberg @date 28/11/2011
  */
-public class JSONAnalyzer {
+public class JSONFileAnalyzer {
 
-    protected JSONReader jsonreader;
-    protected String upmDir;
+    private static final String BROWSER = "browser";
+    private static final String USER = "user";
+    private static final String RESULT = "result";
+    private static final String START = "start";
+    private static final String END = "end";
+    private static final String CLICKED = "clickedobjects";
+    private static JSONFileAnalyzer instance = null;
+    
+    
 
-    public JSONAnalyzer(String uppermostDir) {
-        jsonreader = JSONReader.getInstance();
-        upmDir = uppermostDir;
-    }
-
-    public String getRootDir() {
-        return upmDir;
+    public boolean isOneFlow(JSONObject json) {
+       return json.containsKey(START) && json.containsKey(END);
     }
     
-    public JSONReader getReader(){
-        return jsonreader;
+    public boolean isOfUser(JSONObject json, String user){
+       return json.containsKey(USER) 
+               && json.get(USER).toString().replace("\"", "").equals(user);
     }
 }
+// elemente mehrfach geclickt
+    // hilfe-element zu frage wie oft aufgerufen

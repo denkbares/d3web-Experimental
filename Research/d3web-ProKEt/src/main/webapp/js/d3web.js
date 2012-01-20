@@ -407,7 +407,7 @@ function initFunctionality() {
         d3web_storeQuestionNum($(this));
         d3web_addFacts();
     });//.each(function() {
-        //d3web_checkQuestionNum($(this));
+    //d3web_checkQuestionNum($(this));
     //});
 	
     $('[type=textselect]').unbind('change').change(function() {
@@ -799,7 +799,7 @@ function d3web_storeQuestionNum(numInput) {
         var numQuestion = getQuestionId(numInput);
         textStore[numQuestion] = $(numInput).val();
     } else {
-       // alert("dont store");
+    // alert("dont store");
     }
 }
 
@@ -1035,8 +1035,14 @@ function d3web_getSelectedFile() {
 *            Name of the file to be laoded.
 */
 function d3web_loadCase(filename) {
-
-    var link = $.query.set("action", "loadcase").set("fn", filename).toString();
+    var link;
+    
+    if(logging){
+        var now = ue_getCurrentDate();
+        link = $.query.set("action", "loadcase").set("fn", filename).set("timestring", now).toString();
+    } else {
+        link = $.query.set("action", "loadcase").set("fn", filename).toString();
+    }
     link = window.location.href.replace(window.location.search, "") + link;
 
     $.ajax({

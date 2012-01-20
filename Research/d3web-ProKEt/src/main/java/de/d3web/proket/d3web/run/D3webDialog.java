@@ -393,7 +393,7 @@ public class D3webDialog extends HttpServlet {
             for (Question iq : indicated) {
                 if (!valued.contains(iq)) {
                     indicatedNotAnswered = true;
-                 }
+                }
             }
         } else {
             indicatedNotAnswered = true;
@@ -720,18 +720,23 @@ public class D3webDialog extends HttpServlet {
 
         String filename = request.getParameter("fn");
         String user = (String) httpSession.getAttribute("user");
-        loadCaseUserFilename(httpSession, user, filename);
+        loadCaseUserFilename(request, httpSession, user, filename);
     }
 
     /*
      * Helper method for above loadCase() method and for single access of load
      * case mechanism with a given username and filename
      */
-    protected void loadCaseUserFilename(HttpSession httpSession, String user, String filename) {
+    protected void loadCaseUserFilename(HttpServletRequest request, HttpSession httpSession, String user, String filename) {
+        Session session = null;
         if (PersistenceD3webUtils.existsCase(user, filename)) {
+            session = PersistenceD3webUtils.loadUserCase(user, filename);
             httpSession.setAttribute(D3WEB_SESSION,
-                    PersistenceD3webUtils.loadUserCase(user, filename));
+                    session);
             httpSession.setAttribute("lastLoaded", filename);
+            if (D3webConnector.getInstance().isLogging()) {
+                D3webServletLogUtils.logResume(request, session.getId());
+            }
         }
     }
 
@@ -751,7 +756,7 @@ public class D3webDialog extends HttpServlet {
             httpSession.setAttribute("authenticated", "yes");
             httpSession.setAttribute("user", email);
 
-            loadCaseUserFilename(httpSession, email, "autosave");
+            loadCaseUserFilename(request, httpSession, email, "autosave");
 
             response.sendRedirect("../EuraHS-Dialog");
         } else {
@@ -1025,8 +1030,8 @@ public class D3webDialog extends HttpServlet {
     protected void logInfoPopup(HttpServletRequest request) {
         D3webServletLogUtils.logInfoPopup(request);
     }
-    
-     protected void logNotAllowed(HttpServletRequest request) {
+
+    protected void logNotAllowed(HttpServletRequest request) {
         D3webServletLogUtils.logNotAllowed(request);
     }
 

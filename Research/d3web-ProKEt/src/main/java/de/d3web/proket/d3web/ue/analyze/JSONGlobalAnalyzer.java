@@ -19,43 +19,74 @@
  */
 package de.d3web.proket.d3web.ue.analyze;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.json.simple.JSONObject;
+
 /**
- * Basic class for analyzing JSON content Operating on multiple files.
+ * Basic class for analyzing JSON content Operating on multiple files. Examples
+ * are the total number of cases, successful cases, cases per user...
+ *
+ * TODO: factor out the number-grapping methods to separate usabilityAnalysis-
+ * classes and just leave the json-parsing/retrieving stuff in here
  *
  * @author Martina Freiberg @date 28/11/2011
  */
-public class JSONGlobalAnalyzer extends JSONAnalyzer {
+public class JSONGlobalAnalyzer {
 
-    public JSONGlobalAnalyzer(String uppermostdir) {
-        super(uppermostdir);
-    }
-    
-    /*
-     * Retrieve the total number of stored cases.
-     * This is not simply the total number of stored JSON logfiles, but we 
-     * have to factor out resumed cases and count those as one... (TODO?!)
-     * 
-     * @return the number of cases
-     * 
-     */
-    public int getTotalNumberOfCases() {
-        return (jsonreader.retrieveAllLogfilesAsJSON(getRootDir()).size());
-    }
-    
+    protected JSONReader jsonreader;
+    protected String upmDir;
+
     /**
-     * Retrieve the total number of successful cases.
-     * Thereby, a successful case means cases, where all questions had been
-     * answered and thus start and end values of time are provided
-     * 
-     * @return the number of successful cases
+     * Constructor setting both the JSONReader to use and the uppermost (parent,
+     * root) directory where files to be analyzed are stored
+     *
+     * @param uppermostDir
      */
-    public int getTotalNumberOfSuccessfulCases(){
-        return 0;
+    public JSONGlobalAnalyzer(String uppermostDir) {
+        jsonreader = JSONReader.getInstance();
+        upmDir = uppermostDir;
     }
-    
-    
-    public static void main(String[] args){
-        JSONGlobalAnalyzer globa = new JSONGlobalAnalyzer("DEFAULT-DATA");
-        System.out.println(globa.getTotalNumberOfCases());
+
+    /*
+     * Retrieve all cases stored in the root directory Independent of whether
+     * the cases were successful, resumed, partly finished or the like. Just the
+     * number of all partly & completely entered cases.
+     *
+     * @return the list with all case files
+     *
+     */
+    public List<JSONObject> getAllCases() {
+        return jsonreader.retrieveAllLogfilesAsJSON(getRootDir());
+    }
+
+
+    /**
+     * Retrieves all cases within the root directory that had been worked
+     * through in one flow, thus containing both a start and end time value
+     *
+     * @return a list of one flow cases, or an empty list if none one flow cases
+     * available
+     */
+    public List<JSONObject> getOneFlowCases(JSONFileAnalyzer filea) {
+        List<JSONObject> jsons =
+                jsonreader.retrieveAllLogfilesAsJSON(getRootDir());
+        List<JSONObject> oneFlowJsons =
+                new ArrayList<JSONObject>();
+
+        for (JSONObject json : jsons) {
+            if (filea.isOneFlow(json)) {
+                oneFlowJsons.add(json);
+            }
+        }
+        return oneFlowJsons;
+    }
+
+    public String getRootDir() {
+        return upmDir;
+    }
+
+    public JSONReader getReader() {
+        return jsonreader;
     }
 }
