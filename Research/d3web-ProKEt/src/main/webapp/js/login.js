@@ -135,7 +135,7 @@ function sendData() {
 				
 				// just close login dialog, but NOT reset session
 				$("#jqLoginDialog").dialog("close");	
-				
+                               
 				// in case another user than before logged in successfully
 				if(html=="newUser"){
 					

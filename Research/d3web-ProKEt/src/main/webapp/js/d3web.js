@@ -372,27 +372,13 @@ function initFunctionality() {
     });
 	
         
-    /**
-     *$('[type=text]').unbind('click').click(function() {
-        var thisEl = $(this);
-        thisEl.bind('keydown', function(e) {
-            var code = (e.keyCode ? e.keyCode : e.which);
-            if (code == 13) {
-                d3web_storeQuestionText($(this));
-                d3web_addFacts();
-            }
-        });
-    });*/
-    
     $('[type=text]').unbind('keydown').keydown(function(e) {
         var code = (e.keyCode ? e.keyCode : e.which);
         if (code == 13) {
-            d3web_storeQuestionText($(this));
-            d3web_addFacts();
+            handleTextFields($(this))
         }
     }).unbind('focusout').focusout(function() {
-        d3web_storeQuestionText($(this));
-        d3web_addFacts();
+        handleTextFields($(this));
     }).each(function() {
         handleUrlInput($(this));
     });
@@ -400,15 +386,11 @@ function initFunctionality() {
     $('[type=num]').unbind("keydown").keydown(function(e) { 
         var code = (e.keyCode ? e.keyCode : e.which);
         if (code == 13) {
-            d3web_storeQuestionNum($(this));
-            d3web_addFacts();
+            handleNumFields($(this));
         }
     }).unbind("focusout").focusout(function() {
-        d3web_storeQuestionNum($(this));
-        d3web_addFacts();
-    });//.each(function() {
-    //d3web_checkQuestionNum($(this));
-    //});
+        handleNumFields($(this));
+    });
 	
     $('[type=textselect]').unbind('change').change(function() {
         d3web_storeQuestionText($(this));
@@ -610,6 +592,27 @@ function handleUnsupportedBrowsers() {
             "<a href='http://www.google.com/chrome/'>Google Chrome</a>!</td></tr>");
     }
 }
+
+function handleTextFields(field){
+    // workaround for IE: if login dialog is opened, no sending of
+    // textfield/numfield data should take place as this leads to a
+    // required-check fail (works in other browsers without that if)
+    if(!$("#jqLoginDialog").dialog("isOpen")){
+        d3web_storeQuestionText(field);
+        d3web_addFacts();
+    }
+}
+
+function handleNumFields(field){
+    // workaround for IE: if login dialog is opened, no sending of
+    // textfield/numfield data should take place as this leads to a
+    // required-check fail (works in other browsers without that if)
+    if(!$("#jqLoginDialog").dialog("isOpen")){
+        d3web_storeQuestionNum(field);
+        d3web_addFacts();
+    }
+}
+
 
 function moveContentPart() {
     $('#content').css("margin-top", (getHeaderHeight() + 10) + "px");

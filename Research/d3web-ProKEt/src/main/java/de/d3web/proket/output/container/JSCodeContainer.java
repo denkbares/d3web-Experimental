@@ -132,7 +132,7 @@ public class JSCodeContainer implements ICodeContainer {
 			ownBibs.add("encrypt.js");
 			// flag that enables login mechanism in d3web.js
 			add("var usrdatLogin = true;", 0);
-		}
+                       }
 		else {
 			// flag that disables login mechanism in d3web.js
 			add("var usrdatLogin = false;", 0);
