@@ -55,15 +55,6 @@ public class JSONLogger {
 	private final JSONObject logfile;
 	private final JSONArray clickarray;
 
-	protected static final String BROWSER = "browser";
-	protected static final String USER = "user";
-	protected static final String RESULT = "result";
-	protected static final String START = "start";
-	protected static final String END = "end";
-	protected static final String CLICKED = "clickedwidgets";
-	protected static final String ID = "id";
-	protected static final String TS = "timestamp";
-	protected static final String VAL = "value";
 	private static final long serialVersionUID = -5766536853041423918L;
 
 	/**
@@ -80,7 +71,7 @@ public class JSONLogger {
 	 * @param value the value to be added
 	 */
 	public void logBrowserValue(String value) {
-		logfile.put(BROWSER, value);
+		logfile.put(UETerm.BROW.toString(), value);
 	}
 
 	/**
@@ -89,7 +80,7 @@ public class JSONLogger {
 	 * @param value the value to be added
 	 */
 	public void logUserValue(String value) {
-		logfile.put(USER, value);
+		logfile.put(UETerm.USER.toString(), value);
 	}
 
 	/**
@@ -98,7 +89,7 @@ public class JSONLogger {
 	 * @param value the value to be added
 	 */
 	public void logResultValue(String value) {
-		logfile.put(RESULT, value);
+		logfile.put(UETerm.RES.toString(), value);
 	}
 
 	/**
@@ -107,7 +98,7 @@ public class JSONLogger {
 	 * @param value the value to be added
 	 */
 	public void logStartValue(String value) {
-		logfile.put(START, value);
+		logfile.put(UETerm.START.toString(), value);
 	}
 
 	/**
@@ -116,7 +107,7 @@ public class JSONLogger {
 	 * @param value the value to be added
 	 */
 	public void logEndValue(String value) {
-		logfile.put(END, value);
+		logfile.put(UETerm.END.toString(), value);
 	}
 
 	/**
@@ -135,14 +126,14 @@ public class JSONLogger {
 	public void logClickedObjects(Object id, Object timestamp, Object value) {
 
 		JSONObject ob = new JSONObject();
-		ob.put(ID, id);
-		ob.put(TS, timestamp);
-		ob.put(VAL, value);
+		ob.put(UETerm.ID.toString(), id);
+		ob.put(UETerm.TS.toString(), timestamp);
+		ob.put(UETerm.VAL.toString(), value);
 
 		JSONArray existingClickedObjects = getClickedObjects();
 		existingClickedObjects.add(ob);
 
-		logfile.put(CLICKED, existingClickedObjects);
+		logfile.put(UETerm.CLICKED.toString(), existingClickedObjects);
 	}
 
 	// get the existing clicked objects already stored in the internal array

@@ -597,17 +597,28 @@ function handleTextFields(field){
     // workaround for IE: if login dialog is opened, no sending of
     // textfield/numfield data should take place as this leads to a
     // required-check fail (works in other browsers without that if)
-    if(!$("#jqLoginDialog").dialog("isOpen")){
+    if(usrdatLogin==true){
+        if(!$("#jqLoginDialog").dialog("isOpen")){
+            d3web_storeQuestionText(field);
+            d3web_addFacts();
+        }
+    } else {
         d3web_storeQuestionText(field);
         d3web_addFacts();
     }
+    
 }
 
 function handleNumFields(field){
     // workaround for IE: if login dialog is opened, no sending of
     // textfield/numfield data should take place as this leads to a
     // required-check fail (works in other browsers without that if)
-    if(!$("#jqLoginDialog").dialog("isOpen")){
+    if(usrdatLogin==true){
+        if(!$("#jqLoginDialog").dialog("isOpen")){
+            d3web_storeQuestionNum(field);
+            d3web_addFacts();
+        }
+    } else {
         d3web_storeQuestionNum(field);
         d3web_addFacts();
     }

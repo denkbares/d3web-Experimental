@@ -19,6 +19,7 @@
  */
 package de.d3web.proket.d3web.ue.analyze;
 
+import de.d3web.proket.d3web.ue.log.UETerm;
 import java.io.*;
 import java.util.*;
 import org.json.simple.JSONArray;
@@ -43,17 +44,7 @@ public class JSONReader implements Serializable {
     private static JSONReader INSTANCE = null;
     private static JSONParser parser;
     private static ContainerFactory cf;
-    /*
-     * The String representation of the following finals needs to be exactly as
-     * in the .txt logfile!
-     */
-    private static final String BROWSER = "browser";
-    private static final String USER = "user";
-    private static final String RESULT = "result";
-    private static final String START = "start";
-    private static final String END = "end";
-    private static final String LOAD = "LOAD";
-    private static final String CLICKED = "clickedwidgets";
+   
     /*
      * SVUID
      */
@@ -106,26 +97,26 @@ public class JSONReader implements Serializable {
         HashMap<String, String> logdata = parseFile(file);
         JSONObject ob = new JSONObject();
 
-        if (logdata.get(BROWSER) != null) {
-            ob.put(BROWSER, logdata.get(BROWSER).toString());
+        if (logdata.get(UETerm.BROW.toString()) != null) {
+            ob.put(UETerm.BROW.toString(), logdata.get(UETerm.BROW.toString()).toString());
         }
-        if (logdata.get(USER) != null) {
-            ob.put(USER, logdata.get(USER).toString());
+        if (logdata.get(UETerm.USER.toString()) != null) {
+            ob.put(UETerm.USER.toString(), logdata.get(UETerm.USER.toString()).toString());
         }
-        if (logdata.get(START) != null) {
-            ob.put(START, logdata.get(START).toString());
+        if (logdata.get(UETerm.START.toString()) != null) {
+            ob.put(UETerm.START.toString(), logdata.get(UETerm.START.toString()).toString());
         }
-        if (logdata.get(END) != null) {
-            ob.put(END, logdata.get(END).toString());
+        if (logdata.get(UETerm.END.toString()) != null) {
+            ob.put(UETerm.END.toString(), logdata.get(UETerm.END.toString()).toString());
         }
-        if (logdata.get(RESULT) != null) {
-            ob.put(RESULT, logdata.get(RESULT).toString());
+        if (logdata.get(UETerm.RES.toString()) != null) {
+            ob.put(UETerm.RES.toString(), logdata.get(UETerm.RES.toString()).toString());
         }
-        if (logdata.get(CLICKED) != null) {
-            ob.put(CLICKED, getJSONArrayFromString(logdata.get(CLICKED).toString()));
+        if (logdata.get(UETerm.CLICKED.toString()) != null) {
+            ob.put(UETerm.CLICKED.toString(), getJSONArrayFromString(logdata.get(UETerm.CLICKED.toString()).toString()));
         }
-        if (logdata.get(LOAD) != null) {
-            ob.put(LOAD, logdata.get(LOAD).toString());
+        if (logdata.get(UETerm.LOAD.toString()) != null) {
+            ob.put(UETerm.LOAD.toString(), logdata.get(UETerm.LOAD.toString()).toString());
         }
         return ob;
     }
@@ -167,18 +158,18 @@ public class JSONReader implements Serializable {
                 String keyval = entry.getKey().toString();
                 String value = JSONValue.toJSONString(entry.getValue());
 
-                if (keyval.equals(BROWSER)) {
-                    logdata.put(BROWSER, value);
-                } else if (keyval.equals(USER)) {
-                    logdata.put(USER, value);
-                } else if (keyval.equals(RESULT)) {
-                    logdata.put(RESULT, value);
-                } else if (keyval.equals(START)) {
-                    logdata.put(START, value);
-                } else if (keyval.equals(END)) {
-                    logdata.put(END, value);
-                } else if (keyval.equals(CLICKED)) {
-                    logdata.put(CLICKED, value);
+                if (keyval.equals(UETerm.BROW.toString())) {
+                    logdata.put(UETerm.BROW.toString(), value);
+                } else if (keyval.equals(UETerm.USER.toString())) {
+                    logdata.put(UETerm.USER.toString(), value);
+                } else if (keyval.equals(UETerm.RES.toString())) {
+                    logdata.put(UETerm.RES.toString(), value);
+                } else if (keyval.equals(UETerm.START.toString())) {
+                    logdata.put(UETerm.START.toString(), value);
+                } else if (keyval.equals(UETerm.END.toString())) {
+                    logdata.put(UETerm.END.toString(), value);
+                } else if (keyval.equals(UETerm.CLICKED.toString())) {
+                    logdata.put(UETerm.CLICKED.toString(), value);
                 }
             }
         } catch (ParseException pe) {
@@ -302,9 +293,9 @@ public class JSONReader implements Serializable {
 
         ArrayList<JSONObject> forUser = new ArrayList<JSONObject>();
         for (JSONObject ob : allJSON) {
-            if (ob.containsKey(USER)) {
+            if (ob.containsKey(UETerm.USER.toString())) {
                 String user = //remove "" from username
-                        ob.get(USER).toString().replace("\"", "");
+                        ob.get(UETerm.USER.toString()).toString().replace("\"", "");
                 if (user.equals(username)) {
                     forUser.add(ob);
                 }

@@ -19,6 +19,8 @@
  */
 package de.d3web.proket.d3web.ue.analyze;
 
+import com.sun.xml.internal.bind.v2.model.core.ID;
+import de.d3web.proket.d3web.ue.log.UETerm;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -31,39 +33,29 @@ import org.json.simple.JSONObject;
  */
 public class JSONFileAnalyzer {
 
-    private static final String BROWSER = "browser";
-    private static final String USER = "user";
-    private static final String RESULT = "result";
-    private static final String START = "start";
-    private static final String END = "end";
-    private static final String CLICKED = "clickedwidgets";
-    private static final String LOAD = "LOAD";
-    private static final String ID = "id";
-    
-	protected static final String VAL = "value";
-    
     private static JSONFileAnalyzer instance = null;
 
     public boolean isOneFlow(JSONObject json) {
-        return json.containsKey(START) && json.containsKey(END) &&
+        return json.containsKey(UETerm.START.toString()) && 
+                json.containsKey(UETerm.END.toString()) &&
                 !containsLoad(json);
     }
 
     public boolean isOfUser(JSONObject json, String user) {
-        return json.containsKey(USER)
-                && json.get(USER).toString().replace("\"", "").equals(user);
+        return json.containsKey(UETerm.USER.toString())
+                && json.get(UETerm.USER.toString()).toString().replace("\"", "").equals(user);
     }
 
     public boolean containsEnd(JSONObject json) {
-        return json.containsKey(END);
+        return json.containsKey(UETerm.END.toString());
     }
 
     public boolean containsLoad(JSONObject json) {
-        if (json.containsKey(CLICKED)) {
-            JSONArray jar = (JSONArray) json.get(CLICKED);
+        if (json.containsKey(UETerm.CLICKED.toString())) {
+            JSONArray jar = (JSONArray) json.get(UETerm.CLICKED.toString());
             for (Object jjar : jar) {
-                if (((JSONObject) jjar).containsKey(ID) &&
-                        ((JSONObject)jjar).get(ID).equals("LOAD")) {
+                if (((JSONObject) jjar).containsKey(UETerm.ID.toString()) &&
+                        ((JSONObject)jjar).get(UETerm.ID.toString()).equals("LOAD")) {
                     return true;
                 }
             }
@@ -72,14 +64,14 @@ public class JSONFileAnalyzer {
     }
     
     public String getLoadValue(JSONObject json){
-        if (json.containsKey(CLICKED)) {
-            JSONArray jar = (JSONArray) json.get(CLICKED);
+        if (json.containsKey(UETerm.CLICKED.toString())) {
+            JSONArray jar = (JSONArray) json.get(UETerm.CLICKED.toString());
             for (Object jjar : jar) {
                 
                 JSONObject job = (JSONObject)jjar;
-                if (job.containsKey(ID) &&
-                        job.get(ID).equals("LOAD")) {
-                    return job.get(VAL).toString();
+                if (job.containsKey(UETerm.ID.toString()) &&
+                        job.get(UETerm.ID.toString()).equals("LOAD")) {
+                    return job.get(UETerm.VAL.toString()).toString();
                 }
             }
         }
