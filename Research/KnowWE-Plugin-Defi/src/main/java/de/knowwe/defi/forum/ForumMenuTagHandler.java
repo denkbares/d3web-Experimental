@@ -61,6 +61,7 @@ import de.knowwe.jspwiki.JSPWikiKnowWEConnector;
 import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.dashtree.DashTreeUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+
 /**
  * 
  * @author dupke
@@ -71,7 +72,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	/** Label für Einheiten-Foren */
 	private static final String UNIT_DISCUSSION_LABEL = "Foren zu Einheiten";
 	/** Label für sonstige Foren */
-	private static final String LEFTOVER_LABEL = "Sonstige Foren";
+	private static final String LEFTOVER_LABEL = "Sonstige Themen";
 	/** Label für User-Chat */
 	private static final String USER_CHAT_LABEL = "Mit anderen Benutzern diskutieren";
 
@@ -157,7 +158,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 					topic = getForumAttribute("topic", sec.getText());
 
 					if (pageName.equals(unit.split(":")[0])) {
-						
+
 						// Testen ob es neue Beiträge gibt
 						lastVisit = logPages.get(sec.getTitle());
 						if (userContext.userIsAsserted()) {
@@ -165,9 +166,11 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 							// Benutzer war noch nicht in diesem Forum
 							if (lastVisit == null) {
 								// Hat er es selbst erstellt?
-								if (userContext.getUserName().equals(getAuthor(sec.getText()))) {
+								if (userContext.getUserName().equals(
+										getAuthor(sec.getText()))) {
 									// Gibt es mehr als den eigenen Eintrag?
-									numberOfNewEntries = getNumberOfNewEntries(sec.getText(),
+									numberOfNewEntries = getNumberOfNewEntries(
+											sec.getText(),
 											"01.01.1900 00:00") - 1;
 								}
 								else numberOfNewEntries = -1;
@@ -185,8 +188,9 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 								+ "</a>");
 						if (numberOfNewEntries == -1) fm.append("&nbsp;<span class='fm_new'>(ungelesenes Thema)</span>");
 						else if (numberOfNewEntries == 1) fm.append("&nbsp;<span class='fm_new'>(1 neuer Beitrag)</span>");
-						else if (numberOfNewEntries > 0) fm.append("&nbsp;<span class='fm_new'>("
-								+ numberOfNewEntries + " neue Beiträge)</span>");
+						else if (numberOfNewEntries > 0)
+							fm.append("&nbsp;<span class='fm_new'>("
+									+ numberOfNewEntries + " neue Beiträge)</span>");
 						fm.append("</li>");
 						other.remove(sec);
 						noForum = false;
@@ -202,17 +206,19 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 				// Formular zur Erstellung eines neuen Forums
 				fm.append("<br /><form style='display:none' name='" + pageName
-							+ "'><br /><h4>" + FORM_LABEL + "</h4>");
+						+ "'><br /><h4>" + FORM_LABEL + "</h4>");
 
 				// ++ Select-Tag zur Lektionsauswahl
-				fm.append("<p class='fm_newforum'>" + OPTION_LABEL + "<br /><select name='"
+				fm.append("<p class='fm_newforum'>" + OPTION_LABEL
+						+ "<br /><select name='"
 						+ pageName
 						+ "_select'>");
 				fm.append("<option value='" + pageName + "'>" + pageName + "</option>");
 
 				for (Section<DashTreeElement> unitSec : units) {
 					if (DashTreeUtils.getFatherDashTreeElement(unitSec) != null
-							&& DashTreeUtils.getFatherDashTreeElement(unitSec).equals(rootUnit)) fm.append("<option value='"
+							&& DashTreeUtils.getFatherDashTreeElement(unitSec).equals(
+									rootUnit)) fm.append("<option value='"
 							+ pageName
 							+ ": "
 							+ getPageName(unitSec)
@@ -226,20 +232,21 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 				// ++ Ueberschrift
 				fm.append("<p class='fm_newforum'>" + TOPIC_LABEL
-						+ "<br /><input type='text' size='" + TOPIC_PANEL_SIZE + "' name='"
+						+ "<br /><input type='text' size='" + TOPIC_PANEL_SIZE
+						+ "' name='"
 						+ pageName
 						+ "_topic' /></p>");
 
 				// ++ Nachrichteneingabe
 				fm.append("<p>" + TEXTAREA_LABEL + "</p><textarea name='" + pageName
-							+ "_text' rows='" + TEXTAREA_ROWS + "' cols='" + TEXTAREA_COLS
+						+ "_text' rows='" + TEXTAREA_ROWS + "' cols='" + TEXTAREA_COLS
 						+ "'></textarea><br />");
 				fm.append("<input type='button' value='" + SEND_BUTTON +
-							"' onclick='sendforumForm(\""
-							+ pageName +
-							"\");return false' /><input type='button' onclick='forumForm(\""
-							+ pageName
-							+ "\");return false' value='" + CLOSE_FORM_BUTTON + "' /></form>");
+						"' onclick='sendforumForm(\""
+						+ pageName +
+						"\");return false' /><input type='button' onclick='forumForm(\""
+						+ pageName
+						+ "\");return false' value='" + CLOSE_FORM_BUTTON + "' /></form>");
 
 				if (newEntry) {
 					fm.append("</td><td class='fm_new'></td></tr>");
@@ -264,7 +271,8 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		String[] activeUsers = wc.getAllActiveUsers();
 
 		for (int i = 0; i < users.length; i++) {
-			if (!users[i].startsWith("Patient") && !users[i].equals(userContext.getUserName())) {
+			if (!users[i].startsWith("Patient")
+					&& !users[i].equals(userContext.getUserName())) {
 				newEntry = false;
 				noForum = true;
 				// Sortiere Namen alphabetisch
@@ -274,7 +282,8 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 				// Hole Section des entsprechenden Chats
 				for (Section<? extends Forum> sec : chats) {
 					topic = getForumAttribute("topic", sec.getText());
-					if (topic.equals("Persönliche Nachrichten(" + names[0] + "," + names[1] + ")")) {
+					if (topic.equals("Persönliche Nachrichten(" + names[0] + ","
+							+ names[1] + ")")) {
 						noForum = false;
 
 						// Testen ob es neue Beiträge gibt
@@ -284,9 +293,11 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 							// Benutzer war noch nicht in diesem Forum
 							if (lastVisit == null) {
 								// Hat er es selbst erstellt?
-								if (userContext.getUserName().equals(getAuthor(sec.getText()))) {
+								if (userContext.getUserName().equals(
+										getAuthor(sec.getText()))) {
 									// Gibt es mehr als den eigenen Eintrag?
-									numberOfNewEntries = getNumberOfNewEntries(sec.getText(),
+									numberOfNewEntries = getNumberOfNewEntries(
+											sec.getText(),
 											"01.01.1900 00:00") - 1;
 								}
 								else numberOfNewEntries = -1;
@@ -313,7 +324,8 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 						+ "\" height=\"80px\" width=\"80px\" alt=\"avatar\" />");
 
 				// Username + status
-				fm.append("<span class='userchat'><a href='" + JSPWikiKnowWEConnector.LINK_PREFIX
+				fm.append("<span class='userchat'><a href='"
+						+ JSPWikiKnowWEConnector.LINK_PREFIX
 						+ users[i] + "'>"
 						+ users[i] + "</a><br />- " + getStatus(activeUsers, users[i])
 						+ " -</span>");
@@ -388,7 +400,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 		// Formular zur Erstellung eines neuen Forums
 		fm.append("<br /><form style='display:none' name='" + pageName
-					+ "'><br /><h4>" + FORM_LABEL + "</h4>");
+				+ "'><br /><h4>" + FORM_LABEL + "</h4>");
 
 		// ++ Ueberschrift
 		fm.append("<p class='fm_newforum'>" + TOPIC_LABEL
@@ -401,11 +413,11 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 				+ "_text' rows='" + TEXTAREA_ROWS + "' cols='" + TEXTAREA_COLS
 				+ "'></textarea><br />");
 		fm.append("<input type='button' value='" + SEND_BUTTON +
-					"' onclick='sendforumForm(\""
-					+ pageName +
-					"\");return false' /><input type='button' onclick='forumForm(\""
-					+ pageName
-					+ "\");return false' value='" + CLOSE_FORM_BUTTON + "' /></form>");
+				"' onclick='sendforumForm(\""
+				+ pageName +
+				"\");return false' /><input type='button' onclick='forumForm(\""
+				+ pageName
+				+ "\");return false' value='" + CLOSE_FORM_BUTTON + "' /></form>");
 
 		if (newEntry) {
 			fm.append("</td><td class='fm_new'></td></tr>");
@@ -428,7 +440,8 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 				KnowWEEnvironment.DEFAULT_WEB).getArticle("LeftMenu");
 
 		if (leftMenu != null) {
-			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(leftMenu.getSection(),
+			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(
+					leftMenu.getSection(),
 					DynamicMenuMarkup.class);
 			Sections.findSuccessorsOfType(menu, DashTreeElement.class, units);
 		}
@@ -446,7 +459,8 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 				KnowWEEnvironment.DEFAULT_WEB).getArticle("LeftMenu");
 
 		if (leftMenu != null) {
-			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(leftMenu.getSection(),
+			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(
+					leftMenu.getSection(),
 					DynamicMenuMarkup.class);
 			Sections.findSuccessorsOfType(menu, DashTreeElement.class, units);
 		}
@@ -516,7 +530,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 	private String getForumAttribute(String attribute, String forumXML) {
 		String attributeContent = "";
-		
+
 		try {
 			DocumentBuilderFactory dbf =
 					DocumentBuilderFactory.newInstance();
@@ -524,17 +538,17 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 			InputSource is = new InputSource();
 			is.setCharacterStream(new StringReader(forumXML));
 
-           Document doc = db.parse(is);
+			Document doc = db.parse(is);
 			NodeList nodes = doc.getElementsByTagName("forum");
 
 			Element knoten = (Element) nodes.item(0);
 			attributeContent = knoten.getAttribute(attribute);
-	           
-       }
+
+		}
 		catch (Exception e) {
 			return "";
-       }
-		
+		}
+
 		return attributeContent;
 	}
 
@@ -544,35 +558,35 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 		thresholdDate = stringToDate(date);
 		if (thresholdDate != null) {
-			
-		try {
-			DocumentBuilderFactory dbf =
-					DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			InputSource is = new InputSource();
-			is.setCharacterStream(new StringReader(forumXML));
 
-			Document doc = db.parse(is);
-			NodeList nodes = doc.getElementsByTagName("forum");
-			NodeList boxes = ((Element) nodes.item(0)).getElementsByTagName("box");
+			try {
+				DocumentBuilderFactory dbf =
+						DocumentBuilderFactory.newInstance();
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				InputSource is = new InputSource();
+				is.setCharacterStream(new StringReader(forumXML));
 
-			for (int i = 0; i < boxes.getLength(); i++) {
-				Element element = (Element) boxes.item(i);
+				Document doc = db.parse(is);
+				NodeList nodes = doc.getElementsByTagName("forum");
+				NodeList boxes = ((Element) nodes.item(0)).getElementsByTagName("box");
+
+				for (int i = 0; i < boxes.getLength(); i++) {
+					Element element = (Element) boxes.item(i);
 					entryDate = stringToDate(element.getAttribute("date"));
-				
-				if (entryDate.after(thresholdDate)) number++;
+
+					if (entryDate.after(thresholdDate)) number++;
+				}
 			}
-		}
-		catch (Exception e) {
-		}
+			catch (Exception e) {
+			}
 		}
 
 		return number;
 	}
-	
+
 	private String getAuthor(String forumXML) {
 		String author = "";
-		
+
 		try {
 			DocumentBuilderFactory dbf =
 					DocumentBuilderFactory.newInstance();
@@ -582,7 +596,8 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 
 			Document doc = db.parse(is);
 			NodeList nodes = doc.getElementsByTagName("forum");
-			Element firstBox = (Element) ((Element) nodes.item(0)).getElementsByTagName("box").item(0);
+			Element firstBox = (Element) ((Element) nodes.item(0)).getElementsByTagName(
+					"box").item(0);
 			author = firstBox.getAttribute("name");
 		}
 		catch (Exception e) {
@@ -657,7 +672,8 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 		catch (NullPointerException e) {
 			// e.printStackTrace();
 		}
-		if (avatar == null || avatar == "") avatar = "1000px-Comic_image_missing.svg.jpg";
+		if (avatar == null || avatar == "")
+			avatar = "1000px-Comic_image_missing.svg.jpg";
 
 		return avatar;
 	}

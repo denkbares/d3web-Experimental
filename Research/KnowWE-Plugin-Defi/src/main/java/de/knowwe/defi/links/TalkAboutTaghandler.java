@@ -45,7 +45,6 @@ public class TalkAboutTaghandler extends AbstractTagHandler {
 		super("talkabout");
 	}
 
-
 	@Override
 	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
 
@@ -56,7 +55,7 @@ public class TalkAboutTaghandler extends AbstractTagHandler {
 		String title = parameters.get("title");
 		String subject = parameters.get("subject");
 
-		if (title == null ) {
+		if (title == null) {
 			title = " &raquo; " + talkPage;
 		}
 		if (subject == null || subject.equals("")) {
@@ -70,7 +69,7 @@ public class TalkAboutTaghandler extends AbstractTagHandler {
 		talkAbout.append("\" title=\"Title:");
 		talkAbout.append(title);
 		talkAbout.append("\" rel=\"nofollow\">");
-		talkAbout.append("Mit Therapeuten dar&uuml;ber sprechen");
+		talkAbout.append("Mit Berater dar&uuml;ber sprechen");
 		talkAbout.append("</a>");
 
 		return KnowWEUtils.maskHTML(talkAbout.toString());

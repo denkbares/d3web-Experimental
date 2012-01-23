@@ -47,7 +47,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  * If the article name equals the currently authenticated user the user sees the
  * "About Me" box in edit mode, otherwise the view mode of the "About Me" box is
  * rendered.
- *
+ * 
  * @author smark
  * @created 25.01.2011
  */
@@ -124,7 +124,8 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 			}
 
 			if (fullName != ""
-					&& !KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(fullName)) {
+					&& !KnowWEEnvironment.getInstance().getWikiConnector().doesPageExist(
+							fullName)) {
 
 				// create user page
 				String pagePermissions = "[{ALLOW view All}]\n[{ALLOW delete "
@@ -138,7 +139,7 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 						+ fullName
 						+ "}]\n[{ALLOW delete "
 						+ fullName
-						+ "}]\n<forum name=\"Mit dem Therapeuten sprechen\">\n<box></box></forum>\n";
+						+ "}]\n<forum name=\"Mit dem Berater sprechen\">\n<box></box></forum>\n";
 
 				String commentPage = fullName + "_comment_therapist";
 				KnowWEEnvironment.getInstance().getWikiConnector()
@@ -155,7 +156,8 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 
 			if (fp.getName().equals(filterUsername)) {
 
-				String logout_file = System.getProperty("java.io.tmpdir") + File.separatorChar
+				String logout_file = System.getProperty("java.io.tmpdir")
+						+ File.separatorChar
 						+ LOGOUT_FILENAME;
 
 				DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);

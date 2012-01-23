@@ -119,11 +119,14 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			if (parameters.containsKey(ID)) id = parameters.get(ID);
 			else return KnowWEUtils.maskHTML("<p>Fehler: Dem Button fehlt das Attribut 'id'.</p>");
 
-			if (checkID(id, article) == 1) return KnowWEUtils.maskHTML("<p>Fehler: Das Attribut 'id' darf nicht die Zeichen '::' und ';' enthalten.</p>");
-			if (checkID(id, article) == 2) return KnowWEUtils.maskHTML("<p>Fehler: Das Attribut 'id' muss einmalig sein!");
+			if (checkID(id, article) == 1)
+				return KnowWEUtils.maskHTML("<p>Fehler: Das Attribut 'id' darf nicht die Zeichen '::' und ';' enthalten.</p>");
+			if (checkID(id, article) == 2)
+				return KnowWEUtils.maskHTML("<p>Fehler: Das Attribut 'id' muss einmalig sein!");
 
 			// Get the readpages-annotation
-			KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
+			KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(
+					web);
 			Section<DataMarkup> child = null;
 			String readpages = "";
 
@@ -170,10 +173,12 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			}
 
 			readbutton.append("<div align='center'>");
-			readbutton.append("<form name='readbuttonform' class='rbtag' id='" + id + "'>");
+			readbutton.append("<form name='readbuttonform' class='rbtag' id='" + id
+					+ "'>");
 			// Generate table
 			readbutton.append("<table class='rbtag'>");
-			readbutton = appendRadiobuttons(readbutton, ratedValue, number, hide_values, custom,
+			readbutton = appendRadiobuttons(readbutton, ratedValue, number, hide_values,
+					custom,
 					values, labels);
 
 			// - user has to rate
@@ -203,9 +208,10 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 				readbutton.append("\" rel=\"nofollow\">");
 				readbutton.append("Mit dem Berater dar&uuml;ber sprechen");
 				readbutton.append("</a>");
-				readbutton.append(" - <a href='#' onclick='getReadButtonValue(1," + number
-							+ ",\""
-							+ id + "\");return false'>Nicht Besprechen</a></p>");
+				readbutton.append(" - <a href='#' onclick='getReadButtonValue(1,"
+						+ number
+						+ ",\""
+						+ id + "\");return false'>Nicht Besprechen</a></p>");
 
 				if (link.startsWith("[") && link.endsWith("]")) {
 					// is wiki link (because of ajax not rendering by
@@ -215,19 +221,19 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 					String linkPagename = link.substring(1, link.length() - 1).trim();
 					String baseUrl = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
 					readbutton.append("<a href='" + baseUrl + "Wiki.jsp?page="
-								+ linkPagename
-								+ "' target='_blank'>"
-								+ linkPagename + "</a>");
+							+ linkPagename
+							+ "' target='_blank'>"
+							+ linkPagename + "</a>");
 				}
 				else {
 					readbutton.append("<a href='" + link + "' target='_blank'>"
-								+ linkText + "</a>");
+							+ linkText + "</a>");
 				}
 			}
 			// - user has already rated
 			else {
 				readbutton.append("<tr><td colspan='" + number + "'>");
-				readbutton.append("<p>Alles klar. Vielen Dank!</p>");
+				readbutton.append("<p>Ihre R&uuml;ckmeldung wurde erfasst. Vielen Dank!</p>");
 				readbutton.append("</td></tr>");
 				readbutton.append("</table></form>");
 			}

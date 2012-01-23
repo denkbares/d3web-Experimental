@@ -79,7 +79,8 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 			// Ist die Einheit eine Rooteinheit?
 			if (DashTreeUtils.getDashLevel(rootUnit) == 0) {
 				// Datum der Einheit
-				if (rootCounter >= dates.size()) return KnowWEUtils.maskHTML("<p>Fehler: Zu wenig Zeiteinheiten im <a href='Wiki.jsp?page=Zeitplan'>Zeitplan</a> vorhanden</p>");
+				if (rootCounter >= dates.size())
+					return KnowWEUtils.maskHTML("<p>Fehler: Zu wenig Zeiteinheiten im <a href='Wiki.jsp?page=Zeitplan'>Zeitplan</a> vorhanden</p>");
 
 				unitDate = dates.get(rootCounter);
 				// Hole alle Readbuttons aller Untereinheiten und der Einheit
@@ -87,10 +88,11 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 
 				for (int i = 0; i < readbuttons.size(); i++) {
 					// Prüfe ob alle Buttons der Lektion geklickt wurden
-					if (!getReadbuttonStatus(readbuttons.get(i), userContext.getUserName()))
+					if (!getReadbuttonStatus(readbuttons.get(i),
+							userContext.getUserName()))
 						read = false;
 				}
-				
+
 				calendar.setTime(dates.get(rootCounter));
 				calendar.add(Calendar.DAY_OF_MONTH, DAYS_UNTIL_WARNING);
 				Date warning = calendar.getTime();
@@ -115,20 +117,20 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 				}
 
 				/* ------------------------------------------------------------ */
-				/* AUSGABE                                                      */
+				/* AUSGABE */
 				/* ------------------------------------------------------------ */
 				if (!read) {
-					readstatus.append("<li class='readstatus'>Achtung: ");
+					readstatus.append("<li class='readstatus'>In ");
 					readstatus.append("<a href='Wiki.jsp?page="
 							+ getPageName(rootUnit) + "'>" + getLabel(rootUnit)
-								+ "</a> ");
+							+ "</a> ");
 
 					if (timeStatus == -1) {
-						readstatus.append("sollte so bald wie möglich beendet werden.");
+						readstatus.append(" haben Sie noch nicht alle Seiten bearbeitet!");
 					}
 
 					if (timeStatus == 0 && !current.before(warning)) {
-						readstatus.append("sollte demnächst beendet werden.");
+						readstatus.append(" haben Sie noch nicht alle Seiten bearbeitet!");
 					}
 
 					readstatus.append("</li>");
@@ -155,7 +157,8 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 				KnowWEEnvironment.DEFAULT_WEB).getArticle("LeftMenu");
 
 		if (leftMenu != null) {
-			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(leftMenu.getSection(),
+			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(
+					leftMenu.getSection(),
 					DynamicMenuMarkup.class);
 			Sections.findSuccessorsOfType(menu, DashTreeElement.class, units);
 		}
@@ -230,8 +233,9 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 					node = allNodes.get(i);
 
 					if (node.get().toString().contains("TagHandlerType")
-							&& node.toString().contains("KnowWEPlugin readbutton")) readbuttons.add(getPageName(s)
-							+ "::" + getReadButtonID(node.toString()));
+							&& node.toString().contains("KnowWEPlugin readbutton"))
+						readbuttons.add(getPageName(s)
+								+ "::" + getReadButtonID(node.toString()));
 				}
 			}
 

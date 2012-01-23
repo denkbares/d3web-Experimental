@@ -80,7 +80,7 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 		catch (IOException e) {
 		}
 
-		readon.append("<p>Letzte besuchte Seite: <a href='Wiki.jsp?page=" + page + "'>" + page
+		readon.append("<p><a href='Wiki.jsp?page=" + page + "'>" + page
 				+ "</a></p>");
 
 		return KnowWEUtils.maskHTML(readon.toString());
@@ -96,7 +96,8 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 				KnowWEEnvironment.DEFAULT_WEB).getArticle("LeftMenu");
 
 		if (leftMenu != null) {
-			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(leftMenu.getSection(),
+			Section<DynamicMenuMarkup> menu = Sections.findSuccessor(
+					leftMenu.getSection(),
 					DynamicMenuMarkup.class);
 			Sections.findSuccessorsOfType(menu, DashTreeElement.class, units);
 		}
