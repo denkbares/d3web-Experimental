@@ -19,7 +19,6 @@
  */
 package de.d3web.proket.d3web.ue.analyze;
 
-import com.sun.xml.internal.bind.v2.model.core.ID;
 import de.d3web.proket.d3web.ue.log.UETerm;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
