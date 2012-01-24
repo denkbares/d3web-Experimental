@@ -48,69 +48,136 @@ public class AboutMeRenderer<T extends AbstractType> extends KnowWEDomRenderer<T
 
 		StringBuilder noneHTML = new StringBuilder();
 
-		noneHTML.append("<h1>Meine Profileinstellungen im WIKI</h1>");
-
+		noneHTML.append("<div class=\"aboutme\">");
 		if (isOwner) {
-			noneHTML.append("<strong>Hinweis</strong>: Alle Daten, die Sie hier angeben, sind für andere Benutzer sichtbar. "
-					+
-					"Sie können selbst entscheiden, was Sie von sich preisgeben möchten. Selbstverständlich "
-					+
-					"können Sie hier eingegebene Daten auch jederzeit ändern oder löschen.");
-			noneHTML.append("<form action=\"KnowWE.jsp\" method=\"post\">");
+			renderIsOwner(noneHTML, sec, article);
 		}
-
-		noneHTML.append("<p>Alter: ");
-		noneHTML.append(getInputDependingOnUserState(sec, AboutMe.HTML_AGE, isOwner));
-		noneHTML.append("</p>");
-
-		noneHTML.append("<p>Wohnort: ");
-		noneHTML.append(getInputDependingOnUserState(sec, AboutMe.HTML_CITY, isOwner));
-		noneHTML.append("</p>");
-
-		if (isOwner) {
-			noneHTML.append("<p>Avatar: (Mit diesem Bild können Sie Ihrem Profil ein „Gesicht“ verleihen. Hier können "
-					+ "Sie entweder eines der vorgegebenen Bilder auswählen, oder ein eigenes Bild von Ihrem PC hochladen. "
-					+ "(Hinweis auf Vermeidung anstößiger oder rechtswidriger Inhalte)</p>");
+		else {
+			renderNoOwner(noneHTML, sec, article, user);
 		}
-
-		this.createAvatarHTML(sec, noneHTML, AboutMe.HTML_AVATAR, isOwner);
-		// this.createAvatarHTML(string, avatar, "F");
-		// string.append(KnowWEUtils.maskHTML("</div>"));
-
-		noneHTML.append("<h2>Über mich und meinen Defi:</h2>");
-		noneHTML.append("<dl>");
-		noneHTML.append("<dt>Defi-Modell</dt>");
-		noneHTML.append("<dd>Hersteller: "
-				+ getInputDependingOnUserState(sec, AboutMe.HTML_PRODUCER, isOwner) +
-				"</dd>");
-		noneHTML.append("<dd>Type: "
-				+ getInputDependingOnUserState(sec, AboutMe.HTML_TYPE, isOwner)
-				+ "</dd>");
-		noneHTML.append("</dl>");
-
-		noneHTML.append("<p>Warum ich einen Defi habe: "
-				+ getInputDependingOnUserState(sec, AboutMe.HTML_REASON, isOwner) + "</p>");
-		noneHTML.append("<p>Meine Hobbies: "
-				+ getTextareaDependingOnUserState(sec, AboutMe.HTML_HOBBIES, isOwner)
-				+ "</p>");
-		noneHTML.append("<p>Was ich sonst noch über mich sagen möchte: "
-				+ getTextareaDependingOnUserState(sec, AboutMe.HTML_ABOUT, isOwner) + "</p>");
-
-		// if (about == null) {
-		// string.append(KnowWEUtils.maskHTML("<p>Schreiben Sie ein paar Worte über sich:</p>"));
-		// string.append(KnowWEUtils.maskHTML("<p><textarea cols=\"60\" rows=\"15\" name=\""
-		// + AboutMe.HTMLID_ABOUT + "\"></textarea></p>"));
-		// }
-		if (isOwner) {
-			noneHTML.append("<p><input type=\"submit\" value=\"Speichern\"/></p>");
-			noneHTML.append("<input type=\"hidden\" name=\"action\" value=\"AboutMeSaveAction\" />");
-			noneHTML.append("<input type=\"hidden\" name=\"KWiki_Topic\" value=\""
-					+ article.getTitle() + "\" />");
-			noneHTML.append("</form>");
-		}
+		noneHTML.append("</div>");
 
 		string.append(KnowWEUtils.maskHTML(noneHTML.toString()));
 	}
+
+	/**
+	 * Render the AboutMe view for an owner.
+	 * 
+	 * @created 24.01.2012
+	 * @param html
+	 * @param sec
+	 * @param article
+	 */
+	private void renderIsOwner(StringBuilder html, Section<T> sec, KnowWEArticle article) {
+		html.append("<h1 class=\"aboutme\">persönliche Einstellungen</h1>");
+		html.append("<p>Auf dieser Seite können Sie Angaben zu Ihrer Person machen,")
+				.append(" die Sie mit den anderen Mitgliedern der Gruppe teilen möchten.")
+				.append(" So wird unsere Gruppe ein bisschen lebendiger.</p>");
+		html.append("<p>Alle Angaben sind freiwillig und können jederzeit bearbeitet oder auch wieder gelöscht werden.</p>");
+
+		html.append("<h2 class=\"aboutme\">Zu meiner Person</h2>");
+		html.append("<form action=\"KnowWE.jsp\" method=\"post\">");
+		html.append("<p>Alter: ");
+		html.append(getInputDependingOnUserState(sec, AboutMe.HTML_AGE, true));
+		html.append("</p>");
+
+		html.append("<p>Wohnort: ");
+		html.append(getInputDependingOnUserState(sec, AboutMe.HTML_CITY, true));
+		html.append("</p>");
+
+		html.append("<p>Meine Hobbies: ");
+		html.append(getTextareaDependingOnUserState(sec, AboutMe.HTML_HOBBIES, true));
+		html.append("</p>");
+
+		html.append("<h2 class=\"aboutme\">Über meinen Defi</h2>");
+		html.append("<p> Mein Defi (Hersteller, Modell):");
+		html.append(getInputDependingOnUserState(sec, AboutMe.HTML_PRODUCER, true));
+		html.append("</p>");
+
+		html.append("<p>Warum ich einen Defi habe (Grunderkrankung):");
+		html.append(getInputDependingOnUserState(sec, AboutMe.HTML_TYPE, true));
+		html.append("</p>");
+
+		html.append("<p><strong>Was ich sonst noch über mich sagen möchte:</strong> ");
+		html.append(getTextareaDependingOnUserState(sec, AboutMe.HTML_ABOUT, true));
+		html.append("</p>");
+
+		html.append("<h2 class=\"aboutme\">Mein Bild</h2>");
+		html.append("<p>Geben Sie Ihrem Profil „ein Gesicht“. Wählen Sie ein Bild aus,")
+				.append(" von dem Sie finden, dass es gut zu Ihnen passt. Klicken Sie dazu")
+				.append(" auf den kleinen Kreis links neben dem gewünschten Bild, so dass der")
+				.append(" Kreis eine grüne Markierung erhält.</p>");
+
+		this.createAvatarHTML(sec, html, AboutMe.HTML_AVATAR, true);
+
+		html.append("<p><input type=\"submit\" value=\"Speichern\"/></p>");
+		html.append("<input type=\"hidden\" name=\"action\" value=\"AboutMeSaveAction\" />");
+		html.append("<input type=\"hidden\" name=\"KWiki_Topic\" value=\""
+				+ article.getTitle() + "\" />");
+		html.append("</form>");
+	}
+
+	/**
+	 * Render the AboutMe view for an owner.
+	 * 
+	 * @created 24.01.2012
+	 * @param html
+	 * @param sec
+	 * @param article
+	 */
+	private void renderNoOwner(StringBuilder html, Section<T> sec, KnowWEArticle article, UserContext user) {
+		html.append("<p style=\"text-align:center;\">persönliche Seite von</p>");
+		html.append("<h1 class=\"aboutme\">").append(article.getTitle()).append("</h1>");
+
+		this.createAvatarHTML(sec, html, AboutMe.HTML_AVATAR, false);
+
+
+		html.append("<p style=\"float:left;\">Alter: ");
+		html.append(getInputDependingOnUserState(sec, AboutMe.HTML_AGE, false));
+		html.append("<br />");
+
+		html.append("kommt aus: ");
+		html.append(getInputDependingOnUserState(sec, AboutMe.HTML_CITY, false));
+		html.append("</p>");
+
+		html.append("<h2 class=\"aboutme\">Über mich und meinen Defi:</h2>");
+
+		html.append("<p>Mein Defi:");
+		html.append(getInputDependingOnUserState(sec, AboutMe.HTML_PRODUCER, false));
+		html.append("</p>");
+
+		html.append("<p>Warum ich einen Defi habe:");
+		html.append(getInputDependingOnUserState(sec, AboutMe.HTML_TYPE, false));
+		html.append("</p>");
+		
+		html.append("<h2 class=\"aboutme\">Persönliches</h2>");
+		html.append("<p>Hobbies: ");
+		html.append(getTextareaDependingOnUserState(sec, AboutMe.HTML_HOBBIES, false));
+		html.append("</p>");
+
+		html.append("<p><strong>Was ich sonst noch über mich sagen möchte:</strong><br /> ");
+		html.append(getTextareaDependingOnUserState(sec, AboutMe.HTML_ABOUT, false));
+		html.append("</p>");
+
+		html.append("<form action=\"KnowWE.jsp\" method=\"post\">");
+		html.append(
+				"<div style=\"border: 1px solid rgb(0,0,0); padding:30px; border-right: 30px solid rgb(58,127,22);\">")
+				.append("<p><strong>private Kommunikation mit ")
+				.append(article.getTitle())
+				.append("</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+				.append(
+						"<input class=\"defi-bttn\" type=\"submit\" value=\"Persönliche Nachricht\" />")
+				.append("</p></div>");
+		html.append("<input type=\"hidden\" name=\"action\" value=\"PersonalMessageAction\" />");
+		html.append("<input type=\"hidden\" name=\"user1\" value=\"").append(article.getTitle()).append(
+				"\" />");
+		html.append("<input type=\"hidden\" name=\"user2\" value=\"").append(user.getUserName()).append(
+				"\" />");
+		html.append("</form>");
+
+		// TODO: private communication :)
+	}
+
 
 	/**
 	 * Creates an HTML Input element or a normal string depending on the user
@@ -179,7 +246,7 @@ public class AboutMeRenderer<T extends AbstractType> extends KnowWEDomRenderer<T
 
 		if (!isOwner && avatar != null) {
 			string.append("<img src=\"KnowWEExtension/images/avatars/" + avatar
-					+ "\" height=\"80\" width=\"80\" />\n");
+					+ "\" height=\"80\" width=\"80\" style=\"float:right;\"/>\n");
 		}
 		else {
 

@@ -189,3 +189,11 @@ p.fm_newforum {
 }
 
 
+h1.aboutme, h2.aboutme
+{color:#063d79;}
+
+h1.aboutme, h2.aboutme
+{text-align:center;}
+
+div.aboutme
+{padding-left:40px;padding-right:40px;}
