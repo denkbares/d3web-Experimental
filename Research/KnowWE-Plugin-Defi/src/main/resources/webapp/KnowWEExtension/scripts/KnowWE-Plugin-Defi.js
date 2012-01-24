@@ -112,7 +112,7 @@ KNOWWE.plugin.defi = function() {
             var options = {
                 url : url,
                 response : {
-                    action : 'none',
+                    action : 'none'
                 }
             }
             new _KA( options ).send();          
