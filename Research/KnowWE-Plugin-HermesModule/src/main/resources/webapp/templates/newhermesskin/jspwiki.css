@@ -100,7 +100,7 @@
 	border-color: #385D8A;
 	background-color: #C6D9F1;
 	float:left;
-	margin-top:0em;
+	margin-top: 15px;
 	width:18%;
 	margin: auto; /* Div soll zentriert werden */
 	min-height: 500px;
@@ -378,22 +378,52 @@ a.wikipage {
 
 }
 
-.leftmenu {
-	
+.leftmenu hr {
+	border: 1px solid #385D8A;
+	margin-top: 12px;
+	margin-bottom: 12px;
 }
 .leftmenu .wikipage {
+	margin-left: 18px;
+	margin-right: auto;
+}
+
+.leftmenu .collapsebody .wikipage {
+	margin-left:0;
+}
+
+/*
+.leftmenu .wikipage {
 	border-bottom: 2px solid #385D8A;
+	padding: 12px 40px 10px 70px;
 	max-width: 195px;
-	padding: 12px 40px 10px 75px;
 	float: right;
 }
 .leftmenu a.wikipage {
-	width: 80px;
+	width: 85px;
 }
 .leftmenu br {
 	clear: both;
 	margin: 10px;
 }
+*/
+/*
+#tab-EditorenOnly .wikipage {
+	float: right;
+	border-bottom: 2px solid #385D8A;
+	min-width: 85px;
+	max-width: 195px;
+	padding: 12px 39px 10px 70px;
+}
+#tab-EditorenOnly a.wikipage {
+	width: 80px;
+}
+#tab-EditorenOnly br {
+	clear: both;
+	margin: 10px;
+}
+*/
+
 a.createpage {
 	color:red;
 	text-decoration:none;
@@ -1756,38 +1786,40 @@ div.collapse li {
 /* +++ collapsebox +++ */
 .collapsebox {
     /*clear:right; /* avoid clash with intern floated bullet */
-	border:1px solid #ddd;
+	border:2px solid #385D8A;
 	margin:0 0 0.5em 0;
 	width:99%;
 }  
 .collapsetitle {
 	margin:0;
 	padding:0.25em 0;
-	border: 2px solid white;
+	border: 0;
+	background-color: #C6D9F1;
 }
 .collapsebox .collapsebody {
 	padding:0 0.5em;
 }
 
-/* +++ 930 Sortable tables +++ */
-.sortable .sortAscending, .sortable .sortDescending, .sortable .sort {
-	background-repeat:no-repeat;
-	background-position:2px 4px;
-	cursor:pointer;
-	padding-left:11px;
-}
-.sortable .sort {
-	background-image:url(images/sortable.gif);
-}
-.sortable .sortAscending {
-	background-image:url(images/sorted_down.gif);
-	background-position:2px 6px;
-}
-.sortable .sortDescending {
-	background-image:url(images/sorted_up.gif);
-	background-position:2px 0px;
+.collapsebox .collapsebody .wikipage {
+	padding:0 0.5em;
+	margin-left:18px;
 }
 
+.leftmenu .collapsebox {
+    /*clear:right; /* avoid clash with intern floated bullet */
+	border:0;
+	width:100%;
+}  
+
+.leftmenu .collapsetitle {
+	margin:0;
+	padding:0.25em 0;
+	border: 0;
+	background-color: #DCE6F2;
+}
+.leftmenu .collapsebox .collapsebody {
+	padding:0;
+}
 
 /* +++ 940 SLIMBOX Attachment viewer etc. +++ */
 a.slimbox {
