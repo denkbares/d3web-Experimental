@@ -31,7 +31,11 @@
 	String requestUser = (String)parameters.get("user");
 	boolean requestUserCorrect = (requestUser.equals(context.getUserName()));
 %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
+<html id="top" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  
 <style type="text/css" media="all">
 	table 
 	{ border: 2px dashed black; background-color: firebrick; margin-bottom: 0%; padding: 0%; vertical-align: 0%; }
@@ -61,6 +65,8 @@
 	.inhalt
 	{color: blue; font-size: 12pt;}
 </style>
+</head>
+<body>
 <%
 if(requestUserCorrect) {
 %>
@@ -142,3 +148,5 @@ else {
 
 } 
 %>
+</body>
+</html>
