@@ -20,13 +20,11 @@
 
 package de.d3web.we.wisec.kdom;
 
-import de.knowwe.kdom.table.NullTableAttributesProvider;
 import de.knowwe.kdom.table.Table;
 
 public class WISECTable extends Table {
 
 	public WISECTable() {
-		super(new NullTableAttributesProvider());
 	}
 
 }
