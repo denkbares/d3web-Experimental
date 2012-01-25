@@ -58,7 +58,7 @@ public class TableTest extends TestCase {
 		/**
 		 * Build an Article and register it at env.
 		 */
-		String content = "!!Table\n\n<Table default=\"+,-,0\" width=\"100\" row=\"1\" column=\"1\" cell=\"2,2\">\n| |Apple|Lemon|Coconut\n|sweetness|+|-|hm\n|grows in central europe|+|+|-\n|size|-|+|+\n</Table>";
+		String content = "!!Table\n\n%%Table\n| |Apple|Lemon|Coconut\n|sweetness|+|-|hm\n|grows in central europe|+|+|-\n|size|-|+|+\n%";
 		String title = "Test_Article";
 		env.buildAndRegisterArticle(content, title, web, false);
 		KnowWEArticle article = env.getArticle(web, title);
