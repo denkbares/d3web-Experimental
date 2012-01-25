@@ -132,7 +132,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 	 * @param to The TerminologyObject the children of which are rendered.
 	 */
 	protected void renderChildren(StringTemplate st, Session d3webSession, ContainerCollection cc,
-			TerminologyObject to) {
+			TerminologyObject to, int loc) {
 
 		StringBuilder childrenHTML = new StringBuilder();
 		D3webConnector d3wcon = D3webConnector.getInstance();
@@ -180,7 +180,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
 			// receive the rendering code from the Renderer and append
 			String childHTML =
-					childRenderer.renderTerminologyObject(d3webSession, cc, child, to);
+					childRenderer.renderTerminologyObject(d3webSession, cc, child, to, loc);
 			if (childHTML != null) {
 				childrenHTML.append(childHTML);
 			}
@@ -189,7 +189,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 			// as this is done after having inserted the normal child, the
 			// follow up is appended in between the child and its follow-up
 			if (child instanceof Question) {
-				childrenHTML.append(renderFollowUps(d3webSession, cc, child, to));
+				childrenHTML.append(renderFollowUps(d3webSession, cc, child, to, loc));
 			}
 		}
 
@@ -217,7 +217,8 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 	 * @param d3webSession TODO
 	 */
 	protected void renderChoices(StringTemplate st, ContainerCollection cc,
-			TerminologyObject to, TerminologyObject parent, Session d3webSession) {
+			TerminologyObject to, TerminologyObject parent, Session d3webSession,
+                        int loc) {
 
 		StringBuilder childrenHTML = new StringBuilder();
 
@@ -265,7 +266,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
 					// receive the matching HTML from the Renderer and append
 					String childHTML =
-							childRenderer.renderTerminologyObject(cc, d3webSession, c, to, parent);
+							childRenderer.renderTerminologyObject(cc, d3webSession, c, to, parent, loc);
 					if (childHTML != null) {
 						childrenHTML.append(childHTML);
 					}
@@ -281,7 +282,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
 			// receive the matching HTML from the Renderer and append
 			String childHTML =
-					childRenderer.renderTerminologyObject(cc, d3webSession, null, to, parent);
+					childRenderer.renderTerminologyObject(cc, d3webSession, null, to, parent, loc);
 			if (childHTML != null) {
 				childrenHTML.append(childHTML);
 			}
@@ -308,7 +309,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 					// receive the matching HTML from the Renderer and append
 					String childHTML =
 							unknownRenderer.renderTerminologyObject(cc, d3webSession, null, to,
-									parent);
+									parent, loc);
 					// System.out.println(childHTML);
 					if (childHTML != null) {
 						childrenHTML.append(childHTML);
@@ -343,7 +344,7 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 	 * @return
 	 */
 	private String renderFollowUps(Session d3webSession, ContainerCollection cc, TerminologyObject child,
-			TerminologyObject parent) {
+			TerminologyObject parent, int loc) {
 		StringBuilder fus = new StringBuilder();
 
 		// if child (question) has children and at least the 1st also a question
@@ -362,9 +363,9 @@ public abstract class AbstractD3webRenderer implements D3webRenderer {
 
 				// receive the rendering code from the Renderer and append
 				StringBuilder childHTML = new StringBuilder(
-						childRenderer.renderTerminologyObject(d3webSession, cc, childsChild, parent));
+						childRenderer.renderTerminologyObject(d3webSession, cc, childsChild, parent, loc));
 				if (child instanceof Question) {
-					childHTML.append(renderFollowUps(d3webSession, cc, childsChild, parent));
+					childHTML.append(renderFollowUps(d3webSession, cc, childsChild, parent, loc));
 				}
 				if (childHTML != null) {
 					fus.append(childHTML);

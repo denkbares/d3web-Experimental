@@ -43,7 +43,7 @@ public class AnswerUnknownD3webRenderer extends AbstractD3webRenderer implements
 	 * Specifically adapted for Unknown Option rendering
 	 */
 	public String renderTerminologyObject(ContainerCollection cc, Session d3webSession, Choice c,
-			TerminologyObject to, TerminologyObject parent) {
+			TerminologyObject to, TerminologyObject parent, int loc) {
 
 		StringBuilder sb = new StringBuilder();
 		StringTemplate st = null;
@@ -60,7 +60,7 @@ public class AnswerUnknownD3webRenderer extends AbstractD3webRenderer implements
 		st.setAttribute("parentFullId", getID(parent));// .getName().replace(" ",
 														// // "_"));
 
-		st.setAttribute("title", D3webUtils.getUnknownPrompt());
+		st.setAttribute("title", D3webUtils.getUnknownPrompt(loc));
 
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 

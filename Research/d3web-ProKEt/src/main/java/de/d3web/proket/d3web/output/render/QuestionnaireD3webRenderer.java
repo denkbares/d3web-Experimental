@@ -47,7 +47,7 @@ public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements
      * Adapted specifically for questionnaire rendering
      */
     public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
-            TerminologyObject to, TerminologyObject parent) {
+            TerminologyObject to, TerminologyObject parent, int loc) {
 
         StringBuilder sb = new StringBuilder();
 
@@ -63,7 +63,7 @@ public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements
 
         st.setAttribute("fullId", getID(to));// to.getName().replace(" ",
 
-        st.setAttribute("title", D3webUtils.getTOPrompt(to));
+        st.setAttribute("title", D3webUtils.getTOPrompt(to, loc));
         //st.setAttribute("title", to.getName());
 
         st.setAttribute("count", D3webConnector.getInstance().getID(to));
@@ -86,7 +86,7 @@ public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements
         }
 
         // render the children
-        super.renderChildren(st, d3webSession, cc, to);
+        super.renderChildren(st, d3webSession, cc, to, loc);
 
         sb.append(st.toString());
 

@@ -53,7 +53,7 @@ public class AnswerMCD3webRenderer extends AbstractD3webRenderer implements Answ
 	 * Specifically adapted for rendering MCAnswers
 	 */
 	public String renderTerminologyObject(ContainerCollection cc, Session d3webSession,
-			Choice c, TerminologyObject to, TerminologyObject parent) {
+			Choice c, TerminologyObject to, TerminologyObject parent, int loc) {
 
 		QuestionMC mcq = (QuestionMC) to;
 
@@ -74,7 +74,7 @@ public class AnswerMCD3webRenderer extends AbstractD3webRenderer implements Answ
 		st.setAttribute("parentFullId", getID(mcq));
 		// st.setAttribute("text", c.getName());
 
-		st.setAttribute("text", D3webUtils.getAnswerPrompt(to, c));
+		st.setAttribute("text", D3webUtils.getAnswerPrompt(to, c, loc));
 
 		if (to.getInfoStore().getValue(ProKEtProperties.IMAGE) != null) {
 			st.setAttribute("imageAnswer", "true");

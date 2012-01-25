@@ -883,9 +883,10 @@ public class D3webUtils {
      * @param to the TerminologyObject the prompt is needed for.
      * @return the prompt or the name repsectively.
      */
-    public static String getTOPrompt(TerminologyObject to) {
+    public static String getTOPrompt(TerminologyObject to, int locIdent) {
 
-        int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
+        //int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
+        //int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();
         String prompt = null;
 
         switch (locIdent) {
@@ -939,13 +940,14 @@ public class D3webUtils {
      * @return the prompt or the name repsectively.
      */
     public static String getAnswerPrompt(TerminologyObject to,
-            Choice c) {
+            Choice c, int locIdent) {
 
         if (to instanceof QuestionYN) {
-            return getAnswerYNPrompt(c);
+            return getAnswerYNPrompt(c, locIdent);
         }
 
-        int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
+        //int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
+        //int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();
         String prompt = null;
 
         switch (locIdent) {
@@ -998,9 +1000,10 @@ public class D3webUtils {
      * @return the String representation of the answer prompt in the respective
      * language.
      */
-    private static String getAnswerYNPrompt(Choice c) {
+    private static String getAnswerYNPrompt(Choice c, int locIdent) {
 
-        int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
+        //int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
+        //int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();
         String prompt = null;
 
         if (c.getName().equals("Yes")) {
@@ -1071,9 +1074,10 @@ public class D3webUtils {
      * @param to the TerminologyObject the prompt is needed for.
      * @return the prompt or the name repsectively.
      */
-    public static String getUnknownPrompt() {
+    public static String getUnknownPrompt(int locIdent) {
 
-        int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
+        //int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
+        // int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();
         String prompt = null;
 
         D3webConnector d3wcon = D3webConnector.getInstance();

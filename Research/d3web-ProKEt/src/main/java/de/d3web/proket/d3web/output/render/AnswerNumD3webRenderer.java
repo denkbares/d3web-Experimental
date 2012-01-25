@@ -55,7 +55,7 @@ public class AnswerNumD3webRenderer extends AbstractD3webRenderer implements Ans
 	 * Specifically adapted for rendering NumAnswers
 	 */
 	public String renderTerminologyObject(ContainerCollection cc, Session d3webSession, Choice c,
-			TerminologyObject to, TerminologyObject parent) {
+			TerminologyObject to, TerminologyObject parent, int loc) {
 
 		QuestionNum nq = (QuestionNum) to;
 

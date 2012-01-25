@@ -37,10 +37,11 @@ public interface IQuestionD3webRenderer {
 	 * @param cc ContainerCollection to be used.
 	 * @param to TerminologyObject to be rendered.
 	 * @param parent The parent object of to
+         * @param localeIdent identifier which language is to be used
 	 * @return the resulting String that is inserted in the parent
 	 *         StringTemplate as a result.
 	 */
 	public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
-			TerminologyObject to, TerminologyObject parent);
+			TerminologyObject to, TerminologyObject parent, int localeIdent);
 
 }

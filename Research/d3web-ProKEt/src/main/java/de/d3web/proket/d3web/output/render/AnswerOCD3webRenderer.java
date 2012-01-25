@@ -52,7 +52,7 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
 	 * Specifically adapted for OCAnswer rendering
 	 */
 	public String renderTerminologyObject(ContainerCollection cc, Session d3webSession,
-			Choice c, TerminologyObject to, TerminologyObject parent) {
+			Choice c, TerminologyObject to, TerminologyObject parent, int loc) {
 
 		StringBuilder sb = new StringBuilder();
 
@@ -79,7 +79,7 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
 		}
 
 		//st.setAttribute("text", c.getName());
-                st.setAttribute("text", D3webUtils.getAnswerPrompt(to, c)); 
+                st.setAttribute("text", D3webUtils.getAnswerPrompt(to, c, loc)); 
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 		if (to.getInfoStore().getValue(ProKEtProperties.IMAGE) != null) {
 			st.setAttribute("imageAnswer", "true");

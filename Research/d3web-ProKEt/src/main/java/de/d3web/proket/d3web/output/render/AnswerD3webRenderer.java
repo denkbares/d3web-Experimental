@@ -40,10 +40,11 @@ public interface AnswerD3webRenderer {
 	 * @param d3webSession TODO
 	 * @param c Choice to be rendered.
 	 * @param parent The parent object of to
+         * @param localIdent identifier for language to be used
 	 * @return the resulting String that is inserted in the parent
 	 *         StringTemplate as a result.
 	 */
 	public String renderTerminologyObject(ContainerCollection cc, Session d3webSession,
-			Choice c, TerminologyObject to, TerminologyObject parent);
+			Choice c, TerminologyObject to, TerminologyObject parent, int localIdent);
 
 }

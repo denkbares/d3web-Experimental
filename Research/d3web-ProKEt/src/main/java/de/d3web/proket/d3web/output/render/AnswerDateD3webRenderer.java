@@ -59,7 +59,8 @@ public class AnswerDateD3webRenderer extends AnswerTextD3webRenderer implements 
 	 * Specifically adapted for rendering NumAnswers
 	 */
 	@Override
-	public String renderTerminologyObject(ContainerCollection cc, Session d3webSession, Choice choice, TerminologyObject to, TerminologyObject parent) {
+	public String renderTerminologyObject(ContainerCollection cc, 
+        Session d3webSession, Choice choice, TerminologyObject to, TerminologyObject parent, int loc) {
 
 		QuestionDate dq = (QuestionDate) to;
 

@@ -60,7 +60,7 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 	 * Adapted specifically for question rendering
 	 */
 	public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
-			TerminologyObject to, TerminologyObject parent) {
+			TerminologyObject to, TerminologyObject parent, int loc) {
 
 		Boolean hidden = to.getInfoStore().getValue(ProKEtProperties.HIDE);
 		// return if the InterviewObject is null
@@ -69,14 +69,15 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 		}
 		StringBuilder sb = new StringBuilder();
 
-		// get the fitting template. In case user prefix was specified, the
+	
+                // get the fitting template. In case user prefix was specified, the
 		// specific TemplateName is returned, otherwise, the base object name.
 		StringTemplate st = TemplateUtils.getStringTemplate(
 				super.getTemplateName("Question"), "html");
 
 		// set some basic properties
 		st.setAttribute("fullId", getID(to));
-		st.setAttribute("title", D3webUtils.getTOPrompt(to));
+		st.setAttribute("title", D3webUtils.getTOPrompt(to, loc));
 		// st.setAttribute("title", to.getName());
 		st.setAttribute("count", D3webConnector.getInstance().getID(to));
 
@@ -183,7 +184,7 @@ public class QuestionD3webRenderer extends AbstractD3webRenderer implements IQue
 		}
 
 		// underneath="within" a rendered question, always answers are rendered
-		super.renderChoices(st, cc, to, parent, d3webSession);
+		super.renderChoices(st, cc, to, parent, d3webSession, loc);
 
 		sb.append(st.toString());
 

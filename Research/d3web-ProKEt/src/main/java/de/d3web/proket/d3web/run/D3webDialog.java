@@ -19,7 +19,6 @@
  */
 package de.d3web.proket.d3web.run;
 
-import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.knowledge.TerminologyManager;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -57,10 +56,7 @@ import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.blackboard.Fact;
-import de.d3web.proket.d3web.input.D3webConnector;
-import de.d3web.proket.d3web.input.D3webRendererMapping;
-import de.d3web.proket.d3web.input.D3webUtils;
-import de.d3web.proket.d3web.input.D3webXMLParser;
+import de.d3web.proket.d3web.input.*;
 import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
@@ -99,6 +95,7 @@ public class D3webDialog extends HttpServlet {
 
     private static final long serialVersionUID = -2466200526894064976L;
     protected static final String D3WEB_SESSION = "d3webSession";
+    protected static final String USER_SETTINGS = "userSettings";
     protected static final String REPLACECONTENT = "##replacecontent##";
     protected static final String REPLACEID = "##replaceid##";
     protected static String sourceSave;
@@ -149,12 +146,15 @@ public class D3webDialog extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
 
         HttpSession httpSession = request.getSession(true);
-
+        
         // try to get the src parameter, i.e. the specification of the dialog
         String source = getSource(request);
         d3webParser.setSourceToParse(source);
 
         d3wcon = D3webConnector.getInstance();
+       
+        System.out.println("HTTP " + httpSession);
+        
         d3wcon.setD3webParser(d3webParser);
 
         // set SRC store attribute to "" per default for avoiding nullpointers
@@ -217,7 +217,8 @@ public class D3webDialog extends HttpServlet {
             httpSession.setAttribute(D3WEB_SESSION, d3webSession);
             httpSession.setAttribute("lastLoaded", "");
             D3webConnector.getInstance().setSession(d3webSession);
-
+            
+            
             // stream images from KB into webapp
             GLOBSET.setKbImgFolder(GLOBSET.getServletBasePath() + "kbimg");
             D3webUtils.streamImages();
@@ -228,6 +229,11 @@ public class D3webDialog extends HttpServlet {
             resetD3webSession(httpSession);
         }
 
+        if(httpSession.getAttribute(USER_SETTINGS) == null){
+                D3webUserSettings us = new D3webUserSettings();
+            httpSession.setAttribute(USER_SETTINGS, us);
+        }
+        
         // in case nothing other is provided, "show" is the default action
         String action = request.getParameter("action");
 
@@ -293,7 +299,7 @@ public class D3webDialog extends HttpServlet {
             }
             return;
         } else if (action.equalsIgnoreCase("language")) {
-            setLanguageID(request);
+            setLanguageID(request, httpSession);
             return;
         } else if (action.equalsIgnoreCase("logInit")) {
             JSONLogger logger = new JSONLogger();
@@ -445,7 +451,7 @@ public class D3webDialog extends HttpServlet {
 
         Set<TerminologyObject> diff = calculateDiff(d3webSession, stateBefore, stateAfter);
 
-        renderAndUpdateDiff(writer, d3webSession, diff);
+        renderAndUpdateDiff(writer, d3webSession, diff, httpSession);
     }
 
     /**
@@ -526,8 +532,9 @@ public class D3webDialog extends HttpServlet {
         return diff;
     }
 
-    private void renderAndUpdateDiff(PrintWriter writer, Session d3webSession, Set<TerminologyObject> diff) {
+    private void renderAndUpdateDiff(PrintWriter writer, Session d3webSession, Set<TerminologyObject> diff, HttpSession httpSession) {
         ContainerCollection cc = new ContainerCollection();
+        D3webUserSettings us = (D3webUserSettings)httpSession.getAttribute(USER_SETTINGS);
         for (TerminologyObject to : diff) {
             if (isHiddenOrHasHiddenParent(to)) {
                 continue;
@@ -535,10 +542,14 @@ public class D3webDialog extends HttpServlet {
             IQuestionD3webRenderer toRenderer = AbstractD3webRenderer.getRenderer(to);
             writer.append(REPLACEID + AbstractD3webRenderer.getID(to));
             writer.append(REPLACECONTENT);
-            writer.append(toRenderer.renderTerminologyObject(d3webSession, cc, to,
-                    to instanceof QContainer
-                    ? d3wcon.getKb().getRootQASet()
-                    : D3webUtils.getQuestionnaireAncestor(to)));
+            
+            TerminologyObject parent = to instanceof QContainer ? d3wcon.getKb().getRootQASet()
+                    : D3webUtils.getQuestionnaireAncestor(to);
+            
+            writer.append(
+                    toRenderer.renderTerminologyObject(
+                    d3webSession, cc, to,
+                    parent, us.getLanguageId()));
         }
         writer.append(REPLACEID + "headerInfoLine");
         writer.append(REPLACECONTENT);
@@ -566,11 +577,16 @@ public class D3webDialog extends HttpServlet {
      *
      * @param request
      */
-    protected void setLanguageID(HttpServletRequest request) {
+    protected void setLanguageID(HttpServletRequest request, HttpSession httpSession) {
         int localeID =
                 Integer.parseInt(
                 request.getParameter("langID").toString());
-        GLOBSET.setLocaleIdentifier(localeID);
+        D3webUserSettings us = (D3webUserSettings)httpSession.getAttribute(USER_SETTINGS);
+        
+        us.setLanguageId(localeID);
+        httpSession.setAttribute(USER_SETTINGS, us);
+        
+//        GLOBSET.setLocaleIdentifier(localeID);
     }
 
     /**
@@ -854,6 +870,9 @@ public class D3webDialog extends HttpServlet {
                 D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
         httpSession.setAttribute(D3WEB_SESSION, d3webSession);
         httpSession.setAttribute("lastLoaded", "");
+        D3webUserSettings us = new D3webUserSettings();
+        httpSession.setAttribute(USER_SETTINGS, us);
+        
         D3webConnector.getInstance().setSession(d3webSession);
         if (d3wcon.isLogging()) {
             GLOBSET.setInitLogged(false);

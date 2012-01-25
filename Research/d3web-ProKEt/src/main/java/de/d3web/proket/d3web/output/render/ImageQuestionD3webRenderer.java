@@ -59,7 +59,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 	 * Adapted specifically for question rendering
 	 */
 	public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
-			TerminologyObject to, TerminologyObject parent) {
+			TerminologyObject to, TerminologyObject parent, int loc) {
 
 		StringBuilder sb = new StringBuilder();
 
@@ -140,7 +140,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 		// }
 
 		// underneath="within" a rendered question, always answers are rendered
-		super.renderChoices(st, cc, to, parent, d3webSession);
+		super.renderChoices(st, cc, to, parent, d3webSession, loc);
 
 		sb.append(st.toString());
 

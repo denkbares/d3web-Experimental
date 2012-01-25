@@ -37,6 +37,7 @@ import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.input.D3webUserSettings;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
@@ -106,8 +107,13 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		// handle Css
 		handleCss(cc);
 
+                D3webUserSettings us = 
+                        (D3webUserSettings)http.getAttribute("userSettings");
+                        
+                
 		// render the children
-		renderChildren(st, d3webSession, cc, D3webConnector.getInstance().getKb().getRootQASet());
+		renderChildren(st, d3webSession, cc, D3webConnector.getInstance().getKb().getRootQASet(), 
+                       us.getLanguageId());
 
 		// global JS initialization
 		defineAndAddJS(cc);
