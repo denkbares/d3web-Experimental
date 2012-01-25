@@ -51,7 +51,8 @@ public class TableRenderer extends KnowWEDomRenderer<Table> {
 		if (sortable) {
 			buffi.append("<div class=\"sortable\">");
 		}
-		buffi.append("\n<table style='border:1px solid #999999;' class='wikitable knowwetable' border='1'><tbody>");
+		buffi.append("\n<table style='border:1px solid #999999;' id='" + sec.getID()
+				+ "'class='wikitable knowwetable' border='1'><tbody>");
 		buffi.append(getHeader());
 		buffi.append(b.toString());
 		buffi.append("</tbody></table>");

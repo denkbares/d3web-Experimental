@@ -33,7 +33,7 @@ public class TableType extends DefaultMarkupType {
 
 	static {
 		m = new DefaultMarkup("Table");
-		m.addContentType(new Table(new NullTableAttributesProvider()));
+		m.addContentType(new Table());
 
 	}
 

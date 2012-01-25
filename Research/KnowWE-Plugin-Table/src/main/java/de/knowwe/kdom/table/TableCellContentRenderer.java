@@ -20,14 +20,8 @@
 
 package de.knowwe.kdom.table;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.core.user.UserContext;
@@ -137,39 +131,8 @@ public class TableCellContentRenderer extends KnowWEDomRenderer<TableCellContent
 
 	protected void generateContent(String sectionText, Section<TableCellContent> s,
 			UserContext user, String sectionID, StringBuilder html) {
-		if (s.hasQuickEditModeSet(user.getUserName())) {
-			Section<Table> father = Sections.findAncestorOfType(s, Table.class);
-			String[] values = null;
-			String size = null, rows = null, cols = null;
 
-			if (father != null && father.get() instanceof Table) {
-				values = (father.get()).getTableAttributesProvider().getAttributeValues(
-						s);
-				size = (father.get()).getTableAttributesProvider().getWidthAttribute(
-						Sections.findAncestorOfType(s, Table.class));
-				cols = (father.get()).getTableAttributesProvider().getNoEditColumnAttribute(
-						Sections.findAncestorOfType(s, Table.class));
-				rows = (father.get()).getTableAttributesProvider().getNoEditRowAttribute(
-						Sections.findAncestorOfType(s, Table.class));
-			}
-
-			if (TableUtils.isEditable(s, rows, cols)) {
-				if (values != null) {
-					html.append(createDefaultValueDropDown(values, sectionText, sectionID, size));
-				}
-				else {
-					html.append("<input type='text' name='" + sectionText + "' id='" + sectionID
-							+ "' value='" + TableUtils.quote(sectionText)
-							+ "' class='table-edit-node' " + TableUtils.getWidth(size) + "/>");
-				}
-			}
-			else {
-				html.append(translateTextForView(sectionText, s));
-			}
-		}
-		else {
-			html.append(translateTextForView(sectionText, s));
-		}
+		html.append(translateTextForView(sectionText, s));
 	}
 
 	protected String translateTextForView(String sectionText, Section<?> sec) {
@@ -177,38 +140,6 @@ public class TableCellContentRenderer extends KnowWEDomRenderer<TableCellContent
 		return sectionText;
 	}
 
-	/**
-	 * Creates an DropDown element out of the specified default values.
-	 * 
-	 * @param values
-	 * @param cellcontent
-	 * @param nodeID
-	 * @return
-	 */
-	protected String createDefaultValueDropDown(String[] values, String cellcontent, String nodeID, String width) {
-		StringBuilder html = new StringBuilder();
-		html.append("<select id='" + nodeID + "' class='table-edit-node' "
-				+ TableUtils.getWidth(width) + ">");
-
-		List<String> defaultValues = Arrays.asList(values);
-		if (defaultValues.contains("[:;:]")) {
-			return createTestcaseValueDropDown(defaultValues, cellcontent, nodeID, width);
-		}
-
-		if (!defaultValues.contains(cellcontent)) {
-			html.append("<option value='" + cellcontent + "' selected=\"selected\">" + cellcontent
-					+ "</option>");
-		}
-
-		for (String value : defaultValues) {
-			if (cellcontent.equals(value)) html.append("<option value='" + cellcontent
-					+ "' selected=\"selected\">" + cellcontent + "</option>");
-			else html.append("<option value='" + value + "'>" + value + "</option>");
-		}
-
-		html.append("</select>");
-		return html.toString();
-	}
 
 	public boolean isCallDelegate() {
 		return callDelegate;
@@ -218,81 +149,4 @@ public class TableCellContentRenderer extends KnowWEDomRenderer<TableCellContent
 		this.callDelegate = callDelegate;
 	}
 
-	/**
-	 * creates the Dropdown for TestcaseTables
-	 * 
-	 * @created 03.08.2010
-	 * @param values
-	 * @param cellcontent
-	 * @param nodeID
-	 * @param width
-	 * @return
-	 */
-	private String createTestcaseValueDropDown(List<String> values, String cellcontent, String nodeID, String width) {
-		StringBuilder html = new StringBuilder();
-		html.append("<select id='" + nodeID + "' class='table-edit-node' "
-				+ TableUtils.getWidth(width) + ">");
-
-		if (!values.contains(cellcontent)) {
-			html.append("<option value='" + cellcontent + "' selected=\"selected\">" + cellcontent
-					+ "</option>");
-		}
-
-		// extracts the questions and solutions from the values
-		// and sorts them
-		List<String> questions = new ArrayList<String>();
-		List<String> solutions = new ArrayList<String>();
-		boolean question = true;
-		for (String s : values) {
-			if (s.equals("[:;:]")) {
-				question = false;
-				;
-			}
-			else if (question) {
-				questions.add(s);
-			}
-			else {
-				solutions.add(s);
-			}
-		}
-
-		Collections.sort(questions);
-		Collections.sort(solutions);
-
-		// build the select dropdown
-		// with 2 optgroups, 1 for questions
-		// and 1 for solutions
-		html.append(createOptgroup(questions, "questions", cellcontent));
-		html.append(createOptgroup(solutions, "solutions", cellcontent));
-
-		return html.toString();
-	}
-
-	/**
-	 * creates optgroups for dropdown, with type as label
-	 * 
-	 * @created 03.08.2010
-	 * @param values
-	 * @param type
-	 * @param cellcontent
-	 * @return
-	 */
-	private String createOptgroup(List<String> values, String type, String cellcontent) {
-		StringBuilder html = new StringBuilder();
-		html.append("<optgroup label=\"" + type + "\">");
-
-		for (String s : values) {
-			if (cellcontent.equals(s)) {
-				html.append("<option value='" + cellcontent + "' selected=\"selected\">"
-						+ cellcontent + "</option>");
-			}
-			else {
-				html.append("<option value='" + s + "'>" + s + "</option>");
-			}
-
-		}
-
-		html.append("</optgroup>");
-		return html.toString();
-	}
 }

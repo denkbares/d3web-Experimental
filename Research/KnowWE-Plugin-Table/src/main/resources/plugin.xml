@@ -15,28 +15,6 @@
 		</library>
 	</runtime>	
 	
-    <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-        id="AppendTableNodesAction">
-        <parameter id="class"
-            value="de.knowwe.kdom.table.AppendTableNodesAction" />
-        <parameter id="name" value="AppendTableNodesAction" />
-        <parameter id="description" value="Action AppendTableNodesAction" />
-        <parameter id="version" value="1.0" />
-        <parameter id="priority" value="5" />
-        <parameter id="script" value="KnowWE-Plugin-Table.js" />
-    </extension>		
-
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="TableXML">
-		<parameter id="class"
-			value="de.knowwe.kdom.table.TableXMLType" />
-		<parameter id="name" value="TableXMLType" />
-		<parameter id="description" value="Type TableXMLType" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-		<parameter id="scope" value="root" />	
-		<parameter id="script" value="KnowWE-Plugin-Table.js" />	
-	</extension>
 
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="Table">
@@ -49,14 +27,19 @@
 		<parameter id="scope" value="root" />	
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-		id="UpdateTableKDOMNodesAction">
-		<parameter id="class"
-			value="de.knowwe.kdom.table.UpdateTableKDOMNodesAction" />
-		<parameter id="name" value="UpdateTableKDOMNodesAction" />
-		<parameter id="description" value="Action UpdateTableKDOMNodesAction" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="TableEditProvider">
+        <parameter id="class"
+            value="de.knowwe.kdom.table.TableEditProvider" />
+        <parameter id="name" value="TableEditProvider" />
+        <parameter id="description"
+            value="Offers a button for quick editing a certain section." />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="script" value="TableEditTool.js" />
+        <parameter id="css" value="TableEdit.css" />
+        <parameter id="scope" value="/TableType" />
 	</extension>
 	
 	

@@ -64,10 +64,8 @@ import de.knowwe.kdom.xml.XMLContent;
  */
 public class Table extends AbstractType {
 
-	private final TableAttributesProvider tableAttributesProvider;
 
-	public Table(TableAttributesProvider tableAttributesProvider) {
-		this.tableAttributesProvider = tableAttributesProvider;
+	public Table() {
 		this.childrenTypes.add(new TableLine());
 		this.sectionFinder = new AllTextSectionFinder();
 		this.setCustomRenderer(new TableRenderer());
@@ -83,10 +81,6 @@ public class Table extends AbstractType {
 		if (cellContentType instanceof AbstractType) {
 			((AbstractType) cellContentType).addChildType(injection);
 		}
-	}
-
-	public TableAttributesProvider getTableAttributesProvider() {
-		return tableAttributesProvider;
 	}
 
 	public boolean isSortable() {
