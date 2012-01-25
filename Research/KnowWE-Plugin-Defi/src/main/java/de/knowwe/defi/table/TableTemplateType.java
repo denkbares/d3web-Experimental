@@ -19,13 +19,11 @@
 
 package de.knowwe.defi.table;
 
-import de.knowwe.kdom.table.NullTableAttributesProvider;
 import de.knowwe.kdom.table.Table;
 
 public class TableTemplateType extends Table {
 
 	public TableTemplateType() {
-		super(new NullTableAttributesProvider());
 		this.injectTableCellContentChildtype(new InputFieldCellContent());
 	}
 
