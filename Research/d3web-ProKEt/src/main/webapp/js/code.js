@@ -1052,7 +1052,6 @@ function h4boxes(value, id) {
         
         // set image attribute to the correctly selected one
         item.attr('src', "img/pane" + value + ".png");
-        
 
         // check whether the calculated rating contradicts the user-chosen rating
         // VORLÄUFIG RAUSLASSEN
@@ -1087,6 +1086,7 @@ function h4boxes(value, id) {
     }
 }
 
+// set the color for the area indicating the system-propagated value
 function setPropagationColor(question){
     
     var prop = $("#propagation-"+question.attr("id"));
@@ -1126,6 +1126,7 @@ function setColorForQuestion(target, imgTarget, color){
     }
 }
 
+// similar to setColorForQuestion, except that no 0-option exists
 function setColorForQuestionHelper(target, imgTarget, color){
     
     // remove existing rating=coloring classes
@@ -1154,8 +1155,8 @@ function setColorForQuestionHelper(target, imgTarget, color){
  * the corresponding color/rating value: 0=undecided, 1=approve, 2=suggest, 3=reject
  */
 function calculateRatingForQuestion(question){
-    var ocPar = question.hasClass('oc');
-    var mcPar = question.hasClass('mc');
+    var ocPar = question.hasClass('oc');    // parent has AND connection
+    var mcPar = question.hasClass('mc');    // parent has OR connection
     var color; 
         
     // go through all child-questions and read their ratings into a var
@@ -1178,33 +1179,42 @@ function calculateRatingForQuestion(question){
             }
         });
             
-       
+    // AND case
     if(ocPar){
         // handle OC questions here, i.e. questions where all children
         // need to be confirmed to get the parent confirmed
         if(ratings.indexOf("1") != -1 &&
             ratings.indexOf("0")==-1 && ratings.indexOf("2")==-1 && ratings.indexOf("3")==-1){
-            color = "1";  // only approve if there are solely approve-children
+            color = "1";  // all approved, then parent approve
         } else if (ratings.indexOf("2") != -1 && 
             ratings.indexOf("0")==-1 && ratings.indexOf("3")==-1){
-            color = "2";  // only suspect if there are no contradictions and no undecideds
-        } else if (ratings.indexOf("3") != -1 &&
-            ratings.indexOf("0") == -1){
-            color = "3";
+            color = "2";  // all known and at least one suggested, suggest parent
+        } else if(ratings.indexOf("2") != -1 && ratings.indexOf("0") != -1 
+                && ratings.indexOf("3")==-1 ){
+            color = 2;
+        }  else if (ratings.indexOf("3") != -1 ){
+            color = "3";    // one rejected, reject parent
         } else {
             color = "0";
         }
            
-    } else if (mcPar){
-        // handle MC questions here, i.e. questions where only one
-        // child is enough to get the parent confirmed      
-        if(ratings.indexOf("1") != -1){
-            color = "1";  
-        } else if (ratings.indexOf("2") != -1 && ratings.indexOf("1") == -1){
+    } 
+    // OR case: here, one single confirmed (1) child is enough to get the
+    // parent confirmed
+    else if (mcPar){
+              
+        if(ratings.indexOf("1") != -1){ 
+            color = "1";    // one confirmed, confirm par
+        } else if (ratings.indexOf("2") != -1 && ratings.indexOf("3") != -1 
+            && ratings.indexOf("1") == -1 && ratings.indexOf("0") == -1){
+            color = "2";    // some undecided and some rejected, undecide parent
+        } else if(ratings.indexOf("2") != -1 && ratings.indexOf("1") == -1
+            && ratings.indexOf("0") == -1 && ratings.indexOf("3") == -1){
             color = "2";
-        } else if (ratings.indexOf("3") != -1 && ratings.indexOf("2") == -1
-            && ratings.indexOf("1") == -1){
-            color = "3";
+        }        
+        else if (ratings.indexOf("3") != -1 && ratings.indexOf("2") == -1
+            && ratings.indexOf("1") == -1 && ratings.indexOf("0") == -1){
+            color = "3";    // all rejected, reject parent
         } else {
             color = "0";
         }
