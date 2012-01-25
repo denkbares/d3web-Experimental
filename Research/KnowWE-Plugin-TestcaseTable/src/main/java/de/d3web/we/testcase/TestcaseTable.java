@@ -45,7 +45,6 @@ public class TestcaseTable extends Table {
 	public static final String TESTCASE_KEY = "TESTCASE";
 
 	public TestcaseTable() {
-		super(new TestcaseTableAttributesProvider());
 		KnowWERessourceLoader.getInstance().add("testcasetable.js",
 				KnowWERessourceLoader.RESOURCE_SCRIPT);
 		KnowWERessourceLoader.getInstance().add("testcasetable.css",

@@ -138,7 +138,7 @@ public class STCToTestcaseTableConverter {
 				}
 
 			}
-			builder.append("|").append(GetNewQuickEditAnswersAction.UNCHANGED_VALUE_STRING);
+			builder.append("|").append(UnchangedType.UNCHANGED_VALUE_STRING);
 
 		}
 

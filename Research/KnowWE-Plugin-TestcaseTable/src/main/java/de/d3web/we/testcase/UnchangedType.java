@@ -36,9 +36,8 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
  */
 final class UnchangedType extends AbstractType {
 
-	public static final String REGEX = "\\s*("
-			+ GetNewQuickEditAnswersAction.UNCHANGED_VALUE_STRING
-			+ ")\\s*";
+	public static final String UNCHANGED_VALUE_STRING = "-";
+	public static final String REGEX = "\\s*(" + UNCHANGED_VALUE_STRING + ")\\s*";
 	public static final Pattern PATTERN = Pattern.compile(REGEX);
 
 	@Override
