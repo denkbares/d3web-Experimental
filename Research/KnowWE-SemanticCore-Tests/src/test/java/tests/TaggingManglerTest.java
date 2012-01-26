@@ -130,7 +130,7 @@ public class TaggingManglerTest extends TestCase {
 		assertEquals("%%tags\ntagtest\n%", am.getArticle("AddTag")
 				.getSection().getOriginalText());
 		tm.removeTag("AddTag", "tagtest", context);
-		assertEquals("%%tags\n\n%", am.getArticle("AddTag").getSection()
+		assertEquals("%%tags\n%", am.getArticle("AddTag").getSection()
 				.getOriginalText());
 		am.deleteArticle(am.getArticle("AddTag"));
 	}
