@@ -241,9 +241,9 @@ KNOWWE.table.edit.Editor = (function(editProvider) {
 	 * This methods is called at the beginning and after adding / deleting rows.
 	 */
 	function resizeEditArea(editArea) {
-		var size = (editArea.getElementsByTagName("tr").length * editProvider.getRowHeight());
-		size += 16;
-		editArea.style.height = size + "px";
+//		var size = (editArea.getElementsByTagName("tr").length * editProvider.getRowHeight());
+//		size += 16;
+//		editArea.style.height = size + "px";
 	}
 	
 
@@ -398,8 +398,8 @@ KNOWWE.table.edit.Editor = (function(editProvider) {
 			
 			var result = document.createElement('div')
 			
-			var div = document.createElement('div')
-			div.setAttribute('class', 'defaultEditTool');
+//			var div = document.createElement('div')
+//			div.setAttribute('class', 'defaultEditTool');
 			
 			var table = document.createElement('table');
 			table.setAttribute('class','wikitable knowwetable');
@@ -415,8 +415,8 @@ KNOWWE.table.edit.Editor = (function(editProvider) {
 				
 			}
 			
-			div.appendChild(table);
- 			result.appendChild(div);
+//			div.appendChild(table);
+ 			result.appendChild(table);
 			
 			var buttons = document.createElement('div');
 			buttons.innerHTML = KNOWWE.plugin.instantEdit.getSaveCancelDeleteButtons(id); 
@@ -459,9 +459,8 @@ KNOWWE.table.edit.Editor = (function(editProvider) {
 	    	for (var rowNo = 0; rowNo < rows.length; rowNo++) {
 	    		cols = rows[rowNo].childNodes;
 	    		for (var colNo = 0; colNo < cols.length; colNo++) {
+	    			wikiTable += '|';
 	    			if (cols[colNo].tagName == 'TH')
-	    				wikiTable += '||';
-	    			else 
 	    				wikiTable += '|';
 	    			
 	    			var value = editProvider.getValue(cols[colNo].childNodes[0], rowNo, colNo);
@@ -470,7 +469,6 @@ KNOWWE.table.edit.Editor = (function(editProvider) {
 	    			
 	    			wikiTable += value;
 	    		}
-	    		
 	    		wikiTable += '\n';
 	    	}
 	    
