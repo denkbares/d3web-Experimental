@@ -96,8 +96,8 @@ DONE (hoffentlich) - startup error when starting with EuraHS: Case-Number.txt Pe
 NullPointer (mail Albrecht) --> könnte daran liegen wenn man nicht das Servlet selbst sondern
 über ControlCenter startet...
 DONE - Refactor logging to log ids from id table for consistency
+DONE - Log ids of infopopups --> also ids from id table!
 
-- Log ids of infopopups --> also ids from id table!
 - Check logging of image answers
 - enter error messages as attribute in StringTemplate, not in JS
 
@@ -139,9 +139,15 @@ DONE - Add notification if user sets parent-rating that contradicts calculated c
 - Panel Images umbenennen
 - Panel Areas vergrößern/anpassen
 
-- Refactor Hierarchy prototypes as to use own attributes AND/OR instead of OC/MC 
-
+!!! - Refactor Hierarchy prototypes as to use own attributes AND/OR instead of OC/MC 
 - d3web: Introtext über KB
+- Ausprobieren Schrift über Pfeil
+- Andere Fragetypen in hierarchy --> mc/oc mit Popup?! num
+- neuer Fall, speichern, reset etc
+
+!!! - d3web Anbindung
+
+
 
 KLÄREN ALBRECHT:
 ----------------

@@ -306,8 +306,8 @@ public class D3webDialog extends HttpServlet {
             d3wcon.setLogger(logger);
             // TODO remove logger from d3webconnector
             Date now = new Date();
-            D3webServletLogUtils.initialize(logger, now, httpSession);
-            logInitially(request, httpSession);
+            D3webServletLogUtils.initForD3wDialogs(logger, now);
+            logInitially(request);
             GLOBSET.setInitLogged(true);
             return;
         } else if (action.equalsIgnoreCase("logEnd")) {
@@ -481,16 +481,24 @@ public class D3webDialog extends HttpServlet {
             D3webUtils.setValue(questions.get(i), values.get(i), d3webSession);
 
             if (d3wcon.isLogging()) {
+                
+                String logtime = request.getParameter("timestring").replace("+", " ");
+                String value = AbstractD3webRenderer.getObjectNameForId(values.get(i));
+                value = value == null ? values.get(i) : AbstractD3webRenderer.getObjectNameForId(values.get(i));
+                String question = AbstractD3webRenderer.getObjectNameForId(questions.get(i));
+                
                 // logQuestionValue all changed widgets/items
                 if (questions.get(i).equals(prevQ)) {
                     if (!values.get(i).equals(prevV)) {
-                        D3webServletLogUtils.logQuestionValue(questions.get(i), values.get(i),
-                                request);
+                       
+                        D3webServletLogUtils.logQuestionValue(
+                                question, value, logtime);
                         prevQ = questions.get(i);
                         prevV = values.get(i);
                     }
                 } else {
-                    D3webServletLogUtils.logQuestionValue(questions.get(i), values.get(i), request);
+                    D3webServletLogUtils.logQuestionValue(
+                            question, value, logtime);
                     prevQ = questions.get(i);
                     prevV = values.get(i);
                 }
@@ -752,9 +760,12 @@ public class D3webDialog extends HttpServlet {
                     session);
             httpSession.setAttribute("lastLoaded", filename);
             D3webConnector.getInstance().setSession(session);
-            D3webServletLogUtils.resetLogfileName(session.getId());
+            
+            // is logging () into httpSession
             if (D3webConnector.getInstance().isLogging()) {
-                D3webServletLogUtils.logResume(request, session.getId());
+                D3webServletLogUtils.resetLogfileName(session.getId());
+                String time = request.getParameter("timestring").replace("+", " ");
+                D3webServletLogUtils.logResume(time, session.getId());
             }
         }
     }
@@ -1037,24 +1048,56 @@ public class D3webDialog extends HttpServlet {
         writer.append("<div>");
     }
 
-    protected void logInitially(HttpServletRequest request, HttpSession httpSession) {
-        D3webServletLogUtils.logInitially(request, httpSession);
+    protected void logInitially(HttpServletRequest request) {
+        // get values to logQuestionValue initially: browser, user, and start time
+            String browser =
+                    request.getParameter("browser").replace("+", " ");
+            String user =
+                    request.getParameter("user").replace("+", " ");
+            String start =
+                    request.getParameter("timestring").replace("+", " ");
+        D3webServletLogUtils.logBaseInfo(browser, user, start);
     }
 
     protected void logSessionEnd(HttpServletRequest request) {
-        D3webServletLogUtils.logSessionEnd(request);
+        String end = request.getParameter("timestring").replace("+", " ");
+        D3webServletLogUtils.logSessionEnd(end);
+        
+        // TODO: refactor if not global anymore
+        D3webConnector.getInstance().setLogger(new JSONLogger());
+        GlobalSettings.getInstance().setInitLogged(false);
     }
 
     protected void logWidget(HttpServletRequest request) {
-        D3webServletLogUtils.logWidget(request);
+        String widgetID = request.getParameter("widget");
+        String time = request.getParameter("timestring").replace("+", " ");
+        String language = "";
+        
+        if (request.getParameter("language") != null) {
+            widgetID = "LANGUAGE";
+            language = request.getParameter("language");
+        }
+        
+        D3webServletLogUtils.logWidget(widgetID, time, language);
     }
 
     protected void logInfoPopup(HttpServletRequest request) {
-        D3webServletLogUtils.logInfoPopup(request);
+        String id = request.getParameter("id");
+        String start = request.getParameter("timestring");
+        String timediff = request.getParameter("value");
+        id = id.replace("+", " ");
+        start = start.replace("+", " ");
+        
+        D3webServletLogUtils.logInfoPopup(id, start, timediff);
     }
 
     protected void logNotAllowed(HttpServletRequest request) {
-        D3webServletLogUtils.logNotAllowed(request);
+        String logtime = request.getParameter("timestring").replace("+", " ");
+        String value = request.getParameter("value");
+        String question = request.getParameter("id");
+        question = AbstractD3webRenderer.getObjectNameForId(question);
+       
+        D3webServletLogUtils.logNotAllowed(logtime, value, question);
     }
 
     /**

@@ -20,7 +20,6 @@
 package de.d3web.proket.d3web.run;
 
 import de.d3web.proket.d3web.input.D3webConnector;
-import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
 import de.d3web.proket.d3web.ue.analyze.JSONReader;
 import de.d3web.proket.d3web.ue.log.JSONLogger;
 import de.d3web.proket.utils.GlobalSettings;
@@ -28,22 +27,24 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 
 /**
- * Utility class that contains all methods required for processing the requests
- * coming from various potential Dialog Servlets, such as D3webDialog,
- * MediastinitisDialog, etc.
+ * Utility class that contains all methods required for processing the logging
+ * requests coming from various potential Dialog Servlets, such as D3webDialog,
+ * MediastinitisDialog, and also the prototype Servlets. Therefore, the methods
+ * here receive the correctly formatted values right "as to be logged".
  *
  * @author Martina Freiberg
  *
  * @date 30.12.2011
  */
+// TODO Logger needs to be stored in httpSEssion
 public class D3webServletLogUtils {
 
-    protected static final String D3WEB_SESSION = "d3webSession";
+    private static final SimpleDateFormat DATE_FORMAT_DEFAULT =
+            new SimpleDateFormat("yyyyMMdd_HHmmss");
     protected static String logfilename = "";
     protected static JSONLogger logger = null;
 
@@ -53,63 +54,83 @@ public class D3webServletLogUtils {
      *
      * @param jlogger
      * @param loggingstart
-     * @param httpSession
      */
-    protected static void initialize(JSONLogger jlogger,
-            Date loggingstart, HttpSession httpSession) {
+    protected static void initForD3wDialogs(
+            JSONLogger jlogger, Date loggingstart) {
 
         logger = jlogger; // set the logger
 
-        // initialize logfile name
-        SimpleDateFormat format =
-                new SimpleDateFormat("yyyyMMdd_HHmmss");
-        String formatted = format.format(loggingstart);
-        //String sid =
-          //      ((Session) httpSession.getAttribute(D3WEB_SESSION)).getId();
+        // format timestring for logfilename
+        String formatted = DATE_FORMAT_DEFAULT.format(loggingstart);
         String sid = D3webConnector.getInstance().getSession().getId();
+
         logfilename = formatted + "_" + sid + ".txt";
+
+        // TODO: also initialize logging folder here?!
     }
 
-    
-    public static void resetLogfileName(String newSid){
-        
+    /**
+     * Initializes the logging helper servlet by getting the logger, and
+     * assembling the logfilename (date plus ???) for logging prototypes
+     *
+     * @param jlogger
+     * @param loggingstart
+     * @param httpsess
+     */
+    protected static void initForPrototypeDialogs(
+            JSONLogger jlogger, Date loggingstart, HttpSession httpsess) {
+
+        logger = jlogger; // set the logger
+
+        // format timestring for logfilename
+        String formatted = DATE_FORMAT_DEFAULT.format(loggingstart);
+
+        logfilename = formatted + "_" + httpsess.getId() + ".txt";
+
+        // TODO: also initialize logging folder here?!
+    }
+
+    /**
+     * Resets the logfilename. Needed for example, when an old session is loaded
+     * --> then, not a per default created newly named logfile should be used,
+     * but the already existing one.
+     *
+     * @param idToCheck part of the name of the potentially already existing
+     * logfile name.
+     */
+    public static void resetLogfileName(String idToCheck) {
+
         List<File> logfiles = JSONReader.getInstance().retrieveAllLogfiles(
                 GlobalSettings.getInstance().getLogFolder());
-        File THEfile = null;
-        for(File f: logfiles){
-            if(f.getName().contains(newSid)){
-                
-                JSONObject oldContents = JSONReader.getInstance().getJSONFromTxtFile(f.getAbsolutePath());
-                System.out.println(oldContents);
+
+        for (File f : logfiles) {
+
+            // check whether a file for newSid already exists
+            if (f.getName().contains(idToCheck)) {
+
+                JSONObject oldContents =
+                        JSONReader.getInstance().getJSONFromTxtFile(f.getAbsolutePath());
                 logfilename = f.getName();
-                
-                // TODO: correct logging of old contents (restore)
-                logger.writeJSONToFile(logfilename, oldContents);
+                logger.restore(oldContents);
+                logger.writeJSONToFile(logfilename);
             }
         }
     }
-    
-    
+
     /**
      * Logs initial values username and browser info. Only to be done once,
      * therefore check global setting "initlogged"
      *
-     * @param request
-     * @param httpSession
+     * TODO: factor out session start.
+     *
+     * @param browser the browser used
+     * @param user the user that is logged
      */
-    protected static void logInitially(HttpServletRequest request, HttpSession httpSession) {
+    protected static void logBaseInfo(String browser, String user, String start) {
 
+        // TODO: adapt if not global anymore
         if (!GlobalSettings.getInstance().initLogged()) {
 
-            //logger = D3webConnector.getInstance().getLogger();
-
-            // get values to logQuestionValue initially: browser, user, and start time
-            String browser =
-                    request.getParameter("browser").replace("+", " ");
-            String user =
-                    request.getParameter("user").replace("+", " ");
-            String start =
-                    request.getParameter("timestring").replace("+", " ");
             // give values to logger
             logger.logStartValue(start);
             logger.logBrowserValue(browser);
@@ -126,31 +147,25 @@ public class D3webServletLogUtils {
      * sending it to D3webConnector, and sets the "is logging initialized" flag
      * to false.
      *
-     * @param request
+     * @param end String representation of logging end time
      */
-    protected static void logSessionEnd(HttpServletRequest request) {
-        // end date
-        String end = request.getParameter("timestring").replace("+", " ");
+    protected static void logSessionEnd(String end) {
         logger.logEndValue(end);
         logger.writeJSONToFile(logfilename);
-        D3webConnector.getInstance().setLogger(new JSONLogger());
-        GlobalSettings.getInstance().setInitLogged(false);
     }
 
     /**
      * Logs the click on a non-KB widget of the dialog, e.g., click on the save
      * button, click on a language flag....
      *
-     * @param request
+     * @param widgetID id of the widget to be logged
+     * @param time the timestamp
+     * @param language the language, when a language widget was clicked
      */
-    protected static void logWidget(HttpServletRequest request) {
-        // TODO need to check here in case IDs are reworked globally one day
-        String widgetID = request.getParameter("widget");
-        String time = request.getParameter("timestring").replace("+", " ");
+    //TODO: factor out click on language widget?!
+    protected static void logWidget(String widgetID, String time, String language) {
 
-
-        if (request.getParameter("language") != null) {
-            String language = request.getParameter("language");
+        if (widgetID.contains("LANGUAGE")) {
             logger.logClickedObjects(
                     "LANGUAGE", time, language);
         } else {
@@ -178,30 +193,23 @@ public class D3webServletLogUtils {
     /**
      * Logs the loading=resuming of a case
      *
-     * @param request
+     * @param time
+     * @param session id of the resumed session
      */
-    protected static void logResume(HttpServletRequest request, String session) {
-        String time = request.getParameter("timestring").replace("+", " ");
-
+    protected static void logResume(String time, String session) {
         logger.logClickedObjects("LOAD", time, session);
-
         logger.writeJSONToFile(logfilename);
     }
 
     /**
      * Log mouseover on information popup.
      *
-     * @param request
+     * @param id
+     * @param start
+     * @param timediff
      */
-    protected static void logInfoPopup(HttpServletRequest request) {
-        String id = request.getParameter("id");
-        String start = request.getParameter("timestring");
-        String timediff = request.getParameter("value");
-        id = id.replace("+", " ");
-        start = start.replace("+", " ");
-
-        logger.logClickedObjects(
-                id, start, timediff);
+    protected static void logInfoPopup(String id, String start, String timediff) {
+        logger.logClickedObjects(id, start, timediff);
         logger.writeJSONToFile(logfilename);
     }
 
@@ -211,15 +219,10 @@ public class D3webServletLogUtils {
      *
      * @param question
      * @param value
+     * @param logtime
      */
-    protected static void logQuestionValue(String question, String value, HttpServletRequest request) {
-        String logtime = request.getParameter("timestring").replace("+", " ");
-        String val = AbstractD3webRenderer.getObjectNameForId(value);
-
-        logger.logClickedObjects(
-                AbstractD3webRenderer.getObjectNameForId(question),
-                logtime,
-                val == null ? value : AbstractD3webRenderer.getObjectNameForId(value));
+    protected static void logQuestionValue(String question, String value, String logtime) {
+        logger.logClickedObjects(question, logtime, value);
         logger.writeJSONToFile(logfilename);
     }
 
@@ -229,14 +232,10 @@ public class D3webServletLogUtils {
      *
      * @param request
      */
-    protected static void logNotAllowed(HttpServletRequest request) {
-        String logtime = request.getParameter("timestring").replace("+", " ");
-        String value = request.getParameter("value");
-        String question = request.getParameter("id");
-        System.out.println(question + " " + AbstractD3webRenderer.getObjectNameForId(question));
+    protected static void logNotAllowed(String logtime, String value, String question) {
 
         logger.logClickedObjects(
-                "NOTALLOWED_" + AbstractD3webRenderer.getObjectNameForId(question),
+                "NOTALLOWED_" + question,
                 logtime,
                 value);
         logger.writeJSONToFile(logfilename);
