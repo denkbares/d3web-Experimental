@@ -65,35 +65,6 @@ public class DialogRenderer extends Renderer {
 		cc.js.add("}", 31);
 	}
 
-	/**
-	 * Recursively build the navigation tree from the d3web structure.
-	 * 
-	 * @param HttpSession
-	 *            Session containing the {@link KnowledgeBase} object.
-	 * @param st
-	 *            StringTemplate to add the data to.
-	 */
-	private void makeD3webNavigation(TerminologyObject startElement,
-			StringTemplate st) {
-		TerminologyObject[] children = startElement.getChildren();
-		for (TerminologyObject child : children) {
-			if (child instanceof QASet) {
-				// create subItem
-				StringTemplate childSt = TemplateUtils.getStringTemplate(
-						"NavigationItem", "html");
-				// set title and link
-				if (child.getName() != null) {
-					childSt.setAttribute("title", child.getName());
-				} else {
-					childSt.setAttribute("title", child.getId());
-				}
-				childSt.setAttribute("fullId", child.getId());
-
-				makeD3webNavigation(child, childSt);
-				st.setAttribute("navlist", childSt.toString());
-			}
-		}
-	}
 
 	/**
 	 * Recursively build the navigation tree from the questionnaire structure.
@@ -146,12 +117,11 @@ public class DialogRenderer extends Renderer {
 		 */
 		if (dialogObject instanceof Dialog) {
 			Dialog dialog = (Dialog) dialogObject;
-			if (dialog.isD3web() && session != null) {
-				makeD3webNavigation(session.getKnowledgeBase().getRootQASet(),
-						st);
-			} else {
-				makeNavigation(dialogObject, st);
-			}
+			if(dialog.isLogging()){
+                            cc.js.enableClickLogging();
+                        }
+			makeNavigation(dialogObject, st);
+			
 		}
 
 		// children

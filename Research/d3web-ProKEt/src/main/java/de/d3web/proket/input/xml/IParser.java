@@ -30,6 +30,7 @@ import de.d3web.proket.data.DialogTree;
  * 
  * @author Johannes Mitlmeier
  * 
+ * // TODO REFACTOR: remove this interface
  */
 public interface IParser {
 
@@ -38,6 +39,4 @@ public interface IParser {
 	public Class<? extends Object> getParserClass(Element tag);
 
 	public DialogTree getTree();
-
-	public KnowledgeBase getKb();
 }

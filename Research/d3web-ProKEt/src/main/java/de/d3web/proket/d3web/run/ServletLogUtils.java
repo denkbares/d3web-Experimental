@@ -41,7 +41,10 @@ import org.json.simple.JSONObject;
  * @date 30.12.2011
  */
 // TODO Logger needs to be stored in httpSEssion
-public class D3webServletLogUtils {
+// TODO IMPORTANT: when storing Logger in httpSession, always provide Logger
+// with the methods here and store logfilename in Logger class!
+// Here, ONLY the helper methods are allowed!
+public class ServletLogUtils {
 
     private static final SimpleDateFormat DATE_FORMAT_DEFAULT =
             new SimpleDateFormat("yyyyMMdd_HHmmss");
@@ -77,8 +80,17 @@ public class D3webServletLogUtils {
      * @param loggingstart
      * @param httpsess
      */
-    protected static void initForPrototypeDialogs(
-            JSONLogger jlogger, Date loggingstart, HttpSession httpsess) {
+    public static void initForPrototypeDialogs(
+            JSONLogger jlogger, 
+            Date loggingstart, 
+            HttpSession httpsess) {
+
+        // TODO: refactor here as to create different paths dependent from
+        // prototype type
+        
+        GlobalSettings.getInstance().setLogFolder(
+                GlobalSettings.getInstance().getServletBasePath()
+                + "../../Prototype-Data/logs");
 
         logger = jlogger; // set the logger
 
@@ -86,8 +98,6 @@ public class D3webServletLogUtils {
         String formatted = DATE_FORMAT_DEFAULT.format(loggingstart);
 
         logfilename = formatted + "_" + httpsess.getId() + ".txt";
-
-        // TODO: also initialize logging folder here?!
     }
 
     /**
@@ -126,20 +136,16 @@ public class D3webServletLogUtils {
      * @param browser the browser used
      * @param user the user that is logged
      */
-    protected static void logBaseInfo(String browser, String user, String start) {
+    public static void logBaseInfo(String browser, String user, String start) {
 
         // TODO: adapt if not global anymore
-        if (!GlobalSettings.getInstance().initLogged()) {
+        // give values to logger
+        logger.logStartValue(start);
+        logger.logBrowserValue(browser);
+        logger.logUserValue(user);
 
-            // give values to logger
-            logger.logStartValue(start);
-            logger.logBrowserValue(browser);
-            logger.logUserValue(user);
+        logger.writeJSONToFile(logfilename);
 
-            logger.writeJSONToFile(logfilename);
-
-            GlobalSettings.getInstance().setInitLogged(true);
-        }
     }
 
     /**

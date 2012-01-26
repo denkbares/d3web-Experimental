@@ -41,7 +41,6 @@ import de.d3web.proket.utils.ProKEtLogger;
 public abstract class DefaultDialogObject implements IDialogObject {
 
 	protected GlobalSettings defset = GlobalSettings.getInstance();
-	protected static final Logger logger = ProKEtLogger.getLogger();
 	protected String VCNbase = "";
 	protected Vector<IDialogObject> children = new Vector<IDialogObject>();
 	/**

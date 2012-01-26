@@ -17,155 +17,187 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-
 package de.d3web.proket.run;
 
+import de.d3web.proket.d3web.run.ServletLogUtils;
+import de.d3web.proket.d3web.ue.log.JSONLogger;
+import de.d3web.proket.data.DialogTree;
+import de.d3web.proket.input.xml.IParser;
+import de.d3web.proket.input.xml.ParseException;
+import de.d3web.proket.input.xml.XMLParser;
+import de.d3web.proket.output.container.ContainerCollection;
+import de.d3web.proket.output.render.IRenderer;
+import de.d3web.proket.output.render.Renderer;
+import de.d3web.proket.utils.GlobalSettings;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
-
-import javax.servlet.ServletContext;
+import java.util.Date;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import de.d3web.proket.data.DialogTree;
-import de.d3web.proket.data.IDialogObject;
-import de.d3web.proket.input.xml.IParser;
-import de.d3web.proket.input.xml.ParseException;
-import de.d3web.proket.output.container.ContainerCollection;
-import de.d3web.proket.output.render.IRenderer;
-import de.d3web.proket.output.render.Renderer;
-
 /**
- * Servlet for rendering normal dialogs.
- * 
+ * Servlet for rendering non-d3web dialogs.
+ *
  * @author Martina Freiberg, Johannes Mitlmeier
  */
 public class DialogServlet extends HttpServlet {
 
-	private static final long serialVersionUID = -1514789465295324518L;
+    private static final long serialVersionUID = -1514789465295324518L;
 
-	public static DialogTree parseInput(HttpServletRequest request,
-			HttpServletResponse response, PrintWriter writer)
-			throws ParseException {
-		// parse the input source
-		IParser parser = null;
-		String sourceParser = "";
-		// String typeParameter = request.getParameter("type");
-		// if (typeParameter != null && typeParameter.matches("[\\w]{1,20}")) {
-		// // validation
-		// sourceParser = typeParameter;
-		// }
-		sourceParser = "de.d3web.proket.input.xml.XMLParser";
-		String source = "Standarddialog";
-		if (request.getParameter("src") != null) {
-			source = request.getParameter("src");
-		}
-		try {
-			Class<?> parserClass = Class.forName(sourceParser);
-			parser = (IParser) parserClass.getConstructor(Object.class)
-					.newInstance(source);
-		} catch (ClassNotFoundException ex) {
-			throw new ParseException(MessageFormat.format(
-					"Unable to find class \"{0}\" for loading the source: {1}",
-					sourceParser, ex.getLocalizedMessage()));
-		} catch (IllegalAccessException ex) {
-			throw new ParseException(
-					MessageFormat
-							.format("Unable to create class \"{0}\" for loading the source: {1}",
-									sourceParser, ex.getLocalizedMessage()));
-		} catch (InstantiationException ex) {
-			throw new ParseException(
-					MessageFormat
-							.format("Unable to create class \"{0}\" for loading the source: {1}",
-									sourceParser, ex.getLocalizedMessage()));
-		} catch (IllegalArgumentException ex) {
-			throw new ParseException(
-					MessageFormat
-							.format("Unable to create class \"{0}\" for loading the source: {1}",
-									sourceParser, ex.getLocalizedMessage()));
-		} catch (SecurityException ex) {
-			throw new ParseException(
-					MessageFormat
-							.format("Unable to create class \"{0}\" for loading the source: {1}",
-									sourceParser, ex.getLocalizedMessage()));
-		} catch (InvocationTargetException ex) {
-			throw new ParseException(
-					MessageFormat
-							.format("Unable to create class \"{0}\" for loading the source: {1}",
-									sourceParser, ex.getLocalizedMessage()));
-		} catch (NoSuchMethodException ex) {
-			throw new ParseException(
-					MessageFormat
-							.format("Unable to create class \"{0}\" for loading the source: {1}",
-									sourceParser, ex.getLocalizedMessage()));
-		}
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public DialogServlet() {
+        super();
+    }
 
-		// load the dialog into memory
-		return parser.getTree();
-	}
+    /**
+     * Init method -- put all the stuff here, that should be done ONCE for the
+     * Servlet at the beginning, such as initialising paths, DB connections,
+     * etc.
+     *
+     * @param config
+     * @throws ServletException
+     */
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public DialogServlet() {
-		super();
-	}
+        String servletcontext = config.getServletContext().getRealPath("/");
+        GlobalSettings.getInstance().setServletBasePath(servletcontext);
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	@Override
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		// prepare output document
-		HttpSession session = request.getSession(true);
-		ServletContext context = session.getServletContext();
-		String realContextPath = context.getRealPath(request.getContextPath());
-		// System.out.println("Living in: " + realContextPath);
+    }
 
-		// String sessionID = session.getId();
-		response.setContentType("text/html");
-		response.setCharacterEncoding("utf8");
-		PrintWriter writer = response.getWriter();
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     * response)
+     */
+    @Override
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
 
-		DialogTree dialogTree;
-		try {
-			dialogTree = parseInput(request, response, writer);
-			//System.out.println("Tree parsed:\n" + dialogTree);
-		}
-		catch (ParseException e) {
-			writer.append(e.getLocalizedMessage());
-			writer.flush();
-			writer.close();
-			return;
-		}
+        response.setContentType("text/html; charset=UTF-8");
 
-		String partialId = request.getParameter("partialId");
-		ContainerCollection cc;
-		String html;
-		if (partialId == null) {
-			// decorate root element (recursively)
-			IRenderer rootRenderer = Renderer.getRenderer(dialogTree.getRoot());
-			cc = rootRenderer.renderRoot(dialogTree);
-			// combine the containers to one single HTML file
-			html = cc.html.toString();
-		} else {
-			// partial rendering
-			IDialogObject child = dialogTree.getById(partialId);
-			IRenderer rootRenderer = Renderer.getRenderer(child);
-			cc = new ContainerCollection();
-			html = rootRenderer.renderDialogObject(cc, child);
-		}
+        HttpSession httpSession = request.getSession(true);
 
-		// deliver the rendered output
-		writer.print(html);
-		writer.close();
-	}
+        // in case nothing other is provided, "show" is the default action
+        String action = request.getParameter("action");
+        if (action == null) {
+            action = "show";
+        }
 
+        if (action.equalsIgnoreCase("show")) {
+            show(httpSession, response, request);
+            return;
+        } else if (action.equalsIgnoreCase("logInit")) {
+            logInitially(request, response, httpSession);
+            return;
+        }
+    }
+
+    /**
+     * Handle the actual display of the Servlet content
+     *
+     * @param session
+     * @param response
+     * @param request
+     * @throws IOException
+     */
+    protected void show(HttpSession session,
+            HttpServletResponse response,
+            HttpServletRequest request)
+            throws IOException {
+
+        PrintWriter writer = response.getWriter();
+        DialogTree dialogTree = parseInput(request);
+
+        IRenderer rootRenderer = Renderer.getRenderer(dialogTree.getRoot());
+        ContainerCollection cc = rootRenderer.renderRoot(dialogTree);
+        String html = cc.html.toString();
+
+        // deliver the rendered output
+        writer.print(html);
+        writer.close();
+    }
+
+    /**
+     * Initialization of the logging mechanisms. If nothing has been logged
+     * before, first browser and user info need to be gathered by JS, thus
+     * return with "firsttime" in writer. 
+     * Afterwards, JS calls this action again, now has the browser and user
+     * info, and can start logging.
+     * // TODO: do this refactoring (logInit not existing anymore) also for
+     * // D3webServlets.
+     * @param request
+     * @param response
+     * @param httpSession
+     * @throws IOException 
+     */
+    protected void logInitially(HttpServletRequest request,
+            HttpServletResponse response, HttpSession httpSession) throws IOException {
+
+        PrintWriter writer = response.getWriter();
+
+        /*
+         * check if initial log is already done; if not append firsttime. This
+         * is the flag for JS to first retrieve the browser and user, and then
+         * call this method/action again to go to "else" */
+        if (!GlobalSettings.getInstance().initLogged()) {
+            writer.append("firsttime");
+            GlobalSettings.getInstance().setInitLogged(true);
+        } 
+        
+        /* in this case, the logging initialisation, i.e. retrieval of browser
+         * etc info has been done successfully and now those values can be
+         * processed further */
+        else {
+            JSONLogger logger = new JSONLogger();
+            Date now = new Date();
+            
+            // initialize logging
+            ServletLogUtils.initForPrototypeDialogs(logger, now, httpSession);
+            
+            String browser =
+                    request.getParameter("browser").replace("+", " ");
+            String user =
+                    request.getParameter("user").replace("+", " ");
+            String start =
+                    request.getParameter("timestring").replace("+", " ");
+            ServletLogUtils.logBaseInfo(browser, user, start);
+        }
+    }
+
+    /**
+     * Use the XMLParser to parse the prototype specification files.
+     * Therefore, src parameter (if specified) is used for determining which
+     * prototype spec to use, otherwise a default src is used. Returns a
+     * DialogTree representation of the dialog.
+     * @param request
+     * @param response
+     * @param writer
+     * @return the DialogTree representation of the parsed XML-specified dialog.
+     */
+    private static DialogTree parseInput(HttpServletRequest request) {
+
+        /*
+         * if src-Parameter is given, take it, if not, "Standarddialog" is the
+         * default source
+         */
+        String source = "Standarddialog";
+        if (request.getParameter("src") != null) {
+            source = request.getParameter("src");
+        }
+       
+        // parse the input source
+        XMLParser parser = new XMLParser(source);
+        
+        // load the dialog into memory
+        return parser.getTree();
+    }
 }

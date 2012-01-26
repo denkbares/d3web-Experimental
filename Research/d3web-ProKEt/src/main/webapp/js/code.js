@@ -23,6 +23,7 @@ var initialization = true;
 
 function setup() {
 	
+      
     // load questionnaires and questions into memory
     questionnaires = $('#content [id^="qu_"]');
     questionsDirty = $('#content [id^="q_"]');
@@ -86,15 +87,44 @@ function setup() {
     if(hierarchy){
         expandFirstmostElement();
     
-        exchangeTextFirstSub("Wenn");
+        exchangeTextFirstSub();
+    }
+    
+    if(logging){
+        
+        handleLogging();
     }
     
 }
 
+function handleLogging(){
+   
+   var link = $.query.set("action", "logInit").toString();
+    link = window.location.href.replace(window.location.search, "") + link;
+	
+    $.ajax({
+        type: "GET",
+        async: false,
+        cache : false, // needed for IE, call is not made otherwise
+        url: link,
+        success : function(html) {
+            if (html == "firsttime") {
+                var browser = retrieveBrowserVal();    
+                var user = retrieveUserVal();
+                ue_logBrowserAndUser(browser, user);
+            } 
+        // otherwise, no reload because this would cause endless loop
+        }
+    });
+        
+    
+}
+
+
 /*Helper function to exchange the text of the first subquestion - usually 
  *Oder and Und - of a set of subquestions to the given text, e.g. "Wenn" 
  */
-function exchangeTextFirstSub(textToSet){
+function exchangeTextFirstSub(){
     
     $("[id^=sub-] [id^=readFlow]:first-child img").each(function(){     
         $(this).attr('src', 'img/If.png');
@@ -1190,9 +1220,9 @@ function calculateRatingForQuestion(question){
             ratings.indexOf("0")==-1 && ratings.indexOf("3")==-1){
             color = "2";  // all known and at least one suggested, suggest parent
         } else if(ratings.indexOf("2") != -1 && ratings.indexOf("0") != -1 
-                && ratings.indexOf("3")==-1 ){
+            && ratings.indexOf("3")==-1 ){
             color = 2;
-        }  else if (ratings.indexOf("3") != -1 ){
+        } else if (ratings.indexOf("3") != -1 ){
             color = "3";    // one rejected, reject parent
         } else {
             color = "0";
@@ -1205,7 +1235,8 @@ function calculateRatingForQuestion(question){
               
         if(ratings.indexOf("1") != -1){ 
             color = "1";    // one confirmed, confirm par
-        } else if (ratings.indexOf("2") != -1 && ratings.indexOf("3") != -1 
+        }
+        else if (ratings.indexOf("2") != -1 && ratings.indexOf("3") != -1 
             && ratings.indexOf("1") == -1 && ratings.indexOf("0") == -1){
             color = "2";    // some undecided and some rejected, undecide parent
         } else if(ratings.indexOf("2") != -1 && ratings.indexOf("1") == -1

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialog type="legal" css="legal, nofoot" header="Labour Legislation Consultation"
-	answer-type="oc">
+	answer-type="oc" logging="true">
 		<question title="Employment contract was terminated effectually and in time"
 			id="1" type="mc" />
 		<question title="Compliance with form, time limit, access and proxy"
