@@ -27,7 +27,6 @@ import java.util.Map;
 import de.d3web.core.session.Session;
 import de.d3web.core.utilities.Pair;
 import de.d3web.testcase.model.Check;
-import de.d3web.testcase.model.TestCase;
 
 /**
  * Represents the status of an SessionDebuggerSection
@@ -38,14 +37,11 @@ import de.d3web.testcase.model.TestCase;
 public class SessionDebugStatus {
 
 	private Session session;
-	private Date stcFileDate;
-	private TestCase tc;
 	private Date lastExecuted = null;
 	private Map<Date, Collection<Pair<Check, Boolean>>> checkResults = new HashMap<Date, Collection<Pair<Check, Boolean>>>();
 
-	public SessionDebugStatus(Date stcFileDate, Session session) {
+	public SessionDebugStatus(Session session) {
 		super();
-		this.stcFileDate = stcFileDate;
 		this.session = session;
 	}
 
@@ -58,28 +54,12 @@ public class SessionDebugStatus {
 	 * resets the date of the lastExecuted
 	 * 
 	 * @created 25.01.2012
-	 * @param session new Sesion
+	 * @param session new Session
 	 */
 	public void setSession(Session session) {
 		this.session = session;
 		checkResults.clear();
 		lastExecuted = null;
-	}
-
-	public Date getStcFileDate() {
-		return stcFileDate;
-	}
-
-	public void setStcFileDate(Date stcFileDate) {
-		this.stcFileDate = stcFileDate;
-	}
-
-	public TestCase getTestCase() {
-		return tc;
-	}
-
-	public void setTestCase(TestCase tc) {
-		this.tc = tc;
 	}
 
 	public Date getLastExecuted() {

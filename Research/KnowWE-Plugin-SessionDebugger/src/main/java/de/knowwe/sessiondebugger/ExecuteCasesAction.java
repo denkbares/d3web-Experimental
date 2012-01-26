@@ -27,14 +27,10 @@ import de.d3web.core.session.SessionFactory;
 import de.d3web.testcase.TestCaseUtils;
 import de.d3web.testcase.model.Check;
 import de.d3web.testcase.model.TestCase;
-import de.d3web.we.basic.D3webModule;
-import de.d3web.we.basic.SessionBroker;
-import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * Action that gets called when cases should be executed with the
@@ -48,31 +44,25 @@ public class ExecuteCasesAction extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		String sectionid = context.getParameter("id");
-		SessionDebugStatus status = (SessionDebugStatus) context.getSession().getAttribute(
-				sectionid);
 		Date endDate;
 		try {
-			endDate = SessionDebuggerRenderer.dateFormat.parse(context.getParameter("date"));
+			endDate = TestCasePlayerRenderer.dateFormat.parse(context.getParameter("date"));
 		}
 		catch (ParseException e) {
 			throw new IOException(e);
 		}
 		@SuppressWarnings("unchecked")
-		Section<SessionDebuggerType> section = (Section<SessionDebuggerType>) Sections.getSection(sectionid);
-		String master = DefaultMarkupType.getAnnotation(section,
-				SessionDebuggerType.ANNOTATION_MASTER);
-		String web = context.getWeb();
-		String sessionId = KnowWEEnvironment.generateDefaultID(master);
-		SessionBroker broker = D3webModule.getBroker(context.getUserName(), web);
-		Session session = broker.getSession(sessionId);
+		Section<TestCasePlayerType> section = (Section<TestCasePlayerType>) Sections.getSection(sectionid);
+		TestCaseProvider provider = (TestCaseProvider) section.getSectionStore().getObject(
+				TestCaseProvider.KEY);
+		Session session = provider.getActualSession(context.getUserName());
+		SessionDebugStatus status = provider.getDebugStatus(context.getUserName());
+		TestCase testCase = provider.getTestCase();
 		// reset session
-		TestCase testCase = status.getTestCase();
 		if (session != status.getSession() || status.getLastExecuted() == null) {
 			session = SessionFactory.createSession(session.getKnowledgeBase(),
 					testCase.getStartDate());
-			broker.removeSession(sessionId);
-			broker.addSession(sessionId, session);
-			status.setSession(session);
+			provider.storeSession(session, context.getUserName());
 			runTo(session, testCase, endDate, status);
 			status.setLastExecuted(endDate);
 		}

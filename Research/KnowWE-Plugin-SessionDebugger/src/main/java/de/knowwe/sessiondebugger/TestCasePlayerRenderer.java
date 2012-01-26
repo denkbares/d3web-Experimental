@@ -18,91 +18,81 @@
  */
 package de.knowwe.sessiondebugger;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
-
-import javax.xml.stream.XMLStreamException;
 
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.session.Session;
 import de.d3web.core.utilities.Pair;
-import de.d3web.empiricaltesting.SequentialTestCase;
-import de.d3web.empiricaltesting.TestPersistence;
 import de.d3web.testcase.TestCaseUtils;
 import de.d3web.testcase.model.Check;
 import de.d3web.testcase.model.Finding;
 import de.d3web.testcase.model.TestCase;
-import de.d3web.testcase.stc.STCWrapper;
-import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.compile.packaging.KnowWEPackageManager;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.core.wikiConnector.ConnectorAttachment;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
- * Renderer for SessionDebuggerType
+ * Renderer for TestCasePlayerType
  * 
  * @author Markus Friedrich (denkbares GmbH)
  * @created 19.01.2012
  */
-public class SessionDebuggerRenderer extends DefaultMarkupRenderer<SessionDebuggerType> {
+public class TestCasePlayerRenderer extends DefaultMarkupRenderer<TestCasePlayerType> {
 
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS");
 
-	public SessionDebuggerRenderer() {
+	public TestCasePlayerRenderer() {
 		super(false);
 	}
 
 	@Override
-	public void renderContents(KnowWEArticle article, Section<SessionDebuggerType> section, UserContext user, StringBuilder string) {
+	public void renderContents(KnowWEArticle article, Section<TestCasePlayerType> section, UserContext user, StringBuilder string) {
 		if (user == null || user.getSession() == null) {
 			return;
 		}
+		KnowWEPackageManager packageManager = KnowWEEnvironment.getInstance().getPackageManager(
+				article.getWeb());
+		List<Section> sectionsInPackage = new LinkedList<Section>();
+		for (String s : section.getPackageNames()) {
+			sectionsInPackage.addAll(packageManager.getSectionsOfPackage(s));
+		}
+		List<Pair<TestCaseProvider, Section>> providers = new LinkedList<Pair<TestCaseProvider, Section>>();
+		for (Section s : sectionsInPackage) {
+			TestCaseProvider testCaseProvider = (TestCaseProvider) s.getSectionStore().getObject(
+					TestCaseProvider.KEY);
+			if (testCaseProvider != null) {
+				providers.add(new Pair<TestCaseProvider, Section>(testCaseProvider, s));
+			}
+		}
 		string.append(KnowWEUtils.maskHTML("<span id='" + section.getID() + "'>"));
 
-		String masterArticleName = DefaultMarkupType.getAnnotation(section,
-				SessionDebuggerType.ANNOTATION_MASTER);
-		Session session = D3webUtils.getSession(masterArticleName, user, article.getWeb());
-		if (session == null) {
-			string.append("No knowledge base for: " + masterArticleName + "\n");
+		// TODO: handle more than one
+		if (providers.size() == 0) {
+			string.append("No TestCaseProvider found in the packages: " + section.getPackageNames());
 		}
 		else {
-			String stc_file_string = DefaultMarkupType.getAnnotation(section,
-					SessionDebuggerType.STC);
-			Collection<ConnectorAttachment> attachments = KnowWEEnvironment.getInstance().getWikiConnector().getAttachments();
-			ConnectorAttachment stcfile = null;
-			for (ConnectorAttachment attachment : attachments) {
-				if (attachment.getFileName().equals(stc_file_string)
-						&& attachment.getParentName().equals(article.getTitle())) {
-					stcfile = attachment;
-				}
-			}
-			if (stcfile == null) {
-				string.append("STC file " + session.getKnowledgeBase().getName()
-						+ " cannot be found attached to this article.\n");
+			TestCaseProvider provider = providers.get(0).getA();
+			Session session = provider.getActualSession(user.getUserName());
+
+			if (session == null) {
+				string.append("No knowledge base found.\n");
 			}
 			else {
-				SessionDebugStatus status = (SessionDebugStatus) user.getSession().getAttribute(
-						section.getID());
-				if (status == null) {
-					status = new SessionDebugStatus(stcfile.getDate(), session);
-					user.getSession().setAttribute(section.getID(), status);
-				}
-				else if (status.getSession() != session) {
+				TestCase testCase = provider.getTestCase();
+				SessionDebugStatus status = provider.getDebugStatus(user.getUserName());
+
+				if (status.getSession() != session) {
 					status.setSession(session);
 				}
-				TestCase testCase = status.getTestCase();
-				if (testCase == null || status.getStcFileDate().before(stcfile.getDate())) {
-					testCase = new STCWrapper(loadSTC(string, session, stc_file_string, stcfile));
-					status.setTestCase(testCase);
-				}
+
 				if (testCase != null) {
 					Collection<Question> usedQuestions = TestCaseUtils.getUsedQuestions(testCase);
 					string.append("\n|| ||Date");
@@ -115,12 +105,12 @@ public class SessionDebuggerRenderer extends DefaultMarkupRenderer<SessionDebugg
 						string.append("|");
 						String dateString = dateFormat.format(date);
 						if (status.getLastExecuted() == null
-								|| status.getLastExecuted().before(date)) {
+									|| status.getLastExecuted().before(date)) {
 							StringBuffer sb = new StringBuffer();
 							String js = "SessionDebugger.send("
-									+ "'"
-									+ section.getID()
-									+ "', '" + dateString + "');";
+										+ "'"
+										+ providers.get(0).getB().getID()
+										+ "', '" + dateString + "');";
 							sb.append("<a href=\"javascript:" + js + ";undefined;\">");
 							sb.append("Play");
 							sb.append("</a>");
@@ -162,12 +152,12 @@ public class SessionDebuggerRenderer extends DefaultMarkupRenderer<SessionDebugg
 								for (Pair<Check, Boolean> p : checkResults) {
 									if (p.getB()) {
 										sb.append("%%(background-color:lime;)"
-												+ p.getA().getCondition() + "%%\\\\");
+													+ p.getA().getCondition() + "%%\\\\");
 									}
 									else {
 										sb.append("%%(background-color:red;)"
-												+ p.getA().getCondition()
-												+ "%%\\\\");
+													+ p.getA().getCondition()
+													+ "%%\\\\");
 									}
 								}
 								sb.replace(sb.lastIndexOf("\\\\"), sb.length(), "");
@@ -178,33 +168,8 @@ public class SessionDebuggerRenderer extends DefaultMarkupRenderer<SessionDebugg
 					}
 				}
 			}
-
 		}
 		string.append(KnowWEUtils.maskHTML("</span>"));
-	}
-
-	private SequentialTestCase loadSTC(StringBuilder string, Session session, String stc_file_string, ConnectorAttachment stcfile) {
-		try {
-			List<SequentialTestCase> cases = TestPersistence.getInstance().loadCases(
-						stcfile.getInputStream(), session.getKnowledgeBase());
-			if (cases.size() != 1) {
-				string.append("The attached SequentialTestCase file " + stc_file_string
-							+ " has " + cases.size()
-							+ " cases. Only files with exactly one case are allowed.\n");
-				return null;
-			}
-			else {
-				return cases.get(0);
-			}
-		}
-		catch (XMLStreamException e) {
-			string.append("File " + stc_file_string + " does not contain correct xml markup.");
-			return null;
-		}
-		catch (IOException e) {
-			string.append("File " + stc_file_string + " is not accessible.");
-			return null;
-		}
 	}
 
 }

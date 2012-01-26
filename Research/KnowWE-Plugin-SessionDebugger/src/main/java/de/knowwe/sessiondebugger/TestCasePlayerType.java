@@ -18,6 +18,7 @@
  */
 package de.knowwe.sessiondebugger;
 
+import de.knowwe.core.compile.packaging.KnowWEPackageManager;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -29,27 +30,23 @@ import de.knowwe.kdom.renderer.ReRenderSectionMarkerRenderer;
  * @author Markus Friedrich (denkbares GmbH)
  * @created 19.01.2012
  */
-public class SessionDebuggerType extends DefaultMarkupType {
-
-	public static final String ANNOTATION_MASTER = "master";
-	public static final String STC = "stc";
+public class TestCasePlayerType extends DefaultMarkupType {
 
 	private static final DefaultMarkup MARKUP;
 
 	static {
-		MARKUP = new DefaultMarkup("SessionDebugger");
-		MARKUP.addAnnotation(ANNOTATION_MASTER, true);
-		MARKUP.addAnnotation(STC, true);
+		MARKUP = new DefaultMarkup("TestCasePlayer");
+		MARKUP.addAnnotation(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME, false);
 	}
 
-	public SessionDebuggerType() {
+	public TestCasePlayerType() {
 		super(MARKUP);
 		this.setCustomRenderer(this.getRenderer());
 	}
 
 	@Override
-	public KnowWEDomRenderer<SessionDebuggerType> getRenderer() {
-		return new ReRenderSectionMarkerRenderer<SessionDebuggerType>(new SessionDebuggerRenderer());
+	public KnowWEDomRenderer<TestCasePlayerType> getRenderer() {
+		return new ReRenderSectionMarkerRenderer<TestCasePlayerType>(new TestCasePlayerRenderer());
 	}
 
 }

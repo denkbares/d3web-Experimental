@@ -17,15 +17,26 @@
 	</runtime>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="SessionDebuggerType">
+		id="TestCasePlayerType">
 		<parameter id="class"
-			value="de.knowwe.sessiondebugger.SessionDebuggerType" />
-		<parameter id="name" value="SessionDebuggerType" />
-		<parameter id="description" value="Type SessionDebuggerType" />
+			value="de.knowwe.sessiondebugger.TestCasePlayerType" />
+		<parameter id="name" value="TestCasePlayerType" />
+		<parameter id="description" value="Type TestCasePlayerType" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="scope" value="root" />
 		<parameter id="script" value="sessiondebugger.js" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="TestCaseSTCType">
+		<parameter id="class"
+			value="de.knowwe.sessiondebugger.stc.TestCaseSTCType" />
+		<parameter id="name" value="TestCaseSTCType" />
+		<parameter id="description" value="Type TestCaseSTCType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
