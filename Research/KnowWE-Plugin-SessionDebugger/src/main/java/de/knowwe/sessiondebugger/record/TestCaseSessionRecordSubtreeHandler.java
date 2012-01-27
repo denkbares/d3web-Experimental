@@ -29,7 +29,7 @@ import de.knowwe.sessiondebugger.AttachmentTestCaseProvider;
 import de.knowwe.sessiondebugger.TestCaseProvider;
 
 /**
- * {@link SubtreeHandler} for creationg an {@link SessionRecordCaseProvider}
+ * {@link SubtreeHandler} for creating an {@link SessionRecordCaseProvider}
  * 
  * @author Markus Friedrich (denkbares GmbH)
  * @created 26.01.2012

@@ -107,4 +107,9 @@ public abstract class AttachmentTestCaseProvider implements TestCaseProvider {
 		return status;
 	}
 
+	@Override
+	public String getName() {
+		return title + "/" + fileName;
+	}
+
 }

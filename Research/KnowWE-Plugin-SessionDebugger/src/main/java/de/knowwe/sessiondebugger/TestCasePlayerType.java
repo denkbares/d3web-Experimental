@@ -19,8 +19,10 @@
 package de.knowwe.sessiondebugger;
 
 import de.knowwe.core.compile.packaging.KnowWEPackageManager;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.Type;
+import de.knowwe.kdom.defaultMarkup.ContentType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.renderer.ReRenderSectionMarkerRenderer;
 
@@ -42,11 +44,18 @@ public class TestCasePlayerType extends DefaultMarkupType {
 	public TestCasePlayerType() {
 		super(MARKUP);
 		this.setCustomRenderer(this.getRenderer());
+		for (Type type : this.getAllowedChildrenTypes()) {
+			if (type instanceof ContentType) {
+				((ContentType) type).setCustomRenderer(
+						new ReRenderSectionMarkerRenderer<ContentType>(
+								new TestCasePlayerRenderer()));
+			}
+		}
 	}
 
 	@Override
-	public KnowWEDomRenderer<TestCasePlayerType> getRenderer() {
-		return new ReRenderSectionMarkerRenderer<TestCasePlayerType>(new TestCasePlayerRenderer());
+	public DefaultMarkupRenderer<DefaultMarkupType> getRenderer() {
+		return new DefaultMarkupRenderer<DefaultMarkupType>(false);
 	}
 
 }

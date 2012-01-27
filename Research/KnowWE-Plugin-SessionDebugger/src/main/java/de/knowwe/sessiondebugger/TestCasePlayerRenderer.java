@@ -35,9 +35,10 @@ import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.compile.packaging.KnowWEPackageManager;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
+import de.knowwe.kdom.defaultMarkup.ContentType;
 
 /**
  * Renderer for TestCasePlayerType
@@ -45,16 +46,13 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
  * @author Markus Friedrich (denkbares GmbH)
  * @created 19.01.2012
  */
-public class TestCasePlayerRenderer extends DefaultMarkupRenderer<TestCasePlayerType> {
+public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS");
-
-	public TestCasePlayerRenderer() {
-		super(false);
-	}
+	public static String SELECTOR_KEY = "selector";
 
 	@Override
-	public void renderContents(KnowWEArticle article, Section<TestCasePlayerType> section, UserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section<ContentType> section, UserContext user, StringBuilder string) {
 		if (user == null || user.getSession() == null) {
 			return;
 		}
@@ -74,12 +72,34 @@ public class TestCasePlayerRenderer extends DefaultMarkupRenderer<TestCasePlayer
 		}
 		string.append(KnowWEUtils.maskHTML("<span id='" + section.getID() + "'>"));
 
-		// TODO: handle more than one
 		if (providers.size() == 0) {
 			string.append("No TestCaseProvider found in the packages: " + section.getPackageNames());
 		}
 		else {
-			TestCaseProvider provider = providers.get(0).getA();
+			String selectedID = (String) user.getSession().getAttribute(
+					SELECTOR_KEY + "_" + section.getID());
+			StringBuffer selectsb = new StringBuffer();
+			// if no pair is selected, use the first
+			Pair<TestCaseProvider, Section> selectedPair = providers.get(0);
+			selectsb.append("Select TestCase: <select id=selector" +
+					section.getID()
+					+ " onchange=\"SessionDebugger.change('" + section.getID() +
+					"', this.options[this.selectedIndex].value);\">");
+			for (Pair<TestCaseProvider, Section> pair : providers) {
+				String id = pair.getB().getID();
+				if (id.equals(selectedID)) {
+					selectsb.append("<option value='" + id + "' selected='selected'>"
+							+ pair.getA().getName() + "</option>");
+					selectedPair = pair;
+				}
+				else {
+					selectsb.append("<option value='" + id + "'>"
+							+ pair.getA().getName() + "</option>");
+				}
+			}
+			selectsb.append("</select>");
+			TestCaseProvider provider = selectedPair.getA();
+			string.append(KnowWEUtils.maskHTML(selectsb.toString()));
 			Session session = provider.getActualSession(user.getUserName());
 
 			if (session == null) {
@@ -109,7 +129,7 @@ public class TestCasePlayerRenderer extends DefaultMarkupRenderer<TestCasePlayer
 							StringBuffer sb = new StringBuffer();
 							String js = "SessionDebugger.send("
 										+ "'"
-										+ providers.get(0).getB().getID()
+										+ selectedPair.getB().getID()
 										+ "', '" + dateString + "');";
 							sb.append("<a href=\"javascript:" + js + ";undefined;\">");
 							sb.append("Play");

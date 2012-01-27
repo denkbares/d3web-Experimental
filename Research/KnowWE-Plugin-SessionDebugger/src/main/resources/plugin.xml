@@ -59,5 +59,15 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="TestCaseSelectorAction">
+		<parameter id="class"
+			value="de.knowwe.sessiondebugger.TestCaseSelectorAction" />
+		<parameter id="name" value="TestCaseSelectorAction" />
+		<parameter id="description" value="Action TestCaseSelectorAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
 		
 </plugin>

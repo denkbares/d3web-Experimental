@@ -18,27 +18,26 @@
  */
 package de.knowwe.sessiondebugger;
 
-import de.d3web.core.session.Session;
-import de.d3web.testcase.model.TestCase;
+import java.io.IOException;
+
+import javax.servlet.http.HttpSession;
+
+import de.knowwe.core.action.AbstractAction;
+import de.knowwe.core.action.UserActionContext;
 
 /**
- * Provides access to a TestCase
+ * Stores which TestCase is actually selected in the {@link HttpSession}
  * 
  * @author Markus Friedrich (denkbares GmbH)
- * @created 25.01.2012
+ * @created 27.01.2012
  */
-public interface TestCaseProvider {
+public class TestCaseSelectorAction extends AbstractAction {
 
-	public static final String KEY = "TestCaseProvider";
-
-	TestCase getTestCase();
-
-	Session getActualSession(String user);
-
-	SessionDebugStatus getDebugStatus(String user);
-
-	void storeSession(Session sessin, String user);
-
-	String getName();
+	@Override
+	public void execute(UserActionContext context) throws IOException {
+		String sectionid = context.getParameter("id");
+		context.getSession().setAttribute(TestCasePlayerRenderer.SELECTOR_KEY + "_" + sectionid,
+				context.getParameter("value"));
+	}
 
 }
