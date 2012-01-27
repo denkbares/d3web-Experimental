@@ -16,21 +16,20 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.sessiondebugger.stc;
+package de.knowwe.sessiondebugger.record;
 
-import de.knowwe.core.compile.Priority;
 import de.knowwe.core.compile.packaging.KnowWEPackageManager;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.sessiondebugger.ProviderRefreshRenderer;
 
 /**
- * Type for TestCaseSTC Markup
+ * Type for TestCaseSessionRecord Markup
  * 
  * @author Markus Friedrich (denkbares GmbH)
- * @created 25.01.2012
+ * @created 26.01.2012
  */
-public class TestCaseSTCType extends DefaultMarkupType {
+public class TestCaseSessionRecordType extends DefaultMarkupType {
 
 	public static final String ANNOTATION_MASTER = "master";
 	public static final String ANNOTATION_FILE = "file";
@@ -38,16 +37,16 @@ public class TestCaseSTCType extends DefaultMarkupType {
 	private static final DefaultMarkup MARKUP;
 
 	static {
-		MARKUP = new DefaultMarkup("TestCaseSTC");
+		MARKUP = new DefaultMarkup("TestCaseSessionRecord");
 		MARKUP.addAnnotation(ANNOTATION_MASTER, true);
 		MARKUP.addAnnotation(ANNOTATION_FILE, true);
 		MARKUP.addAnnotation(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME, false);
 	}
 
-	public TestCaseSTCType() {
+	public TestCaseSessionRecordType() {
 		super(MARKUP);
-		addSubtreeHandler(Priority.LOW, new TestCaseSTCSubtreeHandler());
-		this.setCustomRenderer(new ProviderRefreshRenderer<TestCaseSTCType>());
+		addSubtreeHandler(new TestCaseSessionRecordSubtreeHandler());
+		this.setCustomRenderer(new ProviderRefreshRenderer<TestCaseSessionRecordType>());
 	}
 
 }

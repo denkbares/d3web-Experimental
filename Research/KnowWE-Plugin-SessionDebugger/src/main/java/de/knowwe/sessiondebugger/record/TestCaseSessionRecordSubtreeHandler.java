@@ -16,7 +16,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.sessiondebugger.stc;
+package de.knowwe.sessiondebugger.record;
 
 import java.util.Collection;
 
@@ -29,23 +29,23 @@ import de.knowwe.sessiondebugger.AttachmentTestCaseProvider;
 import de.knowwe.sessiondebugger.TestCaseProvider;
 
 /**
- * {@link SubtreeHandler} for creating an {@link STCTestCaseProvider}
+ * {@link SubtreeHandler} for creationg an {@link SessionRecordCaseProvider}
  * 
  * @author Markus Friedrich (denkbares GmbH)
- * @created 25.01.2012
+ * @created 26.01.2012
  */
-public class TestCaseSTCSubtreeHandler extends SubtreeHandler<TestCaseSTCType> {
+public class TestCaseSessionRecordSubtreeHandler extends SubtreeHandler<TestCaseSessionRecordType> {
 
-	public TestCaseSTCSubtreeHandler() {
+	public TestCaseSessionRecordSubtreeHandler() {
 		setIgnorePackageCompile(true);
 	}
 
 	@Override
-	public Collection<Message> create(KnowWEArticle article, Section<TestCaseSTCType> section) {
+	public Collection<Message> create(KnowWEArticle article, Section<TestCaseSessionRecordType> section) {
 		String masterName = DefaultMarkupType.getAnnotation(section, "master");
 		String fileName = DefaultMarkupType.getAnnotation(section, "file");
 
-		AttachmentTestCaseProvider provider = new STCTestCaseProvider(masterName,
+		AttachmentTestCaseProvider provider = new SessionRecordCaseProvider(masterName,
 				article.getWeb(), fileName, article.getTitle());
 		section.getSectionStore().storeObject(TestCaseProvider.KEY, provider);
 		return provider.getMessages();

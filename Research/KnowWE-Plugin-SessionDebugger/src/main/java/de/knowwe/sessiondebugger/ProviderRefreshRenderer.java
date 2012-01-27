@@ -16,39 +16,30 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.sessiondebugger.stc;
-
-import java.util.Collection;
+package de.knowwe.sessiondebugger;
 
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
-import de.knowwe.core.report.Message;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import de.knowwe.sessiondebugger.AttachmentTestCaseProvider;
-import de.knowwe.sessiondebugger.TestCaseProvider;
 
 /**
- * {@link SubtreeHandler} for creating an {@link STCTestCaseProvider}
  * 
  * @author Markus Friedrich (denkbares GmbH)
- * @created 25.01.2012
+ * @created 27.01.2012
  */
-public class TestCaseSTCSubtreeHandler extends SubtreeHandler<TestCaseSTCType> {
+public class ProviderRefreshRenderer<T extends DefaultMarkupType> extends DefaultMarkupRenderer<T> {
 
-	public TestCaseSTCSubtreeHandler() {
-		setIgnorePackageCompile(true);
+	public ProviderRefreshRenderer() {
+		super(false);
 	}
 
 	@Override
-	public Collection<Message> create(KnowWEArticle article, Section<TestCaseSTCType> section) {
-		String masterName = DefaultMarkupType.getAnnotation(section, "master");
-		String fileName = DefaultMarkupType.getAnnotation(section, "file");
-
-		AttachmentTestCaseProvider provider = new STCTestCaseProvider(masterName,
-				article.getWeb(), fileName, article.getTitle());
-		section.getSectionStore().storeObject(TestCaseProvider.KEY, provider);
-		return provider.getMessages();
+	public void render(KnowWEArticle article, Section<T> section, UserContext user, StringBuilder buffer) {
+		TestCaseProvider provider = (TestCaseProvider) section.getSectionStore().getObject(
+				TestCaseProvider.KEY);
+		provider.getTestCase();
+		super.render(article, section, user, buffer);
 	}
-
 }

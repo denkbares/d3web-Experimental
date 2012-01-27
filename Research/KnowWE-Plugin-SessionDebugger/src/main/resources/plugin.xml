@@ -39,6 +39,17 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="TestCaseSessionRecordType">
+		<parameter id="class"
+			value="de.knowwe.sessiondebugger.record.TestCaseSessionRecordType" />
+		<parameter id="name" value="TestCaseSessionRecordType" />
+		<parameter id="description" value="Type TestCaseSessionRecordType" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="ExecuteCasesAction">
 		<parameter id="class"
