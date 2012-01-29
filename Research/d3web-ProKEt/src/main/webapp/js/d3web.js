@@ -290,8 +290,7 @@ $(function() {
             cache : false, // needed for IE, call is not made otherwise
             url: link,
             success : function(html) {
-              
-                if (html == "firsttime") {
+               if (html == "firsttime") {
                     var browser = retrieveBrowserVal();    
                     var user = retrieveUserVal();
                     if (logging) ue_logBrowserAndUser(browser, user);
@@ -332,9 +331,11 @@ function initFunctionality() {
             // if we have indicated but not yet answered questions, keep
             // confirmation closed
             if (html.indexOf("true")>-1) {
+                
                 $('#jqConfirmEoSDialog').dialog('close');
                     
             } else  { // otherwise display
+                
                 $('#jqConfirmEoSDialog').dialog("open");
                     
             }
@@ -454,6 +455,10 @@ function initFunctionality() {
     $('#statistics').unbind('click').click(function(event){
         if (logging) ue_logWidgetClicked($(this));
         gotoStatistics();
+    });
+    
+     $('#FFButton').unbind('click').click(function(event) {
+        $("#jqFFDialog").dialog("open");
     });
     
     // click on language toggle

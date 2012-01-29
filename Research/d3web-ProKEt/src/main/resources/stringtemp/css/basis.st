@@ -109,3 +109,20 @@ body,table,div {
 .rating-high { border: 2px dashed green; }
 .rating-medium { border: 2px dashed yellow; }
 .rating-low { border: 2px dashed red; }
+
+.errorRed {color: red;}
+
+
+/* STANDARD OWN STYLED BUTTONS */ 
+.caseButton{ width: 120px; height: 20px; padding-top: 3px; border: 1px solid #696969; text-align: center; cursor: pointer; 
+	background-color: #dddddd; font-weight: bold; color: #224172; -moz-box-shadow: 0 0 5px black;	
+	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; }
+
+.baseButtonOneLetter{width: 30px; height: 20px; padding-top: 3px; border: 1px solid #696969; text-align: center; cursor: pointer; 
+	background-color: #dddddd; font-weight: bold; color: #224172; -moz-box-shadow: 0 0 5px black;	
+	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; }
+
+
+.rightButton { float: right; margin-right: 10px; }
+
+.leftButton { float: left; margin-right: 5px;}

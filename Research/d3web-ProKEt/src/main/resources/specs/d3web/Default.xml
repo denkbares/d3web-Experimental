@@ -12,6 +12,7 @@
         required = "none"
 	language = ""
         logging = "ON"
+        feedbackform = "ON"
 	>
 	<data kb="Languages.d3web" />
 </dialog>

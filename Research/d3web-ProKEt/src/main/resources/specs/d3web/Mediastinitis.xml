@@ -11,7 +11,7 @@
 	login = "usrdat"
 	required = "Betreffende Klinik"
 	language = "de"
-        logging = "OFF"
+        logging = "ON"
 	>
 	<data kb="MediastinitisDez2011.d3web" />
 </dialog>

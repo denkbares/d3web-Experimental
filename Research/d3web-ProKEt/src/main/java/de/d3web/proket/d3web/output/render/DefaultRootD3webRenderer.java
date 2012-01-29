@@ -84,6 +84,10 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
 		st.setAttribute("loadcase", "true");
 		st.setAttribute("savecase", "true");
 		st.setAttribute("reset", "true");
+                
+                if(D3webConnector.getInstance().getFeedbackForm()){
+                    st.setAttribute("feedback", "true");
+                }
 
 		/*
 		 * handle custom ContainerCollection modification, e.g., enabling

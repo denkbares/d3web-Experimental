@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -49,6 +50,8 @@ import javax.servlet.http.HttpSession;
 public class DialogServlet extends HttpServlet {
 
     private static final long serialVersionUID = -1514789465295324518L;
+    private static final SimpleDateFormat DATE_FORMAT_DEFAULT =
+            new SimpleDateFormat("yyyyMMdd_HHmmss");
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -157,11 +160,12 @@ public class DialogServlet extends HttpServlet {
          * etc info has been done successfully and now those values can be
          * processed further */
         else {
-            JSONLogger logger = new JSONLogger();
             Date now = new Date();
+            JSONLogger logger = new JSONLogger(createLogfileName(now, httpSession));
+            
             
             // initialize logging
-            ServletLogUtils.initForPrototypeDialogs(logger, now, httpSession);
+            //ServletLogUtils.initForPrototypeDialogs(logger, now, httpSession);
             
             String browser =
                     request.getParameter("browser").replace("+", " ");
@@ -169,7 +173,7 @@ public class DialogServlet extends HttpServlet {
                     request.getParameter("user").replace("+", " ");
             String start =
                     request.getParameter("timestring").replace("+", " ");
-            ServletLogUtils.logBaseInfo(browser, user, start);
+            ServletLogUtils.logBaseInfo(browser, user, start, logger);
         }
     }
 
@@ -199,5 +203,14 @@ public class DialogServlet extends HttpServlet {
         
         // load the dialog into memory
         return parser.getTree();
+    }
+
+      // TODO ingetrate logfilename creation for prototpes
+    protected String createLogfileName(Date loggingstart, HttpSession httpSession){
+        String formatted = DATE_FORMAT_DEFAULT.format(loggingstart);
+        String sid = (String)httpSession.getId();
+        //String sid = D3webConnector.getInstance().getSession().getId();
+
+        return formatted + "_" + sid + ".txt";
     }
 }

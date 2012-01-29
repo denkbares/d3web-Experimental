@@ -246,6 +246,10 @@ public class D3webXMLParser {
 	public String getLogging() {
 		return XMLUtils.getStr((Element) dialogSpec, "logging", "OFF");
 	}
+        
+        public String getFeedbackform() {
+		return XMLUtils.getStr((Element) dialogSpec, "feedbackform", "OFF");
+	}
 
 	public HashMap<String, HashMap<String, String>> getSingleSpecs() {
 		HashMap<String, HashMap<String, String>> specs =

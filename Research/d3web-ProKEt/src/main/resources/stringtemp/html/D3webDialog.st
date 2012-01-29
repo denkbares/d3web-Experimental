@@ -5,6 +5,7 @@ $if(login)$
 	$LoginDialog()$
 $endif$
 
+
 <!-- header & footer in one //-->
 <div id="head">
 	<table>
@@ -30,6 +31,12 @@ $endif$
 						$SummaryButton()$
 					</div>
 				$endif$
+                                $if(feedback)$
+					<div class="leftButton">
+						$FeedbackButton()$
+					</div>
+				$endif$
+
 			</td>
 			<td width=*>
 				$header$

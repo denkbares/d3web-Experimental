@@ -1,5 +1,49 @@
 var weekday = new Array("So", "Mo", "Di", "Mi", "Do", "Fr", "Sa");
 
+$(function(){
+    
+    /* Usability Extension: Feedback Form */
+    $(function() {
+
+        var sendFF, cancelFF;
+        if(language=="en"){
+            sendFF = "Send";
+            cancelFF = "Cancel";
+        } else if(language=="de"){
+            sendFF = "Abschicken";
+            cancelFF = "Abbrechen";
+        }
+        var opts = {
+            autoOpen: false,
+            position : top,
+            width : 480,
+            height : 300,
+            minWidth : 480,
+            minHeight : 200,
+            draggable : false,
+            resizable : false,
+            modal : false,
+            // two custom buttons
+            buttons : [{
+                id: "sendFF",
+                text: sendFF,
+                click: function(){
+                    ue_sendFF();
+                }
+            },
+            {
+                id: "cancelFF",
+                text: cancelFF,
+                click: function(){
+                    $('#jqFFDialog').dialog("close");
+                }
+            }]
+        };
+        $("#jqFFDialog").dialog(opts);
+    });
+});
+
+
 /**
 * Retrieve the browser information, i.e. the type and version. 
 * Returns a String in the form "<type> <version>"
@@ -42,9 +86,9 @@ function ue_logBrowserAndUser(browser, user){
         cache : false, // needed for IE, call is not made otherwise
         url : link,
         success : function() {
-             //d3web_resetSession();
-             //window.location.reload(true);
-             //initFunctionality();
+        //d3web_resetSession();
+        //window.location.reload(true);
+        //initFunctionality();
         }
     });
 }
@@ -55,18 +99,18 @@ function ue_logWidgetClicked(el){
     
     var now = ue_getCurrentDate();
     if (logging) {
-	    var link = $.query.set("action", "logWidget").set("timestring", now).set("widget", el.attr("id")).toString();
-	    link = window.location.href.replace(window.location.search, "") + link;
+        var link = $.query.set("action", "logWidget").set("timestring", now).set("widget", el.attr("id")).toString();
+        link = window.location.href.replace(window.location.search, "") + link;
 	
-	    $.ajax({
-	        type : "GET",
-	        // async : false,
-	        cache : false, // needed for IE, call is not made otherwise
-	        url : link,
-	        success : function() {
-	        // no action needed
-	        }
-	    });
+        $.ajax({
+            type : "GET",
+            // async : false,
+            cache : false, // needed for IE, call is not made otherwise
+            url : link,
+            success : function() {
+            // no action needed
+            }
+        });
     }
 }
 
@@ -135,8 +179,8 @@ function ue_logInfoPopup(starttime, endtime, widget){
     
     var diffDate = new Date(endtime-starttime);
     var timediff = diffDate.getHours()-1 +  ":" 
-                + diffDate.getMinutes() + ":" 
-                + diffDate.getSeconds();
+    + diffDate.getMinutes() + ":" 
+    + diffDate.getSeconds();
     
     var parentid = widget.parent().attr("id");
     if(parentid.indexOf("text-") != -1){
@@ -166,7 +210,7 @@ function ue_logNotAllowedInput(numInput){
    
     var now = ue_getCurrentDate();       
     var link = $.query.set("action", "logNotAllowed").set("timestring", now)
-        .set("id", getQuestionId(numInput)).set("value", parseInt($(numInput).val()));
+    .set("id", getQuestionId(numInput)).set("value", parseInt($(numInput).val()));
     link = window.location.href.replace(window.location.search, "") + link;
 
     $.ajax({
@@ -197,7 +241,48 @@ function ue_getCurrentDate(){
  */
 function ue_formatDateString(date){
     var datestring = weekday[date.getDay()] + " " + 
-        date.getFullYear() + "_" + date.getMonth()+1 + "_" + date.getDate() + " " + 
-        date.getHours() +  ":" + date.getMinutes() + ":" + date.getSeconds();
+    date.getFullYear() + "_" + date.getMonth()+1 + "_" + date.getDate() + " " + 
+    date.getHours() +  ":" + date.getMinutes() + ":" + date.getSeconds();
     return datestring;
+}
+
+/**
+ * Sends an ajax request to deliver an automatical email with user feedback
+ * to the developers
+ */
+function ue_sendFF(){
+    
+    var user = $('#ffname').val();
+    var contact = $('#ffmail').val();
+    var feedback = $('#fffeedback').val();
+		
+    var link = $.query.set("action", "sendFeedbackMail")
+    .set("user", user)
+    .set("contact", contact)
+    .set("feedback", feedback).toString();
+    
+    var message = "";
+    
+    link = window.location.href.replace(window.location.search, "") + link;
+
+    $.ajax({
+        type : "GET",
+        // async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function(html) {
+            if(html=="success"){
+                // display success message to user?"  
+                $("#ffmessage").html("");
+                $("#ffmessage").removeClass("errorRed");
+                $('#jqFFDialog').dialog("close");
+        
+            } else if(html=="nofeedback"){
+                // display message that feedback is NOT optional 
+                message = "Please fill in the field 'Feedback' before sending the form!";
+                $("#ffmessage").html(message);
+                $("#ffmessage").addClass("errorRed");
+            }
+        }
+    });
 }

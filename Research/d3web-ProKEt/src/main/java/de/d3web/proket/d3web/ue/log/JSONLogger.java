@@ -52,16 +52,13 @@ import java.util.*;
  */
 public class JSONLogger {
 
-    private JSONObject logfile;
-    private JSONArray clickarray;
+    private JSONObject logfile = new JSONObject();
+    private JSONArray clickarray = new JSONArray();
+    private String filename = "defaultlog.txt";
     private static final long serialVersionUID = -5766536853041423918L;
 
-    /**
-     * Constructor of JSONLogger class; due to Singleton pattern private-only.
-     */
-    public JSONLogger() {
-        logfile = new JSONObject();
-        clickarray = new JSONArray();
+    public JSONLogger(String filename) {
+        this.filename = filename;
     }
 
     /**
@@ -150,10 +147,10 @@ public class JSONLogger {
     }
 
     /**
-     * Restore values from a given existing JSON file into this currently
-     * logged file.
-     * 
-     * @param oldJSON the existing JSON 
+     * Restore values from a given existing JSON file into this currently logged
+     * file.
+     *
+     * @param oldJSON the existing JSON
      */
     public void restore(JSONObject oldJSON) {
         Set<String> keysOld = oldJSON.keySet();
@@ -162,9 +159,13 @@ public class JSONLogger {
             if (saved instanceof String) {
                 logfile.put(key, ((String) saved).replace("\"", ""));
             } else if (saved instanceof JSONArray) {
-                clickarray = (JSONArray)saved;
+                clickarray = (JSONArray) saved;
             }
         }
+    }
+
+    public void setLogfileName(String logfilename) {
+        this.filename = logfilename;
     }
 
     /**
@@ -173,7 +174,7 @@ public class JSONLogger {
      *
      * @param file the file, the logdata is written to.
      */
-    public void writeJSONToFile(String file) {
+    public void writeJSONToFile() {
         BufferedWriter bw = null;
 
         try {
@@ -181,7 +182,7 @@ public class JSONLogger {
             if (!dir.exists()) {
                 dir.mkdirs();
             }
-            String filepath = dir + "/" + file;
+            String filepath = dir + "/" + filename;
 
             bw = new BufferedWriter(new FileWriter(filepath));
             bw.write(getLogAsJSON().toString());
@@ -203,8 +204,21 @@ public class JSONLogger {
         }
     }
 
+    public void writeEndToIntermedEnd() {
+
+        String prevEnd = "";
+        if (logfile.get(UETerm.END.toString()) != null) {
+            prevEnd = (String) logfile.get(UETerm.END.toString());
+
+            if (!prevEnd.equals("")) {
+                    logfile.put(UETerm.BREAK.toString(), prevEnd);
+                
+            }
+        }
+    }
+
     public static void main(String[] args) {
-        JSONLogger logger = new JSONLogger();
+        JSONLogger logger = new JSONLogger("tester.txt");
         logger.logBrowserValue("firefox");
         logger.logUserValue("user");
         logger.logResultValue("result");
@@ -215,7 +229,7 @@ public class JSONLogger {
 
         logger.logClickedObjects("id2", "nowlater", "answer2");
 
-        logger.writeJSONToFile("TESTI.txt");
+        logger.writeJSONToFile();
 
         int ch;
         StringBuffer strContent = new StringBuffer("");

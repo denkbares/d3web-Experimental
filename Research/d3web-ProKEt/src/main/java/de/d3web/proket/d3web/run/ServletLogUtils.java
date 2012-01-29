@@ -46,32 +46,7 @@ import org.json.simple.JSONObject;
 // Here, ONLY the helper methods are allowed!
 public class ServletLogUtils {
 
-    private static final SimpleDateFormat DATE_FORMAT_DEFAULT =
-            new SimpleDateFormat("yyyyMMdd_HHmmss");
-    protected static String logfilename = "";
-    protected static JSONLogger logger = null;
-
-    /**
-     * Initializes the logging helper servlet by getting the logger, and
-     * assembling the logfilename (date plus d3web-sessionid)
-     *
-     * @param jlogger
-     * @param loggingstart
-     */
-    protected static void initForD3wDialogs(
-            JSONLogger jlogger, Date loggingstart) {
-
-        logger = jlogger; // set the logger
-
-        // format timestring for logfilename
-        String formatted = DATE_FORMAT_DEFAULT.format(loggingstart);
-        String sid = D3webConnector.getInstance().getSession().getId();
-
-        logfilename = formatted + "_" + sid + ".txt";
-
-        // TODO: also initialize logging folder here?!
-    }
-
+    
     /**
      * Initializes the logging helper servlet by getting the logger, and
      * assembling the logfilename (date plus ???) for logging prototypes
@@ -80,7 +55,7 @@ public class ServletLogUtils {
      * @param loggingstart
      * @param httpsess
      */
-    public static void initForPrototypeDialogs(
+   /* public static void initForPrototypeDialogs(
             JSONLogger jlogger, 
             Date loggingstart, 
             HttpSession httpsess) {
@@ -108,7 +83,7 @@ public class ServletLogUtils {
      * @param idToCheck part of the name of the potentially already existing
      * logfile name.
      */
-    public static void resetLogfileName(String idToCheck) {
+    public static void resetLogfileName(String idToCheck, JSONLogger logger) {
 
         List<File> logfiles = JSONReader.getInstance().retrieveAllLogfiles(
                 GlobalSettings.getInstance().getLogFolder());
@@ -120,9 +95,9 @@ public class ServletLogUtils {
 
                 JSONObject oldContents =
                         JSONReader.getInstance().getJSONFromTxtFile(f.getAbsolutePath());
-                logfilename = f.getName();
+                logger.setLogfileName(f.getName());
                 logger.restore(oldContents);
-                logger.writeJSONToFile(logfilename);
+                logger.writeJSONToFile();
             }
         }
     }
@@ -136,7 +111,8 @@ public class ServletLogUtils {
      * @param browser the browser used
      * @param user the user that is logged
      */
-    public static void logBaseInfo(String browser, String user, String start) {
+    public static void logBaseInfo(String browser, String user, String start,
+            JSONLogger logger) {
 
         // TODO: adapt if not global anymore
         // give values to logger
@@ -144,7 +120,7 @@ public class ServletLogUtils {
         logger.logBrowserValue(browser);
         logger.logUserValue(user);
 
-        logger.writeJSONToFile(logfilename);
+        logger.writeJSONToFile();
 
     }
 
@@ -155,9 +131,9 @@ public class ServletLogUtils {
      *
      * @param end String representation of logging end time
      */
-    protected static void logSessionEnd(String end) {
+    protected static void logSessionEnd(String end, JSONLogger logger) {
         logger.logEndValue(end);
-        logger.writeJSONToFile(logfilename);
+        logger.writeJSONToFile();
     }
 
     /**
@@ -169,7 +145,8 @@ public class ServletLogUtils {
      * @param language the language, when a language widget was clicked
      */
     //TODO: factor out click on language widget?!
-    protected static void logWidget(String widgetID, String time, String language) {
+    protected static void logWidget(String widgetID, String time, String language,
+            JSONLogger logger) {
 
         if (widgetID.contains("LANGUAGE")) {
             logger.logClickedObjects(
@@ -192,7 +169,7 @@ public class ServletLogUtils {
                         "SAVE", time, "SAVE");
             }
         }
-        logger.writeJSONToFile(logfilename);
+        logger.writeJSONToFile();
 
     }
 
@@ -202,9 +179,10 @@ public class ServletLogUtils {
      * @param time
      * @param session id of the resumed session
      */
-    protected static void logResume(String time, String session) {
+    protected static void logResume(String time, String session, JSONLogger logger) {
+        logger.writeEndToIntermedEnd();
         logger.logClickedObjects("LOAD", time, session);
-        logger.writeJSONToFile(logfilename);
+        logger.writeJSONToFile();
     }
 
     /**
@@ -214,9 +192,10 @@ public class ServletLogUtils {
      * @param start
      * @param timediff
      */
-    protected static void logInfoPopup(String id, String start, String timediff) {
+    protected static void logInfoPopup(String id, String start, String timediff,
+            JSONLogger logger) {
         logger.logClickedObjects(id, start, timediff);
-        logger.writeJSONToFile(logfilename);
+        logger.writeJSONToFile();
     }
 
     /**
@@ -227,9 +206,10 @@ public class ServletLogUtils {
      * @param value
      * @param logtime
      */
-    protected static void logQuestionValue(String question, String value, String logtime) {
+    protected static void logQuestionValue(String question, String value, String logtime,
+            JSONLogger logger) {
         logger.logClickedObjects(question, logtime, value);
-        logger.writeJSONToFile(logfilename);
+        logger.writeJSONToFile();
     }
 
     /**
@@ -238,12 +218,13 @@ public class ServletLogUtils {
      *
      * @param request
      */
-    protected static void logNotAllowed(String logtime, String value, String question) {
+    protected static void logNotAllowed(String logtime, String value, String question,
+            JSONLogger logger) {
 
         logger.logClickedObjects(
                 "NOTALLOWED_" + question,
                 logtime,
                 value);
-        logger.writeJSONToFile(logfilename);
+        logger.writeJSONToFile();
     }
 }
