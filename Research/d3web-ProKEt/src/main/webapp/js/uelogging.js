@@ -17,9 +17,9 @@ $(function(){
             autoOpen: false,
             position : top,
             width : 480,
-            height : 300,
+            height : 350,
             minWidth : 480,
-            minHeight : 200,
+            minHeight : 300,
             draggable : false,
             resizable : false,
             modal : false,
@@ -40,6 +40,48 @@ $(function(){
             }]
         };
         $("#jqFFDialog").dialog(opts);
+    });
+    
+    /* Usability Extension: Usability Questionnaire */
+    $(function() {
+
+        var sendUEQ, cancelUEQ;
+        if(language=="en"){
+            sendUEQ = "Send";
+            cancelUEQ = "Cancel";
+        } else if(language=="de"){
+            sendUEQ = "Abschicken";
+            cancelUEQ = "Abbrechen";
+        }
+        
+        
+        var opts = {
+            autoOpen: false,
+            position : top,
+            width : 600,
+            height : 550,
+            minWidth : 500,
+            minHeight : 450,
+            draggable : false,
+            resizable : false,
+            modal : false,
+            // two custom buttons
+            buttons : [{
+                id: "sendUEQ",
+                text: sendUEQ,
+                click: function(){
+                    ue_sendUEQ();
+                }
+            },
+            {
+                id: "cancelUEQ",
+                text: cancelUEQ,
+                click: function(){
+                    $('#jqUEQDialog').dialog("close");
+                }
+            }]
+        };
+        $("#jqUEQDialog").dialog(opts);
     });
 });
 
@@ -285,4 +327,85 @@ function ue_sendFF(){
             }
         }
     });
+}
+
+
+/**
+ * Sends an ajax request to deliver an automatical email with user feedback
+ * to the developers
+ */
+function ue_sendUEQ(){
+    
+    var user = $('#ueqname').val();
+    var contact = $('#ueqmail').val();
+    var questionnaireData = ue_retrieveQuestionnaireData();
+    if(!ue_dataComplete(questionnaireData)){
+        // display message that feedback is NOT optional 
+        message = "Please fill in the complete survey!";
+        $("#ueqMessage").html(message);
+        $("#ueqMessage").addClass("errorRed");
+        
+    } else {
+        
+        var link = $.query.set("action", "sendUEQMail")
+        .set("user", user)
+        .set("contact", contact)
+        .set("questionnaireData", questionnaireData).toString();
+    
+        var message = "";
+    
+        link = window.location.href.replace(window.location.search, "") + link;
+
+        $.ajax({
+            type : "GET",
+            // async : false,
+            cache : false, // needed for IE, call is not made otherwise
+            url : link,
+            success : function(html) {
+                if(html=="success"){
+                    // display success message to user?"  
+                    $("#ueqMessage").html("");
+                    $("#ueqMessage").removeClass("errorRed");
+                    $('#jqUEQDialog').dialog("close");
+        
+                } 
+            }
+        });
+    }
+
+}
+
+/**
+ * Retrieves the data = question-value-pairs of the currently integrated
+ * usability questionnaire in div "ueq"
+ * returns Questionnaire Data in format: 
+ *  questionID1***value1###questionID2***value2###
+ */
+function ue_retrieveQuestionnaireData(){
+    
+    var qData = "";
+    
+    $("#ueq input:radio:checked").each(function(){
+        qData += $(this).attr("id") + "---" + $(this).attr("value") + "###"; 
+    });
+    
+    return qData;
+}
+
+/**
+ * Checks whether the given questionnaire data (q-a-pairs) reflect the complete
+ * questionnaire or whether some questions hadn't been answered
+ */
+function ue_dataComplete(qData){
+    
+    var testid;
+    var flag = true;
+    
+    $("#ueq input:radio").each(function(){
+        testid = $(this).attr("id");
+        if(qData.indexOf(testid)==-1){
+            flag = false;
+        }
+    });
+    return flag;
 }

@@ -37,6 +37,12 @@ $endif$
 					</div>
 				$endif$
 
+                                $if(ueq)$
+					<div class="leftButton">
+						$ButtonUEQuestionnaire()$
+					</div>
+				$endif$
+
 			</td>
 			<td width=*>
 				$header$

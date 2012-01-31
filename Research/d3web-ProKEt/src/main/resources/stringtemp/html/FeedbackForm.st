@@ -1,6 +1,6 @@
 <div id="jqFFDialog" class="feedbackform" title="Feedback">
 
-    <div id="ffexplanation"> 
+    <div id="ffexplanation" class="margBott"> 
     For sending us your feedback, please fill in the fields below. 
     Name and EMail are optional, but may be useful in case you sent us a question
     or would like us to respond to you directly.
@@ -12,15 +12,15 @@
     <tbody>
         <tr>
             <td width="60px;">Name:</td>
-            <td><input id="ffname" /></td> 
+            <td><input id="ffname" class="longTextfield"/></td> 
 	</tr>
 	<tr>
 		<td width="60px;">EMail:</td>
-		<td><input id="ffmail" /></td> 
+		<td><input id="ffmail" class="longTextfield"/></td> 
 	</tr>
         <tr>
             <td width="60px;">Feedback:</td>
-            <td><textarea id="fffeedback" cols="30" rows="3"></textarea></td> 
+            <td><textarea id="fffeedback" class="longTextarea"></textarea></td> 
 	</tr>
 					
     </tbody>

@@ -89,6 +89,9 @@ public class DefaultRootD3webRenderer extends AbstractD3webRenderer implements R
                     st.setAttribute("feedback", "true");
                 }
 
+                if(D3webConnector.getInstance().getUEQuestionnaire()){
+                    st.setAttribute("ueq", "true");
+                }
 		/*
 		 * handle custom ContainerCollection modification, e.g., enabling
 		 * certain JS stuff

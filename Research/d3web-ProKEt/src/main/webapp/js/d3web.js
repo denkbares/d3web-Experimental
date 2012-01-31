@@ -355,8 +355,11 @@ function initFunctionality() {
      * textareas
      */
     $('[type=radio]').unbind('click').click(function() {
+        
+        if($(this).attr("id").indexOf("UE_")==-1){
         d3web_storeQuestionOC($(this));
         d3web_addFacts();
+        }
     });
 	
 	
@@ -459,6 +462,10 @@ function initFunctionality() {
     
      $('#FFButton').unbind('click').click(function(event) {
         $("#jqFFDialog").dialog("open");
+    });
+    
+    $('#UEQButton').unbind('click').click(function(event) {
+        $("#jqUEQDialog").dialog("open");
     });
     
     // click on language toggle
@@ -1257,4 +1264,7 @@ function toggleLanguage(el){
             initFunctionality();
         }
     });
+    
+    
 }
+

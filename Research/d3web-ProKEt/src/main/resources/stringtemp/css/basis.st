@@ -126,3 +126,13 @@ body,table,div {
 .rightButton { float: right; margin-right: 10px; }
 
 .leftButton { float: left; margin-right: 5px;}
+
+
+
+.textAlignRight {text-align: right}
+
+.longTextfield {width: 250px;}
+
+.longTextarea {width:250px; height: 100px; resize: none;}
+
+.margBott {margin-bottom: 10px;}

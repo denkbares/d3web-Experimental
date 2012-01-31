@@ -250,6 +250,10 @@ public class D3webXMLParser {
         public String getFeedbackform() {
 		return XMLUtils.getStr((Element) dialogSpec, "feedbackform", "OFF");
 	}
+        
+        public String getUEQuestionnaire() {
+		return XMLUtils.getStr((Element) dialogSpec, "uequestionnaire", "OFF");
+	}
 
 	public HashMap<String, HashMap<String, String>> getSingleSpecs() {
 		HashMap<String, HashMap<String, String>> specs =
