@@ -95,6 +95,26 @@ function setup() {
         handleLogging();
     }
     
+    if(ueq){
+        handleUEQ();
+    }
+    
+    if(feedback){
+        handleFB();
+    }
+    
+}
+
+function handleUEQ(){
+    $('#UEQButton').unbind('click').click(function(event) {
+        $("#jqUEQDialog").dialog("open");
+    });
+}
+
+function handleFB(){
+    $('#FFButton').unbind('click').click(function(event) {
+        $("#jqFFDialog").dialog("open");
+    });
 }
 
 function handleLogging(){

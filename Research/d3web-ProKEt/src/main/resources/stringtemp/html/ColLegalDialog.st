@@ -3,6 +3,8 @@ $HTMLHeader()$
 <body>
 <div id="head">
 	$header$
+
+       
 </div>
 
 <div id="content">

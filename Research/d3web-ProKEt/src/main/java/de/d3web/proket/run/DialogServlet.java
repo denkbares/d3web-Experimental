@@ -35,6 +35,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -101,7 +108,34 @@ public class DialogServlet extends HttpServlet {
         } else if (action.equalsIgnoreCase("logInit")) {
             logInitially(request, response, httpSession);
             return;
-        }
+        } else if (action.equalsIgnoreCase("sendFeedbackMail")) {
+            String state = "";
+            if (request.getParameter("feedback") != null) {
+                if (request.getParameter("feedback").equals("")) {
+                    state = "nofeedback";
+                } else {
+                    try {
+                        sendFeedbackMail(request, response, httpSession);
+                        state = "success";
+                    } catch (MessagingException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+            response.getWriter().append(state);
+            return;
+        } else if (action.equalsIgnoreCase("sendUEQMail")) {
+
+            try {
+                sendUEQMail(request, response, httpSession);
+                response.getWriter().append("success");
+            } catch (MessagingException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return;
+        } 
     }
 
     /**
@@ -196,7 +230,7 @@ public class DialogServlet extends HttpServlet {
         String source = "Standarddialog";
         if (request.getParameter("src") != null) {
             source = request.getParameter("src");
-        }
+        } 
        
         // parse the input source
         XMLParser parser = new XMLParser(source);
@@ -212,5 +246,142 @@ public class DialogServlet extends HttpServlet {
         //String sid = D3webConnector.getInstance().getSession().getId();
 
         return formatted + "_" + sid + ".txt";
+    }
+    
+    protected void sendFeedbackMail(HttpServletRequest request,
+            HttpServletResponse response,
+            HttpSession httpSession) throws MessagingException {
+
+        final String user = "SendmailAnonymus@freenet.de";
+        final String pw = "sendmail";
+
+        final String username = request.getParameter("user").toString();
+        final String contact = request.getParameter("contact").toString();
+        final String feedback = request.getParameter("feedback").toString();
+
+        /*
+         * setup properties for mail server
+         */
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "mx.freenet.de");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.user", user);
+        props.put("mail.password", pw);
+        // props.put("mail.debug", "true");
+
+        javax.mail.Session session = javax.mail.Session.getDefaultInstance(props,
+                new javax.mail.Authenticator() {
+
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(user, pw);
+                    }
+                });
+
+        MimeMessage message = new MimeMessage(session);
+
+        // from-identificator
+        InternetAddress from = new InternetAddress(user);
+        message.setFrom(from);
+
+        // default toAddress --> developer/evaluator interested in feedback
+        String toAddress = "freiberg@informatik.uni-wuerzburg.de";
+        InternetAddress to = new InternetAddress(toAddress);
+        message.addRecipient(Message.RecipientType.TO, to);
+
+        /*
+         * Constructing the message
+         */
+        //TODO include dialog flag here
+        // TODO refactor: used both by d3web dialogs and normal prototypes ?!
+        /*String dialogFlag = d3wcon.getUserprefix();
+        if (dialogFlag == null) {
+            dialogFlag = "";
+        }*/
+        message.setSubject("Feedback");
+
+        message.setText("Username:\t" + username + "\n"
+                + "Contact: \t" + contact + "\n\n"
+                + "Feedback:\n"
+                + feedback.replace("+", " "));
+        Transport.send(message);
+
+    }
+    
+    protected void sendUEQMail(HttpServletRequest request,
+            HttpServletResponse response,
+            HttpSession httpSession) throws MessagingException {
+
+       
+        final String user = "SendmailAnonymus@freenet.de";
+        final String pw = "sendmail";
+
+        final String username = request.getParameter("user").toString();
+        final String contact = request.getParameter("contact").toString();
+        final String qData = request.getParameter("questionnaireData").toString();
+
+        /*
+         * setup properties for mail server
+         */
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "mx.freenet.de");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.user", user);
+        props.put("mail.password", pw);
+        // props.put("mail.debug", "true");
+
+        javax.mail.Session session = javax.mail.Session.getDefaultInstance(props,
+                new javax.mail.Authenticator() {
+
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(user, pw);
+                    }
+                });
+
+        MimeMessage message = new MimeMessage(session);
+
+        // from-identificator
+        InternetAddress from = new InternetAddress(user);
+        message.setFrom(from);
+
+        // default toAddress --> developer/evaluator interested in feedback
+        String toAddress = "freiberg@informatik.uni-wuerzburg.de";
+        InternetAddress to = new InternetAddress(toAddress);
+        message.addRecipient(Message.RecipientType.TO, to);
+
+        /*
+         * Constructing the message
+         *  Questionnaire Data: questionID1***value1###questionID2***value2###
+         */
+        
+        String[] qvpairs = qData.split("###");
+        StringBuilder qDataBui = new StringBuilder();
+        
+        for(String pair : qvpairs){
+            String[] splitpair = pair.split("---");
+            qDataBui.append(splitpair[0].replace("UE_", ""));
+            qDataBui.append(" --> ");
+            qDataBui.append(splitpair[1]);
+            qDataBui.append("\n");
+        }
+        
+        // TODO find way to include dialog name here
+        /*String dialogFlag = d3wcon.getUserprefix();
+        if (dialogFlag == null) {
+            dialogFlag = "";
+        }*/
+        message.setSubject("UE Questionnaire Data");
+
+        message.setText("Username:\t" + username + "\n"
+                + "Contact: \t" + contact + "\n\n"
+                + "Questionnaire Data:\n"
+                + qDataBui.toString().replace("_", " "));
+        Transport.send(message);
+
     }
 }

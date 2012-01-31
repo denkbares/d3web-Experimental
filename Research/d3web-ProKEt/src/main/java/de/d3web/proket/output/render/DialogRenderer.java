@@ -120,7 +120,19 @@ public class DialogRenderer extends Renderer {
 			if(dialog.isLogging()){
                             cc.js.enableClickLogging();
                         }
-			makeNavigation(dialogObject, st);
+                        
+                        
+                        if(dialog.hasFeedback()){
+                            st.setAttribute("feedback", true);
+                            cc.js.enableFeedback();
+                        }
+                        
+                        if(dialog.hasUequest()){
+                            st.setAttribute("ueq", true);
+                            cc.js.enableUEQuestionnaire();
+                        }   
+                        
+                        makeNavigation(dialogObject, st);
 			
 		}
 

@@ -1205,7 +1205,7 @@ public class D3webDialog extends HttpServlet {
         for(String pair : qvpairs){
             String[] splitpair = pair.split("---");
             qDataBui.append(splitpair[0].replace("UE_", ""));
-            qDataBui.append("::::");
+            qDataBui.append(" --> ");
             qDataBui.append(splitpair[1]);
             qDataBui.append("\n");
         }

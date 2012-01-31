@@ -181,5 +181,6 @@ LOGGING
 USABILITY EXTENSION
 -------------------
 - feedback form for prototypes also!
-- write questionnaire data to files
+- write questionnaire data to files --> refactor sendmail to send this file
+instead of text in mail?! (needed, files will be stored on server also
 - tweak styling of feedback/questionnaire dialogs

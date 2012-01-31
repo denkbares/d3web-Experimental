@@ -44,6 +44,11 @@ public class JSCodeContainer implements ICodeContainer {
     private boolean logging = false;
     private boolean hierarchy = false;
 
+    private boolean feedback = false;
+
+    private boolean ueq = false;
+
+    
     @Override
     public void add(String data) {
         add(data, 0);
@@ -91,6 +96,14 @@ public class JSCodeContainer implements ICodeContainer {
     public void enableClickLogging() {
         logging = true;
     }
+    
+    public void enableFeedback() {
+        feedback = true;
+    }
+    
+    public void enableUEQuestionnaire() {
+        ueq = true;
+    }
 
     /**
      * Putting together the complete JS-defining and -linking String
@@ -112,6 +125,8 @@ public class JSCodeContainer implements ICodeContainer {
         linkedBibs.add("jquery/jquery.customFileInput.js");
         linkedBibs.add("jquery/jquery.print.js");
         linkedBibs.add("jqueryUI/jqueryUi-1.8.10.all.min.js");
+        
+        ownBibs.add("uelogging.js");
 
         // manage language mechanism
         String lang = D3webConnector.getInstance().getLanguage();
@@ -161,7 +176,7 @@ public class JSCodeContainer implements ICodeContainer {
         }
 
         if (logging) {
-            ownBibs.add("uelogging.js");
+            
             add("var logging = true;", 0);
 
         } else {
@@ -174,6 +189,21 @@ public class JSCodeContainer implements ICodeContainer {
         } else {
             add("var hierarchy = false", 0);
         }
+        
+        if (feedback) {
+            add("var feedback = true", 0);
+        } else {
+            add("var feedback = false", 0);
+        }
+        
+         if (ueq) {
+            add("var ueq = true", 0);
+        } else {
+            add("var ueq = false", 0);
+        }
+        
+        
+        
         // SECOND assemble bibs and singular js data to a string
         // assemble all defined bibs to one String
         for (String filename : linkedBibs) {

@@ -5,9 +5,27 @@ $HTMLHeader()$
 	$header$
 </div>
 
+
+
 <div id="middle">
-	<div id="content">
-		<div class="dialog">
+
+    <div id="content">
+    
+        <div id="ueqButtons">
+            $if(feedback)$
+                <div class="leftButton">
+                $FeedbackButton()$
+                </div>
+            $endif$
+        
+            $if(ueq)$
+                <div class="leftButton">
+                $ButtonUEQuestionnaire()$
+                </div>
+            $endif$
+        </div>
+
+	<div class="dialog">
 			$if(title)$<div id="dialog-title">$title$</div>$endif$
 			$if(text)$$text$$endif$
 	

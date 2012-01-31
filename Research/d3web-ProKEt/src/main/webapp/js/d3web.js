@@ -460,6 +460,7 @@ function initFunctionality() {
         gotoStatistics();
     });
     
+    // TODO REFACTOR: is used both here and in Code.js
      $('#FFButton').unbind('click').click(function(event) {
         $("#jqFFDialog").dialog("open");
     });
