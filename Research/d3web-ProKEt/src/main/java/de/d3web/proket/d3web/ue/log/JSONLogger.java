@@ -39,6 +39,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import de.d3web.proket.utils.GlobalSettings;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -184,7 +185,8 @@ public class JSONLogger {
             }
             String filepath = dir + "/" + filename;
 
-            bw = new BufferedWriter(new FileWriter(filepath));
+            Writer w = new OutputStreamWriter(new FileOutputStream(filepath), "UTF8");
+            bw = new BufferedWriter(w);
             bw.write(getLogAsJSON().toString());
 
         } catch (FileNotFoundException ex) {
