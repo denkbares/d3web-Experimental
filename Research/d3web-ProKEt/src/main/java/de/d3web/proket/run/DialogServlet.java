@@ -20,7 +20,7 @@
 package de.d3web.proket.run;
 
 import de.d3web.proket.d3web.run.ServletLogUtils;
-import de.d3web.proket.d3web.ue.log.JSONLogger;
+import de.d3web.proket.d3web.ue.JSONLogger;
 import de.d3web.proket.data.DialogTree;
 import de.d3web.proket.input.xml.IParser;
 import de.d3web.proket.input.xml.ParseException;

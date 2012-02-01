@@ -162,7 +162,6 @@ KLÄREN ALBRECHT:
 
 
 
-
 INTERNET EXPLORER QUIRKS
 ------------------------
 - popups are displayed completely transparent --> obviously IE doesn't display
@@ -173,7 +172,7 @@ LOGGING
 -------
 - Dateinamen für Logfiles? Currently: Date(yyMMdd)_Session.txt
 - Unter welchem Namen gecklickte Widgets speichern?! (für Fragen momentan Fragename)
-- Umlaute (zB Mediastinitis)
+DONE - Umlaute (zB Mediastinitis)
 - Logging of image answers
 - check sind alle wichtigen Elemente geloggt?
 

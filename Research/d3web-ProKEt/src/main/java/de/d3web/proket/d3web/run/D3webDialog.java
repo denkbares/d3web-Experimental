@@ -63,7 +63,7 @@ import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
 import de.d3web.proket.d3web.output.render.IQuestionD3webRenderer;
 import de.d3web.proket.d3web.output.render.SummaryD3webRenderer;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
-import de.d3web.proket.d3web.ue.log.JSONLogger;
+import de.d3web.proket.d3web.ue.JSONLogger;
 import de.d3web.proket.d3web.utils.PersistenceD3webUtils;
 import de.d3web.proket.database.DB;
 import de.d3web.proket.database.DateCoDec;

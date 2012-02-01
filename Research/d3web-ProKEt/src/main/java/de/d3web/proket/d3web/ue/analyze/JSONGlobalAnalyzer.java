@@ -21,6 +21,7 @@ package de.d3web.proket.d3web.ue.analyze;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.json.simple.JSONObject;
 
@@ -61,6 +62,20 @@ public class JSONGlobalAnalyzer {
         return jsonreader.retrieveAllLogfilesAsJSON(getRootDir());
     }
 
+    // TODO how to handle Multiple Flow Cases?!?! sind doch nur 1-fiule?!?!
+    public List<JSONObject> getAllSuccessfulCases(JSONFileAnalyzer filea){
+        
+        List<JSONObject> jsonsOneFlow = getOneFlowCases(filea);
+        //List<JSONObject> jsonsMultipleFlow = getMultipleFlowCases(filea);
+        List<JSONObject> successful = new ArrayList<JSONObject>();
+        
+        successful.addAll(jsonsOneFlow);
+        //Collections.addAll(successful, jsonsMultipleFlow.toArray(mulFlowA));
+        
+        return successful;
+        
+    }
+    
     /**
      * Retrieves all cases within the root directory that had been worked
      * through in one flow, thus containing both a start and end time value
@@ -82,12 +97,19 @@ public class JSONGlobalAnalyzer {
         return oneFlowJsons;
     }
 
+    /**
+     * Retrieves the number of cases that had NOT been entered in one workflow.
+     * Such cases contain at 
+     * @param filea
+     * @return 
+     */
     public List<List<JSONObject>> getMultipleFlowCases(JSONFileAnalyzer filea) {
         List<JSONObject> jsons =
-                jsonreader.retrieveAllLogfilesAsJSON(getRootDir());
+                getAllCases();
         List<List<JSONObject>> multipleFlowJsons =
                 new ArrayList<List<JSONObject>>();
-
+        List<File> allFilesInDir = jsonreader.retrieveAllLogfiles(getRootDir());
+        
 
         for (JSONObject json : jsons) {
 
@@ -97,7 +119,7 @@ public class JSONGlobalAnalyzer {
                 List<JSONObject> mjs = new ArrayList<JSONObject>();
                 mjs.add(json);
 
-                recurseMultipleFlows(mjs, json, filea);
+                recurseMultipleFlows(mjs, json, filea, allFilesInDir);
 
                 multipleFlowJsons.add(mjs);
             }
@@ -105,17 +127,20 @@ public class JSONGlobalAnalyzer {
         return multipleFlowJsons;
     }
 
-    private void recurseMultipleFlows(List<JSONObject> mjs, JSONObject json, JSONFileAnalyzer filea) {
-
+    private void recurseMultipleFlows(List<JSONObject> mjs, JSONObject json, JSONFileAnalyzer filea,
+            List<File> filesToCheck) {
+        List restToCheck = new ArrayList<File>();
+        Collections.copy(filesToCheck, restToCheck);
+        
         String session = filea.getLoadValue(json);
-        for (File f : jsonreader.retrieveAllLogfiles(getRootDir())) {
+        for (File f : filesToCheck) {
             if (f.getName().contains(session)) {
-                System.out.println("found next part: " + f.getName());
-
+                
                 JSONObject newmjo = jsonreader.getJSONFromTxtFile(f.getAbsolutePath());
                 mjs.add(newmjo);
-
-                recurseMultipleFlows(mjs, newmjo, filea);
+                restToCheck.remove(f);
+                
+                recurseMultipleFlows(mjs, newmjo, filea, restToCheck);
             }
         }
     }

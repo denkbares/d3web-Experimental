@@ -21,7 +21,7 @@ package de.d3web.proket.d3web.run;
 
 import de.d3web.proket.d3web.input.D3webConnector;
 import de.d3web.proket.d3web.ue.analyze.JSONReader;
-import de.d3web.proket.d3web.ue.log.JSONLogger;
+import de.d3web.proket.d3web.ue.JSONLogger;
 import de.d3web.proket.utils.GlobalSettings;
 import java.io.File;
 import java.text.SimpleDateFormat;

@@ -282,8 +282,10 @@ function ue_getCurrentDate(){
  * Mo 2012_01_24 02:30:59
  */
 function ue_formatDateString(date){
+    var month = 1+date.getMonth();
+    
     var datestring = weekday[date.getDay()] + " " + 
-    date.getFullYear() + "_" + date.getMonth()+1 + "_" + date.getDate() + " " + 
+    date.getFullYear() + "_" + month + "_" + date.getDate() + " " + 
     date.getHours() +  ":" + date.getMinutes() + ":" + date.getSeconds();
     return datestring;
 }

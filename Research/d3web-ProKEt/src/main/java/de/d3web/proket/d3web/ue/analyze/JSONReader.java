@@ -19,7 +19,7 @@
  */
 package de.d3web.proket.d3web.ue.analyze;
 
-import de.d3web.proket.d3web.ue.log.UETerm;
+import de.d3web.proket.d3web.ue.UETerm;
 import java.io.*;
 import java.util.*;
 import org.json.simple.JSONArray;
