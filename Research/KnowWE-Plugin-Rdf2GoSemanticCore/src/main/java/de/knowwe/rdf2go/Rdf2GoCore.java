@@ -40,6 +40,7 @@ import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.ontoware.aifbcommons.collection.ClosableIterable;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.Reasoning;
@@ -219,10 +220,8 @@ public class Rdf2GoCore implements EventListener {
 	/**
 	 * add a namespace to the model
 	 * 
-	 * @param sh
-	 *            prefix
-	 * @param ns
-	 *            url
+	 * @param sh prefix
+	 * @param ns url
 	 */
 	public void addNamespace(String sh, String ns) {
 		namespaces.put(sh, ns);
@@ -469,10 +468,11 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	public boolean sparqlAsk(String query) throws ModelRuntimeException, MalformedQueryException {
-		if (query.startsWith(getSparqlNamespaceShorts())) {
+		String sparqlNamespaceShorts = getSparqlNamespaceShorts();
+		if (query.startsWith(sparqlNamespaceShorts)) {
 			return model.sparqlAsk(query);
 		}
-		return model.sparqlAsk(getSparqlNamespaceShorts() + query);
+		return model.sparqlAsk(sparqlNamespaceShorts + query);
 	}
 
 	/**
@@ -482,11 +482,9 @@ public class Rdf2GoCore implements EventListener {
 	 * provide a consistent model.
 	 * 
 	 * @created 14.12.2011
-	 * @param query
-	 *            the query to be ask
-	 * @param sec
-	 *            the section determining the statements to be excluded for the
-	 *            query
+	 * @param query the query to be ask
+	 * @param sec the section determining the statements to be excluded for the
+	 *        query
 	 * @return
 	 * @throws ModelRuntimeException
 	 * @throws MalformedQueryException
@@ -521,14 +519,14 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	/**
-	 * Calculates the Set-subtraction of the inference closure of the model with and without the
-	 * statements created by the given section
+	 * Calculates the Set-subtraction of the inference closure of the model with
+	 * and without the statements created by the given section
 	 * 
 	 * @created 02.01.2012
 	 * @param sec
 	 * @return
 	 * @throws ModelRuntimeException
-	 * @throws MalformedQueryException 
+	 * @throws MalformedQueryException
 	 */
 	public Collection<Statement> generateStatementDiffForSection(Section<?> sec) throws ModelRuntimeException, MalformedQueryException {
 
@@ -538,7 +536,6 @@ public class Rdf2GoCore implements EventListener {
 		WeakHashMap<Section<? extends Type>, List<Statement>> allStatmentSectionsOfArticle =
 				statementcache.get(sec.getTitle());
 		List<Statement> statementsOfSection = allStatmentSectionsOfArticle.get(sec);
-
 
 		// remove these statements
 		if (statementsOfSection != null) {
@@ -552,7 +549,6 @@ public class Rdf2GoCore implements EventListener {
 			model.addAll(statementsOfSection.iterator());
 		}
 
-
 		return includingSection;
 
 	}
@@ -565,6 +561,13 @@ public class Rdf2GoCore implements EventListener {
 		}
 
 		return result;
+	}
+
+	public ClosableIterable<Statement> sparqlConstruct(String query) throws ModelRuntimeException, MalformedQueryException {
+		if (query.startsWith(getSparqlNamespaceShorts())) {
+			return model.sparqlConstruct(query);
+		}
+		return model.sparqlConstruct(getSparqlNamespaceShorts() + query);
 	}
 
 	public QueryResultTable sparqlSelect(String query) throws ModelRuntimeException, MalformedQueryException {
@@ -819,7 +822,7 @@ public class Rdf2GoCore implements EventListener {
 	}
 
 	public String getSparqlNamespaceShorts() {
-		StringBuffer buffy = new StringBuffer();
+		StringBuilder buffy = new StringBuilder();
 
 		for (Entry<String, String> cur : namespaces.entrySet()) {
 			buffy.append("PREFIX " + cur.getKey() + ": <" + cur.getValue() + "> \n");
@@ -970,13 +973,10 @@ public class Rdf2GoCore implements EventListener {
 	 * Resource is of the right type if applicable (eg attachto RDF.TYPE
 	 * RDF.STATEMENT)
 	 * 
-	 * @param attachto
-	 *            The Resource that will be annotated bei the TO-Node
-	 * @param source
-	 *            The source section that should be used
-	 * @param io
-	 *            the ex-IntermediateOwlObject (now List<Statements> that should
-	 *            collect the statements
+	 * @param attachto The Resource that will be annotated bei the TO-Node
+	 * @param source The source section that should be used
+	 * @param io the ex-IntermediateOwlObject (now List<Statements> that should
+	 *        collect the statements
 	 */
 	public void attachTextOrigin(Resource attachto, Section source, List<Statement> io) {
 		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();

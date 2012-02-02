@@ -19,11 +19,8 @@
  */
 package de.knowwe.rdfs.sparql;
 
-import java.util.ArrayList;
-
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryResultTable;
-import org.ontoware.rdf2go.model.Statement;
 
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
@@ -32,10 +29,9 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.SparqlRenderer;
-import de.knowwe.rdf2go.utils.SparqlType;
 import de.knowwe.rdfs.util.SparqlResultSetRenderer;
 
-public class SparqlQueryRenderer extends KnowWEDomRenderer<SparqlType> {
+public class SparqlQueryRenderer extends KnowWEDomRenderer<SparqlContentType> {
 
 	private static SparqlRenderer instance;
 
@@ -47,21 +43,23 @@ public class SparqlQueryRenderer extends KnowWEDomRenderer<SparqlType> {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section sec, UserContext user,
+	public void render(KnowWEArticle article, Section<SparqlContentType> sec, UserContext user,
 			StringBuilder result) {
 
-		ArrayList<Statement> l = new ArrayList<Statement>();
-
-		String sparqlString = "";
-		String section = sec.getOriginalText();
-		sparqlString = section.replaceAll("\n", "");
-		sparqlString = section.replaceAll("\r", "");
+		String sparqlString = sec.getText();
+		sparqlString = sparqlString.trim();
+		sparqlString = sparqlString.replaceAll("\n", "");
+		sparqlString = sparqlString.replaceAll("\r", "");
 
 		try {
-			QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
-					sparqlString);
-
-			result.append(SparqlResultSetRenderer.renderQueryResult(resultSet, true));
+			if (sparqlString.toLowerCase().startsWith("construct")) {
+				result.append(KnowWEUtils.maskHTML("<tt>" + sec.getText() + "</tt>"));
+			}
+			else {
+				QueryResultTable resultSet = Rdf2GoCore.getInstance().sparqlSelect(
+						sparqlString);
+				result.append(SparqlResultSetRenderer.renderQueryResult(resultSet, true));
+			}
 
 		}
 		catch (ModelRuntimeException e) {

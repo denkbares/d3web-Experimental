@@ -19,13 +19,56 @@
  */
 package de.knowwe.rdfs.sparql;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.ontoware.aifbcommons.collection.ClosableIterable;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.model.Statement;
+
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
+import de.knowwe.rdf2go.RDF2GoSubtreeHandler;
+import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class SparqlContentType extends AbstractType {
 
 	public SparqlContentType() {
 		this.setSectionFinder(new AllTextSectionFinder());
 		this.setCustomRenderer(new SparqlQueryRenderer());
+		this.addSubtreeHandler(new SparqlConstructHandler());
 	}
+
+	private class SparqlConstructHandler extends RDF2GoSubtreeHandler<SparqlContentType> {
+
+		@Override
+		public Collection<Message> create(KnowWEArticle article, Section<SparqlContentType> section) {
+			List<Message> msgs = new ArrayList<Message>(1);
+			String sparqlString = section.getText();
+			sparqlString = sparqlString.trim();
+			sparqlString = sparqlString.replaceAll("\n", "");
+			sparqlString = sparqlString.replaceAll("\r", "");
+			if (sparqlString.toLowerCase().startsWith("construct")) {
+				try {
+					ClosableIterable<Statement> sparqlConstruct = Rdf2GoCore.getInstance().sparqlConstruct(
+							sparqlString);
+					ClosableIterator<Statement> statementIterator = sparqlConstruct.iterator();
+
+					while (statementIterator.hasNext()) {
+						Rdf2GoCore.getInstance().addStatement(statementIterator.next(), section);
+					}
+				}
+				catch (Exception e) {
+					msgs.add(Messages.error(e.getMessage()));
+				}
+			}
+			return msgs;
+		}
+	}
+
 }
