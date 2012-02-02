@@ -47,6 +47,7 @@ public class TestCaseSessionRecordSubtreeHandler extends SubtreeHandler<TestCase
 
 		AttachmentTestCaseProvider provider = new SessionRecordCaseProvider(masterName,
 				article.getWeb(), fileName, article.getTitle());
+		// TODO: add article
 		section.getSectionStore().storeObject(TestCaseProvider.KEY, provider);
 		return provider.getMessages();
 	}

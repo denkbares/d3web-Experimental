@@ -79,6 +79,7 @@ public class ExecuteCasesAction extends AbstractAction {
 				for (Check c : testCase.getChecks(date)) {
 					status.addCheckResult(date, c, c.check(session));
 				}
+				status.finished(date);
 			}
 		}
 	}
@@ -90,8 +91,8 @@ public class ExecuteCasesAction extends AbstractAction {
 				for (Check c : testCase.getChecks(date)) {
 					status.addCheckResult(date, c, c.check(session));
 				}
+				status.finished(date);
 			}
 		}
 	}
-
 }

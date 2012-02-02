@@ -21,10 +21,13 @@ package de.knowwe.sessiondebugger;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 
+import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.session.Session;
+import de.d3web.core.session.Value;
 import de.d3web.core.utilities.Pair;
 import de.d3web.testcase.model.Check;
 
@@ -39,6 +42,8 @@ public class SessionDebugStatus {
 	private Session session;
 	private Date lastExecuted = null;
 	private Map<Date, Collection<Pair<Check, Boolean>>> checkResults = new HashMap<Date, Collection<Pair<Check, Boolean>>>();
+	private Map<Date, Map<Question, Value>> timeValues = new HashMap<Date, Map<Question, Value>>();
+	private HashSet<Question> questionsToObserve = new HashSet<Question>();
 
 	public SessionDebugStatus(Session session) {
 		super();
@@ -59,6 +64,7 @@ public class SessionDebugStatus {
 	public void setSession(Session session) {
 		this.session = session;
 		checkResults.clear();
+		timeValues.clear();
 		lastExecuted = null;
 	}
 
@@ -96,5 +102,46 @@ public class SessionDebugStatus {
 	 */
 	public Collection<Pair<Check, Boolean>> getCheckResults(Date date) {
 		return checkResults.get(date);
+	}
+
+	public boolean addQuestionToObserve(Question q) {
+		return questionsToObserve.add(q);
+	}
+
+	/**
+	 * Needs to be called when all findings of a date are set to the session.
+	 * This method saves all values of questions, the user wants to observe.
+	 * 
+	 * @created 31.01.2012
+	 * @param date specified Date
+	 */
+	public void finished(Date date) {
+		Map<Question, Value> values = timeValues.get(date);
+		if (values == null) {
+			values = new HashMap<Question, Value>();
+			timeValues.put(date, values);
+		}
+		for (Question q : questionsToObserve) {
+			values.put(q, session.getBlackboard().getValue(q));
+		}
+	}
+
+	/**
+	 * Returns the value of a question at a specified time. The question must
+	 * have been added by the method addQuestionsToObserve before finishing the
+	 * date. If no value is found, null is returned.
+	 * 
+	 * @created 01.02.2012
+	 * @param q specified {@link Question}
+	 * @param d specified {@link Date}
+	 * @return Value of the Question at the Date or null, if no value has been
+	 *         saved
+	 */
+	public Value getValue(Question q, Date d) {
+		Map<Question, Value> values = timeValues.get(d);
+		if (values != null) {
+			return values.get(q);
+		}
+		return null;
 	}
 }

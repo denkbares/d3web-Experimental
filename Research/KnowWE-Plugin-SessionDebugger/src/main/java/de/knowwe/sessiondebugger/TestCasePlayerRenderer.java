@@ -18,14 +18,24 @@
  */
 package de.knowwe.sessiondebugger;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+
+import org.apache.log4j.Logger;
+
+import de.d3web.core.knowledge.TerminologyManager;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.session.Session;
+import de.d3web.core.session.Value;
 import de.d3web.core.utilities.Pair;
 import de.d3web.testcase.TestCaseUtils;
 import de.d3web.testcase.model.Check;
@@ -48,6 +58,7 @@ import de.knowwe.kdom.defaultMarkup.ContentType;
  */
 public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 
+	private static final String QUESTIONS_SEPARATOR = "#####";
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS");
 	public static String SELECTOR_KEY = "selector";
 
@@ -58,16 +69,16 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 		}
 		KnowWEPackageManager packageManager = KnowWEEnvironment.getInstance().getPackageManager(
 				article.getWeb());
-		List<Section> sectionsInPackage = new LinkedList<Section>();
+		List<Section<?>> sectionsInPackage = new LinkedList<Section<?>>();
 		for (String s : section.getPackageNames()) {
 			sectionsInPackage.addAll(packageManager.getSectionsOfPackage(s));
 		}
-		List<Pair<TestCaseProvider, Section>> providers = new LinkedList<Pair<TestCaseProvider, Section>>();
-		for (Section s : sectionsInPackage) {
+		List<Pair<TestCaseProvider, Section<?>>> providers = new LinkedList<Pair<TestCaseProvider, Section<?>>>();
+		for (Section<?> s : sectionsInPackage) {
 			TestCaseProvider testCaseProvider = (TestCaseProvider) s.getSectionStore().getObject(
 					TestCaseProvider.KEY);
 			if (testCaseProvider != null) {
-				providers.add(new Pair<TestCaseProvider, Section>(testCaseProvider, s));
+				providers.add(new Pair<TestCaseProvider, Section<?>>(testCaseProvider, s));
 			}
 		}
 		string.append(KnowWEUtils.maskHTML("<span id='" + section.getID() + "'>"));
@@ -76,30 +87,9 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 			string.append("No TestCaseProvider found in the packages: " + section.getPackageNames());
 		}
 		else {
-			String selectedID = (String) user.getSession().getAttribute(
-					SELECTOR_KEY + "_" + section.getID());
-			StringBuffer selectsb = new StringBuffer();
-			// if no pair is selected, use the first
-			Pair<TestCaseProvider, Section> selectedPair = providers.get(0);
-			selectsb.append("Select TestCase: <select id=selector" +
-					section.getID()
-					+ " onchange=\"SessionDebugger.change('" + section.getID() +
-					"', this.options[this.selectedIndex].value);\">");
-			for (Pair<TestCaseProvider, Section> pair : providers) {
-				String id = pair.getB().getID();
-				if (id.equals(selectedID)) {
-					selectsb.append("<option value='" + id + "' selected='selected'>"
-							+ pair.getA().getName() + "</option>");
-					selectedPair = pair;
-				}
-				else {
-					selectsb.append("<option value='" + id + "'>"
-							+ pair.getA().getName() + "</option>");
-				}
-			}
-			selectsb.append("</select>");
+			Pair<TestCaseProvider, Section<?>> selectedPair = renderTestCaseSelection(section,
+					user, string, providers);
 			TestCaseProvider provider = selectedPair.getA();
-			string.append(KnowWEUtils.maskHTML(selectsb.toString()));
 			Session session = provider.getActualSession(user.getUserName());
 
 			if (session == null) {
@@ -114,32 +104,45 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 				}
 
 				if (testCase != null) {
+					// get Question from cookie
+					String additionalQuestions = null;
+					String cookiename = "additionalQuestions" + article.getTitle();
+					for (Cookie cookie : user.getRequest().getCookies()) {
+						try {
+							if (URLDecoder.decode(cookie.getName(), "UTF-8").equals(cookiename)) {
+								additionalQuestions = URLDecoder.decode(cookie.getValue(), "UTF-8");
+								break;
+							}
+						}
+						catch (UnsupportedEncodingException e) {
+							additionalQuestions = cookie.getValue();
+							Logger.getLogger(getClass()).error(
+										"Could not decode the value of the cookie " + cookiename
+												+ ":" + cookie.getValue());
+						}
+					}
+					String[] questionStrings = new String[0];
+					if (additionalQuestions != null) {
+						questionStrings = additionalQuestions.split(QUESTIONS_SEPARATOR);
+					}
 					Collection<Question> usedQuestions = TestCaseUtils.getUsedQuestions(testCase);
 					string.append("\n|| ||Date");
 					for (Question q : usedQuestions) {
 						string.append("||" + q.getName());
 					}
 					string.append("||Checks");
+					TerminologyManager manager = session.getKnowledgeBase().getManager();
+					renderObservationQuestionsHeader(string, status, additionalQuestions,
+							questionStrings, manager);
+					renderObservationQuestionAdder(section, string, questionStrings, manager,
+							additionalQuestions);
 					string.append("\n");
 					for (Date date : testCase.chronology()) {
-						string.append("|");
 						String dateString = dateFormat.format(date);
-						if (status.getLastExecuted() == null
-									|| status.getLastExecuted().before(date)) {
-							StringBuffer sb = new StringBuffer();
-							String js = "SessionDebugger.send("
-										+ "'"
-										+ selectedPair.getB().getID()
-										+ "', '" + dateString + "');";
-							sb.append("<a href=\"javascript:" + js + ";undefined;\">");
-							sb.append("Play");
-							sb.append("</a>");
-							string.append(KnowWEUtils.maskHTML(sb.toString()));
-						}
-						else {
-							string.append("%%(color:silver;)Play%%");
-						}
+						renderRunTo(string, selectedPair, status, date, dateString);
+						// render date cell
 						string.append("|" + dateString);
+						// render values of questions
 						for (Question q : usedQuestions) {
 							Finding finding = testCase.getFinding(date, q);
 							if (finding != null) {
@@ -149,39 +152,21 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 								string.append("| ");
 							}
 						}
-						Collection<Pair<Check, Boolean>> checkResults = status.getCheckResults(date);
-						if (checkResults == null) {
-							if (testCase.getChecks(date).isEmpty()) {
+						renderCheckResults(string, testCase, status, date);
+						// render observations
+						for (String s : questionStrings) {
+							Question question = manager.searchQuestion(s);
+							if (question == null) {
 								string.append("| ");
 							}
 							else {
-								string.append("|");
-								for (Check c : testCase.getChecks(date)) {
-									string.append(c.getCondition() + "\\\\");
+								Value value = status.getValue(question, date);
+								if (value != null) {
+									string.append("|" + value);
 								}
-								string.replace(string.lastIndexOf("\\\\"), string.length(), "");
-							}
-						}
-						else {
-							if (checkResults.isEmpty()) {
-								string.append("| ");
-							}
-							else {
-								string.append("|");
-								StringBuffer sb = new StringBuffer();
-								for (Pair<Check, Boolean> p : checkResults) {
-									if (p.getB()) {
-										sb.append("%%(background-color:lime;)"
-													+ p.getA().getCondition() + "%%\\\\");
-									}
-									else {
-										sb.append("%%(background-color:red;)"
-													+ p.getA().getCondition()
-													+ "%%\\\\");
-									}
+								else {
+									string.append("| ");
 								}
-								sb.replace(sb.lastIndexOf("\\\\"), sb.length(), "");
-								string.append(sb.toString());
 							}
 						}
 						string.append("\n");
@@ -192,4 +177,140 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 		string.append(KnowWEUtils.maskHTML("</span>"));
 	}
 
+	private void renderObservationQuestionsHeader(StringBuilder string, SessionDebugStatus status, String additionalQuestions, String[] questionStrings, TerminologyManager manager) {
+		for (String s : questionStrings) {
+			Question question = manager.searchQuestion(s);
+			if (question != null) {
+				string.append("||" + s);
+				status.addQuestionToObserve(question);
+			}
+			else {
+				string.append("||%%(color:silver;)" + s + "%%");
+			}
+			String newQuestionsString = additionalQuestions;
+			newQuestionsString = newQuestionsString.replace(s, "");
+			newQuestionsString = newQuestionsString.replace(QUESTIONS_SEPARATOR
+					+ QUESTIONS_SEPARATOR,
+					QUESTIONS_SEPARATOR);
+			if (newQuestionsString.startsWith(QUESTIONS_SEPARATOR)) {
+				newQuestionsString = newQuestionsString.replaceFirst(
+						QUESTIONS_SEPARATOR, "");
+			}
+			if (newQuestionsString.endsWith(QUESTIONS_SEPARATOR)) {
+				newQuestionsString = newQuestionsString.substring(0,
+						newQuestionsString.length() - QUESTIONS_SEPARATOR.length());
+			}
+			string.append(KnowWEUtils.maskHTML(" <a onclick=\"SessionDebugger.addCookie(&quot;"
+					+ newQuestionsString
+					+ "&quot;);\">X</a>"));
+		}
+	}
+
+	private void renderRunTo(StringBuilder string, Pair<TestCaseProvider, Section<?>> selectedPair, SessionDebugStatus status, Date date, String dateString) {
+		string.append("|");
+		if (status.getLastExecuted() == null
+					|| status.getLastExecuted().before(date)) {
+			StringBuffer sb = new StringBuffer();
+			String js = "SessionDebugger.send("
+						+ "'"
+						+ selectedPair.getB().getID()
+						+ "', '" + dateString + "');";
+			sb.append("<a href=\"javascript:" + js + ";undefined;\">");
+			sb.append("Play");
+			sb.append("</a>");
+			string.append(KnowWEUtils.maskHTML(sb.toString()));
+		}
+		else {
+			string.append("%%(color:silver;)Play%%");
+		}
+	}
+
+	private void renderCheckResults(StringBuilder string, TestCase testCase, SessionDebugStatus status, Date date) {
+		Collection<Pair<Check, Boolean>> checkResults = status.getCheckResults(date);
+		if (checkResults == null) {
+			if (testCase.getChecks(date).isEmpty()) {
+				string.append("| ");
+			}
+			else {
+				string.append("|");
+				for (Check c : testCase.getChecks(date)) {
+					string.append(c.getCondition() + "\\\\");
+				}
+				string.replace(string.lastIndexOf("\\\\"), string.length(), "");
+			}
+		}
+		else {
+			if (checkResults.isEmpty()) {
+				string.append("| ");
+			}
+			else {
+				string.append("|");
+				StringBuffer sb = new StringBuffer();
+				for (Pair<Check, Boolean> p : checkResults) {
+					if (p.getB()) {
+						sb.append("%%(background-color:lime;)"
+									+ p.getA().getCondition() + "%%\\\\");
+					}
+					else {
+						sb.append("%%(background-color:red;)"
+									+ p.getA().getCondition()
+									+ "%%\\\\");
+					}
+				}
+				sb.replace(sb.lastIndexOf("\\\\"), sb.length(), "");
+				string.append(sb.toString());
+			}
+		}
+	}
+
+	private void renderObservationQuestionAdder(Section<ContentType> section, StringBuilder string, String[] questionStrings, TerminologyManager manager, String questionString) {
+		StringBuffer selectsb2 = new StringBuffer();
+		selectsb2.append("||<form><select name=\"toAdd\" id=adder" + section.getID() + ">");
+		HashSet<String> alreadyAddedQuestions = new HashSet<String>(Arrays.asList(questionStrings));
+		for (Question q : manager.getQuestions()) {
+			if (!alreadyAddedQuestions.contains(q.getName())) {
+				selectsb2.append("<option value='" + q.getName() + "'>"
+						+ q.getName() + "</option>");
+
+			}
+		}
+		selectsb2.append("</select>");
+		if (questionString != null) {
+			selectsb2.append("<input type=\"button\" value=\"+\" onclick=\"SessionDebugger.addCookie(&quot;"
+					+ questionString
+					+ QUESTIONS_SEPARATOR
+					+ "&quot;+this.form.toAdd.options[toAdd.selectedIndex].value);\"></form>");
+		}
+		else {
+			selectsb2.append("<input type=\"button\" value=\"+\" onclick=\"SessionDebugger.addCookie(this.form.toAdd.options[toAdd.selectedIndex].value);\"></form>");
+		}
+		string.append(KnowWEUtils.maskHTML(selectsb2.toString()));
+	}
+
+	private Pair<TestCaseProvider, Section<?>> renderTestCaseSelection(Section<ContentType> section, UserContext user, StringBuilder string, List<Pair<TestCaseProvider, Section<?>>> providers) {
+		String selectedID = (String) user.getSession().getAttribute(
+				SELECTOR_KEY + "_" + section.getID());
+		StringBuffer selectsb = new StringBuffer();
+		// if no pair is selected, use the first
+		Pair<TestCaseProvider, Section<?>> selectedPair = providers.get(0);
+		selectsb.append("Select TestCase: <select id=selector" +
+				section.getID()
+				+ " onchange=\"SessionDebugger.change('" + section.getID() +
+				"', this.options[this.selectedIndex].value);\">");
+		for (Pair<TestCaseProvider, Section<?>> pair : providers) {
+			String id = pair.getB().getID();
+			if (id.equals(selectedID)) {
+				selectsb.append("<option value='" + id + "' selected='selected'>"
+						+ pair.getA().getName() + "</option>");
+				selectedPair = pair;
+			}
+			else {
+				selectsb.append("<option value='" + id + "'>"
+						+ pair.getA().getName() + "</option>");
+			}
+		}
+		selectsb.append("</select>");
+		string.append(KnowWEUtils.maskHTML(selectsb.toString()));
+		return selectedPair;
+	}
 }

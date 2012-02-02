@@ -60,3 +60,9 @@ SessionDebugger.change = function(sessionid, selectedvalue) {
             new _KA( options ).send();       
 
 }
+
+SessionDebugger.addCookie = function(cookievalue) {
+			var topic = KNOWWE.helper.gup('page');
+			document.cookie = "additionalQuestions"+ encodeURI(topic) +"=" + encodeURI(cookievalue);
+           	KNOWWE.helper.observer.notify('update');
+}
