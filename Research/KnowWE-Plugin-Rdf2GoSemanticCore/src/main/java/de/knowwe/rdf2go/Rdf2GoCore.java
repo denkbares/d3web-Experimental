@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -220,8 +221,10 @@ public class Rdf2GoCore implements EventListener {
 	/**
 	 * add a namespace to the model
 	 * 
-	 * @param sh prefix
-	 * @param ns url
+	 * @param sh
+	 *            prefix
+	 * @param ns
+	 *            url
 	 */
 	public void addNamespace(String sh, String ns) {
 		namespaces.put(sh, ns);
@@ -290,6 +293,19 @@ public class Rdf2GoCore implements EventListener {
 
 	public String renderedSparqlSelect(String query, boolean links) throws ModelRuntimeException, MalformedQueryException {
 		return renderQueryResult(sparqlSelect(query), links);
+	}
+
+	/**
+	 * Writes the current repository model to the given writer in RDF/XML
+	 * format.
+	 * 
+	 * @created 03.02.2012
+	 * @param out
+	 * @throws ModelRuntimeException
+	 * @throws IOException
+	 */
+	public void writeModel(Writer out) throws ModelRuntimeException, IOException {
+		model.writeTo(out);
 	}
 
 	/**
@@ -482,9 +498,11 @@ public class Rdf2GoCore implements EventListener {
 	 * provide a consistent model.
 	 * 
 	 * @created 14.12.2011
-	 * @param query the query to be ask
-	 * @param sec the section determining the statements to be excluded for the
-	 *        query
+	 * @param query
+	 *            the query to be ask
+	 * @param sec
+	 *            the section determining the statements to be excluded for the
+	 *            query
 	 * @return
 	 * @throws ModelRuntimeException
 	 * @throws MalformedQueryException
@@ -973,10 +991,13 @@ public class Rdf2GoCore implements EventListener {
 	 * Resource is of the right type if applicable (eg attachto RDF.TYPE
 	 * RDF.STATEMENT)
 	 * 
-	 * @param attachto The Resource that will be annotated bei the TO-Node
-	 * @param source The source section that should be used
-	 * @param io the ex-IntermediateOwlObject (now List<Statements> that should
-	 *        collect the statements
+	 * @param attachto
+	 *            The Resource that will be annotated bei the TO-Node
+	 * @param source
+	 *            The source section that should be used
+	 * @param io
+	 *            the ex-IntermediateOwlObject (now List<Statements> that should
+	 *            collect the statements
 	 */
 	public void attachTextOrigin(Resource attachto, Section source, List<Statement> io) {
 		BlankNode to = Rdf2GoCore.getInstance().createBlankNode();
