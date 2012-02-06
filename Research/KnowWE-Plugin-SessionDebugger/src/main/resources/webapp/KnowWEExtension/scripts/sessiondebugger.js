@@ -1,13 +1,13 @@
 var SessionDebugger = {};
 
-SessionDebugger.send = function(sessionid, casedate) {
-			var topic = KNOWWE.helper.gup('page')
+SessionDebugger.send = function(sessionid, casedate, name, topic) {
 			
             var params = {
         		action : 'ExecuteCasesAction',
        			KWiki_Topic : topic,
        			id : sessionid,
-        		date : casedate
+        		date : casedate,
+        		testCaseName : name
     		}
             
             var options = {

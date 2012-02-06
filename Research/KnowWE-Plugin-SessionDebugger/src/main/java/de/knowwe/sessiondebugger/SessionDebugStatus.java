@@ -21,7 +21,6 @@ package de.knowwe.sessiondebugger;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -43,7 +42,6 @@ public class SessionDebugStatus {
 	private Date lastExecuted = null;
 	private Map<Date, Collection<Pair<Check, Boolean>>> checkResults = new HashMap<Date, Collection<Pair<Check, Boolean>>>();
 	private Map<Date, Map<Question, Value>> timeValues = new HashMap<Date, Map<Question, Value>>();
-	private HashSet<Question> questionsToObserve = new HashSet<Question>();
 
 	public SessionDebugStatus(Session session) {
 		super();
@@ -104,10 +102,6 @@ public class SessionDebugStatus {
 		return checkResults.get(date);
 	}
 
-	public boolean addQuestionToObserve(Question q) {
-		return questionsToObserve.add(q);
-	}
-
 	/**
 	 * Needs to be called when all findings of a date are set to the session.
 	 * This method saves all values of questions, the user wants to observe.
@@ -121,7 +115,7 @@ public class SessionDebugStatus {
 			values = new HashMap<Question, Value>();
 			timeValues.put(date, values);
 		}
-		for (Question q : questionsToObserve) {
+		for (Question q : session.getKnowledgeBase().getManager().getQuestions()) {
 			values.put(q, session.getBlackboard().getValue(q));
 		}
 	}

@@ -27,8 +27,10 @@ import de.d3web.core.session.SessionFactory;
 import de.d3web.testcase.TestCaseUtils;
 import de.d3web.testcase.model.Check;
 import de.d3web.testcase.model.TestCase;
+import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
+import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 
@@ -44,6 +46,7 @@ public class ExecuteCasesAction extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		String sectionid = context.getParameter("id");
+		String testCaseName = context.getParameter("testCaseName");
 		Date endDate;
 		try {
 			endDate = TestCasePlayerRenderer.dateFormat.parse(context.getParameter("date"));
@@ -53,8 +56,12 @@ public class ExecuteCasesAction extends AbstractAction {
 		}
 		@SuppressWarnings("unchecked")
 		Section<TestCasePlayerType> section = (Section<TestCasePlayerType>) Sections.getSection(sectionid);
-		TestCaseProvider provider = (TestCaseProvider) section.getSectionStore().getObject(
-				TestCaseProvider.KEY);
+		KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(context.getWeb(),
+				context.getTitle());
+		TestCaseProviderStorage providerStorage = (TestCaseProviderStorage) section.getSectionStore().getObject(
+				article,
+				TestCaseProviderStorage.KEY);
+		TestCaseProvider provider = providerStorage.getTestCaseProvider(testCaseName);
 		Session session = provider.getActualSession(context.getUserName());
 		SessionDebugStatus status = provider.getDebugStatus(context.getUserName());
 		TestCase testCase = provider.getTestCase();
@@ -75,7 +82,7 @@ public class ExecuteCasesAction extends AbstractAction {
 	private static void runTo(Session session, TestCase testCase, Date endDate, SessionDebugStatus status) {
 		for (Date date : testCase.chronology()) {
 			if (date.before(endDate) || date.equals(endDate)) {
-				TestCaseUtils.applyFindings(session, testCase.getFindings(date));
+				TestCaseUtils.applyFindings(session, testCase, date);
 				for (Check c : testCase.getChecks(date)) {
 					status.addCheckResult(date, c, c.check(session));
 				}
@@ -87,7 +94,7 @@ public class ExecuteCasesAction extends AbstractAction {
 	private static void runTo(Session session, TestCase testCase, Date startDate, Date endDate, SessionDebugStatus status) {
 		for (Date date : testCase.chronology()) {
 			if (date.after(startDate) && (date.before(endDate) || date.equals(endDate))) {
-				TestCaseUtils.applyFindings(session, testCase.getFindings(date));
+				TestCaseUtils.applyFindings(session, testCase, date);
 				for (Check c : testCase.getChecks(date)) {
 					status.addCheckResult(date, c, c.check(session));
 				}

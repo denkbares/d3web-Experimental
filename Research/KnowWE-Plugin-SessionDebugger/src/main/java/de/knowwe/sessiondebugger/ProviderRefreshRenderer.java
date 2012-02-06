@@ -18,28 +18,50 @@
  */
 package de.knowwe.sessiondebugger;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import de.knowwe.core.KnowWEArticleManager;
+import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.report.Message;
+import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
+ * Triggers parsing of the TestCases if they are displayed (workaround for
+ * AttachedFiles)
  * 
  * @author Markus Friedrich (denkbares GmbH)
  * @created 27.01.2012
  */
 public class ProviderRefreshRenderer<T extends DefaultMarkupType> extends DefaultMarkupRenderer<T> {
 
-	public ProviderRefreshRenderer() {
-		super(false);
-	}
-
 	@Override
 	public void render(KnowWEArticle article, Section<T> section, UserContext user, StringBuilder buffer) {
-		TestCaseProvider provider = (TestCaseProvider) section.getSectionStore().getObject(
-				TestCaseProvider.KEY);
-		provider.getTestCase();
+		Set<String> articlesReferringTo = KnowWEEnvironment.getInstance().getPackageManager(
+				user.getWeb()).getArticlesReferringTo(section);
+		KnowWEArticleManager articleManager = KnowWEEnvironment.getInstance().getArticleManager(
+				user.getWeb());
+		for (String referingArticleTitle : articlesReferringTo) {
+			KnowWEArticle referningArticle = articleManager.getArticle(referingArticleTitle);
+			TestCaseProviderStorage providerStorage = (TestCaseProviderStorage) section.getSectionStore().getObject(
+					referningArticle,
+					TestCaseProviderStorage.KEY);
+			if (providerStorage != null) {
+				List<Message> messages = new LinkedList<Message>();
+				for (TestCaseProvider provider : providerStorage.getTestCaseProviders()) {
+					provider.getTestCase();
+					messages.addAll(provider.getMessages());
+				}
+				Messages.storeMessages(referningArticle, section, providerStorage.getClass(),
+						messages);
+			}
+		}
 		super.render(article, section, user, buffer);
 	}
 }

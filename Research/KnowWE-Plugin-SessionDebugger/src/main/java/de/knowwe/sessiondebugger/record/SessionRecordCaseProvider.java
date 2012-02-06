@@ -26,6 +26,7 @@ import de.d3web.core.records.SessionRecord;
 import de.d3web.core.records.io.SessionPersistenceManager;
 import de.d3web.testcase.record.SessionRecordWrapper;
 import de.d3web.we.basic.D3webModule;
+import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.report.Messages;
 import de.knowwe.sessiondebugger.AttachmentTestCaseProvider;
 
@@ -37,13 +38,13 @@ import de.knowwe.sessiondebugger.AttachmentTestCaseProvider;
  */
 public class SessionRecordCaseProvider extends AttachmentTestCaseProvider {
 
-	public SessionRecordCaseProvider(String master, String web, String fileName, String title) {
-		super(master, web, fileName, title);
+	public SessionRecordCaseProvider(KnowWEArticle article, String fileName, KnowWEArticle fileArticle) {
+		super(article, fileName, fileArticle);
 	}
 
 	@Override
 	protected void parse() {
-		KnowledgeBase kb = D3webModule.getKnowledgeBase(web, master);
+		KnowledgeBase kb = D3webModule.getKnowledgeBase(article.getWeb(), article.getTitle());
 		if (kb == null) {
 			messages.add(Messages.error("Kb not found."));
 			return;

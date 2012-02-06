@@ -31,14 +31,12 @@ import de.knowwe.sessiondebugger.ProviderRefreshRenderer;
  */
 public class TestCaseSessionRecordType extends DefaultMarkupType {
 
-	public static final String ANNOTATION_MASTER = "master";
 	public static final String ANNOTATION_FILE = "file";
 
 	private static final DefaultMarkup MARKUP;
 
 	static {
 		MARKUP = new DefaultMarkup("TestCaseSessionRecord");
-		MARKUP.addAnnotation(ANNOTATION_MASTER, true);
 		MARKUP.addAnnotation(ANNOTATION_FILE, true);
 		MARKUP.addAnnotation(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME, false);
 	}

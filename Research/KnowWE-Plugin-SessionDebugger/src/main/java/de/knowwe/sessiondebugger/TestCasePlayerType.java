@@ -18,7 +18,6 @@
  */
 package de.knowwe.sessiondebugger;
 
-import de.knowwe.core.compile.packaging.KnowWEPackageManager;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.kdom.defaultMarkup.ContentType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
@@ -38,7 +37,7 @@ public class TestCasePlayerType extends DefaultMarkupType {
 
 	static {
 		MARKUP = new DefaultMarkup("TestCasePlayer");
-		MARKUP.addAnnotation(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME, false);
+		MARKUP.addAnnotation("uses", true);
 	}
 
 	public TestCasePlayerType() {

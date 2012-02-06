@@ -29,6 +29,7 @@ import de.d3web.testcase.model.TestCase;
 import de.d3web.we.basic.D3webModule;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -46,23 +47,22 @@ public abstract class AttachmentTestCaseProvider implements TestCaseProvider {
 	protected TestCase testCase;
 	protected ConnectorAttachment attachment;
 	protected List<Message> messages = new LinkedList<Message>();
-	protected final String master;
-	protected final String web;
+	protected final KnowWEArticle article;
 	private final Map<String, SessionDebugStatus> statusPerUser = new HashMap<String, SessionDebugStatus>();
-	private final String title;
 	private final String fileName;
+	private final KnowWEArticle fileArticle;
 
-	public AttachmentTestCaseProvider(String master, String web, String fileName, String title) {
+	public AttachmentTestCaseProvider(KnowWEArticle article, String fileName, KnowWEArticle fileArticle) {
 		super();
+		this.article = article;
 		this.fileName = fileName;
-		this.title = title;
-		this.master = master;
-		this.web = web;
+		this.fileArticle = fileArticle;
 	}
 
 	@Override
 	public TestCase getTestCase() {
-		ConnectorAttachment actualAttachment = KnowWEUtils.getAttachment(title, fileName);
+		ConnectorAttachment actualAttachment = KnowWEUtils.getAttachment(fileArticle.getTitle(),
+				fileName);
 		if (actualAttachment == null) {
 			messages.clear();
 			statusPerUser.clear();
@@ -81,19 +81,20 @@ public abstract class AttachmentTestCaseProvider implements TestCaseProvider {
 
 	protected abstract void parse();
 
+	@Override
 	public List<Message> getMessages() {
 		return Collections.unmodifiableList(messages);
 	}
 
 	@Override
 	public Session getActualSession(String user) {
-		return D3webUtils.getSession(master, user, web);
+		return D3webUtils.getSession(article.getTitle(), user, article.getWeb());
 	}
 
 	@Override
 	public void storeSession(Session session, String user) {
-		String sessionId = KnowWEEnvironment.generateDefaultID(master);
-		D3webModule.getBroker(user, web).addSession(sessionId, session);
+		String sessionId = KnowWEEnvironment.generateDefaultID(article.getTitle());
+		D3webModule.getBroker(user, article.getWeb()).addSession(sessionId, session);
 		getDebugStatus(user).setSession(session);
 	}
 
@@ -109,7 +110,7 @@ public abstract class AttachmentTestCaseProvider implements TestCaseProvider {
 
 	@Override
 	public String getName() {
-		return title + "/" + fileName;
+		return fileArticle.getTitle() + "/" + fileName;
 	}
 
 }

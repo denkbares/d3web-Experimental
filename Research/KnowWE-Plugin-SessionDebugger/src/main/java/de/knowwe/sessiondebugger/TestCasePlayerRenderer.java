@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.Cookie;
 
@@ -37,10 +38,12 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.utilities.Pair;
+import de.d3web.core.utilities.Triple;
 import de.d3web.testcase.TestCaseUtils;
 import de.d3web.testcase.model.Check;
 import de.d3web.testcase.model.Finding;
 import de.d3web.testcase.model.TestCase;
+import de.knowwe.core.KnowWEArticleManager;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.compile.packaging.KnowWEPackageManager;
 import de.knowwe.core.kdom.KnowWEArticle;
@@ -49,6 +52,7 @@ import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.ContentType;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * Renderer for TestCasePlayerType
@@ -69,16 +73,27 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 		}
 		KnowWEPackageManager packageManager = KnowWEEnvironment.getInstance().getPackageManager(
 				article.getWeb());
-		List<Section<?>> sectionsInPackage = new LinkedList<Section<?>>();
-		for (String s : section.getPackageNames()) {
-			sectionsInPackage.addAll(packageManager.getSectionsOfPackage(s));
-		}
-		List<Pair<TestCaseProvider, Section<?>>> providers = new LinkedList<Pair<TestCaseProvider, Section<?>>>();
-		for (Section<?> s : sectionsInPackage) {
-			TestCaseProvider testCaseProvider = (TestCaseProvider) s.getSectionStore().getObject(
-					TestCaseProvider.KEY);
-			if (testCaseProvider != null) {
-				providers.add(new Pair<TestCaseProvider, Section<?>>(testCaseProvider, s));
+		String[] kbpackages = DefaultMarkupType.getAnnotations(section.getFather(), "uses");
+		List<Triple<TestCaseProvider, Section<?>, KnowWEArticle>> providers = new LinkedList<Triple<TestCaseProvider, Section<?>, KnowWEArticle>>();
+		for (String kbpackage : kbpackages) {
+			List<Section<?>> sectionsInPackage = packageManager.getSectionsOfPackage(kbpackage);
+			Set<String> articlesReferringTo = packageManager.getArticlesReferringTo(kbpackage);
+			KnowWEArticleManager articleManager = KnowWEEnvironment.getInstance().getArticleManager(
+					user.getWeb());
+			for (String masterTitle : articlesReferringTo) {
+				KnowWEArticle masterarticle = articleManager.getArticle(masterTitle);
+				for (Section<?> packagesections : sectionsInPackage) {
+					TestCaseProviderStorage testCaseProviderStorage = (TestCaseProviderStorage) packagesections.getSectionStore().getObject(
+							masterarticle,
+							TestCaseProviderStorage.KEY);
+					if (testCaseProviderStorage != null) {
+						for (TestCaseProvider testCaseProvider : testCaseProviderStorage.getTestCaseProviders()) {
+							providers.add(new Triple<TestCaseProvider, Section<?>, KnowWEArticle>(
+									testCaseProvider,
+									packagesections, masterarticle));
+						}
+					}
+				}
 			}
 		}
 		string.append(KnowWEUtils.maskHTML("<span id='" + section.getID() + "'>"));
@@ -87,9 +102,10 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 			string.append("No TestCaseProvider found in the packages: " + section.getPackageNames());
 		}
 		else {
-			Pair<TestCaseProvider, Section<?>> selectedPair = renderTestCaseSelection(section,
+			Triple<TestCaseProvider, Section<?>, KnowWEArticle> selectedTriple = renderTestCaseSelection(
+					section,
 					user, string, providers);
-			TestCaseProvider provider = selectedPair.getA();
+			TestCaseProvider provider = selectedTriple.getA();
 			Session session = provider.getActualSession(user.getUserName());
 
 			if (session == null) {
@@ -122,7 +138,7 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 						}
 					}
 					String[] questionStrings = new String[0];
-					if (additionalQuestions != null) {
+					if (additionalQuestions != null && !additionalQuestions.isEmpty()) {
 						questionStrings = additionalQuestions.split(QUESTIONS_SEPARATOR);
 					}
 					Collection<Question> usedQuestions = TestCaseUtils.getUsedQuestions(testCase);
@@ -139,7 +155,7 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 					string.append("\n");
 					for (Date date : testCase.chronology()) {
 						String dateString = dateFormat.format(date);
-						renderRunTo(string, selectedPair, status, date, dateString);
+						renderRunTo(string, selectedTriple, status, date, dateString);
 						// render date cell
 						string.append("|" + dateString);
 						// render values of questions
@@ -182,7 +198,6 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 			Question question = manager.searchQuestion(s);
 			if (question != null) {
 				string.append("||" + s);
-				status.addQuestionToObserve(question);
 			}
 			else {
 				string.append("||%%(color:silver;)" + s + "%%");
@@ -206,15 +221,17 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 		}
 	}
 
-	private void renderRunTo(StringBuilder string, Pair<TestCaseProvider, Section<?>> selectedPair, SessionDebugStatus status, Date date, String dateString) {
+	private void renderRunTo(StringBuilder string, Triple<TestCaseProvider, Section<?>, KnowWEArticle> selectedTriple, SessionDebugStatus status, Date date, String dateString) {
 		string.append("|");
 		if (status.getLastExecuted() == null
 					|| status.getLastExecuted().before(date)) {
 			StringBuffer sb = new StringBuffer();
 			String js = "SessionDebugger.send("
 						+ "'"
-						+ selectedPair.getB().getID()
-						+ "', '" + dateString + "');";
+						+ selectedTriple.getB().getID()
+						+ "', '" + dateString
+						+ "', '" + selectedTriple.getA().getName()
+						+ "', '" + selectedTriple.getC().getTitle() + "');";
 			sb.append("<a href=\"javascript:" + js + ";undefined;\">");
 			sb.append("Play");
 			sb.append("</a>");
@@ -275,7 +292,7 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 			}
 		}
 		selectsb2.append("</select>");
-		if (questionString != null) {
+		if (questionString != null && !questionString.isEmpty()) {
 			selectsb2.append("<input type=\"button\" value=\"+\" onclick=\"SessionDebugger.addCookie(&quot;"
 					+ questionString
 					+ QUESTIONS_SEPARATOR
@@ -287,26 +304,26 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 		string.append(KnowWEUtils.maskHTML(selectsb2.toString()));
 	}
 
-	private Pair<TestCaseProvider, Section<?>> renderTestCaseSelection(Section<ContentType> section, UserContext user, StringBuilder string, List<Pair<TestCaseProvider, Section<?>>> providers) {
+	private Triple<TestCaseProvider, Section<?>, KnowWEArticle> renderTestCaseSelection(Section<ContentType> section, UserContext user, StringBuilder string, List<Triple<TestCaseProvider, Section<?>, KnowWEArticle>> providers) {
 		String selectedID = (String) user.getSession().getAttribute(
 				SELECTOR_KEY + "_" + section.getID());
 		StringBuffer selectsb = new StringBuffer();
 		// if no pair is selected, use the first
-		Pair<TestCaseProvider, Section<?>> selectedPair = providers.get(0);
+		Triple<TestCaseProvider, Section<?>, KnowWEArticle> selectedPair = providers.get(0);
 		selectsb.append("Select TestCase: <select id=selector" +
 				section.getID()
 				+ " onchange=\"SessionDebugger.change('" + section.getID() +
 				"', this.options[this.selectedIndex].value);\">");
-		for (Pair<TestCaseProvider, Section<?>> pair : providers) {
-			String id = pair.getB().getID();
+		for (Triple<TestCaseProvider, Section<?>, KnowWEArticle> triple : providers) {
+			String id = triple.getC().getTitle() + "/" + triple.getA().getName();
 			if (id.equals(selectedID)) {
 				selectsb.append("<option value='" + id + "' selected='selected'>"
-						+ pair.getA().getName() + "</option>");
-				selectedPair = pair;
+						+ triple.getA().getName() + "</option>");
+				selectedPair = triple;
 			}
 			else {
 				selectsb.append("<option value='" + id + "'>"
-						+ pair.getA().getName() + "</option>");
+						+ triple.getA().getName() + "</option>");
 			}
 		}
 		selectsb.append("</select>");

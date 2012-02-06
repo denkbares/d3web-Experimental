@@ -18,31 +18,33 @@
  */
 package de.knowwe.sessiondebugger;
 
-import java.util.List;
-
-import de.d3web.core.session.Session;
-import de.d3web.testcase.model.TestCase;
-import de.knowwe.core.report.Message;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Provides access to a TestCase
+ * Stores TestCaseProviders
  * 
  * @author Markus Friedrich (denkbares GmbH)
- * @created 25.01.2012
+ * @created 02.02.2012
  */
-public interface TestCaseProvider {
+public class TestCaseProviderStorage {
 
-	public static final String KEY = "TestCaseProvider";
+	public static final String KEY = "TestCaseProviderStorage";
 
-	TestCase getTestCase();
+	public Map<String, TestCaseProvider> providers = new HashMap<String, TestCaseProvider>();
 
-	Session getActualSession(String user);
+	public void addProvider(TestCaseProvider provider) {
+		providers.put(provider.getName(), provider);
+	}
 
-	SessionDebugStatus getDebugStatus(String user);
+	public Collection<TestCaseProvider> getTestCaseProviders() {
+		return Collections.unmodifiableCollection(providers.values());
+	}
 
-	void storeSession(Session sessin, String user);
+	public TestCaseProvider getTestCaseProvider(String name) {
+		return providers.get(name);
+	}
 
-	String getName();
-
-	List<Message> getMessages();
 }

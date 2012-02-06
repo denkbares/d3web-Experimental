@@ -18,15 +18,14 @@
  */
 package de.knowwe.sessiondebugger.stc;
 
-import java.util.Collection;
+import java.util.List;
 
 import de.knowwe.core.kdom.KnowWEArticle;
-import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.sessiondebugger.AttachmentTestCaseProvider;
-import de.knowwe.sessiondebugger.TestCaseProvider;
+import de.knowwe.sessiondebugger.TestCaseFilesSubtreeHandler;
+import de.knowwe.sessiondebugger.TestCaseProviderStorage;
 
 /**
  * {@link SubtreeHandler} for creating an {@link STCTestCaseProvider}
@@ -34,21 +33,14 @@ import de.knowwe.sessiondebugger.TestCaseProvider;
  * @author Markus Friedrich (denkbares GmbH)
  * @created 25.01.2012
  */
-public class TestCaseSTCSubtreeHandler extends SubtreeHandler<TestCaseSTCType> {
-
-	public TestCaseSTCSubtreeHandler() {
-		setIgnorePackageCompile(true);
-	}
+public class TestCaseSTCSubtreeHandler extends TestCaseFilesSubtreeHandler<TestCaseSTCType> {
 
 	@Override
-	public Collection<Message> create(KnowWEArticle article, Section<TestCaseSTCType> section) {
-		String masterName = DefaultMarkupType.getAnnotation(section, "master");
-		String fileName = DefaultMarkupType.getAnnotation(section, "file");
-
-		AttachmentTestCaseProvider provider = new STCTestCaseProvider(masterName,
-				article.getWeb(), fileName, article.getTitle());
-		section.getSectionStore().storeObject(TestCaseProvider.KEY, provider);
-		return provider.getMessages();
+	protected void addTestCaseProvider(KnowWEArticle article, TestCaseProviderStorage testCaseProviderStorage, List<Message> messages, String fileName, KnowWEArticle filearArticle) {
+		AttachmentTestCaseProvider provider = new STCTestCaseProvider(article, fileName,
+				filearArticle);
+		testCaseProviderStorage.addProvider(provider);
+		messages.addAll(provider.getMessages());
 	}
 
 }

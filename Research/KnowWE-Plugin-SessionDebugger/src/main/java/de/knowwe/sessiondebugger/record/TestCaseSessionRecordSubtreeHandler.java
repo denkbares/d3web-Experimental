@@ -18,15 +18,14 @@
  */
 package de.knowwe.sessiondebugger.record;
 
-import java.util.Collection;
+import java.util.List;
 
 import de.knowwe.core.kdom.KnowWEArticle;
-import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.sessiondebugger.AttachmentTestCaseProvider;
-import de.knowwe.sessiondebugger.TestCaseProvider;
+import de.knowwe.sessiondebugger.TestCaseFilesSubtreeHandler;
+import de.knowwe.sessiondebugger.TestCaseProviderStorage;
 
 /**
  * {@link SubtreeHandler} for creating an {@link SessionRecordCaseProvider}
@@ -34,22 +33,14 @@ import de.knowwe.sessiondebugger.TestCaseProvider;
  * @author Markus Friedrich (denkbares GmbH)
  * @created 26.01.2012
  */
-public class TestCaseSessionRecordSubtreeHandler extends SubtreeHandler<TestCaseSessionRecordType> {
-
-	public TestCaseSessionRecordSubtreeHandler() {
-		setIgnorePackageCompile(true);
-	}
+public class TestCaseSessionRecordSubtreeHandler extends TestCaseFilesSubtreeHandler<TestCaseSessionRecordType> {
 
 	@Override
-	public Collection<Message> create(KnowWEArticle article, Section<TestCaseSessionRecordType> section) {
-		String masterName = DefaultMarkupType.getAnnotation(section, "master");
-		String fileName = DefaultMarkupType.getAnnotation(section, "file");
-
-		AttachmentTestCaseProvider provider = new SessionRecordCaseProvider(masterName,
-				article.getWeb(), fileName, article.getTitle());
-		// TODO: add article
-		section.getSectionStore().storeObject(TestCaseProvider.KEY, provider);
-		return provider.getMessages();
+	protected void addTestCaseProvider(KnowWEArticle article, TestCaseProviderStorage testCaseProviderStorage, List<Message> messages, String fileName, KnowWEArticle fileArticle) {
+		AttachmentTestCaseProvider provider = new SessionRecordCaseProvider(article, fileName,
+				fileArticle);
+		testCaseProviderStorage.addProvider(provider);
+		messages.addAll(provider.getMessages());
 	}
 
 }
