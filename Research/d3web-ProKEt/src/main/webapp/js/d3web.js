@@ -143,11 +143,13 @@ $(function() {
         close = "Schließen";
     }
 	
-    var print;
+    var print, dl;
     if(language=="en"){
         print = "Print";
+        dl = "Download .txt"
     } else if(language=="de"){
         print = "Drucken";
+        dl = ".txt herunterladen"
     }
 	
     /* SUMMARY DIALOG */
@@ -160,6 +162,14 @@ $(function() {
             width: 450,
             height: 550,
             buttons: [{
+                id: "sumDLTxt",
+                text: dl,
+                click: function(){
+                    // handle download --> redirect to DownloadServlet
+                    window.location.replace("/Download?flag=summary");
+                }
+            },
+            {
                 id: "sumPrint",
                 text: print,
                 click: function(){
@@ -290,7 +300,7 @@ $(function() {
             cache : false, // needed for IE, call is not made otherwise
             url: link,
             success : function(html) {
-               if (html == "firsttime") {
+                if (html == "firsttime") {
                     var browser = retrieveBrowserVal();    
                     var user = retrieveUserVal();
                     if (logging) ue_logBrowserAndUser(browser, user);
@@ -357,8 +367,8 @@ function initFunctionality() {
     $('[type=radio]').unbind('click').click(function() {
         
         if($(this).attr("id").indexOf("UE_")==-1){
-        d3web_storeQuestionOC($(this));
-        d3web_addFacts();
+            d3web_storeQuestionOC($(this));
+            d3web_addFacts();
         }
     });
 	
@@ -461,7 +471,7 @@ function initFunctionality() {
     });
     
     // TODO REFACTOR: is used both here and in Code.js
-     $('#FFButton').unbind('click').click(function(event) {
+    $('#FFButton').unbind('click').click(function(event) {
         $("#jqFFDialog").dialog("open");
     });
     
@@ -475,18 +485,18 @@ function initFunctionality() {
         toggleLanguage($(this));
     });
     
-    // mouseover on image answer
+    // mouseover on image answer --> MC Checkboxes
     $('[type=imageAnswer]').unbind('mouseenter').mouseenter(function() {
-        var poly = $("#polygon-" + $(this).attr("id"));
+        var poly = $("#polygon-IMG_" + $(this).attr("id"));
         poly.attr("oldmouseoveropacity", poly.css("opacity"));
         poly.css("opacity", poly.attr("mouseoveropacity"));
     }).unbind('mouseleave').mouseleave(function() {
-        var poly = $("#polygon-" + $(this).attr("id"));
+        var poly = $("#polygon-IMG_" + $(this).attr("id"));
         poly.css("opacity", poly.attr("oldmouseoveropacity"));
     })
-    // click on image answer
+    // click on image answer --> MC Checkboxes
     .find('input').unbind('change').change(function() {
-        var poly = $("#polygon-" + $(this).parents('[type=imageAnswer]').attr("id"));
+        var poly = $("#polygon-IMG_" + $(this).parents('[type=imageAnswer]').attr("id"));
         if ($(this).attr("checked") == "checked") {
             poly.css("opacity",  poly.attr("clickedopacity"));
             poly.attr("oldmouseoveropacity", poly.attr("clickedopacity"));
@@ -496,7 +506,7 @@ function initFunctionality() {
         }
     });
     
-    // mouseover on image answer
+    // mouseover on image answer --> IMAGE-PARTS
     $('[type=imagepolygon]').unbind('mouseenter').mouseenter(function() {
         d3web_IQMouseOver($(this).attr("answerid"), true);
     }).unbind('mouseleave').mouseleave(function() {
@@ -916,14 +926,18 @@ function d3web_prepareSave() {
 }
 
 function d3web_IQClicked(id) {
+    
     var poly = $('#' + "polygon-" + id);
+   
     var opacity = poly.css("opacity");
     if (opacity == "0.5") {
         poly.css("opacity", "0");		
     } else {
         poly.css("opacity", "0.5");	
     }
-    var target = $("#" + id);	// get the clicked element
+    var idClean = id.replace("IMG_", "");
+    
+    var target = $("#" + idClean);	// get the clicked element
     var selected = target.find(":input:checked");	// find clicked input 
     var deselected = target.find(":input:not(:checked)"); // find not clicked inputs
     selected.attr('checked', false);
@@ -935,12 +949,13 @@ function d3web_IQClicked(id) {
 }
 
 function d3web_IQMouseOver(id, isOver) {
+    var idClean = id.replace("IMG_", "");
     if (isOver) {
-        var box = $("#f_" + id);
+        var box = $("#f_" + idClean);
         box.focus();
     }
     else {
-        $("#f_" + id).blur();
+        $("#f_" + idClean).blur();
     }
 }
 

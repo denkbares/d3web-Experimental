@@ -61,7 +61,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 	public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
 			TerminologyObject to, TerminologyObject parent, int loc) {
 
-		StringBuilder sb = new StringBuilder();
+            	StringBuilder sb = new StringBuilder();
 
 		// return if the InterviewObject is null
 		if (to == null) {
@@ -126,13 +126,14 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 		String imgName = to.getInfoStore().getValue(ProKEtProperties.IMAGE);
 		String width = to.getInfoStore().getValue(ProKEtProperties.IMAGEWIDTH);
 		String height = to.getInfoStore().getValue(ProKEtProperties.IMAGEHEIGHT);
-
+                
 		st.setAttribute("image", imgName);
 		if (width != null) st.setAttribute("width", width);
 		if (height != null) st.setAttribute("height", height);
 
 		// read clicable-area coordinates from KB
 		String areas = getChoiceAreas(width, height, to, val);
+                
 		if (areas != null) st.setAttribute("areas", areas);
 
 		// if (to instanceof QuestionMC) {
@@ -181,8 +182,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 		// imagequestions make sense for choice questions only so far
 		if (to instanceof QuestionChoice) {
 			for (Choice choice : ((QuestionChoice) to).getAllAlternatives()) {
-
-				// basic StringTemplate file the shape and coords are inserted
+                                // basic StringTemplate file the shape and coords are inserted
 				// into
 				StringTemplate st = TemplateUtils.getStringTemplate(
 						getTemplateName("ImageAnswerD3web"), "html");
@@ -192,7 +192,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 				// if description = shape and coords for current Choice exist
 				String imgmap = choice.getInfoStore().getValue(ProKEtProperties.IMAGEMAP);
 				Matcher m;
-
+                                
 				// if no description given at all or part of the description
 				// is empty String then set defaults to avoid HTML errors
 				String fixedCoords = "0,0,0,0";
@@ -220,7 +220,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 						}
 
 						String[] coords = m.group(4).split(",");
-						String shape = m.group(3);
+                                                String shape = m.group(3);
 						StringBuilder coordsBuilder = new StringBuilder();
 						if (shape.equals("rect")) {
 							String[] temp = coords;

@@ -57,6 +57,7 @@ import de.d3web.core.knowledge.terminology.QuestionYN;
 import de.d3web.core.knowledge.terminology.Rating;
 import de.d3web.core.knowledge.terminology.Rating.State;
 import de.d3web.core.knowledge.terminology.Solution;
+import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.knowledge.terminology.info.MMInfo;
 import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Session;
@@ -82,6 +83,7 @@ import de.d3web.proket.data.DialogStrategy;
 import de.d3web.proket.utils.FileUtils;
 import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.IDUtils;
+import java.util.*;
 
 /**
  * Util methods for the binding of d3web to the ProKEt system.
@@ -223,7 +225,7 @@ public class D3webUtils {
      * Discretize a rating value with given limits and discretization values.
      *
      * @param limits Ordered list of limits starting from the lowest, where a
-     * single value of x means the rating has to be <= x.
+     * single value of x means the rating hasFollowUp to be <= x.
      * @param returnValues Return values based on the limits.
      * @param value Value to be discretized.
      * @return null on negative input value, the returnValue corresponding to
@@ -1122,6 +1124,37 @@ public class D3webUtils {
         return prompt == null ? defaultPrompt : prompt;
     }
 
+    public static Locale getCurrentLocale(int locIdent) {
+
+        //int locIdent = GlobalSettings.getInstance().getLocaleIdentifier();
+        //int locIdent = D3webConnector.getInstance().getUserSettings().getLanguageId();
+        Locale loc = Locale.getDefault();
+
+        switch (locIdent) {
+            case 1: // german
+                loc = Locale.GERMAN;
+                break;
+            case 2: // english
+                loc = Locale.ENGLISH;
+                break;
+            case 3: // spanish
+                loc = new Locale("es", "ES");
+                break;
+            case 4: // italian
+                loc = Locale.ITALIAN;
+                break;
+            case 5: // french
+                loc = Locale.FRENCH;
+                break;
+            case 6: // polish
+                loc = new Locale("pl", "PL");
+                break;
+        }
+
+        // default prompt = unknown if no locale specific prompt was given
+        return loc;
+    }
+
     /**
      * Try to retrieve the questionnaire-ancestor of a given terminology object.
      *
@@ -1288,7 +1321,6 @@ public class D3webUtils {
                     valueName == null ? valueId : valueName);
 
         } else if (to instanceof QuestionMC) {
-
             if (valueId.equals("")) {
                 value = Unknown.getInstance();
             } else {
@@ -1300,7 +1332,6 @@ public class D3webUtils {
                     choices.add(new Choice(choiceName == null ? choiceId : choiceName));
                 }
                 value = MultipleChoiceValue.fromChoices(choices);
-
             }
         }
         return value;
@@ -1404,5 +1435,46 @@ public class D3webUtils {
             }
         }
         return unknownQuestions;
+    }
+
+    public static String getFormattedDateFromString(Date date, String dateFormat) {
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+        String f = sdf.format(date);
+        return f;
+    }
+
+   
+    public static Collection<TerminologyObject> getAbstractions(Session session){
+        Collection<TerminologyObject> abstractionQuestions =
+                new ArrayList<TerminologyObject>();
+
+        for (TerminologyObject aq : session.getKnowledgeBase().getManager().getQuestions()) {
+            if (aq.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)) {
+                abstractionQuestions.add(aq);
+            }
+        }
+        
+        return abstractionQuestions;
+    }
+    
+    public static Collection<TerminologyObject> getValuedAbstractions(Session session){
+        Collection<TerminologyObject> abstractionQuestions =
+                getAbstractions(session);
+        
+         Collection<TerminologyObject> valuedAbstractions =
+                new ArrayList<TerminologyObject>();
+
+        Collection<TerminologyObject> valuedQuestions =
+                session.getBlackboard().getValuedObjects();
+
+        
+
+        for (TerminologyObject abstracti : abstractionQuestions) {
+            if (valuedQuestions.contains(abstracti)) {
+                valuedAbstractions.add(abstracti);
+            }
+        }
+        
+        return valuedAbstractions;
     }
 }

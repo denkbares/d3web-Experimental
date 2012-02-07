@@ -1,36 +1,3 @@
-PROTOTYPING
------------
-* Folgefragen?!
-* Abstraktionsfragen?!
-* Multicolumn Style: ohne Tabellen? besser?
-* Bonustext auch bei Hierarchy Statistik? 
-DONE Titel aus dem Questionnaire rausziehen/eigen taggen
-
-
-
-GENERAL:
---------
-- DONE replace Renderer-chosing algorithm?! 
-	--> Erstmal so lassen
-	
-- Complete style/image refactoring: pull EVERYTHING out to CSS!!!
-- DefaultSettings: define all required default project paths, dialog settings and so on, noch durchgängig
-- Unterscheidung zwischen global settings und user settings (wichtig für richtige Dialoge die von mehreren
-	Usern/Rechnern aus verwendet werden)
-- Neues Typ-Konzept: noch umsetzen, bisher gibt es nur eine Form Dialoge
-  -- Dialog Kategorien sind in DialogType (Enum) definiert, jeder Dialog gehört einem solchen 
-     Basis-Typen an (momentan SingleForm, Multiform, Hierarchical, und default)
-  -- DialogType definiert, welche Art Strategie für das anzeigen von Fragen verwendet werden soll
-  	 momentan All, NextForm, NextUAQuestion
-  -- Abhängig vom Typ d3web reinladen oder nicht: für SingleForm/All braucht man den gesamten Tree von 
-     Anfang an, für MultipleForm nicht
-- Hierarchy/QuickI Dialogs d3web
-
-- Building Blocks, Modularisierung, Drag and Drop, Visual Edit
-- KnowWE Binding for entering knowledge bases
-
-
-
 ---------------
 -- TODO Doku --
 ---------------
@@ -54,6 +21,17 @@ FREECHOICE/QUICKI Dialog
 -- unknown option
 -- versch. Question Typen
 -- Datumsfragen
+-- ! d3web Anbindung!
+
+
+-----------
+PROTOTYPING
+-----------
+* Folgefragen?!
+* Abstraktionsfragen?!
+* Multicolumn Style: ohne Tabellen? besser?
+* Bonustext auch bei Hierarchy Statistik? 
+DONE Titel aus dem Questionnaire rausziehen/eigen taggen
 
 
 
@@ -61,26 +39,34 @@ FREECHOICE/QUICKI Dialog
 --- MEDIASTINITIS (Projekt Herzmedizin) ---
 -------------------------------------------
 
-DONE - Required Field automatisch setzen user login
+
+----------------------------------
+---- ALLG  D3WEB Dialog  TODOS ---
+----------------------------------
+
+DONE - replace Renderer-chosing algorithm?! -->  Erstmal so lassen, funktioniert
+DONE - styling of required fields marker and warning!
+DONE - Click in Textfields logs automatically with null --> desired?! NO!
+DONE - Reload / refresh --> new case?! --> NO!
+DONE - When switching dialogs, content is not loaded, needs a new-case click
 
 
-
-----------------------------
----- TODOS  TODOS  TODOS ---
-----------------------------
-
+!! LATER - Building Blocks, Modularisierung, Drag and Drop, Visual Edit
 LATER - logout link? Passiert automatisch nach 60 Minuten    
 LATER - Anzeigen welcher Benutzer gerade eingeloggt ist?!
 LATER - Parallelzugriff auf Dateien verhindern (wenn user derselben usergroup sich einloggen)?!
   --> erstmal kein Handlungsbedarf, sollte nicht/sehr selten vorkommen da eh nur ein-zwei Bearbeiter pro Klinik
- 
-REFINE - Fallsortierung im Laden-Menü: Groß-/Kleinschreibung anders berücksichtigen
-REFINE - styling of required fields marker and warning!
 
-DONE - Click in Textfields logs automatically with null --> desired?! NO!
-DONE - Reload / refresh --> new case?! --> NO!
 
-- When switching dialogs, content is not loaded, needs a new-case click
+- Neues Typ-Konzept: noch umsetzen, bisher gibt es nur eine Form Dialoge
+  -- Dialog Kategorien sind in DialogType (Enum) definiert, jeder Dialog gehört einem solchen 
+     Basis-Typen an (momentan SingleForm, Multiform, Hierarchical, und default)
+  -- DialogType definiert, welche Art Strategie für das anzeigen von Fragen verwendet werden soll
+  	 momentan All, NextForm, NextUAQuestion
+  -- Abhängig vom Typ d3web reinladen oder nicht: für SingleForm/All braucht man den gesamten Tree von 
+     Anfang an, für MultipleForm nicht
+
+
 - check all attributes / naming
 - check templates as to be built of elements as described in papers
 - before image inclusion call method to find out whether image exists or 
@@ -88,9 +74,9 @@ DONE - Reload / refresh --> new case?! --> NO!
 - SETTING values: only use the store, not the single val any more!
 - REQUIRED VALUES: currently, only a single value can be specified as "always required", e.g., if its needed for
 	autosaving mechanism (filename assembly in the MEDIASTINITIS case). Make this more flexible to specify several vals?! 
-- enter error messages as attribute in StringTemplate, not in JS
 - Style: Abstand Answers und Radio/CheckButtons: geht teilweise kaputt
     (EuraHS) - Vermutung: liegt an prozentualer Angabe irgendwo
+
 
 --------------------
 --- REFACTORINGS ---
@@ -110,6 +96,9 @@ DONE - Refactor logging to log ids from id table for consistency
 DONE - Log ids of infopopups --> also ids from id table!
 DONE - Log end value --> timespan
 
+- REFACTOR all Templates: everything to CSS, out of template files!
+- REFACTOR Fallsortierung im Laden-Menü: Groß-/Kleinschreibung anders berücksichtigen
+- REFACTOR enter error messages as attribute in StringTemplate, not in JS
 
 - REFACTOR js file(s)
 - rename bonusText in auxInfo or so.
@@ -124,6 +113,7 @@ DONE - Log end value --> timespan
     and provide per httpSession
 - REFACTOR: styles. Check basic styles, e.g. button sizes, and only adapt colors in specific
 CSSs
+
 
 ----------
 JuriSearch
@@ -146,6 +136,8 @@ DONE - Add notification if user sets parent-rating that contradicts calculated c
 - neuer Fall, speichern, reset etc
 
 !!! - d3web Anbindung
+- KnowWE Binding for entering knowledge bases and showing dialogs
+- Styling header: print button, feedback
 
 
 
@@ -183,3 +175,5 @@ USABILITY EXTENSION
 - write questionnaire data to files --> refactor sendmail to send this file
 instead of text in mail?! (needed, files will be stored on server also
 - tweak styling of feedback/questionnaire dialogs
+- own questionnaire --> some usability questions with schulnotenskala and freetext "sonstiges"
+- internationalize questionnaires

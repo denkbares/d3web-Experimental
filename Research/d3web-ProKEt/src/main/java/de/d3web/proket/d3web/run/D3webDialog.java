@@ -49,13 +49,15 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.codec.binary.Base64;
 
 import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.knowledge.terminology.QASet;
-import de.d3web.core.knowledge.terminology.QContainer;
-import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.ValueObject;
+import de.d3web.core.knowledge.terminology.*;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Session;
+import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.blackboard.Fact;
+import de.d3web.core.session.values.MultipleChoiceValue;
+import de.d3web.core.session.values.Unknown;
 import de.d3web.proket.d3web.input.*;
 import de.d3web.proket.d3web.input.D3webXMLParser.LoginMode;
 import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
@@ -71,7 +73,7 @@ import de.d3web.proket.database.TokenThread;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * Servlet for creating and using dialogs with d3web binding. Binding is more of
@@ -106,8 +108,10 @@ public class D3webDialog extends HttpServlet {
     protected static Map<String, List<String>> usrDat = null;
     private String prevQ = "";
     private String prevV = "";
-    private static final SimpleDateFormat DATE_FORMAT_DEFAULT =
+    private static final SimpleDateFormat SDF_FILENAME_DEFAULT =
             new SimpleDateFormat("yyyyMMdd_HHmmss");
+    private static final String SDF_DEFAULT =
+            "EEE yyyy_MM_dd hh:mm:s";
 
     // TODO get Date everywhere in JS instead of Servlet
     /**
@@ -222,13 +226,13 @@ public class D3webDialog extends HttpServlet {
 
             // if a new dialog is loaded we also need a new session to start
             //resetD3webSession(httpSession);
-            Session d3webSession =
-                    D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
-            System.out.println(d3webSession);
-            httpSession.setAttribute(D3WEB_SESSION, d3webSession);
+            resetD3webSession(httpSession);
+            //D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
+            //System.out.println(d3webSession);
+            //httpSession.setAttribute(D3WEB_SESSION, d3webSession);
 
-            httpSession.setAttribute("lastLoaded", "");
-            D3webConnector.getInstance().setSession(d3webSession);
+            //httpSession.setAttribute("lastLoaded", "");
+            //D3webConnector.getInstance().setSession(d3webSession);
 
             // stream images from KB into webapp
             GLOBSET.setKbImgFolder(GLOBSET.getServletBasePath() + "kbimg");
@@ -489,6 +493,7 @@ public class D3webDialog extends HttpServlet {
 
         List<String> questions = new ArrayList<String>();
         List<String> values = new ArrayList<String>();
+
         getParameterPairs(request, "question", "value", questions, values);
 
         if (!handleRequiredValueCheck(writer, d3webSession, questions, values)) {
@@ -498,6 +503,7 @@ public class D3webDialog extends HttpServlet {
         DialogState stateBefore = new DialogState(d3webSession);
 
         setValues(d3webSession, questions, values, request, httpSession);
+
         D3webUtils.resetAbandonedPaths(d3webSession);
 
         PersistenceD3webUtils.saveCase((String) httpSession.getAttribute("user"), "autosave",
@@ -534,35 +540,96 @@ public class D3webDialog extends HttpServlet {
 
     private void setValues(Session d3webSession, List<String> questions, List<String> values, HttpServletRequest request,
             HttpSession httpSession) {
+
+        Collection abstractionsBefore =
+                D3webUtils.getValuedAbstractions(d3webSession);
+        Collection newAbstractions = new ArrayList<TerminologyObject>();
+
         for (int i = 0; i < questions.size(); i++) {
             D3webUtils.setValue(questions.get(i), values.get(i), d3webSession);
+            Collection abstractionsAfter =
+                    D3webUtils.getValuedAbstractions(d3webSession);
 
-            if (d3wcon.isLogging()) {
-
-                String logtime = request.getParameter("timestring").replace("+", " ");
-                String value = AbstractD3webRenderer.getObjectNameForId(values.get(i));
-                value = value == null ? values.get(i) : AbstractD3webRenderer.getObjectNameForId(values.get(i));
-                String question = AbstractD3webRenderer.getObjectNameForId(questions.get(i));
-                System.out.println(question  + "---" + value);
-
-                JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
-                // logQuestionValue all changed widgets/items
-                if (questions.get(i).equals(prevQ)) {
-                    if (!values.get(i).equals(prevV)) {
-
-
-                        ServletLogUtils.logQuestionValue(
-                                question, value, logtime, logger);
-                        prevQ = questions.get(i);
-                        prevV = values.get(i);
-                    }
-                } else {
-                    ServletLogUtils.logQuestionValue(
-                            question, value, logtime, logger);
-                    prevQ = questions.get(i);
-                    prevV = values.get(i);
+            for (Object vaNew : abstractionsAfter) {
+                if (!abstractionsBefore.contains((TerminologyObject) vaNew)) {
+                    newAbstractions.add(vaNew);
                 }
             }
+
+            if (d3wcon.isLogging()) {
+                handleQuestionValueLogging(request, httpSession, questions.get(i), values.get(i), d3webSession, newAbstractions);
+            }
+        }
+    }
+
+    private void handleQuestionValueLogging(HttpServletRequest request,
+            HttpSession httpSession, String ques, String val,
+            Session d3webSession, Collection<TerminologyObject> newAbstractions) {
+
+        // retrieve logtime
+        String logtime = request.getParameter("timestring").replace("+", " ");
+
+        // retrieve internal IDs of value and question and corresponding D3webObjects
+        String question = AbstractD3webRenderer.getObjectNameForId(ques);
+        Question q = D3webConnector.getInstance().getKb().getManager().searchQuestion(
+                question == null ? ques : question);
+
+        String value = AbstractD3webRenderer.getObjectNameForId(val);
+        value = value == null ? val : AbstractD3webRenderer.getObjectNameForId(val);
+        Value v = d3webSession.getBlackboard().getValue((ValueObject) q);
+
+        String datestring = "";
+        JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
+
+        /*
+         * Question Logging: only if - question remains same but value changed -
+         * OR question differs
+         */
+        if ((ques.equals(prevQ) && (!val.equals(prevV))
+                || !ques.equals(prevQ))) {
+            //if (!val.equals(prevV)) {
+
+            if (q instanceof QuestionDate) {
+                //String dateFormat = q.getInfoStore().getValue(ProKEtProperties.DATE_FORMAT);
+                //String df = dateFormat == null?SDF_DEFAULT:dateFormat;
+                if (!value.equals("Unknown")) {
+                    datestring =
+                            D3webUtils.getFormattedDateFromString(
+                            (Date) v.getValue(), SDF_DEFAULT);
+
+                    value = datestring;
+                }
+
+            } else if (q instanceof QuestionMC) {
+                String valMC = "";
+
+                if (val.equals("")) {
+                    value = Unknown.getInstance().toString();
+                } else if (val.contains("##mcanswer")) {
+
+                    String[] choiceIds = val.split("##mcanswer##");
+
+                    for (String choiceId : choiceIds) {
+                        String choiceName = AbstractD3webRenderer.getObjectNameForId(choiceId);
+                        valMC += choiceName == null ? choiceId : choiceName;
+                        valMC += "###";
+                        value = valMC;
+                    }
+                }
+                question = "MC_" + question;
+
+            }
+            ServletLogUtils.logQuestionValue(question, value, logtime, logger);
+            prevQ = ques;
+            prevV = val;
+
+            for (TerminologyObject to : newAbstractions) {
+                Question qa =
+                        D3webConnector.getInstance().getKb().getManager().searchQuestion(to.getName());
+                Value va = d3webSession.getBlackboard().getValue((ValueObject) qa);
+                ServletLogUtils.logQuestionValue(qa.getName(), va.getValue().toString(), logtime, logger);
+            }
+            System.out.println(newAbstractions);
         }
     }
 
@@ -1149,12 +1216,12 @@ public class D3webDialog extends HttpServlet {
         Transport.send(message);
 
     }
-    
+
     protected void sendUEQMail(HttpServletRequest request,
             HttpServletResponse response,
             HttpSession httpSession) throws MessagingException {
 
-       
+
         final String user = "SendmailAnonymus@freenet.de";
         final String pw = "sendmail";
 
@@ -1195,21 +1262,21 @@ public class D3webDialog extends HttpServlet {
         message.addRecipient(Message.RecipientType.TO, to);
 
         /*
-         * Constructing the message
-         *  Questionnaire Data: questionID1***value1###questionID2***value2###
+         * Constructing the message Questionnaire Data:
+         * questionID1***value1###questionID2***value2###
          */
-        
+
         String[] qvpairs = qData.split("###");
         StringBuilder qDataBui = new StringBuilder();
-        
-        for(String pair : qvpairs){
+
+        for (String pair : qvpairs) {
             String[] splitpair = pair.split("---");
             qDataBui.append(splitpair[0].replace("UE_", ""));
             qDataBui.append(" --> ");
             qDataBui.append(splitpair[1]);
             qDataBui.append("\n");
         }
-        
+
         String dialogFlag = d3wcon.getUserprefix();
         if (dialogFlag == null) {
             dialogFlag = "";
@@ -1235,7 +1302,7 @@ public class D3webDialog extends HttpServlet {
         writer.append("<div id='" + questionnaireContentID + "'>");
         writer.append(rootRenderer.renderSummaryDialog(
                 (Session) httpSession.getAttribute(D3WEB_SESSION),
-                SummaryD3webRenderer.SummaryType.QUESTIONNAIRE));
+                SummaryD3webRenderer.SummaryType.QUESTIONNAIRE, httpSession));
         writer.append("<div>");
 
         String gridContentID = "gridSummaryContent";
@@ -1245,7 +1312,7 @@ public class D3webDialog extends HttpServlet {
         writer.append("<div id='" + gridContentID + "'>");
         writer.append(rootRenderer.renderSummaryDialog(
                 (Session) httpSession.getAttribute(D3WEB_SESSION),
-                SummaryD3webRenderer.SummaryType.GRID));
+                SummaryD3webRenderer.SummaryType.GRID, httpSession));
         writer.append("<div>");
     }
 
@@ -1339,6 +1406,8 @@ public class D3webDialog extends HttpServlet {
             source = request.getParameter("src");
         }
         return source.endsWith(".xml") ? source : source + ".xml";
+
+
     }
 
     private class DialogState {
@@ -1353,10 +1422,10 @@ public class D3webDialog extends HttpServlet {
             unknownQuestions = D3webUtils.getUnknownQuestions(d3webSession);
         }
     }
+// TODO ingetrate logfilename creation for prototpes
 
-    // TODO ingetrate logfilename creation for prototpes
     protected String createLogfileName(Date loggingstart, HttpSession httpSession) {
-        String formatted = DATE_FORMAT_DEFAULT.format(loggingstart);
+        String formatted = SDF_FILENAME_DEFAULT.format(loggingstart);
         Session sid = (Session) httpSession.getAttribute(D3WEB_SESSION);
         //String sid = D3webConnector.getInstance().getSession().getId();
 
