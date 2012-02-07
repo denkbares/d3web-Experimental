@@ -10,6 +10,7 @@
 	questioncolumns="1"
 	userprefix = "EuraHS"
 	required = "Case-Number"
-	language = "en">
+	language = "en"
+        logging = "ON">
 	<data kb="Hernia.d3web" />
 </dialog>
