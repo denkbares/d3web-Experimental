@@ -541,23 +541,31 @@ public class D3webDialog extends HttpServlet {
     private void setValues(Session d3webSession, List<String> questions, List<String> values, HttpServletRequest request,
             HttpSession httpSession) {
 
+        // before-state of abstraction questions
         Collection abstractionsBefore =
                 D3webUtils.getValuedAbstractions(d3webSession);
-        Collection newAbstractions = new ArrayList<TerminologyObject>();
 
         for (int i = 0; i < questions.size(); i++) {
+
             D3webUtils.setValue(questions.get(i), values.get(i), d3webSession);
+
+            // state of abstractions AFTER setting values
             Collection abstractionsAfter =
                     D3webUtils.getValuedAbstractions(d3webSession);
 
-            for (Object vaNew : abstractionsAfter) {
-                if (!abstractionsBefore.contains((TerminologyObject) vaNew)) {
-                    newAbstractions.add(vaNew);
-                }
-            }
-
             if (d3wcon.isLogging()) {
-                handleQuestionValueLogging(request, httpSession, questions.get(i), values.get(i), d3webSession, newAbstractions);
+
+                Collection newAbstractions = new ArrayList<TerminologyObject>();
+
+                // check whether new abstractions have fired
+                for (Object vaNew : abstractionsAfter) {
+                    if (!abstractionsBefore.contains((TerminologyObject) vaNew)) {
+                        newAbstractions.add(vaNew);
+                    }
+                }
+                handleQuestionValueLogging(
+                        request, httpSession, questions.get(i), 
+                        values.get(i), d3webSession, newAbstractions);
             }
         }
     }
@@ -623,6 +631,7 @@ public class D3webDialog extends HttpServlet {
             prevQ = ques;
             prevV = val;
 
+            // also log newly set abstraction values
             for (TerminologyObject to : newAbstractions) {
                 Question qa =
                         D3webConnector.getInstance().getKb().getManager().searchQuestion(to.getName());
