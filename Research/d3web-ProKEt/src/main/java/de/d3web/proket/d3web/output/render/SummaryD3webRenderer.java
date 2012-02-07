@@ -268,7 +268,7 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
     private void fillQuestionnaireSummaryChildren(Session d3webSession, StringBuilder bui, TerminologyObject to, HttpSession httpSession) {
 
         if (to instanceof QContainer && !to.getName().contains("Q000")) {
-            if (hasAnsweredChildren(to, d3webSession)) {
+            if (D3webUtils.hasAnsweredChildren(to, d3webSession)) {
                 bui.append("<div style='margin-top:10px;'><b>");
                 bui.append(D3webConnector.getInstance().getID(to));
                 bui.append(" ");
@@ -317,22 +317,5 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
 
     }
 
-    private boolean hasAnsweredChildren(TerminologyObject questionnaire, Session d3websession) {
-        boolean has = false;
-        if (questionnaire.getChildren().length > 0) {
-
-            for (TerminologyObject child : questionnaire.getChildren()) {
-                if (child instanceof QContainer) {
-                    return hasAnsweredChildren(child, d3websession);
-                } else if (child instanceof Question) {
-                    Value val = d3websession.getBlackboard().getValue((ValueObject) child);
-                    if (val != null && UndefinedValue.isNotUndefinedValue(val)) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return has;
-    }
+    
 }

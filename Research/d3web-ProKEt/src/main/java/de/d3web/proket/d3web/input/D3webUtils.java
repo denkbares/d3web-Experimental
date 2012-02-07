@@ -39,10 +39,7 @@ import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 
 import de.d3web.core.io.PersistenceManager;
-import de.d3web.core.knowledge.InterviewObject;
-import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.Resource;
-import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.knowledge.*;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.QContainer;
@@ -1476,5 +1473,24 @@ public class D3webUtils {
         }
         
         return valuedAbstractions;
+    }
+    
+    public static boolean hasAnsweredChildren(TerminologyObject questionnaire, Session d3websession) {
+        boolean has = false;
+        if (questionnaire.getChildren().length > 0) {
+
+            for (TerminologyObject child : questionnaire.getChildren()) {
+                if (child instanceof QContainer) {
+                    return hasAnsweredChildren(child, d3websession);
+                } else if (child instanceof Question) {
+                    Value val = d3websession.getBlackboard().getValue((ValueObject) child);
+                    if (val != null && UndefinedValue.isNotUndefinedValue(val)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return has;
     }
 }

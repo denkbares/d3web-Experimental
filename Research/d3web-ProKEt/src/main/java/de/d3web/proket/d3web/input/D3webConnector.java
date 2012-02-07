@@ -213,6 +213,7 @@ public class D3webConnector {
         }
     }
 
+    //TODO: rename: gibt eigentlich den COUNTER zurück, nicht die ID
     public String getID(TerminologyObject to) {
         String id = idMap.get(to);
         if (id == null) {
