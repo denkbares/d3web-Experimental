@@ -15,267 +15,324 @@ import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.terminology.QuestionDate;
+import de.d3web.core.knowledge.terminology.QuestionNum;
+import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
-import de.d3web.core.session.values.ChoiceID;
-import de.d3web.core.session.values.ChoiceValue;
-import de.d3web.core.session.values.MultipleChoiceValue;
-import de.d3web.core.session.values.NumValue;
-import de.d3web.core.session.values.UndefinedValue;
+import de.d3web.core.session.values.*;
 import de.d3web.core.utilities.Pair;
 import de.d3web.proket.d3web.input.D3webConnector;
+import de.d3web.proket.d3web.input.D3webUtils;
+import java.util.Date;
+import javax.servlet.http.HttpSession;
 
 public class SummaryD3webRenderer extends AbstractD3webRenderer {
 
-	public enum SummaryType {
-		QUESTIONNAIRE,
-		GRID
-	}
+    public enum SummaryType {
 
-	public String renderSummaryDialog(Session d3webSession, SummaryType type) {
+        QUESTIONNAIRE,
+        GRID
+    }
 
-		StringBuilder bui = new StringBuilder();
+    public String renderSummaryDialog(Session d3webSession, SummaryType type, HttpSession http) {
 
-		if (type == SummaryType.GRID) {
-			fillGridSummary(d3webSession, bui);
-		}
-		else if (type == SummaryType.QUESTIONNAIRE) {
-			TerminologyObject root = d3webSession.getKnowledgeBase().getRootQASet();
-			fillQuestionnaireSummaryChildren(d3webSession, bui, root);
-		}
+        StringBuilder bui = new StringBuilder();
 
-		return bui.toString();
-	}
+        if (type == SummaryType.GRID) {
+            fillGridSummary(d3webSession, bui);
+        } else if (type == SummaryType.QUESTIONNAIRE) {
+            TerminologyObject root = d3webSession.getKnowledgeBase().getRootQASet();
+            fillQuestionnaireSummaryChildren(d3webSession, bui, root, http);
+        }
 
-	private void fillGridSummary(Session d3webSession, StringBuilder bui) {
-		KnowledgeBase knowledgeBase = d3webSession.getKnowledgeBase();
-		for (Resource resource : knowledgeBase.getResources()) {
-			String pathName = resource.getPathName();
+        return bui.toString();
+    }
 
-			boolean isGrid = pathName.endsWith(".txt");
-			if (!isGrid) continue;
+    private void fillGridSummary(Session d3webSession, StringBuilder bui) {
+        KnowledgeBase knowledgeBase = d3webSession.getKnowledgeBase();
+        for (Resource resource : knowledgeBase.getResources()) {
+            String pathName = resource.getPathName();
 
-			int lastSlash = pathName.lastIndexOf('/') + 1;
-			isGrid = pathName.substring(lastSlash).toLowerCase().startsWith("grid");
-			if (!isGrid) continue;
+            boolean isGrid = pathName.endsWith(".txt");
+            if (!isGrid) {
+                continue;
+            }
 
-			StringBuilder content = getText(resource);
+            int lastSlash = pathName.lastIndexOf('/') + 1;
+            isGrid = pathName.substring(lastSlash).toLowerCase().startsWith("grid");
+            if (!isGrid) {
+                continue;
+            }
 
-			List<Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>> result = parse(content.toString());
-			if (result.isEmpty()) continue;
+            StringBuilder content = getText(resource);
 
-			boolean nothingAnswered = enrichGrid(d3webSession, content, result);
-			if (nothingAnswered) continue;
+            List<Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>> result = parse(content.toString());
+            if (result.isEmpty()) {
+                continue;
+            }
 
-			bui.append(content.toString());
-		}
-		if (bui.length() == 0) {
-			bui.append("No data available yet.");
-		}
-	}
+            boolean nothingAnswered = enrichGrid(d3webSession, content, result);
+            if (nothingAnswered) {
+                continue;
+            }
 
-	private boolean enrichGrid(Session d3webSession,
-			StringBuilder content,
-			List<Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>> result) {
+            bui.append(content.toString());
+        }
+        if (bui.length() == 0) {
+            bui.append("No data available yet.");
+        }
+    }
 
-		boolean nothingAnswered = true;
-		for (Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>> parsePair : result) {
-			int matchStart = parsePair.getA().getA();
-			int matchEnd = parsePair.getA().getB();
+    private boolean enrichGrid(Session d3webSession,
+            StringBuilder content,
+            List<Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>> result) {
 
-			Pair<String, Object> questionAnswerPair1 = parsePair.getB().getA();
-			Pair<String, Object> questionAnswerPair2 = parsePair.getB().getB();
+        boolean nothingAnswered = true;
+        for (Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>> parsePair : result) {
+            int matchStart = parsePair.getA().getA();
+            int matchEnd = parsePair.getA().getB();
 
-			boolean isCondition1Matching = isConditionMatchingOrNull(d3webSession,
-					questionAnswerPair1);
+            Pair<String, Object> questionAnswerPair1 = parsePair.getB().getA();
+            Pair<String, Object> questionAnswerPair2 = parsePair.getB().getB();
 
-			boolean isCondition2Matching = isConditionMatchingOrNull(d3webSession,
-					questionAnswerPair2);
+            boolean isCondition1Matching = isConditionMatchingOrNull(d3webSession,
+                    questionAnswerPair1);
 
-			if (isCondition1Matching && isCondition2Matching) {
-				Value value = getValue(d3webSession, questionAnswerPair1.getA());
-				if (value.getValue() instanceof Double) {
-					content.replace(matchStart, matchEnd, String.valueOf(value.getValue()));
-				}
-				else {
-					content.replace(matchStart, matchEnd, "X");
-				}
-				nothingAnswered = false;
-			}
-			else {
-				content.replace(matchStart, matchEnd, "<div> </div>");
-			}
+            boolean isCondition2Matching = isConditionMatchingOrNull(d3webSession,
+                    questionAnswerPair2);
 
-		}
-		return nothingAnswered;
-	}
+            if (isCondition1Matching && isCondition2Matching) {
+                Value value = getValue(d3webSession, questionAnswerPair1.getA());
+                if (value.getValue() instanceof Double) {
+                    content.replace(matchStart, matchEnd, String.valueOf(value.getValue()));
+                } else {
+                    content.replace(matchStart, matchEnd, "X");
+                }
+                nothingAnswered = false;
+            } else {
+                content.replace(matchStart, matchEnd, "<div> </div>");
+            }
 
-	private boolean isConditionMatchingOrNull(Session d3webSession, Pair<String, Object> questionAnswerPair) {
+        }
+        return nothingAnswered;
+    }
 
-		if (questionAnswerPair == null) return true;
+    private boolean isConditionMatchingOrNull(Session d3webSession, Pair<String, Object> questionAnswerPair) {
 
-		String questionName = questionAnswerPair.getA();
+        if (questionAnswerPair == null) {
+            return true;
+        }
 
-		Value value = getValue(d3webSession, questionName);
+        String questionName = questionAnswerPair.getA();
 
-		if (value == null || UndefinedValue.isUndefinedValue(value)) return false;
+        Value value = getValue(d3webSession, questionName);
 
-		Object answerTypeObject = questionAnswerPair.getB();
+        if (value == null || UndefinedValue.isUndefinedValue(value)) {
+            return false;
+        }
 
-		if (answerTypeObject instanceof String[]) {
-			return isMatchingChoiceCondition((String[]) answerTypeObject, value);
-		}
-		else {
-			@SuppressWarnings("unchecked")
-			Pair<Integer, Integer> interval = (Pair<Integer, Integer>) answerTypeObject;
-			return isMatchingNumCondition(interval, value);
-		}
-	}
+        Object answerTypeObject = questionAnswerPair.getB();
 
-	private Value getValue(Session d3webSession, String questionName) {
-		Blackboard bb = d3webSession.getBlackboard();
-		KnowledgeBase knowledgeBase = d3webSession.getKnowledgeBase();
+        if (answerTypeObject instanceof String[]) {
+            return isMatchingChoiceCondition((String[]) answerTypeObject, value);
+        } else {
+            @SuppressWarnings("unchecked")
+            Pair<Integer, Integer> interval = (Pair<Integer, Integer>) answerTypeObject;
+            return isMatchingNumCondition(interval, value);
+        }
+    }
 
-		Question question = knowledgeBase.getManager().searchQuestion(questionName);
+    private Value getValue(Session d3webSession, String questionName) {
+        Blackboard bb = d3webSession.getBlackboard();
+        KnowledgeBase knowledgeBase = d3webSession.getKnowledgeBase();
 
-		if (question == null) return null;
+        Question question = knowledgeBase.getManager().searchQuestion(questionName);
 
-		return bb.getValue(question);
-	}
+        if (question == null) {
+            return null;
+        }
 
-	private boolean isMatchingChoiceCondition(String[] answerNames, Value value) {
-		for (String answerName : answerNames) {
-			if (value instanceof MultipleChoiceValue) {
-				if (((MultipleChoiceValue) value).contains(new ChoiceID(answerName))) {
-					return true;
-				}
-			}
-			if (value instanceof ChoiceValue) {
-				if (((ChoiceValue) value).getChoiceID().equals(new ChoiceID(answerName))) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+        return bb.getValue(question);
+    }
 
-	private boolean isMatchingNumCondition(Pair<Integer, Integer> interval, Value value) {
-		if (value instanceof NumValue) {
-			Double doubleValue = ((NumValue) value).getDouble();
-			int intervalStart = interval.getA();
-			int intervalEnd = interval.getB();
-			if (doubleValue >= intervalStart
-					&& doubleValue < intervalEnd) {
-				return true;
-			}
-		}
-		return false;
-	}
+    private boolean isMatchingChoiceCondition(String[] answerNames, Value value) {
+        for (String answerName : answerNames) {
+            if (value instanceof MultipleChoiceValue) {
+                if (((MultipleChoiceValue) value).contains(new ChoiceID(answerName))) {
+                    return true;
+                }
+            }
+            if (value instanceof ChoiceValue) {
+                if (((ChoiceValue) value).getChoiceID().equals(new ChoiceID(answerName))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
-	private List<Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>> parse(String content) {
+    private boolean isMatchingNumCondition(Pair<Integer, Integer> interval, Value value) {
+        if (value instanceof NumValue) {
+            Double doubleValue = ((NumValue) value).getDouble();
+            int intervalStart = interval.getA();
+            int intervalEnd = interval.getB();
+            if (doubleValue >= intervalStart
+                    && doubleValue < intervalEnd) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-		String questionPattern = "(.+?)::";
-		String numIntervalPattern = "num::(\\d*),(\\d*)";
-		String choicePattern = "choice::(.+?)";
+    private List<Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>> parse(String content) {
 
-		String questionAnswerCondition = questionPattern + "(?:" + choicePattern + "|"
-				+ numIntervalPattern + ")";
+        String questionPattern = "(.+?)::";
+        String numIntervalPattern = "num::(\\d*),(\\d*)";
+        String choicePattern = "choice::(.+?)";
 
-		Pattern conditionPattern = Pattern.compile(
-				"##" + questionAnswerCondition + "(&&" + questionAnswerCondition + ")?##");
+        String questionAnswerCondition = questionPattern + "(?:" + choicePattern + "|"
+                + numIntervalPattern + ")";
 
-		Matcher matcher = conditionPattern.matcher(content);
-		LinkedList<Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>> result =
-				new LinkedList<Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>>();
-		while (matcher.find()) {
+        Pattern conditionPattern = Pattern.compile(
+                "##" + questionAnswerCondition + "(&&" + questionAnswerCondition + ")?##");
 
-			Pair<Integer, Integer> startEndPair = new Pair<Integer, Integer>(matcher.start(),
-					matcher.end());
+        Matcher matcher = conditionPattern.matcher(content);
+        LinkedList<Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>> result =
+                new LinkedList<Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>>();
+        while (matcher.find()) {
 
-			Pair<String, Object> questionAnswerPair = getQuestionAnswerPair(matcher, 0);
-			Pair<String, Object> questionAnswerPair2 = null;
+            Pair<Integer, Integer> startEndPair = new Pair<Integer, Integer>(matcher.start(),
+                    matcher.end());
 
-			boolean secondCondition = matcher.group(5) != null;
+            Pair<String, Object> questionAnswerPair = getQuestionAnswerPair(matcher, 0);
+            Pair<String, Object> questionAnswerPair2 = null;
 
-			if (secondCondition) {
-				questionAnswerPair2 = getQuestionAnswerPair(matcher, 5);
-			}
+            boolean secondCondition = matcher.group(5) != null;
 
-			Pair<Pair<String, Object>, Pair<String, Object>> questionAnswerPairs =
-					new Pair<Pair<String, Object>, Pair<String, Object>>(
-							questionAnswerPair, questionAnswerPair2);
+            if (secondCondition) {
+                questionAnswerPair2 = getQuestionAnswerPair(matcher, 5);
+            }
 
-			result.addFirst(new Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>(
-					startEndPair, questionAnswerPairs));
-		}
-		return result;
-	}
+            Pair<Pair<String, Object>, Pair<String, Object>> questionAnswerPairs =
+                    new Pair<Pair<String, Object>, Pair<String, Object>>(
+                    questionAnswerPair, questionAnswerPair2);
 
-	private Pair<String, Object> getQuestionAnswerPair(Matcher matcher, int groupIndex) {
-		String question = matcher.group(groupIndex + 1);
-		String choice = matcher.group(groupIndex + 2);
-		String intervalStart = matcher.group(groupIndex + 3);
-		String intervalEnd = matcher.group(groupIndex + 4);
+            result.addFirst(new Pair<Pair<Integer, Integer>, Pair<Pair<String, Object>, Pair<String, Object>>>(
+                    startEndPair, questionAnswerPairs));
+        }
+        return result;
+    }
 
-		Pair<String, Object> questionAnswerPair = null;
-		if (choice != null) {
-			String[] choiceSplit = choice.trim().split("\\s*\\|\\|\\s*");
-			questionAnswerPair = new Pair<String, Object>(question.trim(), choiceSplit);
-		}
-		else {
-			int start = intervalStart.trim().isEmpty()
-					? Integer.MIN_VALUE
-					: Integer.parseInt(intervalStart.trim());
-			int end = intervalEnd.trim().isEmpty()
-					? Integer.MAX_VALUE
-					: Integer.parseInt(intervalEnd.trim());
-			questionAnswerPair = new Pair<String, Object>(question.trim(),
-					new Pair<Integer, Integer>(start, end));
-		}
+    private Pair<String, Object> getQuestionAnswerPair(Matcher matcher, int groupIndex) {
+        String question = matcher.group(groupIndex + 1);
+        String choice = matcher.group(groupIndex + 2);
+        String intervalStart = matcher.group(groupIndex + 3);
+        String intervalEnd = matcher.group(groupIndex + 4);
 
-		return questionAnswerPair;
-	}
+        Pair<String, Object> questionAnswerPair = null;
+        if (choice != null) {
+            String[] choiceSplit = choice.trim().split("\\s*\\|\\|\\s*");
+            questionAnswerPair = new Pair<String, Object>(question.trim(), choiceSplit);
+        } else {
+            int start = intervalStart.trim().isEmpty()
+                    ? Integer.MIN_VALUE
+                    : Integer.parseInt(intervalStart.trim());
+            int end = intervalEnd.trim().isEmpty()
+                    ? Integer.MAX_VALUE
+                    : Integer.parseInt(intervalEnd.trim());
+            questionAnswerPair = new Pair<String, Object>(question.trim(),
+                    new Pair<Integer, Integer>(start, end));
+        }
 
-	private StringBuilder getText(Resource resource) {
-		StringBuilder sb = new StringBuilder();
-		try {
-			InputStream inputStream = resource.getInputStream();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				sb.append(line + "\n");
-			}
-			inputStream.close();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		return sb;
-	}
+        return questionAnswerPair;
+    }
 
-	private void fillQuestionnaireSummaryChildren(Session d3webSession, StringBuilder bui, TerminologyObject to) {
+    private StringBuilder getText(Resource resource) {
+        StringBuilder sb = new StringBuilder();
+        try {
+            InputStream inputStream = resource.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return sb;
+    }
 
-		if (to instanceof QContainer && !to.getName().contains("Q000")) {
-			bui.append("<div style='margin-top:10px;'><b>" + D3webConnector.getInstance().getID(to)
-					+ " " + to.getName()
-					+ "</b></div>\n");
-		}
-		else if (to instanceof Question) {
-			Value val = d3webSession.getBlackboard().getValue((ValueObject) to);
-			if (val != null && UndefinedValue.isNotUndefinedValue(val)) {
-				bui.append("<div style='margin-left:10px;'>"
-						+ D3webConnector.getInstance().getID(to) + " " + to.getName()
-						+ " -- " + val + "</div>\n");
-			}
-		}
+    private void fillQuestionnaireSummaryChildren(Session d3webSession, StringBuilder bui, TerminologyObject to, HttpSession httpSession) {
 
-		if (to.getChildren() != null && to.getChildren().length != 0) {
-			for (TerminologyObject toc : to.getChildren()) {
-				fillQuestionnaireSummaryChildren(d3webSession, bui, toc);
-			}
-		}
+        if (to instanceof QContainer && !to.getName().contains("Q000")) {
+            if (hasAnsweredChildren(to, d3webSession)) {
+                bui.append("<div style='margin-top:10px;'><b>");
+                bui.append(D3webConnector.getInstance().getID(to));
+                bui.append(" ");
+                bui.append(to.getName());
+                bui.append("</b></div>\n");
+            }
+        } else if (to instanceof Question) {
+            Value val = d3webSession.getBlackboard().getValue((ValueObject) to);
+            if (val != null && UndefinedValue.isNotUndefinedValue(val)) {
 
-	}
+                // handle date quesstions separately for formatting date representation
+                if (to instanceof QuestionDate) {
 
+                    // Format the date appropriately
+                    String f = D3webUtils.getFormattedDateFromString((Date)val.getValue(), "dd.MM.yyyy");
+
+                    bui.append("<div style='margin-left:10px;'>"
+                            + D3webConnector.getInstance().getID(to) + " " + to.getName()
+                            + " -- " + f + "</div>\n");
+                } // handle abstraction questions separately, e.g. for rounding age quesstion
+                else if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)
+                        && to instanceof QuestionNum) {
+                    
+                        //System.out.println("NUM VAL: " + val);
+                        //System.out.println("As int: " + (int)Double.parseDouble(val.toString()));
+                        int doubleAsInt = (int) Double.parseDouble(val.toString());
+                        bui.append("<div style='margin-left:10px;'>"
+                                + D3webConnector.getInstance().getID(to) + " " + to.getName()
+                                + " -- " + doubleAsInt + "</div>\n");
+                    
+                } // all other questions: just append question and val
+                else {
+                    bui.append("<div style='margin-left:10px;'>"
+                            + D3webConnector.getInstance().getID(to) + " " + to.getName()
+                            + " -- " + val + "</div>\n");
+
+                }
+            }
+        }
+
+        if (to.getChildren() != null && to.getChildren().length != 0) {
+            for (TerminologyObject toc : to.getChildren()) {
+                fillQuestionnaireSummaryChildren(d3webSession, bui, toc, httpSession);
+            }
+        }
+
+    }
+
+    private boolean hasAnsweredChildren(TerminologyObject questionnaire, Session d3websession) {
+        boolean has = false;
+        if (questionnaire.getChildren().length > 0) {
+
+            for (TerminologyObject child : questionnaire.getChildren()) {
+                if (child instanceof QContainer) {
+                    return hasAnsweredChildren(child, d3websession);
+                } else if (child instanceof Question) {
+                    Value val = d3websession.getBlackboard().getValue((ValueObject) child);
+                    if (val != null && UndefinedValue.isNotUndefinedValue(val)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return has;
+    }
 }
