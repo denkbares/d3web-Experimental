@@ -30,13 +30,13 @@ SessionDebugger.send = function(sessionid, casedate, name, topic) {
             new _KA( options ).send();         
         }
         
-SessionDebugger.change = function(sessionid, selectedvalue) {
+SessionDebugger.change = function(key_sessionid, selectedvalue) {
 			var topic = KNOWWE.helper.gup('page')
 			
             var params = {
-        		action : 'TestCaseSelectorAction',
+        		action : 'SelectorAction',
        			KWiki_Topic : topic,
-       			id : sessionid,
+       			key : key_sessionid,
        			value : selectedvalue
     		}
             

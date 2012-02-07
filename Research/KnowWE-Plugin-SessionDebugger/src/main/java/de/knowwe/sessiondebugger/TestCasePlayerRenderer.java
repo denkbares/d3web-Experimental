@@ -43,6 +43,7 @@ import de.d3web.testcase.TestCaseUtils;
 import de.d3web.testcase.model.Check;
 import de.d3web.testcase.model.Finding;
 import de.d3web.testcase.model.TestCase;
+import de.d3web.we.testcase.kdom.TimeStampType;
 import de.knowwe.core.KnowWEArticleManager;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.compile.packaging.KnowWEPackageManager;
@@ -64,10 +65,12 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 
 	private static final String QUESTIONS_SEPARATOR = "#####";
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS");
-	public static String SELECTOR_KEY = "selector";
+	private static String SELECTOR_KEY = "selector";
+	private static String QUESTION_SELECTOR_KEY = "question_selector";
 
 	@Override
-	public void render(KnowWEArticle article, Section<ContentType> section, UserContext user, StringBuilder string) {
+	public void render(KnowWEArticle article, Section<ContentType> section, UserContext user, StringBuilder result) {
+		StringBuilder string = new StringBuilder();
 		if (user == null || user.getSession() == null) {
 			return;
 		}
@@ -96,7 +99,7 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 				}
 			}
 		}
-		string.append(KnowWEUtils.maskHTML("<span id='" + section.getID() + "'>"));
+		string.append(KnowWEUtils.maskHTML("<div id='" + section.getID() + "'>"));
 
 		if (providers.size() == 0) {
 			string.append("No TestCaseProvider found in the packages: " + section.getPackageNames());
@@ -118,6 +121,7 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 				if (status.getSession() != session) {
 					status.setSession(session);
 				}
+				string.append(" Start: " + dateFormat.format(testCase.getStartDate()));
 
 				if (testCase != null) {
 					// get Question from cookie
@@ -142,7 +146,7 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 						questionStrings = additionalQuestions.split(QUESTIONS_SEPARATOR);
 					}
 					Collection<Question> usedQuestions = TestCaseUtils.getUsedQuestions(testCase);
-					string.append("\n|| ||Date");
+					string.append("\n|| ||Time");
 					for (Question q : usedQuestions) {
 						string.append("||" + q.getName());
 					}
@@ -150,14 +154,17 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 					TerminologyManager manager = session.getKnowledgeBase().getManager();
 					renderObservationQuestionsHeader(string, status, additionalQuestions,
 							questionStrings, manager);
-					renderObservationQuestionAdder(section, string, questionStrings, manager,
+					Question selectedQuestion = renderObservationQuestionAdder(section, user,
+							string, questionStrings, manager,
 							additionalQuestions);
 					string.append("\n");
 					for (Date date : testCase.chronology()) {
 						String dateString = dateFormat.format(date);
 						renderRunTo(string, selectedTriple, status, date, dateString);
 						// render date cell
-						string.append("|" + dateString);
+						string.append("|"
+								+ TimeStampType.createTimeAsTimeStamp(date.getTime()
+										- testCase.getStartDate().getTime()));
 						// render values of questions
 						for (Question q : usedQuestions) {
 							Finding finding = testCase.getFinding(date, q);
@@ -176,21 +183,30 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 								string.append("| ");
 							}
 							else {
-								Value value = status.getValue(question, date);
-								if (value != null) {
-									string.append("|" + value);
-								}
-								else {
-									string.append("| ");
-								}
+								appendValueCell(string, status, question, date);
 							}
+						}
+						if (selectedQuestion != null) {
+							appendValueCell(string, status, selectedQuestion, date);
 						}
 						string.append("\n");
 					}
+					// string.append("/%\n");
 				}
 			}
 		}
-		string.append(KnowWEUtils.maskHTML("</span>"));
+		string.append(KnowWEUtils.maskHTML("</div>"));
+		result.append(string.toString());
+	}
+
+	private void appendValueCell(StringBuilder string, SessionDebugStatus status, Question question, Date date) {
+		Value value = status.getValue(question, date);
+		if (value != null) {
+			string.append("|" + value);
+		}
+		else {
+			string.append("| ");
+		}
 	}
 
 	private void renderObservationQuestionsHeader(StringBuilder string, SessionDebugStatus status, String additionalQuestions, String[] questionStrings, TerminologyManager manager) {
@@ -215,9 +231,9 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 				newQuestionsString = newQuestionsString.substring(0,
 						newQuestionsString.length() - QUESTIONS_SEPARATOR.length());
 			}
-			string.append(KnowWEUtils.maskHTML(" <a onclick=\"SessionDebugger.addCookie(&quot;"
+			string.append(KnowWEUtils.maskHTML(" <input type=\"button\" value=\"-\" onclick=\"SessionDebugger.addCookie(&quot;"
 					+ newQuestionsString
-					+ "&quot;);\">X</a>"));
+					+ "&quot;);\">"));
 		}
 	}
 
@@ -280,18 +296,37 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 		}
 	}
 
-	private void renderObservationQuestionAdder(Section<ContentType> section, StringBuilder string, String[] questionStrings, TerminologyManager manager, String questionString) {
+	private Question renderObservationQuestionAdder(Section<ContentType> section, UserContext user, StringBuilder string, String[] questionStrings, TerminologyManager manager, String questionString) {
+		String key = QUESTION_SELECTOR_KEY + "_" + section.getID();
+		String selectedQuestion = (String) user.getSession().getAttribute(
+				key);
+		Question question = null;
 		StringBuffer selectsb2 = new StringBuffer();
-		selectsb2.append("||<form><select name=\"toAdd\" id=adder" + section.getID() + ">");
+		selectsb2.append("||<form><select name=\"toAdd\" id=adder" + section.getID()
+				+ " onchange=\"SessionDebugger.change('" + key
+							+ "', this.options[this.selectedIndex].value);\">");
 		HashSet<String> alreadyAddedQuestions = new HashSet<String>(Arrays.asList(questionStrings));
+		boolean foundone = false;
 		for (Question q : manager.getQuestions()) {
 			if (!alreadyAddedQuestions.contains(q.getName())) {
-				selectsb2.append("<option value='" + q.getName() + "'>"
-						+ q.getName() + "</option>");
-
+				// init question with the first Question not already added
+				if (question == null) question = q;
+				if (q.getName().equals(selectedQuestion)) {
+					selectsb2.append("<option selected='selected' value='" + q.getName() + "'>"
+							+ q.getName() + "</option>");
+					question = q;
+				}
+				else {
+					selectsb2.append("<option value='" + q.getName() + "'>" + q.getName()
+							+ "</option>");
+				}
+				foundone = true;
 			}
 		}
 		selectsb2.append("</select>");
+		if (question != null && !question.getName().equals(selectedQuestion)) {
+			user.getSession().setAttribute(key, question.getName());
+		}
 		if (questionString != null && !questionString.isEmpty()) {
 			selectsb2.append("<input type=\"button\" value=\"+\" onclick=\"SessionDebugger.addCookie(&quot;"
 					+ questionString
@@ -301,19 +336,22 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 		else {
 			selectsb2.append("<input type=\"button\" value=\"+\" onclick=\"SessionDebugger.addCookie(this.form.toAdd.options[toAdd.selectedIndex].value);\"></form>");
 		}
-		string.append(KnowWEUtils.maskHTML(selectsb2.toString()));
+		if (foundone) {
+			string.append(KnowWEUtils.maskHTML(selectsb2.toString()));
+		}
+		return question;
 	}
 
 	private Triple<TestCaseProvider, Section<?>, KnowWEArticle> renderTestCaseSelection(Section<ContentType> section, UserContext user, StringBuilder string, List<Triple<TestCaseProvider, Section<?>, KnowWEArticle>> providers) {
+		String key = SELECTOR_KEY + "_" + section.getID();
 		String selectedID = (String) user.getSession().getAttribute(
-				SELECTOR_KEY + "_" + section.getID());
+				key);
 		StringBuffer selectsb = new StringBuffer();
 		// if no pair is selected, use the first
 		Triple<TestCaseProvider, Section<?>, KnowWEArticle> selectedPair = providers.get(0);
-		selectsb.append("Select TestCase: <select id=selector" +
-				section.getID()
-				+ " onchange=\"SessionDebugger.change('" + section.getID() +
-				"', this.options[this.selectedIndex].value);\">");
+		selectsb.append("Select TestCase: <select id=selector" + section.getID()
+				+ " onchange=\"SessionDebugger.change('" + key
+				+ "', this.options[this.selectedIndex].value);\">");
 		for (Triple<TestCaseProvider, Section<?>, KnowWEArticle> triple : providers) {
 			String id = triple.getC().getTitle() + "/" + triple.getA().getName();
 			if (id.equals(selectedID)) {

@@ -26,17 +26,17 @@ import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 
 /**
- * Stores which TestCase is actually selected in the {@link HttpSession}
+ * Stores a value witch is actually selected in the {@link HttpSession}
  * 
  * @author Markus Friedrich (denkbares GmbH)
  * @created 27.01.2012
  */
-public class TestCaseSelectorAction extends AbstractAction {
+public class SelectorAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-		String sectionid = context.getParameter("id");
-		context.getSession().setAttribute(TestCasePlayerRenderer.SELECTOR_KEY + "_" + sectionid,
+		String key = context.getParameter("key");
+		context.getSession().setAttribute(key,
 				context.getParameter("value"));
 	}
 
