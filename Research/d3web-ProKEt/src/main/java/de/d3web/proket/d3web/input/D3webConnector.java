@@ -75,17 +75,17 @@ public class D3webConnector {
     private Map<TerminologyObject, String> idMap;
 
     /*
-     * Counter for question IDs
+     * Counter for question IDs; needs to be 1 as there is no root question 
      */
     private int qCount = 1;
 
     /*
-     * Counter for questionnaire IDs
+     * Counter for questionnaire IDs; needs to be 0 as there exists a root qc
      */
     private int qcCount = 0;
 
     /*
-     * Counter for solution IDs
+     * Counter for solution IDs; needs to be 0 as there exists a root solution
      */
     private int sCount = 0;
 
@@ -187,6 +187,9 @@ public class D3webConnector {
     public void setKb(KnowledgeBase kb) {
         this.kb = kb;
         this.idMap = new HashMap<TerminologyObject, String>();
+        qcCount = 0;
+        qCount = 1;
+        sCount = 0;
         generateIDs(kb.getRootQASet());
         generateIDs(kb.getRootSolution());
 
