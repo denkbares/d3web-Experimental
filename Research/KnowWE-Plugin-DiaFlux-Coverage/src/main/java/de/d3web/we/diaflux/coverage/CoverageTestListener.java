@@ -18,7 +18,12 @@
  */
 package de.d3web.we.diaflux.coverage;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import de.d3web.core.session.Session;
+import de.d3web.diaflux.coverage.CoverageSessionObject;
+import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
 import de.d3web.empiricaltesting.RatedTestCase;
 import de.d3web.empiricaltesting.SequentialTestCase;
 import de.d3web.empiricaltesting.TestCase;
@@ -31,17 +36,28 @@ import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysisReport;
 /**
  * 
  * @author Reinhard Hatko
- * @created 13.09.2011 
+ * @created 13.09.2011
  */
 public class CoverageTestListener implements TestListener {
+
+	private final Map<SequentialTestCase, CoverageSessionObject> results;
+
+	public CoverageTestListener() {
+		this.results = new HashMap<SequentialTestCase, CoverageSessionObject>();
+	}
 
 	@Override
 	public void testcaseStarting(TestCase tc) {
 	}
 
 	@Override
-	public void sequentialTestcaseStarting(SequentialTestCase stc, Session session) {
+	public void testcaseFinished(TestCase tc, TestCaseAnalysisReport report) {
+	}
 
+	@Override
+	public void sequentialTestcaseStarting(SequentialTestCase stc, Session session) {
+//		System.out.println("Starting testcase: " + stc.getName() + " (" + stc.getCases().size()
+//				+ " RTCs)");
 	}
 
 	@Override
@@ -54,12 +70,12 @@ public class CoverageTestListener implements TestListener {
 
 	@Override
 	public void sequentialTestcaseFinished(SequentialTestCase stc, Session session, Diff diff) {
-
+		CoverageSessionObject result = PSMDiaFluxCoverage.getCoverage(session);
+		results.put(stc, result);
 	}
 
-	@Override
-	public void testcaseFinished(TestCase tc, TestCaseAnalysisReport report) {
-
+	public Map<SequentialTestCase, CoverageSessionObject> getResults() {
+		return results;
 	}
 
 }
