@@ -49,24 +49,23 @@ public abstract class AttachmentTestCaseProvider implements TestCaseProvider {
 	protected List<Message> messages = new LinkedList<Message>();
 	protected final KnowWEArticle article;
 	private final Map<String, SessionDebugStatus> statusPerUser = new HashMap<String, SessionDebugStatus>();
-	private final String fileName;
-	private final KnowWEArticle fileArticle;
 
-	public AttachmentTestCaseProvider(KnowWEArticle article, String fileName, KnowWEArticle fileArticle) {
+	public AttachmentTestCaseProvider(KnowWEArticle article, ConnectorAttachment attachment) {
 		super();
 		this.article = article;
-		this.fileName = fileName;
-		this.fileArticle = fileArticle;
+		this.attachment = attachment;
+		parse();
 	}
 
 	@Override
 	public TestCase getTestCase() {
-		ConnectorAttachment actualAttachment = KnowWEUtils.getAttachment(fileArticle.getTitle(),
-				fileName);
+		ConnectorAttachment actualAttachment = KnowWEUtils.getAttachment(
+				attachment.getParentName(),
+				attachment.getFileName());
 		if (actualAttachment == null) {
 			messages.clear();
 			statusPerUser.clear();
-			messages.add(Messages.error("File " + fileName
+			messages.add(Messages.error("File " + attachment.getFileName()
 					+ " cannot be found attached to this article.\n"));
 			return null;
 		}
@@ -110,7 +109,7 @@ public abstract class AttachmentTestCaseProvider implements TestCaseProvider {
 
 	@Override
 	public String getName() {
-		return fileArticle.getTitle() + "/" + fileName;
+		return attachment.getFullName();
 	}
 
 }

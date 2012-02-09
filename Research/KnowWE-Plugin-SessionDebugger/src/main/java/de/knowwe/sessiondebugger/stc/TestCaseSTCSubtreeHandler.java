@@ -18,13 +18,14 @@
  */
 package de.knowwe.sessiondebugger.stc;
 
-import java.util.List;
+import java.util.Collection;
 
 import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
-import de.knowwe.sessiondebugger.AttachmentTestCaseProvider;
-import de.knowwe.sessiondebugger.TestCaseFilesSubtreeHandler;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.sessiondebugger.FileTestCaseProviderStorage;
 import de.knowwe.sessiondebugger.TestCaseProviderStorage;
 
 /**
@@ -33,14 +34,23 @@ import de.knowwe.sessiondebugger.TestCaseProviderStorage;
  * @author Markus Friedrich (denkbares GmbH)
  * @created 25.01.2012
  */
-public class TestCaseSTCSubtreeHandler extends TestCaseFilesSubtreeHandler<TestCaseSTCType> {
+public class TestCaseSTCSubtreeHandler extends SubtreeHandler<TestCaseSTCType> {
 
 	@Override
-	protected void addTestCaseProvider(KnowWEArticle article, TestCaseProviderStorage testCaseProviderStorage, List<Message> messages, String fileName, KnowWEArticle filearArticle) {
-		AttachmentTestCaseProvider provider = new STCTestCaseProvider(article, fileName,
-				filearArticle);
-		testCaseProviderStorage.addProvider(provider);
-		messages.addAll(provider.getMessages());
+	public Collection<Message> create(KnowWEArticle article, Section<TestCaseSTCType> section) {
+		String[] fileNames = DefaultMarkupType.getAnnotations(section, "file");
+		FileTestCaseProviderStorage testCaseProviderStorage = (FileTestCaseProviderStorage) section.getSectionStore().getObject(
+				article, TestCaseProviderStorage.KEY);
+		if (testCaseProviderStorage == null) {
+			testCaseProviderStorage = new STCTestCaseProviderStorage(article, fileNames,
+					section.getArticle());
+			section.getSectionStore().storeObject(article, TestCaseProviderStorage.KEY,
+					testCaseProviderStorage);
+		}
+		else {
+			testCaseProviderStorage.update(fileNames);
+		}
+		return testCaseProviderStorage.getMessages();
 	}
 
 }

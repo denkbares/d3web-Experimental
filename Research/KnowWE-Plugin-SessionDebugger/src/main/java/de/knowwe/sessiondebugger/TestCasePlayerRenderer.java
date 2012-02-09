@@ -121,9 +121,9 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 				if (status.getSession() != session) {
 					status.setSession(session);
 				}
-				string.append(" Start: " + dateFormat.format(testCase.getStartDate()));
 
 				if (testCase != null) {
+					string.append(" Start: " + dateFormat.format(testCase.getStartDate()));
 					// get Question from cookie
 					String additionalQuestions = null;
 					String cookiename = "additionalQuestions" + article.getTitle();

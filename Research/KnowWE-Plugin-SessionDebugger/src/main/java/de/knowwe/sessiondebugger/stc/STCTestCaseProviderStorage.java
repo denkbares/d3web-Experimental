@@ -16,28 +16,27 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.knowwe.sessiondebugger;
+package de.knowwe.sessiondebugger.stc;
 
-import java.util.Collection;
-
-import de.knowwe.core.report.Message;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.wikiConnector.ConnectorAttachment;
+import de.knowwe.sessiondebugger.AttachmentTestCaseProvider;
+import de.knowwe.sessiondebugger.FileTestCaseProviderStorage;
 
 /**
- * Stores TestCaseProviders
  * 
  * @author Markus Friedrich (denkbares GmbH)
- * @created 02.02.2012
+ * @created 08.02.2012
  */
-public interface TestCaseProviderStorage {
+public class STCTestCaseProviderStorage extends FileTestCaseProviderStorage {
 
-	public static final String KEY = "TestCaseProviderStorage";
+	public STCTestCaseProviderStorage(KnowWEArticle article, String[] regexes, KnowWEArticle sectionArticle) {
+		super(article, regexes, sectionArticle);
+	}
 
-	Collection<TestCaseProvider> getTestCaseProviders();
-
-	TestCaseProvider getTestCaseProvider(String name);
-
-	void refresh();
-
-	Collection<Message> getMessages();
+	@Override
+	protected AttachmentTestCaseProvider createTestCaseProvider(KnowWEArticle article, ConnectorAttachment attachment) {
+		return new STCTestCaseProvider(article, attachment);
+	}
 
 }

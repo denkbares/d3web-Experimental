@@ -18,13 +18,14 @@
  */
 package de.knowwe.sessiondebugger.record;
 
-import java.util.List;
+import java.util.Collection;
 
 import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
-import de.knowwe.sessiondebugger.AttachmentTestCaseProvider;
-import de.knowwe.sessiondebugger.TestCaseFilesSubtreeHandler;
+import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.sessiondebugger.FileTestCaseProviderStorage;
 import de.knowwe.sessiondebugger.TestCaseProviderStorage;
 
 /**
@@ -33,14 +34,23 @@ import de.knowwe.sessiondebugger.TestCaseProviderStorage;
  * @author Markus Friedrich (denkbares GmbH)
  * @created 26.01.2012
  */
-public class TestCaseSessionRecordSubtreeHandler extends TestCaseFilesSubtreeHandler<TestCaseSessionRecordType> {
+public class TestCaseSessionRecordSubtreeHandler extends SubtreeHandler<TestCaseSessionRecordType> {
 
 	@Override
-	protected void addTestCaseProvider(KnowWEArticle article, TestCaseProviderStorage testCaseProviderStorage, List<Message> messages, String fileName, KnowWEArticle fileArticle) {
-		AttachmentTestCaseProvider provider = new SessionRecordCaseProvider(article, fileName,
-				fileArticle);
-		testCaseProviderStorage.addProvider(provider);
-		messages.addAll(provider.getMessages());
+	public Collection<Message> create(KnowWEArticle article, Section<TestCaseSessionRecordType> section) {
+		String[] fileNames = DefaultMarkupType.getAnnotations(section, "file");
+		FileTestCaseProviderStorage testCaseProviderStorage = (FileTestCaseProviderStorage) section.getSectionStore().getObject(
+				article, TestCaseProviderStorage.KEY);
+		if (testCaseProviderStorage == null) {
+			testCaseProviderStorage = new SessionRecordTestCaseProviderStorage(article, fileNames,
+					section.getArticle());
+			section.getSectionStore().storeObject(article, TestCaseProviderStorage.KEY,
+					testCaseProviderStorage);
+		}
+		else {
+			testCaseProviderStorage.update(fileNames);
+		}
+		return testCaseProviderStorage.getMessages();
 	}
 
 }
