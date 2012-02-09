@@ -18,15 +18,12 @@
  */
 package de.knowwe.sessiondebugger;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import de.knowwe.core.KnowWEArticleManager;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
@@ -53,13 +50,9 @@ public class ProviderRefreshRenderer<T extends DefaultMarkupType> extends Defaul
 					referningArticle,
 					TestCaseProviderStorage.KEY);
 			if (providerStorage != null) {
-				List<Message> messages = new LinkedList<Message>();
-				for (TestCaseProvider provider : providerStorage.getTestCaseProviders()) {
-					provider.getTestCase();
-					messages.addAll(provider.getMessages());
-				}
+				providerStorage.refresh();
 				Messages.storeMessages(referningArticle, section, providerStorage.getClass(),
-						messages);
+						providerStorage.getMessages());
 			}
 		}
 		super.render(article, section, user, buffer);
