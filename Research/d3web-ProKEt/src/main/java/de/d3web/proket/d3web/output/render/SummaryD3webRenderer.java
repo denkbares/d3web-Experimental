@@ -15,6 +15,7 @@ import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.ValueObject;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionDate;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.info.BasicProperties;
@@ -81,8 +82,30 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
             bui.append(content.toString());
         }
         if (bui.length() == 0) {
-            bui.append("No data available yet.");
+
+            // VERY EURAHS Specific check of a quesiton-answer finding
+            boolean checkPara =
+                    checkQuestionForTargetValue(
+                    "Please select your hernia route",
+                    "Parastomal hernia route",
+                    d3webSession);
+            if (checkPara) {
+                bui.append("There is no grid summary available for parastomal hernias. <br />Please see complete summary.");
+            } else {
+                bui.append("No data available yet.");
+            }
         }
+    }
+
+    private boolean checkQuestionForTargetValue(
+            String question, String targetValue, Session d3webSession) {
+
+        KnowledgeBase kb = d3webSession.getKnowledgeBase();
+        Question q =
+                kb.getManager().searchQuestion(question);
+        Value val = d3webSession.getBlackboard().getValue(q);
+
+        return val.getValue().toString().equals(targetValue);
     }
 
     private boolean enrichGrid(Session d3webSession,
@@ -283,7 +306,7 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
                 if (to instanceof QuestionDate) {
 
                     // Format the date appropriately
-                    String f = D3webUtils.getFormattedDateFromString((Date)val.getValue(), "dd.MM.yyyy");
+                    String f = D3webUtils.getFormattedDateFromString((Date) val.getValue(), "dd.MM.yyyy");
 
                     bui.append("<div style='margin-left:10px;'>"
                             + D3webConnector.getInstance().getID(to) + " " + to.getName()
@@ -291,14 +314,14 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
                 } // handle abstraction questions separately, e.g. for rounding age quesstion
                 else if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)
                         && to instanceof QuestionNum) {
-                    
-                        //System.out.println("NUM VAL: " + val);
-                        //System.out.println("As int: " + (int)Double.parseDouble(val.toString()));
-                        int doubleAsInt = (int) Double.parseDouble(val.toString());
-                        bui.append("<div style='margin-left:10px;'>"
-                                + D3webConnector.getInstance().getID(to) + " " + to.getName()
-                                + " -- " + doubleAsInt + "</div>\n");
-                    
+
+                    //System.out.println("NUM VAL: " + val);
+                    //System.out.println("As int: " + (int)Double.parseDouble(val.toString()));
+                    int doubleAsInt = (int) Double.parseDouble(val.toString());
+                    bui.append("<div style='margin-left:10px;'>"
+                            + D3webConnector.getInstance().getID(to) + " " + to.getName()
+                            + " -- " + doubleAsInt + "</div>\n");
+
                 } // all other questions: just append question and val
                 else {
                     bui.append("<div style='margin-left:10px;'>"
@@ -316,6 +339,4 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
         }
 
     }
-
-    
 }

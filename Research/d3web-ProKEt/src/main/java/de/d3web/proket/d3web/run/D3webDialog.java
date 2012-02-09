@@ -299,6 +299,9 @@ public class D3webDialog extends HttpServlet {
         } else if (action.equalsIgnoreCase("gotoStatistics")) {
             gotoStatistics(response, httpSession);
             return;
+        } else if (action.equalsIgnoreCase("gotoTxtDownload")) {
+            gotoTxtDownload(response, request, httpSession);
+            return;
         } else if (action.equalsIgnoreCase("checkUsrDatLogin")) {
             checkUsrDatLogin(response, httpSession);
             return;
@@ -638,7 +641,6 @@ public class D3webDialog extends HttpServlet {
                 Value va = d3webSession.getBlackboard().getValue((ValueObject) qa);
                 ServletLogUtils.logQuestionValue(qa.getName(), va.getValue().toString(), logtime, logger);
             }
-            System.out.println(newAbstractions);
         }
     }
 
@@ -684,12 +686,15 @@ public class D3webDialog extends HttpServlet {
                 continue;
             }
             IQuestionD3webRenderer toRenderer = AbstractD3webRenderer.getRenderer(to);
+            
+            // get back the ID from store for finding element in HTML
             writer.append(REPLACEID + AbstractD3webRenderer.getID(to));
             writer.append(REPLACECONTENT);
 
             TerminologyObject parent = to instanceof QContainer ? d3wcon.getKb().getRootQASet()
                     : D3webUtils.getQuestionnaireAncestor(to);
 
+            // get the HTML code for rendering the parent containing the to-update element
             writer.append(
                     toRenderer.renderTerminologyObject(
                     d3webSession, cc, to,
@@ -699,9 +704,13 @@ public class D3webDialog extends HttpServlet {
         writer.append(REPLACECONTENT);
         DefaultRootD3webRenderer rootRenderer =
                 (DefaultRootD3webRenderer) D3webRendererMapping.getInstance().getRenderer(null);
+       
+        // render the headerinfoline as latest as to have the most-current infos there
         writer.append(rootRenderer.renderHeaderInfoLine(d3webSession));
     }
-
+    
+    
+// TODO: move to D3webUtils
     private boolean isHiddenOrHasHiddenParent(TerminologyObject to) {
         Boolean hide = to.getInfoStore().getValue(ProKEtProperties.HIDE);
         if (hide != null && hide) {
@@ -867,6 +876,23 @@ public class D3webDialog extends HttpServlet {
         writer.close();
         // response.sendRedirect(gotoUrl);
     }
+    
+    
+    protected void gotoTxtDownload(HttpServletResponse response, HttpServletRequest request,
+            HttpSession httpSession) throws IOException {
+
+        String email = (String) httpSession.getAttribute("user");
+        String path = GlobalSettings.getInstance().getServletBasePath();
+       
+        // Important: /Download... doesn't work both locally and on server due
+        // to webapp paths etc
+        String gotoUrl = "Download?flag=summary";
+
+        PrintWriter writer = response.getWriter();
+        writer.print(gotoUrl);
+        writer.close();
+        // response.sendRedirect(gotoUrl);
+    }
 
     /**
      * Loading a case.
@@ -899,11 +925,18 @@ public class D3webDialog extends HttpServlet {
 
             JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
             // TODO is logging () into httpSession
-            if (D3webConnector.getInstance().isLogging()) {
+            /*if (D3webConnector.getInstance().isLogging()) {
                 ServletLogUtils.resetLogfileName(session.getId(), logger);
-                String time = request.getParameter("timestring").replace("+", " ");
+                String time; 
+                if(request.getParameter("timestring")!=null){
+                    time = request.getParameter("timestring").replace("+", " ");
+                } else {
+                    Date date = new Date();
+                    SimpleDateFormat sdf = new SimpleDateFormat(SDF_DEFAULT);
+                    time = sdf.format(date);
+                }
                 ServletLogUtils.logResume(time, session.getId(), logger);
-            }
+            }*/
         }
     }
 

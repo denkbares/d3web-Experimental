@@ -22,10 +22,6 @@
         <servlet-class>de.d3web.proket.d3web.run.D3webDialog</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>DownloadServlet</servlet-name>
-        <servlet-class>de.d3web.proket.d3web.run.DownloadTxtFileServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>MediastinitisDialog</servlet-name>
         <servlet-class>de.d3web.proket.d3web.run.MediastinitisDialog</servlet-class>
     </servlet>
@@ -46,8 +42,8 @@
         <servlet-class>de.d3web.proket.d3web.run.EuraHSDialog</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Test</servlet-name>
-        <servlet-class>de.d3web.proket.d3web.run.Test</servlet-class>
+        <servlet-name>DownloadServlet</servlet-name>
+        <servlet-class>de.d3web.proket.d3web.run.DownloadTxtFileServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>HelloServlet</servlet-name>

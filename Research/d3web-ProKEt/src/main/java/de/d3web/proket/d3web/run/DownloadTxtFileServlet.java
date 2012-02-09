@@ -137,11 +137,11 @@ public class DownloadTxtFileServlet extends HttpServlet {
     private void fillContents(Session d3webSession, StringBuilder bui, TerminologyObject to) {
         if (to instanceof QContainer && !to.getName().contains("Q000")) {
             if (D3webUtils.hasAnsweredChildren(to, d3webSession)) {
-                bui.append(System.getProperty("line.separator"));
+                bui.append("\r\n");
                 bui.append(D3webConnector.getInstance().getID(to));
                 bui.append(" ");
                 bui.append(to.getName());
-                bui.append(System.getProperty("line.separator"));
+                bui.append("\r\n");
             }
 
         } else if (to instanceof Question) {

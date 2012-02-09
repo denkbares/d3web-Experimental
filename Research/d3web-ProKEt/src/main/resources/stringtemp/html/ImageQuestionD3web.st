@@ -9,7 +9,7 @@
 					<img style="$if(width)$width: $width$px; $endif$$if(height)$height: $height$px; $endif$margin-right: 15px" 
 							src="kbimg/$image$" alt="$image$" $if(inactive)$$else$usemap="#$fullId$-map"$endif$ >
 					</img>
-					<div style="position: absolute; top: 16px; left: 14px;">
+					<div style="position: absolute; top: 13px; left: 11px;">
 						$if(areas)$$areas$$endif$
 					</div>
 				</td>

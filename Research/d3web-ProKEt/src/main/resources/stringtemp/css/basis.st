@@ -136,3 +136,7 @@ body,table,div {
 .longTextarea {width:250px; height: 100px; resize: none;}
 
 .margBott {margin-bottom: 10px;}
+
+.hidden {display:none;}
+
+.visible {display:inline;}

@@ -165,8 +165,16 @@ $(function() {
                 id: "sumDLTxt",
                 text: dl,
                 click: function(){
-                    // handle download --> redirect to DownloadServlet
-                    window.location.replace("/Download?flag=summary");
+                    var link = $.query.set("action", "goToTxtDownload");
+                    $.ajax({
+                        type : "GET",
+                        url : link,
+                        cache : false, // needed for IE, call is not made otherwise
+                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                        success : function(url) {
+                            window.location.href = url;
+                        }
+                    });
                 }
             },
             {
@@ -182,7 +190,11 @@ $(function() {
                 click: function(){
                     $('#jqSummaryDialog').dialog('close');
                 }
-            }]
+            }],
+            // when opening the dialog, apply styling for the download button
+            open: function(){
+                $("#sumDLTxt").addClass("hidden");
+            }
         };
         $("#jqSummaryDialog").dialog(opts);
     });
@@ -514,6 +526,19 @@ function initFunctionality() {
     }).unbind('click').click(function() {
         d3web_IQClicked($(this).attr("answerid"));
     });
+    
+    // check which pane of the summary dialog is selected as download button
+    // is to be shown ONLY for the plain summary
+    $('#jqSummaryDialog').bind('tabsselect', function(event, ui) {
+        if(ui.index==0){
+            $("#sumDLTxt").addClass("hidden");
+            $("#sumDLTxt").removeClass("visible");
+        } else {
+            $("#sumDLTxt").addClass("visible");
+            $("#sumDLTxt").removeClass("hidden");
+        }
+    });
+
     
 }
 

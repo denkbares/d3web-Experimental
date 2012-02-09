@@ -35,11 +35,6 @@ DONE Titel aus dem Questionnaire rausziehen/eigen taggen
 
 
 
--------------------------------------------
---- MEDIASTINITIS (Projekt Herzmedizin) ---
--------------------------------------------
-
-
 ----------------------------------
 ---- ALLG  D3WEB Dialog  TODOS ---
 ----------------------------------
@@ -114,6 +109,16 @@ DONE - Log end value --> timespan
 - REFACTOR: styles. Check basic styles, e.g. button sizes, and only adapt colors in specific
 CSSs
 
+- REFACTOR: clean JavaScript: 
+    - move jquery dialog definitions to separate file
+
+-------------------------------------------
+--- MEDIASTINITIS (Projekt Herzmedizin) ---
+-------------------------------------------
+
+- Alte Fälle laden Problem:
+    wenn alter Fall geladen wird und geändert, kann man nicht mehr abspeichern!
+- Num-questions: Plausibilitätsprüfung!
 
 ----------
 JuriSearch
@@ -140,24 +145,30 @@ DONE - Add notification if user sets parent-rating that contradicts calculated c
 - Styling header: print button, feedback
 
 
+--------------
+--- EuraHS ---
+--------------
 
-KLÄREN ALBRECHT:
-----------------
-- Änderungen Mediastinitis
-- Änderungen EuraHS
-- Mailversand immer an "uns" --> Begründung (Neu)?
-- Header Info: Ablauf
-- TimeDB Usage / Properties speziell für EuraHS
-- EuraHS Login DB
-- EuraHS Follow Up Konzept
-- EuraHS Statistics
-
+- Frage 139 Intrahospital complications 
+    if answered with "no complications", question 148 Classification of surgical complications 
+    should be disabled
+DONE - Question 148 	Classification of surgical complications --> answer Grade 0
+ULI - Question 148 --> Popup adaption?!
+ULI - In this session question 115: "Was the complete scar repaired?" was shown.
+    --> For the primary ventral route this question is not relevant and should not be shown.
+    -->> Ist abhängig von der Frage "Mesh Repair", nicht von der Route --> ULI
+- >IE Meldung englisch
+- Internet Explorer 9 oder 8 --> check
+- Images Upload (Frank spricht hierfür erstmal mit Alex H.)
+DONE - Grid Summary --> download .txt Button deaktivieren
+DONE - Kopfzeile Grid: Leerzeichen fehlt
 
 
 INTERNET EXPLORER QUIRKS
 ------------------------
 - popups are displayed completely transparent --> obviously IE doesn't display
   the half-transparency CSS stuff. 
+- dauert alles zu lange 
 
 
 LOGGING
