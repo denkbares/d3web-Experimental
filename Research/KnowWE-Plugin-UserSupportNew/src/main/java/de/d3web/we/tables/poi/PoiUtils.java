@@ -70,7 +70,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 public class PoiUtils
 {
 
-	public static CellStyle getErrorCellStyle(Workbook wb)
+	private static CellStyle getErrorCellStyle(Workbook wb)
 	{
 		CellStyle cs = wb.createCellStyle();
 		Font f = wb.createFont();
@@ -79,7 +79,7 @@ public class PoiUtils
 		return cs;
 	}
 
-	public static CellStyle getWarningCellStyle(Workbook wb)
+	private static CellStyle getWarningCellStyle(Workbook wb)
 	{
 		CellStyle cs = wb.createCellStyle();
 		Font f = wb.createFont();
@@ -89,7 +89,7 @@ public class PoiUtils
 		return cs;
 	}
 
-	public static CellStyle getNoticeCellStyle(Workbook wb)
+	private static CellStyle getNoticeCellStyle(Workbook wb)
 	{
 		CellStyle cs = wb.createCellStyle();
 		Font f = wb.createFont();
@@ -98,7 +98,7 @@ public class PoiUtils
 		return cs;
 	}
 
-	public static Workbook createBlankHSSFWorkbook() throws IOException
+	private static Workbook createBlankHSSFWorkbook() throws IOException
 	{
 
 		// create a new file
@@ -426,7 +426,7 @@ public class PoiUtils
 	 * @param row
 	 * @param out
 	 */
-	public static void writeTableHeaderLine(Section<TableHeaderLine> line, Row row, FileOutputStream out) {
+	private static void writeTableHeaderLine(Section<TableHeaderLine> line, Row row, FileOutputStream out) {
 
 		List<Section<TableHeaderCell>> cells = Sections.findChildrenOfType(line, TableHeaderCell.class);
 
@@ -448,7 +448,7 @@ public class PoiUtils
 	 * @param row
 	 * @param out
 	 */
-	public static void writeTableLine(Section<TableLine> line, Row row, FileOutputStream out, Workbook wb)
+	private static void writeTableLine(Section<TableLine> line, Row row, FileOutputStream out, Workbook wb)
 	{
 
 		List<Section<TableCell>> cells = Sections.findChildrenOfType(line, TableCell.class);
@@ -477,7 +477,7 @@ public class PoiUtils
 		}
 	}
 
-	public static CellStyle colorTableCell(Collection<Message> messages, Workbook wb)
+	private static CellStyle colorTableCell(Collection<Message> messages, Workbook wb)
 	{
 		if (!Messages.getErrors(messages).isEmpty())
 		{

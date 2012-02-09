@@ -19,6 +19,7 @@
 package de.d3web.we.editor.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -72,10 +73,14 @@ public class GetSuggestionsAction extends AbstractAction {
 		//				UserSupportUtil.getTermReferences(markup.getArticle());
 		Collection<Section<? extends TermDefinition>> localTermMatches =
 				UserSupportUtil.getTermReferencesCompilingArticle(markup.getArticle(), markup);
+		ArrayList<String> localStrings = new ArrayList<String>();
+		for (Section<? extends TermDefinition> def : localTermMatches)
+			localStrings.add(def.getOriginalText());
+
 
 		List<Suggestion> suggestions =
 				DialogComponent.getInstance().
-				getBestSuggestionsUsedAlgorithm(toMatch, localTermMatches);
+				getBestSuggestions(toMatch, localStrings);
 
 		// build JSON-Array with suggestions
 		StringBuilder buildi = new StringBuilder();
@@ -85,7 +90,9 @@ public class GetSuggestionsAction extends AbstractAction {
 			buildi.append("," + "\"" + s.getSuggestion() + "\"");
 		}
 		buildi.append("]");
-		return buildi.toString().replaceFirst(",", "");
+		String toReturn = buildi.toString().replaceFirst(",", "");
+		toReturn = toReturn.replaceAll("\"\"", "\"");
+		return toReturn;
 
 	}
 

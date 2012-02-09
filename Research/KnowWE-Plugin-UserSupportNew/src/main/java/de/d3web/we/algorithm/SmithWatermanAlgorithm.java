@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 University Wuerzburg, Computer Science VI
+ * Copyright (C) 2012 University Wuerzburg, Computer Science VI
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -19,44 +19,42 @@
 package de.d3web.we.algorithm;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import com.wcohen.ss.MongeElkan;
-
-import de.knowwe.core.kdom.objects.TermDefinition;
-import de.knowwe.core.kdom.parsing.Section;
+import com.wcohen.ss.SmithWaterman;
 
 
 /**
  * 
  * @author Johannes Dienst
- * @created 04.10.2011
+ * @created 03.02.2012
  */
-public class MonkeElkanAlgorithm implements MatchingAlgorithm {
+public class SmithWatermanAlgorithm implements MatchingAlgorithm
+{
 
 	@Override
-	public List<Suggestion> getMatches(int maxCount, String toMatch,
-			Collection<Section<? extends TermDefinition>> localTermMatches) {
+	public List<Suggestion> getMatches(int maxCount, String toMatch, List<String> localTermMatches)
+	{
 
-		MongeElkan mE = new MongeElkan();
+		SmithWaterman sM = new SmithWaterman();
 
 		PriorityQueue<Suggestion> suggestions =
 				new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
 
-		for (Section<? extends TermDefinition> match : localTermMatches) {
-			double score = mE.score(toMatch, match.getOriginalText());
+		for (String match : localTermMatches) {
+			double score = sM.score(toMatch, match);
 			// TODO threshold is experimental
 			if (score >= 0.7) {
-				suggestions.add(new Suggestion(match.getText(), score));
+				suggestions.add(new Suggestion(match, score));
 			}
 		}
 
 		List<Suggestion> toReturn = new ArrayList<Suggestion>();
-		for (int i = 0; i < maxCount; i++)
-			toReturn.add(suggestions.poll());
-
+		for (int i = 0; i < maxCount; i++) {
+			Suggestion s = suggestions.poll();
+			if (s != null) toReturn.add(s);
+		}
 		return toReturn;
 	}
 

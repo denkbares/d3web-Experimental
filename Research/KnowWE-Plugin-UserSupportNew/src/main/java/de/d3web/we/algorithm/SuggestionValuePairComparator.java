@@ -30,8 +30,8 @@ public class SuggestionValuePairComparator implements Comparator<SuggestionValue
 
 	@Override
 	public int compare(SuggestionValuePair o1, SuggestionValuePair o2) {
-		if (o1.getValue() > o2.getValue()) return 1;
-		if (o1.getValue() < o2.getValue()) return -1;
+		if (o1.getValue() > o2.getValue()) return -1;
+		if (o1.getValue() < o2.getValue()) return 1;
 		return 0;
 	}
 

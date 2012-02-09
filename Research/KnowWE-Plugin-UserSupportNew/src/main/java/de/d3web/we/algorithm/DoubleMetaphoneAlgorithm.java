@@ -19,14 +19,10 @@
 package de.d3web.we.algorithm;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.PriorityQueue;
 
 import org.apache.commons.codec.language.DoubleMetaphone;
-
-import de.knowwe.core.kdom.objects.TermDefinition;
-import de.knowwe.core.kdom.parsing.Section;
 
 /**
  * 
@@ -37,21 +33,34 @@ public class DoubleMetaphoneAlgorithm implements MatchingAlgorithm {
 
 	@Override
 	public List<Suggestion> getMatches(int maxCount, String toMatch
-			,Collection<Section<? extends TermDefinition>> localTermMatches) {
-
-		DoubleMetaphone dM = new DoubleMetaphone();
-		PriorityQueue<Suggestion> suggestions =
-				new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
-
-		for (Section<? extends TermDefinition> match : localTermMatches) {
-			if (dM.isDoubleMetaphoneEqual(toMatch, match.getOriginalText())) {
-				suggestions.add(new Suggestion(match.getText(), 0));
-			}
-		}
+			,List<String> localTermMatches) {
 
 		List<Suggestion> toReturn = new ArrayList<Suggestion>();
-		for (int i = 0; i < maxCount; i++)
-			toReturn.add(suggestions.poll());
+
+		try
+		{
+			DoubleMetaphone dM = new DoubleMetaphone();
+			PriorityQueue<Suggestion> suggestions =
+					new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
+
+			for (String match : localTermMatches)
+			{
+				if (dM.isDoubleMetaphoneEqual(toMatch, match))
+				{
+					suggestions.add(new Suggestion(match, 0));
+				}
+			}
+
+			for (int i = 0; i < maxCount; i++)
+			{
+				Suggestion s = suggestions.poll();
+				if (s != null) toReturn.add(s);
+			}
+		}
+		catch (Exception e)
+		{
+			// Nothing
+		}
 
 		return toReturn;
 	}

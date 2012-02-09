@@ -72,7 +72,7 @@ public class Suggestion implements Comparable<Suggestion> {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-		+ ((suggestion == null) ? 0 : suggestion.hashCode());
+				+ ((suggestion == null) ? 0 : suggestion.hashCode());
 		return result;
 	}
 

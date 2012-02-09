@@ -42,8 +42,6 @@
         <parameter id="scope" value="CausalDiagnosisScoreMarkup" />
         <parameter id="scope" value="DecisionTableMarkup" />
         <parameter id="scope" value="HeuristicDiagnosisTableMarkup" />
-        <parameter id="scope" value="ApproximateCoveringListMarkup" />
-        <parameter id="scope" value="ApproximateRulesMarkup" />
     </extension>
  
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"

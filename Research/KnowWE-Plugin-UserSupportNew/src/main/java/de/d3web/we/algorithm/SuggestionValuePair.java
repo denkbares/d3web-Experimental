@@ -25,7 +25,7 @@ package de.d3web.we.algorithm;
  * @created 22.11.2011
  */
 public class SuggestionValuePair {
-	private final Suggestion s;
+	private Suggestion s;
 	private int val;
 
 	public SuggestionValuePair(Suggestion suggestion) {
@@ -43,5 +43,15 @@ public class SuggestionValuePair {
 	}
 	public void increment(){
 		val++;
+	}
+	/**
+	 * 
+	 * @created 09.02.2012
+	 * @param s2
+	 */
+	public void updateDistance(Suggestion s2)
+	{
+		if (s.compareTo(s2) == -1)
+			this.s = s2;
 	}
 }

@@ -19,13 +19,9 @@
 package de.d3web.we.algorithm;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import de.knowwe.core.kdom.objects.TermDefinition;
-import de.knowwe.core.kdom.parsing.Section;
 
 
 /**
@@ -48,7 +44,8 @@ public class DialogComponent {
 	private final ResourceBundle bundle = ResourceBundle.getBundle("UserSupport_configuration");
 	private int maxSuggestions;
 
-	private MatchingAlgorithm usedAlgorithm;
+	private MatchingAlgorithm usedTokenAlgorithm;
+	private MatchingAlgorithm usedPhraseAlgorithm;
 
 	private static DialogComponent uniqueInstance;
 
@@ -61,22 +58,29 @@ public class DialogComponent {
 						bundle.getString("usersupport.dialogcomponent.maxSuggestions"));
 
 		try {
-			String className =
-					bundle.getString("usersupport.dialogcomponent.standardmatchingalgorithm");
-			usedAlgorithm = MatchingAlgorithm.class.cast(
-					Class.forName(className
+			String className1 =
+					bundle.getString("usersupport.dialogcomponent.standardtokenmatchingalgorithm");
+			usedTokenAlgorithm = MatchingAlgorithm.class.cast(
+					Class.forName(className1
+							));
+			String className2 =
+					bundle.getString("usersupport.dialogcomponent.standardphrasematchingalgorithm");
+			usedPhraseAlgorithm = MatchingAlgorithm.class.cast(
+					Class.forName(className2
 							));
 		}
 		catch (Exception e) {
-			usedAlgorithm = new LevenshteinAlgorithm();
+			usedTokenAlgorithm = new LevenshteinAlgorithm();
+			usedPhraseAlgorithm = new MongeElkanAlgorithm();
 		}
 
 		// Add all known Algorithms
 		algorithms.add(new DoubleMetaphoneAlgorithm());
 		algorithms.add(new JaroWinklerAlgorithm());
 		algorithms.add(new LevenshteinAlgorithm());
-		algorithms.add(new MonkeElkanAlgorithm());
-		algorithms.add(new RefinedSoundexAlgorithm());
+		algorithms.add(new MongeElkanAlgorithm());
+		//		algorithms.add(new RefinedSoundexAlgorithm());
+		algorithms.add(new SmithWatermanAlgorithm());
 	}
 
 	/**
@@ -104,7 +108,7 @@ public class DialogComponent {
 	 * @return
 	 */
 	public List<Suggestion> getBestSuggestions(String toMatch,
-			Collection<Section<? extends TermDefinition>> localTermMatches) {
+			List<String> localTermMatches) {
 
 		List<Suggestion> bestSuggs = new ArrayList<Suggestion>();
 
@@ -114,11 +118,15 @@ public class DialogComponent {
 
 		for (MatchingAlgorithm algo : algorithms) {
 			suggs = algo.getMatches(maxSuggestions, toMatch, localTermMatches);
-
+			boolean remove = true;
+			while(remove) remove = suggs.remove(null);
 			for (Suggestion s : suggs) {
 				int exists = AlgorithmUtil.containsSuggestion(matchList, s);
 				if (exists != -1)
+				{
 					matchList.get(exists).increment();
+					matchList.get(exists).updateDistance(s);
+				}
 				else
 					matchList.add(new SuggestionValuePair(s));
 			}
@@ -128,13 +136,16 @@ public class DialogComponent {
 		// Sort the matchList and add the count of
 		// maxSuggestions to best Suggestions
 		Collections.sort(matchList, new SuggestionValuePairComparator());
-		for (int i = 0; i < maxSuggestions; i++)
+		for (int i = 0; (i < maxSuggestions) && (i < matchList.size()); i++)
 			bestSuggs.add(matchList.get(i).getSuggestion());
 		return bestSuggs;
 	}
 
-	public List<Suggestion> getBestSuggestionsUsedAlgorithm(String toMatch,
-			Collection<Section<? extends TermDefinition>> localTermMatches) {
+	public List<Suggestion> getSuggestions(String toMatch,
+			List<String> localTermMatches, MatchingAlgorithm algorithm) {
+
+		if (algorithm == null)
+			return getBestSuggestions(toMatch, localTermMatches);
 
 		List<Suggestion> bestSuggs = new ArrayList<Suggestion>();
 
@@ -143,7 +154,7 @@ public class DialogComponent {
 		List<SuggestionValuePair> matchList = new ArrayList<SuggestionValuePair>();
 
 		// TODO returns a list of nulls!
-		suggs = usedAlgorithm.getMatches(maxSuggestions, toMatch, localTermMatches);
+		suggs = algorithm.getMatches(maxSuggestions, toMatch, localTermMatches);
 
 		for (Suggestion s : suggs) {
 			// TODO HOTFIX for problem above
@@ -175,9 +186,16 @@ public class DialogComponent {
 	public List<MatchingAlgorithm> getPossibleMatchingAlgorithms() {
 		return Collections.unmodifiableList(algorithms);
 	}
-	public boolean setUsedMatchingAlgorithm(MatchingAlgorithm algorithm) {
+	public boolean setUsedTokenMatchingAlgorithm(MatchingAlgorithm algorithm) {
 		if (algorithms.contains(algorithm)) {
-			usedAlgorithm = algorithm;
+			usedTokenAlgorithm = algorithm;
+			return true;
+		}
+		return false;
+	}
+	public boolean setUsedPhraseMatchingAlgorithm(MatchingAlgorithm algorithm) {
+		if (algorithms.contains(algorithm)) {
+			usedPhraseAlgorithm = algorithm;
 			return true;
 		}
 		return false;

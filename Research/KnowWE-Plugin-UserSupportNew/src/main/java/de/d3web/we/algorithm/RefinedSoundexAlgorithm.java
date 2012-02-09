@@ -19,15 +19,11 @@
 package de.d3web.we.algorithm;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.PriorityQueue;
 
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.language.RefinedSoundex;
-
-import de.knowwe.core.kdom.objects.TermDefinition;
-import de.knowwe.core.kdom.parsing.Section;
 
 
 /**
@@ -39,15 +35,15 @@ public class RefinedSoundexAlgorithm implements MatchingAlgorithm {
 
 	@Override
 	public List<Suggestion> getMatches(int maxCount, String toMatch,
-			Collection<Section<? extends TermDefinition>> localTermMatches) {
+			List<String> localTermMatches) {
 
 		RefinedSoundex rS = new RefinedSoundex();
 		PriorityQueue<Suggestion> suggestions =
 				new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
 
-		for (Section<? extends TermDefinition> match : localTermMatches) {
+		for (String match : localTermMatches) {
 			try {
-				int diff = rS.difference(toMatch, match.getOriginalText());
+				int diff = rS.difference(toMatch, match);
 
 				// TODO experimental value
 				if (diff <= 1) {
@@ -61,8 +57,10 @@ public class RefinedSoundexAlgorithm implements MatchingAlgorithm {
 		}
 
 		List<Suggestion> toReturn = new ArrayList<Suggestion>();
-		for (int i = 0; i < maxCount; i++)
-			toReturn.add(suggestions.poll());
+		for (int i = 0; i < maxCount; i++) {
+			Suggestion s = suggestions.poll();
+			if (s != null) toReturn.add(s);
+		}
 
 		return toReturn;
 	}

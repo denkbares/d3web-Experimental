@@ -19,14 +19,10 @@
 package de.d3web.we.algorithm;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.PriorityQueue;
 
 import com.wcohen.ss.Levenstein;
-
-import de.knowwe.core.kdom.objects.TermDefinition;
-import de.knowwe.core.kdom.parsing.Section;
 
 
 /**
@@ -48,23 +44,25 @@ public class LevenshteinAlgorithm implements MatchingAlgorithm {
 
 	@Override
 	public List<Suggestion> getMatches(int maxCount, String toMatch,
-			Collection<Section<? extends TermDefinition>> localTermMatches) {
+			List<String> localTermMatches) {
 
 		Levenstein l = new Levenstein();
 
 		PriorityQueue<Suggestion> suggestions =
 				new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
 
-		for (Section<? extends TermDefinition> match : localTermMatches) {
-			double score = l.score(toMatch, match.getOriginalText());
+		for (String match : localTermMatches) {
+			double score = l.score(toMatch, match);
 			if (score >= -threshold) {
-				suggestions.add(new Suggestion(match.getText(), score));
+				suggestions.add(new Suggestion(match, score));
 			}
 		}
 
 		List<Suggestion> toReturn = new ArrayList<Suggestion>();
-		for (int i = 0; i < maxCount; i++)
-			toReturn.add(suggestions.poll());
+		for (int i = 0; i < maxCount; i++) {
+			Suggestion s = suggestions.poll();
+			if (s != null) toReturn.add(s);
+		}
 
 		return toReturn;
 	}

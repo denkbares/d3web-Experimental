@@ -18,6 +18,7 @@
  */
 package de.d3web.we.correction;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -43,11 +44,15 @@ public class ApproximateCorrectionProviderImpl implements ApproximateCorrectionP
 		//				UserSupportUtil.getTermReferences(markup.getArticle());
 		Collection<Section<? extends TermDefinition>> localTermMatches =
 				UserSupportUtil.getTermReferencesCompilingArticle(section.getArticle(), section);
+		ArrayList<String> localStrings = new ArrayList<String>();
+		for (Section<? extends TermDefinition> def : localTermMatches)
+			localStrings.add(def.getOriginalText());
+
 		String toMatch = section.getText().trim();
 
 		List<Suggestion> suggestions =
 				DialogComponent.getInstance().
-				getBestSuggestionsUsedAlgorithm(toMatch, localTermMatches);
+				getBestSuggestions(toMatch, localStrings);
 
 
 		return suggestions;

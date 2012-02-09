@@ -18,11 +18,7 @@
  */
 package de.d3web.we.algorithm;
 
-import java.util.Collection;
 import java.util.List;
-
-import de.knowwe.core.kdom.objects.TermDefinition;
-import de.knowwe.core.kdom.parsing.Section;
 
 
 
@@ -34,5 +30,6 @@ import de.knowwe.core.kdom.parsing.Section;
 public interface MatchingAlgorithm {
 
 	public List<Suggestion> getMatches(int maxCount, String toMatch
-			,Collection<Section<? extends TermDefinition>> localTermMatches);
+			,List<String> localTermMatches);
+
 }
