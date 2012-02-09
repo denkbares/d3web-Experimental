@@ -60,6 +60,7 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	private String perform(UserActionContext context) {
 
 		rb = KnowWEEnvironment.getInstance().getKwikiBundle(context.getRequest());
@@ -86,7 +87,8 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 		String types = context.getParameter("TypeBrowserQuery");
 		try {
 			Type typ = null;
-			typ = KnowWEEnvironment.getInstance().searchType(Class.forName(types));
+			typ = KnowWEEnvironment.getInstance().searchType(
+					(Class<? extends Type>) Class.forName(types));
 
 			if (typ != null) {
 				Iterator<KnowWEArticle> it = KnowWEEnvironment.getInstance().getArticleManager(
