@@ -98,6 +98,6 @@ public class FeedbackSaveAction extends AbstractAction {
 		KnowWEUtils.writeFile(path + filename, xml.toString());
 
 		HttpServletResponse response = context.getResponse();
-		response.sendRedirect("Wiki.jsp?page=Main");
+		response.sendRedirect("Wiki.jsp?page=BefragungAbgeschlossen");
 	}
 }
