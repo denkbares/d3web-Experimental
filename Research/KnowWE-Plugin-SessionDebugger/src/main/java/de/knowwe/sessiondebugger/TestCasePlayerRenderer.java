@@ -373,16 +373,22 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 		selectsb.append("Select TestCase: <select id=selector" + section.getID()
 				+ " onchange=\"SessionDebugger.change('" + key
 				+ "', this.options[this.selectedIndex].value);\">");
+		Set<String> ids = new HashSet<String>();
+		boolean unique = true;
+		for (Triple<TestCaseProvider, Section<?>, KnowWEArticle> triple : providers) {
+			unique &= ids.add(triple.getA().getName());
+		}
 		for (Triple<TestCaseProvider, Section<?>, KnowWEArticle> triple : providers) {
 			String id = triple.getC().getTitle() + "/" + triple.getA().getName();
+			String displayedID = (unique) ? triple.getA().getName() : id;
 			if (id.equals(selectedID)) {
 				selectsb.append("<option value='" + id + "' selected='selected'>"
-						+ triple.getA().getName() + "</option>");
+						+ displayedID + "</option>");
 				selectedPair = triple;
 			}
 			else {
 				selectsb.append("<option value='" + id + "'>"
-						+ triple.getA().getName() + "</option>");
+						+ displayedID + "</option>");
 			}
 		}
 		selectsb.append("</select>");
