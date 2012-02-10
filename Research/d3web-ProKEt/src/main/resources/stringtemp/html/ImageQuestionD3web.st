@@ -1,4 +1,4 @@
-<div id="$fullId$" class="question imageQuestion
+<div id="$fullId$" class="question
 					$if(inactive)$ inactive $endif$ $qstate$" >
 	$if(title)$$TitleTooltipButton()$$endif$
 	<div id="content-$fullId$" class="content-$fullId$ question-content" style="position: relative; padding: 8px;">

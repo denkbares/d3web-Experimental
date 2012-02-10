@@ -9,9 +9,9 @@
 	questionnairecolumns="3"
 	questioncolumns="1"
 	userprefix = "EuraHS"
-        login = ""
+        login = "db"
 	required = "Case-Number"
 	language = "en"
-        logging = "OFF">
+        logging = "ON">
 	<data kb="Hernia.d3web" />
 </dialog>

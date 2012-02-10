@@ -22,6 +22,7 @@ import de.d3web.core.knowledge.terminology.info.BasicProperties;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
+import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.values.*;
 import de.d3web.core.utilities.Pair;
 import de.d3web.proket.d3web.input.D3webConnector;
@@ -52,6 +53,7 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
     }
 
     private void fillGridSummary(Session d3webSession, StringBuilder bui) {
+
         KnowledgeBase knowledgeBase = d3webSession.getKnowledgeBase();
         for (Resource resource : knowledgeBase.getResources()) {
             String pathName = resource.getPathName();
@@ -79,6 +81,7 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
                 continue;
             }
 
+            bui.append("<div style='margin-top:20px;'>");
             bui.append(content.toString());
         }
         if (bui.length() == 0) {
@@ -94,7 +97,62 @@ public class SummaryD3webRenderer extends AbstractD3webRenderer {
             } else {
                 bui.append("No data available yet.");
             }
+        } else {
+
+            // append EuraHS Registration Number
+            String divStringEuraHSReg =
+                    createBoldDivForQuestionValuePair(
+                    "Please enter a EuraHS registration number instead of a patient name",
+                    "EuraHS Reg.-Nr.",
+                    d3webSession);
+            bui.insert(0, divStringEuraHSReg);
+
+            // append Case Number in EuraHS Dialog
+            String definingObject =
+                    D3webConnector.getInstance().getD3webParser().getRequired();
+            String divStringEuraHSCaseNr =
+                    createBoldDivForQuestionValuePair(
+                    definingObject,
+                    "",
+                    d3webSession);
+            bui.insert(0, divStringEuraHSCaseNr.toString());
         }
+    }
+
+    /**
+     * Helper method for creating a div displayed topmost in the summary that
+     * contains the defined question.
+     * If an optional Question name is provided, this is used to display the
+     * question, otherwise the Question.getName() is used there.
+     * 
+     * @param question question
+     * @param optQuestionName optional question name
+     * @param s D3webSession
+     * @return String representation of created div
+     */
+    private String createBoldDivForQuestionValuePair(
+            String question, String optQuestionName, Session s) {
+        StringBuilder buil = new StringBuilder();
+
+        Question to =
+                D3webConnector.getInstance().getKb().getManager().searchQuestion(question);
+        Fact fact = s.getBlackboard().getValueFact(to);
+
+        buil.append("<div style='margin-top:10px;'><b>");
+        if (to != null) {
+            String qName = optQuestionName.equals("") ? to.getName() : optQuestionName;
+            buil.append(qName);
+
+        }
+        buil.append(": ");
+        if (fact != null) {
+            buil.append(fact.getValue().toString());
+        } else {
+            buil.append("---");
+        }
+        buil.append("</b></div>");
+
+        return buil.toString();
     }
 
     private boolean checkQuestionForTargetValue(
