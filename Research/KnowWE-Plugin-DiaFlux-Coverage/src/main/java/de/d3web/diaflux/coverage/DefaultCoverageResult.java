@@ -19,6 +19,7 @@
 package de.d3web.diaflux.coverage;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -117,6 +118,16 @@ public class DefaultCoverageResult implements CoverageResult {
 
 	}
 
+	@Override
+	public Map<Node, Integer> getNodeCounts() {
+		return Collections.unmodifiableMap(nodes);
+	}
+
+	@Override
+	public Map<Edge, Integer> getEdgeCounts() {
+		return Collections.unmodifiableMap(edges);
+	}
+
 	/**
 	 * 
 	 * @created 13.09.2011
@@ -184,28 +195,30 @@ public class DefaultCoverageResult implements CoverageResult {
 		Map<Edge, Integer> edgeSum = new HashMap<Edge, Integer>();
 		Map<Node, Integer> nodeSum = new HashMap<Node, Integer>();
 
-		for (CoverageSessionObject coverageSessionObject : coverages) {
-			Map<Node, Integer> counts = coverageSessionObject.getNodeCounts();
-			for (Node node : counts.keySet()) {
+		for (CoverageSessionObject coverage : coverages) {
+			Map<Node, Integer> nodeCounts = coverage.getNodeCounts();
+			for (Node node : nodeCounts.keySet()) {
 				Integer integer = nodeSum.get(node);
+
 				if (integer == null) {
-					nodeSum.put(node, 1);
+					nodeSum.put(node, nodeCounts.get(node));
 				}
 				else {
-					nodeSum.put(node, 1 + integer);
+					nodeSum.put(node, nodeCounts.get(node) + integer);
 
 				}
 
 			}
 
-			Map<Edge, Integer> edges = coverageSessionObject.getEdgeCounts();
-			for (Edge edge : edges.keySet()) {
+			Map<Edge, Integer> edgeCounts = coverage.getEdgeCounts();
+			for (Edge edge : edgeCounts.keySet()) {
 				Integer integer = edgeSum.get(edge);
+
 				if (integer == null) {
-					edgeSum.put(edge, 1);
+					edgeSum.put(edge, edgeCounts.get(edge));
 				}
 				else {
-					edgeSum.put(edge, 1 + integer);
+					edgeSum.put(edge, edgeCounts.get(edge) + integer);
 				}
 			}
 		}

@@ -18,6 +18,8 @@
  */
 package de.d3web.diaflux.coverage;
 
+import java.util.Map;
+
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.diaFlux.flow.Edge;
 import de.d3web.diaFlux.flow.Flow;
@@ -41,6 +43,10 @@ public interface CoverageResult {
 	int getTraceCount(Node node);
 
 	int getTraceCount(Edge edge);
+
+	Map<Edge, Integer> getEdgeCounts();
+
+	Map<Node, Integer> getNodeCounts();
 
 
 }

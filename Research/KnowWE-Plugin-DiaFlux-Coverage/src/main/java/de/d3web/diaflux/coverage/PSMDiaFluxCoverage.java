@@ -65,6 +65,7 @@ public class PSMDiaFluxCoverage extends PSMethodAdapter implements PostHookableP
 
 	@Override
 	public void init(Session session) {
+		DiaFluxCaseObject.setTraceMode(true);
 	}
 
 
