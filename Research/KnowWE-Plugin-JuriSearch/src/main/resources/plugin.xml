@@ -27,4 +27,15 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
+		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="QuestionDefinitionArea">
+		<parameter id="class"
+			value="de.knowwe.jurisearch.questionDef.QuestionDefinitionArea" />
+		<parameter id="name" value="QuestionDefinitionArea" />
+		<parameter id="description" value="KnowWEObjectType QuestionDefinitionArea" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
 </plugin>
