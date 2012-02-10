@@ -54,6 +54,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.ContentType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * Renderer for TestCasePlayerType
@@ -124,6 +125,10 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 
 				if (testCase != null) {
 					string.append(" Start: " + dateFormat.format(testCase.getStartDate()));
+
+					StringBuilder html = new StringBuilder();
+					html.append(" <a onclick='SessionDebugger.reset();'><img src='KnowWEExtension/testcaseplayer/icon/stop.gif'></a>");
+					string.append(KnowWEUtils.maskHTML(html.toString()));
 					// get Question from cookie
 					String additionalQuestions = null;
 					String cookiename = "additionalQuestions" + article.getTitle();
@@ -249,12 +254,24 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 						+ "', '" + selectedTriple.getA().getName()
 						+ "', '" + selectedTriple.getC().getTitle() + "');";
 			sb.append("<a href=\"javascript:" + js + ";undefined;\">");
-			sb.append("Play");
+			sb.append("<img src='KnowWEExtension/testcaseplayer/icon/runto.png'>");
 			sb.append("</a>");
 			string.append(KnowWEUtils.maskHTML(sb.toString()));
 		}
 		else {
-			string.append("%%(color:silver;)Play%%");
+			Collection<Pair<Check, Boolean>> checkResults = status.getCheckResults(date);
+			boolean ok = true;
+			if (checkResults != null) {
+				for (Pair<Check, Boolean> pair : checkResults) {
+					ok &= pair.getB();
+				}
+			}
+			if (ok) {
+				string.append(KnowWEUtils.maskHTML("<img src='KnowWEExtension/testcaseplayer/icon/done.png'>"));
+			}
+			else {
+				string.append(KnowWEUtils.maskHTML("<img src='KnowWEExtension/testcaseplayer/icon/error.png'>"));
+			}
 		}
 	}
 
@@ -281,11 +298,12 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 				StringBuffer sb = new StringBuffer();
 				for (Pair<Check, Boolean> p : checkResults) {
 					if (p.getB()) {
-						sb.append("%%(background-color:lime;)"
+						sb.append("%%(background-color:" + StyleRenderer.CONDITION_FULLFILLED
+								+ ";)"
 									+ p.getA().getCondition() + "%%\\\\");
 					}
 					else {
-						sb.append("%%(background-color:red;)"
+						sb.append("%%(background-color:" + StyleRenderer.CONDITION_FALSE + ";)"
 									+ p.getA().getCondition()
 									+ "%%\\\\");
 					}
@@ -302,15 +320,16 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 				key);
 		Question question = null;
 		StringBuffer selectsb2 = new StringBuffer();
-		selectsb2.append("||<form><select name=\"toAdd\" id=adder" + section.getID()
-				+ " onchange=\"SessionDebugger.change('" + key
+		selectsb2.append("||<form><select name=\"toAdd\" id=adder"
+				+ section.getID()
+				+ " onchange=\"SessionDebugger.change('"
+				+ key
 							+ "', this.options[this.selectedIndex].value);\">");
 		HashSet<String> alreadyAddedQuestions = new HashSet<String>(Arrays.asList(questionStrings));
+		selectsb2.append("<option value='--'>--</option>");
 		boolean foundone = false;
 		for (Question q : manager.getQuestions()) {
 			if (!alreadyAddedQuestions.contains(q.getName())) {
-				// init question with the first Question not already added
-				if (question == null) question = q;
 				if (q.getName().equals(selectedQuestion)) {
 					selectsb2.append("<option selected='selected' value='" + q.getName() + "'>"
 							+ q.getName() + "</option>");
@@ -328,7 +347,9 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 			user.getSession().setAttribute(key, question.getName());
 		}
 		if (questionString != null && !questionString.isEmpty()) {
-			selectsb2.append("<input type=\"button\" value=\"+\" onclick=\"SessionDebugger.addCookie(&quot;"
+			selectsb2.append("<input " +
+					(question == null ? "disabled='disabled'" : "")
+					+ " type=\"button\" value=\"+\" onclick=\"SessionDebugger.addCookie(&quot;"
 					+ questionString
 					+ QUESTIONS_SEPARATOR
 					+ "&quot;+this.form.toAdd.options[toAdd.selectedIndex].value);\"></form>");

@@ -66,3 +66,28 @@ SessionDebugger.addCookie = function(cookievalue) {
 			document.cookie = "additionalQuestions"+ encodeURI(topic) +"=" + encodeURI(cookievalue);
            	KNOWWE.helper.observer.notify('update');
 }
+
+SessionDebugger.reset = function() {
+			var params = {
+        		action : 'SessionDebuggerResetAction',
+    		}
+            
+            var options = {
+                url : KNOWWE.core.util.getURL(params),
+                response : {
+                	action : 'none',
+                	fn : function(){
+			        	try {
+	                		KNOWWE.helper.observer.notify('update');
+			        	}
+			        	catch (e) { /*ignore*/ }
+			        	KNOWWE.core.util.updateProcessingState(-1);
+                	},
+                    onError : function () {
+			        	KNOWWE.core.util.updateProcessingState(-1);                    	
+                    }
+                }
+            }
+        	KNOWWE.core.util.updateProcessingState(1);
+            new _KA( options ).send();
+}
