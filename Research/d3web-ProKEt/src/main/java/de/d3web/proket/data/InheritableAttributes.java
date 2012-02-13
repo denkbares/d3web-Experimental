@@ -17,7 +17,6 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-
 package de.d3web.proket.data;
 
 import org.w3c.dom.Element;
@@ -27,322 +26,348 @@ import de.d3web.proket.utils.XMLUtils;
 /**
  * A container for inheritable Attributes of {@link IDialogObject}s. Those are
  * all attributes that can be inherited by elements from their parents.
- * 
+ *
  * @author Martina Freiberg, Johannes Mitlmeier
- * 
+ *
  */
 public class InheritableAttributes {
-	/**
-	 * Number of answers to be placed in a row next to each other
-	 */
-	private int answerColumns = -1;
-	/**
-	 * Type of the {@link Answer}, e.g. oc or mc
-	 */
-	private String answerType;
-	/**
-	 * Number of columns in a box layout to be spanned by this
-	 * {@link IDialogObject}
-	 */
-	private int colspan = -1;
-	/**
-	 * Number of questions to be placed in a row next to each other.
-	 */
-	private int columns = -1;
-	/**
-	 * Maximum levels the attributes in the container shall be inherited; -1
-	 * means unlimited.
-	 */
-	private int inheritanceLevel = -1;
-	/**
-	 * Object associated with this {@link InheritableAttributes}.
-	 */
-	private IDialogObject idialogobject;
-	/**
-	 * ???? TODO
-	 */
-	private Boolean selectRandomly;
-	/**
-	 * Show a button for actively sending the given answers to the underlaying
-	 * system?
-	 */
-	private Boolean sendButton;
 
-	/**
-	 * Generate an {@link InheritableAttributes} from the XML tag linked in a
-	 * {@link IDialogObject}.
-	 * 
-	 * @param object
-	 *            {@link IDialogObject} to take the XML tag from
-	 */
-	public InheritableAttributes(IDialogObject object) {
-		// save the reference to the object which uses this
-		// InheritableAttributes
-		this.idialogobject = object;
-		Element element = object.getXMLTag();
+    /**
+     * Number of answers to be placed in a row next to each other
+     */
+    private int answerColumns = -1;
+    /**
+     * Type of the {@link Answer}, e.g. oc or mc
+     */
+    private String answerType;
+    /**
+     * Type of the connection---AND or OR---between sub-elements; used in
+     * prototypes to imitate d3web rules
+     */
+    private String andOrType;
+    /**
+     * Number of columns in a box layout to be spanned by this
+     * {@link IDialogObject}
+     */
+    private int colspan = -1;
+    /**
+     * Number of questions to be placed in a row next to each other.
+     */
+    private int columns = -1;
+    /**
+     * Maximum levels the attributes in the container shall be inherited; -1
+     * means unlimited.
+     */
+    private int inheritanceLevel = -1;
+    /**
+     * Object associated with this {@link InheritableAttributes}.
+     */
+    private IDialogObject idialogobject;
+    /**
+     * ???? TODO
+     */
+    private Boolean selectRandomly;
+    /**
+     * Show a button for actively sending the given answers to the underlaying
+     * system?
+     */
+    private Boolean sendButton;
 
-		// id it exists
-		if (element != null) {
+    /**
+     * Generate an {@link InheritableAttributes} from the XML tag linked in a
+     * {@link IDialogObject}.
+     *
+     * @param object
+     *            {@link IDialogObject} to take the XML tag from
+     */
+    public InheritableAttributes(IDialogObject object) {
+        // save the reference to the object which uses this
+        // InheritableAttributes
+        this.idialogobject = object;
+        Element element = object.getXMLTag();
 
-			// id it is an answer-node
-			if (element.getNodeName().equals("answer")) {
+        // id it exists
+        if (element != null) {
 
-				// get the type attribute
-				String elementValue = XMLUtils.getStr(element, "type");
-				if (elementValue != null) {
-					setAnswerType(elementValue); // set answer type
-				} else {
-					// use parent question's type if in doubt
-					try {
-						setAnswerType(getObject().getParent().getType());
-					} catch (NullPointerException npe) {
-						// no problem, naturally possible
-					}
-				}
-			} else {
+            // id it is an answer-node
+            if (element.getNodeName().equals("answer")) {
 
-				// if element was no answer, the answer type can be
-				// received by reading the answer-type attribute
-				setAnswerType(XMLUtils.getStr(element, "answer-type"));
-			}
-		}
-	}
+                // TODO: refactor: attributes need to be the same,
+                String elementValue = XMLUtils.getStr(element, "type");
+                if (elementValue != null) {
+                    setAnswerType(elementValue); // set answer type
 
-	@Override
-	/**
-	 * Method for cloning this set of InheritableAttributes
-	 */
-	protected Object clone() throws CloneNotSupportedException {
-		InheritableAttributes result = new InheritableAttributes(idialogobject);
-		result.setAnswerColumns(this.getAnswerColumns());
-		result.setInheritanceLevel(this.getInheritanceLevel());
-		result.setColumns(this.getColumns());
-		result.setAnswerType(this.getAnswerType());
-		result.setSendButton(this.getSendButton());
-		result.setSelectRandomly(this.getSelectRandomly());
-		result.setColspan(this.getColspan());
-		return result;
-	}
+                } else {
+                    // use parent question's type if in doubt
+                    try {
+                        setAnswerType(getObject().getParent().getType());
+                    } catch (NullPointerException npe) {
+                        // no problem, naturally possible
+                    }
+                }
+            } else {
 
-	/**
-	 * Compiles this object, including recursively inheriting not set values
-	 * from parent {@link IDialogObject}s.
-	 */
-	public InheritableAttributes compileInside() {
-		return compileOn(this);
-	}
+                // if element was no answer, the answer type can be
+                // received by reading the answer-type attribute
+                setAnswerType(XMLUtils.getStr(element, "answer-type"));
+            }
+        }
+    }
 
-	/**
-	 * Inherits attributes from the parents of the given InheritableAttributes
-	 * 
-	 * @created 09.10.2010
-	 * @param ac the InheritableAttributes that inherits from its parents
-	 * @return the InheritableAttributes that has inherited attributes from its
-	 *         parents
-	 */
-	private InheritableAttributes compileOn(InheritableAttributes ac) {
+    @Override
+    /**
+     * Method for cloning this set of InheritableAttributes
+     */
+    protected Object clone() throws CloneNotSupportedException {
+        InheritableAttributes result = new InheritableAttributes(idialogobject);
+        result.setAnswerColumns(this.getAnswerColumns());
+        result.setInheritanceLevel(this.getInheritanceLevel());
+        result.setColumns(this.getColumns());
+        result.setAnswerType(this.getAnswerType());
+        result.setSendButton(this.getSendButton());
+        result.setSelectRandomly(this.getSelectRandomly());
+        result.setColspan(this.getColspan());
+        result.setAndOrType(this.getAndOrType());
 
-		// get the parent's IA
-		InheritableAttributes parentStyle = getIAFromParent();
-		int level = 1;
+        return result;
+    }
 
-		if (ac == null) {
-			return null;
-		}
+    /**
+     * Compiles this object, including recursively inheriting not set values
+     * from parent {@link IDialogObject}s.
+     */
+    public InheritableAttributes compileInside() {
+        return compileOn(this);
+    }
 
-		while (parentStyle != null) {
+    /**
+     * Inherits attributes from the parents of the given InheritableAttributes
+     *
+     * @created 09.10.2010
+     *
+     * @param ac the InheritableAttributes that inherits from its parents
+     * @return the InheritableAttributes that has inherited attributes from its
+     * parents
+     */
+    private InheritableAttributes compileOn(InheritableAttributes ac) {
 
-			// inheritance allowed?
-			if (parentStyle.isInheritable(level)) {
-				ac.inherit(parentStyle);
-			}
+        // get the parent's IA
+        InheritableAttributes parentStyle = getIAFromParent();
+        int level = 1;
 
-			// recursion: get the IA of the parent's parent, i.e.
-			// go further up in the hierarchy, count up the level
-			// that way, attributes are inherited top-down!
-			parentStyle = parentStyle.getIAFromParent();
-			level++;
-		}
+        if (ac == null) {
+            return null;
+        }
 
-		// WHAT FOR? TODO... CHECK
-		// get BasicType from root element
-		parentStyle = this;
-		while (true) {
-			// recursion
-			if (parentStyle.getIAFromParent() == null) {
-				break;
-			} else {
-				parentStyle = parentStyle.getIAFromParent();
-			}
-		}
+        while (parentStyle != null) {
 
-		return ac;
-	}
+            // inheritance allowed?
+            if (parentStyle.isInheritable(level)) {
+                ac.inherit(parentStyle);
+            }
 
-	public int getAnswerColumns() {
-		return answerColumns;
-	}
+            // recursion: get the IA of the parent's parent, i.e.
+            // go further up in the hierarchy, count up the level
+            // that way, attributes are inherited top-down!
+            parentStyle = parentStyle.getIAFromParent();
+            level++;
+        }
 
-	public String getAnswerType() {
-		return answerType;
-	}
+        // WHAT FOR? TODO... CHECK
+        // get BasicType from root element
+        parentStyle = this;
+        while (true) {
+            // recursion
+            if (parentStyle.getIAFromParent() == null) {
+                break;
+            } else {
+                parentStyle = parentStyle.getIAFromParent();
+            }
+        }
 
-	public int getColspan() {
-		return colspan;
-	}
+        return ac;
+    }
 
-	public int getColumns() {
-		return columns;
-	}
+    public int getAnswerColumns() {
+        return answerColumns;
+    }
 
-	/**
-	 * Get the InheritableAttributes with inheriting everything from the parents
-	 * where necessary
-	 * 
-	 * @created 09.10.2010
-	 * @return the InheritableAttributes after inheriting
-	 */
-	public InheritableAttributes getCompiled() {
-		try {
-			InheritableAttributes compiled = (InheritableAttributes) this
-					.clone();
-			return compileOn(compiled);
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-			return this;
-		}
-	}
+    public String getAnswerType() {
+        return answerType;
+    }
 
-	public int getInheritanceLevel() {
-		return inheritanceLevel;
-	}
+    public String getAndOrType() {
+        return andOrType;
+    }
 
-	public IDialogObject getObject() {
-		return idialogobject;
-	}
+    public int getColspan() {
+        return colspan;
+    }
 
-	/**
-	 * Gets the InheritableAttributes from the parent object if such exists
-	 * 
-	 * @created 09.10.2010
-	 * @return the parent's InheritableAttributes
-	 */
-	public InheritableAttributes getIAFromParent() {
-		if (getObject() == null) {
-			return null;
-		}
-		if (getObject().getParent() == null) {
-			return null;
-		}
-		return getObject().getParent().getInheritableAttributes();
-	}
+    public int getColumns() {
+        return columns;
+    }
 
-	public Boolean getSelectRandomly() {
-		return selectRandomly;
-	}
+    /**
+     * Get the InheritableAttributes with inheriting everything from the parents
+     * where necessary
+     *
+     * @created 09.10.2010
+     *
+     * @return the InheritableAttributes after inheriting
+     */
+    public InheritableAttributes getCompiled() {
+        try {
+            InheritableAttributes compiled = (InheritableAttributes) this.clone();
+            return compileOn(compiled);
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return this;
+        }
+    }
 
-	public Boolean getSendButton() {
-		return sendButton;
-	}
+    public int getInheritanceLevel() {
+        return inheritanceLevel;
+    }
 
-	/**
-	 * Inherit the styles from the parent element
-	 * 
-	 * @created 09.10.2010
-	 * @param parentStyle the InheritableAttributes of the parent
-	 */
-	public void inherit(InheritableAttributes parentStyle) {
+    public IDialogObject getObject() {
+        return idialogobject;
+    }
 
-		// if no parent style, return
-		if (parentStyle == null) {
-			return;
-		}
+    /**
+     * Gets the InheritableAttributes from the parent object if such exists
+     *
+     * @created 09.10.2010
+     *
+     * @return the parent's InheritableAttributes
+     */
+    public InheritableAttributes getIAFromParent() {
+        if (getObject() == null) {
+            return null;
+        }
+        if (getObject().getParent() == null) {
+            return null;
+        }
+        return getObject().getParent().getInheritableAttributes();
+    }
 
-		// inherit columns
-		if (getAnswerColumns() == -1) {
-			setAnswerColumns(parentStyle.getAnswerColumns());
-		}
+    public Boolean getSelectRandomly() {
+        return selectRandomly;
+    }
 
-		// columns; check if the object connected with these attributes
-		// is an Answer, becaus no inherit to answers. They need to be set
-		// explicitly
-		if (getColumns() == -1 && !(getObject() instanceof Answer)) {
-			setColumns(parentStyle.getColumns());
-		}
+    public Boolean getSendButton() {
+        return sendButton;
+    }
 
-		// answer type
-		if (getAnswerType() == null) {
-			setAnswerType(parentStyle.getAnswerType());
-		}
+    /**
+     * Inherit the styles from the parent element
+     *
+     * @created 09.10.2010
+     *
+     * @param parentStyle the InheritableAttributes of the parent
+     */
+    public void inherit(InheritableAttributes parentStyle) {
 
-		// TODO: check if we need this select randomly
-		// select randomly?
-		if (getSelectRandomly() == null) {
-			setSelectRandomly(parentStyle.getSelectRandomly());
-		}
+        // if no parent style, return
+        if (parentStyle == null) {
+            return;
+        }
 
-		// send button
-		if (getSendButton() == null) {
-			setSendButton(parentStyle.getSendButton());
-		}
+        // inherit columns
+        if (getAnswerColumns() == -1) {
+            setAnswerColumns(parentStyle.getAnswerColumns());
+        }
 
-		// colspan, don't inherit to answers, they need to be set explicitly
-		if (getColspan() == -1 && !(getObject() instanceof Answer)) {
-			setColspan(parentStyle.getColspan());
-		}
-	}
+        // columns; check if the object connected with these attributes
+        // is an Answer, becaus no inherit to answers. They need to be set
+        // explicitly
+        if (getColumns() == -1 && !(getObject() instanceof Answer)) {
+            setColumns(parentStyle.getColumns());
+        }
 
-	/**
-	 * Checks, whether thus InheritableAttributes is inheritable: it is, if its
-	 * level is larger or equal the tested level, or when the level is -1 (means
-	 * unlimited inheritance)
-	 * 
-	 * @created 09.10.2010
-	 * @param level
-	 * @return
-	 */
-	public boolean isInheritable(int level) {
-		return (getInheritanceLevel() >= level)
-				|| (getInheritanceLevel() == -1);
-	}
+        // answer type
+        if (getAnswerType() == null) {
+            setAnswerType(parentStyle.getAnswerType());
+        }
 
-	public void setAnswerColumns(Integer answerColumns) {
-		if (answerColumns == null) {
-			return;
-		}
-		this.answerColumns = answerColumns;
-	}
+        // andor type
+        if (getAndOrType() == null) {
+            setAndOrType(parentStyle.getAndOrType());
+        }
 
-	public void setAnswerType(String answerType) {
-		this.answerType = answerType;
-	}
+        // TODO: check if we need this select randomly
+        // select randomly?
+        if (getSelectRandomly() == null) {
+            setSelectRandomly(parentStyle.getSelectRandomly());
+        }
 
-	public void setColspan(Integer colSpan) {
-		if (colSpan == null) {
-			return;
-		}
-		this.colspan = colSpan;
-	}
+        // send button
+        if (getSendButton() == null) {
+            setSendButton(parentStyle.getSendButton());
+        }
 
-	public void setColumns(Integer columns) {
-		if (columns == null) {
-			return;
-		}
-		this.columns = columns;
-	}
+        // colspan, don't inherit to answers, they need to be set explicitly
+        if (getColspan() == -1 && !(getObject() instanceof Answer)) {
+            setColspan(parentStyle.getColspan());
+        }
+    }
 
-	public void setInheritanceLevel(Integer inheritanceLevel) {
-		if (inheritanceLevel == null) {
-			return;
-		}
-		this.inheritanceLevel = inheritanceLevel;
-	}
+    /**
+     * Checks, whether thus InheritableAttributes is inheritable: it is, if its
+     * level is larger or equal the tested level, or when the level is -1 (means
+     * unlimited inheritance)
+     *
+     * @created 09.10.2010
+     *
+     * @param level
+     * @return
+     */
+    public boolean isInheritable(int level) {
+        return (getInheritanceLevel() >= level)
+                || (getInheritanceLevel() == -1);
+    }
 
-	public void setSelectRandomly(Boolean selectRandomly) {
-		this.selectRandomly = selectRandomly;
-	}
+    public void setAnswerColumns(Integer answerColumns) {
+        if (answerColumns == null) {
+            return;
+        }
+        this.answerColumns = answerColumns;
+    }
 
-	public void setSendButton(Boolean sendButton) {
-		this.sendButton = sendButton;
-	}
+    public void setAnswerType(String answerType) {
+        this.answerType = answerType;
+    }
+
+    public void setAndOrType(String andOrType) {
+        this.andOrType = andOrType;
+    }
+
+    public void setColspan(Integer colSpan) {
+        if (colSpan == null) {
+            return;
+        }
+        this.colspan = colSpan;
+    }
+
+    public void setColumns(Integer columns) {
+        if (columns == null) {
+            return;
+        }
+        this.columns = columns;
+    }
+
+    public void setInheritanceLevel(Integer inheritanceLevel) {
+        if (inheritanceLevel == null) {
+            return;
+        }
+        this.inheritanceLevel = inheritanceLevel;
+    }
+
+    public void setSelectRandomly(Boolean selectRandomly) {
+        this.selectRandomly = selectRandomly;
+    }
+
+    public void setSendButton(Boolean sendButton) {
+        this.sendButton = sendButton;
+    }
 }

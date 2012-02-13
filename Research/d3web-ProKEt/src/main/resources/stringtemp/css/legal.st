@@ -155,3 +155,11 @@ area {
 .propagation.rating-low { 
     background-color: #E0B59E; border: 1px solid grey; 
 }
+
+.question-toggleImg { 
+    line-height: 1.5em; padding: 2px; float: left; margin-left: 15px; margin-right: 5px;
+}
+
+.floatingnum {line-height: 1.5em; padding: 2px; float: left; margin-right: 15px;}
+
+input {height: 10px; margin-top: 1px;}

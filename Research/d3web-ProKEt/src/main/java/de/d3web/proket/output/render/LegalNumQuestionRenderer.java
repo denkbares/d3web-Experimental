@@ -33,7 +33,7 @@ import de.d3web.proket.utils.TemplateUtils;
  * @author Martina Freiberg
  *
  */
-public class LegalMcQuestionRenderer extends LegalQuestionRenderer {
+public class LegalNumQuestionRenderer extends LegalQuestionRenderer {
 
     
 }

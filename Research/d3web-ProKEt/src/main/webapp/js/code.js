@@ -119,7 +119,7 @@ function handleFB(){
 
 function handleLogging(){
    
-   var link = $.query.set("action", "logInit").toString();
+    var link = $.query.set("action", "logInit").toString();
     link = window.location.href.replace(window.location.search, "") + link;
 	
     $.ajax({
@@ -1092,48 +1092,31 @@ function toggle_folder_image_4boxes(id) {
  * @param value the value that indicates in what regard the item is marked
  */
 function h4boxes(value, id) {
-    if (!d3web) {
+    	
+    // get dialog item
+    var item = $("#" + id);
 	
-        // get dialog item
-        var item = $("#" + id);
-	
-        // get the first ancestor, i.e. the first upper question
-        var target = $(item).closest("div[id^='q_']");
+    // get the first ancestor, i.e. the first upper question
+    var target = $(item).closest("div[id^='q_']");
         
-        // set image attribute to the correctly selected one
-        item.attr('src', "img/pane" + value + ".png");
+    // set image attribute to the correctly selected one
+    item.attr('src', "img/pane" + value + ".png");
 
-        // check whether the calculated rating contradicts the user-chosen rating
-        // VORLÄUFIG RAUSLASSEN
-        /*if(hasChildrenHierachical(target)){
+    // check whether the calculated rating contradicts the user-chosen rating
+    // VORLÄUFIG RAUSLASSEN
+    /*if(hasChildrenHierachical(target)){
             if(!equalUserAndKBSRating(target, value)){
                 alert("Ratings stimmen nicht überein!")
             }
         }*/
         
-        setColorForQuestion(target, item, value);
-        setPropagationColor(target);
+    setColorForQuestion(target, item, value);
+    setPropagationColor(target);
         
-        // also mark parents of the target while excluding target
-        h4boxes_mark(target, true);
+    // also mark parents of the target while excluding target
+    h4boxes_mark(target, true);
 		
-    } else {
-    // d3web specific toolchain
-    /*if (value < 4) {
-			
-            // add fact in d3web
-            d3web_addfact(id, value - 1); // zero-based
-        } else {
-            // set default empty fact
-            d3web_addfact(id, "[empty]");
-        }
-        // get new ratings, changed at least for the element we are looking at
-        var ids = "";
-        $("[id^='q_']").each(function() {
-            ids = ids + $(this).attr('id') + ",";
-        });
-        d3web_getRatings(ids);*/
-    }
+    
 }
 
 // set the color for the area indicating the system-propagated value
