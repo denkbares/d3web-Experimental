@@ -57,6 +57,7 @@ public class JSONLogger {
     private JSONArray clickarray = new JSONArray();
     private String filename = "defaultlog.txt";
     private static final long serialVersionUID = -5766536853041423918L;
+    private String endValOnNewLoad = "";
 
     public JSONLogger(String filename) {
         this.filename = filename;
@@ -215,7 +216,7 @@ public class JSONLogger {
 
         String prevEnd = "";
         if (logfile.get(UETerm.END.toString()) != null) {
-            prevEnd = (String) logfile.get(UETerm.END.toString());
+           prevEnd = (String) logfile.get(UETerm.END.toString());
 
             if (!prevEnd.equals("")) {
                     logfile.put(UETerm.BREAK.toString(), prevEnd);
@@ -223,6 +224,11 @@ public class JSONLogger {
             }
         }
     }
+    
+    public void setEndValOnLoad(String endVal){
+        endValOnNewLoad = endVal;
+    }
+    
 
     public static void main(String[] args) {
         JSONLogger logger = new JSONLogger("tester.txt");

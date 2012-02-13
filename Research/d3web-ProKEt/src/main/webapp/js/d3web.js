@@ -340,29 +340,31 @@ $(function() {
  */
 function initFunctionality() {
     
-    link = $.query.set("action", "checkLoggingEnd").toString();
+    // per default, assume that NO widget but question or answer o.a. dialog 
+    // elements were clicked
+    markIsWidget("false");
+    
+    link = $.query.set("action", "checkWidgetClicked").toString();
     link = window.location.href.replace(window.location.search, "") + link;
-        
+		
     $.ajax({
         type: "GET",
         async: false,
         cache : false, // needed for IE, call is not made otherwise
         url: link,
         success : function(html) {
-               
-            // if we have indicated but not yet answered questions, keep
-            // confirmation closed
-            if (html.indexOf("true")>-1) {
-                
-                $('#jqConfirmEoSDialog').dialog('close');
-                    
-            } else  { // otherwise display
-                
-                $('#jqConfirmEoSDialog').dialog("open");
-                    
+            if (html == "true") {
+            // a widget was clicked, thus we need no logging of end session
+            // value
+            } else {
+                ue_logEnd();
+                // potential end session value is only logged if there was some
+                // data entry before, NOT if there was sthg like "save" button
+                // clicked
             }
         }
     });
+   
         
     $(window).resize(function() {
         moveContentPart();
@@ -394,6 +396,7 @@ function initFunctionality() {
     });
 
     $('[id^=ok-]').unbind('click').click(function(event) {
+       
         d3web_addFacts($(this));
     });
 	
@@ -449,51 +452,80 @@ function initFunctionality() {
 	
     // bind reset button to resetSession() function
     $('#reset').unbind('click').click(function() {
-        if (logging) ue_logWidgetClicked($(this));
+        if (logging) {
+            markIsWidget("true");
+            ue_logWidgetClicked($(this));
+        }
         d3web_resetSession();
     });
 
     // bind send/save button to sendexit function
     $('#savecase').unbind('click').click(function(event) {
-        if (logging) ue_logWidgetClicked($(this));
+        if (logging) {
+            markIsWidget("true");
+            ue_logWidgetClicked($(this));
+        }
         d3web_addFacts();
         d3web_prepareSave();
     });
 
     // bind the loadcase button to making the fileselect list visible
     $('#loadcase').unbind('click').click(function(event) {
-        if (logging) ue_logWidgetClicked($(this));
+        if (logging) {
+            markIsWidget("true");
+            ue_logWidgetClicked($(this));
+        }
         $("#jqLoadCaseDialog").dialog("open");
     });
 	
     $('#followupbutton').unbind('click').click(function(event) {
-        if (logging) ue_logWidgetClicked($(this));
+        if (logging) {
+            markIsWidget("true"); 
+            ue_logWidgetClicked($(this));
+        }
         $("#jqFollowUpDialog").dialog("open");
     });
 	
     $('#summary').unbind('click').click(function(event){
-        if (logging) ue_logWidgetClicked($(this));
+        if (logging) {
+            markIsWidget("true"); 
+            ue_logWidgetClicked($(this));
+        }
         d3web_updateSummary();
         $("#jqSummaryDialog").dialog("open");
     });
 	
     $('#statistics').unbind('click').click(function(event){
-        if (logging) ue_logWidgetClicked($(this));
+        if (logging) {
+            markIsWidget("true"); 
+            ue_logWidgetClicked($(this));
+        }
         gotoStatistics();
     });
     
     // TODO REFACTOR: is used both here and in Code.js
     $('#FFButton').unbind('click').click(function(event) {
+        if (logging) {
+            markIsWidget("true"); 
+            ue_logWidgetClicked($(this));
+        }
         $("#jqFFDialog").dialog("open");
     });
     
     $('#UEQButton').unbind('click').click(function(event) {
+        if (logging) {
+            markIsWidget("true"); 
+            ue_logWidgetClicked($(this));
+        }
         $("#jqUEQDialog").dialog("open");
     });
     
     // click on language toggle
     $('img[id*="lang"]').unbind('click').click(function(event){
-        if (logging) ue_logLanguageWidgetClicked($(this));
+        if (logging){
+            markIsWidget("true"); 
+            ue_logLanguageWidgetClicked($(this));
+        } 
         toggleLanguage($(this));
     });
     
@@ -530,6 +562,10 @@ function initFunctionality() {
     // check which pane of the summary dialog is selected as download button
     // is to be shown ONLY for the plain summary
     $('#jqSummaryDialog').bind('tabsselect', function(event, ui) {
+        if (logging) {
+            markIsWidget("true"); 
+        }
+        
         if(ui.index==0){
             $("#sumDLTxt").addClass("hidden");
             $("#sumDLTxt").removeClass("visible");
@@ -708,6 +744,10 @@ function submitLoadAndSaveDialog() {
     if ($('#jqConfirmDialog').dialog('isOpen'))
         $('[aria-labelledby$=jqConfirmDialog]').find(
             ":button:contains('Speichern')").click();
+            
+    if ($('#jqConfirmDialog').dialog('isOpen'))
+        $('[aria-labelledby$=jqConfirmDialog]').find(
+            ":button:contains('Save')").click();
 	
     if ($('#jqLoadCaseDialog').dialog('isOpen'))
         $('[aria-labelledby$=jqLoadCaseDialog]').find(
@@ -1305,7 +1345,19 @@ function toggleLanguage(el){
             initFunctionality();
         }
     });
-    
-    
 }
+    
+function markIsWidget(isWidget){
+    
+    var link = $.query.set("action", "markWidget").set("isWidget", isWidget);
+    link = window.location.href.replace(window.location.search, "") + link;
 
+    $.ajax({
+        type : "GET",
+        url : link,
+        cache : false, // needed for IE, call is not made otherwise
+        success : function(html) {
+            
+        }
+    });
+}

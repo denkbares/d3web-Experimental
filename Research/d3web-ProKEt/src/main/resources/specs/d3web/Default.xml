@@ -11,7 +11,7 @@
 	login = "off"
         required = "none"
 	language = ""
-        logging = "hallo"
+        logging = "ON"
         feedbackform = "ON"
         uequestionnaire = "ON"
 	>

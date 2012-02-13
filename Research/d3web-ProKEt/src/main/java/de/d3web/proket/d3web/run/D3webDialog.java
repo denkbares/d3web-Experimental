@@ -349,6 +349,11 @@ public class D3webDialog extends HttpServlet {
         } else if (action.equalsIgnoreCase("logInfoPopup")) {
             logInfoPopup(request, httpSession);
             return;
+        } else if (action.equalsIgnoreCase("markWidget")) {
+            markWidget(request, httpSession);
+        } else if (action.equalsIgnoreCase("checkWidgetClicked")) {
+            checkWidgetClicked(httpSession, response);
+            return;
         } else if (action.equalsIgnoreCase("checkInitialLoggingReload")) {
             checkInitialLoggingReload(httpSession, response);
             return;
@@ -1475,5 +1480,29 @@ public class D3webDialog extends HttpServlet {
         //String sid = D3webConnector.getInstance().getSession().getId();
 
         return formatted + "_" + sid.getId() + ".txt";
+    }
+
+    protected void markWidget(HttpServletRequest request, HttpSession httpSession) {
+        if (request.getParameter("isWidget") != null) {
+            String mark = request.getParameter("isWidget");
+            httpSession.setAttribute("isWidget", mark);
+        }
+
+    }
+
+    protected void checkWidgetClicked(HttpSession httpSession, HttpServletResponse response)
+            throws IOException {
+        PrintWriter writer = response.getWriter();
+        if (httpSession.getAttribute("isWidget") != null) {
+            System.out.println("MARK: " + httpSession.getAttribute("isWidget"));
+            if (httpSession.getAttribute("isWidget").toString().equals("true")) {
+
+                writer.append("true");
+
+            } else {
+                writer.append("false");
+            }
+
+        }
     }
 }

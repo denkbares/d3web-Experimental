@@ -132,6 +132,7 @@ public class ServletLogUtils {
      * @param end String representation of logging end time
      */
     protected static void logSessionEnd(String end, JSONLogger logger) {
+        logger.setEndValOnLoad(end);
         logger.logEndValue(end);
         logger.writeJSONToFile();
     }
@@ -167,6 +168,12 @@ public class ServletLogUtils {
             } else if (widgetID.contains("savecase")) {
                 logger.logClickedObjects(
                         "SAVE", time, "SAVE");
+            } else if (widgetID.contains("FFButton")) {
+                logger.logClickedObjects(
+                        "FFButton", time, "FEEDBACK FORM");
+            } else if (widgetID.contains("UEQButton")) {
+                logger.logClickedObjects(
+                        "UEQButton", time, "USAB QUEST");
             }
         }
         logger.writeJSONToFile();
