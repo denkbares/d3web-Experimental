@@ -25,8 +25,8 @@ import java.util.regex.Pattern;
 
 import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.objects.KnowWETerm;
-import de.knowwe.core.kdom.objects.TermDefinition;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -54,6 +54,7 @@ public class DashTreeClassDefinition extends AbstractType {
 	}
 
 	class DefType extends AbstractType {
+
 		public DefType() {
 			this.setSectionFinder(new RegexSectionFinderSingle("^def\\s+"));
 			this.setCustomRenderer(new StyleRenderer("font-style:italic;"));
@@ -67,13 +68,13 @@ public class DashTreeClassDefinition extends AbstractType {
 		}
 
 		@Override
-		public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
-			return SplitUtility.unquote(s.getOriginalText().trim());
+		public String getTermIdentifier(Section<? extends SimpleTerm> s) {
+			return SplitUtility.unquote(s.getText().trim());
 		}
 
 		@Override
 		public Map<String, ? extends Object> getTypedTermInformation(
-				Section<? extends TermDefinition> s) {
+				Section<? extends SimpleDefinition> s) {
 			// says that URIs created with this markup have the type 'Class'
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(RDFSTermCategory.KEY, RDFSTermCategory.Class);

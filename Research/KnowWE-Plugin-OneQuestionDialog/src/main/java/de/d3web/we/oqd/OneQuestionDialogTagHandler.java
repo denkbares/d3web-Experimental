@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2010 University Wuerzburg, Computer Science VI
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -24,13 +24,13 @@ import java.util.ResourceBundle;
 import de.d3web.core.knowledge.InterviewObject;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
-import de.d3web.we.basic.D3webModule;
+import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWERessourceLoader;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.user.UserContext;
 
 /**
- *
+ * 
  * @author Florian Ziegler
  * @created 16.08.2010
  */
@@ -49,7 +49,7 @@ public class OneQuestionDialogTagHandler extends AbstractHTMLTagHandler {
 		// D3webKnowledgeService knowledgeService =
 		// D3webModule.getAD3webKnowledgeServiceInTopic(
 		// web, topic);
-		ResourceBundle rb = D3webModule.getKwikiBundle_d3web(user.getRequest());
+		ResourceBundle rb = D3webUtils.getD3webBundle(user.getRequest());
 
 		// if the OQDialog is not in the main article (e.g. LeftMenu),
 		// then no KB is found. Set to article.
@@ -58,7 +58,7 @@ public class OneQuestionDialogTagHandler extends AbstractHTMLTagHandler {
 			topic = articleName;
 		}
 
-		KnowledgeBase knowledgeServiceInTopic = D3webModule.getKnowledgeBase(
+		KnowledgeBase knowledgeServiceInTopic = D3webUtils.getKnowledgeBase(
 				web, topic);
 		if (knowledgeServiceInTopic == null) return rb.getString("KnowWE.quicki.error");
 

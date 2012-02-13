@@ -77,19 +77,19 @@ public class PropertyDashTreeElementContent extends DashTreeElementContent {
 				Section<PropertyIDDefinition> propIDSection = Sections.findSuccessor(sec,
 						PropertyIDDefinition.class);
 				if (propIDSection != null) {
-					String propertyName = propIDSection.getOriginalText();
+					String propertyName = propIDSection.getText();
 					String rangeDef = null;
 					String domainDef = null;
 					Section<DomainDefinition> domainDefS = Sections.findSuccessor(sec,
 							DomainDefinition.class);
 					if (domainDefS != null) {
-						domainDef = domainDefS.getOriginalText();
+						domainDef = domainDefS.getText();
 					}
 
 					Section<RangeDefinition> rangeDefS = Sections.findSuccessor(sec,
 							RangeDefinition.class);
 					if (rangeDefS != null) {
-						rangeDef = rangeDefS.getOriginalText();
+						rangeDef = rangeDefS.getText();
 					}
 
 					UpperOntology uo = UpperOntology.getInstance();
@@ -111,7 +111,7 @@ public class PropertyDashTreeElementContent extends DashTreeElementContent {
 							if (fatherID != null) {
 								io.addStatement(helper.createStatement(
 										propURI, RDFS.SUBPROPERTYOF, helper
-												.createlocalURI(fatherID.getOriginalText()
+												.createlocalURI(fatherID.getText()
 														.trim())));
 							}
 						}

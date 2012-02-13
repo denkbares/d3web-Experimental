@@ -39,7 +39,7 @@ public class NamespacesContentRenderer extends KnowWEDomRenderer {
 		StringBuffer buffy = new StringBuffer();
 		ResourceBundle rb = KnowWEEnvironment.getInstance()
 				.getKwikiBundle(user);
-		String content = sec.getOriginalText();
+		String content = sec.getText();
 		Map<String, String> namespaces = Rdf2GoCore.getInstance().getNameSpaces();
 		if (content.trim().length() > 0) {
 			for (String line : content.split("\r\n|\r|\n")) {

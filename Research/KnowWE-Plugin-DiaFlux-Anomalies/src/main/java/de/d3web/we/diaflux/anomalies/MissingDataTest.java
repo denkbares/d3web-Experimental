@@ -11,12 +11,11 @@ import de.d3web.diaFlux.flow.Edge;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.Node;
 import de.d3web.indication.ActionIndication;
-import de.d3web.we.basic.D3webModule;
 import de.d3web.we.ci4ke.testing.AbstractCITest;
 import de.d3web.we.ci4ke.testing.CITestResult;
 import de.d3web.we.ci4ke.testing.CITestResult.Type;
+import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWEEnvironment;
-
 
 public class MissingDataTest extends AbstractCITest {
 
@@ -25,77 +24,77 @@ public class MissingDataTest extends AbstractCITest {
 	private final TreeSet<String> knownNodes = new TreeSet<String>();
 
 	private final String errormsg = "";
-	
+
 	private enum Status {
 		UNVISITED,
 		VISITED,
 		PROCESSING,
 		SAVED
 	}
-	
+
 	@Override
 	public CITestResult call() throws Exception {
 		String articleName = getParameter(0);
 		String config = "knowledge base article: " + articleName;
 
 		KnowledgeBase kb =
-				D3webModule.getKnowledgeBase(
+				D3webUtils.getKnowledgeBase(
 						KnowWEEnvironment.DEFAULT_WEB, articleName);
-		
+
 		CITestResult res = new CITestResult(Type.SUCCESSFUL, null, config);
-		
-		if(null != kb) {
+
+		if (null != kb) {
 			List<Flow> flowcharts =
 					kb.getManager().getObjects(Flow.class);
-			
-			for(Flow flow : flowcharts) {
+
+			for (Flow flow : flowcharts) {
 				allNodes.addAll(flow.getNodes());
 			}
-			
+
 			init();
-			
-			if(!errormsg.isEmpty()) {
+
+			if (!errormsg.isEmpty()) {
 				res = new CITestResult(Type.FAILED, errormsg, config);
 			}
 		}
-		
+
 		return res;
 	}
+
 	private void init() {
-		for(Node node : allNodes) {
+		for (Node node : allNodes) {
 			status.put(node, Status.UNVISITED);
 		}
-		for(Node node : allNodes) {
-			if(Status.UNVISITED == status.get(node)) {
-//				System.out.println("Node " + node.getName() + " visiting");
+		for (Node node : allNodes) {
+			if (Status.UNVISITED == status.get(node)) {
+				// System.out.println("Node " + node.getName() + " visiting");
 				visit(node);
 			}
 		}
-		
+
 	}
-	
+
 	private void visit(Node node) {
 		status.put(node, Status.PROCESSING);
-		if(node.getClass().equals(ActionNode.class)) {
+		if (node.getClass().equals(ActionNode.class)) {
 			ActionNode aNode = (ActionNode) node;
 			System.out.println("=========== ");
 			System.out.println(aNode.getAction().getClass());
 			/*
-			 * indicate: ActionIndication.class
-			 * set: ActionSetValue.class
+			 * indicate: ActionIndication.class set: ActionSetValue.class
 			 */
 			ActionIndication a;
-			if(aNode.getAction().toString().equals("NOOP")) {
+			if (aNode.getAction().toString().equals("NOOP")) {
 				System.out.println("-------");
 				System.out.println("NOOP-Node");
 				System.out.println("-------");
 			}
-//			knownNodes.add(node.getName());
+			// knownNodes.add(node.getName());
 		}
-		
-		for(Edge edge : node.getOutgoingEdges()) {
+
+		for (Edge edge : node.getOutgoingEdges()) {
 			Node nextnode = edge.getEndNode();
-			if(Status.UNVISITED == status.get(node)) {
+			if (Status.UNVISITED == status.get(node)) {
 				visit(nextnode);
 			}
 		}

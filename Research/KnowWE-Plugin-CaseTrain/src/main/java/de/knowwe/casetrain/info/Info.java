@@ -113,7 +113,7 @@ public class Info extends BlockMarkupType {
 				if (title == null) {
 					messages.add(Utils.missingTitleError(Info.class.getSimpleName()));
 				}
-				else if (title.getOriginalText().trim().equals("")) {
+				else if (title.getText().trim().equals("")) {
 					messages.add(Utils.missingTitleError(Info.class.getSimpleName()));
 				}
 
@@ -224,7 +224,7 @@ public class Info extends BlockMarkupType {
 							moreAnswersBlocks = true;
 							String typ =
 									Sections.findSuccessor(actual, QuestionType.class)
-											.getOriginalText().trim();
+											.getText().trim();
 							if (!(AnswersBlockValidator.getInstance()
 									.getTypesMultiple().contains(typ))) {
 								messages.add(Utils.invalidArgumentError(
@@ -269,7 +269,7 @@ public class Info extends BlockMarkupType {
 				}
 				String typ =
 						Sections.findSuccessor(actual, QuestionType.class)
-								.getOriginalText().trim();
+								.getText().trim();
 				if (!moreAnswersBlocks && AnswersBlockValidator.getInstance()
 						.getTypesMultiple().contains(typ)) {
 					messages.add(

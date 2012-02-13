@@ -235,7 +235,7 @@ public class DroolsAction extends AbstractAction {
 				desiredSessionName);
 
 		if (session != null) {
-			processSession(context, session.getOriginalText());
+			processSession(context, session.getText());
 			return;
 		}
 
@@ -272,7 +272,7 @@ public class DroolsAction extends AbstractAction {
 
 			// Save the article
 			Map<String, String> map = new HashMap<String, String>();
-			map.put(article.getSection().getID(), article.getSection().getOriginalText()
+			map.put(article.getSection().getID(), article.getSection().getText()
 					+ sessionText.toString());
 			Sections.replaceSections(context, map);
 			returnMessage(context, "Session was successfully saved.", ResponseType.OK);

@@ -117,7 +117,7 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit<MiscFrame> 
 
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
-			if (keyword.getOriginalText().matches(KEYWORD_EQUIVALENT_CLASSES)) {
+			if (keyword.getText().matches(KEYWORD_EQUIVALENT_CLASSES)) {
 				return true;
 			}
 		}
@@ -134,7 +134,7 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit<MiscFrame> 
 	public boolean isDisjointClasses(Section<? extends DefaultFrame> section) {
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
-			if (keyword.getOriginalText().matches(KEYWORD_DISJOINT_CLASSES)) {
+			if (keyword.getText().matches(KEYWORD_DISJOINT_CLASSES)) {
 				return true;
 			}
 		}
@@ -152,7 +152,7 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit<MiscFrame> 
 
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
-			if (keyword.getOriginalText().matches(KEYWORD_SAME_INDIVIDUAL)) {
+			if (keyword.getText().matches(KEYWORD_SAME_INDIVIDUAL)) {
 				return true;
 			}
 		}
@@ -170,7 +170,7 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit<MiscFrame> 
 	public boolean isDifferentIndividuals(Section<? extends DefaultFrame> section) {
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
-			if (keyword.getOriginalText().matches(KEYWORD_DIFFERENT_INDIVIDUAL)) {
+			if (keyword.getText().matches(KEYWORD_DIFFERENT_INDIVIDUAL)) {
 				return true;
 			}
 		}
@@ -189,7 +189,7 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit<MiscFrame> 
 
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
-			if (keyword.getOriginalText().matches(KEYWORD_EQUIVALENT_PROPERTIES)) {
+			if (keyword.getText().matches(KEYWORD_EQUIVALENT_PROPERTIES)) {
 				return true;
 			}
 		}
@@ -207,7 +207,7 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit<MiscFrame> 
 	public boolean isDisjointProperties(Section<? extends DefaultFrame> section) {
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
-			if (keyword.getOriginalText().matches(KEYWORD_DISJOINT_PROPERTIES)) {
+			if (keyword.getText().matches(KEYWORD_DISJOINT_PROPERTIES)) {
 				return true;
 			}
 		}
@@ -226,7 +226,7 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit<MiscFrame> 
 
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
-			if (keyword.getOriginalText().matches(KEYWORD_EQUIVALENT_PROPERTIES)) {
+			if (keyword.getText().matches(KEYWORD_EQUIVALENT_PROPERTIES)) {
 				return true;
 			}
 		}
@@ -244,7 +244,7 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit<MiscFrame> 
 	public boolean isDisjointDataProperties(Section<? extends DefaultFrame> section) {
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
-			if (keyword.getOriginalText().matches(KEYWORD_DISJOINT_PROPERTIES)) {
+			if (keyword.getText().matches(KEYWORD_DISJOINT_PROPERTIES)) {
 				return true;
 			}
 		}

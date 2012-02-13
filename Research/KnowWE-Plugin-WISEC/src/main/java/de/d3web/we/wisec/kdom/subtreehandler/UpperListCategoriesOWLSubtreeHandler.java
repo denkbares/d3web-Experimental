@@ -68,7 +68,7 @@ public class UpperListCategoriesOWLSubtreeHandler extends OwlSubtreeHandler<Uppe
 		// Process the Table Content
 		if (useKDom) createOWLUsingKDom(s, ioo, ns, listID);
 		else {
-			createOWL(s.getOriginalText().trim(), ioo, ns, listID);
+			createOWL(s.getText().trim(), ioo, ns, listID);
 		}
 
 		// Add the created statements to KnowWE's SemanticCore
@@ -103,17 +103,17 @@ public class UpperListCategoriesOWLSubtreeHandler extends OwlSubtreeHandler<Uppe
 				Sections.findSuccessorsOfType(line, TableCellContent.class, contents);
 
 				// Create OWL statement from cell content
-				if (contents.size() == 2 && !contents.get(1).getOriginalText().matches("\\s*")) createCharacteristicStatement(
+				if (contents.size() == 2 && !contents.get(1).getText().matches("\\s*")) createCharacteristicStatement(
 						ioo,
 													ns,
 													listID,
-													contents.get(0).getOriginalText().trim(),
-													contents.get(1).getOriginalText().trim());
+													contents.get(0).getText().trim(),
+													contents.get(1).getText().trim());
 			}
 		}
 		else {
 			Logging.getInstance().warning("Processing via KDOM failed, trying it without KDOM");
-			createOWL(section.getOriginalText().trim(), ioo, ns, listID);
+			createOWL(section.getText().trim(), ioo, ns, listID);
 		}
 	}
 

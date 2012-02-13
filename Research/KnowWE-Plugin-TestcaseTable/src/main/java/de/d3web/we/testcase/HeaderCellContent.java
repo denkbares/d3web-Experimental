@@ -85,7 +85,7 @@ public class HeaderCellContent extends TableCellContent {
 			@Override
 			public Collection<Message> create(KnowWEArticle article, Section<QuestionReference> s) {
 
-				KnowledgeBase kb = D3webUtils.getKB(article.getWeb(), article.getTitle());
+				KnowledgeBase kb = D3webUtils.getKnowledgeBase(article.getWeb(), article.getTitle());
 
 				Question question = kb.getManager().searchQuestion(s.getText());
 

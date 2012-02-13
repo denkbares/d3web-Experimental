@@ -67,9 +67,9 @@ public class InsertRelationAction extends AbstractAction {
 					insertion.append(object);
 					insertion.append("]");
 
-					if (!description.getOriginalText().contains(insertion.toString())) {
+					if (!description.getText().contains(insertion.toString())) {
 						Map<String, String> nodesMap = new HashMap<String, String>();
-						nodesMap.put(description.getID(), description.getOriginalText() + " - "
+						nodesMap.put(description.getID(), description.getText() + " - "
 								+ insertion.toString());
 						Sections.replaceSections(context, nodesMap);
 					}

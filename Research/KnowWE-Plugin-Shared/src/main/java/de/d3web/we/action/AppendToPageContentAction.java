@@ -52,7 +52,7 @@ public class AppendToPageContentAction extends AbstractAction {
 		// replaces old article content with old article content + text to
 		// append
 		Map<String, String> nodesMap = new HashMap<String, String>();
-		nodesMap.put(art.getSection().getID(), art.getSection().getOriginalText() + appendText);
+		nodesMap.put(art.getSection().getID(), art.getSection().getText() + appendText);
 		Sections.replaceSections(context, nodesMap);
 
 	}

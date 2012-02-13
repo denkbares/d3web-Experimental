@@ -30,9 +30,9 @@ import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.QuestionValue;
 import de.d3web.empiricaltesting.Finding;
 import de.d3web.empiricaltesting.RatedTestCase;
-import de.d3web.we.basic.D3webModule;
 import de.d3web.we.object.QuestionReference;
 import de.d3web.we.testcase.kdom.TimeStampType;
+import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.kdom.InvalidKDOMSchemaModificationOperation;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
@@ -153,7 +153,7 @@ public class TestcaseTableLine extends TableLine {
 					Sections.findAncestorOfExactType(s, TestcaseTableType.class),
 					article.getTitle());
 
-			return D3webModule.getKnowledgeRepresentationHandler(article.getWeb()).getKB(
+			return D3webUtils.getKnowledgeRepresentationHandler(article.getWeb()).getKB(
 					master);
 
 		}

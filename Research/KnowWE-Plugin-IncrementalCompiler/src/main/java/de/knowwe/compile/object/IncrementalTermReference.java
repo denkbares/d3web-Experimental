@@ -23,8 +23,9 @@ package de.knowwe.compile.object;
 import java.util.Collection;
 
 import de.knowwe.compile.IncrementalCompiler;
+import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.KnowWEArticle;
-import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
@@ -35,7 +36,7 @@ import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
-public abstract class IncrementalTermReference<TermObject> extends TermReference<TermObject> {
+public abstract class IncrementalTermReference extends SimpleReference {
 
 	@SuppressWarnings("unchecked")
 	final KnowWEDomRenderer<IncrementalTermReference> REF_RENDERER =
@@ -46,8 +47,8 @@ public abstract class IncrementalTermReference<TermObject> extends TermReference
 			new ToolMenuDecoratingRenderer<IncrementalTermReference>(new StyleRenderer(
 					"font-weight:bold;font-color:black"));
 
-	public IncrementalTermReference(Class termObjectClass) {
-		super(termObjectClass);
+	public IncrementalTermReference(Class<?> termObjectClass) {
+		super(TermRegistrationScope.GLOBAL, termObjectClass);
 	}
 
 	@Override

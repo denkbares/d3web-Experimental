@@ -41,7 +41,7 @@ public class InputFieldCellContent extends AbstractType {
 	}
 
 	public static int getWidth(Section<InputFieldCellContent> sec) {
-		String originalText = sec.getOriginalText();
+		String originalText = sec.getText();
 		int width;
 		width = readParamterNo(originalText, 0);
 		if (width == -1) width = 20; // set default
@@ -49,7 +49,7 @@ public class InputFieldCellContent extends AbstractType {
 	}
 
 	public static int getHeight(Section<InputFieldCellContent> sec) {
-		String originalText = sec.getOriginalText();
+		String originalText = sec.getText();
 		int height;
 		height = readParamterNo(originalText, 1);
 		if (height == -1) height = 3; // set default

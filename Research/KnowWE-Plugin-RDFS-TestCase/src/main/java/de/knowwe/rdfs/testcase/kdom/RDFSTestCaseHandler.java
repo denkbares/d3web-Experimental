@@ -61,7 +61,7 @@ public class RDFSTestCaseHandler extends SubtreeHandler<RDFSTestCaseType> {
 		if (sparqlSection == null) {
 			return Messages.asList(Messages.syntaxError("Unable to find SPARQL-Query! Check the syntax!"));
 		}
-		String sparqlQuery = sparqlSection.getOriginalText();
+		String sparqlQuery = sparqlSection.getText();
 		ValidatorResult validation = Validator.validate(sparqlQuery);
 
 		if (validation.hasErrors()) {
@@ -96,7 +96,7 @@ public class RDFSTestCaseHandler extends SubtreeHandler<RDFSTestCaseType> {
 			// create binding object, add values and add it to the test case
 			Binding b = new Binding();
 			for (Section<ValueType> value : values) {
-				b.addURI(value.getOriginalText().trim());
+				b.addURI(value.getText().trim());
 			}
 			testCase.addExpectedBinding(b);
 		}

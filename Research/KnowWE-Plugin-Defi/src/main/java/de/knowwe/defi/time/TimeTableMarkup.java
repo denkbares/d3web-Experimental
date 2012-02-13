@@ -65,7 +65,7 @@ public class TimeTableMarkup extends DefaultMarkupType {
 			if (!section.hasErrorInSubtree(s.getArticle())) {
 				Date d = null;
 				try {
-					d = DateT.dateFormat.parse(section.getOriginalText().trim());
+					d = DateT.dateFormat.parse(section.getText().trim());
 				}
 				catch (ParseException e) {
 					// TODO Auto-generated catch block

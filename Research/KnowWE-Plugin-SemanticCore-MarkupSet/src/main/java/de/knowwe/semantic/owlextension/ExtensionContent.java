@@ -57,7 +57,7 @@ public class ExtensionContent extends XMLContent {
 
 		@Override
 		public Collection<Message> create(KnowWEArticle article, Section s) {
-			String text = s.getOriginalText();
+			String text = s.getText();
 
 			IntermediateOwlObject io = extend(text, s);
 			;

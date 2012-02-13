@@ -20,7 +20,7 @@ public class DeployAction extends AbstractAction {
 		String title = context.getParameter(KnowWEAttributes.TOPIC);
 		if (filename == null) filename = "knowledgebase.d3web";
 		if (title == null) title = "Main";
-		KnowledgeBase kb = D3webUtils.getKB(KnowWEEnvironment.DEFAULT_WEB, title);
+		KnowledgeBase kb = D3webUtils.getKnowledgeBase(KnowWEEnvironment.DEFAULT_WEB, title);
 		PersistenceManager.getInstance().save(kb,
 				new File("webapps/EuraHS-Dialog/WEB-INF/classes/specs/d3web/" + filename));
 		context.sendRedirect("/KnowWE/");

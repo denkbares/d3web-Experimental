@@ -117,7 +117,7 @@ public class TestCaseExecutorType extends DefaultMarkupType {
 		String title = section.getArticle().getTitle();
 		List<String> attachments = connector.getAttachmentFilenamesForPage(title);
 		String master = getMaster(section);
-		KnowledgeBase kb = D3webUtils.getKB(section.getWeb(), master);
+		KnowledgeBase kb = D3webUtils.getKnowledgeBase(section.getWeb(), master);
 		List<SequentialTestCase> cases = new LinkedList<SequentialTestCase>();
 		attachments.retainAll(Arrays.asList(files));
 

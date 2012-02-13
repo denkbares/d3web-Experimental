@@ -167,7 +167,7 @@ public class AxiomFactory {
 	 * @return OWLEntity
 	 */
 	public static OWLEntity getOWLAPIEntity(Section<? extends Type> section, Class<?> c) {
-		return getOWLAPIEntity(section.getOriginalText(), c);
+		return getOWLAPIEntity(section.getText(), c);
 	}
 
 	/**
@@ -406,7 +406,7 @@ public class AxiomFactory {
 			Section<ManchesterClassExpression> mce = value.get().getManchesterClassExpression(value);
 
 			OWLDataProperty p = (OWLDataProperty) getOWLAPIEntity(pe, OWLDataProperty.class);
-			return factory.getOWLDataHasValue(p, factory.getOWLLiteral(mce.getOriginalText()));
+			return factory.getOWLDataHasValue(p, factory.getOWLLiteral(mce.getText()));
 		}
 
 		// ... or a CardinalityRestriction ...
@@ -532,7 +532,7 @@ public class AxiomFactory {
 					OWLDataProperty p = (OWLDataProperty) getOWLAPIEntity(ope,
 							OWLDataProperty.class);
 					return factory.getOWLDataHasValue(p,
-							factory.getOWLLiteral(mce.getOriginalText()));
+							factory.getOWLLiteral(mce.getText()));
 				}
 			}
 
@@ -885,7 +885,7 @@ public class AxiomFactory {
 			Section<Facet> facetSection = t.getFacet(facet);
 			Facet f = facetSection.get();
 
-			String literal = t.getLiteral(facet).getOriginalText();
+			String literal = t.getLiteral(facet).getText();
 			OWLDatatype type = resolveLiteralType(t.getLiteral(facet));
 
 			if (f.isLength(facetSection)) {
@@ -1002,7 +1002,7 @@ public class AxiomFactory {
 	 * @return
 	 */
 	public static OWLAxiom createCharacteristics(Section<?> section, OWLObjectProperty p, Collection<Message> messages) {
-		String str = section.getOriginalText();
+		String str = section.getText();
 
 		if (str.equals(ManchesterSyntaxKeywords.FUNCTIONAL.getKeyword())) {
 			return factory.getOWLFunctionalObjectPropertyAxiom(p);
@@ -1038,7 +1038,7 @@ public class AxiomFactory {
 	 * @return
 	 */
 	public static OWLAxiom createDataPropertyCharacteristics(Section<?> section, OWLDataProperty p, Collection<Message> messages) {
-		String str = section.getOriginalText();
+		String str = section.getText();
 
 		if (str.equals(ManchesterSyntaxKeywords.FUNCTIONAL.getKeyword())) {
 			return factory.getOWLFunctionalDataPropertyAxiom(p);
@@ -1173,8 +1173,8 @@ public class AxiomFactory {
 				OWLDataProperty pTmp = (OWLDataProperty) getOWLAPIEntity(ope,
 						OWLDataProperty.class);
 
-				String object = (lit != null) ? lit.getOriginalText() : (ref != null)
-						? ref.getOriginalText()
+				String object = (lit != null) ? lit.getText() : (ref != null)
+						? ref.getText()
 						: "";
 				object = object.replaceAll("\"", "");
 
@@ -1239,14 +1239,14 @@ public class AxiomFactory {
 				messages.add(Messages.syntaxError("annotationterm not found!"));
 				return null;
 			}
-			term = annotationType.getTerm(section).getOriginalText();
+			term = annotationType.getTerm(section).getText();
 
 			// check for optional tags (language, data type)
 			if (annotationType.hasLanguageTag(section)) {
-				tag = annotationType.getLanguage(section).getOriginalText();
+				tag = annotationType.getLanguage(section).getText();
 			}
 			else if (annotationType.hasDatatypeTag(section)) {
-				tag = annotationType.getDatatype(section).getOriginalText();
+				tag = annotationType.getDatatype(section).getText();
 			}
 			return createOWLAnnotation(annotationIRI, term, tag);
 		}
@@ -1443,7 +1443,7 @@ public class AxiomFactory {
 	 */
 	public static OWLDatatype convertToOWLDatatype(Section<? extends AbstractType> section) {
 
-		String possibleType = section.getOriginalText().trim();
+		String possibleType = section.getText().trim();
 
 		// Datatype ::= datatypeIRI | 'integer' | 'decimal' | 'float' | 'string'
 		if (possibleType.equals("integer") || possibleType.equals("int")) {

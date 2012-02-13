@@ -105,7 +105,7 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 				}
 
 				nodesMap.put(section.getID(),
-						section.getOriginalText().replace(replacement,
+						section.getText().replace(replacement,
 								createHiddenComment(replacement, possibleDelimiter, context)));
 				Sections.replaceSections(context, nodesMap);
 
@@ -141,7 +141,7 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 		comment.append(replacement);
 
 		if (section != null) {
-			comment.append(section.getOriginalText()).append(" ");
+			comment.append(section.getText()).append(" ");
 			comment.append(HiddenComment.CLOSE_TAG);
 		}
 		return comment.toString();
@@ -203,8 +203,8 @@ public class OWLApiRepairInconsistencies extends AbstractAction {
 			for (Section<?> child : children) {
 
 				// .. found the correct position within the list
-				String sectionText = section.getOriginalText().trim();
-				String childText = child.getOriginalText().trim();
+				String sectionText = section.getText().trim();
+				String childText = child.getText().trim();
 
 				if (childText.equals(sectionText)) {
 					int index = children.indexOf(child);

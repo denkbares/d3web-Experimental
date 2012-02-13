@@ -75,7 +75,7 @@ public class Delimiter extends AbstractType{
 	private boolean isSectionType(Section<? extends Type> section, String delimiter) {
 		Section<Delimiter> d = Sections.findSuccessor(section, Delimiter.class);
 		if (d != null) {
-			if (d.getOriginalText().trim().equals(delimiter)) {
+			if (d.getText().trim().equals(delimiter)) {
 				return true;
 			}
 		}

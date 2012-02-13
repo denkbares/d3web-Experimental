@@ -18,15 +18,41 @@
  */
 package de.d3web.we.algorithm;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
+
+import com.wcohen.ss.MongeElkan;
 
 /**
  * 
  * @author Johannes Dienst
  * @created 04.10.2011
  */
-public interface MatchingAlgorithm {
+public class MonkeElkanAlgorithm implements MatchingAlgorithm {
 
-	public List<Suggestion> getMatches(int maxCount, String toMatch, List<String> localTermMatches);
+	@Override
+	public List<Suggestion> getMatches(int maxCount, String toMatch,
+			List<String> localTermMatches) {
+
+		MongeElkan mE = new MongeElkan();
+
+		PriorityQueue<Suggestion> suggestions =
+				new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
+
+		for (String match : localTermMatches) {
+			double score = mE.score(toMatch, match);
+			// TODO threshold is experimental
+			if (score >= 0.7) {
+				suggestions.add(new Suggestion(match, score));
+			}
+		}
+
+		List<Suggestion> toReturn = new ArrayList<Suggestion>();
+		for (int i = 0; i < maxCount; i++)
+			toReturn.add(suggestions.poll());
+
+		return toReturn;
+	}
 
 }

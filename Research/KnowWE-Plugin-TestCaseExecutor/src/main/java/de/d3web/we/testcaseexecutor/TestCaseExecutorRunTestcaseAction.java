@@ -33,8 +33,8 @@ import de.d3web.empiricaltesting.TestCase;
 import de.d3web.empiricaltesting.TestPersistence;
 import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysis;
 import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysisReport;
-import de.d3web.we.basic.D3webModule;
 import de.d3web.we.testcase.action.TestCaseRunAction;
+import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
@@ -53,11 +53,8 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 	private static final String TESTCASEEXECUTOR_SEPARATOR = "#####";
 	private static final String TESTCASEEXECUTOR_UNNAMED = "Unnamed TestCase";
 
-
-
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-
 
 		String sectionID = context.getParameter("kdomid");
 		if (sectionID != null) {
@@ -66,14 +63,13 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 		}
 
 		String master = context.getParameter("master");
-		KnowledgeBase kb = D3webModule.getKnowledgeBase(
+		KnowledgeBase kb = D3webUtils.getKnowledgeBase(
 				context.getWeb(), master);
 
 		String testCases = context.getParameter("testcases");
 		String fileName = context.getParameter("filename");
 		String topic = context.getTitle();
 		String[] cases = testCases.split(TESTCASEEXECUTOR_SEPARATOR);
-
 
 		KnowWEWikiConnector connector = KnowWEEnvironment.getInstance().getWikiConnector();
 		Collection<String> attachments = connector.getAttachmentFilenamesForPage(topic);
@@ -153,7 +149,7 @@ public class TestCaseExecutorRunTestcaseAction extends AbstractAction {
 		TestCase t = (TestCase) section.getSectionStore().getObject(
 				TestCaseExecutorType.TESTCASE_KEY);
 
-		ResourceBundle rb = D3webModule.getKwikiBundle_d3web(context);
+		ResourceBundle rb = D3webUtils.getD3webBundle(context);
 		MessageFormat mf = new MessageFormat("");
 		String result2 = TestCaseRunAction.renderTestAnalysisResult(t, result, rb, mf);
 

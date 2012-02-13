@@ -28,7 +28,6 @@ import de.d3web.knowwe.type.AnnotationObject;
 import de.d3web.knowwe.type.AnnotationProperty;
 import de.d3web.knowwe.type.SimpleAnnotation;
 import de.d3web.we.basic.D3webKnowledgeHandler;
-import de.d3web.we.basic.D3webModule;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.contexts.AnnotationContext;
 import de.knowwe.core.contexts.ContextManager;
@@ -51,7 +50,7 @@ public class AnnotationInlineAnswerRenderer extends KnowWEDomRenderer {
 	public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
 
 		Section prop = Sections.findSuccessor(sec, AnnotationProperty.class);
-		if (prop == null || !prop.getOriginalText().contains("asks"))
+		if (prop == null || !prop.getText().contains("asks"))
 			return;
 
 		String question = null;
@@ -61,18 +60,18 @@ public class AnnotationInlineAnswerRenderer extends KnowWEDomRenderer {
 			qAChild = Sections.findSuccessor(sec, AnnotationObject.class);
 
 		if (qAChild != null)
-			question = qAChild.getOriginalText().trim();
+			question = qAChild.getText().trim();
 
 		if (question == null) {
 			Section findChildOfType = Sections.findSuccessor(sec, SimpleAnnotation.class);
 			if (findChildOfType != null) {
-				question = findChildOfType.getOriginalText();
+				question = findChildOfType.getText();
 			}
 		}
 
 		String text = "ERROR!!";
 		try {
-			text = Sections.findSuccessor(sec, AnnotatedString.class).getOriginalText();
+			text = Sections.findSuccessor(sec, AnnotatedString.class).getText();
 		}
 		catch (NullPointerException e) {
 			Logger.getLogger(
@@ -83,7 +82,7 @@ public class AnnotationInlineAnswerRenderer extends KnowWEDomRenderer {
 
 		String web = sec.getWeb();
 		String title = sec.getTitle();
-		D3webKnowledgeHandler repHandler = D3webModule.getKnowledgeRepresentationHandler(web);
+		D3webKnowledgeHandler repHandler = D3webUtils.getKnowledgeRepresentationHandler(web);
 		KnowledgeBase service = repHandler.getKB(title);
 		String name = service.getName();
 		if (name == null) {

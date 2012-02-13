@@ -21,13 +21,13 @@
 package de.knowwe.rdfs;
 
 import de.knowwe.compile.object.IncrementalTermReference;
-import de.knowwe.core.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
-public class IRITermRef extends IncrementalTermReference<String> {
+public class IRITermRef extends IncrementalTermReference {
 
 	@SuppressWarnings("unchecked")
 	final KnowWEDomRenderer<IRITermRef> REF_RENDERER =
@@ -40,19 +40,14 @@ public class IRITermRef extends IncrementalTermReference<String> {
 	}
 
 	@Override
-	public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
+	public String getTermIdentifier(Section<? extends SimpleTerm> s) {
 		// dirty hack for colons '::'
 		// TODO: fix
-		if (s.getOriginalText().endsWith("::")) return s.getOriginalText().substring(0,
-				s.getOriginalText().length() - 2);
+		if (s.getText().endsWith("::")) return s.getText().substring(0,
+				s.getText().length() - 2);
 
-		return s.getOriginalText();
+		return s.getText();
 
-	}
-
-	@Override
-	public String getTermObjectDisplayName() {
-		return "URI";
 	}
 
 }

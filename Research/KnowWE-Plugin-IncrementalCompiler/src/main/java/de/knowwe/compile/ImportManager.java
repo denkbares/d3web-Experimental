@@ -7,35 +7,34 @@ import java.util.Map;
 import java.util.Set;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.objects.TermDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 
 /**
- *
- *
+ * 
+ * 
  * @author Jochen, Stefan Mark
  * @created 14.12.2011
  */
 public class ImportManager {
 
-	private static Map<Section<? extends AbstractType>, Set<Section<? extends TermDefinition<?>>>> imports = new HashMap<Section<? extends AbstractType>, Set<Section<? extends TermDefinition<?>>>>();
+	private static Map<Section<? extends AbstractType>, Set<Section<?>>> imports = new HashMap<Section<? extends AbstractType>, Set<Section<?>>>();
 
-	private static Map<Section<? extends AbstractType>, Set<Section<? extends TermDefinition<?>>>> justImported = new HashMap<Section<? extends AbstractType>, Set<Section<? extends TermDefinition<?>>>>();
-	private static Map<Section<? extends AbstractType>, Set<Section<? extends TermDefinition<?>>>> justRemoved = new HashMap<Section<? extends AbstractType>, Set<Section<? extends TermDefinition<?>>>>();
+	private static Map<Section<? extends AbstractType>, Set<Section<?>>> justImported = new HashMap<Section<? extends AbstractType>, Set<Section<?>>>();
+	private static Map<Section<? extends AbstractType>, Set<Section<?>>> justRemoved = new HashMap<Section<? extends AbstractType>, Set<Section<?>>>();
 
-	public static void addImport(Section<? extends AbstractType> key, Set<Section<? extends TermDefinition<?>>> terms) {
+	public static void addImport(Section<? extends AbstractType> key, Set<Section<?>> terms) {
 		imports.put(key, terms);
 		justImported.put(key, terms);
 	}
 
-	public static void addImport(Section<? extends AbstractType> key, Section<? extends TermDefinition<?>> term) {
-		if(!imports.containsKey(key)) {
-			imports.put(key, new HashSet<Section<? extends TermDefinition<?>>>());
+	public static void addImport(Section<? extends AbstractType> key, Section<?> term) {
+		if (!imports.containsKey(key)) {
+			imports.put(key, new HashSet<Section<?>>());
 		}
 		imports.get(key).add(term);
 
 		if (!justImported.containsKey(key)) {
-			justImported.put(key, new HashSet<Section<? extends TermDefinition<?>>>());
+			justImported.put(key, new HashSet<Section<?>>());
 		}
 		justImported.get(key).add(term);
 	}
@@ -45,15 +44,17 @@ public class ImportManager {
 		imports.remove(key);
 	}
 
-	public static Map<Section<? extends AbstractType>, Set<Section<? extends TermDefinition<?>>>> fetchNewImports() {
-		Map<Section<? extends AbstractType>, Set<Section<? extends TermDefinition<?>>>> result = new HashMap<Section<? extends AbstractType>, Set<Section<? extends TermDefinition<?>>>>();
+	public static Map<Section<? extends AbstractType>, Set<Section<?>>> fetchNewImports() {
+		Map<Section<? extends AbstractType>, Set<Section<?>>> result =
+				new HashMap<Section<? extends AbstractType>, Set<Section<?>>>();
 		result.putAll(justImported);
 		justImported.clear();
 		return result;
 	}
 
-	public static Map<Section<? extends AbstractType>, Set<Section<? extends TermDefinition<?>>>> fetchRemovedImports() {
-		Map<Section<? extends AbstractType>, Set<Section<? extends TermDefinition<?>>>> result = new HashMap<Section<? extends AbstractType>, Set<Section<? extends TermDefinition<?>>>>();
+	public static Map<Section<? extends AbstractType>, Set<Section<?>>> fetchRemovedImports() {
+		Map<Section<? extends AbstractType>, Set<Section<?>>> result =
+				new HashMap<Section<? extends AbstractType>, Set<Section<?>>>();
 		result.putAll(justRemoved);
 		justRemoved.clear();
 		return result;
@@ -67,14 +68,14 @@ public class ImportManager {
 		justRemoved.clear();
 	}
 
-	public static Set<Section<? extends TermDefinition<?>>> getImports(Section<? extends AbstractType> key) {
+	public static Set<Section<?>> getImports(Section<? extends AbstractType> key) {
 		return Collections.unmodifiableSet(imports.get(key));
 	}
 
 	public static Section<? extends AbstractType> resolveImportSection(String termIdentifier) {
 		for (Section<? extends AbstractType> importSec : imports.keySet()) {
-			for (Section<? extends TermDefinition<?>> section : imports.get(importSec)) {
-				if (section.getOriginalText().equals(termIdentifier)) {
+			for (Section<?> section : imports.get(importSec)) {
+				if (section.getText().equals(termIdentifier)) {
 					return importSec;
 				}
 			}

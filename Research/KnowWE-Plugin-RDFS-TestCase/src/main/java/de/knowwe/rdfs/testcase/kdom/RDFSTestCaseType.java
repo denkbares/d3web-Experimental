@@ -18,7 +18,6 @@
  */
 package de.knowwe.rdfs.testcase.kdom;
 
-import de.knowwe.core.compile.IncrementalMarker;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -28,7 +27,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  * @author Sebastian Furth
  * @created 20.12.2011
  */
-public class RDFSTestCaseType extends DefaultMarkupType implements IncrementalMarker {
+public class RDFSTestCaseType extends DefaultMarkupType {
 
 	private static final DefaultMarkup MARKUP;
 

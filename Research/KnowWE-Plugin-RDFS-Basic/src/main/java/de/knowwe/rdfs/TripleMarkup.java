@@ -36,7 +36,7 @@ import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.basicType.EndLineComment;
-import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
@@ -98,7 +98,7 @@ public class TripleMarkup extends AbstractType implements
 				Section<SimpleTurtleSubject> subject = Sections.findSuccessor(triple,
 						SimpleTurtleSubject.class);
 
-				String predName = predicate.get().getTermName(predicate);
+				String predName = predicate.getText().trim();
 
 				// IncrementalCompiler.getInstance().getTerminology().getDefinitionInformationForValidTerm(predName);
 
@@ -181,6 +181,7 @@ public class TripleMarkup extends AbstractType implements
 	}
 
 	class SimpleTurtlePredicate extends IRITermRef implements TypeRestrictedReference {
+
 		public SimpleTurtlePredicate() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new RegexSectionFinder("\\b([^\\s]*)::", Pattern.DOTALL, 1));
@@ -190,7 +191,7 @@ public class TripleMarkup extends AbstractType implements
 		}
 
 		@Override
-		public boolean checkTypeConstraints(Section<? extends TermReference> s) {
+		public boolean checkTypeConstraints(Section<? extends SimpleTerm> s) {
 			Object info = IncrementalCompiler.getInstance().getTerminology().getDefinitionInformationForValidTerm(
 					s.get().getTermIdentifier(s));
 			if (info != null) {
@@ -212,12 +213,13 @@ public class TripleMarkup extends AbstractType implements
 		}
 
 		@Override
-		public String getMessageForConstraintViolation(Section<? extends TermReference> s) {
+		public String getMessageForConstraintViolation(Section<? extends SimpleTerm> s) {
 			return "only properties allowed here";
 		}
 	}
 
 	class SimpleTurtleSubject extends IRITermRef {
+
 		public SimpleTurtleSubject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new AllTextFinderTrimmed());
@@ -228,6 +230,7 @@ public class TripleMarkup extends AbstractType implements
 	}
 
 	class SimpleTurtleObjectSection extends AbstractType {
+
 		public SimpleTurtleObjectSection() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new RegexSectionFinder("::\\s(.*)", Pattern.DOTALL, 1));
@@ -241,6 +244,7 @@ public class TripleMarkup extends AbstractType implements
 	}
 
 	class SimpleTurtleObjectRef extends IRITermRef {
+
 		public SimpleTurtleObjectRef() {
 			this.setSectionFinder(new AllTextFinderTrimmed());
 		}
@@ -276,7 +280,7 @@ public class TripleMarkup extends AbstractType implements
 				}
 				else if (literalSec != null) {
 					objURI = Rdf2GoCore.getInstance().createLiteral(
-							literalSec.getOriginalText());
+							literalSec.getText());
 				}
 
 			}

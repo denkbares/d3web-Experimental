@@ -103,7 +103,7 @@ public class DroolsFact extends AbstractType {
 					return messages;
 				}
 
-				String type = inputTypeSection.getOriginalText().toLowerCase();
+				String type = inputTypeSection.getText().toLowerCase();
 
 				// The possible values
 				if ((valuesSection = Sections.findChildOfType(optionsSection,
@@ -120,8 +120,8 @@ public class DroolsFact extends AbstractType {
 					}
 				}
 				// The String still contains the literal markers
-				String factName = nameSection.getOriginalText().substring(1,
-						nameSection.getOriginalText().length() - 1);
+				String factName = nameSection.getText().substring(1,
+						nameSection.getText().length() - 1);
 
 				// Process the possible values
 				List<TextValue> possibleValues = new LinkedList<TextValue>();
@@ -129,8 +129,8 @@ public class DroolsFact extends AbstractType {
 				if (valuesSection != null) {
 					for (Section<DroolsFactValue> v : Sections.findChildrenOfType(valuesSection,
 							DroolsFactValue.class)) {
-						valueName = v.getOriginalText().substring(1,
-								v.getOriginalText().length() - 1);
+						valueName = v.getText().substring(1,
+								v.getText().length() - 1);
 						if ((value = (TextValue) factsStore.get(valueName)) == null) {
 							value = new TextValue(valueName);
 							factsStore.put(valueName, value);
@@ -160,7 +160,7 @@ public class DroolsFact extends AbstractType {
 				}
 				else {
 					messages.add(Messages.syntaxError("Unknown Input type: "
-							+ inputTypeSection.getOriginalText()));
+							+ inputTypeSection.getText()));
 					return messages;
 				}
 

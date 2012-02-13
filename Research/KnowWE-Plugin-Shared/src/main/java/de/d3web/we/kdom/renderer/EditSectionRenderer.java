@@ -118,7 +118,7 @@ public class EditSectionRenderer extends KnowWEDomRenderer {
 			if (preNeeded) {
 				string.append("{{{");
 			}
-			String str = sec.getOriginalText();
+			String str = sec.getText();
 			// padding right: 60px = space for the buttons
 			string.append(KnowWEUtils.maskHTML("<div style=\"padding-right: 60px\"><textarea name=\"default-edit-area\" id=\""
 					+ sec.getID()
@@ -215,17 +215,17 @@ public class EditSectionRenderer extends KnowWEDomRenderer {
 	 */
 	private boolean isInline(Section<Type> section) {
 		Section<? extends Type> sec = section;
-		String text = sec.getOriginalText();
+		String text = sec.getText();
 		if (text.startsWith("\n") || text.startsWith("\f") || text.length() == 0) return false;
 		KnowWEArticle rootTypeObj = sec.getArticle().getSection().get();
 		// Move up the Section-DOM till you find one with 'more' OriginalText
 		while (sec.getFather().get() != rootTypeObj) {
 			sec = sec.getFather();
-			Matcher m = Pattern.compile(text, Pattern.LITERAL).matcher(sec.getOriginalText());
+			Matcher m = Pattern.compile(text, Pattern.LITERAL).matcher(sec.getText());
 			m.find();
 			// Text BEFORE section shouldn't end with '\n' or '\f'
 			if (m.start() != 0) {
-				String textBefore = sec.getOriginalText().substring(0, m.start());
+				String textBefore = sec.getText().substring(0, m.start());
 				return !textBefore.endsWith("\n") && !textBefore.endsWith("\f");
 			}
 		}

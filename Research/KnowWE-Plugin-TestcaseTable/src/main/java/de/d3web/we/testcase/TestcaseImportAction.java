@@ -90,7 +90,7 @@ public class TestcaseImportAction extends AbstractAction {
 		String master = DefaultMarkupType.getAnnotation(section,
 				TestcaseTableType.ANNOTATION_MASTER);
 
-		KnowledgeBase kb = D3webUtils.getKB(context.getWeb(), master);
+		KnowledgeBase kb = D3webUtils.getKnowledgeBase(context.getWeb(), master);
 		List<SequentialTestCase> cases;
 		try {
 

@@ -73,7 +73,7 @@ public class ImportedOntologyManager {
 
 			Set<Section<? extends AbstractType>> terms = importedTerms.get(iri);
 			for (Section<? extends AbstractType> section : terms) {
-				if (section.getOriginalText().equals(termIdentifier)) {
+				if (section.getText().equals(termIdentifier)) {
 					return iri;
 				}
 			}
@@ -145,7 +145,7 @@ public class ImportedOntologyManager {
 		for (Section<ImportFrame> i : importedOntologies.values()) {
 			ImportFrame frame = i.get();
 
-			if (frame.getImportIRI(i).getOriginalText().equals(iri.toString())) {
+			if (frame.getImportIRI(i).getText().equals(iri.toString())) {
 				return true;
 			}
 		}

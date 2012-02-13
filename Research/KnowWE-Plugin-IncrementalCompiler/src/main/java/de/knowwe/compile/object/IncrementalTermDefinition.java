@@ -23,8 +23,9 @@ package de.knowwe.compile.object;
 import java.util.Collection;
 
 import de.knowwe.compile.IncrementalCompiler;
+import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.KnowWEArticle;
-import de.knowwe.core.kdom.objects.TermDefinition;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.core.report.DefaultErrorRenderer;
@@ -34,14 +35,14 @@ import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
-public abstract class IncrementalTermDefinition<TermObject> extends TermDefinition<TermObject> {
+public abstract class IncrementalTermDefinition<TermObject> extends SimpleDefinition {
 
 	final KnowWEDomRenderer CLASS_RENDERER = new ToolMenuDecoratingRenderer<IncrementalTermReference>(
 			new StyleRenderer(
 					"color:rgb(125, 80, 102)"));
 
 	public IncrementalTermDefinition(Class termObjectClass) {
-		super(termObjectClass);
+		super(TermRegistrationScope.GLOBAL, termObjectClass);
 		this.setCustomRenderer(CLASS_RENDERER);
 	}
 

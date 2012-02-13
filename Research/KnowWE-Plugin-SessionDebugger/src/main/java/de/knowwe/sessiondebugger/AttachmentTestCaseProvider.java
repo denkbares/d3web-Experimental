@@ -26,7 +26,6 @@ import java.util.Map;
 
 import de.d3web.core.session.Session;
 import de.d3web.testcase.model.TestCase;
-import de.d3web.we.basic.D3webModule;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.KnowWEArticle;
@@ -93,7 +92,7 @@ public abstract class AttachmentTestCaseProvider implements TestCaseProvider {
 	@Override
 	public void storeSession(Session session, String user) {
 		String sessionId = KnowWEEnvironment.generateDefaultID(article.getTitle());
-		D3webModule.getBroker(user, article.getWeb()).addSession(sessionId, session);
+		D3webUtils.getBroker(user, article.getWeb()).addSession(sessionId, session);
 		getDebugStatus(user).setSession(session);
 	}
 

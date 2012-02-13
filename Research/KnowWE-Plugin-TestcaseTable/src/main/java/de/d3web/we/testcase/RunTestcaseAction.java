@@ -35,7 +35,6 @@ import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.empiricaltesting.Finding;
 import de.d3web.empiricaltesting.RatedTestCase;
 import de.d3web.indication.inference.PSMethodUserSelected;
-import de.d3web.we.basic.D3webModule;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.AbstractAction;
@@ -72,7 +71,7 @@ public class RunTestcaseAction extends AbstractAction {
 				tableDMType, context, session);
 
 		KnowledgeBase kb =
-				D3webModule.getKnowledgeRepresentationHandler(web).getKB(master);
+				D3webUtils.getKnowledgeRepresentationHandler(web).getKB(master);
 
 		if (!multiLines) {
 			executeTableLine(article, session, alreadyExecuted, kb, line);

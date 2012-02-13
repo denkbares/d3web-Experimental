@@ -99,7 +99,7 @@ public class HeuristicDiagnosisTable extends ITable
 			//			KnowledgeBase kb = D3webUtils.getKB(heuristicSec.getWeb(), packageName + " - master");
 			StringBuilder content = new StringBuilder();
 			KnowWEArticle compilingArticle = PackageRenderUtils.checkArticlesCompiling(heuristicSec.getArticle(), heuristicSec, content);
-			KnowledgeBase kb = D3webUtils.getKB(heuristicSec.getWeb(), compilingArticle.getTitle());
+			KnowledgeBase kb = D3webUtils.getKnowledgeBase(heuristicSec.getWeb(), compilingArticle.getTitle());
 
 			// First create solution if necessary
 			// Create Rules: 1. Create Solution if necessary

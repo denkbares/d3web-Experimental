@@ -90,7 +90,7 @@ public class TableCellContentRenderer extends KnowWEDomRenderer<TableCellContent
 			content = builder.toString();
 		}
 		else {
-			content = sec.getOriginalText();
+			content = sec.getText();
 		}
 
 		string.append(wrappContent(content, sec, user));

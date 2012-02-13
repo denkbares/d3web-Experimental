@@ -34,11 +34,11 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.manage.RuleFactory;
-import de.d3web.we.basic.D3webModule;
 import de.d3web.we.kdom.condition.D3webCondition;
 import de.d3web.we.object.AnswerReference;
 import de.d3web.we.object.QuestionReference;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
+import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.basicType.Number;
 import de.knowwe.core.kdom.parsing.Section;
@@ -89,14 +89,14 @@ public class TableLineRuleCompiler extends D3webSubtreeHandler<WimVentRuleTableR
 				}
 				else {
 					return Messages.asList(Messages.creationFailedWarning(
-							D3webModule.getKwikiBundle_d3web().
+							D3webUtils.getD3webBundle().
 									getString("KnowWE.rulesNew.notcreated")
 							));
 				}
 			}
 			else {
 				return Messages.asList(Messages.creationFailedWarning(
-						D3webModule.getKwikiBundle_d3web().
+						D3webUtils.getD3webBundle().
 								getString("KnowWE.rulesNew.notcreated")
 						));
 			}

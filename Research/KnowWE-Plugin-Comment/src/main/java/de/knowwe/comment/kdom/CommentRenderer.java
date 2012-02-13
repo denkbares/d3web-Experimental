@@ -73,10 +73,10 @@ public class CommentRenderer extends KnowWEDomRenderer<CommentType> {
 			KnowWEWikiConnector wikiConnector = instance.getWikiConnector();
 
 			String commentTag = Sections.findChildOfType(
-					Sections.findChildOfType(sec, CommentTypeTag.class), CommentTypeTagName.class).getOriginalText();
+					Sections.findChildOfType(sec, CommentTypeTag.class), CommentTypeTagName.class).getText();
 			String pageName;
 
-			String commentContent = Sections.findChildOfType(sec, CommentTypeContent.class).getOriginalText();
+			String commentContent = Sections.findChildOfType(sec, CommentTypeContent.class).getText();
 
 			// split title and content:
 			String title = "";
@@ -90,7 +90,7 @@ public class CommentRenderer extends KnowWEDomRenderer<CommentType> {
 
 			Section<?> idSec = Sections.findChildOfType(
 						Sections.findChildOfType(sec, CommentTypeTag.class), CommentTypeTagID.class);
-			String id = idSec.getOriginalText().trim();
+			String id = idSec.getText().trim();
 
 			// add ID if not done before:
 			if (id.isEmpty()) {

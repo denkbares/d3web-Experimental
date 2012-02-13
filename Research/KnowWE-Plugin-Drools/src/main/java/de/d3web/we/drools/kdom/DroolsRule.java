@@ -91,7 +91,7 @@ public class DroolsRule extends AbstractType {
 			KnowledgeBuilder b = DroolsKnowledgeHandler.getInstance().getKnowledgeBuilder(
 					article.getTitle());
 
-			Rule r = new Rule(section.getOriginalText());
+			Rule r = new Rule(section.getText());
 
 			// // Test the rule
 			// KnowledgeBuilder testBuilder =

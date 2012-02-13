@@ -11,14 +11,14 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.objects.TermDefinition;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.owlapi.query.OWLApiQueryParser;
 
 /**
  * The OnteRenderingUtils class contains methods used in the rendering process
  * during the components in the OntE-Plugin.
- *
+ * 
  * @author Stefan Mark
  * @created 22.11.2011
  */
@@ -26,7 +26,7 @@ public class OnteRenderingUtils {
 
 	/**
 	 * Checks weather a term identifier is known to the terminology.
-	 *
+	 * 
 	 * @created 22.11.2011
 	 * @param term
 	 * @return
@@ -61,7 +61,7 @@ public class OnteRenderingUtils {
 			return "Wiki.jsp?page=" + importSection.getTitle();
 		}
 		else {
-			Collection<Section<? extends TermDefinition>> termDefs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+			Collection<Section<? extends SimpleDefinition>> termDefs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 					termIdentifier);
 			if (!termDefs.isEmpty()) {
 
@@ -76,7 +76,7 @@ public class OnteRenderingUtils {
 
 	/**
 	 * Create the HTML of a button of the toolbar.
-	 *
+	 * 
 	 * @created 12.10.2011
 	 * @param title
 	 * @param action
@@ -98,7 +98,7 @@ public class OnteRenderingUtils {
 	/**
 	 * Renders a nice hyperlink to the article a concept is defined. used for
 	 * Inter-Wiki linking of the ontology definitions.
-	 *
+	 * 
 	 * @created 22.11.2011
 	 * @param concept
 	 * @return
@@ -115,16 +115,16 @@ public class OnteRenderingUtils {
 			s.append("<span style=\"font-size:9px;padding-left:10px;\">(Defined in: ");
 		}
 
-		String href = getHyperlink(term.getOriginalText());
+		String href = getHyperlink(term.getText());
 		if (!href.isEmpty()) {
 			s.append("<a href=\"").append(href);
 			s.append("\" title=\"Goto definition article\">");
-			s.append(term.getOriginalText());
+			s.append(term.getText());
 			s.append("</a>");
 		}
 		else {
 			// predefined
-			s.append(term.getOriginalText());
+			s.append(term.getText());
 		}
 
 		// boolean isPredefined =
@@ -163,7 +163,7 @@ public class OnteRenderingUtils {
 	/**
 	 * Renders a nice hyperlink to the article a concept is defined. used for
 	 * Inter-Wiki linking of the ontology definitions.
-	 *
+	 * 
 	 * @created 22.11.2011
 	 * @param concept
 	 * @return
@@ -171,7 +171,7 @@ public class OnteRenderingUtils {
 	public static String renderHyperlink(String term, boolean raw) {
 
 		term = term.replace("\"", "").trim();
-		Collection<Section<? extends TermDefinition>> termDefs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+		Collection<Section<? extends SimpleDefinition>> termDefs = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 				term);
 
 		// only one definition allowed in the onte plugin, so simply use the
@@ -187,8 +187,8 @@ public class OnteRenderingUtils {
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @created 21.12.2011
 	 * @param owlEntity
 	 * @return
@@ -197,7 +197,7 @@ public class OnteRenderingUtils {
 
 		IRI iri = owlEntity.getIRI();
 
-		if(iri.getFragment() != null) {
+		if (iri.getFragment() != null) {
 			return iri.getFragment();
 		}
 

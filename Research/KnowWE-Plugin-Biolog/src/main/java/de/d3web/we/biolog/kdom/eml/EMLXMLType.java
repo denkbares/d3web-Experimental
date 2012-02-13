@@ -80,7 +80,7 @@ public class EMLXMLType extends AbstractXMLType {
 					.findSubSectionOfTag("calendarDate", eml);
 
 			if (dateSec != null) {
-				Sections.findChildOfType(dateSec, XMLContent.class).getOriginalText();
+				Sections.findChildOfType(dateSec, XMLContent.class).getText();
 			}
 
 			String abstractText = null;
@@ -93,7 +93,7 @@ public class EMLXMLType extends AbstractXMLType {
 						XMLContent.class);
 				if (findChildOfType != null) {
 					abstractText = findChildOfType
-							.getOriginalText();
+							.getText();
 				}
 			}
 
@@ -103,7 +103,7 @@ public class EMLXMLType extends AbstractXMLType {
 					.findSubSectionOfTag("givenName", eml);
 			if (prenameSec != null) {
 				preName = Sections.findChildOfType(prenameSec, XMLContent.class)
-						.getOriginalText();
+						.getText();
 			}
 
 			String surName = null;
@@ -112,7 +112,7 @@ public class EMLXMLType extends AbstractXMLType {
 					.findSubSectionOfTag("surName", eml);
 			if (surNameSec != null) {
 				surName = Sections.findChildOfType(surNameSec, XMLContent.class)
-						.getOriginalText();
+						.getText();
 			}
 
 			String methodDescription = null;
@@ -121,7 +121,7 @@ public class EMLXMLType extends AbstractXMLType {
 					.findSubSectionOfTag("methods", eml);
 			if (methodsSec != null) {
 				methodDescription = Sections
-						.findChildOfType(methodsSec, XMLContent.class).getOriginalText();
+						.findChildOfType(methodsSec, XMLContent.class).getText();
 			}
 
 			Set<Section<? extends AbstractXMLType>> keyWordSections = new HashSet<Section<? extends AbstractXMLType>>();
@@ -161,7 +161,7 @@ public class EMLXMLType extends AbstractXMLType {
 
 				for (Section<? extends AbstractXMLType> cur : keyWordSections) {
 					String[] split = Sections.findChildOfType(cur, XMLContent.class)
-							.getOriginalText().split(";");
+							.getText().split(";");
 					for (String string : split) {
 						io.addStatement(helper.createStatement(localURI, helper
 								.createURI(ns, "keywords"), helper

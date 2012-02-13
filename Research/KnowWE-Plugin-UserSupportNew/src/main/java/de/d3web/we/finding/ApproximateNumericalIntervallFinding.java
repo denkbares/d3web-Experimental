@@ -26,6 +26,7 @@ import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.we.kdom.condition.D3webCondition;
+import de.d3web.we.object.QuestionReference;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
@@ -43,15 +44,15 @@ public class ApproximateNumericalIntervallFinding extends D3webCondition<Approxi
 	public ApproximateNumericalIntervallFinding() {
 		this.setSectionFinder(new NumericalIntervallFinder());
 		this.addChildType(new Intervall());
-		ApproximateQuestionReference questionRef = new ApproximateQuestionReference();
+		QuestionReference questionRef = new QuestionReference();
 		questionRef.setSectionFinder(new AllTextFinderTrimmed());
 		this.addChildType(questionRef);
 	}
 
 	@Override
 	protected Condition createCondition(KnowWEArticle article, Section<ApproximateNumericalFinding> s) {
-		Section<ApproximateQuestionReference> qRef = Sections.findSuccessor(s,
-				ApproximateQuestionReference.class);
+		Section<QuestionReference> qRef = Sections.findSuccessor(s,
+				QuestionReference.class);
 
 		Section<Intervall> intervall = Sections.findSuccessor(s, Intervall.class);
 
@@ -102,7 +103,7 @@ public class ApproximateNumericalIntervallFinding extends D3webCondition<Approxi
 	class Intervall extends AbstractType {
 
 		public Double getFirstNumber(Section<Intervall> s) {
-			String text = s.getOriginalText();
+			String text = s.getText();
 			String content = text.substring(1, text.length() - 1);
 			String[] parts = SplitUtility.getCharacterChains(content);
 			if (parts.length == 2) {
@@ -120,7 +121,7 @@ public class ApproximateNumericalIntervallFinding extends D3webCondition<Approxi
 		}
 
 		public Double getSecondNumber(Section<Intervall> s) {
-			String text = s.getOriginalText();
+			String text = s.getText();
 			String content = text.substring(1, text.length() - 1);
 			String[] parts = SplitUtility.getCharacterChains(content);
 			if (parts.length == 2) {

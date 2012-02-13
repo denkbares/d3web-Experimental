@@ -90,7 +90,7 @@ public class GroovySparqlRendererRenderer extends
 		else {
 			name = params.get("name");
 		}
-		String content = sec.getOriginalText();
+		String content = sec.getText();
 		KnowWEUtils.storeObject(article, sec, GroovySparqlRendererRenderer.CONTENT,
 				content);
 

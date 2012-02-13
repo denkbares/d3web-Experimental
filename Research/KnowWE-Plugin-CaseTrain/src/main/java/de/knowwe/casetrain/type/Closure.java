@@ -67,7 +67,7 @@ public class Closure extends BlockMarkupType {
 				if (title == null) {
 					messages.add(Utils.missingTitleError(Closure.class.getSimpleName()));
 				}
-				else if (title.getOriginalText().trim().equals("")) {
+				else if (title.getText().trim().equals("")) {
 					messages.add(Utils.missingTitleError(Closure.class.getSimpleName()));
 				}
 

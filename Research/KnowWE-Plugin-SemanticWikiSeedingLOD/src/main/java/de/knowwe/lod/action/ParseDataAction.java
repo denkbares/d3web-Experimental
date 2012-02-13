@@ -184,7 +184,7 @@ public class ParseDataAction extends AbstractAction {
 
 					Section<MappingContentType> lastNode = found.get(found.size() - 1);
 
-					String add = lastNode.getChildren().get(0).getOriginalText()
+					String add = lastNode.getChildren().get(0).getText()
 								+ System.getProperty("line.separator") + parse;
 
 					Map<String, String> nodesMap = new HashMap<String, String>();
@@ -241,8 +241,8 @@ public class ParseDataAction extends AbstractAction {
 
 						Section<IgnoreConcept> temp = Sections.findChildOfType(t,
 								IgnoreConcept.class);
-						String sectionConcept = temp.getOriginalText().substring(1,
-								temp.getOriginalText().length() - 1);
+						String sectionConcept = temp.getText().substring(1,
+								temp.getText().length() - 1);
 						boolean conceptFound = false;
 
 						// if concept is in list - test if tag + value also.
@@ -254,7 +254,7 @@ public class ParseDataAction extends AbstractAction {
 									t, IgnoreChild.class);
 							boolean isIn = false;
 							for (Section<IgnoreChild> child : listChilds) {
-								String node = child.getOriginalText();
+								String node = child.getText();
 								if (Character.isWhitespace(node.charAt(node.length() - 1))) {
 									node = node.substring(0, node.length() - 1);
 								}
@@ -266,7 +266,7 @@ public class ParseDataAction extends AbstractAction {
 								// append at the end of the section.
 								else if (listChilds.indexOf(child) == listChilds.size() - 1
 										&& !isIn) {
-									String newIgnore = child.getOriginalText()
+									String newIgnore = child.getText()
 											+ System.getProperty("line.separator") + "- " +
 											hermes.get(i) + " == " + value.get(i);
 									// add to ignorelist.
@@ -277,7 +277,7 @@ public class ParseDataAction extends AbstractAction {
 						else if (found.indexOf(t) == found.size() - 1 && !conceptFound) {
 
 							// Add concept + tag & value.
-							String newIgnore = t.getOriginalText()
+							String newIgnore = t.getText()
 									+ System.getProperty("line.separator") + "#" + concept
 									+ System.getProperty("line.separator") + "- " + hermes.get(i)
 									+ " == " + value.get(i);
@@ -312,12 +312,12 @@ public class ParseDataAction extends AbstractAction {
 				String add = "";
 
 				if (!wiki.equals("")) {
-					add = lastNode.getChildren().get(0).getOriginalText()
+					add = lastNode.getChildren().get(0).getText()
 							+ System.getProperty("line.separator") + concept + " => "
 							+ LinkedOpenData.getResourceforWikipedia(wiki) + " " + wiki;
 				}
 				else {
-					add = lastNode.getChildren().get(0).getOriginalText()
+					add = lastNode.getChildren().get(0).getText()
 							+ System.getProperty("line.separator") + concept + " => "
 							+ LinkedOpenData.getDBpediaRedirect(concept);
 				}

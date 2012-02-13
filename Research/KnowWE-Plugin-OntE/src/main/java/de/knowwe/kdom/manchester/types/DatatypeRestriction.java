@@ -65,7 +65,7 @@ public class DatatypeRestriction extends AbstractType {
 
 	public boolean isIntegerDataType(Section<DatatypeRestriction> section) {
 		Section<?> predef = getPredefinedDataType(section);
-		if (predef.getOriginalText().equals("integer") || predef.getOriginalText().equals("int")) {
+		if (predef.getText().equals("integer") || predef.getText().equals("int")) {
 			return true;
 		}
 		return false;
@@ -73,7 +73,7 @@ public class DatatypeRestriction extends AbstractType {
 
 	public boolean isDoubleDataType(Section<DatatypeRestriction> section) {
 		Section<?> predef = getPredefinedDataType(section);
-		if (predef.getOriginalText().equals("double")) {
+		if (predef.getText().equals("double")) {
 			return true;
 		}
 		return false;
@@ -81,7 +81,7 @@ public class DatatypeRestriction extends AbstractType {
 
 	public boolean isBooleanDataType(Section<DatatypeRestriction> section) {
 		Section<?> predef = getPredefinedDataType(section);
-		if (predef.getOriginalText().equals("boolean")) {
+		if (predef.getText().equals("boolean")) {
 			return true;
 		}
 		return false;
@@ -89,7 +89,7 @@ public class DatatypeRestriction extends AbstractType {
 
 	public boolean isFloatDataType(Section<DatatypeRestriction> section) {
 		Section<?> predef = getPredefinedDataType(section);
-		if (predef.getOriginalText().equals("float")) {
+		if (predef.getText().equals("float")) {
 			return true;
 		}
 		return false;
@@ -97,7 +97,7 @@ public class DatatypeRestriction extends AbstractType {
 
 	public boolean isDecimalDataType(Section<DatatypeRestriction> section) {
 		Section<?> predef = getPredefinedDataType(section);
-		if (predef.getOriginalText().equals("decimal")) {
+		if (predef.getText().equals("decimal")) {
 			return true;
 		}
 		return false;
@@ -105,7 +105,7 @@ public class DatatypeRestriction extends AbstractType {
 
 	public boolean isStringDataType(Section<DatatypeRestriction> section) {
 		Section<?> predef = getPredefinedDataType(section);
-		if (predef.getOriginalText().equals("string")) {
+		if (predef.getText().equals("string")) {
 			return true;
 		}
 		return false;

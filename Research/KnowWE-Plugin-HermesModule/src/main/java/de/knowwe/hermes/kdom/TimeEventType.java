@@ -115,13 +115,13 @@ public class TimeEventType extends AbstractType {
 				}
 
 				/* Getting all the strings from the sections */
-				String description = descriptionSection.getOriginalText();
-				String title = titleSection.getOriginalText();
-				String importance = importanceSection.getOriginalText();
-				String date = dateSection.getOriginalText();
+				String description = descriptionSection.getText();
+				String title = titleSection.getText();
+				String importance = importanceSection.getText();
+				String date = dateSection.getText();
 				List<String> sourceStrings = new ArrayList<String>();
 				for (Section<TimeEventSourceType> s : sources) {
-					sourceStrings.add(s.getOriginalText());
+					sourceStrings.add(s.getText());
 				}
 
 				/* creating all the URIs for the resources */

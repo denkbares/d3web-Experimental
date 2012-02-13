@@ -77,14 +77,14 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 			}
 			else if (column == 1) {
 				html.append("<td>");
-				html.append("<input type='text' name='" + sec.getOriginalText() + "' id='"
+				html.append("<input type='text' name='" + sec.getText() + "' id='"
 						+ sec.getID()
-						+ "' value='" + TableUtils.quote(sec.getOriginalText())
+						+ "' value='" + TableUtils.quote(sec.getText())
 						+ "' class='table-edit-node'/>");
 			}
 			else if (column != 0) {
 				html.append("<td>");
-				generateContent(sec.getOriginalText(), sec, user, sec.getID(), html);
+				generateContent(sec.getText(), sec, user, sec.getID(), html);
 
 			}
 			else {

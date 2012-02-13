@@ -106,7 +106,7 @@ public final class SparqlDelegateRenderer extends
 			return;
 		}
 
-		String value = sec.getOriginalText();
+		String value = sec.getText();
 		Map<String, String> params = AbstractXMLType
 				.getAttributeMapFor((Section<? extends AbstractXMLType>) sec
 						.getFather());
@@ -140,7 +140,7 @@ public final class SparqlDelegateRenderer extends
 				res = KnowWEUtils.maskHTML(querystring + "<hr /><br />\n")
 						+ res;
 			}
-			string.append(sec.getOriginalText());
+			string.append(sec.getText());
 		}
 	}
 

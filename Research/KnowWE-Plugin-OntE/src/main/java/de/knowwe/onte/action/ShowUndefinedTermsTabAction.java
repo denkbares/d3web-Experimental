@@ -8,7 +8,7 @@ import java.util.Set;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.kdom.renderer.OnteRenderingUtils;
 
@@ -19,10 +19,10 @@ public class ShowUndefinedTermsTabAction extends AbstractAction {
 		StringBuilder html = new StringBuilder();
 		html.append("<p>The ontology contains the following undefined terms:</p>");
 
-		//article --> errors
-		Map<String, Set<Section<? extends TermReference>>> errors = new HashMap<String, Set<Section<? extends TermReference>>>();
+		// article --> errors
+		Map<String, Set<Section<? extends SimpleReference>>> errors = new HashMap<String, Set<Section<? extends SimpleReference>>>();
 
-		Map<String, Set<Section<? extends TermReference>>> refs = IncrementalCompiler.getInstance().getTerminology().getAllReferences();
+		Map<String, Set<Section<? extends SimpleReference>>> refs = IncrementalCompiler.getInstance().getTerminology().getAllReferences();
 		for (String ref : refs.keySet()) {
 			if (!IncrementalCompiler.getInstance().getTerminology().isValid(ref)) {
 				if (errors.containsKey(ref)) {
@@ -41,7 +41,7 @@ public class ShowUndefinedTermsTabAction extends AbstractAction {
 			html.append(termidentifier).append("</strong></p>");
 			html.append("<ul>");
 
-			for (Section<? extends TermReference> section : errors.get(termidentifier)) {
+			for (Section<? extends SimpleReference> section : errors.get(termidentifier)) {
 				html.append("<li>").append(OnteRenderingUtils.renderHyperlink(section, false)).append(
 						"</li>");
 			}

@@ -82,16 +82,16 @@ public class TableTest extends TestCase {
 		Section newHeaderSec = checkChildsTillLine(article, 0, false);
 		assertEquals("Childs of node weren't deleted", 0, newHeaderSec.getChildren().size());
 		assertEquals("New text wasn't saved to orgingialtext from" + headerSec.getID(),
-				newHeader, newHeaderSec.getOriginalText());
+				newHeader, newHeaderSec.getText());
 
 		article = KnowWEEnvironment.getInstance().getArticle(web, title);
-		assertEquals(content, article.getSection().getOriginalText());
+		assertEquals(content, article.getSection().getText());
 		assertNotSame(content, article.collectTextsFromLeaves());
 		checkChildsTillLine(article, 0, true); // isDirty = true?!
 
 		// not being leafs (go down once more)
 		// Testing setOriginalTextSetLeaf for nodes being a leaf
-		String lineText = lineSec.getOriginalText();
+		String lineText = lineSec.getText();
 		String[] newLine = new String[] {
 				"speed", "0", "+", "+" };
 		for (int i = 0; i < newLine.length; i++) {
@@ -100,7 +100,7 @@ public class TableTest extends TestCase {
 					newLine[i]);
 		}
 		assertEquals("OrignialText from parent changed by changing childs (befor save)",
-				lineText, lineSec.getOriginalText());
+				lineText, lineSec.getText());
 		checkChildsTillLine(article, 1, true); // isDirty = true?!
 
 		// Saving changes to article
@@ -111,8 +111,8 @@ public class TableTest extends TestCase {
 		env.buildAndRegisterArticle(buddy.toString(), title,
 				web);
 		article = env.getArticle(web, title);
-		assertNotSame(content, article.getSection().getOriginalText());
-		assertTrue(article.getSection().getOriginalText().contains(newHeader));
+		assertNotSame(content, article.getSection().getText());
+		assertTrue(article.getSection().getText().contains(newHeader));
 
 		// Sectionizing test for new article
 		headerSec = checkChildsTillLine(article, 0, false);
@@ -195,7 +195,7 @@ public class TableTest extends TestCase {
 			// TableContent
 			actSec = (Section) actSec.getChildren().get(1);
 			assertEquals("Actual cell values are wrong: ",
-					cellValues[i], actSec.getOriginalText());
+					cellValues[i], actSec.getText());
 		}
 	}
 

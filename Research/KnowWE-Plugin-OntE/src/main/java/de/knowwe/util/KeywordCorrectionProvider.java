@@ -55,7 +55,7 @@ public class KeywordCorrectionProvider implements CorrectionProvider {
 
 		if(defaultFrame != null) {
 
-			String originalText = section.getOriginalText();
+			String originalText = section.getText();
 			Set<String> possibleMatches = new HashSet<String>();
 
 			for (ManchesterSyntaxKeywords k : ManchesterSyntaxKeywords.values()) {

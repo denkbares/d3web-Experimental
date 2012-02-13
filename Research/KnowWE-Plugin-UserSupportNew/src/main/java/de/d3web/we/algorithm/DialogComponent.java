@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.d3web.we.algorithm;
 
@@ -26,14 +26,15 @@ import java.util.ResourceBundle;
 
 /**
  * 
- * Searches for Terms in the Terminology of a KnowledgeBase.
- * Can handle approximative String Matching algorithms.
+ * Searches for Terms in the Terminology of a KnowledgeBase. Can handle
+ * approximative String Matching algorithms.
  * 
  * All used Algorithms have to implement the {@link MatchingAlgorithm} Interface
- * to be fully plugable. Add them in the private Constroctur if you have implemented
- * a new one. TODO Find better way to plug new Algorithms
+ * to be fully plugable. Add them in the private Constroctur if you have
+ * implemented a new one. TODO Find better way to plug new Algorithms
  * 
- * The DialogComponent is configurable over the ResourceBundle <em>UserSupport_configuration</em>
+ * The DialogComponent is configurable over the ResourceBundle
+ * <em>UserSupport_configuration</em>
  * 
  * @author Johannes Dienst
  * @created 04.10.2011
@@ -90,15 +91,13 @@ public class DialogComponent {
 	 * @return
 	 */
 	public static DialogComponent getInstance() {
-		if (uniqueInstance == null)
-			uniqueInstance = new DialogComponent();
+		if (uniqueInstance == null) uniqueInstance = new DialogComponent();
 		return uniqueInstance;
 	}
 
 	/**
 	 * 
-	 * Collects the best suggestions found by all
-	 * Matching in the terminology.
+	 * Collects the best suggestions found by all Matching in the terminology.
 	 * 
 	 * This is slow but will definitely find the Best matches!
 	 * 
@@ -160,10 +159,8 @@ public class DialogComponent {
 			// TODO HOTFIX for problem above
 			if (s == null) continue;
 			int exists = AlgorithmUtil.containsSuggestion(matchList, s);
-			if (exists != -1)
-				matchList.get(exists).increment();
-			else
-				matchList.add(new SuggestionValuePair(s));
+			if (exists != -1) matchList.get(exists).increment();
+			else matchList.add(new SuggestionValuePair(s));
 		}
 
 		// Sort the matchList and add the count of
@@ -178,6 +175,7 @@ public class DialogComponent {
 	public void setMaxSuggestions(int max) {
 		this.maxSuggestions = max;
 	}
+
 	public int getMaxSuggestions() {
 		return this.maxSuggestions;
 	}

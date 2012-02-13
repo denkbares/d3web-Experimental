@@ -29,7 +29,6 @@ import de.d3web.we.core.semantic.IntermediateOwlObject;
 import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
-import de.knowwe.core.compile.IncrementalConstraint;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -38,18 +37,12 @@ import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.dashtree.DashTreeElementContent;
 import de.knowwe.kdom.dashtree.DashTreeUtils;
 
-public class SubClassingDashTreeElement extends DashTreeElement implements
-		IncrementalConstraint<SubClassingDashTreeElement> {
+public class SubClassingDashTreeElement extends DashTreeElement {
 
 	@Override
 	protected void init() {
 		super.init();
 		this.addSubtreeHandler(new SubClassingDashTreeElementOWLSubTreeHandler());
-	}
-
-	@Override
-	public boolean violatedConstraints(KnowWEArticle article, Section<SubClassingDashTreeElement> s) {
-		return DashTreeUtils.isChangeInAncestorSubtree(article, s, 1);
 	}
 
 	private class SubClassingDashTreeElementOWLSubTreeHandler extends
@@ -81,9 +74,9 @@ public class SubClassingDashTreeElement extends DashTreeElement implements
 			Section<? extends DashTreeElementContent> fatherElement,
 			IntermediateOwlObject io) {
 		UpperOntology uo = UpperOntology.getInstance();
-		URI localURI = uo.getHelper().createlocalURI(child.getOriginalText());
+		URI localURI = uo.getHelper().createlocalURI(child.getText());
 		URI fatherURI = uo.getHelper().createlocalURI(
-				fatherElement.getOriginalText());
+				fatherElement.getText());
 		try {
 			io.addStatement(uo.getHelper().createStatement(localURI,
 					RDFS.SUBCLASSOF, fatherURI));

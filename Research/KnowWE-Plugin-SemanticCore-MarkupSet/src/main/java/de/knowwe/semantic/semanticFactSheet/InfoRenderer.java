@@ -74,7 +74,7 @@ public class InfoRenderer extends KnowWEDomRenderer {
 
 		if (!verbose) return;
 
-		String text = sec.getOriginalText();
+		String text = sec.getText();
 		if (sec.get() instanceof InfoContent) {
 			IntermediateOwlObject io = (IntermediateOwlObject) KnowWEUtils.getStoredObject(sec,
 					OwlHelper.IOO);

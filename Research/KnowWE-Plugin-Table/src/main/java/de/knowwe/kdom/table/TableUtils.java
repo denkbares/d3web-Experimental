@@ -219,7 +219,7 @@ public class TableUtils {
 
 		int i = getColumn(cell);
 		Section<TableCellContent> headerCell = cells.get(i);
-		return headerCell != null ? headerCell.getOriginalText() : null;
+		return headerCell != null ? headerCell.getText() : null;
 	}
 
 	/**
@@ -254,7 +254,7 @@ public class TableUtils {
 		Section<TableLine> line = Sections.findAncestorOfType(cell, TableLine.class);
 		Section<TableCellContent> descriptionCell = Sections.findSuccessor(line,
 				TableCellContent.class);
-		return descriptionCell != null ? descriptionCell.getOriginalText() : null;
+		return descriptionCell != null ? descriptionCell.getText() : null;
 	}
 
 	/**

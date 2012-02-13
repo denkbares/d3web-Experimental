@@ -14,7 +14,7 @@ import org.ontoware.rdf2go.model.node.Node;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.objects.TermDefinition;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -113,7 +113,7 @@ public class SparqlResultSetRenderer {
 				erg = erg.substring(4);
 			}
 			try {
-				Collection<Section<? extends TermDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+				Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 						erg);
 
 				if (termDefinitions != null && termDefinitions.size() > 0) {

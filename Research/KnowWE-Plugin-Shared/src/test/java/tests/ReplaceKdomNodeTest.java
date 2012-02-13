@@ -89,7 +89,7 @@ public class ReplaceKdomNodeTest extends TestCase {
 
 		article = _env.getArticle("default_web", "Test_Article");
 		artSec = article.getSection();
-		String original = artSec.getOriginalText();
+		String original = artSec.getText();
 
 		/**
 		 * The tests. 1. Normal
@@ -123,7 +123,7 @@ public class ReplaceKdomNodeTest extends TestCase {
 
 		article = _env.getArticle("default_web", "Test_Article");
 		artSec = article.getSection();
-		original = artSec.getOriginalText();
+		original = artSec.getText();
 
 		actual = original.contains("-aa-");
 		assertEquals("Word \"-aa-\" not contained", true, actual);

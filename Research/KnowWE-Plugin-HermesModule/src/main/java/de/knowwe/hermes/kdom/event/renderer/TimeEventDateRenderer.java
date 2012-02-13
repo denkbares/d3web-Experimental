@@ -47,7 +47,7 @@ public class TimeEventDateRenderer extends KnowWEDomRenderer<TimeEventNew> {
 			result.deleteCharAt(result.length() - 1);
 		}
 		if (sec != null)
-			date = sec.getOriginalText();
+			date = sec.getText();
 		if (date.startsWith("\r\n"))
 			date = date.substring(2);
 		

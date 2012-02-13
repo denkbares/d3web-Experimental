@@ -61,7 +61,7 @@ public class BlockMarkupContentRenderer extends KnowWEDomRenderer<BlockMarkupCon
 		// Only 1 title here
 		List<Section<Title>> titl = Sections.findChildrenOfType(sec, Title.class);
 		if (!titl.isEmpty()) {
-			tString = titl.get(0).getOriginalText().trim();
+			tString = titl.get(0).getText().trim();
 		} else if(bundle.getString(sec.getFather().get().getName()) != null) {
 			tString = bundle.getString(sec.getFather().get().getName());
 		}

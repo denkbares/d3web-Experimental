@@ -66,7 +66,7 @@ public class BoxRenderer extends KnowWEDomRenderer<ForumBox> {
 		Section<?> contentSec = ForumBox.getInstance().getContentChild(sec);
 
 		// no empty posts --> return
-		if (contentSec == null || contentSec.getOriginalText().length() < 1) return;
+		if (contentSec == null || contentSec.getText().length() < 1) return;
 
 		if (name == null || date == null) {
 

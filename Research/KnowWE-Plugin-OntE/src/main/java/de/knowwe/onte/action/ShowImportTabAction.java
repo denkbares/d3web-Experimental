@@ -62,7 +62,7 @@ public class ShowImportTabAction extends AbstractAction {
 			html.append("<p><strong>Document IRI: ");
 			html.append(iri).append("</strong></p>");
 			html.append("<p><small style=\"padding-left:10px;\">(<a href=\"")
-					.append(section.get().getImportIRI(section).getOriginalText()).append(
+					.append(section.get().getImportIRI(section).getText()).append(
 							"\" title=\"Visit imported ontology\">")
 					.append(section.get().getImportIRI(section)).append("</a>)</small></p>");
 			html.append(OnteRenderingUtils.renderHyperlink(section, false));

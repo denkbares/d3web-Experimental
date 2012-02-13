@@ -1,4 +1,5 @@
-/* Copyright (C) 2010 Chair of Artificial Intelligence and Applied Informatics
+/*
+ * Copyright (C) 2010 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
  * 
  * This is free software; you can redistribute it and/or modify it under the
@@ -19,16 +20,12 @@
 
 package de.knowwe.compile.object;
 
-import java.util.Collection;
-
 import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.objects.TermReference;
-import de.knowwe.core.kdom.parsing.Section;
 
 public interface ComplexDefinition<T extends Type> extends Type {
 
-	//public Collection<Section<TermReference>> getAllReferencesOfComplexDefinition(Section<? extends ComplexDefinition<T>> section);
-	
-	
-	
+	// public Collection<Section<TermReference>>
+	// getAllReferencesOfComplexDefinition(Section<? extends
+	// ComplexDefinition<T>> section);
+
 }

@@ -6,7 +6,7 @@ import java.util.List;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
@@ -14,7 +14,7 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
-public class ImportedTermReference extends IncrementalTermReference<String> {
+public class ImportedTermReference extends IncrementalTermReference {
 
 	@SuppressWarnings("unchecked")
 	final KnowWEDomRenderer<ImportedTermReference> REF_RENDERER =
@@ -31,7 +31,7 @@ public class ImportedTermReference extends IncrementalTermReference<String> {
 
 				String trimmed = text.trim();
 
-				if(IncrementalCompiler.getInstance().getTerminology().isImportedObject(trimmed)) {
+				if (IncrementalCompiler.getInstance().getTerminology().isImportedObject(trimmed)) {
 
 					int currentStart = text.indexOf(trimmed);
 					List<SectionFinderResult> results = new ArrayList<SectionFinderResult>();
@@ -45,12 +45,8 @@ public class ImportedTermReference extends IncrementalTermReference<String> {
 	}
 
 	@Override
-	public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
-		return s.getOriginalText();
+	public String getTermIdentifier(Section<? extends SimpleTerm> s) {
+		return s.getText();
 	}
 
-	@Override
-	public String getTermObjectDisplayName() {
-		return "IRI";
-	}
 }

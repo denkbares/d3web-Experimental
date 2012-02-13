@@ -8,10 +8,12 @@ import java.util.regex.Pattern;
 
 import de.d3web.we.kdom.renderer.EditSectionRenderer;
 import de.knowwe.core.compile.Priority;
+import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.objects.AssertSingleTermDefinitionHandler;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -34,10 +36,8 @@ import de.knowwe.kdom.AnonymousType;
 import de.knowwe.kdom.AnonymousTypeInvisible;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
-import de.knowwe.kdom.turtle.TurtleMarkup;
-import de.knowwe.termObject.AbstractIRITermDefinition;
-import de.knowwe.termObject.IRIEntityType;
-import de.knowwe.termObject.IRIEntityType.IRIDeclarationType;
+import de.knowwe.rdfs.AbstractIRITermDefinition;
+import de.knowwe.rdfs.TripleMarkup;
 
 public class TimeEventNew extends AbstractType {
 
@@ -93,7 +93,7 @@ public class TimeEventNew extends AbstractType {
 
 		String dateS = null;
 		Section<DateType> date = Sections.findSuccessor(s, DateType.class);
-		if (date != null) dateS = date.getOriginalText();
+		if (date != null) dateS = date.getText();
 
 		Integer impI = null;
 		Section<ImportanceType> imp = Sections.findSuccessor(s, ImportanceType.class);
@@ -102,7 +102,7 @@ public class TimeEventNew extends AbstractType {
 		String descS = null;
 		Section<Description> desc = Sections
 				.findSuccessor(s, Description.class);
-		if (desc != null) descS = desc.getOriginalText();
+		if (desc != null) descS = desc.getText();
 
 		List<Section<Source>> sources = Sections.findChildrenOfType(s, Source.class);
 		List<String> sourceStrings = new ArrayList<String>();
@@ -120,10 +120,11 @@ public class TimeEventNew extends AbstractType {
 
 		public TitleType() {
 			// true says that this name is registered as globally unique term
-			this.setTermScope(Scope.GLOBAL);
 
 			// renderer
 			this.setCustomRenderer(new TimeEventTitleRenderer());
+			this.addSubtreeHandler(Priority.HIGH, new AssertSingleTermDefinitionHandler(
+					TermRegistrationScope.GLOBAL));
 
 			// SectionFinder for Title
 			ConstraintSectionFinder cf = new ConstraintSectionFinder(new SectionFinder() {
@@ -149,14 +150,8 @@ public class TimeEventNew extends AbstractType {
 		}
 
 		@Override
-		public String getTermIdentifier(Section<? extends KnowWETerm<IRIEntityType>> s) {
-			return s.getOriginalText().trim();
-		}
-
-		@Override
-		protected IRIDeclarationType getIRIDeclarationType() {
-			// TODO Auto-generated method stub
-			return null;
+		public String getTermIdentifier(Section<? extends SimpleTerm> s) {
+			return s.getText().trim();
 		}
 
 	}
@@ -204,7 +199,7 @@ public class TimeEventNew extends AbstractType {
 		}
 
 		static TimeStamp getTimeStamp(Section<DateType> s) {
-			return new TimeStamp(s.getOriginalText()); // one could
+			return new TimeStamp(s.getText()); // one could
 			// possibly
 			// cache the
 			// object in
@@ -267,7 +262,7 @@ public class TimeEventNew extends AbstractType {
 					Integer i = ImportanceType.getImportance(s);
 					if (i == null || i < 1 || i > 3) {
 						return Messages.asList(Messages.invalidNumberError(
-								s.get().getName() + ": " + s.getOriginalText()));
+								s.get().getName() + ": " + s.getText()));
 					}
 
 					return new ArrayList<Message>(0);
@@ -278,7 +273,7 @@ public class TimeEventNew extends AbstractType {
 		}
 
 		public static Integer getImportance(Section<ImportanceType> s) {
-			String number = s.getOriginalText().replaceAll("\\(", "").replaceAll("\\)",
+			String number = s.getText().replaceAll("\\(", "").replaceAll("\\)",
 					"").trim();
 			Integer i = null;
 			try {
@@ -300,7 +295,7 @@ public class TimeEventNew extends AbstractType {
 		}
 
 		static String getSourceName(Section<Source> s) {
-			return s.getOriginalText().substring(s.getOriginalText().indexOf(":") + 1);
+			return s.getText().substring(s.getText().indexOf(":") + 1);
 		}
 	}
 
@@ -320,7 +315,7 @@ public class TimeEventNew extends AbstractType {
 			// renderer
 			this.setCustomRenderer(new TimeEventDescRenderer());
 
-			this.addChildType(new TurtleMarkup());
+			this.addChildType(new TripleMarkup());
 
 			ConstraintSectionFinder f = new ConstraintSectionFinder(
 					new AllTextFinderTrimmed());

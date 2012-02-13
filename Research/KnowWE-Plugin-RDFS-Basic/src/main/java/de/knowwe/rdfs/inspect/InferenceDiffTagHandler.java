@@ -86,7 +86,7 @@ public class InferenceDiffTagHandler extends AbstractTagHandler {
 			// render the difference
 
 			html.append(KnowWEUtils.maskHTML("<h3>"));
-			html.append("Diff for: \"" + statementSection.getOriginalText() + "\"");
+			html.append("Diff for: \"" + statementSection.getText() + "\"");
 			html.append(KnowWEUtils.maskHTML("</h3>"));
 			html.append(KnowWEUtils.maskHTML("<table>"));
 			html.append(renderDiff(diff));

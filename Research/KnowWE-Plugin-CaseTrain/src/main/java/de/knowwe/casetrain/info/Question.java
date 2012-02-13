@@ -72,7 +72,7 @@ public class Question extends SubblockMarkup {
 							Utils.missingAttributeWarning(
 									bundle.getString("QUESTION_WEIGHT")));
 				}
-				else if (Double.valueOf(fragegewichtSection.getOriginalText()) < 0) {
+				else if (Double.valueOf(fragegewichtSection.getText()) < 0) {
 					messages.add(
 							Utils.invalidArgumentError(
 									bundle.getString("QUESTION_WEIGHT_WRONG")));

@@ -116,7 +116,7 @@ public class EMLRenderer extends KnowWEDomRenderer {
 					Section<? extends XMLContent> xml = Sections.findChildOfType(tag,
 							XMLContent.class);
 					if( xml != null ){
-					    eml.append(xml.getOriginalText());
+					    eml.append(xml.getText());
 					}
 					eml.append(", ");
 				}
@@ -169,7 +169,7 @@ public class EMLRenderer extends KnowWEDomRenderer {
 						Section<? extends XMLContent> xml = Sections.findChildOfType(c,
 								XMLContent.class);
 						if( xml != null ){
-						    eml.append(xml.getOriginalText());
+						    eml.append(xml.getText());
 						}
 						eml.append(", ");
 					}
@@ -305,7 +305,7 @@ public class EMLRenderer extends KnowWEDomRenderer {
 		if(tmpTag != null) {
 			Section<? extends XMLContent> xml = Sections.findChildOfType(tmpTag, XMLContent.class);
 			if( xml != null) {
-				txt = xml.getOriginalText();
+				txt = xml.getText();
 			}
 		}
 		if( txt != null ) {

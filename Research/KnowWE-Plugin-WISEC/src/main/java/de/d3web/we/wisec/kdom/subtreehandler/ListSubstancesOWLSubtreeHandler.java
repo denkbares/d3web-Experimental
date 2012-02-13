@@ -70,7 +70,7 @@ public class ListSubstancesOWLSubtreeHandler extends OwlSubtreeHandler<ListSubst
 		// Process the Table Content
 		// if (useKDom) createOWLUsingKDom(s, ioo, ns, listID);
 		// else {
-		createOWL(s.getOriginalText().trim(), ioo, ns, listID);
+		createOWL(s.getText().trim(), ioo, ns, listID);
 		// }
 
 		// Add the created statements to KnowWE's SemanticCore
@@ -270,7 +270,7 @@ public class ListSubstancesOWLSubtreeHandler extends OwlSubtreeHandler<ListSubst
 		ArrayList<Section<TableCellContent>> contents = new ArrayList<Section<TableCellContent>>();
 		Sections.findSuccessorsOfType(section, TableCellContent.class, contents);
 		for (int i = 0; i < contents.size(); i++) {
-			if (contents.get(i).getOriginalText().trim().equalsIgnoreCase(
+			if (contents.get(i).getText().trim().equalsIgnoreCase(
 					CAS_IDENTIFIER_COLUMN)) return i;
 		}
 		Logging.getInstance().warning("CAS_No row was not found!");

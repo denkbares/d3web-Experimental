@@ -128,10 +128,10 @@ public class TaggingManglerTest extends TestCase {
 		am.registerArticle(article1);
 		tm.addTag("AddTag", "tagtest", context);
 		assertEquals("%%tags\ntagtest\n%", am.getArticle("AddTag")
-				.getSection().getOriginalText());
+				.getSection().getText());
 		tm.removeTag("AddTag", "tagtest", context);
 		assertEquals("%%tags\n%", am.getArticle("AddTag").getSection()
-				.getOriginalText());
+				.getText());
 		am.deleteArticle(am.getArticle("AddTag"));
 	}
 
@@ -155,7 +155,7 @@ public class TaggingManglerTest extends TestCase {
 		// variables
 		String keyorig = article1.getSection().getID().hashCode() + "";
 		assertEquals("%%tags\ntagtest\n%", am.getArticle("AddTag")
-				.getSection().getOriginalText());
+				.getSection().getText());
 		ArrayList<String> tags = tm.getPageTags("AddTag");
 		assertEquals(1, tags.size());
 		assertEquals("tagtest", tags.get(0));
@@ -370,7 +370,7 @@ public class TaggingManglerTest extends TestCase {
 		am.registerArticle(article1);
 		tm.setTags("AddTag", "tag1 tag2 tag3", context);
 		assertEquals("%%tags\ntag1 tag2 tag3\n%", am.getArticle("AddTag")
-				.getSection().getOriginalText());
+				.getSection().getText());
 		am.deleteArticle(am.getArticle("AddTag"));
 	}
 

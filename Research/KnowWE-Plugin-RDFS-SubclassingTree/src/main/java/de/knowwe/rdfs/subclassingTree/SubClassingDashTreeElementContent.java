@@ -28,7 +28,7 @@ import org.ontoware.rdf2go.vocabulary.RDFS;
 
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
-import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -85,10 +85,10 @@ public class SubClassingDashTreeElementContent extends DashTreeElementContent
 		}
 
 		@Override
-		public Collection<Section<? extends TermReference>> getAllReferencesOfKnowledgeUnit(
+		public Collection<Section<? extends SimpleReference>> getAllReferencesOfKnowledgeUnit(
 				Section<? extends KnowledgeUnit<SubClassingDashTreeElementContent>> section) {
 
-			Set<Section<? extends TermReference>> result = new HashSet<Section<? extends TermReference>>();
+			Set<Section<? extends SimpleReference>> result = new HashSet<Section<? extends SimpleReference>>();
 
 			// add child-DTE to ref-list
 			Section<? extends IRITermRef> childElement = Sections

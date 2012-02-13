@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -37,13 +37,14 @@ import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import utils.MyTestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.compile.packaging.KnowWEPackageManager;
-import de.knowwe.onte.test.util.OWLReasoningUtils;
 import de.knowwe.onte.test.util.OWLGenerationVocabulary;
+import de.knowwe.onte.test.util.OWLReasoningUtils;
 
 /**
  * Test for the Manchester OWL syntax in the KnowWE-OntE-Plugin for KnowWE. This
- * {@link TestCase} checks the functionality of a subset of the Generation ontology.
- *
+ * {@link TestCase} checks the functionality of a subset of the Generation
+ * ontology.
+ * 
  * @author Stefan Mark
  * @created 23.09.2011
  */
@@ -124,12 +125,9 @@ public class OWLGenerationTest {
 
 			String parent = m.get(decendant);
 			boolean isSub = OWLReasoningUtils.isSubClassOf(parent, decendant);
-			assertTrue(decendant + " not subClassOf " + parent + ", but should be!", isSub );
+			assertTrue(decendant + " not subClassOf " + parent + ", but should be!", isSub);
 		}
 	}
-
-
-
 
 	@Test
 	public void testSimpleObjectPropertiesComplex() {
@@ -167,13 +165,15 @@ public class OWLGenerationTest {
 		for (OWLNamedIndividual owlNamedIndividual : individuals) {
 			boolean isEntailed = OWLReasoningUtils.checkTypeIndividual(owlNamedIndividual,
 					OWLGenerationVocabulary.PERSON);
-			assertTrue(owlNamedIndividual.getIRI() + " is not of the type PERSON, but should be!", isEntailed);
+			assertTrue(owlNamedIndividual.getIRI() + " is not of the type PERSON, but should be!",
+					isEntailed);
 		}
 
 		for (OWLNamedIndividual owlNamedIndividual : individuals) {
 			boolean isEntailed = OWLReasoningUtils.checkTypeIndividual(owlNamedIndividual,
 					OWLGenerationVocabulary.SEX);
-			assertTrue(owlNamedIndividual.getIRI() + " is of type SEX, but should not be!", !isEntailed);
+			assertTrue(owlNamedIndividual.getIRI() + " is of type SEX, but should not be!",
+					!isEntailed);
 		}
 	}
 
@@ -193,7 +193,7 @@ public class OWLGenerationTest {
 	/**
 	 * Checks if the OWLDeclarations for class, properties and individuals can
 	 * be found.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param entities
 	 */

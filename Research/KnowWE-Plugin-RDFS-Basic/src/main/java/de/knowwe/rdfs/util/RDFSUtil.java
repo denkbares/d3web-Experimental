@@ -31,8 +31,7 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import de.d3web.plugin.Extension;
 import de.d3web.plugin.PluginManager;
 import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.core.kdom.objects.KnowWETerm;
-import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.plugin.Plugins;
 import de.knowwe.rdf2go.Rdf2GoCore;
@@ -41,15 +40,17 @@ import de.knowwe.rdfs.RDFSTerminology;
 
 public class RDFSUtil {
 
-	public static URI getURI(Section<? extends KnowWETerm> s) {
+	public static URI getURI(Section<? extends SimpleTerm> s) {
 		if (s == null) return null;
 
-		URI uri = getRDFSURI(s.get().getTermIdentifier(s));
+		String termIdentifier = s.get().getTermIdentifier(s);
+
+		URI uri = getRDFSURI(termIdentifier);
 
 		if (uri == null) {
 			String baseUrl = Rdf2GoCore.localns;
 			try {
-				String name = URLEncoder.encode(s.get().getTermIdentifier(s), "UTF-8");
+				String name = URLEncoder.encode(termIdentifier, "UTF-8");
 				uri = new URIImpl(baseUrl + name);
 			}
 			catch (UnsupportedEncodingException e) {
@@ -61,9 +62,13 @@ public class RDFSUtil {
 
 	}
 
-	public static boolean isTermCategory(Section<? extends TermReference> ref, RDFSTermCategory c) {
+	public static boolean isTermCategory(Section<? extends SimpleTerm> ref, RDFSTermCategory c) {
+		String termIdentifier = ref.getText();
+		if (ref.get() instanceof SimpleTerm) {
+			termIdentifier = ((SimpleTerm) ref.get()).getTermIdentifier(ref);
+		}
 		Object info = IncrementalCompiler.getInstance().getTerminology().getDefinitionInformationForValidTerm(
-				ref.get().getTermIdentifier(ref));
+				termIdentifier);
 		if (info != null) {
 
 			if (info instanceof Map) {

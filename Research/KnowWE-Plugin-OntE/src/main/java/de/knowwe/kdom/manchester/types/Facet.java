@@ -19,37 +19,37 @@ public class Facet extends AbstractType {
 	}
 
 	public boolean isMaxInclusive(Section<Facet> facet) {
-		return facet.getOriginalText().equals("<=");
+		return facet.getText().equals("<=");
 	}
 
 	public boolean isMaxExclusive(Section<Facet> facet) {
-		return facet.getOriginalText().equals("<");
+		return facet.getText().equals("<");
 	}
 
 	public boolean isMinExclusive(Section<Facet> facet) {
-		return facet.getOriginalText().equals(">");
+		return facet.getText().equals(">");
 	}
 
 	public boolean isMinInclusive(Section<Facet> facet) {
-		return facet.getOriginalText().equals(">=");
+		return facet.getText().equals(">=");
 	}
 
 	public boolean isMaxLength(Section<Facet> facet) {
-		return facet.getOriginalText().equals("maxLength");
+		return facet.getText().equals("maxLength");
 	}
 
 	public boolean isMinLength(Section<Facet> facet) {
-		return facet.getOriginalText().equals("minLength");
+		return facet.getText().equals("minLength");
 	}
 	public boolean isLength(Section<Facet> facet) {
-		return facet.getOriginalText().equals("length");
+		return facet.getText().equals("length");
 	}
 
 	public boolean isPattern(Section<Facet> facet) {
-		return facet.getOriginalText().equals("pattern");
+		return facet.getText().equals("pattern");
 	}
 
 	public boolean isLangRange(Section<Facet> facet) {
-		return facet.getOriginalText().equals("langRange");
+		return facet.getText().equals("langRange");
 	}
 }

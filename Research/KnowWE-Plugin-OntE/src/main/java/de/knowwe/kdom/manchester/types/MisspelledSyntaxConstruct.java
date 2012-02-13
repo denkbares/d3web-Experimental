@@ -57,12 +57,12 @@ public class MisspelledSyntaxConstruct extends AbstractType {
 				StringBuilder corrections = new StringBuilder();
 				for (CorrectionProvider.Suggestion sug : SpellingUtils.getCorrections(
 						s.getFather(),
-						s.getOriginalText())) {
+						s.getText())) {
 					corrections.append(sug.getSuggestion());
 				}
 
 				return Messages.asList(Messages.syntaxError(
-						messageText + s.getOriginalText() + "; Did you mean: " + corrections));
+						messageText + s.getText() + "; Did you mean: " + corrections));
 			}
 		});
 

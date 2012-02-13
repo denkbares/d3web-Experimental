@@ -59,7 +59,7 @@ public class OwlPropertiesRenderer extends KnowWEDomRenderer {
 	 */
 	@Override
 	public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
-		String text = sec.getOriginalText();
+		String text = sec.getText();
 		for (String cur : text.split("\r\n|\r|\n")) {
 			if (cur.trim().length() > 0) string.append(cur.trim() + "\\\\");
 		}

@@ -66,7 +66,7 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 			// Process the Table Content
 			if (useKDom) createD3ObjectsUsingKDom(s, kb, listID, article.getWeb());
 			else {
-				createD3Objects(s.getOriginalText().trim(), kb, listID, article.getWeb());
+				createD3Objects(s.getText().trim(), kb, listID, article.getWeb());
 			}
 
 			return Messages.asList(Messages.objectCreatedNotice(
@@ -107,7 +107,7 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 
 					// Create OWL statements from cell content
 					if (contents.size() >= sgnIndex) {
-						String sgn = contents.get(sgnIndex).getOriginalText().trim();
+						String sgn = contents.get(sgnIndex).getText().trim();
 						// QuestionOC sgnQ =
 						// kbm.createQuestionOC(sgn,
 						// kbm.findQContainer("Substances"),
@@ -125,7 +125,7 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 
 		if (failed) { // Try to process the content without KDOM
 			Logging.getInstance().warning("Processing via KDOM failed, trying it without KDOM");
-			createD3Objects(section.getOriginalText().trim(), kb, listID, web);
+			createD3Objects(section.getText().trim(), kb, listID, web);
 		}
 	}
 
@@ -216,7 +216,7 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 		ArrayList<Section<TableCellContent>> contents = new ArrayList<Section<TableCellContent>>();
 		Sections.findSuccessorsOfType(section, TableCellContent.class, contents);
 		for (int i = 0; i < contents.size(); i++) {
-			if (contents.get(i).getOriginalText().trim().equalsIgnoreCase("CAS_No")) return i;
+			if (contents.get(i).getText().trim().equalsIgnoreCase("CAS_No")) return i;
 		}
 		Logging.getInstance().warning("CAS_No row was not found!");
 		return -1;

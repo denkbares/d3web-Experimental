@@ -7,7 +7,6 @@ import java.util.ResourceBundle;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.empiricaltesting.TestCase;
 import de.d3web.empiricaltesting.caseAnalysis.functions.TestCaseAnalysisReport;
-import de.d3web.we.basic.D3webModule;
 import de.d3web.we.testcase.action.TestCaseRunAction;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWEEnvironment;
@@ -34,7 +33,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer<TestCaseExecut
 
 		String master = TestCaseExecutorType.getMaster(section);
 		// no kb would cause massive amount of nullpointers
-		KnowledgeBase kb = D3webUtils.getKB(user.getWeb(), master);
+		KnowledgeBase kb = D3webUtils.getKnowledgeBase(user.getWeb(), master);
 		if (kb == null) {
 			string.append(KnowWEUtils.maskHTML("<div id=\"testcases\">No Knowledgebase found on "
 					+ master + "</div>"));
@@ -75,7 +74,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer<TestCaseExecut
 		TestCase t = (TestCase) section.getSectionStore().getObject(
 				TestCaseExecutorType.TESTCASE_KEY);
 
-		ResourceBundle rb = D3webModule.getKwikiBundle_d3web(context);
+		ResourceBundle rb = D3webUtils.getD3webBundle(context);
 		MessageFormat mf = new MessageFormat("");
 		String analysisResult = TestCaseRunAction.renderTestAnalysisResult(t, result, rb, mf);
 		string.append(KnowWEUtils.maskHTML(analysisResult));

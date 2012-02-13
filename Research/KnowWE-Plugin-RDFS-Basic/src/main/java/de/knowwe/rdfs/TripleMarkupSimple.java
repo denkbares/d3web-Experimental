@@ -20,7 +20,6 @@
 package de.knowwe.rdfs;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -28,9 +27,7 @@ import org.ontoware.rdf2go.model.node.Node;
 
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
-import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -54,6 +51,7 @@ public class TripleMarkupSimple extends AbstractType implements
 	}
 
 	class SimpleTurtlePredicate extends IRITermRef {
+
 		public SimpleTurtlePredicate() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new RegexSectionFinder("\\b([^\\s]*)::", Pattern.DOTALL, 1));
@@ -64,6 +62,7 @@ public class TripleMarkupSimple extends AbstractType implements
 	}
 
 	class SimpleTurtleSubject extends IRITermRef {
+
 		public SimpleTurtleSubject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new AllTextFinderTrimmed());
@@ -74,6 +73,7 @@ public class TripleMarkupSimple extends AbstractType implements
 	}
 
 	class SimpleTurtleObject extends IRITermRef {
+
 		public SimpleTurtleObject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new RegexSectionFinder("::\\s(.*)", Pattern.DOTALL, 1));
@@ -84,8 +84,6 @@ public class TripleMarkupSimple extends AbstractType implements
 
 	class TripleMarkupSimpleCompileScript extends
 			AbstractKnowledgeUnitCompileScriptRDFS<TripleMarkupSimple> {
-
-
 
 		@Override
 		public void insertIntoRepository(Section<TripleMarkupSimple> section) {
@@ -105,7 +103,8 @@ public class TripleMarkupSimple extends AbstractType implements
 				subURI = RDFSUtil.getURI(subject);
 				predURI = RDFSUtil.getURI(predicate);
 				objURI = RDFSUtil.getURI(object);
-			} else {
+			}
+			else {
 				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
 				// "invalid term combination:" + found.size()));
 			}

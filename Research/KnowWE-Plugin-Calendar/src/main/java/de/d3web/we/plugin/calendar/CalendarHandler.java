@@ -97,7 +97,7 @@ public class CalendarHandler extends AbstractHTMLTagHandler {
 				s[3] = Sections.findChildOfType(mapEntry.getValue(), AppointmentText.class);
 
 				for (int j = 0; j < 4; j++) {
-					if (s[j] != null) entry[j] = s[j].getOriginalText();
+					if (s[j] != null) entry[j] = s[j].getText();
 					else entry[j] = "-NA-";
 				}
 

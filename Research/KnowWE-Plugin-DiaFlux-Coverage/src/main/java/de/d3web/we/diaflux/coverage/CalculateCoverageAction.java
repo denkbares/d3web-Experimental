@@ -86,7 +86,7 @@ public class CalculateCoverageAction extends AbstractAction {
 
 		}
 
-		KnowledgeBase kb = D3webUtils.getKB(context.getWeb(), master);
+		KnowledgeBase kb = D3webUtils.getKnowledgeBase(context.getWeb(), master);
 		Map<SequentialTestCase, CoverageSessionObject> results = listener.getResults();
 		CoverageResult result = DefaultCoverageResult.calculateResult(results.values(), kb);
 		coverageSec.getSectionStore().storeObject(DiaFluxCoverageType.COVERAGE_RESULT, result);

@@ -111,7 +111,7 @@ public class HermesData {
 
 		String dbpediaMapping = "";
 		for (Section<MappingContentType> t : found) {
-			String temp = t.getChildren().get(0).getOriginalText();
+			String temp = t.getChildren().get(0).getText();
 			if (temp.matches(hermes + " => .*")) {
 				dbpediaMapping = temp.substring(temp.indexOf(" => ") + 4);
 				if (temp.matches(".* (?i)http://en\\.wikipedia.*")) {
@@ -149,7 +149,7 @@ public class HermesData {
 				MappingContentType.class, found);
 
 		for (Section<MappingContentType> t : found) {
-			String temp = t.getChildren().get(0).getOriginalText();
+			String temp = t.getChildren().get(0).getText();
 			if (temp.matches(conceptname + " =>.*")) {
 				return true;
 			}
@@ -177,7 +177,7 @@ public class HermesData {
 
 		String hermesMapping = "";
 		for (Section<MappingContentType> t : found) {
-			String temp = t.getChildren().get(0).getOriginalText();
+			String temp = t.getChildren().get(0).getText();
 			if (temp.matches(".* => " + dbpedia)) {
 				hermesMapping = temp.substring(0, temp.indexOf(" => "));
 			}
@@ -210,7 +210,7 @@ public class HermesData {
 					MappingContentType.class, found);
 
 			for (Section<MappingContentType> t : found) {
-				String temp = t.getChildren().get(0).getOriginalText();
+				String temp = t.getChildren().get(0).getText();
 				// System.out.println(concept + "," + hermestag + "," + value);
 				if (temp.matches("~\\[" + concept + " " + hermestag + ":: "
 						+ value + "\\][\\r\\n]*")) {
@@ -248,8 +248,8 @@ public class HermesData {
 
 				Section<IgnoreConcept> temp = Sections
 						.findChildOfType(t, IgnoreConcept.class);
-				String sectionConcept = temp.getOriginalText().substring(1,
-						temp.getOriginalText().length() - 1);
+				String sectionConcept = temp.getText().substring(1,
+						temp.getText().length() - 1);
 
 				// if concept is in list - test if tag + value also.
 				if (sectionConcept.equals(concept)) {
@@ -258,7 +258,7 @@ public class HermesData {
 							.findChildrenOfType(t, IgnoreChild.class);
 
 					for (Section<IgnoreChild> child : listChilds) {
-						String node = child.getOriginalText();
+						String node = child.getText();
 						if (Character
 								.isWhitespace(node.charAt(node.length() - 1))) {
 							node = node.substring(0, node.length() - 1);

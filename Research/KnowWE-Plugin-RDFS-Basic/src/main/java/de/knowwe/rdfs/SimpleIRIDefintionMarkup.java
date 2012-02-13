@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 import de.knowwe.compile.support.Editable;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -47,6 +47,7 @@ public class SimpleIRIDefintionMarkup extends AbstractType implements Editable {
 	}
 
 	class DefType extends AbstractType {
+
 		public DefType() {
 			this.setSectionFinder(new RegexSectionFinderSingle("^def\\s+"));
 			this.setCustomRenderer(new StyleRenderer("font-style:italic;"));
@@ -60,8 +61,8 @@ public class SimpleIRIDefintionMarkup extends AbstractType implements Editable {
 		}
 
 		@Override
-		public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
-			return SplitUtility.unquote(s.getOriginalText().trim());
+		public String getTermIdentifier(Section<? extends SimpleTerm> s) {
+			return SplitUtility.unquote(s.getText().trim());
 		}
 
 	}

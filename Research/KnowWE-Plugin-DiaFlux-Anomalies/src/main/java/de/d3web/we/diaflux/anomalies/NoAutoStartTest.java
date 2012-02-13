@@ -4,12 +4,11 @@ import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.diaFlux.flow.Flow;
-import de.d3web.we.basic.D3webModule;
 import de.d3web.we.ci4ke.testing.AbstractCITest;
 import de.d3web.we.ci4ke.testing.CITestResult;
 import de.d3web.we.ci4ke.testing.CITestResult.Type;
+import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWEEnvironment;
-
 
 public class NoAutoStartTest extends AbstractCITest {
 
@@ -19,24 +18,24 @@ public class NoAutoStartTest extends AbstractCITest {
 		String config = "knowledge base article: " + articleName;
 
 		KnowledgeBase kb =
-				D3webModule.getKnowledgeBase(
+				D3webUtils.getKnowledgeBase(
 						KnowWEEnvironment.DEFAULT_WEB, articleName);
-		
+
 		CITestResult res = new CITestResult(Type.SUCCESSFUL, null, config);
-		
-		if(null != kb) {
+
+		if (null != kb) {
 			List<Flow> flowcharts =
 					kb.getManager().getObjects(Flow.class);
 			boolean noAuto = true;
-			for(Flow flow : flowcharts) {
+			for (Flow flow : flowcharts) {
 				noAuto &= !flow.isAutostart();
 			}
-			
-			if(noAuto) {
+
+			if (noAuto) {
 				res = new CITestResult(Type.FAILED, "No Autostart-Flowchart", config);
 			}
 		}
-		
+
 		return res;
 	}
 }

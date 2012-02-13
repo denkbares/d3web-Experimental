@@ -6,17 +6,18 @@ import java.net.URLEncoder;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
-import de.knowwe.core.kdom.objects.KnowWETerm;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
 public class Utils {
 
-	public static URI getURI(Section<? extends KnowWETerm> s) {
+	public static URI getURI(Section<? extends SimpleTerm> s) {
 		URI uri = null;
 		String baseUrl = Rdf2GoCore.localns;
 		try {
-			String name = URLEncoder.encode(s.get().getTermIdentifier(s), "UTF-8");
+			String name = URLEncoder.encode(KnowWEUtils.getTermIdentifier(s), "UTF-8");
 			uri = new URIImpl(baseUrl + name);
 		}
 		catch (UnsupportedEncodingException e) {

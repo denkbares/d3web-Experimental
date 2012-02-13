@@ -204,64 +204,6 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>
-
-	<!-- ########################################################## -->
-    <!-- KnowWEObjectTypes used in this plugin -->
-    <!-- ########################################################## -->
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="ClassHierarchyMarkup">
-		<parameter id="class"
-			value="de.knowwe.kdom.classHierarchy.ClassHierarchyMarkup" />
-		<parameter id="name" value="ClassHierarchyMarkup" />
-		<parameter id="description" value="KnowWEObjectType ClassHierarchyMarkup" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="100" />
-		<parameter id="scope" value="root" />
-	</extension>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="TurtleMarkup">
-		<parameter id="class"
-			value="de.knowwe.kdom.turtle.TurtleMarkup" />
-		<parameter id="name" value="TurtleMarkup" />
-		<parameter id="description" value="Type TurtleMarkup" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="100" />
-		<parameter id="scope" value="root" />
-	</extension>
-	
-		
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="SimpleIRIDefinition">
-		<parameter id="class"
-			value="de.knowwe.kdom.turtle.simple.SimpleIRIDefintionMarkup" />
-		<parameter id="name" value="SimpleIRIDefinition" />
-		<parameter id="description" value="Type SimpleIRIDefinition" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="100" />
-		<parameter id="scope" value="root" />
-	</extension>
-	
-	<!-- This simple markup was for testing only -->
-		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="TurtleMarkupSimple">
-		<parameter id="class"
-			value="de.knowwe.kdom.turtle.simple.TurtleMarkupSimple" />
-		<parameter id="name" value="TurtleMarkupSimple" />
-		<parameter id="description" value="Type TurtleMarkupSimple" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="100" />
-		<parameter id="scope" value="root" />
-	</extension>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
-		id="TerminologyViewHandler">
-		<parameter id="class" value="de.knowwe.util.TerminologyViewHandler" />
-		<parameter id="name" value="TerminologyViewHandler" />
-		<parameter id="description" value="TagHandler TerminologyViewHandler" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>	
 	
     <!-- ########################################################## -->
     <!-- Declaration: Buttons used in the Toolbar of OntE -->
@@ -396,7 +338,6 @@
         <parameter id="css" value="KnowWE-Plugin-InstantEdit.css" />
         <parameter id="css" value="DefaultEditTool.css" />       
         <parameter id="scope" value="DefaultFrame" />
-        <parameter id="scope" value="TurtleMarkup" />
     </extension>    
     
 

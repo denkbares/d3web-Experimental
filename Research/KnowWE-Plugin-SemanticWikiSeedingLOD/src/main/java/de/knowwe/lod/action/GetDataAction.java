@@ -138,7 +138,7 @@ public class GetDataAction extends AbstractAction {
 					Map<String, String> nodesMap = new HashMap<String, String>();
 
 					for (Section<MappingContentType> t : found) {
-						String complete = t.getChildren().get(0).getOriginalText();
+						String complete = t.getChildren().get(0).getText();
 						if (complete.matches(concept + " =>.*")) {
 							// Update node with wikipedia dbpedia url.
 							nodesMap.put(t.getChildren().get(0).getID(), concept + " => " + wiki

@@ -31,6 +31,7 @@ import de.d3web.core.inference.condition.TerminalCondition;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.we.kdom.condition.D3webCondition;
+import de.d3web.we.kdom.condition.QuestionNumReference;
 import de.d3web.we.object.QuestionReference;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.KnowWEArticle;
@@ -72,7 +73,7 @@ public class ApproximateNumericalFinding extends D3webCondition<ApproximateNumer
 		this.childrenTypes.add(comparator);
 
 		// question
-		QuestionReference question = new ApproximateQuestionNumReference();
+		QuestionReference question = new QuestionNumReference();
 		ConstraintSectionFinder questionFinder = new ConstraintSectionFinder(
 				new AllTextFinderTrimmed());
 		questionFinder.addConstraint(SingleChildConstraint.getInstance());
@@ -117,13 +118,13 @@ public class ApproximateNumericalFinding extends D3webCondition<ApproximateNumer
 			return null;
 		}
 
-		String comparator = Sections.findSuccessor(s, Comparator.class).getOriginalText();
+		String comparator = Sections.findSuccessor(s, Comparator.class).getText();
 
 		Double number = Number.getNumber(numberSec);
 
 		if (number == null) {
 			Message error = Messages.invalidNumberError(
-					numberSec.getOriginalText());
+					numberSec.getText());
 			Messages.storeMessage(article, numberSec, getClass(), error);
 			return null;
 		}

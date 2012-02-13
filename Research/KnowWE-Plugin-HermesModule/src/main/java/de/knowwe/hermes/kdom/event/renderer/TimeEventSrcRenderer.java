@@ -48,7 +48,7 @@ public class TimeEventSrcRenderer extends KnowWEDomRenderer<TimeEventNew> {
 		}
 		String source = "no source found";
 		if (sec != null)
-			source = sec.getOriginalText();
+			source = sec.getText();
 		String key = "QUELLE:";
 		if (source.startsWith(key)) {
 			source = source.substring(key.length());

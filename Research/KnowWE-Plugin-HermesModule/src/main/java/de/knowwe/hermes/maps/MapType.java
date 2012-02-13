@@ -117,7 +117,7 @@ public class MapType extends AbstractXMLType {
 		public void render(KnowWEArticle article, Section<MapType> sec, UserContext user, StringBuilder string) {
 			string.append("<div id=\"map\" class=\"panel\">");
 			string.append("<h3>Karte</h3>");
-			String originalText = sec.getOriginalText();
+			String originalText = sec.getText();
 			int start = originalText.indexOf("<Map>");
 			int end = originalText.indexOf("</Map>");
 			string.append(originalText.substring(start + 5, end));

@@ -60,7 +60,7 @@ public class InlineIndicationCondition extends AbstractType {
 			@Override
 			public void render(KnowWEArticle article, Section<Type> sec, UserContext user, StringBuilder string) {
 				string.append(KnowWEUtils.maskHTML("<b>"));
-				string.append(sec.getOriginalText().substring(1).trim());
+				string.append(sec.getText().substring(1).trim());
 				string.append(KnowWEUtils.maskHTML("</b>"));
 			}
 		});

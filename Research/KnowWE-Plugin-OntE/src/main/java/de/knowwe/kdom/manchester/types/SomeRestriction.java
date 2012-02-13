@@ -77,7 +77,7 @@ public class SomeRestriction extends AbstractType {
 
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
-			return keyword.getOriginalText().equals(ManchesterSyntaxKeywords.SOME.getKeyword());
+			return keyword.getText().equals(ManchesterSyntaxKeywords.SOME.getKeyword());
 		}
 		return false;
 	}
@@ -86,7 +86,7 @@ public class SomeRestriction extends AbstractType {
 
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
-			return keyword.getOriginalText().equals(ManchesterSyntaxKeywords.SOME_.getKeyword());
+			return keyword.getText().equals(ManchesterSyntaxKeywords.SOME_.getKeyword());
 		}
 		return false;
 	}

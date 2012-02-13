@@ -20,7 +20,6 @@
 package de.knowwe.compile.test;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -29,9 +28,8 @@ import org.ontoware.rdf2go.model.node.Node;
 import de.knowwe.compile.object.AbstractKnowledgeUnitCompileScript;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
-import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -54,6 +52,7 @@ public class TripleMarkupSimple extends AbstractType implements
 	}
 
 	class SimpleTurtlePredicate extends IRITermRef {
+
 		public SimpleTurtlePredicate() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new RegexSectionFinder("\\b([^\\s]*)::", Pattern.DOTALL, 1));
@@ -64,6 +63,7 @@ public class TripleMarkupSimple extends AbstractType implements
 	}
 
 	class SimpleTurtleSubject extends IRITermRef {
+
 		public SimpleTurtleSubject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new AllTextFinderTrimmed());
@@ -74,6 +74,7 @@ public class TripleMarkupSimple extends AbstractType implements
 	}
 
 	class SimpleTurtleObject extends IRITermRef {
+
 		public SimpleTurtleObject() {
 			ConstraintSectionFinder c = new ConstraintSectionFinder(
 					new RegexSectionFinder("::\\s(.*)", Pattern.DOTALL, 1));
@@ -85,7 +86,6 @@ public class TripleMarkupSimple extends AbstractType implements
 	class TripleMarkupSimpleCompileScript extends
 			AbstractKnowledgeUnitCompileScript<TripleMarkupSimple> {
 
-		
 		@Override
 		public void deleteFromRepository(Section<TripleMarkupSimple> section) {
 			Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
@@ -94,22 +94,23 @@ public class TripleMarkupSimple extends AbstractType implements
 		@Override
 		public void insertIntoRepository(Section<TripleMarkupSimple> section) {
 
-			List<Section<TermReference>> found = new ArrayList<Section<TermReference>>();
+			List<Section<SimpleReference>> found = new ArrayList<Section<SimpleReference>>();
 			Node subURI = null;
 			Node predURI = null;
 			Node objURI = null;
 
-			Sections.findSuccessorsOfType(section, TermReference.class, found);
+			Sections.findSuccessorsOfType(section, SimpleReference.class, found);
 
 			if (found.size() == 3) {
-				Section<TermReference> subject = found.get(0);
-				Section<TermReference> predicate = found.get(1);
-				Section<TermReference> object = found.get(2);
+				Section<SimpleReference> subject = found.get(0);
+				Section<SimpleReference> predicate = found.get(1);
+				Section<SimpleReference> object = found.get(2);
 
 				subURI = Utils.getURI(subject);
 				predURI = Utils.getURI(predicate);
 				objURI = Utils.getURI(object);
-			} else {
+			}
+			else {
 				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
 				// "invalid term combination:" + found.size()));
 			}

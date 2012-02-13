@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2010 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -35,19 +35,23 @@ import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.compile.utils.CompileUtils;
-import de.knowwe.core.compile.TerminologyExtension;
+import de.knowwe.core.compile.Priority;
+import de.knowwe.core.compile.terminology.TermRegistrationScope;
+import de.knowwe.core.compile.terminology.TerminologyExtension;
 import de.knowwe.core.event.Event;
 import de.knowwe.core.event.EventListener;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.objects.KnowWETerm;
-import de.knowwe.core.kdom.objects.TermDefinition;
-import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.objects.AssertSingleTermDefinitionHandler;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
+import de.knowwe.core.kdom.objects.SimpleReference;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.event.KDOMCreatedEvent;
 import de.knowwe.plugin.Plugins;
 
@@ -129,13 +133,13 @@ public class IncrementalCompiler implements EventListener {
 	 */
 	public void deregisterImportedTerminology(Section<? extends AbstractType> key) {
 
-		Set<Section<? extends TermDefinition<?>>> imports = ImportManager.getImports(key);
-		Iterator<Section<? extends TermDefinition<?>>> it = imports.iterator();
+		Set<Section<?>> imports = ImportManager.getImports(key);
+		Iterator<Section<?>> it = imports.iterator();
 
 		while (it.hasNext()) {
-			Section<? extends TermDefinition<?>> termIdentifier = it.next();
+			Section<?> termIdentifier = it.next();
 			terminology.deregisterTermDefinition(termIdentifier);
-			terminology.removeImportedObject(termIdentifier.getOriginalText());
+			terminology.removeImportedObject(termIdentifier.getText());
 		}
 		ImportManager.removeImport(key);
 	}
@@ -158,28 +162,30 @@ public class IncrementalCompiler implements EventListener {
 
 	}
 
-	class PreDefinedTerm extends TermDefinition<String> {
+	class PreDefinedTerm extends SimpleDefinition {
 
 		public PreDefinedTerm() {
-			super(String.class);
+			super(TermRegistrationScope.GLOBAL, String.class);
+			this.addSubtreeHandler(Priority.HIGH, new AssertSingleTermDefinitionHandler(
+					TermRegistrationScope.GLOBAL));
 		}
 
 		@Override
-		public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
-			return s.getOriginalText();
+		public String getTermIdentifier(Section<? extends SimpleTerm> s) {
+			return s.getText();
 		}
 
 	}
 
-	class ImportedTerm extends TermDefinition<String> {
+	class ImportedTerm extends SimpleDefinition {
 
 		public ImportedTerm() {
-			super(String.class);
+			super(TermRegistrationScope.GLOBAL, String.class);
 		}
 
 		@Override
-		public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
-			return s.getOriginalText();
+		public String getTermIdentifier(Section<? extends SimpleTerm> s) {
+			return s.getText();
 		}
 
 	}
@@ -228,14 +234,14 @@ public class IncrementalCompiler implements EventListener {
 		this.potentiallyNewKnowledgeSlices.addAll(createdknowledge);
 
 		// check deleted objects
-		Collection<Section<? extends TermDefinition<?>>> deletedObjectDefintions = CompileUtils.filterDefinitions(oldSectionsNotReused);
-		for (Section<? extends TermDefinition<?>> section : deletedObjectDefintions) {
+		Collection<Section<SimpleDefinition>> deletedObjectDefintions = CompileUtils.filterDefinitions(oldSectionsNotReused);
+		for (Section<? extends SimpleDefinition> section : deletedObjectDefintions) {
 			checkObject(section);
 		}
 
 		// check new objects
-		Collection<Section<? extends TermDefinition<?>>> createdObjectDefintions = CompileUtils.filterDefinitions(newSectionsNotReused);
-		for (Section<? extends TermDefinition<?>> section : createdObjectDefintions) {
+		Collection<Section<SimpleDefinition>> createdObjectDefintions = CompileUtils.filterDefinitions(newSectionsNotReused);
+		for (Section<? extends SimpleDefinition> section : createdObjectDefintions) {
 			checkObject(section);
 		}
 
@@ -247,20 +253,21 @@ public class IncrementalCompiler implements EventListener {
 			Section<? extends KnowledgeUnit> section = compilationUnitIterator.next();
 			KnowledgeUnitCompileScript compileScript = section.get().getCompileScript();
 			if (compileScript != null) {
-				Collection<Section<TermReference>> refs = compileScript.getAllReferencesOfKnowledgeUnit(
+				Collection<Section<?>> refs = compileScript.getAllReferencesOfKnowledgeUnit(
 						section);
 				if (refs != null) {
-					for (Section<TermReference> ref : refs) {
-						if (!terminology.isValid(ref.get().getTermIdentifier(ref))) {
-							// compilation unit not valid => remove
+					for (Section<?> ref : refs) {
+						if (!terminology.isValid(KnowWEUtils.getTermIdentifier(ref))) {
 							compilationUnitIterator.remove();
 							break;
 						}
 						// check Types of referenced objects here
 						if (ref.get() instanceof TypeRestrictedReference) {
-							if (((TypeRestrictedReference) ref.get()).checkTypeConstraints(ref) == false) {
+							Section<? extends TypeRestrictedReference> trRef = (Section<? extends TypeRestrictedReference>) ref;
+							if (trRef.get().checkTypeConstraints(trRef) == false) {
 								compilationUnitIterator.remove();
 								break;
+
 							}
 						}
 					}
@@ -304,7 +311,7 @@ public class IncrementalCompiler implements EventListener {
 		// this is efficiency improvement is only relevant in very special cases
 	}
 
-	private void checkObject(Section<? extends TermDefinition<?>> section) {
+	private void checkObject(Section<? extends SimpleDefinition> section) {
 		if (hasValidDefinition(section)) {
 			resolveRecursively(section);
 		}
@@ -314,7 +321,7 @@ public class IncrementalCompiler implements EventListener {
 
 	}
 
-	private void removeRecursively(Section<? extends TermDefinition> section) {
+	private void removeRecursively(Section<? extends SimpleTerm> section) {
 		if (terminology.wasValidInOldVersion(section)) {
 			terminology.removeFromValidObjects(section);
 			Collection<Section<? extends KnowledgeUnit>> referencingSlices = terminology.getReferencingSlices(section);
@@ -324,13 +331,13 @@ public class IncrementalCompiler implements EventListener {
 			Collection<Section<? extends ComplexDefinition>> referencingDefs = terminology.getReferencingDefinitions(section);
 			for (Section<? extends ComplexDefinition> ref : referencingDefs) {
 				removeRecursively(Sections.findSuccessor(ref,
-						TermDefinition.class));
+						SimpleDefinition.class));
 			}
 		}
 
 	}
 
-	private void resolveRecursively(Section<? extends TermDefinition> section) {
+	private void resolveRecursively(Section<? extends SimpleDefinition> section) {
 		if (hasValidDefinition(section)) {
 			// we cannot check on "!terminology.wasValidInOldVersion(section)"
 			// here,
@@ -347,13 +354,13 @@ public class IncrementalCompiler implements EventListener {
 			// recursion for complex definitions
 			Collection<Section<? extends ComplexDefinition>> referencingDefs = terminology.getReferencingDefinitions(section);
 			for (Section<? extends ComplexDefinition> ref : referencingDefs) {
-				Section<TermDefinition> def = Sections.findChildOfType(ref,
-						TermDefinition.class);
+				Section<SimpleDefinition> def = Sections.findChildOfType(ref,
+						SimpleDefinition.class);
 
 				// beware of infinite recursion due to self recursive
 				// definitions
-				if (def.get().getTermIdentifier(def).equals(
-						section.get().getTermIdentifier(section))) {
+				if (KnowWEUtils.getTermIdentifier(def).equals(
+						KnowWEUtils.getTermIdentifier(section))) {
 					// chicken-egg problem cursing infinite recursion
 					// TODO: error handling !?
 					// System.out.println("chicken-egg!!!");
@@ -370,9 +377,8 @@ public class IncrementalCompiler implements EventListener {
 
 	}
 
-	private boolean hasValidDefinition(Section<? extends TermDefinition> section) {
-		String termIdentifier = section.get().getTermIdentifier(
-				section);
+	private boolean hasValidDefinition(Section<?> section) {
+		String termIdentifier = KnowWEUtils.getTermIdentifier(section);
 		return hasValidDefinition(termIdentifier);
 
 	}
@@ -393,7 +399,7 @@ public class IncrementalCompiler implements EventListener {
 	public Collection<Message> checkDefinition(String termIdentifier) {
 		Collection<Message> messages = new ArrayList<Message>();
 
-		Collection<Section<? extends TermDefinition>> termDefiningSections = terminology.getTermDefinitions(termIdentifier);
+		Collection<Section<? extends SimpleDefinition>> termDefiningSections = terminology.getTermDefinitions(termIdentifier);
 		if (termDefiningSections.size() == 0) {
 			messages.add(Messages.noSuchObjectError(termIdentifier));
 			return messages;
@@ -417,21 +423,22 @@ public class IncrementalCompiler implements EventListener {
 		// check complex definitions here
 
 		// there is exactly one
-		Section<? extends TermDefinition> def = termDefiningSections.iterator().next();
+		Section<?> def = termDefiningSections.iterator().next();
 
 		Section<ComplexDefinition> complexDef = Sections.findAncestorOfType(def,
 				ComplexDefinition.class);
 		// all references of this complexDef (if existing) need to be in the set
 		// of valid objects
 		if (complexDef != null) {
-			Collection<Section<TermReference>> allReferencesOfComplexDefinition = CompileUtils.getAllReferencesOfComplexDefinition(complexDef);
-			for (Section<TermReference> ref : allReferencesOfComplexDefinition) {
+			Collection<Section<SimpleReference>> allReferencesOfComplexDefinition = CompileUtils.getAllReferencesOfComplexDefinition(complexDef);
+			for (Section<SimpleReference> ref : allReferencesOfComplexDefinition) {
 				String errorMsg = "ComplexDefinition has dependency error: ";
 				// if one reference is not defined
-				if ((!terminology.isValid(ref.get().getTermIdentifier(ref)))) {
+				String termIdentifier2 = KnowWEUtils.getTermIdentifier(ref);
+				if ((!terminology.isValid(termIdentifier2))) {
 					// System.out.println("dependency error");
 					messages.add(new Message(Message.Type.ERROR, errorMsg +
-							ref.get().getTermIdentifier(ref)));
+							termIdentifier2));
 					return messages;
 				}
 
@@ -444,8 +451,7 @@ public class IncrementalCompiler implements EventListener {
 							errorMsg
 									+ ((ComplexDefinitionWithTypeConstraints) complexDef.get())
 											.getProblemMessageForConstraintViolation(def,
-													ref) + " :" +
-									ref.get().getTermIdentifier(ref)));
+													ref) + " :" + termIdentifier2));
 					return messages;
 				}
 			}
@@ -460,11 +466,11 @@ public class IncrementalCompiler implements EventListener {
 
 	private void registerNewSectionsInReferenceManager(Collection<Section<? extends Type>> sectionsNotReused) {
 		for (Section<? extends Type> section : sectionsNotReused) {
-			if (section.get() instanceof TermReference) {
-				terminology.registerTermReference((Section<? extends TermReference>) section);
+			if (section.get() instanceof SimpleReference) {
+				terminology.registerTermReference((Section<? extends SimpleReference>) section);
 			}
-			if (section.get() instanceof TermDefinition) {
-				terminology.registerTermDefinition((Section<? extends TermDefinition>) section);
+			if (section.get() instanceof SimpleDefinition) {
+				terminology.registerTermDefinition((Section<? extends SimpleDefinition>) section);
 			}
 		}
 
@@ -472,11 +478,11 @@ public class IncrementalCompiler implements EventListener {
 
 	private void deregisterOldsectionsInReferenceManager(Collection<Section<? extends Type>> sectionsNotReused) {
 		for (Section<? extends Type> section : sectionsNotReused) {
-			if (section.get() instanceof TermReference) {
-				terminology.deregisterTermReference((Section<? extends TermReference>) section);
+			if (section.get() instanceof SimpleReference) {
+				terminology.deregisterTermReference(section);
 			}
-			if (section.get() instanceof TermDefinition) {
-				terminology.deregisterTermDefinition((Section<? extends TermDefinition>) section);
+			if (section.get() instanceof SimpleDefinition) {
+				terminology.deregisterTermDefinition(section);
 			}
 		}
 

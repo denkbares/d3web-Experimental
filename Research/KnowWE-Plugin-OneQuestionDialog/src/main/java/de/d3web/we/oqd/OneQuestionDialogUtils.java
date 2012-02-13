@@ -30,8 +30,8 @@ import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionYN;
 import de.d3web.core.session.Session;
-import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.SessionBroker;
+import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.user.UserContext;
 
@@ -63,11 +63,11 @@ public class OneQuestionDialogUtils {
 		 * return SessionFactory.createSession(knowledgeService.getBase());
 		 */
 
-		KnowledgeBase knowledgeServiceInTopic = D3webModule.getKnowledgeBase(
+		KnowledgeBase knowledgeServiceInTopic = D3webUtils.getKnowledgeBase(
 				web, topic);
 		String kbid = knowledgeServiceInTopic.getId();
 
-		SessionBroker broker = D3webModule.getBroker(user.getUserName(), web);
+		SessionBroker broker = D3webUtils.getBroker(user.getUserName(), web);
 
 		Session session = broker.getSession(kbid);
 
@@ -133,7 +133,7 @@ public class OneQuestionDialogUtils {
 		// MF: moved send button to head
 		html.append("<div id=\"oqdbutton\" class=\"oqdbutton\" onclick=\"return OneQuestionDialog.sendQuestion(this)\" "
 				+ "title='"
-				+ D3webModule.getKwikiBundle_d3web(kwuser).getString("KnowWE.OQD.send")
+				+ D3webUtils.getD3webBundle(kwuser).getString("KnowWE.OQD.send")
 				+ "'>");
 		html.append("</div>");
 

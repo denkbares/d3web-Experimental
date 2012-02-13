@@ -201,7 +201,7 @@ public class XMLUtils {
 				}
 
 				if (child.get().isAssignableFromType(Link.class)) {
-					String original = child.getOriginalText();
+					String original = child.getText();
 					simpleSec.getContentOrMultimediaItemOrFormula().add(original);
 					continue;
 				}
@@ -321,7 +321,7 @@ public class XMLUtils {
 			}
 
 			if (sec.get().isAssignableFromType(Link.class)) {
-				String original = sec.getOriginalText();
+				String original = sec.getText();
 				titledmmContent.getContentOrMultimediaItemOrFormula().add(original);
 				continue;
 			}
@@ -352,7 +352,7 @@ public class XMLUtils {
 		if (sec.get().isType(Video.class)) type = "video";
 		if (sec.get().isType(Audio.class)) type = "audio";
 		it.setType(type);
-		it.setURL(sec.getChildren().get(1).getOriginalText().trim());
+		it.setURL(sec.getChildren().get(1).getText().trim());
 	}
 
 	/**
@@ -379,8 +379,8 @@ public class XMLUtils {
 		String attName = "";
 		String attContent = "";
 		for (Section<MetaLine> line : lines) {
-			attName = Sections.findSuccessor(line, AttributeName.class).getOriginalText().trim();
-			attContent = Sections.findSuccessor(line, AttributeContent.class).getOriginalText().trim();
+			attName = Sections.findSuccessor(line, AttributeName.class).getText().trim();
+			attContent = Sections.findSuccessor(line, AttributeContent.class).getText().trim();
 
 			if (attName.equals(MetaAttributes.CASE_TODO)) {
 				todos.add(attContent);
@@ -506,7 +506,7 @@ public class XMLUtils {
 				}
 
 				if (child.get().isAssignableFromType(Link.class)) {
-					String original = child.getOriginalText();
+					String original = child.getText();
 					simpleSec.getContentOrMultimediaItemOrFormula().add(original);
 					continue;
 				}
@@ -559,7 +559,7 @@ public class XMLUtils {
 
 		Section<?> frage = frageChilds.get(0);
 		Section<?> fragetyp = Sections.findSuccessor(frage, QuestionType.class);
-		String typ = fragetyp.getOriginalText().trim();
+		String typ = fragetyp.getText().trim();
 
 		if (typ.equals(AnswersBlockValidator.OC)) {
 			ChoiceQuestion q = fac.createChoiceQuestion();
@@ -634,9 +634,9 @@ public class XMLUtils {
 		Section<?> frageGewicht = Sections.findSuccessor(frage, QuestionWeight.class);
 		Section<?> frageText = Sections.findSuccessor(frage, QuestionText.class);
 
-		String weight = frageGewicht.getOriginalText().trim();
+		String weight = frageGewicht.getText().trim();
 		question.setWeight(new BigDecimal(weight));
-		question.setText(frageText.getOriginalText());
+		question.setText(frageText.getText());
 
 		for (Section<?> sec : frageChilds) {
 
@@ -691,35 +691,35 @@ public class XMLUtils {
 			// AntwortText
 			Section<AnswerText> text = Sections.findSuccessor(s, AnswerText.class);
 			String antwortText = "";
-			if (text != null) antwortText = text.getOriginalText();
+			if (text != null) antwortText = text.getText();
 
 			// AntwortTextArgument
 			String textArgString = null;
 			Section<AnswerTextArgument> textArg = Sections.findSuccessor(s,
 					AnswerTextArgument.class);
-			if (textArg != null) textArgString = textArg.getOriginalText().trim();
+			if (textArg != null) textArgString = textArg.getText().trim();
 
 			// SimpleFeedback
 			Section<AnswerExplanation> erklaerung = Sections.findSuccessor(s,
 					AnswerExplanation.class);
 			String erkl = null;
 			if (erklaerung != null) {
-				erkl = erklaerung.getOriginalText().
-						substring(1, erklaerung.getOriginalText().length() - 1);
+				erkl = erklaerung.getText().
+						substring(1, erklaerung.getText().length() - 1);
 			}
 
 			// Postfix Praefix Ueberschrift
 			Section<AnswersBlock.Postfix> post =
 					Sections.findSuccessor(s, AnswersBlock.Postfix.class);
-			if (post != null) postfix = post.getOriginalText().trim();
+			if (post != null) postfix = post.getText().trim();
 
 			Section<AnswersBlock.Praefix> prae =
 					Sections.findSuccessor(s, AnswersBlock.Praefix.class);
-			if (prae != null) praefix = prae.getOriginalText().trim();
+			if (prae != null) praefix = prae.getText().trim();
 
 			Section<AnswersBlock.Heading> head =
 					Sections.findSuccessor(s, AnswersBlock.Heading.class);
-			if (head != null) heading = head.getOriginalText().trim();
+			if (head != null) heading = head.getText().trim();
 
 			ants.add(new AnswerAttributeStore(posFactor, negFactor,
 					antwortText, erkl, textArgString));
@@ -773,7 +773,7 @@ public class XMLUtils {
 			Section<AnswersBlockWeightMark> aBWMark =
 					Sections.findSuccessor(antworten, AnswersBlockWeightMark.class);
 			if (aBWMark != null) ans.setWeight(new BigDecimal(
-						AnswersBlock.getWeight(aBWMark.getOriginalText())));
+						AnswersBlock.getWeight(aBWMark.getText())));
 
 			for (AnswerAttributeStore store : ants) {
 				WordAnswer a = fac.createWordAnswersWordAnswer();
@@ -816,7 +816,7 @@ public class XMLUtils {
 			Section<AnswersBlockWeightMark> aBWMark =
 					Sections.findSuccessor(antworten, AnswersBlockWeightMark.class);
 			if (aBWMark != null) ans.setWeight(new BigDecimal(
-						AnswersBlock.getWeight(aBWMark.getOriginalText())));
+						AnswersBlock.getWeight(aBWMark.getText())));
 
 			for (AnswerAttributeStore store : ants) {
 				XMLUtils.addNumAnswerInstance(ans, store, fac);
@@ -903,7 +903,7 @@ public class XMLUtils {
 			}
 
 			if (s.get().isAssignableFromType(Link.class)) {
-				String original = s.getOriginalText();
+				String original = s.getText();
 				itList.add(original);
 				continue;
 			}
@@ -930,7 +930,7 @@ public class XMLUtils {
 			}
 
 			if (s.get().isAssignableFromType(Link.class)) {
-				String original = s.getOriginalText();
+				String original = s.getText();
 				itList.add(original);
 				continue;
 			}
@@ -951,7 +951,7 @@ public class XMLUtils {
 	 * @param itemList
 	 */
 	private static void clearPlainText(Section<?> child, List<Object> itemList) {
-		String te = child.getOriginalText().replaceAll("[\\r\\n]", "");
+		String te = child.getText().replaceAll("[\\r\\n]", "");
 		if (!te.equals("")) {
 			te = Utils.wikiSyntaxToHtml(te);
 			itemList.add(te);
@@ -965,7 +965,7 @@ public class XMLUtils {
 	 * @param child
 	 */
 	private static String clearPlainText(Section<?> child) {
-		String te = child.getOriginalText().replaceAll("[\\r\\n]", "");
+		String te = child.getText().replaceAll("[\\r\\n]", "");
 		te = Utils.wikiSyntaxToHtml(te);
 		return te;
 	}

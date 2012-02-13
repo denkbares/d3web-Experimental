@@ -92,7 +92,7 @@ public class CausalDiagnosisScore extends AbstractType {
 			//			KnowledgeBase kb = D3webUtils.getKB(scoreSec.getWeb(), packageName + " - master");
 			StringBuilder content = new StringBuilder();
 			KnowWEArticle compilingArticle = PackageRenderUtils.checkArticlesCompiling(scoreSec.getArticle(), scoreSec, content);
-			KnowledgeBase kb = D3webUtils.getKB(scoreSec.getWeb(), compilingArticle.getTitle());
+			KnowledgeBase kb = D3webUtils.getKnowledgeBase(scoreSec.getWeb(), compilingArticle.getTitle());
 
 			// Create all Conditions and Weights: 1st and 2end column
 			// TODO First Cell is no Question: Removed it! But what if empty?

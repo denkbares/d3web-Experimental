@@ -159,7 +159,7 @@ public class IncrementalCompilerTest {
 	@Test
 	public void testChangeAll() throws IOException {
 		/* replace the whole text */
-		String oldText = getArticle().getSection().getOriginalText();
+		String oldText = getArticle().getSection().getText();
 		String newText = "def Schnurtzelpieper livesIn:: Dingenskirchen" + "\n\n" + "def is"
 				+ "\n\n" + "def livesIn" + "\n\n" + "def Dingenskirchen" + "\n\n"
 				+ "def inDaHouse" + "\n\n"

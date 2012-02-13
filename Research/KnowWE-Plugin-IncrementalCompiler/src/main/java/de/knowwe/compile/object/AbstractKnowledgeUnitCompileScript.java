@@ -1,4 +1,5 @@
-/* Copyright (C) 2010 Chair of Artificial Intelligence and Applied Informatics
+/*
+ * Copyright (C) 2010 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
  * 
  * This is free software; you can redistribute it and/or modify it under the
@@ -23,32 +24,30 @@ import java.util.Collection;
 
 import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 
-public abstract class AbstractKnowledgeUnitCompileScript<T extends Type> implements KnowledgeUnitCompileScript<T>{
+public abstract class AbstractKnowledgeUnitCompileScript<T extends Type> implements KnowledgeUnitCompileScript<T> {
 
 	@Override
-	public Collection<Section<? extends TermReference>> getAllReferencesOfKnowledgeUnit(
+	public Collection<Section<? extends SimpleReference>> getAllReferencesOfKnowledgeUnit(
 			Section<? extends KnowledgeUnit<T>> section) {
-		
+
 		/*
-		 *  this is a default behaviour, working for all markups where knowledge-units dont overlap
+		 * this is a default behaviour, working for all markups where
+		 * knowledge-units dont overlap
 		 */
-		
-		
-		Collection<Section<TermReference>> allReferencesOfCompilationUnit = CompileUtils.getAllReferencesOfCompilationUnit(section);
-		
+
+		Collection<Section<SimpleReference>> allReferencesOfCompilationUnit = CompileUtils.getAllReferencesOfCompilationUnit(section);
+
 		// some evil workaround because of generics problem
-		Collection<Section<? extends TermReference>> result = new ArrayList<Section<? extends TermReference>>();
-		for (Section<TermReference> ref : allReferencesOfCompilationUnit) {
+		Collection<Section<? extends SimpleReference>> result = new ArrayList<Section<? extends SimpleReference>>();
+		for (Section<SimpleReference> ref : allReferencesOfCompilationUnit) {
 			result.add(ref);
 		}
-		
-		
+
 		return result;
-		
+
 	}
-	
 
 }

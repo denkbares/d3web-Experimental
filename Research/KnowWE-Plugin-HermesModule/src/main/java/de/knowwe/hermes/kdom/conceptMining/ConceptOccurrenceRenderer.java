@@ -56,7 +56,7 @@ public class ConceptOccurrenceRenderer extends KnowWEDomRenderer {
 
 		// TableUtils.getRow(arg0);
 
-		String conceptName = arg0.getOriginalText();
+		String conceptName = arg0.getText();
 
 		Context context = ContextManager.getInstance().getContext(arg0, DefaultSubjectContext.CID);
 
@@ -100,7 +100,7 @@ public class ConceptOccurrenceRenderer extends KnowWEDomRenderer {
 		// id='" + arg0.getId() + "'
 
 		String htmlContent1 = "<strong>"
-				+ arg0.getOriginalText()
+				+ arg0.getText()
 				+ "</strong>"
 				+ "<img rel=\"{type: '"
 				+ conceptName
@@ -222,7 +222,7 @@ public class ConceptOccurrenceRenderer extends KnowWEDomRenderer {
 
 		buffy.append("<ul style='padding:10px' class=\"options\" >");
 
-		String originalText = arg0.getOriginalText();
+		String originalText = arg0.getText();
 		String[] opts = getPossibleProperties(subject, originalText);
 
 		String[] newOpts = filterOpts(subject, originalText, opts);

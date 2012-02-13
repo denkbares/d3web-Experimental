@@ -23,7 +23,6 @@ import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
-import de.d3web.we.basic.D3webModule;
 import de.d3web.we.basic.SessionBroker;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWEEnvironment;
@@ -63,7 +62,7 @@ public class TestcaseTableResetAction extends AbstractAction {
 			Session newSession = D3webUtils.getSession(master, context, web);
 
 			KnowledgeBase kb =
-					D3webModule.getKnowledgeRepresentationHandler(web).getKB(master);
+					D3webUtils.getKnowledgeRepresentationHandler(web).getKB(master);
 
 			KnowWEArticle article = KnowWEEnvironment.getInstance().getArticle(web, master);
 			List<Section<TestcaseTableLine>> alreadyExecuted = TestcaseTable.getExecutedLinesOfTable(
@@ -97,7 +96,7 @@ public class TestcaseTableResetAction extends AbstractAction {
 	}
 
 	private void clearSession(UserActionContext context) {
-		SessionBroker broker = D3webModule.getBroker(context.getParameters());
+		SessionBroker broker = D3webUtils.getBroker(context.getParameters());
 		broker.clear();
 	}
 

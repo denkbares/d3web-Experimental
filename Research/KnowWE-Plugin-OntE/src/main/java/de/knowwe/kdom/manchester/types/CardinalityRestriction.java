@@ -88,7 +88,7 @@ public class CardinalityRestriction extends AbstractType {
 		Section<NonNegativeInteger> digit = Sections.findChildOfType(section,
 				NonNegativeInteger.class);
 		if (digit != null) {
-			return Integer.parseInt(digit.getOriginalText());
+			return Integer.parseInt(digit.getText());
 		}
 		return 0;
 	}

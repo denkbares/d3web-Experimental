@@ -51,7 +51,7 @@ public class MultimediaItemHandler extends GeneralSubtreeHandler<MultimediaItem>
 		Section<MultimediaItemContent> mmI = Sections.findChildOfType(s,
 				MultimediaItemContent.class);
 
-		String t = mmI.getOriginalText().trim();
+		String t = mmI.getText().trim();
 
 		if (t.equals("")) {
 			messages.add(Utils.missingContentWarning(MultimediaItem.class.getSimpleName()));

@@ -28,29 +28,28 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
 import de.knowwe.core.correction.CorrectionProvider;
 import de.knowwe.core.kdom.KnowWEArticle;
-import de.knowwe.core.kdom.objects.TermDefinition;
-import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
+import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.utils.KnowWEUtils;
 
 public class IncrementalTermReferenceCorrectionProvider implements CorrectionProvider {
 
 	@Override
 	public List<CorrectionProvider.Suggestion> getSuggestions(KnowWEArticle article, Section<?> section, int threshold) {
-		if (!(section.get() instanceof TermReference)) {
+		if (!(section.get() instanceof SimpleReference)) {
 			return null;
 		}
 
-		TermReference<?> termReference = ((TermReference<?>) section.get());
-
 		ReferenceManager terminology = IncrementalCompiler.getInstance().getTerminology();
-		Collection<Section<? extends TermDefinition>> defs = terminology.getAllTermDefinitions();
+		Collection<Section<? extends SimpleDefinition>> defs = terminology.getAllTermDefinitions();
 
-		String originalText = section.getOriginalText();
+		String originalText = section.getText();
 		List<CorrectionProvider.Suggestion> suggestions = new LinkedList<CorrectionProvider.Suggestion>();
 		Levenstein l = new Levenstein();
 
-		for (Section<? extends TermDefinition> def : defs) {
-			String termName = def.get().getTermName(def);
+		for (Section<? extends SimpleDefinition> def : defs) {
+			String termName = KnowWEUtils.getTermIdentifier(def);
 			double score = l.score(originalText, termName);
 			if (score >= -threshold) {
 				suggestions.add(new CorrectionProvider.Suggestion(termName, (int) score));

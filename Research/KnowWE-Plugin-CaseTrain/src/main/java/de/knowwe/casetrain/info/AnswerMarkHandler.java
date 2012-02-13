@@ -58,7 +58,7 @@ public class AnswerMarkHandler extends GeneralSubtreeHandler<AnswerMark> {
 	public Collection<Message> create(KnowWEArticle article, Section<AnswerMark> s) {
 
 		List<Message> messages = new ArrayList<Message>();
-		String content = s.getOriginalText().substring(1, s.getOriginalText().length() - 1).trim();
+		String content = s.getText().substring(1, s.getText().length() - 1).trim();
 
 		for (String string : symbols) {
 			if (content.equals(string)) {

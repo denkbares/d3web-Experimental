@@ -19,7 +19,7 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.objects.TermDefinition;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
@@ -30,8 +30,8 @@ import de.knowwe.owlapi.OWLAPIConnector;
 import de.knowwe.owlapi.OWLAPIKnowledgeUnitCompileScript;
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 30.11.2011
  */
@@ -50,7 +50,7 @@ public class ImportFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<I
 		if (importFrame.hasImportIRI(section)) {
 
 			Section<? extends Type> importIRISection = importFrame.getImportIRI(section);
-			IRI iri = IRI.create(importIRISection.getOriginalText());
+			IRI iri = IRI.create(importIRISection.getText());
 			try {
 				// ... load the ontology
 				OWLOntologyManager manager = OWLAPIConnector.getInstance(iri).getManager();
@@ -98,7 +98,7 @@ public class ImportFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<I
 		ImportFrame importFrame = section.get();
 
 		Section<? extends Type> importIRISection = importFrame.getImportIRI(section);
-		IRI iri = IRI.create(importIRISection.getOriginalText());
+		IRI iri = IRI.create(importIRISection.getText());
 
 		// .. remove the import declaration from the ontology
 		OWLAPIConnector.getGlobalInstance().removeImport(iri);
@@ -119,7 +119,7 @@ public class ImportFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<I
 		ImportFrame importFrame = section.get();
 		Section<? extends Type> importIRISection = importFrame.getImportIRI(section);
 
-		String importIRI = importIRISection.getOriginalText();
+		String importIRI = importIRISection.getText();
 		if (!importIRI.endsWith("#")) {
 			importIRI += "#";
 		}
@@ -134,7 +134,7 @@ public class ImportFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<I
 
 	/**
 	 * Handle optional import declaration within the to import ontology.
-	 *
+	 * 
 	 * @created 14.12.2011
 	 * @param ontolology
 	 * @param axioms
@@ -178,7 +178,7 @@ public class ImportFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<I
 	 * {@link IncrementalCompiler}. Each term is stored as {@link ImportedTerm}.
 	 * Simply call the register method from the {@link IncrementalCompiler} for
 	 * each term that should be added.
-	 *
+	 * 
 	 * @created 01.12.2011
 	 * @param terminologyExtension
 	 */
@@ -192,13 +192,13 @@ public class ImportFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<I
 
 				String conceptName = OnteRenderingUtils.getDisplayName(owlEntity);
 
-//			if (owlEntity.getIRI().getFragment() != null) {
-//				conceptName = owlEntity.getIRI().getFragment();
-//			}
-//			else {
-//				String path = owlEntity.getIRI().toURI().getPath();
-//				conceptName = path.substring(path.lastIndexOf("/") + 1);
-//			}
+				// if (owlEntity.getIRI().getFragment() != null) {
+				// conceptName = owlEntity.getIRI().getFragment();
+				// }
+				// else {
+				// String path = owlEntity.getIRI().toURI().getPath();
+				// conceptName = path.substring(path.lastIndexOf("/") + 1);
+				// }
 
 				entityNames.add(conceptName);
 				compiler.registerImportedTerminology(section, conceptName);
@@ -211,9 +211,9 @@ public class ImportFrameCompileScript extends OWLAPIKnowledgeUnitCompileScript<I
 		}
 
 		if (messages.isEmpty()) { // check only if no violations till now
-			Collection<Section<? extends TermDefinition>> localTerms = IncrementalCompiler.getInstance().getTerminology().getAllTermDefinitions();
-			for (Section<? extends TermDefinition> term : localTerms) {
-				if (entityNames.contains(term.getOriginalText())) {
+			Collection<Section<? extends SimpleDefinition>> localTerms = IncrementalCompiler.getInstance().getTerminology().getAllTermDefinitions();
+			for (Section<? extends SimpleDefinition> term : localTerms) {
+				if (entityNames.contains(term.getText())) {
 					messages.add(Messages.warning("Import violates unique name assumption! Some concepts are already defined!"));
 					break;
 				}

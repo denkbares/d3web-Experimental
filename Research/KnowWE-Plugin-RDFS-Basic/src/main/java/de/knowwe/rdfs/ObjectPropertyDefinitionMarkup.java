@@ -19,9 +19,9 @@ import de.knowwe.compile.object.TypedTermDefinition;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.basicType.EndLineComment;
-import de.knowwe.core.kdom.objects.KnowWETerm;
-import de.knowwe.core.kdom.objects.TermDefinition;
-import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
+import de.knowwe.core.kdom.objects.SimpleReference;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -53,6 +53,7 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 	}
 
 	class RangeDomainSpec extends AbstractType {
+
 		public RangeDomainSpec() {
 			this.setSectionFinder(new RegexSectionFinder("\\((.*?)\\)", 0, 1));
 			this.addChildType(new ClassRef());
@@ -60,6 +61,7 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 	}
 
 	class ClassRef extends IRITermRef implements TypeRestrictedReference {
+
 		public ClassRef() {
 			this.setSectionFinder(new SectionFinder() {
 
@@ -79,12 +81,12 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 		}
 
 		@Override
-		public boolean checkTypeConstraints(Section<? extends TermReference> s) {
+		public boolean checkTypeConstraints(Section<? extends SimpleTerm> s) {
 			return RDFSUtil.isTermCategory(s, RDFSTermCategory.Class);
 		}
 
 		@Override
-		public String getMessageForConstraintViolation(Section<? extends TermReference> s) {
+		public String getMessageForConstraintViolation(Section<? extends SimpleTerm> s) {
 			return "Only classes are allowed here";
 		}
 	}
@@ -96,13 +98,13 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 		}
 
 		@Override
-		public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
-			return s.getOriginalText();
+		public String getTermIdentifier(Section<? extends SimpleTerm> s) {
+			return s.getText();
 		}
 
 		@Override
 		public Map getTypedTermInformation(
-				Section<? extends TermDefinition> s) {
+				Section<? extends SimpleDefinition> s) {
 			Map<String, Object> map = new HashMap<String, Object>();
 
 			// add entity type
@@ -126,7 +128,7 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 	@Override
 	public boolean checkTypeConstraints(
 			Section<? extends ComplexDefinition<ObjectPropertyDefinitionMarkup>> def,
-			Section<? extends TermReference> ref) {
+			Section<? extends SimpleReference> ref) {
 
 		return RDFSUtil.isTermCategory(ref, RDFSTermCategory.Class);
 	}
@@ -134,7 +136,7 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 	@Override
 	public String getProblemMessageForConstraintViolation(
 			Section<? extends ComplexDefinition<ObjectPropertyDefinitionMarkup>> def,
-			Section<? extends TermReference> ref) {
+			Section<? extends SimpleReference> ref) {
 
 		return "Object of type 'Class' expected";
 	}

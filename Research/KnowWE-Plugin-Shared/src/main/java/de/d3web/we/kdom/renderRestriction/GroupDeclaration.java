@@ -41,7 +41,7 @@ public class GroupDeclaration extends AbstractType {
 	}
 
 	public String getGroup(Section<GroupDeclaration> s) {
-		Matcher matcher = p.matcher(s.getOriginalText());
+		Matcher matcher = p.matcher(s.getText());
 		if (matcher.find()) {
 			return matcher.group(1);
 		}

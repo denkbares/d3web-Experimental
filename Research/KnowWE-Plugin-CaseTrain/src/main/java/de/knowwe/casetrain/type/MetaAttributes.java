@@ -137,7 +137,7 @@ public class MetaAttributes {
 
 		String ori = "";
 		for (Section<AttributeName> section : atts) {
-			ori = section.getOriginalText().trim();
+			ori = section.getText().trim();
 			if (foundOnes.contains(ori) && !ori.equals(CASE_TODO)) {
 				messages.add(Messages.error(Utils.getBundle().getString("DOUBLE_ATTRIBUTE") + ori));
 				continue;

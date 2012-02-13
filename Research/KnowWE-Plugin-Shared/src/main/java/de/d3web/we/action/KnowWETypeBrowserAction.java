@@ -155,7 +155,7 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 			String BOLD_CLOSE = "BOLD_CLOSE";
 
 			// Create a RenameFinding from the Section for context.
-			String[] sectionWords = sec.getOriginalText().split(" ");
+			String[] sectionWords = sec.getText().split(" ");
 			WordBasedRenameFinding f = new WordBasedRenameFinding
 											(0, sectionWords.length - 1, sectionWords[0], sec);
 			String text = BOLD_OPEN + f.contextText() + BOLD_CLOSE;
@@ -292,7 +292,7 @@ public class KnowWETypeBrowserAction extends AbstractAction {
 				Section<?> section = Sections.getSection(sectionId);
 				additionalText = WordBasedRenameFinding.getAdditionalContextTypeBrowser(pos,
 									direction, curWords, queryLength,
-									section.getArticle().getSection().getOriginalText(), wordCount);
+									section.getArticle().getSection().getText(), wordCount);
 
 				// add highlighting when needed
 				additionalText = this.replaceSpecialCharacters(additionalText);

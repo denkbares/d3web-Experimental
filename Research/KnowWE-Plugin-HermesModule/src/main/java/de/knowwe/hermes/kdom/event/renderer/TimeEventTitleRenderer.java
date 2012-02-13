@@ -43,7 +43,7 @@ public class TimeEventTitleRenderer extends KnowWEDomRenderer<TimeEventNew> {
 			UserContext user, StringBuilder result) {
 		String title = "no title found";
 		if (sec != null)
-			title = sec.getOriginalText();
+			title = sec.getText();
 
 		// opening Span-Tag in TimeEventRenderer
 		title = title + KnowWEUtils.maskHTML("</span>");

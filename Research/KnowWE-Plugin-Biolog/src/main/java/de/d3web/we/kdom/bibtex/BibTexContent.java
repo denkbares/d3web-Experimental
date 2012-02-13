@@ -66,7 +66,7 @@ public class BibTexContent extends XMLContent{
 		public Collection<Message> create(KnowWEArticle article, Section<BibTexContent> s) {
 			Message msg=null;
 			IntermediateOwlObject io = new IntermediateOwlObject();
-			String text = s.getOriginalText();
+			String text = s.getText();
 			BibtexFile bibtexFile = new BibtexFile();
 			BibtexParser parser = new BibtexParser(false);
 

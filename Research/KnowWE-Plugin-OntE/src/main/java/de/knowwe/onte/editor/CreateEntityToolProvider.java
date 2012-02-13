@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -25,12 +25,10 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.manchester.frame.ClassFrame;
 import de.knowwe.kdom.manchester.frame.DataPropertyFrame;
 import de.knowwe.kdom.manchester.frame.ObjectPropertyFrame;
-import de.knowwe.termObject.AbstractIRITermDefinition;
+import de.knowwe.rdfs.AbstractIRITermDefinition;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
-
-
 
 /**
  * The CreateEntityToolProvider offers help with quick creation of not yet
@@ -42,7 +40,7 @@ import de.knowwe.tools.ToolProvider;
  * <li>object properties</li>
  * <li>data properties</li>
  * </ul>
- *
+ * 
  * @author Stefan Mark
  * @created 06.10.2011
  */
@@ -73,7 +71,7 @@ public class CreateEntityToolProvider implements ToolProvider {
 	/**
 	 * Returns the {@link DefaultTool} for the creation of new
 	 * {@link ClassFrame} out of unknown terms.
-	 *
+	 * 
 	 * @created 06.10.2011
 	 * @param section
 	 * @return
@@ -83,7 +81,7 @@ public class CreateEntityToolProvider implements ToolProvider {
 		String name = "Create Class";
 		String description = "Creates a article containing a basic OWL Class Frame for adding the term to the Ontology!";
 		String action = "KnowWE.plugin.onte.actions.createEntity(urlencode('"
-				+ section.getOriginalText()
+				+ section.getText()
 				+ "'), 'OWLClass')";
 
 		return new DefaultTool(image, name, description, action);
@@ -92,7 +90,7 @@ public class CreateEntityToolProvider implements ToolProvider {
 	/**
 	 * Returns the {@link DefaultTool} for the creation of new
 	 * {@link ObjectPropertyFrame} out of unknown terms.
-	 *
+	 * 
 	 * @created 06.10.2011
 	 * @param section
 	 * @return
@@ -102,7 +100,7 @@ public class CreateEntityToolProvider implements ToolProvider {
 		String name = "Create ObjectProperty";
 		String description = "Creates a article containing a basic OWL ObjectProperty Frame for adding the term to the Ontology!";
 		String action = "KnowWE.plugin.onte.actions.createEntity(urlencode('"
-				+ section.getOriginalText()
+				+ section.getText()
 				+ "'), 'OWLObjectProperty')";
 
 		return new DefaultTool(image, name, description, action);
@@ -111,7 +109,7 @@ public class CreateEntityToolProvider implements ToolProvider {
 	/**
 	 * Returns the {@link DefaultTool} for the creation of new
 	 * {@link DataPropertyFrame} out of unknown terms.
-	 *
+	 * 
 	 * @created 06.10.2011
 	 * @param section
 	 * @return
@@ -121,7 +119,7 @@ public class CreateEntityToolProvider implements ToolProvider {
 		String name = "Create ObjectProperty";
 		String description = "Creates a article containing a basic OWL DataProperty Frame for adding the term to the Ontology!";
 		String action = "KnowWE.plugin.onte.actions.createEntity(urlencode('"
-				+ section.getOriginalText()
+				+ section.getText()
 				+ "'), 'OWLDataProperty')";
 
 		return new DefaultTool(image, name, description, action);

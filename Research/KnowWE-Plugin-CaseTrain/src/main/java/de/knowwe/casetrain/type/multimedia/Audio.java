@@ -49,7 +49,7 @@ public class Audio extends MultimediaItem {
 				Section<MultimediaItemContent> linkURL = Sections.findChildOfType(sec,
 						MultimediaItemContent.class);
 				string.append(KnowWEUtils.maskHTML("<span title='Audio'>"));
-				string.append(linkURL.getOriginalText().trim());
+				string.append(linkURL.getText().trim());
 				string.append(KnowWEUtils.maskHTML("'</span>"));
 			}
 		});

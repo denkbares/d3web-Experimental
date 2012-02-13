@@ -11,6 +11,6 @@ public class IRITypeRenderer<T extends AbstractType> extends KnowWEDomRenderer<T
 
 	@Override
 	public void render(KnowWEArticle article, Section<T> sec, UserContext user, StringBuilder string) {
-		string.append(KnowWEUtils.maskHTML(KnowWEUtils.escapeHTML(sec.getOriginalText())));
+		string.append(KnowWEUtils.maskHTML(KnowWEUtils.escapeHTML(sec.getText())));
 	}
 }

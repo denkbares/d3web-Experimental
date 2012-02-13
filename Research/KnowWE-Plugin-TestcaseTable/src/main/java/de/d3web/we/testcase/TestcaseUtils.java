@@ -29,7 +29,7 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionChoice;
 import de.d3web.core.knowledge.terminology.QuestionYN;
 import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.we.basic.D3webModule;
+import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.kdom.table.TableCellContent;
 import de.knowwe.kdom.table.TableUtils;
@@ -45,7 +45,7 @@ public class TestcaseUtils {
 	 */
 	public static String[] getKnowledge(Section<? extends TableCellContent> s) {
 
-		KnowledgeBase knowledgeService = D3webModule.getKnowledgeBase(
+		KnowledgeBase knowledgeService = D3webUtils.getKnowledgeBase(
 				s.getWeb(), s.getTitle());
 
 		// if autocompile is off

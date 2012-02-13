@@ -116,7 +116,7 @@ public class MappingsAction extends AbstractAction {
 			for (Section<MappingContentType> t : found1) {
 
 				String temp = t.getChildren().get(0)
-								.getOriginalText();
+								.getText();
 
 				String hermes = temp.substring(0, temp.indexOf(" =>"));
 				String value = "";
@@ -148,7 +148,7 @@ public class MappingsAction extends AbstractAction {
 				add = add.substring(0, add.length() - 2);
 				nodesMap.put(
 						lastNode.getChildren().get(0).getID(),
-						lastNode.getChildren().get(0).getOriginalText()
+						lastNode.getChildren().get(0).getText()
 								+ System.getProperty("line.separator") + add);
 			}
 

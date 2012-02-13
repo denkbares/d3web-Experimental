@@ -119,7 +119,7 @@ public class ListCriteriaRootType extends DefaultMarkupType {
 					continue;
 				if (subsec == last && subsec.get() instanceof PlainText)
 					continue;
-				if (subsec.getOriginalText().trim().startsWith("@")) {
+				if (subsec.getText().trim().startsWith("@")) {
 					annotationPartStarted = true;
 				}
 				if (!(subsec.get() instanceof AnnotationContentType)

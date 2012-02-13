@@ -22,11 +22,10 @@ package de.knowwe.wimvent.ruleTable;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.we.object.AnswerReference;
 import de.d3web.we.object.QuestionReference;
-import de.knowwe.core.compile.IncrementalConstraint;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -35,14 +34,13 @@ import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.ExactlyOneFindingConstraint;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.kdom.table.TableCellContent;
 import de.knowwe.kdom.table.TableLine;
 import de.knowwe.kdom.table.TableRenderer;
 import de.knowwe.kdom.table.TableUtils;
 
-public class WimVentTable extends AbstractType implements IncrementalConstraint<WimVentTable> {
+public class WimVentTable extends AbstractType {
 
 	public static final StyleRenderer NUMBER_RENDERER = new StyleRenderer(
 			"font-weight:bold");
@@ -76,16 +74,16 @@ public class WimVentTable extends AbstractType implements IncrementalConstraint<
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(s);
 			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 			this.sectionFinder = csf;
-			
+
 			QuestionReference questionReference = new QuestionReference();
 			questionReference.setSectionFinder(new AllTextFinderTrimmed());
 			this.injectTableCellContentChildtype(questionReference);
 		}
 
-
 	}
 
 	class WimVentRuleTableRuleLine extends TableLine {
+
 		public WimVentRuleTableRuleLine() {
 			this.injectTableCellContentChildtype(new GrEqTableCondNum());
 			this.injectTableCellContentChildtype(new LeEqTableCondNum());
@@ -103,7 +101,7 @@ public class WimVentTable extends AbstractType implements IncrementalConstraint<
 		}
 	}
 
-	static class TableAnswerRef extends AnswerReference implements IncrementalConstraint<TableAnswerRef> {
+	static class TableAnswerRef extends AnswerReference {
 
 		public TableAnswerRef() {
 			this.setSectionFinder(new AllTextFinderTrimmed());
@@ -121,17 +119,10 @@ public class WimVentTable extends AbstractType implements IncrementalConstraint<
 		}
 
 		@Override
-		public boolean violatedConstraints(KnowWEArticle article, Section<TableAnswerRef> s) {
-			Section<DefaultMarkupType> type = Sections.findAncestorOfType(s,
-					DefaultMarkupType.class);
-			return type.isOrHasSuccessorNotReusedBy(article.getTitle());
+		public Class<?> getTermObjectClass() {
+			return Choice.class;
 		}
 
-	}
-
-	@Override
-	public boolean violatedConstraints(KnowWEArticle article, Section<WimVentTable> s) {
-		return s.isOrHasSuccessorNotReusedBy(article.getTitle());
 	}
 
 }

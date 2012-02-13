@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -32,9 +32,9 @@ import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.objects.KnowWETerm;
-import de.knowwe.core.kdom.objects.TermDefinition;
-import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
+import de.knowwe.core.kdom.objects.SimpleReference;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -67,6 +67,7 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 	// }
 
 	class DefType extends AbstractType {
+
 		public DefType() {
 			this.setSectionFinder(new RegexSectionFinderSingle(REGEX_DEF));
 			this.setCustomRenderer(new StyleRenderer("font-style:italic;"));
@@ -81,96 +82,88 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 		}
 
 		@Override
-		public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
-			return SplitUtility.unquote(s.getOriginalText().trim());
+		public String getTermIdentifier(Section<? extends SimpleTerm> s) {
+			return SplitUtility.unquote(s.getText().trim());
 		}
 
 	}
 
 	class Predicate extends IRITermRef {
+
 		public Predicate() {
 			this.sectionFinder = new RegexSectionFinderSingle("\\b([^\\s]*)::",
 					Pattern.DOTALL, 1);
 		}
 
 		@Override
-		public String getTermObjectDisplayName() {
-			return "URI";
-		}
-
-		@Override
-		public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
-			return s.getOriginalText().trim().replaceAll("::", "").trim();
+		public String getTermIdentifier(Section<? extends SimpleTerm> s) {
+			return s.getText().trim().replaceAll("::", "").trim();
 		}
 	}
 
 	class Object extends IRITermRef {
+
 		public Object() {
 			this.sectionFinder = new RegexSectionFinderSingle("::\\s(.*)",
 					Pattern.DOTALL, 1);
 		}
 
 		@Override
-		public String getTermObjectDisplayName() {
-			return "URI";
-		}
-
-		@Override
-		public String getTermIdentifier(Section<? extends KnowWETerm<String>> s) {
-			return s.getOriginalText().trim();
+		public String getTermIdentifier(Section<? extends SimpleTerm> s) {
+			return s.getText().trim();
 		}
 	}
-	
+
 	class ComplexIRIDefinitionCompileScript extends AbstractKnowledgeUnitCompileScript<ComplexIRIDefinitionMarkup> {
-	
+
 		@Override
 		public void deleteFromRepository(Section<ComplexIRIDefinitionMarkup> section) {
 			Rdf2GoCore.getInstance().removeSectionStatementsRecursive(section);
 		}
 
-	@Override
-	public void insertIntoRepository(Section<ComplexIRIDefinitionMarkup> section) {
-		List<Section<TermReference>> found = new ArrayList<Section<TermReference>>();
-		Node subURI = null;
-		Node predURI = null;
-		Node objURI = null;
+		@Override
+		public void insertIntoRepository(Section<ComplexIRIDefinitionMarkup> section) {
+			List<Section<SimpleReference>> found = new ArrayList<Section<SimpleReference>>();
+			Node subURI = null;
+			Node predURI = null;
+			Node objURI = null;
 
-		Sections.findSuccessorsOfType(section, TermReference.class, found);
-		Section<TermDefinition> subject = Sections.findSuccessor(section,
-				TermDefinition.class);
+			Sections.findSuccessorsOfType(section, SimpleReference.class, found);
+			Section<SimpleDefinition> subject = Sections.findSuccessor(section,
+					SimpleDefinition.class);
 
-		if (found.size() == 2) {
+			if (found.size() == 2) {
 
-			Section<TermReference> predicate = found.get(0);
-			Section<TermReference> object = found.get(1);
+				Section<SimpleReference> predicate = found.get(0);
+				Section<SimpleReference> object = found.get(1);
 
-			subURI = Utils.getURI(subject);
-			predURI = Utils.getURI(predicate);
-			objURI = Utils.getURI(object);
+				subURI = Utils.getURI(subject);
+				predURI = Utils.getURI(predicate);
+				objURI = Utils.getURI(object);
+			}
+			else {
+				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+				// "invalid term combination:" + found.size()));
+			}
+			if (subURI == null) {
+				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+				// "subject URI not found"));
+			}
+			if (predURI == null) {
+				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+				// "predicate URI not found"));
+			}
+			if (objURI == null) {
+				// return Arrays.asList((KDOMReportMessage) new SyntaxError(
+				// "object URI not found"));
+			}
+
+			Rdf2GoCore.getInstance().addStatement(subURI.asResource(),
+					predURI.asURI(), objURI, section);
+
+			// return new ArrayList<KDOMReportMessage>(0);
+
 		}
-		else {
-			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-			// "invalid term combination:" + found.size()));
-		}
-		if (subURI == null) {
-			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-			// "subject URI not found"));
-		}
-		if (predURI == null) {
-			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-			// "predicate URI not found"));
-		}
-		if (objURI == null) {
-			// return Arrays.asList((KDOMReportMessage) new SyntaxError(
-			// "object URI not found"));
-		}
-
-		Rdf2GoCore.getInstance().addStatement(subURI.asResource(),
-				predURI.asURI(), objURI, section);
-
-		// return new ArrayList<KDOMReportMessage>(0);
-
-	}
 
 	}
 
@@ -178,6 +171,5 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 	public KnowledgeUnitCompileScript<ComplexIRIDefinitionMarkup> getCompileScript() {
 		return new ComplexIRIDefinitionCompileScript();
 	}
-
 
 }

@@ -53,7 +53,7 @@ public class OwlPropertiesContent extends XMLContent {
 		@Override
 		public Collection<Message> create(KnowWEArticle article, Section s) {
 			IntermediateOwlObject io = new IntermediateOwlObject();
-			String text = s.getOriginalText();
+			String text = s.getText();
 			for (String cur : text.split("\r\n|\r|\n")) {
 				if (cur.trim().length() > 0) io.merge(UpperOntology.getInstance().getHelper().createlocalProperty(
 						cur.trim()));

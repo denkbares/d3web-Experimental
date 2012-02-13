@@ -92,7 +92,7 @@ public class OnlyRestriction extends AbstractType {
 
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
-			return keyword.getOriginalText().equals(ManchesterSyntaxKeywords.ONLY.getKeyword());
+			return keyword.getText().equals(ManchesterSyntaxKeywords.ONLY.getKeyword());
 		}
 		return false;
 	}
@@ -101,7 +101,7 @@ public class OnlyRestriction extends AbstractType {
 
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
-			return keyword.getOriginalText().equals(ManchesterSyntaxKeywords.ONLY_.getKeyword());
+			return keyword.getText().equals(ManchesterSyntaxKeywords.ONLY_.getKeyword());
 		}
 		return false;
 	}

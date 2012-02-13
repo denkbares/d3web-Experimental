@@ -113,15 +113,15 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 	 * 
 	 */
 	private static String getPageName(Section<DashTreeElement> sec) {
-		String pagename = sec.getOriginalText().trim();
+		String pagename = sec.getText().trim();
 		if (DashTreeUtils.getDashLevel(sec) == 1) {
 			pagename = pagename.substring(2);
 		}
 		else if (DashTreeUtils.getDashLevel(sec) == 2) {
 			pagename = pagename.substring(3);
 		}
-		if (sec.getOriginalText().contains("|")) {
-			String[] split = sec.getOriginalText().split("\\|");
+		if (sec.getText().contains("|")) {
+			String[] split = sec.getText().split("\\|");
 			pagename = split[1].trim();
 		}
 

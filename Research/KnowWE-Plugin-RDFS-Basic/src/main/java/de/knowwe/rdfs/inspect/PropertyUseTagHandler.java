@@ -26,7 +26,7 @@ import org.ontoware.rdf2go.model.node.URI;
 
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.kdom.KnowWEArticle;
-import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractTagHandler;
@@ -42,6 +42,7 @@ import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolUtils;
 
 public class PropertyUseTagHandler extends AbstractTagHandler {
+
 	// Parameter used in the request
 	public static final String OBJECTNAME = "objectname";
 
@@ -84,7 +85,7 @@ public class PropertyUseTagHandler extends AbstractTagHandler {
 			objectName = KnowWEUtils.urldecode(parameters.get(OBJECTNAME));
 		}
 
-		Collection<Section<? extends TermReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(
+		Collection<Section<? extends SimpleReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(
 				objectName);
 
 		if (termReferences != null && termReferences.size() > 0) {

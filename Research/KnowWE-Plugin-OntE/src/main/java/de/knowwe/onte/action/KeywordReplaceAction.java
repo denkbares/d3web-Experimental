@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -29,7 +29,6 @@ import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.KDOMReplaceTermNameAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -38,7 +37,7 @@ import de.knowwe.kdom.manchester.types.MisspelledSyntaxConstruct;
 /**
  * Simply an adaption of the {@link KDOMReplaceTermNameAction}. The adaption was
  * necessary since we wanted to replace no {@link TermReference} objects.
- *
+ * 
  * @author Stefan Mark
  * @created 11.11.2011
  */
@@ -77,7 +76,7 @@ public class KeywordReplaceAction extends AbstractAction {
 			return;
 		}
 
-		String originalText = section.getOriginalText();
+		String originalText = section.getText();
 		String newNodeText = originalText.replace(originalText, newText);
 
 		nodesMap.put(nodeID, newNodeText);

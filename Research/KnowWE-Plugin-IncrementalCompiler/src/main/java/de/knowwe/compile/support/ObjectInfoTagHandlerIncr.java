@@ -24,21 +24,20 @@ import java.util.Set;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
 import de.knowwe.core.kdom.KnowWEArticle;
-import de.knowwe.core.kdom.objects.KnowWETerm.Scope;
-import de.knowwe.core.kdom.objects.TermDefinition;
-import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
+import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 
 public class ObjectInfoTagHandlerIncr extends de.knowwe.core.taghandler.ObjectInfoTagHandler {
 
 	@Override
-	protected void getTermDefinitions(KnowWEArticle currentArticle, String objectName, KnowWEArticle context, Scope scope, Set<Section<? extends TermDefinition<?>>> definitions) {
+	protected void getTermDefinitions(KnowWEArticle currentArticle, String objectName, Set<Section<?>> definitions) {
 
 		ReferenceManager terminology = IncrementalCompiler.getInstance().getTerminology();
-		Collection<Section<? extends TermDefinition>> termDefinitions = terminology.getTermDefinitions(objectName);
+		Collection<Section<? extends SimpleDefinition>> termDefinitions = terminology.getTermDefinitions(objectName);
 		if (termDefinitions != null) {
-			for (Section<? extends TermDefinition> section : termDefinitions) {
-				definitions.add((Section<? extends TermDefinition<?>>) section);
+			for (Section<?> section : termDefinitions) {
+				definitions.add(section);
 			}
 
 		}
@@ -46,12 +45,12 @@ public class ObjectInfoTagHandlerIncr extends de.knowwe.core.taghandler.ObjectIn
 	}
 
 	@Override
-	protected void getTermReferences(KnowWEArticle currentArticle, String objectName, KnowWEArticle context, Scope scope, Set<Section<? extends TermReference<?>>> references) {
+	protected void getTermReferences(KnowWEArticle currentArticle, String objectName, Set<Section<?>> references) {
 		ReferenceManager terminology = IncrementalCompiler.getInstance().getTerminology();
-		Collection<Section<? extends TermReference>> termReferences = terminology.getTermReferences(objectName);
+		Collection<Section<? extends SimpleReference>> termReferences = terminology.getTermReferences(objectName);
 		if (termReferences != null) {
-			for (Section<? extends TermReference> section : termReferences) {
-				references.add((Section<? extends TermReference<?>>) section);
+			for (Section<?> section : termReferences) {
+				references.add(section);
 			}
 
 		}

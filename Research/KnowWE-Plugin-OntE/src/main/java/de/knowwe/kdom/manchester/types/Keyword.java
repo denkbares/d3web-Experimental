@@ -43,6 +43,6 @@ public class Keyword extends AbstractType {
 	}
 
 	public String getKeyword(Section<Keyword> section) {
-		return section.getOriginalText();
+		return section.getText();
 	}
 }

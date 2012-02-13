@@ -34,8 +34,8 @@ import de.knowwe.core.KnowWEAttributes;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.kdom.objects.TermDefinition;
-import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
+import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 
@@ -69,8 +69,8 @@ public class TermRenamingAction extends AbstractAction {
 				new HashMap<String, Set<Section<?>>>();
 
 		// Check all TermDefinitions
-		Collection<Section<? extends TermDefinition>> termDefinitions = referenceManager.getTermDefinitions(term);
-		for (Section<? extends TermDefinition> section : termDefinitions) {
+		Collection<Section<? extends SimpleDefinition>> termDefinitions = referenceManager.getTermDefinitions(term);
+		for (Section<? extends SimpleDefinition> section : termDefinitions) {
 			Set<Section<?>> articleSecs;
 			if (allTerms.containsKey(section.getTitle())) {
 				articleSecs = allTerms.get(section.getTitle());
@@ -83,8 +83,8 @@ public class TermRenamingAction extends AbstractAction {
 		}
 
 		// Check all TermReferences
-		Collection<Section<? extends TermReference>> termReferences = referenceManager.getTermReferences(term);
-		for (Section<? extends TermReference> section : termReferences) {
+		Collection<Section<? extends SimpleReference>> termReferences = referenceManager.getTermReferences(term);
+		for (Section<? extends SimpleReference> section : termReferences) {
 			Set<Section<?>> articleSecs;
 			if (allTerms.containsKey(section.getTitle())) {
 				articleSecs = allTerms.get(section.getTitle());

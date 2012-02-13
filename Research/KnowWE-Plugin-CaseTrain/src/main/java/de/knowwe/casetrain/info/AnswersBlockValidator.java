@@ -127,37 +127,37 @@ public class AnswersBlockValidator {
 			return;
 		}
 
-		if (typ.getOriginalText().equals(MC) || typ.getOriginalText().equals(OC)) {
+		if (typ.getText().equals(MC) || typ.getText().equals(OC)) {
 			this.checkChoiceQuestion(answersBlock, messages, evaluation);
 			return;
 		}
 
-		if (typ.getOriginalText().equals(W)) {
+		if (typ.getText().equals(W)) {
 			this.checkWordQuestion(answersBlock, messages, evaluation);
 			return;
 		}
 
-		if (typ.getOriginalText().equals(UMW)) {
+		if (typ.getText().equals(UMW)) {
 			this.checkUMWQuestion(answersBlock, messages, evaluation);
 			return;
 		}
 
-		if (typ.getOriginalText().equals(OMW)) {
+		if (typ.getText().equals(OMW)) {
 			this.checkOMWQuestion(answersBlock, messages, evaluation);
 			return;
 		}
 
-		if (typ.getOriginalText().equals(N)) {
+		if (typ.getText().equals(N)) {
 			this.checkNQuestion(answersBlock, messages, evaluation);
 			return;
 		}
 
-		if (typ.getOriginalText().equals(MN)) {
+		if (typ.getText().equals(MN)) {
 			this.checkMNQuestion(answersBlock, messages, evaluation);
 			return;
 		}
 
-		if (typ.getOriginalText().equals(T)) {
+		if (typ.getText().equals(T)) {
 			this.checkTQuestion(answersBlock, messages, evaluation);
 		}
 
@@ -180,7 +180,7 @@ public class AnswersBlockValidator {
 			antwortText = Sections.findSuccessor(ans, AnswerText.class);
 			if (antwortText == null) messages.add(Utils.missingContentWarning(
 					"Antwort hat keinen Antwort-Text"));
-			else if (antwortText.getOriginalText().trim().length() == 0) messages.add(Utils.missingContentWarning(
+			else if (antwortText.getText().trim().length() == 0) messages.add(Utils.missingContentWarning(
 					"Antwort hat leeren Antwort-Text"));
 
 		}
@@ -201,7 +201,7 @@ public class AnswersBlockValidator {
 		Section<AnswerExplanation> antwortErklaerung = null;
 		for (Section<AnswerLine> ans : found) {
 			antwortErklaerung = Sections.findSuccessor(ans, AnswerExplanation.class);
-			if (antwortErklaerung != null) if (antwortErklaerung.getOriginalText().trim().length() == 0) messages.add(Utils.missingContentWarning(
+			if (antwortErklaerung != null) if (antwortErklaerung.getText().trim().length() == 0) messages.add(Utils.missingContentWarning(
 					"Antwort-Erklärung enthält keinen Text"));
 		}
 	}
@@ -235,7 +235,7 @@ public class AnswersBlockValidator {
 		String content = "";
 		for (Section<AnswerLine> ans : found) {
 			weight = Sections.findSuccessor(ans, AnswerMark.class);
-			content = weight.getOriginalText().substring(1, weight.getOriginalText().length() - 1).trim();
+			content = weight.getText().substring(1, weight.getText().length() - 1).trim();
 
 			if (content.equals("+") || content.equals("1")) {
 				rightAnswers++;
@@ -294,7 +294,7 @@ public class AnswersBlockValidator {
 
 			if ((antwortText == null)) continue;
 
-			antString = antwortText.getOriginalText().trim();
+			antString = antwortText.getText().trim();
 			if (antString.length() == 0) continue;
 
 			if (antString.startsWith("{")) {
@@ -312,8 +312,8 @@ public class AnswersBlockValidator {
 			// Test the Argument
 			arg = Sections.findSuccessor(ans, AnswerTextArgument.class);
 			if (arg != null) {
-				c = arg.getOriginalText().trim().substring(1,
-						arg.getOriginalText().trim().length() - 1);
+				c = arg.getText().trim().substring(1,
+						arg.getText().trim().length() - 1);
 				// Regex is marked with r
 				if (c.equals("r")) {
 					try {
@@ -386,7 +386,7 @@ public class AnswersBlockValidator {
 		String antString = "";
 		for (Section<AnswerLine> ans : found) {
 			antwortText = Sections.findSuccessor(ans, AnswerText.class);
-			antString = antwortText.getOriginalText().trim();
+			antString = antwortText.getText().trim();
 			String[] interval = antString.split("[ ]+");
 
 			if ((interval.length == 0) || (interval.length > 2)) {

@@ -38,7 +38,7 @@ import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.NumValue;
 import de.d3web.core.session.values.UndefinedValue;
 import de.d3web.core.session.values.Unknown;
-import de.d3web.we.basic.D3webModule;
+import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWEAttributes;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -283,7 +283,7 @@ public class FindingHTMLWriter {
 	public String getHTMLString(Question question, Session session,
 			String namespace, String webname, String topic, String targetUrlPrefix) {
 
-		rb = D3webModule.getKwikiBundle_d3web();
+		rb = D3webUtils.getD3webBundle();
 		String retVal = null;
 		if (question == null) {
 			Logger.getLogger(this.getClass().getName()).warning(

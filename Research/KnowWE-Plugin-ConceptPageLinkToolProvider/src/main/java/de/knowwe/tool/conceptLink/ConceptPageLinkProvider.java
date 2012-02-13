@@ -25,7 +25,7 @@ import java.util.Collection;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.core.kdom.KnowWEArticle;
-import de.knowwe.core.kdom.objects.TermDefinition;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
@@ -37,14 +37,17 @@ public class ConceptPageLinkProvider implements ToolProvider {
 	@Override
 	public Tool[] getTools(KnowWEArticle article, Section<?> section, UserContext userContext) {
 
-		String text = section.getOriginalText();
+		String text = section.getText();
 
 		if (section.get() instanceof IncrementalTermReference) {
-			String termName = ((IncrementalTermReference) (section.get())).getTermName(section);
-			Collection<Section<? extends TermDefinition>> definitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-					termName);
+			@SuppressWarnings("unchecked")
+			Section<IncrementalTermReference> incSection = (Section<IncrementalTermReference>) section;
+			String termIdentifier = incSection.get().getTermIdentifier(incSection);
+			Collection<Section<? extends SimpleDefinition>> definitions =
+					IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+							termIdentifier);
 			if (definitions != null && definitions.size() > 0) {
-				Section<? extends TermDefinition> definition = definitions.iterator().next();
+				Section<?> definition = definitions.iterator().next();
 				KnowWEArticle defArticle = definition.getArticle();
 
 				if (defArticle == null) {

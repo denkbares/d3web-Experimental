@@ -92,7 +92,7 @@ public class ValueRestriction extends AbstractType {
 
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
-			return keyword.getOriginalText().equals(ManchesterSyntaxKeywords.VALUE.getKeyword());
+			return keyword.getText().equals(ManchesterSyntaxKeywords.VALUE.getKeyword());
 		}
 		return false;
 	}
@@ -101,7 +101,7 @@ public class ValueRestriction extends AbstractType {
 
 		Section<Keyword> keyword = Sections.findSuccessor(section, Keyword.class);
 		if (keyword != null) {
-			return keyword.getOriginalText().equals(ManchesterSyntaxKeywords.VALUE_.getKeyword());
+			return keyword.getText().equals(ManchesterSyntaxKeywords.VALUE_.getKeyword());
 		}
 		return false;
 	}

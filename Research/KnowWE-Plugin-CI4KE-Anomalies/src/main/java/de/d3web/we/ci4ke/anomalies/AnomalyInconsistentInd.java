@@ -27,10 +27,10 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.diaFlux.flow.ActionNode;
 import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.Node;
-import de.d3web.we.basic.D3webModule;
 import de.d3web.we.ci4ke.testing.AbstractCITest;
 import de.d3web.we.ci4ke.testing.CITestResult;
 import de.d3web.we.ci4ke.testing.CITestResult.Type;
+import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWEEnvironment;
 
 /**
@@ -51,7 +51,7 @@ public class AnomalyInconsistentInd extends AbstractCITest {
 
 		// get the KB of this article
 		KnowledgeBase kb =
-				D3webModule.getKnowledgeBase(
+				D3webUtils.getKnowledgeBase(
 						KnowWEEnvironment.DEFAULT_WEB, articleName);
 
 		CITestResult res = new CITestResult(Type.SUCCESSFUL, null, config);

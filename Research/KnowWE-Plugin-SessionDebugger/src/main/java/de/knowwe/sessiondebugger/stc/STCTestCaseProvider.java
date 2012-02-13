@@ -47,7 +47,7 @@ public class STCTestCaseProvider extends AttachmentTestCaseProvider {
 
 	@Override
 	protected void parse() {
-		KnowledgeBase kb = D3webUtils.getKB(article.getWeb(), article.getTitle());
+		KnowledgeBase kb = D3webUtils.getKnowledgeBase(article.getWeb(), article.getTitle());
 		if (kb == null) {
 			messages.add(Messages.error("Kb not found."));
 			return;

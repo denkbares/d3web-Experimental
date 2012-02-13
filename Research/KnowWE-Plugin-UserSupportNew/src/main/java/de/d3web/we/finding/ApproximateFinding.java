@@ -29,6 +29,7 @@ import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.session.values.ChoiceValue;
 import de.d3web.we.kdom.condition.D3webCondition;
 import de.d3web.we.object.AnswerReference;
+import de.d3web.we.object.QuestionReference;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
@@ -65,7 +66,7 @@ public class ApproximateFinding extends D3webCondition<ApproximateFinding> {
 		this.childrenTypes.add(comparator);
 
 		// question
-		ApproximateQuestionReference question = new ApproximateQuestionReference();
+		QuestionReference question = new QuestionReference();
 
 		ConstraintSectionFinder questionFinder = new ConstraintSectionFinder(
 				new AllTextFinderTrimmed());
@@ -82,8 +83,8 @@ public class ApproximateFinding extends D3webCondition<ApproximateFinding> {
 	@Override
 	protected Condition createCondition(KnowWEArticle article, Section<ApproximateFinding> s) {
 
-		Section<ApproximateQuestionReference> qRef = Sections.findSuccessor(s,
-				ApproximateQuestionReference.class);
+		Section<QuestionReference> qRef = Sections.findSuccessor(s,
+				QuestionReference.class);
 
 		Section<AnswerReference> aRef = Sections.findSuccessor(s, AnswerReference.class);
 

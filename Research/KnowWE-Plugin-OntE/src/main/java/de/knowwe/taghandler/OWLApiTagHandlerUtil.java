@@ -487,7 +487,7 @@ public class OWLApiTagHandlerUtil {
 			for (IRI iri : imports.keySet()) {
 				Section<ImportFrame> frame = imports.get(iri);
 				if (frame.get().hasPrefix(frame)) {
-					String prefixName = frame.get().getPrefix(frame).getOriginalText();
+					String prefixName = frame.get().getPrefix(frame).getText();
 					prefixName = prefixName.replace(":", "");
 					((PrefixOWLOntologyFormat) ontologyFormat).setPrefix(prefixName, iri.toString()
 							+ "#");

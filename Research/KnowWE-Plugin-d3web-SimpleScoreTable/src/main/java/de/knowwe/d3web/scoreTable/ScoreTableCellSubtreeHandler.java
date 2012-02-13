@@ -35,7 +35,7 @@ public class ScoreTableCellSubtreeHandler extends D3webSubtreeHandler<ScoreCell>
 
 		List<Message> messages = new ArrayList<Message>();
 
-		if (section.getOriginalText().trim().length() == 0) {
+		if (section.getText().trim().length() == 0) {
 			return messages;
 		}
 
@@ -69,7 +69,7 @@ public class ScoreTableCellSubtreeHandler extends D3webSubtreeHandler<ScoreCell>
 
 			Condition d3webCond = KDOMConditionFactory.createCondition(article, condition);
 
-			Score score = D3webUtils.getScoreForString(section.getOriginalText().trim());
+			Score score = D3webUtils.getScoreForString(section.getText().trim());
 			if (solution == null || score == null) return messages;
 			ActionHeuristicPS a = new ActionHeuristicPS();
 			a.setSolution(s);

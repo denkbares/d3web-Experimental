@@ -65,7 +65,7 @@ public class TimeEventTypeRenderer extends KnowWEDomRenderer<TimeEventType> {
 		Section<? extends TimeEventTitleType> titleSection = Sections.findChildOfType(sec,
 				TimeEventTitleType.class);
 		String title = "no title found";
-		if (titleSection != null) title = titleSection.getOriginalText();
+		if (titleSection != null) title = titleSection.getText();
 
 		String date = TimeStamp.decode(getDateString(sec));
 
@@ -103,7 +103,7 @@ public class TimeEventTypeRenderer extends KnowWEDomRenderer<TimeEventType> {
 		if (sources.size() > 0) {
 			result.append("\\\\__Quellen:__\n\n");
 			for (Section<TimeEventSourceType> section : sources) {
-				String text = section.getOriginalText();
+				String text = section.getText();
 				String key = "QUELLE:";
 				if (text.startsWith(key)) {
 					text = text.substring(key.length());
@@ -120,7 +120,7 @@ public class TimeEventTypeRenderer extends KnowWEDomRenderer<TimeEventType> {
 		Section<? extends TimeEventDateType> dateSection = Sections.findChildOfType(sec,
 				TimeEventDateType.class);
 		String date = "no date found";
-		if (dateSection != null) date = dateSection.getOriginalText();
+		if (dateSection != null) date = dateSection.getText();
 		if (date.startsWith("\r\n")) date = date.substring(2);
 		return date;
 	}
@@ -140,7 +140,7 @@ public class TimeEventTypeRenderer extends KnowWEDomRenderer<TimeEventType> {
 				.findChildOfType(sec, TimeEventImportanceType.class);
 		String importance = "no importance found";
 		if (importanceSection != null) {
-			importance = importanceSection.getOriginalText();
+			importance = importanceSection.getText();
 		}
 
 		try {

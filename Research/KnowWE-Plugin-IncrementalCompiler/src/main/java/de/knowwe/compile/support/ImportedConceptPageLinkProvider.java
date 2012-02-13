@@ -4,7 +4,7 @@ import de.knowwe.compile.ImportManager;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.KnowWEArticle;
-import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
@@ -12,8 +12,8 @@ import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 15.12.2011
  */
@@ -22,13 +22,13 @@ public class ImportedConceptPageLinkProvider implements ToolProvider {
 	@Override
 	public Tool[] getTools(KnowWEArticle article, Section<?> section, UserContext userContext) {
 
-		if (section.get() instanceof TermReference<?>) {
+		if (section.get() instanceof SimpleReference) {
 
 			boolean isImported = IncrementalCompiler.getInstance().getTerminology().isImportedObject(
-					section.getOriginalText());
+					section.getText());
 
 			if (isImported) {
-				Section<? extends AbstractType> importLocation = ImportManager.resolveImportSection(section.getOriginalText());
+				Section<? extends AbstractType> importLocation = ImportManager.resolveImportSection(section.getText());
 
 				if (importLocation != null) {
 					return new Tool[] { getConceptInfoPageTool(importLocation) };

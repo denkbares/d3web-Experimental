@@ -68,7 +68,7 @@ public class ListCriteriaD3SubtreeHandler extends D3webSubtreeHandler<ListCriter
 			// Process the Table Content
 			if (useKDom) createD3ObjectsUsingKDom(s, kb, listID);
 			else {
-				createD3Objects(s.getOriginalText().trim(), kb, listID);
+				createD3Objects(s.getText().trim(), kb, listID);
 			}
 
 			return Messages.asList(Messages.objectCreatedNotice(
@@ -106,9 +106,9 @@ public class ListCriteriaD3SubtreeHandler extends D3webSubtreeHandler<ListCriter
 				Sections.findSuccessorsOfType(line, TableCellContent.class, contents);
 
 				// Create d3web objects from cell content
-				if (contents.size() == 2 && !contents.get(1).getOriginalText().matches("\\s*")) {
-					String criteria = contents.get(0).getOriginalText().trim();
-					String value = contents.get(1).getOriginalText().trim();
+				if (contents.size() == 2 && !contents.get(1).getText().matches("\\s*")) {
+					String criteria = contents.get(0).getText().trim();
+					String value = contents.get(1).getText().trim();
 					if (criteria.matches("\\w+") && value.matches("\\d")) {
 						// QuestionNum counterQ =
 						// kbm.createQuestionNum(criteria,
@@ -120,7 +120,7 @@ public class ListCriteriaD3SubtreeHandler extends D3webSubtreeHandler<ListCriter
 		}
 		else {
 			Logging.getInstance().warning("Processing via KDOM failed, trying it without KDOM");
-			createD3Objects(section.getOriginalText().trim(), kb, listID);
+			createD3Objects(section.getText().trim(), kb, listID);
 		}
 	}
 

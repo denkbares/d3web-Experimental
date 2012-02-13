@@ -23,8 +23,8 @@ import java.util.Collection;
 
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.kdom.KnowWEArticle;
-import de.knowwe.core.kdom.objects.KnowWETerm;
-import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.objects.SimpleReference;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.rdfs.AbstractIRITermDefinition;
@@ -36,6 +36,7 @@ import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
 
 public class DescribeIndividualLinkToolProvider implements ToolProvider {
+
 	@Override
 	public Tool[] getTools(KnowWEArticle article, Section<?> section, UserContext userContext) {
 
@@ -51,10 +52,10 @@ public class DescribeIndividualLinkToolProvider implements ToolProvider {
 		}
 		if (section.get() instanceof AbstractIRITermDefinition) {
 			Section<? extends AbstractIRITermDefinition> def = ((Section<? extends AbstractIRITermDefinition>) section);
-			Collection<Section<? extends TermReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(
+			Collection<Section<? extends SimpleReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(
 					def.get().getTermIdentifier(def));
 			if (termReferences != null && termReferences.size() > 0) {
-				Section<? extends TermReference> ref = termReferences.iterator().next();
+				Section<? extends SimpleReference> ref = termReferences.iterator().next();
 				if (!RDFSUtil.isTermCategory(ref, RDFSTermCategory.ObjectProperty)
 						&& !RDFSUtil.isTermCategory(ref, RDFSTermCategory.Class)
 						&& !RDFSUtil.isTermCategory(ref,
@@ -68,9 +69,9 @@ public class DescribeIndividualLinkToolProvider implements ToolProvider {
 		return new Tool[] {};
 	}
 
-	protected Tool getDescribeIndividualTool(KnowWEArticle article, @SuppressWarnings("rawtypes") Section<? extends KnowWETerm> section, UserContext userContext) {
-		@SuppressWarnings("unchecked")
-		String objectName = section.get().getTermIdentifier(section).trim();
+	protected Tool getDescribeIndividualTool(KnowWEArticle article, Section<? extends SimpleTerm> section, UserContext userContext) {
+		String objectName = section.get().getTermIdentifier(section);
+
 		String jsAction = "window.location.href = "
 				+
 				"'Wiki.jsp?page=IndividualDescription&objectname=' + encodeURIComponent('"

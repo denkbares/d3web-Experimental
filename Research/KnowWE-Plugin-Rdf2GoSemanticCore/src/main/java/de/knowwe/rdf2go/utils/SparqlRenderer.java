@@ -50,7 +50,7 @@ public class SparqlRenderer extends KnowWEDomRenderer<SparqlType> {
 		ArrayList<Statement> l = new ArrayList<Statement>();
 
 		String sparqlString = "";
-		String section = sec.getOriginalText();
+		String section = sec.getText();
 		section = section.replaceAll("<sparql2go>", "");
 		section = section.replaceAll("</sparql2go>", "");
 		sparqlString = section.replaceAll("\n", "");

@@ -44,9 +44,9 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 	private static final String CSS_CLASS_MENULINKCURRENT = "menulinkcurrent";
 
 	private static String getPageName(Section<? extends DashTreeElementContent> sec) {
-		String pagename = sec.getOriginalText().trim();
-		if (sec.getOriginalText().contains("|")) {
-			String[] split = sec.getOriginalText().split("\\|");
+		String pagename = sec.getText().trim();
+		if (sec.getText().contains("|")) {
+			String[] split = sec.getText().split("\\|");
 			pagename = split[1].trim();
 		}
 
@@ -54,10 +54,10 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 	}
 
 	private static String getLabel(Section<DynamicMenuItem> sec) {
-		String pagename = sec.getOriginalText().trim();
+		String pagename = sec.getText().trim();
 		String label = pagename;
-		if (sec.getOriginalText().contains("|")) {
-			String[] split = sec.getOriginalText().split("\\|");
+		if (sec.getText().contains("|")) {
+			String[] split = sec.getText().split("\\|");
 			label = split[0].trim();
 		}
 

@@ -89,7 +89,7 @@ public class DecisionTable extends ITable {
 			// TODO Right KnowledgeBase?
 			StringBuilder content = new StringBuilder();
 			KnowWEArticle compilingArticle = PackageRenderUtils.checkArticlesCompiling(decisionSec.getArticle(), decisionSec, content);
-			KnowledgeBase kb = D3webUtils.getKB(decisionSec.getWeb(), compilingArticle.getTitle());
+			KnowledgeBase kb = D3webUtils.getKnowledgeBase(decisionSec.getWeb(), compilingArticle.getTitle());
 
 			// Collect all text values from first column
 			LinkedList<String> firstColumnsQuestionStringList = this.getConditionStringsFirstColumn(decisionSec);

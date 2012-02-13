@@ -47,7 +47,7 @@ class DateT extends AbstractType {
 
 		@Override
 		public Collection<Message> create(KnowWEArticle article, Section<DateT> s) {
-			String dateText = s.getOriginalText().trim();
+			String dateText = s.getText().trim();
 			Date d = null;
 			try {
 				d = dateFormat.parse(dateText);

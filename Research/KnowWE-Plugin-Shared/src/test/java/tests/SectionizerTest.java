@@ -102,48 +102,48 @@ public class SectionizerTest extends TestCase {
 		 */
 		// WordordObjectType Content deep
 		child = children.get(0);
-		String cont = child.getOriginalText();
+		String cont = child.getText();
 		assertEquals("WordObjectType expected", "aaa", cont);
 		child = (Section) child.getChildren().get(0);
-		cont = child.getOriginalText();
+		cont = child.getText();
 		assertEquals("AStarObjectType expected", "aaa", cont);
 		child = (Section) child.getChildren().get(1);
-		cont = child.getOriginalText();
+		cont = child.getText();
 		assertEquals("AObjectType expected", "a", cont);
 
 		// PlainText
 		child = children.get(1);
-		cont = child.getOriginalText();
+		cont = child.getText();
 		assertEquals("Expected PlainText", " ", cont);
 
 		// WordObjectType lazy
 		child = children.get(2);
-		cont = child.getOriginalText();
+		cont = child.getText();
 		assertEquals("WordObjectType expected", "bbb", cont);
 
 		// PlainText
 		child = children.get(3);
-		cont = child.getOriginalText();
+		cont = child.getText();
 		assertEquals("Expected PlainText", " ", cont);
 
 		// SplitObjectType deep
 		child = children.get(4);
-		cont = child.getOriginalText();
+		cont = child.getText();
 		assertEquals("Expected SplitObjectType", "-ababba-", cont);
 		ArrayList<Section> childs = new ArrayList<Section>(child.getChildren());
-		cont = childs.get(0).getOriginalText();
+		cont = childs.get(0).getText();
 		assertEquals("Error in SplitObjectType", "-", cont);
-		cont = childs.get(1).getOriginalText();
+		cont = childs.get(1).getText();
 		assertEquals("Error in SplitObjectType", "a", cont);
-		cont = childs.get(2).getOriginalText();
+		cont = childs.get(2).getText();
 		assertEquals("Error in SplitObjectType", "b", cont);
-		cont = childs.get(3).getOriginalText();
+		cont = childs.get(3).getText();
 		assertEquals("Error in SplitObjectType", "a", cont);
-		cont = childs.get(4).getOriginalText();
+		cont = childs.get(4).getText();
 		assertEquals("Error in SplitObjectType", "bb", cont);
-		cont = childs.get(5).getOriginalText();
+		cont = childs.get(5).getText();
 		assertEquals("Error in SplitObjectType", "a", cont);
-		cont = childs.get(6).getOriginalText();
+		cont = childs.get(6).getText();
 		assertEquals("Error in SplitObjectType", "-", cont);
 
 		/**

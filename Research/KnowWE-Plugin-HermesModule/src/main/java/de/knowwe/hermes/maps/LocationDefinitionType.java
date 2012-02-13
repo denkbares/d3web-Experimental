@@ -62,7 +62,7 @@ public class LocationDefinitionType extends AbstractType {
 	}
 
 	private static Placemark extractPlacemark(Section<LocationDefinitionType> section) {
-		String sectionText = section.getOriginalText();
+		String sectionText = section.getText();
 		sectionText = sectionText.substring(START_TAG.length(),
 				sectionText.length() - END_TAG.length());
 
@@ -120,7 +120,7 @@ public class LocationDefinitionType extends AbstractType {
 
 		@Override
 		public void render(KnowWEArticle article, Section<LocationDefinitionType> sec, UserContext user, StringBuilder string) {
-			String originalText = sec.getOriginalText();
+			String originalText = sec.getText();
 			Placemark extractPlacemark = extractPlacemark(sec);
 			if (extractPlacemark == null) {
 				string.append(KnowWEUtils.maskHTML("<span class='error' title='invalid syntax'>")

@@ -51,7 +51,7 @@ public class AppendMapHandler implements PageAppendHandler {
 		if (KnowWEEnvironment.getInstance().getWikiConnector().userIsMemberOfGroup(
 				user.getUserName(), group, user.getRequest())) {
 
-			String content = KnowWEEnvironment.getInstance().getArticle(web, topic).getSection().getOriginalText();
+			String content = KnowWEEnvironment.getInstance().getArticle(web, topic).getSection().getText();
 
 			List<Placemark> l = getPlacemarks(content);
 

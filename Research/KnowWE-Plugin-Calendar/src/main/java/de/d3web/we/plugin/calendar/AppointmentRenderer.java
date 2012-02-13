@@ -44,7 +44,7 @@ public class AppointmentRenderer extends KnowWEDomRenderer<Appointment> {
 		Section<?> nameSec = Sections.findChildOfType(sec, AppointmentAuthor.class);
 
 		String name = "";
-		String text = textSec.getOriginalText();
+		String text = textSec.getText();
 
 		// TODO Error messages for dateSec, timeSec = null ??
 
@@ -55,13 +55,13 @@ public class AppointmentRenderer extends KnowWEDomRenderer<Appointment> {
 		}
 		else {
 
-			name = persons.get(nameSec.getOriginalText());
+			name = persons.get(nameSec.getText());
 		}
 
 		StringBuilder b = new StringBuilder();
 		b.append("<table class=wikitable width=95% border=0>\n");
-		b.append("<tr><th align=left width=80>" + dateSec.getOriginalText()
-				+ "</th><th align=left>" + timeSec.getOriginalText()
+		b.append("<tr><th align=left width=80>" + dateSec.getText()
+				+ "</th><th align=left>" + timeSec.getText()
 				+ "</th><th align=right width=250><i>" + name + "</i></th></tr>\n");
 		b.append("<tr><td colspan=3>" + text + "</td></tr>\n</table>\n");
 

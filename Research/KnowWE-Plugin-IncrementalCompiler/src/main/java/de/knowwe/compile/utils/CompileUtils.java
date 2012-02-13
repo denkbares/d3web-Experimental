@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2010 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -34,8 +34,8 @@ import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.objects.TermDefinition;
-import de.knowwe.core.kdom.objects.TermReference;
+import de.knowwe.core.kdom.objects.SimpleDefinition;
+import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -61,8 +61,8 @@ public class CompileUtils {
 		Collection<Section<? extends Type>> result = new HashSet<Section<? extends Type>>();
 		addNonReusedSection(parsedArticle.getSection(), result);
 
-		Map<Section<? extends AbstractType>, Set<Section<? extends TermDefinition<?>>>> newImports = ImportManager.fetchNewImports();
-		for (Set<Section<? extends TermDefinition<?>>> anImport : newImports.values()) {
+		Map<Section<? extends AbstractType>, Set<Section<?>>> newImports = ImportManager.fetchNewImports();
+		for (Set<Section<?>> anImport : newImports.values()) {
 			result.addAll(anImport);
 		}
 		return result;
@@ -97,8 +97,8 @@ public class CompileUtils {
 		addOldNonReusedSection(lastVersionOfArticle.getSection(), result,
 				lastVersionOfArticle);
 
-		Map<Section<? extends AbstractType>, Set<Section<? extends TermDefinition<?>>>> removedImports = ImportManager.fetchRemovedImports();
-		for (Set<Section<? extends TermDefinition<?>>> removed : removedImports.values()) {
+		Map<Section<? extends AbstractType>, Set<Section<?>>> removedImports = ImportManager.fetchRemovedImports();
+		for (Set<Section<?>> removed : removedImports.values()) {
 			result.addAll(removed);
 		}
 
@@ -144,36 +144,37 @@ public class CompileUtils {
 	 * @param oldSectionsNotReused
 	 * @return
 	 */
-	public static Collection<Section<? extends TermDefinition<?>>> filterDefinitions(Collection<Section<? extends Type>> oldSectionsNotReused) {
-		Collection<Section<? extends TermDefinition<?>>> result = new HashSet<Section<? extends TermDefinition<?>>>();
+	@SuppressWarnings("unchecked")
+	public static Collection<Section<SimpleDefinition>> filterDefinitions(Collection<Section<? extends Type>> oldSectionsNotReused) {
+		Collection<Section<SimpleDefinition>> result = new HashSet<Section<SimpleDefinition>>();
 		for (Section<? extends Type> section : oldSectionsNotReused) {
-			if (section.get() instanceof TermDefinition<?>) {
-				result.add((Section<? extends TermDefinition<?>>) section);
+			if (section.get() instanceof SimpleDefinition) {
+				result.add((Section<SimpleDefinition>) section);
 			}
 		}
 		return result;
 	}
 
-	public static Collection<Section<TermReference>> getAllReferencesOfCompilationUnit(Section<? extends KnowledgeUnit> section) {
-		List<Section<TermReference>> result = new ArrayList<Section<TermReference>>();
-		Sections.findSuccessorsOfType(section, TermReference.class, result);
+	public static Collection<Section<SimpleReference>> getAllReferencesOfCompilationUnit(Section<? extends KnowledgeUnit> section) {
+		List<Section<SimpleReference>> result = new ArrayList<Section<SimpleReference>>();
+		Sections.findSuccessorsOfType(section, SimpleReference.class, result);
 		return result;
 	}
 
-	public static <T extends Type> Collection<Section<TermReference>> getAllReferencesOfComplexDefinition(Section<? extends ComplexDefinition> section) {
-		List<Section<TermReference>> result = new ArrayList<Section<TermReference>>();
-		Sections.findSuccessorsOfType(section, TermReference.class, result);
+	public static <T extends Type> Collection<Section<SimpleReference>> getAllReferencesOfComplexDefinition(Section<? extends ComplexDefinition> section) {
+		List<Section<SimpleReference>> result = new ArrayList<Section<SimpleReference>>();
+		Sections.findSuccessorsOfType(section, SimpleReference.class, result);
 		return result;
 	}
 
 	public static String createLinkToDefinition(String termname) {
-		Collection<Section<? extends TermReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(
+		Collection<Section<? extends SimpleReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(
 				termname);
 		if (termReferences != null && termReferences.size() > 0) {
 			return createLinkToDefinition(termReferences.iterator().next(), termname);
 		}
 
-		Collection<Section<? extends TermDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+		Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 				termname);
 		if (termDefinitions != null && termDefinitions.size() > 0) {
 			return createLinkToDefinition(termDefinitions.iterator().next());
@@ -182,16 +183,15 @@ public class CompileUtils {
 		return null;
 	}
 
-	public static String createLinkToDefinition(Section<? extends TermDefinition> section) {
-
-		return createLinkToDef(section, section.get().getTermIdentifier(section));
+	public static String createLinkToDefinition(Section<?> section) {
+		return createLinkToDef(section, KnowWEUtils.getTermIdentifier(section));
 
 	}
 
-	public static String createLinkToDefinition(Section<? extends TermReference> section, String linktext) {
-		String termName = ((TermReference) (section.get())).getTermName(section);
-		Collection<Section<? extends TermDefinition>> definitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
-				termName);
+	public static String createLinkToDefinition(Section<?> section, String linktext) {
+
+		Collection<Section<? extends SimpleDefinition>> definitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
+				KnowWEUtils.getTermIdentifier(section));
 		if (definitions != null && definitions.size() > 0) {
 
 			return createLinkToDef(definitions.iterator().next(), linktext);
@@ -202,7 +202,7 @@ public class CompileUtils {
 
 	}
 
-	protected static String createLinkToDef(Section<? extends TermDefinition> definition, String linktext) {
+	protected static String createLinkToDef(Section<?> definition, String linktext) {
 		KnowWEArticle defArticle = definition.getArticle();
 
 		if (defArticle == null) {

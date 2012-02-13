@@ -49,7 +49,7 @@ public class Video extends MultimediaItem {
 						MultimediaItemContent.class);
 				string.append(KnowWEUtils.maskHTML("<img height='70' src='"));
 				string.append("attach/" + sec.getArticle().getTitle() + "/");
-				string.append(bildURL.getOriginalText().trim());
+				string.append(bildURL.getText().trim());
 				string.append(KnowWEUtils.maskHTML("'></img>"));
 			}
 		});

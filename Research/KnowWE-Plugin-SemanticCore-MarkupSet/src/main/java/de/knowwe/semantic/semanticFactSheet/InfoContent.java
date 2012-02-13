@@ -56,7 +56,7 @@ public class InfoContent extends XMLContent {
 		@Override
 		public Collection<Message> create(KnowWEArticle article, Section s) {
 			IntermediateOwlObject io = new IntermediateOwlObject();
-			String text = s.getOriginalText();
+			String text = s.getText();
 			PropertyManager pm = PropertyManager.getInstance();
 			String subjectconcept = ((DefaultSubjectContext) ContextManager
 					.getInstance().getContext(s, DefaultSubjectContext.CID))

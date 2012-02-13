@@ -24,6 +24,7 @@ import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.core.correction.CorrectionToolProvider;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.utils.KnowWEUtils;
 
 public class IncrementalCorrectionToolProvider extends CorrectionToolProvider {
 
@@ -32,8 +33,7 @@ public class IncrementalCorrectionToolProvider extends CorrectionToolProvider {
 		boolean error = true;
 		if (section.get() instanceof IncrementalTermReference) {
 			ReferenceManager terminology = IncrementalCompiler.getInstance().getTerminology();
-			error = !terminology.isValid(((Section<? extends IncrementalTermReference>) section).get().getTermIdentifier(
-					section));
+			error = !terminology.isValid(KnowWEUtils.getTermIdentifier(section));
 		}
 
 		return super.hasError(article, section) || error;
