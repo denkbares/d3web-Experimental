@@ -23,8 +23,6 @@ import java.util.List;
 
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.we.object.D3webTermReference;
-import de.knowwe.core.kdom.KnowWEArticle;
-import de.knowwe.core.kdom.objects.TermReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -41,7 +39,7 @@ import de.knowwe.kdom.dashtree.DashTreeUtils;
 public class QuestionIdentifier extends D3webTermReference<Question> {
 
 	public QuestionIdentifier() {
-		super(Question.class);
+		
 
 		AllTextFinderTrimmed allTextFinderTrimmed = new AllTextFinderTrimmed();
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(allTextFinderTrimmed);
@@ -75,10 +73,10 @@ public class QuestionIdentifier extends D3webTermReference<Question> {
 		return result;
 	}
 
+
 	@Override
-	public Question getTermObjectFallback(KnowWEArticle article, Section<? extends TermReference<Question>> s) {
-		// TODO Auto-generated method stub
-		return null;
+	public Class<?> getTermObjectClass() {
+		return Question.class;
 	}
 
 }
