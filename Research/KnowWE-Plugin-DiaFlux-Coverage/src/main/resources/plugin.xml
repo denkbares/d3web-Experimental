@@ -32,7 +32,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="DiaFluxCoverageType">
 		<parameter id="class"
-			value="de.d3web.we.diaflux.coverage.DiaFluxCoverageType" />
+			value="de.knowwe.diaflux.coverage.DiaFluxCoverageType" />
 		<parameter id="name" value="DiaFluxCoverageType" />
 		<parameter id="description" value="DiaFluxCoverageType" />
 		<parameter id="version" value="1.0" />
@@ -43,7 +43,7 @@
 	<extension plugin-id="KnowWE-Plugin-DiaFlux" point-id="DiaFluxDisplayEnhancement"
 		id="DiaFluxCoverageHighlight">
 		<parameter id="class"
-			value="de.d3web.we.diaflux.coverage.DiaFluxCoverageHighlight" />
+			value="de.knowwe.diaflux.coverage.DiaFluxCoverageHighlight" />
 		<parameter id="name" value="DiaFluxCoverageHighlight" />
 		<parameter id="description" value="DiaFluxCoverageHighlight" />
 		<parameter id="version" value="1.0" />
@@ -55,7 +55,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="GetCoverageHighlightAction">
 		<parameter id="class"
-			value="de.d3web.we.diaflux.coverage.GetCoverageHighlightAction" />
+			value="de.knowwe.diaflux.coverage.GetCoverageHighlightAction" />
 		<parameter id="name" value="GetCoverageHighlightAction" />
 		<parameter id="description" value="Action GetCoverageHighlightAction" />
 		<parameter id="version" value="1.0" />
@@ -65,7 +65,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="CalculateCoverageAction">
 		<parameter id="class"
-			value="de.d3web.we.diaflux.coverage.CalculateCoverageAction" />
+			value="de.knowwe.diaflux.coverage.CalculateCoverageAction" />
 		<parameter id="name" value="CalculateCoverageAction" />
 		<parameter id="description" value="Action CalculateCoverageAction" />
 		<parameter id="version" value="1.0" />
@@ -75,7 +75,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
 		id="CoverageProvider">
 		<parameter id="class"
-			value="de.d3web.we.diaflux.coverage.CoverageProvider" />
+			value="de.knowwe.diaflux.coverage.CoverageProvider" />
 		<parameter id="name" value="CoverageProvider" />
 		<parameter id="description"
 			value="Enables coverage for active nodes and edges." />

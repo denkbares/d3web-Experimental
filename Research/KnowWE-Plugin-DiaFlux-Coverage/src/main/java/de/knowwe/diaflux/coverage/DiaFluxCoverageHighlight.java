@@ -16,11 +16,11 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.d3web.we.diaflux.coverage;
+package de.knowwe.diaflux.coverage;
 
-import de.d3web.we.flow.DiaFluxDisplayEnhancement;
-import de.d3web.we.flow.DiaFluxTraceHighlight;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.diaflux.DiaFluxDisplayEnhancement;
+import de.knowwe.diaflux.DiaFluxTraceHighlight;
 
 
 /**

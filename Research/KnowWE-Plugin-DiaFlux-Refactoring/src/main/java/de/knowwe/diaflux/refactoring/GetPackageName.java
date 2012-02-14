@@ -1,14 +1,14 @@
-package de.d3web.we.diaFlux.refactoring;
+package de.knowwe.diaflux.refactoring;
 
 import java.io.IOException;
 
-import de.d3web.we.flow.type.DiaFluxType;
 import de.knowwe.core.KnowWEAttributes;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.compile.packaging.KnowWEPackageManager;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.diaflux.type.DiaFluxType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**

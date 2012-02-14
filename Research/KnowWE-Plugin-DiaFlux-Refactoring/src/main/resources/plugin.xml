@@ -19,7 +19,7 @@
 	<extension plugin-id="KnowWE-Plugin-DiaFlux" point-id="DiaFluxEditorEnhancement"
 		id="DiaFluxRefactoring">
 		<parameter id="class"
-			value="de.d3web.we.diaFlux.refactoring.DiaFluxRefactoring" />
+			value="de.knowwe.diaflux.refactoring.DiaFluxRefactoring" />
 		<parameter id="name" value="DiaFluxRefactoring" />
 		<parameter id="description" value="Refactoring for DiaFlux editor" />
 		<parameter id="version" value="1.0" />
@@ -29,7 +29,7 @@
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="GetPackageName">
 		<parameter id="class"
-			value="de.d3web.we.diaFlux.refactoring.GetPackageName" />
+			value="de.knowwe.diaflux.refactoring.GetPackageName" />
 		<parameter id="name" value="GetPackageName" />
 		<parameter id="description" value="Gets package name of a flowchart." />
 		<parameter id="version" value="1.0" />

@@ -16,19 +16,19 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package de.d3web.we.diaflux.coverage;
+package de.knowwe.diaflux.coverage;
 
 import de.d3web.core.session.Session;
 import de.d3web.diaflux.coverage.CoverageResult;
 import de.d3web.diaflux.coverage.CoverageSessionObject;
 import de.d3web.diaflux.coverage.DefaultCoverageResult;
 import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
-import de.d3web.we.flow.type.FlowchartType;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWERessourceLoader;
 import de.knowwe.core.compile.packaging.KnowWEPackageManager;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.diaflux.type.FlowchartType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 

@@ -16,9 +16,9 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.d3web.we.diaFlux.refactoring;
+package de.knowwe.diaflux.refactoring;
 
-import de.d3web.we.flow.DiaFluxEditorEnhancement;
+import de.knowwe.diaflux.DiaFluxEditorEnhancement;
 
 /**
  * 

@@ -16,7 +16,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package de.d3web.we.diaflux.coverage;
+package de.knowwe.diaflux.coverage;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -32,9 +32,6 @@ import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.CoverageResult;
 import de.d3web.diaflux.coverage.DefaultCoverageResult;
 import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
-import de.d3web.we.flow.GetTraceHighlightAction;
-import de.d3web.we.flow.type.DiaFluxType;
-import de.d3web.we.flow.type.FlowchartType;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
@@ -43,6 +40,9 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.diaflux.GetTraceHighlightAction;
+import de.knowwe.diaflux.type.DiaFluxType;
+import de.knowwe.diaflux.type.FlowchartType;
 
 /**
  * 
