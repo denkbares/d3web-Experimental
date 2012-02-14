@@ -1040,19 +1040,6 @@ function toggle_folder_image(id) {
  */
 function toggle_sub_4boxes(id) {
 	
-    // get d3web stuff out of here
-    if (d3web) {
-        d3web_getChildren(id);
-        /*
-		 * get new ratings, they changed at least for the element we are looking
-		 * at
-		 */
-        var ids = "";
-        $("[id^='q_']").each(function() {
-            ids = ids + $(this).attr('id') + ",";
-        });
-        d3web_getRatings(ids);
-    }
     toggle_hide("sub-" + id); 
     toggle_folder_image_4boxes(id);
     hide_all_tooltips();

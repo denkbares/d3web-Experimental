@@ -84,8 +84,10 @@ public class XMLDialogObjectParser implements IDialogObjectParser {
 
 	protected IDialogObject parseThisDialogObject(IParser parser, Element tag,
 			IDialogObject parent, InheritableAttributes parentStyle) {
+                
 		String className = ClassUtils
 				.getVirtualClassName(subType, type, base);
+                System.out.println(className);
 		Class<? extends Object> dialogObjectClass = ClassUtils.getBestClass(
 				className, "de.d3web.proket.data", "");
 		IDialogObject dialogObject = null;

@@ -20,6 +20,7 @@
 package de.d3web.proket.output.render;
 
 import de.d3web.proket.data.IDialogObject;
+import de.d3web.proket.data.LegalQuestion;
 import de.d3web.proket.output.container.ContainerCollection;
 import java.util.Vector;
 import org.antlr.stringtemplate.StringTemplate;
@@ -31,5 +32,35 @@ import org.antlr.stringtemplate.StringTemplate;
  */
 public class LegalOcQuestionRenderer extends LegalQuestionRenderer {
 
- 
+    @Override
+    protected void renderChildren(StringTemplate st, ContainerCollection cc,
+            IDialogObject dialogObject, boolean force) {
+
+        super.renderChildren(st, cc, dialogObject, force);
+
+        if (dialogObject instanceof LegalQuestion) {
+            LegalQuestion lq = (LegalQuestion) dialogObject;
+
+            // retrieve the defining value(s) and write to html
+            String defining = lq.getDefining();
+            String choices = lq.getChoices();
+
+            st.removeAttribute("defining");
+            st.setAttribute("defining", defining);
+            
+            // assemble choices dropdown String
+            StringBuilder bui = new StringBuilder();
+            String cSplit[] = choices.split("###");
+            if(cSplit != null && cSplit.length != 0){
+                for(String c: cSplit){
+                    bui.append("<option>");
+                    bui.append(c);
+                    bui.append("</option>");
+                }
+            }
+            
+            st.removeAttribute("choicesDropdownOptions");
+            st.setAttribute("choicesDropdownOptions", bui.toString());
+        }
+    }
 }

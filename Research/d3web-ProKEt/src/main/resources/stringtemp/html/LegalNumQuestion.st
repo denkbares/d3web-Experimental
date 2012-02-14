@@ -1,4 +1,4 @@
-<div id="$fullId$" class="question $fullId$ $answerType$">
+<div id="$fullId$" class="question $fullId$ $answerType$" inter="$defmin$-$defmax$">
    
     <!--this is the opening/close arrow image-->
     <div id="$id$-imagebox" class="question-imagebox" 
@@ -10,27 +10,28 @@
     <!--NUM VALUE ENTRY-->
     <div id=$id$-numentry class="floatingnum"
              onmouseover="showAuxInfo('$fullId$')" onmouseout="hideAuxInfo()">
-        <input name="$id$-numentry" type="num" size="5" maxlength="5" value="">
+        <input name="$id$-numentry" type="num" size="5" maxlength="5" value="" />
     </div>
    
     <!--DISPLAY OF QUESTION-->
     <div class="title t-$fullId$" id="t-$fullId$" 
-            onmouseover="showAuxInfo('$fullId$', '$title$')" 
-            onmouseout="hideAuxInfo()">
-        $title$
-	$Tooltip()$
-	$text$
+        onmouseover="showAuxInfo('$fullId$', '$title$')" 
+        onmouseout="hideAuxInfo()">
+            $title$
+            $Tooltip()$
+            $text$
 		
-    <!--FOR PROPAGATING COMPUTER-DERIVED VALUES (NEEDED FOR JS MECHANISMS)-->
-    <div id="propagation-$fullId$" class="propagation"></div>
+        <!--FOR PROPAGATING COMPUTER-DERIVED VALUES (NEEDED FOR JS MECHANISMS)-->
+        <div id="propagation-$fullId$" class="propagation"></div>
 	
-    <!--ADD CHILDREN IF EXIST-->
-    $if(children)$
-        <div id="sub-$fullId$" class="sub-$fullId$" style="padding-left:30px;display:none">
-            $children$
-        </div>
-    $endif$
+        <!--ADD CHILDREN IF EXIST-->
+        $if(children)$
+            <div id="sub-$fullId$" class="sub-$fullId$" style="padding-left:30px;display:none">
+                $children$
+            </div>
+        $endif$
 
-    <!--STORAGE OF AUXILIARY INFORMATION-->
-    <div id="bonus-$fullId$" style="display:none">$bonusText$</div>
+        <!--STORAGE OF AUXILIARY INFORMATION-->
+        <div id="bonus-$fullId$" style="display:none">$bonusText$</div>
+    </div>
 </div>

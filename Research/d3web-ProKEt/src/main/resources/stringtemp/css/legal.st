@@ -160,6 +160,13 @@ area {
     line-height: 1.5em; padding: 2px; float: left; margin-left: 15px; margin-right: 5px;
 }
 
+/* style the num input area of hierarchical num questions */
 .floatingnum {line-height: 1.5em; padding: 2px; float: left; margin-right: 15px;}
 
 input {height: 10px; margin-top: 1px;}
+
+
+/* style the dropdown area of hierarchical oc questions */ 
+.floatingCDrop {line-height: 1.5em; padding: 3px; float: left; margin-right: 15px;}
+
+.floatingCDrop select{width: 53px;}
