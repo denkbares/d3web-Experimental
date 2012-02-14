@@ -12,9 +12,8 @@
   <dependencies>
   	<dependency>
   		<groupId>de.uniwue.d3web</groupId>
-  		<artifactId>KnowWE-Plugin-Flowchart</artifactId>
-  		<version>${project.version}</version>
-  		<scope>compile</scope>
+  		<artifactId>KnowWE-Plugin-DiaFlux</artifactId>
+  		<version>0.2-SNAPSHOT</version>
   	</dependency>
   </dependencies>
 </project>

@@ -11,12 +11,12 @@
   <dependencies>
   	<dependency>
   		<groupId>de.uniwue.d3web</groupId>
-  		<artifactId>KnowWE-Plugin-Flowchart</artifactId>
+  		<artifactId>KnowWE-Plugin-CI4KE</artifactId>
   		<version>0.2-SNAPSHOT</version>
   	</dependency>
   	<dependency>
   		<groupId>de.uniwue.d3web</groupId>
-  		<artifactId>KnowWE-Plugin-CI4KE</artifactId>
+  		<artifactId>KnowWE-Plugin-DiaFlux</artifactId>
   		<version>0.2-SNAPSHOT</version>
   	</dependency>
   </dependencies>
