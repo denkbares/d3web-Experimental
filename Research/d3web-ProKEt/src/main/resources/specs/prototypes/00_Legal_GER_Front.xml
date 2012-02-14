@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dialog sub-type="front" type="legal" css="legal, nofoot" header="Arbeitsrechtsberatung-Kündigung" answer-type="oc">
+<dialog sub-type="front" type="legal" css="legal, nofoot" header="Arbeitsrechtsberatung-Kündigung" and-or-type="AND">
 		<question title="Ist das Arbeitsverhältnis wirksam und termingerecht gekündigt worden?"
 			id="1"
                         bonus-text="Diese Frage überprüft den Sachverhalt, ob das Arbeitsverhältnis
                         wirksam und termingerecht gekündigt wurde. Hierzu müssen verschiedene einzelne
-                        Tatbestände erfüllt sein..."/>
+                        Tatbestände erfüllt sein..." />
                 <question title="Wurden Form, Frist, Zugang und Stellvertretung eingehalten?"
 			id="2" parent-id="1" bonus-text="Überprüfung, ob Form, Frist, Zugang sowie Stellvertretung
                         korrekt eingehalten wurden."/>
@@ -12,19 +12,19 @@
                         bonus-text="Überprüfung, ob die Form der Kündigung rechtswirksam vorlag"/>
                 <question title="Lag eine Schriftform der Kündigung vor?" id="22" parent-id="18" />
                 <question title="War der Wille zur Kündigung erkennbar?" id="23" parent-id="18" />
-		<question title="Wurde die Frist eingehalten?" answer-type="mc" id="19" parent-id="2" bonus-text="Überprüfung, ob die Kündigungsfrist korrekt eingehalten wurde" />
+		<question title="Wurde die Frist eingehalten?" and-or-type="OR" id="19" parent-id="2" bonus-text="Überprüfung, ob die Kündigungsfrist korrekt eingehalten wurde" />
                 <question title="Wurde die ordentliche Kündigungsfrist eingehalten?" id="28" parent-id="19"/>
-                <question title="Lag eine außerordentliche Kündigung vor?" id="28" parent-id="19" />
+                <question title="Lag eine außerordentliche Kündigung vor?" id="50" parent-id="19" />
 		<question title="Lag Zugang vor?" id="20" parent-id="2" />
-		<question title="Wurden die Bedingungen für Stellvertretung eingehalten?" id="21" parent-id="2" answer-type="mc"/>
+		<question title="Wurden die Bedingungen für Stellvertretung eingehalten?" id="21" parent-id="2" and-or-type="OR"/>
                 <question title="Hat der Arbeitgeber selbst die Kündigung erklärt?" id="24" parent-id="21" />
                 <question title="Hat der Stellvertreter wirksam vertreten?" id="25" parent-id="21" />
                 <question title="War der Stellvertreter bevollmächtigt?" id="26" parent-id="25" />
                 <question title="Hat der Stellvertreter seine Legitimation angezeigt?" id="27" parent-id="25" />
-                <question title="Hatte der Stellvertreter Legitimation aus seiner Position?" id="39" parent-id="27" answer-type="mc"/>
+                <question title="Hatte der Stellvertreter Legitimation aus seiner Position?" id="39" parent-id="27" and-or-type="OR"/>
                 <question title="War der Stellvertreter Personalchef?" id="42" parent-id="39" />
                 <question title="War der Stellvertreter Prokurist?" id="43" parent-id="39" />
-                <question title="Hat der Stellvertreter eine Orignialvollmacht vorgelegt?" id="40" parent-id="27" answer-type="mc"/>
+                <question title="Hat der Stellvertreter eine Orignialvollmacht vorgelegt?" id="40" parent-id="27" and-or-type="OR"/>
                 <question title="Lag die Originalvollmacht bei?" id="44" parent-id="40" />
                 <question title="Wurde die Vollmacht wirksam nachgereicht?" id="45" parent-id="40" />
                 <question title="Die Kündigung war nicht durch Sondertatbestände ausgeschlossen?"
@@ -40,11 +40,11 @@
 		<question title="War kein Wehrdienst gegeben?" id="9" parent-id="3" />
 		<question title="War kein Betriebsübergang gegeben?" id="10" parent-id="3" />
 		<question title="Waren keine sonstigen Unwirksamkeitsgründe gegeben?" id="11" parent-id="3" />
-		<question title="War die Kündigung nicht durch Befristung ausgeschlossen?" id="12" parent-id="1" answer-type="mc" />
-		<question title="War der Arbeitsvertrag nicht (mehr) wirksam befristet?" id="13" parent-id="12" answer-type="mc"/>
-                <question title="War keine Befristung vereinbart?" id="28" parent-id="13" />
+		<question title="War die Kündigung nicht durch Befristung ausgeschlossen?" id="12" parent-id="1" and-or-type="OR" />
+		<question title="War der Arbeitsvertrag nicht (mehr) wirksam befristet?" id="13" parent-id="12" and-or-type="OR"/>
+                <question title="War keine Befristung vereinbart?" id="51" parent-id="13" />
                 <question title="Ging ein befristetes Arbeitsverhältnis in ein unbefristetes über?" id="29" parent-id="13" />
-                <question title="Fehlte ein Befristungsgrund?" id="30" parent-id="13" answer-type="mc"/>
+                <question title="Fehlte ein Befristungsgrund?" id="30" parent-id="13" and-or-type="OR"/>
                 <question title="War eine Betriebszugehörigkeit von mehr als 2 Jahren gegeben?" id="37" parent-id="30" />
                 <question title="Waren mehr als 2 Verlängerungen gegeben?" id="38" parent-id="30" />
 		<question title="War die Kündigung während der Befristung zugelassen?" id="14" parent-id="12" />
@@ -52,11 +52,15 @@
 		<question title="War eine soziale Rechtfertigung nicht nötig oder lag sie vor?" id="16" parent-id="1" />
 		<question title="War kein Betriebsrat vorhanden oder wurde der Betriebsrat korrekt angehört?" id="17"
 			parent-id="1" bonus-text="Hier wird geklärt, ob ein Betriebsrat vorhanden
-                        war und falls ja, ob dieser korrekt angehört wurde..." answer-type="mc"/> 
+                        war und falls ja, ob dieser korrekt angehört wurde..." and-or-type="OR"/> 
                 <question title="War kein Betriebsrat vorhanden?" id="31" parent-id="17" />
                 <question title="Wurde der Betriebsrat korrekt angehört?" id="32" parent-id="17" />
                 <question title="War der Betriebsrat vollständig informiert?" id="33" parent-id="32" />
-                <question title="Hat der Betriebsrat Stellungnahme abgegeben?" id="34" parent-id="32" answer-type="mc" />
+                <question title="Hat der Betriebsrat Stellungnahme abgegeben?" id="34" parent-id="32" and-or-type="OR" />
                 <question title="Wurde eine Stellungnahme erklärt?" id="36" parent-id="34" />
-                <question title="Wird eine Stellungnahme Zeitablauf fingiert?" id="37" parent-id="34" />
+                <question title="Wird eine Stellungnahme Zeitablauf fingiert?" id="52" parent-id="34" />
+                <legalQuestion title="Test numerische Frage" id="53" parent-id="1" answer-type="num" defining="50"/>
+                <legalQuestion title="Test numerische Frage 2" id="54" parent-id="1" answer-type="num" defining="1-99"/>
+                <legalQuestion title="Test OC Frage" id="55" parent-id="1" answer-type="oc" choices="c1###c2###c3" defining="c3"/>
+                <legalQuestion title="Test OC Frage 2" id="56" parent-id="1" answer-type="oc" choices="c1###c2###c3###c4###c5###c6###letzte Choice" defining="c3"/>
 </dialog>

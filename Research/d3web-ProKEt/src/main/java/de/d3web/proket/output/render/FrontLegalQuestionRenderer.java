@@ -19,21 +19,17 @@
  */
 package de.d3web.proket.output.render;
 
-import java.util.Vector;
-
-import org.antlr.stringtemplate.StringTemplate;
-
 import de.d3web.proket.data.IDialogObject;
-import de.d3web.proket.data.Question;
 import de.d3web.proket.output.container.ContainerCollection;
-import de.d3web.proket.utils.TemplateUtils;
+import java.util.Vector;
+import org.antlr.stringtemplate.StringTemplate;
 
 /**
  *
  * @author Martina Freiberg
  *
  */
-public class FrontLegalMcQuestionRenderer extends Renderer {
+public class FrontLegalQuestionRenderer extends Renderer {
 
     @Override
     protected void renderChildren(StringTemplate st, ContainerCollection cc,
@@ -42,7 +38,8 @@ public class FrontLegalMcQuestionRenderer extends Renderer {
         IDialogObject parent = dialogObject.getParent();
         String pTitle = parent.getTitle();
 
-        if (parent != null) {
+        if (pTitle != null && parent != null) {
+
             Vector<IDialogObject> children = parent.getChildren();
             StringBuffer childrenHTML = new StringBuffer();
             for (IDialogObject child : children) {
@@ -58,38 +55,28 @@ public class FrontLegalMcQuestionRenderer extends Renderer {
                 }
             }
 
-            if (pTitle != null) {
-                /*
-                 * set text for indicating the readflow
-                 */
-                st.removeAttribute("readimg");
-                if (parent.getInheritableAttributes().getAnswerType().equals("mc")) {
-                    st.setAttribute("readimg", "img/Or.png");
-                } else if (parent.getInheritableAttributes().getAnswerType().equals("oc")) {
-                    st.setAttribute("readimg", "img/And.png");
-                }
-
-                // workaround for removing a doubled-answertype setting in template
-                st.removeAttribute("answerType");
-                st.setAttribute("answerType", dialogObject.getInheritableAttributes().getAnswerType());
-
-
-            } else {
-                st.setAttribute("readimg", "img/transpSquare.png");
-            }
-
-
-            /*
-             * set arrow sign for indicating toggling or not
-             */
             // Check if this question has subquestions
-            if (dialogObject.getChildren().size() != 0) {
+            if (!dialogObject.getChildren().isEmpty()) {
                 st.setAttribute("typeimg", "img/closedArrow.png");
             } else {
                 st.setAttribute("typeimg", "img/transpSquare.png");
             }
-            
-             /*
+
+
+            String andOrTypePar = parent.getInheritableAttributes().getAndOrType();
+            st.removeAttribute("readimg");
+            if (andOrTypePar.equals("OR")) {
+                st.setAttribute("readimg", "img/Or.png");
+            } else if (andOrTypePar.equals("AND")) {
+                st.setAttribute("readimg", "img/And.png");
+            }
+
+            // workaround for removing a doubled-answertype setting in template
+            st.removeAttribute("answerType");
+            st.setAttribute("answerType", dialogObject.getInheritableAttributes().getAnswerType());
+
+
+            /*
              * We have children not necessarily direct dialog object children
              * (subquestions) but smthg. like the image panel etc.
              */
@@ -102,8 +89,18 @@ public class FrontLegalMcQuestionRenderer extends Renderer {
                 // no child questions
                 st.setAttribute("noChildren", "");
             }
+        } else {
 
-            super.renderChildren(st, cc, dialogObject, force);
+            st.setAttribute("readimg", "img/transpSquare");
+            
+            if (!dialogObject.getChildren().isEmpty()) {
+                st.setAttribute("typeimg", "img/closedArrow.png");
+            } else {
+                st.setAttribute("typeimg", "img/transpSquare.png");
+            }
+
         }
+
+        super.renderChildren(st, cc, dialogObject, force);
     }
 }

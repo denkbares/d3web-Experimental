@@ -47,7 +47,6 @@ public class LegalQuestion extends Question {
         IDialogObject dialog = getRootParent();
         String vcn = ClassUtils.getVirtualClassName(dialog.getSubType(), dialog.getType(), getSubType(), getType() != null ? getType()
                 : getInheritableAttributes().getAnswerType(), VCNbase);
-        System.out.println("VCN: " + vcn);
-        return vcn;
+       return vcn;
     }
 }

@@ -54,7 +54,6 @@ public class LegalQuestionRenderer extends Renderer {
                 }
             }
 
-            String answerType = dialogObject.getInheritableAttributes().getAnswerType();
             String andOrTypePar = parent.getInheritableAttributes().getAndOrType();
             
             // Check if this question has subquestions
