@@ -113,8 +113,21 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			if (parameters.containsKey(ADDLINK)) link = parameters.get(ADDLINK);
 			else link = "";
 
+			if (link.startsWith("[") && link.endsWith("]")) {
+				// is wiki link (because of ajax not rendering by
+				// jspwiki
+				// pipeline
+				// => render here
+				link = link.substring(1, link.length() - 1).trim();
+				link = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl()
+						+ "Wiki.jsp?page=" + link;
+			}
+
 			if (parameters.containsKey(LINKTEXT)) linkText = parameters.get(LINKTEXT);
 			else linkText = link;
+
+
+			System.out.println(linkText);
 
 			if (parameters.containsKey(ID)) id = parameters.get(ID);
 			else return KnowWEUtils.maskHTML("<p>Fehler: Dem Button fehlt das Attribut 'id'.</p>");
@@ -213,22 +226,8 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 						+ ",\""
 						+ id + "\");return false'>Nicht Besprechen</a></p>");
 
-				if (link.startsWith("[") && link.endsWith("]")) {
-					// is wiki link (because of ajax not rendering by
-					// jspwiki
-					// pipeline
-					// => render here
-					String linkPagename = link.substring(1, link.length() - 1).trim();
-					String baseUrl = KnowWEEnvironment.getInstance().getWikiConnector().getBaseUrl();
-					readbutton.append("<a href='" + baseUrl + "Wiki.jsp?page="
-							+ linkPagename
-							+ "' target='_blank'>"
-							+ linkPagename + "</a>");
-				}
-				else {
-					readbutton.append("<a href='" + link + "' target='_blank'>"
+				readbutton.append("<a href='" + link + "' target='_blank'>"
 							+ linkText + "</a>");
-				}
 			}
 			// - user has already rated
 			else {
