@@ -19,11 +19,6 @@
  */
 package de.knowwe.wimvent.ruleTable;
 
-import de.knowwe.core.kdom.KnowWEArticle;
-import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
-import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -33,18 +28,6 @@ public class WimVentTableMarkup extends DefaultMarkupType {
 
 	public WimVentTableMarkup(DefaultMarkup markup) {
 		super(markup);
-	}
-
-	@Override
-	public KnowWEDomRenderer getRenderer() {
-		return new KnowWEDomRenderer() {
-			@Override
-			public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
-				// user.getParameters().put(TableRenderer.QUICK_EDIT_FLAG,
-				// "false");
-				DelegateRenderer.getInstance().render(article, sec, user, string);
-			}
-		};
 	}
 
 	private static DefaultMarkup m = null;

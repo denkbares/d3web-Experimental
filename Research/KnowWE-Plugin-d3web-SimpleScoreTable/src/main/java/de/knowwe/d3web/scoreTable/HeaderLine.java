@@ -48,7 +48,7 @@ public class HeaderLine extends AbstractType {
 		setSectionFinder(c);
 		c.addConstraint(AtMostOneFindingConstraint.getInstance());
 		//setCustomRenderer(new GenericHTMLRenderer<HeaderLine>("span", new String[] {"style", "color: blue;", "title", "HeaderLine"}));
-		setCustomRenderer(new TableLineRenderer());
+		setRenderer(new TableLineRenderer());
 	}
 
 }

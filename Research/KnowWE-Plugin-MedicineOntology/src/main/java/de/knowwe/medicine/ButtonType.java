@@ -27,9 +27,8 @@ public class ButtonType extends AbstractType {
 
 	public static final String TAG = "<MedicineButtons>";
 
-	@Override
-	protected void init() {
+	protected ButtonType() {
 		sectionFinder = new RegexSectionFinder(TAG);
-		this.setCustomRenderer(new ButtonRenderer());
+		this.setRenderer(new ButtonRenderer());
 	}
 }

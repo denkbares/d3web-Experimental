@@ -46,7 +46,7 @@ public class DefaultFrame extends AbstractType {
 	 */
 	public DefaultFrame() {
 		this(UNRECOGNIZED_TYPE);
-		this.setCustomRenderer(new ManchesterSyntaxFrameRenderer());
+		this.setRenderer(new ManchesterSyntaxFrameRenderer());
 	}
 
 	/**

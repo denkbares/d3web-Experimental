@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -40,7 +40,7 @@ import de.knowwe.kdom.manchester.frame.DefaultFrame;
 /**
  * The {@link OWLApiOntologyOverviewTagHandler} prints the complete asserted
  * local ontology.
- *
+ * 
  * @author Stefan Mark
  * @created 20.09.2011
  */
@@ -102,7 +102,8 @@ public class OWLApiOntologyOverviewTagHandler extends AbstractHTMLTagHandler {
 			concepts.append("<a name=\"" + key + "\"></a>");
 
 			for (Section<DefaultFrame> frame : defaultFrames) {
-				KnowWEDomRenderer<DefaultFrame> renderer = frame.get().getRenderer();
+				@SuppressWarnings("rawtypes")
+				KnowWEDomRenderer renderer = frame.get().getRenderer();
 				if (renderer instanceof ManchesterSyntaxFrameRenderer) {
 					((ManchesterSyntaxFrameRenderer) renderer).setRenderLink(true);
 					renderer.render(frame.getArticle(), frame, user, concepts);
@@ -118,7 +119,7 @@ public class OWLApiOntologyOverviewTagHandler extends AbstractHTMLTagHandler {
 
 	/**
 	 * Returns an example usage string
-	 *
+	 * 
 	 * @return A example usage string
 	 */
 	@Override
@@ -135,7 +136,7 @@ public class OWLApiOntologyOverviewTagHandler extends AbstractHTMLTagHandler {
 	/**
 	 * Appends a simple how to use message to the output if the
 	 * {@link TagHandler} was used incorrectly.
-	 *
+	 * 
 	 * @created 20.09.2011
 	 * @return String The how to use message
 	 */

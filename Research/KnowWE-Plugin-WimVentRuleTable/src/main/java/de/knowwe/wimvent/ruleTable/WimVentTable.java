@@ -49,7 +49,7 @@ public class WimVentTable extends AbstractType {
 		this.addChildType(new WimVentRuleTableHeaderLine());
 		this.addChildType(new WimVentRuleTableRuleLine());
 		this.sectionFinder = new AllTextSectionFinder();
-		this.setCustomRenderer(new TableRenderer());
+		this.setRenderer(new TableRenderer());
 	}
 
 	public static Section<QuestionReference> findQRecInColumn(Section<? extends Type> s, int column) {
@@ -93,7 +93,7 @@ public class WimVentTable extends AbstractType {
 			// this.injectTableCellContentChildtype(new
 			// IntervallTableCondNum());
 			de.knowwe.core.kdom.basicType.Number number = new de.knowwe.core.kdom.basicType.Number();
-			number.setCustomRenderer(NUMBER_RENDERER);
+			number.setRenderer(NUMBER_RENDERER);
 			this.injectTableCellContentChildtype(number);
 			this.injectTableCellContentChildtype(new TableAnswerRef());
 

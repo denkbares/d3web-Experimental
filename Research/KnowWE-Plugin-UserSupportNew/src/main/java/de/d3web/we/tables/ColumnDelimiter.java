@@ -32,7 +32,7 @@ public class ColumnDelimiter extends AbstractType {
 
 	public ColumnDelimiter() {
 		this.setSectionFinder(new RegexSectionFinder("\\|"));
-		this.setCustomRenderer(StyleRenderer.COMMENT); // TODO Just a quick-shot
+		this.setRenderer(StyleRenderer.COMMENT); // TODO Just a quick-shot
 	}
 
 }

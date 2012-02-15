@@ -46,7 +46,7 @@ public class TableLine extends AbstractType {
 	public TableLine() {
 		childrenTypes.add(new TableCell());
 		sectionFinder = new RegexSectionFinder(LINEPATTERN);
-		setCustomRenderer(new TableLineRenderer());
+		setRenderer(new TableLineRenderer());
 	}
 
 	public void injectTableCellContentChildtype(Type type) {

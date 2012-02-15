@@ -39,7 +39,7 @@ public class RenderRestrictionEnd extends DefaultMarkupType {
 
 	public RenderRestrictionEnd(DefaultMarkup markup) {
 		super(markup);
-		this.setCustomRenderer(new RestrictionRendererEnd());
+		this.setRenderer(new RestrictionRendererEnd());
 	}
 
 	private static DefaultMarkup m = null;
@@ -52,7 +52,7 @@ public class RenderRestrictionEnd extends DefaultMarkupType {
 
 	public RenderRestrictionEnd() {
 		super(m);
-		this.setCustomRenderer(new RestrictionRendererEnd());
+		this.setRenderer(new RestrictionRendererEnd());
 	}
 
 	class RestrictionRendererEnd extends KnowWEDomRenderer<GroupDeclaration> {

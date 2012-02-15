@@ -38,7 +38,7 @@ public class SimpleScoreTable extends AbstractType {
 		childrenTypes.add(new HeaderLine());
 		childrenTypes.add(new ContentLine());
 		this.setSectionFinder(new AllTextFinderTrimmed());
-		this.setCustomRenderer(new KnowWEDomRenderer<SimpleScoreTable>() {
+		this.setRenderer(new KnowWEDomRenderer<SimpleScoreTable>() {
 
 			@Override
 			public void render(KnowWEArticle article, Section<SimpleScoreTable> section,

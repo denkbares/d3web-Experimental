@@ -44,7 +44,7 @@ public class TestCaseSessionRecordType extends DefaultMarkupType {
 	public TestCaseSessionRecordType() {
 		super(MARKUP);
 		addSubtreeHandler(new TestCaseSessionRecordSubtreeHandler());
-		this.setCustomRenderer(new ProviderRefreshRenderer<TestCaseSessionRecordType>());
+		this.setRenderer(new ProviderRefreshRenderer<TestCaseSessionRecordType>());
 	}
 
 }

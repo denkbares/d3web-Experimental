@@ -39,9 +39,7 @@ import de.knowwe.kdom.dashtree.DashTreeUtils;
 
 public class SubClassingDashTreeElement extends DashTreeElement {
 
-	@Override
-	protected void init() {
-		super.init();
+	public SubClassingDashTreeElement() {
 		this.addSubtreeHandler(new SubClassingDashTreeElementOWLSubTreeHandler());
 	}
 

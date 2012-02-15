@@ -49,11 +49,7 @@ public abstract class IncrementalTermReference extends SimpleReference {
 
 	public IncrementalTermReference(Class<?> termObjectClass) {
 		super(TermRegistrationScope.GLOBAL, termObjectClass);
-	}
-
-	@Override
-	public KnowWEDomRenderer getRenderer() {
-		return new ReferenceRenderer(REF_RENDERER);
+		this.setRenderer(new ReferenceRenderer(REF_RENDERER));
 	}
 
 	/**

@@ -43,7 +43,7 @@ public class AssignmentMarkup extends DefaultMarkupType {
 
 	public AssignmentMarkup() {
 		super(MARKUP);
-		this.setCustomRenderer(new DefaultMarkupRenderer<RulesMarkup>(
+		this.setRenderer(new DefaultMarkupRenderer<RulesMarkup>(
 				"KnowWEExtension/d3web/icon/rule24.png"));
 	}
 

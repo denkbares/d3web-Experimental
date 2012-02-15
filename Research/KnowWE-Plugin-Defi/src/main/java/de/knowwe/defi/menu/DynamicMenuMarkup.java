@@ -33,11 +33,7 @@ public class DynamicMenuMarkup extends DefaultMarkupType {
 
 	public DynamicMenuMarkup(DefaultMarkup markup) {
 		super(markup);
-	}
-
-	@Override
-	public KnowWEDomRenderer getRenderer() {
-		return new KnowWEDomRenderer<DynamicMenuMarkup>() {
+		this.setRenderer(new KnowWEDomRenderer<DynamicMenuMarkup>() {
 
 			@Override
 			public void render(KnowWEArticle article, Section<DynamicMenuMarkup> sec, UserContext user, StringBuilder string) {
@@ -48,8 +44,7 @@ public class DynamicMenuMarkup extends DefaultMarkupType {
 				string.append("</table>");
 
 			}
-		};
-
+		});
 	}
 
 	private static DefaultMarkup m = null;
@@ -60,7 +55,7 @@ public class DynamicMenuMarkup extends DefaultMarkupType {
 	}
 
 	public DynamicMenuMarkup() {
-		super(m);
+		this(m);
 
 	}
 }

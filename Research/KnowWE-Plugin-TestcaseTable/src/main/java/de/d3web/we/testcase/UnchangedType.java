@@ -40,8 +40,7 @@ final class UnchangedType extends AbstractType {
 	public static final String REGEX = "\\s*(" + UNCHANGED_VALUE_STRING + ")\\s*";
 	public static final Pattern PATTERN = Pattern.compile(REGEX);
 
-	@Override
-	protected void init() {
+	public UnchangedType() {
 		setSectionFinder(new SectionFinder() {
 
 			@Override

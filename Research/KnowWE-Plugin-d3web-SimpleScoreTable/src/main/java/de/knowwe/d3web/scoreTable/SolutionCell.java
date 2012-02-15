@@ -45,7 +45,7 @@ public class SolutionCell extends AbstractType {
 		csf.addConstraint(NonEmptyConstraint.getInstance());
 		setSectionFinder(csf);
 
-		setCustomRenderer(new TableCellRenderer());
+		setRenderer(new TableCellRenderer());
 		//setCustomRenderer(new GenericHTMLRenderer<SolutionCell>("span", new String[] {"style", "color: purple;", "title", "SolutionCell"}));
 	}
 

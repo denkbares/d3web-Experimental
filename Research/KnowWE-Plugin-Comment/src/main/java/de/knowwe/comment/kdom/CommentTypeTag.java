@@ -27,8 +27,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 public class CommentTypeTag extends AbstractType {
 
-	@Override
-	protected void init() {
+	public CommentTypeTag() {
 		Map<String, String> commentTypes = CommentModule.getCommentTypes();
 
 		StringBuffer regexString = new StringBuffer();

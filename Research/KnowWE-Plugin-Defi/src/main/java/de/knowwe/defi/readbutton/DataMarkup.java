@@ -30,7 +30,6 @@ import com.ecyrd.jspwiki.event.WikiSecurityEvent;
 
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -55,17 +54,12 @@ public class DataMarkup extends DefaultMarkupType implements WikiEventListener {
 	 */
 	public DataMarkup() {
 		super(MARKUP);
-		this.setCustomRenderer(this.getDefaultRenderer());
+		this.setRenderer(new DataRenderer<AbstractType>());
 		this.setIgnorePackageCompile(true);
 
 		ServletContext context = KnowWEEnvironment.getInstance().getContext();
 		WikiEngine en = WikiEngine.getInstance(context, null);
 		WikiEventManager.addWikiEventListener(en.getAuthenticationManager(), this);
-	}
-
-	@Override
-	protected KnowWEDomRenderer<?> getDefaultRenderer() {
-		return new DataRenderer<AbstractType>();
 	}
 
 	@Override

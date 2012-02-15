@@ -34,6 +34,6 @@ public class DroolsRuleTitle extends AbstractType {
 
 	public DroolsRuleTitle() {
 		setSectionFinder(new RegexSectionFinder(Pattern.compile("\"(.*?)\""), 1));
-		setCustomRenderer(new StyleRenderer("font-weight: bold; text-decoration: underline; color: #3465A4"));
+		setRenderer(new StyleRenderer("font-weight: bold; text-decoration: underline; color: #3465A4"));
 	}
 }

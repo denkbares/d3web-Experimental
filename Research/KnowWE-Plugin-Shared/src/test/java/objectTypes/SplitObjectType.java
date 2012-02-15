@@ -25,8 +25,7 @@ import de.knowwe.core.kdom.AbstractType;
 
 public class SplitObjectType extends AbstractType {
 
-	@Override
-	public void init() {
+	public SplitObjectType() {
 		this.childrenTypes.add(new BracketsCloseObjectType());
 		this.childrenTypes.add(new BracketsOpenObjectType());
 		this.childrenTypes.add(new AStarObjectType());

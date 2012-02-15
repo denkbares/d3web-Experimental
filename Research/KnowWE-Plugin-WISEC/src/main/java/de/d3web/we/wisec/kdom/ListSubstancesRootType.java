@@ -20,8 +20,6 @@
 
 package de.d3web.we.wisec.kdom;
 
-import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -38,11 +36,6 @@ public class ListSubstancesRootType extends DefaultMarkupType {
 		m = new DefaultMarkup("ListSubstances");
 		m.addContentType(new ListSubstancesType());
 		m.addAnnotation("ListID", true);
-	}
-
-	@Override
-	public KnowWEDomRenderer getRenderer() {
-		return DelegateRenderer.getInstance();
 	}
 
 	public ListSubstancesRootType() {

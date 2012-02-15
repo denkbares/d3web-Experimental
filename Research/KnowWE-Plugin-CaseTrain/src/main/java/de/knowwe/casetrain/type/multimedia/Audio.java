@@ -42,7 +42,7 @@ public class Audio extends MultimediaItem {
 	public Audio() {
 		super(REGEX);
 
-		this.setCustomRenderer(new KnowWEDomRenderer<Audio>() {
+		this.setRenderer(new KnowWEDomRenderer<Audio>() {
 
 			@Override
 			public void render(KnowWEArticle article, Section<Audio> sec, UserContext user, StringBuilder string) {

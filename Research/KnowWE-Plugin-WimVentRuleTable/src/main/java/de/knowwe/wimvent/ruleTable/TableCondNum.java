@@ -48,7 +48,7 @@ public abstract class TableCondNum extends D3webCondition<TableCondNum> implemen
 				1));
 		de.knowwe.core.kdom.basicType.Number t = new de.knowwe.core.kdom.basicType.Number(
 				new AllTextFinderTrimmed());
-		t.setCustomRenderer(WimVentTable.NUMBER_RENDERER);
+		t.setRenderer(WimVentTable.NUMBER_RENDERER);
 		this.addChildType(t);
 
 	}

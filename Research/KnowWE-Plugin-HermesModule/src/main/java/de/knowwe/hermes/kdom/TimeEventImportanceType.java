@@ -31,8 +31,7 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 
 public class TimeEventImportanceType extends AbstractType {
 
-	@Override
-	protected void init() {
+	public TimeEventImportanceType() {
 		sectionFinder = new TimeEventTitleSectionFinder();
 	}
 

@@ -25,8 +25,7 @@ import de.knowwe.core.kdom.AbstractType;
 
 public class AObjectType extends AbstractType {
 
-	@Override
-	public void init() {
+	public AObjectType() {
 		this.sectionFinder = new RegexSectionFinder("a");
 	}
 

@@ -66,7 +66,7 @@ public class Annotation extends AbstractType {
 
 		Keyword k = new Keyword(KEYWORD_COMMENT + "|" + KEYWORD_LABEL + "|" + KEYWORD_VERSION
 				+ KEYWORD_ISDEFINEDBY + "|" + KEYWORD_SEEALSO);
-		k.setCustomRenderer(LABEL_RENDERER);
+		k.setRenderer(LABEL_RENDERER);
 
 		this.addChildType(k);
 		this.addChildType(new AnnotationTerm());
@@ -215,7 +215,7 @@ class AnnotationTerm extends AbstractType {
 	public AnnotationTerm() {
 		// StringLiteral
 		this.setSectionFinder(new RegexSectionFinder("\".*\""));
-		this.setCustomRenderer(Annotation.TERM_RENDERER);
+		this.setRenderer(Annotation.TERM_RENDERER);
 	}
 }
 
@@ -231,7 +231,7 @@ class AnnotationLanguageTag extends AbstractType {
 	public AnnotationLanguageTag() {
 		Pattern p = Pattern.compile(Annotation.PATTERN_LANG);
 		this.setSectionFinder(new RegexSectionFinder(p, 1));
-		this.setCustomRenderer(Annotation.TAG_RENDERER);
+		this.setRenderer(Annotation.TAG_RENDERER);
 	}
 }
 
@@ -247,6 +247,6 @@ class AnnotationDatatypeTag extends AbstractType {
 	public AnnotationDatatypeTag() {
 		Pattern p = Pattern.compile(Annotation.PATTERN_DATATYPE);
 		this.setSectionFinder(new RegexSectionFinder(p, 1));
-		this.setCustomRenderer(Annotation.TAG_RENDERER);
+		this.setRenderer(Annotation.TAG_RENDERER);
 	}
 }

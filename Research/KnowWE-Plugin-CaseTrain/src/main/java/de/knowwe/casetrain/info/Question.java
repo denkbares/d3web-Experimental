@@ -101,7 +101,7 @@ public class Question extends SubblockMarkup {
 
 		public QuestionWeight() {
 			this.setSectionFinder(new RegexSectionFinder("[-]?[0-9]+"));
-			this.setCustomRenderer(new SpanClassRenderer(SpanClassRenderer.META_KEY));
+			this.setRenderer(new SpanClassRenderer(SpanClassRenderer.META_KEY));
 		}
 	}
 
@@ -113,7 +113,7 @@ public class Question extends SubblockMarkup {
 							AnswersBlockValidator.getInstance().getRegexAsString()));
 			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 			this.setSectionFinder(csf);
-			this.setCustomRenderer(new SpanClassRenderer(SpanClassRenderer.META_KEY));
+			this.setRenderer(new SpanClassRenderer(SpanClassRenderer.META_KEY));
 		}
 
 	}
@@ -122,7 +122,7 @@ public class Question extends SubblockMarkup {
 
 		public QuestionText() {
 			this.setSectionFinder(new RegexSectionFinder("([\\w]{1}[\\W]?[ ]?)+\\?"));
-			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
+			this.setRenderer(MouseOverTitleRenderer.getInstance());
 		}
 	}
 

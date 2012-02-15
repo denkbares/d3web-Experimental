@@ -139,7 +139,7 @@ public class ApproximateNumericalIntervallFinding extends D3webCondition<Approxi
 		}
 
 		public Intervall() {
-			this.setCustomRenderer(StyleRenderer.NUMBER);
+			this.setRenderer(StyleRenderer.NUMBER);
 			this.setSectionFinder(new SectionFinder() {
 
 				@Override

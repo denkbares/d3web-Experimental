@@ -42,7 +42,7 @@ public class GroovyCITestType extends DefaultMarkupType {
 		super(MARKUP);
 		this.setIgnorePackageCompile(true);
 		this.addSubtreeHandler(new GroovyCITestSubtreeHandler());
-		this.setCustomRenderer(new GroovyCITestRenderer());
+		this.setRenderer(new GroovyCITestRenderer());
 	}
 
 }

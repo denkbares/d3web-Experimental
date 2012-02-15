@@ -84,7 +84,7 @@ public class AnswersBlock extends SubblockMarkup {
 		public Praefix() {
 			this.setSectionFinder(
 					new RegexSectionFinder(NAME + ":.*"));
-			this.setCustomRenderer(
+			this.setRenderer(
 					new DivStyleClassRenderer("praefix",
 							new SpanClassRenderer(SpanClassRenderer.META_KEY)));
 		}
@@ -102,7 +102,7 @@ public class AnswersBlock extends SubblockMarkup {
 		public Postfix() {
 			this.setSectionFinder(
 					new RegexSectionFinder(NAME + ":.*"));
-			this.setCustomRenderer(
+			this.setRenderer(
 					new DivStyleClassRenderer("postfix",
 							new SpanClassRenderer(SpanClassRenderer.META_KEY)));
 		}
@@ -120,7 +120,7 @@ public class AnswersBlock extends SubblockMarkup {
 		public Heading() {
 			this.setSectionFinder(
 					new RegexSectionFinder(NAME + ":.*"));
-			this.setCustomRenderer(
+			this.setRenderer(
 					new DivStyleClassRenderer(
 							"ueberschrift", new SpanClassRenderer(SpanClassRenderer.META_KEY)));
 		}
@@ -137,7 +137,7 @@ public class AnswersBlock extends SubblockMarkup {
 		public AnswersBlockWeightMark() {
 			this.setSectionFinder(
 					new RegexSectionFinder("\\{[0-9]+\\}"));
-			this.setCustomRenderer(new SpanClassRenderer(SpanClassRenderer.META_KEY));
+			this.setRenderer(new SpanClassRenderer(SpanClassRenderer.META_KEY));
 		}
 
 	}

@@ -32,7 +32,7 @@ public class ForumBox extends AbstractXMLType {
 
 	public ForumBox() {
 		super("box");
-		this.setCustomRenderer(BoxRenderer.getInstance());
+		this.setRenderer(BoxRenderer.getInstance());
 		ForumContent forumContent = new ForumContent();
 		forumContent.addChildType(this);
 		childrenTypes.add(forumContent);

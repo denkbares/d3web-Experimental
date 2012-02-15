@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2012 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.jurisearch.questionDef;
 
@@ -55,7 +55,7 @@ public class QuestionDefinitionArea extends AbstractType {
 		super(null);
 		this.setSectionFinder(new RegexSectionFinder(Q_AREA_REGEX,
 				Pattern.MULTILINE | Pattern.DOTALL, 0));
-		this.setCustomRenderer(new PreDecoratingRenderer(new
+		this.setRenderer(new PreDecoratingRenderer(new
 				BoxRenderer("defaultMarkupFrame")));
 		this.addChildType(new QuestionDefinitionContent());
 		this.addSubtreeHandler(Priority.PRECOMPILE_HIGH,
@@ -89,10 +89,11 @@ public class QuestionDefinitionArea extends AbstractType {
 	}
 
 	class QuestionDefinitionContent extends AbstractType {
+
 		public QuestionDefinitionContent() {
 			this.setSectionFinder(new RegexSectionFinder(Q_AREA_REGEX,
 					Pattern.MULTILINE | Pattern.DOTALL, 1));
-			this.setCustomRenderer(new BoxRenderer("markupText"));
+			this.setRenderer(new BoxRenderer("markupText"));
 			this.addChildType(new QuestionTermDefinitionLine());
 			this.addChildType(new ExplanationTextArea());
 		}
@@ -107,7 +108,7 @@ public class QuestionDefinitionArea extends AbstractType {
 			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 			this.setSectionFinder(csf);
 
-			this.setCustomRenderer(new StyleRenderer("color:green;"));
+			this.setRenderer(new StyleRenderer("color:green;"));
 
 			this.addChildType(new QuestionTypeDeclaration());
 
@@ -121,6 +122,7 @@ public class QuestionDefinitionArea extends AbstractType {
 		}
 
 		private final class QAreaQuestionDefinition extends QuestionDefinition {
+
 			@Override
 			public QuestionType getQuestionType(Section<QuestionDefinition> s) {
 				return QuestionTypeDeclaration
@@ -141,6 +143,7 @@ public class QuestionDefinitionArea extends AbstractType {
 	}
 
 	class ExplanationTextArea extends AbstractType {
+
 		public ExplanationTextArea() {
 			this.setSectionFinder(new AllTextFinderTrimmed());
 			this.addChildType(new ExplanationText());
@@ -148,13 +151,14 @@ public class QuestionDefinitionArea extends AbstractType {
 	}
 
 	class ExplanationText extends AbstractType {
+
 		public ExplanationText() {
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(
 					new RegexSectionFinder("(Erläuterung:)?(.*)",
 							Pattern.MULTILINE | Pattern.DOTALL, 2));
 			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 			this.setSectionFinder(csf);
-			this.setCustomRenderer(new StyleRenderer("color:pink;"));
+			this.setRenderer(new StyleRenderer("color:pink;"));
 		}
 	}
 

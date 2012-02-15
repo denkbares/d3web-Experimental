@@ -31,7 +31,7 @@ public class ApproximateMatchingType extends AbstractType {
 
 	public ApproximateMatchingType() {
 		this.sectionFinder = new AllTextFinderTrimmed();
-		this.setCustomRenderer(new ApproximateMatchingTypeRenderer());
+		this.setRenderer(new ApproximateMatchingTypeRenderer());
 	}
 
 }

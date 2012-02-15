@@ -48,10 +48,9 @@ public class PropertyIDDefinition extends AbstractType {
 		return defaultInstance;
 	}
 
-	@Override
-	protected void init() {
+	public PropertyIDDefinition() {
 		this.sectionFinder = new AllTextFinderTrimmed();
-		this.setCustomRenderer(new PropertyIDRenderer());
+		this.setRenderer(new PropertyIDRenderer());
 	}
 
 	class PropertyIDRenderer extends KnowWEDomRenderer {

@@ -27,8 +27,7 @@ public class AStarObjectType extends AbstractType {
 
 	private static AStarObjectType instance;
 
-	@Override
-	public void init() {
+	public AStarObjectType() {
 		this.childrenTypes.add(new AObjectType());
 		this.sectionFinder = new RegexSectionFinder("a+");
 	}

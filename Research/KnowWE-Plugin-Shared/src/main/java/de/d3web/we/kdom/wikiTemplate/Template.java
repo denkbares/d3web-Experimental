@@ -45,9 +45,8 @@ public class Template extends AbstractXMLType {
 
 	public Template() {
 		super("Template");
-		this.customRenderer = new PreRenderer();
+		this.setRenderer(new PreRenderer());
 	}
-
 
 	/**
 	 * @return
@@ -57,10 +56,10 @@ public class Template extends AbstractXMLType {
 		return instance;
 	}
 
-	private class PreRenderer extends KnowWEDomRenderer {
+	private class PreRenderer extends KnowWEDomRenderer<Template> {
 
 		@Override
-		public void render(KnowWEArticle article, Section sec,
+		public void render(KnowWEArticle article, Section<Template> sec,
 				UserContext user, StringBuilder string) {
 
 			string.append("{{{");

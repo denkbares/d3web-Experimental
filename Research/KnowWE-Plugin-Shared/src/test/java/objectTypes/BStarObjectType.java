@@ -25,8 +25,7 @@ import de.knowwe.core.kdom.AbstractType;
 
 public class BStarObjectType extends AbstractType {
 
-	@Override
-	public void init() {
+	public BStarObjectType() {
 		this.childrenTypes.add(new BObjectType());
 		this.sectionFinder = new RegexSectionFinder("b+");
 	}

@@ -31,8 +31,7 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 
 public class BulletType extends AbstractType {
 
-	@Override
-	public void init() {
+	public BulletType() {
 		this.sectionFinder = new BulletFinder();
 	}
 

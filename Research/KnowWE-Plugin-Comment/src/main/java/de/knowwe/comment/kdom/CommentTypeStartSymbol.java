@@ -25,8 +25,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 public class CommentTypeStartSymbol extends AbstractType {
 
-	@Override
-	protected void init() {
+	public CommentTypeStartSymbol() {
 		sectionFinder = new RegexSectionFinder("<");
 
 	}

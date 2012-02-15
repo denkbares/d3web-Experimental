@@ -34,6 +34,6 @@ public class DroolsFactName extends AbstractType {
 
 	public DroolsFactName() {
 		setSectionFinder(new RegexSectionFinder(Pattern.compile("^\\(\\s*?(\".*?\")\\s*?(,|\\)$)"), 1));
-		setCustomRenderer(StyleRenderer.KEYWORDS);
+		setRenderer(StyleRenderer.KEYWORDS);
 	}
 }

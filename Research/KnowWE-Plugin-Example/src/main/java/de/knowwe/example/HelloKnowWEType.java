@@ -48,7 +48,7 @@ public class HelloKnowWEType extends AbstractType {
 		 * in the wiki page view.
 		 * 
 		 */
-		this.setCustomRenderer(new HelloKnowWERenderer());
+		this.setRenderer(new HelloKnowWERenderer());
 	}
 
 }

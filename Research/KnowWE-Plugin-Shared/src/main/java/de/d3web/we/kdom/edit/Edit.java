@@ -33,14 +33,11 @@ public class Edit extends AbstractXMLType {
 
 	public Edit(String tagName) {
 		super(tagName);
+		childrenTypes.add(new EditContent());
 	}
 
 	public Edit() {
-		super("Edit");
+		this("Edit");
 	}
 
-	@Override
-	protected void init() {
-		childrenTypes.add(new EditContent());
-	}
 }

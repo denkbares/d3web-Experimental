@@ -32,8 +32,7 @@ import de.knowwe.hermes.kdom.conceptMining.PersonOccurrence;
 
 public class TimeEventDescriptionType extends AbstractType {
 
-	@Override
-	protected void init() {
+	public TimeEventDescriptionType() {
 
 		SemanticAnnotation semanticAnnotation = new SemanticAnnotation();
 

@@ -63,8 +63,7 @@ public class ApproximateNumericalFinding extends D3webCondition<ApproximateNumer
 	private static String[] comparators = {
 			"<=", ">=", "==", "=", "<", ">", };
 
-	@Override
-	protected void init() {
+	public ApproximateNumericalFinding() {
 		this.setSectionFinder(new NumericalFindingFinder());
 
 		// comparator

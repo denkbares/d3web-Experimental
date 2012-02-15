@@ -27,7 +27,7 @@ public class ClassHierarchyMarkup extends DefaultMarkupType {
 
 	public ClassHierarchyMarkup(DefaultMarkup markup) {
 		super(markup);
-		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
+		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 
 	private static DefaultMarkup m = null;
@@ -39,7 +39,7 @@ public class ClassHierarchyMarkup extends DefaultMarkupType {
 
 	public ClassHierarchyMarkup() {
 		super(m);
-		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
+		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 
 	}
 }

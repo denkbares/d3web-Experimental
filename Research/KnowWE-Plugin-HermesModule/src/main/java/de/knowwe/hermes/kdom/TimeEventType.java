@@ -56,8 +56,7 @@ public class TimeEventType extends AbstractType {
 	public static final String START_TAG = "<<";
 	public static final String END_TAG = ">>";
 
-	@Override
-	protected void init() {
+	public TimeEventType() {
 		sectionFinder = new RegexSectionFinder(START_TAG + "[\\w|\\W]*?"
 				+ END_TAG);
 		this.childrenTypes.add(new SemanticAnnotationStartSymbol("<<"));
@@ -68,7 +67,7 @@ public class TimeEventType extends AbstractType {
 		this.childrenTypes.add(new TimeEventSourceType());
 		this.childrenTypes.add(new TimeEventDescriptionType());
 
-		this.setCustomRenderer(new EditSectionRenderer(
+		this.setRenderer(new EditSectionRenderer(
 				TimeEventTypeRenderer.getInstance()));
 		this.addSubtreeHandler(Priority.HIGH, new TimeEventTypeOWLSubTreeHandler());
 

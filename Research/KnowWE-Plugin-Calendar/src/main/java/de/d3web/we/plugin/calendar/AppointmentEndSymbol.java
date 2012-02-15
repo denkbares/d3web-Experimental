@@ -25,8 +25,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 public class AppointmentEndSymbol extends AbstractType {
 
-	@Override
-	protected void init() {
+	public AppointmentEndSymbol() {
 		sectionFinder = new RegexSectionFinder(">&>");
 	}
 

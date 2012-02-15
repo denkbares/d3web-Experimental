@@ -40,7 +40,7 @@ public class PropertyDefinitionTree extends DashTree {
 
 	public PropertyDefinitionTree() {
 		// setting Pre-environoment-renderer
-		this.setCustomRenderer(new PreRendererWithoutTilde());
+		this.setRenderer(new PreRendererWithoutTilde());
 		replaceDashTreeElementContentType(new PropertyDashTreeElementContent());
 	}
 

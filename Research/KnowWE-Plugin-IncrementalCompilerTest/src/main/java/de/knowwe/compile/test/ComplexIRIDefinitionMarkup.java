@@ -70,7 +70,7 @@ public class ComplexIRIDefinitionMarkup extends AbstractType implements ComplexD
 
 		public DefType() {
 			this.setSectionFinder(new RegexSectionFinderSingle(REGEX_DEF));
-			this.setCustomRenderer(new StyleRenderer("font-style:italic;"));
+			this.setRenderer(new StyleRenderer("font-style:italic;"));
 		}
 	}
 

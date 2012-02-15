@@ -34,17 +34,12 @@ public class PropertyDefinitionType extends AbstractXMLType {
 
 	public PropertyDefinitionType() {
 		super("PropertyDefinition");
-	}
-
-	@Override
-	protected void init() {
 		this.childrenTypes.add(new PropertyDefinitionContent());
 	}
 
 	class PropertyDefinitionContent extends XMLContent {
 
-		@Override
-		protected void init() {
+		protected PropertyDefinitionContent() {
 			this.childrenTypes.add(new PropertyDefinitionTree());
 		}
 	}

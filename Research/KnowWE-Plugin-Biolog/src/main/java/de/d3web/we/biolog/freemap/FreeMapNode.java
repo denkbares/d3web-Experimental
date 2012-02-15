@@ -1,21 +1,21 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
- *                    Computer Science VI, University of Wuerzburg
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * Computer Science VI, University of Wuerzburg
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 
 package de.d3web.we.biolog.freemap;
@@ -80,12 +80,8 @@ public class FreeMapNode extends AbstractXMLType {
 
 	private FreeMapNode() {
 		super("node");
-	}
-
-	@Override
-	protected void init() {
 		this.childrenTypes.add(this);
-		this.setCustomRenderer(new FreeMapNodeRenderer());
+		this.setRenderer(new FreeMapNodeRenderer());
 		this.addSubtreeHandler(new FreeMapNodeOWLSubTreeHandler());
 	}
 
@@ -118,8 +114,7 @@ public class FreeMapNode extends AbstractXMLType {
 			List<Section<FreeMapNode>> children = new ArrayList<Section<FreeMapNode>>();
 			Sections.findSuccessorsOfType(s, FreeMapNode.class, children);
 			for (Section<FreeMapNode> child : children) {
-				if (child.get() instanceof FreeMapNode)
-					io.merge((IntermediateOwlObject) KnowWEUtils
+				if (child.get() instanceof FreeMapNode) io.merge((IntermediateOwlObject) KnowWEUtils
 							.getStoredObject(child, OwlHelper.IOO));
 			}
 			SemanticCoreDelegator.getInstance(KnowWEEnvironment.getInstance()).addStatements(io, s);
@@ -137,7 +132,8 @@ public class FreeMapNode extends AbstractXMLType {
 		try {
 			io.addStatement(uo.getHelper().createStatement(localURI,
 					uo.getHelper().createlocalURI("submethodOf"), fatherURI));
-		} catch (RepositoryException e) {
+		}
+		catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -174,6 +170,5 @@ public class FreeMapNode extends AbstractXMLType {
 		}
 
 	}
-
 
 }

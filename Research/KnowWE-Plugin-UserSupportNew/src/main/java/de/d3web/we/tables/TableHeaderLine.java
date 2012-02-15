@@ -45,7 +45,7 @@ public class TableHeaderLine extends AbstractType {
 		AnonymousType relationComment = new AnonymousType("comment");
 		relationComment.setSectionFinder(new RegexSectionFinder("[\\t ]*"
 				+ "//[^\r\n]*+" + "\\r?\\n"));
-		relationComment.setCustomRenderer(StyleRenderer.COMMENT);
+		relationComment.setRenderer(StyleRenderer.COMMENT);
 		this.addChildType(relationComment);
 
 		//		this.sectionFinder = new RegexSectionFinder("([^\\|]+\\|)+[^\\|]+");
@@ -58,7 +58,7 @@ public class TableHeaderLine extends AbstractType {
 		// divide the line in delimiters and cells
 		AnonymousType delimiter = new AnonymousType("delimiter");
 		delimiter.setSectionFinder(new RegexSectionFinder("\\|"));
-		delimiter.setCustomRenderer(StyleRenderer.COMMENT); // TODO Just a quick-shot
+		delimiter.setRenderer(StyleRenderer.COMMENT); // TODO Just a quick-shot
 		this.addChildType(delimiter);
 
 		this.addChildType(new TableHeaderCell());

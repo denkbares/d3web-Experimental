@@ -23,7 +23,7 @@ public class PelletSparqlSelect extends DefaultMarkupType {
 
 	public PelletSparqlSelect() {
 		super(MARKUP);
-		this.setCustomRenderer(new PelletSelectRenderer());
+		this.setRenderer(new PelletSelectRenderer());
 		this.setIgnorePackageCompile(true);
 	}
 

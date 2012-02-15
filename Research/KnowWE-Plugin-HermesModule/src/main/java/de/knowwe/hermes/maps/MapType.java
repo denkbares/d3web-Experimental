@@ -53,7 +53,7 @@ public class MapType extends AbstractXMLType {
 	@Override
 	public List<Type> getAllowedChildrenTypes() {
 		childrenTypes.add(new AbstractXMLType("iframe"));
-		this.setCustomRenderer(new MapRenderer());
+		this.setRenderer(new MapRenderer());
 		return childrenTypes;
 	}
 

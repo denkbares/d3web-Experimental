@@ -63,7 +63,7 @@ public class MetaData extends BlockMarkupType {
 
 		this.addContentType(new MetaLine());
 
-		this.setCustomRenderer(new KnowWEDomRenderer<MetaData>() {
+		this.setRenderer(new KnowWEDomRenderer<MetaData>() {
 
 			@SuppressWarnings("unchecked")
 			@Override

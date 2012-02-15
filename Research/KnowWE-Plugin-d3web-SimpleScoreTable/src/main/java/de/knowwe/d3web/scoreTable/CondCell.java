@@ -43,7 +43,7 @@ public class CondCell extends DefaultCompositeCondition {
 		setSectionFinder(c);
 		c.addConstraint(AtMostOneFindingConstraint.getInstance());
 		//setCustomRenderer(new GenericHTMLRenderer<CondCell>("span", new String[] {"title", "CondCell"}));
-		setCustomRenderer(new TableCellRenderer());
+		setRenderer(new TableCellRenderer());
 	}
 
 }

@@ -35,7 +35,7 @@ public class DatatypePropertyIRIDefinition extends AbstractIRITermDefinition {
 					"color:rgb(125, 80, 102)"));
 
 	public DatatypePropertyIRIDefinition() {
-		this.setCustomRenderer(PROPERTY_RENDERER);
+		this.setRenderer(PROPERTY_RENDERER);
 	}
 
 	@Override

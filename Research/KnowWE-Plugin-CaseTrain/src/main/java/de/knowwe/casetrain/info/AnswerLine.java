@@ -53,7 +53,7 @@ public class AnswerLine extends AbstractType {
 
 	public AnswerLine() {
 		this.setSectionFinder(new AnswerSectionFinder());
-		this.setCustomRenderer(new DivStyleClassRenderer("Antwort", null));
+		this.setRenderer(new DivStyleClassRenderer("Antwort", null));
 		this.addChildType(new AnswerMark());
 		this.addChildType(new AnswerTextArgument());
 		this.addChildType(new AnswerText());
@@ -181,7 +181,7 @@ public class AnswerLine extends AbstractType {
 		String regex = "\\{(.*?)\\}";
 
 		public AnswerMark() {
-			this.setCustomRenderer(new SpanClassRenderer(SpanClassRenderer.META_KEY));
+			this.setRenderer(new SpanClassRenderer(SpanClassRenderer.META_KEY));
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(
 					new RegexSectionFinder(regex));
 			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
@@ -200,7 +200,7 @@ public class AnswerLine extends AbstractType {
 	public class AnswerTextArgument extends AbstractType {
 
 		public AnswerTextArgument() {
-			this.setCustomRenderer(new SpanClassRenderer(SpanClassRenderer.META_KEY));
+			this.setRenderer(new SpanClassRenderer(SpanClassRenderer.META_KEY));
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(
 					new RegexSectionFinder("\\{[rf1-9]}"));
 			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
@@ -221,7 +221,7 @@ public class AnswerLine extends AbstractType {
 		//			String regex = "(\\{.*?\\})?([\\w]{1}[äüöÄÜÖß]?[ 0-9]*)+";
 
 		public AnswerText() {
-			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
+			this.setRenderer(MouseOverTitleRenderer.getInstance());
 			//				ConstraintSectionFinder csf = new ConstraintSectionFinder(
 			//						new RegexSectionFinder(regex));
 			//				csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
@@ -266,7 +266,7 @@ public class AnswerLine extends AbstractType {
 		String regex = "\\{.*?\\}";
 
 		public AnswerExplanation() {
-			this.setCustomRenderer(MouseOverTitleRenderer.getInstance());
+			this.setRenderer(MouseOverTitleRenderer.getInstance());
 			ConstraintSectionFinder csf = new ConstraintSectionFinder(
 					new RegexSectionFinder(regex));
 			csf.addConstraint(ExactlyOneFindingConstraint.getInstance());

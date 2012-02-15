@@ -15,7 +15,7 @@ public class IgnoreAttributesMarkup extends DefaultMarkupType {
 
 	public IgnoreAttributesMarkup() {
 		super(m);
-		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
+		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 
 }

@@ -23,13 +23,11 @@ package de.knowwe.comment.kdom;
 import java.util.Map;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 public class CommentType extends AbstractType {
 
-	@Override
-	protected void init() {
+	public CommentType() {
 
 		Map<String, String> commentTypes = CommentModule.getCommentTypes();
 
@@ -51,11 +49,6 @@ public class CommentType extends AbstractType {
 			childrenTypes.add(new CommentTypeContent());
 
 		}
-
-	}
-
-	@Override
-	public KnowWEDomRenderer getRenderer() {
-		return new CommentRenderer();
+		this.setRenderer(new CommentRenderer());
 	}
 }

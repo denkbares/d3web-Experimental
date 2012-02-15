@@ -56,12 +56,8 @@ public class EMLXMLType extends AbstractXMLType {
 
 	public EMLXMLType() {
 		super("ns4:eml");
-	}
-
-	@Override
-	protected void init() {
 		this.childrenTypes.add(new EMLContent());
-		this.setCustomRenderer(new EMLRenderer());
+		this.setRenderer(new EMLRenderer());
 		this.addSubtreeHandler(new EMLXMLTypeOWLSubTreeHandler());
 	}
 
@@ -185,8 +181,7 @@ public class EMLXMLType extends AbstractXMLType {
 
 	class EMLContent extends XMLContent {
 
-		@Override
-		protected void init() {
+		protected EMLContent() {
 			this.childrenTypes.add(new GenericXMLObjectType());
 
 		}

@@ -41,6 +41,6 @@ public class ManchesterDefaultMarkup extends DefaultMarkupType {
 
 	public ManchesterDefaultMarkup() {
 		super(MARKUP);
-		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
+		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 }

@@ -105,7 +105,7 @@ class ObjectPropertyCharacteristic extends AbstractType {
 		t.append(ManchesterSyntaxKeywords.REFLEXIVE.getKeyword() + "|");
 		t.append(ManchesterSyntaxKeywords.IRREFLEXIVE.getKeyword());
 
-		this.setCustomRenderer(CLASS_RENDERER);
+		this.setRenderer(CLASS_RENDERER);
 		Pattern p = Pattern.compile(t.toString());
 		this.setSectionFinder(new RegexSectionFinder(p));
 	}
@@ -126,6 +126,6 @@ class DataPropertyCharacteristic extends AbstractType {
 
 		Pattern p = Pattern.compile(ManchesterSyntaxKeywords.FUNCTIONAL.getKeyword());
 		this.setSectionFinder(new RegexSectionFinder(p));
-		this.setCustomRenderer(CLASS_RENDERER);
+		this.setRenderer(CLASS_RENDERER);
 	}
 }

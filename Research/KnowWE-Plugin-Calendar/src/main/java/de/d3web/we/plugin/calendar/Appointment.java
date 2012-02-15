@@ -21,14 +21,11 @@
 package de.d3web.we.plugin.calendar;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 public class Appointment extends AbstractType {
 
-	@Override
-	protected void init() {
-
+	public Appointment() {
 		sectionFinder = new RegexSectionFinder("<&<[0-9]+.*?>&>");
 
 		childrenTypes.add(new AppointmentStartSymbol());
@@ -36,10 +33,7 @@ public class Appointment extends AbstractType {
 		childrenTypes.add(new AppointmentAuthor());
 		childrenTypes.add(new AppointmentText());
 
+		this.setRenderer(new AppointmentRenderer());
 	}
 
-	@Override
-	public KnowWEDomRenderer getRenderer() {
-		return new AppointmentRenderer();
-	}
 }

@@ -40,7 +40,7 @@ public class SparqlContentType extends AbstractType {
 
 	public SparqlContentType() {
 		this.setSectionFinder(new AllTextSectionFinder());
-		this.setCustomRenderer(new SparqlQueryRenderer());
+		this.setRenderer(new SparqlQueryRenderer());
 		this.addSubtreeHandler(new SparqlConstructHandler());
 	}
 

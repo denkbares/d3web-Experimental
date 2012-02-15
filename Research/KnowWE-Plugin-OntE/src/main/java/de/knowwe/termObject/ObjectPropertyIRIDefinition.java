@@ -33,7 +33,7 @@ public class ObjectPropertyIRIDefinition extends de.knowwe.rdfs.AbstractIRITermD
 					"color:rgb(125, 80, 102)"));
 
 	public ObjectPropertyIRIDefinition() {
-		this.setCustomRenderer(PROPERTY_RENDERER);
+		this.setRenderer(PROPERTY_RENDERER);
 	}
 
 	@Override

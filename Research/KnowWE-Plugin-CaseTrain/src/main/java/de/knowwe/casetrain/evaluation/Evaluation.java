@@ -70,7 +70,7 @@ public class Evaluation extends BlockMarkupType {
 		this.addContentType(new Link());
 		this.addContentType(new Audio());
 
-		this.setCustomRenderer(new KnowWEDomRenderer<BlockMarkupType>() {
+		this.setRenderer(new KnowWEDomRenderer<BlockMarkupType>() {
 
 			@Override
 			public void render(KnowWEArticle article, Section<BlockMarkupType> sec,

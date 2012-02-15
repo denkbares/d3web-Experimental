@@ -32,6 +32,6 @@ public class DroolsRuleLiteral extends AbstractType {
 
 	public DroolsRuleLiteral() {
 		setSectionFinder(new RegexSectionFinder("\"(.*?)\""));
-		setCustomRenderer(StyleRenderer.CHOICE);
+		setRenderer(StyleRenderer.CHOICE);
 	}
 }

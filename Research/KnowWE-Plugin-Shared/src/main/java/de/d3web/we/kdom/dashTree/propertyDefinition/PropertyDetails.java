@@ -45,8 +45,7 @@ import de.knowwe.kdom.renderer.StyleRenderer;
  */
 public class PropertyDetails extends AbstractType {
 
-	@Override
-	protected void init() {
+	public PropertyDetails() {
 		this.sectionFinder = new PropertyDetailsSectionFinder();
 		this.childrenTypes.add(new DomainDefinition());
 		this.childrenTypes.add(new DomainRangeOperatorType());
@@ -101,10 +100,9 @@ class RangeDefinition extends AbstractType {
 		return defaultInstance;
 	}
 
-	@Override
-	protected void init() {
+	protected RangeDefinition() {
 		this.sectionFinder = new AllTextFinderTrimmed();
-		this.setCustomRenderer(new RangeRenderer());
+		this.setRenderer(new RangeRenderer());
 	}
 }
 
@@ -134,10 +132,9 @@ class DomainDefinition extends AbstractType {
 		return defaultInstance;
 	}
 
-	@Override
-	protected void init() {
+	protected DomainDefinition() {
 		this.sectionFinder = new DomainFinder();
-		this.setCustomRenderer(new DomainRenderer());
+		this.setRenderer(new DomainRenderer());
 	}
 }
 

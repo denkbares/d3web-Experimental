@@ -54,12 +54,12 @@ public class InnerTable extends ITable {
 		this.addChildType(new TableLine());
 
 		// Renderer
-		this.setCustomRenderer(new TableRenderer());
+		this.setRenderer(new TableRenderer());
 
 		// anything left is comment
 		AnonymousType residue = new AnonymousType("rest");
 		residue.setSectionFinder(new AllTextFinderTrimmed());
-		residue.setCustomRenderer(StyleRenderer.COMMENT);
+		residue.setRenderer(StyleRenderer.COMMENT);
 		this.addChildType(residue);
 	}
 }

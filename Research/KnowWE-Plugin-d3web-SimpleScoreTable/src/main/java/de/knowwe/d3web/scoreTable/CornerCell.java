@@ -37,13 +37,13 @@ public class CornerCell extends AbstractType {
 
 	public CornerCell() {
 		AnonymousType before = new AnonymousType("Before");
-		before.setCustomRenderer(NothingRenderer.getInstance());
+		before.setRenderer(NothingRenderer.getInstance());
 		childrenTypes.add(before);
 
 		ConstraintSectionFinder c = new ConstraintSectionFinder(new RegexSectionFinder("\\|([^\\|]*)",Pattern.DOTALL|Pattern.MULTILINE,1));
 		setSectionFinder(c);
 		c.addConstraint(AtMostOneFindingConstraint.getInstance());
-		setCustomRenderer(new TableCellRenderer());
+		setRenderer(new TableCellRenderer());
 		//setCustomRenderer(new GenericHTMLRenderer<CornerCell>("span", new String[] {"title", "CornerCell"}));
 	}
 

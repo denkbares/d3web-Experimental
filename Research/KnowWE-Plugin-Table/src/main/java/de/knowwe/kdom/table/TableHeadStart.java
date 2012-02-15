@@ -41,7 +41,7 @@ public class TableHeadStart extends AbstractType {
 
 	public TableHeadStart() {
 		setSectionFinder(new RegexSectionFinder(Pattern.compile("(\\|\\|).*"), 1));
-		setCustomRenderer(NothingRenderer.getInstance());
+		setRenderer(NothingRenderer.getInstance());
 	}
 
 }

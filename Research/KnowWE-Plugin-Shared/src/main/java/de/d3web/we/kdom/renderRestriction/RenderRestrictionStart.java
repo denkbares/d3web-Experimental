@@ -37,7 +37,7 @@ public class RenderRestrictionStart extends DefaultMarkupType {
 
 	public RenderRestrictionStart(DefaultMarkup markup) {
 		super(markup);
-		this.setCustomRenderer(new RestrictionRendererStart());
+		this.setRenderer(new RestrictionRendererStart());
 	}
 
 	private static DefaultMarkup m = null;
@@ -50,7 +50,7 @@ public class RenderRestrictionStart extends DefaultMarkupType {
 
 	public RenderRestrictionStart() {
 		super(m);
-		this.setCustomRenderer(new RestrictionRendererStart());
+		this.setRenderer(new RestrictionRendererStart());
 	}
 
 	public static String createString(String group) {

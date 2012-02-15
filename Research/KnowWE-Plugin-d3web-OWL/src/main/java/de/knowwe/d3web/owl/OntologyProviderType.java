@@ -45,7 +45,7 @@ public class OntologyProviderType extends DefaultMarkupType {
 	public OntologyProviderType() {
 		super(MARKUP);
 		this.addSubtreeHandler(new OntologyHandler());
-		this.setCustomRenderer(new OntologyEscapeRenderer());
+		this.setRenderer(new OntologyEscapeRenderer());
 	}
 
 }

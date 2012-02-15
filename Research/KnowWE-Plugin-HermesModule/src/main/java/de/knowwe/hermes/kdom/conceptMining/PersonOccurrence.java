@@ -24,9 +24,8 @@ import de.knowwe.core.kdom.AbstractType;
 
 public class PersonOccurrence extends AbstractType {
 
-	@Override
-	public void init() {
-		this.setCustomRenderer(new ConceptOccurrenceRenderer());
+	public PersonOccurrence() {
+		this.setRenderer(new ConceptOccurrenceRenderer());
 		this.sectionFinder = new PersonFinder();
 	}
 }

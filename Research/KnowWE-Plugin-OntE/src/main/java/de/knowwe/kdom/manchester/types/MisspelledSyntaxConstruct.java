@@ -44,7 +44,7 @@ public class MisspelledSyntaxConstruct extends AbstractType {
 	@SuppressWarnings("unchecked")
 	public MisspelledSyntaxConstruct() {
 		this.setSectionFinder(new MisspelledFrameKeywordFinder());
-		this.setCustomRenderer(new ToolMenuDecoratingRenderer<MisspelledSyntaxConstruct>(
+		this.setRenderer(new ToolMenuDecoratingRenderer<MisspelledSyntaxConstruct>(
 				new StyleRenderer(
 						"color:rgb(255, 0, 0)")));
 

@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.defi.aboutMe;
 
@@ -36,7 +36,6 @@ import com.ecyrd.jspwiki.event.WikiSecurityEvent;
 
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -89,17 +88,12 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 	 */
 	public AboutMe() {
 		super(MARKUP);
-		this.setCustomRenderer(this.getDefaultRenderer());
+		this.setRenderer(new AboutMeRenderer<AbstractType>());
 		this.setIgnorePackageCompile(true);
 
 		ServletContext context = KnowWEEnvironment.getInstance().getContext();
 		WikiEngine en = WikiEngine.getInstance(context, null);
 		WikiEventManager.addWikiEventListener(en.getAuthenticationManager(), this);
-	}
-
-	@Override
-	protected KnowWEDomRenderer<?> getDefaultRenderer() {
-		return new AboutMeRenderer<AbstractType>();
 	}
 
 	@Override

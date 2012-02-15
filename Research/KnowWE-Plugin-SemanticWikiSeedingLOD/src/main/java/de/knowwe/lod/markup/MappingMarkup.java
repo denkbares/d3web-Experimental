@@ -15,7 +15,7 @@ public class MappingMarkup extends DefaultMarkupType {
 
 	public MappingMarkup() {
 		super(m);
-		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
+		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 
 }

@@ -67,7 +67,7 @@ public class TripleMarkup extends AbstractType implements
 
 		this.addChildType(new EndLineComment());
 		this.addChildType(new TripleMarkupContent());
-		this.setCustomRenderer(new PreEnvRenderer());
+		this.setRenderer(new PreEnvRenderer());
 	}
 
 	class TripleMarkupContent extends AbstractType {
@@ -79,7 +79,7 @@ public class TripleMarkup extends AbstractType implements
 			this.addChildType(new SimpleTurtleSubject());
 			this.addChildType(new SimpleTurtleObjectSection());
 
-			this.setCustomRenderer(new RangeCheckRenderer());
+			this.setRenderer(new RangeCheckRenderer());
 		}
 
 		class RangeCheckRenderer extends KnowWEDomRenderer {

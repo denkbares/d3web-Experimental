@@ -113,7 +113,7 @@ public abstract class BlockMarkupType extends AbstractType {
 		this.sectionFinder = new RegexSectionFinder(regex, Pattern.DOTALL
 				| Pattern.MULTILINE, 1);
 
-		this.setCustomRenderer(new BlockMarkupTypeRenderer());
+		this.setRenderer(new BlockMarkupTypeRenderer());
 
 		content = new BlockMarkupContent(key + "Content");
 

@@ -48,8 +48,7 @@ public class OneOfBracedCondition extends NonTerminalCondition {
 	public static final char CURLY_BRACKET_OPEN = '\u007B';
 	public static final char CURLY_BRACKET_CLOSED = '\u007D';
 
-	@Override
-	protected void init() {
+	public OneOfBracedCondition() {
 		this.sectionFinder = OneOfExpressionFinder.createEmbracedExpressionFinder();
 	}
 }

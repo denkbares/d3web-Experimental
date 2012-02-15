@@ -38,10 +38,8 @@ public class XMLDashTree extends AbstractXMLType {
 
 	class XMLDashTreeContent extends XMLContent {
 
-		@Override
-		protected void init() {
+		protected XMLDashTreeContent() {
 			this.childrenTypes.add(new DashTree());
-
 		}
 
 	}

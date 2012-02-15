@@ -25,8 +25,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 public class CommentTypeEndSymbol extends AbstractType {
 
-	@Override
-	protected void init() {
+	public CommentTypeEndSymbol() {
 		sectionFinder = new RegexSectionFinder(">");
 	}
 

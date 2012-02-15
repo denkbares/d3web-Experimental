@@ -41,18 +41,17 @@ import de.knowwe.kdom.table.TableLine;
  */
 public class ValueType extends AbstractType {
 
-	@Override
-	protected void init() {
+	public ValueType() {
 		setSectionFinder(new AllTextSectionFinder());
 
 		addChildType(new UnchangedType());
 		Number number = new Number();
-		number.setCustomRenderer(DefaultTextRenderer.getInstance());
+		number.setRenderer(DefaultTextRenderer.getInstance());
 		number.setSectionFinder(new ConstraintSectionFinder(number.getSectionFinder(),
 				SingleChildConstraint.getInstance()));
 		addChildType(number);
 		CellAnswerRef aRef = new CellAnswerRef();
-		aRef.setCustomRenderer(DefaultTextRenderer.getInstance());
+		aRef.setRenderer(DefaultTextRenderer.getInstance());
 		addChildType(aRef);
 
 		aRef.setSectionFinder(new SectionFinder() {

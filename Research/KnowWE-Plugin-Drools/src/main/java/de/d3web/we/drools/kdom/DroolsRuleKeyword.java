@@ -32,6 +32,6 @@ public class DroolsRuleKeyword extends AbstractType {
 
 	public DroolsRuleKeyword() {
 		setSectionFinder(new RegexSectionFinder("(rule|when|then|end)"));
-		setCustomRenderer(new StyleRenderer("font-weight: bold;"));
+		setRenderer(new StyleRenderer("font-weight: bold;"));
 	}
 }

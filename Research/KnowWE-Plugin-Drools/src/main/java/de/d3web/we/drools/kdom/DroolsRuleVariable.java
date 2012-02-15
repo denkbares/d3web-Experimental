@@ -33,6 +33,6 @@ public class DroolsRuleVariable extends AbstractType {
 
 	public DroolsRuleVariable() {
 		setSectionFinder(new RegexSectionFinder("\\$(\\w+)"));
-		setCustomRenderer(StyleRenderer.SOLUTION);
+		setRenderer(StyleRenderer.SOLUTION);
 	}
 }

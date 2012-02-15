@@ -23,7 +23,6 @@ package de.d3web.we.kdom.css;
 import java.util.List;
 
 import de.knowwe.core.kdom.Type;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.kdom.xml.AbstractXMLType;
 
 /**
@@ -49,6 +48,7 @@ public class CSS extends AbstractXMLType {
 	 */
 	public CSS() {
 		super("CSS");
+		this.setRenderer(new CSSRenderer());
 	}
 
 	@Override
@@ -57,16 +57,4 @@ public class CSS extends AbstractXMLType {
 		return childrenTypes;
 	}
 
-	/**
-	 * <p>
-	 * Returns the renderer for the CSS tag
-	 * </p>
-	 * 
-	 * @return {@link KnowWEDomRenderer}
-	 * @see CSSRenderer
-	 */
-	@Override
-	public KnowWEDomRenderer getRenderer() {
-		return new CSSRenderer();
-	}
 }

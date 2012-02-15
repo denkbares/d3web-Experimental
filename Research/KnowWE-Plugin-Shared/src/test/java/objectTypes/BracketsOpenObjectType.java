@@ -25,8 +25,7 @@ import de.knowwe.core.kdom.AbstractType;
 
 public class BracketsOpenObjectType extends AbstractType {
 
-	@Override
-	public void init() {
+	public BracketsOpenObjectType() {
 		this.sectionFinder = new StringSectionFinder("-");
 	}
 

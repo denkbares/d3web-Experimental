@@ -36,7 +36,7 @@ public class IRITermRef extends IncrementalTermReference {
 
 	public IRITermRef() {
 		super(String.class);
-		this.setCustomRenderer(REF_RENDERER);
+		this.setRenderer(REF_RENDERER);
 	}
 
 	@Override

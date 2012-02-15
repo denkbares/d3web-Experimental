@@ -36,7 +36,7 @@ public class TableEntryType extends DefaultMarkupType {
 
 	public TableEntryType(DefaultMarkup markup) {
 		super(markup);
-		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
+		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 
 	private static DefaultMarkup m = null;
@@ -49,7 +49,7 @@ public class TableEntryType extends DefaultMarkupType {
 
 	public TableEntryType() {
 		super(m);
-		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
+		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 
 	public static List<Section<VersionEntry>> getVersionBlocks(Section<TableEntryType> s) {

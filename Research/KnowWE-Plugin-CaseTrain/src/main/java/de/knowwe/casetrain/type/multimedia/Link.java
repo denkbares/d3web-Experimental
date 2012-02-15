@@ -46,7 +46,7 @@ public class Link extends MultimediaItem {
 		this.clearSubtreeHandlers();
 		this.addChildType(new Url());
 
-		this.setCustomRenderer(new KnowWEDomRenderer<Link>() {
+		this.setRenderer(new KnowWEDomRenderer<Link>() {
 
 			@Override
 			public void render(KnowWEArticle article, Section<Link> sec,

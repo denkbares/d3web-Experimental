@@ -23,7 +23,7 @@ public class ImportedTermReference extends IncrementalTermReference {
 
 	public ImportedTermReference() {
 		super(String.class);
-		this.setCustomRenderer(REF_RENDERER);
+		this.setRenderer(REF_RENDERER);
 		this.setSectionFinder(new SectionFinder() {
 
 			@Override

@@ -35,6 +35,6 @@ public class DroolsFactValue extends AbstractType {
 
 	public DroolsFactValue() {
 		setSectionFinder(new RegexSectionFinder(Pattern.compile("(\".*?\")"), 1));
-		setCustomRenderer(StyleRenderer.SOLUTION);
+		setRenderer(StyleRenderer.SOLUTION);
 	}
 }

@@ -34,8 +34,7 @@ public class DomainRangeOperatorType extends AbstractType {
 
 	public static final String DOMAIN_RANGE_OPERATOR = "-->";
 
-	@Override
-	protected void init() {
+	public DomainRangeOperatorType() {
 		this.sectionFinder = new StringSectionFinder(DOMAIN_RANGE_OPERATOR);
 	}
 }

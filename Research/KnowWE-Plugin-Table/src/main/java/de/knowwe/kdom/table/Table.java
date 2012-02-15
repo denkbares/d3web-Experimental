@@ -68,7 +68,7 @@ public class Table extends AbstractType {
 	public Table() {
 		this.childrenTypes.add(new TableLine());
 		this.sectionFinder = new AllTextSectionFinder();
-		this.setCustomRenderer(new TableRenderer());
+		this.setRenderer(new TableRenderer());
 	}
 
 	public void injectTableCellContentChildtype(Type type) {

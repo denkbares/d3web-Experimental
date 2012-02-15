@@ -40,11 +40,7 @@ public abstract class ParameterizedKeyWordType extends AbstractType {
 		this.keyword = keyword;
 		this.type = type;
 		initintern();
-	}
-
-	@Override
-	public void init() {
-		setCustomRenderer(StyleRenderer.OPERATOR);
+		setRenderer(StyleRenderer.OPERATOR);
 	}
 
 	// ugly, but only workaround to configure according to constructor

@@ -25,8 +25,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 public class AppointmentStartSymbol extends AbstractType {
 
-	@Override
-	protected void init() {
+	public AppointmentStartSymbol() {
 		sectionFinder = new RegexSectionFinder("<&<([0-9]+(\\.|-|/|:| )){5}");
 
 		childrenTypes.add(new AppointmentDate());

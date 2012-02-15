@@ -79,7 +79,7 @@ class Prefix extends AbstractType {
 		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 
 		this.setSectionFinder(csf);
-		this.setCustomRenderer(PREFIX_RENDERER);
+		this.setRenderer(PREFIX_RENDERER);
 	}
 }
 
@@ -96,6 +96,6 @@ class PrefixIRI extends AbstractType {
 		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 
 		this.setSectionFinder(csf);
-		this.setCustomRenderer(new IRITypeRenderer<PrefixIRI>());
+		this.setRenderer(new IRITypeRenderer<PrefixIRI>());
 	}
 }

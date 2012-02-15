@@ -34,7 +34,7 @@ public class NamedIndividualIRIDefinition extends de.knowwe.rdfs.AbstractIRITerm
 					"color:rgb(152, 180, 12)"));
 
 	public NamedIndividualIRIDefinition() {
-		this.setCustomRenderer(INDIVIDUAL_RENDERER);
+		this.setRenderer(INDIVIDUAL_RENDERER);
 	}
 
 	@Override

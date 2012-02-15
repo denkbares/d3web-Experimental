@@ -34,7 +34,7 @@ public class ClassIRIDefinition extends de.knowwe.rdfs.AbstractIRITermDefinition
 					"color:rgb(125, 80, 102)"));
 
 	public ClassIRIDefinition() {
-		this.setCustomRenderer(CLASS_RENDERER);
+		this.setRenderer(CLASS_RENDERER);
 	}
 
 	@Override

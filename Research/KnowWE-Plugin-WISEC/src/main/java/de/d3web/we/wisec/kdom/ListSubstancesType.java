@@ -41,7 +41,7 @@ public class ListSubstancesType extends AbstractType {
 		setSectionFinder(new AllTextSectionFinder());
 		addSubtreeHandler(Priority.LOWEST,
 				new ListSubstancesOWLSubtreeHandler());
-		this.setCustomRenderer(new ListSubstancesRenderer());
+		this.setRenderer(new ListSubstancesRenderer());
 
 		// addSubtreeHandler(new ListSubstancesD3SubtreeHandler());
 		// addChildType(new WISECTable());

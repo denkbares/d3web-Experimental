@@ -58,7 +58,7 @@ public class SubblockMarkup extends AbstractType {
 
 		this.sectionFinder = new RegexSectionFinder("\\r?\\n(" + regex1 + ")\\r?\\n", Pattern.DOTALL, 1);
 
-		this.setCustomRenderer(new SubblockMarkupRenderer());
+		this.setRenderer(new SubblockMarkupRenderer());
 
 		content = new SubblockMarkupContent();
 		content.setSectionFinder(new RegexSectionFinder(regex1, Pattern.DOTALL, 1));

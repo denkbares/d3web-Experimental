@@ -24,9 +24,8 @@ import de.knowwe.core.kdom.AbstractType;
 
 public class LocationOccurrence extends AbstractType {
 
-	@Override
-	public void init() {
-		this.setCustomRenderer(new ConceptOccurrenceRenderer());
+	public LocationOccurrence() {
+		this.setRenderer(new ConceptOccurrenceRenderer());
 		this.sectionFinder = new LocationFinder();
 
 	}

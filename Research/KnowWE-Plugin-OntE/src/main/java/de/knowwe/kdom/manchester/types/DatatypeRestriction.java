@@ -169,7 +169,7 @@ class PredefinedOWLDatatype extends AbstractType {
 
 	public PredefinedOWLDatatype() {
 		this.setSectionFinder(new RegexSectionFinder(PATTERN));
-		this.setCustomRenderer(new ToolMenuDecoratingRenderer<PredefinedOWLDatatype>(
+		this.setRenderer(new ToolMenuDecoratingRenderer<PredefinedOWLDatatype>(
 				new StyleRenderer("font-weight:bold;font-color:black")));
 	}
 }

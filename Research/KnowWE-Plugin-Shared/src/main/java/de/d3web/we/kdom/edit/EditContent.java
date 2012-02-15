@@ -33,9 +33,7 @@ import de.knowwe.kdom.xml.XMLContent;
  */
 public class EditContent extends XMLContent {
 
-	@Override
-	protected void init() {
-		this.setCustomRenderer(new EditSectionRenderer());
-
+	public EditContent() {
+		this.setRenderer(new EditSectionRenderer());
 	}
 }

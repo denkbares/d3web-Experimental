@@ -31,7 +31,7 @@ public class Bar extends AbstractType {
 	
 	public Bar() {
 		this.setSectionFinder(new RegexSectionFinder("\\|"));
-		this.setCustomRenderer(NothingRenderer.getInstance());
+		this.setRenderer(NothingRenderer.getInstance());
 		
 	}
 

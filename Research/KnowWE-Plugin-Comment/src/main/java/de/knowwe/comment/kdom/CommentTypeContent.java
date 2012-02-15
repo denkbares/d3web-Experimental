@@ -25,8 +25,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 public class CommentTypeContent extends AbstractType {
 
-	@Override
-	protected void init() {
+	public CommentTypeContent() {
 		sectionFinder = new RegexSectionFinder(".+");
 	}
 

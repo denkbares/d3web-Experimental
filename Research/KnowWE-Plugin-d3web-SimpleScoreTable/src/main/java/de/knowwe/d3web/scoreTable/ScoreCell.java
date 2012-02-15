@@ -47,7 +47,7 @@ public class ScoreCell extends AbstractType {
 		setSectionFinder(csf);
 
 		//setCustomRenderer(new GenericHTMLRenderer<ScoreCell>("span", new String[] {"style", "color: black;", "title", "ScoreCell"}));
-		setCustomRenderer(new TableCellRenderer());
+		setRenderer(new TableCellRenderer());
 		this.addSubtreeHandler(Priority.LOW,new ScoreTableCellSubtreeHandler());
 	}
 

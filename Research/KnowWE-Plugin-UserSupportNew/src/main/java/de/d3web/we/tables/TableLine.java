@@ -37,7 +37,7 @@ public class TableLine extends AbstractType {
 		AnonymousType relationComment = new AnonymousType("comment");
 		relationComment.setSectionFinder(new RegexSectionFinder("[\\t ]*"
 				+ "//[^\r\n]*+" + "\\r?\\n"));
-		relationComment.setCustomRenderer(StyleRenderer.COMMENT);
+		relationComment.setRenderer(StyleRenderer.COMMENT);
 		this.addChildType(relationComment);
 
 		this.sectionFinder = new RegexSectionFinder("([^\\|]+\\|)+[^\\|]+");

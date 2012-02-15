@@ -36,7 +36,7 @@ public class Image extends MultimediaItem {
 	public Image() {
 		super(REGEX);
 
-		this.setCustomRenderer(new KnowWEDomRenderer<Image>() {
+		this.setRenderer(new KnowWEDomRenderer<Image>() {
 
 			@Override
 			public void render(KnowWEArticle article, Section<Image> sec, UserContext user, StringBuilder string) {

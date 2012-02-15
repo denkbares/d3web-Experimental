@@ -54,7 +54,7 @@ public class BraceElement extends NonTerminalCondition {
 		CLOSED = closed;
 
 		this.setSectionFinder(BracedExpressionFinder.createEmbracedExpressionFinder());
-		this.setCustomRenderer(new KnowWEDomRenderer<BraceElement>() {
+		this.setRenderer(new KnowWEDomRenderer<BraceElement>() {
 
 			@Override
 			public void render(KnowWEArticle article, Section<BraceElement> section, UserContext user, StringBuilder string) {

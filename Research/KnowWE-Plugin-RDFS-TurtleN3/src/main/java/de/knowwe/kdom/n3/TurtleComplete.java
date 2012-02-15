@@ -36,7 +36,7 @@ public class TurtleComplete extends AbstractKnowledgeUnitType {
 		setSectionFinder(new RegexSectionFinder("ttl:.*?\\.", Pattern.DOTALL
 				| Pattern.MULTILINE, 0));
 
-		setCustomRenderer(new TurtleN3Renderer());
+		setRenderer(new TurtleN3Renderer());
 	}
 
 }

@@ -134,7 +134,7 @@ class ImportIRI extends AbstractType {
 		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 
 		this.setSectionFinder(csf);
-		this.setCustomRenderer(new IRITypeRenderer<ImportIRI>());
+		this.setRenderer(new IRITypeRenderer<ImportIRI>());
 	}
 }
 

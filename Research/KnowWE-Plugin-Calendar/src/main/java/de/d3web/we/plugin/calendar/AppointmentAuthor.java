@@ -27,8 +27,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 public class AppointmentAuthor extends AbstractType {
 
-	@Override
-	protected void init() {
+	public AppointmentAuthor() {
 
 		Map<String, String> persons = CalendarModule.getPersons();
 

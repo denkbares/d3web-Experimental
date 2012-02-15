@@ -41,23 +41,18 @@ public class SubClassing extends AbstractXMLType {
 
 	public SubClassing() {
 		super("subclassing");
-	}
-
-	@Override
-	protected void init() {
 		this.childrenTypes.add(new SubclassingContent());
 	}
 
 	class SubclassingContent extends XMLContent {
 
-		@Override
-		protected void init() {
+		protected SubclassingContent() {
 			AbstractType subClassingDashTree = new DashTree();
 			replaceRootType(subClassingDashTree);
 			this.childrenTypes.add(subClassingDashTree);
 
 			// setting Pre-environoment-renderer
-			this.setCustomRenderer(new PreRendererWithoutTilde());
+			this.setRenderer(new PreRendererWithoutTilde());
 		}
 
 		private void replaceRootType(

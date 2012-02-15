@@ -23,7 +23,7 @@ public class PelletSparqlAsk extends DefaultMarkupType {
 
 	public PelletSparqlAsk() {
 		super(MARKUP);
-		this.setCustomRenderer(new PelletAskRenderer());
+		this.setRenderer(new PelletAskRenderer());
 		this.setIgnorePackageCompile(true);
 	}
 

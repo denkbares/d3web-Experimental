@@ -41,10 +41,9 @@ public class LocationDefinitionType extends AbstractType {
 	private static final String START_TAG = "<<ORT:";
 	private static final String END_TAG = ">>";
 
-	@Override
-	protected void init() {
+	public LocationDefinitionType() {
 		sectionFinder = new RegexSectionFinder(START_TAG + "[\\w|\\W]*?" + END_TAG);
-		this.setCustomRenderer(new EditSectionRenderer(LocationRenderer.getInstance()));
+		this.setRenderer(new EditSectionRenderer(LocationRenderer.getInstance()));
 		this.addSubtreeHandler(new LocationDefinitionTypeOWLSubTreeHandler());
 	}
 

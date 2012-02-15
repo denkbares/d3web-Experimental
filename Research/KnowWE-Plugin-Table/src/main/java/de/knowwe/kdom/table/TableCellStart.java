@@ -42,7 +42,7 @@ public class TableCellStart extends AbstractType {
 
 	public TableCellStart() {
 		setSectionFinder(new RegexSectionFinder(Pattern.compile("(\\|).*"), 1));
-		setCustomRenderer(NothingRenderer.getInstance());
+		setRenderer(NothingRenderer.getInstance());
 	}
 
 }

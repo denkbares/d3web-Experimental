@@ -23,7 +23,7 @@ public class PredefinedTermReference extends IncrementalTermReference {
 
 	public PredefinedTermReference() {
 		super(String.class);
-		this.setCustomRenderer(REF_RENDERER);
+		this.setRenderer(REF_RENDERER);
 		this.setSectionFinder(new SectionFinder() {
 
 			@Override

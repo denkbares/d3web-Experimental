@@ -47,7 +47,7 @@ public class SimpleIRIDefintionMarkup extends AbstractType {
 
 		public DefType() {
 			this.setSectionFinder(new RegexSectionFinderSingle("^def\\s+"));
-			this.setCustomRenderer(new StyleRenderer("font-style:italic;"));
+			this.setRenderer(new StyleRenderer("font-style:italic;"));
 		}
 	}
 

@@ -43,14 +43,14 @@ public class SimpleIRIDefintionMarkup extends AbstractType implements Editable {
 		this.addChildType(new DefType());
 		this.addChildType(new DefinitionTerm());
 
-		this.setCustomRenderer(new PreEnvRenderer());
+		this.setRenderer(new PreEnvRenderer());
 	}
 
 	class DefType extends AbstractType {
 
 		public DefType() {
 			this.setSectionFinder(new RegexSectionFinderSingle("^def\\s+"));
-			this.setCustomRenderer(new StyleRenderer("font-style:italic;"));
+			this.setRenderer(new StyleRenderer("font-style:italic;"));
 		}
 	}
 

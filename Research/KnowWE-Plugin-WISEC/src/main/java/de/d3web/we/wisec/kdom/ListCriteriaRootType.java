@@ -51,13 +51,9 @@ public class ListCriteriaRootType extends DefaultMarkupType {
 
 	}
 
-	@Override
-	public KnowWEDomRenderer getRenderer() {
-		return new CriteriaListDefaultMarkupRenderer();
-	}
-
 	public ListCriteriaRootType() {
 		super(m);
+		this.setRenderer(new CriteriaListDefaultMarkupRenderer());
 	}
 
 	/**
@@ -115,10 +111,8 @@ public class ListCriteriaRootType extends DefaultMarkupType {
 			// bloody hack to not render annotations...
 			boolean annotationPartStarted = false;
 			for (Section<?> subsec : subsecs) {
-				if (subsec == first && subsec.get() instanceof PlainText)
-					continue;
-				if (subsec == last && subsec.get() instanceof PlainText)
-					continue;
+				if (subsec == first && subsec.get() instanceof PlainText) continue;
+				if (subsec == last && subsec.get() instanceof PlainText) continue;
 				if (subsec.getText().trim().startsWith("@")) {
 					annotationPartStarted = true;
 				}

@@ -37,7 +37,7 @@ public class AttributeContent extends AbstractType {
 
 	public AttributeContent() {
 		this.setSectionFinder(new AllTextFinderTrimmed());
-		this.setCustomRenderer(new KnowWEDomRenderer<MetaLine>() {
+		this.setRenderer(new KnowWEDomRenderer<MetaLine>() {
 
 			@Override
 			public void render(KnowWEArticle article, Section<MetaLine> sec, UserContext user, StringBuilder string) {

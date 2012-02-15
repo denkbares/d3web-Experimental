@@ -34,8 +34,7 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 
 public class BulletListItemLine extends AbstractType {
 
-	@Override
-	public void init() {
+	public BulletListItemLine() {
 		this.sectionFinder = new BulletListItemLineFinder();
 		this.childrenTypes.add(new BulletType());
 		this.childrenTypes.add(new LineBreak());

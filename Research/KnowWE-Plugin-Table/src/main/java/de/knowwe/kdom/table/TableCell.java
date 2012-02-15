@@ -50,7 +50,7 @@ public class TableCell extends AbstractType {
 	public TableCell() {
 		sectionFinder = new TableCellSectionFinder();
 		LineBreak lineBreak = new LineBreak();
-		lineBreak.setCustomRenderer(NothingRenderer.getInstance());
+		lineBreak.setRenderer(NothingRenderer.getInstance());
 		childrenTypes.add(lineBreak);
 		childrenTypes.add(new TableHeadStart());
 		childrenTypes.add(new TableCellStart());

@@ -41,7 +41,7 @@ public class Video extends MultimediaItem {
 		super(REGEX);
 
 		// TODO this is not for Video.
-		this.setCustomRenderer(new KnowWEDomRenderer<Video>() {
+		this.setRenderer(new KnowWEDomRenderer<Video>() {
 
 			@Override
 			public void render(KnowWEArticle article, Section<Video> sec, UserContext user, StringBuilder string) {

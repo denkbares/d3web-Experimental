@@ -20,7 +20,6 @@
 
 package de.knowwe.comment.forum;
 
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.kdom.xml.AbstractXMLType;
 
 public class Forum extends AbstractXMLType {
@@ -29,6 +28,8 @@ public class Forum extends AbstractXMLType {
 
 	public Forum() {
 		super("forum");
+		this.setRenderer(new ForumRenderer());
+		childrenTypes.add(new ForumBox());
 	}
 
 	public static Forum getInstance() {
@@ -38,16 +39,4 @@ public class Forum extends AbstractXMLType {
 		return instance;
 	}
 
-	@Override
-	protected void init() {
-
-		childrenTypes.add(new ForumBox());
-
-		// TODO handle text between forum content
-	}
-
-	@Override
-	public KnowWEDomRenderer getRenderer() {
-		return new ForumRenderer();
-	}
 }

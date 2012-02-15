@@ -53,7 +53,7 @@ public class ClassDefinitionMarkup extends AbstractType implements Editable, Kno
 		this.addChildType(new EndLineComment());
 		this.addChildType(new ClassDef());
 
-		this.setCustomRenderer(new PreEnvRenderer());
+		this.setRenderer(new PreEnvRenderer());
 	}
 
 	class ClassDef extends AbstractIRITermDefinition implements TypedTermDefinition {

@@ -34,6 +34,6 @@ public class DroolsFactInputType extends AbstractType {
 
 	public DroolsFactInputType() {
 		setSectionFinder(new RegexSectionFinder(Pattern.compile("<(\\S*?)>"), 1));
-		setCustomRenderer(StyleRenderer.PROMPT);
+		setRenderer(StyleRenderer.PROMPT);
 	}
 }

@@ -37,7 +37,6 @@ import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.KnowWERessourceLoader;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
@@ -91,11 +90,8 @@ public class TestCaseExecutorType extends DefaultMarkupType {
 				return errors;
 			}
 		});
-	}
 
-	@Override
-	public KnowWEDomRenderer<TestCaseExecutorType> getRenderer() {
-		return new TestCaseExecutorRender();
+		this.setRenderer(new TestCaseExecutorRender());
 	}
 
 	public static String getMaster(Section<TestCaseExecutorType> section) {

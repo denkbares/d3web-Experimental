@@ -70,9 +70,8 @@ public class CellContent extends TableCellContent {
 		}
 	}
 
-	@Override
-	protected void init() {
-		setCustomRenderer(new TestcaseTableCellContentRenderer());
+	public CellContent() {
+		setRenderer(new TestcaseTableCellContentRenderer());
 
 		TimeStampType timeStampType = new TimeStampType();
 		timeStampType.setSectionFinder(new ConstraintSectionFinder(

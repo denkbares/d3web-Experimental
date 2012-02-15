@@ -55,7 +55,7 @@ public class InlineIndicationCondition extends AbstractType {
 		AnonymousType open = new AnonymousType(START_KEY);
 		open.setSectionFinder(new RegexSectionFinder(
 				START_KEY, Pattern.CASE_INSENSITIVE));
-		open.setCustomRenderer(new KnowWEDomRenderer<Type>() {
+		open.setRenderer(new KnowWEDomRenderer<Type>() {
 
 			@Override
 			public void render(KnowWEArticle article, Section<Type> sec, UserContext user, StringBuilder string) {
@@ -69,7 +69,7 @@ public class InlineIndicationCondition extends AbstractType {
 		AnonymousType close = new AnonymousType(END_KEY);
 		close.setSectionFinder(new UnquotedExpressionFinder(
 				END_KEY));
-		close.setCustomRenderer(NothingRenderer.getInstance());
+		close.setRenderer(NothingRenderer.getInstance());
 		this.addChildType(close);
 
 		this.addChildType(new Finding());

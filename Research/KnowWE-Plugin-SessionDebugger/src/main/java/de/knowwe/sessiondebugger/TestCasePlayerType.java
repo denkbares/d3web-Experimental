@@ -42,19 +42,14 @@ public class TestCasePlayerType extends DefaultMarkupType {
 
 	public TestCasePlayerType() {
 		super(MARKUP);
-		this.setCustomRenderer(this.getRenderer());
+		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 		for (Type type : this.getAllowedChildrenTypes()) {
 			if (type instanceof ContentType) {
-				((ContentType) type).setCustomRenderer(
+				((ContentType) type).setRenderer(
 						new ReRenderSectionMarkerRenderer<ContentType>(
 								new TestCasePlayerRenderer()));
 			}
 		}
-	}
-
-	@Override
-	public DefaultMarkupRenderer<DefaultMarkupType> getRenderer() {
-		return new DefaultMarkupRenderer<DefaultMarkupType>(false);
 	}
 
 }

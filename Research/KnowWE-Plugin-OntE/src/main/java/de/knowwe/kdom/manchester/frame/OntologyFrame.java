@@ -50,7 +50,7 @@ class OntologyIRI extends AbstractType {
 		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 
 		this.setSectionFinder(csf);
-		this.setCustomRenderer(new IRITypeRenderer<OntologyIRI>());
+		this.setRenderer(new IRITypeRenderer<OntologyIRI>());
 	}
 }
 
@@ -61,6 +61,6 @@ class OntologyVersionIRI extends AbstractType {
 		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 
 		this.setSectionFinder(csf);
-		this.setCustomRenderer(new IRITypeRenderer<OntologyVersionIRI>());
+		this.setRenderer(new IRITypeRenderer<OntologyVersionIRI>());
 	}
 }

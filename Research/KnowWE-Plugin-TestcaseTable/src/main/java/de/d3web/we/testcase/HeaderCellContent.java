@@ -48,12 +48,11 @@ import de.knowwe.kdom.table.TableLine;
  */
 public class HeaderCellContent extends TableCellContent {
 
-	@Override
-	protected void init() {
-		setCustomRenderer(new TableCellContentRenderer(false));
+	public HeaderCellContent() {
+		setRenderer(new TableCellContentRenderer(false));
 
 		QuestionReference qref = new QuestionReference();
-		qref.setCustomRenderer(DefaultTextRenderer.getInstance());
+		qref.setRenderer(DefaultTextRenderer.getInstance());
 		qref.setSectionFinder(new SectionFinder() {
 
 			@Override

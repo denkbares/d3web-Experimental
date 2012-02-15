@@ -25,8 +25,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 
 public class AppointmentTime extends AbstractType {
 
-	@Override
-	protected void init() {
+	public AppointmentTime() {
 		sectionFinder = new RegexSectionFinder("[0-9][0-9]?(:|\\.)[0-9][0-9]?");
 	}
 

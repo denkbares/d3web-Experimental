@@ -37,18 +37,13 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 public abstract class IncrementalTermDefinition<TermObject> extends SimpleDefinition {
 
-	final KnowWEDomRenderer CLASS_RENDERER = new ToolMenuDecoratingRenderer<IncrementalTermReference>(
-			new StyleRenderer(
-					"color:rgb(125, 80, 102)"));
+	final KnowWEDomRenderer CLASS_RENDERER = new ReferenceRenderer(
+			new ToolMenuDecoratingRenderer<IncrementalTermReference>(
+					new StyleRenderer("color:rgb(125, 80, 102)")));
 
 	public IncrementalTermDefinition(Class termObjectClass) {
 		super(TermRegistrationScope.GLOBAL, termObjectClass);
-		this.setCustomRenderer(CLASS_RENDERER);
-	}
-
-	@Override
-	public KnowWEDomRenderer getRenderer() {
-		return new ReferenceRenderer(this.customRenderer);
+		this.setRenderer(CLASS_RENDERER);
 	}
 
 	class ReferenceRenderer extends KnowWEDomRenderer<IncrementalTermDefinition> {

@@ -33,7 +33,7 @@ public class DroolsFactValues extends AbstractType {
 	
 	public DroolsFactValues() {
 		setSectionFinder(new RegexSectionFinder("\\{.*?\\}"));
-		setCustomRenderer(StyleRenderer.KEYWORDS);
+		setRenderer(StyleRenderer.KEYWORDS);
 		addChildType(new DroolsFactValue());
 	}
 }

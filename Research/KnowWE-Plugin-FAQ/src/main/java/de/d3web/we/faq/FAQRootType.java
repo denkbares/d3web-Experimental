@@ -49,7 +49,7 @@ public class FAQRootType extends DefaultMarkupType {
 	 */
 	public FAQRootType() {
 		super(m);
-		this.setCustomRenderer(new FAQRootTypeDefaultRenderer());
+		this.setRenderer(new FAQRootTypeDefaultRenderer());
 	}
 
 }

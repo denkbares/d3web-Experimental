@@ -27,8 +27,7 @@ public class WordObjectType extends AbstractType {
 
 	private static WordObjectType instance;
 
-	@Override
-	public void init() {
+	public WordObjectType() {
 		this.childrenTypes.add(new AStarObjectType());
 		this.childrenTypes.add(new BStarObjectType());
 		this.sectionFinder = new RegexSectionFinder("[ab]+");

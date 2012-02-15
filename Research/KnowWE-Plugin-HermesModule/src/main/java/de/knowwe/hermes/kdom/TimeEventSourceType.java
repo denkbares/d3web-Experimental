@@ -31,8 +31,7 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 
 public class TimeEventSourceType extends AbstractType {
 
-	@Override
-	protected void init() {
+	public TimeEventSourceType() {
 		sectionFinder = new TimeEventSourceSectionFinder();
 	}
 

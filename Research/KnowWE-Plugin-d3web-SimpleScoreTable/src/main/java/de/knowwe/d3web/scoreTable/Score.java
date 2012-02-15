@@ -37,7 +37,7 @@ public class Score extends ScoreValue {
 
 
 
-		setCustomRenderer(new StyleRenderer("font-weight:bold;"));
+		setRenderer(new StyleRenderer("font-weight:bold;"));
 		this.setSectionFinder(new OneOfStringEnumFinderExact(this.values));
 		//setCustomRenderer(new GenericHTMLRenderer<Score>("span", new String[] {"style", "color: brown;", "title", "Score"}));
 	}

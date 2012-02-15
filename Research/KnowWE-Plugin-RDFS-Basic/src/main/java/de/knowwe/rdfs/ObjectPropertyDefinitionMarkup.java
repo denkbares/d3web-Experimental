@@ -49,7 +49,7 @@ public class ObjectPropertyDefinitionMarkup extends AbstractType implements Comp
 		this.addChildType(new PropertyDef());
 		this.addChildType(new RangeDomainSpec());
 
-		this.setCustomRenderer(new PreEnvRenderer());
+		this.setRenderer(new PreEnvRenderer());
 	}
 
 	class RangeDomainSpec extends AbstractType {

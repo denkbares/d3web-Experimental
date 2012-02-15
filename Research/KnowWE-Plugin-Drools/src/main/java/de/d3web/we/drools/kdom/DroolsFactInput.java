@@ -32,7 +32,7 @@ public class DroolsFactInput extends AbstractType {
 	
 	public DroolsFactInput() {
 		setSectionFinder(new RegexSectionFinder("(Input)<\\S+>"));
-		setCustomRenderer(StyleRenderer.KEYWORDS);
+		setRenderer(StyleRenderer.KEYWORDS);
 		addChildType(new DroolsFactInputType());
 	}
 }

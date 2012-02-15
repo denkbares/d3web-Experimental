@@ -72,7 +72,7 @@ public class TimeEventNew extends AbstractType {
 
 		this.childrenTypes.add(DescriptionType);
 
-		this.setCustomRenderer(new EditSectionRenderer(new TimeEventRenderer()));
+		this.setRenderer(new EditSectionRenderer(new TimeEventRenderer()));
 
 		this.addSubtreeHandler(Priority.LOW, new TimeEventOWLCompiler());
 	}
@@ -122,7 +122,7 @@ public class TimeEventNew extends AbstractType {
 			// true says that this name is registered as globally unique term
 
 			// renderer
-			this.setCustomRenderer(new TimeEventTitleRenderer());
+			this.setRenderer(new TimeEventTitleRenderer());
 			this.addSubtreeHandler(Priority.HIGH, new AssertSingleTermDefinitionHandler(
 					TermRegistrationScope.GLOBAL));
 
@@ -159,7 +159,7 @@ public class TimeEventNew extends AbstractType {
 	public static class DateType extends AbstractType {
 
 		public DateType() {
-			this.setCustomRenderer(new TimeEventDateRenderer());
+			this.setRenderer(new TimeEventDateRenderer());
 			ConstraintSectionFinder cf = new ConstraintSectionFinder(
 					new SectionFinder() {
 
@@ -214,7 +214,7 @@ public class TimeEventNew extends AbstractType {
 		// Pattern embracedNumbers = Pattern.compile("1");
 
 		public ImportanceType() {
-			this.setCustomRenderer(new TimeEventImpRenderer());
+			this.setRenderer(new TimeEventImpRenderer());
 
 			// SectionFinder taking the last number in brackets
 			ConstraintSectionFinder cf = new ConstraintSectionFinder(
@@ -290,7 +290,7 @@ public class TimeEventNew extends AbstractType {
 	public static class Source extends AbstractType {
 
 		public Source() {
-			this.setCustomRenderer(new TimeEventSrcRenderer());
+			this.setRenderer(new TimeEventSrcRenderer());
 			this.sectionFinder = new RegexSectionFinder("(QUELLE:.*)\\r?\\n", 9999, 1);
 		}
 
@@ -313,7 +313,7 @@ public class TimeEventNew extends AbstractType {
 			// this.childrenTypes.add(new LocationOccurrence());
 
 			// renderer
-			this.setCustomRenderer(new TimeEventDescRenderer());
+			this.setRenderer(new TimeEventDescRenderer());
 
 			this.addChildType(new TripleMarkup());
 

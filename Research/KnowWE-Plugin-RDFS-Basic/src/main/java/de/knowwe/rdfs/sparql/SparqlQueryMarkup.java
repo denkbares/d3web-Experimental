@@ -28,7 +28,7 @@ public class SparqlQueryMarkup extends DefaultMarkupType {
 
 	public SparqlQueryMarkup(DefaultMarkup markup) {
 		super(markup);
-		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
+		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 
 	private static DefaultMarkup m = null;
@@ -40,7 +40,7 @@ public class SparqlQueryMarkup extends DefaultMarkupType {
 
 	public SparqlQueryMarkup() {
 		super(m);
-		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
+		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 
 	}
 

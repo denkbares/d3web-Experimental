@@ -29,11 +29,7 @@ public class TableCellContent extends AbstractType {
 
 	public TableCellContent() {
 		this.sectionFinder = new AllTextSectionFinder();
-	}
-
-	@Override
-	protected void init() {
-		this.setCustomRenderer(new TableCellContentRenderer());
+		this.setRenderer(new TableCellContentRenderer());
 	}
 
 	public static boolean isTableHeadContent(Section<? extends TableCellContent> s) {

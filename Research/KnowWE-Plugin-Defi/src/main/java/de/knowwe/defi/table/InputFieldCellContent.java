@@ -37,7 +37,7 @@ public class InputFieldCellContent extends AbstractType {
 
 	public InputFieldCellContent() {
 		this.setSectionFinder(new RegexSectionFinder("INPUT(\\(.*?\\))?", Pattern.DOTALL));
-		this.setCustomRenderer(new InputRenderer());
+		this.setRenderer(new InputRenderer());
 	}
 
 	public static int getWidth(Section<InputFieldCellContent> sec) {

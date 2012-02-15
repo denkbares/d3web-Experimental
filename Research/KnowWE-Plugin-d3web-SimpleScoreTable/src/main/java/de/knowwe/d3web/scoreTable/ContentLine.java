@@ -43,7 +43,7 @@ public class ContentLine extends AbstractType {
 		childrenTypes.add(new Bar());
 		setSectionFinder(new RegexSectionFinder("\\s*(\\|{1,2}.*?)(?:\\r?\\n|\\z)", Pattern.DOTALL
 				| Pattern.MULTILINE, 0));
-		setCustomRenderer(new TableLineRenderer());
+		setRenderer(new TableLineRenderer());
 		// setCustomRenderer(new GenericHTMLRenderer<ContentLine>("span", new
 		// String[] {"style", "color: orange;", "title", "ContentLine"}));
 	}

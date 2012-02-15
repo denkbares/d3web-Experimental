@@ -42,7 +42,7 @@ public class TimeTableMarkup extends DefaultMarkupType {
 
 	public TimeTableMarkup(DefaultMarkup markup) {
 		super(markup);
-		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
+		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 
 	// @Override
@@ -89,6 +89,6 @@ public class TimeTableMarkup extends DefaultMarkupType {
 
 	public TimeTableMarkup() {
 		super(m);
-		this.setCustomRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
+		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 }
