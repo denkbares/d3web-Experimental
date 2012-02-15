@@ -23,6 +23,8 @@ import java.util.List;
 
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.we.object.D3webTermReference;
+import de.knowwe.core.compile.terminology.TermRegistrationScope;
+import de.knowwe.core.kdom.objects.SimpleTermReferenceRegistrationHandler;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -46,6 +48,8 @@ public class QuestionIdentifier extends D3webTermReference<Question> {
 		csf.addConstraint(SingleChildConstraint.getInstance());
 
 		this.setSectionFinder(csf);
+		
+		this.addSubtreeHandler(new SimpleTermReferenceRegistrationHandler(TermRegistrationScope.LOCAL));
 
 	}
 
