@@ -88,6 +88,12 @@ function setup() {
         expandFirstmostElement();
     
         exchangeTextFirstSub();
+        
+        // initialize mechanism for num fields to check entered values etc
+        initializeNumfields();
+        
+        // initialize mechanism for dropdwons to check entered values etc
+        initializeDropdownSelects();
     }
     
     if(logging){
@@ -1175,8 +1181,9 @@ function setColorForQuestionHelper(target, imgTarget, color){
  * the corresponding color/rating value: 0=undecided, 1=approve, 2=suggest, 3=reject
  */
 function calculateRatingForQuestion(question){
-    var ocPar = question.hasClass('oc');    // parent has AND connection
-    var mcPar = question.hasClass('mc');    // parent has OR connection
+    
+    var ocPar = question.hasClass('AND');    // parent has AND connection
+    var mcPar = question.hasClass('OR');    // parent has OR connection
     var color; 
         
     // go through all child-questions and read their ratings into a var
@@ -1198,9 +1205,11 @@ function calculateRatingForQuestion(question){
                 ratings += "0 ";
             }
         });
-            
+          
+          
     // AND case
     if(ocPar){
+       
         // handle OC questions here, i.e. questions where all children
         // need to be confirmed to get the parent confirmed
         if(ratings.indexOf("1") != -1 &&
@@ -1222,7 +1231,7 @@ function calculateRatingForQuestion(question){
     // OR case: here, one single confirmed (1) child is enough to get the
     // parent confirmed
     else if (mcPar){
-              
+        
         if(ratings.indexOf("1") != -1){ 
             color = "1";    // one confirmed, confirm par
         }
@@ -1271,6 +1280,86 @@ function hasChildrenHierachical(question){
 }
 
 /**
+ * Initialize Num fields as to react on enter-press or focusout to check whether
+ * question should be established due to the rating given
+ */
+function initializeNumfields(){
+    $('[type=num]').unbind("keydown").keydown(function(e) { 
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if (code == 13) {
+            handleNumFields_proto($(this));
+        }
+    }).unbind("focusout").focusout(function() {
+        handleNumFields_proto($(this));
+    });
+}
+
+/**
+ * Checks the defined range for num questions. If in defined value range for
+ * establishing question: establish, otherwise remove rating
+ */
+function handleNumFields_proto(el){
+    
+    var val = parseInt($(el).val());
+    var min = parseInt($(el).attr("min"));
+    var max = parseInt($(el).attr("max"));
+    
+    // get parent question element
+    var name = $(el).attr("name");
+    var idnum = name.split("-")[0];
+    var par = $(el).parents("[id^=" + "q_" + idnum + "]");
+        
+    if(val >= min && val <= max){
+        // set color of question --> high rating, as defining = establish
+        setColorForQuestion(par, par, "1");
+    } else {
+        // remove rating if value outside range
+        par.removeClass("rating-high");
+    }
+
+    $(el).blur();
+    setPropagationColor(par);
+    h4boxes_mark(par, true);
+}
+
+/**
+ * Initialize Dropdwons as to check whether the chosen value is the defined
+ * establish-value when dropdown input changes.
+ */
+function initializeDropdownSelects(){
+    $('select').unbind('change').change(function() { 
+        handleDropdwonSelects_proto($(this));
+    });
+}
+
+/**
+ * Checks the defined range for dropdown questions. If the defined-->establish 
+ * value is selected, establish question, otherwise remove rating
+ */
+function handleDropdwonSelects_proto(el){
+    
+    var val = el.val();
+    
+    // get parent question element
+    var id = $(el).attr("id");
+    var idnum = name.split("-")[0];
+    var par = $(el).parents("[id^=" + "q_" + idnum + "]");
+    var defining = par.attr("defining");
+    
+    if(defining.indexOf(val)!=-1){
+        // set color of question --> high rating, as defining = establish
+        setColorForQuestion(par, par, "1");
+    } else {
+        // remove rating if value outside range
+        par.removeClass("rating-high");
+    }
+
+    $(el).blur();
+    setPropagationColor(par);
+    h4boxes_mark(par, true);
+}
+
+/**
  * Show the auxiliary information for element with id "id" in the infopanel
  * element
  */
@@ -1311,18 +1400,13 @@ function h4boxes_mark(object, skip_self) {
     // check object itself unless skip_self
     if (!skip_self) {
 		
-        // get the basic class (AND/OR) of the parent = the question
-        var ocPar = object.hasClass('oc');
-        var mcPar = object.hasClass('mc');
         var color; 
-        
-        // go through all child-questions and read their ratings into a var
-        var ratings = "";
         
         color = calculateRatingForQuestion(object);
           
         // retrieve target element and target image
         var target = $("#" + $(object).attr('id'));
+        
         var imgTarget = $("#panel-" + $(object).attr('id'));
         
         setColorForQuestion(target, imgTarget, color);

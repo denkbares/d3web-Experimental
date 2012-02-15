@@ -55,31 +55,33 @@ public class LegalQuestionRenderer extends Renderer {
             }
 
             String andOrTypePar = parent.getInheritableAttributes().getAndOrType();
-            
+
             // Check if this question has subquestions
             if (dialogObject.getChildren().size() != 0) {
 
-               st.removeAttribute("typeimg");
-               if (andOrTypePar.equals("OR")) {
+                st.removeAttribute("typeimg");
+                if (andOrTypePar.equals("OR")) {
                     st.setAttribute("typeimg", "img/closedArrowOr.png");
                 } else if (andOrTypePar.equals("AND")) {
                     st.setAttribute("typeimg", "img/closedArrowAnd.png");
-                } 
+                }
             } else {
 
-                 st.removeAttribute("typeimg");
+                st.removeAttribute("typeimg");
                 if (andOrTypePar.equals("OR")) {
                     st.setAttribute("typeimg", "img/transpOr.png");
                 } else if (andOrTypePar.equals("AND")) {
                     st.setAttribute("typeimg", "img/transpAnd.png");
                 }
-            
+
             }
 
             // workaround for removing a doubled-answertype setting in template
             st.removeAttribute("answerType");
             st.setAttribute("answerType", dialogObject.getInheritableAttributes().getAnswerType());
 
+            st.removeAttribute("andOrType");
+            st.setAttribute("andOrType", dialogObject.getInheritableAttributes().getAndOrType());
 
             /*
              * We have children not necessarily direct dialog object children
@@ -95,14 +97,14 @@ public class LegalQuestionRenderer extends Renderer {
                 st.setAttribute("noChildren", "");
             }
         } else {
-            
+
             st.removeAttribute("typeimg");
             if (!dialogObject.getChildren().isEmpty()) {
-               
+
                 st.setAttribute("typeimg", "img/closedArrow.png");
             } else {
 
-               
+
                 st.setAttribute("typeimg", "img/transpSquare.png");
             }
         }

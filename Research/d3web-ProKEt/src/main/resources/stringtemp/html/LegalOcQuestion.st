@@ -1,4 +1,4 @@
-<div id="$fullId$" class="question $fullId$ $answerType$" defining="$defining$">
+<div id="$fullId$" class="question $fullId$ $answerType$ $andOrType$" defining="$defining$">
 
     <!--this is the opening/close arrow image-->
     <div id="$id$-imagebox" class="question-imagebox" 
@@ -11,12 +11,12 @@
     <div id=$id$-choicesDropdown class="floatingCDrop"
              onmouseover="showAuxInfo('$fullId$')" onmouseout="hideAuxInfo()">
         
-        <select>
+        <select id="$fullId$-dropdown">
             $choicesDropdownOptions$
         </select>
     </div>
     
-    <div class="title t-$fullId$" id="t-$fullId$" onmouseover="showAuxInfo('$fullId$', '$title$')" onmouseout="hideAuxInfo()">
+    <div class="title t-$fullId$" id="t-$fullId$" onmouseover="showAuxInfo('$fullId$', '$title$')" onmouseout="hideAuxInfo()" >
         $title$
 		$Tooltip()$
 		$Image()$

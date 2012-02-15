@@ -2,7 +2,7 @@
     <img id="$fullid$-readimg" alt="readflow" src="$readimg$" height="14" width="25">
 </div>
  
-<div id="$fullId$" class="question $fullId$ $answerType$">
+<div id="$fullId$" class="question $fullId$ $answerType$ $andOrType$" defining=$defining$>
 	<div id="$id$-imagebox" class="question-imagebox" onmouseover="showAuxInfo('$fullId$')" onmouseout="hideAuxInfo()">
             <img id="$id$-typeimg" alt="type" src="$typeimg$" height="20" width="35" onclick="toggle_sub_4boxes('$fullId$')">
             
@@ -12,12 +12,12 @@
     <div id=$id$-choicesDropdown class="floatingCDrop"
              onmouseover="showAuxInfo('$fullId$')" onmouseout="hideAuxInfo()">
         
-        <select>
+        <select id="$fullId$-dropdown">
             $choicesDropdownOptions$
         </select>
     </div>
 
-<div class="title t-$fullId$" id="t-$fullId$" onmouseover="showAuxInfo('$fullId$', '$title$')" onmouseout="hideAuxInfo()">
+<div class="title t-$fullId$" id="t-$fullId$" onmouseover="showAuxInfo('$fullId$', '$title$')" onmouseout="hideAuxInfo() ">
         $title$
 		$Tooltip()$
 		$Image()$

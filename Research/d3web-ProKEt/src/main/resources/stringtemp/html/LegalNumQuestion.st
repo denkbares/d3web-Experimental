@@ -1,4 +1,4 @@
-<div id="$fullId$" class="question $fullId$ $answerType$" inter="$defmin$-$defmax$">
+<div id="$fullId$" class="question $fullId$ $answerType$ $andOrType$" inter="$defmin$-$defmax$">
    
     <!--this is the opening/close arrow image-->
     <div id="$id$-imagebox" class="question-imagebox" 
@@ -10,7 +10,7 @@
     <!--NUM VALUE ENTRY-->
     <div id=$id$-numentry class="floatingnum"
              onmouseover="showAuxInfo('$fullId$')" onmouseout="hideAuxInfo()">
-        <input name="$id$-numentry" type="num" size="5" maxlength="5" value="" />
+        <input name="$id$-numentry" type="num" size="5" maxlength="5" value="" min="$defmin$" max="$defmax$"/>
     </div>
    
     <!--DISPLAY OF QUESTION-->

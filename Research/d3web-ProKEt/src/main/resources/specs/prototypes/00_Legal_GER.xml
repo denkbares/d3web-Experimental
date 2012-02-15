@@ -63,4 +63,4 @@
                 <legalQuestion title="Test numerische Frage 2" id="54" parent-id="1" answer-type="num" defining="1-99"/>
                 <legalQuestion title="Test OC Frage" id="55" parent-id="1" answer-type="oc" choices="c1###c2###c3" defining="c3"/>
                 <legalQuestion title="Test OC Frage 2" id="56" parent-id="1" answer-type="oc" choices="c1###c2###c3###c4###c5###c6###letzte Choice" defining="c3"/>
-</dialog>
+                </dialog>

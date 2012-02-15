@@ -74,6 +74,9 @@ public class FrontLegalQuestionRenderer extends Renderer {
             // workaround for removing a doubled-answertype setting in template
             st.removeAttribute("answerType");
             st.setAttribute("answerType", dialogObject.getInheritableAttributes().getAnswerType());
+            
+            st.removeAttribute("andOrType");
+            st.setAttribute("andOrType", dialogObject.getInheritableAttributes().getAndOrType());
 
 
             /*
@@ -91,7 +94,7 @@ public class FrontLegalQuestionRenderer extends Renderer {
             }
         } else {
 
-            st.setAttribute("readimg", "img/transpSquare");
+            st.setAttribute("readimg", "img/transpSquare.png");
             
             if (!dialogObject.getChildren().isEmpty()) {
                 st.setAttribute("typeimg", "img/closedArrow.png");

@@ -2,7 +2,7 @@
     <img id="$fullid$-readimg" alt="readflow" src="$readimg$" height="14" width="25">
 </div>
  
-<div id="$fullId$" class="question $fullId$ $answerType$" inter="$defmin$-$defmax$">
+<div id="$fullId$" class="question $fullId$ $answerType$ $andOrType$" inter="$defmin$-$defmax$">
 
 <div id="$id$-imagebox" class="question-imagebox" onmouseover="showAuxInfo('$fullId$')" onmouseout="hideAuxInfo()">
             <img id="$id$-typeimg" alt="type" src="$typeimg$" height="20" width="35" onclick="toggle_sub_4boxes('$fullId$')">
@@ -12,7 +12,7 @@
     <!--NUM VALUE ENTRY-->
     <div id=$id$-numentry class="floatingnum"
              onmouseover="showAuxInfo('$fullId$')" onmouseout="hideAuxInfo()">
-        <input name="$id$-numentry" type="num" size="5" maxlength="5" value="" />
+        <input name="$id$-numentry" type="num" size="5" maxlength="5" value="" min="$defmin$" max="$defmax$"/>
     </div>
    
     <!--DISPLAY OF QUESTION-->

@@ -59,8 +59,10 @@
                 <question title="Hat der Betriebsrat Stellungnahme abgegeben?" id="34" parent-id="32" and-or-type="OR" />
                 <question title="Wurde eine Stellungnahme erklärt?" id="36" parent-id="34" />
                 <question title="Wird eine Stellungnahme Zeitablauf fingiert?" id="52" parent-id="34" />
-                <legalQuestion title="Test numerische Frage" id="53" parent-id="1" answer-type="num" defining="50"/>
-                <legalQuestion title="Test numerische Frage 2" id="54" parent-id="1" answer-type="num" defining="1-99"/>
+                <legalQuestion title="Test numerische Frage" id="53" parent-id="1" answer-type="num" defining="50"
+                bonus-text="Frage gilt als bestätigt, wenn der eingegebene Wert 50 ist."/>
+                <legalQuestion title="Test numerische Frage 2" id="54" parent-id="1" answer-type="num" defining="1-99"
+                bonus-text="Frage gilt als bestätigt, wenn der eingegebene Wert zwischen 1 und 99 liegt."/>
                 <legalQuestion title="Test OC Frage" id="55" parent-id="1" answer-type="oc" choices="c1###c2###c3" defining="c3"/>
-                <legalQuestion title="Test OC Frage 2" id="56" parent-id="1" answer-type="oc" choices="c1###c2###c3###c4###c5###c6###letzte Choice" defining="c3"/>
+                <legalQuestion title="Test OC Frage 2" id="56" parent-id="1" answer-type="oc" choices="c1###c2###c3###c4###c5###c6###letzte Choice" defining="c1"/>
 </dialog>
