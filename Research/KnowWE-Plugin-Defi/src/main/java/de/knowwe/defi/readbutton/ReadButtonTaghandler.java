@@ -126,9 +126,6 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			if (parameters.containsKey(LINKTEXT)) linkText = parameters.get(LINKTEXT);
 			else linkText = link;
 
-
-			System.out.println(linkText);
-
 			if (parameters.containsKey(ID)) id = parameters.get(ID);
 			else return KnowWEUtils.maskHTML("<p>Fehler: Dem Button fehlt das Attribut 'id'.</p>");
 
