@@ -37,7 +37,7 @@ public class FrontLegalOcQuestionRenderer extends FrontLegalQuestionRenderer {
             IDialogObject dialogObject, boolean force) {
 
         super.renderChildren(st, cc, dialogObject, force);
-        
+
         if (dialogObject instanceof LegalQuestion) {
             LegalQuestion lq = (LegalQuestion) dialogObject;
 
@@ -47,18 +47,21 @@ public class FrontLegalOcQuestionRenderer extends FrontLegalQuestionRenderer {
 
             st.removeAttribute("defining");
             st.setAttribute("defining", defining);
-            
+
             // assemble choices dropdown String
             StringBuilder bui = new StringBuilder();
-            String cSplit[] = choices.split("###");
-            if(cSplit != null && cSplit.length != 0){
-                for(String c: cSplit){
-                    bui.append("<option>");
-                    bui.append(c);
-                    bui.append("</option>");
+            if (choices != null && !choices.equals("")) {
+                String cSplit[] = choices.split("###");
+                if (cSplit != null && cSplit.length != 0) {
+                    for (String c : cSplit) {
+                        bui.append("<option>");
+                        bui.append(c);
+                        bui.append("</option>");
+                    }
                 }
             }
-            
+
+
             st.removeAttribute("choicesDropdownOptions");
             st.setAttribute("choicesDropdownOptions", bui.toString());
         }

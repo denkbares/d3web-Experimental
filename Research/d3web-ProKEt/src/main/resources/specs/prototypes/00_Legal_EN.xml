@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialog type="legal" css="legal, nofoot" header="Labour Legislation Consultation"
-	answer-type="oc" logging="false" uequest="true" feedback="true">
+	 and-or-type="AND" logging="false" uequest="true" feedback="true">
 		<question title="Employment contract was terminated effectually and in time"
-			id="1" type="mc" />
+			id="1" and-or-type="OR" />
 		<question title="Compliance with form, time limit, access and proxy"
-			id="2" parent-id="1" type="mc"/>
+			id="2" parent-id="1" and-or-type="OR"/>
 		<question title="Dismissal was not prohibited due to special facts"
-			id="3" parent-id="1" type="mc"/>
+			id="3" parent-id="1" and-or-type="OR"/>
 		<question title="No maternity protection law" id="4" parent-id="3" />
 		<question title="No vocational training act" id="5" parent-id="3" />
 		<question title="No employment protection law" id="6" parent-id="3" />
@@ -20,7 +20,7 @@
 			parent-id="3" />
 		<question 
 			title="Dismissal was not prohibited due to time limitations" id="12"
-			parent-id="1" type="oc"/>
+			parent-id="1" />
 		<question title="Employment contract was not effectually limited (any more)"
 			id="13" parent-id="12"  />
 		<question
@@ -28,10 +28,8 @@
 			parent-id="12" />
 		<question title="A fixed-term employment elapsed"
 			id="15" parent-id="12" />
-		<question answer-type=""
-			title="Social justification was not necessary or existed" id="16"
+		<question title="Social justification was not necessary or existed" id="16"
 			parent-id="1" />
-		<question answer-type=""
-			title="A works council was nonexistent or was not heard" id="17"
+		<question title="A works council was nonexistent or was not heard" id="17"
 			parent-id="1" /> 
 </dialog>
