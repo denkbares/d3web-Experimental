@@ -43,8 +43,8 @@ public abstract class FileTestCaseProviderStorage implements TestCaseProviderSto
 
 	private final Map<String, List<AttachmentTestCaseProvider>> regexMap = new HashMap<String, List<AttachmentTestCaseProvider>>();
 	private final KnowWEArticle article;
-	private final List<Message> messages = new LinkedList<Message>();
-	private final KnowWEArticle sectionArticle;;
+	protected final List<Message> messages = new LinkedList<Message>();
+	protected final KnowWEArticle sectionArticle;;
 
 	public FileTestCaseProviderStorage(KnowWEArticle compilingArticle, String[] regexes, KnowWEArticle sectionArticle) {
 		this.article = compilingArticle;
@@ -125,7 +125,7 @@ public abstract class FileTestCaseProviderStorage implements TestCaseProviderSto
 		Collection<Message> result = new LinkedList<Message>();
 		result.addAll(messages);
 		for (TestCaseProvider provider : getTestCaseProviders()) {
-			messages.addAll(provider.getMessages());
+			result.addAll(provider.getMessages());
 		}
 		return result;
 	}

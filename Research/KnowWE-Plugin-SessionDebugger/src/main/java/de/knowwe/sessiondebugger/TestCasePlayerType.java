@@ -21,7 +21,6 @@ package de.knowwe.sessiondebugger;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.kdom.defaultMarkup.ContentType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.renderer.ReRenderSectionMarkerRenderer;
 
@@ -42,7 +41,7 @@ public class TestCasePlayerType extends DefaultMarkupType {
 
 	public TestCasePlayerType() {
 		super(MARKUP);
-		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
+		this.setIgnorePackageCompile(false);
 		for (Type type : this.getAllowedChildrenTypes()) {
 			if (type instanceof ContentType) {
 				((ContentType) type).setRenderer(

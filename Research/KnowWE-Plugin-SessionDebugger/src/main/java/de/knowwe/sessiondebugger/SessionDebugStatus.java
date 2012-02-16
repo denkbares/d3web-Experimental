@@ -24,7 +24,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.utilities.Pair;
@@ -41,7 +43,7 @@ public class SessionDebugStatus {
 	private Session session;
 	private Date lastExecuted = null;
 	private Map<Date, Collection<Pair<Check, Boolean>>> checkResults = new HashMap<Date, Collection<Pair<Check, Boolean>>>();
-	private Map<Date, Map<Question, Value>> timeValues = new HashMap<Date, Map<Question, Value>>();
+	private Map<Date, Map<TerminologyObject, Value>> timeValues = new HashMap<Date, Map<TerminologyObject, Value>>();
 
 	public SessionDebugStatus(Session session) {
 		super();
@@ -110,13 +112,16 @@ public class SessionDebugStatus {
 	 * @param date specified Date
 	 */
 	public void finished(Date date) {
-		Map<Question, Value> values = timeValues.get(date);
+		Map<TerminologyObject, Value> values = timeValues.get(date);
 		if (values == null) {
-			values = new HashMap<Question, Value>();
+			values = new HashMap<TerminologyObject, Value>();
 			timeValues.put(date, values);
 		}
 		for (Question q : session.getKnowledgeBase().getManager().getQuestions()) {
 			values.put(q, session.getBlackboard().getValue(q));
+		}
+		for (Solution s : session.getKnowledgeBase().getManager().getSolutions()) {
+			values.put(s, session.getBlackboard().getValue(s));
 		}
 	}
 
@@ -126,15 +131,15 @@ public class SessionDebugStatus {
 	 * date. If no value is found, null is returned.
 	 * 
 	 * @created 01.02.2012
-	 * @param q specified {@link Question}
+	 * @param object specified {@link Question}
 	 * @param d specified {@link Date}
 	 * @return Value of the Question at the Date or null, if no value has been
 	 *         saved
 	 */
-	public Value getValue(Question q, Date d) {
-		Map<Question, Value> values = timeValues.get(d);
+	public Value getValue(TerminologyObject object, Date d) {
+		Map<TerminologyObject, Value> values = timeValues.get(d);
 		if (values != null) {
-			return values.get(q);
+			return values.get(object);
 		}
 		return null;
 	}

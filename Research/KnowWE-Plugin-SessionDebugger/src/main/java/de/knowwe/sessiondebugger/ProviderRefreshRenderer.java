@@ -51,6 +51,7 @@ public class ProviderRefreshRenderer<T extends DefaultMarkupType> extends Defaul
 					TestCaseProviderStorage.KEY);
 			if (providerStorage != null) {
 				providerStorage.refresh();
+				Messages.clearMessages(referningArticle, section);
 				Messages.storeMessages(referningArticle, section, providerStorage.getClass(),
 						providerStorage.getMessages());
 			}
