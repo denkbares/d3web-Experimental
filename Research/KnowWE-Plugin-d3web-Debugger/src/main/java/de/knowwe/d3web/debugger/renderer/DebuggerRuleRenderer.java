@@ -27,7 +27,7 @@ import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.d3web.debugger.inference.DebugAction;
@@ -38,11 +38,11 @@ import de.knowwe.d3web.debugger.inference.DebugCondition;
  * 
  * @author dupke
  */
-public class DebuggerRuleRenderer implements KnowWERenderer<RuleContentType>{
+public class DebuggerRuleRenderer implements Renderer{
 
 
 	@Override
-	public void render(Section<RuleContentType> sec, UserContext user,
+	public void render(Section<?> sec, UserContext user,
 			StringBuilder string) {
 		KnowWEArticle article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 		Session session = D3webUtils.getSession(article.getTitle(), user,

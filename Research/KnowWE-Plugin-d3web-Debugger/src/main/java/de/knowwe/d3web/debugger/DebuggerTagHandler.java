@@ -43,7 +43,7 @@ public class DebuggerTagHandler extends AbstractTagHandler {
 	 * @param name
 	 */
 	public DebuggerTagHandler() {
-		super("debug");
+		super("debugger");
 	}
 
 	@Override
