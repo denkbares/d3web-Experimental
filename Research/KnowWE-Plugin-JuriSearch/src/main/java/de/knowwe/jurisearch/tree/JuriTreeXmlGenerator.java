@@ -30,16 +30,16 @@ import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.jurisearch.questionDef.ExplanationText;
 import de.knowwe.jurisearch.questionDef.QuestionDefinitionArea;
 import de.knowwe.kdom.dashtree.DashSubtree;
 import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.defaultMarkup.ContentType;
 import de.knowwe.kdom.filter.SectionFilter;
 import de.uniwue.abstracttools.xml.XmlWriter;
-import de.knowwe.jurisearch.questionDef.ExplanationText;
 
 /**
- * 
+ *
  * @author boehler
  * @created 20.01.2012
  */
@@ -111,48 +111,41 @@ public class JuriTreeXmlGenerator {
 		}
 	}
 
-	public void buildXMLForDashSubtree(XmlWriter w,
-			Section<DashSubtree> section, String parent)
+
+	public void buildXMLForDashSubtree(XmlWriter w, Section<DashSubtree> section, String parent)
 			throws XmlWriter.MalformedXmlException, IOException {
-		Section<DashTreeElement> dtelement = Sections.findSuccessor(section,
-				DashTreeElement.class);
-		Section<QuestionIdentifier> question = Sections.findSuccessor(
-				dtelement, QuestionIdentifier.class);
-		String questionText = question.getText();
-
-		de.knowwe.core.compile.terminology.TerminologyManager terminologyHandler = KnowWEEnvironment
-				.getInstance().getTerminologyHandler(
-						KnowWEEnvironment.DEFAULT_WEB,
-						section.getArticle().getTitle());
-		Section<?> definingSection = terminologyHandler
-				.getTermDefiningSection(questionText);
-		if (definingSection != null) {
-			Section<QuestionDefinitionArea> area = Sections.findAncestorOfType(
-					definingSection, QuestionDefinitionArea.class);
-			Section<ExplanationText> explSection = Sections.findSuccessor(area,
-					ExplanationText.class);
-			String explanationText = explSection.getText();
-		}
-
-		Section<JuriTreeExpression> jexp = (Section<JuriTreeExpression>) getSectionsWithPath(
-				section, DashTreeElement.class, JuriTreeExpression.class)
-				.getFirst();
-		String text = getSectionsWithPath(jexp, QuestionIdentifier.class)
-				.getFirst().getText();
-		Section nodeMode = getFirstSectionWithPath(jexp,
-				JuriTreeExpression.RoundBracketExp.class,
-				JuriTreeExpression.RoundExpBracketExpContent.class);
+		Section jexp = getSectionsWithPath(section, DashTreeElement.class, JuriTreeExpression.class).getFirst();
+		String text = getSectionsWithPath(jexp, QuestionIdentifier.class).getFirst().getText();
+		String explanation = getExplanationText(section, text);
+		Section nodeMode =
+		        getFirstSectionWithPath(jexp, JuriTreeExpression.RoundBracketExp.class, JuriTreeExpression.RoundExpBracketExpContent.class);
 		String answerTypeAtt = getAnswerTypeAttribute(nodeMode);
 		String id = getNextUniqueID();
 		String parentString = "";
-		if (parent != null)
-			parentString = " parent-id='" + parent + "'";
-		w.writeFullTag("question title='" + text + "' id='" + id + "'"
-				+ parentString + " " + answerTypeAtt);
-		for (Section<? extends Type> s : getSectionsWithPath(section,
-				DashSubtree.class)) {
+		if (parent != null) parentString = " parent-id='" + parent + "'";
+		w.writeFullTag("question title='" + text + "' id='" + id + "'" + parentString + " " + answerTypeAtt);
+		for (Section<? extends Type> s : getSectionsWithPath(section, DashSubtree.class)) {
 			buildXMLForDashSubtree(w, (Section<DashSubtree>) s, id);
 		}
+	}
+
+
+	private String getExplanationText(Section<DashSubtree> section, String questionText) {
+	    String explanationText = null;
+        de.knowwe.core.compile.terminology.TerminologyManager terminologyHandler = KnowWEEnvironment
+                .getInstance().getTerminologyHandler(
+                        KnowWEEnvironment.DEFAULT_WEB,
+                        section.getArticle().getTitle());
+        Section<?> definingSection = terminologyHandler
+                .getTermDefiningSection(questionText);
+        if (definingSection != null) {
+            Section<QuestionDefinitionArea> area = Sections.findAncestorOfType(
+                    definingSection, QuestionDefinitionArea.class);
+            Section<ExplanationText> explSection = Sections.findSuccessor(area,
+                    ExplanationText.class);
+            explanationText = explSection.getText();
+        }
+        return explanationText;
 	}
 
 	private String getAnswerTypeAttribute(Section bracketExp) {
