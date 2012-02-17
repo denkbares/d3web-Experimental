@@ -25,14 +25,13 @@ import java.util.ArrayList;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.Statement;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
-public class SparqlRenderer extends KnowWEDomRenderer<SparqlType> {
+public class SparqlRenderer implements KnowWERenderer<SparqlType> {
 
 	private static SparqlRenderer instance;
 
@@ -44,8 +43,7 @@ public class SparqlRenderer extends KnowWEDomRenderer<SparqlType> {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section sec, UserContext user,
-			StringBuilder result) {
+	public void render(Section sec, UserContext user, StringBuilder result) {
 
 		ArrayList<Statement> l = new ArrayList<Statement>();
 

@@ -20,10 +20,9 @@
 
 package de.knowwe.kdom.table;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -34,17 +33,16 @@ import de.knowwe.core.utils.KnowWEUtils;
  * 
  * @author smark
  */
-public class TableRenderer extends KnowWEDomRenderer<Table> {
-
+public class TableRenderer implements KnowWERenderer<Table> {
 
 	@Override
-	public void render(KnowWEArticle article, Section<Table> sec, UserContext user, StringBuilder string) {
+	public void render(Section<Table> sec, UserContext user, StringBuilder string) {
 
 		boolean sortable = TableUtils.sortOption(sec);
 
 		StringBuilder b = new StringBuilder();
 		StringBuilder buffi = new StringBuilder();
-		DelegateRenderer.getInstance().render(article, sec, user, b);
+		DelegateRenderer.getInstance().render(sec, user, b);
 
 		buffi.append(getOpeningTag(sec));
 
@@ -64,7 +62,6 @@ public class TableRenderer extends KnowWEDomRenderer<Table> {
 
 		string.append(KnowWEUtils.maskHTML(buffi.toString()));
 	}
-
 
 	protected String getHeader() {
 		return "";

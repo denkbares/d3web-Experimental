@@ -20,14 +20,12 @@
 package de.knowwe.rdfs.subclassingTree;
 
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 public class ClassHierarchyMarkup extends DefaultMarkupType {
 
 	public ClassHierarchyMarkup(DefaultMarkup markup) {
 		super(markup);
-		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 
 	private static DefaultMarkup m = null;
@@ -39,7 +37,6 @@ public class ClassHierarchyMarkup extends DefaultMarkupType {
 
 	public ClassHierarchyMarkup() {
 		super(m);
-		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 
 	}
 }

@@ -22,7 +22,6 @@ package de.d3web.we.taghandler;
 
 import java.util.Map;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractTagHandler;
@@ -55,12 +54,12 @@ public abstract class AbstractDefaultStyledTagHandler extends AbstractTagHandler
 	}
 
 	@Override
-	public final String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
-		String content = renderContent(article, section, userContext, parameters);
+	public final String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
+		String content = renderContent(section, userContext, parameters);
 		Section<TagHandlerTypeContent> tagNameSection = Sections.findSuccessor(section,
 				TagHandlerTypeContent.class);
 		String sectionID = section.getID();
-		Tool[] tools = ToolUtils.getTools(article, tagNameSection, userContext);
+		Tool[] tools = ToolUtils.getTools(tagNameSection, userContext);
 
 		StringBuilder buffer = new StringBuilder();
 		String cssClassName = "type_" + section.get().getName();
@@ -82,6 +81,6 @@ public abstract class AbstractDefaultStyledTagHandler extends AbstractTagHandler
 	 * @param parameters the parameters of the tag handler invocation
 	 * @return the resulting wiki markup text
 	 */
-	public abstract String renderContent(KnowWEArticle article, Section<?> section, UserContext user, Map<String, String> parameters);
+	public abstract String renderContent(Section<?> section, UserContext user, Map<String, String> parameters);
 
 }

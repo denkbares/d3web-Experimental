@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 import de.d3web.we.search.SearchWordPreprocessor;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
@@ -47,7 +46,7 @@ public class BiologSearchTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> values) {
+	public String render(Section<?> section, UserContext userContext, Map<String, String> values) {
 		String count = values.get("count");
 
 		int number = 1;

@@ -19,10 +19,9 @@
 package de.knowwe.casetrain.type;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -37,13 +36,13 @@ public class AttributeContent extends AbstractType {
 
 	public AttributeContent() {
 		this.setSectionFinder(new AllTextFinderTrimmed());
-		this.setRenderer(new KnowWEDomRenderer<MetaLine>() {
+		this.setRenderer(new KnowWERenderer<MetaLine>() {
 
 			@Override
-			public void render(KnowWEArticle article, Section<MetaLine> sec, UserContext user, StringBuilder string) {
+			public void render(Section<MetaLine> sec, UserContext user, StringBuilder string) {
 
 				string.append(KnowWEUtils.maskHTML("<td>"));
-				DelegateRenderer.getInstance().render(article, sec, user, string);
+				DelegateRenderer.getInstance().render(sec, user, string);
 				string.append(KnowWEUtils.maskHTML("</td>"));
 
 			}

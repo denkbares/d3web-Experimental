@@ -21,7 +21,6 @@ package de.d3web.we.util;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import de.knowwe.core.compile.packaging.PackageRenderUtils;
 import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
@@ -69,11 +68,9 @@ public class UserSupportUtil {
 	 */
 	public static Collection<Section<?>> getTermReferencesCompilingArticle(KnowWEArticle article, Section<?> markup) {
 
-		StringBuilder content = new StringBuilder();
-		KnowWEArticle compilingArticle = PackageRenderUtils.checkArticlesCompiling(article, markup,
-				content);
+		article = KnowWEUtils.getCompilingArticles(markup).iterator().next();
 
-		TerminologyManager tH = KnowWEUtils.getTerminologyManager(compilingArticle);
+		TerminologyManager tH = KnowWEUtils.getTerminologyManager(article);
 		Collection<String> allDefinedTerms = tH.getAllDefinedTerms();
 
 		Collection<Section<?>> globalTerms = new LinkedList<Section<?>>();

@@ -24,11 +24,10 @@ import java.util.Collection;
 
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.report.DefaultErrorRenderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
@@ -39,11 +38,11 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
 public abstract class IncrementalTermReference extends SimpleReference {
 
 	@SuppressWarnings("unchecked")
-	final KnowWEDomRenderer<IncrementalTermReference> REF_RENDERER =
+	final KnowWERenderer<IncrementalTermReference> REF_RENDERER =
 			new ToolMenuDecoratingRenderer<IncrementalTermReference>(new StyleRenderer(
 					"color:rgb(25, 180, 120)"));
 	@SuppressWarnings("unchecked")
-	final KnowWEDomRenderer<IncrementalTermReference> PREDEFINDED_TERM_RENDERER =
+	final KnowWERenderer<IncrementalTermReference> PREDEFINDED_TERM_RENDERER =
 			new ToolMenuDecoratingRenderer<IncrementalTermReference>(new StyleRenderer(
 					"font-weight:bold;font-color:black"));
 
@@ -61,11 +60,11 @@ public abstract class IncrementalTermReference extends SimpleReference {
 	 * @author Jochen
 	 * @created 09.06.2011
 	 */
-	class ReferenceRenderer extends KnowWEDomRenderer<IncrementalTermReference> {
+	class ReferenceRenderer implements KnowWERenderer<IncrementalTermReference> {
 
-		private KnowWEDomRenderer r = null;
+		private KnowWERenderer r = null;
 
-		public ReferenceRenderer(KnowWEDomRenderer renderer) {
+		public ReferenceRenderer(KnowWERenderer renderer) {
 			if (renderer != null) {
 				r = renderer;
 			}
@@ -75,7 +74,7 @@ public abstract class IncrementalTermReference extends SimpleReference {
 		}
 
 		@Override
-		public void render(KnowWEArticle article, Section<IncrementalTermReference> sec, UserContext user, StringBuilder string) {
+		public void render(Section<IncrementalTermReference> sec, UserContext user, StringBuilder string) {
 
 			Collection<Message> messages = IncrementalCompiler.getInstance().checkDefinition(
 					sec.get().getTermIdentifier(sec));
@@ -92,37 +91,37 @@ public abstract class IncrementalTermReference extends SimpleReference {
 			for (Message kdomReportMessage : messages) {
 				if (kdomReportMessage.getType() == Message.Type.ERROR) {
 					string.append(DefaultErrorRenderer.INSTANCE_ERROR.preRenderMessage(
-									kdomReportMessage, user));
+									kdomReportMessage, user, null));
 				}
 				if (kdomReportMessage.getType() == Message.Type.WARNING) {
 					string.append(
 							DefaultErrorRenderer.INSTANCE_WARNING.preRenderMessage(
-									kdomReportMessage, user));
+									kdomReportMessage, user, null));
 				}
 			}
 			if (IncrementalCompiler.getInstance().getTerminology().isPredefinedObject(
 					sec.get().getTermIdentifier(sec))) {
-				PREDEFINDED_TERM_RENDERER.render(article, sec, user, string);
+				PREDEFINDED_TERM_RENDERER.render(sec, user, string);
 			}
 			else if (IncrementalCompiler.getInstance().getTerminology().isImportedObject(
 					sec.get().getTermIdentifier(sec))) {
-				REF_RENDERER.render(article, sec, user, string);
+				REF_RENDERER.render(sec, user, string);
 			}
 			else {
 				string.append(KnowWEUtils.maskHTML("<a name='" + sec.getID() + "'>"));
-				r.render(article, sec, user, string);
+				r.render(sec, user, string);
 				string.append(KnowWEUtils.maskHTML("</a>"));
 			}
 			for (Message kdomReportMessage : messages) {
 				if (kdomReportMessage.getType() == Message.Type.ERROR) {
 					string.append(
 							DefaultErrorRenderer.INSTANCE_ERROR.postRenderMessage(
-									kdomReportMessage, user));
+									kdomReportMessage, user, null));
 				}
 				if (kdomReportMessage.getType() == Message.Type.WARNING) {
 					string.append(
 							DefaultErrorRenderer.INSTANCE_WARNING.postRenderMessage(
-									kdomReportMessage, user));
+									kdomReportMessage, user, null));
 				}
 			}
 		}

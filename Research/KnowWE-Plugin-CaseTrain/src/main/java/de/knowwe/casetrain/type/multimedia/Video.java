@@ -18,10 +18,9 @@
  */
 package de.knowwe.casetrain.type.multimedia;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -41,10 +40,10 @@ public class Video extends MultimediaItem {
 		super(REGEX);
 
 		// TODO this is not for Video.
-		this.setRenderer(new KnowWEDomRenderer<Video>() {
+		this.setRenderer(new KnowWERenderer<Video>() {
 
 			@Override
-			public void render(KnowWEArticle article, Section<Video> sec, UserContext user, StringBuilder string) {
+			public void render(Section<Video> sec, UserContext user, StringBuilder string) {
 				Section<MultimediaItemContent> bildURL = Sections.findChildOfType(sec,
 						MultimediaItemContent.class);
 				string.append(KnowWEUtils.maskHTML("<img height='70' src='"));

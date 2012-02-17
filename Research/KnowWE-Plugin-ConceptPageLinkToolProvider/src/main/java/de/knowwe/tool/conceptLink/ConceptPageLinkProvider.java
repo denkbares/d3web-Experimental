@@ -35,7 +35,7 @@ import de.knowwe.tools.ToolProvider;
 public class ConceptPageLinkProvider implements ToolProvider {
 
 	@Override
-	public Tool[] getTools(KnowWEArticle article, Section<?> section, UserContext userContext) {
+	public Tool[] getTools(Section<?> section, UserContext userContext) {
 
 		String text = section.getText();
 

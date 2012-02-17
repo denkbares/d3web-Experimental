@@ -1,21 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Aimport java.util.regex.Pattern;
-
-import de.d3web.we.kdom.AbstractType;
-import de.d3web.we.kdom.KnowWEArticle;
-import de.d3web.we.kdom.Section;
-import de.d3web.we.kdom.Type;
-import de.d3web.we.kdom.rendering.DelegateRenderer;
-import de.d3web.we.kdom.rendering.KnowWEDomRenderer;
-import de.d3web.we.kdom.report.KDOMError;
-import de.d3web.we.kdom.report.KDOMWarning;
-import de.d3web.we.kdom.sectionFinder.RegexSectionFinder;
-import de.d3web.we.kdom.type.AnonymousTypeInvisible;
-import de.d3web.we.user.UserContext;
-import de.d3web.we.utils.KnowWEUtils;
-Lesser General Public License for more
- * details.
- *
+ * 
+ * import de.d3web.we.kdom.AbstractType; import de.d3web.we.kdom.KnowWEArticle;
+ * import de.d3web.we.kdom.Section; import de.d3web.we.kdom.Type; import
+ * de.d3web.we.kdom.rendering.DelegateRenderer; import
+ * de.d3web.we.kdom.rendering.KnowWEDomRenderer; import
+ * de.d3web.we.kdom.report.KDOMError; import
+ * de.d3web.we.kdom.report.KDOMWarning; import
+ * de.d3web.we.kdom.sectionFinder.RegexSectionFinder; import
+ * de.d3web.we.kdom.type.AnonymousTypeInvisible; import
+ * de.d3web.we.user.UserContext; import de.d3web.we.utils.KnowWEUtils; Lesser
+ * General Public License for more details.
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -46,53 +42,53 @@ import de.knowwe.kdom.AnonymousTypeInvisible;
 public abstract class BlockMarkupType extends AbstractType {
 
 	// Warnings are only rendered in message block
-	//	@Override
-	//	public MessageRenderer getWarningRenderer() {
-	//		return new MessageRenderer() {
+	// @Override
+	// public MessageRenderer getWarningRenderer() {
+	// return new MessageRenderer() {
 	//
-	//			@Override
-	//			public String preRenderMessage(KDOMReportMessage m, UserContext user) {
-	//				return "";
-	//			}
+	// @Override
+	// public String preRenderMessage(KDOMReportMessage m, UserContext user) {
+	// return "";
+	// }
 	//
-	//			@Override
-	//			public String postRenderMessage(KDOMReportMessage m, UserContext user) {
-	//				return "";
-	//			}
-	//		};
-	//	}
+	// @Override
+	// public String postRenderMessage(KDOMReportMessage m, UserContext user) {
+	// return "";
+	// }
+	// };
+	// }
 
 	@Override
 	public MessageRenderer getNoticeRenderer() {
 		return new MessageRenderer() {
 
 			@Override
-			public String preRenderMessage(Message m, UserContext user) {
+			public String postRenderMessage(Message m, UserContext user, String source) {
 				return "";
 			}
 
 			@Override
-			public String postRenderMessage(Message m, UserContext user) {
+			public String preRenderMessage(Message m, UserContext user, String source) {
 				return "";
 			}
 		};
 	}
 
-	//	@Override
-	//	public MessageRenderer getErrorRenderer() {
-	//		return new MessageRenderer() {
+	// @Override
+	// public MessageRenderer getErrorRenderer() {
+	// return new MessageRenderer() {
 	//
-	//			@Override
-	//			public String preRenderMessage(KDOMReportMessage m, UserContext user) {
-	//				return "";
-	//			}
+	// @Override
+	// public String preRenderMessage(KDOMReportMessage m, UserContext user) {
+	// return "";
+	// }
 	//
-	//			@Override
-	//			public String postRenderMessage(KDOMReportMessage m, UserContext user) {
-	//				return "";
-	//			}
-	//		};
-	//	}
+	// @Override
+	// public String postRenderMessage(KDOMReportMessage m, UserContext user) {
+	// return "";
+	// }
+	// };
+	// }
 
 	private final String key;
 	public static final String START_TAG = "<<";
@@ -108,7 +104,7 @@ public abstract class BlockMarkupType extends AbstractType {
 		this.key = key;
 
 		String regex = "^\\s*(" + START_TAG + ""
-		+ key +":"+ "(.*?)" + END_TAG + ")\\r?\\n";
+				+ key + ":" + "(.*?)" + END_TAG + ")\\r?\\n";
 
 		this.sectionFinder = new RegexSectionFinder(regex, Pattern.DOTALL
 				| Pattern.MULTILINE, 1);
@@ -119,12 +115,12 @@ public abstract class BlockMarkupType extends AbstractType {
 
 		// TODO: reuse regex above
 		String regex2 = START_TAG + ""
-		+ key + ":" + "(.*?)" + END_TAG;
+				+ key + ":" + "(.*?)" + END_TAG;
 		content.setSectionFinder(new RegexSectionFinder(regex2, Pattern.DOTALL, 1));
 		this.addChildType(content);
 
 		// TODO Title needed?
-		//		content.addChildType(new Title());
+		// content.addChildType(new Title());
 
 		AnonymousTypeInvisible keytext = new AnonymousTypeInvisible("syntax");
 		this.addChildType(keytext);
@@ -137,8 +133,5 @@ public abstract class BlockMarkupType extends AbstractType {
 	public void addContentType(Type t) {
 		content.addChildType(t);
 	}
-
-
-
 
 }

@@ -18,11 +18,11 @@
  */
 package de.d3web.we.taghandler;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import de.knowwe.core.KnowWEArticleManager;
 import de.knowwe.core.KnowWEEnvironment;
@@ -96,8 +96,8 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 		for (KnowWEArticle article : articles) {
 			Section<KnowWEArticle> root = article.getSection();
 
-			Collection<Message> errors = new ArrayList<Message>();
-			Collection<Message> warnings = new ArrayList<Message>();
+			Map<Section<?>, Collection<Message>> errors = new HashMap<Section<?>, Collection<Message>>();
+			Map<Section<?>, Collection<Message>> warnings = new HashMap<Section<?>, Collection<Message>>();
 
 			// search messages
 			findMessages(root, article, errors, warnings);
@@ -135,27 +135,26 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 	 * @param result The StringBuilder the verbalized {@link Message} should
 	 *        stored in.
 	 */
-	private void renderMessages(Collection<Message> messages, StringBuilder result, KnowWEArticle article) {
+	private void renderMessages(Map<Section<?>, Collection<Message>> messages, StringBuilder result, KnowWEArticle article) {
 		if (messages.size() > 0) {
 
 			result.append("<dt><a href=\"Wiki.jsp?page=");
 			result.append(article.getTitle()).append("\" class=\"wikipage\">");
 			result.append(article.getTitle()).append("</a></dt>\n");
 
-			for (Message kdomReportMessage : messages) {
-				if (kdomReportMessage.getSection() == null) {
-					continue;
+			for (Entry<Section<?>, Collection<Message>> entry : messages.entrySet()) {
+				for (Message kdomReportMessage : entry.getValue()) {
+					if (kdomReportMessage.getType() == Message.Type.ERROR) {
+						result.append("<dd><img src=\"templates/knowweTmps/images/error.gif\" title=\"KnowWEError\" />");
+					}
+					else {
+						result.append("<dd><img src=\"templates/knowweTmps/images/exclamation.gif\" title=\"KnowWEError\" />");
+					}
+					result.append("<a href=\"Wiki.jsp?page=").append(article.getTitle()).append("#");
+					result.append(entry.getKey().getID()).append(
+							"\" class=\"wikipage\">");
+					result.append(kdomReportMessage.getVerbalization()).append("</a></dd>");
 				}
-				if (kdomReportMessage.getType() == Message.Type.ERROR) {
-					result.append("<dd><img src=\"templates/knowweTmps/images/error.gif\" title=\"KnowWEError\" />");
-				}
-				else {
-					result.append("<dd><img src=\"templates/knowweTmps/images/exclamation.gif\" title=\"KnowWEError\" />");
-				}
-				result.append("<a href=\"Wiki.jsp?page=").append(article.getTitle()).append("#");
-				result.append(kdomReportMessage.getSection().getID()).append(
-						"\" class=\"wikipage\">");
-				result.append(kdomReportMessage.getVerbalization()).append("</a></dd>");
 			}
 		}
 	}
@@ -173,20 +172,14 @@ public class ReportOverview extends AbstractHTMLTagHandler {
 	 * @param warnings {@link StringBuilder} containing all warning messages
 	 */
 	private void findMessages(Section<?> section, KnowWEArticle article,
-			Collection<Message> errors, Collection<Message> warnings) {
+			Map<Section<?>, Collection<Message>> errors, Map<Section<?>, Collection<Message>> warnings) {
 
 		List<Section<? extends Type>> children = section.getChildren();
 		for (Section<?> child : children) {
 
-			Collection<Message> e = Messages.getErrors(article, child);
-			for (Message kdomReportMessage : e) {
-				errors.add(kdomReportMessage);
-			}
+			errors.put(child, Messages.getErrors(Messages.getMessages(article, child)));
+			warnings.put(child, Messages.getWarnings(Messages.getMessages(article, child)));
 
-			Collection<Message> w = Messages.getWarnings(article, child);
-			for (Message kdomReportMessage : w) {
-				warnings.add(kdomReportMessage);
-			}
 			findMessages(child, article, errors, warnings);
 		}
 	}

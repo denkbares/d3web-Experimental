@@ -20,13 +20,12 @@
 
 package de.knowwe.hermes.kdom.event.renderer;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.hermes.kdom.event.TimeEventNew;
 
-public class TimeEventImpRenderer extends KnowWEDomRenderer<TimeEventNew> {
+public class TimeEventImpRenderer implements KnowWERenderer<TimeEventNew> {
 
 	private static TimeEventImpRenderer instance;
 
@@ -38,8 +37,8 @@ public class TimeEventImpRenderer extends KnowWEDomRenderer<TimeEventNew> {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section<TimeEventNew> sec,
-			UserContext user, StringBuilder result) {
+	public void render(Section<TimeEventNew> sec, UserContext user,
+			StringBuilder result) {
 		// Empty renderer. Importance is handled in TimeEventRenderer.
 	}
 }

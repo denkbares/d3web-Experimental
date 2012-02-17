@@ -21,9 +21,8 @@
 package de.d3web.we.kdom.dashTree.propertyDefinition;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -53,15 +52,14 @@ public class PropertyIDDefinition extends AbstractType {
 		this.setRenderer(new PropertyIDRenderer());
 	}
 
-	class PropertyIDRenderer extends KnowWEDomRenderer {
+	class PropertyIDRenderer implements KnowWERenderer {
 
 		@Override
-		public void render(KnowWEArticle article, Section sec,
-				UserContext user, StringBuilder string) {
+		public void render(Section sec, UserContext user,
+				StringBuilder string) {
 
 			string.append(KnowWEUtils.maskHTML("<span title=\"ObjectProperty Definition\">"));
-			StyleRenderer.PROPERTY.render(article, sec, user,
-					string);
+			StyleRenderer.PROPERTY.render(sec, user, string);
 			string.append(KnowWEUtils.maskHTML("</span>"));
 		}
 

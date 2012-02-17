@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2010 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -29,17 +29,16 @@ import java.io.IOException;
 import java.util.Map;
 
 import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.xml.AbstractXMLType;
 import de.knowwe.semantic.sparql.SparqlDelegateRenderer;
 import de.knowwe.semantic.sparql.SparqlRenderer;
 
-public class GroovySparqlRendererRenderer extends
-		KnowWEDomRenderer<GroovySparqlRendererContent> {
+public class GroovySparqlRendererRenderer implements
+		KnowWERenderer<GroovySparqlRendererContent> {
 
 	private static final String CONTENT = "GROOVY_RENDERER_SOURCE_CONTENT";
 	private static GroovySparqlRendererRenderer instance;
@@ -75,12 +74,11 @@ public class GroovySparqlRendererRenderer extends
 	}
 
 	@Override
-	public void render(KnowWEArticle article,
-			Section<GroovySparqlRendererContent> sec, UserContext user,
-			StringBuilder string) {
+	public void render(Section<GroovySparqlRendererContent> sec,
+			UserContext user, StringBuilder string) {
 		// rb = KnowWEEnvironment.getInstance().getKwikiBundle(user);
 		Map<String, String> params = AbstractXMLType
-				.getAttributeMapFor((Section<? extends AbstractXMLType>) sec
+				.getAttributeMapFor(sec
 						.getFather());
 		String name = "";
 		if (!params.containsKey("name")) {
@@ -91,7 +89,7 @@ public class GroovySparqlRendererRenderer extends
 			name = params.get("name");
 		}
 		String content = sec.getText();
-		KnowWEUtils.storeObject(article, sec, GroovySparqlRendererRenderer.CONTENT,
+		KnowWEUtils.storeObject(sec.getArticle(), sec, GroovySparqlRendererRenderer.CONTENT,
 				content);
 
 		GroovyClassLoader gcl = new GroovyClassLoader(this.getClass().getClassLoader());

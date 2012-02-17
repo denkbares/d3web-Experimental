@@ -103,8 +103,8 @@ public class GroovySparqlRendererTest {
 				"SetRenderer", type, "default_web");
 		am.registerArticle(setrenderer);
 		StringBuilder articleString = new StringBuilder();
-		setrenderer.getRenderer().render(setrenderer, setrenderer.getSection(),
-				context, articleString);
+		setrenderer.getRenderer().render(setrenderer.getSection(), context,
+				articleString);
 		String setrenderer_result = KnowWEUtils.unmaskHTML(articleString
 				.toString());
 		String setrenderer_result_should_be = "renderer junit already present";
@@ -113,8 +113,8 @@ public class GroovySparqlRendererTest {
 		KnowWEArticle junitquery = KnowWEArticle.createArticle(querystring, "JunitQuery",
 				type, "default_web");
 		am.registerArticle(junitquery);
-		junitquery.getRenderer().render(junitquery, junitquery.getSection(),
-				context, articleString);
+		junitquery.getRenderer().render(junitquery.getSection(), context,
+				articleString);
 		String result_is = KnowWEUtils.unmaskHTML(articleString.toString());
 		String result_should_be = "hallo";
 		assertEquals(result_should_be, result_is);

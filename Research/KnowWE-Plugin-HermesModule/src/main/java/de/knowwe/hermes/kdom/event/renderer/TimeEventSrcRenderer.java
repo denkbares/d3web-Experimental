@@ -20,16 +20,15 @@
 
 package de.knowwe.hermes.kdom.event.renderer;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.hermes.kdom.event.TimeEventNew;
 import de.knowwe.hermes.kdom.event.TimeEventNew.Source;
 
-public class TimeEventSrcRenderer extends KnowWEDomRenderer<TimeEventNew> {
+public class TimeEventSrcRenderer implements KnowWERenderer<TimeEventNew> {
 
 	private static TimeEventSrcRenderer instance;
 
@@ -41,14 +40,13 @@ public class TimeEventSrcRenderer extends KnowWEDomRenderer<TimeEventNew> {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section<TimeEventNew> sec,
-			UserContext user, StringBuilder result) {
+	public void render(Section<TimeEventNew> sec, UserContext user,
+			StringBuilder result) {
 		if (sec.equals(Sections.findChildOfType(sec.getFather(), Source.class))) {
 			result.append(KnowWEUtils.maskHTML("\\\\__Quellen:__\\\\"));
 		}
 		String source = "no source found";
-		if (sec != null)
-			source = sec.getText();
+		if (sec != null) source = sec.getText();
 		String key = "QUELLE:";
 		if (source.startsWith(key)) {
 			source = source.substring(key.length());

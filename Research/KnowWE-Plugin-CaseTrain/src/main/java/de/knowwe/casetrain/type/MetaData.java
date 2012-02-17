@@ -31,7 +31,7 @@ import de.knowwe.casetrain.util.Utils;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
@@ -63,11 +63,12 @@ public class MetaData extends BlockMarkupType {
 
 		this.addContentType(new MetaLine());
 
-		this.setRenderer(new KnowWEDomRenderer<MetaData>() {
+		this.setRenderer(new KnowWERenderer<MetaData>() {
 
 			@SuppressWarnings("unchecked")
 			@Override
-			public void render(KnowWEArticle article, Section<MetaData> sec, UserContext user, StringBuilder string) {
+			public void render(Section<MetaData> sec, UserContext user, StringBuilder string) {
+				KnowWEArticle article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 				Utils.renderKDOMReportMessageBlock(
 						Messages.getErrors(Messages.getMessagesFromSubtree(
 								article, sec)), string);
@@ -94,7 +95,7 @@ public class MetaData extends BlockMarkupType {
 				string.append(KnowWEUtils.maskHTML("<div class=\"casetrain-instantedit\">"
 						// + getFrameName(sec)
 						// + getEditorIcon(sec)
-						+ Utils.renderTools(article, sec, user)
+						+ Utils.renderTools(sec, user)
 						// + getLink(sec)
 						+ "</div>"));
 
@@ -107,7 +108,7 @@ public class MetaData extends BlockMarkupType {
 				Sections.findSuccessorsOfType(con, MetaLine.class, lines);
 
 				for (Section<MetaLine> l : lines) {
-					l.get().getRenderer().render(article, l, user, string);
+					l.get().getRenderer().render(l, user, string);
 				}
 
 				string.append(KnowWEUtils.maskHTML("</table>"));

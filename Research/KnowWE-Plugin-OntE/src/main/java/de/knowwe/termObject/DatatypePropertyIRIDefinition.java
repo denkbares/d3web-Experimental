@@ -22,7 +22,7 @@ package de.knowwe.termObject;
 
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.rdfs.AbstractIRITermDefinition;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
@@ -30,7 +30,7 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
 public class DatatypePropertyIRIDefinition extends AbstractIRITermDefinition {
 
 	@SuppressWarnings("unchecked")
-	final KnowWEDomRenderer<DatatypePropertyIRIDefinition> PROPERTY_RENDERER =
+	final KnowWERenderer<DatatypePropertyIRIDefinition> PROPERTY_RENDERER =
 			new ToolMenuDecoratingRenderer<DatatypePropertyIRIDefinition>(new StyleRenderer(
 					"color:rgb(125, 80, 102)"));
 

@@ -20,28 +20,27 @@
 
 package de.d3web.we.kdom.renderer;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 
-public class SettingsModeRenderer extends KnowWEDomRenderer {
+public class SettingsModeRenderer implements KnowWERenderer {
 
-	private KnowWEDomRenderer defaultRenderer;
-	private KnowWEDomRenderer quickEditRenderer;
+	private final KnowWERenderer defaultRenderer;
+	private final KnowWERenderer quickEditRenderer;
 
-	public SettingsModeRenderer(KnowWEDomRenderer defaultR, KnowWEDomRenderer quickEditR) {
+	public SettingsModeRenderer(KnowWERenderer defaultR, KnowWERenderer quickEditR) {
 		this.defaultRenderer = defaultR;
 		this.quickEditRenderer = quickEditR;
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
+	public void render(Section sec, UserContext user, StringBuilder string) {
 		if (sec.hasQuickEditModeSet(user.getUserName())) {
-			quickEditRenderer.render(article, sec, user, string);
+			quickEditRenderer.render(sec, user, string);
 			return;
 		}
-		defaultRenderer.render(article, sec, user, string);
+		defaultRenderer.render(sec, user, string);
 	}
 
 }

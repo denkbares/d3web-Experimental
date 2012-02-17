@@ -23,12 +23,11 @@ package de.d3web.we.kdom.css;
 import java.util.List;
 import java.util.Map;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.xml.AbstractXMLType;
@@ -39,17 +38,16 @@ import de.knowwe.kdom.xml.AbstractXMLType;
  * </p>
  * <p>
  * Renders a given <code>CSS</code> tag in the wiki article page to a <code>span
- * </code>
- * tag and applies the given style information to it.
+ * </code> tag and applies the given style information to it.
  * </p>
  * 
  * @author smark
- * @see KnowWEDomRenderer
+ * @see KnowWERenderer
  */
-public class CSSRenderer extends KnowWEDomRenderer<AbstractXMLType> {
+public class CSSRenderer implements KnowWERenderer<AbstractXMLType> {
 
 	@Override
-	public void render(KnowWEArticle article, Section<AbstractXMLType> sec, UserContext user, StringBuilder string) {
+	public void render(Section<AbstractXMLType> sec, UserContext user, StringBuilder string) {
 		Map<String, String> mapFor = AbstractXMLType.getAttributeMapFor(sec);
 		String style = mapFor.get("style");
 
@@ -57,7 +55,7 @@ public class CSSRenderer extends KnowWEDomRenderer<AbstractXMLType> {
 		List<Section<PlainText>> children = Sections.findChildrenOfType(sec, PlainText.class);
 		// should only be one
 		for (Section<PlainText> section : children) {
-			DelegateRenderer.getInstance().render(article, section, user, b);
+			DelegateRenderer.getInstance().render(section, user, b);
 		}
 		string.append(wrapWithCSS(b.toString(), style));
 	}

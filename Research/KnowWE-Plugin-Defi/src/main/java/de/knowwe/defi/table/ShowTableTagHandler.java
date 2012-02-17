@@ -75,14 +75,14 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 
 		for (int versionIndex = 0; versionIndex < versionsExisting; versionIndex++) {
 			user.getParameters().put(VERSION_KEY, Integer.toString(versionIndex));
-			DelegateRenderer.getInstance().render(myTable.getArticle(),
-					table.getFather(),
-					user, string);
+			DelegateRenderer.getInstance().render(table.getFather(),
+					user,
+					string);
 		}
 		if (versionsExisting == 0) {
-			DelegateRenderer.getInstance().render(myTable.getArticle(),
-					table.getFather(),
-					user, string);
+			DelegateRenderer.getInstance().render(table.getFather(),
+					user,
+					string);
 		}
 
 		String erneut = "";
@@ -132,8 +132,8 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(KnowWEArticle article, Section<?> section,
-			UserContext userContext, Map<String, String> parameters) {
+	public String render(Section<?> section, UserContext userContext,
+			Map<String, String> parameters) {
 		String id = parameters.get("id");
 		boolean singleVersionTable = parameters.containsKey("single");
 		if (id == null) {

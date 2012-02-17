@@ -28,14 +28,14 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.defi.time.TimeTableMarkup;
 import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.dashtree.DashTreeElementContent;
 import de.knowwe.kdom.dashtree.DashTreeUtils;
 
-public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
+public class MenuItemRenderer implements KnowWERenderer<DynamicMenuItem> {
 
 	private static final String CSS_CLASS_MENULINK = "menulink";
 	private static final String CSS_CLASS_MENULINKROOT = "menulinkroot";
@@ -65,7 +65,7 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section<DynamicMenuItem> sec, UserContext user, StringBuilder string) {
+	public void render(Section<DynamicMenuItem> sec, UserContext user, StringBuilder string) {
 
 		int dashLevel = DashTreeUtils.getDashLevel(Sections.findAncestorOfType(sec,
 				DashTreeElement.class));
@@ -81,14 +81,12 @@ public class MenuItemRenderer extends KnowWEDomRenderer<DynamicMenuItem> {
 			// highlighted)
 		}
 
-
 		String currentPage = user.getParameter("page");
 
 		String className = CSS_CLASS_MENULINK;
 
 		String pagename = getPageName(sec);
 		String label = getLabel(sec);
-
 
 		boolean hidden = true;
 

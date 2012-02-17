@@ -25,7 +25,6 @@ import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.node.URI;
 
 import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -54,13 +53,13 @@ public class PropertyUseTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public final String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public final String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
 
-		String content = renderContent(article, section, userContext, parameters);
+		String content = renderContent(section, userContext, parameters);
 		Section<TagHandlerTypeContent> tagNameSection = Sections.findSuccessor(section,
 				TagHandlerTypeContent.class);
 		String sectionID = section.getID();
-		Tool[] tools = ToolUtils.getTools(article, tagNameSection, userContext);
+		Tool[] tools = ToolUtils.getTools(tagNameSection, userContext);
 
 		StringBuilder buffer = new StringBuilder();
 		String cssClassName = "type_" + section.get().getName();
@@ -71,7 +70,7 @@ public class PropertyUseTagHandler extends AbstractTagHandler {
 		return buffer.toString();
 	}
 
-	private String renderContent(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	private String renderContent(Section<?> section, UserContext userContext, Map<String, String> parameters) {
 
 		StringBuffer buffy = new StringBuffer();
 		Map<String, String> urlParameters = userContext.getParameters();

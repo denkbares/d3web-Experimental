@@ -20,7 +20,6 @@ package de.knowwe.defi;
 
 import java.util.Map;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
@@ -42,7 +41,7 @@ public class UsernameTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		StringBuilder username = new StringBuilder();
 		username.append("<a name='usernametag' href='Wiki.jsp?page=" + userContext.getUserName()
 				+ "'>"

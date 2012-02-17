@@ -20,7 +20,6 @@
 package de.knowwe.kdom.namespaces.rdf2go;
 
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 public class Namespaces extends DefaultMarkupType {
@@ -34,7 +33,6 @@ public class Namespaces extends DefaultMarkupType {
 
 	public Namespaces() {
 		super(m);
-		setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 
 }

@@ -57,7 +57,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		StringBuilder readstatus = new StringBuilder();
 		// Hole alle Einheiten
 		List<Section<DashTreeElement>> units = getALlUnits();

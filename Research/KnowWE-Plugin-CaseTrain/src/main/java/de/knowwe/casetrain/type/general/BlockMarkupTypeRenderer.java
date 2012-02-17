@@ -22,7 +22,7 @@ import de.knowwe.casetrain.util.Utils;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -32,15 +32,15 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @author Johannes Dienst
  * @created 06.06.2011
  */
-public class BlockMarkupTypeRenderer extends KnowWEDomRenderer<BlockMarkupType> {
+public class BlockMarkupTypeRenderer implements KnowWERenderer<BlockMarkupType> {
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void render(KnowWEArticle article, Section<BlockMarkupType> sec, UserContext user, StringBuilder string) {
+	public void render(Section<BlockMarkupType> sec, UserContext user, StringBuilder string) {
 
 		string.append(KnowWEUtils.maskHTML("<div class='"
 				+ sec.get().getCSSClass()
 				+ "'>"));
+		KnowWEArticle article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 		Utils.renderKDOMReportMessageBlock(Messages.getErrors(Messages.getMessagesFromSubtree(
 				article, sec)), string);
 
@@ -68,7 +68,7 @@ public class BlockMarkupTypeRenderer extends KnowWEDomRenderer<BlockMarkupType> 
 		// + "</div>"));
 		Section<BlockMarkupContent> con =
 				Sections.findSuccessor(sec, BlockMarkupContent.class);
-		BlockMarkupContentRenderer.getInstance().render(article, con, user, string);
+		BlockMarkupContentRenderer.getInstance().render(con, user, string);
 		string.append(KnowWEUtils.maskHTML("</div>"));
 
 		// string.append(KnowWEUtils.maskHTML("</pre>"));

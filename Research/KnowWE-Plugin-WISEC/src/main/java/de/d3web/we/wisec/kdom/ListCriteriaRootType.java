@@ -23,10 +23,9 @@ package de.d3web.we.wisec.kdom;
 import java.util.List;
 
 import de.d3web.we.wisec.kdom.subtreehandler.ListCriteriaOWLSubtreeHandler;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.AnnotationContentType;
@@ -65,7 +64,7 @@ public class ListCriteriaRootType extends DefaultMarkupType {
 	 *          annotations
 	 * 
 	 */
-	class CriteriaListDefaultMarkupRenderer extends KnowWEDomRenderer<DefaultMarkupType> {
+	class CriteriaListDefaultMarkupRenderer implements KnowWERenderer<DefaultMarkupType> {
 
 		private final String iconPath;
 
@@ -78,7 +77,7 @@ public class ListCriteriaRootType extends DefaultMarkupType {
 		}
 
 		@Override
-		public void render(KnowWEArticle article, Section<DefaultMarkupType> section, UserContext user, StringBuilder string) {
+		public void render(Section<DefaultMarkupType> section, UserContext user, StringBuilder string) {
 
 			String id = section.getID();
 			String name = "<span>" + section.get().getName() + "</span>";
@@ -98,13 +97,13 @@ public class ListCriteriaRootType extends DefaultMarkupType {
 			string.append(KnowWEUtils.maskHTML("<a name='" + anchorName + "'></a>"));
 
 			// render messages and content
-			renderContents(article, section, user, string);
+			renderContents(section, user, string);
 
 			// and close the box
 			string.append(KnowWEUtils.maskHTML("</div>\n"));
 		}
 
-		protected void renderContents(KnowWEArticle article, Section<? extends DefaultMarkupType> section, UserContext user, StringBuilder string) {
+		protected void renderContents(Section<? extends DefaultMarkupType> section, UserContext user, StringBuilder string) {
 			List<Section<?>> subsecs = section.getChildren();
 			Section<?> first = subsecs.get(0);
 			Section<?> last = subsecs.get(subsecs.size() - 1);
@@ -118,8 +117,7 @@ public class ListCriteriaRootType extends DefaultMarkupType {
 				}
 				if (!(subsec.get() instanceof AnnotationContentType)
 						&& !annotationPartStarted) {
-					subsec.get().getRenderer().render(article, subsec, user,
-							string);
+					subsec.get().getRenderer().render(subsec, user, string);
 				}
 			}
 		}

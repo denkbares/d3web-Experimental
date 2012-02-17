@@ -6,14 +6,13 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
-public class PelletSelectRenderer extends KnowWEDomRenderer<PelletSparqlSelect> {
+public class PelletSelectRenderer implements KnowWERenderer<PelletSparqlSelect> {
 
 	public static final String LB = System.getProperty("line.separator");
 
@@ -24,17 +23,16 @@ public class PelletSelectRenderer extends KnowWEDomRenderer<PelletSparqlSelect> 
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section<PelletSparqlSelect> section, UserContext user, StringBuilder string) {
+	public void render(Section<PelletSparqlSelect> section, UserContext user, StringBuilder string) {
 
 		String query = DefaultMarkupType.getAnnotation(section, PelletSparqlSelect.QUERY);
-
 
 		StringBuilder html = new StringBuilder();
 
 		if (query != null && !query.trim().isEmpty()) {
 			query = query.replace(",", "");
 			ResultSet rs = PelletSparqlUtils.selectQuery(PREFIX + query);
-			if(rs != null) {
+			if (rs != null) {
 				printDefaultView(html, rs, query);
 			}
 		}
@@ -49,7 +47,7 @@ public class PelletSelectRenderer extends KnowWEDomRenderer<PelletSparqlSelect> 
 
 	/**
 	 * Prints the results from the SPARQL query.
-	 *
+	 * 
 	 * @created 06.01.2012
 	 * @param string
 	 * @param rs
@@ -62,7 +60,7 @@ public class PelletSelectRenderer extends KnowWEDomRenderer<PelletSparqlSelect> 
 
 		List<String> resultVars = rs.getResultVars();
 
-		while(rs.hasNext()) {
+		while (rs.hasNext()) {
 			QuerySolution solution = rs.nextSolution();
 
 			string.append("<dd>");

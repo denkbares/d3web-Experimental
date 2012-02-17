@@ -18,10 +18,9 @@
  */
 package de.knowwe.casetrain.type.multimedia;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -42,10 +41,10 @@ public class Audio extends MultimediaItem {
 	public Audio() {
 		super(REGEX);
 
-		this.setRenderer(new KnowWEDomRenderer<Audio>() {
+		this.setRenderer(new KnowWERenderer<Audio>() {
 
 			@Override
-			public void render(KnowWEArticle article, Section<Audio> sec, UserContext user, StringBuilder string) {
+			public void render(Section<Audio> sec, UserContext user, StringBuilder string) {
 				Section<MultimediaItemContent> linkURL = Sections.findChildOfType(sec,
 						MultimediaItemContent.class);
 				string.append(KnowWEUtils.maskHTML("<span title='Audio'>"));

@@ -18,7 +18,6 @@
  */
 package de.knowwe.kdom.table;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.user.UserContext;
@@ -34,7 +33,7 @@ import de.knowwe.tools.ToolProvider;
 public class TableEditProvider implements ToolProvider {
 
 	@Override
-	public Tool[] getTools(KnowWEArticle article, Section<?> section, UserContext userContext) {
+	public Tool[] getTools(Section<?> section, UserContext userContext) {
 		// edit the content of the markup, without %%Table and Annotations
 		Section<Table> content = Sections.findSuccessor(section, Table.class);
 		if (content == null) {

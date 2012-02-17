@@ -52,7 +52,7 @@ import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.compile.packaging.KnowWEPackageManager;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.ContentType;
@@ -65,7 +65,7 @@ import de.knowwe.kdom.renderer.StyleRenderer;
  * @author Markus Friedrich (denkbares GmbH)
  * @created 19.01.2012
  */
-public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
+public class TestCasePlayerRenderer implements KnowWERenderer<ContentType> {
 
 	private static final String QUESTIONS_SEPARATOR = "#####";
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS");
@@ -73,13 +73,13 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 	private static String QUESTION_SELECTOR_KEY = "question_selector";
 
 	@Override
-	public void render(KnowWEArticle article, Section<ContentType> section, UserContext user, StringBuilder result) {
+	public void render(Section<ContentType> section, UserContext user, StringBuilder result) {
 		StringBuilder string = new StringBuilder();
 		if (user == null || user.getSession() == null) {
 			return;
 		}
 		KnowWEPackageManager packageManager = KnowWEEnvironment.getInstance().getPackageManager(
-				article.getWeb());
+				section.getWeb());
 		String[] kbpackages = DefaultMarkupType.getAnnotations(section.getFather(), "uses");
 		List<Triple<TestCaseProvider, Section<?>, KnowWEArticle>> providers = new LinkedList<Triple<TestCaseProvider, Section<?>, KnowWEArticle>>();
 		for (String kbpackage : kbpackages) {
@@ -134,7 +134,7 @@ public class TestCasePlayerRenderer extends KnowWEDomRenderer<ContentType> {
 					string.append(KnowWEUtils.maskHTML(html.toString()));
 					// get Question from cookie
 					String additionalQuestions = null;
-					String cookiename = "additionalQuestions" + article.getTitle();
+					String cookiename = "additionalQuestions" + section.getTitle();
 					for (Cookie cookie : user.getRequest().getCookies()) {
 						try {
 							if (URLDecoder.decode(cookie.getName(), "UTF-8").equals(cookiename)) {

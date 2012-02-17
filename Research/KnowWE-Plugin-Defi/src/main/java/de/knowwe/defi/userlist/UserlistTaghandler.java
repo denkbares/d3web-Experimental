@@ -48,7 +48,7 @@ public class UserlistTaghandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		StringBuilder userlist = new StringBuilder();
 		JSPWikiKnowWEConnector wc = new JSPWikiKnowWEConnector(WikiEngine.getInstance(
 				KnowWEEnvironment.getInstance().getContext(), null));

@@ -28,7 +28,7 @@ import de.d3web.we.kdom.renderer.EditSectionRenderer;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
@@ -106,7 +106,7 @@ public class LocationDefinitionType extends AbstractType {
 		return new Placemark(locationName, latitude, longitude, description);
 	}
 
-	public static class LocationRenderer extends KnowWEDomRenderer<LocationDefinitionType> {
+	public static class LocationRenderer implements KnowWERenderer<LocationDefinitionType> {
 
 		private static LocationRenderer instance;
 
@@ -118,7 +118,7 @@ public class LocationDefinitionType extends AbstractType {
 		}
 
 		@Override
-		public void render(KnowWEArticle article, Section<LocationDefinitionType> sec, UserContext user, StringBuilder string) {
+		public void render(Section<LocationDefinitionType> sec, UserContext user, StringBuilder string) {
 			String originalText = sec.getText();
 			Placemark extractPlacemark = extractPlacemark(sec);
 			if (extractPlacemark == null) {

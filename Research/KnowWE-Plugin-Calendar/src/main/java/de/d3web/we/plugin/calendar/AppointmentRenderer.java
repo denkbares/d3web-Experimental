@@ -22,17 +22,16 @@ package de.d3web.we.plugin.calendar;
 
 import java.util.Map;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
-public class AppointmentRenderer extends KnowWEDomRenderer<Appointment> {
+public class AppointmentRenderer implements KnowWERenderer<Appointment> {
 
 	@Override
-	public void render(KnowWEArticle article, Section<Appointment> sec, UserContext user, StringBuilder string) {
+	public void render(Section<Appointment> sec, UserContext user, StringBuilder string) {
 
 		Map<String, String> persons = CalendarModule.getPersons();
 

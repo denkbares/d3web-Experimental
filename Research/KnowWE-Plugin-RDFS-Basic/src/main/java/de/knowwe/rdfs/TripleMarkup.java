@@ -34,13 +34,12 @@ import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
 import de.knowwe.compile.object.TypeRestrictedReference;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.basicType.EndLineComment;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.report.DefaultErrorRenderer;
@@ -82,10 +81,10 @@ public class TripleMarkup extends AbstractType implements
 			this.setRenderer(new RangeCheckRenderer());
 		}
 
-		class RangeCheckRenderer extends KnowWEDomRenderer {
+		class RangeCheckRenderer implements KnowWERenderer {
 
 			@Override
-			public void render(KnowWEArticle article, Section section, UserContext user, StringBuilder string) {
+			public void render(Section section, UserContext user, StringBuilder string) {
 				Section<KnowledgeUnit> triple = Sections.findAncestorOfType(section,
 						KnowledgeUnit.class);
 
@@ -150,29 +149,29 @@ public class TripleMarkup extends AbstractType implements
 							DefaultErrorRenderer.INSTANCE_WARNING.preRenderMessage(
 									new Message(Message.Type.WARNING,
 											"Triple object does not match range definition"),
-									user));
+									user, null));
 				}
 				if (warningDomain) {
 					string.append(
 							DefaultErrorRenderer.INSTANCE_WARNING.preRenderMessage(
 									new Message(Message.Type.WARNING,
 											"Triple subject does not match domain definition"),
-									user));
+									user, null));
 				}
 
-				DelegateRenderer.getInstance().render(article, section, user, string);
+				DelegateRenderer.getInstance().render(section, user, string);
 
 				if (warningRange) {
 					string.append(
 							DefaultErrorRenderer.INSTANCE_WARNING.postRenderMessage(
 									new Message(Message.Type.WARNING,
-											""), user));
+											""), user, null));
 				}
 				if (warningDomain) {
 					string.append(
 							DefaultErrorRenderer.INSTANCE_WARNING.postRenderMessage(
 									new Message(Message.Type.WARNING,
-											""), user));
+											""), user, null));
 				}
 
 			}

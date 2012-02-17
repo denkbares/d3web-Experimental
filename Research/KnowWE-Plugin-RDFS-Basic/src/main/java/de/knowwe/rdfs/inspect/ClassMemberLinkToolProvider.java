@@ -21,7 +21,6 @@ package de.knowwe.rdfs.inspect;
 import java.util.Collection;
 
 import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
@@ -37,12 +36,12 @@ import de.knowwe.tools.ToolProvider;
 public class ClassMemberLinkToolProvider implements ToolProvider {
 
 	@Override
-	public Tool[] getTools(KnowWEArticle article, Section<?> section, UserContext userContext) {
+	public Tool[] getTools(Section<?> section, UserContext userContext) {
 
 		if (section.get() instanceof IRITermRef) {
 			Section<? extends IRITermRef> ref = ((Section<? extends IRITermRef>) section);
 			if (RDFSUtil.isTermCategory(ref, RDFSTermCategory.Class)) {
-				return new Tool[] { getClassMemberPageTool(article, ref, userContext) };
+				return new Tool[] { getClassMemberPageTool(ref, userContext) };
 			}
 
 		}
@@ -53,7 +52,7 @@ public class ClassMemberLinkToolProvider implements ToolProvider {
 			if (termReferences != null && termReferences.size() > 0) {
 				Section<? extends SimpleReference> ref = termReferences.iterator().next();
 				if (RDFSUtil.isTermCategory(ref, RDFSTermCategory.Class)) {
-					return new Tool[] { getClassMemberPageTool(article, ref, userContext) };
+					return new Tool[] { getClassMemberPageTool(ref, userContext) };
 				}
 			}
 
@@ -61,7 +60,7 @@ public class ClassMemberLinkToolProvider implements ToolProvider {
 		return new Tool[] {};
 	}
 
-	protected Tool getClassMemberPageTool(KnowWEArticle article, Section<? extends SimpleTerm> section, UserContext userContext) {
+	protected Tool getClassMemberPageTool(Section<? extends SimpleTerm> section, UserContext userContext) {
 
 		String objectName = section.getText();
 		if (section.get() instanceof SimpleTerm) {

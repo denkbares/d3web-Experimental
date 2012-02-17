@@ -39,7 +39,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 public class ProviderRefreshRenderer<T extends DefaultMarkupType> extends DefaultMarkupRenderer<T> {
 
 	@Override
-	public void render(KnowWEArticle article, Section<T> section, UserContext user, StringBuilder buffer) {
+	public void render(Section<T> section, UserContext user, StringBuilder buffer) {
 		Set<String> articlesReferringTo = KnowWEEnvironment.getInstance().getPackageManager(
 				user.getWeb()).getArticlesReferringTo(section);
 		KnowWEArticleManager articleManager = KnowWEEnvironment.getInstance().getArticleManager(
@@ -56,6 +56,6 @@ public class ProviderRefreshRenderer<T extends DefaultMarkupType> extends Defaul
 						providerStorage.getMessages());
 			}
 		}
-		super.render(article, section, user, buffer);
+		super.render(section, user, buffer);
 	}
 }

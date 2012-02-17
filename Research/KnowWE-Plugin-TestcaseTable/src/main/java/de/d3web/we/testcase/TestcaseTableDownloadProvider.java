@@ -18,7 +18,6 @@
  */
 package de.d3web.we.testcase;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
@@ -33,10 +32,10 @@ import de.knowwe.tools.ToolProvider;
 public class TestcaseTableDownloadProvider implements ToolProvider {
 
 	@Override
-	public Tool[] getTools(KnowWEArticle article, Section<?> section, UserContext userContext) {
+	public Tool[] getTools(Section<?> section, UserContext userContext) {
 
 		String jsAction = "window.location='action/TestcaseDownload?type=case&KWiki_Topic="
-				+ article.getTitle() + "&web=" + article.getWeb() + "&nodeid=" + section.getID()
+				+ section.getTitle() + "&web=" + section.getWeb() + "&nodeid=" + section.getID()
 				+ "'";
 
 		return new Tool[] { new DefaultTool(

@@ -22,11 +22,10 @@ package de.d3web.we.kdom.wikiTemplate;
 
 import de.d3web.we.action.TemplateGenerationAction;
 import de.d3web.we.taghandler.TemplateTagHandler;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.xml.AbstractXMLType;
 
@@ -56,14 +55,14 @@ public class Template extends AbstractXMLType {
 		return instance;
 	}
 
-	private class PreRenderer extends KnowWEDomRenderer<Template> {
+	private class PreRenderer implements KnowWERenderer<Template> {
 
 		@Override
-		public void render(KnowWEArticle article, Section<Template> sec,
-				UserContext user, StringBuilder string) {
+		public void render(Section<Template> sec, UserContext user,
+				StringBuilder string) {
 
 			string.append("{{{");
-			DelegateRenderer.getInstance().render(article, sec, user, string);
+			DelegateRenderer.getInstance().render(sec, user, string);
 			string.append("}}}");
 
 		}

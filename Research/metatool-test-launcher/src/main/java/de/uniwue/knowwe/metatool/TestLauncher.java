@@ -76,7 +76,7 @@ public class TestLauncher {
 
 		StringBuilder sb = new StringBuilder();
 		UserContext userContext = TestUtils.createTestActionContext(null, null);
-		art.getRenderer().render(art, art.getSection(), userContext, sb);
+		art.getRenderer().render(art.getSection(), userContext, sb);
 
 		File targetFile = new File(targetDir, markupFile.getName() + ".html");
 

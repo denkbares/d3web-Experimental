@@ -19,7 +19,6 @@
  */
 package de.knowwe.onte.editor;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.manchester.frame.ClassFrame;
@@ -47,11 +46,11 @@ import de.knowwe.tools.ToolProvider;
 public class CreateEntityToolProvider implements ToolProvider {
 
 	@Override
-	public Tool[] getTools(KnowWEArticle article, Section<?> section, UserContext userContext) {
+	public Tool[] getTools(Section<?> section, UserContext userContext) {
 
 		// section does not have an error in the subtree, that means there are
 		// now unknown terms, so return (no creation feature needed)
-		if (!section.hasErrorInSubtree(article)) {
+		if (!section.hasErrorInSubtree()) {
 			return new Tool[] {};
 		}
 

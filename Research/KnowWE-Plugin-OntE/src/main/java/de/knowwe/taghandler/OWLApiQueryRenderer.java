@@ -16,10 +16,9 @@ import org.semanticweb.owlapi.util.ShortFormProvider;
 import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.taghandler.TagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -30,13 +29,13 @@ import de.knowwe.onte.editor.OWLApiAxiomCache;
 import de.knowwe.owlapi.query.OWLApiQueryEngine;
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 04.10.2011
  * @param <T>
  */
-public class OWLApiQueryRenderer<T extends AbstractType> extends KnowWEDomRenderer<T> {
+public class OWLApiQueryRenderer<T extends AbstractType> implements KnowWERenderer<T> {
 
 	public static OWLApiQueryEngine engine = null;
 	public static ShortFormProvider shortFormProvider = null;
@@ -47,7 +46,7 @@ public class OWLApiQueryRenderer<T extends AbstractType> extends KnowWEDomRender
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section<T> sec, UserContext user, StringBuilder string) {
+	public void render(Section<T> sec, UserContext user, StringBuilder string) {
 
 		String query = DefaultMarkupType.getAnnotation(sec, "query");
 		String show = DefaultMarkupType.getAnnotation(sec, "show");
@@ -79,7 +78,7 @@ public class OWLApiQueryRenderer<T extends AbstractType> extends KnowWEDomRender
 	/**
 	 * Prints a raw list without the query string and the result type. This raw
 	 * view is mainly used to print a navigation etc.
-	 *
+	 * 
 	 * @created 12.11.2011
 	 */
 	private void printRawView(StringBuilder html, String query, String show) {
@@ -149,10 +148,9 @@ public class OWLApiQueryRenderer<T extends AbstractType> extends KnowWEDomRender
 		html.append("</div>");
 	}
 
-
 	/**
 	 * Prints the results found from the {@link OWLApiQueryEngine}.
-	 *
+	 * 
 	 * @created 12.11.2011
 	 * @param entities
 	 * @param string
@@ -197,7 +195,7 @@ public class OWLApiQueryRenderer<T extends AbstractType> extends KnowWEDomRender
 	/**
 	 * Appends a simple how to use message to the output if the
 	 * {@link TagHandler} was used incorrectly.
-	 *
+	 * 
 	 * @created 20.09.2011
 	 * @return String The how to use message
 	 */

@@ -26,7 +26,7 @@ import de.d3web.we.kdom.condition.Finding;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.kdom.renderer.StyleRenderer;
@@ -45,7 +45,7 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
 public class TableCellFirstColumn extends TableCell {
 
 	@SuppressWarnings("unchecked")
-	public static final KnowWEDomRenderer<TableCellFirstColumn> INDIVIDUAL_RENDERER =
+	public static final KnowWERenderer<TableCellFirstColumn> INDIVIDUAL_RENDERER =
 			new ToolMenuDecoratingRenderer<TableCellFirstColumn>(new StyleRenderer(
 					"color:rgb(152, 180, 12)"));
 

@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2010 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -20,10 +20,9 @@
 
 package de.d3web.we.kdom.renderer;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.renderer.StyleRenderer;
 
@@ -32,11 +31,11 @@ import de.knowwe.kdom.renderer.StyleRenderer;
  * method of tree structure visualization e.g., for logical expressions like
  * (((a and b) or (c and not(e and f)))) Note: all the nodes beeing part of this
  * tree need to get this renderer (and being delegated to).
- *
+ * 
  * @author Jochen
- *
+ * 
  */
-public class KDOMDepthFontSizeRenderer extends KnowWEDomRenderer<Type> {
+public class KDOMDepthFontSizeRenderer implements KnowWERenderer<Type> {
 
 	private double initialFontsize = 340;
 	private double depthDiscountFactor = 0.88;
@@ -51,7 +50,7 @@ public class KDOMDepthFontSizeRenderer extends KnowWEDomRenderer<Type> {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section<Type> sec, UserContext user, StringBuilder string) {
+	public void render(Section<Type> sec, UserContext user, StringBuilder string) {
 		// font-size:1.2em
 
 		double font = initialFontsize;
@@ -66,8 +65,7 @@ public class KDOMDepthFontSizeRenderer extends KnowWEDomRenderer<Type> {
 				"font-size:"
 						+ fontString
 						+ "%;").render(
-				article, sec, user,
-				string);
+				sec, user, string);
 
 	}
 

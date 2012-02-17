@@ -34,7 +34,7 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.xml.AbstractXMLType;
@@ -111,10 +111,10 @@ public class MapType extends AbstractXMLType {
 
 	}
 
-	private class MapRenderer extends KnowWEDomRenderer<MapType> {
+	private class MapRenderer implements KnowWERenderer<MapType> {
 
 		@Override
-		public void render(KnowWEArticle article, Section<MapType> sec, UserContext user, StringBuilder string) {
+		public void render(Section<MapType> sec, UserContext user, StringBuilder string) {
 			string.append("<div id=\"map\" class=\"panel\">");
 			string.append("<h3>Karte</h3>");
 			String originalText = sec.getText();

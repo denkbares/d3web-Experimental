@@ -20,10 +20,10 @@ package de.d3web.we.testcase;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import de.d3web.core.session.Session;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
@@ -46,10 +46,10 @@ public class TestcaseTableLineRenderer extends TableLineRenderer {
 	public static final String TESTCASEERROR = "tcError";
 
 	@Override
-	protected String getClasses(KnowWEArticle article, Section<TableLine> sec, UserContext user) {
+	protected String getClasses(Section<TableLine> sec, UserContext user) {
 
-		Collection<Message> errorMessages = Messages.getErrors(Messages.getMessagesFromSubtree(
-				article, sec));
+		Map<String, Collection<Message>> errorMessages = Messages.getMessagesFromSubtree(sec,
+				Message.Type.ERROR);
 
 		if (errorMessages != null && !errorMessages.isEmpty()) {
 			return TESTCASELINE + " " + TESTCASEERROR;

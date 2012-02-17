@@ -23,11 +23,10 @@ package de.knowwe.hermes.kdom.renderer;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.hermes.HermesUserManagement;
@@ -39,7 +38,7 @@ import de.knowwe.hermes.kdom.TimeEventSourceType;
 import de.knowwe.hermes.kdom.TimeEventTitleType;
 import de.knowwe.hermes.kdom.TimeEventType;
 
-public class TimeEventTypeRenderer extends KnowWEDomRenderer<TimeEventType> {
+public class TimeEventTypeRenderer implements KnowWERenderer<TimeEventType> {
 
 	private static TimeEventTypeRenderer instance;
 
@@ -51,7 +50,7 @@ public class TimeEventTypeRenderer extends KnowWEDomRenderer<TimeEventType> {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section<TimeEventType> sec, UserContext user, StringBuilder result) {
+	public void render(Section<TimeEventType> sec, UserContext user, StringBuilder result) {
 
 		// check filter Level
 		int filterLevel = getFilterLevel(user);
@@ -98,7 +97,7 @@ public class TimeEventTypeRenderer extends KnowWEDomRenderer<TimeEventType> {
 
 		result.append("! " + titleHeader + " \n");
 
-		DelegateRenderer.getInstance().render(article, descriptionSection, user, result);
+		DelegateRenderer.getInstance().render(descriptionSection, user, result);
 
 		if (sources.size() > 0) {
 			result.append("\\\\__Quellen:__\n\n");

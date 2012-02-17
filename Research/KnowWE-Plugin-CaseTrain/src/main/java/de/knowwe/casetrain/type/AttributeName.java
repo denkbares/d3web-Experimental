@@ -22,11 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.core.user.UserContext;
@@ -54,12 +53,12 @@ public class AttributeName extends AbstractType {
 			}
 
 		});
-		this.setRenderer(new KnowWEDomRenderer<MetaLine>() {
+		this.setRenderer(new KnowWERenderer<MetaLine>() {
 
 			@Override
-			public void render(KnowWEArticle article, Section<MetaLine> sec, UserContext user, StringBuilder string) {
+			public void render(Section<MetaLine> sec, UserContext user, StringBuilder string) {
 				string.append(KnowWEUtils.maskHTML("<td>"));
-				DelegateRenderer.getInstance().render(article, sec, user, string);
+				DelegateRenderer.getInstance().render(sec, user, string);
 				string.append(KnowWEUtils.maskHTML("</td>"));
 
 			}

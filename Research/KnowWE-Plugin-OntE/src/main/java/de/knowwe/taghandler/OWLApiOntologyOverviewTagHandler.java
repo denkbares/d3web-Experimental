@@ -30,7 +30,7 @@ import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.taghandler.AbstractHTMLTagHandler;
 import de.knowwe.core.taghandler.TagHandler;
 import de.knowwe.core.user.UserContext;
@@ -103,10 +103,10 @@ public class OWLApiOntologyOverviewTagHandler extends AbstractHTMLTagHandler {
 
 			for (Section<DefaultFrame> frame : defaultFrames) {
 				@SuppressWarnings("rawtypes")
-				KnowWEDomRenderer renderer = frame.get().getRenderer();
+				KnowWERenderer renderer = frame.get().getRenderer();
 				if (renderer instanceof ManchesterSyntaxFrameRenderer) {
 					((ManchesterSyntaxFrameRenderer) renderer).setRenderLink(true);
-					renderer.render(frame.getArticle(), frame, user, concepts);
+					renderer.render(frame, user, concepts);
 					((ManchesterSyntaxFrameRenderer) renderer).setRenderLink(false);
 				}
 			}

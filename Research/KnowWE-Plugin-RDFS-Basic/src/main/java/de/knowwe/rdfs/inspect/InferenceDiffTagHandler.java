@@ -27,7 +27,6 @@ import org.ontoware.rdf2go.model.Statement;
 
 import de.knowwe.core.KnowWEArticleManager;
 import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.taghandler.AbstractTagHandler;
@@ -65,7 +64,7 @@ public class InferenceDiffTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(KnowWEArticle article, Section<?> section, UserContext user, Map<String, String> parameters) {
+	public String render(Section<?> section, UserContext user, Map<String, String> parameters) {
 
 		Map<String, String> urlParameters = user.getParameters();
 		String sectionID = urlParameters.get("section");

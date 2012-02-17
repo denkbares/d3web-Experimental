@@ -20,12 +20,13 @@
 package de.knowwe.kdom.manchester;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Map;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
@@ -42,7 +43,7 @@ import de.knowwe.tools.ToolUtils;
  * @author Stefan Mark
  * @created 10.08.2011
  */
-public class ManchesterSyntaxFrameRenderer extends KnowWEDomRenderer<DefaultFrame> {
+public class ManchesterSyntaxFrameRenderer implements KnowWERenderer<DefaultFrame> {
 
 	/**
 	 * Specifies if a link to the article where the current {@link DefaultFrame}
@@ -51,22 +52,22 @@ public class ManchesterSyntaxFrameRenderer extends KnowWEDomRenderer<DefaultFram
 	private boolean renderLink = false;
 
 	@Override
-	public void render(KnowWEArticle article, Section<DefaultFrame> sec, UserContext user, StringBuilder string) {
+	public void render(Section<DefaultFrame> sec, UserContext user, StringBuilder string) {
 
 		string.append(KnowWEUtils.maskHTML("<pre id=\""
 				+ sec.getID()
 				+ "\"style=\"white-space:pre-wrap;background: none repeat scroll 0 0 #F5F5F5;border: 1px solid #E5E5E5;position:relative;margin:0px\">"));
 
-		renderMessages(article, sec, string);
+		renderMessages(sec, string);
 		string.append(KnowWEUtils.maskHTML("<div style=\"position:absolute;top:0px;right:0px;border-bottom: 1px solid #E5E5E5;border-left: 1px solid #E5E5E5;padding:5px\">"
 				// + getFrameName(sec)
 				// + getEditorIcon(sec)
-				+ renderTools(article, sec, user)
+				+ renderTools(sec, user)
 				+ getLink(sec)
 				+ "</div>"));
 
 		StringBuilder frame = new StringBuilder();
-		DelegateRenderer.getInstance().render(article, sec, user, frame);
+		DelegateRenderer.getInstance().render(sec, user, frame);
 
 		// remove the newlines at the end for nicer rendering
 		frame.replace(frame.length() - 2, frame.length(), "");
@@ -83,33 +84,37 @@ public class ManchesterSyntaxFrameRenderer extends KnowWEDomRenderer<DefaultFram
 	 * @param Section<? extends Type> section
 	 * @param StringBuilder string
 	 */
-	private void renderMessages(KnowWEArticle article, Section<? extends Type> section, StringBuilder string) {
-		Collection<Message> allmsgs = Messages.getMessagesFromSubtree(article, section);
-		Collection<Message> errors = Messages.getErrors(allmsgs);
-		Collection<Message> warnings = Messages.getWarnings(allmsgs);
-		renderKDOMReportMessages(errors, string);
-		renderKDOMReportMessages(warnings, string);
+	private void renderMessages(Section<? extends Type> section, StringBuilder string) {
+		Map<String, Collection<Message>> messagesFromSubtree = Messages.getMessagesFromSubtree(
+				section, Message.Type.ERROR, Message.Type.WARNING);
+		Collection<Message> allmsgs = new LinkedList<Message>();
+		for (Collection<Message> msgs : messagesFromSubtree.values()) {
+			allmsgs.addAll(msgs);
+		}
+		renderKDOMReportMessages(allmsgs, string, Message.Type.ERROR, Message.Type.WARNING);
 	}
 
-	private void renderKDOMReportMessages(Collection<Message> messages, StringBuilder string) {
+	private void renderKDOMReportMessages(Collection<Message> messages, StringBuilder string, Message.Type... types) {
 		if (messages == null) return;
 		if (messages.isEmpty()) return;
 
-		Message msg = messages.iterator().next();
-		String className = "";
-		if (msg.getType() == Message.Type.WARNING) {
-			className = "warning";
-		}
-		else if (msg.getType() == Message.Type.ERROR) {
-			className = "error";
-		}
+		for (Message.Type type : types) {
+			String className = "";
+			if (type == Message.Type.WARNING) {
+				className = "warning";
+			}
+			else if (type == Message.Type.ERROR) {
+				className = "error";
+			}
 
-		string.append(KnowWEUtils.maskHTML("<span class='" + className + "'>"));
-		for (Message error : messages) {
-			string.append(error.getVerbalization());
-			string.append("\n");
+			string.append(KnowWEUtils.maskHTML("<span class='" + className + "'>"));
+			for (Message msg : messages) {
+				if (msg.getType() != type) continue;
+				string.append(msg.getVerbalization());
+				string.append("\n");
+			}
+			string.append(KnowWEUtils.maskHTML("</span>"));
 		}
-		string.append(KnowWEUtils.maskHTML("</span>"));
 	}
 
 	/**
@@ -153,11 +158,11 @@ public class ManchesterSyntaxFrameRenderer extends KnowWEDomRenderer<DefaultFram
 	 * @param user
 	 * @return
 	 */
-	private String renderTools(KnowWEArticle article, Section<DefaultFrame> sec, UserContext user) {
+	private String renderTools(Section<DefaultFrame> sec, UserContext user) {
 
 		StringBuilder string = new StringBuilder();
 
-		Tool[] tools = ToolUtils.getTools(article, sec, user);
+		Tool[] tools = ToolUtils.getTools(sec, user);
 
 		for (Tool t : tools) {
 			String icon = t.getIconPath();

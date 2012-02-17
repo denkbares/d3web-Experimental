@@ -21,7 +21,6 @@
 package de.knowwe.defi.table;
 
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
@@ -34,7 +33,6 @@ public class DefineTableMarkup extends DefaultMarkupType {
 
 	public DefineTableMarkup(DefaultMarkup markup) {
 		super(markup);
-		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 
 	private static DefaultMarkup m = null;
@@ -47,6 +45,5 @@ public class DefineTableMarkup extends DefaultMarkupType {
 
 	public DefineTableMarkup() {
 		super(m);
-		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 }

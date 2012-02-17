@@ -20,10 +20,9 @@
 
 package de.knowwe.kdom.table;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -34,19 +33,19 @@ import de.knowwe.core.utils.KnowWEUtils;
  * 
  * @author smark
  */
-public class TableLineRenderer extends KnowWEDomRenderer<TableLine> {
+public class TableLineRenderer implements KnowWERenderer<TableLine> {
 
 	@Override
-	public void render(KnowWEArticle article, Section<TableLine> sec, UserContext user, StringBuilder string) {
+	public void render(Section<TableLine> sec, UserContext user, StringBuilder string) {
 		StringBuilder b = new StringBuilder();
-		DelegateRenderer.getInstance().render(article, sec, user, b);
+		DelegateRenderer.getInstance().render(sec, user, b);
 
 		StringBuilder buffi = new StringBuilder();
 		buffi.append("<tr");
 
 		buffi.append(" id='").append(sec.getID()).append("'");
 
-		String classes = getClasses(article, sec, user);
+		String classes = getClasses(sec, user);
 
 		if (!classes.isEmpty()) {
 			buffi.append(" class='").append(classes).append("'");
@@ -70,7 +69,7 @@ public class TableLineRenderer extends KnowWEDomRenderer<TableLine> {
 	 * @return an empty string, if no classes should be assigned to the table
 	 *         line, a string of CSS classes otherwise
 	 */
-	protected String getClasses(KnowWEArticle article, Section<TableLine> sec, UserContext user) {
+	protected String getClasses(Section<TableLine> sec, UserContext user) {
 		return "";
 	}
 

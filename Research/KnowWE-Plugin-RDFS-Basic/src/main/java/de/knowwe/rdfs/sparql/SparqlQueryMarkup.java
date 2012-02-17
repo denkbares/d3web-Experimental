@@ -21,14 +21,12 @@
 package de.knowwe.rdfs.sparql;
 
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 public class SparqlQueryMarkup extends DefaultMarkupType {
 
 	public SparqlQueryMarkup(DefaultMarkup markup) {
 		super(markup);
-		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 
 	private static DefaultMarkup m = null;
@@ -40,7 +38,6 @@ public class SparqlQueryMarkup extends DefaultMarkupType {
 
 	public SparqlQueryMarkup() {
 		super(m);
-		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 
 	}
 

@@ -24,7 +24,6 @@ import java.util.ResourceBundle;
 
 import de.casetrain.cleanup.Cleaner;
 import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
@@ -135,11 +134,11 @@ public class Utils {
 	 * @param user
 	 * @return
 	 */
-	public static String renderTools(KnowWEArticle article, Section<?> sec, UserContext user) {
+	public static String renderTools(Section<?> sec, UserContext user) {
 
 		StringBuilder string = new StringBuilder();
 
-		Tool[] tools = ToolUtils.getTools(article, sec, user);
+		Tool[] tools = ToolUtils.getTools(sec, user);
 
 		for (Tool t : tools) {
 			String icon = t.getIconPath();

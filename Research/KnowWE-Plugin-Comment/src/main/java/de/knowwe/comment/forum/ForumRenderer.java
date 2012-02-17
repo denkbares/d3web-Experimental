@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -26,16 +26,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.xml.AbstractXMLType;
 
 @SuppressWarnings("unchecked")
-public class ForumRenderer extends KnowWEDomRenderer {
+public class ForumRenderer implements KnowWERenderer {
 
 	private static boolean sortUpwards = ResourceBundle.getBundle("Forum_config").getString(
 			"upwards").equals("true");
@@ -86,7 +85,7 @@ public class ForumRenderer extends KnowWEDomRenderer {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
+	public void render(Section sec, UserContext user, StringBuilder string) {
 
 		StringBuilder ret = new StringBuilder();
 
@@ -130,7 +129,7 @@ public class ForumRenderer extends KnowWEDomRenderer {
 			if (sortUpwards) {
 				for (int i = 0; i < contentSectionList.size(); i++) {
 					Section sectionI = contentSectionList.get(i);
-					sectionI.get().getRenderer().render(article, sectionI, user, ret);
+					sectionI.get().getRenderer().render(sectionI, user, ret);
 				}
 				ret.append("<div id=newBox></div>");
 			}
@@ -138,7 +137,7 @@ public class ForumRenderer extends KnowWEDomRenderer {
 				ret.append("<div id=newBox></div>");
 				for (int i = contentSectionList.size() - 1; i >= 0; i--) {
 					Section sectionI = contentSectionList.get(i);
-					sectionI.get().getRenderer().render(article, sectionI, user, ret);
+					sectionI.get().getRenderer().render(sectionI, user, ret);
 				}
 			}
 
@@ -151,8 +150,8 @@ public class ForumRenderer extends KnowWEDomRenderer {
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @created 11.03.2011
 	 * @return
 	 */
@@ -166,8 +165,8 @@ public class ForumRenderer extends KnowWEDomRenderer {
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @created 08.03.2011
 	 * @param direction
 	 * @param topic

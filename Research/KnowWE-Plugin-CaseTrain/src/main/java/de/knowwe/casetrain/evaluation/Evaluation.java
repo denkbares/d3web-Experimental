@@ -44,7 +44,7 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
@@ -70,16 +70,16 @@ public class Evaluation extends BlockMarkupType {
 		this.addContentType(new Link());
 		this.addContentType(new Audio());
 
-		this.setRenderer(new KnowWEDomRenderer<BlockMarkupType>() {
+		this.setRenderer(new KnowWERenderer<BlockMarkupType>() {
 
 			@Override
-			public void render(KnowWEArticle article, Section<BlockMarkupType> sec,
-					UserContext user, StringBuilder string) {
+			public void render(Section<BlockMarkupType> sec, UserContext user,
+					StringBuilder string) {
 				string.append(KnowWEUtils.maskHTML("<div class='"
 						+ sec.get().getCSSClass()
 						+ "'>"));
 				string.append(KnowWEUtils.maskHTML("<div class='Evaluationstart'></div>"));
-
+				KnowWEArticle article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 				Utils.renderKDOMReportMessageBlock(
 						Messages.getErrors(Messages.getMessagesFromSubtree(
 								article, sec)), string);
@@ -93,7 +93,7 @@ public class Evaluation extends BlockMarkupType {
 								article, sec)), string);
 				Section<BlockMarkupContent> con =
 						Sections.findSuccessor(sec, BlockMarkupContent.class);
-				BlockMarkupContentRenderer.getInstance().render(article, con, user, string);
+				BlockMarkupContentRenderer.getInstance().render(con, user, string);
 				string.append(KnowWEUtils.maskHTML("<div class='Evaluationend'></div>"));
 				string.append(KnowWEUtils.maskHTML("</div>"));
 			}

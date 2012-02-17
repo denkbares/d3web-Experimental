@@ -67,7 +67,7 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 	 * 
 	 */
 	@Override
-	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		StringBuilder readbutton = new StringBuilder();
 		if (userContext.userIsAsserted()) {
 			// Initializing variables
@@ -129,10 +129,8 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			if (parameters.containsKey(ID)) id = parameters.get(ID);
 			else return KnowWEUtils.maskHTML("<p>Fehler: Dem Button fehlt das Attribut 'id'.</p>");
 
-			if (checkID(id, article) == 1)
-				return KnowWEUtils.maskHTML("<p>Fehler: Das Attribut 'id' darf nicht die Zeichen '::' und ';' enthalten.</p>");
-			if (checkID(id, article) == 2)
-				return KnowWEUtils.maskHTML("<p>Fehler: Das Attribut 'id' muss einmalig sein!");
+			if (checkID(id, section.getArticle()) == 1) return KnowWEUtils.maskHTML("<p>Fehler: Das Attribut 'id' darf nicht die Zeichen '::' und ';' enthalten.</p>");
+			if (checkID(id, section.getArticle()) == 2) return KnowWEUtils.maskHTML("<p>Fehler: Das Attribut 'id' muss einmalig sein!");
 
 			// Get the readpages-annotation
 			KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(

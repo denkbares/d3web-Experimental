@@ -20,7 +20,6 @@
 
 package de.d3web.we.faq;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -37,8 +36,8 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 public class FAQRootTypeDefaultRenderer extends DefaultMarkupRenderer {
 
 	@Override
-	public void render(KnowWEArticle article, Section sec,
-			UserContext user, StringBuilder string) {
+	public void render(Section sec, UserContext user,
+			StringBuilder string) {
 
 		String question =
 				DefaultMarkupType.getAnnotation(sec, "question");

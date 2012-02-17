@@ -24,11 +24,10 @@ import java.util.List;
 import de.d3web.we.kdom.condition.CompositeCondition;
 import de.d3web.we.kdom.condition.NonTerminalCondition;
 import de.d3web.we.kdom.condition.helper.BracedCondition;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.core.report.Messages;
@@ -54,13 +53,13 @@ public class BraceElement extends NonTerminalCondition {
 		CLOSED = closed;
 
 		this.setSectionFinder(BracedExpressionFinder.createEmbracedExpressionFinder());
-		this.setRenderer(new KnowWEDomRenderer<BraceElement>() {
+		this.setRenderer(new KnowWERenderer<BraceElement>() {
 
 			@Override
-			public void render(KnowWEArticle article, Section<BraceElement> section, UserContext user, StringBuilder string) {
+			public void render(Section<BraceElement> section, UserContext user, StringBuilder string) {
 
 				StringBuilder masked = new StringBuilder();
-				DelegateRenderer.getInstance().render(article, section, user, masked);
+				DelegateRenderer.getInstance().render(section, user, masked);
 				string.append(KnowWEUtils.maskJSPWikiMarkup(masked.toString()));
 			}
 		});

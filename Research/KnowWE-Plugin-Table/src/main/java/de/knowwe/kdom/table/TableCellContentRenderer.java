@@ -20,10 +20,9 @@
 
 package de.knowwe.kdom.table;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -52,10 +51,10 @@ import de.knowwe.core.utils.KnowWEUtils;
  * </p>
  * 
  * @author smark
- * @see KnowWEDomRenderer
+ * @see KnowWERenderer
  * @see Table
  */
-public class TableCellContentRenderer extends KnowWEDomRenderer<TableCellContent> {
+public class TableCellContentRenderer implements KnowWERenderer<TableCellContent> {
 
 	/**
 	 * Determines of the DelegateRenderer is called for content
@@ -80,13 +79,13 @@ public class TableCellContentRenderer extends KnowWEDomRenderer<TableCellContent
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section<TableCellContent> sec, UserContext user, StringBuilder string) {
+	public void render(Section<TableCellContent> sec, UserContext user, StringBuilder string) {
 
 		String content;
 
 		if (callDelegate) {
 			StringBuilder builder = new StringBuilder();
-			DelegateRenderer.getInstance().render(article, sec, user, builder);
+			DelegateRenderer.getInstance().render(sec, user, builder);
 			content = builder.toString();
 		}
 		else {
@@ -139,7 +138,6 @@ public class TableCellContentRenderer extends KnowWEDomRenderer<TableCellContent
 		// can be overriden by subclasses
 		return sectionText;
 	}
-
 
 	public boolean isCallDelegate() {
 		return callDelegate;

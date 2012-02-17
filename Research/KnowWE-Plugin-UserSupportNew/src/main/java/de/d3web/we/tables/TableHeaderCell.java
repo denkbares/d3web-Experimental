@@ -18,7 +18,7 @@
  */
 package de.d3web.we.tables;
 
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
@@ -31,7 +31,7 @@ import de.knowwe.kdom.renderer.StyleRenderer;
 public class TableHeaderCell extends TableCell {
 
 	@SuppressWarnings("unchecked")
-	public static final KnowWEDomRenderer<TableHeaderCell> INDIVIDUAL_RENDERER = StyleRenderer.KEYWORDS;
+	public static final KnowWERenderer<TableHeaderCell> INDIVIDUAL_RENDERER = StyleRenderer.KEYWORDS;
 
 	public TableHeaderCell() {
 		super();

@@ -22,14 +22,14 @@ package de.knowwe.termObject;
 
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 public class ClassIRIDefinition extends de.knowwe.rdfs.AbstractIRITermDefinition {
 
 	@SuppressWarnings("unchecked")
-	final KnowWEDomRenderer<ClassIRIDefinition> CLASS_RENDERER =
+	final KnowWERenderer<ClassIRIDefinition> CLASS_RENDERER =
 			new ToolMenuDecoratingRenderer<ClassIRIDefinition>(new StyleRenderer(
 					"color:rgb(125, 80, 102)"));
 

@@ -1,26 +1,25 @@
 /*
  * Copyright (C) 2010 denkbares GmbH, Wuerzburg
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.d3web.we.ci4ke.groovy;
 
 import de.d3web.we.knowledgebase.KnowledgeBaseType;
 import de.knowwe.core.KnowWERessourceLoader;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -36,11 +35,11 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 public class GroovyCITestRenderer extends DefaultMarkupRenderer<GroovyCITestType> {
 
 	public GroovyCITestRenderer() {
-		super("KnowWEExtension/images/terminal-icon.png", false);
+		super("KnowWEExtension/images/terminal-icon.png");
 	}
 
 	@Override
-	protected void renderContents(KnowWEArticle article, Section<GroovyCITestType> section, UserContext user, StringBuilder string) {
+	protected void renderContents(Section<GroovyCITestType> section, UserContext user, StringBuilder string) {
 		KnowWERessourceLoader.getInstance().add("syntaxhighlighter_3.0.83/shCore.css",
 				KnowWERessourceLoader.RESOURCE_STYLESHEET);
 		KnowWERessourceLoader.getInstance().add("syntaxhighlighter_3.0.83/shThemeEclipse.css",

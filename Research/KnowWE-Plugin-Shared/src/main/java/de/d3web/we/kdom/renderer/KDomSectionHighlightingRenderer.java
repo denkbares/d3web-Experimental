@@ -20,10 +20,9 @@
 
 package de.d3web.we.kdom.renderer;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -40,7 +39,7 @@ import de.knowwe.core.utils.KnowWEUtils;
  * 
  * @author Johannes Dienst
  */
-public class KDomSectionHighlightingRenderer extends KnowWEDomRenderer {
+public class KDomSectionHighlightingRenderer implements KnowWERenderer {
 
 	private static KDomSectionHighlightingRenderer instance;
 
@@ -50,11 +49,11 @@ public class KDomSectionHighlightingRenderer extends KnowWEDomRenderer {
 	}
 
 	@Override
-	public void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
+	public void render(Section sec, UserContext user, StringBuilder string) {
 		// First span is for kdom id. Second for an uniqueMarker
 		// that is needed for Highlighting the section
 		StringBuilder b = new StringBuilder();
-		DelegateRenderer.getInstance().render(article, sec, user, b);
+		DelegateRenderer.getInstance().render(sec, user, b);
 		string.append(KnowWEUtils.maskHTML("<span id='" + sec.getID()
 						+ "'><span id=''>"
 						+ b.toString()

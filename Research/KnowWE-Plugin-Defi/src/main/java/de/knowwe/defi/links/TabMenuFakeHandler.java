@@ -3,7 +3,6 @@ package de.knowwe.defi.links;
 import java.util.Map;
 
 import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
@@ -16,7 +15,7 @@ public class TabMenuFakeHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		if (parameters.containsKey("pages")) {
 			String pages = parameters.get("pages");
 			String[] pageNames = pages.split("\\|");
@@ -27,7 +26,7 @@ public class TabMenuFakeHandler extends AbstractTagHandler {
 			buffy.append(KnowWEUtils.maskHTML("<div class='tabmenu'>"));
 			for (String page : pageNames) {
 				String clazz = "";
-				if (page.trim().equals(article.getTitle())) {
+				if (page.trim().equals(section.getTitle())) {
 					clazz = "activetab";
 				}
 				buffy.append(KnowWEUtils.maskHTML("<a href='" + baseUrl

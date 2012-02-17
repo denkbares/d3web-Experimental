@@ -24,10 +24,9 @@ import java.util.Collection;
 
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.report.DefaultErrorRenderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
@@ -37,7 +36,7 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 public abstract class IncrementalTermDefinition<TermObject> extends SimpleDefinition {
 
-	final KnowWEDomRenderer CLASS_RENDERER = new ReferenceRenderer(
+	final KnowWERenderer CLASS_RENDERER = new ReferenceRenderer(
 			new ToolMenuDecoratingRenderer<IncrementalTermReference>(
 					new StyleRenderer("color:rgb(125, 80, 102)")));
 
@@ -46,16 +45,16 @@ public abstract class IncrementalTermDefinition<TermObject> extends SimpleDefini
 		this.setRenderer(CLASS_RENDERER);
 	}
 
-	class ReferenceRenderer extends KnowWEDomRenderer<IncrementalTermDefinition> {
+	class ReferenceRenderer implements KnowWERenderer<IncrementalTermDefinition> {
 
-		private KnowWEDomRenderer r = null;
+		private KnowWERenderer r = null;
 
-		public ReferenceRenderer(KnowWEDomRenderer renderer) {
+		public ReferenceRenderer(KnowWERenderer renderer) {
 			r = renderer;
 		}
 
 		@Override
-		public void render(KnowWEArticle article, Section<IncrementalTermDefinition> sec, UserContext user, StringBuilder string) {
+		public void render(Section<IncrementalTermDefinition> sec, UserContext user, StringBuilder string) {
 
 			Collection<Message> messages = IncrementalCompiler.getInstance().checkDefinition(
 					sec.get().getTermIdentifier(sec));
@@ -63,18 +62,18 @@ public abstract class IncrementalTermDefinition<TermObject> extends SimpleDefini
 				if (kdomReportMessage.getType() == Message.Type.ERROR) {
 					string.append(
 							DefaultErrorRenderer.INSTANCE_ERROR.preRenderMessage(
-									kdomReportMessage, user));
+									kdomReportMessage, user, null));
 				}
 				if (kdomReportMessage.getType() == Message.Type.WARNING) {
 					string.append(
 							DefaultErrorRenderer.INSTANCE_WARNING.preRenderMessage(
-									kdomReportMessage, user));
+									kdomReportMessage, user, null));
 				}
 			}
 
 			string.append(KnowWEUtils.maskHTML("<a name='" + sec.getID() + "'>"));
 
-			r.render(article, sec, user, string);
+			r.render(sec, user, string);
 
 			string.append(KnowWEUtils.maskHTML("</a>"));
 
@@ -82,12 +81,12 @@ public abstract class IncrementalTermDefinition<TermObject> extends SimpleDefini
 				if (kdomReportMessage.getType() == Message.Type.ERROR) {
 					string.append(
 							DefaultErrorRenderer.INSTANCE_ERROR.postRenderMessage(
-									kdomReportMessage, user));
+									kdomReportMessage, user, null));
 				}
 				if (kdomReportMessage.getType() == Message.Type.WARNING) {
 					string.append(
 							DefaultErrorRenderer.INSTANCE_WARNING.postRenderMessage(
-									kdomReportMessage, user));
+									kdomReportMessage, user, null));
 				}
 			}
 		}

@@ -20,7 +20,6 @@ package de.knowwe.d3web.owl;
 
 import java.util.List;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
@@ -39,7 +38,7 @@ public class OntologyEscapeRenderer extends DefaultMarkupRenderer<OntologyProvid
 	}
 
 	@Override
-	protected void renderContents(KnowWEArticle article, Section<OntologyProviderType> section, UserContext user, StringBuilder string) {
+	protected void renderContents(Section<OntologyProviderType> section, UserContext user, StringBuilder string) {
 		List<Section<?>> subsecs = section.getChildren();
 		Section<?> first = subsecs.get(0);
 		Section<?> last = subsecs.get(subsecs.size() - 1);
@@ -57,7 +56,7 @@ public class OntologyEscapeRenderer extends DefaultMarkupRenderer<OntologyProvid
 				string.append("}}}\n/%");
 				continue;
 			}
-			subsec.get().getRenderer().render(article, subsec, user, string);
+			subsec.get().getRenderer().render(subsec, user, string);
 		}
 	}
 

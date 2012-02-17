@@ -18,7 +18,7 @@
  */
 package de.d3web.we.tables;
 
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 
 
@@ -30,7 +30,7 @@ import de.knowwe.kdom.renderer.StyleRenderer;
 public class TableNormalCell extends TableCell {
 
 	@SuppressWarnings("unchecked")
-	public static final KnowWEDomRenderer<TableNormalCell> INDIVIDUAL_RENDERER = StyleRenderer.CONTENT;
+	public static final KnowWERenderer<TableNormalCell> INDIVIDUAL_RENDERER = StyleRenderer.CONTENT;
 
 	public TableNormalCell() {
 		super();

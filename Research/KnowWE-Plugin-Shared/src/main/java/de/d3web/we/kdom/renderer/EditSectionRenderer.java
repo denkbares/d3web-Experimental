@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -30,7 +30,7 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.user.UserSettingsManager;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -43,27 +43,27 @@ import de.knowwe.core.utils.KnowWEUtils;
  * user to edit the content of the section. The text of the HTML textarea is the
  * original text of the section. So be carefully when editing the lines.
  * </p>
- *
+ * 
  * @author smark
  * @since 2009/10/18
  */
-public class EditSectionRenderer extends KnowWEDomRenderer {
+public class EditSectionRenderer implements KnowWERenderer {
 
-	KnowWEDomRenderer<? extends Type> renderer;
+	KnowWERenderer<? extends Type> renderer;
 
 	public EditSectionRenderer() {
 		this(DelegateRenderer.getInstance());
 	}
 
-	public EditSectionRenderer(KnowWEDomRenderer renderer) {
+	public EditSectionRenderer(KnowWERenderer renderer) {
 		this.renderer = renderer;
 	}
 
 	@Override
-	public final void render(KnowWEArticle article, Section sec, UserContext user, StringBuilder string) {
+	public final void render(Section sec, UserContext user, StringBuilder string) {
 
 		StringBuilder subTreeContent = new StringBuilder();
-		renderer.render(article, sec, user, subTreeContent);
+		renderer.render(sec, user, subTreeContent);
 		if (subTreeContent.length() == 0) {
 			// if the content renders to nothing, also no quick-edit button is
 			// set.
@@ -102,6 +102,7 @@ public class EditSectionRenderer extends KnowWEDomRenderer {
 		string.append(KnowWEUtils.maskHTML("<a name=\"" + sec.getID() + "\"></a>"));
 
 		string.append(KnowWEUtils.maskHTML("<div id=\"" + sec.getID() + "\" style=\"width: 100%\">"));
+		KnowWEArticle article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 		if (sec.getArticle().equals(article) || KnowWEEnvironment.getInstance().getPackageManager(
 				article.getWeb()).getArticlesReferringTo(sec).contains(article.getTitle())) {
 			string.append(KnowWEUtils.maskHTML(this.generateQuickEdit("Quickedit "
@@ -149,7 +150,7 @@ public class EditSectionRenderer extends KnowWEDomRenderer {
 
 	/**
 	 * Generates a link used to enable or disable the Quick-Edit-Flag.
-	 *
+	 * 
 	 * @param id - of the section the flag should assigned to.
 	 * @param user - to get language preferences.
 	 * @param topic - name of the current page.
@@ -190,7 +191,7 @@ public class EditSectionRenderer extends KnowWEDomRenderer {
 
 	/**
 	 * Calculates the height of the HTML textarea.
-	 *
+	 * 
 	 * @param str - The string used to calculate the height.
 	 * @param isInline - If true the textarea gets no additional newlines.
 	 * @return The height of the HTML textarea element.
@@ -207,7 +208,7 @@ public class EditSectionRenderer extends KnowWEDomRenderer {
 	 * Searches the first ancestor Section of section with some text right in
 	 * front of the section's one, and checks whether both are separated by '\n'
 	 * or '\f' or not (inline).
-	 *
+	 * 
 	 * @created 07.08.2010
 	 * @param sec The section used by the ESR which could be inline.
 	 * @return True if the section (its OrignialText) is in the same line as the
@@ -237,7 +238,7 @@ public class EditSectionRenderer extends KnowWEDomRenderer {
 	 * takes the last line of the actual string being rendered so far. The
 	 * table-code is inserted right in front of the last (can be changed in
 	 * while loop) text (which is no HTML-code) in this line.
-	 *
+	 * 
 	 * @created 10.08.2010
 	 * @param string - The so far rendered page content.
 	 * @param sec - The section used by the ESR, used for the table's name.

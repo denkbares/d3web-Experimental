@@ -28,7 +28,6 @@ import java.util.List;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
@@ -42,7 +41,6 @@ public class TimeTableMarkup extends DefaultMarkupType {
 
 	public TimeTableMarkup(DefaultMarkup markup) {
 		super(markup);
-		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 
 	// @Override
@@ -89,6 +87,5 @@ public class TimeTableMarkup extends DefaultMarkupType {
 
 	public TimeTableMarkup() {
 		super(m);
-		this.setRenderer(new DefaultMarkupRenderer<DefaultMarkupType>(false));
 	}
 }

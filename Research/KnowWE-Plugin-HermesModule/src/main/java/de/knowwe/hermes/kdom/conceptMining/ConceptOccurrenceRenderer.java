@@ -35,22 +35,21 @@ import org.ontoware.rdf2go.util.RDFTool;
 import de.knowwe.core.contexts.Context;
 import de.knowwe.core.contexts.ContextManager;
 import de.knowwe.core.contexts.DefaultSubjectContext;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.hermes.kdom.TimeEventType;
 import de.knowwe.rdf2go.DefaultURIContext;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
-public class ConceptOccurrenceRenderer extends KnowWEDomRenderer {
+public class ConceptOccurrenceRenderer implements KnowWERenderer {
 
 	private static String TITLE_QUERY = "SELECT  ?title WHERE {  <URI> lns:hasTitle ?title }";
 
 	@Override
-	public void render(KnowWEArticle article, Section arg0, UserContext arg1, StringBuilder arg2) {
+	public void render(Section arg0, UserContext arg1, StringBuilder arg2) {
 
 		Section<PersonOccurrence> personSection = arg0;
 

@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.d3web.we.correction;
 
@@ -26,13 +26,12 @@ import java.util.ResourceBundle;
 
 import de.d3web.we.algorithm.Suggestion;
 import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.tools.DefaultTool;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolProvider;
-
 
 /**
  * 
@@ -42,25 +41,25 @@ import de.knowwe.tools.ToolProvider;
 public class ApproximateCorrectionToolProvider implements ToolProvider {
 
 	@Override
-	public Tool[] getTools(KnowWEArticle article, Section<?> section, UserContext userContext) {
+	public Tool[] getTools(Section<?> section, UserContext userContext) {
 
 		List<Suggestion> suggestions = new LinkedList<Suggestion>();
 		ResourceBundle wikiConfig = ResourceBundle.getBundle("KnowWE_config");
 
-
-		//		for (ApproximateCorrectionProvider c : getProviders(section)) {
-		//			List<Suggestion> s = c.getSuggestions(article, section);
+		// for (ApproximateCorrectionProvider c : getProviders(section)) {
+		// List<Suggestion> s = c.getSuggestions(article, section);
 		//
-		//			if (s != null) {
-		//				suggestions.addAll(s);
-		//			}
-		//		}
+		// if (s != null) {
+		// suggestions.addAll(s);
+		// }
+		// }
 
 		ApproximateCorrectionProviderImpl impl = new ApproximateCorrectionProviderImpl();
 
 		// Ensure there are no duplicates
 		suggestions = new LinkedList<Suggestion>(
-				new HashSet<Suggestion>(impl.getSuggestions(article, section)));
+				new HashSet<Suggestion>(impl.getSuggestions(
+						KnowWEUtils.getCompilingArticles(section).iterator().next(), section)));
 
 		// Sort by ascending distance
 		Collections.sort(suggestions);
@@ -93,22 +92,27 @@ public class ApproximateCorrectionToolProvider implements ToolProvider {
 		return tools;
 	}
 
-	//	private static ApproximateCorrectionProvider[] getProviders(Section<?> section) {
-	//		Extension[] extensions = PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
-	//				"ApproximateCorrectionProviderImpl");
-	//		extensions = PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
-	//				"ApproximateCorrectionToolProvider");
-	//		extensions = PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
-	//				"ApproximateCorrectionProvider");
-	//		extensions = ScopeUtils.getMatchingExtensions(extensions, section);
-	//		ApproximateCorrectionProvider[] providers = new ApproximateCorrectionProvider[extensions.length];
+	// private static ApproximateCorrectionProvider[] getProviders(Section<?>
+	// section) {
+	// Extension[] extensions =
+	// PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
+	// "ApproximateCorrectionProviderImpl");
+	// extensions =
+	// PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
+	// "ApproximateCorrectionToolProvider");
+	// extensions =
+	// PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
+	// "ApproximateCorrectionProvider");
+	// extensions = ScopeUtils.getMatchingExtensions(extensions, section);
+	// ApproximateCorrectionProvider[] providers = new
+	// ApproximateCorrectionProvider[extensions.length];
 	//
-	//		for (int i = 0; i < extensions.length; i++) {
-	//			Extension extension = extensions[i];
-	//			providers[i] = (ApproximateCorrectionProvider) extension.getSingleton();
-	//		}
+	// for (int i = 0; i < extensions.length; i++) {
+	// Extension extension = extensions[i];
+	// providers[i] = (ApproximateCorrectionProvider) extension.getSingleton();
+	// }
 	//
-	//		return providers;
-	//	}
+	// return providers;
+	// }
 
 }

@@ -20,10 +20,9 @@
 
 package de.knowwe.casetrain.type.multimedia;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -36,10 +35,10 @@ public class Image extends MultimediaItem {
 	public Image() {
 		super(REGEX);
 
-		this.setRenderer(new KnowWEDomRenderer<Image>() {
+		this.setRenderer(new KnowWERenderer<Image>() {
 
 			@Override
-			public void render(KnowWEArticle article, Section<Image> sec, UserContext user, StringBuilder string) {
+			public void render(Section<Image> sec, UserContext user, StringBuilder string) {
 				Section<MultimediaItemContent> bildURL = Sections.findChildOfType(sec,
 						MultimediaItemContent.class);
 				string.append(KnowWEUtils.maskHTML("<img height='70' src='"));

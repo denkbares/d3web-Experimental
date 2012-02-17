@@ -24,10 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
@@ -106,13 +105,13 @@ class RangeDefinition extends AbstractType {
 	}
 }
 
-class RangeRenderer extends KnowWEDomRenderer {
+class RangeRenderer implements KnowWERenderer {
 
 	@Override
-	public void render(KnowWEArticle article, Section sec,
-			UserContext user, StringBuilder string) {
+	public void render(Section sec, UserContext user,
+			StringBuilder string) {
 		string.append(KnowWEUtils.maskHTML("<span title=\"Range restriction\">"));
-		new StyleRenderer("color:rgb(128, 128, 0)").render(article, sec, user, string);
+		new StyleRenderer("color:rgb(128, 128, 0)").render(sec, user, string);
 		string.append(KnowWEUtils.maskHTML("</span>"));
 
 	}
@@ -138,13 +137,13 @@ class DomainDefinition extends AbstractType {
 	}
 }
 
-class DomainRenderer extends KnowWEDomRenderer {
+class DomainRenderer implements KnowWERenderer {
 
 	@Override
-	public void render(KnowWEArticle article, Section sec,
-			UserContext user, StringBuilder string) {
+	public void render(Section sec, UserContext user,
+			StringBuilder string) {
 		string.append(KnowWEUtils.maskHTML("<span title=\"Domain restriction\">"));
-		new StyleRenderer("color:rgb(0, 128, 0)").render(article, sec, user, string);
+		new StyleRenderer("color:rgb(0, 128, 0)").render(sec, user, string);
 		string.append(KnowWEUtils.maskHTML("</span>"));
 
 	}

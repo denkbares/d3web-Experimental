@@ -38,7 +38,7 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -147,16 +147,16 @@ public class FreeMapNode extends AbstractXMLType {
 	 * @created 16.09.2010
 	 */
 	@SuppressWarnings("unchecked")
-	class FreeMapNodeRenderer extends KnowWEDomRenderer {
+	class FreeMapNodeRenderer implements KnowWERenderer {
 
 		@Override
-		public void render(KnowWEArticle article, Section sec,
-				UserContext user, StringBuilder string) {
+		public void render(Section sec, UserContext user,
+				StringBuilder string) {
 			int depth = AbstractXMLType.getXMLDepth(sec);
 
 			string.append(createDashes(depth - 1) + "  " + getText(sec) + "\n");
 
-			DelegateRenderer.getInstance().render(article, sec, user, string);
+			DelegateRenderer.getInstance().render(sec, user, string);
 
 		}
 

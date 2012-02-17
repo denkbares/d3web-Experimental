@@ -18,7 +18,6 @@
  */
 package de.d3web.we.testcase;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.tools.DefaultTool;
@@ -33,14 +32,14 @@ import de.knowwe.tools.ToolProvider;
 public class TestcaseTableResetProvider implements ToolProvider {
 
 	@Override
-	public Tool[] getTools(KnowWEArticle article, Section<?> section, UserContext userContext) {
-		Tool reset = getResetTool(article, section, userContext);
-		Tool resetAndRerun = getResetAndRerunTool(article, section, userContext);
+	public Tool[] getTools(Section<?> section, UserContext userContext) {
+		Tool reset = getResetTool(section, userContext);
+		Tool resetAndRerun = getResetAndRerunTool(section, userContext);
 		return new Tool[] {
 				reset, resetAndRerun };
 	}
 
-	private Tool getResetAndRerunTool(KnowWEArticle article, Section<?> section, UserContext userContext) {
+	private Tool getResetAndRerunTool(Section<?> section, UserContext userContext) {
 		String jsAction = createResetAction(section, userContext, true);
 		return new DefaultTool(
 				"KnowWEExtension/images/testcasetable/resetRerun.png",
@@ -49,7 +48,7 @@ public class TestcaseTableResetProvider implements ToolProvider {
 				jsAction);
 	}
 
-	private Tool getResetTool(KnowWEArticle article, Section<?> section, UserContext userContext) {
+	private Tool getResetTool(Section<?> section, UserContext userContext) {
 		String jsAction = createResetAction(section, userContext, false);
 		return new DefaultTool(
 				"KnowWEExtension/images/progress_stop.gif",
@@ -58,9 +57,9 @@ public class TestcaseTableResetProvider implements ToolProvider {
 				jsAction);
 	}
 
-
 	private static String createResetAction(Section<?> section, UserContext userContext, boolean rerun) {
-		return "Testcase.resetTestcase('" + section.getID() + "', " + Boolean.toString(rerun) + ");";
+		return "Testcase.resetTestcase('" + section.getID() + "', " + Boolean.toString(rerun)
+				+ ");";
 	}
 
 }

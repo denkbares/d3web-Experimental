@@ -19,9 +19,8 @@
 package de.knowwe.defi.aboutMe;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -35,25 +34,24 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  * @author Stefan Mark
  * @created 25.01.2011
  */
-public class AboutMeRenderer<T extends AbstractType> extends KnowWEDomRenderer<T> {
+public class AboutMeRenderer<T extends AbstractType> implements KnowWERenderer<T> {
 
 	@Override
-	public void render(KnowWEArticle article, Section<T> sec, UserContext user, StringBuilder string) {
+	public void render(Section<T> sec, UserContext user, StringBuilder string) {
 
 		String username = user.getUserName();
-		String pageName = article.getTitle();
 
-		boolean isOwner = pageName.toLowerCase().equals(username.toLowerCase())
+		boolean isOwner = sec.getTitle().toLowerCase().equals(username.toLowerCase())
 				&& user.userIsAsserted();
 
 		StringBuilder noneHTML = new StringBuilder();
 
 		noneHTML.append("<div class=\"aboutme\">");
 		if (isOwner) {
-			renderIsOwner(noneHTML, sec, article);
+			renderIsOwner(noneHTML, sec);
 		}
 		else {
-			renderNoOwner(noneHTML, sec, article, user);
+			renderNoOwner(noneHTML, sec, user);
 		}
 		noneHTML.append("</div>");
 
@@ -68,7 +66,7 @@ public class AboutMeRenderer<T extends AbstractType> extends KnowWEDomRenderer<T
 	 * @param sec
 	 * @param article
 	 */
-	private void renderIsOwner(StringBuilder html, Section<T> sec, KnowWEArticle article) {
+	private void renderIsOwner(StringBuilder html, Section<T> sec) {
 		html.append("<h1 class=\"aboutme\">persönliche Einstellungen</h1>");
 		html.append("<p>Auf dieser Seite können Sie Angaben zu Ihrer Person machen,")
 				.append(" die Sie mit den anderen Mitgliedern der Gruppe teilen möchten.")
@@ -113,7 +111,7 @@ public class AboutMeRenderer<T extends AbstractType> extends KnowWEDomRenderer<T
 		html.append("<p><input type=\"submit\" value=\"Speichern\"/></p>");
 		html.append("<input type=\"hidden\" name=\"action\" value=\"AboutMeSaveAction\" />");
 		html.append("<input type=\"hidden\" name=\"KWiki_Topic\" value=\""
-				+ article.getTitle() + "\" />");
+				+ sec.getTitle() + "\" />");
 		html.append("</form>");
 	}
 
@@ -125,12 +123,11 @@ public class AboutMeRenderer<T extends AbstractType> extends KnowWEDomRenderer<T
 	 * @param sec
 	 * @param article
 	 */
-	private void renderNoOwner(StringBuilder html, Section<T> sec, KnowWEArticle article, UserContext user) {
+	private void renderNoOwner(StringBuilder html, Section<T> sec, UserContext user) {
 		html.append("<p style=\"text-align:center;\">persönliche Seite von</p>");
-		html.append("<h1 class=\"aboutme\">").append(article.getTitle()).append("</h1>");
+		html.append("<h1 class=\"aboutme\">").append(sec.getTitle()).append("</h1>");
 
 		this.createAvatarHTML(sec, html, AboutMe.HTML_AVATAR, false);
-
 
 		html.append("<p style=\"float:left;\">Alter: ");
 		html.append(getInputDependingOnUserState(sec, AboutMe.HTML_AGE, false));
@@ -149,7 +146,7 @@ public class AboutMeRenderer<T extends AbstractType> extends KnowWEDomRenderer<T
 		html.append("<p>Warum ich einen Defi habe:");
 		html.append(getInputDependingOnUserState(sec, AboutMe.HTML_TYPE, false));
 		html.append("</p>");
-		
+
 		html.append("<h2 class=\"aboutme\">Persönliches</h2>");
 		html.append("<p>Hobbies: ");
 		html.append(getTextareaDependingOnUserState(sec, AboutMe.HTML_HOBBIES, false));
@@ -163,13 +160,13 @@ public class AboutMeRenderer<T extends AbstractType> extends KnowWEDomRenderer<T
 		html.append(
 				"<div style=\"border: 1px solid rgb(0,0,0); padding:30px; border-right: 30px solid rgb(58,127,22);\">")
 				.append("<p><strong>private Kommunikation mit ")
-				.append(article.getTitle())
+				.append(sec.getTitle())
 				.append("</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
 				.append(
 						"<input class=\"defi-bttn\" type=\"submit\" value=\"Persönliche Nachricht\" />")
 				.append("</p></div>");
 		html.append("<input type=\"hidden\" name=\"action\" value=\"PersonalMessageAction\" />");
-		html.append("<input type=\"hidden\" name=\"user1\" value=\"").append(article.getTitle()).append(
+		html.append("<input type=\"hidden\" name=\"user1\" value=\"").append(sec.getTitle()).append(
 				"\" />");
 		html.append("<input type=\"hidden\" name=\"user2\" value=\"").append(user.getUserName()).append(
 				"\" />");
@@ -177,7 +174,6 @@ public class AboutMeRenderer<T extends AbstractType> extends KnowWEDomRenderer<T
 
 		// TODO: private communication :)
 	}
-
 
 	/**
 	 * Creates an HTML Input element or a normal string depending on the user

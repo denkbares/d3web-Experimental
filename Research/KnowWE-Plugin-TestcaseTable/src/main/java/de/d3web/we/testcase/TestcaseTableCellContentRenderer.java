@@ -19,8 +19,8 @@
 package de.d3web.we.testcase;
 
 import java.util.Collection;
+import java.util.Map;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
@@ -40,16 +40,16 @@ import de.knowwe.kdom.table.TableUtils;
 public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 
 	@Override
-	public void render(KnowWEArticle article, Section<TableCellContent> sec, UserContext user, StringBuilder string) {
+	public void render(Section<TableCellContent> sec, UserContext user, StringBuilder string) {
 
-		Collection<Message> messages = Messages.getErrors(Messages.getMessagesFromSubtree(article,
-				sec));
+		Map<String, Collection<Message>> errors = Messages.getMessagesFromSubtree(sec,
+				Message.Type.ERROR);
 
 		int column = TableUtils.getColumn(sec);
 
 		StringBuilder html = new StringBuilder();
 		if (!sec.hasQuickEditModeSet(user.getUserName())) {
-			if (!messages.isEmpty()) {
+			if (!errors.isEmpty()) {
 				html.append("<td class='error'>");
 			}
 			else if (column != 0) {
@@ -71,7 +71,7 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 			html.append(sec.getText());
 		}
 		else {
-			if (!messages.isEmpty()) {
+			if (!errors.isEmpty()) {
 				html.append("<td class='error'>");
 				html.append(sec.getText());
 			}

@@ -23,14 +23,14 @@ package de.knowwe.compile.test;
 import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 public class IRITermRef extends IncrementalTermReference {
 
 	@SuppressWarnings("unchecked")
-	final KnowWEDomRenderer<IRITermRef> REF_RENDERER =
+	final KnowWERenderer<IRITermRef> REF_RENDERER =
 			new ToolMenuDecoratingRenderer<IRITermRef>(new StyleRenderer(
 					"color:rgb(25, 180, 120)"));
 

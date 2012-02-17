@@ -33,13 +33,13 @@ import de.d3web.xcl.XCLModel;
 import de.d3web.xcl.XCLRelation;
 import de.d3web.xcl.XCLRelationType;
 import de.knowwe.core.compile.Priority;
-import de.knowwe.core.compile.packaging.PackageRenderUtils;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.report.Message;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.AnonymousTypeInvisible;
 import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
 import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
@@ -78,30 +78,34 @@ public class CausalDiagnosisScore extends AbstractType {
 		private static final String NO_WEIGHT = "Weightless";
 
 		@Override
-		public Collection<Message> create(KnowWEArticle article, Section<CausalDiagnosisScore> scoreSec)
-		{
+		public Collection<Message> create(KnowWEArticle article, Section<CausalDiagnosisScore> scoreSec) {
 
 			Section<InnerTable> innerTable =
 					Sections.findChildOfType(scoreSec, InnerTable.class);
 			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty()) return null;
 
 			// TODO Right KnowledgeBase?
-			//			Section<CausalDiagnosisScoreMarkup> mark = Sections.findAncestorOfExactType(
-			//					scoreSec, CausalDiagnosisScoreMarkup.class);
-			//			String packageName = DefaultMarkupType.getAnnotation(mark, "package");
-			//			KnowledgeBase kb = D3webUtils.getKB(scoreSec.getWeb(), packageName + " - master");
-			StringBuilder content = new StringBuilder();
-			KnowWEArticle compilingArticle = PackageRenderUtils.checkArticlesCompiling(scoreSec.getArticle(), scoreSec, content);
-			KnowledgeBase kb = D3webUtils.getKnowledgeBase(scoreSec.getWeb(), compilingArticle.getTitle());
+			// Section<CausalDiagnosisScoreMarkup> mark =
+			// Sections.findAncestorOfExactType(
+			// scoreSec, CausalDiagnosisScoreMarkup.class);
+			// String packageName = DefaultMarkupType.getAnnotation(mark,
+			// "package");
+			// KnowledgeBase kb = D3webUtils.getKB(scoreSec.getWeb(),
+			// packageName + " - master");
+			article = KnowWEUtils.getCompilingArticles(scoreSec).iterator().next();
+			KnowledgeBase kb = D3webUtils.getKnowledgeBase(scoreSec.getWeb(),
+					article.getTitle());
 
 			// Create all Conditions and Weights: 1st and 2end column
 			// TODO First Cell is no Question: Removed it! But what if empty?
 			// TODO no checks or whatsoever. Write security check!
-			List<Section<TableCellFirstColumn>> firstColumn = Sections.findSuccessorsOfType(innerTable, TableCellFirstColumn.class);
+			List<Section<TableCellFirstColumn>> firstColumn = Sections.findSuccessorsOfType(
+					innerTable, TableCellFirstColumn.class);
 			firstColumn.remove(0);
 			LinkedList<Condition> conditionList = new LinkedList<Condition>();
 			for (Section<TableCellFirstColumn> cell : firstColumn) {
-				Section<CompositeCondition> cond = Sections.findChildOfType(cell, CompositeCondition.class);
+				Section<CompositeCondition> cond = Sections.findChildOfType(cell,
+						CompositeCondition.class);
 				Condition d3Cond = KDOMConditionFactory.createCondition(cell.getArticle(), cond);
 				conditionList.add(d3Cond);
 			}
@@ -111,11 +115,9 @@ public class CausalDiagnosisScore extends AbstractType {
 					1, Sections.findChildOfType(scoreSec, InnerTable.class));
 			secondColumn.remove(0);
 			LinkedList<String> weightList = new LinkedList<String>();
-			for (Section<TableCell> cell : secondColumn)
-			{
+			for (Section<TableCell> cell : secondColumn) {
 				String weightText = cell.getText().trim();
-				if (weightText.equals(""))
-				{
+				if (weightText.equals("")) {
 					weightList.add(NO_WEIGHT);
 					continue;
 				}
@@ -128,8 +130,7 @@ public class CausalDiagnosisScore extends AbstractType {
 
 			// Do for every column/XCLRelation
 			LinkedList<Section<TableCell>> column = null;
-			for (int i = 2; i < cellCount; i++)
-			{
+			for (int i = 2; i < cellCount; i++) {
 				column = new LinkedList<Section<TableCell>>(
 						TableUtils.getColumnCells(
 								i, Sections.findChildOfType(scoreSec, InnerTable.class)));
@@ -139,8 +140,7 @@ public class CausalDiagnosisScore extends AbstractType {
 				String solText = solutionCell.getText();
 				solText = solText.replaceAll("[\\r\\n\\{\\s]", "");
 				Solution solution = kb.getManager().searchSolution(solText);
-				if (solution == null)
-				{
+				if (solution == null) {
 					solution = new Solution(kb.getRootSolution(), solText);
 					kb.getManager().putTerminologyObject(solution);
 				}
@@ -154,8 +154,7 @@ public class CausalDiagnosisScore extends AbstractType {
 				// Excludes this solution: [--]
 				// Suffices to derive solution: [++]
 				Section<TableCell> cell = null;
-				for (int j = 0; j < column.size(); j++)
-				{
+				for (int j = 0; j < column.size(); j++) {
 					cell = column.removeFirst();
 					String cellText = cell.getText().trim();
 
@@ -166,28 +165,24 @@ public class CausalDiagnosisScore extends AbstractType {
 					XCLRelation rel = XCLRelation.createXCLRelation(conditionList.get(j));
 
 					// Normal
-					if (cellText.equals("+"))
-					{
+					if (cellText.equals("+")) {
 						// TODO what if it is no double?
 						rel.setWeight(Double.parseDouble(weightList.get(j)));
 						model.addRelation(rel);
 					}
 
 					// Necessary
-					else if (cellText.equals("!"))
-					{
+					else if (cellText.equals("!")) {
 						model.addRelation(rel, XCLRelationType.requires);
 					}
 
 					// Excluded
-					else if (cellText.equals("--"))
-					{
+					else if (cellText.equals("--")) {
 						model.addRelation(rel, XCLRelationType.contradicted);
 					}
 
 					// Suffices
-					else if (cellText.equals("++"))
-					{
+					else if (cellText.equals("++")) {
 						model.addRelation(rel, XCLRelationType.sufficiently);
 					}
 
@@ -196,7 +191,6 @@ public class CausalDiagnosisScore extends AbstractType {
 			}
 			return null;
 		}
-
 	}
 
 }

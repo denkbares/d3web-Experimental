@@ -101,7 +101,7 @@ public class ForumMenuTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		StringBuilder fm = new StringBuilder();
 		Iterator<KnowWEArticle> it = KnowWEEnvironment.getInstance().getArticleManager(
 				KnowWEEnvironment.DEFAULT_WEB).getArticleIterator();

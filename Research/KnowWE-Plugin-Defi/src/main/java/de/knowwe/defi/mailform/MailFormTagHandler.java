@@ -51,14 +51,14 @@ public class MailFormTagHandler extends AbstractTagHandler {
 	 * 
 	 */
 	@Override
-	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		StringBuilder mailform = new StringBuilder();
 		if (userContext.userIsAsserted()) {
 			String id = "";
 			if (parameters.containsKey(FORM_NAME)) id = "mf_" + parameters.get(FORM_NAME);
 			else return KnowWEUtils.maskHTML(mailform.append(
 					"<p>Jedes Mail-Formular muss eine eindeutige ID besitzen</p>").toString());
-			if (checkID(id, article)) return KnowWEUtils.maskHTML(mailform.append(
+			if (checkID(id, section.getArticle())) return KnowWEUtils.maskHTML(mailform.append(
 					"<p>Jedes Mail-Formular muss eine eindeutige ID besitzen</p>").toString());
 
 			mailform.append("<form id='" + id

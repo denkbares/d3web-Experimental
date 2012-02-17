@@ -22,7 +22,6 @@ package de.knowwe.rdfs.inspect;
 import java.util.Collection;
 
 import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.objects.SimpleReference;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
@@ -38,7 +37,7 @@ import de.knowwe.tools.ToolProvider;
 public class DescribeIndividualLinkToolProvider implements ToolProvider {
 
 	@Override
-	public Tool[] getTools(KnowWEArticle article, Section<?> section, UserContext userContext) {
+	public Tool[] getTools(Section<?> section, UserContext userContext) {
 
 		if (section.get() instanceof IRITermRef) {
 			Section<? extends IRITermRef> ref = ((Section<? extends IRITermRef>) section);
@@ -46,7 +45,7 @@ public class DescribeIndividualLinkToolProvider implements ToolProvider {
 					&& !RDFSUtil.isTermCategory(ref, RDFSTermCategory.Class)
 					&& !RDFSUtil.isTermCategory(ref,
 							RDFSTermCategory.DataTypeProperty)) {
-				return new Tool[] { getDescribeIndividualTool(article, ref, userContext) };
+				return new Tool[] { getDescribeIndividualTool(ref, userContext) };
 			}
 
 		}
@@ -60,7 +59,7 @@ public class DescribeIndividualLinkToolProvider implements ToolProvider {
 						&& !RDFSUtil.isTermCategory(ref, RDFSTermCategory.Class)
 						&& !RDFSUtil.isTermCategory(ref,
 								RDFSTermCategory.DataTypeProperty)) {
-					return new Tool[] { getDescribeIndividualTool(article, ref,
+					return new Tool[] { getDescribeIndividualTool(ref,
 							userContext) };
 				}
 			}
@@ -69,7 +68,7 @@ public class DescribeIndividualLinkToolProvider implements ToolProvider {
 		return new Tool[] {};
 	}
 
-	protected Tool getDescribeIndividualTool(KnowWEArticle article, Section<? extends SimpleTerm> section, UserContext userContext) {
+	protected Tool getDescribeIndividualTool(Section<? extends SimpleTerm> section, UserContext userContext) {
 		String objectName = section.get().getTermIdentifier(section);
 
 		String jsAction = "window.location.href = "

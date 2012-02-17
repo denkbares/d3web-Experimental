@@ -35,11 +35,11 @@ import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.compile.packaging.PackageRenderUtils;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.diaflux.GetTraceHighlightAction;
 import de.knowwe.diaflux.type.DiaFluxType;
 import de.knowwe.diaflux.type.FlowchartType;
@@ -61,6 +61,7 @@ public class GetCoverageHighlightAction extends AbstractAction {
 		CoverageResult result;
 
 		if (coverageKdomid != null) { // coverage shown in coverage section
+			@SuppressWarnings("unchecked")
 			Section<DiaFluxCoverageType> coverageSec = (Section<DiaFluxCoverageType>) Sections.getSection(
 					coverageKdomid);
 
@@ -69,12 +70,11 @@ public class GetCoverageHighlightAction extends AbstractAction {
 		}
 		else { // coverage shown in diaflux section
 			String flowKdomid = context.getParameter("kdomid");
+			@SuppressWarnings("unchecked")
 			Section<DiaFluxType> diaFluxSec = (Section<DiaFluxType>) Sections.getSection(
 					flowKdomid);
 
-			KnowWEArticle article = PackageRenderUtils.checkArticlesCompiling(
-					diaFluxSec.getArticle(),
-					diaFluxSec, new StringBuilder());
+			KnowWEArticle article = KnowWEUtils.getCompilingArticles(diaFluxSec).iterator().next();
 
 			Session session = D3webUtils.getSession(article.getTitle(), context, article.getWeb());
 
@@ -101,7 +101,6 @@ public class GetCoverageHighlightAction extends AbstractAction {
 		@SuppressWarnings("unchecked")
 		Section<DiaFluxType> diaFluxSec = (Section<DiaFluxType>) Sections.getSection(
 				flowKdomid);
-
 
 		Section<FlowchartType> flowchart = Sections.findSuccessor(diaFluxSec, FlowchartType.class);
 		if (flowchart == null) {
@@ -137,9 +136,8 @@ public class GetCoverageHighlightAction extends AbstractAction {
 		List<Edge> coveredEdges = new LinkedList<Edge>();
 		List<Edge> uncoveredEdges = new LinkedList<Edge>();
 
-		
 		Collection<Node> validNodes = DefaultCoverageResult.getValidNodes(flow);
-		
+
 		for (Edge edge : DefaultCoverageResult.getValidEdges(validNodes)) {
 			int count = result.getTraceCount(edge);
 			if (count != 0) coveredEdges.add(edge);

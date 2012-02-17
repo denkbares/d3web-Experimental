@@ -55,7 +55,7 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
+	public String render(Section<?> section, UserContext userContext, Map<String, String> parameters) {
 		StringBuilder readon = new StringBuilder();
 		String path = PageLoggerHandler.getPath();
 		String line;

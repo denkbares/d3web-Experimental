@@ -23,10 +23,9 @@ package de.d3web.we.wisec.kdom;
 import de.d3web.we.wisec.kdom.subtreehandler.ListSubstancesOWLSubtreeHandler;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWEDomRenderer;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.user.UserContext;
 
@@ -47,16 +46,16 @@ public class ListSubstancesType extends AbstractType {
 		// addChildType(new WISECTable());
 	}
 
-	class ListSubstancesRenderer extends KnowWEDomRenderer<ListSubstancesType> {
+	class ListSubstancesRenderer implements KnowWERenderer<ListSubstancesType> {
 
 		@Override
-		public void render(KnowWEArticle article, Section<ListSubstancesType> sec, UserContext user, StringBuilder string) {
+		public void render(Section<ListSubstancesType> sec, UserContext user, StringBuilder string) {
 
 			// %%zebra-table
 			// %%sortable
 			string.append("\n%%zebra-table");
 			string.append("\n%%sortable\n");
-			DelegateRenderer.getInstance().render(article, sec, user, string);
+			DelegateRenderer.getInstance().render(sec, user, string);
 			string.append("\n/%");
 			string.append("\n/%\n");
 

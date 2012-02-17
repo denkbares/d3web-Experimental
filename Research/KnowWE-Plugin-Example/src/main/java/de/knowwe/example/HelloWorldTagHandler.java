@@ -22,7 +22,6 @@ package de.knowwe.example;
 
 import java.util.Map;
 
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
@@ -38,7 +37,7 @@ public class HelloWorldTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> values) {
+	public String render(Section<?> section, UserContext userContext, Map<String, String> values) {
 		String count = values.get("count");
 
 		int number = 1;

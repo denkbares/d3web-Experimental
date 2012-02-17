@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.diaflux.coverage;
 
@@ -28,14 +28,12 @@ import de.d3web.diaFlux.flow.Flow;
 import de.d3web.diaFlux.flow.FlowSet;
 import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.CoverageResult;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.diaflux.FlowchartUtils;
 import de.knowwe.diaflux.type.FlowchartType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
-
 
 /**
  * 
@@ -47,12 +45,12 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer<DiaFluxCovera
 	public static final String DIA_FLUX_COVERAGE_SCOPE = "diafluxcoverage";
 
 	@Override
-	protected void renderContents(KnowWEArticle article, Section<DiaFluxCoverageType> section, UserContext user, StringBuilder string) {
+	protected void renderContents(Section<DiaFluxCoverageType> section, UserContext user, StringBuilder string) {
 
 		CoverageResult result = DiaFluxCoverageType.getResult(section, user);
 
 		if (result == null) {
-			renderButton(user, string, section, article);
+			renderButton(user, string, section);
 		}
 		else {
 			renderResult(user, string, section, result);
@@ -60,8 +58,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer<DiaFluxCovera
 
 	}
 
-
-	private void renderButton(UserContext user, StringBuilder string, Section<DiaFluxCoverageType> section, KnowWEArticle article) {
+	private void renderButton(UserContext user, StringBuilder string, Section<DiaFluxCoverageType> section) {
 
 		StringBuilder bob = new StringBuilder();
 		bob.append("<em>No coverage has been calculated yet.</em><input type='button' value='Calculate' onclick='DiaFlux.Coverage.calculateCoverage(\""
@@ -69,9 +66,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer<DiaFluxCovera
 
 		string.append(KnowWEUtils.maskHTML(bob.toString()));
 
-
 	}
-
 
 	/**
 	 * 
@@ -95,21 +90,19 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer<DiaFluxCovera
 
 		Collections.sort(flows, new Comparator<Flow>() {
 
+			@Override
 			public int compare(Flow o1, Flow o2) {
 				return o1.getName().compareTo(o2.getName());
 			}
 		});
 
-
 		StringBuilder builder = new StringBuilder();
 		String web = user.getWeb();
 
-		
 		builder.append("<div id='coverage' class='diafluxcoverage' height='500'>\n");
 		builder.append("<input id='coveragesection' type='hidden' value='" + section.getID()
 				+ "'/>");
 		builder.append("<select name='coverageSelector' onchange='DiaFlux.Coverage.refresh(this);'>");
-
 
 		Flow selectedFlow = null;
 
@@ -133,7 +126,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer<DiaFluxCovera
 
 		builder.append("</select>");
 
-		if (selectedFlow == null) selectedFlow = (Flow) flows.get(0);
+		if (selectedFlow == null) selectedFlow = flows.get(0);
 
 		Section<FlowchartType> flowSec = FlowchartUtils.findFlowchartSection(web,
 				selectedFlow.getName());
@@ -151,6 +144,5 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer<DiaFluxCovera
 
 		string.append(KnowWEUtils.maskHTML(builder.toString()));
 	}
-
 
 }
