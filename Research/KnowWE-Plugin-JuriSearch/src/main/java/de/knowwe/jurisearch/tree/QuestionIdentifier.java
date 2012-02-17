@@ -23,6 +23,7 @@ import java.util.List;
 
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.we.object.D3webTermReference;
+import de.d3web.we.object.QuestionReference;
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.objects.SimpleTermReferenceRegistrationHandler;
 import de.knowwe.core.kdom.parsing.Section;
@@ -38,7 +39,7 @@ import de.knowwe.kdom.dashtree.DashTreeUtils;
  * @author boehler
  * @created 19.01.2012
  */
-public class QuestionIdentifier extends D3webTermReference<Question> {
+public class QuestionIdentifier extends QuestionReference {
 
 	public QuestionIdentifier() {
 		
@@ -49,7 +50,7 @@ public class QuestionIdentifier extends D3webTermReference<Question> {
 
 		this.setSectionFinder(csf);
 		
-		this.addSubtreeHandler(new SimpleTermReferenceRegistrationHandler(TermRegistrationScope.LOCAL));
+		//this.addSubtreeHandler(new SimpleTermReferenceRegistrationHandler(TermRegistrationScope.LOCAL));
 
 	}
 
@@ -78,9 +79,9 @@ public class QuestionIdentifier extends D3webTermReference<Question> {
 	}
 
 
-	@Override
-	public Class<?> getTermObjectClass() {
-		return Question.class;
-	}
+//	@Override
+//	public Class<?> getTermObjectClass() {
+//		return Question.class;
+//	}
 
 }

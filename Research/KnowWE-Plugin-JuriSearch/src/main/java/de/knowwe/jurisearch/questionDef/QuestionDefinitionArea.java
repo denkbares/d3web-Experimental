@@ -150,16 +150,6 @@ public class QuestionDefinitionArea extends AbstractType {
 		}
 	}
 
-	class ExplanationText extends AbstractType {
-
-		public ExplanationText() {
-			ConstraintSectionFinder csf = new ConstraintSectionFinder(
-					new RegexSectionFinder("(Erläuterung:)?(.*)",
-							Pattern.MULTILINE | Pattern.DOTALL, 2));
-			csf.addConstraint(AtMostOneFindingConstraint.getInstance());
-			this.setSectionFinder(csf);
-			this.setRenderer(new StyleRenderer("color:pink;"));
-		}
-	}
+	
 
 }

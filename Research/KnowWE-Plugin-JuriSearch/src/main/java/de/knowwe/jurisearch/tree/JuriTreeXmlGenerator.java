@@ -24,30 +24,33 @@ import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.RootType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.jurisearch.questionDef.QuestionDefinitionArea;
 import de.knowwe.kdom.dashtree.DashSubtree;
 import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.defaultMarkup.ContentType;
 import de.knowwe.kdom.filter.SectionFilter;
 import de.uniwue.abstracttools.xml.XmlWriter;
-
+import de.knowwe.jurisearch.questionDef.ExplanationText;
 
 /**
- *
+ * 
  * @author boehler
  * @created 20.01.2012
  */
 public class JuriTreeXmlGenerator {
 
-
 	private static int idCounter = 0;
 
 	public JuriTreeXmlGenerator(Section<KnowWEArticle> section) {
 		if (isRoot(section)) {
-			if (isJuriTreeSection(section)) buildXML(section, "Name of Wiki");
+			if (isJuriTreeSection(section))
+				buildXML(section, "Name of Wiki");
 		}
 	}
 
@@ -56,13 +59,14 @@ public class JuriTreeXmlGenerator {
 		return o instanceof de.knowwe.core.kdom.KnowWEArticle;
 	}
 
-
 	private boolean isJuriTreeSection(Section<KnowWEArticle> section) {
 		Object o = section.get();
-		if (o instanceof de.knowwe.jurisearch.tree.QuestionTreeMarkup) return true;
+		if (o instanceof de.knowwe.jurisearch.tree.QuestionTreeMarkup)
+			return true;
 		else {
 			for (Section s : section.getChildren()) {
-				if (isJuriTreeSection(s))  return true;
+				if (isJuriTreeSection(s))
+					return true;
 			}
 		}
 		return false;
@@ -70,9 +74,14 @@ public class JuriTreeXmlGenerator {
 
 	private Writer getWriter() {
 		try {
-            PrintWriter w = new PrintWriter("C:\\Program Files\\apache-tomcat-6.0.33\\webapps\\proket\\WEB-INF\\classes\\specs\\prototypes\\wikiTest.xml");
+			// PrintWriter w = new
+			// PrintWriter("C:\\Program Files\\apache-tomcat-6.0.33\\webapps\\proket\\WEB-INF\\classes\\specs\\prototypes\\wikiTest.xml");
+			PrintWriter w = new PrintWriter(KnowWEEnvironment.getInstance()
+					.getWikiConnector().getSavePath()
+					+ "\\wikiTest.xml");
 
-			//PrintWriter w = new PrintWriter("C:\\Projekte\\KnowWE\\Research\\d3web-ProKEt\\src\\main\\resources\\specs\\prototypes\\wikiTest.xml");
+			// PrintWriter w = new
+			// PrintWriter("C:\\Projekte\\KnowWE\\Research\\d3web-ProKEt\\src\\main\\resources\\specs\\prototypes\\wikiTest.xml");
 			return w;
 		} catch (Exception e) {
 			e.printStackTrace(System.err);
@@ -80,17 +89,18 @@ public class JuriTreeXmlGenerator {
 		}
 	}
 
-
-
 	public void buildXML(Section<KnowWEArticle> section, String name) {
 		try {
 			XmlWriter w = new XmlWriter(getWriter());
 			w.writeDirectly("<?xml version='1.0' encoding='UTF-8'?>");
-			w.writeStartTag("dialog sub-type='front' type='legal' css='legal, nofoot' header='" + name + "' answer-type='oc'");
+			w.writeStartTag("dialog sub-type='front' type='legal' css='legal, nofoot' header='"
+					+ name + "' answer-type='oc'");
 
-			List<Section<? extends Type>> roots =
-					getSectionsWithPath(section, RootType.class, QuestionTreeMarkup.class, ContentType.class, QuestionTree.class, DashSubtree.class);
-			for (Section sec : roots) buildXMLForDashSubtree(w, sec, null);
+			List<Section<? extends Type>> roots = getSectionsWithPath(section,
+					RootType.class, QuestionTreeMarkup.class,
+					ContentType.class, QuestionTree.class, DashSubtree.class);
+			for (Section sec : roots)
+				buildXMLForDashSubtree(w, sec, null);
 			w.writeEndTag("dialog");
 			w.flush();
 			w.close();
@@ -101,74 +111,106 @@ public class JuriTreeXmlGenerator {
 		}
 	}
 
+	public void buildXMLForDashSubtree(XmlWriter w,
+			Section<DashSubtree> section, String parent)
+			throws XmlWriter.MalformedXmlException, IOException {
+		Section<DashTreeElement> dtelement = Sections.findSuccessor(section,
+				DashTreeElement.class);
+		Section<QuestionIdentifier> question = Sections.findSuccessor(
+				dtelement, QuestionIdentifier.class);
+		String questionText = question.getText();
 
-	public void buildXMLForDashSubtree(XmlWriter w, Section<DashSubtree> section, String parent)
-	throws XmlWriter.MalformedXmlException, IOException {
-		Section<JuriTreeExpression> jexp =
-				(Section<JuriTreeExpression>)getSectionsWithPath(section, DashTreeElement.class, JuriTreeExpression.class).getFirst();
-		String text = getSectionsWithPath(jexp, QuestionIdentifier.class).getFirst().getText();
-		Section nodeMode = getFirstSectionWithPath(jexp, JuriTreeExpression.RoundBracketExp.class,
-		                                           JuriTreeExpression.RoundExpBracketExpContent.class);
+		de.knowwe.core.compile.terminology.TerminologyManager terminologyHandler = KnowWEEnvironment
+				.getInstance().getTerminologyHandler(
+						KnowWEEnvironment.DEFAULT_WEB,
+						section.getArticle().getTitle());
+		Section<?> definingSection = terminologyHandler
+				.getTermDefiningSection(questionText);
+		if (definingSection != null) {
+			Section<QuestionDefinitionArea> area = Sections.findAncestorOfType(
+					definingSection, QuestionDefinitionArea.class);
+			Section<ExplanationText> explSection = Sections.findSuccessor(area,
+					ExplanationText.class);
+			String explanationText = explSection.getText();
+		}
+
+		Section<JuriTreeExpression> jexp = (Section<JuriTreeExpression>) getSectionsWithPath(
+				section, DashTreeElement.class, JuriTreeExpression.class)
+				.getFirst();
+		String text = getSectionsWithPath(jexp, QuestionIdentifier.class)
+				.getFirst().getText();
+		Section nodeMode = getFirstSectionWithPath(jexp,
+				JuriTreeExpression.RoundBracketExp.class,
+				JuriTreeExpression.RoundExpBracketExpContent.class);
 		String answerTypeAtt = getAnswerTypeAttribute(nodeMode);
 		String id = getNextUniqueID();
 		String parentString = "";
-		if (parent != null) parentString = " parent-id='" + parent + "'";
-		w.writeFullTag("question title='" + text + "' id='" + id + "'" + parentString + " " + answerTypeAtt);
-		for (Section<? extends Type> s : getSectionsWithPath(section, DashSubtree.class)) {
-			buildXMLForDashSubtree(w, (Section<DashSubtree>)s, id);
+		if (parent != null)
+			parentString = " parent-id='" + parent + "'";
+		w.writeFullTag("question title='" + text + "' id='" + id + "'"
+				+ parentString + " " + answerTypeAtt);
+		for (Section<? extends Type> s : getSectionsWithPath(section,
+				DashSubtree.class)) {
+			buildXMLForDashSubtree(w, (Section<DashSubtree>) s, id);
 		}
 	}
 
 	private String getAnswerTypeAttribute(Section bracketExp) {
-	    if (bracketExp != null) {
-	        String roundBracketText = bracketExp.getText();
-    	    if ("oder".equals(roundBracketText)) return "answer-type='mc'";
-    	    if ("und".equals(roundBracketText)) return "";
-	    }
-	    return "";
+		if (bracketExp != null) {
+			String roundBracketText = bracketExp.getText();
+			if ("oder".equals(roundBracketText))
+				return "answer-type='mc'";
+			if ("und".equals(roundBracketText))
+				return "";
+		}
+		return "";
 	}
 
-
-
-	private Section<? extends Type> getFirstSectionWithPath(Section<? extends Type> section, Class... c) {
+	private Section<? extends Type> getFirstSectionWithPath(
+			Section<? extends Type> section, Class... c) {
 		LinkedList<Section<? extends Type>> l = getSectionsWithPath(section, c);
-		if (l.size() > 0) return l.getFirst();
-		else return null;
+		if (l.size() > 0)
+			return l.getFirst();
+		else
+			return null;
 	}
 
-	private LinkedList<Section<? extends Type>> getSectionsWithPath(Section<? extends Type> section, Class... c) {
+	private LinkedList<Section<? extends Type>> getSectionsWithPath(
+			Section<? extends Type> section, Class... c) {
 		LinkedList<Section<? extends Type>> l = new LinkedList<Section<? extends Type>>();
-		if (c.length==0) {
+		if (c.length == 0) {
 			l.add(section);
 		} else {
 			final Class firstClass = c[0];
-			List<Section<? extends Type>> children = section.getChildren(new SectionFilter() {
-				@Override
-				public boolean accept(Section<?> section) { return section.get().getClass().equals(firstClass);}
-			});
+			List<Section<? extends Type>> children = section
+					.getChildren(new SectionFilter() {
+						@Override
+						public boolean accept(Section<?> section) {
+							return section.get().getClass().equals(firstClass);
+						}
+					});
 			if (children.size() > 0) {
-				Class[] c1 = new Class[c.length-1];
-				for (int i=0; i<c.length-1; i++) c1[i] = c[i+1];
-				for (Section<? extends Type> s : children) l.addAll(getSectionsWithPath(s, c1));
+				Class[] c1 = new Class[c.length - 1];
+				for (int i = 0; i < c.length - 1; i++)
+					c1[i] = c[i + 1];
+				for (Section<? extends Type> s : children)
+					l.addAll(getSectionsWithPath(s, c1));
 			}
 		}
 		return l;
 	}
 
-
-
-
-	private Section<? extends Type> getChildOfClass(Section<? extends Type> section, Class c) {
+	private Section<? extends Type> getChildOfClass(
+			Section<? extends Type> section, Class c) {
 		List<Section<? extends Type>> children = section.getChildren();
 		for (Section<? extends Type> s : children)
-			if (s.get().getClass().equals(c)) return s;
+			if (s.get().getClass().equals(c))
+				return s;
 		return null;
 	}
-
 
 	private static String getNextUniqueID() {
 		return "" + idCounter++;
 	}
-
 
 }

@@ -29,6 +29,7 @@ import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Message;
+import de.knowwe.event.ArticleCreatedEvent;
 import de.knowwe.event.KDOMCreatedEvent;
 
 
@@ -61,26 +62,26 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> imp
 		}
 		System.out.println("");
 		*/
-		System.out.println("zuuu");
+		//System.out.println("zuuu");
 		return new ArrayList<Message>(0);
 	}
 
 
 	public Class<? extends Event> getEvent() {
-		return KDOMCreatedEvent.class;
+		return ArticleCreatedEvent.class;
 	}
 
 	@Override
 	public Collection<Class<? extends Event>> getEvents() {
 		LinkedList<Class<? extends Event>> l = new LinkedList<Class<? extends Event>>();
-		l.add(KDOMCreatedEvent.class);
+		l.add(ArticleCreatedEvent.class);
 		//l.add(Event.class);
 		return l;
 	}
 
 	@Override
 	public void notify(Event event) {
-		KDOMCreatedEvent e = (KDOMCreatedEvent)event;
+		ArticleCreatedEvent e = (ArticleCreatedEvent)event;
 		KnowWEArticle article = e.getArticle();
 		Section<KnowWEArticle> section = article.getSection();
 		JuriTreeXmlGenerator jtxg = new JuriTreeXmlGenerator(section);
