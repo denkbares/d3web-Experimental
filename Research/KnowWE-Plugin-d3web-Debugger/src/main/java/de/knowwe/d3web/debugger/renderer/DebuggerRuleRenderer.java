@@ -20,6 +20,16 @@ package de.knowwe.d3web.debugger.renderer;
 
 import de.d3web.core.inference.Rule;
 import de.d3web.core.session.Session;
+import de.d3web.we.kdom.rules.RuleContentType;
+import de.d3web.we.kdom.rules.action.RuleAction;
+import de.d3web.we.utils.D3webUtils;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.d3web.debugger.inference.DebugAction;
 import de.knowwe.d3web.debugger.inference.DebugCondition;
 
@@ -28,25 +38,34 @@ import de.knowwe.d3web.debugger.inference.DebugCondition;
  * 
  * @author dupke
  */
-public class DebuggerRuleRenderer {
+public class DebuggerRuleRenderer implements KnowWERenderer<RuleContentType>{
 
-	public String renderRule(Rule r, Session session, String topic, String web) {
+
+	@Override
+	public void render(Section<RuleContentType> sec, UserContext user,
+			StringBuilder string) {
+		KnowWEArticle article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
+		Session session = D3webUtils.getSession(article.getTitle(), user,
+				article.getWeb());
+		Section<RuleAction> ruleAction = Sections.findSuccessor(sec,
+				RuleAction.class);
+		Rule r = null;
+		if (ruleAction != null) {
+			r = (Rule) KnowWEUtils.getStoredObject(article, ruleAction,
+					RuleContentType.ruleStoreKey);
+		}
+		
 		StringBuffer buffer = new StringBuffer();
 
 		DebugCondition dc = new DebugCondition(r.getCondition());
 		DebugAction da = new DebugAction(r.getAction());
-		buffer.append("IF " + dc.render(session, web, topic) + "<br />");
+		buffer.append("IF " + dc.render(session, KnowWEEnvironment.DEFAULT_WEB, sec.getTitle()) + "<br />");
 		if (r.hasFired(session)) buffer.append("<span style='background-color:#CFFFCF'>");
 		else buffer.append("<span>");
 		buffer.append("THEN " + da.render());
 		buffer.append("</span>");
 
-		return buffer.toString();
-	}
-
-	public String renderCondition(Rule r, Session session, String topic, String web) {
-		StringBuffer buffer = new StringBuffer();
-
-		return "";
+		string.append(buffer.toString());
+		
 	}
 }
