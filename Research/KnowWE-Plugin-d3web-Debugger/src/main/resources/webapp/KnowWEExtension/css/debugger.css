@@ -1,0 +1,186 @@
+/* Container */
+div.debugger {
+	background-color: #F9F9F9;
+	border: 1px solid #DDDDDD;
+	padding: 5px;
+	min-height:40px;
+}
+/* Debugger menu */
+div.debugger #debuggerMenu {
+	min-height: 35px;	
+}
+div.debugger ul {
+	margin: 0;
+	padding: 0;	
+}
+div.debugger li.debuggerMenu, div.debugger li.debuggerMenuSolution {
+	float: left;
+	cursor: pointer;
+	background-color: white;
+	border: 1px solid #DDDDDD;
+	padding: 8px;
+	margin: 2px;
+	color: 	#003366;
+	list-style: none;
+}
+div.debugger li.debuggerMenuSolution {
+	color: rgb(150, 110, 120);
+	border-color: rgb(120, 120, 120);
+}
+div.debugger li:hover {
+	background-color: highlight;
+	color: highlighttext;
+}
+/* Debugger trace */
+div.debugger div.debuggerTrace {
+	border-bottom: 1px solid black;
+	margin: 2px 2px 10px 2px;
+	padding: 2px;
+	min-height:20px;
+}
+div.debugger div.debuggerTrace span {
+	color: #003366;
+	padding-left: 12px;
+	margin: 0 4px;
+	background: url("../../KnowWEExtension/images/arrow_right.png") no-repeat scroll left 2px transparent;
+	cursor: pointer;
+}
+div.debugger div.debuggerTrace span:FIRST-CHILD {
+	color: #003366;
+	padding-left: 0;
+	margin: 0 4px;
+	cursor: pointer;
+	background: transparent;
+}
+div.debugger div.debuggerTrace span:hover {
+	color: orange !important;
+}
+/* debugger main */
+div.debugger div.debuggerMain {
+	background-color: #FFFFFF;
+	border: 1px solid black;
+	border-radius:4px;
+	margin: 10px 2px;
+	padding: 0 4px 4px 4px;
+	min-height:45px;
+}
+div.debugger div.debuggerMain p {
+	margin: 0 -4px 10px;
+	padding: 5px;
+	text-align: center;
+	font-weight: bold;
+	font-variant: small-caps;
+	border-bottom: 1px solid black;
+}
+div.debugger div.debuggerMain li.debuggerMainEntry, 
+div.debugger div.debuggerMain li.debuggerMainEntryActive {
+	float: left;
+	cursor: pointer;
+	background-color: #F9F9F9;
+	border: 2px solid #DDDDDD;
+	padding: 8px;
+	margin: 5px;
+	color: 	#003366;
+	list-style: none;
+}
+div.debugger div.debuggerMain li.debuggerMainEntry:hover,
+div.debugger div.debuggerMain li.debuggerMainEntryActive {
+	padding: 12px;
+	margin: 1px;
+}
+/* debugger rulerenderer */
+div.debugger div.debuggerRule {
+	background-color: #EEE;
+	border: 1px solid #CCC;
+	margin: 2px;
+	padding: 5px;
+	min-height:20px;
+	text-align: center;
+}
+.condTrue, .condFalse, .condUnknown, .condUndefined {
+	display: inline-block;
+}
+.condTrue {
+	color: green;
+}
+.condFalse {
+	color: red;	
+}
+.condUnknown {
+	color: gray;
+}
+.condUndefined {
+	color: black;
+}
+/* QuestionRendering */
+.debuggerQuestionOC, .debuggerQuestionMC, .debuggerQuestionNum, .debuggerQuestionText {
+	border: 1px dotted transparent;
+	background-color: transparent;
+	border-radius: 4px;
+	padding: 0 13px 0 3px;
+	margin-right: -13px;
+	display: inline-block;
+	cursor: pointer;
+	color: #003366;
+}
+.debuggerQuestionOC:hover, .debuggerQuestionMC:hover, .debuggerQuestionNum:hover, .debuggerQuestionText:hover {
+	border-color: #000000;
+	background: url("../../KnowWEExtension/d3web/icon/dropdown-opaque.png") no-repeat scroll right 50% transparent;
+}
+div.debuggerDropdown {
+	position: absolute;
+	border: 2px solid #DDDDDD;
+	background-color: white;
+	z-index: 2000;
+	box-shadow: 6px 6px 5px #888;
+}
+div.debuggerDropdown a.dquestionLink, div.debuggerDropdown .dchoice, 
+div.debuggerDropdown .dchoiceActive, div.debuggerDropdown .dQnum, div.debuggerDropdown .dQnumUnit,
+div.debuggerDropdown .dQtext, div.debuggerDropdown .dQnumError {
+	padding: 0;
+	margin: 0;
+	color: #000;
+}
+div.debuggerDropdown .dchoice, div.debuggerDropdown .dchoiceActive, div.debuggerDropdown a.dquestionLink {
+		padding: 2px 12px 2px 24px;
+		cursor: pointer;
+} 
+div.debuggerDropdown a.dquestionLink {
+	background: url("../../KnowWEExtension/d3web/icon/infoPage16.png") no-repeat scroll 3px 50% transparent;
+	text-decoration: none;
+	display: block;
+}
+div.debuggerDropdown .dchoice {
+	background: url("../../KnowWEExtension/d3web/icon/uses_ok16.gif") no-repeat scroll 3px 50% transparent;
+}
+div.debuggerDropdown .dchoiceActive {
+	background: url("../../KnowWEExtension/d3web/icon/uses_error16.gif") no-repeat scroll 3px 50% transparent;
+	background-color: #EEE;
+	color: #003DF5;
+}
+div.debuggerDropdown .dchoice:hover, div.debuggerDropdown a.dquestionLink:hover {
+	color: #003DF5;
+	background-color: #EEE;
+}
+div.debuggerDropdown .dQnumError {
+	color: red;
+	display: block;
+}
+/* Outside */
+.debuggerAction, .debuggerActionSolution, .debuggerValue {
+	border: 1px dotted transparent;
+	background-color: transparent;
+	border-radius: 4px;
+	padding: 0 13px 0 3px;
+	margin-right: -13px;
+	display: inline-block;
+}
+.debuggerAction {
+	color: #003366;
+}
+.debuggerActionSolution {
+	color: rgb(150, 110, 120);	
+}
+.debuggerValue {
+	color: rgb(0, 128, 0);	
+}

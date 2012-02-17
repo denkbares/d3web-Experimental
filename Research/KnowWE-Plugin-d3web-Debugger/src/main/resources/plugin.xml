@@ -1,0 +1,69 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="KnowWE-Plugin-Debugger" version="0.0.1">
+    
+    <requires>
+        <import plugin-id="KnowWEExtensionPoints" />
+    </requires>
+    
+    <runtime>
+        <library id="de.d3web" path="." type="code">
+            <export prefix="*" />
+        </library>
+        <library id="webapp" path="webapp/" type="resources">
+            <export prefix="*" />
+        </library>
+    </runtime> 
+    
+        <extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
+        id="DebuggerTagHandler">
+        <parameter id="class" value="de.knowwe.d3web.debugger.DebuggerTagHandler" />
+        <parameter id="name" value="DebugTagHandler" />
+        <parameter id="description" value="TagHandler DebuggerTagHandler" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="script" value="KnowWE-Plugin-d3web-Debugger.js" />
+        <parameter id="css" value="debugger.css" />
+    </extension>   
+    
+        <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="DebuggerMenuAction">
+        <parameter id="class"
+            value="de.knowwe.d3web.debugger.actions.DebuggerMenuAction" />
+        <parameter id="name" value="DebuggerMenuAction" />
+        <parameter id="description" value="Action DebuggerMenuAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    
+   <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="DebuggerMainAction">
+        <parameter id="class"
+            value="de.knowwe.d3web.debugger.actions.DebuggerMainAction" />
+        <parameter id="name" value="DebuggerMainAction" />
+        <parameter id="description" value="Action DebuggerMainAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    
+       <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="DebuggerRuleAction">
+        <parameter id="class"
+            value="de.knowwe.d3web.debugger.actions.DebuggerRuleAction" />
+        <parameter id="name" value="DebuggerRuleAction" />
+        <parameter id="description" value="Action DebuggerRuleAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    
+       <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+        id="DebuggerRerenderAction">
+        <parameter id="class"
+            value="de.knowwe.d3web.debugger.actions.DebuggerRerenderAction" />
+        <parameter id="name" value="DebuggerRerenderAction" />
+        <parameter id="description" value="Action DebuggerRerenderAction" />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+    </extension>
+    
+</plugin>
