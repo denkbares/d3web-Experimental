@@ -32,5 +32,4 @@ public class QuestionTree extends DashTree {
 		replaceDashTreeElementContentType(new JuriTreeExpression());
 	}
 
-
 }
