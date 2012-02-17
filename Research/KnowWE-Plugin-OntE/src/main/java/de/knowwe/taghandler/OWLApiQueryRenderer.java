@@ -15,10 +15,9 @@ import org.semanticweb.owlapi.util.OWLEntityComparator;
 import org.semanticweb.owlapi.util.ShortFormProvider;
 import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 
-import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.taghandler.TagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -35,7 +34,7 @@ import de.knowwe.owlapi.query.OWLApiQueryEngine;
  * @created 04.10.2011
  * @param <T>
  */
-public class OWLApiQueryRenderer<T extends AbstractType> implements KnowWERenderer<T> {
+public class OWLApiQueryRenderer implements Renderer {
 
 	public static OWLApiQueryEngine engine = null;
 	public static ShortFormProvider shortFormProvider = null;
@@ -46,7 +45,7 @@ public class OWLApiQueryRenderer<T extends AbstractType> implements KnowWERender
 	}
 
 	@Override
-	public void render(Section<T> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
 		String query = DefaultMarkupType.getAnnotation(sec, "query");
 		String show = DefaultMarkupType.getAnnotation(sec, "show");

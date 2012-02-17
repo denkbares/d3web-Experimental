@@ -18,10 +18,9 @@
  */
 package de.d3web.we.renderer;
 
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -30,10 +29,10 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @author Johannes Dienst
  * @created 14.10.2011
  */
-public class SpanIDRenderer implements KnowWERenderer<Type> {
+public class SpanIDRenderer implements Renderer {
 
 	@Override
-	public void render(Section<Type> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 		string.append(KnowWEUtils.maskHTML("<span id='" + sec.getID() + "'>"));
 		DelegateRenderer.getInstance().render(sec, user, string);
 		string.append(KnowWEUtils.maskHTML("</span>"));

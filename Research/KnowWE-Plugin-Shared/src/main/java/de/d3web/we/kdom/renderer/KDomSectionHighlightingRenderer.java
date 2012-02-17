@@ -22,7 +22,7 @@ package de.d3web.we.kdom.renderer;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -39,7 +39,7 @@ import de.knowwe.core.utils.KnowWEUtils;
  * 
  * @author Johannes Dienst
  */
-public class KDomSectionHighlightingRenderer implements KnowWERenderer {
+public class KDomSectionHighlightingRenderer implements Renderer {
 
 	private static KDomSectionHighlightingRenderer instance;
 
@@ -49,7 +49,7 @@ public class KDomSectionHighlightingRenderer implements KnowWERenderer {
 	}
 
 	@Override
-	public void render(Section sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 		// First span is for kdom id. Second for an uniqueMarker
 		// that is needed for Highlighting the section
 		StringBuilder b = new StringBuilder();

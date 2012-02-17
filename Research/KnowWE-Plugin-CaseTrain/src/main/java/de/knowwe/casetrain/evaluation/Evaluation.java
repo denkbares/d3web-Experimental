@@ -33,6 +33,7 @@ import de.knowwe.casetrain.info.Question.QuestionType;
 import de.knowwe.casetrain.type.general.BlockMarkupContent;
 import de.knowwe.casetrain.type.general.BlockMarkupContentRenderer;
 import de.knowwe.casetrain.type.general.BlockMarkupType;
+import de.knowwe.casetrain.type.general.SubblockMarkup;
 import de.knowwe.casetrain.type.general.Title;
 import de.knowwe.casetrain.type.multimedia.Audio;
 import de.knowwe.casetrain.type.multimedia.Image;
@@ -44,7 +45,7 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
@@ -70,13 +71,13 @@ public class Evaluation extends BlockMarkupType {
 		this.addContentType(new Link());
 		this.addContentType(new Audio());
 
-		this.setRenderer(new KnowWERenderer<BlockMarkupType>() {
+		this.setRenderer(new Renderer() {
 
 			@Override
-			public void render(Section<BlockMarkupType> sec, UserContext user,
+			public void render(Section<?> sec, UserContext user,
 					StringBuilder string) {
 				string.append(KnowWEUtils.maskHTML("<div class='"
-						+ sec.get().getCSSClass()
+						+ ((SubblockMarkup) sec.get()).getCSSClass()
 						+ "'>"));
 				string.append(KnowWEUtils.maskHTML("<div class='Evaluationstart'></div>"));
 				KnowWEArticle article = KnowWEUtils.getCompilingArticles(sec).iterator().next();

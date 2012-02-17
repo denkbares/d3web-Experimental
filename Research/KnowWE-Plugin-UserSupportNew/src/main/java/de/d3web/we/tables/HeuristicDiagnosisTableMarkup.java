@@ -49,7 +49,7 @@ public class HeuristicDiagnosisTableMarkup extends DefaultMarkupType {
 
 	public HeuristicDiagnosisTableMarkup() {
 		super(m);
-		setRenderer(new DefaultMarkupRendererUserSupport<DefaultMarkupType>());
+		setRenderer(new DefaultMarkupRendererUserSupport());
 	}
 
 }

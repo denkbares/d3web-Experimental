@@ -13,10 +13,9 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
-
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 05.10.2011
  */
@@ -113,7 +112,7 @@ public class DatatypeRestriction extends AbstractType {
 
 	/**
 	 * Retrieves a {@link PredefinedOWLDatatype} section
-	 *
+	 * 
 	 * @param Section<Restriction> a A {@link DatatypeRestriction} section
 	 * @return The found {@link PredefinedOWLDatatype} sections
 	 */
@@ -127,7 +126,7 @@ public class DatatypeRestriction extends AbstractType {
 
 	/**
 	 * Retrieves a {@link Literal} section
-	 *
+	 * 
 	 * @param Section<Restriction> a A {@link DatatypeRestriction} section
 	 * @return The found {@link Literal} sections
 	 */
@@ -157,9 +156,10 @@ public class DatatypeRestriction extends AbstractType {
 		return Collections.emptyMap();
 	}
 }
+
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 05.10.2011
  */
@@ -169,7 +169,7 @@ class PredefinedOWLDatatype extends AbstractType {
 
 	public PredefinedOWLDatatype() {
 		this.setSectionFinder(new RegexSectionFinder(PATTERN));
-		this.setRenderer(new ToolMenuDecoratingRenderer<PredefinedOWLDatatype>(
+		this.setRenderer(new ToolMenuDecoratingRenderer(
 				new StyleRenderer("font-weight:bold;font-color:black")));
 	}
 }

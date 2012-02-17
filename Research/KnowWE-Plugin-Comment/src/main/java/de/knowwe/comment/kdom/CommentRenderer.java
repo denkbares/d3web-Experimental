@@ -30,13 +30,13 @@ import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.core.wikiConnector.KnowWEWikiConnector;
 import de.knowwe.kdom.xml.XMLTail;
 
-public class CommentRenderer implements KnowWERenderer<CommentType> {
+public class CommentRenderer implements Renderer {
 
 	public static String clean(String s) {
 
@@ -60,7 +60,7 @@ public class CommentRenderer implements KnowWERenderer<CommentType> {
 	}
 
 	@Override
-	public void render(Section<CommentType> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
 		Map<String, String> commentTypes = CommentModule.getCommentTypes();
 

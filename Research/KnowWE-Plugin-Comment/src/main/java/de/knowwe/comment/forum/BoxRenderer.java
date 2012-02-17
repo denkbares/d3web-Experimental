@@ -28,13 +28,13 @@ import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.xml.AbstractXMLType;
 import de.knowwe.kdom.xml.XMLHead;
 
-public class BoxRenderer implements KnowWERenderer<ForumBox> {
+public class BoxRenderer implements Renderer {
 
 	private static BoxRenderer instance = null;
 
@@ -44,7 +44,7 @@ public class BoxRenderer implements KnowWERenderer<ForumBox> {
 	}
 
 	@Override
-	public void render(Section<ForumBox> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
 		ResourceBundle rb = ResourceBundle.getBundle("Forum_messages");
 

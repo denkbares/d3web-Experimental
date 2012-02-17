@@ -26,7 +26,7 @@ import java.util.Map;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
@@ -43,7 +43,7 @@ import de.knowwe.tools.ToolUtils;
  * @author Stefan Mark
  * @created 10.08.2011
  */
-public class ManchesterSyntaxFrameRenderer implements KnowWERenderer<DefaultFrame> {
+public class ManchesterSyntaxFrameRenderer implements Renderer {
 
 	/**
 	 * Specifies if a link to the article where the current {@link DefaultFrame}
@@ -52,7 +52,7 @@ public class ManchesterSyntaxFrameRenderer implements KnowWERenderer<DefaultFram
 	private boolean renderLink = false;
 
 	@Override
-	public void render(Section<DefaultFrame> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
 		string.append(KnowWEUtils.maskHTML("<pre id=\""
 				+ sec.getID()
@@ -124,7 +124,7 @@ public class ManchesterSyntaxFrameRenderer implements KnowWERenderer<DefaultFram
 	 * @param Section<DefaultFrame> section The current {@link DefaultFrame}
 	 * @return
 	 */
-	private String getEditorIcon(Section<DefaultFrame> section) {
+	private String getEditorIcon(Section<?> section) {
 		StringBuilder icon = new StringBuilder();
 		icon.append("<a href=\"javascript:KNOWWE.plugin.onte.popEditor('Edit current frame');\">");
 		icon.append("<img src=\"KnowWEExtension/images/owl_class_24.png\" width=\"32\"/>");
@@ -141,7 +141,7 @@ public class ManchesterSyntaxFrameRenderer implements KnowWERenderer<DefaultFram
 	 * @param Section<DefaultFrame> section The current {@link DefaultFrame}
 	 * @return The name of the {@link DefaultFrame}
 	 */
-	private String getFrameName(Section<DefaultFrame> section) {
+	private String getFrameName(Section<?> section) {
 		return section.get().getName();
 	}
 
@@ -158,7 +158,7 @@ public class ManchesterSyntaxFrameRenderer implements KnowWERenderer<DefaultFram
 	 * @param user
 	 * @return
 	 */
-	private String renderTools(Section<DefaultFrame> sec, UserContext user) {
+	private String renderTools(Section<?> sec, UserContext user) {
 
 		StringBuilder string = new StringBuilder();
 
@@ -192,7 +192,7 @@ public class ManchesterSyntaxFrameRenderer implements KnowWERenderer<DefaultFram
 	 * @param Section<DefaultFrame> section The current {@link DefaultFrame}
 	 * @return A link to the article the section can be found
 	 */
-	private String getLink(Section<DefaultFrame> section) {
+	private String getLink(Section<?> section) {
 		if (renderLink) {
 			return " - <a href=\"Wiki.jsp?page=" + section.getTitle()
 					+ "\" title=\"View section in occuring article\"/>"

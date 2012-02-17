@@ -22,7 +22,7 @@ package de.knowwe.kdom.table;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -51,10 +51,10 @@ import de.knowwe.core.utils.KnowWEUtils;
  * </p>
  * 
  * @author smark
- * @see KnowWERenderer
+ * @see Renderer
  * @see Table
  */
-public class TableCellContentRenderer implements KnowWERenderer<TableCellContent> {
+public class TableCellContentRenderer implements Renderer {
 
 	/**
 	 * Determines of the DelegateRenderer is called for content
@@ -79,7 +79,7 @@ public class TableCellContentRenderer implements KnowWERenderer<TableCellContent
 	}
 
 	@Override
-	public void render(Section<TableCellContent> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
 		String content;
 
@@ -99,7 +99,7 @@ public class TableCellContentRenderer implements KnowWERenderer<TableCellContent
 	 * Wraps the content of the cell (sectionText) with the HTML-Code needed for
 	 * the table
 	 */
-	protected String wrappContent(String sectionText, Section<TableCellContent> sec, UserContext user) {
+	protected String wrappContent(String sectionText, Section<?> sec, UserContext user) {
 
 		String sectionID = sec.getID();
 		StringBuilder html = new StringBuilder();
@@ -128,7 +128,7 @@ public class TableCellContentRenderer implements KnowWERenderer<TableCellContent
 		return KnowWEUtils.maskHTML(html.toString());
 	}
 
-	protected void generateContent(String sectionText, Section<TableCellContent> s,
+	protected void generateContent(String sectionText, Section<?> s,
 			UserContext user, String sectionID, StringBuilder html) {
 
 		html.append(translateTextForView(sectionText, s));

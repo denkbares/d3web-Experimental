@@ -45,7 +45,7 @@ public class TestCaseSTCType extends DefaultMarkupType {
 	public TestCaseSTCType() {
 		super(MARKUP);
 		addSubtreeHandler(Priority.LOW, new TestCaseSTCSubtreeHandler());
-		this.setRenderer(new ProviderRefreshRenderer<TestCaseSTCType>());
+		this.setRenderer(new ProviderRefreshRenderer());
 	}
 
 }

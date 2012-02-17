@@ -19,10 +19,9 @@
  */
 package de.d3web.we.drools.kdom.rendering;
 
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -30,10 +29,10 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @author Alex Legler
  * 
  */
-public class DroolsRuleRenderer<T extends Type> implements KnowWERenderer<T> {
+public class DroolsRuleRenderer implements Renderer {
 
 	@Override
-	public void render(Section<T> sec, UserContext user,
+	public void render(Section<?> sec, UserContext user,
 			StringBuilder string) {
 
 		string.append(KnowWEUtils.maskHTML("<span class=\"drools-rule\">"));

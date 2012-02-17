@@ -25,7 +25,7 @@ package de.knowwe.d3web.scoreTable;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -37,10 +37,10 @@ public class SimpleScoreTable extends AbstractType {
 		childrenTypes.add(new HeaderLine());
 		childrenTypes.add(new ContentLine());
 		this.setSectionFinder(new AllTextFinderTrimmed());
-		this.setRenderer(new KnowWERenderer<SimpleScoreTable>() {
+		this.setRenderer(new Renderer() {
 
 			@Override
-			public void render(Section<SimpleScoreTable> section, UserContext user,
+			public void render(Section<?> section, UserContext user,
 					StringBuilder string) {
 				string.append(KnowWEUtils.maskHTML("<table class='wikitable' border='1' style='margin-right: 50px'>"));
 				DelegateRenderer.getInstance().render(section, user, string);

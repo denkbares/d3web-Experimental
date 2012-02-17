@@ -25,7 +25,7 @@ import java.util.List;
 import de.d3web.we.wisec.kdom.subtreehandler.ListCriteriaOWLSubtreeHandler;
 import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.AnnotationContentType;
@@ -64,7 +64,7 @@ public class ListCriteriaRootType extends DefaultMarkupType {
 	 *          annotations
 	 * 
 	 */
-	class CriteriaListDefaultMarkupRenderer implements KnowWERenderer<DefaultMarkupType> {
+	class CriteriaListDefaultMarkupRenderer implements Renderer {
 
 		private final String iconPath;
 
@@ -77,7 +77,7 @@ public class ListCriteriaRootType extends DefaultMarkupType {
 		}
 
 		@Override
-		public void render(Section<DefaultMarkupType> section, UserContext user, StringBuilder string) {
+		public void render(Section<?> section, UserContext user, StringBuilder string) {
 
 			String id = section.getID();
 			String name = "<span>" + section.get().getName() + "</span>";
@@ -103,7 +103,7 @@ public class ListCriteriaRootType extends DefaultMarkupType {
 			string.append(KnowWEUtils.maskHTML("</div>\n"));
 		}
 
-		protected void renderContents(Section<? extends DefaultMarkupType> section, UserContext user, StringBuilder string) {
+		protected void renderContents(Section<?> section, UserContext user, StringBuilder string) {
 			List<Section<?>> subsecs = section.getChildren();
 			Section<?> first = subsecs.get(0);
 			Section<?> last = subsecs.get(subsecs.size() - 1);

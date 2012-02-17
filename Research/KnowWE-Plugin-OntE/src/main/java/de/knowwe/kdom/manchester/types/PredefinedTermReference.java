@@ -8,7 +8,7 @@ import de.knowwe.compile.object.IncrementalTermReference;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
 import de.knowwe.kdom.renderer.StyleRenderer;
@@ -16,9 +16,8 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 public class PredefinedTermReference extends IncrementalTermReference {
 
-	@SuppressWarnings("unchecked")
-	final KnowWERenderer<PredefinedTermReference> REF_RENDERER =
-			new ToolMenuDecoratingRenderer<PredefinedTermReference>(new StyleRenderer(
+	final Renderer REF_RENDERER =
+			new ToolMenuDecoratingRenderer(new StyleRenderer(
 					"color:rgb(25, 180, 120)"));
 
 	public PredefinedTermReference() {

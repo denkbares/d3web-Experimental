@@ -16,8 +16,8 @@ import de.knowwe.kdom.renderer.IRITypeRenderer;
 import de.knowwe.kdom.sectionfinder.IRISectionFinder;
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 04.10.2011
  */
@@ -50,7 +50,7 @@ class OntologyIRI extends AbstractType {
 		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 
 		this.setSectionFinder(csf);
-		this.setRenderer(new IRITypeRenderer<OntologyIRI>());
+		this.setRenderer(new IRITypeRenderer());
 	}
 }
 
@@ -61,6 +61,6 @@ class OntologyVersionIRI extends AbstractType {
 		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 
 		this.setSectionFinder(csf);
-		this.setRenderer(new IRITypeRenderer<OntologyVersionIRI>());
+		this.setRenderer(new IRITypeRenderer());
 	}
 }

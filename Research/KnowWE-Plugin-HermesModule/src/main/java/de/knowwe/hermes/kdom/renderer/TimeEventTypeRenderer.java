@@ -26,7 +26,7 @@ import java.util.List;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.hermes.HermesUserManagement;
@@ -36,9 +36,8 @@ import de.knowwe.hermes.kdom.TimeEventDescriptionType;
 import de.knowwe.hermes.kdom.TimeEventImportanceType;
 import de.knowwe.hermes.kdom.TimeEventSourceType;
 import de.knowwe.hermes.kdom.TimeEventTitleType;
-import de.knowwe.hermes.kdom.TimeEventType;
 
-public class TimeEventTypeRenderer implements KnowWERenderer<TimeEventType> {
+public class TimeEventTypeRenderer implements Renderer {
 
 	private static TimeEventTypeRenderer instance;
 
@@ -50,7 +49,7 @@ public class TimeEventTypeRenderer implements KnowWERenderer<TimeEventType> {
 	}
 
 	@Override
-	public void render(Section<TimeEventType> sec, UserContext user, StringBuilder result) {
+	public void render(Section<?> sec, UserContext user, StringBuilder result) {
 
 		// check filter Level
 		int filterLevel = getFilterLevel(user);
@@ -115,7 +114,7 @@ public class TimeEventTypeRenderer implements KnowWERenderer<TimeEventType> {
 		// return result.toString();
 	}
 
-	private String getDateString(Section<TimeEventType> sec) {
+	private String getDateString(Section<?> sec) {
 		Section<? extends TimeEventDateType> dateSection = Sections.findChildOfType(sec,
 				TimeEventDateType.class);
 		String date = "no date found";
@@ -134,7 +133,7 @@ public class TimeEventTypeRenderer implements KnowWERenderer<TimeEventType> {
 		return filterLevel;
 	}
 
-	private int getImportanceOfEvent(Section<TimeEventType> sec) {
+	private int getImportanceOfEvent(Section<?> sec) {
 		Section<? extends TimeEventImportanceType> importanceSection = Sections
 				.findChildOfType(sec, TimeEventImportanceType.class);
 		String importance = "no importance found";

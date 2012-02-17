@@ -46,7 +46,7 @@ public class DecisionTableMarkup extends DefaultMarkupType {
 
 	public DecisionTableMarkup() {
 		super(m);
-		setRenderer(new DefaultMarkupRendererUserSupport<DefaultMarkupType>());
+		setRenderer(new DefaultMarkupRendererUserSupport());
 	}
 
 }

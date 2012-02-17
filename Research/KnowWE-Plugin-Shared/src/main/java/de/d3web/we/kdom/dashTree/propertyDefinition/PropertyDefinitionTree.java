@@ -23,7 +23,7 @@ package de.d3web.we.kdom.dashTree.propertyDefinition;
 import de.d3web.we.kdom.dashTree.subclassing.PreRendererWithoutTilde;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.dashtree.DashTree;
 
@@ -43,10 +43,10 @@ public class PropertyDefinitionTree extends DashTree {
 		replaceDashTreeElementContentType(new PropertyDashTreeElementContent());
 	}
 
-	class PreRenderer implements KnowWERenderer<DashTree> {
+	class PreRenderer implements Renderer {
 
 		@Override
-		public void render(Section<DashTree> sec, UserContext user,
+		public void render(Section<?> sec, UserContext user,
 				StringBuilder string) {
 
 			string.append("{{{");

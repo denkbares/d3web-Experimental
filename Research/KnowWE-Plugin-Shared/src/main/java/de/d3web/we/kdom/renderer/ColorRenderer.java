@@ -21,9 +21,9 @@
 package de.d3web.we.kdom.renderer;
 
 import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 
-public abstract class ColorRenderer implements KnowWERenderer {
+public abstract class ColorRenderer implements Renderer {
 
 	public String spanColorTitle(String text, String color, String title) {
 		return KnowWEEnvironment.HTML_ST + "span title='" + title

@@ -30,7 +30,7 @@ import java.util.Map;
 
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.xml.AbstractXMLType;
@@ -38,7 +38,7 @@ import de.knowwe.semantic.sparql.SparqlDelegateRenderer;
 import de.knowwe.semantic.sparql.SparqlRenderer;
 
 public class GroovySparqlRendererRenderer implements
-		KnowWERenderer<GroovySparqlRendererContent> {
+		Renderer {
 
 	private static final String CONTENT = "GROOVY_RENDERER_SOURCE_CONTENT";
 	private static GroovySparqlRendererRenderer instance;
@@ -74,7 +74,7 @@ public class GroovySparqlRendererRenderer implements
 	}
 
 	@Override
-	public void render(Section<GroovySparqlRendererContent> sec,
+	public void render(Section<?> sec,
 			UserContext user, StringBuilder string) {
 		// rb = KnowWEEnvironment.getInstance().getKwikiBundle(user);
 		Map<String, String> params = AbstractXMLType
@@ -106,7 +106,7 @@ public class GroovySparqlRendererRenderer implements
 		}
 		String finalcontent = basecontent.replace("%NAME%", name).replace("%CONTENT%", content);
 
-		Class clazz = gcl.parseClass(finalcontent, "Renderer.groovy");
+		Class<?> clazz = gcl.parseClass(finalcontent, "Renderer.groovy");
 		Object aScript;
 
 		try {

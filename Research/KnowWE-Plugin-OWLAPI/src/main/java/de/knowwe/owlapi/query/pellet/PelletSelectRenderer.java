@@ -7,12 +7,12 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
-public class PelletSelectRenderer implements KnowWERenderer<PelletSparqlSelect> {
+public class PelletSelectRenderer implements Renderer {
 
 	public static final String LB = System.getProperty("line.separator");
 
@@ -23,7 +23,7 @@ public class PelletSelectRenderer implements KnowWERenderer<PelletSparqlSelect> 
 	}
 
 	@Override
-	public void render(Section<PelletSparqlSelect> section, UserContext user, StringBuilder string) {
+	public void render(Section<?> section, UserContext user, StringBuilder string) {
 
 		String query = DefaultMarkupType.getAnnotation(section, PelletSparqlSelect.QUERY);
 

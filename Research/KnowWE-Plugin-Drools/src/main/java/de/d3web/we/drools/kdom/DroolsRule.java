@@ -56,7 +56,7 @@ public class DroolsRule extends AbstractType {
 	public DroolsRule() {
 		addSubtreeHandler(new DroolsRuleSubtreeHandler());
 		setSectionFinder(new RegexSectionFinder("rule.*?^end$", Pattern.DOTALL | Pattern.MULTILINE));
-		setRenderer(new DroolsRuleRenderer<DroolsRule>());
+		setRenderer(new DroolsRuleRenderer());
 		childrenTypes.add(new DroolsRuleTitleLine());
 		childrenTypes.add(new DroolsRuleBody());
 	}

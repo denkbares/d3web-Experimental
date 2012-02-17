@@ -28,14 +28,14 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.defi.time.TimeTableMarkup;
 import de.knowwe.kdom.dashtree.DashTreeElement;
 import de.knowwe.kdom.dashtree.DashTreeElementContent;
 import de.knowwe.kdom.dashtree.DashTreeUtils;
 
-public class MenuItemRenderer implements KnowWERenderer<DynamicMenuItem> {
+public class MenuItemRenderer implements Renderer {
 
 	private static final String CSS_CLASS_MENULINK = "menulink";
 	private static final String CSS_CLASS_MENULINKROOT = "menulinkroot";
@@ -43,7 +43,7 @@ public class MenuItemRenderer implements KnowWERenderer<DynamicMenuItem> {
 	private static final String CSS_CLASS_MENULINKROOTCURRENT = "menulinkrootcurrent";
 	private static final String CSS_CLASS_MENULINKCURRENT = "menulinkcurrent";
 
-	private static String getPageName(Section<? extends DashTreeElementContent> sec) {
+	private static String getPageName(Section<?> sec) {
 		String pagename = sec.getText().trim();
 		if (sec.getText().contains("|")) {
 			String[] split = sec.getText().split("\\|");
@@ -53,7 +53,7 @@ public class MenuItemRenderer implements KnowWERenderer<DynamicMenuItem> {
 		return pagename;
 	}
 
-	private static String getLabel(Section<DynamicMenuItem> sec) {
+	private static String getLabel(Section<?> sec) {
 		String pagename = sec.getText().trim();
 		String label = pagename;
 		if (sec.getText().contains("|")) {
@@ -65,7 +65,7 @@ public class MenuItemRenderer implements KnowWERenderer<DynamicMenuItem> {
 	}
 
 	@Override
-	public void render(Section<DynamicMenuItem> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
 		int dashLevel = DashTreeUtils.getDashLevel(Sections.findAncestorOfType(sec,
 				DashTreeElement.class));
@@ -147,7 +147,7 @@ public class MenuItemRenderer implements KnowWERenderer<DynamicMenuItem> {
 		string.append("</td></tr>");
 	}
 
-	private boolean isSubpageOf(String currentPage, Section<DynamicMenuItem> section) {
+	private boolean isSubpageOf(String currentPage, Section<?> section) {
 		Section<DashTreeElement> dtElement = Sections.findAncestorOfType(section,
 				DashTreeElement.class);
 		List<Section<DashTreeElementContent>> found = new ArrayList<Section<DashTreeElementContent>>();
@@ -163,7 +163,7 @@ public class MenuItemRenderer implements KnowWERenderer<DynamicMenuItem> {
 		return false;
 	}
 
-	private boolean isFree(Section<DynamicMenuItem> sec) {
+	private boolean isFree(Section<?> sec) {
 		Section<? extends Type> dashtree = sec.getFather().getFather().getFather();
 		List<Section<DynamicMenuItem>> found = new ArrayList<Section<DynamicMenuItem>>();
 		Sections.findSuccessorsOfType(dashtree, DynamicMenuItem.class, 3, found);

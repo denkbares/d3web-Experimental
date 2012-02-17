@@ -25,9 +25,10 @@ import java.util.Collection;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.objects.SimpleReference;
+import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.report.DefaultErrorRenderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
@@ -37,13 +38,12 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 public abstract class IncrementalTermReference extends SimpleReference {
 
-	@SuppressWarnings("unchecked")
-	final KnowWERenderer<IncrementalTermReference> REF_RENDERER =
-			new ToolMenuDecoratingRenderer<IncrementalTermReference>(new StyleRenderer(
+	final Renderer REF_RENDERER =
+			new ToolMenuDecoratingRenderer(new StyleRenderer(
 					"color:rgb(25, 180, 120)"));
-	@SuppressWarnings("unchecked")
-	final KnowWERenderer<IncrementalTermReference> PREDEFINDED_TERM_RENDERER =
-			new ToolMenuDecoratingRenderer<IncrementalTermReference>(new StyleRenderer(
+
+	final Renderer PREDEFINDED_TERM_RENDERER =
+			new ToolMenuDecoratingRenderer(new StyleRenderer(
 					"font-weight:bold;font-color:black"));
 
 	public IncrementalTermReference(Class<?> termObjectClass) {
@@ -60,11 +60,11 @@ public abstract class IncrementalTermReference extends SimpleReference {
 	 * @author Jochen
 	 * @created 09.06.2011
 	 */
-	class ReferenceRenderer implements KnowWERenderer<IncrementalTermReference> {
+	class ReferenceRenderer implements Renderer {
 
-		private KnowWERenderer r = null;
+		private Renderer r = null;
 
-		public ReferenceRenderer(KnowWERenderer renderer) {
+		public ReferenceRenderer(Renderer renderer) {
 			if (renderer != null) {
 				r = renderer;
 			}
@@ -74,17 +74,20 @@ public abstract class IncrementalTermReference extends SimpleReference {
 		}
 
 		@Override
-		public void render(Section<IncrementalTermReference> sec, UserContext user, StringBuilder string) {
+		public void render(Section<?> section, UserContext user, StringBuilder string) {
+
+			@SuppressWarnings("unchecked")
+			Section<? extends SimpleTerm> reference = (Section<? extends SimpleTerm>) section;
 
 			Collection<Message> messages = IncrementalCompiler.getInstance().checkDefinition(
-					sec.get().getTermIdentifier(sec));
+					KnowWEUtils.getTermIdentifier(reference));
 
 			// insert TypeConstraint-warnings
-			if (sec.get() instanceof TypeRestrictedReference) {
-				if (((TypeRestrictedReference) sec.get()).checkTypeConstraints(sec) == false) {
+			if (reference.get() instanceof TypeRestrictedReference) {
+				if (((TypeRestrictedReference) reference.get()).checkTypeConstraints(reference) == false) {
 					messages.add(new Message(
 							Message.Type.WARNING,
-							((TypeRestrictedReference) sec.get()).getMessageForConstraintViolation(sec)));
+							((TypeRestrictedReference) reference.get()).getMessageForConstraintViolation(reference)));
 				}
 			}
 
@@ -100,16 +103,16 @@ public abstract class IncrementalTermReference extends SimpleReference {
 				}
 			}
 			if (IncrementalCompiler.getInstance().getTerminology().isPredefinedObject(
-					sec.get().getTermIdentifier(sec))) {
-				PREDEFINDED_TERM_RENDERER.render(sec, user, string);
+					reference.get().getTermIdentifier(reference))) {
+				PREDEFINDED_TERM_RENDERER.render(reference, user, string);
 			}
 			else if (IncrementalCompiler.getInstance().getTerminology().isImportedObject(
-					sec.get().getTermIdentifier(sec))) {
-				REF_RENDERER.render(sec, user, string);
+					reference.get().getTermIdentifier(reference))) {
+				REF_RENDERER.render(reference, user, string);
 			}
 			else {
-				string.append(KnowWEUtils.maskHTML("<a name='" + sec.getID() + "'>"));
-				r.render(sec, user, string);
+				string.append(KnowWEUtils.maskHTML("<a name='" + reference.getID() + "'>"));
+				r.render(reference, user, string);
 				string.append(KnowWEUtils.maskHTML("</a>"));
 			}
 			for (Message kdomReportMessage : messages) {

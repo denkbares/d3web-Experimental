@@ -18,9 +18,8 @@
  */
 package de.knowwe.defi.aboutMe;
 
-import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -34,10 +33,10 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  * @author Stefan Mark
  * @created 25.01.2011
  */
-public class AboutMeRenderer<T extends AbstractType> implements KnowWERenderer<T> {
+public class AboutMeRenderer implements Renderer {
 
 	@Override
-	public void render(Section<T> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
 		String username = user.getUserName();
 
@@ -66,7 +65,7 @@ public class AboutMeRenderer<T extends AbstractType> implements KnowWERenderer<T
 	 * @param sec
 	 * @param article
 	 */
-	private void renderIsOwner(StringBuilder html, Section<T> sec) {
+	private void renderIsOwner(StringBuilder html, Section<?> sec) {
 		html.append("<h1 class=\"aboutme\">persönliche Einstellungen</h1>");
 		html.append("<p>Auf dieser Seite können Sie Angaben zu Ihrer Person machen,")
 				.append(" die Sie mit den anderen Mitgliedern der Gruppe teilen möchten.")
@@ -123,7 +122,7 @@ public class AboutMeRenderer<T extends AbstractType> implements KnowWERenderer<T
 	 * @param sec
 	 * @param article
 	 */
-	private void renderNoOwner(StringBuilder html, Section<T> sec, UserContext user) {
+	private void renderNoOwner(StringBuilder html, Section<?> sec, UserContext user) {
 		html.append("<p style=\"text-align:center;\">persönliche Seite von</p>");
 		html.append("<h1 class=\"aboutme\">").append(sec.getTitle()).append("</h1>");
 
@@ -185,7 +184,7 @@ public class AboutMeRenderer<T extends AbstractType> implements KnowWERenderer<T
 	 * @param isOwner
 	 * @return
 	 */
-	private String getInputDependingOnUserState(Section<T> section, String value, boolean isOwner) {
+	private String getInputDependingOnUserState(Section<?> section, String value, boolean isOwner) {
 
 		String input = DefaultMarkupType.getAnnotation(section, value);
 
@@ -214,7 +213,7 @@ public class AboutMeRenderer<T extends AbstractType> implements KnowWERenderer<T
 	 * @param isOwner
 	 * @return
 	 */
-	private String getTextareaDependingOnUserState(Section<T> section, String value, boolean isOwner) {
+	private String getTextareaDependingOnUserState(Section<?> section, String value, boolean isOwner) {
 
 		String input = DefaultMarkupType.getAnnotation(section, value);
 
@@ -236,7 +235,7 @@ public class AboutMeRenderer<T extends AbstractType> implements KnowWERenderer<T
 	/**
 	 *
 	 */
-	private void createAvatarHTML(Section<T> section, StringBuilder string, String key, boolean isOwner) {
+	private void createAvatarHTML(Section<?> section, StringBuilder string, String key, boolean isOwner) {
 
 		String avatar = DefaultMarkupType.getAnnotation(section, key);
 

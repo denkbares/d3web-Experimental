@@ -19,7 +19,7 @@
 package de.d3web.we.tables;
 
 import de.knowwe.core.kdom.AbstractType;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
@@ -29,8 +29,7 @@ import de.knowwe.kdom.renderer.StyleRenderer;
  */
 public class TableCell extends AbstractType {
 
-	@SuppressWarnings("unchecked")
-	public static final KnowWERenderer<TableCell> INDIVIDUAL_RENDERER = StyleRenderer.CONTENT;
+	public static final Renderer INDIVIDUAL_RENDERER = StyleRenderer.CONTENT;
 
 	public TableCell() {
 

@@ -21,11 +21,10 @@ package de.d3web.we.renderer;
 import de.d3web.we.tables.InnerTable;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * This is a workaround class. Because the import/export-buttons will not be
@@ -34,11 +33,11 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  * @author Johannes Dienst
  * @created 15.12.2011
  */
-public class DefaultMarkupRendererUserSupport<T extends DefaultMarkupType> implements KnowWERenderer<T> {
+public class DefaultMarkupRendererUserSupport implements Renderer {
 
 	@Override
-	public void render(Section<T> section, UserContext user, StringBuilder string) {
-		new DefaultMarkupRenderer<T>().render(section, user, string);
+	public void render(Section<?> section, UserContext user, StringBuilder string) {
+		new DefaultMarkupRenderer().render(section, user, string);
 		Section<InnerTable> iT = Sections.findSuccessor(section, InnerTable.class);
 		StringBuilder buildi = new StringBuilder();
 		TableRenderer.renderExportImportButton(buildi, iT);

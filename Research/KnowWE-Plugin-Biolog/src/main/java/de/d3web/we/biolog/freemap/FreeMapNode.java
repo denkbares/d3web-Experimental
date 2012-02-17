@@ -38,7 +38,7 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -65,7 +65,7 @@ public class FreeMapNode extends AbstractXMLType {
 		return instance;
 	}
 
-	public static String getText(Section<FreeMapNode> s) {
+	public static String getText(Section<?> s) {
 		Map<String, String> map = AbstractXMLType.getAttributeMapFor(s);
 
 		String text = map.get("TEXT");
@@ -108,7 +108,7 @@ public class FreeMapNode extends AbstractXMLType {
 						&& father.get() instanceof FreeMapNode) {
 
 					createSubClassRelation(getText(element),
-							getText((Section<FreeMapNode>) father), io);
+							getText(father), io);
 				}
 			}
 			List<Section<FreeMapNode>> children = new ArrayList<Section<FreeMapNode>>();
@@ -147,10 +147,10 @@ public class FreeMapNode extends AbstractXMLType {
 	 * @created 16.09.2010
 	 */
 	@SuppressWarnings("unchecked")
-	class FreeMapNodeRenderer implements KnowWERenderer {
+	class FreeMapNodeRenderer implements Renderer {
 
 		@Override
-		public void render(Section sec, UserContext user,
+		public void render(Section<?> sec, UserContext user,
 				StringBuilder string) {
 			int depth = AbstractXMLType.getXMLDepth(sec);
 

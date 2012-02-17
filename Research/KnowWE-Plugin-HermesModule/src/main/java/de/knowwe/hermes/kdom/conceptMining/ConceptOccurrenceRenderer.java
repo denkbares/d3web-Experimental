@@ -37,21 +37,19 @@ import de.knowwe.core.contexts.ContextManager;
 import de.knowwe.core.contexts.DefaultSubjectContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.hermes.kdom.TimeEventType;
 import de.knowwe.rdf2go.DefaultURIContext;
 import de.knowwe.rdf2go.Rdf2GoCore;
 
-public class ConceptOccurrenceRenderer implements KnowWERenderer {
+public class ConceptOccurrenceRenderer implements Renderer {
 
 	private static String TITLE_QUERY = "SELECT  ?title WHERE {  <URI> lns:hasTitle ?title }";
 
 	@Override
-	public void render(Section arg0, UserContext arg1, StringBuilder arg2) {
-
-		Section<PersonOccurrence> personSection = arg0;
+	public void render(Section<?> arg0, UserContext arg1, StringBuilder arg2) {
 
 		// TableUtils.getRow(arg0);
 

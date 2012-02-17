@@ -2,17 +2,16 @@ package de.knowwe.kdom.n3.render;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.kdom.n3.TurtleComplete;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolUtils;
 
-public class TurtleN3Renderer implements KnowWERenderer<TurtleComplete> {
+public class TurtleN3Renderer implements Renderer {
 
 	@Override
-	public void render(Section<TurtleComplete> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 		string.append(KnowWEUtils.maskHTML("<pre id=\""
 				+ sec.getID()
 				+ "\" class=\"turtle-instantedit-pre\">"));

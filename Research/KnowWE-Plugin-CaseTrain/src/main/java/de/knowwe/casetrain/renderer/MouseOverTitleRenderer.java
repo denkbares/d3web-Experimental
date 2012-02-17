@@ -20,7 +20,7 @@ package de.knowwe.casetrain.renderer;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -32,7 +32,7 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @author Johannes Dienst
  * @created 18.04.2011
  */
-public class MouseOverTitleRenderer implements KnowWERenderer {
+public class MouseOverTitleRenderer implements Renderer {
 
 	private static MouseOverTitleRenderer uniqueInstance;
 
@@ -44,7 +44,7 @@ public class MouseOverTitleRenderer implements KnowWERenderer {
 	}
 
 	@Override
-	public void render(Section sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 		string.append(KnowWEUtils.maskHTML("<span title=\"" + sec.get().getName() + "\">"));
 		DelegateRenderer.getInstance().render(sec, user, string);
 		string.append(KnowWEUtils.maskHTML("</span>"));

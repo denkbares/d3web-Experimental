@@ -30,7 +30,7 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.user.UserSettingsManager;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -47,20 +47,20 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @author smark
  * @since 2009/10/18
  */
-public class EditSectionRenderer implements KnowWERenderer {
+public class EditSectionRenderer implements Renderer {
 
-	KnowWERenderer<? extends Type> renderer;
+	Renderer renderer;
 
 	public EditSectionRenderer() {
 		this(DelegateRenderer.getInstance());
 	}
 
-	public EditSectionRenderer(KnowWERenderer renderer) {
+	public EditSectionRenderer(Renderer renderer) {
 		this.renderer = renderer;
 	}
 
 	@Override
-	public final void render(Section sec, UserContext user, StringBuilder string) {
+	public final void render(Section<?> sec, UserContext user, StringBuilder string) {
 
 		StringBuilder subTreeContent = new StringBuilder();
 		renderer.render(sec, user, subTreeContent);
@@ -214,7 +214,7 @@ public class EditSectionRenderer implements KnowWERenderer {
 	 * @return True if the section (its OrignialText) is in the same line as the
 	 *         text before; false if they are seperated by '\n' or '\f'.
 	 */
-	private boolean isInline(Section<Type> section) {
+	private boolean isInline(Section<?> section) {
 		Section<? extends Type> sec = section;
 		String text = sec.getText();
 		if (text.startsWith("\n") || text.startsWith("\f") || text.length() == 0) return false;
@@ -243,7 +243,7 @@ public class EditSectionRenderer implements KnowWERenderer {
 	 * @param string - The so far rendered page content.
 	 * @param sec - The section used by the ESR, used for the table's name.
 	 */
-	private void insertTableBeforeMarkup(StringBuilder string, Section<Type> sec) {
+	private void insertTableBeforeMarkup(StringBuilder string, Section<?> sec) {
 		String[] lineSplit = string.toString().split("\n");
 		String lastLine = lineSplit[lineSplit.length - 1];
 		Integer charsTillLS = string.length() - lastLine.length();

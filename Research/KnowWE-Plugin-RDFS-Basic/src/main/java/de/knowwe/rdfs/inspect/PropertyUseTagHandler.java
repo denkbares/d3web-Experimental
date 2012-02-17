@@ -33,7 +33,6 @@ import de.knowwe.core.taghandler.TagHandlerTypeContent;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.util.RDFSUtil;
 import de.knowwe.rdfs.util.SparqlResultSetRenderer;
@@ -45,8 +44,8 @@ public class PropertyUseTagHandler extends AbstractTagHandler {
 	// Parameter used in the request
 	public static final String OBJECTNAME = "objectname";
 
-	private static DefaultMarkupRenderer<DefaultMarkupType> defaultMarkupRenderer =
-			new DefaultMarkupRenderer<DefaultMarkupType>();
+	private static DefaultMarkupRenderer defaultMarkupRenderer =
+			new DefaultMarkupRenderer();
 
 	public PropertyUseTagHandler() {
 		super("propertyuse");

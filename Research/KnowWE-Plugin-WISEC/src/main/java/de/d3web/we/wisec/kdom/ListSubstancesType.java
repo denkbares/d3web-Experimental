@@ -25,7 +25,7 @@ import de.knowwe.core.compile.Priority;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.user.UserContext;
 
@@ -46,10 +46,10 @@ public class ListSubstancesType extends AbstractType {
 		// addChildType(new WISECTable());
 	}
 
-	class ListSubstancesRenderer implements KnowWERenderer<ListSubstancesType> {
+	class ListSubstancesRenderer implements Renderer {
 
 		@Override
-		public void render(Section<ListSubstancesType> sec, UserContext user, StringBuilder string) {
+		public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
 			// %%zebra-table
 			// %%sortable

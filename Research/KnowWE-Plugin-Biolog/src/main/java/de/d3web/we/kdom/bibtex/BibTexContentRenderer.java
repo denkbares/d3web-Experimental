@@ -28,7 +28,7 @@ import de.d3web.we.kdom.bibtex.verbalizer.BibTexRenderManager;
 import de.d3web.we.kdom.bibtex.verbalizer.BibTexRenderManager.RenderingFormat;
 import de.knowwe.core.KnowWEAttributes;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -39,10 +39,10 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @author Jochen
  * @created 16.09.2010
  */
-public class BibTexContentRenderer implements KnowWERenderer {
+public class BibTexContentRenderer implements Renderer {
 
 	@Override
-	public void render(Section sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 		String parseerror = (String) KnowWEUtils.getStoredObject(sec,
 				BibTexContent.PARSEEXCEPTION);
 		String ioerror = (String) KnowWEUtils.getStoredObject(sec,

@@ -62,23 +62,25 @@ public class DiaFluxCoverageType extends DefaultMarkupType {
 		setRenderer(new DiaFluxCoverageRenderer());
 	}
 
-	public static String getMaster(Section<DiaFluxCoverageType> section, String topic) {
-		String master = DefaultMarkupType.getAnnotation(section, ANNOTATION_MASTER);
+	public static String getMaster(Section<?> coverageSection, String topic) {
+		String master = DefaultMarkupType.getAnnotation(coverageSection, ANNOTATION_MASTER);
 		if (master != null) return master;
 		else return topic;
 	}
 
-	public static CoverageResult getResult(Section<DiaFluxCoverageType> section, UserContext user) {
-		String tests = DefaultMarkupType.getAnnotation(section, DiaFluxCoverageType.ANNOTATION_TEST);
+	public static CoverageResult getResult(Section<?> coverageSection, UserContext user) {
+		String tests = DefaultMarkupType.getAnnotation(coverageSection,
+				DiaFluxCoverageType.ANNOTATION_TEST);
 		CoverageResult result;
 		if (tests == null) {
-			String master = DiaFluxCoverageType.getMaster(section, section.getTitle());
+			String master = DiaFluxCoverageType.getMaster(coverageSection,
+					coverageSection.getTitle());
 			Session session = D3webUtils.getSession(master, user, user.getWeb());
 			CoverageSessionObject coverage = PSMDiaFluxCoverage.getCoverage(session);
 			result = DefaultCoverageResult.calculateResult(coverage, session.getKnowledgeBase());
 		}
 		else {
-			result = (CoverageResult) section.getSectionStore().getObject(COVERAGE_RESULT);
+			result = (CoverageResult) coverageSection.getSectionStore().getObject(COVERAGE_RESULT);
 
 		}
 		return result;

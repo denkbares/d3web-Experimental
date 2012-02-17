@@ -23,7 +23,7 @@ package de.d3web.we.kdom.renderRestriction;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -54,10 +54,10 @@ public class RenderRestrictionEnd extends DefaultMarkupType {
 		this.setRenderer(new RestrictionRendererEnd());
 	}
 
-	class RestrictionRendererEnd implements KnowWERenderer<GroupDeclaration> {
+	class RestrictionRendererEnd implements Renderer {
 
 		@Override
-		public void render(Section<GroupDeclaration> sec, UserContext user, StringBuilder string) {
+		public void render(Section<?> sec, UserContext user, StringBuilder string) {
 			Section<GroupDeclaration> groupSec = Sections.findSuccessor(sec, GroupDeclaration.class);
 			if (groupSec != null) {
 				String group = groupSec.get().getGroup(groupSec);

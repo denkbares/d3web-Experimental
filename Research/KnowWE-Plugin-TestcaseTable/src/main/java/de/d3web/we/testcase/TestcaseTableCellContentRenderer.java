@@ -28,7 +28,6 @@ import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
-import de.knowwe.kdom.table.TableCellContent;
 import de.knowwe.kdom.table.TableCellContentRenderer;
 import de.knowwe.kdom.table.TableUtils;
 
@@ -40,11 +39,12 @@ import de.knowwe.kdom.table.TableUtils;
 public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 
 	@Override
-	public void render(Section<TableCellContent> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
 		Map<String, Collection<Message>> errors = Messages.getMessagesFromSubtree(sec,
 				Message.Type.ERROR);
 
+		@SuppressWarnings("unchecked")
 		int column = TableUtils.getColumn(sec);
 
 		StringBuilder html = new StringBuilder();

@@ -28,7 +28,7 @@ import java.util.Map;
 import de.d3web.we.core.semantic.IntermediateOwlObject;
 import de.d3web.we.core.semantic.OwlHelper;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.xml.AbstractXMLType;
@@ -37,7 +37,7 @@ import de.knowwe.kdom.xml.AbstractXMLType;
  * @author kazamatzuri
  * 
  */
-public class InfoRenderer implements KnowWERenderer {
+public class InfoRenderer implements Renderer {
 
 	private static InfoRenderer instance;
 
@@ -59,7 +59,7 @@ public class InfoRenderer implements KnowWERenderer {
 	 * , java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void render(Section sec, UserContext user,
+	public void render(Section<?> sec, UserContext user,
 			StringBuilder string) {
 		boolean verbose = false;
 		Map<String, String> params = AbstractXMLType

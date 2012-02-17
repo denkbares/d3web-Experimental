@@ -24,14 +24,14 @@
 package de.knowwe.semantic.owlextension;
 
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 
 /**
  * @author kazamatzuri
  * 
  */
-public class OwlPropertiesRenderer implements KnowWERenderer {
+public class OwlPropertiesRenderer implements Renderer {
 
 	private static OwlPropertiesRenderer instance;
 
@@ -57,7 +57,7 @@ public class OwlPropertiesRenderer implements KnowWERenderer {
 	 * , java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void render(Section sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 		String text = sec.getText();
 		for (String cur : text.split("\r\n|\r|\n")) {
 			if (cur.trim().length() > 0) string.append(cur.trim() + "\\\\");

@@ -28,13 +28,13 @@ import java.util.ResourceBundle;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.xml.AbstractXMLType;
 
 @SuppressWarnings("unchecked")
-public class ForumRenderer implements KnowWERenderer {
+public class ForumRenderer implements Renderer {
 
 	private static boolean sortUpwards = ResourceBundle.getBundle("Forum_config").getString(
 			"upwards").equals("true");
@@ -85,7 +85,7 @@ public class ForumRenderer implements KnowWERenderer {
 	}
 
 	@Override
-	public void render(Section sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
 		StringBuilder ret = new StringBuilder();
 

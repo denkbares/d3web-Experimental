@@ -36,7 +36,7 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 public class FAQRootTypeDefaultRenderer extends DefaultMarkupRenderer {
 
 	@Override
-	public void render(Section sec, UserContext user,
+	public void render(Section<?> sec, UserContext user,
 			StringBuilder string) {
 
 		String question =

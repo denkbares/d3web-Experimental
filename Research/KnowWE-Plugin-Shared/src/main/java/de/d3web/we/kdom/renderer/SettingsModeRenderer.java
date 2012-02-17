@@ -21,21 +21,21 @@
 package de.d3web.we.kdom.renderer;
 
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 
-public class SettingsModeRenderer implements KnowWERenderer {
+public class SettingsModeRenderer implements Renderer {
 
-	private final KnowWERenderer defaultRenderer;
-	private final KnowWERenderer quickEditRenderer;
+	private final Renderer defaultRenderer;
+	private final Renderer quickEditRenderer;
 
-	public SettingsModeRenderer(KnowWERenderer defaultR, KnowWERenderer quickEditR) {
+	public SettingsModeRenderer(Renderer defaultR, Renderer quickEditR) {
 		this.defaultRenderer = defaultR;
 		this.quickEditRenderer = quickEditR;
 	}
 
 	@Override
-	public void render(Section sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 		if (sec.hasQuickEditModeSet(user.getUserName())) {
 			quickEditRenderer.render(sec, user, string);
 			return;

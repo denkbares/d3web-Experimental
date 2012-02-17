@@ -27,7 +27,7 @@ import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -40,7 +40,7 @@ public class InputFieldCellContent extends AbstractType {
 		this.setRenderer(new InputRenderer());
 	}
 
-	public static int getWidth(Section<InputFieldCellContent> sec) {
+	public static int getWidth(Section<?> sec) {
 		String originalText = sec.getText();
 		int width;
 		width = readParamterNo(originalText, 0);
@@ -48,7 +48,7 @@ public class InputFieldCellContent extends AbstractType {
 		return width;
 	}
 
-	public static int getHeight(Section<InputFieldCellContent> sec) {
+	public static int getHeight(Section<?> sec) {
 		String originalText = sec.getText();
 		int height;
 		height = readParamterNo(originalText, 1);
@@ -73,10 +73,10 @@ public class InputFieldCellContent extends AbstractType {
 		return -1;
 	}
 
-	static class InputRenderer implements KnowWERenderer<InputFieldCellContent> {
+	static class InputRenderer implements Renderer {
 
 		@Override
-		public void render(Section<InputFieldCellContent> sec,
+		public void render(Section<?> sec,
 				UserContext user, StringBuilder string) {
 			String versionString = user.getParameter(ShowTableTagHandler.VERSION_KEY);
 			int version = 0;
@@ -93,7 +93,7 @@ public class InputFieldCellContent extends AbstractType {
 					+ "_" + version + "'>" + contentString + "</textarea>"));
 		}
 
-		public static String getStoredContentForInput(Section<InputFieldCellContent> sec, int version, String username) {
+		public static String getStoredContentForInput(Section<?> sec, int version, String username) {
 			List<Section<InputFieldCellContent>> found = new ArrayList<Section<InputFieldCellContent>>();
 			Sections.findSuccessorsOfType(sec.getFather().getFather().getFather(),
 					InputFieldCellContent.class,

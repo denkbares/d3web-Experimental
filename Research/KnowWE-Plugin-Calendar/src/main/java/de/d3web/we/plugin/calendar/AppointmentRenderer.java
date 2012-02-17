@@ -24,14 +24,14 @@ import java.util.Map;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
-public class AppointmentRenderer implements KnowWERenderer<Appointment> {
+public class AppointmentRenderer implements Renderer {
 
 	@Override
-	public void render(Section<Appointment> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
 		Map<String, String> persons = CalendarModule.getPersons();
 

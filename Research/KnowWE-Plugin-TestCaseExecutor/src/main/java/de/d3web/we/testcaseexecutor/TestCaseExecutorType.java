@@ -94,9 +94,9 @@ public class TestCaseExecutorType extends DefaultMarkupType {
 		this.setRenderer(new TestCaseExecutorRender());
 	}
 
-	public static String getMaster(Section<TestCaseExecutorType> section) {
-		String master = DefaultMarkupType.getAnnotation(section, ANNOTATION_MASTER);
-		return master != null ? master : section.getArticle().getTitle();
+	public static String getMaster(Section<?> executoreSection) {
+		String master = DefaultMarkupType.getAnnotation(executoreSection, ANNOTATION_MASTER);
+		return master != null ? master : executoreSection.getArticle().getTitle();
 	}
 
 	/**

@@ -24,7 +24,7 @@ import java.util.ResourceBundle;
 import de.knowwe.casetrain.util.Utils;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -33,7 +33,7 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @author Johannes Dienst
  * @created 06.06.2011
  */
-public class BlockMarkupContentRenderer implements KnowWERenderer<BlockMarkupContent> {
+public class BlockMarkupContentRenderer implements Renderer {
 
 	private static final ResourceBundle bundle = ResourceBundle.getBundle("casetrain_messages");;
 
@@ -47,9 +47,8 @@ public class BlockMarkupContentRenderer implements KnowWERenderer<BlockMarkupCon
 	private BlockMarkupContentRenderer() {
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void render(Section<BlockMarkupContent> sec, UserContext user,
+	public void render(Section<?> sec, UserContext user,
 			StringBuilder string) {
 
 		string.append(KnowWEUtils.maskHTML("%%collapsebox-closed \r\n"));

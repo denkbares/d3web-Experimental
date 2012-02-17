@@ -21,12 +21,11 @@
 package de.knowwe.hermes.kdom.event.renderer;
 
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.hermes.kdom.event.TimeEventNew;
 
-public class TimeEventTitleRenderer implements KnowWERenderer<TimeEventNew> {
+public class TimeEventTitleRenderer implements Renderer {
 
 	private static TimeEventTitleRenderer instance;
 
@@ -38,7 +37,7 @@ public class TimeEventTitleRenderer implements KnowWERenderer<TimeEventNew> {
 	}
 
 	@Override
-	public void render(Section<TimeEventNew> sec, UserContext user,
+	public void render(Section<?> sec, UserContext user,
 			StringBuilder result) {
 		String title = "no title found";
 		if (sec != null) title = sec.getText();

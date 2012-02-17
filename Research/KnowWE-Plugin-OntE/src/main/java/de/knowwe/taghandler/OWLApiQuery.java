@@ -18,7 +18,6 @@
  */
 package de.knowwe.taghandler;
 
-import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
@@ -45,7 +44,7 @@ public class OWLApiQuery extends DefaultMarkupType {
 	 */
 	public OWLApiQuery() {
 		super(MARKUP);
-		this.setRenderer(new OWLApiQueryRenderer<AbstractType>());
+		this.setRenderer(new OWLApiQueryRenderer());
 		this.setIgnorePackageCompile(true);
 	}
 

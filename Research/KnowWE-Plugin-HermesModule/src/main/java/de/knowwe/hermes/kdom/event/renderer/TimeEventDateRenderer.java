@@ -21,13 +21,12 @@
 package de.knowwe.hermes.kdom.event.renderer;
 
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.hermes.TimeStamp;
-import de.knowwe.hermes.kdom.event.TimeEventNew;
 
-public class TimeEventDateRenderer implements KnowWERenderer<TimeEventNew> {
+public class TimeEventDateRenderer implements Renderer {
 
 	private static TimeEventDateRenderer instance;
 
@@ -39,7 +38,7 @@ public class TimeEventDateRenderer implements KnowWERenderer<TimeEventNew> {
 	}
 
 	@Override
-	public void render(Section<TimeEventNew> sec, UserContext user,
+	public void render(Section<?> sec, UserContext user,
 			StringBuilder result) {
 		String date = "no date found";
 		if (result.charAt(result.length() - 1) == '\n') {

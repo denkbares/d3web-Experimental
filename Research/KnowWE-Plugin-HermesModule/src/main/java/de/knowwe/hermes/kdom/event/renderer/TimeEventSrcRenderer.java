@@ -22,13 +22,12 @@ package de.knowwe.hermes.kdom.event.renderer;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.hermes.kdom.event.TimeEventNew;
 import de.knowwe.hermes.kdom.event.TimeEventNew.Source;
 
-public class TimeEventSrcRenderer implements KnowWERenderer<TimeEventNew> {
+public class TimeEventSrcRenderer implements Renderer {
 
 	private static TimeEventSrcRenderer instance;
 
@@ -40,7 +39,7 @@ public class TimeEventSrcRenderer implements KnowWERenderer<TimeEventNew> {
 	}
 
 	@Override
-	public void render(Section<TimeEventNew> sec, UserContext user,
+	public void render(Section<?> sec, UserContext user,
 			StringBuilder result) {
 		if (sec.equals(Sections.findChildOfType(sec.getFather(), Source.class))) {
 			result.append(KnowWEUtils.maskHTML("\\\\__Quellen:__\\\\"));

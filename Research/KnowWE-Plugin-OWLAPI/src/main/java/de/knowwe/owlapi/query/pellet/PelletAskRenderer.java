@@ -1,12 +1,12 @@
 package de.knowwe.owlapi.query.pellet;
 
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
-public class PelletAskRenderer implements KnowWERenderer<PelletSparqlSelect> {
+public class PelletAskRenderer implements Renderer {
 
 	private static final String PREFIX;
 
@@ -15,7 +15,7 @@ public class PelletAskRenderer implements KnowWERenderer<PelletSparqlSelect> {
 	}
 
 	@Override
-	public void render(Section<PelletSparqlSelect> section, UserContext user, StringBuilder string) {
+	public void render(Section<?> section, UserContext user, StringBuilder string) {
 
 		String query = DefaultMarkupType.getAnnotation(section, PelletSparqlAsk.QUERY);
 

@@ -31,7 +31,7 @@ import de.knowwe.casetrain.util.Utils;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
@@ -63,11 +63,10 @@ public class MetaData extends BlockMarkupType {
 
 		this.addContentType(new MetaLine());
 
-		this.setRenderer(new KnowWERenderer<MetaData>() {
+		this.setRenderer(new Renderer() {
 
-			@SuppressWarnings("unchecked")
 			@Override
-			public void render(Section<MetaData> sec, UserContext user, StringBuilder string) {
+			public void render(Section<?> sec, UserContext user, StringBuilder string) {
 				KnowWEArticle article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 				Utils.renderKDOMReportMessageBlock(
 						Messages.getErrors(Messages.getMessagesFromSubtree(

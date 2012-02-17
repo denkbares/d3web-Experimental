@@ -21,9 +21,8 @@ package de.knowwe.casetrain.renderer;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -33,7 +32,7 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @author Johannes Dienst
  * @created 03.06.2011
  */
-public class SpanClassRenderer implements KnowWERenderer<Type> {
+public class SpanClassRenderer implements Renderer {
 
 	public static final String META_KEY = "metakeyword";
 
@@ -58,7 +57,7 @@ public class SpanClassRenderer implements KnowWERenderer<Type> {
 	}
 
 	@Override
-	public void render(Section<Type> sec, UserContext user,
+	public void render(Section<?> sec, UserContext user,
 			StringBuilder string) {
 		string.append(KnowWEUtils.maskHTML("<span class=\"" + clazz));
 

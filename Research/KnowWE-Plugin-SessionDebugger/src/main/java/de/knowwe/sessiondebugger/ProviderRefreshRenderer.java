@@ -27,7 +27,6 @@ import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * Triggers parsing of the TestCases if they are displayed (workaround for
@@ -36,10 +35,10 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  * @author Markus Friedrich (denkbares GmbH)
  * @created 27.01.2012
  */
-public class ProviderRefreshRenderer<T extends DefaultMarkupType> extends DefaultMarkupRenderer<T> {
+public class ProviderRefreshRenderer extends DefaultMarkupRenderer {
 
 	@Override
-	public void render(Section<T> section, UserContext user, StringBuilder buffer) {
+	public void render(Section<?> section, UserContext user, StringBuilder buffer) {
 		Set<String> articlesReferringTo = KnowWEEnvironment.getInstance().getPackageManager(
 				user.getWeb()).getArticlesReferringTo(section);
 		KnowWEArticleManager articleManager = KnowWEEnvironment.getInstance().getArticleManager(

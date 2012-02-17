@@ -20,7 +20,7 @@ package de.knowwe.defi.readbutton;
 
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -30,10 +30,10 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  * @author dupke
  * @created 23.03.2011
  */
-public class DataRenderer<T extends AbstractType> implements KnowWERenderer<T> {
+public class DataRenderer<T extends AbstractType> implements Renderer {
 
 	@Override
-	public void render(Section<T> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
 		String readpages = DefaultMarkupType.getAnnotation(sec, "readpages");
 		String username = user.getUserName();

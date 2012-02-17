@@ -26,7 +26,7 @@ import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.objects.SimpleDefinition;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.report.DefaultErrorRenderer;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.user.UserContext;
@@ -36,28 +36,28 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 public abstract class IncrementalTermDefinition<TermObject> extends SimpleDefinition {
 
-	final KnowWERenderer CLASS_RENDERER = new ReferenceRenderer(
-			new ToolMenuDecoratingRenderer<IncrementalTermReference>(
+	final Renderer CLASS_RENDERER = new ReferenceRenderer(
+			new ToolMenuDecoratingRenderer(
 					new StyleRenderer("color:rgb(125, 80, 102)")));
 
-	public IncrementalTermDefinition(Class termObjectClass) {
+	public IncrementalTermDefinition(Class<?> termObjectClass) {
 		super(TermRegistrationScope.GLOBAL, termObjectClass);
 		this.setRenderer(CLASS_RENDERER);
 	}
 
-	class ReferenceRenderer implements KnowWERenderer<IncrementalTermDefinition> {
+	class ReferenceRenderer implements Renderer {
 
-		private KnowWERenderer r = null;
+		private Renderer r = null;
 
-		public ReferenceRenderer(KnowWERenderer renderer) {
+		public ReferenceRenderer(Renderer renderer) {
 			r = renderer;
 		}
 
 		@Override
-		public void render(Section<IncrementalTermDefinition> sec, UserContext user, StringBuilder string) {
+		public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
 			Collection<Message> messages = IncrementalCompiler.getInstance().checkDefinition(
-					sec.get().getTermIdentifier(sec));
+					KnowWEUtils.getTermIdentifier(sec));
 			for (Message kdomReportMessage : messages) {
 				if (kdomReportMessage.getType() == Message.Type.ERROR) {
 					string.append(

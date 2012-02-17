@@ -18,9 +18,8 @@
  */
 package de.d3web.we.types;
 
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.renderer.StyleRenderer;
@@ -31,12 +30,12 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
  * @author Johannes Dienst
  * @created 16.09.2011
  */
-public class ApproximateMatchingTypeRenderer implements KnowWERenderer<ApproximateMatchingType> {
+public class ApproximateMatchingTypeRenderer implements Renderer {
 
 	@Override
-	public void render(Section<ApproximateMatchingType> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 		string.append(KnowWEUtils.maskHTML("<div>"));
-		new ToolMenuDecoratingRenderer<Type>(
+		new ToolMenuDecoratingRenderer(
 				new StyleRenderer("color:rgb(40, 40, 160)")).render(sec, user, string);
 		string.append(KnowWEUtils.maskHTML("</div>"));
 	}

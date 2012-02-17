@@ -40,12 +40,12 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
  * @author Reinhard Hatko
  * @created 05.08.2011
  */
-public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer<DiaFluxCoverageType> {
+public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer {
 
 	public static final String DIA_FLUX_COVERAGE_SCOPE = "diafluxcoverage";
 
 	@Override
-	protected void renderContents(Section<DiaFluxCoverageType> section, UserContext user, StringBuilder string) {
+	protected void renderContents(Section<?> section, UserContext user, StringBuilder string) {
 
 		CoverageResult result = DiaFluxCoverageType.getResult(section, user);
 
@@ -58,7 +58,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer<DiaFluxCovera
 
 	}
 
-	private void renderButton(UserContext user, StringBuilder string, Section<DiaFluxCoverageType> section) {
+	private void renderButton(UserContext user, StringBuilder string, Section<?> section) {
 
 		StringBuilder bob = new StringBuilder();
 		bob.append("<em>No coverage has been calculated yet.</em><input type='button' value='Calculate' onclick='DiaFlux.Coverage.calculateCoverage(\""
@@ -77,7 +77,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer<DiaFluxCovera
 	 * @param result
 	 * @param session
 	 */
-	private void renderResult(UserContext user, StringBuilder string, Section<DiaFluxCoverageType> section, CoverageResult result) {
+	private void renderResult(UserContext user, StringBuilder string, Section<?> section, CoverageResult result) {
 		KnowledgeBase kb = result.getKb();
 		FlowSet flowSet = DiaFluxUtils.getFlowSet(kb);
 

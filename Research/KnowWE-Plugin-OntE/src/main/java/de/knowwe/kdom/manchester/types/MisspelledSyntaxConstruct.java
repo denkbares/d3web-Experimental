@@ -41,10 +41,9 @@ public class MisspelledSyntaxConstruct extends AbstractType {
 
 	public final static char COLON = '\u003A';
 
-	@SuppressWarnings("unchecked")
 	public MisspelledSyntaxConstruct() {
 		this.setSectionFinder(new MisspelledFrameKeywordFinder());
-		this.setRenderer(new ToolMenuDecoratingRenderer<MisspelledSyntaxConstruct>(
+		this.setRenderer(new ToolMenuDecoratingRenderer(
 				new StyleRenderer(
 						"color:rgb(255, 0, 0)")));
 

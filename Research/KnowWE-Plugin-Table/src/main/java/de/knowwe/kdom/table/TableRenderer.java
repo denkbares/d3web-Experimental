@@ -22,7 +22,7 @@ package de.knowwe.kdom.table;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -33,10 +33,10 @@ import de.knowwe.core.utils.KnowWEUtils;
  * 
  * @author smark
  */
-public class TableRenderer implements KnowWERenderer<Table> {
+public class TableRenderer implements Renderer {
 
 	@Override
-	public void render(Section<Table> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
 		boolean sortable = TableUtils.sortOption(sec);
 

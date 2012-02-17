@@ -24,11 +24,10 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  * @author Reinhard Hatko
  * @created 11.05.2011
  */
-public class TestCaseExecutorRender extends DefaultMarkupRenderer<TestCaseExecutorType> {
-
+public class TestCaseExecutorRender extends DefaultMarkupRenderer {
 
 	@Override
-	protected void renderContents(Section<TestCaseExecutorType> section, UserContext user, StringBuilder string) {
+	protected void renderContents(Section<?> section, UserContext user, StringBuilder string) {
 
 		String master = TestCaseExecutorType.getMaster(section);
 		// no kb would cause massive amount of nullpointers
@@ -67,7 +66,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer<TestCaseExecut
 	 * @param section
 	 * @param context
 	 */
-	private void renderResult(TestCaseAnalysisReport report, StringBuilder string, Section<TestCaseExecutorType> section, UserContext context) {
+	private void renderResult(TestCaseAnalysisReport report, StringBuilder string, Section<?> section, UserContext context) {
 		TestCaseAnalysisReport result = (TestCaseAnalysisReport) section.getSectionStore().getObject(
 				TestCaseExecutorType.TEST_RESULT_KEY);
 		TestCase t = (TestCase) section.getSectionStore().getObject(
@@ -88,7 +87,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer<TestCaseExecut
 	 * @param master
 	 * @param file
 	 */
-	private String renderAutomated(Section<TestCaseExecutorType> section, String master, String[] files) {
+	private String renderAutomated(Section<?> section, String master, String[] files) {
 
 		StringBuilder html = new StringBuilder();
 
@@ -119,7 +118,7 @@ public class TestCaseExecutorRender extends DefaultMarkupRenderer<TestCaseExecut
 	 * @param master
 	 * @return
 	 */
-	private String renderSelection(Section<TestCaseExecutorType> section, String master) {
+	private String renderSelection(Section<?> section, String master) {
 		KnowWEWikiConnector connector = KnowWEEnvironment.getInstance().getWikiConnector();
 
 		Collection<String> attachments = connector.getAttachmentFilenamesForPage(section.getArticle().getTitle());

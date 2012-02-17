@@ -22,7 +22,7 @@ import de.knowwe.casetrain.util.Utils;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -32,13 +32,13 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @author Johannes Dienst
  * @created 06.06.2011
  */
-public class BlockMarkupTypeRenderer implements KnowWERenderer<BlockMarkupType> {
+public class BlockMarkupTypeRenderer implements Renderer {
 
 	@Override
-	public void render(Section<BlockMarkupType> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
 		string.append(KnowWEUtils.maskHTML("<div class='"
-				+ sec.get().getCSSClass()
+				+ ((BlockMarkupType) sec.get()).getCSSClass()
 				+ "'>"));
 		KnowWEArticle article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
 		Utils.renderKDOMReportMessageBlock(Messages.getErrors(Messages.getMessagesFromSubtree(

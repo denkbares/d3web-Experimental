@@ -20,9 +20,8 @@
 
 package de.knowwe.casetrain.renderer;
 
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -33,18 +32,18 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @author Jochen
  * @created 06.04.2011
  */
-public class DivStyleClassRenderer implements KnowWERenderer<Type> {
+public class DivStyleClassRenderer implements Renderer {
 
 	private final String cssClass;
-	private final KnowWERenderer<Type> customRenderer;
+	private final Renderer customRenderer;
 
-	public DivStyleClassRenderer(String s, KnowWERenderer<Type> c) {
+	public DivStyleClassRenderer(String s, Renderer c) {
 		this.cssClass = s;
 		customRenderer = c;
 	}
 
 	@Override
-	public void render(Section<Type> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 		string.append(KnowWEUtils.maskHTML("<div class='"
 				+ cssClass
 				+ "'>"));

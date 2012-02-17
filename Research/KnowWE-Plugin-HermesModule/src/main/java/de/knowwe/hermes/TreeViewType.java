@@ -21,7 +21,7 @@ package de.knowwe.hermes;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -42,10 +42,10 @@ public class TreeViewType extends AbstractType {
 		this.setRenderer(new TreeViewRenderer());
 	}
 
-	public static class TreeViewRenderer implements KnowWERenderer<TreeViewType> {
+	public static class TreeViewRenderer implements Renderer {
 
 		@Override
-		public void render(Section<TreeViewType> sec, UserContext user, StringBuilder string) {
+		public void render(Section<?> sec, UserContext user, StringBuilder string) {
 			long id = System.currentTimeMillis();
 
 			String pre = ""

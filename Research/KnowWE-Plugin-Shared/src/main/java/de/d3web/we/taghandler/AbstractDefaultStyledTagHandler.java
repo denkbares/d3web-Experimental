@@ -28,7 +28,6 @@ import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.taghandler.TagHandlerTypeContent;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.tools.Tool;
 import de.knowwe.tools.ToolUtils;
 
@@ -42,8 +41,8 @@ import de.knowwe.tools.ToolUtils;
  */
 public abstract class AbstractDefaultStyledTagHandler extends AbstractTagHandler {
 
-	private static DefaultMarkupRenderer<DefaultMarkupType> defaultMarkupRenderer =
-			new DefaultMarkupRenderer<DefaultMarkupType>();
+	private static DefaultMarkupRenderer defaultMarkupRenderer =
+			new DefaultMarkupRenderer();
 
 	public AbstractDefaultStyledTagHandler(String name) {
 		super(name);

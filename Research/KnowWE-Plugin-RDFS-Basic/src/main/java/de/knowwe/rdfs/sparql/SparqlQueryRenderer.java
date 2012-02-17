@@ -23,14 +23,14 @@ import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryResultTable;
 
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.utils.SparqlRenderer;
 import de.knowwe.rdfs.util.SparqlResultSetRenderer;
 
-public class SparqlQueryRenderer implements KnowWERenderer<SparqlContentType> {
+public class SparqlQueryRenderer implements Renderer {
 
 	private static SparqlRenderer instance;
 
@@ -42,7 +42,7 @@ public class SparqlQueryRenderer implements KnowWERenderer<SparqlContentType> {
 	}
 
 	@Override
-	public void render(Section<SparqlContentType> sec, UserContext user, StringBuilder result) {
+	public void render(Section<?> sec, UserContext user, StringBuilder result) {
 
 		String sparqlString = sec.getText();
 		sparqlString = sparqlString.trim();

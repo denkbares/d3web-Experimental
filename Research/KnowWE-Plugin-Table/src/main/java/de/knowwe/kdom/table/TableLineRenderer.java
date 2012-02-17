@@ -22,7 +22,7 @@ package de.knowwe.kdom.table;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -33,10 +33,10 @@ import de.knowwe.core.utils.KnowWEUtils;
  * 
  * @author smark
  */
-public class TableLineRenderer implements KnowWERenderer<TableLine> {
+public class TableLineRenderer implements Renderer {
 
 	@Override
-	public void render(Section<TableLine> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 		StringBuilder b = new StringBuilder();
 		DelegateRenderer.getInstance().render(sec, user, b);
 
@@ -64,12 +64,12 @@ public class TableLineRenderer implements KnowWERenderer<TableLine> {
 	 * 
 	 * @created 16.03.2011
 	 * @param article
-	 * @param sec
+	 * @param tableLine
 	 * @param user
 	 * @return an empty string, if no classes should be assigned to the table
 	 *         line, a string of CSS classes otherwise
 	 */
-	protected String getClasses(Section<TableLine> sec, UserContext user) {
+	protected String getClasses(Section<?> tableLine, UserContext user) {
 		return "";
 	}
 

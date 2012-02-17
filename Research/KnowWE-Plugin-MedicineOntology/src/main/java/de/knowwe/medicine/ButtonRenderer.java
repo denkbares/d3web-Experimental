@@ -21,12 +21,11 @@
 package de.knowwe.medicine;
 
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.rdf2go.utils.SparqlType;
 
-public class ButtonRenderer implements KnowWERenderer<SparqlType> {
+public class ButtonRenderer implements Renderer {
 
 	private static ButtonRenderer instance;
 
@@ -38,7 +37,7 @@ public class ButtonRenderer implements KnowWERenderer<SparqlType> {
 	}
 
 	@Override
-	public void render(Section sec, UserContext user, StringBuilder result) {
+	public void render(Section<?> sec, UserContext user, StringBuilder result) {
 		result.append(KnowWEUtils.maskHTML("<script type='text/javascript' src='KnowWEExtension/scripts/Medicine.js'></script>\n<input type='button' value='Export' title='' onclick='checkIfTableExists();'/><input type='button' value='Import' title='' onclick='readFromDB();'/><div id='medresult'></div>"));
 	}
 

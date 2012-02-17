@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -42,7 +42,7 @@ import de.knowwe.kdom.sectionfinder.IRISectionFinder;
  * <p>
  * Simple {@link AbstractType} for prefixes in the Manchester OWL syntax.
  * </p>
- *
+ * 
  * @author Stefan Mark
  * @created 22.09.2011
  */
@@ -71,7 +71,7 @@ public class ImportFrame extends DefaultFrame implements KnowledgeUnit<ImportFra
 	/**
 	 * Returns the {@link ImportIRI} section containing the name of the to
 	 * define OWLClass.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ImportFrame> section
 	 * @return The found section
@@ -83,7 +83,7 @@ public class ImportFrame extends DefaultFrame implements KnowledgeUnit<ImportFra
 	/**
 	 * Returns the {@link ImportIRI} section containing the name of the to
 	 * define OWLClass.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ImportFrame> section
 	 * @return The found section
@@ -95,7 +95,7 @@ public class ImportFrame extends DefaultFrame implements KnowledgeUnit<ImportFra
 	/**
 	 * Returns the {@link ImportPrefix} section containing a optional namespace
 	 * prefix used for this import.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ImportFrame> section
 	 * @return The found section
@@ -107,7 +107,7 @@ public class ImportFrame extends DefaultFrame implements KnowledgeUnit<ImportFra
 	/**
 	 * Returns the {@link ImportPrefix} section containing the name of the
 	 * optional namespace shortcut.
-	 *
+	 * 
 	 * @created 27.09.2011
 	 * @param Section<ImportFrame> section
 	 * @return The found section
@@ -121,9 +121,10 @@ public class ImportFrame extends DefaultFrame implements KnowledgeUnit<ImportFra
 		return new ImportFrameCompileScript();
 	}
 }
+
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 22.09.2011
  */
@@ -134,13 +135,13 @@ class ImportIRI extends AbstractType {
 		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 
 		this.setSectionFinder(csf);
-		this.setRenderer(new IRITypeRenderer<ImportIRI>());
+		this.setRenderer(new IRITypeRenderer());
 	}
 }
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 05.12.2011
  */

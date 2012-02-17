@@ -21,20 +21,20 @@
 package de.knowwe.semantic.owlextension;
 
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
-public class ExtensionRenderer implements KnowWERenderer {
+public class ExtensionRenderer implements Renderer {
 
-	private static KnowWERenderer me;
+	private static Renderer me;
 
 	private ExtensionRenderer() {
 
 	}
 
 	@Override
-	public void render(Section sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 		String header;
 		String footer = "</p>";
 		String content = "";
@@ -50,7 +50,7 @@ public class ExtensionRenderer implements KnowWERenderer {
 		string.append(KnowWEUtils.maskHTML(header + content + footer));
 	}
 
-	public static synchronized KnowWERenderer getInstance() {
+	public static synchronized Renderer getInstance() {
 		if (me == null) me = new ExtensionRenderer();
 		return me;
 	}

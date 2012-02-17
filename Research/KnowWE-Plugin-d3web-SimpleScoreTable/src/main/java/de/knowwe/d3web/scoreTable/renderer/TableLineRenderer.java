@@ -2,14 +2,14 @@ package de.knowwe.d3web.scoreTable.renderer;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
-public class TableLineRenderer implements KnowWERenderer {
+public class TableLineRenderer implements Renderer {
 
 	@Override
-	public void render(Section section, UserContext user,
+	public void render(Section<?> section, UserContext user,
 			StringBuilder string) {
 
 		string.append(KnowWEUtils.maskHTML("<tr>"));

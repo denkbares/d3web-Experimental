@@ -20,9 +20,8 @@
 
 package de.d3web.we.kdom.renderer;
 
-import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.renderer.StyleRenderer;
 
@@ -35,7 +34,7 @@ import de.knowwe.kdom.renderer.StyleRenderer;
  * @author Jochen
  * 
  */
-public class KDOMDepthFontSizeRenderer implements KnowWERenderer<Type> {
+public class KDOMDepthFontSizeRenderer implements Renderer {
 
 	private double initialFontsize = 340;
 	private double depthDiscountFactor = 0.88;
@@ -50,7 +49,7 @@ public class KDOMDepthFontSizeRenderer implements KnowWERenderer<Type> {
 	}
 
 	@Override
-	public void render(Section<Type> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 		// font-size:1.2em
 
 		double font = initialFontsize;

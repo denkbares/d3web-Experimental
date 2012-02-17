@@ -22,7 +22,7 @@ package de.d3web.we.biolog.freemap;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.xml.AbstractXMLType;
 import de.knowwe.kdom.xml.XMLContent;
@@ -51,10 +51,10 @@ public class FreeMapType extends AbstractXMLType {
 
 	}
 
-	class FreeMapTypeRenderer implements KnowWERenderer {
+	class FreeMapTypeRenderer implements Renderer {
 
 		@Override
-		public void render(Section sec, UserContext user,
+		public void render(Section<?> sec, UserContext user,
 				StringBuilder string) {
 			string.append("{{{");
 			DelegateRenderer.getInstance().render(sec, user, string);

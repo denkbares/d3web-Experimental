@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -37,7 +37,7 @@ import de.knowwe.kdom.sectionfinder.IRISectionFinder;
  * <p>
  * Simple {@link AbstractType} for prefixes in the Manchester OWL syntax.
  * </p>
- *
+ * 
  * @author Stefan Mark
  * @created 22.09.2011
  */
@@ -64,8 +64,8 @@ public class PrefixFrame extends DefaultFrame {
 }
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 22.09.2011
  */
@@ -84,8 +84,8 @@ class Prefix extends AbstractType {
 }
 
 /**
- *
- *
+ * 
+ * 
  * @author Stefan Mark
  * @created 22.09.2011
  */
@@ -96,6 +96,6 @@ class PrefixIRI extends AbstractType {
 		csf.addConstraint(ExactlyOneFindingConstraint.getInstance());
 
 		this.setSectionFinder(csf);
-		this.setRenderer(new IRITypeRenderer<PrefixIRI>());
+		this.setRenderer(new IRITypeRenderer());
 	}
 }

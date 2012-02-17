@@ -21,14 +21,14 @@ package de.knowwe.rdfs.rendering;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
-public class PreEnvRenderer implements KnowWERenderer {
+public class PreEnvRenderer implements Renderer {
 
 	@Override
-	public void render(Section section, UserContext user, StringBuilder string) {
+	public void render(Section<?> section, UserContext user, StringBuilder string) {
 		string.append(KnowWEUtils.maskHTML("<pre id=\""
 				+ section.getID()
 				+ "\" class=\"turtle-instantedit-pre\">"));

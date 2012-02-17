@@ -27,7 +27,7 @@ import de.knowwe.core.kdom.basicType.PlainText;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.xml.AbstractXMLType;
@@ -42,12 +42,12 @@ import de.knowwe.kdom.xml.AbstractXMLType;
  * </p>
  * 
  * @author smark
- * @see KnowWERenderer
+ * @see Renderer
  */
-public class CSSRenderer implements KnowWERenderer<AbstractXMLType> {
+public class CSSRenderer implements Renderer {
 
 	@Override
-	public void render(Section<AbstractXMLType> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 		Map<String, String> mapFor = AbstractXMLType.getAttributeMapFor(sec);
 		String style = mapFor.get("style");
 

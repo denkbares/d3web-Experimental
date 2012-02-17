@@ -31,7 +31,7 @@ import de.d3web.we.tables.TableNormalCell;
 import de.d3web.we.tables.TableUtils;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -41,12 +41,12 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @author Johannes Dienst
  * @created 14.10.2011
  */
-public class TableRenderer implements KnowWERenderer<InnerTable> {
+public class TableRenderer implements Renderer {
 
 	private static ResourceBundle bundle = ResourceBundle.getBundle("Usersupport_messages");
 
 	@Override
-	public void render(Section<InnerTable> section, UserContext user,
+	public void render(Section<?> section, UserContext user,
 			StringBuilder string) {
 
 		string.append(KnowWEUtils.maskHTML("<span id='" + section.getID() + "'>"));
@@ -82,10 +82,10 @@ public class TableRenderer implements KnowWERenderer<InnerTable> {
 	}
 
 	private static void renderTableHeader(
-			StringBuilder buildi, Section<InnerTable> section, int maxCellLength, int averageCellCount,
+			StringBuilder buildi, Section<?> innerTable, int maxCellLength, int averageCellCount,
 			UserContext user) {
 
-		Section<TableHeaderLine> sec = Sections.findChildOfType(section, TableHeaderLine.class);
+		Section<TableHeaderLine> sec = Sections.findChildOfType(innerTable, TableHeaderLine.class);
 
 		if (sec != null) {
 			buildi.append("<thead>");
@@ -117,11 +117,11 @@ public class TableRenderer implements KnowWERenderer<InnerTable> {
 	}
 
 	private static void renderTableBody(
-			StringBuilder buildi, Section<InnerTable> section, int maxCellLength,
+			StringBuilder buildi, Section<?> innerTable, int maxCellLength,
 			UserContext user) {
 		buildi.append("<tbody>");
 
-		List<Section<TableLine>> lines = Sections.findChildrenOfType(section, TableLine.class);
+		List<Section<TableLine>> lines = Sections.findChildrenOfType(innerTable, TableLine.class);
 
 		// First line is header
 		for (Section<TableLine> line : lines) {

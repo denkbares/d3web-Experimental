@@ -52,10 +52,9 @@ import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.compile.packaging.KnowWEPackageManager;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.kdom.defaultMarkup.ContentType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.renderer.StyleRenderer;
 
@@ -65,7 +64,7 @@ import de.knowwe.kdom.renderer.StyleRenderer;
  * @author Markus Friedrich (denkbares GmbH)
  * @created 19.01.2012
  */
-public class TestCasePlayerRenderer implements KnowWERenderer<ContentType> {
+public class TestCasePlayerRenderer implements Renderer {
 
 	private static final String QUESTIONS_SEPARATOR = "#####";
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS");
@@ -73,7 +72,7 @@ public class TestCasePlayerRenderer implements KnowWERenderer<ContentType> {
 	private static String QUESTION_SELECTOR_KEY = "question_selector";
 
 	@Override
-	public void render(Section<ContentType> section, UserContext user, StringBuilder result) {
+	public void render(Section<?> section, UserContext user, StringBuilder result) {
 		StringBuilder string = new StringBuilder();
 		if (user == null || user.getSession() == null) {
 			return;
@@ -324,7 +323,7 @@ public class TestCasePlayerRenderer implements KnowWERenderer<ContentType> {
 		}
 	}
 
-	private TerminologyObject renderObservationQuestionAdder(Section<ContentType> section, UserContext user, StringBuilder string, String[] questionStrings, TerminologyManager manager, String questionString) {
+	private TerminologyObject renderObservationQuestionAdder(Section<?> section, UserContext user, StringBuilder string, String[] questionStrings, TerminologyManager manager, String questionString) {
 		String key = QUESTION_SELECTOR_KEY + "_" + section.getID();
 		String selectedQuestion = (String) user.getSession().getAttribute(
 				key);
@@ -380,7 +379,7 @@ public class TestCasePlayerRenderer implements KnowWERenderer<ContentType> {
 		return object;
 	}
 
-	private Triple<TestCaseProvider, Section<?>, KnowWEArticle> renderTestCaseSelection(Section<ContentType> section, UserContext user, StringBuilder string, List<Triple<TestCaseProvider, Section<?>, KnowWEArticle>> providers) {
+	private Triple<TestCaseProvider, Section<?>, KnowWEArticle> renderTestCaseSelection(Section<?> section, UserContext user, StringBuilder string, List<Triple<TestCaseProvider, Section<?>, KnowWEArticle>> providers) {
 		String key = SELECTOR_KEY + "_" + section.getID();
 		String selectedID = (String) user.getSession().getAttribute(
 				key);

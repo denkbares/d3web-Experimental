@@ -32,7 +32,7 @@ import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.user.UserSettingsManager;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -125,7 +125,7 @@ public class SetQuickEditFlagAction extends AbstractAction {
 		Section secWithNodeID = getSectionFromCurrentID(nodeID, root);
 
 		if (secWithNodeID != null) {
-			KnowWERenderer renderer = secWithNodeID.get().getRenderer();
+			Renderer renderer = secWithNodeID.get().getRenderer();
 			StringBuilder b = new StringBuilder();
 			if (renderer != null) {
 				renderer.render(secWithNodeID, user, b);

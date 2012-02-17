@@ -198,7 +198,7 @@ public class TableUtils {
 	 * @param section
 	 * @return
 	 */
-	public static int getMaximumTableCellCount(Section<InnerTable> section) {
+	public static int getMaximumTableCellCount(Section<?> section) {
 
 		int maxCount = 0;
 

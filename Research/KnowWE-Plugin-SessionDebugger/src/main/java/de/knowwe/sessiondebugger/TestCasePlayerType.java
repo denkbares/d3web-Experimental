@@ -45,7 +45,7 @@ public class TestCasePlayerType extends DefaultMarkupType {
 		for (Type type : this.getAllowedChildrenTypes()) {
 			if (type instanceof ContentType) {
 				((ContentType) type).setRenderer(
-						new ReRenderSectionMarkerRenderer<ContentType>(
+						new ReRenderSectionMarkerRenderer(
 								new TestCasePlayerRenderer()));
 			}
 		}

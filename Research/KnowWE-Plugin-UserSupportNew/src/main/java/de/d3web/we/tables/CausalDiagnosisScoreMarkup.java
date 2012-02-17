@@ -45,7 +45,7 @@ public class CausalDiagnosisScoreMarkup extends DefaultMarkupType {
 
 	public CausalDiagnosisScoreMarkup() {
 		super(m);
-		setRenderer(new DefaultMarkupRendererUserSupport<DefaultMarkupType>());
+		setRenderer(new DefaultMarkupRendererUserSupport());
 	}
 
 }

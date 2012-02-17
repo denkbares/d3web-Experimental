@@ -20,11 +20,11 @@ package de.knowwe.jurisearch;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
-public class BoxRenderer implements KnowWERenderer {
+public class BoxRenderer implements Renderer {
 
 	private final String clazz;
 
@@ -33,7 +33,7 @@ public class BoxRenderer implements KnowWERenderer {
 	}
 
 	@Override
-	public void render(Section section, UserContext user, StringBuilder string) {
+	public void render(Section<?> section, UserContext user, StringBuilder string) {
 		string.append(KnowWEUtils.maskHTML("<div"));
 		string.append(" class='").append(clazz).append("'");
 

@@ -40,13 +40,13 @@ import de.d3web.we.core.semantic.ISemanticCore;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.xml.AbstractXMLType;
 
 public final class SparqlDelegateRenderer implements
-		KnowWERenderer<SparqlContent> {
+		Renderer {
 
 	private ResourceBundle rb;
 	private static SparqlDelegateRenderer instance;
@@ -94,7 +94,7 @@ public final class SparqlDelegateRenderer implements
 	}
 
 	@Override
-	public void render(Section<SparqlContent> sec, UserContext user,
+	public void render(Section<?> sec, UserContext user,
 			StringBuilder string) {
 		String renderengine = "default";
 		rb = KnowWEEnvironment.getInstance().getKwikiBundle(user);

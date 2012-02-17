@@ -32,14 +32,14 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  * @author Marc-Oliver Ochlast (denkbares GmbH)
  * @created 30.11.2010
  */
-public class GroovyCITestRenderer extends DefaultMarkupRenderer<GroovyCITestType> {
+public class GroovyCITestRenderer extends DefaultMarkupRenderer {
 
 	public GroovyCITestRenderer() {
 		super("KnowWEExtension/images/terminal-icon.png");
 	}
 
 	@Override
-	protected void renderContents(Section<GroovyCITestType> section, UserContext user, StringBuilder string) {
+	protected void renderContents(Section<?> section, UserContext user, StringBuilder string) {
 		KnowWERessourceLoader.getInstance().add("syntaxhighlighter_3.0.83/shCore.css",
 				KnowWERessourceLoader.RESOURCE_STYLESHEET);
 		KnowWERessourceLoader.getInstance().add("syntaxhighlighter_3.0.83/shThemeEclipse.css",

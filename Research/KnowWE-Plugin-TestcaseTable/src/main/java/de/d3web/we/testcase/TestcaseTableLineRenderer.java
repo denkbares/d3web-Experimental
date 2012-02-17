@@ -29,7 +29,6 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
-import de.knowwe.kdom.table.TableLine;
 import de.knowwe.kdom.table.TableLineRenderer;
 import de.knowwe.kdom.table.TableUtils;
 
@@ -46,9 +45,9 @@ public class TestcaseTableLineRenderer extends TableLineRenderer {
 	public static final String TESTCASEERROR = "tcError";
 
 	@Override
-	protected String getClasses(Section<TableLine> sec, UserContext user) {
+	protected String getClasses(Section<?> tableLine, UserContext user) {
 
-		Map<String, Collection<Message>> errorMessages = Messages.getMessagesFromSubtree(sec,
+		Map<String, Collection<Message>> errorMessages = Messages.getMessagesFromSubtree(tableLine,
 				Message.Type.ERROR);
 
 		if (errorMessages != null && !errorMessages.isEmpty()) {
@@ -56,16 +55,16 @@ public class TestcaseTableLineRenderer extends TableLineRenderer {
 		}
 
 		// get execution status
-		Section<TestcaseTableType> table = Sections.findAncestorOfExactType(sec,
+		Section<TestcaseTableType> table = Sections.findAncestorOfExactType(tableLine,
 				TestcaseTableType.class);
 		String master = TestcaseTableType.getMaster(table, user.getTitle());
-		Session session = D3webUtils.getSession(master, user, sec.getWeb());
+		Session session = D3webUtils.getSession(master, user, tableLine.getWeb());
 
 		if (session == null) {
 			return TESTCASELINE;
 		}
 
-		Section<TestcaseTableType> parentTable = Sections.findAncestorOfType(sec,
+		Section<TestcaseTableType> parentTable = Sections.findAncestorOfType(tableLine,
 				TestcaseTableType.class);
 
 		List<Section<TestcaseTableLine>> executedLines = TestcaseTable.getExecutedLinesOfTable(
@@ -74,13 +73,13 @@ public class TestcaseTableLineRenderer extends TableLineRenderer {
 		if (executedLines.isEmpty()) {
 			return TESTCASELINE;
 		}
-		else if (executedLines.contains(sec)) {
+		else if (executedLines.contains(tableLine)) {
 			return TESTCASELINE + " " + TESTCASEEXECUTED;
 		}
 		else {
 			Section<TestcaseTableLine> lastLine = executedLines.get(executedLines.size() - 1);
 
-			if (TableUtils.getRowOfLine(sec) < TableUtils.getRowOfLine(lastLine)) {
+			if (TableUtils.getRowOfLine(tableLine) < TableUtils.getRowOfLine(lastLine)) {
 				return TESTCASELINE + " " + TESTCASESKIPPED;
 			}
 			else {

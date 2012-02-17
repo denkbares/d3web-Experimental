@@ -23,14 +23,13 @@ package de.knowwe.hermes.kdom.event.renderer;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.DelegateRenderer;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.hermes.HermesUserManagement;
-import de.knowwe.hermes.kdom.event.TimeEventNew;
 import de.knowwe.hermes.kdom.event.TimeEventNew.ImportanceType;
 
-public class TimeEventRenderer implements KnowWERenderer<TimeEventNew> {
+public class TimeEventRenderer implements Renderer {
 
 	private static TimeEventRenderer instance;
 
@@ -42,7 +41,7 @@ public class TimeEventRenderer implements KnowWERenderer<TimeEventNew> {
 	}
 
 	@Override
-	public void render(Section<TimeEventNew> sec, UserContext user,
+	public void render(Section<?> sec, UserContext user,
 			StringBuilder result) {
 
 		int eventImportanceLevel = -1;

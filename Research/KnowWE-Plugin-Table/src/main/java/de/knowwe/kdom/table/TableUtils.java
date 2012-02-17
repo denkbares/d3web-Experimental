@@ -38,7 +38,7 @@ public class TableUtils {
 	 * @param s current section
 	 * @return
 	 */
-	public static int getColumn(Section<? extends TableCellContent> s) {
+	public static int getColumn(Section<?> s) {
 		Section<TableLine> tableLine = Sections.findAncestorOfType(s, TableLine.class);
 		List<Section<TableCellContent>> cells = new ArrayList<Section<TableCellContent>>();
 		Sections.findSuccessorsOfType(tableLine, TableCellContent.class, cells);
@@ -73,12 +73,12 @@ public class TableUtils {
 	 * The row number of the given table line.
 	 * 
 	 * @created 16.03.2011
-	 * @param s
+	 * @param tableLine
 	 * @return
 	 */
-	public static int getRowOfLine(Section<? extends TableLine> s) {
-		return Sections.findAncestorOfType(s, Table.class).getChildren().indexOf(
-				s);
+	public static int getRowOfLine(Section<?> tableLine) {
+		return Sections.findAncestorOfType(tableLine, Table.class).getChildren().indexOf(
+				tableLine);
 	}
 
 	/**

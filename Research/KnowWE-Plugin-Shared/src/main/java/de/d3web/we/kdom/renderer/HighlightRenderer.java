@@ -35,7 +35,7 @@ public class HighlightRenderer extends ColorRenderer {
 	}
 
 	@Override
-	public void render(Section sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 		String title = "Marker";
 		StringBuilder b = new StringBuilder();
 		DelegateRenderer.getInstance().render(sec, user, b);

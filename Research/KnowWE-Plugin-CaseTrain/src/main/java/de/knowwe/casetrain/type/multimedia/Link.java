@@ -21,7 +21,7 @@ package de.knowwe.casetrain.type.multimedia;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -45,10 +45,10 @@ public class Link extends MultimediaItem {
 		this.clearSubtreeHandlers();
 		this.addChildType(new Url());
 
-		this.setRenderer(new KnowWERenderer<Link>() {
+		this.setRenderer(new Renderer() {
 
 			@Override
-			public void render(Section<Link> sec, UserContext user,
+			public void render(Section<?> sec, UserContext user,
 					StringBuilder string) {
 				Section<MultimediaItemContent> linkURL = Sections.findChildOfType(sec,
 						MultimediaItemContent.class);

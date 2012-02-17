@@ -33,7 +33,7 @@ import de.knowwe.core.contexts.AnnotationContext;
 import de.knowwe.core.contexts.ContextManager;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
@@ -42,10 +42,10 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @author Johannes Dienst
  * @created 09.06.2011
  */
-public class AnnotationInlineAnswerRenderer implements KnowWERenderer {
+public class AnnotationInlineAnswerRenderer implements Renderer {
 
 	@Override
-	public void render(Section sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string) {
 
 		Section prop = Sections.findSuccessor(sec, AnnotationProperty.class);
 		if (prop == null || !prop.getText().contains("asks")) return;

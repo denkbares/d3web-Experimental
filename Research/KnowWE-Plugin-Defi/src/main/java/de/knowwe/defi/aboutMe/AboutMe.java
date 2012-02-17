@@ -35,7 +35,6 @@ import com.ecyrd.jspwiki.event.WikiEventManager;
 import com.ecyrd.jspwiki.event.WikiSecurityEvent;
 
 import de.knowwe.core.KnowWEEnvironment;
-import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
@@ -88,7 +87,7 @@ public class AboutMe extends DefaultMarkupType implements WikiEventListener {
 	 */
 	public AboutMe() {
 		super(MARKUP);
-		this.setRenderer(new AboutMeRenderer<AbstractType>());
+		this.setRenderer(new AboutMeRenderer());
 		this.setIgnorePackageCompile(true);
 
 		ServletContext context = KnowWEEnvironment.getInstance().getContext();

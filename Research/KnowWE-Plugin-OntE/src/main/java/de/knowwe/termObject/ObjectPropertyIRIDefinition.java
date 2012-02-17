@@ -21,15 +21,14 @@ package de.knowwe.termObject;
 
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 public class ObjectPropertyIRIDefinition extends de.knowwe.rdfs.AbstractIRITermDefinition {
 
-	@SuppressWarnings("unchecked")
-	final KnowWERenderer<ObjectPropertyIRIDefinition> PROPERTY_RENDERER =
-			new ToolMenuDecoratingRenderer<ObjectPropertyIRIDefinition>(new StyleRenderer(
+	final Renderer PROPERTY_RENDERER =
+			new ToolMenuDecoratingRenderer(new StyleRenderer(
 					"color:rgb(125, 80, 102)"));
 
 	public ObjectPropertyIRIDefinition() {

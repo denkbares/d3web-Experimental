@@ -25,7 +25,7 @@ import java.util.Collection;
 
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.xml.AbstractXMLType;
@@ -36,13 +36,14 @@ import de.knowwe.kdom.xml.XMLContent;
  * 
  * @author smark
  */
-public class EMLRenderer implements KnowWERenderer {
+public class EMLRenderer implements Renderer {
 
 	@Override
-	public void render(Section sec, UserContext user,
+	public void render(Section<?> sec, UserContext user,
 			StringBuilder string) {
 		if (sec.get() instanceof EMLXMLType) {
-			Section<AbstractXMLType> s = sec;
+			@SuppressWarnings("unchecked")
+			Section<AbstractXMLType> s = (Section<AbstractXMLType>) sec;
 
 			Section<? extends AbstractXMLType> methodSection = AbstractXMLType.findSubSectionOfTag(
 					"methods", s);

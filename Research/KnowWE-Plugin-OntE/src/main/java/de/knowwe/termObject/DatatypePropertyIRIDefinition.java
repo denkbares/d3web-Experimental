@@ -22,16 +22,15 @@ package de.knowwe.termObject;
 
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.rdfs.AbstractIRITermDefinition;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 public class DatatypePropertyIRIDefinition extends AbstractIRITermDefinition {
 
-	@SuppressWarnings("unchecked")
-	final KnowWERenderer<DatatypePropertyIRIDefinition> PROPERTY_RENDERER =
-			new ToolMenuDecoratingRenderer<DatatypePropertyIRIDefinition>(new StyleRenderer(
+	final Renderer PROPERTY_RENDERER =
+			new ToolMenuDecoratingRenderer(new StyleRenderer(
 					"color:rgb(125, 80, 102)"));
 
 	public DatatypePropertyIRIDefinition() {

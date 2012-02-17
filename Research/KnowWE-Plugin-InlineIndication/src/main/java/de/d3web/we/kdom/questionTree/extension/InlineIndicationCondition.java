@@ -22,8 +22,8 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.rendering.KnowWERenderer;
 import de.knowwe.core.kdom.rendering.NothingRenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
@@ -55,10 +55,10 @@ public class InlineIndicationCondition extends AbstractType {
 		AnonymousType open = new AnonymousType(START_KEY);
 		open.setSectionFinder(new RegexSectionFinder(
 				START_KEY, Pattern.CASE_INSENSITIVE));
-		open.setRenderer(new KnowWERenderer<Type>() {
+		open.setRenderer(new Renderer() {
 
 			@Override
-			public void render(Section<Type> sec, UserContext user, StringBuilder string) {
+			public void render(Section<?> sec, UserContext user, StringBuilder string) {
 				string.append(KnowWEUtils.maskHTML("<b>"));
 				string.append(sec.getText().substring(1).trim());
 				string.append(KnowWEUtils.maskHTML("</b>"));
