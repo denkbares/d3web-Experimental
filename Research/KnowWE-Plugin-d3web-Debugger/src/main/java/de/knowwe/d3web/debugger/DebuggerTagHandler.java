@@ -47,8 +47,9 @@ public class DebuggerTagHandler extends AbstractTagHandler {
 	}
 
 	@Override
-	public String render(KnowWEArticle article, Section<?> section, UserContext userContext, Map<String, String> parameters) {
-		// Get the page's knowledgebase and prepare some variables
+	public String render(Section<?> section, UserContext userContext,
+			Map<String, String> parameters) {
+	// Get the page's knowledgebase and prepare some variables
 		StringBuffer buffer = new StringBuffer();
 		String title = userContext.getTitle();
 		String web = userContext.getParameter(KnowWEAttributes.WEB);
