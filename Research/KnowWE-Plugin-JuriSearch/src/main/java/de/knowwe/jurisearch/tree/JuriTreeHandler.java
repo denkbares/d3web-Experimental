@@ -20,13 +20,16 @@ package de.knowwe.jurisearch.tree;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.LinkedList;
 
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
+import de.knowwe.core.event.Event;
+import de.knowwe.core.event.EventListener;
+import de.knowwe.core.event.EventManager;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
+import de.knowwe.event.KDOMCreatedEvent;
 
 
 /**
@@ -34,10 +37,18 @@ import de.knowwe.core.report.Message;
  * @author boehler
  * @created 19.01.2012
  */
-public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression>{
+public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression> implements EventListener {
+
+
+	public JuriTreeHandler() {
+		EventManager.getInstance().registerListener(this);
+	}
 
 	@Override
 	public Collection<Message> create(KnowWEArticle article, Section<JuriTreeExpression> section) {
+		/*
+		 * In the moment, do nothing.
+		 *
 		Section<QuestionIdentifier> question = Sections.findSuccessor(section, QuestionIdentifier.class);
 
 		Section<QuestionIdentifier> fatherQuestion = question.get().getFatherQuestion(question);
@@ -49,8 +60,30 @@ public class JuriTreeHandler extends D3webSubtreeHandler<JuriTreeExpression>{
 			System.out.println("- Kind: "+child);
 		}
 		System.out.println("");
-
+		*/
+		System.out.println("zuuu");
 		return new ArrayList<Message>(0);
+	}
+
+
+	public Class<? extends Event> getEvent() {
+		return KDOMCreatedEvent.class;
+	}
+
+	@Override
+	public Collection<Class<? extends Event>> getEvents() {
+		LinkedList<Class<? extends Event>> l = new LinkedList<Class<? extends Event>>();
+		l.add(KDOMCreatedEvent.class);
+		//l.add(Event.class);
+		return l;
+	}
+
+	@Override
+	public void notify(Event event) {
+		KDOMCreatedEvent e = (KDOMCreatedEvent)event;
+		KnowWEArticle article = e.getArticle();
+		Section<KnowWEArticle> section = article.getSection();
+		JuriTreeXmlGenerator jtxg = new JuriTreeXmlGenerator(section);
 	}
 
 }
