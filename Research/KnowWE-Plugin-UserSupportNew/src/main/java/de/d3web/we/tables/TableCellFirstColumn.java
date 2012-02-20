@@ -23,13 +23,13 @@ import java.util.List;
 
 import de.d3web.we.kdom.condition.CompositeCondition;
 import de.d3web.we.kdom.condition.Finding;
+import de.d3web.we.renderer.TableCellFirstColumnRenderer;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.SectionFinder;
 import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
-import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.tools.ToolMenuDecoratingRenderer;
 
 /**
@@ -45,8 +45,7 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
 public class TableCellFirstColumn extends TableCell {
 
 	public static final Renderer INDIVIDUAL_RENDERER =
-			new ToolMenuDecoratingRenderer(new StyleRenderer(
-					"color:rgb(152, 180, 12)"));
+			new ToolMenuDecoratingRenderer(new TableCellFirstColumnRenderer());
 
 	// TODO Insert the right hierarchy for CompositeCondition here
 	public TableCellFirstColumn() {
@@ -58,6 +57,7 @@ public class TableCellFirstColumn extends TableCell {
 		CompositeCondition cc = new CompositeCondition();
 		List<Type> types = new ArrayList<Type>();
 		types.add(new Finding());
+
 		cc.setAllowedTerminalConditions(types);
 		this.addChildType(cc);
 	}
@@ -67,10 +67,24 @@ public class TableCellFirstColumn extends TableCell {
 		@Override
 		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
 
-			Section<TableCellFirstColumn> first = Sections.findChildOfType(father,
-					TableCellFirstColumn.class);
-
+			Section<TableCellFirstColumn> first = Sections.findChildOfType(father, TableCellFirstColumn.class);
 			if (first != null) return null;
+
+			Section<TableNormalCell> normalCell = Sections.findChildOfType(father, TableNormalCell.class);
+			if (normalCell != null) return null;
+
+			// Check if it is a HeuristicDiagnosisTable
+			// no FirstColumnTableCell here
+			Section<HeuristicDiagnosisTable> hTable = Sections.findAncestorOfType(father, HeuristicDiagnosisTable.class);
+			if (hTable != null)
+			{
+				List<Section<TableLine>> lines = Sections.findSuccessorsOfType(hTable, TableLine.class);
+				if (lines.size() == 1) return null;
+			}
+
+			// When text.equals("Action"): Transition line in DecisionTable
+			if (text.trim().equals("Actions")) return null;
+
 
 			SectionFinder regex = new TableCellSectionFinder();
 			List<SectionFinderResult> results = regex.lookForSections(text, father, type);

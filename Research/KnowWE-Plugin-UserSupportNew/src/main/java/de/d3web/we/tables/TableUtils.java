@@ -97,7 +97,7 @@ public class TableUtils {
 		for (Section<TableLine> line : lines) {
 			cells.add(
 					Sections.findSuccessorsOfType(line, TableCell.class).
-							get(columnNumber));
+					get(columnNumber));
 		}
 
 		return cells;
@@ -186,7 +186,7 @@ public class TableUtils {
 	 */
 	public static String generateFillString(String toFill, int maxCellLength) {
 		if (toFill.length() < maxCellLength) return TableUtils.generateStringWithLength(
-					Math.abs(toFill.length() - maxCellLength), ' ');
+				Math.abs(toFill.length() - maxCellLength), ' ');
 		return "";
 	}
 
@@ -212,6 +212,8 @@ public class TableUtils {
 		List<Section<TableLine>> tableLines =
 				Sections.findSuccessorsOfType(section, TableLine.class);
 		for (Section<TableLine> line : tableLines) {
+			List<Section<TableCell>> cells = Sections.findSuccessorsOfType(line, TableCell.class);
+			int size = cells.size();
 			if (Sections.findSuccessorsOfType(line, TableCell.class).size() > maxCount) maxCount = Sections.findSuccessorsOfType(
 					line, TableCell.class).size();
 		}

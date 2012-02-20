@@ -95,6 +95,7 @@ public class TableExportAction extends AbstractAction {
 				"<a href=\"file://"+ extensionPath + "\">" +
 						bundle.getString("download-export") +  "</a>"
 				);
+		writer.append("<a href=\"" + extensionPath + "\">" + bundle.getString("download-export") +"</a>");
 
 	}
 

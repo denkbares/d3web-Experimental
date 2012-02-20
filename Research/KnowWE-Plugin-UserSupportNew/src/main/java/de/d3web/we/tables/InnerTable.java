@@ -62,4 +62,5 @@ public class InnerTable extends ITable {
 		residue.setRenderer(StyleRenderer.COMMENT);
 		this.addChildType(residue);
 	}
+
 }

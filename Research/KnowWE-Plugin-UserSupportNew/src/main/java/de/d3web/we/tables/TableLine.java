@@ -53,4 +53,7 @@ public class TableLine extends AbstractType {
 		this.addChildType(new TableNormalCell());
 	}
 
+	protected void removeFirstColumn() {
+		this.childrenTypes.remove(2);
+	}
 }

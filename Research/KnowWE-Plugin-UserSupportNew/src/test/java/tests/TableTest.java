@@ -37,6 +37,7 @@ import de.d3web.we.tables.HeuristicDiagnosisTableMarkup;
 import de.d3web.we.tables.InnerTable;
 import de.d3web.we.tables.TableCell;
 import de.d3web.we.tables.TableCellFirstColumn;
+import de.d3web.we.tables.TableDescriptionType;
 import de.d3web.we.tables.TableHeaderCell;
 import de.d3web.we.tables.TableHeaderLine;
 import de.d3web.we.tables.TableLine;
@@ -67,14 +68,14 @@ public class TableTest extends TestCase {
 	private final int decisionHeaderCellCount = 5;
 	private final int decisionLineCount = 6;
 	private final int decisionCellCount = 35;
-	private final int decisionCellFirstColumnCount = 6;
+	private final int decisionCellFirstColumnCount = 5;
 
 	private Section<HeuristicDiagnosisTableMarkup> heuristicTable = null;
 	private final int heuristicHeaderLineCount = 1;
 	private final int heuristicHeaderCellCount = 5;
 	private final int heuristicLineCount = 9;
 	private final int heuristicCellCount = 50;
-	private final int heuristicCellFirstColumnCount = 9;
+	private final int heuristicCellFirstColumnCount = 8;
 
 	@Override
 	protected void setUp() throws IOException {
@@ -92,7 +93,7 @@ public class TableTest extends TestCase {
 				Sections.findSuccessor(causalTable, CausalDiagnosisScore.class);
 		assertNotNull(score);
 
-		Section<ListSolutionType> solution = Sections.findSuccessor(score, ListSolutionType.class);
+		Section<TableDescriptionType> solution = Sections.findSuccessor(score, TableDescriptionType.class);
 		assertNotNull(solution);
 		assertEquals("Kausaler Score {\r\n", solution.getText());
 
@@ -122,7 +123,7 @@ public class TableTest extends TestCase {
 				Sections.findSuccessor(decisionTable, DecisionTable.class);
 		assertNotNull(score);
 
-		Section<ListSolutionType> solution = Sections.findSuccessor(score, ListSolutionType.class);
+		Section<TableDescriptionType> solution = Sections.findSuccessor(score, TableDescriptionType.class);
 		assertNotNull(solution);
 		assertEquals("EntscheidungsTabelle {\r\n", solution.getText());
 

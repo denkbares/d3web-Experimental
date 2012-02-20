@@ -29,12 +29,15 @@ import de.d3web.core.inference.Rule;
 import de.d3web.core.inference.RuleSet;
 import de.d3web.core.inference.condition.CondAnd;
 import de.d3web.core.inference.condition.CondEqual;
+import de.d3web.core.inference.condition.CondNot;
+import de.d3web.core.inference.condition.CondQuestion;
 import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionYN;
 import de.d3web.core.session.values.ChoiceValue;
-import de.d3web.we.kdom.xcl.list.ListSolutionType;
+import de.d3web.we.kdom.condition.CompositeCondition;
+import de.d3web.we.kdom.condition.KDOMConditionFactory;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.kdom.KnowWEArticle;
@@ -58,8 +61,9 @@ public class DecisionTable extends ITable {
 
 	public DecisionTable() {
 		this.sectionFinder = new AllTextSectionFinder();
-		this.addSubtreeHandler(Priority.LOW, new DecisionTableSubtreehandler());
-		this.addChildType(new ListSolutionType());
+		this.addSubtreeHandler(Priority.LOW, new DecisionTableSubtreeHandlerNew());
+
+		this.addChildType(new TableDescriptionType());
 
 		// cut the optional closing }
 		AnonymousTypeInvisible closing = new AnonymousTypeInvisible("closing-bracket");
@@ -67,6 +71,116 @@ public class DecisionTable extends ITable {
 		this.addChildType(closing);
 
 		this.addChildType(new InnerTable());
+	}
+
+	public class DecisionTableSubtreeHandlerNew extends GeneralSubtreeHandler<DecisionTable>
+	{
+		@Override
+		public Collection<Message> create(KnowWEArticle article, Section<DecisionTable> decisionSec)
+		{
+			Section<InnerTable> innerTable =
+					Sections.findChildOfType(decisionSec, InnerTable.class);
+			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty())
+				return null;
+
+			// TODO Right KnowledgeBase?
+			KnowWEArticle compilingArticle = KnowWEUtils.getCompilingArticles(decisionSec).iterator().next();
+			KnowledgeBase kb = D3webUtils.getKnowledgeBase(decisionSec.getWeb(), article.getTitle());
+
+			// Get all conditions and actions
+			//			List<Section<TableCellFirstColumn>> firstColumn =
+			//					Sections.findSuccessorsOfType(innerTable, TableCellFirstColumn.class);
+			List<Section<TableCell>> firstColumn = new LinkedList<Section<TableCell>>(
+					TableUtils.getColumnCells(
+							0, Sections.findChildOfType(decisionSec, InnerTable.class)));
+
+			// Get all conditions from firstColumn
+			LinkedList<Condition> conditionList = new LinkedList<Condition>();
+			Section<TableCell> cell = null;
+
+			for (int i = 0; i < firstColumn.size(); i++)
+			{
+				cell = firstColumn.get(i);
+				if (cell.getText().equals("Actions")) {
+					conditionList.add(null);
+					continue;
+				}
+				Section<CompositeCondition> cond = Sections.findChildOfType(cell, CompositeCondition.class);
+				Condition d3Cond = KDOMConditionFactory.createCondition(compilingArticle, cond);
+				conditionList.add(d3Cond);
+			}
+
+			// Do for every column
+			int cellCount = TableUtils.getMaximumTableCellCount(innerTable);
+			LinkedList<Section<TableCell>> column = null;
+			for (int j = 1; j < cellCount; j++)
+			{
+				column = new LinkedList<Section<TableCell>>(
+						TableUtils.getColumnCells(
+								j, Sections.findChildOfType(decisionSec, InnerTable.class)));
+
+				// Collect all conditions and create final ConditionAnd
+				List<Condition> conditions = new ArrayList<Condition>();
+				int i= 0;
+				Condition c = null;
+				for (; i < conditionList.size(); i++)
+				{
+					c = conditionList.get(i);
+					if (c == null) break; //Transition: Actions follow
+
+					if (column.get(i).getText().equals("+"))
+					{
+						conditions.add(c);
+					}
+					else if (column.get(i).getText().equals("-"))
+					{
+						conditions.add(new CondNot(c));
+					}
+
+				}
+				CondAnd conditionAnd = new CondAnd(conditions);
+
+				// Create actions
+				i++;
+
+				// Create Rule for every action
+				RuleSet ruleSet = new RuleSet();
+				for (; i < conditionList.size(); i++)
+				{
+					c = conditionList.get(i);
+
+					if (column.get(i).getText().equals(""))
+					{
+						c = null;
+					}
+					else if (column.get(i).getText().equals("-"))
+					{
+						conditions.add(new CondNot(c));
+					}
+
+					if (c != null)
+					{
+						ActionSetValue actionValue = new ActionSetValue();
+
+						// TODO: How to set this right? /////////////
+						CondQuestion cQ = (CondQuestion) c;
+						actionValue.setQuestion(cQ.getQuestion());
+						/////////////////////////////////////////////
+						Rule rule = new Rule(PSMethodAbstraction.class);
+						rule.setAction(actionValue);
+
+						// Create the final Rule
+						rule.setCondition(conditionAnd);
+						rule.setException(null);
+						ruleSet.addRule(rule);
+					}
+
+				}
+			}
+
+			return null;
+		}
+
 	}
 
 	/**
@@ -84,7 +198,6 @@ public class DecisionTable extends ITable {
 			if (Sections.findSuccessorsOfType(innerTable, TableCell.class).isEmpty()) return null;
 
 			// TODO Right KnowledgeBase?
-			StringBuilder content = new StringBuilder();
 			article = KnowWEUtils.getCompilingArticles(decisionSec).iterator().next();
 			KnowledgeBase kb = D3webUtils.getKnowledgeBase(decisionSec.getWeb(), article.getTitle());
 
