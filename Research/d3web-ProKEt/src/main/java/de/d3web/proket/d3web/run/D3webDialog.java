@@ -154,6 +154,7 @@ public class D3webDialog extends HttpServlet {
 
 
         HttpSession httpSession = request.getSession(true);
+
         // try to get the src parameter, i.e. the specification of the dialog
         String source = getSource(request);
         d3webParser.setSourceToParse(source);
@@ -267,15 +268,11 @@ public class D3webDialog extends HttpServlet {
             return;
         }
 
-        // in case of db login (as for EuraHS) redirect to the EuraHS-Login
-        // Servlet --> TODO refactor: rename EuraHS-Login Servlet or create
-        // superservlet to be overwritten
-        if (d3wcon.getLoginMode() == LoginMode.db) {
-            String authenticated = (String) httpSession.getAttribute("authenticated");
-            if (authenticated == null || !authenticated.equals("yes")) {
-                response.sendRedirect("../EuraHS-Login");
-                return;
-            }
+        // set handleBrowsers flag null for all actions other than handlecheck
+        // itself; that way, the check can be processed correctly also after 
+        // refreshs or the like
+        if (!action.equalsIgnoreCase("checkHandleBrowsers")) {
+            httpSession.setAttribute("handleBrowsers", null);
         }
 
         // switch action as defined by the servlet call
@@ -360,7 +357,48 @@ public class D3webDialog extends HttpServlet {
         } else if (action.equalsIgnoreCase("checkLoggingEnd")) {
             checkLoggingEnd(httpSession, response);
             return;
-        } else if (action.equalsIgnoreCase("sendFeedbackMail")) {
+
+        } else if (action.equalsIgnoreCase("checkHandleBrowsers")) {
+            PrintWriter writer = response.getWriter();
+            if (httpSession.getAttribute("handleBrowsers") == null) {
+                writer.print("true");
+                httpSession.setAttribute("handleBrowsers", "false");
+            }
+        } else if (action.equalsIgnoreCase("handleBrowsers")) {
+
+            PrintWriter writer = response.getWriter();
+
+            // is the case ONLY when called from handleUnsupportedBrowsers-js method
+            String browser = request.getParameter("browser").replace("+", " ");
+            String version = request.getParameter("version").replace("+", " ");
+
+            if (browser.equals("Explorer")
+                    && !equalOrHigher(version, "9")) {
+
+                browser = "Internet Explorer";
+                writer.print(assembleBrowserCompatibilityMessage(browser, version));
+                
+                writer.close();
+
+            } else {
+
+                // in case of db login (as for EuraHS) redirect to the EuraHS-Login
+                // Servlet --> TODO refactor: rename EuraHS-Login Servlet or create
+                // superservlet to be overwritten
+                if (d3wcon.getLoginMode() == LoginMode.db) {
+                    String authenticated = (String) httpSession.getAttribute("authenticated");
+                    if (authenticated == null || !authenticated.equals("yes")) {
+                        response.sendRedirect("../EuraHS-Login");
+                        return;
+                    }
+                }
+
+            }
+
+
+            return;
+        } else if (action.equalsIgnoreCase(
+                "sendFeedbackMail")) {
             String state = "";
             if (request.getParameter("feedback") != null) {
                 if (request.getParameter("feedback").equals("")) {
@@ -377,7 +415,8 @@ public class D3webDialog extends HttpServlet {
             }
             response.getWriter().append(state);
             return;
-        } else if (action.equalsIgnoreCase("sendUEQMail")) {
+        } else if (action.equalsIgnoreCase(
+                "sendUEQMail")) {
 
             try {
                 sendUEQMail(request, response, httpSession);
@@ -1051,6 +1090,7 @@ public class D3webDialog extends HttpServlet {
                 D3webUtils.createSession(d3wcon.getKb(), d3wcon.getDialogStrat());
         httpSession.setAttribute(D3WEB_SESSION, d3webSession);
         httpSession.setAttribute("lastLoaded", "");
+        httpSession.setAttribute("handleBrowsers", null);
         D3webUserSettings us = new D3webUserSettings();
         httpSession.setAttribute(USER_SETTINGS, us);
 
@@ -1096,7 +1136,7 @@ public class D3webDialog extends HttpServlet {
         // new ContainerCollection needed each time to get an updated dialog
         ContainerCollection cc = new ContainerCollection();
         Session d3webSess = (Session) httpSession.getAttribute(D3WEB_SESSION);
-        System.out.println(d3webSess);
+        //System.out.println(d3webSess);
         cc = d3webr.renderRoot(cc, d3webSess, httpSession);
         writer.print(cc.html.toString()); // deliver the rendered output
         writer.close(); // and close
@@ -1458,6 +1498,8 @@ public class D3webDialog extends HttpServlet {
         return source.endsWith(".xml") ? source : source + ".xml";
 
 
+
+
     }
 
     private class DialogState {
@@ -1494,7 +1536,7 @@ public class D3webDialog extends HttpServlet {
             throws IOException {
         PrintWriter writer = response.getWriter();
         if (httpSession.getAttribute("isWidget") != null) {
-            System.out.println("MARK: " + httpSession.getAttribute("isWidget"));
+            //System.out.println("MARK: " + httpSession.getAttribute("isWidget"));
             if (httpSession.getAttribute("isWidget").toString().equals("true")) {
 
                 writer.append("true");
@@ -1504,5 +1546,45 @@ public class D3webDialog extends HttpServlet {
             }
 
         }
+    }
+
+    private boolean equalOrHigher(String version, String refNr) {
+        int nr = -1;
+        if (version.contains(".")) {
+            String verArray[] = version.split("\\.");
+           nr = Integer.parseInt(verArray[0]);
+        } else {
+            nr = Integer.parseInt(version);
+        }
+        int ref = Integer.parseInt(refNr);
+
+        if (nr >= ref) {
+            return true;
+        }
+
+        return false;
+    }
+    
+    private String assembleBrowserCompatibilityMessage(String browser, String version){
+        StringBuilder bui = new StringBuilder();
+        
+        bui.append("<div id=\"BROWSERINFO\" style='width: 700px; margin-left:auto; margin-right:auto; margin-top:50px; font-size:1.5em; color: red'>");
+        bui.append("You are currently using <b>" + browser + " " + version);
+        bui.append(".</b><br /><br />This website does NOT fully support this browser/version! <br /><br />");
+        bui.append("Please use instead one of the following suggestions:");
+        bui.append("<ul>");
+        bui.append("<li>");
+        bui.append("<a href='http://www.mozilla-europe.org/de/'>Mozilla Firefox</a>");
+        bui.append("</li>");
+        bui.append("<li>");
+        bui.append("<a href='http://www.google.com/chrome/'>Google Chrome</a>");
+        bui.append("</li>");
+        bui.append("<li>");
+        bui.append("<a href='http://windows.microsoft.com/de-DE/internet-explorer/products/ie-9/features'>Internet Explorer <b>9.0</b></a>");
+        bui.append("</li>");
+        bui.append("</ul>");
+        bui.append("</div>");
+        
+        return bui.toString();    
     }
 }

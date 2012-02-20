@@ -28,9 +28,30 @@ var textStore = new Object();
 var numStore = new Object();
 var headerHeight = -1;
 var warningRecieved = false;
-
+var goon = true;
 
 $(function() {
+   
+    // check browser and warn if the wrong one is used
+    
+        var link = $.query.set("action", "checkHandleBrowsers").toString();
+        
+        link = window.location.href.replace(window.location.search, "") + link;
+        
+        $.ajax({
+            type : "GET",
+            url : link,
+            asynch: true,
+            cache : false, // needed for IE, call is not made otherwise
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success : function(html) {
+                if(html.indexOf("true")!=-1){
+                    handleUnsupportedBrowsers();
+                } 
+            }
+        });
+    
+    
         
     /* LOGIN DIALOG */
     if(usrdatLogin){
@@ -296,11 +317,6 @@ $(function() {
         } );*/
     });
 	
-    // check browser and warn if the wrong one is used
-    handleUnsupportedBrowsers();
-	
-    
-    
     if (logging) {
         
         link = $.query.set("action", "checkInitialLoggingReload").toString();
@@ -329,7 +345,7 @@ $(function() {
     
     // move the content below the header
     moveContentPart();
-    
+   
 });
 
 
@@ -358,9 +374,9 @@ function initFunctionality() {
             // value
             } else {
                 ue_logEnd();
-                // potential end session value is only logged if there was some
-                // data entry before, NOT if there was sthg like "save" button
-                // clicked
+            // potential end session value is only logged if there was some
+            // data entry before, NOT if there was sthg like "save" button
+            // clicked
             }
         }
     });
@@ -656,26 +672,6 @@ function handleUrlInput(input) {
     }
 }
 
-
-function handleUnsupportedBrowsers() {
-    var browser;
-    if($.browser.msie)
-        browser = "Internet Explorer";
-    else
-        browser = $.browser.name;
-    $("#unsupportedbrowserwarning").remove();
-    if (!($.browser.webkit
-        || $.browser.opera 
-        || $.browser.mozilla)) {
-        $('#head').children("table").children("tbody").append(
-            "<tr id='unsupportedbrowserwarning'><td colspan='3' style='color:red; font-variant:normal' >Sie benutzen " +
-            "den Browser '" + browser + "'. Dieser Browser wird von dieser Seite " +
-            "noch nicht vollständig unterstützt. Bitte nutzen sie stattdessen " +
-            "<a href='http://www.mozilla-europe.org/de/'>Mozilla Firefox</a> " +
-            "oder " +
-            "<a href='http://www.google.com/chrome/'>Google Chrome</a>!</td></tr>");
-    }
-}
 
 function handleTextFields(field){
     // workaround for IE: if login dialog is opened, no sending of
