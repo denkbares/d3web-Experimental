@@ -21,8 +21,10 @@ package de.d3web.we.servlet;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.servlet.ServletException;
@@ -36,6 +38,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import de.d3web.we.tables.poi.PoiUtils;
+import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.ActionContext;
 
 
@@ -114,7 +117,9 @@ public class UploadReceptorServlet extends HttpServlet {
 					item.write(file);
 
 					// import the file to Wiki via PoiUtils
-					ActionContext context = new ActionContext(null, null, null, req, res, null, null);
+					Map<String, String> parameters= new HashMap<String, String>();
+					parameters.put("KWikiWeb", KnowWEEnvironment.DEFAULT_WEB);
+					ActionContext context = new ActionContext(null, null, parameters, req, res, null, null);
 					PoiUtils.importTableFromFile(file, tableId, article, context);
 				}
 				out.close();
