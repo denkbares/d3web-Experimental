@@ -1,0 +1,317 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dialog sub-type='front' type='legal' css='legal, nofoot' header='Name of Wiki' answer-type='oc' and-or-type="OR">
+  <question title='Dummy-Knoten' id='101'/>
+  <question title='Ist das Arbeitsverhältnis wirksam gekündigt worden?' id='102' parent-id='101'/>
+  <question title='Ist die Kündigung formell rechtmäßig?' id='103' parent-id='102'/>
+  <question title='Umfasst sie nötigen Inhalt, Schriftform, Berechtigtenunterzeichnung und Zugang?' id='104' parent-id='103'  bonus-text="Prompt: Hat die Kündigungserklärung den erforderlichen Inhalt, hält sie die Schriftform ein, hat ein Berechtigter unterzeichnet und ist der Zugang erfolgt?
+Erläuterung:
+Sollte die Kündigungserklärung nicht den erforderlichen Inhalt haben, nicht schriftlich ausgesprochen worden sein, keine Berechtigter unterzeichnet haben oder kein Zugang vorligen, so ist die Kündigung bereits deshalb unwirksam."/>
+  <question title='Hat die Kündigungserklärung den erforderlichen Inhalt?' id='105' parent-id='104'/>
+  <question title='Liegt eine eindeutige Erklärung vor bzw. ist der Wille zur Kündigung erkennbar?' id='106' parent-id='105'/>
+  <question title='Ist der Beendigungstermin ersichtlich?' id='107' parent-id='105'/>
+  <question title='Ist eine Begründung nicht nötig oder liegt eine solche vor?' id='108' parent-id='105' and-or-type="AND"/>
+  <question title='Ist eine Begründung nicht nötig?' id='109' parent-id='108'  bonus-text="
+Eine Begründung ist in folgenden Fällen nötig:
+-	es besteht ein Ausbildungsverhältnis,
+-	es ergibt sich aus einem geltenden Tarifvertrag,
+-	es ergibt sich aus einer geltenden Betriebsvereinbarung,
+-	man hat zuvor die Mitteilung des außerordentlichen Kündigungsgrundes verlangt."/>
+  <question title='Liegt eine Begründung vor?' id='110' parent-id='108'/>
+  <question title='Ist die Schriftform eingehalten?' id='111' parent-id='104'  bonus-text="
+Es ist für eine wirksame Kündigung die sog. Schriftform nötig. D.h. die Kündigung muss schriftlich abgefasst und mit handschriftlicher, eigenhändiger  Namensunterschrift unter-zeichnet sein. Die Unterschrift muss hierbei den Text abschließen. Die elektronische Form ist für die Kündigung des Arbeitsverhältnisses ausgeschlossen. 
+Nicht ausreichend sind insbesondere:
+-	eine Kündigung per Email,
+-	eine mündliche Kündigung."/>
+  <question title='Hat ein Berechtigter unterzeichnet?' id='112' parent-id='104' and-or-type="AND"/>
+  <question title='Hat der Arbeitgeber selbst gekündigt oder ist der Unterzeichner direkt berechtigt?' id='113' parent-id='112'/>
+  <question title='Ist der Unterzeichner durch eine Vollmacht legitimiert?' id='114' parent-id='112' and-or-type="AND"/>
+  <question title='Lag eine Vollmacht bei Ausspruch der Kündigung vor?' id='115' parent-id='114'/>
+  <question title='Wurde die Kündigung aufgrund fehlender Vollmacht bei Ausspruch der Kündigung nicht zurückgewiesen?' id='116' parent-id='114'  bonus-text="
+Liegt eine Vollmacht bei Ausspruch der Kündigung nicht vor, so gilt:
+-	Erfolgt deshalb eine unverzügliche (abhängig vom Einzelfall, in der Regel sind vier Tage nicht zu lang) Zurückweisung der Kündigung seitens des Arbeitnehmers, so ist die Kündigung unwirksam und der Arbeitgeber muss die Kündigung ordnungsgemäß wiederholen.
+-	Erfolgt keine Zurückweisung, so ist die Kündigung wirksam."/>
+  <question title='Ist der Zugang erfolgt?' id='117' parent-id='104'  bonus-text="
+Die Kündigungserklärung ist eine sog. einseitige, empfangsbedürftige Willenserklärung. D.h. der Empfänger muss sie nicht annehmen bzw. akzeptieren, damit sie wirksam wird, sondern sie nur wahrnehmen. Der Zugang muss also erfolgt sein.
+Der Zugang ist erfolgt, wenn unter gewöhnlichen Umständen die Möglichkeit der Kennt-nisnahme besteht. Ab diesem Zeitpunkt läuft die Kündigungsfrist. 
+Der Zugang kann erfolgen durch
+-	Übergabe - unabhängig davon, ob wann und wann der Empfänger die Kündigung liest
+-	so in den Machtbereich des Empfängers gelangen, dass unter gewöhnlichen Um-ständen damit zu rechnen ist, dass Kenntnis erlangt wird – der Zeitpunkt der Mög-lichkeit der Kenntnisnahme ist entscheidend, nicht der Zeitpunkt, wann tatsächlich Kenntnis genommen wurde – d.h. z.B.
+o	bei Einwurf in den Briefkasten – auch beim Einwurf-Einschreiben: Zugang sobald mit Leerung zu rechnen ist,
+o	bei Einlegung ins Postfach: Zugang sobald zum Abholen bereit gehalten und üblicherweise mit dem Abholen gerechnet werden kann,
+o	bei Aushändigung an einen Empfangsboten (nach Verkehrsauffassung als ermächtigt geltend, z.B. Familienangehörige, Lebensgefährten, Hausange-stellte, Vermieter): Zugang zum Zeitpunkt der Aushändigung,
+o	bei Abwesenheit: Zugang mit Zustellung,
+o	bei grundloser (nicht anzunehmen bei unzureichender Frankierung / Nach-porto) Ablehnung: Zugang zum Zeitpunkt der Ablehnung, wenn mit rechtserheblichen Mitteilungen in der Vertragbeziehung zu rechnen war – bei Familienangehörigen als Empfangsboten gilt dies nur, wenn der Empfänger zuvor dementsprechend auf diesen Einfluss genommen hat,
+o	bei Übergabe-Einschreiben, das mangels Anwesenheit nicht übergeben werden konnte: Zugang bei Abholung des Einschreibens (innerhalb der Aufbewahrungsfrist) – bei einer rechtsmissbräuchlichen Zugangsverhinderung (d.h. Nichtabholung/Verhinderung der Aushändigung trotz Kenntnis des Benachrichtigungsscheins, wenn der Empfänger weiß/damit rechnen muss, dass ein Kündigungsschreiben möglich ist) gilt die Kündigung als zugegangen."/>
+  <question title='War kein Betriebsrat vorhanden oder wurde der Betriebsrat korrekt angehört?' id='118' parent-id='103' and-or-type="AND"/>
+  <question title='War kein Betriebsrat vorhanden?' id='119' parent-id='118'/>
+  <question title='Wurde der Betriebsrat korrekt angehört?' id='120' parent-id='118'  bonus-text="
+Wurde eine Kündigung ausgesprochen, ohne dass zuvor eine Anhörung/Beteiligung des Betriebsrates erfolgt ist, so ist diese Kündigung unwirksam. Diese Unwirksamkeit kann auch nicht, z.B. durch nachträgliche Anhörung, geheilt werden. Die Kündigung bleibt unwirksam und es muss eine neue Kündigung erfolgen. 
+Wurde das Anhörungsverfahren nicht korrekt ausgeführt, führt dies nur dann zur Unwirk-samkeit der Kündigung, wenn der Arbeitgeber den Mangel zu verantworten hat, z.B. mangelnde Information an den Betriebsrat (vgl. auch die nachfolgenden Fragen). Sollte der Betriebsrat den Mangel zu vertreten haben, bleibt die Kündigung wirksam, auch wenn der Arbeitgeber den Mangel erahnte.
+Besonderheiten gibt es beim Nachschieben von Kündigunsgsgründen. Dieses ist grund-sätzlich für Sachverhalte von vor Ausspruch der Kündigung möglich – unabhängig davon, ob der Kündigende sie bei Kündigungszugang kannte. Dies gilt z.B. nicht, wenn eine Begründungspflicht (z.B. im Ausbildungsverhältnis, vgl. auch Frage oben) gegeben ist und der nachgeschobene Grund der Kündigung ein sozialtypisch anderes Gewicht verleihen würde. Dies gilt z.B. auch nicht bei einer außerordentlichen Kündigung für Kündigungsgründe, die dem Kündigenden mehr als zwei Wochen vor Kündigungsausspruch bekannt waren. Nach Kündigungszugang entstandene Gründe sind nicht als eigener Kündigungsgrund nachschiebbar. Ist nun ein Betriebsrat vorhanden und zu beteiligen, so können neue Kündigunsgründe sowie Tatsachen, die erst zu einem kündigungsrelevanten Grund führen (z.B. Abmahnung), die bereits bei Kündigungsausspruch bekannt waren, aber dem Betriebsrat nicht mitgeteilt wurden, nicht nachgeschoben werden. Ist ein Betriebsrat vorhanden und zu beteiligen, können Kündigungsgründe, die bei Kündigungsausspruch entstanden, aber noch nicht bekannt waren, nur mit erneuter Beteiligung des Betriebsrates nachgeschoben werden. Eine erneute Kündigung ist dann nicht nötig."/>
+  <question title='War der Betriebsrat vollständig und rechtzeitig informiert?' id='121' parent-id='120'/>
+  <question title='War die richtige Person im Betriebsrat informiert?' id='122' parent-id='121'  bonus-text="
+Es muss eine Information an den Betriebsratsvorsitzenden oder dessen Stellvertreter er-folgt sein."/>
+  <question title='Erfolgte die Information des Betriebsrats vor Ausspruch der Kündigung?' id='123' parent-id='121'/>
+  <question title='Erfolgte die Information des Betriebsrats inhaltich vollständig?' id='124' parent-id='121'  bonus-text="
+Die Information muss beinhalten:
+-		Kündigungsabsicht
+-		Angaben zur Person des Arbeitnehmers einschließlich Sozialdaten
+-	Art der Kündigung
+-		Wesentliche Kündigungsgründe
+-		Kündigungsfrist"/>
+  <question title='Hat der Betriebsrat eine Stellungnahme abgegeben?' id='125' parent-id='120' and-or-type="AND" bonus-text="
+Stellungnahme kann hierbei sein:
+-		Bedenken
+-		Widerspruch bei ordentlicher Kündigung
+-		Zustimmung
+Notwendig sind hierbei Schriftform und eine Begründung. Allerdings muss lediglich eine Stellungnahme erfolgt sein. Diese kann auch fingiert werden (vgl. eine der nachfolgenden Fragen).
+Nach der Anhörung des Betriebsrats kann – unabhängig davon, ob und wie Stellung genommen wurde – (formell) wirksam gekündigt werden.
+Ein Widerspruch des Betriebsrats macht die Kündigung nicht in jedem Fall (materiell) un-wirksam, kann aber zur Annahme von Sozialwidrigkeit/Unwirksamkeit führen, wenn der Betriebsrat form- und fristgerecht widersprochen hat, weil die Kündigung gegen eine be-triebliche Auswahlrichtlinie verstößt oder der Arbeitnehmer weiterbeschäftigt werden könnte an einem anderen Arbeitsplatz im selben Betrieb oder in einem anderen Betrieb des Unternehmens (vgl. auch Frage unten). Zudem ist der Arbeitgeber bei einem ordnungsgemäßen Widerspruch grundsätzlich verpflichtet, den Arbeitnehmer, der fristgerecht Kündigungsschutzklage eingereicht hat, auf Verlangen zu bisherigen Bedingungen bis zum rechtskräftigen Abschluss des Kündigungsschutzstreites weiterzubeschäftigen."/>
+  <question title='Wurde eine Stellungnahme erklärt?' id='126' parent-id='125'/>
+  <question title='Wird eine Stellungnahme nach Zeitablauf fingiert?' id='127' parent-id='125'  bonus-text="
+Die Stellungnahme des Betriebsrats wird nach folgendem Zeitablauf fingiert:
+-		Bei ordentlicher Kündigung nach einer Woche,
+-		Bei außerordentliche Kündigung unverzüglich (höchstens drei Tage)."/>
+  <question title='War keine Zustimmung des Betriebsrats nötig oder wurde sie erteilt?' id='128' parent-id='120' and-or-type="AND"/>
+  <question title='War keine Zustimmung des Betriebsrats nötig?' id='129' parent-id='128'  bonus-text="
+Eine Zustimmung des Betriebsrats ist z.B. nötig bei außerordentlicher Kündigung eines 
+-	Betriebsratsmitglieds,
+-	Ersatzmitglieds während der Vertretung,
+-	Mitglieds der Jugend- und Auszubildendenvertretung,
+-	Wahlvorstands,
+-	Wahlbewerbers."/>
+  <question title='Wurde eine Zustimmung erteilt?' id='130' parent-id='128'  bonus-text="
+Fehlt die vorherige Zustimmung, ist die Kündigung unwirksam. Eine nachträgliche Ge-nehmigung ändert daran nichts."/>
+  <question title='Ist die Kündigung materiell/inhaltlich rechtmäßig?' id='131' parent-id='102'/>
+  <question title='Ist die Kündigung nicht durch Befristung ausgeschlossen?' id='132' parent-id='131' and-or-type="AND"/>
+  <question title='War der Arbeitsvertrag nicht' id='133' parent-id='132'/>
+  <question title='War keine zeitliche Befristung vereinbart?' id='134' parent-id='133'  bonus-text="
+Eine Befristung muss in Schriftform vereinbart werden. Sie kann vereinbart werden als zeitliche Befristung für einen bestimmten Zeitraum oder als Zweckbefristung. Für eine Zweckbefristung ist ein sachlicher Grund nötig, während der zeitlichen Befristung grund-sätzlich folgende Grenzen gesetzt sind:
+1)	Grundsätzlich:
+-	mit demselben Arbeitgeber hat zuvor kein befristetes oder unbefristetes Arbeitsver-hältnis bestanden
+-	grundsätzlich besteht keine Betriebszugehörigkeit von mehr als 2 Jahren; Abwei-chungen können in Tarifverträgen geregelt sein
+-		grundsätzlich gibt es bis zur Gesamtdauer von zwei Jahren nicht mehr als 3 Verlängerungen; Abweichungen können in Tarifverträgen geregelt sein
+2)	Als Ausnahme zu 1) in den ersten vier Jahren nach der Gründung eines Unternehmens:
+-	die kalendermäßige Befristung ist bis zur Dauer von vier Jahren zulässig
+-	bis zur Gesamtdauer von vier Jahren ist die mehrfache Verlängerung der kalen-dermäßigen Befristung zulässig
+3)		Als Ausnahme zu 1), wenn der Arbeitnehmer bei Beginn des befristeten Arbeitsverhältnisses das 52. Lebensjahr vollendet hat und
+a)	unmittelbar vor Beginn mindestens vier Monate beschäftigungslos im Sinne des SGB III gewesen ist oder
+b)	Transferkurzarbeitergeld bezogen oder
+c)	an einer öffentlich geförderten Beschäftigungsmaßnahme nach dem SGB II oder SGB III teilgenommen hat:
+-	die kalendermäßige Befristung ist bis zur Dauer von fünf Jahren zulässig
+-	bis zur Gesamtdauer von fünf Jahren ist die mehrfache Verlängerung der kalen-dermäßigen Befristung zulässig"/>
+  <question title='Ging ein befristetes Arbeitsverhältnis in ein unbefristetes über?' id='135' parent-id='133'  bonus-text="
+Dies ist z.B. der Fall, wenn bei wirksamer Befristung eine stillschweigende Fortsetzung über den vereinbarten Endtermin des Arbeitsverhältnisses in Kenntnis des Arbeitgebers hinaus erfolgt und kein unverzüglicher Widerspruch erfolgt. Denn dann gilt das Arbeitsverhältnis als auf unbestimmte Zeit verlängert."/>
+  <question title='War keine Zweckbefristung vereinbart oder fehlte ein Befristungsgrund?' id='136' parent-id='133' and-or-type="AND"/>
+  <question title='War keine Zweckbefristung vereinbart?' id='137' parent-id='136'/>
+  <question title='Fehlte ein Befristungsgrund?' id='138' parent-id='136'  bonus-text="
+Eine Befristung muss in Schriftform vereinbart werden. Sie kann auch vereinbart werden als Zweckbefristung. Für eine Zweckbefristung ist ein sachlicher Grund nötig. Ein solcher liegt laut Gesetz (§ 14 Abs. 1 S. 2 TzBfG) insbesondere vor, wenn 
+-	der betriebliche Bedarf an der Arbeitsleistung nur vorübergehend besteht,
+-	die Befristung im Anschluss an eine Ausbildung oder ein Studium erfolgt, um den Übergang des Arbeitnehmers in eine Anschlussbeschäftigung zu erleichtern,
+-	der Arbeitnehmer zur Vertretung eines anderen Arbeitnehmers beschäftigt wird,
+-	die Eigenart der Arbeitsleistung die Befristung rechtfertigt,
+-	die Befristung zur Erprobung erfolgt,
+-	in der Person des Arbeitnehmers liegende Gründe die Befristung rechtfertigen,
+-	der Arbeitnehmer aus Haushaltsmitteln vergütet wird, die haushaltsrechtlich für eine befristete Beschäftigung bestimmt sind, und er entsprechend beschäftigt wird oder
+-	die Befristung auf einem gerichtlichen Vergleich beruht."/>
+  <question title='War die Kündigung während der Befristung zugelassen?' id='139' parent-id='132'  bonus-text="
+Im befristeten Arbeitsvertrag kann die Möglichkeit einer ordentlichen Kündigung vor Ablauf der Befristung eingeräumt sein. Ist dies nicht der Fall oder hierzu gar nichts im Vertrag genannt, so ist die ordentliche Kündigung grundsätzlich ausgeschlossen. Eine außerordentliche Kündigung ist aber auch dann denkbar. 
+Ist eine ordentliche Kündigung während der Befristung nicht zugelassen, endet das Ar-beitsverhältnis daher grundsätzlich nach Ablauf der vereinbarten Befristung. Eine Aus-nahme gäbe es bei einer berechtigten außerordentlichen Kündigung oder bei einem ein-vernehmlichen Aufhebungsvertrag. Eine weitere Ausnahme gibt es z.B. im Rahmen einer Insolvenz. Dann ist auch ohne vertragliche Einräumung eine ordentliche Kündigung mit einer Frist von drei Monaten zum Monatsende möglich."/>
+  <question title='War ein befristetes Arbeitsverhältnis ausgelaufen?' id='140' parent-id='132'/>
+  <question title='Unterliegt die Kündigung nicht einem sog. Sonderkündigungsschutz?' id='141' parent-id='131'  bonus-text="
+Wenn die Kündigung einem sog. Sonderkündigungsschutz unterliegt, müssen besondere Regeln beachtet werden, insbesondere ob überhaupt eine ordentliche Kündigung zulässig ist, und wenn ja, unter welchen Umständen. Einem Sonderkündigungsschutz unterliegen Sie insbesondere als:
+-	(ehemaliges) Betriebsratsmitglied oder (ehemaliges) Personalratsmitglied
+-		(ehemaliger) Wahlvorstand oder (ehemaliger) Wahlbewerber bei Betriebs-rats- oder Personalratswahlen
+-		(ehemaliges) Mitglied von Jugend- und Auszubildendenvertretungen
+-		Auszubildender nach der Probezeit 
+-		Schwangere oder Mutter bis vier Monate nach der Entbindung
+-		Person in Elternzeit
+-		Person in Pflegezeit
+-	(ehemaliger) Schwerbehindertenvertreter 
+-		Schwerbehinderter 
+-	(ehemaliger) betrieblicher Datenschutzbeauftragter
+-		(ehemaliger) Immissionsschutzbeauftragter
+-		Person während Ableistung des Wehr- oder Zivildienstes"/>
+  <question title='Ist die Kündigungsfrist eingehalten?' id='142' parent-id='131'/>
+  <question title='Wird die ordentliche Kündigungsfrist eingehalten oder liegt eine außerordentliche Kündigung vor?' id='143' parent-id='142' and-or-type="AND"/>
+  <question title='Wird die ordentliche Kündigungsfrist eingehalten?' id='144' parent-id='143'  bonus-text="
+Die Kündigungsfrist beginnt mit Zugang der Kündigung zu laufen. Zum Zugang vgl. Frage oben.
+Die ordentliche Kündigungsfrist ergibt sich grundsätzlich aus dem Gesetz, § 622 BGB. Die gesetzlich vorgesehene ordentliche Kündigungsfrist ist auch einzuhalten, wenn z.B. im Arbeitsvertrag auf die gesetzlichen Vorschriften verwiesen wird.
+Es kann aber abweichend von der gesetzlichen Regelung eine andere ordentliche Kündigungsfrist vereinbart werden. Dies kann geschehen in Tarifverträgen, in Betriebsvereinbarungen oder in Arbeitsverträgen. In Arbeitsverträgen allerdings nur unter gewissen Bedingungen. Im Folgenden wird – bevor die gesetzlich vorgesehene ordentliche Kündigungsfrist überprüft wird - zunächst abgefragt, ob es solche vom Gesetz abweichende Vereinbarungen zur ordentlichen Kündigungsfrist gab, und wenn ja, ob sie eingehalten wurden. 
+Das Gesetz sieht Folgendes vor:
+§ 622 Abs. 1 BGB:
+Das Arbeitsverhältnis eines Arbeiters oder eines Angestellten (Arbeitnehmers) kann mit einer Frist von vier Wochen zum Fünfzehnten oder zum Ende eines Kalendermonats gekündigt werden.
+§ 622 Abs. 2 BGB:
+Für eine Kündigung durch den Arbeitgeber beträgt die Kündigungsfrist, wenn das Arbeitsverhältnis in dem Betrieb oder Unternehmen 
+1. zwei Jahre bestanden hat, einen Monat zum Ende eines Kalendermonats,
+2. fünf Jahre bestanden hat, zwei Monate zum Ende eines Kalendermonats,
+3. acht Jahre bestanden hat, drei Monate zum Ende eines Kalendermonats,
+4. zehn Jahre bestanden hat, vier Monate zum Ende eines Kalendermonats,
+5. zwölf Jahre bestanden hat, fünf Monate zum Ende eines Kalendermonats,
+6. 15 Jahre bestanden hat, sechs Monate zum Ende eines Kalendermonats,
+7. 20 Jahre bestanden hat, sieben Monate zum Ende eines Kalendermonats.
+Bei der Berechnung der Beschäftigungsdauer werden Zeiten, die vor der Vollendung des 25. Lebensjahrs des Arbeitnehmers liegen, nicht berücksichtigt.
+§ 622 Abs. 3 BGB:
+Während einer vereinbarten Probezeit, längstens für die Dauer von sechs Monaten, kann das Arbeitsverhältnis mit einer Frist von zwei Wochen gekündigt werden."/>
+  <question title='Gibt es keine Regelung im Tarifvertrag oder wird die dortige Regelung eingehal-ten?' id='145' parent-id='144' and-or-type="AND"/>
+  <question title='Gibt es keine Regelung im Tarifvertrag?' id='146' parent-id='145'/>
+  <question title='Wird die Regelung im Tarifvertrag eingehalten?' id='147' parent-id='145'/>
+  <question title='Gibt es keine Regelung in einer Betriebsvereinbarung oder wird die dortige Rege-lung eingehalten?' id='148' parent-id='144' and-or-type="AND"/>
+  <question title='Gibt es keine Regelung in einer Betriebsvereinbarung?' id='149' parent-id='148'/>
+  <question title='Wird die Regelung in der Betriebsvereinbarung eingehalten?' id='150' parent-id='148'/>
+  <question title='Gibt es keine Regelung im Arbeitsvertrag oder wird eine zulässige Regelung im Ar-beitsvertrag eingehalten?' id='151' parent-id='144' and-or-type="AND"/>
+  <question title='Gibt es keine Regelung im Arbeitsvertrag?' id='152' parent-id='151'/>
+  <question title='Wird eine zulässige Regelung im Arbeitsvertrag eingehalten?' id='153' parent-id='151'/>
+  <question title='Liegt eine zulässige Abweichung vom Gesetz vor?' id='154' parent-id='153' and-or-type="AND"/>
+  <question title='Liegt eine zulässige Verkürzung der Kündigungsfrist vor?' id='155' parent-id='154'  bonus-text="
+Im Arbeitsvertrag kann eine kürzere Kündigungsfrist grundsätzlich vereinbart werden. Allerdings kann abweichend von der Regelung in § 622 Abs. 1 BGB (Das Arbeitsverhältnis eines Arbeiters oder eines Angestellten (Arbeitnehmers) kann mit einer Frist von vier Wochen zum Fünfzehnten oder zum Ende eines Kalendermonats gekündigt werden.) nur unter bestimmten Bedingungen eine kürzere Kündigungsfrist vereinbart werden. § 622 Abs. 5 BGB sieht hierbei Folgendes vor:
+Einzelvertraglich kann eine kürzere als die in Absatz 1 genannte Kündigungsfrist nur vereinbart werden, 
+1.wenn ein Arbeitnehmer zur vorübergehenden Aushilfe eingestellt ist; dies gilt nicht, wenn das Arbeitsverhältnis über die Zeit von drei Monaten hinaus fortgesetzt wird;
+2.wenn der Arbeitgeber in der Regel nicht mehr als 20 Arbeitnehmer ausschließlich der zu ihrer Berufsbildung Beschäftigten beschäftigt und die Kündigungsfrist vier Wochen nicht unterschreitet.
+Bei der Feststellung der Zahl der beschäftigten Arbeitnehmer sind teilzeitbeschäftigte Arbeitnehmer mit einer regelmäßigen wöchentlichen Arbeitszeit von nicht mehr als 20 Stunden mit 0,5 und nicht mehr als 30 Stunden mit 0,75 zu berücksichtigen. …"/>
+  <question title='Liegt eine zulässige Verlängerung der Kündigungsfrist vor?' id='156' parent-id='154'  bonus-text="
+Im Arbeitsvertrag kann eine längere Kündigungsfrist jeweils unter folgender Bedingung aus § 622 Abs. 6 BGB vereinbart werden:
+Für die Kündigung des Arbeitsverhältnisses durch den Arbeitnehmer darf keine längere Frist vereinbart werden als für die Kündigung durch den Arbeitgeber."/>
+  <question title='Wird die Regelung im Arbeitsvertrag eingehalten?' id='157' parent-id='153'/>
+  <question title='Gibt es vom Gesetz abweichende Regelungen in Tarifvertrag, Betriebsvereinbarung oder Arbeitsvertrag oder wird die gesetzlich vorgesehene ordentliche Kündigungsfrist eingehalten?' id='158' parent-id='144' and-or-type="AND"/>
+  <question title='Gibt es vom Gesetz abweichende Regelungen in Tarifvertrag, Betriebsvereinba-rung oder Arbeitsvertrag?' id='159' parent-id='158'/>
+  <question title='Wird die gesetzlich vorgesehene ordentliche Kündigungsfrist eingehalten?' id='160' parent-id='158'  bonus-text="
+Gesetzlich sind folgende ordentliche Kündigungsfristen vorgesehen:
+-		In der Probezeit, längstens für die Dauer von sechs Monaten: zwei Wochen
+-		Danach für Arbeitnehmer: immer vier Wochen zum Fünfzehnten oder zum Ende eines Kalendermonats
+-		Danach für Arbeitgeber:
+o		Bis 2 Jahre: vier Wochen zum Fünfzehnten oder zum Ende eines Kalender-monats
+o		Ab 2 Jahre: einen Monat zum Ende eines Kalendermonats
+o		Ab fünf Jahre: zwei Monate zum Ende eines Kalendermonats
+o		Ab acht Jahre: drei Monate zum Ende eines Kalendermonats
+o		Ab zehn Jahre: vier Monate zum Ende eines Kalendermonats
+o		Ab zwölf Jahre: fünf Monate zum Ende eines Kalendermonats
+o		Ab 15 Jahre: sechs Monate zum Ende eines Kalendermonats
+o		Ab 20 Jahre: sieben Monate zum Ende eines Kalendermonats"/>
+  <question title='Liegt eine außerordentliche' id='161' parent-id='143'/>
+  <question title='Liegt keine ordentliche Kündigung vor oder ist ein erforderlicher, zulässiger Kündi-gungsgrund für eine ordentliche Kündigung gegeben?' id='162' parent-id='131' and-or-type="AND"/>
+  <question title='Liegt keine ordentliche Kündigung vor?' id='163' parent-id='162'/>
+  <question title='Liegt ein erforderlicher, zulässiger Kündigungsgrund für eine ordentliche Kündigung vor?' id='164' parent-id='162'/>
+  <question title='Ist eine soziale Rechtfertigung nicht nötig oder liegt sie vor?' id='165' parent-id='164' and-or-type="AND"/>
+  <question title='Ist eine soziale Rechtfertigung nicht nötig?' id='166' parent-id='165'  bonus-text="
+Eine soziale Rechtfertigung für ordentliche Arbeitgeberkündigungen im Sinne des Kündigungsschutzgesetzes ist dann nicht nötig, wenn das Kündigungsschutzgesetz nicht anwendbar ist. Das Kündigungsschutzgesetz ist nicht anwendbar, wenn
+-	die Arbeitnehmereigenschaft zu verneinen ist, d.h. insbesondere bei Selbständi-gen, arbeitnehmerähnlichen Personen;
+-	in der Regel fünf oder weniger Arbeitnehmer ausschließlich der zu ihrer Berufsbil-dung Beschäftigten beschäftigt werden, soweit deren Arbeitsverhältnis vor dem 31. Dezember 2003 begonnen hat (bei der Feststellung der Zahl der beschäftigten Ar-beitnehmer sind hierbei teilzeitbeschäftigte Arbeitnehmer mit einer regelmäßigen wöchentlichen Arbeitszeit von nicht mehr als 20 Stunden mit 0,5 und mit einer re-gelmäßigen wöchentlichen Arbeitszeit von nicht mehr als 30 Stunden mit 0,75 zu berücksichtigen); 
+-	in der Regel zehn oder weniger Arbeitnehmer ausschließlich der zu ihrer Berufsbildung Beschäftigten beschäftigt werden (bei der Feststellung der Zahl der beschäftigten Arbeitnehmer sind hierbei teilzeitbeschäftigte Arbeitnehmer mit einer regelmäßigen wöchentlichen Arbeitszeit von nicht mehr als 20 Stunden mit 0,5 und mit einer regelmäßigen wöchentlichen Arbeitszeit von nicht mehr als 30 Stunden mit 0,75 zu berücksichtigen);
+-	das Arbeitsverhältnis in demselben Betrieb oder Unternehmen ohne Unterbrechung kürzer als sechs Monate bestanden hat."/>
+  <question title='Liegt eine soziale Rechtfertigung vor?' id='167' parent-id='165'/>
+  <question title='Liegt kein die Sozialwidrigkeit bedingender Widerspruch des Betriebsrates vor?' id='168' parent-id='167'  bonus-text="
+Ein Widerspruch des Betriebsrats macht die Kündigung nicht in jedem Fall (materiell) un-wirksam, kann aber zur Annahme von Sozialwidrigkeit/Unwirksamkeit führen, wenn der Betriebsrat form- und fristgerecht widersprochen hat, weil 
+-	die Kündigung gegen eine betriebliche Auswahlrichtlinie verstößt oder 
+-	der Arbeitnehmer weiterbeschäftigt werden könnte an einem anderen Arbeitsplatz im selben Betrieb oder in einem anderen Betrieb des Unternehmens.
+Dies gilt entsprechend, wenn nach zumutbaren Umschulungs- oder Fortbildungsmaßnahmen oder unter geänderten Arbeitsbedingungen eine Weiterbeschäftigung des Arbeitnehmers möglich ist und der Arbeitnehmer hiermit einverstanden ist."/>
+  <question title='Liegt ein sozial rechtfertigender Kündigungsgrund vor?' id='169' parent-id='167' and-or-type="AND"/>
+  <question title='Liegt ein verhaltensbedingter Kündigungsgrund vor?' id='170' parent-id='169'/>
+  <question title='Liegt eine Pflichtverletzung/ein vertragswidriges Verhalten des Arbeitnehmers vor?' id='171' parent-id='170'  bonus-text="
+Eine Pflichtverletzung/ein vertragswidriges Verhalten des Arbeitnehmers liegt insbesondere vor bei Schlechtleistung, vertragswidrigem Verhalten oder Verstößen im Vertrauensbereich. Es muss sich nach objektivem Maßstab um eine so schwere Pflichtverletzung handeln, dass eine ordentliche Kündigung angemessen erscheint.
+Beispiele für eine Pflichtverletzung/ein vertragswidriges Verhalten des Arbeitnehmers sind: 
+-	signifikante Schlechtleistung (aufgrund mangelndem Leistungswillen)
+-	unberechtigte Arbeitsverweigerung
+-	vorgetäuschte Arbeitsunfähigkeit
+-	Mobbing
+-	nicht erlaubte private Telefon- und Internetnutzung
+-	unentschuldigtes Fehlen/wiederholte Verspätung
+-	Verstoß gegen Sicherheitsvorschriften (z.B. Vertsoß gegen Rauchverbot, Helm-pflicht)
+-	strafbare Handlungen (z.B. Diebstahl, Verrat von Betriebsgeheimnissen) – diese können ggf. bei dementsprechender Interessenabwägung sogar eine außerordentliche Kündigung rechtfertigen"/>
+  <question title='Ist eine Abmahnung entbehrlich oder liegt eine solche vor?' id='172' parent-id='170' and-or-type="AND"/>
+  <question title='Ist eine Abmahnung entbehrlich?' id='173' parent-id='172'  bonus-text="
+Eine Abmahnung ist insbesondere entbehrlich, 
+-	wenn es sich um eine Pflichtverletzung im Vertrauensbereich (z.B. unerlaubte Handlungen) handelt, außer 
+o	es handelt sich um ein steuerbares Verhalten und eine Wiederherstellung des Vertrauens ist zu erwarten oder 
+o	der Arbeitnehmer konnte vertretbar von einer Vertragsgemäßheit oder davon ausgehen, dass der Arbeitgeber das Verhalten nicht als ein das Arbeitsver-hältnis gefährdendes ansehen wird (z.B. Dulden privater Telefonate)
+-	wenn sie aufgrund der Schwere oder der Hartnäckigkeit bei der Pflichtverletzung nicht erfolgsversprechend erscheint."/>
+  <question title='Liegt eine einschlägige verhältnismäßige Abmahnung zu einem gleichartigen Verstoß vor?' id='174' parent-id='172'/>
+  <question title='Gibt es keine Möglichkeit einer zumutbaren anderweitigen Beschäftigung im Un-ternehmen?' id='175' parent-id='170'/>
+  <question title='Fällt die Interessenabwägung zugunsten des Arbeitgebers aus?' id='176' parent-id='170'  bonus-text="
+Unabhängig von der Schwere des Pflichtverstoßes hat unter einer Gesamtwürdigung der Umstände eine Interessenabwägung bei einer verhaltensbedingten ordentlichen Kündi-gung zu erfolgen.
+HINWEIS: Bestehen z.B. durch die Sozialdaten (Betriebszugehörigkeit, Lebensalter, Un-terhaltspflichten, Schwerbehinderung) Anhaltspunkte zugunsten des Arbeitnehmers, so sollten Sie sofort einen Anwalt einschalten, der die Erfolgsaussichten einer Kündigungs-schutzklage – auch anhand der örtlichen Rechtsprechung – näher prüft. Die Interessen-abwägung ist einzelfallabhängig."/>
+  <question title='Sprechen die Sozialdaten nicht zugunsten des Arbeitnehmers?' id='177' parent-id='176'  bonus-text="
+Sozialdaten bedeutet:
+-	Betriebszugehörigkeit
+-	Lebensalter
+-	Unterhaltspflichten
+-	Schwerbehinderung"/>
+  <question title='Hat der Arbeitnehmer wiederholt trotz Abmahnung grobe Pflichtvernachlässigungen vorsätzlich begangen?' id='178' parent-id='176'/>
+  <question title='Kam es durch die Vertragsverletzung des Arbeitnehmers zu neagtiven Auswir-kungen/konkreten Störungen im Betrieb?' id='179' parent-id='176'/>
+  <question title='Liegt ein betriebsbedingter Kündigungsgrund vor?' id='180' parent-id='169'/>
+  <question title='Gibt es einen betrieblichen Grund?' id='181' parent-id='180'  bonus-text="
+Ein betrieblicher Grund ist zu bejahen bei einem dauerhaften Wegfall der Beschäfti-gungsmöglichkeit aufgrund einer unternehmerischen Entscheidung. Die Unternehmerentscheidung unterliegt hierbei lediglich einer Missbrauchskontrolle im Hinblick auf offensichtliche Unsachlichkeit oder Willkürlichkeit. Es kann sich um innerbetriebliche und/oder um außerbetriebliche Gründe handeln. 
+Beispiele für innerbetriebliche Gründe sind:
+-	Abbau von Arbeitsplätzen
+-	Betriebsstilllegung
+-	Umstellung/ Einschränkung der Produktion
+-	Verlagerung der Produktion ins Ausland
+Beispiele für außerbetriebliche Gründe sind:
+-	Absatzschwierigkeiten
+-	Umsatzrückgang
+-	Auftragsmangel
+Ein Betriebsübergang oder der Übergang eines Betriebsteils darf gemäß § 613a Abs. 4 BGB nicht Kündigungsgrund sein. § 613a Abs. 4 BGB lautet:
+„… Die Kündigung des Arbeitsverhältnisses eines Arbeitnehmers durch den bisherigen Arbeitgeber oder durch den neuen Inhaber wegen des Übergangs eines Betriebs oder eines Betriebsteils ist unwirksam. Das Recht zur Kündigung des Arbeitsverhältnisses aus anderen Gründen bleibt unberührt. …“"/>
+  <question title='Ist das Ultima-Ratio-Prinzip eingehalten?' id='182' parent-id='180'  bonus-text="
+Das Ultima-Ratio-Prinzip ist bei der betriebsbedingten Kündigung dadurch konkretisiert, dass die betrieblichen Erfordernisse dringend sein müssen. Dringlichkeit ist gegeben, wenn eine Zwangslage vorherrscht, die dem Arbeitgeber die Kündigung unvermeidbar machte, d.h notwendige Folge der betrieblichen Erfordernisse musste die Kündigung sein. Das Ultima-Ratio-Prinzip ist bei der betriebsbedingten Kündigung nicht eingehalten, wenn eine Versetzung/ eine anderweitige Beschäftigung auf einem gleichwertigen oder zumutbaren Arbeitsplatz im Unternehmen vorhanden ist. Dann ist die Kündigung vermeidbar und unverhältnismäßig. Unternehmen bedeutet hierbei das ganze Unternehmen, nicht nur der Betrieb, aber grundsätzlich nicht der ganze Konzern."/>
+  <question title='Fällt die Interessenabwägung zugunsten des Arbeitgebers aus?' id='183' parent-id='180'  bonus-text="
+Unabhängig von der Schwere des Pflichtverstoßes hat unter einer Gesamtwürdigung der Umstände eine Interessenabwägung bei einer verhaltensbedingten ordentlichen Kündi-gung zu erfolgen.
+HINWEIS: Bestehen z.B. durch die Sozialdaten (Betriebszugehörigkeit, Lebensalter, Un-terhaltspflichten, Schwerbehinderung) Anhaltspunkte zugunsten des Arbeitnehmers, so sollten Sie sofort einen Anwalt einschalten, der die Erfolgsaussichten einer Kündigungs-schutzklage – auch anhand der örtlichen Rechtsprechung – näher prüft. Die Interessen-abwägung ist einzelfallabhängig."/>
+  <question title='Ist die Sozialauswahl korrekt durchgeführt?' id='184' parent-id='180'  bonus-text="
+Um die Sozialauswahl ordnungsgemäß durchzuführen, muss der Arbeitgeber prüfen, ob nicht eine Person mit geringerer Schutzbedürftigkeit vorrangig zu kündigen ist. Die Sozialauswahl ist insbesondere korrekt ausgeführt, wenn Folgendes gilt:
+-	Es gibt keine andere Person, die vergleichbar ist. Dies bezieht sich auf den Be-trieb, nicht auf das Unternehmen/andere Betriebe des Unternehmens oder gar den Konzern/andere Unternehmen des Konzerns. Vergleichbarkeit bezieht sich auf die horizontale Ebene, d.h. nur auf dieselbe Betriebshierarchie-Ebene, und auf austauschbare Arbeitnehmer, die ohne Arbeitsvertragsänderung, nur durch Weisung , auf den anderen Arbeitsplatz versetzt werden könnten.
+-	Für eine andere, vergleichbare Person besteht ein Grund für die Beibehaltung,d.h. es besteht  ein berechtigtes betriebliches Interesse an ihrer Weiterbeschäftigung, insbesondere aufgrund ihrer Kenntnisse, Fähigkeiten und Leistungen oder zur Si-cherung einer ausgewogenen betreiblichen Personalstruktur.
+-	Die Auswahlentscheidung zwischen den vergleichbaren Person ist unter ausrei-chender Berücksichtigung nachfolgend genannter sozialer Gesichtspunkte, von denen keiner herausragende Bedeutung hat, erfolgt: 
+o	Dauer der Betriebszugehörigkeit 
+o	Lebensalter 
+o	Unterhaltspflichten 
+o	Schwerbehinderung"/>
+  <question title='Liegt ein personenbedingter Kündigungsgrund vor?' id='185' parent-id='169'  bonus-text="
+Personenbedingte Kündigungsgründe können beispielsweise sein:
+-	Krankheit
+-	Alkohol- sowie Drogensucht
+-	Fehlende Eignung im Rahmen vertraglich geschuldeter Arbeitsleistung
+-	Beschäftigungsverbot/-hindernis (z.B. fehlende erforderliche Erlaubnis zur Berufs-ausübung)
+-	Haft"/>
+  <question title='Gibt es eine negative Zukunftsprognose?' id='186' parent-id='185'  bonus-text="
+Die notwendige negative Zukunftsprognose liegt insbesondere vor, wenn
+-	bei Kündigungszugang die nötige/n Fähigkeiten/Eignung fehlt und
+-	nicht mit alsbaldiger Wiederherstellung der Fähigkeiten/Eignung zu rechnen ist."/>
+  <question title='Ist von einer erheblichen Beeinträchtigung betrieblicher oder wirtschaftlicher Interessen zum Zeitpunkt des Kündigungszugangs und befürchtetermaßen auch danach auszugehen?' id='187' parent-id='185'/>
+  <question title='Besteht keine Möglichkeit einer zumutbaren anderweitigen Beschäftigung im Unternehmen?' id='188' parent-id='185'/>
+  <question title='Fällt die Interessenabwägung zugunsten des Arbeitgebers aus?' id='189' parent-id='185'  bonus-text="
+Unabhängig von der Schwere des Pflichtverstoßes hat unter einer Gesamtwürdigung der Umstände eine Interessenabwägung bei einer verhaltensbedingten ordentlichen Kündi-gung zu erfolgen.
+HINWEIS: Bestehen z.B. durch die Sozialdaten (Betriebszugehörigkeit, Lebensalter, Un-terhaltspflichten, Schwerbehinderung) Anhaltspunkte zugunsten des Arbeitnehmers, so sollten Sie sofort einen Anwalt einschalten, der die Erfolgsaussichten einer Kündigungs-schutzklage – auch anhand der örtlichen Rechtsprechung – näher prüft. Die Interessen-abwägung ist einzelfallabhängig."/>
+  <question title='Liegt kein sonstiger allgemeiner Unwirksamkeitsgrund vor?' id='190' parent-id='164'/>
+  <question title='Liegt kein Verstoß gegen das Maßregelungsverbot vor?' id='191' parent-id='190'  bonus-text="
+Ein Verstoß gegen das Maßregelungsverbot liegt vor, wenn tragender Grund für die Kün-digung eine zulässige Rechtsausübung des Arbeitnehmers ist. Eine Kündigung unter Verstoß gegen das Maßregelungsverbot ist aufgrund eines Verstoßes gegen ein gesetzli-ches Verbot unwirksam."/>
+  <question title='Liegen keine verwerflichen Motive vor?' id='192' parent-id='190'  bonus-text="
+Verwerfliche Motive sind z.B.:
+-	Rachsucht
+-	Vergeltung
+Eine Kündigung aus verwerflichen Motiven ist aufgrund Sittenwidrigkeit unwirksam."/>
+  <question title='Liegt kein Verstoß gegen Treu und Glauben vor?' id='193' parent-id='190'  bonus-text="
+Ein Verstoß gegen Treu und Glauben ist beispielsweise gegeben bei:
+-	Willkürlichkeit
+-	Kündigung zur Unzeit (Bsp. Zustellung im Krankenhaus am selben Tag wie der Arbeitsunfall, nicht aber: bloße Zustellung z.B. an gesetzlichen Feiertagen, Sonntagen oder Krankheitstagen)
+-	Kündigung in verletzender/ungehöriger Form (Bsp.: Aushang am schwarzen Brett)
+Eine Kündigung unter Verstoß gegen Treu und Glauben ist aufgrund dieses Verstoßes unwirksam."/>
+  <question title='Liegt keine Kündigung wegen eines Betriebsübergangs oder eines Betriebsteils-übergangs vor?' id='194' parent-id='190'  bonus-text="
+Erfolgt eine Kündigung wegen eines Betriebsübergangs oder eines Betriebsteilsüber-gangs, so ist sie unwirksam, auch wenn das Kündigungsschutzgesetz nicht für diesen Arbeitnehmer anwendbar ist."/>
+  <question title='Liegt keine außerordentliche Kündigung vor oder ist ein zulässiger Kündigungsgrund für eine außerordentliche Kündigung gegeben?' id='195' parent-id='131' and-or-type="AND"/>
+  <question title='Liegt keine außerordentliche Kündigung vor?' id='196' parent-id='195'/>
+  <question title='Liegt ein zulässiger Kündigungsgrund für eine außerordentliche Kündigung vor?' id='197' parent-id='195'/>
+  <question title='Erfolgte die Kündigung innerhalb von zwei Wochen nach Bekanntwerden der dem Grund zugrundeliegenden Tatsachen?' id='198' parent-id='197'/>
+  <question title='Liegt ein wichtiger Grund vor?' id='199' parent-id='197'  bonus-text="
+Ein wichtiger Grund liegt vor, wenn Tatsachen gegeben sind, die es dem Kündigenden unter Berücksichtigung aller Einzelfallumstände und unter beidseitiger Interessenabwä-gung unzumutbar machen, das Arbeitsverhältnis noch bis zum Ablauf der Kündigungsfrist aufrecht zu erhalten. Das Verhalten muss also an sich als außerordentlicher Kündigungsgrund geeignet sein und zudem im konkreten Fall insbesondere durch die Interessenabwägung. Absolute außerordentliche Kündigungsgründe gibt es nicht, da der Einzelfall entscheidend ist. Beispiele für wichtige Gründe, die regelmäßig an sich im Rahmen einer außerordentlichen Kündigung geeignet sind, lauten: 
+-	beharrliche Arbeitsverweigerung ohne Grund
+-	grobe Beleidigungen, Bedrohungen, Täuschungen gegenüber dem Arbeitgeber
+-	nicht erlaubte intensive Internet- und heimliche Telefonnutzung zu privaten Zwe-cken
+-	Selbstbeurlaubung
+-	strafbare Handlungen und deren Verdacht (z.B. Diebstahl, Verrat von Betriebsge-heimnissen) – durch die im Einzelfall zu erfolgende Interessenabwägung können diese ggf. auch „nur“ zu einer ordentlichen Kündigung berechtigen"/>
+  <question title='Ist das Ultima-Ratio-Prinzip eingehalten?' id='200' parent-id='197'  bonus-text="
+Das Ultima-Ratio-Prinzip ist bei der betriebsbedingten Kündigung dadurch konkretisiert, dass die betrieblichen Erfordernisse dringend sein müssen. Dringlichkeit ist gegeben, wenn eine Zwangslage vorherrscht, die dem Arbeitgeber die Kündigung unvermeidbar machte, d.h notwendige Folge der betrieblichen Erfordernisse musste die Kündigung sein. Das Ultima-Ratio-Prinzip ist bei der betriebsbedingten Kündigung nicht eingehalten, wenn eine Versetzung/ eine anderweitige Beschäftigung auf einem gleichwertigen oder zumutbaren Arbeitsplatz im Unternehmen vorhanden ist. Dann ist die Kündigung vermeidbar und unverhältnismäßig. Unternehmen bedeutet hierbei das ganze Unternehmen, nicht nur der Betrieb, aber grundsätzlich nicht der ganze Konzern."/>
+  <question title='Fällt die Interessenabwägung zugunsten des Arbeitgebers aus?' id='201' parent-id='197'  bonus-text="
+Unabhängig von der Schwere des Pflichtverstoßes hat unter einer Gesamtwürdigung der Umstände eine Interessenabwägung bei einer verhaltensbedingten ordentlichen Kündi-gung zu erfolgen.
+HINWEIS: Bestehen z.B. durch die Sozialdaten (Betriebszugehörigkeit, Lebensalter, Un-terhaltspflichten, Schwerbehinderung) Anhaltspunkte zugunsten des Arbeitnehmers, so sollten Sie sofort einen Anwalt einschalten, der die Erfolgsaussichten einer Kündigungs-schutzklage – auch anhand der örtlichen Rechtsprechung – näher prüft. Die Interessen-abwägung ist einzelfallabhängig."/>
+</dialog>
