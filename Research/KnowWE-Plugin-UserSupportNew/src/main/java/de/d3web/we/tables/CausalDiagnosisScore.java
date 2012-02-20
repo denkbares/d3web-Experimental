@@ -18,6 +18,7 @@
  */
 package de.d3web.we.tables;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,7 +32,6 @@ import de.d3web.scoring.ActionHeuristicPS;
 import de.d3web.scoring.Score;
 import de.d3web.we.kdom.condition.CompositeCondition;
 import de.d3web.we.kdom.condition.KDOMConditionFactory;
-import de.d3web.we.util.UserSupportUtil;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.kdom.AbstractType;
@@ -131,7 +131,15 @@ public class CausalDiagnosisScore extends AbstractType {
 					if (!weight.equals(""))
 					{
 						ActionHeuristicPS action = new ActionHeuristicPS();
-						Score score = UserSupportUtil.getScore(weight);
+						Score score = Score.N1;
+						try
+						{
+							score = de.d3web.core.io.utilities.Util.getScore(weight);
+						}
+						catch (IOException e)
+						{
+							// TODO Auto-generated catch block
+						}
 						action.setScore(score);
 						action.setSolution(solution);
 						Rule rule = new Rule(PSMethodAbstraction.class);
