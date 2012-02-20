@@ -20,7 +20,7 @@ public class ExtendDataPropertyFrame extends DataPropertyFrame {
 		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
 		this.setSectionFinder(new RegexSectionFinder(p));
 
-		int pos = this.getAllowedChildrenTypes().indexOf(DataPropertyDefinition.getInstance());
+		int pos = this.getChildrenTypes().indexOf(DataPropertyDefinition.getInstance());
 		this.removeChildType(DataPropertyDefinition.getInstance());
 		this.childrenTypes.add(pos, new EntityReference(KEYWORD));
 	}

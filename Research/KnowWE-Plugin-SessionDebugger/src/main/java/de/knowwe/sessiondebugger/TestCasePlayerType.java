@@ -42,7 +42,7 @@ public class TestCasePlayerType extends DefaultMarkupType {
 	public TestCasePlayerType() {
 		super(MARKUP);
 		this.setIgnorePackageCompile(false);
-		for (Type type : this.getAllowedChildrenTypes()) {
+		for (Type type : this.getChildrenTypes()) {
 			if (type instanceof ContentType) {
 				((ContentType) type).setRenderer(
 						new ReRenderSectionMarkerRenderer(

@@ -20,7 +20,7 @@
 		<parameter id="description" value="Type InlineIndicationCondition to be added to QuestionLine" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="scope" value="de.d3web.we.kdom.questionTree.QuestionLine" />
+		<parameter id="scope" value="QuestionLine" />
 	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -31,7 +31,7 @@
 		<parameter id="description" value="Type InlineIndicationCondition to be added to QClassLine" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
-		<parameter id="scope" value="de.d3web.we.kdom.questionTree.QClassLine" />
+		<parameter id="scope" value="QClassLine" />
 	</extension>
 
 </plugin>

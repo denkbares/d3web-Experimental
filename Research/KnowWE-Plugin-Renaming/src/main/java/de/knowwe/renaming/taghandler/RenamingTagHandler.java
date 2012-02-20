@@ -240,7 +240,7 @@ public class RenamingTagHandler extends AbstractHTMLTagHandler {
 						li.appendChild(koTypeNameText);
 						ul.appendChild(li);
 						// mach mit den Kindern weiter
-						printULNodes(koType.getAllowedChildrenTypes(), dom, li,
+						printULNodes(koType.getChildrenTypes(), dom, li,
 								usedType);
 					}
 				}

@@ -182,7 +182,7 @@ public class EMLXMLType extends AbstractXMLType {
 	class EMLContent extends XMLContent {
 
 		protected EMLContent() {
-			this.childrenTypes.add(new GenericXMLObjectType());
+			this.childrenTypes.add(GenericXMLObjectType.getInstance());
 
 		}
 

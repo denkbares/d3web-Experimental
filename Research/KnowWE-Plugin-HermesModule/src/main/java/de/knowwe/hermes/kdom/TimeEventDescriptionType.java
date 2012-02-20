@@ -47,7 +47,7 @@ public class TimeEventDescriptionType extends AbstractType {
 	}
 
 	private Type findContentType(SemanticAnnotation semanticAnnotation) {
-		List<Type> annoChildren = semanticAnnotation.getAllowedChildrenTypes();
+		List<Type> annoChildren = semanticAnnotation.getChildrenTypes();
 		for (Type Type : annoChildren) {
 			if (Type instanceof SemanticAnnotationContent) {
 				return Type;

@@ -57,7 +57,7 @@ public class SubClassing extends AbstractXMLType {
 
 		private void replaceRootType(
 				AbstractType subClassingDashTree) {
-			List<Type> types = subClassingDashTree.getAllowedChildrenTypes();
+			List<Type> types = subClassingDashTree.getChildrenTypes();
 			for (Type Type : types) {
 				if (Type instanceof DashSubtree) {
 					try {

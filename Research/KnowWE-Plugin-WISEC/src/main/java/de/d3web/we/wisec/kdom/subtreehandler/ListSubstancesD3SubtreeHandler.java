@@ -61,7 +61,7 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 			new QContainer(kb.getRootQASet(), "Substances");
 
 			// Check if we want to use the KDOM
-			boolean useKDom = s.get().getAllowedChildrenTypes().size() > 0 ? true : false;
+			boolean useKDom = s.get().getChildrenTypes().size() > 0 ? true : false;
 
 			// Process the Table Content
 			if (useKDom) createD3ObjectsUsingKDom(s, kb, listID, article.getWeb());

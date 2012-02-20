@@ -71,7 +71,7 @@ public class ObjectTypeTreeHandler extends AbstractTagHandler {
 		sb.append("\\\\\n %%(font-size: 70%) Renderer: __"
 				+ t.getRenderer().getClass().getSimpleName() + "__%% \n");
 
-		for (Type child_type : t.getAllowedChildrenTypes()) {
+		for (Type child_type : t.getChildrenTypes()) {
 			if (doNotRecurse) {
 				sb.append(asterisks(level + 1));
 				sb.append(KnowWEUtils.maskHTML("<a href=\"#objecttype-"

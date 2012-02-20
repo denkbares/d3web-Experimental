@@ -63,7 +63,7 @@ public class ManchesterClassExpression extends CompositeCondition {
 	public void initRestrictionTypes(boolean isLast) {
 
 		// get count of the CompositeConditions children
-		int ccChildren = getAllowedChildrenTypes().size();
+		int ccChildren = getChildrenTypes().size();
 
 		// add new NonTerminalChildren ...
 		// ... like a NonTerminalList ...

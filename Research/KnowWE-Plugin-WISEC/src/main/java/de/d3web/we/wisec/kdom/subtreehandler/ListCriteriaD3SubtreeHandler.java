@@ -63,7 +63,7 @@ public class ListCriteriaD3SubtreeHandler extends D3webSubtreeHandler<ListCriter
 			new QContainer(kb.getRootQASet(), "Counter");
 
 			// Check if we want to use the KDOM
-			boolean useKDom = s.get().getAllowedChildrenTypes().size() > 0 ? true : false;
+			boolean useKDom = s.get().getChildrenTypes().size() > 0 ? true : false;
 
 			// Process the Table Content
 			if (useKDom) createD3ObjectsUsingKDom(s, kb, listID);

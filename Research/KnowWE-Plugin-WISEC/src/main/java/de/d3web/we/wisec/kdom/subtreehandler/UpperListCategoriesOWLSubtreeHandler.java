@@ -63,7 +63,7 @@ public class UpperListCategoriesOWLSubtreeHandler extends OwlSubtreeHandler<Uppe
 		createListTypeStatement(ioo, ns, listID);
 
 		// Check if we want to use the KDOM
-		boolean useKDom = s.get().getAllowedChildrenTypes().size() > 0 ? true : false;
+		boolean useKDom = s.get().getChildrenTypes().size() > 0 ? true : false;
 
 		// Process the Table Content
 		if (useKDom) createOWLUsingKDom(s, ioo, ns, listID);

@@ -132,7 +132,7 @@ public class XMLSectionFinderTest extends TestCase {
 		 */
 
 		RootType rootType = RootType.getInstance();
-		rootType.addChildType(new GenericXMLObjectType());
+		rootType.addChildType(GenericXMLObjectType.getInstance());
 
 		content = this.readXMLFile("0");
 		article = KnowWEArticle.createArticle(content, "Test_Article2", rootType,

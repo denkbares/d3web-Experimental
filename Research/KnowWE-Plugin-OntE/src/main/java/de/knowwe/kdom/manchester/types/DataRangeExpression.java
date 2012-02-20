@@ -27,7 +27,7 @@ public class DataRangeExpression extends CompositeCondition {
 	public void initRestrictionTypes() {
 
 		// get count of the CompositeConditions children
-		int ccChildren = getAllowedChildrenTypes().size();
+		int ccChildren = getChildrenTypes().size();
 
 		// add new NonTerminalChildren ...
 		// ... like a NonTerminalList ...^
