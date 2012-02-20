@@ -55,7 +55,7 @@ public class CausalDiagnosisScore extends AbstractType {
 
 	public CausalDiagnosisScore() {
 		this.sectionFinder = new AllTextSectionFinder();
-		this.addSubtreeHandler(Priority.LOW, new CausalDiagnosisSubtreeHandler());
+		this.addSubtreeHandler(Priority.LOWEST, new CausalDiagnosisSubtreeHandler());
 
 		this.addChildType(new TableDescriptionType());
 

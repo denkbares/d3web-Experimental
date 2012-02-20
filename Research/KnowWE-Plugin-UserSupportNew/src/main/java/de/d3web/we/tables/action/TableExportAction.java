@@ -92,10 +92,10 @@ public class TableExportAction extends AbstractAction {
 		// write the downloadlink beneath the exportbutton
 		Writer writer = context.getWriter();
 		writer.append(
-				"<a href=\"file://"+ extensionPath + "\">" +
+				"<a href=\"file://"+ extensionPath + "\" target=\"_blank\">" +
 						bundle.getString("download-export") +  "</a>"
 				);
-		writer.append("<a href=\"" + extensionPath + "\">" + bundle.getString("download-export") +"</a>");
+		//		writer.append("<a href=\"" + extensionPath + "\">" + bundle.getString("download-export") +"</a>");
 
 	}
 

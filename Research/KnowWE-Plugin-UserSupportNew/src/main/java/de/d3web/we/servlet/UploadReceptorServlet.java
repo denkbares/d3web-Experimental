@@ -114,6 +114,7 @@ public class UploadReceptorServlet extends HttpServlet {
 					 * Write file to the ultimate location.
 					 */
 					File file = new File(destinationDir, "workbook-" + tableId + ".xls");
+					file.deleteOnExit();
 					item.write(file);
 
 					// import the file to Wiki via PoiUtils

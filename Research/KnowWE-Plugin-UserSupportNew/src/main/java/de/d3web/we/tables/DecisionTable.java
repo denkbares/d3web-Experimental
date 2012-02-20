@@ -30,7 +30,6 @@ import de.d3web.core.inference.RuleSet;
 import de.d3web.core.inference.condition.CondAnd;
 import de.d3web.core.inference.condition.CondEqual;
 import de.d3web.core.inference.condition.CondNot;
-import de.d3web.core.inference.condition.CondQuestion;
 import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
@@ -61,7 +60,7 @@ public class DecisionTable extends ITable {
 
 	public DecisionTable() {
 		this.sectionFinder = new AllTextSectionFinder();
-		this.addSubtreeHandler(Priority.LOW, new DecisionTableSubtreeHandlerNew());
+		this.addSubtreeHandler(Priority.LOWEST, new DecisionTableSubtreeHandlerNew());
 
 		this.addChildType(new TableDescriptionType());
 
@@ -148,6 +147,7 @@ public class DecisionTable extends ITable {
 				for (; i < conditionList.size(); i++)
 				{
 					c = conditionList.get(i);
+					if (c == null) continue;
 
 					if (column.get(i).getText().equals(""))
 					{
@@ -163,8 +163,9 @@ public class DecisionTable extends ITable {
 						ActionSetValue actionValue = new ActionSetValue();
 
 						// TODO: How to set this right? /////////////
-						CondQuestion cQ = (CondQuestion) c;
+						CondEqual cQ = (CondEqual) c;
 						actionValue.setQuestion(cQ.getQuestion());
+						actionValue.setValue(cQ.getValue());
 						/////////////////////////////////////////////
 						Rule rule = new Rule(PSMethodAbstraction.class);
 						rule.setAction(actionValue);
