@@ -33,7 +33,7 @@ import com.wcohen.ss.MongeElkan;
 public class MongeElkanAlgorithm implements MatchingAlgorithm {
 
 	@Override
-	public List<Suggestion> getMatches(int maxCount, String toMatch,
+	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch,
 			List<String> localTermMatches) {
 
 		MongeElkan mE = new MongeElkan();
@@ -44,7 +44,7 @@ public class MongeElkanAlgorithm implements MatchingAlgorithm {
 		for (String match : localTermMatches) {
 			double score = mE.score(toMatch, match);
 			// TODO threshold is experimental
-			if (score >= 0.7) {
+			if (score >= threshold) {
 				suggestions.add(new Suggestion(match, score));
 			}
 		}

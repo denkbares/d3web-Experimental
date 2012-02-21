@@ -1,8 +1,8 @@
 %%CausalDiagnosisScore 
 Kausaler Score {
-              |Gewicht|Kiefer|Tanne| ,
-Nadeln = ja   |G5(32) |++    |     |++    ,
-Stamm = braun |G5(32) |++    |++   |++    ,
+                    |Diagnose-1 | Diagnose-2 | Diagnose-3,
+Make of car = Dacia |P5         |            |           , 
+Make of car = BMW   |P7         | P3         |N2         ,
 
 @package tabledemo
 }
@@ -10,13 +10,13 @@ Stamm = braun |G5(32) |++    |++   |++    ,
 
 %%DecisionTable
 EntscheidungsTabelle {
-                             | Regel1  | Regel2 | Regel3 | Regel4,
-    Lieferfähig              | Yes     | Yes    | No     | No,
-    Angaben vollständig      | No      | Yes    | Yes    | No,
-    Actions                  |         |        |        |   ,
-    Lieferung mit Rechnung   | x       |        | x      |   ,
-    Lieferung mit Nachnahme  |         | x      |        | x ,  
-    Angaben vervollständigen |         |        | x      | x ,
+                              | Regel1  | Regel2 | Regel3 | Regel4,
+    NOT Make of car = BMW     | +       | +      | -      | -     ,
+    Make of car = Fiat        | -       | +      | +      | -     ,
+            Actions           |         |        |        |       ,
+    Engine noises = ringing   | +       |        | +      |       ,
+    Make of car = VW          |         | +      |        | +     ,  
+    Make of car = Opel        |         |        | +      | +     ,
     }
 
 @package tabledemo

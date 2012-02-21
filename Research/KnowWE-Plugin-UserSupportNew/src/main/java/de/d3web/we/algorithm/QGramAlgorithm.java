@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 University Wuerzburg, Computer Science VI
+ * Copyright (C) 2012 University Wuerzburg, Computer Science VI
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -22,42 +22,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import com.wcohen.ss.Levenstein;
+import uk.ac.shef.wit.simmetrics.similaritymetrics.QGramsDistance;
 
 
 /**
  * 
  * @author Johannes Dienst
- * @created 04.10.2011
+ * @created 21.02.2012
  */
-public class LevenshteinAlgorithm implements MatchingAlgorithm {
-
-	private final double threshold;
-
-	public LevenshteinAlgorithm(int threshold) {
-		this.threshold = threshold;
-	}
-
-	public LevenshteinAlgorithm() {
-		this.threshold = 5;
-	}
+public class QGramAlgorithm implements MatchingAlgorithm
+{
 
 	@Override
-	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch,
-			List<String> localTermMatches) {
-
-		Levenstein l = new Levenstein();
+	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> localTermMatches)
+	{
+		QGramsDistance qG = new QGramsDistance();
 
 		PriorityQueue<Suggestion> suggestions =
 				new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
 
 		for (String term : localTermMatches) {
-			double score = l.score(toMatch, term);
-			int max = Math.max(term.length(), toMatch.length());
-			double minuend = score / max;
-			double result = 1.0 + (minuend);
-			if (result >= threshold) {
-				suggestions.add(new Suggestion(term, result));
+			double score = qG.getSimilarity(toMatch, term);
+			if (score >= threshold) {
+				suggestions.add(new Suggestion(term, score));
 			}
 		}
 

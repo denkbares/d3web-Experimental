@@ -18,46 +18,22 @@
  */
 package de.d3web.we.algorithm;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.PriorityQueue;
-
-import com.wcohen.ss.SmithWaterman;
 
 
 /**
  * 
  * @author Johannes Dienst
- * @created 03.02.2012
+ * @created 21.02.2012 
  */
-public class SmithWatermanAlgorithm implements MatchingAlgorithm
+public class PermutedWinkler implements MatchingAlgorithm
 {
 
 	@Override
 	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> localTermMatches)
 	{
-
-		SmithWaterman sM = new SmithWaterman();
-
-		PriorityQueue<Suggestion> suggestions =
-				new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
-
-		for (String term : localTermMatches) {
-			double score = sM.score(toMatch, term);
-			int div = Math.max(term.length(), toMatch.length()); // could also be min or 0.5*(s1+s2)
-			double exactMatchScore = 5.0; // TODO where is this from?
-			double result = score / (div * exactMatchScore);
-			if (result >= threshold) {
-				suggestions.add(new Suggestion(term, result));
-			}
-		}
-
-		List<Suggestion> toReturn = new ArrayList<Suggestion>();
-		for (int i = 0; i < maxCount; i++) {
-			Suggestion s = suggestions.poll();
-			if (s != null) toReturn.add(s);
-		}
-		return toReturn;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

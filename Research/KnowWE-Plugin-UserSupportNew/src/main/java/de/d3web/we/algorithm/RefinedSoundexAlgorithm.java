@@ -34,7 +34,7 @@ import org.apache.commons.codec.language.RefinedSoundex;
 public class RefinedSoundexAlgorithm implements MatchingAlgorithm {
 
 	@Override
-	public List<Suggestion> getMatches(int maxCount, String toMatch,
+	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch,
 			List<String> localTermMatches) {
 
 		RefinedSoundex rS = new RefinedSoundex();
@@ -44,8 +44,6 @@ public class RefinedSoundexAlgorithm implements MatchingAlgorithm {
 		for (String match : localTermMatches) {
 			try {
 				int diff = rS.difference(toMatch, match);
-
-				// TODO experimental value
 				if (diff <= 1) {
 					suggestions.add(new Suggestion(toMatch, diff));
 				}

@@ -105,7 +105,7 @@ public class CausalDiagnosisScore extends AbstractType {
 
 			// Collect cells for columns
 			// TODO Check if header misses 1st Tablecell
-			int cellCount = TableUtils.getMaximumTableCellCount(innerTable);
+			int cellCount = Sections.findSuccessorsOfType(innerTable, TableLine.class).size();
 
 			// Do for every column: Create Scoring rules
 			List<Section<TableCell>> column = null;
@@ -143,7 +143,7 @@ public class CausalDiagnosisScore extends AbstractType {
 						action.setScore(score);
 						action.setSolution(solution);
 						Rule rule = new Rule(PSMethodAbstraction.class);
-						rule.setCondition(conditionList.get(i));
+						rule.setCondition(conditionList.get(i-1));
 						rule.setAction(action);
 					}
 				}

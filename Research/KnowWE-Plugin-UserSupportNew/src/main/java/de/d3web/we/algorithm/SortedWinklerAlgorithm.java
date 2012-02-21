@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 University Wuerzburg, Computer Science VI
+ * Copyright (C) 2012 University Wuerzburg, Computer Science VI
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -19,45 +19,63 @@
 package de.d3web.we.algorithm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import com.wcohen.ss.Levenstein;
+import com.wcohen.ss.JaroWinkler;
 
 
 /**
  * 
  * @author Johannes Dienst
- * @created 04.10.2011
+ * @created 21.02.2012
  */
-public class LevenshteinAlgorithm implements MatchingAlgorithm {
-
-	private final double threshold;
-
-	public LevenshteinAlgorithm(int threshold) {
-		this.threshold = threshold;
-	}
-
-	public LevenshteinAlgorithm() {
-		this.threshold = 5;
-	}
+public class SortedWinklerAlgorithm implements MatchingAlgorithm
+{
 
 	@Override
-	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch,
-			List<String> localTermMatches) {
+	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> localTermMatches)
+	{
+		JaroWinkler jW = new JaroWinkler();
 
-		Levenstein l = new Levenstein();
+		if (toMatch.contains(" "))
+		{
+			String[] a = toMatch.split(" ");
+			List<String> sortMe = Arrays.asList(a);
+			Collections.sort(sortMe);
+			toMatch = "";
+			for (String s : a)
+			{
+				toMatch += s;
+				toMatch += " ";
+			}
+
+			toMatch = toMatch.substring(0, toMatch.length()-1);
+		}
 
 		PriorityQueue<Suggestion> suggestions =
 				new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
 
 		for (String term : localTermMatches) {
-			double score = l.score(toMatch, term);
-			int max = Math.max(term.length(), toMatch.length());
-			double minuend = score / max;
-			double result = 1.0 + (minuend);
-			if (result >= threshold) {
-				suggestions.add(new Suggestion(term, result));
+			String term2 = term;
+			if (term.contains(" "))
+			{
+				String[] a = term.split(" ");
+				List<String> sortMe = Arrays.asList(a);
+				Collections.sort(sortMe);
+				term2 = "";
+				for (String s : a)
+				{
+					term2 += s;
+					term2 += " ";
+				}
+				term2 = term2.substring(0, term2.length()- 1);
+			}
+			double score = jW.score(toMatch, term2);
+			if (score >= threshold) {
+				suggestions.add(new Suggestion(term, score ));
 			}
 		}
 

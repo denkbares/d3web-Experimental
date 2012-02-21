@@ -18,7 +18,9 @@
  */
 package de.d3web.we.algorithm;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 
 /**
@@ -49,6 +51,24 @@ public class AlgorithmUtil {
 				return matchList.indexOf(pair);
 		}
 		return -1;
+	}
+
+	/**
+	 * 
+	 * @created 21.02.2012
+	 * @param maxCount
+	 * @param suggestions
+	 * @return
+	 */
+	public static List<Suggestion> reduceSuggestionCount(int maxCount, PriorityQueue<Suggestion> suggestions)
+	{
+		List<Suggestion> toReturn = new ArrayList<Suggestion>();
+		for (int i = 0; i < maxCount; i++)
+		{
+			Suggestion s = suggestions.poll();
+			if (s != null) toReturn.add(s);
+		}
+		return toReturn;
 	}
 
 }

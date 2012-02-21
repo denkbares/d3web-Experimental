@@ -41,9 +41,12 @@ import java.util.ResourceBundle;
  */
 public class DialogComponent {
 
-	private final List<MatchingAlgorithm> algorithms = new ArrayList<MatchingAlgorithm>();
+	private final List<MatchingAlgorithm> algorithmsToken = new ArrayList<MatchingAlgorithm>();
+	private final List<MatchingAlgorithm> algorithmsPhrase = new ArrayList<MatchingAlgorithm>();
+
 	private final ResourceBundle bundle = ResourceBundle.getBundle("UserSupport_configuration");
 	private int maxSuggestions;
+	private double threshold;
 
 	private MatchingAlgorithm usedTokenAlgorithm;
 	private MatchingAlgorithm usedPhraseAlgorithm;
@@ -57,6 +60,9 @@ public class DialogComponent {
 		maxSuggestions =
 				Integer.parseInt(
 						bundle.getString("usersupport.dialogcomponent.maxSuggestions"));
+		threshold =
+				Double.parseDouble(
+						bundle.getString("usersupport.dialogcomponent.threshold"));
 
 		try {
 			String className1 =
@@ -76,12 +82,16 @@ public class DialogComponent {
 		}
 
 		// Add all known Algorithms
-		algorithms.add(new DoubleMetaphoneAlgorithm());
-		algorithms.add(new JaroWinklerAlgorithm());
-		algorithms.add(new LevenshteinAlgorithm());
-		algorithms.add(new MongeElkanAlgorithm());
-		//		algorithms.add(new RefinedSoundexAlgorithm());
-		algorithms.add(new SmithWatermanAlgorithm());
+		algorithmsToken.add(new DoubleMetaphoneAlgorithm());
+		algorithmsToken.add(new JaroWinklerAlgorithm());
+		algorithmsToken.add(new LevenshteinAlgorithm());
+		algorithmsToken.add(new QGramAlgorithm());
+		algorithmsToken.add(new RefinedSoundexAlgorithm());
+
+		algorithmsPhrase.add(new JaccardAlgorithm());
+		algorithmsPhrase.add(new MongeElkanAlgorithm());
+		algorithmsPhrase.add(new SmithWatermanAlgorithm());
+		algorithmsPhrase.add(new SortedWinklerAlgorithm());
 	}
 
 	/**
@@ -106,17 +116,105 @@ public class DialogComponent {
 	 * @param localTermMatches
 	 * @return
 	 */
-	public List<Suggestion> getBestSuggestions(String toMatch,
-			List<String> localTermMatches) {
+	public List<Suggestion> getBestSuggestions(String toMatch, List<String> localTermMatches) {
 
 		List<Suggestion> bestSuggs = new ArrayList<Suggestion>();
 
 		// Put all Suggestions in List
-		List<Suggestion> suggs = new ArrayList<Suggestion>();
 		List<SuggestionValuePair> matchList = new ArrayList<SuggestionValuePair>();
 
-		for (MatchingAlgorithm algo : algorithms) {
-			suggs = algo.getMatches(maxSuggestions, toMatch, localTermMatches);
+		// When toMatch contains Whitespace then use algorithmsPhrase
+		if (toMatch.contains(" "))
+		{
+			this.getBestSuggestionsPhrase(toMatch, localTermMatches, matchList);
+		}
+
+		if (!toMatch.contains(" "))
+		{
+			this.getBestSuggestionsToken(toMatch, localTermMatches, matchList);
+		}
+
+		// Sort the matchList and add the count of
+		// maxSuggestions to best Suggestions
+		Collections.sort(matchList, new SuggestionValuePairComparator());
+		for (int i = 0; (i < maxSuggestions) && (i < matchList.size()); i++)
+			bestSuggs.add(matchList.get(i).getSuggestion());
+		return bestSuggs;
+	}
+
+	/**
+	 * Collects the best suggestions if toMatch is a Token.
+	 * So it only uses Matching-Algorithms for phrases.
+	 * 
+	 * @created 20.02.2012
+	 * @param toMatch
+	 * @param localTermMatches
+	 * @param matchList
+	 */
+	private void getBestSuggestionsToken(String toMatch, List<String> localTermMatches, List<SuggestionValuePair> matchList)
+	{
+
+		// Sort terms to token and phrase
+		List<String> tokenTerms = new ArrayList<String>();
+		List<String> phraseTerms = new ArrayList<String>();
+		for (String s : localTermMatches)
+			if (s.contains(" "))
+				phraseTerms.add(s);
+			else
+				tokenTerms.add(s);
+
+		this.getBestSuggestionsPhrase(toMatch, phraseTerms, matchList);
+
+		List<Suggestion> suggs = new ArrayList<Suggestion>();
+		for (MatchingAlgorithm algo : algorithmsToken)
+		{
+			suggs = algo.getMatches(maxSuggestions, threshold, toMatch, tokenTerms);
+			boolean remove = true;
+			suggs = this.removeExactMatches(suggs);
+			while(remove) remove = suggs.remove(null);
+			for (Suggestion s : suggs) {
+				int exists = AlgorithmUtil.containsSuggestion(matchList, s);
+				if (exists != -1)
+				{
+					matchList.get(exists).increment();
+					matchList.get(exists).updateDistance(s);
+				}
+				else
+					matchList.add(new SuggestionValuePair(s));
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @created 20.02.2012
+	 * @param suggs
+	 */
+	private List<Suggestion> removeExactMatches(List<Suggestion> suggs)
+	{
+		List<Suggestion> toReturn = new ArrayList<Suggestion>();
+		for (Suggestion s : suggs)
+			if (s.getDistance() != 1.0)
+				toReturn.add(s);
+		return toReturn;
+	}
+
+	/**
+	 * Collects the best suggestions if toMatch is a Phrase.
+	 * So it only uses Matching-Algorithms for phrases.
+	 * 
+	 * @created 20.02.2012
+	 * @param toMatch
+	 * @param localTermMatches
+	 * @param matchList
+	 */
+	private void getBestSuggestionsPhrase(String toMatch, List<String> localTermMatches, List<SuggestionValuePair> matchList)
+	{
+		List<Suggestion> suggs = new ArrayList<Suggestion>();
+		for (MatchingAlgorithm algo : algorithmsPhrase)
+		{
+			suggs = algo.getMatches(maxSuggestions, threshold, toMatch, localTermMatches);
+			suggs = this.removeExactMatches(suggs);
 			boolean remove = true;
 			while(remove) remove = suggs.remove(null);
 			for (Suggestion s : suggs) {
@@ -129,15 +227,7 @@ public class DialogComponent {
 				else
 					matchList.add(new SuggestionValuePair(s));
 			}
-
 		}
-
-		// Sort the matchList and add the count of
-		// maxSuggestions to best Suggestions
-		Collections.sort(matchList, new SuggestionValuePairComparator());
-		for (int i = 0; (i < maxSuggestions) && (i < matchList.size()); i++)
-			bestSuggs.add(matchList.get(i).getSuggestion());
-		return bestSuggs;
 	}
 
 	public List<Suggestion> getSuggestions(String toMatch,
@@ -153,7 +243,7 @@ public class DialogComponent {
 		List<SuggestionValuePair> matchList = new ArrayList<SuggestionValuePair>();
 
 		// TODO returns a list of nulls!
-		suggs = algorithm.getMatches(maxSuggestions, toMatch, localTermMatches);
+		suggs = algorithm.getMatches(maxSuggestions, threshold, toMatch, localTermMatches);
 
 		for (Suggestion s : suggs) {
 			// TODO HOTFIX for problem above
@@ -172,27 +262,42 @@ public class DialogComponent {
 	}
 
 	// Getters and Setters for Suggestion staff
-	public void setMaxSuggestions(int max) {
+	public void setMaxSuggestions(int max)
+	{
 		this.maxSuggestions = max;
 	}
 
-	public int getMaxSuggestions() {
+	public int getMaxSuggestions()
+	{
 		return this.maxSuggestions;
+	}
+
+	public void setThreshold(double threshold)
+	{
+		this.threshold = threshold;
+	}
+
+	public double getThreshold()
+	{
+		return this.threshold;
 	}
 
 	// Getters and setters for MatchingAlgorithm staff
 	public List<MatchingAlgorithm> getPossibleMatchingAlgorithms() {
-		return Collections.unmodifiableList(algorithms);
+		List<MatchingAlgorithm> toReturn = new ArrayList<MatchingAlgorithm>();
+		toReturn.addAll(algorithmsToken);
+		toReturn.addAll(algorithmsPhrase);
+		return Collections.unmodifiableList(toReturn);
 	}
 	public boolean setUsedTokenMatchingAlgorithm(MatchingAlgorithm algorithm) {
-		if (algorithms.contains(algorithm)) {
+		if (algorithmsToken.contains(algorithm)) {
 			usedTokenAlgorithm = algorithm;
 			return true;
 		}
 		return false;
 	}
 	public boolean setUsedPhraseMatchingAlgorithm(MatchingAlgorithm algorithm) {
-		if (algorithms.contains(algorithm)) {
+		if (algorithmsPhrase.contains(algorithm)) {
 			usedPhraseAlgorithm = algorithm;
 			return true;
 		}

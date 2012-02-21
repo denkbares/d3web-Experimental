@@ -58,9 +58,9 @@ public class TableTest extends TestCase {
 
 	private Section<CausalDiagnosisScoreMarkup> causalTable = null;
 	private final int causalHeaderLineCount = 1;
-	private final int causalHeaderCellCount = 5;
+	private final int causalHeaderCellCount = 4;
 	private final int causalLineCount = 2;
-	private final int causalCellCount = 15;
+	private final int causalCellCount = 12;
 	private final int causalCellFirstColumnCount = 2;
 
 	private Section<DecisionTableMarkup> decisionTable = null;

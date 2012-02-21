@@ -183,6 +183,12 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>simmetricsv162</groupId>
+			<artifactId>simmetricsv162</artifactId>
+			<version>simmetrics162</version>
+			<type>jar</type>
+		</dependency>
 	</dependencies>
 	<distributionManagement>
 		<snapshotRepository>
