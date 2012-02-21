@@ -30,6 +30,10 @@ import de.knowwe.core.kdom.parsing.Section;
 
 public class ObjectInfoTagHandlerIncr extends de.knowwe.core.taghandler.ObjectInfoTagHandler {
 
+	public ObjectInfoTagHandlerIncr() {
+		super("ObjectInfoIncr");
+	}
+
 	@Override
 	protected void getTermDefinitions(KnowWEArticle currentArticle, String objectName, Set<Section<?>> definitions) {
 
