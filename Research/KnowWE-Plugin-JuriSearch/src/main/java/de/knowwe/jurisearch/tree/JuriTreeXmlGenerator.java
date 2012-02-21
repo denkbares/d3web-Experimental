@@ -74,15 +74,13 @@ public class JuriTreeXmlGenerator {
 
 	private Writer getWriter() {
 		try {
-			// PrintWriter w = new
-			// PrintWriter("C:\\Program Files\\apache-tomcat-6.0.33\\webapps\\proket\\WEB-INF\\classes\\specs\\prototypes\\wikiTest.xml");
-			PrintWriter w = new PrintWriter(KnowWEEnvironment.getInstance()
-					.getWikiConnector().getSavePath()
-					+ "\\wikiTest.xml");
-
+			PrintWriter w = new
+					PrintWriter("C:\\Program Files\\apache-tomcat-6.0.33\\webapps\\proket\\WEB-INF\\classes\\specs\\prototypes\\wikiTest.xml");
+			//PrintWriter w = new PrintWriter(KnowWEEnvironment.getInstance().getWikiConnector().getSavePath()+ "\\wikiTest.xml");
+			//PrintWriter w = new PrintWriter("C:\\wikis\\juriSearchWiki\\wikiTest.xml");
 			// PrintWriter w = new
 			// PrintWriter("C:\\Projekte\\KnowWE\\Research\\d3web-ProKEt\\src\\main\\resources\\specs\\prototypes\\wikiTest.xml");
-			return w;
+			return w;			
 		} catch (Exception e) {
 			e.printStackTrace(System.err);
 			return null;
@@ -119,11 +117,13 @@ public class JuriTreeXmlGenerator {
 		String explanation = getExplanationText(section, text);
 		Section nodeMode =
 		        getFirstSectionWithPath(jexp, JuriTreeExpression.RoundBracketExp.class, JuriTreeExpression.RoundExpBracketExpContent.class);
-		String answerTypeAtt = getAnswerTypeAttribute(nodeMode);
+		String booleanTypeAdd = getAnswerTypeAttribute(nodeMode);
 		String id = getNextUniqueID();
 		String parentString = "";
+		String bonusString = "";
+		if (explanation != null) bonusString = " bonus-text=\"" + escapeQuotes(explanation) + "\""; 
 		if (parent != null) parentString = " parent-id='" + parent + "'";
-		w.writeFullTag("question title='" + text + "' id='" + id + "'" + parentString + " " + answerTypeAtt);
+		w.writeFullTag("legalQuestion title='" + text + "' id='" + id + "'" + parentString + " " + booleanTypeAdd + bonusString);
 		for (Section<? extends Type> s : getSectionsWithPath(section, DashSubtree.class)) {
 			buildXMLForDashSubtree(w, (Section<DashSubtree>) s, id);
 		}
@@ -148,11 +148,30 @@ public class JuriTreeXmlGenerator {
         return explanationText;
 	}
 
+	
+	private String escapeQuotes(String s) {
+		if (s == null) return null;
+		int i = 0;
+		while (i!=-1) {
+			i = s.indexOf("\"",i);
+			if (i!=-1) {
+				if (i>0) {
+					if (s.charAt(i-1) != '\\') {
+						s = s.substring(0, i) + "\\" + s.substring(i);
+					}
+				} else {
+					s = "\\" + s;
+				}
+			}
+		}
+		return s;
+	}
+	
 	private String getAnswerTypeAttribute(Section bracketExp) {
 		if (bracketExp != null) {
 			String roundBracketText = bracketExp.getText();
 			if ("oder".equals(roundBracketText))
-				return "answer-type='mc'";
+				return "and-or-type='OR'";
 			if ("und".equals(roundBracketText))
 				return "";
 		}
