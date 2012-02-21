@@ -42,8 +42,6 @@ import de.knowwe.kdom.dashtree.DashTreeUtils;
 public class QuestionIdentifier extends QuestionReference {
 
 	public QuestionIdentifier() {
-		
-
 		AllTextFinderTrimmed allTextFinderTrimmed = new AllTextFinderTrimmed();
 		ConstraintSectionFinder csf = new ConstraintSectionFinder(allTextFinderTrimmed);
 		csf.addConstraint(SingleChildConstraint.getInstance());

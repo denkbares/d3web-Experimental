@@ -38,27 +38,23 @@ public class JuriTreeExpression extends DashTreeElementContent {
 
 	public JuriTreeExpression() {
 		this.setSectionFinder(new AllTextFinderTrimmed());
-
 		this.addChildType(new RoundBracketExp());
 		this.addChildType(new QuestionIdentifier());
 		this.addChildType(new Error());
-
 		this.addSubtreeHandler(new JuriTreeHandler());
-
 	}
 
+	
 	class RoundBracketExp extends AbstractType {
-
 		RoundBracketExp() {
 			this.setSectionFinder(new EmbracedContentFinder(BRACKET_OPEN, BRACKET_CLOSE));
-
 			this.addChildType(new RoundExpBracketExpContent());
 		}
-
 	}
 
+	
+	
 	class RoundExpBracketExpContent extends AbstractType {
-
 		RoundExpBracketExpContent() {
 			this.setSectionFinder(new EmbracedContentFinder(BRACKET_OPEN, BRACKET_CLOSE, true));
 			this.addChildType(new Operator());
@@ -66,14 +62,14 @@ public class JuriTreeExpression extends DashTreeElementContent {
 		}
 	}
 
+	
+	
 	class Operator extends AbstractType {
-
 		Operator() {
 			this.sectionFinder = new OneOfStringEnumFinder(new String[] {
 					"oder", "und", "score" });
 			this.setRenderer(new StyleRenderer("font-weight:bold"));
 		}
-
 	}
 
 }
