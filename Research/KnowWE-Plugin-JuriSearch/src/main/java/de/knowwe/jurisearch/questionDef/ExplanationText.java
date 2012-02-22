@@ -16,6 +16,6 @@ public class ExplanationText extends AbstractType {
 						Pattern.MULTILINE | Pattern.DOTALL, 2));
 		csf.addConstraint(AtMostOneFindingConstraint.getInstance());
 		this.setSectionFinder(csf);
-		this.setRenderer(new StyleRenderer("color:pink;"));
+		this.setRenderer(new StyleRenderer("color:blue;"));
 	}
 }
