@@ -28,6 +28,11 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Solution;
+import de.d3web.we.kdom.rule.ConditionActionRuleContent;
+import de.knowwe.core.KnowWEEnvironment;
+import de.knowwe.core.kdom.KnowWEArticle;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 
 
 /**
@@ -165,4 +170,23 @@ public class DebugUtilities {
 		return rules;
 	}
 
+	/**
+	 * Get the path to the rule's article.
+	 */
+	public static String getRuleResource(Rule r) {
+		String rulePath;
+
+		List<Section<ConditionActionRuleContent>> rules;
+		for (KnowWEArticle article : KnowWEEnvironment.getInstance().getArticleManager(KnowWEEnvironment.DEFAULT_WEB).getArticles()) {
+			rules = Sections.findSuccessorsOfType(article.getSection(),
+					ConditionActionRuleContent.class);
+			for (Section<ConditionActionRuleContent> sec : rules) {
+				// TODO: Vergleiche Regel mit Section
+			}
+		}
+		
+		rulePath = "rulePath";
+
+		return rulePath;
+	}
 }

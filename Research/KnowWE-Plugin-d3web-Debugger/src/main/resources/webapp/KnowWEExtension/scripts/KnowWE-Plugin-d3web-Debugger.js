@@ -77,14 +77,12 @@ KNOWWE.plugin.debuggr = function(){
 					$('debuggerRule').empty();
 				});
 			});
-			$ES('span', 'debuggerTrace').each(function(element) {
-				_KE.add('click', element, function() { 
-					KNOWWE.plugin.debuggr.removeTrace(element);
-					KNOWWE.plugin.debuggr.renderMenu(element);
-					KNOWWE.plugin.debuggr.renderMain(element);
-					$('debuggerRule').empty();
-				});
-			});
+		},
+		traceClicked : function(element) {
+			KNOWWE.plugin.debuggr.removeTrace(element);
+			KNOWWE.plugin.debuggr.renderMenu(element);
+			KNOWWE.plugin.debuggr.renderMain(element);
+			$('debuggerRule').empty();
 		},
 		renderMenu : function(element) {
        		var params = {
@@ -109,7 +107,15 @@ KNOWWE.plugin.debuggr = function(){
 			trace = $('debuggerTrace');
 			// get trace-entries
 			traceEntries = trace.childNodes;
-			newEntry = new Element('span', {lvl: traceEntries.length, kbid: element.getAttribute("kbid")});
+			newEntry = new Element('span', {
+				lvl: traceEntries.length, 
+				kbid: element.getAttribute("kbid"),
+			    events: {
+			        click: function(){
+			        	KNOWWE.plugin.debuggr.traceClicked(this);
+			        }
+			    }
+			});
 			newEntry.innerHTML = element.innerHTML;
 			if (newEntry.getAttribute("lvl") == 1)
 				newEntry.style.color = 'rgb(150, 110, 120)';
@@ -189,6 +195,18 @@ KNOWWE.plugin.debuggr = function(){
 	            }
             }
            	new _KA( options ).send(); 
+		},
+		/**
+		 * Function: mainSelected
+		 * 		Shows the list of influential rules for element
+		 */
+		mainSelected : function(option) {
+			$ES('ul', 'debuggerMain').each(function(element) {
+				element.style.display = "none";
+			});
+			id = option + "_rules";
+			document.getElementById(id).style.display = "block";
+			$('debuggerRule').empty();
 		},
 		/**
          * Function: initializeQuestions

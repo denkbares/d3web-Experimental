@@ -21,16 +21,15 @@ package de.knowwe.d3web.debugger;
 import java.util.Map;
 
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.session.Session;
 import de.d3web.we.basic.SessionBroker;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWEAttributes;
-import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.d3web.debugger.actions.DebuggerMenuAction;
 
 
 /**
@@ -56,7 +55,7 @@ public class DebuggerTagHandler extends AbstractTagHandler {
 		SessionBroker broker;
 		Session session = null;
 		KnowledgeBase kb = null;
-		String kbID;
+		String kbID = "";
 		// Get knowledgebase
 		try {
 			// If knowledgebase's id is given
@@ -83,15 +82,13 @@ public class DebuggerTagHandler extends AbstractTagHandler {
 		buffer.append("<div id='debugger' class='debugger'>");
 		// trace
 		buffer.append("<div id='debuggerTrace' class='debuggerTrace'>");
-		buffer.append("<span lvl=0 kbid='" + kb.getId() + "'>Solutions</span>");
+		buffer.append("<span lvl=0 kbid='" + kb.getId()
+				+ "' onClick='KNOWWE.plugin.debuggr.traceClicked(this);'>Lösungen</span>");
 		buffer.append("</div>");
 		// menu
-		buffer.append("<div id='debuggerMenu'><ul>");
-		for (TerminologyObject s : DebugUtilities.getSolutionsFromKB(kb)) {
-			buffer.append("<li class='debuggerMenuSolution' kbid='" + kb.getId() + "'>" + s
-					+ "</li>");
-		}
-		buffer.append("</ul></div><div style='clear:both'></div>");
+		buffer.append("<div id='debuggerMenu'>");
+		buffer.append(new DebuggerMenuAction().getMenuRendering(kbID, "Lösungen", session));
+		buffer.append("</div><div style='clear:both'></div>");
 		// main
 		buffer.append("<div id= 'debuggerMain' class='debuggerMain'></div>");
 		// rule

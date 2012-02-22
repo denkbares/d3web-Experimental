@@ -67,6 +67,8 @@ public class DebuggerRuleAction extends AbstractAction {
 				if (r.hashCode() == ruleid) {
 					dc = new DebugCondition(r.getCondition());
 					buffer.append(KnowWEUtils.unmaskHTML(dc.render(session, web, title)));
+					buffer.append(KnowWEUtils.unmaskHTML("<a class='ruleLink' href='Wiki.jsp?page="
+							+ DebugUtilities.getRuleResource(r) + "'></a>"));
 					break;
 				}
 			}

@@ -23,6 +23,7 @@ import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
+import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Session;
 import de.d3web.we.basic.SessionBroker;
 import de.d3web.we.utils.D3webUtils;
@@ -39,12 +40,23 @@ public class DebuggerMenuAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
+		String kbID = context.getParameter("kbid");
+		String qid = context.getParameter("qid");
+		SessionBroker broker = D3webUtils.getBroker(context.getUserName(), context.getWeb());
+		Session session = broker.getSession(kbID);
+		String result = getMenuRendering(kbID, qid, session);
+
+		if (result != null && context.getWriter() != null) {
+			context.setContentType("text/html; charset=UTF-8");
+			context.getWriter().write(result);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public String getMenuRendering(String kbID, String qid, Session session) {
 		StringBuffer buffer = new StringBuffer();
+		String rate = "";
 		try {
-			String kbID = context.getParameter("kbid");
-			String qid = context.getParameter("qid");
-			SessionBroker broker = D3webUtils.getBroker(context.getUserName(), context.getWeb());
-			Session session = broker.getSession(kbID);
 			KnowledgeBase kb = session.getKnowledgeBase();
 			TerminologyObject to = null;
 			
@@ -58,17 +70,27 @@ public class DebuggerMenuAction extends AbstractAction {
 				}
 			}
 
-			if (qid.equals("Solutions")) tos = (List<TerminologyObject>) DebugUtilities.getSolutionsFromKB(kb);
+			if (qid.equals("Lösungen")) tos = (List<TerminologyObject>) DebugUtilities.getSolutionsFromKB(kb);
 			else tos = DebugUtilities.getInfluentialTOs(to, kb);
 
-			if (tos.size() == 0) buffer.append("<p style='margin-left:10px;font-weight:bold'>Keine weiteren Elemente</p>");
+			if (tos.size() == 0) buffer.append("<p style='margin-left:10px;'>Keine relevanten Elemente gefunden.</p>");
 			else {
-				buffer.append("<ul>");
-				for (TerminologyObject too : tos) {
-					if (qid.equals("Start")) buffer.append("<li class='debuggerMenuSolution'");
+				if (!qid.equals("Lösungen")) buffer.append("<p>Relevante Elemente:</p><ul>");
+				for (TerminologyObject tobj : tos) {
+					if (tobj instanceof Solution) {
+						rate = session.getBlackboard().getRating((Solution) tobj).toString();
+						buffer.append("<li class='debuggerMenuSolution' style='");
+						if (rate.equals("EXCLUDED")) buffer.append("border-color:"
+								+ DebugUtilities.COLOR_EXCLUDED + "'");
+						else if (rate.equals("SUGGESTED")) buffer.append("border-color:"
+								+ DebugUtilities.COLOR_SUGGESTED + "'");
+						else if (rate.equals("ESTABLISHED")) buffer.append("border-color:"
+								+ DebugUtilities.COLOR_ESTABLISHED + "'");
+						else buffer.append("border-color: " + DebugUtilities.COLOR_UNCLEAR + "'");
+					}
 					else buffer.append("<li class='debuggerMenu'");
 					buffer.append(" kbid='" + kb.getId() + "'>"
-							+ too.getName()
+							+ tobj.getName()
 							+ "</li>");
 				}
 				buffer.append("</ul>");
@@ -77,11 +99,7 @@ public class DebuggerMenuAction extends AbstractAction {
 		catch (NullPointerException e) {
 		}
 		
-		if (buffer != null && context.getWriter() != null) {
-			context.setContentType("text/html; charset=UTF-8");
-			context.getWriter().write(buffer.toString());
-		}
+		return buffer.toString();
 	}
-
 
 }

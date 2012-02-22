@@ -19,6 +19,7 @@
 package de.knowwe.d3web.debugger.actions;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.d3web.core.inference.Rule;
@@ -32,6 +33,7 @@ import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.d3web.debugger.DebugUtilities;
 import de.knowwe.d3web.debugger.inference.DebugAction;
+import de.knowwe.d3web.debugger.inference.DebugCondition;
 
 
 /**
@@ -40,6 +42,10 @@ import de.knowwe.d3web.debugger.inference.DebugAction;
  */
 public class DebuggerMainAction extends AbstractAction {
 
+	/** Displayed text */
+	private final String noInfluentialRules = "Keine relevanten Regeln gefunden.";
+	private final String influentialRules = "Relevante Regeln mit ";
+	private final String allElements = "allen Elementen";
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
@@ -71,15 +77,24 @@ public class DebuggerMainAction extends AbstractAction {
 			List<? extends TerminologyObject> sos = DebugUtilities.getSolutionsFromKB(kb);
 			List<TerminologyObject> tos = DebugUtilities.getAllTOsFromKB(kb);
 			tos.addAll(sos);
-			for (TerminologyObject too : tos) {
-				if (too.getName().equals(qid)) {
-					to = too;
+			for (TerminologyObject tobj : tos) {
+				if (tobj.getName().equals(qid)) {
+					to = tobj;
 					break;
 				}
 			}
 			if (to == null) return "";
 
 			rules = DebugUtilities.getRulesWithTO(to, kb);
+
+			// Get all influential TerminologyObjects
+			List<TerminologyObject> iTos = new LinkedList<TerminologyObject>();
+			for (Rule r : rules) {
+				for (TerminologyObject tobj : r.getCondition().getTerminalObjects()) {
+					if (!iTos.contains(tobj)) iTos.add(tobj);
+				}
+			}
+
 			if (sid != "") {
 				for (TerminologyObject s : sos) {
 					if (sid.equals(s.toString())) {
@@ -99,18 +114,58 @@ public class DebuggerMainAction extends AbstractAction {
 							+ DebugUtilities.COLOR_ESTABLISHED + "'>" + sid + " (ESTABLISHED)</p>");
 				}
 			}
-			buffer.append("<ul>");
+			int eval;
+			if (iTos.size() == 0) buffer.append("<p>" + noInfluentialRules + "</p>");
+			else {
+				buffer.append("<p>"
+						+ influentialRules
+						+ "<select onChange='KNOWWE.plugin.debuggr.mainSelected(this.options[this.selectedIndex].value);'>");
+				buffer.append("<option>" + allElements + "</option>");
+				for (TerminologyObject tobj : iTos) {
+					buffer.append("<option>" + tobj + "</option>");
+				}
+				buffer.append("</select></p>");
+			}
+			// Build list for all Rules
+			buffer.append("<ul id='" + allElements + "_rules' style='display:block;'>");
 			for (Rule r : rules) {
 				if (ruleid == r.hashCode()) buffer.append("<li class='debuggerMainEntryActive' ");
 				else buffer.append("<li class='debuggerMainEntry' ");
 
-				if (r.hasFired(session)) buffer.append("style='border-color:green;color:green;'");
-				else buffer.append("style='border-color:black;color:black'");
+				DebugCondition dc = new DebugCondition(r.getCondition());
+				eval = dc.evaluateForRendering(session);
+				if (eval == 0) buffer.append("style='border-color:gray;color:gray;'");
+				else if (eval == 1) buffer.append("style='border-color:green;color:green;'");
+				else if (eval == -1) buffer.append("style='border-color:red;color:red;'");
+				else buffer.append("style='border-color:black;color:black;'");
+
 				buffer.append(" ruleid='" + r.hashCode() + "' kbid='"
 						+ kb.getId() + "'>" + new DebugAction(r.getAction()).render()
 							+ "</li>");
 			}
 			buffer.append("</ul>");
+
+			// Build lists for Rules with object in condition
+			for (TerminologyObject tobj : iTos) {
+				buffer.append("<ul id='" + tobj + "_rules' style='display:none;'>");
+				for (Rule r : rules) {
+					if (!r.getCondition().getTerminalObjects().contains(tobj)) continue;
+					if (ruleid == r.hashCode()) buffer.append("<li class='debuggerMainEntryActive' ");
+					else buffer.append("<li class='debuggerMainEntry' ");
+
+					DebugCondition dc = new DebugCondition(r.getCondition());
+					eval = dc.evaluateForRendering(session);
+					if (eval == 0) buffer.append("style='border-color:gray;color:gray;'");
+					else if (eval == 1) buffer.append("style='border-color:green;color:green;'");
+					else if (eval == -1) buffer.append("style='border-color:red;color:red;'");
+					else buffer.append("style='border-color:black;color:black;'");
+
+					buffer.append(" ruleid='" + r.hashCode() + "' kbid='"
+							+ kb.getId() + "'>" + new DebugAction(r.getAction()).render()
+								+ "</li>");
+				}
+				buffer.append("</ul>");
+			}
 			buffer.append("<div style='clear:both'></div>");
 		}
 		catch (NullPointerException e) {
