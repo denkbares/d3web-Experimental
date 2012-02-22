@@ -64,7 +64,16 @@ public class CausalDiagnosisScore extends AbstractType {
 		closing.setSectionFinder(new StringSectionFinderUnquoted("}"));
 		this.addChildType(closing);
 
-		this.addChildType(new InnerTable());
+		InnerTable iTable = new InnerTable();
+		iTable.removeChild(3);
+		TableHeaderLine header = new TableHeaderLine();
+		TableHeaderCell headerCell = new TableHeaderCell();
+		headerCell.addChildType(new CausalScoreSolutionDefinition());
+		header.removeChild(2);
+		header.addChildType(headerCell);
+		iTable.addChildTypeAtPosition(header, 3);
+
+		this.addChildType(iTable);
 	}
 
 	/**

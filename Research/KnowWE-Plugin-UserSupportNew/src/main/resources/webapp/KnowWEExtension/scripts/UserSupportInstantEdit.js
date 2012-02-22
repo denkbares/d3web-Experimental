@@ -39,7 +39,7 @@ KNOWWE.plugin.usersupportinstantedit = function() {
 		    	+ KNOWWE.plugin.instantEditHook.getSaveCancelDeleteButtons(id, "KNOWWE.plugin.usersupportinstantedit");
 	    },
 	    
-	    postProcessHTML : function(id) {
+	    postProcessHTML : function(id, coloringmode) {
 	    	var textarea = $(createTextAreaID(id));
 	    	if (typeof AutoComplete != "undefined") AutoComplete.initialize(textarea);
 	        TextArea.initialize(textarea);
@@ -56,9 +56,9 @@ KNOWWE.plugin.usersupportinstantedit = function() {
 	        var editorID = "defaultEdit"+id;
             editor = CodeMirror.fromTextArea(document.getElementById(editorID), {
             	lineNumbers: true,
-            	mode: "usersupportmode",
+//            	mode: "usersupportmode",
+            	mode: coloringmode,
             	theme: "elegant",
-//            	extraKeys: {"Ctrl-Space": function(cm) {CodeMirror.simpleHint(cm, CodeMirror.usersupportHint, id)}}
  		        extraKeys: {"Ctrl-Space": function(cm)
  		        	{
  		        		KNOWWE.plugin.usersupport.gatherDialogComponentCompletions(cm, CodeMirror.usersupportHint, id)

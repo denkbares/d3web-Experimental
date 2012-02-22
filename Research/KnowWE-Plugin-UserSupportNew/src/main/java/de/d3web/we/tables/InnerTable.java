@@ -19,6 +19,7 @@
 package de.d3web.we.tables;
 
 import de.d3web.we.renderer.TableRenderer;
+import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.basicType.CommentLineType;
 import de.knowwe.core.kdom.basicType.LineBreak;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
@@ -61,6 +62,18 @@ public class InnerTable extends ITable {
 		residue.setSectionFinder(new AllTextFinderTrimmed());
 		residue.setRenderer(StyleRenderer.COMMENT);
 		this.addChildType(residue);
+	}
+
+	/**
+	 * 
+	 * @created 22.02.2012
+	 * @param header
+	 * @param i
+	 */
+	public void addChildTypeAtPosition(Type type, int i)
+	{
+		if (this.childrenTypes.size() > i)
+			this.childrenTypes.add(i, type);
 	}
 
 }

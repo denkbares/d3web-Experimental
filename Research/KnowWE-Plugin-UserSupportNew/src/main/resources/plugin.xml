@@ -36,6 +36,7 @@
 		<parameter id="script" value="usersupportHint.js" />
 		<parameter id="script" value="usersupportmode.js" />
         <parameter id="script" value="UserSupportInstantEdit.js" />
+        <parameter id="script" value="UserSupportStandardMarkup.js" />
         <parameter id="script" value="TextArea.js" />
         <parameter id="css" value="KnowWE-Plugin-InstantEdit.css" />
         <parameter id="css" value="DefaultEditTool.css" />

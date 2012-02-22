@@ -45,7 +45,8 @@ public class UserSupportInstantEditToolProvider implements ToolProvider {
 		String jsAction = "KNOWWE.plugin.instantEdit.enable("
 				+ "'"
 				+ section.getID()
-				+ "', KNOWWE.plugin.usersupportinstantedit);";
+				//				+ "', KNOWWE.plugin.usersupportinstantedit);"; // BACKUP
+				+ "', KNOWWE.plugin.userSupportStandardMarkup);";
 		return new DefaultEditTool(
 				"KnowWEExtension/images/pencil.png",
 				"Edit",
