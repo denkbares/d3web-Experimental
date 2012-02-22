@@ -74,9 +74,12 @@ public class JuriTreeXmlGenerator {
 
 	private Writer getWriter() {
 		try {
+                        String path = "../webapps/Juri/WEB-INF/classes/specs/prototypes/juritest.xml";
 			PrintWriter w = new
-					PrintWriter("C:\\Program Files\\apache-tomcat-6.0.33\\webapps\\proket\\WEB-INF\\classes\\specs\\prototypes\\wikiTest.xml");
-			//PrintWriter w = new PrintWriter(KnowWEEnvironment.getInstance().getWikiConnector().getSavePath()+ "\\wikiTest.xml");
+					PrintWriter(path);
+                        
+                        
+                        //PrintWriter w = new PrintWriter(KnowWEEnvironment.getInstance().getWikiConnector().getSavePath()+ "\\wikiTest.xml");
 			//PrintWriter w = new PrintWriter("C:\\wikis\\juriSearchWiki\\wikiTest.xml");
 			// PrintWriter w = new
 			// PrintWriter("C:\\Projekte\\KnowWE\\Research\\d3web-ProKEt\\src\\main\\resources\\specs\\prototypes\\wikiTest.xml");
@@ -92,7 +95,7 @@ public class JuriTreeXmlGenerator {
 			XmlWriter w = new XmlWriter(getWriter());
 			w.writeDirectly("<?xml version='1.0' encoding='UTF-8'?>");
 			w.writeStartTag("dialog sub-type='front' type='legal' css='legal, nofoot' header='"
-					+ name + "' answer-type='oc'");
+					+ name + "' answer-type='oc' and-or-type='OR'");
 
 			List<Section<? extends Type>> roots = getSectionsWithPath(section,
 					RootType.class, QuestionTreeMarkup.class,
