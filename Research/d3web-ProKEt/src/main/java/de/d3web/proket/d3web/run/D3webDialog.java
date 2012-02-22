@@ -95,7 +95,7 @@ import java.util.*;
  *
  */
 public class D3webDialog extends HttpServlet {
-
+    
     private static final long serialVersionUID = -2466200526894064976L;
     protected static final String D3WEB_SESSION = "d3webSession";
     protected static final String USER_SETTINGS = "userSettings";
@@ -132,10 +132,10 @@ public class D3webDialog extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-
+        
         String servletcontext = config.getServletContext().getRealPath("/");
         GLOBSET.setServletBasePath(servletcontext);
-
+        
         d3webParser = new D3webXMLParser();
     }
 
@@ -149,18 +149,18 @@ public class D3webDialog extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         response.setContentType("text/html; charset=UTF-8");
-
-
+        
+        
         HttpSession httpSession = request.getSession(true);
 
         // try to get the src parameter, i.e. the specification of the dialog
         String source = getSource(request);
         d3webParser.setSourceToParse(source);
-
+        
         d3wcon = D3webConnector.getInstance();
-
+        
         d3wcon.setD3webParser(d3webParser);
 
         // set SRC store attribute to "" per default for avoiding nullpointers
@@ -175,7 +175,7 @@ public class D3webDialog extends HttpServlet {
             //httpSession.setAttribute("first", "true");
             sourceSave = source;
             d3webParser.parse();
-
+            
             d3wcon.setKb(d3webParser.getKnowledgeBase());
             d3wcon.setKbName(d3webParser.getKnowledgeBaseName());
             // d3wcon.setDialogStrat(d3webParser.getStrategy());
@@ -194,11 +194,11 @@ public class D3webDialog extends HttpServlet {
             if (d3webParser.getLogging().contains("ON")) {
                 d3wcon.setLogging(true);
             }
-
+            
             if (d3webParser.getFeedbackform().contains("ON")) {
                 d3wcon.setFeedbackForm(true);
             }
-
+            
             if (d3webParser.getUEQuestionnaire().contains("ON")) {
                 d3wcon.setUEQuestionnaire(true);
             }
@@ -220,7 +220,7 @@ public class D3webDialog extends HttpServlet {
             GLOBSET.setCaseFolder(
                     GLOBSET.getServletBasePath()
                     + "../../" + userpref + "-Data/cases");
-
+            
             GLOBSET.setLogFolder(
                     GLOBSET.getServletBasePath()
                     + "../../" + userpref + "-Data/logs");
@@ -250,19 +250,28 @@ public class D3webDialog extends HttpServlet {
         if (httpSession.getAttribute(D3WEB_SESSION) == null) {
             resetD3webSession(httpSession);
         }
-
+        
         if (httpSession.getAttribute(USER_SETTINGS) == null) {
             D3webUserSettings us = new D3webUserSettings();
             httpSession.setAttribute(USER_SETTINGS, us);
         }
-
+        
+        if (d3wcon.getLoginMode() == LoginMode.db) {
+            String authenticated = (String) httpSession.getAttribute("authenticated");
+            if (authenticated == null || !authenticated.equals("yes")) {
+                response.sendRedirect("../EuraHS-Login");
+                return;
+            }
+        }
+        
         // in case nothing other is provided, "show" is the default action
         String action = request.getParameter("action");
-
+        
         if (action == null) {
-            // action = "mail";
             action = "show";
+            
         }
+        
         if (action.equalsIgnoreCase("dbLogin")) {
             loginDB(request, response, httpSession);
             return;
@@ -329,7 +338,7 @@ public class D3webDialog extends HttpServlet {
 
             JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
             logInitially(request, logger);
-
+            
             httpSession.setAttribute("loginit", true);
             //GLOBSET.setInitLogged(true); // TODO remove
 
@@ -357,7 +366,7 @@ public class D3webDialog extends HttpServlet {
         } else if (action.equalsIgnoreCase("checkLoggingEnd")) {
             checkLoggingEnd(httpSession, response);
             return;
-
+            
         } else if (action.equalsIgnoreCase("checkHandleBrowsers")) {
             PrintWriter writer = response.getWriter();
             if (httpSession.getAttribute("handleBrowsers") == null) {
@@ -365,21 +374,21 @@ public class D3webDialog extends HttpServlet {
                 httpSession.setAttribute("handleBrowsers", "false");
             }
         } else if (action.equalsIgnoreCase("handleBrowsers")) {
-
+            
             PrintWriter writer = response.getWriter();
 
             // is the case ONLY when called from handleUnsupportedBrowsers-js method
             String browser = request.getParameter("browser").replace("+", " ");
             String version = request.getParameter("version").replace("+", " ");
-
+            
             if (browser.equals("Explorer")
                     && !equalOrHigher(version, "9")) {
-
+                
                 browser = "Internet Explorer";
                 writer.print(assembleBrowserCompatibilityMessage(browser, version));
                 
                 writer.close();
-
+                
             } else {
 
                 // in case of db login (as for EuraHS) redirect to the EuraHS-Login
@@ -392,10 +401,10 @@ public class D3webDialog extends HttpServlet {
                         return;
                     }
                 }
-
+                
             }
-
-
+            
+            
             return;
         } else if (action.equalsIgnoreCase(
                 "sendFeedbackMail")) {
@@ -417,7 +426,7 @@ public class D3webDialog extends HttpServlet {
             return;
         } else if (action.equalsIgnoreCase(
                 "sendUEQMail")) {
-
+            
             try {
                 sendUEQMail(request, response, httpSession);
                 response.getWriter().append("success");
@@ -448,14 +457,14 @@ public class D3webDialog extends HttpServlet {
     protected void checkInitialLoggingReload(HttpSession httpSession,
             HttpServletResponse response) throws IOException {
         PrintWriter writer = response.getWriter();
-
+        
         if (httpSession.getAttribute("loginit") == null) {
             httpSession.setAttribute("loginit", false);
         }
-
+        
         if (httpSession.getAttribute("loginit").equals(false)) {
             writer.append("firsttime");
-
+            
         } else {
             writer.append("later");
         }
@@ -479,8 +488,8 @@ public class D3webDialog extends HttpServlet {
     protected void checkLoggingEnd(HttpSession httpSession,
             HttpServletResponse response) throws IOException {
         PrintWriter writer = response.getWriter();
-
-
+        
+        
         TerminologyManager tman = D3webConnector.getInstance().getKb().getManager();
         List<Question> allquestions = tman.getQuestions();
         List<Question> indicated = new ArrayList<Question>();
@@ -488,28 +497,28 @@ public class D3webDialog extends HttpServlet {
             if (D3webUtils.isIndicated(q, D3webConnector.getInstance().getSession().getBlackboard())) {
                 indicated.add(q);
             }
-
+            
             if (D3webUtils.isInit(q)) {
                 indicated.add(q);
             }
         }
         boolean indicatedNotAnswered = false;
         Collection<Question> valued = D3webConnector.getInstance().getSession().getBlackboard().getValuedQuestions();
-
+        
         if (valued.size() > 0) {
             for (Question iq : indicated) {
                 if (!valued.contains(iq)) {
-
+                    
                     indicatedNotAnswered = true;
                 }
             }
         } else {
             indicatedNotAnswered = true;
         }
-
+        
         if (indicatedNotAnswered) {
             writer.append("true");
-
+            
         } else {
             writer.append("false");
         }
@@ -528,33 +537,33 @@ public class D3webDialog extends HttpServlet {
     protected void addFacts(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
-
+        
         PrintWriter writer = response.getWriter();
-
+        
         Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
-
+        
         List<String> questions = new ArrayList<String>();
         List<String> values = new ArrayList<String>();
-
+        
         getParameterPairs(request, "question", "value", questions, values);
-
+        
         if (!handleRequiredValueCheck(writer, d3webSession, questions, values)) {
             return;
         }
-
+        
         DialogState stateBefore = new DialogState(d3webSession);
-
+        
         setValues(d3webSession, questions, values, request, httpSession);
-
+        
         D3webUtils.resetAbandonedPaths(d3webSession);
-
+        
         PersistenceD3webUtils.saveCase((String) httpSession.getAttribute("user"), "autosave",
                 d3webSession);
-
+        
         DialogState stateAfter = new DialogState(d3webSession);
-
+        
         Set<TerminologyObject> diff = calculateDiff(d3webSession, stateBefore, stateAfter);
-
+        
         renderAndUpdateDiff(writer, d3webSession, diff, httpSession);
     }
 
@@ -579,24 +588,24 @@ public class D3webDialog extends HttpServlet {
         }
         return true;
     }
-
+    
     private void setValues(Session d3webSession, List<String> questions, List<String> values, HttpServletRequest request,
             HttpSession httpSession) {
 
         // before-state of abstraction questions
         Collection abstractionsBefore =
                 D3webUtils.getValuedAbstractions(d3webSession);
-
+        
         for (int i = 0; i < questions.size(); i++) {
-
+            
             D3webUtils.setValue(questions.get(i), values.get(i), d3webSession);
 
             // state of abstractions AFTER setting values
             Collection abstractionsAfter =
                     D3webUtils.getValuedAbstractions(d3webSession);
-
+            
             if (d3wcon.isLogging()) {
-
+                
                 Collection newAbstractions = new ArrayList<TerminologyObject>();
 
                 // check whether new abstractions have fired
@@ -611,7 +620,7 @@ public class D3webDialog extends HttpServlet {
             }
         }
     }
-
+    
     private void handleQuestionValueLogging(HttpServletRequest request,
             HttpSession httpSession, String ques, String val,
             Session d3webSession, Collection<TerminologyObject> newAbstractions) {
@@ -623,11 +632,11 @@ public class D3webDialog extends HttpServlet {
         String question = AbstractD3webRenderer.getObjectNameForId(ques);
         Question q = D3webConnector.getInstance().getKb().getManager().searchQuestion(
                 question == null ? ques : question);
-
+        
         String value = AbstractD3webRenderer.getObjectNameForId(val);
         value = value == null ? val : AbstractD3webRenderer.getObjectNameForId(val);
         Value v = d3webSession.getBlackboard().getValue((ValueObject) q);
-
+        
         String datestring = "";
         JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
 
@@ -646,19 +655,19 @@ public class D3webDialog extends HttpServlet {
                     datestring =
                             D3webUtils.getFormattedDateFromString(
                             (Date) v.getValue(), SDF_DEFAULT);
-
+                    
                     value = datestring;
                 }
-
+                
             } else if (q instanceof QuestionMC) {
                 String valMC = "";
-
+                
                 if (val.equals("")) {
                     value = Unknown.getInstance().toString();
                 } else if (val.contains("##mcanswer")) {
-
+                    
                     String[] choiceIds = val.split("##mcanswer##");
-
+                    
                     for (String choiceId : choiceIds) {
                         String choiceName = AbstractD3webRenderer.getObjectNameForId(choiceId);
                         valMC += choiceName == null ? choiceId : choiceName;
@@ -667,7 +676,7 @@ public class D3webDialog extends HttpServlet {
                     }
                 }
                 question = "MC_" + question;
-
+                
             }
             ServletLogUtils.logQuestionValue(question, value, logtime, logger);
             prevQ = ques;
@@ -682,20 +691,20 @@ public class D3webDialog extends HttpServlet {
             }
         }
     }
-
+    
     private Set<TerminologyObject> calculateDiff(Session d3webSession, DialogState beforeState, DialogState afterState) {
-
+        
         Set<TerminologyObject> diff = new HashSet<TerminologyObject>();
-
+        
         for (TerminologyObject to : beforeState.unknownQuestions) {
             if (!afterState.unknownQuestions.contains(to)) {
                 diff.add(to);
             }
         }
-
+        
         D3webUtils.getDiff(beforeState.indicatedQASets, afterState.indicatedQASets, diff);
         D3webUtils.getDiff(afterState.indicatedQASets, beforeState.indicatedQASets, diff);
-
+        
         diff.addAll(D3webUtils.getUnknownQuestions(d3webSession));
         // we simply update answered abstract questions every time
         // actually we only need to update them if their facts have changed, but
@@ -713,10 +722,10 @@ public class D3webDialog extends HttpServlet {
         afterState.answeredQuestions.removeAll(beforeState.answeredQuestions);
         // System.out.println(answeredQuestionsAfter);
         diff.addAll(afterState.answeredQuestions);
-
+        
         return diff;
     }
-
+    
     private void renderAndUpdateDiff(PrintWriter writer, Session d3webSession, Set<TerminologyObject> diff, HttpSession httpSession) {
         ContainerCollection cc = new ContainerCollection();
         D3webUserSettings us = (D3webUserSettings) httpSession.getAttribute(USER_SETTINGS);
@@ -729,7 +738,7 @@ public class D3webDialog extends HttpServlet {
             // get back the ID from store for finding element in HTML
             writer.append(REPLACEID + AbstractD3webRenderer.getID(to));
             writer.append(REPLACECONTENT);
-
+            
             TerminologyObject parent = to instanceof QContainer ? d3wcon.getKb().getRootQASet()
                     : D3webUtils.getQuestionnaireAncestor(to);
 
@@ -773,7 +782,7 @@ public class D3webDialog extends HttpServlet {
                 Integer.parseInt(
                 request.getParameter("langID").toString());
         D3webUserSettings us = (D3webUserSettings) httpSession.getAttribute(USER_SETTINGS);
-
+        
         us.setLanguageId(localeID);
         httpSession.setAttribute(USER_SETTINGS, us);
 
@@ -796,18 +805,18 @@ public class D3webDialog extends HttpServlet {
      */
     private boolean checkReqVal(String requiredVal, Session sess, List<String> check) {
         Blackboard blackboard = sess.getBlackboard();
-
+        
         Question to = D3webConnector.getInstance().getKb().getManager().searchQuestion(requiredVal);
-
+        
         Fact lastFact = blackboard.getValueFact(to);
-
+        
         boolean contains = false;
         for (String s : check) {
             String objectNameForId = AbstractD3webRenderer.getObjectNameForId(s);
             if (objectNameForId != null) {
                 s = objectNameForId;
             }
-
+            
             if (s.equals(requiredVal)) {
                 contains = true;
                 break;
@@ -830,7 +839,7 @@ public class D3webDialog extends HttpServlet {
      */
     protected void checkUsrDatLogin(HttpServletResponse response, HttpSession httpSession) throws IOException {
         PrintWriter writer = response.getWriter();
-
+        
         if (httpSession.getAttribute("user") == null) {
             httpSession.setAttribute("log", true);
             writer.append("NLI");
@@ -849,10 +858,10 @@ public class D3webDialog extends HttpServlet {
      */
     protected void deleteCase(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession) {
-
+        
         String filename = request.getParameter("fn");
         String user = (String) httpSession.getAttribute("user");
-
+        
         if (PersistenceD3webUtils.existsCase(user, filename)) {
             PersistenceD3webUtils.deleteUserCase(user, filename);
         }
@@ -899,32 +908,32 @@ public class D3webDialog extends HttpServlet {
      */
     protected void gotoStatistics(HttpServletResponse response,
             HttpSession httpSession) throws IOException {
-
+        
         String email = (String) httpSession.getAttribute("user");
-
+        
         String gotoUrl = "../Statistics/Statistic.jsp?action=dbLogin";
-
+        
         String token = DateCoDec.getCode();
         gotoUrl += "&t=" + token;
         gotoUrl += "&e=" + Base64.encodeBase64String(email.getBytes());
-
+        
         new TokenThread(token, email).start();
         PrintWriter writer = response.getWriter();
         writer.print(gotoUrl);
         writer.close();
         // response.sendRedirect(gotoUrl);
     }
-
+    
     protected void gotoTxtDownload(HttpServletResponse response, HttpServletRequest request,
             HttpSession httpSession) throws IOException {
-
+        
         String email = (String) httpSession.getAttribute("user");
         String path = GlobalSettings.getInstance().getServletBasePath();
 
         // Important: /Download... doesn't work both locally and on server due
         // to webapp paths etc
         String gotoUrl = "Download?flag=summary";
-
+        
         PrintWriter writer = response.getWriter();
         writer.print(gotoUrl);
         writer.close();
@@ -941,7 +950,7 @@ public class D3webDialog extends HttpServlet {
      */
     protected void loadCase(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession) {
-
+        
         String filename = request.getParameter("fn");
         String user = (String) httpSession.getAttribute("user");
         loadCaseUserFilename(request, httpSession, user, filename);
@@ -959,7 +968,7 @@ public class D3webDialog extends HttpServlet {
                     session);
             httpSession.setAttribute("lastLoaded", filename);
             D3webConnector.getInstance().setSession(session);
-
+            
             JSONLogger logger =
                     (JSONLogger) httpSession.getAttribute("logger");
 
@@ -990,13 +999,13 @@ public class D3webDialog extends HttpServlet {
     protected void loginDB(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
         String token = request.getParameter("t");
         String email = new String(Base64.decodeBase64(request.getParameter("e")));
-
+        
         if (DB.isValidToken(token, email)) {
             httpSession.setAttribute("authenticated", "yes");
             httpSession.setAttribute("user", email);
-
+            
             loadCaseUserFilename(request, httpSession, email, "autosave");
-
+            
             response.sendRedirect("../EuraHS-Dialog");
         } else {
             response.sendRedirect("../EuraHS-Login");
@@ -1024,7 +1033,7 @@ public class D3webDialog extends HttpServlet {
 
         // get the response writer for communicating back via Ajax
         PrintWriter writer = res.getWriter();
-
+        
         httpSession.setMaxInactiveInterval(60 * 60);
 
         // if no valid login
@@ -1037,7 +1046,7 @@ public class D3webDialog extends HttpServlet {
 
         // set user attribute for the HttpSession
         httpSession.setAttribute("user", u);
-
+        
         httpSession.setAttribute("lastLoaded", "");
 
         /*
@@ -1069,7 +1078,7 @@ public class D3webDialog extends HttpServlet {
      * @return True, if permissions are correct.
      */
     private boolean permitUser(String user, String password) {
-
+        
         List<String> values = usrDat.get(user);
         if (values != null) {
             String pass = values.get(1);
@@ -1093,7 +1102,7 @@ public class D3webDialog extends HttpServlet {
         httpSession.setAttribute("handleBrowsers", null);
         D3webUserSettings us = new D3webUserSettings();
         httpSession.setAttribute(USER_SETTINGS, us);
-
+        
         D3webConnector.getInstance().setSession(d3webSession);
         if (d3wcon.isLogging()) {  // move into httpSession
 
@@ -1101,12 +1110,12 @@ public class D3webDialog extends HttpServlet {
             initializeLoggingMechanism(httpSession);
         }
     }
-
+    
     private void initializeLoggingMechanism(HttpSession httpSession) {
         Date now = new Date();
         String filename = // init logfilename
                 createLogfileName(now, httpSession);
-
+        
         JSONLogger logger = null;
 
         // create logger
@@ -1127,7 +1136,7 @@ public class D3webDialog extends HttpServlet {
     protected void show(HttpServletRequest request, HttpServletResponse response,
             HttpSession httpSession)
             throws IOException {
-
+        
         PrintWriter writer = response.getWriter();
         // get the root renderer --> call getRenderer with null
         DefaultRootD3webRenderer d3webr =
@@ -1153,17 +1162,17 @@ public class D3webDialog extends HttpServlet {
     protected void saveCase(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession)
             throws IOException {
-
+        
         PrintWriter writer = null;
         writer = response.getWriter();
-
+        
         String userFilename = request.getParameter("userfn");
         String user = (String) httpSession.getAttribute("user");
         String lastLoaded = (String) httpSession.getAttribute("lastLoaded");
         String forceString = request.getParameter("force");
         boolean force = forceString != null && forceString.equals("true");
         Session d3webSession = (Session) httpSession.getAttribute(D3WEB_SESSION);
-
+        
         if (force
                 || !PersistenceD3webUtils.existsCase(user, userFilename)
                 || (PersistenceD3webUtils.existsCase(user, userFilename)
@@ -1191,7 +1200,7 @@ public class D3webDialog extends HttpServlet {
      */
     protected void sendMail(HttpServletRequest request, HttpServletResponse response,
             HttpSession httpSession) throws MessagingException {
-
+        
         final String user = "SendmailAnonymus@freenet.de";
         final String pw = "sendmail";
 
@@ -1209,19 +1218,19 @@ public class D3webDialog extends HttpServlet {
 
         javax.mail.Session session = javax.mail.Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
-
+                    
                     @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(user, pw);
                     }
                 });
-
+        
         MimeMessage message = new MimeMessage(session);
 
         // from-identificator
         InternetAddress from = new InternetAddress(user);
         message.setFrom(from);
-
+        
         String loginUser = request.getParameter("user");
 
         // default toAddress if nothing else specified in userdat.csv
@@ -1240,20 +1249,20 @@ public class D3webDialog extends HttpServlet {
          * A subject
          */
         message.setSubject(this.getClass().getSimpleName() + " Loginanfrage");
-
+        
         message.setText("Bitte Logindaten erneut zusenden: \n\n"
                 + "Benutzername: " + loginUser);
         Transport.send(message);
-
+        
     }
-
+    
     protected void sendFeedbackMail(HttpServletRequest request,
             HttpServletResponse response,
             HttpSession httpSession) throws MessagingException {
-
+        
         final String user = "SendmailAnonymus@freenet.de";
         final String pw = "sendmail";
-
+        
         final String username = request.getParameter("user").toString();
         final String contact = request.getParameter("contact").toString();
         final String feedback = request.getParameter("feedback").toString();
@@ -1272,13 +1281,13 @@ public class D3webDialog extends HttpServlet {
 
         javax.mail.Session session = javax.mail.Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
-
+                    
                     @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(user, pw);
                     }
                 });
-
+        
         MimeMessage message = new MimeMessage(session);
 
         // from-identificator
@@ -1298,23 +1307,23 @@ public class D3webDialog extends HttpServlet {
             dialogFlag = "";
         }
         message.setSubject("Feedback" + " " + dialogFlag);
-
+        
         message.setText("Username:\t" + username + "\n"
                 + "Contact: \t" + contact + "\n\n"
                 + "Feedback:\n"
                 + feedback.replace("+", " "));
         Transport.send(message);
-
+        
     }
-
+    
     protected void sendUEQMail(HttpServletRequest request,
             HttpServletResponse response,
             HttpSession httpSession) throws MessagingException {
-
-
+        
+        
         final String user = "SendmailAnonymus@freenet.de";
         final String pw = "sendmail";
-
+        
         final String username = request.getParameter("user").toString();
         final String contact = request.getParameter("contact").toString();
         final String qData = request.getParameter("questionnaireData").toString();
@@ -1333,13 +1342,13 @@ public class D3webDialog extends HttpServlet {
 
         javax.mail.Session session = javax.mail.Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
-
+                    
                     @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(user, pw);
                     }
                 });
-
+        
         MimeMessage message = new MimeMessage(session);
 
         // from-identificator
@@ -1355,10 +1364,10 @@ public class D3webDialog extends HttpServlet {
          * Constructing the message Questionnaire Data:
          * questionID1***value1###questionID2***value2###
          */
-
+        
         String[] qvpairs = qData.split("###");
         StringBuilder qDataBui = new StringBuilder();
-
+        
         for (String pair : qvpairs) {
             String[] splitpair = pair.split("---");
             qDataBui.append(splitpair[0].replace("UE_", ""));
@@ -1366,26 +1375,26 @@ public class D3webDialog extends HttpServlet {
             qDataBui.append(splitpair[1]);
             qDataBui.append("\n");
         }
-
+        
         String dialogFlag = d3wcon.getUserprefix();
         if (dialogFlag == null) {
             dialogFlag = "";
         }
         message.setSubject("UE Questionnaire Data" + " " + dialogFlag);
-
+        
         message.setText("Username:\t" + username + "\n"
                 + "Contact: \t" + contact + "\n\n"
                 + "Questionnaire Data:\n"
                 + qDataBui.toString().replace("_", " "));
         Transport.send(message);
-
+        
     }
-
+    
     protected void updateSummary(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) throws IOException {
         PrintWriter writer = response.getWriter();
-
+        
         String questionnaireContentID = "questionnaireSummaryContent";
-
+        
         writer.append(REPLACEID + questionnaireContentID);
         writer.append(REPLACECONTENT);
         SummaryD3webRenderer rootRenderer = D3webRendererMapping.getInstance().getSummaryRenderer();
@@ -1394,9 +1403,9 @@ public class D3webDialog extends HttpServlet {
                 (Session) httpSession.getAttribute(D3WEB_SESSION),
                 SummaryD3webRenderer.SummaryType.QUESTIONNAIRE, httpSession));
         writer.append("<div>");
-
+        
         String gridContentID = "gridSummaryContent";
-
+        
         writer.append(REPLACEID + gridContentID);
         writer.append(REPLACECONTENT);
         writer.append("<div id='" + gridContentID + "'>");
@@ -1405,7 +1414,7 @@ public class D3webDialog extends HttpServlet {
                 SummaryD3webRenderer.SummaryType.GRID, httpSession));
         writer.append("<div>");
     }
-
+    
     protected void logInitially(HttpServletRequest request, JSONLogger logger) {
         // get values to logQuestionValue initially: browser, user, and start time
         String browser =
@@ -1416,7 +1425,7 @@ public class D3webDialog extends HttpServlet {
                 request.getParameter("timestring").replace("+", " ");
         ServletLogUtils.logBaseInfo(browser, user, start, logger);
     }
-
+    
     protected void logSessionEnd(HttpServletRequest request, HttpSession httpSession) {
         String end = request.getParameter("timestring").replace("+", " ");
         JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
@@ -1427,38 +1436,38 @@ public class D3webDialog extends HttpServlet {
         //D3webConnector.getInstance().setLogger(new JSONLogger());
         //GlobalSettings.getInstance().setInitLogged(false);
     }
-
+    
     protected void logWidget(HttpServletRequest request, HttpSession httpSession) {
         String widgetID = request.getParameter("widget");
         String time = request.getParameter("timestring").replace("+", " ");
         String language = "";
-
+        
         if (request.getParameter("language") != null) {
             widgetID = "LANGUAGE";
             language = request.getParameter("language");
         }
-
+        
         JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
         ServletLogUtils.logWidget(widgetID, time, language, logger);
     }
-
+    
     protected void logInfoPopup(HttpServletRequest request, HttpSession httpSession) {
         String id = request.getParameter("id");
         String start = request.getParameter("timestring");
         String timediff = request.getParameter("value");
         id = id.replace("+", " ");
         start = start.replace("+", " ");
-
+        
         JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
         ServletLogUtils.logInfoPopup(id, start, timediff, logger);
     }
-
+    
     protected void logNotAllowed(HttpServletRequest request, HttpSession httpSession) {
         String logtime = request.getParameter("timestring").replace("+", " ");
         String value = request.getParameter("value");
         String question = request.getParameter("id");
         question = AbstractD3webRenderer.getObjectNameForId(question);
-
+        
         JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
         ServletLogUtils.logNotAllowed(logtime, value, question, logger);
     }
@@ -1496,18 +1505,18 @@ public class D3webDialog extends HttpServlet {
             source = request.getParameter("src");
         }
         return source.endsWith(".xml") ? source : source + ".xml";
-
-
-
-
+        
+        
+        
+        
     }
-
+    
     private class DialogState {
-
+        
         Set<QASet> indicatedQASets;
         List<Question> answeredQuestions;
         Set<TerminologyObject> unknownQuestions;
-
+        
         DialogState(Session d3webSession) {
             indicatedQASets = D3webUtils.getActiveSet(d3webSession);
             answeredQuestions = d3webSession.getBlackboard().getAnsweredQuestions();
@@ -1523,49 +1532,49 @@ public class D3webDialog extends HttpServlet {
 
         return formatted + "_" + sid.getId() + ".txt";
     }
-
+    
     protected void markWidget(HttpServletRequest request, HttpSession httpSession) {
         if (request.getParameter("isWidget") != null) {
             String mark = request.getParameter("isWidget");
             httpSession.setAttribute("isWidget", mark);
         }
-
+        
     }
-
+    
     protected void checkWidgetClicked(HttpSession httpSession, HttpServletResponse response)
             throws IOException {
         PrintWriter writer = response.getWriter();
         if (httpSession.getAttribute("isWidget") != null) {
             //System.out.println("MARK: " + httpSession.getAttribute("isWidget"));
             if (httpSession.getAttribute("isWidget").toString().equals("true")) {
-
+                
                 writer.append("true");
-
+                
             } else {
                 writer.append("false");
             }
-
+            
         }
     }
-
+    
     private boolean equalOrHigher(String version, String refNr) {
         int nr = -1;
         if (version.contains(".")) {
             String verArray[] = version.split("\\.");
-           nr = Integer.parseInt(verArray[0]);
+            nr = Integer.parseInt(verArray[0]);
         } else {
             nr = Integer.parseInt(version);
         }
         int ref = Integer.parseInt(refNr);
-
+        
         if (nr >= ref) {
             return true;
         }
-
+        
         return false;
     }
     
-    private String assembleBrowserCompatibilityMessage(String browser, String version){
+    private String assembleBrowserCompatibilityMessage(String browser, String version) {
         StringBuilder bui = new StringBuilder();
         
         bui.append("<div id=\"BROWSERINFO\" style='width: 700px; margin-left:auto; margin-right:auto; margin-top:50px; font-size:1.5em; color: red'>");
@@ -1585,6 +1594,6 @@ public class D3webDialog extends HttpServlet {
         bui.append("</ul>");
         bui.append("</div>");
         
-        return bui.toString();    
+        return bui.toString();        
     }
 }

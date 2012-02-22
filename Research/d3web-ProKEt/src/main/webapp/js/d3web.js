@@ -38,7 +38,7 @@ $(function() {
         
         link = window.location.href.replace(window.location.search, "") + link;
         
-        $.ajax({
+      /*$.ajax({
             type : "GET",
             url : link,
             asynch: true,
@@ -50,7 +50,7 @@ $(function() {
                 } 
             }
         });
-    
+    */
     
         
     /* LOGIN DIALOG */

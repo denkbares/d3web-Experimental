@@ -173,6 +173,7 @@ INTERNET EXPLORER QUIRKS
 - dauert alles zu lange 
 - welche Version?
 - download txt button not invisible for grid
+- ! Browser Check: configure per specs which way to include (beforelogin, beforedialog)
 
 
 LOGGING
