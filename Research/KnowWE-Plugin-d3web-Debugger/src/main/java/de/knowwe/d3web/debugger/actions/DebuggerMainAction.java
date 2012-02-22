@@ -63,6 +63,8 @@ public class DebuggerMainAction extends AbstractAction {
 			String kbID = context.getParameter("kbid");
 			String qid = context.getParameter("qid");
 			String sid = context.getParameter("sid");
+			int selectInd = 0;
+			if (context.getParameters().containsKey("selectInd")) selectInd = Integer.parseInt(context.getParameter("selectInd"));
 			String rate = "";
 			int ruleid;
 			if (context.getParameters().containsKey("ruleid")) ruleid = Integer.parseInt(context.getParameter("ruleid"));
@@ -114,7 +116,7 @@ public class DebuggerMainAction extends AbstractAction {
 							+ DebugUtilities.COLOR_ESTABLISHED + "'>" + sid + " (ESTABLISHED)</p>");
 				}
 			}
-			int eval;
+			int eval, select = 0;
 			if (iTos.size() == 0) buffer.append("<p>" + noInfluentialRules + "</p>");
 			else {
 				buffer.append("<p>"
@@ -122,12 +124,18 @@ public class DebuggerMainAction extends AbstractAction {
 						+ "<select onChange='KNOWWE.plugin.debuggr.mainSelected(this.options[this.selectedIndex].value);'>");
 				buffer.append("<option>" + allElements + "</option>");
 				for (TerminologyObject tobj : iTos) {
-					buffer.append("<option>" + tobj + "</option>");
+					select++;
+					if (select == selectInd) buffer.append("<option selected='yes'>" + tobj
+							+ "</option>");
+					else buffer.append("<option>" + tobj + "</option>");
 				}
 				buffer.append("</select></p>");
 			}
 			// Build list for all Rules
-			buffer.append("<ul id='" + allElements + "_rules' style='display:block;'>");
+			if (selectInd == 0) buffer.append("<ul id='" + allElements
+					+ "_rules' style='display:block;'>");
+			else buffer.append("<ul id='" + allElements + "_rules' style='display:none;'>");
+
 			for (Rule r : rules) {
 				if (ruleid == r.hashCode()) buffer.append("<li class='debuggerMainEntryActive' ");
 				else buffer.append("<li class='debuggerMainEntry' ");
@@ -146,8 +154,13 @@ public class DebuggerMainAction extends AbstractAction {
 			buffer.append("</ul>");
 
 			// Build lists for Rules with object in condition
+			select = 0;
 			for (TerminologyObject tobj : iTos) {
-				buffer.append("<ul id='" + tobj + "_rules' style='display:none;'>");
+				select++;
+				if (select == selectInd) buffer.append("<ul id='" + tobj
+						+ "_rules' style='display:block;'>");
+				else buffer.append("<ul id='" + tobj + "_rules' style='display:none;'>");
+
 				for (Rule r : rules) {
 					if (!r.getCondition().getTerminalObjects().contains(tobj)) continue;
 					if (ruleid == r.hashCode()) buffer.append("<li class='debuggerMainEntryActive' ");

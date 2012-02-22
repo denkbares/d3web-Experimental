@@ -399,6 +399,7 @@ KNOWWE.plugin.debuggr = function(){
    			ruleid = $('debuggerRule').childNodes[0].getAttribute('ruleid');
    			traceLength = $('debuggerTrace').childNodes.length;
    			qid = $('debuggerTrace').childNodes[traceLength - 1].innerHTML;
+   			selectInd = $ES('select', 'debuggerMain')[0].selectedIndex;
    			sid = "";
    			if (traceLength > 1)
    				sid = $('debuggerTrace').childNodes[1].innerHTML;
@@ -411,6 +412,7 @@ KNOWWE.plugin.debuggr = function(){
        				kbid : kbid,
        				qid : qid,
        				sid : sid,
+       				selectInd : selectInd,
        				ruleid : ruleid
        		} 
        		
