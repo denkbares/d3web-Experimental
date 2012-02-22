@@ -79,7 +79,6 @@ KNOWWE.plugin.debuggr = function(){
 			});
 		},
 		traceClicked : function(element) {
-			alert(element.innerHTML);
 			KNOWWE.plugin.debuggr.removeTrace(element);
 			KNOWWE.plugin.debuggr.renderMenu(element);
 			KNOWWE.plugin.debuggr.renderMain(element);
