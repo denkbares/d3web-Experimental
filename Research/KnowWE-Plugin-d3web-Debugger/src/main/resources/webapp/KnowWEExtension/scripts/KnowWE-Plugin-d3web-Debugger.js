@@ -79,6 +79,7 @@ KNOWWE.plugin.debuggr = function(){
 			});
 		},
 		traceClicked : function(element) {
+			alert(element.innerHTML);
 			KNOWWE.plugin.debuggr.removeTrace(element);
 			KNOWWE.plugin.debuggr.renderMenu(element);
 			KNOWWE.plugin.debuggr.renderMain(element);
@@ -203,6 +204,9 @@ KNOWWE.plugin.debuggr = function(){
 		mainSelected : function(option) {
 			$ES('ul', 'debuggerMain').each(function(element) {
 				element.style.display = "none";
+			});
+			$$('[class^=debuggerMainEntryActive]').each(function(mainEntry) {
+				mainEntry.className = 'debuggerMainEntry';
 			});
 			id = option + "_rules";
 			document.getElementById(id).style.display = "block";
@@ -420,6 +424,11 @@ KNOWWE.plugin.debuggr = function(){
     			        	try {
     			            	KNOWWE.plugin.debuggr.initializeMenu();
     			            	KNOWWE.plugin.debuggr.initializeMain();
+    			            	$ES('span', 'debuggerTrace').each(function(element) {
+    			            		element.onclick = function() {
+    			            			KNOWWE.plugin.debuggr.traceClicked(this);
+    			            		}
+    			            	});
                         		KNOWWE.core.rerendercontent.update(); //Clear new SolutionPanel
     			        	}
     			        	catch (e) { /*ignore*/ }
