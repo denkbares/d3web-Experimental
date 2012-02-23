@@ -91,18 +91,8 @@ $(function(){
 * Returns a String in the form "<type> <version>"
 */
 function retrieveBrowserVal(){
-    var val = "";
-    // retrieve the browser used
-    jQuery.each(jQuery.browser, function(i, value) {
-        var v = "";
-        if(i=="version"){
-            v = value + " ";
-        } else{
-            v = i + " ";
-        }
-        val += v;
-    });
-    return val;
+    
+    return BrowserDetect.browser + " " + BrowserDetect.version;
 }
 
 function retrieveUserVal(){

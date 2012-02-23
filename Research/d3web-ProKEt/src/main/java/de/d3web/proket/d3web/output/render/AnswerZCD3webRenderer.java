@@ -80,8 +80,8 @@ public class AnswerZCD3webRenderer extends AbstractD3webRenderer implements Answ
 
             // assemble link here
             StringBuilder linkBui = new StringBuilder();
-            linkBui.append("http://132.187.15.128:8080/");
-            linkBui.append("idb/index.jsp?ext=eurahs");
+            linkBui.append("http://promotion.medizin.uni-wuerzburg.de/idb/index.jsp");
+            linkBui.append("?ext=eurahs");
             
             String token = DateCoDec.getCode();
             linkBui.append("&t=" + token);  // TODO: get Token
@@ -94,6 +94,7 @@ public class AnswerZCD3webRenderer extends AbstractD3webRenderer implements Answ
             }
             String mailEncoded = Base64.encodeBase64String(mailPure.getBytes());
             linkBui.append("&l=" + mailEncoded);  // TODO: url-encoded mail address
+
 
             st.setAttribute("text", linkBui.toString());
             st.setAttribute("count", D3webConnector.getInstance().getID(to));

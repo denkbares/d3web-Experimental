@@ -126,8 +126,9 @@ public class JSCodeContainer implements ICodeContainer {
         linkedBibs.add("jquery/jquery.print.js");
         linkedBibs.add("jqueryUI/jqueryUi-1.8.10.all.min.js");
         
-        ownBibs.add("uelogging.js");
+        
         ownBibs.add("browserInfo.js");
+        ownBibs.add("uelogging.js");
         
         // manage language mechanism
         String lang = D3webConnector.getInstance().getLanguage();

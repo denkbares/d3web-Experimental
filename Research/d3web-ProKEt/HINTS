@@ -11,3 +11,8 @@
                redirectPort="8443" 
 	       URIEncoding="UTF-8"
               />
+
+- Dauerschleife Login - Login - Login
+    --> es muss ERST die dbLogin action abgefragt werden bevor man aus der property wieder auf den Login springen lässt!
+    --> es kann auch sein, dass auf dem Server in /tomcat/conf/Catalina/localhost die Dateien
+        EuraHS.xml und EuraHS-Dialog.xml die richtigen DB Daten nicht enthalten

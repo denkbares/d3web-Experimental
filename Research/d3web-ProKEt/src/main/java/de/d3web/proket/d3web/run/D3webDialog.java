@@ -256,6 +256,18 @@ public class D3webDialog extends HttpServlet {
             httpSession.setAttribute(USER_SETTINGS, us);
         }
         
+        // in case nothing other is provided, "show" is the default action
+        String action = request.getParameter("action");
+        
+        if (action == null) {
+            action = "show";
+        }
+        
+        if (action.equalsIgnoreCase("dbLogin")) {
+            loginDB(request, response, httpSession);
+            return;
+        }
+
         if (d3wcon.getLoginMode() == LoginMode.db) {
             String authenticated = (String) httpSession.getAttribute("authenticated");
             if (authenticated == null || !authenticated.equals("yes")) {
@@ -264,19 +276,6 @@ public class D3webDialog extends HttpServlet {
             }
         }
         
-        // in case nothing other is provided, "show" is the default action
-        String action = request.getParameter("action");
-        
-        if (action == null) {
-            action = "show";
-            
-        }
-        
-        if (action.equalsIgnoreCase("dbLogin")) {
-            loginDB(request, response, httpSession);
-            return;
-        }
-
         // set handleBrowsers flag null for all actions other than handlecheck
         // itself; that way, the check can be processed correctly also after 
         // refreshs or the like
@@ -687,7 +686,8 @@ public class D3webDialog extends HttpServlet {
                 Question qa =
                         D3webConnector.getInstance().getKb().getManager().searchQuestion(to.getName());
                 Value va = d3webSession.getBlackboard().getValue((ValueObject) qa);
-                ServletLogUtils.logQuestionValue(qa.getName(), va.getValue().toString(), logtime, logger);
+                int doubleAsInt = (int) Double.parseDouble(va.toString());
+                ServletLogUtils.logQuestionValue(qa.getName(), Integer.toString(doubleAsInt), logtime, logger);
             }
         }
     }

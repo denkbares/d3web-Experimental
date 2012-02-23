@@ -162,7 +162,7 @@ public class DownloadTxtFileServlet extends HttpServlet {
                     bui.append(to.getName());
                     bui.append(" -- ");
                     bui.append(f);
-                    bui.append(System.getProperty("line.separator"));
+                    bui.append("\r\n");
                 } // handle abstraction questions separately, e.g. for rounding age quesstion
                 else if (to.getInfoStore().getValue(BasicProperties.ABSTRACTION_QUESTION)
                         && to instanceof QuestionNum) {
@@ -173,7 +173,7 @@ public class DownloadTxtFileServlet extends HttpServlet {
                     bui.append(to.getName());
                     bui.append(" -- ");
                     bui.append(doubleAsInt);
-                    bui.append(System.getProperty("line.separator"));
+                    bui.append("\r\n");
                 } // all other questions: just append question and val
                 else {
                     bui.append("\t q");
@@ -182,7 +182,7 @@ public class DownloadTxtFileServlet extends HttpServlet {
                     bui.append(to.getName());
                     bui.append(" -- ");
                     bui.append(val);
-                    bui.append(System.getProperty("line.separator"));
+                    bui.append("\r\n");
                 }
             }
         }
