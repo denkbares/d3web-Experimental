@@ -54,6 +54,7 @@ public class DebuggerRuleAction extends AbstractAction {
 			String title = context.getTitle();
 			String web = context.getWeb();
 			String kbID = context.getParameter("kbid");
+			String ruleArticle;
 			if (context.getParameter("ruleid") == null) return "";
 			int ruleid = Integer.parseInt(context.getParameter("ruleid"));
 			SessionBroker broker = D3webUtils.getBroker(context.getUserName(), context.getWeb());
@@ -65,10 +66,12 @@ public class DebuggerRuleAction extends AbstractAction {
 			buffer.append("<span ruleid='" + ruleid + "'>");
 			for (Rule r : rules) {
 				if (r.hashCode() == ruleid) {
+					ruleArticle = DebugUtilities.getRuleResource(r);
+					if (ruleArticle.equals("")) ruleArticle = context.getTitle();
 					dc = new DebugCondition(r.getCondition());
 					buffer.append(KnowWEUtils.unmaskHTML(dc.render(session, web, title)));
 					buffer.append(KnowWEUtils.unmaskHTML("<a class='ruleLink' href='Wiki.jsp?page="
-							+ DebugUtilities.getRuleResource(r) + "'></a>"));
+							+ ruleArticle + "'></a>"));
 					break;
 				}
 			}

@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2012 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.knowwe.d3web.debugger;
 
@@ -28,12 +28,13 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Solution;
-import de.d3web.we.kdom.rule.ConditionActionRuleContent;
+import de.d3web.we.kdom.rules.RuleContentType;
+import de.d3web.we.kdom.rules.action.RuleAction;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-
+import de.knowwe.core.utils.KnowWEUtils;
 
 /**
  * 
@@ -174,19 +175,22 @@ public class DebugUtilities {
 	 * Get the path to the rule's article.
 	 */
 	public static String getRuleResource(Rule r) {
-		String rulePath;
+		Rule rule;
+		List<Section<RuleAction>> rules;
 
-		List<Section<ConditionActionRuleContent>> rules;
-		for (KnowWEArticle article : KnowWEEnvironment.getInstance().getArticleManager(KnowWEEnvironment.DEFAULT_WEB).getArticles()) {
-			rules = Sections.findSuccessorsOfType(article.getSection(),
-					ConditionActionRuleContent.class);
-			for (Section<ConditionActionRuleContent> sec : rules) {
-				// TODO: Vergleiche Regel mit Section
+		for (KnowWEArticle article : KnowWEEnvironment.getInstance().getArticleManager(
+				KnowWEEnvironment.DEFAULT_WEB).getArticles()) {
+
+			rules = Sections.findSuccessorsOfType(article.getSection(), RuleAction.class);
+			for (Section<RuleAction> ruleAction : rules) {
+
+				rule = (Rule) KnowWEUtils.getStoredObject(article, ruleAction,
+							RuleContentType.ruleStoreKey);
+
+				if (rule != null && rule.equals(r)) return article.getTitle();
 			}
 		}
-		
-		rulePath = "rulePath";
 
-		return rulePath;
+		return "";
 	}
 }

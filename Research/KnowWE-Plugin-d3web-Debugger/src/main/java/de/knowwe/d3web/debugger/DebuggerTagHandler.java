@@ -25,6 +25,7 @@ import de.d3web.core.session.Session;
 import de.d3web.we.basic.SessionBroker;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWEAttributes;
+import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.taghandler.AbstractTagHandler;
 import de.knowwe.core.user.UserContext;
@@ -48,15 +49,18 @@ public class DebuggerTagHandler extends AbstractTagHandler {
 	@Override
 	public String render(Section<?> section, UserContext userContext,
 			Map<String, String> parameters) {
-	// Get the page's knowledgebase and prepare some variables
+		// Get the page's knowledgebase and prepare some variables
 		StringBuffer buffer = new StringBuffer();
 		String title = userContext.getTitle();
 		String web = userContext.getParameter(KnowWEAttributes.WEB);
+		// If article already contains a debugger, return error.
+		String articleText = KnowWEEnvironment.getInstance().getArticle(web, title).getSection().getText();
+		if (articleText.split("KnowWEPlugin debugger").length > 2) return KnowWEUtils.maskHTML("<p class='info box'>Fehler: Nur ein Debugger pro Artikel!</p>");
+		// Get knowledgebase
 		SessionBroker broker;
 		Session session = null;
 		KnowledgeBase kb = null;
 		String kbID = "";
-		// Get knowledgebase
 		try {
 			// If knowledgebase's id is given
 			if (parameters.containsKey("kbID")) {
