@@ -139,6 +139,8 @@ DONE - Refactor Hierarchy prototypes as to use own attributes AND/OR instead of 
 - d3web: Introtext über KB
 - Ausprobieren Schrift über Pfeil
 - JS interactivity für num und oc fragen
+- Install IE check as beforedialog
+- deploy automatically wiki to dialog
 
 - neuer Fall, speichern, reset etc
 
@@ -160,7 +162,7 @@ DONE - In this session question 115: "Was the complete scar repaired?" was shown
     --> For the primary ventral route this question is not relevant and should not be shown.
     -->> Ist abhängig von der Frage "Mesh Repair", nicht von der Route --> ULI
 - >IE Meldung englisch
-- Internet Explorer 9 oder 8 --> check
+- Internet Explorer 9
 - Images Upload (Frank spricht hierfür erstmal mit Alex H.)
 DONE - Grid Summary --> download .txt Button deaktivieren
 DONE - Kopfzeile Grid: Leerzeichen fehlt
@@ -174,6 +176,7 @@ INTERNET EXPLORER QUIRKS
 - welche Version?
 - download txt button not invisible for grid
 - ! Browser Check: configure per specs which way to include (beforelogin, beforedialog)
+
 
 
 LOGGING

@@ -29,6 +29,7 @@ import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -47,7 +48,7 @@ public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements
      * Adapted specifically for questionnaire rendering
      */
     public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
-            TerminologyObject to, TerminologyObject parent, int loc) {
+            TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession) {
 
         StringBuilder sb = new StringBuilder();
 
@@ -86,7 +87,7 @@ public class QuestionnaireD3webRenderer extends AbstractD3webRenderer implements
         }
 
         // render the children
-        super.renderChildren(st, d3webSession, cc, to, loc);
+        super.renderChildren(st, d3webSession, cc, to, loc, httpSession);
 
         sb.append(st.toString());
 

@@ -35,6 +35,7 @@ import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
+import javax.servlet.http.HttpSession;
 
 /**
  * Renderer for rendering basic OCAnswers.
@@ -52,7 +53,8 @@ public class AnswerOCD3webRenderer extends AbstractD3webRenderer implements Answ
 	 * Specifically adapted for OCAnswer rendering
 	 */
 	public String renderTerminologyObject(ContainerCollection cc, Session d3webSession,
-			Choice c, TerminologyObject to, TerminologyObject parent, int loc) {
+			Choice c, TerminologyObject to, TerminologyObject parent, int loc,
+                        HttpSession httpSession) {
 
 		StringBuilder sb = new StringBuilder();
 

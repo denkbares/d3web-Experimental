@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+// TODO: move to d3web packages
 public class DB {
 
 	public static boolean isValidToken(String token, String email) {

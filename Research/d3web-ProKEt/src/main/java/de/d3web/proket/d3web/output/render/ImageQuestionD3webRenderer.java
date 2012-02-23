@@ -41,6 +41,7 @@ import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
+import javax.servlet.http.HttpSession;
 
 /**
  * Renderer for rendering basic Questions.
@@ -59,7 +60,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 	 * Adapted specifically for question rendering
 	 */
 	public String renderTerminologyObject(Session d3webSession, ContainerCollection cc,
-			TerminologyObject to, TerminologyObject parent, int loc) {
+			TerminologyObject to, TerminologyObject parent, int loc, HttpSession httpSession) {
 
             	StringBuilder sb = new StringBuilder();
 
@@ -141,7 +142,7 @@ public class ImageQuestionD3webRenderer extends AbstractD3webRenderer implements
 		// }
 
 		// underneath="within" a rendered question, always answers are rendered
-		super.renderChoices(st, cc, to, parent, d3webSession, loc);
+		super.renderChoices(st, cc, to, parent, d3webSession, loc, httpSession);
 
 		sb.append(st.toString());
 

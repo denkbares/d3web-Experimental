@@ -22,6 +22,7 @@ import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.session.Session;
 import de.d3web.proket.output.container.ContainerCollection;
+import javax.servlet.http.HttpSession;
 
 /**
  * 
@@ -44,7 +45,7 @@ public interface AnswerD3webRenderer {
 	 * @return the resulting String that is inserted in the parent
 	 *         StringTemplate as a result.
 	 */
-	public String renderTerminologyObject(ContainerCollection cc, Session d3webSession,
-			Choice c, TerminologyObject to, TerminologyObject parent, int localIdent);
+	  public String renderTerminologyObject(ContainerCollection cc, Session d3webSession,
+			Choice c, TerminologyObject to, TerminologyObject parent, int localIdent, HttpSession httpSession);
 
 }

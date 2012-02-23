@@ -36,6 +36,7 @@ import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
+import javax.servlet.http.HttpSession;
 
 /**
  * Renderer for rendering basic NumAnswers.
@@ -53,7 +54,8 @@ public class AnswerTextD3webRenderer extends AbstractD3webRenderer implements An
 	 * Specifically adapted for rendering NumAnswers
 	 */
 	public String renderTerminologyObject(ContainerCollection cc, Session d3webSession, Choice c,
-			TerminologyObject to, TerminologyObject parent, int loc) {
+			TerminologyObject to, TerminologyObject parent, int loc,
+                        HttpSession httpSession) {
 
 		QuestionText tq = (QuestionText) to;
 

@@ -43,6 +43,7 @@ import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.TemplateUtils;
+import javax.servlet.http.HttpSession;
 
 /**
  * Renderer for rendering basic NumAnswers.
@@ -60,7 +61,8 @@ public class AnswerDateD3webRenderer extends AnswerTextD3webRenderer implements 
 	 */
 	@Override
 	public String renderTerminologyObject(ContainerCollection cc, 
-        Session d3webSession, Choice choice, TerminologyObject to, TerminologyObject parent, int loc) {
+        Session d3webSession, Choice choice, TerminologyObject to, TerminologyObject parent, int loc,
+        HttpSession httpSession) {
 
 		QuestionDate dq = (QuestionDate) to;
 

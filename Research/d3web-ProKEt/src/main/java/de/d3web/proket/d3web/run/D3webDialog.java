@@ -746,7 +746,8 @@ public class D3webDialog extends HttpServlet {
             writer.append(
                     toRenderer.renderTerminologyObject(
                     d3webSession, cc, to,
-                    parent, us.getLanguageId()));
+                    parent, us.getLanguageId(),
+                    httpSession));
         }
         writer.append(REPLACEID + "headerInfoLine");
         writer.append(REPLACECONTENT);

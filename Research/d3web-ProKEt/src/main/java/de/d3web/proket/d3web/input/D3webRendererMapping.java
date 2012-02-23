@@ -22,26 +22,8 @@ package de.d3web.proket.d3web.input;
 import java.util.HashMap;
 
 import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.knowledge.terminology.QContainer;
-import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.knowledge.terminology.QuestionDate;
-import de.d3web.core.knowledge.terminology.QuestionMC;
-import de.d3web.core.knowledge.terminology.QuestionNum;
-import de.d3web.core.knowledge.terminology.QuestionOC;
-import de.d3web.core.knowledge.terminology.QuestionText;
-import de.d3web.proket.d3web.output.render.AbstractD3webRenderer;
-import de.d3web.proket.d3web.output.render.AnswerD3webRenderer;
-import de.d3web.proket.d3web.output.render.AnswerDateD3webRenderer;
-import de.d3web.proket.d3web.output.render.AnswerMCD3webRenderer;
-import de.d3web.proket.d3web.output.render.AnswerNumD3webRenderer;
-import de.d3web.proket.d3web.output.render.AnswerOCD3webRenderer;
-import de.d3web.proket.d3web.output.render.AnswerTextD3webRenderer;
-import de.d3web.proket.d3web.output.render.AnswerUnknownD3webRenderer;
-import de.d3web.proket.d3web.output.render.DefaultRootD3webRenderer;
-import de.d3web.proket.d3web.output.render.ImageQuestionD3webRenderer;
-import de.d3web.proket.d3web.output.render.QuestionD3webRenderer;
-import de.d3web.proket.d3web.output.render.QuestionnaireD3webRenderer;
-import de.d3web.proket.d3web.output.render.SummaryD3webRenderer;
+import de.d3web.core.knowledge.terminology.*;
+import de.d3web.proket.d3web.output.render.*;
 import de.d3web.proket.d3web.properties.ProKEtProperties;
 import de.d3web.proket.utils.GlobalSettings;
 
@@ -67,6 +49,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
 	private static final String TXT_ANSWER = "TXT";
 	private static final String MC_ANSWER = "MC";
 	private static final String OC_ANSWER = "OC";
+        private static final String ZC_ANSWER = "ZC";
 	private static final String SUMMARY = "Summary";
 	private static final String Q_CONT = "QCont";
 	private static final String IMG_QUESTION = "IMGQuestion";
@@ -101,6 +84,7 @@ public class D3webRendererMapping extends HashMap<String, String> {
 
 		this.put(OC_ANSWER, AnswerOCD3webRenderer.class.getSimpleName());
 		this.put(MC_ANSWER, AnswerMCD3webRenderer.class.getSimpleName());
+                this.put(ZC_ANSWER, AnswerZCD3webRenderer.class.getSimpleName());
 		this.put(TXT_ANSWER, AnswerTextD3webRenderer.class.getSimpleName());
 		this.put(NUM_ANSWER, AnswerNumD3webRenderer.class.getSimpleName());
 		this.put(DATE_ANSWER, AnswerDateD3webRenderer.class.getSimpleName());
@@ -145,7 +129,12 @@ public class D3webRendererMapping extends HashMap<String, String> {
 	public AnswerD3webRenderer getAnswerRendererObject(TerminologyObject to) {
 
 		String name = DEFAULT;
-		if (to instanceof QuestionOC) {
+                
+                // ZC needs to be queried BEFORE OZ as ZC extends OC!!!
+                if (to instanceof QuestionZC) {
+			name = ZC_ANSWER;
+		}
+                else if (to instanceof QuestionOC) {
 			name = OC_ANSWER;
 		}
 		else if (to instanceof QuestionMC) {
