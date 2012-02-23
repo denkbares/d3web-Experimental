@@ -128,9 +128,7 @@ public class TestCasePlayerRenderer implements Renderer {
 				if (testCase != null) {
 					string.append(" Start: " + dateFormat.format(testCase.getStartDate()));
 
-					StringBuilder html = new StringBuilder();
-					html.append(" <a onclick='SessionDebugger.reset();'><img src='KnowWEExtension/testcaseplayer/icon/stop.gif'></a>");
-					string.append(KnowWEUtils.maskHTML(html.toString()));
+					string.append(KnowWEUtils.maskHTML(" <a onclick='SessionDebugger.reset();'><img src='KnowWEExtension/testcaseplayer/icon/stop.gif'></a>"));
 					// get Question from cookie
 					String additionalQuestions = null;
 					String cookiename = "additionalQuestions" + section.getTitle();
@@ -153,56 +151,28 @@ public class TestCasePlayerRenderer implements Renderer {
 						questionStrings = additionalQuestions.split(QUESTIONS_SEPARATOR);
 					}
 					Collection<Question> usedQuestions = TestCaseUtils.getUsedQuestions(testCase);
-					// string.append("\n%%(overflow:auto;)");
-					string.append(KnowWEUtils.maskHTML("<div style='overflow:auto'>"));
-					string.append("\n|| ||Time");
+					TableModel tableModel = new TableModel();
+					tableModel.addCell(0, 1, "Time", "Time".length());
+					int column = 2;
 					for (Question q : usedQuestions) {
-						string.append("||" + q.getName());
+						tableModel.addCell(0, column++, q.getName(), q.getName().length());
 					}
-					string.append("||Checks");
+					tableModel.addCell(0, column++, "Checks", "Checks".length());
 					TerminologyManager manager = session.getKnowledgeBase().getManager();
-					renderObservationQuestionsHeader(string, status, additionalQuestions,
-							questionStrings, manager);
+					renderObservationQuestionsHeader(status, additionalQuestions, questionStrings,
+							manager, tableModel, column);
+					column += questionStrings.length;
 					TerminologyObject selectedObject = renderObservationQuestionAdder(section,
 							user,
-							string, questionStrings, manager,
-							additionalQuestions);
-					string.append("\n");
+							questionStrings, manager, additionalQuestions,
+							tableModel, column++);
+					int row = 1;
 					for (Date date : testCase.chronology()) {
-						String dateString = dateFormat.format(date);
-						renderRunTo(string, selectedTriple, status, date, dateString);
-						// render date cell
-						string.append("|"
-								+ TimeStampType.createTimeAsTimeStamp(date.getTime()
-										- testCase.getStartDate().getTime()));
-						// render values of questions
-						for (Question q : usedQuestions) {
-							Finding finding = testCase.getFinding(date, q);
-							if (finding != null) {
-								string.append("|" + finding.getValue());
-							}
-							else {
-								string.append("| ");
-							}
-						}
-						renderCheckResults(string, testCase, status, date);
-						// render observations
-						for (String s : questionStrings) {
-							Question question = manager.searchQuestion(s);
-							if (question == null) {
-								string.append("| ");
-							}
-							else {
-								appendValueCell(string, status, question, date);
-							}
-						}
-						if (selectedObject != null) {
-							appendValueCell(string, status, selectedObject, date);
-						}
-						string.append("\n");
+						renderTableLine(selectedTriple, testCase, status, questionStrings,
+								usedQuestions,
+								manager, selectedObject, date, row++, tableModel);
 					}
-					string.append(KnowWEUtils.maskHTML("</div>"));
-					// string.append("/%\n");
+					string.append(tableModel.toHtml());
 				}
 				else {
 					string.append("\nNo TestCase contained!\n");
@@ -213,24 +183,53 @@ public class TestCasePlayerRenderer implements Renderer {
 		result.append(string.toString());
 	}
 
-	private void appendValueCell(StringBuilder string, SessionDebugStatus status, TerminologyObject object, Date date) {
-		Value value = status.getValue(object, date);
-		if (value != null) {
-			string.append("|" + value);
+	private void renderTableLine(Triple<TestCaseProvider, Section<?>, KnowWEArticle> selectedTriple, TestCase testCase, SessionDebugStatus status, String[] questionStrings, Collection<Question> usedQuestions, TerminologyManager manager, TerminologyObject selectedObject, Date date, int row, TableModel tableModel) {
+		String dateString = dateFormat.format(date);
+		renderRunTo(selectedTriple, status, date, dateString, tableModel, row);
+		int column = 1;
+		// render date cell
+		String timeAsTimeStamp = TimeStampType.createTimeAsTimeStamp(date.getTime()
+						- testCase.getStartDate().getTime());
+		tableModel.addCell(row, column++, timeAsTimeStamp, timeAsTimeStamp.length());
+		// render values of questions
+		for (Question q : usedQuestions) {
+			Finding finding = testCase.getFinding(date, q);
+			if (finding != null) {
+				tableModel.addCell(row, column, finding.getValue().toString(),
+						finding.getValue().toString().length());
+			}
+			column++;
 		}
-		else {
-			string.append("| ");
-		}
-	}
-
-	private void renderObservationQuestionsHeader(StringBuilder string, SessionDebugStatus status, String additionalQuestions, String[] questionStrings, TerminologyManager manager) {
+		renderCheckResults(testCase, status, date, tableModel, row, column++);
+		// render observations
 		for (String s : questionStrings) {
 			Question question = manager.searchQuestion(s);
 			if (question != null) {
-				string.append("||" + s);
+				appendValueCell(status, question, date, tableModel, row, column);
+			}
+			column++;
+		}
+		if (selectedObject != null) {
+			appendValueCell(status, selectedObject, date, tableModel, row, column++);
+		}
+	}
+
+	private void appendValueCell(SessionDebugStatus status, TerminologyObject object, Date date, TableModel tableModel, int row, int column) {
+		Value value = status.getValue(object, date);
+		if (value != null) {
+			tableModel.addCell(row, column, value.toString(), value.toString().length());
+		}
+	}
+
+	private void renderObservationQuestionsHeader(SessionDebugStatus status, String additionalQuestions, String[] questionStrings, TerminologyManager manager, TableModel tableModel, int column) {
+		for (String s : questionStrings) {
+			Question question = manager.searchQuestion(s);
+			StringBuilder sb = new StringBuilder();
+			if (question != null) {
+				sb.append(s);
 			}
 			else {
-				string.append("||%%(color:silver;)" + s + "%%");
+				sb.append("%%(color:silver;)" + s + "%%");
 			}
 			String newQuestionsString = additionalQuestions;
 			newQuestionsString = newQuestionsString.replace(s, "");
@@ -245,14 +244,14 @@ public class TestCasePlayerRenderer implements Renderer {
 				newQuestionsString = newQuestionsString.substring(0,
 						newQuestionsString.length() - QUESTIONS_SEPARATOR.length());
 			}
-			string.append(KnowWEUtils.maskHTML(" <input type=\"button\" value=\"-\" onclick=\"SessionDebugger.addCookie(&quot;"
+			sb.append(KnowWEUtils.maskHTML(" <input type=\"button\" value=\"-\" onclick=\"SessionDebugger.addCookie(&quot;"
 					+ newQuestionsString
 					+ "&quot;);\">"));
+			tableModel.addCell(0, column, sb.toString(), s.length() + 2);
 		}
 	}
 
-	private void renderRunTo(StringBuilder string, Triple<TestCaseProvider, Section<?>, KnowWEArticle> selectedTriple, SessionDebugStatus status, Date date, String dateString) {
-		string.append("|");
+	private void renderRunTo(Triple<TestCaseProvider, Section<?>, KnowWEArticle> selectedTriple, SessionDebugStatus status, Date date, String dateString, TableModel tableModel, int row) {
 		if (status.getLastExecuted() == null
 					|| status.getLastExecuted().before(date)) {
 			StringBuffer sb = new StringBuffer();
@@ -265,7 +264,7 @@ public class TestCasePlayerRenderer implements Renderer {
 			sb.append("<a href=\"javascript:" + js + ";undefined;\">");
 			sb.append("<img src='KnowWEExtension/testcaseplayer/icon/runto.png'>");
 			sb.append("</a>");
-			string.append(KnowWEUtils.maskHTML(sb.toString()));
+			tableModel.addCell(row, 0, KnowWEUtils.maskHTML(sb.toString()), 2);
 		}
 		else {
 			Collection<Pair<Check, Boolean>> checkResults = status.getCheckResults(date);
@@ -276,60 +275,65 @@ public class TestCasePlayerRenderer implements Renderer {
 				}
 			}
 			if (ok) {
-				string.append(KnowWEUtils.maskHTML("<img src='KnowWEExtension/testcaseplayer/icon/done.png'>"));
+				tableModel.addCell(
+						row,
+						0,
+						KnowWEUtils.maskHTML("<img src='KnowWEExtension/testcaseplayer/icon/done.png'>"),
+						2);
 			}
 			else {
-				string.append(KnowWEUtils.maskHTML("<img src='KnowWEExtension/testcaseplayer/icon/error.png'>"));
+				tableModel.addCell(
+						row,
+						0,
+						KnowWEUtils.maskHTML("<img src='KnowWEExtension/testcaseplayer/icon/error.png'>"),
+						2);
 			}
 		}
 	}
 
-	private void renderCheckResults(StringBuilder string, TestCase testCase, SessionDebugStatus status, Date date) {
+	private void renderCheckResults(TestCase testCase, SessionDebugStatus status, Date date, TableModel tableModel, int row, int column) {
 		Collection<Pair<Check, Boolean>> checkResults = status.getCheckResults(date);
+		int max = 0;
+		StringBuilder sb = new StringBuilder();
 		if (checkResults == null) {
-			if (testCase.getChecks(date).isEmpty()) {
-				string.append("| ");
-			}
-			else {
-				string.append("|");
-				for (Check c : testCase.getChecks(date)) {
-					string.append(c.getCondition() + "\\\\");
-				}
-				string.replace(string.lastIndexOf("\\\\"), string.length(), "");
+			boolean first = true;
+			for (Check c : testCase.getChecks(date)) {
+				if (!first) sb.append(KnowWEUtils.maskHTML("<br />"));
+				first = false;
+				sb.append(c.getCondition());
+				max = Math.max(max, c.getCondition().toString().length());
 			}
 		}
 		else {
-			if (checkResults.isEmpty()) {
-				string.append("| ");
-			}
-			else {
-				string.append("|");
-				StringBuffer sb = new StringBuffer();
+			if (!checkResults.isEmpty()) {
+				boolean first = true;
 				for (Pair<Check, Boolean> p : checkResults) {
+					max = Math.max(max, p.getA().getCondition().toString().length());
+					if (!first) sb.append(KnowWEUtils.maskHTML("<br />"));
+					first = false;
+					String color;
 					if (p.getB()) {
-						sb.append("%%(background-color:" + StyleRenderer.CONDITION_FULLFILLED
-								+ ";)"
-									+ p.getA().getCondition() + "%%\\\\");
+						color = StyleRenderer.CONDITION_FULLFILLED;
 					}
 					else {
-						sb.append("%%(background-color:" + StyleRenderer.CONDITION_FALSE + ";)"
-									+ p.getA().getCondition()
-									+ "%%\\\\");
+						color = StyleRenderer.CONDITION_FALSE;
 					}
+					sb.append(KnowWEUtils.maskHTML("<span style='background-color:" + color + "'>"));
+					sb.append(p.getA().getCondition());
+					sb.append(KnowWEUtils.maskHTML("</span>"));
 				}
-				sb.replace(sb.lastIndexOf("\\\\"), sb.length(), "");
-				string.append(sb.toString());
 			}
 		}
+		tableModel.addCell(row, column, sb.toString(), max);
 	}
 
-	private TerminologyObject renderObservationQuestionAdder(Section<?> section, UserContext user, StringBuilder string, String[] questionStrings, TerminologyManager manager, String questionString) {
+	private TerminologyObject renderObservationQuestionAdder(Section<?> section, UserContext user, String[] questionStrings, TerminologyManager manager, String questionString, TableModel tableModel, int column) {
 		String key = QUESTION_SELECTOR_KEY + "_" + section.getID();
 		String selectedQuestion = (String) user.getSession().getAttribute(
 				key);
 		TerminologyObject object = null;
 		StringBuffer selectsb2 = new StringBuffer();
-		selectsb2.append("||<form><select name=\"toAdd\" id=adder"
+		selectsb2.append("<form><select name=\"toAdd\" id=adder"
 				+ section.getID()
 				+ " onchange=\"SessionDebugger.change('"
 				+ key
@@ -341,8 +345,10 @@ public class TestCasePlayerRenderer implements Renderer {
 		objects.addAll(manager.getQuestions());
 		objects.addAll(manager.getSolutions());
 		Collections.sort(objects, new NamedObjectComparator());
+		int max = 0;
 		for (TerminologyObject q : objects) {
 			if (!alreadyAddedQuestions.contains(q.getName())) {
+				max = Math.max(max, q.getName().toString().length());
 				if (q.getName().equals(selectedQuestion)) {
 					selectsb2.append("<option selected='selected' value='" + q.getName() + "'>"
 							+ q.getName() + "</option>");
@@ -374,7 +380,7 @@ public class TestCasePlayerRenderer implements Renderer {
 					+ "type=\"button\" value=\"+\" onclick=\"SessionDebugger.addCookie(this.form.toAdd.options[toAdd.selectedIndex].value);\"></form>");
 		}
 		if (foundone) {
-			string.append(KnowWEUtils.maskHTML(selectsb2.toString()));
+			tableModel.addCell(0, column, KnowWEUtils.maskHTML(selectsb2.toString()), max + 3);
 		}
 		return object;
 	}
