@@ -50,7 +50,7 @@ KNOWWE.plugin.usersupport = function(){
 }();
 
 /**
- * Namespace: KNOWWE.usersupport.plugin The KNOWWE usersupport namespace.
+ * Namespace: KNOWWE.plugin.usersupport The KNOWWE usersupport namespace.
  */
 KNOWWE.plugin.usersupport = function() {
   	

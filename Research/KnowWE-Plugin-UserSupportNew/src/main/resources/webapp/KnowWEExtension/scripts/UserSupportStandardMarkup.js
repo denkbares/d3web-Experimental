@@ -34,7 +34,8 @@ KNOWWE.plugin.userSupportStandardMarkup = function() {
 	    },
 	    
 	    postProcessHTML : function(id) {
-			KNOWWE.plugin.usersupportinstantedit.postProcessHTML(id, "usersupportmode");	        
+	    	// use standard mode and complete function
+			KNOWWE.plugin.usersupportinstantedit.postProcessHTML(id, "usersupportmode", null);
 	    },
     	
     	save : function(id) {

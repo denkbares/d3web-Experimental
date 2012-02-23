@@ -113,10 +113,10 @@ public class DialogComponent {
 	 * 
 	 * @created 21.11.2011
 	 * @param toMatch
-	 * @param localTermMatches
+	 * @param termDefinitions
 	 * @return
 	 */
-	public List<Suggestion> getBestSuggestions(String toMatch, List<String> localTermMatches) {
+	public List<Suggestion> getBestSuggestions(String toMatch, List<String> termDefinitions) {
 
 		List<Suggestion> bestSuggs = new ArrayList<Suggestion>();
 
@@ -126,12 +126,49 @@ public class DialogComponent {
 		// When toMatch contains Whitespace then use algorithmsPhrase
 		if (toMatch.contains(" "))
 		{
-			this.getBestSuggestionsPhrase(toMatch, localTermMatches, matchList);
+			this.getBestSuggestionsPhrase(toMatch, termDefinitions, matchList, true);
 		}
 
 		if (!toMatch.contains(" "))
 		{
-			this.getBestSuggestionsToken(toMatch, localTermMatches, matchList);
+			this.getBestSuggestionsToken(toMatch, termDefinitions, matchList, true);
+		}
+
+		// Sort the matchList and add the count of
+		// maxSuggestions to best Suggestions
+		Collections.sort(matchList, new SuggestionValuePairComparator());
+		for (int i = 0; (i < maxSuggestions) && (i < matchList.size()); i++)
+			bestSuggs.add(matchList.get(i).getSuggestion());
+		return bestSuggs;
+	}
+
+	/**
+	 * 
+	 * Collects the best suggestions found by all Matching in the terminology.
+	 * 
+	 * This is slow but will definitely find the Best matches!
+	 * 
+	 * @created 21.11.2011
+	 * @param toMatch
+	 * @param termDefinitions
+	 * @return
+	 */
+	public List<Suggestion> getBestSuggestionsAllAlgorithms(String toMatch, List<String> termDefinitions) {
+
+		List<Suggestion> bestSuggs = new ArrayList<Suggestion>();
+
+		// Put all Suggestions in List
+		List<SuggestionValuePair> matchList = new ArrayList<SuggestionValuePair>();
+
+		// When toMatch contains Whitespace then use algorithmsPhrase
+		if (toMatch.contains(" "))
+		{
+			this.getBestSuggestionsPhrase(toMatch, termDefinitions, matchList, true);
+		}
+
+		if (!toMatch.contains(" "))
+		{
+			this.getBestSuggestionsToken(toMatch, termDefinitions, matchList, true);
 		}
 
 		// Sort the matchList and add the count of
@@ -148,25 +185,37 @@ public class DialogComponent {
 	 * 
 	 * @created 20.02.2012
 	 * @param toMatch
-	 * @param localTermMatches
+	 * @param termDefinitions
 	 * @param matchList
+	 * @param useAllAlgorithms
 	 */
-	private void getBestSuggestionsToken(String toMatch, List<String> localTermMatches, List<SuggestionValuePair> matchList)
+	private void getBestSuggestionsToken(String toMatch, List<String> termDefinitions, List<SuggestionValuePair> matchList, boolean useAllAlgorithms)
 	{
 
 		// Sort terms to token and phrase
 		List<String> tokenTerms = new ArrayList<String>();
 		List<String> phraseTerms = new ArrayList<String>();
-		for (String s : localTermMatches)
+		for (String s : termDefinitions)
 			if (s.contains(" "))
 				phraseTerms.add(s);
 			else
 				tokenTerms.add(s);
 
-		this.getBestSuggestionsPhrase(toMatch, phraseTerms, matchList);
+		this.getBestSuggestionsPhrase(toMatch, phraseTerms, matchList, useAllAlgorithms);
 
 		List<Suggestion> suggs = new ArrayList<Suggestion>();
-		for (MatchingAlgorithm algo : algorithmsToken)
+
+		List<MatchingAlgorithm> algorithms = new ArrayList<MatchingAlgorithm>();
+		if (!useAllAlgorithms)
+		{
+			algorithms.add(usedTokenAlgorithm);
+		}
+		if (useAllAlgorithms)
+		{
+			algorithms = algorithmsToken;
+		}
+
+		for (MatchingAlgorithm algo : algorithms)
 		{
 			suggs = algo.getMatches(maxSuggestions, threshold, toMatch, tokenTerms);
 			boolean remove = true;
@@ -205,18 +254,29 @@ public class DialogComponent {
 	 * 
 	 * @created 20.02.2012
 	 * @param toMatch
-	 * @param localTermMatches
+	 * @param termDefinitions
 	 * @param matchList
+	 * @param useAllAlgorithms
 	 */
-	private void getBestSuggestionsPhrase(String toMatch, List<String> localTermMatches, List<SuggestionValuePair> matchList)
+	private void getBestSuggestionsPhrase(String toMatch, List<String> termDefinitions, List<SuggestionValuePair> matchList, boolean useAllAlgorithms)
 	{
-		List<Suggestion> suggs = new ArrayList<Suggestion>();
-		for (MatchingAlgorithm algo : algorithmsPhrase)
+		List<MatchingAlgorithm> algorithms = new ArrayList<MatchingAlgorithm>();
+		if (!useAllAlgorithms)
 		{
-			suggs = algo.getMatches(maxSuggestions, threshold, toMatch, localTermMatches);
-			suggs = this.removeExactMatches(suggs);
+			algorithms.add(usedPhraseAlgorithm);
+		}
+		if (useAllAlgorithms)
+		{
+			algorithms = algorithmsPhrase;
+		}	
+		
+		List<Suggestion> suggs = new ArrayList<Suggestion>();
+		for (MatchingAlgorithm algo : algorithms)
+		{
+			suggs = algo.getMatches(maxSuggestions, threshold, toMatch, termDefinitions);
 			boolean remove = true;
 			while(remove) remove = suggs.remove(null);
+			suggs = this.removeExactMatches(suggs);
 			for (Suggestion s : suggs) {
 				int exists = AlgorithmUtil.containsSuggestion(matchList, s);
 				if (exists != -1)
@@ -231,10 +291,10 @@ public class DialogComponent {
 	}
 
 	public List<Suggestion> getSuggestions(String toMatch,
-			List<String> localTermMatches, MatchingAlgorithm algorithm) {
+			List<String> termDefinitions, MatchingAlgorithm algorithm) {
 
 		if (algorithm == null)
-			return getBestSuggestions(toMatch, localTermMatches);
+			return getBestSuggestionsAllAlgorithms(toMatch, termDefinitions);
 
 		List<Suggestion> bestSuggs = new ArrayList<Suggestion>();
 
@@ -242,15 +302,19 @@ public class DialogComponent {
 		List<Suggestion> suggs = new ArrayList<Suggestion>();
 		List<SuggestionValuePair> matchList = new ArrayList<SuggestionValuePair>();
 
-		// TODO returns a list of nulls!
-		suggs = algorithm.getMatches(maxSuggestions, threshold, toMatch, localTermMatches);
-
+		suggs = algorithm.getMatches(maxSuggestions, threshold, toMatch, termDefinitions);
+		boolean remove = true;
+		while(remove) remove = suggs.remove(null);
+		suggs = this.removeExactMatches(suggs);
 		for (Suggestion s : suggs) {
-			// TODO HOTFIX for problem above
-			if (s == null) continue;
 			int exists = AlgorithmUtil.containsSuggestion(matchList, s);
-			if (exists != -1) matchList.get(exists).increment();
-			else matchList.add(new SuggestionValuePair(s));
+			if (exists != -1)
+			{
+				matchList.get(exists).increment();
+				matchList.get(exists).updateDistance(s);
+			}
+			else
+				matchList.add(new SuggestionValuePair(s));
 		}
 
 		// Sort the matchList and add the count of

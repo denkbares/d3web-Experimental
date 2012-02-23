@@ -50,7 +50,7 @@ public class ApproximateCorrectionProviderImpl implements ApproximateCorrectionP
 
 		List<Suggestion> suggestions =
 				DialogComponent.getInstance().
-						getBestSuggestions(toMatch, localStrings);
+						getBestSuggestionsAllAlgorithms(toMatch, localStrings);
 
 		return suggestions;
 	}

@@ -41,31 +41,30 @@ import de.knowwe.core.kdom.parsing.Sections;
  * @author Johannes Dienst
  * @created 29.11.2011
  */
-public class GetSuggestionsAction extends AbstractAction {
+public class GetSuggestionsAction extends AbstractAction
+{
 
 	@Override
-	public void execute(UserActionContext context) throws IOException {
+	public void execute(UserActionContext context) throws IOException
+	{
 
 		String result = handle(context);
-		if (result != null && context.getWriter() != null) {
+		if (result != null && context.getWriter() != null)
+		{
 			context.setContentType("text/html; charset=UTF-8");
 			context.getWriter().write(result);
 		}
 	}
 
-	private String handle(UserActionContext context) throws IOException {
-		String title = context.getTitle();
+	private String handle(UserActionContext context) throws IOException
+	{
 		String toMatch = context.getParameter("toMatch");
 		String sectionID = context.getParameter("sectionID");
 
 		Section<?> markup = Sections.getSection(sectionID);
-		// Section<? extends DefaultMarkup> mark = (Section<? extends
-		// DefaultMarkup>) markup;
-		// String packageName = DefaultMarkupType.getAnnotation(mark,
-		// "package");
-		// packageName = packageName.replaceAll("[\\r\\n\\}]", "");
 
-		if (toMatch == null) {
+		if (toMatch == null)
+		{
 			return "[]";
 		}
 
@@ -79,20 +78,10 @@ public class GetSuggestionsAction extends AbstractAction {
 
 		List<Suggestion> suggestions =
 				DialogComponent.getInstance().
-						getBestSuggestions(toMatch, localStrings);
+				getBestSuggestionsAllAlgorithms(toMatch, localStrings);
 
-		// build JSON-Array with suggestions
-		StringBuilder buildi = new StringBuilder();
-
-		buildi.append("[");
-		for (Suggestion s : suggestions) {
-			buildi.append("," + "\"" + s.getSuggestion() + "\"");
-		}
-		buildi.append("]");
-		String toReturn = buildi.toString().replaceFirst(",", "");
-		toReturn = toReturn.replaceAll("\"\"", "\"");
+		String toReturn = UserSupportUtil.buildJSONArray(suggestions);
 		return toReturn;
-
 	}
 
 }

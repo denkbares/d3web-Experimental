@@ -20,7 +20,9 @@ package de.d3web.we.util;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
+import de.d3web.we.algorithm.Suggestion;
 import de.knowwe.core.compile.terminology.TerminologyManager;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
@@ -79,6 +81,29 @@ public class UserSupportUtil {
 		}
 
 		return globalTerms;
+	}
+
+	/**
+	 * 
+	 * @created 22.02.2012
+	 * @param suggestions
+	 * @return
+	 */
+	public static String buildJSONArray(List<Suggestion> suggestions)
+	{
+		// build JSON-Array with suggestions
+		StringBuilder buildi = new StringBuilder();
+
+		buildi.append("[");
+		for (Suggestion s : suggestions)
+		{
+			if (!s.getSuggestion().equals(""))
+				buildi.append("," + "\"" + s.getSuggestion() + "\"");
+		}
+		buildi.append("]");
+		String toReturn = buildi.toString().replaceFirst(",", "");
+		toReturn = toReturn.replaceAll("\"\"", "\"");
+		return toReturn;
 	}
 
 }
