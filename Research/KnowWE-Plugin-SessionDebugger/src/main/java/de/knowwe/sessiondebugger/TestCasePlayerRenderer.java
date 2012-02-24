@@ -172,7 +172,7 @@ public class TestCasePlayerRenderer implements Renderer {
 								usedQuestions,
 								manager, selectedObject, date, row++, tableModel);
 					}
-					string.append(tableModel.toHtml());
+					string.append(tableModel.toHtml(section, user));
 				}
 				else {
 					string.append("\nNo TestCase contained!\n");

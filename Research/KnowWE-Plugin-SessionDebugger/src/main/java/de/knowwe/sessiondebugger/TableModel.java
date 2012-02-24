@@ -21,6 +21,8 @@ package de.knowwe.sessiondebugger;
 import java.util.HashMap;
 
 import de.d3web.core.utilities.Pair;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 
 /**
@@ -34,6 +36,9 @@ public class TableModel {
 	private HashMap<Integer, Integer> columnWidths = new HashMap<Integer, Integer>();
 	private int rowCount = 0;
 	private int columnCount = 0;
+
+	private static String SIZE_SELECTOR_KEY = "size_selector";
+	private static String FROM_KEY = "from_position";
 
 	public void addCell(int row, int column, String value, int width) {
 		rowCount = Math.max(rowCount, row);
@@ -104,8 +109,34 @@ public class TableModel {
 		return sb.toString();
 	}
 
-	public String toHtml() {
+	public String toHtml(Section<?> section, UserContext user) {
 		StringBuilder string = new StringBuilder();
+		String sizeKey = SIZE_SELECTOR_KEY + "_" + section.getID();
+		String selectedSizeString = (String) user.getSession().getAttribute(
+				sizeKey);
+		if (selectedSizeString == null) {
+			selectedSizeString = "10";
+		}
+		int selectedSize = Integer.parseInt(selectedSizeString);
+		String fromKey = FROM_KEY + "_" + section.getID();
+		String fromString = (String) user.getSession().getAttribute(
+				fromKey);
+		int from = 1;
+		if (fromString != null) {
+			from = Integer.parseInt(fromString);
+		}
+		int to = from + selectedSize - 1;
+		if (to > rowCount) {
+			int tempfrom = from - (to - rowCount);
+			if (tempfrom > 0) {
+				from = tempfrom;
+			}
+			else {
+				from = 1;
+			}
+			user.getSession().setAttribute(fromKey, String.valueOf(from));
+			to = rowCount;
+		}
 		string.append(KnowWEUtils.maskHTML("<div style='overflow:auto'>"));
 		string.append(KnowWEUtils.maskHTML("<table class='wikitable' border='1' width='100%'>"));
 		string.append(KnowWEUtils.maskHTML("<thead>"));
@@ -120,7 +151,7 @@ public class TableModel {
 		string.append(KnowWEUtils.maskHTML("</tr>\n"));
 		string.append(KnowWEUtils.maskHTML("</thead>\n"));
 		string.append(KnowWEUtils.maskHTML("<tbody>"));
-		for (int i = 1; i <= rowCount; i++) {
+		for (int i = from; i <= to; i++) {
 			string.append(KnowWEUtils.maskHTML("<tr>"));
 			for (int j = 0; j <= columnCount; j++) {
 				string.append(KnowWEUtils.maskHTML("<td>"));
@@ -132,6 +163,47 @@ public class TableModel {
 		string.append(KnowWEUtils.maskHTML("</tbody>"));
 		string.append(KnowWEUtils.maskHTML("</table>"));
 		string.append(KnowWEUtils.maskHTML("</div>"));
+		string.append(renderTableSizeSelector(section, user, sizeKey, selectedSize));
+		string.append(renderNavigation(section, from, selectedSize, fromKey));
 		return string.toString();
+	}
+
+	private String renderTableSizeSelector(Section<?> section, UserContext user, String key, int selectedSize) {
+		StringBuilder builder = new StringBuilder();
+
+		int[] sizeArray = new int[] {
+				5, 10, 20, 50 };
+		builder.append("<select id=sizeSelector"
+				+ section.getID()
+				+ " onchange=\"SessionDebugger.change('"
+				+ key
+							+ "', this.options[this.selectedIndex].value);\">");
+		for (int size : sizeArray) {
+			if (size == selectedSize) {
+				builder.append("<option selected='selected' value='" + size + "'>"
+						+ size + "</option>");
+			}
+			else {
+				builder.append("<option value='" + size + "'>" + size
+						+ "</option>");
+			}
+		}
+		builder.append("</select>");
+		return KnowWEUtils.maskHTML(builder.toString());
+	}
+
+	private Object renderNavigation(Section<?> section, int from, int selectedSize, String key) {
+		StringBuilder builder = new StringBuilder();
+		int previous = Math.max(1, from - selectedSize);
+		int next = from + selectedSize;
+		builder.append("<input type=\"button\" onclick=\"SessionDebugger.change('" + key
+				+ "', " + 1 + ");\" value='start'>");
+		builder.append("<input type=\"button\" onclick=\"SessionDebugger.change('" + key
+				+ "', " + previous + ");\" value='previous'>");
+		builder.append("<input type=\"button\" onclick=\"SessionDebugger.change('" + key
+				+ "', " + next + ");\" value=\"next\">");
+		builder.append("<input type=\"button\" onclick=\"SessionDebugger.change('" + key
+				+ "', " + rowCount + ");\" value='end'>");
+		return KnowWEUtils.maskHTML(builder.toString());
 	}
 }
