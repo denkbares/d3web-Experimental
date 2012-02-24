@@ -247,7 +247,7 @@ public class TestCasePlayerRenderer implements Renderer {
 			sb.append(KnowWEUtils.maskHTML(" <input type=\"button\" value=\"-\" onclick=\"SessionDebugger.addCookie(&quot;"
 					+ newQuestionsString
 					+ "&quot;);\">"));
-			tableModel.addCell(0, column, sb.toString(), s.length() + 2);
+			tableModel.addCell(0, column++, sb.toString(), s.length() + 2);
 		}
 	}
 
@@ -362,6 +362,10 @@ public class TestCasePlayerRenderer implements Renderer {
 			}
 		}
 		selectsb2.append("</select>");
+		// reset value because -- is selected
+		if (object == null) {
+			user.getSession().setAttribute(key, "");
+		}
 		if (object != null && !object.getName().equals(selectedQuestion)) {
 			user.getSession().setAttribute(key, object.getName());
 		}
