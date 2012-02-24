@@ -131,7 +131,7 @@ public class TableModel {
 		}
 		string.append(KnowWEUtils.maskHTML("</tbody>"));
 		string.append(KnowWEUtils.maskHTML("</table>"));
-		string.append(KnowWEUtils.maskHTML("<div>"));
+		string.append(KnowWEUtils.maskHTML("</div>"));
 		return string.toString();
 	}
 }
