@@ -81,7 +81,7 @@ public class DebugCondition implements Condition {
 	/**
 	 * Get HTML-output with the session's context.
 	 */
-	public String render(Session session, String web, String topic) {
+	public String render(Session session, String web, String topic, boolean inside) {
 		StringBuffer buffer = new StringBuffer();
 		int truth = evaluateForRendering(session);
 
@@ -98,13 +98,13 @@ public class DebugCondition implements Condition {
 					if (i > 0) buffer.append(connector);
 
 					buffer.append(" ( "
-							+ subConditions.get(i).render(session, web, topic)
+							+ subConditions.get(i).render(session, web, topic, inside)
 							+ " ) ");
 				}
 			}
 			else if (connector.equals(DebugUtilities.DEBUG_NOT)) {
 				buffer.append(" " + connector + "( "
-						+ subConditions.get(0).render(session, web, topic)
+						+ subConditions.get(0).render(session, web, topic, inside)
 						+ " ) ");
 			}
 		}
@@ -119,7 +119,7 @@ public class DebugCondition implements Condition {
 				buffer.append(DebuggerQuestionRenderer.renderQuestion(
 						(Question) to, session,
 						topic,
-						web));
+						web, inside));
 
 				if (connector.equals(DebugUtilities.DEBUG_KNOWN)) buffer.append("]");
 				else

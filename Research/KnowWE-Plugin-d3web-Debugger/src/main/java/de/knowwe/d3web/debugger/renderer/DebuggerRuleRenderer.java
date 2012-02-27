@@ -59,13 +59,18 @@ public class DebuggerRuleRenderer implements Renderer{
 
 		DebugCondition dc = new DebugCondition(r.getCondition());
 		DebugAction da = new DebugAction(r.getAction());
-		buffer.append("IF " + dc.render(session, KnowWEEnvironment.DEFAULT_WEB, sec.getTitle()) + "<br />");
-		if (r.hasFired(session)) buffer.append("<span style='background-color:#CFFFCF'>");
-		else buffer.append("<span>");
+		if (r.hasFired(session)) buffer.append("<div class='ruleContentFired' ruleid='"
+				+ r.hashCode() + "'>");
+		else
+			buffer.append("<div class='ruleContent' ruleid='" + r.hashCode() + "'>");
+
+		buffer.append("IF "
+				+ dc.render(session, KnowWEEnvironment.DEFAULT_WEB, sec.getTitle(), false)
+				+ "<br />");
+		;
 		buffer.append("THEN " + da.render());
-		buffer.append("</span>");
+		buffer.append("</div>");
 
 		string.append(buffer.toString());
-		
 	}
 }

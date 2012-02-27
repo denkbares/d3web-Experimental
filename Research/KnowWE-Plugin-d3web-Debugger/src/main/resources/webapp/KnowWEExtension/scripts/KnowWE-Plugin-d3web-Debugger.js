@@ -425,7 +425,8 @@ KNOWWE.plugin.debuggr = function(){
     			        	try {
     			            	KNOWWE.plugin.debuggr.initializeMenu();
     			            	KNOWWE.plugin.debuggr.initializeMain();
-    			            	$ES('span', 'debuggerTrace').each(function(element) {
+    			            	
+    			            	$('debuggerTrace').getElements('span').each(function(element) {
     			            		element.onclick = function() {
     			            			KNOWWE.plugin.debuggr.traceClicked(this);
     			            		}
@@ -455,8 +456,8 @@ KNOWWE.plugin.debuggr = function(){
         		KNOWWE.plugin.debuggr.initializeMenu();
         		KNOWWE.plugin.debuggr.initializeMain();
         		KNOWWE.plugin.debuggr.initializeQuestions();
-        		KNOWWE.helper.observer.subscribe( 'update', KNOWWE.plugin.debuggr.rerender);
         	}
+        	KNOWWE.helper.observer.subscribe( 'update', KNOWWE.plugin.debuggr.rerender);
         	KNOWWE.plugin.debuggr.initializeQuestions();
         	KNOWWE.helper.observer.subscribe( 'update', function() {
         		setTimeout(KNOWWE.plugin.debuggr.initializeQuestions, 1000);

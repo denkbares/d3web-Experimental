@@ -200,3 +200,10 @@ div.debuggerDropdown .dQnumError {
 .debuggerValue {
 	color: rgb(0, 128, 0);	
 }
+div.ruleContent, div.ruleContentFired {
+	display: inline-block;	
+}
+div.ruleContentFired {
+	border-top: 2px solid green;	
+	border-bottom: 2px solid green;	
+}

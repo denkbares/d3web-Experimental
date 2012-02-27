@@ -65,5 +65,14 @@
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Renderer" id="DebuggerRuleRenderer">
+		<parameter id="class" value="de.knowwe.d3web.debugger.renderer.DebuggerRuleRenderer" />
+		<parameter id="name" value="DebuggerRuleRenderer" />
+		<parameter id="description" value="render rules." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="ConditionActionRuleContent" />
+	</extension>
     
 </plugin>

@@ -69,7 +69,7 @@ public class DebuggerRuleAction extends AbstractAction {
 					ruleArticle = DebugUtilities.getRuleResource(r);
 					if (ruleArticle.equals("")) ruleArticle = context.getTitle();
 					dc = new DebugCondition(r.getCondition());
-					buffer.append(KnowWEUtils.unmaskHTML(dc.render(session, web, title)));
+					buffer.append(KnowWEUtils.unmaskHTML(dc.render(session, web, title, true)));
 					buffer.append(KnowWEUtils.unmaskHTML("<a class='ruleLink' href='Wiki.jsp?page="
 							+ ruleArticle + "'></a>"));
 					break;
