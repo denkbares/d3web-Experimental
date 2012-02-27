@@ -8,7 +8,7 @@ body,div {
 	text-color: black;
 }
 
-#content {float: none;margin-left: auto; margin-right: auto; width: 85%;
+#content {float: none;margin-left: auto; margin-right: auto; width: 100%;
     clear: both; padding-top: 35px;}
 
 #right {display: none;}
@@ -38,23 +38,43 @@ padding: 10px;
 
 #dialog{
     float: left;
-    width: 60%;
+    width: 75%;
     margin-top: 60px;
 }
 
-#auxpanel{
+
+.auxpanelRight{
     background-color: #fffff0;
-    width: 25%;
-    height: 250px;
+    width: 20%;
     -moz-box-shadow: 0 0 3.5px black;
 	-webkit-box-shadow: 0 0 3.5px black;
 	box-shadow: 0 0 3.5px black;
     position: fixed;
-    right: 65px;
+    right: 20px;
     padding: 10px;
     margin-top: 80px;
 }
 
+.auxpanelBottom{
+    background-color: #fffff0;
+    width: 100%;
+    height: 120px;
+    -moz-box-shadow: 0 0 3.5px black;
+	-webkit-box-shadow: 0 0 3.5px black;
+	box-shadow: 0 0 3.5px black;
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    padding: 10px;
+}
+
+
+.auxpanelButtonRight{
+    width: 70px; height: 16px; padding-top: 1px; border: 1px solid #696969; text-align: center; cursor: pointer; 
+	background-color: #dddddd; font-weight: normal; color: 	#8b4513; -moz-box-shadow: 0 0 5px black;	
+	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; margin-bottom: 10px;
+}
 
 table{
 	margin-top: 10px;
@@ -126,7 +146,7 @@ table{
 
 /* Styles the box containing the button panel */
 .question-imagebox { 
-    line-height: 1.5em; padding: 2px; float: left; margin-left: 15px; margin-right: 15px;
+    line-height: 1.5em; padding: 2px; float: left; margin-left: 8px; margin-right: 8px;
 }
 
 

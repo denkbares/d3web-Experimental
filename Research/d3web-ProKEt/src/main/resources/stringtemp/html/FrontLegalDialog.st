@@ -22,10 +22,16 @@ $HTMLHeader()$
          $children$	
     </div>
 
-    <div id="auxpanel">
+    <div id="auxpanel" class="auxpanelRight">
+
+        <div id="auxpanelToggle" class="auxpanelButtonRight" onclick="toggleAuxInfoPlacing()">
+            To Bottom
+        </div>    
         <div id="auxHeader">
-        <b>Informationen zu []:</b> <br /><br />
+            <b>Informationen zu []:</b>  
+            <br /><br />
         </div>
+
         
         <div id="auxInfo">
         -

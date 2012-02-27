@@ -4,7 +4,7 @@
  
 <div id="$fullId$" class="question $fullId$ $answerType$ $andOrType$" defining=$defining$>
 	<div id="$id$-imagebox" class="question-imagebox" onmouseover="showAuxInfo('$fullId$')" onmouseout="hideAuxInfo()">
-            <img id="$id$-typeimg" alt="type" src="$typeimg$" height="20" width="35" onclick="toggle_sub_4boxes('$fullId$')">
+            <img id="$id$-typeimg" alt="type" src="$typeimg$" height="20" width="20" onclick="toggle_sub_4boxes('$fullId$')">
             
         </div> 
     

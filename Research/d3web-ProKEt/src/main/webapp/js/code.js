@@ -1390,6 +1390,28 @@ function hideAuxInfo(){
 }
 
 /**
+ * Function for toggling the display of the info panel.
+ */
+function toggleAuxInfoPlacing(){
+    
+    var html = $("#auxpanelToggle").html();
+    
+   // info currently displayed at the right side, i.e. is to be toggled to bottom
+   if(html.indexOf("Bottom")!=-1){
+        $("#auxpanelToggle").html("To Side");
+        $("#auxpanel").removeClass("auxpanelRight");
+        $("#auxpanel").addClass("auxpanelBottom");
+    } 
+    // info displayed at the bottom
+    else {
+        $("#auxpanelToggle").html("To Bottom");
+        $("#auxpanel").removeClass("auxpanelBottom");
+        $("#auxpanel").addClass("auxpanelRight");
+    }
+    
+}
+
+/**
  * Transfer coloring (in hierarchy dialog) also to parent quesitons
  * @param object the object from where to start marking parents
  * @parents skip_self flag indicating whether element itself should
