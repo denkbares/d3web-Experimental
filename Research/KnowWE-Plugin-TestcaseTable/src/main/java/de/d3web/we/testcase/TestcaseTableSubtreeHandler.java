@@ -21,6 +21,7 @@ package de.d3web.we.testcase;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeSet;
 
 import de.d3web.empiricaltesting.RatedTestCase;
 import de.d3web.empiricaltesting.SequentialTestCase;
@@ -65,8 +66,21 @@ public class TestcaseTableSubtreeHandler extends SubtreeHandler<TestcaseTable> {
 		}
 
 		KnowWEUtils.storeObject(article, s, TestcaseTable.TESTCASE_KEY, testcase);
+
+		List<Section<TestcaseTable>> sections = Sections.findSuccessorsOfType(
+				s.getArticle().getSection(), TestcaseTable.class);
+		int i = 1;
+		for (Section<TestcaseTable> section : new TreeSet<Section<TestcaseTable>>(sections)) {
+			if (section.equals(s)) {
+				break;
+			}
+			else {
+				i++;
+			}
+		}
 		SingleTestCaseProvider provider = new SingleTestCaseProvider(new STCWrapper(stc), article,
-				"TestCaseTable");
+				s.getArticle().getTitle() +
+						"/TestCaseTable" + i);
 		// append Storage of the TestCaseProvider to the section of the default
 		// markup
 		s.getFather().getFather().getSectionStore().storeObject(article,
