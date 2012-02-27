@@ -25,12 +25,16 @@ import java.util.List;
 import de.d3web.empiricaltesting.RatedTestCase;
 import de.d3web.empiricaltesting.SequentialTestCase;
 import de.d3web.empiricaltesting.TestCase;
+import de.d3web.testcase.stc.STCWrapper;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.sessiondebugger.SingleTestCaseProvider;
+import de.knowwe.sessiondebugger.SingleTestCaseStorage;
+import de.knowwe.sessiondebugger.TestCaseProviderStorage;
 
 /**
  * 
@@ -61,6 +65,13 @@ public class TestcaseTableSubtreeHandler extends SubtreeHandler<TestcaseTable> {
 		}
 
 		KnowWEUtils.storeObject(article, s, TestcaseTable.TESTCASE_KEY, testcase);
+		SingleTestCaseProvider provider = new SingleTestCaseProvider(new STCWrapper(stc), article,
+				"TestCaseTable");
+		// append Storage of the TestCaseProvider to the section of the default
+		// markup
+		s.getFather().getFather().getSectionStore().storeObject(article,
+				TestCaseProviderStorage.KEY,
+				new SingleTestCaseStorage(provider));
 
 		return null;
 	}

@@ -33,8 +33,6 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.empiricaltesting.SequentialTestCase;
 import de.d3web.empiricaltesting.TestPersistence;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.KnowWEArticleManager;
-import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
@@ -82,9 +80,6 @@ public class TestcaseImportAction extends AbstractAction {
 			context.getWriter().write("No file specified.");
 			return;
 		}
-
-		KnowWEArticleManager manager = KnowWEEnvironment.getInstance().getArticleManager(
-				context.getWeb());
 
 		Section<TestcaseTableType> section = (Section<TestcaseTableType>) Sections.getSection(sectionID);
 		String master = DefaultMarkupType.getAnnotation(section,

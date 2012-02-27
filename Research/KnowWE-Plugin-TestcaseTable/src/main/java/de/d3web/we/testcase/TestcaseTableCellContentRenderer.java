@@ -44,7 +44,6 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 		Map<String, Collection<Message>> errors = Messages.getMessagesFromSubtree(sec,
 				Message.Type.ERROR);
 
-		@SuppressWarnings("unchecked")
 		int column = TableUtils.getColumn(sec);
 
 		StringBuilder html = new StringBuilder();

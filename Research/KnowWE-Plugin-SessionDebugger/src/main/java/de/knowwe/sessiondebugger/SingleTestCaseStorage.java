@@ -18,31 +18,49 @@
  */
 package de.knowwe.sessiondebugger;
 
-import java.util.List;
+import java.util.Arrays;
+import java.util.Collection;
 
-import de.d3web.core.session.Session;
-import de.d3web.testcase.model.TestCase;
 import de.knowwe.core.report.Message;
 
 /**
- * Provides access to a TestCase
+ * Capsules one TestCaseProvider
  * 
  * @author Markus Friedrich (denkbares GmbH)
- * @created 25.01.2012
+ * @created 27.02.2012
  */
-public interface TestCaseProvider {
+public class SingleTestCaseStorage implements TestCaseProviderStorage {
 
-	public static final String KEY = "TestCaseProvider";
+	private TestCaseProvider provider;
 
-	TestCase getTestCase();
+	public SingleTestCaseStorage(TestCaseProvider provider) {
+		super();
+		this.provider = provider;
+	}
 
-	Session getActualSession(String user);
+	@Override
+	public Collection<TestCaseProvider> getTestCaseProviders() {
+		return Arrays.asList(provider);
+	}
 
-	SessionDebugStatus getDebugStatus(String user);
+	@Override
+	public TestCaseProvider getTestCaseProvider(String name) {
+		if (provider.getName().equals(name)) {
+			return provider;
+		}
+		else {
+			return null;
+		}
+	}
 
-	void storeSession(Session session, String user);
+	@Override
+	public void refresh() {
+		// nothing to do
+	}
 
-	String getName();
+	@Override
+	public Collection<Message> getMessages() {
+		return provider.getMessages();
+	}
 
-	List<Message> getMessages();
 }
