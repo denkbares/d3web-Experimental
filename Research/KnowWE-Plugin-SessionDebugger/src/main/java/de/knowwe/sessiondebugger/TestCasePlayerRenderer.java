@@ -166,7 +166,15 @@ public class TestCasePlayerRenderer implements Renderer {
 							fromKey);
 					int from = 1;
 					if (fromString != null) {
-						from = Integer.parseInt(fromString);
+						try {
+							from = Integer.parseInt(fromString);
+							if (from < 1) {
+								from = 1;
+							}
+						}
+						catch (NumberFormatException e) {
+							from = 1;
+						}
 					}
 					int to = from + selectedSize - 1;
 					if (to > chronology.size()) {
@@ -490,26 +498,40 @@ public class TestCasePlayerRenderer implements Renderer {
 		int previous = Math.max(1, from - selectedSize);
 		int next = from + selectedSize;
 
-		builder.append("<input " +
-					(from == 1 ? "disabled='disabled'" : "")
-					+ "type=\"button\" onclick=\"SessionDebugger.change('" + key
+		builder.append("<input "
+				+
+					(from == 1
+							? "src='KnowWEExtension/testcaseplayer/icon/begin_deactivated.png'"
+							: "src='KnowWEExtension/testcaseplayer/icon/begin.png'")
+					+ "type=\"image\" onclick=\"SessionDebugger.change('"
+				+ key
 				+ "', " + 1 + ");\" value='start'>");
-		builder.append("<input " +
-					(from == 1 ? "disabled='disabled'" : "")
-					+ "type=\"button\" onclick=\"SessionDebugger.change('" + key
+		builder.append(" <input "
+				+
+					(from == 1
+							? "src='KnowWEExtension/testcaseplayer/icon/back_deactivated.png'"
+							: "src='KnowWEExtension/testcaseplayer/icon/back.png'")
+					+ "type=\"image\" onclick=\"SessionDebugger.change('"
+				+ key
 				+ "', " + previous + ");\" value='previous'>");
-		// builder.append("Page ");
-		// builder.append("<input type=\"field\" onchange=\"SessionDebugger.change('"
-		// + key
-		// + "', " + previous + ");\" value='Page:'>");
-		// builder.append(" of ");
-		builder.append("<input " +
-					(from + selectedSize > maxsize ? "disabled='disabled'" : "")
-					+ "type=\"button\" onclick=\"SessionDebugger.change('" + key
+		builder.append(" Displaying ");
+		builder.append("<input size=3 type=\"field\" onchange=\"SessionDebugger.change('"
+				+ key
+				+ "', " + "this.value);\" value='" + from + "'>");
+		builder.append(" to " + (from + selectedSize - 1) + " of " + maxsize + " items");
+		builder.append(" <input "
+				+
+					(from + selectedSize > maxsize
+							? "src='KnowWEExtension/testcaseplayer/icon/forward_deactivated.png'"
+							: "src='KnowWEExtension/testcaseplayer/icon/forward.png'")
+					+ "type=\"image\" onclick=\"SessionDebugger.change('" + key
 				+ "', " + next + ");\" value=\"next\">");
-		builder.append("<input " +
-					(from + selectedSize > maxsize ? "disabled='disabled'" : "")
-					+ "type=\"button\" onclick=\"SessionDebugger.change('" + key
+		builder.append(" <input "
+				+
+					(from + selectedSize > maxsize
+							? "src='KnowWEExtension/testcaseplayer/icon/end_deactivated.png'"
+							: "src='KnowWEExtension/testcaseplayer/icon/end.png'")
+					+ "type=\"image\" onclick=\"SessionDebugger.change('" + key
 				+ "', " + maxsize + ");\" value='end'>");
 		return KnowWEUtils.maskHTML(builder.toString());
 	}
