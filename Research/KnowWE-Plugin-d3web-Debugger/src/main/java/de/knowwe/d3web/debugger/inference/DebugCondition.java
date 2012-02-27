@@ -203,7 +203,6 @@ public class DebugCondition implements Condition {
 			}
 			objValue = transformBasicConditionText(conditionText).split(" " + connector + " ")[1];
 
-
 			if (connector.equals(DebugUtilities.DEBUG_NUMGREATEREQUAL)
 					&& Double.parseDouble(value) >= Double.parseDouble(objValue)) return 1;
 			else if (connector.equals(DebugUtilities.DEBUG_NUMGREATER)
@@ -217,7 +216,7 @@ public class DebugCondition implements Condition {
 				for (String v : value.split(", "))
 					if (objValue.equals(v)) return 1;
 			}
-			else if (objValue.equals(value)) return 1;
+			else if (connector.equals(DebugUtilities.DEBUG_STATE) && objValue.equals(value)) return 1;
 		}
 	
 		return -1;
