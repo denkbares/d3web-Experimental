@@ -130,11 +130,15 @@ public class TestCasePlayerRenderer implements Renderer {
 				if (testCase != null) {
 					string.append(" Start: " + dateFormat.format(testCase.getStartDate()));
 
-					string.append(KnowWEUtils.maskHTML(" <a onclick='SessionDebugger.reset();'><img src='KnowWEExtension/testcaseplayer/icon/stop.gif'></a>"));
+					StringBuilder buffer = new StringBuilder();
+					renderToolbarButton("stop.gif", "SessionDebugger.reset()", true, buffer);
+					string.append(KnowWEUtils.maskHTML(buffer.toString()));
+					// string.append(KnowWEUtils.maskHTML(" <a onclick='SessionDebugger.reset();'><img src='KnowWEExtension/testcaseplayer/icon/stop.gif'></a>"));
 					// get Question from cookie
 					String additionalQuestions = null;
 					String cookiename = "additionalQuestions" + section.getTitle();
-					for (Cookie cookie : user.getRequest().getCookies()) {
+					Cookie[] cookies = user.getRequest().getCookies();
+					if (cookies != null) for (Cookie cookie : cookies) {
 						try {
 							if (URLDecoder.decode(cookie.getName(), "UTF-8").equals(cookiename)) {
 								additionalQuestions = URLDecoder.decode(cookie.getValue(), "UTF-8");
@@ -475,7 +479,7 @@ public class TestCasePlayerRenderer implements Renderer {
 		StringBuilder builder = new StringBuilder();
 
 		int[] sizeArray = new int[] {
-				5, 10, 20, 50, 100 };
+				1, 2, 5, 10, 20, 50, 100 };
 		builder.append("<select id=sizeSelector"
 				+ section.getID()
 				+ " onchange=\"SessionDebugger.change('"
@@ -501,10 +505,10 @@ public class TestCasePlayerRenderer implements Renderer {
 		int next = from + selectedSize;
 
 		renderToolbarButton(
-				"begin", "SessionDebugger.change('" + key + "', " + 1 + ")",
+				"begin.png", "SessionDebugger.change('" + key + "', " + 1 + ")",
 				(from > 1), builder);
 		renderToolbarButton(
-				"back", "SessionDebugger.change('" + key + "', " + previous + ")",
+				"back.png", "SessionDebugger.change('" + key + "', " + previous + ")",
 				(from > 1), builder);
 		builder.append(" Displaying ");
 		builder.append("<input size=3 type=\"field\" onchange=\"SessionDebugger.change('"
@@ -512,10 +516,10 @@ public class TestCasePlayerRenderer implements Renderer {
 				+ "', " + "this.value);\" value='" + from + "'>");
 		builder.append(" to " + (from + selectedSize - 1) + " of " + maxsize + " items");
 		renderToolbarButton(
-				"forward", "SessionDebugger.change('" + key + "', " + next + ")",
+				"forward.png", "SessionDebugger.change('" + key + "', " + next + ")",
 				(from + selectedSize <= maxsize), builder);
 		renderToolbarButton(
-				"end", "SessionDebugger.change('" + key + "', " + maxsize + ")",
+				"end.png", "SessionDebugger.change('" + key + "', " + maxsize + ")",
 				(from + selectedSize <= maxsize), builder);
 		return KnowWEUtils.maskHTML(builder.toString());
 	}
@@ -528,6 +532,9 @@ public class TestCasePlayerRenderer implements Renderer {
 		// builder.append("type=\"image\" onclick=\"");
 		// if (enabled) builder.append(action);
 		// builder.append(";\" style='margin-top:px;'>");
+		int index = icon.lastIndexOf('.');
+		String suffix = icon.substring(index);
+		icon = icon.substring(0, index);
 		if (enabled) {
 			builder.append("<a onclick=\"");
 			builder.append(action);
@@ -539,7 +546,7 @@ public class TestCasePlayerRenderer implements Renderer {
 		builder.append("<img src='KnowWEExtension/testcaseplayer/icon/");
 		builder.append(icon);
 		if (!enabled) builder.append("_deactivated");
-		builder.append(".png'></img></span>");
+		builder.append(suffix).append("'></img></span>");
 		if (enabled) {
 			builder.append("</a>");
 		}

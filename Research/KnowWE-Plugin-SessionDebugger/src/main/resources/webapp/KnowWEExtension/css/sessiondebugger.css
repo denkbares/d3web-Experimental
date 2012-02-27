@@ -7,6 +7,7 @@
 .type_TestCasePlayer TABLE {
 	margin: 0px;
 }
+
 .type_TestCasePlayer .toolBar .toolButton {
 	position:relative;
 	border: 1px solid #EEE;
@@ -16,7 +17,7 @@
 	border: 1px outset white;
 }
 
-.type_TestCasePlayer .toolBar .toolButton IMG {
+.type_TestCasePlayer .toolButton IMG {
 	position:relative;
 	top:3px;
 }
