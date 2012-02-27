@@ -70,6 +70,8 @@ public class TestCasePlayerRenderer implements Renderer {
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS");
 	private static String SELECTOR_KEY = "selector";
 	private static String QUESTION_SELECTOR_KEY = "question_selector";
+	private static String SIZE_SELECTOR_KEY = "size_selector";
+	private static String FROM_KEY = "from_position";
 
 	@Override
 	public void render(Section<?> section, UserContext user, StringBuilder result) {
@@ -151,6 +153,34 @@ public class TestCasePlayerRenderer implements Renderer {
 						questionStrings = additionalQuestions.split(QUESTIONS_SEPARATOR);
 					}
 					Collection<Question> usedQuestions = TestCaseUtils.getUsedQuestions(testCase);
+					Collection<Date> chronology = testCase.chronology();
+					String sizeKey = SIZE_SELECTOR_KEY + "_" + section.getID();
+					String selectedSizeString = (String) user.getSession().getAttribute(
+							sizeKey);
+					if (selectedSizeString == null) {
+						selectedSizeString = "10";
+					}
+					int selectedSize = Integer.parseInt(selectedSizeString);
+					String fromKey = FROM_KEY + "_" + section.getID();
+					String fromString = (String) user.getSession().getAttribute(
+							fromKey);
+					int from = 1;
+					if (fromString != null) {
+						from = Integer.parseInt(fromString);
+					}
+					int to = from + selectedSize - 1;
+					if (to > chronology.size()) {
+						int tempfrom = from - (to - chronology.size());
+						if (tempfrom > 0) {
+							from = tempfrom;
+						}
+						else {
+							from = 1;
+						}
+						user.getSession().setAttribute(fromKey, String.valueOf(from));
+						to = chronology.size();
+					}
+
 					TableModel tableModel = new TableModel();
 					tableModel.addCell(0, 1, "Time", "Time".length());
 					int column = 2;
@@ -167,12 +197,21 @@ public class TestCasePlayerRenderer implements Renderer {
 							questionStrings, manager, additionalQuestions,
 							tableModel, column++);
 					int row = 1;
-					for (Date date : testCase.chronology()) {
+					for (Date date : chronology) {
+						if (row < from) {
+							row++;
+							continue;
+						}
+						if (row > to) break;
 						renderTableLine(selectedTriple, testCase, status, questionStrings,
 								usedQuestions,
-								manager, selectedObject, date, row++, tableModel);
+								manager, selectedObject, date, row - from + 1, tableModel);
+						row++;
 					}
 					string.append(tableModel.toHtml(section, user));
+					string.append(renderTableSizeSelector(section, user, sizeKey, selectedSize));
+					string.append(renderNavigation(section, from, selectedSize, fromKey,
+							chronology.size()));
 				}
 				else {
 					string.append("\nNo TestCase contained!\n");
@@ -420,5 +459,58 @@ public class TestCasePlayerRenderer implements Renderer {
 		selectsb.append("</select>");
 		string.append(KnowWEUtils.maskHTML(selectsb.toString()));
 		return selectedPair;
+	}
+
+	private String renderTableSizeSelector(Section<?> section, UserContext user, String key, int selectedSize) {
+		StringBuilder builder = new StringBuilder();
+
+		int[] sizeArray = new int[] {
+				5, 10, 20, 50 };
+		builder.append("<select id=sizeSelector"
+				+ section.getID()
+				+ " onchange=\"SessionDebugger.change('"
+				+ key
+							+ "', this.options[this.selectedIndex].value);\">");
+		for (int size : sizeArray) {
+			if (size == selectedSize) {
+				builder.append("<option selected='selected' value='" + size + "'>"
+						+ size + "</option>");
+			}
+			else {
+				builder.append("<option value='" + size + "'>" + size
+						+ "</option>");
+			}
+		}
+		builder.append("</select>");
+		return KnowWEUtils.maskHTML(builder.toString());
+	}
+
+	private Object renderNavigation(Section<?> section, int from, int selectedSize, String key, int maxsize) {
+		StringBuilder builder = new StringBuilder();
+		int previous = Math.max(1, from - selectedSize);
+		int next = from + selectedSize;
+
+		builder.append("<input " +
+					(from == 1 ? "disabled='disabled'" : "")
+					+ "type=\"button\" onclick=\"SessionDebugger.change('" + key
+				+ "', " + 1 + ");\" value='start'>");
+		builder.append("<input " +
+					(from == 1 ? "disabled='disabled'" : "")
+					+ "type=\"button\" onclick=\"SessionDebugger.change('" + key
+				+ "', " + previous + ");\" value='previous'>");
+		// builder.append("Page ");
+		// builder.append("<input type=\"field\" onchange=\"SessionDebugger.change('"
+		// + key
+		// + "', " + previous + ");\" value='Page:'>");
+		// builder.append(" of ");
+		builder.append("<input " +
+					(from + selectedSize > maxsize ? "disabled='disabled'" : "")
+					+ "type=\"button\" onclick=\"SessionDebugger.change('" + key
+				+ "', " + next + ");\" value=\"next\">");
+		builder.append("<input " +
+					(from + selectedSize > maxsize ? "disabled='disabled'" : "")
+					+ "type=\"button\" onclick=\"SessionDebugger.change('" + key
+				+ "', " + maxsize + ");\" value='end'>");
+		return KnowWEUtils.maskHTML(builder.toString());
 	}
 }
