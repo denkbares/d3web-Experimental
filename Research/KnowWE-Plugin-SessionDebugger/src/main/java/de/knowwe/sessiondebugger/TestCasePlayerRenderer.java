@@ -216,10 +216,12 @@ public class TestCasePlayerRenderer implements Renderer {
 								manager, selectedObject, date, row - from + 1, tableModel);
 						row++;
 					}
-					string.append(tableModel.toHtml(section, user));
+					string.append(KnowWEUtils.maskHTML("<div class='toolBar'>"));
 					string.append(renderTableSizeSelector(section, user, sizeKey, selectedSize));
 					string.append(renderNavigation(section, from, selectedSize, fromKey,
 							chronology.size()));
+					string.append(KnowWEUtils.maskHTML("</div>"));
+					string.append(tableModel.toHtml(section, user));
 				}
 				else {
 					string.append("\nNo TestCase contained!\n");
@@ -473,7 +475,7 @@ public class TestCasePlayerRenderer implements Renderer {
 		StringBuilder builder = new StringBuilder();
 
 		int[] sizeArray = new int[] {
-				5, 10, 20, 50 };
+				5, 10, 20, 50, 100 };
 		builder.append("<select id=sizeSelector"
 				+ section.getID()
 				+ " onchange=\"SessionDebugger.change('"
@@ -498,41 +500,48 @@ public class TestCasePlayerRenderer implements Renderer {
 		int previous = Math.max(1, from - selectedSize);
 		int next = from + selectedSize;
 
-		builder.append("<input "
-				+
-					(from == 1
-							? "src='KnowWEExtension/testcaseplayer/icon/begin_deactivated.png'"
-							: "src='KnowWEExtension/testcaseplayer/icon/begin.png'")
-					+ "type=\"image\" onclick=\"SessionDebugger.change('"
-				+ key
-				+ "', " + 1 + ");\" value='start'>");
-		builder.append(" <input "
-				+
-					(from == 1
-							? "src='KnowWEExtension/testcaseplayer/icon/back_deactivated.png'"
-							: "src='KnowWEExtension/testcaseplayer/icon/back.png'")
-					+ "type=\"image\" onclick=\"SessionDebugger.change('"
-				+ key
-				+ "', " + previous + ");\" value='previous'>");
+		renderToolbarButton(
+				"begin", "SessionDebugger.change('" + key + "', " + 1 + ")",
+				(from > 1), builder);
+		renderToolbarButton(
+				"back", "SessionDebugger.change('" + key + "', " + previous + ")",
+				(from > 1), builder);
 		builder.append(" Displaying ");
 		builder.append("<input size=3 type=\"field\" onchange=\"SessionDebugger.change('"
 				+ key
 				+ "', " + "this.value);\" value='" + from + "'>");
 		builder.append(" to " + (from + selectedSize - 1) + " of " + maxsize + " items");
-		builder.append(" <input "
-				+
-					(from + selectedSize > maxsize
-							? "src='KnowWEExtension/testcaseplayer/icon/forward_deactivated.png'"
-							: "src='KnowWEExtension/testcaseplayer/icon/forward.png'")
-					+ "type=\"image\" onclick=\"SessionDebugger.change('" + key
-				+ "', " + next + ");\" value=\"next\">");
-		builder.append(" <input "
-				+
-					(from + selectedSize > maxsize
-							? "src='KnowWEExtension/testcaseplayer/icon/end_deactivated.png'"
-							: "src='KnowWEExtension/testcaseplayer/icon/end.png'")
-					+ "type=\"image\" onclick=\"SessionDebugger.change('" + key
-				+ "', " + maxsize + ");\" value='end'>");
+		renderToolbarButton(
+				"forward", "SessionDebugger.change('" + key + "', " + next + ")",
+				(from + selectedSize <= maxsize), builder);
+		renderToolbarButton(
+				"end", "SessionDebugger.change('" + key + "', " + maxsize + ")",
+				(from + selectedSize <= maxsize), builder);
 		return KnowWEUtils.maskHTML(builder.toString());
+	}
+
+	private void renderToolbarButton(String icon, String action, boolean enabled, StringBuilder builder) {
+		// builder.append("<input src='KnowWEExtension/testcaseplayer/icon/");
+		// builder.append(icon);
+		// if (!enabled) builder.append("_deactivated");
+		// builder.append(".png'");
+		// builder.append("type=\"image\" onclick=\"");
+		// if (enabled) builder.append(action);
+		// builder.append(";\" style='margin-top:px;'>");
+		if (enabled) {
+			builder.append("<a onclick=\"");
+			builder.append(action);
+			builder.append(";\">");
+		}
+		builder.append("<span class='toolButton ");
+		builder.append(enabled ? "enabled" : "disabled");
+		builder.append("'>");
+		builder.append("<img src='KnowWEExtension/testcaseplayer/icon/");
+		builder.append(icon);
+		if (!enabled) builder.append("_deactivated");
+		builder.append(".png'></img></span>");
+		if (enabled) {
+			builder.append("</a>");
+		}
 	}
 }

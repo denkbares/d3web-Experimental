@@ -1,0 +1,22 @@
+.type_TestCasePlayer .toolBar {
+	background-color: #EEE;
+	border: 1px solid #DDD;
+	border-bottom: 0px;
+}
+
+.type_TestCasePlayer TABLE {
+	margin: 0px;
+}
+.type_TestCasePlayer .toolBar .toolButton {
+	position:relative;
+	border: 1px solid #EEE;
+}
+
+.type_TestCasePlayer .toolBar .toolButton.enabled:hover {
+	border: 1px outset white;
+}
+
+.type_TestCasePlayer .toolBar .toolButton IMG {
+	position:relative;
+	top:3px;
+}
