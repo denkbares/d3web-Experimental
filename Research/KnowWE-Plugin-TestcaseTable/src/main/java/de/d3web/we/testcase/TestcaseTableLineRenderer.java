@@ -19,18 +19,13 @@
 package de.d3web.we.testcase;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
-import de.d3web.core.session.Session;
-import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.table.TableLineRenderer;
-import de.knowwe.kdom.table.TableUtils;
 
 /**
  * 
@@ -39,8 +34,6 @@ import de.knowwe.kdom.table.TableUtils;
  */
 public class TestcaseTableLineRenderer extends TableLineRenderer {
 
-	public static final String TESTCASEEXECUTED = "tcExecuted";
-	public static final String TESTCASESKIPPED = "tcSkipped";
 	public static final String TESTCASELINE = "tcLine";
 	public static final String TESTCASEERROR = "tcError";
 
@@ -54,39 +47,7 @@ public class TestcaseTableLineRenderer extends TableLineRenderer {
 			return TESTCASELINE + " " + TESTCASEERROR;
 		}
 
-		// get execution status
-		Section<TestcaseTableType> table = Sections.findAncestorOfExactType(tableLine,
-				TestcaseTableType.class);
-		String master = TestcaseTableType.getMaster(table, user.getTitle());
-		Session session = D3webUtils.getSession(master, user, tableLine.getWeb());
-
-		if (session == null) {
-			return TESTCASELINE;
-		}
-
-		Section<TestcaseTableType> parentTable = Sections.findAncestorOfType(tableLine,
-				TestcaseTableType.class);
-
-		List<Section<TestcaseTableLine>> executedLines = TestcaseTable.getExecutedLinesOfTable(
-				parentTable, user, session);
-
-		if (executedLines.isEmpty()) {
-			return TESTCASELINE;
-		}
-		else if (executedLines.contains(tableLine)) {
-			return TESTCASELINE + " " + TESTCASEEXECUTED;
-		}
-		else {
-			Section<TestcaseTableLine> lastLine = executedLines.get(executedLines.size() - 1);
-
-			if (TableUtils.getRowOfLine(tableLine) < TableUtils.getRowOfLine(lastLine)) {
-				return TESTCASELINE + " " + TESTCASESKIPPED;
-			}
-			else {
-				return TESTCASELINE;
-
-			}
-		}
+		return TESTCASELINE;
 
 	}
 

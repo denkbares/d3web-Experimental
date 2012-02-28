@@ -29,32 +29,6 @@ div.addCol{
 	background-image: url(../images/plus.png);
 }
 
-div.startTestcase{
-	display: inline-block;
-	height: 16px;
-	width: 16px;
-	margin-right: 5px;
-	background-image: url(../images/testcasetable/run_exc.gif);
-	cursor: pointer;
-}
-
-div.startTestcaseIncluding{
-	display: inline-block;
-	height: 16px;
-	width: 16px;
-	margin-right: 5px;
-	background-image: url(../images/testcasetable/runlast_co.gif);
-	cursor: pointer;
-}
-
-tr.tcExecuted td{
-	background-color: #CDFECD ;
-}
-
-tr.tcSkipped td{
-	background-color: #FF6633 ;
-}
-
 tr.tcLine{
 	height: 28px;
 }
@@ -64,11 +38,4 @@ tr.tcError td div {
 	display: none;
 }
 
-tr.tcExecuted td div {
-	display: none;
-}
-
-tr.tcSkipped td div {
-	display: none;
-}
 

@@ -275,44 +275,6 @@ Testcase.saveInputAfterChange = function(event) {
 	KNOWWE.table.getMap().set(el.id, el.value);
 }
 
-/**
- * runs a Testcase via RunTestcaseAction
- */
-Testcase.runTestcase = function(el, including) {
-	var topic = KNOWWE.helper.gup('page')
-	
-	var row = Testcase.findLineOfElement(el);
-	
-	var params = {
-        action : 'RunTestcaseAction',
-        KWiki_Topic : topic,
-        execLine : row.id,
-        multiLines : including
-    }
-
-    var options = {
-        url : KNOWWE.core.util.getURL ( params ),
-        loader : true,
-        response : {
-            action : 'none',
-            fn : function(){
-            	KNOWWE.core.util.updateProcessingState(-1);
-				KNOWWE.helper.observer.notify('update');
-				var table = Testcase.findParentWikiTable(el);
-				KNOWWE.core.rerendercontent.updateNode(table.parentNode.id, topic, null);
-			},
-            onError : function () {
-	        	KNOWWE.core.util.updateProcessingState(-1);                    	
-            }
-
-        }
-    }
-	KNOWWE.core.util.updateProcessingState(1);
-    new _KA( options ).send();
-	//Testcase.colorExecutedLines(row, including);	
-}
-
-
 Testcase.findLineOfElement = function(element) {
 	var e = $(element);
 	while (e.tagName != 'BODY') {
@@ -353,72 +315,6 @@ Testcase.saveTable = function() {
     }
     new _KA( options ).send();
 }
-
-
-/**
- * colors lines after their execution
- */
-Testcase.colorExecutedLines = function(row, including) {
-	var trs = row.parentNode.childNodes;
-
-	if (including) {
-		for (var i = 1; i < trs.length; i++) {
-			if (trs[i] == row) { 
-                break; 
-           } else if (trs[i].className == Testcase.testcaseExecuted || trs[i].className == Testcase.testcaseSkipped) { 
-                continue; 
-           } else { 
-                trs[i].className = Testcase.testcaseExecuted; 
-           }
-		}
-	} else {
-		for (var i = 1; i < trs.length; i++) {
-			if (trs[i] == row) {
-				break;
-			} else if (trs[i].className == Testcase.testcaseExecuted) {
-				continue;
-			} else {
-				trs[i].className = Testcase.testcaseSkipped;
-			}
-		}
-	}
-	row.className = Testcase.testcaseExecuted;
-}
-
-/**
- * resets all run lines
- */
-Testcase.resetTestcase = function(sectionID, rerun) {
-	var topic = KNOWWE.helper.gup('page')
-		
-	var params = {
-        action : 'TestcaseTableResetAction',
-        KWiki_Topic : topic,
-        rerun : rerun,
-        table : sectionID
-    }
-
-    var options = {
-        url : KNOWWE.core.util.getURL ( params ),
-        loader : true,
-        response : {
-            action : 'none',
-            fn : function(){
-				KNOWWE.core.rerendercontent.update(); //TODO 
-				KNOWWE.core.rerendercontent.updateNode(sectionID, topic, null);
-				KNOWWE.core.util.updateProcessingState(-1); 
-            },
-            onError : function () {
-	        	KNOWWE.core.util.updateProcessingState(-1);                    	
-            }
-        }
-    }
-	KNOWWE.core.util.updateProcessingState(1);
-    new _KA( options ).send();
-    
-    //Testcase.resetTableCSS(sectionID);
-}
-
 
 /**
  * resets the css back to standard

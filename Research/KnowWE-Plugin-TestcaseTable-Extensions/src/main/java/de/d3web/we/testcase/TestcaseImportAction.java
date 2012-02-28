@@ -81,6 +81,7 @@ public class TestcaseImportAction extends AbstractAction {
 			return;
 		}
 
+		@SuppressWarnings("unchecked")
 		Section<TestcaseTableType> section = (Section<TestcaseTableType>) Sections.getSection(sectionID);
 		String master = DefaultMarkupType.getAnnotation(section,
 				TestcaseTableType.ANNOTATION_MASTER);

@@ -20,19 +20,10 @@
 
 package de.d3web.we.testcase;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import de.d3web.core.session.Session;
-import de.d3web.we.basic.WikiEnvironment;
-import de.d3web.we.basic.WikiEnvironmentManager;
 import de.knowwe.core.KnowWERessourceLoader;
 import de.knowwe.core.kdom.InvalidKDOMSchemaModificationOperation;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.table.Table;
 import de.knowwe.kdom.table.TableLine;
 
@@ -64,31 +55,6 @@ public class TestcaseTable extends Table {
 	@Override
 	public boolean isSortable() {
 		return false;
-	}
-
-	public static List<Section<TestcaseTableLine>> getExecutedLinesOfTable(Section<TestcaseTableType> table, UserContext context, Session session) {
-		String web = context.getWeb();
-
-		// TODO hotfix: web is null on startup
-		if (web == null) {
-			web = "default_web";
-		}
-
-		WikiEnvironment wiki = WikiEnvironmentManager.getInstance().getEnvironments(web);
-		Map<String, Object> sessionInfoStore = wiki.getSessionInfoStore(session);
-		Map<String, List<Section<TestcaseTableLine>>> tableExecutions = (Map<String, List<Section<TestcaseTableLine>>>) sessionInfoStore.get(TestcaseTable.TESTCASE_INFOSTORE_KEY);
-		if (tableExecutions == null) {
-			tableExecutions = new HashMap<String, List<Section<TestcaseTableLine>>>();
-			sessionInfoStore.put(TestcaseTable.TESTCASE_INFOSTORE_KEY, tableExecutions);
-		}
-
-		List<Section<TestcaseTableLine>> list = tableExecutions.get(table.getID());
-		if (list == null) {
-			list = new LinkedList<Section<TestcaseTableLine>>();
-			tableExecutions.put(table.getID(), list);
-		}
-		return list;
-
 	}
 
 	/**

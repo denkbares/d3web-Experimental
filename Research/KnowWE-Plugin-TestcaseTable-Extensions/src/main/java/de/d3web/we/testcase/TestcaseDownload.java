@@ -47,6 +47,7 @@ public class TestcaseDownload extends AbstractAction {
 		String filename = context.getParameter("filename");
 		String nodeID = context.getParameter("nodeid");
 
+		@SuppressWarnings("unchecked")
 		Section<TestcaseTableType> tableDMType = (Section<TestcaseTableType>) Sections.getSection(nodeID);
 
 		Section<TestcaseTable> table = Sections.findSuccessor(tableDMType, TestcaseTable.class);
