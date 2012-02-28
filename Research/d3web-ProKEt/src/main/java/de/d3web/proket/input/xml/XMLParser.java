@@ -257,6 +257,7 @@ public class XMLParser implements IParser {
         try {
             // try to get the corresponding XML from the resources folder
             inputFile = FileUtils.getResourceFile("/specs/prototypes/" + xMLFilename);
+            System.out.println(inputFile);
 
             if (inputFile == null) {
                 try {

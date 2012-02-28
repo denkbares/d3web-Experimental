@@ -38,7 +38,6 @@ padding: 10px;
 
 #dialog{
     float: left;
-    width: 75%;
     margin-top: 60px;
 }
 
@@ -57,8 +56,7 @@ padding: 10px;
 
 .auxpanelBottom{
     background-color: #fffff0;
-    width: 100%;
-    height: 120px;
+    width: 99%;
     -moz-box-shadow: 0 0 3.5px black;
 	-webkit-box-shadow: 0 0 3.5px black;
 	box-shadow: 0 0 3.5px black;
@@ -70,8 +68,8 @@ padding: 10px;
 }
 
 
-.auxpanelButtonRight{
-    width: 70px; height: 16px; padding-top: 1px; border: 1px solid #696969; text-align: center; cursor: pointer; 
+.auxpanelButton{
+    width: 75px; height: 16px; padding-top: 1px; border: 1px solid #696969; text-align: center; cursor: pointer; 
 	background-color: #dddddd; font-weight: normal; color: 	#8b4513; -moz-box-shadow: 0 0 5px black;	
 	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; margin-bottom: 10px;
 }
@@ -103,8 +101,6 @@ table{
 }
 
 .title {
-	padding-left: 4px;
-	padding-right: 4px;
 	vertical-align: middle;
 	background-color: #e0e0e0;
 	-moz-box-shadow: 0 0 3.5px black;
@@ -164,7 +160,7 @@ area {
 
 /* Styling of the div within questions that displays the currently propagated value */
 .propagation{
-    display: block; width: 12px; height: 12px; float: right; margin-top: 5px; margin-right: 2px;
+    display: block; width: 150px; height: 22px; float: right; pading-right: 4px;
 }
 .propagation.rating-high { 
     background-color: #C3DAA8; border: 1px solid grey; 
@@ -190,3 +186,27 @@ area {
 .floatingCDrop {line-height: 1.5em; padding: 3px; float: left; margin-right: 15px;}
 
 .floatingCDrop select{width: 54px; margin-left: 17px;}
+
+.ynbutton{width: 14px; height: 14px; 
+        border: 1px solid #696969; font-size: 0.8em; font-weight: bold;
+        text-align: center; cursor: pointer; 
+	background-color: #DCDFF3; 
+        -moz-box-shadow: -2px -2px 5px black;	
+	-webkit-box-shadow: 0 0 5px black; 
+        box-shadow: 0 0 5px black; 
+        margin-bottom: 10px;
+        }
+
+.dialogCompleteWidth{
+    width: 99%;
+}
+
+.dialog75Width{
+    width: 75%;
+}
+
+.auxPropagationInfo{color: #800000; font-size: 1.1em;}
+
+.hide{display: none;}
+
+.show{display: block;}

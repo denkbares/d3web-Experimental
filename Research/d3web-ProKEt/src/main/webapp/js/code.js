@@ -16,9 +16,9 @@ var stopMarking = false;
 var initialization = true;
 
 /****************************************************************************
-* FUNCTIONS needed for the basic initial setting up of all js functionality *
-* e.g., marking questions (normal case) , making navigaion etc.             *
-****************************************************************************/
+ * FUNCTIONS needed for the basic initial setting up of all js functionality *
+ * e.g., marking questions (normal case) , making navigaion etc.             *
+ ****************************************************************************/
 
 
 function setup() {
@@ -94,6 +94,18 @@ function setup() {
         
         // initialize mechanism for dropdwons to check entered values etc
         initializeDropdownSelects();
+        
+        // remove the field containing the propagation value info for 1st q
+        removePropagationInfoInQuestionForFirst();
+        
+        // remove yn panel etc for first question
+        removeInputFacilitiesForFirst();
+    }
+    
+    // handle one question dialog
+    if(oc) {
+        
+       
     }
     
     if(logging){
@@ -863,8 +875,8 @@ function generate_tooltip_functions() {
 
 
 /**********************************************************
-* FUNCTIONS added to StringTemplates or JS CodeContainers *
-**********************************************************/
+ * FUNCTIONS added to StringTemplates or JS CodeContainers *
+ **********************************************************/
 
 /*** BASIC STUFF ***/
 
@@ -1103,8 +1115,9 @@ function h4boxes(value, id) {
             }
         }*/
         
+    //alert(target.attr("id") + " " + value);    
     setColorForQuestion(target, item, value);
-    setPropagationColor(target);
+    setPropagationColor(target, value);
         
     // also mark parents of the target while excluding target
     h4boxes_mark(target, true);
@@ -1113,11 +1126,45 @@ function h4boxes(value, id) {
 }
 
 // set the color for the area indicating the system-propagated value
-function setPropagationColor(question){
+function setPropagationColor(question, userval){
     
     var prop = $("#propagation-"+question.attr("id"));
     var propColor = calculateRatingForQuestion(question);
-    setColorForQuestion(prop, prop, propColor);
+    
+    setPropColor(prop, propColor);
+    if(userval != propColor && propColor != 0 && userval != undefined){
+        prop.removeClass("hide");
+        prop.addClass("show");
+    } else {
+        prop.removeClass("show");
+        prop.addClass("hide");
+    }
+    removePropagationInfoInQuestionForFirst();
+  
+}
+
+function setPropColor(target, color){
+    // remove existing rating=coloring classes
+    target.removeClass('rating-low rating-medium rating-high');
+    switch (color) {
+        case "1": // approve --> green
+            target.addClass("rating-high");
+            //imgTarget.attr('src', "img/panel1.gif");
+            break;
+            
+        // in case the user retracts the answer (gray) check, if 
+        // there is a calculated rating. If not, set gray
+        case "0": // undecided --> transparent
+            break;
+        case "2": // suggested  --> yellow
+            target.addClass("rating-medium");
+            //imgTarget.attr('src', "img/panel2.gif");
+            break;
+        case "3": // rejected -_> red
+            target.addClass("rating-low");
+            //imgTarget.attr('src', "img/panel3.gif");
+            break;
+    }
 }
 
 /*
@@ -1177,9 +1224,9 @@ function setColorForQuestionHelper(target, imgTarget, color){
 
 
 /**
- * Calculates the rating for the given question and returns
- * the corresponding color/rating value: 0=undecided, 1=approve, 2=suggest, 3=reject
- */
+* Calculates the rating for the given question and returns
+* the corresponding color/rating value: 0=undecided, 1=approve, 2=suggest, 3=reject
+*/
 function calculateRatingForQuestion(question){
     
     var ocPar = question.hasClass('AND');    // parent has AND connection
@@ -1254,8 +1301,8 @@ function calculateRatingForQuestion(question){
 }
 
 /*
- * Compares the user-chosen and kbs-calculated color/rating values
- */
+* Compares the user-chosen and kbs-calculated color/rating values
+*/
 function equalUserAndKBSRating(question, chosenColor){
     
     var col = chosenColor+"";
@@ -1280,9 +1327,9 @@ function hasChildrenHierachical(question){
 }
 
 /**
- * Initialize Num fields as to react on enter-press or focusout to check whether
- * question should be established due to the rating given
- */
+* Initialize Num fields as to react on enter-press or focusout to check whether
+* question should be established due to the rating given
+*/
 function initializeNumfields(){
     $('[type=num]').unbind("keydown").keydown(function(e) { 
         var code = (e.keyCode ? e.keyCode : e.which);
@@ -1295,9 +1342,9 @@ function initializeNumfields(){
 }
 
 /**
- * Checks the defined range for num questions. If in defined value range for
- * establishing question: establish, otherwise remove rating
- */
+* Checks the defined range for num questions. If in defined value range for
+* establishing question: establish, otherwise remove rating
+*/
 function handleNumFields_proto(el){
     
     var val = parseInt($(el).val());
@@ -1323,9 +1370,9 @@ function handleNumFields_proto(el){
 }
 
 /**
- * Initialize Dropdwons as to check whether the chosen value is the defined
- * establish-value when dropdown input changes.
- */
+* Initialize Dropdwons as to check whether the chosen value is the defined
+* establish-value when dropdown input changes.
+*/
 function initializeDropdownSelects(){
     $('select').unbind('change').change(function() { 
         handleDropdwonSelects_proto($(this));
@@ -1333,9 +1380,9 @@ function initializeDropdownSelects(){
 }
 
 /**
- * Checks the defined range for dropdown questions. If the defined-->establish 
- * value is selected, establish question, otherwise remove rating
- */
+* Checks the defined range for dropdown questions. If the defined-->establish 
+* value is selected, establish question, otherwise remove rating
+*/
 function handleDropdwonSelects_proto(el){
     
     var val = el.val();
@@ -1360,9 +1407,9 @@ function handleDropdwonSelects_proto(el){
 }
 
 /**
- * Show the auxiliary information for element with id "id" in the infopanel
- * element
- */
+* Show the auxiliary information for element with id "id" in the infopanel
+* element
+*/
 function showAuxInfo(id, title){
     
     // get infotext stored in additional, invisible sub-element of current q
@@ -1389,34 +1436,78 @@ function hideAuxInfo(){
     $("#auxInfo").html("-");
 }
 
+function showAuxPropInfo(){
+    
+    $("#auxPropagationInfo").html("<b>Beantwortung der Detailfragen widerspricht der Antwort dieser Frage!</b> <br /><br />");
+}
+
+function hideAuxPropInfo(){
+    $("#auxPropagationInfo").html("");
+}
+
+function removePropagationInfoInQuestionForFirst(){
+    $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements
+        
+        var first = $(this).attr("id"); // get question id
+        
+        if($(this).attr("id")!=undefined){  
+            var prop = $("#propagation-"+$(this).attr("id"));
+    
+            prop.removeClass("show");
+            prop.addClass("hide");
+        }
+      
+    });
+    
+}
+
+// TODO check if that works for num and oc q
+function removeInputFacilitiesForFirst(){
+     $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements
+        
+        if($(this).attr("id")!=undefined){  
+            var id = "#" + $(this).attr("id").replace("q_", "") + "-imagebox";
+            
+            
+            var prop = $(id);
+    
+            prop.addClass("hide");
+        }
+    });
+}
+
 /**
- * Function for toggling the display of the info panel.
- */
+* Function for toggling the display of the info panel.
+*/
 function toggleAuxInfoPlacing(){
     
     var html = $("#auxpanelToggle").html();
     
-   // info currently displayed at the right side, i.e. is to be toggled to bottom
-   if(html.indexOf("Bottom")!=-1){
-        $("#auxpanelToggle").html("To Side");
+    // info currently displayed at the right side, i.e. is to be toggled to bottom
+    if(html.indexOf("Nach unten")!=-1){
+        $("#auxpanelToggle").html("Zur Seite");
         $("#auxpanel").removeClass("auxpanelRight");
         $("#auxpanel").addClass("auxpanelBottom");
+        $("#dialog").addClass("dialogCompleteWidth");
+        $("#dialog").removeClass("dialog75Width");
     } 
     // info displayed at the bottom
     else {
-        $("#auxpanelToggle").html("To Bottom");
+        $("#auxpanelToggle").html("Nach unten");
         $("#auxpanel").removeClass("auxpanelBottom");
         $("#auxpanel").addClass("auxpanelRight");
+        $("#dialog").addClass("dialog75Width");
+        $("#dialog").removeClass("dialogCompleteWidth");
     }
     
 }
 
 /**
- * Transfer coloring (in hierarchy dialog) also to parent quesitons
- * @param object the object from where to start marking parents
- * @parents skip_self flag indicating whether element itself should
- * 		also be processed
- */
+* Transfer coloring (in hierarchy dialog) also to parent quesitons
+* @param object the object from where to start marking parents
+* @parents skip_self flag indicating whether element itself should
+* 		also be processed
+*/
 function h4boxes_mark(object, skip_self) {
 
     // check object itself unless skip_self
@@ -1462,11 +1553,11 @@ function h4boxes_mark(object, skip_self) {
 
 
 /**
- * REMOVE?!
- * IN ColorHierarchyMCQuestion.st and LegalQuestion.st
- * @param sourceId the ID of the source element
- * @param destId the ID of the destination element
- */
+* REMOVE?!
+* IN ColorHierarchyMCQuestion.st and LegalQuestion.st
+* @param sourceId the ID of the source element
+* @param destId the ID of the destination element
+*/
 function copy_div(sourceId, destId) {
 	
     // get content, which is the innerHTML of the source
@@ -1485,10 +1576,10 @@ function copy_div(sourceId, destId) {
 /*** CLARIFICATION STYLE ***/
 
 /**
- * IN ClarificationMCAnswer.st and EulenspiegelMCAnswer.st
- * Toggle the selection state of the clarification dialogs flat answers
- * @param id the ID of the element to toggle
- */
+* IN ClarificationMCAnswer.st and EulenspiegelMCAnswer.st
+* Toggle the selection state of the clarification dialogs flat answers
+* @param id the ID of the element to toggle
+*/
 function flat_button_toggle(id) {
 	
     // get target element
@@ -1536,9 +1627,9 @@ function flat_button_toggle(id) {
 }
 
 /**
- * Set a target element to deselected
- * @param target the target element
- */
+* Set a target element to deselected
+* @param target the target element
+*/
 function class_deselect(target) {
     target.removeClass('selected').addClass('not-selected');
     if (target.hasClass('selected-c')) {
@@ -1550,11 +1641,11 @@ function class_deselect(target) {
 }
 
 /**
- * Create the additional-answers popup in clarification dialog
- * (or Eulenspiegel)
- * @param question_id the ID of the question that needs the popup
- * @param e the clicked-evebt
- */
+* Create the additional-answers popup in clarification dialog
+* (or Eulenspiegel)
+* @param question_id the ID of the question that needs the popup
+* @param e the clicked-evebt
+*/
 function show_clarification_popup(question_id, e) {
     var counter = 0;
 
@@ -1647,9 +1738,9 @@ function show_clarification_popup(question_id, e) {
 
 
 /**
- * Selection of clarification answers from the additional-answers popup
- * @param answer_id id of the newly to add answer
- */
+* Selection of clarification answers from the additional-answers popup
+* @param answer_id id of the newly to add answer
+*/
 function select_clarification(answer_id) {
     var answer = $("#" + answer_id);
     answer.show();	// show the answer element
@@ -1659,17 +1750,17 @@ function select_clarification(answer_id) {
 
 
 /** IN ClarificationQuestionnaire.st 
- * Toggles the specified element in 500 ms
- * @param id the ID of the element to toggle
- */
+* Toggles the specified element in 500 ms
+* @param id the ID of the element to toggle
+*/
 function toggle(id) {
     $("#" + id).toggle(500);
 }
 
 /**
- * Prevent errors in browsers NOT supporting the FIREBUG CONSOLE
- * (http://blog.t8d.de/2008/11/03/firebug-windowconsole-is-undefined-verhindern/)
- */
+* Prevent errors in browsers NOT supporting the FIREBUG CONSOLE
+* (http://blog.t8d.de/2008/11/03/firebug-windowconsole-is-undefined-verhindern/)
+*/
 if (typeof window.loadFirebugConsole == "undefined"
     || typeof window.console == 'undefined') {
     var names = [ "log", "debug", "info", "warn", "error", "assert", "dir",

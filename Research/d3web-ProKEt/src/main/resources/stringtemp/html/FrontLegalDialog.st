@@ -18,15 +18,19 @@ $HTMLHeader()$
            detailliertere Fragen dazu eingeblendet. 
     </div>
     
-    <div id="dialog">
+    <div id="dialog" class="dialog75Width">
          $children$	
     </div>
 
     <div id="auxpanel" class="auxpanelRight">
 
-        <div id="auxpanelToggle" class="auxpanelButtonRight" onclick="toggleAuxInfoPlacing()">
-            To Bottom
-        </div>    
+        <div id="auxpanelToggle" class="auxpanelButton" onclick="toggleAuxInfoPlacing()">
+            Nach unten
+        </div>   
+        
+        <div id="auxPropagationInfo" class="auxPropagationInfo">
+            
+        </div>
         <div id="auxHeader">
             <b>Informationen zu []:</b>  
             <br /><br />
@@ -36,6 +40,8 @@ $HTMLHeader()$
         <div id="auxInfo">
         -
         </div>
+
+        
     </div>
     
                  
