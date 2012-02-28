@@ -10,7 +10,7 @@
     
 <!--Dropdown for choice display and selection-->
     <div id=$id$-choicesDropdown class="floatingCDrop"
-             onmouseover="showAuxInfo('$fullId$')" onmouseout="hideAuxInfo()">
+             onmouseover="showAuxInfo('$fullId$')" >
         
         <select id="$fullId$-dropdown">
             $choicesDropdownOptions$

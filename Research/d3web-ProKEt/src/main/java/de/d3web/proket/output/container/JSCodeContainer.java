@@ -43,6 +43,7 @@ public class JSCodeContainer implements ICodeContainer {
     private boolean dbLogin = false;
     private boolean logging = false;
     private boolean hierarchy = false;
+    private boolean oqd = false;
 
     private boolean feedback = false;
 
@@ -69,6 +70,9 @@ public class JSCodeContainer implements ICodeContainer {
         hierarchy = true;
     }
 
+    public void setOneQuestionDialog() {
+        oqd = true;
+    }
     /**
      * Some setters for enabling specific settings: d3web, dateanswers,
      * imagequestions --- for eased usage in the Renderers
@@ -190,6 +194,12 @@ public class JSCodeContainer implements ICodeContainer {
             add("var hierarchy = true", 0);
         } else {
             add("var hierarchy = false", 0);
+        }
+        
+        if (oqd) {
+            add("var oqd = true", 0);
+        } else {
+            add("var oqd = false", 0);
         }
         
         if (feedback) {

@@ -103,8 +103,8 @@ function setup() {
     }
     
     // handle one question dialog
-    if(oc) {
-        
+    if(oqd) {
+        // init oqd stuff
        
     }
     
@@ -1823,3 +1823,31 @@ REM function click_weight(id) {
 
 	impDiv.html(text);
 }*/
+
+/*----------------------One Question Dialog----------*/
+function toggle_sub_4oqd(id){
+    toggle_hide("sub-" + id); 
+}
+
+/**
+* Show the auxiliary information for element with id "id" in the infopanel
+* element
+*/
+function showAuxInfoOQD(id, title){
+    
+    // get infotext stored in additional, invisible sub-element of current q
+    var infoid = "#bonus-"+id;
+    if(title==undefined){
+        title = "";
+    }
+    var auxHeader = "<b>Informationen zu [" + title + "]:</b> <br /><br />";
+    var auxinfo = $(infoid).html();
+    
+    // rewrite inner HTML of infopanel widget with info content
+    if(auxinfo==""){
+        auxinfo = "";
+    } 
+    
+    $("#auxHeader-"+id).html(auxHeader);
+    $("#auxInfo-"+id).html(auxinfo);
+}
