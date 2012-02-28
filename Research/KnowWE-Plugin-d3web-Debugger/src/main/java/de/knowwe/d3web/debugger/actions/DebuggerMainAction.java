@@ -32,11 +32,11 @@ import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.d3web.debugger.DebugUtilities;
-import de.knowwe.d3web.debugger.inference.DebugAction;
-import de.knowwe.d3web.debugger.inference.DebugCondition;
-
+import de.knowwe.d3web.debugger.inference.DebuggerRuleAction;
+import de.knowwe.d3web.debugger.inference.DebuggerRuleCondition;
 
 /**
+ * An action to render the debugger's main-part.
  * 
  * @author dupke
  */
@@ -56,16 +56,24 @@ public class DebuggerMainAction extends AbstractAction {
 		}
 	}
 
+	/**
+	 * Render the debugger's main-part
+	 */
 	public String renderMain(UserActionContext context) {
 		StringBuffer buffer = new StringBuffer();
 
 		try {
+			// knoweledgebase id
 			String kbID = context.getParameter("kbid");
+			// question id
 			String qid = context.getParameter("qid");
+			// solution id
 			String sid = context.getParameter("sid");
+			// index of selected item in selec-tag
 			int selectInd = 0;
 			if (context.getParameters().containsKey("selectInd")) selectInd = Integer.parseInt(context.getParameter("selectInd"));
 			String rate = "";
+			// id of displayed rule
 			int ruleid;
 			if (context.getParameters().containsKey("ruleid")) ruleid = Integer.parseInt(context.getParameter("ruleid"));
 			else ruleid = 0;
@@ -105,6 +113,7 @@ public class DebuggerMainAction extends AbstractAction {
 					}
 				}
 
+				// highlight the solution's state
 				if (rate != "") {
 					if (rate.equals("UNCLEAR")) buffer.append("<p style='background-color:"
 							+ DebugUtilities.COLOR_UNCLEAR + "'>" + sid + " (UNCLEAR)</p>");
@@ -118,6 +127,7 @@ public class DebuggerMainAction extends AbstractAction {
 			}
 			int eval, select = 0;
 			if (iTos.size() == 0) buffer.append("<p>" + noInfluentialRules + "</p>");
+			// select-tag
 			else {
 				buffer.append("<p>"
 						+ influentialRules
@@ -131,7 +141,8 @@ public class DebuggerMainAction extends AbstractAction {
 				}
 				buffer.append("</select></p>");
 			}
-			// Build list for all Rules
+			/* divs with rules for the selected element */
+			// rules for all elements
 			if (selectInd == 0) buffer.append("<ul id='" + allElements
 					+ "_rules' style='display:block;'>");
 			else buffer.append("<ul id='" + allElements + "_rules' style='display:none;'>");
@@ -140,7 +151,7 @@ public class DebuggerMainAction extends AbstractAction {
 				if (ruleid == r.hashCode()) buffer.append("<li class='debuggerMainEntryActive' ");
 				else buffer.append("<li class='debuggerMainEntry' ");
 
-				DebugCondition dc = new DebugCondition(r.getCondition());
+				DebuggerRuleCondition dc = new DebuggerRuleCondition(r.getCondition());
 				eval = dc.evaluateForRendering(session);
 				if (eval == 0) buffer.append("style='border-color:gray;color:gray;'");
 				else if (eval == 1) buffer.append("style='border-color:green;color:green;'");
@@ -148,12 +159,12 @@ public class DebuggerMainAction extends AbstractAction {
 				else buffer.append("style='border-color:black;color:black;'");
 
 				buffer.append(" ruleid='" + r.hashCode() + "' kbid='"
-						+ kb.getId() + "'>" + new DebugAction(r.getAction()).render()
+						+ kb.getId() + "'>" + new DebuggerRuleAction(r.getAction()).render()
 							+ "</li>");
 			}
 			buffer.append("</ul>");
 
-			// Build lists for Rules with object in condition
+			// rules for each element
 			select = 0;
 			for (TerminologyObject tobj : iTos) {
 				select++;
@@ -166,7 +177,7 @@ public class DebuggerMainAction extends AbstractAction {
 					if (ruleid == r.hashCode()) buffer.append("<li class='debuggerMainEntryActive' ");
 					else buffer.append("<li class='debuggerMainEntry' ");
 
-					DebugCondition dc = new DebugCondition(r.getCondition());
+					DebuggerRuleCondition dc = new DebuggerRuleCondition(r.getCondition());
 					eval = dc.evaluateForRendering(session);
 					if (eval == 0) buffer.append("style='border-color:gray;color:gray;'");
 					else if (eval == 1) buffer.append("style='border-color:green;color:green;'");
@@ -174,7 +185,7 @@ public class DebuggerMainAction extends AbstractAction {
 					else buffer.append("style='border-color:black;color:black;'");
 
 					buffer.append(" ruleid='" + r.hashCode() + "' kbid='"
-							+ kb.getId() + "'>" + new DebugAction(r.getAction()).render()
+							+ kb.getId() + "'>" + new DebuggerRuleAction(r.getAction()).render()
 								+ "</li>");
 				}
 				buffer.append("</ul>");

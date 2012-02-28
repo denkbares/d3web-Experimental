@@ -180,7 +180,7 @@ KNOWWE.plugin.debuggr = function(){
 				return;
 			
        		var params = {
-       				action : 'DebuggerRuleAction',
+       				action : 'DebuggerRuleboxAction',
        				kbid : element.getAttribute('kbid'),
        				ruleid : element.getAttribute('ruleid')
        		}  

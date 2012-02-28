@@ -32,8 +32,9 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.d3web.debugger.actions.DebuggerMenuAction;
 
-
 /**
+ * This d3web-debugger is used to debug a knowledgebase. It uses backtracking to
+ * trace an error, starting at a chosen solution.
  * 
  * @author dupke
  */
@@ -46,6 +47,9 @@ public class DebuggerTagHandler extends AbstractTagHandler {
 		super("debugger");
 	}
 
+	/**
+	 * Render the debugger.
+	 */
 	@Override
 	public String render(Section<?> section, UserContext userContext,
 			Map<String, String> parameters) {
@@ -87,11 +91,13 @@ public class DebuggerTagHandler extends AbstractTagHandler {
 		// trace
 		buffer.append("<div id='debuggerTrace' class='debuggerTrace'>");
 		buffer.append("<span lvl=0 kbid='" + kb.getId()
-				+ "' onClick='KNOWWE.plugin.debuggr.traceClicked(this);'>Lösungen</span>");
+				+ "' onClick='KNOWWE.plugin.debuggr.traceClicked(this);'>"
+				+ DebuggerMenuAction.SOLUTIONS_KEY + "</span>");
 		buffer.append("</div>");
 		// menu
 		buffer.append("<div id='debuggerMenu'>");
-		buffer.append(new DebuggerMenuAction().getMenuRendering(kbID, "Lösungen", session));
+		buffer.append(new DebuggerMenuAction().getMenuRendering(kbID,
+				DebuggerMenuAction.SOLUTIONS_KEY, session));
 		buffer.append("</div><div style='clear:both'></div>");
 		// main
 		buffer.append("<div id= 'debuggerMain' class='debuggerMain'></div>");

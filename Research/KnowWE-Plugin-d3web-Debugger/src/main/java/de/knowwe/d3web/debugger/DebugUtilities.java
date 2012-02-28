@@ -37,6 +37,7 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
 
 /**
+ * Some useful functions and variables for the d3web-debugger.
  * 
  * @author dupke
  */
@@ -175,6 +176,7 @@ public class DebugUtilities {
 	 * Get the path to the rule's article.
 	 */
 	public static String getRuleResource(Rule r) {
+		// TODO: Does not really work, don't know why.
 		Rule rule;
 		List<Section<RuleAction>> rules;
 

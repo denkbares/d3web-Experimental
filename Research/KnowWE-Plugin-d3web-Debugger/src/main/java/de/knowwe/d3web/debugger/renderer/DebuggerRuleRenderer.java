@@ -30,11 +30,11 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.d3web.debugger.inference.DebugAction;
-import de.knowwe.d3web.debugger.inference.DebugCondition;
-
+import de.knowwe.d3web.debugger.inference.DebuggerRuleAction;
+import de.knowwe.d3web.debugger.inference.DebuggerRuleCondition;
 
 /**
+ * Renders rules to provide a debugging-layout.
  * 
  * @author dupke
  */
@@ -57,8 +57,8 @@ public class DebuggerRuleRenderer implements Renderer{
 		
 		StringBuffer buffer = new StringBuffer();
 
-		DebugCondition dc = new DebugCondition(r.getCondition());
-		DebugAction da = new DebugAction(r.getAction());
+		DebuggerRuleCondition dc = new DebuggerRuleCondition(r.getCondition());
+		DebuggerRuleAction da = new DebuggerRuleAction(r.getAction());
 		if (r.hasFired(session)) buffer.append("<div class='ruleContentFired' ruleid='"
 				+ r.hashCode() + "'>");
 		else

@@ -23,8 +23,8 @@ import java.io.IOException;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 
-
 /**
+ * An action to rerender the debugger.
  * 
  * @author dupke
  */
@@ -33,7 +33,7 @@ public class DebuggerRerenderAction extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		StringBuffer buffer = new StringBuffer();
-		DebuggerRuleAction dra = new DebuggerRuleAction();
+		DebuggerRuleboxAction dra = new DebuggerRuleboxAction();
 		DebuggerMainAction dma = new DebuggerMainAction();
 		String menu, trace;
 		// get menu

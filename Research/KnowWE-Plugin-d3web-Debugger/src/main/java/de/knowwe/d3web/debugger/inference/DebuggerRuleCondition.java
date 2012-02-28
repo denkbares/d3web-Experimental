@@ -33,24 +33,25 @@ import de.knowwe.d3web.debugger.DebugUtilities;
 import de.knowwe.d3web.debugger.renderer.DebuggerQuestionRenderer;
 
 /**
+ * A data type for rule's condition in the debugger.
  * 
  * @author dupke
  */
-public class DebugCondition implements Condition {
+public class DebuggerRuleCondition implements Condition {
 
 	/** Some information */
 	private final Collection<? extends TerminologyObject> conditionObjects;
 	private final String conditionText;
-	private List<DebugCondition> subConditions;
+	private List<DebuggerRuleCondition> subConditions;
 	private String connector;
 	private boolean complex;
 	/** Truth of the condition. undefined: -1, unknown: 0, false: 1, true: 2 */
 
-	public DebugCondition(Condition condition) {
+	public DebuggerRuleCondition(Condition condition) {
 		this(condition.getTerminalObjects(), condition.toString());
 	}
 
-	public DebugCondition(Collection<? extends TerminologyObject> conditionObjects, String conditionText) {
+	public DebuggerRuleCondition(Collection<? extends TerminologyObject> conditionObjects, String conditionText) {
 		this.conditionObjects = conditionObjects;
 		this.conditionText = conditionText;
 		split();
@@ -65,7 +66,7 @@ public class DebugCondition implements Condition {
 		return evaluateForRendering(session) == 1;
 	}
 
-	public List<DebugCondition> getSubconditions() {
+	public List<DebuggerRuleCondition> getSubconditions() {
 		return subConditions;
 	}
 
@@ -147,7 +148,7 @@ public class DebugCondition implements Condition {
 		if (this == obj) return true;
 		if (obj == null) return false;
 		if (getClass() != obj.getClass()) return false;
-		DebugCondition other = (DebugCondition) obj;
+		DebuggerRuleCondition other = (DebuggerRuleCondition) obj;
 		if (conditionText == null) {
 			if (other.conditionText != null) return false;
 		}
@@ -165,7 +166,7 @@ public class DebugCondition implements Condition {
 		
 		if (complex) {
 			if (connector.equals(DebugUtilities.DEBUG_AND)) {
-				for (DebugCondition dc : subConditions) {
+				for (DebuggerRuleCondition dc : subConditions) {
 					eval = dc.evaluateForRendering(session);
 					if (eval == 0) return 0;
 					if (eval == 2012) return 2012;
@@ -175,7 +176,7 @@ public class DebugCondition implements Condition {
 				if (counter == subConditions.size()) return 1;
 			}
 			else if (connector.equals(DebugUtilities.DEBUG_OR)) {
-				for (DebugCondition dc : subConditions) {
+				for (DebuggerRuleCondition dc : subConditions) {
 					eval = dc.evaluateForRendering(session);
 					if (eval == 0) return 0;
 					if (eval == 2012) return 2012;
@@ -280,10 +281,10 @@ public class DebugCondition implements Condition {
 			conditionText = conditionText.replaceFirst(DebugUtilities.AND, "");
 			conditionText = conditionText.substring(2, conditionText.length() - 1);
 			subConds = splitConditionText(conditionText);
-			subConditions = new ArrayList<DebugCondition>();
+			subConditions = new ArrayList<DebuggerRuleCondition>();
 
 			for (String s : subConds)
-				subConditions.add(new DebugCondition(getObjectsOfConditionPart(s), s));
+				subConditions.add(new DebuggerRuleCondition(getObjectsOfConditionPart(s), s));
 		}
 		else if (conditionText.startsWith(DebugUtilities.OR)) {
 			complex = true;
@@ -291,19 +292,19 @@ public class DebugCondition implements Condition {
 			conditionText = conditionText.replaceFirst(DebugUtilities.OR, "");
 			conditionText = conditionText.substring(2, conditionText.length() - 1);
 			subConds = splitConditionText(conditionText);
-			subConditions = new ArrayList<DebugCondition>();
+			subConditions = new ArrayList<DebuggerRuleCondition>();
 
 			for (String s : subConds)
-				subConditions.add(new DebugCondition(getObjectsOfConditionPart(s), s));
+				subConditions.add(new DebuggerRuleCondition(getObjectsOfConditionPart(s), s));
 		}
 		else if (conditionText.startsWith(DebugUtilities.NOT)) {
 			complex = true;
 			connector = DebugUtilities.DEBUG_NOT;
 			conditionText = conditionText.replaceFirst(DebugUtilities.NOT, "");
 			conditionText = conditionText.substring(2, conditionText.length() - 1);
-			subConditions = new ArrayList<DebugCondition>();
+			subConditions = new ArrayList<DebuggerRuleCondition>();
 			
-			subConditions.add(new DebugCondition(conditionObjects, conditionText));
+			subConditions.add(new DebuggerRuleCondition(conditionObjects, conditionText));
 		}
 		// Basic condition (==, >=, >, <=, <, State)
 		else {

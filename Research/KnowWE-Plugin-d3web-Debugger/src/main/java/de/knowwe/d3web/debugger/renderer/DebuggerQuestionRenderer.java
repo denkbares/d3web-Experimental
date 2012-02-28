@@ -33,8 +33,8 @@ import de.d3web.core.session.Value;
 import de.d3web.core.session.values.UndefinedValue;
 import de.knowwe.core.utils.KnowWEUtils;
 
-
 /**
+ * Get the HTML-output for debugging a question.
  * 
  * @author dupke
  */
@@ -96,12 +96,6 @@ public class DebuggerQuestionRenderer {
 
 	/**
 	 * Render a OneChoice-Question.
-	 * 
-	 * @param q
-	 * @param valueText
-	 * @param web
-	 * @param topic
-	 * @return
 	 */
 	private static String renderQuestionOC(QuestionOC q, String valueText, String web, String topic, String kbid, boolean inside) {
 		StringBuffer buffer = new StringBuffer();
@@ -127,12 +121,6 @@ public class DebuggerQuestionRenderer {
 
 	/**
 	 * Render a MultipleChoice-Question.
-	 * 
-	 * @param q
-	 * @param valueText
-	 * @param web
-	 * @param topic
-	 * @return
 	 */
 	private static String renderQuestionMC(QuestionMC q, String valueText, String web, String topic, String kbid, boolean inside) {
 		StringBuffer buffer = new StringBuffer();
@@ -163,12 +151,6 @@ public class DebuggerQuestionRenderer {
 
 	/**
 	 * Render a Numerical-Question.
-	 * 
-	 * @param q
-	 * @param valueText
-	 * @param web
-	 * @param topic
-	 * @return
 	 */
 	private static String renderQuestionNum(QuestionNum q, String valueText, String web, String topic, String kbid, boolean inside) {
 		StringBuffer buffer = new StringBuffer();
@@ -205,12 +187,6 @@ public class DebuggerQuestionRenderer {
 
 	/**
 	 * Render a Textual-Question.
-	 * 
-	 * @param q
-	 * @param valueText
-	 * @param web
-	 * @param topic
-	 * @return
 	 */
 	private static String renderQuestionText(QuestionText q, String valueText, String web, String topic, String kbid, boolean inside) {
 		StringBuffer buffer = new StringBuffer();

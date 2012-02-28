@@ -29,18 +29,23 @@ import de.d3web.indication.ActionNextQASet;
 import de.d3web.indication.ActionSuppressAnswer;
 import de.d3web.scoring.ActionHeuristicPS;
 
-
 /**
+ * A data type for rule's action in the debugger.
  * 
  * @author dupke
  */
-public class DebugAction {
+public class DebuggerRuleAction {
 
 	private final List<? extends TerminologyObject> actionObjects;
 	private String actionText;
 
-	public DebugAction(PSAction action) {
+	/**
+	 * Constructor. Keep the action's objects and text.
+	 */
+	public DebuggerRuleAction(PSAction action) {
+		// getting objects
 		actionObjects = action.getBackwardObjects();
+		// getting text
 		if (action instanceof ActionHeuristicPS) {
 			ActionHeuristicPS ac = (ActionHeuristicPS) action;
 			actionText = "<span class='debuggerActionSolution'>" + ac.getSolution().getName()
@@ -97,7 +102,7 @@ public class DebugAction {
 		if (this == obj) return true;
 		if (obj == null) return false;
 		if (getClass() != obj.getClass()) return false;
-		DebugAction other = (DebugAction) obj;
+		DebuggerRuleAction other = (DebuggerRuleAction) obj;
 		if (actionText == null) {
 			if (other.actionText != null) return false;
 		}

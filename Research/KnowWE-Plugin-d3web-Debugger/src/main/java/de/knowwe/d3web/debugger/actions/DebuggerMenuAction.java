@@ -31,16 +31,20 @@ import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.d3web.debugger.DebugUtilities;
 
-
 /**
+ * An action to render the debugger's menu.
  * 
  * @author dupke
  */
 public class DebuggerMenuAction extends AbstractAction {
 
+	public static final String SOLUTIONS_KEY = "Lösungen";
+
 	@Override
 	public void execute(UserActionContext context) throws IOException {
+		// knowledgebase id
 		String kbID = context.getParameter("kbid");
+		// question id
 		String qid = context.getParameter("qid");
 		SessionBroker broker = D3webUtils.getBroker(context.getUserName(), context.getWeb());
 		Session session = broker.getSession(kbID);
@@ -52,6 +56,9 @@ public class DebuggerMenuAction extends AbstractAction {
 		}
 	}
 
+	/**
+	 * Render the debugger's menu.
+	 */
 	@SuppressWarnings("unchecked")
 	public String getMenuRendering(String kbID, String qid, Session session) {
 		StringBuffer buffer = new StringBuffer();
@@ -70,12 +77,14 @@ public class DebuggerMenuAction extends AbstractAction {
 				}
 			}
 
-			if (qid.equals("Lösungen")) tos = (List<TerminologyObject>) DebugUtilities.getSolutionsFromKB(kb);
+			// if question id = solution's key, menu elements = solutions
+			if (qid.equals(SOLUTIONS_KEY)) tos = (List<TerminologyObject>) DebugUtilities.getSolutionsFromKB(kb);
 			else tos = DebugUtilities.getInfluentialTOs(to, kb);
-
+			// no elements to render
 			if (tos.size() == 0) buffer.append("<p style='margin-left:10px;'>Keine relevanten Elemente gefunden.</p>");
 			else {
-				if (!qid.equals("Lösungen")) buffer.append("<p>Relevante Elemente:</p><ul>");
+				// render menu
+				if (!qid.equals(SOLUTIONS_KEY)) buffer.append("<p>Relevante Elemente:</p><ul>");
 				for (TerminologyObject tobj : tos) {
 					if (tobj instanceof Solution) {
 						rate = session.getBlackboard().getRating((Solution) tobj).toString();

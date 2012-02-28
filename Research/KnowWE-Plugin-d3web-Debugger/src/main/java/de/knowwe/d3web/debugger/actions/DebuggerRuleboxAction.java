@@ -30,14 +30,14 @@ import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.d3web.debugger.DebugUtilities;
-import de.knowwe.d3web.debugger.inference.DebugCondition;
-
+import de.knowwe.d3web.debugger.inference.DebuggerRuleCondition;
 
 /**
+ * An action to render the debugger's rulebox.
  * 
  * @author dupke
  */
-public class DebuggerRuleAction extends AbstractAction {
+public class DebuggerRuleboxAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
@@ -48,6 +48,9 @@ public class DebuggerRuleAction extends AbstractAction {
 		}
 	}
 
+	/**
+	 * Render the rulebox.
+	 */
 	public String renderRule(UserActionContext context) {
 		StringBuffer buffer = new StringBuffer();
 		try {
@@ -61,14 +64,14 @@ public class DebuggerRuleAction extends AbstractAction {
 			Session session = broker.getSession(kbID);
 			KnowledgeBase kb = session.getKnowledgeBase();
 			List<Rule> rules = DebugUtilities.getRulesFromKB(kb);
-			DebugCondition dc;
+			DebuggerRuleCondition dc;
 
 			buffer.append("<span ruleid='" + ruleid + "'>");
 			for (Rule r : rules) {
 				if (r.hashCode() == ruleid) {
 					ruleArticle = DebugUtilities.getRuleResource(r);
 					if (ruleArticle.equals("")) ruleArticle = context.getTitle();
-					dc = new DebugCondition(r.getCondition());
+					dc = new DebuggerRuleCondition(r.getCondition());
 					buffer.append(KnowWEUtils.unmaskHTML(dc.render(session, web, title, true)));
 					buffer.append(KnowWEUtils.unmaskHTML("<a class='ruleLink' href='Wiki.jsp?page="
 							+ ruleArticle + "'></a>"));

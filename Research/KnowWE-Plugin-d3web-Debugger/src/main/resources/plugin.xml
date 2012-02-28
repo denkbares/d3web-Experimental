@@ -47,11 +47,11 @@
     </extension>
     
        <extension plugin-id="KnowWEExtensionPoints" point-id="Action"
-        id="DebuggerRuleAction">
+        id="DebuggerRuleboxAction">
         <parameter id="class"
-            value="de.knowwe.d3web.debugger.actions.DebuggerRuleAction" />
-        <parameter id="name" value="DebuggerRuleAction" />
-        <parameter id="description" value="Action DebuggerRuleAction" />
+            value="de.knowwe.d3web.debugger.actions.DebuggerRuleboxAction" />
+        <parameter id="name" value="DebuggerRuleboxAction" />
+        <parameter id="description" value="Action DebuggerRuleboxAction" />
         <parameter id="version" value="1.0" />
         <parameter id="priority" value="5" />
     </extension>
