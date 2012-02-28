@@ -23,6 +23,7 @@ package de.knowwe.d3web.scoreTable;
 import de.knowwe.core.compile.packaging.KnowWEPackageManager;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.kdom.renderer.StyleRenderer;
 
 public class ScoreTableDefaultMarkup extends DefaultMarkupType {
 
@@ -36,6 +37,8 @@ public class ScoreTableDefaultMarkup extends DefaultMarkupType {
 		m = new DefaultMarkup("ScoreTable");
 		m.addContentType(new SimpleScoreTable());
 		m.addAnnotation(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME, false);
+		m.addAnnotationRenderer(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME,
+				StyleRenderer.ANNOTATION);
 	}
 
 	public ScoreTableDefaultMarkup() {

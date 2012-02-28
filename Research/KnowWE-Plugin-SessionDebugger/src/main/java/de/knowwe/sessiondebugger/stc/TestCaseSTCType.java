@@ -22,6 +22,7 @@ import de.knowwe.core.compile.Priority;
 import de.knowwe.core.compile.packaging.KnowWEPackageManager;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.sessiondebugger.ProviderRefreshRenderer;
 
 /**
@@ -40,6 +41,8 @@ public class TestCaseSTCType extends DefaultMarkupType {
 		MARKUP = new DefaultMarkup("TestCaseSTC");
 		MARKUP.addAnnotation(ANNOTATION_FILE, true);
 		MARKUP.addAnnotation(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME, false);
+		MARKUP.addAnnotationRenderer(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME,
+				StyleRenderer.ANNOTATION);
 	}
 
 	public TestCaseSTCType() {

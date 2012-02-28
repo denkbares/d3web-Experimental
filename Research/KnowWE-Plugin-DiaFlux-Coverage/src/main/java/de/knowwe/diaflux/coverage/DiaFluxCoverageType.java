@@ -31,6 +31,7 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.diaflux.type.FlowchartType;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * 
@@ -49,6 +50,8 @@ public class DiaFluxCoverageType extends DefaultMarkupType {
 		MARKUP = new DefaultMarkup("DiaFluxCoverage");
 		MARKUP.addContentType(new FlowchartType());
 		MARKUP.addAnnotation(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME, false);
+		MARKUP.addAnnotationRenderer(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME,
+				StyleRenderer.ANNOTATION);
 		MARKUP.addAnnotation(ANNOTATION_MASTER, false);
 		MARKUP.addAnnotation(ANNOTATION_TEST, true);
 

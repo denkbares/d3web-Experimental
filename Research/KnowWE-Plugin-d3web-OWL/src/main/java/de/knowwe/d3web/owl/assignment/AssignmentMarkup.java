@@ -22,6 +22,7 @@ import de.knowwe.core.compile.packaging.KnowWEPackageManager;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * 
@@ -37,6 +38,8 @@ public class AssignmentMarkup extends DefaultMarkupType {
 		MARKUP = new DefaultMarkup("Assignment");
 		MARKUP.addContentType(new AssignmentContentType());
 		MARKUP.addAnnotation(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME, false);
+		MARKUP.addAnnotationRenderer(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME,
+				StyleRenderer.ANNOTATION);
 		MARKUP.addAnnotation(BASEURI, false);
 	}
 
