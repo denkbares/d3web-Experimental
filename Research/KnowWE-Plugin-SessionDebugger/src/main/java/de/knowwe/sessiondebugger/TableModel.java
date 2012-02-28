@@ -110,7 +110,7 @@ public class TableModel {
 	public String toHtml(Section<?> section, UserContext user) {
 		StringBuilder string = new StringBuilder();
 		string.append(KnowWEUtils.maskHTML("<div style='overflow:auto'>"));
-		string.append(KnowWEUtils.maskHTML("<table class='wikitable' border='1' width='100%'>"));
+		string.append(KnowWEUtils.maskHTML("<table class='wikitable' border='1'>"));
 		string.append(KnowWEUtils.maskHTML("<thead>"));
 		// headline
 		string.append(KnowWEUtils.maskHTML("<tr>"));
@@ -124,7 +124,7 @@ public class TableModel {
 		string.append(KnowWEUtils.maskHTML("</thead>\n"));
 		string.append(KnowWEUtils.maskHTML("<tbody>"));
 		for (int i = 1; i <= rowCount; i++) {
-			string.append(KnowWEUtils.maskHTML("<tr>"));
+			string.append(KnowWEUtils.maskHTML(i % 2 == 1 ? "<tr>" : "<tr class='odd'>"));
 			for (int j = 0; j <= columnCount; j++) {
 				string.append(KnowWEUtils.maskHTML("<td>"));
 				string.append(getCell(i, j));

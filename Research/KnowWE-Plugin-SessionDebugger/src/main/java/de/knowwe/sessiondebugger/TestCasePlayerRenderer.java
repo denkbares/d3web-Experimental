@@ -37,6 +37,7 @@ import org.apache.log4j.Logger;
 import de.d3web.core.knowledge.TerminologyManager;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Question;
+import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.utilities.NamedObjectComparator;
@@ -52,6 +53,7 @@ import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.compile.packaging.KnowWEPackageManager;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -67,7 +69,7 @@ import de.knowwe.kdom.renderer.StyleRenderer;
 public class TestCasePlayerRenderer implements Renderer {
 
 	private static final String QUESTIONS_SEPARATOR = "#####";
-	public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS");
+	public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 	private static String SELECTOR_KEY = "selector";
 	private static String QUESTION_SELECTOR_KEY = "question_selector";
 	private static String SIZE_SELECTOR_KEY = "size_selector";
@@ -75,39 +77,19 @@ public class TestCasePlayerRenderer implements Renderer {
 
 	@Override
 	public void render(Section<?> section, UserContext user, StringBuilder result) {
+		Section<TestCasePlayerType> playerSection =
+				Sections.cast(section.getFather(), TestCasePlayerType.class);
 		StringBuilder string = new StringBuilder();
 		if (user == null || user.getSession() == null) {
 			return;
 		}
-		KnowWEPackageManager packageManager = KnowWEEnvironment.getInstance().getPackageManager(
-				section.getWeb());
-		String[] kbpackages = DefaultMarkupType.getAnnotations(section.getFather(), "uses");
-		List<Triple<TestCaseProvider, Section<?>, KnowWEArticle>> providers = new LinkedList<Triple<TestCaseProvider, Section<?>, KnowWEArticle>>();
-		for (String kbpackage : kbpackages) {
-			List<Section<?>> sectionsInPackage = packageManager.getSectionsOfPackage(kbpackage);
-			Set<String> articlesReferringTo = packageManager.getArticlesReferringTo(kbpackage);
-			KnowWEArticleManager articleManager = KnowWEEnvironment.getInstance().getArticleManager(
-					user.getWeb());
-			for (String masterTitle : articlesReferringTo) {
-				KnowWEArticle masterarticle = articleManager.getArticle(masterTitle);
-				for (Section<?> packagesections : sectionsInPackage) {
-					TestCaseProviderStorage testCaseProviderStorage = (TestCaseProviderStorage) packagesections.getSectionStore().getObject(
-							masterarticle,
-							TestCaseProviderStorage.KEY);
-					if (testCaseProviderStorage != null) {
-						for (TestCaseProvider testCaseProvider : testCaseProviderStorage.getTestCaseProviders()) {
-							providers.add(new Triple<TestCaseProvider, Section<?>, KnowWEArticle>(
-									testCaseProvider,
-									packagesections, masterarticle));
-						}
-					}
-				}
-			}
-		}
+		List<Triple<TestCaseProvider, Section<?>, KnowWEArticle>> providers =
+				getTestCaseProviders(playerSection, user);
+
 		string.append(KnowWEUtils.maskHTML("<div id='" + section.getID() + "'>"));
 
 		if (providers.size() == 0) {
-			string.append("No TestCaseProvider found in the packages: " + section.getPackageNames());
+			string.append("No test cases found in the packages: " + section.getPackageNames());
 		}
 		else {
 			Triple<TestCaseProvider, Section<?>, KnowWEArticle> selectedTriple = renderTestCaseSelection(
@@ -128,12 +110,12 @@ public class TestCasePlayerRenderer implements Renderer {
 				}
 
 				if (testCase != null) {
-					string.append(" Start: " + dateFormat.format(testCase.getStartDate()));
+					string.append(KnowWEUtils.maskHTML("<span class='fillText'> from </span>"));
+					string.append(dateFormat.format(testCase.getStartDate()));
+					// string.append(KnowWEUtils.maskHTML(renderToolbarButton("stop.gif",
+					// "SessionDebugger.reset()")));
+					string.append(KnowWEUtils.maskHTML("<div class='toolSeparator'></div>"));
 
-					StringBuilder buffer = new StringBuilder();
-					renderToolbarButton("stop.gif", "SessionDebugger.reset()", true, buffer);
-					string.append(KnowWEUtils.maskHTML(buffer.toString()));
-					// string.append(KnowWEUtils.maskHTML(" <a onclick='SessionDebugger.reset();'><img src='KnowWEExtension/testcaseplayer/icon/stop.gif'></a>"));
 					// get Question from cookie
 					String additionalQuestions = null;
 					String cookiename = "additionalQuestions" + section.getTitle();
@@ -181,8 +163,9 @@ public class TestCasePlayerRenderer implements Renderer {
 						}
 					}
 					int to = from + selectedSize - 1;
-					if (to > chronology.size()) {
-						int tempfrom = from - (to - chronology.size());
+					int maxSize = chronology.size();
+					if (to > maxSize) {
+						int tempfrom = from - (to - maxSize);
 						if (tempfrom > 0) {
 							from = tempfrom;
 						}
@@ -190,10 +173,13 @@ public class TestCasePlayerRenderer implements Renderer {
 							from = 1;
 						}
 						user.getSession().setAttribute(fromKey, String.valueOf(from));
-						to = chronology.size();
+						to = maxSize;
 					}
 
 					TableModel tableModel = new TableModel();
+					tableModel.addCell(0, 0,
+							KnowWEUtils.maskHTML(renderToolbarButton("stop12.png",
+									"SessionDebugger.reset()")), 1);
 					tableModel.addCell(0, 1, "Time", "Time".length());
 					int column = 2;
 					for (Question q : usedQuestions) {
@@ -220,11 +206,9 @@ public class TestCasePlayerRenderer implements Renderer {
 								manager, selectedObject, date, row - from + 1, tableModel);
 						row++;
 					}
-					string.append(KnowWEUtils.maskHTML("<div class='toolBar'>"));
-					string.append(renderTableSizeSelector(section, user, sizeKey, selectedSize));
-					string.append(renderNavigation(section, from, selectedSize, fromKey,
-							chronology.size()));
-					string.append(KnowWEUtils.maskHTML("</div>"));
+					string.append(
+							renderTableSizeSelector(section, user, sizeKey, selectedSize, maxSize));
+					string.append(renderNavigation(section, from, selectedSize, fromKey, maxSize));
 					string.append(tableModel.toHtml(section, user));
 				}
 				else {
@@ -234,6 +218,35 @@ public class TestCasePlayerRenderer implements Renderer {
 		}
 		string.append(KnowWEUtils.maskHTML("</div>"));
 		result.append(string.toString());
+	}
+
+	private List<Triple<TestCaseProvider, Section<?>, KnowWEArticle>> getTestCaseProviders(Section<TestCasePlayerType> section, UserContext user) {
+		List<Triple<TestCaseProvider, Section<?>, KnowWEArticle>> providers = new LinkedList<Triple<TestCaseProvider, Section<?>, KnowWEArticle>>();
+		String[] kbpackages = DefaultMarkupType.getAnnotations(section, "uses");
+		KnowWEEnvironment env = KnowWEEnvironment.getInstance();
+		KnowWEPackageManager packageManager = env.getPackageManager(section.getWeb());
+		KnowWEArticleManager articleManager = env.getArticleManager(user.getWeb());
+		for (String kbpackage : kbpackages) {
+			List<Section<?>> sectionsInPackage = packageManager.getSectionsOfPackage(kbpackage);
+			Set<String> articlesReferringTo = packageManager.getArticlesReferringTo(kbpackage);
+			for (String masterTitle : articlesReferringTo) {
+				KnowWEArticle masterArticle = articleManager.getArticle(masterTitle);
+				for (Section<?> packageSections : sectionsInPackage) {
+					TestCaseProviderStorage testCaseProviderStorage =
+							(TestCaseProviderStorage) packageSections.getSectionStore().getObject(
+									masterArticle,
+									TestCaseProviderStorage.KEY);
+					if (testCaseProviderStorage != null) {
+						for (TestCaseProvider testCaseProvider : testCaseProviderStorage.getTestCaseProviders()) {
+							providers.add(new Triple<TestCaseProvider, Section<?>, KnowWEArticle>(
+									testCaseProvider,
+									packageSections, masterArticle));
+						}
+					}
+				}
+			}
+		}
+		return providers;
 	}
 
 	private void renderTableLine(Triple<TestCaseProvider, Section<?>, KnowWEArticle> selectedTriple, TestCase testCase, SessionDebugStatus status, String[] questionStrings, Collection<Question> usedQuestions, TerminologyManager manager, TerminologyObject selectedObject, Date date, int row, TableModel tableModel) {
@@ -276,9 +289,9 @@ public class TestCasePlayerRenderer implements Renderer {
 
 	private void renderObservationQuestionsHeader(SessionDebugStatus status, String additionalQuestions, String[] questionStrings, TerminologyManager manager, TableModel tableModel, int column) {
 		for (String s : questionStrings) {
-			Question question = manager.searchQuestion(s);
+			TerminologyObject object = manager.search(s);
 			StringBuilder sb = new StringBuilder();
-			if (question != null) {
+			if (object instanceof Question || object instanceof Solution) {
 				sb.append(s);
 			}
 			else {
@@ -449,7 +462,8 @@ public class TestCasePlayerRenderer implements Renderer {
 		StringBuffer selectsb = new StringBuffer();
 		// if no pair is selected, use the first
 		Triple<TestCaseProvider, Section<?>, KnowWEArticle> selectedPair = providers.get(0);
-		selectsb.append("Select TestCase: <select id=selector" + section.getID()
+		selectsb.append("<span class=fillText>Case </span>"
+				+ "<select id=selector" + section.getID()
 				+ " onchange=\"SessionDebugger.change('" + key
 				+ "', this.options[this.selectedIndex].value);\">");
 		Set<String> ids = new HashSet<String>();
@@ -475,12 +489,14 @@ public class TestCasePlayerRenderer implements Renderer {
 		return selectedPair;
 	}
 
-	private String renderTableSizeSelector(Section<?> section, UserContext user, String key, int selectedSize) {
+	private String renderTableSizeSelector(Section<?> section, UserContext user, String key, int selectedSize, int maxSize) {
 		StringBuilder builder = new StringBuilder();
 
 		int[] sizeArray = new int[] {
 				1, 2, 5, 10, 20, 50, 100 };
-		builder.append("<select id=sizeSelector"
+		builder.append("<div class='toolBar'>");
+		builder.append("<span class=fillText>Show </span>"
+				+ "<select id=sizeSelector"
 				+ section.getID()
 				+ " onchange=\"SessionDebugger.change('"
 				+ key
@@ -495,7 +511,9 @@ public class TestCasePlayerRenderer implements Renderer {
 						+ "</option>");
 			}
 		}
-		builder.append("</select>");
+		builder.append("</select><span class=fillText> lines of </span>" + maxSize);
+		builder.append("<div class='toolSeparator'></div>");
+		builder.append("</div>");
 		return KnowWEUtils.maskHTML(builder.toString());
 	}
 
@@ -504,24 +522,33 @@ public class TestCasePlayerRenderer implements Renderer {
 		int previous = Math.max(1, from - selectedSize);
 		int next = from + selectedSize;
 
+		builder.append("<div class='toolBar avoidMenu'>");
 		renderToolbarButton(
 				"begin.png", "SessionDebugger.change('" + key + "', " + 1 + ")",
 				(from > 1), builder);
 		renderToolbarButton(
 				"back.png", "SessionDebugger.change('" + key + "', " + previous + ")",
 				(from > 1), builder);
-		builder.append(" Displaying ");
+		builder.append("<span class=fillText> Lines </span>");
 		builder.append("<input size=3 type=\"field\" onchange=\"SessionDebugger.change('"
 				+ key
 				+ "', " + "this.value);\" value='" + from + "'>");
-		builder.append(" to " + (from + selectedSize - 1) + " of " + maxsize + " items");
+		builder.append("<span class=fillText> to </span>" + (from + selectedSize - 1));
 		renderToolbarButton(
 				"forward.png", "SessionDebugger.change('" + key + "', " + next + ")",
 				(from + selectedSize <= maxsize), builder);
 		renderToolbarButton(
 				"end.png", "SessionDebugger.change('" + key + "', " + maxsize + ")",
 				(from + selectedSize <= maxsize), builder);
+		builder.append("</div>");
 		return KnowWEUtils.maskHTML(builder.toString());
+	}
+
+	private String renderToolbarButton(String icon, String action) {
+		StringBuilder buffer = new StringBuilder();
+		renderToolbarButton(icon, action, true, buffer);
+		String buttonHTML = buffer.toString();
+		return buttonHTML;
 	}
 
 	private void renderToolbarButton(String icon, String action, boolean enabled, StringBuilder builder) {
