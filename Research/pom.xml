@@ -222,7 +222,6 @@
 		<module>KnowWE-Plugin-DiaFlux-Anomalies</module>
 		<module>KnowWE-Plugin-CodeMirror</module>
 		<module>KnowWE-Plugin-RDFS-TestCase</module>
-		<module>KnowWE-Plugin-SessionDebugger</module>
 		<module>KnowWE-Plugin-JuriSearch</module>
 		<module>KnowWE-Plugin-TestcaseTable-Extensions</module>
 	</modules>
