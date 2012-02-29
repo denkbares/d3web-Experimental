@@ -27,7 +27,6 @@ import de.knowwe.core.report.Messages;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.table.TableCellContentRenderer;
-import de.knowwe.kdom.table.TableUtils;
 
 /**
  * 
@@ -42,40 +41,16 @@ public class TestcaseTableCellContentRenderer extends TableCellContentRenderer {
 		Map<String, Collection<Message>> errors = Messages.getMessagesFromSubtree(sec,
 				Message.Type.ERROR);
 
-		int column = TableUtils.getColumn(sec);
 
 		StringBuilder html = new StringBuilder();
-		if (!sec.hasQuickEditModeSet(user.getUserName())) {
-			if (!errors.isEmpty()) {
-				html.append("<td class='error'>");
-			}
-			else {
-				html.append("<td>");
-			}
-
-			html.append(sec.getText());
+		if (!errors.isEmpty()) {
+			html.append("<td class='error'>");
 		}
 		else {
-			if (!errors.isEmpty()) {
-				html.append("<td class='error'>");
-				html.append(sec.getText());
-			}
-			else if (column == 1) {
-				html.append("<td>");
-				html.append("<input type='text' name='" + sec.getText() + "' id='"
-						+ sec.getID()
-						+ "' value='" + TableUtils.quote(sec.getText())
-						+ "' class='table-edit-node'/>");
-			}
-			else if (column != 0) {
-				html.append("<td>");
-				generateContent(sec.getText(), sec, user, sec.getID(), html);
-
-			}
-			else {
-				html.append("<td>");
-			}
+			html.append("<td>");
 		}
+
+		html.append(sec.getText());
 
 		html.append("</td>");
 		string.append(KnowWEUtils.maskHTML(html.toString()));
