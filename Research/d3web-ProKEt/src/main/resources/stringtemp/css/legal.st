@@ -52,6 +52,8 @@ padding: 10px;
     right: 20px;
     padding: 10px;
     margin-top: 80px;
+    height: 75%;
+    overflow: auto; /* for scrolling */
 }
 
 .auxpanelBottom{
@@ -65,6 +67,8 @@ padding: 10px;
     right: 0px;
     bottom: 0px;
     padding: 10px;
+    height: 25%;
+    overflow: auto;
 }
 
 
