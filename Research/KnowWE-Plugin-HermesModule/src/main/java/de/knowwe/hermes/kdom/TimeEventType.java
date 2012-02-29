@@ -35,7 +35,6 @@ import de.d3web.we.core.semantic.IntermediateOwlObject;
 import de.d3web.we.core.semantic.OwlSubtreeHandler;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.core.semantic.UpperOntology;
-import de.d3web.we.kdom.renderer.EditSectionRenderer;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotationEndSymbol;
 import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotationStartSymbol;
 import de.knowwe.core.compile.Priority;
@@ -67,8 +66,7 @@ public class TimeEventType extends AbstractType {
 		this.childrenTypes.add(new TimeEventSourceType());
 		this.childrenTypes.add(new TimeEventDescriptionType());
 
-		this.setRenderer(new EditSectionRenderer(
-				TimeEventTypeRenderer.getInstance()));
+		this.setRenderer(TimeEventTypeRenderer.getInstance());
 		this.addSubtreeHandler(Priority.HIGH, new TimeEventTypeOWLSubTreeHandler());
 
 	}

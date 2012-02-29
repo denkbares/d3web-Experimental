@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.d3web.we.kdom.renderer.EditSectionRenderer;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.compile.terminology.TermRegistrationScope;
 import de.knowwe.core.kdom.AbstractType;
@@ -72,7 +71,7 @@ public class TimeEventNew extends AbstractType {
 
 		this.childrenTypes.add(DescriptionType);
 
-		this.setRenderer(new EditSectionRenderer(new TimeEventRenderer()));
+		this.setRenderer(new TimeEventRenderer());
 
 		this.addSubtreeHandler(Priority.LOW, new TimeEventOWLCompiler());
 	}

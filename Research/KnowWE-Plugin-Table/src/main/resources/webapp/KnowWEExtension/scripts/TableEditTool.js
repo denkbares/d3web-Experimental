@@ -443,7 +443,6 @@ KNOWWE.table.edit.Editor = (function(editProvider) {
 		**/
 	    unloadCondition : function(id) {
 	    	var wikiTable = KNOWWE.table.edit.createWikiMarkup(id);
-			//alert(wikicode == wikiTable);
 			return wikicode == wikiTable;
 	    },
 	    

@@ -53,7 +53,7 @@ public class DiaFluxCoverageType extends DefaultMarkupType {
 		MARKUP.addAnnotationRenderer(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME,
 				StyleRenderer.ANNOTATION);
 		MARKUP.addAnnotation(ANNOTATION_MASTER, false);
-		MARKUP.addAnnotation(ANNOTATION_TEST, true);
+		MARKUP.addAnnotation(ANNOTATION_TEST, false);
 
 	}
 

@@ -1,97 +1,4 @@
 /**
- * Namespace: KNOWWE.table
- * The KNOWWE table tag namespace.
- */
-KNOWWE.table = function(){
-    var map = new KNOWWE.helper.hash(); 
-    return {  
-        /**
-         * Function: init
-         * Initializes some table functionality.
-         */
-        init : function(){                  
-            if( _KS('.table-edit').length != 0 ){
-                var elements = _KS(".table-edit input[type=submit]");
-                for(var i = 0; i < elements.length; i++){
-                    _KE.add('click', elements[i], KNOWWE.table.onSave );
-                }
-                elements = _KS('.table-edit-node');
-                for(var i = 0; i < elements.length; i++){
-                    _KE.add('change', elements[i], KNOWWE.table.onChange );
-                }
-                
-                elements = _KS('.quickedit .table');
-                for(var i = 0; i < elements.length; i++){
-                    _KE.removeEvents(elements[i]);
-                    _KE.add('click', elements[i], function(e){
-                        var el = _KE.target(e);
-                        var id = el.parentNode.id;
-                        KNOWWE.shared.actions.enableQuickEdit( KNOWWE.table.init, id, null);
-                    });
-                }                
-            }
-        },
-        /**
-         * Function: map
-         * Returns the map of the KnowWETable. Stores the changed cells in edit mode.
-         * 
-         * Returns:
-         *     The changed cells stored as map.
-         */
-        getMap : function(){
-            return map;
-        },
-        /**
-         * Function: onChange
-         * Triggered when the cell content changes. Stores the new value together 
-         * with the old one in the table map.
-         * 
-         * Parameters:
-         *     e - The occurred cell change event.
-         */
-        onChange : function(e){
-            var el = _KE.target( e );
-            KNOWWE.table.getMap().set(el.id, el.value);
-        },
-        /**
-         * Function: onSave
-         * Triggered when the changes to the table in edit mode should be saved.
-         * 
-         * Parameters:
-         *     e - The occurred event.
-         */
-        onSave : function( e ){
-            var el = _KE.target(e);
-            var id = el.id;
-
-            var n = '';
-            KNOWWE.table.getMap().forEach(function(key, value){
-                n += key + ";-;" + value + "::";
-            });
-            n = n.substring(0, n.lastIndexOf('::'));
-
-            var params = {
-                action : 'UpdateTableKDOMNodesAction',
-                TargetNamespace : n,
-                KWiki_Topic : KNOWWE.helper.gup('page')
-            }
-
-            var options = {
-                url : KNOWWE.core.util.getURL ( params ),
-                loader : true,
-                response : {
-                    action : 'none',
-                    fn : function(){ 
-                        KNOWWE.shared.actions.enableQuickEdit( KNOWWE.table.init, id, "render");
-                    }
-                }
-            }
-            new _KA( options ).send();
-        }
-    }
-}();
-
-/**
  * Namespace: KNOWWE.tablesorter
  * The KNOWWE table sorter namespace.
  * Contains functions to sort HTMLTables.
@@ -194,7 +101,6 @@ KNOWWE.tablesorter = function(){
 
     if( KNOWWE.helper.loadCheck( ['Wiki.jsp'] )){
         window.addEvent( 'domready', function(){
-            KNOWWE.table.init(); 
             KNOWWE.tablesorter.init();
         });
     };

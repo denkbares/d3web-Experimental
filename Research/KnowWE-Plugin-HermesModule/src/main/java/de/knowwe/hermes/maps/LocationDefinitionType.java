@@ -24,7 +24,6 @@ import java.util.Collection;
 
 import org.ontoware.rdf2go.model.Statement;
 
-import de.d3web.we.kdom.renderer.EditSectionRenderer;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
@@ -43,7 +42,7 @@ public class LocationDefinitionType extends AbstractType {
 
 	public LocationDefinitionType() {
 		sectionFinder = new RegexSectionFinder(START_TAG + "[\\w|\\W]*?" + END_TAG);
-		this.setRenderer(new EditSectionRenderer(LocationRenderer.getInstance()));
+		this.setRenderer(LocationRenderer.getInstance());
 		this.addSubtreeHandler(new LocationDefinitionTypeOWLSubTreeHandler());
 	}
 
