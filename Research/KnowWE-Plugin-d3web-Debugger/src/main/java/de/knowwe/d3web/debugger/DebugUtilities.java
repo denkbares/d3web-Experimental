@@ -115,6 +115,7 @@ public class DebugUtilities {
 		List<Solution> solutions = new LinkedList<Solution>();
 		Solution root = kb.getRootSolution();
 		for (TerminologyObject s : root.getChildren()) {
+			solutions.add((Solution) s);
 			solutions.addAll(getChildSolutions((Solution) s));
 		}
 

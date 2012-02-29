@@ -104,10 +104,10 @@ div.debugger div.debuggerRule {
 	margin: 2px;
 	padding: 5px;
 	min-height:20px;
-	text-align: center;
+	text-align: left;
 }
 .condTrue, .condFalse, .condUnknown, .condUndefined {
-	display: inline-block;
+	display: inline;
 }
 .condTrue {
 	color: green;
