@@ -25,12 +25,14 @@ import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 
 /**
  * 
+ * A {@link SolutionDefinition}-Wrapper for {@link CausalDiagnosisScore}
+ * 
  * @author Johannes Dienst
  * @created 22.02.2012
  */
-public class CausalScoreSolutionDefinition extends SolutionDefinition
+public class CausalDiagnosisScoreSolutionDefinition extends SolutionDefinition
 {
-	public CausalScoreSolutionDefinition()
+	public CausalDiagnosisScoreSolutionDefinition()
 	{
 		super(Priority.HIGHER);
 		this.setSectionFinder(new AllTextSectionFinder());

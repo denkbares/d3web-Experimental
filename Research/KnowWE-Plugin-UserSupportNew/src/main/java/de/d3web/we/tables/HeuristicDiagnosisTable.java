@@ -18,13 +18,11 @@
  */
 package de.d3web.we.tables;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.d3web.abstraction.inference.PSMethodAbstraction;
 import de.d3web.core.inference.Rule;
 import de.d3web.core.inference.RuleSet;
 import de.d3web.core.inference.condition.CondAnd;
@@ -36,9 +34,11 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.scoring.ActionHeuristicPS;
 import de.d3web.scoring.Score;
+import de.d3web.scoring.inference.PSMethodHeuristic;
 import de.d3web.we.kdom.condition.CompositeCondition;
 import de.d3web.we.kdom.condition.KDOMConditionFactory;
 import de.d3web.we.kdom.xcl.list.ListSolutionType;
+import de.d3web.we.object.ScoreValue;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.kdom.KnowWEArticle;
@@ -131,12 +131,18 @@ public class HeuristicDiagnosisTable extends ITable
 				String conjunctionType = headerCells.get(i).getText().trim();
 
 				// get scoring
-				String scoring = column.removeFirst().getText().trim();
+				Section<ScoreValue> scoreVal = Sections.findSuccessor(column.removeFirst(), ScoreValue.class);
+				Score score = Score.N1;
+				if (scoreVal != null)
+				{
+					score = D3webUtils.getScoreForString(scoreVal.getText().trim());
+				}
 
 				// create rule choices
 				Section<TableCell> cell = null;
 				List<Integer> choices = new ArrayList<Integer>();
-				for (int j = 0; j < column.size(); j++) {
+				for (int j = 0; j < column.size(); j++)
+				{
 					cell = column.get(j);
 					String cellText = cell.getText().trim();
 
@@ -180,23 +186,14 @@ public class HeuristicDiagnosisTable extends ITable
 					condition = new CondMofN(terms, m, n);
 				}
 
-				// TODO add right score here
 				ActionHeuristicPS action = new ActionHeuristicPS();
 				action.setSolution(solution);
-				Score score = Score.N1;
-
-				try {
-					score = de.d3web.core.io.utilities.Util.getScore(scoring);
-				}
-				catch (IOException e) {
-					// Do nothing!
-				}
 				action.setScore(score);
 
 				// Create Rule
 				RuleSet ruleSet = new RuleSet();
 				if ( (condition != null) && (action != null)) {
-					Rule rule = new Rule(PSMethodAbstraction.class);
+					Rule rule = new Rule(PSMethodHeuristic.class);
 					rule.setAction(action);
 					rule.setCondition(condition);
 					rule.setException(null);

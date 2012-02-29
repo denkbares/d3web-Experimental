@@ -33,18 +33,17 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  */
 public class DecisionTableMarkup extends DefaultMarkupType {
 
-	// public static final String ESTABLISHED_THRESHOLD =
-	// "establishedThreshold";
-
 	private static DefaultMarkup m = null;
 
-	static {
+	static
+	{
 		m = new DefaultMarkup("DecisionTable");
 		m.addContentType(new DecisionTable());
 		m.addAnnotation("package", true);
 	}
 
-	public DecisionTableMarkup() {
+	public DecisionTableMarkup()
+	{
 		super(m);
 		setRenderer(new DefaultMarkupRendererUserSupport());
 	}

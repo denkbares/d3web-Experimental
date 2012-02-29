@@ -63,13 +63,8 @@ public class GetSuggestionsAction extends AbstractAction
 
 		Section<?> markup = Sections.getSection(sectionID);
 
-		if (toMatch == null)
-		{
-			return "[]";
-		}
+		if (toMatch == null){return "[]";}
 
-		// Collection<Section<? extends TermDefinition>> localTermMatches =
-		// UserSupportUtil.getTermReferences(markup.getArticle());
 		Collection<Section<?>> localTermMatches =
 				UserSupportUtil.getTermReferencesCompilingArticle(markup.getArticle(), markup);
 		ArrayList<String> localStrings = new ArrayList<String>();

@@ -18,7 +18,6 @@
  */
 package de.d3web.we.algorithm;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -48,11 +47,7 @@ public class QGramAlgorithm implements MatchingAlgorithm
 			}
 		}
 
-		List<Suggestion> toReturn = new ArrayList<Suggestion>();
-		for (int i = 0; i < maxCount; i++) {
-			Suggestion s = suggestions.poll();
-			if (s != null) toReturn.add(s);
-		}
+		List<Suggestion> toReturn = AlgorithmUtil.reduceSuggestionCount(maxCount, suggestions);
 
 		return toReturn;
 	}

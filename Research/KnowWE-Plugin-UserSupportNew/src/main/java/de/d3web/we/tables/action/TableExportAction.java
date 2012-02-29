@@ -42,20 +42,21 @@ import de.knowwe.core.kdom.parsing.Section;
  * Meanwhile the page is locked for a given time.
  * The user has to manually reimport the file. See {@link TableImportAction}.
  * 
- * TODO Coloring of TableCells
  * TODO Storing the file on the server: Now hardcoded for testing
  * TODO Get the downloadlink to work properly
  * 
  * @author Johannes Dienst
  * @created 18.10.2011
  */
-public class TableExportAction extends AbstractAction {
+public class TableExportAction extends AbstractAction
+{
 
 	private static ResourceBundle bundle = ResourceBundle.getBundle("Usersupport_messages");
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void execute(UserActionContext context) throws IOException {
+	public void execute(UserActionContext context) throws IOException
+	{
 
 		String tableId = context.getParameter("tableId");
 		String title = context.getTitle();

@@ -42,13 +42,15 @@ import de.knowwe.tools.ToolMenuDecoratingRenderer;
  * @author Johannes Dienst
  * @created 28.11.2011
  */
-public class TableCellFirstColumn extends TableCell {
+public class TableCellFirstColumn extends TableCell
+{
 
 	public static final Renderer INDIVIDUAL_RENDERER =
 			new ToolMenuDecoratingRenderer(new TableCellFirstColumnRenderer());
 
 	// TODO Insert the right hierarchy for CompositeCondition here
-	public TableCellFirstColumn() {
+	public TableCellFirstColumn()
+	{
 		super();
 		this.setRenderer(INDIVIDUAL_RENDERER);
 		this.sectionFinder = new TableCellFirstColumnSectionFinder();
@@ -62,7 +64,8 @@ public class TableCellFirstColumn extends TableCell {
 		this.addChildType(cc);
 	}
 
-	private class TableCellFirstColumnSectionFinder implements SectionFinder {
+	private class TableCellFirstColumnSectionFinder implements SectionFinder
+	{
 
 		@Override
 		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
@@ -82,8 +85,25 @@ public class TableCellFirstColumn extends TableCell {
 				if (lines.size() == 1) return null;
 			}
 
-			// When text.equals("Action"): Transition line in DecisionTable
-			if (text.trim().equals("Actions")) return null;
+			// Check if it is a DecisionTable
+			// 1. TableLine with Actions has no TableCellFirstColumn
+			// 2. All FirstTableCells after Actions should be SetQuestionValues
+			Section<DecisionTable> dTable = Sections.findAncestorOfType(father, DecisionTable.class);
+			if (dTable != null)
+			{
+				if (text.trim().equals("Actions")) return null; // 1. Condition
+
+				// 2. condition: check if a tableline before has "Actions" as first cell text
+				List<Section<TableLine>> lines = Sections.findSuccessorsOfType(dTable, TableLine.class);
+				for (Section<TableLine> line : lines)
+				{
+					List<Section<TableNormalCell>> cells = Sections.findSuccessorsOfType(line, TableNormalCell.class);
+					if (!cells.isEmpty())
+					{
+						if (cells.get(0).getText().trim().equals("Actions")) return null;
+					}
+				}
+			}
 
 
 			SectionFinder regex = new TableCellSectionFinder();

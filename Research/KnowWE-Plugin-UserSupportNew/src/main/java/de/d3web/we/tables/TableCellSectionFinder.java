@@ -35,7 +35,8 @@ import de.knowwe.core.kdom.sectionFinder.SectionFinderResult;
  * @author Johannes Dienst
  * @created 28.11.2011
  */
-public class TableCellSectionFinder implements SectionFinder {
+public class TableCellSectionFinder implements SectionFinder
+{
 
 	@Override
 	public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
@@ -53,21 +54,14 @@ public class TableCellSectionFinder implements SectionFinder {
 		List<SectionFinderResult> toReturn = new ArrayList<SectionFinderResult>();
 		if (!type.isAssignableFromType(TableHeaderCell.class)) {
 			for (SectionFinderResult res : results) {
-
-				Section<TableCell> cell = Sections.findChildOfType(father, TableCell.class);
 				Section<ColumnDelimiter> fatherSuccs = Sections.findChildOfType(father, ColumnDelimiter.class);
 
-				if ((res.getStart() != res.getEnd())) {
-					toReturn.add(res);
-				}
+				if ((res.getStart() != res.getEnd())) { toReturn.add(res);}
 				//				else if (cell != null && !cell.get().isAssignableFromType(TableCellFirstColumn.class)) {
-				else if ( fatherSuccs != null) {
-					toReturn.add(res);
-				}
-
-
+				else if ( fatherSuccs != null) {toReturn.add(res);}
 			}
-		} else {
+		} else
+		{
 			toReturn = results;
 		}
 

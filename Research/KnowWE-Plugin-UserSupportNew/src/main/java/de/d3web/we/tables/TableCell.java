@@ -27,15 +27,13 @@ import de.knowwe.kdom.renderer.StyleRenderer;
  * @author Johannes Dienst
  * @created 14.10.2011
  */
-public class TableCell extends AbstractType {
+public class TableCell extends AbstractType
+{
 
 	public static final Renderer INDIVIDUAL_RENDERER = StyleRenderer.CONTENT;
 
-	public TableCell() {
-
-		// finds everything except an empty cell
-		// this.sectionFinder = new RegexSectionFinder("[^\\|\\s]+");
-
+	public TableCell()
+	{
 		this.sectionFinder = new TableCellSectionFinder();
 		this.setRenderer(INDIVIDUAL_RENDERER);
 	}

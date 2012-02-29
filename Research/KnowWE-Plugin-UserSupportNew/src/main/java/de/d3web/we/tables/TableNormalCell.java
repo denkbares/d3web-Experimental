@@ -18,19 +18,28 @@
  */
 package de.d3web.we.tables;
 
+import de.d3web.we.kdom.rules.action.SetQuestionValue;
+import de.d3web.we.object.ScoreValue;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * 
+ * Normal cell of an {@link InnerTable}. Can
+ * contain {@link SetQuestionValue} and {@link ScoreValue}
+ * 
  * @author Johannes Dienst
  * @created 28.11.2011
  */
-public class TableNormalCell extends TableCell {
+public class TableNormalCell extends TableCell
+{
 
 	public static final Renderer INDIVIDUAL_RENDERER = StyleRenderer.CONTENT;
 
-	public TableNormalCell() {
+	public TableNormalCell()
+	{
 		super();
+		this.addChildType(new SetQuestionValue());
+		this.addChildType(new ScoreValue());
 	}
 }

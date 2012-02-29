@@ -18,7 +18,6 @@
  */
 package de.d3web.we.algorithm;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -30,18 +29,20 @@ import com.wcohen.ss.MongeElkan;
  * @author Johannes Dienst
  * @created 04.10.2011
  */
-public class MongeElkanAlgorithm implements MatchingAlgorithm {
+public class MongeElkanAlgorithm implements MatchingAlgorithm
+{
 
 	@Override
-	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch,
-			List<String> localTermMatches) {
+	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> localTermMatches)
+	{
 
 		MongeElkan mE = new MongeElkan();
 
 		PriorityQueue<Suggestion> suggestions =
 				new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
 
-		for (String match : localTermMatches) {
+		for (String match : localTermMatches)
+		{
 			double score = mE.score(toMatch, match);
 			// TODO threshold is experimental
 			if (score >= threshold) {
@@ -49,11 +50,7 @@ public class MongeElkanAlgorithm implements MatchingAlgorithm {
 			}
 		}
 
-		List<Suggestion> toReturn = new ArrayList<Suggestion>();
-		for (int i = 0; i < maxCount; i++) {
-			Suggestion s = suggestions.poll();
-			if (s != null) toReturn.add(s);
-		}
+		List<Suggestion> toReturn = AlgorithmUtil.reduceSuggestionCount(maxCount, suggestions);
 
 		return toReturn;
 	}

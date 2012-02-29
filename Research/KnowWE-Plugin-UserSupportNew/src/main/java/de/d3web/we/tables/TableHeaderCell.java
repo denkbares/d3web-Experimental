@@ -23,16 +23,18 @@ import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * 
- * This is a normal TableCell with no special children.
+ * This is like a normal TableCell with no special children.
  * 
  * @author Johannes Dienst
  * @created 28.11.2011
  */
-public class TableHeaderCell extends TableCell {
+public class TableHeaderCell extends TableCell
+{
 
 	public static final Renderer INDIVIDUAL_RENDERER = StyleRenderer.KEYWORDS;
 
-	public TableHeaderCell() {
+	public TableHeaderCell()
+	{
 		super();
 		this.setRenderer(INDIVIDUAL_RENDERER);
 	}

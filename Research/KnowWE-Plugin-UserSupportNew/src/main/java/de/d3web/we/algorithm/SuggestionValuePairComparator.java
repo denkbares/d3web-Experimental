@@ -23,10 +23,13 @@ import java.util.Comparator;
 
 /**
  * 
+ * To sort {@link SuggestionValuePairs} according to their value.
+ * 
  * @author Johannes Dienst
  * @created 22.11.2011
  */
-public class SuggestionValuePairComparator implements Comparator<SuggestionValuePair> {
+public class SuggestionValuePairComparator implements Comparator<SuggestionValuePair>
+{
 
 	@Override
 	public int compare(SuggestionValuePair o1, SuggestionValuePair o2) {

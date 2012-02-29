@@ -30,16 +30,19 @@ import de.knowwe.core.kdom.parsing.Section;
 
 /**
  * 
+ * Searches for Suggestions in the terminology. Used in
+ * {@link ApproximateCorrectionToolProvider} to provide the
+ * corrections.
+ * 
  * @author Johannes Dienst
  * @created 15.09.2011
  */
-public class ApproximateCorrectionProviderImpl implements ApproximateCorrectionProvider {
+public class ApproximateCorrectionProviderImpl implements ApproximateCorrectionProvider
+{
 
 	@Override
-	public List<Suggestion> getSuggestions(KnowWEArticle article, Section<?> section) {
-
-		// Collection<Section<? extends TermDefinition>> localTermMatches =
-		// UserSupportUtil.getTermReferences(markup.getArticle());
+	public List<Suggestion> getSuggestions(KnowWEArticle article, Section<?> section)
+	{
 		Collection<Section<?>> localTermMatches =
 				UserSupportUtil.getTermReferencesCompilingArticle(section.getArticle(), section);
 		ArrayList<String> localStrings = new ArrayList<String>();
@@ -50,7 +53,7 @@ public class ApproximateCorrectionProviderImpl implements ApproximateCorrectionP
 
 		List<Suggestion> suggestions =
 				DialogComponent.getInstance().
-						getBestSuggestionsAllAlgorithms(toMatch, localStrings);
+				getBestSuggestionsAllAlgorithms(toMatch, localStrings);
 
 		return suggestions;
 	}

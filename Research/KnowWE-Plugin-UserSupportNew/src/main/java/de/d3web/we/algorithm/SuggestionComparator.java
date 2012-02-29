@@ -26,10 +26,12 @@ import java.util.Comparator;
  * @author Johannes Dienst
  * @created 22.11.2011
  */
-public class SuggestionComparator implements Comparator<Suggestion> {
+public class SuggestionComparator implements Comparator<Suggestion>
+{
 
 	@Override
-	public int compare(Suggestion o1, Suggestion o2) {
+	public int compare(Suggestion o1, Suggestion o2)
+	{
 		return o1.compareTo(o2);
 	}
 

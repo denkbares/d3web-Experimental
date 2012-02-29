@@ -18,7 +18,6 @@
  */
 package de.d3web.we.algorithm;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -42,21 +41,20 @@ public class SmithWatermanAlgorithm implements MatchingAlgorithm
 		PriorityQueue<Suggestion> suggestions =
 				new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
 
-		for (String term : localTermMatches) {
+		for (String term : localTermMatches)
+		{
 			double score = sM.score(toMatch, term);
 			int div = Math.max(term.length(), toMatch.length()); // could also be min or 0.5*(s1+s2)
 			double exactMatchScore = 5.0; // TODO where is this from?
 			double result = score / (div * exactMatchScore);
-			if (result >= threshold) {
+			if (result >= threshold)
+			{
 				suggestions.add(new Suggestion(term, result));
 			}
 		}
 
-		List<Suggestion> toReturn = new ArrayList<Suggestion>();
-		for (int i = 0; i < maxCount; i++) {
-			Suggestion s = suggestions.poll();
-			if (s != null) toReturn.add(s);
-		}
+		List<Suggestion> toReturn = AlgorithmUtil.reduceSuggestionCount(maxCount, suggestions);
+
 		return toReturn;
 	}
 

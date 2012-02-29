@@ -37,7 +37,6 @@ public interface ApproximateCorrectionProvider {
 	 * Returns a list of suggestions for a given section of an article,
 	 * that have a levenshtein distance of no more than <tt>threshold</tt>.
 	 * 
-	 * @created 20.02.2011
 	 * @param article The article the misspelled reference is in
 	 * @param section The section the misspelled reference is in
 	 * @param threshold The maximium Levenshtein distance suggestions can have. (KnowWE includes an implementation in secondstring/com.wcohen.ss.Levenstein)

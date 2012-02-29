@@ -35,30 +35,6 @@ import de.knowwe.core.utils.KnowWEUtils;
  */
 public class UserSupportUtil {
 
-	// /**
-	// *
-	// * This method collects all TermDefinitions in the whole system.
-	// *
-	// * @created 15.12.2011
-	// * @param article
-	// * @return
-	// */
-	// public static Collection<Section<?>> getTermReferences(KnowWEArticle
-	// article) {
-	// TerminologyManager tH =
-	// KnowWEUtils.getTerminologyManager(article);
-	//
-	// Collection<String> globalTerms = tH.getAllGlobalTerms();
-	//
-	// Collection<Section<?>> toReturn = new ArrayList<Section<?>>();
-	// for (String gT : globalTerms) {
-	// Collection<Section<?>> allLocalTermDefs = tH.getAllLocalTermDefs(gT);
-	// toReturn.addAll(allLocalTermDefs);
-	// }
-	//
-	// return toReturn;
-	// }
-
 	/**
 	 * 
 	 * Collect only the TermDefinitions used by a given Section
@@ -68,7 +44,8 @@ public class UserSupportUtil {
 	 * @param markup
 	 * @return
 	 */
-	public static Collection<Section<?>> getTermReferencesCompilingArticle(KnowWEArticle article, Section<?> markup) {
+	public static Collection<Section<?>> getTermReferencesCompilingArticle(KnowWEArticle article, Section<?> markup)
+	{
 
 		article = KnowWEUtils.getCompilingArticles(markup).iterator().next();
 
@@ -76,7 +53,8 @@ public class UserSupportUtil {
 		Collection<String> allDefinedTerms = tH.getAllDefinedTerms();
 
 		Collection<Section<?>> globalTerms = new LinkedList<Section<?>>();
-		for (String term : allDefinedTerms) {
+		for (String term : allDefinedTerms)
+		{
 			globalTerms.addAll(tH.getTermDefiningSections(term));
 		}
 
@@ -91,7 +69,6 @@ public class UserSupportUtil {
 	 */
 	public static String buildJSONArray(List<Suggestion> suggestions)
 	{
-		// build JSON-Array with suggestions
 		StringBuilder buildi = new StringBuilder();
 
 		buildi.append("[");

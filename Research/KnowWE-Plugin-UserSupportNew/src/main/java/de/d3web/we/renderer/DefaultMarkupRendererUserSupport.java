@@ -33,10 +33,12 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
  * @author Johannes Dienst
  * @created 15.12.2011
  */
-public class DefaultMarkupRendererUserSupport implements Renderer {
+public class DefaultMarkupRendererUserSupport implements Renderer
+{
 
 	@Override
-	public void render(Section<?> section, UserContext user, StringBuilder string) {
+	public void render(Section<?> section, UserContext user, StringBuilder string)
+	{
 		new DefaultMarkupRenderer().render(section, user, string);
 		Section<InnerTable> iT = Sections.findSuccessor(section, InnerTable.class);
 		StringBuilder buildi = new StringBuilder();

@@ -18,7 +18,6 @@
  */
 package de.d3web.we.algorithm;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +27,9 @@ import com.wcohen.ss.JaroWinkler;
 
 
 /**
+ * 
+ * Uses {@link JaroWinklerAlgorithm} to compute a distance
+ * with phrases as input.
  * 
  * @author Johannes Dienst
  * @created 21.02.2012
@@ -79,11 +81,7 @@ public class SortedWinklerAlgorithm implements MatchingAlgorithm
 			}
 		}
 
-		List<Suggestion> toReturn = new ArrayList<Suggestion>();
-		for (int i = 0; i < maxCount; i++) {
-			Suggestion s = suggestions.poll();
-			if (s != null) toReturn.add(s);
-		}
+		List<Suggestion> toReturn = AlgorithmUtil.reduceSuggestionCount(maxCount, suggestions);
 
 		return toReturn;
 	}

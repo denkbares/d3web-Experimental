@@ -34,12 +34,16 @@ import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * 
+ * First line of a {@link InnerTable}
+ * 
  * @author Johannes Dienst
  * @created 28.11.2011
  */
-public class TableHeaderLine extends AbstractType {
+public class TableHeaderLine extends AbstractType
+{
 
-	public TableHeaderLine() {
+	public TableHeaderLine()
+	{
 
 		// here also a comment might occur:
 		AnonymousType relationComment = new AnonymousType("comment");
@@ -64,10 +68,12 @@ public class TableHeaderLine extends AbstractType {
 		this.addChildType(new TableHeaderCell());
 	}
 
-	private class TableHeaderSectionFinder implements SectionFinder {
+	private class TableHeaderSectionFinder implements SectionFinder
+	{
 
 		@Override
-		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type) {
+		public List<SectionFinderResult> lookForSections(String text, Section<?> father, Type type)
+		{
 
 			Section<TableHeaderLine> header = Sections.findChildOfType(father, TableHeaderLine.class);
 

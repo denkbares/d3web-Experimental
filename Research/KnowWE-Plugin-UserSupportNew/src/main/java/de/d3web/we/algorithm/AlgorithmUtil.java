@@ -30,7 +30,8 @@ import java.util.PriorityQueue;
  * @author Johannes Dienst
  * @created 21.11.2011
  */
-public class AlgorithmUtil {
+public class AlgorithmUtil
+{
 
 	/**
 	 * 
@@ -45,8 +46,10 @@ public class AlgorithmUtil {
 	 * @return
 	 */
 	public static int containsSuggestion(
-			List<SuggestionValuePair> matchList, Suggestion s) {
-		for (SuggestionValuePair pair : matchList) {
+			List<SuggestionValuePair> matchList, Suggestion s)
+	{
+		for (SuggestionValuePair pair : matchList)
+		{
 			if (pair.getSuggestion().equals(s))
 				return matchList.indexOf(pair);
 		}
@@ -54,6 +57,9 @@ public class AlgorithmUtil {
 	}
 
 	/**
+	 * 
+	 * Reduces the suggestions-Queue to
+	 * the size of maxCount.
 	 * 
 	 * @created 21.02.2012
 	 * @param maxCount

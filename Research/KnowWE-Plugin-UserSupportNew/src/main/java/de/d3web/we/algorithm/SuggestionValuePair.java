@@ -20,31 +20,44 @@ package de.d3web.we.algorithm;
 
 
 /**
+ * Stores a Suggestion with a count-Value to
+ * count how often a Suggestion was proposed
+ * by a bunch of MatchingAlgorithms
  * 
  * @author Johannes Dienst
  * @created 22.11.2011
  */
-public class SuggestionValuePair {
+public class SuggestionValuePair
+{
 	private Suggestion s;
 	private int val;
 
-	public SuggestionValuePair(Suggestion suggestion) {
+	public SuggestionValuePair(Suggestion suggestion)
+	{
 		this(suggestion, 0);
 	}
-	public SuggestionValuePair(Suggestion suggestion, int value) {
+	public SuggestionValuePair(Suggestion suggestion, int value)
+	{
 		s = suggestion;
 		val = value;
 	}
-	public Suggestion getSuggestion() {
+	public Suggestion getSuggestion()
+	{
 		return s;
 	}
-	public int getValue() {
+	public int getValue()
+	{
 		return val;
 	}
-	public void increment(){
+	public void increment()
+	{
 		val++;
 	}
+
 	/**
+	 * When the s2 is the same Suggestion as
+	 * stored in this container. The distance
+	 * value is set to the better of the two
 	 * 
 	 * @created 09.02.2012
 	 * @param s2

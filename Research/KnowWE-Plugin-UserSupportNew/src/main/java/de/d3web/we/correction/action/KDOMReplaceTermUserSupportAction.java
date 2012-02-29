@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.d3web.we.correction.ApproximateCorrectionProvider;
-import de.knowwe.core.KnowWEArticleManager;
 import de.knowwe.core.KnowWEAttributes;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.AbstractAction;
@@ -58,7 +57,6 @@ public class KDOMReplaceTermUserSupportAction extends AbstractAction {
 		String nodeID = context.getParameter(KnowWEAttributes.TARGET);
 		String name = context.getTitle();
 		String newText = context.getParameter(KnowWEAttributes.TEXT);
-		KnowWEArticleManager mgr = KnowWEEnvironment.getInstance().getArticleManager(web);
 
 		// Check for user access
 		if (!KnowWEEnvironment.getInstance().getWikiConnector().userCanEditPage(name,

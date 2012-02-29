@@ -33,14 +33,17 @@ import de.knowwe.tools.ToolProvider;
  * @author Johannes Dienst
  * @created 23.11.2011
  */
-public class UserSupportInstantEditToolProvider implements ToolProvider {
+public class UserSupportInstantEditToolProvider implements ToolProvider
+{
 
 	@Override
-	public Tool[] getTools(Section<?> section, UserContext userContext) {
+	public Tool[] getTools(Section<?> section, UserContext userContext)
+	{
 		return new Tool[] { getQuickEditPageTool(section, userContext) };
 	}
 
-	protected Tool getQuickEditPageTool(Section<?> section, UserContext userContext) {
+	protected Tool getQuickEditPageTool(Section<?> section, UserContext userContext)
+	{
 
 		String jsAction = "KNOWWE.plugin.instantEdit.enable("
 				+ "'"

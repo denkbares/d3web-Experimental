@@ -34,20 +34,20 @@ import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
  * @author Johannes Dienst
  * @created 14.10.2011
  */
-public class HeuristicDiagnosisTableMarkup extends DefaultMarkupType {
-
-	// public static final String ESTABLISHED_THRESHOLD =
-	// "establishedThreshold";
+public class HeuristicDiagnosisTableMarkup extends DefaultMarkupType
+{
 
 	private static DefaultMarkup m = null;
 
-	static {
+	static
+	{
 		m = new DefaultMarkup("HeuristicDiagnosisTable");
 		m.addContentType(new HeuristicDiagnosisTable());
 		m.addAnnotation("package", true);
 	}
 
-	public HeuristicDiagnosisTableMarkup() {
+	public HeuristicDiagnosisTableMarkup()
+	{
 		super(m);
 		setRenderer(new DefaultMarkupRendererUserSupport());
 	}

@@ -28,7 +28,8 @@ import de.knowwe.core.kdom.parsing.Sections;
 public class ApproximateAnswerReferenceImpl extends AnswerReference {
 
 	@Override
-	public Section<QuestionReference> getQuestionSection(Section<? extends AnswerReference> s) {
+	public Section<QuestionReference> getQuestionSection(Section<? extends AnswerReference> s)
+	{
 		return Sections.findSuccessor(s.getFather(), QuestionReference.class);
 	}
 

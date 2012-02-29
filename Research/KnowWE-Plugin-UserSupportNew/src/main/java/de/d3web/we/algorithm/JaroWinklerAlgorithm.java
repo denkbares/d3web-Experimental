@@ -18,7 +18,6 @@
  */
 package de.d3web.we.algorithm;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -29,29 +28,28 @@ import com.wcohen.ss.JaroWinkler;
  * @author Johannes Dienst
  * @created 04.10.2011
  */
-public class JaroWinklerAlgorithm implements MatchingAlgorithm {
+public class JaroWinklerAlgorithm implements MatchingAlgorithm
+{
 
 	@Override
-	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch,
-			List<String> localTermMatches) {
+	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> localTermMatches)
+	{
 
 		JaroWinkler jW = new JaroWinkler();
 		PriorityQueue<Suggestion> suggestions =
 				new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
 
-		for (String match : localTermMatches) {
+		for (String match : localTermMatches)
+		{
 			double score = jW.score(toMatch, match);
 			// TODO threshold is experimental
-			if (score >= threshold) {
+			if (score >= threshold)
+			{
 				suggestions.add(new Suggestion(match, score));
 			}
 		}
 
-		List<Suggestion> toReturn = new ArrayList<Suggestion>();
-		for (int i = 0; i < maxCount; i++) {
-			Suggestion s = suggestions.poll();
-			if (s != null) toReturn.add(s);
-		}
+		List<Suggestion> toReturn = AlgorithmUtil.reduceSuggestionCount(maxCount, suggestions);
 
 		return toReturn;
 	}

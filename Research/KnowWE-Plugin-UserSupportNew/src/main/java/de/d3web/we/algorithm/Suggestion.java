@@ -18,24 +18,21 @@
  */
 package de.d3web.we.algorithm;
 
-
-
 /**
+ * Encapsulates a Suggestion found by a ApproximativeCorrectionProvider.
+ * This is basically the same as the Suggestion used for CorrectionProviders
+ * but the distance is stored as a double.
  * 
  * @author Johannes Dienst
  * @created 04.10.2011
  */
-/**
- * Encapsulates a Suggestion found by a CorrectionProvider.
- * 
- * @author Alex Legler
- * @created 20.05.2011
- */
-public class Suggestion implements Comparable<Suggestion> {
+public class Suggestion implements Comparable<Suggestion>
+{
 	private final String suggestion;
 	private final double distance;
 
-	public Suggestion(String suggestion, double distance) {
+	public Suggestion(String suggestion, double distance)
+	{
 		this.suggestion = suggestion;
 		this.distance = distance;
 	}
@@ -46,7 +43,8 @@ public class Suggestion implements Comparable<Suggestion> {
 	 * @created 20.05.2011
 	 * @return The suggested string
 	 */
-	public String getSuggestion() {
+	public String getSuggestion()
+	{
 		return suggestion;
 	}
 
@@ -56,19 +54,22 @@ public class Suggestion implements Comparable<Suggestion> {
 	 * @created 20.05.2011
 	 * @return distance
 	 */
-	public double getDistance() {
+	public double getDistance()
+	{
 		return distance;
 	}
 
 	@Override
-	public int compareTo(Suggestion other) {
+	public int compareTo(Suggestion other)
+	{
 		if ( (other.distance - distance) < 0) return -1;
 		if ( (other.distance - distance) == 0) return 0;
 		return 1;
 	}
 
 	@Override
-	public int hashCode() {
+	public int hashCode()
+	{
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
@@ -77,7 +78,8 @@ public class Suggestion implements Comparable<Suggestion> {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(Object obj)
+	{
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -85,7 +87,8 @@ public class Suggestion implements Comparable<Suggestion> {
 		if (getClass() != obj.getClass())
 			return false;
 		Suggestion other = (Suggestion) obj;
-		if (suggestion == null) {
+		if (suggestion == null)
+		{
 			if (other.suggestion != null)
 				return false;
 		} else if (!suggestion.equals(other.suggestion))

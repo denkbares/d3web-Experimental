@@ -33,7 +33,8 @@ public class DoubleMetaphoneAlgorithm implements MatchingAlgorithm {
 
 	@Override
 	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch
-			,List<String> localTermMatches) {
+			,List<String> localTermMatches)
+			{
 
 		List<Suggestion> toReturn = new ArrayList<Suggestion>();
 
@@ -63,6 +64,6 @@ public class DoubleMetaphoneAlgorithm implements MatchingAlgorithm {
 		}
 
 		return toReturn;
-	}
+			}
 
 }

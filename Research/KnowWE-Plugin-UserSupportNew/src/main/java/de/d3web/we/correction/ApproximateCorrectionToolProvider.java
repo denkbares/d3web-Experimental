@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import de.d3web.we.algorithm.Suggestion;
+import de.d3web.we.tables.CausalDiagnosisScore;
+import de.d3web.we.tables.DecisionTable;
+import de.d3web.we.tables.HeuristicDiagnosisTable;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.user.UserContext;
@@ -35,24 +38,22 @@ import de.knowwe.tools.ToolProvider;
 
 /**
  * 
+ * Renders the correction suggestions in the DefaultMarkup
+ * of the {@link CausalDiagnosisScore}, {@link DecisionTable},
+ * {@link HeuristicDiagnosisTable}
+ * 
  * @author Johannes Dienst
  * @created 15.09.2011
  */
-public class ApproximateCorrectionToolProvider implements ToolProvider {
+public class ApproximateCorrectionToolProvider implements ToolProvider
+{
 
 	@Override
-	public Tool[] getTools(Section<?> section, UserContext userContext) {
+	public Tool[] getTools(Section<?> section, UserContext userContext)
+	{
 
 		List<Suggestion> suggestions = new LinkedList<Suggestion>();
 		ResourceBundle wikiConfig = ResourceBundle.getBundle("KnowWE_config");
-
-		// for (ApproximateCorrectionProvider c : getProviders(section)) {
-		// List<Suggestion> s = c.getSuggestions(article, section);
-		//
-		// if (s != null) {
-		// suggestions.addAll(s);
-		// }
-		// }
 
 		ApproximateCorrectionProviderImpl impl = new ApproximateCorrectionProviderImpl();
 
@@ -64,7 +65,8 @@ public class ApproximateCorrectionToolProvider implements ToolProvider {
 		// Sort by ascending distance
 		Collections.sort(suggestions);
 
-		if (suggestions.size() == 0) {
+		if (suggestions.size() == 0)
+		{
 			return new Tool[0];
 		}
 
@@ -78,7 +80,8 @@ public class ApproximateCorrectionToolProvider implements ToolProvider {
 				"correct"
 				);
 
-		for (int i = 0; i < suggestions.size(); i++) {
+		for (int i = 0; i < suggestions.size(); i++)
+		{
 			tools[i + 1] = new DefaultTool(
 					"KnowWEExtension/images/correction_change.gif",
 					suggestions.get(i).getSuggestion(),
@@ -91,28 +94,5 @@ public class ApproximateCorrectionToolProvider implements ToolProvider {
 
 		return tools;
 	}
-
-	// private static ApproximateCorrectionProvider[] getProviders(Section<?>
-	// section) {
-	// Extension[] extensions =
-	// PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
-	// "ApproximateCorrectionProviderImpl");
-	// extensions =
-	// PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
-	// "ApproximateCorrectionToolProvider");
-	// extensions =
-	// PluginManager.getInstance().getExtensions("KnowWEExtensionPoints",
-	// "ApproximateCorrectionProvider");
-	// extensions = ScopeUtils.getMatchingExtensions(extensions, section);
-	// ApproximateCorrectionProvider[] providers = new
-	// ApproximateCorrectionProvider[extensions.length];
-	//
-	// for (int i = 0; i < extensions.length; i++) {
-	// Extension extension = extensions[i];
-	// providers[i] = (ApproximateCorrectionProvider) extension.getSingleton();
-	// }
-	//
-	// return providers;
-	// }
 
 }

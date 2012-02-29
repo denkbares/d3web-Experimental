@@ -37,7 +37,7 @@ import de.knowwe.core.utils.KnowWEUtils;
 
 
 /**
- * For Rendering the Tables in HTML.
+ * For Rendering the Tables to HTML.
  * 
  * @author Johannes Dienst
  * @created 14.10.2011
@@ -47,38 +47,30 @@ public class TableRenderer implements Renderer {
 	private static ResourceBundle bundle = ResourceBundle.getBundle("Usersupport_messages");
 
 	@Override
-	public void render(Section<?> section, UserContext user, StringBuilder string) {
-
+	public void render(Section<?> section, UserContext user, StringBuilder string)
+	{
 		string.append(KnowWEUtils.maskHTML("<span id='" + section.getID() + "'>"));
 
 		StringBuilder buildi = new StringBuilder();
 		buildi.append("<table border=\"1\">");
 
-		// Get max cell size
 		int maxCellLength =
 				TableUtils.getWidestTableCellLength(
 						Sections.findSuccessorsOfType(section,TableCell.class));
 
-		// Get average cell count for line
 		int averageCellCount = TableUtils.getMaximumTableCellCount(section);
 
-		// Render the Header
 		renderTableHeader(buildi, section, maxCellLength, averageCellCount, user);
 
 		buildi.append("<tfoot></tfoot>");
 
-		// Render the Body
 		renderTableBody(buildi, section, maxCellLength, user);
 
 		buildi.append("</table>");
 
 		string.append(KnowWEUtils.maskHTML("</span>"));
 
-		// Render import und export buttons
-		//		renderExportImportButton(buildi, section);
-
 		string.append(KnowWEUtils.maskHTML(buildi.toString()));
-
 	}
 
 	private static void renderTableHeader(

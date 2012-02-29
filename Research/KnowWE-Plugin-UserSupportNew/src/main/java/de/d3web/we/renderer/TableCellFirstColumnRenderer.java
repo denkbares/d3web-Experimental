@@ -20,8 +20,6 @@ package de.d3web.we.renderer;
 
 import java.util.Collection;
 
-import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.Renderer;
@@ -34,6 +32,8 @@ import de.knowwe.kdom.renderer.StyleRenderer;
 
 /**
  * 
+ * Colors {@link TableCellFirstColumns} according to the {@link Message}s.
+ * 
  * @author Johannes Dienst
  * @created 17.02.2012
  */
@@ -44,7 +44,6 @@ public class TableCellFirstColumnRenderer implements Renderer
 	public void render(Section<?> sec, UserContext user, StringBuilder string)
 	{
 		KnowWEArticle article = KnowWEUtils.getCompilingArticles(sec).iterator().next();
-		KnowledgeBase kb = D3webUtils.getKnowledgeBase(sec.getWeb(), sec.getTitle());
 
 		Collection<Message> messages = Messages.getMessagesFromSubtree(article, sec);
 		StyleRenderer styler = new StyleRenderer("color:rgb(152, 180, 12)");

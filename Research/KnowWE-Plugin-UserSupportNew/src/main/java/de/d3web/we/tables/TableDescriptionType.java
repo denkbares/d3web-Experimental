@@ -28,12 +28,16 @@ import de.knowwe.kdom.sectionFinder.StringSectionFinderUnquoted;
 
 /**
  * 
+ * {@link CausalDiagnosisScore} and {@link DecisionTable} use this
+ * to display the type of the table specified.
+ * 
  * @author Johannes Dienst
  * @created 16.02.2012
  */
 public class TableDescriptionType extends AbstractType
 {
-	public TableDescriptionType() {
+	public TableDescriptionType()
+	{
 		ConstraintSectionFinder solutionFinder = new ConstraintSectionFinder(
 				new NonEmptyLineSectionFinder());
 		solutionFinder.addConstraint(ExactlyOneFindingConstraint.getInstance());

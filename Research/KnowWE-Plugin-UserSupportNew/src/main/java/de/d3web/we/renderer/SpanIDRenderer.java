@@ -29,10 +29,12 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @author Johannes Dienst
  * @created 14.10.2011
  */
-public class SpanIDRenderer implements Renderer {
+public class SpanIDRenderer implements Renderer
+{
 
 	@Override
-	public void render(Section<?> sec, UserContext user, StringBuilder string) {
+	public void render(Section<?> sec, UserContext user, StringBuilder string)
+	{
 		string.append(KnowWEUtils.maskHTML("<span id='" + sec.getID() + "'>"));
 		DelegateRenderer.getInstance().render(sec, user, string);
 		string.append(KnowWEUtils.maskHTML("</span>"));

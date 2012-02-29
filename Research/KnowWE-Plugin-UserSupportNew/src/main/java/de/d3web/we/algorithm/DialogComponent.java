@@ -39,7 +39,8 @@ import java.util.ResourceBundle;
  * @author Johannes Dienst
  * @created 04.10.2011
  */
-public class DialogComponent {
+public class DialogComponent
+{
 
 	private final List<MatchingAlgorithm> algorithmsToken = new ArrayList<MatchingAlgorithm>();
 	private final List<MatchingAlgorithm> algorithmsPhrase = new ArrayList<MatchingAlgorithm>();
@@ -56,7 +57,8 @@ public class DialogComponent {
 	/**
 	 * To avoid instantiation
 	 */
-	private DialogComponent() {
+	private DialogComponent()
+	{
 		maxSuggestions =
 				Integer.parseInt(
 						bundle.getString("usersupport.dialogcomponent.maxSuggestions"));
@@ -64,7 +66,8 @@ public class DialogComponent {
 				Double.parseDouble(
 						bundle.getString("usersupport.dialogcomponent.threshold"));
 
-		try {
+		try
+		{
 			String className1 =
 					bundle.getString("usersupport.dialogcomponent.standardtokenmatchingalgorithm");
 			usedTokenAlgorithm = MatchingAlgorithm.class.cast(
@@ -76,7 +79,8 @@ public class DialogComponent {
 					Class.forName(className2
 							));
 		}
-		catch (Exception e) {
+		catch (Exception e)
+		{
 			usedTokenAlgorithm = new LevenshteinAlgorithm();
 			usedPhraseAlgorithm = new MongeElkanAlgorithm();
 		}
@@ -100,23 +104,26 @@ public class DialogComponent {
 	 * @created 21.11.2011
 	 * @return
 	 */
-	public static DialogComponent getInstance() {
+	public static DialogComponent getInstance()
+	{
 		if (uniqueInstance == null) uniqueInstance = new DialogComponent();
 		return uniqueInstance;
 	}
 
 	/**
 	 * 
-	 * Collects the best suggestions found by all Matching in the terminology.
+	 * Collects the best suggestions found by
+	 * usedPhraseAlgorithm and usedTokenAlgorithm
+	 * all Matching in the terminology.
 	 * 
-	 * This is slow but will definitely find the Best matches!
 	 * 
 	 * @created 21.11.2011
 	 * @param toMatch
 	 * @param termDefinitions
 	 * @return
 	 */
-	public List<Suggestion> getBestSuggestions(String toMatch, List<String> termDefinitions) {
+	public List<Suggestion> getBestSuggestions(String toMatch, List<String> termDefinitions)
+	{
 
 		List<Suggestion> bestSuggs = new ArrayList<Suggestion>();
 
@@ -126,12 +133,12 @@ public class DialogComponent {
 		// When toMatch contains Whitespace then use algorithmsPhrase
 		if (toMatch.contains(" "))
 		{
-			this.getBestSuggestionsPhrase(toMatch, termDefinitions, matchList, true);
+			this.getBestSuggestionsPhrase(toMatch, termDefinitions, matchList, false);
 		}
 
 		if (!toMatch.contains(" "))
 		{
-			this.getBestSuggestionsToken(toMatch, termDefinitions, matchList, true);
+			this.getBestSuggestionsToken(toMatch, termDefinitions, matchList, false);
 		}
 
 		// Sort the matchList and add the count of
@@ -144,7 +151,8 @@ public class DialogComponent {
 
 	/**
 	 * 
-	 * Collects the best suggestions found by all Matching in the terminology.
+	 * Collects the best suggestions found by all MatchingAlgorithms
+	 * in the terminology.
 	 * 
 	 * This is slow but will definitely find the Best matches!
 	 * 
@@ -189,7 +197,8 @@ public class DialogComponent {
 	 * @param matchList
 	 * @param useAllAlgorithms
 	 */
-	private void getBestSuggestionsToken(String toMatch, List<String> termDefinitions, List<SuggestionValuePair> matchList, boolean useAllAlgorithms)
+	private void getBestSuggestionsToken(String toMatch, List<String> termDefinitions,
+			List<SuggestionValuePair> matchList, boolean useAllAlgorithms)
 	{
 
 		// Sort terms to token and phrase
@@ -221,7 +230,8 @@ public class DialogComponent {
 			boolean remove = true;
 			suggs = this.removeExactMatches(suggs);
 			while(remove) remove = suggs.remove(null);
-			for (Suggestion s : suggs) {
+			for (Suggestion s : suggs)
+			{
 				int exists = AlgorithmUtil.containsSuggestion(matchList, s);
 				if (exists != -1)
 				{
@@ -268,8 +278,8 @@ public class DialogComponent {
 		if (useAllAlgorithms)
 		{
 			algorithms = algorithmsPhrase;
-		}	
-		
+		}
+
 		List<Suggestion> suggs = new ArrayList<Suggestion>();
 		for (MatchingAlgorithm algo : algorithms)
 		{
@@ -347,21 +357,26 @@ public class DialogComponent {
 	}
 
 	// Getters and setters for MatchingAlgorithm staff
-	public List<MatchingAlgorithm> getPossibleMatchingAlgorithms() {
+	public List<MatchingAlgorithm> getPossibleMatchingAlgorithms()
+	{
 		List<MatchingAlgorithm> toReturn = new ArrayList<MatchingAlgorithm>();
 		toReturn.addAll(algorithmsToken);
 		toReturn.addAll(algorithmsPhrase);
 		return Collections.unmodifiableList(toReturn);
 	}
-	public boolean setUsedTokenMatchingAlgorithm(MatchingAlgorithm algorithm) {
-		if (algorithmsToken.contains(algorithm)) {
+	public boolean setUsedTokenMatchingAlgorithm(MatchingAlgorithm algorithm)
+	{
+		if (algorithmsToken.contains(algorithm))
+		{
 			usedTokenAlgorithm = algorithm;
 			return true;
 		}
 		return false;
 	}
-	public boolean setUsedPhraseMatchingAlgorithm(MatchingAlgorithm algorithm) {
-		if (algorithmsPhrase.contains(algorithm)) {
+	public boolean setUsedPhraseMatchingAlgorithm(MatchingAlgorithm algorithm)
+	{
+		if (algorithmsPhrase.contains(algorithm))
+		{
 			usedPhraseAlgorithm = algorithm;
 			return true;
 		}

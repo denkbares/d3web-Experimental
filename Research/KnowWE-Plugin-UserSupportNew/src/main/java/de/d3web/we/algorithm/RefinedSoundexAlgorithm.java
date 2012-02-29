@@ -18,7 +18,6 @@
  */
 package de.d3web.we.algorithm;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -31,34 +30,35 @@ import org.apache.commons.codec.language.RefinedSoundex;
  * @author Johannes Dienst
  * @created 04.10.2011
  */
-public class RefinedSoundexAlgorithm implements MatchingAlgorithm {
+public class RefinedSoundexAlgorithm implements MatchingAlgorithm
+{
 
 	@Override
-	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch,
-			List<String> localTermMatches) {
+	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> localTermMatches)
+	{
 
 		RefinedSoundex rS = new RefinedSoundex();
 		PriorityQueue<Suggestion> suggestions =
 				new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
 
-		for (String match : localTermMatches) {
-			try {
+		for (String match : localTermMatches)
+		{
+			try
+			{
 				int diff = rS.difference(toMatch, match);
-				if (diff <= 1) {
+				if (diff <= 1)
+				{
 					suggestions.add(new Suggestion(toMatch, diff));
 				}
 
 			}
-			catch (EncoderException e) {
+			catch (EncoderException e)
+			{
 				// TODO Auto-generated catch block
 			}
 		}
 
-		List<Suggestion> toReturn = new ArrayList<Suggestion>();
-		for (int i = 0; i < maxCount; i++) {
-			Suggestion s = suggestions.poll();
-			if (s != null) toReturn.add(s);
-		}
+		List<Suggestion> toReturn = AlgorithmUtil.reduceSuggestionCount(maxCount, suggestions);
 
 		return toReturn;
 	}

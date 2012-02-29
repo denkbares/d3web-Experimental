@@ -18,20 +18,20 @@
  */
 package de.d3web.we.tables;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.d3web.abstraction.inference.PSMethodAbstraction;
 import de.d3web.core.inference.Rule;
 import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Solution;
 import de.d3web.scoring.ActionHeuristicPS;
 import de.d3web.scoring.Score;
+import de.d3web.scoring.inference.PSMethodHeuristic;
 import de.d3web.we.kdom.condition.CompositeCondition;
 import de.d3web.we.kdom.condition.KDOMConditionFactory;
+import de.d3web.we.object.ScoreValue;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.kdom.AbstractType;
@@ -51,9 +51,11 @@ import de.knowwe.kdom.subtreehandler.GeneralSubtreeHandler;
  * @author Johannes Dienst
  * @created 14.10.2011
  */
-public class CausalDiagnosisScore extends AbstractType {
+public class CausalDiagnosisScore extends AbstractType
+{
 
-	public CausalDiagnosisScore() {
+	public CausalDiagnosisScore()
+	{
 		this.sectionFinder = new AllTextSectionFinder();
 		this.addSubtreeHandler(Priority.LOWEST, new CausalDiagnosisSubtreeHandler());
 
@@ -68,7 +70,7 @@ public class CausalDiagnosisScore extends AbstractType {
 		iTable.removeChild(3);
 		TableHeaderLine header = new TableHeaderLine();
 		TableHeaderCell headerCell = new TableHeaderCell();
-		headerCell.addChildType(new CausalScoreSolutionDefinition());
+		headerCell.addChildType(new CausalDiagnosisScoreSolutionDefinition());
 		header.removeChild(2);
 		header.addChildType(headerCell);
 		iTable.addChildTypeAtPosition(header, 3);
@@ -82,7 +84,8 @@ public class CausalDiagnosisScore extends AbstractType {
 	 * @author Johannes Dienst
 	 * @created 10.11.2011
 	 */
-	public class CausalDiagnosisSubtreeHandler extends GeneralSubtreeHandler<CausalDiagnosisScore> {
+	public class CausalDiagnosisSubtreeHandler extends GeneralSubtreeHandler<CausalDiagnosisScore>
+	{
 
 		private static final String NO_WEIGHT = "Weightless";
 
@@ -97,9 +100,7 @@ public class CausalDiagnosisScore extends AbstractType {
 			article = KnowWEUtils.getCompilingArticles(scoreSec).iterator().next();
 			KnowledgeBase kb = D3webUtils.getKnowledgeBase(scoreSec.getWeb(), article.getTitle());
 
-			// Create all Conditions and Weights: 1st and 2end column
-			// TODO First Cell is no Question: Removed it! But what if empty?
-			// TODO no checks or whatsoever. Write security check!
+			// Create all Conditions
 			List<Section<TableCellFirstColumn>> firstColumn = Sections.findSuccessorsOfType(innerTable, TableCellFirstColumn.class);
 			LinkedList<Condition> conditionList = new LinkedList<Condition>();
 			for (Section<TableCellFirstColumn> cell : firstColumn) {
@@ -112,8 +113,6 @@ public class CausalDiagnosisScore extends AbstractType {
 			// TODO Check if header misses 1st Tablecell
 			List<Section<TableHeaderCell>> headerCells = Sections.findSuccessorsOfType(innerTable, TableHeaderCell.class);
 
-			// Collect cells for columns
-			// TODO Check if header misses 1st Tablecell
 			int cellCount = Sections.findSuccessorsOfType(innerTable, TableLine.class).size();
 
 			// Do for every column: Create Scoring rules
@@ -122,7 +121,7 @@ public class CausalDiagnosisScore extends AbstractType {
 			{
 				column = TableUtils.getColumnCells(i, Sections.findChildOfType(scoreSec, InnerTable.class));
 
-				// Get Solution from headerCells and create it, if necessary in kb
+				// Get Solution from headerCells and create it, if necessary, in kb
 				Section<TableHeaderCell> solutionCell = headerCells.get(i);
 				String solText = solutionCell.getText();
 				solText = solText.replaceAll("[\\r\\n\\{\\s]", "");
@@ -136,22 +135,14 @@ public class CausalDiagnosisScore extends AbstractType {
 				for (Section<TableCell> cell : column)
 				{
 					// create one Scoring-Rule per Cell
-					String weight = cell.getText().trim();
-					if (!weight.equals(""))
+					Section<ScoreValue> scoreVal = Sections.findSuccessor(cell, ScoreValue.class);
+					if (scoreVal != null)
 					{
 						ActionHeuristicPS action = new ActionHeuristicPS();
-						Score score = Score.N1;
-						try
-						{
-							score = de.d3web.core.io.utilities.Util.getScore(weight);
-						}
-						catch (IOException e)
-						{
-							// TODO Auto-generated catch block
-						}
+						Score score = D3webUtils.getScoreForString(scoreVal.getText());
 						action.setScore(score);
 						action.setSolution(solution);
-						Rule rule = new Rule(PSMethodAbstraction.class);
+						Rule rule = new Rule(PSMethodHeuristic.class);
 						rule.setCondition(conditionList.get(i-1));
 						rule.setAction(action);
 					}

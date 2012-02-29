@@ -44,13 +44,16 @@ import de.knowwe.core.kdom.parsing.Sections;
  * @author Johannes Dienst
  * @created 18.10.2011
  */
-public class TableImportAction extends AbstractAction {
+public class TableImportAction extends AbstractAction
+{
 
 
 	@Override
-	public void execute(UserActionContext context) {
+	public void execute(UserActionContext context)
+	{
 
-		try {
+		try
+		{
 			String tableId = context.getParameter("tableId");
 			String title = context.getTitle();
 
@@ -72,7 +75,8 @@ public class TableImportAction extends AbstractAction {
 			Writer writer = context.getWriter();
 			writer.append("Import successful");
 			//			in.close();
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			Logger.getLogger(this.getClass().getName()).warning(
 					"Import of xls failed");
 		}
@@ -84,7 +88,8 @@ public class TableImportAction extends AbstractAction {
 	 * @created 21.10.2011
 	 * @param context
 	 */
-	private void uploadFile(UserActionContext context) {
+	private void uploadFile(UserActionContext context)
+	{
 		HttpServletRequest req = context.getRequest();
 		HttpServletResponse res = context.getResponse();
 		//		try {

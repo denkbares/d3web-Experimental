@@ -31,13 +31,17 @@ import de.knowwe.kdom.sectionFinder.UnquotedExpressionFinder;
 
 /**
  * 
+ * {@link CausalDiagnosisScore}, {@link DecisionTable} and {@link HeuristicDiagnosisTable}
+ * use this class for recognition of the their knowledge table.
+ * 
  * @author Johannes Dienst
  * @created 19.10.2011
  */
-public class InnerTable extends ITable {
+public class InnerTable extends ITable
+{
 
-	public InnerTable() {
-
+	public InnerTable()
+	{
 		this.sectionFinder = new AllTextSectionFinder();
 
 		// allow for comment lines

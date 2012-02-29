@@ -29,9 +29,11 @@ import de.knowwe.kdom.renderer.StyleRenderer;
  * @author Johannes Dienst
  * @created 14.10.2011
  */
-public class TableLine extends AbstractType {
+public class TableLine extends AbstractType
+{
 
-	public TableLine() {
+	public TableLine()
+	{
 
 		// here also a comment might occur:
 		AnonymousType relationComment = new AnonymousType("comment");
@@ -41,19 +43,14 @@ public class TableLine extends AbstractType {
 		this.addChildType(relationComment);
 
 		this.sectionFinder = new RegexSectionFinder("([^\\|]+\\|)+[^\\|]+");
-
-		// divide the line in delimiters and cells
-		//		AnonymousType delimiter = new AnonymousType("delimiter");
-		//		delimiter.setSectionFinder(new RegexSectionFinder("\\|"));
-		//		delimiter.setCustomRenderer(StyleRenderer.COMMENT); // TODO Just a quick-shot
-		//		this.addChildType(delimiter);
 		this.addChildType(new ColumnDelimiter());
 
 		this.addChildType(new TableCellFirstColumn());
 		this.addChildType(new TableNormalCell());
 	}
 
-	protected void removeFirstColumn() {
+	protected void removeFirstColumn()
+	{
 		this.childrenTypes.remove(2);
 	}
 }

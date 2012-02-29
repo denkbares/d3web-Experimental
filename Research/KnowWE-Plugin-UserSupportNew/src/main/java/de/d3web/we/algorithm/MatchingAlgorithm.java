@@ -22,10 +22,13 @@ import java.util.List;
 
 /**
  * 
+ * Interface for all approximative matching algorithms.
+ * 
  * @author Johannes Dienst
  * @created 04.10.2011
  */
-public interface MatchingAlgorithm {
+public interface MatchingAlgorithm
+{
 
 	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> termDefinitions);
 

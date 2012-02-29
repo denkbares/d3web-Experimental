@@ -18,7 +18,6 @@
  */
 package de.d3web.we.algorithm;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -43,15 +42,16 @@ public class LevenshteinAlgorithm implements MatchingAlgorithm {
 	}
 
 	@Override
-	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch,
-			List<String> localTermMatches) {
+	public List<Suggestion> getMatches(int maxCount, double threshold, String toMatch, List<String> localTermMatches)
+	{
 
 		Levenstein l = new Levenstein();
 
 		PriorityQueue<Suggestion> suggestions =
 				new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
 
-		for (String term : localTermMatches) {
+		for (String term : localTermMatches)
+		{
 			double score = l.score(toMatch, term);
 			int max = Math.max(term.length(), toMatch.length());
 			double minuend = score / max;
@@ -61,11 +61,7 @@ public class LevenshteinAlgorithm implements MatchingAlgorithm {
 			}
 		}
 
-		List<Suggestion> toReturn = new ArrayList<Suggestion>();
-		for (int i = 0; i < maxCount; i++) {
-			Suggestion s = suggestions.poll();
-			if (s != null) toReturn.add(s);
-		}
+		List<Suggestion> toReturn = AlgorithmUtil.reduceSuggestionCount(maxCount, suggestions);
 
 		return toReturn;
 	}

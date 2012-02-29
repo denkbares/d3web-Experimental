@@ -39,9 +39,9 @@ public class JaccardAlgorithm implements MatchingAlgorithm
 		PriorityQueue<Suggestion> suggestions =
 				new PriorityQueue<Suggestion>(maxCount, new SuggestionComparator());
 
-		for (String match : localTermMatches) {
+		for (String match : localTermMatches)
+		{
 			double score = jC.score(toMatch, match);
-			// TODO threshold is experimental
 			if (score >= threshold) {
 				suggestions.add(new Suggestion(match, score));
 			}
