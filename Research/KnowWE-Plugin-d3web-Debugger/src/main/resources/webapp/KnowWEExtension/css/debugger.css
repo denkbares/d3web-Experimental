@@ -194,7 +194,7 @@ div.debuggerDropdown .dQnumError {
 .debuggerAction {
 	color: #003366;
 }
-.debuggerActionSolution {
+.debuggerSolution {
 	color: rgb(150, 110, 120);	
 }
 .debuggerValue {
@@ -206,4 +206,8 @@ div.ruleContent, div.ruleContentFired {
 div.ruleContentFired {
 	border-top: 2px solid green;	
 	border-bottom: 2px solid green;	
+}
+/* Sonstiges */
+.defaultMarkup {
+	overflow: visible !important;
 }

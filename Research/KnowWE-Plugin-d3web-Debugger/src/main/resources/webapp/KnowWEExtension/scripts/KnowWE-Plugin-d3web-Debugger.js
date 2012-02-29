@@ -249,18 +249,18 @@ KNOWWE.plugin.debuggr = function(){
          * Function: questionOCClicked
          * 		handles an incoming QuestionOC-Click
          */
-        questionOCclicked : function(element) {
+        questionOCclicked : function(element, inside) {
         	rel = eval("(" + element.getAttribute('rel') + ")");
         	if (element.className == 'dchoiceActive')
-        		KNOWWE.plugin.debuggr.sendChoice(element, {action: 'RetractSingleFindingAction', ValueID: element.innerHTML, KBid: rel.kbid});
+        		KNOWWE.plugin.debuggr.sendChoice(element, inside, {action: 'RetractSingleFindingAction', ValueID: element.innerHTML, KBid: rel.kbid});
         	else
-        		KNOWWE.plugin.debuggr.sendChoice(element, {action: 'SetSingleFindingAction', ValueID: element.innerHTML, KBid: rel.kbid});
+        		KNOWWE.plugin.debuggr.sendChoice(element, inside, {action: 'SetSingleFindingAction', ValueID: element.innerHTML, KBid: rel.kbid});
         },
 		/**
          * Function: questionMCClicked
          * 		handles an incoming QuestionMC-Click
          */
-        questionMCclicked : function(element) {
+        questionMCclicked : function(element, inside) {
         	rel = eval("(" + element.getAttribute('rel') + ")");
         	choices = '';
         	dropdown = element.parentNode;
@@ -276,7 +276,7 @@ KNOWWE.plugin.debuggr = function(){
 	       	if (element.className == 'dchoiceActive') {
         		// If last active choice is going to be retracted, we need to call 'RetractSingleFindingAction'
         		if (choices.length == 0)
-        			KNOWWE.plugin.debuggr.sendChoice(element, {action: 'RetractSingleFindingAction', ValueID: element.innerHTML, KBid: rel.kbid});
+        			KNOWWE.plugin.debuggr.sendChoice(element, inside, {action: 'RetractSingleFindingAction', ValueID: element.innerHTML, KBid: rel.kbid});
         		// Delete the last "#####"
         		else choices = choices.substring(0, choices.length-5);
         	}
@@ -284,16 +284,20 @@ KNOWWE.plugin.debuggr = function(){
         	else
         		choices += element.innerHTML;
         	
-        	KNOWWE.plugin.debuggr.sendChoice(element, {action: 'SetSingleFindingAction', ValueID: choices, KBid: rel.kbid});
+        	KNOWWE.plugin.debuggr.sendChoice(element, inside, {action: 'SetSingleFindingAction', ValueID: choices, KBid: rel.kbid});
         },
 		/**
          * Function: questionNumClicked
          * 		handles an incoming QuestionNum-Click
          */
-        questionNumClicked : function(element) {
+        questionNumClicked : function(element, inside) {
         	rel = eval("(" + element.getAttribute('rel') + ")");
         	inputNode = element.parentNode.childNodes[0];
-        	errorNode = element.parentNode.childNodes[2];
+        	nodez = element.parentNode.childNodes;
+        	for (i = 0; i < nodez.length; i++) {
+        		if (nodez[i].className == 'dQnumError')
+        			errorNode = nodez[i];
+        	}
         	input = inputNode.value;
         	
         	// enabling float value input also with "," instead of "."
@@ -302,12 +306,12 @@ KNOWWE.plugin.debuggr = function(){
             }
 	 		if (!input.match(/^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/)) {
 	 			if (input == "") {
-	 				KNOWWE.plugin.debuggr.sendChoice(element, {action: 'SetSingleFindingAction', ValueID: "MaU", KBid: rel.kbid});
-	 				return;
+	 				KNOWWE.plugin.debuggr.sendChoice(element, inside, {action: 'SetSingleFindingAction', ValueID: "MaU", KBid: rel.kbid});
+	 				return false;
 	 			}
 	 			errorNode.innerHTML = 'Input needs to be a number.';
 	 			inputNode.value = "";
-        		return;
+        		return false;
 	 		}
 	 		
 	 		  // if range is given, validate range
@@ -318,27 +322,27 @@ KNOWWE.plugin.debuggr = function(){
             	if(parseFloat(input) < min || parseFloat(input) > max){
             		errorNode.innerHTML = 'Input needs to be between '+min+' and '+max+'.';
             		inputNode.value = "";
-            		return;
+            		return false;
             	}
             }
         	
-        	KNOWWE.plugin.debuggr.sendChoice(element, {action: 'SetSingleFindingAction', ValueID: input, KBid: rel.kbid});
-			errorNode.innerHTML = "";
+        	KNOWWE.plugin.debuggr.sendChoice(element, inside, {action: 'SetSingleFindingAction', ValueID: input, KBid: rel.kbid});
+        	errorNode.innerHTML = "";
         },
 		/**
          * Function: questionTextClicked
          * 		handles an incoming QuestionText-Click
          */
-        questionTextClicked : function(element) {
+        questionTextClicked : function(element, inside) {
         	rel = eval("(" + element.getAttribute('rel') + ")");
         	input = element.parentNode.childNodes[0].value;
-        	KNOWWE.plugin.debuggr.sendChoice(element, {action: 'SetSingleFindingAction', ValueID: input, KBid: rel.kbid});
+        	KNOWWE.plugin.debuggr.sendChoice(element, inside, {action: 'SetSingleFindingAction', ValueID: input, KBid: rel.kbid});
         },
 		/**
          * Function: sendChoice
          * 		sends the chosen answer
          */
-        sendChoice : function(element, params) {
+        sendChoice : function(element, inside, params) {
         	rel = eval("(" + element.getAttribute('rel') + ")");
         	
         	pDefault = {
@@ -357,6 +361,9 @@ KNOWWE.plugin.debuggr = function(){
                     	fn : function(){
     			        	try {
     	                		KNOWWE.helper.observer.notify('update');
+    	                		if (!inside) {
+    	                			window.location.reload();
+    	                		}
     			        	}
     			        	catch (e) { /*ignore*/ }
     			        	KNOWWE.core.util.updateProcessingState(-1);

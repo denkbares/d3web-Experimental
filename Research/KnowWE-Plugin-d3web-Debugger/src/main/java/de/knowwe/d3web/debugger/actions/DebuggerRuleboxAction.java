@@ -28,9 +28,8 @@ import de.d3web.we.basic.SessionBroker;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.d3web.debugger.DebugUtilities;
-import de.knowwe.d3web.debugger.inference.DebuggerRuleCondition;
+import de.knowwe.d3web.debugger.renderer.DebuggerRuleRenderer;
 
 /**
  * An action to render the debugger's rulebox.
@@ -53,9 +52,8 @@ public class DebuggerRuleboxAction extends AbstractAction {
 	 */
 	public String renderRule(UserActionContext context) {
 		StringBuffer buffer = new StringBuffer();
+		String title = context.getTitle();
 		try {
-			String title = context.getTitle();
-			String web = context.getWeb();
 			String kbID = context.getParameter("kbid");
 			String ruleArticle;
 			if (context.getParameter("ruleid") == null) return "";
@@ -64,17 +62,16 @@ public class DebuggerRuleboxAction extends AbstractAction {
 			Session session = broker.getSession(kbID);
 			KnowledgeBase kb = session.getKnowledgeBase();
 			List<Rule> rules = DebugUtilities.getRulesFromKB(kb);
-			DebuggerRuleCondition dc;
+			DebuggerRuleRenderer drr = new DebuggerRuleRenderer();
 
 			buffer.append("<span ruleid='" + ruleid + "'>");
 			for (Rule r : rules) {
 				if (r.hashCode() == ruleid) {
 					ruleArticle = DebugUtilities.getRuleResource(r);
 					if (ruleArticle.equals("")) ruleArticle = context.getTitle();
-					dc = new DebuggerRuleCondition(r.getCondition());
-					buffer.append(KnowWEUtils.unmaskHTML(dc.render(session, web, title, true)));
-					buffer.append(KnowWEUtils.unmaskHTML("<a class='ruleLink' href='Wiki.jsp?page="
-							+ ruleArticle + "'></a>"));
+					buffer.append(drr.renderCondition(r.getCondition(), session, title, true));
+					buffer.append("<a class='ruleLink' href='Wiki.jsp?page="
+							+ ruleArticle + "'></a>");
 					break;
 				}
 			}

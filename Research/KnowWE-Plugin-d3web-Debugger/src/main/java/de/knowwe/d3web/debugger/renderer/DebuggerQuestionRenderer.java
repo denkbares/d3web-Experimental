@@ -31,7 +31,7 @@ import de.d3web.core.knowledge.terminology.info.NumericalInterval;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.values.UndefinedValue;
-import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.core.KnowWEEnvironment;
 
 /**
  * Get the HTML-output for debugging a question.
@@ -46,7 +46,7 @@ public class DebuggerQuestionRenderer {
 	 * @param q The rendered question
 	 * @return HTML-Rendering
 	 */
-	public static String renderQuestion(Question q, Session session, String topic, String web, boolean inside) {
+	public static String renderQuestion(Question q, Session session, String title, boolean inside) {
 		StringBuffer buffer = new StringBuffer();
 		String valueText;
 		Value value = session.getBlackboard().getValue(q);
@@ -74,16 +74,16 @@ public class DebuggerQuestionRenderer {
 		buffer.append("<div class='debuggerDropdown' id='' style='display:none;'>");
 
 		if (q instanceof QuestionOC) {
-			buffer.append(renderQuestionOC((QuestionOC) q, valueText, web, topic, kbid, inside));
+			buffer.append(renderQuestionOC((QuestionOC) q, valueText, kbid, title, inside));
 		}
 		else if (q instanceof QuestionMC) {
-			buffer.append(renderQuestionMC((QuestionMC) q, valueText, web, topic, kbid, inside));
+			buffer.append(renderQuestionMC((QuestionMC) q, valueText, kbid, title, inside));
 		}
 		else if (q instanceof QuestionNum) {
-			buffer.append(renderQuestionNum((QuestionNum) q, valueText, web, topic, kbid, inside));
+			buffer.append(renderQuestionNum((QuestionNum) q, valueText, kbid, title, inside));
 		}
 		else if (q instanceof QuestionText) {
-			buffer.append(renderQuestionText((QuestionText) q, valueText, web, topic, kbid, inside));
+			buffer.append(renderQuestionText((QuestionText) q, valueText, kbid, title, inside));
 		}
 
 		buffer.append("<a href='Wiki.jsp?page=ObjectInfoPage&objectname=" + q.getName()
@@ -91,21 +91,21 @@ public class DebuggerQuestionRenderer {
 
 		buffer.append("</div>");
 
-		return KnowWEUtils.maskHTML(buffer.toString());
+		return buffer.toString();
 	}
 
 	/**
 	 * Render a OneChoice-Question.
 	 */
-	private static String renderQuestionOC(QuestionOC q, String valueText, String web, String topic, String kbid, boolean inside) {
+	private static String renderQuestionOC(QuestionOC q, String valueText, String kbid, String title, boolean inside) {
 		StringBuffer buffer = new StringBuffer();
+		String web = KnowWEEnvironment.DEFAULT_WEB;
 		for (Choice choice : q.getAllAlternatives()) {
-			if (inside) buffer.append("<p onClick='KNOWWE.plugin.debuggr.questionOCclicked(this);return' ");
-			else buffer.append("<p onClick='KNOWWE.plugin.debuggr.questionOCclicked(this);window.location.reload()' ");
-
-			buffer.append("rel=\"{kbid: '" + kbid + "', web:'" + web + "', ns:'" + topic
-					+ "', qid:'" + q.getName()
-					+ "'}\" ");
+			buffer.append("<p onClick='KNOWWE.plugin.debuggr.questionOCclicked(this, " + inside
+					+ ")' ");
+			buffer.append("rel=\"{kbid: '" + kbid + "', web:'" + web + "', ns:'" + title
+					+ "', qid:'"
+					+ q.getName() + "'}\" ");
 
 			if (valueText.equals(choice.getName())) {
 				buffer.append("class='dchoiceActive'");
@@ -122,17 +122,18 @@ public class DebuggerQuestionRenderer {
 	/**
 	 * Render a MultipleChoice-Question.
 	 */
-	private static String renderQuestionMC(QuestionMC q, String valueText, String web, String topic, String kbid, boolean inside) {
+	private static String renderQuestionMC(QuestionMC q, String valueText, String kbid, String title, boolean inside) {
 		StringBuffer buffer = new StringBuffer();
+		String web = KnowWEEnvironment.DEFAULT_WEB;
 		boolean active;
 		String[] values = valueText.substring(1, valueText.length() - 1).split(", ");
 
 		for (Choice choice : ((QuestionChoice) q).getAllAlternatives()) {
-			if (inside) buffer.append("<p onClick='KNOWWE.plugin.debuggr.questionMCclicked(this);return' ");
-			else buffer.append("<p onClick='KNOWWE.plugin.debuggr.questionMCclicked(this);window.location.reload()' ");
-			buffer.append("rel=\"{kbid: '" + kbid + "', web:'" + web + "', ns:'" + topic
-					+ "', qid:'" + q.getName()
-					+ "'}\" ");
+			buffer.append("<p onClick='KNOWWE.plugin.debuggr.questionMCclicked(this, " + inside
+					+ ")' ");
+			buffer.append("rel=\"{kbid: '" + kbid + "', web:'" + web + "', ns:'" + title
+					+ "', qid:'"
+					+ q.getName() + "'}\" ");
 
 			active = false;
 			for (String v : values) {
@@ -152,8 +153,9 @@ public class DebuggerQuestionRenderer {
 	/**
 	 * Render a Numerical-Question.
 	 */
-	private static String renderQuestionNum(QuestionNum q, String valueText, String web, String topic, String kbid, boolean inside) {
+	private static String renderQuestionNum(QuestionNum q, String valueText, String kbid, String title, boolean inside) {
 		StringBuffer buffer = new StringBuffer();
+		String web = KnowWEEnvironment.DEFAULT_WEB;
 		String unit = "";
 		Double rangeMin = Double.MAX_VALUE * -1;
 		Double rangeMax = Double.MAX_VALUE;
@@ -168,12 +170,11 @@ public class DebuggerQuestionRenderer {
 		buffer.append("<p class='dQnum'>");
 		buffer.append("<input value='" + valueText + "' type='text' size='15' />");
 		buffer.append("<input type='button' value='O.K.' rel=\"{kbid: '" + kbid + "', web:'"
-				+ web + "', ns:'" + topic + "', qid:'"
+				+ web + "', ns:'" + title + "', qid:'"
 				+ q.getName() + "', rangeMin:'" + rangeMin
 				+ "', rangeMax:'" + rangeMax
-				+ "'}\" onClick='KNOWWE.plugin.debuggr.questionNumClicked(this);");
-		if (inside) buffer.append("return' />");
-		else buffer.append("window.location.reload()' />");
+				+ "'}\" onClick='KNOWWE.plugin.debuggr.questionNumClicked(this, " + inside
+				+ ");' />");
 
 		Object questionUnit = q.getInfoStore().getValue(MMInfo.UNIT);
 		if (questionUnit != null) {
@@ -188,16 +189,16 @@ public class DebuggerQuestionRenderer {
 	/**
 	 * Render a Textual-Question.
 	 */
-	private static String renderQuestionText(QuestionText q, String valueText, String web, String topic, String kbid, boolean inside) {
+	private static String renderQuestionText(QuestionText q, String valueText, String kbid, String title, boolean inside) {
 		StringBuffer buffer = new StringBuffer();
+		String web = KnowWEEnvironment.DEFAULT_WEB;
 
 		buffer.append("<p class='dQtext'><input value='" + valueText
 				+ "' type='text' size='20' />"
 				+ "<input type='button' value='O.K.' rel=\"{kbid: '" + kbid + "', web:'"
-				+ web + "', ns:'" + topic + "', qid:'" + q.getName() + "'}\" "
-				+ "onClick='KNOWWE.plugin.debuggr.questionTextClicked(this);");
-		if (inside) buffer.append("return false' /></p>");
-		else buffer.append("window.location.reload()' /></p>");
+				+ web + "', ns:'" + title + "', qid:'" + q.getName() + "'}\" "
+				+ "onClick='KNOWWE.plugin.debuggr.questionTextClicked(this, " + inside
+				+ ");' /></p>");
 
 		return buffer.toString();
 	}

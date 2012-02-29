@@ -23,6 +23,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.d3web.core.inference.Rule;
+import de.d3web.core.inference.condition.Condition;
+import de.d3web.core.inference.condition.NoAnswerException;
+import de.d3web.core.inference.condition.UnknownAnswerException;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Solution;
@@ -32,8 +35,7 @@ import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.d3web.debugger.DebugUtilities;
-import de.knowwe.d3web.debugger.inference.DebuggerRuleAction;
-import de.knowwe.d3web.debugger.inference.DebuggerRuleCondition;
+import de.knowwe.d3web.debugger.renderer.DebuggerRuleRenderer;
 
 /**
  * An action to render the debugger's main-part.
@@ -61,7 +63,7 @@ public class DebuggerMainAction extends AbstractAction {
 	 */
 	public String renderMain(UserActionContext context) {
 		StringBuffer buffer = new StringBuffer();
-
+		DebuggerRuleRenderer drr = new DebuggerRuleRenderer();
 		try {
 			// knoweledgebase id
 			String kbID = context.getParameter("kbid");
@@ -125,7 +127,7 @@ public class DebuggerMainAction extends AbstractAction {
 							+ DebugUtilities.COLOR_ESTABLISHED + "'>" + sid + " (ESTABLISHED)</p>");
 				}
 			}
-			int eval, select = 0;
+			int select = 0;
 			if (iTos.size() == 0) buffer.append("<p>" + noInfluentialRules + "</p>");
 			// select-tag
 			else {
@@ -151,16 +153,20 @@ public class DebuggerMainAction extends AbstractAction {
 				if (ruleid == r.hashCode()) buffer.append("<li class='debuggerMainEntryActive' ");
 				else buffer.append("<li class='debuggerMainEntry' ");
 
-				DebuggerRuleCondition dc = new DebuggerRuleCondition(r.getCondition());
-				eval = dc.evaluateForRendering(session);
-				if (eval == 0) buffer.append("style='border-color:gray;color:gray;'");
-				else if (eval == 1) buffer.append("style='border-color:green;color:green;'");
-				else if (eval == -1) buffer.append("style='border-color:red;color:red;'");
-				else buffer.append("style='border-color:black;color:black;'");
+				Condition cond = r.getCondition();
+				try {
+					if (cond.eval(session)) buffer.append("style='border-color:green;color:green;'");
+					else buffer.append("style='border-color:red;color:red;'");
+				}
+				catch (NoAnswerException e) {
+					buffer.append("style='border-color:black;color:black;'");
+				}
+				catch (UnknownAnswerException e) {
+					buffer.append("style='border-color:gray;color:gray;'");
+				}
 
-				buffer.append(" ruleid='" + r.hashCode() + "' kbid='"
-						+ kb.getId() + "'>" + new DebuggerRuleAction(r.getAction()).render()
-							+ "</li>");
+				buffer.append(" ruleid='" + r.hashCode() + "' kbid='" + kb.getId() + "'>"
+						+ drr.renderAction(r.getAction()) + "</li>");
 			}
 			buffer.append("</ul>");
 
@@ -177,16 +183,20 @@ public class DebuggerMainAction extends AbstractAction {
 					if (ruleid == r.hashCode()) buffer.append("<li class='debuggerMainEntryActive' ");
 					else buffer.append("<li class='debuggerMainEntry' ");
 
-					DebuggerRuleCondition dc = new DebuggerRuleCondition(r.getCondition());
-					eval = dc.evaluateForRendering(session);
-					if (eval == 0) buffer.append("style='border-color:gray;color:gray;'");
-					else if (eval == 1) buffer.append("style='border-color:green;color:green;'");
-					else if (eval == -1) buffer.append("style='border-color:red;color:red;'");
-					else buffer.append("style='border-color:black;color:black;'");
+					Condition cond = r.getCondition();
+					try {
+						if (cond.eval(session)) buffer.append("style='border-color:green;color:green;'");
+						else buffer.append("style='border-color:red;color:red;'");
+					}
+					catch (NoAnswerException e) {
+						buffer.append("style='border-color:black;color:black;'");
+					}
+					catch (UnknownAnswerException e) {
+						buffer.append("style='border-color:gray;color:gray;'");
+					}
 
-					buffer.append(" ruleid='" + r.hashCode() + "' kbid='"
-							+ kb.getId() + "'>" + new DebuggerRuleAction(r.getAction()).render()
-								+ "</li>");
+					buffer.append(" ruleid='" + r.hashCode() + "' kbid='" + kb.getId() + "'>"
+							+ drr.renderAction(r.getAction()) + "</li>");
 				}
 				buffer.append("</ul>");
 			}

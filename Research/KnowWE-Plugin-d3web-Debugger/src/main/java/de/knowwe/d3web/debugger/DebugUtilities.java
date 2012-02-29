@@ -42,32 +42,6 @@ import de.knowwe.core.utils.KnowWEUtils;
  * @author dupke
  */
 public class DebugUtilities {
-
-	/** d3web-connectors */
-	public static final String AND = "← CondAnd";
-	public static final String OR = "← CondOr";
-	public static final String NOT = "← CondNot";
-	public static final String NUMGREATEREQUAL = "← CondNumGreaterEqual";
-	public static final String NUMGREATER = "← CondNumGreater";
-	public static final String NUMLESSEQUAL = "← CondNumLessEqual";
-	public static final String NUMLESS = "← CondNumLess";
-	public static final String STATE = "← CondDState";
-	public static final String KNOWN = "← CondKnown";
-	/** DebugCondition-connectors */
-	public static final String DEBUG_AND = "AND";
-	public static final String DEBUG_OR = "OR";
-	public static final String DEBUG_NOT = "NOT";
-	public static final String DEBUG_NUMGREATEREQUAL = ">=";
-	public static final String DEBUG_NUMGREATER = ">";
-	public static final String DEBUG_NUMLESSEQUAL = "<=";
-	public static final String DEBUG_NUMLESS = "<";
-	public static final String DEBUG_STATE = "==";
-	public static final String DEBUG_KNOWN = "KNOWN";
-	/** CSS-classes for DebugCondition */
-	public static final String COND_TRUE = "condTrue";
-	public static final String COND_FALSE = "condFalse";
-	public static final String COND_UNKNOWN = "condUnknown";
-	public static final String COND_UNDEFINED = "condUndefined";
 	/** BackgroundColors for TopNode(Solution) */
 	public static final String COLOR_ESTABLISHED = "#33CC66";
 	public static final String COLOR_SUGGESTED = "#99FF66";
@@ -195,4 +169,5 @@ public class DebugUtilities {
 
 		return "";
 	}
+
 }
