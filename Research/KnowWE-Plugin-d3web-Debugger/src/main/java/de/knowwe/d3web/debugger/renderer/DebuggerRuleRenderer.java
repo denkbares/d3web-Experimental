@@ -98,9 +98,6 @@ public class DebuggerRuleRenderer implements Renderer{
 		// condition
 		buffer.append("IF " + renderCondition(r.getCondition(), session, title, false) + "<br />");
 		// action
-		System.out.println("---------------");
-		System.out.println(r);
-		System.out.println("---------------");
 		buffer.append("THEN " + renderAction(r.getAction()));
 		buffer.append("</div>");
 
