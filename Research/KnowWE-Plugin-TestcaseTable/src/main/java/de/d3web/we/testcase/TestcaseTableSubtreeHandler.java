@@ -33,9 +33,9 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.utils.KnowWEUtils;
-import de.knowwe.sessiondebugger.SingleTestCaseProvider;
-import de.knowwe.sessiondebugger.SingleTestCaseStorage;
-import de.knowwe.sessiondebugger.TestCaseProviderStorage;
+import de.knowwe.testcases.SingleTestCaseProvider;
+import de.knowwe.testcases.SingleTestCaseStorage;
+import de.knowwe.testcases.TestCaseProviderStorage;
 
 /**
  * 
