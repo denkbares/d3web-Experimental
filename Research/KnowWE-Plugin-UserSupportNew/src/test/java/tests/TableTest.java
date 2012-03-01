@@ -27,6 +27,7 @@ import org.junit.Test;
 
 import utils.MyTestArticleManager;
 import de.d3web.plugin.test.InitPluginManager;
+import de.d3web.we.kdom.rules.action.SetQuestionValue;
 import de.d3web.we.kdom.xcl.list.ListSolutionType;
 import de.d3web.we.tables.CausalDiagnosisScore;
 import de.d3web.we.tables.CausalDiagnosisScoreMarkup;
@@ -41,6 +42,7 @@ import de.d3web.we.tables.TableDescriptionType;
 import de.d3web.we.tables.TableHeaderCell;
 import de.d3web.we.tables.TableHeaderLine;
 import de.d3web.we.tables.TableLine;
+import de.d3web.we.tables.TableNormalCell;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -68,7 +70,9 @@ public class TableTest extends TestCase {
 	private final int decisionHeaderCellCount = 5;
 	private final int decisionLineCount = 6;
 	private final int decisionCellCount = 35;
-	private final int decisionCellFirstColumnCount = 5;
+	private final int decisionCellFirstColumnCount = 2;
+	private final String actionsKeyword = "Actions";
+	private final int setQuestionValueCount = 3;
 
 	private Section<HeuristicDiagnosisTableMarkup> heuristicTable = null;
 	private final int heuristicHeaderLineCount = 1;
@@ -145,6 +149,12 @@ public class TableTest extends TestCase {
 
 		List<Section<TableCellFirstColumn>> firstColumncells = Sections.findSuccessorsOfType(innerTable, TableCellFirstColumn.class);
 		assertEquals(decisionCellFirstColumnCount, firstColumncells.size());
+
+		Section<TableNormalCell> actionsCell = Sections.findChildOfType(lines.get(2), TableNormalCell.class);
+		assertEquals(actionsKeyword, actionsCell.getText());
+
+		List<Section<SetQuestionValue>> questionValues = Sections.findSuccessorsOfType(innerTable, SetQuestionValue.class);
+		assertEquals(setQuestionValueCount, questionValues.size());
 	}
 
 	@Test
