@@ -1,15 +1,17 @@
+
 <div id="readFlow-$fullId$" class="readflow">
     <img id="$fullid$-readimg" alt="readflow" src="$readimg$" height="14" width="25">
 </div>
  
 <div id="$fullId$" class="question $fullId$ $answerType$ $andOrType$">
-	<div id="$id$-imagebox" class="question-imagebox" onmouseover="showAuxInfo('$fullId$')">
-            <img id="$id$-typeimg" alt="type" src="$typeimg$" height="20" width="20" onclick="toggle_sub_4boxes('$fullId$')">
-            <img height="20" 
-		$if(noChildren)$usemap="#panel-$fullId$"$endif$ 
-		src="img/pane.png" style="border: medium none;" id="panel-$fullId$" 
-		$if(hasChildren)$onclick="toggle_sub_4boxes('$fullId$')"$endif$>
-        </div> 
+    
+    <div id="$id$-imagebox" class="question-imagebox" onmouseover="showAuxInfo('$fullId$')">
+        <img id="$id$-typeimg" alt="type" src="$typeimg$" height="20" width="20" onclick="toggle_sub_4boxes('$fullId$')">
+        <img height="20" 
+            $if(noChildren)$usemap="#panel-$fullId$"$endif$ 
+            src="img/pane.png" style="border: medium none;" id="panel-$fullId$" 
+            $if(hasChildren)$onclick="toggle_sub_4boxes('$fullId$')"$endif$>
+    </div> 
     <div class="title t-$fullId$" id="t-$fullId$" onmouseover="showAuxInfo('$fullId$', '$title$')">
         $title$
 		$Tooltip()$

@@ -30,7 +30,7 @@ import org.antlr.stringtemplate.StringTemplate;
  * @author Martina Freiberg
  *
  */
-public class OQOcQuestionRenderer extends LegalQuestionRenderer {
+public class OQOcQuestionRenderer extends OQQuestionRenderer {
 
     @Override
     protected void renderChildren(StringTemplate st, ContainerCollection cc,
@@ -38,6 +38,7 @@ public class OQOcQuestionRenderer extends LegalQuestionRenderer {
 
         super.renderChildren(st, cc, dialogObject, force);
 
+        // TODO: refactor to OQ Questions
         if (dialogObject instanceof LegalQuestion) {
             LegalQuestion lq = (LegalQuestion) dialogObject;
 

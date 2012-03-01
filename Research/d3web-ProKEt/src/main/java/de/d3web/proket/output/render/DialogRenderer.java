@@ -48,6 +48,8 @@ public class DialogRenderer extends Renderer {
 		IRenderer renderer = (IRenderer) ClassUtils.getBestObject(
 				dialogObject, "de.d3web.proket.output.render",
 				"Renderer");
+                System.out.println(dialogObject.getClass());
+                System.out.println(renderer.getClass());
 		return renderer;
 	}
 
@@ -98,8 +100,8 @@ public class DialogRenderer extends Renderer {
 	}
 
 	@Override
-	protected String renderDialogObject(ContainerCollection cc,
-			IDialogObject dialogObject, boolean excludeChildren, boolean force,
+	public String renderDialogObject(ContainerCollection cc,
+			IDialogObject dialogObject, boolean recurseCount, boolean excludeChildren, boolean force,
 			Session session) {
 
 		StringTemplate st = TemplateUtils.getStringTemplate(
@@ -137,7 +139,7 @@ public class DialogRenderer extends Renderer {
 		}
 
 		// children
-		renderChildren(st, cc, dialogObject, force);
+		renderChildren(st, cc, recurseCount, dialogObject, force);
 
 		// add JS/CSS
 		// some global JS goes here

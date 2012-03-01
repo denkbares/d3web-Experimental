@@ -19,8 +19,11 @@
  */
 package de.d3web.proket.output.render;
 
+import de.d3web.core.session.Session;
 import de.d3web.proket.data.IDialogObject;
 import de.d3web.proket.output.container.ContainerCollection;
+import de.d3web.proket.utils.GlobalSettings;
+import de.d3web.proket.utils.TemplateUtils;
 import java.util.Vector;
 import org.antlr.stringtemplate.StringTemplate;
 
@@ -32,21 +35,124 @@ import org.antlr.stringtemplate.StringTemplate;
 public class OQQuestionRenderer extends Renderer {
 
     @Override
-    protected void renderChildren(StringTemplate st, ContainerCollection cc,
+    public String renderDialogObject(ContainerCollection cc, IDialogObject dialogObject,
+            boolean recurseCount, boolean excludeChildren, boolean force, Session session) {
+
+        // TODO maybe null is not such a good idea here?
+        // already rendered somewhere? If yes, and if render-force is not set
+        // then return null, i.e. no representation
+        if (dialogObject.isRendered() && !force) {
+            return null;
+        }
+
+
+
+
+        StringBuilder result = new StringBuilder();
+
+        // get the HTML template for the dialog object
+        StringTemplate st = TemplateUtils.getStringTemplate(
+                dialogObject.getVirtualClassName(), "html");
+
+        if (dialogObject.getParent().getXMLTag().toString().contains("dialog")) {
+            st.setAttribute("hide", "hide");
+        } else {
+            st.setAttribute("hide", "show");
+
+            String qcnew = "";
+            String questioncount = GlobalSettings.getInstance().getQuestionCount();
+            String[] parts = questioncount.split("\\.");
+            System.out.println(recurseCount);
+
+            if (parts.length > 1) {
+
+                if (recurseCount) {
+                    qcnew = questioncount + ".1";
+                } else {
+                    int count = Integer.parseInt(parts[parts.length - 1]);
+                    count++;
+                    for (int i = 0; i < parts.length - 1; i++) {
+                        qcnew += parts[i] + ".";
+                    }
+                    qcnew += count;
+
+                }
+
+               } else {
+                if (recurseCount) {
+                    qcnew = questioncount + ".1";
+                } else {
+
+                    int count = Integer.parseInt(questioncount);
+                    qcnew = Integer.toString(++count);
+                }
+
+            }
+
+
+            st.setAttribute("questioncount", qcnew);
+            GlobalSettings.getInstance().setQuestionCount(qcnew);
+        }
+
+        // get the inh.attributes of this objects and inherit missing
+        // attributes where needed from parents
+        dialogObject.getInheritableAttributes().compileInside();
+
+        // fill the stringtemplate with attributes/getters from the object
+        fillTemplate(dialogObject, st);
+
+        // include css styles
+        handleCss(cc, dialogObject);
+        // children: if they are not to be excluded, just render them forcedly
+        if (!excludeChildren) {
+            renderChildren(st, cc, false, dialogObject, force);
+        }
+
+        // append filled template to result string
+        result.append(st.toString());
+
+        // optional tables
+        makeTables(dialogObject, cc, result);
+
+        // visible?
+        if (!dialogObject.isVisible()) {
+            cc.css.addStyle("display: none;", "#" + dialogObject.getFullId());
+        }
+
+        // mark as rendered
+        dialogObject.setRendered(
+                true);
+
+        // save to output
+        return result.toString();
+    }
+
+    @Override
+    protected void renderChildren(StringTemplate st, ContainerCollection cc, boolean recurse,
             IDialogObject dialogObject, boolean force) {
 
         IDialogObject parent = dialogObject.getParent();
         String pTitle = parent.getTitle();
-        
+
+        if (dialogObject.getChildren().isEmpty()) {
+            st.setAttribute("hideDetails", "hide");
+        }
+
+
         if (pTitle != null && parent != null) {
+
+
+
             Vector<IDialogObject> children = parent.getChildren();
             StringBuffer childrenHTML = new StringBuffer();
-            for (IDialogObject child : children) {
 
+            for (IDialogObject child : children) {
+                 
                 if (child.getXMLTag().getAttribute("parent-id").equals(dialogObject.getId())) {
                     IRenderer renderer = Renderer.getRenderer(child);
                     String childHTML = renderer.renderDialogObject(cc, child);
                     if (childHTML != null) {
+
                         childrenHTML.append(childHTML);
                     }
 
@@ -108,6 +214,7 @@ public class OQQuestionRenderer extends Renderer {
             }
         }
 
-        super.renderChildren(st, cc, dialogObject, force);
+        super.renderChildren(st, cc, true, dialogObject, force);
+
     }
 }

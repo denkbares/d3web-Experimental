@@ -105,6 +105,8 @@ function setup() {
     // handle one question dialog
     if(oqd) {
         // init oqd stuff
+        hideTopElement();
+        expandFirstQuestion();
        
     }
     
@@ -187,6 +189,7 @@ function expandFirstmostElement(){
       
     });
 }
+
 
 /**
  * Scroll to the top of the page by setting jquery attribute 
@@ -1117,6 +1120,8 @@ function h4boxes(value, id) {
         
     //alert(target.attr("id") + " " + value);    
     setColorForQuestion(target, item, value);
+    
+    // store user set value as uservalue attribute
     setPropagationColor(target, value);
         
     // also mark parents of the target while excluding target
@@ -1463,7 +1468,7 @@ function removePropagationInfoInQuestionForFirst(){
 
 // TODO check if that works for num and oc q
 function removeInputFacilitiesForFirst(){
-     $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements
+    $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements
         
         if($(this).attr("id")!=undefined){  
             var id = "#" + $(this).attr("id").replace("q_", "") + "-imagebox";
@@ -1829,6 +1834,37 @@ function toggle_sub_4oqd(id){
     toggle_hide("sub-" + id); 
 }
 
+function hideTopElement(){
+    
+    $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements
+        if($(this).attr("id")!=undefined){  
+               
+            $(this).addClass("show");
+            $(this).children().first().addClass("hide");
+        }
+    });
+}
+
+function expandFirstQuestion(){
+    
+    $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements
+        if($(this).attr("id")!=undefined){  
+               
+            var children = $(this).children();
+            children.each(function(){
+                if($(this).attr("id").indexOf("sub-")!=-1){
+                    qchildren = $(this).children();
+                    qchildren.first().addClass("show");
+                    qchildren.first().removeClass("hide");
+                    qchildren.parents().closest('[id^=sub-q_]').addClass("show");
+                    qchildren.parents().closest('[id^=sub-q_]').removeClass("hide");
+                }
+            }
+            );
+        }
+    });
+}
+
 /**
 * Show the auxiliary information for element with id "id" in the infopanel
 * element
@@ -1840,7 +1876,6 @@ function showAuxInfoOQD(id, title){
     if(title==undefined){
         title = "";
     }
-    var auxHeader = "<b>Informationen zu [" + title + "]:</b> <br /><br />";
     var auxinfo = $(infoid).html();
     
     // rewrite inner HTML of infopanel widget with info content
@@ -1848,6 +1883,159 @@ function showAuxInfoOQD(id, title){
         auxinfo = "";
     } 
     
-    $("#auxHeader-"+id).html(auxHeader);
     $("#auxInfo-"+id).html(auxinfo);
+}
+
+function handleOQYNQuestions(fullId, rating){
+  
+    // retrieve follow up element to current element
+    var splitID = fullId.split("-")[1];
+    var questionEl = $("#"+splitID);
+    
+    setColorForQuestion(questionEl, questionEl, rating);
+    setPropagationColor(questionEl, rating);
+    // also mark parents of the target while excluding target
+    h4boxes_mark(questionEl, true);
+    
+    
+    var followUp = retrieveFollowUpForQuestion(questionEl);
+    
+    if(followUp == undefined || followUp.attr("id")==undefined){
+        followUp = retrieveFollowUpParent(questionEl);
+    }
+    
+    if(followUp == undefined || followUp.attr("id") == undefined){
+        
+        // show solution box
+        $("#solution").removeClass("hide");
+        $("#solution").addClass("show");
+        
+        // show solution rating
+        
+               
+               
+            var solQuestion = $("#dialog").children().first();   
+            var rating = calculateRatingForQuestion(solQuestion);
+            alert(rating);
+            
+            switch (rating) {
+        case "1": // approve --> green
+            $("#solHigh").addClass("show");
+            $("#solHigh").removeClass("hide");
+            $("#solUn").addClass("hide");
+            $("#solUn").removeClass("show");
+            $("#solMed").addClass("hide");
+            $("#solMed").removeClass("show");
+            $("#solLow").addClass("hide");
+            $("#solLow").removeClass("show");
+            break;
+            
+        case "0": // undecided --> transparent
+            $("#solUn").addClass("show");
+            $("#solUn").removeClass("hide");
+             $("#solHigh").addClass("hide");
+            $("#solHigh").removeClass("show");
+            $("#solMed").addClass("hide");
+            $("#solMed").removeClass("show");
+            $("#solLow").addClass("hide");
+            $("#solLow").removeClass("show");
+            break;
+        
+        case "2": // suggested  --> yellow
+            $("#solMed").addClass("show");
+            $("#solMed").removeClass("hide");
+             $("#solUn").addClass("hide");
+            $("#solUn").removeClass("show");
+            $("#solHigh").addClass("hide");
+            $("#solHigh").removeClass("show");
+            $("#solLow").addClass("hide");
+            $("#solLow").removeClass("show");
+            break;
+        case "3": // rejected -_> red
+            $("#solLow").addClass("show");
+            $("#solLow").removeClass("hide");
+             $("#solUn").addClass("hide");
+            $("#solUn").removeClass("show");
+            $("#solMed").addClass("hide");
+            $("#solMed").removeClass("show");
+            $("#solHigh").addClass("hide");
+            $("#solHigh").removeClass("show");
+            break;
+    }
+            
+            
+        
+    } else {
+        // toggle follow up element to be visible by toggling its super-sub element
+        // and then toggling the follow up itself
+        var fpar = followUp.parents().closest('[id^="sub-q_"]');
+        fpar.removeClass("hide");
+        fpar.addClass("show");
+        followUp.removeClass("hide");
+        followUp.addClass("show");
+    }
+    
+      
+    // toggle auxinfo and styling for current element
+    questionEl.children().first().children().closest('[id^=auxpanel]').addClass("hide");
+    questionEl.children().first().children().closest('[id^=detail]').addClass("hide");
+}
+
+function retrieveFollowUpForQuestion(questionEl){
+    
+    // get the next, following sibling of element
+    return questionEl.next();
+    
+}
+
+// called when no follow up sibling was found for question El
+function retrieveFollowUpParent(questionEl){
+    
+    var parent = questionEl.closest('[id^="sub-q_"]').closest('[id^="q_"]');
+    var fup = parent.next();
+    
+    
+    if(parent.attr("id") != undefined && fup.attr("id") == undefined){
+        return retrieveFollowUpParent(parent);
+    }
+   
+    else if(parent.attr("id") == undefined && fup.attr("id") == undefined){
+        return undefined;
+    }
+    
+    return fup;
+}
+
+function stepIntoDetail(questionId){
+    
+    var question = $("#"+questionId);
+    
+    // get corresponding sub- and question elements and make them visible 
+    var sub = $("#sub-"+questionId);
+    
+    if(sub != undefined && sub.attr("id")!= undefined){
+   
+        var firstChild = sub.children().first();
+    
+        firstChild.addClass("show");
+        firstChild.removeClass("hide");
+        sub.addClass("show");
+        sub.removeClass("hide");
+    
+        //make siblings of original question invisible
+        makeInvisibleSiblings(question);
+    
+        // toggle auxinfo and styling for current element
+        question.children().first().children().closest('[id^=auxpanel]').addClass("hide");
+        question.children().first().children().closest('[id^=detail]').addClass("hide");
+    }
+}
+
+function makeInvisibleSiblings(original){
+    
+    if(original.next() != undefined && original.next().attr("id") != undefined){
+        original.next().addClass("hide");
+        original.next().removeClass("show");
+        makeInvisibleSiblings(original.next());
+    }
 }

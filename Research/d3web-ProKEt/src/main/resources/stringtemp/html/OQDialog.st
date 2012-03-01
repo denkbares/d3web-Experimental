@@ -13,13 +13,28 @@ $HTMLHeader()$
 
     
     <div id="intro">
-        Here goes some general info regarding (the usage) of the oqd...
+        <div id="solution" class="solution hide">
+    Ist das Arbeitsverhältnis wirksam gekündigt worden?
+    <div id="solHigh" class="solRating rating-high hide">
+    wird bestätigt.
+    </div>
+    <div id="solMed" class="solRating rating-medium hide">
+    ist unentschieden.
+    </div>
+    <div id="solLow" class="solRating rating-low hide">
+    wird verneint.
+    </div>
+<div id="solUn" class="solRating hide">
+    ist nicht bewertet.
+    </div>
+    </div>
     </div>
     
     <div id="dialog" class="dialog99Width">
          $children$	
     </div>
 
+    
     
     
                  

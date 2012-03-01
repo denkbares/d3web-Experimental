@@ -153,6 +153,7 @@ public class DialogServlet extends HttpServlet {
 
         PrintWriter writer = response.getWriter();
         DialogTree dialogTree = parseInput(request);
+        GlobalSettings.getInstance().setQuestionCount("0");
 
         IRenderer rootRenderer = Renderer.getRenderer(dialogTree.getRoot());
         ContainerCollection cc = rootRenderer.renderRoot(dialogTree);

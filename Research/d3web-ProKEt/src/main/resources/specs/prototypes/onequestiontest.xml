@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<dialog type='OQ' css='oqd, nofoot' header='Ein-Frage Dialog - Arbeitsrechtsberatung' and-or-type='AND' >
-  <OQQuestion title='Ist das Arbeitsverh&#228;ltnis wirksam gek&#252;ndigt worden?' id='102' parent-id='101'/>
+<dialog type='OQ' css='oqd, nofoot' header='Ein-Frage Dialog - Arbeitsrechtsberatung' and-or-type='AND' answer-type="yn">
+  <OQQuestion title='Ist das Arbeitsverh&#228;ltnis wirksam gek&#252;ndigt worden?' id='102' />
   <OQQuestion title='Ist die K&#252;ndigung formell rechtm&#228;&#223;ig?' id='103' parent-id='102'/>
   <OQQuestion title='Umfasst sie n&#246;tigen Inhalt, Schriftform, Berechtigtenunterzeichnung und Zugang?' id='104' parent-id='103'  bonus-text="Prompt: Hat die K&#252;ndigungserkl&#228;rung den erforderlichen Inhalt, h&#228;lt sie die Schriftform ein, hat ein Berechtigter unterzeichnet und ist der Zugang erfolgt?
 Erl&#228;uterung:

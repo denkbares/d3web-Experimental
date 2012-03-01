@@ -27,29 +27,19 @@ body,div {
 }
 
 #intro{ 
+    background-color: white;
     font-family: Arial;
-	font-size: 8pt;
-	text-color: darkgrey;
-        position: fixed; 
-        left: 0; right: 0;
-        background-color: white;
-    padding: 10px;
+    font-size: 8pt;
+    left: 0;
+    padding-bottom: 20px;
+    position: fixed;
+    right: 0;
 }
 
 #dialog{
     float: left;
-    margin-top: 60px;
+    margin-top: 75px;
 }
-
-
-.auxpanelBottom{
-    background-color: #fffff0;
-    -moz-box-shadow: 0 0 3.5px black;
-	-webkit-box-shadow: 0 0 3.5px black;
-	box-shadow: 0 0 3.5px black;
-    padding: 10px;
-}
-
 
 
 table{
@@ -87,9 +77,12 @@ table{
 
 .question .title {
 	min-height: 16px;
-	padding-left: 90px;
+	padding-left: 15px;
+        padding-right: 15px;
+        padding-bottom: 1px;
 	line-height: 1.75em;
         margin-left: 15px;
+        font-weight: bold;
 }
 
 
@@ -119,7 +112,7 @@ table{
 
 /* Styles the box containing the button panel */
 .question-imagebox { 
-    line-height: 1.5em; padding: 2px; float: left; margin-left: 8px; margin-right: 8px;
+    line-height: 1.5em; float: left; padding-left: 2px;
 }
 
 
@@ -164,7 +157,7 @@ area {
 
 .floatingCDrop select{width: 54px; margin-left: 17px;}
 
-.ynbutton{width: 14px; height: 14px; 
+.ynbutton{width: 28px; height: 18px; 
         border: 1px solid #696969; font-size: 0.8em; font-weight: bold;
         text-align: center; cursor: pointer; 
 	background-color: #DCDFF3; 
@@ -172,6 +165,9 @@ area {
 	-webkit-box-shadow: 0 0 5px black; 
         box-shadow: 0 0 5px black; 
         margin-bottom: 10px;
+        margin-top: 7px;
+        float: left;
+        margin-right: 10px;
         }
 
 .dialog99Width{
@@ -187,3 +183,63 @@ area {
 .hide{display: none;}
 
 .show{display: block;}
+
+.titletext{font-weight: bold; padding-top: 5px; padding-left: 40px; padding-bottom: 5px;}
+
+.auxpanelBottom{
+    background-color: #fffff0;
+    -moz-box-shadow: 0 0 3.5px black;
+	-webkit-box-shadow: 0 0 3.5px black;
+	box-shadow: 0 0 3.5px black;
+    padding: 10px;
+    height: 20%;
+    overflow: auto;
+    line-height: 1.1em;
+    margin-top: 5px;
+    font-weight: normal;
+}
+
+.detailButton{width: 50px; height: 18px; 
+        border: 1px solid #696969; font-size: 0.8em; font-weight: bold;
+        text-align: center; cursor: pointer; 
+	background-color: #DCDFF3; 
+        -moz-box-shadow: -2px -2px 5px black;	
+	-webkit-box-shadow: 0 0 5px black; 
+        box-shadow: 0 0 5px black; 
+        margin-bottom: 12px;
+        margin-top: 7px;
+        margin-right: 10px;
+        
+        }
+
+.solution{
+    box-shadow: 0 0 3.5px black;
+    clear: both;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+    padding: 12px;
+    width: 50%;
+}
+
+.solRating {
+    float: right;
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 5px;
+    padding-bottom: 2px;
+    padding-top: 2px;
+}
+
+.solRating.rating-high { 
+    background-color: #C3DAA8; border: 1px solid grey; 
+}
+.solRating.rating-medium { 
+    background-color: #F4F4C7; border: 1px solid grey; 
+}
+.solRating.rating-low { 
+    background-color: #E0B59E; border: 1px solid grey; 
+}
+

@@ -31,29 +31,15 @@ import de.d3web.proket.utils.TemplateUtils;
  * @author Martina Freiberg
  *
  */
-public class OQNumQuestionRenderer extends OQQuestionRenderer {
+public class OQYnQuestionRenderer extends OQQuestionRenderer {
 
     @Override
-    public void renderChildren(StringTemplate st, ContainerCollection cc,
+    protected void renderChildren(StringTemplate st, ContainerCollection cc,
             IDialogObject dialogObject, boolean force) {
 
+        
         super.renderChildren(st, cc, dialogObject, force);
 
-        // TODO: refactor to OQ Questions
-        if (dialogObject instanceof LegalQuestion) {
-            LegalQuestion lq = (LegalQuestion) dialogObject;
-
-            // write the defining num value or intervall from xml into html
-            String defining = lq.getDefining();
-            String defArray[] = defining.split("-");
-            if (defArray != null && defArray.length == 2 && 
-                    defArray[0] != null && defArray[1] != null) {
-                st.setAttribute("defmin", defArray[0]);
-                st.setAttribute("defmax", defArray[1]);
-            } else {
-                st.setAttribute("defmin", defArray[0]);
-                st.setAttribute("defmax", defArray[0]);
-            }
-        }
+        
     }
 }

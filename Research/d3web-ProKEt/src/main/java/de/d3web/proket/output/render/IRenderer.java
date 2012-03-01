@@ -41,10 +41,18 @@ public interface IRenderer {
 	public String renderDialogObject(ContainerCollection cc,
 			IDialogObject dialogObject, boolean force);
 
+        // ...force overwriting deliberately or not...
+	public String renderDialogObject(ContainerCollection cc,
+			IDialogObject dialogObject, boolean force, boolean recurseCount);
+        
 	// ...and exclude the children
 	public String renderDialogObject(ContainerCollection cc,
-			IDialogObject dialogObject, boolean excludeChildren, boolean force);
+			IDialogObject dialogObject, boolean recurseCount, boolean excludeChildren, boolean force);
 
+        public String renderDialogObject(ContainerCollection cc,
+			IDialogObject dialogObject, boolean recurseCount, boolean excludeChildren, boolean force, Session s);
+        
+        
 
 	// render root element of the dialog tree
 	public ContainerCollection renderRoot(DialogTree dialogTree);

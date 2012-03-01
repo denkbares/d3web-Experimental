@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2010/2011 Chair of Artificial Intelligence and Applied
  * Informatics Computer Science VI, University of Wuerzburg
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -25,9 +25,8 @@ import de.d3web.proket.data.DialogType;
 /**
  * Class for storing and retrieving the global or default dialog settings.
  * Contains the base paths needed by the app, and default settings of dialogs.
- * 
- * @author Martina Freiberg
- * @created 11.10.2010
+ *
+ * @author Martina Freiberg @created 11.10.2010
  */
 public class GlobalSettings {
 
@@ -47,7 +46,9 @@ public class GlobalSettings {
     private GlobalSettings() {
     }
 
-    /* Paths */
+    /*
+     * Paths
+     */
     private final String d3webSpecsPath = "/specs/d3web";
     private final String prototypeSpecsPath = "/specs/prototypes";
     private final String baseSpecsPath = "/specs/";
@@ -59,25 +60,37 @@ public class GlobalSettings {
     private final String rendererBasePath = "de.d3web.proket.output.render";
     private final String applicationBasePath = "/controlcenterResources";
 
-    /* File names */
+    /*
+     * File names
+     */
     private final String defaultKB = "defaultKB.jar"; // TODO
     private final String defaultPrototypeXML = "defaultPrototype.xml"; // TODO
 
-    /* Default dialog settings */
+    /*
+     * Default dialog settings
+     */
     private final DialogType defaultDialogType = DialogType.DEFAULT;
     private final DialogStrategy defaultDialogStrategy = DialogStrategy.DEFAULT;
     private final String defaultCSSSpec = "default"; // TODO
 
-    /* The folder, where persistence is stored, e.g., case-files */
+    /*
+     * The folder, where persistence is stored, e.g., case-files
+     */
     private String caseFolder = "";
     private String kbImgFolder = "";
     private String servletBasePath;
     private int localeIdent = 0;
-    /* Save log files */
+    /*
+     * Save log files
+     */
     private String logFolder = "";
     private boolean initLog = false;
+    private String questionCount = "";
 
-    /* The getters for retrieving all those values */
+
+    /*
+     * The getters for retrieving all those values
+     */
     public String getProketPath() {
         return proketPath;
     }
@@ -138,7 +151,9 @@ public class GlobalSettings {
         return d3webRendererPath;
     }
 
-    /* Some values need to be set at runtime from outside */
+    /*
+     * Some values need to be set at runtime from outside
+     */
     public void setCaseFolder(String folderPath) {
         caseFolder = folderPath;
     }
@@ -178,12 +193,21 @@ public class GlobalSettings {
     public void setLocaleIdentifier(int localId) {
         this.localeIdent = localId;
     }
-    
+
     public boolean initLogged() {
         return this.initLog;
     }
 
     public void setInitLogged(boolean iLog) {
         this.initLog = iLog;
+    }
+
+    // TODO: factor out to dialog/prototype settings
+    public void setQuestionCount(String c) {
+        this.questionCount = c;
+ }
+
+    public String getQuestionCount() {
+        return this.questionCount;
     }
 }
