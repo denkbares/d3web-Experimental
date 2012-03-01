@@ -67,7 +67,7 @@ public class DebuggerRuleboxAction extends AbstractAction {
 			buffer.append("<span ruleid='" + ruleid + "'>");
 			for (Rule r : rules) {
 				if (r.hashCode() == ruleid) {
-					ruleArticle = DebugUtilities.getRuleResource(r);
+					ruleArticle = DebugUtilities.getRuleResource(r, session);
 					if (ruleArticle.equals("")) ruleArticle = context.getTitle();
 					buffer.append(drr.renderCondition(r.getCondition(), session, title, true));
 					buffer.append("<a class='ruleLink' href='Wiki.jsp?page="

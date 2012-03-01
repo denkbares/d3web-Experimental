@@ -28,6 +28,7 @@ import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Solution;
+import de.d3web.core.session.Session;
 import de.d3web.we.kdom.rules.RuleContentType;
 import de.d3web.we.kdom.rules.action.RuleAction;
 import de.knowwe.core.KnowWEEnvironment;
@@ -150,10 +151,21 @@ public class DebugUtilities {
 	/**
 	 * Get the path to the rule's article.
 	 */
-	public static String getRuleResource(Rule r) {
-		// TODO: Does not really work, don't know why.
+	public static String getRuleResource(Rule r, Session session) {
+		KnowledgeBase kb = session.getKnowledgeBase();
+		KnowWEArticle kbArticle = null;
 		Rule rule;
 		List<Section<RuleAction>> rules;
+		
+		// get the knowledgebase's article
+		for (KnowWEArticle article : KnowWEEnvironment.getInstance().getArticleManager(
+				KnowWEEnvironment.DEFAULT_WEB).getArticles()) {
+			
+			if (article.getTitle().equals(kb.getId())) {
+				kbArticle = article;
+				break;
+			}
+		}
 
 		for (KnowWEArticle article : KnowWEEnvironment.getInstance().getArticleManager(
 				KnowWEEnvironment.DEFAULT_WEB).getArticles()) {
@@ -161,7 +173,7 @@ public class DebugUtilities {
 			rules = Sections.findSuccessorsOfType(article.getSection(), RuleAction.class);
 			for (Section<RuleAction> ruleAction : rules) {
 
-				rule = (Rule) KnowWEUtils.getStoredObject(article, ruleAction,
+				rule = (Rule) KnowWEUtils.getStoredObject(kbArticle, ruleAction,
 							RuleContentType.ruleStoreKey);
 
 				if (rule != null && rule.equals(r)) return article.getTitle();
