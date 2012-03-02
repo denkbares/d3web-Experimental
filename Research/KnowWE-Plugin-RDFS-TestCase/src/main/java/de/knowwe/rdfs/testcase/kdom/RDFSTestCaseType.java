@@ -19,8 +19,8 @@
 package de.knowwe.rdfs.testcase.kdom;
 
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
+import de.knowwe.rdfs.testcase.renderer.RDFSTestCaseRenderer;
 
 /**
  * 
@@ -47,7 +47,7 @@ public class RDFSTestCaseType extends DefaultMarkupType {
 		super(MARKUP);
 		this.setIgnorePackageCompile(true);
 		this.addSubtreeHandler(new RDFSTestCaseHandler());
-		this.setRenderer(new DefaultMarkupRenderer());
+		this.setRenderer(new RDFSTestCaseRenderer());
 	}
 
 }

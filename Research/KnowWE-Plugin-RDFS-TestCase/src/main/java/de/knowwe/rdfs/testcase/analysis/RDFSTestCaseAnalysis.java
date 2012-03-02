@@ -26,6 +26,7 @@ import java.util.HashSet;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
+import org.ontoware.rdf2go.model.node.Node;
 
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.testcase.Binding;
@@ -86,10 +87,13 @@ public class RDFSTestCaseAnalysis {
 				Binding binding = new Binding();
 
 				for (String var : result.getVariables()) {
-					String value = row.getValue(var).toString();
-					value = processValue(value);
-					if (value != null) {
-						binding.addURI(value);
+					Node valueNode = row.getValue(var);
+					if (valueNode != null) {
+						String value = valueNode.toString();
+						value = processValue(value);
+						if (value != null) {
+							binding.addURI(value);
+						}
 					}
 				}
 

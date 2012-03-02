@@ -18,13 +18,70 @@
  */
 package de.knowwe.rdfs.testcase.kdom;
 
+import java.util.regex.Pattern;
+
 import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.core.kdom.basicType.EmbracedType;
+import de.knowwe.core.kdom.objects.SimpleTerm;
+import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
+import de.knowwe.kdom.AnonymousType;
+import de.knowwe.kdom.n3.TurtlePredicate;
+import de.knowwe.rdfs.IRITermRef;
 
 /**
  * 
  * @author Sebastian Furth
- * @created 20.12.2011
+ * @created 10.02.2012
  */
 public class SPARQLQueryType extends AbstractType {
 
+	private static final String SELECT = "SELECT";
+	private static final String WHERE = "WHERE";
+
+	public SPARQLQueryType() {
+		// SELECT
+		AnonymousType select = new AnonymousType(SELECT);
+		select.setSectionFinder(new RegexSectionFinder(SELECT, Pattern.CASE_INSENSITIVE));
+		addChildType(select);
+
+		// WHERE
+		AnonymousType where = new AnonymousType(WHERE);
+		where.setSectionFinder(new RegexSectionFinder(WHERE, Pattern.CASE_INSENSITIVE));
+		addChildType(where);
+
+		// Triples
+		EmbracedType triples = new EmbracedType(new SPARQLQueryContentType(), "{", "}");
+		addChildType(triples);
+
+		// Variables
+		addChildType(new VariableType());
+	}
+
+	public static String getSPARQLQuery(Section<SPARQLQueryType> sparqlSection) {
+		StringBuilder query = new StringBuilder();
+		appendRecursively(sparqlSection, query);
+		return query.toString();
+	}
+
+	private static void appendRecursively(Section<?> section, StringBuilder query) {
+		for (Section<?> child : section.getChildren()) {
+			if (child.getChildren().size() > 0 && !(child.get() instanceof TurtlePredicate)) {
+				appendRecursively(child, query);
+			}
+			else if (child.get() instanceof IRITermRef || child.get() instanceof TurtlePredicate) {
+				IRITermRef ref = (IRITermRef) child.get();
+				@SuppressWarnings("unchecked")
+				String iri = "lns:" + ref.getTermIdentifier((Section<? extends SimpleTerm>) child);
+				query.append(iri);
+			}
+			else if (child.get() instanceof Colon) {
+				continue;
+			}
+			else {
+				query.append(child.getText());
+			}
+		}
+
+	}
 }

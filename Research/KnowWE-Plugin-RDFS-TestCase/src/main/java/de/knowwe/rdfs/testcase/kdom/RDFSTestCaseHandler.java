@@ -61,12 +61,13 @@ public class RDFSTestCaseHandler extends SubtreeHandler<RDFSTestCaseType> {
 		if (sparqlSection == null) {
 			return Messages.asList(Messages.syntaxError("Unable to find SPARQL-Query! Check the syntax!"));
 		}
-		String sparqlQuery = sparqlSection.getText();
+		String sparqlQuery = SPARQLQueryType.getSPARQLQuery(sparqlSection);
 		ValidatorResult validation = Validator.validate(sparqlQuery);
 
 		if (validation.hasErrors()) {
 			Collection<Message> messages = new LinkedList<Message>();
 			for (Exception e : validation.getErrors()) {
+
 				messages.add(Messages.syntaxError(e.getLocalizedMessage()));
 			}
 			return messages;
