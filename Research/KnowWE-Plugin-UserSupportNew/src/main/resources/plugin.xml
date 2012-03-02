@@ -86,28 +86,6 @@
 		<parameter id="css" value="default.css" />
 	</extension>
 	
-	<!-- extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="ApproximateCoveringListMarkup">
-		<parameter id="class"
-			value="de.d3web.we.covering.ApproximateCoveringListMarkup" />
-		<parameter id="name" value="ApproximateCoveringListMarkup" />
-		<parameter id="description" value="Type ApproximateCoveringListMarkup" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-		<parameter id="scope" value="root" />
-	</extension-->
-
-	<!--extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="ApproximateRulesMarkup">
-		<parameter id="class"
-			value="de.d3web.we.rules.ApproximateRulesMarkup" />
-		<parameter id="name" value="ApproximateRulesMarkup" />
-		<parameter id="description" value="Type ApproximateRulesMarkup" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-		<parameter id="scope" value="root" />
-	</extension-->
-	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
 		id="TableExportAction">
 		<parameter id="class"
@@ -148,19 +126,6 @@
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 	</extension>
-    
-	<!--extension plugin-id="KnowWEExtensionPoints" point-id="CorrectionProvider"
-		id="ApproximateCorrectionProviderImpl">
-		<parameter id="class"
-			value="de.d3web.we.correction.ApproximateCorrectionProviderImpl" />
-		<parameter id="name" value="ApproximateCorrectionProviderImpl" />
-		<parameter id="description"
-			value="Generates correction suggestions for d3web terms with approximate
-			String matching algorithms." />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-        <parameter id="scope" value="TableCell" />
-	</extension-->
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="PageAppendHandler"
 		id="ApproximateCorrectionAppendHandler">
@@ -195,17 +160,5 @@
 		<parameter id="scope" value="AbstractIRITermDefinition" />
 		<parameter id="scope" value="IRITermReference" />
 	</extension>
-	
-	<!-- extension plugin-id="KnowWEExtensionPoints" point-id="ApproximateCorrectionProvider"
-		id="ApproximateCorrectionProviderImpl">
-		<parameter id="class"
-			value="de.d3web.we.correction.ApproximateCorrectionProviderImpl" />
-		<parameter id="name" value="ApproximateCorrectionToolProviderImpl" />
-		<parameter id="description"
-			value="Offers to quickly correct typos in term references." />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-		<parameter id="scope" value="TableCell" />
-	</extension-->
 
 </plugin>

@@ -57,21 +57,18 @@ KNOWWE.plugin.usersupportinstantedit = function() {
 	        var f = completeFunction;
 	        if (f == null)
 	        {
-	        	f = function(cm) 
-	        	{
-	        		KNOWWE.plugin.usersupport.gatherDialogComponentCompletions(cm, CodeMirror.usersupportHint, id)
-	        	}
+	        	f = KNOWWE.plugin.usersupport;
 	        }
             editor = CodeMirror.fromTextArea(document.getElementById(editorID), {
             	lineNumbers: true,
 //            	mode: "usersupportmode",
             	mode: coloringmode,
             	theme: "elegant",
-            	extraKeys: {"Ctrl-Space": f
-// 		        extraKeys: {"Ctrl-Space": function(cm)
-// 		        	{
-// 		        		KNOWWE.plugin.usersupport.gatherDialogComponentCompletions(cm, CodeMirror.usersupportHint, id)
-// 		        	}
+//            	extraKeys: {"Ctrl-Space": f
+ 		        extraKeys: {"Ctrl-Space": function(cm)
+ 		        	{
+ 		        		f.gatherDialogComponentCompletions(cm, CodeMirror.usersupportHint, id)
+ 		        	}
  		        }
             });
 	        
