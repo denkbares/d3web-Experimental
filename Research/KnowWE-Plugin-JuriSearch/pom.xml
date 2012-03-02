@@ -39,5 +39,10 @@
   		<artifactId>de.uniwue.abstracttools</artifactId>
   		<version>de.uniwue.abstracttools</version>
   	</dependency>
+  	<dependency>
+  		<groupId>de.uniwue.d3web</groupId>
+  		<artifactId>KnowWE-Plugin-UserSupportNew</artifactId>
+  		<version>0.2-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
 </project>

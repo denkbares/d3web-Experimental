@@ -27,7 +27,7 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
-		<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
 		id="QuestionDefinitionArea">
 		<parameter id="class"
 			value="de.knowwe.jurisearch.questionDef.QuestionDefinitionArea" />
@@ -38,4 +38,66 @@
 		<parameter id="scope" value="root" />
 	</extension>
 	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="GetSuggestionsActionJuri">
+		<parameter id="class"
+			value="de.knowwe.jurisearch.usersupport.GetSuggestionsActionJuri" />
+		<parameter id="name" value="GetSuggestionsActionJuri" />
+		<parameter id="description" value="Action GetSuggestionsActionJuri" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+        id="InstantEditToolProviderJuri">
+        <parameter id="class"
+            value="de.knowwe.jurisearch.usersupport.InstantEditToolProviderJuri" />
+        <parameter id="name" value="UserSupportInstantEditToolProvider" />
+        <parameter id="description"
+            value="Offers a button for quick editing a certain section." />
+        <parameter id="version" value="1.0" />
+        <parameter id="priority" value="5" />
+        <parameter id="script" value="KnowWE-Plugin-InstantEdit.js" />
+        <parameter id="script" value="InstantEditHook.js" />
+		<parameter id="script" value="codemirror.js" />
+		
+		<parameter id="css" value="usersupportjuri.css" />
+		<parameter id="css" value="default.css" />
+		<parameter id="css" value="elegant.css" />
+		<parameter id="css" value="codemirror.css" />
+		
+		<parameter id="css" value="usersupportjuri.css" />
+		
+		<parameter id="script" value="usersupport.js" />
+		<parameter id="script" value="simple-hint.js" />
+		<parameter id="script" value="usersupportHint.js" />
+        <parameter id="script" value="UserSupportInstantEdit.js" />
+        
+        <parameter id="script" value="juricodemirrormode.js" />
+        <parameter id="script" value="usersupportjuri.js" />
+        <parameter id="script" value="jurimarkup.js" />
+        
+        <parameter id="script" value="TextArea.js" />
+        <parameter id="css" value="KnowWE-Plugin-InstantEdit.css" />
+        <parameter id="css" value="DefaultEditTool.css" />
+        <parameter id="scope" value="QuestionTreeMarkup" />
+        <parameter id="scope" value="QuestionDefinitionArea" />
+    </extension>
+
+	<extension plugin-id="KnowWEExtensionPoints" point-id="ToolProvider"
+		id="CorrectionToolProviderJuri">
+		<parameter id="class"
+			value="de.knowwe.jurisearch.usersupport.CorrectionToolProviderJuri" />
+		<parameter id="name" value="CorrectionToolProviderJuri" />
+		<parameter id="description"
+			value="Offers to quickly correct typos in term references." />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<!--parameter id="scope" value="QuestionIdentifier" />
+		<parameter id="scope" value="QuestionDefinition" />
+		<parameter id="scope" value="QuestionnaireDefinition" />
+		<parameter id="scope" value="SolutionDefinition" />
+		<parameter id="scope" value="QuestionReference" />
+		<parameter id="scope" value="QuestionnaireReference" /-->
+	</extension>
 </plugin>

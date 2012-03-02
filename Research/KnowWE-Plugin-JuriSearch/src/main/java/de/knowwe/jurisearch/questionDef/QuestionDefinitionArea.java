@@ -25,18 +25,22 @@ import java.util.regex.Pattern;
 import de.d3web.we.kdom.questionTree.QuestionTypeDeclaration;
 import de.d3web.we.object.QASetDefinition;
 import de.d3web.we.object.QuestionDefinition;
+import de.d3web.we.util.UserSupportUtil;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.DelegateRenderer;
+import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.kdom.sectionFinder.AllTextFinderTrimmed;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
+import de.knowwe.core.user.UserContext;
+import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.jurisearch.BoxRenderer;
-import de.knowwe.jurisearch.PreDecoratingRenderer;
 import de.knowwe.kdom.constraint.AtMostOneFindingConstraint;
 import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SingleChildConstraint;
@@ -55,11 +59,38 @@ public class QuestionDefinitionArea extends AbstractType {
 		super(null);
 		this.setSectionFinder(new RegexSectionFinder(Q_AREA_REGEX,
 				Pattern.MULTILINE | Pattern.DOTALL, 0));
-		this.setRenderer(new PreDecoratingRenderer(new
-				BoxRenderer("defaultMarkupFrame")));
+		//		this.setRenderer(new PreDecoratingRenderer(new
+		//				BoxRenderer("defaultMarkupFrame")));
+		this.setRenderer(new JuriInstantEditRenderer());
 		this.addChildType(new QuestionDefinitionContent());
 		this.addSubtreeHandler(Priority.PRECOMPILE_HIGH,
 				new RegisterPackageSubtreeHandler());
+	}
+
+	class JuriInstantEditRenderer implements Renderer {
+
+		public JuriInstantEditRenderer() {
+
+		}
+
+		@Override
+		public void render(Section<?> section, UserContext user, StringBuilder string)
+		{
+			string.append(KnowWEUtils.maskHTML("<div id=\""+section.getID() +"\">"));
+			string.append(KnowWEUtils.maskHTML("<div class=\"defaultMarkupFrame\">"));
+
+			string.append(KnowWEUtils.maskHTML("<div class=\"jurisearch-instantedit\">"
+					// + getFrameName(sec)
+					// + getEditorIcon(sec)
+					+ UserSupportUtil.renderTools(section, user)
+					// + getLink(sec)
+					+ "</div>"));
+			string.append(KnowWEUtils.maskHTML("<pre>"));
+			DelegateRenderer.getInstance().render(section, user, string);
+			string.append(KnowWEUtils.maskHTML("</pre>"));
+			string.append(KnowWEUtils.maskHTML("</div>"));
+			string.append(KnowWEUtils.maskHTML("</div>"));
+		}
 	}
 
 	class RegisterPackageSubtreeHandler extends SubtreeHandler<QuestionDefinitionArea> {
@@ -73,7 +104,7 @@ public class QuestionDefinitionArea extends AbstractType {
 
 			KnowWEEnvironment.getInstance().getPackageManager(
 					article.getWeb()).addSectionToPackage(
-					markupSection, "default");
+							markupSection, "default");
 			return new ArrayList<Message>();
 		}
 
@@ -150,6 +181,6 @@ public class QuestionDefinitionArea extends AbstractType {
 		}
 	}
 
-	
+
 
 }
