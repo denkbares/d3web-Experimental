@@ -3,38 +3,32 @@
 
 
 ObjectProperty: hasSibling
-
     Characteristics: 
         Symmetric
 
 
 
 ObjectProperty: hasSex
-
-    Characteristics: 
+  Characteristics: 
         Functional
-
     Range: 
         Sex
 
 
 
 ObjectProperty: hasParent
-
     InverseOf: 
         hasChild
 
 
 
 ObjectProperty: hasChild
-
     InverseOf: 
         hasParent
 
 
 
 Class: GrandFather
-
     EquivalentTo: 
         Person
          AND (hasChild SOME 
@@ -45,14 +39,12 @@ Class: GrandFather
 
 
 Class: Female
-
     EquivalentTo: 
         hasSex VALUE FemaleSex
 
 
 
 Class: Parent
-
     EquivalentTo: 
         Person
          AND (hasChild SOME Person)
@@ -60,7 +52,6 @@ Class: Parent
 
 
 Class: Mother
-
     EquivalentTo: 
         Person
          AND (hasChild SOME Person)
@@ -69,7 +60,6 @@ Class: Mother
 
 
 Class: Woman
-
     EquivalentTo: 
         Person
          AND (hasSex VALUE FemaleSex)
@@ -77,7 +67,6 @@ Class: Woman
 
 
 Class: Brother
-
     EquivalentTo: 
         Person
          AND ((hasSibling SOME Person)
@@ -86,7 +75,6 @@ Class: Brother
 
 
 Class: Father
-
     EquivalentTo: 
         Person
          AND (hasChild SOME Person)
@@ -95,21 +83,18 @@ Class: Father
 
 
 Class: Male
-
     EquivalentTo: 
         hasSex VALUE MaleSex
 
 
 
 Class: Sex
-
     EquivalentTo: 
         {FemaleSex , MaleSex}
 
 
 
 Class: GrandMother
-
     EquivalentTo: 
         Person
          AND (hasChild SOME 
@@ -120,7 +105,6 @@ Class: GrandMother
 
 
 Class: Son
-
     EquivalentTo: 
         Person
          AND (hasParent SOME Person)
@@ -133,7 +117,6 @@ Class: Person
 
 
 Class: GrandParent
-
     EquivalentTo: 
         Person
          AND (hasChild SOME 
@@ -143,7 +126,6 @@ Class: GrandParent
 
 
 Class: Daughter
-
     EquivalentTo: 
         Person
          AND (hasParent SOME Person)
@@ -152,7 +134,6 @@ Class: Daughter
 
 
 Class: Man
-
     EquivalentTo: 
         Person
          AND (hasSex VALUE MaleSex)
@@ -160,7 +141,6 @@ Class: Man
 
 
 Class: Sister
-
     EquivalentTo: 
         Person
          AND (hasSibling SOME Person)
@@ -169,7 +149,6 @@ Class: Sister
 
 
 Class: OffSpring
-
     EquivalentTo: 
         Person
          AND (hasParent SOME Person)
@@ -177,7 +156,6 @@ Class: OffSpring
 
 
 Class: Sibling
-
     EquivalentTo: 
         Person
          AND (hasSibling SOME Person)
@@ -185,27 +163,22 @@ Class: Sibling
 
 
 Individual: FemaleSex
-
     Types: 
         Sex
 
 
 
 Individual: Matthew
-
     Types: 
         Person
-
     SameAs: 
         Matt
 
 
 
 Individual: Peter
-
     Types: 
         Person
-
     Facts:  
      hasChild  Matt,
      hasSex  MaleSex,
@@ -214,10 +187,8 @@ Individual: Peter
 
 
 Individual: William
-
     Types: 
         Person
-
     Facts:  
      hasSex  MaleSex,
      hasChild  Peter
@@ -225,32 +196,26 @@ Individual: William
 
 
 Individual: Matt
-
     Types: 
         Person
-
     Facts:  
      hasParent  Peter,
      hasSex  MaleSex,
      hasSibling  Gemma
-
     SameAs: 
         Matthew
 
 
 
 Individual: Gemma
-
     Types: 
         Person
-
     Facts:  
      hasSex  FemaleSex
 
 
 
 Individual: MaleSex
-
     Types: 
         Sex
 

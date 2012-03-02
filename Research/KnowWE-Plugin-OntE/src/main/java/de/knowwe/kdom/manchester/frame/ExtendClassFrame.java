@@ -1,12 +1,8 @@
 package de.knowwe.kdom.manchester.frame;
 
-import java.util.regex.Pattern;
-
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.rdfs.IRITermRef;
 
 public class ExtendClassFrame extends ClassFrame {
@@ -16,8 +12,8 @@ public class ExtendClassFrame extends ClassFrame {
 	public ExtendClassFrame() {
 		super();
 
-		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p));
+		// Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
+		// this.setSectionFinder(new RegexSectionFinder(p, 3));
 
 		int pos = this.getChildrenTypes().indexOf(OWLClassDefinition.getInstance());
 		this.removeChildType(OWLClassDefinition.getInstance());

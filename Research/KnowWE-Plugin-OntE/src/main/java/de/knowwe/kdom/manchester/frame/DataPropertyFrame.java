@@ -71,7 +71,7 @@ public class DataPropertyFrame extends DefaultFrame implements KnowledgeUnit<Dat
 		// this.addSubtreeHandler(new ObjectPropertySubtreeHandler());
 
 		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p));
+		this.setSectionFinder(new RegexSectionFinder(p, 3));
 
 		List<Type> types = new ArrayList<Type>();
 

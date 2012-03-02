@@ -68,7 +68,7 @@ public class ClassFrame extends DefaultFrame implements KnowledgeUnit<ClassFrame
 		// this.addSubtreeHandler(new ClassFrameSubtreeHandler());
 
 		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p));
+		this.setSectionFinder(new RegexSectionFinder(p, 3));
 
 		List<Type> types = new ArrayList<Type>();
 

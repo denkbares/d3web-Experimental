@@ -87,7 +87,7 @@ public class MiscFrame extends DefaultFrame implements KnowledgeUnit<MiscFrame> 
 	public MiscFrame() {
 
 		Pattern p = ManchesterSyntaxUtil.getFramePattern(FRAME_KEYWORDS);
-		this.setSectionFinder(new RegexSectionFinder(p));
+		this.setSectionFinder(new RegexSectionFinder(p, 3));
 		// this.addSubtreeHandler(new MiscFrameSubtreeHandler());
 
 		List<Type> types = new ArrayList<Type>();

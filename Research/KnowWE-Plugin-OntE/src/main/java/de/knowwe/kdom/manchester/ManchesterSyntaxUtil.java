@@ -67,7 +67,7 @@ public class ManchesterSyntaxUtil {
 				"(\r\n?|\n)" +
 				"((^.*$)(\r\n?|\n))" +
 				"*?)" +
-				"((^$)(\r\n?|\n)){2}";
+				"((^$)(\r\n?|\n)){1}";
 		String regex = frame.replace("$TOKEN$", keyword);
 		return Pattern.compile(regex);
 	}

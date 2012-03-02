@@ -57,7 +57,7 @@ public class ImportFrame extends DefaultFrame implements KnowledgeUnit<ImportFra
 	public ImportFrame() {
 
 		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p));
+		this.setSectionFinder(new RegexSectionFinder(p, 3));
 
 		List<Type> types = new ArrayList<Type>();
 

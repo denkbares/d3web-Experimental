@@ -82,7 +82,7 @@ public class ObjectPropertyFrame extends DefaultFrame implements KnowledgeUnit<O
 		// this.addSubtreeHandler(new ObjectPropertySubtreeHandler());
 
 		Pattern p = ManchesterSyntaxUtil.getFramePattern(KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p));
+		this.setSectionFinder(new RegexSectionFinder(p, 3));
 
 		List<Type> types = new ArrayList<Type>();
 
