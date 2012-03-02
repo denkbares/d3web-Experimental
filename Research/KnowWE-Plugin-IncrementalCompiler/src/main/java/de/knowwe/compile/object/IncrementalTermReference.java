@@ -48,7 +48,30 @@ public abstract class IncrementalTermReference extends SimpleReference {
 
 	public IncrementalTermReference(Class<?> termObjectClass) {
 		super(TermRegistrationScope.GLOBAL, termObjectClass);
-		this.setRenderer(new ReferenceRenderer(REF_RENDERER));
+		super.setRenderer(new ReferenceRenderer(REF_RENDERER));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.knowwe.core.kdom.AbstractType#setRenderer(de.knowwe.core.kdom.rendering
+	 * .Renderer)
+	 * 
+	 * 
+	 * makes sure that the ReferenceRenderer for the error-messages is actually
+	 * installed and called and does not get overridden
+	 */
+	@Override
+	public void setRenderer(Renderer renderer) {
+		if (this.getRenderer() != null) {
+			if (this.getRenderer() instanceof ReferenceRenderer) {
+				((ReferenceRenderer) this.getRenderer()).setRenderer(renderer);
+			}
+		}
+		else {
+			super.setRenderer(renderer);
+		}
 	}
 
 	/**
@@ -61,6 +84,14 @@ public abstract class IncrementalTermReference extends SimpleReference {
 	 * @created 09.06.2011
 	 */
 	class ReferenceRenderer implements Renderer {
+
+		public Renderer getRenderer() {
+			return r;
+		}
+
+		public void setRenderer(Renderer r) {
+			this.r = r;
+		}
 
 		private Renderer r = null;
 
@@ -94,7 +125,7 @@ public abstract class IncrementalTermReference extends SimpleReference {
 			for (Message kdomReportMessage : messages) {
 				if (kdomReportMessage.getType() == Message.Type.ERROR) {
 					string.append(DefaultErrorRenderer.INSTANCE_ERROR.preRenderMessage(
-									kdomReportMessage, user, null));
+							kdomReportMessage, user, null));
 				}
 				if (kdomReportMessage.getType() == Message.Type.WARNING) {
 					string.append(
