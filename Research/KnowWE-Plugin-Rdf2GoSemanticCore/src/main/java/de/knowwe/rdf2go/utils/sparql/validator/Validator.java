@@ -57,6 +57,28 @@ public class Validator {
 			parser.parseQuery(query, Rdf2GoCore.basens);
 		}
 		catch (MalformedQueryException e) {
+			// correct line numbers (caused by auto adding prefixes)
+			String msg = e.getMessage();
+			if (msg.contains("line")) {
+				try {
+					// find the line number
+					int start = msg.indexOf("line ") + 5;
+					int i = start;
+					while (Character.isDigit(msg.charAt(i))) {
+						i++;
+					}
+					String digits = msg.substring(start, i);
+					// correct the line number
+					int lineNumber = Integer.parseInt(digits);
+					lineNumber = lineNumber - 9;
+					msg = msg.replace("line " + digits, "line " + lineNumber);
+					e = new MalformedQueryException(msg);
+				}
+				catch (NumberFormatException nfe) {
+					// unable to find number, we have to live with the wrong
+					// line number
+				}
+			}
 			result.addException(e);
 		}
 
