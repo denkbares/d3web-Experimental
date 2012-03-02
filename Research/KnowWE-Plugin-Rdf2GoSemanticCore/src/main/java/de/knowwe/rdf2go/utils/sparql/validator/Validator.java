@@ -32,6 +32,7 @@ public class Validator {
 
 	private static final SPARQLParser parser = new SPARQLParser();
 	private static final String prefixes = Rdf2GoCore.getInstance().getSparqlNamespaceShorts();
+	private static final int LINESTOSUBTRACT = 9;
 
 	private Validator() {
 	}
@@ -70,7 +71,7 @@ public class Validator {
 					String digits = msg.substring(start, i);
 					// correct the line number
 					int lineNumber = Integer.parseInt(digits);
-					lineNumber = lineNumber - 9;
+					lineNumber = lineNumber - LINESTOSUBTRACT;
 					msg = msg.replace("line " + digits, "line " + lineNumber);
 					e = new MalformedQueryException(msg);
 				}
