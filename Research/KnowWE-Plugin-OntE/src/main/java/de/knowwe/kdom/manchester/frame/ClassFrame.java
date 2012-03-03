@@ -291,11 +291,7 @@ class SubClassOf extends DefaultDescription {
 	public static final String KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.SUBCLASS_OF);
 
 	public SubClassOf() {
-
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(ClassFrame.KEYWORDS, KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 1));
-
-		this.addChildType(new Keyword(SubClassOf.KEYWORD));
+		super(ClassFrame.KEYWORDS, KEYWORD);
 		this.addChildType(ManchesterSyntaxUtil.getMCE());
 	}
 }
@@ -310,11 +306,7 @@ class DisjointWith extends DefaultDescription {
 	public static final String KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.DISJOINT_WITH);
 
 	public DisjointWith() {
-
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(ClassFrame.KEYWORDS, KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 1));
-
-		this.addChildType(new Keyword(KEYWORD));
+		super(ClassFrame.KEYWORDS, KEYWORD);
 		this.addChildType(ManchesterSyntaxUtil.getMCE());
 	}
 }
@@ -331,10 +323,7 @@ class DisjointUnionOf extends DefaultDescription {
 
 	public DisjointUnionOf() {
 
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(ClassFrame.KEYWORDS, KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 1));
-
-		this.addChildType(new Keyword(KEYWORD));
+		super(ClassFrame.KEYWORDS, KEYWORD);
 		this.addChildType(ManchesterSyntaxUtil.getMCE());
 	}
 }

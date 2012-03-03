@@ -35,6 +35,7 @@ import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
 import de.knowwe.kdom.manchester.compile.ObjectPropertyCompileScript;
 import de.knowwe.kdom.manchester.types.Annotations;
 import de.knowwe.kdom.manchester.types.Characteristics;
+import de.knowwe.kdom.manchester.types.DescriptionType;
 import de.knowwe.kdom.manchester.types.DisjointWith;
 import de.knowwe.kdom.manchester.types.Domain;
 import de.knowwe.kdom.manchester.types.EquivalentTo;
@@ -385,19 +386,14 @@ class ObjectProperty extends ObjectPropertyIRIDefinition {
  * @author Stefan Mark
  * @created 24.05.2011
  */
-class InverseOf extends AbstractType {
+class InverseOf extends DescriptionType {
 
 	public static final String KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.INVERSE_OF);
 
 	public InverseOf() {
 
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(ObjectPropertyFrame.KEYWORDS,
+		super(ObjectPropertyFrame.KEYWORDS,
 				KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 1));
-
-		Keyword key = new Keyword(KEYWORD);
-		this.addChildType(key);
-
 		this.addChildType(ManchesterSyntaxUtil.getMCE());
 	}
 }
@@ -408,17 +404,13 @@ class InverseOf extends AbstractType {
  * @author Stefan Mark
  * @created 25.10.2011
  */
-class SubPropertyChain extends AbstractType {
+class SubPropertyChain extends DescriptionType {
 
 	public static final String KEYWORD = ManchesterSyntaxUtil.getFrameKeywordPattern(ManchesterSyntaxKeywords.SUB_PROPERTY_CHAIN);
 
 	public SubPropertyChain() {
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(ObjectPropertyFrame.KEYWORDS,
+		super(ObjectPropertyFrame.KEYWORDS,
 				KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 1));
-
-		Keyword key = new Keyword(KEYWORD);
-		this.addChildType(key);
 
 		// objectPropertyExpression 'o' objectPropertyExpression { 'o'
 		// objectPropertyExpression }

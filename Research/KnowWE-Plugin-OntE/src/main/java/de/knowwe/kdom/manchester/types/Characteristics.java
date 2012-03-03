@@ -28,10 +28,6 @@ import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
-import de.knowwe.kdom.manchester.ManchesterSyntaxUtil;
-import de.knowwe.kdom.manchester.types.Keyword;
-import de.knowwe.kdom.manchester.types.NonTerminalList;
-import de.knowwe.kdom.manchester.types.NonTerminalListContent;
 import de.knowwe.kdom.renderer.StyleRenderer;
 import de.knowwe.util.ManchesterSyntaxKeywords;
 
@@ -41,17 +37,13 @@ import de.knowwe.util.ManchesterSyntaxKeywords;
  * @author Stefan Mark
  * @created 24.06.2011
  */
-public class Characteristics extends AbstractType {
+public class Characteristics extends DescriptionType {
 
 	public static final String KEYWORD = "Characteristics[:]?";
 
 	public Characteristics(boolean isObject, String description) {
 
-		Pattern p = ManchesterSyntaxUtil.getDescriptionPattern(description, KEYWORD);
-		this.setSectionFinder(new RegexSectionFinder(p, 1));
-
-		Keyword key = new Keyword(KEYWORD);
-		this.addChildType(key);
+		super(description, KEYWORD);
 
 		NonTerminalList list = new NonTerminalList();
 		NonTerminalListContent listContent = new NonTerminalListContent();

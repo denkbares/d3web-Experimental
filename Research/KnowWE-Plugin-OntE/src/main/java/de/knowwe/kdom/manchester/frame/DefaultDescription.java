@@ -19,7 +19,7 @@
  */
 package de.knowwe.kdom.manchester.frame;
 
-import de.knowwe.core.kdom.AbstractType;
+import de.knowwe.kdom.manchester.types.DescriptionType;
 import de.knowwe.kdom.manchester.types.HiddenComment;
 
 /**
@@ -30,12 +30,13 @@ import de.knowwe.kdom.manchester.types.HiddenComment;
  * @author Stefan Mark
  * @created 23.09.2011
  */
-public class DefaultDescription extends AbstractType {
+public class DefaultDescription extends DescriptionType {
 
 	/**
 	 * Constructor for the {@link DefaultDescription}.
 	 */
-	public DefaultDescription() {
+	public DefaultDescription(String description, String keyword) {
+		super(description, keyword);
 		this.addChildType(new HiddenComment());
 	}
 }

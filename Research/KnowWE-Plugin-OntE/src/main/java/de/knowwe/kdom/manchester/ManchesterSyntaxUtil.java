@@ -96,6 +96,9 @@ public class ManchesterSyntaxUtil {
 	 * @return
 	 */
 	public static Pattern getDescriptionPattern(String clazzKey, String descriptionKey) {
+		if(clazzKey.contains(descriptionKey+"|")) {
+			clazzKey = clazzKey.replace(descriptionKey + "|", "");
+		}
 		String regex = "(" + descriptionKey + "(.+?))" + clazzKey;
 		return Pattern.compile(regex, Pattern.DOTALL | Pattern.MULTILINE);
 	}

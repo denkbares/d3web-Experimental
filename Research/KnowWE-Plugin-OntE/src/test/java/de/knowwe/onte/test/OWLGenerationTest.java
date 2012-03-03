@@ -1,49 +1,45 @@
- /*
- * Copyright (C) 2011 University Wuerzburg, Computer Science VI
+/*
+ * Copyright (C) 2011 Chair of Artificial Intelligence and Applied Informatics
+ * Computer Science VI, University of Wuerzburg
  *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 3 of the License, or (at your option)
- any
+ * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
  *
- * This software is distributed in the hope that it will be useful, but
- WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for
- more
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the
- FSF
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
  package de.knowwe.onte.test;
 
  import static org.junit.Assert.assertTrue;
 
- import java.io.IOException;
- import java.util.HashMap;
- import java.util.HashSet;
- import java.util.Map;
- import java.util.Set;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
- import junit.framework.TestCase;
+import junit.framework.TestCase;
 
- import org.junit.AfterClass;
- import org.junit.BeforeClass;
- import org.junit.Test;
- import org.semanticweb.owlapi.model.OWLEntity;
- import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.semanticweb.owlapi.model.OWLEntity;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
- import utils.MyTestArticleManager;
- import de.d3web.plugin.test.InitPluginManager;
- import de.knowwe.core.compile.packaging.KnowWEPackageManager;
- import de.knowwe.onte.test.util.OWLGenerationVocabulary;
- import de.knowwe.onte.test.util.OWLReasoningUtils;
+import utils.MyTestArticleManager;
+import de.d3web.plugin.test.InitPluginManager;
+import de.knowwe.core.compile.packaging.KnowWEPackageManager;
+import de.knowwe.onte.test.util.OWLGenerationVocabulary;
+import de.knowwe.onte.test.util.OWLReasoningUtils;
 
  /**
  * Test for the Manchester OWL syntax in the KnowWE-OntE-Plugin for KnowWE.
