@@ -146,15 +146,16 @@ public class ReferenceManager {
 	}
 
 	public boolean wasValidInOldVersion(String termIdentifier) {
-		return validObjectsOld.containsKey(termIdentifier);
+		return validObjectsOld.containsKey(termIdentifier)
+				|| validPredefinedObjects.containsKey(termIdentifier);
 	}
 
 	public boolean wasValidInOldVersion(Section<?> s) {
 		return wasValidInOldVersion(KnowWEUtils.getTermIdentifier(s));
 	}
 
-	public Collection<Section<? extends KnowledgeUnit>> getReferencingSlices(Section<? extends SimpleTerm> section) {
-		Collection<Section<? extends KnowledgeUnit>> result = new HashSet<Section<? extends KnowledgeUnit>>();
+	public Collection<Section<? extends KnowledgeUnit<?>>> getReferencingSlices(Section<? extends SimpleTerm> section) {
+		Collection<Section<? extends KnowledgeUnit<?>>> result = new HashSet<Section<? extends KnowledgeUnit<?>>>();
 		String termIdentifier = KnowWEUtils.getTermIdentifier(section);
 		Set<Section<? extends SimpleReference>> refSet = allReferences.get(termIdentifier);
 		if (refSet == null) return result;
@@ -162,7 +163,7 @@ public class ReferenceManager {
 			Section<KnowledgeUnit> compilationUnit = Sections.findAncestorOfType(ref,
 					KnowledgeUnit.class);
 			if (compilationUnit != null) {
-				result.add(compilationUnit);
+				result.add((Section<? extends KnowledgeUnit<?>>) compilationUnit);
 			}
 		}
 		return result;
