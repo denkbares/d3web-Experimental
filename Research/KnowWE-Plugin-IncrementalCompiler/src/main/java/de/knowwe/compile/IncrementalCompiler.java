@@ -68,8 +68,8 @@ public class IncrementalCompiler implements EventListener {
 
 	private final ReferenceManager terminology = new ReferenceManager();
 
-	private Collection<Section<? extends KnowledgeUnit<?>>> potentiallyNewKnowledgeSlices = new HashSet<Section<? extends KnowledgeUnit<?>>>();
-	private Collection<Section<? extends KnowledgeUnit<?>>> knowledgeSlicesToRemove = new HashSet<Section<? extends KnowledgeUnit<?>>>();
+	private Collection<Section<? extends KnowledgeUnit>> potentiallyNewKnowledgeSlices = new HashSet<Section<? extends KnowledgeUnit>>();
+	private Collection<Section<? extends KnowledgeUnit>> knowledgeSlicesToRemove = new HashSet<Section<? extends KnowledgeUnit>>();
 
 	// TODO: how to implement singleton plugin?
 	private static IncrementalCompiler instance;
@@ -212,8 +212,8 @@ public class IncrementalCompiler implements EventListener {
 		Collection<Section<? extends Type>> oldSectionsNotReused = CompileUtils.findOldNonReusedSections(lastVersionOfArticle);
 
 		// reset knowledge slice sets
-		potentiallyNewKnowledgeSlices = new HashSet<Section<? extends KnowledgeUnit<?>>>();
-		knowledgeSlicesToRemove = new HashSet<Section<? extends KnowledgeUnit<?>>>();
+		potentiallyNewKnowledgeSlices = new HashSet<Section<? extends KnowledgeUnit>>();
+		knowledgeSlicesToRemove = new HashSet<Section<? extends KnowledgeUnit>>();
 
 		// update references --- necessary??
 		registerNewSectionsInReferenceManager(newSectionsNotReused);
@@ -226,14 +226,14 @@ public class IncrementalCompiler implements EventListener {
 		/* now dependency graph is updated */
 
 		// check new knowledge units
-		Collection<Section<? extends KnowledgeUnit<?>>> createdknowledge = CompileUtils.filterKnowledgeUnits(newSectionsNotReused);
-		Collection<Section<? extends KnowledgeUnit<?>>> deletedknowledge = CompileUtils.filterKnowledgeUnits(oldSectionsNotReused);
+		Collection<Section<? extends KnowledgeUnit>> createdknowledge = CompileUtils.filterKnowledgeUnits(newSectionsNotReused);
+		Collection<Section<? extends KnowledgeUnit>> deletedknowledge = CompileUtils.filterKnowledgeUnits(oldSectionsNotReused);
 
 		// filter resource-delta for equal sections
 		EqualStringHazardFilter.filter(createdknowledge, deletedknowledge);
 
 
-		for (Section<? extends KnowledgeUnit<?>> section : createdknowledge) {
+		for (Section<? extends KnowledgeUnit> section : createdknowledge) {
 
 			this.potentiallyNewKnowledgeSlices.add(section);
 		}
@@ -243,7 +243,7 @@ public class IncrementalCompiler implements EventListener {
 		// for each check whether it had been valid in the last version,
 		// otherwise it does not need to be in the toRemove list,
 		// indeed it must not if hazard filter activated!
-		for (Section<? extends KnowledgeUnit<?>> section : deletedknowledge) {
+		for (Section<? extends KnowledgeUnit> section : deletedknowledge) {
 			Collection<Section<SimpleReference>> referencesOfCompilationUnit = CompileUtils.getAllReferencesOfCompilationUnit(section);
 			boolean valid = true;
 			// check for all references if had been valid in old version
@@ -276,9 +276,9 @@ public class IncrementalCompiler implements EventListener {
 		/* now knowledge slice sets are filled */
 
 		// now check all potentially new knowledge slices for validity
-		Iterator<Section<? extends KnowledgeUnit<?>>> compilationUnitIterator = potentiallyNewKnowledgeSlices.iterator();
+		Iterator<Section<? extends KnowledgeUnit>> compilationUnitIterator = potentiallyNewKnowledgeSlices.iterator();
 		while (compilationUnitIterator.hasNext()) {
-			Section<? extends KnowledgeUnit<?>> section = compilationUnitIterator.next();
+			Section<? extends KnowledgeUnit> section = compilationUnitIterator.next();
 			KnowledgeUnitCompileScript compileScript = section.get().getCompileScript();
 			if (compileScript != null) {
 				Collection<Section<?>> refs = compileScript.getAllReferencesOfKnowledgeUnit(
@@ -350,7 +350,7 @@ public class IncrementalCompiler implements EventListener {
 	 * @param potentiallyNewKnowledgeSlices2
 	 * @param knowledgeSlicesToRemove2
 	 */
-	private void hazardFilter(Collection<Section<? extends KnowledgeUnit<?>>> potentiallyNewKnowledgeSlices2, Collection<Section<? extends KnowledgeUnit<?>>> knowledgeSlicesToRemove2) {
+	private void hazardFilter(Collection<Section<? extends KnowledgeUnit>> potentiallyNewKnowledgeSlices2, Collection<Section<? extends KnowledgeUnit>> knowledgeSlicesToRemove2) {
 
 		EqualStringHazardFilter.filter(potentiallyNewKnowledgeSlices2,
 				knowledgeSlicesToRemove2);
@@ -369,7 +369,7 @@ public class IncrementalCompiler implements EventListener {
 	private void removeRecursively(Section<? extends SimpleTerm> section) {
 		if (terminology.wasValidInOldVersion(section)) {
 			terminology.removeFromValidObjects(section);
-			Collection<Section<? extends KnowledgeUnit<?>>> referencingSlices = terminology.getReferencingSlices(section);
+			Collection<Section<? extends KnowledgeUnit>> referencingSlices = terminology.getReferencingSlices(section);
 			knowledgeSlicesToRemove.addAll(referencingSlices);
 
 			// recursion for complex definitions
@@ -393,7 +393,7 @@ public class IncrementalCompiler implements EventListener {
 			// if (!terminology.wasValidInOldVersion(section)) {
 
 			terminology.addToValidObjects(section);
-			Collection<Section<? extends KnowledgeUnit<?>>> referencingSlices = terminology.getReferencingSlices(section);
+			Collection<Section<? extends KnowledgeUnit>> referencingSlices = terminology.getReferencingSlices(section);
 			potentiallyNewKnowledgeSlices.addAll(referencingSlices);
 
 			// recursion for complex definitions

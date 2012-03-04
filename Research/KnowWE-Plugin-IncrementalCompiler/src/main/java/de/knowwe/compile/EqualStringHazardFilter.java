@@ -10,7 +10,7 @@ import de.knowwe.core.kdom.parsing.Section;
 
 public class EqualStringHazardFilter {
 
-	public static void filter(Collection<Section<? extends KnowledgeUnit<?>>> insert, Collection<Section<? extends KnowledgeUnit<?>>> remove) {
+	public static void filter(Collection<Section<? extends KnowledgeUnit>> insert, Collection<Section<? extends KnowledgeUnit>> remove) {
 		// NOTE: This weird collection juggling using CompileSections is
 		// necessary because the equals of the Sections class itself does not
 		// have the characteristics required here.
@@ -20,7 +20,7 @@ public class EqualStringHazardFilter {
 
 		// transform Section-collections to CompileSection-collections
 		Collection<CompileSection> removeSet = new ArrayList<CompileSection>();
-		for (Section<? extends KnowledgeUnit<?>> section : remove) {
+		for (Section<? extends KnowledgeUnit> section : remove) {
 			removeSet.add(new CompileSection(section));
 		}
 

@@ -125,11 +125,11 @@ public class CompileUtils {
 	 * @param oldSectionsNotReused
 	 * @return
 	 */
-	public static Collection<Section<? extends KnowledgeUnit<?>>> filterKnowledgeUnits(Collection<Section<? extends Type>> oldSectionsNotReused) {
-		Collection<Section<? extends KnowledgeUnit<?>>> result = new HashSet<Section<? extends KnowledgeUnit<?>>>();
+	public static Collection<Section<? extends KnowledgeUnit>> filterKnowledgeUnits(Collection<Section<? extends Type>> oldSectionsNotReused) {
+		Collection<Section<? extends KnowledgeUnit>> result = new HashSet<Section<? extends KnowledgeUnit>>();
 		for (Section<? extends Type> section : oldSectionsNotReused) {
 			if (section.get() instanceof KnowledgeUnit<?>) {
-				result.add((Section<? extends KnowledgeUnit<?>>) section);
+				result.add((Section<? extends KnowledgeUnit>) section);
 			}
 		}
 		return result;
