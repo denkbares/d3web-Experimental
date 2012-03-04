@@ -30,7 +30,7 @@ import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
  */
 public class OWLTermReferenceManchester extends AbstractType {
 
-	public static final String PATTERN = "\\b([A-Z]|owl)[A-Za-z0-9:]+\\b";
+	public static final String PATTERN = "\\b([A-Z]|owl)[A-Za-z0-9,;.\\-+_/\\#&%]+\\b";
 
 	public OWLTermReferenceManchester() {
 		this.setSectionFinder(new RegexSectionFinder(PATTERN));
