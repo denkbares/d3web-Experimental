@@ -665,37 +665,55 @@ public class Rdf2GoCore implements EventListener {
 
 		if (allStatmentSectionsOfArticle != null) {
 			if (allStatmentSectionsOfArticle.containsKey(sec)) {
-				List<Statement> statementsOfSection = allStatmentSectionsOfArticle.get(sec);
-				List<Statement> removedStatements = new ArrayList<Statement>();
-
-				for (Statement s : statementsOfSection) {
-					Set<String> sectionIDsForStatement = duplicateStatements.get(s);
-					boolean removed = false;
-					if (sectionIDsForStatement != null) {
-						removed = sectionIDsForStatement.remove(sec.getID());
-					}
-					if (removed && sectionIDsForStatement.isEmpty()) {
-						removedStatements.add(s);
-						duplicateStatements.remove(s);
-					}
-					else {
-						Logger.getLogger(this.getClass().getName()).log(
-								Level.INFO,
-								"Tried to remove statement from Section '"
-										+ sec.get().getName()
-										+ "', ' " + sec.getID()
-										+ "' that wasn't there:\n"
-										+ s.toString());
+				removeStatementList(sec, allStatmentSectionsOfArticle);
+			}
+			else {
+				// fix: IncrementalCompiler not necessarily delivers the same
+				// section object, maybe another with the same content
+				Set<Section<? extends Type>> keySet = allStatmentSectionsOfArticle.keySet();
+				Iterator<Section<? extends Type>> iterator = keySet.iterator();
+				while (iterator.hasNext()) {
+					Section<? extends Type> section = iterator.next();
+					if (section.getText().equals(sec.getText())) {
+						removeStatementList(section, allStatmentSectionsOfArticle);
+						break;
 					}
 				}
-				allStatmentSectionsOfArticle.remove(sec);
-				if (allStatmentSectionsOfArticle.isEmpty()) {
-					statementcache.remove(sec.getArticle().getTitle());
-				}
-				removeStatementsFromCache(removedStatements);
-				// model.removeAll(removedStatements.iterator());
 			}
 		}
+	}
+
+	private void removeStatementList(Section<? extends Type> sec, WeakHashMap<Section<? extends Type>, List<Statement>> allStatementSectionsOfArticle) {
+		List<Statement> statementsOfSection = allStatementSectionsOfArticle.get(sec);
+		List<Statement> removedStatements = new ArrayList<Statement>();
+
+		for (Statement s : statementsOfSection) {
+			Set<String> sectionIDsForStatement = duplicateStatements.get(s);
+			boolean removed = false;
+			if (sectionIDsForStatement != null) {
+				removed = sectionIDsForStatement.remove(sec.getID());
+			}
+			if (removed && sectionIDsForStatement.isEmpty()) {
+				removedStatements.add(s);
+				duplicateStatements.remove(s);
+			}
+			else {
+				Logger.getLogger(this.getClass().getName()).log(
+						Level.INFO,
+						"Tried to remove statement from Section '"
+								+ sec.get().getName()
+								+ "', ' " + sec.getID()
+								+ "' that wasn't there:\n"
+								+ s.toString());
+
+			}
+		}
+		allStatementSectionsOfArticle.remove(sec);
+		if (allStatementSectionsOfArticle.isEmpty()) {
+			statementcache.remove(sec.getArticle().getTitle());
+		}
+		removeStatementsFromCache(removedStatements);
+		// model.removeAll(removedStatements.iterator());
 	}
 
 	/**
