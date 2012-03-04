@@ -175,7 +175,7 @@ public class IncrementalCompilerTest {
 		assertFalse(core.sparqlAsk(Query.Update.ASSISTENTPERSON));
 		assertFalse(core.sparqlAsk(Query.Update.JOCHENASSISTENT));
 		assertFalse(core.sparqlAsk(Query.Update.PETERASSISTENT));
-		/* check that new statemants are valid */
+		/* check that new statements are valid */
 		assertTrue(core.sparqlAsk(Query.Update.SCHNURTZELPIEPERDINGENSKIRCHEN));
 		assertTrue(core.sparqlAsk(Query.Update.SCHNURTZELPIEPERINDAHOUSE));
 	}
