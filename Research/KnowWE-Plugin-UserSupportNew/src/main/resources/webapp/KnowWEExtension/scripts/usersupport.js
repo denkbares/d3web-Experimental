@@ -75,19 +75,24 @@ KNOWWE.plugin.usersupport = function() {
 
 			exportbuttons = _KS('.table-export');
 			for (var i = 0; i < exportbuttons.length; i++) {
-				 _KE.add('click', exportbuttons[i], KNOWWE.plugin.usersupport.exportAction);
+				 _KE.add('click', exportbuttons[i], KNOWWE.plugin.usersupport.exportActionExcel);
+			}
+			
+			exportbuttonsword = _KS('.word-export');
+			for (var i = 0; i < exportbuttonsword.length; i++) {
+				 _KE.add('click', exportbuttonsword[i], KNOWWE.plugin.usersupport.exportActionWord);
 			}
 
         },
 		
 		/**
-		 * Function     : exportAction
+		 * Function     : exportActionExcel
 		 * @param event
 		 * Description  : adds the ExportTableAction for Tables to the Button.
 		 * 				  Renders a download button as response. The xls is
 		 * 				  stored on the server.
 		 */
-		exportAction : function(event) {
+		exportActionExcel : function(event) {
 			var rel = eval("(" + _KE.target( event ).getAttribute('rel') + ")");
 			var params = {
 				action : 'TableExportAction',
@@ -96,6 +101,33 @@ KNOWWE.plugin.usersupport = function() {
 
 			var id = "export-download"+rel.objectId;
 
+			var options = {
+				url : KNOWWE.core.util.getURL(params),
+				response : {
+					action : 'insert',
+                    ids : [ id ],
+				}
+			}
+			new _KA(options).send();
+
+		},
+		
+		/**
+		 * Function     : exportActionWord
+		 * @param event
+		 * Description  : adds the WordExportAction for Articles to the Button.
+		 * 				  Renders a download button as response. The doc is
+		 * 				  stored on the server.
+		 */
+		exportActionWord : function(event) {
+			
+			var rel = eval("(" + _KE.target( event ).getAttribute('rel') + ")");
+			var params = {
+				action : 'WordExportAction',
+			}
+
+			var id = "export-download"+rel.objectId;
+						
 			var options = {
 				url : KNOWWE.core.util.getURL(params),
 				response : {

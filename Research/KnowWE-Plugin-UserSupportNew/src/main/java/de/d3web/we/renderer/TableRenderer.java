@@ -177,7 +177,8 @@ public class TableRenderer implements Renderer {
 
 		String importButton = "<form class=\"file_upload_form\" id=\"file_upload_form\" action=\"uploadreceptor?" +
 				"tableId=" + section.getID() +
-				"&article=" + section.getTitle() + "\" " +
+				"&article=" + section.getTitle() +
+				"&filetype=excel" + "\" " +
 				"method=\"post\" enctype=\"multipart/form-data\" accept-charset=\"UTF-8\">" +
 				"<P>" +
 				bundle.getString("excel-upload") +

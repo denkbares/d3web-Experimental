@@ -42,7 +42,10 @@ import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
+import de.d3web.we.knowledgebase.KnowledgeBaseType;
 import de.d3web.we.tables.CausalDiagnosisScore;
 import de.d3web.we.tables.DecisionTable;
 import de.d3web.we.tables.HeuristicDiagnosisTable;
@@ -262,6 +265,57 @@ public class PoiUtils
 		PoiUtils.autoSizeSheetColumns(lines, sheet);
 
 		wb.write(out);
+	}
+
+	public static String importWordFromFile(File in, String tableId, String article, ActionContext context) throws IOException
+	{
+		KnowWEArticleManager manager =
+				KnowWEEnvironment.getInstance().getArticleManager(KnowWEEnvironment.DEFAULT_WEB);
+		KnowWEArticle art = manager.getArticle(article);
+		Section<KnowWEArticle> artSec = art.getSection();
+		KnowWEEnvironment.getInstance().getWikiConnector();
+
+		// Save {@link KnowledgeBaseType} and {@link WordDefaultMarkup}
+		StringBuilder recovery = new StringBuilder();
+		List<Section<KnowledgeBaseType>> knowledgeBaseTypes = Sections.findSuccessorsOfType(artSec, KnowledgeBaseType.class);
+		for (Section<KnowledgeBaseType> kType : knowledgeBaseTypes)
+		{
+			recovery.append(kType.getText());
+		}
+		recovery.append("%%WordExportImport \r\n");
+		recovery.append("Text \r\n");
+		recovery.append("@package: default \r\n");
+		recovery.append("% \r\n");
+
+
+		FileInputStream input = new FileInputStream(in);
+		XWPFDocument doc = new XWPFDocument(input);
+		List<XWPFParagraph> paragraphs = doc.getParagraphs();
+		StringBuilder docText = new StringBuilder();
+
+		boolean isTree = false;
+		for (XWPFParagraph par : paragraphs)
+		{
+			String parText = par.getParagraphText();
+			if (parText.startsWith("-") && !isTree)
+			{
+				isTree = true;
+				docText.append("%%baum \r\n start \r\n");
+			}
+			if (!parText.startsWith("-") && isTree)
+			{
+				docText.append("% \r\n");
+			}
+
+			docText.append(parText + "\r\n");
+		}
+		recovery.append(docText);
+
+		Map<String, String> nodeMap = new HashMap<String, String>();
+		nodeMap.put(artSec.getID(), recovery.toString());
+
+		Sections.replaceSections(context, nodeMap);
+		return null;
 	}
 
 	/**

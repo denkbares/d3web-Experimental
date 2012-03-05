@@ -91,6 +91,7 @@ public class UploadReceptorServlet extends HttpServlet {
 			List items = uploadHandler.parseRequest(req);
 			String tableId = req.getParameter("tableId");
 			String article = req.getParameter("article");
+			String fileType = req.getParameter("filetype");
 
 			// TODO works everywhere?
 			res.sendRedirect("/KnowWE/Wiki.jsp?page="+article);
@@ -112,8 +113,13 @@ public class UploadReceptorServlet extends HttpServlet {
 							", File Size = "+item.getSize());
 					/*
 					 * Write file to the ultimate location.
+					 * Distinguish between .xls and .doc
 					 */
-					File file = new File(destinationDir, "workbook-" + tableId + ".xls");
+					File file;
+					if (fileType.equals("word"))
+						file = new File(destinationDir, "docbook-" + tableId + ".docx");
+					else
+						file = new File(destinationDir, "workbook-" + tableId + ".xls");
 					file.deleteOnExit();
 					item.write(file);
 
@@ -121,7 +127,10 @@ public class UploadReceptorServlet extends HttpServlet {
 					Map<String, String> parameters= new HashMap<String, String>();
 					parameters.put("KWikiWeb", KnowWEEnvironment.DEFAULT_WEB);
 					ActionContext context = new ActionContext(null, null, parameters, req, res, null, null);
-					PoiUtils.importTableFromFile(file, tableId, article, context);
+					if (fileType.equals("word"))
+						PoiUtils.importWordFromFile(file, tableId, article, context);
+					else
+						PoiUtils.importTableFromFile(file, tableId, article, context);
 				}
 				out.close();
 			}
