@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import de.d3web.we.algorithm.Suggestion;
 import de.d3web.we.tables.CausalDiagnosisScore;
@@ -51,9 +50,7 @@ public class ApproximateCorrectionToolProvider implements ToolProvider
 	@Override
 	public Tool[] getTools(Section<?> section, UserContext userContext)
 	{
-
 		List<Suggestion> suggestions = new LinkedList<Suggestion>();
-		ResourceBundle wikiConfig = ResourceBundle.getBundle("KnowWE_config");
 
 		ApproximateCorrectionProviderImpl impl = new ApproximateCorrectionProviderImpl();
 
