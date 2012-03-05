@@ -100,4 +100,25 @@
 		<parameter id="scope" value="QuestionReference" />
 		<parameter id="scope" value="QuestionnaireReference" /-->
 	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
+		id="WordDefaultMarkup">
+		<parameter id="class"
+			value="de.knowwe.jurisearch.usersupport.WordDefaultMarkup" />
+		<parameter id="name" value="WordDefaultMarkup" />
+		<parameter id="description" value="KnowWEObjectType WordDefaultMarkup" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+		<parameter id="scope" value="root" />
+	</extension>
+	
+	<extension plugin-id="KnowWEExtensionPoints" point-id="Action"
+		id="WordExportAction">
+		<parameter id="class"
+			value="de.knowwe.jurisearch.usersupport.WordExportAction" />
+		<parameter id="name" value="WordExportAction" />
+		<parameter id="description" value="Action WordExportAction" />
+		<parameter id="version" value="1.0" />
+		<parameter id="priority" value="5" />
+	</extension>
 </plugin>

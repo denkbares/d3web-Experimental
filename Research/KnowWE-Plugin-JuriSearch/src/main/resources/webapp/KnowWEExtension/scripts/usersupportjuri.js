@@ -32,6 +32,47 @@ KNOWWE.plugin.usersupportjuri = function() {
 	
 	return {
 		
+				/**
+		 * Function:    init
+		 * Description: inits import and export buttons
+		 */
+		init : function(){
+			
+			exportbuttonsword = _KS('.word-export');
+			for (var i = 0; i < exportbuttonsword.length; i++) {
+				 _KE.add('click', exportbuttonsword[i], KNOWWE.plugin.usersupportjuri.exportActionWord);
+			}
+
+        },
+        
+        		/**
+		 * Function     : exportActionWord
+		 * @param event
+		 * Description  : adds the WordExportAction for Articles to the Button.
+		 * 				  Renders a download button as response. The doc is
+		 * 				  stored on the server.
+		 */
+		exportActionWord : function(event) {
+			
+			var rel = eval("(" + _KE.target( event ).getAttribute('rel') + ")");
+			
+			var params = {
+				action : 'WordExportAction',
+			}
+
+			var id = "export-download"+rel.objectId;
+						
+			var options = {
+				url : KNOWWE.core.util.getURL(params),
+				response : {
+					action : 'insert',
+                    ids : [ id ],
+				}
+			}
+			new _KA(options).send();
+
+		},
+		
 		/**
   		 * 
   		 * Function:    maybeAdd
