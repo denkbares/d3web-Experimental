@@ -21,8 +21,9 @@
 package de.knowwe.defi.logger;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
@@ -41,7 +42,8 @@ public class PageLoggerHandler implements PageAppendHandler {
 			UserContext user) {
 		if (log) {
 			try {
-				BufferedWriter buffy = new BufferedWriter(new FileWriter(path, true));
+				BufferedWriter buffy = new BufferedWriter(new OutputStreamWriter(
+						new FileOutputStream(path, true), "UTF-8"));
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				String uhrzeit = sdf.format(new Date(System.currentTimeMillis()));
 				buffy.append(uhrzeit + ";" + user.getUserName() + ";" + user.getTopic() + "\n");

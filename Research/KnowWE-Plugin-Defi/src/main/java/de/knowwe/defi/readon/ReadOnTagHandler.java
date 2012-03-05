@@ -19,9 +19,11 @@
 package de.knowwe.defi.readon;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +70,9 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 		}
 
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(path));
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					(new FileInputStream(
+					new File(path))), "UTF-8"));
 			while ((line = br.readLine()) != null) {
 				if (userContext.getUserName().equals(line.split(";")[1])
 						&& units.contains(line.split(";")[2]))
