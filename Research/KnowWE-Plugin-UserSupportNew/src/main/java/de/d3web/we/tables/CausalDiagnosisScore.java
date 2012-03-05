@@ -79,7 +79,7 @@ public class CausalDiagnosisScore extends AbstractType
 	}
 
 	/**
-	 * Handles the creation of XCLRelations from CausalDiagnosisScoreMarkup
+	 * Handles the creation of HeuristicRules from CausalDiagnosisScoreMarkup
 	 * 
 	 * @author Johannes Dienst
 	 * @created 10.11.2011

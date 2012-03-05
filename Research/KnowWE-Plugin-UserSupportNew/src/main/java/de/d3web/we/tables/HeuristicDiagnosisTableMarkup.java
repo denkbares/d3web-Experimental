@@ -19,6 +19,7 @@
 package de.d3web.we.tables;
 
 import de.d3web.we.renderer.DefaultMarkupRendererUserSupport;
+import de.knowwe.core.compile.packaging.KnowWEPackageManager;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
@@ -43,7 +44,7 @@ public class HeuristicDiagnosisTableMarkup extends DefaultMarkupType
 	{
 		m = new DefaultMarkup("HeuristicDiagnosisTable");
 		m.addContentType(new HeuristicDiagnosisTable());
-		m.addAnnotation("package", true);
+		m.addAnnotation(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME, true);
 	}
 
 	public HeuristicDiagnosisTableMarkup()
