@@ -36,6 +36,7 @@ grant principal com.ecyrd.jspwiki.auth.authorize.Role "All" {
     permission com.ecyrd.jspwiki.auth.permissions.WikiPermission "*", "editProfile";
     permission com.ecyrd.jspwiki.auth.permissions.WikiPermission "*", "login";
     permission com.ecyrd.jspwiki.auth.permissions.PagePermission "*:Impressum", "view";
+	permission com.ecyrd.jspwiki.auth.permissions.PagePermission "*:Bildnachweis", "view";
 };
 
 
