@@ -34,12 +34,12 @@
 	}
 
 	ResourceBundle rb = ResourceBundle.getBundle("KnowWE_Defi_config");
-	String notfallplan = rb.getString("defi.link.notfall");
+	String notfallplan = rb.getString("defi.link.notfall")+user.getUserName();
 %>
 <div class="userbox">
 	<span>Pers&ouml;nliche Funktionen</span>
 	<div class="notfall">
-		<a href="<%=notfallplan%>" class="notfall"
+		<a href="<%=notfallplan%>" target="blank" class="notfall"
 			title="test"> <img src="KnowWEExtension/images/notfall.png"
 			width="73px" height="69px" alt="Notfallplan" />
 			<p>Notfallplan</p> </a>
