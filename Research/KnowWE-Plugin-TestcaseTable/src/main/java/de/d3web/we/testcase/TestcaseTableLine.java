@@ -31,7 +31,6 @@ import de.d3web.core.session.QuestionValue;
 import de.d3web.empiricaltesting.Finding;
 import de.d3web.empiricaltesting.RatedTestCase;
 import de.d3web.we.object.QuestionReference;
-import de.d3web.we.testcase.kdom.TimeStampType;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.kdom.InvalidKDOMSchemaModificationOperation;
 import de.knowwe.core.kdom.KnowWEArticle;
@@ -43,6 +42,7 @@ import de.knowwe.core.report.Messages;
 import de.knowwe.core.utils.KnowWEUtils;
 import de.knowwe.kdom.table.TableCell;
 import de.knowwe.kdom.table.TableLine;
+import de.knowwe.testcases.TimeStampType;
 
 /**
  * 

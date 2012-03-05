@@ -33,8 +33,8 @@ import de.d3web.empiricaltesting.RatedTestCase;
 import de.d3web.empiricaltesting.SequentialTestCase;
 import de.d3web.empiricaltesting.TestPersistence;
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.testcase.kdom.TimeStampType;
 import de.knowwe.core.utils.Strings;
+import de.knowwe.testcases.TimeStampType;
 
 /**
  * This class takes a sequential test case XML and creates markup for a
@@ -48,7 +48,6 @@ import de.knowwe.core.utils.Strings;
 public class STCToTestcaseTableConverter {
 
 	private static final String LINESEP = "\r\n";
-	
 
 	public static String convert(List<SequentialTestCase> cases, String master) {
 		StringBuilder markup = new StringBuilder();
@@ -56,10 +55,9 @@ public class STCToTestcaseTableConverter {
 			markup.append(convert(stc, master));
 			markup.append(LINESEP);
 		}
-		
+
 		return markup.toString();
 	}
-
 
 	/**
 	 * 
@@ -166,15 +164,12 @@ public class STCToTestcaseTableConverter {
 
 		return builder.toString();
 	}
-	
-	
-	
+
 	static String workspace = "d:/WiMVent/Faelle/";
 	static String knowledgebase_fn = "knowledgebase.d3web";
 	static String journal_fn = "20110714133256-Service.xml";
 	static String stc_input = "d3web_" + journal_fn;
 	static String tct_output = "tct_" + stc_input + ".txt";
-
 
 	public static void main(String[] args) throws Exception {
 
@@ -198,6 +193,5 @@ public class STCToTestcaseTableConverter {
 		}
 
 	}
-
 
 }

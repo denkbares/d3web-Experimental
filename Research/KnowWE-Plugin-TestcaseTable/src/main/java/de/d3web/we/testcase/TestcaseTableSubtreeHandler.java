@@ -33,8 +33,9 @@ import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.subtreeHandler.SubtreeHandler;
 import de.knowwe.core.report.Message;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.testcases.DefaultTestCaseStorage;
 import de.knowwe.testcases.SingleTestCaseProvider;
-import de.knowwe.testcases.SingleTestCaseStorage;
+import de.knowwe.testcases.TestCaseProvider;
 import de.knowwe.testcases.TestCaseProviderStorage;
 
 /**
@@ -83,9 +84,11 @@ public class TestcaseTableSubtreeHandler extends SubtreeHandler<TestcaseTable> {
 						"/TestCaseTable" + i);
 		// append Storage of the TestCaseProvider to the section of the default
 		// markup
+		List<TestCaseProvider> list = new LinkedList<TestCaseProvider>();
+		list.add(provider);
 		s.getFather().getFather().getSectionStore().storeObject(article,
 				TestCaseProviderStorage.KEY,
-				new SingleTestCaseStorage(provider));
+				new DefaultTestCaseStorage(list));
 
 		return null;
 	}

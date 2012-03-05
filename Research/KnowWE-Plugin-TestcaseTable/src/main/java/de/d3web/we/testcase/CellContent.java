@@ -20,7 +20,6 @@ package de.d3web.we.testcase;
 
 import java.util.List;
 
-import de.d3web.we.testcase.kdom.TimeStampType;
 import de.knowwe.core.kdom.Type;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
@@ -30,6 +29,7 @@ import de.knowwe.kdom.constraint.ConstraintSectionFinder;
 import de.knowwe.kdom.constraint.SectionFinderConstraint;
 import de.knowwe.kdom.table.TableCellContent;
 import de.knowwe.kdom.table.TableUtils;
+import de.knowwe.testcases.TimeStampType;
 
 /**
  * @author Florian Ziegler
@@ -59,7 +59,7 @@ public class CellContent extends TableCellContent {
 		@SuppressWarnings("unchecked")
 		@Override
 		public <T extends Type> boolean satisfiesConstraint(List<SectionFinderResult> found, Section<?> father, Class<T> type, String text) {
-			int column = TableUtils.getColumn((Section<? extends TableCellContent>) father);
+			int column = TableUtils.getColumn(father);
 			return this.column == column;
 		}
 
