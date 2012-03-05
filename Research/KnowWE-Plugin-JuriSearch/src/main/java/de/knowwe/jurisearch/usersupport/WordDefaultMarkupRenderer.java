@@ -21,7 +21,6 @@ package de.knowwe.jurisearch.usersupport;
 import java.util.ResourceBundle;
 
 import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -42,7 +41,6 @@ public class WordDefaultMarkupRenderer implements Renderer
 	public void render(Section<?> section, UserContext user, StringBuilder string)
 	{
 		new DefaultMarkupRenderer().render(section, user, string);
-		Section<WordDefaultMarkupContent> content = Sections.findSuccessor(section, WordDefaultMarkupContent.class);
 		StringBuilder buildi = new StringBuilder();
 		this.renderExportImportButton(buildi, section);
 		string.append(KnowWEUtils.maskHTML(buildi.toString()));
