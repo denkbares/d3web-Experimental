@@ -119,5 +119,9 @@ public interface IDialogObject {
 	public void setVisible(Boolean visible);
 
 	public void setXMLTag(org.w3c.dom.Element tag);
+        
+        //public String getCounter();
+        
+        //public void setCounter();
 
 }

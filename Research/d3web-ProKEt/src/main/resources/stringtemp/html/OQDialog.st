@@ -17,10 +17,13 @@ $HTMLHeader()$
         Bitte beantworten Sie die jeweils aktuell angezeigte Frage. Können Sie 
         eine Frage nicht direkt beantworten, können - falls vorhanden - mittels Klick auf den
         'Details' Button weitere, verfeinernde Fragen angefordert werden. Beantwortete Fragen   
-        werden automatisch vom System "zugeklappt"; die Antwort kann aber dennoch nachträglich
-        durch Klick auf die gewünschte Antwortalternative noch geändert werden.<br />
+        werden automatisch vom System auf eine kompaktere Darstellung "zugeklappt"; 
+        die Antwort kann dennoch nachträglich durch Klick auf die gewünschte Antwortalternative 
+        noch geändert werden.<br />
         Bewertet wird der im Diagnose-Panel angezeigte Sachverhalt; die aktuelle Bewertung
         wird aufgrund der eingegebenen Daten vom System automatisch jederzeit berechnet.
+        Nach Beendigung einer Beratungs-Session können die Antworten noch weiter geändert
+        werden, das System aktualisiert das Ergebnis dementsprechend.
         </div>
 
         <div id="solution" class="solution">
@@ -29,13 +32,13 @@ $HTMLHeader()$
             <div id="solutiontext">Ist das Arbeitsverhältnis wirksam gekündigt worden?</div>
 
             <div id="solHigh" class="solRating rating-high hide">
-                wird bestätigt.
+                Sachverhalt bestätigt.
             </div>
             <div id="solMed" class="solRating rating-medium hide">
-                ist unentschieden.
+                Sachverhalt nicht sicher entscheidbar.
             </div>
             <div id="solLow" class="solRating rating-low hide">
-                wird verneint.
+                Sachverhalt trifft nicht zu.
             </div>
             <div id="solUn" class="solRating">
                 Zu wenig Informationen für eine Bewertung.

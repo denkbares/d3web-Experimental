@@ -23,14 +23,16 @@ import java.util.Vector;
 
 import org.antlr.stringtemplate.StringTemplate;
 
-import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.session.Session;
 import de.d3web.proket.d3web.input.D3webUtils;
 import de.d3web.proket.data.Answer;
+import de.d3web.proket.data.Dialog;
 import de.d3web.proket.data.DialogTree;
 import de.d3web.proket.data.IDialogObject;
+import de.d3web.proket.data.Question;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.ClassUtils;
+import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.TemplateUtils;
 
 /**
@@ -208,6 +210,7 @@ public class Renderer implements IRenderer {
             columns = dialogObject.getInheritableAttributes().getAnswerColumns();
         }
 
+
         if (dialogObject instanceof Answer) {
             if (((Answer) dialogObject).getAbstraction()) {
                 System.out.println("ABSTRACTION: " + dialogObject.getText());
@@ -230,7 +233,23 @@ public class Renderer implements IRenderer {
 
         // for each of the child elements
         Vector<IDialogObject> children = dialogObject.getChildren();
+        int count = 0;
         for (IDialogObject child : children) {
+
+            // Setup for the hierarchical counter of questions
+            count++;
+            
+            // skip the topmost question (=diagnosis) 
+            if (dialogObject instanceof Question 
+                    && dialogObject.getParent() instanceof Dialog) {
+                ((Question) child).setCounter(Integer.toString(count));
+            } else 
+                
+                // otherwise only count, if dialog Objects are questions
+            if (!(dialogObject instanceof Dialog)){
+                addCount(dialogObject, child, count);
+            }
+
 
             // get the matching renderer
             IRenderer childRenderer = Renderer.getRenderer(child);
@@ -238,6 +257,8 @@ public class Renderer implements IRenderer {
             // receive the matching HTML from the Renderer and append
             String childHTML =
                     childRenderer.renderDialogObject(cc, child, false, force);
+
+
             if (childHTML != null) {
                 childrenHTML.append(childHTML);
             }
@@ -410,5 +431,21 @@ public class Renderer implements IRenderer {
         if (result != null) {
             cc.html.add(result);
         }
+    }
+
+    public void addCount(IDialogObject dialogObject) {
+        String qcnew = "";
+        String questioncount = GlobalSettings.getInstance().getQuestionCount();
+        int count = Integer.parseInt(questioncount);
+        qcnew = Integer.toString(++count);
+        ((Question) dialogObject).setCounter(qcnew);
+        GlobalSettings.getInstance().setQuestionCount(qcnew);
+    }
+
+    public void addCount(IDialogObject parent, IDialogObject child, int count) {
+        String parentCount = ((Question) parent).getCounter();
+        String childCount = Integer.toString(count);
+        String countTotal = parentCount + "." + childCount;
+        ((Question) child).setCounter(countTotal);
     }
 }

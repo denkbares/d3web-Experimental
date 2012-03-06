@@ -86,13 +86,12 @@ table{
 }
 
 .question .title {
-	min-height: 16px;
-	padding-left: 15px;
-        padding-right: 15px;
-        padding-bottom: 1px;
-	line-height: 1.75em;
-        margin-left: 15px;
-        font-weight: bold;
+    font-weight: bold;
+    line-height: 1.75em;
+    margin-left: 15px;
+    min-height: 16px;
+    padding-bottom: 1px;
+    padding-left: 15px;
 }
 
 
@@ -140,7 +139,10 @@ area {
 
 /* Styling of the div within questions that displays the currently propagated value */
 .propagation{
-    display: block; width: 150px; height: 22px; float: right; pading-right: 4px;
+     float: right;
+    height: 22px;
+    padding-right: 4px;
+    width: 150px;
 }
 .propagation.rating-high { 
     background-color: #C3DAA8; border: 1px solid grey; 
@@ -167,18 +169,20 @@ area {
 
 .floatingCDrop select{width: 54px; margin-left: 17px;}
 
-.ynbutton{width: 28px; height: 18px; 
-        border: 1px solid #696969; font-size: 0.8em; font-weight: bold;
-        text-align: center; cursor: pointer; 
-	background-color: #DCDFF3; 
-        -moz-box-shadow: -2px -2px 5px black;	
-	-webkit-box-shadow: 0 0 5px black; 
-        box-shadow: 0 0 5px black; 
-        margin-bottom: 10px;
-        margin-top: 7px;
-        float: left;
-        margin-right: 10px;
-        }
+.ynbutton {
+    background-color: #DCDFF3;
+    border: 1px solid #696969;
+    box-shadow: 0 0 5px black;
+    cursor: pointer;
+    float: left;
+    font-size: 0.8em;
+    font-weight: bold;
+    height: 16px;
+    margin-right: 10px;
+    margin-top: 4px;
+    text-align: center;
+    width: 28px;
+}
 
 .dialog99Width{
     width: 99%;
@@ -194,7 +198,10 @@ area {
 
 .show{display: block;}
 
-.titletext{font-weight: bold; padding-top: 5px; padding-left: 40px; padding-bottom: 5px;}
+.titletext {
+    font-weight: bold;
+    padding-left: 40px;
+}
 
 .auxpanelBottom{
     background-color: #fffff0;
@@ -263,5 +270,3 @@ area {
      float: left;
     padding: 2px 0;
 }
-
-

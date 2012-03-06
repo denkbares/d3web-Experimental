@@ -14,6 +14,8 @@
             $Tooltip()$
             $Image()$
             $text$
+        
+        <div id="propagation-$fullId$" class="propagation hide" onmouseover="" onmouseout=""></div>
         </div>
         
         <div id="detail-$fullId$" class="detailButton $hideDetails$" onclick="stepIntoDetail('$fullId$')"> 

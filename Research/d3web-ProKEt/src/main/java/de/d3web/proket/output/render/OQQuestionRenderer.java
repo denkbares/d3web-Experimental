@@ -21,6 +21,7 @@ package de.d3web.proket.output.render;
 
 import de.d3web.core.session.Session;
 import de.d3web.proket.data.IDialogObject;
+import de.d3web.proket.data.Question;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.utils.GlobalSettings;
 import de.d3web.proket.utils.TemplateUtils;
@@ -38,15 +39,14 @@ public class OQQuestionRenderer extends Renderer {
     public String renderDialogObject(ContainerCollection cc, IDialogObject dialogObject,
             boolean recurseCount, boolean excludeChildren, boolean force, Session session) {
 
+        System.out.println(dialogObject.getTitle() + "  COUNT: " + 
+                ((Question)dialogObject).getCounter());
         // TODO maybe null is not such a good idea here?
         // already rendered somewhere? If yes, and if render-force is not set
         // then return null, i.e. no representation
         if (dialogObject.isRendered() && !force) {
             return null;
         }
-
-
-
 
         StringBuilder result = new StringBuilder();
 
@@ -59,11 +59,10 @@ public class OQQuestionRenderer extends Renderer {
         } else {
             st.setAttribute("hide", "show");
 
-            String qcnew = "";
+           /* String qcnew = "";
             String questioncount = GlobalSettings.getInstance().getQuestionCount();
             String[] parts = questioncount.split("\\.");
-            System.out.println(recurseCount);
-
+            
             if (parts.length > 1) {
 
                 if (recurseCount) {
@@ -91,9 +90,12 @@ public class OQQuestionRenderer extends Renderer {
 
 
             st.setAttribute("questioncount", qcnew);
-            GlobalSettings.getInstance().setQuestionCount(qcnew);
+            GlobalSettings.getInstance().setQuestionCount(qcnew);*/
         }
 
+        st.setAttribute("questioncount", ((Question)dialogObject).getCounter());
+            
+        
         // get the inh.attributes of this objects and inherit missing
         // attributes where needed from parents
         dialogObject.getInheritableAttributes().compileInside();
@@ -131,6 +133,7 @@ public class OQQuestionRenderer extends Renderer {
     protected void renderChildren(StringTemplate st, ContainerCollection cc, 
             IDialogObject dialogObject, boolean force) {
 
+        System.out.println("OQRenderer");
         IDialogObject parent = dialogObject.getParent();
         String pTitle = parent.getTitle();
 
