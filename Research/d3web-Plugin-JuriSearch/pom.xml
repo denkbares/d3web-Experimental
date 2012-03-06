@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>Research</artifactId>
+    <groupId>de.uniwue.d3web</groupId>
+    <version>0.2-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
+  <artifactId>d3web-Plugin-JuriSearch</artifactId>
+  <name>d3web-Plugin JuriSearch</name>
+  <description>Inference for JuriSearch DashTree</description>
+  <dependencies>
+  	<dependency>
+  		<groupId>de.uniwue.d3web</groupId>
+  		<artifactId>d3web-Plugin-Kernel-ExtensionPoints</artifactId>
+  		<version>0.2-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>de.uniwue.d3web</groupId>
+  		<artifactId>d3web-Kernel</artifactId>
+  		<version>0.2-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>4.10</version>
+  	</dependency>
+  </dependencies>
+  <groupId>de.uniwue.d3web</groupId>
+  <version>0.2-SNAPSHOT</version>
+</project>
