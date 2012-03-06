@@ -52,6 +52,7 @@ import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.core.kdom.rendering.DelegateRenderer;
 import de.knowwe.core.kdom.rendering.Renderer;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -91,6 +92,7 @@ public class DebuggerRuleRenderer implements Renderer{
 		StringBuffer buffer = new StringBuffer();
 		String title = user.getTitle();
 
+		if (r != null) {
 		if (r.hasFired(session)) buffer.append("<div class='ruleContentFired' ruleid='"
 				+ r.hashCode() + "'>");
 		else buffer.append("<div class='ruleContent' ruleid='" + r.hashCode() + "'>");
@@ -102,6 +104,10 @@ public class DebuggerRuleRenderer implements Renderer{
 		buffer.append("</div>");
 
 		string.append(KnowWEUtils.maskHTML(buffer.toString()));
+		}
+		else {
+			DelegateRenderer.getInstance().render(sec, user, string);
+		}
 	}
 
 	/**
