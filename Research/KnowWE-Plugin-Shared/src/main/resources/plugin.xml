@@ -26,27 +26,8 @@
 		<parameter id="priority" value="4.9" />
 	</extension>
 	-->
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="SubClassing">
-		<parameter id="class"
-			value="de.d3web.we.kdom.dashTree.subclassing.SubClassing" />
-		<parameter id="name" value="SubClassing" />
-		<parameter id="description" value="Type SubClassing" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="4" />
-		<parameter id="scope" value="root" />
-	</extension>
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
-		id="XMLDashTree">
-		<parameter id="class"
-			value="de.d3web.we.kdom.dashTree.XMLDashTree" />
-		<parameter id="name" value="XMLDashTree" />
-		<parameter id="description" value="Type XMLDashTree" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="4" />
-		<parameter id="scope" value="root" />
-	</extension>
+
+
 	
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="Type"
@@ -136,16 +117,6 @@
 		<parameter id="priority" value="5" />
 	</extension>
 		
-	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
-		id="PageViewHandler">
-		<parameter id="class"
-			value="de.d3web.we.taghandler.PageViewHandler" />
-		<parameter id="name" value="PageViewHandler" />
-		<parameter id="description" value="TagHandler PageViewHandler" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>
-	
 		
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="ParseFullLocalPageButton">
@@ -157,17 +128,6 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-
-	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
-		id="OwlUploadHandler">
-		<parameter id="class"
-			value="de.d3web.we.taghandler.OwlUploadHandler" />
-		<parameter id="name" value="OwlUploadHandler" />
-		<parameter id="description" value="TagHandler OwlUploadHandler" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="TagHandlerListHandler">
@@ -200,15 +160,6 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
-		id="RenderClassMembersHandler">
-		<parameter id="class"
-			value="de.d3web.we.taghandler.RenderClassMembersHandler" />
-		<parameter id="name" value="RenderClassMembersHandler" />
-		<parameter id="description" value="TagHandler RenderClassMembersHandler" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="TemplateTagHandler">
@@ -221,15 +172,6 @@
 		<parameter id="script" value="KnowWE-Plugin-Shared.js" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
-		id="FactSheet">
-		<parameter id="class"
-			value="de.d3web.we.taghandler.FactSheet" />
-		<parameter id="name" value="FactSheet" />
-		<parameter id="description" value="TagHandler FactSheet" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="ImportKnOfficeHandler">
@@ -262,15 +204,6 @@
 		<parameter id="script" value="KnowWE-Plugin-Shared.js" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
-		id="OwlDownloadHandler">
-		<parameter id="class"
-			value="de.d3web.we.taghandler.OwlDownloadHandler" />
-		<parameter id="name" value="OwlDownloadHandler" />
-		<parameter id="description" value="TagHandler OwlDownloadHandler" />
-		<parameter id="version" value="1.0" />
-		<parameter id="priority" value="5" />
-	</extension>
 	
 	<extension plugin-id="KnowWEExtensionPoints" point-id="TagHandler"
 		id="ReportOveview">
@@ -314,12 +247,5 @@
 		<parameter id="priority" value="5" />
 	</extension>
 	
-	<extension plugin-id="KnowWEExtensionPoints" point-id="SemanticCoreImpl" id="SemanticCoreImpl">
-                <parameter id="class" value="de.d3web.we.core.semantic.SemanticCoreDummy"/>
-                <parameter id="name" value="SemanticCoreDummy"/>
-                <parameter id="description" value="core Dummy"/>
-                <parameter id="version"  value="0.0.1"/>
-                <parameter id="priority"  value="0" />
-     </extension>
 
 </plugin>
