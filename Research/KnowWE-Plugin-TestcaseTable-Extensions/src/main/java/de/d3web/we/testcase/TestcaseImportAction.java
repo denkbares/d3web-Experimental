@@ -37,7 +37,6 @@ import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
-import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
  * 
@@ -83,10 +82,8 @@ public class TestcaseImportAction extends AbstractAction {
 
 		@SuppressWarnings("unchecked")
 		Section<TestcaseTableType> section = (Section<TestcaseTableType>) Sections.getSection(sectionID);
-		String master = DefaultMarkupType.getAnnotation(section,
-				TestcaseTableType.ANNOTATION_MASTER);
 
-		KnowledgeBase kb = D3webUtils.getKnowledgeBase(context.getWeb(), master);
+		KnowledgeBase kb = D3webUtils.getKnowledgeBase(context.getWeb(), context.getTitle());
 		List<SequentialTestCase> cases;
 		try {
 
@@ -102,7 +99,7 @@ public class TestcaseImportAction extends AbstractAction {
 					"<a href='Wiki.jsp?page=" + section.getTitle() + "'>back</a>");
 			return;
 		}
-		String stcs = STCToTestcaseTableConverter.convert(cases, master);
+		String stcs = STCToTestcaseTableConverter.convert(cases, context.getTitle());
 
 		Map<String, String> nodesMap = new HashMap<String, String>();
 		nodesMap.put(sectionID, stcs);

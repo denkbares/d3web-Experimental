@@ -56,7 +56,6 @@ public class CellContent extends TableCellContent {
 			this.column = column;
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public <T extends Type> boolean satisfiesConstraint(List<SectionFinderResult> found, Section<?> father, Class<T> type, String text) {
 			int column = TableUtils.getColumn(father);

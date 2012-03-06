@@ -23,7 +23,6 @@ import java.io.IOException;
 
 import de.d3web.empiricaltesting.TestCase;
 import de.d3web.empiricaltesting.writer.TestSuiteXMLWriter;
-import de.knowwe.core.KnowWEAttributes;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
@@ -42,7 +41,6 @@ public class TestcaseDownload extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 
-		String topic = context.getParameter(KnowWEAttributes.TOPIC);
 		String web = context.getParameter("web");
 		String filename = context.getParameter("filename");
 		String nodeID = context.getParameter("nodeid");
@@ -53,7 +51,7 @@ public class TestcaseDownload extends AbstractAction {
 		Section<TestcaseTable> table = Sections.findSuccessor(tableDMType, TestcaseTable.class);
 
 		KnowWEArticle master = KnowWEEnvironment.getInstance().getArticleManager(
-				web).getArticle(TestcaseTableType.getMaster(tableDMType, topic));
+				web).getArticle(context.getTitle());
 
 		TestCase t = (TestCase) KnowWEUtils.getStoredObject(master, table,
 				TestcaseTable.TESTCASE_KEY);

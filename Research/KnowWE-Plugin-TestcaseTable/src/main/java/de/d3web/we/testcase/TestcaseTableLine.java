@@ -75,7 +75,7 @@ public class TestcaseTableLine extends TableLine {
 		@Override
 		public Collection<Message> create(KnowWEArticle article, Section<TestcaseTableLine> s) {
 
-			KnowledgeBase kb = findKB(s, article);
+			KnowledgeBase kb = D3webUtils.getKnowledgeBase(article.getWeb(), article.getTitle());
 
 			Section<TimeStampType> timeStamp = Sections.findSuccessor(s, TimeStampType.class);
 
@@ -147,16 +147,6 @@ public class TestcaseTableLine extends TableLine {
 			return Collections.emptyList();
 		}
 
-		private KnowledgeBase findKB(Section<TestcaseTableLine> s, KnowWEArticle article) {
-
-			String master = TestcaseTableType.getMaster(
-					Sections.findAncestorOfExactType(s, TestcaseTableType.class),
-					article.getTitle());
-
-			return D3webUtils.getKnowledgeRepresentationHandler(article.getWeb()).getKB(
-					master);
-
-		}
 	}
 
 }

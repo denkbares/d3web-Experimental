@@ -19,7 +19,6 @@
 package de.d3web.we.testcase;
 
 import de.knowwe.core.compile.packaging.KnowWEPackageManager;
-import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkup;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.kdom.renderer.StyleRenderer;
@@ -31,7 +30,6 @@ import de.knowwe.kdom.renderer.StyleRenderer;
  */
 public class TestcaseTableType extends DefaultMarkupType {
 
-	public static final String ANNOTATION_MASTER = "master";
 	public static final String ANNOTATION_SHOW_SKIP_BUTTON = "showskip";
 	private static DefaultMarkup m = null;
 
@@ -41,8 +39,6 @@ public class TestcaseTableType extends DefaultMarkupType {
 		m.addAnnotation(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME, false);
 		m.addAnnotationRenderer(KnowWEPackageManager.PACKAGE_ATTRIBUTE_NAME,
 				StyleRenderer.ANNOTATION);
-		m.addAnnotation(ANNOTATION_MASTER, false);
-		m.addAnnotationRenderer(ANNOTATION_MASTER, StyleRenderer.ANNOTATION);
 		m.addAnnotation(ANNOTATION_SHOW_SKIP_BUTTON, false, "true", "false");
 		m.addAnnotationRenderer(ANNOTATION_SHOW_SKIP_BUTTON, StyleRenderer.ANNOTATION);
 
@@ -54,21 +50,4 @@ public class TestcaseTableType extends DefaultMarkupType {
 	public TestcaseTableType() {
 		super(m);
 	}
-
-	/**
-	 * Gets the name of the master specified in the master annotation of the
-	 * supplied section. If no annotation is present, the second argument is
-	 * returned.
-	 * 
-	 * @created 22.01.2011
-	 * @param section
-	 * @param topic
-	 * @return
-	 */
-	public static String getMaster(Section<TestcaseTableType> section, String topic) {
-		String master = DefaultMarkupType.getAnnotation(section, ANNOTATION_MASTER);
-		if (master != null) return master;
-		else return topic;
-	}
-
 }

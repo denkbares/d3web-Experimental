@@ -66,7 +66,7 @@ public class TestcaseTableSubtreeHandler extends SubtreeHandler<TestcaseTable> {
 
 		}
 
-		KnowWEUtils.storeObject(article, s, TestcaseTable.TESTCASE_KEY, testcase);
+		KnowWEUtils.storeObject(s.getArticle(), s, TestcaseTable.TESTCASE_KEY, testcase);
 
 		List<Section<TestcaseTable>> sections = Sections.findSuccessorsOfType(
 				s.getArticle().getSection(), TestcaseTable.class);
