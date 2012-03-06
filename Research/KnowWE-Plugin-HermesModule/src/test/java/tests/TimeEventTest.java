@@ -14,7 +14,6 @@ import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.QueryRow;
 
 import de.d3web.plugin.test.InitPluginManager;
-import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotation;
 import de.knowwe.core.KnowWEArticleManager;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.compile.packaging.KnowWEPackageManager;
@@ -34,7 +33,6 @@ public class TimeEventTest extends TestCase {
 	public void setUp() throws Exception {
 		InitPluginManager.init();
 		KnowWEPackageManager.overrideAutocompileArticle(true);
-		RootType.getInstance().addChildType(new SemanticAnnotation());
 		KnowWEEnvironment.initKnowWE(new KnowWETestWikiConnector());
 		ke = KnowWEEnvironment.getInstance();
 		type = ke.getRootType();
@@ -48,7 +46,8 @@ public class TimeEventTest extends TestCase {
 		// Create TimeEvents
 		List<TimeEvent> eventsInput = new ArrayList<TimeEvent>();
 		List<String> sources = new ArrayList<String>();
-		eventsInput.add(new TimeEvent("Testing", "!§$&/=?#-.,;:_", 1, sources, "8jv-9jv", "",
+		eventsInput.add(new TimeEvent("Testing", "!§$&/=?#-.,;:_", 1, sources, "8jv-9jv",
+				"",
 				testtopic));
 		eventsInput.add(new TimeEvent("MeinTestevent", "Beschreibung dieses Events", 1, sources,
 				"8jv", "", testtopic));
