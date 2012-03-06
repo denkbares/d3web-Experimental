@@ -2,7 +2,7 @@
     <img id="$fullid$-readimg" alt="readflow" src="$readimg$" height="14" width="25">
 </div>
  
-<div id="$fullId$" class="question $fullId$ $answerType$ $andOrType$" inter="$defmin$-$defmax$">
+<div id="$fullId$" class="question $fullId$ $answerType$ $andOrType$" inter="$defmin$-$defmax$" >
 
 <div id="$id$-imagebox" class="question-imagebox" onmouseover="showAuxInfo('$fullId$')">
             <img id="$id$-typeimg" alt="type" src="$typeimg$" height="20" width="20" onclick="toggle_sub_4boxes('$fullId$')">

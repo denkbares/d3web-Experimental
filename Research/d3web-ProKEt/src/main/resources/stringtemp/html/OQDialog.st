@@ -13,31 +13,39 @@ $HTMLHeader()$
 
     
     <div id="intro">
-        <div id="solution" class="solution hide">
-    Ist das Arbeitsverhältnis wirksam gekündigt worden?
-    <div id="solHigh" class="solRating rating-high hide">
-    wird bestätigt.
-    </div>
-    <div id="solMed" class="solRating rating-medium hide">
-    ist unentschieden.
-    </div>
-    <div id="solLow" class="solRating rating-low hide">
-    wird verneint.
-    </div>
-<div id="solUn" class="solRating hide">
-    ist nicht bewertet.
-    </div>
-    </div>
+        <div id="introtext">
+        Bitte beantworten Sie die jeweils aktuell angezeigte Frage. Können Sie 
+        eine Frage nicht direkt beantworten, können - falls vorhanden - mittels Klick auf den
+        'Details' Button weitere, verfeinernde Fragen angefordert werden. Beantwortete Fragen   
+        werden automatisch vom System "zugeklappt"; die Antwort kann aber dennoch nachträglich
+        durch Klick auf die gewünschte Antwortalternative noch geändert werden.<br />
+        Bewertet wird der im Diagnose-Panel angezeigte Sachverhalt; die aktuelle Bewertung
+        wird aufgrund der eingegebenen Daten vom System automatisch jederzeit berechnet.
+        </div>
+
+        <div id="solution" class="solution">
+            <div id="solutionboxtext">Diagnose-Panel</div>
+
+            <div id="solutiontext">Ist das Arbeitsverhältnis wirksam gekündigt worden?</div>
+
+            <div id="solHigh" class="solRating rating-high hide">
+                wird bestätigt.
+            </div>
+            <div id="solMed" class="solRating rating-medium hide">
+                ist unentschieden.
+            </div>
+            <div id="solLow" class="solRating rating-low hide">
+                wird verneint.
+            </div>
+            <div id="solUn" class="solRating">
+                Zu wenig Informationen für eine Bewertung.
+            </div>
+        </div>
     </div>
     
     <div id="dialog" class="dialog99Width">
          $children$	
     </div>
-
-    
-    
-    
-                 
 
 </div>
 </body>

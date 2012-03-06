@@ -182,12 +182,6 @@ public class Renderer implements IRenderer {
         cc.tc.addNextCell(id, colspan);
     }
 
-    protected void renderChildren(StringTemplate st, ContainerCollection cc,
-            IDialogObject dialogObject, boolean force) {
-
-        renderChildren(st, cc, false, dialogObject, force);
-    }
-
     /**
      * Render the child elements of a dialog object
      *
@@ -198,7 +192,7 @@ public class Renderer implements IRenderer {
      * @param dialogObject the object
      * @param force flag if a re-rendering(?) should be forced
      */
-    protected void renderChildren(StringTemplate st, ContainerCollection cc, boolean recurse,
+    protected void renderChildren(StringTemplate st, ContainerCollection cc,
             IDialogObject dialogObject, boolean force) {
         StringBuilder childrenHTML = new StringBuilder();
 
@@ -243,7 +237,7 @@ public class Renderer implements IRenderer {
 
             // receive the matching HTML from the Renderer and append
             String childHTML =
-                    childRenderer.renderDialogObject(cc, child, recurse, false, force);
+                    childRenderer.renderDialogObject(cc, child, false, force);
             if (childHTML != null) {
                 childrenHTML.append(childHTML);
             }
@@ -331,7 +325,7 @@ public class Renderer implements IRenderer {
 
         // children: if they are not to be excluded, just render them forcedly
         if (!excludeChildren) {
-            renderChildren(st, cc, false, dialogObject, force);
+            renderChildren(st, cc, dialogObject, force);
         }
 
         // append filled template to result string

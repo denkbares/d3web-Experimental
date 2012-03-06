@@ -105,7 +105,7 @@ public class OQQuestionRenderer extends Renderer {
         handleCss(cc, dialogObject);
         // children: if they are not to be excluded, just render them forcedly
         if (!excludeChildren) {
-            renderChildren(st, cc, false, dialogObject, force);
+            renderChildren(st, cc, dialogObject, force);
         }
 
         // append filled template to result string
@@ -128,7 +128,7 @@ public class OQQuestionRenderer extends Renderer {
     }
 
     @Override
-    protected void renderChildren(StringTemplate st, ContainerCollection cc, boolean recurse,
+    protected void renderChildren(StringTemplate st, ContainerCollection cc, 
             IDialogObject dialogObject, boolean force) {
 
         IDialogObject parent = dialogObject.getParent();
@@ -214,7 +214,7 @@ public class OQQuestionRenderer extends Renderer {
             }
         }
 
-        super.renderChildren(st, cc, true, dialogObject, force);
+        super.renderChildren(st, cc, dialogObject, force);
 
     }
 }

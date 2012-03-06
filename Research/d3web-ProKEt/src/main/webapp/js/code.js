@@ -87,7 +87,7 @@ function setup() {
     if(hierarchy){
         expandFirstmostElement();
     
-        exchangeTextFirstSub();
+        exchangeReadflowTextFirstSubQuestion();
         
         // initialize mechanism for num fields to check entered values etc
         initializeNumfields();
@@ -160,17 +160,21 @@ function handleLogging(){
     
 }
 
-
-/*Helper function to exchange the text of the first subquestion - usually 
- *Oder and Und - of a set of subquestions to the given text, e.g. "Wenn" 
+/**
+ * Retrieve the topmost element in hierarchically specified XML prototypes.
+ * Usually this is the first <question> element.
  */
-function exchangeTextFirstSub(){
+function retrieveRootQuestionIdInHierarchyPrototype(){
     
-    $("[id^=sub-] [id^=readFlow]:first-child img").each(function(){     
-        $(this).attr('src', 'img/If.png');
+    var first; // get question id
+    
+    $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements     
+        if($(this).attr("id")!=undefined){  
+            first = $(this).attr("id");   // expand the first element
+        }   
     });
+    return first;
 }
-
 
 /**
  * Retrieve the first element in hierarchical dialogs and expand it on startup
@@ -178,15 +182,17 @@ function exchangeTextFirstSub(){
  */
 function expandFirstmostElement(){
     
-    $("[id^=dialog] > [id^=q_]").each(function(){  // check all question elements
-        
-        var first = $(this).attr("id"); // get question id
-        
-        if($(this).attr("id")!=undefined){  
-               
-            toggle_sub_4boxes(first);   // expand the first element
-        }
-      
+    var rootId = retrieveRootQuestionIdInHierarchyPrototype();
+    toggle_sub_4boxes(rootId);   // expand the first element
+}
+
+/*Helper function to exchange the text of the first subquestion - usually 
+ *Oder and Und - of a set of subquestions to the given text, e.g. "Wenn" 
+ */
+function exchangeReadflowTextFirstSubQuestion(){
+    
+    $("[id^=sub-] [id^=readFlow]:first-child img").each(function(){     
+        $(this).attr('src', 'img/If.png');
     });
 }
 
@@ -1122,12 +1128,35 @@ function h4boxes(value, id) {
     setColorForQuestion(target, item, value);
     
     // store user set value as uservalue attribute
+    storeUserVal(target, value);
+    
+    // set color of propagation-color indicator
     setPropagationColor(target, value);
         
     // also mark parents of the target while excluding target
     h4boxes_mark(target, true);
 		
     
+}
+
+function storeUserVal(question, value){
+    
+    switch(value){
+        case "1":
+            $(question).addClass("uv1").removeClass("uv2").removeClass("uv3").removeClass("uv0");
+            break;
+        case "2":
+            $(question).addClass("uv2").removeClass("uv1").removeClass("uv3").removeClass("uv0");
+            break;
+        case "3":
+            $(question).addClass("uv3").removeClass("uv2").removeClass("uv1").removeClass("uv0");
+            break;
+        case "0":
+            $(question).addClass("uv0").removeClass("uv2").removeClass("uv3").removeClass("uv1");
+            break;
+        
+    }
+        
 }
 
 // set the color for the area indicating the system-propagated value
@@ -1257,7 +1286,6 @@ function calculateRatingForQuestion(question){
                 ratings += "0 ";
             }
         });
-          
           
     // AND case
     if(ocPar){
@@ -1510,7 +1538,7 @@ function toggleAuxInfoPlacing(){
 /**
 * Transfer coloring (in hierarchy dialog) also to parent quesitons
 * @param object the object from where to start marking parents
-* @parents skip_self flag indicating whether element itself should
+* @param skip_self flag indicating whether element itself should
 * 		also be processed
 */
 function h4boxes_mark(object, skip_self) {
@@ -1520,12 +1548,27 @@ function h4boxes_mark(object, skip_self) {
 		
         var color; 
         
-        color = calculateRatingForQuestion(object);
-          
         // retrieve target element and target image
         var target = $("#" + $(object).attr('id'));
         
         var imgTarget = $("#panel-" + $(object).attr('id'));
+        
+        color = calculateRatingForQuestion(object);
+        
+       
+        if(color=="0"){
+            
+            if(object.hasClass("uv1")){
+                color = "1"; 
+            } else if(object.hasClass("uv2")){
+                color = "2"; 
+            } else if(object.hasClass("uv3")){
+                color = "3"; 
+            } else if(object.hasClass("uv0")){
+                color = "0"; 
+            } 
+            
+        }
         
         setColorForQuestion(target, imgTarget, color);
         setPropagationColor(target);
@@ -1886,8 +1929,12 @@ function showAuxInfoOQD(id, title){
     $("#auxInfo-"+id).html(auxinfo);
 }
 
+/**
+ * Handle everything there is to do when a y/n question in the OQDialog is clicked,
+ * i.e., and answer is provided
+ */
 function handleOQYNQuestions(fullId, rating){
-  
+    
     // retrieve follow up element to current element
     var splitID = fullId.split("-")[1];
     var questionEl = $("#"+splitID);
@@ -1904,68 +1951,65 @@ function handleOQYNQuestions(fullId, rating){
         followUp = retrieveFollowUpParent(questionEl);
     }
     
-    if(followUp == undefined || followUp.attr("id") == undefined){
+    //if(followUp == undefined || followUp.attr("id") == undefined){
         
         // show solution box
-        $("#solution").removeClass("hide");
-        $("#solution").addClass("show");
+        //$("#solution").removeClass("hide");
+        //$("#solution").addClass("show");
         
         // show solution rating
-        
-               
-               
-            var solQuestion = $("#dialog").children().first();   
-            var rating = calculateRatingForQuestion(solQuestion);
-            alert(rating);
+        var solQuestion = $("#dialog").children().first();  
+       
+        var rating = calculateRatingForQuestion($(solQuestion));
             
-            switch (rating) {
-        case "1": // approve --> green
-            $("#solHigh").addClass("show");
-            $("#solHigh").removeClass("hide");
-            $("#solUn").addClass("hide");
-            $("#solUn").removeClass("show");
-            $("#solMed").addClass("hide");
-            $("#solMed").removeClass("show");
-            $("#solLow").addClass("hide");
-            $("#solLow").removeClass("show");
-            break;
+        switch (rating) {
+            case "1": // approve --> green
+                $("#solHigh").addClass("show");
+                $("#solHigh").removeClass("hide");
+                $("#solUn").addClass("hide");
+                $("#solUn").removeClass("show");
+                $("#solMed").addClass("hide");
+                $("#solMed").removeClass("show");
+                $("#solLow").addClass("hide");
+                $("#solLow").removeClass("show");
+                break;
             
-        case "0": // undecided --> transparent
-            $("#solUn").addClass("show");
-            $("#solUn").removeClass("hide");
-             $("#solHigh").addClass("hide");
-            $("#solHigh").removeClass("show");
-            $("#solMed").addClass("hide");
-            $("#solMed").removeClass("show");
-            $("#solLow").addClass("hide");
-            $("#solLow").removeClass("show");
-            break;
+            case "0": // undecided --> transparent
+                $("#solUn").addClass("show");
+                $("#solUn").removeClass("hide");
+                $("#solHigh").addClass("hide");
+                $("#solHigh").removeClass("show");
+                $("#solMed").addClass("hide");
+                $("#solMed").removeClass("show");
+                $("#solLow").addClass("hide");
+                $("#solLow").removeClass("show");
+                break;
         
-        case "2": // suggested  --> yellow
-            $("#solMed").addClass("show");
-            $("#solMed").removeClass("hide");
-             $("#solUn").addClass("hide");
-            $("#solUn").removeClass("show");
-            $("#solHigh").addClass("hide");
-            $("#solHigh").removeClass("show");
-            $("#solLow").addClass("hide");
-            $("#solLow").removeClass("show");
-            break;
-        case "3": // rejected -_> red
-            $("#solLow").addClass("show");
-            $("#solLow").removeClass("hide");
-             $("#solUn").addClass("hide");
-            $("#solUn").removeClass("show");
-            $("#solMed").addClass("hide");
-            $("#solMed").removeClass("show");
-            $("#solHigh").addClass("hide");
-            $("#solHigh").removeClass("show");
-            break;
-    }
+            case "2": // suggested  --> yellow
+                $("#solMed").addClass("show");
+                $("#solMed").removeClass("hide");
+                $("#solUn").addClass("hide");
+                $("#solUn").removeClass("show");
+                $("#solHigh").addClass("hide");
+                $("#solHigh").removeClass("show");
+                $("#solLow").addClass("hide");
+                $("#solLow").removeClass("show");
+                break;
+            case "3": // rejected -_> red
+                $("#solLow").addClass("show");
+                $("#solLow").removeClass("hide");
+                $("#solUn").addClass("hide");
+                $("#solUn").removeClass("show");
+                $("#solMed").addClass("hide");
+                $("#solMed").removeClass("show");
+                $("#solHigh").addClass("hide");
+                $("#solHigh").removeClass("show");
+                break;
+        }
             
             
         
-    } else {
+   // } else {
         // toggle follow up element to be visible by toggling its super-sub element
         // and then toggling the follow up itself
         var fpar = followUp.parents().closest('[id^="sub-q_"]');
@@ -1973,12 +2017,27 @@ function handleOQYNQuestions(fullId, rating){
         fpar.addClass("show");
         followUp.removeClass("hide");
         followUp.addClass("show");
-    }
+        
+        closeAllChildren(questionEl);
+  //  }
     
       
     // toggle auxinfo and styling for current element
     questionEl.children().first().children().closest('[id^=auxpanel]').addClass("hide");
     questionEl.children().first().children().closest('[id^=detail]').addClass("hide");
+}
+
+/**
+ * Toggle all sub-elements of the given question --> also sub-questions, again
+ */
+function closeAllChildren(question){
+    $(question).children().each(function(){
+        
+        if($(this).attr("id").indexOf("sub-q")!=-1){
+            $(this).removeClass("show");
+            $(this).addClass("hide");
+        }
+    });
 }
 
 function retrieveFollowUpForQuestion(questionEl){

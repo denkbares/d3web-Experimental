@@ -139,7 +139,7 @@ public class DialogRenderer extends Renderer {
 		}
 
 		// children
-		renderChildren(st, cc, recurseCount, dialogObject, force);
+		renderChildren(st, cc, dialogObject, force);
 
 		// add JS/CSS
 		// some global JS goes here

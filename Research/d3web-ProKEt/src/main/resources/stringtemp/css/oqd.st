@@ -36,9 +36,19 @@ body,div {
     right: 0;
 }
 
+#introtext{
+background-color: white;
+    font-family: Arial;
+    font-size: 8pt;
+    left: 10%;
+    padding: 10px;
+    position: fixed;
+    right: 10%;
+}
+
 #dialog{
     float: left;
-    margin-top: 75px;
+    margin-top: 170px;
 }
 
 
@@ -219,27 +229,39 @@ area {
     font-weight: bold;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 15px;
-    padding: 12px;
+    margin-top: 90px;
+    padding: 30px;
     width: 50%;
 }
 
 .solRating {
+      background-color: #DEDEDE;
     float: right;
-    font-size: 1em;
     font-weight: bold;
-    margin-bottom: 5px;
-    padding-bottom: 2px;
-    padding-top: 2px;
+    padding: 2px 30px;
 }
 
 .solRating.rating-high { 
-    background-color: #C3DAA8; border: 1px solid grey; 
+    background-color: #C3DAA8; 
 }
 .solRating.rating-medium { 
-    background-color: #F4F4C7; border: 1px solid grey; 
+    background-color: #F4F4C7; 
 }
 .solRating.rating-low { 
-    background-color: #E0B59E; border: 1px solid grey; 
+    background-color: #E0B59E;  
 }
+
+#solutionboxtext{
+    font-size: 0.6em;
+    font-variant: small-caps;
+    font-weight: normal;
+    margin-left: -25px;
+    margin-top: -25px;
+}
+
+#solutiontext{
+     float: left;
+    padding: 2px 0;
+}
+
 
