@@ -30,9 +30,8 @@ import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.knowledge.terminology.QuestionYN;
 import de.d3web.core.session.Session;
-import de.d3web.we.basic.SessionBroker;
+import de.d3web.we.basic.SessionProvider;
 import de.d3web.we.utils.D3webUtils;
-import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.user.UserContext;
 
 /**
@@ -56,26 +55,16 @@ public class OneQuestionDialogUtils {
 
 		kwuser = user;
 
-		/*
-		 * D3webKnowledgeService knowledgeService =
-		 * D3webModule.getAD3webKnowledgeServiceInTopic( web, topic);
-		 * 
-		 * return SessionFactory.createSession(knowledgeService.getBase());
-		 */
-
-		KnowledgeBase knowledgeServiceInTopic = D3webUtils.getKnowledgeBase(
+		KnowledgeBase kb = D3webUtils.getKnowledgeBase(
 				web, topic);
-		String kbid = knowledgeServiceInTopic.getId();
 
-		SessionBroker broker = D3webUtils.getBroker(user.getUserName(), web);
-
-		Session session = broker.getSession(kbid);
+		SessionProvider provider = SessionProvider.getSessionProvider(user);
+		Session session = provider.getSession(kb);
 
 		if (session == null) {
-			kbid = KnowWEEnvironment.generateDefaultID(KnowWEEnvironment.WIKI_FINDINGS);
-			session = broker.getSession(kbid);
-
+			session = provider.createSession(kb);
 		}
+
 		return session;
 	}
 

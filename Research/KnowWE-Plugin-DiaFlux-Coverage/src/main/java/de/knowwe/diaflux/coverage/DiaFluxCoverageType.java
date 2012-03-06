@@ -18,11 +18,13 @@
  */
 package de.knowwe.diaflux.coverage;
 
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
 import de.d3web.diaflux.coverage.CoverageResult;
 import de.d3web.diaflux.coverage.CoverageSessionObject;
 import de.d3web.diaflux.coverage.DefaultCoverageResult;
 import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
+import de.d3web.we.basic.SessionProvider;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWERessourceLoader;
 import de.knowwe.core.compile.packaging.KnowWEPackageManager;
@@ -78,7 +80,9 @@ public class DiaFluxCoverageType extends DefaultMarkupType {
 		if (tests == null) {
 			String master = DiaFluxCoverageType.getMaster(coverageSection,
 					coverageSection.getTitle());
-			Session session = D3webUtils.getSession(master, user, user.getWeb());
+			SessionProvider provider = SessionProvider.getSessionProvider(user);
+			KnowledgeBase kb = D3webUtils.getKnowledgeBase(user.getWeb(), master);
+			Session session = provider.getSession(kb);
 			CoverageSessionObject coverage = PSMDiaFluxCoverage.getCoverage(session);
 			result = DefaultCoverageResult.calculateResult(coverage, session.getKnowledgeBase());
 		}

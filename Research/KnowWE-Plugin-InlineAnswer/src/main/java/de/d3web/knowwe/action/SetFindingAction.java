@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2009 Chair of Artificial Intelligence and Applied Informatics
  * Computer Science VI, University of Wuerzburg
- *
+ * 
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -39,6 +39,7 @@ import de.d3web.core.session.blackboard.FactFactory;
 import de.d3web.core.session.values.DateValue;
 import de.d3web.core.session.values.NumValue;
 import de.d3web.core.session.values.TextValue;
+import de.d3web.we.basic.SessionProvider;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWEAttributes;
 import de.knowwe.core.action.AbstractAction;
@@ -63,7 +64,7 @@ public class SetFindingAction extends AbstractAction {
 		String valuenum = context.getParameter(KnowWEAttributes.SEMANO_VALUE_NUM);
 		String valuedate = context.getParameter(KnowWEAttributes.SEMANO_VALUE_DATE);
 		String valueText = context.getParameter(KnowWEAttributes.SEMANO_VALUE_TEXT);
-		String topic = context.getTopic();
+		String topic = context.getTitle();
 		String user = context.getUserName();
 		String web = context.getWeb();
 		String namespace = null;
@@ -74,8 +75,7 @@ public class SetFindingAction extends AbstractAction {
 					context.getParameter(KnowWEAttributes.SEMANO_NAMESPACE), "UTF-8");
 			String tempValueID = context.getParameter(KnowWEAttributes.SEMANO_VALUE_ID);
 			if (tempValueID != null) valueid = URLDecoder.decode(tempValueID, "UTF-8");
-			if (term != null)
-				term = URLDecoder.decode(term, "UTF-8");
+			if (term != null) term = URLDecoder.decode(term, "UTF-8");
 		}
 		catch (UnsupportedEncodingException e1) {
 			// should not occur
@@ -88,12 +88,12 @@ public class SetFindingAction extends AbstractAction {
 			return "null";
 		}
 
-		KnowledgeBase kb = D3webUtils.getKnowledgeRepresentationHandler(web).getKB(
-				topic);
-		Session session = D3webUtils.getSession(topic, user, web);
+		KnowledgeBase kb = D3webUtils.getKnowledgeBase(web, topic);
+		SessionProvider provider = SessionProvider.getSessionProvider(context);
+		Session session = provider.getSession(kb);
 		if (session == null) {
-			session = D3webUtils.getFirstSession(web, user, topic);
-			kb = D3webUtils.getFirstKnowledgeBase(web);
+			KnowledgeBase firstKB = D3webUtils.getFirstKnowledgeBase(web);
+			session = provider.createSession(firstKB);
 		}
 		Blackboard blackboard = session.getBlackboard();
 

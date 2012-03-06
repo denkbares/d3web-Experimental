@@ -39,11 +39,7 @@ import common.Logger;
 
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.session.Session;
 import de.d3web.core.session.Value;
-import de.d3web.core.session.values.NumValue;
-import de.d3web.we.basic.WikiEnvironment;
-import de.d3web.we.basic.WikiEnvironmentManager;
 import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.wisec.util.Criteria;
 import de.knowwe.core.event.Event;
@@ -85,9 +81,12 @@ public class WISECFindingSetEventListener implements EventListener {
 						criteria);
 				TupleQueryResult result = evaluateQuery(query);
 				double accumulatedValue = computeNumValue(criteria, result, computedLists, add);
-				setCounterValue(criteria, accumulatedValue, findingEvent.getWeb(),
-						findingEvent.getUsername(),
-						findingEvent.getNamespace());
+				// TODO: incompatible with new d3web-Session handling
+				// (refactoring necessary for usage!)
+				// setCounterValue(criteria, accumulatedValue,
+				// findingEvent.getWeb(),
+				// findingEvent.getUsername(),
+				// findingEvent.getNamespace());
 				System.out.println(criteria + ": " + accumulatedValue);
 			}
 			catch (RepositoryException e) {
@@ -127,14 +126,14 @@ public class WISECFindingSetEventListener implements EventListener {
 	private Query createQuery(Question question, Value value, String criteria) throws RepositoryException, MalformedQueryException {
 
 		String queryString = SemanticCoreDelegator.getInstance().getSparqlNamespaceShorts() +
-								"SELECT ?" + LIST + " ?" + criteria + " " +
-								"WHERE { " +
-								"<http://ki.informatik.uni-wuerzburg.de/d3web/we/knowwe.owl#" +
-								question.getName() + "> w:onListRelation ?substancelistrelation . "
+				"SELECT ?" + LIST + " ?" + criteria + " " +
+				"WHERE { " +
+				"<http://ki.informatik.uni-wuerzburg.de/d3web/we/knowwe.owl#" +
+				question.getName() + "> w:onListRelation ?substancelistrelation . "
 				+
-								"?" + LIST + " w:hasSubstanceRelation ?substancelistrelation . " +
-								"?" + LIST + " w:" + criteria + " ?" + criteria + " ." +
-								"}";
+				"?" + LIST + " w:hasSubstanceRelation ?substancelistrelation . " +
+				"?" + LIST + " w:" + criteria + " ?" + criteria + " ." +
+				"}";
 
 		RepositoryConnection con = SemanticCoreDelegator.getInstance().getUpper().getConnection();
 		return con.prepareQuery(QueryLanguage.SPARQL, queryString);
@@ -180,41 +179,43 @@ public class WISECFindingSetEventListener implements EventListener {
 		return add ? accumulatedValue : accumulatedValue * (-1);
 	}
 
-	/**
-	 * Adds the computed value to the counter of the current criteria.
-	 */
-	private void setCounterValue(String criteria, double accumulatedValue,
-			String web, String user, String namespace) {
-
-		if (accumulatedValue == 0) return;
-
-		// Get the KnowledgeServiceSession
-		WikiEnvironment env = WikiEnvironmentManager.getInstance().getEnvironments(web);
-		Session kss =
-				env.getBroker(user).getSession(namespace);
-		if (kss == null) {
-			Logger.getLogger(this.getClass()).error(
-					"Unable to get KnowledgeServiceSession for namespace: " + namespace);
-			return;
-		}
-
-		// Search the Counter-Question (P, B, Aqua_Tox etc.)
-		Question counterQuestion = kss.getKnowledgeBase().getManager().searchQuestion(
-				criteria);
-		if (counterQuestion == null) {
-			Logger.getLogger(this.getClass()).error(
-					"Counter-Question: " + criteria + " was not found! No value set!");
-			return;
-		}
-
-		// Get the old value
-		Value oldValue = kss.getBlackboard().getValue(counterQuestion);
-		double oldNumValue = oldValue instanceof NumValue ? (Double) oldValue.getValue() : 0;
-		NumValue newValue = new NumValue(oldNumValue + accumulatedValue);
-
-		// Set the new value
-		List<Object> newValueList = new LinkedList<Object>();
-		newValueList.add(newValue);
-	}
+	// /**
+	// * Adds the computed value to the counter of the current criteria.
+	// */
+	// private void setCounterValue(String criteria, double accumulatedValue,
+	// String web, String user, String namespace) {
+	//
+	// if (accumulatedValue == 0) return;
+	//
+	// // Get the KnowledgeServiceSession
+	// WikiEnvironment env =
+	// WikiEnvironmentManager.getInstance().getEnvironments(web);
+	// Session kss = null;
+	// if (kss == null) {
+	// Logger.getLogger(this.getClass()).error(
+	// "Unable to get KnowledgeServiceSession for namespace: " + namespace);
+	// return;
+	// }
+	//
+	// // Search the Counter-Question (P, B, Aqua_Tox etc.)
+	// Question counterQuestion =
+	// kss.getKnowledgeBase().getManager().searchQuestion(
+	// criteria);
+	// if (counterQuestion == null) {
+	// Logger.getLogger(this.getClass()).error(
+	// "Counter-Question: " + criteria + " was not found! No value set!");
+	// return;
+	// }
+	//
+	// // Get the old value
+	// Value oldValue = kss.getBlackboard().getValue(counterQuestion);
+	// double oldNumValue = oldValue instanceof NumValue ? (Double)
+	// oldValue.getValue() : 0;
+	// NumValue newValue = new NumValue(oldNumValue + accumulatedValue);
+	//
+	// // Set the new value
+	// List<Object> newValueList = new LinkedList<Object>();
+	// newValueList.add(newValue);
+	// }
 
 }

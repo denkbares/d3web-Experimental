@@ -1,36 +1,34 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.d3web.knowwe.action;
 
 import java.io.IOException;
 
+import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.session.Session;
-import de.d3web.we.basic.SessionBroker;
-import de.d3web.we.basic.WikiEnvironment;
-import de.d3web.we.basic.WikiEnvironmentManager;
+import de.d3web.we.basic.SessionProvider;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWEAttributes;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-
 
 /**
  * 
@@ -67,7 +65,7 @@ public class AnnotationAction extends AbstractAction {
 		String webname = context.getParameter(KnowWEAttributes.WEB);
 		String id = context.getParameter(KnowWEAttributes.SEMANO_OBJECT_ID);
 		String targetUrlPrefix = context.getParameter("sendToUrl");
-		String topic = context.getTopic();
+		String topic = context.getTitle();
 		if (topic == null) {
 			topic = namespace.substring(0, namespace.indexOf(".."));
 		}
@@ -81,9 +79,7 @@ public class AnnotationAction extends AbstractAction {
 
 		namespace = java.net.URLDecoder.decode(namespace);
 
-		WikiEnvironment dpse = WikiEnvironmentManager.getInstance()
-		.getEnvironments(webname);
-		SessionBroker broker = dpse.getBroker(user);
+		SessionProvider provider = SessionProvider.getSessionProvider(context);
 
 		if (id == null) {
 			return null;
@@ -93,13 +89,13 @@ public class AnnotationAction extends AbstractAction {
 		// TODO HOTFIX: This Action was not refactored: New Method for getting
 		// the Session.
 		String fixMe = namespace;
-		if (fixMe.contains(".."))
-			fixMe = fixMe.substring(0,fixMe.indexOf(".."));
-		Session session = broker.getSession(fixMe);
+		if (fixMe.contains("..")) fixMe = fixMe.substring(0, fixMe.indexOf(".."));
+		KnowledgeBase kb = D3webUtils.getKnowledgeBase(context.getWeb(), fixMe);
+		Session session = provider.getSession(kb);
 
 		if (session == null) {
-			session = D3webUtils.getFirstSession(context.getWeb(),
-					context.getUserName(), context.getTopic());
+			KnowledgeBase firstKB = D3webUtils.getFirstKnowledgeBase(webname);
+			session = provider.getSession(firstKB);
 		}
 
 		TerminologyObject obj = session.getKnowledgeBase().getManager().search(id);

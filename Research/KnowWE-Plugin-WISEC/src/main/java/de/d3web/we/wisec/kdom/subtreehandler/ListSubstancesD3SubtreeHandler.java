@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.knowledge.terminology.QuestionOC;
-import de.d3web.we.basic.WikiEnvironmentManager;
 import de.d3web.we.kdom.decisionTree.QuestionsSection;
 import de.d3web.we.reviseHandler.D3webSubtreeHandler;
 import de.d3web.we.wisec.kdom.ListSubstancesRootType;
@@ -133,7 +132,7 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 		KnowWEArticle globalsArticle = KnowWEEnvironment.getInstance().getArticleManager(web).getArticle(
 				"WISEC_D3Globals");
 		Section<QuestionsSection> questionsSection = Sections.findSuccessor(
-					globalsArticle.getSection(), QuestionsSection.class);
+				globalsArticle.getSection(), QuestionsSection.class);
 
 		if (globalsArticle != null && questionsSection != null) {
 			if (kb.getManager().searchQContainer("Substances") == null) new QContainer(
@@ -141,8 +140,6 @@ public class ListSubstancesD3SubtreeHandler extends D3webSubtreeHandler<ListSubs
 			if (kb.getManager().searchQuestion(sgn) == null) {
 				new QuestionOC(kb.getManager().searchQContainer("Substances"), sgn, "included",
 						"excluded");
-				WikiEnvironmentManager.registerKnowledgeBase(kb,
-						globalsArticle.getTitle(), globalsArticle.getWeb());
 			}
 		}
 	}

@@ -1,49 +1,41 @@
 /*
  * Copyright (C) 2011 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.d3web.knowwe.action;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
-import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Session;
-import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Blackboard;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.blackboard.FactFactory;
-import de.d3web.core.session.values.DateValue;
-import de.d3web.core.session.values.NumValue;
 import de.d3web.core.session.values.Unknown;
+import de.d3web.we.basic.SessionProvider;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.KnowWEAttributes;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.event.EventManager;
 import de.knowwe.d3web.event.FindingSetEvent;
-
 
 /**
  * 
@@ -64,25 +56,18 @@ public class RetractFindingAction extends AbstractAction {
 	private String retractValue(UserActionContext context) {
 
 		String objectid = context.getParameter(KnowWEAttributes.SEMANO_OBJECT_ID);
-		String valuenum =
-			context.getParameter(KnowWEAttributes.SEMANO_VALUE_NUM);
-		String valuedate =
-			context.getParameter(KnowWEAttributes.SEMANO_VALUE_DATE);
-		String topic = context.getTopic();
+		String topic = context.getTitle();
 		String user = context.getUserName();
 		String web = context.getWeb();
 
 		String namespace = null;
 		String term = null;
-		String valueid = null;
 		try {
 			topic = java.net.URLDecoder.decode(topic, "UTF-8");
 			namespace = java.net.URLDecoder.decode(
 					context.getParameter(KnowWEAttributes.SEMANO_NAMESPACE), "UTF-8");
-			valueid = URLDecoder.decode(context.getParameter(KnowWEAttributes.SEMANO_VALUE_ID),
-			"UTF-8");
 			term = URLDecoder.decode(context.getParameter(KnowWEAttributes.SEMANO_TERM_NAME),
-			"UTF-8");
+					"UTF-8");
 			if (objectid != null) objectid = URLDecoder.decode(objectid, "UTF-8");
 		}
 		catch (UnsupportedEncodingException e1) {
@@ -96,42 +81,22 @@ public class RetractFindingAction extends AbstractAction {
 			return "null";
 		}
 
-		KnowledgeBase kb = D3webUtils.getKnowledgeRepresentationHandler(web).getKB(
-				topic);
-		Session session = D3webUtils.getSession(topic, user, web);
+		KnowledgeBase kb = D3webUtils.getKnowledgeBase(web, topic);
+		SessionProvider provider = SessionProvider.getSessionProvider(context);
+		Session session = provider.getSession(kb);
 		if (session == null) {
-			session = D3webUtils.getFirstSession(web, user, topic);
-			kb = D3webUtils.getFirstKnowledgeBase(web);
+			KnowledgeBase firstKB = D3webUtils.getFirstKnowledgeBase(web);
+			session = provider.createSession(firstKB);
 		}
 		Blackboard blackboard = session.getBlackboard();
 
 		Question question = kb.getManager().searchQuestion(objectid);
 		if (question != null) {
 
-			Value value = null;
-			if (valueid != null) {
-				value = KnowledgeBaseUtils.findValue(question, valueid);
-			}
-			else if (valuenum != null) {
-				value = new NumValue(Double.parseDouble(valuenum));
-			}
-			else if (valuedate != null) {
-				final DateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-				try {
-					Date date = format.parse(valuedate);
-					value = new DateValue(date);
-				}
-				catch (ParseException e) {
-					e.printStackTrace();
-				}
-			}
-
-			//			if (value != null) {
-
 			// TODO Use this Code?
 			// 6.2011 Johannes
 			Unknown unknown = Unknown.getInstance();
-			synchronized(session) {
+			synchronized (session) {
 				Fact fact = FactFactory.createUserEnteredFact(question,
 						unknown);
 				blackboard.addValueFact(fact);
@@ -139,16 +104,6 @@ public class RetractFindingAction extends AbstractAction {
 			EventManager.getInstance().fireEvent(
 					new FindingSetEvent(question, unknown, namespace, web,
 							user));
-
-			//				Fact fact = blackboard.getValueFact(question);
-			//				if (fact.getValue().equals(value)) {
-			//					blackboard.removeValueFact(fact);
-			//				}
-			//			}
-			// need a FindingRetractedEvent?!
-			// EventManager.getInstance().fireEvent(
-			// new FindingSetEvent(question, value, namespace, web, user));
-			// }
 		}
 
 		return null;

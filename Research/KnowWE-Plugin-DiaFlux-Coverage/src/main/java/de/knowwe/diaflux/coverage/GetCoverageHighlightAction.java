@@ -32,6 +32,7 @@ import de.d3web.diaFlux.inference.DiaFluxUtils;
 import de.d3web.diaflux.coverage.CoverageResult;
 import de.d3web.diaflux.coverage.DefaultCoverageResult;
 import de.d3web.diaflux.coverage.PSMDiaFluxCoverage;
+import de.d3web.we.basic.SessionProvider;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
@@ -76,7 +77,9 @@ public class GetCoverageHighlightAction extends AbstractAction {
 
 			KnowWEArticle article = KnowWEUtils.getCompilingArticles(diaFluxSec).iterator().next();
 
-			Session session = D3webUtils.getSession(article.getTitle(), context, article.getWeb());
+			SessionProvider provider = SessionProvider.getSessionProvider(context);
+			KnowledgeBase kb = D3webUtils.getKnowledgeBase(context.getWeb(), article.getTitle());
+			Session session = provider.getSession(kb);
 
 			result = DefaultCoverageResult.calculateResult(
 					PSMDiaFluxCoverage.getCoverage(session),

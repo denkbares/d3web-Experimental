@@ -27,7 +27,6 @@ import de.d3web.knowwe.type.AnnotatedString;
 import de.d3web.knowwe.type.AnnotationObject;
 import de.d3web.knowwe.type.AnnotationProperty;
 import de.d3web.knowwe.type.SimpleAnnotation;
-import de.d3web.we.basic.D3webKnowledgeHandler;
 import de.d3web.we.utils.D3webUtils;
 import de.knowwe.core.contexts.AnnotationContext;
 import de.knowwe.core.contexts.ContextManager;
@@ -78,8 +77,7 @@ public class AnnotationInlineAnswerRenderer implements Renderer {
 
 		String web = sec.getWeb();
 		String title = sec.getTitle();
-		D3webKnowledgeHandler repHandler = D3webUtils.getKnowledgeRepresentationHandler(web);
-		KnowledgeBase service = repHandler.getKB(title);
+		KnowledgeBase service = D3webUtils.getKnowledgeBase(web, title);
 		String name = service.getName();
 		if (name == null) {
 			KnowledgeBase base = D3webUtils.getFirstKnowledgeBase(web);
