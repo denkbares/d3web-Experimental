@@ -25,10 +25,7 @@ import java.util.Collection;
 
 import org.apache.commons.fileupload.FileItem;
 
-import de.d3web.we.core.semantic.ISemanticCore;
-import de.d3web.we.core.semantic.SemanticCoreDelegator;
 import de.d3web.we.taghandler.ImportKnOfficeHandler;
-import de.d3web.we.taghandler.OwlUploadHandler;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.utils.KopicWriter;
 
@@ -113,44 +110,6 @@ public class KnOfficeUploadManager {
 					// String data = parser.parse();
 					// kopicWriter.appendDecisionTable(data);
 				}
-			}
-			if (fileItem.getFieldName().equals(ImportKnOfficeHandler.KEY_OWL)) {
-				String text = fileItem.getString();
-
-				String path = KnowWEEnvironment.getInstance()
-						.getKnowWEExtensionPath();
-				if (text != null && text.length() > 0) {
-					File file = new File(path + File.separatorChar
-							+ "owlincludes", fileItem.getName());
-					File fpath = new File(path, "owlincludes");
-
-					try {
-						if (!fpath.exists()) fpath.mkdirs();
-
-						if (!file.exists()) {
-							file.createNewFile();
-						}
-						else {
-							file.delete();
-							file.createNewFile();
-						}
-						fileItem.write(file);
-					}
-					catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					ISemanticCore sc = SemanticCoreDelegator.getInstance();
-					sc.getUpper().loadOwlFile(file);
-					return "redirect:Wiki.jsp?page=" + "SemanticSettings";
-				}
-			}
-
-			if (fileItem.getFieldName().equals(
-					OwlUploadHandler.KEY_DELETE_OWL)) {
-				String filename = fileItem.getString();
-				SemanticCoreDelegator.getInstance().removeFile(filename);
-				return "redirect:Wiki.jsp?page=" + "SemanticSettings";
 			}
 			if (fileItem.getFieldName().equals(ImportKnOfficeHandler.KEY_RULES)) {
 				String data = fileItem.getString();

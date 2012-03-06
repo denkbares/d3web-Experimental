@@ -23,7 +23,6 @@ package tests;
 import java.util.List;
 
 import junit.framework.TestCase;
-import de.d3web.we.kdom.semanticAnnotation.SemanticAnnotationProperty;
 import de.knowwe.core.kdom.basicType.LineBreak;
 import de.knowwe.core.kdom.sectionFinder.AllTextSectionFinder;
 import de.knowwe.core.kdom.sectionFinder.RegexSectionFinder;
@@ -79,16 +78,6 @@ public class KnowWESectionFinderTest extends TestCase {
 
 	}
 
-	public void testAnnotationPropertyFinder() {
-		String test = "blablub {{the currently measured mileage"
-					+ " <=> swrc:asks:: Real mileage  /100km}}bla blub";
-		SectionFinder f =
-					new SemanticAnnotationProperty().getSectionFinder();
-		List<SectionFinderResult> results = f.lookForSections(test, null, null);
-
-		assertEquals(WRONG_FIRST_START, 45, results.get(0).getStart());
-		assertEquals(WRONG_FIRST_END, 56, results.get(0).getEnd());
-	}
 
 	public void testAnnotationSubjectSectionFinder() {
 
