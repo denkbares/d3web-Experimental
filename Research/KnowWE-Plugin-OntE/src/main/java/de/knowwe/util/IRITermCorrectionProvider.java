@@ -11,6 +11,7 @@ import de.knowwe.core.correction.CorrectionProvider;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.objects.SimpleTerm;
 import de.knowwe.core.kdom.parsing.Section;
+import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
 
 /**
@@ -31,7 +32,7 @@ public class IRITermCorrectionProvider implements CorrectionProvider {
 		SimpleTerm termReference = ((SimpleTerm) section.get());
 
 		Collection<String> localTermMatches = terminologyHandler.getAllDefinedTermsOfType(
-				termReference.getTermObjectClass()
+				termReference.getTermObjectClass(Sections.cast(section, SimpleTerm.class))
 				);
 
 		String originalText = section.getText();
