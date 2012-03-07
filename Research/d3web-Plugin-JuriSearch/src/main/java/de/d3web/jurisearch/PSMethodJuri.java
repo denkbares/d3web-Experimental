@@ -63,7 +63,13 @@ public class PSMethodJuri implements PSMethod {
 
 		for (JuriRule rule : rulesToUpdate.keySet()) {
 			List<PropagationEntry> entries = rulesToUpdate.get(rule);
-			rule.fire(session, entries);
+			Fact fact = rule.fire(session, entries);
+			if (fact != null) {
+				session.getBlackboard().addValueFact(rule.fire(session, entries));
+			}
+			else {
+				session.getBlackboard().removeValueFact(rule.getFather(), rule);
+			}
 		}
 	}
 

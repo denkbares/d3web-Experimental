@@ -19,15 +19,19 @@
 package de.d3web.jurisearch;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import de.d3web.core.inference.KnowledgeKind;
 import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.inference.PropagationEntry;
-import de.d3web.core.knowledge.TerminologyObject;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.session.Session;
+import de.d3web.core.session.Value;
+import de.d3web.core.session.blackboard.Fact;
+import de.d3web.core.session.blackboard.FactFactory;
+import de.d3web.core.session.values.ChoiceValue;
 
 /**
  * 
@@ -38,9 +42,14 @@ public class JuriRule implements KnowledgeSlice {
 
 	public final static KnowledgeKind<JuriRule> KNOWLEDGE_KIND = new KnowledgeKind<JuriRule>(
 			"JuriRule", JuriRule.class);
-	public static final String YES = "yes";
-	public static final String NO = "no";
-	public static final String MAYBE = "maybe";
+
+	public static final Choice YES = new Choice("yes");
+	public static final Choice NO = new Choice("no");
+	public static final Choice MAYBE = new Choice("maybe");
+
+	public static final ChoiceValue YES_VALUE = new ChoiceValue(YES);
+	public static final ChoiceValue NO_VALUE = new ChoiceValue(NO);
+	public static final ChoiceValue MAYBE_VALUE = new ChoiceValue(MAYBE);
 
 	private QuestionOC father;
 	private List<QuestionOC> children;
@@ -55,21 +64,7 @@ public class JuriRule implements KnowledgeSlice {
 		this.father = father;
 		this.children = children;
 
-		for (QuestionOC child : this.children) {
-			child = setAlternatives(child);
-		}
-		this.father = setAlternatives(this.father);
 		disjunctive = false;
-	}
-
-	private QuestionOC setAlternatives(QuestionOC q) {
-		// for (Choice a : q.getAlternatives()) {
-		// q.removeAlternative(a);
-		// }
-		q.addAlternative(new Choice(YES));
-		q.addAlternative(new Choice(NO));
-		q.addAlternative(new Choice(MAYBE));
-		return q;
 	}
 
 	public QuestionOC getFather() {
@@ -78,7 +73,6 @@ public class JuriRule implements KnowledgeSlice {
 
 	public void setFather(QuestionOC father) {
 		this.father = father;
-		this.father = setAlternatives(father);
 	}
 
 	public List<QuestionOC> getChildren() {
@@ -87,13 +81,9 @@ public class JuriRule implements KnowledgeSlice {
 
 	public void setChildren(List<QuestionOC> children) {
 		this.children = children;
-		for (QuestionOC child : this.children) {
-			child = setAlternatives(child);
-		}
 	}
 
 	public void addChild(QuestionOC q) {
-		q = setAlternatives(q);
 		children.add(q);
 	}
 
@@ -109,65 +99,58 @@ public class JuriRule implements KnowledgeSlice {
 		this.disjunctive = disjunctive;
 	}
 
-	public void fire(Session session, List<PropagationEntry> entries) {
-		ArrayList<QuestionOC> affirmendQuestions = new ArrayList<QuestionOC>();
-		ArrayList<QuestionOC> negatedQuestions = new ArrayList<QuestionOC>();
-		ArrayList<QuestionOC> unansweredQuestions = new ArrayList<QuestionOC>();
-		for (PropagationEntry e : entries) {
-			TerminologyObject o = e.getObject();
-			if (o instanceof QuestionOC) {
-				QuestionOC q = (QuestionOC) o;
-				if (children.contains(q)) {
-					if (e.hasNewValue()) {
-						if (e.getNewValue().equals(YES)) {
-							affirmendQuestions.add(q);
-						}
-						else if (e.getNewValue().equals(NO)) {
-							negatedQuestions.add(q);
-						}
-					}
-					else {
-						unansweredQuestions.add(q);
-					}
-				}
-				// TODO
-				affirmendQuestions.add(q);
-			}
+	public Fact fire(Session session, List<PropagationEntry> changes) {
+		HashMap<QuestionOC, ChoiceValue> changedQuestions = new HashMap<QuestionOC, ChoiceValue>();
+		for (PropagationEntry change : changes) {
+			changedQuestions.put((QuestionOC) change.getObject(),
+					(ChoiceValue) change.getNewValue());
 		}
+		boolean maybe = false;
+		for (QuestionOC child : children) {
+			ChoiceValue value = null;
+			if (changedQuestions.keySet().contains(child)) {
+				value = changedQuestions.get(child);
+			}
+			else {
+				if (session.getBlackboard().getAnsweredQuestions().contains(child)) {
+					value = (ChoiceValue) session.getBlackboard().getValue(child);
+				}
+			}
 
-		if (!disjunctive) {
-			boolean maybe = false;
-			for (QuestionOC child : children) {
-				if (!affirmendQuestions.contains(child)) {
-					if (negatedQuestions.contains(child)) {
-						// fire no
+			if (value != null) {
+				if (!disjunctive) {
+					if (value.equals(NO_VALUE)) {
+						return createFact(session, NO_VALUE);
 					}
-					else {
-						maybe = true;
-					}
-				}
-			}
-			if (maybe) {
-				// fire maybe
-			}
-			// fire yes
-		}
-		else {
-			boolean maybe = false;
-			for (QuestionOC child : children) {
-				if (affirmendQuestions.contains(child)) {
-					// fire yes
 				}
 				else {
-					if (!negatedQuestions.contains(child)) {
-						maybe = true;
+					if (value.equals(YES)) {
+						return createFact(session, YES_VALUE);
 					}
 				}
+				if (value.equals(MAYBE_VALUE)) {
+					maybe = true;
+				}
 			}
-			if (maybe) {
-				// fire maybe
+			else {
+				if (!disjunctive) {
+					return null;
+				}
 			}
-			// fire no
 		}
+		if (maybe) {
+			return createFact(session, MAYBE_VALUE);
+		}
+		if (!disjunctive) {
+			return createFact(session, YES_VALUE);
+		}
+		else {
+			return createFact(session, NO_VALUE);
+		}
+	}
+
+	private Fact createFact(Session session, Value value) {
+		return FactFactory.createFact(session, father, value, this,
+				session.getPSMethodInstance(PSMethodJuri.class));
 	}
 }
