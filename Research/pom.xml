@@ -183,7 +183,6 @@
 		<module>KnowWE-Plugin-TestcaseTable</module>
 		<module>d3web-Plugin-Persistence-ImageQuestion</module>
 		<module>KnowWE-Plugin-Defi</module>
-		<module>KnowWE-Plugin-SemanticCore-MarkupSet</module>
 		<module>KnowWE-Plugin-Rdf2GoSemanticCore</module>
 		<module>KnowWE-Plugin-SemanticWikiSeedingLOD</module>
 		<module>KnowWE-Plugin-Renaming</module>
