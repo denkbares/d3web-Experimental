@@ -30,6 +30,8 @@ import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.utils.KnowWEUtils;
+import de.knowwe.testcases.table.TestcaseTable;
+import de.knowwe.testcases.table.TestcaseTableType;
 
 /**
  * 

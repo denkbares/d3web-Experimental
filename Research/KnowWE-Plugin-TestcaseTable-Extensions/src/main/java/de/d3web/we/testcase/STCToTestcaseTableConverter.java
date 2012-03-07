@@ -35,6 +35,7 @@ import de.d3web.empiricaltesting.TestPersistence;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.utils.Strings;
 import de.knowwe.testcases.TimeStampType;
+import de.knowwe.testcases.table.UnchangedType;
 
 /**
  * This class takes a sequential test case XML and creates markup for a

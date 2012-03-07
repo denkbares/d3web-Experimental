@@ -12,13 +12,6 @@
 	<name>KnowWE-Plugin-TestcaseTable-Extensions</name>
 	<dependencies>
 		<dependency>
-			<groupId>de.uniwue.d3web</groupId>
-			<artifactId>KnowWE-Plugin-TestcaseTable</artifactId>
-			<version>0.2-SNAPSHOT</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>catalina</artifactId>
 			<version>6.0.20</version>
@@ -28,6 +21,13 @@
 			<groupId>de.uniwue</groupId>
 			<artifactId>CaseGenerator</artifactId>
 			<version>0.2-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>KnowWE-Plugin-TestCases</artifactId>
+			<version>0.2-SNAPSHOT</version>
+			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
