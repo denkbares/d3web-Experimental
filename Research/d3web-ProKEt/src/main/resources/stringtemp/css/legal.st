@@ -24,6 +24,7 @@ body,div {
 	padding: 5px;
         position: fixed;
         margin: 0px;
+ width: 100%;
 }
 
 #intro{ 
@@ -214,3 +215,11 @@ area {
 .hide{display: none;}
 
 .show{display: block;}
+
+#solutionboxtext{
+    font-size: 0.7em;
+    font-variant: small-caps;
+    font-weight: normal;
+    margin-left: 5px;
+    margin-top: -5px;
+}

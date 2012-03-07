@@ -15,6 +15,7 @@ public enum UETerm {
     TS("timestamp"), 
     VAL("value"),
     BREAK("BREAK"),
+    SOL("SOLUTION"),
     LOAD("LOAD");
     
     private String stringrep;

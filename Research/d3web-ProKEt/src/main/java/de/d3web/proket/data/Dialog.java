@@ -55,7 +55,8 @@ public class Dialog extends DefaultDialogObject {
     protected String sidetext;
     protected Boolean logging = false;
     protected Boolean feedback = false;
-    protected Boolean uequest = false;
+    protected Boolean study = false;
+    protected String uequest = "none";
 
     public Dialog() {
         style = new InheritableAttributes(this);
@@ -124,11 +125,19 @@ public class Dialog extends DefaultDialogObject {
         return this.feedback;
     }
     
-    public void setUequest(Boolean ueq) {
+    public void setUequest(String ueq) {
         this.uequest = ueq;
     }
 
-    public Boolean hasUequest() {
+    public String getUequest() {
         return this.uequest;
+    }
+    
+     public void setStudy(Boolean s) {
+        this.study = s;
+    }
+
+    public Boolean isStudy() {
+        return this.study;
     }
 }

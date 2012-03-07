@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dialog sub-type="front" type="legal" css="legal, nofoot" header="Arbeitsrechtsberatung-Kündigung" and-or-type="AND" uequest="true" feedback="true">
+<dialog sub-type="front" type="legal" css="legal, nofoot" header="Arbeitsrechtsberatung-Kündigung" and-or-type="AND" uequest="OWN" feedback="true">
 		<question title="Ist das Arbeitsverhältnis wirksam und termingerecht gekündigt worden?"
 			id="1"
                         bonus-text="Diese Frage überprüft den Sachverhalt, ob das Arbeitsverhältnis

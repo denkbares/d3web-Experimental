@@ -39,9 +39,7 @@ public class OQQuestionRenderer extends Renderer {
     public String renderDialogObject(ContainerCollection cc, IDialogObject dialogObject,
             boolean recurseCount, boolean excludeChildren, boolean force, Session session) {
 
-        System.out.println(dialogObject.getTitle() + "  COUNT: " + 
-                ((Question)dialogObject).getCounter());
-        // TODO maybe null is not such a good idea here?
+         // TODO maybe null is not such a good idea here?
         // already rendered somewhere? If yes, and if render-force is not set
         // then return null, i.e. no representation
         if (dialogObject.isRendered() && !force) {

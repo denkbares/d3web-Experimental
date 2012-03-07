@@ -192,13 +192,15 @@ USABILITY EXTENSION
 -------------------
 - feedback form for prototypes also!
 - write questionnaire data to files --> refactor sendmail to send this file
+-- txtfilename = logfile currently is send in mail, but _ are not displayed
 instead of text in mail?! (needed, files will be stored on server also
 - tweak styling of feedback/questionnaire dialogs
 - own questionnaire --> some usability questions with schulnotenskala and freetext "sonstiges"
 - internationalize questionnaires
-- switch usability questionnaires by property, e.g allow "uequestionnaire=SUS" or
+DONE - switch usability questionnaires by property, e.g allow "uequestionnaire=SUS" or
 "uequestionnaire=OWN"
 - for above, also log appropriately WHICH Questionnaier was included
 - property based configuration of usability metrics / evaluation
 - visualization of appropriate results (WHICH ONES?)
 - Logging: when end session logtime is BEFORE save button click
+

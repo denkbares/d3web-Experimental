@@ -100,6 +100,8 @@ function setup() {
         
         // remove yn panel etc for first question
         removeInputFacilitiesForFirst();
+        
+    // some more styling of diagnosis element
     }
     
     // handle one question dialog
@@ -129,6 +131,12 @@ function handleUEQ(){
     $('#UEQButton').unbind('click').click(function(event) {
         $("#jqUEQDialog").dialog("open");
     });
+    
+    if($('#EndStudySessionButton')!=undefined){
+        $('#EndStudySessionButton').unbind('click').click(function(event) {
+            $("#jqUEQDialog").dialog("open");
+        });
+    }
 }
 
 function handleFB(){
@@ -137,6 +145,7 @@ function handleFB(){
     });
 }
 
+/* Logging initialization for prototypes */
 function handleLogging(){
    
     var link = $.query.set("action", "logInit").toString();
@@ -183,6 +192,8 @@ function retrieveRootQuestionIdInHierarchyPrototype(){
 function expandFirstmostElement(){
     
     var rootId = retrieveRootQuestionIdInHierarchyPrototype();
+
+   $("#" + rootId).addClass('solutiontext');
     toggle_sub_4boxes(rootId);   // expand the first element
 }
 
@@ -1501,10 +1512,10 @@ function removeInputFacilitiesForFirst(){
         if($(this).attr("id")!=undefined){  
             var id = "#" + $(this).attr("id").replace("q_", "") + "-imagebox";
             
-            
+            // the imagebox div, that contains input buttons normally
             var prop = $(id);
-    
-            prop.addClass("hide");
+            
+            prop.html("<div id='solutionboxtext'>Diagnose</div>");
         }
     });
 }
@@ -2017,6 +2028,8 @@ function handleOQYNQuestions(fullId, rating){
     // toggle auxinfo and styling for current element
     questionEl.children().first().children().closest('[id^=auxpanel]').addClass("hide");
     questionEl.children().first().children().closest('[id^=detail]').addClass("hide");
+    questionEl.children().first().children().closest('[id^=auxpanel]').removeClass("show");
+    questionEl.children().first().children().closest('[id^=detail]').removeClass("show");
 }
 
 /**
@@ -2084,6 +2097,8 @@ function stepIntoDetail(questionId){
         // toggle auxinfo and styling for current element
         question.children().first().children().closest('[id^=auxpanel]').addClass("hide");
         question.children().first().children().closest('[id^=detail]').addClass("hide");
+        question.children().first().children().closest('[id^=auxpanel]').removeClass("show");
+        question.children().first().children().closest('[id^=detail]').removeClass("show");
     }
 }
 
@@ -2095,4 +2110,12 @@ function makeInvisibleSiblings(original){
         original.next().removeClass("show");
         makeInvisibleSiblings(original.next());
     }
+}
+
+function toggleDetails(q){
+    question =  $(q);
+    question.children().first().children().closest('[id^=auxpanel]').addClass("show");
+    question.children().first().children().closest('[id^=detail]').addClass("show");
+    question.children().first().children().closest('[id^=auxpanel]').removeClass("hide");
+    question.children().first().children().closest('[id^=detail]').removeClass("hide");
 }

@@ -131,7 +131,7 @@ public class ServletLogUtils {
      *
      * @param end String representation of logging end time
      */
-    protected static void logSessionEnd(String end, JSONLogger logger) {
+    public static void logSessionEnd(String end, JSONLogger logger) {
         logger.setEndValOnLoad(end);
         logger.logEndValue(end);
         logger.writeJSONToFile();
@@ -233,5 +233,9 @@ public class ServletLogUtils {
                 logtime,
                 value);
         logger.writeJSONToFile();
+    }
+    
+    public static void logDiagnosis(String solutiontext, String rating, JSONLogger logger){
+        logger.logDiagnosis(solutiontext, rating);
     }
 }

@@ -13,7 +13,7 @@
             $if(hasChildren)$onclick="toggle_sub_4boxes('$fullId$')"$endif$>
     </div> 
     <div class="title t-$fullId$" id="t-$fullId$" onmouseover="showAuxInfo('$fullId$', '$title$')">
-        $title$
+        <div id="solutiontitle">$title$</div>
 		$Tooltip()$
 		$Image()$
 		$text$

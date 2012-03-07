@@ -24,6 +24,7 @@ body,div {
 	padding: 5px;
         position: fixed;
         margin: 0px;
+        width: 100%;
 }
 
 #intro{ 

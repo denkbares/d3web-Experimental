@@ -2,7 +2,16 @@ $HTMLHeader()$
 
 <body>
 <div id="head">
-	$header$
+        <div id='headertext'>$header$</div>
+        $if(study)$
+            <div class="rightButton">
+                $ButtonEndStudySession()$
+            </div>
+        $elseif(ueq)$
+            <div class="leftButton">
+                $ButtonUEQuestionnaire()$
+            </div>
+        $endif$
 </div>
 
 <div id="content">
@@ -19,11 +28,15 @@ $HTMLHeader()$
         'Details' Button weitere, verfeinernde Fragen angefordert werden. Beantwortete Fragen   
         werden automatisch vom System auf eine kompaktere Darstellung "zugeklappt"; 
         die Antwort kann dennoch nachträglich durch Klick auf die gewünschte Antwortalternative 
-        noch geändert werden.<br />
+        noch geändert werden; hierzu können Zusatzinfo und Detail-Button per Klick auf 
+        den Fragetext erneut sichtbar gemacht werden.
         Bewertet wird der im Diagnose-Panel angezeigte Sachverhalt; die aktuelle Bewertung
         wird aufgrund der eingegebenen Daten vom System automatisch jederzeit berechnet.
         Nach Beendigung einer Beratungs-Session können die Antworten noch weiter geändert
-        werden, das System aktualisiert das Ergebnis dementsprechend.
+        werden, das System aktualisiert das Ergebnis dementsprechend.<br />
+        <b>Wenn Sie die Beratungs-Session als beendet sehen (weil sie alle Fragen beantwortet
+        haben und/oder mit dem Ergebnis zufrieden sind) bestätigen Sie dies bitte per Klick auf
+        den Button <i>End Session</i> und beantworten Sie den anschließend angezeigten Kurzfragebogen!</b>.
         </div>
 
         <div id="solution" class="solution">

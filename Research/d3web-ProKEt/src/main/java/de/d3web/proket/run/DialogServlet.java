@@ -59,6 +59,7 @@ public class DialogServlet extends HttpServlet {
     private static final long serialVersionUID = -1514789465295324518L;
     private static final SimpleDateFormat DATE_FORMAT_DEFAULT =
             new SimpleDateFormat("yyyyMMdd_HHmmss");
+    private String sourceSave = "";
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -96,6 +97,21 @@ public class DialogServlet extends HttpServlet {
 
         HttpSession httpSession = request.getSession(true);
 
+       String source = getSource(request);
+       
+       // set SRC store attribute to "" per default for avoiding nullpointers
+        if (sourceSave == null) {
+            sourceSave = "";
+        }
+
+        // only parse again if stored source is not equal to current source
+        // then a new dialog has been called
+        if (!sourceSave.equals(source)) {
+            httpSession.removeAttribute("initlogged");
+            //httpSession.setAttribute("first", "true");
+            sourceSave = source;
+        }
+
         // in case nothing other is provided, "show" is the default action
         String action = request.getParameter("action");
         if (action == null) {
@@ -106,8 +122,28 @@ public class DialogServlet extends HttpServlet {
             show(httpSession, response, request);
             return;
         } else if (action.equalsIgnoreCase("logInit")) {
-            logInitially(request, response, httpSession);
+
+            if (httpSession.getAttribute("initlogged") == null) {
+                response.getWriter().append("firsttime");
+                httpSession.setAttribute("initlogged", "true");
+            } else {
+                logInitially(request, response, httpSession);
+            }
+
             return;
+        } else if (action.equalsIgnoreCase("logEnd")) {
+
+            String end = request.getParameter("timestring").replace("+", " ");
+            JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
+            ServletLogUtils.logSessionEnd(end, logger);
+
+        } else if (action.equalsIgnoreCase("logDiagnosis")) {
+
+            String soltext = request.getParameter("id").replace("+", " ");
+            String rating = request.getParameter("rating");
+            JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
+            ServletLogUtils.logDiagnosis(soltext, rating, logger);
+
         } else if (action.equalsIgnoreCase("sendFeedbackMail")) {
             String state = "";
             if (request.getParameter("feedback") != null) {
@@ -135,7 +171,7 @@ public class DialogServlet extends HttpServlet {
                 e.printStackTrace();
             }
             return;
-        } 
+        }
     }
 
     /**
@@ -167,56 +203,50 @@ public class DialogServlet extends HttpServlet {
     /**
      * Initialization of the logging mechanisms. If nothing has been logged
      * before, first browser and user info need to be gathered by JS, thus
-     * return with "firsttime" in writer. 
-     * Afterwards, JS calls this action again, now has the browser and user
-     * info, and can start logging.
-     * // TODO: do this refactoring (logInit not existing anymore) also for
-     * // D3webServlets.
+     * return with "firsttime" in writer. Afterwards, JS calls this action
+     * again, now has the browser and user info, and can start logging. // TODO:
+     * do this refactoring (logInit not existing anymore) also for //
+     * D3webServlets.
+     *
      * @param request
      * @param response
      * @param httpSession
-     * @throws IOException 
+     * @throws IOException
      */
     protected void logInitially(HttpServletRequest request,
             HttpServletResponse response, HttpSession httpSession) throws IOException {
 
         PrintWriter writer = response.getWriter();
+        GlobalSettings.getInstance().setLogFolder(
+                GlobalSettings.getInstance().getServletBasePath()
+                + "../../Study-Data/logs");
 
         /*
-         * check if initial log is already done; if not append firsttime. This
-         * is the flag for JS to first retrieve the browser and user, and then
-         * call this method/action again to go to "else" */
-        if (!GlobalSettings.getInstance().initLogged()) {
-            writer.append("firsttime");
-            GlobalSettings.getInstance().setInitLogged(true);
-        } 
-        
-        /* in this case, the logging initialisation, i.e. retrieval of browser
+         * in this case, the logging initialisation, i.e. retrieval of browser
          * etc info has been done successfully and now those values can be
-         * processed further */
-        else {
-            Date now = new Date();
-            JSONLogger logger = new JSONLogger(createLogfileName(now, httpSession));
-            
-            
-            // initialize logging
-            //ServletLogUtils.initForPrototypeDialogs(logger, now, httpSession);
-            
-            String browser =
-                    request.getParameter("browser").replace("+", " ");
-            String user =
-                    request.getParameter("user").replace("+", " ");
-            String start =
-                    request.getParameter("timestring").replace("+", " ");
-            ServletLogUtils.logBaseInfo(browser, user, start, logger);
-        }
+         * processed further
+         */
+
+        Date now = new Date();
+        JSONLogger logger = new JSONLogger(createLogfileName(now, httpSession));
+
+        String browser =
+                request.getParameter("browser").replace("+", " ");
+        String user =
+                request.getParameter("user").replace("+", " ");
+        String start =
+                request.getParameter("timestring").replace("+", " ");
+        ServletLogUtils.logBaseInfo(browser, user, start, logger);
+        httpSession.setAttribute("logger", logger);
+
     }
 
     /**
-     * Use the XMLParser to parse the prototype specification files.
-     * Therefore, src parameter (if specified) is used for determining which
-     * prototype spec to use, otherwise a default src is used. Returns a
-     * DialogTree representation of the dialog.
+     * Use the XMLParser to parse the prototype specification files. Therefore,
+     * src parameter (if specified) is used for determining which prototype spec
+     * to use, otherwise a default src is used. Returns a DialogTree
+     * representation of the dialog.
+     *
      * @param request
      * @param response
      * @param writer
@@ -231,24 +261,28 @@ public class DialogServlet extends HttpServlet {
         String source = "Standarddialog";
         if (request.getParameter("src") != null) {
             source = request.getParameter("src");
-        } 
-       
+        }
+
         // parse the input source
         XMLParser parser = new XMLParser(source);
-        
+
         // load the dialog into memory
         return parser.getTree();
     }
 
-      // TODO ingetrate logfilename creation for prototpes
-    protected String createLogfileName(Date loggingstart, HttpSession httpSession){
+    // TODO ingetrate logfilename creation for prototpes
+    protected String createLogfileName(Date loggingstart, HttpSession httpSession) {
+
         String formatted = DATE_FORMAT_DEFAULT.format(loggingstart);
-        String sid = (String)httpSession.getId();
+        String sid = (String) httpSession.getId();
         //String sid = D3webConnector.getInstance().getSession().getId();
 
-        return formatted + "_" + sid + ".txt";
+        String logfilename = formatted + "_" + sid + ".txt";
+        httpSession.setAttribute("logfile", logfilename);
+
+        return logfilename;
     }
-    
+
     protected void sendFeedbackMail(HttpServletRequest request,
             HttpServletResponse response,
             HttpSession httpSession) throws MessagingException {
@@ -297,10 +331,10 @@ public class DialogServlet extends HttpServlet {
          */
         //TODO include dialog flag here
         // TODO refactor: used both by d3web dialogs and normal prototypes ?!
-        /*String dialogFlag = d3wcon.getUserprefix();
-        if (dialogFlag == null) {
-            dialogFlag = "";
-        }*/
+        /*
+         * String dialogFlag = d3wcon.getUserprefix(); if (dialogFlag == null) {
+         * dialogFlag = ""; }
+         */
         message.setSubject("Feedback");
 
         message.setText("Username:\t" + username + "\n"
@@ -310,12 +344,12 @@ public class DialogServlet extends HttpServlet {
         Transport.send(message);
 
     }
-    
+
     protected void sendUEQMail(HttpServletRequest request,
             HttpServletResponse response,
             HttpSession httpSession) throws MessagingException {
 
-       
+
         final String user = "SendmailAnonymus@freenet.de";
         final String pw = "sendmail";
 
@@ -356,26 +390,30 @@ public class DialogServlet extends HttpServlet {
         message.addRecipient(Message.RecipientType.TO, to);
 
         /*
-         * Constructing the message
-         *  Questionnaire Data: questionID1***value1###questionID2***value2###
+         * Constructing the message Questionnaire Data:
+         * questionID1***value1###questionID2***value2###
          */
-        
+
         String[] qvpairs = qData.split("###");
         StringBuilder qDataBui = new StringBuilder();
-        
-        for(String pair : qvpairs){
+
+        qDataBui.append("Corresponding Logfile: ");
+        qDataBui.append(httpSession.getAttribute("logfile").toString());
+        qDataBui.append("\n\n");
+
+        for (String pair : qvpairs) {
             String[] splitpair = pair.split("---");
             qDataBui.append(splitpair[0].replace("UE_", ""));
             qDataBui.append(" --> ");
             qDataBui.append(splitpair[1]);
             qDataBui.append("\n");
         }
-        
+
         // TODO find way to include dialog name here
-        /*String dialogFlag = d3wcon.getUserprefix();
-        if (dialogFlag == null) {
-            dialogFlag = "";
-        }*/
+        /*
+         * String dialogFlag = d3wcon.getUserprefix(); if (dialogFlag == null) {
+         * dialogFlag = ""; }
+         */
         message.setSubject("UE Questionnaire Data");
 
         message.setText("Username:\t" + username + "\n"
@@ -384,5 +422,19 @@ public class DialogServlet extends HttpServlet {
                 + qDataBui.toString().replace("_", " "));
         Transport.send(message);
 
+    }
+
+       protected String getSource(HttpServletRequest request) {
+
+        // Overwrite if necessary
+        String source = "Default.xml"; // default
+        if (request.getParameter("src") != null) {
+            source = request.getParameter("src");
+        }
+        return source.endsWith(".xml") ? source : source + ".xml";
+        
+        
+        
+        
     }
 }

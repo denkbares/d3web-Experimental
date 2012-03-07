@@ -70,6 +70,10 @@ $(function(){
                 id: "sendUEQ",
                 text: sendUEQ,
                 click: function(){
+                    if(study && logging){    
+                        ue_logDiagnosis();
+                        ue_logEnd();
+                    }
                     ue_sendUEQ();
                 }
             },
@@ -87,9 +91,9 @@ $(function(){
 
 
 /**
-* Retrieve the browser information, i.e. the type and version. 
-* Returns a String in the form "<type> <version>"
-*/
+     * Retrieve the browser information, i.e. the type and version. 
+     * Returns a String in the form "<type> <version>"
+     */
 function retrieveBrowserVal(){
     
     return BrowserDetect.browser + " " + BrowserDetect.version;
@@ -101,9 +105,9 @@ function retrieveUserVal(){
 }
 
 /**
-* Send Ajax request for logging basic information, currently browser information
-* type and version, as well as user info
-*/
+     * Send Ajax request for logging basic information, currently browser information
+     * type and version, as well as user info
+     */
 function ue_logBrowserAndUser(browser, user){
     
     var now = ue_getCurrentDate();
@@ -182,14 +186,14 @@ function ue_logLanguageWidgetClicked(el){
 
 
 /**
-* Send the end-of-logging command
- */
+     * Send the end-of-logging command
+     */
 function ue_logEnd(){
     
     var now = ue_getCurrentDate();        
     var link = $.query.set("action", "logEnd").set("timestring", now);
     link = window.location.href.replace(window.location.search, "") + link;
-
+    
     $.ajax({
         type : "GET",
         // async : false,
@@ -202,9 +206,9 @@ function ue_logEnd(){
 }
 
 /**
- * Log call time (start), time difference (duration), and id
- * of the parent widget of an info popup.
- */
+     * Log call time (start), time difference (duration), and id
+     * of the parent widget of an info popup.
+     */
 function ue_logInfoPopup(starttime, endtime, widget){
     
     var start = ue_formatDateString(new Date(starttime));
@@ -236,8 +240,8 @@ function ue_logInfoPopup(starttime, endtime, widget){
 
 
 /**
- * log attempts to set unallowed inputs
- */
+     * log attempts to set unallowed inputs
+     */
 function ue_logNotAllowedInput(numInput){
    
     var now = ue_getCurrentDate();       
@@ -257,9 +261,9 @@ function ue_logNotAllowedInput(numInput){
 }
 
 /**
- * Retrieves the current date and returns it in the form
- * Mo 2012_01_24 02:30:59
- */
+     * Retrieves the current date and returns it in the form
+     * Mo 2012_01_24 02:30:59
+     */
 function ue_getCurrentDate(){
     
     var now = new Date(); // retrieve the current date
@@ -268,9 +272,9 @@ function ue_getCurrentDate(){
 }
 
 /**
- * Formats a given date object in the form and res
- * Mo 2012_01_24 02:30:59
- */
+     * Formats a given date object in the form and res
+     * Mo 2012_01_24 02:30:59
+     */
 function ue_formatDateString(date){
     var month = 1+date.getMonth();
     
@@ -281,9 +285,9 @@ function ue_formatDateString(date){
 }
 
 /**
- * Sends an ajax request to deliver an automatical email with user feedback
- * to the developers
- */
+     * Sends an ajax request to deliver an automatical email with user feedback
+     * to the developers
+     */
 function ue_sendFF(){
     
     var user = $('#ffname').val();
@@ -323,9 +327,9 @@ function ue_sendFF(){
 
 
 /**
- * Sends an ajax request to deliver an automatical email with user feedback
- * to the developers
- */
+     * Sends an ajax request to deliver an automatical email with user feedback
+     * to the developers
+     */
 function ue_sendUEQ(){
     
     var user = $('#ueqname').val();
@@ -368,11 +372,11 @@ function ue_sendUEQ(){
 }
 
 /**
- * Retrieves the data = question-value-pairs of the currently integrated
- * usability questionnaire in div "ueq"
- * returns Questionnaire Data in format: 
- *  questionID1***value1###questionID2***value2###
- */
+     * Retrieves the data = question-value-pairs of the currently integrated
+     * usability questionnaire in div "ueq"
+     * returns Questionnaire Data in format: 
+     *  questionID1***value1###questionID2***value2###
+     */
 function ue_retrieveQuestionnaireData(){
     
     var qData = "";
@@ -385,9 +389,9 @@ function ue_retrieveQuestionnaireData(){
 }
 
 /**
- * Checks whether the given questionnaire data (q-a-pairs) reflect the complete
- * questionnaire or whether some questions hadn't been answered
- */
+     * Checks whether the given questionnaire data (q-a-pairs) reflect the complete
+     * questionnaire or whether some questions hadn't been answered
+     */
 function ue_dataComplete(qData){
     
     var testid;
@@ -400,4 +404,79 @@ function ue_dataComplete(qData){
         }
     });
     return flag;
+}
+
+function ue_logDiagnosis(){
+    
+    var now = ue_getCurrentDate();  
+    var rating;
+    var id;
+    var rootId = retrieveRootQuestionIdInHierarchyPrototype()
+    
+    // TODO: refactor that both dialogs have "solutiontext"; then
+    // the if/else needs to be queried otherwise 
+    // and StringTemplate needs adaption
+    // 
+    // in OQD Dialog 
+    if($("#solutiontext").attr("id") != undefined){
+        rating = ue_getSolutionRating($("#solutiontext"));
+        id = $("#solutiontext").html();
+    } else 
+    
+    // in HierarchyDialog
+    if($("#" + rootId).hasClass("solutiontext"))
+    {
+        if($("#" + rootId).hasClass("rating-high")){
+            rating = "1";
+        } else if ($("#" + rootId).hasClass("rating-med")){
+            rating = "2";
+        } else if ($("#" + rootId).hasClass("rating-low")){
+            rating = "3";
+        } else if (!$("#" + rootId).hasClass("rating-high")  
+            && !$("#" + rootId).hasClass("rating-med") 
+            && !$("#" + rootId).hasClass("rating-low") ){
+            rating = "0";
+        }
+        
+        id = $("#solutiontitle").html();
+    }
+    
+    
+    var link = $.query.set("action", "logDiagnosis").set("timestring", now)
+                        .set("id", id).set("rating", rating);
+    link = window.location.href.replace(window.location.search, "") + link;
+
+    $.ajax({
+        type : "GET",
+        // async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function() {
+        // no action needed
+        }
+    });
+}
+
+function ue_getSolutionRating(solutiontextid){
+    var rating = "-1";
+    $(solutiontextid).siblings().each(function(){
+        
+        if($(this).attr("id").indexOf("solHigh")!=-1 
+            && !($(this).hasClass("hide"))){
+            rating = "1";
+        } else 
+        if($(this).attr("id").indexOf("solMed")!=-1 
+            && !($(this).hasClass("hide"))){
+            rating = "2";
+        } else 
+        if($(this).attr("id").indexOf("solLow")!=-1 
+            && !($(this).hasClass("hide"))){
+            rating = "3";
+        } else 
+        if($(this).attr("id").indexOf("solUn")!=-1 
+            && !($(this).hasClass("hide"))){
+            rating = "0";
+        } 
+    });
+    return rating;
 }

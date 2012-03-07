@@ -17,7 +17,6 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-
 package de.d3web.proket.output.render;
 
 import java.util.Vector;
@@ -38,117 +37,126 @@ import de.d3web.proket.utils.TemplateUtils;
 
 /**
  * Renderer that handles some general dialog specific tasks.
- * 
+ *
  * @author Martina Freiberg, Johannes Mitlmeier
- * 
+ *
  */
 public class DialogRenderer extends Renderer {
 
-	public static IRenderer getRenderer(IDialogObjectParser dialogObject) {
-		IRenderer renderer = (IRenderer) ClassUtils.getBestObject(
-				dialogObject, "de.d3web.proket.output.render",
-				"Renderer");
-                System.out.println(dialogObject.getClass());
-                System.out.println(renderer.getClass());
-		return renderer;
-	}
+    public static IRenderer getRenderer(IDialogObjectParser dialogObject) {
+        IRenderer renderer = (IRenderer) ClassUtils.getBestObject(
+                dialogObject, "de.d3web.proket.output.render",
+                "Renderer");
+        System.out.println(dialogObject.getClass());
+        System.out.println(renderer.getClass());
+        return renderer;
+    }
 
-	protected void globalJS(de.d3web.proket.output.container.ContainerCollection cc,
-			de.d3web.proket.data.Dialog dialog) {
+    protected void globalJS(de.d3web.proket.output.container.ContainerCollection cc,
+            de.d3web.proket.data.Dialog dialog) {
 
-		cc.js.add("$(function() {init_all();});", 1);
-		cc.js.add("function init_all() {", 1);
-		cc.js.add("building = true;", 2);
-		cc.js.add("setup();", 2);
-		cc.js.add("building = false;", 2);
-		cc.js.add("remark();", 2);
-		cc.js.add("generate_tooltip_functions();", 3);
+        cc.js.add("$(function() {init_all();});", 1);
+        cc.js.add("function init_all() {", 1);
+        cc.js.add("building = true;", 2);
+        cc.js.add("setup();", 2);
+        cc.js.add("building = false;", 2);
+        cc.js.add("remark();", 2);
+        cc.js.add("generate_tooltip_functions();", 3);
 
-		cc.js.add("}", 31);
-	}
+        cc.js.add("}", 31);
+    }
+
+    /**
+     * Recursively build the navigation tree from the questionnaire structure.
+     *
+     * @param startElement
+     *            {@link IDialogObject} to start searching down from.
+     * @param st StringTemplate to add the data to.
+     */
+    private void makeNavigation(IDialogObject startElement, StringTemplate st) {
+        Vector<IDialogObject> children = startElement.getChildren();
+        for (IDialogObject child : children) {
+            if (child instanceof Questionnaire) {
+                // create subItem
+                StringTemplate childSt = TemplateUtils.getStringTemplate(
+                        "NavigationItem", "html");
+                // set title and link
+                if (child.getTitle() != null) {
+                    childSt.setAttribute("title", child.getTitle());
+                } else {
+                    childSt.setAttribute("title", child.getId());
+                }
+                childSt.setAttribute("fullId", child.getFullId());
+                childSt.setAttribute("link", "javascript:show_questionnaire(\'"
+                        + child.getFullId() + "');");
+
+                makeNavigation(child, childSt);
+                st.setAttribute("navlist", childSt.toString());
+            }
+        }
+    }
+
+    @Override
+    public String renderDialogObject(ContainerCollection cc,
+            IDialogObject dialogObject, boolean recurseCount, boolean excludeChildren, boolean force,
+            Session session) {
+
+        StringTemplate st = TemplateUtils.getStringTemplate(
+                dialogObject.getVirtualClassName(), "html");
+        if (st == null) {
+            return null;
+        }
+
+        fillTemplate(dialogObject, st);
+
+        handleCss(cc, dialogObject);
+
+        /*
+         * build the navigation
+         */
+        if (dialogObject instanceof Dialog) {
+            Dialog dialog = (Dialog) dialogObject;
+            if (dialog.isLogging()) {
+                cc.js.enableClickLogging();
+            }
 
 
-	/**
-	 * Recursively build the navigation tree from the questionnaire structure.
-	 * 
-	 * @param startElement
-	 *            {@link IDialogObject} to start searching down from.
-	 * @param st
-	 *            StringTemplate to add the data to.
-	 */
-	private void makeNavigation(IDialogObject startElement, StringTemplate st) {
-		Vector<IDialogObject> children = startElement.getChildren();
-		for (IDialogObject child : children) {
-			if (child instanceof Questionnaire) {
-				// create subItem
-				StringTemplate childSt = TemplateUtils.getStringTemplate(
-						"NavigationItem", "html");
-				// set title and link
-				if (child.getTitle() != null) {
-					childSt.setAttribute("title", child.getTitle());
-				} else {
-					childSt.setAttribute("title", child.getId());
-				}
-				childSt.setAttribute("fullId", child.getFullId());
-				childSt.setAttribute("link", "javascript:show_questionnaire(\'"
-						+ child.getFullId() + "');");
+            if (dialog.hasFeedback()) {
+                st.setAttribute("feedback", true);
+                cc.js.enableFeedback();
+            }
+            
+            if (!dialog.getUequest().equals("none")) {
+                 st.setAttribute("ueq", true);
+                 cc.js.enableUEQuestionnaire();
+                 
+                if (dialog.getUequest().equals("SUS")) {
+                    st.setAttribute("sus", true);
+                } else if (dialog.getUequest().equals("OWN")) {
+                    st.setAttribute("own", true);
+                }
+            }
+            
+            if (dialog.isStudy()) {
+                cc.js.enableStudy();
+                st.setAttribute("study", true);
+            }
 
-				makeNavigation(child, childSt);
-				st.setAttribute("navlist", childSt.toString());
-			}
-		}
-	}
+            makeNavigation(dialogObject, st);
 
-	@Override
-	public String renderDialogObject(ContainerCollection cc,
-			IDialogObject dialogObject, boolean recurseCount, boolean excludeChildren, boolean force,
-			Session session) {
+        }
 
-		StringTemplate st = TemplateUtils.getStringTemplate(
-				dialogObject.getVirtualClassName(), "html");
-		if (st == null) {
-			return null;
-		}
+        // children
+        renderChildren(st, cc, dialogObject, force);
 
-		fillTemplate(dialogObject, st);
+        // add JS/CSS
+        // some global JS goes here
+        globalJS(cc, (Dialog) dialogObject);
+        st.setAttribute("fullcss", cc.css.generateOutput());
+        st.setAttribute("fulljs", cc.js.generateOutput());
 
-		handleCss(cc, dialogObject);
-
-		/*
-		 * build the navigation
-		 */
-		if (dialogObject instanceof Dialog) {
-			Dialog dialog = (Dialog) dialogObject;
-			if(dialog.isLogging()){
-                            cc.js.enableClickLogging();
-                        }
-                        
-                        
-                        if(dialog.hasFeedback()){
-                            st.setAttribute("feedback", true);
-                            cc.js.enableFeedback();
-                        }
-                        
-                        if(dialog.hasUequest()){
-                            st.setAttribute("ueq", true);
-                            cc.js.enableUEQuestionnaire();
-                        }   
-                        
-                        makeNavigation(dialogObject, st);
-			
-		}
-
-		// children
-		renderChildren(st, cc, dialogObject, force);
-
-		// add JS/CSS
-		// some global JS goes here
-		globalJS(cc, (Dialog) dialogObject);
-		st.setAttribute("fullcss", cc.css.generateOutput());
-		st.setAttribute("fulljs", cc.js.generateOutput());
-
-		// save to output
-		st.setDefaultArgumentValues();
-		return st.toString();
-	}
+        // save to output
+        st.setDefaultArgumentValues();
+        return st.toString();
+    }
 }

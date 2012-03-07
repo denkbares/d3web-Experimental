@@ -8,14 +8,14 @@
             <div id="ynNan-$fullId$" class="ynbutton" onclick="handleOQYNQuestions('ynNan-$fullId$', '0')"> </div>
         </div> 
         
-        <div id="titletext-$fullId$" class="titletext">
-            $questioncount$
-            $title$
-            $Tooltip()$
-            $Image()$
-            $text$
-        
-        <div id="propagation-$fullId$" class="propagation hide" onmouseover="" onmouseout=""></div>
+        <div id="titletext-$fullId$" class="titletext" onclick="toggleDetails($fullId$)">
+                $questioncount$
+                $title$
+                $Tooltip()$
+                $Image()$
+                $text$
+            
+            <div id="propagation-$fullId$" class="propagation hide" onmouseover="" onmouseout=""></div>
         </div>
         
         <div id="detail-$fullId$" class="detailButton $hideDetails$" onclick="stepIntoDetail('$fullId$')"> 

@@ -98,6 +98,10 @@ public class JSONLogger {
     public void logStartValue(String value) {
         logfile.put(UETerm.START.toString(), value);
     }
+    
+    public void logDiagnosis(String solutiontext, String rating){
+        logfile.put(UETerm.SOL.toString() + "::" + solutiontext, rating);
+    }
 
     /**
      * Adds the given value to the internal JSONObject representation.

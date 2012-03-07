@@ -44,6 +44,7 @@ public class JSCodeContainer implements ICodeContainer {
     private boolean logging = false;
     private boolean hierarchy = false;
     private boolean oqd = false;
+    private boolean study = false;
 
     private boolean feedback = false;
 
@@ -107,6 +108,10 @@ public class JSCodeContainer implements ICodeContainer {
     
     public void enableUEQuestionnaire() {
         ueq = true;
+    }
+    
+    public void enableStudy(){
+        study = true;
     }
 
     /**
@@ -212,6 +217,12 @@ public class JSCodeContainer implements ICodeContainer {
             add("var ueq = true", 0);
         } else {
             add("var ueq = false", 0);
+        }
+         
+         if (study) {
+            add("var study = true", 0);
+        } else {
+            add("var study = false", 0);
         }
         
         

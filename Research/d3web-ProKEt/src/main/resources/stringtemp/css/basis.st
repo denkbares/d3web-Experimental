@@ -28,7 +28,6 @@ body,table,div {
 
 #head {
 	margin: 0px;
-	text-align: center;
 	margin-bottom: 10px;
 }
 
@@ -57,7 +56,8 @@ body,table,div {
 	margin-bottom: 10px;
 }
 
-
+#headertext{margin-left: auto; margin-right: auto; width: 500px;
+}
 /* element content's styles */
 .dialog-content { margin-bottom: 5px; }
 .question-content {	padding: 4px; }
@@ -122,6 +122,9 @@ body,table,div {
 	background-color: #dddddd; font-weight: bold; color: #224172; -moz-box-shadow: 0 0 5px black;	
 	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; }
 
+.baseButtonEndStudySession{width: 110px; height: 20px; padding-top: 3px; border: 1px solid #696969; text-align: center; cursor: pointer; 
+	background-color: #dddddd; font-weight: bold; color: darkred; -moz-box-shadow: 0 0 5px black;	
+	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; margin-top: -15px; }
 
 .rightButton { float: right; margin-right: 10px; }
 
@@ -140,3 +143,4 @@ body,table,div {
 .hidden {display:none;}
 
 .visible {display:inline;}
+ 
