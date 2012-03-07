@@ -179,7 +179,6 @@
 		<module>KnowWE-Plugin-Calendar</module>
 		<module>KnowWE-Plugin-HermesModule</module>
 		<module>KnowWE-Plugin-Shared</module>
-		<module>KnowWE-Plugin-WISEC</module>
 		<module>KnowWE-Plugin-FAQ</module>
 		<module>KnowWE-SemanticCore-Tests</module>
 		<module>KnowWE-Plugin-OneQuestionDialog</module>
