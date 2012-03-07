@@ -76,10 +76,8 @@ public class GetCoverageHighlightAction extends AbstractAction {
 					flowKdomid);
 
 			KnowWEArticle article = KnowWEUtils.getCompilingArticles(diaFluxSec).iterator().next();
-
-			SessionProvider provider = SessionProvider.getSessionProvider(context);
 			KnowledgeBase kb = D3webUtils.getKnowledgeBase(context.getWeb(), article.getTitle());
-			Session session = provider.getSession(kb);
+			Session session = SessionProvider.getSession(context, kb);
 
 			result = DefaultCoverageResult.calculateResult(
 					PSMDiaFluxCoverage.getCoverage(session),

@@ -80,9 +80,8 @@ public class DiaFluxCoverageType extends DefaultMarkupType {
 		if (tests == null) {
 			String master = DiaFluxCoverageType.getMaster(coverageSection,
 					coverageSection.getTitle());
-			SessionProvider provider = SessionProvider.getSessionProvider(user);
 			KnowledgeBase kb = D3webUtils.getKnowledgeBase(user.getWeb(), master);
-			Session session = provider.getSession(kb);
+			Session session = SessionProvider.getSession(user, kb);
 			CoverageSessionObject coverage = PSMDiaFluxCoverage.getCoverage(session);
 			result = DefaultCoverageResult.calculateResult(coverage, session.getKnowledgeBase());
 		}

@@ -52,20 +52,9 @@ public class OneQuestionDialogUtils {
 	 * @return the session
 	 */
 	public static Session getSession(String topic, String web, UserContext user) {
-
 		kwuser = user;
-
-		KnowledgeBase kb = D3webUtils.getKnowledgeBase(
-				web, topic);
-
-		SessionProvider provider = SessionProvider.getSessionProvider(user);
-		Session session = provider.getSession(kb);
-
-		if (session == null) {
-			session = provider.createSession(kb);
-		}
-
-		return session;
+		KnowledgeBase kb = D3webUtils.getKnowledgeBase(web, topic);
+		return SessionProvider.getSession(user, kb);
 	}
 
 	/**
