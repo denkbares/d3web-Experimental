@@ -53,7 +53,7 @@ public class TableTest extends TestCase {
 		 */
 		KnowWEEnvironment.initKnowWE(new KnowWETestWikiConnector());
 		KnowWEEnvironment env = KnowWEEnvironment.getInstance();
-		final String web = env.DEFAULT_WEB;
+		final String web = KnowWEEnvironment.DEFAULT_WEB;
 
 		/**
 		 * Build an Article and register it at env.
@@ -69,17 +69,17 @@ public class TableTest extends TestCase {
 		assertEquals(content, article.collectTextsFromLeaves());
 
 		// First some initial sectionizing test
-		Section headerSec = checkChildsTillLine(article, 0, false);
+		Section<?> headerSec = checkChildsTillLine(article, 0, false);
 		checkCellContents(headerSec, new String[] {
 				" ", "Apple", "Lemon", "Coconut" });
-		Section lineSec = checkChildsTillLine(article, 1, false);
+		Section<?> lineSec = checkChildsTillLine(article, 1, false);
 		checkCellContents(lineSec, new String[] {
 				"sweetness", "+", "-", "hm" });
 
 		// Testing setOriginalTextSetLeaf for a node being not a leaf
 		String newHeader = "| |Football|Soccer|Rugby\n";
 		article.getSection().setOriginalTextSetLeaf(headerSec.getID(), newHeader);
-		Section newHeaderSec = checkChildsTillLine(article, 0, false);
+		Section<?> newHeaderSec = checkChildsTillLine(article, 0, false);
 		assertEquals("Childs of node weren't deleted", 0, newHeaderSec.getChildren().size());
 		assertEquals("New text wasn't saved to orgingialtext from" + headerSec.getID(),
 				newHeader, newHeaderSec.getText());
@@ -96,7 +96,7 @@ public class TableTest extends TestCase {
 				"speed", "0", "+", "+" };
 		for (int i = 0; i < newLine.length; i++) {
 			article.getSection().setOriginalTextSetLeaf(
-					((Section) ((Section) lineSec.getChildren().get(i)).getChildren().get(1)).getID(),
+					lineSec.getChildren().get(i).getChildren().get(1).getID(),
 					newLine[i]);
 		}
 		assertEquals("OrignialText from parent changed by changing childs (befor save)",
@@ -131,8 +131,8 @@ public class TableTest extends TestCase {
 	 * @param dirtyCheck TODO
 	 * @return Section of the 'line'th table-row
 	 */
-	private Section checkChildsTillLine(KnowWEArticle article, int line, boolean dirtyCheck) {
-		Section actSec = article.getSection();
+	private Section<?> checkChildsTillLine(KnowWEArticle article, int line, boolean dirtyCheck) {
+		Section<?> actSec = article.getSection();
 		assertEquals(actSec + ": ", 1, actSec.getChildren().size());
 		// RootType
 		actSec = getChild(actSec, 0, 2, dirtyCheck);
@@ -143,7 +143,7 @@ public class TableTest extends TestCase {
 		// XMLWrappedTable
 		actSec = getChild(actSec, 0, 4, dirtyCheck);
 		// TableHeaderLine
-		actSec = (Section) actSec.getChildren().get(line);
+		actSec = actSec.getChildren().get(line);
 		return actSec;
 	}
 
@@ -158,8 +158,8 @@ public class TableTest extends TestCase {
 	 * @param dirtyCheck Chosen child's isDirty flag should have this value
 	 * @return The Section with position childPos in the actSec's children list
 	 */
-	private Section getChild(Section actSec, int childPos, int childCount, boolean dirtyCheck) {
-		actSec = (Section) actSec.getChildren().get(childPos);
+	private Section<?> getChild(Section<?> actSec, int childPos, int childCount, boolean dirtyCheck) {
+		actSec = actSec.getChildren().get(childPos);
 		assertEquals(actSec + ": ", childCount, actSec.getChildren().size());
 		if (dirtyCheck) {
 			assertEquals("The section's flag isDirty should be " +
@@ -175,9 +175,9 @@ public class TableTest extends TestCase {
 	 * @param sec The Section of a table row
 	 * @param cellValues Values which should be visible
 	 */
-	private void checkCellContents(Section sec, String[] cellValues) {
+	private void checkCellContents(Section<?> sec, String[] cellValues) {
 		for (int i = 0; i < cellValues.length; i++) {
-			Section actSec = sec;
+			Section<?> actSec = sec;
 
 			assertEquals("Node with new content wasn't split up into childs",
 					4, actSec.getChildren().size());
@@ -190,10 +190,10 @@ public class TableTest extends TestCase {
 				expectedChildCount = 2;
 			}
 			// TableCell #i
-			actSec = (Section) actSec.getChildren().get(i);
+			actSec = actSec.getChildren().get(i);
 			assertEquals(actSec + ": ", expectedChildCount, actSec.getChildren().size());
 			// TableContent
-			actSec = (Section) actSec.getChildren().get(1);
+			actSec = actSec.getChildren().get(1);
 			assertEquals("Actual cell values are wrong: ",
 					cellValues[i], actSec.getText());
 		}
