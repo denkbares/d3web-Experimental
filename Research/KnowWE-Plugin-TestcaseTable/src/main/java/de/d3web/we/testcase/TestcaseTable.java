@@ -20,7 +20,6 @@
 
 package de.d3web.we.testcase;
 
-import de.knowwe.core.KnowWERessourceLoader;
 import de.knowwe.core.kdom.InvalidKDOMSchemaModificationOperation;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
@@ -36,10 +35,6 @@ public class TestcaseTable extends Table {
 	public static final String TESTCASE_KEY = "TESTCASE";
 
 	public TestcaseTable() {
-		KnowWERessourceLoader.getInstance().add("testcasetable.js",
-				KnowWERessourceLoader.RESOURCE_SCRIPT);
-		KnowWERessourceLoader.getInstance().add("testcasetable.css",
-				KnowWERessourceLoader.RESOURCE_STYLESHEET);
 
 		try {
 			replaceChildType(new HeaderLine(), TableLine.class);
