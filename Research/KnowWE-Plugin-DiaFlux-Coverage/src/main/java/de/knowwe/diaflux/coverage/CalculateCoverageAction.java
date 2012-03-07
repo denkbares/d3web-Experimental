@@ -59,7 +59,7 @@ public class CalculateCoverageAction extends AbstractAction {
 
 		String tests = DefaultMarkupType.getAnnotation(coverageSec,
 				DiaFluxCoverageType.ANNOTATION_TEST).replace("*", ".*").replace("?", ".");
-		String master = DiaFluxCoverageType.getMaster(coverageSec, context.getTitle());
+		String master = DiaFluxCoverageType.getMaster(coverageSec);
 
 		Pattern pattern = Pattern.compile(tests, Pattern.CASE_INSENSITIVE);
 

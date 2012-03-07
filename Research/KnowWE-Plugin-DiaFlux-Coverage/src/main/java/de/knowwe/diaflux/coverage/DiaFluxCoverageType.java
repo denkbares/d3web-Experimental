@@ -67,10 +67,10 @@ public class DiaFluxCoverageType extends DefaultMarkupType {
 		setRenderer(new DiaFluxCoverageRenderer());
 	}
 
-	public static String getMaster(Section<?> coverageSection, String topic) {
+	public static String getMaster(Section<?> coverageSection) {
 		String master = DefaultMarkupType.getAnnotation(coverageSection, ANNOTATION_MASTER);
 		if (master != null) return master;
-		else return topic;
+		else return coverageSection.getTitle();
 	}
 
 	public static CoverageResult getResult(Section<?> coverageSection, UserContext user) {
@@ -78,10 +78,13 @@ public class DiaFluxCoverageType extends DefaultMarkupType {
 				DiaFluxCoverageType.ANNOTATION_TEST);
 		CoverageResult result;
 		if (tests == null) {
-			String master = DiaFluxCoverageType.getMaster(coverageSection,
-					coverageSection.getTitle());
+			String master = DiaFluxCoverageType.getMaster(coverageSection);
 			KnowledgeBase kb = D3webUtils.getKnowledgeBase(user.getWeb(), master);
 			Session session = SessionProvider.getSession(user, kb);
+			if (session == null) {
+				return null;
+			}
+
 			CoverageSessionObject coverage = PSMDiaFluxCoverage.getCoverage(session);
 			result = DefaultCoverageResult.calculateResult(coverage, session.getKnowledgeBase());
 		}
