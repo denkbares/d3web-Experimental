@@ -24,7 +24,6 @@
 package tests;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -156,7 +155,7 @@ public class TaggingManglerTest extends TestCase {
 		String keyorig = article1.getSection().getID().hashCode() + "";
 		assertEquals("%%tags\ntagtest\n%", am.getArticle("AddTag")
 				.getSection().getText());
-		ArrayList<String> tags = tm.getPageTags("AddTag");
+		List<String> tags = tm.getPageTags("AddTag");
 		assertEquals(1, tags.size());
 		assertEquals("tagtest", tags.get(0));
 		// remove statements from triplestore
@@ -241,7 +240,7 @@ public class TaggingManglerTest extends TestCase {
 		// remember: article* are not the current articles anymore, changes to
 		// the articles by the TaggingMangler do not backpropagate to those
 		// variables
-		ArrayList<String> tags = tm.getPageTags("Tag");
+		List<String> tags = tm.getPageTags("Tag");
 		assertTrue(tags.contains("tick"));
 		assertTrue(tags.contains("trick"));
 		assertTrue(tags.contains("track"));
