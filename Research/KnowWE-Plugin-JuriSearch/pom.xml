@@ -7,6 +7,7 @@
   </parent>
   <groupId>de.uniwue.d3web</groupId>
   <artifactId>KnowWE-Plugin-JuriSearch</artifactId>
+  <name>KnowWE-Plugin-JuriSearch</name>
   <version>0.2-SNAPSHOT</version>
   <description>Plugin for JuriSearch Project</description>
   <dependencies>
