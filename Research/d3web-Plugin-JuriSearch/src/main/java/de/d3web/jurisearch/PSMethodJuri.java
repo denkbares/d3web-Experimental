@@ -27,8 +27,10 @@ import java.util.Map;
 import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.inference.PSMethod;
 import de.d3web.core.inference.PropagationEntry;
+import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Fact;
+import de.d3web.core.session.values.ChoiceValue;
 
 /**
  * 
@@ -62,10 +64,14 @@ public class PSMethodJuri implements PSMethod {
 		}
 
 		for (JuriRule rule : rulesToUpdate.keySet()) {
-			List<PropagationEntry> entries = rulesToUpdate.get(rule);
-			Fact fact = rule.fire(session, entries);
+			HashMap<QuestionOC, ChoiceValue> changedQuestions = new HashMap<QuestionOC, ChoiceValue>();
+			for (PropagationEntry change : rulesToUpdate.get(rule)) {
+				changedQuestions.put((QuestionOC) change.getObject(),
+						(ChoiceValue) change.getNewValue());
+			}
+			Fact fact = rule.fire(session, changedQuestions);
 			if (fact != null) {
-				session.getBlackboard().addValueFact(rule.fire(session, entries));
+				session.getBlackboard().addValueFact(fact);
 			}
 			else {
 				session.getBlackboard().removeValueFact(rule.getFather(), rule);

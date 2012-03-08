@@ -24,7 +24,6 @@ import java.util.List;
 
 import de.d3web.core.inference.KnowledgeKind;
 import de.d3web.core.inference.KnowledgeSlice;
-import de.d3web.core.inference.PropagationEntry;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.session.Session;
@@ -99,12 +98,8 @@ public class JuriRule implements KnowledgeSlice {
 		this.disjunctive = disjunctive;
 	}
 
-	public Fact fire(Session session, List<PropagationEntry> changes) {
-		HashMap<QuestionOC, ChoiceValue> changedQuestions = new HashMap<QuestionOC, ChoiceValue>();
-		for (PropagationEntry change : changes) {
-			changedQuestions.put((QuestionOC) change.getObject(),
-					(ChoiceValue) change.getNewValue());
-		}
+	public Fact fire(Session session, HashMap<QuestionOC, ChoiceValue> changedQuestions) {
+
 		boolean maybe = false;
 		for (QuestionOC child : children) {
 			ChoiceValue value = null;

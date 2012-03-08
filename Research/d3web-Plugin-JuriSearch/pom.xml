@@ -9,6 +9,33 @@
   <artifactId>d3web-Plugin-JuriSearch</artifactId>
   <name>d3web-Plugin JuriSearch</name>
   <description>Inference for JuriSearch DashTree</description>
+  	
+	<build>
+		<plugins>
+  <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-dependency-plugin</artifactId>
+    <executions>
+        <execution>
+            <id>copy-dependencies</id>
+            <phase>test-compile</phase>
+            <goals>
+                <goal>build-classpath</goal>
+            </goals>
+            <configuration>
+                <outputDirectory>target/dependencies</outputDirectory>
+                <overWriteReleases>false</overWriteReleases>
+                <overWriteSnapshots>false</overWriteSnapshots>
+                <overWriteIfNewer>true</overWriteIfNewer>
+                <outputFile>target/dependencies/output.txt</outputFile>
+                <pathSeparator>;</pathSeparator>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+</plugins>
+</build>
+  
   <dependencies>
   	<dependency>
   		<groupId>de.uniwue.d3web</groupId>
@@ -24,6 +51,16 @@
   		<groupId>junit</groupId>
   		<artifactId>junit</artifactId>
   		<version>4.10</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>de.uniwue.d3web</groupId>
+  		<artifactId>d3web-Persistence</artifactId>
+  		<version>0.2-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>de.uniwue.d3web</groupId>
+  		<artifactId>d3web-Plugin-Persistence-Basic</artifactId>
+  		<version>0.2-SNAPSHOT</version>
   	</dependency>
   </dependencies>
   <groupId>de.uniwue.d3web</groupId>
