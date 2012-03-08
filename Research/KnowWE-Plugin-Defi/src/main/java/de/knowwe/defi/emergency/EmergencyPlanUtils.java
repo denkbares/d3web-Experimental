@@ -34,6 +34,7 @@ import de.knowwe.defi.table.TableEntryType;
  */
 public class EmergencyPlanUtils {
 
+	private static final String NAME = "name";
 	private static final String CARDIOLOGIST = "tel2";
 	private static final String PHYSICIAN = "tel3";
 	private static final String EMERGENCY_PERSON = "tel4";
@@ -42,6 +43,20 @@ public class EmergencyPlanUtils {
 	private static final String BLOOD_TYPE = "blood";
 	private static final String DIAGNOSIS = "disease";
 	private static final String ICD_MODEL = "model";
+
+	/**
+	 * tableid: name INPUT0: name of patient
+	 * 
+	 * @created 25.10.2011
+	 * @param user
+	 * @return
+	 */
+	public static String getPatientName(String user) {
+		String entry = getTableEntry(NAME, user);
+		String name = getEntryLine(entry, "INPUT0");
+
+		return name;
+	}
 
 	/**
 	 * tableid: tel2 INPUT0: Cardiologist INPUT1: Tele

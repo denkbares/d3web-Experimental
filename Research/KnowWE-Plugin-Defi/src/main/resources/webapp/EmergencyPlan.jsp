@@ -10,7 +10,7 @@
 	//Create wiki context; authorization check not needed
 	WikiEngine wiki = WikiEngine.getInstance( getServletConfig() );
 	WikiContext wikiContext = wiki.createContext( request, WikiContext.VIEW );
-	
+
 	// Check if KnowWE is initialized
 	if (!KnowWEEnvironment.isInitialized()) {
 		KnowWEEnvironment.initKnowWE(new JSPWikiKnowWEConnector(wiki));
@@ -82,7 +82,7 @@ if(requestUserCorrect) {
 			<table class="other" border="0">
 				<tr>
 					<th width="239px" height="15px">
-					<span class="inhalt"><%=context.getUserName()%></span>
+					<span class="inhalt"><%=EmergencyPlanUtils.getPatientName(context.getUserName())%></span>
 					</th>
 				</tr>
 			</table>		
