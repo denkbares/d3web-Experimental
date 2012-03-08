@@ -37,6 +37,7 @@ public class TimeEventTest extends TestCase {
 		ke = KnowWEEnvironment.getInstance();
 		type = ke.getRootType();
 		am = ke.getArticleManager(KnowWEEnvironment.DEFAULT_WEB);
+		am.setArticlesInitialized(true);
 	}
 
 	@Test
