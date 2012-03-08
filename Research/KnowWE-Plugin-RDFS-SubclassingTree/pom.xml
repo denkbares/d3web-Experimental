@@ -9,6 +9,8 @@
   <artifactId>KnowWE-Plugin-RDFS-SubclassingTree</artifactId>
   <name>KnowWE-Plugin-RDFS-SubclassingTree</name>
   <description>dashtree for subclassing</description>
+  	<version>0.2-SNAPSHOT</version>
+  		<groupId>de.uniwue.d3web</groupId>
   <dependencies>
   	<dependency>
   		<groupId>de.uniwue.d3web</groupId>
