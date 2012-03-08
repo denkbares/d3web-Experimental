@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2012 University Wuerzburg, Computer Science VI
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package de.d3web.we.testcase;
 
@@ -50,7 +50,6 @@ import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 import de.knowwe.testcases.table.TestcaseTableType;
 
-
 /**
  * 
  * @author Alexander Strehler
@@ -65,7 +64,6 @@ public class TestcaseTableEditAction extends AbstractAction {
 	 */
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-
 
 		// KnowledgeBase kb = D3webUtils.getKnowledgeBase(context.getWeb(),
 		// context.getTitle());
@@ -91,7 +89,7 @@ public class TestcaseTableEditAction extends AbstractAction {
 		StringBuilder bui = new StringBuilder();
 		bui.append("[");
 		for (Iterator<Question> it = questions.iterator(); it.hasNext(); it.next()) {
-			
+
 			Question q = it.next();
 			if (q.getName().toLowerCase().equals("start")
 					|| q.getName().toLowerCase().equals("now")) {
@@ -151,7 +149,7 @@ public class TestcaseTableEditAction extends AbstractAction {
 		KnowWEPackageManager packageManager = env.getPackageManager(section.getWeb());
 		KnowWEArticleManager articleManager = env.getArticleManager(user.getWeb());
 		for (String kbpackage : kbpackages) {
-			Set<String> articlesReferringTo = packageManager.getArticlesReferringTo(kbpackage);
+			Set<String> articlesReferringTo = packageManager.getCompilingArticles(kbpackage);
 			for (String masterTitle : articlesReferringTo) {
 				KnowWEArticle masterArticle = articleManager.getArticle(masterTitle);
 				KnowledgeBase kb = D3webUtils.getKnowledgeBase(masterArticle.getWeb(),
