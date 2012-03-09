@@ -20,8 +20,8 @@ package de.knowwe.diaflux.coverage;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.session.Session;
@@ -94,7 +94,7 @@ public class GetCoverageHighlightAction extends AbstractAction {
 
 		CoverageResult result = getResult(context);
 		if (result == null) {
-			context.getWriter().write("<flow></flow>");
+			context.getWriter().write(GetTraceHighlightAction.EMPTY_HIGHLIGHT);
 			return;
 		}
 		String flowKdomid = context.getParameter("kdomid");
@@ -105,7 +105,7 @@ public class GetCoverageHighlightAction extends AbstractAction {
 
 		Section<FlowchartType> flowchart = Sections.findSuccessor(diaFluxSec, FlowchartType.class);
 		if (flowchart == null) {
-			context.getWriter().write("<flow></flow>");
+			context.getWriter().write(GetTraceHighlightAction.EMPTY_HIGHLIGHT);
 			return;
 		}
 
@@ -134,33 +134,46 @@ public class GetCoverageHighlightAction extends AbstractAction {
 
 		GetTraceHighlightAction.appendHeader(builder, flow.getName(), PREFIX);
 
-		List<Edge> coveredEdges = new LinkedList<Edge>();
-		List<Edge> uncoveredEdges = new LinkedList<Edge>();
+		Map<Edge, Map<String, String>> edges = new HashMap<Edge, Map<String, String>>();
+
 
 		Collection<Node> validNodes = DefaultCoverageResult.getValidNodes(flow);
-
 		for (Edge edge : DefaultCoverageResult.getValidEdges(validNodes)) {
 			int count = result.getTraceCount(edge);
-			if (count != 0) coveredEdges.add(edge);
-			else uncoveredEdges.add(edge);
+			String clazz;
+			if (count == 0) {
+				clazz = UNCOVERED;
+			}
+			else {
+				clazz = COVERED;
+			}
 
+			GetTraceHighlightAction.putValue(edges, edge, GetTraceHighlightAction.CSS_CLASS, clazz);
+			GetTraceHighlightAction.putValue(edges, edge, GetTraceHighlightAction.TOOL_TIP,
+					String.valueOf(count));
 		}
 
-		GetTraceHighlightAction.addEdgeHighlight(builder, coveredEdges, COVERED);
-		GetTraceHighlightAction.addEdgeHighlight(builder, uncoveredEdges, UNCOVERED);
+		GetTraceHighlightAction.addEdgeHighlight(builder, edges);
 
-		List<Node> coveredNodes = new LinkedList<Node>();
-		List<Node> uncoveredNodes = new LinkedList<Node>();
+		Map<Node, Map<String, String>> nodes = new HashMap<Node, Map<String, String>>();
 
 		for (Node node : validNodes) {
 			int count = result.getTraceCount(node);
-			if (count != 0) coveredNodes.add(node);
-			else uncoveredNodes.add(node);
+			String clazz;
+			if (count == 0) {
+				clazz = UNCOVERED;
+			}
+			else {
+				clazz = COVERED;
+			}
+
+			GetTraceHighlightAction.putValue(nodes, node, GetTraceHighlightAction.CSS_CLASS, clazz);
+			GetTraceHighlightAction.putValue(nodes, node, GetTraceHighlightAction.TOOL_TIP,
+					String.valueOf(count));
 
 		}
 
-		GetTraceHighlightAction.addNodeHighlight(builder, coveredNodes, COVERED);
-		GetTraceHighlightAction.addNodeHighlight(builder, uncoveredNodes, UNCOVERED);
+		GetTraceHighlightAction.addNodeHighlight(builder, nodes);
 
 		GetTraceHighlightAction.appendFooter(builder);
 		return builder;
