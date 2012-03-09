@@ -4,13 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.HashMap;
 
 import junit.framework.TestCase;
 import de.d3web.core.io.PersistenceManager;
 import de.d3web.core.io.progress.DummyProgressListener;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.core.knowledge.TerminologyObject;
-import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.manage.KnowledgeBaseUtils;
 import de.d3web.core.session.Session;
@@ -18,14 +17,24 @@ import de.d3web.core.session.SessionFactory;
 import de.d3web.core.session.Value;
 import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.blackboard.FactFactory;
+import de.d3web.jurisearch.JuriModel;
 import de.d3web.jurisearch.JuriRule;
 import de.d3web.jurisearch.JuriRulePersistenceHandler;
 import de.d3web.plugin.test.InitPluginManager;
 
 public class JuriTest extends TestCase {
 
-	KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase();
-	JuriRule r;
+	private final KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase();
+	private JuriModel model;
+
+	private final HashMap<QuestionOC, Value> map = new HashMap<QuestionOC, Value>();
+
+	private QuestionOC f;
+	private QuestionOC c1;
+	private QuestionOC c2;
+
+	private QuestionOC c21;
+	private QuestionOC c22;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -73,19 +82,46 @@ public class JuriTest extends TestCase {
 		File file2 = new File("target/kbs/test.jar");
 		pm.save(kb, file2);
 		KnowledgeBase k2 = pm.load(file2);
-		Collection<JuriRule> col =
-				k2.getAllKnowledgeSlicesFor(JuriRule.KNOWLEDGE_KIND);
-		for (JuriRule rule : col) {
-			assertEquals(r, rule);
-
+		Collection<JuriModel> col =
+				k2.getAllKnowledgeSlicesFor(JuriModel.KNOWLEDGE_KIND);
+		for (JuriModel jurimodel : col) {
+			assertEquals(model.getRules(), jurimodel.getRules());
 		}
+	}
 
+	public void testRules() {
+
+		Session s = SessionFactory.createSession(kb);
+		changeFact(s, c1, JuriRule.YES_VALUE);
+		checkMap(s);
+		changeFact(s, c21, JuriRule.YES_VALUE);
+		checkMap(s);
+		changeFact(s, c22, JuriRule.YES_VALUE);
+		checkMap(s);
+		assertEquals(JuriRule.YES_VALUE, s.getBlackboard().getValue(c2));
+		changeFact(s, f, JuriRule.NO_VALUE);
+		checkMap(s);
+	}
+
+	/**
+	 * 
+	 * @created 09.03.2012
+	 */
+	private void checkMap(Session s) {
+		for (QuestionOC o : map.keySet()) {
+			assertEquals(map.get(o), s.getBlackboard().getValue(o));
+		}
 	}
 
 	private void createKnowledgebase() {
-		QuestionOC f = new QuestionOC(kb, "Ist das Wetter heute gut?");
-		QuestionOC c1 = new QuestionOC(kb, "Ist es warm?");
-		QuestionOC c2 = new QuestionOC(kb, "Ist es trocken?");
+		f = new QuestionOC(kb, "Ist das Wetter heute gut?");
+		c1 = new QuestionOC(kb, "Ist es warm?");
+		c2 = new QuestionOC(kb, "Ist es trocken?");
+
+		c21 = new QuestionOC(kb, "Regnet es nicht?");
+		c22 = new QuestionOC(kb, "Schneit es nicht?");
+
+		model = new JuriModel();
 
 		f.addAlternative(JuriRule.YES);
 		f.addAlternative(JuriRule.NO);
@@ -96,47 +132,33 @@ public class JuriTest extends TestCase {
 		c2.addAlternative(JuriRule.YES);
 		c2.addAlternative(JuriRule.NO);
 		c2.addAlternative(JuriRule.MAYBE);
+		c21.addAlternative(JuriRule.YES);
+		c21.addAlternative(JuriRule.NO);
+		c21.addAlternative(JuriRule.MAYBE);
+		c22.addAlternative(JuriRule.YES);
+		c22.addAlternative(JuriRule.NO);
+		c22.addAlternative(JuriRule.MAYBE);
 
-		r = new JuriRule();
-		r.setFather(f);
-		r.addChild(c1);
-		r.addChild(c2);
+		JuriRule jurirule = new JuriRule();
+		jurirule.setFather(f);
+		jurirule.addChild(c1);
+		jurirule.addChild(c2);
 
-		kb.getKnowledgeStore().addKnowledge(JuriRule.KNOWLEDGE_KIND, r);
+		JuriRule jurirule2 = new JuriRule();
+		jurirule2.setFather(c2);
+		jurirule2.addChild(c21);
+		jurirule2.addChild(c22);
 
-		Session s = SessionFactory.createSession(kb);
-		changeFact(s, c1, 1);
-		changeFact(s, c2, 1);
-		// out(s);
-		changeFact(s, c2, 0);
-		// out(s);
-		changeFact(s, f, 1);
-		// out(s);
+		model.addRule(jurirule);
+		model.addRule(jurirule2);
+		kb.getKnowledgeStore().addKnowledge(JuriModel.KNOWLEDGE_KIND, model);
 
-		// for (ProtocolEntry entry :
-		// session.getProtocol().getProtocolHistory()) {
-		// System.out.println(entry);
-		// }
 	}
 
-	private void changeFact(Session s, TerminologyObject o, int i) {
-		Value v = JuriRule.NO_VALUE;
-		if (i == 1) {
-			v = JuriRule.YES_VALUE;
-		}
-		else if (i == 2) {
-			v = JuriRule.MAYBE_VALUE;
-		}
+	private void changeFact(Session s, QuestionOC o, Value v) {
+		map.put(o, v);
 		System.out.println("Ändere Fakt " + o.getName() + " zu " + v.toString());
 		Fact f = FactFactory.createUserEnteredFact(o, v);
 		s.getBlackboard().addValueFact(f);
-	}
-
-	private void out(Session session) {
-		System.out.println("Lese beantwortete Fragen: ");
-		for (Question q : session.getBlackboard().getAnsweredQuestions()) {
-			System.out.println(q.getName() + " = " + session.getBlackboard().getValue(q));
-		}
-		System.out.println();
 	}
 }

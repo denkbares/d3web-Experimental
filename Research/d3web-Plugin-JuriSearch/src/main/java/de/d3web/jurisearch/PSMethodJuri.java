@@ -19,18 +19,13 @@
 package de.d3web.jurisearch;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
-import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.inference.PSMethod;
 import de.d3web.core.inference.PropagationEntry;
-import de.d3web.core.knowledge.terminology.QuestionOC;
 import de.d3web.core.session.Session;
 import de.d3web.core.session.blackboard.Fact;
-import de.d3web.core.session.values.ChoiceValue;
 
 /**
  * 
@@ -47,36 +42,24 @@ public class PSMethodJuri implements PSMethod {
 
 	@Override
 	public void propagate(Session session, Collection<PropagationEntry> changes) {
-		// System.out.println("Propagating:");
-		Map<JuriRule, List<PropagationEntry>> rulesToUpdate = new HashMap<JuriRule, List<PropagationEntry>>();
+
+		Set<JuriRule> rulesToUpdate = new HashSet<JuriRule>();
 		for (PropagationEntry change : changes) {
 			System.out.println(change.toString());
 			if (change.hasChanged()) {
-				Collection<KnowledgeSlice> slices = change.getObject().getKnowledgeBase().getAllKnowledgeSlices();
-				for (KnowledgeSlice slice : slices) {
-					if (slice instanceof JuriRule) {
-						JuriRule rule = (JuriRule) slice;
+				Collection<JuriModel> models = session.getKnowledgeBase().getAllKnowledgeSlicesFor(
+						JuriModel.KNOWLEDGE_KIND);
+				for (JuriModel model : models) {
+					for (JuriRule rule : model.getRules()) {
 						if (rule.getChildren().contains(change.getObject())) {
-							List<PropagationEntry> entries = rulesToUpdate.get(rule);
-							if (entries == null) {
-								entries = new LinkedList<PropagationEntry>();
-								rulesToUpdate.put(rule, entries);
-							}
-							entries.add(change);
+							rulesToUpdate.add(rule);
 						}
 					}
 				}
 			}
 		}
-
-		for (JuriRule rule : rulesToUpdate.keySet()) {
-			HashMap<QuestionOC, ChoiceValue> changedQuestions = new HashMap<QuestionOC, ChoiceValue>();
-			for (PropagationEntry change : rulesToUpdate.get(rule)) {
-				changedQuestions.put((QuestionOC) change.getObject(),
-						(ChoiceValue) change.getNewValue());
-			}
-
-			Fact fact = rule.fire(session, changedQuestions);
+		for (JuriRule rule : rulesToUpdate) {
+			Fact fact = rule.fire(session);
 			if (fact != null) {
 				session.getBlackboard().addValueFact(fact);
 			}
@@ -100,7 +83,6 @@ public class PSMethodJuri implements PSMethod {
 
 	@Override
 	public double getPriority() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 4;
 	}
 }

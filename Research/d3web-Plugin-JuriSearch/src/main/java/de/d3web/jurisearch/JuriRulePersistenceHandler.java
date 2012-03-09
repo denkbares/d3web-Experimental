@@ -24,15 +24,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
+import java.util.Set;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.io.KnowledgeReader;
 import de.d3web.core.io.KnowledgeWriter;
 import de.d3web.core.io.progress.ProgressListener;
@@ -58,16 +57,17 @@ public class JuriRulePersistenceHandler implements KnowledgeReader,
 		root.setAttribute("type", JuriRulePersistenceHandler.ID);
 		root.setAttribute("system", "d3web");
 		doc.appendChild(root);
-		Element ksNode = doc.createElement("KnowledgeSlices");
+		Element ksNode = doc.createElement("JuriRules");
 		root.appendChild(ksNode);
-		ArrayList<JuriRule> slices = new ArrayList<JuriRule>(
-				knowledgeBase.getAllKnowledgeSlicesFor(JuriRule.KNOWLEDGE_KIND));
-		Collections.sort(slices, new JuriRuleComparator());
-		float cur = 0;
-		int max = getEstimatedSize(knowledgeBase);
-		for (KnowledgeSlice model : slices) {
-			if (model instanceof JuriRule) {
-				ksNode.appendChild(getRuleElement((JuriRule) model, doc));
+
+		ArrayList<JuriModel> models = new ArrayList<JuriModel>(
+				knowledgeBase.getAllKnowledgeSlicesFor(JuriModel.KNOWLEDGE_KIND));
+		for (JuriModel model : models) {
+			Set<JuriRule> rules = model.getRules();
+			float cur = 0;
+			int max = getEstimatedSize(knowledgeBase);
+			for (JuriRule rule : rules) {
+				ksNode.appendChild(getRuleElement(rule, doc));
 				listener.updateProgress(++cur / max, "Saving knowledge base: Juri Rules");
 			}
 		}
@@ -97,16 +97,18 @@ public class JuriRulePersistenceHandler implements KnowledgeReader,
 		NodeList jurirules = doc.getElementsByTagName("JuriRule");
 		int cur = 0;
 		int max = jurirules.getLength();
+		JuriModel model = new JuriModel();
+
 		for (int i = 0; i < jurirules.getLength(); i++) {
 			Node current = jurirules.item(i);
-			addKnowledge(kb, current);
+			addRule(kb, model, current);
 			listener.updateProgress(++cur / max, "Loading knowledge base: Juri Rules");
 		}
-
+		kb.getKnowledgeStore().addKnowledge(JuriModel.KNOWLEDGE_KIND, model);
 		return kb;
 	}
 
-	private void addKnowledge(KnowledgeBase kb, Node current) throws IOException {
+	private void addRule(KnowledgeBase kb, JuriModel model, Node current) throws IOException {
 		String isDisjunctive = getAttribute("Disjunctive", current);
 		String fatherquestion = getAttribute("FatherQuestion", current);
 
@@ -127,7 +129,7 @@ public class JuriRulePersistenceHandler implements KnowledgeReader,
 				rule.addChild(child);
 			}
 		}
-		kb.getKnowledgeStore().addKnowledge(JuriRule.KNOWLEDGE_KIND, rule);
+		model.addRule(rule);
 	}
 
 	public Element getRuleElement(JuriRule jurirule, Document doc) throws IOException {
