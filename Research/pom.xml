@@ -218,6 +218,7 @@
 		<module>KnowWE-Plugin-JuriSearch</module>
 		<module>KnowWE-Plugin-TestcaseTable-Extensions</module>
 		<module>d3web-Plugin-JuriSearch</module>
+		<module>KnowWE-Plugin-DiaFlux-CoverageCity</module>
 	</modules>
 	<repositories>
 		<repository>
