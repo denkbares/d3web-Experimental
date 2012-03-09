@@ -45,7 +45,7 @@ import de.d3web.core.knowledge.terminology.QuestionOC;
  * @author kazamatzuri, Markus Friedrich (denkbares GmbH)
  * 
  */
-public class JuriRulePersistenceHandler implements KnowledgeReader,
+public class JuriModelPersistenceHandler implements KnowledgeReader,
 		KnowledgeWriter {
 
 	public final static String ID = "juripattern";
@@ -54,7 +54,7 @@ public class JuriRulePersistenceHandler implements KnowledgeReader,
 	public void write(KnowledgeBase knowledgeBase, OutputStream stream, ProgressListener listener) throws IOException {
 		Document doc = Util.createEmptyDocument();
 		Element root = doc.createElement("KnowledgeBase");
-		root.setAttribute("type", JuriRulePersistenceHandler.ID);
+		root.setAttribute("type", JuriModelPersistenceHandler.ID);
 		root.setAttribute("system", "d3web");
 		doc.appendChild(root);
 		Element ksNode = doc.createElement("JuriRules");

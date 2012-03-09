@@ -19,7 +19,7 @@ import de.d3web.core.session.blackboard.Fact;
 import de.d3web.core.session.blackboard.FactFactory;
 import de.d3web.jurisearch.JuriModel;
 import de.d3web.jurisearch.JuriRule;
-import de.d3web.jurisearch.JuriRulePersistenceHandler;
+import de.d3web.jurisearch.JuriModelPersistenceHandler;
 import de.d3web.plugin.test.InitPluginManager;
 
 public class JuriTest extends TestCase {
@@ -55,7 +55,7 @@ public class JuriTest extends TestCase {
 	 * @throws IOException
 	 */
 	public void testXMLWriter() throws IOException {
-		JuriRulePersistenceHandler xmph = new JuriRulePersistenceHandler();
+		JuriModelPersistenceHandler xmph = new JuriModelPersistenceHandler();
 		xmph.write(kb, new OutputStream() {
 
 			@Override

@@ -19,7 +19,6 @@
 package de.d3web.jurisearch;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import de.d3web.core.inference.KnowledgeKind;
@@ -37,7 +36,7 @@ import de.d3web.core.session.values.ChoiceValue;
  * @author grotheer
  * @created 06.03.2012
  */
-public class JuriRule implements KnowledgeSlice {
+public class JuriRule implements KnowledgeSlice, Comparable<JuriRule> {
 
 	public final static KnowledgeKind<JuriRule> KNOWLEDGE_KIND = new KnowledgeKind<JuriRule>(
 			"JuriRule", JuriRule.class);
@@ -98,17 +97,12 @@ public class JuriRule implements KnowledgeSlice {
 		this.disjunctive = disjunctive;
 	}
 
-	public Fact fire(Session session, HashMap<QuestionOC, ChoiceValue> changedQuestions) {
+	public Fact fire(Session session) {
 		boolean maybe = false;
 		for (QuestionOC child : children) {
 			ChoiceValue value = null;
-			if (changedQuestions.keySet().contains(child)) {
-				value = changedQuestions.get(child);
-			}
-			else {
-				if (session.getBlackboard().getAnsweredQuestions().contains(child)) {
-					value = (ChoiceValue) session.getBlackboard().getValue(child);
-				}
+			if (session.getBlackboard().getAnsweredQuestions().contains(child)) {
+				value = (ChoiceValue) session.getBlackboard().getValue(child);
 			}
 
 			if (value != null) {
@@ -176,4 +170,17 @@ public class JuriRule implements KnowledgeSlice {
 				session.getPSMethodInstance(PSMethodJuri.class));
 		// return FactFactory.createUserEnteredFact(father, value)
 	}
+
+	@Override
+	public String toString() {
+		return "JuriRule [father=" + father + ", children=" + children + ", disjunctive="
+				+ disjunctive + "]";
+	}
+
+	@Override
+	public int compareTo(JuriRule o) {
+		// TODO Auto-generated method stub
+		return hashCode() - o.hashCode();
+	}
+
 }

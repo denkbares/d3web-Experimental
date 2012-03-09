@@ -24,22 +24,22 @@
 	</extension>
 	
 	<extension plugin-id="KnowledgePersistenceExtensionPoints" point-id="KnowledgeReader"
-		id="JuriRulePersistenceHandler">
+		id="JuriModelPersistenceHandler">
 		<parameter id="class"
-			value="de.d3web.jurisearch.JuriRulePersistenceHandler" />
-		<parameter id="name" value="JuriRulePersistenceHandler" />
-		<parameter id="description" value="KnowledgeReader for JuriRules" />
+			value="de.d3web.jurisearch.JuriModelPersistenceHandler" />
+		<parameter id="name" value="JuriModelPersistenceHandler" />
+		<parameter id="description" value="KnowledgeReader for JuriModels" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="filename" value="kb/juri.xml" />
 	</extension>
 	
 	<extension plugin-id="KnowledgePersistenceExtensionPoints" point-id="KnowledgeWriter"
-		id="JuriRulePersistenceHandler.Writer">
+		id="JuriModelPersistenceHandler.Writer">
 		<parameter id="class"
-			value="de.d3web.jurisearch.JuriRulePersistenceHandler" />
-		<parameter id="name" value="JuriRulePersistenceHandler" />
-		<parameter id="description" value="KnowledgeWriter for JuriRules" />
+			value="de.d3web.jurisearch.JuriModelPersistenceHandler" />
+		<parameter id="name" value="JuriModelPersistenceHandler" />
+		<parameter id="description" value="KnowledgeWriter for JuriModels" />
 		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="5" />
 		<parameter id="filename" value="kb/juri.xml" />
