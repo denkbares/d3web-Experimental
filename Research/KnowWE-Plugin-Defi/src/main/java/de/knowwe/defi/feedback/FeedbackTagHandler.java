@@ -39,7 +39,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	public static final String FRAGE3 = "ICD-Forum hat mich motiviert, neue Dinge auszuprobieren.";
 	public static final String FRAGE4 = "Durch die Teilnahme am ICD-Forum, komme ich mit meiner Erkrankung besser zurecht.";
 	public static final String FRAGE5 = "Welche Themen waren für Sie besonders wichtig?";
-	public static final String FRAGE6 = "Welche Themen waren für Sie besonders wichtig?";
+	public static final String FRAGE6 = "Wie gut haben Ihnen die Themen in den einzelnen Bereichen geholfen?";
 	public static final String FRAGE7 = "Wie haben Sie den Gesamtumfang des Programms empfunden?";
 	public static final String FRAGE8 = "Was haben Sie bei unserem inhaltlichen Angebot vermisst?";
 	public static final String FRAGE9 = "Haben Sie das Diskussionsforum genutzt?";
@@ -60,6 +60,8 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 	public static final String FRAGE24 = "Wenn Sie Schwierigkeiten bei der Bedienung hatten - Woran lag das?";
 	public static final String FRAGE25 = "Würden Sie in Zukunft an einem ähnlichen Angebot teilnehmen?";
 	public static final String FRAGE26 = "Haben Sie sonst noch Wünsche, Kritik oder Erfahrungen, die Sie uns mitteilen möchten?";
+	
+	private static final String HINT_MUTIPLE = "(Bitte alle zutreffenden Antworten markieren!)";
 
 
 	/**
@@ -255,7 +257,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"4\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") " + FRAGE5);
+				+ ") " + FRAGE5 + "<br><b><i>" + HINT_MUTIPLE+"</i></b>");
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
@@ -269,7 +271,8 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 
 		result.append(createDoubleCheckBox("Was erwartet mich im ICD-Forum", radioID + "-1-1",
 				"Angst verstehen", radioID + "-4-1"));
-		result.append(createDoubleCheckBox("Unser Team", radioID + "-1-2", "Wie sich Angst zeigt",
+		result.append(createDoubleCheckBox("Wer steckt hinter ICD Forum?", radioID
+				+ "-1-2", "Wie sich Angst zeigt",
 				radioID + "-4-2"));
 		result.append(createDoubleCheckBox("Tipps und Anregungen", radioID + "-1-3",
 				"Die eigenen Ängste kennen lernen", radioID + "-4-3"));
@@ -279,7 +282,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createDoubleHeader("Einheit 2 - Wissen über den ICD", "QFB"
 				+ questionNum
 				+ "-2",
-				"Einheit 5 - Probleme anpacken", "QFB" + questionNum + "-5"));
+				"Einheit 5", "QFB" + questionNum + "-5"));
 
 		result.append(createDoubleCheckBox("Wie funktioniert mein ICD?", radioID + "-2-1",
 				"Angst überwinden", radioID + "-5-1"));
@@ -301,9 +304,9 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				"Einheit 6 - Meine Zukunft mit dem ICD", "QFB" + questionNum + "-6"));
 
 		result.append(createDoubleCheckBox("Der ICD als Teil von mir.", radioID + "-3-1",
-				"Das Ende ist erst der Anfang.", radioID + "-6-1"));
+				"Was kann ich für mich mitnehmen?", radioID + "-6-1"));
 		result.append(createDoubleCheckBox("Sich vom ICD nicht unterkriegen lassen.", radioID
-						+ "-3-2", "Resümee", radioID + "-6-2"));
+						+ "-3-2", "Zukünftige Hürden meistern", radioID + "-6-2"));
 		result.append(createDoubleCheckBox("Körperliche Aktivität", radioID + "-3-3", "",
 				radioID
 				+ ""));
@@ -320,7 +323,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"4\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ")   "+FRAGE6);
+				+ ")   " + FRAGE6 + "<br><b><i>" + HINT_MUTIPLE+"</i></b>");
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
@@ -334,7 +337,8 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 
 		result.append(createDoubleCheckBox("Was erwartet mich im ICD-Forum", radioID + "-1-1",
 				"Angst verstehen", radioID + "-4-1"));
-		result.append(createDoubleCheckBox("Unser Team", radioID + "-1-2", "Wie sich Angst zeigt",
+		result.append(createDoubleCheckBox("Wer steckt hinter ICD Forum?", radioID
+				+ "-1-2", "Wie sich Angst zeigt",
 				radioID + "-4-2"));
 		result.append(createDoubleCheckBox("Tipps und Anregungen", radioID + "-1-3",
 				"Die eigenen Ängste kennen lernen", radioID + "-4-3"));
@@ -344,7 +348,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createDoubleHeader("Einheit 2 - Wissen über den ICD", "QFB"
 				+ questionNum
 				+ "-2",
-				"Einheit 5 - Probleme anpacken", "QFB" + questionNum + "-5"));
+				"Einheit 5", "QFB" + questionNum + "-5"));
 
 		result.append(createDoubleCheckBox("Wie funktioniert mein ICD?", radioID + "-2-1",
 				"Angst überwinden", radioID + "-5-1"));
@@ -366,9 +370,9 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				"Einheit 6 - Meine Zukunft mit dem ICD", "QFB" + questionNum + "-6"));
 
 		result.append(createDoubleCheckBox("Der ICD als Teil von mir.", radioID + "-3-1",
-				"Das Ende ist erst der Anfang.", radioID + "-6-1"));
+				"Was kann ich für mich mitnehmen?", radioID + "-6-1"));
 		result.append(createDoubleCheckBox("Sich vom ICD nicht unterkriegen lassen.", radioID
-						+ "-3-2", "Resümee", radioID + "-6-2"));
+						+ "-3-2", "Zukünftige Hürden meistern", radioID + "-6-2"));
 		result.append(createDoubleCheckBox("Körperliche Aktivität", radioID + "-3-3", "",
 				radioID
 				+ ""));
@@ -385,7 +389,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") " + FRAGE7 + " ");
+				+ ") " + FRAGE7 + "<br><b><i>" + HINT_MUTIPLE + "</i></b> ");
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
@@ -399,7 +403,7 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createCheckBox(
 				"zu wenig - ich hätte mir mehr zusätzliche Inhalte gewünscht ", radioID));
 		result.append(createCheckBox("zu viel", radioID));
-		result.append(createCheckBox("genau passen", radioID));
+		result.append(createCheckBox("genau passend", radioID));
 		result.append("</tbody></table>\n");
 		questionNum++;
 	}
