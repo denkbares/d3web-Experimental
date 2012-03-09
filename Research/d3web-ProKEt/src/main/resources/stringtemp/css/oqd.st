@@ -9,22 +9,29 @@ body,div {
 }
 
 #content {float: none;margin-left: auto; margin-right: auto; width: 100%;
-    clear: both; padding-top: 35px;}
+    clear: both;}
 
 #right {display: none;}
 
 #left {display: none;}
 
 #head{
+    background: #e7e7e7;
+    background-image: none;
+    clear: both;
+    min-height: 35px;
+    width: 100%;
+}
+
+#headertext{
 	font-size: 1.5em;
 	font-variant: small-caps;
 	text-align: center;
-	background: #e7e7e7;
-	background-image: none;
+	margin-right: 10%;
+        margin-left: 10%;
 	padding: 5px;
         position: fixed;
-        margin: 0px;
-        width: 100%;
+        width: 70%;
 }
 
 #intro{ 
@@ -49,7 +56,7 @@ background-color: white;
 
 #dialog{
     float: left;
-    margin-top: 170px;
+    margin-top: 190px;
 }
 
 
@@ -237,9 +244,9 @@ area {
     font-weight: bold;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 90px;
+    margin-top: 110px;
     padding: 30px;
-    width: 50%;
+    width: 60%;
 }
 
 .solRating {

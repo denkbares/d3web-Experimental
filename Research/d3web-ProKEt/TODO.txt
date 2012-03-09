@@ -204,3 +204,7 @@ DONE - switch usability questionnaires by property, e.g allow "uequestionnaire=S
 - visualization of appropriate results (WHICH ONES?)
 - Logging: when end session logtime is BEFORE save button click
 
+
+
+- Refactor language stuff for prototypes (ger/eng) bzw. generally
+    (language config file with all texts for dialog elements such as buttons etc?!)

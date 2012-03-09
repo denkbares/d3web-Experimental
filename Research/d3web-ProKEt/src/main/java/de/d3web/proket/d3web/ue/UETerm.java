@@ -16,6 +16,8 @@ public enum UETerm {
     VAL("value"),
     BREAK("BREAK"),
     SOL("SOLUTION"),
+    UEQ("UE_Questionnaire"),
+    UEF("UE_Feedback"),
     LOAD("LOAD");
     
     private String stringrep;

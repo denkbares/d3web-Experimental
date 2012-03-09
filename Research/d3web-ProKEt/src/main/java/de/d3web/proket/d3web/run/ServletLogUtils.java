@@ -237,5 +237,17 @@ public class ServletLogUtils {
     
     public static void logDiagnosis(String solutiontext, String rating, JSONLogger logger){
         logger.logDiagnosis(solutiontext, rating);
+         logger.writeJSONToFile();
     }
+    
+    public static void logUEFeedback(String feedbackString, String logtime, JSONLogger logger){
+        logger.logUEFeedback(feedbackString, logtime);
+         logger.writeJSONToFile();
+    }
+    
+    public static void logUEQuestionnaire(String questionnaireString, JSONLogger logger){
+        logger.logUEQuestionnaire(questionnaireString);
+         logger.writeJSONToFile();
+    }
+    
 }

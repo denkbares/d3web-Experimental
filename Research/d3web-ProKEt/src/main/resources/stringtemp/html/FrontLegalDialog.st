@@ -2,7 +2,8 @@ $HTMLHeader()$
 
 <body>
 <div id="head">
-	   <div id='headertext'>$header$</div>
+        <div id='headertext'>$header$</div>
+        
         $if(study)$
             <div class="rightButton">
                 $ButtonEndStudySession()$
@@ -12,6 +13,10 @@ $HTMLHeader()$
                 $ButtonUEQuestionnaire()$
             </div>
         $endif$
+
+        <div class="rightButton">
+            $FeedbackButton()$
+        </div>
 </div>
 
 <div id="content">
@@ -22,8 +27,8 @@ $HTMLHeader()$
 
     
     <div id="intro">
-        Um eine Bewertung des Sachverhalts ("Diagnose"-Element) zu bekommen, beantworten Sie bitte die
-        unterhalb der Diagnose angezeigten Fragen.
+        Um eine Bewertung des Sachverhalts ("Hauptfrage") zu bekommen, beantworten Sie bitte die
+        unterhalb der Hauptfrage angezeigten Fragen.
         Wenn Sie die Maus über den Text einer Frage bewegen, bekommen Sie dazu im Panel rechts Zusatzinformationen angezeigt. 
         (mittels des <i>Nach unten</i> Button können Sie dieses Panel auch an den unteren Bildschirmrand legen)
         Wenn Sie eine Frage nicht direkt beantworten können, klicken Sie auf das Dreieck vor der Frage: dann werden

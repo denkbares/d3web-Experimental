@@ -1515,7 +1515,7 @@ function removeInputFacilitiesForFirst(){
             // the imagebox div, that contains input buttons normally
             var prop = $(id);
             
-            prop.html("<div id='solutionboxtext'>Diagnose</div>");
+            prop.html("<div id='solutionboxtext'>Hauptfrage</div>");
         }
     });
 }

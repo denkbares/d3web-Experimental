@@ -30,7 +30,7 @@ $HTMLHeader()$
         die Antwort kann dennoch nachträglich durch Klick auf die gewünschte Antwortalternative 
         noch geändert werden; hierzu können Zusatzinfo und Detail-Button per Klick auf 
         den Fragetext erneut sichtbar gemacht werden.
-        Bewertet wird der im Diagnose-Panel angezeigte Sachverhalt; die aktuelle Bewertung
+        Bewertet wird der im Bewertungs-Panel angezeigte Sachverhalt ("Hauptfrage"); die aktuelle Bewertung
         wird aufgrund der eingegebenen Daten vom System automatisch jederzeit berechnet.
         Nach Beendigung einer Beratungs-Session können die Antworten noch weiter geändert
         werden, das System aktualisiert das Ergebnis dementsprechend.<br />
@@ -40,7 +40,7 @@ $HTMLHeader()$
         </div>
 
         <div id="solution" class="solution">
-            <div id="solutionboxtext">Diagnose-Panel</div>
+            <div id="solutionboxtext">Bewertung Hauptfrage</div>
 
             <div id="solutiontext">Ist das Arbeitsverhältnis wirksam gekündigt worden?</div>
 

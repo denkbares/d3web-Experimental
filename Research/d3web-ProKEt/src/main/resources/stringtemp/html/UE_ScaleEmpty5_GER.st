@@ -1,11 +1,11 @@
 <table>
     <tbody>
         <tr>
-            <td>Stimme überhaupt nicht zu</td>
+            <td>Stimme nicht zu</td>
             <td></td>
             <td></td>
             <td></td>
-            <td class="textAlignRight">Stimme komplett zu</td>
+            <td class="textAlignRight">Stimme zu</td>
             </tr>				
     </tbody>
 </table>

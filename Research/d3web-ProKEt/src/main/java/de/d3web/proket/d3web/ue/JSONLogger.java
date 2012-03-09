@@ -55,6 +55,7 @@ public class JSONLogger {
 
     private JSONObject logfile = new JSONObject();
     private JSONArray clickarray = new JSONArray();
+    private JSONArray feedbackarray = new JSONArray();
     private String filename = "defaultlog.txt";
     private static final long serialVersionUID = -5766536853041423918L;
     private String endValOnNewLoad = "";
@@ -102,7 +103,13 @@ public class JSONLogger {
     public void logDiagnosis(String solutiontext, String rating){
         logfile.put(UETerm.SOL.toString() + "::" + solutiontext, rating);
     }
-
+    
+    public void logUEQuestionnaire(String questionnairetext){
+        System.out.println(questionnairetext);
+        logfile.put(UETerm.UEQ.toString(), questionnairetext);
+    }
+    
+   
     /**
      * Adds the given value to the internal JSONObject representation.
      *
@@ -137,10 +144,26 @@ public class JSONLogger {
 
         logfile.put(UETerm.CLICKED.toString(), existingClickedObjects);
     }
+    
+    public void logUEFeedback(Object feedbackstring, Object timestamp) {
+
+        JSONObject ob = new JSONObject();
+        ob.put(UETerm.TS.toString(), timestamp);
+        ob.put(UETerm.VAL.toString(), feedbackstring);
+
+        JSONArray existingFeedbacks = getFeedbackArray();
+        existingFeedbacks.add(ob);
+
+        logfile.put(UETerm.UEF.toString(), existingFeedbacks);
+    }
 
     // get the existing clicked objects already stored in the internal array
     private JSONArray getClickedObjects() {
         return clickarray;
+    }
+    
+     private JSONArray getFeedbackArray() {
+        return feedbackarray;
     }
 
     /**

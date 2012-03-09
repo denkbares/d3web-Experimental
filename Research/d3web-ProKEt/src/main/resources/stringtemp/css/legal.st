@@ -16,15 +16,22 @@ body,div {
 #left {display: none;}
 
 #head{
+    background: #e7e7e7;
+    background-image: none;
+    clear: both;
+    min-height: 35px;
+    width: 100%;
+}
+
+#headertext{
 	font-size: 1.5em;
 	font-variant: small-caps;
 	text-align: center;
-	background: #e7e7e7;
-	background-image: none;
+	margin-right: 10%;
+        margin-left: 10%;
 	padding: 5px;
         position: fixed;
-        margin: 0px;
- width: 100%;
+        width: 70%;
 }
 
 #intro{ 
@@ -35,11 +42,12 @@ body,div {
         left: 10%; right: 10%;
         background-color: white;
 padding: 10px;
+    top: 40px;
 }
 
 #dialog{
     float: left;
-    margin-top: 60px;
+    margin-top: 80px;
 }
 
 
@@ -52,7 +60,7 @@ padding: 10px;
     position: fixed;
     right: 20px;
     padding: 10px;
-    margin-top: 80px;
+    margin-top: 90px;
     height: 75%;
     overflow: auto; /* for scrolling */
 }
@@ -114,7 +122,7 @@ table{
 }
 
 .question .title {
-	min-height: 16px;
+	min-height: 23px;
 	padding-left: 90px;
 	line-height: 1.75em;
         margin-left: 15px;
@@ -222,4 +230,11 @@ area {
     font-weight: normal;
     margin-left: 5px;
     margin-top: -5px;
+}
+
+.solutiontitle{
+    float: left;
+    min-height: 16px;
+	line-height: 1.75em;
+        margin-left: 15px;
 }

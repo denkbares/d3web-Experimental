@@ -6,10 +6,10 @@ $(function(){
     $(function() {
 
         var sendFF, cancelFF;
-        if(language=="en"){
+         if(!study==true && language=="en"){
             sendFF = "Send";
             cancelFF = "Cancel";
-        } else if(language=="de"){
+        } else if(language=="de" || study==true){
             sendFF = "Abschicken";
             cancelFF = "Abbrechen";
         }
@@ -44,12 +44,12 @@ $(function(){
     
     /* Usability Extension: Usability Questionnaire */
     $(function() {
-
+        
         var sendUEQ, cancelUEQ;
-        if(language=="en"){
+        if(!study==true && language=="en"){
             sendUEQ = "Send";
             cancelUEQ = "Cancel";
-        } else if(language=="de"){
+        } else if(language=="de" || study==true){
             sendUEQ = "Abschicken";
             cancelUEQ = "Abbrechen";
         }
@@ -190,7 +190,7 @@ function ue_logLanguageWidgetClicked(el){
      */
 function ue_logEnd(){
     
-    var now = ue_getCurrentDate();        
+    var now = ue_getCurrentDate();
     var link = $.query.set("action", "logEnd").set("timestring", now);
     link = window.location.href.replace(window.location.search, "") + link;
     
@@ -267,7 +267,6 @@ function ue_logNotAllowedInput(numInput){
 function ue_getCurrentDate(){
     
     var now = new Date(); // retrieve the current date
-    
     return ue_formatDateString(now);
 }
 
@@ -293,6 +292,7 @@ function ue_sendFF(){
     var user = $('#ffname').val();
     var contact = $('#ffmail').val();
     var feedback = $('#fffeedback').val();
+    var now = ue_getCurrentDate();
 		
     var link = $.query.set("action", "sendFeedbackMail")
     .set("user", user)
@@ -314,6 +314,7 @@ function ue_sendFF(){
                 $("#ffmessage").html("");
                 $("#ffmessage").removeClass("errorRed");
                 $('#jqFFDialog').dialog("close");
+                ue_logUEFeedback(user, contact, feedback, now);
         
             } else if(html=="nofeedback"){
                 // display message that feedback is NOT optional 
@@ -323,6 +324,8 @@ function ue_sendFF(){
             }
         }
     });
+// TODO: remove mail stuff later
+    
 }
 
 
@@ -333,7 +336,15 @@ function ue_sendFF(){
 function ue_sendUEQ(){
     
     var user = $('#ueqname').val();
+    if(user==undefined){
+        user = "";
+    }
+
     var contact = $('#ueqmail').val();
+    if(contact==undefined){
+        contact = "";
+    }
+        
     var questionnaireData = ue_retrieveQuestionnaireData();
     if(!ue_dataComplete(questionnaireData)){
         // display message that feedback is NOT optional 
@@ -367,6 +378,8 @@ function ue_sendUEQ(){
                 } 
             }
         });
+    
+        ue_logUEQData(user, contact, questionnaireData); 
     }
 
 }
@@ -382,8 +395,9 @@ function ue_retrieveQuestionnaireData(){
     var qData = "";
     
     $("#ueq input:radio:checked").each(function(){
-        qData += $(this).attr("id") + "---" + $(this).attr("value") + "###"; 
+        qData += $(this).attr("id").replace("UE_", "") + "---" + $(this).attr("value") + "###"; 
     });
+    alert(qData);
     
     return qData;
 }
@@ -398,7 +412,7 @@ function ue_dataComplete(qData){
     var flag = true;
     
     $("#ueq input:radio").each(function(){
-        testid = $(this).attr("id");
+        testid = $(this).attr("id").replace("UE_", "");
         if(qData.indexOf(testid)==-1){
             flag = false;
         }
@@ -438,12 +452,12 @@ function ue_logDiagnosis(){
             rating = "0";
         }
         
-        id = $("#solutiontitle").html();
+        id = $("#solutiontitle-" + rootId).html();
     }
     
     
-    var link = $.query.set("action", "logDiagnosis").set("timestring", now)
-                        .set("id", id).set("rating", rating);
+    var link = $.query.set("action", "logDiagnosis")
+    .set("id", id).set("rating", rating);
     link = window.location.href.replace(window.location.search, "") + link;
 
     $.ajax({
@@ -479,4 +493,41 @@ function ue_getSolutionRating(solutiontextid){
         } 
     });
     return rating;
+}
+
+function ue_logUEFeedback(user, contact, feedback, now){
+     var link = $.query.set("action", "logUEFeedback")
+    .set("user", user)
+    .set("contact", contact)
+    .set("ueFeedback", feedback)
+    .set("timestring", now).toString();
+    $.ajax({
+        type : "GET",
+        // async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function(html) {
+            if(html=="success"){
+               
+            } 
+        }
+    });
+}
+
+function ue_logUEQData(user, contact, questionnaireData){
+    var link = $.query.set("action", "logUEQuestionnaire")
+    .set("user", user)
+    .set("contact", contact)
+    .set("ueQData", questionnaireData).toString();
+    $.ajax({
+        type : "GET",
+        // async : false,
+        cache : false, // needed for IE, call is not made otherwise
+        url : link,
+        success : function(html) {
+            if(html=="success"){
+               
+            } 
+        }
+    });
 }

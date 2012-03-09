@@ -1,10 +1,11 @@
 <div id="jqFFDialog" class="feedbackform" title="Feedback">
 
     <div id="ffexplanation" class="margBott"> 
-    For sending us your feedback, please fill in the fields below. 
-    Name and EMail are optional, but may be useful in case you sent us a question
-    or would like us to respond to you directly.
-    Otherwise, the feedback can as well be sent anonymously (by leaving those fields blank).
+    Bitte tragen Sie ihre Bemerkungen, Fragen, oder Wünsche in das Feedback-Feld    
+    ein. 
+    Name und EMail sind dabei optional, falls Sie aber eine Frage senden und eine
+    Antwort erhalten wollen, füllen Sie diese Felder bitte aus. Andernfalls können Sie 
+    das Feedback anonym schicken (Name und EMail leer lassen).
     </div>
     <div id="ffmessage"> </div>
 

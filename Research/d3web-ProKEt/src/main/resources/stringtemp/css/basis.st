@@ -118,13 +118,13 @@ body,table,div {
 	background-color: #dddddd; font-weight: bold; color: #224172; -moz-box-shadow: 0 0 5px black;	
 	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; }
 
-.baseButtonOneLetter{width: 30px; height: 20px; padding-top: 3px; border: 1px solid #696969; text-align: center; cursor: pointer; 
-	background-color: #dddddd; font-weight: bold; color: #224172; -moz-box-shadow: 0 0 5px black;	
-	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; }
-
-.baseButtonEndStudySession{width: 110px; height: 20px; padding-top: 3px; border: 1px solid #696969; text-align: center; cursor: pointer; 
+.baseButtonOneLetter{width: 24px; height: 20px; padding-top: 3px; border: 1px solid #696969; text-align: center; cursor: pointer; 
 	background-color: #dddddd; font-weight: bold; color: darkred; -moz-box-shadow: 0 0 5px black;	
-	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; margin-top: -15px; }
+	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; margin-top: 5px;}
+
+.baseButtonEndStudySession{width: 100px; height: 20px; padding-top: 3px; border: 1px solid #696969; text-align: center; cursor: pointer; 
+	background-color: #dddddd; font-weight: bold; color: darkred; -moz-box-shadow: 0 0 5px black;	
+	-webkit-box-shadow: 0 0 5px black; box-shadow: 0 0 5px black; margin-top: 5px; }
 
 .rightButton { float: right; margin-right: 10px; }
 
@@ -132,7 +132,7 @@ body,table,div {
 
 
 
-.textAlignRight {text-align: right}
+.textAlignRight {text-align: right; padding-right: 10px;}
 
 .longTextfield {width: 250px;}
 

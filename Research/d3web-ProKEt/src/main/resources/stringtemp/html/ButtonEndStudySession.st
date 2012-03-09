@@ -1,4 +1,4 @@
 <div id="EndStudySessionButton" class="baseButtonEndStudySession">
-	X  (end session)
+	End Session
 	$UEQuestionnaire()$
 </div>

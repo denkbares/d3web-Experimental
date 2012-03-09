@@ -144,6 +144,20 @@ public class DialogServlet extends HttpServlet {
             JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
             ServletLogUtils.logDiagnosis(soltext, rating, logger);
 
+        } else if (action.equalsIgnoreCase("logUEFeedback")) {
+
+            JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
+            String feedback = request.getParameter("ueFeedback").toString().replace("+", " ");
+            String logtime =
+                request.getParameter("timestring").replace("+", " ");
+            ServletLogUtils.logUEFeedback(feedback, logtime, logger);
+
+        } else if (action.equalsIgnoreCase("logUEQuestionnaire")) {
+
+            JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
+            String qData = request.getParameter("ueQData").toString().replace("_", " ");
+            ServletLogUtils.logUEQuestionnaire(qData, logger);
+
         } else if (action.equalsIgnoreCase("sendFeedbackMail")) {
             String state = "";
             if (request.getParameter("feedback") != null) {

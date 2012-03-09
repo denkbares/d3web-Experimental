@@ -1,5 +1,9 @@
 <div id="FFButton" class="baseButtonOneLetter">
 	F
     
-	$FeedbackForm()$
+        $if(study)$
+        $FeedbackForm_GER()$
+        $elseif(feedback)$
+        $FeedbackForm()$
+        $endif$
 </div>

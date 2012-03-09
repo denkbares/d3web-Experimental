@@ -196,15 +196,15 @@ public class JSCodeContainer implements ICodeContainer {
         }
 
         if (hierarchy) {
-            add("var hierarchy = true", 0);
+            add("var hierarchy = true;", 0);
         } else {
-            add("var hierarchy = false", 0);
+            add("var hierarchy = false;", 0);
         }
         
         if (oqd) {
-            add("var oqd = true", 0);
+            add("var oqd = true;", 0);
         } else {
-            add("var oqd = false", 0);
+            add("var oqd = false;", 0);
         }
         
         if (feedback) {
@@ -214,15 +214,15 @@ public class JSCodeContainer implements ICodeContainer {
         }
         
          if (ueq) {
-            add("var ueq = true", 0);
+            add("var ueq = true;", 0);
         } else {
-            add("var ueq = false", 0);
+            add("var ueq = false;", 0);
         }
          
          if (study) {
-            add("var study = true", 0);
+            add("var study = true;", 0);
         } else {
-            add("var study = false", 0);
+            add("var study = false;", 0);
         }
         
         
