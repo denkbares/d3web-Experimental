@@ -29,6 +29,7 @@ import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.defi.utils.ReplaceSectionUtils;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupType;
 
 /**
@@ -74,7 +75,8 @@ public class ReadPagesSaveAction extends AbstractAction {
 			}
 			HashMap<String, String> nodesMap = new HashMap<String, String>();
 			nodesMap.put(child.getID(), "%%data\r\n@readpages: " + readpages + "\r\n%");
-			Sections.replaceSections(context, nodesMap);
+			ReplaceSectionUtils.replaceSections(context, nodesMap);
+			// Sections.replaceSections(context, nodesMap);
 		}
 		// ...else try to add a new entry
 		else {
@@ -93,7 +95,8 @@ public class ReadPagesSaveAction extends AbstractAction {
 				HashMap<String, String> nodesMap = new HashMap<String, String>();
 				readpages += pagename + "::" + id + "::" + value + "::" + 0 + ";";
 				nodesMap.put(child.getID(), "%%data\r\n@readpages: " + readpages + "\r\n%");
-				Sections.replaceSections(context, nodesMap);
+				ReplaceSectionUtils.replaceSections(context, nodesMap);
+				// Sections.replaceSections(context, nodesMap);
 			}
 		}
 

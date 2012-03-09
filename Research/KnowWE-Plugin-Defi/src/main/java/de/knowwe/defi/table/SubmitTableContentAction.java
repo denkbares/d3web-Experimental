@@ -32,6 +32,7 @@ import de.knowwe.core.action.UserActionContext;
 import de.knowwe.core.kdom.KnowWEArticle;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
+import de.knowwe.defi.utils.ReplaceSectionUtils;
 
 public class SubmitTableContentAction extends AbstractAction {
 
@@ -128,8 +129,8 @@ public class SubmitTableContentAction extends AbstractAction {
 			}
 
 			// submit change
-			Sections.replaceSections(context,
-					nodesMap);
+			ReplaceSectionUtils.replaceSections(context, nodesMap);
+			// Sections.replaceSections(context, nodesMap);
 		}
 
 		context.getOutputStream().write(" (Wurde gespeichert)".getBytes());
