@@ -35,7 +35,6 @@ import org.w3c.dom.NodeList;
 import de.d3web.core.inference.KnowledgeSlice;
 import de.d3web.core.io.KnowledgeReader;
 import de.d3web.core.io.KnowledgeWriter;
-import de.d3web.core.io.PersistenceManager;
 import de.d3web.core.io.progress.ProgressListener;
 import de.d3web.core.io.utilities.Util;
 import de.d3web.core.knowledge.KnowledgeBase;
@@ -108,26 +107,24 @@ public class JuriRulePersistenceHandler implements KnowledgeReader,
 	}
 
 	private void addKnowledge(KnowledgeBase kb, Node current) throws IOException {
-		String isDisjunctive = getAttribute("disjunctive", current);
+		String isDisjunctive = getAttribute("Disjunctive", current);
+		String fatherquestion = getAttribute("FatherQuestion", current);
 
 		JuriRule rule = new JuriRule();
 		if (isDisjunctive != null) {
 			rule.setDisjunctive(Boolean.parseBoolean(isDisjunctive));
 		}
+		if (fatherquestion != null) {
+			// TODO
+			QuestionOC father = (QuestionOC) kb.getManager().search(fatherquestion);
+			rule.setFather(father);
+		}
 		NodeList elements = current.getChildNodes();
 		for (int i = 0; i < elements.getLength(); i++) {
-			if (elements.item(i).getNodeName().equals("Question")) {
-				rule.setFather((QuestionOC)
-						PersistenceManager.getInstance().readFragment(
-								(Element) elements.item(i), kb));
-			}
-			else if (elements.item(i).getNodeName().equals("Children")) {
-				NodeList children = elements.item(i).getChildNodes();
-				for (int j = 0; j < children.getLength(); j++) {
-					rule.addChild((QuestionOC)
-							PersistenceManager.getInstance().readFragment(
-									(Element) children.item(j), kb));
-				}
+			if (elements.item(i).getNodeName().equals("Child")) {
+				String childquestion = getAttribute("Question", elements.item(i));
+				QuestionOC child = (QuestionOC) kb.getManager().search(childquestion);
+				rule.addChild(child);
 			}
 		}
 		kb.getKnowledgeStore().addKnowledge(JuriRule.KNOWLEDGE_KIND, rule);
@@ -135,14 +132,21 @@ public class JuriRulePersistenceHandler implements KnowledgeReader,
 
 	public Element getRuleElement(JuriRule jurirule, Document doc) throws IOException {
 		Element ruleelement = doc.createElement("JuriRule");
-		Element children = doc.createElement("Children");
-		ruleelement.appendChild(PersistenceManager.getInstance().writeFragment(
-				jurirule.getFather(), doc));
+
+		ruleelement.setAttribute("FatherQuestion", jurirule.getFather().getName());
+
+		// Element children = doc.createElement("Children");
+
 		for (QuestionOC child : jurirule.getChildren()) {
-			children.appendChild(PersistenceManager.getInstance().writeFragment(child, doc));
+			Element childelement = doc.createElement("Child");
+			childelement.setAttribute("Question", child.getName());
+			// children.appendChild(childelement);
+			ruleelement.appendChild(childelement);
 		}
-		ruleelement.appendChild(children);
-		ruleelement.setAttribute("disjuntice", "" + jurirule.isDisjunctive());
+		// ruleelement.appendChild(children);
+
+		ruleelement.setAttribute("Disjuntice", "" + jurirule.isDisjunctive());
+
 		return ruleelement;
 	}
 

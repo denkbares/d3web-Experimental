@@ -47,18 +47,24 @@ public class PSMethodJuri implements PSMethod {
 
 	@Override
 	public void propagate(Session session, Collection<PropagationEntry> changes) {
+		// System.out.println("Propagating:");
 		Map<JuriRule, List<PropagationEntry>> rulesToUpdate = new HashMap<JuriRule, List<PropagationEntry>>();
 		for (PropagationEntry change : changes) {
-			KnowledgeSlice[] slices = change.getObject().getKnowledgeStore().getKnowledge();
-			for (KnowledgeSlice slice : slices) {
-				if (slice instanceof JuriRule) {
-					JuriRule rule = (JuriRule) slice;
-					List<PropagationEntry> entries = rulesToUpdate.get(rule);
-					if (entries == null) {
-						entries = new LinkedList<PropagationEntry>();
-						rulesToUpdate.put(rule, entries);
+			System.out.println(change.toString());
+			if (change.hasChanged()) {
+				Collection<KnowledgeSlice> slices = change.getObject().getKnowledgeBase().getAllKnowledgeSlices();
+				for (KnowledgeSlice slice : slices) {
+					if (slice instanceof JuriRule) {
+						JuriRule rule = (JuriRule) slice;
+						if (rule.getChildren().contains(change.getObject())) {
+							List<PropagationEntry> entries = rulesToUpdate.get(rule);
+							if (entries == null) {
+								entries = new LinkedList<PropagationEntry>();
+								rulesToUpdate.put(rule, entries);
+							}
+							entries.add(change);
+						}
 					}
-					entries.add(change);
 				}
 			}
 		}
@@ -69,6 +75,7 @@ public class PSMethodJuri implements PSMethod {
 				changedQuestions.put((QuestionOC) change.getObject(),
 						(ChoiceValue) change.getNewValue());
 			}
+
 			Fact fact = rule.fire(session, changedQuestions);
 			if (fact != null) {
 				session.getBlackboard().addValueFact(fact);
@@ -96,5 +103,4 @@ public class PSMethodJuri implements PSMethod {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
 }

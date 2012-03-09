@@ -4,7 +4,6 @@
     <artifactId>Research</artifactId>
     <groupId>de.uniwue.d3web</groupId>
     <version>0.2-SNAPSHOT</version>
-    <relativePath>..</relativePath>
   </parent>
   <artifactId>d3web-Plugin-JuriSearch</artifactId>
   <name>d3web-Plugin JuriSearch</name>

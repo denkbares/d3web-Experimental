@@ -99,7 +99,6 @@ public class JuriRule implements KnowledgeSlice {
 	}
 
 	public Fact fire(Session session, HashMap<QuestionOC, ChoiceValue> changedQuestions) {
-
 		boolean maybe = false;
 		for (QuestionOC child : children) {
 			ChoiceValue value = null;
@@ -144,8 +143,37 @@ public class JuriRule implements KnowledgeSlice {
 		}
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((children == null) ? 0 : children.hashCode());
+		result = prime * result + (disjunctive ? 1231 : 1237);
+		result = prime * result + ((father == null) ? 0 : father.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		JuriRule other = (JuriRule) obj;
+		if (children == null) {
+			if (other.children != null) return false;
+		}
+		else if (!children.equals(other.children)) return false;
+		if (disjunctive != other.disjunctive) return false;
+		if (father == null) {
+			if (other.father != null) return false;
+		}
+		else if (!father.equals(other.father)) return false;
+		return true;
+	}
+
 	private Fact createFact(Session session, Value value) {
 		return FactFactory.createFact(session, father, value, this,
 				session.getPSMethodInstance(PSMethodJuri.class));
+		// return FactFactory.createUserEnteredFact(father, value)
 	}
 }
