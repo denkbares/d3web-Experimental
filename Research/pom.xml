@@ -217,6 +217,7 @@
 		<module>KnowWE-Plugin-RDFS-TestCase</module>
 		<module>KnowWE-Plugin-JuriSearch</module>
 		<module>KnowWE-Plugin-TestcaseTable-Extensions</module>
+		<module>d3web-Plugin-JuriSearch</module>
 	</modules>
 	<repositories>
 		<repository>
