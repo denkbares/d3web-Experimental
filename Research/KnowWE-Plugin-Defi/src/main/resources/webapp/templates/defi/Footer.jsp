@@ -16,7 +16,7 @@
   <div class="footerlinks">
   	<!--  <a href="Wiki.jsp?page=Datenschutz" class="data">Datenschutz</a>-->
   	<!-- <a href="Wiki.jsp?page=About" class="about">&Uuml;ber uns</a> -->
-  	<a href="Wiki.jsp?page=Impressum" class="impressum">Impressum</a>
+  	<a href="Impressum.html" class="impressum">Impressum</a>
     <a href="<wiki:LinkTo page='<%=frontpage%>' format='url' />" class="start" title="<fmt:message key='actions.home.title' ><fmt:param><%=frontpage%></fmt:param></fmt:message> "><fmt:message key='actions.home' /></a>
   </div>
   

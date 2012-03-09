@@ -21,8 +21,6 @@ package de.knowwe.defi.readbutton;
 import java.io.IOException;
 import java.util.HashMap;
 
-import javax.servlet.http.HttpServletResponse;
-
 import de.knowwe.core.KnowWEArticleManager;
 import de.knowwe.core.KnowWEEnvironment;
 import de.knowwe.core.action.AbstractAction;
@@ -100,8 +98,6 @@ public class ReadPagesSaveAction extends AbstractAction {
 			}
 		}
 
-		HttpServletResponse response = context.getResponse();
-		response.sendRedirect("Wiki.jsp?page=" + username + "_data");
 	}
 
 }
