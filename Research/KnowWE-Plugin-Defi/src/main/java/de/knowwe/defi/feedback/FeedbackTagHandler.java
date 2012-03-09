@@ -34,6 +34,34 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 
 	private int questionNum = 1;
 
+	public static final String FRAGE1 = "Die Teilnahme am ICD Forum hat mir insgesamt weitergeholfen.";
+	public static final String FRAGE2 = "ICD-Forum hat mir geholfen, meinen Alltag besser zu bewältigen.";
+	public static final String FRAGE3 = "ICD-Forum hat mich motiviert, neue Dinge auszuprobieren.";
+	public static final String FRAGE4 = "Durch die Teilnahme am ICD-Forum, komme ich mit meiner Erkrankung besser zurecht.";
+	public static final String FRAGE5 = "Welche Themen waren für Sie besonders wichtig?";
+	public static final String FRAGE6 = "Welche Themen waren für Sie besonders wichtig?";
+	public static final String FRAGE7 = "Wie haben Sie den Gesamtumfang des Programms empfunden?";
+	public static final String FRAGE8 = "Was haben Sie bei unserem inhaltlichen Angebot vermisst?";
+	public static final String FRAGE9 = "Haben Sie das Diskussionsforum genutzt?";
+	public static final String FRAGE10 = "Es hat mir gut getan, im Diskussionsforum mitzulesen.";
+	public static final String FRAGE11 = "Ich habe den Moderator im Diskussionsforum als hilfreich empfunden.";
+	public static final String FRAGE12 = "Es hat mir gut getan, im Diskussionsforum Fragen zu stellen.";
+	public static final String FRAGE13 = "Es hat mir gut getan, im Diskussionsforum Antworten auf meine Fragen zu erhalten.";
+	public static final String FRAGE14 = "Es hat mir gut getan, im Diskussionsforum auf die Fragen anderer antworten zu können.";
+	public static final String FRAGE15 = "Ich habe den Eindruck, dass der Moderator im Diskussionsforum an meinen Fragen und Problemen interessiert war.";
+	public static final String FRAGE16 = "Ich habe den Eindruck, dass die Teilnehmer an meinen Fragen und Problemen wirklich interessiert waren.";
+	public static final String FRAGE17 = "Was haben Sie im Diskussionsforum vermisst?";
+	public static final String FRAGE18 = "Ich wusste, an wen ich mich bei ICD-Forum mit meinen persönlichen Fragen wenden kann.";
+	public static final String FRAGE19 = "ICD-Forum hat mir einen vertrauensvollen Rahmen geboten, in dem ich mich über die Themen austauschen konnte, die mir wirklich wichtig sind.";
+	public static final String FRAGE20 = "Wieviel Zeit haben Sie auf ICD-Forum verbracht?";
+	public static final String FRAGE21 = "In welchen Bereichen von ICD-Forum haben Sie mehr Zeit verbracht?";
+	public static final String FRAGE22 = "Wie haben Sie die Dauer des Programms empfunden? 6 Wochen waren...";
+	public static final String FRAGE23 = "Wie fanden Sie die Bedienbarkeit von ICD-Forum?";
+	public static final String FRAGE24 = "Wenn Sie Schwierigkeiten bei der Bedienung hatten - Woran lag das?";
+	public static final String FRAGE25 = "Würden Sie in Zukunft an einem ähnlichen Angebot teilnehmen?";
+	public static final String FRAGE26 = "Haben Sie sonst noch Wünsche, Kritik oder Erfahrungen, die Sie uns mitteilen möchten?";
+
+
 	/**
 	 * @param name
 	 */
@@ -145,10 +173,10 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Die Teilnahme am ICD Forum hat mir insgesamt weitergeholfen.");
+				+ ") " + FRAGE1);
 		result.append("<input type=\"hidden\" name=\"QFB" + questionNum + "\" value=\""
 				+ questionNum
-				+ ") Die Teilnahme am ICD Forum hat mir insgesamt weitergeholfen.\" />");
+				+ ") " + FRAGE1 + "\" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -165,10 +193,10 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") ICD-Forum hat mir geholfen, meinen Alltag besser zu bewältigen.");
+				+ ") " + FRAGE2);
 		result.append("<input type=\"hidden\" name=\"QFB" + questionNum + "\" value=\""
 				+ questionNum
-				+ ") ICD-Forum hat mir geholfen, meinen Alltag besser zu bewältigen. \" />");
+				+ ") " + FRAGE2 + " \" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -185,10 +213,10 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") ICD-Forum hat mich motiviert, neue Dinge auszuprobieren.");
+				+ ") " + FRAGE3);
 		result.append("<input type=\"hidden\" name=\"QFB" + questionNum + "\" value=\""
 				+ questionNum
-				+ ") ICD-Forum hat mich motiviert, neue Dinge auszuprobieren.\"/>");
+				+ ") " + FRAGE3 + "\"/>");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -205,12 +233,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Durch die Teilnahme am ICD-Forum, komme ich mit meiner Erkrankung besser zurecht. ");
+				+ ") " + FRAGE4);
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") Durch die Teilnahme am ICD-Forum, komme ich mit meiner Erkrankung besser zurecht. \" />");
+				+ ") " + FRAGE4 + " \" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -227,12 +255,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"4\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Welche Themen waren für Sie besonders wichtig?  ");
+				+ ") " + FRAGE5);
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") Welche Themen waren für Sie besonders wichtig?  \" />");
+				+ ") " + FRAGE5 + "  \" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -248,7 +276,8 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createDoubleCheckBox("Unser Sicherheitskonzept", radioID + "-1-4",
 				"Die Angst vor der Sterblichkeit", radioID + "-4-4"));
 
-		result.append(createDoubleHeader("Einheit 2 - Wissen über den ICD", "QFB" + questionNum
+		result.append(createDoubleHeader("Einheit 2 - Wissen über den ICD", "QFB"
+				+ questionNum
 				+ "-2",
 				"Einheit 5 - Probleme anpacken", "QFB" + questionNum + "-5"));
 
@@ -258,9 +287,11 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				"Ziele erreichen", radioID + "-5-2"));
 		result.append(createDoubleCheckBox("Den richtigen Rhythmus finden", radioID + "-2-3",
 				"Gedankenmuster durchbrechen", radioID + "-5-3"));
-		result.append(createDoubleCheckBox("Der ICD löst aus - was tun!?", radioID + "-2-4",
+		result.append(createDoubleCheckBox("Der ICD löst aus - was tun!?", radioID
+				+ "-2-4",
 				"Stress reduzieren", radioID + "-5-4"));
-		result.append(createDoubleCheckBox("Kleine und große Reisen mit dem ICD", radioID + "-2-5",
+		result.append(createDoubleCheckBox("Kleine und große Reisen mit dem ICD", radioID
+				+ "-2-5",
 				"Wenn Selbsthilfe nicht mehr reicht", radioID + "-5-5"));
 		result.append(createDoubleCheckBox("Wo finde ich weitere Informationen?", radioID + "-2-6",
 				"", ""));
@@ -272,8 +303,9 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createDoubleCheckBox("Der ICD als Teil von mir.", radioID + "-3-1",
 				"Das Ende ist erst der Anfang.", radioID + "-6-1"));
 		result.append(createDoubleCheckBox("Sich vom ICD nicht unterkriegen lassen.", radioID
-				+ "-3-2", "Resümee", radioID + "-6-2"));
-		result.append(createDoubleCheckBox("Körperliche Aktivität", radioID + "-3-3", "", radioID
+						+ "-3-2", "Resümee", radioID + "-6-2"));
+		result.append(createDoubleCheckBox("Körperliche Aktivität", radioID + "-3-3", "",
+				radioID
 				+ ""));
 		result.append(createDoubleCheckBox("Mein soziales Netz", radioID + "-3-4", "", radioID + ""));
 		result.append(createDoubleCheckBox("Mein Partner versteht mich einfach nicht.", radioID
@@ -288,12 +320,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"4\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Welche Themen waren für Sie besonders wichtig?  ");
+				+ ")   "+FRAGE6);
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") Welche Themen waren für Sie besonders wichtig?  \" />");
+				+ ") "+FRAGE6+"  \" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -309,7 +341,8 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createDoubleCheckBox("Unser Sicherheitskonzept", radioID + "-1-4",
 				"Die Angst vor der Sterblichkeit", radioID + "-4-4"));
 
-		result.append(createDoubleHeader("Einheit 2 - Wissen über den ICD", "QFB" + questionNum
+		result.append(createDoubleHeader("Einheit 2 - Wissen über den ICD", "QFB"
+				+ questionNum
 				+ "-2",
 				"Einheit 5 - Probleme anpacken", "QFB" + questionNum + "-5"));
 
@@ -319,9 +352,11 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 				"Ziele erreichen", radioID + "-5-2"));
 		result.append(createDoubleCheckBox("Den richtigen Rhythmus finden", radioID + "-2-3",
 				"Gedankenmuster durchbrechen", radioID + "-5-3"));
-		result.append(createDoubleCheckBox("Der ICD löst aus - was tun!?", radioID + "-2-4",
+		result.append(createDoubleCheckBox("Der ICD löst aus - was tun!?", radioID
+				+ "-2-4",
 				"Stress reduzieren", radioID + "-5-4"));
-		result.append(createDoubleCheckBox("Kleine und große Reisen mit dem ICD", radioID + "-2-5",
+		result.append(createDoubleCheckBox("Kleine und große Reisen mit dem ICD", radioID
+				+ "-2-5",
 				"Wenn Selbsthilfe nicht mehr reicht", radioID + "-5-5"));
 		result.append(createDoubleCheckBox("Wo finde ich weitere Informationen?", radioID + "-2-6",
 				"", ""));
@@ -333,8 +368,9 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append(createDoubleCheckBox("Der ICD als Teil von mir.", radioID + "-3-1",
 				"Das Ende ist erst der Anfang.", radioID + "-6-1"));
 		result.append(createDoubleCheckBox("Sich vom ICD nicht unterkriegen lassen.", radioID
-				+ "-3-2", "Resümee", radioID + "-6-2"));
-		result.append(createDoubleCheckBox("Körperliche Aktivität", radioID + "-3-3", "", radioID
+						+ "-3-2", "Resümee", radioID + "-6-2"));
+		result.append(createDoubleCheckBox("Körperliche Aktivität", radioID + "-3-3", "",
+				radioID
 				+ ""));
 		result.append(createDoubleCheckBox("Mein soziales Netz", radioID + "-3-4", "", radioID + ""));
 		result.append(createDoubleCheckBox("Mein Partner versteht mich einfach nicht.", radioID
@@ -349,12 +385,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Wie haben Sie den Gesamtumfang des Programms empfunden? ");
+				+ ") " + FRAGE7 + " ");
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") Wie haben Sie den Gesamtumfang des Programms empfunden?  \" />");
+				+ ") "+FRAGE7+"  \" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -372,12 +408,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Was haben Sie bei unserem inhaltlichen Angebot vermisst?   ");
+				+ ") " + FRAGE8 + "   ");
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") Was haben Sie bei unserem inhaltlichen Angebot vermisst?   \" />");
+				+ ") " + FRAGE8 + "   \" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -390,18 +426,19 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Haben Sie das Diskussionsforum genutzt?  ");
+				+ ") " + FRAGE9 + "  ");
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") Haben Sie das Diskussionsforum genutzt?\" />");
+				+ ") " + FRAGE9 + "\" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 		result.append(createRadioButton("Nein", radioID));
 		result.append(createRadioButton("Ja, ich habe mitgelesen ", radioID));
-		result.append(createRadioButton("Ja, ich habe mitgelesen und eigene Beiträge geschrieben ",
+		result.append(createRadioButton(
+				"Ja, ich habe mitgelesen und eigene Beiträge geschrieben ",
 				radioID));
 		result.append("</tbody></table>\n");
 		questionNum++;
@@ -411,10 +448,10 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Es hat mir gut getan, im Diskussionsforum mitzulesen.");
+				+ ") " + FRAGE10);
 		result.append("<input type=\"hidden\" name=\"QFB" + questionNum + "\" value=\""
 				+ questionNum
-				+ ") Es hat mir gut getan, im Diskussionsforum mitzulesen.\"/>");
+				+ ") " + FRAGE10 + "\"/>");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -432,10 +469,10 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Ich habe den Moderator im Diskussionsforum als hilfreich empfunden ");
+				+ ") " + FRAGE11 + " ");
 		result.append("<input type=\"hidden\" name=\"QFB" + questionNum + "\" value=\""
 				+ questionNum
-				+ ") Ich habe den Moderator im Diskussionsforum als hilfreich empfunden\" />");
+				+ ") " + FRAGE11 + "\" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -453,10 +490,10 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Es hat mir gut getan, im Diskussionsforum Fragen zu stellen  ");
+				+ ") " + FRAGE12 + "  ");
 		result.append("<input type=\"hidden\" name=\"QFB" + questionNum + "\" value=\""
 				+ questionNum
-				+ ") Es hat mir gut getan, im Diskussionsforum Fragen zu stellen\"  />");
+				+ ") " + FRAGE12 + "\"  />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -475,12 +512,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Es hat mir gut getan, im Diskussionsforum Antworten auf meine Fragen zu erhalten");
+				+ ") " + FRAGE13);
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") Es hat mir gut getan, im Diskussionsforum Antworten auf meine Fragen zu erhalten\" />");
+				+ ") " + FRAGE13 + "\" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -499,12 +536,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Es hat mir gut getan, im Diskussionsforum auf die Fragen anderer antworten zu können. ");
+				+ ") " + FRAGE14 + " ");
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") Es hat mir gut getan, im Diskussionsforum auf die Fragen anderer antworten zu können. \" />");
+				+ ") " + FRAGE14 + " \" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -523,12 +560,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Ich habe den Eindruck, dass der Moderator im Diskussionsforum an meinen Fragen und Problemen interessiert war.");
+				+ ") " + FRAGE15);
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") Ich habe den Eindruck, dass der Moderator im Diskussionsforum an meinen Fragen und Problemen interessiert war.\" />");
+				+ ") " + FRAGE15 + "\" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -546,12 +583,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Ich habe den Eindruck, dass die Teilnehmer an meinen Fragen und Problemen wirklich interessiert waren.");
+				+ ") " + FRAGE16);
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") Ich habe den Eindruck, dass die Teilnehmer an meinen Fragen und Problemen wirklich interessiert waren.\" />");
+				+ ") " + FRAGE16 + "\" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -569,12 +606,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Was haben Sie im Diskussionsforum vermisst? ");
+				+ ") " + FRAGE17 + " ");
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") Was haben Sie im Diskussionsforum vermisst? \" />");
+				+ ") " + FRAGE17 + " \" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -587,12 +624,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Ich wusste, an wen ich mich bei ICD-Forum mit meinen persönlichen Fragen wenden kann? ");
+				+ ") " + FRAGE18 + " ");
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") Ich wusste, an wen ich mich bei ICD-Forum mit meinen persönlichen Fragen wenden kann? \" />");
+				+ ") " + FRAGE18 + " \" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -609,12 +646,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") ICD-Forum hat mir einen vertrauensvollen Rahmen geboten, in dem ich mich über die Themen austauschen konnte, die mir wirklich wichtig sind.  ");
+				+ ") " + FRAGE19 + "  ");
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") ICD-Forum hat mir einen vertrauensvollen Rahmen geboten, in dem ich mich über die Themen austauschen konnte, die mir wirklich wichtig sind.  \" />");
+				+ ") " + FRAGE19 + "  \" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -631,12 +668,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Wieviel Zeit haben Sie auf ICD-Forum verbracht?");
+				+ ") " + FRAGE20);
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") Wieviel Zeit haben Sie auf ICD-Forum verbracht?\" />");
+				+ ") " + FRAGE20 + "\" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -652,12 +689,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") In welchen Bereichen von ICD-Forum haben Sie mehr Zeit verbracht? ");
+				+ ") " + FRAGE21 + " ");
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") In welchen Bereichen von ICD-Forum haben Sie mehr Zeit verbracht? \" />");
+				+ ") " + FRAGE21 + " \" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -672,12 +709,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Wie haben Sie die Dauer des Programms empfunden? 6 Wochen waren... ");
+				+ ") " + FRAGE22 + " ");
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") Wie haben Sie die Dauer des Programms empfunden? 6 Wochen waren... \" />");
+				+ ") " + FRAGE22 + " \" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -692,12 +729,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Wie fanden Sie die Bedienbarkeit von ICD-Forum?  ");
+				+ ") " + FRAGE23 + "  ");
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") Wie fanden Sie die Bedienbarkeit von ICD-Forum?  \" />");
+				+ ") " + FRAGE23 + "  \" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -717,12 +754,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Wenn Sie Schwierigkeiten bei der Bedienung hatten - Woran lag das?  ");
+				+ ") " + FRAGE24 + "  ");
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") Wenn Sie Schwierigkeiten bei der Bedienung hatten - Woran lag das? \" />");
+				+ ") " + FRAGE24 + " \" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
@@ -735,17 +772,18 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Würden Sie in Zukunft an einem ähnlichen Angebot teilnehmen?   ");
+				+ ") " + FRAGE25 + "   ");
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") Würden Sie in Zukunft an einem ähnlichen Angebot teilnehmen?  \" />");
+				+ ") " + FRAGE25 + "  \" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
 
-		result.append(createRadioButton("Ich würde prinzipiell an einem neuen Angebot teilnehmen.",
+		result.append(createRadioButton(
+				"Ich würde prinzipiell an einem neuen Angebot teilnehmen.",
 				radioID));
 		result.append(createRadioButton(
 				"Ich würde teilnehmen, wenn Verbesserungen am ICD-Forum stattfinden (bitte auswählen) ",
@@ -771,12 +809,12 @@ public class FeedbackTagHandler extends AbstractHTMLTagHandler {
 		result.append("<table><tbody><tr>\n");
 		result.append("<td colspan=\"2\" class=\"rowhead\">");
 		result.append(questionNum
-				+ ") Haben Sie sonst noch Wünsche, Kritik oder Erfahrungen, die Sie uns mitteilen möchten?  ");
+				+ ") " + FRAGE26 + "  ");
 		result.append("<input type=\"hidden\" name=\"QFB"
 				+ questionNum
 				+ "\" value=\""
 				+ questionNum
-				+ ") Haben Sie sonst noch Wünsche, Kritik oder Erfahrungen, die Sie uns mitteilen möchten?  \" />");
+				+ ") " + FRAGE26 + "  \" />");
 		result.append("</td></tr>\n");
 
 		String radioID = "FB" + questionNum;
