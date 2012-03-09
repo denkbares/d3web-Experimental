@@ -62,34 +62,6 @@ public class KnowWESectionFinderTest extends TestCase {
 		assertEquals(WRONG_FIRST_END, test.length(), results.get(0).getEnd());
 	}
 
-	public void testAnnotationKnowledgeSliceObjectAnswerSectionFinder() {
-
-	}
-
-	public void testAnnotationKnowledgeSliceObjectComparatorSectionFinder() {
-
-	}
-
-	public void testAnnotationKnowledgeSliceObjectQuestiongetSectionFinder() {
-
-	}
-
-	public void testAnnotationKnowledgeSliceSubjectSectionFinder() {
-
-	}
-
-
-	public void testAnnotationSubjectSectionFinder() {
-
-	}
-
-	// public void testFindingFinder() {
-	//
-	// }
-
-	// public void testFindingsFinder() {
-	//
-	// }
 
 	/**
 	 * Single \r or \n are LineBreaks too for this finder
@@ -122,13 +94,6 @@ public class KnowWESectionFinderTest extends TestCase {
 		assertEquals(WRONG_SECOND_END, 72, results.get(1).getEnd());
 	}
 
-	// public void testQuestionFinder() {
-	//
-	// }
-
-	// public void testRatedSolutionFinder() {
-	//
-	// }
 
 	public void testRegexSectionFinder() {
 		String text = "<ME> is a ,bad, cruel bastard !! that !! </ME>";
@@ -166,9 +131,6 @@ public class KnowWESectionFinderTest extends TestCase {
 		// assertEquals(WRONG_THIRD_END, 99, results.get(2).getEnd());
 	}
 
-	// public void testStateRatingFinder() {
-	//
-	// }
 
 	// TODO: Should this only find the first occurrence
 	public void testStringSectionFinder() {
@@ -235,13 +197,11 @@ public class KnowWESectionFinderTest extends TestCase {
 
 		assertEquals(WRONG_FIRST_START, 0, results.get(0).getStart());
 		assertEquals(WRONG_FIRST_END, 34, results.get(0).getEnd());
-
-		assertEquals(WRONG_FIRST_START, 34, results.get(1).getStart());
+		// System.out.println(text.substring(results.get(1).getStart(),
+		// results.get(1).getEnd()));
+		// System.out.println(text.substring(34, results.get(1).getEnd()));
+		assertEquals(WRONG_FIRST_START, 36, results.get(1).getStart());
 		assertEquals(WRONG_FIRST_END, 69, results.get(1).getEnd());
 	}
 
-	// TODO What does that
-	public void testTagHandlerAttributeFinder() {
-
-	}
 }
