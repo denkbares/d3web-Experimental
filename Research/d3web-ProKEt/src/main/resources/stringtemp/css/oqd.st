@@ -257,6 +257,7 @@ area {
     float: right;
     font-weight: bold;
     padding: 2px 30px;
+    margin-top: -12px;
 }
 
 .solRating.rating-high { 

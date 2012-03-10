@@ -58,10 +58,10 @@ $(function(){
         var opts = {
             autoOpen: false,
             position : top,
-            width : 600,
-            height : 550,
-            minWidth : 500,
-            minHeight : 450,
+            width : 720,
+            height : 620,
+            minWidth : 720,
+            minHeight : 620,
             draggable : false,
             resizable : false,
             modal : false,
@@ -72,9 +72,8 @@ $(function(){
                 click: function(){
                     if(study && logging){    
                         ue_logDiagnosis();
-                        ue_logEnd();
+                        ue_sendUEQ();
                     }
-                    ue_sendUEQ();
                 }
             },
             {
@@ -347,6 +346,7 @@ function ue_sendUEQ(){
         
     var questionnaireData = ue_retrieveQuestionnaireData();
     if(!ue_dataComplete(questionnaireData)){
+        
         // display message that feedback is NOT optional 
         message = "Please fill in the complete survey!";
         $("#ueqMessage").html(message);
@@ -365,7 +365,7 @@ function ue_sendUEQ(){
 
         $.ajax({
             type : "GET",
-            // async : false,
+            async : false,
             cache : false, // needed for IE, call is not made otherwise
             url : link,
             success : function(html) {
@@ -374,7 +374,6 @@ function ue_sendUEQ(){
                     $("#ueqMessage").html("");
                     $("#ueqMessage").removeClass("errorRed");
                     $('#jqUEQDialog').dialog("close");
-        
                 } 
             }
         });
@@ -397,7 +396,12 @@ function ue_retrieveQuestionnaireData(){
     $("#ueq input:radio:checked").each(function(){
         qData += $(this).attr("id").replace("UE_", "") + "---" + $(this).attr("value") + "###"; 
     });
-    alert(qData);
+    var freeFBField = $("#UE_QFreeFeedback"); 
+    var freeFeedback = "/";
+    if(freeFBField.val()!=undefined && freeFBField.val()!=""){
+        freeFeedback = freeFBField.val();
+    }
+    qData += freeFBField.attr("id").replace("UE_", "") + "---" + freeFeedback + "###";
     
     return qData;
 }
@@ -417,7 +421,7 @@ function ue_dataComplete(qData){
             flag = false;
         }
     });
-    return flag;
+   return flag;
 }
 
 function ue_logDiagnosis(){
@@ -526,7 +530,7 @@ function ue_logUEQData(user, contact, questionnaireData){
         url : link,
         success : function(html) {
             if(html=="success"){
-               
+               ue_logEnd();
             } 
         }
     });

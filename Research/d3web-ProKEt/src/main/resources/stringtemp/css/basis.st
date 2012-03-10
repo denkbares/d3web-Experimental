@@ -143,4 +143,13 @@ body,table,div {
 .hidden {display:none;}
 
 .visible {display:inline;}
+
+.smallTd{width: 60px;}
+
+.topSpace{padding-top: 15px;}
  
+.topText{vertical-align: top;}
+
+.leftPadd{padding-left: 15px;}
+
+.tableNoTopMargin{margin-top: 0px;}

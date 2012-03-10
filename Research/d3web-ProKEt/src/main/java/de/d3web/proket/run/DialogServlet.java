@@ -22,8 +22,6 @@ package de.d3web.proket.run;
 import de.d3web.proket.d3web.run.ServletLogUtils;
 import de.d3web.proket.d3web.ue.JSONLogger;
 import de.d3web.proket.data.DialogTree;
-import de.d3web.proket.input.xml.IParser;
-import de.d3web.proket.input.xml.ParseException;
 import de.d3web.proket.input.xml.XMLParser;
 import de.d3web.proket.output.container.ContainerCollection;
 import de.d3web.proket.output.render.IRenderer;
@@ -31,9 +29,8 @@ import de.d3web.proket.output.render.Renderer;
 import de.d3web.proket.utils.GlobalSettings;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
 import javax.mail.Message;
@@ -136,6 +133,7 @@ public class DialogServlet extends HttpServlet {
             String end = request.getParameter("timestring").replace("+", " ");
             JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
             ServletLogUtils.logSessionEnd(end, logger);
+            httpSession.invalidate();
 
         } else if (action.equalsIgnoreCase("logDiagnosis")) {
 
@@ -155,8 +153,9 @@ public class DialogServlet extends HttpServlet {
         } else if (action.equalsIgnoreCase("logUEQuestionnaire")) {
 
             JSONLogger logger = (JSONLogger) httpSession.getAttribute("logger");
-            String qData = request.getParameter("ueQData").toString().replace("_", " ");
+            String qData = request.getParameter("ueQData").toString().replace("_", " ").replace("+", " ");
             ServletLogUtils.logUEQuestionnaire(qData, logger);
+            response.getWriter().append("success");
 
         } else if (action.equalsIgnoreCase("logQuestion")) {
 
@@ -255,8 +254,13 @@ public class DialogServlet extends HttpServlet {
         PrintWriter writer = response.getWriter();
         GlobalSettings.getInstance().setLogFolder(
                 GlobalSettings.getInstance().getServletBasePath()
-                + "../../Study-Data/logs");
-
+                + "../../Study-Data-G1/logs");
+        
+        /*GlobalSettings.getInstance().setLogFolder(
+                GlobalSettings.getInstance().getServletBasePath()
+                + "../../Study-Data-G2"/logs");
+*/
+        
         /*
          * in this case, the logging initialisation, i.e. retrieval of browser
          * etc info has been done successfully and now those values can be
@@ -429,15 +433,14 @@ public class DialogServlet extends HttpServlet {
          * Constructing the message Questionnaire Data:
          * questionID1***value1###questionID2***value2###
          */
-
         String[] qvpairs = qData.split("###");
         StringBuilder qDataBui = new StringBuilder();
 
         qDataBui.append("Corresponding Logfile: ");
         qDataBui.append(httpSession.getAttribute("logfile").toString());
         qDataBui.append("\n\n");
-
-        for (String pair : qvpairs) {
+       
+        for (String pair : qvpairs){
             String[] splitpair = pair.split("---");
             qDataBui.append(splitpair[0].replace("UE_", ""));
             qDataBui.append(" --> ");

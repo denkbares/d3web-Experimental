@@ -2034,6 +2034,9 @@ function handleOQYNQuestions(fullId, rating){
             $("#solMed").removeClass("show");
             $("#solLow").addClass("hide");
             $("#solLow").removeClass("show");
+            //var baseText = $("#solHigh").html();
+            //baseText += ",<br /> weil Frage 1 oder Frage 2 nicht bestätigt werden konnte.";
+            //$("#solHigh").html(baseText);
             break;
             
         case "0": // undecided --> transparent
@@ -2066,8 +2069,12 @@ function handleOQYNQuestions(fullId, rating){
             $("#solMed").removeClass("show");
             $("#solHigh").addClass("hide");
             $("#solHigh").removeClass("show");
+            //var baseText = $("#solLow").html();
+            //baseText += ",<br /> weil Frage 1 oder Frage 2 nicht bestätigt werden konnte.";
+            //$("#solLow").html(baseText);
             break;
     }
+    
        
     // close all child questions (aux info etc) if a question is answered   
     closeAllChildren(questionEl);
